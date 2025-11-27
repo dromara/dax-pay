@@ -5,7 +5,7 @@ import org.dromara.daxpay.sdk.code.PayLimitPayEnum;
 import org.dromara.daxpay.sdk.code.PayMethodEnum;
 import org.dromara.daxpay.sdk.net.DaxPayRequest;
 import org.dromara.daxpay.sdk.response.DaxResult;
-import org.dromara.daxpay.sdk.result.trade.pay.PayResult;
+import org.dromara.daxpay.sdk.trade.pay.PayResult;
 import org.dromara.daxpay.sdk.util.JsonUtil;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.lang.TypeReference;
@@ -44,8 +44,16 @@ public class PayParam extends DaxPayRequest<PayResult> {
 
     /** 支付描述 */
     @Schema(description = "支付描述")
-    @Size(max = 500, message = "支付描述不可超过500位")
+    @Size(max = 50, message = "支付描述不可超过50位")
     private String description;
+
+    /** 是否开启分账 */
+    @Schema(description = "是否开启分账")
+    private Boolean allocation;
+
+    /** 自动分账 */
+    @Schema(description = "自动分账")
+    private Boolean autoAllocation;
 
     /** 过期时间 */
     @Schema(description = "过期时间")

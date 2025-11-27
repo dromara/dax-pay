@@ -226,6 +226,7 @@ public class RefundService {
         // 更新退款订单
         refundOrder.setStatus(refundInfo.getStatus().getCode())
                 .setOutRefundNo(refundInfo.getOutRefundNo())
+                .setRelationOrderNo(refundInfo.getRelationOrderNo())
                 .setFinishTime(refundInfo.getFinishTime());
         // 是否直接返回了退款成功
         if (Objects.equals(refundOrder.getStatus(), RefundStatusEnum.SUCCESS.getCode())){

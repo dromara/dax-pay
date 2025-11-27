@@ -47,6 +47,12 @@ public class RefundOrder extends MchAppBaseEntity implements ToResult<RefundOrde
     /** 退款号 */
     private String refundNo;
 
+    /**
+     * 特殊通道关联订单号
+     * 部分通道对订单号有要求, 需要使用指定前缀且有长度限制, 无法使用系统订单关联, 使用这个进行关联
+     */
+    private String relationOrderNo;
+
     /** 商户退款号 */
     private String bizRefundNo;
 

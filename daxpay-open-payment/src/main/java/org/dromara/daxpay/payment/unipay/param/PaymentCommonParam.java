@@ -34,7 +34,7 @@ public abstract class PaymentCommonParam {
 
     /** 签名 */
     @Schema(description = "签名")
-    @Size(max = 64, message = "签名不可超过64位")
+    @Size(max = 1024, message = "签名不可超过1024位")
     private String sign;
 
     /** 请求时间 格式yyyy-MM-dd HH:mm:ss */

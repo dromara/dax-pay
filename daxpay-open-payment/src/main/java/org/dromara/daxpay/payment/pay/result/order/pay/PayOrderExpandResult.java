@@ -60,6 +60,10 @@ public class PayOrderExpandResult extends BaseResult {
     @Schema(description = "付款码")
     private String barCode;
 
+    /** 支付通道返回支付参数 */
+    @Schema(description = "支付通道返回支付参数")
+    private String payBody;
+
     /** 扩展参数存储字段 */
     @Schema(description = "扩展参数存储字段")
     private String ext;

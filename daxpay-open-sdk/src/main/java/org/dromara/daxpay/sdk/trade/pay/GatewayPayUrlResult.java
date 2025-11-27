@@ -1,4 +1,4 @@
-package org.dromara.daxpay.sdk.result.trade.pay;
+package org.dromara.daxpay.sdk.trade.pay;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

@@ -25,8 +25,11 @@ public class RefundSyncResultBo {
     /** 外部三方支付网关生成的退款交易号, 用与将记录关联起来 */
     private String outRefundNo;
 
-    /** 交易金额 */
+    /** 退款金额 */
     private BigDecimal amount;
+
+    /** 实际退款金额 */
+    private BigDecimal realAmount;
 
     /** 退款完成时间(通常用于接收网关返回的时间) */
     private LocalDateTime finishTime;

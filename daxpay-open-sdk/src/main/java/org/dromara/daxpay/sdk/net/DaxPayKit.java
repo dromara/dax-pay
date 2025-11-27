@@ -1,6 +1,5 @@
 package org.dromara.daxpay.sdk.net;
 
-import org.dromara.daxpay.sdk.code.SignTypeEnum;
 import org.dromara.daxpay.sdk.response.DaxResult;
 import org.dromara.daxpay.sdk.util.JsonUtil;
 import org.dromara.daxpay.sdk.util.PaySignUtil;
@@ -11,6 +10,7 @@ import java.util.Objects;
 
 /**
  * 支付发起工具包
+ *
  * @author xxm
  * @since 2024/2/2
  */
@@ -32,18 +32,6 @@ public class DaxPayKit {
      * @return DaxResult 响应类
      */
     public <T> DaxResult<T> execute(DaxPayRequest<T> request) {
-        return execute(request, true);
-    }
-
-    /**
-     * 支付请求执行类
-     *
-     * @param request 请求参数
-     * @param sign    是否进行签名
-     * @param <T>     业务对象
-     * @return DaxResult 响应类
-     */
-    public <T> DaxResult<T> execute(DaxPayRequest<T> request, boolean sign) {
         // 判断是否需要填充商户号和应用号
         if (Objects.isNull(request.getMchNo())) {
             request.setMchNo(config.getMchNo());
@@ -51,16 +39,8 @@ public class DaxPayKit {
         if (Objects.isNull(request.getAppId())) {
             request.setAppId(config.getAppId());
         }
-        // 判断是是否进行签名
-        if (sign) {
-            if (Objects.equals(SignTypeEnum.MD5, config.getSignType())) {
-                request.setSign(PaySignUtil.md5Sign(request, config.getSignSecret()));
-            } else if (Objects.equals(SignTypeEnum.HMAC_SHA256, config.getSignType())) {
-                request.setSign(PaySignUtil.hmacSha256Sign(request, config.getSignSecret()));
-            } else if (Objects.equals(SignTypeEnum.SM3, config.getSignType())) {
-                request.setSign(PaySignUtil.sm3Sign(request, config.getSignSecret()));
-            }
-        }
+        // 进行签名
+        request.setSign(PaySignUtil.sign(request, config.getPrivateKey()));
         // 参数序列化
         String data = JsonUtil.toJsonStr(request);
         log.debug("请求参数:{}", data);
@@ -88,16 +68,9 @@ public class DaxPayKit {
     public boolean verifySign(DaxResult<?> result) {
         String sign = result.getSign();
         // 如果签名值为空, 不需要进行验签
-        if (Objects.isNull(sign)){
+        if (Objects.isNull(sign)) {
             return true;
         }
-        if (Objects.equals(SignTypeEnum.MD5, config.getSignType())) {
-            return PaySignUtil.verifyMd5Sign(result, config.getSignSecret(), sign);
-        } else if (Objects.equals(SignTypeEnum.HMAC_SHA256, config.getSignType())) {
-            return PaySignUtil.verifyHmacSha256Sign(result, config.getSignSecret(), sign);
-        } else if (Objects.equals(SignTypeEnum.SM3, config.getSignType())) {
-            return PaySignUtil.verifySm3Sign(result, config.getSignSecret(), sign);
-        }
-        throw new IllegalArgumentException("未获取到签名方式，请检查");
+        return PaySignUtil.verify(result, config.getPublicKey());
     }
 }

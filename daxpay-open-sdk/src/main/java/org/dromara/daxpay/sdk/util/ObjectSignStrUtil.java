@@ -1,4 +1,4 @@
-package org.dromara.daxpay.payment.common.util;
+package org.dromara.daxpay.sdk.util;
 
 import cn.hutool.core.date.LocalDateTimeUtil;
 import lombok.experimental.UtilityClass;
@@ -91,7 +91,8 @@ public class ObjectSignStrUtil {
         }
 
         // 处理 List
-        if (obj instanceof List<?> list) {
+        if (obj instanceof List<?>) {
+            List<?> list = (List<?>) obj;
             for (int i = 0; i < list.size(); i++) {
                 String key = prefix + "[" + i + "]";
                 flatten(key, list.get(i), result);
@@ -100,7 +101,8 @@ public class ObjectSignStrUtil {
         }
 
         // 处理map
-        if (obj instanceof Map<?, ?> map) {
+        if (obj instanceof Map<?, ?>) {
+            Map<?, ?> map = (Map<?, ?>) obj;
             for (Map.Entry<?, ?> entry : map.entrySet()) {
                 String key = prefix + "." + entry.getKey();
                 flatten(key, entry.getValue(), result);

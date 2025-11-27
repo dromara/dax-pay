@@ -48,7 +48,10 @@ public enum ChannelEnum {
     SAND_PAY("sand_pay"),
     /** 易宝 */
     YEE_PAY("yee_pay"),
+    /** 银联商务 */
+    UMS_PAY("ums_pay"),
     ;
+
 
     /** 支付通道编码 */
     private final String code;

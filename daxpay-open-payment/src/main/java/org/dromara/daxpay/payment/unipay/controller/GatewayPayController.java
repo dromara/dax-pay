@@ -70,8 +70,9 @@ public class GatewayPayController {
 
     @Operation(summary = "获取用于获取OpenId信息的链接(聚合扫码)")
     @PostMapping("/generateAuthUrl")
-    public Result<String> generateAuthUrl( @NotBlank(message = "订单号不能为空") String orderNo,
-                                           @NotBlank(message = "支付场景不能为空") String scene){
+    public Result<String> generateAuthUrl(
+            @NotBlank(message = "订单号不能为空") @Parameter(description = "订单号") String orderNo,
+            @NotBlank(message = "支付场景不能为空") @Parameter(description = "支付场景")String scene){
         return Res.ok(aggregateQrPayService.genAuthUrl(orderNo, scene));
     }
 

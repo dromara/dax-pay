@@ -7,7 +7,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 /**
- * 微信支付配置
+ * 微信支付配置(不持久化)
  *
  * @author xxm
  * @since 2021/3/1

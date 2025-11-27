@@ -1,4 +1,4 @@
-package org.dromara.daxpay.sdk.result.trade.refund;
+package org.dromara.daxpay.sdk.trade.refund;
 
 import org.dromara.daxpay.sdk.code.ChannelEnum;
 import org.dromara.daxpay.sdk.code.RefundStatusEnum;

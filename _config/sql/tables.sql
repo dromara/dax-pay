@@ -4,9 +4,9 @@
 -- ----------------------------
 DROP TABLE IF EXISTS base_area;
 CREATE TABLE base_area (
-                           code varchar(6) COLLATE pg_catalog.default NOT NULL,
-                           name varchar(60) COLLATE pg_catalog.default NOT NULL,
-                           city_code varchar(4) COLLATE pg_catalog.default NOT NULL
+                                      code varchar(6) COLLATE pg_catalog.default NOT NULL,
+                                      name varchar(60) COLLATE pg_catalog.default NOT NULL,
+                                      city_code varchar(4) COLLATE pg_catalog.default NOT NULL
 )
 ;
 COMMENT ON COLUMN base_area.name IS '区域名称';
@@ -18,9 +18,9 @@ COMMENT ON TABLE base_area IS '县区表';
 -- ----------------------------
 DROP TABLE IF EXISTS base_city;
 CREATE TABLE base_city (
-                           code varchar(4) COLLATE pg_catalog.default NOT NULL,
-                           name varchar(60) COLLATE pg_catalog.default NOT NULL,
-                           province_code varchar(2) COLLATE pg_catalog.default NOT NULL
+                                      code varchar(4) COLLATE pg_catalog.default NOT NULL,
+                                      name varchar(60) COLLATE pg_catalog.default NOT NULL,
+                                      province_code varchar(2) COLLATE pg_catalog.default NOT NULL
 )
 ;
 COMMENT ON COLUMN base_city.code IS '城市编码';
@@ -33,18 +33,18 @@ COMMENT ON TABLE base_city IS '城市表';
 -- ----------------------------
 DROP TABLE IF EXISTS base_dict;
 CREATE TABLE base_dict (
-                           id int8 NOT NULL,
-                           name varchar(50) COLLATE pg_catalog.default,
-                           group_tag varchar(50) COLLATE pg_catalog.default,
-                           code varchar(50) COLLATE pg_catalog.default,
-                           remark varchar(50) COLLATE pg_catalog.default,
-                           creator int8,
-                           create_time timestamp(6),
-                           last_modifier int8,
-                           last_modified_time timestamp(6),
-                           version int4 NOT NULL,
-                           enable bool,
-                           deleted bool NOT NULL
+                                      id int8 NOT NULL,
+                                      name varchar(50) COLLATE pg_catalog.default,
+                                      group_tag varchar(50) COLLATE pg_catalog.default,
+                                      code varchar(50) COLLATE pg_catalog.default,
+                                      remark varchar(50) COLLATE pg_catalog.default,
+                                      creator int8,
+                                      create_time timestamp(6),
+                                      last_modifier int8,
+                                      last_modified_time timestamp(6),
+                                      version int4 NOT NULL,
+                                      enable bool,
+                                      deleted bool NOT NULL
 )
 ;
 COMMENT ON COLUMN base_dict.id IS '主键';
@@ -66,20 +66,20 @@ COMMENT ON TABLE base_dict IS '字典表';
 -- ----------------------------
 DROP TABLE IF EXISTS base_dict_item;
 CREATE TABLE base_dict_item (
-                                id int8 NOT NULL,
-                                dict_id int8 NOT NULL,
-                                dict_code varchar(50) COLLATE pg_catalog.default,
-                                code varchar(50) COLLATE pg_catalog.default,
-                                name varchar(50) COLLATE pg_catalog.default,
-                                sort_no int4,
-                                enable bool,
-                                remark varchar(50) COLLATE pg_catalog.default,
-                                creator int8,
-                                create_time timestamp(6),
-                                last_modifier int8,
-                                last_modified_time timestamp(6),
-                                version int4 NOT NULL,
-                                deleted bool NOT NULL
+                                           id int8 NOT NULL,
+                                           dict_id int8 NOT NULL,
+                                           dict_code varchar(50) COLLATE pg_catalog.default,
+                                           code varchar(50) COLLATE pg_catalog.default,
+                                           name varchar(50) COLLATE pg_catalog.default,
+                                           sort_no int4,
+                                           enable bool,
+                                           remark varchar(50) COLLATE pg_catalog.default,
+                                           creator int8,
+                                           create_time timestamp(6),
+                                           last_modifier int8,
+                                           last_modified_time timestamp(6),
+                                           version int4 NOT NULL,
+                                           deleted bool NOT NULL
 )
 ;
 COMMENT ON COLUMN base_dict_item.id IS '主键';
@@ -103,20 +103,20 @@ COMMENT ON TABLE base_dict_item IS '字典项';
 -- ----------------------------
 DROP TABLE IF EXISTS base_param;
 CREATE TABLE base_param (
-                            id int8 NOT NULL,
-                            creator int8,
-                            create_time timestamp(6),
-                            last_modifier int8,
-                            last_modified_time timestamp(6),
-                            version int4 NOT NULL,
-                            deleted bool NOT NULL,
-                            name varchar(50) COLLATE pg_catalog.default NOT NULL,
-                            key varchar(50) COLLATE pg_catalog.default NOT NULL,
-                            value varchar(500) COLLATE pg_catalog.default NOT NULL,
-                            type varchar(20) COLLATE pg_catalog.default,
-                            enable bool NOT NULL,
-                            internal bool NOT NULL,
-                            remark varchar(200) COLLATE pg_catalog.default
+                                       id int8 NOT NULL,
+                                       creator int8,
+                                       create_time timestamp(6),
+                                       last_modifier int8,
+                                       last_modified_time timestamp(6),
+                                       version int4 NOT NULL,
+                                       deleted bool NOT NULL,
+                                       name varchar(50) COLLATE pg_catalog.default NOT NULL,
+                                       key varchar(50) COLLATE pg_catalog.default NOT NULL,
+                                       value varchar(500) COLLATE pg_catalog.default NOT NULL,
+                                       type varchar(20) COLLATE pg_catalog.default,
+                                       enable bool NOT NULL,
+                                       internal bool NOT NULL,
+                                       remark varchar(200) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN base_param.id IS '主键';
@@ -140,8 +140,8 @@ COMMENT ON TABLE base_param IS '系统参数';
 -- ----------------------------
 DROP TABLE IF EXISTS base_province;
 CREATE TABLE base_province (
-                               code varchar(2) COLLATE pg_catalog.default NOT NULL,
-                               name varchar(30) COLLATE pg_catalog.default NOT NULL
+                                          code varchar(2) COLLATE pg_catalog.default NOT NULL,
+                                          name varchar(30) COLLATE pg_catalog.default NOT NULL
 )
 ;
 COMMENT ON COLUMN base_province.code IS '省份编码';
@@ -153,9 +153,9 @@ COMMENT ON TABLE base_province IS '省份表';
 -- ----------------------------
 DROP TABLE IF EXISTS base_street;
 CREATE TABLE base_street (
-                             code varchar(9) COLLATE pg_catalog.default NOT NULL,
-                             name varchar(60) COLLATE pg_catalog.default NOT NULL,
-                             area_code varchar(6) COLLATE pg_catalog.default NOT NULL
+                                        code varchar(9) COLLATE pg_catalog.default NOT NULL,
+                                        name varchar(60) COLLATE pg_catalog.default NOT NULL,
+                                        area_code varchar(6) COLLATE pg_catalog.default NOT NULL
 )
 ;
 COMMENT ON COLUMN base_street.code IS '编码';
@@ -168,18 +168,18 @@ COMMENT ON TABLE base_street IS '街道表';
 -- ----------------------------
 DROP TABLE IF EXISTS base_user_protocol;
 CREATE TABLE base_user_protocol (
-                                    id int8 NOT NULL,
-                                    creator int8,
-                                    create_time timestamp(6),
-                                    last_modifier int8,
-                                    last_modified_time timestamp(6),
-                                    version int4 NOT NULL,
-                                    deleted bool NOT NULL,
-                                    name varchar(32) COLLATE pg_catalog.default,
-                                    show_name varchar(64) COLLATE pg_catalog.default,
-                                    type varchar(32) COLLATE pg_catalog.default,
-                                    default_protocol bool,
-                                    content text COLLATE pg_catalog.default
+                                               id int8 NOT NULL,
+                                               creator int8,
+                                               create_time timestamp(6),
+                                               last_modifier int8,
+                                               last_modified_time timestamp(6),
+                                               version int4 NOT NULL,
+                                               deleted bool NOT NULL,
+                                               name varchar(32) COLLATE pg_catalog.default,
+                                               show_name varchar(64) COLLATE pg_catalog.default,
+                                               type varchar(32) COLLATE pg_catalog.default,
+                                               default_protocol bool,
+                                               content text COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN base_user_protocol.id IS '主键';
@@ -201,17 +201,17 @@ COMMENT ON TABLE base_user_protocol IS '用户协议';
 -- ----------------------------
 DROP TABLE IF EXISTS iam_client;
 CREATE TABLE iam_client (
-                            id int8 NOT NULL,
-                            creator int8,
-                            create_time timestamp(6),
-                            last_modifier int8,
-                            last_modified_time timestamp(6),
-                            version int4 NOT NULL,
-                            deleted bool NOT NULL,
-                            code varchar(50) COLLATE pg_catalog.default NOT NULL,
-                            name varchar(50) COLLATE pg_catalog.default NOT NULL,
-                            internal bool NOT NULL,
-                            remark varchar(200) COLLATE pg_catalog.default
+                                       id int8 NOT NULL,
+                                       creator int8,
+                                       create_time timestamp(6),
+                                       last_modifier int8,
+                                       last_modified_time timestamp(6),
+                                       version int4 NOT NULL,
+                                       deleted bool NOT NULL,
+                                       code varchar(50) COLLATE pg_catalog.default NOT NULL,
+                                       name varchar(50) COLLATE pg_catalog.default NOT NULL,
+                                       internal bool NOT NULL,
+                                       remark varchar(200) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN iam_client.id IS '主键';
@@ -232,18 +232,18 @@ COMMENT ON TABLE iam_client IS '认证终端';
 -- ----------------------------
 DROP TABLE IF EXISTS iam_perm_code;
 CREATE TABLE iam_perm_code (
-                               id int8 NOT NULL,
-                               creator int8,
-                               create_time timestamp(6),
-                               last_modifier int8,
-                               last_modified_time timestamp(6),
-                               version int4 NOT NULL,
-                               deleted bool NOT NULL,
-                               pid int8,
-                               code varchar(50) COLLATE pg_catalog.default,
-                               name varchar(50) COLLATE pg_catalog.default,
-                               remark varchar(300) COLLATE pg_catalog.default,
-                               leaf bool NOT NULL
+                                          id int8 NOT NULL,
+                                          creator int8,
+                                          create_time timestamp(6),
+                                          last_modifier int8,
+                                          last_modified_time timestamp(6),
+                                          version int4 NOT NULL,
+                                          deleted bool NOT NULL,
+                                          pid int8,
+                                          code varchar(50) COLLATE pg_catalog.default,
+                                          name varchar(50) COLLATE pg_catalog.default,
+                                          remark varchar(300) COLLATE pg_catalog.default,
+                                          leaf bool NOT NULL
 )
 ;
 COMMENT ON COLUMN iam_perm_code.id IS '主键';
@@ -265,29 +265,29 @@ COMMENT ON TABLE iam_perm_code IS '权限码';
 -- ----------------------------
 DROP TABLE IF EXISTS iam_perm_menu;
 CREATE TABLE iam_perm_menu (
-                               id int8 NOT NULL,
-                               creator int8,
-                               create_time timestamp(6),
-                               last_modifier int8,
-                               last_modified_time timestamp(6),
-                               version int4 NOT NULL,
-                               deleted bool NOT NULL,
-                               pid int8,
-                               client_code varchar(50) COLLATE pg_catalog.default NOT NULL,
-                               title varchar(100) COLLATE pg_catalog.default,
-                               name varchar(100) COLLATE pg_catalog.default,
-                               icon varchar(100) COLLATE pg_catalog.default,
-                               hidden bool NOT NULL,
-                               hide_children_menu bool NOT NULL,
-                               component varchar(300) COLLATE pg_catalog.default,
-                               path varchar(300) COLLATE pg_catalog.default,
-                               redirect varchar(300) COLLATE pg_catalog.default,
-                               sort_no float4,
-                               root bool NOT NULL,
-                               keep_alive bool,
-                               target_outside bool,
-                               full_screen bool,
-                               remark varchar(200) COLLATE pg_catalog.default
+                                          id int8 NOT NULL,
+                                          creator int8,
+                                          create_time timestamp(6),
+                                          last_modifier int8,
+                                          last_modified_time timestamp(6),
+                                          version int4 NOT NULL,
+                                          deleted bool NOT NULL,
+                                          pid int8,
+                                          client_code varchar(50) COLLATE pg_catalog.default NOT NULL,
+                                          title varchar(100) COLLATE pg_catalog.default,
+                                          name varchar(100) COLLATE pg_catalog.default,
+                                          icon varchar(100) COLLATE pg_catalog.default,
+                                          hidden bool NOT NULL,
+                                          hide_children_menu bool NOT NULL,
+                                          component varchar(300) COLLATE pg_catalog.default,
+                                          path varchar(300) COLLATE pg_catalog.default,
+                                          redirect varchar(300) COLLATE pg_catalog.default,
+                                          sort_no float4,
+                                          root bool NOT NULL,
+                                          keep_alive bool,
+                                          target_outside bool,
+                                          full_screen bool,
+                                          remark varchar(200) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN iam_perm_menu.id IS '主键';
@@ -320,14 +320,14 @@ COMMENT ON TABLE iam_perm_menu IS '菜单权限';
 -- ----------------------------
 DROP TABLE IF EXISTS iam_perm_path;
 CREATE TABLE iam_perm_path (
-                               id int8 NOT NULL,
-                               parent_code varchar(50) COLLATE pg_catalog.default,
-                               client_code varchar(50) COLLATE pg_catalog.default NOT NULL,
-                               code varchar(50) COLLATE pg_catalog.default NOT NULL,
-                               name varchar(50) COLLATE pg_catalog.default,
-                               leaf bool NOT NULL,
-                               path varchar(200) COLLATE pg_catalog.default,
-                               method varchar(10) COLLATE pg_catalog.default
+                                          id int8 NOT NULL,
+                                          parent_code varchar(50) COLLATE pg_catalog.default,
+                                          client_code varchar(50) COLLATE pg_catalog.default NOT NULL,
+                                          code varchar(50) COLLATE pg_catalog.default NOT NULL,
+                                          name varchar(50) COLLATE pg_catalog.default,
+                                          leaf bool NOT NULL,
+                                          path varchar(200) COLLATE pg_catalog.default,
+                                          method varchar(10) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN iam_perm_path.id IS '主键';
@@ -345,18 +345,18 @@ COMMENT ON TABLE iam_perm_path IS '请求权限(url)';
 -- ----------------------------
 DROP TABLE IF EXISTS iam_role;
 CREATE TABLE iam_role (
-                          id int8 NOT NULL,
-                          creator int8,
-                          create_time timestamp(6),
-                          last_modifier int8,
-                          last_modified_time timestamp(6),
-                          version int4 NOT NULL,
-                          deleted bool NOT NULL,
-                          pid int8,
-                          code varchar(50) COLLATE pg_catalog.default,
-                          name varchar(100) COLLATE pg_catalog.default,
-                          internal bool,
-                          remark varchar(200) COLLATE pg_catalog.default
+                                     id int8 NOT NULL,
+                                     creator int8,
+                                     create_time timestamp(6),
+                                     last_modifier int8,
+                                     last_modified_time timestamp(6),
+                                     version int4 NOT NULL,
+                                     deleted bool NOT NULL,
+                                     pid int8,
+                                     code varchar(50) COLLATE pg_catalog.default,
+                                     name varchar(100) COLLATE pg_catalog.default,
+                                     internal bool,
+                                     remark varchar(200) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN iam_role.id IS '主键';
@@ -378,9 +378,9 @@ COMMENT ON TABLE iam_role IS '角色';
 -- ----------------------------
 DROP TABLE IF EXISTS iam_role_code;
 CREATE TABLE iam_role_code (
-                               id int8 NOT NULL,
-                               role_id int8 NOT NULL,
-                               code_id int8 NOT NULL
+                                          id int8 NOT NULL,
+                                          role_id int8 NOT NULL,
+                                          code_id int8 NOT NULL
 )
 ;
 COMMENT ON COLUMN iam_role_code.id IS '主键';
@@ -393,10 +393,10 @@ COMMENT ON TABLE iam_role_code IS '角色权限码关联关系';
 -- ----------------------------
 DROP TABLE IF EXISTS iam_role_menu;
 CREATE TABLE iam_role_menu (
-                               id int8 NOT NULL,
-                               role_id int8 NOT NULL,
-                               client_code varchar(50) COLLATE pg_catalog.default NOT NULL,
-                               menu_id int8 NOT NULL
+                                          id int8 NOT NULL,
+                                          role_id int8 NOT NULL,
+                                          client_code varchar(50) COLLATE pg_catalog.default NOT NULL,
+                                          menu_id int8 NOT NULL
 )
 ;
 COMMENT ON COLUMN iam_role_menu.id IS '主键';
@@ -410,10 +410,10 @@ COMMENT ON TABLE iam_role_menu IS '角色菜单关联关系';
 -- ----------------------------
 DROP TABLE IF EXISTS iam_role_path;
 CREATE TABLE iam_role_path (
-                               id int8 NOT NULL,
-                               role_id int8 NOT NULL,
-                               client_code varchar(50) COLLATE pg_catalog.default NOT NULL,
-                               path_id int8 NOT NULL
+                                          id int8 NOT NULL,
+                                          role_id int8 NOT NULL,
+                                          client_code varchar(50) COLLATE pg_catalog.default NOT NULL,
+                                          path_id int8 NOT NULL
 )
 ;
 COMMENT ON COLUMN iam_role_path.id IS '主键';
@@ -427,22 +427,22 @@ COMMENT ON TABLE iam_role_path IS '角色路径关联关系';
 -- ----------------------------
 DROP TABLE IF EXISTS iam_user_expand_info;
 CREATE TABLE iam_user_expand_info (
-                                      id int8 NOT NULL,
-                                      creator int8,
-                                      create_time timestamp(6),
-                                      last_modifier int8,
-                                      last_modified_time timestamp(6),
-                                      version int4 NOT NULL,
-                                      deleted bool NOT NULL,
-                                      sex varchar(10) COLLATE pg_catalog.default,
-                                      avatar varchar(300) COLLATE pg_catalog.default,
-                                      birthday date,
-                                      last_login_time timestamp(0),
-                                      register_time timestamp(6),
-                                      current_login_time timestamp(6),
-                                      initial_password bool,
-                                      expire_password bool,
-                                      last_change_password_time timestamp(6)
+                                                 id int8 NOT NULL,
+                                                 creator int8,
+                                                 create_time timestamp(6),
+                                                 last_modifier int8,
+                                                 last_modified_time timestamp(6),
+                                                 version int4 NOT NULL,
+                                                 deleted bool NOT NULL,
+                                                 sex varchar(10) COLLATE pg_catalog.default,
+                                                 avatar varchar(300) COLLATE pg_catalog.default,
+                                                 birthday date,
+                                                 last_login_time timestamp(0),
+                                                 register_time timestamp(6),
+                                                 current_login_time timestamp(6),
+                                                 initial_password bool,
+                                                 expire_password bool,
+                                                 last_change_password_time timestamp(6)
 )
 ;
 COMMENT ON COLUMN iam_user_expand_info.id IS '主键';
@@ -468,20 +468,20 @@ COMMENT ON TABLE iam_user_expand_info IS '用户扩展信息';
 -- ----------------------------
 DROP TABLE IF EXISTS iam_user_info;
 CREATE TABLE iam_user_info (
-                               id int8 NOT NULL,
-                               creator int8,
-                               create_time timestamp(6),
-                               last_modifier int8,
-                               last_modified_time timestamp(6),
-                               version int4 NOT NULL,
-                               deleted bool NOT NULL,
-                               name varchar(50) COLLATE pg_catalog.default,
-                               account varchar(50) COLLATE pg_catalog.default NOT NULL,
-                               password varchar(120) COLLATE pg_catalog.default NOT NULL,
-                               phone varchar(50) COLLATE pg_catalog.default,
-                               email varchar(50) COLLATE pg_catalog.default,
-                               administrator bool NOT NULL,
-                               status varchar(50) COLLATE pg_catalog.default
+                                          id int8 NOT NULL,
+                                          creator int8,
+                                          create_time timestamp(6),
+                                          last_modifier int8,
+                                          last_modified_time timestamp(6),
+                                          version int4 NOT NULL,
+                                          deleted bool NOT NULL,
+                                          name varchar(50) COLLATE pg_catalog.default,
+                                          account varchar(50) COLLATE pg_catalog.default NOT NULL,
+                                          password varchar(120) COLLATE pg_catalog.default NOT NULL,
+                                          phone varchar(50) COLLATE pg_catalog.default,
+                                          email varchar(50) COLLATE pg_catalog.default,
+                                          administrator bool NOT NULL,
+                                          status varchar(50) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN iam_user_info.id IS '主键';
@@ -505,9 +505,9 @@ COMMENT ON TABLE iam_user_info IS '用户核心信息';
 -- ----------------------------
 DROP TABLE IF EXISTS iam_user_role;
 CREATE TABLE iam_user_role (
-                               id int8 NOT NULL,
-                               user_id int8 NOT NULL,
-                               role_id int8 NOT NULL
+                                          id int8 NOT NULL,
+                                          user_id int8 NOT NULL,
+                                          role_id int8 NOT NULL
 )
 ;
 COMMENT ON COLUMN iam_user_role.id IS '主键';
@@ -520,27 +520,27 @@ COMMENT ON TABLE iam_user_role IS '用户角色关联关系';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_adapay_config;
 CREATE TABLE pay_adapay_config (
-                                   id int8 NOT NULL,
-                                   creator int8,
-                                   create_time timestamp(6),
-                                   last_modifier int8,
-                                   last_modified_time timestamp(6),
-                                   version int4 NOT NULL,
-                                   deleted bool NOT NULL,
-                                   ada_pay_mch_no varchar(64) COLLATE pg_catalog.default,
-                                   ada_pay_app_id varchar(64) COLLATE pg_catalog.default,
-                                   api_key text COLLATE pg_catalog.default,
-                                   mch_private_key text COLLATE pg_catalog.default,
-                                   ada_pay_public_key text COLLATE pg_catalog.default,
-                                   enable bool,
-                                   sandbox bool,
-                                   alloc_fee varchar(10) COLLATE pg_catalog.default,
-                                   mch_no varchar(32) COLLATE pg_catalog.default,
-                                   app_id varchar(32) COLLATE pg_catalog.default,
-                                   wx_app_id varchar(32) COLLATE pg_catalog.default,
-                                   wx_app_secret varchar(64) COLLATE pg_catalog.default,
-                                   wx_auth_url varchar(200) COLLATE pg_catalog.default,
-                                   isv_no varchar(32) COLLATE pg_catalog.default
+                                              id int8 NOT NULL,
+                                              creator int8,
+                                              create_time timestamp(6),
+                                              last_modifier int8,
+                                              last_modified_time timestamp(6),
+                                              version int4 NOT NULL,
+                                              deleted bool NOT NULL,
+                                              ada_pay_mch_no varchar(64) COLLATE pg_catalog.default,
+                                              ada_pay_app_id varchar(64) COLLATE pg_catalog.default,
+                                              api_key text COLLATE pg_catalog.default,
+                                              mch_private_key text COLLATE pg_catalog.default,
+                                              ada_pay_public_key text COLLATE pg_catalog.default,
+                                              enable bool,
+                                              sandbox bool,
+                                              alloc_fee varchar(10) COLLATE pg_catalog.default,
+                                              mch_no varchar(32) COLLATE pg_catalog.default,
+                                              app_id varchar(32) COLLATE pg_catalog.default,
+                                              wx_app_id varchar(32) COLLATE pg_catalog.default,
+                                              wx_app_secret varchar(64) COLLATE pg_catalog.default,
+                                              wx_auth_url varchar(200) COLLATE pg_catalog.default,
+                                              isv_no varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_adapay_config.id IS '主键';
@@ -571,23 +571,23 @@ COMMENT ON TABLE pay_adapay_config IS '汇付支付配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_aggregate_bar_pay_config;
 CREATE TABLE pay_aggregate_bar_pay_config (
-                                              id int8 NOT NULL,
-                                              creator varchar(64) COLLATE pg_catalog.default,
-                                              create_time timestamp(6),
-                                              last_modifier varchar(64) COLLATE pg_catalog.default,
-                                              last_modified_time timestamp(6),
-                                              version int4 NOT NULL DEFAULT 0,
-                                              deleted bool NOT NULL DEFAULT false,
-                                              isv_no varchar(32) COLLATE pg_catalog.default,
-                                              mch_no varchar(32) COLLATE pg_catalog.default NOT NULL,
-                                              app_id varchar(32) COLLATE pg_catalog.default NOT NULL,
-                                              wx_channel varchar(32) COLLATE pg_catalog.default,
-                                              wx_method varchar(32) COLLATE pg_catalog.default,
-                                              alipay_channel varchar(32) COLLATE pg_catalog.default,
-                                              alipay_method varchar(32) COLLATE pg_catalog.default,
-                                              union_channel varchar(32) COLLATE pg_catalog.default,
-                                              union_method varchar(32) COLLATE pg_catalog.default,
-                                              terminal_no varchar(32) COLLATE pg_catalog.default
+                                                         id int8 NOT NULL,
+                                                         creator varchar(64) COLLATE pg_catalog.default,
+                                                         create_time timestamp(6),
+                                                         last_modifier varchar(64) COLLATE pg_catalog.default,
+                                                         last_modified_time timestamp(6),
+                                                         version int4 NOT NULL DEFAULT 0,
+                                                         deleted bool NOT NULL DEFAULT false,
+                                                         isv_no varchar(32) COLLATE pg_catalog.default,
+                                                         mch_no varchar(32) COLLATE pg_catalog.default NOT NULL,
+                                                         app_id varchar(32) COLLATE pg_catalog.default NOT NULL,
+                                                         wx_channel varchar(32) COLLATE pg_catalog.default,
+                                                         wx_method varchar(32) COLLATE pg_catalog.default,
+                                                         alipay_channel varchar(32) COLLATE pg_catalog.default,
+                                                         alipay_method varchar(32) COLLATE pg_catalog.default,
+                                                         union_channel varchar(32) COLLATE pg_catalog.default,
+                                                         union_method varchar(32) COLLATE pg_catalog.default,
+                                                         terminal_no varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_aggregate_bar_pay_config.id IS '主键ID';
@@ -614,24 +614,24 @@ COMMENT ON TABLE pay_aggregate_bar_pay_config IS '网关聚合付款码支付配
 -- ----------------------------
 DROP TABLE IF EXISTS pay_aggregate_pay_config;
 CREATE TABLE pay_aggregate_pay_config (
-                                          id int8 NOT NULL,
-                                          creator int8,
-                                          create_time timestamp(6),
-                                          last_modifier int8,
-                                          last_modified_time timestamp(6),
-                                          version int4 NOT NULL,
-                                          deleted bool NOT NULL,
-                                          app_id varchar(32) COLLATE pg_catalog.default,
-                                          aggregate_type varchar(32) COLLATE pg_catalog.default,
-                                          channel varchar(32) COLLATE pg_catalog.default,
-                                          pay_method varchar(32) COLLATE pg_catalog.default,
-                                          auto_launch bool,
-                                          other_method varchar(32) COLLATE pg_catalog.default,
-                                          mch_no varchar(32) COLLATE pg_catalog.default,
-                                          need_open_id bool,
-                                          call_type varchar(32) COLLATE pg_catalog.default,
-                                          open_id_get_type varchar(32) COLLATE pg_catalog.default,
-                                          isv_no varchar(32) COLLATE pg_catalog.default
+                                                     id int8 NOT NULL,
+                                                     creator int8,
+                                                     create_time timestamp(6),
+                                                     last_modifier int8,
+                                                     last_modified_time timestamp(6),
+                                                     version int4 NOT NULL,
+                                                     deleted bool NOT NULL,
+                                                     app_id varchar(32) COLLATE pg_catalog.default,
+                                                     aggregate_type varchar(32) COLLATE pg_catalog.default,
+                                                     channel varchar(32) COLLATE pg_catalog.default,
+                                                     pay_method varchar(32) COLLATE pg_catalog.default,
+                                                     auto_launch bool,
+                                                     other_method varchar(32) COLLATE pg_catalog.default,
+                                                     mch_no varchar(32) COLLATE pg_catalog.default,
+                                                     need_open_id bool,
+                                                     call_type varchar(32) COLLATE pg_catalog.default,
+                                                     open_id_get_type varchar(32) COLLATE pg_catalog.default,
+                                                     isv_no varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_aggregate_pay_config.id IS '主键';
@@ -659,23 +659,23 @@ COMMENT ON TABLE pay_aggregate_pay_config IS '网关聚合支付配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_aggregate_qr_pay_config;
 CREATE TABLE pay_aggregate_qr_pay_config (
-                                             id int8 NOT NULL,
-                                             creator varchar(64) COLLATE pg_catalog.default,
-                                             create_time timestamp(6),
-                                             last_modifier varchar(64) COLLATE pg_catalog.default,
-                                             last_modified_time timestamp(6),
-                                             version int4 NOT NULL DEFAULT 0,
-                                             deleted bool NOT NULL DEFAULT false,
-                                             isv_no varchar(32) COLLATE pg_catalog.default,
-                                             mch_no varchar(32) COLLATE pg_catalog.default NOT NULL,
-                                             app_id varchar(32) COLLATE pg_catalog.default NOT NULL,
-                                             wx_channel varchar(32) COLLATE pg_catalog.default,
-                                             wx_method varchar(32) COLLATE pg_catalog.default,
-                                             alipay_channel varchar(32) COLLATE pg_catalog.default,
-                                             alipay_method varchar(32) COLLATE pg_catalog.default,
-                                             union_channel varchar(32) COLLATE pg_catalog.default,
-                                             union_method varchar(32) COLLATE pg_catalog.default,
-                                             auto_launch bool NOT NULL DEFAULT false
+                                                        id int8 NOT NULL,
+                                                        creator varchar(64) COLLATE pg_catalog.default,
+                                                        create_time timestamp(6),
+                                                        last_modifier varchar(64) COLLATE pg_catalog.default,
+                                                        last_modified_time timestamp(6),
+                                                        version int4 NOT NULL DEFAULT 0,
+                                                        deleted bool NOT NULL DEFAULT false,
+                                                        isv_no varchar(32) COLLATE pg_catalog.default,
+                                                        mch_no varchar(32) COLLATE pg_catalog.default NOT NULL,
+                                                        app_id varchar(32) COLLATE pg_catalog.default NOT NULL,
+                                                        wx_channel varchar(32) COLLATE pg_catalog.default,
+                                                        wx_method varchar(32) COLLATE pg_catalog.default,
+                                                        alipay_channel varchar(32) COLLATE pg_catalog.default,
+                                                        alipay_method varchar(32) COLLATE pg_catalog.default,
+                                                        union_channel varchar(32) COLLATE pg_catalog.default,
+                                                        union_method varchar(32) COLLATE pg_catalog.default,
+                                                        auto_launch bool NOT NULL DEFAULT false
 )
 ;
 COMMENT ON COLUMN pay_aggregate_qr_pay_config.id IS '主键ID';
@@ -702,29 +702,29 @@ COMMENT ON TABLE pay_aggregate_qr_pay_config IS '网关聚合扫码支付配置'
 -- ----------------------------
 DROP TABLE IF EXISTS pay_alipay_config;
 CREATE TABLE pay_alipay_config (
-                                   id int8 NOT NULL,
-                                   creator int8,
-                                   create_time timestamp(6),
-                                   last_modifier int8,
-                                   last_modified_time timestamp(6),
-                                   version int4 NOT NULL,
-                                   deleted bool NOT NULL,
-                                   isv bool,
-                                   ali_app_id varchar(64) COLLATE pg_catalog.default,
-                                   app_auth_token varchar(128) COLLATE pg_catalog.default,
-                                   enable bool,
-                                   auth_type varchar(20) COLLATE pg_catalog.default,
-                                   sign_type varchar(20) COLLATE pg_catalog.default,
-                                   alipay_user_id varchar(32) COLLATE pg_catalog.default,
-                                   alipay_public_key text COLLATE pg_catalog.default,
-                                   private_key text COLLATE pg_catalog.default,
-                                   app_cert text COLLATE pg_catalog.default,
-                                   alipay_cert text COLLATE pg_catalog.default,
-                                   alipay_root_cert text COLLATE pg_catalog.default,
-                                   sandbox bool,
-                                   mch_no varchar(32) COLLATE pg_catalog.default,
-                                   app_id varchar(32) COLLATE pg_catalog.default,
-                                   isv_no varchar(32) COLLATE pg_catalog.default
+                                              id int8 NOT NULL,
+                                              creator int8,
+                                              create_time timestamp(6),
+                                              last_modifier int8,
+                                              last_modified_time timestamp(6),
+                                              version int4 NOT NULL,
+                                              deleted bool NOT NULL,
+                                              isv bool,
+                                              ali_app_id varchar(64) COLLATE pg_catalog.default,
+                                              app_auth_token varchar(128) COLLATE pg_catalog.default,
+                                              enable bool,
+                                              auth_type varchar(20) COLLATE pg_catalog.default,
+                                              sign_type varchar(20) COLLATE pg_catalog.default,
+                                              alipay_user_id varchar(32) COLLATE pg_catalog.default,
+                                              alipay_public_key text COLLATE pg_catalog.default,
+                                              private_key text COLLATE pg_catalog.default,
+                                              app_cert text COLLATE pg_catalog.default,
+                                              alipay_cert text COLLATE pg_catalog.default,
+                                              alipay_root_cert text COLLATE pg_catalog.default,
+                                              sandbox bool,
+                                              mch_no varchar(32) COLLATE pg_catalog.default,
+                                              app_id varchar(32) COLLATE pg_catalog.default,
+                                              isv_no varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_alipay_config.id IS '主键';
@@ -757,25 +757,25 @@ COMMENT ON TABLE pay_alipay_config IS '支付宝配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_alipay_isv_config;
 CREATE TABLE pay_alipay_isv_config (
-                                       id int8 NOT NULL,
-                                       creator int8,
-                                       create_time timestamp(6),
-                                       last_modifier int8,
-                                       last_modified_time timestamp(6),
-                                       version int4 NOT NULL,
-                                       deleted bool NOT NULL,
-                                       ali_app_id varchar(64) COLLATE pg_catalog.default,
-                                       enable bool,
-                                       auth_type varchar(20) COLLATE pg_catalog.default,
-                                       sign_type varchar(20) COLLATE pg_catalog.default,
-                                       alipay_user_id varchar(32) COLLATE pg_catalog.default,
-                                       alipay_public_key varchar(512) COLLATE pg_catalog.default,
-                                       private_key text COLLATE pg_catalog.default,
-                                       app_cert text COLLATE pg_catalog.default,
-                                       alipay_cert text COLLATE pg_catalog.default,
-                                       alipay_root_cert text COLLATE pg_catalog.default,
-                                       sandbox bool,
-                                       isv_no varchar(32) COLLATE pg_catalog.default
+                                                  id int8 NOT NULL,
+                                                  creator int8,
+                                                  create_time timestamp(6),
+                                                  last_modifier int8,
+                                                  last_modified_time timestamp(6),
+                                                  version int4 NOT NULL,
+                                                  deleted bool NOT NULL,
+                                                  ali_app_id varchar(64) COLLATE pg_catalog.default,
+                                                  enable bool,
+                                                  auth_type varchar(20) COLLATE pg_catalog.default,
+                                                  sign_type varchar(20) COLLATE pg_catalog.default,
+                                                  alipay_user_id varchar(32) COLLATE pg_catalog.default,
+                                                  alipay_public_key varchar(512) COLLATE pg_catalog.default,
+                                                  private_key text COLLATE pg_catalog.default,
+                                                  app_cert text COLLATE pg_catalog.default,
+                                                  alipay_cert text COLLATE pg_catalog.default,
+                                                  alipay_root_cert text COLLATE pg_catalog.default,
+                                                  sandbox bool,
+                                                  isv_no varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_alipay_isv_config.id IS '主键';
@@ -804,19 +804,19 @@ COMMENT ON TABLE pay_alipay_isv_config IS '支付宝服务商配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_alipay_sub_config;
 CREATE TABLE pay_alipay_sub_config (
-                                       id int8 NOT NULL,
-                                       creator int8,
-                                       create_time timestamp(6),
-                                       last_modifier int8,
-                                       last_modified_time timestamp(6),
-                                       version int4 NOT NULL,
-                                       deleted bool NOT NULL,
-                                       app_auth_token varchar(128) COLLATE pg_catalog.default,
-                                       enable bool,
-                                       alipay_user_id varchar(32) COLLATE pg_catalog.default,
-                                       app_id varchar(32) COLLATE pg_catalog.default,
-                                       mch_no varchar(32) COLLATE pg_catalog.default,
-                                       isv_no varchar(32) COLLATE pg_catalog.default
+                                                  id int8 NOT NULL,
+                                                  creator int8,
+                                                  create_time timestamp(6),
+                                                  last_modifier int8,
+                                                  last_modified_time timestamp(6),
+                                                  version int4 NOT NULL,
+                                                  deleted bool NOT NULL,
+                                                  app_auth_token varchar(128) COLLATE pg_catalog.default,
+                                                  enable bool,
+                                                  alipay_user_id varchar(32) COLLATE pg_catalog.default,
+                                                  app_id varchar(32) COLLATE pg_catalog.default,
+                                                  mch_no varchar(32) COLLATE pg_catalog.default,
+                                                  isv_no varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_alipay_sub_config.id IS '主键';
@@ -839,12 +839,12 @@ COMMENT ON TABLE pay_alipay_sub_config IS '支付宝特约商户配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_api_const;
 CREATE TABLE pay_api_const (
-                               id int8 NOT NULL,
-                               code varchar(50) COLLATE pg_catalog.default NOT NULL,
-                               name varchar(50) COLLATE pg_catalog.default NOT NULL,
-                               api varchar(200) COLLATE pg_catalog.default NOT NULL,
-                               enable bool,
-                               remark varchar(200) COLLATE pg_catalog.default
+                                          id int8 NOT NULL,
+                                          code varchar(50) COLLATE pg_catalog.default NOT NULL,
+                                          name varchar(50) COLLATE pg_catalog.default NOT NULL,
+                                          api varchar(200) COLLATE pg_catalog.default NOT NULL,
+                                          enable bool,
+                                          remark varchar(200) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_api_const.id IS '主键';
@@ -860,33 +860,33 @@ COMMENT ON TABLE pay_api_const IS '支付接口常量';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_cashier_code;
 CREATE TABLE pay_cashier_code (
-                                  id int8 NOT NULL,
-                                  creator int8,
-                                  create_time timestamp(6),
-                                  last_modifier int8,
-                                  last_modified_time timestamp(6),
-                                  version int4 DEFAULT 0,
-                                  deleted bool DEFAULT false,
-                                  isv_no varchar(32) COLLATE pg_catalog.default,
-                                  mch_no varchar(32) COLLATE pg_catalog.default,
-                                  app_id varchar(32) COLLATE pg_catalog.default,
-                                  amount_type varchar(20) COLLATE pg_catalog.default,
-                                  amount numeric(15,2),
-                                  name varchar(100) COLLATE pg_catalog.default,
-                                  code varchar(50) COLLATE pg_catalog.default,
-                                  template_id int8,
-                                  allocation bool DEFAULT false,
-                                  auto_allocation bool DEFAULT false,
-                                  limit_pay varchar(50) COLLATE pg_catalog.default,
-                                  read_system bool DEFAULT false,
-                                  wx_channel varchar(20) COLLATE pg_catalog.default,
-                                  wx_method varchar(20) COLLATE pg_catalog.default,
-                                  alipay_channel varchar(20) COLLATE pg_catalog.default,
-                                  alipay_method varchar(20) COLLATE pg_catalog.default,
-                                  union_channel varchar(20) COLLATE pg_catalog.default,
-                                  union_method varchar(20) COLLATE pg_catalog.default,
-                                  enable bool DEFAULT true,
-                                  batch_no varchar(50) COLLATE pg_catalog.default
+                                             id int8 NOT NULL,
+                                             creator int8,
+                                             create_time timestamp(6),
+                                             last_modifier int8,
+                                             last_modified_time timestamp(6),
+                                             version int4 DEFAULT 0,
+                                             deleted bool DEFAULT false,
+                                             isv_no varchar(32) COLLATE pg_catalog.default,
+                                             mch_no varchar(32) COLLATE pg_catalog.default,
+                                             app_id varchar(32) COLLATE pg_catalog.default,
+                                             amount_type varchar(20) COLLATE pg_catalog.default,
+                                             amount numeric(15,2),
+                                             name varchar(100) COLLATE pg_catalog.default,
+                                             code varchar(50) COLLATE pg_catalog.default,
+                                             template_id int8,
+                                             allocation bool DEFAULT false,
+                                             auto_allocation bool DEFAULT false,
+                                             limit_pay varchar(50) COLLATE pg_catalog.default,
+                                             read_system bool DEFAULT false,
+                                             wx_channel varchar(20) COLLATE pg_catalog.default,
+                                             wx_method varchar(20) COLLATE pg_catalog.default,
+                                             alipay_channel varchar(20) COLLATE pg_catalog.default,
+                                             alipay_method varchar(20) COLLATE pg_catalog.default,
+                                             union_channel varchar(20) COLLATE pg_catalog.default,
+                                             union_method varchar(20) COLLATE pg_catalog.default,
+                                             enable bool DEFAULT true,
+                                             batch_no varchar(50) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_cashier_code.id IS '主键ID';
@@ -923,25 +923,25 @@ COMMENT ON TABLE pay_cashier_code IS '收款码牌';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_cashier_code_config;
 CREATE TABLE pay_cashier_code_config (
-                                         id int8 NOT NULL,
-                                         creator varchar(64) COLLATE pg_catalog.default,
-                                         create_time timestamp(6),
-                                         last_modifier varchar(64) COLLATE pg_catalog.default,
-                                         last_modified_time timestamp(6),
-                                         version int4 NOT NULL DEFAULT 0,
-                                         deleted bool NOT NULL DEFAULT false,
-                                         isv_no varchar(32) COLLATE pg_catalog.default,
-                                         mch_no varchar(32) COLLATE pg_catalog.default NOT NULL,
-                                         app_id varchar(32) COLLATE pg_catalog.default NOT NULL,
-                                         allocation bool NOT NULL DEFAULT false,
-                                         auto_allocation bool NOT NULL DEFAULT false,
-                                         limit_pay varchar(512) COLLATE pg_catalog.default,
-                                         wx_channel varchar(32) COLLATE pg_catalog.default,
-                                         wx_method varchar(32) COLLATE pg_catalog.default,
-                                         alipay_channel varchar(32) COLLATE pg_catalog.default,
-                                         alipay_method varchar(32) COLLATE pg_catalog.default,
-                                         union_channel varchar(32) COLLATE pg_catalog.default,
-                                         union_method varchar(32) COLLATE pg_catalog.default
+                                                    id int8 NOT NULL,
+                                                    creator varchar(64) COLLATE pg_catalog.default,
+                                                    create_time timestamp(6),
+                                                    last_modifier varchar(64) COLLATE pg_catalog.default,
+                                                    last_modified_time timestamp(6),
+                                                    version int4 NOT NULL DEFAULT 0,
+                                                    deleted bool NOT NULL DEFAULT false,
+                                                    isv_no varchar(32) COLLATE pg_catalog.default,
+                                                    mch_no varchar(32) COLLATE pg_catalog.default NOT NULL,
+                                                    app_id varchar(32) COLLATE pg_catalog.default NOT NULL,
+                                                    allocation bool NOT NULL DEFAULT false,
+                                                    auto_allocation bool NOT NULL DEFAULT false,
+                                                    limit_pay varchar(512) COLLATE pg_catalog.default,
+                                                    wx_channel varchar(32) COLLATE pg_catalog.default,
+                                                    wx_method varchar(32) COLLATE pg_catalog.default,
+                                                    alipay_channel varchar(32) COLLATE pg_catalog.default,
+                                                    alipay_method varchar(32) COLLATE pg_catalog.default,
+                                                    union_channel varchar(32) COLLATE pg_catalog.default,
+                                                    union_method varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_cashier_code_config.id IS '主键ID';
@@ -970,21 +970,21 @@ COMMENT ON TABLE pay_cashier_code_config IS '收银码牌配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_channel_config;
 CREATE TABLE pay_channel_config (
-                                    id int8 NOT NULL,
-                                    channel varchar(32) COLLATE pg_catalog.default,
-                                    out_mch_no varchar(128) COLLATE pg_catalog.default,
-                                    out_app_id varchar(256) COLLATE pg_catalog.default,
-                                    enable bool,
-                                    ext text COLLATE pg_catalog.default,
-                                    creator int8,
-                                    create_time timestamp(6),
-                                    last_modifier int8,
-                                    last_modified_time timestamp(6),
-                                    version int4 NOT NULL,
-                                    deleted bool NOT NULL,
-                                    mch_no varchar(32) COLLATE pg_catalog.default NOT NULL,
-                                    app_id varchar(32) COLLATE pg_catalog.default NOT NULL,
-                                    isv_no varchar(64) COLLATE pg_catalog.default
+                                               id int8 NOT NULL,
+                                               channel varchar(32) COLLATE pg_catalog.default,
+                                               out_mch_no varchar(128) COLLATE pg_catalog.default,
+                                               out_app_id varchar(256) COLLATE pg_catalog.default,
+                                               enable bool,
+                                               ext text COLLATE pg_catalog.default,
+                                               creator int8,
+                                               create_time timestamp(6),
+                                               last_modifier int8,
+                                               last_modified_time timestamp(6),
+                                               version int4 NOT NULL,
+                                               deleted bool NOT NULL,
+                                               mch_no varchar(32) COLLATE pg_catalog.default NOT NULL,
+                                               app_id varchar(32) COLLATE pg_catalog.default NOT NULL,
+                                               isv_no varchar(64) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_channel_config.id IS '主键';
@@ -1009,14 +1009,14 @@ COMMENT ON TABLE pay_channel_config IS '支付通道配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_channel_const;
 CREATE TABLE pay_channel_const (
-                                   id int8 NOT NULL,
-                                   code varchar(32) COLLATE pg_catalog.default NOT NULL,
-                                   name varchar(32) COLLATE pg_catalog.default NOT NULL,
-                                   enable bool NOT NULL DEFAULT false,
-                                   isv bool NOT NULL DEFAULT false,
-                                   allocatable bool NOT NULL DEFAULT false,
-                                   terminal bool NOT NULL DEFAULT false,
-                                   apply bool NOT NULL DEFAULT false
+                                              id int8 NOT NULL,
+                                              code varchar(32) COLLATE pg_catalog.default NOT NULL,
+                                              name varchar(32) COLLATE pg_catalog.default NOT NULL,
+                                              enable bool NOT NULL DEFAULT false,
+                                              isv bool NOT NULL DEFAULT false,
+                                              allocatable bool NOT NULL DEFAULT false,
+                                              terminal bool NOT NULL DEFAULT false,
+                                              apply bool NOT NULL DEFAULT false
 )
 ;
 COMMENT ON COLUMN pay_channel_const.id IS '主键';
@@ -1034,26 +1034,26 @@ COMMENT ON TABLE pay_channel_const IS '支付通道常量';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_checkout_counter_config;
 CREATE TABLE pay_checkout_counter_config (
-                                             id int8 NOT NULL,
-                                             creator varchar(64) COLLATE pg_catalog.default,
-                                             create_time timestamp(6),
-                                             last_modifier varchar(64) COLLATE pg_catalog.default,
-                                             last_modified_time timestamp(6),
-                                             version int4 NOT NULL DEFAULT 0,
-                                             deleted bool NOT NULL DEFAULT false,
-                                             isv_no varchar(32) COLLATE pg_catalog.default,
-                                             mch_no varchar(32) COLLATE pg_catalog.default NOT NULL,
-                                             app_id varchar(32) COLLATE pg_catalog.default NOT NULL,
-                                             name varchar(100) COLLATE pg_catalog.default,
-                                             type varchar(32) COLLATE pg_catalog.default,
-                                             recommend bool NOT NULL DEFAULT false,
-                                             bg_color varchar(20) COLLATE pg_catalog.default,
-                                             border_color varchar(20) COLLATE pg_catalog.default,
-                                             font_color varchar(20) COLLATE pg_catalog.default,
-                                             icon varchar(200) COLLATE pg_catalog.default,
-                                             sort_no numeric(10,2),
-                                             channel varchar(32) COLLATE pg_catalog.default,
-                                             pay_method varchar(32) COLLATE pg_catalog.default
+                                                        id int8 NOT NULL,
+                                                        creator varchar(64) COLLATE pg_catalog.default,
+                                                        create_time timestamp(6),
+                                                        last_modifier varchar(64) COLLATE pg_catalog.default,
+                                                        last_modified_time timestamp(6),
+                                                        version int4 NOT NULL DEFAULT 0,
+                                                        deleted bool NOT NULL DEFAULT false,
+                                                        isv_no varchar(32) COLLATE pg_catalog.default,
+                                                        mch_no varchar(32) COLLATE pg_catalog.default NOT NULL,
+                                                        app_id varchar(32) COLLATE pg_catalog.default NOT NULL,
+                                                        name varchar(100) COLLATE pg_catalog.default,
+                                                        type varchar(32) COLLATE pg_catalog.default,
+                                                        recommend bool NOT NULL DEFAULT false,
+                                                        bg_color varchar(20) COLLATE pg_catalog.default,
+                                                        border_color varchar(20) COLLATE pg_catalog.default,
+                                                        font_color varchar(20) COLLATE pg_catalog.default,
+                                                        icon varchar(200) COLLATE pg_catalog.default,
+                                                        sort_no numeric(10,2),
+                                                        channel varchar(32) COLLATE pg_catalog.default,
+                                                        pay_method varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_checkout_counter_config.id IS '主键ID';
@@ -1083,20 +1083,20 @@ COMMENT ON TABLE pay_checkout_counter_config IS '网关收银台配置项';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_close_record;
 CREATE TABLE pay_close_record (
-                                  id int8 NOT NULL,
-                                  order_no varchar(32) COLLATE pg_catalog.default NOT NULL,
-                                  biz_order_no varchar(100) COLLATE pg_catalog.default NOT NULL,
-                                  channel varchar(20) COLLATE pg_catalog.default,
-                                  close_type varchar(20) COLLATE pg_catalog.default NOT NULL,
-                                  closed bool NOT NULL,
-                                  error_code varchar(10) COLLATE pg_catalog.default,
-                                  error_msg varchar(500) COLLATE pg_catalog.default,
-                                  client_ip varchar(64) COLLATE pg_catalog.default,
-                                  creator int8,
-                                  create_time timestamp(6),
-                                  mch_no varchar(32) COLLATE pg_catalog.default,
-                                  app_id varchar(32) COLLATE pg_catalog.default,
-                                  isv_no varchar(32) COLLATE pg_catalog.default
+                                             id int8 NOT NULL,
+                                             order_no varchar(32) COLLATE pg_catalog.default NOT NULL,
+                                             biz_order_no varchar(100) COLLATE pg_catalog.default NOT NULL,
+                                             channel varchar(20) COLLATE pg_catalog.default,
+                                             close_type varchar(20) COLLATE pg_catalog.default NOT NULL,
+                                             closed bool NOT NULL,
+                                             error_code varchar(10) COLLATE pg_catalog.default,
+                                             error_msg varchar(500) COLLATE pg_catalog.default,
+                                             client_ip varchar(64) COLLATE pg_catalog.default,
+                                             creator int8,
+                                             create_time timestamp(6),
+                                             mch_no varchar(32) COLLATE pg_catalog.default,
+                                             app_id varchar(32) COLLATE pg_catalog.default,
+                                             isv_no varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_close_record.id IS '主键';
@@ -1120,23 +1120,23 @@ COMMENT ON TABLE pay_close_record IS '支付关闭记录';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_dougong_isv_config;
 CREATE TABLE pay_dougong_isv_config (
-                                        id int8 NOT NULL,
-                                        creator int8,
-                                        create_time timestamp(6),
-                                        last_modifier int8,
-                                        last_modified_time timestamp(6),
-                                        version int4 NOT NULL DEFAULT 0,
-                                        deleted bool NOT NULL DEFAULT false,
-                                        enable bool,
-                                        sandbox bool,
-                                        sys_id varchar(64) COLLATE pg_catalog.default,
-                                        product_id varchar(32) COLLATE pg_catalog.default,
-                                        dg_public_key varchar(5000) COLLATE pg_catalog.default,
-                                        private_key varchar(2048) COLLATE pg_catalog.default,
-                                        wx_app_id varchar(32) COLLATE pg_catalog.default,
-                                        wx_app_secret varchar(64) COLLATE pg_catalog.default,
-                                        wx_auth_url varchar(150) COLLATE pg_catalog.default,
-                                        isv_no varchar(32) COLLATE pg_catalog.default
+                                                   id int8 NOT NULL,
+                                                   creator int8,
+                                                   create_time timestamp(6),
+                                                   last_modifier int8,
+                                                   last_modified_time timestamp(6),
+                                                   version int4 NOT NULL DEFAULT 0,
+                                                   deleted bool NOT NULL DEFAULT false,
+                                                   enable bool,
+                                                   sandbox bool,
+                                                   sys_id varchar(64) COLLATE pg_catalog.default,
+                                                   product_id varchar(32) COLLATE pg_catalog.default,
+                                                   dg_public_key varchar(5000) COLLATE pg_catalog.default,
+                                                   private_key varchar(2048) COLLATE pg_catalog.default,
+                                                   wx_app_id varchar(32) COLLATE pg_catalog.default,
+                                                   wx_app_secret varchar(64) COLLATE pg_catalog.default,
+                                                   wx_auth_url varchar(150) COLLATE pg_catalog.default,
+                                                   isv_no varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_dougong_isv_config.id IS '主键';
@@ -1163,22 +1163,22 @@ COMMENT ON TABLE pay_dougong_isv_config IS '斗拱服务商配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_dougong_sub_config;
 CREATE TABLE pay_dougong_sub_config (
-                                        id int8 NOT NULL,
-                                        creator int8,
-                                        create_time timestamp(6),
-                                        last_modifier int8,
-                                        last_modified_time timestamp(6),
-                                        version int4 NOT NULL DEFAULT 0,
-                                        deleted bool NOT NULL DEFAULT false,
-                                        isv_no varchar(32) COLLATE pg_catalog.default,
-                                        mch_no varchar(32) COLLATE pg_catalog.default,
-                                        app_id varchar(32) COLLATE pg_catalog.default,
-                                        enable bool DEFAULT false,
-                                        merchant_no varchar(32) COLLATE pg_catalog.default,
-                                        read_system bool DEFAULT true,
-                                        wx_app_id varchar(32) COLLATE pg_catalog.default,
-                                        wx_app_secret varchar(64) COLLATE pg_catalog.default,
-                                        wx_auth_url varchar(150) COLLATE pg_catalog.default
+                                                   id int8 NOT NULL,
+                                                   creator int8,
+                                                   create_time timestamp(6),
+                                                   last_modifier int8,
+                                                   last_modified_time timestamp(6),
+                                                   version int4 NOT NULL DEFAULT 0,
+                                                   deleted bool NOT NULL DEFAULT false,
+                                                   isv_no varchar(32) COLLATE pg_catalog.default,
+                                                   mch_no varchar(32) COLLATE pg_catalog.default,
+                                                   app_id varchar(32) COLLATE pg_catalog.default,
+                                                   enable bool DEFAULT false,
+                                                   merchant_no varchar(32) COLLATE pg_catalog.default,
+                                                   read_system bool DEFAULT true,
+                                                   wx_app_id varchar(32) COLLATE pg_catalog.default,
+                                                   wx_app_secret varchar(64) COLLATE pg_catalog.default,
+                                                   wx_auth_url varchar(150) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_dougong_sub_config.id IS '主键';
@@ -1204,25 +1204,25 @@ COMMENT ON TABLE pay_dougong_sub_config IS '斗拱特约商户配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_fuyou_isv_config;
 CREATE TABLE pay_fuyou_isv_config (
-                                      id int8 NOT NULL,
-                                      enable bool,
-                                      sandbox bool,
-                                      fy_app_id varchar(64) COLLATE pg_catalog.default,
-                                      order_prefix varchar(64) COLLATE pg_catalog.default,
-                                      private_key text COLLATE pg_catalog.default,
-                                      public_key text COLLATE pg_catalog.default,
-                                      wx_channel_auth bool,
-                                      wx_app_id varchar(32) COLLATE pg_catalog.default,
-                                      wx_app_secret varchar(64) COLLATE pg_catalog.default,
-                                      wx_auth_url varchar(200) COLLATE pg_catalog.default,
-                                      isv_no varchar(32) COLLATE pg_catalog.default,
-                                      version int8,
-                                      creator int8,
-                                      create_time timestamp(6),
-                                      last_modifier int8,
-                                      last_modified_time timestamp(6),
-                                      deleted bool DEFAULT false,
-                                      onb_key varchar(200) COLLATE pg_catalog.default
+                                                 id int8 NOT NULL,
+                                                 enable bool,
+                                                 sandbox bool,
+                                                 fy_app_id varchar(64) COLLATE pg_catalog.default,
+                                                 order_prefix varchar(64) COLLATE pg_catalog.default,
+                                                 private_key text COLLATE pg_catalog.default,
+                                                 public_key text COLLATE pg_catalog.default,
+                                                 wx_channel_auth bool,
+                                                 wx_app_id varchar(32) COLLATE pg_catalog.default,
+                                                 wx_app_secret varchar(64) COLLATE pg_catalog.default,
+                                                 wx_auth_url varchar(200) COLLATE pg_catalog.default,
+                                                 isv_no varchar(32) COLLATE pg_catalog.default,
+                                                 version int8,
+                                                 creator int8,
+                                                 create_time timestamp(6),
+                                                 last_modifier int8,
+                                                 last_modified_time timestamp(6),
+                                                 deleted bool DEFAULT false,
+                                                 onb_key varchar(200) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_fuyou_isv_config.id IS '主键';
@@ -1251,24 +1251,24 @@ COMMENT ON TABLE pay_fuyou_isv_config IS '富友服务商配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_fuyou_sub_config;
 CREATE TABLE pay_fuyou_sub_config (
-                                      id int8 NOT NULL,
-                                      enable bool,
-                                      merchant_no varchar(32) COLLATE pg_catalog.default,
-                                      term_no varchar(32) COLLATE pg_catalog.default,
-                                      mch_no varchar(32) COLLATE pg_catalog.default,
-                                      app_id varchar(32) COLLATE pg_catalog.default,
-                                      read_system bool,
-                                      wx_channel_auth bool,
-                                      wx_app_id varchar(32) COLLATE pg_catalog.default,
-                                      wx_app_secret varchar(64) COLLATE pg_catalog.default,
-                                      wx_auth_url varchar(200) COLLATE pg_catalog.default,
-                                      version int8,
-                                      creator int8,
-                                      create_time timestamp(6),
-                                      last_modifier int8,
-                                      last_modified_time timestamp(6),
-                                      deleted bool DEFAULT false,
-                                      isv_no varchar(32) COLLATE pg_catalog.default
+                                                 id int8 NOT NULL,
+                                                 enable bool,
+                                                 merchant_no varchar(32) COLLATE pg_catalog.default,
+                                                 term_no varchar(32) COLLATE pg_catalog.default,
+                                                 mch_no varchar(32) COLLATE pg_catalog.default,
+                                                 app_id varchar(32) COLLATE pg_catalog.default,
+                                                 read_system bool,
+                                                 wx_channel_auth bool,
+                                                 wx_app_id varchar(32) COLLATE pg_catalog.default,
+                                                 wx_app_secret varchar(64) COLLATE pg_catalog.default,
+                                                 wx_auth_url varchar(200) COLLATE pg_catalog.default,
+                                                 version int8,
+                                                 creator int8,
+                                                 create_time timestamp(6),
+                                                 last_modifier int8,
+                                                 last_modified_time timestamp(6),
+                                                 deleted bool DEFAULT false,
+                                                 isv_no varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_fuyou_sub_config.id IS '主键';
@@ -1296,18 +1296,18 @@ COMMENT ON TABLE pay_fuyou_sub_config IS '富友子商户配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_gateway_pay_config;
 CREATE TABLE pay_gateway_pay_config (
-                                        id int8 NOT NULL,
-                                        creator varchar(64) COLLATE pg_catalog.default,
-                                        create_time timestamp(6),
-                                        last_modifier varchar(64) COLLATE pg_catalog.default,
-                                        last_modified_time timestamp(6),
-                                        version int4 NOT NULL DEFAULT 0,
-                                        deleted bool NOT NULL DEFAULT false,
-                                        isv_no varchar(32) COLLATE pg_catalog.default,
-                                        mch_no varchar(32) COLLATE pg_catalog.default NOT NULL,
-                                        app_id varchar(32) COLLATE pg_catalog.default NOT NULL,
-                                        aggregate_qr_show bool NOT NULL DEFAULT false,
-                                        h5_auto_upgrade bool NOT NULL DEFAULT false
+                                                   id int8 NOT NULL,
+                                                   creator varchar(64) COLLATE pg_catalog.default,
+                                                   create_time timestamp(6),
+                                                   last_modifier varchar(64) COLLATE pg_catalog.default,
+                                                   last_modified_time timestamp(6),
+                                                   version int4 NOT NULL DEFAULT 0,
+                                                   deleted bool NOT NULL DEFAULT false,
+                                                   isv_no varchar(32) COLLATE pg_catalog.default,
+                                                   mch_no varchar(32) COLLATE pg_catalog.default NOT NULL,
+                                                   app_id varchar(32) COLLATE pg_catalog.default NOT NULL,
+                                                   aggregate_qr_show bool NOT NULL DEFAULT false,
+                                                   h5_auto_upgrade bool NOT NULL DEFAULT false
 )
 ;
 COMMENT ON COLUMN pay_gateway_pay_config.id IS '主键ID';
@@ -1329,22 +1329,22 @@ COMMENT ON TABLE pay_gateway_pay_config IS '网关支付配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_gateway_pay_read_config;
 CREATE TABLE pay_gateway_pay_read_config (
-                                             id int8 NOT NULL,
-                                             creator varchar(64) COLLATE pg_catalog.default,
-                                             create_time timestamp(6),
-                                             last_modifier varchar(64) COLLATE pg_catalog.default,
-                                             last_modified_time timestamp(6),
-                                             version int4 NOT NULL DEFAULT 0,
-                                             deleted bool NOT NULL DEFAULT false,
-                                             isv_no varchar(32) COLLATE pg_catalog.default,
-                                             mch_no varchar(32) COLLATE pg_catalog.default NOT NULL,
-                                             app_id varchar(32) COLLATE pg_catalog.default NOT NULL,
-                                             gateway_read_system bool NOT NULL DEFAULT false,
-                                             h5_read_system bool NOT NULL DEFAULT false,
-                                             pc_read_system bool NOT NULL DEFAULT false,
-                                             aggregate_qr_read_system bool NOT NULL DEFAULT false,
-                                             aggregate_bar_read_system bool NOT NULL DEFAULT false,
-                                             mini_quickly_read_system bool NOT NULL DEFAULT false
+                                                        id int8 NOT NULL,
+                                                        creator varchar(64) COLLATE pg_catalog.default,
+                                                        create_time timestamp(6),
+                                                        last_modifier varchar(64) COLLATE pg_catalog.default,
+                                                        last_modified_time timestamp(6),
+                                                        version int4 NOT NULL DEFAULT 0,
+                                                        deleted bool NOT NULL DEFAULT false,
+                                                        isv_no varchar(32) COLLATE pg_catalog.default,
+                                                        mch_no varchar(32) COLLATE pg_catalog.default NOT NULL,
+                                                        app_id varchar(32) COLLATE pg_catalog.default NOT NULL,
+                                                        gateway_read_system bool NOT NULL DEFAULT false,
+                                                        h5_read_system bool NOT NULL DEFAULT false,
+                                                        pc_read_system bool NOT NULL DEFAULT false,
+                                                        aggregate_qr_read_system bool NOT NULL DEFAULT false,
+                                                        aggregate_bar_read_system bool NOT NULL DEFAULT false,
+                                                        mini_quickly_read_system bool NOT NULL DEFAULT false
 )
 ;
 COMMENT ON COLUMN pay_gateway_pay_read_config.id IS '主键ID';
@@ -1370,28 +1370,28 @@ COMMENT ON TABLE pay_gateway_pay_read_config IS '网关支付读取配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_hkrt_isv_config;
 CREATE TABLE pay_hkrt_isv_config (
-                                     id int8 NOT NULL,
-                                     creator int8,
-                                     create_time timestamp(6),
-                                     last_modifier int8,
-                                     last_modified_time timestamp(6),
-                                     version int4 NOT NULL,
-                                     deleted bool NOT NULL,
-                                     access_id varchar(64) COLLATE pg_catalog.default,
-                                     wx_channel_no varchar(32) COLLATE pg_catalog.default,
-                                     ali_channel_no varchar(32) COLLATE pg_catalog.default,
-                                     access_key text COLLATE pg_catalog.default,
-                                     transfer_key text COLLATE pg_catalog.default,
-                                     enable bool,
-                                     sandbox bool,
-                                     trade_url varchar(200) COLLATE pg_catalog.default,
-                                     other_url varchar(200) COLLATE pg_catalog.default,
-                                     isv_no varchar(32) COLLATE pg_catalog.default,
-                                     wx_channel_auth bool,
-                                     wx_app_id varchar(32) COLLATE pg_catalog.default,
-                                     wx_app_secret varchar(64) COLLATE pg_catalog.default,
-                                     wx_auth_url varchar(200) COLLATE pg_catalog.default,
-                                     hkrt_agent_no varchar(32) COLLATE pg_catalog.default
+                                                id int8 NOT NULL,
+                                                creator int8,
+                                                create_time timestamp(6),
+                                                last_modifier int8,
+                                                last_modified_time timestamp(6),
+                                                version int4 NOT NULL,
+                                                deleted bool NOT NULL,
+                                                access_id varchar(64) COLLATE pg_catalog.default,
+                                                wx_channel_no varchar(32) COLLATE pg_catalog.default,
+                                                ali_channel_no varchar(32) COLLATE pg_catalog.default,
+                                                access_key text COLLATE pg_catalog.default,
+                                                transfer_key text COLLATE pg_catalog.default,
+                                                enable bool,
+                                                sandbox bool,
+                                                trade_url varchar(200) COLLATE pg_catalog.default,
+                                                other_url varchar(200) COLLATE pg_catalog.default,
+                                                isv_no varchar(32) COLLATE pg_catalog.default,
+                                                wx_channel_auth bool,
+                                                wx_app_id varchar(32) COLLATE pg_catalog.default,
+                                                wx_app_secret varchar(64) COLLATE pg_catalog.default,
+                                                wx_auth_url varchar(200) COLLATE pg_catalog.default,
+                                                hkrt_agent_no varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_hkrt_isv_config.id IS '主键';
@@ -1423,24 +1423,24 @@ COMMENT ON TABLE pay_hkrt_isv_config IS '海科服务商配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_hkrt_sub_config;
 CREATE TABLE pay_hkrt_sub_config (
-                                     id int8 NOT NULL,
-                                     creator int8,
-                                     create_time timestamp(6),
-                                     last_modifier int8,
-                                     last_modified_time timestamp(6),
-                                     version int4 NOT NULL,
-                                     deleted bool NOT NULL,
-                                     merch_no varchar(64) COLLATE pg_catalog.default,
-                                     pn varchar(32) COLLATE pg_catalog.default,
-                                     enable bool,
-                                     app_id varchar(32) COLLATE pg_catalog.default,
-                                     read_system bool,
-                                     wx_channel_auth bool,
-                                     wx_app_id varchar(32) COLLATE pg_catalog.default,
-                                     wx_app_secret varchar(64) COLLATE pg_catalog.default,
-                                     wx_auth_url varchar(200) COLLATE pg_catalog.default,
-                                     mch_no varchar(32) COLLATE pg_catalog.default,
-                                     isv_no varchar(32) COLLATE pg_catalog.default
+                                                id int8 NOT NULL,
+                                                creator int8,
+                                                create_time timestamp(6),
+                                                last_modifier int8,
+                                                last_modified_time timestamp(6),
+                                                version int4 NOT NULL,
+                                                deleted bool NOT NULL,
+                                                merch_no varchar(64) COLLATE pg_catalog.default,
+                                                pn varchar(32) COLLATE pg_catalog.default,
+                                                enable bool,
+                                                app_id varchar(32) COLLATE pg_catalog.default,
+                                                read_system bool,
+                                                wx_channel_auth bool,
+                                                wx_app_id varchar(32) COLLATE pg_catalog.default,
+                                                wx_app_secret varchar(64) COLLATE pg_catalog.default,
+                                                wx_auth_url varchar(200) COLLATE pg_catalog.default,
+                                                mch_no varchar(32) COLLATE pg_catalog.default,
+                                                isv_no varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_hkrt_sub_config.id IS '主键';
@@ -1468,20 +1468,20 @@ COMMENT ON TABLE pay_hkrt_sub_config IS '海科子商户配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_isv_aggregate_bar_pay_config;
 CREATE TABLE pay_isv_aggregate_bar_pay_config (
-                                                  id int8 NOT NULL,
-                                                  creator varchar(64) COLLATE pg_catalog.default,
-                                                  create_time timestamp(6),
-                                                  last_modifier varchar(64) COLLATE pg_catalog.default,
-                                                  last_modified_time timestamp(6),
-                                                  version int4 NOT NULL DEFAULT 0,
-                                                  deleted bool NOT NULL DEFAULT false,
-                                                  wx_channel varchar(32) COLLATE pg_catalog.default,
-                                                  wx_method varchar(32) COLLATE pg_catalog.default,
-                                                  alipay_channel varchar(32) COLLATE pg_catalog.default,
-                                                  alipay_method varchar(32) COLLATE pg_catalog.default,
-                                                  union_channel varchar(32) COLLATE pg_catalog.default,
-                                                  union_method varchar(32) COLLATE pg_catalog.default,
-                                                  isv_no varchar(32) COLLATE pg_catalog.default NOT NULL
+                                                             id int8 NOT NULL,
+                                                             creator varchar(64) COLLATE pg_catalog.default,
+                                                             create_time timestamp(6),
+                                                             last_modifier varchar(64) COLLATE pg_catalog.default,
+                                                             last_modified_time timestamp(6),
+                                                             version int4 NOT NULL DEFAULT 0,
+                                                             deleted bool NOT NULL DEFAULT false,
+                                                             wx_channel varchar(32) COLLATE pg_catalog.default,
+                                                             wx_method varchar(32) COLLATE pg_catalog.default,
+                                                             alipay_channel varchar(32) COLLATE pg_catalog.default,
+                                                             alipay_method varchar(32) COLLATE pg_catalog.default,
+                                                             union_channel varchar(32) COLLATE pg_catalog.default,
+                                                             union_method varchar(32) COLLATE pg_catalog.default,
+                                                             isv_no varchar(32) COLLATE pg_catalog.default NOT NULL
 )
 ;
 COMMENT ON COLUMN pay_isv_aggregate_bar_pay_config.id IS '主键ID';
@@ -1505,23 +1505,23 @@ COMMENT ON TABLE pay_isv_aggregate_bar_pay_config IS 'ISV网关聚合付款码�
 -- ----------------------------
 DROP TABLE IF EXISTS pay_isv_aggregate_pay_config;
 CREATE TABLE pay_isv_aggregate_pay_config (
-                                              id int8 NOT NULL,
-                                              creator int8,
-                                              create_time timestamp(6),
-                                              last_modifier int8,
-                                              last_modified_time timestamp(6),
-                                              version int4 NOT NULL,
-                                              deleted bool NOT NULL,
-                                              aggregate_type varchar(32) COLLATE pg_catalog.default,
-                                              channel varchar(32) COLLATE pg_catalog.default,
-                                              pay_method varchar(32) COLLATE pg_catalog.default,
-                                              auto_launch bool,
-                                              other_method varchar(32) COLLATE pg_catalog.default,
-                                              mch_no varchar(32) COLLATE pg_catalog.default,
-                                              need_open_id bool,
-                                              call_type varchar(32) COLLATE pg_catalog.default,
-                                              open_id_get_type varchar(32) COLLATE pg_catalog.default,
-                                              isv_no varchar(32) COLLATE pg_catalog.default
+                                                         id int8 NOT NULL,
+                                                         creator int8,
+                                                         create_time timestamp(6),
+                                                         last_modifier int8,
+                                                         last_modified_time timestamp(6),
+                                                         version int4 NOT NULL,
+                                                         deleted bool NOT NULL,
+                                                         aggregate_type varchar(32) COLLATE pg_catalog.default,
+                                                         channel varchar(32) COLLATE pg_catalog.default,
+                                                         pay_method varchar(32) COLLATE pg_catalog.default,
+                                                         auto_launch bool,
+                                                         other_method varchar(32) COLLATE pg_catalog.default,
+                                                         mch_no varchar(32) COLLATE pg_catalog.default,
+                                                         need_open_id bool,
+                                                         call_type varchar(32) COLLATE pg_catalog.default,
+                                                         open_id_get_type varchar(32) COLLATE pg_catalog.default,
+                                                         isv_no varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_isv_aggregate_pay_config.id IS '主键';
@@ -1548,21 +1548,21 @@ COMMENT ON TABLE pay_isv_aggregate_pay_config IS '网关聚合支付配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_isv_aggregate_qr_pay_config;
 CREATE TABLE pay_isv_aggregate_qr_pay_config (
-                                                 id int8 NOT NULL,
-                                                 creator varchar(64) COLLATE pg_catalog.default,
-                                                 create_time timestamp(6),
-                                                 last_modifier varchar(64) COLLATE pg_catalog.default,
-                                                 last_modified_time timestamp(6),
-                                                 version int4 NOT NULL DEFAULT 0,
-                                                 deleted bool NOT NULL DEFAULT false,
-                                                 auto_launch bool NOT NULL DEFAULT false,
-                                                 wx_channel varchar(32) COLLATE pg_catalog.default,
-                                                 wx_method varchar(32) COLLATE pg_catalog.default,
-                                                 alipay_channel varchar(32) COLLATE pg_catalog.default,
-                                                 alipay_method varchar(32) COLLATE pg_catalog.default,
-                                                 union_channel varchar(32) COLLATE pg_catalog.default,
-                                                 union_method varchar(32) COLLATE pg_catalog.default,
-                                                 isv_no varchar(32) COLLATE pg_catalog.default NOT NULL
+                                                            id int8 NOT NULL,
+                                                            creator varchar(64) COLLATE pg_catalog.default,
+                                                            create_time timestamp(6),
+                                                            last_modifier varchar(64) COLLATE pg_catalog.default,
+                                                            last_modified_time timestamp(6),
+                                                            version int4 NOT NULL DEFAULT 0,
+                                                            deleted bool NOT NULL DEFAULT false,
+                                                            auto_launch bool NOT NULL DEFAULT false,
+                                                            wx_channel varchar(32) COLLATE pg_catalog.default,
+                                                            wx_method varchar(32) COLLATE pg_catalog.default,
+                                                            alipay_channel varchar(32) COLLATE pg_catalog.default,
+                                                            alipay_method varchar(32) COLLATE pg_catalog.default,
+                                                            union_channel varchar(32) COLLATE pg_catalog.default,
+                                                            union_method varchar(32) COLLATE pg_catalog.default,
+                                                            isv_no varchar(32) COLLATE pg_catalog.default NOT NULL
 )
 ;
 COMMENT ON COLUMN pay_isv_aggregate_qr_pay_config.id IS '主键ID';
@@ -1587,20 +1587,20 @@ COMMENT ON TABLE pay_isv_aggregate_qr_pay_config IS 'ISV网关聚合扫码支付
 -- ----------------------------
 DROP TABLE IF EXISTS pay_isv_channel_config;
 CREATE TABLE pay_isv_channel_config (
-                                        id int8 NOT NULL,
-                                        channel varchar(32) COLLATE pg_catalog.default,
-                                        out_isv_no varchar(32) COLLATE pg_catalog.default,
-                                        enable bool,
-                                        ext text COLLATE pg_catalog.default,
-                                        creator int8,
-                                        create_time timestamp(6),
-                                        last_modifier int8,
-                                        last_modified_time timestamp(6),
-                                        version int4 NOT NULL,
-                                        deleted bool NOT NULL,
-                                        isv_no varchar(32) COLLATE pg_catalog.default NOT NULL,
-                                        onb_apply bool,
-                                        settle_cycle int2
+                                                   id int8 NOT NULL,
+                                                   channel varchar(32) COLLATE pg_catalog.default,
+                                                   out_isv_no varchar(32) COLLATE pg_catalog.default,
+                                                   enable bool,
+                                                   ext text COLLATE pg_catalog.default,
+                                                   creator int8,
+                                                   create_time timestamp(6),
+                                                   last_modifier int8,
+                                                   last_modified_time timestamp(6),
+                                                   version int4 NOT NULL,
+                                                   deleted bool NOT NULL,
+                                                   isv_no varchar(32) COLLATE pg_catalog.default NOT NULL,
+                                                   onb_apply bool,
+                                                   settle_cycle int2
 )
 ;
 COMMENT ON COLUMN pay_isv_channel_config.id IS '主键';
@@ -1624,24 +1624,24 @@ COMMENT ON TABLE pay_isv_channel_config IS '服务商通道配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_isv_checkout_counter_config;
 CREATE TABLE pay_isv_checkout_counter_config (
-                                                 id int8 NOT NULL,
-                                                 creator varchar(64) COLLATE pg_catalog.default,
-                                                 create_time timestamp(6),
-                                                 last_modifier varchar(64) COLLATE pg_catalog.default,
-                                                 last_modified_time timestamp(6),
-                                                 version int4 NOT NULL DEFAULT 0,
-                                                 deleted bool NOT NULL DEFAULT false,
-                                                 type varchar(32) COLLATE pg_catalog.default,
-                                                 recommend bool NOT NULL DEFAULT false,
-                                                 bg_color varchar(20) COLLATE pg_catalog.default,
-                                                 border_color varchar(20) COLLATE pg_catalog.default,
-                                                 font_color varchar(20) COLLATE pg_catalog.default,
-                                                 icon varchar(200) COLLATE pg_catalog.default,
-                                                 sort_no numeric(10,2),
-                                                 channel varchar(32) COLLATE pg_catalog.default,
-                                                 pay_method varchar(32) COLLATE pg_catalog.default,
-                                                 isv_no varchar(32) COLLATE pg_catalog.default NOT NULL,
-                                                 name varchar(32) COLLATE pg_catalog.default
+                                                            id int8 NOT NULL,
+                                                            creator varchar(64) COLLATE pg_catalog.default,
+                                                            create_time timestamp(6),
+                                                            last_modifier varchar(64) COLLATE pg_catalog.default,
+                                                            last_modified_time timestamp(6),
+                                                            version int4 NOT NULL DEFAULT 0,
+                                                            deleted bool NOT NULL DEFAULT false,
+                                                            type varchar(32) COLLATE pg_catalog.default,
+                                                            recommend bool NOT NULL DEFAULT false,
+                                                            bg_color varchar(20) COLLATE pg_catalog.default,
+                                                            border_color varchar(20) COLLATE pg_catalog.default,
+                                                            font_color varchar(20) COLLATE pg_catalog.default,
+                                                            icon varchar(200) COLLATE pg_catalog.default,
+                                                            sort_no numeric(10,2),
+                                                            channel varchar(32) COLLATE pg_catalog.default,
+                                                            pay_method varchar(32) COLLATE pg_catalog.default,
+                                                            isv_no varchar(32) COLLATE pg_catalog.default NOT NULL,
+                                                            name varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_isv_checkout_counter_config.id IS '主键ID';
@@ -1669,16 +1669,16 @@ COMMENT ON TABLE pay_isv_checkout_counter_config IS 'ISV网关收银台配置项
 -- ----------------------------
 DROP TABLE IF EXISTS pay_isv_gateway_config;
 CREATE TABLE pay_isv_gateway_config (
-                                        id int8 NOT NULL,
-                                        creator varchar(64) COLLATE pg_catalog.default,
-                                        create_time timestamp(6),
-                                        last_modifier varchar(64) COLLATE pg_catalog.default,
-                                        last_modified_time timestamp(6),
-                                        version int4 NOT NULL DEFAULT 0,
-                                        deleted bool NOT NULL DEFAULT false,
-                                        aggregate_show bool NOT NULL DEFAULT false,
-                                        h5_auto_upgrade bool NOT NULL DEFAULT false,
-                                        isv_no varchar(32) COLLATE pg_catalog.default NOT NULL
+                                                   id int8 NOT NULL,
+                                                   creator varchar(64) COLLATE pg_catalog.default,
+                                                   create_time timestamp(6),
+                                                   last_modifier varchar(64) COLLATE pg_catalog.default,
+                                                   last_modified_time timestamp(6),
+                                                   version int4 NOT NULL DEFAULT 0,
+                                                   deleted bool NOT NULL DEFAULT false,
+                                                   aggregate_show bool NOT NULL DEFAULT false,
+                                                   h5_auto_upgrade bool NOT NULL DEFAULT false,
+                                                   isv_no varchar(32) COLLATE pg_catalog.default NOT NULL
 )
 ;
 COMMENT ON COLUMN pay_isv_gateway_config.id IS '主键ID';
@@ -1698,17 +1698,17 @@ COMMENT ON TABLE pay_isv_gateway_config IS 'ISV网关支付配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_isv_info;
 CREATE TABLE pay_isv_info (
-                              id int8 NOT NULL,
-                              creator int8,
-                              create_time timestamp(6),
-                              last_modifier int8,
-                              last_modified_time timestamp(6),
-                              version int4 NOT NULL,
-                              deleted bool NOT NULL,
-                              status varchar(32) COLLATE pg_catalog.default,
-                              name varchar(64) COLLATE pg_catalog.default,
-                              isv_no varchar(32) COLLATE pg_catalog.default,
-                              short_name varchar(32) COLLATE pg_catalog.default
+                                         id int8 NOT NULL,
+                                         creator int8,
+                                         create_time timestamp(6),
+                                         last_modifier int8,
+                                         last_modified_time timestamp(6),
+                                         version int4 NOT NULL,
+                                         deleted bool NOT NULL,
+                                         status varchar(32) COLLATE pg_catalog.default,
+                                         name varchar(64) COLLATE pg_catalog.default,
+                                         isv_no varchar(32) COLLATE pg_catalog.default,
+                                         short_name varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_isv_info.id IS '主键';
@@ -1729,18 +1729,18 @@ COMMENT ON TABLE pay_isv_info IS '服务商信息';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_isv_mini_quickly_config;
 CREATE TABLE pay_isv_mini_quickly_config (
-                                             id int8 NOT NULL,
-                                             creator varchar(64) COLLATE pg_catalog.default,
-                                             create_time timestamp(6),
-                                             last_modifier varchar(64) COLLATE pg_catalog.default,
-                                             last_modified_time timestamp(6),
-                                             version int4 NOT NULL DEFAULT 0,
-                                             deleted bool NOT NULL DEFAULT false,
-                                             mini_app_allocation bool NOT NULL DEFAULT false,
-                                             mini_app_auto_allocation bool NOT NULL DEFAULT false,
-                                             mini_app_limit_pay varchar(512) COLLATE pg_catalog.default,
-                                             terminal_no varchar(32) COLLATE pg_catalog.default,
-                                             isv_no varchar(32) COLLATE pg_catalog.default NOT NULL
+                                                        id int8 NOT NULL,
+                                                        creator varchar(64) COLLATE pg_catalog.default,
+                                                        create_time timestamp(6),
+                                                        last_modifier varchar(64) COLLATE pg_catalog.default,
+                                                        last_modified_time timestamp(6),
+                                                        version int4 NOT NULL DEFAULT 0,
+                                                        deleted bool NOT NULL DEFAULT false,
+                                                        mini_app_allocation bool NOT NULL DEFAULT false,
+                                                        mini_app_auto_allocation bool NOT NULL DEFAULT false,
+                                                        mini_app_limit_pay varchar(512) COLLATE pg_catalog.default,
+                                                        terminal_no varchar(32) COLLATE pg_catalog.default,
+                                                        isv_no varchar(32) COLLATE pg_catalog.default NOT NULL
 )
 ;
 COMMENT ON COLUMN pay_isv_mini_quickly_config.id IS '主键ID';
@@ -1762,24 +1762,24 @@ COMMENT ON TABLE pay_isv_mini_quickly_config IS 'ISV小程序快捷支付配置'
 -- ----------------------------
 DROP TABLE IF EXISTS pay_lakala_isv_config;
 CREATE TABLE pay_lakala_isv_config (
-                                       id int8 NOT NULL,
-                                       enable bool,
-                                       sandbox bool,
-                                       lkl_app_id varchar(32) COLLATE pg_catalog.default,
-                                       mch_serial_no varchar(32) COLLATE pg_catalog.default,
-                                       private_key text COLLATE pg_catalog.default,
-                                       public_key text COLLATE pg_catalog.default,
-                                       sm4_key text COLLATE pg_catalog.default,
-                                       wx_app_id varchar(32) COLLATE pg_catalog.default,
-                                       wx_app_secret varchar(64) COLLATE pg_catalog.default,
-                                       wx_auth_url varchar(200) COLLATE pg_catalog.default,
-                                       isv_no varchar(32) COLLATE pg_catalog.default,
-                                       version int8,
-                                       creator int8,
-                                       create_time timestamp(6),
-                                       last_modifier int8,
-                                       last_modified_time timestamp(6),
-                                       deleted bool DEFAULT false
+                                                  id int8 NOT NULL,
+                                                  enable bool,
+                                                  sandbox bool,
+                                                  lkl_app_id varchar(32) COLLATE pg_catalog.default,
+                                                  mch_serial_no varchar(32) COLLATE pg_catalog.default,
+                                                  private_key text COLLATE pg_catalog.default,
+                                                  public_key text COLLATE pg_catalog.default,
+                                                  sm4_key text COLLATE pg_catalog.default,
+                                                  wx_app_id varchar(32) COLLATE pg_catalog.default,
+                                                  wx_app_secret varchar(64) COLLATE pg_catalog.default,
+                                                  wx_auth_url varchar(200) COLLATE pg_catalog.default,
+                                                  isv_no varchar(32) COLLATE pg_catalog.default,
+                                                  version int8,
+                                                  creator int8,
+                                                  create_time timestamp(6),
+                                                  last_modifier int8,
+                                                  last_modified_time timestamp(6),
+                                                  deleted bool DEFAULT false
 )
 ;
 COMMENT ON COLUMN pay_lakala_isv_config.id IS '主键';
@@ -1807,23 +1807,23 @@ COMMENT ON TABLE pay_lakala_isv_config IS '拉卡拉服务商配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_lakala_sub_config;
 CREATE TABLE pay_lakala_sub_config (
-                                       id int8 NOT NULL,
-                                       enable bool,
-                                       merchant_no varchar(32) COLLATE pg_catalog.default,
-                                       term_no varchar(32) COLLATE pg_catalog.default,
-                                       mch_no varchar(32) COLLATE pg_catalog.default,
-                                       app_id varchar(32) COLLATE pg_catalog.default,
-                                       read_system bool,
-                                       wx_app_id varchar(32) COLLATE pg_catalog.default,
-                                       wx_app_secret varchar(64) COLLATE pg_catalog.default,
-                                       wx_auth_url varchar(200) COLLATE pg_catalog.default,
-                                       version int8,
-                                       creator int8,
-                                       create_time timestamp(6),
-                                       last_modifier int8,
-                                       last_modified_time timestamp(6),
-                                       deleted bool DEFAULT false,
-                                       isv_no varchar(32) COLLATE pg_catalog.default
+                                                  id int8 NOT NULL,
+                                                  enable bool,
+                                                  merchant_no varchar(32) COLLATE pg_catalog.default,
+                                                  term_no varchar(32) COLLATE pg_catalog.default,
+                                                  mch_no varchar(32) COLLATE pg_catalog.default,
+                                                  app_id varchar(32) COLLATE pg_catalog.default,
+                                                  read_system bool,
+                                                  wx_app_id varchar(32) COLLATE pg_catalog.default,
+                                                  wx_app_secret varchar(64) COLLATE pg_catalog.default,
+                                                  wx_auth_url varchar(200) COLLATE pg_catalog.default,
+                                                  version int8,
+                                                  creator int8,
+                                                  create_time timestamp(6),
+                                                  last_modifier int8,
+                                                  last_modified_time timestamp(6),
+                                                  deleted bool DEFAULT false,
+                                                  isv_no varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_lakala_sub_config.id IS '主键';
@@ -1850,23 +1850,23 @@ COMMENT ON TABLE pay_lakala_sub_config IS '拉卡拉子商户配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_leshua_isv_config;
 CREATE TABLE pay_leshua_isv_config (
-                                       id int8 NOT NULL,
-                                       creator int8,
-                                       create_time timestamp(6),
-                                       last_modifier int8,
-                                       last_modified_time timestamp(6),
-                                       version int4 NOT NULL,
-                                       deleted bool NOT NULL,
-                                       ls_isv_no varchar(32) COLLATE pg_catalog.default,
-                                       trade_key varchar(128) COLLATE pg_catalog.default,
-                                       notify_key varchar(128) COLLATE pg_catalog.default,
-                                       enable bool,
-                                       sandbox bool,
-                                       sign_type varchar(10) COLLATE pg_catalog.default,
-                                       wx_app_id varchar(32) COLLATE pg_catalog.default,
-                                       wx_app_secret varchar(64) COLLATE pg_catalog.default,
-                                       wx_auth_url varchar(200) COLLATE pg_catalog.default,
-                                       isv_no varchar(32) COLLATE pg_catalog.default
+                                                  id int8 NOT NULL,
+                                                  creator int8,
+                                                  create_time timestamp(6),
+                                                  last_modifier int8,
+                                                  last_modified_time timestamp(6),
+                                                  version int4 NOT NULL,
+                                                  deleted bool NOT NULL,
+                                                  ls_isv_no varchar(32) COLLATE pg_catalog.default,
+                                                  trade_key varchar(128) COLLATE pg_catalog.default,
+                                                  notify_key varchar(128) COLLATE pg_catalog.default,
+                                                  enable bool,
+                                                  sandbox bool,
+                                                  sign_type varchar(10) COLLATE pg_catalog.default,
+                                                  wx_app_id varchar(32) COLLATE pg_catalog.default,
+                                                  wx_app_secret varchar(64) COLLATE pg_catalog.default,
+                                                  wx_auth_url varchar(200) COLLATE pg_catalog.default,
+                                                  isv_no varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_leshua_isv_config.id IS '主键';
@@ -1893,22 +1893,22 @@ COMMENT ON TABLE pay_leshua_isv_config IS '乐刷服务商配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_leshua_sub_config;
 CREATE TABLE pay_leshua_sub_config (
-                                       id int8 NOT NULL,
-                                       creator int8,
-                                       create_time timestamp(6),
-                                       last_modifier int8,
-                                       last_modified_time timestamp(6),
-                                       version int4 NOT NULL,
-                                       deleted bool NOT NULL,
-                                       app_id varchar(32) COLLATE pg_catalog.default,
-                                       mch_no varchar(32) COLLATE pg_catalog.default,
-                                       ls_mch_no varchar(32) COLLATE pg_catalog.default,
-                                       enable bool,
-                                       read_system bool,
-                                       wx_app_id varchar(32) COLLATE pg_catalog.default,
-                                       wx_app_secret varchar(64) COLLATE pg_catalog.default,
-                                       wx_auth_url varchar(200) COLLATE pg_catalog.default,
-                                       isv_no varchar(32) COLLATE pg_catalog.default
+                                                  id int8 NOT NULL,
+                                                  creator int8,
+                                                  create_time timestamp(6),
+                                                  last_modifier int8,
+                                                  last_modified_time timestamp(6),
+                                                  version int4 NOT NULL,
+                                                  deleted bool NOT NULL,
+                                                  app_id varchar(32) COLLATE pg_catalog.default,
+                                                  mch_no varchar(32) COLLATE pg_catalog.default,
+                                                  ls_mch_no varchar(32) COLLATE pg_catalog.default,
+                                                  enable bool,
+                                                  read_system bool,
+                                                  wx_app_id varchar(32) COLLATE pg_catalog.default,
+                                                  wx_app_secret varchar(64) COLLATE pg_catalog.default,
+                                                  wx_auth_url varchar(200) COLLATE pg_catalog.default,
+                                                  isv_no varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_leshua_sub_config.id IS '主键';
@@ -1934,29 +1934,29 @@ COMMENT ON TABLE pay_leshua_sub_config IS '乐刷子商户配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_mch_app;
 CREATE TABLE pay_mch_app (
-                             id int8 NOT NULL,
-                             mch_no varchar(32) COLLATE pg_catalog.default,
-                             app_id varchar(32) COLLATE pg_catalog.default,
-                             app_name varchar(64) COLLATE pg_catalog.default,
-                             sign_type varchar(32) COLLATE pg_catalog.default,
-                             sign_secret varchar(500) COLLATE pg_catalog.default,
-                             req_sign bool,
-                             limit_amount numeric(16,4),
-                             status varchar(32) COLLATE pg_catalog.default,
-                             notify_type varchar(32) COLLATE pg_catalog.default,
-                             notify_url varchar(200) COLLATE pg_catalog.default,
-                             creator int8,
-                             create_time timestamp(6),
-                             last_modifier int8,
-                             last_modified_time timestamp(6),
-                             version int4 NOT NULL,
-                             deleted bool NOT NULL,
-                             order_timeout int2,
-                             merchant_type varchar(32) COLLATE pg_catalog.default,
-                             req_timeout bool,
-                             req_timeout_second int4,
-                             isv_no varchar(32) COLLATE pg_catalog.default,
-                             default_app bool
+                                        id int8 NOT NULL,
+                                        mch_no varchar(32) COLLATE pg_catalog.default,
+                                        app_id varchar(32) COLLATE pg_catalog.default,
+                                        app_name varchar(64) COLLATE pg_catalog.default,
+                                        sign_type varchar(32) COLLATE pg_catalog.default,
+                                        sign_secret varchar(500) COLLATE pg_catalog.default,
+                                        req_sign bool,
+                                        limit_amount numeric(16,4),
+                                        status varchar(32) COLLATE pg_catalog.default,
+                                        notify_type varchar(32) COLLATE pg_catalog.default,
+                                        notify_url varchar(200) COLLATE pg_catalog.default,
+                                        creator int8,
+                                        create_time timestamp(6),
+                                        last_modifier int8,
+                                        last_modified_time timestamp(6),
+                                        version int4 NOT NULL,
+                                        deleted bool NOT NULL,
+                                        order_timeout int2,
+                                        merchant_type varchar(32) COLLATE pg_catalog.default,
+                                        req_timeout bool,
+                                        req_timeout_second int4,
+                                        isv_no varchar(32) COLLATE pg_catalog.default,
+                                        default_app bool
 )
 ;
 COMMENT ON COLUMN pay_mch_app.id IS '主键';
@@ -1989,29 +1989,29 @@ COMMENT ON TABLE pay_mch_app IS '商户应用';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_merchant;
 CREATE TABLE pay_merchant (
-                              id int8 NOT NULL,
-                              mch_no varchar(64) COLLATE pg_catalog.default NOT NULL,
-                              mch_name varchar(100) COLLATE pg_catalog.default NOT NULL,
-                              company_name varchar(100) COLLATE pg_catalog.default,
-                              id_type varchar(32) COLLATE pg_catalog.default,
-                              id_no varchar COLLATE pg_catalog.default,
-                              contact varchar(100) COLLATE pg_catalog.default,
-                              legal_person varchar(100) COLLATE pg_catalog.default,
-                              status varchar(10) COLLATE pg_catalog.default,
-                              creator int8,
-                              create_time timestamp(0),
-                              last_modifier int8,
-                              last_modified_time timestamp(0),
-                              version int4 NOT NULL,
-                              deleted bool NOT NULL,
-                              company_contact varchar(150) COLLATE pg_catalog.default,
-                              company_address varchar(150) COLLATE pg_catalog.default,
-                              company_code varchar(50) COLLATE pg_catalog.default,
-                              administrator bool NOT NULL,
-                              admin_user_id int8,
-                              isv_no varchar(32) COLLATE pg_catalog.default,
-                              merchant_type varchar(32) COLLATE pg_catalog.default,
-                              mch_short_name varchar(32) COLLATE pg_catalog.default
+                                         id int8 NOT NULL,
+                                         mch_no varchar(64) COLLATE pg_catalog.default NOT NULL,
+                                         mch_name varchar(100) COLLATE pg_catalog.default NOT NULL,
+                                         company_name varchar(100) COLLATE pg_catalog.default,
+                                         id_type varchar(32) COLLATE pg_catalog.default,
+                                         id_no varchar COLLATE pg_catalog.default,
+                                         contact varchar(100) COLLATE pg_catalog.default,
+                                         legal_person varchar(100) COLLATE pg_catalog.default,
+                                         status varchar(10) COLLATE pg_catalog.default,
+                                         creator int8,
+                                         create_time timestamp(0),
+                                         last_modifier int8,
+                                         last_modified_time timestamp(0),
+                                         version int4 NOT NULL,
+                                         deleted bool NOT NULL,
+                                         company_contact varchar(150) COLLATE pg_catalog.default,
+                                         company_address varchar(150) COLLATE pg_catalog.default,
+                                         company_code varchar(50) COLLATE pg_catalog.default,
+                                         administrator bool NOT NULL,
+                                         admin_user_id int8,
+                                         isv_no varchar(32) COLLATE pg_catalog.default,
+                                         merchant_type varchar(32) COLLATE pg_catalog.default,
+                                         mch_short_name varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_merchant.id IS '主键';
@@ -2044,18 +2044,18 @@ COMMENT ON TABLE pay_merchant IS '商户';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_merchant_callback_record;
 CREATE TABLE pay_merchant_callback_record (
-                                              id int8 NOT NULL,
-                                              creator int8,
-                                              create_time timestamp(6),
-                                              mch_no varchar(32) COLLATE pg_catalog.default,
-                                              app_id varchar(32) COLLATE pg_catalog.default,
-                                              task_id int8,
-                                              req_count int4,
-                                              success bool,
-                                              send_type varchar(30) COLLATE pg_catalog.default,
-                                              error_code varchar(50) COLLATE pg_catalog.default,
-                                              error_msg varchar(500) COLLATE pg_catalog.default,
-                                              isv_no varchar(32) COLLATE pg_catalog.default
+                                                         id int8 NOT NULL,
+                                                         creator int8,
+                                                         create_time timestamp(6),
+                                                         mch_no varchar(32) COLLATE pg_catalog.default,
+                                                         app_id varchar(32) COLLATE pg_catalog.default,
+                                                         task_id int8,
+                                                         req_count int4,
+                                                         success bool,
+                                                         send_type varchar(30) COLLATE pg_catalog.default,
+                                                         error_code varchar(50) COLLATE pg_catalog.default,
+                                                         error_msg varchar(500) COLLATE pg_catalog.default,
+                                                         isv_no varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_merchant_callback_record.id IS '主键';
@@ -2077,26 +2077,26 @@ COMMENT ON TABLE pay_merchant_callback_record IS '客户回调消息发送记录
 -- ----------------------------
 DROP TABLE IF EXISTS pay_merchant_callback_task;
 CREATE TABLE pay_merchant_callback_task (
-                                            id int8 NOT NULL,
-                                            creator int8,
-                                            create_time timestamp(6),
-                                            last_modifier int8,
-                                            last_modified_time timestamp(6),
-                                            version int4 NOT NULL,
-                                            deleted bool NOT NULL,
-                                            trade_id int8,
-                                            trade_no varchar(32) COLLATE pg_catalog.default,
-                                            trade_type varchar(20) COLLATE pg_catalog.default,
-                                            content text COLLATE pg_catalog.default,
-                                            success bool,
-                                            next_time timestamp(6),
-                                            send_count int4,
-                                            delay_count int4,
-                                            latest_time timestamp(6),
-                                            mch_no varchar(32) COLLATE pg_catalog.default,
-                                            app_id varchar(32) COLLATE pg_catalog.default,
-                                            url varchar(200) COLLATE pg_catalog.default,
-                                            isv_no varchar(64) COLLATE pg_catalog.default
+                                                       id int8 NOT NULL,
+                                                       creator int8,
+                                                       create_time timestamp(6),
+                                                       last_modifier int8,
+                                                       last_modified_time timestamp(6),
+                                                       version int4 NOT NULL,
+                                                       deleted bool NOT NULL,
+                                                       trade_id int8,
+                                                       trade_no varchar(32) COLLATE pg_catalog.default,
+                                                       trade_type varchar(20) COLLATE pg_catalog.default,
+                                                       content text COLLATE pg_catalog.default,
+                                                       success bool,
+                                                       next_time timestamp(6),
+                                                       send_count int4,
+                                                       delay_count int4,
+                                                       latest_time timestamp(6),
+                                                       mch_no varchar(32) COLLATE pg_catalog.default,
+                                                       app_id varchar(32) COLLATE pg_catalog.default,
+                                                       url varchar(200) COLLATE pg_catalog.default,
+                                                       isv_no varchar(64) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_merchant_callback_task.id IS '主键';
@@ -2126,17 +2126,17 @@ COMMENT ON TABLE pay_merchant_callback_task IS '客户回调通知消息任务';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_merchant_credential;
 CREATE TABLE pay_merchant_credential (
-                                         id int8 NOT NULL,
-                                         creator int8,
-                                         create_time timestamp(6),
-                                         last_modifier int8,
-                                         last_modified_time timestamp(6),
-                                         version int4 DEFAULT 0,
-                                         deleted bool DEFAULT false,
-                                         isv_no varchar(32) COLLATE pg_catalog.default,
-                                         mch_no varchar(32) COLLATE pg_catalog.default,
-                                         public_key text COLLATE pg_catalog.default,
-                                         secret_key text COLLATE pg_catalog.default
+                                                    id int8 NOT NULL,
+                                                    creator int8,
+                                                    create_time timestamp(6),
+                                                    last_modifier int8,
+                                                    last_modified_time timestamp(6),
+                                                    version int4 DEFAULT 0,
+                                                    deleted bool DEFAULT false,
+                                                    isv_no varchar(32) COLLATE pg_catalog.default,
+                                                    mch_no varchar(32) COLLATE pg_catalog.default,
+                                                    public_key text COLLATE pg_catalog.default,
+                                                    secret_key text COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_merchant_credential.id IS '主键ID';
@@ -2157,12 +2157,12 @@ COMMENT ON TABLE pay_merchant_credential IS '商户API对接配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_merchant_user;
 CREATE TABLE pay_merchant_user (
-                                   id int8 NOT NULL,
-                                   user_id int8 NOT NULL,
-                                   mch_no varchar(32) COLLATE pg_catalog.default NOT NULL,
-                                   creator int8,
-                                   create_time timestamp(6),
-                                   administrator bool NOT NULL
+                                              id int8 NOT NULL,
+                                              user_id int8 NOT NULL,
+                                              mch_no varchar(32) COLLATE pg_catalog.default NOT NULL,
+                                              creator int8,
+                                              create_time timestamp(6),
+                                              administrator bool NOT NULL
 )
 ;
 COMMENT ON COLUMN pay_merchant_user.id IS '主键';
@@ -2178,20 +2178,20 @@ COMMENT ON TABLE pay_merchant_user IS '用户商户关联关系';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_mini_quickly_config;
 CREATE TABLE pay_mini_quickly_config (
-                                         id int8 NOT NULL,
-                                         creator varchar(64) COLLATE pg_catalog.default,
-                                         create_time timestamp(6),
-                                         last_modifier varchar(64) COLLATE pg_catalog.default,
-                                         last_modified_time timestamp(6),
-                                         version int4 NOT NULL DEFAULT 0,
-                                         deleted bool NOT NULL DEFAULT false,
-                                         isv_no varchar(32) COLLATE pg_catalog.default,
-                                         mch_no varchar(32) COLLATE pg_catalog.default NOT NULL,
-                                         app_id varchar(32) COLLATE pg_catalog.default NOT NULL,
-                                         allocation bool NOT NULL DEFAULT false,
-                                         auto_allocation bool NOT NULL DEFAULT false,
-                                         limit_pay varchar(512) COLLATE pg_catalog.default,
-                                         terminal_no varchar(32) COLLATE pg_catalog.default
+                                                    id int8 NOT NULL,
+                                                    creator varchar(64) COLLATE pg_catalog.default,
+                                                    create_time timestamp(6),
+                                                    last_modifier varchar(64) COLLATE pg_catalog.default,
+                                                    last_modified_time timestamp(6),
+                                                    version int4 NOT NULL DEFAULT 0,
+                                                    deleted bool NOT NULL DEFAULT false,
+                                                    isv_no varchar(32) COLLATE pg_catalog.default,
+                                                    mch_no varchar(32) COLLATE pg_catalog.default NOT NULL,
+                                                    app_id varchar(32) COLLATE pg_catalog.default NOT NULL,
+                                                    allocation bool NOT NULL DEFAULT false,
+                                                    auto_allocation bool NOT NULL DEFAULT false,
+                                                    limit_pay varchar(512) COLLATE pg_catalog.default,
+                                                    terminal_no varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_mini_quickly_config.id IS '主键ID';
@@ -2215,19 +2215,19 @@ COMMENT ON TABLE pay_mini_quickly_config IS '小程序快捷支付配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_onb_mch_info;
 CREATE TABLE pay_onb_mch_info (
-                                  id int8 NOT NULL,
-                                  creator int8,
-                                  create_time timestamp(0),
-                                  last_modifier int8,
-                                  last_modified_time timestamp(0),
-                                  version int4 NOT NULL,
-                                  deleted bool NOT NULL,
-                                  isv_no varchar(32) COLLATE pg_catalog.default,
-                                  onb_mch_no varchar(128) COLLATE pg_catalog.default,
-                                  onb_mch_type varchar(32) COLLATE pg_catalog.default,
-                                  onb_mch_name varchar(128) COLLATE pg_catalog.default,
-                                  onb_channel varchar(32) COLLATE pg_catalog.default,
-                                  mch_no varchar(32) COLLATE pg_catalog.default
+                                             id int8 NOT NULL,
+                                             creator int8,
+                                             create_time timestamp(0),
+                                             last_modifier int8,
+                                             last_modified_time timestamp(0),
+                                             version int4 NOT NULL,
+                                             deleted bool NOT NULL,
+                                             isv_no varchar(32) COLLATE pg_catalog.default,
+                                             onb_mch_no varchar(128) COLLATE pg_catalog.default,
+                                             onb_mch_type varchar(32) COLLATE pg_catalog.default,
+                                             onb_mch_name varchar(128) COLLATE pg_catalog.default,
+                                             onb_channel varchar(32) COLLATE pg_catalog.default,
+                                             mch_no varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_onb_mch_info.id IS '主键';
@@ -2250,42 +2250,42 @@ COMMENT ON TABLE pay_onb_mch_info IS '进件商户信息';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_order;
 CREATE TABLE pay_order (
-                           id int8 NOT NULL,
-                           creator int8 NOT NULL,
-                           create_time timestamp(6) NOT NULL,
-                           last_modifier int8,
-                           last_modified_time timestamp(6),
-                           version int4 NOT NULL,
-                           deleted bool NOT NULL,
-                           biz_order_no varchar(100) COLLATE pg_catalog.default NOT NULL,
-                           order_no varchar(100) COLLATE pg_catalog.default NOT NULL,
-                           out_order_no varchar(150) COLLATE pg_catalog.default,
-                           title varchar(100) COLLATE pg_catalog.default NOT NULL,
-                           description varchar(500) COLLATE pg_catalog.default,
-                           allocation bool NOT NULL,
-                           auto_allocation bool NOT NULL,
-                           channel varchar(20) COLLATE pg_catalog.default,
-                           method varchar(20) COLLATE pg_catalog.default,
-                           amount numeric(16,4) NOT NULL,
-                           refundable_balance numeric(16,4) NOT NULL,
-                           status varchar(32) COLLATE pg_catalog.default NOT NULL,
-                           refund_status varchar(32) COLLATE pg_catalog.default NOT NULL,
-                           alloc_status varchar(32) COLLATE pg_catalog.default,
-                           error_msg varchar(500) COLLATE pg_catalog.default,
-                           mch_no varchar(32) COLLATE pg_catalog.default NOT NULL,
-                           app_id varchar(32) COLLATE pg_catalog.default NOT NULL,
-                           expired_time timestamp(6),
-                           pay_time timestamp(6),
-                           close_time timestamp(6),
-                           isv_no varchar(32) COLLATE pg_catalog.default NOT NULL,
-                           other_method varchar(128) COLLATE pg_catalog.default,
-                           limit_pay varchar(128) COLLATE pg_catalog.default,
-                           terminal_no varchar(128) COLLATE pg_catalog.default,
-                           settle_status varchar(32) COLLATE pg_catalog.default,
-                           onb_mch_no varchar(32) COLLATE pg_catalog.default,
-                           payment_vendor varchar(32) COLLATE pg_catalog.default,
-                           relation_order_no varchar(150) COLLATE pg_catalog.default,
-                           trans_order_no varchar(150) COLLATE pg_catalog.default
+                                      id int8 NOT NULL,
+                                      creator int8 NOT NULL,
+                                      create_time timestamp(6) NOT NULL,
+                                      last_modifier int8,
+                                      last_modified_time timestamp(6),
+                                      version int4 NOT NULL,
+                                      deleted bool NOT NULL,
+                                      biz_order_no varchar(100) COLLATE pg_catalog.default NOT NULL,
+                                      order_no varchar(100) COLLATE pg_catalog.default NOT NULL,
+                                      out_order_no varchar(150) COLLATE pg_catalog.default,
+                                      title varchar(100) COLLATE pg_catalog.default NOT NULL,
+                                      description varchar(500) COLLATE pg_catalog.default,
+                                      allocation bool NOT NULL,
+                                      auto_allocation bool NOT NULL,
+                                      channel varchar(20) COLLATE pg_catalog.default,
+                                      method varchar(20) COLLATE pg_catalog.default,
+                                      amount numeric(16,4) NOT NULL,
+                                      refundable_balance numeric(16,4) NOT NULL,
+                                      status varchar(32) COLLATE pg_catalog.default NOT NULL,
+                                      refund_status varchar(32) COLLATE pg_catalog.default NOT NULL,
+                                      alloc_status varchar(32) COLLATE pg_catalog.default,
+                                      error_msg varchar(500) COLLATE pg_catalog.default,
+                                      mch_no varchar(32) COLLATE pg_catalog.default NOT NULL,
+                                      app_id varchar(32) COLLATE pg_catalog.default NOT NULL,
+                                      expired_time timestamp(6),
+                                      pay_time timestamp(6),
+                                      close_time timestamp(6),
+                                      isv_no varchar(32) COLLATE pg_catalog.default NOT NULL,
+                                      other_method varchar(128) COLLATE pg_catalog.default,
+                                      limit_pay varchar(128) COLLATE pg_catalog.default,
+                                      terminal_no varchar(128) COLLATE pg_catalog.default,
+                                      settle_status varchar(32) COLLATE pg_catalog.default,
+                                      onb_mch_no varchar(32) COLLATE pg_catalog.default,
+                                      payment_vendor varchar(32) COLLATE pg_catalog.default,
+                                      relation_order_no varchar(150) COLLATE pg_catalog.default,
+                                      trans_order_no varchar(150) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_order.id IS '主键';
@@ -2331,35 +2331,36 @@ COMMENT ON TABLE pay_order IS '支付订单';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_order_expand;
 CREATE TABLE pay_order_expand (
-                                  id int8 NOT NULL,
-                                  creator int8 NOT NULL,
-                                  create_time timestamp(6) NOT NULL,
-                                  last_modifier int8 NOT NULL,
-                                  last_modified_time timestamp(6) NOT NULL,
-                                  version int4 NOT NULL,
-                                  deleted bool NOT NULL,
-                                  mch_no varchar(32) COLLATE pg_catalog.default NOT NULL,
-                                  app_id varchar(32) COLLATE pg_catalog.default NOT NULL,
-                                  isv_no varchar(32) COLLATE pg_catalog.default NOT NULL,
-                                  buyer_id varchar(64) COLLATE pg_catalog.default,
-                                  user_id varchar(64) COLLATE pg_catalog.default,
-                                  trade_product varchar(64) COLLATE pg_catalog.default,
-                                  trade_way varchar(64) COLLATE pg_catalog.default,
-                                  bank_type varchar(64) COLLATE pg_catalog.default,
-                                  promotion_type varchar(64) COLLATE pg_catalog.default,
-                                  ext text COLLATE pg_catalog.default,
-                                  relation_order_no varchar(64) COLLATE pg_catalog.default,
-                                  bar_code varchar(64) COLLATE pg_catalog.default,
-                                  return_url varchar(200) COLLATE pg_catalog.default,
-                                  notify_url varchar(200) COLLATE pg_catalog.default,
-                                  extra_param varchar(2048) COLLATE pg_catalog.default,
-                                  attach varchar(500) COLLATE pg_catalog.default,
-                                  req_time timestamp(6),
-                                  client_ip varchar(64) COLLATE pg_catalog.default,
-                                  auth_code varchar(128) COLLATE pg_catalog.default,
-                                  real_amount numeric(16,4),
-                                  terminal_no varchar(128) COLLATE pg_catalog.default,
-                                  jsapi_open_id varchar(128) COLLATE pg_catalog.default
+                                             id int8 NOT NULL,
+                                             creator int8 NOT NULL,
+                                             create_time timestamp(6) NOT NULL,
+                                             last_modifier int8 NOT NULL,
+                                             last_modified_time timestamp(6) NOT NULL,
+                                             version int4 NOT NULL,
+                                             deleted bool NOT NULL,
+                                             mch_no varchar(32) COLLATE pg_catalog.default NOT NULL,
+                                             app_id varchar(32) COLLATE pg_catalog.default NOT NULL,
+                                             isv_no varchar(32) COLLATE pg_catalog.default NOT NULL,
+                                             buyer_id varchar(64) COLLATE pg_catalog.default,
+                                             user_id varchar(64) COLLATE pg_catalog.default,
+                                             trade_product varchar(64) COLLATE pg_catalog.default,
+                                             trade_way varchar(64) COLLATE pg_catalog.default,
+                                             bank_type varchar(64) COLLATE pg_catalog.default,
+                                             promotion_type varchar(64) COLLATE pg_catalog.default,
+                                             ext text COLLATE pg_catalog.default,
+                                             relation_order_no varchar(64) COLLATE pg_catalog.default,
+                                             bar_code varchar(64) COLLATE pg_catalog.default,
+                                             return_url varchar(200) COLLATE pg_catalog.default,
+                                             notify_url varchar(200) COLLATE pg_catalog.default,
+                                             extra_param varchar(2048) COLLATE pg_catalog.default,
+                                             attach varchar(500) COLLATE pg_catalog.default,
+                                             req_time timestamp(6),
+                                             client_ip varchar(64) COLLATE pg_catalog.default,
+                                             auth_code varchar(128) COLLATE pg_catalog.default,
+                                             real_amount numeric(16,4),
+                                             terminal_no varchar(128) COLLATE pg_catalog.default,
+                                             jsapi_open_id varchar(128) COLLATE pg_catalog.default,
+                                             pay_body text COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_order_expand.id IS '主键';
@@ -2391,6 +2392,7 @@ COMMENT ON COLUMN pay_order_expand.auth_code IS '付款码';
 COMMENT ON COLUMN pay_order_expand.real_amount IS '实收金额';
 COMMENT ON COLUMN pay_order_expand.terminal_no IS '终端设备编码';
 COMMENT ON COLUMN pay_order_expand.jsapi_open_id IS 'jsapi支付时OpenId';
+COMMENT ON COLUMN pay_order_expand.pay_body IS '支付通道返回支付参数';
 COMMENT ON TABLE pay_order_expand IS '支付订单扩展存储参数';
 
 -- ----------------------------
@@ -2398,18 +2400,18 @@ COMMENT ON TABLE pay_order_expand IS '支付订单扩展存储参数';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_platform_basic_config;
 CREATE TABLE pay_platform_basic_config (
-                                           id int8 NOT NULL,
-                                           creator int8,
-                                           create_time timestamp(6),
-                                           last_modifier int8,
-                                           last_modified_time timestamp(6),
-                                           version int4 NOT NULL,
-                                           deleted bool NOT NULL,
-                                           single_limit_amount numeric(16,4),
-                                           monthly_limit_amount numeric(16,4),
-                                           daily_limit_amount numeric(16,4),
-                                           order_timeout int4,
-                                           default_isv_no varchar(32) COLLATE pg_catalog.default
+                                                      id int8 NOT NULL,
+                                                      creator int8,
+                                                      create_time timestamp(6),
+                                                      last_modifier int8,
+                                                      last_modified_time timestamp(6),
+                                                      version int4 NOT NULL,
+                                                      deleted bool NOT NULL,
+                                                      single_limit_amount numeric(16,4),
+                                                      monthly_limit_amount numeric(16,4),
+                                                      daily_limit_amount numeric(16,4),
+                                                      order_timeout int4,
+                                                      default_isv_no varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_platform_basic_config.id IS '主键';
@@ -2431,20 +2433,20 @@ COMMENT ON TABLE pay_platform_basic_config IS '管理平台基础配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_platform_cashouts_config;
 CREATE TABLE pay_platform_cashouts_config (
-                                              id int8 NOT NULL,
-                                              creator int8,
-                                              create_time timestamp(0),
-                                              last_modifier int8,
-                                              last_modified_time timestamp(0),
-                                              version int4 NOT NULL,
-                                              deleted bool NOT NULL,
-                                              start_amount numeric(16,4),
-                                              fee_formula varchar(32) COLLATE pg_catalog.default,
-                                              fixed_fee numeric(16,4),
-                                              fixed_rate numeric(16,4),
-                                              fixed_fee_combined numeric(16,4),
-                                              fixed_rate_combined numeric(16,4),
-                                              freeze_amount numeric(16,4)
+                                                         id int8 NOT NULL,
+                                                         creator int8,
+                                                         create_time timestamp(0),
+                                                         last_modifier int8,
+                                                         last_modified_time timestamp(0),
+                                                         version int4 NOT NULL,
+                                                         deleted bool NOT NULL,
+                                                         start_amount numeric(16,4),
+                                                         fee_formula varchar(32) COLLATE pg_catalog.default,
+                                                         fixed_fee numeric(16,4),
+                                                         fixed_rate numeric(16,4),
+                                                         fixed_fee_combined numeric(16,4),
+                                                         fixed_rate_combined numeric(16,4),
+                                                         freeze_amount numeric(16,4)
 )
 ;
 COMMENT ON COLUMN pay_platform_cashouts_config.id IS '主键';
@@ -2468,16 +2470,16 @@ COMMENT ON TABLE pay_platform_cashouts_config IS '平台代理商默认提现配
 -- ----------------------------
 DROP TABLE IF EXISTS pay_platform_integration_config;
 CREATE TABLE pay_platform_integration_config (
-                                                 id int8 NOT NULL,
-                                                 creator int8,
-                                                 create_time timestamp(6),
-                                                 last_modifier int8,
-                                                 last_modified_time timestamp(6),
-                                                 version int4 NOT NULL DEFAULT 0,
-                                                 deleted bool NOT NULL DEFAULT false,
-                                                 req_sign bool NOT NULL DEFAULT false,
-                                                 req_timeout bool NOT NULL DEFAULT false,
-                                                 api_req_timeout int4
+                                                            id int8 NOT NULL,
+                                                            creator int8,
+                                                            create_time timestamp(6),
+                                                            last_modifier int8,
+                                                            last_modified_time timestamp(6),
+                                                            version int4 NOT NULL DEFAULT 0,
+                                                            deleted bool NOT NULL DEFAULT false,
+                                                            req_sign bool NOT NULL DEFAULT false,
+                                                            req_timeout bool NOT NULL DEFAULT false,
+                                                            api_req_timeout int4
 )
 ;
 COMMENT ON COLUMN pay_platform_integration_config.id IS '主键';
@@ -2497,17 +2499,17 @@ COMMENT ON TABLE pay_platform_integration_config IS '平台集成配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_platform_url_config;
 CREATE TABLE pay_platform_url_config (
-                                         id int8 NOT NULL,
-                                         creator int8,
-                                         create_time timestamp(6),
-                                         last_modifier int8,
-                                         last_modified_time timestamp(6),
-                                         version int4 NOT NULL,
-                                         deleted bool NOT NULL,
-                                         admin_web_url varchar(200) COLLATE pg_catalog.default,
-                                         mch_web_url varchar(200) COLLATE pg_catalog.default,
-                                         gateway_service_url varchar(200) COLLATE pg_catalog.default,
-                                         gateway_h5_url varchar(200) COLLATE pg_catalog.default
+                                                    id int8 NOT NULL,
+                                                    creator int8,
+                                                    create_time timestamp(6),
+                                                    last_modifier int8,
+                                                    last_modified_time timestamp(6),
+                                                    version int4 NOT NULL,
+                                                    deleted bool NOT NULL,
+                                                    admin_web_url varchar(200) COLLATE pg_catalog.default,
+                                                    mch_web_url varchar(200) COLLATE pg_catalog.default,
+                                                    gateway_service_url varchar(200) COLLATE pg_catalog.default,
+                                                    gateway_h5_url varchar(200) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_platform_url_config.id IS '主键';
@@ -2528,29 +2530,29 @@ COMMENT ON TABLE pay_platform_url_config IS '系统地址配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_platform_website_config;
 CREATE TABLE pay_platform_website_config (
-                                             id int8 NOT NULL,
-                                             creator int8,
-                                             create_time timestamp(6),
-                                             last_modifier int8,
-                                             last_modified_time timestamp(6),
-                                             version int4 NOT NULL,
-                                             deleted bool NOT NULL,
-                                             system_name varchar(50) COLLATE pg_catalog.default,
-                                             company_name varchar(100) COLLATE pg_catalog.default,
-                                             company_phone varchar(32) COLLATE pg_catalog.default,
-                                             company_email varchar(64) COLLATE pg_catalog.default,
-                                             whole_logo varchar(200) COLLATE pg_catalog.default,
-                                             simple_logo varchar(200) COLLATE pg_catalog.default,
-                                             icp_info varchar(64) COLLATE pg_catalog.default,
-                                             icp_link varchar(200) COLLATE pg_catalog.default,
-                                             mps_info varchar(64) COLLATE pg_catalog.default,
-                                             mps_link varchar(200) COLLATE pg_catalog.default,
-                                             pcac_info varchar(64) COLLATE pg_catalog.default,
-                                             pcac_link varchar(200) COLLATE pg_catalog.default,
-                                             icp_plus_info varchar(64) COLLATE pg_catalog.default,
-                                             icp_plus_link varchar(200) COLLATE pg_catalog.default,
-                                             copyright varchar(64) COLLATE pg_catalog.default,
-                                             copyright_link varchar(200) COLLATE pg_catalog.default
+                                                        id int8 NOT NULL,
+                                                        creator int8,
+                                                        create_time timestamp(6),
+                                                        last_modifier int8,
+                                                        last_modified_time timestamp(6),
+                                                        version int4 NOT NULL,
+                                                        deleted bool NOT NULL,
+                                                        system_name varchar(50) COLLATE pg_catalog.default,
+                                                        company_name varchar(100) COLLATE pg_catalog.default,
+                                                        company_phone varchar(32) COLLATE pg_catalog.default,
+                                                        company_email varchar(64) COLLATE pg_catalog.default,
+                                                        whole_logo varchar(200) COLLATE pg_catalog.default,
+                                                        simple_logo varchar(200) COLLATE pg_catalog.default,
+                                                        icp_info varchar(64) COLLATE pg_catalog.default,
+                                                        icp_link varchar(200) COLLATE pg_catalog.default,
+                                                        mps_info varchar(64) COLLATE pg_catalog.default,
+                                                        mps_link varchar(200) COLLATE pg_catalog.default,
+                                                        pcac_info varchar(64) COLLATE pg_catalog.default,
+                                                        pcac_link varchar(200) COLLATE pg_catalog.default,
+                                                        icp_plus_info varchar(64) COLLATE pg_catalog.default,
+                                                        icp_plus_link varchar(200) COLLATE pg_catalog.default,
+                                                        copyright varchar(64) COLLATE pg_catalog.default,
+                                                        copyright_link varchar(200) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_platform_website_config.id IS '主键';
@@ -2567,40 +2569,41 @@ COMMENT ON TABLE pay_platform_website_config IS '站点显示内容配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_refund_order;
 CREATE TABLE pay_refund_order (
-                                  id int8 NOT NULL,
-                                  order_id int8 NOT NULL,
-                                  order_no varchar(100) COLLATE pg_catalog.default NOT NULL,
-                                  biz_order_no varchar(100) COLLATE pg_catalog.default NOT NULL,
-                                  out_order_no varchar(150) COLLATE pg_catalog.default NOT NULL,
-                                  title varchar(100) COLLATE pg_catalog.default NOT NULL,
-                                  refund_no varchar(150) COLLATE pg_catalog.default NOT NULL,
-                                  biz_refund_no varchar(100) COLLATE pg_catalog.default NOT NULL,
-                                  out_refund_no varchar(150) COLLATE pg_catalog.default,
-                                  channel varchar(20) COLLATE pg_catalog.default NOT NULL,
-                                  order_amount numeric(16,4) NOT NULL,
-                                  amount numeric(16,4) NOT NULL,
-                                  reason varchar(150) COLLATE pg_catalog.default,
-                                  finish_time timestamp(6),
-                                  status varchar(20) COLLATE pg_catalog.default NOT NULL,
-                                  notify_url varchar(200) COLLATE pg_catalog.default,
-                                  attach varchar(500) COLLATE pg_catalog.default,
-                                  extra_param varchar(2048) COLLATE pg_catalog.default,
-                                  req_time timestamp(6),
-                                  client_ip varchar(64) COLLATE pg_catalog.default,
-                                  error_code varchar(10) COLLATE pg_catalog.default,
-                                  error_msg varchar(500) COLLATE pg_catalog.default,
-                                  creator int8,
-                                  create_time timestamp(6),
-                                  last_modifier int8,
-                                  last_modified_time timestamp(6),
-                                  version int4 NOT NULL,
-                                  deleted bool NOT NULL,
-                                  mch_no varchar(32) COLLATE pg_catalog.default,
-                                  app_id varchar(32) COLLATE pg_catalog.default,
-                                  isv_no varchar(32) COLLATE pg_catalog.default,
-                                  settle_status varchar(32) COLLATE pg_catalog.default,
-                                  onb_mch_no varchar(32) COLLATE pg_catalog.default,
-                                  payment_vendor varchar(32) COLLATE pg_catalog.default
+                                             id int8 NOT NULL,
+                                             order_id int8 NOT NULL,
+                                             order_no varchar(100) COLLATE pg_catalog.default NOT NULL,
+                                             biz_order_no varchar(100) COLLATE pg_catalog.default NOT NULL,
+                                             out_order_no varchar(150) COLLATE pg_catalog.default NOT NULL,
+                                             title varchar(100) COLLATE pg_catalog.default NOT NULL,
+                                             refund_no varchar(150) COLLATE pg_catalog.default NOT NULL,
+                                             biz_refund_no varchar(100) COLLATE pg_catalog.default NOT NULL,
+                                             out_refund_no varchar(150) COLLATE pg_catalog.default,
+                                             channel varchar(20) COLLATE pg_catalog.default NOT NULL,
+                                             order_amount numeric(16,4) NOT NULL,
+                                             amount numeric(16,4) NOT NULL,
+                                             reason varchar(150) COLLATE pg_catalog.default,
+                                             finish_time timestamp(6),
+                                             status varchar(20) COLLATE pg_catalog.default NOT NULL,
+                                             notify_url varchar(200) COLLATE pg_catalog.default,
+                                             attach varchar(500) COLLATE pg_catalog.default,
+                                             extra_param varchar(2048) COLLATE pg_catalog.default,
+                                             req_time timestamp(6),
+                                             client_ip varchar(64) COLLATE pg_catalog.default,
+                                             error_code varchar(10) COLLATE pg_catalog.default,
+                                             error_msg varchar(500) COLLATE pg_catalog.default,
+                                             creator int8,
+                                             create_time timestamp(6),
+                                             last_modifier int8,
+                                             last_modified_time timestamp(6),
+                                             version int4 NOT NULL,
+                                             deleted bool NOT NULL,
+                                             mch_no varchar(32) COLLATE pg_catalog.default,
+                                             app_id varchar(32) COLLATE pg_catalog.default,
+                                             isv_no varchar(32) COLLATE pg_catalog.default,
+                                             settle_status varchar(32) COLLATE pg_catalog.default,
+                                             onb_mch_no varchar(32) COLLATE pg_catalog.default,
+                                             payment_vendor varchar(32) COLLATE pg_catalog.default,
+                                             relation_order_no varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_refund_order.id IS '主键';
@@ -2637,6 +2640,7 @@ COMMENT ON COLUMN pay_refund_order.isv_no IS '所属服务商';
 COMMENT ON COLUMN pay_refund_order.settle_status IS '结算状态';
 COMMENT ON COLUMN pay_refund_order.onb_mch_no IS '进件商户号';
 COMMENT ON COLUMN pay_refund_order.payment_vendor IS '支付厂商';
+COMMENT ON COLUMN pay_refund_order.relation_order_no IS '特殊通道关联订单号';
 COMMENT ON TABLE pay_refund_order IS '退款订单';
 
 -- ----------------------------
@@ -2644,24 +2648,24 @@ COMMENT ON TABLE pay_refund_order IS '退款订单';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_sand_isv_config;
 CREATE TABLE pay_sand_isv_config (
-                                     id int8 NOT NULL,
-                                     enable bool,
-                                     sandbox bool,
-                                     sand_app_id varchar(32) COLLATE pg_catalog.default,
-                                     private_key text COLLATE pg_catalog.default,
-                                     public_key text COLLATE pg_catalog.default,
-                                     wx_channel_auth bool,
-                                     wx_app_id varchar(32) COLLATE pg_catalog.default,
-                                     wx_app_secret varchar(64) COLLATE pg_catalog.default,
-                                     wx_auth_url varchar(200) COLLATE pg_catalog.default,
-                                     isv_no varchar(32) COLLATE pg_catalog.default,
-                                     version int8 NOT NULL,
-                                     creator int8,
-                                     create_time timestamp(6),
-                                     last_modifier int8,
-                                     last_modified_time timestamp(6) NOT NULL,
-                                     deleted bool DEFAULT false,
-                                     product_code varchar(64) COLLATE pg_catalog.default
+                                                id int8 NOT NULL,
+                                                enable bool,
+                                                sandbox bool,
+                                                sand_app_id varchar(32) COLLATE pg_catalog.default,
+                                                private_key text COLLATE pg_catalog.default,
+                                                public_key text COLLATE pg_catalog.default,
+                                                wx_channel_auth bool,
+                                                wx_app_id varchar(32) COLLATE pg_catalog.default,
+                                                wx_app_secret varchar(64) COLLATE pg_catalog.default,
+                                                wx_auth_url varchar(200) COLLATE pg_catalog.default,
+                                                isv_no varchar(32) COLLATE pg_catalog.default,
+                                                version int8 NOT NULL,
+                                                creator int8,
+                                                create_time timestamp(6),
+                                                last_modifier int8,
+                                                last_modified_time timestamp(6) NOT NULL,
+                                                deleted bool DEFAULT false,
+                                                product_code varchar(64) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_sand_isv_config.id IS '主键';
@@ -2689,24 +2693,24 @@ COMMENT ON TABLE pay_sand_isv_config IS '杉德服务商配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_sand_settle_bind_info;
 CREATE TABLE pay_sand_settle_bind_info (
-                                           id int8 NOT NULL,
-                                           creator int8,
-                                           create_time timestamp(6),
-                                           last_modifier int8,
-                                           last_modified_time timestamp(6),
-                                           version int4 NOT NULL,
-                                           deleted bool NOT NULL,
-                                           isv_no varchar(32) COLLATE pg_catalog.default,
-                                           mch_no varchar(32) COLLATE pg_catalog.default,
-                                           onb_mch_id int8,
-                                           sub_merchant_id varchar(32) COLLATE pg_catalog.default,
-                                           bank_account_type varchar(32) COLLATE pg_catalog.default,
-                                           bank_account_name varchar(100) COLLATE pg_catalog.default,
-                                           bank_card_no varchar(32) COLLATE pg_catalog.default,
-                                           bank_channel_no varchar(32) COLLATE pg_catalog.default,
-                                           bank_account_id_card_no varchar(32) COLLATE pg_catalog.default,
-                                           bank_account_phone varchar(20) COLLATE pg_catalog.default,
-                                           valid_date date
+                                                      id int8 NOT NULL,
+                                                      creator int8,
+                                                      create_time timestamp(6),
+                                                      last_modifier int8,
+                                                      last_modified_time timestamp(6),
+                                                      version int4 NOT NULL,
+                                                      deleted bool NOT NULL,
+                                                      isv_no varchar(32) COLLATE pg_catalog.default,
+                                                      mch_no varchar(32) COLLATE pg_catalog.default,
+                                                      onb_mch_id int8,
+                                                      sub_merchant_id varchar(32) COLLATE pg_catalog.default,
+                                                      bank_account_type varchar(32) COLLATE pg_catalog.default,
+                                                      bank_account_name varchar(100) COLLATE pg_catalog.default,
+                                                      bank_card_no varchar(32) COLLATE pg_catalog.default,
+                                                      bank_channel_no varchar(32) COLLATE pg_catalog.default,
+                                                      bank_account_id_card_no varchar(32) COLLATE pg_catalog.default,
+                                                      bank_account_phone varchar(20) COLLATE pg_catalog.default,
+                                                      valid_date date
 )
 ;
 COMMENT ON COLUMN pay_sand_settle_bind_info.id IS '主键';
@@ -2734,24 +2738,24 @@ COMMENT ON TABLE pay_sand_settle_bind_info IS '杉德商户结算银行卡绑定
 -- ----------------------------
 DROP TABLE IF EXISTS pay_sand_sub_config;
 CREATE TABLE pay_sand_sub_config (
-                                     id int8 NOT NULL,
-                                     enable bool,
-                                     merchant_no varchar(32) COLLATE pg_catalog.default,
-                                     store_id varchar(32) COLLATE pg_catalog.default,
-                                     read_system bool,
-                                     wx_channel_auth bool,
-                                     wx_app_id varchar(32) COLLATE pg_catalog.default,
-                                     wx_app_secret varchar(64) COLLATE pg_catalog.default,
-                                     wx_auth_url varchar(200) COLLATE pg_catalog.default,
-                                     mch_no varchar(32) COLLATE pg_catalog.default,
-                                     app_id varchar(32) COLLATE pg_catalog.default,
-                                     version int8,
-                                     creator int8,
-                                     create_time timestamp(6),
-                                     last_modifier int8,
-                                     last_modified_time timestamp(6),
-                                     deleted bool DEFAULT false,
-                                     isv_no varchar(32) COLLATE pg_catalog.default
+                                                id int8 NOT NULL,
+                                                enable bool,
+                                                merchant_no varchar(32) COLLATE pg_catalog.default,
+                                                store_id varchar(32) COLLATE pg_catalog.default,
+                                                read_system bool,
+                                                wx_channel_auth bool,
+                                                wx_app_id varchar(32) COLLATE pg_catalog.default,
+                                                wx_app_secret varchar(64) COLLATE pg_catalog.default,
+                                                wx_auth_url varchar(200) COLLATE pg_catalog.default,
+                                                mch_no varchar(32) COLLATE pg_catalog.default,
+                                                app_id varchar(32) COLLATE pg_catalog.default,
+                                                version int8,
+                                                creator int8,
+                                                create_time timestamp(6),
+                                                last_modifier int8,
+                                                last_modified_time timestamp(6),
+                                                deleted bool DEFAULT false,
+                                                isv_no varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_sand_sub_config.id IS '主键';
@@ -2779,20 +2783,20 @@ COMMENT ON TABLE pay_sand_sub_config IS '杉德子商户配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_trade_callback_record;
 CREATE TABLE pay_trade_callback_record (
-                                           id int8 NOT NULL,
-                                           trade_no varchar(100) COLLATE pg_catalog.default,
-                                           out_trade_no varchar(150) COLLATE pg_catalog.default,
-                                           channel varchar(20) COLLATE pg_catalog.default NOT NULL,
-                                           callback_type varchar(20) COLLATE pg_catalog.default NOT NULL,
-                                           notify_info text COLLATE pg_catalog.default NOT NULL,
-                                           status varchar(20) COLLATE pg_catalog.default NOT NULL,
-                                           error_code varchar(10) COLLATE pg_catalog.default,
-                                           error_msg varchar(500) COLLATE pg_catalog.default,
-                                           creator int8,
-                                           create_time timestamp(6),
-                                           mch_no varchar(32) COLLATE pg_catalog.default,
-                                           app_id varchar(32) COLLATE pg_catalog.default,
-                                           isv_no varchar(32) COLLATE pg_catalog.default
+                                                      id int8 NOT NULL,
+                                                      trade_no varchar(100) COLLATE pg_catalog.default,
+                                                      out_trade_no varchar(150) COLLATE pg_catalog.default,
+                                                      channel varchar(20) COLLATE pg_catalog.default NOT NULL,
+                                                      callback_type varchar(20) COLLATE pg_catalog.default NOT NULL,
+                                                      notify_info text COLLATE pg_catalog.default NOT NULL,
+                                                      status varchar(20) COLLATE pg_catalog.default NOT NULL,
+                                                      error_code varchar(10) COLLATE pg_catalog.default,
+                                                      error_msg varchar(500) COLLATE pg_catalog.default,
+                                                      creator int8,
+                                                      create_time timestamp(6),
+                                                      mch_no varchar(32) COLLATE pg_catalog.default,
+                                                      app_id varchar(32) COLLATE pg_catalog.default,
+                                                      isv_no varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_trade_callback_record.id IS '主键';
@@ -2816,19 +2820,19 @@ COMMENT ON TABLE pay_trade_callback_record IS '网关回调通知';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_trade_flow_record;
 CREATE TABLE pay_trade_flow_record (
-                                       id int8 NOT NULL,
-                                       title varchar(100) COLLATE pg_catalog.default NOT NULL,
-                                       amount numeric(16,4) NOT NULL,
-                                       type varchar(20) COLLATE pg_catalog.default NOT NULL,
-                                       channel varchar(20) COLLATE pg_catalog.default NOT NULL,
-                                       trade_no varchar(100) COLLATE pg_catalog.default NOT NULL,
-                                       biz_trade_no varchar(100) COLLATE pg_catalog.default NOT NULL,
-                                       out_trade_no varchar(150) COLLATE pg_catalog.default,
-                                       creator int8,
-                                       create_time timestamp(6),
-                                       mch_no varchar(32) COLLATE pg_catalog.default,
-                                       app_id varchar(32) COLLATE pg_catalog.default,
-                                       isv_no varchar(32) COLLATE pg_catalog.default
+                                                  id int8 NOT NULL,
+                                                  title varchar(100) COLLATE pg_catalog.default NOT NULL,
+                                                  amount numeric(16,4) NOT NULL,
+                                                  type varchar(20) COLLATE pg_catalog.default NOT NULL,
+                                                  channel varchar(20) COLLATE pg_catalog.default NOT NULL,
+                                                  trade_no varchar(100) COLLATE pg_catalog.default NOT NULL,
+                                                  biz_trade_no varchar(100) COLLATE pg_catalog.default NOT NULL,
+                                                  out_trade_no varchar(150) COLLATE pg_catalog.default,
+                                                  creator int8,
+                                                  create_time timestamp(6),
+                                                  mch_no varchar(32) COLLATE pg_catalog.default,
+                                                  app_id varchar(32) COLLATE pg_catalog.default,
+                                                  isv_no varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_trade_flow_record.id IS '主键';
@@ -2851,23 +2855,23 @@ COMMENT ON TABLE pay_trade_flow_record IS '资金流水记录';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_trade_sync_record;
 CREATE TABLE pay_trade_sync_record (
-                                       id int8 NOT NULL,
-                                       creator int8,
-                                       create_time timestamp(6),
-                                       mch_no varchar(32) COLLATE pg_catalog.default,
-                                       app_id varchar(32) COLLATE pg_catalog.default,
-                                       trade_no varchar(100) COLLATE pg_catalog.default,
-                                       biz_trade_no varchar(100) COLLATE pg_catalog.default,
-                                       out_trade_no varchar(150) COLLATE pg_catalog.default,
-                                       out_trade_status varchar(32) COLLATE pg_catalog.default,
-                                       trade_type varchar(32) COLLATE pg_catalog.default,
-                                       channel varchar(32) COLLATE pg_catalog.default,
-                                       sync_info text COLLATE pg_catalog.default,
-                                       adjust bool NOT NULL,
-                                       error_code varchar(50) COLLATE pg_catalog.default,
-                                       error_msg varchar(500) COLLATE pg_catalog.default,
-                                       client_ip varchar(64) COLLATE pg_catalog.default,
-                                       isv_no varchar(32) COLLATE pg_catalog.default
+                                                  id int8 NOT NULL,
+                                                  creator int8,
+                                                  create_time timestamp(6),
+                                                  mch_no varchar(32) COLLATE pg_catalog.default,
+                                                  app_id varchar(32) COLLATE pg_catalog.default,
+                                                  trade_no varchar(100) COLLATE pg_catalog.default,
+                                                  biz_trade_no varchar(100) COLLATE pg_catalog.default,
+                                                  out_trade_no varchar(150) COLLATE pg_catalog.default,
+                                                  out_trade_status varchar(32) COLLATE pg_catalog.default,
+                                                  trade_type varchar(32) COLLATE pg_catalog.default,
+                                                  channel varchar(32) COLLATE pg_catalog.default,
+                                                  sync_info text COLLATE pg_catalog.default,
+                                                  adjust bool NOT NULL,
+                                                  error_code varchar(50) COLLATE pg_catalog.default,
+                                                  error_msg varchar(500) COLLATE pg_catalog.default,
+                                                  client_ip varchar(64) COLLATE pg_catalog.default,
+                                                  isv_no varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_trade_sync_record.id IS '主键';
@@ -2894,35 +2898,35 @@ COMMENT ON TABLE pay_trade_sync_record IS '交易同步记录';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_transfer_order;
 CREATE TABLE pay_transfer_order (
-                                    id int8 NOT NULL,
-                                    biz_transfer_no varchar(100) COLLATE pg_catalog.default NOT NULL,
-                                    transfer_no varchar(100) COLLATE pg_catalog.default NOT NULL,
-                                    out_transfer_no varchar(150) COLLATE pg_catalog.default,
-                                    channel varchar(20) COLLATE pg_catalog.default NOT NULL,
-                                    amount numeric(16,4) NOT NULL,
-                                    title varchar(100) COLLATE pg_catalog.default,
-                                    reason varchar(150) COLLATE pg_catalog.default,
-                                    payee_type varchar(20) COLLATE pg_catalog.default,
-                                    payee_account varchar(100) COLLATE pg_catalog.default,
-                                    payee_name varchar(50) COLLATE pg_catalog.default,
-                                    status varchar(20) COLLATE pg_catalog.default NOT NULL,
-                                    finish_time timestamp(6),
-                                    notify_url varchar(200) COLLATE pg_catalog.default,
-                                    attach varchar(500) COLLATE pg_catalog.default,
-                                    req_time timestamp(6),
-                                    client_ip varchar(64) COLLATE pg_catalog.default,
-                                    error_code varchar(10) COLLATE pg_catalog.default,
-                                    error_msg varchar(500) COLLATE pg_catalog.default,
-                                    creator int8,
-                                    create_time timestamp(6),
-                                    last_modifier int8,
-                                    last_modified_time timestamp(6),
-                                    version int4 NOT NULL,
-                                    deleted bool NOT NULL,
-                                    mch_no varchar(32) COLLATE pg_catalog.default,
-                                    app_id varchar(32) COLLATE pg_catalog.default,
-                                    extra_param varchar(2048) COLLATE pg_catalog.default,
-                                    isv_no varchar(32) COLLATE pg_catalog.default
+                                               id int8 NOT NULL,
+                                               biz_transfer_no varchar(100) COLLATE pg_catalog.default NOT NULL,
+                                               transfer_no varchar(100) COLLATE pg_catalog.default NOT NULL,
+                                               out_transfer_no varchar(150) COLLATE pg_catalog.default,
+                                               channel varchar(20) COLLATE pg_catalog.default NOT NULL,
+                                               amount numeric(16,4) NOT NULL,
+                                               title varchar(100) COLLATE pg_catalog.default,
+                                               reason varchar(150) COLLATE pg_catalog.default,
+                                               payee_type varchar(20) COLLATE pg_catalog.default,
+                                               payee_account varchar(100) COLLATE pg_catalog.default,
+                                               payee_name varchar(50) COLLATE pg_catalog.default,
+                                               status varchar(20) COLLATE pg_catalog.default NOT NULL,
+                                               finish_time timestamp(6),
+                                               notify_url varchar(200) COLLATE pg_catalog.default,
+                                               attach varchar(500) COLLATE pg_catalog.default,
+                                               req_time timestamp(6),
+                                               client_ip varchar(64) COLLATE pg_catalog.default,
+                                               error_code varchar(10) COLLATE pg_catalog.default,
+                                               error_msg varchar(500) COLLATE pg_catalog.default,
+                                               creator int8,
+                                               create_time timestamp(6),
+                                               last_modifier int8,
+                                               last_modified_time timestamp(6),
+                                               version int4 NOT NULL,
+                                               deleted bool NOT NULL,
+                                               mch_no varchar(32) COLLATE pg_catalog.default,
+                                               app_id varchar(32) COLLATE pg_catalog.default,
+                                               extra_param varchar(2048) COLLATE pg_catalog.default,
+                                               isv_no varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_transfer_order.id IS '主键';
@@ -2961,22 +2965,22 @@ COMMENT ON TABLE pay_transfer_order IS '转账订单';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_vbill_isv_config;
 CREATE TABLE pay_vbill_isv_config (
-                                      id int8 NOT NULL,
-                                      creator int8,
-                                      create_time timestamp(6),
-                                      last_modifier int8,
-                                      last_modified_time timestamp(6),
-                                      version int4 NOT NULL,
-                                      deleted bool NOT NULL,
-                                      org_id varchar(64) COLLATE pg_catalog.default,
-                                      public_key text COLLATE pg_catalog.default,
-                                      private_key text COLLATE pg_catalog.default,
-                                      enable bool,
-                                      sandbox bool,
-                                      wx_app_id varchar(32) COLLATE pg_catalog.default,
-                                      wx_app_secret varchar(64) COLLATE pg_catalog.default,
-                                      wx_auth_url varchar(200) COLLATE pg_catalog.default,
-                                      isv_no varchar(32) COLLATE pg_catalog.default
+                                                 id int8 NOT NULL,
+                                                 creator int8,
+                                                 create_time timestamp(6),
+                                                 last_modifier int8,
+                                                 last_modified_time timestamp(6),
+                                                 version int4 NOT NULL,
+                                                 deleted bool NOT NULL,
+                                                 org_id varchar(64) COLLATE pg_catalog.default,
+                                                 public_key text COLLATE pg_catalog.default,
+                                                 private_key text COLLATE pg_catalog.default,
+                                                 enable bool,
+                                                 sandbox bool,
+                                                 wx_app_id varchar(32) COLLATE pg_catalog.default,
+                                                 wx_app_secret varchar(64) COLLATE pg_catalog.default,
+                                                 wx_auth_url varchar(200) COLLATE pg_catalog.default,
+                                                 isv_no varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_vbill_isv_config.id IS '主键';
@@ -3002,22 +3006,22 @@ COMMENT ON TABLE pay_vbill_isv_config IS '随行付服务商配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_vbill_sub_config;
 CREATE TABLE pay_vbill_sub_config (
-                                      id int8 NOT NULL,
-                                      creator int8,
-                                      create_time timestamp(6),
-                                      last_modifier int8,
-                                      last_modified_time timestamp(6),
-                                      version int4 NOT NULL,
-                                      deleted bool NOT NULL,
-                                      mno varchar(64) COLLATE pg_catalog.default,
-                                      enable bool,
-                                      app_id varchar(32) COLLATE pg_catalog.default,
-                                      read_system bool,
-                                      wx_app_id varchar(32) COLLATE pg_catalog.default,
-                                      wx_app_secret varchar(64) COLLATE pg_catalog.default,
-                                      wx_auth_url varchar(200) COLLATE pg_catalog.default,
-                                      mch_no varchar(32) COLLATE pg_catalog.default,
-                                      isv_no varchar(32) COLLATE pg_catalog.default
+                                                 id int8 NOT NULL,
+                                                 creator int8,
+                                                 create_time timestamp(6),
+                                                 last_modifier int8,
+                                                 last_modified_time timestamp(6),
+                                                 version int4 NOT NULL,
+                                                 deleted bool NOT NULL,
+                                                 mno varchar(64) COLLATE pg_catalog.default,
+                                                 enable bool,
+                                                 app_id varchar(32) COLLATE pg_catalog.default,
+                                                 read_system bool,
+                                                 wx_app_id varchar(32) COLLATE pg_catalog.default,
+                                                 wx_app_secret varchar(64) COLLATE pg_catalog.default,
+                                                 wx_auth_url varchar(200) COLLATE pg_catalog.default,
+                                                 mch_no varchar(32) COLLATE pg_catalog.default,
+                                                 isv_no varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_vbill_sub_config.id IS '主键';
@@ -3043,29 +3047,29 @@ COMMENT ON TABLE pay_vbill_sub_config IS '随行付特约商户配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_wechat_isv_config;
 CREATE TABLE pay_wechat_isv_config (
-                                       id int8 NOT NULL,
-                                       creator int8,
-                                       create_time timestamp(6),
-                                       last_modifier int8,
-                                       last_modified_time timestamp(6),
-                                       version int4 NOT NULL,
-                                       deleted bool NOT NULL,
-                                       wx_mch_id varchar(64) COLLATE pg_catalog.default,
-                                       wx_app_id varchar(32) COLLATE pg_catalog.default,
-                                       enable bool,
-                                       api_version varchar(10) COLLATE pg_catalog.default,
-                                       api_key_v2 varchar(64) COLLATE pg_catalog.default,
-                                       api_key_v3 varchar(64) COLLATE pg_catalog.default,
-                                       app_secret varchar(64) COLLATE pg_catalog.default,
-                                       public_key text COLLATE pg_catalog.default,
-                                       public_key_id varchar(128) COLLATE pg_catalog.default,
-                                       private_key text COLLATE pg_catalog.default,
-                                       private_cert text COLLATE pg_catalog.default,
-                                       cert_serial_no varchar(128) COLLATE pg_catalog.default,
-                                       p12 text COLLATE pg_catalog.default,
-                                       wx_app_secret varchar(64) COLLATE pg_catalog.default,
-                                       wx_auth_url varchar(200) COLLATE pg_catalog.default,
-                                       isv_no varchar(32) COLLATE pg_catalog.default
+                                                  id int8 NOT NULL,
+                                                  creator int8,
+                                                  create_time timestamp(6),
+                                                  last_modifier int8,
+                                                  last_modified_time timestamp(6),
+                                                  version int4 NOT NULL,
+                                                  deleted bool NOT NULL,
+                                                  wx_mch_id varchar(64) COLLATE pg_catalog.default,
+                                                  wx_app_id varchar(32) COLLATE pg_catalog.default,
+                                                  enable bool,
+                                                  api_version varchar(10) COLLATE pg_catalog.default,
+                                                  api_key_v2 varchar(64) COLLATE pg_catalog.default,
+                                                  api_key_v3 varchar(64) COLLATE pg_catalog.default,
+                                                  app_secret varchar(64) COLLATE pg_catalog.default,
+                                                  public_key text COLLATE pg_catalog.default,
+                                                  public_key_id varchar(128) COLLATE pg_catalog.default,
+                                                  private_key text COLLATE pg_catalog.default,
+                                                  private_cert text COLLATE pg_catalog.default,
+                                                  cert_serial_no varchar(128) COLLATE pg_catalog.default,
+                                                  p12 text COLLATE pg_catalog.default,
+                                                  wx_app_secret varchar(64) COLLATE pg_catalog.default,
+                                                  wx_auth_url varchar(200) COLLATE pg_catalog.default,
+                                                  isv_no varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_wechat_isv_config.id IS '主键';
@@ -3098,31 +3102,31 @@ COMMENT ON TABLE pay_wechat_isv_config IS '微信服务商配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_wechat_pay_config;
 CREATE TABLE pay_wechat_pay_config (
-                                       id int8 NOT NULL,
-                                       creator int8,
-                                       create_time timestamp(6),
-                                       last_modifier int8,
-                                       last_modified_time timestamp(6),
-                                       version int4 NOT NULL,
-                                       deleted bool NOT NULL,
-                                       app_id varchar(32) COLLATE pg_catalog.default,
-                                       mch_no varchar(32) COLLATE pg_catalog.default,
-                                       enable bool,
-                                       auth_type varchar(32) COLLATE pg_catalog.default,
-                                       auth_url varchar(200) COLLATE pg_catalog.default,
-                                       api_version varchar(10) COLLATE pg_catalog.default,
-                                       api_key_v2 varchar(64) COLLATE pg_catalog.default,
-                                       api_key_v3 varchar(64) COLLATE pg_catalog.default,
-                                       app_secret varchar(64) COLLATE pg_catalog.default,
-                                       public_key text COLLATE pg_catalog.default,
-                                       public_key_id varchar(128) COLLATE pg_catalog.default,
-                                       private_cert text COLLATE pg_catalog.default,
-                                       private_key text COLLATE pg_catalog.default,
-                                       cert_serial_no varchar(128) COLLATE pg_catalog.default,
-                                       p12 text COLLATE pg_catalog.default,
-                                       isv_no varchar(32) COLLATE pg_catalog.default,
-                                       wx_mch_id varchar(64) COLLATE pg_catalog.default,
-                                       wx_app_id varchar(32) COLLATE pg_catalog.default
+                                                  id int8 NOT NULL,
+                                                  creator int8,
+                                                  create_time timestamp(6),
+                                                  last_modifier int8,
+                                                  last_modified_time timestamp(6),
+                                                  version int4 NOT NULL,
+                                                  deleted bool NOT NULL,
+                                                  app_id varchar(32) COLLATE pg_catalog.default,
+                                                  mch_no varchar(32) COLLATE pg_catalog.default,
+                                                  enable bool,
+                                                  auth_type varchar(32) COLLATE pg_catalog.default,
+                                                  auth_url varchar(200) COLLATE pg_catalog.default,
+                                                  api_version varchar(10) COLLATE pg_catalog.default,
+                                                  api_key_v2 varchar(64) COLLATE pg_catalog.default,
+                                                  api_key_v3 varchar(64) COLLATE pg_catalog.default,
+                                                  app_secret varchar(64) COLLATE pg_catalog.default,
+                                                  public_key text COLLATE pg_catalog.default,
+                                                  public_key_id varchar(128) COLLATE pg_catalog.default,
+                                                  private_cert text COLLATE pg_catalog.default,
+                                                  private_key text COLLATE pg_catalog.default,
+                                                  cert_serial_no varchar(128) COLLATE pg_catalog.default,
+                                                  p12 text COLLATE pg_catalog.default,
+                                                  isv_no varchar(32) COLLATE pg_catalog.default,
+                                                  wx_mch_id varchar(64) COLLATE pg_catalog.default,
+                                                  wx_app_id varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_wechat_pay_config.id IS '主键';
@@ -3157,22 +3161,22 @@ COMMENT ON TABLE pay_wechat_pay_config IS '微信支付配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_wechat_sub_config;
 CREATE TABLE pay_wechat_sub_config (
-                                       id int8 NOT NULL,
-                                       creator int8,
-                                       create_time timestamp(6),
-                                       last_modifier int8,
-                                       last_modified_time timestamp(6),
-                                       version int4 NOT NULL,
-                                       deleted bool NOT NULL,
-                                       app_id varchar(32) COLLATE pg_catalog.default,
-                                       mch_no varchar(32) COLLATE pg_catalog.default,
-                                       sub_mch_id varchar(64) COLLATE pg_catalog.default,
-                                       enable bool,
-                                       auth_type varchar(32) COLLATE pg_catalog.default,
-                                       sub_app_id varchar(64) COLLATE pg_catalog.default,
-                                       wx_app_secret varchar(64) COLLATE pg_catalog.default,
-                                       wx_auth_url varchar(200) COLLATE pg_catalog.default,
-                                       isv_no varchar(32) COLLATE pg_catalog.default
+                                                  id int8 NOT NULL,
+                                                  creator int8,
+                                                  create_time timestamp(6),
+                                                  last_modifier int8,
+                                                  last_modified_time timestamp(6),
+                                                  version int4 NOT NULL,
+                                                  deleted bool NOT NULL,
+                                                  app_id varchar(32) COLLATE pg_catalog.default,
+                                                  mch_no varchar(32) COLLATE pg_catalog.default,
+                                                  sub_mch_id varchar(64) COLLATE pg_catalog.default,
+                                                  enable bool,
+                                                  auth_type varchar(32) COLLATE pg_catalog.default,
+                                                  sub_app_id varchar(64) COLLATE pg_catalog.default,
+                                                  wx_app_secret varchar(64) COLLATE pg_catalog.default,
+                                                  wx_auth_url varchar(200) COLLATE pg_catalog.default,
+                                                  isv_no varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_wechat_sub_config.id IS '主键';
@@ -3198,27 +3202,27 @@ COMMENT ON TABLE pay_wechat_sub_config IS '微信特约商户配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_yeepay_isv_config;
 CREATE TABLE pay_yeepay_isv_config (
-                                       id int8 NOT NULL,
-                                       creator int8,
-                                       create_time timestamp(6),
-                                       last_modifier int8,
-                                       last_modified_time timestamp(6),
-                                       version int4 NOT NULL,
-                                       deleted bool NOT NULL,
-                                       enable bool,
-                                       sandbox bool,
-                                       app_key varchar(500) COLLATE pg_catalog.default,
-                                       private_key text COLLATE pg_catalog.default,
-                                       yop_public_key text COLLATE pg_catalog.default,
-                                       merchant_no varchar(32) COLLATE pg_catalog.default,
-                                       parent_merchant_no varchar(32) COLLATE pg_catalog.default,
-                                       wx_app_id varchar(32) COLLATE pg_catalog.default,
-                                       wx_app_secret varchar(64) COLLATE pg_catalog.default,
-                                       wx_auth_url varchar(200) COLLATE pg_catalog.default,
-                                       isv_no varchar(32) COLLATE pg_catalog.default,
-                                       mch_no varchar(32) COLLATE pg_catalog.default,
-                                       app_id varchar(32) COLLATE pg_catalog.default,
-                                       yop_isv_no varchar(32) COLLATE pg_catalog.default
+                                                  id int8 NOT NULL,
+                                                  creator int8,
+                                                  create_time timestamp(6),
+                                                  last_modifier int8,
+                                                  last_modified_time timestamp(6),
+                                                  version int4 NOT NULL,
+                                                  deleted bool NOT NULL,
+                                                  enable bool,
+                                                  sandbox bool,
+                                                  app_key varchar(500) COLLATE pg_catalog.default,
+                                                  private_key text COLLATE pg_catalog.default,
+                                                  yop_public_key text COLLATE pg_catalog.default,
+                                                  merchant_no varchar(32) COLLATE pg_catalog.default,
+                                                  parent_merchant_no varchar(32) COLLATE pg_catalog.default,
+                                                  wx_app_id varchar(32) COLLATE pg_catalog.default,
+                                                  wx_app_secret varchar(64) COLLATE pg_catalog.default,
+                                                  wx_auth_url varchar(200) COLLATE pg_catalog.default,
+                                                  isv_no varchar(32) COLLATE pg_catalog.default,
+                                                  mch_no varchar(32) COLLATE pg_catalog.default,
+                                                  app_id varchar(32) COLLATE pg_catalog.default,
+                                                  yop_isv_no varchar(32) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_yeepay_isv_config.id IS '主键';
@@ -3249,22 +3253,22 @@ COMMENT ON TABLE pay_yeepay_isv_config IS '易宝服务商支付配置';
 -- ----------------------------
 DROP TABLE IF EXISTS pay_yeepay_sub_config;
 CREATE TABLE pay_yeepay_sub_config (
-                                       id int8 NOT NULL,
-                                       creator int8,
-                                       create_time timestamp(6),
-                                       last_modifier int8,
-                                       last_modified_time timestamp(6),
-                                       version int4 NOT NULL,
-                                       deleted bool NOT NULL,
-                                       isv_no varchar(32) COLLATE pg_catalog.default,
-                                       mch_no varchar(32) COLLATE pg_catalog.default,
-                                       app_id varchar(32) COLLATE pg_catalog.default,
-                                       enable bool,
-                                       merchant_no varchar(32) COLLATE pg_catalog.default,
-                                       read_system varchar(32) COLLATE pg_catalog.default,
-                                       wx_app_id varchar(32) COLLATE pg_catalog.default,
-                                       wx_app_secret varchar(64) COLLATE pg_catalog.default,
-                                       wx_auth_url varchar(200) COLLATE pg_catalog.default
+                                                  id int8 NOT NULL,
+                                                  creator int8,
+                                                  create_time timestamp(6),
+                                                  last_modifier int8,
+                                                  last_modified_time timestamp(6),
+                                                  version int4 NOT NULL,
+                                                  deleted bool NOT NULL,
+                                                  isv_no varchar(32) COLLATE pg_catalog.default,
+                                                  mch_no varchar(32) COLLATE pg_catalog.default,
+                                                  app_id varchar(32) COLLATE pg_catalog.default,
+                                                  enable bool,
+                                                  merchant_no varchar(32) COLLATE pg_catalog.default,
+                                                  read_system varchar(32) COLLATE pg_catalog.default,
+                                                  wx_app_id varchar(32) COLLATE pg_catalog.default,
+                                                  wx_app_secret varchar(64) COLLATE pg_catalog.default,
+                                                  wx_auth_url varchar(200) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN pay_yeepay_sub_config.id IS '主键';
@@ -3290,18 +3294,18 @@ COMMENT ON TABLE pay_yeepay_sub_config IS '易宝支付子商户配置';
 -- ----------------------------
 DROP TABLE IF EXISTS starter_audit_login_log;
 CREATE TABLE starter_audit_login_log (
-                                         id int8 NOT NULL,
-                                         user_id int8,
-                                         account varchar(100) COLLATE pg_catalog.default,
-                                         login bool,
-                                         client varchar(20) COLLATE pg_catalog.default,
-                                         login_type varchar(20) COLLATE pg_catalog.default,
-                                         ip varchar(80) COLLATE pg_catalog.default,
-                                         login_location varchar(100) COLLATE pg_catalog.default,
-                                         browser varchar(200) COLLATE pg_catalog.default,
-                                         os varchar(100) COLLATE pg_catalog.default,
-                                         msg text COLLATE pg_catalog.default,
-                                         login_time timestamp(6)
+                                                    id int8 NOT NULL,
+                                                    user_id int8,
+                                                    account varchar(100) COLLATE pg_catalog.default,
+                                                    login bool,
+                                                    client varchar(20) COLLATE pg_catalog.default,
+                                                    login_type varchar(20) COLLATE pg_catalog.default,
+                                                    ip varchar(80) COLLATE pg_catalog.default,
+                                                    login_location varchar(100) COLLATE pg_catalog.default,
+                                                    browser varchar(200) COLLATE pg_catalog.default,
+                                                    os varchar(100) COLLATE pg_catalog.default,
+                                                    msg text COLLATE pg_catalog.default,
+                                                    login_time timestamp(6)
 )
 ;
 COMMENT ON COLUMN starter_audit_login_log.id IS '主键';
@@ -3323,24 +3327,24 @@ COMMENT ON TABLE starter_audit_login_log IS '登录日志';
 -- ----------------------------
 DROP TABLE IF EXISTS starter_audit_operate_log;
 CREATE TABLE starter_audit_operate_log (
-                                           id int8 NOT NULL,
-                                           title varchar(100) COLLATE pg_catalog.default NOT NULL,
-                                           operate_id int8,
-                                           account varchar(100) COLLATE pg_catalog.default,
-                                           business_type varchar(50) COLLATE pg_catalog.default NOT NULL,
-                                           method varchar(100) COLLATE pg_catalog.default NOT NULL,
-                                           request_method varchar(20) COLLATE pg_catalog.default NOT NULL,
-                                           operate_url varchar(200) COLLATE pg_catalog.default NOT NULL,
-                                           operate_ip varchar(80) COLLATE pg_catalog.default,
-                                           operate_location varchar(50) COLLATE pg_catalog.default,
-                                           operate_param text COLLATE pg_catalog.default,
-                                           operate_return text COLLATE pg_catalog.default,
-                                           success bool,
-                                           error_msg text COLLATE pg_catalog.default,
-                                           operate_time timestamp(6) NOT NULL,
-                                           browser varchar(200) COLLATE pg_catalog.default,
-                                           os varchar(100) COLLATE pg_catalog.default,
-                                           client varchar(20) COLLATE pg_catalog.default
+                                                      id int8 NOT NULL,
+                                                      title varchar(100) COLLATE pg_catalog.default NOT NULL,
+                                                      operate_id int8,
+                                                      account varchar(100) COLLATE pg_catalog.default,
+                                                      business_type varchar(50) COLLATE pg_catalog.default NOT NULL,
+                                                      method varchar(100) COLLATE pg_catalog.default NOT NULL,
+                                                      request_method varchar(20) COLLATE pg_catalog.default NOT NULL,
+                                                      operate_url varchar(200) COLLATE pg_catalog.default NOT NULL,
+                                                      operate_ip varchar(80) COLLATE pg_catalog.default,
+                                                      operate_location varchar(50) COLLATE pg_catalog.default,
+                                                      operate_param text COLLATE pg_catalog.default,
+                                                      operate_return text COLLATE pg_catalog.default,
+                                                      success bool,
+                                                      error_msg text COLLATE pg_catalog.default,
+                                                      operate_time timestamp(6) NOT NULL,
+                                                      browser varchar(200) COLLATE pg_catalog.default,
+                                                      os varchar(100) COLLATE pg_catalog.default,
+                                                      client varchar(20) COLLATE pg_catalog.default
 )
 ;
 COMMENT ON COLUMN starter_audit_operate_log.id IS '主键';
@@ -3368,17 +3372,17 @@ COMMENT ON TABLE starter_audit_operate_log IS '操作日志';
 -- ----------------------------
 DROP TABLE IF EXISTS starter_file_platform;
 CREATE TABLE starter_file_platform (
-                                       id int8 NOT NULL,
-                                       type varchar(50) COLLATE pg_catalog.default,
-                                       name varchar(200) COLLATE pg_catalog.default,
-                                       url varchar(200) COLLATE pg_catalog.default,
-                                       default_platform bool,
-                                       creator int8,
-                                       create_time timestamp(6),
-                                       last_modifier int8,
-                                       last_modified_time timestamp(6),
-                                       version int4 NOT NULL DEFAULT 0,
-                                       frontend_upload bool
+                                                  id int8 NOT NULL,
+                                                  type varchar(50) COLLATE pg_catalog.default,
+                                                  name varchar(200) COLLATE pg_catalog.default,
+                                                  url varchar(200) COLLATE pg_catalog.default,
+                                                  default_platform bool,
+                                                  creator int8,
+                                                  create_time timestamp(6),
+                                                  last_modifier int8,
+                                                  last_modified_time timestamp(6),
+                                                  version int4 NOT NULL DEFAULT 0,
+                                                  frontend_upload bool
 )
 ;
 COMMENT ON COLUMN starter_file_platform.id IS '文件id';
@@ -3399,30 +3403,30 @@ COMMENT ON TABLE starter_file_platform IS '文件存储平台';
 -- ----------------------------
 DROP TABLE IF EXISTS starter_file_upload_info;
 CREATE TABLE starter_file_upload_info (
-                                          id int8 NOT NULL,
-                                          url varchar(512) COLLATE pg_catalog.default NOT NULL,
-                                          size int8,
-                                          filename varchar(256) COLLATE pg_catalog.default,
-                                          original_filename varchar(256) COLLATE pg_catalog.default,
-                                          base_path varchar(256) COLLATE pg_catalog.default,
-                                          path varchar(256) COLLATE pg_catalog.default,
-                                          ext varchar(32) COLLATE pg_catalog.default,
-                                          content_type varchar(128) COLLATE pg_catalog.default,
-                                          platform varchar(32) COLLATE pg_catalog.default,
-                                          th_url varchar(512) COLLATE pg_catalog.default,
-                                          th_filename varchar(256) COLLATE pg_catalog.default,
-                                          th_size int8,
-                                          th_content_type varchar(128) COLLATE pg_catalog.default,
-                                          object_id varchar(32) COLLATE pg_catalog.default,
-                                          object_type varchar(32) COLLATE pg_catalog.default,
-                                          metadata text COLLATE pg_catalog.default,
-                                          user_metadata text COLLATE pg_catalog.default,
-                                          th_metadata text COLLATE pg_catalog.default,
-                                          th_user_metadata text COLLATE pg_catalog.default,
-                                          attr text COLLATE pg_catalog.default,
-                                          file_acl varchar(32) COLLATE pg_catalog.default,
-                                          th_file_acl varchar(32) COLLATE pg_catalog.default,
-                                          create_time timestamp(6)
+                                                     id int8 NOT NULL,
+                                                     url varchar(512) COLLATE pg_catalog.default NOT NULL,
+                                                     size int8,
+                                                     filename varchar(256) COLLATE pg_catalog.default,
+                                                     original_filename varchar(256) COLLATE pg_catalog.default,
+                                                     base_path varchar(256) COLLATE pg_catalog.default,
+                                                     path varchar(256) COLLATE pg_catalog.default,
+                                                     ext varchar(32) COLLATE pg_catalog.default,
+                                                     content_type varchar(128) COLLATE pg_catalog.default,
+                                                     platform varchar(32) COLLATE pg_catalog.default,
+                                                     th_url varchar(512) COLLATE pg_catalog.default,
+                                                     th_filename varchar(256) COLLATE pg_catalog.default,
+                                                     th_size int8,
+                                                     th_content_type varchar(128) COLLATE pg_catalog.default,
+                                                     object_id varchar(32) COLLATE pg_catalog.default,
+                                                     object_type varchar(32) COLLATE pg_catalog.default,
+                                                     metadata text COLLATE pg_catalog.default,
+                                                     user_metadata text COLLATE pg_catalog.default,
+                                                     th_metadata text COLLATE pg_catalog.default,
+                                                     th_user_metadata text COLLATE pg_catalog.default,
+                                                     attr text COLLATE pg_catalog.default,
+                                                     file_acl varchar(32) COLLATE pg_catalog.default,
+                                                     th_file_acl varchar(32) COLLATE pg_catalog.default,
+                                                     create_time timestamp(6)
 )
 ;
 COMMENT ON COLUMN starter_file_upload_info.id IS '文件id';
@@ -3485,7 +3489,7 @@ ALTER TABLE base_province ADD CONSTRAINT base_province_pkey PRIMARY KEY (code);
 -- Indexes structure for table base_street
 -- ----------------------------
 CREATE INDEX inx_area_code ON base_street USING btree (
-                                                       area_code COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                    area_code COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 COMMENT ON INDEX inx_area_code IS '县区';
 
@@ -3558,7 +3562,7 @@ ALTER TABLE iam_user_role ADD CONSTRAINT iam_user_role_pkey PRIMARY KEY (id);
 -- Indexes structure for table pay_adapay_config
 -- ----------------------------
 CREATE INDEX idx_pay_adapay_config_app_id ON pay_adapay_config USING btree (
-                                                                            app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                         app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 COMMENT ON INDEX idx_pay_adapay_config_app_id IS '汇付支付配置应用号索引';
 
@@ -3571,7 +3575,7 @@ ALTER TABLE pay_adapay_config ADD CONSTRAINT pay_adapay_config_pkey PRIMARY KEY 
 -- Indexes structure for table pay_aggregate_bar_pay_config
 -- ----------------------------
 CREATE INDEX idx_aggregate_bar_pay_config_app_id ON pay_aggregate_bar_pay_config USING btree (
-                                                                                              app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                                           app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 
 -- ----------------------------
@@ -3588,7 +3592,7 @@ ALTER TABLE pay_aggregate_pay_config ADD CONSTRAINT pay_checkout_aggregate_confi
 -- Indexes structure for table pay_aggregate_qr_pay_config
 -- ----------------------------
 CREATE INDEX idx_aggregate_qr_pay_config_app_id ON pay_aggregate_qr_pay_config USING btree (
-                                                                                            app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                                         app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 
 -- ----------------------------
@@ -3600,7 +3604,7 @@ ALTER TABLE pay_aggregate_qr_pay_config ADD CONSTRAINT pk_aggregate_qr_pay_confi
 -- Indexes structure for table pay_alipay_config
 -- ----------------------------
 CREATE INDEX idx_pay_alipay_config_app_id ON pay_alipay_config USING btree (
-                                                                            app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                         app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 COMMENT ON INDEX idx_pay_alipay_config_app_id IS '支付宝配置应用号索引';
 
@@ -3613,7 +3617,7 @@ ALTER TABLE pay_alipay_config ADD CONSTRAINT pay_alipay_config_pkey PRIMARY KEY 
 -- Indexes structure for table pay_alipay_isv_config
 -- ----------------------------
 CREATE INDEX idx_pay_alipay_isv_config_isv_no ON pay_alipay_isv_config USING btree (
-                                                                                    isv_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                                 isv_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 COMMENT ON INDEX idx_pay_alipay_isv_config_isv_no IS '支付宝服务商配置服务商号索引';
 
@@ -3626,7 +3630,7 @@ ALTER TABLE pay_alipay_isv_config ADD CONSTRAINT pay_alipay_isv_config_pkey PRIM
 -- Indexes structure for table pay_alipay_sub_config
 -- ----------------------------
 CREATE INDEX idx_pay_alipay_sub_config_app_id ON pay_alipay_sub_config USING btree (
-                                                                                    app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                                 app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 COMMENT ON INDEX idx_pay_alipay_sub_config_app_id IS '支付宝特约商户配置应用号索引';
 
@@ -3644,19 +3648,19 @@ ALTER TABLE pay_api_const ADD CONSTRAINT pay_channel_const_copy1_pkey1 PRIMARY K
 -- Indexes structure for table pay_cashier_code
 -- ----------------------------
 CREATE INDEX idx_pay_cashier_code_app_id ON pay_cashier_code USING btree (
-                                                                          app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                       app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 CREATE INDEX idx_pay_cashier_code_code ON pay_cashier_code USING btree (
-                                                                        code COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                     code COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 CREATE INDEX idx_pay_cashier_code_deleted ON pay_cashier_code USING btree (
-                                                                           deleted pg_catalog.bool_ops ASC NULLS LAST
+                                                                                        deleted pg_catalog.bool_ops ASC NULLS LAST
     );
 CREATE INDEX idx_pay_cashier_code_enable ON pay_cashier_code USING btree (
-                                                                          enable pg_catalog.bool_ops ASC NULLS LAST
+                                                                                       enable pg_catalog.bool_ops ASC NULLS LAST
     );
 CREATE INDEX idx_pay_cashier_code_mch_no ON pay_cashier_code USING btree (
-                                                                          mch_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                       mch_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 
 -- ----------------------------
@@ -3668,7 +3672,7 @@ ALTER TABLE pay_cashier_code ADD CONSTRAINT pk_pay_cashier_code PRIMARY KEY (id)
 -- Indexes structure for table pay_cashier_code_config
 -- ----------------------------
 CREATE INDEX idx_cashier_code_config_app_id ON pay_cashier_code_config USING btree (
-                                                                                    app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                                 app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 
 -- ----------------------------
@@ -3690,7 +3694,7 @@ ALTER TABLE pay_channel_const ADD CONSTRAINT pay_channel_const_pkey PRIMARY KEY 
 -- Indexes structure for table pay_checkout_counter_config
 -- ----------------------------
 CREATE INDEX idx_checkout_counter_config_app_id ON pay_checkout_counter_config USING btree (
-                                                                                            app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                                         app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 
 -- ----------------------------
@@ -3702,11 +3706,11 @@ ALTER TABLE pay_checkout_counter_config ADD CONSTRAINT pk_checkout_counter_confi
 -- Indexes structure for table pay_close_record
 -- ----------------------------
 CREATE INDEX biz_order_no ON pay_close_record USING btree (
-                                                           biz_order_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                        biz_order_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 COMMENT ON INDEX biz_order_no IS '商户支付订单号索引';
 CREATE INDEX order_no ON pay_close_record USING btree (
-                                                       order_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                    order_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 COMMENT ON INDEX order_no IS '支付订单号索引';
 
@@ -3719,7 +3723,7 @@ ALTER TABLE pay_close_record ADD CONSTRAINT pay_close_record_pkey PRIMARY KEY (i
 -- Indexes structure for table pay_dougong_isv_config
 -- ----------------------------
 CREATE INDEX idx_pay_dougong_isv_config_isv_no ON pay_dougong_isv_config USING btree (
-                                                                                      isv_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                                   isv_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 COMMENT ON INDEX idx_pay_dougong_isv_config_isv_no IS '斗拱服务商配置服务商号索引';
 
@@ -3732,7 +3736,7 @@ ALTER TABLE pay_dougong_isv_config ADD CONSTRAINT pay_dougong_isv_config_pkey PR
 -- Indexes structure for table pay_dougong_sub_config
 -- ----------------------------
 CREATE INDEX idx_pay_dougong_sub_config_app_id ON pay_dougong_sub_config USING btree (
-                                                                                      app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                                   app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 COMMENT ON INDEX idx_pay_dougong_sub_config_app_id IS '斗拱特约商户配置应用号索引';
 
@@ -3745,7 +3749,7 @@ ALTER TABLE pay_dougong_sub_config ADD CONSTRAINT pay_dougong_sub_config_pkey PR
 -- Indexes structure for table pay_fuyou_isv_config
 -- ----------------------------
 CREATE INDEX idx_fuyou_isv_config_isv_no ON pay_fuyou_isv_config USING btree (
-                                                                              isv_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                           isv_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 
 -- ----------------------------
@@ -3757,7 +3761,7 @@ ALTER TABLE pay_fuyou_isv_config ADD CONSTRAINT pay_fuyou_isv_config_pkey PRIMAR
 -- Indexes structure for table pay_fuyou_sub_config
 -- ----------------------------
 CREATE INDEX idx_fuyou_sub_config_app_id ON pay_fuyou_sub_config USING btree (
-                                                                              app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                           app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 
 -- ----------------------------
@@ -3769,7 +3773,7 @@ ALTER TABLE pay_fuyou_sub_config ADD CONSTRAINT pay_fuyou_sub_config_pkey PRIMAR
 -- Indexes structure for table pay_gateway_pay_config
 -- ----------------------------
 CREATE INDEX idx_gateway_config_app_id ON pay_gateway_pay_config USING btree (
-                                                                              app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                           app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 
 -- ----------------------------
@@ -3781,7 +3785,7 @@ ALTER TABLE pay_gateway_pay_config ADD CONSTRAINT pk_gateway_config PRIMARY KEY 
 -- Indexes structure for table pay_gateway_pay_read_config
 -- ----------------------------
 CREATE INDEX idx_gateway_read_config_app_id ON pay_gateway_pay_read_config USING btree (
-                                                                                        app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                                     app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 
 -- ----------------------------
@@ -3793,7 +3797,7 @@ ALTER TABLE pay_gateway_pay_read_config ADD CONSTRAINT pay_gateway_config_copy1_
 -- Indexes structure for table pay_hkrt_isv_config
 -- ----------------------------
 CREATE INDEX idx_pay_hkrt_isv_config_isv_no ON pay_hkrt_isv_config USING btree (
-                                                                                isv_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                             isv_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 COMMENT ON INDEX idx_pay_hkrt_isv_config_isv_no IS '海科服务商配置服务商号索引';
 
@@ -3806,7 +3810,7 @@ ALTER TABLE pay_hkrt_isv_config ADD CONSTRAINT pay_hkrt_isv_config_pkey PRIMARY 
 -- Indexes structure for table pay_hkrt_sub_config
 -- ----------------------------
 CREATE INDEX idx_pay_hkrt_sub_config_app_id ON pay_hkrt_sub_config USING btree (
-                                                                                app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                             app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 COMMENT ON INDEX idx_pay_hkrt_sub_config_app_id IS '海科子商户配置应用号索引';
 
@@ -3819,7 +3823,7 @@ ALTER TABLE pay_hkrt_sub_config ADD CONSTRAINT pay_hkrt_sub_config_pkey PRIMARY 
 -- Indexes structure for table pay_isv_aggregate_bar_pay_config
 -- ----------------------------
 CREATE INDEX idx_isv_aggregate_bar_pay_config_isv_no ON pay_isv_aggregate_bar_pay_config USING btree (
-                                                                                                      isv_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                                                   isv_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 
 -- ----------------------------
@@ -3836,7 +3840,7 @@ ALTER TABLE pay_isv_aggregate_pay_config ADD CONSTRAINT pay_aggregate_pay_config
 -- Indexes structure for table pay_isv_aggregate_qr_pay_config
 -- ----------------------------
 CREATE INDEX idx_isv_aggregate_qr_pay_config_isv_no ON pay_isv_aggregate_qr_pay_config USING btree (
-                                                                                                    isv_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                                                 isv_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 
 -- ----------------------------
@@ -3853,7 +3857,7 @@ ALTER TABLE pay_isv_channel_config ADD CONSTRAINT pay_channel_config_copy1_pkey 
 -- Indexes structure for table pay_isv_checkout_counter_config
 -- ----------------------------
 CREATE INDEX idx_isv_checkout_counter_config_isv_no ON pay_isv_checkout_counter_config USING btree (
-                                                                                                    isv_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                                                 isv_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 
 -- ----------------------------
@@ -3865,7 +3869,7 @@ ALTER TABLE pay_isv_checkout_counter_config ADD CONSTRAINT pk_isv_checkout_count
 -- Indexes structure for table pay_isv_gateway_config
 -- ----------------------------
 CREATE INDEX idx_isv_gateway_config_isv_no ON pay_isv_gateway_config USING btree (
-                                                                                  isv_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                               isv_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 
 -- ----------------------------
@@ -3882,7 +3886,7 @@ ALTER TABLE pay_isv_info ADD CONSTRAINT pay_mch_app_copy1_pkey PRIMARY KEY (id);
 -- Indexes structure for table pay_isv_mini_quickly_config
 -- ----------------------------
 CREATE INDEX idx_isv_mini_quickly_config_isv_no ON pay_isv_mini_quickly_config USING btree (
-                                                                                            isv_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                                         isv_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 
 -- ----------------------------
@@ -3894,7 +3898,7 @@ ALTER TABLE pay_isv_mini_quickly_config ADD CONSTRAINT pk_isv_mini_quickly_confi
 -- Indexes structure for table pay_lakala_isv_config
 -- ----------------------------
 CREATE INDEX idx_lakala_isv_config_isv_no ON pay_lakala_isv_config USING btree (
-                                                                                isv_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                             isv_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 
 -- ----------------------------
@@ -3906,7 +3910,7 @@ ALTER TABLE pay_lakala_isv_config ADD CONSTRAINT pay_lakala_isv_config_pkey PRIM
 -- Indexes structure for table pay_lakala_sub_config
 -- ----------------------------
 CREATE INDEX idx_lakala_sub_config_app_id ON pay_lakala_sub_config USING btree (
-                                                                                app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                             app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 
 -- ----------------------------
@@ -3918,7 +3922,7 @@ ALTER TABLE pay_lakala_sub_config ADD CONSTRAINT pay_lakala_sub_config_pkey PRIM
 -- Indexes structure for table pay_leshua_isv_config
 -- ----------------------------
 CREATE INDEX idx_pay_leshua_isv_config_isv_no ON pay_leshua_isv_config USING btree (
-                                                                                    isv_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                                 isv_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 COMMENT ON INDEX idx_pay_leshua_isv_config_isv_no IS '乐刷服务商配置服务商号索引';
 
@@ -3931,7 +3935,7 @@ ALTER TABLE pay_leshua_isv_config ADD CONSTRAINT pay_leshua_isv_config_pkey PRIM
 -- Indexes structure for table pay_leshua_sub_config
 -- ----------------------------
 CREATE INDEX idx_pay_leshua_sub_config_app_id ON pay_leshua_sub_config USING btree (
-                                                                                    app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                                 app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 COMMENT ON INDEX idx_pay_leshua_sub_config_app_id IS '乐刷子商户配置应用号索引';
 
@@ -3964,10 +3968,10 @@ ALTER TABLE pay_merchant_callback_task ADD CONSTRAINT pay_merchant_callback_task
 -- Indexes structure for table pay_merchant_credential
 -- ----------------------------
 CREATE INDEX idx_pay_merchant_credential_isv_no ON pay_merchant_credential USING btree (
-                                                                                        isv_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                                     isv_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 CREATE INDEX idx_pay_merchant_credential_mch_no ON pay_merchant_credential USING btree (
-                                                                                        mch_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                                     mch_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 
 -- ----------------------------
@@ -3984,7 +3988,7 @@ ALTER TABLE pay_merchant_user ADD CONSTRAINT pay_user_merchant_pkey PRIMARY KEY 
 -- Indexes structure for table pay_mini_quickly_config
 -- ----------------------------
 CREATE INDEX idx_mini_quickly_config_app_id ON pay_mini_quickly_config USING btree (
-                                                                                    app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                                 app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 
 -- ----------------------------
@@ -4001,13 +4005,13 @@ ALTER TABLE pay_onb_mch_info ADD CONSTRAINT pay_isv_mch_info_pkey PRIMARY KEY (i
 -- Indexes structure for table pay_order
 -- ----------------------------
 CREATE INDEX order_biz_order_order_no_idx ON pay_order USING btree (
-                                                                    biz_order_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                 biz_order_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 CREATE INDEX order_pay_order_order_no_idx ON pay_order USING btree (
-                                                                    order_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                 order_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 CREATE INDEX order_pay_order_out_order_no_idx ON pay_order USING btree (
-                                                                        out_order_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                     out_order_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 
 -- ----------------------------
@@ -4049,31 +4053,31 @@ ALTER TABLE pay_platform_website_config ADD CONSTRAINT pay_platform_website_conf
 -- Indexes structure for table pay_refund_order
 -- ----------------------------
 CREATE INDEX refund_biz_order_no ON pay_refund_order USING btree (
-                                                                  biz_order_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                               biz_order_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 COMMENT ON INDEX refund_biz_order_no IS '商户支付订单号索引';
 CREATE INDEX refund_biz_refund_no ON pay_refund_order USING btree (
-                                                                   biz_refund_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                biz_refund_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 COMMENT ON INDEX refund_biz_refund_no IS '商户退款号索引';
 CREATE INDEX refund_order_id ON pay_refund_order USING btree (
-                                                              order_id pg_catalog.int8_ops ASC NULLS LAST
+                                                                           order_id pg_catalog.int8_ops ASC NULLS LAST
     );
 COMMENT ON INDEX refund_order_id IS '支付订单ID索引';
 CREATE INDEX refund_order_no ON pay_refund_order USING btree (
-                                                              order_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                           order_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 COMMENT ON INDEX refund_order_no IS '支付订单号索引';
 CREATE INDEX refund_out_order_no ON pay_refund_order USING btree (
-                                                                  out_order_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                               out_order_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 COMMENT ON INDEX refund_out_order_no IS '通道支付订单号索引';
 CREATE INDEX refund_out_refund_no ON pay_refund_order USING btree (
-                                                                   out_refund_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                out_refund_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 COMMENT ON INDEX refund_out_refund_no IS '通道退款交易号索引';
 CREATE INDEX refund_refund_no ON pay_refund_order USING btree (
-                                                               refund_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                            refund_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 COMMENT ON INDEX refund_refund_no IS '退款号索引';
 
@@ -4086,7 +4090,7 @@ ALTER TABLE pay_refund_order ADD CONSTRAINT pay_refund_order_pkey PRIMARY KEY (i
 -- Indexes structure for table pay_sand_isv_config
 -- ----------------------------
 CREATE INDEX idx_sand_isv_config_isv_no ON pay_sand_isv_config USING btree (
-                                                                            isv_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                         isv_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 
 -- ----------------------------
@@ -4098,7 +4102,7 @@ ALTER TABLE pay_sand_isv_config ADD CONSTRAINT pay_sand_isv_config_pkey PRIMARY 
 -- Indexes structure for table pay_sand_settle_bind_info
 -- ----------------------------
 CREATE INDEX idx_sand_settle_bind_info_onb_mch_id ON pay_sand_settle_bind_info USING btree (
-                                                                                            onb_mch_id pg_catalog.int8_ops ASC NULLS LAST
+                                                                                                         onb_mch_id pg_catalog.int8_ops ASC NULLS LAST
     );
 
 -- ----------------------------
@@ -4110,7 +4114,7 @@ ALTER TABLE pay_sand_settle_bind_info ADD CONSTRAINT pay_sand_settle_bind_info_p
 -- Indexes structure for table pay_sand_sub_config
 -- ----------------------------
 CREATE INDEX idx_sand_sub_config_app_id ON pay_sand_sub_config USING btree (
-                                                                            app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                         app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 
 -- ----------------------------
@@ -4122,11 +4126,11 @@ ALTER TABLE pay_sand_sub_config ADD CONSTRAINT pay_sand_sub_config_pkey PRIMARY 
 -- Indexes structure for table pay_trade_callback_record
 -- ----------------------------
 CREATE INDEX out_trade_no ON pay_trade_callback_record USING btree (
-                                                                    out_trade_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                 out_trade_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 COMMENT ON INDEX out_trade_no IS '通道交易号索引';
 CREATE INDEX trade_no ON pay_trade_callback_record USING btree (
-                                                                trade_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                             trade_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 COMMENT ON INDEX trade_no IS '本地交易号索引';
 
@@ -4149,15 +4153,15 @@ ALTER TABLE pay_trade_sync_record ADD CONSTRAINT pay_trade_sync_record_pkey PRIM
 -- Indexes structure for table pay_transfer_order
 -- ----------------------------
 CREATE INDEX transfer_biz_transfer_no ON pay_transfer_order USING btree (
-                                                                         biz_transfer_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                      biz_transfer_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 COMMENT ON INDEX transfer_biz_transfer_no IS '商户转账号索引';
 CREATE INDEX transfer_out_transfer_no ON pay_transfer_order USING btree (
-                                                                         out_transfer_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                      out_transfer_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 COMMENT ON INDEX transfer_out_transfer_no IS '通道转账号索引';
 CREATE INDEX transfer_transfer_no ON pay_transfer_order USING btree (
-                                                                     transfer_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                  transfer_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 COMMENT ON INDEX transfer_transfer_no IS '转账号索引';
 
@@ -4170,7 +4174,7 @@ ALTER TABLE pay_transfer_order ADD CONSTRAINT pay_transfer_order_pkey PRIMARY KE
 -- Indexes structure for table pay_vbill_isv_config
 -- ----------------------------
 CREATE INDEX idx_pay_vbill_isv_config_isv_no ON pay_vbill_isv_config USING btree (
-                                                                                  isv_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                               isv_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 COMMENT ON INDEX idx_pay_vbill_isv_config_isv_no IS '随行付服务商配置服务商号索引';
 
@@ -4183,7 +4187,7 @@ ALTER TABLE pay_vbill_isv_config ADD CONSTRAINT pay_vbill_isv_config_pkey PRIMAR
 -- Indexes structure for table pay_vbill_sub_config
 -- ----------------------------
 CREATE INDEX idx_pay_vbill_sub_config_app_id ON pay_vbill_sub_config USING btree (
-                                                                                  app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                               app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 COMMENT ON INDEX idx_pay_vbill_sub_config_app_id IS '随行付子商户配置应用号索引';
 
@@ -4196,7 +4200,7 @@ ALTER TABLE pay_vbill_sub_config ADD CONSTRAINT pay_vbill_sub_config_pkey PRIMAR
 -- Indexes structure for table pay_wechat_isv_config
 -- ----------------------------
 CREATE INDEX idx_pay_wechat_isv_config_isv_no ON pay_wechat_isv_config USING btree (
-                                                                                    isv_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                                 isv_no COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 COMMENT ON INDEX idx_pay_wechat_isv_config_isv_no IS '微信服务商配置服务商号索引';
 
@@ -4209,7 +4213,7 @@ ALTER TABLE pay_wechat_isv_config ADD CONSTRAINT pay_wechat_isv_config_pkey PRIM
 -- Indexes structure for table pay_wechat_pay_config
 -- ----------------------------
 CREATE INDEX idx_pay_wechat_pay_config_app_id ON pay_wechat_pay_config USING btree (
-                                                                                    app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                                 app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 COMMENT ON INDEX idx_pay_wechat_pay_config_app_id IS '微信支付配置应用号索引';
 
@@ -4222,7 +4226,7 @@ ALTER TABLE pay_wechat_pay_config ADD CONSTRAINT pay_wechat_pay_config_pkey PRIM
 -- Indexes structure for table pay_wechat_sub_config
 -- ----------------------------
 CREATE INDEX idx_pay_wechat_sub_config_app_id ON pay_wechat_sub_config USING btree (
-                                                                                    app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                                 app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 COMMENT ON INDEX idx_pay_wechat_sub_config_app_id IS '微信特约商户配置应用号索引';
 
@@ -4235,7 +4239,7 @@ ALTER TABLE pay_wechat_sub_config ADD CONSTRAINT pay_wechat_sub_config_pkey PRIM
 -- Indexes structure for table pay_yeepay_isv_config
 -- ----------------------------
 CREATE INDEX idx_pay_yeepay_config_app_id ON pay_yeepay_isv_config USING btree (
-                                                                                app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                             app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 
 -- ----------------------------
@@ -4247,7 +4251,7 @@ ALTER TABLE pay_yeepay_isv_config ADD CONSTRAINT pk_pay_yeepay_config PRIMARY KE
 -- Indexes structure for table pay_yeepay_sub_config
 -- ----------------------------
 CREATE INDEX idx_pay_yeepay_sub_config_app_id ON pay_yeepay_sub_config USING btree (
-                                                                                    app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
+                                                                                                 app_id COLLATE pg_catalog.default pg_catalog.text_ops ASC NULLS LAST
     );
 
 -- ----------------------------

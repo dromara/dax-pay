@@ -1,6 +1,5 @@
 package org.dromara.daxpay.sdk.net;
 
-import org.dromara.daxpay.sdk.code.SignTypeEnum;
 import cn.hutool.core.util.StrUtil;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,12 +22,11 @@ public class DaxPayConfig {
     /** 应用号 */
     private String appId;
 
-    /** 签名方式 */
-    @Builder.Default
-    private SignTypeEnum signType = SignTypeEnum.HMAC_SHA256;
+    /** 商户私钥 */
+    private String privateKey;
 
-    /** 签名秘钥 */
-    private String signSecret;
+    /** 平台公钥 */
+    private String publicKey;
 
     /** 请求超时时间 */
     @Builder.Default

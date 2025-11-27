@@ -1,4 +1,4 @@
-package org.dromara.daxpay.sdk.result.trade.transfer;
+package org.dromara.daxpay.sdk.trade.transfer;
 
 import org.dromara.daxpay.sdk.code.ChannelEnum;
 import org.dromara.daxpay.sdk.code.TransferPayeeTypeEnum;

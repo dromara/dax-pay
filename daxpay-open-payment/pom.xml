@@ -12,7 +12,7 @@
 
     <groupId>org.dromara.daxpay</groupId>
     <artifactId>daxpay-open-payment</artifactId>
-    <version>3.1.0.beta2</version>
+    <version>3.1.1</version>
     <packaging>jar</packaging>
     <description>开源版支付核心功能实现</description>
 
@@ -29,8 +29,8 @@
         <aliyun.ocr.version>3.0.4</aliyun.ocr.version>
         <tencent.cloud.sdk.ocr>3.1.1270</tencent.cloud.sdk.ocr>
 
-        <bootx-platform.version>3.1.0.beta2</bootx-platform.version>
-        <daxpay.version>3.1.0.beta2</daxpay.version>
+        <bootx-platform.version>3.1.1</bootx-platform.version>
+        <daxpay.version>3.1.1</daxpay.version>
     </properties>
 
     <dependencies>

@@ -1,13 +1,13 @@
 package org.dromara.daxpay.sdk.trade;
 
+import org.dromara.daxpay.sdk.ApiTestConsent;
 import org.dromara.daxpay.sdk.code.ChannelEnum;
-import org.dromara.daxpay.sdk.code.SignTypeEnum;
 import org.dromara.daxpay.sdk.code.TransferPayeeTypeEnum;
 import org.dromara.daxpay.sdk.net.DaxPayConfig;
 import org.dromara.daxpay.sdk.net.DaxPayKit;
 import org.dromara.daxpay.sdk.param.trade.transfer.TransferParam;
 import org.dromara.daxpay.sdk.response.DaxResult;
-import org.dromara.daxpay.sdk.result.trade.transfer.TransferResult;
+import org.dromara.daxpay.sdk.trade.transfer.TransferResult;
 import org.dromara.daxpay.sdk.util.JsonUtil;
 import org.junit.Before;
 import org.junit.Test;
@@ -27,9 +27,9 @@ public class TransferOrderTest {
     public void init() {
         // 初始化支付配置
         DaxPayConfig config = DaxPayConfig.builder()
-                .serviceUrl("http://127.0.0.1:19999")
-                .signSecret("123456")
-                .signType(SignTypeEnum.MD5)
+                .serviceUrl(ApiTestConsent.PAY_URL)
+                .publicKey(ApiTestConsent.PUBLIC_KEY)
+                .privateKey(ApiTestConsent.PRIVATE_KEY)
                 .mchNo("M1723635576766")
                 .appId("M8207639754663343")
                 .build();

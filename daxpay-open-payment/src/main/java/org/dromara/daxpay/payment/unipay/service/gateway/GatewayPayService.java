@@ -49,7 +49,6 @@ public class GatewayPayService {
     private final PayService payService;
     private final PayAssistService payAssistService;
     private final AggregateConfigService aggregateConfigService;
-    private final GatewayPayConfigService gatewayPayConfigService;
     private final PaymentAssistService paymentAssistService;
     private final GatewayPayReadConfigService gatewayPayReadConfigService;
 
@@ -118,6 +117,7 @@ public class GatewayPayService {
 
         // 支付参数
         var payParam = new PayParam();
+        payParam.setOpenId(param.getOpenId());
         payParam.setAppId(payOrder.getAppId());
         payParam.setMchNo(payOrder.getMchNo());
         // 设置IP

@@ -4,7 +4,7 @@ import org.dromara.daxpay.sdk.code.GatewayPayTypeEnum;
 import org.dromara.daxpay.sdk.code.PayLimitPayEnum;
 import org.dromara.daxpay.sdk.net.DaxPayRequest;
 import org.dromara.daxpay.sdk.response.DaxResult;
-import org.dromara.daxpay.sdk.result.trade.pay.GatewayPayUrlResult;
+import org.dromara.daxpay.sdk.trade.pay.GatewayPayUrlResult;
 import org.dromara.daxpay.sdk.util.JsonUtil;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.lang.TypeReference;
@@ -43,7 +43,7 @@ public class GatewayPayParam extends DaxPayRequest<GatewayPayUrlResult> {
 
     /** 支付描述 */
     @Schema(description = "支付描述")
-    @Size(max = 500, message = "支付描述不可超过500位")
+    @Size(max = 50, message = "支付描述不可超过50位")
     private String description;
 
     /** 自定义OpenId 微信类通道可用 */
@@ -59,7 +59,16 @@ public class GatewayPayParam extends DaxPayRequest<GatewayPayUrlResult> {
     @NotBlank(message = "网关支付类型不可为空")
     private String gatewayPayType;
 
-    /** 限制用户支付类型, 目前支持限制信用卡
+    /** 是否开启分账 */
+    @Schema(description = "是否开启分账")
+    private Boolean allocation;
+
+    /** 自动分账 */
+    @Schema(description = "自动分账")
+    private Boolean autoAllocation;
+
+    /**
+     * 限制用户支付类型, 目前支持限制信用卡
      * @see PayLimitPayEnum
      */
     @Schema(description = "限制用户支付类型")

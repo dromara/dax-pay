@@ -20,6 +20,11 @@ public class RefundResultBo {
     private String outRefundNo;
 
     /**
+     * 特殊通道关联订单号
+     */
+    private String relationOrderNo;
+
+    /**
      * 退款状态
      */
     private RefundStatusEnum status;

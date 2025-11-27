@@ -48,6 +48,15 @@ public class RefundOrderManager extends BaseManager<RefundOrderMapper, RefundOrd
         return findByField(RefundOrder::getRefundNo, refundNo);
     }
 
+
+    /**
+     * 根据关联退款号查询
+     */
+    public Optional<RefundOrder> findByRelationOrderNo(String relationOrderNo) {
+        return findByField(RefundOrder::getRelationOrderNo, relationOrderNo);
+    }
+
+
     /**
      * 根据商户退款号查询
      */
@@ -125,7 +134,7 @@ public class RefundOrderManager extends BaseManager<RefundOrderMapper, RefundOrd
     public int updateById(RefundOrder refundOrder) {
         int i = super.updateById(refundOrder);
         if (i<1){
-            throw new DangerSqlException("更新退款订单失败");
+            throw new DangerSqlException("更新退款订单失败: "+refundOrder.getRefundNo());
         }
         return i;
     }

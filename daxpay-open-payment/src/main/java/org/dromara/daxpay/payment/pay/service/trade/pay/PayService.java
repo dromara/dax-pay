@@ -153,7 +153,9 @@ public class PayService {
                 .setPromotionType(result.getPromotionType())
                 .setRealAmount(Opt.ofNullable(result.getRealAmount()).orElse(payOrder.getAmount()))
                 .setBuyerId(result.getBuyerId())
-                .setUserId(result.getUserId());
+                .setUserId(result.getUserId())
+                .setPayBody(result.getPayBody());
+        payOrderExpandManager.updateById(orderExpand);
         payOrderExpandManager.updateById(orderExpand);
         // 如果支付完成 发送通知, 记录流水
         if (Objects.equals(payOrder.getStatus(), PayStatusEnum.SUCCESS.getCode())){

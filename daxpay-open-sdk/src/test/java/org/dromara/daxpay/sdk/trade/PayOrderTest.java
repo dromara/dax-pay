@@ -1,13 +1,14 @@
 package org.dromara.daxpay.sdk.trade;
 
+import org.dromara.daxpay.sdk.ApiTestConsent;
 import org.dromara.daxpay.sdk.code.ChannelEnum;
 import org.dromara.daxpay.sdk.code.PayMethodEnum;
-import org.dromara.daxpay.sdk.code.SignTypeEnum;
 import org.dromara.daxpay.sdk.net.DaxPayConfig;
 import org.dromara.daxpay.sdk.net.DaxPayKit;
+import org.dromara.daxpay.sdk.param.channel.wechat.WechatPayParam;
 import org.dromara.daxpay.sdk.param.trade.pay.PayParam;
 import org.dromara.daxpay.sdk.response.DaxResult;
-import org.dromara.daxpay.sdk.result.trade.pay.PayResult;
+import org.dromara.daxpay.sdk.trade.pay.PayResult;
 import org.dromara.daxpay.sdk.util.JsonUtil;
 import org.junit.Before;
 import org.junit.Test;
@@ -26,9 +27,9 @@ public class PayOrderTest {
     public void init() {
         // 初始化支付配置
         DaxPayConfig config = DaxPayConfig.builder()
-                .serviceUrl("http://127.0.0.1:19999")
-                .signSecret("123456")
-                .signType(SignTypeEnum.MD5)
+                .serviceUrl(ApiTestConsent.PAY_URL)
+                .publicKey(ApiTestConsent.PUBLIC_KEY)
+                .privateKey(ApiTestConsent.PRIVATE_KEY)
                 .mchNo("M1723635576766")
                 .appId("M8207639754663343")
                 .build();
@@ -46,9 +47,10 @@ public class PayOrderTest {
         param.setTitle("测试微信扫码支付");
         param.setDescription("这是支付备注");
         param.setAmount(BigDecimal.valueOf(0.01));
-        param.setChannel(ChannelEnum.VBILL_PAY.getCode());
+        param.setChannel(ChannelEnum.ALIPAY_ISV.getCode());
         param.setMethod(PayMethodEnum.QRCODE.getCode());
         param.setAttach("{回调参数}");
+        param.setAllocation(false);
         param.setReturnUrl("https://abc.com/returnurl");
         param.setNotifyUrl("http://127.0.0.1:19999/test/callback/notify");
         DaxResult<PayResult> execute = daxPayKit.execute(param);
@@ -70,7 +72,11 @@ public class PayOrderTest {
         param.setChannel(ChannelEnum.WECHAT.getCode());
         param.setMethod(PayMethodEnum.BARCODE.getCode());
 
+        WechatPayParam wechatPayParam = new WechatPayParam();
+        param.setAuthCode("131513396074955617");
+        param.setExtraParam(JsonUtil.toJsonStr(wechatPayParam));
         param.setAttach("{回调参数}");
+        param.setAllocation(false);
         param.setReturnUrl("https://abc.com/returnurl");
         param.setNotifyUrl("http://127.0.0.1:19999/test/callback/notify");
 
@@ -89,10 +95,14 @@ public class PayOrderTest {
         param.setTitle("测试微信公众号预支付");
         param.setAmount(BigDecimal.valueOf(0.01));
         param.setChannel(ChannelEnum.WECHAT.getCode());
-        param.setMethod(PayMethodEnum.JSAPI.getCode());
+        param.setMethod(PayMethodEnum.WECHAT_JSAPI.getCode());
         param.setOpenId("11111openid");
 
+        WechatPayParam wechatPayParam = new WechatPayParam();
+        param.setExtraParam(JsonUtil.toJsonStr(wechatPayParam));
+
         param.setAttach("{回调参数}");
+        param.setAllocation(false);
         param.setReturnUrl("https://abc.com/returnurl");
         param.setNotifyUrl("http://127.0.0.1:19999/test/callback/notify");
 
@@ -111,9 +121,10 @@ public class PayOrderTest {
         param.setTitle("测试微信h5支付");
         param.setAmount(BigDecimal.valueOf(0.01));
         param.setChannel(ChannelEnum.WECHAT.getCode());
-        param.setMethod(PayMethodEnum.WAP.getCode());
+        param.setMethod(PayMethodEnum.WECHAT_H5.getCode());
 
         param.setAttach("{回调参数}");
+        param.setAllocation(false);
         param.setReturnUrl("https://abc.com/returnurl");
         param.setNotifyUrl("http://127.0.0.1:19999/test/callback/notify");
 
@@ -133,8 +144,9 @@ public class PayOrderTest {
         param.setDescription("这是备注");
         param.setAmount(BigDecimal.valueOf(10));
         param.setChannel(ChannelEnum.WECHAT.getCode());
-        param.setMethod(PayMethodEnum.APP.getCode());
+        param.setMethod(PayMethodEnum.WECHAT_APP.getCode());
         param.setAttach("{回调参数}");
+        param.setAllocation(false);
         param.setReturnUrl("https://abc.com/returnurl");
         param.setNotifyUrl("http://127.0.0.1:19999/test/callback/notify");
 
@@ -154,8 +166,9 @@ public class PayOrderTest {
         param.setDescription("这是支付宝扫码支付");
         param.setAmount(BigDecimal.valueOf(10));
         param.setChannel(ChannelEnum.ALIPAY_ISV.getCode());
-        param.setMethod(PayMethodEnum.QRCODE.getCode());
+        param.setMethod(PayMethodEnum.ALIPAY_QR.getCode());
         param.setAttach("{回调参数}");
+        param.setAllocation(false);
         param.setReturnUrl("https://abc.com/returnurl");
         param.setNotifyUrl("http://127.0.0.1:19999/test/callback/notify");
 
@@ -178,8 +191,10 @@ public class PayOrderTest {
         param.setChannel(ChannelEnum.ALIPAY.getCode());
         param.setMethod(PayMethodEnum.BARCODE.getCode());
 
+        param.setAuthCode("287109871028487115");
 
         param.setAttach("{回调参数}");
+        param.setAllocation(false);
         param.setReturnUrl("https://abc.com/returnurl");
         param.setNotifyUrl("http://127.0.0.1:19999/test/callback/notify");
 
@@ -201,6 +216,7 @@ public class PayOrderTest {
         param.setChannel(ChannelEnum.ALIPAY.getCode());
         param.setMethod(PayMethodEnum.QRCODE.getCode());
         param.setAttach("{回调参数}");
+        param.setAllocation(false);
         param.setReturnUrl("https://abc.com/returnurl");
         param.setNotifyUrl("http://127.0.0.1:19999/test/callback/notify");
 
@@ -220,8 +236,9 @@ public class PayOrderTest {
         param.setDescription("这是支付宝WEB支付");
         param.setAmount(BigDecimal.valueOf(1.52));
         param.setChannel(ChannelEnum.ALIPAY_ISV.getCode());
-        param.setMethod(PayMethodEnum.WAP.getCode());
+        param.setMethod(PayMethodEnum.ALIPAY_H5.getCode());
         param.setAttach("{回调参数}");
+        param.setAllocation(false);
         param.setReturnUrl("https://abc.com/returnurl");
         param.setNotifyUrl("http://127.0.0.1:19999/test/callback/notify");
 
@@ -241,10 +258,13 @@ public class PayOrderTest {
         param.setDescription("这是支付宝WEB支付");
         param.setAmount(BigDecimal.valueOf(1.52));
         param.setChannel(ChannelEnum.ALIPAY.getCode());
-        param.setMethod(PayMethodEnum.JSAPI.getCode());
+        param.setMethod(PayMethodEnum.WECHAT_JSAPI.getCode());
         param.setOpenId("06599D4kvsqTsdNkN1xG05ZACe29h4bm2hi78vsAEVnGCI2");
 
+        param.setOpenId("9021000135649359");
+
         param.setAttach("{回调参数}");
+        param.setAllocation(false);
         param.setReturnUrl("https://abc.com/returnurl");
         param.setNotifyUrl("http://127.0.0.1:19999/test/callback/notify");
 
@@ -263,8 +283,9 @@ public class PayOrderTest {
         param.setTitle("测试支付宝APP支付");
         param.setAmount(BigDecimal.valueOf(1.52));
         param.setChannel(ChannelEnum.ALIPAY.getCode());
-        param.setMethod(PayMethodEnum.APP.getCode());
+        param.setMethod(PayMethodEnum.ALIPAY_APP.getCode());
         param.setAttach("{回调参数}");
+        param.setAllocation(false);
         param.setReturnUrl("https://abc.com/returnurl");
         param.setNotifyUrl("http://127.0.0.1:19999/test/callback/notify");
 
@@ -273,7 +294,7 @@ public class PayOrderTest {
     }
 
     /**
-     * 三方平台的其他类型支付
+     * 三方平台支付
      */
     @Test
     public void otherPay() {
@@ -283,11 +304,12 @@ public class PayOrderTest {
         param.setTitle("测试汇付的其他支付方式");
         param.setDescription("这是汇付支付宝小程序支付");
         param.setAmount(BigDecimal.valueOf(1.52));
-        param.setChannel(ChannelEnum.ADA_PAY.getCode());
-        param.setMethod(PayMethodEnum.OTHER.getCode());
+        param.setChannel(ChannelEnum.LESHUA_PAY.getCode());
+        // 乐刷聚合支付方式
+        param.setMethod(PayMethodEnum.QRCODE.getCode());
         // 使用支付宝小程序支付类型
-        param.setOtherMethod("alipay_lite");
         param.setAttach("{回调参数}");
+        param.setAllocation(false);
 
         param.setReturnUrl("https://abc.com/returnurl");
         param.setNotifyUrl("http://127.0.0.1:19999/test/callback/notify");

@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.dromara.daxpay</groupId>
         <artifactId>daxpay-open-channel</artifactId>
-        <version>3.1.0.beta2</version>
+        <version>3.1.1</version>
     </parent>
 
     <artifactId>daxpay-open-channel-wechat</artifactId>

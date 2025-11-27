@@ -1,11 +1,11 @@
 package org.dromara.daxpay.sdk.trade;
 
-import org.dromara.daxpay.sdk.code.SignTypeEnum;
+import org.dromara.daxpay.sdk.ApiTestConsent;
 import org.dromara.daxpay.sdk.net.DaxPayConfig;
 import org.dromara.daxpay.sdk.net.DaxPayKit;
 import org.dromara.daxpay.sdk.param.trade.refund.RefundParam;
 import org.dromara.daxpay.sdk.response.DaxResult;
-import org.dromara.daxpay.sdk.result.trade.refund.RefundResult;
+import org.dromara.daxpay.sdk.trade.refund.RefundResult;
 import org.dromara.daxpay.sdk.util.JsonUtil;
 import cn.hutool.core.util.RandomUtil;
 import org.junit.Before;
@@ -27,9 +27,9 @@ public class RefundOrderTest {
     public void init() {
         // 初始化支付配置
         DaxPayConfig config = DaxPayConfig.builder()
-                .serviceUrl("http://127.0.0.1:19999")
-                .signSecret("123456")
-                .signType(SignTypeEnum.MD5)
+                .serviceUrl(ApiTestConsent.PAY_URL)
+                .publicKey(ApiTestConsent.PUBLIC_KEY)
+                .privateKey(ApiTestConsent.PRIVATE_KEY)
                 .mchNo("M1723635576766")
                 .appId("M8207639754663343")
                 .build();
@@ -48,7 +48,7 @@ public class RefundOrderTest {
         param.setAttach("{回调参数}");
         param.setClientIp("127.0.0.1");
 
-        DaxResult<RefundResult> execute = daxPayKit.execute(param);
+        DaxResult<org.dromara.daxpay.sdk.trade.refund.RefundResult> execute = daxPayKit.execute(param);
         System.out.println(JsonUtil.toJsonStr(execute));
         System.out.println(daxPayKit.verifySign(execute));
     }

@@ -3,7 +3,7 @@ package org.dromara.daxpay.sdk.param.trade.pay;
 import org.dromara.daxpay.sdk.code.PayLimitPayEnum;
 import org.dromara.daxpay.sdk.net.DaxPayRequest;
 import org.dromara.daxpay.sdk.response.DaxResult;
-import org.dromara.daxpay.sdk.result.trade.pay.PayResult;
+import org.dromara.daxpay.sdk.trade.pay.PayResult;
 import org.dromara.daxpay.sdk.util.JsonUtil;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.lang.TypeReference;
@@ -42,7 +42,7 @@ public class AggregateBarPayParam extends DaxPayRequest<PayResult> {
 
     /** 支付描述 */
     @Schema(description = "支付描述")
-    @Size(max = 500, message = "支付描述不可超过500位")
+    @Size(max = 50, message = "支付描述不可超过50位")
     private String description;
 
     /** 付款码 */
@@ -55,6 +55,14 @@ public class AggregateBarPayParam extends DaxPayRequest<PayResult> {
     @Size(max = 128, message = "终端设备编码不可超过128位")
     @Schema(description = "终端设备编码")
     private String terminalNo;
+
+    /** 是否开启分账 */
+    @Schema(description = "是否开启分账")
+    private Boolean allocation;
+
+    /** 自动分账 */
+    @Schema(description = "自动分账")
+    private Boolean autoAllocation;
 
     /**
      * 限制用户支付类型, 目前支持限制信用卡

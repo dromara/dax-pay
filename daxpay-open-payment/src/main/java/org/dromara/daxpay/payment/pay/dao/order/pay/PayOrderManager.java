@@ -130,7 +130,7 @@ public class PayOrderManager extends BaseManager<PayOrderMapper, PayOrder> {
     public int updateById(PayOrder payOrder) {
         int i = super.updateById(payOrder);
         if (i<1){
-            throw new DangerSqlException("更新支付订单失败");
+            throw new DangerSqlException("更新支付订单失败: " + payOrder.getOrderNo());
         }
         return i;
     }

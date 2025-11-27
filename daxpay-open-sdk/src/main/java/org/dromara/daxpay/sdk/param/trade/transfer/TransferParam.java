@@ -4,7 +4,7 @@ import org.dromara.daxpay.sdk.code.ChannelEnum;
 import org.dromara.daxpay.sdk.code.TransferPayeeTypeEnum;
 import org.dromara.daxpay.sdk.net.DaxPayRequest;
 import org.dromara.daxpay.sdk.response.DaxResult;
-import org.dromara.daxpay.sdk.result.trade.transfer.TransferResult;
+import org.dromara.daxpay.sdk.trade.transfer.TransferResult;
 import org.dromara.daxpay.sdk.util.JsonUtil;
 import cn.hutool.core.lang.TypeReference;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -54,7 +54,7 @@ public class TransferParam extends DaxPayRequest<TransferResult> {
     private String title;
 
     /** 转账原因/备注 */
-    @Size(max = 150, message = "转账原因/备注不可超过150位")
+    @Size(max = 50, message = "转账原因/备注不可超过50位")
     @Schema(description = "转账原因/备注")
     private String reason;
 
@@ -86,7 +86,7 @@ public class TransferParam extends DaxPayRequest<TransferResult> {
     private String extraParam;
 
     /** 商户扩展参数,回调时会原样返回 */
-    @Size(max = 500, message = "商户扩展参数,回调时会原样返回不可超过500位")
+    @Size(max = 500, message = "商户扩展参数不可超过500位")
     @Schema(description = "商户扩展参数,回调时会原样返回")
     private String attach;
 

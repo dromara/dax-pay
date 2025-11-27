@@ -1,4 +1,4 @@
-package org.dromara.daxpay.sdk.result.trade.pay;
+package org.dromara.daxpay.sdk.trade.pay;
 
 import org.dromara.daxpay.sdk.code.*;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -35,6 +35,14 @@ public class PayOrderResult {
     /** 描述 */
     @Schema(description = "描述")
     private String description;
+
+    /** 是否支持分账 */
+    @Schema(description = "是否需要分账")
+    private Boolean allocation;
+
+    /** 是否开启自动分账, 不传输为不开启 */
+    @Schema(description = "是否开启自动分账")
+    private Boolean autoAllocation;
 
     /**
      * 支付通道

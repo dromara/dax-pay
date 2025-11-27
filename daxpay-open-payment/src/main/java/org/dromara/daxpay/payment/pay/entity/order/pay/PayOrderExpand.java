@@ -81,6 +81,9 @@ public class PayOrderExpand extends MchAppBaseEntity implements ToResult<PayOrde
     /** jsapi支付时的OpenId */
     private String jsapiOpenId;
 
+    /** 支付通道返回支付参数 */
+    private String payBody;
+
     /** 扩展参数存储字段 */
     private String ext;
 

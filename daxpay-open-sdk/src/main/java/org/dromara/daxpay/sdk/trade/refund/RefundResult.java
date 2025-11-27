@@ -1,4 +1,4 @@
-package org.dromara.daxpay.sdk.result.trade.refund;
+package org.dromara.daxpay.sdk.trade.refund;
 
 import lombok.Data;
 

@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
- *
+ * 支付同步结果
  * @author xxm
  * @since 2024/7/25
  */
@@ -71,7 +71,7 @@ public class PaySyncResultBo {
     private String bankType;
 
     /**
-     * 支付方式
+     * 支付厂商
      */
     private PaymentVendorEnum paymentVendor;
 

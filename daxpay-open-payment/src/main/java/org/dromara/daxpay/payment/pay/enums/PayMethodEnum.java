@@ -20,6 +20,7 @@ public enum PayMethodEnum {
     /* 通用支付方式 */
     QRCODE("qrcode",  "通用扫码支付"),
     BARCODE("barcode", "通用付款码支付"),
+    WECHAT_CASHIER("wechat_cashier", "微信小程序收银台"),
     /* 通道支付方式 */
     WECHAT_QR("wechat_qr", "微信扫码"),
     WECHAT_JSAPI("wechat_jsapi", "微信jsapi"),
@@ -34,6 +35,7 @@ public enum PayMethodEnum {
     ALIPAY_APP("alipay_app", "支付宝应用支付"),
     UNION_QR("union_qr", "银联扫码"),
     UNION_JSAPI("union_jsapi", "银联jsapi"),
+    UNION_H5("union_h5", "银联H5"),
     OTHER("other",  "其他支付方式"),
     ;
 

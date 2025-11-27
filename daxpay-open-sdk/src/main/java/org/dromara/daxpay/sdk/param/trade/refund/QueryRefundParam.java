@@ -2,7 +2,7 @@ package org.dromara.daxpay.sdk.param.trade.refund;
 
 import org.dromara.daxpay.sdk.net.DaxPayRequest;
 import org.dromara.daxpay.sdk.response.DaxResult;
-import org.dromara.daxpay.sdk.result.trade.refund.RefundOrderResult;
+import org.dromara.daxpay.sdk.trade.refund.RefundOrderResult;
 import org.dromara.daxpay.sdk.util.JsonUtil;
 import cn.hutool.core.lang.TypeReference;
 import io.swagger.v3.oas.annotations.media.Schema;
