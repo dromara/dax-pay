@@ -11,102 +11,91 @@
  <img src="https://img.shields.io/badge/license-Apache%20License%202.0-green.svg"/>
 </p>
 
-# Dromara Dax-Pay(开源版)
+# Dromara Dax-Pay(开源版/免费版)
 
 ## 使用须知
 
-`DaxPay`是一款基于`Apache License 2.0`协议分发的开源软件，受中华人民共和国相关法律法规的保护和限制，可以在符合[《用户授权使用协议》](用户授权使用协议.txt)和
+`DaxPay`开源版是一款基于`Apache License 2.0`协议分发的开源软件，受中华人民共和国相关法律法规的保护和限制，可以在符合[《用户授权使用协议》](用户授权使用协议.txt)和
 [《Apache License 2.0》](LICENSE)开源协议情况下进行免费使用、学习和交流。**在使用前请阅读上述协议，如果不同意请勿进行使用。**
 
-## 项目介绍
-
-> DaxPay是一套开源支付系统，可以独立部署，提供接口供业务系统进行调用，不对原有系统产生影响。
-
 ## 特色功能
-- 支持支付、退款等支付相关的核心能力
-- 提供商户端、运营端，支持多商户和服务商模式，
-- 封装各类支付通道的接口为统一的接口，方便业务系统进行调用，简化对接多种支付方式的复杂度
-- 已对接`微信支付`、`支付宝`和10+第三方通道相关的接口
-- 以支付扩展包的方式支持更多类型的通道：乐刷、海科、随行付、拉卡拉、斗拱、富友、易宝等
-- 支持商户小程序扩展包，可以通过小程序来查询订单和管理商户相关的功能
-- 支持以易支付接口的方式对外提供接口，方便各种支持易支付插件的软件快速接入
-- 提供`HTTP`方式接口调用能力，和`Java`版本的`SDK`，方便业务系统进行对接
+- 支持支付、退款、转账等支付相关的核心能力
+- 提供商户端、运营端，支持多商户和服务商模式
+- 免费版支持以**易支付接口协议**，包括被易支付接入和接入易支付通道，也支持易支付插件软件的一键接入
+- 封装各通道为统一的`HTTP`接口，方便业务系统进行对接，简化对接多种支付方式的复杂度
+- 免费版支持`微信支付`、`支付宝`和10+第三方通道相关的接口
 - 接口请求和响应数据支持RSA公私钥签名机制，保证交易安全可靠
+- 免费版支持提供商户小程序、收银台小程序等方便实现业务管理
 
 
 ## 核心技术栈
-| 名称          | 描述     | 版本要求             |
-|-------------|--------|------------------|
-| Jdk         | Java环境 | 21+              |
-| Spring Boot | 开发框架   | 3.5.x            |
-| Redis       | 分布式缓存  | 7.x版本及以上         |
-| Postgresql  | 数据库    | Postgresql 12及以上 |
-| Vue         | 前端框架   | 3.x              |
+| 名称        | 描述         | 版本要求            |
+| ----------- | ------------ | ------------------- |
+| JDK         | Java环境     | 21+                 |
+| Spring Boot | 开发框架     | 3.5.x               |
+| Redis       | 分布式缓存   | 7.x版本及以上       |
+| Postgresql  | 数据库       | Postgresql 14及以上 |
+| Vue         | 前端框架     | 3.x                 |
+| UniApp      | 跨端开发工具 | 项目内定义          |
 
-## 文档和源码地址
-### 文档地址
-在 [DaxPay开源文档站](https://doc.daxpay.cn/) 可以进行查阅相关文档，具体模块说明地址如下：
+## 源码和演示地址
 
 ### 项目地址
 
-| 项目      | GITEE                                       | GITHUB                                          | GITCODE                                        |
-|---------|---------------------------------------------|-------------------------------------------------|------------------------------------------------|
-| 后端地址    | [GITEE](https://gitee.com/dromara/dax-pay)  | [GITHUB](https://github.com/dromara/dax-pay)    | [GITCODE](https://gitcode.com/dromara/dax-pay) |
-| Web前端地址 | [GITEE](https://gitee.com/bootx/dax-pay-ui) | [GITHUB](https://github.com/xxm1995/dax-pay-ui) |                                                |
-| 网关前端地址  | [GITEE](https://gitee.com/bootx/dax-pay-h5) | [GITHUB](https://github.com/xxm1995/dax-pay-h5) |                                                |
-| 小程序地址   | 无                                           | 无                                               |                                                |
+> 在 [DaxPay开源文档站](https://yibeiguangnian.feishu.cn/wiki/space/7587280618229074889?ccm_open_type=lark_wiki_spaceLink&open_tab_from=wiki_home) 可以进行查阅相关文档
 
 
-## 系统演示
-### 开源版:
-> 注：演示账号部分功能权限未开放。
+| 项目         | GITEE                                       | GITHUB                                          | GITCODE                                        |
+| ------------ | ------------------------------------------- | ----------------------------------------------- | ---------------------------------------------- |
+| 后端地址     | [GITEE](https://gitee.com/dromara/dax-pay)  | [GITHUB](https://github.com/dromara/dax-pay)    | [GITCODE](https://gitcode.com/dromara/dax-pay) |
+| Web前端地址  | [GITEE](https://gitee.com/bootx/dax-pay-ui) | [GITHUB](https://github.com/xxm1995/dax-pay-ui) |                                                |
+| 网关前端地址 | [GITEE](https://gitee.com/bootx/dax-pay-h5) | [GITHUB](https://github.com/xxm1995/dax-pay-h5) |                                                |
+
+### 演示环境
+> 注：演示账号部分功能权限未开放，演示系统是基于免费版搭建，相对于开源版增加了一些通道和功能。
 
 | 站点类型    | 地址 | 演示账号 |
 |---------|------|---------|
 | 运营端     | [https://admin.open.daxpay.cn/](https://admin.open.daxpay.cn/) | csadmin/123123 |
 | 商户端     | [https://merchant.open.daxpay.cn/](https://merchant.open.daxpay.cn/) | cssh/123123 |
 | 小程序(H5) | [https://mini.open.daxpay.cn/](https://mini.open.daxpay.cn/) | cssh/123123 |
+| 收银台小程序 | 暂时未上架 | 无 |
+
+## 免费版
+> 免费版是基于开源版进行开发，然后参考商业版中的部分功能特性进行移植实现的，相对于开源版功能更加完善，相对于商业版，功能轻量易上手。实行主体免费+付费扩展，方便快速搭建和使用该系统。
+
+### 扩展模块
+
+> 在开源版的基础上，提供一些更贴合业务相关的功能模块，方便更好的服务于业务。
+
+| 典型功能     | 描述                                                         |
+| ------------ | ------------------------------------------------------------ |
+| 易支付插件   | 易支付接口协议，方便其他系统快速接入Daxpay，也支持在易支付中进行接入 |
+| 三方支付通道 | 如乐刷、汇付、海科、易宝等持牌三方机构通道                   |
+| 四方支付通道 | 如Jeepay、易支付、收钱吧等一系列大大小小的四方支付系统       |
+| 网关H5端     | 提供收银台、聚合支付、码牌支付的落地页实现                   |
+| 商户小程序   | 方便商户管理自己的交易相关的信息和数据                       |
+| 收银台小程序 | 支付宝、微信收银小程序，支持码牌支付的落地形式               |
+| 其他         | 其他                                                         |
+
+### 一键启动
+
+> 提供Docker镜像和编排文件，方便根据自己的需求进行一键启动。
+
+```shell
+# 拉取镜像
+ docker-compose pull
+# 启动系统
+ docker-compose up -d
+```
 
 
-### 商业版
-
-> 官网: [https://plus.daxpay.cn/](https://plus.daxpay.cn/)
-
-| 站点类型      | 地址                                                                       | 演示账号           |
-|-----------|--------------------------------------------------------------------------|----------------|
-| 运营端       | [https://admin.plus.daxpay.cn/](https://admin.plus.daxpay.cn/)           | csadmin/123123 |
-| 代理端       | [https://agent.plus.daxpay.cn/](https://agent.plus.daxpay.cn/)           | csdl/123123    |
-| 商户端       | [https://merchant.plus.daxpay.cn/](https://merchant.plus.daxpay.cn/)     | cssh/123123    |
-| 代理小程序(H5) | [https://mini-agent.plus.daxpay.cn/](https://mini-agent.plus.daxpay.cn/) | csdl/123123    |
-| 商户小程序(H5) | [https://mini-mch.plus.daxpay.cn/](https://mini-mch.plus.daxpay.cn/)     | cssh/123123    |
-
-## 扩展包和商业版
-
-### 扩展包
-> 针对一些拓展性的功能和三四方通道的对接，提供付费扩展包，方便用户进行功能扩展，实现更多功能。扩展包地址: [https://plus.daxpay.cn/plugins/](https://plus.daxpay.cn/plugins/)
-
-| 名称            | 类型      | 说明                          |
-|---------------|---------|-----------------------------|
-| 商户小程序端        | 功能扩展包   | uniapp架构，支持H5方式编译           |
-| 易支付兼容接口       | 功能扩展包   | 系统支持对外提供易支付格式的接口,方便其他软件快速接入 |
-| 乐刷支付扩展包       | 支付通道扩展包 |                             |
-| 海科融通扩展包       | 支付通道扩展包 |                             |
-| 汇付(adapay)扩展包 | 支付通道扩展包 |                             |
-| 随行付扩展包        | 支付通道扩展包 |                             |
-| 斗拱支付扩展包       | 支付通道扩展包 |                             |
-| 拉卡拉支付扩展包      | 支付通道扩展包 |                             |
-| 快钱支付扩展包       | 支付通道扩展包 | 待推出                         |
-| 富友支付扩展包       | 支付通道扩展包 |                             |
-| 易宝支付扩展包       | 支付通道扩展包 |                             |
-| 盛付通支付扩展包      | 支付通道扩展包 | 待推出                         |
-| 银盛支付扩展包       | 支付通道扩展包 | 待推出                         |
-| 银联商务扩展包       | 支付通道扩展包 |                             |
-
-
-### 商业版
-> 官网地址: [https://plus.daxpay.cn](https://plus.daxpay.cn)
+## 商业版
+> 官网地址: [https://plus.daxpay.cn](https://plus.daxpay.cn) 文档地址：[飞书文档站](https://yibeiguangnian.feishu.cn/wiki/space/7512817895487848452?ccm_open_type=lark_wiki_spaceLink&open_tab_from=wiki_home)
 > 
 > 针对一些需要较高的客户，提供商业版进行选择，相对于开源版，功能更强大。
+
+### 功能模块
 
 | 典型功能  | 描述                    |
 |-------|-----------------------|
@@ -117,56 +106,55 @@
 | 终端报备  | 给通道侧进行辅助支付设备的宝贝       |
 | 费率管理  | 管理商户进件和分润时所使用的费率      |
 
+### 系统演示
+
+> 注：演示账号部分功能权限未开放。
+
+| 站点类型      | 地址                                                                       | 演示账号           |
+|-----------|--------------------------------------------------------------------------|----------------|
+| 运营端       | [https://admin.plus.daxpay.cn/](https://admin.plus.daxpay.cn/)           | csadmin/123123 |
+| 代理端       | [https://agent.plus.daxpay.cn/](https://agent.plus.daxpay.cn/)           | csdl/123123    |
+| 商户端       | [https://merchant.plus.daxpay.cn/](https://merchant.plus.daxpay.cn/)     | cssh/123123    |
+| 代理小程序(H5) | [https://mini-agent.plus.daxpay.cn/](https://mini-agent.plus.daxpay.cn/) | csdl/123123    |
+| 商户小程序(H5) | [https://mini-mch.plus.daxpay.cn/](https://mini-mch.plus.daxpay.cn/)     | cssh/123123    |
+| 收银台小程序    | 暂时未上架                                                                    | 无              |
 
 ## 系统截图
 
-### WEB端
+| | |
+| --- | --- |
+| <img src="https://cdn.jsdmirror.cn/gh/xxm1995/picx-images-hosting@master/20260130/86fdffc1177a50638196482707da070c.5fl3iu2gyd.webp" height="570" /> | <img src="https://cdn.jsdmirror.cn/gh/xxm1995/picx-images-hosting@master/20260130/channel-DswG0sBC.1lcbzvlbfb.webp" height="570" /> |
+| <img src="https://cdn.jsdmirror.cn/gh/xxm1995/picx-images-hosting@master/20260130/ScreenShot_2026-01-30_114018_880.4ubfwj80o3.webp" height="270" /> | <img src="https://cdn.jsdmirror.cn/gh/xxm1995/picx-images-hosting@master/20260130/image.6m4erfrdju.webp" height="370" /> |
+| <img src="https://cdn.jsdmirror.cn/gh/xxm1995/picx-images-hosting@master/20260130/image-(1).4ubfwj80nq.webp" /> | <img src="https://cdn.jsdmirror.cn/gh/xxm1995/picx-images-hosting@master/20260130/image.b9etk4rbh.webp"  /> |
+| <img src="https://cdn.jsdmirror.cn/gh/xxm1995/picx-images-hosting@master/20260130/b1d35c4d2b44d610cf86de729a3e7c3f.4jom3dssip.webp" height="570" /> | <img src="https://cdn.jsdmirror.cn/gh/xxm1995/picx-images-hosting@master/20260130/70779c3d5c2810817b6e935acf18a1aa.szgi53xb3.webp" height="570" /> |
+| <img src="https://cdn.jsdmirror.cn/gh/xxm1995/picx-images-hosting@master/20260130/f218d9ade6c2a283ad05a71a9cb26b0d.32ih1monry.webp" height="570" /> | <img src="https://cdn.jsdmirror.cn/gh/xxm1995/picx-images-hosting@master/20260130/d9a4327a85e97e849534f09ea9c25966.7w7bxr9cv0.webp" height="570" /> |
 
-<img alt="97c03499-d554-4e55-bb12-ddea42158551" src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/20251117/97c03499-d554-4e55-bb12-ddea42158551.1vz2vjqzaj.webp" width="" height="800"/>
+##   关于我们
 
-<img alt="ScreenShot_2025-11-17_170633_696" height="570" src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/20251117/ScreenShot_2025-11-17_170633_696.8s3qfq3bgn.webp"/>
+### QQ交流群
 
-<img alt="ScreenShot_2025-11-17_170415_265" height="570" src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/20251117/ScreenShot_2025-11-17_170415_265.b9bw2kzp8.webp"/>
+>  扫码加入QQ交流群: 879409917
 
-### 网关H5端
-
-<img src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/20250825/微信图片_20250825232829_66.92qgx888jk.webp" height="570"/>
-
-<img src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/20250825/微信图片_2025-08-25_232403_439.3d54ln66eh.webp" width="300"/>
-
-<img src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/20250427/7604af26dde4add3ff9aaea7a7d3be84.7axdaovomy.webp"  width="300"  />
-
-<img src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/20250427/1b7671d183f279751460d42234c6eadb.2rvc7pq7p4.webp" width="300" />
-
-### 商户小程序端(扩展包)
-
-<img alt="微信图片_20251117161043_127_724" src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/20251117/微信图片_20251117161043_127_724.1hsn4mdm51.webp" width="300"/>
-
-<img alt="微信图片_20251117161049_135_724" src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/20251117/微信图片_20251117161049_135_724.esxtqhs9e.webp" width="300"/>
-
-<img alt="微信图片_20251117161047_132_724" src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/20251117/微信图片_20251117161047_132_724.1vz2vhlx0c.webp" width="300"/>
-
-<img alt="微信图片_20251117161045_130_724" src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/20251117/微信图片_20251117161045_130_724.7ppyavmu1.webp" width="300"/>
-
-<img alt="微信图片_20251117161047_132_721" height="666" src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/20251117/微信图片_20251117161048_134_724.5q7ueg3uxq.webp" width="300"/>)
-
-<img alt="微信图片_20251117161044_129_724" src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/20251117/微信图片_20251117161044_129_724.58hspv2hcn.webp" width="300"/>
-
-##  🥪 关于我们
-
-扫码加入QQ交流群
-
-交流三群: 879409917
 <p>
 <img src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/connect/1733360741745_d.83a33entp3.webp" width = "330" height = "500"/>
 </p>
 
-微信扫码加小助手拉群: sdcit2020
+### 微信交流群
+
+> 微信扫码加小助手拉群: sdcit2020
+
 <p>
 <img alt="微信图片_20240226144703" height="480" src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/connect/微信图片_20240412152722.231nkeje2o.webp" width="330"/>
 </p>
+### 微信公众号
 
-## Star History
+> 微信公众号会定期更新使用教程、版本更新记录和各种活动情况，欢迎关注
+
+<p>
+<img alt="微信图片_20240226144703" height="330" src="https://plus.daxpay.cn/assets/other/wxpub.webp" width="330" height="330"/>
+</p>
+
+### Star History
 
 [![Stargazers over time](https://starchart.cc/dromara/dax-pay.svg?variant=adaptive)](https://starchart.cc/dromara/dax-pay)
 
