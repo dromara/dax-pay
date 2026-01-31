@@ -80,7 +80,7 @@
 
 ### 一键启动
 
-> 提供Docker镜像和编排文件，方便根据自己的需求进行一键启动。
+> 提供Docker镜像和编排文件，方便根据自己的需求进行一键启动。Docker一键启动教程: [项目启动（免费版）](https://yibeiguangnian.feishu.cn/wiki/Ot2nw2i8Mi4HVUkRgswc926EnZd)
 
 ```shell
 # 拉取镜像
@@ -121,13 +121,13 @@
 
 ## 系统截图
 
-<img src="https://cdn.jsdmirror.cn/gh/xxm1995/picx-images-hosting@master/20260130/86fdffc1177a50638196482707da070c.5fl3iu2gyd.webp" height="570" />
-<img src="https://cdn.jsdmirror.cn/gh/xxm1995/picx-images-hosting@master/20260130/channel-DswG0sBC.1lcbzvlbfb.webp" height="570" />
 <img src="https://cdn.jsdmirror.cn/gh/xxm1995/picx-images-hosting@master/20260130/ScreenShot_2026-01-30_114018_880.4ubfwj80o3.webp" height="570" />
 <img src="https://cdn.jsdmirror.cn/gh/xxm1995/picx-images-hosting@master/20260130/image.6m4erfrdju.webp" height="570" />
 <img src="https://cdn.jsdmirror.cn/gh/xxm1995/picx-images-hosting@master/20260130/image-(1).4ubfwj80nq.webp" height="570" />
 <img src="https://cdn.jsdmirror.cn/gh/xxm1995/picx-images-hosting@master/20260130/image.b9etk4rbh.webp" height="570" />
+<img src="https://cdn.jsdmirror.cn/gh/xxm1995/picx-images-hosting@master/20260130/86fdffc1177a50638196482707da070c.5fl3iu2gyd.webp" height="570" />
 <img src="https://cdn.jsdmirror.cn/gh/xxm1995/picx-images-hosting@master/20260130/b1d35c4d2b44d610cf86de729a3e7c3f.4jom3dssip.webp" height="570" />
+<img src="https://cdn.jsdmirror.cn/gh/xxm1995/picx-images-hosting@master/20260130/channel-DswG0sBC.1lcbzvlbfb.webp" height="570" />
 <img src="https://cdn.jsdmirror.cn/gh/xxm1995/picx-images-hosting@master/20260130/70779c3d5c2810817b6e935acf18a1aa.szgi53xb3.webp" height="570" />
 <img src="https://cdn.jsdmirror.cn/gh/xxm1995/picx-images-hosting@master/20260130/f218d9ade6c2a283ad05a71a9cb26b0d.32ih1monry.webp" height="570" />
 <img src="https://cdn.jsdmirror.cn/gh/xxm1995/picx-images-hosting@master/20260130/d9a4327a85e97e849534f09ea9c25966.7w7bxr9cv0.webp" height="570" />
