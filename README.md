@@ -122,9 +122,9 @@
 ## 系统截图
 
 <img src="https://cdn.jsdmirror.cn/gh/xxm1995/picx-images-hosting@master/20260130/ScreenShot_2026-01-30_114018_880.4ubfwj80o3.webp" height="570" />
-<img src="https://cdn.jsdmirror.cn/gh/xxm1995/picx-images-hosting@master/20260130/image.6m4erfrdju.webp" height="570" />
 <img src="https://cdn.jsdmirror.cn/gh/xxm1995/picx-images-hosting@master/20260130/image-(1).4ubfwj80nq.webp" height="570" />
 <img src="https://cdn.jsdmirror.cn/gh/xxm1995/picx-images-hosting@master/20260130/image.b9etk4rbh.webp" height="570" />
+<img src="https://cdn.jsdmirror.cn/gh/xxm1995/picx-images-hosting@master/20260130/image.6m4erfrdju.webp" height="570" />
 <img src="https://cdn.jsdmirror.cn/gh/xxm1995/picx-images-hosting@master/20260130/86fdffc1177a50638196482707da070c.5fl3iu2gyd.webp" height="570" />
 <img src="https://cdn.jsdmirror.cn/gh/xxm1995/picx-images-hosting@master/20260130/b1d35c4d2b44d610cf86de729a3e7c3f.4jom3dssip.webp" height="570" />
 <img src="https://cdn.jsdmirror.cn/gh/xxm1995/picx-images-hosting@master/20260130/channel-DswG0sBC.1lcbzvlbfb.webp" height="570" />
@@ -162,13 +162,13 @@
 [![Stargazers over time](https://starchart.cc/dromara/dax-pay.svg?variant=adaptive)](https://starchart.cc/dromara/dax-pay)
 
 
-## 🍻 鸣谢
+##  鸣谢
 
 感谢其他提供灵感和思路的开源项目
 
 [部分参考的开源项目和开源许可列表](./_license/LICENSE.md)
 
 
-## 🍷License
+## License
 
 Apache License Version 2.0
