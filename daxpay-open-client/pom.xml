@@ -15,16 +15,21 @@
     <description>启动端</description>
 
     <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <java.version>21</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <lombok.version>1.18.36</lombok.version>
 
         <bootx-platform.version>3.1.1</bootx-platform.version>
         <daxpay.version>3.1.1</daxpay.version>
-        <minio.version>8.5.2</minio.version>
     </properties>
 
     <dependencies>
+        <!-- lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
         <!-- web框架 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -69,6 +74,21 @@
     <build>
         <finalName>daxpay-open-server</finalName>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
             <!-- spring-boot -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
