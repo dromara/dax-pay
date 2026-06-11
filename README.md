@@ -108,10 +108,10 @@
 
 ### QQ交流群
 
->  扫码加入QQ交流群: 879409917
+>  扫码加入QQ交流群: 839738244
 
 <p>
-<img src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/connect/1733360741745_d.83a33entp3.webp" width = "330" height = "500"/>
+<img src="https://cdn.jsdmirror.cn/gh/xxm1995/picx-images-hosting@master/20260611/qrcode_1781170853115.1e99dci0rp.webp" width = "330" height = "500"/>
 </p>
 
 ### 微信交流群
