@@ -92,9 +92,6 @@
     "password": {
       "notBlank": "Password cannot be blank"
     },
-    "merchantType": {
-      "notBlank": "Agent type cannot be blank"
-    },
     "subjectType": {
       "notBlank": "Subject type cannot be blank"
     },

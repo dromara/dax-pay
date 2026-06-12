@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 /// # 统一支付上下文
 ///
-/// 合并原 PaymentContextLocal/MchContextLocal/AgentContextLocal 三个ThreadLocal的信息
+/// 合并原 PaymentContextLocal/MchContextLocal 两个ThreadLocal的信息
 /// 使用自定义作用域 "payment", 底层基于ThreadLocal, 兼容HTTP/定时任务/MQ场景
 @Component
 @Scope(value = PaymentScope.SCOPE_NAME, proxyMode = ScopedProxyMode.TARGET_CLASS)

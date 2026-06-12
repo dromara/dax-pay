@@ -6,7 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldNameConstants;
 
-/// # 商户基础实体类 应用/商户/代理商/服务商号可以更新
+/// # 商户基础实体类 应用/商户/服务商号可以更新
 ///
 @EqualsAndHashCode(callSuper = true)
 @Data

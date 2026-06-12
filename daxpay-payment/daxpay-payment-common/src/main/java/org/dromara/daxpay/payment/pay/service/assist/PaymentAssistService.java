@@ -119,7 +119,7 @@ public class PaymentAssistService {
     /// 1.商户信息
     /// 2.应用信息
     /// 3.服务商信息
-    /// 4.代理商信息
+    
     private void initData(org.dromara.daxpay.payment.common.service.dto.MerchantAccessInfo merchant,
                           org.dromara.daxpay.payment.common.service.dto.MchAppInfoAccessInfo mchApp){
         // 判断是否匹配

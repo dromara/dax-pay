@@ -53,6 +53,6 @@ public class MerchantCallbackQueryService {
                 .orElseThrow(() -> new DataNotExistException("error.payment.order.subscribeRecordNotExist"));
     }
 
-    /// 检查代理商权限
+    
     
 }

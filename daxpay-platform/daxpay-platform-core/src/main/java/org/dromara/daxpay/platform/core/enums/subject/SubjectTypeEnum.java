@@ -7,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 /// # 主体类型枚举
 ///
 ///
-/// 适用于商户、代理商、服务商等经营主体
+/// 适用于商户、服务商等经营主体
 @Getter
 @RequiredArgsConstructor
 public enum SubjectTypeEnum implements I18nSupport {

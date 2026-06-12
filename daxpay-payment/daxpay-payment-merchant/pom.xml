@@ -64,9 +64,6 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!-- 代理商模块 -->
-
-        <!-- 代理功能 -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>

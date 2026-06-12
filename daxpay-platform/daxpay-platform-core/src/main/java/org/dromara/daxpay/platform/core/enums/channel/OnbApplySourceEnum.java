@@ -12,7 +12,7 @@ public enum OnbApplySourceEnum implements I18nSupport {
 
     /// 商户创建
     MERCHANT("merchant"),
-    /// 代理商/运营创建
+    /// 运营创建
     ADMIN("admin"),
     /// 接口创建
     GATEWAY("system");

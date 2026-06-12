@@ -44,7 +44,7 @@ public class TradeSyncRecordService {
         orderManager.save(tradeSyncRecord);
     }
 
-    /// 检查代理商权限
+    
     
 
 }

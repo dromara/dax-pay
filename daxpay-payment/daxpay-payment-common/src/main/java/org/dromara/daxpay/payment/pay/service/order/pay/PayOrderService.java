@@ -49,6 +49,6 @@ public class PayOrderService {
         payCloseService.closeOrder(payOrder,true);
     }
 
-    /// 检查代理商权限
+    
     
 }

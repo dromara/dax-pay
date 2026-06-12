@@ -57,6 +57,6 @@ public class TradeCallbackRecordService {
         callbackRecordManager.save(payNotifyRecord);
     }
 
-    /// 检查代理商权限
+    
     
 }

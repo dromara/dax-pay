@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/// # 商户和代理商数据隔离插件
+/// # 商户数据隔离插件
 ///
 @Configuration
 @RequiredArgsConstructor

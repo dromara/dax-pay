@@ -122,7 +122,7 @@ public class PayOrderQueryService {
         return payOrderManager.getTotalAmount(param);
     }
 
-    /// 检查代理商权限
+    
     
 
 }

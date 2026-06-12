@@ -86,7 +86,7 @@ public class TransferOrderQueryService {
         return transferOrderManager.getTotalAmount(param);
     }
 
-    /// 检查代理商权限
+    
     
 
 }

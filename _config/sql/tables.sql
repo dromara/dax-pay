@@ -2428,42 +2428,7 @@ COMMENT ON COLUMN pay_platform_basic_config.order_timeout IS '订单超时时间
 COMMENT ON COLUMN pay_platform_basic_config.default_isv_no IS '默认服务商';
 COMMENT ON TABLE pay_platform_basic_config IS '管理平台基础配置';
 
--- ----------------------------
--- Table structure for pay_platform_cashouts_config
--- ----------------------------
-DROP TABLE IF EXISTS pay_platform_cashouts_config;
-CREATE TABLE pay_platform_cashouts_config (
-                                                         id int8 NOT NULL,
-                                                         creator int8,
-                                                         create_time timestamp(0),
-                                                         last_modifier int8,
-                                                         last_modified_time timestamp(0),
-                                                         version int4 NOT NULL,
-                                                         deleted bool NOT NULL,
-                                                         start_amount numeric(16,4),
-                                                         fee_formula varchar(32) COLLATE pg_catalog.default,
-                                                         fixed_fee numeric(16,4),
-                                                         fixed_rate numeric(16,4),
-                                                         fixed_fee_combined numeric(16,4),
-                                                         fixed_rate_combined numeric(16,4),
-                                                         freeze_amount numeric(16,4)
-)
-;
-COMMENT ON COLUMN pay_platform_cashouts_config.id IS '主键';
-COMMENT ON COLUMN pay_platform_cashouts_config.creator IS '创建者ID';
-COMMENT ON COLUMN pay_platform_cashouts_config.create_time IS '创建时间';
-COMMENT ON COLUMN pay_platform_cashouts_config.last_modifier IS '最后修改ID';
-COMMENT ON COLUMN pay_platform_cashouts_config.last_modified_time IS '最后修改时间';
-COMMENT ON COLUMN pay_platform_cashouts_config.version IS '版本号';
-COMMENT ON COLUMN pay_platform_cashouts_config.deleted IS '删除标志';
-COMMENT ON COLUMN pay_platform_cashouts_config.start_amount IS '起始提现额度';
-COMMENT ON COLUMN pay_platform_cashouts_config.fee_formula IS '手续费计算公式';
-COMMENT ON COLUMN pay_platform_cashouts_config.fixed_fee IS '单笔固定';
-COMMENT ON COLUMN pay_platform_cashouts_config.fixed_rate IS '单笔费率';
-COMMENT ON COLUMN pay_platform_cashouts_config.fixed_fee_combined IS '组合 固定手续费';
-COMMENT ON COLUMN pay_platform_cashouts_config.fixed_rate_combined IS '组合 费率';
-COMMENT ON COLUMN pay_platform_cashouts_config.freeze_amount IS '冻结金额';
-COMMENT ON TABLE pay_platform_cashouts_config IS '平台代理商默认提现配置';
+
 
 -- ----------------------------
 -- Table structure for pay_platform_integration_config
@@ -4029,10 +3994,6 @@ ALTER TABLE pay_order_expand ADD CONSTRAINT pay_order_expand_pkey PRIMARY KEY (i
 -- ----------------------------
 ALTER TABLE pay_platform_basic_config ADD CONSTRAINT pay_platform_basic_config_pkey PRIMARY KEY (id);
 
--- ----------------------------
--- Primary Key structure for table pay_platform_cashouts_config
--- ----------------------------
-ALTER TABLE pay_platform_cashouts_config ADD CONSTRAINT pay_platform_cashouts_config_pkey PRIMARY KEY (id);
 
 -- ----------------------------
 -- Primary Key structure for table pay_platform_integration_config

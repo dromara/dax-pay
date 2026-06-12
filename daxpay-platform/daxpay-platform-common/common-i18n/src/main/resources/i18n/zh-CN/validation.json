@@ -92,9 +92,6 @@
     "password": {
       "notBlank": "密码不可为空"
     },
-    "merchantType": {
-      "notBlank": "代理商类型不可为空"
-    },
     "subjectType": {
       "notBlank": "主体类型不可为空"
     },

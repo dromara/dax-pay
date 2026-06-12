@@ -86,7 +86,7 @@ public class RefundOrderQueryService {
         return refundOrderManager.getTotalAmount(param);
     }
 
-    /// 检查代理商权限
+    
     
 
 }

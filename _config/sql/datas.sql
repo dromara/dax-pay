@@ -1469,11 +1469,6 @@ INSERT INTO pay_channel_const VALUES (160000, 'lakala_pay', '拉卡拉', true, t
 INSERT INTO pay_platform_basic_config VALUES (1, 1811365615815487488, '2025-11-11 16:36:33.620947', 1811365615815487488, '2025-11-11 16:36:33.620947', 0, false, NULL, NULL, NULL, NULL, NULL);
 
 
---
--- Data for Name: pay_platform_cashouts_config; Type: TABLE DATA; Schema: public; Owner: bootx
---
-
-
 
 --
 -- Data for Name: pay_platform_integration_config; Type: TABLE DATA; Schema: public; Owner: bootx
