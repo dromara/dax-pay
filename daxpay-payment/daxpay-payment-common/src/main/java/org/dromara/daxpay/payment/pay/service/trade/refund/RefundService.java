@@ -8,8 +8,6 @@ import org.dromara.daxpay.platform.core.util.ValidationUtil;
 import org.dromara.daxpay.platform.core.code.DaxPayErrorCode;
 import org.dromara.daxpay.platform.core.exception.operation.OperationFailException;
 import org.dromara.daxpay.payment.common.util.PaymentStrategyFactory;
-import org.dromara.daxpay.payment.common.service.MerchantPermissionService;
-
 import org.dromara.daxpay.payment.pay.bo.trade.RefundResultBo;
 import org.dromara.daxpay.payment.pay.dao.order.pay.PayOrderManager;
 import org.dromara.daxpay.payment.pay.dao.order.refund.RefundOrderManager;
@@ -59,14 +57,11 @@ public class RefundService {
 
     private final TradeUniHandleService tradeUniHandleService;
 
-    private final MerchantPermissionService merchantPermissionService;
-
     /// 退款
     /// 1. 创建退款订单(单独事务)
     /// 2. 调用API发起退款(异步退款)
     /// 3. 根据API返回信息更新退款订单信息
     public RefundResult refund(RefundParam param){
-        this.checkPerm();
         // 绕过退款来源的校验
         String source = param.getSource();
         param.setSource(null);
@@ -145,7 +140,6 @@ public class RefundService {
     /// 2. 更新退款扩展参数
     /// 3. 构建退款策略, 发起退款
     private RefundResult repeatRefund(RefundOrder refundOrder, RefundParam param) {
-        this.checkPerm();
         // 加锁
         LockInfo lock = lockTemplate.lock("payment:refund:" + refundOrder.getId(),10000,200);
         if (Objects.isNull(lock)){

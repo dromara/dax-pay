@@ -3,8 +3,6 @@ package org.dromara.daxpay.payment.pay.service.trade.refund;
 import org.dromara.daxpay.platform.core.exception.RepetitiveOperationException;
 import org.dromara.daxpay.platform.core.exception.operation.OperationFailException;
 import org.dromara.daxpay.platform.core.code.CommonCode;
-import org.dromara.daxpay.payment.common.service.MerchantPermissionService;
-
 import org.dromara.daxpay.platform.core.enums.pay.refund.RefundStatusEnum;
 import org.dromara.daxpay.platform.core.enums.pay.trade.TradeTypeEnum;
 import org.dromara.daxpay.payment.pay.exception.TradeNotExistException;
@@ -45,14 +43,11 @@ public class RefundSyncService {
 
     private final LockTemplate lockTemplate;
 
-    private final MerchantPermissionService merchantPermissionService;
-
     private final PaymentContext apiContext;
 
     /// 退款同步, 开启一个新的事务, 不受外部抛出异常的影响
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public RefundSyncResult sync(RefundSyncParam param){
-        this.checkPerm();
         // 先获取退款单
         RefundOrder refundOrder = refundOrderQueryService.findByBizOrRefundNo(param.getRefundNo(), param.getBizRefundNo(), param.getAppId())
                 .orElseThrow(TradeNotExistException::new);
@@ -62,7 +57,6 @@ public class RefundSyncService {
     /// 退款订单信息同步
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public RefundSyncResult syncRefundOrder(RefundOrder refundOrder) {
-        this.checkPerm();
         // 加锁
         LockInfo lock = lockTemplate.lock("sync:refund:" + refundOrder.getId(),10000,200);
         if (Objects.isNull(lock)) {

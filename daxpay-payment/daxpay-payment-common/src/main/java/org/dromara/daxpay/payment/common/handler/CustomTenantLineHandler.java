@@ -17,6 +17,7 @@ import net.sf.jsqlparser.schema.Column;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Stream;
 

@@ -23,10 +23,8 @@ public class MerchantReportQueryFacadeService implements MerchantReportQueryServ
     @Override
     public MerchantReportResult merchantCount(TradeReportQuery query) {
         Long normalCount = merchantInfoManager.lambdaQuery()
-                .eq(Objects.nonNull(query) && query.getAgentNo() != null, MerchantInfo::getAgentNo, query.getAgentNo())
                 .count();
         Long normalAppCount = mchAppInfoManager.lambdaQuery()
-                .eq(Objects.nonNull(query) && query.getAgentNo() != null, MchAppInfo::getAgentNo, query.getAgentNo())
                 .count();
         return new MerchantReportResult()
                 .setNormalCount(normalCount.intValue())

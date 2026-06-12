@@ -37,4 +37,3 @@ public class DaxpayOpenStart {
         log.info(message);
     }
 }
-

@@ -1,6 +1,8 @@
 package org.dromara.daxpay.payment.admin.service.merchant.info;
 
 import org.dromara.daxpay.platform.common.mybatisplus.util.MpUtil;
+import org.dromara.daxpay.platform.core.enums.client.ClientEnum;
+import org.dromara.daxpay.platform.core.enums.role.RoleCodeEnum;
 import org.dromara.daxpay.platform.core.exception.BizException;
 import org.dromara.daxpay.platform.core.exception.DataNotExistException;
 import org.dromara.daxpay.platform.core.exception.ValidationFailedException;
@@ -194,9 +196,8 @@ public class MerchantAdminService {
                 .innerJoin(MerchantInfo.class, MerchantInfo::getMchNo, MerchantUser::getMchNo)
                 .eq(UserInfo::getAccount, account)
                 .eq(UserInfo::getClientCode, ClientEnum.MERCHANT.getCode())
-                .eq(MerchantInfo::getIsvNo, isvNo)
-                .last("LIMIT 1");
-        return merchantUserManager.selectJoinOne(MerchantUser.class, wrapper) != null;
+                .eq(MerchantInfo::getIsvNo, isvNo);
+        return merchantUserManager.selectJoinCount(wrapper) > 0;
     }
 
     /// 校验服务商下商户手机号是否已存在
@@ -210,9 +211,8 @@ public class MerchantAdminService {
                 .innerJoin(MerchantInfo.class, MerchantInfo::getMchNo, MerchantUser::getMchNo)
                 .eq(UserInfo::getPhone, phone)
                 .eq(UserInfo::getClientCode, ClientEnum.MERCHANT.getCode())
-                .eq(MerchantInfo::getIsvNo, isvNo)
-                .last("LIMIT 1");
-        return merchantUserManager.selectJoinOne(MerchantUser.class, wrapper) != null;
+                .eq(MerchantInfo::getIsvNo, isvNo);
+        return merchantUserManager.selectJoinCount(wrapper) > 0;
     }
 
     /// 校验服务商下商户邮箱是否已存在
@@ -226,8 +226,7 @@ public class MerchantAdminService {
                 .innerJoin(MerchantInfo.class, MerchantInfo::getMchNo, MerchantUser::getMchNo)
                 .eq(UserInfo::getEmail, email)
                 .eq(UserInfo::getClientCode, ClientEnum.MERCHANT.getCode())
-                .eq(MerchantInfo::getIsvNo, isvNo)
-                .last("LIMIT 1");
-        return merchantUserManager.selectJoinOne(MerchantUser.class, wrapper) != null;
+                .eq(MerchantInfo::getIsvNo, isvNo);
+        return merchantUserManager.selectJoinCount(wrapper) > 0;
     }
 }
