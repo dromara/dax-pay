@@ -16,7 +16,7 @@ spring:
     redis:
       host: redis
       port: 6379
-      database: 1
+      database: 0
       password: bootx123
       lettuce:
         pool:
@@ -126,7 +126,7 @@ rocketmq:
   name-server: 192.168.1.229:9876
   producer:
     # 生产者组名，用于标识同一类生产者
-    group: daxpay-producer-group
+    group: daxpay-open-producer-group
     # 消息发送超时时间（毫秒）
     send-message-timeout: 3000
     # 消息发送失败时的重试次数
