@@ -1,0 +1,8 @@
+{
+  "discrepancyNotExist": "Reconciliation discrepancy record not found",
+  "orderNotFound": "Reconciliation order not found",
+  "statementNotFound": "Reconciliation statement not found",
+  "reconcileOrderNotExist": "Reconciliation order not found",
+  "channelStatementUrlNotFound": "Channel statement download URL not found",
+  "platformStatementUrlNotFound": "Platform statement download URL not found"
+}

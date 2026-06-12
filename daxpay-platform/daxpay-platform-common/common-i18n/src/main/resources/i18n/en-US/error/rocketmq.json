@@ -1,0 +1,7 @@
+{
+  "sendFailed": "Message send failed: {0}",
+  "delaySendFailed": "Delayed message send failed: {0}",
+  "serializeFailed": "Message serialization failed: {0}",
+  "parseBodyFailed": "Message body parse failed: {0}",
+  "typeConvertFailed": "Message type conversion failed: {0}"
+}

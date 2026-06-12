@@ -1,0 +1,13 @@
+{
+  "codeExists": "Menu code already exists",
+  "cycleDependency": "Parent menu cannot be itself or a child menu",
+  "subpageNoChildren": "Subpage cannot have child menus",
+  "hasChildrenCannotDelete": "Cannot delete menu with child menus",
+  "invalidType": "Invalid menu type",
+  "subpageNeedParent": "Subpage must select a parent menu",
+  "parentNotExist": "Parent menu not found",
+  "subpageParentMustBeMenu": "Subpage parent must be a menu type",
+  "needParentCatalog": "Menu, embedded page, or external link must select a parent directory",
+  "parentMustBeCatalog": "Parent of menu, embedded page, or external link must be a directory type",
+  "notExist": "Menu not found"
+}

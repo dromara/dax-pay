@@ -1,0 +1,8 @@
+{
+  "progress": "执行中",
+  "success": "成功",
+  "fail": "失败",
+  "closed": "关闭",
+  "revoked": "撤销",
+  "exception": "异常"
+}

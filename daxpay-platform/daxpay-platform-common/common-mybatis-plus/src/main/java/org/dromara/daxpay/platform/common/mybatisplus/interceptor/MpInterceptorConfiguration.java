@@ -1,0 +1,28 @@
+package org.dromara.daxpay.platform.common.mybatisplus.interceptor;
+
+import com.baomidou.mybatisplus.annotation.DbType;
+import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
+import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+/// # 插件容器
+///
+@Configuration
+public class MpInterceptorConfiguration {
+
+    /// 分页
+    @Bean
+    public MpInterceptor paginationInnerInterceptor() {
+        PaginationInnerInterceptor paginationInnerInterceptor = new PaginationInnerInterceptor(DbType.POSTGRE_SQL);
+        paginationInnerInterceptor.setOptimizeJoin(false);
+        return new MpInterceptor(paginationInnerInterceptor, 1);
+    }
+
+    /// 乐观锁
+    @Bean
+    public MpInterceptor optimisticLockerInnerInterceptor() {
+        return new MpInterceptor(new OptimisticLockerInnerInterceptor(), 1);
+    }
+
+}

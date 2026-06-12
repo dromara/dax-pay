@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.dromara.daxpay</groupId>
+        <artifactId>daxpay-platform-capability</artifactId>
+        <version>4.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>capability-wechat</artifactId>
+    <description>微信公众号和小程序管理服务</description>
+
+    <properties>
+        <wxjava.version>4.8.1.B</wxjava.version>
+    </properties>
+
+    <dependencies>
+        <!-- web容器 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!-- 核心包 -->
+        <dependency>
+            <groupId>org.dromara.daxpay</groupId>
+            <artifactId>daxpay-platform-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- mybatis-plus -->
+        <dependency>
+            <groupId>org.dromara.daxpay</groupId>
+            <artifactId>common-mybatis-plus</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 微信工具包-公众号 -->
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-mp</artifactId>
+            <version>${wxjava.version}</version>
+        </dependency>
+        <!-- 微信工具包-小程序 -->
+        <dependency>
+            <groupId>com.github.binarywang</groupId>
+            <artifactId>weixin-java-miniapp</artifactId>
+            <version>${wxjava.version}</version>
+        </dependency>
+        <!-- lock4j分布式锁 -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>lock4j-redis-template-spring-boot-starter</artifactId>
+            <version>${lock4j.version}</version>
+        </dependency>
+        <!-- Redis -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+    </dependencies>
+</project>

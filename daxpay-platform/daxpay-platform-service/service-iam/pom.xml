@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.dromara.daxpay</groupId>
+        <artifactId>daxpay-platform-service</artifactId>
+        <version>4.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>service-iam</artifactId>
+    <description>身份识别与访问管理</description>
+
+    <dependencies>
+
+        <!-- 认证 -->
+        <dependency>
+            <groupId>org.dromara.daxpay</groupId>
+            <artifactId>capability-auth</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 防重放Nonce验证 -->
+        <dependency>
+            <groupId>org.dromara.daxpay</groupId>
+            <artifactId>capability-nonce</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 请求上下文 -->
+        <dependency>
+            <groupId>org.dromara.daxpay</groupId>
+            <artifactId>common-request-context</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 系统基础服务 -->
+        <dependency>
+            <groupId>org.dromara.daxpay</groupId>
+            <artifactId>service-baseapi</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 平台配置服务 -->
+        <dependency>
+            <groupId>org.dromara.daxpay</groupId>
+            <artifactId>service-system</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- hutool验证码 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-captcha</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
+    </dependencies>
+
+</project>

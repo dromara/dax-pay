@@ -1,0 +1,8 @@
+{
+  "security_password_policy": "密码策略配置",
+  "security_login": "登录安全配置",
+  "security_session": "会话管理配置",
+  "anomaly_detection": "异常登录检测配置",
+  "security_two_factor_auth": "双因素认证配置",
+  "url": "系统访问地址配置"
+}

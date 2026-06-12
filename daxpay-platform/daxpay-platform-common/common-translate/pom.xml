@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.dromara.daxpay</groupId>
+        <artifactId>daxpay-platform-common</artifactId>
+        <version>4.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>common-translate</artifactId>
+    <packaging>jar</packaging>
+
+    <dependencies>
+        <!-- daxpay 平台核心（@Trans 注解、BizException 等） -->
+        <dependency>
+            <groupId>org.dromara.daxpay</groupId>
+            <artifactId>daxpay-platform-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- mybatis-plus 核心（含 mybatis-spring） -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-spring-boot4-starter</artifactId>
+        </dependency>
+
+        <!-- hutool 工具类 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-core</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-bom</artifactId>
+                <version>${mybatis-plus.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>4.0.6</version>
+        <relativePath/> <!-- lookup parent from repository -->
+    </parent>
+
+    <groupId>org.dromara.daxpay</groupId>
+    <artifactId>daxpay-start</artifactId>
+    <version>4.0.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <description>多商户启动终端</description>
+
+
+    <properties>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
+        <java.version>25</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- 三方库 -->
+        <mapstruct.version>1.6.3</mapstruct.version>
+        <lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
+        <autopoi.version>1.4.8</autopoi.version>
+    </properties>
+
+    <dependencies>
+        <!-- web框架 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!-- Lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+
+        <!-- 支付服务和通用控制器 -->
+        <dependency>
+            <groupId>org.dromara.daxpay</groupId>
+            <artifactId>daxpay-payment-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.dromara.daxpay</groupId>
+            <artifactId>daxpay-payment-merchant</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.dromara.daxpay</groupId>
+            <artifactId>daxpay-payment-admin</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- 数据库驱动 PG -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- 支付通道 -->
+        <!-- 支付宝通道 -->
+
+        <!-- 微信通道 -->
+
+        <!-- 银联商务通道 -->
+
+        <!-- 拉卡拉通道 -->
+
+        <!-- 抖音支付通道 -->
+
+
+        <!-- 风控模块 -->
+
+    </dependencies>
+
+    <build>
+        <finalName>daxpay-union</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                            <version>${lombok-mapstruct.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapstruct.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+            <!-- spring-boot -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <includeSystemScope>true</includeSystemScope>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>build-info</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

@@ -1,0 +1,6 @@
+{
+  "codeDefinitionConflict": "同一权限码定义冲突: {0}",
+  "codeNotConfigured": "存在未配置 code 的权限码声明",
+  "nameCnNotConfigured": "存在未配置 nameCn 的权限码声明",
+  "nameEnNotConfigured": "存在未配置 nameEn 的权限码声明"
+}

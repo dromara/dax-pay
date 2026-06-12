@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.dromara.daxpay</groupId>
+        <artifactId>daxpay-platform-common</artifactId>
+        <version>4.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>common-mybatis-plus</artifactId>
+    <packaging>jar</packaging>
+
+    <dependencies>
+        <!-- spring jdbc -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+        <!-- PostgreSQL 驱动，用于 jsonb 类型处理器 -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+        </dependency>
+        <!-- common-json 模块, TypeHandler 使用 JacksonUtil, 且 Jackson 3 通过 spring-boot-starter-jackson 传递引入 -->
+        <dependency>
+            <groupId>org.dromara.daxpay</groupId>
+            <artifactId>common-json</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- MP -->
+
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-spring-boot4-starter</artifactId>
+        </dependency>
+        <!-- jdk 11+ 引入可选模块 -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-jsqlparser</artifactId>
+        </dependency>
+        <!-- MPJ -->
+        <dependency>
+            <groupId>com.github.yulichang</groupId>
+            <artifactId>mybatis-plus-join-boot-starter</artifactId>
+            <version>${mybatis-plus-join.version}</version>
+        </dependency>
+        <!-- 依赖缓存 -->
+        <dependency>
+            <groupId>com.github.ben-manes.caffeine</groupId>
+            <artifactId>caffeine</artifactId>
+            <version>${caffeine.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.dromara.daxpay</groupId>
+            <artifactId>common-spring</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- hutool 组件 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-db</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-http</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
+        <!-- 系统配置 -->
+        <dependency>
+            <groupId>org.dromara.daxpay</groupId>
+            <artifactId>common-config</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 测试包 -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-bom</artifactId>
+                <version>${mybatis-plus.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+</project>

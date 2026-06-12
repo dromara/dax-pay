@@ -1,0 +1,7 @@
+{
+  "codeExists": "字典编码已存在",
+  "notExist": "字典不存在",
+  "hasItems": "字典下有字典项,不能删除",
+  "itemCodeDuplicate": "字典项编码重复",
+  "itemNotExist": "字典项不存在"
+}

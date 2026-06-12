@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <parent>
+        <groupId>org.dromara.daxpay</groupId>
+        <artifactId>daxpay-platform</artifactId>
+        <version>4.0.0-SNAPSHOT</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>daxpay-platform-core</artifactId>
+    <packaging>jar</packaging>
+
+    <dependencies>
+        <!-- lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <!-- swagger 依赖 -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-common</artifactId>
+            <version>${springdoc.version}</version>
+        </dependency>
+        <!-- hutool工具类 核心包 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-core</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
+        <!-- hutool工具类 json包 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-json</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
+        <!-- hutool工具类 加解密 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-crypto</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
+        <!-- 国密扩展-->
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcpkix-jdk18on</artifactId>
+            <version>${bouncycastle.version}</version>
+        </dependency>
+        <!-- google 工具类 -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

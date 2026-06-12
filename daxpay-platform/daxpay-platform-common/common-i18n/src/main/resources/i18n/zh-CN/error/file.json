@@ -1,0 +1,5 @@
+{
+  "storageConfigNotExist": "存储配置不存在",
+  "recordNotExist": "文件记录不存在",
+  "platformRecordNotExist": "平台文件记录不存在"
+}

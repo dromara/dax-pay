@@ -1,0 +1,225 @@
+package org.dromara.daxpay.payment.merchant.service.user;
+
+import org.dromara.daxpay.platform.common.mybatisplus.util.MpUtil;
+import org.dromara.daxpay.platform.core.code.CommonCode;
+import org.dromara.daxpay.platform.core.enums.client.ClientEnum;
+import org.dromara.daxpay.platform.core.exception.BizException;
+import org.dromara.daxpay.platform.core.exception.DataNotExistException;
+import org.dromara.daxpay.platform.core.rest.param.PageParam;
+import org.dromara.daxpay.platform.core.rest.result.PageResult;
+import org.dromara.daxpay.platform.iam.auth.service.PasswordDecryptService;
+import org.dromara.daxpay.platform.iam.auth.service.PasswordPolicyService;
+import org.dromara.daxpay.platform.iam.code.UserStatusEnum;
+import org.dromara.daxpay.platform.iam.dao.user.UserExpandInfoManager;
+import org.dromara.daxpay.platform.iam.dao.user.UserInfoManager;
+import org.dromara.daxpay.platform.iam.dao.user.UserPasswordSecurityManager;
+import org.dromara.daxpay.platform.iam.entity.user.UserExpandInfo;
+import org.dromara.daxpay.platform.iam.entity.user.UserInfo;
+import org.dromara.daxpay.platform.iam.exception.user.UserInfoNotExistsException;
+import org.dromara.daxpay.platform.iam.result.user.UserInfoResult;
+import org.dromara.daxpay.platform.iam.service.upms.UserRoleService;
+import org.dromara.daxpay.platform.iam.service.user.UserAdminService;
+import org.dromara.daxpay.platform.iam.service.user.UserQueryService;
+import org.dromara.daxpay.payment.merchant.convert.info.MerchantUserConvert;
+import org.dromara.daxpay.payment.merchant.dao.info.MerchantInfoManager;
+import org.dromara.daxpay.payment.merchant.dao.info.MerchantUserManager;
+import org.dromara.daxpay.payment.merchant.entity.info.MerchantInfo;
+import org.dromara.daxpay.payment.merchant.entity.info.MerchantUser;
+import org.dromara.daxpay.payment.merchant.param.info.MerchantUserParam;
+import org.dromara.daxpay.payment.merchant.param.info.MerchantUserQuery;
+import org.dromara.daxpay.payment.merchant.result.info.MerchantUserResult;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.digest.BCrypt;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.github.yulichang.wrapper.MPJLambdaWrapper;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.List;
+
+/// # 商户用户管理服务
+///
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class MerchantUserAdminService {
+
+    private final UserInfoManager userInfoManager;
+    private final UserExpandInfoManager userExpandInfoManager;
+    private final MerchantUserManager merchantUserManager;
+    private final MerchantInfoManager merchantInfoManager;
+    private final PasswordDecryptService passwordDecryptService;
+    private final PasswordPolicyService passwordPolicyService;
+    private final UserPasswordSecurityManager passwordSecurityManager;
+    private final UserRoleService userRoleService;
+    private final UserQueryService userQueryService;
+    private final UserAdminService userAdminService;
+
+    /// 分页查询商户用户
+    public PageResult<MerchantUserResult> page(PageParam pageParam, MerchantUserQuery query) {
+        Page<MerchantUserResult> mpPage = MpUtil.getMpPage(pageParam);
+        MPJLambdaWrapper<UserInfo> wrapper = new MPJLambdaWrapper<>();
+        wrapper.innerJoin(MerchantUser.class, MerchantUser::getUserId, UserInfo::getId)
+                .innerJoin(MerchantInfo.class, MerchantInfo::getMchNo, MerchantUser::getMchNo)
+                .selectAll(UserInfo.class)
+                .select(MerchantUser::isAdministrator)
+                .select(MerchantInfo::getMchNo)
+                .select(MerchantInfo::getMchName)
+                .eq(StrUtil.isNotBlank(query.getMchNo()), MerchantInfo::getMchNo, query.getMchNo())
+                .eq(StrUtil.isNotBlank(query.getStatus()), UserInfo::getStatus, query.getStatus())
+                .like(StrUtil.isNotBlank(query.getName()), UserInfo::getName, query.getName())
+                .like(StrUtil.isNotBlank(query.getAccount()), UserInfo::getAccount, query.getAccount());
+        Page<MerchantUserResult> page = userInfoManager.selectJoinListPage(mpPage, MerchantUserResult.class, wrapper);
+        return MpUtil.toPageResult(page);
+    }
+
+    /// 根据用户ID查询用户详情
+    public UserInfoResult findById(Long id) {
+        this.checkMerchantUser(id);
+        return userInfoManager.findById(id)
+                .map(UserInfo::toResult)
+                .orElseThrow(DataNotExistException::new);
+    }
+
+    /// 添加商户用户
+    @Transactional(rollbackFor = Exception.class)
+    public void add(MerchantUserParam param) {
+        String mchNo = param.getMchNo();
+        MerchantInfo merchantInfo = merchantInfoManager.findByMchNo(mchNo)
+                // 商户不存在
+                .orElseThrow(() -> new BizException(CommonCode.FAIL_CODE, "error.payment.merchant.merchantNotExist"));
+
+        // 校验账号唯一性（商户终端）
+        String clientCode = ClientEnum.MERCHANT.getCode();
+        if (userQueryService.existsAccountByClientCode(clientCode, param.getAccount())) {
+            // 该账号已存在
+            throw new BizException(CommonCode.FAIL_CODE, "error.payment.merchant.accountExists");
+        }
+
+        // 解密密码
+        String password = passwordDecryptService.decryptPassword(param.getPassword());
+        passwordPolicyService.validatePassword(password);
+
+        // 创建用户
+        UserInfo userInfo = MerchantUserConvert.CONVERT.toEntity(param);
+        userInfo.setClientCode(clientCode)
+                .setAdministrator(false)
+                .setStatus(UserStatusEnum.NORMAL.getCode());
+        String passwordHash = BCrypt.hashpw(password, BCrypt.gensalt());
+        userInfo.setPassword(passwordHash);
+        userInfoManager.save(userInfo);
+
+        // 保存密码历史记录
+        passwordPolicyService.savePasswordHistory(userInfo.getId(), passwordHash, null);
+
+        // 创建用户扩展信息
+        LocalDateTime passwordExpireTime = this.calculatePasswordExpireTime();
+        passwordSecurityManager.initPasswordSecurity(userInfo.getId(), passwordExpireTime);
+
+        UserExpandInfo userExpandInfo = new UserExpandInfo()
+                .setRegisterTime(LocalDateTime.now());
+        userExpandInfo.setId(userInfo.getId());
+        userExpandInfoManager.save(userExpandInfo);
+
+        // 创建商户用户关联
+        MerchantUser merchantUser = new MerchantUser(userInfo.getId(), mchNo, false);
+        merchantUserManager.save(merchantUser);
+    }
+
+    /// 编辑商户用户
+    @Transactional(rollbackFor = Exception.class)
+    public void update(MerchantUserParam param) {
+        UserInfo userInfo = userInfoManager.findById(param.getId())
+                .orElseThrow(UserInfoNotExistsException::new);
+
+        MerchantUser merchantUser = merchantUserManager.findByUserId(param.getId())
+                .orElseThrow(() -> new BizException(CommonCode.FAIL_CODE, "error.payment.merchant.mchUserRelationNotExist"));
+
+        // 按终端校验手机号唯一性（排除自身）
+        if (StrUtil.isNotBlank(param.getPhone()) && 
+            userQueryService.existsPhoneByClientCode(userInfo.getClientCode(), param.getPhone(), param.getId())) {
+            // 该终端下手机号已被其他用户使用
+            throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.phoneUsedByOtherInClient");
+        }
+
+        // 按终端校验邮箱唯一性（排除自身）
+        if (StrUtil.isNotBlank(param.getEmail()) && 
+            userQueryService.existsEmailByClientCode(userInfo.getClientCode(), param.getEmail(), param.getId())) {
+            // 该终端下邮箱已被其他用户使用
+            throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.emailUsedByOtherInClient");
+        }
+
+        param.setPassword(null);
+        param.setAccount(null);
+        MerchantUserConvert.CONVERT.copy(param, userInfo);
+        userInfoManager.updateById(userInfo);
+    }
+
+    /// 分配角色
+    @Transactional(rollbackFor = Exception.class)
+    public void assignRole(Long userId, Long roleId) {
+        this.checkMerchantUser(userId);
+        userRoleService.saveAssign(userId, roleId, false);
+    }
+
+    /// 封禁商户用户
+    public void ban(Long userId) {
+        this.checkMerchantUser(userId);
+        userAdminService.ban(userId);
+    }
+
+    /// 批量封禁商户用户
+    public void banBatch(List<Long> userIds) {
+        this.checkMerchantUser(userIds);
+        userAdminService.banBatch(userIds);
+    }
+
+    /// 解锁商户用户
+    public void unlock(Long userId) {
+        this.checkMerchantUser(userId);
+        userAdminService.unlock(userId);
+    }
+
+    /// 批量解锁商户用户
+    public void unlockBatch(List<Long> userIds) {
+        this.checkMerchantUser(userIds);
+        userAdminService.unlockBatch(userIds);
+    }
+
+    /// 重置密码
+    @Transactional(rollbackFor = Exception.class)
+    public void restartPassword(Long userId, String newPassword) {
+        this.checkMerchantUser(userId);
+        userAdminService.restartPassword(userId, newPassword);
+    }
+
+    /// 批量重置密码
+    @Transactional(rollbackFor = Exception.class)
+    public void restartPasswordBatch(List<Long> userIds, String newPassword) {
+        this.checkMerchantUser(userIds);
+        userAdminService.restartPasswordBatch(userIds, newPassword);
+    }
+
+    /// 计算密码过期时间
+    private LocalDateTime calculatePasswordExpireTime() {
+        return null;
+    }
+
+    /// 校验用户是否属于商户
+    private void checkMerchantUser(Long userId) {
+        if (!merchantUserManager.existedByField(MerchantUser::getUserId, userId)) {
+            throw new BizException(CommonCode.FAIL_CODE, "error.payment.merchant.mchUserRelationNotExist");
+        }
+    }
+
+    /// 批量校验用户是否属于商户
+    private void checkMerchantUser(List<Long> userIds) {
+        List<MerchantUser> users = merchantUserManager.findAllByField(MerchantUser::getUserId, userIds);
+        if (users.size() != userIds.size()) {
+            throw new BizException(CommonCode.FAIL_CODE, "error.payment.merchant.mchUserRelationNotExist");
+        }
+    }
+}

@@ -1,0 +1,8 @@
+{
+  "progress": "In Progress",
+  "success": "Success",
+  "fail": "Failed",
+  "closed": "Closed",
+  "revoked": "Revoked",
+  "exception": "Exception"
+}

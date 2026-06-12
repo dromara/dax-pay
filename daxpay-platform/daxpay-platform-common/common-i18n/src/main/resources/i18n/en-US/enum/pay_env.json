@@ -1,0 +1,5 @@
+{
+  "prod": "Production",
+  "sandbox": "Sandbox",
+  "none": "Inactive"
+}

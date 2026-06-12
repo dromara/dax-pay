@@ -1,0 +1,44 @@
+package org.dromara.daxpay.payment.admin.controller.masterdata.capability;
+
+import org.dromara.daxpay.payment.pay.param.masterdata.capability.PayCapabilityQuery;
+import org.dromara.daxpay.payment.pay.result.masterdata.capability.PayCapabilityResult;
+import org.dromara.daxpay.payment.pay.service.masterdata.capability.PayCapabilityMasterDataService;
+import org.dromara.daxpay.platform.core.annotation.PermCode;
+import org.dromara.daxpay.platform.core.rest.Res;
+import org.dromara.daxpay.platform.core.rest.param.PageParam;
+import org.dromara.daxpay.platform.core.rest.result.PageResult;
+import org.dromara.daxpay.platform.core.rest.result.Result;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotBlank;
+import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+/// # 支付能力（管理端，只读）
+@PermCode(menuCode = "payment:capability")
+@Validated
+@Tag(name = "支付能力管理")
+@RestController
+@RequestMapping("/admin/payment/pay-capability")
+@RequiredArgsConstructor
+public class PayCapabilityMasterDataController {
+
+    private final PayCapabilityMasterDataService payCapabilityMasterDataService;
+
+    @PermCode(code = "view", nameCn = "支付能力查看", nameEn = "Pay Capability View")
+    @Operation(summary = "分页查询")
+    @GetMapping("/page")
+    public Result<PageResult<PayCapabilityResult>> page(PageParam pageParam, PayCapabilityQuery query, String name) {
+        return Res.ok(payCapabilityMasterDataService.page(pageParam, query, name));
+    }
+
+    @PermCode(code = "view", nameCn = "支付能力查看", nameEn = "Pay Capability View")
+    @Operation(summary = "根据编码查询详情")
+    @GetMapping("/get")
+    public Result<PayCapabilityResult> findByCode(@NotBlank(message = "{validation.field.code.notBlank}") String code) {
+        return Res.ok(payCapabilityMasterDataService.findByCode(code));
+    }
+}

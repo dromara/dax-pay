@@ -5,7 +5,7 @@
 <p align="center">
  <img src="https://img.shields.io/github/stars/dromara/dax-pay?style=flat&label=Github">
  <img src='https://gitee.com/bootx/dax-pay/badge/star.svg?theme=dark' alt='star'/>
- <img src="https://img.shields.io/badge/Dax%20Pay-3.1.0-success.svg" alt="Build Status"/>
+ <img src="https://img.shields.io/badge/Dax%20Pay-4.0.0-success.svg" alt="Build Status"/>
  <img src="https://img.shields.io/badge/Author-Daxpay-orange.svg" alt="Build Status"/>
  <img src="https://img.shields.io/badge/Spring%20Boot-3.5.6-blue.svg" alt="Downloads"/>
  <img src="https://img.shields.io/badge/license-Apache%20License%202.0-green.svg"/>
@@ -62,35 +62,6 @@
 | 收银台小程序 | 暂时未上架 | 无 |
 
 
-## 商业版
-> 官网地址: [https://plus.daxpay.cn](https://plus.daxpay.cn) 文档地址：[飞书文档站](https://yibeiguangnian.feishu.cn/wiki/space/7512817895487848452?ccm_open_type=lark_wiki_spaceLink&open_tab_from=wiki_home)
-> 
-> 针对一些需要较高的客户，提供商业版进行选择，相对于开源版，功能更强大。
-
-### 功能模块
-
-| 典型功能  | 描述                    |
-|-------|-----------------------|
-| 进件    | 支持发起进件申请和对已经进件的商户进行管理 |
-| 分账    | 支持根据设置对支付订单进行分账       |
-| 分润    | 根据设定的费率进行分润处理         |
-| 代理商系统 | 支持代理商模式               |
-| 终端报备  | 给通道侧进行辅助支付设备的宝贝       |
-| 费率管理  | 管理商户进件和分润时所使用的费率      |
-
-### 系统演示
-
-> 注：演示账号部分功能权限未开放。
-
-| 站点类型      | 地址                                                                       | 演示账号           |
-|-----------|--------------------------------------------------------------------------|----------------|
-| 运营端       | [https://admin.plus.daxpay.cn/](https://admin.plus.daxpay.cn/)           | csadmin/123123 |
-| 代理端       | [https://agent.plus.daxpay.cn/](https://agent.plus.daxpay.cn/)           | csdl/123123    |
-| 商户端       | [https://merchant.plus.daxpay.cn/](https://merchant.plus.daxpay.cn/)     | cssh/123123    |
-| 代理小程序(H5) | [https://mini-agent.plus.daxpay.cn/](https://mini-agent.plus.daxpay.cn/) | csdl/123123    |
-| 商户小程序(H5) | [https://mini-mch.plus.daxpay.cn/](https://mini-mch.plus.daxpay.cn/)     | cssh/123123    |
-| 收银台小程序    | 暂时未上架                                                                    | 无              |
-
 ## 系统截图
 
 <img src="https://cdn.jsdmirror.cn/gh/xxm1995/picx-images-hosting@master/20260130/ScreenShot_2026-01-30_114018_880.4ubfwj80o3.webp" height="570" />
@@ -126,7 +97,7 @@
 > 微信公众号会定期更新使用教程、版本更新记录和各种活动情况，欢迎关注
 
 <p>
-<img alt="微信图片_20240226144703" height="330" src="https://plus.daxpay.cn/assets/other/wxpub.webp" width="330" height="330"/>
+<img alt="微信公众号" height="330" src="https://cdn.jsdmirror.cn/gh/xxm1995/picx-images-hosting@master/connect/微信图片_20240412152722.231nkeje2o.webp" width="330"/>
 </p>
 
 ### Star History

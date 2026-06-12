@@ -1,0 +1,14 @@
+{
+  "referencedByRule": "Lookup table is referenced by rule nodes and cannot be deleted",
+  "nameExistsInModel": "Lookup table name already exists in this model",
+  "codeGenFailed": "Failed to generate lookup table code",
+  "defIdRequired": "Lookup table definition ID is required",
+  "cannotModifyTemplateRow": "Cannot modify default template lookup row",
+  "instanceMismatch": "Instance code mismatch",
+  "cannotDeleteTemplateRow": "Cannot delete default template lookup row",
+  "cannotModifyForeignRow": "Cannot modify lookup row of another instance",
+  "instanceCodeRequired": "Instance code is required",
+  "defNotExist": "Lookup table definition not found",
+  "keyDefNotExist": "Lookup key definition not found",
+  "rowNotExist": "Lookup row not found"
+}

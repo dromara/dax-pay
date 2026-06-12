@@ -1,0 +1,13 @@
+{
+  "configNotFound": "ISV config not found",
+  "configNotEnable": "ISV not enabled",
+  "productConfigNotFound": "ISV product payment config not found",
+  "permissionDenied": "You do not have permission to configure this sub merchant",
+  "productPayConfigNotFound": "Product pay config not found",
+  "productNotFound": "Product not found",
+  "notSupportSandbox": "Sandbox environment is not supported for this product",
+  "sandboxNotConfigured": "Sandbox environment not configured, please configure first",
+  "sandboxNotEnabled": "Sandbox environment not enabled, please enable first",
+  "prodNotConfigured": "Production environment not configured, please configure first",
+  "prodNotEnabled": "Production environment not enabled, please enable first"
+}

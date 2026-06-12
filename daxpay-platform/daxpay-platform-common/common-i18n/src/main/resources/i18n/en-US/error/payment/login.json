@@ -1,0 +1,6 @@
+{
+  "isvDisabled": "Associated service provider is disabled",
+  "mchDisabled": "Merchant is disabled",
+  "noAdminPermUseMerchant": "You do not have admin permission, please use merchant portal to login",
+  "noMerchantPerm": "You do not have merchant portal login permission"
+}

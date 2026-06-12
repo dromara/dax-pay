@@ -1,0 +1,137 @@
+spring:
+  datasource:
+    # Postgresql连接
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://postgresql:5432/daxpay-dev?serverTimezone=Asia/Shanghai&autoReconnect=true&reWriteBatchedInserts=true
+    username: bootx
+    password: bootx123
+    hikari:
+      minimumIdle: 5 # 最小连接数
+      maximumPoolSize: 50 # 最大连接数
+      leak-detection-threshold: 5000 # 检测连接泄漏的时间阈值（毫秒）
+      connection-timeout: 30000 # 获取连接超时时间（毫秒）
+      idle-timeout: 600000      # 空闲连接超时时间（毫秒）
+      max-lifetime: 1800000     # 连接最大存活时间（毫秒）
+  data:
+    redis:
+      host: redis
+      port: 6379
+      database: 1
+      password: bootx123
+      lettuce:
+        pool:
+          max-wait: 1000ms
+# 开发时显示debug日志
+logging:
+  level:
+    org.dromara.daxpay.**: debug
+    # 打印请求头和响应头（不含 body）
+#    org.apache.hc.client5.http.wire: DEBUG
+#    org.apache.hc.client5.http.headers: DEBUG
+# 接口文档配置
+springdoc:
+  # 默认展开对象类型的属性, 主要用在get类型的参数中
+  default-flat-param-object: true
+  # 是否开启API文档接口
+  api-docs:
+    enabled: true
+# 基础脚手架配置
+daxpay:
+  platform:
+    common:
+      # 错误信息配置
+      exception:
+        show-full-message: true
+      # swagger相关配置
+      swagger:
+        author: DaxPay
+        title: DaxPay支付平台-开源版
+        description: DaxPay支付平台-开源版
+        version: 4.0.0-SNAPSHOT
+    starter:
+      auth:
+        # 开启超级管理员
+        enable-admin: true
+        # 用户管理列表中是否显示超级管理员用户
+        admin-in-list: true
+        ignore-urls:
+          - '/actuator/**'
+          - '/v3/api-docs/**'
+          - '/swagger-ui/*'
+          - '/swagger-resources/**'
+          - '/token/**'
+          - '/ws/**'
+          - '/demo/**'
+          - '/test/**'
+          - '/error'
+          - '/favicon.ico'
+          - '/**'
+      # 审计日志配置
+      audit-log:
+        ip2region:
+          # ip2region.xdb 文件路径
+          file-path: D:/data/ip/ip2region_v4.xdb
+          # 查询模式: VECTOR_INDEX(推荐) 或 CACHE
+          search-type: VECTOR_INDEX
+    config:
+      # 证书配置0
+      key-config:
+            # 私钥配置
+            private-key: '-----BEGIN PRIVATE KEY-----
+              MIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQClTNVpzrAL9IgQ
+              Z6HeV8Ov05gV9DLvgEVOxmxneCyaMLeAZBMyxs8Uvudw4QhPHercHLhg0Slhnoif
+              XI7tKO+/nm2gxcatfQzzYy9AN7A2BWcJZB8Yu4bWayzK3X9lRt9kXMTyiLwvk4o7
+              9x/STFcyraIFWepyBEg272z34gGk8PH8YTjkM8TJ2nwYuR0Xvs/HdEm1TzCugywZ
+              N2cgr/6OLfg3+marx5pRvizBWOAnabSEylCgWAld9TC4HRuItMGp4zX50d4QLuTY
+              RvZhdkOoRh3HKNurO3GbRKZjCXzzmZwY8E09O30CmhFZHcIZF8TylxCJ64HRh2x1
+              KH35lJojAgMBAAECggEAOR28XCwLzoW3Ahwc5UvkFPwDAAr6EqF60UZkrLfsiXat
+              4VIzBAeIBD4WkH1hNp06ysWtu95p8w4pXQ9JX48WkFp4vOW5ybZ85BhwejsDyxbA
+              zJDo4c3iQHKV7p7sZx0/EVmwv7EZfUL4r9GrECpKsvsmEb1I8g6iuUCvoVNZiBkf
+              BMy7bkDXJDJ/KYuRqEkfPfgqOOicJlXgjyiwtV9RN9SKErvnHo3kyt8RrSbCEYh2
+              y787gtPYf2U1XH674SAxd2Ki0rQ3CqHRjBUQGix7l8G5Hcv+TBJITNIktj8aJfu3
+              CvMnslQU9HEjbU8dMclywRSrjW839rym5lf+ptU/aQKBgQDJ6Bt5gsJlysy8P7ag
+              JlmQS0D5GmTx3GELLim1Uhbwwt6gCsQJf2l+0CnuEOBfJPGRdAUi35Tv8gDTG+9X
+              ai0wunNki6AHIfCtvY+zDxdgFtut1eIyq1ASFbAkW1jQRlXshVILAcU5GNjv8wOp
+              V9KcgkMGIsqGUdGb5drsbKDUPwKBgQDRlgtjktHXxDFsdkxUXCObCu6LevgdqgMH
+              qZ4mfui/NkTAuLFaFPddR+cmJNPPsy6MrHj97rZsPSTpaP0vQfJykFDlkm0xfBwv
+              dp41jLhWDN+OxsSs0eyoXptl3XUArsfipQ84tUODp9h86DoPs2oS39LuZj0DncY7
+              yXq1jCOxHQKBgFj603DfcXCOyV+E7KTzgbEXmRCu0yHLr3DP7U2dWcLM/nOlivNs
+              lT9v2aqzAU6s51Dkwoa15dtA2aAvxXDOuA+re8MpzWKXUIwg6D1PP0v3huS7R65w
+              1R7DNBcxsphHBwLvVlLHevVIwAIvJMPykjyrI4KGvp4nXKrJx4s97DrdAoGBAJab
+              401HuWH7C6UskYdhuvh0b51t3ZS7knfULODu++REZD21u0THoka3H+UqO8eatI3E
+              dyHLg+3eNoNAvghStJ4dFPUUN0GDNWHqNKC4odK8Z35bWgPyysTnT3ZxIN4/u0Yk
+              ZP7US1L1r716yBZ2UHiFvTcx4xCRNV3LWFHUBeYFAoGBAJKdUemy9ZFhtox7vLOG
+              U9EPScsh7xcyDcR8dEk+Ixjh8T8TnYjFxg4URAk7/uTki8WF9xcp6YntA92W22+J
+              Eje42gDW9bDb8I7BDlMigVCkM2A8cAsr3sHDdfo4N/PISL0dHpt2izEKWb6HZriK
+              AxnJl5/NyDmL/YfSVksVOZud
+              -----END PRIVATE KEY-----'
+            # 公钥配置
+            public-key: '-----BEGIN PUBLIC KEY-----
+              MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApUzVac6wC/SIEGeh3lfD
+              r9OYFfQy74BFTsZsZ3gsmjC3gGQTMsbPFL7ncOEITx3q3By4YNEpYZ6In1yO7Sjv
+              v55toMXGrX0M82MvQDewNgVnCWQfGLuG1mssyt1/ZUbfZFzE8oi8L5OKO/cf0kxX
+              Mq2iBVnqcgRINu9s9+IBpPDx/GE45DPEydp8GLkdF77Px3RJtU8wroMsGTdnIK/+
+              ji34N/pmq8eaUb4swVjgJ2m0hMpQoFgJXfUwuB0biLTBqeM1+dHeEC7k2Eb2YXZD
+              qEYdxyjbqztxm0SmYwl885mcGPBNPTt9ApoRWR3CGRfE8pcQieuB0YdsdSh9+ZSa
+              IwIDAQAB
+              -----END PUBLIC KEY-----'
+      encrypt:
+        enable: true
+        keys:
+          - key: z0Vd8jDKB80pA6OOptGLO+qDVvWboEko
+            version: 1
+# RocketMQ配置
+rocketmq:
+  # NameServer地址，用于服务发现和路由信息获取
+  name-server: 192.168.1.229:9876
+  producer:
+    # 生产者组名，用于标识同一类生产者
+    group: daxpay-producer-group
+    # 消息发送超时时间（毫秒）
+    send-message-timeout: 3000
+    # 消息发送失败时的重试次数
+    retry-times-when-send-failed: 2
+    # 消息压缩阈值（字节），超过此值自动压缩
+    compress-message-body-threshold: 4096
+    # 最大消息大小（字节），默认4MB
+    max-message-size: 4194304

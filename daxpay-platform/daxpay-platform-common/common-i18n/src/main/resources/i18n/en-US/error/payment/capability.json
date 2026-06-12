@@ -1,0 +1,5 @@
+{
+  "notExist": "Payment capability does not exist",
+  "duplicateProduct": "Linked payment products must be unique",
+  "productNotExist": "Payment product does not exist"
+}

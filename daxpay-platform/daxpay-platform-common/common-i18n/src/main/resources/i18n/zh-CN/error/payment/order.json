@@ -1,0 +1,19 @@
+{
+  "unsupportedBarcodeType": "不支持的条码类型",
+  "reconcileFileAlreadyDownloaded": "对账单文件已经下载或上传",
+  "reconcileParseError": "解析对账单异常",
+  "reconcileDownloadFirst": "请先下载对账单",
+  "reconcileAlreadyCompleted": "对账单比对已经完成",
+  "merchantNoRefundPermission": "该商户没有退款权限",
+  "merchantNoApiPermission": "该商户没有此接口的权限",
+  "payOrderNotExist": "支付订单不存在",
+  "payOrderExtNotExist": "支付订单扩展信息不存在",
+  "refundOrderNotExist": "退款订单不存在",
+  "refundOrderExtNotExist": "退款订单扩展信息不存在",
+  "refundPayOrderNotExist": "退款订单关联支付订单不存在",
+  "transferOrderNotExist": "转账订单不存在",
+  "transferOrderInfoNotExist": "转账订单信息不存在",
+  "tradeFlowNotExist": "交易流水记录不存在",
+  "callbackTaskNotExist": "商户回调通知任务不存在",
+  "subscribeRecordNotExist": "商户订阅通知记录不存在"
+}

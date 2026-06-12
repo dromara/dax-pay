@@ -5,59 +5,56 @@
 
     <groupId>org.dromara.daxpay</groupId>
     <artifactId>daxpay</artifactId>
-    <version>3.1.1</version>
+    <version>4.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>dax-pay-plus</name>
+    <name>dax-pay-open</name>
     <description>DaxPay开源版支付系统</description>
 
     <modules>
-        <module>bootx-platform</module>
-        <module>daxpay-open-payment</module>
-        <module>daxpay-open-channel</module>
-        <module>daxpay-open-client</module>
-        <module>daxpay-open-sdk</module>
+        <module>daxpay-platform</module>
+        <module>daxpay-payment</module>
+        <module>daxpay-start</module>
+        <module>daxpay-plugin</module>
     </modules>
-    
     <properties>
-        <maven.compiler.source>21</maven.compiler.source>
-        <maven.compiler.target>21</maven.compiler.target>
+        <maven.compiler.source>25</maven.compiler.source>
+        <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <lombok.version>1.18.36</lombok.version>
-        <mapstruct.version>1.5.5.Final</mapstruct.version>
+        <lombok.version>1.18.46</lombok.version>
         <lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
+        <mapstruct.version>1.6.3</mapstruct.version>
     </properties>
 
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.14.0</version>
-                    <configuration>
-                        <source>${maven.compiler.source}</source>
-                        <target>${maven.compiler.target}</target>
-                        <annotationProcessorPaths>
-                            <path>
-                                <groupId>org.projectlombok</groupId>
-                                <artifactId>lombok</artifactId>
-                                <version>${lombok.version}</version>
-                            </path>
-                            <path>
-                                <groupId>org.mapstruct</groupId>
-                                <artifactId>mapstruct-processor</artifactId>
-                                <version>${mapstruct.version}</version>
-                            </path>
-                            <path>
-                                <groupId>org.projectlombok</groupId>
-                                <artifactId>lombok-mapstruct-binding</artifactId>
-                                <version>${lombok-mapstruct.version}</version>
-                            </path>
-                        </annotationProcessorPaths>
-                    </configuration>
-                </plugin>
-            </plugins>
-        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                            <version>${lombok-mapstruct.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapstruct.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+        </plugins>
     </build>
+
+
 </project>

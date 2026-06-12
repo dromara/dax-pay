@@ -1,0 +1,71 @@
+package org.dromara.daxpay.platform.capability.auth.handler;
+
+import org.dromara.daxpay.platform.common.spring.util.WebServletUtil;
+import org.dromara.daxpay.platform.capability.auth.exception.RouterCheckException;
+import org.dromara.daxpay.platform.capability.auth.service.RouterCheck;
+import org.dromara.daxpay.platform.capability.auth.util.SecurityUtil;
+import cn.dev33.satoken.fun.SaFunction;
+import cn.dev33.satoken.router.SaRouter;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.stereotype.Component;
+
+import java.util.Comparator;
+import java.util.List;
+
+/// # 鉴权路由统一处理类（主链编排器）
+///
+/// 【执行语义 - 统一为"命中放行，未命中拒绝"】
+/// - 所有实现 RouterCheck SPI 的 Bean 在启动时按 sortNo 升序排列。
+/// - 请求进入时遍历 RouterCheck 列表，任意一个返回 true 即调用 SaRouter.stop() 放行。
+/// - 全部未命中：
+/// - 未登录 → SecurityUtil.getUserId() 抛 NotLoginException
+/// - 已登录 → 记录 WARN 日志并抛出 RouterCheckException（403 无权限）
+/// </li>
+///
+/// 【stop 条件语义】：SaRouter.stop() 会终止后续拦截器执行，但不终止整个过滤器链，
+/// 仅结束 Sa-Token 鉴权阶段的处理。
+///
+/// @see org.dromara.daxpay.platform.capability.auth.service.RouterCheck
+@Slf4j
+@Component
+@RequiredArgsConstructor
+public class SaRouteHandler implements InitializingBean {
+
+    private final List<RouterCheck> routerChecks;
+
+    @Override
+    public void afterPropertiesSet() {
+        // 排序
+        routerChecks.sort(Comparator.comparing(RouterCheck::sortNo));
+    }
+
+    /// 路由检查处理方法
+    ///
+    /// @param handler Sa-Token 传入的路由处理上下文
+    public SaFunction check(Object handler) {
+        return () -> {
+            String path = WebServletUtil.getPath();
+            // 遍历所有 RouterCheck，命中即放行（按 sortNo 顺序执行）
+            for (RouterCheck routerCheck : routerChecks) {
+                if (routerCheck.check(handler)) {
+                    log.debug("路由鉴权命中: {} -> {}", path, routerCheck.getClass().getSimpleName());
+                    SaRouter.stop();
+                    return;
+                }
+            }
+            // 全部未命中：判断未登录 vs 无权限
+            if (SecurityUtil.notLogin()) {
+                log.debug("路由鉴权未命中（未登录）: {}", path);
+                SecurityUtil.getUserId(); // 触发 NotLoginException
+            }
+            // 已登录但无权限
+            log.warn("路由鉴权未命中（已登录无权限）: {}，已检查 {} 个 RouterCheck", path, routerChecks.size());
+            throw new RouterCheckException();
+        };
+    }
+
+}
+
+

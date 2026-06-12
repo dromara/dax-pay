@@ -1,0 +1,5 @@
+{
+  "storageConfigNotExist": "Storage configuration not found",
+  "recordNotExist": "File record not found",
+  "platformRecordNotExist": "Platform file record not found"
+}

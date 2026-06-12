@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.dromara.daxpay</groupId>
+        <artifactId>daxpay-platform-capability</artifactId>
+        <version>4.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>capability-auth</artifactId>
+
+    <dependencies>
+        <!-- web -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <!-- redis -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-redis</artifactId>
+        </dependency>
+
+        <!-- Sa-Token 权限认证, 在线文档：https://sa-token.cc -->
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-spring-boot4-starter</artifactId>
+            <version>${sa-token.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.dev33</groupId>
+            <artifactId>sa-token-redis-jackson</artifactId>
+            <version>${sa-token.version}</version>
+        </dependency>
+
+        <!--spring 配置 -->
+        <dependency>
+            <groupId>org.dromara.daxpay</groupId>
+            <artifactId>common-spring</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- Jackson配置 -->
+        <dependency>
+            <groupId>org.dromara.daxpay</groupId>
+            <artifactId>common-json</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 项目配置 -->
+        <dependency>
+            <groupId>org.dromara.daxpay</groupId>
+            <artifactId>common-config</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+</project>

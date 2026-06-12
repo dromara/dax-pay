@@ -1,0 +1,14 @@
+{
+  "referencedByRule": "该查表定义正在被规则节点引用，无法删除",
+  "nameExistsInModel": "同一模型下查表名称已存在",
+  "codeGenFailed": "查表编码生成失败",
+  "defIdRequired": "查表定义ID不能为空",
+  "cannotModifyTemplateRow": "不能修改模板默认查表行",
+  "instanceMismatch": "实例标识不匹配",
+  "cannotDeleteTemplateRow": "不能删除模板默认查表行",
+  "cannotModifyForeignRow": "不能修改非本实例的查表行",
+  "instanceCodeRequired": "实例标识不能为空",
+  "defNotExist": "查表定义不存在",
+  "keyDefNotExist": "查表键定义不存在",
+  "rowNotExist": "查表行不存在"
+}

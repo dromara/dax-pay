@@ -1,0 +1,13 @@
+{
+  "configNotFound": "服务商配置不存在",
+  "configNotEnable": "服务商未启用",
+  "productConfigNotFound": "服务商产品支付配置不存在",
+  "permissionDenied": "你没有权限配置此子商户号",
+  "productPayConfigNotFound": "服务商产品支付配置不存在",
+  "productNotFound": "产品不存在",
+  "notSupportSandbox": "该产品不支持沙箱环境",
+  "sandboxNotConfigured": "沙箱环境尚未配置，请先完成配置后再切换",
+  "sandboxNotEnabled": "沙箱环境尚未启用，请先启用后再切换",
+  "prodNotConfigured": "生产环境尚未配置，请先完成配置后再切换",
+  "prodNotEnabled": "生产环境尚未启用，请先启用后再切换"
+}

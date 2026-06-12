@@ -1,0 +1,7 @@
+{
+  "init": "Initialized",
+  "wait": "Not Reported",
+  "submit": "Reported",
+  "logged": "Logged Off",
+  "error": "Error"
+}

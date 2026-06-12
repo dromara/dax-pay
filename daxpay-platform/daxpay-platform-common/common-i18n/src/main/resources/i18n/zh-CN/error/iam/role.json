@@ -1,0 +1,9 @@
+{
+  "roleNotExisted": "角色不存在",
+  "roleAlreadyUsed": "该角色下分配了用户，无法删除",
+  "roleAlreadyExisted": "角色已经存在",
+  "permissionDbError": "用户没有权限",
+  "internalCannotDelete": "内置角色不允许删除",
+  "assignOutOfScope": "角色分配超出了可分配的范围",
+  "notExist": "角色不存在"
+}

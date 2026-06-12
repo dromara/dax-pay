@@ -1,0 +1,7 @@
+{
+  "codeExists": "Dictionary code already exists",
+  "notExist": "Dictionary not found",
+  "hasItems": "Dictionary has items, cannot be deleted",
+  "itemCodeDuplicate": "Dictionary item code duplicated",
+  "itemNotExist": "Dictionary item not found"
+}

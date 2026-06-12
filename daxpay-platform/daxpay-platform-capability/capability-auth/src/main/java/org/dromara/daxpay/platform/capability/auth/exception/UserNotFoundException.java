@@ -1,0 +1,21 @@
+package org.dromara.daxpay.platform.capability.auth.exception;
+
+/// # 用户未找到异常
+///
+public class UserNotFoundException extends LoginFailureException {
+
+    public UserNotFoundException(String account) {
+        super(account, "用户未找到");
+        initMessageKey("error.auth.auth.userNotFound");
+    }
+
+    public UserNotFoundException() {
+        super("用户未找到");
+        initMessageKey("error.auth.auth.userNotFound");
+    }
+
+
+    public UserNotFoundException(int code, String messageKey, Object... args) {
+        super(code, messageKey, args);
+    }
+}

@@ -1,0 +1,5 @@
+{
+  "notExist": "Payment product not found",
+  "duplicateCapability": "Duplicate pay capability code",
+  "capabilityNotExist": "Pay capability not found"
+}

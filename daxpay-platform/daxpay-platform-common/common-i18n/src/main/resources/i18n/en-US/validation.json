@@ -1,0 +1,443 @@
+{
+  "notBlank": "{0} cannot be blank",
+  "notEmpty": "{0} cannot be empty",
+  "lengthRange": "{0} length must be between {1} and {2}",
+  "min": "{0} cannot be less than {1}",
+  "max": "{0} cannot be greater than {1}",
+  "parameterError": "Parameter validation failed",
+  "field": {
+    "ip": {
+      "notValid": "IP address is invalid"
+    },
+    "aliAppId": {
+      "notBlank": "Alipay app ID cannot be blank"
+    },
+    "authType": {
+      "notBlank": "Auth type cannot be blank"
+    },
+    "signType": {
+      "notBlank": "Sign type cannot be blank"
+    },
+    "alipayPublicKey": {
+      "notBlank": "Alipay public key cannot be blank"
+    },
+    "mchAppPrivateKey": {
+      "notBlank": "App private key cannot be blank"
+    },
+    "appSecret": {
+      "notBlank": "App secret cannot be blank"
+    },
+    "douyinMchId": {
+      "notBlank": "Douyin merchant ID cannot be blank"
+    },
+    "userIdType": {
+      "notBlank": "User ID type cannot be blank"
+    },
+    "authCallbackUrl": {
+      "notBlank": "Authorization callback URL cannot be blank",
+      "size": "Authorization callback URL cannot exceed 512 characters"
+    },
+    "isvNo": {
+      "notBlank": "Service provider no. cannot be blank"
+    },
+    "product": {
+      "notBlank": "Product code cannot be blank",
+      "size": "Product code cannot exceed 32 characters",
+      "notNull": "Product code cannot be blank"
+    },
+    "channel": {
+      "notBlank": "Channel code cannot be blank",
+      "notNull": "Channel code cannot be blank",
+      "size": "Channel code cannot exceed 32 characters"
+    },
+    "sandbox": {
+      "notNull": "Sandbox environment cannot be blank"
+    },
+    "enable": {
+      "notNull": "Enable status cannot be blank"
+    },
+    "mchNo": {
+      "notBlank": "Merchant no. cannot be blank",
+      "size": "Merchant no. cannot exceed 32 characters",
+      "notNull": "Merchant no. cannot be blank"
+    },
+    "appId": {
+      "notBlank": "Merchant app ID cannot be blank",
+      "size": "Merchant app ID cannot exceed 32 characters"
+    },
+    "subMchId": {
+      "notBlank": "WeChat sub-merchant ID cannot be blank"
+    },
+    "wxMchId": {
+      "notBlank": "WeChat merchant ID cannot be blank"
+    },
+    "wxAppId": {
+      "notBlank": "WeChat AppId cannot be blank"
+    },
+    "publicKeyId": {
+      "notBlank": "Payment public key ID cannot be blank"
+    },
+    "certSerialNo": {
+      "notBlank": "Certificate serial no. cannot be blank"
+    },
+    "id": {
+      "notNull": "Primary key cannot be blank",
+      "mustBeNullOnAdd": "Id must be empty"
+    },
+    "account": {
+      "notBlank": "Account cannot be blank",
+      "size": "Account length must be between 6 and 20 characters",
+      "pattern": "Account format is invalid"
+    },
+    "password": {
+      "notBlank": "Password cannot be blank"
+    },
+    "merchantType": {
+      "notBlank": "Agent type cannot be blank"
+    },
+    "subjectType": {
+      "notBlank": "Subject type cannot be blank"
+    },
+    "pass": {
+      "notNull": "Audit result cannot be blank"
+    },
+    "applyType": {
+      "notNull": "Application type cannot be blank"
+    },
+    "channelMerchantNo": {
+      "notBlank": "Channel merchant no. cannot be blank"
+    },
+    "channelMerchantName": {
+      "notBlank": "Merchant name cannot be blank"
+    },
+    "tradeIdentity": {
+      "notBlank": "Merchant trade identity cannot be blank"
+    },
+    "subMchNo": {
+      "notBlank": "Sub-merchant no. cannot be blank"
+    },
+    "parentMchNo": {
+      "notBlank": "Parent channel merchant no. cannot be blank"
+    },
+    "subMchName": {
+      "notBlank": "Sub-merchant name cannot be blank"
+    },
+    "orderNo": {
+      "notBlank": "Payment order no. cannot be blank",
+      "size": "Payment order no. cannot exceed 100 characters"
+    },
+    "amount": {
+      "notNull": "Refund amount cannot be blank",
+      "decimalMin": "Payment amount cannot be less than 0.01",
+      "digits": "Payment amount must be accurate to cents and less than 100 million"
+    },
+    "title": {
+      "notBlank": "Title cannot be blank",
+      "size": "Title cannot exceed 100 characters"
+    },
+    "date": {
+      "notNull": "Date cannot be blank"
+    },
+    "fileType": {
+      "notNull": "File type cannot be blank"
+    },
+    "authCode": {
+      "notBlank": "Auth code cannot be blank",
+      "size": "Auth code cannot exceed 128 characters"
+    },
+    "clientIp": {
+      "size": "Client IP cannot exceed 64 characters"
+    },
+    "nonceStr": {
+      "size": "Nonce cannot exceed 32 characters"
+    },
+    "sign": {
+      "size": "Signature cannot exceed 1024 characters"
+    },
+    "reqTime": {
+      "notNull": "Request time cannot be blank"
+    },
+    "bizOrderNo": {
+      "size": "Merchant order no. cannot exceed 100 characters",
+      "notBlank": "Merchant order no. cannot be blank"
+    },
+    "description": {
+      "size": "Description cannot exceed 50 characters"
+    },
+    "method": {
+      "notBlank": "Payment method cannot be blank",
+      "size": "Payment method cannot exceed 32 characters"
+    },
+    "provider": {
+      "notBlank": "Pay brand must not be blank",
+      "size": "Pay brand code must not exceed 32 characters"
+    },
+    "otherMethod": {
+      "size": "Other payment method cannot exceed 128 characters"
+    },
+    "limitPay": {
+      "size": "Limit pay type cannot exceed 128 characters"
+    },
+    "opAppId": {
+      "size": "Op app ID cannot exceed 128 characters"
+    },
+    "openId": {
+      "size": "Open ID cannot exceed 128 characters"
+    },
+    "terminalNo": {
+      "size": "Terminal no. cannot exceed 128 characters"
+    },
+    "extraParam": {
+      "size": "Extra param cannot exceed 2048 characters"
+    },
+    "attach": {
+      "size": "Attach cannot exceed 500 characters"
+    },
+    "returnUrl": {
+      "size": "Return URL cannot exceed 200 characters"
+    },
+    "quitUrl": {
+      "size": "Quit URL cannot exceed 200 characters"
+    },
+    "notifyUrl": {
+      "size": "Notify URL cannot exceed 200 characters"
+    },
+    "outOrderNo": {
+      "size": "Channel order no. cannot exceed 150 characters"
+    },
+    "refundNo": {
+      "notBlank": "Refund number cannot be blank",
+      "size": "Refund number cannot exceed 100 characters"
+    },
+    "bizRefundNo": {
+      "size": "Merchant refund no. cannot exceed 100 characters",
+      "notBlank": "Merchant refund no. cannot be blank"
+    },
+    "reason": {
+      "size": "Reason cannot exceed 50 characters"
+    },
+    "bizTransferNo": {
+      "size": "Merchant transfer no. cannot exceed 100 characters",
+      "notNull": "Merchant transfer no. cannot be blank"
+    },
+    "transferNo": {
+      "size": "Transfer no. cannot exceed 100 characters"
+    },
+    "payeeType": {
+      "notBlank": "Payee account type cannot be blank",
+      "size": "Payee account type cannot exceed 32 characters"
+    },
+    "payeeAccount": {
+      "notBlank": "Payee account cannot be blank",
+      "size": "Payee account cannot exceed 100 characters"
+    },
+    "payeeName": {
+      "size": "Payee name cannot exceed 50 characters"
+    },
+    "items": {
+      "notEmpty": "Product config list cannot be empty"
+    },
+    "shortName": {
+      "notBlank": "Short name cannot be blank"
+    },
+    "status": {
+      "notBlank": "Status cannot be blank"
+    },
+    "accountType": {
+      "notBlank": "Account type cannot be blank"
+    },
+    "appAuthToken": {
+      "notBlank": "App auth token cannot be blank"
+    },
+    "isvAppId": {
+      "notBlank": "Alipay application cannot be blank"
+    },
+    "alipayUserId": {
+      "notBlank": "Sub-merchant no. cannot be blank"
+    },
+    "accountName": {
+      "notBlank": "Bank account name cannot be blank"
+    },
+    "cardNo": {
+      "notBlank": "Bank card no. cannot be blank"
+    },
+    "bankName": {
+      "notBlank": "Bank name cannot be blank"
+    },
+    "cardFrontPic": {
+      "notBlank": "Bank card front photo cannot be blank"
+    },
+    "legalName": {
+      "notBlank": "Legal person name cannot be blank"
+    },
+    "certNo": {
+      "notBlank": "ID card no. cannot be blank"
+    },
+    "frontPic": {
+      "notBlank": "ID card front photo cannot be blank"
+    },
+    "backPic": {
+      "notBlank": "ID card back photo cannot be blank"
+    },
+    "licenseNo": {
+      "notBlank": "Business license no. cannot be blank"
+    },
+    "licenseName": {
+      "notBlank": "Business license name cannot be blank"
+    },
+    "licensePic": {
+      "notBlank": "Business license photo cannot be blank"
+    },
+    "appName": {
+      "notBlank": "Application name cannot be blank",
+      "notNull": "Application name cannot be blank"
+    },
+    "appType": {
+      "notBlank": "Application type cannot be blank"
+    },
+    "mchName": {
+      "notBlank": "Merchant name cannot be blank"
+    },
+    "mchShortName": {
+      "notBlank": "Merchant short name cannot be blank"
+    },
+    "publicKey": {
+      "notBlank": "Platform public key cannot be blank; configure daxpay.platform.config.key-config.public-key"
+    },
+    "privateKey": {
+      "notBlank": "Platform private key cannot be blank; configure daxpay.platform.config.key-config.private-key"
+    },
+    "phone": {
+      "notBlank": "Phone number cannot be blank"
+    },
+    "roleId": {
+      "notNull": "Role ID cannot be blank"
+    },
+    "clientCode": {
+      "notBlank": "Client code cannot be blank"
+    },
+    "code": {
+      "notBlank": "Code cannot be blank"
+    },
+    "nameCn": {
+      "notBlank": "Chinese name cannot be blank"
+    },
+    "nameEn": {
+      "notBlank": "English name cannot be blank"
+    },
+    "menuCode": {
+      "notBlank": "Menu code cannot be blank"
+    },
+    "titleCn": {
+      "notBlank": "Menu title (Chinese) cannot be blank"
+    },
+    "titleEn": {
+      "notBlank": "Menu title (English) cannot be blank"
+    },
+    "i18nKey": {
+      "notBlank": "I18n key cannot be blank"
+    },
+    "userIds": {
+      "notEmpty": "User list cannot be empty"
+    },
+    "userId": {
+      "notNull": "User ID cannot be blank"
+    },
+    "newPassword": {
+      "notBlank": "New password cannot be blank"
+    },
+    "configName": {
+      "notBlank": "Config name cannot be blank"
+    },
+    "smsProvider": {
+      "notBlank": "SMS provider must not be blank"
+    },
+    "endpoint": {
+      "notBlank": "Endpoint cannot be blank"
+    },
+    "publicBucket": {
+      "notBlank": "Public bucket cannot be blank"
+    },
+    "privateBucket": {
+      "notBlank": "Private bucket cannot be blank"
+    },
+    "dictId": {
+      "notNull": "Dictionary ID cannot be blank"
+    },
+    "protocolId": {
+      "notNull": "Protocol ID cannot be blank"
+    },
+    "content": {
+      "notBlank": "Protocol content cannot be blank"
+    },
+    "showName": {
+      "notBlank": "Display name cannot be blank"
+    },
+    "type": {
+      "notBlank": "Type cannot be blank"
+    },
+    "clientType": {
+      "notBlank": "Client type cannot be blank"
+    },
+    "email": {
+      "notBlank": "Email cannot be blank"
+    },
+    "realName": {
+      "notBlank": "Name cannot be blank"
+    },
+    "regionCode": {
+      "notBlank": "Region code cannot be blank"
+    },
+    "dictItemId": {
+      "notNull": "Dictionary item ID cannot be blank"
+    },
+    "configItems": {
+      "notEmpty": "Configuration items cannot be empty"
+    },
+    "payOrderId": {
+      "notNull": "Payment order ID cannot be blank"
+    },
+    "orderId": {
+      "notNull": "Order ID cannot be blank"
+    },
+    "reconcileStatementId": {
+      "notNull": "Reconciliation statement ID cannot be blank"
+    },
+    "fileId": {
+      "notNull": "File ID cannot be blank"
+    },
+    "objectKey": {
+      "notBlank": "Object key cannot be blank"
+    },
+    "sessionIds": {
+      "notEmpty": "Session ID list cannot be empty"
+    },
+    "orderSource": {
+      "mustBeNull": "Order source field is not allowed to be set"
+    },
+    "minLengthNotGreaterThanMax": {
+      "assertTrue": "Minimum length cannot be greater than maximum length"
+    },
+    "captchaFailCountNotGreaterThanMax": {
+      "assertTrue": "Captcha trigger failure count cannot be greater than maximum failure count"
+    },
+    "queryCode": {
+      "notBlank": "Query code cannot be blank"
+    },
+    "taskId": {
+      "notNull": "Message ID cannot be blank"
+    },
+    "deleteDay": {
+      "notNull": "Days cannot be blank"
+    },
+    "menuId": {
+      "notNull": "Menu ID cannot be blank"
+    },
+    "oldPassword": {
+      "notBlank": "Old password cannot be blank"
+    },
+    "smsConfigId": {
+      "notNull": "SMS config ID cannot be blank"
+    }
+  }
+}

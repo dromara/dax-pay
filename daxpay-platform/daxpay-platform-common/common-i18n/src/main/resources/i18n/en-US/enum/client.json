@@ -1,0 +1,6 @@
+{
+  "gateway": "Payment Gateway",
+  "admin": "Admin Portal",
+  "isv": "ISV Portal",
+  "merchant": "Merchant Portal"
+}

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <parent>
+        <groupId>org.dromara.daxpay</groupId>
+        <artifactId>daxpay-platform</artifactId>
+        <version>4.0.0-SNAPSHOT</version>
+    </parent>
+
+    <modelVersion>4.0.0</modelVersion>
+    <artifactId>daxpay-platform-common</artifactId>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>common-swagger</module>
+        <module>common-mybatis-plus</module>
+        <module>common-json</module>
+        <module>common-spring</module>
+        <module>common-config</module>
+        <module>common-redis</module>
+        <module>common-request-context</module>
+        <module>common-rocketmq</module>
+        <module>common-translate</module>
+        <module>common-i18n</module>
+    </modules>
+
+    <dependencies>
+        <!-- 核心包 -->
+        <dependency>
+            <groupId>org.dromara.daxpay</groupId>
+            <artifactId>daxpay-platform-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- lombok -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+</project>

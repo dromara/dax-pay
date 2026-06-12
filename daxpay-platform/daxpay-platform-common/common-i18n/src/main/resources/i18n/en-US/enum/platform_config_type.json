@@ -1,0 +1,8 @@
+{
+  "security_password_policy": "Password policy",
+  "security_login": "Login security",
+  "security_session": "Session management",
+  "anomaly_detection": "Anomaly login detection",
+  "security_two_factor_auth": "Two-factor authentication",
+  "url": "System URL settings"
+}

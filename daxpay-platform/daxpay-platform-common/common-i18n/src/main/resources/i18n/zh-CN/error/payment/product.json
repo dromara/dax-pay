@@ -1,0 +1,5 @@
+{
+  "notExist": "支付产品不存在",
+  "duplicateCapability": "支付能力编码重复",
+  "capabilityNotExist": "支付能力不存在"
+}

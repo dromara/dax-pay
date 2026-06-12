@@ -1,0 +1,7 @@
+{
+  "link": "支付链接",
+  "jsapi": "JSAPI对象",
+  "from": "表单数据",
+  "identifier": "标识码",
+  "json": "JSON对象"
+}

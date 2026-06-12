@@ -1,0 +1,12 @@
+{
+  "draft": "草稿",
+  "pre_trial": "预审",
+  "pre_trial_reject": "预审拒绝",
+  "completion": "数据补填",
+  "apply": "申请中",
+  "reject": "驳回",
+  "pass": "通过",
+  "generated": "已生成进件商户",
+  "closed": "关闭",
+  "error": "错误"
+}

@@ -1,0 +1,11 @@
+{
+  "notAllowDelete": "Service provider cannot be deleted",
+  "genFailed": "Service provider number generation failed",
+  "notExist": "Service provider not found",
+  "channelNotExist": "Service provider channel not found",
+  "infoNotExist": "Service provider information not found",
+  "credentialNotExist": "Service provider integration configuration not found",
+  "sessionConfigNotExist": "Service provider session management configuration not found",
+  "passwordPolicyNotExist": "Service provider password policy configuration not found",
+  "loginSecurityNotExist": "Service provider login security configuration not found"
+}

@@ -1,0 +1,5 @@
+{
+  "notExist": "支付方式不存在",
+  "duplicateProvider": "关联支付渠道不可重复",
+  "providerNotExist": "支付渠道不存在"
+}

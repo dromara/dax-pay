@@ -1,0 +1,19 @@
+{
+  "unsupportedBarcodeType": "Unsupported barcode type",
+  "reconcileFileAlreadyDownloaded": "Reconciliation file has already been downloaded or uploaded",
+  "reconcileParseError": "Reconciliation file parsing error",
+  "reconcileDownloadFirst": "Please download the reconciliation file first",
+  "reconcileAlreadyCompleted": "Reconciliation comparison already completed",
+  "merchantNoRefundPermission": "Merchant does not have refund permission",
+  "merchantNoApiPermission": "Merchant does not have API permission",
+  "payOrderNotExist": "Payment order not found",
+  "payOrderExtNotExist": "Payment order extension not found",
+  "refundOrderNotExist": "Refund order not found",
+  "refundOrderExtNotExist": "Refund order extension not found",
+  "refundPayOrderNotExist": "Payment order linked to refund order not found",
+  "transferOrderNotExist": "Transfer order not found",
+  "transferOrderInfoNotExist": "Transfer order information not found",
+  "tradeFlowNotExist": "Trade flow record not found",
+  "callbackTaskNotExist": "Merchant callback notification task not found",
+  "subscribeRecordNotExist": "Merchant subscription notification record not found"
+}

@@ -1,0 +1,9 @@
+{
+  "wait": "Pending",
+  "progress": "Processing",
+  "success": "Success",
+  "close": "Closed",
+  "cancel": "Cancelled",
+  "fail": "Failed",
+  "timeout": "Timeout"
+}

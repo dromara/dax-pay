@@ -1,0 +1,5 @@
+{
+  "strategyNodeNotExist": "Strategy node not found",
+  "ruleNodeNotExist": "Rule node not found",
+  "ruleEntryNotExist": "Rule entry not found"
+}

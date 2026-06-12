@@ -1,0 +1,8 @@
+{
+  "aggregate_pay": "Aggregate Pay",
+  "wechat": "WeChat Pay",
+  "alipay": "Alipay",
+  "union_pay": "UnionPay",
+  "visa": "Visa",
+  "mastercard": "Mastercard"
+}

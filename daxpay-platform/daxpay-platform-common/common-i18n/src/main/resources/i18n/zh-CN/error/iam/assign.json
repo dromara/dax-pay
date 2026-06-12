@@ -1,0 +1,7 @@
+{
+  "roleClientMismatch": "角色所属终端与请求终端不一致",
+  "invalidMenuData": "存在无效的菜单数据",
+  "roleMenuClientMismatch": "角色所属终端与菜单终端不一致",
+  "invalidPermCodeData": "存在无效的权限码数据",
+  "permCodeNotOnSelectedMenus": "存在未挂载到已选菜单的权限码: {0}"
+}

@@ -1,0 +1,13 @@
+{
+  "codeExists": "菜单编码已存在",
+  "cycleDependency": "上级菜单不能是自身或下级菜单",
+  "subpageNoChildren": "子页面不能有下级菜单",
+  "hasChildrenCannotDelete": "有子菜单不可以删除",
+  "invalidType": "无效的菜单类型",
+  "subpageNeedParent": "子页面必须选择上级菜单",
+  "parentNotExist": "上级菜单不存在",
+  "subpageParentMustBeMenu": "子页面的上级菜单必须是菜单类型",
+  "needParentCatalog": "菜单、内嵌页面、外链必须选择上级目录",
+  "parentMustBeCatalog": "菜单、内嵌页面、外链的上级菜单必须是目录类型",
+  "notExist": "菜单不存在"
+}

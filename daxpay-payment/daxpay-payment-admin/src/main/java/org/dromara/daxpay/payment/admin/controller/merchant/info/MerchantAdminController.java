@@ -1,0 +1,120 @@
+package org.dromara.daxpay.payment.admin.controller.merchant.info;
+
+import org.dromara.daxpay.platform.core.annotation.PermCode;
+import org.dromara.daxpay.platform.core.rest.Res;
+import org.dromara.daxpay.platform.core.rest.param.PageParam;
+import org.dromara.daxpay.platform.core.rest.result.PageResult;
+import org.dromara.daxpay.platform.core.rest.result.Result;
+import org.dromara.daxpay.platform.core.validation.ValidationGroup;
+import org.dromara.daxpay.payment.merchant.param.info.MerchantInfoParam;
+import org.dromara.daxpay.payment.merchant.param.info.MerchantInfoQuery;
+import org.dromara.daxpay.payment.merchant.param.info.MerchantRegisterParam;
+import org.dromara.daxpay.payment.merchant.result.info.MerchantInfoResult;
+import org.dromara.daxpay.payment.admin.service.merchant.info.MerchantAdminService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+/// 商户配置(管理)
+@PermCode(menuCode = "payment:merchant")
+@Validated
+@Tag(name = "商户配置(管理)")
+@RestController
+@RequestMapping("/admin/merchant")
+@RequiredArgsConstructor
+public class MerchantAdminController {
+    private final MerchantAdminService merchantService;
+
+        @PermCode(code = "add", nameCn = "商户新增", nameEn = "Merchant Add")
+    @Operation(summary = "新增商户")
+    @PostMapping("/add")
+    public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) MerchantRegisterParam param){
+        merchantService.add(param);
+        return Res.ok();
+    }
+
+    @PermCode(code = "edit", nameCn = "商户编辑", nameEn = "Merchant Edit")
+    @Operation(summary = "修改商户")
+    @PostMapping("/update")
+    public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) MerchantInfoParam param){
+        merchantService.update(param);
+        return Res.ok();
+    }
+
+    @PermCode(code = "view", nameCn = "商户查看", nameEn = "Merchant View")
+    @Operation(summary = "商户分页")
+    @GetMapping("/page")
+    public Result<PageResult<MerchantInfoResult>> page(PageParam pageParam, MerchantInfoQuery param){
+        return Res.ok(merchantService.page(pageParam, param));
+    }
+
+    @PermCode(code = "view", nameCn = "商户查看", nameEn = "Merchant View")
+    @Operation(summary = "根据id查询商户")
+    @GetMapping("/get")
+    public Result<MerchantInfoResult> findById(@NotNull(message = "{validation.field.id.notNull}")Long id){
+        return Res.ok(merchantService.findById(id));
+    }
+
+    @PermCode(code = "view", nameCn = "商户查看", nameEn = "Merchant View")
+    @Operation(summary = "根据商户号查询商户")
+    @GetMapping("/get-by-mch-no")
+    public Result<MerchantInfoResult> findByMchNo(@NotBlank(message = "{validation.field.mchNo.notBlank}") String mchNo){
+        return Res.ok(merchantService.findByMchNo(mchNo));
+    }
+
+    @PermCode(code = "delete", nameCn = "商户删除", nameEn = "Merchant Delete")
+    @Operation(summary = "删除商户")
+    @PostMapping("/delete")
+    public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id){
+        merchantService.delete(id);
+        return Res.ok();
+    }
+
+    @PermCode(code = "edit", nameCn = "商户编辑", nameEn = "Merchant Edit")
+    @Operation(summary = "启用商户")
+    @PostMapping("/enable")
+    public Result<Void> enable(@NotNull(message = "{validation.field.id.notNull}") Long id) {
+        merchantService.enable(id);
+        return Res.ok();
+    }
+
+    @PermCode(code = "edit", nameCn = "商户编辑", nameEn = "Merchant Edit")
+    @Operation(summary = "禁用商户")
+    @PostMapping("/disable")
+    public Result<Void> disable(@NotNull(message = "{validation.field.id.notNull}") Long id) {
+        merchantService.disable(id);
+        return Res.ok();
+    }
+
+    @Operation(summary = "商户下拉列表")
+    @GetMapping("/dropdown")
+    public Result<?> dropdown() {
+        return Res.ok(merchantService.dropdown());
+    }
+
+    @Operation(summary = "校验服务商下商户登录账号是否已存在")
+    @GetMapping("/exists-account-by-isv")
+    public Result<Boolean> existsAccountByIsv(@NotBlank(message = "{validation.field.account.notBlank}") String account,
+                                              @NotBlank(message = "{validation.field.isvNo.notBlank}") String isvNo) {
+        return Res.ok(merchantService.existsAccountByIsvNo(account, isvNo));
+    }
+
+    @Operation(summary = "校验服务商下商户手机号是否已存在")
+    @GetMapping("/exists-phone-by-isv")
+    public Result<Boolean> existsPhoneByIsv(@NotBlank(message = "{validation.field.phone.notBlank}") String phone,
+                                            @NotBlank(message = "{validation.field.isvNo.notBlank}") String isvNo) {
+        return Res.ok(merchantService.existsPhoneByIsvNo(phone, isvNo));
+    }
+
+    @Operation(summary = "校验服务商下商户邮箱是否已存在")
+    @GetMapping("/exists-email-by-isv")
+    public Result<Boolean> existsEmailByIsv(@NotBlank(message = "{validation.field.email.notBlank}") String email,
+                                            @NotBlank(message = "{validation.field.isvNo.notBlank}") String isvNo) {
+        return Res.ok(merchantService.existsEmailByIsvNo(email, isvNo));
+    }
+
+}

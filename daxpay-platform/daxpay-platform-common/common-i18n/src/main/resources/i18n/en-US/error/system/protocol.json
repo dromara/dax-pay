@@ -1,0 +1,6 @@
+{
+  "defaultCannotDelete": "Default protocol cannot be deleted",
+  "notExist": "User protocol not found",
+  "itemNotExist": "User protocol item not found",
+  "defaultItemNotExist": "No default protocol exists for this type"
+}

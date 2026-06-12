@@ -1,0 +1,13 @@
+{
+  "dimensionIdRequired": "评分卡维度ID不能为空",
+  "cannotDeleteForeignEntry": "不能删除非本实例的评分卡条目",
+  "ruleNodeIdRequired": "规则节点ID不能为空",
+  "cannotDeleteForeignRating": "不能删除非本实例的评级标尺条目",
+  "entryCountMismatch": "实例评分卡条目数量须与模型模板一致",
+  "entrySeqMismatch": "实例评分卡条目序号须与模型模板一致",
+  "ratingCountMismatch": "实例评级标尺数量须与模型模板一致",
+  "ratingSeqMismatch": "实例评级标尺排序号须与模型模板一致",
+  "dimensionNotExist": "评分卡维度不存在",
+  "entryNotExist": "评分卡条目不存在",
+  "ratingEntryNotExist": "评级标尺条目不存在"
+}

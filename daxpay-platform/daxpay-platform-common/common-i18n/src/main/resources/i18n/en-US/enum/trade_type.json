@@ -1,0 +1,8 @@
+{
+  "pay": "Payment",
+  "refund": "Refund",
+  "transfer": "Transfer",
+  "allocation": "Allocation",
+  "cashouts": "Withdrawal",
+  "settle": "Settlement"
+}

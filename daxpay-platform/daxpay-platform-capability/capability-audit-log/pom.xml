@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.dromara.daxpay</groupId>
+        <artifactId>daxpay-platform-capability</artifactId>
+        <version>4.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>capability-audit-log</artifactId>
+    <description>审计日志模块</description>
+
+    <dependencies>
+        <!-- web容器 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!-- 切面 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aspectj</artifactId>
+        </dependency>
+        <!-- 认证模块 -->
+        <dependency>
+            <groupId>org.dromara.daxpay</groupId>
+            <artifactId>capability-auth</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- json库 -->
+        <dependency>
+            <groupId>org.dromara.daxpay</groupId>
+            <artifactId>common-json</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 数据访问 -->
+        <dependency>
+            <groupId>org.dromara.daxpay</groupId>
+            <artifactId>common-mybatis-plus</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 请求头获取工具 -->
+        <dependency>
+            <groupId>org.dromara.daxpay</groupId>
+            <artifactId>common-request-context</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- ip库 -->
+        <dependency>
+            <groupId>org.lionsoul</groupId>
+            <artifactId>ip2region</artifactId>
+            <version>${ip2region.version}</version>
+        </dependency>
+        <!-- hutool 请求工具类 -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-http</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
+        <!-- 项目配置 -->
+        <dependency>
+            <groupId>org.dromara.daxpay</groupId>
+            <artifactId>common-config</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
+
+</project>

@@ -1,0 +1,6 @@
+{
+  "company_owner": "Corporate account",
+  "company_not_owner": "Authorized corporate account",
+  "person_owner": "Personal (legal representative)",
+  "person_not_owner": "Personal (non-representative)"
+}

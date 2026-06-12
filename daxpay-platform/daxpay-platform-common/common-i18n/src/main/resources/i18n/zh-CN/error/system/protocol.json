@@ -1,0 +1,6 @@
+{
+  "defaultCannotDelete": "默认协议不可删除",
+  "notExist": "用户协议不存在",
+  "itemNotExist": "用户协议项不存在",
+  "defaultItemNotExist": "该类型下不存在默认协议"
+}

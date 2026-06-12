@@ -1,0 +1,12 @@
+{
+  "draft": "Draft",
+  "pre_trial": "Pre-trial",
+  "pre_trial_reject": "Pre-trial Rejected",
+  "completion": "Data Completion",
+  "apply": "Applying",
+  "reject": "Rejected",
+  "pass": "Passed",
+  "generated": "Merchant Generated",
+  "closed": "Closed",
+  "error": "Error"
+}

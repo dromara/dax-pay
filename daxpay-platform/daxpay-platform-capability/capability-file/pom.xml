@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>org.dromara.daxpay</groupId>
+        <artifactId>daxpay-platform-capability</artifactId>
+        <version>4.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>capability-file</artifactId>
+    <description>文件存储</description>
+
+    <dependencies>
+        <!-- web容器 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <!-- AWS SDK v2 S3 -->
+        <dependency>
+            <groupId>software.amazon.awssdk</groupId>
+            <artifactId>s3</artifactId>
+            <version>${aws-sdk.version}</version>
+        </dependency>
+        <!-- 数据库 -->
+        <dependency>
+            <groupId>org.dromara.daxpay</groupId>
+            <artifactId>common-mybatis-plus</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 认证 -->
+        <dependency>
+            <groupId>org.dromara.daxpay</groupId>
+            <artifactId>capability-auth</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-http</artifactId>
+            <version>${hutool.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- 缓存 -->
+        <dependency>
+            <groupId>org.dromara.daxpay</groupId>
+            <artifactId>capability-cache</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+    </dependencies>
+</project>

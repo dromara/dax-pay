@@ -1,0 +1,446 @@
+{
+  "notBlank": "{0}不能为空",
+  "notEmpty": "{0}不能为空",
+  "lengthRange": "{0}长度必须在{1}到{2}之间",
+  "min": "{0}不能小于{1}",
+  "max": "{0}不能大于{1}",
+  "parameterError": "参数校验失败",
+  "field": {
+    "ip": {
+      "notValid": "IP地址不合法"
+    },
+    "aliAppId": {
+      "notBlank": "支付宝商户appId不可为空"
+    },
+    "authType": {
+      "notBlank": "认证类型不可为空"
+    },
+    "signType": {
+      "notBlank": "签名类型不可为空"
+    },
+    "alipayPublicKey": {
+      "notBlank": "支付宝公钥不可为空"
+    },
+    "mchAppPrivateKey": {
+      "notBlank": "应用私钥不可为空"
+    },
+    "appSecret": {
+      "notBlank": "应用密钥不可为空"
+    },
+    "douyinMchId": {
+      "notBlank": "抖音商户号不可为空"
+    },
+    "userIdType": {
+      "notBlank": "用户标识类型不可为空"
+    },
+    "authCallbackUrl": {
+      "notBlank": "授权回调地址不可为空",
+      "size": "授权回调地址不可超过512位"
+    },
+    "isvNo": {
+      "notBlank": "服务商号不可为空"
+    },
+    "product": {
+      "notBlank": "产品编码不可为空",
+      "size": "支付产品不可超过32位",
+      "notNull": "支付产品必填"
+    },
+    "channel": {
+      "notBlank": "通道编码不可为空",
+      "notNull": "进件通道不可为空",
+      "size": "通道不可超过32位"
+    },
+    "sandbox": {
+      "notNull": "沙箱环境不可为空"
+    },
+    "enable": {
+      "notNull": "是否启用不可为空"
+    },
+    "mchNo": {
+      "notBlank": "商户号不可为空",
+      "size": "商户号不可超过32位",
+      "notNull": "商户号不可为空"
+    },
+    "appId": {
+      "notBlank": "商户AppId不可为空",
+      "size": "应用号不可超过32位"
+    },
+    "subMchId": {
+      "notBlank": "微信子商户号不可为空"
+    },
+    "wxMchId": {
+      "notBlank": "微信商户Id不可为空"
+    },
+    "wxAppId": {
+      "notBlank": "微信应用appId不可为空"
+    },
+    "publicKeyId": {
+      "notBlank": "支付公钥ID不可为空"
+    },
+    "certSerialNo": {
+      "notBlank": "证书序列号不可为空"
+    },
+    "id": {
+      "notNull": "主键不可为空",
+      "mustBeNullOnAdd": "Id需要为空"
+    },
+    "account": {
+      "notBlank": "登录账号不可为空",
+      "size": "账号长度为6-20个字符",
+      "pattern": "账号只能包含字母、数字、下划线和中划线"
+    },
+    "password": {
+      "notBlank": "密码不可为空"
+    },
+    "merchantType": {
+      "notBlank": "代理商类型不可为空"
+    },
+    "subjectType": {
+      "notBlank": "主体类型不可为空"
+    },
+    "pass": {
+      "notNull": "审核结果不可为空"
+    },
+    "applyType": {
+      "notNull": "进件类型不可为空"
+    },
+    "channelMerchantNo": {
+      "notBlank": "通道商户号不可为空"
+    },
+    "channelMerchantName": {
+      "notBlank": "商户名称不可为空"
+    },
+    "tradeIdentity": {
+      "notBlank": "商户交易标识不可为空"
+    },
+    "subMchNo": {
+      "notBlank": "子商户号不可为空"
+    },
+    "parentMchNo": {
+      "notBlank": "父级通道商户号不可为空"
+    },
+    "subMchName": {
+      "notBlank": "子商户名称不可为空"
+    },
+    "orderNo": {
+      "notBlank": "支付订单号不可为空",
+      "size": "支付订单号不可超过100位"
+    },
+    "amount": {
+      "notNull": "退款金额不可为空",
+      "decimalMin": "支付金额不可小于0.01元",
+      "digits": "支付金额精度到分, 且要小于一亿元"
+    },
+    "title": {
+      "notBlank": "名称不可为空",
+      "size": "支付标题不可超过100位"
+    },
+    "date": {
+      "notNull": "日期不可为空"
+    },
+    "fileType": {
+      "notNull": "文件类型不能为空"
+    },
+    "authCode": {
+      "notBlank": "标识码不可为空",
+      "size": "付款码不可超过128位"
+    },
+    "clientIp": {
+      "size": "客户端ip不可超过64位"
+    },
+    "nonceStr": {
+      "size": "随机数不可超过32位"
+    },
+    "sign": {
+      "size": "签名不可超过1024位"
+    },
+    "reqTime": {
+      "notNull": "请求时间必填"
+    },
+    "bizOrderNo": {
+      "size": "商户支付订单号不可超过100位",
+      "notBlank": "商户订单号不可为空"
+    },
+    "description": {
+      "size": "支付描述不可超过50位"
+    },
+    "method": {
+      "notBlank": "支付方式不可为空",
+      "size": "支付方式编码不可超过32位"
+    },
+    "provider": {
+      "notBlank": "支付渠道不可为空",
+      "size": "支付渠道编码不可超过32位"
+    },
+    "otherMethod": {
+      "size": "支付方式编码不可超过128位"
+    },
+    "limitPay": {
+      "size": "限制用户支付类型不能超过128位"
+    },
+    "opAppId": {
+      "size": "opAppId不可超过128位"
+    },
+    "openId": {
+      "size": "用户标识不可超过128位"
+    },
+    "terminalNo": {
+      "size": "终端设备编码不可超过128位"
+    },
+    "extraParam": {
+      "size": "支付扩展参数不可超过2048位"
+    },
+    "attach": {
+      "size": "商户扩展参数不可超过500位"
+    },
+    "returnUrl": {
+      "size": "同步通知URL不可超过200位"
+    },
+    "quitUrl": {
+      "size": "退出地址不可超过200位"
+    },
+    "notifyUrl": {
+      "size": "异步通知地址不可超过200位"
+    },
+    "outOrderNo": {
+      "size": "通道支付订单号不可超过150位"
+    },
+    "refundNo": {
+      "notBlank": "退款号不可为空",
+      "size": "退款号不可超过100位"
+    },
+    "bizRefundNo": {
+      "size": "商户退款号不可超过100位",
+      "notBlank": "商户退款号不可为空"
+    },
+    "reason": {
+      "size": "退款原因不可超过50位"
+    },
+    "bizTransferNo": {
+      "size": "商户转账号不可超过100位",
+      "notNull": "商户转账号必填"
+    },
+    "transferNo": {
+      "size": "转账号不可超过100位"
+    },
+    "payeeType": {
+      "notBlank": "收款人账号类型必填",
+      "size": "收款人账号类型不可超过32位"
+    },
+    "payeeAccount": {
+      "notBlank": "收款人账号必填",
+      "size": "收款人账号不可超过100位"
+    },
+    "payeeName": {
+      "size": "收款人姓名不可超过50位"
+    },
+    "items": {
+      "notEmpty": "产品配置列表不可为空"
+    },
+    "shortName": {
+      "notBlank": "简称不能为空"
+    },
+    "status": {
+      "notBlank": "状态不可为空"
+    },
+    "accountType": {
+      "notBlank": "账户类型不可为空"
+    },
+    "appAuthToken": {
+      "notBlank": "应用授权令牌不可为空"
+    },
+    "isvAppId": {
+      "notBlank": "支付宝应用不可为空"
+    },
+    "alipayUserId": {
+      "notBlank": "子商户号不可为空"
+    },
+    "accountName": {
+      "notBlank": "银行卡账户名不可为空"
+    },
+    "cardNo": {
+      "notBlank": "银行卡号不可为空"
+    },
+    "bankName": {
+      "notBlank": "开户行名称不可为空"
+    },
+    "cardFrontPic": {
+      "notBlank": "银行卡正面照片不可为空"
+    },
+    "legalName": {
+      "notBlank": "法人姓名不可为空"
+    },
+    "certNo": {
+      "notBlank": "身份证号不可为空"
+    },
+    "frontPic": {
+      "notBlank": "身份证人像面照片不可为空"
+    },
+    "backPic": {
+      "notBlank": "身份证国徽面照片不可为空"
+    },
+    "licenseNo": {
+      "notBlank": "营业执照号不可为空"
+    },
+    "licenseName": {
+      "notBlank": "营业执照名称不可为空"
+    },
+    "licensePic": {
+      "notBlank": "营业执照照片不可为空"
+    },
+    "appName": {
+      "notBlank": "应用名称不可为空",
+      "notNull": "应用名称不可为空"
+    },
+    "appType": {
+      "notBlank": "应用类型不可为空"
+    },
+    "wxAppId": {
+      "notBlank": "微信应用AppId不可为空"
+    },
+    "mchName": {
+      "notBlank": "商户名称不可为空"
+    },
+    "mchShortName": {
+      "notBlank": "商户简称不可为空"
+    },
+    "publicKey": {
+      "notBlank": "平台公钥不能为空，请配置 daxpay.platform.config.key-config.public-key"
+    },
+    "privateKey": {
+      "notBlank": "平台私钥不能为空，请配置 daxpay.platform.config.key-config.private-key"
+    },
+    "phone": {
+      "notBlank": "手机号不能为空"
+    },
+    "roleId": {
+      "notNull": "角色ID不可为空"
+    },
+    "clientCode": {
+      "notBlank": "终端编码不可为空"
+    },
+    "code": {
+      "notBlank": "编码不可为空"
+    },
+    "nameCn": {
+      "notBlank": "中文名称不可为空"
+    },
+    "nameEn": {
+      "notBlank": "英文名称不可为空"
+    },
+    "menuCode": {
+      "notBlank": "菜单编码不可为空"
+    },
+    "titleCn": {
+      "notBlank": "菜单标题-中文不可为空"
+    },
+    "titleEn": {
+      "notBlank": "菜单标题-英文不可为空"
+    },
+    "i18nKey": {
+      "notBlank": "国际化key不可为空"
+    },
+    "userIds": {
+      "notEmpty": "用户集合不能为空"
+    },
+    "userId": {
+      "notNull": "用户 ID 不能为空"
+    },
+    "newPassword": {
+      "notBlank": "新密码不能为空"
+    },
+    "configName": {
+      "notBlank": "配置名称不能为空"
+    },
+    "smsProvider": {
+      "notBlank": "短信服务商不可为空"
+    },
+    "endpoint": {
+      "notBlank": "服务端点不能为空"
+    },
+    "publicBucket": {
+      "notBlank": "公开存储桶不能为空"
+    },
+    "privateBucket": {
+      "notBlank": "私有存储桶不能为空"
+    },
+    "dictId": {
+      "notNull": "字典ID不可为空"
+    },
+    "protocolId": {
+      "notNull": "协议id不能为空"
+    },
+    "content": {
+      "notBlank": "协议内容不能为空"
+    },
+    "showName": {
+      "notBlank": "显示名称不能为空"
+    },
+    "type": {
+      "notBlank": "类型不能为空"
+    },
+    "clientType": {
+      "notBlank": "端类型不能为空"
+    },
+    "email": {
+      "notBlank": "邮箱不可为空"
+    },
+    "realName": {
+      "notBlank": "姓名不可为空"
+    },
+    "regionCode": {
+      "notBlank": "区划代码不可为空"
+    },
+    "dictItemId": {
+      "notNull": "字典项主键不可为空"
+    },
+    "configItems": {
+      "notEmpty": "配置项不可为空"
+    },
+    "payOrderId": {
+      "notNull": "支付订单ID不可为空"
+    },
+    "orderId": {
+      "notNull": "订单ID不可为空"
+    },
+    "reconcileStatementId": {
+      "notNull": "对账单ID不可为空"
+    },
+    "fileId": {
+      "notNull": "文件ID不可为空"
+    },
+    "objectKey": {
+      "notBlank": "对象Key不可为空"
+    },
+    "sessionIds": {
+      "notEmpty": "会话ID列表不可为空"
+    },
+    "orderSource": {
+      "mustBeNull": "订单来源字段不允许进行设置"
+    },
+    "minLengthNotGreaterThanMax": {
+      "assertTrue": "最小长度不能大于最大长度"
+    },
+    "captchaFailCountNotGreaterThanMax": {
+      "assertTrue": "触发验证码的失败次数不能大于最大失败次数"
+    },
+    "queryCode": {
+      "notBlank": "查询码不可为空"
+    },
+    "taskId": {
+      "notNull": "消息ID不可为空"
+    },
+    "deleteDay": {
+      "notNull": "天数不可为空"
+    },
+    "menuId": {
+      "notNull": "菜单ID不可为空"
+    },
+    "oldPassword": {
+      "notBlank": "旧密码不能为空"
+    },
+    "smsConfigId": {
+      "notNull": "短信配置ID不能为空"
+    }
+  }
+}

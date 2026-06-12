@@ -1,0 +1,7 @@
+{
+  "roleClientMismatch": "Role client does not match request client",
+  "invalidMenuData": "Invalid menu data exists",
+  "roleMenuClientMismatch": "Role client does not match menu client",
+  "invalidPermCodeData": "Invalid permission code data exists",
+  "permCodeNotOnSelectedMenus": "Permission codes not mounted on selected menus: {0}"
+}

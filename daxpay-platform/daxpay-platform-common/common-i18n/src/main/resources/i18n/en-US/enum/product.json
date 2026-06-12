@@ -1,0 +1,14 @@
+{
+  "alipay_isv": "Alipay (ISV)",
+  "alipay": "Alipay (Direct)",
+  "wechat_isv": "WeChat Pay (ISV)",
+  "wechat_pay": "WeChat Pay (Direct)",
+  "douyin_pay": "Douyin Pay (Direct)",
+  "ums_qrcode": "UMS (C Scan B)",
+  "ums_jsapi": "UMS (JSAPI)",
+  "ums_app": "UMS (APP)",
+  "ums_mini": "UMS (Mini Program)",
+  "ums_h5": "UMS (H5)",
+  "ums_barcode": "UMS (B Scan C)",
+  "lakala_pay": "Lakala Pay"
+}

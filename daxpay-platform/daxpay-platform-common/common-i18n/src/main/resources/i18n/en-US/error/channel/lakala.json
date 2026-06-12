@@ -1,0 +1,6 @@
+{
+  "privateKeyRequired": "Private key is required",
+  "publicKeyRequired": "Public key is required",
+  "lklAppIdRequired": "Lakala application ID is required",
+  "mchSerialNoRequired": "Merchant certificate serial number is required"
+}

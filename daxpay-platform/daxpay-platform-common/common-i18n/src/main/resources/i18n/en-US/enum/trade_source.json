@@ -1,0 +1,7 @@
+{
+  "user": "User Operation",
+  "mch_api": "Merchant API",
+  "cashier_code": "Cashier Code",
+  "checkout": "Checkout Payment",
+  "aggress_pay": "Aggregate/Checkout Payment"
+}

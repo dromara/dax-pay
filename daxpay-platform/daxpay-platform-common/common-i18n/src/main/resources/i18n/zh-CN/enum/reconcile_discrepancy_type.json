@@ -1,0 +1,6 @@
+{
+  "consistent": "一致",
+  "local_not_exists": "本地订单不存在",
+  "remote_not_exists": "远程订单不存在",
+  "not_match": "订单信息不一致"
+}

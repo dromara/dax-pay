@@ -1,0 +1,9 @@
+{
+  "wait": "待支付",
+  "progress": "支付中",
+  "success": "成功",
+  "close": "支付关闭",
+  "cancel": "支付撤销",
+  "fail": "失败",
+  "timeout": "支付超时"
+}

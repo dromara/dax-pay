@@ -1,0 +1,6 @@
+{
+  "codeDefinitionConflict": "Conflicting permission code definitions: {0}",
+  "codeNotConfigured": "Permission code declaration missing code",
+  "nameCnNotConfigured": "Permission code declaration missing nameCn",
+  "nameEnNotConfigured": "Permission code declaration missing nameEn"
+}

@@ -1,0 +1,13 @@
+{
+  "dimensionIdRequired": "Scorecard dimension ID is required",
+  "cannotDeleteForeignEntry": "Cannot delete scorecard entry of another instance",
+  "ruleNodeIdRequired": "Rule node ID is required",
+  "cannotDeleteForeignRating": "Cannot delete rating scale entry of another instance",
+  "entryCountMismatch": "Instance scorecard entry count must match model template",
+  "entrySeqMismatch": "Instance scorecard entry sequence must match model template",
+  "ratingCountMismatch": "Instance rating scale count must match model template",
+  "ratingSeqMismatch": "Instance rating scale order must match model template",
+  "dimensionNotExist": "Scorecard dimension not found",
+  "entryNotExist": "Scorecard entry not found",
+  "ratingEntryNotExist": "Rating scale entry not found"
+}

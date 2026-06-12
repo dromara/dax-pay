@@ -1,0 +1,9 @@
+{
+  "roleNotExisted": "Role does not exist",
+  "roleAlreadyUsed": "The role has users assigned, cannot be deleted",
+  "roleAlreadyExisted": "Role already exists",
+  "permissionDbError": "User has no permission",
+  "internalCannotDelete": "Built-in role cannot be deleted",
+  "assignOutOfScope": "Role assignment exceeds the assignable scope",
+  "notExist": "Role not found"
+}

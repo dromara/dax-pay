@@ -1,0 +1,13 @@
+{
+  "pay": {
+    "create": "Create payment order, order no: {0}, amount: {1}",
+    "success": "Payment success, order no: {0}, amount: {1}",
+    "close": "Payment closed, order no: {0}",
+    "fail": "Payment failed, order no: {0}, reason: {1}"
+  },
+  "refund": {
+    "create": "Create refund, order no: {0}, refund amount: {1}",
+    "success": "Refund success, order no: {0}",
+    "fail": "Refund failed, order no: {0}, reason: {1}"
+  }
+}

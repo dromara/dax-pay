@@ -1,0 +1,6 @@
+{
+  "no_refund": "Not refunded",
+  "refunding": "Refunding",
+  "partial_refund": "Partially refunded",
+  "refunded": "Fully refunded"
+}

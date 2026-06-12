@@ -1,0 +1,14 @@
+{
+  "userInfoNotExists": "User info does not exist",
+  "userPhoneAlreadyExisted": "User phone already exists",
+  "userNonePhoneAndEmail": "Either phone or email must be provided",
+  "oldPasswordError": "Old password is incorrect",
+  "accountExistsInClient": "Account already exists under this client",
+  "phoneUsedInClient": "Phone number already used under this client",
+  "emailUsedInClient": "Email already used under this client",
+  "phoneUsedByOtherInClient": "Phone number already used by another user under this client",
+  "emailUsedByOtherInClient": "Email already used by another user under this client",
+  "dataError": "User data error",
+  "notExist": "User not found",
+  "cannotEditNonAdmin": "Cannot edit non-admin client users"
+}

@@ -1,0 +1,7 @@
+{
+  "paramSetReferenced": "Parameter set is referenced and cannot be deleted",
+  "paramSetCodeGenFailed": "Failed to generate parameter set code",
+  "inputParamCodeExists": "Input parameter code already exists",
+  "paramSetNotExist": "Parameter set not found",
+  "inputParamDefNotExist": "Input parameter definition not found"
+}
