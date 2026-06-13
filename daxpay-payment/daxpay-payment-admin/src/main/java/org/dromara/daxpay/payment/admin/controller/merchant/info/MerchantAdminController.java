@@ -96,25 +96,4 @@ public class MerchantAdminController {
         return Res.ok(merchantService.dropdown());
     }
 
-    @Operation(summary = "校验服务商下商户登录账号是否已存在")
-    @GetMapping("/exists-account-by-isv")
-    public Result<Boolean> existsAccountByIsv(@NotBlank(message = "{validation.field.account.notBlank}") String account,
-                                              @NotBlank(message = "{validation.field.isvNo.notBlank}") String isvNo) {
-        return Res.ok(merchantService.existsAccountByIsvNo(account, isvNo));
-    }
-
-    @Operation(summary = "校验服务商下商户手机号是否已存在")
-    @GetMapping("/exists-phone-by-isv")
-    public Result<Boolean> existsPhoneByIsv(@NotBlank(message = "{validation.field.phone.notBlank}") String phone,
-                                            @NotBlank(message = "{validation.field.isvNo.notBlank}") String isvNo) {
-        return Res.ok(merchantService.existsPhoneByIsvNo(phone, isvNo));
-    }
-
-    @Operation(summary = "校验服务商下商户邮箱是否已存在")
-    @GetMapping("/exists-email-by-isv")
-    public Result<Boolean> existsEmailByIsv(@NotBlank(message = "{validation.field.email.notBlank}") String email,
-                                            @NotBlank(message = "{validation.field.isvNo.notBlank}") String isvNo) {
-        return Res.ok(merchantService.existsEmailByIsvNo(email, isvNo));
-    }
-
 }

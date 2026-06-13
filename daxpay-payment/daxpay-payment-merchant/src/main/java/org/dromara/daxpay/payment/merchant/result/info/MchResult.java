@@ -27,10 +27,4 @@ public class MchResult extends BaseResult {
 
     @Schema(description = "商户应用名称")
     private String appName;
-
-    @Schema(description = "服务商号")
-    private String isvNo;
-
-    @Schema(description = "服务商名称")
-    private String isvName;
 }

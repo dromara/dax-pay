@@ -15,6 +15,5 @@ public class MerchantAccessInfo {
     /// 商户状态
     private String status;
 
-    /// 服务商号
-    private String isvNo;
+
 }

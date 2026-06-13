@@ -115,7 +115,7 @@ public class UserInfoService {
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.oldPasswordError");
         }
         // 验证密码历史
-        passwordPolicyService.validatePasswordHistory(userInfo.getId(), decryptedNewPassword, null);
+        passwordPolicyService.validatePasswordHistory(userInfo.getId(), decryptedNewPassword);
         passwordPolicyService.validatePassword(decryptedNewPassword);
         String passwordHash = BCrypt.hashpw(decryptedNewPassword, BCrypt.gensalt());
         UserInfo update = new UserInfo();
@@ -124,7 +124,7 @@ public class UserInfoService {
         update.setPassword(passwordHash);
         userInfoManager.updateById(update);
         // 保存密码历史记录
-        passwordPolicyService.savePasswordHistory(userInfo.getId(), passwordHash, null);
+        passwordPolicyService.savePasswordHistory(userInfo.getId(), passwordHash);
         // 更新密码过期时间和初始密码标记
         OffsetDateTime passwordExpireTime = this.calculatePasswordExpireTime();
         passwordSecurityManager.updatePasswordExpireTime(userInfo.getId(), passwordExpireTime);

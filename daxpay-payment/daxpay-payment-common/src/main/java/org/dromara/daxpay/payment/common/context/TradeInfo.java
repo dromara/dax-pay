@@ -16,7 +16,4 @@ public class TradeInfo {
     /// 应用号
     private String appId;
 
-    /// 服务商号
-    private String isvNo;
-
 }

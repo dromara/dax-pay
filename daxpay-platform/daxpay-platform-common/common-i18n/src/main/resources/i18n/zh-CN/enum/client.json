@@ -1,6 +1,5 @@
 {
   "gateway": "支付网关",
   "admin": "运营端",
-  "isv": "服务商端",
   "merchant": "商户端"
 }

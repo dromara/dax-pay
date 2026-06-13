@@ -81,7 +81,6 @@
     "mchNotOwnApp": "Merchant does not own this application",
     "mchNotEnabled": "Merchant not enabled",
     "mchAppNotEnabled": "Merchant application not enabled",
-    "isvNotEnabled": "Service provider not enabled",
     "wechatAuthFail": "WeChat authentication failed: {0}",
     "wechatAuthConfigError": "WeChat authentication configuration error: {0}",
     "wechatMiniAuthConfigError": "WeChat mini program authentication configuration error: {0}",

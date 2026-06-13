@@ -12,59 +12,13 @@ import org.springframework.stereotype.Service;
 
 /// # 安全策略配置服务
 ///
-/// 支持平台配置与服务商配置的合并读取
+/// 读取平台安全配置
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class SecurityConfigService {
 
-    private final SystemPlatformConfigService systemPlatformConfigService;/// 获取密码策略配置
-    /// @param isvNo 服务商号，为空则返回平台配置
-    public PlatformPasswordPolicyConfig getPasswordPolicy(String isvNo) {
-        PlatformPasswordPolicyConfig platformConfig = this.getPlatformPasswordPolicy();
-        if (StrUtil.isBlank(isvNo)) {
-            return platformConfig;
-        }
-
-        PlatformPasswordPolicyConfig isvConfig = null;
-        if (isvConfig == null) {
-            return platformConfig;
-        }
-
-        return isvConfig;
-    }
-
-    /// 获取登录安全配置
-    /// @param isvNo 服务商号，为空则返回平台配置
-    public PlatformLoginSecurityConfig getLoginSecurity(String isvNo) {
-        PlatformLoginSecurityConfig platformConfig = this.getPlatformLoginSecurity();
-        if (StrUtil.isBlank(isvNo)) {
-            return platformConfig;
-        }
-
-        PlatformLoginSecurityConfig isvConfig = null;
-        if (isvConfig == null) {
-            return platformConfig;
-        }
-
-        return isvConfig;
-    }
-
-    /// 获取会话管理配置
-    /// @param isvNo 服务商号，为空则返回平台配置
-    public PlatformSessionManagementConfig getSessionManagement(String isvNo) {
-        PlatformSessionManagementConfig platformConfig = this.getPlatformSessionManagement();
-        if (StrUtil.isBlank(isvNo)) {
-            return platformConfig;
-        }
-
-        PlatformSessionManagementConfig isvConfig = null;
-        if (isvConfig == null) {
-            return platformConfig;
-        }
-
-        return isvConfig;
-    }
+    private final SystemPlatformConfigService systemPlatformConfigService;
 
     /// 获取平台密码策略配置
     public PlatformPasswordPolicyConfig getPlatformPasswordPolicy() {

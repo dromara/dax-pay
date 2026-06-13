@@ -74,7 +74,6 @@ public class MchAppInfoService implements MchAppInfoAssistQueryService {
         // 生成应用号
         entity.setAppId(this.generateAppId());
         entity.setMchNo(mchNo);
-        entity.setIsvNo(merchant.getIsvNo());
         mchAppInfoManager.save(entity);
     }
 

@@ -24,8 +24,6 @@ public class MchTenantMetaObjectHandler implements MetaObjectFill {
         metaObjectHandler.strictInsertFill(metaObject, "mchNo", this::getMchNo, String.class);
         // 应用号
         metaObjectHandler.strictInsertFill(metaObject, "appId", this::getAppId, String.class);
-        // 服务商号
-        metaObjectHandler.strictInsertFill(metaObject, "isvNo", this::getIsvNo, String.class);
     }
 
     /// 获取商户号
@@ -37,13 +35,6 @@ public class MchTenantMetaObjectHandler implements MetaObjectFill {
     /// 不是所有情况下都会获取到应用号
     public String getAppId() {
         return apiContext.getTradeInfo().getAppId();
-    }
-
-    /// 获取服务商号
-    /// 不是所有情况下都会获取到服务商号
-    public String getIsvNo() {
-        String isvNo = apiContext.getTradeInfo().getIsvNo();
-        return isvNo;
     }
 
 }

@@ -21,7 +21,6 @@ INSERT INTO base_dict VALUES (1902286175247896576, '网关支付类型', '支付
 INSERT INTO base_dict VALUES (1905238363176165376, '网关收银台类型', '支付', 'gateway_cashier_type', '', 1811365615815487488, '2025-03-27 20:39:58.057782', 1811365615815487488, '2025-03-27 20:39:58.058781', 0, true, false);
 INSERT INTO base_dict VALUES (1902285549071863808, '聚合支付类型', '支付', 'aggregate_pay_type', '', 1811365615815487488, '2025-03-19 17:06:32.314075', 1811365615815487488, '2025-03-24 17:20:41.459492', 2, true, false);
 INSERT INTO base_dict VALUES (1904092914741948416, '付款码支付类型', '支付', 'aggregate_bar_pay_type', '', 1811365615815487488, '2025-03-24 16:48:21.87', 1811365615815487488, '2025-04-10 15:07:38.127186', 2, true, false);
-INSERT INTO base_dict VALUES (1889681841244356608, '服务商状态', '支付', 'isv_status', '', 1811365615815487488, '2025-02-12 22:23:54.201303', 1811365615815487488, '2025-02-12 22:23:54.202303', 0, true, false);
 INSERT INTO base_dict VALUES (1909136633497235456, '通道认证类型', '支付通道', 'channel_auth_type', '', 1811365615815487488, '2025-04-07 14:50:18.126778', 1811365615815487488, '2025-04-07 14:50:18.126778', 0, true, false);
 INSERT INTO base_dict VALUES (1902285697764134912, '网关支付调起方式', '支付', 'gateway_call_type', '', 1811365615815487488, '2025-03-19 17:07:07.763773', 1811365615815487488, '2025-06-04 14:26:05.443785', 2, true, false);
 INSERT INTO base_dict VALUES (1840650057641713664, '支付场景类型', '支付', 'cashier_scene', '', 1811365615815487488, '2024-09-30 15:09:06.025286', 1811365615815487488, '2025-07-03 14:30:23.444221', 1, true, false);
@@ -152,8 +151,6 @@ INSERT INTO base_dict_item VALUES (1904093394268336128, 1904092914741948416, 'ag
 INSERT INTO base_dict_item VALUES (1904093428015706112, 1904092914741948416, 'aggregate_bar_pay_type', 'union_pay', '银联支付', 3, true, '', 1811365615815487488, '2025-03-24 16:50:24.241075', 1811365615815487488, '2025-03-24 16:50:24.241075', 0, false);
 INSERT INTO base_dict_item VALUES (1889592019199250432, 1889586857340620800, 'user_status', 'lock', '锁定', 1, true, '', 1811365615815487488, '2025-02-12 16:26:58.956727', 1811365615815487488, '2025-02-12 16:26:58.956727', 0, false);
 INSERT INTO base_dict_item VALUES (1889592060567670784, 1889586857340620800, 'user_status', 'ban', '封禁(未实装)', 2, true, '', 1811365615815487488, '2025-02-12 16:27:08.819761', 1811365615815487488, '2025-02-12 16:28:36.019193', 1, false);
-INSERT INTO base_dict_item VALUES (1889681884026257408, 1889681841244356608, 'isv_status', 'disabled', '禁用', 1, true, '', 1811365615815487488, '2025-02-12 22:24:04.400184', 1811365615815487488, '2025-02-12 22:24:21.226792', 1, false);
-INSERT INTO base_dict_item VALUES (1889681926099320832, 1889681841244356608, 'isv_status', 'enable', '启用', 0, true, '', 1811365615815487488, '2025-02-12 22:24:14.431976', 1811365615815487488, '2025-02-12 22:24:14.431976', 0, false);
 INSERT INTO base_dict_item VALUES (1909136677222854656, 1909136633497235456, 'channel_auth_type', 'wechat', '微信', 1, true, '', 1811365615815487488, '2025-04-07 14:50:28.5512', 1811365615815487488, '2025-04-07 14:50:28.5512', 0, false);
 INSERT INTO base_dict_item VALUES (1909136784991301632, 1909136633497235456, 'channel_auth_type', 'alipay', '支付宝', 2, true, '', 1811365615815487488, '2025-04-07 14:50:54.245595', 1811365615815487488, '2025-04-07 14:51:07.894418', 1, false);
 INSERT INTO base_dict_item VALUES (1909136824161906688, 1909136633497235456, 'channel_auth_type', 'union_pay', '银联', 3, true, '', 1811365615815487488, '2025-04-07 14:51:03.584872', 1811365615815487488, '2025-04-07 14:51:03.584872', 0, false);
@@ -302,7 +299,6 @@ INSERT INTO iam_perm_menu VALUES (1917045943678099456, 1811365615815487488, '202
 INSERT INTO iam_perm_menu VALUES (1921570991115419648, 1811365615815487488, '2025-05-11 22:20:00.001239', 1811365615815487488, '2025-05-12 11:48:19.202344', 1, false, 1810910433264762880, 'dax-pay-admin', '用户协议', 'UserProtocol', '', false, false, '/baseapi/protocol/UserProtocolList', '/system/config/protocol', '', 0, false, true, false, false, NULL);
 INSERT INTO iam_perm_menu VALUES (1810914501286580224, 0, '2024-07-10 13:50:36.93111', 1811365615815487488, '2025-05-14 19:30:55.397446', 2, false, 1810909511121862656, 'dax-pay-admin', '请求权限', 'PermPathList', '', false, false, 'iam/perm/path/PermPathList', '/system/permission/path', '', 0, false, true, false, false, NULL);
 INSERT INTO iam_perm_menu VALUES (1813782811271446528, 1811365615815487488, '2024-07-18 11:48:15.321777', 1811365615815487488, '2025-06-04 19:55:54.185224', 4, false, 1812113823376666624, 'dax-pay-admin', '平台配置', 'PlatformConfig', '', false, false, '/daxpay/admin/config/platform/PlatformConfig', '/pay/config/basic/platfom', '', -99, false, true, false, false, NULL);
-INSERT INTO iam_perm_menu VALUES (1851455363447775232, 1811365615815487488, '2024-10-30 10:45:31.680337', 1811365615815487488, '2025-06-04 19:56:01.995775', 5, false, 1812113823376666624, 'dax-pay-admin', '服务商管理', 'IsvInfoList', '', false, false, '/daxpay/admin/isv/info/IsvInfoList', '/pay/config/basic/isv', '', -10, false, true, false, false, NULL);
 INSERT INTO iam_perm_menu VALUES (1836248839544733696, 1811365615815487488, '2024-09-18 11:40:13.861746', 1811365615815487488, '2025-06-04 19:57:47.433207', 2, false, 1812115119471128576, 'dax-pay-admin', '交易调试', 'DevelopTrade', '', false, false, '/daxpay/common/develop/trade/DevelopTrade', '/pay/develop/teade', '', 0, false, true, false, false, NULL);
 INSERT INTO iam_perm_menu VALUES (1828329089900580864, 1811365615815487488, '2024-08-27 15:09:58.401939', 1811365615815487488, '2025-06-21 14:31:53.198501', 2, false, 1828321321655308288, 'dax-pay-merchant', '角色管理', 'RoleList', '', false, false, '/iam/role/RoleList.vue', '/system/role', '', 0, false, true, false, false, NULL);
 INSERT INTO iam_perm_menu VALUES (1828391048989757440, 1811365615815487488, '2024-08-27 19:16:10.599848', 1811365615815487488, '2025-10-19 10:34:43.655021', 4, false, 1828329559561965568, 'dax-pay-merchant', '商户应用', 'MchAppList', '', true, false, '/daxpay/merchant/app/MchAppList', '/pay/account/merchant/app', '', 0, false, true, false, false, NULL);
@@ -348,11 +344,9 @@ INSERT INTO iam_perm_path VALUES (3486685753507002421, 'MchAppQuery', 'dax-pay-a
 INSERT INTO iam_perm_path VALUES (4134642223704007728, 'CashierCodeTemplate', 'dax-pay-admin', '', '查询详情', true, '/admin/cashier/code/template/findById', 'GET');
 INSERT INTO iam_perm_path VALUES (3689910885032670264, 'PlatformConfig', 'dax-pay-admin', '', '获取集成配置', true, '/platform/config/integration/get', 'GET');
 INSERT INTO iam_perm_path VALUES (3977581377857283639, 'LakalaPayConfig', 'dax-pay-admin', '', '根据应用ID获取子商户配置', true, '/lakala/config/findByAppId', 'GET');
-INSERT INTO iam_perm_path VALUES (3905292013757554995, 'IsvQuery', 'dax-pay-admin', '', '查询服务商下拉列表', true, '/isv/query/dropdown', 'GET');
 INSERT INTO iam_perm_path VALUES (3905521803785943346, 'PlatformConfig', 'dax-pay-admin', '', '更新平台访问地址配置', true, '/platform/config/url/update', 'POST');
 INSERT INTO iam_perm_path VALUES (4135484660000186933, 'SandIsvConfig', 'dax-pay-admin', '', '获取服务商配置', true, '/isv/sand/config/findByIsvNo', 'GET');
 INSERT INTO iam_perm_path VALUES (7017508927272531000, 'perm', 'dax-pay-admin', '', '权限码目录树', true, '/perm/code/catalogTree', 'GET');
-INSERT INTO iam_perm_path VALUES (3618133438105138745, 'IsvQuery', 'dax-pay-admin', '', '查询启用的服务商下拉列表', true, '/isv/query/dropdownByEnable', 'GET');
 INSERT INTO iam_perm_path VALUES (3618142444517351986, 'PayOrder', 'dax-pay-admin', '', '关闭支付订单', true, '/order/pay/close', 'POST');
 INSERT INTO iam_perm_path VALUES (4121419712341227312, 'dict', 'dax-pay-admin', '', '获取全部字典项', true, '/dict/item/findAll', 'GET');
 INSERT INTO iam_perm_path VALUES (7075825043325006435, 'perm', 'dax-pay-admin', '', '编码是否被使用', true, '/perm/code/existsByCode', 'GET');
@@ -360,7 +354,6 @@ INSERT INTO iam_perm_path VALUES (3690244916735587686, 'MerchantUser', 'dax-pay-
 INSERT INTO iam_perm_path VALUES (3473793064910545972, 'TradeFlow', 'dax-pay-admin', '', '查询各类金额汇总', true, '/record/flow/summary', 'GET');
 INSERT INTO iam_perm_path VALUES (3702579448612402225, 'CashierCodeConfig', 'dax-pay-admin', '', '更新', true, '/cashier/code/config/update', 'POST');
 INSERT INTO iam_perm_path VALUES (7018078495035188326, 'params', 'dax-pay-admin', '', '获取单条', true, '/system/param/findById', 'GET');
-INSERT INTO iam_perm_path VALUES (7364059612069246517, 'IsvGatewayPayConfig', 'dax-pay-admin', '', '获取网关支付配置', true, '/isv/gateway/pay/config/getConfig', 'GET');
 INSERT INTO iam_perm_path VALUES (3617905860689289782, 'client', 'dax-pay-admin', '', '编码是否被使用(不包含自己)', true, '/client/existsByCodeNotId', 'GET');
 INSERT INTO iam_perm_path VALUES (7161621043741877561, 'user', 'dax-pay-admin', '', '修改用户', true, '/user/admin/update', 'POST');
 INSERT INTO iam_perm_path VALUES (3472609801420355893, 'IndexTradeReport', 'dax-pay-admin', '', '支付交易通道统计', true, '/admin/report/index/payChannel', 'GET');
@@ -369,7 +362,6 @@ INSERT INTO iam_perm_path VALUES (7378414827345162297, 'YeePayIsvConfig', 'dax-p
 INSERT INTO iam_perm_path VALUES (7305181884700713520, 'DougongIsvConfig', 'dax-pay-admin', '', '获取服务商配置', true, '/dougong/config/isv/findByIsvNo', 'GET');
 INSERT INTO iam_perm_path VALUES (3559309793520990566, 'CashierCode', 'dax-pay-admin', '', '绑定商户', true, '/cashier/code/bindMerchant', 'POST');
 INSERT INTO iam_perm_path VALUES (3558461838158018661, 'upms', 'dax-pay-admin', '', '保存请求权限关系', true, '/role/menu/save', 'POST');
-INSERT INTO iam_perm_path VALUES (3904674960087527778, 'IsvInfoAdmin', 'dax-pay-admin', '', '服务商分页', true, '/admin/isv/info/page', 'GET');
 INSERT INTO iam_perm_path VALUES (3977349384440788277, 'upms', 'dax-pay-admin', '', '指定角色下的菜单权限树(分配时用)', true, '/role/menu/treeByRole', 'GET');
 INSERT INTO iam_perm_path VALUES (3991937713257931312, 'YeePaySubConfig', 'dax-pay-admin', '', '更新子商户配置', true, '/yeepay/config/sub/update', 'POST');
 INSERT INTO iam_perm_path VALUES (3977866176400470072, 'user', 'dax-pay-admin', '', '根据用户id查询用户 ', true, '/user/admin/findById', 'GET');
@@ -378,7 +370,6 @@ INSERT INTO iam_perm_path VALUES (4051100449740502629, 'merchantAdmin', 'dax-pay
 INSERT INTO iam_perm_path VALUES (7161629822654964791, 'upms', 'dax-pay-admin', '', '指定角色下的请求权限树(分配时用)', true, '/role/code/treeByRole', 'GET');
 INSERT INTO iam_perm_path VALUES (3558519025751568740, 'DevelopTrade', 'dax-pay-admin', '', '退款参数签名', true, '/develop/trade/sign/refund', 'POST');
 INSERT INTO iam_perm_path VALUES (7162243153279476789, 'IndexTradeReport', 'dax-pay-admin', '', '退款交易信息统计', true, '/admin/report/index/refund', 'GET');
-INSERT INTO iam_perm_path VALUES (3703706233268810288, 'IsvInfoAdmin', 'dax-pay-admin', '', '删除服务商', true, '/admin/isv/info/delete', 'POST');
 INSERT INTO iam_perm_path VALUES (3978757867328058680, 'user', 'dax-pay-admin', '', '批量解锁用户', true, '/user/admin/unlockBatch', 'POST');
 INSERT INTO iam_perm_path VALUES (7089902082810067301, 'MerchantCallback', 'dax-pay-admin', '', '发送记录分页', true, '/merchant/notice/callback/record/page', 'GET');
 INSERT INTO iam_perm_path VALUES (3690478210819450214, 'PayOrder', 'dax-pay-admin', '', '撤销支付订单', true, '/order/pay/cancel', 'POST');
@@ -407,7 +398,6 @@ INSERT INTO iam_perm_path VALUES (7005177032505308464, 'AlipayIsvConfig', 'dax-p
 INSERT INTO iam_perm_path VALUES (3978142343552590130, 'PlatformConfig', 'dax-pay-admin', '', '更新平台基础配置', true, '/platform/config/basic/update', 'POST');
 INSERT INTO iam_perm_path VALUES (3630798717531350577, 'LeshuaPayConfig', 'dax-pay-admin', '', '更新子商户配置', true, '/leshua/config/update', 'POST');
 INSERT INTO iam_perm_path VALUES (7305736218916106802, 'TradeFlow', 'dax-pay-admin', '', '查询单条', true, '/record/flow/findById', 'GET');
-INSERT INTO iam_perm_path VALUES (7004004724771927865, 'CashierConfig', 'dax-pay-admin', '', '保存', true, '/isv/checkout/counter/config/save', 'POST');
 INSERT INTO iam_perm_path VALUES (7075545771666530658, 'CheckoutCounter', 'dax-pay-admin', '', '删除', true, '/checkout/counter/config/delete', 'POST');
 INSERT INTO iam_perm_path VALUES (7149246023074395960, 'MchAppQuery', 'dax-pay-admin', '', '根据商户号查询应用下拉列表', true, '/mch/app/query/dropdownByMchNo', 'GET');
 INSERT INTO iam_perm_path VALUES (3904731035932506212, 'user', 'dax-pay-admin', '', '解锁用户', true, '/user/admin/unlock', 'POST');
@@ -425,7 +415,6 @@ INSERT INTO iam_perm_path VALUES (3978421439050102115, 'CashierCodeTemplate', 'd
 INSERT INTO iam_perm_path VALUES (7148391724872841008, 'DevelopSign', 'dax-pay-admin', '', '验证签名', true, '/develop/sign/verifySign', 'POST');
 INSERT INTO iam_perm_path VALUES (3631086788819629153, 'CacheClearService', 'dax-pay-admin', '', '清除指定前缀的缓存', true, '/cache/clear/prefix', 'POST');
 INSERT INTO iam_perm_path VALUES (3846408548983923507, 'AggregateConfig', 'dax-pay-admin', '', '聚合扫码支付配置查询', true, '/aggregate/pay/config/findQrConfigByAppId', 'GET');
-INSERT INTO iam_perm_path VALUES (4122592688595886690, 'IsvInfoAdmin', 'dax-pay-admin', '', '新增服务商', true, '/admin/isv/info/add', 'POST');
 INSERT INTO iam_perm_path VALUES (4063431244915290420, 'PayOrder', 'dax-pay-admin', '', '查询金额汇总', true, '/order/pay/getTotalAmount', 'GET');
 INSERT INTO iam_perm_path VALUES (3775249252372461108, 'TransferOrder', 'dax-pay-admin', '', '转账重试', true, '/order/transfer/retry', 'POST');
 INSERT INTO iam_perm_path VALUES (3702858728961423666, 'FuyouIsvConfig', 'dax-pay-admin', '', '获取服务商配置', true, '/isv/fuyou/config/findByIsvNo', 'GET');
@@ -442,7 +431,6 @@ INSERT INTO iam_perm_path VALUES (3833238624425566517, 'DougongPayConfig', 'dax-
 INSERT INTO iam_perm_path VALUES (3906419890091079521, 'GatewayPayConfig', 'dax-pay-admin', '', '更新网关支付读取配置', true, '/gateway/pay/config/updateReadConfig', 'POST');
 INSERT INTO iam_perm_path VALUES (7364058722323293538, 'dict', 'dax-pay-admin', '', '查询字典项', true, '/dict/item/findById', 'GET');
 INSERT INTO iam_perm_path VALUES (3904674079501791283, 'FuyouPayConfig', 'dax-pay-admin', '', '根据应用ID获取子商户配置', true, '/fuyou/config/findByAppId', 'GET');
-INSERT INTO iam_perm_path VALUES (4134921722995554402, 'CashierConfig', 'dax-pay-admin', '', '获取收银台配置', true, '/isv/checkout/counter/config/findById', 'GET');
 INSERT INTO iam_perm_path VALUES (3691044460032112998, 'user', 'dax-pay-admin', '', '批量封禁用户', true, '/user/admin/banBatch', 'POST');
 INSERT INTO iam_perm_path VALUES (7366027749996114534, 'ChannelConfig', 'dax-pay-admin', '', '根据应用AppId查询配置列表', true, '/channel/config/findAllByAppId', 'GET');
 INSERT INTO iam_perm_path VALUES (3919312779876578613, 'delay', 'dax-pay-admin', '', '删除死信任务', true, '/delay/queue/removeDeadJob', 'POST');
@@ -467,7 +455,6 @@ INSERT INTO iam_perm_path VALUES (3486459245558522209, 'WechatIsvConfig', 'dax-p
 INSERT INTO iam_perm_path VALUES (7161904507271668838, 'MiniQuicklyConfig', 'dax-pay-admin', '', '根据应用ID查询', true, '/mch/mini/quickly/config/findByAppId', 'GET');
 INSERT INTO iam_perm_path VALUES (3760842579133149745, 'DevelopSign', 'dax-pay-admin', '', '生成签名', true, '/develop/sign/genSign', 'POST');
 INSERT INTO iam_perm_path VALUES (3847875311138125921, 'client', 'dax-pay-admin', '', '编码是否被使用', true, '/client/existsByCode', 'GET');
-INSERT INTO iam_perm_path VALUES (3847539937761178930, 'IsvGatewayPayConfig', 'dax-pay-admin', '', '更新网关支付配置', true, '/isv/gateway/pay/config/update', 'POST');
 INSERT INTO iam_perm_path VALUES (7090413354877991219, 'delay', 'dax-pay-admin', '', '获取死信任务分页', true, '/delay/queue/pageDeadJob', 'GET');
 INSERT INTO iam_perm_path VALUES (7306302261232218937, 'WechatPayConfig', 'dax-pay-admin', '', '获取支付配置', true, '/wechat/pay/config/findByAppId', 'GET');
 INSERT INTO iam_perm_path VALUES (3919319566697063523, 'DevelopTrade', 'dax-pay-admin', '', '网关支付链接创建接口', true, '/develop/trade/gateway', 'POST');
@@ -524,7 +511,6 @@ INSERT INTO iam_perm_path VALUES (3905013828642497379, 'MerchantUser', 'dax-pay-
 INSERT INTO iam_perm_path VALUES (3832955131603150389, 'IndexTradeReport', 'dax-pay-admin', '', '退款交易通道统计', true, '/admin/report/index/refundChannel', 'GET');
 INSERT INTO iam_perm_path VALUES (7363443000110113585, 'dict', 'dax-pay-admin', '', '删除字典项', true, '/dict/item/delete', 'POST');
 INSERT INTO iam_perm_path VALUES (7220507377557256034, 'PayOrder', 'dax-pay-admin', '', '查询订单详情', true, '/order/pay/findById', 'GET');
-INSERT INTO iam_perm_path VALUES (3919035690047910192, 'AggregateConfig', 'dax-pay-admin', '', '获取聚合二维码配置详情', true, '/isv/aggregate/pay/config/findQrByIsvNo', 'GET');
 INSERT INTO iam_perm_path VALUES (3472950834708885861, 'UserProtocol', 'dax-pay-admin', '', '查询', true, '/user/protocol/findById', 'GET');
 INSERT INTO iam_perm_path VALUES (7364573091904960048, 'IndexTradeReport', 'dax-pay-admin', '', '交易统计报表', true, '/admin/report/index/tradeStatisticsReport', 'GET');
 INSERT INTO iam_perm_path VALUES (3558462947115296304, 'VbillIsvConfig', 'dax-pay-admin', '', '更新服务商配置', true, '/vbill/config/isv/update', 'POST');
@@ -535,7 +521,6 @@ INSERT INTO iam_perm_path VALUES (3834308634731687990, 'PayOrder', 'dax-pay-admi
 INSERT INTO iam_perm_path VALUES (7221300322922410546, 'merchantAdmin', 'dax-pay-admin', '', '新增商户', true, '/admin/merchant/add', 'POST');
 INSERT INTO iam_perm_path VALUES (4063707445705597241, 'user', 'dax-pay-admin', '', '重置密码', true, '/user/admin/restartPassword', 'POST');
 INSERT INTO iam_perm_path VALUES (7090136089875527474, 'upms', 'dax-pay-admin', '', '给用户分配角色(批量)', true, '/user/role/saveAssignBatch', 'POST');
-INSERT INTO iam_perm_path VALUES (3690807858152289633, 'CashierConfig', 'dax-pay-admin', '', '删除', true, '/isv/checkout/counter/config/delete', 'POST');
 INSERT INTO iam_perm_path VALUES (3474871484641457509, 'GatewayPayConfig', 'dax-pay-admin', '', '更新网关支付配置', true, '/gateway/pay/config/update', 'POST');
 INSERT INTO iam_perm_path VALUES (4063146681923940919, 'loginLog', 'dax-pay-admin', '', '获取登录日志', true, '/log/login/findById', 'GET');
 INSERT INTO iam_perm_path VALUES (3977296612110120293, 'user', 'dax-pay-admin', '', '封禁用户', true, '/user/admin/ban', 'POST');
@@ -547,8 +532,6 @@ INSERT INTO iam_perm_path VALUES (3919594241988571494, 'UserProtocol', 'dax-pay-
 INSERT INTO iam_perm_path VALUES (3617856572385997366, 'mchAppAdmin', 'dax-pay-admin', '', '根据id查询商户应用', true, '/admin/mch/app/findById', 'GET');
 INSERT INTO iam_perm_path VALUES (3991142985481139299, 'mchAppAdmin', 'dax-pay-admin', '', '删除商户应用', true, '/admin/mch/app/delete', 'POST');
 INSERT INTO iam_perm_path VALUES (7364899651136676146, 'LakalaIsvConfig', 'dax-pay-admin', '', '获取服务商配置', true, '/isv/lakala/config/findByIsvNo', 'GET');
-INSERT INTO iam_perm_path VALUES (7076334112863695412, 'AggregateConfig', 'dax-pay-admin', '', '更新聚合付款码支付配置', true, '/isv/aggregate/pay/config/updateBarConfig', 'POST');
-INSERT INTO iam_perm_path VALUES (3762257426504769893, 'CashierConfig', 'dax-pay-admin', '', '修改', true, '/isv/checkout/counter/config/update', 'POST');
 INSERT INTO iam_perm_path VALUES (7076339395673207346, 'dict', 'dax-pay-admin', '', '根据主键删除字典', true, '/dict/delete', 'POST');
 INSERT INTO iam_perm_path VALUES (7162237676441461299, 'TradeSync', 'dax-pay-admin', '', '查询单条', true, '/record/sync/findById', 'GET');
 INSERT INTO iam_perm_path VALUES (7365700301743339315, 'TransferOrder', 'dax-pay-admin', '', '分页查询', true, '/order/transfer/page', 'GET');
@@ -565,7 +548,6 @@ INSERT INTO iam_perm_path VALUES (3978146740706687077, 'AggregateConfig', 'dax-p
 INSERT INTO iam_perm_path VALUES (3690249314768283190, 'CloseRecord', 'dax-pay-admin', '', '分页查询', true, '/record/close/page', 'GET');
 INSERT INTO iam_perm_path VALUES (7377847475064169269, 'CashierCode', 'dax-pay-admin', '', '分页查询', true, '/cashier/code/page', 'GET');
 INSERT INTO iam_perm_path VALUES (7077237915766842673, 'PlatformConfig', 'dax-pay-admin', '', '更新集成配置', true, '/platform/config/integration/update', 'POST');
-INSERT INTO iam_perm_path VALUES (7077519175947858531, 'IsvInfoAdmin', 'dax-pay-admin', '', '根据id查询服务商', true, '/admin/isv/info/findById', 'GET');
 INSERT INTO iam_perm_path VALUES (7378644628829189427, 'IndexTradeReport', 'dax-pay-admin', '', '商户和应用数量统计', true, '/admin/report/index/merchantCount', 'GET');
 INSERT INTO iam_perm_path VALUES (3630573334022153271, 'user', 'dax-pay-admin', '', '添加用户', true, '/user/admin/add', 'POST');
 INSERT INTO iam_perm_path VALUES (4063146502321025072, 'TransferOrder', 'dax-pay-admin', '', '查询单条', true, '/order/transfer/findById', 'GET');
@@ -573,12 +555,9 @@ INSERT INTO iam_perm_path VALUES (7077463109458486373, 'CashierCodeTemplate', 'd
 INSERT INTO iam_perm_path VALUES (3690753105825510705, 'client', 'dax-pay-admin', '', '通过ID查询终端', true, '/client/findById', 'GET');
 INSERT INTO iam_perm_path VALUES (3846972624957159736, 'AggregateConfig', 'dax-pay-admin', '', '聚合付款码支付配置查询', true, '/aggregate/pay/config/findBarConfigByAppId', 'GET');
 INSERT INTO iam_perm_path VALUES (3832906542655026224, 'upms', 'dax-pay-admin', '', '查询当前角色已经选择的请求路径', true, '/role/path/findIdsByRole', 'GET');
-INSERT INTO iam_perm_path VALUES (3618414913839719523, 'IsvInfoAdmin', 'dax-pay-admin', '', '修改服务商', true, '/admin/isv/info/update', 'POST');
 INSERT INTO iam_perm_path VALUES (7365417714316556599, 'RefundOrder', 'dax-pay-admin', '', '退款同步', true, '/order/refund/sync', 'POST');
 INSERT INTO iam_perm_path VALUES (7090465956218168627, 'MiniQuicklyConfig', 'dax-pay-admin', '', '更新', true, '/mch/mini/quickly/config/update', 'POST');
-INSERT INTO iam_perm_path VALUES (3473508085176546918, 'CashierConfig', 'dax-pay-admin', '', '获取指定类型收银台分组列表', true, '/isv/checkout/counter/config/listByType', 'GET');
 INSERT INTO iam_perm_path VALUES (3630808616706204469, 'SandPayConfig', 'dax-pay-admin', '', '获取子商户配置', true, '/sand/config/findByAppId', 'GET');
-INSERT INTO iam_perm_path VALUES (3762864357758874725, 'AggregateConfig', 'dax-pay-admin', '', '更新聚合二维码支付配置', true, '/isv/aggregate/pay/config/updateQrConfig', 'POST');
 INSERT INTO iam_perm_path VALUES (7075781075680911716, 'TransferOrder', 'dax-pay-admin', '', '查询金额汇总', true, '/order/transfer/getTotalAmount', 'GET');
 INSERT INTO iam_perm_path VALUES (7004335695659623217, 'UserProtocol', 'dax-pay-admin', '', '取消默认', true, '/user/protocol/cancelDefault', 'POST');
 INSERT INTO iam_perm_path VALUES (4063714944799434040, 'WechatPayConfig', 'dax-pay-admin', '', '获取特约商户配置', true, '/wechat/pay/config/findSubByAppId', 'GET');
@@ -599,7 +578,6 @@ INSERT INTO iam_perm_path VALUES (3691036583078749796, 'CacheClearService', 'dax
 INSERT INTO iam_perm_path VALUES (7075209119164217189, 'delay', 'dax-pay-admin', '', '获取桶信息列表', true, '/delay/queue/getBucket', 'GET');
 INSERT INTO iam_perm_path VALUES (4135491252724852068, 'MerchantInfo', 'dax-pay-admin', '', '启用的商户下拉列表', true, '/merchant/query/dropdownByEnable', 'GET');
 INSERT INTO iam_perm_path VALUES (3545797895211005753, 'CashierCode', 'dax-pay-admin', '', '修改', true, '/cashier/code/update', 'POST');
-INSERT INTO iam_perm_path VALUES (3834873577580409956, 'AggregateConfig', 'dax-pay-admin', '', '获取聚合付款码配置详情', true, '/isv/aggregate/pay/config/findBarByIsvNo', 'GET');
 INSERT INTO iam_perm_path VALUES (7305512803223416932, 'dict', 'dax-pay-admin', '', '查询字典项列表', true, '/dict/item/findByDictionaryId', 'GET');
 INSERT INTO iam_perm_path VALUES (7377240569596306992, 'IndexTradeReport', 'dax-pay-admin', '', '支付交易信息统计', true, '/admin/report/index/pay', 'GET');
 INSERT INTO iam_perm_path VALUES (7291381901241639777, 'params', 'dax-pay-admin', '', '判断编码是否存在(不包含自己)', true, '/system/param/existsByKeyNotId', 'GET');
@@ -617,7 +595,6 @@ INSERT INTO iam_perm_path VALUES (3918802584973107812, NULL, 'dax-pay-admin', 'b
 INSERT INTO iam_perm_path VALUES (3919084099396068965, NULL, 'dax-pay-admin', 'merchant', '(DaxPay)商户管理', false, NULL, NULL);
 INSERT INTO iam_perm_path VALUES (3559307392651256934, NULL, 'dax-pay-admin', 'LakalaPay', '(DaxPay通道)拉卡拉支付', false, NULL, NULL);
 INSERT INTO iam_perm_path VALUES (7004333707103330657, NULL, 'dax-pay-admin', 'SandPay', '(DaxPay通道)杉德支付', false, NULL, NULL);
-INSERT INTO iam_perm_path VALUES (7089007986599801910, NULL, 'dax-pay-admin', 'isv', '(DaxPay)服务商管理', false, NULL, NULL);
 INSERT INTO iam_perm_path VALUES (7293359017294245936, NULL, 'dax-pay-admin', 'GatewayPay', '(DaxPay)网关支付配置', false, NULL, NULL);
 INSERT INTO iam_perm_path VALUES (4135260180024812134, NULL, 'dax-pay-admin', 'DaxPayPlatform', '(DaxPay)支付平台', false, NULL, NULL);
 INSERT INTO iam_perm_path VALUES (7364004627159802469, NULL, 'dax-pay-admin', 'TradeOrder', '(DaxPay)交易订单', false, NULL, NULL);
@@ -633,13 +610,11 @@ INSERT INTO iam_perm_path VALUES (7221350724299612980, 'TradeOrder', 'dax-pay-ad
 INSERT INTO iam_perm_path VALUES (3486970502003647798, 'report', 'dax-pay-admin', 'IndexTradeReport', '运营平台首页交易报表', false, NULL, NULL);
 INSERT INTO iam_perm_path VALUES (3546923589009748326, 'dougong', 'dax-pay-admin', 'DougongPayConfig', '斗拱支付配置', false, NULL, NULL);
 INSERT INTO iam_perm_path VALUES (3546412303080710712, 'merchant', 'dax-pay-admin', 'merchantAdmin', '商户配置(管理)', false, NULL, NULL);
-INSERT INTO iam_perm_path VALUES (7378076405346940257, 'isv', 'dax-pay-admin', 'IsvChannelConfig', '通道配置', false, NULL, NULL);
 INSERT INTO iam_perm_path VALUES (7292513299511914851, 'starter', 'dax-pay-admin', 'loginLog', '登录日志', false, NULL, NULL);
 INSERT INTO iam_perm_path VALUES (3688837546988941879, 'channel', 'dax-pay-admin', 'WechatIsvConfig', '微信服务商配置', false, NULL, NULL);
 INSERT INTO iam_perm_path VALUES (7293914068030732341, 'yeepay', 'dax-pay-admin', 'YeePaySubConfig', '易宝子商户配置', false, NULL, NULL);
 INSERT INTO iam_perm_path VALUES (4136102594138628963, 'LakalaPay', 'dax-pay-admin', 'LakalaIsvConfig', '拉卡拉服务商配置', false, NULL, NULL);
 INSERT INTO iam_perm_path VALUES (3618754697289294898, 'paymentAssist', 'dax-pay-admin', 'ChannelAuth', '通道认证', false, NULL, NULL);
-INSERT INTO iam_perm_path VALUES (7233685226263032371, 'paymentAssist', 'dax-pay-admin', 'IsvQuery', '服务商信息查询', false, NULL, NULL);
 INSERT INTO iam_perm_path VALUES (4049643369166825013, 'MerchantNotice', 'dax-pay-admin', 'MerchantCallback', '商户回调通知', false, NULL, NULL);
 INSERT INTO iam_perm_path VALUES (3616779956339881012, 'paymentAssist', 'dax-pay-admin', 'MchAppQuery', '商户应用信息查询', false, NULL, NULL);
 INSERT INTO iam_perm_path VALUES (3544389210342711863, 'merchant', 'dax-pay-admin', 'MerchantUser', '商户用户管理', false, NULL, NULL);
@@ -675,7 +650,6 @@ INSERT INTO iam_perm_path VALUES (7219332210043728689, 'GatewayPay', 'dax-pay-ad
 INSERT INTO iam_perm_path VALUES (7149295316447279152, 'DaxPayPlatform', 'dax-pay-admin', 'PlatformConfig', '支付平台配置', false, NULL, NULL);
 INSERT INTO iam_perm_path VALUES (7305742820214124644, 'FuyouPay', 'dax-pay-admin', 'FuyouIsvConfig', '富友服务商配置', false, NULL, NULL);
 INSERT INTO iam_perm_path VALUES (3617851070513178164, 'iam', 'dax-pay-admin', 'client', '终端管理', false, NULL, NULL);
-INSERT INTO iam_perm_path VALUES (7089291646926730594, 'isv', 'dax-pay-admin', 'IsvInfoAdmin', '服务商管理', false, NULL, NULL);
 INSERT INTO iam_perm_path VALUES (4050486728998609202, 'starter', 'dax-pay-admin', 'FilePlatform', '文件存储平台管理', false, NULL, NULL);
 INSERT INTO iam_perm_path VALUES (3834926573165032038, 'dougong', 'dax-pay-admin', 'DougongIsvConfig', '斗拱服务商配置', false, NULL, NULL);
 INSERT INTO iam_perm_path VALUES (3544722366627406642, 'TradeRecord', 'dax-pay-admin', 'TradeFlow', '交易流水记录', false, NULL, NULL);
@@ -718,9 +692,7 @@ INSERT INTO iam_perm_path VALUES (3690193265425003831, 'GatewayPayConfig', 'dax-
 INSERT INTO iam_perm_path VALUES (3546082463302508853, 'operateLog', 'dax-pay-merchant', '', '获取日志分页', true, '/log/operate/findById', 'GET');
 INSERT INTO iam_perm_path VALUES (7365699185773065777, 'MchAppQuery', 'dax-pay-merchant', '', '查询启应用下拉列表', true, '/mch/app/query/dropdownByEnable', 'GET');
 INSERT INTO iam_perm_path VALUES (7004335687100217652, 'LakalaPayConfig', 'dax-pay-merchant', '', '根据应用ID获取子商户配置', true, '/lakala/config/findByAppId', 'GET');
-INSERT INTO iam_perm_path VALUES (7077462022882144563, 'IsvQuery', 'dax-pay-merchant', '', '查询服务商下拉列表', true, '/isv/query/dropdown', 'GET');
 INSERT INTO iam_perm_path VALUES (3833180531539916853, 'perm', 'dax-pay-merchant', '', '权限码目录树', true, '/perm/code/catalogTree', 'GET');
-INSERT INTO iam_perm_path VALUES (3559589971447854392, 'IsvQuery', 'dax-pay-merchant', '', '查询启用的服务商下拉列表', true, '/isv/query/dropdownByEnable', 'GET');
 INSERT INTO iam_perm_path VALUES (4050252722752468324, 'PayOrder', 'dax-pay-merchant', '', '关闭支付订单', true, '/order/pay/close', 'POST');
 INSERT INTO iam_perm_path VALUES (4122264127909804088, 'MiniMchOrderQuery', 'dax-pay-merchant', '', '退款订单详情', true, '/mini/mch/order/query/findRefundOrderById', 'GET');
 INSERT INTO iam_perm_path VALUES (7005128658271626805, 'dict', 'dax-pay-merchant', '', '获取全部字典项', true, '/dict/item/findAll', 'GET');
@@ -981,7 +953,6 @@ INSERT INTO iam_perm_path VALUES (4063150895250563633, 'merchant', 'dax-pay-merc
 INSERT INTO iam_perm_path VALUES (3631416655259971890, 'channel', 'dax-pay-merchant', 'WechatIsvConfig', '微信服务商配置', false, NULL, NULL);
 INSERT INTO iam_perm_path VALUES (3833743279630136118, 'yeepay', 'dax-pay-merchant', 'YeePaySubConfig', '易宝子商户配置', false, NULL, NULL);
 INSERT INTO iam_perm_path VALUES (7220785571175752292, 'paymentAssist', 'dax-pay-merchant', 'ChannelAuth', '通道认证', false, NULL, NULL);
-INSERT INTO iam_perm_path VALUES (3978984572912349240, 'paymentAssist', 'dax-pay-merchant', 'IsvQuery', '服务商信息查询', false, NULL, NULL);
 INSERT INTO iam_perm_path VALUES (3977072307510208056, 'MerchantNotice', 'dax-pay-merchant', 'MerchantCallback', '商户回调通知', false, NULL, NULL);
 INSERT INTO iam_perm_path VALUES (7161626529173300280, 'paymentAssist', 'dax-pay-merchant', 'MchAppQuery', '商户应用信息查询', false, NULL, NULL);
 INSERT INTO iam_perm_path VALUES (7365135135617004339, 'baseapi', 'dax-pay-merchant', 'dict', '字典管理', false, NULL, NULL);

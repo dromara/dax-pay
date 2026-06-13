@@ -25,10 +25,6 @@ public class MerchantInfoQuery {
     @Schema(description = "主体类型")
     private String subjectType;
 
-    /// 服务商号
-    @Schema(description = "服务商号")
-    private String isvNo;
-
     /// 状态
     /// @see MerchantStatusEnum
     @QueryParam(type = QueryParam.CompareTypeEnum.EQ)

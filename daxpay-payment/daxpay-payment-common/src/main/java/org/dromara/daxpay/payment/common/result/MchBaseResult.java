@@ -22,10 +22,4 @@ public class MchBaseResult extends BaseResult {
 
     @Schema(description = "商户名称")
     private String mchName;
-
-    @Schema(description = "服务商号")
-    private String isvNo;
-
-    @Schema(description = "服务商名称")
-    private String isvName;
 }

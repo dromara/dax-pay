@@ -26,13 +26,6 @@ public class PasswordPolicyService {
 
     /// 验证密码强度
     public void validatePassword(String password) {
-        this.validatePassword(password, null);
-    }
-
-    /// 验证密码强度
-    /// @param password 密码
-    /// @param isvNo 服务商号（可选）
-    public void validatePassword(String password, String isvNo) {
         if (StrUtil.isBlank(password)) {
             // 密码不能为空
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.password.notBlank");
@@ -42,7 +35,7 @@ public class PasswordPolicyService {
             // 密码不能包含中文字符
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.password.noChinese");
         }
-        PasswordPolicy config = this.getPolicyConfig(isvNo);
+        PasswordPolicy config = this.getPolicyConfig();
         if (!config.enabled()) {
             return;
         }
@@ -73,11 +66,8 @@ public class PasswordPolicyService {
     }
 
     /// 验证密码是否在历史记录中
-    /// @param userId 用户ID
-    /// @param newPassword 新密码（明文）
-    /// @param isvNo 服务商号（可选）
-    public void validatePasswordHistory(Long userId, String newPassword, String isvNo) {
-        PasswordPolicy config = this.getPolicyConfig(isvNo);
+    public void validatePasswordHistory(Long userId, String newPassword) {
+        PasswordPolicy config = this.getPolicyConfig();
         if (!config.enabled() || config.historyCount() <= 0) {
             return;
         }
@@ -92,19 +82,16 @@ public class PasswordPolicyService {
     }
 
     /// 保存密码历史记录
-    /// @param userId 用户ID
-    /// @param passwordHash 密码哈希
-    /// @param isvNo 服务商号（可选）
-    public void savePasswordHistory(Long userId, String passwordHash, String isvNo) {
-        PasswordPolicy config = this.getPolicyConfig(isvNo);
+    public void savePasswordHistory(Long userId, String passwordHash) {
+        PasswordPolicy config = this.getPolicyConfig();
         passwordHistoryManager.addHistory(userId, passwordHash);
         if (config.historyCount() > 0) {
             passwordHistoryManager.deleteOldest(userId, config.historyCount());
         }
     }
 
-    private PasswordPolicy getPolicyConfig(String isvNo) {
-        PlatformPasswordPolicyConfig config = iamSecurityConfigService.getPasswordPolicy(isvNo);
+    private PasswordPolicy getPolicyConfig() {
+        PlatformPasswordPolicyConfig config = iamSecurityConfigService.getPasswordPolicy();
         return new PasswordPolicy(
                 Boolean.TRUE.equals(config.getEnabled()),
                 config.getMinLength(),

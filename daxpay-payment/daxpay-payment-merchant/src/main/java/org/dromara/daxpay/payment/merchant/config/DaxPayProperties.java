@@ -11,6 +11,4 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "daxpay")
 public class DaxPayProperties {
 
-    /// 当前部署所属的服务商号，商户端独立部署时配置
-    private String isvNo;
 }

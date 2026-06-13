@@ -34,8 +34,7 @@ public class MerchantCredentialService {
             var merchant = merchantInfoManager.findByMchNo(mchNo)
                     .orElseThrow(() -> new DataNotExistException("error.payment.merchant.merchantNotExist"));
             var credential = new MerchantCredential();
-            credential.setMchNo(mchNo)
-                    .setIsvNo(merchant.getIsvNo());
+            credential.setMchNo(mchNo);
             credentialManager.save(credential);
             return credential.toResult().setPlatformPublicKey(publicKey);
         }

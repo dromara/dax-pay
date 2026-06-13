@@ -18,7 +18,7 @@ import java.lang.annotation.*;
 /// 使用示例：
 /// ```java
 /// // 实体翻译：
-/// @Trans(entity = IsvInfo.class, source = "isvNo", result = "name")
+/// @Trans(entity = MerchantInfo.class, source = "mchNo", result = "name")
 /// private String isvName;
 ///
 /// // 字典翻译：
@@ -44,7 +44,7 @@ public @interface Trans {
 
     /// 源字段名（当前 Result 中作为查询条件的字段名）
     /// 翻译时从当前 Result 对象中读取此字段的值，作为数据库查询的条件值
-    /// 例如：source = "isvNo" 表示取当前对象的 isvNo 属性值
+    /// 例如：source = "mchNo" 表示取当前对象的 mchNo 属性值
     String source();
 
     /// 目标实体中的匹配字段名

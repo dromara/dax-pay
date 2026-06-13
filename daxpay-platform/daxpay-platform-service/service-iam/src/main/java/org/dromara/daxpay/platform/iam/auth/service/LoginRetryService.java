@@ -30,14 +30,12 @@ public class LoginRetryService {
     private final UserPasswordSecurityManager passwordSecurityManager;
 
     /// 登录前检查
-    /// @param userDetail 用户详情
-    /// @param isvNo 服务商号（可选）
-    public void checkBeforeLogin(UserDetail userDetail, String isvNo) {
+    public void checkBeforeLogin(UserDetail userDetail) {
         if (!UserStatusEnum.NORMAL.getCode().equals(userDetail.getStatus())) {
             throw new LoginFailureException(userDetail.getAccount(), "用户状态异常");
         }
 
-        LoginRetryPolicyConfig config = this.getPolicyConfig(isvNo);
+        LoginRetryPolicyConfig config = this.getPolicyConfig();
         if (!config.lockoutEnabled()) {
             return;
         }
@@ -67,11 +65,6 @@ public class LoginRetryService {
         throw new LoginFailureException(userDetail.getAccount(), "登录失败次数过多，请" + remainingMinutes + "分钟后重试");
     }
 
-    /// 登录前检查（无服务商号）
-    public void checkBeforeLogin(UserDetail userDetail) {
-        this.checkBeforeLogin(userDetail, null);
-    }
-
     /// 检查并重置失败计数
     /// 如果上次失败时间超过配置的重置时长，则重置失败计数
     private void checkAndResetFailureCount(Long userId, UserPasswordSecurity security, LoginRetryPolicyConfig config) {
@@ -90,16 +83,13 @@ public class LoginRetryService {
     }
 
     /// 登录失败处理
-    /// @param userId 用户ID
-    /// @param account 账号
-    /// @param isvNo 服务商号（可选）
     @Transactional(rollbackFor = Exception.class)
-    public void onLoginFailure(Long userId, String account, String isvNo) {
+    public void onLoginFailure(Long userId, String account) {
         if (userId == null || StrUtil.isBlank(account)) {
             return;
         }
 
-        LoginRetryPolicyConfig config = this.getPolicyConfig(isvNo);
+        LoginRetryPolicyConfig config = this.getPolicyConfig();
         if (!config.lockoutEnabled()) {
             return;
         }
@@ -112,11 +102,6 @@ public class LoginRetryService {
         OffsetDateTime lockTime = OffsetDateTime.now(ZoneOffset.UTC).plusMinutes(config.lockoutDurationMinutes());
         passwordSecurityManager.lockAccount(userId, lockTime);
         log.info("用户[{}]登录失败次数达到上限[{}]，锁定至[{}]", account, config.maxFailedAttempts(), lockTime);
-    }
-
-    /// 登录失败处理（无服务商号）
-    public void onLoginFailure(Long userId, String account) {
-        this.onLoginFailure(userId, account, null);
     }
 
     /// 登录成功处理
@@ -197,8 +182,8 @@ public class LoginRetryService {
     }
 
     /// 获取登录重试策略配置
-    private LoginRetryPolicyConfig getPolicyConfig(String isvNo) {
-        PlatformLoginSecurityConfig config = iamSecurityConfigService.getLoginSecurity(isvNo);
+    private LoginRetryPolicyConfig getPolicyConfig() {
+        PlatformLoginSecurityConfig config = iamSecurityConfigService.getLoginSecurity();
         return new LoginRetryPolicyConfig(
                 Boolean.TRUE.equals(config.getLockoutEnabled()),
                 config.getFailureResetMinutes() == null ? 0 : config.getFailureResetMinutes(),

@@ -21,9 +21,6 @@ public class MchBaseEntity extends MpBaseEntity {
     @TableField(updateStrategy = FieldStrategy.NEVER, fill = FieldFill.INSERT)
     private String mchNo;
 
-    /// 服务商号
-    private String isvNo;
-
 }
 
 

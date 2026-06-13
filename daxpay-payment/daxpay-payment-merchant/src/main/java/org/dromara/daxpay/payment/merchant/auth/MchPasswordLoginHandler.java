@@ -32,7 +32,6 @@ import java.util.Objects;
 
 /// # 商户端密码登录处理器
 ///
-/// 增加服务商(isvNo)维度的用户查找
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -120,7 +119,6 @@ public class MchPasswordLoginHandler implements AbstractAuthentication {
     }
 
     /// 根据终端编码+账号加载用户
-    /// 商户端优先使用isvNo维度查找用户
     public UserInfoResult loadUserByClientCodeAndAccount(String clientCode, String account) throws UserNotFoundException {
         // 回退到默认查找方式（终端维度）
         UserInfoResult userInfoResult = userQueryService.findByClientCodeAndAccount(clientCode, account);

@@ -81,7 +81,6 @@
     "mchNotOwnApp": "该商户不拥有该应用",
     "mchNotEnabled": "商户未启用",
     "mchAppNotEnabled": "商户应用未启用",
-    "isvNotEnabled": "服务商未启用",
     "wechatAuthFail": "微信认证失败: {0}",
     "wechatAuthConfigError": "微信认证配置错误: {0}",
     "wechatMiniAuthConfigError": "微信小程序认证配置错误: {0}",

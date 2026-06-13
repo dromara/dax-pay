@@ -40,10 +40,6 @@ public class MerchantInfoParam {
     @Schema(description = "状态")
     private String status;
 
-    /// 服务商号
-    @Schema(description = "服务商号")
-    private String isvNo;
-
     /// 是否创建默认应用
     @Schema(description = "是否创建默认应用")
     private Boolean createDefaultApp;

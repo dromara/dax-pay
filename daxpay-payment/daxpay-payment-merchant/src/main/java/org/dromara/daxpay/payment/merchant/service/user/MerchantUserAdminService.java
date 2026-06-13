@@ -114,7 +114,7 @@ public class MerchantUserAdminService {
         userInfoManager.save(userInfo);
 
         // 保存密码历史记录
-        passwordPolicyService.savePasswordHistory(userInfo.getId(), passwordHash, null);
+        passwordPolicyService.savePasswordHistory(userInfo.getId(), passwordHash);
 
         // 创建用户扩展信息
         OffsetDateTime passwordExpireTime = this.calculatePasswordExpireTime();

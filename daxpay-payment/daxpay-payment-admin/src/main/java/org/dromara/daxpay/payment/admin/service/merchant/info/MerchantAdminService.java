@@ -77,15 +77,7 @@ public class MerchantAdminService {
 
     /// 创建商户管理员
     public void createMerchantAdmin(MerchantRegisterParam param, MerchantInfo merchant) {
-        // 校验服务商下商户登录账号是否已存在
-        if (this.existsAccountByIsvNo(param.getAccount(), merchant.getIsvNo())) {
-            throw new BizException(CommonCode.FAIL_CODE, "error.payment.merchant.accountExistsInIsv");
-        }
-        // 校验服务商下商户手机号是否已存在
-        if (this.existsPhoneByIsvNo(param.getPhone(), merchant.getIsvNo())) {
-            throw new BizException(CommonCode.FAIL_CODE, "error.payment.merchant.phoneUsedInIsv");
-        }
-        // 创建用户（跳过通用重复校验，因为已做服务商维度校验）
+        // 创建用户
         var userInfoParam = new UserInfoParam();
         MerchantInfoConvert.CONVERT.copy(param, userInfoParam);
         // 用户名称
@@ -188,45 +180,4 @@ public class MerchantAdminService {
                 .collect(Collectors.toList());
     }
 
-    /// 校验服务商下商户登录账号是否已存在
-    public boolean existsAccountByIsvNo(String account, String isvNo) {
-        MPJLambdaWrapper<MerchantUser> wrapper = new MPJLambdaWrapper<>();
-        wrapper.selectAll(MerchantUser.class)
-                .innerJoin(UserInfo.class, UserInfo::getId, MerchantUser::getUserId)
-                .innerJoin(MerchantInfo.class, MerchantInfo::getMchNo, MerchantUser::getMchNo)
-                .eq(UserInfo::getAccount, account)
-                .eq(UserInfo::getClientCode, ClientEnum.MERCHANT.getCode())
-                .eq(MerchantInfo::getIsvNo, isvNo);
-        return merchantUserManager.selectJoinCount(wrapper) > 0;
-    }
-
-    /// 校验服务商下商户手机号是否已存在
-    public boolean existsPhoneByIsvNo(String phone, String isvNo) {
-        if (StrUtil.isBlank(phone)) {
-            return false;
-        }
-        MPJLambdaWrapper<MerchantUser> wrapper = new MPJLambdaWrapper<>();
-        wrapper.selectAll(MerchantUser.class)
-                .innerJoin(UserInfo.class, UserInfo::getId, MerchantUser::getUserId)
-                .innerJoin(MerchantInfo.class, MerchantInfo::getMchNo, MerchantUser::getMchNo)
-                .eq(UserInfo::getPhone, phone)
-                .eq(UserInfo::getClientCode, ClientEnum.MERCHANT.getCode())
-                .eq(MerchantInfo::getIsvNo, isvNo);
-        return merchantUserManager.selectJoinCount(wrapper) > 0;
-    }
-
-    /// 校验服务商下商户邮箱是否已存在
-    public boolean existsEmailByIsvNo(String email, String isvNo) {
-        if (StrUtil.isBlank(email)) {
-            return false;
-        }
-        MPJLambdaWrapper<MerchantUser> wrapper = new MPJLambdaWrapper<>();
-        wrapper.selectAll(MerchantUser.class)
-                .innerJoin(UserInfo.class, UserInfo::getId, MerchantUser::getUserId)
-                .innerJoin(MerchantInfo.class, MerchantInfo::getMchNo, MerchantUser::getMchNo)
-                .eq(UserInfo::getEmail, email)
-                .eq(UserInfo::getClientCode, ClientEnum.MERCHANT.getCode())
-                .eq(MerchantInfo::getIsvNo, isvNo);
-        return merchantUserManager.selectJoinCount(wrapper) > 0;
-    }
 }

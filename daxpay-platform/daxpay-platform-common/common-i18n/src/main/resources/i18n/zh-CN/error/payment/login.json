@@ -1,5 +1,4 @@
 {
-  "isvDisabled": "所属服务商已禁用",
   "mchDisabled": "该商户已禁用",
   "noAdminPermUseMerchant": "您没有运营端的权限，请使用商户端登录",
   "noMerchantPerm": "您没有商户端的登录权限"

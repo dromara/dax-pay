@@ -57,8 +57,7 @@ public class MerchantQueryFacadeService implements MerchantContextQueryService, 
     private MerchantAccessInfo toMerchantAccessInfo(MerchantInfo merchantInfo) {
         return new MerchantAccessInfo()
                 .setMchNo(merchantInfo.getMchNo())
-                .setStatus(merchantInfo.getStatus())
-                .setIsvNo(merchantInfo.getIsvNo());
+                .setStatus(merchantInfo.getStatus());
     }
 
     private MchAppInfoAccessInfo toMchAppInfoAccessInfo(MchAppInfo mchApp) {

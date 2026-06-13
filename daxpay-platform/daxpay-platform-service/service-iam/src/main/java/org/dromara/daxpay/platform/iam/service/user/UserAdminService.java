@@ -165,7 +165,7 @@ public class UserAdminService {
         userInfo.setPassword(passwordHash);
         userInfoManager.save(userInfo);
         // 保存密码历史记录
-        passwordPolicyService.savePasswordHistory(userInfo.getId(), passwordHash, null);
+        passwordPolicyService.savePasswordHistory(userInfo.getId(), passwordHash);
         // 初始化密码安全信息（设置初始密码标记和密码过期时间）
         OffsetDateTime passwordExpireTime = this.calculatePasswordExpireTime();
         passwordSecurityManager.initPasswordSecurity(userInfo.getId(), passwordExpireTime);
@@ -195,7 +195,7 @@ public class UserAdminService {
         // 解密密码
         String decryptedPassword = passwordDecryptService.decryptPassword(newPassword);
         // 验证密码历史
-        passwordPolicyService.validatePasswordHistory(userId, decryptedPassword, null);
+        passwordPolicyService.validatePasswordHistory(userId, decryptedPassword);
         passwordPolicyService.validatePassword(decryptedPassword);
 
         UserInfo userInfo = userInfoManager.findById(userId).orElseThrow(UserInfoNotExistsException::new);
@@ -204,7 +204,7 @@ public class UserAdminService {
         userInfo.setPassword(passwordHash);
         userInfoManager.updateById(userInfo);
         // 保存密码历史记录
-        passwordPolicyService.savePasswordHistory(userId, passwordHash, null);
+        passwordPolicyService.savePasswordHistory(userId, passwordHash);
         // 更新密码过期时间和初始密码标记
         OffsetDateTime passwordExpireTime = this.calculatePasswordExpireTime();
         passwordSecurityManager.updatePasswordExpireTime(userId, passwordExpireTime);
@@ -222,8 +222,8 @@ public class UserAdminService {
         OffsetDateTime passwordExpireTime = this.calculatePasswordExpireTime();
         // 为每个用户验证密码历史并保存历史记录
         for (Long userId : userIds) {
-            passwordPolicyService.validatePasswordHistory(userId, decryptedPassword, null);
-            passwordPolicyService.savePasswordHistory(userId, passwordHash, null);
+            passwordPolicyService.validatePasswordHistory(userId, decryptedPassword);
+            passwordPolicyService.savePasswordHistory(userId, passwordHash);
             // 更新密码过期时间和初始密码标记
             passwordSecurityManager.updatePasswordExpireTime(userId, passwordExpireTime);
         }

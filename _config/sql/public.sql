@@ -5780,9 +5780,7 @@ ALTER TABLE "public"."mch_credential" ADD CONSTRAINT "mch_credential_pkey" PRIMA
 CREATE INDEX "idx_mch_info_agent_no" ON "public"."mch_info" USING btree (
   "agent_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
 );
-CREATE INDEX "idx_mch_info_isv_no" ON "public"."mch_info" USING btree (
-  "isv_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-);
+
 CREATE INDEX "idx_mch_info_mch_no" ON "public"."mch_info" USING btree (
   "mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
 );
