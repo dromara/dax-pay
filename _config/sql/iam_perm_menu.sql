@@ -210,3 +210,21 @@ ON CONFLICT (id) DO UPDATE SET
   menu_type = EXCLUDED.menu_type,
   last_modified_time = EXCLUDED.last_modified_time;
 
+-- ----------------------------
+-- 微信服务商相关菜单
+-- ----------------------------
+-- 微信服务商应用管理（隐藏，从微信服务商总览页卡片进入）
+INSERT INTO "public"."iam_perm_menu" VALUES (40503, 405, 'payment:wechat:isvApp', 'admin', 'WechatIsvAppManage', '微信服务商应用', 'WeChat ISV Application', 'menu.payment.wechat.isvApp', NULL, 't', 'f', '/payment/channel/wechat/manage/app/WechatIsvAppManage', '/payment/config/product/wechat-app-manage', NULL, 4, 'f', 't', 'f', 1, 1, 0, 'f', 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-14 00:00:00+00', '2026-06-14 00:00:00+00')
+ON CONFLICT (id) DO UPDATE SET
+  pid = EXCLUDED.pid,
+  menu_code = EXCLUDED.menu_code,
+  name = EXCLUDED.name,
+  title_cn = EXCLUDED.title_cn,
+  title_en = EXCLUDED.title_en,
+  i18n_key = EXCLUDED.i18n_key,
+  component = EXCLUDED.component,
+  path = EXCLUDED.path,
+  sort_no = EXCLUDED.sort_no,
+  menu_type = EXCLUDED.menu_type,
+  last_modified_time = EXCLUDED.last_modified_time;
+
