@@ -31,7 +31,6 @@ public class PayProductConfigResult extends BaseResult {
 
     @Schema(description = "生效环境: prod/sandbox")
     private String activeEnv;
-
     @Schema(description = "是否已配置参数")
     private boolean configured;
 }

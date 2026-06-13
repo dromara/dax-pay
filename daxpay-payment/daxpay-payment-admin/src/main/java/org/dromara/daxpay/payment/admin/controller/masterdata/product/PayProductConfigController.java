@@ -18,7 +18,7 @@ import java.util.List;
 
 /// # 支付产品配置管理
 ///
-@PermCode(menuCode = "payment:product")
+@PermCode(menuCode = "payment:product:config")
 @Validated
 @Tag(name = "支付产品配置管理")
 @RestController

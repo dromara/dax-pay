@@ -176,3 +176,37 @@ ON CONFLICT (id) DO UPDATE SET
 -- Primary Key structure for table iam_perm_menu
 -- ----------------------------
 ALTER TABLE "public"."iam_perm_menu" ADD CONSTRAINT "iam_perm_menu_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- 支付宝服务商相关菜单
+-- ----------------------------
+-- 支付产品详情分发页（隐藏，供支付产品管理卡片跳转进入对应通道总览页）
+INSERT INTO "public"."iam_perm_menu" VALUES (40501, 405, 'payment:config:productDetail', 'admin', 'ProductDetailDispatch', '支付产品详情', 'Payment Product Detail', 'menu.payment.config.productDetail', NULL, 't', 'f', '/payment/config/product/detail/ProductDetailDispatch', '/payment/product-detail', NULL, 2, 'f', 't', 'f', 1, 1, 0, 'f', 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-14 00:00:00+00', '2026-06-14 00:00:00+00')
+ON CONFLICT (id) DO UPDATE SET
+  pid = EXCLUDED.pid,
+  menu_code = EXCLUDED.menu_code,
+  name = EXCLUDED.name,
+  title_cn = EXCLUDED.title_cn,
+  title_en = EXCLUDED.title_en,
+  i18n_key = EXCLUDED.i18n_key,
+  component = EXCLUDED.component,
+  path = EXCLUDED.path,
+  sort_no = EXCLUDED.sort_no,
+  menu_type = EXCLUDED.menu_type,
+  last_modified_time = EXCLUDED.last_modified_time;
+
+-- 支付宝服务商应用管理（隐藏，从支付宝服务商总览页卡片进入）
+INSERT INTO "public"."iam_perm_menu" VALUES (40502, 405, 'payment:alipay:isvApp', 'admin', 'AlipayIsvAppManage', '支付宝服务商应用', 'Alipay ISV Application', 'menu.payment.alipay.isvApp', NULL, 't', 'f', '/payment/channel/alipay/manage/app/AlipayIsvAppManage', '/payment/config/product/app-manage', NULL, 3, 'f', 't', 'f', 1, 1, 0, 'f', 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-14 00:00:00+00', '2026-06-14 00:00:00+00')
+ON CONFLICT (id) DO UPDATE SET
+  pid = EXCLUDED.pid,
+  menu_code = EXCLUDED.menu_code,
+  name = EXCLUDED.name,
+  title_cn = EXCLUDED.title_cn,
+  title_en = EXCLUDED.title_en,
+  i18n_key = EXCLUDED.i18n_key,
+  component = EXCLUDED.component,
+  path = EXCLUDED.path,
+  sort_no = EXCLUDED.sort_no,
+  menu_type = EXCLUDED.menu_type,
+  last_modified_time = EXCLUDED.last_modified_time;
+
