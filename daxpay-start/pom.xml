@@ -69,26 +69,31 @@
         </dependency>
 
         <!-- 支付通道 -->
+        <!-- 支付宝通道 -->
         <dependency>
             <groupId>org.dromara.daxpay</groupId>
             <artifactId>daxpay-channel-alipay</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- 微信支付通道 -->
         <dependency>
             <groupId>org.dromara.daxpay</groupId>
             <artifactId>daxpay-channel-wechat</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- 银联商务通道 -->
         <dependency>
             <groupId>org.dromara.daxpay</groupId>
             <artifactId>daxpay-channel-ums</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- 拉卡拉通道 -->
         <dependency>
             <groupId>org.dromara.daxpay</groupId>
             <artifactId>daxpay-channel-lakala</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- 抖音支付通道 -->
         <dependency>
             <groupId>org.dromara.daxpay</groupId>
             <artifactId>daxpay-channel-douyin</artifactId>
