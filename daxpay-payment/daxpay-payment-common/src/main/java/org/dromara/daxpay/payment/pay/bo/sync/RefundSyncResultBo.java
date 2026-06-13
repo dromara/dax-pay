@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 支付退款同步结果
 ///
@@ -29,7 +29,7 @@ public class RefundSyncResultBo {
     private BigDecimal realAmount;
 
     /// 退款完成时间(通常用于接收网关返回的时间)
-    private LocalDateTime finishTime;
+    private OffsetDateTime finishTime;
 
     /// 同步时网关返回的对象, 序列化为json字符串
     private String syncData;

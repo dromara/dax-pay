@@ -16,7 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -35,7 +35,7 @@ public class TransferOrderManager extends BaseManager<TransferOrderMapper, Trans
 
     /// 查询指定时间的转账中的订单
     @IgnoreTenant
-    public List<TransferOrder> findAllByProgress(LocalDateTime startTime, LocalDateTime endTime) {
+    public List<TransferOrder> findAllByProgress(OffsetDateTime startTime, OffsetDateTime endTime) {
         return lambdaQuery()
                 .eq(TransferOrder::getStatus, TransferStatusEnum.PROGRESS.getCode())
                 .between(MpCreateEntity::getCreateTime, startTime,  endTime)
@@ -44,7 +44,7 @@ public class TransferOrderManager extends BaseManager<TransferOrderMapper, Trans
 
     /// 查询指定时间前的转账中的订单
     @IgnoreTenant
-    public List<TransferOrder> findAllByBeforeProgress(LocalDateTime dateTime) {
+    public List<TransferOrder> findAllByBeforeProgress(OffsetDateTime dateTime) {
         return lambdaQuery()
                 .eq(TransferOrder::getStatus, TransferStatusEnum.PROGRESS.getCode())
                 .le(MpCreateEntity::getCreateTime, dateTime)

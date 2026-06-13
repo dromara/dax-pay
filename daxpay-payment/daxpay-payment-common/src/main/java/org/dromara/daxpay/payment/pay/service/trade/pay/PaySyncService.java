@@ -37,7 +37,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -144,7 +145,7 @@ public class PaySyncService {
             // 如果返回订单也是支付中
             if (Objects.equals(PayStatusEnum.PROGRESS, payStatus)){
                 // 判断支付单是否支付超时, 如果待支付状态下触发超时
-                if (DateTimeUtil.le(order.getExpiredTime(), LocalDateTime.now())){
+                if (DateTimeUtil.le(order.getExpiredTime(), OffsetDateTime.now(ZoneOffset.UTC))){
                     // 将支付单同步状态状态调整为支付超时, 进行订单的关闭
                     payRemoteSyncResult.setPayStatus(PayStatusEnum.TIMEOUT);
                     return false;

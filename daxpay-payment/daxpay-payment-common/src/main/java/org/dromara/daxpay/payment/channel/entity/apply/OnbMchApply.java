@@ -15,7 +15,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 商户进件申请单
 ///
@@ -46,7 +46,7 @@ public class OnbMchApply extends MchBaseEntity implements ToResult<OnbMchApplyRe
 
     /// 最后提交时间
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
-    private LocalDateTime lastSubmitTime;
+    private OffsetDateTime lastSubmitTime;
 
     /// 状态
     /// @see OnbApplyStatusEnum

@@ -19,7 +19,8 @@ import me.chanjar.weixin.mp.config.impl.WxMpDefaultConfigImpl;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -162,7 +163,7 @@ public class WechatMpMessageService {
         record.setTemplateData(JSONUtil.toJsonStr(param.getData()));
         record.setUrl(param.getUrl());
         record.setStatus("sending");
-        record.setSendTime(LocalDateTime.now());
+        record.setSendTime(OffsetDateTime.now(ZoneOffset.UTC));
         record.setScene(param.getScene());
         record.setAppId(param.getAppId());
         return record;

@@ -4,7 +4,7 @@ import org.dromara.daxpay.platform.core.enums.pay.transfer.TransferStatusEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 转账结果业务类
 ///
@@ -21,7 +21,7 @@ public class TransferResultBo {
     private String transferBody;
 
     /// 完成时间
-    private LocalDateTime finishTime;
+    private OffsetDateTime finishTime;
 
     /// 进件商户号
     private String onbMchNo;

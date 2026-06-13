@@ -3,7 +3,8 @@ package org.dromara.daxpay.platform.iam.entity.config;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
 /// # 配置变更历史实体
 ///
@@ -34,14 +35,14 @@ public class ConfigChangeHistory {
     private String modifiedByUsername;
 
     /// 修改时间
-    private LocalDateTime modifiedAt;
+    private OffsetDateTime modifiedAt;
 
     /// 修改原因/备注
     private String remark;
 
     protected void onCreate() {
         if (modifiedAt == null) {
-            modifiedAt = LocalDateTime.now();
+            modifiedAt = OffsetDateTime.now(ZoneOffset.UTC);
         }
     }
 }

@@ -11,15 +11,14 @@ import org.dromara.daxpay.platform.capability.audit.log.param.OperateLogParam;
 import org.dromara.daxpay.platform.capability.audit.log.param.OperateLogQuery;
 import org.dromara.daxpay.platform.capability.audit.log.result.OperateLogResult;
 import org.dromara.daxpay.platform.capability.audit.log.service.mask.AuditLogMaskService;
-import cn.hutool.core.date.LocalDateTimeUtil;
 import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
@@ -155,7 +154,7 @@ public class OperateLogService {
     /// 删除
     public void deleteByDay(int deleteDay) {
         // 计算出来指定天数的日期
-        LocalDateTime offset = LocalDateTimeUtil.offset(LocalDateTime.now(), -deleteDay, ChronoUnit.DAYS);
+        OffsetDateTime offset = OffsetDateTime.now(ZoneOffset.UTC).minusDays(deleteDay);
         operateLogManager.deleteByOffset(offset);
     }
 

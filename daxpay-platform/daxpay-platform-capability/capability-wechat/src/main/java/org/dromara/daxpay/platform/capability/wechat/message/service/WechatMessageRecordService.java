@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -75,8 +75,8 @@ public class WechatMessageRecordService {
     /// @param endTime 结束时间
     /// @return 消息记录列表
     public List<WechatMessageRecord> queryRecords(String openId, String messageType, 
-                                                   String status, LocalDateTime startTime, 
-                                                   LocalDateTime endTime) {
+                                                   String status, OffsetDateTime startTime, 
+                                                   OffsetDateTime endTime) {
         QueryWrapper<WechatMessageRecord> wrapper = new QueryWrapper<>();
         
         if (StrUtil.isNotBlank(openId)) {

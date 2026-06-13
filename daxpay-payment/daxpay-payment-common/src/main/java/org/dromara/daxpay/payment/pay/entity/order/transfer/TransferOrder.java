@@ -16,7 +16,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 转账订单
 ///
@@ -66,7 +66,7 @@ public class TransferOrder extends MchAppBaseEntity implements ToResult<Transfer
     private String status;
 
     /// 完成时间
-    private LocalDateTime finishTime;
+    private OffsetDateTime finishTime;
 
     /// 异步通知地址
     private String notifyUrl;
@@ -81,7 +81,7 @@ public class TransferOrder extends MchAppBaseEntity implements ToResult<Transfer
     private String attach;
 
     /// 请求时间
-    private LocalDateTime reqTime;
+    private OffsetDateTime reqTime;
 
     /// 终端ip
     private String clientIp;

@@ -24,7 +24,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import org.dromara.daxpay.platform.core.code.CommonCode;
 
 /// # 用户
@@ -125,18 +126,18 @@ public class UserInfoService {
         // 保存密码历史记录
         passwordPolicyService.savePasswordHistory(userInfo.getId(), passwordHash, null);
         // 更新密码过期时间和初始密码标记
-        LocalDateTime passwordExpireTime = this.calculatePasswordExpireTime();
+        OffsetDateTime passwordExpireTime = this.calculatePasswordExpireTime();
         passwordSecurityManager.updatePasswordExpireTime(userInfo.getId(), passwordExpireTime);
     }
 
-    /// 计算密码过期时间
-    private LocalDateTime calculatePasswordExpireTime() {
+    /// 计算密码过期时间 (UTC)
+    private OffsetDateTime calculatePasswordExpireTime() {
         PlatformPasswordPolicyConfig config = iamSecurityConfigService.getPasswordPolicy();
         Integer rotationDays = config.getRotationDays();
         if (rotationDays == null || rotationDays <= 0) {
             return null;
         }
-        return LocalDateTime.now().plusDays(rotationDays);
+        return OffsetDateTime.now(ZoneOffset.UTC).plusDays(rotationDays);
     }
 
 }

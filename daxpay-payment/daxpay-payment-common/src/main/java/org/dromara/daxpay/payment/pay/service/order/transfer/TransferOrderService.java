@@ -22,7 +22,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -65,7 +66,7 @@ public class TransferOrderService {
         transferParam.setMchNo(transferOrder.getMchNo());
         transferParam.setAppId(transferOrder.getAppId());
         transferParam.setClientIp(ip);
-        transferParam.setReqTime(LocalDateTime.now());
+        transferParam.setReqTime(OffsetDateTime.now(ZoneOffset.UTC));
         transferParam.setBizTransferNo(transferOrder.getBizTransferNo());
         transferParam.setAmount(transferOrder.getAmount());
         transferParam.setSource(TradeSourceEnum.USER.getCode());
@@ -84,7 +85,7 @@ public class TransferOrderService {
             // 只有失败状态的才可以关闭
             throw new TradeProcessingException(DaxPayErrorCode.TRADE_PROCESSING, "pay.error.transfer.onlyFailRetry");
         }
-        transferAssistService.close(transferOrder,LocalDateTime.now());
+        transferAssistService.close(transferOrder,OffsetDateTime.now(ZoneOffset.UTC));
     }
 
     

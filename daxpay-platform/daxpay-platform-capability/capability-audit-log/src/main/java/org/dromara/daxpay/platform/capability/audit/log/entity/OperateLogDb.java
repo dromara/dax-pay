@@ -11,7 +11,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 操作日志
 ///
@@ -71,8 +71,8 @@ public class OperateLogDb extends MpIdEntity implements ToResult<OperateLogResul
     /// 错误消息
     private String errorMsg;
 
-    /// 操作时间
-    private LocalDateTime operateTime;
+    /// 操作时间 (UTC)
+    private OffsetDateTime operateTime;
 
     @Override
     public OperateLogResult toResult() {

@@ -3,7 +3,7 @@ package org.dromara.daxpay.platform.capability.file.result;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 文件上传预签名返回结果
 ///
@@ -30,5 +30,5 @@ public class FileUploadPresignResult {
     private String uploadUrl;
 
     /// 过期时间
-    private LocalDateTime expireTime;
+    private OffsetDateTime expireTime;
 }

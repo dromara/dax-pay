@@ -39,7 +39,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -273,7 +274,7 @@ public class ReconcileStatementService {
         String channelName = PayChannelMasterDataService.findNameByCode(statement.getChannel());
         return new ReconcileTotalExcel()
                 .setReconcileDate(LocalDateTimeUtil.format(statement.getDate(), DatePattern.CHINESE_DATE_PATTERN))
-                .setCreateTime(LocalDateTimeUtil.format(LocalDateTime.now(), DatePattern.CHINESE_DATE_TIME_PATTERN))
+                .setCreateTime(LocalDateTimeUtil.format(OffsetDateTime.now(ZoneOffset.UTC).toLocalDateTime(), DatePattern.CHINESE_DATE_TIME_PATTERN))
                 .setChannel(channelName)
                 .setResult(I18nUtil.getEnumName(ReconcileResultEnum.findByCode(statement.getResult())))
                 .setTradeAmount(PayUtil.toDecimal(statement.getOrderAmount()).toString())
@@ -311,12 +312,12 @@ public class ReconcileStatementService {
                     .setTradeType(I18nUtil.getEnumName(TradeTypeEnum.findByCode(platformTrade.getTradeType())))
                     .setTradeAmount(PayUtil.toDecimal(platformTrade.getAmount()).toPlainString())
                     .setTradeStatus(platformTrade.getTradeStatus())
-                    .setTradeTime(LocalDateTimeUtil.format(platformTrade.getTradeTime(), DatePattern.CHINESE_DATE_TIME_PATTERN))
+                    .setTradeTime(LocalDateTimeUtil.format(platformTrade.getTradeTime().toLocalDateTime(), DatePattern.CHINESE_DATE_TIME_PATTERN))
                     .setChannelTradeNo(channelTrade.getChannelTradeNo())
                     .setChannelTradeType(I18nUtil.getEnumName(TradeTypeEnum.findByCode(channelTrade.getTradeType())))
                     .setChannelTradeAmount(PayUtil.toDecimal(channelTrade.getAmount()).toPlainString())
                     .setChannelTradeStatus(channelTrade.getTradeStatus())
-                    .setChannelTradeTime(LocalDateTimeUtil.format(channelTrade.getTradeTime(), DatePattern.CHINESE_DATE_TIME_PATTERN))
+                    .setChannelTradeTime(LocalDateTimeUtil.format(channelTrade.getTradeTime().toLocalDateTime(), DatePattern.CHINESE_DATE_TIME_PATTERN))
             );
         }
         // 处理异常订单,
@@ -331,7 +332,7 @@ public class ReconcileStatementService {
                         .setChannelTradeType(I18nUtil.getEnumName(TradeTypeEnum.findByCode(discrepancy.getChannelTradeType())))
                         .setChannelTradeStatus(discrepancy.getChannelTradeStatus())
                         .setChannelTradeAmount(PayUtil.toDecimal(discrepancy.getChannelTradeAmount()).toString())
-                        .setChannelTradeTime(LocalDateTimeUtil.format(discrepancyTrade.getChannelTradeTime(), DatePattern.CHINESE_DATE_TIME_PATTERN))
+                        .setChannelTradeTime(LocalDateTimeUtil.format(discrepancyTrade.getChannelTradeTime().toLocalDateTime(), DatePattern.CHINESE_DATE_TIME_PATTERN))
                 );
                 // 处理远程短单
                 case REMOTE_NOT_EXISTS -> {
@@ -343,7 +344,7 @@ public class ReconcileStatementService {
                             .setTradeType(I18nUtil.getEnumName(TradeTypeEnum.findByCode(discrepancyTrade.getTradeType())))
                             .setTradeAmount(PayUtil.toDecimal(discrepancyTrade.getTradeAmount()).toString())
                             .setTradeStatus(discrepancyTrade.getTradeStatus())
-                            .setTradeTime(LocalDateTimeUtil.format(discrepancyTrade.getTradeTime(), DatePattern.CHINESE_DATE_TIME_PATTERN))
+                            .setTradeTime(LocalDateTimeUtil.format(discrepancyTrade.getTradeTime().toLocalDateTime(), DatePattern.CHINESE_DATE_TIME_PATTERN))
                     );
                 }
                 // 处理信息不一致订单
@@ -356,11 +357,11 @@ public class ReconcileStatementService {
                             .setTradeType(I18nUtil.getEnumName(TradeTypeEnum.findByCode(discrepancyTrade.getTradeType())))
                             .setTradeAmount(PayUtil.toDecimal(discrepancyTrade.getTradeAmount()).toString())
                             .setTradeStatus(discrepancyTrade.getTradeStatus())
-                            .setTradeTime(LocalDateTimeUtil.format(discrepancyTrade.getTradeTime(), DatePattern.CHINESE_DATE_TIME_PATTERN))
+                            .setTradeTime(LocalDateTimeUtil.format(discrepancyTrade.getTradeTime().toLocalDateTime(), DatePattern.CHINESE_DATE_TIME_PATTERN))
                             .setChannelTradeNo(discrepancy.getChannelTradeNo())
                             .setChannelTradeAmount(PayUtil.toDecimal(discrepancy.getChannelTradeAmount()).toString())
                             .setChannelTradeStatus(discrepancy.getChannelTradeStatus())
-                            .setChannelTradeTime(LocalDateTimeUtil.format(discrepancy.getChannelTradeTime(), DatePattern.CHINESE_DATE_TIME_PATTERN))
+                            .setChannelTradeTime(LocalDateTimeUtil.format(discrepancy.getChannelTradeTime().toLocalDateTime(), DatePattern.CHINESE_DATE_TIME_PATTERN))
                     );
                 }
             }

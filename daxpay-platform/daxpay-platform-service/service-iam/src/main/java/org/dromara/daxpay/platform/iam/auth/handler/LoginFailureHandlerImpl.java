@@ -16,7 +16,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Optional;
 
 /// # 登录失败
@@ -56,7 +57,7 @@ public class LoginFailureHandlerImpl implements LoginFailureHandler {
                 .setLoginLocation(location)
                 .setOs(userAgent.getOs().getName())
                 .setBrowser(userAgent.getBrowser().getName() + " " + userAgent.getVersion())
-                .setLoginTime(LocalDateTime.now());
+                .setLoginTime(OffsetDateTime.now(ZoneOffset.UTC));
         loginLogService.add(loginLog);
     }
 

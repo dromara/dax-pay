@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 数据字典目录返回结果
 ///
@@ -41,6 +41,6 @@ public class DictResult {
     private String remark;
 
     @Schema(description = "创建时间")
-    private LocalDateTime createTime;
+    private OffsetDateTime createTime;
 
 }

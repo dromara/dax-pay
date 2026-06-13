@@ -4,7 +4,7 @@ import org.dromara.daxpay.platform.core.enums.pay.refund.RefundStatusEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 退款结果业务类
 ///
@@ -21,5 +21,5 @@ public class RefundResultBo {
     private RefundStatusEnum status;
 
     /// 退款完成时间
-    private LocalDateTime finishTime;
+    private OffsetDateTime finishTime;
 }

@@ -6,7 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Optional;
 
 /// # 用户密码安全信息
@@ -49,7 +50,7 @@ public class UserPasswordSecurityManager extends BaseManager<UserPasswordSecurit
             security.setId(userId);
             security.setPasswordErrorCount(1);
             security.setInitialPassword(true);
-            security.setLastFailureTime(LocalDateTime.now());
+            security.setLastFailureTime(OffsetDateTime.now(ZoneOffset.UTC));
             save(security);
             return 1;
         }
@@ -57,13 +58,13 @@ public class UserPasswordSecurityManager extends BaseManager<UserPasswordSecurit
         lambdaUpdate()
                 .eq(UserPasswordSecurity::getId, userId)
                 .set(UserPasswordSecurity::getPasswordErrorCount, newCount)
-                .set(UserPasswordSecurity::getLastFailureTime, LocalDateTime.now())
+                .set(UserPasswordSecurity::getLastFailureTime, OffsetDateTime.now(ZoneOffset.UTC))
                 .update();
         return newCount;
     }
 
     /// 锁定账号
-    public void lockAccount(Long userId, LocalDateTime lockTime) {
+    public void lockAccount(Long userId, OffsetDateTime lockTime) {
         lambdaUpdate()
                 .eq(UserPasswordSecurity::getId, userId)
                 .set(UserPasswordSecurity::getLockTime, lockTime)
@@ -80,11 +81,11 @@ public class UserPasswordSecurityManager extends BaseManager<UserPasswordSecurit
     }
 
     /// 更新密码过期时间
-    public void updatePasswordExpireTime(Long userId, LocalDateTime expireTime) {
+    public void updatePasswordExpireTime(Long userId, OffsetDateTime expireTime) {
         lambdaUpdate()
                 .eq(UserPasswordSecurity::getId, userId)
                 .set(UserPasswordSecurity::getPasswordExpireTime, expireTime)
-                .set(UserPasswordSecurity::getLastChangePasswordTime, LocalDateTime.now())
+                .set(UserPasswordSecurity::getLastChangePasswordTime, OffsetDateTime.now(ZoneOffset.UTC))
                 .set(UserPasswordSecurity::getInitialPassword, false)
                 .update();
     }
@@ -99,13 +100,13 @@ public class UserPasswordSecurityManager extends BaseManager<UserPasswordSecurit
     }
 
     /// 初始化用户密码安全信息（创建用户时调用）
-    public void initPasswordSecurity(Long userId, LocalDateTime passwordExpireTime) {
+    public void initPasswordSecurity(Long userId, OffsetDateTime passwordExpireTime) {
         UserPasswordSecurity security = new UserPasswordSecurity();
         security.setId(userId);
         security.setPasswordErrorCount(0);
         security.setInitialPassword(true);
         security.setPasswordExpireTime(passwordExpireTime);
-        security.setLastChangePasswordTime(LocalDateTime.now());
+        security.setLastChangePasswordTime(OffsetDateTime.now(ZoneOffset.UTC));
         save(security);
     }
 

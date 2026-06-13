@@ -14,7 +14,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Optional;
 
 /// # 转账辅助服务
@@ -67,10 +68,10 @@ public class TransferAssistService {
     }
 
     /// 转账关闭
-    public void close(TransferOrder order, LocalDateTime finishTime) {
+    public void close(TransferOrder order, OffsetDateTime finishTime) {
         // 执行策略的关闭方法
         order.setStatus(TransferStatusEnum.CLOSE.getCode())
-                .setFinishTime(Optional.ofNullable(finishTime).orElse(LocalDateTime.now()));
+                .setFinishTime(Optional.ofNullable(finishTime).orElse(OffsetDateTime.now(ZoneOffset.UTC)));
         transferOrderManager.updateById(order);
         merchantNoticeService.registerTransferNotice(order);
     }

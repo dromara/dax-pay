@@ -30,7 +30,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Objects;
 import org.dromara.daxpay.platform.core.code.CommonCode;
@@ -166,24 +167,24 @@ public class UserAdminService {
         // 保存密码历史记录
         passwordPolicyService.savePasswordHistory(userInfo.getId(), passwordHash, null);
         // 初始化密码安全信息（设置初始密码标记和密码过期时间）
-        LocalDateTime passwordExpireTime = this.calculatePasswordExpireTime();
+        OffsetDateTime passwordExpireTime = this.calculatePasswordExpireTime();
         passwordSecurityManager.initPasswordSecurity(userInfo.getId(), passwordExpireTime);
         // 扩展信息
         UserExpandInfo userExpandInfo = new UserExpandInfo()
-                .setRegisterTime(LocalDateTime.now());
+                .setRegisterTime(OffsetDateTime.now(ZoneOffset.UTC));
         userExpandInfo.setId(userInfo.getId());
         userExpandInfoManager.save(userExpandInfo);
         return userInfo;
     }
 
-    /// 计算密码过期时间
-    private LocalDateTime calculatePasswordExpireTime() {
+    /// 计算密码过期时间 (UTC)
+    private OffsetDateTime calculatePasswordExpireTime() {
         PlatformPasswordPolicyConfig config = iamSecurityConfigService.getPasswordPolicy();
         Integer rotationDays = config.getRotationDays();
         if (rotationDays == null || rotationDays <= 0) {
             return null;
         }
-        return LocalDateTime.now().plusDays(rotationDays);
+        return OffsetDateTime.now(ZoneOffset.UTC).plusDays(rotationDays);
     }
 
     /// 重置密码
@@ -205,7 +206,7 @@ public class UserAdminService {
         // 保存密码历史记录
         passwordPolicyService.savePasswordHistory(userId, passwordHash, null);
         // 更新密码过期时间和初始密码标记
-        LocalDateTime passwordExpireTime = this.calculatePasswordExpireTime();
+        OffsetDateTime passwordExpireTime = this.calculatePasswordExpireTime();
         passwordSecurityManager.updatePasswordExpireTime(userId, passwordExpireTime);
     }
 
@@ -218,7 +219,7 @@ public class UserAdminService {
         String decryptedPassword = passwordDecryptService.decryptPassword(newPassword);
         passwordPolicyService.validatePassword(decryptedPassword);
         String passwordHash = BCrypt.hashpw(decryptedPassword, BCrypt.gensalt());
-        LocalDateTime passwordExpireTime = this.calculatePasswordExpireTime();
+        OffsetDateTime passwordExpireTime = this.calculatePasswordExpireTime();
         // 为每个用户验证密码历史并保存历史记录
         for (Long userId : userIds) {
             passwordPolicyService.validatePasswordHistory(userId, decryptedPassword, null);

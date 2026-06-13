@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 操作日志
 ///
@@ -29,7 +29,7 @@ public class OperateLogDbManager extends BaseManager<OperateLogDbMapper, Operate
     }
 
     /// 删除 小于指定日期的日志
-    public void deleteByOffset(LocalDateTime offset){
+    public void deleteByOffset(OffsetDateTime offset){
         lambdaUpdate()
                 .le(OperateLogDb::getOperateTime, offset)
                 .remove();

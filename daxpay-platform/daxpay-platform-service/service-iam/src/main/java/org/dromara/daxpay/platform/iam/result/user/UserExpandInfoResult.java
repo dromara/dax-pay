@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 用户扩展信息 whole
 ///
@@ -26,11 +26,11 @@ public class UserExpandInfoResult {
     @Schema(description = "生日")
     private LocalDate birthday;
 
-    @Schema(description = "上次登录时间")
-    private LocalDateTime lastLoginTime;
+    @Schema(description = "上次登录时间 (UTC)")
+    private OffsetDateTime lastLoginTime;
 
-    @Schema(description = "本次登录时间")
-    private LocalDateTime currentLoginTime;
+    @Schema(description = "本次登录时间 (UTC)")
+    private OffsetDateTime currentLoginTime;
 
     @Schema(description = "最后登录IP")
     private String lastLoginIp;

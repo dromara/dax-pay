@@ -1,73 +1,78 @@
 package org.dromara.daxpay.platform.core.util;
 
-import cn.hutool.core.date.DatePattern;
 import lombok.experimental.UtilityClass;
 
-import java.time.Instant;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.*;
 
 /// # java8 时间工具类
 ///
+/// 所有时间基于 UTC，与数据库 timestamptz 列保持一致
+/// 前端展示时由客户端按用户时区转换
 @UtilityClass
 public class DateTimeUtil {
 
     /// 大于
-    public boolean gt(LocalDateTime now, LocalDateTime next) {
-        long mills = now.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-        long epochMilli = next.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-        return mills > epochMilli;
+    public boolean gt(OffsetDateTime now, OffsetDateTime next) {
+        return now.toEpochSecond() > next.toEpochSecond();
     }
 
     /// 小于
-    public boolean lt(LocalDateTime now, LocalDateTime next) {
-        long mills = now.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-        long epochMilli = next.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-        return mills < epochMilli;
+    public boolean lt(OffsetDateTime now, OffsetDateTime next) {
+        return now.toEpochSecond() < next.toEpochSecond();
     }
 
     /// 大于等于
-    public boolean ge(LocalDateTime now, LocalDateTime next) {
-        long mills = now.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-        long epochMilli = next.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-        return mills >= epochMilli;
+    public boolean ge(OffsetDateTime now, OffsetDateTime next) {
+        return now.toEpochSecond() >= next.toEpochSecond();
     }
 
     /// 小于等于
-    public boolean le(LocalDateTime now, LocalDateTime next) {
-        long mills = now.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-        long epochMilli = next.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
-        return mills <= epochMilli;
+    public boolean le(OffsetDateTime now, OffsetDateTime next) {
+        return now.toEpochSecond() <= next.toEpochSecond();
     }
 
-    /// 将localDate转换成localDateTime
-    public LocalDateTime date2DateTime(LocalDate localDate) {
-        return localDate.atTime(0, 0);
-
+    /// 获取当前 UTC 时间
+    public OffsetDateTime nowUtc() {
+        return OffsetDateTime.now(ZoneOffset.UTC);
     }
 
-    /// 将long类型的timestamp转为LocalDateTime
-    /// @param timestamp 时间戳
-    /// @return LocalDateTime
-    public LocalDateTime parse(long timestamp) {
-        Instant instant = Instant.ofEpochMilli(timestamp);
-        ZoneId zone = ZoneId.systemDefault();
-        return LocalDateTime.ofInstant(instant, zone);
+    /// 将 long 类型的 timestamp 转为 OffsetDateTime (UTC)
+    public OffsetDateTime fromEpochMilli(long timestamp) {
+        return Instant.ofEpochMilli(timestamp).atOffset(ZoneOffset.UTC);
     }
 
-    /// LocalDateTime转为long类型的timestamp
-    /// @param localDateTime 日期时间
-    /// @return timestamp
-    public long timestamp(LocalDateTime localDateTime) {
-        ZoneId zone = ZoneId.systemDefault();
-        Instant instant = localDateTime.atZone(zone).toInstant();
-        return instant.toEpochMilli();
+    /// OffsetDateTime 转为 long 类型的 timestamp
+    public long toEpochMilli(OffsetDateTime dateTime) {
+        return dateTime.toInstant().toEpochMilli();
     }
 
-    /// 格式化为标准时间日期
-    public String formatDateTime(LocalDateTime localDateTime) {
-        return localDateTime.format(DatePattern.NORM_DATETIME_FORMATTER);
+    /// 将 localDate 转换成当天开始时间的 OffsetDateTime (UTC)
+    /// 用于日期范围查询等场景
+    public OffsetDateTime dateStartUtc(LocalDate localDate) {
+        return localDate.atStartOfDay(ZoneOffset.UTC).toOffsetDateTime();
+    }
+
+    /// 将 localDate 转换成当天结束时间的 OffsetDateTime (UTC)
+    public OffsetDateTime dateEndUtc(LocalDate localDate) {
+        return localDate.atTime(LocalTime.MAX).atZone(ZoneOffset.UTC).toOffsetDateTime();
+    }
+
+    /// 旧版兼容: 将 Asia/Shanghai 时区的 LocalDateTime 转为 UTC OffsetDateTime
+    public OffsetDateTime shanghaiToUtc(LocalDateTime shanghaiTime) {
+        if (shanghaiTime == null) return null;
+        return shanghaiTime.atOffset(ZoneOffset.ofHours(8)).withOffsetSameInstant(ZoneOffset.UTC);
+    }
+
+    /// 旧版兼容: 将 UTC OffsetDateTime 转为 Asia/Shanghai 时区的 LocalDateTime
+    public LocalDateTime utcToShanghai(OffsetDateTime utcTime) {
+        if (utcTime == null) return null;
+        return utcTime.withOffsetSameInstant(ZoneOffset.ofHours(8)).toLocalDateTime();
+    }
+
+    /// 格式化为 ISO 8601 标准时间字符串 (UTC)
+    public String formatIso(OffsetDateTime dateTime) {
+        if (dateTime == null) return null;
+        return dateTime.withOffsetSameInstant(ZoneOffset.UTC).toString();
     }
 
 }

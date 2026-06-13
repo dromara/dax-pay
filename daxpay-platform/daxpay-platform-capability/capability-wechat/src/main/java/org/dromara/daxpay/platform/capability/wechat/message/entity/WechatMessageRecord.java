@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 微信消息记录
 ///
@@ -44,7 +44,7 @@ public class WechatMessageRecord extends MpBaseEntity {
     private String errorMsg;
 
     /// 发送时间
-    private LocalDateTime sendTime;
+    private OffsetDateTime sendTime;
 
     /// 业务场景标识
     private String scene;

@@ -8,6 +8,7 @@ import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.*;
 
 /// # 对象签名工具类
@@ -57,7 +58,13 @@ public class ObjectSignStrUtil {
             return;
         }
 
-        // 处理 LocalDateTime
+        // 处理 OffsetDateTime
+        if (obj instanceof OffsetDateTime value) {
+            result.put(prefix, value.withOffsetSameInstant(java.time.ZoneOffset.UTC).toString());
+            return;
+        }
+
+        // 处理 LocalDateTime (旧格式向下兼容)
         if (obj instanceof LocalDateTime value) {
             result.put(prefix, LocalDateTimeUtil.formatNormal(value));
             return;

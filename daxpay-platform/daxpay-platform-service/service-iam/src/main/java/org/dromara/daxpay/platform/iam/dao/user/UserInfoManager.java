@@ -14,7 +14,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
 
@@ -160,7 +161,7 @@ public class UserInfoManager extends BaseManager<UserInfoMapper, UserInfo> {
         lambdaUpdate()
                 .in(MpIdEntity::getId, userIds)
                 .set(UserInfo::getStatus, status)
-                .set(UserInfo::getLastModifiedTime, LocalDateTime.now())
+                .set(UserInfo::getLastModifiedTime, OffsetDateTime.now(ZoneOffset.UTC))
                 .set(UserInfo::getLastModifier, SecurityUtil.getUserIdOrDefaultId())
                 .setIncrBy(MpRealDelEntity::getVersion, 1)
                 .update();
@@ -171,7 +172,7 @@ public class UserInfoManager extends BaseManager<UserInfoMapper, UserInfo> {
         lambdaUpdate()
                 .in(MpIdEntity::getId, userIds)
                 .set(UserInfo::getPassword, password)
-                .set(UserInfo::getLastModifiedTime, LocalDateTime.now())
+                .set(UserInfo::getLastModifiedTime, OffsetDateTime.now(ZoneOffset.UTC))
                 .set(UserInfo::getLastModifier, SecurityUtil.getUserIdOrDefaultId())
                 .setIncrBy(MpRealDelEntity::getVersion, 1)
                 .update();

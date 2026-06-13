@@ -9,7 +9,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 支付公共参数
 ///
@@ -38,6 +38,6 @@ public abstract class PaymentCommonParam {
     @Schema(description = "请求时间, 格式yyyy-MM-dd HH:mm:ss")
     @NotNull(message = "{validation.field.reqTime.notNull}")
     @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
-    private LocalDateTime reqTime;
+    private OffsetDateTime reqTime;
 
 }

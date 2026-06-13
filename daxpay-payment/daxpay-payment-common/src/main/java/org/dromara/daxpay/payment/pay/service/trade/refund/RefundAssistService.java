@@ -26,7 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
 
@@ -123,7 +123,7 @@ public class RefundAssistService {
 
     /// 退款成功, 更新退款单和支付单
     @Transactional(rollbackFor = Exception.class)
-    public void success(RefundOrder refundOrder, LocalDateTime finishTime) {
+    public void success(RefundOrder refundOrder, OffsetDateTime finishTime) {
         PayOrder payOrder = payOrderManager.findById(refundOrder.getOrderId())
                 .orElseThrow(() -> new DataNotExistException("error.payment.order.refundPayOrderNotExist"));
 

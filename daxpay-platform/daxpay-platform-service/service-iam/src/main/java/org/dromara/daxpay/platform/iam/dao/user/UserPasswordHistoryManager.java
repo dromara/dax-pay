@@ -6,7 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 
 /// # 用户密码历史
@@ -23,7 +24,7 @@ public class UserPasswordHistoryManager {
         UserPasswordHistory history = new UserPasswordHistory()
                 .setUserId(userId)
                 .setPassword(passwordHash);
-        history.setCreateTime(LocalDateTime.now());
+        history.setCreateTime(OffsetDateTime.now(ZoneOffset.UTC));
         passwordHistoryMapper.insert(history);
     }
 

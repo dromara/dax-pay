@@ -8,7 +8,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 转账订单
 ///
@@ -65,8 +65,8 @@ public class TransferOrderResult {
     private String status;
 
     /// 完成时间
-    @Schema(description = "完成时间")
-    private LocalDateTime finishTime;
+    @Schema(description = "完成时间(UTC)")
+    private OffsetDateTime finishTime;
 
     /// 商户扩展参数,回调时会原样返回
     @Schema(description = "商户扩展参数")

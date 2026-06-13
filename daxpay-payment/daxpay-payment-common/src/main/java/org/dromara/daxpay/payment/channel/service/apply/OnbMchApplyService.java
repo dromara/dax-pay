@@ -40,7 +40,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Objects;
 import org.dromara.daxpay.platform.core.code.CommonCode;
@@ -177,7 +178,7 @@ public class OnbMchApplyService {
                     .setStatus(resultBo.getStatus().getCode())
                     .setOutStatus(resultBo.getOutStatus());
         }
-        mchApply.setLastSubmitTime(LocalDateTime.now());
+        mchApply.setLastSubmitTime(OffsetDateTime.now(ZoneOffset.UTC));
         onbMchApplyManager.updateById(mchApply);
     }
 
@@ -263,7 +264,7 @@ public class OnbMchApplyService {
         // 存在签名说明是H5端请求
         if (StrUtil.isNotBlank(sign)) {
             // 通过申请时间生成摘要
-            var date = DateUtil.format(mchApply.getCreateTime(), DatePattern.PURE_DATETIME_PATTERN);
+            var date = DateUtil.format(mchApply.getCreateTime().toLocalDateTime(), DatePattern.PURE_DATETIME_PATTERN);
             String dateSign = MD5.create().digestHex16(date);
             // 校验签名是否一致
             if (!Objects.equals(sign, dateSign)) {

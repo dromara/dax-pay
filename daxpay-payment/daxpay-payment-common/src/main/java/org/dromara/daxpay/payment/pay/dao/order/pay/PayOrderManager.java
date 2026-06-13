@@ -19,7 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
 
@@ -77,7 +78,7 @@ public class PayOrderManager extends BaseManager<PayOrderMapper, PayOrder> {
     }
 
     /// 查询对账用订单记录(指定时间和状态的订单)
-    public List<PayOrder> findReconcile(String product, LocalDateTime startTime, LocalDateTime endTime) {
+    public List<PayOrder> findReconcile(String product, OffsetDateTime startTime, OffsetDateTime endTime) {
         return this.lambdaQuery()
                 .eq(PayOrder::getProduct, product)
                 .between(PayOrder::getPayTime, startTime, endTime)
@@ -108,13 +109,13 @@ public class PayOrderManager extends BaseManager<PayOrderMapper, PayOrder> {
     public List<PayOrder> queryExpiredOrderNotTenant() {
         return lambdaQuery()
                 .in(PayOrder::getStatus, PayStatusEnum.PROGRESS.getCode(),PayStatusEnum.WAIT.getCode())
-                .lt(PayOrder::getExpiredTime, LocalDateTime.now())
+                .lt(PayOrder::getExpiredTime, OffsetDateTime.now(ZoneOffset.UTC))
                 .list();
     }
 
     /// 查询指定时间的的未支付订单
     @IgnoreTenant
-    public List<PayOrder> queryExpiredOrderNotTenant(LocalDateTime start, LocalDateTime end) {
+    public List<PayOrder> queryExpiredOrderNotTenant(OffsetDateTime start, OffsetDateTime end) {
         return lambdaQuery()
                 .in(PayOrder::getStatus, PayStatusEnum.PROGRESS.getCode(),PayStatusEnum.WAIT.getCode())
                 .between(PayOrder::getExpiredTime, start,end)
@@ -123,7 +124,7 @@ public class PayOrderManager extends BaseManager<PayOrderMapper, PayOrder> {
 
     /// 查询支付完成未结算的订单
     @IgnoreTenant
-    public List<PayOrder> findAllBySettleAndBeforeNotTenant(LocalDateTime dateTime) {
+    public List<PayOrder> findAllBySettleAndBeforeNotTenant(OffsetDateTime dateTime) {
         return lambdaQuery()
                 .eq(PayOrder::getSettleStatus, SettleStatusEnum.NOT_SETTLE.getCode())
                 .eq(PayOrder::getStatus, PayStatusEnum.SUCCESS.getCode())

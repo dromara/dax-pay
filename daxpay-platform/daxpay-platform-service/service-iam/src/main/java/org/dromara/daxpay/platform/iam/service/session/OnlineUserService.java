@@ -17,8 +17,8 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -165,9 +165,9 @@ public class OnlineUserService {
         }
     }
 
-    /// 时间戳转 LocalDateTime
-    private LocalDateTime toLocalDateTime(long timestamp) {
-        return LocalDateTime.ofInstant(Instant.ofEpochMilli(timestamp), ZoneId.systemDefault());
+    /// 时间戳转 OffsetDateTime (UTC)
+    private OffsetDateTime toLocalDateTime(long timestamp) {
+        return Instant.ofEpochMilli(timestamp).atOffset(ZoneOffset.UTC);
     }
 }
 

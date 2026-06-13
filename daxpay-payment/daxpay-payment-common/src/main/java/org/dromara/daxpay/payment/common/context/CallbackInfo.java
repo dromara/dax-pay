@@ -7,7 +7,7 @@ import org.dromara.daxpay.platform.core.enums.pay.transfer.TransferStatusEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,8 +35,8 @@ public class CallbackInfo {
     /// 交易错误信息
     private String tradeErrorMsg;
 
-    /// 完成时间(支付/退款)
-    private LocalDateTime finishTime;
+    /// 完成时间(UTC)
+    private OffsetDateTime finishTime;
 
     /// 回调信息错误信息
     private String callbackErrorMsg;

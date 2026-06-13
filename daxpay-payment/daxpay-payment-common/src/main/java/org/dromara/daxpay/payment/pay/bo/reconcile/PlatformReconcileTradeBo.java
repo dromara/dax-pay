@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 平台通用交易对象对象，用于与网关进行对账
 ///
@@ -35,6 +35,6 @@ public class PlatformReconcileTradeBo {
     private String outTradeNo;
 
     /// 完成时间
-    private LocalDateTime tradeTime;
+    private OffsetDateTime tradeTime;
 }
 

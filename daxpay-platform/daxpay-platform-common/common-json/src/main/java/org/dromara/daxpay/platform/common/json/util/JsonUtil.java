@@ -1,6 +1,5 @@
 package org.dromara.daxpay.platform.common.json.util;
 
-import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.lang.TypeReference;
 import cn.hutool.json.*;
 import lombok.experimental.UtilityClass;
@@ -23,7 +22,7 @@ import java.util.Collection;
 @UtilityClass
 public class JsonUtil {
     private final JSONConfig JSON_CONFIG = JSONConfig.create()
-            .setDateFormat(DatePattern.NORM_DATETIME_PATTERN);
+            .setDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
 
     /// 序列化为字符串
     public String toJsonStr(Object object) {

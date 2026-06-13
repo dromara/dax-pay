@@ -13,7 +13,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 客户回调消息任务
 ///
@@ -45,7 +45,7 @@ public class MerchantCallbackTask extends MchAppBaseEntity implements ToResult<M
 
     /// 下次发送时间
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
-    private LocalDateTime nextTime;
+    private OffsetDateTime nextTime;
 
     /// 发送次数
     private Integer sendCount;
@@ -57,7 +57,7 @@ public class MerchantCallbackTask extends MchAppBaseEntity implements ToResult<M
     private String url;
 
     /// 最后发送时间
-    private LocalDateTime latestTime;
+    private OffsetDateTime latestTime;
 
     /// 转换
     @Override

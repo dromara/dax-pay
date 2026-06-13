@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 支付订单
 ///
@@ -113,16 +113,16 @@ public class PayOrderVo extends MchTradeBaseResult {
     private String provider;
 
     /// 支付时间
-    @Schema(description = "支付时间")
-    private LocalDateTime payTime;
+    @Schema(description = "支付时间(UTC)")
+    private OffsetDateTime payTime;
 
     /// 关闭时间
-    @Schema(description = "关闭时间")
-    private LocalDateTime closeTime;
+    @Schema(description = "关闭时间(UTC)")
+    private OffsetDateTime closeTime;
 
     /// 过期时间
-    @Schema(description = "过期时间")
-    private LocalDateTime expiredTime;
+    @Schema(description = "过期时间(UTC)")
+    private OffsetDateTime expiredTime;
 
     /// 终端设备编码
     @Schema(description = "终端设备编码")
@@ -141,8 +141,8 @@ public class PayOrderVo extends MchTradeBaseResult {
     private String attach;
 
     /// 请求时间
-    @Schema(description = "请求时间")
-    private LocalDateTime reqTime;
+    @Schema(description = "请求时间(UTC)")
+    private OffsetDateTime reqTime;
 
     /// 订单来源
     @Schema(description = "订单来源")

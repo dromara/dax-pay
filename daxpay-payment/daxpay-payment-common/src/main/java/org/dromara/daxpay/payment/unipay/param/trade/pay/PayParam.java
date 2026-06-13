@@ -14,7 +14,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 统一下单参数
 ///
@@ -49,9 +49,9 @@ public class PayParam extends MerchantPaymentCommonParam {
     private Boolean autoAllocation;
 
     /// 过期时间
-    @Schema(description = "过期时间")
+    @Schema(description = "过期时间(UTC)")
     @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
-    private LocalDateTime expiredTime;
+    private OffsetDateTime expiredTime;
 
     /// 支付渠道（微信/支付宝/银联）, 路由未指定 product 时必填
     /// @see PayProviderEnum

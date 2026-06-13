@@ -3,7 +3,6 @@ package org.dromara.daxpay.payment.common.util;
 import org.dromara.daxpay.platform.core.exception.operation.OperationFailException;
 import org.dromara.daxpay.platform.core.enums.pay.channel.PayMethodEnum;
 import org.dromara.daxpay.platform.core.enums.pay.channel.PayProviderEnum;
-import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.lang.Opt;
 import cn.hutool.core.util.StrUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -15,7 +14,8 @@ import java.math.RoundingMode;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,13 +28,13 @@ public class PayUtil {
     private static final BigDecimal HUNDRED = new BigDecimal(100);
 
     /// 获取支付单的超时时间
-    public LocalDateTime getPaymentExpiredTime(Integer minute) {
-        return LocalDateTimeUtil.offset(LocalDateTime.now(), minute, ChronoUnit.MINUTES);
+    public OffsetDateTime getPaymentExpiredTime(Integer minute) {
+        return OffsetDateTime.now(ZoneOffset.UTC).plus(minute, ChronoUnit.MINUTES);
     }
 
     /// 获取支付单的超时分钟数, 舍去秒数， 所以会有大约一分钟的误差
-    public int getPaymentExpiredTime(LocalDateTime date) {
-        Duration duration = LocalDateTimeUtil.between(LocalDateTime.now(), date);
+    public int getPaymentExpiredTime(OffsetDateTime date) {
+        Duration duration = Duration.between(OffsetDateTime.now(ZoneOffset.UTC), date);
         return Math.toIntExact(duration.getSeconds() / 60);
     }
 

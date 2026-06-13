@@ -35,7 +35,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Objects;
 
@@ -58,7 +59,7 @@ public class PayAssistService {
     @Transactional(rollbackFor = Exception.class)
     public PayOrder createPayOrder(PayParam payParam) {
         // 订单超时时间
-        LocalDateTime expiredTime = this.getExpiredTime(payParam.getExpiredTime());
+        OffsetDateTime expiredTime = this.getExpiredTime(payParam.getExpiredTime());
         // 构建支付订单对象
         PayOrder order = new PayOrder();
         PayOrderConvert.CONVERT.copy(payParam, order);
@@ -142,7 +143,7 @@ public class PayAssistService {
         // 待支付
         if (Objects.equals(payOrder.getStatus(), PayStatusEnum.WAIT.getCode())){
             // 如果支付超时, 触发订单同步操作, 同时抛出异常
-            if (Objects.nonNull(payOrder.getExpiredTime()) && DateTimeUtil.ge(LocalDateTime.now(), payOrder.getExpiredTime())) {
+            if (Objects.nonNull(payOrder.getExpiredTime()) && DateTimeUtil.ge(OffsetDateTime.now(ZoneOffset.UTC), payOrder.getExpiredTime())) {
                 payCloseService.closeOrder(payOrder,false);
                 // 支付已超时，请重新确认支付状态
             throw new TradeStatusErrorException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.pay.timeoutRetry");
@@ -152,7 +153,7 @@ public class PayAssistService {
         // 支付中
         if (Objects.equals(payOrder.getStatus(), PayStatusEnum.PROGRESS.getCode())) {
             // 如果支付超时, 触发订单同步操作, 同时抛出异常
-            if (Objects.nonNull(payOrder.getExpiredTime()) && DateTimeUtil.ge(LocalDateTime.now(), payOrder.getExpiredTime())) {
+            if (Objects.nonNull(payOrder.getExpiredTime()) && DateTimeUtil.ge(OffsetDateTime.now(ZoneOffset.UTC), payOrder.getExpiredTime())) {
                 paySyncService.syncPayOrder(payOrder);
                 // 支付已超时，请重新确认支付状态
             throw new TradeStatusErrorException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.pay.timeoutRetry");
@@ -200,7 +201,7 @@ public class PayAssistService {
     }
 
     /// 获取支付订单超时时间, 后续会根据各通道调整订单的超时时间
-    public LocalDateTime getExpiredTime(LocalDateTime expiredTime) {
+    public OffsetDateTime getExpiredTime(OffsetDateTime expiredTime) {
         // 参数传入
         if (Objects.nonNull(expiredTime)) {
             return expiredTime;
@@ -210,8 +211,8 @@ public class PayAssistService {
     }
 
     /// 校验订单超时时间是否正常
-    public void validationExpiredTime(LocalDateTime expiredTime) {
-        if (Objects.nonNull(expiredTime) && DateTimeUtil.lt(expiredTime,LocalDateTime.now())) {
+    public void validationExpiredTime(OffsetDateTime expiredTime) {
+        if (Objects.nonNull(expiredTime) && DateTimeUtil.lt(expiredTime,OffsetDateTime.now(ZoneOffset.UTC))) {
             // 支付超时时间设置有误
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.expiredTimeError");
         }

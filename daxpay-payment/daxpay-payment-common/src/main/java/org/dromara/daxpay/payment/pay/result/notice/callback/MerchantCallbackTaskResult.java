@@ -11,7 +11,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 商户回调消息发送记录
 ///
@@ -52,7 +52,7 @@ public class MerchantCallbackTaskResult extends MchTradeBaseResult {
 
     /// 下次发送时间
     @Schema(description = "下次发送时间")
-    private LocalDateTime nextTime;
+    private OffsetDateTime nextTime;
 
     /// 发送次数
     @Schema(description = "发送次数")
@@ -68,6 +68,6 @@ public class MerchantCallbackTaskResult extends MchTradeBaseResult {
 
     /// 最后发送时间
     @Schema(description = "最后发送时间")
-    private LocalDateTime latestTime;
+    private OffsetDateTime latestTime;
 }
 

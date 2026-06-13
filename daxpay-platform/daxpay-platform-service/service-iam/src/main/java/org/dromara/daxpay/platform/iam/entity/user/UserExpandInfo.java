@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 用户扩展信息
 ///
@@ -29,14 +29,14 @@ public class UserExpandInfo extends MpBaseEntity implements ToResult<UserExpandI
     /// 生日
     private LocalDate birthday;
 
-    /// 上次登录时间
-    private LocalDateTime lastLoginTime;
+    /// 上次登录时间 (UTC)
+    private OffsetDateTime lastLoginTime;
 
-    /// 注册时间
-    private LocalDateTime registerTime;
+    /// 注册时间 (UTC)
+    private OffsetDateTime registerTime;
 
-    /// 本次登录时间
-    private LocalDateTime currentLoginTime;
+    /// 本次登录时间 (UTC)
+    private OffsetDateTime currentLoginTime;
 
     /// 最后登录IP
     private String lastLoginIp;

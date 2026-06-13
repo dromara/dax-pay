@@ -26,7 +26,8 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -99,7 +100,7 @@ public class OperateLogAspectHandler {
                     .setSuccess(true)
                     .setOperateIp(ip)
                     .setOperateLocation(location)
-                    .setOperateTime(LocalDateTime.now())
+                    .setOperateTime(OffsetDateTime.now(ZoneOffset.UTC))
                     // 注解配置字段
                     .setSaveParam(log.saveParam())
                     .setSaverReturn(log.saverReturn())

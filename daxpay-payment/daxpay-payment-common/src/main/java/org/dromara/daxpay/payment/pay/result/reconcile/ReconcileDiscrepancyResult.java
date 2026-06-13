@@ -11,7 +11,7 @@ import lombok.experimental.FieldNameConstants;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 对账差异记录
 ///
@@ -78,7 +78,7 @@ public class ReconcileDiscrepancyResult extends MchTradeBaseResult {
 
     /// 交易时间
     @Schema(description = "交易时间")
-    private LocalDateTime tradeTime;
+    private OffsetDateTime tradeTime;
 
     /* 通道侧信息 */
     /// 通道交易号
@@ -102,7 +102,7 @@ public class ReconcileDiscrepancyResult extends MchTradeBaseResult {
 
     /// 通道交易时间
     @Schema(description = "通道交易时间")
-    private LocalDateTime channelTradeTime;
+    private OffsetDateTime channelTradeTime;
 
 }
 

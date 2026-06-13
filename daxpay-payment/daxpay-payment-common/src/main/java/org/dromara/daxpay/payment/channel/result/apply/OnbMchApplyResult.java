@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldNameConstants;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # `商户入驻申请结果
 ///
@@ -42,7 +42,7 @@ public class OnbMchApplyResult extends MchBaseResult {
 
     /// 最后提交时间
     @Schema(description = "最后提交时间")
-    private LocalDateTime lastSubmitTime;
+    private OffsetDateTime lastSubmitTime;
 
     /// 来源
     /// @see OnbApplySourceEnum

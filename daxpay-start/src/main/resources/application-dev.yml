@@ -2,7 +2,7 @@ spring:
   datasource:
     # Postgresql连接
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://postgresql:5432/daxpay-dev?serverTimezone=Asia/Shanghai&autoReconnect=true&reWriteBatchedInserts=true
+    url: jdbc:postgresql://postgresql:5432/daxpay-dev?autoReconnect=true&reWriteBatchedInserts=true
     username: bootx
     password: bootx123
     hikari:

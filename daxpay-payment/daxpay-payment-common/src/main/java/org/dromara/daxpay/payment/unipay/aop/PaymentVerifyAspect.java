@@ -22,7 +22,8 @@ import org.slf4j.MDC;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
 /// # 支付签名切面, 用于对支付参数进行校验和签名
 ///
@@ -84,7 +85,7 @@ public class PaymentVerifyAspect {
         }
         // 对返回值添加响应时间并进行签名
         if (proceed instanceof DaxResult<?> result){
-            result.setResTime(LocalDateTime.now());
+            result.setResTime(OffsetDateTime.now(ZoneOffset.UTC));
             paymentAssistService.sign(result);
         } else {
             // 支付方法返回类型需要为 DaxResult

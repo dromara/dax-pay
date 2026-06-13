@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldNameConstants;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 创建实体类 (不带逻辑删除)
 ///
@@ -19,8 +19,8 @@ public abstract class MpCreateEntity extends MpIdEntity {
     @TableField(fill = FieldFill.INSERT)
     private Long creator;
 
-    /// 创建时间
+    /// 创建时间 (UTC)
     @TableField(fill = FieldFill.INSERT)
-    private LocalDateTime createTime;
+    private OffsetDateTime createTime;
 
 }

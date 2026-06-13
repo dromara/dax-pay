@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 退款订单数据
 ///
@@ -74,8 +74,8 @@ public class RefundOrderVo extends MchTradeBaseResult {
     private String reason;
 
     /// 退款结束时间
-    @Schema(description = "退款结束时间")
-    private LocalDateTime finishTime;
+    @Schema(description = "退款结束时间(UTC)")
+    private OffsetDateTime finishTime;
 
     /// 退款状态
     /// @see RefundStatusEnum
@@ -105,8 +105,8 @@ public class RefundOrderVo extends MchTradeBaseResult {
     private String extraParam;
 
     /// 请求时间
-    @Schema(description = "请求时间")
-    private LocalDateTime reqTime;
+    @Schema(description = "请求时间(UTC)")
+    private OffsetDateTime reqTime;
 
     /// 终端ip
     @Schema(description = "终端ip")

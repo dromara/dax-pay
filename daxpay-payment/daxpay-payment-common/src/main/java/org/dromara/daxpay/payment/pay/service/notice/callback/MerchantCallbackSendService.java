@@ -23,7 +23,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Objects;
 
 import static org.dromara.daxpay.platform.core.code.CommonCode.SUCCESS_CODE;
@@ -63,7 +64,7 @@ public class MerchantCallbackSendService {
     /// @param autoSend 是否为自动发送
     public void sendDataBySystem(MerchantCallbackTask task, boolean autoSend){
         paymentAssistService.initMchAndApp(task.getMchNo(), task.getAppId());
-        LocalDateTime sendTime = LocalDateTime.now();
+        OffsetDateTime sendTime = OffsetDateTime.now(ZoneOffset.UTC);
         // 创建发送记录
         MerchantCallbackRecord record = new MerchantCallbackRecord()
                 .setTaskId(task.getId())
@@ -76,7 +77,7 @@ public class MerchantCallbackSendService {
                     .setMchNo(task.getMchNo())
                     .setAppId(task.getAppId());
             // 设置响应时间并签名
-            daxResult.setResTime(LocalDateTime.now());
+            daxResult.setResTime(OffsetDateTime.now(ZoneOffset.UTC));
             paymentAssistService.sign(daxResult);
             HttpResponse execute = HttpUtil.createPost(task.getUrl())
                     .body(JsonUtil.toJsonStr(daxResult), ContentType.JSON.getValue())
@@ -113,7 +114,7 @@ public class MerchantCallbackSendService {
     }
 
     /// 失败处理, 首先发送次数+1, 然后注册后推指定时间的重试任务
-    private void failHandler(MerchantCallbackTask task, LocalDateTime sendTime, boolean autoSend){
+    private void failHandler(MerchantCallbackTask task, OffsetDateTime sendTime, boolean autoSend){
         // 为空不进行处理
         if (Objects.isNull(task)){
             return;

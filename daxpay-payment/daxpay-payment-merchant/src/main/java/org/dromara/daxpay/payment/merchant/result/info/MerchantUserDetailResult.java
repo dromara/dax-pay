@@ -8,7 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 商户用户详情信息
 ///
@@ -53,10 +53,10 @@ public class MerchantUserDetailResult extends MchResult {
     private LocalDate birthday;
 
     @Schema(description = "上次登录时间")
-    private LocalDateTime lastLoginTime;
+    private OffsetDateTime lastLoginTime;
 
     @Schema(description = "本次登录时间")
-    private LocalDateTime currentLoginTime;
+    private OffsetDateTime currentLoginTime;
 
     @Schema(description = "最后登录IP")
     private String lastLoginIp;

@@ -14,12 +14,11 @@ import org.dromara.daxpay.payment.pay.entity.reconcile.ChannelReconcileTrade;
 import org.dromara.daxpay.payment.pay.entity.reconcile.ReconcileDiscrepancy;
 import org.dromara.daxpay.payment.pay.entity.reconcile.ReconcileStatement;
 import org.dromara.daxpay.platform.core.enums.pay.reconcile.ReconcileDiscrepancyTypeEnum;
-import cn.hutool.core.date.LocalDateTimeUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,9 +36,8 @@ public class ReconcileAssistService {
     public List<PlatformReconcileTradeBo> getPlatformTrades(ReconcileStatement statement){
         List<PlatformReconcileTradeBo> reconcileTradeBos = new ArrayList<>();
         // 查询流水
-        LocalDateTime localDateTime = DateTimeUtil.date2DateTime(statement.getDate());
-        LocalDateTime start = LocalDateTimeUtil.beginOfDay(localDateTime);
-        LocalDateTime end = LocalDateTimeUtil.endOfDay(localDateTime);
+        OffsetDateTime start = DateTimeUtil.dateStartUtc(statement.getDate());
+        OffsetDateTime end = DateTimeUtil.dateEndUtc(statement.getDate());
 
         // 支付订单
         List<PayOrder> payOrders = payOrderManager.findReconcile(statement.getProduct(), start, end);

@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 通道对账交易明细, 通过解析通道对账文件获得,
 ///
@@ -40,6 +40,6 @@ public class ChannelReconcileTrade extends MchAppRecordEntity {
     private String tradeStatus;
 
     /// 交易时间
-    private LocalDateTime tradeTime;
+    private OffsetDateTime tradeTime;
 }
 

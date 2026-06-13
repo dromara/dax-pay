@@ -16,7 +16,8 @@ import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequ
 import software.amazon.awssdk.services.s3.presigner.model.PresignedPutObjectRequest;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Optional;
 
 /// # S3文件存储服务
@@ -267,17 +268,17 @@ public class S3FileStorageService {
     /// 计算上传预签名URL过期时间
     ///
     /// @return 过期时间
-    public LocalDateTime calculateUploadExpireTime() {
+    public OffsetDateTime calculateUploadExpireTime() {
         int expireMinutes = getUploadPresignExpireMinutes();
-        return LocalDateTime.now().plusMinutes(expireMinutes);
+        return OffsetDateTime.now(ZoneOffset.UTC).plusMinutes(expireMinutes);
     }
 
     /// 计算下载或查看预签名URL过期时间
     ///
     /// @return 过期时间
-    public LocalDateTime calculateDownloadExpireTime() {
+    public OffsetDateTime calculateDownloadExpireTime() {
         int expireHours = getDownloadPresignExpireHours();
-        return LocalDateTime.now().plusHours(expireHours);
+        return OffsetDateTime.now(ZoneOffset.UTC).plusHours(expireHours);
     }
 
     /// 获取上传预签名URL有效期（分钟）

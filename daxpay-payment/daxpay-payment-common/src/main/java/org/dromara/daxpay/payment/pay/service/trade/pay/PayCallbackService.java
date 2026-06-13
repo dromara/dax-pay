@@ -23,7 +23,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Objects;
 
 /// # 支付回调处理
@@ -96,7 +97,7 @@ public class PayCallbackService {
         CallbackInfo callbackInfo = apiContext.getCallbackInfo();
         // 回调时间超出了支付单超时时间, 记录一下, 不做处理 TODO 考虑不全, 需要做退款or人工处理
         if (Objects.nonNull(payOrder.getExpiredTime())
-                && DateTimeUtil.ge(LocalDateTime.now(), payOrder.getExpiredTime())) {
+                && DateTimeUtil.ge(OffsetDateTime.now(ZoneOffset.UTC), payOrder.getExpiredTime())) {
             callbackInfo.setCallbackStatus(CallbackStatusEnum.EXCEPTION).setCallbackErrorMsg(I18nUtil.get("pay.error.callback.timeout"));
             return;
         }

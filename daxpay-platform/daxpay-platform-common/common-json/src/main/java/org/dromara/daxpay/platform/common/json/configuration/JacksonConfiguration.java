@@ -1,5 +1,6 @@
 package org.dromara.daxpay.platform.common.json.configuration;
 
+import jakarta.annotation.PostConstruct;
 import org.dromara.daxpay.platform.common.json.jdk.Java8TimeFormatModule;
 import org.dromara.daxpay.platform.common.json.jdk.JavaLongTypeModule;
 import org.dromara.daxpay.platform.common.json.util.JacksonUtil;
@@ -13,6 +14,8 @@ import org.springframework.context.annotation.Configuration;
 import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.SerializationFeature;
+
+import java.util.TimeZone;
 
 /// # jackson 序列化自动配置
 ///
@@ -34,7 +37,7 @@ public class JacksonConfiguration {
                 .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
                 // Long 类型序列化为字符串, 防止前端精度丢失
                 .addModule(new JavaLongTypeModule())
-                // Java 8 时间类型格式定制
+                // Java 8 时间类型格式定制 (OffsetDateTime/LocalDate/LocalTime)
                 .addModule(new Java8TimeFormatModule());
     }
 
@@ -42,6 +45,12 @@ public class JacksonConfiguration {
     @Bean
     InitializingBean jacksonUtilInitializer(ObjectMapper objectMapper) {
         return () -> JacksonUtil.setObjectMapper(objectMapper);
+    }
+
+    /// 初始化时设置全局时区为 UTC
+    @PostConstruct
+    public void init() {
+        TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
     }
 
     /// 序列化时忽略空值

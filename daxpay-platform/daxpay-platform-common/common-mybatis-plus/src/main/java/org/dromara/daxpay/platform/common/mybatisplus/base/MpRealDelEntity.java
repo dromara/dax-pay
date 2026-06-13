@@ -7,7 +7,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.FieldNameConstants;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # MP基础类,真实删除
 ///
@@ -20,9 +20,9 @@ public abstract class MpRealDelEntity extends MpCreateEntity {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Long lastModifier;
 
-    /// 最后修改时间
+    /// 最后修改时间 (UTC)
     @TableField(fill = FieldFill.INSERT_UPDATE)
-    private LocalDateTime lastModifiedTime;
+    private OffsetDateTime lastModifiedTime;
 
     /// 版本号, 使用乐观锁
     @Version

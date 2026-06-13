@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 支付通用响应参数
 ///
@@ -29,8 +29,8 @@ public class DaxResult<T>{
     @Schema(description = "签名")
     private String sign;
 
-    @Schema(description = "响应时间")
-    private LocalDateTime resTime;
+    @Schema(description = "响应时间(UTC)")
+    private OffsetDateTime resTime;
 
     /// 追踪ID
     @Schema(description = "追踪ID")

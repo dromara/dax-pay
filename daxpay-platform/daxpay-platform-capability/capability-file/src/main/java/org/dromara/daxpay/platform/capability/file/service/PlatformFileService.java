@@ -18,7 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
 /// # 平台文件服务
 ///
@@ -72,7 +73,7 @@ public class PlatformFileService {
                 bucket, objectKey, param.getContentType(), param.getFileSize()
         );
 
-        LocalDateTime expireTime = s3FileStorageService.calculateUploadExpireTime();
+        OffsetDateTime expireTime = s3FileStorageService.calculateUploadExpireTime();
 
         PlatformFileRecord platformFileRecord = new PlatformFileRecord()
                 .setPath(path)
@@ -279,7 +280,7 @@ public class PlatformFileService {
     /// @param basePath      基础存储路径（可选）
     /// @return 对象Key
     private String generateObjectKey(String fileExtension, String basePath) {
-        String datePath = LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy/MM/dd"));
+        String datePath = OffsetDateTime.now(ZoneOffset.UTC).format(java.time.format.DateTimeFormatter.ofPattern("yyyy/MM/dd"));
         String uuid = IdUtil.fastSimpleUUID();
         String key = datePath + "/" + uuid;
         if (StrUtil.isNotBlank(fileExtension)) {

@@ -13,7 +13,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 
 /// # 登录重试服务
@@ -55,8 +56,8 @@ public class LoginRetryService {
             return;
         }
 
-        LocalDateTime lockTime = security.getLockTime();
-        LocalDateTime now = LocalDateTime.now();
+        OffsetDateTime lockTime = security.getLockTime();
+        OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
         if (lockTime.isBefore(now) || lockTime.isEqual(now)) {
             passwordSecurityManager.unlockAccount(userId);
             return;
@@ -80,7 +81,7 @@ public class LoginRetryService {
         if (security.getLastFailureTime() == null) {
             return;
         }
-        LocalDateTime now = LocalDateTime.now();
+        OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
         long minutesSinceLastFailure = ChronoUnit.MINUTES.between(security.getLastFailureTime(), now);
         if (minutesSinceLastFailure >= config.failureResetMinutes()) {
             passwordSecurityManager.resetFailureCount(userId);
@@ -108,7 +109,7 @@ public class LoginRetryService {
             return;
         }
 
-        LocalDateTime lockTime = LocalDateTime.now().plusMinutes(config.lockoutDurationMinutes());
+        OffsetDateTime lockTime = OffsetDateTime.now(ZoneOffset.UTC).plusMinutes(config.lockoutDurationMinutes());
         passwordSecurityManager.lockAccount(userId, lockTime);
         log.info("用户[{}]登录失败次数达到上限[{}]，锁定至[{}]", account, config.maxFailedAttempts(), lockTime);
     }
@@ -149,8 +150,8 @@ public class LoginRetryService {
                     .setInitialPassword(true);
         }
 
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime expireTime = security.getPasswordExpireTime();
+        OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
+        OffsetDateTime expireTime = security.getPasswordExpireTime();
 
         boolean expired = expireTime != null && expireTime.isBefore(now);
         boolean expiringSoon = false;
@@ -177,8 +178,8 @@ public class LoginRetryService {
             return;
         }
 
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime expireTime = security.getPasswordExpireTime();
+        OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
+        OffsetDateTime expireTime = security.getPasswordExpireTime();
         boolean expired = expireTime != null && expireTime.isBefore(now);
 
         userDetail.setPasswordExpired(expired);

@@ -37,7 +37,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 
 /// # 商户用户管理服务
@@ -116,11 +117,11 @@ public class MerchantUserAdminService {
         passwordPolicyService.savePasswordHistory(userInfo.getId(), passwordHash, null);
 
         // 创建用户扩展信息
-        LocalDateTime passwordExpireTime = this.calculatePasswordExpireTime();
+        OffsetDateTime passwordExpireTime = this.calculatePasswordExpireTime();
         passwordSecurityManager.initPasswordSecurity(userInfo.getId(), passwordExpireTime);
 
         UserExpandInfo userExpandInfo = new UserExpandInfo()
-                .setRegisterTime(LocalDateTime.now());
+                .setRegisterTime(OffsetDateTime.now(ZoneOffset.UTC));
         userExpandInfo.setId(userInfo.getId());
         userExpandInfoManager.save(userExpandInfo);
 
@@ -204,7 +205,7 @@ public class MerchantUserAdminService {
     }
 
     /// 计算密码过期时间
-    private LocalDateTime calculatePasswordExpireTime() {
+    private OffsetDateTime calculatePasswordExpireTime() {
         return null;
     }
 

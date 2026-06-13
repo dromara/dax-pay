@@ -10,7 +10,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 转账订单
 ///
@@ -71,8 +71,8 @@ public class TransferOrderVo extends MchTradeBaseResult {
     private String status;
 
     /// 完成时间
-    @Schema(description = "完成时间")
-    private LocalDateTime finishTime;
+    @Schema(description = "完成时间(UTC)")
+    private OffsetDateTime finishTime;
 
     /// 异步通知地址
     @Schema(description = "异步通知地址")
@@ -87,8 +87,8 @@ public class TransferOrderVo extends MchTradeBaseResult {
     private String transferBody;
 
     /// 请求时间
-    @Schema(description = "请求时间")
-    private LocalDateTime reqTime;
+    @Schema(description = "请求时间(UTC)")
+    private OffsetDateTime reqTime;
 
     /// 终端ip
     @Schema(description = "支付终端ip")

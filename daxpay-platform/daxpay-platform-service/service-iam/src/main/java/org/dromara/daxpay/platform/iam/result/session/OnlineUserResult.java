@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 在线用户信息
 ///
@@ -28,6 +28,6 @@ public class OnlineUserResult {
     @Schema(description = "终端编码")
     private String clientCode;
 
-    @Schema(description = "登录时间")
-    private LocalDateTime loginTime;
+    @Schema(description = "登录时间 (UTC)")
+    private OffsetDateTime loginTime;
 }

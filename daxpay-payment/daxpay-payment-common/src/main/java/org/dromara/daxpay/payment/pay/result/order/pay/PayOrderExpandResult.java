@@ -7,7 +7,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 支付订单扩展信息
 ///
@@ -29,8 +29,8 @@ public class PayOrderExpandResult extends BaseResult {
     @Schema(description = "商户扩展参数")
     private String attach;
 
-    @Schema(description = "请求时间")
-    private LocalDateTime reqTime;
+    @Schema(description = "请求时间(UTC)")
+    private OffsetDateTime reqTime;
 
     @Schema(description = "实收金额")
     private BigDecimal realAmount;

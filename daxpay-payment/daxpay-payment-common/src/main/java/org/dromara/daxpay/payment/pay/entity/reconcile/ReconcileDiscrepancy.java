@@ -13,7 +13,7 @@ import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 对账差异记录
 ///
@@ -64,7 +64,7 @@ public class ReconcileDiscrepancy extends MchAppRecordEntity implements ToResult
     private String tradeStatus;
 
     /// 交易时间
-    private LocalDateTime tradeTime;
+    private OffsetDateTime tradeTime;
 
     /* 通道侧信息 */
 
@@ -84,7 +84,7 @@ public class ReconcileDiscrepancy extends MchAppRecordEntity implements ToResult
     private String channelTradeStatus;
 
     /// 通道交易时间
-    private LocalDateTime channelTradeTime;
+    private OffsetDateTime channelTradeTime;
 
     /// 转换
     @Override

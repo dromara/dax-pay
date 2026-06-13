@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 支付通道交易对账单
 ///
@@ -32,6 +32,6 @@ public class ChannelReconcileTradeBo {
     private BigDecimal amount;
 
     /// 交易时间
-    private LocalDateTime tradeTime;
+    private OffsetDateTime tradeTime;
 }
 

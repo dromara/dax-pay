@@ -29,7 +29,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -73,7 +74,7 @@ public class RefundOrderService {
         refundParam.setMchNo(payOrder.getMchNo());
         refundParam.setAppId(payOrder.getAppId());
         refundParam.setClientIp(ip);
-        refundParam.setReqTime(LocalDateTime.now());
+        refundParam.setReqTime(OffsetDateTime.now(ZoneOffset.UTC));
         refundParam.setOrderNo(payOrder.getOrderNo());
         refundParam.setBizRefundNo("MANUAL_"+TradeNoGenerateUtil.refund());
         refundParam.setAmount(PayUtil.toDecimal(param.getAmount()));
@@ -108,7 +109,7 @@ public class RefundOrderService {
         refundParam.setMchNo(refundOrder.getMchNo());
         refundParam.setAppId(refundOrder.getAppId());
         refundParam.setClientIp(ip);
-        refundParam.setReqTime(LocalDateTime.now());
+        refundParam.setReqTime(OffsetDateTime.now(ZoneOffset.UTC));
         refundParam.setOrderNo(refundOrder.getOrderNo());
         refundParam.setBizRefundNo(refundOrder.getBizRefundNo());
         refundParam.setAmount(PayUtil.toDecimal(refundOrder.getAmount()));

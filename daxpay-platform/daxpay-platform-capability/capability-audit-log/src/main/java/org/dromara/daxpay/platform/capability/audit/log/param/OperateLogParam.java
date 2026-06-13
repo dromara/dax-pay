@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 操作日志
 ///
@@ -62,8 +62,8 @@ public class OperateLogParam {
     @Schema(description = "错误消息")
     private String errorMsg;
 
-    @Schema(description = "操作时间")
-    private LocalDateTime operateTime;
+    @Schema(description = "操作时间 (UTC)")
+    private OffsetDateTime operateTime;
 
     /// ==================== 注解配置字段（AOP采集时使用） ====================
 

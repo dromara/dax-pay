@@ -4,7 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 登录日志
 ///
@@ -43,7 +43,7 @@ public class LoginLogParam {
     @Schema(description = "提示消息")
     private String msg;
 
-    @Schema(description = "访问时间")
-    private LocalDateTime loginTime;
+    @Schema(description = "访问时间 (UTC)")
+    private OffsetDateTime loginTime;
 
 }

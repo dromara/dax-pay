@@ -9,7 +9,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 退款订单数据
 ///
@@ -64,8 +64,8 @@ public class RefundOrderResult {
     private String reason;
 
     /// 退款结束时间
-    @Schema(description = "退款结束时间")
-    private LocalDateTime finishTime;
+    @Schema(description = "退款结束时间(UTC)")
+    private OffsetDateTime finishTime;
 
     /// 退款状态
     /// @see RefundStatusEnum

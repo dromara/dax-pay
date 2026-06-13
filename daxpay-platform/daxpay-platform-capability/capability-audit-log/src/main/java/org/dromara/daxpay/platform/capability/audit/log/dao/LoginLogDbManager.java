@@ -12,7 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 登录日志
 ///
@@ -27,7 +27,7 @@ public class LoginLogDbManager extends BaseManager<LoginLogDbMapper, LoginLogDb>
         return this.page(mpPage, generator);
     }
 
-    public void deleteByOffset(LocalDateTime offset) {
+    public void deleteByOffset(OffsetDateTime offset) {
         lambdaUpdate()
                 .le(LoginLogDb::getLoginTime, offset)
                 .remove();

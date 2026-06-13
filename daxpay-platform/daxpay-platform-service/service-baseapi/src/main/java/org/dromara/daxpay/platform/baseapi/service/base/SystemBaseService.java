@@ -9,7 +9,7 @@ import org.springframework.boot.info.BuildProperties;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
-import java.time.ZoneId;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Map;
@@ -35,7 +35,7 @@ public class SystemBaseService {
         // 构建时间
         String buildTime = optional
                 .map(BuildProperties::getTime)
-                .map(o-> o.atZone(ZoneId.systemDefault())
+                .map(o-> o.atZone(ZoneOffset.UTC)
                         .format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
                 .orElse("");
         // 项目版本

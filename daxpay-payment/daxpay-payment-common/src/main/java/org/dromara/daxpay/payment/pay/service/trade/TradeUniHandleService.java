@@ -19,7 +19,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Objects;
 
 /// # 交易统一处理服务
@@ -57,7 +58,7 @@ public class TradeUniHandleService {
     public void payFail(PayOrder payOrder, String errMsg){
         payOrder.setStatus(PayStatusEnum.FAIL.getCode())
                 .setErrorMsg(errMsg)
-                .setCloseTime(LocalDateTime.now());
+                .setCloseTime(OffsetDateTime.now(ZoneOffset.UTC));
         payOrderManager.updateById(payOrder);
         merchantNoticeService.registerPayNotice(payOrder);
         // 处理插件策略
@@ -68,7 +69,7 @@ public class TradeUniHandleService {
     @IgnoreTenant
     public void payClose(PayOrder order, PayStatusEnum payStatusEnum){
         order.setStatus(payStatusEnum.getCode())
-                .setCloseTime(LocalDateTime.now());
+                .setCloseTime(OffsetDateTime.now(ZoneOffset.UTC));
         payOrderManager.updateById(order);
         // 发送通知
         merchantNoticeService.registerPayNotice(order);

@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 支付结果业务类
 ///
@@ -25,7 +25,7 @@ public class PayResultBo {
     private BigDecimal realAmount;
 
     /// 完成时间
-    private LocalDateTime finishTime;
+    private OffsetDateTime finishTime;
 
     /// 支付参数体(通常用于发起支付的参数)
     private String payBody;

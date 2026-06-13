@@ -17,7 +17,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.Objects;
 
 /// # 支付订单
@@ -104,13 +104,13 @@ public class PayOrder extends MchAppBaseEntity implements ToResult<PayOrderVo> {
     private String provider;
 
     /// 过期时间
-    private LocalDateTime expiredTime;
+    private OffsetDateTime expiredTime;
 
     /// 支付成功时间
-    private LocalDateTime payTime;
+    private OffsetDateTime payTime;
 
     /// 关闭时间
-    private LocalDateTime closeTime;
+    private OffsetDateTime closeTime;
 
     /// 进件商户
     private String onbMchNo;

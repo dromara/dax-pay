@@ -9,7 +9,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 登录日志
 ///
@@ -49,8 +49,8 @@ public class LoginLogDb extends MpIdEntity implements ToResult<LoginLogResult> {
     /// 提示消息
     private String msg;
 
-    /// 访问时间
-    private LocalDateTime loginTime;
+    /// 访问时间 (UTC)
+    private OffsetDateTime loginTime;
 
     @Override
     public LoginLogResult toResult() {

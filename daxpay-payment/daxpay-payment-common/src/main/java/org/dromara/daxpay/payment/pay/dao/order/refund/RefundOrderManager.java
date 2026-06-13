@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -61,7 +61,7 @@ public class RefundOrderManager extends BaseManager<RefundOrderMapper, RefundOrd
 
     /// 查询指定时间的退款中的订单
     @IgnoreTenant
-    public List<RefundOrder> findAllByProgress(LocalDateTime startTime, LocalDateTime endTime) {
+    public List<RefundOrder> findAllByProgress(OffsetDateTime startTime, OffsetDateTime endTime) {
         return lambdaQuery()
                 .eq(RefundOrder::getStatus, RefundStatusEnum.PROGRESS.getCode())
                 .between(MpCreateEntity::getCreateTime, startTime,  endTime)
@@ -70,7 +70,7 @@ public class RefundOrderManager extends BaseManager<RefundOrderMapper, RefundOrd
 
     /// 查询支付完成未结算的订单
     @IgnoreTenant
-    public List<RefundOrder> findAllBySettleAndBeforeNotTenant(LocalDateTime dateTime) {
+    public List<RefundOrder> findAllBySettleAndBeforeNotTenant(OffsetDateTime dateTime) {
         return lambdaQuery()
                 .eq(RefundOrder::getSettleStatus, SettleStatusEnum.NOT_SETTLE.getCode())
                 .eq(RefundOrder::getStatus, RefundStatusEnum.SUCCESS.getCode())
@@ -79,7 +79,7 @@ public class RefundOrderManager extends BaseManager<RefundOrderMapper, RefundOrd
     }
 
     /// 查询对账用订单记录(指定时间和状态的订单)
-    public List<RefundOrder> findSuccessReconcile(String product, LocalDateTime startTime, LocalDateTime endTime) {
+    public List<RefundOrder> findSuccessReconcile(String product, OffsetDateTime startTime, OffsetDateTime endTime) {
         return this.lambdaQuery()
                 .eq(RefundOrder::getProduct, product)
                 .between(RefundOrder::getFinishTime, startTime, endTime)

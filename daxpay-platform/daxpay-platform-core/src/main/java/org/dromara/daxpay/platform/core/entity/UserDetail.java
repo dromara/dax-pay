@@ -6,7 +6,7 @@ import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 用户登录会话信息
 ///
@@ -41,8 +41,8 @@ public class UserDetail {
     /// 是否初始密码
     private Boolean initialPassword;
 
-    /// 密码过期时间
-    private LocalDateTime passwordExpireTime;
+    /// 密码过期时间 (UTC)
+    private OffsetDateTime passwordExpireTime;
 
     /// 是否需要修改密码
     public boolean needChangePassword() {

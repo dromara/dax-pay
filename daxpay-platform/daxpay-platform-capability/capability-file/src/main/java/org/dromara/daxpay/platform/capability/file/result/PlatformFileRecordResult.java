@@ -5,7 +5,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 /// # 平台文件记录返回结果
 ///
@@ -48,5 +48,5 @@ public class PlatformFileRecordResult {
     private String remark;
 
     @Schema(description = "创建时间")
-    private LocalDateTime createTime;
+    private OffsetDateTime createTime;
 }
