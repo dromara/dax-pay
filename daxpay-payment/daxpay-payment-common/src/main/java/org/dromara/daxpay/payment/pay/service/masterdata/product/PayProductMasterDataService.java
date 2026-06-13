@@ -62,12 +62,12 @@ public class PayProductMasterDataService {
     }
 
     /// 返回全部支付产品，按 sortNo、id 排序
+    /// 策略存在时补全特性字段，不存在时仅返回枚举与数据库基础信息
     public List<PayProductResult> listAll() {
         Map<String, PayProduct> dbMap = payProductManager.lambdaQuery().list().stream()
                 .collect(Collectors.toMap(PayProduct::getCode, p -> p, (a, b) -> a));
 
         return Arrays.stream(ProductEnum.values())
-                .filter(e -> PaymentStrategyFactory.existsByProduct(e.getCode(), AbsProductStrategy.class))
                 .map(e -> toProductResult(e, dbMap))
                 .sorted(Comparator.comparing(PayProductResult::getSortNo,
                                 Comparator.nullsLast(Comparator.naturalOrder()))
@@ -91,7 +91,6 @@ public class PayProductMasterDataService {
 
     /// 枚举与库表合并为产品结果
     private PayProductResult toProductResult(ProductEnum product, Map<String, PayProduct> dbMap) {
-        var strategy = PaymentStrategyFactory.createByProduct(product.getCode(), AbsProductStrategy.class);
         PayProductResult result = new PayProductResult()
                 .setCode(product.getCode())
                 .setChannel(product.getChannel())
@@ -111,7 +110,10 @@ public class PayProductMasterDataService {
         } else {
             result.setSortNo(0);
         }
-        applyStrategyFields(strategy, result);
+        AbsProductStrategy strategy = resolveStrategy(product.getCode());
+        if (strategy != null) {
+            applyStrategyFields(strategy, result);
+        }
         return result;
     }
 

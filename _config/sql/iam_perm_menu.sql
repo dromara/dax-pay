@@ -12,7 +12,7 @@
  Target Server Version : 160009 (160009)
  File Encoding         : 65001
 
- Date: 13/06/2026 15:50:03
+ Date: 13/06/2026 17:02:31
 */
 
 
@@ -138,12 +138,39 @@ INSERT INTO "public"."iam_perm_menu" VALUES (4040112, 40401, 'payment:merchant:c
 INSERT INTO "public"."iam_perm_menu" VALUES (4040113, 40401, 'payment:merchant:channelMerchant:wechatApp', 'admin', 'WechatMchAppManage', '微信通道商户应用', 'WeChat Channel Merchant App', 'menu.payment.merchant.channelMerchant.wechatApp', NULL, 't', 'f', '/payment/channel/wechat/manage/mch/app/WechatMchAppManage', '/payment/merchant/channel-merchant/wechat-app-manage', NULL, 11, 'f', 't', 'f', 1, 1, 0, 'f', 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-07 23:57:13.620205+00', '2026-06-07 23:57:13.620205+00');
 INSERT INTO "public"."iam_perm_menu" VALUES (4040114, 40401, 'payment:merchant:channelMerchant:alipayApp', 'admin', 'AlipayMchAppManage', '支付宝通道商户应用', 'Alipay Channel Merchant App', 'menu.payment.merchant.channelMerchant.alipayApp', NULL, 't', 'f', '/payment/channel/alipay/manage/mch/app/AlipayMchAppManage', '/payment/merchant/channel-merchant/alipay-app-manage', NULL, 12, 'f', 't', 'f', 1, 1, 0, 'f', 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-11 22:28:11.274785+00', '2026-06-11 22:28:11.274785+00');
 INSERT INTO "public"."iam_perm_menu" VALUES (404, NULL, 'payment:merchant', 'admin', 'PaymentMerchant', '商户管理', 'Merchant Management', 'menu.payment.merchant', 'lucide:store', 'f', 'f', NULL, '/payment/merchant', NULL, 4, 't', 't', 'f', 0, NULL, 0, 'f', 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-04-05 16:00:00+00', '2026-06-13 00:00:00+00');
-INSERT INTO "public"."iam_perm_menu" VALUES (402, 4, 'payment:isv:basic', 'admin', 'IsvBasic', '基础管理', 'Basic Management', 'menu.payment.isv.basic', 'lucide:layers', 'f', 'f', NULL, '/payment/isv/basic', NULL, 2, 'f', 't', 'f', 1, 1, 0, 'f', 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-13 00:00:00+00', '2026-06-13 00:00:00+00');
-INSERT INTO "public"."iam_perm_menu" VALUES (403, 4, 'payment:isv:pay-config', 'admin', 'IsvPayConfig', '支付配置', 'Payment Config', 'menu.payment.isv.payConfig', 'lucide:settings-2', 'f', 'f', NULL, '/payment/isv/pay-config', NULL, 3, 'f', 't', 'f', 1, 1, 0, 'f', 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-13 00:00:00+00', '2026-06-13 00:00:00+00');
-INSERT INTO "public"."iam_perm_menu" VALUES (405, 4, 'payment:isv:business', 'admin', 'IsvBusiness', '业务配置', 'Business Config', 'menu.payment.isv.business', 'lucide:briefcase', 'f', 'f', NULL, '/payment/isv/business', NULL, 4, 'f', 't', 'f', 1, 1, 0, 'f', 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-13 00:00:00+00', '2026-06-13 00:00:00+00');
-INSERT INTO "public"."iam_perm_menu" VALUES (40201, 402, 'payment:isv:user', 'admin', 'IsvUserList', '用户管理', 'User Management', 'menu.payment.isv.basic.user', 'lucide:users', 'f', 'f', '/_core/fallback/coming-soon', '/payment/isv/user', NULL, 1, 'f', 't', 'f', 1, 1, 0, 'f', 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-13 00:00:00+00', '2026-06-13 00:00:00+00');
-INSERT INTO "public"."iam_perm_menu" VALUES (40203, 402, 'payment:isv:site', 'admin', 'IsvSiteConfig', '站点配置', 'Site Config', 'menu.payment.isv.basic.site', 'lucide:globe', 'f', 'f', '/_core/fallback/coming-soon', '/payment/isv/site', NULL, 3, 'f', 't', 'f', 1, 1, 0, 'f', 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-13 00:00:00+00', '2026-06-13 00:00:00+00');
-INSERT INTO "public"."iam_perm_menu" VALUES (40301, 403, 'payment:isv:product', 'admin', 'IsvProductConfig', '支付产品管理', 'Payment Product', 'menu.payment.isv.payConfig.product', 'lucide:package', 'f', 'f', '/_core/fallback/coming-soon', '/payment/isv/product', NULL, 1, 'f', 't', 'f', 1, 1, 0, 'f', 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-13 00:00:00+00', '2026-06-13 00:00:00+00');
+INSERT INTO "public"."iam_perm_menu" VALUES (30403, 304, 'system:credential:config', 'admin', 'PlatformCredentialConfig', '对接配置', 'Credential Config', 'menu.system.config.credential', 'lucide:key-round', 'f', 'f', '/system/config/credential/PlatformCredentialConfig', '/system/config/credential', NULL, 3, 'f', 't', 'f', 1, 1, 0, 'f', 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-13 00:00:00+00', '2026-06-13 00:00:00+00');
+
+-- 支付配置目录
+INSERT INTO "public"."iam_perm_menu" VALUES (405, 4, 'payment:config', 'admin', 'PaymentConfig', '支付配置', 'Payment Config', 'menu.payment.config', 'lucide:settings-2', 'f', 'f', NULL, '/payment/config', NULL, 2, 'f', 't', 'f', 1, 1, 0, 'f', 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-14 00:00:00+00', '2026-06-14 00:00:00+00')
+ON CONFLICT (id) DO UPDATE SET
+  menu_code = EXCLUDED.menu_code,
+  name = EXCLUDED.name,
+  title_cn = EXCLUDED.title_cn,
+  title_en = EXCLUDED.title_en,
+  i18n_key = EXCLUDED.i18n_key,
+  icon = EXCLUDED.icon,
+  path = EXCLUDED.path,
+  sort_no = EXCLUDED.sort_no,
+  keep_alive = EXCLUDED.keep_alive,
+  menu_type = EXCLUDED.menu_type,
+  last_modified_time = EXCLUDED.last_modified_time;
+
+-- 支付配置：支付产品管理（卡片式）
+INSERT INTO "public"."iam_perm_menu" VALUES (40105, 405, 'payment:config:productConfig', 'admin', 'ProductConfig', '支付产品管理', 'Payment Product Management', 'menu.payment.config.productConfig', 'lucide:layout-grid', 'f', 'f', '/payment/config/product/ProductConfig', '/payment/config/product', NULL, 1, 'f', 't', 'f', 1, 1, 0, 'f', 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-14 00:00:00+00', '2026-06-14 00:00:00+00')
+ON CONFLICT (id) DO UPDATE SET
+  pid = EXCLUDED.pid,
+  menu_code = EXCLUDED.menu_code,
+  name = EXCLUDED.name,
+  title_cn = EXCLUDED.title_cn,
+  title_en = EXCLUDED.title_en,
+  i18n_key = EXCLUDED.i18n_key,
+  icon = EXCLUDED.icon,
+  component = EXCLUDED.component,
+  path = EXCLUDED.path,
+  sort_no = EXCLUDED.sort_no,
+  keep_alive = EXCLUDED.keep_alive,
+  menu_type = EXCLUDED.menu_type,
+  last_modified_time = EXCLUDED.last_modified_time;
 
 -- ----------------------------
 -- Primary Key structure for table iam_perm_menu

@@ -1,7 +1,5 @@
 package org.dromara.daxpay.payment.merchant.service.route.runtime;
 
-import org.dromara.daxpay.payment.merchant.dao.config.MchProductConfigManager;
-import org.dromara.daxpay.payment.merchant.entity.config.MchProductConfig;
 import org.dromara.daxpay.payment.merchant.service.route.support.PayRouteStrategyCapabilitySupport;
 import org.dromara.daxpay.platform.core.enums.pay.channel.PayMethodEnum;
 import org.dromara.daxpay.platform.core.enums.pay.channel.ProductEnum;
@@ -11,23 +9,23 @@ import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 /// # 通道路由产品解析器
 ///
+/// 开源版：所有产品默认可用，直接从产品枚举中按通道+支付方式解析产品编码。
 @Service
 @RequiredArgsConstructor
 public class PayRouteProductResolver {
 
-    private final MchProductConfigManager productConfigManager;
     private final PayRouteStrategyCapabilitySupport payRouteStrategyCapabilitySupport;
 
-    /// 根据商户已开通产品及支付方式解析产品编码
+    /// 根据通道及支付方式解析产品编码（开源版：所有产品默认可用）
     public String resolve(String mchNo, String channel, String method) {
-        return productConfigManager.findByMchNo(mchNo).stream()
-                .filter(MchProductConfig::isEnable)
-                .filter(config -> Objects.equals(config.getChannel(), channel))
-                .map(MchProductConfig::getProduct)
+        return Arrays.stream(ProductEnum.values())
+                .filter(pe -> Objects.equals(pe.getChannel(), channel))
+                .map(ProductEnum::getCode)
                 .filter(product -> payRouteStrategyCapabilitySupport.routeProductSupportsMethod(
                         product, PayMethodEnum.findByCode(method)))
                 .findFirst()

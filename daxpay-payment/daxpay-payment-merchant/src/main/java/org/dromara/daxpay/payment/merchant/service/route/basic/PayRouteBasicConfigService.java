@@ -2,10 +2,8 @@ package org.dromara.daxpay.payment.merchant.service.route.basic;
 
 import org.dromara.daxpay.payment.common.util.PaymentStrategyFactory;
 import org.dromara.daxpay.payment.merchant.dao.appinfo.MchAppInfoManager;
-import org.dromara.daxpay.payment.merchant.dao.config.MchProductConfigManager;
 import org.dromara.daxpay.payment.merchant.dao.route.basic.PayRouteBasicConfigManager;
 import org.dromara.daxpay.payment.merchant.dao.route.strategy.PayRouteStrategyManager;
-import org.dromara.daxpay.payment.merchant.entity.config.MchProductConfig;
 import org.dromara.daxpay.payment.merchant.entity.route.basic.PayRouteBasicConfig;
 import org.dromara.daxpay.payment.merchant.entity.route.strategy.PayRouteStrategy;
 import org.dromara.daxpay.payment.merchant.param.route.basic.PayRouteBasicConfigBatchParam;
@@ -14,6 +12,7 @@ import org.dromara.daxpay.payment.merchant.result.route.basic.PayRouteBasicConfi
 import org.dromara.daxpay.payment.merchant.service.route.support.PayRouteConfigProviders;
 import org.dromara.daxpay.payment.pay.strategy.AbsProductStrategy;
 import org.dromara.daxpay.platform.core.enums.pay.channel.PayProviderEnum;
+import org.dromara.daxpay.platform.core.enums.pay.channel.ProductEnum;
 import org.dromara.daxpay.platform.core.exception.BizInfoException;
 import org.dromara.daxpay.platform.core.exception.DataNotExistException;
 import org.dromara.daxpay.platform.core.code.CommonErrorCode;
@@ -22,14 +21,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 /// # 通道路由基础模式配置
 ///
-/// 按支付渠道配置默认支付产品，保存前校验商户已开通产品能力。
-///
+/// 按支付渠道配置默认支付产品，保存前校验产品策略能力。
+/// 开源版：所有产品默认可用，不再检查商户启用状态。
 @Service
 @RequiredArgsConstructor
 public class PayRouteBasicConfigService {
@@ -37,25 +37,21 @@ public class PayRouteBasicConfigService {
     private final PayRouteStrategyManager strategyManager;
     private final PayRouteBasicConfigManager basicConfigManager;
     private final MchAppInfoManager mchAppInfoManager;
-    private final MchProductConfigManager mchProductConfigManager;
 
     /// 查询基础模式面板数据（已保存 product + 各渠道可选 products）
     public List<PayRouteBasicConfigResult> listBasicByAppId(String appId) {
         PayRouteStrategy strategy = requireStrategy(appId);
-        String mchNo = mchAppInfoManager.requireMchNoByAppIdNotTenant(appId);
-        List<MchProductConfig> mchProducts = enabledMchProducts(mchNo);
         Map<String, String> productMap = basicConfigManager.findByStrategyId(strategy.getId()).stream()
                 .filter(config -> StrUtil.isNotBlank(config.getProvider()))
                 .collect(Collectors.toMap(PayRouteBasicConfig::getProvider, PayRouteBasicConfig::getProduct, (a, b) -> a));
         return PayRouteConfigProviders.enumsInWhitelistOrder().stream()
-                .map(provider -> toPanelResult(provider, productMap.get(provider.getCode()), mchProducts))
+                .map(provider -> toPanelResult(provider, productMap.get(provider.getCode())))
                 .toList();
     }
 
     /// 批量保存基础模式配置（先删后插）
     @Transactional(rollbackFor = Exception.class)
     public void saveBasicBatch(PayRouteBasicConfigBatchParam param) {
-        String mchNo = mchAppInfoManager.requireMchNoByAppIdNotTenant(param.getAppId());
         PayRouteStrategy strategy = requireStrategy(param.getAppId());
         basicConfigManager.deleteByStrategyId(strategy.getId());
         for (PayRouteBasicConfigItem item : param.getItems()) {
@@ -63,7 +59,7 @@ public class PayRouteBasicConfigService {
                 continue;
             }
             PayProviderEnum provider = validateBasicPayProviderCode(item.getProvider());
-            validateBasicProduct(mchNo, item.getProduct(), provider);
+            validateBasicProduct(item.getProduct(), provider);
             PayRouteBasicConfig config = new PayRouteBasicConfig();
             config.setStrategyId(strategy.getId());
             config.setProvider(item.getProvider());
@@ -72,11 +68,14 @@ public class PayRouteBasicConfigService {
         }
     }
 
-    /// 校验产品属于该商户且支持指定支付渠道
-    public void validateBasicProduct(String mchNo, String product, PayProviderEnum provider) {
-        List<MchProductConfig> mchProducts = enabledMchProducts(mchNo);
-        List<String> products = productsForProvider(mchProducts, provider);
-        if (!products.contains(product)) {
+    /// 校验产品存在且支持指定支付渠道（开源版：不再检查商户启用状态）
+    public void validateBasicProduct(String product, PayProviderEnum provider) {
+        ProductEnum productEnum = ProductEnum.findByCode(product);
+        if (productEnum == null) {
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "pay.route.error.productInvalid", product);
+        }
+        if (!PaymentStrategyFactory.productSupportsProvider(product, provider)) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.route.error.basicProductNotAvailable", provider.getCode());
         }
@@ -96,30 +95,20 @@ public class PayRouteBasicConfigService {
     }
 
     /// 组装单渠道基础模式面板行：已保存 product + 该渠道下可选 products
-    private PayRouteBasicConfigResult toPanelResult(
-            PayProviderEnum provider,
-            String savedProduct,
-            List<MchProductConfig> mchProducts) {
-        List<String> products = productsForProvider(mchProducts, provider);
+    private PayRouteBasicConfigResult toPanelResult(PayProviderEnum provider, String savedProduct) {
+        List<String> products = productsForProvider(provider);
         return new PayRouteBasicConfigResult()
                 .setProvider(provider.getCode())
                 .setProduct(savedProduct)
                 .setProducts(products);
     }
 
-    /// 从商户已开通产品中筛出支持指定支付渠道的产品编码
-    private List<String> productsForProvider(List<MchProductConfig> mchProducts, PayProviderEnum provider) {
-        return mchProducts.stream()
-                .map(MchProductConfig::getProduct)
+    /// 从产品枚举中筛出支持指定支付渠道的产品编码（开源版：所有产品默认可用）
+    private List<String> productsForProvider(PayProviderEnum provider) {
+        return Arrays.stream(ProductEnum.values())
+                .map(ProductEnum::getCode)
                 .filter(product -> PaymentStrategyFactory.productSupportsProvider(product, provider))
                 .distinct()
-                .toList();
-    }
-
-    /// 查询商户已启用的支付产品配置
-    private List<MchProductConfig> enabledMchProducts(String mchNo) {
-        return mchProductConfigManager.findByMchNo(mchNo).stream()
-                .filter(MchProductConfig::isEnable)
                 .toList();
     }
 

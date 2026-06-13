@@ -53,4 +53,12 @@ public class PayProductMasterDataController {
         return Res.ok(payProductMasterDataService.dropdown());
     }
 
+    /// 全量查询支付产品列表（卡片式管理页使用）
+    @PermCode(code = "view", nameCn = "产品查看", nameEn = "Product View")
+    @Operation(summary = "全量查询支付产品")
+    @GetMapping("/list-all")
+    public Result<List<PayProductResult>> listAll() {
+        return Res.ok(payProductMasterDataService.listAll());
+    }
+
 }

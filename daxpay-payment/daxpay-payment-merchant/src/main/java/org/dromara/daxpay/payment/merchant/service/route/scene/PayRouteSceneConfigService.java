@@ -95,7 +95,7 @@ public class PayRouteSceneConfigService {
                             PayRouteI18nHelper.payMethod(item.getMethod()), PayRouteI18nHelper.product(item.getProduct()));
                 }
                 payRouteStrategyCapabilitySupport.validateSceneCapability(
-                        mchNo, item.getProvider(), item.getMethod(), item.getProduct(), item.getCapability());
+                        item.getProvider(), item.getMethod(), item.getProduct(), item.getCapability());
                 var route = sceneRouteResolver.resolve(item.getProduct(), item.getProvider(), item.getMethod());
                 channel = route.channel();
                 method = route.method();
@@ -143,7 +143,7 @@ public class PayRouteSceneConfigService {
             return List.of();
         }
         String mchNo = mchAppInfoManager.requireMchNoByAppIdNotTenant(appId);
-        return payRouteStrategyCapabilitySupport.listSceneProductCandidates(mchNo, provider, method);
+        return payRouteStrategyCapabilitySupport.listSceneProductCandidates(provider, method);
     }
 
     /// 按目录项与支付产品筛选支付能力候选（策略 Map ∩ DB，不落库）
@@ -153,7 +153,7 @@ public class PayRouteSceneConfigService {
             return List.of();
         }
         String mchNo = mchAppInfoManager.requireMchNoByAppIdNotTenant(appId);
-        return payRouteStrategyCapabilitySupport.listSceneCapabilityCandidates(mchNo, provider, method, product);
+        return payRouteStrategyCapabilitySupport.listSceneCapabilityCandidates(provider, method, product);
     }
 
     /// 回显推断支付能力（候选唯一时返回编码）
@@ -162,7 +162,7 @@ public class PayRouteSceneConfigService {
             return null;
         }
         String mchNo = mchAppInfoManager.requireMchNoByAppIdNotTenant(appId);
-        return payRouteStrategyCapabilitySupport.inferSceneCapability(mchNo, provider, method, product);
+        return payRouteStrategyCapabilitySupport.inferSceneCapability(provider, method, product);
     }
 
     /// 校验批量保存项：provider + method 在策略内唯一
@@ -210,7 +210,7 @@ public class PayRouteSceneConfigService {
         if (provider == null) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.route.error.basicProviderInvalid");
         }
-        basicConfigService.validateBasicProduct(mchNo, product, provider);
+        basicConfigService.validateBasicProduct(product, provider);
     }
 
     /// 校验通道+方式可解析为商户产品且存在对应产品策略

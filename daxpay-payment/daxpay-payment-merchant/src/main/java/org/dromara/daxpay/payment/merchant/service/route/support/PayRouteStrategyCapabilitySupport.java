@@ -1,8 +1,6 @@
 package org.dromara.daxpay.payment.merchant.service.route.support;
 
 import org.dromara.daxpay.payment.common.util.PaymentStrategyFactory;
-import org.dromara.daxpay.payment.merchant.dao.config.MchProductConfigManager;
-import org.dromara.daxpay.payment.merchant.entity.config.MchProductConfig;
 import org.dromara.daxpay.payment.merchant.param.route.scene.PayRouteSceneCapabilityBatchItem;
 import org.dromara.daxpay.payment.pay.dao.masterdata.capability.PayCapabilityManager;
 import org.dromara.daxpay.payment.pay.dao.masterdata.capability.PayProductCapabilityManager;
@@ -26,19 +24,20 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-/// # 通道路由：策略方式→能力与 DB/商户求交
+/// # 通道路由：策略方式→能力与 DB 求交
 ///
 /// 统一场景模式产品/能力候选及保存校验，数据源为 {@link AbsProductStrategy#methodCapabilityMapping()}。
+/// 开源版：所有产品默认可用，不再检查商户启用状态。
 @Service
 @RequiredArgsConstructor
 public class PayRouteStrategyCapabilitySupport {
 
-    private final MchProductConfigManager mchProductConfigManager;
     private final PayProviderMethodService payProviderMethodService;
     private final PayProductCapabilityService payProductCapabilityService;
     private final PayProductCapabilityManager payProductCapabilityManager;
@@ -54,7 +53,7 @@ public class PayRouteStrategyCapabilitySupport {
             String provider = entry.getProviderCode();
             String method = entry.getMethodCode();
             String key = PayProviderMethodManager.pairKey(provider, method);
-            index.put(key, listSceneProductCandidates(mchNo, provider, method));
+            index.put(key, listSceneProductCandidates(provider, method));
         }
         return index;
     }
@@ -72,7 +71,7 @@ public class PayRouteStrategyCapabilitySupport {
             }
             String key = capabilityBatchKey(item.getProvider(), item.getMethod(), item.getProduct());
             index.put(key, listSceneCapabilityCandidates(
-                    mchNo, item.getProvider(), item.getMethod(), item.getProduct()));
+                    item.getProvider(), item.getMethod(), item.getProduct()));
         }
         return index;
     }
@@ -82,23 +81,19 @@ public class PayRouteStrategyCapabilitySupport {
         return provider + "|" + method + "|" + product;
     }
 
-    /// 目录项下商户可用支付产品候选
-    public List<LabelValue> listSceneProductCandidates(String mchNo, String provider, String method) {
+    /// 目录项下可用支付产品候选（开源版：所有产品默认可用）
+    public List<LabelValue> listSceneProductCandidates(String provider, String method) {
         if (!payProviderMethodService.contains(provider, method)) {
             return List.of();
         }
         PayMethodEnum methodEnum = PayMethodEnum.findByCode(method);
         List<LabelValue> results = new ArrayList<>();
-        for (MchProductConfig config : mchProductConfigManager.findByMchNo(mchNo)) {
-            if (!config.isEnable() || StrUtil.isBlank(config.getProduct())) {
-                continue;
-            }
-            String product = config.getProduct();
+        for (ProductEnum pe : ProductEnum.values()) {
+            String product = pe.getCode();
             if (!routeProductSupportsMethod(product, methodEnum)) {
                 continue;
             }
-            ProductEnum productEnum = ProductEnum.findByCode(product);
-            String label = productEnum != null ? I18nUtil.getEnumName(productEnum) : product;
+            String label = I18nUtil.getEnumName(pe);
             if (results.stream().noneMatch(item -> Objects.equals(item.getValue(), product))) {
                 results.add(new LabelValue(label, product));
             }
@@ -107,11 +102,9 @@ public class PayRouteStrategyCapabilitySupport {
     }
 
     /// 指定产品+目录项下支付能力候选（策略 Map ∩ DB ∩ 能力主数据启用）
-    public List<LabelValue> listSceneCapabilityCandidates(String mchNo, String provider, String method, String product) {
+    /// 开源版：不再检查商户产品启用状态
+    public List<LabelValue> listSceneCapabilityCandidates(String provider, String method, String product) {
         if (!payProviderMethodService.contains(provider, method)) {
-            return List.of();
-        }
-        if (!merchantProductEnabled(mchNo, product)) {
             return List.of();
         }
         if (!PaymentStrategyFactory.existsByProduct(product, AbsProductStrategy.class)) {
@@ -126,8 +119,8 @@ public class PayRouteStrategyCapabilitySupport {
     }
 
     /// 候选唯一时返回能力编码（仅供回显）
-    public String inferSceneCapability(String mchNo, String provider, String method, String product) {
-        List<LabelValue> candidates = listSceneCapabilityCandidates(mchNo, provider, method, product);
+    public String inferSceneCapability(String provider, String method, String product) {
+        List<LabelValue> candidates = listSceneCapabilityCandidates(provider, method, product);
         if (candidates.size() == 1) {
             return candidates.getFirst().getValue();
         }
@@ -135,12 +128,12 @@ public class PayRouteStrategyCapabilitySupport {
     }
 
     /// 校验场景配置项所选能力在候选集合内
-    public void validateSceneCapability(String mchNo, String provider, String method, String product, String capability) {
+    public void validateSceneCapability(String provider, String method, String product, String capability) {
         if (StrUtil.isBlank(capability)) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.route.error.sceneCapabilityRequired");
         }
-        boolean matched = listSceneCapabilityCandidates(mchNo, provider, method, product).stream()
+        boolean matched = listSceneCapabilityCandidates(provider, method, product).stream()
                 .anyMatch(item -> Objects.equals(item.getValue(), capability));
         if (!matched) {
             PayCapabilityEnum capabilityEnum = PayCapabilityEnum.findByCode(capability);
@@ -171,11 +164,6 @@ public class PayRouteStrategyCapabilitySupport {
             return false;
         }
         return routeProductSupportsMethod(product, PayMethodEnum.findByCode(methodCode));
-    }
-
-    private boolean merchantProductEnabled(String mchNo, String product) {
-        return mchProductConfigManager.findByMchNo(mchNo).stream()
-                .anyMatch(config -> config.isEnable() && Objects.equals(config.getProduct(), product));
     }
 
     private boolean productCapabilityEnabled(String productCode, String capabilityCode) {

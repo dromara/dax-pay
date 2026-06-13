@@ -1,8 +1,6 @@
 package org.dromara.daxpay.payment.merchant.service.route.basic;
 
 import org.dromara.daxpay.payment.common.util.PaymentStrategyFactory;
-import org.dromara.daxpay.payment.merchant.dao.config.MchProductConfigManager;
-import org.dromara.daxpay.payment.merchant.entity.config.MchProductConfig;
 import org.dromara.daxpay.payment.merchant.entity.route.basic.PayRouteBasicConfig;
 import org.dromara.daxpay.payment.merchant.service.route.support.PayRouteCapabilityService;
 import org.dromara.daxpay.payment.merchant.service.route.model.RouteHit;
@@ -22,12 +20,12 @@ import java.util.Objects;
 
 /// # 基础模式通道路由匹配器
 ///
-/// 按已配置的支付渠道与支付产品，结合产品策略解析通道与支付方式
+/// 按已配置的支付渠道与支付产品，结合产品策略解析通道与支付方式。
+/// 开源版：所有产品默认可用，不再检查商户启用状态。
 @Component
 @RequiredArgsConstructor
 public class PayRouteBasicMatcher {
 
-    private final MchProductConfigManager productConfigManager;
     private final PayRouteProductResolver productResolver;
     private final PayRouteCapabilityService payRouteCapabilityService;
 
@@ -45,7 +43,7 @@ public class PayRouteBasicMatcher {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.route.error.basicProductNotConfigured", PayRouteI18nHelper.provider(payParam.getProvider()));
         }
-        assertProductConfigured(payParam.getMchNo(), product, provider);
+        assertProductConfigured(product, provider);
         if (!PaymentStrategyFactory.existsByProduct(product, AbsProductStrategy.class)) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.route.error.productStrategyMissing");
@@ -75,15 +73,8 @@ public class PayRouteBasicMatcher {
                 .orElse(null);
     }
 
-    /// 路由配置的产品仍须在商户已开通产品范围内，且产品策略支持该支付渠道
-    private void assertProductConfigured(String mchNo, String product, PayProviderEnum provider) {
-        boolean mchEnabled = productConfigManager.findByMchNo(mchNo).stream()
-                .filter(MchProductConfig::isEnable)
-                .anyMatch(config -> Objects.equals(config.getProduct(), product));
-        if (!mchEnabled) {
-            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                    "pay.route.error.basicProductNotAvailable", PayRouteI18nHelper.provider(provider.getCode()));
-        }
+    /// 校验产品策略支持该支付渠道（开源版：不再检查商户启用状态）
+    private void assertProductConfigured(String product, PayProviderEnum provider) {
         if (!PaymentStrategyFactory.productSupportsProvider(product, provider)) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.route.error.basicProductNotAvailable", PayRouteI18nHelper.provider(provider.getCode()));
