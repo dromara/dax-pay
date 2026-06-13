@@ -135,9 +135,6 @@ public class PermCodeScanService {
         if (CollUtil.isNotEmpty(result.getUpdatedCodes())) {
             log.info("权限码扫描更新: {}", result.getUpdatedCodes());
         }
-        if (CollUtil.isNotEmpty(result.getSkippedCodes())) {
-            log.info("权限码扫描跳过: {}", result.getSkippedCodes());
-        }
         if (CollUtil.isNotEmpty(result.getDeletedCodes())) {
             log.info("权限码扫描删除: {}", result.getDeletedCodes());
         }
