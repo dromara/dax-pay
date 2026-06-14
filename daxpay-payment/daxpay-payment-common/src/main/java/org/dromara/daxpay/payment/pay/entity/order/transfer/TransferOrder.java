@@ -97,6 +97,7 @@ public class TransferOrder extends MchAppBaseEntity implements ToResult<Transfer
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String errorMsg;
 
+    /// 转换
     @Override
     public TransferOrderVo toResult() {
         return TransferOrderConvert.CONVERT.toVo(this);

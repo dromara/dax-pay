@@ -31,6 +31,7 @@ public class PayChannel extends MpBaseEntity implements ToResult<PayChannelResul
     /// 图标
     private String icon;
 
+    /// 转换
     @Override
     public PayChannelResult toResult() {
         return PayChannelConvert.CONVERT.toResult(this);

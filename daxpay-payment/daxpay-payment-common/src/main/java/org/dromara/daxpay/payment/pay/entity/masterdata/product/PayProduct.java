@@ -45,6 +45,7 @@ public class PayProduct extends MpBaseEntity implements ToResult<PayProductResul
     /// 是否支持沙箱环境
     private Boolean sandbox;
 
+    /// 转换
     @Override
     public PayProductResult toResult() {
         return PayProductConvert.CONVERT.toResult(this);

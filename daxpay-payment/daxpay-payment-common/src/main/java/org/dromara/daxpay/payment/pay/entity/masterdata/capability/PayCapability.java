@@ -29,6 +29,7 @@ public class PayCapability extends MpBaseEntity implements ToResult<PayCapabilit
     /// 说明
     private String description;
 
+    /// 转换
     @Override
     public PayCapabilityResult toResult() {
         return PayCapabilityConvert.CONVERT.toResult(this);

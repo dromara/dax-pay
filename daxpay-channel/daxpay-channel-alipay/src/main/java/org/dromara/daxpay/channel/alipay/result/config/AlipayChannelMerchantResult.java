@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
+/// # 支付宝通道商户配置结果
+///
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)

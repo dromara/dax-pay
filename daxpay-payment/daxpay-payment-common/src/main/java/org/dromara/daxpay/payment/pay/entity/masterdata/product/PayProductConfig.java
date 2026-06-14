@@ -32,6 +32,7 @@ public class PayProductConfig extends MpBaseEntity implements ToResult<PayProduc
     /// 备注
     private String remark;
 
+    /// 转换
     @Override
     public PayProductConfigResult toResult() {
         return PayProductConfigConvert.CONVERT.toResult(this);

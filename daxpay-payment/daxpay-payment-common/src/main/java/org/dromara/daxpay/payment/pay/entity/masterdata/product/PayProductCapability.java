@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /// # 支付产品与支付能力关联
+///
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)

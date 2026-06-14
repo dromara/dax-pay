@@ -63,6 +63,7 @@ public class OnbLicenseProfile extends MchBaseEntity implements ToResult<OnbLice
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String licensePicUrl;
 
+    /// 转换
     @Override
     public OnbLicenseProfileBo toResult() {
         return OnbLicenseProfileConvert.CONVERT.toResult(this);

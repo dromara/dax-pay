@@ -69,6 +69,7 @@ public class OnbCardHolderProfile extends MchBaseEntity implements ToResult<OnbC
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String letterOfAuthPicUrl;
 
+    /// 转换
     @Override
     public OnbCardHolderProfileBo toResult() {
         return OnbCardHolderProfileConvert.CONVERT.toResult(this);

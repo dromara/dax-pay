@@ -70,6 +70,7 @@ public class OnbShopProfile extends MchBaseEntity implements ToResult<OnbShopPro
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String cashierPicUrl;
 
+    /// 转换
     @Override
     public OnbShopProfileBo toResult() {
         return OnbShopProfileConvert.CONVERT.toResult(this);
