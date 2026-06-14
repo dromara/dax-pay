@@ -8,7 +8,7 @@ import org.dromara.daxpay.platform.capability.wechat.message.param.UniformMessag
 import org.dromara.daxpay.platform.capability.wechat.message.result.MessageSendResult;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
@@ -74,29 +74,29 @@ public class WechatMessageRecordService {
     /// @param startTime 开始时间
     /// @param endTime 结束时间
     /// @return 消息记录列表
-    public List<WechatMessageRecord> queryRecords(String openId, String messageType, 
-                                                   String status, OffsetDateTime startTime, 
+    public List<WechatMessageRecord> queryRecords(String openId, String messageType,
+                                                   String status, OffsetDateTime startTime,
                                                    OffsetDateTime endTime) {
-        QueryWrapper<WechatMessageRecord> wrapper = new QueryWrapper<>();
-        
+        LambdaQueryWrapper<WechatMessageRecord> wrapper = new LambdaQueryWrapper<>();
+
         if (StrUtil.isNotBlank(openId)) {
-            wrapper.eq("open_id", openId);
+            wrapper.eq(WechatMessageRecord::getOpenId, openId);
         }
         if (StrUtil.isNotBlank(messageType)) {
-            wrapper.eq("message_type", messageType);
+            wrapper.eq(WechatMessageRecord::getMessageType, messageType);
         }
         if (StrUtil.isNotBlank(status)) {
-            wrapper.eq("status", status);
+            wrapper.eq(WechatMessageRecord::getStatus, status);
         }
         if (startTime != null) {
-            wrapper.ge("send_time", startTime);
+            wrapper.ge(WechatMessageRecord::getSendTime, startTime);
         }
         if (endTime != null) {
-            wrapper.le("send_time", endTime);
+            wrapper.le(WechatMessageRecord::getSendTime, endTime);
         }
-        
-        wrapper.orderByDesc("send_time");
-        
+
+        wrapper.orderByDesc(WechatMessageRecord::getSendTime);
+
         return recordManager.findAll(wrapper);
     }
 

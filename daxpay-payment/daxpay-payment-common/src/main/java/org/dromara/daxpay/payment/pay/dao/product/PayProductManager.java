@@ -42,6 +42,7 @@ public class PayProductManager extends BaseManager<PayProductMapper, PayProduct>
     public Page<PayProduct> page(PageParam pageParam, PayProductQuery query) {
         Page<PayProduct> mpPage = MpUtil.getMpPage(pageParam);
         QueryWrapper<PayProduct> generator = QueryGenerator.generator(query);
+        generator.lambda().orderByAsc(PayProduct::getSortNo).orderByAsc(PayProduct::getId);
         return page(mpPage, generator);
     }
 }
