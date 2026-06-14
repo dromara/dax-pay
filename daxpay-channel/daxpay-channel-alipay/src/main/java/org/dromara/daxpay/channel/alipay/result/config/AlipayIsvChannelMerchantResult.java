@@ -6,13 +6,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-/// # 支付宝通道商户配置结果
+/// # 支付宝服务商通道商户绑定结果
 ///
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@Schema(title = "支付宝通道商户配置结果")
-public class AlipayChannelMerchantResult extends MchTradeBaseResult {
+@Schema(title = "支付宝服务商通道商户绑定结果")
+public class AlipayIsvChannelMerchantResult extends MchTradeBaseResult {
 
     @Schema(description = "通道商户号")
     private String channelMchNo;
@@ -20,10 +20,11 @@ public class AlipayChannelMerchantResult extends MchTradeBaseResult {
     @Schema(description = "所属支付产品")
     private String product;
 
-    @Schema(description = "支付宝服务商应用ID（aliAppId）")
-    private String isvAppId;
+    /// 注意: 此处用 isvAppId(Long) 而非 appId, 避免与父类 MchTradeBaseResult.appId(String) 字段冲突
+    @Schema(description = "关联服务商应用ID(系统主键)")
+    private Long isvAppId;
 
-    @Schema(description = "支付宝商家唯一识别码(2088开头的16位数字)")
+    @Schema(description = "子商户支付宝识别码(2088开头)")
     private String alipayUserId;
 
     @Schema(description = "应用授权令牌")

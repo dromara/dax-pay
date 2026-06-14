@@ -2,6 +2,7 @@ package org.dromara.daxpay.channel.alipay.param.mch;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -25,17 +26,17 @@ public class AlipayIsvChannelMerchantCreateParam {
     @NotBlank(message = "{validation.field.product.notBlank}")
     private String product;
 
-    /// 支付宝服务商应用ID
-    @Schema(description = "支付宝服务商应用ID")
-    @NotBlank(message = "{validation.field.isvAppId.notBlank}")
-    private String isvAppId;
+    /// 服务商应用ID(系统主键, 指向 alipay_isv_app.id)
+    @Schema(description = "服务商应用ID")
+    @NotNull(message = "{validation.field.appId.notNull}")
+    private Long appId;
 
-    /// 支付宝商家用户ID(2088开头)
-    @Schema(description = "支付宝商家用户ID(2088开头)")
+    /// 子商户支付宝用户ID(2088开头)
+    @Schema(description = "子商户支付宝用户ID(2088开头)")
     @NotBlank(message = "{validation.field.alipayUserId.notBlank}")
     private String alipayUserId;
 
-    /// 应用授权令牌，服务商代商户调用接口的凭据
+    /// 应用授权令牌，服务商代子商户调用接口的凭据
     @Schema(description = "应用授权令牌")
     @NotBlank(message = "{validation.field.appAuthToken.notBlank}")
     private String appAuthToken;

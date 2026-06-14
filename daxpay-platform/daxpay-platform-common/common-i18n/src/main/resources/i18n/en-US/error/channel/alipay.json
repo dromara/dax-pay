@@ -37,5 +37,6 @@
   "appIdDuplicate": "Application ID already exists under the same service provider",
   "appNotFound": "Alipay ISV application not found",
   "subMerchantDuplicate": "This sub-merchant already exists under the Alipay application",
+  "directMchDuplicate": "The Alipay merchant already exists under this merchant",
   "userIdTypeInvalid": "Invalid user ID type"
 }

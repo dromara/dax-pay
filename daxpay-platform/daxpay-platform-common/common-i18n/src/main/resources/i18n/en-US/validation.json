@@ -60,7 +60,8 @@
     },
     "appId": {
       "notBlank": "Merchant app ID cannot be blank",
-      "size": "Merchant app ID cannot exceed 32 characters"
+      "size": "Merchant app ID cannot exceed 32 characters",
+      "notNull": "Application ID cannot be null"
     },
     "subMchId": {
       "notBlank": "WeChat sub-merchant ID cannot be blank"

@@ -60,7 +60,8 @@
     },
     "appId": {
       "notBlank": "商户AppId不可为空",
-      "size": "应用号不可超过32位"
+      "size": "应用号不可超过32位",
+      "notNull": "应用ID不可为空"
     },
     "subMchId": {
       "notBlank": "微信子商户号不可为空"
