@@ -1,0 +1,33 @@
+package org.dromara.daxpay.channel.alipay.dao.direct;
+
+import org.dromara.daxpay.platform.common.mybatisplus.impl.BaseManager;
+import org.dromara.daxpay.channel.alipay.entity.direct.AlipayDirectAppKeyConfig;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
+
+/// # 支付宝直连商户应用密钥配置
+///
+/// 直连商户应用密钥配置数据访问管理器，提供按应用ID查询和删除密钥配置的方法。
+///
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class AlipayDirectAppKeyConfigManager extends BaseManager<AlipayDirectAppKeyConfigMapper, AlipayDirectAppKeyConfig> {
+
+    /// 根据应用ID查询密钥配置
+    public Optional<AlipayDirectAppKeyConfig> findByAppId(Long appId) {
+        return lambdaQuery()
+                .eq(AlipayDirectAppKeyConfig::getAppId, appId)
+                .oneOpt();
+    }
+
+    /// 根据应用ID删除密钥配置
+    public void deleteByAppId(Long appId) {
+        lambdaUpdate()
+                .eq(AlipayDirectAppKeyConfig::getAppId, appId)
+                .remove();
+    }
+}

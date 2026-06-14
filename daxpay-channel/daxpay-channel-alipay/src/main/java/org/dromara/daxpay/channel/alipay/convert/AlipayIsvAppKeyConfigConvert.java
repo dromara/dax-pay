@@ -1,8 +1,8 @@
 package org.dromara.daxpay.channel.alipay.convert;
 
-import org.dromara.daxpay.channel.alipay.entity.config.AlipayIsvAppKeyConfig;
-import org.dromara.daxpay.channel.alipay.param.config.AlipayIsvAppKeyConfigParam;
-import org.dromara.daxpay.channel.alipay.result.config.AlipayIsvAppKeyConfigResult;
+import org.dromara.daxpay.channel.alipay.entity.isv.AlipayIsvAppKeyConfig;
+import org.dromara.daxpay.channel.alipay.param.isv.AlipayIsvAppKeyConfigParam;
+import org.dromara.daxpay.channel.alipay.result.isv.AlipayIsvAppKeyConfigResult;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
@@ -10,6 +10,8 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
 
 /// # 支付宝服务商应用密钥配置转换
+///
+/// MapStruct转换器，负责支付宝服务商应用密钥配置在实体、参数和返回结果之间的转换，更新时空值不覆盖。
 ///
 @Mapper
 public interface AlipayIsvAppKeyConfigConvert {

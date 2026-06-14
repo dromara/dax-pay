@@ -18,6 +18,8 @@ import static org.dromara.daxpay.platform.core.enums.pay.channel.PayProviderEnum
 
 /// # 支付宝直连产品策略
 ///
+/// 支付宝直连模式的支付产品策略，定义支持条码、扫码、JSAPI、小程序、PC、H5和APP等全部支付方式，使用商户API调用模式并支持沙箱环境。
+///
 @Slf4j
 @Service
 @RequiredArgsConstructor

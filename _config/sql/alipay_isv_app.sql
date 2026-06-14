@@ -30,8 +30,8 @@ ALTER TABLE alipay_isv_app ADD CONSTRAINT pk_alipay_isv_app PRIMARY KEY (id);
 -- ----------------------------
 -- 支付宝服务商应用密钥配置表
 -- ----------------------------
-DROP TABLE IF EXISTS alipay_isv_app_config;
-CREATE TABLE alipay_isv_app_config (
+DROP TABLE IF EXISTS alipay_isv_app_key_config;
+CREATE TABLE alipay_isv_app_key_config (
     id int8 NOT NULL,
     app_id int8,
     auth_type varchar(32) COLLATE pg_catalog.default,
@@ -49,24 +49,24 @@ CREATE TABLE alipay_isv_app_config (
     deleted bool NOT NULL DEFAULT false
 );
 
-COMMENT ON TABLE alipay_isv_app_config IS '支付宝服务商应用密钥配置表';
-COMMENT ON COLUMN alipay_isv_app_config.id IS '主键';
-COMMENT ON COLUMN alipay_isv_app_config.app_id IS '关联应用ID';
-COMMENT ON COLUMN alipay_isv_app_config.auth_type IS '认证类型';
-COMMENT ON COLUMN alipay_isv_app_config.alipay_public_key IS '支付宝公钥';
-COMMENT ON COLUMN alipay_isv_app_config.private_key IS '商户私钥';
-COMMENT ON COLUMN alipay_isv_app_config.app_cert IS '应用公钥证书';
-COMMENT ON COLUMN alipay_isv_app_config.alipay_cert IS '支付宝公钥证书';
-COMMENT ON COLUMN alipay_isv_app_config.alipay_root_cert IS '支付宝根证书';
-COMMENT ON COLUMN alipay_isv_app_config.secret_key IS '密钥';
-COMMENT ON COLUMN alipay_isv_app_config.creator IS '创建者ID';
-COMMENT ON COLUMN alipay_isv_app_config.create_time IS '创建时间';
-COMMENT ON COLUMN alipay_isv_app_config.last_modifier IS '最后修改ID';
-COMMENT ON COLUMN alipay_isv_app_config.last_modified_time IS '最后修改时间';
-COMMENT ON COLUMN alipay_isv_app_config.version IS '版本号';
-COMMENT ON COLUMN alipay_isv_app_config.deleted IS '删除标志';
+COMMENT ON TABLE alipay_isv_app_key_config IS '支付宝服务商应用密钥配置表';
+COMMENT ON COLUMN alipay_isv_app_key_config.id IS '主键';
+COMMENT ON COLUMN alipay_isv_app_key_config.app_id IS '关联应用ID';
+COMMENT ON COLUMN alipay_isv_app_key_config.auth_type IS '认证类型';
+COMMENT ON COLUMN alipay_isv_app_key_config.alipay_public_key IS '支付宝公钥';
+COMMENT ON COLUMN alipay_isv_app_key_config.private_key IS '商户私钥';
+COMMENT ON COLUMN alipay_isv_app_key_config.app_cert IS '应用公钥证书';
+COMMENT ON COLUMN alipay_isv_app_key_config.alipay_cert IS '支付宝公钥证书';
+COMMENT ON COLUMN alipay_isv_app_key_config.alipay_root_cert IS '支付宝根证书';
+COMMENT ON COLUMN alipay_isv_app_key_config.secret_key IS '密钥';
+COMMENT ON COLUMN alipay_isv_app_key_config.creator IS '创建者ID';
+COMMENT ON COLUMN alipay_isv_app_key_config.create_time IS '创建时间';
+COMMENT ON COLUMN alipay_isv_app_key_config.last_modifier IS '最后修改ID';
+COMMENT ON COLUMN alipay_isv_app_key_config.last_modified_time IS '最后修改时间';
+COMMENT ON COLUMN alipay_isv_app_key_config.version IS '版本号';
+COMMENT ON COLUMN alipay_isv_app_key_config.deleted IS '删除标志';
 
-ALTER TABLE alipay_isv_app_config ADD CONSTRAINT pk_alipay_isv_app_config PRIMARY KEY (id);
+ALTER TABLE alipay_isv_app_key_config ADD CONSTRAINT pk_alipay_isv_app_key_config PRIMARY KEY (id);
 
 -- ----------------------------
 -- 支付宝服务商应用授权认证配置表

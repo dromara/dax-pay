@@ -2,6 +2,8 @@ package org.dromara.daxpay.channel.alipay.code;
 
 /// # 支付宝支付参数常量
 ///
+/// 定义支付宝支付相关的常量，包括认证类型(公钥/证书)和用户标识类型(openid/userid)等枚举值。
+///
 public interface AlipayCode {
 
     /// # 认证类型
@@ -11,7 +13,7 @@ public interface AlipayCode {
         String AUTH_TYPE_KEY = "public_key";
 
         /// 证书模式
-        String AUTH_TYPE_CART = "cert";
+        String AUTH_TYPE_CERT = "cert";
     }
 
     /// # 用户标识类型

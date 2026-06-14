@@ -1,13 +1,15 @@
 package org.dromara.daxpay.channel.alipay.convert;
 
-import org.dromara.daxpay.channel.alipay.entity.app.AlipayIsvApp;
-import org.dromara.daxpay.channel.alipay.param.app.AlipayIsvAppParam;
-import org.dromara.daxpay.channel.alipay.result.app.AlipayIsvAppResult;
+import org.dromara.daxpay.channel.alipay.entity.isv.AlipayIsvApp;
+import org.dromara.daxpay.channel.alipay.param.isv.AlipayIsvAppParam;
+import org.dromara.daxpay.channel.alipay.result.isv.AlipayIsvAppResult;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
 
 /// # 支付宝服务商应用转换
+///
+/// MapStruct转换器，负责支付宝服务商应用在实体、参数和返回结果之间的相互转换。
 ///
 @Mapper
 public interface AlipayIsvAppConvert {

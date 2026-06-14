@@ -1,11 +1,13 @@
 package org.dromara.daxpay.channel.alipay.convert;
 
-import org.dromara.daxpay.channel.alipay.entity.config.AlipayIsvChannelMerchant;
-import org.dromara.daxpay.channel.alipay.result.config.AlipayIsvChannelMerchantResult;
+import org.dromara.daxpay.channel.alipay.entity.isv.AlipayIsvChannelMerchant;
+import org.dromara.daxpay.channel.alipay.result.isv.AlipayIsvChannelMerchantResult;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
+/// # 支付宝服务商通道商户绑定转换
+///
 @Mapper
 public interface AlipayIsvChannelMerchantConvert {
 

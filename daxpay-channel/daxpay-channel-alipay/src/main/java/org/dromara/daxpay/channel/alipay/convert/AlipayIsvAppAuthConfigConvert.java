@@ -1,8 +1,8 @@
 package org.dromara.daxpay.channel.alipay.convert;
 
-import org.dromara.daxpay.channel.alipay.entity.config.AlipayIsvAppAuthConfig;
-import org.dromara.daxpay.channel.alipay.param.config.AlipayIsvAppAuthConfigParam;
-import org.dromara.daxpay.channel.alipay.result.config.AlipayIsvAppAuthConfigResult;
+import org.dromara.daxpay.channel.alipay.entity.isv.AlipayIsvAppAuthConfig;
+import org.dromara.daxpay.channel.alipay.param.isv.AlipayIsvAppAuthConfigParam;
+import org.dromara.daxpay.channel.alipay.result.isv.AlipayIsvAppAuthConfigResult;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
@@ -10,6 +10,8 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
 
 /// # 支付宝服务商应用授权认证配置转换
+///
+/// MapStruct转换器，负责支付宝服务商应用授权认证配置在实体、参数和返回结果之间的转换，更新时空值不覆盖。
 ///
 @Mapper
 public interface AlipayIsvAppAuthConfigConvert {

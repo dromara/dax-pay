@@ -8,6 +8,8 @@ import org.springframework.context.annotation.ComponentScan;
 
 /// # 支付宝支付实现
 ///
+/// 支付宝通道的自动配置入口，扫描当前模块下的所有组件(Controller/Service/Manager/Mapper等)，自动注册到Spring容器。
+///
 @AutoConfiguration
 @ConfigurationPropertiesScan
 @MapperScan(annotationClass = Mapper.class)
