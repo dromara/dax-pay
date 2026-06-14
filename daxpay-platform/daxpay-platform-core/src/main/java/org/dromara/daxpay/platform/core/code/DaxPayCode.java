@@ -4,7 +4,7 @@ package org.dromara.daxpay.platform.core.code;
 ///
 public interface DaxPayCode {
 
-    /// 网关支付内置虚拟用户ID, 用于进件申请等功能
+    /// 网关支付内置虚拟用户ID
     Long GATEWAY_USER_ID = 99999999L;
 }
 

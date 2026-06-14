@@ -117,10 +117,6 @@ public class PayOrderResult {
     @Schema(description = "过期时间(UTC)")
     private OffsetDateTime expiredTime;
 
-    /// 进件商户
-    @Schema(description = "进件商户")
-    private String onbMchNo;
-
     /// 终端设备编码
     @Schema(description = "终端设备编码")
     private String terminalNo;

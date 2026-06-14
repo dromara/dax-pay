@@ -129,7 +129,6 @@ public class TransferService {
         order.setStatus(transferInfo.getStatus().getCode())
                 .setFinishTime(transferInfo.getFinishTime())
                 .setTransferBody(transferInfo.getTransferBody())
-                .setOnbMchNo(transferInfo.getOnbMchNo())
                 .setOutTransferNo(transferInfo.getOutTransferNo());
         // 是否直接返回转账成功
         if (Objects.equals(transferInfo.getStatus(), TransferStatusEnum.SUCCESS)){

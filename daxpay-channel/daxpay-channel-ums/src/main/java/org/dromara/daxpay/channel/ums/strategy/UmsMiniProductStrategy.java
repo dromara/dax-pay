@@ -38,9 +38,6 @@ public class UmsMiniProductStrategy extends AbsProductStrategy {
     public boolean isTerminal() { return true; }
 
     @Override
-    public boolean isApply() { return true; }
-
-    @Override
     public boolean isSandbox() { return true; }
 
     @Override

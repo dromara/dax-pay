@@ -89,10 +89,6 @@ public class TransferOrder extends MchAppBaseEntity implements ToResult<Transfer
     /// 订单来源
     private String source;
 
-    /// 所属进件商户号
-    @TableField(updateStrategy = FieldStrategy.NEVER)
-    private String onbMchNo;
-
     /// 错误信息
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String errorMsg;

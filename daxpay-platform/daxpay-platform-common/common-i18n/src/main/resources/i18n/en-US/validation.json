@@ -44,7 +44,6 @@
     },
     "channel": {
       "notBlank": "Channel code cannot be blank",
-      "notNull": "Channel code cannot be blank",
       "size": "Channel code cannot exceed 32 characters"
     },
     "sandbox": {
@@ -96,9 +95,7 @@
     "pass": {
       "notNull": "Audit result cannot be blank"
     },
-    "applyType": {
-      "notNull": "Application type cannot be blank"
-    },
+
     "channelMerchantNo": {
       "notBlank": "Channel merchant no. cannot be blank"
     },

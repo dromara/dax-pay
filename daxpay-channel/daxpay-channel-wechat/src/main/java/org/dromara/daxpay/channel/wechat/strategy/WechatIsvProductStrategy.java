@@ -43,9 +43,6 @@ public class WechatIsvProductStrategy extends AbsProductStrategy {
     public boolean isAllocatable() { return true; }
 
     @Override
-    public boolean isApply() { return true; }
-
-    @Override
     public boolean isSandbox() { return false; }
 
     @Override

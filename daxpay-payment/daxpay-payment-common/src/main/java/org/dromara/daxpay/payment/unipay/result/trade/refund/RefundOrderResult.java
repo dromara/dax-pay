@@ -82,10 +82,6 @@ public class RefundOrderResult {
     @Schema(description = "支付渠道")
     private String provider;
 
-    /// 进件商户
-    @Schema(description = "进件商户")
-    private String onbMchNo;
-
     /// 商户扩展参数,回调时会原样返回
     @Schema(description = "商户扩展参数,回调时会原样返回")
     private String attach;

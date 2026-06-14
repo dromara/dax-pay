@@ -60,7 +60,5 @@ public class PayResultBo {
     /// 参加活动类型
     private String promotionType;
 
-    /// 进件商户号
-    private String onbMchNo;
 }
 

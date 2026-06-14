@@ -1,20 +1,16 @@
 package org.dromara.daxpay.payment.pay.service.masterdata.channel;
 
-import org.dromara.daxpay.payment.common.util.PaymentStrategyFactory;
 import org.dromara.daxpay.payment.pay.dao.masterdata.channel.PayChannelManager;
 import org.dromara.daxpay.payment.pay.entity.masterdata.channel.PayChannel;
 import org.dromara.daxpay.payment.pay.param.channel.PayChannelQuery;
 import org.dromara.daxpay.payment.pay.result.masterdata.channel.PayChannelResult;
-import org.dromara.daxpay.payment.pay.strategy.AbsProductStrategy;
 import org.dromara.daxpay.platform.common.i18n.util.I18nUtil;
 import org.dromara.daxpay.platform.common.mybatisplus.util.MpUtil;
 import org.dromara.daxpay.platform.core.enums.pay.channel.ChannelEnum;
-import org.dromara.daxpay.platform.core.enums.pay.channel.ProductEnum;
 import org.dromara.daxpay.platform.core.exception.DataNotExistException;
 import org.dromara.daxpay.platform.core.rest.dto.LabelValue;
 import org.dromara.daxpay.platform.core.rest.param.PageParam;
 import org.dromara.daxpay.platform.core.rest.result.PageResult;
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -77,13 +73,6 @@ public class PayChannelMasterDataService {
         return buildChannels();
     }
 
-    /// 返回至少关联一个可进件产品的支付通道
-    public List<PayChannelResult> listAllByApply() {
-        return buildChannels().stream()
-                .filter(c -> channelSupportsApply(c.getCode()))
-                .toList();
-    }
-
     /// 按通道编码取展示名称
     public String findNameByCode(String code) {
         return resolveChannelName(code);
@@ -143,21 +132,4 @@ public class PayChannelMasterDataService {
         return name != null && name.contains(nameKeyword);
     }
 
-    /// 该通道下是否存在可进件产品
-    private boolean channelSupportsApply(String channelCode) {
-        List<ProductEnum> products = productsByChannel().get(channelCode);
-        if (CollUtil.isEmpty(products)) {
-            return false;
-        }
-        return products.stream()
-                .anyMatch(product -> PaymentStrategyFactory.createByProduct(
-                        product.getCode(), AbsProductStrategy.class).isApply());
-    }
-
-    /// 按支付通道分组产品枚举
-    private Map<String, List<ProductEnum>> productsByChannel() {
-        return Arrays.stream(ProductEnum.values())
-                .filter(e -> PaymentStrategyFactory.existsByProduct(e.getCode(), AbsProductStrategy.class))
-                .collect(Collectors.groupingBy(ProductEnum::getChannel));
-    }
 }

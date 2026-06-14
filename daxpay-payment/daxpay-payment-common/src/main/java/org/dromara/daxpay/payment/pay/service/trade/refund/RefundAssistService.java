@@ -78,7 +78,6 @@ public class RefundAssistService {
         // 生成退款订单
         RefundOrder refundOrder = new RefundOrder()
                 .setOrderId(payOrder.getId())
-                .setOnbMchNo(payOrder.getOnbMchNo())
                 .setOrderNo(payOrder.getOrderNo())
                 .setBizOrderNo(payOrder.getBizOrderNo())
                 .setOutOrderNo(payOrder.getOutOrderNo())

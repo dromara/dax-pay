@@ -52,9 +52,6 @@ public class PayProductResult extends BaseResult {
     @Schema(description = "是否支持终端报备")
     private boolean terminal;
 
-    @Schema(description = "是否支持进件申请")
-    private boolean apply;
-
     @Schema(description = "是否支持沙箱环境")
     private boolean sandbox;
 

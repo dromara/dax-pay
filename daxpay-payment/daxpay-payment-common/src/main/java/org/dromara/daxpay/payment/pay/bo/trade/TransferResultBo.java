@@ -23,6 +23,4 @@ public class TransferResultBo {
     /// 完成时间
     private OffsetDateTime finishTime;
 
-    /// 进件商户号
-    private String onbMchNo;
 }

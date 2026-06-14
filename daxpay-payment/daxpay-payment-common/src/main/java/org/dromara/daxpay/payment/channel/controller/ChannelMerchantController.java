@@ -47,7 +47,7 @@ public class ChannelMerchantController {
         return Res.ok(channelMerchantService.findById(id));
     }
 
-    @Operation(summary = "根据商户号查询进件通道")
+    @Operation(summary = "根据商户号查询通道")
     @GetMapping("/channel/dropdown-by-mch-no")
     public Result<List<PayChannelResult>> dropdownByMchNo(@NotBlank(message = "{validation.field.mchNo.notBlank}") String mchNo) {
         return Res.ok(channelMerchantService.dropdownByMchNo(mchNo));

@@ -76,10 +76,6 @@ public class TransferOrderResult {
     @Schema(description = "返回转账参数")
     private String transferBody;
 
-    /// 所属进件商户号
-    @Schema(description = "所属进件商户号")
-    private String onbMchNo;
-
     /// 错误原因
     @Schema(description = "错误原因")
     private String errorMsg;

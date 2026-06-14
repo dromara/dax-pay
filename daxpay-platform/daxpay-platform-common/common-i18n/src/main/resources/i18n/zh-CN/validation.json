@@ -44,7 +44,6 @@
     },
     "channel": {
       "notBlank": "通道编码不可为空",
-      "notNull": "进件通道不可为空",
       "size": "通道不可超过32位"
     },
     "sandbox": {
@@ -96,9 +95,7 @@
     "pass": {
       "notNull": "审核结果不可为空"
     },
-    "applyType": {
-      "notNull": "进件类型不可为空"
-    },
+
     "channelMerchantNo": {
       "notBlank": "通道商户号不可为空"
     },

@@ -23,9 +23,6 @@ public abstract class AbsProductStrategy implements PaymentStrategy {
     /// 是否支持终端报备
     public boolean isTerminal() { return false; }
 
-    /// 是否支持进件申请
-    public boolean isApply() { return false; }
-
     /// 是否支持沙箱环境
     public boolean isSandbox() { return false; }
 

@@ -11,9 +11,7 @@ import lombok.RequiredArgsConstructor;
 public enum ChannelMerchantSourceEnum implements I18nSupport {
 
     /// 手动创建
-    MANUAL("manual"),
-    /// 进件申请
-    APPLY("apply");
+    MANUAL("manual");
 
     /// 编码
     private final String code;

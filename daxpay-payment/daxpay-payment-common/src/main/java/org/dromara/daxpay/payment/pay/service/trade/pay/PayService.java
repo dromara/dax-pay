@@ -143,7 +143,6 @@ public class PayService {
         payOrder.setOutOrderNo(result.getOutOrderNo())
                 .setErrorMsg(null)
                 .setTransOrderNo(result.getTransOrderNo())
-                .setOnbMchNo(result.getOnbMchNo())
                 .setRelationOrderNo(result.getRelationOrderNo());
         // 更新订单扩展信息
         var orderExpand = payOrderExpandManager.findById(payOrder.getId()).orElseThrow(() -> new DataErrorException("error.payment.order.payOrderExtNotExist"));

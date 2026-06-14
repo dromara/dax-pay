@@ -94,10 +94,6 @@ public class TransferOrderVo extends MchTradeBaseResult {
     @Schema(description = "支付终端ip")
     private String clientIp;
 
-    /// 所属进件商户号
-    @Schema(description = "所属进件商户号")
-    private String onbMchNo;
-
     /// 错误原因
     @Schema(description = "错误原因")
     private String errorMsg;

@@ -82,13 +82,6 @@ public class PayProductMasterDataService {
                 .toList();
     }
 
-    /// 返回支持进件申请的支付产品
-    public List<PayProductResult> listAllByApply() {
-        return listAll().stream()
-                .filter(PayProductResult::isApply)
-                .toList();
-    }
-
     /// 枚举与库表合并为产品结果
     private PayProductResult toProductResult(ProductEnum product, Map<String, PayProduct> dbMap) {
         PayProductResult result = new PayProductResult()
@@ -151,7 +144,6 @@ public class PayProductMasterDataService {
         target.setIsv(strategy.isIsv())
                 .setAllocatable(strategy.isAllocatable())
                 .setTerminal(strategy.isTerminal())
-                .setApply(strategy.isApply())
                 .setSandbox(strategy.isSandbox())
                 .setApiCallMode(strategy.getApiCallMode().getCode())
                 .setPayIdType(strategy.getPayIdType().getCode());

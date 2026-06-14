@@ -68,7 +68,7 @@ public class MerchantChannelMerchantAdminController {
     }
 
     @PermCode(code = "view", nameCn = "商户通道商户查看", nameEn = "Merchant Channel Merchant View")
-    @Operation(summary = "根据商户号查询进件通道")
+    @Operation(summary = "根据商户号查询通道")
     @GetMapping("/channel/dropdown-by-mch-no")
     public Result<List<PayChannelResult>> dropdownByMchNo(@NotBlank(message = "{validation.field.mchNo.notBlank}") String mchNo) {
         return Res.ok(channelMerchantService.dropdownByMchNo(mchNo));

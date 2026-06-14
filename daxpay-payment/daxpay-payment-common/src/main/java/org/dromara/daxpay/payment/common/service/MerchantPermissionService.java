@@ -7,9 +7,6 @@ import java.util.List;
 /// 由端侧模块提供实现，供 bus 公共底座按最小能力依赖。
 public interface MerchantPermissionService {
 
-    /// 是否允许发起进件
-    boolean canApplyMch();
-
     /// 是否允许退款
     boolean canRefund();
 

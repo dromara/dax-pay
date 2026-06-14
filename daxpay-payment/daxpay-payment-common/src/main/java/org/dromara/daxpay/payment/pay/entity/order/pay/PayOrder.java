@@ -112,9 +112,6 @@ public class PayOrder extends MchAppBaseEntity implements ToResult<PayOrderVo> {
     /// 关闭时间
     private OffsetDateTime closeTime;
 
-    /// 进件商户
-    private String onbMchNo;
-
     /// 订单来源
     /// @see TradeSourceEnum
     private String source;
