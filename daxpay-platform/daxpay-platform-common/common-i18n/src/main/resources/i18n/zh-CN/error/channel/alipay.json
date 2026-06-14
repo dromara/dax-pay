@@ -36,5 +36,6 @@
   "mchProductConfigNotExist": "支付宝产品支付配置不存在",
   "appIdDuplicate": "同一服务商下应用ID已存在",
   "appNotFound": "支付宝服务商应用不存在",
+  "subMerchantDuplicate": "该支付宝应用下已存在此子商户号",
   "userIdTypeInvalid": "用户标识类型不合法"
 }

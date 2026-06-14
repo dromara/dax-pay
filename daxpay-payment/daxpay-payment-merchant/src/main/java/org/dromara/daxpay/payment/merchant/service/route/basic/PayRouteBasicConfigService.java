@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
 /// # 通道路由基础模式配置
 ///
 /// 按支付渠道配置默认支付产品，保存前校验产品策略能力。
-/// 开源版：所有产品默认可用，不再检查商户启用状态。
 @Service
 @RequiredArgsConstructor
 public class PayRouteBasicConfigService {
@@ -68,7 +67,7 @@ public class PayRouteBasicConfigService {
         }
     }
 
-    /// 校验产品存在且支持指定支付渠道（开源版：不再检查商户启用状态）
+    /// 校验产品存在且支持指定支付渠道
     public void validateBasicProduct(String product, PayProviderEnum provider) {
         ProductEnum productEnum = ProductEnum.findByCode(product);
         if (productEnum == null) {
@@ -103,7 +102,7 @@ public class PayRouteBasicConfigService {
                 .setProducts(products);
     }
 
-    /// 从产品枚举中筛出支持指定支付渠道的产品编码（开源版：所有产品默认可用）
+    /// 从产品枚举中筛出支持指定支付渠道的产品编码
     private List<String> productsForProvider(PayProviderEnum provider) {
         return Arrays.stream(ProductEnum.values())
                 .map(ProductEnum::getCode)

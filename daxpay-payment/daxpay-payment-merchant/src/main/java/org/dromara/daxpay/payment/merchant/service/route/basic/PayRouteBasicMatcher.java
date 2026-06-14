@@ -21,7 +21,6 @@ import java.util.Objects;
 /// # 基础模式通道路由匹配器
 ///
 /// 按已配置的支付渠道与支付产品，结合产品策略解析通道与支付方式。
-/// 开源版：所有产品默认可用，不再检查商户启用状态。
 @Component
 @RequiredArgsConstructor
 public class PayRouteBasicMatcher {
@@ -73,7 +72,7 @@ public class PayRouteBasicMatcher {
                 .orElse(null);
     }
 
-    /// 校验产品策略支持该支付渠道（开源版：不再检查商户启用状态）
+    /// 校验产品策略支持该支付渠道
     private void assertProductConfigured(String product, PayProviderEnum provider) {
         if (!PaymentStrategyFactory.productSupportsProvider(product, provider)) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,

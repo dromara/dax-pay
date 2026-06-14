@@ -36,5 +36,6 @@
   "mchProductConfigNotExist": "Alipay merchant product payment configuration not found",
   "appIdDuplicate": "Application ID already exists under the same service provider",
   "appNotFound": "Alipay ISV application not found",
+  "subMerchantDuplicate": "This sub-merchant already exists under the Alipay application",
   "userIdTypeInvalid": "Invalid user ID type"
 }

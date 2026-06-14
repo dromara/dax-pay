@@ -4,6 +4,7 @@ import org.dromara.daxpay.platform.core.annotation.PermCode;
 import org.dromara.daxpay.platform.core.rest.Res;
 import org.dromara.daxpay.platform.core.rest.result.Result;
 import org.dromara.daxpay.channel.alipay.param.mch.AlipayDirectChannelMerchantCreateParam;
+import org.dromara.daxpay.channel.alipay.param.mch.AlipayIsvChannelMerchantCreateParam;
 import org.dromara.daxpay.channel.alipay.result.config.AlipayChannelMerchantResult;
 import org.dromara.daxpay.channel.alipay.service.mch.AlipayChannelMerchantService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,6 +34,14 @@ public class AlipayChannelMerchantController {
     public Result<AlipayChannelMerchantResult> findByChannelMchNo(
             @NotBlank(message = "{validation.field.channelMerchantNo.notBlank}") String channelMchNo) {
         return Res.ok(alipayChannelMerchantService.findByChannelMchNo(channelMchNo));
+    }
+
+    @PermCode(code = "add", nameCn = "商户通道商户新增", nameEn = "Merchant Channel Merchant Add")
+    @Operation(summary = "创建支付宝服务商通道商户")
+    @PostMapping("/create")
+    public Result<Void> create(@RequestBody @Validated AlipayIsvChannelMerchantCreateParam param) {
+        alipayChannelMerchantService.create(param);
+        return Res.ok();
     }
 
     @PermCode(code = "add", nameCn = "商户通道商户新增", nameEn = "Merchant Channel Merchant Add")

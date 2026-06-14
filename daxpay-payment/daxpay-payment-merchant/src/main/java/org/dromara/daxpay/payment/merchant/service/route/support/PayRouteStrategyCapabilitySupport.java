@@ -33,7 +33,6 @@ import java.util.Objects;
 /// # 通道路由：策略方式→能力与 DB 求交
 ///
 /// 统一场景模式产品/能力候选及保存校验，数据源为 {@link AbsProductStrategy#methodCapabilityMapping()}。
-/// 开源版：所有产品默认可用，不再检查商户启用状态。
 @Service
 @RequiredArgsConstructor
 public class PayRouteStrategyCapabilitySupport {
@@ -81,7 +80,7 @@ public class PayRouteStrategyCapabilitySupport {
         return provider + "|" + method + "|" + product;
     }
 
-    /// 目录项下可用支付产品候选（开源版：所有产品默认可用）
+    /// 目录项下可用支付产品候选
     public List<LabelValue> listSceneProductCandidates(String provider, String method) {
         if (!payProviderMethodService.contains(provider, method)) {
             return List.of();
@@ -102,7 +101,6 @@ public class PayRouteStrategyCapabilitySupport {
     }
 
     /// 指定产品+目录项下支付能力候选（策略 Map ∩ DB ∩ 能力主数据启用）
-    /// 开源版：不再检查商户产品启用状态
     public List<LabelValue> listSceneCapabilityCandidates(String provider, String method, String product) {
         if (!payProviderMethodService.contains(provider, method)) {
             return List.of();

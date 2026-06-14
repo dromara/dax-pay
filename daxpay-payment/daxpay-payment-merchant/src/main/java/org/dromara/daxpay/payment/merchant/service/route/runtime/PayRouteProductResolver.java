@@ -14,14 +14,13 @@ import java.util.Objects;
 
 /// # 通道路由产品解析器
 ///
-/// 开源版：所有产品默认可用，直接从产品枚举中按通道+支付方式解析产品编码。
 @Service
 @RequiredArgsConstructor
 public class PayRouteProductResolver {
 
     private final PayRouteStrategyCapabilitySupport payRouteStrategyCapabilitySupport;
 
-    /// 根据通道及支付方式解析产品编码（开源版：所有产品默认可用）
+    /// 根据通道及支付方式解析产品编码
     public String resolve(String mchNo, String channel, String method) {
         return Arrays.stream(ProductEnum.values())
                 .filter(pe -> Objects.equals(pe.getChannel(), channel))
