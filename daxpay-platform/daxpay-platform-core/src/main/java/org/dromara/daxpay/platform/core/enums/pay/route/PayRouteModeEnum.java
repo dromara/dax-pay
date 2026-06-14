@@ -19,8 +19,6 @@ public enum PayRouteModeEnum implements I18nSupport {
     BASIC("basic"),
     /// 场景模式
     SCENE("scene"),
-    /// 精细模式（预留字典项，运行时与配置保存暂未开放）
-    ADVANCED("advanced"),
     ;
 
     private final String code;

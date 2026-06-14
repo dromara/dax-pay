@@ -3,13 +3,11 @@ package org.dromara.daxpay.payment.admin.controller.merchant.route;
 import org.dromara.daxpay.payment.pay.result.masterdata.provider.PayProviderMethodResult;
 import org.dromara.daxpay.payment.pay.service.masterdata.provider.PayProviderMethodService;
 import org.dromara.daxpay.payment.merchant.param.route.basic.PayRouteBasicConfigBatchParam;
-import org.dromara.daxpay.payment.merchant.param.route.resolve.PayRouteSimulateParam;
 import org.dromara.daxpay.payment.merchant.param.route.scene.PayRouteSceneCapabilityBatchParam;
 import org.dromara.daxpay.payment.merchant.param.route.scene.PayRouteSceneConfigBatchParam;
 import org.dromara.daxpay.payment.merchant.param.route.strategy.PayRouteStrategyParam;
 import org.dromara.daxpay.platform.core.rest.dto.LabelValue;
 import org.dromara.daxpay.payment.merchant.result.route.basic.PayRouteBasicConfigResult;
-import org.dromara.daxpay.payment.merchant.result.route.resolve.PayRouteResolveResult;
 import org.dromara.daxpay.payment.merchant.result.route.scene.PayRouteSceneConfigResult;
 import org.dromara.daxpay.payment.merchant.result.route.strategy.PayRouteStrategyResult;
 import org.dromara.daxpay.payment.merchant.service.route.facade.PayRouteConfigService;
@@ -29,8 +27,8 @@ import java.util.Map;
 
 /// # 商户应用通道路由（管理端 API）
 ///
-/// 「运营」指 Admin 运营端角色，不是支付通道 channel。提供策略、基础/场景配置、试算及
-/// 已启用渠道支付方式扁平目录（`method-directory/flat-list`）；精细模式 API 已移除。
+/// 「运营」指 Admin 运营端角色，不是支付通道 channel。提供策略、基础/场景配置及
+/// 已启用渠道支付方式扁平目录（`method-directory/flat-list`）。
 ///
 @PermCode(menuCode = "payment:merchant:app:payRoute")
 @Validated
@@ -142,10 +140,4 @@ public class PayRouteAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "view", nameCn = "通道路由查看", nameEn = "Pay Route View")
-    @Operation(summary = "模拟路由")
-    @PostMapping("/simulate")
-    public Result<PayRouteResolveResult> simulate(@RequestBody @Validated PayRouteSimulateParam param) {
-        return Res.ok(configService.simulate(param));
-    }
 }

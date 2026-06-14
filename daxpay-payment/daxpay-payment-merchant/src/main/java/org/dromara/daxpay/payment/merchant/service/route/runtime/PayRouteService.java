@@ -11,21 +11,19 @@ import org.dromara.daxpay.payment.merchant.entity.route.strategy.PayRouteStrateg
 import org.dromara.daxpay.payment.merchant.service.route.model.PayRouteBundle;
 import org.dromara.daxpay.payment.pay.service.route.PayRouteFacade;
 import org.dromara.daxpay.payment.unipay.param.trade.pay.PayParam;
-import org.dromara.daxpay.platform.core.enums.pay.route.PayRouteModeEnum;
 import org.dromara.daxpay.platform.core.exception.BizInfoException;
 import org.dromara.daxpay.platform.core.code.CommonErrorCode;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
+import java.util.Objects;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
-
 /// # 支付通道路由服务
 ///
-/// 实现 PayRouteFacade，供管理端试算按策略模式解析通道、方式与产品。
-/// `resolve` 暂未接入支付切面（起步阶段仅配置态 + 试算）；实付接入时再打开 PaymentVerifyAspect 调用。
-/// 当前仅实现基础模式与场景模式；精细模式 advanced 暂未开放。
+/// 实现 PayRouteFacade，供管理端按策略模式解析通道、方式与产品。
+/// `resolve` 暂未接入支付切面（起步阶段仅配置态）；实付接入时再打开 PaymentVerifyAspect 调用。
+/// 当前仅实现基础模式与场景模式。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -64,22 +62,6 @@ public class PayRouteService implements PayRouteFacade {
         fillPayParam(payParam, hit);
     }
 
-    /// 模拟路由解析（modeOverride 为空时使用策略生效模式）
-    public RouteHit simulate(PayParam payParam, String modeOverride) {
-        var bundle = loadBundle(payParam.getAppId());
-        if (bundle == null || bundle.getStrategy() == null) {
-            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.route.error.strategyNotFound");
-        }
-        PayRouteStrategy strategy = bundle.getStrategy();
-        String mode = StrUtil.isNotBlank(modeOverride) ? modeOverride : strategy.getMode();
-        RouteHit hit = resolveByMode(bundle, payParam, mode);
-        if (hit == null) {
-            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.route.error.noMatch");
-        }
-        fillPayParam(payParam, hit);
-        return hit;
-    }
-
     /// 按应用号从库加载路由数据包（无 Redis 缓存）
     private PayRouteBundle loadBundle(String appId) {
         var strategyOpt = strategyManager.findByAppId(appId);
@@ -93,13 +75,9 @@ public class PayRouteService implements PayRouteFacade {
                 .setSceneConfigs(sceneConfigManager.findByStrategyId(strategy.getId()));
     }
 
-    /// 按路由模式委托匹配器；advanced 拒绝；未识别模式按场景模式处理
+    /// 按路由模式委托匹配器；未识别模式按场景模式处理
     private RouteHit resolveByMode(PayRouteBundle bundle, PayParam payParam, String mode) {
-        if (Objects.equals(mode, PayRouteModeEnum.ADVANCED.getCode())) {
-            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                    "pay.route.error.advancedModeNotSupported");
-        }
-        if (Objects.equals(mode, PayRouteModeEnum.BASIC.getCode())) {
+        if (Objects.equals(mode, "basic")) {
             return basicMatcher.match(bundle.getBasicConfigs(), payParam);
         }
         return PayRouteSceneMatcher.match(bundle.getSceneConfigs(), payParam);

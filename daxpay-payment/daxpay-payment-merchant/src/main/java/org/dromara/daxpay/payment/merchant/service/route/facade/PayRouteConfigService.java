@@ -4,22 +4,17 @@ import org.dromara.daxpay.payment.merchant.dao.appinfo.MchAppInfoManager;
 import org.dromara.daxpay.payment.merchant.dao.route.strategy.PayRouteStrategyManager;
 import org.dromara.daxpay.payment.merchant.entity.route.strategy.PayRouteStrategy;
 import org.dromara.daxpay.payment.merchant.param.route.basic.PayRouteBasicConfigBatchParam;
-import org.dromara.daxpay.payment.merchant.param.route.resolve.PayRouteSimulateParam;
 import org.dromara.daxpay.payment.merchant.param.route.scene.PayRouteSceneCapabilityBatchParam;
 import org.dromara.daxpay.payment.merchant.param.route.scene.PayRouteSceneConfigBatchParam;
 import org.dromara.daxpay.payment.merchant.param.route.strategy.PayRouteStrategyParam;
 import org.dromara.daxpay.platform.core.rest.dto.LabelValue;
 import org.dromara.daxpay.payment.merchant.result.route.basic.PayRouteBasicConfigResult;
-import org.dromara.daxpay.payment.merchant.result.route.resolve.PayRouteResolveResult;
 import org.dromara.daxpay.payment.merchant.result.route.scene.PayRouteSceneConfigResult;
 import org.dromara.daxpay.payment.merchant.result.route.strategy.PayRouteStrategyResult;
 import org.dromara.daxpay.payment.merchant.service.route.basic.PayRouteBasicConfigService;
 import org.dromara.daxpay.payment.merchant.service.route.scene.PayRouteSceneConfigService;
-import org.dromara.daxpay.payment.merchant.service.route.simulate.PayRouteSimulateService;
 import org.dromara.daxpay.platform.core.enums.pay.route.PayRouteModeEnum;
-import org.dromara.daxpay.platform.core.exception.BizInfoException;
 import org.dromara.daxpay.platform.core.exception.DataNotExistException;
-import org.dromara.daxpay.platform.core.code.CommonErrorCode;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -27,12 +22,10 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /// # 通道路由配置门面
 ///
-/// 管理端通道路由唯一编排入口，按模式委托场景/基础配置与试算服务，不承载匹配逻辑。
-/// 精细模式（advanced）不可设为生效模式，规则 CRUD 已下线，待后续版本重做。
+/// 管理端通道路由唯一编排入口，按模式委托场景/基础配置服务，不承载匹配逻辑。
 ///
 @Service
 @RequiredArgsConstructor
@@ -42,8 +35,6 @@ public class PayRouteConfigService {
     private final MchAppInfoManager mchAppInfoManager;
     private final PayRouteSceneConfigService sceneConfigService;
     private final PayRouteBasicConfigService basicConfigService;
-    private final PayRouteSimulateService simulateService;
-
     /// 按应用号获取路由策略，不存在则创建默认基础模式策略
     @Transactional(rollbackFor = Exception.class)
     public PayRouteStrategyResult getOrInitByAppId(String appId) {
@@ -72,11 +63,6 @@ public class PayRouteConfigService {
         PayRouteStrategy strategy = strategyManager.findByAppId(param.getAppId())
                 .orElseThrow(() -> new DataNotExistException("pay.route.error.routeStrategyNotExist"));
         if (StrUtil.isNotBlank(param.getMode())) {
-            // 精细模式暂未实现，禁止通过 API 设为生效模式
-            if (Objects.equals(param.getMode(), PayRouteModeEnum.ADVANCED.getCode())) {
-                throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                        "pay.route.error.advancedModeNotSupported");
-            }
             strategy.setMode(param.getMode());
         }
         if (param.getEnable() != null) {
@@ -136,10 +122,5 @@ public class PayRouteConfigService {
     /// 批量保存基础模式配置（全量覆盖）
     public void saveBasicBatch(PayRouteBasicConfigBatchParam param) {
         basicConfigService.saveBasicBatch(param);
-    }
-
-    /// 模拟路由解析（管理端试算，不写真实订单）
-    public PayRouteResolveResult simulate(PayRouteSimulateParam param) {
-        return simulateService.simulate(param);
     }
 }

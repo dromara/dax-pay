@@ -24,7 +24,6 @@
   "sceneCapabilityProductMismatch": "Payment capability [{0}] does not match product [{1}] and method [{2}]",
   "sceneChannelMethodRequired": "Generic pay route requires channel and pay method",
   "providerRequiredForScene": "Pay brand is required in scene routing mode",
-  "advancedModeNotSupported": "Advanced routing mode is not available yet",
   "productNotResolved": "Cannot resolve product for channel [{0}] and method [{1}]",
   "productMismatch": "Specified product [{0}] does not match resolved [{1}]",
   "productInvalid": "Invalid payment product [{0}]",

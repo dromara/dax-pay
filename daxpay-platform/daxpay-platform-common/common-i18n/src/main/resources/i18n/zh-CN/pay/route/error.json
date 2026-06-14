@@ -24,7 +24,6 @@
   "sceneCapabilityProductMismatch": "支付能力[{0}]与产品[{1}]、支付方式[{2}]不匹配",
   "sceneChannelMethodRequired": "通用支付配置须指定通道与支付方式",
   "providerRequiredForScene": "场景模式下，支付渠道不能为空",
-  "advancedModeNotSupported": "精细模式暂未开放",
   "productNotResolved": "通道[{0}]与支付方式[{1}]无法解析支付产品",
   "productMismatch": "指定产品[{0}]与解析结果[{1}]不一致",
   "productInvalid": "支付产品[{0}]无效",

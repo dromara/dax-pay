@@ -21,7 +21,7 @@ public class PayRouteStrategyParam {
     @Schema(description = "应用号")
     private String appId;
 
-    @Schema(description = "路由模式：basic/scene；不可传 advanced（精细模式暂未开放）")
+    @Schema(description = "路由模式：basic/scene")
     private String mode;
 
     @Schema(description = "支付渠道")

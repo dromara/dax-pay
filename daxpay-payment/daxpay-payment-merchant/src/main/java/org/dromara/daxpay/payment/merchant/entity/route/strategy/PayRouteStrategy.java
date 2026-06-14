@@ -18,7 +18,7 @@ import lombok.experimental.Accessors;
 @TableName("pay_route_strategy")
 public class PayRouteStrategy extends MchAppBaseEntity implements ToResult<PayRouteStrategyResult> {
 
-    /// 路由模式：basic / scene；advanced 为预留值，不可设为生效模式
+    /// 路由模式：basic / scene
     /// @see PayRouteModeEnum
     private String mode;
 
