@@ -32,7 +32,6 @@ import org.dromara.daxpay.payment.pay.service.masterdata.channel.PayChannelMaste
 import org.dromara.daxpay.payment.pay.result.masterdata.channel.PayChannelResult;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.DateUtil;
-import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.MD5;
 import lombok.RequiredArgsConstructor;
@@ -219,9 +218,7 @@ public class OnbMchApplyService {
         var channelMch = new ChannelMerchant();
         channelMch.setApplyId(mchApply.getId())
                 .setSource(ChannelMerchantSourceEnum.APPLY.getCode())
-                .setMchNo(mchApply.getMchNo())
-                
-                .setId(IdUtil.getSnowflakeNextId());
+                .setMchNo(mchApply.getMchNo());
         mchApply.setStatus(OnbApplyStatusEnum.GENERATED.getCode());
         // 调用策略处理通道商户处理后并保存
         var strategy = OnbStrategyFactory.create(mchApply.getChannel(), AbsChannelMerchantStrategy.class);

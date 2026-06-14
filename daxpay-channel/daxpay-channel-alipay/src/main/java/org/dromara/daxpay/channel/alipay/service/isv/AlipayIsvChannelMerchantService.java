@@ -46,7 +46,6 @@ public class AlipayIsvChannelMerchantService {
         String channelMchNo = "AISV" + IdUtil.getSnowflakeNextId();
         // 写通用通道商户主表
         ChannelMerchant channelMerchant = new ChannelMerchant();
-        channelMerchant.setId(IdUtil.getSnowflakeNextId());
         channelMerchant.setMchNo(param.getMchNo());
         channelMerchant.setChannelMchNo(channelMchNo);
         channelMerchant.setChannelMerchantName(param.getChannelMerchantName());
@@ -56,7 +55,6 @@ public class AlipayIsvChannelMerchantService {
         channelMerchantManager.save(channelMerchant);
         // 写服务商绑定表(含挂靠关系专属字段)
         AlipayIsvChannelMerchant entity = new AlipayIsvChannelMerchant();
-        entity.setId(IdUtil.getSnowflakeNextId());
         entity.setMchNo(param.getMchNo());
         entity.setChannelMchNo(channelMchNo);
         entity.setProduct(param.getProduct());
