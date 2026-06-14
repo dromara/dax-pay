@@ -5,6 +5,8 @@ import org.dromara.daxpay.payment.merchant.param.config.MerchantCredentialParam;
 import org.dromara.daxpay.payment.merchant.result.config.MerchantCredentialResult;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.factory.Mappers;
 
 /// # 商户API配置转换
@@ -17,5 +19,6 @@ public interface MerchantCredentialConvert {
 
     MerchantCredentialResult toResult(MerchantCredential entity);
 
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void copy(MerchantCredentialParam param, @MappingTarget MerchantCredential entity);
 }

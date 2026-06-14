@@ -1,6 +1,6 @@
 package org.dromara.daxpay.channel.alipay.service.isv;
 
-import org.dromara.daxpay.channel.alipay.convert.AlipayIsvAppConvert;
+import org.dromara.daxpay.channel.alipay.convert.isv.AlipayIsvAppConvert;
 import org.dromara.daxpay.channel.alipay.dao.isv.AlipayIsvAppManager;
 import org.dromara.daxpay.channel.alipay.entity.isv.AlipayIsvApp;
 import org.dromara.daxpay.channel.alipay.param.isv.AlipayIsvAppParam;

@@ -1,7 +1,7 @@
 package org.dromara.daxpay.channel.alipay.service.direct;
 
 import org.dromara.daxpay.channel.alipay.code.AlipayCode;
-import org.dromara.daxpay.channel.alipay.convert.AlipayDirectAppKeyConfigConvert;
+import org.dromara.daxpay.channel.alipay.convert.direct.AlipayDirectAppKeyConfigConvert;
 import org.dromara.daxpay.channel.alipay.dao.direct.AlipayDirectAppManager;
 import org.dromara.daxpay.channel.alipay.dao.direct.AlipayDirectAppKeyConfigManager;
 import org.dromara.daxpay.channel.alipay.entity.direct.AlipayDirectApp;
@@ -54,7 +54,7 @@ public class AlipayDirectAppKeyConfigService {
         if (existing.isPresent()) {
             AlipayDirectAppKeyConfig config = existing.get();
             config.setAuthType(param.getAuthType());
-            this.mergeSensitiveFields(config, param);
+            AlipayDirectAppKeyConfigConvert.CONVERT.copy(param, config);
             alipayDirectAppKeyConfigManager.updateById(config);
             return;
         }
@@ -69,28 +69,6 @@ public class AlipayDirectAppKeyConfigService {
     /// 删除应用密钥配置
     public void deleteByAppId(Long appId) {
         alipayDirectAppKeyConfigManager.deleteByAppId(appId);
-    }
-
-    /// 合并敏感字段，空值表示不更新
-    private void mergeSensitiveFields(AlipayDirectAppKeyConfig config, AlipayDirectAppKeyConfigParam param) {
-        if (StrUtil.isNotBlank(param.getAlipayPublicKey())) {
-            config.setAlipayPublicKey(param.getAlipayPublicKey());
-        }
-        if (StrUtil.isNotBlank(param.getPrivateKey())) {
-            config.setPrivateKey(param.getPrivateKey());
-        }
-        if (StrUtil.isNotBlank(param.getAppCert())) {
-            config.setAppCert(param.getAppCert());
-        }
-        if (StrUtil.isNotBlank(param.getAlipayCert())) {
-            config.setAlipayCert(param.getAlipayCert());
-        }
-        if (StrUtil.isNotBlank(param.getAlipayRootCert())) {
-            config.setAlipayRootCert(param.getAlipayRootCert());
-        }
-        if (StrUtil.isNotBlank(param.getSecretKey())) {
-            config.setSecretKey(param.getSecretKey());
-        }
     }
 
     /// 新增时的条件校验

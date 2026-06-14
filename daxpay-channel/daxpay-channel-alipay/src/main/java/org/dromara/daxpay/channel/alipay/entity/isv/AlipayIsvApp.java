@@ -1,6 +1,6 @@
 package org.dromara.daxpay.channel.alipay.entity.isv;
 
-import org.dromara.daxpay.channel.alipay.convert.AlipayIsvAppConvert;
+import org.dromara.daxpay.channel.alipay.convert.isv.AlipayIsvAppConvert;
 import org.dromara.daxpay.channel.alipay.result.isv.AlipayIsvAppResult;
 import org.dromara.daxpay.platform.common.mybatisplus.base.MpBaseEntity;
 import org.dromara.daxpay.platform.common.mybatisplus.function.ToResult;

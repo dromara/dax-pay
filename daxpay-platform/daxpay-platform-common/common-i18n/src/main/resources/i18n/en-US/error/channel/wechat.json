@@ -39,5 +39,7 @@
   "appTypeInvalid": "Invalid WeChat application type",
   "appSecretRequired": "App secret is required",
   "publicKeyRequired": "Payment public key is required",
-  "privateCertRequired": "API certificate is required"
+  "privateCertRequired": "API certificate is required",
+  "subMerchantDuplicate": "This sub-merchant already exists under the WeChat application",
+  "directMchDuplicate": "The WeChat merchant already exists under this merchant"
 }

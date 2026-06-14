@@ -1,7 +1,7 @@
 package org.dromara.daxpay.channel.alipay.service.isv;
 
 import org.dromara.daxpay.channel.alipay.code.AlipayCode;
-import org.dromara.daxpay.channel.alipay.convert.AlipayIsvAppAuthConfigConvert;
+import org.dromara.daxpay.channel.alipay.convert.isv.AlipayIsvAppAuthConfigConvert;
 import org.dromara.daxpay.channel.alipay.dao.isv.AlipayIsvAppManager;
 import org.dromara.daxpay.channel.alipay.dao.isv.AlipayIsvAppAuthConfigManager;
 import org.dromara.daxpay.channel.alipay.entity.isv.AlipayIsvAppAuthConfig;

@@ -22,7 +22,6 @@ public class AlipayIsvChannelMerchantResult extends MchTradeBaseResult {
     @Schema(description = "所属支付产品")
     private String product;
 
-    /// 注意: 此处用 isvAppId(Long) 而非 appId, 避免与父类 MchTradeBaseResult.appId(String) 字段冲突
     @Schema(description = "关联服务商应用ID(系统主键)")
     private Long isvAppId;
 

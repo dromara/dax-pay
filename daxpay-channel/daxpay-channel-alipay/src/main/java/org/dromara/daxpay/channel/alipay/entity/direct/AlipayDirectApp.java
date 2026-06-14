@@ -1,6 +1,6 @@
 package org.dromara.daxpay.channel.alipay.entity.direct;
 
-import org.dromara.daxpay.channel.alipay.convert.AlipayDirectAppConvert;
+import org.dromara.daxpay.channel.alipay.convert.direct.AlipayDirectAppConvert;
 import org.dromara.daxpay.channel.alipay.result.direct.AlipayDirectAppResult;
 import org.dromara.daxpay.payment.common.entity.merchant.MchBaseEntity;
 import org.dromara.daxpay.platform.common.mybatisplus.function.ToResult;

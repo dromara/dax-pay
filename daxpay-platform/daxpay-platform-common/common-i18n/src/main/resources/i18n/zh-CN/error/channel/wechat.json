@@ -39,5 +39,7 @@
   "appTypeInvalid": "微信应用类型无效",
   "appSecretRequired": "应用密钥不可为空",
   "publicKeyRequired": "支付公钥未配置",
-  "privateCertRequired": "API证书未配置"
+  "privateCertRequired": "API证书未配置",
+  "subMerchantDuplicate": "该微信应用下已存在此特约商户号",
+  "directMchDuplicate": "同一商户下该微信商户已存在"
 }

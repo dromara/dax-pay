@@ -10,9 +10,9 @@ import org.springframework.stereotype.Repository;
 public class AlipayIsvChannelMerchantManager extends BaseManager<AlipayIsvChannelMerchantMapper, AlipayIsvChannelMerchant> {
 
     /// 校验同一服务商应用下是否已绑定该子商户
-    public boolean existsByAppIdAndAlipayUserId(Long appId, String alipayUserId) {
+    public boolean existsByIsvAppIdAndAlipayUserId(Long isvAppId, String alipayUserId) {
         return lambdaQuery()
-                .eq(AlipayIsvChannelMerchant::getAppId, appId)
+                .eq(AlipayIsvChannelMerchant::getIsvAppId, isvAppId)
                 .eq(AlipayIsvChannelMerchant::getAlipayUserId, alipayUserId)
                 .exists();
     }

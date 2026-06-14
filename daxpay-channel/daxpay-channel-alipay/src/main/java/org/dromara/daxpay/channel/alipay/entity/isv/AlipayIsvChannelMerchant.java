@@ -1,6 +1,6 @@
 package org.dromara.daxpay.channel.alipay.entity.isv;
 
-import org.dromara.daxpay.channel.alipay.convert.AlipayIsvChannelMerchantConvert;
+import org.dromara.daxpay.channel.alipay.convert.isv.AlipayIsvChannelMerchantConvert;
 import org.dromara.daxpay.channel.alipay.result.isv.AlipayIsvChannelMerchantResult;
 import org.dromara.daxpay.payment.common.entity.merchant.MchBaseEntity;
 import org.dromara.daxpay.platform.common.mybatisplus.function.ToResult;
@@ -28,7 +28,7 @@ public class AlipayIsvChannelMerchant extends MchBaseEntity implements ToResult<
     private String product;
 
     /// 关联服务商应用ID(系统主键, 指向 alipay_isv_app.id)
-    private Long appId;
+    private Long isvAppId;
 
     /// 子商户支付宝识别码(2088开头的16位数字)
     private String alipayUserId;

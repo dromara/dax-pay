@@ -1,7 +1,7 @@
 package org.dromara.daxpay.channel.alipay.service.isv;
 
 import org.dromara.daxpay.channel.alipay.code.AlipayCode;
-import org.dromara.daxpay.channel.alipay.convert.AlipayIsvAppKeyConfigConvert;
+import org.dromara.daxpay.channel.alipay.convert.isv.AlipayIsvAppKeyConfigConvert;
 import org.dromara.daxpay.channel.alipay.dao.isv.AlipayIsvAppManager;
 import org.dromara.daxpay.channel.alipay.dao.isv.AlipayIsvAppKeyConfigManager;
 import org.dromara.daxpay.channel.alipay.entity.isv.AlipayIsvAppKeyConfig;
@@ -48,7 +48,7 @@ public class AlipayIsvAppKeyConfigService {
         if (existing.isPresent()) {
             AlipayIsvAppKeyConfig config = existing.get();
             config.setAuthType(param.getAuthType());
-            this.mergeSensitiveFields(config, param);
+            AlipayIsvAppKeyConfigConvert.CONVERT.copy(param, config);
             alipayIsvAppKeyConfigManager.updateById(config);
             return;
         }
@@ -61,28 +61,6 @@ public class AlipayIsvAppKeyConfigService {
     /// 删除应用密钥配置
     public void deleteByAppId(Long appId) {
         alipayIsvAppKeyConfigManager.deleteByAppId(appId);
-    }
-
-    /// 合并敏感字段，空值表示不更新
-    private void mergeSensitiveFields(AlipayIsvAppKeyConfig config, AlipayIsvAppKeyConfigParam param) {
-        if (StrUtil.isNotBlank(param.getAlipayPublicKey())) {
-            config.setAlipayPublicKey(param.getAlipayPublicKey());
-        }
-        if (StrUtil.isNotBlank(param.getPrivateKey())) {
-            config.setPrivateKey(param.getPrivateKey());
-        }
-        if (StrUtil.isNotBlank(param.getAppCert())) {
-            config.setAppCert(param.getAppCert());
-        }
-        if (StrUtil.isNotBlank(param.getAlipayCert())) {
-            config.setAlipayCert(param.getAlipayCert());
-        }
-        if (StrUtil.isNotBlank(param.getAlipayRootCert())) {
-            config.setAlipayRootCert(param.getAlipayRootCert());
-        }
-        if (StrUtil.isNotBlank(param.getSecretKey())) {
-            config.setSecretKey(param.getSecretKey());
-        }
     }
 
     /// 新增时的条件校验

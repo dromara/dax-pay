@@ -1,7 +1,7 @@
 package org.dromara.daxpay.channel.alipay.service.direct;
 
 import org.dromara.daxpay.channel.alipay.code.AlipayCode;
-import org.dromara.daxpay.channel.alipay.convert.AlipayDirectAppAuthConfigConvert;
+import org.dromara.daxpay.channel.alipay.convert.direct.AlipayDirectAppAuthConfigConvert;
 import org.dromara.daxpay.channel.alipay.dao.direct.AlipayDirectAppManager;
 import org.dromara.daxpay.channel.alipay.dao.direct.AlipayDirectAppAuthConfigManager;
 import org.dromara.daxpay.channel.alipay.entity.direct.AlipayDirectApp;

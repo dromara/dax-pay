@@ -2,7 +2,13 @@ package org.dromara.daxpay.payment.merchant.convert.route.strategy;
 
 import org.dromara.daxpay.payment.merchant.entity.route.strategy.PayRouteStrategy;
 import org.dromara.daxpay.payment.merchant.result.route.strategy.PayRouteStrategyResult;
+import org.dromara.daxpay.payment.merchant.entity.route.strategy.PayRouteStrategy;
+import org.dromara.daxpay.payment.merchant.param.route.strategy.PayRouteStrategyParam;
+import org.dromara.daxpay.payment.merchant.result.route.strategy.PayRouteStrategyResult;
+import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
 
 /// # 支付通道路由策略转换
@@ -13,4 +19,7 @@ public interface PayRouteStrategyConvert {
     PayRouteStrategyConvert CONVERT = Mappers.getMapper(PayRouteStrategyConvert.class);
 
     PayRouteStrategyResult toResult(PayRouteStrategy entity);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void copy(PayRouteStrategyParam param, @MappingTarget PayRouteStrategy entity);
 }

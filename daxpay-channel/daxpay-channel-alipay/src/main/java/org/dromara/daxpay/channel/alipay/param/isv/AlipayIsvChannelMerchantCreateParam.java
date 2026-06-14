@@ -31,7 +31,7 @@ public class AlipayIsvChannelMerchantCreateParam {
     /// 服务商应用ID(系统主键, 指向 alipay_isv_app.id)
     @Schema(description = "服务商应用ID")
     @NotNull(message = "{validation.field.appId.notNull}")
-    private Long appId;
+    private Long isvAppId;
 
     /// 子商户支付宝用户ID(2088开头)
     @Schema(description = "子商户支付宝用户ID(2088开头)")

@@ -1,6 +1,7 @@
 package org.dromara.daxpay.payment.merchant.service.route.facade;
 
 import org.dromara.daxpay.payment.merchant.dao.appinfo.MchAppInfoManager;
+import org.dromara.daxpay.payment.merchant.convert.route.strategy.PayRouteStrategyConvert;
 import org.dromara.daxpay.payment.merchant.dao.route.strategy.PayRouteStrategyManager;
 import org.dromara.daxpay.payment.merchant.entity.route.strategy.PayRouteStrategy;
 import org.dromara.daxpay.payment.merchant.param.route.basic.PayRouteBasicConfigBatchParam;
@@ -15,7 +16,6 @@ import org.dromara.daxpay.payment.merchant.service.route.basic.PayRouteBasicConf
 import org.dromara.daxpay.payment.merchant.service.route.scene.PayRouteSceneConfigService;
 import org.dromara.daxpay.platform.core.enums.pay.route.PayRouteModeEnum;
 import org.dromara.daxpay.platform.core.exception.DataNotExistException;
-import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,18 +62,7 @@ public class PayRouteConfigService {
         mchAppInfoManager.requireByAppIdNotTenant(param.getAppId());
         PayRouteStrategy strategy = strategyManager.findByAppId(param.getAppId())
                 .orElseThrow(() -> new DataNotExistException("pay.route.error.routeStrategyNotExist"));
-        if (StrUtil.isNotBlank(param.getMode())) {
-            strategy.setMode(param.getMode());
-        }
-        if (param.getEnable() != null) {
-            strategy.setEnable(param.getEnable());
-        }
-        if (StrUtil.isNotBlank(param.getName())) {
-            strategy.setName(param.getName());
-        }
-        if (StrUtil.isNotBlank(param.getProvider())) {
-            strategy.setProvider(param.getProvider());
-        }
+        PayRouteStrategyConvert.CONVERT.copy(param, strategy);
         strategyManager.updateById(strategy);
         return strategy.toResult();
     }

@@ -34,12 +34,12 @@ public class AlipayIsvChannelMerchantService {
     /// 创建支付宝服务商通道商户
     @Transactional(rollbackFor = Exception.class)
     public void create(AlipayIsvChannelMerchantCreateParam param) {
-        // 校验服务商应用存在(用 appId 系统主键查询)
-        AlipayIsvApp isvApp = alipayIsvAppManager.findById(param.getAppId())
+        // 校验服务商应用存在(用 isvAppId 系统主键查询)
+        AlipayIsvApp isvApp = alipayIsvAppManager.findById(param.getIsvAppId())
                 .orElseThrow(() -> new DataNotExistException("error.channel.alipay.appNotFound"));
         // 校验同一应用下子商户号不重复
-        if (alipayIsvChannelMerchantManager.existsByAppIdAndAlipayUserId(
-                param.getAppId(), param.getAlipayUserId())) {
+        if (alipayIsvChannelMerchantManager.existsByIsvAppIdAndAlipayUserId(
+                param.getIsvAppId(), param.getAlipayUserId())) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.alipay.subMerchantDuplicate");
         }
         // 生成通道商户号：前缀 AISV + 雪花ID(无分隔符, 符合 TradeNoGenerateUtil 约定)
@@ -58,7 +58,7 @@ public class AlipayIsvChannelMerchantService {
         entity.setMchNo(param.getMchNo());
         entity.setChannelMchNo(channelMchNo);
         entity.setProduct(param.getProduct());
-        entity.setAppId(isvApp.getId());
+        entity.setIsvAppId(isvApp.getId());
         entity.setAlipayUserId(param.getAlipayUserId());
         entity.setAppAuthToken(param.getAppAuthToken());
         alipayIsvChannelMerchantManager.save(entity);
