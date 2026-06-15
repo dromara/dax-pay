@@ -4,6 +4,8 @@ import org.dromara.daxpay.channel.wechat.entity.direct.WechatDirectChannelMercha
 import org.dromara.daxpay.platform.common.mybatisplus.impl.BaseManager;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 /// # 微信直连通道商户绑定
 ///
 @Repository
@@ -15,5 +17,12 @@ public class WechatDirectChannelMerchantManager extends BaseManager<WechatDirect
                 .eq(WechatDirectChannelMerchant::getMchNo, mchNo)
                 .eq(WechatDirectChannelMerchant::getWxMchId, wxMchId)
                 .exists();
+    }
+
+    /// 根据通道商户号查询
+    public Optional<WechatDirectChannelMerchant> findByChannelMchNo(String channelMchNo) {
+        return lambdaQuery()
+                .eq(WechatDirectChannelMerchant::getChannelMchNo, channelMchNo)
+                .oneOpt();
     }
 }

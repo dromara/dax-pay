@@ -4,8 +4,11 @@ import org.dromara.daxpay.platform.core.annotation.PermCode;
 import org.dromara.daxpay.platform.core.rest.Res;
 import org.dromara.daxpay.platform.core.rest.result.Result;
 import org.dromara.daxpay.channel.wechat.param.direct.WechatDirectChannelMerchantCreateParam;
+import org.dromara.daxpay.channel.wechat.param.direct.WechatDirectKeyConfigParam;
 import org.dromara.daxpay.channel.wechat.result.direct.WechatDirectChannelMerchantResult;
+import org.dromara.daxpay.channel.wechat.result.direct.WechatDirectKeyConfigResult;
 import org.dromara.daxpay.channel.wechat.service.direct.WechatDirectChannelMerchantService;
+import org.dromara.daxpay.channel.wechat.service.direct.WechatDirectKeyConfigService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
@@ -28,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class WechatDirectChannelMerchantController {
 
     private final WechatDirectChannelMerchantService wechatDirectChannelMerchantService;
+    private final WechatDirectKeyConfigService wechatDirectKeyConfigService;
 
     @PermCode(code = "view", nameCn = "商户通道商户查看", nameEn = "Merchant Channel Merchant View")
     @Operation(summary = "根据通道商户号查询微信直连通道商户配置")
@@ -42,6 +46,22 @@ public class WechatDirectChannelMerchantController {
     @PostMapping("/create")
     public Result<Void> create(@RequestBody @Validated WechatDirectChannelMerchantCreateParam param) {
         wechatDirectChannelMerchantService.create(param);
+        return Res.ok();
+    }
+
+    @PermCode(code = "view", nameCn = "商户通道商户查看", nameEn = "Merchant Channel Merchant View")
+    @Operation(summary = "根据通道商户号查询密钥配置")
+    @GetMapping("/find-key-config")
+    public Result<WechatDirectKeyConfigResult> findKeyConfig(
+            @NotBlank(message = "{validation.field.channelMerchantNo.notBlank}") String channelMchNo) {
+        return Res.ok(wechatDirectKeyConfigService.findByChannelMchNo(channelMchNo).toResult());
+    }
+
+    @PermCode(code = "edit", nameCn = "商户通道商户编辑", nameEn = "Merchant Channel Merchant Edit")
+    @Operation(summary = "保存密钥配置")
+    @PostMapping("/save-key-config")
+    public Result<Void> saveKeyConfig(@RequestBody @Validated WechatDirectKeyConfigParam param) {
+        wechatDirectKeyConfigService.save(param);
         return Res.ok();
     }
 }
