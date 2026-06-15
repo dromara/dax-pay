@@ -12,7 +12,7 @@
  Target Server Version : 160009 (160009)
  File Encoding         : 65001
 
- Date: 13/06/2026 17:02:31
+ Date: 15/06/2026 22:06:18
 */
 
 
@@ -139,92 +139,14 @@ INSERT INTO "public"."iam_perm_menu" VALUES (4040113, 40401, 'payment:merchant:c
 INSERT INTO "public"."iam_perm_menu" VALUES (4040114, 40401, 'payment:merchant:channelMerchant:alipayApp', 'admin', 'AlipayMchAppManage', '支付宝通道商户应用', 'Alipay Channel Merchant App', 'menu.payment.merchant.channelMerchant.alipayApp', NULL, 't', 'f', '/payment/channel/alipay/manage/mch/app/AlipayMchAppManage', '/payment/merchant/channel-merchant/alipay-app-manage', NULL, 12, 'f', 't', 'f', 1, 1, 0, 'f', 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-11 22:28:11.274785+00', '2026-06-11 22:28:11.274785+00');
 INSERT INTO "public"."iam_perm_menu" VALUES (404, NULL, 'payment:merchant', 'admin', 'PaymentMerchant', '商户管理', 'Merchant Management', 'menu.payment.merchant', 'lucide:store', 'f', 'f', NULL, '/payment/merchant', NULL, 4, 't', 't', 'f', 0, NULL, 0, 'f', 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-04-05 16:00:00+00', '2026-06-13 00:00:00+00');
 INSERT INTO "public"."iam_perm_menu" VALUES (30403, 304, 'system:credential:config', 'admin', 'PlatformCredentialConfig', '对接配置', 'Credential Config', 'menu.system.config.credential', 'lucide:key-round', 'f', 'f', '/system/config/credential/PlatformCredentialConfig', '/system/config/credential', NULL, 3, 'f', 't', 'f', 1, 1, 0, 'f', 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-13 00:00:00+00', '2026-06-13 00:00:00+00');
-
--- 支付配置目录
-INSERT INTO "public"."iam_perm_menu" VALUES (405, 4, 'payment:config', 'admin', 'PaymentConfig', '支付配置', 'Payment Config', 'menu.payment.config', 'lucide:settings-2', 'f', 'f', NULL, '/payment/config', NULL, 2, 'f', 't', 'f', 1, 1, 0, 'f', 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-14 00:00:00+00', '2026-06-14 00:00:00+00')
-ON CONFLICT (id) DO UPDATE SET
-  menu_code = EXCLUDED.menu_code,
-  name = EXCLUDED.name,
-  title_cn = EXCLUDED.title_cn,
-  title_en = EXCLUDED.title_en,
-  i18n_key = EXCLUDED.i18n_key,
-  icon = EXCLUDED.icon,
-  path = EXCLUDED.path,
-  sort_no = EXCLUDED.sort_no,
-  keep_alive = EXCLUDED.keep_alive,
-  menu_type = EXCLUDED.menu_type,
-  last_modified_time = EXCLUDED.last_modified_time;
-
--- 支付配置：支付产品管理（卡片式）
-INSERT INTO "public"."iam_perm_menu" VALUES (40105, 405, 'payment:config:productConfig', 'admin', 'ProductConfig', '支付产品管理', 'Payment Product Management', 'menu.payment.config.productConfig', 'lucide:layout-grid', 'f', 'f', '/payment/config/product/ProductConfig', '/payment/config/product', NULL, 1, 'f', 't', 'f', 1, 1, 0, 'f', 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-14 00:00:00+00', '2026-06-14 00:00:00+00')
-ON CONFLICT (id) DO UPDATE SET
-  pid = EXCLUDED.pid,
-  menu_code = EXCLUDED.menu_code,
-  name = EXCLUDED.name,
-  title_cn = EXCLUDED.title_cn,
-  title_en = EXCLUDED.title_en,
-  i18n_key = EXCLUDED.i18n_key,
-  icon = EXCLUDED.icon,
-  component = EXCLUDED.component,
-  path = EXCLUDED.path,
-  sort_no = EXCLUDED.sort_no,
-  keep_alive = EXCLUDED.keep_alive,
-  menu_type = EXCLUDED.menu_type,
-  last_modified_time = EXCLUDED.last_modified_time;
+INSERT INTO "public"."iam_perm_menu" VALUES (405, 4, 'payment:config', 'admin', 'PaymentConfig', '支付配置', 'Payment Config', 'menu.payment.config', 'lucide:settings-2', 'f', 'f', NULL, '/payment/config', NULL, 2, 'f', 't', 'f', 1, 1, 0, 'f', 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-14 00:00:00+00', '2026-06-14 00:00:00+00');
+INSERT INTO "public"."iam_perm_menu" VALUES (40105, 405, 'payment:config:productConfig', 'admin', 'ProductConfig', '支付产品管理', 'Payment Product Management', 'menu.payment.config.productConfig', 'lucide:layout-grid', 'f', 'f', '/payment/config/product/ProductConfig', '/payment/config/product', NULL, 1, 'f', 't', 'f', 1, 1, 0, 'f', 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-13 00:00:00+00', '2026-06-13 09:14:10.179605+00');
+INSERT INTO "public"."iam_perm_menu" VALUES (40501, 405, 'payment:config:productDetail', 'admin', 'ProductDetailDispatch', '支付产品详情', 'Payment Product Detail', 'menu.payment.config.productDetail', NULL, 't', 'f', '/payment/config/product/detail/ProductDetailDispatch', '/payment/product-detail', NULL, 2, 'f', 't', 'f', 1, 1, 0, 'f', 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-14 00:00:00+00', '2026-06-14 00:00:00+00');
+INSERT INTO "public"."iam_perm_menu" VALUES (40502, 405, 'payment:alipay:isvApp', 'admin', 'AlipayIsvAppManage', '支付宝服务商应用', 'Alipay ISV Application', 'menu.payment.alipay.isvApp', NULL, 't', 'f', '/payment/channel/alipay/manage/app/AlipayIsvAppManage', '/payment/config/product/app-manage', NULL, 3, 'f', 't', 'f', 1, 1, 0, 'f', 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-14 00:00:00+00', '2026-06-14 00:00:00+00');
+INSERT INTO "public"."iam_perm_menu" VALUES (40503, 405, 'payment:wechat:isvApp', 'admin', 'WechatIsvAppManage', '微信服务商应用', 'WeChat ISV Application', 'menu.payment.wechat.isvApp', NULL, 't', 'f', '/payment/channel/wechat/manage/app/WechatIsvAppManage', '/payment/config/product/wechat-app-manage', NULL, 4, 'f', 't', 'f', 1, 1, 0, 'f', 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-14 00:00:00+00', '2026-06-14 00:00:00+00');
+INSERT INTO "public"."iam_perm_menu" VALUES (4040115, 40401, 'payment:merchant:channelMerchant:douyinApp', 'admin', 'DouyinMchAppManage', '抖音通道商户应用', 'Douyin Channel Merchant App', 'menu.payment.merchant.channelMerchant.douyinApp', NULL, 't', 'f', '/payment/channel/douyin/manage/app/DouyinMchAppManage', '/payment/merchant/channel-merchant/douyin-app-manage', NULL, 13, 'f', 't', 'f', 1, 1, 0, 'f', 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-15 16:00:00+00', '2026-06-15 16:00:00+00');
 
 -- ----------------------------
 -- Primary Key structure for table iam_perm_menu
 -- ----------------------------
 ALTER TABLE "public"."iam_perm_menu" ADD CONSTRAINT "iam_perm_menu_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- 支付宝服务商相关菜单
--- ----------------------------
--- 支付产品详情分发页（隐藏，供支付产品管理卡片跳转进入对应通道总览页）
-INSERT INTO "public"."iam_perm_menu" VALUES (40501, 405, 'payment:config:productDetail', 'admin', 'ProductDetailDispatch', '支付产品详情', 'Payment Product Detail', 'menu.payment.config.productDetail', NULL, 't', 'f', '/payment/config/product/detail/ProductDetailDispatch', '/payment/product-detail', NULL, 2, 'f', 't', 'f', 1, 1, 0, 'f', 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-14 00:00:00+00', '2026-06-14 00:00:00+00')
-ON CONFLICT (id) DO UPDATE SET
-  pid = EXCLUDED.pid,
-  menu_code = EXCLUDED.menu_code,
-  name = EXCLUDED.name,
-  title_cn = EXCLUDED.title_cn,
-  title_en = EXCLUDED.title_en,
-  i18n_key = EXCLUDED.i18n_key,
-  component = EXCLUDED.component,
-  path = EXCLUDED.path,
-  sort_no = EXCLUDED.sort_no,
-  menu_type = EXCLUDED.menu_type,
-  last_modified_time = EXCLUDED.last_modified_time;
-
--- 支付宝服务商应用管理（隐藏，从支付宝服务商总览页卡片进入）
-INSERT INTO "public"."iam_perm_menu" VALUES (40502, 405, 'payment:alipay:isvApp', 'admin', 'AlipayIsvAppManage', '支付宝服务商应用', 'Alipay ISV Application', 'menu.payment.alipay.isvApp', NULL, 't', 'f', '/payment/channel/alipay/manage/app/AlipayIsvAppManage', '/payment/config/product/app-manage', NULL, 3, 'f', 't', 'f', 1, 1, 0, 'f', 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-14 00:00:00+00', '2026-06-14 00:00:00+00')
-ON CONFLICT (id) DO UPDATE SET
-  pid = EXCLUDED.pid,
-  menu_code = EXCLUDED.menu_code,
-  name = EXCLUDED.name,
-  title_cn = EXCLUDED.title_cn,
-  title_en = EXCLUDED.title_en,
-  i18n_key = EXCLUDED.i18n_key,
-  component = EXCLUDED.component,
-  path = EXCLUDED.path,
-  sort_no = EXCLUDED.sort_no,
-  menu_type = EXCLUDED.menu_type,
-  last_modified_time = EXCLUDED.last_modified_time;
-
--- ----------------------------
--- 微信服务商相关菜单
--- ----------------------------
--- 微信服务商应用管理（隐藏，从微信服务商总览页卡片进入）
-INSERT INTO "public"."iam_perm_menu" VALUES (40503, 405, 'payment:wechat:isvApp', 'admin', 'WechatIsvAppManage', '微信服务商应用', 'WeChat ISV Application', 'menu.payment.wechat.isvApp', NULL, 't', 'f', '/payment/channel/wechat/manage/app/WechatIsvAppManage', '/payment/config/product/wechat-app-manage', NULL, 4, 'f', 't', 'f', 1, 1, 0, 'f', 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-14 00:00:00+00', '2026-06-14 00:00:00+00')
-ON CONFLICT (id) DO UPDATE SET
-  pid = EXCLUDED.pid,
-  menu_code = EXCLUDED.menu_code,
-  name = EXCLUDED.name,
-  title_cn = EXCLUDED.title_cn,
-  title_en = EXCLUDED.title_en,
-  i18n_key = EXCLUDED.i18n_key,
-  component = EXCLUDED.component,
-  path = EXCLUDED.path,
-  sort_no = EXCLUDED.sort_no,
-  menu_type = EXCLUDED.menu_type,
-  last_modified_time = EXCLUDED.last_modified_time;
-

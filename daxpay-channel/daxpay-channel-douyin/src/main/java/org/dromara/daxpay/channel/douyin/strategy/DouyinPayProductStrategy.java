@@ -11,9 +11,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+
+import static org.dromara.daxpay.platform.core.enums.pay.channel.PayProviderEnum.DOUYIN;
 
 /// # 抖音支付直连产品策略
 ///
@@ -22,9 +23,20 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class DouyinPayProductStrategy extends AbsProductStrategy {
 
+    private static final Map<PayMethodEnum, List<PayCapabilityEnum>> METHOD_CAP_MAP = Map.of(
+            PayMethodEnum.DOUYIN_QR, List.of(PayCapabilityEnum.DOUYIN_QR),
+            PayMethodEnum.DOUYIN_JSAPI, List.of(PayCapabilityEnum.DOUYIN_JSAPI),
+            PayMethodEnum.DOUYIN_H5, List.of(PayCapabilityEnum.DOUYIN_H5),
+            PayMethodEnum.DOUYIN_APP, List.of(PayCapabilityEnum.DOUYIN_APP));
+
     @Override
     public ProductEnum getProduct() {
         return ProductEnum.DOUYIN_PAY;
+    }
+
+    @Override
+    public boolean isAllocatable() {
+        return false;
     }
 
     @Override
@@ -44,11 +56,11 @@ public class DouyinPayProductStrategy extends AbsProductStrategy {
 
     @Override
     public List<PayProviderEnum> supportedPayProviders() {
-        return Collections.emptyList();
+        return List.of(DOUYIN);
     }
 
     @Override
     public Map<PayMethodEnum, List<PayCapabilityEnum>> methodCapabilityMapping() {
-        return Collections.emptyMap();
+        return METHOD_CAP_MAP;
     }
 }

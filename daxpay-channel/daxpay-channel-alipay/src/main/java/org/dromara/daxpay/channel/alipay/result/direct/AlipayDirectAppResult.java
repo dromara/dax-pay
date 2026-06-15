@@ -24,4 +24,7 @@ public class AlipayDirectAppResult extends MchBaseResult {
 
     @Schema(description = "支付宝应用ID")
     private String aliAppId;
+
+    @Schema(description = "应用类型: mini_program-小程序 mobile_app-移动应用 web_app-网站应用")
+    private String appType;
 }
