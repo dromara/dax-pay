@@ -24,7 +24,7 @@ public class AlipayDirectAppKeyConfigResult extends BaseResult {
     private String channelMchNo;
 
     @Schema(description = "关联应用ID")
-    private Long appId;
+    private Long alipayDirectAppId;
 
     @Schema(description = "认证类型")
     private String authType;

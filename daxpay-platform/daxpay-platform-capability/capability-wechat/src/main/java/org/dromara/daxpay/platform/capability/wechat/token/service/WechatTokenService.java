@@ -34,38 +34,38 @@ public class WechatTokenService {
     private static final long TOKEN_EXPIRE_TIME = 7200 - 300;
 
     /// 获取AccessToken（自动刷新，支持多副本部署）
-    /// @param appId AppId
+    /// @param wxAppId 微信AppId
     /// @param appSecret AppSecret
     /// @return AccessToken
-    public String getAccessToken(String appId, String appSecret) {
-        String cacheKey = TOKEN_CACHE_KEY + appId;
+    public String getAccessToken(String wxAppId, String appSecret) {
+        String cacheKey = TOKEN_CACHE_KEY + wxAppId;
         
         // 从缓存获取Token
         String token = redisTemplate.opsForValue().get(cacheKey);
         
         // 如果Token存在且未即将过期，直接返回
-        if (StrUtil.isNotBlank(token) && !isTokenExpiringSoon(appId)) {
-            log.debug("从缓存获取AccessToken成功，appId: {}", appId);
+        if (StrUtil.isNotBlank(token) && !isTokenExpiringSoon(wxAppId)) {
+            log.debug("从缓存获取AccessToken成功，wxAppId: {}", wxAppId);
             return token;
         }
         
         // Token不存在或即将过期，需要刷新
-        return refreshAccessToken(appId, appSecret);
+        return refreshAccessToken(wxAppId, appSecret);
     }
 
     /// 手动刷新AccessToken（使用lock4j分布式锁）
     /// @param appId AppId
     /// @param appSecret AppSecret
     /// @return 新的AccessToken
-    public String refreshAccessToken(String appId, String appSecret) {
-        String lockKey = TOKEN_LOCK_KEY + appId;
-        String cacheKey = TOKEN_CACHE_KEY + appId;
-        String expireKey = TOKEN_EXPIRE_KEY + appId;
+    public String refreshAccessToken(String wxAppId, String appSecret) {
+        String lockKey = TOKEN_LOCK_KEY + wxAppId;
+        String cacheKey = TOKEN_CACHE_KEY + wxAppId;
+        String expireKey = TOKEN_EXPIRE_KEY + wxAppId;
         
         // 使用lock4j获取分布式锁
         LockInfo lockInfo = lockTemplate.lock(lockKey, 30000L, 5000L);
         if (lockInfo == null) {
-            log.warn("获取Token刷新锁失败，appId: {}", appId);
+            log.warn("获取Token刷新锁失败，wxAppId: {}", wxAppId);
             // 获取锁失败，尝试从缓存获取
             String token = redisTemplate.opsForValue().get(cacheKey);
             if (StrUtil.isNotBlank(token)) {
@@ -77,19 +77,19 @@ public class WechatTokenService {
         try {
             // 双重检查，避免重复刷新
             String token = redisTemplate.opsForValue().get(cacheKey);
-            if (StrUtil.isNotBlank(token) && !isTokenExpiringSoon(appId)) {
-                log.debug("其他实例已刷新Token，直接返回，appId: {}", appId);
+            if (StrUtil.isNotBlank(token) && !isTokenExpiringSoon(wxAppId)) {
+                log.debug("其他实例已刷新Token，直接返回，wxAppId: {}", wxAppId);
                 return token;
             }
             
             // 调用微信API获取新Token
-            log.info("开始刷新AccessToken，appId: {}", appId);
-            WxMpService wxMpService = createWxMpService(appId, appSecret);
+            log.info("开始刷新AccessToken，wxAppId: {}", wxAppId);
+            WxMpService wxMpService = createWxMpService(wxAppId, appSecret);
             String newToken;
             try {
                 newToken = wxMpService.getAccessToken();
             } catch (WxErrorException e) {
-                log.error("调用微信API获取AccessToken失败，appId: {}, 错误: {}", appId, e.getMessage());
+                log.error("调用微信API获取AccessToken失败，wxAppId: {}, 错误: {}", wxAppId, e.getMessage());
                 throw new RuntimeException("刷新AccessToken失败: " + e.getMessage(), e);
             }
             
@@ -103,7 +103,7 @@ public class WechatTokenService {
             long expireTime = System.currentTimeMillis() + TOKEN_EXPIRE_TIME * 1000;
             redisTemplate.opsForValue().set(expireKey, String.valueOf(expireTime), TOKEN_EXPIRE_TIME, TimeUnit.SECONDS);
             
-            log.info("刷新AccessToken成功，appId: {}", appId);
+            log.info("刷新AccessToken成功，wxAppId: {}", wxAppId);
             return newToken;
             
         } finally {
@@ -113,10 +113,10 @@ public class WechatTokenService {
     }
 
     /// 检查Token是否即将过期（过期前5分钟）
-    /// @param appId AppId
+    /// @param wxAppId 微信AppId
     /// @return 是否即将过期
-    public boolean isTokenExpiringSoon(String appId) {
-        String expireKey = TOKEN_EXPIRE_KEY + appId;
+    public boolean isTokenExpiringSoon(String wxAppId) {
+        String expireKey = TOKEN_EXPIRE_KEY + wxAppId;
         String expireTimeStr = redisTemplate.opsForValue().get(expireKey);
         
         if (StrUtil.isBlank(expireTimeStr)) {
@@ -129,16 +129,16 @@ public class WechatTokenService {
             // 提前5分钟判断为即将过期
             return (expireTime - currentTime) < 300000;
         } catch (NumberFormatException e) {
-            log.warn("解析Token过期时间失败，appId: {}", appId);
+            log.warn("解析Token过期时间失败，wxAppId: {}", wxAppId);
             return true;
         }
     }
 
     /// 创建微信公众号Service
-    private WxMpService createWxMpService(String appId, String appSecret) {
+    private WxMpService createWxMpService(String wxAppId, String appSecret) {
         WxMpService wxMpService = new WxMpServiceImpl();
         WxMpDefaultConfigImpl config = new WxMpDefaultConfigImpl();
-        config.setAppId(appId);
+        config.setAppId(wxAppId);
         config.setSecret(appSecret);
         wxMpService.setWxMpConfigStorage(config);
         return wxMpService;

@@ -171,7 +171,7 @@ public class WechatMessageRecordService {
     @SuppressWarnings("unchecked")
     private TemplateMessageParam buildTemplateMessageParam(WechatMessageRecord record) {
         TemplateMessageParam param = new TemplateMessageParam();
-        param.setAppId(record.getAppId());
+        param.setWxAppId(record.getWxAppId());
         // AppSecret需要从外部传入，这里暂时为空，实际使用时需要调用方提供
         param.setOpenId(record.getOpenId());
         param.setTemplateId(record.getTemplateId());
@@ -186,12 +186,12 @@ public class WechatMessageRecordService {
         
         return param;
     }
-
+    
     /// 构建统一服务消息参数
     @SuppressWarnings("unchecked")
     private UniformMessageParam buildUniformMessageParam(WechatMessageRecord record) {
         UniformMessageParam param = new UniformMessageParam();
-        param.setAppId(record.getAppId());
+        param.setWxAppId(record.getWxAppId());
         // AppSecret需要从外部传入，这里暂时为空，实际使用时需要调用方提供
         param.setOpenId(record.getOpenId());
         param.setTemplateId(record.getTemplateId());

@@ -18,16 +18,16 @@ import java.util.Optional;
 public class AlipayIsvAppAuthConfigManager extends BaseManager<AlipayIsvAppAuthConfigMapper, AlipayIsvAppAuthConfig> {
 
     /// 根据应用ID查询授权认证配置
-    public Optional<AlipayIsvAppAuthConfig> findByAppId(Long appId) {
+    public Optional<AlipayIsvAppAuthConfig> findByAlipayIsvAppId(Long alipayIsvAppId) {
         return lambdaQuery()
-                .eq(AlipayIsvAppAuthConfig::getAppId, appId)
+                .eq(AlipayIsvAppAuthConfig::getAlipayIsvAppId, alipayIsvAppId)
                 .oneOpt();
     }
 
     /// 根据应用ID删除授权认证配置
-    public void deleteByAppId(Long appId) {
+    public void deleteByAlipayIsvAppId(Long alipayIsvAppId) {
         lambdaUpdate()
-                .eq(AlipayIsvAppAuthConfig::getAppId, appId)
+                .eq(AlipayIsvAppAuthConfig::getAlipayIsvAppId, alipayIsvAppId)
                 .remove();
     }
 }

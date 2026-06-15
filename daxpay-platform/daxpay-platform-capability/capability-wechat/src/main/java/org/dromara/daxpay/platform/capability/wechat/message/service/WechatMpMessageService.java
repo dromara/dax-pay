@@ -41,7 +41,7 @@ public class WechatMpMessageService {
     /// @return 消息发送结果
     public MessageSendResult sendTemplateMessage(TemplateMessageParam param) {
         // 验证配置参数
-        validateConfig(param.getAppId(), param.getAppSecret());
+        validateConfig(param.getWxAppId(), param.getAppSecret());
         
         // 创建消息记录
         WechatMessageRecord record = createMessageRecord(param);
@@ -53,13 +53,13 @@ public class WechatMpMessageService {
         
         try {
             // 获取AccessToken
-            String accessToken = tokenService.getAccessToken(param.getAppId(), param.getAppSecret());
+            String accessToken = tokenService.getAccessToken(param.getWxAppId(), param.getAppSecret());
             
             // 构建模板消息
             WxMpTemplateMessage templateMessage = buildTemplateMessage(param);
             
             // 创建微信服务
-            WxMpService wxMpService = createWxMpService(param.getAppId(), param.getAppSecret(), accessToken);
+            WxMpService wxMpService = createWxMpService(param.getWxAppId(), param.getAppSecret(), accessToken);
             
             // 发送消息
             String msgId = wxMpService.getTemplateMsgService().sendTemplateMsg(templateMessage);
@@ -146,9 +146,9 @@ public class WechatMpMessageService {
     }
 
     /// 验证配置参数
-    private void validateConfig(String appId, String appSecret) {
-        if (StrUtil.isBlank(appId) || StrUtil.isBlank(appSecret)) {
-            log.error("微信配置参数为空，appId: {}", appId);
+    private void validateConfig(String wxAppId, String appSecret) {
+        if (StrUtil.isBlank(wxAppId) || StrUtil.isBlank(appSecret)) {
+            log.error("微信配置参数为空，wxAppId: {}", wxAppId);
             // 微信配置参数不能为空
             throw new OperationFailException("error.channel.wechat.configParamsRequired");
         }
@@ -165,7 +165,7 @@ public class WechatMpMessageService {
         record.setStatus("sending");
         record.setSendTime(OffsetDateTime.now(ZoneOffset.UTC));
         record.setScene(param.getScene());
-        record.setAppId(param.getAppId());
+        record.setWxAppId(param.getWxAppId());
         return record;
     }
 
@@ -190,10 +190,10 @@ public class WechatMpMessageService {
     }
 
     /// 创建微信公众号Service
-    private WxMpService createWxMpService(String appId, String appSecret, String accessToken) {
+    private WxMpService createWxMpService(String wxAppId, String appSecret, String accessToken) {
         WxMpService wxMpService = new WxMpServiceImpl();
         WxMpDefaultConfigImpl config = new WxMpDefaultConfigImpl();
-        config.setAppId(appId);
+        config.setAppId(wxAppId);
         config.setSecret(appSecret);
         config.setAccessToken(accessToken);
         wxMpService.setWxMpConfigStorage(config);

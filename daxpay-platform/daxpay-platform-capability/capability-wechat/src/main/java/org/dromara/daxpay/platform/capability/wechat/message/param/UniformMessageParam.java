@@ -12,7 +12,7 @@ import java.util.Map;
 public class UniformMessageParam {
 
     /// 小程序AppId
-    private String appId;
+    private String wxAppId;
 
     /// 小程序AppSecret
     private String appSecret;

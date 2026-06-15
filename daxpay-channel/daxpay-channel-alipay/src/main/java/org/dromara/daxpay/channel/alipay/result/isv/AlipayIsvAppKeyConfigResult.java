@@ -18,7 +18,7 @@ public class AlipayIsvAppKeyConfigResult extends BaseResult {
 
     /// 支付宝服务商应用ID
     @Schema(description = "应用ID")
-    private Long appId;
+    private Long alipayIsvAppId;
 
     /// 认证类型
     @Schema(description = "认证类型")

@@ -30,24 +30,24 @@ public class WechatIsvAppAuthConfigService {
     private final WechatIsvAppManager wechatIsvAppManager;
 
     /// 根据应用ID查询授权认证配置
-    public WechatIsvAppAuthConfigResult findByAppId(Long appId) {
-        WechatIsvApp app = wechatIsvAppManager.findById(appId)
+    public WechatIsvAppAuthConfigResult findByWechatIsvAppId(Long wechatIsvAppId) {
+        WechatIsvApp app = wechatIsvAppManager.findById(wechatIsvAppId)
                 .orElseThrow(() -> new DataNotExistException("error.channel.wechat.appNotFound"));
-        return wechatIsvAppAuthConfigManager.findByAppId(appId)
+        return wechatIsvAppAuthConfigManager.findByWechatIsvAppId(wechatIsvAppId)
                 .map(config -> WechatIsvAppAuthConfigConvert.CONVERT.toResult(config)
                         .setAppSecretConfigured(StrUtil.isNotBlank(config.getAppSecret())))
                 .orElseGet(() -> new WechatIsvAppAuthConfigResult()
-                        .setAppId(appId)
+                        .setWechatIsvAppId(wechatIsvAppId)
                         .setAppSecretConfigured(false));
     }
 
     /// 保存应用授权认证配置
     @Transactional(rollbackFor = Exception.class)
     public void save(WechatIsvAppAuthConfigParam param) {
-        WechatIsvApp app = wechatIsvAppManager.findById(param.getAppId())
+        WechatIsvApp app = wechatIsvAppManager.findById(param.getWechatIsvAppId())
                 .orElseThrow(() -> new DataNotExistException("error.channel.wechat.appNotFound"));
         String authCallbackUrl = this.resolveAuthCallbackUrl(app, param.getAuthCallbackUrl());
-        Optional<WechatIsvAppAuthConfig> existing = wechatIsvAppAuthConfigManager.findByAppId(param.getAppId());
+        Optional<WechatIsvAppAuthConfig> existing = wechatIsvAppAuthConfigManager.findByWechatIsvAppId(param.getWechatIsvAppId());
         if (existing.isPresent()) {
             WechatIsvAppAuthConfig config = existing.get();
             WechatIsvAppAuthConfigConvert.CONVERT.copy(param, config);
@@ -63,7 +63,7 @@ public class WechatIsvAppAuthConfigService {
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.wechat.appSecretRequired");
             }
             WechatIsvAppAuthConfig config = WechatIsvAppAuthConfigConvert.CONVERT.toEntity(param);
-            config.setAppId(param.getAppId());
+            config.setWechatIsvAppId(param.getWechatIsvAppId());
             config.setAuthCallbackUrl(authCallbackUrl);
             wechatIsvAppAuthConfigManager.save(config);
         }
@@ -81,7 +81,7 @@ public class WechatIsvAppAuthConfigService {
     }
 
     /// 删除应用授权认证配置
-    public void deleteByAppId(Long appId) {
-        wechatIsvAppAuthConfigManager.deleteByAppId(appId);
+    public void deleteByWechatIsvAppId(Long wechatIsvAppId) {
+        wechatIsvAppAuthConfigManager.deleteByWechatIsvAppId(wechatIsvAppId);
     }
 }

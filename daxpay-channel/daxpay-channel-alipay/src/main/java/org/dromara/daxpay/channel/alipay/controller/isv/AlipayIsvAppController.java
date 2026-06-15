@@ -102,8 +102,8 @@ public class AlipayIsvAppController {
     @Operation(summary = "查询应用密钥配置")
     @GetMapping("/find-key-config-by-app-id")
     public Result<AlipayIsvAppKeyConfigResult> findKeyConfigByAppId(
-            @NotNull(message = "{validation.field.id.notNull}") Long appId) {
-        return Res.ok(alipayIsvAppKeyConfigService.findByAppId(appId));
+            @NotNull(message = "{validation.field.alipayIsvAppId.notNull}") Long alipayIsvAppId) {
+        return Res.ok(alipayIsvAppKeyConfigService.findByAlipayIsvAppId(alipayIsvAppId).toResult());
     }
 
     @PermCode(code = "edit", nameCn = "支付宝服务商编辑", nameEn = "Alipay ISV Edit")
@@ -118,8 +118,8 @@ public class AlipayIsvAppController {
     @Operation(summary = "查询应用授权认证配置")
     @GetMapping("/find-auth-config-by-app-id")
     public Result<AlipayIsvAppAuthConfigResult> findAuthConfigByAppId(
-            @NotNull(message = "{validation.field.id.notNull}") Long appId) {
-        return Res.ok(alipayIsvAppAuthConfigService.findByAppId(appId));
+            @NotNull(message = "{validation.field.alipayIsvAppId.notNull}") Long alipayIsvAppId) {
+        return Res.ok(alipayIsvAppAuthConfigService.findByAlipayIsvAppId(alipayIsvAppId).toResult());
     }
 
     @PermCode(code = "edit", nameCn = "支付宝服务商编辑", nameEn = "Alipay ISV Edit")

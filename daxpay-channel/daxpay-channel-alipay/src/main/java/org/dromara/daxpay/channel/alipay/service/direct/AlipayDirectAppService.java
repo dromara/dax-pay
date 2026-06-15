@@ -33,7 +33,7 @@ public class AlipayDirectAppService {
 
     /// 根据商户号和通道商户号查询应用列表
     public List<AlipayDirectAppResult> listByMchNoAndChannelMchNo(String mchNo, String channelMchNo) {
-        List<AlipayDirectApp> list = alipayDirectAppManager.listByMchNoAndChannelMchNo(mchNo, channelMchNo);
+        var list = alipayDirectAppManager.listByMchNoAndChannelMchNo(mchNo, channelMchNo);
         return MpUtil.toListResult(list);
     }
 
@@ -55,13 +55,13 @@ public class AlipayDirectAppService {
     /// 新增支付宝直连商户应用
     public void add(AlipayDirectAppParam param) {
         this.assertAliAppIdUnique(param.getMchNo(), param.getChannelMchNo(), param.getAliAppId(), null);
-        AlipayDirectApp entity = AlipayDirectAppConvert.CONVERT.toEntity(param);
+        var entity = AlipayDirectAppConvert.CONVERT.toEntity(param);
         alipayDirectAppManager.save(entity);
     }
 
     /// 更新支付宝直连商户应用
     public void update(AlipayDirectAppParam param) {
-        AlipayDirectApp entity = alipayDirectAppManager.findById(param.getId())
+        var entity = alipayDirectAppManager.findById(param.getId())
                 .orElseThrow(() -> new DataNotExistException("error.channel.alipay.appNotFound"));
         this.assertScopeMatch(entity, param.getMchNo(), param.getChannelMchNo());
         this.assertAliAppIdUnique(entity.getMchNo(), entity.getChannelMchNo(), param.getAliAppId(), param.getId());
@@ -73,8 +73,8 @@ public class AlipayDirectAppService {
     public void delete(Long id) {
         alipayDirectAppManager.findById(id)
                 .orElseThrow(() -> new DataNotExistException("error.channel.alipay.appNotFound"));
-        alipayDirectAppKeyConfigService.deleteByAppId(id);
-        alipayDirectAppAuthConfigService.deleteByAppId(id);
+        alipayDirectAppKeyConfigService.deleteByAlipayDirectAppId(id);
+        alipayDirectAppAuthConfigService.deleteByAlipayDirectAppId(id);
         alipayDirectAppManager.deleteById(id);
     }
 

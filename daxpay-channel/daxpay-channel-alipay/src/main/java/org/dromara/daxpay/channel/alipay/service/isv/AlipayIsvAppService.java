@@ -33,7 +33,7 @@ public class AlipayIsvAppService {
 
     /// 查询全部应用列表
     public List<AlipayIsvAppResult> listAll() {
-        List<AlipayIsvApp> list = alipayIsvAppManager.listAll();
+        var list = alipayIsvAppManager.listAll();
         return MpUtil.toListResult(list);
     }
 
@@ -55,13 +55,13 @@ public class AlipayIsvAppService {
     /// 新增支付宝服务商应用
     public void add(AlipayIsvAppParam param) {
         this.assertAliAppIdUnique(param.getAliAppId(), null);
-        AlipayIsvApp entity = AlipayIsvAppConvert.CONVERT.toEntity(param);
+        var entity = AlipayIsvAppConvert.CONVERT.toEntity(param);
         alipayIsvAppManager.save(entity);
     }
 
     /// 更新支付宝服务商应用
     public void update(AlipayIsvAppParam param) {
-        AlipayIsvApp entity = alipayIsvAppManager.findById(param.getId())
+        var entity = alipayIsvAppManager.findById(param.getId())
                 .orElseThrow(() -> new DataNotExistException("error.channel.alipay.appNotFound"));
         this.assertAliAppIdUnique(param.getAliAppId(), param.getId());
         AlipayIsvAppConvert.CONVERT.copy(param, entity);
@@ -72,8 +72,8 @@ public class AlipayIsvAppService {
     public void delete(Long id) {
         alipayIsvAppManager.findById(id)
                 .orElseThrow(() -> new DataNotExistException("error.channel.alipay.appNotFound"));
-        alipayIsvAppKeyConfigService.deleteByAppId(id);
-        alipayIsvAppAuthConfigService.deleteByAppId(id);
+        alipayIsvAppKeyConfigService.deleteByAlipayIsvAppId(id);
+        alipayIsvAppAuthConfigService.deleteByAlipayIsvAppId(id);
         alipayIsvAppManager.deleteById(id);
     }
 

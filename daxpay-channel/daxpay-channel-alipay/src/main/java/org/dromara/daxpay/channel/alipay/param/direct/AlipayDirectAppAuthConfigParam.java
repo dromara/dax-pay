@@ -16,9 +16,9 @@ import lombok.experimental.Accessors;
 @Schema(title = "支付宝直连商户应用授权认证配置保存参数")
 public class AlipayDirectAppAuthConfigParam {
 
-    @NotNull(message = "{validation.field.id.notNull}")
+    @NotNull(message = "{validation.field.alipayDirectAppId.notNull}")
     @Schema(description = "关联应用ID")
-    private Long appId;
+    private Long alipayDirectAppId;
 
     @NotBlank(message = "{validation.field.mchNo.notBlank}")
     @Schema(description = "商户号")

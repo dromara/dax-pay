@@ -15,9 +15,9 @@ import lombok.experimental.Accessors;
 @Schema(title = "支付宝服务商应用密钥配置保存参数")
 public class AlipayIsvAppKeyConfigParam {
 
-    @NotNull(message = "{validation.field.id.notNull}")
+    @NotNull(message = "{validation.field.alipayIsvAppId.notNull}")
     @Schema(description = "支付宝服务商应用ID")
-    private Long appId;
+    private Long alipayIsvAppId;
 
     @NotBlank(message = "{validation.field.authType.notBlank}")
     @Schema(description = "认证类型")

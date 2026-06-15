@@ -81,6 +81,12 @@
       "notNull": "Primary key cannot be blank",
       "mustBeNullOnAdd": "Id must be empty"
     },
+    "alipayIsvAppId": {
+      "notNull": "Alipay ISV app id cannot be null"
+    },
+    "alipayDirectAppId": {
+      "notNull": "Alipay direct app id cannot be null"
+    },
     "account": {
       "notBlank": "Account cannot be blank",
       "size": "Account length must be between 6 and 20 characters",

@@ -20,8 +20,8 @@ import org.springframework.stereotype.Service;
 public class WechatMiniAuthService {
 
     /// 获取微信AccessToken数据
-    public AuthResult getOpenId(String authCode, String appId, String appSecret){
-        var wxMaService = this.getWxMaService(appId,appSecret);
+    public AuthResult getOpenId(String authCode, String wxAppId, String appSecret){
+        var wxMaService = this.getWxMaService(wxAppId,appSecret);
         WxMaJscode2SessionResult sessionResult;
         try {
             sessionResult = wxMaService.jsCode2SessionInfo(authCode);
@@ -34,11 +34,11 @@ public class WechatMiniAuthService {
     }
 
     /// 获取微信小程序API的Service
-    public WxMaService getWxMaService(String appId, String appSecret) {
+    public WxMaService getWxMaService(String wxAppId, String appSecret) {
         WxMaService wxMaService = new WxMaServiceImpl();
         var wxMpConfig = new WxMaDefaultConfigImpl();
         // 设置微信小程序的appid
-        wxMpConfig.setAppid(appId);
+        wxMpConfig.setAppid(wxAppId);
         // 设置微信小程序的app corpSecret
         wxMpConfig.setSecret(appSecret);
         try {

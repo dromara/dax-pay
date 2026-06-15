@@ -27,7 +27,7 @@ public class AlipayDirectAppAuthConfig extends MchBaseEntity implements ToResult
 
     /// 关联应用ID
     @TableField(updateStrategy = FieldStrategy.NEVER)
-    private Long appId;
+    private Long alipayDirectAppId;
 
     /// 用户标识类型
     private String userIdType;

@@ -39,7 +39,7 @@ public class AlipayDirectChannelMerchantService {
         // 生成通道商户号(雪花号, 不再使用 alipayUserId)
         String channelMchNo = String.valueOf(IdUtil.getSnowflakeNextId());
         // 写通用通道商户主表
-        ChannelMerchant channelMerchant = new ChannelMerchant();
+        var channelMerchant = new ChannelMerchant();
         channelMerchant.setMchNo(param.getMchNo());
         channelMerchant.setChannelMchNo(channelMchNo);
         channelMerchant.setChannelMerchantName(param.getChannelMerchantName());
@@ -48,7 +48,7 @@ public class AlipayDirectChannelMerchantService {
         channelMerchant.setEnable(true);
         channelMerchantManager.save(channelMerchant);
         // 写直连绑定表(alipayUserId 作为业务字段, 不参与关联)
-        AlipayDirectChannelMerchant entity = new AlipayDirectChannelMerchant();
+        var entity = new AlipayDirectChannelMerchant();
         entity.setMchNo(param.getMchNo());
         entity.setChannelMchNo(channelMchNo);
         entity.setProduct(param.getProduct());

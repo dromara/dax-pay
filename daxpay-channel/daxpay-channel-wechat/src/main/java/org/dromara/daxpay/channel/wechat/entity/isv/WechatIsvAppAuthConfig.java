@@ -22,7 +22,7 @@ public class WechatIsvAppAuthConfig extends MpBaseEntity implements ToResult<Wec
 
     /// 微信服务商应用ID
     @TableField(updateStrategy = FieldStrategy.NEVER)
-    private Long appId;
+    private Long wechatIsvAppId;
 
     /// 应用密钥(加密存储)
     @TableField(typeHandler = DataEncryptTypeHandler.class)

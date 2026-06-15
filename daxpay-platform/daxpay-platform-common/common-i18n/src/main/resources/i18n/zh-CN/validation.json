@@ -81,6 +81,12 @@
       "notNull": "主键不可为空",
       "mustBeNullOnAdd": "Id需要为空"
     },
+    "alipayIsvAppId": {
+      "notNull": "支付宝服务商应用ID不可为空"
+    },
+    "alipayDirectAppId": {
+      "notNull": "支付宝直连应用ID不可为空"
+    },
     "account": {
       "notBlank": "登录账号不可为空",
       "size": "账号长度为6-20个字符",

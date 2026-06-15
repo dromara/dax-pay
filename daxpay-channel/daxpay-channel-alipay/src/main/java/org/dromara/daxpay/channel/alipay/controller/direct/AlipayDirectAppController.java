@@ -108,8 +108,8 @@ public class AlipayDirectAppController {
     @Operation(summary = "查询应用密钥配置")
     @GetMapping("/find-key-config-by-app-id")
     public Result<AlipayDirectAppKeyConfigResult> findKeyConfigByAppId(
-            @NotNull(message = "{validation.field.id.notNull}") Long appId) {
-        return Res.ok(alipayDirectAppKeyConfigService.findByAppId(appId));
+            @NotNull(message = "{validation.field.alipayDirectAppId.notNull}") Long alipayDirectAppId) {
+        return Res.ok(alipayDirectAppKeyConfigService.findByAlipayDirectAppId(alipayDirectAppId).toResult());
     }
 
     @PermCode(code = "edit", nameCn = "通道商户编辑", nameEn = "Channel Merchant Edit")
@@ -124,8 +124,8 @@ public class AlipayDirectAppController {
     @Operation(summary = "查询应用授权认证配置")
     @GetMapping("/find-auth-config-by-app-id")
     public Result<AlipayDirectAppAuthConfigResult> findAuthConfigByAppId(
-            @NotNull(message = "{validation.field.id.notNull}") Long appId) {
-        return Res.ok(alipayDirectAppAuthConfigService.findByAppId(appId));
+            @NotNull(message = "{validation.field.alipayDirectAppId.notNull}") Long alipayDirectAppId) {
+        return Res.ok(alipayDirectAppAuthConfigService.findByAlipayDirectAppId(alipayDirectAppId).toResult());
     }
 
     @PermCode(code = "edit", nameCn = "通道商户编辑", nameEn = "Channel Merchant Edit")

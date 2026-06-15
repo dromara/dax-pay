@@ -35,7 +35,7 @@ public class AlipayIsvChannelMerchantService {
     @Transactional(rollbackFor = Exception.class)
     public void create(AlipayIsvChannelMerchantCreateParam param) {
         // 校验服务商应用存在(用 isvAppId 系统主键查询)
-        AlipayIsvApp isvApp = alipayIsvAppManager.findById(param.getIsvAppId())
+        var isvApp = alipayIsvAppManager.findById(param.getIsvAppId())
                 .orElseThrow(() -> new DataNotExistException("error.channel.alipay.appNotFound"));
         // 校验同一应用下子商户号不重复
         if (alipayIsvChannelMerchantManager.existsByIsvAppIdAndAlipayUserId(
@@ -45,7 +45,7 @@ public class AlipayIsvChannelMerchantService {
         // 生成通道商户号：前缀 AISV + 雪花ID(无分隔符, 符合 TradeNoGenerateUtil 约定)
         String channelMchNo = "AISV" + IdUtil.getSnowflakeNextId();
         // 写通用通道商户主表
-        ChannelMerchant channelMerchant = new ChannelMerchant();
+        var channelMerchant = new ChannelMerchant();
         channelMerchant.setMchNo(param.getMchNo());
         channelMerchant.setChannelMchNo(channelMchNo);
         channelMerchant.setChannelMerchantName(param.getChannelMerchantName());
@@ -54,7 +54,7 @@ public class AlipayIsvChannelMerchantService {
         channelMerchant.setEnable(true);
         channelMerchantManager.save(channelMerchant);
         // 写服务商绑定表(含挂靠关系专属字段)
-        AlipayIsvChannelMerchant entity = new AlipayIsvChannelMerchant();
+        var entity = new AlipayIsvChannelMerchant();
         entity.setMchNo(param.getMchNo());
         entity.setChannelMchNo(channelMchNo);
         entity.setProduct(param.getProduct());

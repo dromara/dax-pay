@@ -24,7 +24,7 @@ public class AlipayIsvAppKeyConfig extends MpBaseEntity implements ToResult<Alip
 
     /// 支付宝服务商应用ID
     @TableField(updateStrategy = FieldStrategy.NEVER)
-    private Long appId;
+    private Long alipayIsvAppId;
 
     /// 认证类型
     private String authType;

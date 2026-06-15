@@ -48,8 +48,8 @@ public class WechatOpenAuthService {
     }
 
     /// 获取微信AccessToken数据
-    public AuthResult getTokenAndOpenId(String authCode, String appId, String appSecret){
-        WxMpService wxMpService = this.getWxMpService(appId,appSecret);
+    public AuthResult getTokenAndOpenId(String authCode, String wxAppId, String appSecret){
+        WxMpService wxMpService = this.getWxMpService(wxAppId,appSecret);
         WxOAuth2AccessToken accessToken;
         try {
             accessToken = wxMpService.getOAuth2Service().getAccessToken(authCode);
@@ -63,11 +63,11 @@ public class WechatOpenAuthService {
     }
 
     /// 获取微信公众号API的Service
-    private WxMpService getWxMpService(String appId, String appSecret) {
+    private WxMpService getWxMpService(String wxAppId, String appSecret) {
         WxMpService wxMpService = new WxMpServiceImpl();
         WxMpDefaultConfigImpl wxMpConfig = new WxMpDefaultConfigImpl();
         // 设置微信公众号的appid
-        wxMpConfig.setAppId(appId);
+        wxMpConfig.setAppId(wxAppId);
         // 设置微信公众号的app corpSecret
         wxMpConfig.setSecret(appSecret);
         try {

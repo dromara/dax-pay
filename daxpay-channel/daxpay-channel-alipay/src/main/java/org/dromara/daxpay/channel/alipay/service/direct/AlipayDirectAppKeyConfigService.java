@@ -7,20 +7,19 @@ import org.dromara.daxpay.channel.alipay.dao.direct.AlipayDirectAppKeyConfigMana
 import org.dromara.daxpay.channel.alipay.entity.direct.AlipayDirectApp;
 import org.dromara.daxpay.channel.alipay.entity.direct.AlipayDirectAppKeyConfig;
 import org.dromara.daxpay.channel.alipay.param.direct.AlipayDirectAppKeyConfigParam;
-import org.dromara.daxpay.channel.alipay.result.direct.AlipayDirectAppKeyConfigResult;
 import org.dromara.daxpay.platform.core.code.CommonErrorCode;
 import org.dromara.daxpay.platform.core.exception.BizInfoException;
 import org.dromara.daxpay.platform.core.exception.DataNotExistException;
-import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 /// # 支付宝直连商户应用密钥配置
 ///
-/// 管理直连商户应用的密钥和证书配置，校验应用归属关系后执行新增或更新，更新时合并敏感字段。
+/// 管理直连商户应用的密钥和证书配置，查询时不存在则创建默认记录，保存时校验应用归属关系并合并敏感字段。
 ///
 @Slf4j
 @Service
@@ -30,66 +29,40 @@ public class AlipayDirectAppKeyConfigService {
     private final AlipayDirectAppKeyConfigManager alipayDirectAppKeyConfigManager;
     private final AlipayDirectAppManager alipayDirectAppManager;
 
-    /// 根据应用ID查询密钥配置
-    public AlipayDirectAppKeyConfigResult findByAppId(Long appId) {
-        AlipayDirectApp app = alipayDirectAppManager.findById(appId)
+    /// 根据应用ID查询密钥配置, 不存在则创建默认记录
+    @Transactional(rollbackFor = Exception.class)
+    public AlipayDirectAppKeyConfig findByAlipayDirectAppId(Long alipayDirectAppId) {
+        var app = alipayDirectAppManager.findById(alipayDirectAppId)
                 .orElseThrow(() -> new DataNotExistException("error.channel.alipay.appNotFound"));
-        return alipayDirectAppKeyConfigManager.findByAppId(appId)
-                .map(AlipayDirectAppKeyConfigConvert.CONVERT::toResult)
-                .orElseGet(() -> new AlipayDirectAppKeyConfigResult()
-                        .setAppId(appId)
-                        .setMchNo(app.getMchNo())
-                        .setChannelMchNo(app.getChannelMchNo())
-                        .setAuthType(AlipayCode.AuthType.AUTH_TYPE_KEY));
+        var existing = alipayDirectAppKeyConfigManager.findByAlipayDirectAppId(alipayDirectAppId);
+        if (existing.isPresent()) {
+            return existing.get();
+        }
+        var config = new AlipayDirectAppKeyConfig()
+                .setChannelMchNo(app.getChannelMchNo())
+                .setAlipayDirectAppId(alipayDirectAppId)
+                .setAuthType(AlipayCode.AuthType.AUTH_TYPE_KEY);
+        config.setMchNo(app.getMchNo());
+        alipayDirectAppKeyConfigManager.save(config);
+        return config;
     }
 
-    /// 保存应用密钥配置
+    /// 保存应用密钥配置(更新)
+    @Transactional(rollbackFor = Exception.class)
     public void save(AlipayDirectAppKeyConfigParam param) {
-        AlipayDirectApp app = alipayDirectAppManager.findById(param.getAppId())
+        var app = alipayDirectAppManager.findById(param.getAlipayDirectAppId())
                 .orElseThrow(() -> new DataNotExistException("error.channel.alipay.appNotFound"));
         if (!app.getMchNo().equals(param.getMchNo()) || !app.getChannelMchNo().equals(param.getChannelMchNo())) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.alipay.appNotFound");
         }
-        Optional<AlipayDirectAppKeyConfig> existing = alipayDirectAppKeyConfigManager.findByAppId(param.getAppId());
-        if (existing.isPresent()) {
-            AlipayDirectAppKeyConfig config = existing.get();
-            config.setAuthType(param.getAuthType());
-            AlipayDirectAppKeyConfigConvert.CONVERT.copy(param, config);
-            alipayDirectAppKeyConfigManager.updateById(config);
-            return;
-        }
-        this.validateForCreate(param);
-        AlipayDirectAppKeyConfig config = AlipayDirectAppKeyConfigConvert.CONVERT.toEntity(param);
-        config.setMchNo(app.getMchNo());
-        config.setChannelMchNo(app.getChannelMchNo());
-        config.setAppId(param.getAppId());
-        alipayDirectAppKeyConfigManager.save(config);
+        var config = this.findByAlipayDirectAppId(param.getAlipayDirectAppId());
+        config.setAuthType(param.getAuthType());
+        AlipayDirectAppKeyConfigConvert.CONVERT.copy(param, config);
+        alipayDirectAppKeyConfigManager.updateById(config);
     }
 
     /// 删除应用密钥配置
-    public void deleteByAppId(Long appId) {
-        alipayDirectAppKeyConfigManager.deleteByAppId(appId);
-    }
-
-    /// 新增时的条件校验
-    private void validateForCreate(AlipayDirectAppKeyConfigParam param) {
-        if (StrUtil.isBlank(param.getPrivateKey())) {
-            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.alipay.privateKeyRequired");
-        }
-        if (AlipayCode.AuthType.AUTH_TYPE_KEY.equals(param.getAuthType())) {
-            if (StrUtil.isBlank(param.getAlipayPublicKey())) {
-                throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.alipay.alipayPublicKeyRequired");
-            }
-        } else if (AlipayCode.AuthType.AUTH_TYPE_CERT.equals(param.getAuthType())) {
-            if (StrUtil.isBlank(param.getAppCert())) {
-                throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.alipay.appCertRequired");
-            }
-            if (StrUtil.isBlank(param.getAlipayCert())) {
-                throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.alipay.alipayCertRequired");
-            }
-            if (StrUtil.isBlank(param.getAlipayRootCert())) {
-                throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.alipay.alipayRootCertRequired");
-            }
-        }
+    public void deleteByAlipayDirectAppId(Long alipayDirectAppId) {
+        alipayDirectAppKeyConfigManager.deleteByAlipayDirectAppId(alipayDirectAppId);
     }
 }

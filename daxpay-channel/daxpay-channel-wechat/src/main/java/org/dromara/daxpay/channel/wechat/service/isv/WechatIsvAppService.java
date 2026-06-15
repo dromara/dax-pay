@@ -77,7 +77,7 @@ public class WechatIsvAppService {
     public void delete(Long id) {
         wechatIsvAppManager.findById(id)
                 .orElseThrow(() -> new DataNotExistException("error.channel.wechat.appNotFound"));
-        wechatIsvAppAuthConfigService.deleteByAppId(id);
+        wechatIsvAppAuthConfigService.deleteByWechatIsvAppId(id);
         wechatIsvAppManager.deleteById(id);
     }
 

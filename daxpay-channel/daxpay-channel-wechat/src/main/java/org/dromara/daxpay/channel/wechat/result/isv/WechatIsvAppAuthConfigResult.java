@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
 public class WechatIsvAppAuthConfigResult extends BaseResult {
 
     @Schema(description = "微信服务商应用ID")
-    private Long appId;
+    private Long wechatIsvAppId;
 
     @SensitiveInfo(front = 12, end = 12)
     @Schema(description = "应用密钥(加密存储)")

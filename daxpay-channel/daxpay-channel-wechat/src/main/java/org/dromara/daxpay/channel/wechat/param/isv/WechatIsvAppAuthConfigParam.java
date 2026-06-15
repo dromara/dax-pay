@@ -15,7 +15,7 @@ public class WechatIsvAppAuthConfigParam {
 
     @NotNull(message = "{validation.field.id.notNull}")
     @Schema(description = "微信服务商应用ID")
-    private Long appId;
+    private Long wechatIsvAppId;
 
     @Schema(description = "应用密钥(加密存储)，所有应用类型首次保存时必填")
     private String appSecret;

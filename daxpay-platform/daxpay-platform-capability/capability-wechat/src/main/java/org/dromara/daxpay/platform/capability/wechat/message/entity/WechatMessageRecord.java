@@ -50,5 +50,5 @@ public class WechatMessageRecord extends MpBaseEntity {
     private String scene;
 
     /// 使用的AppId（用于多副本部署时区分不同配置）
-    private String appId;
+    private String wxAppId;
 }

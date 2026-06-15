@@ -1,26 +1,25 @@
 package org.dromara.daxpay.channel.alipay.service.direct;
 
 import org.dromara.daxpay.channel.alipay.code.AlipayCode;
-import org.dromara.daxpay.channel.alipay.convert.direct.AlipayDirectAppAuthConfigConvert;
 import org.dromara.daxpay.channel.alipay.dao.direct.AlipayDirectAppManager;
 import org.dromara.daxpay.channel.alipay.dao.direct.AlipayDirectAppAuthConfigManager;
 import org.dromara.daxpay.channel.alipay.entity.direct.AlipayDirectApp;
 import org.dromara.daxpay.channel.alipay.entity.direct.AlipayDirectAppAuthConfig;
 import org.dromara.daxpay.channel.alipay.param.direct.AlipayDirectAppAuthConfigParam;
-import org.dromara.daxpay.channel.alipay.result.direct.AlipayDirectAppAuthConfigResult;
 import org.dromara.daxpay.platform.core.code.CommonErrorCode;
 import org.dromara.daxpay.platform.core.exception.BizInfoException;
 import org.dromara.daxpay.platform.core.exception.DataNotExistException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 import java.util.Set;
 
 /// # 支付宝直连商户应用授权认证配置
 ///
-/// 管理直连商户应用的用户授权认证配置，校验应用归属关系后执行新增或更新，校验用户标识类型的合法性。
+/// 管理直连商户应用的用户授权认证配置，查询时不存在则创建默认记录，保存时校验应用归属关系，校验用户标识类型的合法性。
 ///
 @Slf4j
 @Service
@@ -36,45 +35,42 @@ public class AlipayDirectAppAuthConfigService {
     private final AlipayDirectAppAuthConfigManager alipayDirectAppAuthConfigManager;
     private final AlipayDirectAppManager alipayDirectAppManager;
 
-    /// 根据应用ID查询授权认证配置
-    public AlipayDirectAppAuthConfigResult findByAppId(Long appId) {
-        AlipayDirectApp app = alipayDirectAppManager.findById(appId)
+    /// 根据应用ID查询授权认证配置, 不存在则创建默认记录
+    @Transactional(rollbackFor = Exception.class)
+    public AlipayDirectAppAuthConfig findByAlipayDirectAppId(Long alipayDirectAppId) {
+        var app = alipayDirectAppManager.findById(alipayDirectAppId)
                 .orElseThrow(() -> new DataNotExistException("error.channel.alipay.appNotFound"));
-        return alipayDirectAppAuthConfigManager.findByAppId(appId)
-                .map(AlipayDirectAppAuthConfigConvert.CONVERT::toResult)
-                .orElseGet(() -> new AlipayDirectAppAuthConfigResult()
-                        .setAppId(appId)
-                        .setMchNo(app.getMchNo())
-                        .setChannelMchNo(app.getChannelMchNo())
-                        .setUserIdType(AlipayCode.UserIdType.OPENID));
+        var existing = alipayDirectAppAuthConfigManager.findByAlipayDirectAppId(alipayDirectAppId);
+        if (existing.isPresent()) {
+            return existing.get();
+        }
+        var config = new AlipayDirectAppAuthConfig()
+                .setChannelMchNo(app.getChannelMchNo())
+                .setAlipayDirectAppId(alipayDirectAppId)
+                .setUserIdType(AlipayCode.UserIdType.OPENID);
+        config.setMchNo(app.getMchNo());
+        alipayDirectAppAuthConfigManager.save(config);
+        return config;
     }
 
-    /// 保存应用授权认证配置
+    /// 保存应用授权认证配置(更新)
+    @Transactional(rollbackFor = Exception.class)
     public void save(AlipayDirectAppAuthConfigParam param) {
-        AlipayDirectApp app = alipayDirectAppManager.findById(param.getAppId())
+        var app = alipayDirectAppManager.findById(param.getAlipayDirectAppId())
                 .orElseThrow(() -> new DataNotExistException("error.channel.alipay.appNotFound"));
         if (!app.getMchNo().equals(param.getMchNo()) || !app.getChannelMchNo().equals(param.getChannelMchNo())) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.alipay.appNotFound");
         }
         this.validateUserIdType(param.getUserIdType());
-        Optional<AlipayDirectAppAuthConfig> existing = alipayDirectAppAuthConfigManager.findByAppId(param.getAppId());
-        if (existing.isPresent()) {
-            AlipayDirectAppAuthConfig config = existing.get();
-            config.setUserIdType(param.getUserIdType());
-            config.setAuthCallbackUrl(param.getAuthCallbackUrl());
-            alipayDirectAppAuthConfigManager.updateById(config);
-            return;
-        }
-        AlipayDirectAppAuthConfig config = AlipayDirectAppAuthConfigConvert.CONVERT.toEntity(param);
-        config.setMchNo(app.getMchNo());
-        config.setChannelMchNo(app.getChannelMchNo());
-        config.setAppId(param.getAppId());
-        alipayDirectAppAuthConfigManager.save(config);
+        var config = this.findByAlipayDirectAppId(param.getAlipayDirectAppId());
+        config.setUserIdType(param.getUserIdType());
+        config.setAuthCallbackUrl(param.getAuthCallbackUrl());
+        alipayDirectAppAuthConfigManager.updateById(config);
     }
 
     /// 删除应用授权认证配置
-    public void deleteByAppId(Long appId) {
-        alipayDirectAppAuthConfigManager.deleteByAppId(appId);
+    public void deleteByAlipayDirectAppId(Long alipayDirectAppId) {
+        alipayDirectAppAuthConfigManager.deleteByAlipayDirectAppId(alipayDirectAppId);
     }
 
     /// 校验用户标识类型

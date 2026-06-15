@@ -12,7 +12,7 @@ import java.util.Map;
 public class TemplateMessageParam {
 
     /// 公众号AppId
-    private String appId;
+    private String wxAppId;
 
     /// 公众号AppSecret
     private String appSecret;

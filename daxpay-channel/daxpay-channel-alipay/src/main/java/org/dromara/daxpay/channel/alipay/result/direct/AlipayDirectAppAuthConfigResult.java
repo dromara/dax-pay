@@ -23,7 +23,7 @@ public class AlipayDirectAppAuthConfigResult extends BaseResult {
     private String channelMchNo;
 
     @Schema(description = "关联应用ID")
-    private Long appId;
+    private Long alipayDirectAppId;
 
     @Schema(description = "用户标识类型")
     private String userIdType;

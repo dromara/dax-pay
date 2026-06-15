@@ -18,16 +18,16 @@ import java.util.Optional;
 public class AlipayIsvAppKeyConfigManager extends BaseManager<AlipayIsvAppKeyConfigMapper, AlipayIsvAppKeyConfig> {
 
     /// 根据应用ID查询密钥配置
-    public Optional<AlipayIsvAppKeyConfig> findByAppId(Long appId) {
+    public Optional<AlipayIsvAppKeyConfig> findByAlipayIsvAppId(Long alipayIsvAppId) {
         return lambdaQuery()
-                .eq(AlipayIsvAppKeyConfig::getAppId, appId)
+                .eq(AlipayIsvAppKeyConfig::getAlipayIsvAppId, alipayIsvAppId)
                 .oneOpt();
     }
 
     /// 根据应用ID删除密钥配置
-    public void deleteByAppId(Long appId) {
+    public void deleteByAlipayIsvAppId(Long alipayIsvAppId) {
         lambdaUpdate()
-                .eq(AlipayIsvAppKeyConfig::getAppId, appId)
+                .eq(AlipayIsvAppKeyConfig::getAlipayIsvAppId, alipayIsvAppId)
                 .remove();
     }
 }

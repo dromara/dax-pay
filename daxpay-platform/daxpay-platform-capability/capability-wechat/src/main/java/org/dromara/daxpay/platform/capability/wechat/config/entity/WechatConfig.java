@@ -25,7 +25,7 @@ public class WechatConfig extends MpBaseEntity implements ToResult<WechatConfigR
 
     /// 微信公众号AppId
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
-    private String appId;
+    private String wxAppId;
 
     /// 微信公众号AppSecret
     @TableField(updateStrategy = FieldStrategy.ALWAYS)

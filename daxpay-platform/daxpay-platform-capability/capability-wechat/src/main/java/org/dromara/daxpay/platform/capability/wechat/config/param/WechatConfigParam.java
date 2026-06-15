@@ -15,7 +15,7 @@ public class WechatConfigParam {
     private String qrcode;
 
     @Schema(description = "微信公众号AppId")
-    private String appId;
+    private String wxAppId;
 
     @Schema(description = "微信公众号AppSecret")
     private String appSecret;

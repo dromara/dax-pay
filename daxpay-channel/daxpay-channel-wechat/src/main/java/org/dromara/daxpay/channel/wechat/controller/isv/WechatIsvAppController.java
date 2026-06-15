@@ -96,8 +96,8 @@ public class WechatIsvAppController {
     @Operation(summary = "查询应用授权认证配置")
     @GetMapping("/find-auth-config-by-app-id")
     public Result<WechatIsvAppAuthConfigResult> findAuthConfigByAppId(
-            @NotNull(message = "{validation.field.id.notNull}") Long appId) {
-        return Res.ok(wechatIsvAppAuthConfigService.findByAppId(appId));
+            @NotNull(message = "{validation.field.id.notNull}") Long wechatIsvAppId) {
+        return Res.ok(wechatIsvAppAuthConfigService.findByWechatIsvAppId(wechatIsvAppId));
     }
 
     @PermCode(code = "edit", nameCn = "微信服务商编辑", nameEn = "WeChat ISV Edit")

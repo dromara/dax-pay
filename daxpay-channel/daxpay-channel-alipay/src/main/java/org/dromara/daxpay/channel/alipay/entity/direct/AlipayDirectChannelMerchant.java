@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@TableName(value = "mch_alipay_direct_channel_merchant", autoResultMap = true)
+@TableName(value = "alipay_direct_channel_merchant", autoResultMap = true)
 public class AlipayDirectChannelMerchant extends MchBaseEntity implements ToResult<AlipayDirectChannelMerchantResult> {
 
     /// 通道商户号(系统生成雪花号)

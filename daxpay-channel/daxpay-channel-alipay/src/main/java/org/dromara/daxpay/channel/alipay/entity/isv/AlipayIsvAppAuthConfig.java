@@ -23,7 +23,7 @@ public class AlipayIsvAppAuthConfig extends MpBaseEntity implements ToResult<Ali
 
     /// 支付宝服务商应用ID
     @TableField(updateStrategy = FieldStrategy.NEVER)
-    private Long appId;
+    private Long alipayIsvAppId;
 
     /// 用户标识类型
     private String userIdType;
