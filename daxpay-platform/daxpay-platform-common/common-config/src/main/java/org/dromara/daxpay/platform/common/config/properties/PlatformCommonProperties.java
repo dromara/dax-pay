@@ -19,6 +19,8 @@ public class PlatformCommonProperties {
     private Spring spring = new Spring();
     /// Swagger 配置
     private Swagger swagger = new Swagger();
+    /// 通道适配服务配置
+    private ChannelOne channelOne = new ChannelOne();
 
     /// # 缓存配置
     ///
@@ -98,6 +100,14 @@ public class PlatformCommonProperties {
             private Integer connectionRequestTimeout = 3;
         }
     }
+    /// # 通道适配服务配置
+    ///
+    @Data
+    public static class ChannelOne {
+        /// 通道服务基础地址
+        private String baseUrl = "http://127.0.0.1:20100";
+    }
+
     /// # Swagger 配置
     ///
     @Data

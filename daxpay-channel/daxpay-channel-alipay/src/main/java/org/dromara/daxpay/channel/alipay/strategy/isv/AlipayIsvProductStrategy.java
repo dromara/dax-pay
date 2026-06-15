@@ -1,4 +1,4 @@
-package org.dromara.daxpay.channel.alipay.strategy;
+package org.dromara.daxpay.channel.alipay.strategy.isv;
 
 import org.dromara.daxpay.platform.core.enums.pay.channel.ChannelApiCallMode;
 import org.dromara.daxpay.platform.core.enums.pay.channel.ChannelPayIdType;
@@ -16,14 +16,14 @@ import java.util.Map;
 
 import static org.dromara.daxpay.platform.core.enums.pay.channel.PayProviderEnum.ALIPAY;
 
-/// # 支付宝直连产品策略
+/// # 支付宝服务商产品策略
 ///
-/// 支付宝直连模式的支付产品策略，定义支持条码、扫码、JSAPI、小程序、PC、H5和APP等全部支付方式，使用商户API调用模式并支持沙箱环境。
+/// 支付宝服务商(ISV)模式的支付产品策略，定义支持条码、扫码、JSAPI、小程序、PC、H5和APP等全部支付方式，使用服务商API调用模式。
 ///
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AlipayDirectProductStrategy extends AbsProductStrategy {
+public class AlipayIsvProductStrategy extends AbsProductStrategy {
 
     private static final Map<PayMethodEnum, List<PayCapabilityEnum>> METHOD_CAP_MAP = Map.ofEntries(
             Map.entry(PayMethodEnum.ALIPAY_BARCODE, List.of(PayCapabilityEnum.ALIPAY_BARCODE)),
@@ -37,28 +37,23 @@ public class AlipayDirectProductStrategy extends AbsProductStrategy {
 
     @Override
     public ProductEnum getProduct() {
-        return ProductEnum.ALIPAY;
+        return ProductEnum.ALIPAY_ISV;
     }
 
     @Override
-    public boolean isAllocatable() {
-        return true;
-    }
+    public boolean isIsv() { return true; }
 
     @Override
-    public boolean isSandbox() {
-        return true;
-    }
+    public boolean isAllocatable() { return true; }
 
     @Override
-    public ChannelApiCallMode getApiCallMode() {
-        return ChannelApiCallMode.MCH;
-    }
+    public boolean isSandbox() { return false; }
 
     @Override
-    public ChannelPayIdType getPayIdType() {
-        return ChannelPayIdType.MCH;
-    }
+    public ChannelApiCallMode getApiCallMode() { return ChannelApiCallMode.ISV; }
+
+    @Override
+    public ChannelPayIdType getPayIdType() { return ChannelPayIdType.IDENTITY; }
 
     @Override
     public List<PayProviderEnum> supportedPayProviders() {

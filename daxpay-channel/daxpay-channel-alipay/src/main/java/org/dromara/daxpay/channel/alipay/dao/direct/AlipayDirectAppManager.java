@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /// # 支付宝直连商户应用
 ///
@@ -35,5 +36,15 @@ public class AlipayDirectAppManager extends BaseManager<AlipayDirectAppMapper, A
                 .eq(AlipayDirectApp::getAliAppId, aliAppId)
                 .ne(excludeId != null, AlipayDirectApp::getId, excludeId)
                 .exists();
+    }
+
+    /// 根据商户号查询首个直连应用(单应用场景, 按创建时间升序取第一条)
+    public Optional<AlipayDirectApp> findFirstByMchNo(String mchNo) {
+        return Optional.ofNullable(lambdaQuery()
+                .eq(AlipayDirectApp::getMchNo, mchNo)
+                .orderByAsc(AlipayDirectApp::getCreateTime)
+                .orderByAsc(AlipayDirectApp::getId)
+                .last("limit 1")
+                .one());
     }
 }

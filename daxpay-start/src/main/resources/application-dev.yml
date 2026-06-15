@@ -39,6 +39,9 @@ springdoc:
 daxpay:
   platform:
     common:
+      # 通道适配服务配置(daxpay-channel-one, 独立部署的通道对接子服务)
+      channel-one:
+        base-url: http://127.0.0.1:20100
       # 错误信息配置
       exception:
         show-full-message: true
