@@ -38,8 +38,7 @@ public class AlipayIsvChannelMerchantCreateParam {
     @NotBlank(message = "{validation.field.alipayUserId.notBlank}")
     private String alipayUserId;
 
-    /// 应用授权令牌，服务商代子商户调用接口的凭据
+    /// 应用授权令牌，服务商代子商户调用接口的凭据，创建时可留空，后续通过代运营授权补充
     @Schema(description = "应用授权令牌")
-    @NotBlank(message = "{validation.field.appAuthToken.notBlank}")
     private String appAuthToken;
 }
