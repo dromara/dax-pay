@@ -2,7 +2,7 @@ package org.dromara.daxpay.payment.admin.controller.masterdata.provider;
 
 import org.dromara.daxpay.payment.pay.result.masterdata.provider.PayProviderGroupResult;
 import org.dromara.daxpay.payment.pay.result.masterdata.provider.PayProviderMethodResult;
-import org.dromara.daxpay.payment.pay.service.masterdata.provider.PayProviderMasterDataService;
+import org.dromara.daxpay.payment.pay.service.masterdata.provider.PayProviderService;
 import org.dromara.daxpay.platform.core.annotation.PermCode;
 import org.dromara.daxpay.platform.core.rest.Res;
 import org.dromara.daxpay.platform.core.rest.result.Result;
@@ -25,15 +25,15 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin/payment/pay-provider")
 @RequiredArgsConstructor
-public class PayProviderMasterDataController {
+public class PayProviderController {
 
-    private final PayProviderMasterDataService payProviderMasterDataService;
+    private final PayProviderService payProviderService;
 
     @PermCode(code = "view", nameCn = "品牌目录查看", nameEn = "Brand Method Directory View")
     @Operation(summary = "按支付渠道分组查询支付方式列表")
     @GetMapping("/list-by-provider")
     public Result<List<PayProviderGroupResult>> listByProvider() {
-        return Res.ok(payProviderMasterDataService.listByProvider());
+        return Res.ok(payProviderService.listByProvider());
     }
 
     @PermCode(code = "view", nameCn = "品牌目录查看", nameEn = "Brand Method Directory View")
@@ -42,6 +42,6 @@ public class PayProviderMasterDataController {
     public Result<PayProviderMethodResult> get(
             @NotBlank(message = "{validation.field.provider.notBlank}") String provider,
             @NotBlank(message = "{validation.field.method.notBlank}") String method) {
-        return Res.ok(payProviderMasterDataService.get(provider, method));
+        return Res.ok(payProviderService.get(provider, method));
     }
 }

@@ -4,7 +4,7 @@ import org.dromara.daxpay.platform.common.mybatisplus.impl.BaseManager;
 import org.dromara.daxpay.platform.common.mybatisplus.util.MpUtil;
 import org.dromara.daxpay.platform.core.rest.param.PageParam;
 import org.dromara.daxpay.payment.pay.entity.masterdata.channel.PayChannel;
-import org.dromara.daxpay.payment.pay.param.channel.PayChannelQuery;
+import org.dromara.daxpay.payment.pay.param.masterdata.channel.PayChannelQuery;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.dromara.daxpay.platform.common.mybatisplus.query.generator.QueryGenerator;

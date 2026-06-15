@@ -1,7 +1,7 @@
 package org.dromara.daxpay.payment.pay.service.masterdata.product;
 
 import org.dromara.daxpay.payment.common.util.PaymentStrategyFactory;
-import org.dromara.daxpay.payment.pay.dao.product.PayProductManager;
+import org.dromara.daxpay.payment.pay.dao.masterdata.product.PayProductManager;
 import org.dromara.daxpay.payment.pay.entity.masterdata.product.PayProduct;
 import org.dromara.daxpay.payment.pay.param.masterdata.product.PayProductQuery;
 import org.dromara.daxpay.payment.pay.result.masterdata.product.PayProductResult;
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PayProductMasterDataService {
+public class PayProductService {
 
     private final PayProductManager payProductManager;
     private final PayProductCapabilityService payProductCapabilityService;
@@ -51,6 +51,13 @@ public class PayProductMasterDataService {
         PayProduct payProduct = payProductManager.findByCode(code)
                 .orElseThrow(() -> new DataNotExistException("error.payment.product.notExist"));
         return enrich(payProduct.toResult());
+    }
+
+    /// 查询全部支付产品，按 sortNo 升序排列
+    public List<PayProduct> listSortedProducts() {
+        return payProductManager.lambdaQuery()
+                .orderByAsc(PayProduct::getSortNo)
+                .list();
     }
 
     /// 按支付通道编码查询所属支付产品

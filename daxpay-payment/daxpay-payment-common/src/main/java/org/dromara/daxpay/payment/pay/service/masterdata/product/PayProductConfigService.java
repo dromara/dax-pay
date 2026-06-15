@@ -1,7 +1,7 @@
 package org.dromara.daxpay.payment.pay.service.masterdata.product;
 
 import org.dromara.daxpay.payment.common.util.PaymentStrategyFactory;
-import org.dromara.daxpay.payment.pay.dao.product.PayProductConfigManager;
+import org.dromara.daxpay.payment.pay.dao.masterdata.product.PayProductConfigManager;
 import org.dromara.daxpay.payment.pay.entity.masterdata.product.PayProduct;
 import org.dromara.daxpay.payment.pay.entity.masterdata.product.PayProductConfig;
 import org.dromara.daxpay.payment.pay.param.masterdata.product.PayProductConfigParam;
@@ -30,7 +30,7 @@ public class PayProductConfigService {
 
     private final PayProductConfigManager payProductConfigManager;
 
-    private final PayProductMasterDataService payProductMasterDataService;
+    private final PayProductService payProductService;
 
     /// 查询全部产品配置列表（卡片页使用）
     /// 融合 PayProduct + pay_product_config 表 + 策略信息
@@ -38,7 +38,7 @@ public class PayProductConfigService {
         Map<String, PayProductConfig> configMap = payProductConfigManager.lambdaQuery().list().stream()
                 .collect(Collectors.toMap(PayProductConfig::getProduct, c -> c, (a, b) -> a));
 
-        return payProductMasterDataService.listSortedProducts()
+        return payProductService.listSortedProducts()
                 .stream()
                 .map(payProduct -> toConfigResult(payProduct, configMap))
                 .toList();

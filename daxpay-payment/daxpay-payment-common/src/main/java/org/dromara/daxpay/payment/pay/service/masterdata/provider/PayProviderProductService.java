@@ -4,7 +4,7 @@ import org.dromara.daxpay.payment.pay.dao.masterdata.provider.PayProviderMethodM
 import org.dromara.daxpay.payment.pay.result.masterdata.product.PayProductResult;
 import org.dromara.daxpay.payment.pay.result.masterdata.provider.PayProviderProductResult;
 import org.dromara.daxpay.payment.pay.service.masterdata.product.PayProductCapabilityService;
-import org.dromara.daxpay.payment.pay.service.masterdata.product.PayProductMasterDataService;
+import org.dromara.daxpay.payment.pay.service.masterdata.product.PayProductService;
 import org.dromara.daxpay.platform.common.i18n.util.I18nUtil;
 import org.dromara.daxpay.platform.core.enums.pay.channel.ChannelEnum;
 import org.dromara.daxpay.platform.core.model.PayProviderMethodEntry;
@@ -24,7 +24,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class PayProviderProductService {
 
-    private final PayProductMasterDataService payProductMasterDataService;
+    private final PayProductService payProductService;
     private final PayProductCapabilityService payProductCapabilityService;
 
     /// 构建「渠道+方式 → 产品列表」索引，供管理端批量展示
@@ -35,7 +35,7 @@ public class PayProviderProductService {
             return index;
         }
         Map<String, Set<String>> capabilityCodesByProduct = payProductCapabilityService.loadCapabilityCodesByProduct();
-        for (PayProductResult product : payProductMasterDataService.listAll()) {
+        for (PayProductResult product : payProductService.listAll()) {
             PayProviderProductResult productItem = new PayProviderProductResult()
                     .setLabel(product.getName())
                     .setValue(product.getCode())

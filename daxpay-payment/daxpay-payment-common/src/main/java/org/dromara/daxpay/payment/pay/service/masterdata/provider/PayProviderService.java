@@ -23,7 +23,7 @@ import java.util.Objects;
 /// 按支付渠道分组展示支付方式，并附带每种方式支持的产品列表。
 @Service
 @RequiredArgsConstructor
-public class PayProviderMasterDataService {
+public class PayProviderService {
 
     private final PayProviderMethodService payProviderMethodService;
     private final PayProviderProductService payProviderProductService;

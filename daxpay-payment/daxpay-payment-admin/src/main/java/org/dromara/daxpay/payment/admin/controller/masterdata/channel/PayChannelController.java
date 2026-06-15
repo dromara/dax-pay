@@ -1,10 +1,10 @@
 package org.dromara.daxpay.payment.admin.controller.masterdata.channel;
 
-import org.dromara.daxpay.payment.pay.param.channel.PayChannelQuery;
+import org.dromara.daxpay.payment.pay.param.masterdata.channel.PayChannelQuery;
 import org.dromara.daxpay.payment.pay.result.masterdata.channel.PayChannelResult;
 import org.dromara.daxpay.payment.pay.result.masterdata.product.PayProductResult;
-import org.dromara.daxpay.payment.pay.service.masterdata.channel.PayChannelMasterDataService;
-import org.dromara.daxpay.payment.pay.service.masterdata.product.PayProductMasterDataService;
+import org.dromara.daxpay.payment.pay.service.masterdata.channel.PayChannelService;
+import org.dromara.daxpay.payment.pay.service.masterdata.product.PayProductService;
 import org.dromara.daxpay.platform.core.annotation.PermCode;
 import org.dromara.daxpay.platform.core.rest.Res;
 import org.dromara.daxpay.platform.core.rest.dto.LabelValue;
@@ -31,23 +31,23 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin/payment/pay-channel")
 @RequiredArgsConstructor
-public class PayChannelMasterDataController {
+public class PayChannelController {
 
-    private final PayChannelMasterDataService payChannelMasterDataService;
-    private final PayProductMasterDataService payProductMasterDataService;
+    private final PayChannelService payChannelService;
+    private final PayProductService payProductService;
 
     @PermCode(code = "view", nameCn = "支付通道查看", nameEn = "Pay Channel View")
     @Operation(summary = "分页查询")
     @GetMapping("/page")
     public Result<PageResult<PayChannelResult>> page(PageParam pageParam, PayChannelQuery query, String name) {
-        return Res.ok(payChannelMasterDataService.page(pageParam, query, name));
+        return Res.ok(payChannelService.page(pageParam, query, name));
     }
 
     @PermCode(code = "view", nameCn = "支付通道查看", nameEn = "Pay Channel View")
     @Operation(summary = "根据编码查询详情")
     @GetMapping("/get")
     public Result<PayChannelResult> findByCode(@NotBlank(message = "{validation.field.code.notBlank}") String code) {
-        return Res.ok(payChannelMasterDataService.findByCode(code));
+        return Res.ok(payChannelService.findByCode(code));
     }
 
     @PermCode(code = "view", nameCn = "支付通道查看", nameEn = "Pay Channel View")
@@ -55,13 +55,13 @@ public class PayChannelMasterDataController {
     @GetMapping("/list-products")
     public Result<List<PayProductResult>> listProducts(
             @NotBlank(message = "{validation.field.channel.notBlank}") String channel) {
-        return Res.ok(payProductMasterDataService.listByChannel(channel));
+        return Res.ok(payProductService.listByChannel(channel));
     }
 
     @PermCode(code = "view", nameCn = "支付通道查看", nameEn = "Pay Channel View")
     @Operation(summary = "启用通道下拉列表")
     @GetMapping("/dropdown")
     public Result<List<LabelValue>> dropdown() {
-        return Res.ok(payChannelMasterDataService.dropdown());
+        return Res.ok(payChannelService.dropdown());
     }
 }

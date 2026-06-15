@@ -22,7 +22,7 @@ import org.dromara.daxpay.platform.core.enums.pay.reconcile.ReconcileResultEnum;
 import org.dromara.daxpay.payment.pay.param.reconcile.ReconcileCreatParam;
 import org.dromara.daxpay.payment.pay.param.reconcile.ReconcileUploadParam;
 import org.dromara.daxpay.payment.pay.service.assist.PaymentAssistService;
-import org.dromara.daxpay.payment.pay.service.masterdata.channel.PayChannelMasterDataService;
+import org.dromara.daxpay.payment.pay.service.masterdata.channel.PayChannelService;
 import org.dromara.daxpay.payment.pay.strategy.AbsReconcileStrategy;
 import org.dromara.daxpay.payment.common.util.PaymentStrategyFactory;
 import org.dromara.daxpay.platform.capability.file.service.PlatformFileService;
@@ -60,7 +60,7 @@ public class ReconcileStatementService {
     private final ReconcileDiscrepancyService reconcileDiscrepancyService;
     private final ReconcileAssistService reconcileAssistService;
     private final PlatformFileService platformFileService;
-    private final PayChannelMasterDataService PayChannelMasterDataService;
+    private final PayChannelService payChannelService;
 
     /// 创建对账订单
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
@@ -271,7 +271,7 @@ public class ReconcileStatementService {
     /// 转换对账单概览
     public ReconcileTotalExcel convertTotal(ReconcileStatement statement){
         // 汇总 通道
-        String channelName = PayChannelMasterDataService.findNameByCode(statement.getChannel());
+        String channelName = payChannelService.findNameByCode(statement.getChannel());
         return new ReconcileTotalExcel()
                 .setReconcileDate(LocalDateTimeUtil.format(statement.getDate(), DatePattern.CHINESE_DATE_PATTERN))
                 .setCreateTime(LocalDateTimeUtil.format(OffsetDateTime.now(ZoneOffset.UTC).toLocalDateTime(), DatePattern.CHINESE_DATE_TIME_PATTERN))

@@ -2,7 +2,7 @@ package org.dromara.daxpay.payment.admin.controller.masterdata.capability;
 
 import org.dromara.daxpay.payment.pay.param.masterdata.capability.PayCapabilityQuery;
 import org.dromara.daxpay.payment.pay.result.masterdata.capability.PayCapabilityResult;
-import org.dromara.daxpay.payment.pay.service.masterdata.capability.PayCapabilityMasterDataService;
+import org.dromara.daxpay.payment.pay.service.masterdata.capability.PayCapabilityService;
 import org.dromara.daxpay.platform.core.annotation.PermCode;
 import org.dromara.daxpay.platform.core.rest.Res;
 import org.dromara.daxpay.platform.core.rest.param.PageParam;
@@ -24,21 +24,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/admin/payment/pay-capability")
 @RequiredArgsConstructor
-public class PayCapabilityMasterDataController {
+public class PayCapabilityController {
 
-    private final PayCapabilityMasterDataService payCapabilityMasterDataService;
+    private final PayCapabilityService payCapabilityService;
 
     @PermCode(code = "view", nameCn = "支付能力查看", nameEn = "Pay Capability View")
     @Operation(summary = "分页查询")
     @GetMapping("/page")
     public Result<PageResult<PayCapabilityResult>> page(PageParam pageParam, PayCapabilityQuery query, String name) {
-        return Res.ok(payCapabilityMasterDataService.page(pageParam, query, name));
+        return Res.ok(payCapabilityService.page(pageParam, query, name));
     }
 
     @PermCode(code = "view", nameCn = "支付能力查看", nameEn = "Pay Capability View")
     @Operation(summary = "根据编码查询详情")
     @GetMapping("/get")
     public Result<PayCapabilityResult> findByCode(@NotBlank(message = "{validation.field.code.notBlank}") String code) {
-        return Res.ok(payCapabilityMasterDataService.findByCode(code));
+        return Res.ok(payCapabilityService.findByCode(code));
     }
 }

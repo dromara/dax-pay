@@ -2,7 +2,7 @@ package org.dromara.daxpay.payment.pay.service.masterdata.channel;
 
 import org.dromara.daxpay.payment.pay.dao.masterdata.channel.PayChannelManager;
 import org.dromara.daxpay.payment.pay.entity.masterdata.channel.PayChannel;
-import org.dromara.daxpay.payment.pay.param.channel.PayChannelQuery;
+import org.dromara.daxpay.payment.pay.param.masterdata.channel.PayChannelQuery;
 import org.dromara.daxpay.payment.pay.result.masterdata.channel.PayChannelResult;
 import org.dromara.daxpay.platform.common.i18n.util.I18nUtil;
 import org.dromara.daxpay.platform.common.mybatisplus.util.MpUtil;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PayChannelMasterDataService {
+public class PayChannelService {
 
     private final PayChannelManager payChannelManager;
 

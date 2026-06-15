@@ -1,4 +1,4 @@
-package org.dromara.daxpay.payment.pay.dao.product;
+package org.dromara.daxpay.payment.pay.dao.masterdata.product;
 
 import org.dromara.daxpay.platform.common.mybatisplus.impl.BaseManager;
 import org.dromara.daxpay.payment.pay.entity.masterdata.product.PayProductConfig;

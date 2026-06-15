@@ -24,7 +24,7 @@ import java.util.List;
 /// 供管理端维护与展示支付能力字典。
 @Service
 @RequiredArgsConstructor
-public class PayCapabilityMasterDataService {
+public class PayCapabilityService {
 
     private final PayCapabilityManager payCapabilityManager;
     private final PayProductCapabilityManager payProductCapabilityManager;

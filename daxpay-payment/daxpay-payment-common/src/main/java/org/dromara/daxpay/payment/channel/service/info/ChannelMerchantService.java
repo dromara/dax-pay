@@ -12,7 +12,7 @@ import org.dromara.daxpay.payment.channel.entity.mch.ChannelMerchant;
 import org.dromara.daxpay.payment.channel.param.mch.ChannelMerchantEditParam;
 import org.dromara.daxpay.payment.channel.param.mch.ChannelMerchantQuery;
 import org.dromara.daxpay.payment.channel.result.info.ChannelMerchantResult;
-import org.dromara.daxpay.payment.pay.service.masterdata.channel.PayChannelMasterDataService;
+import org.dromara.daxpay.payment.pay.service.masterdata.channel.PayChannelService;
 import org.dromara.daxpay.payment.pay.result.masterdata.channel.PayChannelResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,7 +28,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ChannelMerchantService {
     private final ChannelMerchantManager channelMerchantManager;
-    private final PayChannelMasterDataService PayChannelMasterDataService;
+    private final PayChannelService payChannelService;
     private final MerchantPermissionService merchantPermissionService;
 
     /// 分页
@@ -46,7 +46,7 @@ public class ChannelMerchantService {
 
     /// 根据商户号查询通道
     public List<PayChannelResult> dropdownByMchNo(String mchNo) {
-        List<PayChannelResult> channelList = PayChannelMasterDataService.listAll();
+        List<PayChannelResult> channelList = payChannelService.listAll();
         // 商户权限过滤
         var availableChannel = merchantPermissionService.getAvailableChannel(mchNo);
         return channelList.stream()

@@ -1,4 +1,4 @@
-package org.dromara.daxpay.payment.pay.param.channel;
+package org.dromara.daxpay.payment.pay.param.masterdata.channel;
 
 import org.dromara.daxpay.platform.common.mybatisplus.query.entity.SortParam;
 import org.dromara.daxpay.platform.core.annotation.QueryParam;

@@ -5,7 +5,7 @@ import org.dromara.daxpay.platform.core.rest.dto.LabelValue;
 import org.dromara.daxpay.payment.common.context.PaymentContext;
 import org.dromara.daxpay.payment.merchant.dao.config.ChannelConfigManager;
 import org.dromara.daxpay.payment.merchant.result.config.ChannelConfigResult;
-import org.dromara.daxpay.payment.pay.service.masterdata.channel.PayChannelMasterDataService;
+import org.dromara.daxpay.payment.pay.service.masterdata.channel.PayChannelService;
 import org.dromara.daxpay.payment.pay.entity.config.ChannelConfig;
 import org.dromara.daxpay.payment.pay.result.masterdata.channel.PayChannelResult;
 import org.dromara.daxpay.payment.pay.service.assist.PaymentAssistService;
@@ -28,7 +28,7 @@ public class ChannelConfigService {
 
     private final ChannelConfigManager channelConfigManager;
 
-    private final PayChannelMasterDataService PayChannelMasterDataService;
+    private final PayChannelService payChannelService;
 
     private final PaymentAssistService paymentAssistService;
 
@@ -42,7 +42,7 @@ public class ChannelConfigService {
         // 商户应用
         paymentAssistService.initMchAndApp(appId);
         // 遍历通道类型,
-        var channelList = PayChannelMasterDataService.listAll();
+        var channelList = payChannelService.listAll();
         return channelList.stream()
                 .map(o->{
             ChannelConfig channelConfig = channelConfigMap.get(o.getCode());
@@ -73,7 +73,7 @@ public class ChannelConfigService {
         // 商户应用
         paymentAssistService.initMchAndApp(appId);
         // 遍历通道类型
-        List<PayChannelResult> channelList = PayChannelMasterDataService.listAll();
+        List<PayChannelResult> channelList = payChannelService.listAll();
         var constMap = channelList.stream().collect(Collectors.toMap(PayChannelResult::getCode, Function.identity()));
         return channelList.stream()
                 .map(o-> channelConfigMap.get(o.getCode()))
