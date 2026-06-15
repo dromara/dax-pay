@@ -2,6 +2,7 @@ package org.dromara.daxpay.payment.pay.service.masterdata.product;
 
 import org.dromara.daxpay.payment.common.util.PaymentStrategyFactory;
 import org.dromara.daxpay.payment.pay.dao.product.PayProductConfigManager;
+import org.dromara.daxpay.payment.pay.entity.masterdata.product.PayProduct;
 import org.dromara.daxpay.payment.pay.entity.masterdata.product.PayProductConfig;
 import org.dromara.daxpay.payment.pay.param.masterdata.product.PayProductConfigParam;
 import org.dromara.daxpay.payment.pay.result.masterdata.product.PayProductConfigResult;
@@ -16,8 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -31,16 +30,17 @@ public class PayProductConfigService {
 
     private final PayProductConfigManager payProductConfigManager;
 
+    private final PayProductMasterDataService payProductMasterDataService;
+
     /// 查询全部产品配置列表（卡片页使用）
-    /// 融合 ProductEnum + pay_product_config 表 + 策略信息
+    /// 融合 PayProduct + pay_product_config 表 + 策略信息
     public List<PayProductConfigResult> listAll() {
         Map<String, PayProductConfig> configMap = payProductConfigManager.lambdaQuery().list().stream()
                 .collect(Collectors.toMap(PayProductConfig::getProduct, c -> c, (a, b) -> a));
 
-        return Arrays.stream(ProductEnum.values())
-                .map(product -> toConfigResult(product, configMap))
-                .sorted(Comparator.comparing(PayProductConfigResult::getId,
-                        Comparator.nullsLast(Comparator.naturalOrder())))
+        return payProductMasterDataService.listSortedProducts()
+                .stream()
+                .map(payProduct -> toConfigResult(payProduct, configMap))
                 .toList();
     }
 
@@ -81,20 +81,23 @@ public class PayProductConfigService {
         payProductConfigManager.saveOrUpdate(config);
     }
 
-    /// 枚举 + 库表 + 策略合并为配置结果
-    private PayProductConfigResult toConfigResult(ProductEnum product, Map<String, PayProductConfig> configMap) {
-        PayProductConfigResult result = new PayProductConfigResult()
-                .setProduct(product.getCode())
-                .setName(I18nUtil.getEnumName(product))
-                .setChannel(product.getChannel())
-                .setChannelName(I18nUtil.getEnumName(ChannelEnum.findByCode(product.getChannel())));
+    /// PayProduct + 库表 + 策略合并为配置结果
+    private PayProductConfigResult toConfigResult(PayProduct payProduct, Map<String, PayProductConfig> configMap) {
+        ProductEnum productEnum = ProductEnum.findByCode(payProduct.getCode());
 
-        AbsProductStrategy strategy = resolveStrategy(product.getCode());
+        PayProductConfigResult result = new PayProductConfigResult()
+                .setProduct(payProduct.getCode())
+                .setName(productEnum != null ? I18nUtil.getEnumName(productEnum) : payProduct.getCode())
+                .setChannel(payProduct.getChannel())
+                .setChannelName(I18nUtil.getEnumName(ChannelEnum.findByCode(payProduct.getChannel())));
+
+        AbsProductStrategy strategy = resolveStrategy(payProduct.getCode());
         if (strategy != null) {
             result.setSandboxSupport(strategy.isSandbox());
+            result.setIsv(strategy.isIsv());
         }
 
-        PayProductConfig config = configMap.get(product.getCode());
+        PayProductConfig config = configMap.get(payProduct.getCode());
         if (config != null) {
             result.setId(config.getId());
             result.setActiveEnv(config.getActiveEnv());

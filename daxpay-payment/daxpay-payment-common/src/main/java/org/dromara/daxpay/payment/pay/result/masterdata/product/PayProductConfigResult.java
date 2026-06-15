@@ -31,6 +31,10 @@ public class PayProductConfigResult extends BaseResult {
 
     @Schema(description = "生效环境: prod/sandbox")
     private String activeEnv;
+
     @Schema(description = "是否已配置参数")
     private boolean configured;
+
+    /// 是否为服务商模式（true=服务商, false=直连）
+    private boolean isv;
 }
