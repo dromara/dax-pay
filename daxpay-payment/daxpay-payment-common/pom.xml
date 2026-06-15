@@ -37,9 +37,6 @@
             <version>${mapstruct.version}</version>
         </dependency>
 
-        <!-- 风控核心接口 -->
-
-
         <!-- 测试包 -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>

@@ -1,7 +1,0 @@
-{
-  "paramSetReferenced": "该参数集已被输入参数引用，无法删除",
-  "paramSetCodeGenFailed": "参数集编码生成失败",
-  "inputParamCodeExists": "输入参数编码已存在",
-  "paramSetNotExist": "参数集不存在",
-  "inputParamDefNotExist": "输入参数定义不存在"
-}

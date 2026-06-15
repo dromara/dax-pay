@@ -40,7 +40,4 @@ public interface CommonErrorCode {
     /// 请求时间戳超出允许范围
     int TIMESTAMP_EXPIRED = 10410;
 
-    /// 风控拒绝
-    int RISK_REJECT = 10411;
-
 }

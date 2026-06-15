@@ -100,9 +100,6 @@
             <version>${project.version}</version>
         </dependency>
 
-
-        <!-- 风控模块 -->
-
     </dependencies>
 
     <build>
