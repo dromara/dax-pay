@@ -38,7 +38,7 @@ public enum TradeStatusEnum implements I18nSupport {
         return Arrays.stream(values())
                 .filter(e -> e.getCode().equals(code))
                 .findFirst()
-                // 交易状态不存在: {0}
+                // 通用: 交易状态不存在: {0}
                 .orElseThrow(() -> new ConfigNotExistException("error.common.tradeStatusNotExist", code));
     }
 

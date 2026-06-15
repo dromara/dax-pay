@@ -38,7 +38,7 @@ public class InternalRouterCheck implements RouterCheck {
             if (Objects.nonNull(internalPath)) {
                 // 判断当前用户是否为超级管理员
                 if (!SecurityUtil.getUser().isAdmin()){
-                    // 内部接口不允许普通用户进行调用
+                    // 通用: 内部接口不允许普通用户进行调用
                     throw new BizWarnException(CommonCode.FAIL_CODE, "error.common.internalForbidden");
                 }
             }

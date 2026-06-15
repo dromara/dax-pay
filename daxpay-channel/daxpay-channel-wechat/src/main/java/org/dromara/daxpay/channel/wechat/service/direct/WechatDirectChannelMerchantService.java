@@ -34,6 +34,7 @@ public class WechatDirectChannelMerchantService {
         // 校验同一商户下微信商户号不重复
         if (wechatDirectChannelMerchantManager.existsByMchNoAndWxMchId(
                 param.getMchNo(), param.getWxMchId())) {
+            // 微信: 同一商户下该微信商户已存在
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.wechat.directMchDuplicate");
         }
         // 生成通道商户号(雪花号, 不再使用 wxMchId)
@@ -62,6 +63,7 @@ public class WechatDirectChannelMerchantService {
                 .eq(WechatDirectChannelMerchant::getChannelMchNo, channelMchNo)
                 .oneOpt()
                 .map(WechatDirectChannelMerchant::toResult)
+                // 微信: 通道商户配置不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
     }
 }

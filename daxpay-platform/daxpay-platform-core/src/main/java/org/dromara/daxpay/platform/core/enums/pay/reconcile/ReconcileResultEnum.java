@@ -31,7 +31,7 @@ public enum ReconcileResultEnum implements I18nSupport {
         return Arrays.stream(ReconcileResultEnum.values())
                 .filter(value -> value.getCode().equals(code))
                 .findFirst()
-                // 未找到对应的对账结果: {0}
+                // 通用: 未找到对应的对账结果: {0}
                 .orElseThrow(() -> new ConfigNotExistException("error.common.reconcileResultNotFound", code));
     }
 }

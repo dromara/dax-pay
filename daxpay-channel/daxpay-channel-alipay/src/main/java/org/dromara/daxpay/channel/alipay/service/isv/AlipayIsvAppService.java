@@ -41,6 +41,7 @@ public class AlipayIsvAppService {
     public AlipayIsvAppResult findById(Long id) {
         return alipayIsvAppManager.findById(id)
                 .map(AlipayIsvApp::toResult)
+                // 支付宝: 服务商应用不存在
                 .orElseThrow(() -> new DataNotExistException("error.channel.alipay.appNotFound"));
     }
 
@@ -62,6 +63,7 @@ public class AlipayIsvAppService {
     /// 更新支付宝服务商应用
     public void update(AlipayIsvAppParam param) {
         var entity = alipayIsvAppManager.findById(param.getId())
+                // 支付宝: 服务商应用不存在
                 .orElseThrow(() -> new DataNotExistException("error.channel.alipay.appNotFound"));
         this.assertAliAppIdUnique(param.getAliAppId(), param.getId());
         AlipayIsvAppConvert.CONVERT.copy(param, entity);
@@ -71,6 +73,7 @@ public class AlipayIsvAppService {
     /// 删除应用
     public void delete(Long id) {
         alipayIsvAppManager.findById(id)
+                // 支付宝: 服务商应用不存在
                 .orElseThrow(() -> new DataNotExistException("error.channel.alipay.appNotFound"));
         alipayIsvAppKeyConfigService.deleteByAlipayIsvAppId(id);
         alipayIsvAppAuthConfigService.deleteByAlipayIsvAppId(id);
@@ -80,6 +83,7 @@ public class AlipayIsvAppService {
     /// 校验应用ID唯一
     private void assertAliAppIdUnique(String aliAppId, Long excludeId) {
         if (this.existsAliAppId(aliAppId, excludeId)) {
+            // 支付宝: 同一服务商下应用ID已存在
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.alipay.appIdDuplicate");
         }
     }

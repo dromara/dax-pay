@@ -47,6 +47,7 @@ public class UserProtocolService {
     public void update(UserProtocolParam param){
         this.validateParam(param);
         var userProtocol = userProtocolManager.findById(param.getId())
+                // 系统: 协议不存在
                 .orElseThrow(() -> new DataNotExistException("error.system.protocol.notExist"));
         UserProtocolConvert.CONVERT.copy(param, userProtocol);
         userProtocol.setContentFormat(this.getContentFormat(param.getContentFormat()));
@@ -57,6 +58,7 @@ public class UserProtocolService {
     public void delete(Long id){
         // 默认不可被删除
         var userProtocol = userProtocolManager.findById(id)
+                // 系统: 协议不存在
                 .orElseThrow(() -> new DataNotExistException("error.system.protocol.notExist"));
         if (userProtocol.getDefaultProtocol()){
             // 默认协议不可删除
@@ -69,6 +71,7 @@ public class UserProtocolService {
     public UserProtocolResult findById(Long id){
         return userProtocolManager.findById(id)
                 .map(UserProtocol::toResult)
+                // 系统: 协议不存在
                 .orElseThrow(() -> new DataNotExistException("error.system.protocol.notExist"));
     }
 
@@ -78,6 +81,7 @@ public class UserProtocolService {
         UserProtocolClientTypeEnum.findByCode(clientType);
         return userProtocolManager.findDefault(type, clientType)
                 .map(UserProtocol::toResult)
+                // 系统: 协议不存在
                 .orElseThrow(() -> new DataNotExistException("error.system.protocol.notExist"));
     }
 
@@ -85,6 +89,7 @@ public class UserProtocolService {
     @Transactional(rollbackFor = Exception.class)
     public void setDefault(Long id){
         var userProtocol = userProtocolManager.findById(id)
+                // 系统: 协议不存在
                 .orElseThrow(() -> new DataNotExistException("error.system.protocol.notExist"));
         userProtocolManager.clearDefault(userProtocol.getType(), userProtocol.getClientType());
         userProtocolManager.setDefault(id);
@@ -93,6 +98,7 @@ public class UserProtocolService {
     /// 取消默认协议
     public void cancelDefault(Long id){
         var userProtocol = userProtocolManager.findById(id)
+                // 系统: 协议不存在
                 .orElseThrow(() -> new DataNotExistException("error.system.protocol.notExist"));
         userProtocolManager.cancelDefault(id);
     }

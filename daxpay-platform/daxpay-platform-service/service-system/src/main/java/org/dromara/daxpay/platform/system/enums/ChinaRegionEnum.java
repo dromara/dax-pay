@@ -35,6 +35,7 @@ public enum ChinaRegionEnum {
         return Arrays.stream(values())
             .filter(e -> e.length == code.length())
             .findFirst()
+            // 通用: 未知的行政区划级别
             .orElseThrow(() -> new BizException("error.common.enumUnknown", "ChinaRegion"));
     }
 

@@ -46,7 +46,7 @@ public class UserRoleService {
         if (!ignoreScopes){
             List<Long> roleIdsByUser = this.findRoleIdsByUser();
             if (!roleIdsByUser.contains(roleId)){
-                // 角色分配超出了可分配的范围
+                // 权限: 角色分配超出了可分配的范围
                 throw new ValidationFailedException("error.iam.role.assign_out_of_scope");
             }
         }
@@ -63,12 +63,12 @@ public class UserRoleService {
     public void saveAssignBatch(List<Long> userIds, Long roleId) {
         List<Long> roleIdsByUser = this.findRoleIdsByUser();
         if (!roleIdsByUser.contains(roleId)){
-            // 角色分配超出了可分配的范围
+            // 权限: 角色分配超出了可分配的范围
             throw new ValidationFailedException("error.iam.role.assignOutOfScope");
         }
         List<UserInfo> userInfos = userInfoManager.findAllByIds(userIds);
         if (userInfos.size() != userIds.size()) {
-            // 用户数据有问题
+            // 权限: 用户数据有问题
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.dataError");
         }
         // 校验用户与角色的终端一致性
@@ -85,6 +85,7 @@ public class UserRoleService {
     /// 查询用户可分配的角色列表
     public List<RoleResult> findAssignableRolesByUser(Long userId) {
         UserInfo userInfo = userInfoManager.findById(userId)
+                // 权限: 用户不存在
                 .orElseThrow(() -> new DataNotExistException("error.iam.user.not_exist"));
         return MpUtil.toListResult(roleManager.findAllByClientCode(userInfo.getClientCode()));
     }
@@ -92,9 +93,11 @@ public class UserRoleService {
     /// 校验用户与角色的终端一致性
     private void validateUserRoleTerminalConsistency(Long userId, Long roleId) {
         UserInfo userInfo = userInfoManager.findById(userId)
+                // 权限: 用户不存在
                 .orElseThrow(() -> new DataNotExistException("error.iam.user.not_exist"));
         String userClientCode = userInfo.getClientCode();
         Role role = roleManager.findById(roleId)
+                // 权限: 角色不存在
                 .orElseThrow(() -> new DataNotExistException("error.iam.role.not_exist"));
         if (!Objects.equals(userClientCode, role.getClientCode())) {
             throw new ValidationFailedException(

@@ -30,7 +30,7 @@ public enum ReconcileFileTypeEnum implements I18nSupport {
         return Arrays.stream(values())
                 .filter(value -> Objects.equals(value.getCode(), code))
                 .findFirst()
-                // 未知的对账文件类型: {0}
+                // 通用: 未知的对账文件类型: {0}
                 .orElseThrow(() -> new ConfigNotEnableException("error.common.reconcileFileTypeUnknown", code));
     }
 

@@ -43,6 +43,7 @@ public class MiniMchBasicService {
     public MchAppInfoResult findDefaultMchApp() {
         return mchAppInfoManager.findDefaultByMchNo(apiContext.getTradeInfo().getMchNo())
                 .map(MchAppInfo::toResult)
+                // 商户: 默认应用未配置
                 .orElseThrow(() -> new DataNotExistException("error.payment.merchant.defaultAppNotConfigured"));
     }
 

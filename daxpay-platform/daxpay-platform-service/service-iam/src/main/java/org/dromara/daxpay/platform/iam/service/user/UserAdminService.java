@@ -141,17 +141,17 @@ public class UserAdminService {
         if (!skipDuplicateCheck) {
             // 按终端校验账号唯一性
             if (userQueryService.existsAccountByClientCode(clientCode, userInfoParam.getAccount())) {
-                // 该终端下账号已存在
+                // 权限: 该终端下账号已存在
                 throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.accountExistsInClient");
             }
             // 按终端校验手机号唯一性
             if (userQueryService.existsPhoneByClientCode(clientCode, userInfoParam.getPhone())) {
-                // 该终端下手机号已被使用
+                // 权限: 该终端下手机号已被使用
                 throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.phoneUsedInClient");
             }
             // 按终端校验邮箱唯一性
             if (userQueryService.existsEmailByClientCode(clientCode, userInfoParam.getEmail())) {
-                // 该终端下邮箱已被使用
+                // 权限: 该终端下邮箱已被使用
                 throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.emailUsedInClient");
             }
         }
@@ -237,18 +237,19 @@ public class UserAdminService {
                 .orElseThrow(UserInfoNotExistsException::new);
         // 禁止编辑非运营端用户
         if (!ClientEnum.ADMIN.getCode().equals(userInfo.getClientCode())) {
+            // 权限: 不能编辑非运营端用户
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.cannotEditNonAdmin");
         }
         // 禁止修改终端归属
         userInfoParam.setClientCode(userInfo.getClientCode());
         // 按终端校验手机号唯一性（排除自身）
         if (userQueryService.existsPhoneByClientCode(userInfo.getClientCode(), userInfoParam.getPhone(), userInfoParam.getId())) {
-            // 该终端下手机号已被其他用户使用
+            // 权限: 该终端下手机号已被其他用户使用
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.phoneUsedByOtherInClient");
         }
         // 按终端校验邮箱唯一性（排除自身）
         if (userQueryService.existsEmailByClientCode(userInfo.getClientCode(), userInfoParam.getEmail(), userInfoParam.getId())) {
-            // 该终端下邮箱已被其他用户使用
+            // 权限: 该终端下邮箱已被其他用户使用
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.emailUsedByOtherInClient");
         }
         userInfoParam.setPassword(null);

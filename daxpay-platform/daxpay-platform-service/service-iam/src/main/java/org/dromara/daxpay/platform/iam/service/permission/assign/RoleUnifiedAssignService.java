@@ -55,7 +55,7 @@ public class RoleUnifiedAssignService {
     public RoleUnifiedAssignResult getByRole(Long roleId, String clientCode) {
         Role role = roleManager.findById(roleId).orElseThrow(RoleNotExistedException::new);
         if (!Objects.equals(role.getClientCode(), clientCode)) {
-            // 角色所属终端与请求终端不一致
+            // 权限: 角色所属终端与请求终端不一致
             throw new ValidationFailedException("error.iam.assign.roleClientMismatch");
         }
 
@@ -151,7 +151,7 @@ public class RoleUnifiedAssignService {
     public void save(RoleUnifiedAssignParam param) {
         Role role = roleManager.findById(param.getRoleId()).orElseThrow(RoleNotExistedException::new);
         if (!Objects.equals(role.getClientCode(), param.getClientCode())) {
-            // 角色所属终端与请求终端不一致
+            // 权限: 角色所属终端与请求终端不一致
             throw new ValidationFailedException("error.iam.assign.roleClientMismatch");
         }
 
@@ -160,17 +160,17 @@ public class RoleUnifiedAssignService {
 
         List<PermMenu> menus = menuIds.isEmpty() ? List.of() : permMenuManager.findAllByIds(menuIds);
         if (menus.size() != menuIds.size()) {
-            // 存在无效的菜单数据
+            // 权限: 存在无效的菜单数据
             throw new ValidationFailedException("error.iam.assign.invalidMenuData");
         }
         if (menus.stream().map(PermMenu::getClientCode).anyMatch(clientCode -> !Objects.equals(clientCode, param.getClientCode()))) {
-            // 角色所属终端与菜单终端不一致
+            // 权限: 角色所属终端与菜单终端不一致
             throw new ValidationFailedException("error.iam.assign.roleMenuClientMismatch");
         }
 
         List<PermCodeData> codes = codeIds.isEmpty() ? List.of() : permCodeManager.findAllByIds(codeIds);
         if (codes.size() != codeIds.size()) {
-            // 存在无效的权限码数据
+            // 权限: 存在无效的权限码数据
             throw new ValidationFailedException("error.iam.assign.invalidPermCodeData");
         }
         // 只有当权限码归属的 menuCode 出现在本次已选菜单中，权限码才允许被保存。
@@ -181,7 +181,7 @@ public class RoleUnifiedAssignService {
                 .sorted()
                 .toList();
         if (CollUtil.isNotEmpty(invalidCodeList)) {
-            // 存在未挂载到已选菜单的权限码: {0}
+            // 权限: 存在未挂载到已选菜单的权限码: {0}
             throw new ValidationFailedException("error.iam.assign.permCodeNotOnSelectedMenus", String.join(", ", invalidCodeList));
         }
 

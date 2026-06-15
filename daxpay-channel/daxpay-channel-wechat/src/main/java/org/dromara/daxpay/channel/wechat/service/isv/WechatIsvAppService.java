@@ -40,6 +40,7 @@ public class WechatIsvAppService {
     public WechatIsvAppResult findById(Long id) {
         return wechatIsvAppManager.findById(id)
                 .map(WechatIsvApp::toResult)
+                // 微信: 服务商应用不存在
                 .orElseThrow(() -> new DataNotExistException("error.channel.wechat.appNotFound"));
     }
 
@@ -67,6 +68,7 @@ public class WechatIsvAppService {
     /// 更新微信服务商应用
     public void update(WechatIsvAppParam param) {
         WechatIsvApp entity = wechatIsvAppManager.findById(param.getId())
+                // 微信: 服务商应用不存在
                 .orElseThrow(() -> new DataNotExistException("error.channel.wechat.appNotFound"));
         this.assertWxAppIdUnique(param.getWxAppId(), param.getId());
         WechatIsvAppConvert.CONVERT.copy(param, entity);
@@ -76,6 +78,7 @@ public class WechatIsvAppService {
     /// 删除应用
     public void delete(Long id) {
         wechatIsvAppManager.findById(id)
+                // 微信: 服务商应用不存在
                 .orElseThrow(() -> new DataNotExistException("error.channel.wechat.appNotFound"));
         wechatIsvAppAuthConfigService.deleteByWechatIsvAppId(id);
         wechatIsvAppManager.deleteById(id);

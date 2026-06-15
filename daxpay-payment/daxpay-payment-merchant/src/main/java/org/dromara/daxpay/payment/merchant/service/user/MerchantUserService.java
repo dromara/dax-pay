@@ -85,7 +85,7 @@ public class MerchantUserService {
         // 判断该手机号是否已注册
         boolean phoneExists = userInfoManager.findByClientCodeAndPhone("mch", phone).isPresent();
         if (phoneExists) {
-            // 该手机号已注册
+            // 商户: 该手机号已注册
             throw new ValidationFailedException("error.payment.merchant.phoneRegistered");
         }
 
@@ -105,6 +105,7 @@ public class MerchantUserService {
         SmsResponse smsResponse = smsBlend.sendMessage(phone, params);
         if (!smsResponse.isSuccess()){
             log.error("发送验证码失败: {}", smsResponse.getData());
+            // 商户: 发送验证码失败
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.merchant.smsSendFailed");
         }
     }
@@ -115,7 +116,7 @@ public class MerchantUserService {
         String captcha = redisTemplate.opsForValue()
                 .get(SMS_REGISTER_CAPTCHA_KEY + phone);
         if (!StrUtil.equals(smsCaptcha, captcha)) {
-            // 验证码错误或已过期
+            // 商户: 验证码错误或已过期
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.merchant.smsCodeError");
         }
     }
@@ -155,7 +156,7 @@ public class MerchantUserService {
         userInfoParam.setClientCode(ClientEnum.MERCHANT.getCode());
         UserInfo userInfo = userAdminService.add(userInfoParam, true);
         Role role = roleManager.findByCode(RoleCodeEnum.MERCHANT_ADMIN.getCode())
-                // 商户管理员角色不存在, 请检查
+                // 商户: 商户管理员角色不存在, 请检查
                 .orElseThrow(() -> new ConfigNotExistException("error.payment.merchant.adminRoleNotExist"));
         userRoleService.saveAssign(userInfo.getId(), role.getId(), true);
         merchantUserManager.save(new MerchantUser(userInfo.getId(), merchant.getMchNo(), true));
@@ -171,7 +172,7 @@ public class MerchantUserService {
             }
             mchNo = "M" + System.currentTimeMillis();
         }
-        // 商户号生成失败
+        // 商户: 商户号生成失败
         throw new OperationFailException("error.payment.merchant.mchNoGenFailed");
     }
 
@@ -179,7 +180,7 @@ public class MerchantUserService {
     private SmsReadConfig getSmsReadConfig() {
         SmsReadConfig smsReadConfig = smsReadConfigProvider.getIfAvailable();
         if (smsReadConfig == null) {
-            // 短信配置不存在，请先完成短信配置
+            // 商户: 短信配置不存在，请先完成短信配置
             throw new ConfigNotExistException("error.payment.merchant.smsConfigNotExist");
         }
         return smsReadConfig;
@@ -189,14 +190,18 @@ public class MerchantUserService {
     public String sendForgotCaptcha(String account, String phone) {
         // 按服务商+账号查找用户
         UserInfo userInfo = userInfoManager.findByClientCodeAndAccount("mch", account)
+                // 商户: 账号或手机号未找到
                 .orElseThrow(() -> new DataNotExistException("error.payment.merchant.accountOrPhoneNotFound"));
         MerchantUser merchantUser = merchantUserManager.findByUserId(userInfo.getId())
+                // 商户: 账号或手机号未找到
                 .orElseThrow(() -> new DataNotExistException("error.payment.merchant.accountOrPhoneNotFound"));
         if (!merchantInfoManager.existedByMchNo(merchantUser.getMchNo())) {
+            // 商户: 账号或手机号未找到
             throw new DataNotExistException("error.payment.merchant.accountOrPhoneNotFound");
         }
         // 判断密码是否一致
         if (!Objects.equals(phone, userInfo.getPhone())) {
+            // 商户: 账号或手机号信息不正确
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.merchant.accountOrPhoneError");
         }
 
@@ -214,7 +219,7 @@ public class MerchantUserService {
         SmsResponse smsResponse = smsBlend.sendMessage(phone, params);
         if (!smsResponse.isSuccess()){
             log.error("发送验证码失败: {}", smsResponse.getData());
-            // 发送验证码失败
+            // 商户: 发送验证码失败
             throw new OperationFailException("error.payment.merchant.smsSendFailed");
         }
         // 返回脱敏手机号
@@ -225,15 +230,18 @@ public class MerchantUserService {
     public void checkForgotCaptcha(MerchantForgotParam param) {
         // 按服务商+账号查找用户
         UserInfo userInfo = userInfoManager.findByClientCodeAndAccount("mch", param.getAccount())
+                // 商户: 账号或手机号未找到
                 .orElseThrow(() -> new DataNotExistException("error.payment.merchant.accountOrPhoneNotFound"));
         MerchantUser merchantUser = merchantUserManager.findByUserId(userInfo.getId())
+                // 商户: 账号或手机号未找到
                 .orElseThrow(() -> new DataNotExistException("error.payment.merchant.accountOrPhoneNotFound"));
         if (!merchantInfoManager.existedByMchNo(merchantUser.getMchNo())) {
+            // 商户: 账号或手机号未找到
             throw new DataNotExistException("error.payment.merchant.accountOrPhoneNotFound");
         }
         // 判断手机号是否一致
         if (!Objects.equals(param.getPhone(), userInfo.getPhone())) {
-            // 账号或手机号信息不正确
+            // 商户: 账号或手机号信息不正确
             throw new OperationFailException("error.payment.merchant.accountOrPhoneError");
         }
         // 查询验证码, 判断是否一致
@@ -241,7 +249,7 @@ public class MerchantUserService {
         String smsCaptcha = redisTemplate.opsForValue()
                 .get(SMS_CAPTCHA_KEY + phone);
         if (!StrUtil.equals(param.getSmsCaptcha(), smsCaptcha)) {
-            // 验证码错误或已过期
+            // 商户: 验证码错误或已过期
             throw new OperationFailException("error.payment.merchant.smsCodeError");
         }
     }
@@ -252,6 +260,7 @@ public class MerchantUserService {
         this.checkForgotCaptcha(param);
         // 按服务商+账号查找用户
         UserInfo userInfo = userInfoManager.findByClientCodeAndAccount("mch", param.getAccount())
+                // 商户: 账号或手机号未找到
                 .orElseThrow(() -> new DataNotExistException("error.payment.merchant.accountOrPhoneNotFound"));
         // 解密密码
         String newPassword = passwordDecryptService.decryptPassword(param.getNewPassword());

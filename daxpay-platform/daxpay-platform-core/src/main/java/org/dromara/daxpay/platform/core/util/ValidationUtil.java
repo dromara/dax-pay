@@ -21,7 +21,7 @@ public class ValidationUtil {
         Validator validator = validatorFactory.getValidator();
         Set<ConstraintViolation<Object>> violations = validator.validate(paramObject, groups);
         if (!violations.isEmpty()) {
-            // 参数验证失败: {0}
+            // 通用: 参数验证失败: {0}
             throw new ValidationFailedException("error.common.validateParams", extractMessages(violations));
         }
     }

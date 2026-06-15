@@ -35,6 +35,7 @@ public class WechatIsvChannelMerchantService {
         // 校验同一商户下特约商户号不重复
         if (wechatIsvChannelMerchantManager.existsByMchNoAndSubMchId(
                 param.getMchNo(), param.getSubMchId())) {
+            // 微信: 该服务商应用下已存在此特约商户号
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.wechat.subMerchantDuplicate");
         }
         // 生成通道商户号：前缀 WISV + 雪花ID(无分隔符, 符合 TradeNoGenerateUtil 约定)
@@ -63,6 +64,7 @@ public class WechatIsvChannelMerchantService {
                 .eq(WechatIsvChannelMerchant::getChannelMchNo, channelMchNo)
                 .oneOpt()
                 .map(WechatIsvChannelMerchant::toResult)
+                // 微信: 通道商户配置不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
     }
 }

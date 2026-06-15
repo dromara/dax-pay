@@ -36,6 +36,7 @@ public enum PayEnvEnum implements I18nSupport {
         return Arrays.stream(values())
                 .filter(e -> Objects.equals(e.getCode(), code))
                 .findFirst()
+                // 通用: 支付环境不存在
                 .orElseThrow(() -> new DataNotExistException("error.common.payEnvNotExist"));
     }
 }

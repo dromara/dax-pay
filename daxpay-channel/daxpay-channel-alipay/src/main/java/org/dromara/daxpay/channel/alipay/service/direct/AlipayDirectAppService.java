@@ -41,7 +41,8 @@ public class AlipayDirectAppService {
     public AlipayDirectAppResult findById(Long id) {
         return alipayDirectAppManager.findById(id)
                 .map(AlipayDirectApp::toResult)
-                .orElseThrow(() -> new DataNotExistException("error.channel.alipay.appNotFound"));
+                // 支付宝: 直连商户应用不存在
+                .orElseThrow(() -> new DataNotExistException("error.channel.alipay.mchAppNotFound"));
     }
 
     /// 判断同一通道商户下支付宝应用ID是否已存在
@@ -62,7 +63,8 @@ public class AlipayDirectAppService {
     /// 更新支付宝直连商户应用
     public void update(AlipayDirectAppParam param) {
         var entity = alipayDirectAppManager.findById(param.getId())
-                .orElseThrow(() -> new DataNotExistException("error.channel.alipay.appNotFound"));
+                // 支付宝: 直连商户应用不存在
+                .orElseThrow(() -> new DataNotExistException("error.channel.alipay.mchAppNotFound"));
         this.assertScopeMatch(entity, param.getMchNo(), param.getChannelMchNo());
         this.assertAliAppIdUnique(entity.getMchNo(), entity.getChannelMchNo(), param.getAliAppId(), param.getId());
         AlipayDirectAppConvert.CONVERT.copy(param, entity);
@@ -72,7 +74,8 @@ public class AlipayDirectAppService {
     /// 删除应用（级联删除密钥配置和授权认证配置）
     public void delete(Long id) {
         alipayDirectAppManager.findById(id)
-                .orElseThrow(() -> new DataNotExistException("error.channel.alipay.appNotFound"));
+                // 支付宝: 直连商户应用不存在
+                .orElseThrow(() -> new DataNotExistException("error.channel.alipay.mchAppNotFound"));
         alipayDirectAppKeyConfigService.deleteByAlipayDirectAppId(id);
         alipayDirectAppAuthConfigService.deleteByAlipayDirectAppId(id);
         alipayDirectAppManager.deleteById(id);
@@ -81,6 +84,7 @@ public class AlipayDirectAppService {
     /// 校验同一通道商户下应用ID唯一
     private void assertAliAppIdUnique(String mchNo, String channelMchNo, String aliAppId, Long excludeId) {
         if (this.existsAliAppIdByChannel(mchNo, channelMchNo, aliAppId, excludeId)) {
+            // 支付宝: 同一商户下应用ID已存在
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.alipay.appIdDuplicate");
         }
     }
@@ -88,7 +92,8 @@ public class AlipayDirectAppService {
     /// 校验操作范围与记录归属一致
     private void assertScopeMatch(AlipayDirectApp entity, String mchNo, String channelMchNo) {
         if (!entity.getMchNo().equals(mchNo) || !entity.getChannelMchNo().equals(channelMchNo)) {
-            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.alipay.appNotFound");
+            // 支付宝: 直连商户应用不存在或商户号归属不匹配
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.alipay.mchAppNotFound");
         }
     }
 }

@@ -33,7 +33,7 @@ public enum ChannelAuthTypeEnum implements I18nSupport {
         return Arrays.stream(values())
                 .filter(item -> Objects.equals(item.code, code))
                 .findFirst()
-                // 认证类型不存在: {0}
+                // 通用: 认证类型不存在: {0}
                 .orElseThrow(() -> new ConfigNotExistException("error.common.channelAuthTypeNotExist", code));
     }
 

@@ -66,6 +66,7 @@ public class PlatformFileController {
         } catch (IOException e) {
             log.error("访问文件失败", e);
             response.setStatus(HttpStatus.NOT_FOUND.value());
+            // 通用: 文件操作失败
             throw new BizException("error.common.fileOperationFailed", e.getMessage());
         }
     }
@@ -82,6 +83,7 @@ public class PlatformFileController {
         } catch (IOException e) {
             log.error("下载文件失败", e);
             response.setStatus(HttpStatus.NOT_FOUND.value());
+            // 通用: 文件操作失败
             throw new BizException("error.common.fileOperationFailed", e.getMessage());
         }
     }

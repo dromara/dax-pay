@@ -40,6 +40,7 @@ public class UserProtocolItemService {
     /// 更新协议项
     public void update(UserProtocolItemParam param){
         var userProtocolItem = userProtocolItemManager.findById(param.getId())
+                // 系统: 协议项不存在
                 .orElseThrow(() -> new DataNotExistException("error.system.protocol.itemNotExist"));
         UserProtocolConvert.CONVERT.copy(param, userProtocolItem);
         userProtocolItemManager.updateById(userProtocolItem);
@@ -54,6 +55,7 @@ public class UserProtocolItemService {
     public UserProtocolItemResult findById(Long id){
         return userProtocolItemManager.findById(id)
                 .map(UserProtocolItem::toResult)
+                // 系统: 协议项不存在
                 .orElseThrow(() -> new DataNotExistException("error.system.protocol.itemNotExist"));
     }
 
@@ -68,6 +70,7 @@ public class UserProtocolItemService {
     public List<UserProtocolItemResult> findByProtocolType(String type, String clientType) {
         // 根据类型查询默认协议
         var defaultProtocol = userProtocolManager.findDefault(type, clientType)
+                // 系统: 默认协议项不存在
                 .orElseThrow(() -> new DataNotExistException("error.system.protocol.defaultItemNotExist"));
         var protocolItems = userProtocolItemManager.findAllByProtocolIdOrderBySortNo(defaultProtocol.getId());
         return MpUtil.toListResult(protocolItems);

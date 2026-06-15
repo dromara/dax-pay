@@ -111,7 +111,7 @@ public class UserInfoService {
             .orElseThrow(UserInfoNotExistsException::new);
         // 判断原密码是否正确
         if (!BCrypt.checkpw(decryptedPassword, userInfo.getPassword())) {
-            // 旧密码错误
+            // 权限: 旧密码错误
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.oldPasswordError");
         }
         // 验证密码历史

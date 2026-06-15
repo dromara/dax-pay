@@ -39,7 +39,8 @@ public class AlipayDirectAppAuthConfigService {
     @Transactional(rollbackFor = Exception.class)
     public AlipayDirectAppAuthConfig findByAlipayDirectAppId(Long alipayDirectAppId) {
         var app = alipayDirectAppManager.findById(alipayDirectAppId)
-                .orElseThrow(() -> new DataNotExistException("error.channel.alipay.appNotFound"));
+                // 支付宝: 直连商户应用不存在
+                .orElseThrow(() -> new DataNotExistException("error.channel.alipay.mchAppNotFound"));
         var existing = alipayDirectAppAuthConfigManager.findByAlipayDirectAppId(alipayDirectAppId);
         if (existing.isPresent()) {
             return existing.get();
@@ -57,9 +58,11 @@ public class AlipayDirectAppAuthConfigService {
     @Transactional(rollbackFor = Exception.class)
     public void save(AlipayDirectAppAuthConfigParam param) {
         var app = alipayDirectAppManager.findById(param.getAlipayDirectAppId())
-                .orElseThrow(() -> new DataNotExistException("error.channel.alipay.appNotFound"));
+                // 支付宝: 直连商户应用不存在
+                .orElseThrow(() -> new DataNotExistException("error.channel.alipay.mchAppNotFound"));
         if (!app.getMchNo().equals(param.getMchNo()) || !app.getChannelMchNo().equals(param.getChannelMchNo())) {
-            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.alipay.appNotFound");
+            // 支付宝: 直连商户应用不存在或商户号归属不匹配
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.alipay.mchAppNotFound");
         }
         this.validateUserIdType(param.getUserIdType());
         var config = this.findByAlipayDirectAppId(param.getAlipayDirectAppId());
@@ -76,6 +79,7 @@ public class AlipayDirectAppAuthConfigService {
     /// 校验用户标识类型
     private void validateUserIdType(String userIdType) {
         if (!USER_ID_TYPES.contains(userIdType)) {
+            // 支付宝: 用户标识类型不合法
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.alipay.userIdTypeInvalid");
         }
     }

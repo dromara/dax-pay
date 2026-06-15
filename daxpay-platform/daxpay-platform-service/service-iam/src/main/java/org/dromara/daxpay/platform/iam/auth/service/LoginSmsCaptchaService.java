@@ -24,6 +24,7 @@ public class LoginSmsCaptchaService {
     public void sendSmsCaptcha(LoginSmsCaptchaSendParam param) {
         UserInfo userInfo = this.findUser(param);
         if (!Objects.equals(userInfo.getStatus(), UserStatusEnum.NORMAL.getCode())) {
+            // 认证: 用户状态异常
             throw new BizException(CommonCode.FAIL_CODE, "error.auth.auth.userStatusError");
         }
     }

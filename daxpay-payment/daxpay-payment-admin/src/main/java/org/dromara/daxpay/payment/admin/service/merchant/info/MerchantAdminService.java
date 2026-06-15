@@ -88,8 +88,7 @@ public class MerchantAdminService {
         userInfoParam.setClientCode(ClientEnum.MERCHANT.getCode());
         UserInfo userInfo = userAdminService.add(userInfoParam, true);
         Role role;
-        // 查询商户管理员角色
-        // 商户管理员角色不存在
+        // 商户: 商户管理员角色不存在
         role = roleManager.findByCode(RoleCodeEnum.MERCHANT_ADMIN.getCode())
                 .orElseThrow(ConfigNotExistException::new);
         // 分配角色
@@ -139,7 +138,7 @@ public class MerchantAdminService {
 
     /// 删除
     public void delete(Long id) {
-        // 商户不允许删除
+        // 商户: 商户不允许删除
         throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.merchant.mchNotAllowDelete");
     }
 
@@ -152,7 +151,7 @@ public class MerchantAdminService {
             }
             mchNo = "M" + System.currentTimeMillis();
         }
-        // 商户号生成失败
+        // 商户: 商户号生成失败
         throw new BizException(CommonCode.FAIL_CODE, "error.payment.merchant.mchNoGenFailed");
     }
 

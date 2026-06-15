@@ -40,7 +40,8 @@ public class WechatDirectAppService {
     public WechatDirectAppResult findById(Long id) {
         return wechatDirectAppManager.findById(id)
                 .map(WechatDirectApp::toResult)
-                .orElseThrow(() -> new DataNotExistException("error.channel.wechat.appNotFound"));
+                // 微信: 直连商户应用不存在
+                .orElseThrow(() -> new DataNotExistException("error.channel.wechat.mchAppNotFound"));
     }
 
     /// 判断同一通道商户下微信应用ID是否已存在
@@ -61,7 +62,8 @@ public class WechatDirectAppService {
     /// 更新微信直连商户应用
     public void update(WechatDirectAppParam param) {
         var entity = wechatDirectAppManager.findById(param.getId())
-                .orElseThrow(() -> new DataNotExistException("error.channel.wechat.appNotFound"));
+                // 微信: 直连商户应用不存在
+                .orElseThrow(() -> new DataNotExistException("error.channel.wechat.mchAppNotFound"));
         this.assertScopeMatch(entity, param.getMchNo(), param.getChannelMchNo());
         this.assertWxAppIdUnique(entity.getMchNo(), entity.getChannelMchNo(), param.getWxAppId(), param.getId());
         WechatDirectAppConvert.CONVERT.copy(param, entity);
@@ -72,7 +74,8 @@ public class WechatDirectAppService {
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
         wechatDirectAppManager.findById(id)
-                .orElseThrow(() -> new DataNotExistException("error.channel.wechat.appNotFound"));
+                // 微信: 直连商户应用不存在
+                .orElseThrow(() -> new DataNotExistException("error.channel.wechat.mchAppNotFound"));
         wechatDirectAppAuthConfigService.deleteByWechatDirectAppId(id);
         wechatDirectAppManager.deleteById(id);
     }
@@ -87,7 +90,8 @@ public class WechatDirectAppService {
     /// 校验操作范围与记录归属一致
     private void assertScopeMatch(WechatDirectApp entity, String mchNo, String channelMchNo) {
         if (!entity.getMchNo().equals(mchNo) || !entity.getChannelMchNo().equals(channelMchNo)) {
-            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.wechat.appNotFound");
+            // 微信: 直连商户应用不存在或商户号归属不匹配
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.wechat.mchAppNotFound");
         }
     }
 }

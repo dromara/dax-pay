@@ -193,7 +193,7 @@ public class PermCodeScanService {
             }
         }
         if (CollUtil.isNotEmpty(conflicts)) {
-            // 同一权限码定义冲突: {0}
+            // 权限: 权限码定义冲突
             throw new ValidationFailedException("error.iam.perm.codeDefinitionConflict", String.join(", ", conflicts));
         }
         return definitionMap;
@@ -206,15 +206,15 @@ public class PermCodeScanService {
             return;
         }
         if (definitionMap.values().stream().map(PermCodeDefinition::getCode).anyMatch(StrUtil::isBlank)) {
-            // 存在未配置 code 的权限码声明
+            // 权限: 存在未配置 code 的权限码声明
             throw new ValidationFailedException("error.iam.perm.codeNotConfigured");
         }
         if (definitionMap.values().stream().map(PermCodeDefinition::getNameCn).anyMatch(StrUtil::isBlank)) {
-            // 存在未配置 nameCn 的权限码声明
+            // 权限: 存在未配置 nameCn 的权限码声明
             throw new ValidationFailedException("error.iam.perm.nameCnNotConfigured");
         }
         if (definitionMap.values().stream().map(PermCodeDefinition::getNameEn).anyMatch(StrUtil::isBlank)) {
-            // 存在未配置 nameEn 的权限码声明
+            // 权限: 存在未配置 nameEn 的权限码声明
             throw new ValidationFailedException("error.iam.perm.nameEnNotConfigured");
         }
     }

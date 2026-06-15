@@ -46,12 +46,14 @@ public class TransferOrderQueryService {
     /// 根据id查询
     public TransferOrderVo findById(Long id) {
         return transferOrderManager.findById(id).map(TransferOrder::toResult)
+                // 订单: 转账订单不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.order.transferOrderNotExist"));
     }
 
     /// 根据转账号查询
     public TransferOrderVo findByTransferNo(String transferNo){
         return transferOrderManager.findByTransferNo(transferNo).map(TransferOrder::toResult)
+                // 订单: 转账订单信息不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.order.transferOrderInfoNotExist"));
 
     }
@@ -76,6 +78,7 @@ public class TransferOrderQueryService {
         }
         // 查询转账单
         TransferOrder transferOrder = this.findByBizOrTransferNo(param.getTransferNo(), param.getBizTransferNo(), param.getAppId())
+                // 订单: 转账订单不存在
                 .orElseThrow(() -> new TradeNotExistException("error.payment.order.transferOrderNotExist"));
 
         return TransferOrderConvert.CONVERT.toResult(transferOrder);

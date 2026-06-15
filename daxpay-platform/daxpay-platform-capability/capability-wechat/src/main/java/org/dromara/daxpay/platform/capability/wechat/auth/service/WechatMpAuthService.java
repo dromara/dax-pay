@@ -58,7 +58,7 @@ public class WechatMpAuthService {
         try {
             accessToken = wxMpService.getOAuth2Service().getAccessToken(authCode);
         } catch (WxErrorException e) {
-            // 微信公众号认证失败: {0}
+            // 微信: 微信公众号认证失败: {0}
             throw new OperationFailException("error.channel.wechat.mpAuthFailed", e.getMessage());
         }
         return new WechatAuthResult()
@@ -98,7 +98,7 @@ public class WechatMpAuthService {
             
         } catch (WxErrorException e) {
             log.error("获取用户信息失败，错误: {}", e.getMessage());
-            // 获取用户信息失败: {0}
+            // 微信: 获取用户信息失败: {0}
             throw new OperationFailException("error.channel.wechat.userInfoFetchFailed", e.getMessage());
         }
     }
@@ -112,7 +112,7 @@ public class WechatMpAuthService {
         try {
             wxMpService.setWxMpConfigStorage(wxMpConfig);
         } catch (Exception e) {
-            // 微信公众号认证配置错误: {0}
+            // 微信: 微信公众号认证配置错误: {0}
             throw new OperationFailException("error.channel.wechat.mpAuthConfigError", e.getMessage());
         }
         return wxMpService;

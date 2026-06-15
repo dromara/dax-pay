@@ -35,7 +35,7 @@ public enum ReconcileDiscrepancyTypeEnum implements I18nSupport {
         return Arrays.stream(values())
                 .filter(value -> Objects.equals(value.getCode(), code))
                 .findFirst()
-                // 未找到对应的支付类型: {0}
+                // 通用: 未找到对应的支付类型: {0}
                 .orElseThrow(() -> new ConfigNotExistException("error.common.reconcileDiscrepancyTypeNotFound", code));
     }
 }

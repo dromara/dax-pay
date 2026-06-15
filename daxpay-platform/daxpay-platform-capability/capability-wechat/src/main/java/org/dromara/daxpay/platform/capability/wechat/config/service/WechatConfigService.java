@@ -43,7 +43,7 @@ public class WechatConfigService {
     /// 更新微信配置
     public void updateConfig(WechatConfigParam param) {
         var config = wechatConfigManager.findById(1L)
-                // 微信配置不存在
+                // 微信: 微信配置不存在
                 .orElseThrow(() -> new ConfigNotExistException("error.channel.wechat.platformConfigNotExist"));
         WechatConfigConvert.CONVERT.copy(param, config);
         wechatConfigManager.updateById(config);

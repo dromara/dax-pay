@@ -39,7 +39,7 @@ public enum PayCallTypeEnum implements I18nSupport {
         return Arrays.stream(values())
                 .filter(value -> Objects.equals(value.getCode(), code))
                 .findFirst()
-                // 不支持的收银台类型: {0}
+                // 通用: 不支持的收银台类型: {0}
                 .orElseThrow(() -> new ConfigNotExistException("error.common.payCallTypeNotSupported", code));
     }
 

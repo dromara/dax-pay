@@ -36,10 +36,12 @@ public class AlipayIsvChannelMerchantService {
     public void create(AlipayIsvChannelMerchantCreateParam param) {
         // 校验服务商应用存在(用 isvAppId 系统主键查询)
         var isvApp = alipayIsvAppManager.findById(param.getIsvAppId())
+                // 支付宝: 服务商应用不存在
                 .orElseThrow(() -> new DataNotExistException("error.channel.alipay.appNotFound"));
         // 校验同一应用下子商户号不重复
         if (alipayIsvChannelMerchantManager.existsByIsvAppIdAndAlipayUserId(
                 param.getIsvAppId(), param.getAlipayUserId())) {
+            // 支付宝: 该应用下已存在此子商户号
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.alipay.subMerchantDuplicate");
         }
         // 生成通道商户号：前缀 AISV + 雪花ID(无分隔符, 符合 TradeNoGenerateUtil 约定)
@@ -70,6 +72,7 @@ public class AlipayIsvChannelMerchantService {
                 .eq(AlipayIsvChannelMerchant::getChannelMchNo, channelMchNo)
                 .oneOpt()
                 .map(AlipayIsvChannelMerchant::toResult)
+                // 支付宝: 通道商户配置不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
     }
 }

@@ -27,6 +27,7 @@ public class PayRouteSceneMatcher {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.route.error.providerRequiredForScene");
         }
         if (StrUtil.isBlank(payParam.getMethod())) {
+            // 能力: 支付方式不能为空
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.payment.capability.methodRequiredWithPayProvider");
         }

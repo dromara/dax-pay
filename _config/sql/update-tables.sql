@@ -54,6 +54,8 @@ DROP TABLE IF EXISTS "public"."wechat_isv_app_auth_config";
 
 CREATE TABLE "public"."wechat_isv_app_auth_config" (
   "id" int8 NOT NULL,
+  "mch_no" varchar(32),
+  "channel_mch_no" varchar(64),
   "wechat_isv_app_id" int8,
   "app_secret" text,
   "auth_callback_url" varchar(255),
@@ -67,6 +69,8 @@ CREATE TABLE "public"."wechat_isv_app_auth_config" (
 
 COMMENT ON TABLE  "public"."wechat_isv_app_auth_config" IS '微信服务商应用授权配置';
 COMMENT ON COLUMN "public"."wechat_isv_app_auth_config"."id" IS '主键';
+COMMENT ON COLUMN "public"."wechat_isv_app_auth_config"."mch_no" IS '商户号';
+COMMENT ON COLUMN "public"."wechat_isv_app_auth_config"."channel_mch_no" IS '通道商户号';
 COMMENT ON COLUMN "public"."wechat_isv_app_auth_config"."wechat_isv_app_id" IS '关联服务商应用ID(指向 wechat_isv_app.id)';
 COMMENT ON COLUMN "public"."wechat_isv_app_auth_config"."app_secret" IS '应用密钥(加密存储)';
 COMMENT ON COLUMN "public"."wechat_isv_app_auth_config"."auth_callback_url" IS '授权回调地址（仅公众号）';

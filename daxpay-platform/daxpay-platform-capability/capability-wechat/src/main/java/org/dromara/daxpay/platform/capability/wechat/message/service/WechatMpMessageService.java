@@ -84,7 +84,7 @@ public class WechatMpMessageService {
             // 更新消息记录状态
             recordService.updateStatus(record.getId(), "failed", null, e.getError().getErrorMsg());
             
-            // 发送公众号模板消息失败: {0}
+            // 微信: 发送公众号模板消息失败: {0}
             throw new OperationFailException("error.channel.wechat.mpTemplateMessageFailed", e.getError().getErrorMsg());
         } catch (Exception e) {
             log.error("发送公众号模板消息异常，openId: {}, templateId: {}", 
@@ -95,7 +95,7 @@ public class WechatMpMessageService {
             // 更新消息记录状态
             recordService.updateStatus(record.getId(), "failed", null, e.getMessage());
             
-            // 发送公众号模板消息异常: {0}
+            // 微信: 发送公众号模板消息异常: {0}
             throw new OperationFailException("error.channel.wechat.mpTemplateMessageError", e.getMessage());
         }
         
@@ -149,7 +149,7 @@ public class WechatMpMessageService {
     private void validateConfig(String wxAppId, String appSecret) {
         if (StrUtil.isBlank(wxAppId) || StrUtil.isBlank(appSecret)) {
             log.error("微信配置参数为空，wxAppId: {}", wxAppId);
-            // 微信配置参数不能为空
+            // 微信: 微信配置参数不能为空
             throw new OperationFailException("error.channel.wechat.configParamsRequired");
         }
     }

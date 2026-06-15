@@ -91,6 +91,7 @@ public class RefundCallbackService {
         var callbackInfo = apiContext.getCallbackInfo();
 
         var payOrder = payOrderManager.findById(refundOrder.getOrderId())
+                // 订单: 退款对应的支付订单不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.order.refundPayOrderNotExist"));
         refundOrder.setErrorMsg(callbackInfo.getTradeErrorMsg());
 

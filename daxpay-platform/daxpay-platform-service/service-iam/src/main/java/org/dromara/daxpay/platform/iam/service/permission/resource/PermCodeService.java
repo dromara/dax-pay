@@ -32,7 +32,9 @@ public class PermCodeService {
 
     /// 根据菜单查询权限码列表
     public List<MenuPermCodeItemResult> findByMenu(Long menuId) {
-        PermMenu menu = permMenuManager.findById(menuId).orElseThrow(() -> new DataNotExistException("error.iam.menu.notExist"));
+        PermMenu menu = permMenuManager.findById(menuId)
+                // 权限: 菜单不存在
+                .orElseThrow(() -> new DataNotExistException("error.iam.menu.notExist"));
         if (menu.getMenuCode() == null || menu.getMenuCode().isBlank()) {
             return List.of();
         }

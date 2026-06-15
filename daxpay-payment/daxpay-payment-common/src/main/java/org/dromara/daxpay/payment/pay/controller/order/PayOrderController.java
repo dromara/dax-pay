@@ -47,6 +47,7 @@ public class PayOrderController {
     public Result<PayOrderVo> findById(@NotNull(message = "{validation.field.payOrderId.notNull}") Long id){
         PayOrderVo order = queryService.findById(id)
                 .map(PayOrder::toResult)
+                // 订单: 支付订单不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.order.payOrderNotExist"));
         return Res.ok(order);
     }
@@ -62,6 +63,7 @@ public class PayOrderController {
     public Result<PayOrderVo> findByOrderNo(@NotBlank(message = "{validation.field.orderNo.notBlank}") @Parameter(description = "支付订单号") String orderNo){
         PayOrderVo order = queryService.findByOrderNo(orderNo)
                 .map(PayOrder::toResult)
+                // 订单: 支付订单不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.order.payOrderNotExist"));
         return Res.ok(order);
     }

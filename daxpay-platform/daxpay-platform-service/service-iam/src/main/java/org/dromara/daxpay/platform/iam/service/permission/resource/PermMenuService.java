@@ -43,7 +43,7 @@ public class PermMenuService {
         // 检查菜单编码是否重复（仅菜单类型需要）
         if (MenuTypeEnum.MENU.equalsCode(param.getMenuType()) && StrUtil.isNotEmpty(param.getMenuCode())) {
             if (permMenuManager.existsByMenuCodeAndClient(param.getMenuCode(), param.getClientCode(), null)) {
-                // 菜单编码已存在
+                // 权限: 菜单编码已存在
                 throw new BizException(CommonCode.FAIL_CODE, "error.iam.menu.codeExists");
             }
         }
@@ -57,24 +57,26 @@ public class PermMenuService {
     /// 更新
     @Transactional(rollbackFor = Exception.class)
     public void update(PermMenuParam param) {
-        PermMenu permMenu = permMenuManager.findById(param.getId()).orElseThrow(() -> new DataNotExistException("error.iam.menu.notExist"));
+        PermMenu permMenu = permMenuManager.findById(param.getId())
+                // 权限: 菜单不存在
+                .orElseThrow(() -> new DataNotExistException("error.iam.menu.notExist"));
 
         // 校验父级菜单类型
         validateParentType(param.getPid(), param.getMenuType());
         // 检查上级菜单是否出现了循环依赖
         if (this.wouldCreateCycle(param.getId(), param.getPid())) {
-            // 上级菜单不能是自身或下级菜单
+            // 权限: 上级菜单不能是自身或下级菜单
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.menu.cycleDependency");
         }
         // 检查菜单编码是否重复（仅菜单类型需要）
         if (MenuTypeEnum.MENU.equalsCode(param.getMenuType()) && StrUtil.isNotEmpty(param.getMenuCode())) {
             if (permMenuManager.existsByMenuCodeAndClient(param.getMenuCode(), param.getClientCode(), param.getId())) {
-                // 菜单编码已存在
+                // 权限: 菜单编码已存在
                 throw new BizException(CommonCode.FAIL_CODE, "error.iam.menu.codeExists");
             }
         }
         if (MenuTypeEnum.SUBPAGE.equalsCode(param.getMenuType()) && permMenuManager.existsByPid(param.getId())) {
-            // 子页面不能有下级菜单
+            // 权限: 子页面不能有下级菜单
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.menu.subpageNoChildren");
         }
         if (MenuTypeEnum.SUBPAGE.equalsCode(param.getMenuType())) {
@@ -109,7 +111,7 @@ public class PermMenuService {
     public void delete(Long id) {
         // 有子菜单不可以删除
         if (permMenuManager.existsByPid(id)) {
-            // 有子菜单不可以删除
+            // 权限: 有子菜单不可以删除
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.menu.hasChildrenCannotDelete");
         }
         roleMenuManager.deleteByMenuId(id);
@@ -173,7 +175,7 @@ public class PermMenuService {
     private void validateParentType(Long pid, String menuType) {
         MenuTypeEnum typeEnum = MenuTypeEnum.getByCode(menuType);
         if (typeEnum == null) {
-            // 无效的菜单类型
+            // 权限: 无效的菜单类型
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.menu.invalidType");
         }
         if (MenuTypeEnum.CATALOG.equals(typeEnum)) {
@@ -181,31 +183,31 @@ public class PermMenuService {
         }
         if (MenuTypeEnum.SUBPAGE.equals(typeEnum)) {
             if (pid == null) {
-                // 子页面必须选择上级菜单
+                // 权限: 子页面必须选择上级菜单
                 throw new BizException(CommonCode.FAIL_CODE, "error.iam.menu.subpageNeedParent");
             }
             PermMenu parent = permMenuManager.findById(pid).orElse(null);
             if (parent == null) {
-                // 上级菜单不存在
+                // 权限: 上级菜单不存在
                 throw new BizException(CommonCode.FAIL_CODE, "error.iam.menu.parentNotExist");
             }
             if (!MenuTypeEnum.MENU.equalsCode(parent.getMenuType())) {
-                // 子页面的上级菜单必须是菜单类型
+                // 权限: 子页面的上级菜单必须是菜单类型
                 throw new BizException(CommonCode.FAIL_CODE, "error.iam.menu.subpageParentMustBeMenu");
             }
             return;
         }
         if (pid == null) {
-            // 菜单、内嵌页面、外链必须选择上级目录
+            // 权限: 菜单、内嵌页面、外链必须选择上级目录
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.menu.needParentCatalog");
         }
         PermMenu parent = permMenuManager.findById(pid).orElse(null);
         if (parent == null) {
-            // 上级菜单不存在
+            // 权限: 上级菜单不存在
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.menu.parentNotExist");
         }
         if (!MenuTypeEnum.CATALOG.equalsCode(parent.getMenuType())) {
-            // 菜单、内嵌页面、外链的上级菜单必须是目录类型
+            // 权限: 菜单、内嵌页面、外链的上级菜单必须是目录类型
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.menu.parentMustBeCatalog");
         }
     }

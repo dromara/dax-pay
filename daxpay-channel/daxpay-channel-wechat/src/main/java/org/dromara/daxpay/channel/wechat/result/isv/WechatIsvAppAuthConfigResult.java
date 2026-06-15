@@ -15,6 +15,12 @@ import lombok.experimental.Accessors;
 @Schema(title = "微信服务商应用授权认证配置")
 public class WechatIsvAppAuthConfigResult extends BaseResult {
 
+    @Schema(description = "商户号")
+    private String mchNo;
+
+    @Schema(description = "通道商户号")
+    private String channelMchNo;
+
     @Schema(description = "微信服务商应用ID")
     private Long wechatIsvAppId;
 

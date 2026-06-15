@@ -30,6 +30,7 @@ public class PlatformSmsConfigService {
     /// 更新短信配置
     public void update(PlatformSmsConfigParam param) {
         var config = smsConfigManager.findById(param.getId())
+                // 系统: 短信配置不存在
                 .orElseThrow(() -> new ConfigNotExistException("error.system.sms.configNotExist"));
         PlatformConfigConvert.CONVERT.copy(param, config);
         smsConfigManager.updateById(config);
@@ -41,6 +42,7 @@ public class PlatformSmsConfigService {
         smsConfigManager.clearEnable();
         // 查询
         var config = smsConfigManager.findById(id)
+                // 系统: 短信配置不存在
                 .orElseThrow(() -> new ConfigNotExistException("error.system.sms.configNotExist"));
         // 设置当前配置为默认
         config.setEnable(true);
@@ -51,6 +53,7 @@ public class PlatformSmsConfigService {
     public void clearEnable(Long id) {
         // 查询
         var config = smsConfigManager.findById(id)
+                // 系统: 短信配置不存在
                 .orElseThrow(() -> new ConfigNotExistException("error.system.sms.configNotExist"));
         // 设置当前配置为默认
         config.setEnable(false);
@@ -65,12 +68,14 @@ public class PlatformSmsConfigService {
     /// 获取短信配置
     public PlatformSmsConfigResult findById(Long id) {
         return smsConfigManager.findById(id).map(PlatformSmsConfig::toResult)
+                // 系统: 短信配置不存在
                 .orElseThrow(() -> new ConfigNotExistException("error.system.sms.configNotExist"));
     }
 
     /// 获取默认短信配置
     public PlatformSmsConfig findDefault() {
         return smsConfigManager.findDefault()
+                // 系统: 默认短信配置不存在
                 .orElseThrow(() -> new ConfigNotExistException("error.system.sms.defaultConfigNotExist"));
     }
 

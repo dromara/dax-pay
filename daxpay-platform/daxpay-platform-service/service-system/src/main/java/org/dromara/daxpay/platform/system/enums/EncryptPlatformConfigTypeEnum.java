@@ -30,6 +30,7 @@ public enum EncryptPlatformConfigTypeEnum implements I18nSupport {
         return Arrays.stream(values())
             .filter(e -> e.getCode().equals(code))
             .findFirst()
+            // 通用: 未知的加密平台配置类型
             .orElseThrow(() -> new BizException("error.common.enumUnknown", "EncryptPlatformConfigType"));
     }
 }

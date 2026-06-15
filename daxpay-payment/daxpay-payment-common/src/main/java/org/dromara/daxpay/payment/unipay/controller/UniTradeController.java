@@ -47,7 +47,7 @@ public class UniTradeController {
     @PostMapping("/pay")
     public DaxResult<PayResult> pay(@RequestBody PayParam payParam){
         if (!permConfigService.hasApiPerm(PaymentApiEnum.PAY.getCode())){
-            // 该商户没有此接口的权限
+            // 订单: 该商户没有此接口的权限
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.order.merchantNoApiPermission");
         }
         payParam.setSource(TradeSourceEnum.MCH_API.getCode());
@@ -58,7 +58,7 @@ public class UniTradeController {
     @PostMapping("/refund")
     public DaxResult<RefundResult> refund(@RequestBody RefundParam refundParam){
         if (!permConfigService.hasApiPerm(PaymentApiEnum.REFUND.getCode())){
-            // 该商户没有此接口的权限
+            // 订单: 该商户没有此接口的权限
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.order.merchantNoApiPermission");
         }
         refundParam.setSource(TradeSourceEnum.MCH_API.getCode());
@@ -69,7 +69,7 @@ public class UniTradeController {
     @PostMapping("/close")
     public DaxResult<Void> close(@RequestBody PayCloseParam param){
         if ( permConfigService.hasApiPerm(PaymentApiEnum.CLOSE.getCode())){
-            // 该商户没有此接口的权限
+            // 订单: 该商户没有此接口的权限
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.order.merchantNoApiPermission");
         }
         payCloseService.close(param);
@@ -80,7 +80,7 @@ public class UniTradeController {
     @PostMapping("/transfer")
     public DaxResult<TransferResult> transfer(@RequestBody TransferParam transferParam){
         if (!permConfigService.hasApiPerm(PaymentApiEnum.TRANSFER.getCode())){
-            // 该商户没有此接口的权限
+            // 订单: 该商户没有此接口的权限
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.order.merchantNoApiPermission");
         }
         transferParam.setSource(TradeSourceEnum.MCH_API.getCode());

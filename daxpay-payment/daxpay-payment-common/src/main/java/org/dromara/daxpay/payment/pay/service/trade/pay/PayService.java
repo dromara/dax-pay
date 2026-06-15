@@ -99,7 +99,7 @@ public class PayService {
         if (Objects.isNull(payOrder)){
             payOrder = payAssistService.createPayOrder(payParam);
         } else {
-            // 如果订单存在判断是都一
+            // 订单: 支付订单扩展信息不存在
             var orderExpand = payOrderExpandManager.findById(payOrder.getId()).orElseThrow(() -> new DataErrorException("error.payment.order.payOrderExtNotExist"));
             // 判断是否已经拉起了支付，如果拉起返回保存的支付参数
             if (StrUtil.isNotBlank(orderExpand.getPayBody())){

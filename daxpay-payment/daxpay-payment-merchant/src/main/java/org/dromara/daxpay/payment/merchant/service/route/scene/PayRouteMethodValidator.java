@@ -44,6 +44,7 @@ public class PayRouteMethodValidator {
         }
         // 品牌绑定行：须在合并且启用的渠道支付方式目录内
         if (!payProviderMethodService.contains(providerCode, method)) {
+            // 能力: 支付方式不在渠道目录中
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.payment.capability.methodNotInDirectory",
                     PayRouteI18nHelper.payMethod(method), PayRouteI18nHelper.provider(providerCode));

@@ -35,7 +35,7 @@ public enum PayRefundStatusEnum implements I18nSupport {
         return Arrays.stream(values())
                 .filter(payStatusEnum -> Objects.equals(payStatusEnum.getCode(), code))
                 .findFirst()
-                // 该退款状态不存在: {0}
+                // 通用: 该退款状态不存在: {0}
                 .orElseThrow(() -> new StatusNotExistException("error.common.payRefundStatusNotExist", code));
     }
 

@@ -39,6 +39,7 @@ public enum PlatformConfigTypeEnum implements I18nSupport {
         return Arrays.stream(values())
             .filter(e -> e.getCode().equals(code))
             .findFirst()
+            // 通用: 未知的平台配置类型
             .orElseThrow(() -> new BizException("error.common.enumUnknown", "PlatformConfigType"));
     }
 }

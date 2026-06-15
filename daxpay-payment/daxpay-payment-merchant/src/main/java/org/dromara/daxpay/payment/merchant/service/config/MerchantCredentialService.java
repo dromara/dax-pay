@@ -32,6 +32,7 @@ public class MerchantCredentialService {
         var credentialOptional = credentialManager.findByMchNo(mchNo);
         if (credentialOptional.isEmpty()){
             var merchant = merchantInfoManager.findByMchNo(mchNo)
+                    // 商户: 商户不存在
                     .orElseThrow(() -> new DataNotExistException("error.payment.merchant.merchantNotExist"));
             var credential = new MerchantCredential();
             credential.setMchNo(mchNo);
@@ -44,6 +45,7 @@ public class MerchantCredentialService {
     /// 更新
     public void update(MerchantCredentialParam param) {
         var credential = credentialManager.findByMchNo(param.getMchNo())
+                // 商户: API配置不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.merchant.apiConfigNotExist"));
         // 判断公钥是否合法
         if (StrUtil.isNotBlank(param.getPublicKey())){

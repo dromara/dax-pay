@@ -39,7 +39,7 @@ public enum TradeTypeEnum implements I18nSupport {
         return Arrays.stream(values())
                 .filter(tradeTypeEnum -> tradeTypeEnum.getCode().equals(code))
                 .findFirst()
-                // 交易类型不存在: {0}
+                // 通用: 交易类型不存在: {0}
                 .orElseThrow(() -> new ConfigNotExistException("error.common.tradeTypeNotExist", code));
     }
 }

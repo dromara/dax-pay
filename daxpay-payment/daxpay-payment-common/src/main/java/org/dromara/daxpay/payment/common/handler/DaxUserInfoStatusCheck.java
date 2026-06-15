@@ -37,20 +37,20 @@ public class DaxUserInfoStatusCheck implements UserInfoStatusCheck {
         // 商户端
         if (Objects.equals(clientCodeService.getClientCode(), org.dromara.daxpay.platform.core.enums.client.ClientEnum.MERCHANT.getCode())) {
             String merchantNo = Optional.ofNullable(merchantUserQueryService.findMchNoByUserId(userId))
-                    // 您没有商户端的登录权限
+                    // 登录: 您没有商户端的登录权限
                     .orElseThrow(() -> new LoginFailureException(CommonCode.FAIL_CODE, "error.payment.login.noMerchantPerm"));
             var merchant = Optional.ofNullable(merchantPaymentQueryService.getMerchantByMchNo(merchantNo))
-                    // 您没有商户端的登录权限
+                    // 登录: 您没有商户端的登录权限
                     .orElseThrow(() -> new LoginFailureException(CommonCode.FAIL_CODE, "error.payment.login.noMerchantPerm"));
             if (Objects.equals(merchant.getStatus(), MerchantStatusEnum.DISABLED.getCode())) {
-                // 该商户已禁用
+                // 登录: 该商户已禁用
             throw new LoginFailureException(CommonCode.FAIL_CODE, "error.payment.login.mchDisabled");
             }
         } else {
             // 运营端
             String merchant = merchantUserQueryService.findMchNoByUserId(userId);
             if (merchant != null) {
-                // 您没有运营端的权限，请使用商户端登录
+                // 登录: 您没有运营端的权限，请使用商户端登录
             throw new LoginFailureException(CommonCode.FAIL_CODE, "error.payment.login.noAdminPermUseMerchant");
             }
         }

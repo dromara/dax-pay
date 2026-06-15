@@ -74,7 +74,7 @@ public class RoleService {
 
         // 内置角色不允许删除
         if (role.isInternal()) {
-            // 内置角色不允许删除
+            // 权限: 内置角色不允许删除
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.role.internalCannotDelete");
         }
         // 存在当前角色用户的场合不允许删除

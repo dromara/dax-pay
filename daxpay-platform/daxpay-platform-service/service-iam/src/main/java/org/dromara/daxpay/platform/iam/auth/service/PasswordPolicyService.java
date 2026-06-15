@@ -27,12 +27,12 @@ public class PasswordPolicyService {
     /// 验证密码强度
     public void validatePassword(String password) {
         if (StrUtil.isBlank(password)) {
-            // 密码不能为空
+            // 权限: 密码不能为空
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.password.notBlank");
         }
         // 禁止中文字符
         if (password.matches(".*[\\u4e00-\\u9fa5].*")) {
-            // 密码不能包含中文字符
+            // 权限: 密码不能包含中文字符
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.password.noChinese");
         }
         PasswordPolicy config = this.getPolicyConfig();
@@ -40,27 +40,27 @@ public class PasswordPolicyService {
             return;
         }
         if (password.length() < config.minLength()) {
-            // 密码长度不能小于N位
+            // 权限: 密码长度不能小于N位
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.password.minLength", config.minLength());
         }
         if (password.length() > config.maxLength()) {
-            // 密码长度不能大于N位
+            // 权限: 密码长度不能大于N位
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.password.maxLength", config.maxLength());
         }
         if (config.requireUppercase() && password.chars().noneMatch(Character::isUpperCase)) {
-            // 密码必须包含大写字母
+            // 权限: 密码必须包含大写字母
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.password.requireUppercase");
         }
         if (config.requireLowercase() && password.chars().noneMatch(Character::isLowerCase)) {
-            // 密码必须包含小写字母
+            // 权限: 密码必须包含小写字母
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.password.requireLowercase");
         }
         if (config.requireDigit() && password.chars().noneMatch(Character::isDigit)) {
-            // 密码必须包含数字
+            // 权限: 密码必须包含数字
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.password.requireDigit");
         }
         if (config.requireSpecialChar() && !this.containsSpecialChar(password, config.specialChars())) {
-            // 密码必须包含特殊字符
+            // 权限: 密码必须包含特殊字符
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.password.requireSpecialChar");
         }
     }
@@ -75,7 +75,7 @@ public class PasswordPolicyService {
         List<UserPasswordHistory> histories = passwordHistoryManager.findRecentByUserId(userId, config.historyCount());
         for (UserPasswordHistory history : histories) {
             if (BCrypt.checkpw(newPassword, history.getPassword())) {
-                // 新密码不能与最近N次使用过的密码相同
+                // 权限: 新密码不能与最近N次使用过的密码相同
                 throw new BizException(CommonCode.FAIL_CODE, "error.iam.password.historyDuplicate", config.historyCount());
             }
         }

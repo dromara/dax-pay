@@ -86,7 +86,7 @@ public class WechatMaMessageService {
             // 更新消息记录状态
             recordService.updateStatus(record.getId(), "failed", null, e.getError().getErrorMsg());
             
-            // 发送小程序统一服务消息失败: {0}
+            // 微信: 发送小程序统一服务消息失败: {0}
             throw new OperationFailException("error.channel.wechat.maUniformMessageFailed", e.getError().getErrorMsg());
         } catch (Exception e) {
             log.error("发送小程序统一服务消息异常，openId: {}, templateId: {}", 
@@ -97,7 +97,7 @@ public class WechatMaMessageService {
             // 更新消息记录状态
             recordService.updateStatus(record.getId(), "failed", null, e.getMessage());
             
-            // 发送小程序统一服务消息异常: {0}
+            // 微信: 发送小程序统一服务消息异常: {0}
             throw new OperationFailException("error.channel.wechat.maUniformMessageError", e.getMessage());
         }
         

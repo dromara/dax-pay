@@ -71,6 +71,7 @@ public class PaySyncService {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.orderNoRequired");
         }
         PayOrder payOrder = payOrderQueryService.findAnyOrderNo(param.getOrderNo(), param.getBizOrderNo(), param.getAppId())
+                // 订单: 支付订单不存在
                 .orElseThrow(() -> new TradeNotExistException("error.payment.order.payOrderNotExist"));
         // 执行订单同步逻辑
         return this.syncPayOrder(payOrder);
@@ -180,6 +181,7 @@ public class PaySyncService {
     /// 同步: 将异步支付状态修改为成功
     /// 回调: 将异步支付状态修改为成功
     private void success(PayOrder payOrder, PaySyncResultBo resultBo) {
+        // 订单: 支付订单扩展信息不存在
         var payOrderExpand = payOrderExpandManager.findById(payOrder.getId()).orElseThrow(() -> new DataErrorException("error.payment.order.payOrderExtNotExist"));
         // 修改订单支付状态为成功
         payOrder.setStatus(PayStatusEnum.SUCCESS.getCode())

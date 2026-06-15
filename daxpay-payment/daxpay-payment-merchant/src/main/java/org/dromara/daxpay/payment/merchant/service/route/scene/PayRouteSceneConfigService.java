@@ -81,6 +81,7 @@ public class PayRouteSceneConfigService {
                     continue;
                 }
                 if (StrUtil.isBlank(item.getMethod())) {
+                    // 能力: 支付方式不能为空
                     throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                             "error.payment.capability.methodRequiredWithPayProvider");
                 }

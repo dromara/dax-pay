@@ -31,7 +31,7 @@ public enum MchAppStatusEnum implements I18nSupport {
         return Arrays.stream(values())
                 .filter(e -> e.getCode().equals(code))
                 .findFirst()
-                // 未找到对应的商户应用状态类型: {0}
+                // 通用: 未找到对应的商户应用状态类型: {0}
                 .orElseThrow(() -> new ConfigNotExistException("error.common.mchAppStatusNotFound", code));
     }
 

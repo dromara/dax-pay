@@ -44,7 +44,7 @@ public class UniQueryController {
     @PostMapping("/pay-order")
     public DaxResult<PayOrderResult> queryPayOrder(@RequestBody QueryPayParam param){
         if (!permConfigService.hasApiPerm(PaymentApiEnum.PAY_ORDER.getCode())){
-            // 该商户没有此接口的权限
+            // 订单: 该商户没有此接口的权限
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.order.merchantNoApiPermission");
         }
         return DaxRes.ok(payOrderQueryService.queryPayOrder(param));
@@ -54,7 +54,7 @@ public class UniQueryController {
      @PostMapping("/refund-order")
      public DaxResult<RefundOrderResult> queryRefundOrder(@RequestBody QueryRefundParam param){
         if (!permConfigService.hasApiPerm(PaymentApiEnum.REFUND_ORDER.getCode())){
-            // 该商户没有此接口的权限
+            // 订单: 该商户没有此接口的权限
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.order.merchantNoApiPermission");
         }
         return DaxRes.ok(refundOrderQueryService.queryRefundOrder(param));
@@ -64,7 +64,7 @@ public class UniQueryController {
     @PostMapping("/transfer-order")
     public DaxResult<TransferOrderResult> transferOrder(@RequestBody QueryTransferParam param){
         if (!permConfigService.hasApiPerm(PaymentApiEnum.TRANSFER_ORDER.getCode())){
-            // 该商户没有此接口的权限
+            // 订单: 该商户没有此接口的权限
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.order.merchantNoApiPermission");
         }
         return DaxRes.ok(transferOrderQueryService.queryTransferOrder(param));

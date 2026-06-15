@@ -37,7 +37,7 @@ public enum RefundStatusEnum implements I18nSupport {
         return Arrays.stream(values())
                 .filter(item -> Objects.equals(item.code, code))
                 .findFirst()
-                // 退款状态不存在: {0}
+                // 通用: 退款状态不存在: {0}
                 .orElseThrow(() -> new ConfigNotExistException("error.common.refundStatusNotExist", code));
     }
 

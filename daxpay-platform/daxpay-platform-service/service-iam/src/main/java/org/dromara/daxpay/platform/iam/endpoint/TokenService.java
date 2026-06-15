@@ -106,7 +106,7 @@ public class TokenService {
         boolean supported = abstractAuthentications.stream()
                 .anyMatch(authentication -> authentication.adaptation(loginType));
         if (!supported) {
-            // 当前终端不支持该登录方式
+            // 认证: 当前终端不支持该登录方式
             throw new LoginFailureException("error.auth.loginMethodNotSupported");
         }
     }
@@ -118,7 +118,7 @@ public class TokenService {
                 .filter(o -> o.adaptation(loginType))
                 .findFirst()
                 .map(o -> o.authentication(context))
-                // 未找到对应的登录认证器
+                // 认证: 未找到对应的登录认证器
                 .orElseThrow(() -> new LoginFailureException("error.auth.loginAuthenticatorNotFound"));
     }
 

@@ -40,6 +40,7 @@ public class ChannelMerchantService {
     public ChannelMerchantResult findById(Long id){
         return channelMerchantManager.findById(id)
                 .map(ChannelMerchant::toResult)
+                // 通道: 通道商户不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
     }
 
@@ -55,6 +56,7 @@ public class ChannelMerchantService {
 
     /// 编辑
     public void update(ChannelMerchantEditParam param){
+        // 通道: 通道商户不存在
         var mchInfo = channelMerchantManager.findById(param.getId()).orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
         mchInfo.setChannelMerchantName(param.getChannelMerchantName());
         channelMerchantManager.updateById(mchInfo);
@@ -63,6 +65,7 @@ public class ChannelMerchantService {
     /// 删除
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id){
+        // 通道: 通道商户不存在
         var mchInfo = channelMerchantManager.findById(id).orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
         channelMerchantManager.deleteById(id);
     }
@@ -83,6 +86,7 @@ public class ChannelMerchantService {
 
     /// 更新启用状态
     public void updateEnable(Long id, Boolean enable){
+        // 通道: 通道商户不存在
         var mchInfo = channelMerchantManager.findById(id).orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
         mchInfo.setEnable(enable);
         channelMerchantManager.updateById(mchInfo);

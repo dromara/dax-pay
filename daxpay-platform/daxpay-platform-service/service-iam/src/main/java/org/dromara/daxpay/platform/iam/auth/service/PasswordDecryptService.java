@@ -29,6 +29,7 @@ public class PasswordDecryptService {
 
         String privateKey = platformConfigProperties.getKeyConfig().getPrivateKey();
         if (StrUtil.isBlank(privateKey)) {
+            // 认证: 私钥未配置
             throw new BizException(CommonCode.FAIL_CODE, "error.auth.auth.privateKeyNotConfigured");
         }
 
@@ -36,6 +37,7 @@ public class PasswordDecryptService {
             return RsaSignUtil.decrypt(encryptedPassword, privateKey);
         } catch (Exception e) {
             log.error("密码解密失败: {}", e.getMessage());
+            // 认证: 密码解密失败
             throw new BizException(CommonCode.FAIL_CODE, "error.auth.auth.passwordDecryptFailed");
         }
     }

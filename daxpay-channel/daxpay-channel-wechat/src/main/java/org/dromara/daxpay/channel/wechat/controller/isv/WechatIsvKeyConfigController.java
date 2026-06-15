@@ -3,6 +3,7 @@ package org.dromara.daxpay.channel.wechat.controller.isv;
 import org.dromara.daxpay.platform.core.annotation.PermCode;
 import org.dromara.daxpay.platform.core.rest.Res;
 import org.dromara.daxpay.platform.core.rest.result.Result;
+import org.dromara.daxpay.channel.wechat.convert.isv.WechatIsvKeyConfigConvert;
 import org.dromara.daxpay.channel.wechat.param.isv.WechatIsvKeyConfigParam;
 import org.dromara.daxpay.channel.wechat.result.isv.WechatIsvKeyConfigResult;
 import org.dromara.daxpay.channel.wechat.service.isv.WechatIsvKeyConfigService;
@@ -30,7 +31,7 @@ public class WechatIsvKeyConfigController {
     @GetMapping("/find-config")
     public Result<WechatIsvKeyConfigResult> findConfig(
             @NotBlank(message = "{validation.field.product.notBlank}") String product) {
-        return Res.ok(wechatIsvKeyConfigService.findByProduct(product));
+        return Res.ok(WechatIsvKeyConfigConvert.CONVERT.toResult(wechatIsvKeyConfigService.findByProduct(product)));
     }
 
     @PermCode(code = "edit", nameCn = "微信服务商编辑", nameEn = "WeChat ISV Edit")

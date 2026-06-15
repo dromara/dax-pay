@@ -29,12 +29,13 @@ public class WechatDirectAppAuthConfigService {
     /// 根据应用ID查询授权认证配置, 不存在则创建默认记录
     @Transactional(rollbackFor = Exception.class)
     public WechatDirectAppAuthConfig findByWechatDirectAppId(Long wechatDirectAppId) {
-        var app = wechatDirectAppManager.findById(wechatDirectAppId)
-                .orElseThrow(() -> new DataNotExistException("error.channel.wechat.appNotFound"));
         var existing = wechatDirectAppAuthConfigManager.findByWechatDirectAppId(wechatDirectAppId);
         if (existing.isPresent()) {
             return existing.get();
         }
+        var app = wechatDirectAppManager.findById(wechatDirectAppId)
+                // 微信: 直连商户应用不存在
+                .orElseThrow(() -> new DataNotExistException("error.channel.wechat.mchAppNotFound"));
         var config = new WechatDirectAppAuthConfig()
                 .setChannelMchNo(app.getChannelMchNo())
                 .setWechatDirectAppId(wechatDirectAppId);
@@ -47,9 +48,11 @@ public class WechatDirectAppAuthConfigService {
     @Transactional(rollbackFor = Exception.class)
     public void save(WechatDirectAppAuthConfigParam param) {
         var app = wechatDirectAppManager.findById(param.getWechatDirectAppId())
-                .orElseThrow(() -> new DataNotExistException("error.channel.wechat.appNotFound"));
+                // 微信: 直连商户应用不存在
+                .orElseThrow(() -> new DataNotExistException("error.channel.wechat.mchAppNotFound"));
         if (!app.getMchNo().equals(param.getMchNo()) || !app.getChannelMchNo().equals(param.getChannelMchNo())) {
-            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.wechat.appNotFound");
+            // 微信: 直连商户应用不存在或商户号归属不匹配
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.wechat.mchAppNotFound");
         }
         var config = this.findByWechatDirectAppId(param.getWechatDirectAppId());
         config.setAuthCallbackUrl(param.getAuthCallbackUrl());

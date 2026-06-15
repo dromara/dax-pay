@@ -46,12 +46,14 @@ public class RefundOrderQueryService {
     /// 根据id查询
     public RefundOrderVo findById(Long id) {
         return refundOrderManager.findById(id).map(RefundOrder::toResult)
+                // 订单: 退款订单不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.order.refundOrderNotExist"));
     }
 
     /// 根据退款号查询
     public RefundOrderVo findByRefundNo(String refundNo){
         return refundOrderManager.findByRefundNo(refundNo).map(RefundOrder::toResult)
+                // 订单: 退款订单扩展信息不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.order.refundOrderExtNotExist"));
 
     }
@@ -76,6 +78,7 @@ public class RefundOrderQueryService {
         }
         // 查询退款单
         RefundOrder refundOrder = this.findByBizOrRefundNo(param.getRefundNo(), param.getBizRefundNo(),param.getAppId())
+                // 订单: 退款订单不存在
                 .orElseThrow(() -> new TradeNotExistException("error.payment.order.refundOrderNotExist"));
 
         return RefundOrderConvert.CONVERT.toResult(refundOrder);

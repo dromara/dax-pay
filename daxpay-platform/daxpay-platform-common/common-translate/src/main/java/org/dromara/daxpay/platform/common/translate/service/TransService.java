@@ -322,6 +322,7 @@ public class TransService {
         if (tableInfo.getKeyProperty().equals(propertyName)) {
             return tableInfo.getKeyColumn();
         }
+        // 通用: 翻译字段对应的数据库列不存在
         throw new BizException("error.common.translateColumnNotFound",
                 tableInfo.getEntityType().getSimpleName(), propertyName);
     }

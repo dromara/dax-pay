@@ -117,7 +117,7 @@ public class PayUtil {
         if (StrUtil.startWith(barCode.substring(0, 2), "62")) {
             return PayProviderEnum.UNION_PAY;
         }
-        // 不支持的条码类型
+        // 订单: 不支持的条码类型
         throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.order.unsupportedBarcodeType");
     }
 

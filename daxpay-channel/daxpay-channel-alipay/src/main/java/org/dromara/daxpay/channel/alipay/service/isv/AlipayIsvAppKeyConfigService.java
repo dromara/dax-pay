@@ -30,6 +30,7 @@ public class AlipayIsvAppKeyConfigService {
     @Transactional(rollbackFor = Exception.class)
     public AlipayIsvAppKeyConfig findByAlipayIsvAppId(Long alipayIsvAppId) {
         if (!alipayIsvAppManager.existedById(alipayIsvAppId)) {
+            // 支付宝: 服务商应用不存在
             throw new DataNotExistException("error.channel.alipay.appNotFound");
         }
         var existing = alipayIsvAppKeyConfigManager.findByAlipayIsvAppId(alipayIsvAppId);

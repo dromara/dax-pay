@@ -44,6 +44,7 @@ public enum PayStatusEnum implements I18nSupport {
         return Arrays.stream(values())
                 .filter(payStatusEnum -> Objects.equals(payStatusEnum.getCode(), code))
                 .findFirst()
+                // 通用: 支付状态不存在
                 .orElseThrow(() -> new DataNotExistException("error.common.payStatusNotExist"));
     }
 

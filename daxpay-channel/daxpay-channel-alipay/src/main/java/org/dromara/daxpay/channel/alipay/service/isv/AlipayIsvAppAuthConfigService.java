@@ -38,6 +38,7 @@ public class AlipayIsvAppAuthConfigService {
     @Transactional(rollbackFor = Exception.class)
     public AlipayIsvAppAuthConfig findByAlipayIsvAppId(Long alipayIsvAppId) {
         if (!alipayIsvAppManager.existedById(alipayIsvAppId)) {
+            // 支付宝: 服务商应用不存在
             throw new DataNotExistException("error.channel.alipay.appNotFound");
         }
         var existing = alipayIsvAppAuthConfigManager.findByAlipayIsvAppId(alipayIsvAppId);
@@ -69,6 +70,7 @@ public class AlipayIsvAppAuthConfigService {
     /// 校验用户标识类型
     private void validateUserIdType(String userIdType) {
         if (!USER_ID_TYPES.contains(userIdType)) {
+            // 支付宝: 用户标识类型不合法
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.alipay.userIdTypeInvalid");
         }
     }

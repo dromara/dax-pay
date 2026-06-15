@@ -60,6 +60,7 @@ public class RefundOrderService {
     public RefundResult create(RefundCreateParam param) {
         // 检查是否有权限
         var payOrder = payOrderManager.findByOrderNo(param.getOrderNo())
+                // 订单: 支付订单不存在
                 .orElseThrow(() -> new TradeNotExistException("error.payment.order.payOrderNotExist"));
 
         // 初始化商户和应用
@@ -86,6 +87,7 @@ public class RefundOrderService {
     /// 同步
     public void sync(Long id) {
         RefundOrder refundOrder = refundOrderManager.findById(id)
+                // 订单: 退款订单不存在
                 .orElseThrow(() -> new TradeNotExistException("error.payment.order.refundOrderNotExist"));
         // 初始化商户和应用
         paymentAssistService.initMchAndApp(refundOrder.getMchNo(),refundOrder.getAppId());
@@ -96,6 +98,7 @@ public class RefundOrderService {
     /// 退款重试
     public void retry(Long id) {
         RefundOrder refundOrder = refundOrderManager.findById(id)
+                // 订单: 退款订单不存在
                 .orElseThrow(() -> new TradeNotExistException("error.payment.order.refundOrderNotExist"));
         // 初始化商户和应用
         paymentAssistService.initMchAndApp(refundOrder.getMchNo(),refundOrder.getAppId());
@@ -121,6 +124,7 @@ public class RefundOrderService {
     /// 退款关闭
     public void close(Long id) {
         RefundOrder refundOrder = refundOrderManager.findById(id)
+                // 订单: 退款订单不存在
                 .orElseThrow(() -> new TradeNotExistException("error.payment.order.refundOrderNotExist"));
         // 初始化商户和应用
         paymentAssistService.initMchAndApp(refundOrder.getMchNo(),refundOrder.getAppId());

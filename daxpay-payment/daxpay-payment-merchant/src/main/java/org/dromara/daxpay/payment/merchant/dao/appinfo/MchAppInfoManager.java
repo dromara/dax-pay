@@ -40,6 +40,7 @@ public class MchAppInfoManager extends BaseManager<MchAppInfoMapper, MchAppInfo>
     @IgnoreTenant
     public MchAppInfo requireByAppIdNotTenant(String appId) {
         return findByAppIdNotTenant(appId)
+                // 商户: 未找到指定应用的配置
                 .orElseThrow(() -> new ConfigNotExistException("error.payment.merchant.specifiedAppConfigNotFound"));
     }
 

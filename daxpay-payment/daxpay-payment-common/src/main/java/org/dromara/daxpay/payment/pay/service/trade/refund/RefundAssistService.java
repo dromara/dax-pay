@@ -116,6 +116,7 @@ public class RefundAssistService {
     @Transactional(rollbackFor = Exception.class)
     public void close(RefundOrder refundOrder) {
         PayOrder payOrder = payOrderManager.findById(refundOrder.getOrderId())
+                // 订单: 退款对应的支付订单不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.order.refundPayOrderNotExist"));
         tradeUniHandleService.refundClose(payOrder,refundOrder);
     }
@@ -124,6 +125,7 @@ public class RefundAssistService {
     @Transactional(rollbackFor = Exception.class)
     public void success(RefundOrder refundOrder, OffsetDateTime finishTime) {
         PayOrder payOrder = payOrderManager.findById(refundOrder.getOrderId())
+                // 订单: 退款对应的支付订单不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.order.refundPayOrderNotExist"));
 
         // 完成时间

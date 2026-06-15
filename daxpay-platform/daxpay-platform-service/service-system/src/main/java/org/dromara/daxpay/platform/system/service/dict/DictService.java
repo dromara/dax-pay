@@ -34,7 +34,7 @@ public class DictService {
     @Transactional(rollbackFor = Exception.class)
     public DictResult add(DictParam param) {
         if (dictManager.existsByCode(param.getCode())) {
-            // 字典编码已存在
+            // 系统: 字典编码已存在
             throw new BizException(CommonCode.FAIL_CODE, "error.system.dict.codeExists");
         }
         Dict dict = DictConvert.CONVERT.convert(param);
@@ -47,11 +47,11 @@ public class DictService {
     public void delete(Long id) {
 
         if (!dictManager.existedById(id)) {
-            // 字典不存在
+            // 系统: 字典不存在
             throw new BizException(CommonCode.FAIL_CODE, "error.system.dict.notExist");
         }
         if (dictItemManager.existsByDictId(id)) {
-            // 字典下有字典项,不能删除
+            // 系统: 字典下有字典项,不能删除
             throw new BizException(CommonCode.FAIL_CODE, "error.system.dict.hasItems");
         }
         dictManager.deleteById(id);
@@ -62,11 +62,12 @@ public class DictService {
     public DictResult update(DictParam param) {
 
         Dict dict = dictManager.findById(param.getId())
+                // 系统: 字典不存在
                 .orElseThrow(()->new DataNotExistException("error.system.dict.notExist"));
 
         // 判断字典是否重名
         if (dictManager.existsByCode(param.getCode(), param.getId())) {
-            // 字典编码已存在
+            // 系统: 字典编码已存在
             throw new BizException(CommonCode.FAIL_CODE, "error.system.dict.codeExists");
         }
         // 更新字典项

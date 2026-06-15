@@ -90,13 +90,13 @@ public class MerchantUserAdminService {
     public void add(MerchantUserParam param) {
         String mchNo = param.getMchNo();
         MerchantInfo merchantInfo = merchantInfoManager.findByMchNo(mchNo)
-                // 商户不存在
+                // 商户: 商户不存在
                 .orElseThrow(() -> new BizException(CommonCode.FAIL_CODE, "error.payment.merchant.merchantNotExist"));
 
         // 校验账号唯一性（商户终端）
         String clientCode = ClientEnum.MERCHANT.getCode();
         if (userQueryService.existsAccountByClientCode(clientCode, param.getAccount())) {
-            // 该账号已存在
+            // 商户: 该账号已存在
             throw new BizException(CommonCode.FAIL_CODE, "error.payment.merchant.accountExists");
         }
 
@@ -137,19 +137,20 @@ public class MerchantUserAdminService {
                 .orElseThrow(UserInfoNotExistsException::new);
 
         MerchantUser merchantUser = merchantUserManager.findByUserId(param.getId())
+                // 商户: 商户用户关联关系不存在
                 .orElseThrow(() -> new BizException(CommonCode.FAIL_CODE, "error.payment.merchant.mchUserRelationNotExist"));
 
         // 按终端校验手机号唯一性（排除自身）
         if (StrUtil.isNotBlank(param.getPhone()) && 
             userQueryService.existsPhoneByClientCode(userInfo.getClientCode(), param.getPhone(), param.getId())) {
-            // 该终端下手机号已被其他用户使用
+            // 商户: 该终端下手机号已被其他用户使用
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.phoneUsedByOtherInClient");
         }
 
         // 按终端校验邮箱唯一性（排除自身）
         if (StrUtil.isNotBlank(param.getEmail()) && 
             userQueryService.existsEmailByClientCode(userInfo.getClientCode(), param.getEmail(), param.getId())) {
-            // 该终端下邮箱已被其他用户使用
+            // 商户: 该终端下邮箱已被其他用户使用
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.emailUsedByOtherInClient");
         }
 
@@ -212,6 +213,7 @@ public class MerchantUserAdminService {
     /// 校验用户是否属于商户
     private void checkMerchantUser(Long userId) {
         if (!merchantUserManager.existedByField(MerchantUser::getUserId, userId)) {
+            // 商户: 商户用户关联关系不存在
             throw new BizException(CommonCode.FAIL_CODE, "error.payment.merchant.mchUserRelationNotExist");
         }
     }
@@ -220,6 +222,7 @@ public class MerchantUserAdminService {
     private void checkMerchantUser(List<Long> userIds) {
         List<MerchantUser> users = merchantUserManager.findAllByField(MerchantUser::getUserId, userIds);
         if (users.size() != userIds.size()) {
+            // 商户: 商户用户关联关系不存在
             throw new BizException(CommonCode.FAIL_CODE, "error.payment.merchant.mchUserRelationNotExist");
         }
     }

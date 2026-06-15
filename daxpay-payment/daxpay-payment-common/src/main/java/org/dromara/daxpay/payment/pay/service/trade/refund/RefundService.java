@@ -86,6 +86,7 @@ public class RefundService {
     private RefundResult firstRefund(RefundParam param) {
         // 获取支付订单
         PayOrder payOrder = payOrderQueryService.findAnyOrderNo(param.getOrderNo(), param.getBizOrderNo(), param.getAppId())
+                // 订单: 支付订单不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.order.payOrderNotExist"));
         // 加锁, 使用支付订单id, 防止同时多个退款被发起
         LockInfo lock = lockTemplate.lock("payment:refund:" + payOrder.getId(),10000,200);
@@ -154,6 +155,7 @@ public class RefundService {
             }
             // 获取支付订单
             PayOrder payOrder = payOrderQueryService.findAnyOrderNo(refundOrder.getOrderNo(), refundOrder.getBizOrderNo(), refundOrder.getAppId())
+                    // 订单: 支付订单不存在
                     .orElseThrow(() -> new TradeNotExistException("error.payment.order.payOrderNotExist"));
             AbsRefundStrategy refundStrategy = PaymentStrategyFactory.createByProduct(refundOrder.getProduct(), AbsRefundStrategy.class);
             // 设置退款订单对象

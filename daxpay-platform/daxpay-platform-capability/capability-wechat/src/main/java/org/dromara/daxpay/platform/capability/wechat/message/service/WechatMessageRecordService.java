@@ -123,11 +123,13 @@ public class WechatMessageRecordService {
         // 获取消息记录
         WechatMessageRecord record = recordManager.findById(recordId).orElse(null);
         if (record == null) {
+            // 微信: 消息记录不存在
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.channel.wechat.messageRecordNotExist");
         }
         
         // 验证消息状态
         if (!"failed".equals(record.getStatus())) {
+            // 微信: 只能重发失败的消息
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.channel.wechat.onlyFailedCanResend");
         }
         
@@ -146,7 +148,7 @@ public class WechatMessageRecordService {
                 UniformMessageParam param = buildUniformMessageParam(record);
                 result = maMessageService.sendUniformMessage(param);
             } else {
-                // 不支持的消息类型: {0}
+                // 微信: 不支持的消息类型: {0}
                 throw new OperationFailException("error.channel.wechat.unsupportedMessageType", record.getMessageType());
             }
             
@@ -162,7 +164,7 @@ public class WechatMessageRecordService {
         } catch (Exception e) {
             log.error("重发消息失败，recordId: {}", recordId, e);
             updateStatus(recordId, "failed", null, e.getMessage());
-            // 重发消息失败: {0}
+            // 微信: 重发消息失败: {0}
             throw new OperationFailException("error.channel.wechat.messageResendFailed", e.getMessage());
         }
     }

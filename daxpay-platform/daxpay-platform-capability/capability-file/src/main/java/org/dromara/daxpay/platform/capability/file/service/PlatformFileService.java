@@ -60,6 +60,7 @@ public class PlatformFileService {
     @Transactional(rollbackFor = Exception.class)
     public FileUploadPresignResult getUploadPresignUrl(FileUploadPresignParam param) {
         var storageConfig = s3FileStorageService.getStorageConfig()
+                // 文件: 存储配置不存在
                 .orElseThrow(() -> new DataNotExistException("error.file.storageConfigNotExist"));
 
         String bucket = selectBucket(storageConfig, param.getAccessType());
@@ -110,6 +111,7 @@ public class PlatformFileService {
     @Transactional(rollbackFor = Exception.class)
     public void confirmUpload(FileUploadConfirmParam param) {
         PlatformFileRecord platformFileRecord = platformFileRecordManager.findByIdNotDeleted(param.getFileId())
+                // 文件: 文件记录不存在
                 .orElseThrow(() -> new DataNotExistException("error.file.recordNotExist"));
 
         if (!FileUploadStatusEnum.PENDING.getCode().equals(platformFileRecord.getStatus())) {
@@ -122,6 +124,7 @@ public class PlatformFileService {
         }
 
         var storageConfig = s3FileStorageService.getStorageConfig()
+                // 文件: 存储配置不存在
                 .orElseThrow(() -> new DataNotExistException("error.file.storageConfigNotExist"));
 
         String bucket = selectBucket(storageConfig, platformFileRecord.getAccessType());
@@ -156,6 +159,7 @@ public class PlatformFileService {
     /// @throws IllegalStateException 文件未上传完成
     public String getAccessUrlByFilename(String filename) {
         PlatformFileRecord platformFileRecord = platformFileRecordManager.findByFilename(filename)
+                // 文件: 文件记录不存在
                 .orElseThrow(() -> new DataNotExistException("error.file.recordNotExist"));
 
         if (!FileUploadStatusEnum.UPLOADED.getCode().equals(platformFileRecord.getStatus())) {
@@ -163,6 +167,7 @@ public class PlatformFileService {
         }
 
         FileStorageConfig storageConfig = s3FileStorageService.getStorageConfig()
+                // 文件: 存储配置不存在
                 .orElseThrow(() -> new DataNotExistException("error.file.storageConfigNotExist"));
 
         String bucket = selectBucket(storageConfig, platformFileRecord.getAccessType());
@@ -186,6 +191,7 @@ public class PlatformFileService {
     /// @throws IllegalStateException 文件未上传完成
     public String getDownloadUrlByFilename(String filename) {
         PlatformFileRecord platformFileRecord = platformFileRecordManager.findByFilename(filename)
+                // 文件: 文件记录不存在
                 .orElseThrow(() -> new DataNotExistException("error.file.recordNotExist"));
 
         if (!FileUploadStatusEnum.UPLOADED.getCode().equals(platformFileRecord.getStatus())) {
@@ -193,6 +199,7 @@ public class PlatformFileService {
         }
 
         FileStorageConfig storageConfig = s3FileStorageService.getStorageConfig()
+                // 文件: 存储配置不存在
                 .orElseThrow(() -> new DataNotExistException("error.file.storageConfigNotExist"));
 
         String bucket = selectBucket(storageConfig, platformFileRecord.getAccessType());
@@ -216,6 +223,7 @@ public class PlatformFileService {
     /// @throws IllegalStateException 文件未上传完成
     public byte[] downloadAndCheck(Long fileId) {
         PlatformFileRecord platformFileRecord = platformFileRecordManager.findByIdNotDeleted(fileId)
+                // 文件: 文件记录不存在
                 .orElseThrow(() -> new DataNotExistException("error.file.recordNotExist"));
 
         if (!FileUploadStatusEnum.UPLOADED.getCode().equals(platformFileRecord.getStatus())) {
@@ -223,6 +231,7 @@ public class PlatformFileService {
         }
 
         FileStorageConfig storageConfig = s3FileStorageService.getStorageConfig()
+                // 文件: 存储配置不存在
                 .orElseThrow(() -> new DataNotExistException("error.file.storageConfigNotExist"));
 
         String bucket = selectBucket(storageConfig, platformFileRecord.getAccessType());
@@ -245,6 +254,7 @@ public class PlatformFileService {
     @Transactional(rollbackFor = Exception.class)
     public String uploadServerFile(byte[] data, String fileName, String contentType, String bizType) {
         var storageConfig = s3FileStorageService.getStorageConfig()
+                // 文件: 存储配置不存在
                 .orElseThrow(() -> new DataNotExistException("error.file.storageConfigNotExist"));
 
         String fileExtension = FileUtil.extName(fileName);

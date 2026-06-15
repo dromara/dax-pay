@@ -28,7 +28,7 @@ public class WechatMaAuthService {
         try {
             sessionResult = wxMaService.jsCode2SessionInfo(authCode);
         } catch (WxErrorException e) {
-            // 微信小程序认证失败: {0}
+            // 微信: 微信小程序认证失败: {0}
             throw new OperationFailException("error.channel.wechat.maAuthFailed", e.getMessage());
         }
         return new WechatAuthResult()
@@ -44,7 +44,7 @@ public class WechatMaAuthService {
         try {
             wxMaService.setWxMaConfig(wxMaConfig);
         } catch (Exception e) {
-            // 微信小程序认证配置错误: {0}
+            // 微信: 微信小程序认证配置错误: {0}
             throw new OperationFailException("error.channel.wechat.maAuthConfigError", e.getMessage());
         }
         return wxMaService;

@@ -39,11 +39,12 @@ public class DictItemService {
 
         // 在同一个Dict不允许存在相同code的DictItem
         if (dictItemManager.existsByCode(param.getCode(), param.getDictId())) {
-            // 字典项编码重复
+            // 系统: 字典项编码重复
             throw new BizException(CommonCode.FAIL_CODE, "error.system.dict.itemCodeDuplicate");
         }
 
         Dict dict = dictManager.findById(param.getDictId())
+                // 系统: 字典不存在
                 .orElseThrow(() -> new DataNotExistException("error.system.dict.notExist"));
         param.setDictCode(dict.getCode());
         DictItem dictItem = DictConvert.CONVERT.convert(param);
@@ -55,11 +56,12 @@ public class DictItemService {
     public void update(DictItemParam param) {
         // 判断字典item是否存在
         DictItem dictItem = dictItemManager.findById(param.getId())
+                // 系统: 字典项不存在
                 .orElseThrow(() -> new DataNotExistException("error.system.dict.itemNotExist"));
 
         // 判断是否有重复code的Item
         if (dictItemManager.existsByCode(dictItem.getDictCode(), param.getDictId(), param.getId())) {
-            // 字典项编码重复
+            // 系统: 字典项编码重复
             throw new BizException(CommonCode.FAIL_CODE, "error.system.dict.itemCodeDuplicate");
         }
         DictConvert.CONVERT.copy(param, dictItem);
@@ -73,7 +75,9 @@ public class DictItemService {
 
     /// 根据ID查询指定内容
     public DictItemResult findById(Long id) {
-        return dictItemManager.findById(id).map(DictItem::toResult).orElseThrow(() -> new DataNotExistException("error.system.dict.itemNotExist"));
+        return dictItemManager.findById(id).map(DictItem::toResult)
+                // 系统: 字典项不存在
+                .orElseThrow(() -> new DataNotExistException("error.system.dict.itemNotExist"));
     }
 
     /// 根据字典编码和字典项编码查询启用的菜单项

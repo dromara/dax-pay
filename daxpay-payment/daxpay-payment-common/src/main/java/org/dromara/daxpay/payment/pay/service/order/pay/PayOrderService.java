@@ -27,6 +27,7 @@ public class PayOrderService {
 
     /// 同步
     public void sync(Long id) {
+        // 订单: 支付订单不存在
         PayOrder payOrder = payOrderManager.findById(id).orElseThrow(() -> new TradeNotExistException("error.payment.order.payOrderNotExist"));
         // 初始化商户和应用
         paymentAssistService.initMchAndApp(payOrder.getMchNo(),payOrder.getAppId());
@@ -35,6 +36,7 @@ public class PayOrderService {
 
     /// 关闭订单
     public void close(Long id) {
+        // 订单: 支付订单不存在
         PayOrder payOrder = payOrderManager.findById(id).orElseThrow(() -> new TradeNotExistException("error.payment.order.payOrderNotExist"));
         // 初始化商户和应用
         paymentAssistService.initMchAndApp(payOrder.getMchNo(),payOrder.getAppId());
@@ -43,6 +45,7 @@ public class PayOrderService {
 
     /// 撤销订单
     public void cancel(Long id) {
+        // 订单: 支付订单不存在
         PayOrder payOrder = payOrderManager.findById(id).orElseThrow(() -> new TradeNotExistException("error.payment.order.payOrderNotExist"));
         // 初始化商户和应用
         paymentAssistService.initMchAndApp(payOrder.getMchNo(),payOrder.getAppId());

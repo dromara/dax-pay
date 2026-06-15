@@ -26,6 +26,7 @@ public enum UserProtocolContentFormatEnum implements I18nSupport {
         return Arrays.stream(values())
                 .filter(e -> e.getCode().equalsIgnoreCase(code))
                 .findFirst()
+                // 通用: 未知的用户协议内容格式
                 .orElseThrow(() -> new BizException("error.common.enumUnknown", "UserProtocolContentFormat"));
     }
 }

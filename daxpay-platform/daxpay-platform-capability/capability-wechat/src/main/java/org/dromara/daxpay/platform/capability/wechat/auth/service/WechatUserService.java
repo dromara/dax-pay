@@ -71,11 +71,11 @@ public class WechatUserService {
                 throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.channel.用户未关注公众号");
             }
             
-            // 获取用户信息失败: {0}
+            // 微信: 获取用户信息失败: {0}
             throw new OperationFailException("error.channel.wechat.userInfoFetchFailed", e.getError().getErrorMsg());
         } catch (Exception e) {
             log.error("获取公众号用户信息异常，openId: {}", openId, e);
-            // 获取用户信息异常: {0}
+            // 微信: 获取用户信息异常: {0}
             throw new OperationFailException("error.channel.wechat.userInfoFetchError", e.getMessage());
         }
     }
@@ -88,7 +88,7 @@ public class WechatUserService {
     public WechatPhoneResult getPhoneNumber(String code, String appId, String appSecret) {
         // 验证参数
         if (StrUtil.isBlank(code) || StrUtil.isBlank(appId) || StrUtil.isBlank(appSecret)) {
-            // 参数不能为空
+            // 微信: 参数不能为空
             throw new OperationFailException("error.channel.wechat.paramsRequired");
         }
         
@@ -114,11 +114,11 @@ public class WechatUserService {
             
         } catch (WxErrorException e) {
             log.error("获取小程序用户手机号失败，错误: {}", e.getMessage());
-            // 获取手机号失败: {0}
+            // 微信: 获取手机号失败: {0}
             throw new OperationFailException("error.channel.wechat.phoneFetchFailed", e.getError().getErrorMsg());
         } catch (Exception e) {
             log.error("获取小程序用户手机号异常", e);
-            // 获取手机号异常: {0}
+            // 微信: 获取手机号异常: {0}
             throw new OperationFailException("error.channel.wechat.phoneFetchError", e.getMessage());
         }
     }

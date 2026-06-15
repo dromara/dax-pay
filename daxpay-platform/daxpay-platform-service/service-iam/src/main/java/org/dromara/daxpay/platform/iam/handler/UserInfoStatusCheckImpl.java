@@ -33,7 +33,7 @@ public class UserInfoStatusCheckImpl implements UserInfoStatusCheck {
         // 判断当前终端是否允许内置超管生效
         if (userDetail.isAdmin() && (!authProperties.isEnableAdmin()
                 || !Objects.equals(ClientEnum.ADMIN.getCode(), clientCode))) {
-            // 当前终端未开启内置超管登录能力
+            // 认证: 当前终端未开启内置超管登录能力
             throw new LoginFailureException("error.auth.builtinAdminLoginDisabled");
         }
         // 管理员跳过各种限制
@@ -42,7 +42,7 @@ public class UserInfoStatusCheckImpl implements UserInfoStatusCheck {
         }
         //  判断用户是否被禁用
         if (Objects.equals(userDetail.getStatus(), UserStatusEnum.BAN)){
-            // 该用户已被禁用
+            // 认证: 该用户已被禁用
             throw new LoginFailureException("error.auth.userDisabled");
         }
     }

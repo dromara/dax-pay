@@ -45,6 +45,7 @@ public class SqlInjectionUtil {
             if (value.contains(s)) {
                 log.error("请注意，存在SQL注入关键词---> {}", s);
                 log.error("请注意，值可能存在SQL注入风险!---> {}", value);
+                // 通用: 检测到SQL注入关键词
                 throw new DangerSqlException("error.common.dangerSqlWithValue", value);
             }
         }
@@ -55,12 +56,14 @@ public class SqlInjectionUtil {
                 if (value.contains(s)) {
                     log.error("请注意，存在SQL注入关键词---> {}", s);
                     log.error("请注意，值可能存在SQL注入风险!---> {}", value);
+                    // 通用: 检测到SQL注入关键词
                     throw new DangerSqlException("error.common.dangerSqlWithValue", value);
                 }
             }
         }
         // 除了XSS_STR这些提前设置好的，还需要额外的校验比如 单引号
         if (Pattern.matches(SHOW_TABLES, value) || Pattern.matches(REGULAR_EXPRE_USER, value)) {
+            // 通用: 检测到SQL注入关键词
             throw new DangerSqlException("error.common.dangerSqlWithValue", value);
         }
     }
@@ -86,6 +89,7 @@ public class SqlInjectionUtil {
                 if (value.contains(s)) {
                     log.error("请注意，存在SQL注入关键词---> {}", s);
                     log.error("请注意，值可能存在SQL注入风险!---> {}", value);
+                    // 通用: 检测到SQL注入关键词
                     throw new DangerSqlException("error.common.dangerSqlWithValue", value);
                 }
             }
@@ -96,12 +100,14 @@ public class SqlInjectionUtil {
                     if (value.contains(s)) {
                         log.error("请注意，存在SQL注入关键词---> {}", s);
                         log.error("请注意，值可能存在SQL注入风险!---> {}", value);
+                        // 通用: 检测到SQL注入关键词
                         throw new DangerSqlException("error.common.dangerSqlWithValue", value);
                     }
                 }
             }
             // 除了XSS_STR这些提前设置好的，还需要额外的校验比如 单引号
             if (Pattern.matches(SHOW_TABLES, value) || Pattern.matches(REGULAR_EXPRE_USER, value)) {
+                // 通用: 检测到SQL注入关键词
                 throw new DangerSqlException("error.common.dangerSqlWithValue", value);
             }
         }

@@ -32,6 +32,7 @@ public enum UserProtocolTypeEnum implements I18nSupport {
         return Arrays.stream(values())
                 .filter(e -> e.getCode().equalsIgnoreCase(code))
                 .findFirst()
+                // 通用: 未知的用户协议类型
                 .orElseThrow(() -> new BizException("error.common.enumUnknown", "UserProtocolType"));
     }
 }

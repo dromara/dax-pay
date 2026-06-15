@@ -33,9 +33,10 @@ public class MerchantInfoService implements MerchantAssistQueryService {
     public MerchantInfoResult getMerchant() {
         String mchNo = apiContext.getTradeInfo().getMchNo();
         if (mchNo == null){
-            // 数据错误, 未发现商户号
+            // 商户: 数据错误, 未发现商户号
             throw new BizInfoException(CommonCode.FAIL_CODE, "error.payment.merchant.dataErrorNoMchNo");
         }
+        // 商户: 商户不存在
         return merchantInfoManager.findByMchNo(mchNo).map(MerchantInfo::toResult).orElseThrow(() -> new DataNotExistException("error.payment.merchant.mchNotExist"));
     }
 
@@ -43,10 +44,11 @@ public class MerchantInfoService implements MerchantAssistQueryService {
     public void update(MerchantInfoParam param) {
         String mchNo = apiContext.getTradeInfo().getMchNo();
         if (mchNo == null){
-            // 数据错误, 未发现商户号
+            // 商户: 数据错误, 未发现商户号
             throw new BizInfoException(CommonCode.FAIL_CODE, "error.payment.merchant.dataErrorNoMchNo");
         }
         MerchantInfo merchant = merchantInfoManager.findByMchNo(mchNo)
+                // 商户: 商户不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.merchant.mchNotExist"));
         MerchantInfoConvert.CONVERT.copy(param, merchant);
         merchantInfoManager.updateById(merchant);

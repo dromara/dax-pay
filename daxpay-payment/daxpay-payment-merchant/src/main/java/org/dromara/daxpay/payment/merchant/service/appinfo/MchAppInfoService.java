@@ -63,9 +63,11 @@ public class MchAppInfoService implements MchAppInfoAssistQueryService {
             mchNo = param.getMchNo();
         }
         if (mchNo == null) {
+            // 商户: 数据错误，未发现商户号
             throw new BizInfoException(CommonCode.FAIL_CODE, "error.payment.merchant.dataErrorNoMchNo");
         }
         MerchantInfo merchant = merchantInfoManager.findByMchNo(mchNo)
+                // 商户: 商户不存在
                 .orElseThrow(() -> new BizException(CommonCode.FAIL_CODE, "error.payment.merchant.mchNotExist"));
         param.setMchNo(mchNo);
         // 新建应用默认为非默认，需通过 setDefault 或编辑时手动指定
@@ -81,6 +83,7 @@ public class MchAppInfoService implements MchAppInfoAssistQueryService {
     @Transactional(rollbackFor = Exception.class)
     public void update(MchAppInfoParam param) {
         var mchApp = mchAppInfoManager.findById(param.getId())
+                // 商户: 商户应用不存在
                 .orElseThrow(() -> new ConfigNotExistException("error.payment.merchant.mchAppNotFound"));
         boolean defaultApp = mchApp.isDefaultApp();
         this.checkApp(mchApp);
@@ -100,10 +103,12 @@ public class MchAppInfoService implements MchAppInfoAssistQueryService {
     public void setDefault(Long id) {
         // 先清除默认应用
         MchAppInfo mchApp = mchAppInfoManager.findById(id)
+                // 商户: 商户应用不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.merchant.mchAppNotFound"));
         mchAppInfoManager.clearDefault(mchApp.getMchNo());
         // 已经更新, 需要重新查询
         mchApp = mchAppInfoManager.findById(id)
+                // 商户: 商户应用不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.merchant.mchAppNotFound"));
         mchApp.setDefaultApp(true);
         mchAppInfoManager.updateById(mchApp);
@@ -113,6 +118,7 @@ public class MchAppInfoService implements MchAppInfoAssistQueryService {
     @Transactional(rollbackFor = Exception.class)
     public void clearDefault(Long id) {
         MchAppInfo mchApp = mchAppInfoManager.findById(id)
+                // 商户: 商户应用不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.merchant.mchAppNotFound"));
         mchApp.setDefaultApp(false);
         mchAppInfoManager.updateById(mchApp);
@@ -134,6 +140,7 @@ public class MchAppInfoService implements MchAppInfoAssistQueryService {
     /// 根据应用AppId获取应用详情
     public MchAppInfoResult findByAppId(String appId) {
         MchAppInfo mchApp = mchAppInfoManager.findByAppId(appId)
+                // 商户: 商户应用不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.merchant.mchAppNotFound"));
         this.checkApp(mchApp);
         return mchApp.toResult();
@@ -142,6 +149,7 @@ public class MchAppInfoService implements MchAppInfoAssistQueryService {
     /// 获取单条
     public MchAppInfoResult findById(Long id) {
         var mchApp = mchAppInfoManager.findById(id)
+                // 商户: 商户应用不存在
                 .orElseThrow(() -> new ConfigNotExistException("error.payment.merchant.mchAppNotFound"));
         this.checkApp(mchApp);
         return mchApp.toResult();
@@ -154,6 +162,7 @@ public class MchAppInfoService implements MchAppInfoAssistQueryService {
         }
         // 判断商户状态
         MerchantInfo merchantInfo = merchantInfoManager.findByMchNo(mchNo)
+                // 商户: 商户不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.merchant.mchNotExist"));
         if (!Objects.equals(merchantInfo.getStatus(), MerchantStatusEnum.ENABLE.getCode())) {
             throw new ConfigNotEnableException(CommonCode.FAIL_CODE, "pay.error.assist.mchNotEnabled");
@@ -177,10 +186,12 @@ public class MchAppInfoService implements MchAppInfoAssistQueryService {
     /// 删除
     public void delete(Long id) {
         MchAppInfo mchApp = mchAppInfoManager.findById(id)
+                // 商户: 商户应用不存在
                 .orElseThrow(() -> new ConfigNotExistException("error.payment.merchant.mchAppNotFound"));
         this.checkApp(mchApp);
         // 查看是否有配置的支付配置
         if (channelConfigManager.existedByField(ChannelConfig::getAppId, mchApp.getAppId())) {
+            // 商户: 商户应用存在通道配置，无法删除
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.merchant.mchAppHasChannelConfig");
         }
         mchAppInfoManager.deleteById(id);
@@ -195,6 +206,7 @@ public class MchAppInfoService implements MchAppInfoAssistQueryService {
             }
             appId = "A" + RandomUtil.randomNumbers(16);
         }
+        // 商户: 应用号生成失败
         throw new BizException(CommonCode.FAIL_CODE, "error.payment.merchant.appNoGenFailed");
     }
 
@@ -202,6 +214,7 @@ public class MchAppInfoService implements MchAppInfoAssistQueryService {
     public void checkApp(MchAppInfo mchApp) {
         if (clientCodeService.getClientCode().equals(ClientEnum.MERCHANT.getCode())) {
             if (!mchApp.getMchNo().equals(apiContext.getTradeInfo().getMchNo())) {
+                // 商户: 商户应用不匹配
                 throw new ConfigErrorException("error.payment.merchant.mchAppNoMatch");
             }
         }

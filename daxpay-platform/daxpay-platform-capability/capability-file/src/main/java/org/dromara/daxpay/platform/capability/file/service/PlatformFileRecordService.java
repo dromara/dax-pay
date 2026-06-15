@@ -39,6 +39,7 @@ public class PlatformFileRecordService {
     /// 查询详情
     public PlatformFileRecordResult findById(Long id) {
         return platformFileRecordManager.findByIdNotDeleted(id)
+                // 文件: 文件记录不存在
                 .orElseThrow(() -> new DataNotExistException("error.file.platformRecordNotExist"))
                 .toResult();
     }

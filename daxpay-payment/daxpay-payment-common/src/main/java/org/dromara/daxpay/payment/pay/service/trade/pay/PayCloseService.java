@@ -60,6 +60,7 @@ public class PayCloseService {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.orderNoRequired");
         }
         PayOrder payOrder = payOrderQueryService.findAnyOrderNo(param.getOrderNo(), param.getBizOrderNo(), param.getAppId())
+                // 订单: 支付订单不存在
                 .orElseThrow(() -> new TradeNotExistException("error.payment.order.payOrderNotExist"));
         this.closeOrder(payOrder, param.isUseCancel());
 

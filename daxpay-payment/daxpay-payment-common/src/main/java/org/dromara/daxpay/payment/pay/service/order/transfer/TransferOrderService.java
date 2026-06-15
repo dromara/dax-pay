@@ -43,6 +43,7 @@ public class TransferOrderService {
     /// 同步
     public void sync(Long id) {
         var transferOrder = transferOrderManager.findById(id)
+                // 订单: 转账订单不存在
                 .orElseThrow(() -> new TradeNotExistException("error.payment.order.transferOrderNotExist"));
         // 初始化商户和应用
         paymentAssistService.initMchAndApp(transferOrder.getMchNo(),transferOrder.getAppId());
@@ -53,6 +54,7 @@ public class TransferOrderService {
     /// 转账重试
     public void retry(Long id) {
         var transferOrder = transferOrderManager.findById(id)
+                // 订单: 转账订单不存在
                 .orElseThrow(() -> new TradeNotExistException("error.payment.order.transferOrderNotExist"));
         // 初始化商户和应用
         paymentAssistService.initMchAndApp(transferOrder.getMchNo(),transferOrder.getAppId());
@@ -77,6 +79,7 @@ public class TransferOrderService {
     /// 转账关闭
     public void close(Long id) {
         var transferOrder = transferOrderManager.findById(id)
+                // 订单: 转账订单不存在
                 .orElseThrow(() -> new TradeNotExistException("error.payment.order.transferOrderNotExist"));
         // 初始化商户和应用
         paymentAssistService.initMchAndApp(transferOrder.getMchNo(),transferOrder.getAppId());

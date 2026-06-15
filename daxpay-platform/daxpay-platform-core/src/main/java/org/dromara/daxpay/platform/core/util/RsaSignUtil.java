@@ -33,7 +33,7 @@ public class RsaSignUtil {
             KeyFactory kf = KeyFactory.getInstance("RSA");
             return kf.generatePrivate(keySpec);
         } catch (Exception e) {
-            // 私钥解析失败，需要为 PKCS#8 格式的Rsa私钥
+            // 通用: 私钥解析失败，需要为 PKCS#8 格式的Rsa私钥
             throw new ValidationFailedException("error.common.rsaPrivateKeyParseFailed");
         }
     }
@@ -51,7 +51,7 @@ public class RsaSignUtil {
             KeyFactory kf = KeyFactory.getInstance("RSA");
             return kf.generatePublic(keySpec);
         } catch (Exception e) {
-            // 公钥解析失败，需要为 PKCS#8 格式的Rsa公钥
+            // 通用: 公钥解析失败，需要为 PKCS#8 格式的Rsa公钥
             throw new ValidationFailedException("error.common.rsaPublicKeyParseFailed");
         }
     }

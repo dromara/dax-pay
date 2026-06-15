@@ -34,6 +34,7 @@ public class AlipayDirectChannelMerchantService {
         // 校验同一商户下 PID 不重复
         if (alipayDirectChannelMerchantManager.existsByMchNoAndAlipayUserId(
                 param.getMchNo(), param.getAlipayUserId())) {
+            // 支付宝: 同一商户下该支付宝商户已存在
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.alipay.directMchDuplicate");
         }
         // 生成通道商户号(雪花号, 不再使用 alipayUserId)
@@ -62,6 +63,7 @@ public class AlipayDirectChannelMerchantService {
                 .eq(AlipayDirectChannelMerchant::getChannelMchNo, channelMchNo)
                 .oneOpt()
                 .map(AlipayDirectChannelMerchant::toResult)
+                // 支付宝: 通道商户配置不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
     }
 }
