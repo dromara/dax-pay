@@ -30,7 +30,7 @@
         <!-- 三方库 -->
         <mapstruct.version>1.6.3</mapstruct.version>
         <lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
-        <wxjava.version>4.8.2</wxjava.version>
+        <wxjava.version>4.8.4.B</wxjava.version>
         <alipay.version>4.40.272.ALL</alipay.version>
     </properties>
 

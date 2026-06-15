@@ -13,7 +13,7 @@
     <description>微信公众号和小程序管理服务</description>
 
     <properties>
-        <wxjava.version>4.8.1.B</wxjava.version>
+        <wxjava.version>4.8.4.B</wxjava.version>
     </properties>
 
     <dependencies>

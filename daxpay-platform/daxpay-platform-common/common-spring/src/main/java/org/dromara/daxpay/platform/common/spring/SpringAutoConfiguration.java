@@ -4,7 +4,6 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.retry.annotation.EnableRetry;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.util.TimeZone;
@@ -12,7 +11,6 @@ import java.util.TimeZone;
 /// # spring默认配置
 ///
 @EnableScheduling
-@EnableRetry
 @ComponentScan
 @ConfigurationPropertiesScan
 @AutoConfiguration

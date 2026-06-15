@@ -26,7 +26,6 @@
         <!-- 三方库 -->
         <mapstruct.version>1.6.3</mapstruct.version>
         <lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
-        <autopoi.version>1.4.8</autopoi.version>
     </properties>
 
     <dependencies>

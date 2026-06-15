@@ -23,12 +23,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aspectj</artifactId>
         </dependency>
-        <!-- 重试库 -->
-        <dependency>
-            <groupId>org.springframework.retry</groupId>
-            <artifactId>spring-retry</artifactId>
-            <version>2.0.11</version>
-        </dependency>
+
         <!-- hutool 扩展 -->
         <dependency>
             <groupId>cn.hutool</groupId>

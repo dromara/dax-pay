@@ -23,10 +23,9 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- 三方库 -->
-        <mapstruct.version>1.5.5.Final</mapstruct.version>
+        <mapstruct.version>1.6.3</mapstruct.version>
         <lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
-        <wxjava.version>4.8.1.B</wxjava.version>
-        <httpclient.version>4.5.14</httpclient.version>
+        <wxjava.version>4.8.4.B</wxjava.version>
 
     </properties>
 
