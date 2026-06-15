@@ -65,6 +65,16 @@ public enum PayMethodEnum implements I18nSupport {
     /// 银联付款码
     UNION_PAY_BARCODE("union_pay_barcode"),
 
+    /* 抖音 */
+    /// 抖音扫码支付
+    DOUYIN_QR("douyin_qr"),
+    /// 抖音JSAPI支付
+    DOUYIN_JSAPI("douyin_jsapi"),
+    /// 抖音H5支付
+    DOUYIN_H5("douyin_h5"),
+    /// 抖音APP支付
+    DOUYIN_APP("douyin_app"),
+
     /* 卡组 */
     /// Visa 网关支付
     VISA_CARD_GATEWAY("visa_card_gateway"),

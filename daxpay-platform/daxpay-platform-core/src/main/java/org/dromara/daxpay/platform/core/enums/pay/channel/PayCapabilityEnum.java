@@ -63,6 +63,16 @@ public enum PayCapabilityEnum implements I18nSupport {
     /// 银联 JSAPI
     UNION_PAY_JSAPI("union_pay_jsapi"),
 
+    /* 抖音 */
+    /// 抖音扫码
+    DOUYIN_QR("douyin_qr"),
+    /// 抖音 JSAPI
+    DOUYIN_JSAPI("douyin_jsapi"),
+    /// 抖音 H5
+    DOUYIN_H5("douyin_h5"),
+    /// 抖音 APP
+    DOUYIN_APP("douyin_app"),
+
     /* 卡组 */
     /// Visa 网关
     VISA_CARD_GATEWAY("visa_card_gateway"),

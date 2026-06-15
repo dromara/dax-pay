@@ -25,6 +25,8 @@ public enum PayProviderEnum implements I18nSupport {
     VISA("visa"),
     /// 万事达卡组织
     MASTERCARD("mastercard"),
+    /// 抖音支付
+    DOUYIN("douyin"),
     ;
     private final String code;
 
