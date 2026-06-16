@@ -1,8 +1,8 @@
 package org.dromara.daxpay.payment.strategy.sync;
 
 import org.dromara.daxpay.payment.common.strategy.PaymentStrategy;
-import org.dromara.daxpay.payment.old.pay.bo.sync.PaySyncResultBo;
-import org.dromara.daxpay.payment.old.pay.entity.order.pay.PayOrder;
+import org.dromara.daxpay.payment.pay.bo.PaySyncResultBo;
+import org.dromara.daxpay.payment.pay.order.entity.PayTrade;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,8 +12,8 @@ import lombok.Setter;
 @Setter
 public abstract class AbsSyncPayOrderStrategy implements PaymentStrategy {
 
-    /// 支付订单
-    private PayOrder order = null;
+    /// 资金交易凭证
+    private PayTrade trade = null;
 
     /// 查询通道网关方的退款订单状态信息
     public abstract PaySyncResultBo doSync();

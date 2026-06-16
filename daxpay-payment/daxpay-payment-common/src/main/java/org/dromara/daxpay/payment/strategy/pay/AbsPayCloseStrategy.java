@@ -2,7 +2,7 @@ package org.dromara.daxpay.payment.strategy.pay;
 
 import org.dromara.daxpay.payment.common.strategy.PaymentStrategy;
 import org.dromara.daxpay.platform.core.enums.pay.pay.CloseTypeEnum;
-import org.dromara.daxpay.payment.old.pay.entity.order.pay.PayOrder;
+import org.dromara.daxpay.payment.pay.order.entity.PayTrade;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,14 +12,14 @@ import lombok.Setter;
 @Setter
 public abstract class AbsPayCloseStrategy implements PaymentStrategy {
 
-    /// 支付订单
-    private PayOrder order = null;
+    /// 资金交易凭证
+    private PayTrade trade = null;
 
     /// 是否使用撤销方式进行订单关闭
     private boolean useCancel = false;
 
-    public void init(PayOrder order, boolean useCancel){
-        this.order = order;
+    public void init(PayTrade trade, boolean useCancel){
+        this.trade = trade;
         this.useCancel = useCancel;
     }
 

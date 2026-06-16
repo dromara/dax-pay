@@ -1,4 +1,4 @@
-package org.dromara.daxpay.payment.pay.trade.entity;
+package org.dromara.daxpay.payment.pay.order.entity;
 
 import org.dromara.daxpay.payment.common.entity.merchant.MchAppBaseEntity;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
@@ -34,13 +34,26 @@ public class PayTrade extends MchAppBaseEntity {
     /// normal → pay_normal_order / authorize/capture → pay_auth / recurring → pay_recurring / combine_sub → pay_combine
     private Long containerId;
 
+    /// 支付产品编码，策略工厂通过此字段创建策略
+    /// @see org.dromara.daxpay.platform.core.enums.pay.channel.ProductEnum
+    private String product;
+
     /// 支付通道
     private String channel;
 
     /// 支付方式
+    /// @see org.dromara.daxpay.platform.core.enums.pay.channel.PayMethodEnum
     private String method;
 
+    /// 其他支付方式，method=other 时生效
+    private String otherMethod;
+
+    /// 限制支付类型（如限制信用卡）
+    /// @see org.dromara.daxpay.platform.core.enums.unipay.PayLimitPayEnum
+    private String limitPay;
+
     /// 支付渠道（微信/支付宝/银联等，三方通道透传时填）
+    /// @see org.dromara.daxpay.platform.core.enums.pay.channel.PayProviderEnum
     private String provider;
 
     /// 本次交易金额（最小货币单位）
@@ -67,6 +80,42 @@ public class PayTrade extends MchAppBaseEntity {
 
     /// 订单来源
     private String source;
+
+    /// 通道订单号（三方通道返回的订单号）
+    private String outOrderNo;
+
+    /// 透传订单号（三方通道产生的透传订单号）
+    private String transOrderNo;
+
+    /// 特殊通道关联订单号（部分通道订单号有前缀/长度限制时使用）
+    private String relationOrderNo;
+
+    /// 付款用户 ID（支付宝 buyer_user_id 等）
+    private String buyerId;
+
+    /// 微信 openid（jsapi/app/miniapp）
+    private String openid;
+
+    /// 通道方记录的支付产品
+    private String tradeProduct;
+
+    /// 通道方记录的交易方式
+    private String tradeWay;
+
+    /// 银行卡类型（借记卡/贷记卡）
+    private String bankType;
+
+    /// 付款码（被扫支付）
+    private String barCode;
+
+    /// 活动类型
+    private String promotionType;
+
+    /// 支付参数体（如微信 prepay_id 组装串）
+    private String payBody;
+
+    /// 支付参数体类型（jsapi/sdk/app）
+    private String payBodyType;
 
     /// 错误信息
     @TableField(updateStrategy = FieldStrategy.ALWAYS)

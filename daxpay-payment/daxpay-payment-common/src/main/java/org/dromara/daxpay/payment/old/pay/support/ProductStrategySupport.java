@@ -1,6 +1,6 @@
 package org.dromara.daxpay.payment.old.pay.support;
 
-import org.dromara.daxpay.payment.old.pay.strategy.AbsProductStrategy;
+import org.dromara.daxpay.payment.strategy.product.AbsProductStrategy;
 import org.dromara.daxpay.platform.core.enums.pay.channel.PayCapabilityEnum;
 import org.dromara.daxpay.platform.core.enums.pay.channel.PayMethodEnum;
 import org.dromara.daxpay.platform.core.enums.pay.channel.PayProviderEnum;

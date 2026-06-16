@@ -3,8 +3,8 @@ package org.dromara.daxpay.payment.common.util;
 import org.dromara.daxpay.platform.core.enums.pay.channel.PayProviderEnum;
 import org.dromara.daxpay.platform.core.exception.business.UnsupportedAbilityException;
 import org.dromara.daxpay.payment.common.strategy.PaymentStrategy;
-import org.dromara.daxpay.payment.pay.strategy.AbsProductStrategy;
-import org.dromara.daxpay.payment.pay.support.ProductStrategySupport;
+import org.dromara.daxpay.payment.strategy.product.AbsProductStrategy;
+import org.dromara.daxpay.payment.old.pay.support.ProductStrategySupport;
 import cn.hutool.extra.spring.SpringUtil;
 import lombok.experimental.UtilityClass;
 

@@ -1,9 +1,9 @@
 package org.dromara.daxpay.payment.strategy.pay;
 
 import org.dromara.daxpay.payment.common.strategy.PaymentStrategy;
+import org.dromara.daxpay.payment.pay.bo.PayTradeResultBo;
+import org.dromara.daxpay.payment.pay.order.entity.PayTrade;
 import org.dromara.daxpay.payment.unipay.param.trade.pay.PayParam;
-import org.dromara.daxpay.payment.old.pay.bo.trade.PayResultBo;
-import org.dromara.daxpay.payment.old.pay.entity.order.pay.PayOrder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -13,15 +13,15 @@ import lombok.Setter;
 @Setter
 public abstract class AbsPayStrategy implements PaymentStrategy {
 
-    /// 支付订单
-    private PayOrder order = null;
+    /// 资金交易凭证
+    private PayTrade trade = null;
 
     /// 支付参数
     private PayParam payParam = null;
 
-    /// 初始化支付的参数支付上下文
-    public void initPayParam(PayOrder order, PayParam payParam) {
-        this.order = order;
+    /// 初始化支付的参数
+    public void initPayParam(PayTrade trade, PayParam payParam) {
+        this.trade = trade;
         this.payParam = payParam;
     }
 
@@ -32,7 +32,7 @@ public abstract class AbsPayStrategy implements PaymentStrategy {
 
     /// 支付操作
     /// 出现错误会保存相关信息
-    public abstract PayResultBo doPayHandler();
+    public abstract PayTradeResultBo doPayHandler();
 
 }
 
