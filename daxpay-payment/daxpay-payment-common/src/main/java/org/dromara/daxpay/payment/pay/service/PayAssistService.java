@@ -40,14 +40,19 @@ public class PayAssistService {
     private final PayTradeManager payTradeManager;
     private final MchAppInfoAssistQueryService mchAppInfoAssistQueryService;
 
+    /// 解析应用号：param 有则用，无则取商户默认应用并回填到 param
+    public void resolveApp(PayParam payParam) {
+        if (StrUtil.isBlank(payParam.getAppId())) {
+            String appId = mchAppInfoAssistQueryService.findDefaultAppId(payParam.getMchNo());
+            payParam.setAppId(appId);
+        }
+    }
+
     /// 创建支付订单（容器 + 资金交易）
+    /// 调用方需保证 appId 和 product 已解析完毕
     @Transactional(rollbackFor = Exception.class)
     public PayTrade createOrder(PayParam payParam) {
-        // 解析应用号：有传输则使用，无则取商户默认应用
         String appId = payParam.getAppId();
-        if (StrUtil.isBlank(appId)) {
-            appId = mchAppInfoAssistQueryService.findDefaultAppId(payParam.getMchNo());
-        }
         OffsetDateTime expiredTime = this.getExpiredTime(payParam.getExpiredTime());
         Long amount = Long.valueOf(PayUtil.convertCentAmount(payParam.getAmount()));
         // 从产品编码派生通道编码

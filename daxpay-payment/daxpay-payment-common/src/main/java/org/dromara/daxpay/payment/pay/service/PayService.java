@@ -8,6 +8,7 @@ import org.dromara.daxpay.payment.common.util.PaymentStrategyFactory;
 import org.dromara.daxpay.payment.pay.bo.PayTradeResultBo;
 import org.dromara.daxpay.payment.pay.order.dao.PayTradeManager;
 import org.dromara.daxpay.payment.pay.order.entity.PayTrade;
+import org.dromara.daxpay.payment.pay.service.route.PayRouteFacade;
 import cn.hutool.core.util.StrUtil;
 import org.dromara.daxpay.payment.strategy.pay.AbsPayStrategy;
 import org.dromara.daxpay.payment.unipay.param.trade.pay.PayParam;
@@ -33,6 +34,7 @@ public class PayService {
     private final PayUniHandleService payUniHandleService;
     private final LockTemplate lockTemplate;
     private final PayTradeManager payTradeManager;
+    private final PayRouteFacade payRouteFacade;
 
     /// 支付入口
     public PayResult pay(PayParam payParam) {
@@ -52,6 +54,15 @@ public class PayService {
 
     /// 支付操作
     public PayResult payHandle(PayParam payParam, PayTrade trade) {
+        // 解析应用号：空则取商户默认应用
+        payAssistService.resolveApp(payParam);
+        // 重付场景：已有订单且 param 未传产品时，复用首次产品，不重复路由
+        if (Objects.nonNull(trade) && StrUtil.isBlank(payParam.getProduct())
+                && StrUtil.isNotBlank(trade.getProduct())) {
+            payParam.setProduct(trade.getProduct());
+        }
+        // 路由解析：已指定 product 则跳过，否则按 appId+method 策略匹配
+        payRouteFacade.resolve(payParam);
         var payStrategy = PaymentStrategyFactory.createByProduct(payParam.getProduct(), AbsPayStrategy.class);
         payStrategy.setPayParam(payParam);
         // 订单不存在，新建支付订单

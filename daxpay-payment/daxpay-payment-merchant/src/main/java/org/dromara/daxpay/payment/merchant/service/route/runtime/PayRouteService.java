@@ -1,6 +1,5 @@
 package org.dromara.daxpay.payment.merchant.service.route.runtime;
 
-import org.dromara.daxpay.payment.common.context.PaymentContext;
 import org.dromara.daxpay.payment.merchant.dao.route.basic.PayRouteBasicConfigManager;
 import org.dromara.daxpay.payment.merchant.dao.route.scene.PayRouteSceneConfigManager;
 import org.dromara.daxpay.payment.merchant.dao.route.strategy.PayRouteStrategyManager;
@@ -21,9 +20,9 @@ import org.springframework.stereotype.Service;
 
 /// # 支付通道路由服务
 ///
-/// 实现 PayRouteFacade，供管理端按策略模式解析通道、方式与产品。
-/// `resolve` 暂未接入支付切面（起步阶段仅配置态）；实付接入时再打开 PaymentVerifyAspect 调用。
-/// 当前仅实现基础模式与场景模式。
+/// 实现 PayRouteFacade，供 PayService 在支付流程中调用。
+/// 已指定 product 则跳过；否则按 appId 加载策略，经基础/场景模式匹配后回填 product。
+/// 调用方需保证 appId 已解析完毕。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -34,19 +33,14 @@ public class PayRouteService implements PayRouteFacade {
     private final PayRouteBasicConfigManager basicConfigManager;
     private final PayRouteProductResolver productResolver;
     private final PayRouteBasicMatcher basicMatcher;
-    private final PaymentContext paymentContext;
 
-    /// 实付路由解析：已指定 product 则跳过；否则按策略模式匹配并回填 PayParam（暂未接入支付切面）
+    /// 实付路由解析：已指定 product 则跳过；否则按策略模式匹配并回填 product
     @Override
     public void resolve(PayParam payParam) {
         if (StrUtil.isNotBlank(payParam.getProduct())) {
             return;
         }
         String appId = payParam.getAppId();
-        if (StrUtil.isBlank(appId)) {
-            appId = paymentContext.getTradeInfo().getAppId();
-            payParam.setAppId(appId);
-        }
         var bundle = loadBundle(appId);
         if (bundle == null || bundle.getStrategy() == null) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.route.error.strategyNotFound");
@@ -83,13 +77,11 @@ public class PayRouteService implements PayRouteFacade {
         return PayRouteSceneMatcher.match(bundle.getSceneConfigs(), payParam);
     }
 
-    /// 将命中结果写入 PayParam；产品为空时按通道+方式反查商户产品
+    /// 将命中结果写入 PayParam：仅回填 product（channel 从 ProductEnum 派生，method 由客户端传入）
     private void fillPayParam(PayParam payParam, RouteHit hit) {
         String product = StrUtil.isNotBlank(hit.product())
                 ? hit.product()
                 : productResolver.resolve(payParam.getMchNo(), hit.channel(), hit.method());
-        payParam.setChannel(hit.channel());
-        payParam.setMethod(hit.method());
         payParam.setProduct(product);
     }
 }
