@@ -5,15 +5,18 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.dromara.daxpay.payment.common.enums.NormalOrderStatusEnum;
+import org.dromara.daxpay.payment.unipay.param.trade.pay.GoodsDetail;
 import org.dromara.daxpay.platform.core.enums.pay.channel.CurrencyEnum;
 import org.dromara.daxpay.platform.core.enums.pay.channel.PayMethodEnum;
 import org.dromara.daxpay.platform.core.enums.pay.channel.ProductEnum;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 /// # 普通支付业务单容器
 ///
@@ -23,7 +26,7 @@ import java.time.OffsetDateTime;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("pay_normal_order")
+@TableName(value = "pay_normal_order", autoResultMap = true)
 public class PayNormalOrder extends MchBaseEntity {
 
     /// 应用号
@@ -89,6 +92,10 @@ public class PayNormalOrder extends MchBaseEntity {
 
     /// 通道附加参数
     private String extraParam;
+
+    /// 订单商品明细列表（jsonb 存储）
+    @TableField(typeHandler = JacksonTypeHandler.class)
+    private List<GoodsDetail> goodsDetail;
 
     /// 客户端 IP
     private String clientIp;

@@ -188,6 +188,35 @@
     "extraParam": {
       "size": "Extra param cannot exceed 2048 characters"
     },
+    "goodsDetail": {
+      "size": "Goods detail list cannot exceed 50 items"
+    },
+    "goodsId": {
+      "notBlank": "Goods ID cannot be empty",
+      "size": "Goods ID cannot exceed 64 characters"
+    },
+    "goodsName": {
+      "notBlank": "Goods name cannot be empty",
+      "size": "Goods name cannot exceed 256 characters"
+    },
+    "quantity": {
+      "notNull": "Quantity cannot be null",
+      "min": "Quantity cannot be less than 1"
+    },
+    "unitPrice": {
+      "notNull": "Unit price cannot be null",
+      "decimalMin": "Unit price cannot be less than 0.01",
+      "digits": "Unit price precision up to cents"
+    },
+    "goodsCategory": {
+      "size": "Goods category cannot exceed 32 characters"
+    },
+    "goodsDescription": {
+      "size": "Goods description cannot exceed 1000 characters"
+    },
+    "showUrl": {
+      "size": "Show URL cannot exceed 400 characters"
+    },
     "attach": {
       "size": "Attach cannot exceed 500 characters"
     },

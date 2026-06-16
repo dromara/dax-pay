@@ -3,6 +3,7 @@ package org.dromara.daxpay.payment.unipay.param.trade.pay;
 import org.dromara.daxpay.platform.core.enums.pay.channel.ProductEnum;
 import org.dromara.daxpay.platform.core.enums.pay.channel.PayMethodEnum;
 import org.dromara.daxpay.payment.unipay.param.MerchantPaymentCommonParam;
+import jakarta.validation.Valid;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
@@ -84,6 +85,14 @@ public class PayParam extends MerchantPaymentCommonParam {
     @Schema(description = "支付扩展参数")
     @Size(max = 2048, message = "{validation.field.extraParam.size}")
     private String extraParam;
+
+    /// 订单商品明细列表
+    /// 传给支付渠道（支付宝 goods_detail / 微信 detail.goods_detail），
+    /// 用于单品营销、电子发票等场景
+    @Valid
+    @Size(max = 50, message = "{validation.field.goodsDetail.size}")
+    @Schema(description = "订单商品明细列表")
+    private List<GoodsDetail> goodsDetail;
 
     // ===== 通知回调 =====
 

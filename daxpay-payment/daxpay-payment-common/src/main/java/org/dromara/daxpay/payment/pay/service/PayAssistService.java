@@ -81,6 +81,7 @@ public class PayAssistService {
         normalOrder.setMethod(payParam.getMethod());
         normalOrder.setProduct(payParam.getProduct());
         normalOrder.setExtraParam(payParam.getExtraParam());
+        normalOrder.setGoodsDetail(payParam.getGoodsDetail());
         normalOrder.setTerminalNo(terminalNo);
         normalOrder.setAppId(appId);
         payNormalOrderManager.save(normalOrder);

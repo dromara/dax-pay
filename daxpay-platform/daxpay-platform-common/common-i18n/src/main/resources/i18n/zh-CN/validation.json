@@ -188,6 +188,35 @@
     "extraParam": {
       "size": "支付扩展参数不可超过2048位"
     },
+    "goodsDetail": {
+      "size": "商品明细列表不可超过50条"
+    },
+    "goodsId": {
+      "notBlank": "商品编码不可为空",
+      "size": "商品编码不可超过64位"
+    },
+    "goodsName": {
+      "notBlank": "商品名称不可为空",
+      "size": "商品名称不可超过256位"
+    },
+    "quantity": {
+      "notNull": "商品数量不可为空",
+      "min": "商品数量不能小于1"
+    },
+    "unitPrice": {
+      "notNull": "商品单价不可为空",
+      "decimalMin": "商品单价不可小于0.01元",
+      "digits": "商品单价精度到分"
+    },
+    "goodsCategory": {
+      "size": "商品分类不可超过32位"
+    },
+    "goodsDescription": {
+      "size": "商品描述不可超过1000位"
+    },
+    "showUrl": {
+      "size": "商品展示链接不可超过400位"
+    },
     "attach": {
       "size": "商户扩展参数不可超过500位"
     },
