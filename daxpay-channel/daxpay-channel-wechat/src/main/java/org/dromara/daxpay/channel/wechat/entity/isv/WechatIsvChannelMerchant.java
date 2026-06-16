@@ -17,7 +17,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@TableName(value = "mch_wechat_isv_channel_merchant", autoResultMap = true)
+@TableName(value = "wechat_isv_channel_merchant", autoResultMap = true)
 public class WechatIsvChannelMerchant extends MchBaseEntity implements ToResult<WechatIsvChannelMerchantResult> {
 
     /// 通道商户号(WISV+雪花)

@@ -1,5 +1,6 @@
 package org.dromara.daxpay.channel.douyin.result.direct;
 
+import org.dromara.daxpay.platform.common.json.sensitive.SensitiveInfo;
 import org.dromara.daxpay.payment.common.result.MchBaseResult;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -19,6 +20,10 @@ public class DouyinDirectAppAuthConfigResult extends MchBaseResult {
 
     @Schema(description = "关联应用ID")
     private Long douyinDirectAppId;
+
+    @SensitiveInfo
+    @Schema(description = "应用密钥 (已脱敏)")
+    private String appSecret;
 
     @Schema(description = "授权回调地址")
     private String authCallbackUrl;

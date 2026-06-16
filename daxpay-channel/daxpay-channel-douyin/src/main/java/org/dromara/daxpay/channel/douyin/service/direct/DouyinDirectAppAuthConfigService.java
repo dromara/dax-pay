@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 /// # 抖音直连商户应用授权认证配置
 ///
-/// 管理直连商户应用的授权认证配置，查询时不存在则创建默认记录，保存时校验应用归属关系。
+/// 管理直连商户应用的密钥和授权认证配置，查询时不存在则创建默认记录，保存时校验应用归属关系。
 ///
 @Slf4j
 @Service
@@ -55,6 +55,7 @@ public class DouyinDirectAppAuthConfigService {
         }
         var config = this.findByDouyinDirectAppId(param.getDouyinDirectAppId());
         config.setAuthCallbackUrl(param.getAuthCallbackUrl());
+        // Convert copy(IGNORE) 自动处理 appSecret：null 不覆盖，非 null 设置新值
         DouyinDirectAppAuthConfigConvert.CONVERT.copy(param, config);
         douyinDirectAppAuthConfigManager.updateById(config);
     }

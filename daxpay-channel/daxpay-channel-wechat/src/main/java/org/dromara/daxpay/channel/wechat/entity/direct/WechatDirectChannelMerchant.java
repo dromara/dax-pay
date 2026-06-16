@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@TableName(value = "mch_wechat_direct_channel_merchant", autoResultMap = true)
+@TableName(value = "wechat_direct_channel_merchant", autoResultMap = true)
 public class WechatDirectChannelMerchant extends MchBaseEntity implements ToResult<WechatDirectChannelMerchantResult> {
 
     /// 通道商户号(系统生成雪花号)
