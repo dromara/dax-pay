@@ -347,9 +347,6 @@
     "configName": {
       "notBlank": "Config name cannot be blank"
     },
-    "smsProvider": {
-      "notBlank": "SMS provider must not be blank"
-    },
     "endpoint": {
       "notBlank": "Endpoint cannot be blank"
     },
@@ -434,8 +431,5 @@
     "oldPassword": {
       "notBlank": "Old password cannot be blank"
     },
-    "smsConfigId": {
-      "notNull": "SMS config ID cannot be blank"
-    }
   }
 }

@@ -32,9 +32,6 @@ public class MerchantRegisterParam {
     @Schema(description = "用户绑定手机号")
     private String phone;
 
-    @Schema(description = "验证码")
-    private String smsCaptcha;
-
     @NotBlank(message = "{validation.field.account.notBlank}")
     @Schema(description = "登录账号")
     private String account;

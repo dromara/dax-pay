@@ -50,6 +50,4 @@ sa-token:
 easy-trans:
   #启用平铺模式
   is-enable-tile: true
-# 平台配置
-sms:
-  is-print: false
+

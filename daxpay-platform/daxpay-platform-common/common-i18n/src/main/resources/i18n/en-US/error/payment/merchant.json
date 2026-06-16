@@ -1,9 +1,5 @@
 {
-  "phoneRegistered": "Phone number already registered",
-  "smsSendFailed": "Failed to send verification code",
-  "smsCodeError": "Verification code is incorrect or expired",
   "mchNoGenFailed": "Merchant number generation failed",
-  "smsConfigNotExist": "SMS configuration not found, please configure SMS first",
   "accountOrPhoneNotFound": "Account or bound phone number not found",
   "accountOrPhoneError": "Account or phone number information is incorrect",
   "dataErrorNoMchNo": "Data error, merchant number not found",

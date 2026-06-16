@@ -350,9 +350,6 @@
     "configName": {
       "notBlank": "配置名称不能为空"
     },
-    "smsProvider": {
-      "notBlank": "短信服务商不可为空"
-    },
     "endpoint": {
       "notBlank": "服务端点不能为空"
     },
@@ -437,8 +434,5 @@
     "oldPassword": {
       "notBlank": "旧密码不能为空"
     },
-    "smsConfigId": {
-      "notNull": "短信配置ID不能为空"
-    }
   }
 }

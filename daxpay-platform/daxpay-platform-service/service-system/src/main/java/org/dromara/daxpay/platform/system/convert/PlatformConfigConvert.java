@@ -2,7 +2,6 @@ package org.dromara.daxpay.platform.system.convert;
 
 import org.dromara.daxpay.platform.system.entity.config.platform.PlatformOssConfig;
 import org.dromara.daxpay.platform.system.entity.config.platform.security.*;
-import org.dromara.daxpay.platform.system.entity.config.sms.PlatformSmsConfig;
 import org.dromara.daxpay.platform.system.param.config.*;
 import org.dromara.daxpay.platform.system.result.config.platform.*;
 import org.mapstruct.BeanMapping;
@@ -16,14 +15,6 @@ import org.mapstruct.factory.Mappers;
 @Mapper
 public interface PlatformConfigConvert {
     PlatformConfigConvert CONVERT = Mappers.getMapper(PlatformConfigConvert.class);
-
-    // ========== 短信配置转换（保留多记录模式） ==========
-    PlatformSmsConfigResult toResult(PlatformSmsConfig platformSmsConfig);
-
-    PlatformSmsConfig convert(PlatformSmsConfigParam param);
-
-    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void copy(PlatformSmsConfigParam param, @MappingTarget PlatformSmsConfig entity);
 
     // ========== OSS配置转换（单配置模式） ==========
     PlatformOssConfigResult toOssResult(PlatformOssConfig data);

@@ -50,13 +50,6 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- 短信服务 -->
-        <dependency>
-            <groupId>org.dromara.sms4j</groupId>
-            <artifactId>sms4j-spring-boot-starter</artifactId>
-            <version>3.3.5</version>
-        </dependency>
-
         <!-- 支付公共底座 -->
         <dependency>
             <groupId>org.dromara.daxpay</groupId>

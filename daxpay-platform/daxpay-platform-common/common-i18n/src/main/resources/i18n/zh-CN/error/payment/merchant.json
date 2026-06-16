@@ -1,9 +1,5 @@
 {
-  "phoneRegistered": "该手机号已注册",
-  "smsSendFailed": "发送验证码失败",
-  "smsCodeError": "验证码错误或已过期",
   "mchNoGenFailed": "商户号生成失败",
-  "smsConfigNotExist": "短信配置不存在，请先完成短信配置",
   "accountOrPhoneNotFound": "未找到该账号或绑定手机信息",
   "accountOrPhoneError": "账号或手机号信息不正确",
   "dataErrorNoMchNo": "数据错误, 未发现商户号",

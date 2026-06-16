@@ -6,17 +6,14 @@ import org.dromara.daxpay.platform.core.annotation.NonceVerification;
 import org.dromara.daxpay.platform.core.rest.Res;
 import org.dromara.daxpay.platform.core.rest.result.Result;
 import org.dromara.daxpay.platform.iam.auth.service.LoginContentService;
-import org.dromara.daxpay.platform.iam.auth.service.LoginSmsCaptchaService;
 import org.dromara.daxpay.platform.iam.auth.service.SecondCheckService;
 import org.dromara.daxpay.platform.iam.param.auth.LoginContentParam;
-import org.dromara.daxpay.platform.iam.param.auth.LoginSmsCaptchaSendParam;
 import org.dromara.daxpay.platform.iam.result.auth.LoginContentResult;
 import org.dromara.daxpay.platform.iam.result.auth.SecondCheckResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -33,8 +30,6 @@ public class TokenEndpoint {
     private final TokenService tokenService;
 
     private final LoginContentService loginContentService;
-
-    private final LoginSmsCaptchaService loginSmsCaptchaService;
 
     private final SecondCheckService secondCheckService;
 
@@ -57,13 +52,6 @@ public class TokenEndpoint {
     @PostMapping("/login-content")
     public Result<LoginContentResult> getLoginContent(@RequestBody(required = false) LoginContentParam param) {
         return Res.ok(loginContentService.getLoginContent(param == null ? new LoginContentParam() : param));
-    }
-
-    @Operation(summary = "发送登录短信验证码")
-    @PostMapping("/send-sms-captcha")
-    public Result<Void> sendSmsCaptcha(@RequestBody @Valid LoginSmsCaptchaSendParam param) {
-        loginSmsCaptchaService.sendSmsCaptcha(param);
-        return Res.ok();
     }
 
     @Operation(summary = "获取二次校验信息")

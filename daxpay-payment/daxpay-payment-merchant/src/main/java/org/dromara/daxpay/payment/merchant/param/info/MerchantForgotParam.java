@@ -19,7 +19,4 @@ public class MerchantForgotParam {
 
     @Schema(description = "用户绑定手机号")
     private String phone;
-
-    @Schema(description = "验证码")
-    private String smsCaptcha;
 }
