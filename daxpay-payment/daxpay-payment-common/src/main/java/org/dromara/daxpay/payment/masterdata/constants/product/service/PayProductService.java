@@ -5,7 +5,7 @@ import org.dromara.daxpay.payment.masterdata.constants.product.dao.PayProductMan
 import org.dromara.daxpay.payment.masterdata.constants.product.entity.PayProduct;
 import org.dromara.daxpay.payment.masterdata.constants.product.param.PayProductQuery;
 import org.dromara.daxpay.payment.masterdata.constants.product.result.PayProductResult;
-import org.dromara.daxpay.payment.old.pay.strategy.AbsProductStrategy;
+import org.dromara.daxpay.payment.strategy.product.AbsProductStrategy;
 import org.dromara.daxpay.platform.common.i18n.util.I18nUtil;
 import org.dromara.daxpay.platform.common.mybatisplus.util.MpUtil;
 import org.dromara.daxpay.platform.core.enums.pay.channel.ChannelEnum;

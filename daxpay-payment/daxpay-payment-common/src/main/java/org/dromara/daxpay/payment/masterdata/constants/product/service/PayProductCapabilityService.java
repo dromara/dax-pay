@@ -7,7 +7,7 @@ import org.dromara.daxpay.payment.masterdata.constants.capability.entity.PayCapa
 import org.dromara.daxpay.payment.masterdata.constants.product.entity.PayProductCapability;
 import org.dromara.daxpay.payment.masterdata.constants.product.result.PayProductCapabilityResult;
 import org.dromara.daxpay.payment.masterdata.constants.product.result.PayProductResult;
-import org.dromara.daxpay.payment.old.pay.strategy.AbsProductStrategy;
+import org.dromara.daxpay.payment.strategy.product.AbsProductStrategy;
 import org.dromara.daxpay.payment.old.pay.support.ProductStrategySupport;
 import org.dromara.daxpay.platform.common.i18n.util.I18nUtil;
 import org.dromara.daxpay.platform.core.enums.pay.channel.PayCapabilityEnum;
