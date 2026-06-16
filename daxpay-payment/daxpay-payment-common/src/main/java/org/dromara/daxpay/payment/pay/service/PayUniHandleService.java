@@ -25,32 +25,37 @@ public class PayUniHandleService {
     private final PayTradeManager payTradeManager;
     private final PayNormalOrderManager payNormalOrderManager;
 
-    /// 支付成功后续处理
+    /// 支付成功后续处理（同步冗余时间线到容器）
     public void paySuccess(PayTrade trade) {
         PayNormalOrder normalOrder = payNormalOrderManager.findById(trade.getContainerId())
                 .orElse(null);
         if (normalOrder != null) {
             normalOrder.setStatus(NormalOrderStatusEnum.PAID.getCode());
+            normalOrder.setPayTime(trade.getPayTime());
             payNormalOrderManager.updateById(normalOrder);
         }
         payTradeManager.updateById(trade);
     }
 
-    /// 支付失败处理
+    /// 支付失败处理（同步冗余时间线到容器）
     public void payFail(PayTrade trade, PayNormalOrder normalOrder, String errMsg) {
+        OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
         trade.setStatus(PayFundStatusEnum.FAIL.getCode());
         trade.setErrorMsg(errMsg);
-        trade.setCloseTime(OffsetDateTime.now(ZoneOffset.UTC));
+        trade.setCloseTime(now);
         normalOrder.setStatus(NormalOrderStatusEnum.CLOSED.getCode());
+        normalOrder.setCloseTime(now);
         payTradeManager.updateById(trade);
         payNormalOrderManager.updateById(normalOrder);
     }
 
-    /// 支付关闭处理
+    /// 支付关闭处理（同步冗余时间线到容器）
     public void payClose(PayTrade trade, PayNormalOrder normalOrder) {
+        OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
         trade.setStatus(PayFundStatusEnum.CLOSE.getCode());
-        trade.setCloseTime(OffsetDateTime.now(ZoneOffset.UTC));
+        trade.setCloseTime(now);
         normalOrder.setStatus(NormalOrderStatusEnum.CLOSED.getCode());
+        normalOrder.setCloseTime(now);
         payTradeManager.updateById(trade);
         payNormalOrderManager.updateById(normalOrder);
     }

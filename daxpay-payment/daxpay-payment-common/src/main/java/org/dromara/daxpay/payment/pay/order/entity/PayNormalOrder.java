@@ -6,6 +6,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import org.dromara.daxpay.payment.common.enums.NormalOrderStatusEnum;
+import org.dromara.daxpay.platform.core.enums.pay.channel.CurrencyEnum;
+import org.dromara.daxpay.platform.core.enums.pay.channel.PayMethodEnum;
+import org.dromara.daxpay.platform.core.enums.pay.channel.ProductEnum;
 
 import java.time.OffsetDateTime;
 
@@ -13,6 +16,7 @@ import java.time.OffsetDateTime;
 ///
 /// 普通支付场景的容器，承载商户业务单信息（bizOrderNo / 商品标题 / 回调地址 等）
 /// 与 pay_trade 一对一关联（trade_type = normal）
+/// 冗余存储金额/支付/时间线字段，便于后台查询无需 JOIN pay_trade
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
@@ -43,4 +47,45 @@ public class PayNormalOrder extends MchAppBaseEntity {
 
     /// 业务单过期时间
     private OffsetDateTime expiredTime;
+
+    // ===== 金额（冗余自 PayTrade，方便查询）=====
+
+    /// 业务单金额（最小货币单位）
+    private Long amount;
+
+    /// 币种
+    /// @see CurrencyEnum
+    private String currency;
+
+    // ===== 支付信息（冗余，查询过滤用）=====
+
+    /// 支付通道
+    private String channel;
+
+    /// 支付方式
+    /// @see PayMethodEnum
+    private String method;
+
+    /// 支付产品编码
+    /// @see ProductEnum
+    private String product;
+
+    // ===== 时间线（冗余，查询展示用）=====
+
+    /// 支付成功时间
+    private OffsetDateTime payTime;
+
+    /// 关闭时间
+    private OffsetDateTime closeTime;
+
+    // ===== 请求信息（低频，审计排查用）=====
+
+    /// 通道附加参数
+    private String extraParam;
+
+    /// 客户端 IP
+    private String clientIp;
+
+    /// 终端设备编码
+    private String terminalNo;
 }

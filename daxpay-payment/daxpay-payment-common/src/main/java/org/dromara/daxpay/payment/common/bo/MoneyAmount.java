@@ -1,5 +1,7 @@
 package org.dromara.daxpay.payment.common.bo;
 
+import org.dromara.daxpay.platform.core.enums.pay.channel.CurrencyEnum;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
@@ -14,7 +16,7 @@ import java.util.Objects;
 /// @param currency ISO 4217 币种代码，默认 CNY
 public record MoneyAmount(Long amount, String currency) {
 
-    public static final String DEFAULT_CURRENCY = "CNY";
+    public static final String DEFAULT_CURRENCY = CurrencyEnum.CNY.getCode();
 
     public MoneyAmount {
         currency = Objects.requireNonNullElse(currency, DEFAULT_CURRENCY);

@@ -49,7 +49,6 @@ public class UniTradeController {
             // 订单: 该商户没有此接口的权限
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.order.merchantNoApiPermission");
         }
-        payParam.setSource(TradeSourceEnum.MCH_API.getCode());
         return DaxRes.ok(payService.pay(payParam));
     }
 

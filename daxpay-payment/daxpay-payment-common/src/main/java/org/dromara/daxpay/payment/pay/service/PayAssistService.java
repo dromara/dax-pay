@@ -1,5 +1,7 @@
 package org.dromara.daxpay.payment.pay.service;
 
+import org.dromara.daxpay.platform.core.enums.pay.channel.CurrencyEnum;
+import org.dromara.daxpay.platform.core.enums.pay.channel.ProductEnum;
 import org.dromara.daxpay.platform.core.exception.BizInfoException;
 import org.dromara.daxpay.platform.core.code.CommonErrorCode;
 import org.dromara.daxpay.platform.core.util.DateTimeUtil;
@@ -8,6 +10,7 @@ import org.dromara.daxpay.payment.common.enums.NormalOrderStatusEnum;
 import org.dromara.daxpay.payment.common.enums.PayFundStatusEnum;
 import org.dromara.daxpay.payment.common.enums.PayTradeTypeEnum;
 import org.dromara.daxpay.payment.common.util.PayUtil;
+import cn.hutool.core.util.StrUtil;
 import org.dromara.daxpay.payment.pay.convert.PayTradeConvert;
 import org.dromara.daxpay.payment.pay.order.dao.PayNormalOrderManager;
 import org.dromara.daxpay.payment.pay.order.entity.PayNormalOrder;
@@ -35,11 +38,22 @@ public class PayAssistService {
     private final PayNormalOrderManager payNormalOrderManager;
     private final PayTradeManager payTradeManager;
 
-    /// 创建支付订单（容器 + 资金交易 + 通道信息）
+    /// 创建支付订单（容器 + 资金交易）
     @Transactional(rollbackFor = Exception.class)
     public PayTrade createOrder(PayParam payParam) {
         OffsetDateTime expiredTime = this.getExpiredTime(payParam.getExpiredTime());
-        // 创建容器 PayNormalOrder
+        Long amount = Long.valueOf(PayUtil.convertCentAmount(payParam.getAmount()));
+        // 从产品编码派生通道编码
+        String channel = payParam.getProduct();
+        if (StrUtil.isNotBlank(channel)) {
+            ProductEnum productEnum = ProductEnum.findByCode(payParam.getProduct());
+            if (productEnum != null) {
+                channel = productEnum.getChannel();
+            }
+        }
+        // 终端信息
+        String terminalNo = payParam.getTerminal() != null ? payParam.getTerminal().getTerminalNo() : null;
+        // 创建容器 PayNormalOrder（含冗余字段，方便查询）
         PayNormalOrder normalOrder = new PayNormalOrder();
         normalOrder.setBizOrderNo(payParam.getBizOrderNo());
         normalOrder.setTitle(payParam.getTitle());
@@ -49,25 +63,30 @@ public class PayAssistService {
         normalOrder.setReturnUrl(payParam.getReturnUrl());
         normalOrder.setAttach(payParam.getAttach());
         normalOrder.setExpiredTime(expiredTime);
+        normalOrder.setAmount(amount);
+        normalOrder.setCurrency(CurrencyEnum.CNY.getCode());
+        normalOrder.setChannel(channel);
+        normalOrder.setMethod(payParam.getMethod());
+        normalOrder.setProduct(payParam.getProduct());
+        normalOrder.setExtraParam(payParam.getExtraParam());
+        normalOrder.setTerminalNo(terminalNo);
         payNormalOrderManager.save(normalOrder);
         // 创建资金交易 PayTrade
-        Long amount = Long.valueOf(PayUtil.convertCentAmount(payParam.getAmount()));
         PayTrade trade = new PayTrade();
         trade.setTradeNo(TradeNoGenerateUtil.pay());
         trade.setTradeType(PayTradeTypeEnum.NORMAL.getCode());
         trade.setContainerId(normalOrder.getId());
         trade.setProduct(payParam.getProduct());
-        trade.setChannel(payParam.getChannel());
+        trade.setChannel(channel);
         trade.setMethod(payParam.getMethod());
-        trade.setOtherMethod(payParam.getOtherMethod());
-        trade.setLimitPay(payParam.getLimitPay());
-        trade.setProvider(payParam.getProvider());
+        trade.setLimitPay(payParam.getLimitPay() != null
+                ? String.join(",", payParam.getLimitPay()) : null);
         trade.setAmount(amount);
-        trade.setCurrency("CNY");
+        trade.setCurrency(CurrencyEnum.CNY.getCode());
         trade.setRefundableBalance(amount);
         trade.setStatus(PayFundStatusEnum.PROGRESS.getCode());
         trade.setExpiredTime(expiredTime);
-        trade.setSource(payParam.getSource());
+        trade.setSource(org.dromara.daxpay.platform.core.enums.pay.trade.TradeSourceEnum.MCH_API.getCode());
         trade.setBarCode(payParam.getAuthCode());
         trade.setOpenid(payParam.getOpenId());
         payTradeManager.save(trade);

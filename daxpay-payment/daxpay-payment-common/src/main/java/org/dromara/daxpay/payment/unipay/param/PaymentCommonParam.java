@@ -1,7 +1,6 @@
 package org.dromara.daxpay.payment.unipay.param;
 
 import org.dromara.daxpay.platform.core.validation.IpAddress;
-import cn.hutool.core.date.DatePattern;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
@@ -34,10 +33,10 @@ public abstract class PaymentCommonParam {
     @Size(max = 1024, message = "{validation.field.sign.size}")
     private String sign;
 
-    /// 请求时间 格式yyyy-MM-dd HH:mm:ss
-    @Schema(description = "请求时间, 格式yyyy-MM-dd HH:mm:ss")
+    /// 请求时间（北京时间，格式 yyyy-MM-dd HH:mm:ss）
+    @Schema(description = "请求时间(北京时间，yyyy-MM-dd HH:mm:ss)")
     @NotNull(message = "{validation.field.reqTime.notNull}")
-    @JsonFormat(pattern = DatePattern.NORM_DATETIME_PATTERN)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private OffsetDateTime reqTime;
 
 }
