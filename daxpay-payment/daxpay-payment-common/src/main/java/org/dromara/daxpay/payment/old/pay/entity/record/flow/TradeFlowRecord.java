@@ -4,9 +4,12 @@ import org.dromara.daxpay.platform.common.mybatisplus.function.ToResult;
 import org.dromara.daxpay.platform.core.enums.pay.channel.ChannelEnum;
 import org.dromara.daxpay.platform.core.enums.pay.channel.ProductEnum;
 import org.dromara.daxpay.platform.core.enums.pay.trade.TradeTypeEnum;
-import org.dromara.daxpay.payment.common.entity.merchant.MchAppRecordEntity;
+import org.dromara.daxpay.payment.common.entity.merchant.MchBaseEntity;
 import org.dromara.daxpay.payment.old.pay.convert.record.TradeFlowRecordConvert;
 import org.dromara.daxpay.payment.old.pay.result.record.flow.TradeFlowRecordResult;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,7 +23,11 @@ import java.math.BigDecimal;
 @Data
 @Accessors(chain = true)
 @TableName("pay_trade_flow_record")
-public class TradeFlowRecord extends MchAppRecordEntity implements ToResult<TradeFlowRecordResult> {
+public class TradeFlowRecord extends MchBaseEntity implements ToResult<TradeFlowRecordResult> {
+
+    /// 应用号
+    @TableField(updateStrategy = FieldStrategy.NEVER, fill = FieldFill.INSERT)
+    private String appId;
 
     /// 订单标题
     private String title;

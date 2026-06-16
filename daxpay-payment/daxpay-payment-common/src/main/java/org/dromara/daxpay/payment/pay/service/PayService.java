@@ -43,7 +43,7 @@ public class PayService {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.processing");
         }
         try {
-            PayTrade trade = payAssistService.getOrderAndCheck(bizOrderNo, payParam.getAppId());
+            PayTrade trade = payAssistService.getOrderAndCheck(bizOrderNo);
             return this.payHandle(payParam, trade);
         } finally {
             lockTemplate.releaseLock(lock);

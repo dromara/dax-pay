@@ -3,10 +3,11 @@ package org.dromara.daxpay.payment.old.pay.entity.reconcile;
 import org.dromara.daxpay.platform.common.mybatisplus.function.ToResult;
 import org.dromara.daxpay.platform.core.enums.pay.channel.ChannelEnum;
 import org.dromara.daxpay.platform.core.enums.pay.channel.ProductEnum;
-import org.dromara.daxpay.payment.common.entity.merchant.MchAppBaseEntity;
+import org.dromara.daxpay.payment.common.entity.merchant.MchBaseEntity;
 import org.dromara.daxpay.payment.old.pay.convert.reconcile.ReconcileConvert;
 import org.dromara.daxpay.platform.core.enums.pay.reconcile.ReconcileResultEnum;
 import org.dromara.daxpay.payment.old.pay.result.reconcile.ReconcileStatementResult;
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -25,7 +26,11 @@ import java.time.LocalDate;
 @Data
 @Accessors(chain = true)
 @TableName(value = "pay_reconcile_statement")
-public class ReconcileStatement extends MchAppBaseEntity implements ToResult<ReconcileStatementResult> {
+public class ReconcileStatement extends MchBaseEntity implements ToResult<ReconcileStatementResult> {
+
+    /// 应用号
+    @TableField(updateStrategy = FieldStrategy.NEVER, fill = FieldFill.INSERT)
+    private String appId;
 
     /// 名称
     private String name;

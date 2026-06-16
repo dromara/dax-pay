@@ -1,6 +1,9 @@
 package org.dromara.daxpay.payment.pay.order.entity;
 
-import org.dromara.daxpay.payment.common.entity.merchant.MchAppBaseEntity;
+import org.dromara.daxpay.payment.common.entity.merchant.MchBaseEntity;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,7 +18,11 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("pay_combine")
-public class PayCombineOrder extends MchAppBaseEntity {
+public class PayCombineOrder extends MchBaseEntity {
+
+    /// 应用号
+    @TableField(updateStrategy = FieldStrategy.NEVER, fill = FieldFill.INSERT)
+    private String appId;
 
     /// 商户合单业务号
     private String bizOrderNo;

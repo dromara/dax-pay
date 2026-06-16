@@ -1,7 +1,7 @@
 package org.dromara.daxpay.payment.old.pay.entity.order.pay;
 
 import org.dromara.daxpay.platform.common.mybatisplus.function.ToResult;
-import org.dromara.daxpay.payment.common.entity.merchant.MchAppBaseEntity;
+import org.dromara.daxpay.payment.common.entity.merchant.MchBaseEntity;
 import org.dromara.daxpay.payment.old.pay.convert.order.pay.PayOrderConvert;
 import org.dromara.daxpay.platform.core.enums.pay.channel.*;
 import org.dromara.daxpay.platform.core.enums.pay.pay.*;
@@ -9,6 +9,7 @@ import org.dromara.daxpay.platform.core.enums.pay.trade.*;
 import org.dromara.daxpay.payment.old.pay.result.order.pay.PayOrderVo;
 import org.dromara.daxpay.platform.core.enums.unipay.PayLimitPayEnum;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -26,7 +27,11 @@ import java.util.Objects;
 @Data
 @Accessors(chain = true)
 @TableName("pay_order")
-public class PayOrder extends MchAppBaseEntity implements ToResult<PayOrderVo> {
+public class PayOrder extends MchBaseEntity implements ToResult<PayOrderVo> {
+
+    /// 应用号
+    @TableField(updateStrategy = FieldStrategy.NEVER, fill = FieldFill.INSERT)
+    private String appId;
 
     /// 商户订单号
     private String bizOrderNo;

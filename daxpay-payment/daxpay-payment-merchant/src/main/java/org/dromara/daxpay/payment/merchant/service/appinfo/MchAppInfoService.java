@@ -173,6 +173,14 @@ public class MchAppInfoService implements MchAppInfoAssistQueryService {
                 .collect(Collectors.toList());
     }
 
+    /// 查询商户默认应用号
+    @Override
+    public String findDefaultAppId(String mchNo) {
+        return mchAppInfoManager.findDefaultByMchNo(mchNo)
+                .map(MchAppInfo::getAppId)
+                .orElseThrow(() -> new DataNotExistException("error.payment.merchant.defaultAppNotConfigured"));
+    }
+
     /// 下拉列表, 不判断应用和商户的状态
     public List<LabelValue> dropdown(String mchNo) {
         if (clientCodeService.getClientCode().equals(ClientEnum.MERCHANT.getCode())) {

@@ -4,10 +4,13 @@ import org.dromara.daxpay.platform.common.mybatisplus.function.ToResult;
 import org.dromara.daxpay.platform.core.enums.pay.channel.ChannelEnum;
 import org.dromara.daxpay.platform.core.enums.pay.channel.ProductEnum;
 import org.dromara.daxpay.platform.core.enums.pay.trade.TradeTypeEnum;
-import org.dromara.daxpay.payment.common.entity.merchant.MchAppRecordEntity;
+import org.dromara.daxpay.payment.common.entity.merchant.MchBaseEntity;
 import org.dromara.daxpay.payment.old.pay.convert.record.TradeSyncRecordConvert;
 import org.dromara.daxpay.payment.old.pay.result.record.sync.TradeSyncRecordResult;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,7 +22,11 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @TableName("pay_trade_sync_record")
-public class TradeSyncRecord extends MchAppRecordEntity implements ToResult<TradeSyncRecordResult> {
+public class TradeSyncRecord extends MchBaseEntity implements ToResult<TradeSyncRecordResult> {
+
+    /// 应用号
+    @TableField(updateStrategy = FieldStrategy.NEVER, fill = FieldFill.INSERT)
+    private String appId;
 
     /// 平台交易号
     private String tradeNo;

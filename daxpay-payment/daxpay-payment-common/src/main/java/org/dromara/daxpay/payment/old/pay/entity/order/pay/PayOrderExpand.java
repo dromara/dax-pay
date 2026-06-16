@@ -1,9 +1,12 @@
 package org.dromara.daxpay.payment.old.pay.entity.order.pay;
 
 import org.dromara.daxpay.platform.common.mybatisplus.function.ToResult;
-import org.dromara.daxpay.payment.common.entity.merchant.MchAppBaseEntity;
+import org.dromara.daxpay.payment.common.entity.merchant.MchBaseEntity;
 import org.dromara.daxpay.payment.old.pay.convert.order.pay.PayOrderConvert;
 import org.dromara.daxpay.payment.old.pay.result.order.pay.PayOrderExpandResult;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,7 +21,11 @@ import java.time.OffsetDateTime;
 @Data
 @Accessors(chain = true)
 @TableName(value = "pay_order_expand",autoResultMap = true)
-public class PayOrderExpand extends MchAppBaseEntity implements ToResult<PayOrderExpandResult>{
+public class PayOrderExpand extends MchBaseEntity implements ToResult<PayOrderExpandResult>{
+
+    /// 应用号
+    @TableField(updateStrategy = FieldStrategy.NEVER, fill = FieldFill.INSERT)
+    private String appId;
 
     /// 同步跳转地址
     private String returnUrl;

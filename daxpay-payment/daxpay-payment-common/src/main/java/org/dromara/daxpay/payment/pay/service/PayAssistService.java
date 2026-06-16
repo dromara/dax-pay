@@ -9,6 +9,7 @@ import org.dromara.daxpay.platform.core.util.TradeNoGenerateUtil;
 import org.dromara.daxpay.payment.common.enums.NormalOrderStatusEnum;
 import org.dromara.daxpay.payment.common.enums.PayFundStatusEnum;
 import org.dromara.daxpay.payment.common.enums.PayTradeTypeEnum;
+import org.dromara.daxpay.payment.common.service.MchAppInfoAssistQueryService;
 import org.dromara.daxpay.payment.common.util.PayUtil;
 import cn.hutool.core.util.StrUtil;
 import org.dromara.daxpay.payment.pay.convert.PayTradeConvert;
@@ -37,10 +38,16 @@ public class PayAssistService {
 
     private final PayNormalOrderManager payNormalOrderManager;
     private final PayTradeManager payTradeManager;
+    private final MchAppInfoAssistQueryService mchAppInfoAssistQueryService;
 
     /// 创建支付订单（容器 + 资金交易）
     @Transactional(rollbackFor = Exception.class)
     public PayTrade createOrder(PayParam payParam) {
+        // 解析应用号：有传输则使用，无则取商户默认应用
+        String appId = payParam.getAppId();
+        if (StrUtil.isBlank(appId)) {
+            appId = mchAppInfoAssistQueryService.findDefaultAppId(payParam.getMchNo());
+        }
         OffsetDateTime expiredTime = this.getExpiredTime(payParam.getExpiredTime());
         Long amount = Long.valueOf(PayUtil.convertCentAmount(payParam.getAmount()));
         // 从产品编码派生通道编码
@@ -70,9 +77,11 @@ public class PayAssistService {
         normalOrder.setProduct(payParam.getProduct());
         normalOrder.setExtraParam(payParam.getExtraParam());
         normalOrder.setTerminalNo(terminalNo);
+        normalOrder.setAppId(appId);
         payNormalOrderManager.save(normalOrder);
         // 创建资金交易 PayTrade
         PayTrade trade = new PayTrade();
+        trade.setAppId(appId);
         trade.setTradeNo(TradeNoGenerateUtil.pay());
         trade.setTradeType(PayTradeTypeEnum.NORMAL.getCode());
         trade.setContainerId(normalOrder.getId());
@@ -93,14 +102,14 @@ public class PayAssistService {
         return trade;
     }
 
-    /// 根据业务单号查询并检查支付状态
-    public PayTrade getOrderAndCheck(String bizOrderNo, String appId) {
-        Optional<PayNormalOrder> normalOrderOpt = payNormalOrderManager.findByBizOrderNo(bizOrderNo, appId);
+    /// 根据业务单号查询并检查支付状态（按商户号自动租户隔离）
+    public PayTrade getOrderAndCheck(String bizOrderNo) {
+        Optional<PayNormalOrder> normalOrderOpt = payNormalOrderManager.findByBizOrderNo(bizOrderNo);
         if (normalOrderOpt.isEmpty()) {
             return null;
         }
         PayNormalOrder normalOrder = normalOrderOpt.get();
-        PayTrade trade = payTradeManager.findByContainerId(normalOrder.getId(), appId).orElse(null);
+        PayTrade trade = payTradeManager.findByContainerId(normalOrder.getId()).orElse(null);
         if (trade == null) {
             return null;
         }

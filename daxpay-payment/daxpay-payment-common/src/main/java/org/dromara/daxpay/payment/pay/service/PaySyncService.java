@@ -52,18 +52,18 @@ public class PaySyncService {
         }
         PayTrade trade = null;
         if (StrUtil.isNotBlank(param.getOrderNo())) {
-            trade = payTradeManager.findByTradeNo(param.getOrderNo(), param.getAppId()).orElse(null);
+            trade = payTradeManager.findByTradeNo(param.getOrderNo()).orElse(null);
         }
         if (Objects.isNull(trade) && Objects.nonNull(param.getBizOrderNo())) {
             PayNormalOrder normalOrder = payNormalOrderManager.findByBizOrderNo(
-                    param.getBizOrderNo(), param.getAppId()).orElse(null);
+                    param.getBizOrderNo()).orElse(null);
             if (Objects.nonNull(normalOrder)) {
-                trade = payTradeManager.findByContainerId(normalOrder.getId(), param.getAppId())
+                trade = payTradeManager.findByContainerId(normalOrder.getId())
                         .orElse(null);
             }
         }
         if (Objects.isNull(trade) && StrUtil.isNotBlank(param.getOutOrderNo())) {
-            trade = payTradeManager.findByOutOrderNo(param.getOutOrderNo(), param.getAppId())
+            trade = payTradeManager.findByOutOrderNo(param.getOutOrderNo())
                     .orElse(null);
         }
         if (Objects.isNull(trade)) {

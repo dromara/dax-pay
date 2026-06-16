@@ -1,10 +1,13 @@
 package org.dromara.daxpay.payment.merchant.entity.route.strategy;
 
-import org.dromara.daxpay.payment.common.entity.merchant.MchAppBaseEntity;
+import org.dromara.daxpay.payment.common.entity.merchant.MchBaseEntity;
 import org.dromara.daxpay.payment.merchant.convert.route.strategy.PayRouteStrategyConvert;
 import org.dromara.daxpay.payment.merchant.result.route.strategy.PayRouteStrategyResult;
 import org.dromara.daxpay.platform.common.mybatisplus.function.ToResult;
 import org.dromara.daxpay.platform.core.enums.pay.route.PayRouteModeEnum;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,7 +19,11 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @TableName("pay_route_strategy")
-public class PayRouteStrategy extends MchAppBaseEntity implements ToResult<PayRouteStrategyResult> {
+public class PayRouteStrategy extends MchBaseEntity implements ToResult<PayRouteStrategyResult> {
+
+    /// 应用号
+    @TableField(updateStrategy = FieldStrategy.NEVER, fill = FieldFill.INSERT)
+    private String appId;
 
     /// 路由模式：basic / scene
     /// @see PayRouteModeEnum

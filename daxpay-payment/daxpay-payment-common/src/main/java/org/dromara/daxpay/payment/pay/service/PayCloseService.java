@@ -42,13 +42,13 @@ public class PayCloseService {
         if (StrUtil.isBlank(param.getOrderNo()) && Objects.isNull(param.getBizOrderNo())) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.orderNoRequired");
         }
-        PayTrade trade = payTradeManager.findByTradeNo(param.getOrderNo(), param.getAppId())
+        PayTrade trade = payTradeManager.findByTradeNo(param.getOrderNo())
                 .orElse(null);
         if (Objects.isNull(trade) && Objects.nonNull(param.getBizOrderNo())) {
-            PayNormalOrder normalOrder = payNormalOrderManager.findByBizOrderNo(param.getBizOrderNo(), param.getAppId())
+            PayNormalOrder normalOrder = payNormalOrderManager.findByBizOrderNo(param.getBizOrderNo())
                     .orElse(null);
             if (Objects.nonNull(normalOrder)) {
-                trade = payTradeManager.findByContainerId(normalOrder.getId(), param.getAppId())
+                trade = payTradeManager.findByContainerId(normalOrder.getId())
                         .orElse(null);
             }
         }

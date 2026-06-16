@@ -9,4 +9,7 @@ import java.util.List;
 public interface MchAppInfoAssistQueryService {
     List<LabelValue> dropdown(String mchNo);
     List<LabelValue> dropdownByEnable(String mchNo);
+
+    /// 查询商户默认应用号
+    String findDefaultAppId(String mchNo);
 }

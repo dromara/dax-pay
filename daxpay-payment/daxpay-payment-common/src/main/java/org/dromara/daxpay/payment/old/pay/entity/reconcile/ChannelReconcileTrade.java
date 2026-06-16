@@ -2,7 +2,10 @@ package org.dromara.daxpay.payment.old.pay.entity.reconcile;
 
 import org.dromara.daxpay.platform.core.enums.pay.trade.TradeStatusEnum;
 import org.dromara.daxpay.platform.core.enums.pay.trade.TradeTypeEnum;
-import org.dromara.daxpay.payment.common.entity.merchant.MchAppRecordEntity;
+import org.dromara.daxpay.payment.common.entity.merchant.MchBaseEntity;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,7 +20,11 @@ import java.time.OffsetDateTime;
 @Data
 @Accessors(chain = true)
 @TableName("pay_channel_reconcile_trade")
-public class ChannelReconcileTrade extends MchAppRecordEntity {
+public class ChannelReconcileTrade extends MchBaseEntity {
+
+    /// 应用号
+    @TableField(updateStrategy = FieldStrategy.NEVER, fill = FieldFill.INSERT)
+    private String appId;
 
     /// 关联对账单ID
     private Long reconcileId;

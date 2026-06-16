@@ -1,11 +1,12 @@
 package org.dromara.daxpay.payment.old.pay.entity.notice.callback;
 
 import org.dromara.daxpay.platform.common.mybatisplus.function.ToResult;
-import org.dromara.daxpay.payment.common.entity.merchant.MchAppBaseEntity;
+import org.dromara.daxpay.payment.common.entity.merchant.MchBaseEntity;
 import org.dromara.daxpay.payment.old.pay.convert.notice.MerchantCallbackConvert;
 import org.dromara.daxpay.platform.core.enums.pay.notice.CallbackNoticeTypeEnum;
 import org.dromara.daxpay.platform.core.enums.pay.trade.TradeTypeEnum;
 import org.dromara.daxpay.payment.old.pay.result.notice.callback.MerchantCallbackTaskResult;
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -21,7 +22,11 @@ import java.time.OffsetDateTime;
 @Data
 @Accessors(chain = true)
 @TableName("pay_merchant_callback_task")
-public class MerchantCallbackTask extends MchAppBaseEntity implements ToResult<MerchantCallbackTaskResult> {
+public class MerchantCallbackTask extends MchBaseEntity implements ToResult<MerchantCallbackTaskResult> {
+
+    /// 应用号
+    @TableField(updateStrategy = FieldStrategy.NEVER, fill = FieldFill.INSERT)
+    private String appId;
 
     /// 本地交易ID
     private Long tradeId;

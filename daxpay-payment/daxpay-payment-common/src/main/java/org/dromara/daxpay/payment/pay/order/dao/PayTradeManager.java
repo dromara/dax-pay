@@ -25,27 +25,17 @@ public class PayTradeManager extends BaseManager<PayTradeMapper, PayTrade> {
         return findByField(PayTrade::getTradeNo, tradeNo);
     }
 
-    /// 根据交易号+应用ID查询
-    public Optional<PayTrade> findByTradeNo(String tradeNo, String appId) {
-        return lambdaQuery()
-                .eq(PayTrade::getTradeNo, tradeNo)
-                .eq(PayTrade::getAppId, appId)
-                .oneOpt();
-    }
-
-    /// 根据通道订单号+应用ID查询
-    public Optional<PayTrade> findByOutOrderNo(String outOrderNo, String appId) {
+    /// 根据通道订单号查询（按商户号自动租户隔离）
+    public Optional<PayTrade> findByOutOrderNo(String outOrderNo) {
         return lambdaQuery()
                 .eq(PayTrade::getOutOrderNo, outOrderNo)
-                .eq(PayTrade::getAppId, appId)
                 .oneOpt();
     }
 
-    /// 根据容器ID查询
-    public Optional<PayTrade> findByContainerId(Long containerId, String appId) {
+    /// 根据容器ID查询（按商户号自动租户隔离）
+    public Optional<PayTrade> findByContainerId(Long containerId) {
         return lambdaQuery()
                 .eq(PayTrade::getContainerId, containerId)
-                .eq(PayTrade::getAppId, appId)
                 .oneOpt();
     }
 

@@ -5,9 +5,10 @@ import org.dromara.daxpay.platform.core.enums.pay.channel.ChannelEnum;
 import org.dromara.daxpay.platform.core.enums.pay.channel.ProductEnum;
 import org.dromara.daxpay.platform.core.enums.pay.transfer.TransferPayeeTypeEnum;
 import org.dromara.daxpay.platform.core.enums.pay.transfer.TransferStatusEnum;
-import org.dromara.daxpay.payment.common.entity.merchant.MchAppBaseEntity;
+import org.dromara.daxpay.payment.common.entity.merchant.MchBaseEntity;
 import org.dromara.daxpay.payment.old.pay.convert.order.transfer.TransferOrderConvert;
 import org.dromara.daxpay.payment.old.pay.result.order.transfer.TransferOrderVo;
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -24,7 +25,12 @@ import java.time.OffsetDateTime;
 @Data
 @Accessors(chain = true)
 @TableName("pay_transfer_order")
-public class TransferOrder extends MchAppBaseEntity implements ToResult<TransferOrderVo> {
+public class TransferOrder extends MchBaseEntity implements ToResult<TransferOrderVo> {
+
+    /// 应用号
+    @TableField(updateStrategy = FieldStrategy.NEVER, fill = FieldFill.INSERT)
+    private String appId;
+
     /// 商户转账号
     private String bizTransferNo;
 

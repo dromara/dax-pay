@@ -1,10 +1,13 @@
 package org.dromara.daxpay.payment.old.pay.entity.notice.callback;
 
 import org.dromara.daxpay.platform.common.mybatisplus.function.ToResult;
-import org.dromara.daxpay.payment.common.entity.merchant.MchAppRecordEntity;
+import org.dromara.daxpay.payment.common.entity.merchant.MchBaseEntity;
 import org.dromara.daxpay.payment.old.pay.convert.notice.MerchantCallbackConvert;
 import org.dromara.daxpay.platform.core.enums.pay.notice.NoticeSendTypeEnum;
 import org.dromara.daxpay.payment.old.pay.result.notice.callback.MerchantCallbackRecordResult;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -16,7 +19,11 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @TableName("pay_merchant_callback_record")
-public class MerchantCallbackRecord extends MchAppRecordEntity implements ToResult<MerchantCallbackRecordResult> {
+public class MerchantCallbackRecord extends MchBaseEntity implements ToResult<MerchantCallbackRecordResult> {
+
+    /// 应用号
+    @TableField(updateStrategy = FieldStrategy.NEVER, fill = FieldFill.INSERT)
+    private String appId;
 
     /// 任务ID
     private Long taskId;

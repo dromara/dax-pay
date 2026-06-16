@@ -4,9 +4,6 @@ import org.dromara.daxpay.platform.common.mybatisplus.util.MpUtil;
 import org.dromara.daxpay.platform.iam.service.client.ClientCodeService;
 import org.dromara.daxpay.payment.common.context.PaymentContext;
 import org.dromara.daxpay.payment.common.entity.merchant.MchBaseEntity;
-import org.dromara.daxpay.payment.common.entity.merchant.MchAppBaseEntity;
-import org.dromara.daxpay.payment.common.entity.merchant.MchAppEditEntity;
-import org.dromara.daxpay.payment.common.entity.merchant.MchAppRecordEntity;
 import cn.hutool.core.util.ClassUtil;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
@@ -71,8 +68,8 @@ public class CustomTenantLineHandler implements TenantLineHandler {
         if (tableInfo == null){
             return true;
         }
-        // 如果为 MchAppBaseEntity、MchAppEditEntity、MchAppRecordEntity 子类, MchBaseEntity, 不可以忽略过滤
-        boolean anyMatch = Stream.of(MchAppBaseEntity.class, MchAppEditEntity.class, MchAppRecordEntity.class, MchBaseEntity.class)
+        // 如果为 MchBaseEntity 子类, 不可以忽略过滤
+        boolean anyMatch = Stream.of(MchBaseEntity.class)
                 .anyMatch(entityClass -> ClassUtil.isAssignable(entityClass, tableInfo.getEntityType()));
         return !anyMatch;
     }

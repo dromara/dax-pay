@@ -4,10 +4,13 @@ import org.dromara.daxpay.platform.common.mybatisplus.function.ToResult;
 import org.dromara.daxpay.platform.core.enums.pay.channel.ChannelEnum;
 import org.dromara.daxpay.platform.core.enums.pay.channel.ProductEnum;
 import org.dromara.daxpay.platform.core.enums.pay.pay.CloseTypeEnum;
-import org.dromara.daxpay.payment.common.entity.merchant.MchAppRecordEntity;
+import org.dromara.daxpay.payment.common.entity.merchant.MchBaseEntity;
 import org.dromara.daxpay.payment.old.pay.convert.record.PayCloseRecordConvert;
 import org.dromara.daxpay.payment.old.pay.result.record.close.PayCloseRecordResult;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -19,7 +22,11 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @TableName("pay_close_record")
-public class PayCloseRecord extends MchAppRecordEntity implements ToResult<PayCloseRecordResult> {
+public class PayCloseRecord extends MchBaseEntity implements ToResult<PayCloseRecordResult> {
+
+    /// 应用号
+    @TableField(updateStrategy = FieldStrategy.NEVER, fill = FieldFill.INSERT)
+    private String appId;
 
     /// 订单号
     private String orderNo;

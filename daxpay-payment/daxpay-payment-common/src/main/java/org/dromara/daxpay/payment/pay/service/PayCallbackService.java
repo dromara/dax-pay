@@ -43,10 +43,10 @@ public class PayCallbackService {
             return null;
         }
         try {
-            PayTrade trade = payTradeManager.findByTradeNo(callbackInfo.getTradeNo(), apiContext.getTradeInfo().getAppId())
+            PayTrade trade = payTradeManager.findByTradeNo(callbackInfo.getTradeNo())
                     .orElse(null);
             if (Objects.isNull(trade)) {
-                trade = payTradeManager.findByOutOrderNo(callbackInfo.getOutTradeNo(), apiContext.getTradeInfo().getAppId())
+                trade = payTradeManager.findByOutOrderNo(callbackInfo.getOutTradeNo())
                         .orElse(null);
             }
             if (Objects.isNull(trade)) {

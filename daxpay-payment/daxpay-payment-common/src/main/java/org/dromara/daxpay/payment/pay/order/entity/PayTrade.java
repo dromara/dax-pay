@@ -1,6 +1,7 @@
 package org.dromara.daxpay.payment.pay.order.entity;
 
-import org.dromara.daxpay.payment.common.entity.merchant.MchAppBaseEntity;
+import org.dromara.daxpay.payment.common.entity.merchant.MchBaseEntity;
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -20,7 +21,11 @@ import java.time.OffsetDateTime;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("pay_trade")
-public class PayTrade extends MchAppBaseEntity {
+public class PayTrade extends MchBaseEntity {
+
+    /// 应用号
+    @TableField(updateStrategy = FieldStrategy.NEVER, fill = FieldFill.INSERT)
+    private String appId;
 
     /// 支付交易号（统一雪花，无形态前缀）
     private String tradeNo;

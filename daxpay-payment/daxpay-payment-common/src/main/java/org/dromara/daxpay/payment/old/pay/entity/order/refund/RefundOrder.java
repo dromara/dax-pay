@@ -6,9 +6,10 @@ import org.dromara.daxpay.platform.core.enums.pay.channel.ProductEnum;
 import org.dromara.daxpay.platform.core.enums.pay.channel.PayProviderEnum;
 import org.dromara.daxpay.platform.core.enums.pay.refund.RefundStatusEnum;
 import org.dromara.daxpay.platform.core.enums.pay.trade.SettleStatusEnum;
-import org.dromara.daxpay.payment.common.entity.merchant.MchAppBaseEntity;
+import org.dromara.daxpay.payment.common.entity.merchant.MchBaseEntity;
 import org.dromara.daxpay.payment.old.pay.convert.order.refund.RefundOrderConvert;
 import org.dromara.daxpay.payment.old.pay.result.order.refund.RefundOrderVo;
+import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -25,7 +26,11 @@ import java.time.OffsetDateTime;
 @Data
 @Accessors(chain = true)
 @TableName("pay_refund_order")
-public class RefundOrder extends MchAppBaseEntity implements ToResult<RefundOrderVo> {
+public class RefundOrder extends MchBaseEntity implements ToResult<RefundOrderVo> {
+
+    /// 应用号
+    @TableField(updateStrategy = FieldStrategy.NEVER, fill = FieldFill.INSERT)
+    private String appId;
 
     /// 支付订单ID
     private Long orderId;

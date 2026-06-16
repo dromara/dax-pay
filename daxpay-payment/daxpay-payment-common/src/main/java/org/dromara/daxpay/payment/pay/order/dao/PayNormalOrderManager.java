@@ -11,11 +11,10 @@ import java.util.Optional;
 @Repository
 public class PayNormalOrderManager extends BaseManager<PayNormalOrderMapper, PayNormalOrder> {
 
-    /// 根据业务单号查询
-    public Optional<PayNormalOrder> findByBizOrderNo(String bizOrderNo, String appId) {
+    /// 根据业务单号查询（按商户号自动租户隔离）
+    public Optional<PayNormalOrder> findByBizOrderNo(String bizOrderNo) {
         return lambdaQuery()
                 .eq(PayNormalOrder::getBizOrderNo, bizOrderNo)
-                .eq(PayNormalOrder::getAppId, appId)
                 .oneOpt();
     }
 }

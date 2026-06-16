@@ -2,10 +2,13 @@ package org.dromara.daxpay.payment.old.pay.entity.reconcile;
 
 import org.dromara.daxpay.platform.common.mybatisplus.function.ToResult;
 import org.dromara.daxpay.platform.core.enums.pay.trade.TradeTypeEnum;
-import org.dromara.daxpay.payment.common.entity.merchant.MchAppRecordEntity;
+import org.dromara.daxpay.payment.common.entity.merchant.MchBaseEntity;
 import org.dromara.daxpay.payment.old.pay.convert.reconcile.ReconcileConvert;
 import org.dromara.daxpay.platform.core.enums.pay.reconcile.ReconcileDiscrepancyTypeEnum;
 import org.dromara.daxpay.payment.old.pay.result.reconcile.ReconcileDiscrepancyResult;
+import com.baomidou.mybatisplus.annotation.FieldFill;
+import com.baomidou.mybatisplus.annotation.FieldStrategy;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,7 +24,11 @@ import java.time.OffsetDateTime;
 @Data
 @Accessors(chain = true)
 @TableName("pay_reconcile_discrepancy")
-public class ReconcileDiscrepancy extends MchAppRecordEntity implements ToResult<ReconcileDiscrepancyResult> {
+public class ReconcileDiscrepancy extends MchBaseEntity implements ToResult<ReconcileDiscrepancyResult> {
+
+    /// 应用号
+    @TableField(updateStrategy = FieldStrategy.NEVER, fill = FieldFill.INSERT)
+    private String appId;
 
     /// 对账单ID
     private Long reconcileId;
