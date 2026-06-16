@@ -1,5 +1,6 @@
 package org.dromara.daxpay.channel.wechat.result.direct;
 
+import org.dromara.daxpay.platform.common.json.sensitive.SensitiveInfo;
 import org.dromara.daxpay.platform.core.result.BaseResult;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -8,7 +9,7 @@ import lombok.experimental.Accessors;
 
 /// # 微信直连商户应用授权认证配置
 ///
-/// 微信直连商户应用授权认证配置的返回结果对象，含商户号、通道商户号，以及应用密钥配置状态和授权回调地址。
+/// 微信直连商户应用授权认证配置的返回结果对象，含商户号、通道商户号、应用密钥(脱敏)和授权回调地址。
 ///
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -25,8 +26,10 @@ public class WechatDirectAppAuthConfigResult extends BaseResult {
     @Schema(description = "关联应用ID")
     private Long wechatDirectAppId;
 
-    @Schema(description = "是否已配置应用密钥")
-    private Boolean appSecretConfigured;
+    // 应用密钥(序列化时脱敏)
+    @SensitiveInfo
+    @Schema(description = "应用密钥(已脱敏)")
+    private String appSecret;
 
     @Schema(description = "授权回调地址")
     private String authCallbackUrl;

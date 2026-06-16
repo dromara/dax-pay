@@ -110,9 +110,7 @@ public class WechatDirectAppController {
     public Result<WechatDirectAppAuthConfigResult> findAuthConfigByAppId(
             @NotNull(message = "{validation.field.wechatDirectAppId.notNull}") Long wechatDirectAppId) {
         var config = wechatDirectAppAuthConfigService.findByWechatDirectAppId(wechatDirectAppId);
-        var result = config.toResult();
-        result.setAppSecretConfigured(config.getAppSecret() != null);
-        return Res.ok(result);
+        return Res.ok(config.toResult());
     }
 
     @PermCode(code = "edit", nameCn = "通道商户编辑", nameEn = "Channel Merchant Edit")

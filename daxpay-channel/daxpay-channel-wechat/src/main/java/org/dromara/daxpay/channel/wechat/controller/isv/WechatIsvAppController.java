@@ -12,7 +12,6 @@ import org.dromara.daxpay.channel.wechat.result.isv.WechatIsvAppResult;
 import org.dromara.daxpay.channel.wechat.result.isv.WechatIsvAppAuthConfigResult;
 import org.dromara.daxpay.channel.wechat.service.isv.WechatIsvAppService;
 import org.dromara.daxpay.channel.wechat.service.isv.WechatIsvAppAuthConfigService;
-import cn.hutool.core.util.StrUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
@@ -100,9 +99,7 @@ public class WechatIsvAppController {
     public Result<WechatIsvAppAuthConfigResult> findAuthConfigByAppId(
             @NotNull(message = "{validation.field.id.notNull}") Long wechatIsvAppId) {
         var config = wechatIsvAppAuthConfigService.findByWechatIsvAppId(wechatIsvAppId);
-        var result = WechatIsvAppAuthConfigConvert.CONVERT.toResult(config);
-        result.setAppSecretConfigured(StrUtil.isNotBlank(config.getAppSecret()));
-        return Res.ok(result);
+        return Res.ok(WechatIsvAppAuthConfigConvert.CONVERT.toResult(config));
     }
 
     @PermCode(code = "edit", nameCn = "微信服务商编辑", nameEn = "WeChat ISV Edit")

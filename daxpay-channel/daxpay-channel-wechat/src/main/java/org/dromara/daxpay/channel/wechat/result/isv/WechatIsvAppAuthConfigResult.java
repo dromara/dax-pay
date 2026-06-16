@@ -25,11 +25,8 @@ public class WechatIsvAppAuthConfigResult extends BaseResult {
     private Long wechatIsvAppId;
 
     @SensitiveInfo(front = 12, end = 12)
-    @Schema(description = "应用密钥(加密存储)")
+    @Schema(description = "应用密钥(已脱敏)")
     private String appSecret;
-
-    @Schema(description = "是否已配置应用密钥")
-    private Boolean appSecretConfigured;
 
     @Schema(description = "授权回调地址（仅公众号）")
     private String authCallbackUrl;
