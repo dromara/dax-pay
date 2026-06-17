@@ -36,6 +36,16 @@ public class PayProductConfigController {
     }
 
     @PermCode(code = "edit", nameCn = "产品配置编辑", nameEn = "Product Config Edit")
+    @Operation(summary = "切换产品启停")
+    @PostMapping("/switch-enabled")
+    public Result<Void> switchEnabled(
+            @NotBlank(message = "{validation.field.product.notBlank}") String product,
+            @NotNull(message = "{validation.field.enabled.notNull}") Boolean enabled) {
+        payProductConfigService.switchEnabled(product, enabled);
+        return Res.ok();
+    }
+
+    @PermCode(code = "edit", nameCn = "产品配置编辑", nameEn = "Product Config Edit")
     @Operation(summary = "切换产品生效环境")
     @PostMapping("/switch-env")
     public Result<Void> switchEnv(

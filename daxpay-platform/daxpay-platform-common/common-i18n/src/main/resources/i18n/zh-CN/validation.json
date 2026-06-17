@@ -49,6 +49,9 @@
     "sandbox": {
       "notNull": "沙箱环境不可为空"
     },
+    "enabled": {
+      "notNull": "启用状态不可为空"
+    },
     "enable": {
       "notNull": "是否启用不可为空"
     },

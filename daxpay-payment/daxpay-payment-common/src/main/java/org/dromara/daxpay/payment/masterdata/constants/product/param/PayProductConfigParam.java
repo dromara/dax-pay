@@ -26,6 +26,9 @@ public class PayProductConfigParam {
     @Schema(description = "是否已配置参数")
     private boolean configured;
 
+    @Schema(description = "是否启用")
+    private boolean enabled;
+
     @Schema(description = "备注")
     private String remark;
 }

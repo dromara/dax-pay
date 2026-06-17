@@ -44,6 +44,15 @@ public class PayProductConfigService {
                 .toList();
     }
 
+    /// 切换产品的启用/停用
+    @Transactional(rollbackFor = Exception.class)
+    public void switchEnabled(String product, boolean enabled) {
+        PayProductConfig config = payProductConfigManager.findByProduct(product)
+                .orElseGet(() -> createDefaultConfig(product));
+        config.setEnabled(enabled);
+        payProductConfigManager.saveOrUpdate(config);
+    }
+
     /// 切换产品的生效环境
     @Transactional(rollbackFor = Exception.class)
     public void switchEnv(String product, boolean sandbox) {
@@ -66,6 +75,7 @@ public class PayProductConfigService {
 
         config.setProduct(param.getProduct());
         config.setChannel(param.getChannel());
+        config.setEnabled(param.isEnabled());
         config.setActiveEnv(param.getActiveEnv() != null ? param.getActiveEnv() : PayEnvEnum.PROD.getCode());
         config.setConfigured(param.isConfigured());
         config.setRemark(param.getRemark());
@@ -100,9 +110,11 @@ public class PayProductConfigService {
         PayProductConfig config = configMap.get(payProduct.getCode());
         if (config != null) {
             result.setId(config.getId());
+            result.setEnabled(config.isEnabled());
             result.setActiveEnv(config.getActiveEnv());
             result.setConfigured(config.isConfigured());
         } else {
+            result.setEnabled(true);
             result.setActiveEnv(PayEnvEnum.PROD.getCode());
             result.setConfigured(false);
         }

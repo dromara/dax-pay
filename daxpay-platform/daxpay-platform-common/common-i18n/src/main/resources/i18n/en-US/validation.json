@@ -49,6 +49,9 @@
     "sandbox": {
       "notNull": "Sandbox environment cannot be blank"
     },
+    "enabled": {
+      "notNull": "Enabled status cannot be blank"
+    },
     "enable": {
       "notNull": "Enable status cannot be blank"
     },
