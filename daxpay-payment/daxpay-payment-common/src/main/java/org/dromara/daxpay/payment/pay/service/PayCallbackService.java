@@ -83,7 +83,7 @@ public class PayCallbackService {
 
     /// 失败处理
     private void fail(PayTrade trade, PayNormalOrder normalOrder, CallbackInfo callbackInfo) {
-        if (!Objects.equals(trade.getStatus(), PayFundStatusEnum.PROGRESS.getCode())) {
+        if (!Objects.equals(trade.getStatus(), PayFundStatusEnum.PROCESSING.getCode())) {
             callbackInfo.setCallbackStatus(CallbackStatusEnum.IGNORE)
                     .setCallbackErrorMsg("订单不是支付中状态，忽略");
             return;

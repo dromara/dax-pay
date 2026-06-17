@@ -30,7 +30,7 @@ import java.util.Objects;
 /// # 支付回调处理
 ///
 @Slf4j
-@Service
+@Service("oldPayCallbackService")
 @RequiredArgsConstructor
 public class PayCallbackService {
 

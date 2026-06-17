@@ -8,7 +8,6 @@ import org.dromara.daxpay.platform.core.exception.DangerSqlException;
 import org.dromara.daxpay.platform.core.code.CommonCode;
 import org.dromara.daxpay.platform.core.rest.param.PageParam;
 import org.dromara.daxpay.payment.old.pay.entity.order.pay.PayOrder;
-import org.dromara.daxpay.platform.core.enums.pay.pay.PayAllocStatusEnum;
 import org.dromara.daxpay.platform.core.enums.pay.pay.PayStatusEnum;
 import org.dromara.daxpay.platform.core.enums.pay.trade.SettleStatusEnum;
 import org.dromara.daxpay.payment.old.pay.param.order.pay.PayOrderQuery;
@@ -82,16 +81,6 @@ public class PayOrderManager extends BaseManager<PayOrderMapper, PayOrder> {
         return this.lambdaQuery()
                 .eq(PayOrder::getProduct, product)
                 .between(PayOrder::getPayTime, startTime, endTime)
-                .eq(PayOrder::getStatus, PayStatusEnum.SUCCESS.getCode())
-                .list();
-    }
-
-    /// 查询自动分账的订单记录(指定时间和状态的订单)
-    public List<PayOrder> findAutoAllocation() {
-        return this.lambdaQuery()
-                .eq(PayOrder::getAllocation, true)
-                .eq(PayOrder::getAutoAllocation, true)
-                .eq(PayOrder::getAllocStatus, PayAllocStatusEnum.WAITING.getCode())
                 .eq(PayOrder::getStatus, PayStatusEnum.SUCCESS.getCode())
                 .list();
     }

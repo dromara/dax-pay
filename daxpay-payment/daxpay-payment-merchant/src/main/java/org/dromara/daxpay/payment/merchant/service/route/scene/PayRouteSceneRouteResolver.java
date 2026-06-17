@@ -4,7 +4,7 @@ import org.dromara.daxpay.payment.common.util.PaymentStrategyFactory;
 import org.dromara.daxpay.payment.merchant.service.route.support.PayRouteCapabilityService;
 import org.dromara.daxpay.payment.merchant.service.route.support.PayRouteI18nHelper;
 import org.dromara.daxpay.payment.merchant.service.route.runtime.PayRouteProductResolver;
-import org.dromara.daxpay.payment.pay.strategy.AbsProductStrategy;
+import org.dromara.daxpay.payment.strategy.product.AbsProductStrategy;
 import org.dromara.daxpay.platform.core.code.CommonErrorCode;
 import org.dromara.daxpay.platform.core.enums.pay.channel.PayProviderEnum;
 import org.dromara.daxpay.platform.core.enums.pay.channel.ProductEnum;

@@ -2,10 +2,10 @@ package org.dromara.daxpay.payment.merchant.controller.report;
 
 import org.dromara.daxpay.platform.core.rest.Res;
 import org.dromara.daxpay.platform.core.rest.result.Result;
-import org.dromara.daxpay.payment.pay.param.report.TradeReportQuery;
-import org.dromara.daxpay.payment.pay.result.report.TradeReportResult;
-import org.dromara.daxpay.payment.pay.result.report.TradeStatisticsReport;
-import org.dromara.daxpay.payment.pay.service.report.IndexTradeReportService;
+import org.dromara.daxpay.payment.old.pay.param.report.TradeReportQuery;
+import org.dromara.daxpay.payment.old.pay.result.report.TradeReportResult;
+import org.dromara.daxpay.payment.old.pay.result.report.TradeStatisticsReport;
+import org.dromara.daxpay.payment.old.pay.service.report.IndexTradeReportService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

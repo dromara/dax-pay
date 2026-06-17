@@ -112,13 +112,13 @@ public class PaySyncService {
     /// 判断状态是否一致
     private boolean checkAndAdjust(PaySyncResultBo syncResult, PayTrade trade) {
         var payStatus = Optional.ofNullable(syncResult.getPayStatus())
-                .orElse(PayFundStatusEnum.PROGRESS);
+                .orElse(PayFundStatusEnum.PROCESSING);
         String orderStatus = trade.getStatus();
         if (orderStatus.equals(PayFundStatusEnum.FAIL.getCode())) {
             return false;
         }
-        if (orderStatus.equals(PayFundStatusEnum.PROGRESS.getCode())) {
-            if (Objects.equals(PayFundStatusEnum.PROGRESS, payStatus)) {
+        if (orderStatus.equals(PayFundStatusEnum.PROCESSING.getCode())) {
+            if (Objects.equals(PayFundStatusEnum.PROCESSING, payStatus)) {
                 if (DateTimeUtil.le(trade.getExpiredTime(), OffsetDateTime.now(ZoneOffset.UTC))) {
                     syncResult.setPayStatus(PayFundStatusEnum.CLOSE);
                     return false;
@@ -138,7 +138,7 @@ public class PaySyncService {
             return;
         }
         switch (payStatus) {
-            case PROGRESS -> {}
+            case PROCESSING -> {}
             case SUCCESS -> this.success(trade, normalOrder, syncResult);
             case CLOSE -> payUniHandleService.payClose(trade, normalOrder);
             case FAIL -> payUniHandleService.payFail(trade, normalOrder, syncResult.getSyncErrorMsg());

@@ -4,7 +4,7 @@ import org.dromara.daxpay.payment.old.pay.entity.notice.callback.MerchantCallbac
 import org.dromara.daxpay.payment.old.pay.entity.order.pay.PayOrder;
 import org.dromara.daxpay.payment.old.pay.entity.order.pay.PayOrderExpand;
 import org.dromara.daxpay.payment.old.pay.entity.order.refund.RefundOrder;
-import org.dromara.daxpay.payment.old.pay.strategy.AbsPayPluginStrategy;
+import org.dromara.daxpay.payment.strategy.pay.AbsPayPluginStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

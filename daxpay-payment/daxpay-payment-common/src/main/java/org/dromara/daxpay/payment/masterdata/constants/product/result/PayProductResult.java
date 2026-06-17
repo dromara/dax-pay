@@ -46,9 +46,6 @@ public class PayProductResult extends BaseResult {
     @Schema(description = "是否支持服务商")
     private boolean isv;
 
-    @Schema(description = "是否支持分账")
-    private boolean allocatable;
-
     @Schema(description = "是否支持终端报备")
     private boolean terminal;
 

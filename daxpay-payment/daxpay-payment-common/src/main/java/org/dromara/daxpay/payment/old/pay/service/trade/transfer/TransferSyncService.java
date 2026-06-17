@@ -17,7 +17,7 @@ import org.dromara.daxpay.payment.old.pay.service.notice.MerchantNoticeService;
 import org.dromara.daxpay.payment.old.pay.service.order.transfer.TransferOrderQueryService;
 import org.dromara.daxpay.payment.old.pay.service.record.flow.TradeFlowRecordService;
 import org.dromara.daxpay.payment.old.pay.service.record.sync.TradeSyncRecordService;
-import org.dromara.daxpay.payment.old.pay.strategy.AbsSyncTransferOrderStrategy;
+import org.dromara.daxpay.payment.strategy.sync.AbsSyncTransferOrderStrategy;
 import org.dromara.daxpay.payment.common.util.PaymentStrategyFactory;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;

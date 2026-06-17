@@ -1,8 +1,8 @@
 package org.dromara.daxpay.payment.admin.controller.masterdata.product;
 
-import org.dromara.daxpay.payment.pay.param.masterdata.product.PayProductQuery;
-import org.dromara.daxpay.payment.pay.result.masterdata.product.PayProductResult;
-import org.dromara.daxpay.payment.pay.service.masterdata.product.PayProductService;
+import org.dromara.daxpay.payment.masterdata.constants.product.param.PayProductQuery;
+import org.dromara.daxpay.payment.masterdata.constants.product.result.PayProductResult;
+import org.dromara.daxpay.payment.masterdata.constants.product.service.PayProductService;
 import org.dromara.daxpay.platform.core.annotation.PermCode;
 import org.dromara.daxpay.platform.core.rest.Res;
 import org.dromara.daxpay.platform.core.rest.dto.LabelValue;

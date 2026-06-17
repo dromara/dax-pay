@@ -2,7 +2,7 @@ package org.dromara.daxpay.payment.merchant.dao.config;
 
 import org.dromara.daxpay.platform.common.mybatisplus.impl.BaseManager;
 import org.dromara.daxpay.platform.common.mybatisplus.util.MpUtil;
-import org.dromara.daxpay.payment.pay.entity.config.ChannelConfig;
+import org.dromara.daxpay.payment.masterdata.config.entity.ChannelConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;

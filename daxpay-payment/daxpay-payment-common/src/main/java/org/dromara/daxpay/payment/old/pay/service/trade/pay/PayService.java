@@ -15,8 +15,9 @@ import org.dromara.daxpay.platform.core.enums.pay.channel.PayMethodEnum;
 import org.dromara.daxpay.platform.core.enums.pay.pay.PayStatusEnum;
 import org.dromara.daxpay.payment.old.pay.exception.TradeProcessingException;
 import org.dromara.daxpay.payment.old.pay.service.trade.TradeUniHandleService;
-import org.dromara.daxpay.payment.old.pay.service.masterdata.product.PayProductCapabilityService;
-import org.dromara.daxpay.payment.old.pay.strategy.AbsPayStrategy;
+import org.dromara.daxpay.payment.masterdata.constants.product.service.PayProductCapabilityService;
+import org.dromara.daxpay.payment.pay.order.entity.PayTrade;
+import org.dromara.daxpay.payment.strategy.pay.AbsPayStrategy;
 import org.dromara.daxpay.platform.core.enums.unipay.PayBodyTypeEnum;
 import org.dromara.daxpay.payment.unipay.param.trade.pay.PayParam;
 import org.dromara.daxpay.payment.unipay.result.trade.pay.PayResult;
@@ -36,7 +37,7 @@ import java.util.Optional;
 /// # 支付服务类
 ///
 @Slf4j
-@Service
+@Service("oldPayService")
 @RequiredArgsConstructor
 public class PayService {
 
@@ -86,13 +87,6 @@ public class PayService {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.unsupportedPayMethod",
                     I18nUtil.getEnumName(methodEnum) + "(" + methodEnum.getCode() + ")");
         }
-        // 其他支付方式检查
-        if (methodEnum == PayMethodEnum.OTHER){
-            if (StrUtil.isBlank(payParam.getOtherMethod())) {
-                // 其他支付方法不能为空
-                throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.otherMethodRequired");
-            }
-        }
         // 执行支付前处理动作, 进行各种校验, 校验通过才会进行下面的操作
         payStrategy.doBeforePayHandler();
         // 订单不存在执行支付前的保存动作, 保存支付订单默认状态为支付中
@@ -110,11 +104,32 @@ public class PayService {
         if (Objects.equals(payOrder.getStatus(), PayStatusEnum.WAIT.getCode())){
             payAssistService.updatePayOrder(payParam,payOrder);
         }
-        payStrategy.setOrder(payOrder);
+        PayTrade trade = new PayTrade();
+        trade.setId(payOrder.getId());
+        trade.setProduct(payOrder.getProduct());
+        trade.setChannel(payOrder.getChannel());
+        trade.setMethod(payOrder.getMethod());
+        trade.setAmount(payOrder.getAmount().multiply(java.math.BigDecimal.valueOf(100)).longValue());
+        payStrategy.setTrade(trade);
         PayResultBo result;
         try {
             // 支付操作
-            result = payStrategy.doPayHandler();
+            var newResult = payStrategy.doPayHandler();
+            result = new PayResultBo();
+            result.setOutOrderNo(newResult.getOutOrderNo());
+            result.setComplete(newResult.isComplete());
+            result.setRealAmount(newResult.getRealAmount() != null ? java.math.BigDecimal.valueOf(newResult.getRealAmount(), 2) : null);
+            result.setFinishTime(newResult.getFinishTime());
+            result.setPayBody(newResult.getPayBody());
+            result.setPayBodyType(newResult.getPayBodyType());
+            result.setBuyerId(newResult.getBuyerId());
+            result.setUserId(newResult.getUserId());
+            result.setTradeProduct(newResult.getTradeProduct());
+            result.setTradeWay(newResult.getTradeWay());
+            result.setBankType(newResult.getBankType());
+            result.setTransOrderNo(newResult.getTransOrderNo());
+            result.setRelationOrderNo(newResult.getRelationOrderNo());
+            result.setPromotionType(newResult.getPromotionType());
         } catch (Exception e) {
             log.error("支付出现异常",e);
             payOrder.setStatus(PayStatusEnum.FAIL.getCode());

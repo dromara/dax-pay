@@ -1,7 +1,7 @@
 package org.dromara.daxpay.payment.common.service;
 
-import org.dromara.daxpay.payment.pay.param.report.TradeReportQuery;
-import org.dromara.daxpay.payment.pay.result.report.MerchantReportResult;
+import org.dromara.daxpay.payment.old.pay.param.report.TradeReportQuery;
+import org.dromara.daxpay.payment.old.pay.result.report.MerchantReportResult;
 
 /// # 商户报表查询服务
 ///

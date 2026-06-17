@@ -1,6 +1,6 @@
 package org.dromara.daxpay.payment.merchant.convert.config;
 
-import org.dromara.daxpay.payment.pay.entity.config.ChannelConfig;
+import org.dromara.daxpay.payment.masterdata.config.entity.ChannelConfig;
 import org.dromara.daxpay.payment.merchant.result.config.ChannelConfigResult;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;

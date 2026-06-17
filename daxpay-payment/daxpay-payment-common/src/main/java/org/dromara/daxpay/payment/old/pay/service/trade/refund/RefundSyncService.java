@@ -15,7 +15,7 @@ import org.dromara.daxpay.payment.old.pay.entity.order.refund.RefundOrder;
 import org.dromara.daxpay.payment.old.pay.entity.record.sync.TradeSyncRecord;
 import org.dromara.daxpay.payment.old.pay.service.order.refund.RefundOrderQueryService;
 import org.dromara.daxpay.payment.old.pay.service.record.sync.TradeSyncRecordService;
-import org.dromara.daxpay.payment.old.pay.strategy.AbsSyncRefundOrderStrategy;
+import org.dromara.daxpay.payment.strategy.sync.AbsSyncRefundOrderStrategy;
 import org.dromara.daxpay.payment.common.util.PaymentStrategyFactory;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;

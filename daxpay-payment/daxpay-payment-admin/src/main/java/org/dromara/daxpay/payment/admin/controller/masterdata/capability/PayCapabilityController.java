@@ -1,8 +1,8 @@
 package org.dromara.daxpay.payment.admin.controller.masterdata.capability;
 
-import org.dromara.daxpay.payment.pay.param.masterdata.capability.PayCapabilityQuery;
-import org.dromara.daxpay.payment.pay.result.masterdata.capability.PayCapabilityResult;
-import org.dromara.daxpay.payment.pay.service.masterdata.capability.PayCapabilityService;
+import org.dromara.daxpay.payment.masterdata.constants.capability.param.PayCapabilityQuery;
+import org.dromara.daxpay.payment.masterdata.constants.capability.result.PayCapabilityResult;
+import org.dromara.daxpay.payment.masterdata.constants.capability.service.PayCapabilityService;
 import org.dromara.daxpay.platform.core.annotation.PermCode;
 import org.dromara.daxpay.platform.core.rest.Res;
 import org.dromara.daxpay.platform.core.rest.param.PageParam;

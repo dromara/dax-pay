@@ -6,7 +6,7 @@ import org.dromara.daxpay.platform.core.enums.pay.channel.PayCapabilityEnum;
 import org.dromara.daxpay.platform.core.enums.pay.channel.PayMethodEnum;
 import org.dromara.daxpay.platform.core.enums.pay.channel.PayProviderEnum;
 import org.dromara.daxpay.platform.core.enums.pay.channel.ProductEnum;
-import org.dromara.daxpay.payment.pay.strategy.AbsProductStrategy;
+import org.dromara.daxpay.payment.strategy.product.AbsProductStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

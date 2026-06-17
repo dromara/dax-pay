@@ -8,10 +8,10 @@ import org.dromara.daxpay.platform.core.code.CommonErrorCode;
 import org.dromara.daxpay.platform.core.util.ValidationUtil;
 import org.dromara.daxpay.payment.unipay.param.MerchantPaymentCommonParam;
 import org.dromara.daxpay.payment.common.result.DaxResult;
-import org.dromara.daxpay.payment.pay.anno.PaymentVerify;
-import org.dromara.daxpay.payment.pay.service.assist.PayParamCapabilityValidator;
-import org.dromara.daxpay.payment.pay.service.assist.PayParamRouteValidator;
-import org.dromara.daxpay.payment.pay.service.assist.PaymentAssistService;
+import org.dromara.daxpay.payment.old.pay.anno.PaymentVerify;
+import org.dromara.daxpay.payment.old.pay.service.assist.PayParamCapabilityValidator;
+import org.dromara.daxpay.payment.old.pay.service.assist.PayParamRouteValidator;
+import org.dromara.daxpay.payment.old.pay.service.assist.PaymentAssistService;
 import org.dromara.daxpay.payment.unipay.param.trade.pay.PayParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +45,7 @@ public class PaymentVerifyAspect {
     }
 
     /// 处理类上的@PaymentVerify注解（排除方法上也有的情况，避免重复匹配）
-    @Around("@within(paymentVerify) && !@annotation(org.dromara.daxpay.payment.pay.anno.PaymentVerify)")
+    @Around("@within(paymentVerify) && !@annotation(org.dromara.daxpay.payment.old.pay.anno.PaymentVerify)")
     public Object methodPointWithin(ProceedingJoinPoint pjp, PaymentVerify paymentVerify) throws Throwable {
         return doVerify(pjp);
     }

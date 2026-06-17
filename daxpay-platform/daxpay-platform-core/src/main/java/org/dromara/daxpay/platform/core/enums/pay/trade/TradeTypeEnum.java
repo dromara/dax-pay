@@ -20,8 +20,6 @@ public enum TradeTypeEnum implements I18nSupport {
     REFUND("refund"),
     /// 转账
     TRANSFER("transfer"),
-    /// 分账
-    ALLOCATION("allocation"),
     /// 提现
     CASHOUTS("cashouts"),
     /// 结算

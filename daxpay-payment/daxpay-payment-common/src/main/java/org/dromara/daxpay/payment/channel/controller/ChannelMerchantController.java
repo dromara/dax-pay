@@ -8,7 +8,7 @@ import org.dromara.daxpay.platform.core.rest.result.Result;
 import org.dromara.daxpay.payment.channel.param.mch.ChannelMerchantQuery;
 import org.dromara.daxpay.payment.channel.result.info.ChannelMerchantResult;
 import org.dromara.daxpay.payment.channel.service.info.ChannelMerchantService;
-import org.dromara.daxpay.payment.pay.result.masterdata.channel.PayChannelResult;
+import org.dromara.daxpay.payment.masterdata.constants.channel.result.PayChannelResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;

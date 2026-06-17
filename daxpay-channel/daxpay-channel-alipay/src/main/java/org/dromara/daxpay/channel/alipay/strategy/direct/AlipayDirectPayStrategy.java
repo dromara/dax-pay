@@ -5,8 +5,8 @@ import org.dromara.daxpay.channel.alipay.entity.direct.AlipayDirectApp;
 import org.dromara.daxpay.channel.alipay.entity.direct.AlipayDirectAppKeyConfig;
 import org.dromara.daxpay.channel.alipay.service.direct.AlipayDirectAppKeyConfigService;
 import org.dromara.daxpay.channel.alipay.service.pay.AlipayPayService;
-import org.dromara.daxpay.payment.pay.bo.trade.PayResultBo;
-import org.dromara.daxpay.payment.pay.strategy.AbsPayStrategy;
+import org.dromara.daxpay.payment.pay.bo.PayTradeResultBo;
+import org.dromara.daxpay.payment.strategy.pay.AbsPayStrategy;
 import org.dromara.daxpay.platform.core.enums.pay.channel.PayMethodEnum;
 import org.dromara.daxpay.platform.core.enums.pay.channel.ProductEnum;
 import org.dromara.daxpay.platform.core.exception.DataNotExistException;
@@ -42,12 +42,12 @@ public class AlipayDirectPayStrategy extends AbsPayStrategy {
     }
 
     @Override
-    public PayResultBo doPayHandler() {
-        return alipayPayService.pay(getOrder(), getPayParam(), buildConfig());
+    public PayTradeResultBo doPayHandler() {
+        return alipayPayService.pay(getTrade(), getPayParam(), buildConfig());
     }
 
     private Map<String, Object> buildConfig() {
-        String mchNo = getOrder().getMchNo();
+        String mchNo = getTrade().getMchNo();
         AlipayDirectApp app = alipayDirectAppManager.findFirstByMchNo(mchNo)
                 .orElseThrow(() -> new DataNotExistException("error.channel.alipay.mchAppNotFound"));
         AlipayDirectAppKeyConfig keyConfig = alipayDirectAppKeyConfigService.findByAlipayDirectAppId(app.getId());

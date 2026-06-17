@@ -19,6 +19,7 @@ import org.dromara.daxpay.payment.unipay.param.trade.transfer.TransferParam;
 import org.dromara.daxpay.payment.unipay.result.trade.pay.PayResult;
 import org.dromara.daxpay.payment.unipay.result.trade.refund.RefundResult;
 import org.dromara.daxpay.payment.unipay.result.trade.transfer.TransferResult;
+import org.dromara.daxpay.platform.core.enums.pay.trade.TradeSourceEnum;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

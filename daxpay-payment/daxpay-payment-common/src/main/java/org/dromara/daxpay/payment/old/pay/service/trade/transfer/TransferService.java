@@ -11,7 +11,7 @@ import org.dromara.daxpay.payment.old.pay.dao.order.transfer.TransferOrderManage
 import org.dromara.daxpay.payment.old.pay.entity.order.transfer.TransferOrder;
 import org.dromara.daxpay.payment.old.pay.service.notice.MerchantNoticeService;
 import org.dromara.daxpay.payment.old.pay.service.record.flow.TradeFlowRecordService;
-import org.dromara.daxpay.payment.old.pay.strategy.AbsTransferStrategy;
+import org.dromara.daxpay.payment.strategy.transfer.AbsTransferStrategy;
 import org.dromara.daxpay.payment.common.util.PaymentStrategyFactory;
 import cn.hutool.extra.spring.SpringUtil;
 import com.baomidou.lock.LockInfo;

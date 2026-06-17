@@ -60,7 +60,7 @@ public class PayCloseService {
 
     /// 关闭支付记录
     public void closeOrder(PayTrade trade, boolean useCancel) {
-        if (!List.of(PayFundStatusEnum.INIT.getCode(), PayFundStatusEnum.PROGRESS.getCode())
+        if (!List.of(PayFundStatusEnum.INIT.getCode(), PayFundStatusEnum.PROCESSING.getCode())
                 .contains(trade.getStatus())) {
             throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.pay.closeNotPaying");
         }

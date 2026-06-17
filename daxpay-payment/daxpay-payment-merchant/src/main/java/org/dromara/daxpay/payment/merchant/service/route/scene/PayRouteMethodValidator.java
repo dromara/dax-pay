@@ -1,6 +1,6 @@
 package org.dromara.daxpay.payment.merchant.service.route.scene;
 
-import org.dromara.daxpay.payment.pay.service.masterdata.provider.PayProviderMethodService;
+import org.dromara.daxpay.payment.masterdata.constants.provider.service.PayProviderMethodService;
 import org.dromara.daxpay.platform.core.code.CommonErrorCode;
 import org.dromara.daxpay.platform.core.enums.pay.channel.PayMethodEnum;
 import org.dromara.daxpay.platform.core.enums.pay.channel.PayProviderEnum;

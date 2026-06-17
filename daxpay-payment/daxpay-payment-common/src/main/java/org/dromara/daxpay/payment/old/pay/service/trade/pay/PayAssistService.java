@@ -26,7 +26,7 @@ import cn.hutool.core.util.StrUtil;
 import org.dromara.daxpay.payment.old.pay.exception.TradeStatusErrorException;
 import org.dromara.daxpay.payment.common.context.PaymentContext;
 import org.dromara.daxpay.payment.old.pay.service.order.pay.PayOrderQueryService;
-import org.dromara.daxpay.payment.old.pay.strategy.AbsTradeProfitStrategy;
+import org.dromara.daxpay.payment.strategy.profit.AbsTradeProfitStrategy;
 import org.dromara.daxpay.payment.unipay.param.trade.pay.PayParam;
 import org.dromara.daxpay.payment.unipay.result.trade.pay.PayResult;
 import lombok.RequiredArgsConstructor;
@@ -43,7 +43,7 @@ import java.util.Objects;
 /// # 支付支持服务
 ///
 @Slf4j
-@Service
+@Service("oldPayAssistService")
 @RequiredArgsConstructor
 public class PayAssistService {
 
@@ -74,12 +74,9 @@ public class PayAssistService {
                 .setStatus(PayStatusEnum.PROGRESS.getCode())
                 .setRefundStatus(PayRefundStatusEnum.NO_REFUND.getCode())
                 .setExpiredTime(expiredTime)
-                .setSource(payParam.getSource())
                 .setRefundableBalance(payParam.getAmount());
-        // 支付渠道：请求参数优先（copy 已写入），付款码场景由 authCode 推导
-        if (StrUtil.isNotBlank(payParam.getProvider())) {
-            order.setProvider(payParam.getProvider());
-        } else if (PayUtil.isBarcodePayMethod(payParam.getMethod())) {
+        // 支付渠道：付款码场景由 authCode 推导
+        if (PayUtil.isBarcodePayMethod(payParam.getMethod())) {
             var barInstrument = PayUtil.getBarCodeType(payParam.getAuthCode());
             order.setProvider(barInstrument.getCode());
         }
@@ -100,10 +97,6 @@ public class PayAssistService {
 
     /// 订单初始化处理
     public void initPayOrder(PayOrder order){
-        // 如果支持分账, 设置分账状态为待分账
-        if (order.getAllocation()) {
-            order.setAllocStatus(PayAllocStatusEnum.WAITING.getCode());
-        }
         // 判断该产品是否有分润策略, 有的话记录为待结算
         if (PaymentStrategyFactory.existsByProduct(order.getProduct(), AbsTradeProfitStrategy.class)){
             order.setSettleStatus(SettleStatusEnum.NOT_SETTLE.getCode());
@@ -116,10 +109,15 @@ public class PayAssistService {
     @Transactional(rollbackFor = Exception.class)
     public void updatePayOrder(PayParam payParam, PayOrder payOrder) {
         payOrder.setProduct(payParam.getProduct())
-                .setChannel(payParam.getChannel())
                 .setMethod(payParam.getMethod())
-                .setOtherMethod(payParam.getOtherMethod())
                 .setStatus(PayStatusEnum.PROGRESS.getCode());
+        // 从产品编码派生通道编码
+        if (StrUtil.isNotBlank(payParam.getProduct())) {
+            ProductEnum productEnum = ProductEnum.findByCode(payParam.getProduct());
+            if (productEnum != null) {
+                payOrder.setChannel(productEnum.getChannel());
+            }
+        }
         // 判断该产品是否有分润策略, 有的话记录为待结算
         if (PaymentStrategyFactory.existsByProduct(payParam.getProduct(), AbsTradeProfitStrategy.class)){
             payOrder.setSettleStatus(SettleStatusEnum.NOT_SETTLE.getCode());

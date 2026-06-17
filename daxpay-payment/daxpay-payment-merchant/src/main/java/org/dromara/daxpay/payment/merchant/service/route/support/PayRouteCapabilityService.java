@@ -1,10 +1,10 @@
 package org.dromara.daxpay.payment.merchant.service.route.support;
 
 import org.dromara.daxpay.payment.common.util.PaymentStrategyFactory;
-import org.dromara.daxpay.payment.pay.service.masterdata.product.PayProductCapabilityService;
-import org.dromara.daxpay.payment.pay.service.masterdata.provider.PayProviderMethodService;
-import org.dromara.daxpay.payment.pay.strategy.AbsProductStrategy;
-import org.dromara.daxpay.payment.pay.support.ProductStrategySupport;
+import org.dromara.daxpay.payment.masterdata.constants.product.service.PayProductCapabilityService;
+import org.dromara.daxpay.payment.masterdata.constants.provider.service.PayProviderMethodService;
+import org.dromara.daxpay.payment.strategy.product.AbsProductStrategy;
+import org.dromara.daxpay.payment.old.pay.support.ProductStrategySupport;
 import org.dromara.daxpay.platform.core.enums.pay.channel.PayMethodEnum;
 import org.dromara.daxpay.platform.core.enums.pay.channel.PayProviderEnum;
 import lombok.RequiredArgsConstructor;

@@ -3,7 +3,7 @@ package org.dromara.daxpay.payment.old.pay.service.assist;
 import org.dromara.daxpay.platform.common.i18n.util.I18nUtil;
 import org.dromara.daxpay.platform.core.rest.dto.LabelValue;
 import org.dromara.daxpay.payment.common.util.PaymentStrategyFactory;
-import org.dromara.daxpay.payment.old.pay.strategy.AbsProductStrategy;
+import org.dromara.daxpay.payment.strategy.product.AbsProductStrategy;
 import org.dromara.daxpay.payment.old.pay.support.ProductStrategySupport;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

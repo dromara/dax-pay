@@ -1,8 +1,8 @@
 package org.dromara.daxpay.payment.admin.controller.masterdata.provider;
 
-import org.dromara.daxpay.payment.pay.result.masterdata.provider.PayProviderGroupResult;
-import org.dromara.daxpay.payment.pay.result.masterdata.provider.PayProviderMethodResult;
-import org.dromara.daxpay.payment.pay.service.masterdata.provider.PayProviderService;
+import org.dromara.daxpay.payment.masterdata.constants.provider.result.PayProviderGroupResult;
+import org.dromara.daxpay.payment.masterdata.constants.provider.result.PayProviderMethodResult;
+import org.dromara.daxpay.payment.masterdata.constants.provider.service.PayProviderService;
 import org.dromara.daxpay.platform.core.annotation.PermCode;
 import org.dromara.daxpay.platform.core.rest.Res;
 import org.dromara.daxpay.platform.core.rest.result.Result;

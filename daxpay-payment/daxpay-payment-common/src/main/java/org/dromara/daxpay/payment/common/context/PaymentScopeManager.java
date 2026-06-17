@@ -1,6 +1,6 @@
 package org.dromara.daxpay.payment.common.context;
 
-import org.dromara.daxpay.payment.pay.service.assist.PaymentAssistService;
+import org.dromara.daxpay.payment.old.pay.service.assist.PaymentAssistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

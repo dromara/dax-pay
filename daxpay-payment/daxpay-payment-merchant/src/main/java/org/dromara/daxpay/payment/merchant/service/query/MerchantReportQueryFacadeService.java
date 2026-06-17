@@ -5,8 +5,8 @@ import org.dromara.daxpay.payment.merchant.dao.appinfo.MchAppInfoManager;
 import org.dromara.daxpay.payment.merchant.dao.info.MerchantInfoManager;
 import org.dromara.daxpay.payment.merchant.entity.appinfo.MchAppInfo;
 import org.dromara.daxpay.payment.merchant.entity.info.MerchantInfo;
-import org.dromara.daxpay.payment.pay.param.report.TradeReportQuery;
-import org.dromara.daxpay.payment.pay.result.report.MerchantReportResult;
+import org.dromara.daxpay.payment.old.pay.param.report.TradeReportQuery;
+import org.dromara.daxpay.payment.old.pay.result.report.MerchantReportResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -2,7 +2,7 @@ package org.dromara.daxpay.payment.common.controller.assist;
 
 import org.dromara.daxpay.platform.core.rest.Res;
 import org.dromara.daxpay.platform.core.rest.result.Result;
-import org.dromara.daxpay.payment.pay.service.assist.ChannelAuthService;
+import org.dromara.daxpay.payment.old.pay.service.assist.ChannelAuthService;
 import org.dromara.daxpay.payment.unipay.param.assist.GenerateAuthUrlParam;
 import org.dromara.daxpay.payment.unipay.result.assist.AuthResult;
 import org.dromara.daxpay.payment.unipay.result.assist.AuthUrlResult;

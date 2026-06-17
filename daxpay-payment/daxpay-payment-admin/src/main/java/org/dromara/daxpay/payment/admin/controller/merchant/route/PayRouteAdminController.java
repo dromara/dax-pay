@@ -1,7 +1,7 @@
 package org.dromara.daxpay.payment.admin.controller.merchant.route;
 
-import org.dromara.daxpay.payment.pay.result.masterdata.provider.PayProviderMethodResult;
-import org.dromara.daxpay.payment.pay.service.masterdata.provider.PayProviderMethodService;
+import org.dromara.daxpay.payment.masterdata.constants.provider.result.PayProviderMethodResult;
+import org.dromara.daxpay.payment.masterdata.constants.provider.service.PayProviderMethodService;
 import org.dromara.daxpay.payment.merchant.param.route.basic.PayRouteBasicConfigBatchParam;
 import org.dromara.daxpay.payment.merchant.param.route.scene.PayRouteSceneCapabilityBatchParam;
 import org.dromara.daxpay.payment.merchant.param.route.scene.PayRouteSceneConfigBatchParam;

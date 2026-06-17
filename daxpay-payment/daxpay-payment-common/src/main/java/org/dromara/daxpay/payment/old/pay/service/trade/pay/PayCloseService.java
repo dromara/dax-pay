@@ -8,6 +8,7 @@ import org.dromara.daxpay.platform.core.code.DaxPayErrorCode;
 import org.dromara.daxpay.platform.core.exception.operation.OperationFailException;
 import org.dromara.daxpay.platform.core.exception.PayFailureException;
 import org.dromara.daxpay.payment.common.util.PaymentStrategyFactory;
+import org.dromara.daxpay.payment.pay.order.entity.PayTrade;
 import org.dromara.daxpay.payment.old.pay.dao.order.pay.PayOrderManager;
 import org.dromara.daxpay.payment.old.pay.entity.order.pay.PayOrder;
 import org.dromara.daxpay.payment.old.pay.entity.record.close.PayCloseRecord;
@@ -21,7 +22,7 @@ import org.dromara.daxpay.payment.old.pay.service.notice.MerchantNoticeService;
 import org.dromara.daxpay.payment.old.pay.service.order.pay.PayOrderQueryService;
 import org.dromara.daxpay.payment.old.pay.service.record.close.PayCloseRecordService;
 import org.dromara.daxpay.payment.old.pay.service.trade.TradeUniHandleService;
-import org.dromara.daxpay.payment.old.pay.strategy.AbsPayCloseStrategy;
+import org.dromara.daxpay.payment.strategy.pay.AbsPayCloseStrategy;
 import org.dromara.daxpay.payment.unipay.param.trade.pay.PayCloseParam;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.lock.LockInfo;
@@ -36,7 +37,7 @@ import java.util.Objects;
 /// # 支付关闭和撤销服务
 ///
 @Slf4j
-@Service
+@Service("oldPayCloseService")
 @RequiredArgsConstructor
 public class PayCloseService {
     private final PayOrderManager payOrderManager;
@@ -88,7 +89,12 @@ public class PayCloseService {
             } else {
                 AbsPayCloseStrategy strategy = PaymentStrategyFactory.createByProduct(payOrder.getProduct(), AbsPayCloseStrategy.class);
                 // 初始化参数
-                strategy.init(payOrder, useCancel);
+                PayTrade trade = new PayTrade();
+                trade.setId(payOrder.getId());
+                trade.setProduct(payOrder.getProduct());
+                trade.setChannel(payOrder.getChannel());
+                trade.setMethod(payOrder.getMethod());
+                strategy.init(trade, useCancel);
                 // 关闭前准备
                 strategy.doBeforeCloseHandler();
                 // 执行关闭策略, 返回关闭的方式

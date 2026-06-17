@@ -19,7 +19,6 @@ import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
-import java.util.Objects;
 
 /// # 支付订单
 ///
@@ -56,12 +55,6 @@ public class PayOrder extends MchBaseEntity implements ToResult<PayOrderVo> {
     /// 描述
     private String description;
 
-    /// 是否支持分账
-    private Boolean allocation;
-
-    /// 自动分账
-    private Boolean autoAllocation;
-
     /// 支付产品
     /// @see ProductEnum
     private String product;
@@ -96,10 +89,6 @@ public class PayOrder extends MchBaseEntity implements ToResult<PayOrderVo> {
     /// @see PayRefundStatusEnum
     private String refundStatus;
 
-    /// 分账状态
-    /// @see PayAllocStatusEnum
-    private String allocStatus;
-
     /// 结算状态, 为空不需要进行结算
     /// @see SettleStatusEnum
     private String settleStatus;
@@ -128,14 +117,6 @@ public class PayOrder extends MchBaseEntity implements ToResult<PayOrderVo> {
     public PayOrder setErrorMsg(String errorMsg) {
         this.errorMsg = StrUtil.sub(errorMsg,0,300);
         return this;
-    }
-
-    public boolean getAllocation() {
-        return Objects.equals(true, allocation);
-    }
-
-    public boolean getAutoAllocation() {
-        return Objects.equals(true, autoAllocation);
     }
 
     @Override

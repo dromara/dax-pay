@@ -28,11 +28,6 @@ public final class TradeNoGenerateUtil {
         return prefix() + "TFR" + IdUtil.getSnowflakeNextId();
     }
 
-    /// 生成分账订单号
-    public static String allocation() {
-        return prefix() + "ALL" + IdUtil.getSnowflakeNextId();
-    }
-
     /// 生成对账订单号
     public static String reconciliation() {
         return prefix() + "REC" + IdUtil.getSnowflakeNextId();

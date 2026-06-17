@@ -41,14 +41,6 @@ public class PayOrderResult {
     @Schema(description = "描述")
     private String description;
 
-    /// 是否支持分账
-    @Schema(description = "是否需要分账")
-    private Boolean allocation;
-
-    /// 是否开启自动分账, 不传输为不开启
-    @Schema(description = "是否开启自动分账")
-    private Boolean autoAllocation;
-
     /// 支付通道
     /// @see ChannelEnum
     @Schema(description = "支付通道")
@@ -89,11 +81,6 @@ public class PayOrderResult {
     /// @see PayRefundStatusEnum
     @Schema(description = "退款状态")
     private String refundStatus;
-
-    /// 分账状态
-    /// @see PayAllocStatusEnum
-    @Schema(description = "分账状态")
-    private String allocStatus;
 
     /// 结算状态
     /// @see SettleStatusEnum

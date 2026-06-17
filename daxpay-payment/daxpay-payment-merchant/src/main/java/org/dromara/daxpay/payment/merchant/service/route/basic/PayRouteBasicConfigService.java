@@ -10,7 +10,7 @@ import org.dromara.daxpay.payment.merchant.param.route.basic.PayRouteBasicConfig
 import org.dromara.daxpay.payment.merchant.param.route.basic.PayRouteBasicConfigItem;
 import org.dromara.daxpay.payment.merchant.result.route.basic.PayRouteBasicConfigResult;
 import org.dromara.daxpay.payment.merchant.service.route.support.PayRouteConfigProviders;
-import org.dromara.daxpay.payment.pay.strategy.AbsProductStrategy;
+import org.dromara.daxpay.payment.strategy.product.AbsProductStrategy;
 import org.dromara.daxpay.platform.core.enums.pay.channel.PayProviderEnum;
 import org.dromara.daxpay.platform.core.enums.pay.channel.ProductEnum;
 import org.dromara.daxpay.platform.core.exception.BizInfoException;

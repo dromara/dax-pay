@@ -10,9 +10,11 @@ import org.dromara.daxpay.payment.old.pay.result.order.pay.PayOrderExpandResult;
 import org.dromara.daxpay.payment.old.pay.result.order.pay.PayOrderVo;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
+import java.util.List;
 
 /// # 支付订单
 ///
@@ -26,7 +28,16 @@ public interface PayOrderConvert {
 
     PayOrderExpandResult toResult(PayOrderExpand payOrder);
 
+    @Mapping(target = "limitPay", source = "limitPay")
     void copy(PayParam param, @MappingTarget PayOrder payOrder);
+
+    /// 将 List<String> limitPay 转换为逗号分隔的字符串
+    default String mapListToString(List<String> list) {
+        if (list == null || list.isEmpty()) {
+            return null;
+        }
+        return String.join(",", list);
+    }
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void copy(CallbackInfo callbackInfo, @MappingTarget  PayOrderExpand orderExpand);

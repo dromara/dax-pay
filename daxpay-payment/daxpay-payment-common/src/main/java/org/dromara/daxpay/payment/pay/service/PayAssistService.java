@@ -99,7 +99,7 @@ public class PayAssistService {
         trade.setAmount(amount);
         trade.setCurrency(CurrencyEnum.CNY.getCode());
         trade.setRefundableBalance(amount);
-        trade.setStatus(PayFundStatusEnum.PROGRESS.getCode());
+        trade.setStatus(PayFundStatusEnum.PROCESSING.getCode());
         trade.setExpiredTime(expiredTime);
         trade.setSource(org.dromara.daxpay.platform.core.enums.pay.trade.TradeSourceEnum.MCH_API.getCode());
         trade.setBarCode(payParam.getAuthCode());

@@ -1,8 +1,8 @@
 package org.dromara.daxpay.channel.douyin.strategy;
 
 import org.dromara.daxpay.platform.core.enums.pay.channel.ProductEnum;
-import org.dromara.daxpay.payment.pay.bo.trade.PayResultBo;
-import org.dromara.daxpay.payment.pay.strategy.AbsPayStrategy;
+import org.dromara.daxpay.payment.pay.bo.PayTradeResultBo;
+import org.dromara.daxpay.payment.strategy.pay.AbsPayStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class DouyinDirectPayStrategy extends AbsPayStrategy {
     }
 
     @Override
-    public PayResultBo doPayHandler() {
+    public PayTradeResultBo doPayHandler() {
         throw new UnsupportedOperationException("抖音支付直连暂未实现");
     }
 }

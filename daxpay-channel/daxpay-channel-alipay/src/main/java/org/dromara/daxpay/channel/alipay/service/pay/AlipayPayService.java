@@ -1,8 +1,7 @@
 package org.dromara.daxpay.channel.alipay.service.pay;
 
-import org.dromara.daxpay.payment.pay.bo.trade.PayResultBo;
-import org.dromara.daxpay.payment.pay.channel.ChannelPayClient;
-import org.dromara.daxpay.payment.pay.entity.order.pay.PayOrder;
+import org.dromara.daxpay.payment.pay.bo.PayTradeResultBo;
+import org.dromara.daxpay.payment.pay.order.entity.PayTrade;
 import org.dromara.daxpay.payment.unipay.param.trade.pay.PayParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,15 +19,13 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class AlipayPayService {
 
-    private final ChannelPayClient channelPayClient;
-
     /// 执行支付宝支付
     ///
     /// @param order    支付订单
     /// @param payParam 支付参数
     /// @param config   通道调用配置(密钥/证书/授权令牌等)
     /// @return 支付结果
-    public PayResultBo pay(PayOrder order, PayParam payParam, Map<String, Object> config) {
+    public PayTradeResultBo pay(PayTrade order, PayParam payParam, Map<String, Object> config) {
         // TODO 后续实现: method映射 → 组装ChannelPayReq → channelPayClient.pay → 结果转换
         throw new UnsupportedOperationException("AlipayPayService.pay 尚未实现");
     }

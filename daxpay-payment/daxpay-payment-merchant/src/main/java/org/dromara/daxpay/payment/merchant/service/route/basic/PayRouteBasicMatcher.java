@@ -6,7 +6,8 @@ import org.dromara.daxpay.payment.merchant.service.route.support.PayRouteCapabil
 import org.dromara.daxpay.payment.merchant.service.route.model.RouteHit;
 import org.dromara.daxpay.payment.merchant.service.route.runtime.PayRouteProductResolver;
 import org.dromara.daxpay.payment.merchant.service.route.support.PayRouteI18nHelper;
-import org.dromara.daxpay.payment.pay.strategy.AbsProductStrategy;
+import org.dromara.daxpay.platform.core.enums.pay.channel.ProductEnum;
+import org.dromara.daxpay.payment.strategy.product.AbsProductStrategy;
 import org.dromara.daxpay.payment.unipay.param.trade.pay.PayParam;
 import org.dromara.daxpay.platform.core.enums.pay.channel.PayProviderEnum;
 import org.dromara.daxpay.platform.core.exception.BizInfoException;
@@ -30,17 +31,18 @@ public class PayRouteBasicMatcher {
 
     /// 基础模式匹配
     public RouteHit match(List<PayRouteBasicConfig> basicConfigs, PayParam payParam) {
-        if (StrUtil.isBlank(payParam.getProvider())) {
+        String providerCode = providerFromProduct(payParam);
+        if (StrUtil.isBlank(providerCode)) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.route.error.providerRequired");
         }
-        PayProviderEnum provider = PayProviderEnum.findByCode(payParam.getProvider());
+        PayProviderEnum provider = PayProviderEnum.findByCode(providerCode);
         if (provider == null) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.route.error.basicProviderInvalid");
         }
-        String product = findConfiguredProduct(basicConfigs, payParam.getProvider());
+        String product = findConfiguredProduct(basicConfigs, providerCode);
         if (StrUtil.isBlank(product)) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                    "pay.route.error.basicProductNotConfigured", PayRouteI18nHelper.provider(payParam.getProvider()));
+                    "pay.route.error.basicProductNotConfigured", PayRouteI18nHelper.provider(providerCode));
         }
         assertProductConfigured(product, provider);
         if (!PaymentStrategyFactory.existsByProduct(product, AbsProductStrategy.class)) {
@@ -48,7 +50,7 @@ public class PayRouteBasicMatcher {
                     "pay.route.error.productStrategyMissing");
         }
         List<String> methodCandidates = payRouteCapabilityService.methodsForProductPayProvider(
-                product, payParam.getProvider());
+                product, providerCode);
         if (methodCandidates.isEmpty()) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.route.error.methodNotSupportedForProduct",
@@ -57,6 +59,17 @@ public class PayRouteBasicMatcher {
         String method = methodCandidates.getFirst();
         String channel = productResolver.channelOfProduct(product);
         return new RouteHit(channel, method, product, null, null);
+    }
+
+    /// 从产品编码推导 Provider（临时兼容，待路由重构后移除）
+    private static String providerFromProduct(PayParam payParam) {
+        if (StrUtil.isNotBlank(payParam.getProduct())) {
+            ProductEnum product = ProductEnum.findByCode(payParam.getProduct());
+            if (product != null) {
+                return product.getChannel();
+            }
+        }
+        return null;
     }
 
     /// 从基础配置中取指定支付渠道已绑定的产品编码

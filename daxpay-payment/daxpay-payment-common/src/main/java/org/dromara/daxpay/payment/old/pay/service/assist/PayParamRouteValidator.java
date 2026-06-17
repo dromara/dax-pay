@@ -18,11 +18,6 @@ public class PayParamRouteValidator {
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "pay.route.error.methodRequiredWhenProductSet");
             }
-            return;
-        }
-        if (StrUtil.isBlank(payParam.getProvider())) {
-            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                    "pay.route.error.providerRequired");
         }
     }
 }

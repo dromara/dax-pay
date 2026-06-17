@@ -1,10 +1,10 @@
 package org.dromara.daxpay.payment.admin.controller.masterdata.channel;
 
-import org.dromara.daxpay.payment.pay.param.masterdata.channel.PayChannelQuery;
-import org.dromara.daxpay.payment.pay.result.masterdata.channel.PayChannelResult;
-import org.dromara.daxpay.payment.pay.result.masterdata.product.PayProductResult;
-import org.dromara.daxpay.payment.pay.service.masterdata.channel.PayChannelService;
-import org.dromara.daxpay.payment.pay.service.masterdata.product.PayProductService;
+import org.dromara.daxpay.payment.masterdata.constants.channel.param.PayChannelQuery;
+import org.dromara.daxpay.payment.masterdata.constants.channel.result.PayChannelResult;
+import org.dromara.daxpay.payment.masterdata.constants.product.result.PayProductResult;
+import org.dromara.daxpay.payment.masterdata.constants.channel.service.PayChannelService;
+import org.dromara.daxpay.payment.masterdata.constants.product.service.PayProductService;
 import org.dromara.daxpay.platform.core.annotation.PermCode;
 import org.dromara.daxpay.platform.core.rest.Res;
 import org.dromara.daxpay.platform.core.rest.dto.LabelValue;

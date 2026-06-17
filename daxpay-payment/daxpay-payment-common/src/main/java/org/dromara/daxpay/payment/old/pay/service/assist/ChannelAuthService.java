@@ -1,7 +1,7 @@
 package org.dromara.daxpay.payment.old.pay.service.assist;
 
 import org.dromara.daxpay.payment.common.util.PaymentStrategyFactory;
-import org.dromara.daxpay.payment.old.pay.strategy.AbsChannelAuthStrategy;
+import org.dromara.daxpay.payment.strategy.auth.AbsChannelAuthStrategy;
 import org.dromara.daxpay.platform.common.json.util.JacksonUtil;
 import org.dromara.daxpay.platform.core.enums.unipay.ChannelAuthStatusEnum;
 import org.dromara.daxpay.payment.unipay.param.assist.AuthCodeParam;

@@ -24,8 +24,10 @@ import org.dromara.daxpay.payment.common.context.PaymentContext;
 import org.dromara.daxpay.payment.old.pay.service.order.pay.PayOrderQueryService;
 import org.dromara.daxpay.payment.old.pay.service.record.sync.TradeSyncRecordService;
 import org.dromara.daxpay.payment.old.pay.service.trade.TradeUniHandleService;
-import org.dromara.daxpay.payment.old.pay.strategy.AbsPayCloseStrategy;
-import org.dromara.daxpay.payment.old.pay.strategy.AbsSyncPayOrderStrategy;
+import org.dromara.daxpay.payment.common.enums.PayFundStatusEnum;
+import org.dromara.daxpay.payment.pay.order.entity.PayTrade;
+import org.dromara.daxpay.payment.strategy.pay.AbsPayCloseStrategy;
+import org.dromara.daxpay.payment.strategy.sync.AbsSyncPayOrderStrategy;
 import org.dromara.daxpay.payment.unipay.param.trade.pay.PaySyncParam;
 import org.dromara.daxpay.payment.unipay.result.trade.pay.PaySyncResult;
 import cn.hutool.core.util.StrUtil;
@@ -37,6 +39,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Objects;
@@ -45,7 +48,7 @@ import java.util.Optional;
 /// # 支付同步服务
 ///
 @Slf4j
-@Service
+@Service("oldPaySyncService")
 @RequiredArgsConstructor
 public class PaySyncService {
     private final PayOrderQueryService payOrderQueryService;
@@ -94,10 +97,42 @@ public class PaySyncService {
         }
         // 获取支付同步策略类并初始化
         var syncPayStrategy = PaymentStrategyFactory.createByProduct(payOrder.getProduct(), AbsSyncPayOrderStrategy.class);
-        syncPayStrategy.setOrder(payOrder);
+        PayTrade trade = new PayTrade();
+        trade.setId(payOrder.getId());
+        trade.setProduct(payOrder.getProduct());
+        trade.setChannel(payOrder.getChannel());
+        trade.setMethod(payOrder.getMethod());
+        trade.setAmount(payOrder.getAmount().multiply(BigDecimal.valueOf(100)).longValue());
+        syncPayStrategy.setTrade(trade);
         try {
             // 执行操作, 获取支付网关同步的结果
-            PaySyncResultBo syncResult = syncPayStrategy.doSync();
+            var newResult = syncPayStrategy.doSync();
+            PaySyncResultBo syncResult = new PaySyncResultBo();
+            syncResult.setSyncSuccess(newResult.isSyncSuccess());
+            if (newResult.getPayStatus() != null) {
+                syncResult.setPayStatus(switch (newResult.getPayStatus()) {
+                    case INIT -> PayStatusEnum.WAIT;
+                    case PROCESSING -> PayStatusEnum.PROGRESS;
+                    case SUCCESS -> PayStatusEnum.SUCCESS;
+                    case FAIL -> PayStatusEnum.FAIL;
+                    case CLOSE -> PayStatusEnum.CLOSE;
+                });
+            }
+            syncResult.setOutOrderNo(newResult.getOutOrderNo());
+            syncResult.setAmount(newResult.getAmount() != null ? BigDecimal.valueOf(newResult.getAmount(), 2) : null);
+            syncResult.setRealAmount(newResult.getRealAmount() != null ? BigDecimal.valueOf(newResult.getRealAmount(), 2) : null);
+            syncResult.setFinishTime(newResult.getFinishTime());
+            syncResult.setSyncData(newResult.getSyncData());
+            syncResult.setSyncErrorCode(newResult.getSyncErrorCode());
+            syncResult.setSyncErrorMsg(newResult.getSyncErrorMsg());
+            syncResult.setBuyerId(newResult.getBuyerId());
+            syncResult.setUserId(newResult.getUserId());
+            syncResult.setTradeProduct(newResult.getTradeProduct());
+            syncResult.setTradeWay(newResult.getTradeWay());
+            syncResult.setBankType(newResult.getBankType());
+            syncResult.setProvider(newResult.getProvider());
+            syncResult.setTransOrderNo(newResult.getTransOrderNo());
+            syncResult.setPromotionType(newResult.getPromotionType());
             // 支付订单的网关订单号是否一致, 不一致进行更新
             if (!Objects.equals(syncResult.getOutOrderNo(), payOrder.getOutOrderNo())){
                 payOrder.setOutOrderNo(syncResult.getOutOrderNo());
@@ -213,7 +248,12 @@ public class PaySyncService {
     private void closeRemote(PayOrder order) {
         // 初始化调整参数
         AbsPayCloseStrategy strategy = PaymentStrategyFactory.createByProduct(order.getProduct(), AbsPayCloseStrategy.class);
-        strategy.setOrder(order);
+        PayTrade closeTrade = new PayTrade();
+        closeTrade.setId(order.getId());
+        closeTrade.setProduct(order.getProduct());
+        closeTrade.setChannel(order.getChannel());
+        closeTrade.setMethod(order.getMethod());
+        strategy.setTrade(closeTrade);
         strategy.doBeforeCloseHandler();
         // 执行策略的关闭方法
         strategy.doCloseHandler();

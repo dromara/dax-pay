@@ -26,7 +26,7 @@ import org.dromara.daxpay.payment.merchant.param.appinfo.MchAppInfoParam;
 import org.dromara.daxpay.payment.merchant.param.appinfo.MchAppInfoQuery;
 import org.dromara.daxpay.payment.merchant.result.appinfo.MchAppInfoResult;
 import org.dromara.daxpay.payment.common.service.MchAppInfoAssistQueryService;
-import org.dromara.daxpay.payment.pay.entity.config.ChannelConfig;
+import org.dromara.daxpay.payment.masterdata.config.entity.ChannelConfig;
 import cn.hutool.core.util.RandomUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

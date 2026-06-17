@@ -7,8 +7,8 @@ import org.dromara.daxpay.channel.alipay.entity.isv.AlipayIsvAppKeyConfig;
 import org.dromara.daxpay.channel.alipay.entity.isv.AlipayIsvChannelMerchant;
 import org.dromara.daxpay.channel.alipay.service.isv.AlipayIsvAppKeyConfigService;
 import org.dromara.daxpay.channel.alipay.service.pay.AlipayPayService;
-import org.dromara.daxpay.payment.pay.bo.trade.PayResultBo;
-import org.dromara.daxpay.payment.pay.strategy.AbsPayStrategy;
+import org.dromara.daxpay.payment.pay.bo.PayTradeResultBo;
+import org.dromara.daxpay.payment.strategy.pay.AbsPayStrategy;
 import org.dromara.daxpay.platform.core.enums.pay.channel.PayMethodEnum;
 import org.dromara.daxpay.platform.core.enums.pay.channel.ProductEnum;
 import org.dromara.daxpay.platform.core.exception.DataNotExistException;
@@ -45,12 +45,12 @@ public class AlipayIsvPayStrategy extends AbsPayStrategy {
     }
 
     @Override
-    public PayResultBo doPayHandler() {
-        return alipayPayService.pay(getOrder(), getPayParam(), buildConfig());
+    public PayTradeResultBo doPayHandler() {
+        return alipayPayService.pay(getTrade(), getPayParam(), buildConfig());
     }
 
     private Map<String, Object> buildConfig() {
-        String mchNo = getOrder().getMchNo();
+        String mchNo = getTrade().getMchNo();
         AlipayIsvChannelMerchant isvMerchant = alipayIsvChannelMerchantManager.findByMchNo(mchNo)
                 .orElseThrow(() -> new DataNotExistException("error.channel.alipay.mchAppNotFound"));
         AlipayIsvApp isvApp = alipayIsvAppManager.findById(isvMerchant.getIsvAppId())

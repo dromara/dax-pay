@@ -2,7 +2,6 @@ package org.dromara.daxpay.payment.old.pay.param.order.pay;
 
 import org.dromara.daxpay.platform.core.annotation.QueryParam;
 import org.dromara.daxpay.platform.core.enums.pay.channel.ChannelEnum;
-import org.dromara.daxpay.platform.core.enums.pay.pay.PayAllocStatusEnum;
 import org.dromara.daxpay.platform.core.enums.pay.pay.PayRefundStatusEnum;
 import org.dromara.daxpay.platform.core.enums.pay.pay.PayStatusEnum;
 import org.dromara.daxpay.payment.old.pay.param.MchQuery;
@@ -36,16 +35,6 @@ public class PayOrderQuery extends MchQuery {
     @Schema(description = "标题")
     private String title;
 
-    /// 是否支持分账
-    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
-    @Schema(description = "是否需要分账")
-    private Boolean allocation;
-
-    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
-    @Schema(description = "是否开启自动分账")
-    private Boolean autoAlloc;
-
-
     /// 支付产品
     /// @see org.dromara.daxpay.platform.core.enums.pay.channel.ProductEnum
     @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
@@ -74,12 +63,6 @@ public class PayOrderQuery extends MchQuery {
     @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "退款状态")
     private String refundStatus;
-
-    /// 分账状态
-    /// @see PayAllocStatusEnum
-    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
-    @Schema(description = "分账状态")
-    private String allocStatus;
 
     /// 错误码
     @Schema(description = "错误码")

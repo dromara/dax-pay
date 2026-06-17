@@ -1,6 +1,6 @@
 package org.dromara.daxpay.payment.merchant.dao.config;
 
-import org.dromara.daxpay.payment.pay.entity.config.ChannelConfig;
+import org.dromara.daxpay.payment.masterdata.config.entity.ChannelConfig;
 import com.github.yulichang.base.MPJBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 
