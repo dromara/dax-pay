@@ -44,7 +44,6 @@ public class AlipayIsvProductStrategy extends AbsProductStrategy {
     public boolean isIsv() { return true; }
 
     @Override
-    @Override
     public boolean isSandbox() { return false; }
 
     @Override

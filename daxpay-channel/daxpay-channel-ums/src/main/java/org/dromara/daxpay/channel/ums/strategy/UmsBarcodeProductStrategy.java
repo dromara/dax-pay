@@ -30,7 +30,6 @@ public class UmsBarcodeProductStrategy extends AbsProductStrategy {
     }
 
     @Override
-    @Override
     public boolean isTerminal() { return true; }
 
     @Override

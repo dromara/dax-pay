@@ -32,7 +32,6 @@ public class UmsAppProductStrategy extends AbsProductStrategy {
     }
 
     @Override
-    @Override
     public boolean isTerminal() { return true; }
 
     @Override

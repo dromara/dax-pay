@@ -34,7 +34,6 @@ public class UmsH5ProductStrategy extends AbsProductStrategy {
     }
 
     @Override
-    @Override
     public boolean isTerminal() { return true; }
 
     @Override

@@ -32,7 +32,6 @@ public class UmsMiniProductStrategy extends AbsProductStrategy {
     }
 
     @Override
-    @Override
     public boolean isTerminal() { return true; }
 
     @Override

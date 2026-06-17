@@ -47,7 +47,6 @@ public class LakalaProductStrategy extends AbsProductStrategy {
     public boolean isIsv() { return true; }
 
     @Override
-    @Override
     public boolean isTerminal() { return true; }
 
     @Override

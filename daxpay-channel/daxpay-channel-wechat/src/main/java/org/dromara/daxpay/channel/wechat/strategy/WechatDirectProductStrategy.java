@@ -37,7 +37,6 @@ public class WechatDirectProductStrategy extends AbsProductStrategy {
     }
 
     @Override
-    @Override
     public boolean isSandbox() {
         return false;
     }

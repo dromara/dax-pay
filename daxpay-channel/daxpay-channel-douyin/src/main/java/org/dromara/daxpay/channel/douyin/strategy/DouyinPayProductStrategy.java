@@ -35,7 +35,6 @@ public class DouyinPayProductStrategy extends AbsProductStrategy {
     }
 
     @Override
-    @Override
     public boolean isSandbox() {
         return false;
     }

@@ -32,7 +32,6 @@ public class UmsJsapiProductStrategy extends AbsProductStrategy {
     }
 
     @Override
-    @Override
     public boolean isTerminal() { return true; }
 
     @Override
