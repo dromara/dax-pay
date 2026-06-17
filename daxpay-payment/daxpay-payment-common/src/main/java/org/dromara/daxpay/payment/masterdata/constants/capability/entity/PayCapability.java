@@ -16,7 +16,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@TableName("pay_capability")
+@TableName("pay_md_capability")
 public class PayCapability extends MpBaseEntity implements ToResult<PayCapabilityResult> {
 
     /// 支付能力编码

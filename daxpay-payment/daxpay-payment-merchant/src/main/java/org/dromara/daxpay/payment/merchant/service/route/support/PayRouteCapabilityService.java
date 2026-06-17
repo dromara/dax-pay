@@ -39,7 +39,7 @@ public class PayRouteCapabilityService {
         return methodCodes;
     }
 
-    /// 支付产品是否支持目录中的 provider + method 组合（策略方式→能力 Map ∧ `pay_product_capability`）
+    /// 支付产品是否支持目录中的 provider + method 组合（策略方式→能力 Map ∧ `pay_md_product_capability`）
     public boolean productSupportsMethod(String product, String providerCode, String methodCode) {
         if (!payProviderMethodService.contains(providerCode, methodCode)) {
             return false;

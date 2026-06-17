@@ -9,8 +9,8 @@ import java.util.Objects;
 
 /// # 支付能力
 ///
-/// 字典: pay_capability；`code` 为独立发版契约，与 `PayMethodEnum` / `PayProviderEnum` **无类型级绑定**。
-/// 与支付产品的关联见 `pay_product_capability`；与渠道支付方式目录、通道路由的整合另行维护。
+/// 字典: pay_md_capability；`code` 为独立发版契约，与 `PayMethodEnum` / `PayProviderEnum` **无类型级绑定**。
+/// 与支付产品的关联见 `pay_md_product_capability`；与渠道支付方式目录、通道路由的整合另行维护。
 @Getter
 @RequiredArgsConstructor
 public enum PayCapabilityEnum implements I18nSupport {

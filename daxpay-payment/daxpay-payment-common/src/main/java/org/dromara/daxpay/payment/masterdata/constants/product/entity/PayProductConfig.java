@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@TableName(value = "pay_product_config", autoResultMap = true)
+@TableName(value = "pay_md_product_config", autoResultMap = true)
 public class PayProductConfig extends MpBaseEntity implements ToResult<PayProductConfigResult> {
 
     /// 产品编码
@@ -22,9 +22,6 @@ public class PayProductConfig extends MpBaseEntity implements ToResult<PayProduc
 
     /// 通道编码
     private String channel;
-
-    /// 是否启用
-    private boolean enabled;
 
     /// 生效环境: prod/sandbox
     private String activeEnv;

@@ -12,7 +12,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@TableName("pay_product_capability")
+@TableName("pay_md_product_capability")
 public class PayProductCapability extends MpBaseEntity {
 
     /// 支付产品编码

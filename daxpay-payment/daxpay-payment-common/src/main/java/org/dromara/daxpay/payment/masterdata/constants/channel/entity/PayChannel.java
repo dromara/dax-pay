@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@TableName("pay_channel")
+@TableName("pay_md_channel")
 public class PayChannel extends MpBaseEntity implements ToResult<PayChannelResult> {
 
     /// 通道编码

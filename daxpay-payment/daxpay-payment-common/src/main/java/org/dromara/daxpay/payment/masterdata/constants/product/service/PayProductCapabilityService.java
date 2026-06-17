@@ -30,7 +30,7 @@ import java.util.stream.Collectors;
 /// # 支付产品与支付能力关联
 ///
 /// 查询产品挂载了哪些支付能力，并判断某支付产品是否支持某种支付方式。
-/// 方式→能力以各产品策略 {@link AbsProductStrategy#methodCapabilityMapping()} 为准，再与 `pay_product_capability` 求交。
+/// 方式→能力以各产品策略 {@link AbsProductStrategy#methodCapabilityMapping()} 为准，再与 `pay_md_product_capability` 求交。
 /// 内调约定：`productCode` / `methodCode` 均为已解析的合法编码，不在本类重复判空。
 @Service
 @RequiredArgsConstructor

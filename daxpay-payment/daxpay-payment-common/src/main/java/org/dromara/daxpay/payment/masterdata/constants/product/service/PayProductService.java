@@ -18,6 +18,7 @@ import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.Comparator;
@@ -35,6 +36,15 @@ public class PayProductService {
 
     private final PayProductManager payProductManager;
     private final PayProductCapabilityService payProductCapabilityService;
+
+    /// 切换支付产品启停
+    @Transactional(rollbackFor = Exception.class)
+    public void switchEnabled(String code, boolean enabled) {
+        PayProduct product = payProductManager.findByCode(code)
+                .orElseThrow(() -> new DataNotExistException("error.payment.product.notExist"));
+        product.setEnabled(enabled);
+        payProductManager.saveOrUpdate(product);
+    }
 
     /// 分页查询支付产品
     public PageResult<PayProductResult> page(PageParam pageParam, PayProductQuery query, String nameKeyword) {
@@ -100,6 +110,7 @@ public class PayProductService {
         PayProduct dbRow = dbMap.get(product.getCode());
         if (dbRow != null) {
             result.setId(dbRow.getId());
+            result.setEnabled(dbRow.isEnabled());
             result.setSortNo(dbRow.getSortNo());
             result.setDescription(dbRow.getDescription());
             result.setIcon(dbRow.getIcon());
@@ -108,6 +119,7 @@ public class PayProductService {
                 result.setSandbox(dbRow.getSandbox());
             }
         } else {
+            result.setEnabled(true);
             result.setSortNo(0);
         }
         AbsProductStrategy strategy = resolveStrategy(product.getCode());

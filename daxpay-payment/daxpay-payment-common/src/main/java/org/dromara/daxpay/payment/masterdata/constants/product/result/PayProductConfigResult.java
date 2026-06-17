@@ -29,9 +29,6 @@ public class PayProductConfigResult extends BaseResult {
     @Schema(description = "是否支持沙箱环境")
     private boolean sandboxSupport;
 
-    @Schema(description = "是否启用")
-    private boolean enabled;
-
     @Schema(description = "生效环境: prod/sandbox")
     private String activeEnv;
 

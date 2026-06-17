@@ -28,6 +28,9 @@ public class PayProductResult extends BaseResult {
     @Schema(description = "通道名称")
     private String channelName;
 
+    @Schema(description = "是否启用")
+    private boolean enabled;
+
     @Schema(description = "产品介绍")
     private String description;
 

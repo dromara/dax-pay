@@ -24,7 +24,7 @@ public class ProductStrategySupport {
         return provider != null && strategy.supportedPayProviders().contains(provider);
     }
 
-    /// 产品支持的支付能力列表（由方式→能力 Map 派生，对齐 pay_product_capability 全集）
+    /// 产品支持的支付能力列表（由方式→能力 Map 派生，对齐 pay_md_product_capability 全集）
     public List<PayCapabilityEnum> supportedPayCapabilities(AbsProductStrategy strategy) {
         Map<PayMethodEnum, List<PayCapabilityEnum>> mapping = strategy.methodCapabilityMapping();
         if (CollUtil.isEmpty(mapping)) {

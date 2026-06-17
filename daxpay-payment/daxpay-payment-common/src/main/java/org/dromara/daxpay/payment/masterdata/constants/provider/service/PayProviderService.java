@@ -1,5 +1,6 @@
 package org.dromara.daxpay.payment.masterdata.constants.provider.service;
 
+import org.dromara.daxpay.payment.masterdata.constants.provider.dao.PayProviderManager;
 import org.dromara.daxpay.payment.masterdata.constants.provider.dao.PayProviderMethodManager;
 import org.dromara.daxpay.payment.masterdata.constants.provider.entity.PayProvider;
 import org.dromara.daxpay.payment.masterdata.constants.provider.result.PayProviderGroupResult;
@@ -11,6 +12,7 @@ import org.dromara.daxpay.platform.core.exception.DataNotExistException;
 import org.dromara.daxpay.platform.core.model.PayProviderMethodEntry;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -25,8 +27,22 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class PayProviderService {
 
+    private final PayProviderManager payProviderManager;
     private final PayProviderMethodService payProviderMethodService;
     private final PayProviderProductService payProviderProductService;
+
+    /// 切换支付渠道启停
+    @Transactional(rollbackFor = Exception.class)
+    public void switchEnabled(String product, boolean enabled) {
+        PayProvider provider = payProviderManager.findByCode(product)
+                .orElseGet(() -> {
+                    PayProvider p = new PayProvider();
+                    p.setCode(product);
+                    return p;
+                });
+        provider.setEnabled(enabled);
+        payProviderManager.saveOrUpdate(provider);
+    }
 
     /// 按支付渠道分组，返回各渠道下的支付方式
     public List<PayProviderGroupResult> listByProvider() {
@@ -70,7 +86,9 @@ public class PayProviderService {
                     .setProvider(brandEnum.getCode())
                     .setProviderLabel(I18nUtil.getEnumName(brandEnum))
                     .setIcon(dbBrand != null ? dbBrand.getIcon() : null)
-                    .setSortNo(resolveSortNo(dbBrand, brandOrdinal));
+                    .setSortNo(resolveSortNo(dbBrand, brandOrdinal))
+                    .setEnabled(dbBrand != null ? dbBrand.isEnabled() : true)
+                    .setDescription(dbBrand != null ? dbBrand.getDescription() : null);
             List<PayProviderMethodResult> methods = directoryContext.relationsByProvider()
                     .getOrDefault(brandEnum.getCode(), List.of()).stream()
                     .map(row -> toAdminMethod(brandEnum.getCode(), row, adminContext))

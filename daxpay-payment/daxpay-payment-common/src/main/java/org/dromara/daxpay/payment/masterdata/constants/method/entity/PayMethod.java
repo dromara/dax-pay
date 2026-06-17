@@ -13,7 +13,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@TableName("pay_method")
+@TableName("pay_md_method")
 public class PayMethod extends MpBaseEntity {
 
     /// 支付方式编码

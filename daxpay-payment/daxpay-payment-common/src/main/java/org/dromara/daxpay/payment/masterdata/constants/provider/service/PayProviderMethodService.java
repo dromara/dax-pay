@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 
 /// # 支付渠道与支付方式的配置与查询
 ///
-/// 读取 `pay_provider`、`pay_method`、`pay_provider_method`，供下单校验和管理端「支付渠道」页面使用。
+/// 读取 `pay_md_provider`、`pay_md_method`、`pay_md_provider_method`，供下单校验和管理端「支付渠道」页面使用。
 /// 内调约定：`providerCode` / `methodCode` 均为已解析的合法编码，不在本类重复判空。
 @Service
 @RequiredArgsConstructor
@@ -53,6 +53,10 @@ public class PayProviderMethodService {
     public List<PayProviderMethodEntry> listDirectoryEntriesFromContext(DirectoryLoadContext context) {
         List<PayProviderMethodEntry> entries = new ArrayList<>();
         for (PayProviderEnum providerEnum : PayProviderEnum.values()) {
+            PayProvider dbProvider = context.providerMap().get(providerEnum.getCode());
+            if (dbProvider != null && !dbProvider.isEnabled()) {
+                continue;
+            }
             for (MergedRelationRow row : context.relationsByProvider()
                     .getOrDefault(providerEnum.getCode(), List.of())) {
                 entries.add(new PayProviderMethodEntry(providerEnum, row.methodEnum()));

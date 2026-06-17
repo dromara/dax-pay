@@ -19,7 +19,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@TableName(value = "pay_product", autoResultMap = true)
+@TableName(value = "pay_md_product", autoResultMap = true)
 public class PayProduct extends MpBaseEntity implements ToResult<PayProductResult> {
 
     /// 产品编码
@@ -28,6 +28,9 @@ public class PayProduct extends MpBaseEntity implements ToResult<PayProductResul
 
     /// 关联通道编码
     private String channel;
+
+    /// 是否启用
+    private boolean enabled;
 
     /// 产品介绍
     private String description;

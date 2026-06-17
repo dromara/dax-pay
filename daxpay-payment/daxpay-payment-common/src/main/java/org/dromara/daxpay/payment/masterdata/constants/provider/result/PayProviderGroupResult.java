@@ -24,6 +24,12 @@ public class PayProviderGroupResult {
     @Schema(description = "排序")
     private Integer sortNo;
 
+    @Schema(description = "是否启用")
+    private boolean enabled;
+
+    @Schema(description = "描述")
+    private String description;
+
     @Schema(description = "渠道下支付方式列表")
     private List<PayProviderMethodResult> methods;
 }
