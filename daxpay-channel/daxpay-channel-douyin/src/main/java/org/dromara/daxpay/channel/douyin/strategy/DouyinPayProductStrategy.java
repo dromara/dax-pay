@@ -35,10 +35,6 @@ public class DouyinPayProductStrategy extends AbsProductStrategy {
     }
 
     @Override
-    public boolean isAllocatable() {
-        return false;
-    }
-
     @Override
     public boolean isSandbox() {
         return false;

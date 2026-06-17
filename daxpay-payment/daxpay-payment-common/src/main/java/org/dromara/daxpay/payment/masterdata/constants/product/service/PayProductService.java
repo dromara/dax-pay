@@ -149,7 +149,6 @@ public class PayProductService {
     /// 写入策略层产品特性字段
     private void applyStrategyFields(AbsProductStrategy strategy, PayProductResult target) {
         target.setIsv(strategy.isIsv())
-                .setAllocatable(strategy.isAllocatable())
                 .setTerminal(strategy.isTerminal())
                 .setSandbox(strategy.isSandbox())
                 .setApiCallMode(strategy.getApiCallMode().getCode())

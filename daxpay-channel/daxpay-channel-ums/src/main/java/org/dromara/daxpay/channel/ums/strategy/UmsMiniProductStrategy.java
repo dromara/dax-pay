@@ -32,8 +32,6 @@ public class UmsMiniProductStrategy extends AbsProductStrategy {
     }
 
     @Override
-    public boolean isAllocatable() { return true; }
-
     @Override
     public boolean isTerminal() { return true; }
 

@@ -41,10 +41,6 @@ public class AlipayDirectProductStrategy extends AbsProductStrategy {
     }
 
     @Override
-    public boolean isAllocatable() {
-        return true;
-    }
-
     @Override
     public boolean isSandbox() {
         return true;

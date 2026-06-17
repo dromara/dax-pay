@@ -30,8 +30,6 @@ public class UmsBarcodeProductStrategy extends AbsProductStrategy {
     }
 
     @Override
-    public boolean isAllocatable() { return true; }
-
     @Override
     public boolean isTerminal() { return true; }
 

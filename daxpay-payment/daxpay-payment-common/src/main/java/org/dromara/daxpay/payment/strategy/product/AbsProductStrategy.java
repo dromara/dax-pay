@@ -17,9 +17,6 @@ public abstract class AbsProductStrategy implements PaymentStrategy {
     /// 是否支持服务商模式
     public boolean isIsv() { return false; }
 
-    /// 是否支持分账
-    public boolean isAllocatable() { return false; }
-
     /// 是否支持终端报备
     public boolean isTerminal() { return false; }
 
