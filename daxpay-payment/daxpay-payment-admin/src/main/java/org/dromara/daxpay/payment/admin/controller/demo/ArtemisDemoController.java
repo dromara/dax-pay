@@ -11,6 +11,7 @@ import org.dromara.daxpay.payment.admin.controller.demo.param.SendDemoMessagePar
 import org.dromara.daxpay.payment.admin.controller.demo.result.DemoMessageResult;
 import org.dromara.daxpay.payment.admin.controller.demo.store.DemoMessageStore;
 import org.dromara.daxpay.platform.common.artemis.service.ArtemisTemplateService;
+import org.dromara.daxpay.platform.common.json.util.JacksonUtil;
 import org.dromara.daxpay.platform.core.annotation.IgnoreAuth;
 import org.dromara.daxpay.platform.core.exception.BizInfoException;
 import org.dromara.daxpay.platform.core.rest.Res;
@@ -58,23 +59,26 @@ public class ArtemisDemoController {
                 .setScene(scene.name())
                 .setSendTime(OffsetDateTime.now());
 
+        // 序列化为 JSON 字符串，发送层只负责搬运文本，不参与对象转换
+        String json = JacksonUtil.toJson(message, false);
+
         switch (scene) {
             case QUEUE -> {
                 // 点对点：无 tag
-                artemisTemplateService.send(DemoArtemisConstants.QUEUE, null, message);
+                artemisTemplateService.send(DemoArtemisConstants.QUEUE, null, json);
             }
             case TOPIC -> {
                 // 发布订阅：广播（必须走 sendTopic，否则 broker 端 multicast 地址会触发 ANYCAST 路由错误）
-                artemisTemplateService.sendTopic(DemoArtemisConstants.TOPIC, null, message);
+                artemisTemplateService.sendTopic(DemoArtemisConstants.TOPIC, null, json);
             }
             case DELAY -> {
                 // 延时：调用 sendDelay（已校验 delaySeconds 非空）
                 artemisTemplateService.sendDelay(
-                        DemoArtemisConstants.DELAY_QUEUE, null, message, param.getDelaySeconds());
+                        DemoArtemisConstants.DELAY_QUEUE, null, json, param.getDelaySeconds());
             }
             case TAG -> {
                 // Tag 过滤：把标签作为消息属性写入（已校验 tag 非空）
-                artemisTemplateService.send(DemoArtemisConstants.TAG_QUEUE, param.getTag(), message);
+                artemisTemplateService.send(DemoArtemisConstants.TAG_QUEUE, param.getTag(), json);
             }
         }
         return Res.ok();

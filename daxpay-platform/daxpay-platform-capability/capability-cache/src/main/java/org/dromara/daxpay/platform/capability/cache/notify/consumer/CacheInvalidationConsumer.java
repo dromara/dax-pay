@@ -35,12 +35,12 @@ public class CacheInvalidationConsumer {
 
     /// 订阅缓存失效 Topic
     ///
-    /// 通过独立的 listenerContainerFactory（`cacheTopicListenerFactory`）配置 Topic 模式，
+    /// 通过通用的 `topicListenerFactory`（pubSubDomain=true）配置 Topic 模式，
     /// 每个 non-durable 订阅者都会收到消息，实现跨节点广播。
     /// 方法签名接收原始 JSON 字符串（统一 Text 传输），手动反序列化为目标类型。
     @JmsListener(
             destination = CacheTopicConstants.TOPIC,
-            containerFactory = "cacheTopicListenerFactory"
+            containerFactory = "topicListenerFactory"
     )
     public void onMessage(String json) {
         CacheInvalidationMessage message;

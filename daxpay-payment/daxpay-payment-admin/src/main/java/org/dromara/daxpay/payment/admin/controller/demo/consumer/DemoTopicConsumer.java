@@ -15,7 +15,7 @@ import org.springframework.stereotype.Component;
 /// 监听 `demo.topic`，演示 JMS pub-sub 广播场景。
 /// 同一节点注册两个订阅者，证明发布订阅模式下每个订阅者都能收到完整消息。
 ///
-/// 注意：必须显式指定 `containerFactory = "demoTopicListenerFactory"`，
+/// 注意：必须显式指定 `containerFactory = "topicListenerFactory"`，
 /// 否则走默认 Queue 工厂，Topic 消息将无法被消费。
 @Slf4j
 @Component
@@ -25,13 +25,13 @@ public class DemoTopicConsumer {
     private final DemoMessageStore store;
 
     /// 订阅者 A
-    @JmsListener(destination = DemoArtemisConstants.TOPIC, containerFactory = "demoTopicListenerFactory")
+    @JmsListener(destination = DemoArtemisConstants.TOPIC, containerFactory = "topicListenerFactory")
     public void onMessageA(String json) {
         handle(json, "demo-topic-consumer-A");
     }
 
     /// 订阅者 B（同节点模拟多订阅者）
-    @JmsListener(destination = DemoArtemisConstants.TOPIC, containerFactory = "demoTopicListenerFactory")
+    @JmsListener(destination = DemoArtemisConstants.TOPIC, containerFactory = "topicListenerFactory")
     public void onMessageB(String json) {
         handle(json, "demo-topic-consumer-B");
     }

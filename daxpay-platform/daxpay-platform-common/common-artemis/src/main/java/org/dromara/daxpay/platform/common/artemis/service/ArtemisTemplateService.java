@@ -33,6 +33,13 @@ import java.util.Map;
 /// - 错配会触发 broker 端 `Destination ... does not support ANYCAST/MULTICAST routing` 异常
 /// - 调用方在编码期就明确语义，避免运行期歧义
 ///
+/// 消息体传输约定：
+/// - `body` 统一为 JSON 字符串，**由调用方自行序列化**（推荐 `JacksonUtil.toJson(obj)`）
+/// - 发送端不参与对象转换，回落到 Spring 默认 `SimpleMessageConverter`：
+///   `String` payload 直接写入 `TextMessage`
+/// - 消费端 `@JmsListener` 方法签名统一 `onMessage(String json)`，自行反序列化
+/// - 这样消息保持自描述的 JSON 契约，类改名、跨服务消费、多语言接入都安全
+///
 /// @see JmsClient Spring Framework 7 fluent JMS 客户端
 @Slf4j
 @Service
@@ -62,8 +69,8 @@ public class ArtemisTemplateService {
     ///
     /// @param address 目标地址（对应 Artemis address，kebab-case 命名）
     /// @param tag     消息标签，用于消息过滤，为空时不设置
-    /// @param body    消息体，由 MessageConverter 自动序列化为 JSON TextMessage
-    public void send(String address, String tag, Object body) {
+    /// @param body    JSON 字符串消息体，由调用方自行序列化
+    public void send(String address, String tag, String body) {
         Map<String, Object> headers = buildHeaders(tag);
         try {
             jmsClient(queueJmsTemplate).destination(address).send(body, headers);
@@ -82,9 +89,9 @@ public class ArtemisTemplateService {
     ///
     /// @param address        目标地址
     /// @param tag            消息标签
-    /// @param body           消息体
+    /// @param body           JSON 字符串消息体，由调用方自行序列化
     /// @param delaySeconds   延时秒数
-    public void sendDelay(String address, String tag, Object body, int delaySeconds) {
+    public void sendDelay(String address, String tag, String body, int delaySeconds) {
         Map<String, Object> headers = buildHeaders(tag);
         long delayMillis = delaySeconds * 1000L;
         try {
@@ -107,9 +114,9 @@ public class ArtemisTemplateService {
     ///
     /// @param address       目标地址
     /// @param tag           消息标签
-    /// @param body          消息体
+    /// @param body          JSON 字符串消息体，由调用方自行序列化
     /// @param deliveryTime  投递时刻（统一使用 OffsetDateTime，避免时区问题）
-    public void sendDelayAt(String address, String tag, Object body, OffsetDateTime deliveryTime) {
+    public void sendDelayAt(String address, String tag, String body, OffsetDateTime deliveryTime) {
         Map<String, Object> headers = buildHeaders(tag);
         long deliveryTimestamp = deliveryTime.toInstant().toEpochMilli();
         long delayMillis = deliveryTimestamp - System.currentTimeMillis();
@@ -139,8 +146,8 @@ public class ArtemisTemplateService {
     ///
     /// @param address 目标 Topic 地址
     /// @param tag     消息标签
-    /// @param body    消息体
-    public void sendTopic(String address, String tag, Object body) {
+    /// @param body    JSON 字符串消息体，由调用方自行序列化
+    public void sendTopic(String address, String tag, String body) {
         Map<String, Object> headers = buildHeaders(tag);
         try {
             jmsClient(topicJmsTemplate).destination(address).send(body, headers);
@@ -156,9 +163,9 @@ public class ArtemisTemplateService {
     ///
     /// @param address       目标 Topic 地址
     /// @param tag           消息标签
-    /// @param body          消息体
+    /// @param body          JSON 字符串消息体，由调用方自行序列化
     /// @param delaySeconds  延时秒数
-    public void sendTopicDelay(String address, String tag, Object body, int delaySeconds) {
+    public void sendTopicDelay(String address, String tag, String body, int delaySeconds) {
         Map<String, Object> headers = buildHeaders(tag);
         long delayMillis = delaySeconds * 1000L;
         try {
@@ -178,9 +185,9 @@ public class ArtemisTemplateService {
     ///
     /// @param address       目标 Topic 地址
     /// @param tag           消息标签
-    /// @param body          消息体
+    /// @param body          JSON 字符串消息体，由调用方自行序列化
     /// @param deliveryTime  投递时刻
-    public void sendTopicDelayAt(String address, String tag, Object body, OffsetDateTime deliveryTime) {
+    public void sendTopicDelayAt(String address, String tag, String body, OffsetDateTime deliveryTime) {
         Map<String, Object> headers = buildHeaders(tag);
         long deliveryTimestamp = deliveryTime.toInstant().toEpochMilli();
         long delayMillis = deliveryTimestamp - System.currentTimeMillis();

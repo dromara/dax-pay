@@ -12,7 +12,8 @@ import java.time.OffsetDateTime;
 /// 通过 JMS 在生产者与消费者之间传递的消息载体。
 /// 必须保留无参构造，否则 Jackson 反序列化会失败。
 ///
-/// @see org.dromara.daxpay.platform.common.artemis.message.ArtemisMessageConverter
+/// 传输时由生产端用 `JacksonUtil.toJson` 序列化为 JSON 字符串，
+/// 消费端 `onMessage(String json)` 拿到文本后自行 `JacksonUtil.toBean` 反序列化。
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
