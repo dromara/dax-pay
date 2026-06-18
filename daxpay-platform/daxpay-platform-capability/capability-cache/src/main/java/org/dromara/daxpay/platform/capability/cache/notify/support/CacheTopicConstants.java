@@ -8,12 +8,6 @@ public interface CacheTopicConstants {
     /// 缓存失效通知 Topic
     String TOPIC = "cache-invalidation-topic";
 
-    /// 删除单个缓存键 Tag
-    String TAG_EVICT = "evict";
-
-    /// 清空缓存 Tag
-    String TAG_CLEAR = "clear";
-
     /// 消费者组
     String CONSUMER_GROUP = "cache-invalidation-group";
 }

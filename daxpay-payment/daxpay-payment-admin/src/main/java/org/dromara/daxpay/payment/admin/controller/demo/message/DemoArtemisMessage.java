@@ -26,11 +26,8 @@ public class DemoArtemisMessage {
     /// 消息内容
     private String content;
 
-    /// 消息场景（QUEUE / TOPIC / DELAY / TAG）
+    /// 消息场景（QUEUE / TOPIC / DELAY）
     private String scene;
-
-    /// 消息标签（演示 Tag 过滤时使用，其它场景可为空）
-    private String tag;
 
     /// 发送时间（UTC）
     private OffsetDateTime sendTime;

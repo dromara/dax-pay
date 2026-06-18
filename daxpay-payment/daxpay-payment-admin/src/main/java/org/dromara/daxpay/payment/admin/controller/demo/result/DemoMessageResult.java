@@ -20,13 +20,9 @@ public class DemoMessageResult {
     @Schema(description = "业务消息ID")
     private String id;
 
-    /// 消息场景（QUEUE / TOPIC / DELAY / TAG）
+    /// 消息场景（QUEUE / TOPIC / DELAY）
     @Schema(description = "消息场景")
     private String scene;
-
-    /// 消息标签
-    @Schema(description = "消息标签")
-    private String tag;
 
     /// 消息内容
     @Schema(description = "消息内容")
@@ -54,7 +50,6 @@ public class DemoMessageResult {
         DemoMessageResult result = new DemoMessageResult()
                 .setId(message.getId())
                 .setScene(message.getScene())
-                .setTag(message.getTag())
                 .setContent(message.getContent())
                 .setSendTime(message.getSendTime())
                 .setConsumeTime(now)

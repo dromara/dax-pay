@@ -17,19 +17,15 @@ import lombok.experimental.Accessors;
 @Schema(title = "Artemis 演示消息发送参数")
 public class SendDemoMessageParam {
 
-    /// 消息场景：QUEUE / TOPIC / DELAY / TAG
+    /// 消息场景：QUEUE / TOPIC / DELAY
     @NotNull(message = "{validation.field.scene.notNull}")
-    @Schema(description = "消息场景: QUEUE/TOPIC/DELAY/TAG")
+    @Schema(description = "消息场景: QUEUE/TOPIC/DELAY")
     private SendScene scene;
 
     /// 消息内容
     @NotBlank(message = "{validation.field.demoContent.notBlank}")
     @Schema(description = "消息内容")
     private String content;
-
-    /// 消息标签（仅 TAG 场景必填，取值 important / normal）
-    @Schema(description = "消息标签: important / normal（仅 TAG 场景使用）")
-    private String tag;
 
     /// 延时秒数（仅 DELAY 场景必填，范围 1-300）
     @Min(value = 1, message = "{validation.field.delaySeconds.min}")
@@ -48,9 +44,6 @@ public class SendDemoMessageParam {
         TOPIC,
 
         /// 延时消息
-        DELAY,
-
-        /// Tag 过滤
-        TAG
+        DELAY
     }
 }

@@ -1,4 +1,3 @@
 {
-  "tagRequired": "Message tag is required for TAG scene",
   "delaySecondsRequired": "Delay seconds is required for DELAY scene"
 }

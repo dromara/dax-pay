@@ -1,7 +1,6 @@
 package org.dromara.daxpay.payment.admin.controller.demo;
 
 import cn.hutool.core.lang.UUID;
-import cn.hutool.core.util.StrUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +27,7 @@ import java.util.List;
 
 /// # Artemis 消息队列演示接口
 ///
-/// 演示 JMS 四类核心场景：点对点队列、发布订阅、延时消息、Tag 过滤。
+/// 演示 JMS 三类核心场景：点对点队列、发布订阅、延时消息。
 /// 消费记录暂存于内存，前端通过 `/list` 轮询拉取。
 ///
 /// 鉴权：URL 前缀 `/demo/**` 已在白名单，类上叠加 `@IgnoreAuth` 双保险。
@@ -55,7 +54,6 @@ public class ArtemisDemoController {
         DemoArtemisMessage message = new DemoArtemisMessage()
                 .setId(UUID.randomUUID().toString(true))
                 .setContent(param.getContent())
-                .setTag(param.getTag())
                 .setScene(scene.name())
                 .setSendTime(OffsetDateTime.now());
 
@@ -64,21 +62,17 @@ public class ArtemisDemoController {
 
         switch (scene) {
             case QUEUE -> {
-                // 点对点：无 tag
-                artemisTemplateService.send(DemoArtemisConstants.QUEUE, null, json);
+                // 点对点
+                artemisTemplateService.send(DemoArtemisConstants.QUEUE, json);
             }
             case TOPIC -> {
                 // 发布订阅：广播（必须走 sendTopic，否则 broker 端 multicast 地址会触发 ANYCAST 路由错误）
-                artemisTemplateService.sendTopic(DemoArtemisConstants.TOPIC, null, json);
+                artemisTemplateService.sendTopic(DemoArtemisConstants.TOPIC, json);
             }
             case DELAY -> {
                 // 延时：调用 sendDelay（已校验 delaySeconds 非空）
                 artemisTemplateService.sendDelay(
-                        DemoArtemisConstants.DELAY_QUEUE, null, json, param.getDelaySeconds());
-            }
-            case TAG -> {
-                // Tag 过滤：把标签作为消息属性写入（已校验 tag 非空）
-                artemisTemplateService.send(DemoArtemisConstants.TAG_QUEUE, param.getTag(), json);
+                        DemoArtemisConstants.DELAY_QUEUE, json, param.getDelaySeconds());
             }
         }
         return Res.ok();
@@ -101,9 +95,6 @@ public class ArtemisDemoController {
 
     /// 校验与场景绑定的必填字段
     private void validateSceneParam(SendDemoMessageParam param, SendDemoMessageParam.SendScene scene) {
-        if (scene == SendDemoMessageParam.SendScene.TAG && StrUtil.isEmpty(param.getTag())) {
-            throw new BizInfoException("error.demo.tagRequired");
-        }
         if (scene == SendDemoMessageParam.SendScene.DELAY && param.getDelaySeconds() == null) {
             throw new BizInfoException("error.demo.delaySecondsRequired");
         }
