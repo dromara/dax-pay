@@ -35,7 +35,8 @@ public class CacheInvalidationPublisher {
         message.setType(CacheInvalidationType.EVICT.name());
 
         try {
-            artemisTemplateService.send(CacheTopicConstants.TOPIC, CacheTopicConstants.TAG_EVICT, message);
+            // 缓存失效是广播语义，必须走 sendTopic（broker 端 cache-invalidation-topic 为 multicast 路由）
+            artemisTemplateService.sendTopic(CacheTopicConstants.TOPIC, CacheTopicConstants.TAG_EVICT, message);
             log.debug("发布缓存失效消息成功: cacheName={}, key={}", cacheName, key);
         } catch (Exception e) {
             log.error("发布缓存失效消息失败: cacheName={}, key={}, error={}", cacheName, key, e.getMessage(), e);
@@ -51,7 +52,8 @@ public class CacheInvalidationPublisher {
         message.setType(CacheInvalidationType.CLEAR.name());
 
         try {
-            artemisTemplateService.send(CacheTopicConstants.TOPIC, CacheTopicConstants.TAG_CLEAR, message);
+            // 缓存清空也是广播语义，同样使用 sendTopic
+            artemisTemplateService.sendTopic(CacheTopicConstants.TOPIC, CacheTopicConstants.TAG_CLEAR, message);
             log.debug("发布缓存清空消息成功: cacheName={}", cacheName);
         } catch (Exception e) {
             log.error("发布缓存清空消息失败: cacheName={}, error={}", cacheName, e.getMessage(), e);

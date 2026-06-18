@@ -78,6 +78,12 @@
             <artifactId>service-baseapi</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- Artemis 消息队列通用模块（供 demo 演示注入 ArtemisTemplateService） -->
+        <dependency>
+            <groupId>org.dromara.daxpay</groupId>
+            <artifactId>common-artemis</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

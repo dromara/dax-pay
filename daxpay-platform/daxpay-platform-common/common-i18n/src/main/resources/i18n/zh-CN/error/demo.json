@@ -1,0 +1,4 @@
+{
+  "tagRequired": "TAG 场景下消息标签不能为空",
+  "delaySecondsRequired": "DELAY 场景下延时秒数不能为空"
+}

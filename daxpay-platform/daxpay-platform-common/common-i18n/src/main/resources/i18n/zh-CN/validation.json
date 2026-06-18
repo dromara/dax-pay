@@ -463,5 +463,15 @@
     "oldPassword": {
       "notBlank": "旧密码不能为空"
     },
+    "scene": {
+      "notNull": "消息场景不能为空"
+    },
+    "demoContent": {
+      "notBlank": "消息内容不能为空"
+    },
+    "delaySeconds": {
+      "min": "延时秒数不能小于1",
+      "max": "延时秒数不能大于300"
+    }
   }
 }

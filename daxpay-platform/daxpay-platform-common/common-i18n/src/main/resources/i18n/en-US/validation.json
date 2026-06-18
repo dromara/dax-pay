@@ -460,5 +460,15 @@
     "oldPassword": {
       "notBlank": "Old password cannot be blank"
     },
+    "scene": {
+      "notNull": "Message scene cannot be blank"
+    },
+    "demoContent": {
+      "notBlank": "Message content cannot be blank"
+    },
+    "delaySeconds": {
+      "min": "Delay seconds cannot be less than 1",
+      "max": "Delay seconds cannot be greater than 300"
+    }
   }
 }
