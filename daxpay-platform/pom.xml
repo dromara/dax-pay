@@ -38,7 +38,6 @@
         <mapstruct.version>1.6.3</mapstruct.version>
         <ip2region.version>3.3.6</ip2region.version>
         <lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
-        <rocketmq.version>2.3.5</rocketmq.version>
 
         <java.version>25</java.version>
         <maven.compiler.source>25</maven.compiler.source>

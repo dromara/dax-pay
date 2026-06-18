@@ -39,10 +39,10 @@
             <groupId>com.github.ben-manes.caffeine</groupId>
             <artifactId>caffeine</artifactId>
         </dependency>
-        <!-- RocketMQ 缓存失效通知 -->
+        <!-- Artemis 缓存失效通知（JMS 协议，独立容器部署） -->
         <dependency>
             <groupId>org.dromara.daxpay</groupId>
-            <artifactId>common-rocketmq</artifactId>
+            <artifactId>common-artemis</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

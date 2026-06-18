@@ -55,13 +55,7 @@
             <artifactId>common-redis</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <!-- RocketMQ配置 -->
-        <dependency>
-            <groupId>org.dromara.daxpay</groupId>
-            <artifactId>common-rocketmq</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <!-- Spring 缓存配置 -->
+        <!-- Spring 缓存配置（已通过 capability-cache 间接引入 common-artemis） -->
         <dependency>
             <groupId>org.dromara.daxpay</groupId>
             <artifactId>capability-cache</artifactId>

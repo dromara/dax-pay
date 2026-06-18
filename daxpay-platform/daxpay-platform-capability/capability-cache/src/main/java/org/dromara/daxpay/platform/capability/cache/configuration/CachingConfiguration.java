@@ -6,7 +6,7 @@ import org.dromara.daxpay.platform.capability.cache.core.LocalCacheRegistry;
 import org.dromara.daxpay.platform.capability.cache.notify.publisher.CacheInvalidationPublisher;
 import org.dromara.daxpay.platform.common.config.properties.PlatformCommonProperties;
 import org.dromara.daxpay.platform.common.redis.serializer.JacksonRedisSerializer;
-import org.dromara.daxpay.platform.common.rocketmq.service.RocketmqTemplateService;
+import org.dromara.daxpay.platform.common.artemis.service.ArtemisTemplateService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 /// - 缓存能力始终启用，不需要总开关控制
 /// - L1 本地缓存始终启用，作为性能加速层
 /// - L2 Redis 作为共享缓存主层
-/// - 缓存失效通知通过 RocketMQ 广播，始终启用
+/// - 缓存失效通知通过 Artemis 广播，始终启用
 @Configuration
 @EnableCaching
 @EnableConfigurationProperties(PlatformCommonProperties.class)
@@ -88,10 +88,10 @@ public class CachingConfiguration implements CachingConfigurer {
 
     /// 缓存失效通知发布者
     ///
-    /// 通过 RocketMQ 广播缓存失效消息，通知其他节点删除本地 L1 缓存
+    /// 通过 Artemis 广播缓存失效消息，通知其他节点删除本地 L1 缓存
     @Bean
-    public CacheInvalidationPublisher cacheInvalidationPublisher(RocketmqTemplateService rocketmqTemplateService) {
-        return new CacheInvalidationPublisher(rocketmqTemplateService);
+    public CacheInvalidationPublisher cacheInvalidationPublisher(ArtemisTemplateService artemisTemplateService) {
+        return new CacheInvalidationPublisher(artemisTemplateService);
     }
 
     /// 二级缓存管理器

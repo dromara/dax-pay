@@ -10,15 +10,15 @@ class BizErrorExceptionTest {
 
     @Test
     void twoArgConstructorShouldSetMessageKey() {
-        BizErrorException ex = new BizErrorException(CommonCode.FAIL_CODE, "error.rocketmq.sendFailed");
+        BizErrorException ex = new BizErrorException(CommonCode.FAIL_CODE, "error.artemis.sendFailed");
         assertNotNull(ex.getMessageKey());
-        assertEquals("error.rocketmq.sendFailed", ex.getMessageKey());
+        assertEquals("error.artemis.sendFailed", ex.getMessageKey());
     }
 
     @Test
     void singleArgConstructorShouldSetMessageKey() {
-        BizErrorException ex = new BizErrorException("error.rocketmq.sendFailed");
+        BizErrorException ex = new BizErrorException("error.artemis.sendFailed");
         assertNotNull(ex.getMessageKey());
-        assertEquals("error.rocketmq.sendFailed", ex.getMessageKey());
+        assertEquals("error.artemis.sendFailed", ex.getMessageKey());
     }
 }

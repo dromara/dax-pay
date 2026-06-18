@@ -9,17 +9,22 @@
         <version>4.0.0-SNAPSHOT</version>
     </parent>
 
-    <artifactId>common-rocketmq</artifactId>
-    <description>RocketMQ通用配置模块</description>
+    <artifactId>common-artemis</artifactId>
+    <description>ActiveMQ Artemis 通用配置模块</description>
 
     <dependencies>
-        <!-- RocketMQ Spring Boot Starter -->
+        <!-- Artemis JMS 客户端（Spring Boot 4 原生支持，对应下一代 ActiveMQ） -->
+        <!-- 注意：不要使用 spring-boot-starter-activemq，该 starter 在 Spring Boot 4 已被 deprecated -->
         <dependency>
-            <groupId>org.apache.rocketmq</groupId>
-            <artifactId>rocketmq-spring-boot-starter</artifactId>
-            <version>${rocketmq.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-artemis</artifactId>
         </dependency>
-        <!-- JSON序列化 -->
+        <!-- JMS 连接池（使 spring.artemis.pool.enabled=true 生效，starter 默认不传递） -->
+        <dependency>
+            <groupId>org.messaginghub</groupId>
+            <artifactId>pooled-jms</artifactId>
+        </dependency>
+        <!-- JSON 序列化 -->
         <dependency>
             <groupId>org.dromara.daxpay</groupId>
             <artifactId>common-json</artifactId>

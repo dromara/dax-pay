@@ -21,7 +21,7 @@
         <module>common-config</module>
         <module>common-redis</module>
         <module>common-request-context</module>
-        <module>common-rocketmq</module>
+        <module>common-artemis</module>
         <module>common-translate</module>
         <module>common-i18n</module>
     </modules>

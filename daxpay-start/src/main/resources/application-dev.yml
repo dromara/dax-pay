@@ -21,6 +21,31 @@ spring:
       lettuce:
         pool:
           max-wait: 1000ms
+  # Artemis 消息队列配置（独立容器部署，JMS 协议）
+  # 本地开发启动 broker：
+  artemis:
+    # 连接模式：native 表示连接外部独立 broker（非嵌入式）
+    mode: native
+    # Broker 连接地址
+    broker-url: tcp://192.168.1.229:61616
+    # broker 账号（与容器启动环境变量一致）
+    user: admin
+    password: admin
+    # 连接池
+    pool:
+      enabled: true
+      max-connections: 10
+      idle-timeout: 30s
+  jms:
+    # 会话缓存，提升发送性能
+    cache:
+      enabled: true
+      session-cache-size: 10
+    # 默认 pub-sub-domain=false（点对点 queue）；
+    # 缓存失效广播等 Topic 场景由独立的 cacheTopicListenerFactory 设置 true
+    pub-sub-domain: false
+    listener:
+      auto-startup: true
 # 开发时显示debug日志
 logging:
   level:
@@ -123,18 +148,3 @@ daxpay:
         keys:
           - key: z0Vd8jDKB80pA6OOptGLO+qDVvWboEko
             version: 1
-# RocketMQ配置
-rocketmq:
-  # NameServer地址，用于服务发现和路由信息获取
-  name-server: 192.168.1.229:9876
-  producer:
-    # 生产者组名，用于标识同一类生产者
-    group: daxpay-open-producer-group
-    # 消息发送超时时间（毫秒）
-    send-message-timeout: 3000
-    # 消息发送失败时的重试次数
-    retry-times-when-send-failed: 2
-    # 消息压缩阈值（字节），超过此值自动压缩
-    compress-message-body-threshold: 4096
-    # 最大消息大小（字节），默认4MB
-    max-message-size: 4194304
