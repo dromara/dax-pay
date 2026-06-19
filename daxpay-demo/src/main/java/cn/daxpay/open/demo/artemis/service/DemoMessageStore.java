@@ -1,5 +1,5 @@
-package org.dromara.daxpay.demo.artemis;
-
+package cn.daxpay.open.demo.artemis.service;
+import cn.daxpay.open.demo.artemis.result.DemoMessageResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

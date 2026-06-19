@@ -1,11 +1,11 @@
-package org.dromara.daxpay.demo.artemis;
+package cn.daxpay.open.demo.artemis.constants;
 
 /// # Artemis 消息队列演示常量
 ///
 /// 演示用的 address 常量，地址命名遵循 kebab-case 约定。
 /// Artemis 默认开启地址自动创建，无需在 broker 端预置。
 ///
-/// @see org.dromara.daxpay.platform.common.artemis.service.ArtemisTemplateService
+/// @see cn.daxpay.open.platform.common.artemis.service.ArtemisTemplateService
 public interface DemoArtemisConstants {
 
     /// 点对点队列 address

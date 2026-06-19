@@ -1,5 +1,5 @@
-package org.dromara.daxpay.demo.artemis;
-
+package cn.daxpay.open.demo.artemis.result;
+import cn.daxpay.open.demo.artemis.model.DemoArtemisMessage;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;

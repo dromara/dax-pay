@@ -1,15 +1,19 @@
-package org.dromara.daxpay.demo.artemis;
-
+package cn.daxpay.open.demo.artemis.controller;
+import cn.daxpay.open.demo.artemis.service.DemoMessageStore;
+import cn.daxpay.open.demo.artemis.result.DemoMessageResult;
+import cn.daxpay.open.demo.artemis.param.SendDemoMessageParam;
+import cn.daxpay.open.demo.artemis.model.DemoArtemisMessage;
+import cn.daxpay.open.demo.artemis.constants.DemoArtemisConstants;
 import cn.hutool.core.lang.UUID;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.dromara.daxpay.platform.common.artemis.service.ArtemisTemplateService;
-import org.dromara.daxpay.platform.common.json.util.JacksonUtil;
-import org.dromara.daxpay.platform.core.annotation.IgnoreAuth;
-import org.dromara.daxpay.platform.core.exception.BizInfoException;
-import org.dromara.daxpay.platform.core.rest.Res;
-import org.dromara.daxpay.platform.core.rest.result.Result;
+import cn.daxpay.open.platform.common.artemis.service.ArtemisTemplateService;
+import cn.daxpay.open.platform.common.json.util.JacksonUtil;
+import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
+import cn.daxpay.open.platform.core.exception.BizInfoException;
+import cn.daxpay.open.platform.core.rest.Res;
+import cn.daxpay.open.platform.core.rest.result.Result;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

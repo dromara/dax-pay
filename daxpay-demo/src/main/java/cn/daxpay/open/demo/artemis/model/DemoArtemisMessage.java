@@ -1,4 +1,4 @@
-package org.dromara.daxpay.demo.artemis;
+package cn.daxpay.open.demo.artemis.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

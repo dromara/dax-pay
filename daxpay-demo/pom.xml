@@ -10,7 +10,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>org.dromara.daxpay</groupId>
+    <groupId>cn.daxpay.open</groupId>
     <artifactId>daxpay-demo</artifactId>
     <version>4.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -40,7 +40,7 @@
         <!-- Artemis 消息队列通用模块 -->
         <!-- 提供 ArtemisTemplateService，并传递带出 common-json / spring-jms / platform-core(含 Res/Result/异常/swagger) -->
         <dependency>
-            <groupId>org.dromara.daxpay</groupId>
+            <groupId>cn.daxpay.open</groupId>
             <artifactId>common-artemis</artifactId>
             <version>${project.version}</version>
         </dependency>

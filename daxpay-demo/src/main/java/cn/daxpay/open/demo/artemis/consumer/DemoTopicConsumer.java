@@ -1,9 +1,12 @@
-package org.dromara.daxpay.demo.artemis;
-
+package cn.daxpay.open.demo.artemis.consumer;
+import cn.daxpay.open.demo.artemis.service.DemoMessageStore;
+import cn.daxpay.open.demo.artemis.result.DemoMessageResult;
+import cn.daxpay.open.demo.artemis.model.DemoArtemisMessage;
+import cn.daxpay.open.demo.artemis.constants.DemoArtemisConstants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.dromara.daxpay.platform.common.artemis.ArtemisBeanNames;
-import org.dromara.daxpay.platform.common.json.util.JacksonUtil;
+import cn.daxpay.open.platform.common.artemis.ArtemisBeanNames;
+import cn.daxpay.open.platform.common.json.util.JacksonUtil;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 

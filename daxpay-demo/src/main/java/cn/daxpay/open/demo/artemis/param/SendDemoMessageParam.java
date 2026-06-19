@@ -1,4 +1,4 @@
-package org.dromara.daxpay.demo.artemis;
+package cn.daxpay.open.demo.artemis.param;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
