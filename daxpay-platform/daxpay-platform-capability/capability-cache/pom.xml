@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.dromara.daxpay</groupId>
+        <groupId>cn.daxpay.open</groupId>
         <artifactId>daxpay-platform-capability</artifactId>
         <version>4.0.0-SNAPSHOT</version>
     </parent>
@@ -20,7 +20,7 @@
         </dependency>
         <!-- redis配置 -->
         <dependency>
-            <groupId>org.dromara.daxpay</groupId>
+            <groupId>cn.daxpay.open</groupId>
             <artifactId>common-redis</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -30,7 +30,7 @@
         </dependency>
         <!-- 项目配置 -->
         <dependency>
-            <groupId>org.dromara.daxpay</groupId>
+            <groupId>cn.daxpay.open</groupId>
             <artifactId>common-config</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -41,7 +41,7 @@
         </dependency>
         <!-- Artemis 缓存失效通知（JMS 协议，独立容器部署） -->
         <dependency>
-            <groupId>org.dromara.daxpay</groupId>
+            <groupId>cn.daxpay.open</groupId>
             <artifactId>common-artemis</artifactId>
             <version>${project.version}</version>
         </dependency>

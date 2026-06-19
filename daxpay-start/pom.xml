@@ -10,7 +10,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>org.dromara.daxpay</groupId>
+    <groupId>cn.daxpay.open</groupId>
     <artifactId>daxpay-start</artifactId>
     <version>4.0.0-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -43,26 +43,26 @@
 
         <!-- 支付服务和通用控制器 -->
         <dependency>
-            <groupId>org.dromara.daxpay</groupId>
+            <groupId>cn.daxpay.open</groupId>
             <artifactId>daxpay-payment-common</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.dromara.daxpay</groupId>
+            <groupId>cn.daxpay.open</groupId>
             <artifactId>daxpay-payment-merchant</artifactId>
             <version>${project.version}</version>
         </dependency>
 
 
         <dependency>
-            <groupId>org.dromara.daxpay</groupId>
+            <groupId>cn.daxpay.open</groupId>
             <artifactId>daxpay-payment-admin</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <!-- 功能演示模块（需隔离时注释此依赖即可从产物中剔除） -->
         <dependency>
-            <groupId>org.dromara.daxpay</groupId>
+            <groupId>cn.daxpay.open</groupId>
             <artifactId>daxpay-demo</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -77,31 +77,31 @@
         <!-- 支付通道 -->
         <!-- 支付宝通道 -->
         <dependency>
-            <groupId>org.dromara.daxpay</groupId>
+            <groupId>cn.daxpay.open</groupId>
             <artifactId>daxpay-channel-alipay</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!-- 微信支付通道 -->
         <dependency>
-            <groupId>org.dromara.daxpay</groupId>
+            <groupId>cn.daxpay.open</groupId>
             <artifactId>daxpay-channel-wechat</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!-- 银联商务通道 -->
         <dependency>
-            <groupId>org.dromara.daxpay</groupId>
+            <groupId>cn.daxpay.open</groupId>
             <artifactId>daxpay-channel-ums</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!-- 拉卡拉通道 -->
         <dependency>
-            <groupId>org.dromara.daxpay</groupId>
+            <groupId>cn.daxpay.open</groupId>
             <artifactId>daxpay-channel-lakala</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!-- 抖音支付通道 -->
         <dependency>
-            <groupId>org.dromara.daxpay</groupId>
+            <groupId>cn.daxpay.open</groupId>
             <artifactId>daxpay-channel-douyin</artifactId>
             <version>${project.version}</version>
         </dependency>

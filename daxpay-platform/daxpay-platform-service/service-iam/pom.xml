@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.dromara.daxpay</groupId>
+        <groupId>cn.daxpay.open</groupId>
         <artifactId>daxpay-platform-service</artifactId>
         <version>4.0.0-SNAPSHOT</version>
     </parent>
@@ -16,31 +16,31 @@
 
         <!-- 认证 -->
         <dependency>
-            <groupId>org.dromara.daxpay</groupId>
+            <groupId>cn.daxpay.open</groupId>
             <artifactId>capability-auth</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!-- 防重放Nonce验证 -->
         <dependency>
-            <groupId>org.dromara.daxpay</groupId>
+            <groupId>cn.daxpay.open</groupId>
             <artifactId>capability-nonce</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!-- 请求上下文 -->
         <dependency>
-            <groupId>org.dromara.daxpay</groupId>
+            <groupId>cn.daxpay.open</groupId>
             <artifactId>common-request-context</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!-- 系统基础服务 -->
         <dependency>
-            <groupId>org.dromara.daxpay</groupId>
+            <groupId>cn.daxpay.open</groupId>
             <artifactId>service-baseapi</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!-- 平台配置服务 -->
         <dependency>
-            <groupId>org.dromara.daxpay</groupId>
+            <groupId>cn.daxpay.open</groupId>
             <artifactId>service-system</artifactId>
             <version>${project.version}</version>
         </dependency>

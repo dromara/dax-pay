@@ -1,0 +1,16 @@
+package cn.daxpay.open.channel.lakala;
+
+import org.apache.ibatis.annotations.Mapper;
+import org.mybatis.spring.annotation.MapperScan;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
+import org.springframework.context.annotation.ComponentScan;
+
+/// # 拉卡拉支付实现
+///
+@AutoConfiguration
+@ConfigurationPropertiesScan
+@MapperScan(annotationClass = Mapper.class)
+@ComponentScan
+public class LakalaChannelApp {
+}

@@ -11,7 +11,7 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <groupId>org.dromara.daxpay</groupId>
+    <groupId>cn.daxpay.open</groupId>
     <artifactId>daxpay-platform</artifactId>
     <version>4.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>

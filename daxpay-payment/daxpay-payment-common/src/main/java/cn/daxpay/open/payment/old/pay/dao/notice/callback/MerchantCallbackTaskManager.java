@@ -1,0 +1,36 @@
+package cn.daxpay.open.payment.old.pay.dao.notice.callback;
+
+import cn.daxpay.open.platform.common.mybatisplus.impl.BaseManager;
+import cn.daxpay.open.platform.common.mybatisplus.query.generator.QueryGenerator;
+import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
+import cn.daxpay.open.platform.core.annotation.IgnoreTenant;
+import cn.daxpay.open.platform.core.rest.param.PageParam;
+import cn.daxpay.open.payment.old.pay.entity.notice.callback.MerchantCallbackTask;
+import cn.daxpay.open.payment.old.pay.param.notice.callback.MerchantCallbackTaskQuery;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Repository;
+
+import java.util.Optional;
+
+
+@Slf4j
+@Repository
+@RequiredArgsConstructor
+public class MerchantCallbackTaskManager extends BaseManager<MerchantCallbackTaskMapper, MerchantCallbackTask> {
+
+    /// 分页
+    public Page<MerchantCallbackTask> page(PageParam param, MerchantCallbackTaskQuery query){
+        var mpPage = MpUtil.getMpPage(param, MerchantCallbackTask.class);
+        QueryWrapper<MerchantCallbackTask> generator = QueryGenerator.generator(query);
+        return this.page(mpPage, generator);
+    }
+
+    /// 获取数据, 不过滤租户
+    @IgnoreTenant
+    public Optional<MerchantCallbackTask> findByIdNotTenant(Long taskId) {
+        return this.findById(taskId);
+    }
+}

@@ -1,0 +1,30 @@
+package cn.daxpay.open.channel.alipay.convert.isv;
+
+import cn.daxpay.open.channel.alipay.entity.isv.AlipayIsvAppKeyConfig;
+import cn.daxpay.open.channel.alipay.param.isv.AlipayIsvAppKeyConfigParam;
+import cn.daxpay.open.channel.alipay.result.isv.AlipayIsvAppKeyConfigResult;
+import org.mapstruct.BeanMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.factory.Mappers;
+
+/// # 支付宝服务商应用密钥配置转换
+///
+/// MapStruct转换器，负责支付宝服务商应用密钥配置在实体、参数和返回结果之间的转换，更新时空值不覆盖。
+///
+@Mapper
+public interface AlipayIsvAppKeyConfigConvert {
+
+    AlipayIsvAppKeyConfigConvert CONVERT = Mappers.getMapper(AlipayIsvAppKeyConfigConvert.class);
+
+    /// 转换为返回对象
+    AlipayIsvAppKeyConfigResult toResult(AlipayIsvAppKeyConfig entity);
+
+    /// 转换为实体
+    AlipayIsvAppKeyConfig toEntity(AlipayIsvAppKeyConfigParam param);
+
+    /// 更新源数据到实体(空值不覆盖,密钥/证书为空时保留原值)
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void copy(AlipayIsvAppKeyConfigParam param, @MappingTarget AlipayIsvAppKeyConfig entity);
+}

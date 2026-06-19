@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.dromara.daxpay</groupId>
+        <groupId>cn.daxpay.open</groupId>
         <artifactId>daxpay-payment</artifactId>
         <version>4.0.0-SNAPSHOT</version>
     </parent>
@@ -52,13 +52,13 @@
 
         <!-- 支付公共底座 -->
         <dependency>
-            <groupId>org.dromara.daxpay</groupId>
+            <groupId>cn.daxpay.open</groupId>
             <artifactId>daxpay-payment-common</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!-- 商户管理 -->
         <dependency>
-            <groupId>org.dromara.daxpay</groupId>
+            <groupId>cn.daxpay.open</groupId>
             <artifactId>daxpay-payment-merchant</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -68,19 +68,19 @@
 
         <!-- 翻译模块 -->
         <dependency>
-            <groupId>org.dromara.daxpay</groupId>
+            <groupId>cn.daxpay.open</groupId>
             <artifactId>common-translate</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!-- 基础API服务 -->
         <dependency>
-            <groupId>org.dromara.daxpay</groupId>
+            <groupId>cn.daxpay.open</groupId>
             <artifactId>service-baseapi</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!-- Artemis 消息队列通用模块（供 demo 演示注入 ArtemisTemplateService） -->
         <dependency>
-            <groupId>org.dromara.daxpay</groupId>
+            <groupId>cn.daxpay.open</groupId>
             <artifactId>common-artemis</artifactId>
             <version>${project.version}</version>
         </dependency>

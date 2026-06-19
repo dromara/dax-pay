@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.dromara.daxpay</groupId>
+        <groupId>cn.daxpay.open</groupId>
         <artifactId>daxpay-platform-service</artifactId>
         <version>4.0.0-SNAPSHOT</version>
     </parent>
@@ -15,20 +15,20 @@
     <dependencies>
         <!-- 翻译模块（@Trans 注解、DictTranslator SPI） -->
         <dependency>
-            <groupId>org.dromara.daxpay</groupId>
+            <groupId>cn.daxpay.open</groupId>
             <artifactId>common-translate</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!-- 国际化 -->
         <dependency>
-            <groupId>org.dromara.daxpay</groupId>
+            <groupId>cn.daxpay.open</groupId>
             <artifactId>common-i18n</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <!-- 数据持久层依赖 -->
         <dependency>
-            <groupId>org.dromara.daxpay</groupId>
+            <groupId>cn.daxpay.open</groupId>
             <artifactId>common-mybatis-plus</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -39,25 +39,25 @@
         </dependency>
         <!-- json 序列化配置 -->
         <dependency>
-            <groupId>org.dromara.daxpay</groupId>
+            <groupId>cn.daxpay.open</groupId>
             <artifactId>common-json</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!-- Spring 封装 -->
         <dependency>
-            <groupId>org.dromara.daxpay</groupId>
+            <groupId>cn.daxpay.open</groupId>
             <artifactId>common-spring</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!-- Redis配置-->
         <dependency>
-            <groupId>org.dromara.daxpay</groupId>
+            <groupId>cn.daxpay.open</groupId>
             <artifactId>common-redis</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!-- Spring 缓存配置（已通过 capability-cache 间接引入 common-artemis） -->
         <dependency>
-            <groupId>org.dromara.daxpay</groupId>
+            <groupId>cn.daxpay.open</groupId>
             <artifactId>capability-cache</artifactId>
             <version>${project.version}</version>
         </dependency>
@@ -69,26 +69,26 @@
         </dependency>
         <!-- 安全认证 -->
         <dependency>
-            <groupId>org.dromara.daxpay</groupId>
+            <groupId>cn.daxpay.open</groupId>
             <artifactId>capability-auth</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!-- 审计日志 -->
         <dependency>
-            <groupId>org.dromara.daxpay</groupId>
+            <groupId>cn.daxpay.open</groupId>
             <artifactId>capability-audit-log</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!-- 文件存储 -->
         <dependency>
-            <groupId>org.dromara.daxpay</groupId>
+            <groupId>cn.daxpay.open</groupId>
             <artifactId>capability-file</artifactId>
             <version>${project.version}</version>
         </dependency>
 
         <!-- 项目配置 -->
         <dependency>
-            <groupId>org.dromara.daxpay</groupId>
+            <groupId>cn.daxpay.open</groupId>
             <artifactId>common-config</artifactId>
             <version>${project.version}</version>
         </dependency>

@@ -8,7 +8,7 @@
         <version>4.0.6</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>org.dromara.daxpay</groupId>
+    <groupId>cn.daxpay.open</groupId>
     <artifactId>daxpay-plugin</artifactId>
 
     <version>4.0.0-SNAPSHOT</version>
@@ -55,7 +55,7 @@
 
         <!-- 支付服务实现类 -->
         <dependency>
-            <groupId>org.dromara.daxpay</groupId>
+            <groupId>cn.daxpay.open</groupId>
             <artifactId>daxpay-payment-common</artifactId>
             <version>${project.version}</version>
         </dependency>
