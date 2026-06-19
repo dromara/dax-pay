@@ -10,8 +10,6 @@ import org.dromara.daxpay.platform.core.enums.pay.trade.TradeTypeEnum;
 import org.dromara.daxpay.payment.old.pay.convert.record.TradeFlowRecordCreateConvert;
 import org.dromara.daxpay.payment.old.pay.dao.record.flow.TradeFlowRecordManager;
 import org.dromara.daxpay.payment.old.pay.entity.order.pay.PayOrder;
-import org.dromara.daxpay.payment.old.pay.entity.order.refund.RefundOrder;
-import org.dromara.daxpay.payment.old.pay.entity.order.transfer.TransferOrder;
 import org.dromara.daxpay.payment.old.pay.entity.record.flow.TradeFlowRecord;
 import org.dromara.daxpay.payment.old.pay.param.record.TradeFlowRecordQuery;
 import org.dromara.daxpay.payment.old.pay.result.record.flow.TradeFlowAmountResult;
@@ -43,8 +41,6 @@ public class TradeFlowRecordService {
     public TradeFlowAmountResult summary(TradeFlowRecordQuery query){
         var result = new TradeFlowAmountResult();
         result.setIncomeAmount(tradeFlowRecordManager.getTotalAmount(query, TradeTypeEnum.PAY));
-        result.setRefundAmount(tradeFlowRecordManager.getTotalAmount(query, TradeTypeEnum.REFUND));
-        result.setTransferAmount(tradeFlowRecordManager.getTotalAmount(query, TradeTypeEnum.TRANSFER));
         return result;
     }
 
@@ -57,28 +53,5 @@ public class TradeFlowRecordService {
         tradeFlowRecord.setType("pay");
         tradeFlowRecordManager.save(tradeFlowRecord);
     }
-
-    /// 退款记账
-    public void saveRefund(RefundOrder refundOrder){
-        TradeFlowRecord tradeFlowRecord = TradeFlowRecordCreateConvert.CONVERT.fromRefundOrder(refundOrder);
-        tradeFlowRecord.setTradeNo(refundOrder.getRefundNo());
-        tradeFlowRecord.setBizTradeNo(refundOrder.getBizRefundNo());
-        tradeFlowRecord.setOutTradeNo(refundOrder.getOutRefundNo());
-        tradeFlowRecord.setType("refund");
-        tradeFlowRecordManager.save(tradeFlowRecord);
-    }
-
-    /// 转账记账
-    public void saveTransfer(TransferOrder transferOrder){
-        TradeFlowRecord tradeFlowRecord = TradeFlowRecordCreateConvert.CONVERT.fromTransferOrder(transferOrder);
-        tradeFlowRecord.setTradeNo(transferOrder.getTransferNo());
-        tradeFlowRecord.setBizTradeNo(transferOrder.getBizTransferNo());
-        tradeFlowRecord.setOutTradeNo(transferOrder.getOutTransferNo());
-        tradeFlowRecord.setType("transfer");
-        tradeFlowRecordManager.save(tradeFlowRecord);
-    }
-
-    
-    
 
 }

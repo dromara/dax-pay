@@ -1,5 +1,4 @@
 {
   "pay": "Payment Order Notification",
-  "refund": "Refund Order Notification",
-  "transfer": "Transfer Order Notification"
+  "refund": "Refund Order Notification"
 }

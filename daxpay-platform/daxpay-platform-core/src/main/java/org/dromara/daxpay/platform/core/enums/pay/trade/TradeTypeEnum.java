@@ -16,10 +16,6 @@ public enum TradeTypeEnum implements I18nSupport {
 
     /// 支付
     PAY("pay"),
-    /// 退款
-    REFUND("refund"),
-    /// 转账
-    TRANSFER("transfer"),
     /// 提现
     CASHOUTS("cashouts"),
     /// 结算

@@ -2,7 +2,5 @@
   "paySuccessTitle": "支付成功通知",
   "paySuccessBody": "您的订单 {0} 已支付成功，金额 {1}",
   "refundSuccessTitle": "退款成功通知",
-  "refundSuccessBody": "您的订单 {0} 已退款成功，金额 {1}",
-  "transferSuccessTitle": "转账成功通知",
-  "transferSuccessBody": "您的转账 {0} 已成功，金额 {1}"
+  "refundSuccessBody": "您的订单 {0} 已退款成功，金额 {1}"
 }

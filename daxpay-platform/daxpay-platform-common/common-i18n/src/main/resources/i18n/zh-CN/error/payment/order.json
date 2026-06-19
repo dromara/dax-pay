@@ -7,8 +7,6 @@
   "refundOrderNotExist": "退款订单不存在",
   "refundOrderExtNotExist": "退款订单扩展信息不存在",
   "refundPayOrderNotExist": "退款订单关联支付订单不存在",
-  "transferOrderNotExist": "转账订单不存在",
-  "transferOrderInfoNotExist": "转账订单信息不存在",
   "tradeFlowNotExist": "交易流水记录不存在",
   "callbackTaskNotExist": "商户回调通知任务不存在",
   "subscribeRecordNotExist": "商户订阅通知记录不存在"

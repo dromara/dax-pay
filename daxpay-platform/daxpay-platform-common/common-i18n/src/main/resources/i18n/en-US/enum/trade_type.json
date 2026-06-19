@@ -1,7 +1,6 @@
 {
   "pay": "Payment",
   "refund": "Refund",
-  "transfer": "Transfer",
   "cashouts": "Withdrawal",
   "settle": "Settlement"
 }

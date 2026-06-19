@@ -1,7 +1,6 @@
 {
   "pay": "支付",
   "refund": "退款",
-  "transfer": "转账",
   "cashouts": "提现",
   "settle": "结算"
 }

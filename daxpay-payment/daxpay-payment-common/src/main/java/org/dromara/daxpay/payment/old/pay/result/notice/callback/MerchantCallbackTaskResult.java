@@ -4,8 +4,6 @@ import org.dromara.daxpay.platform.core.enums.pay.notice.CallbackNoticeTypeEnum;
 import org.dromara.daxpay.platform.core.enums.pay.trade.TradeTypeEnum;
 import org.dromara.daxpay.payment.common.result.MchTradeBaseResult;
 import org.dromara.daxpay.payment.unipay.result.trade.pay.PayOrderResult;
-import org.dromara.daxpay.payment.unipay.result.trade.refund.RefundOrderResult;
-import org.dromara.daxpay.payment.unipay.result.trade.transfer.TransferOrderResult;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -41,8 +39,6 @@ public class MerchantCallbackTaskResult extends MchTradeBaseResult {
 
     /// 消息内容
     /// @see PayOrderResult
-    /// @see RefundOrderResult
-    /// @see TransferOrderResult
     @Schema(description = "消息内容")
     private String content;
 

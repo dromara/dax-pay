@@ -15,8 +15,6 @@ public enum NotifyContentTypeEnum implements I18nSupport {
     PAY("pay"),
     /// 退款订单变动通知
     REFUND("refund"),
-    /// 转账订单变动通知
-    TRANSFER("transfer"),
     ;
 
     /// 编码

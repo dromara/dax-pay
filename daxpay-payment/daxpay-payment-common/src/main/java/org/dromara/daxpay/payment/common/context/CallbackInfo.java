@@ -2,8 +2,6 @@ package org.dromara.daxpay.payment.common.context;
 
 import org.dromara.daxpay.platform.core.enums.pay.notice.CallbackStatusEnum;
 import org.dromara.daxpay.platform.core.enums.pay.pay.PayStatusEnum;
-import org.dromara.daxpay.platform.core.enums.pay.refund.RefundStatusEnum;
-import org.dromara.daxpay.platform.core.enums.pay.transfer.TransferStatusEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -28,8 +26,6 @@ public class CallbackInfo {
 
     /// 交易状态
     /// @see PayStatusEnum 支付状态
-    /// @see RefundStatusEnum 退款状态
-    /// @see TransferStatusEnum 转账状态
     private String tradeStatus;
 
     /// 交易错误信息

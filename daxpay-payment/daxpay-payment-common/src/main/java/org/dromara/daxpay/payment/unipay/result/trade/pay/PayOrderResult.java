@@ -2,8 +2,6 @@ package org.dromara.daxpay.payment.unipay.result.trade.pay;
 
 import org.dromara.daxpay.platform.core.enums.pay.channel.*;
 import org.dromara.daxpay.platform.core.enums.pay.pay.*;
-import org.dromara.daxpay.platform.core.enums.pay.refund.*;
-import org.dromara.daxpay.platform.core.enums.pay.transfer.*;
 import org.dromara.daxpay.platform.core.enums.pay.trade.*;
 import org.dromara.daxpay.platform.core.enums.pay.notice.*;
 import org.dromara.daxpay.platform.core.enums.unipay.PayLimitPayEnum;

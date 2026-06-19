@@ -1,8 +1,6 @@
 package org.dromara.daxpay.payment.old.pay.service.notice;
 
 import org.dromara.daxpay.payment.old.pay.entity.order.pay.PayOrder;
-import org.dromara.daxpay.payment.old.pay.entity.order.refund.RefundOrder;
-import org.dromara.daxpay.payment.old.pay.entity.order.transfer.TransferOrder;
 import org.dromara.daxpay.payment.old.pay.service.notice.callback.MerchantCallbackTaskService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,15 +24,4 @@ public class MerchantNoticeService {
         merchantCallbackService.registerPayNotice(order);
     }
 
-    /// 注册退款通知
-    @Transactional(rollbackFor = Exception.class)
-    public void registerRefundNotice(RefundOrder order) {
-        merchantCallbackService.registerRefundNotice(order);
-    }
-
-    /// 注册转账通知
-    @Transactional(rollbackFor = Exception.class)
-    public void registerTransferNotice(TransferOrder order) {
-        merchantCallbackService.registerTransferNotice(order);
-    }
 }

@@ -10,7 +10,6 @@
   "channelNotEnable": "Payment channel not enabled",
   "unsupportedAbility": "Unsupported Ability",
   "unsupportedAbilityWithDetail": "Unsupported ability: {0}",
-  "transferPayeeTypeNotFound": "Transfer payee type not found",
   "reconciliationFail": "Reconciliation Failed",
   "amount": {
     "exceed": "Amount Exceeded",
@@ -54,12 +53,6 @@
     "orderNotFound": "Refund order not found",
     "syncProcessing": "Refund sync in progress, do not repeat",
     "noPermission": "Merchant does not have refund permission"
-  },
-  "transfer": {
-    "processing": "Transfer processing, do not repeat",
-    "onlyFailRetry": "Only failed status can retry transfer",
-    "orderNotFound": "Transfer order not found",
-    "syncProcessing": "Transfer sync in progress, do not repeat"
   },
   "callback": {
     "processing": "Callback processing, ignoring this callback request",

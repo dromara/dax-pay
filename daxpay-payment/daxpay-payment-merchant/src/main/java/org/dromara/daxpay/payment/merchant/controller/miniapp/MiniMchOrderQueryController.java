@@ -4,9 +4,7 @@ import org.dromara.daxpay.platform.core.rest.Res;
 import org.dromara.daxpay.platform.core.rest.result.PageResult;
 import org.dromara.daxpay.platform.core.rest.result.Result;
 import org.dromara.daxpay.payment.old.pay.result.order.pay.PayOrderVo;
-import org.dromara.daxpay.payment.old.pay.result.order.refund.RefundOrderVo;
 import org.dromara.daxpay.payment.merchant.param.miniapp.order.MiniPayOrderQuery;
-import org.dromara.daxpay.payment.merchant.param.miniapp.order.MiniRefundOrderQuery;
 import org.dromara.daxpay.payment.merchant.service.miniapp.MiniMchOrderQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -45,15 +43,4 @@ public class MiniMchOrderQueryController {
         return Res.ok(miniAppOrderQueryService.findPayOrderByNo(orderNo,appId));
     }
 
-    @Operation(summary = "退款订单分页")
-    @PostMapping("/page-by-refund")
-    public Result<PageResult<RefundOrderVo>> pageByRefund(@RequestBody MiniRefundOrderQuery query) {
-        return Res.ok(miniAppOrderQueryService.pageByRefund(query));
-    }
-
-    @Operation(summary = "退款订单详情")
-    @GetMapping("/find-refund-order-by-id")
-    public Result<RefundOrderVo> findRefundOrderById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
-        return Res.ok(miniAppOrderQueryService.findRefundOrderById(id));
-    }
 }

@@ -10,7 +10,6 @@
   "channelNotEnable": "支付通道未启用",
   "unsupportedAbility": "不支持该能力",
   "unsupportedAbilityWithDetail": "不支持的能力: {0}",
-  "transferPayeeTypeNotFound": "未找到对应的转账接收方类型",
   "amount": {
     "exceed": "金额超限",
     "invalid": "金额无效"
@@ -53,12 +52,6 @@
     "orderNotFound": "未查询到退款订单",
     "syncProcessing": "退款同步处理中，请勿重复操作",
     "noPermission": "该商户没有退款权限"
-  },
-  "transfer": {
-    "processing": "转账处理中，请勿重复操作",
-    "onlyFailRetry": "只有失败状态的才可以重新发起转账",
-    "orderNotFound": "转账订单不存在",
-    "syncProcessing": "转账同步处理中，请勿重复操作"
   },
   "callback": {
     "processing": "回调正在处理中，忽略本次回调请求",

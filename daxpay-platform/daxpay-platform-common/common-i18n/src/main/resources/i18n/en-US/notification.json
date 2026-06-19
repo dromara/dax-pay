@@ -2,7 +2,5 @@
   "paySuccessTitle": "Payment Success Notification",
   "paySuccessBody": "Your order {0} has been paid successfully, amount: {1}",
   "refundSuccessTitle": "Refund Success Notification",
-  "refundSuccessBody": "Your order {0} has been refunded, amount: {1}",
-  "transferSuccessTitle": "Transfer Success Notification",
-  "transferSuccessBody": "Your transfer {0} has been completed, amount: {1}"
+  "refundSuccessBody": "Your order {0} has been refunded, amount: {1}"
 }

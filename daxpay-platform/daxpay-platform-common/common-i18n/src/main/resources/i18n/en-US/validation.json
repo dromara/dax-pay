@@ -243,24 +243,7 @@
     "reason": {
       "size": "Reason cannot exceed 50 characters"
     },
-    "bizTransferNo": {
-      "size": "Merchant transfer no. cannot exceed 100 characters",
-      "notNull": "Merchant transfer no. cannot be blank"
-    },
-    "transferNo": {
-      "size": "Transfer no. cannot exceed 100 characters"
-    },
-    "payeeType": {
-      "notBlank": "Payee account type cannot be blank",
-      "size": "Payee account type cannot exceed 32 characters"
-    },
-    "payeeAccount": {
-      "notBlank": "Payee account cannot be blank",
-      "size": "Payee account cannot exceed 100 characters"
-    },
-    "payeeName": {
-      "size": "Payee name cannot exceed 50 characters"
-    },
+
     "items": {
       "notEmpty": "Product config list cannot be empty"
     },

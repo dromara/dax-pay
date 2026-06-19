@@ -12,11 +12,6 @@ import java.util.List;
 public class MerchantPermissionServiceImpl implements MerchantPermissionService {
 
     @Override
-    public boolean canRefund() {
-        return true;
-    }
-
-    @Override
     public boolean hasApiPerm(String api) {
         return true;
     }

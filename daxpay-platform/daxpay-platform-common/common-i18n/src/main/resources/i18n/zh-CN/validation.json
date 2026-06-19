@@ -243,20 +243,7 @@
     "reason": {
       "size": "退款原因不可超过50位"
     },
-    "bizTransferNo": {
-      "size": "商户转账号不可超过100位",
-      "notNull": "商户转账号必填"
-    },
-    "transferNo": {
-      "size": "转账号不可超过100位"
-    },
-    "payeeType": {
-      "notBlank": "收款人账号类型必填",
-      "size": "收款人账号类型不可超过32位"
-    },
-    "payeeAccount": {
-      "notBlank": "收款人账号必填",
-      "size": "收款人账号不可超过100位"
+
     },
     "payeeName": {
       "size": "收款人姓名不可超过50位"

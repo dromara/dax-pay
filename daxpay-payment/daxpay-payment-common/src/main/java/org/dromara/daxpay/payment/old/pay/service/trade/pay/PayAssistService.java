@@ -17,8 +17,6 @@ import org.dromara.daxpay.payment.old.pay.entity.order.pay.PayOrder;
 import org.dromara.daxpay.payment.old.pay.entity.order.pay.PayOrderExpand;
 import org.dromara.daxpay.platform.core.enums.pay.channel.*;
 import org.dromara.daxpay.platform.core.enums.pay.pay.*;
-import org.dromara.daxpay.platform.core.enums.pay.refund.*;
-import org.dromara.daxpay.platform.core.enums.pay.transfer.*;
 import org.dromara.daxpay.platform.core.enums.pay.trade.*;
 import org.dromara.daxpay.platform.core.enums.pay.notice.*;
 import cn.hutool.core.util.StrUtil;

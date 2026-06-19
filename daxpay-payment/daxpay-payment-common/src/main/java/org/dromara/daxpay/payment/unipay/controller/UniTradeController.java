@@ -8,17 +8,11 @@ import org.dromara.daxpay.payment.common.result.DaxResult;
 import org.dromara.daxpay.payment.common.util.DaxRes;
 import org.dromara.daxpay.payment.common.service.MerchantPermissionService;
 import org.dromara.daxpay.payment.old.pay.anno.PaymentVerify;
-import org.dromara.daxpay.payment.old.pay.service.trade.refund.RefundService;
-import org.dromara.daxpay.payment.old.pay.service.trade.transfer.TransferService;
 import org.dromara.daxpay.payment.pay.service.PayCloseService;
 import org.dromara.daxpay.payment.pay.service.PayService;
 import org.dromara.daxpay.payment.unipay.param.trade.pay.PayCloseParam;
 import org.dromara.daxpay.payment.unipay.param.trade.pay.PayParam;
-import org.dromara.daxpay.payment.unipay.param.trade.refund.RefundParam;
-import org.dromara.daxpay.payment.unipay.param.trade.transfer.TransferParam;
 import org.dromara.daxpay.payment.unipay.result.trade.pay.PayResult;
-import org.dromara.daxpay.payment.unipay.result.trade.refund.RefundResult;
-import org.dromara.daxpay.payment.unipay.result.trade.transfer.TransferResult;
 import org.dromara.daxpay.platform.core.enums.pay.trade.TradeSourceEnum;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -38,9 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UniTradeController {
     private final PayService payService;
-    private final RefundService refundService;
     private final PayCloseService payCloseService;
-    private final TransferService transferService;
     private final MerchantPermissionService permConfigService;
 
     @Operation(summary = "支付接口")
@@ -51,17 +43,6 @@ public class UniTradeController {
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.order.merchantNoApiPermission");
         }
         return DaxRes.ok(payService.pay(payParam));
-    }
-
-    @Operation(summary = "退款接口")
-    @PostMapping("/refund")
-    public DaxResult<RefundResult> refund(@RequestBody RefundParam refundParam){
-        if (!permConfigService.hasApiPerm(PaymentApiEnum.REFUND.getCode())){
-            // 订单: 该商户没有此接口的权限
-            throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.order.merchantNoApiPermission");
-        }
-        refundParam.setSource(TradeSourceEnum.MCH_API.getCode());
-        return DaxRes.ok(refundService.refund(refundParam));
     }
 
     @Operation(summary = "关闭和撤销接口")
@@ -75,14 +56,4 @@ public class UniTradeController {
         return DaxRes.ok();
     }
 
-    @Operation(summary = "转账接口")
-    @PostMapping("/transfer")
-    public DaxResult<TransferResult> transfer(@RequestBody TransferParam transferParam){
-        if (!permConfigService.hasApiPerm(PaymentApiEnum.TRANSFER.getCode())){
-            // 订单: 该商户没有此接口的权限
-            throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.order.merchantNoApiPermission");
-        }
-        transferParam.setSource(TradeSourceEnum.MCH_API.getCode());
-        return DaxRes.ok(transferService.transfer(transferParam));
-    }
 }

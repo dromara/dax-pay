@@ -3,14 +3,10 @@ package org.dromara.daxpay.payment.old.pay.service.notice.callback;
 import org.dromara.daxpay.platform.common.json.util.JacksonUtil;
 import org.dromara.daxpay.platform.core.exception.DataNotExistException;
 import org.dromara.daxpay.payment.old.pay.convert.order.pay.PayOrderConvert;
-import org.dromara.daxpay.payment.old.pay.convert.order.refund.RefundOrderConvert;
-import org.dromara.daxpay.payment.old.pay.convert.order.transfer.TransferOrderConvert;
 import org.dromara.daxpay.payment.old.pay.dao.notice.callback.MerchantCallbackTaskManager;
 import org.dromara.daxpay.payment.old.pay.dao.order.pay.PayOrderExpandManager;
 import org.dromara.daxpay.payment.old.pay.entity.notice.callback.MerchantCallbackTask;
 import org.dromara.daxpay.payment.old.pay.entity.order.pay.PayOrder;
-import org.dromara.daxpay.payment.old.pay.entity.order.refund.RefundOrder;
-import org.dromara.daxpay.payment.old.pay.entity.order.transfer.TransferOrder;
 import org.dromara.daxpay.platform.core.enums.pay.notice.CallbackNoticeTypeEnum;
 import org.dromara.daxpay.platform.core.enums.pay.trade.TradeTypeEnum;
 import cn.hutool.core.util.StrUtil;
@@ -54,48 +50,4 @@ public class MerchantCallbackTaskService {
         log.info("注册支付回调通知");
     }
 
-    /// 注册退款通知
-    public void registerRefundNotice(RefundOrder order) {
-        // 判断是否需要进行通知
-        if (StrUtil.isBlank(order.getNotifyUrl())){
-            log.info("支付退款无需回调，订单号：{}",order.getRefundNo());
-            return;
-        }
-        var noticeResult = RefundOrderConvert.CONVERT.toResult(order);
-        var task = new MerchantCallbackTask()
-                // 时间序列化进行了重写, 所以使用Jackson的序列化工具类
-                .setContent(JacksonUtil.toJson(noticeResult))
-                .setNoticeType(CallbackNoticeTypeEnum.SYSTEM.getCode())
-                .setTradeType(TradeTypeEnum.REFUND.getCode())
-                .setUrl(order.getNotifyUrl())
-                .setSendCount(0)
-                .setDelayCount(0)
-                .setTradeId(order.getId())
-                .setTradeNo(order.getRefundNo());
-        taskManager.save(task);
-//        delayJobService.registerByTransaction(task.getId(), DaxPayCode.Event.MERCHANT_CALLBACK_SENDER, 0);
-        log.info("注册退款通知");
-    }
-
-    /// 注册转账通知
-    public void registerTransferNotice(TransferOrder order) {
-        // 判断是否需要进行通知
-        if (StrUtil.isBlank(order.getNotifyUrl())){
-            log.info("转账订单无需通知，订单号：{}",order.getTransferNo());
-            return;
-        }
-        var noticeResult = TransferOrderConvert.CONVERT.toResult(order);
-        var task = new MerchantCallbackTask()
-                // 时间序列化进行了重写, 所以使用Jackson的序列化工具类
-                .setContent(JacksonUtil.toJson(noticeResult))
-                .setNoticeType(CallbackNoticeTypeEnum.SYSTEM.getCode())
-                .setTradeType(TradeTypeEnum.TRANSFER.getCode())
-                .setUrl(order.getNotifyUrl())
-                .setSendCount(0)
-                .setTradeId(order.getId())
-                .setTradeNo(order.getTransferNo());
-        taskManager.save(task);
-//        delayJobService.registerByTransaction(task.getId(), DaxPayCode.Event.MERCHANT_CALLBACK_SENDER, 0);
-        log.info("注册转账通知");
-    }
 }

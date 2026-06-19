@@ -3,7 +3,6 @@ package org.dromara.daxpay.payment.old.pay.service.assist;
 import org.dromara.daxpay.payment.old.pay.entity.notice.callback.MerchantCallbackTask;
 import org.dromara.daxpay.payment.old.pay.entity.order.pay.PayOrder;
 import org.dromara.daxpay.payment.old.pay.entity.order.pay.PayOrderExpand;
-import org.dromara.daxpay.payment.old.pay.entity.order.refund.RefundOrder;
 import org.dromara.daxpay.payment.strategy.pay.AbsPayPluginStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,28 +48,6 @@ public class PayPluginAssistService {
                 strategy.payClose(order);
             } catch (Exception e) {
                 log.error("支付关闭处理失败: {}:",  e.getMessage());
-            }
-        }
-    }
-
-    /// 退款成功处理
-    public void refundSuccess(PayOrder payOrder, RefundOrder refundOrder){
-        for (var strategy : absPayPluginStrategies) {
-            try {
-                strategy.refundSuccess(payOrder, refundOrder);
-            } catch (Exception e) {
-                log.error("退款成功处理失败: {}:",  e.getMessage());
-            }
-        }
-    }
-
-    /// 退款关闭处理
-    public void refundClose(PayOrder payOrder, RefundOrder refundOrder){
-        for (var strategy : absPayPluginStrategies) {
-            try {
-                strategy.refundClose(payOrder,refundOrder);
-            } catch (Exception e) {
-                log.error("退款关闭处理失败: {}:",  e.getMessage());
             }
         }
     }

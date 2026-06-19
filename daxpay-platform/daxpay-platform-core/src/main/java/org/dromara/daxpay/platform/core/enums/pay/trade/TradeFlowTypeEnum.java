@@ -15,8 +15,7 @@ public enum TradeFlowTypeEnum implements I18nSupport {
     PAY("pay"),
     /// 退款
     REFUND("refund"),
-    /// 转账
-    TRANSFER("transfer");
+    ;
 
     /// 编码
     private final String code;
