@@ -1,9 +1,5 @@
 {
   "unsupportedBarcodeType": "不支持的条码类型",
-  "reconcileFileAlreadyDownloaded": "对账单文件已经下载或上传",
-  "reconcileParseError": "解析对账单异常",
-  "reconcileDownloadFirst": "请先下载对账单",
-  "reconcileAlreadyCompleted": "对账单比对已经完成",
   "merchantNoRefundPermission": "该商户没有退款权限",
   "merchantNoApiPermission": "该商户没有此接口的权限",
   "payOrderNotExist": "支付订单不存在",

@@ -1,9 +1,5 @@
 {
   "unsupportedBarcodeType": "Unsupported barcode type",
-  "reconcileFileAlreadyDownloaded": "Reconciliation file has already been downloaded or uploaded",
-  "reconcileParseError": "Reconciliation file parsing error",
-  "reconcileDownloadFirst": "Please download the reconciliation file first",
-  "reconcileAlreadyCompleted": "Reconciliation comparison already completed",
   "merchantNoRefundPermission": "Merchant does not have refund permission",
   "merchantNoApiPermission": "Merchant does not have API permission",
   "payOrderNotExist": "Payment order not found",

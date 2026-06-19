@@ -424,9 +424,6 @@
     "orderId": {
       "notNull": "Order ID cannot be blank"
     },
-    "reconcileStatementId": {
-      "notNull": "Reconciliation statement ID cannot be blank"
-    },
     "fileId": {
       "notNull": "File ID cannot be blank"
     },

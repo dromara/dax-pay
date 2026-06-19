@@ -1,6 +1,0 @@
-{
-  "consistent": "Consistent",
-  "local_not_exists": "Local order missing",
-  "remote_not_exists": "Remote order missing",
-  "not_match": "Order mismatch"
-}

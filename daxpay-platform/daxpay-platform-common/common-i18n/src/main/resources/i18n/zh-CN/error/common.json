@@ -27,8 +27,5 @@
   "payRefundStatusNotExist": "该退款状态不存在: {0}",
   "payCallTypeNotSupported": "不支持的收银台类型: {0}",
   "channelAuthTypeNotExist": "认证类型不存在: {0}",
-  "reconcileResultNotFound": "未找到对应的对账结果: {0}",
-  "reconcileFileTypeUnknown": "未知的对账文件类型: {0}",
-  "reconcileDiscrepancyTypeNotFound": "未找到对应的支付类型: {0}",
   "mchAppStatusNotFound": "未找到对应的商户应用状态类型: {0}"
 }

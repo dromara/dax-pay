@@ -427,9 +427,6 @@
     "orderId": {
       "notNull": "订单ID不可为空"
     },
-    "reconcileStatementId": {
-      "notNull": "对账单ID不可为空"
-    },
     "fileId": {
       "notNull": "文件ID不可为空"
     },

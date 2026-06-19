@@ -233,7 +233,7 @@ public class PaySyncService {
     }
 
     /// 关闭支付
-    /// 同步/对账: 执行支付单所有的支付通道关闭支付逻辑, 不需要调用网关关闭,
+    /// 同步: 执行支付单所有的支付通道关闭支付逻辑, 不需要调用网关关闭,
     private void closeLocal(PayOrder order) {
         tradeUniHandleService.payClose(order,PayStatusEnum.CLOSE);
     }

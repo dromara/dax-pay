@@ -6,7 +6,7 @@ import lombok.Setter;
 /// # 各类型订单号生成工具类
 ///
 /// 格式: {环境前缀}{3字母类型}{雪花ID}, 例如 PRODPAY1872635419283456
-/// 类型使用3字母缩写: PAY(支付) REF(退款) TFR(转账) ALL(分账) REC(对账) REP(修复)
+/// 类型使用3字母缩写: PAY(支付) REF(退款) TFR(转账) ALL(分账) REP(修复)
 @Setter
 public final class TradeNoGenerateUtil {
 
@@ -26,11 +26,6 @@ public final class TradeNoGenerateUtil {
     /// 生成转账订单号
     public static String transfer() {
         return prefix() + "TFR" + IdUtil.getSnowflakeNextId();
-    }
-
-    /// 生成对账订单号
-    public static String reconciliation() {
-        return prefix() + "REC" + IdUtil.getSnowflakeNextId();
     }
 
     /// 生成修复单号

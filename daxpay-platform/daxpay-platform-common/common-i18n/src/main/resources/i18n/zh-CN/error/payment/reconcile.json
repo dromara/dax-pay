@@ -1,8 +1,0 @@
-{
-  "discrepancyNotExist": "对账差异记录不存在",
-  "orderNotFound": "未找到对账订单",
-  "statementNotFound": "未找到对账单",
-  "reconcileOrderNotExist": "对账订单不存在",
-  "channelStatementUrlNotFound": "未找到通道对账单下载链接",
-  "platformStatementUrlNotFound": "未找到平台对账单下载链接"
-}

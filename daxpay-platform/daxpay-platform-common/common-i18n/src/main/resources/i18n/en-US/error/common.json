@@ -27,8 +27,5 @@
   "payRefundStatusNotExist": "Pay refund status not found: {0}",
   "payCallTypeNotSupported": "Unsupported checkout type: {0}",
   "channelAuthTypeNotExist": "Auth type not found: {0}",
-  "reconcileResultNotFound": "Reconcile result not found: {0}",
-  "reconcileFileTypeUnknown": "Unknown reconcile file type: {0}",
-  "reconcileDiscrepancyTypeNotFound": "Payment discrepancy type not found: {0}",
   "mchAppStatusNotFound": "Merchant app status not found: {0}"
 }

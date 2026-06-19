@@ -76,15 +76,6 @@ public class PayOrderManager extends BaseManager<PayOrderMapper, PayOrder> {
         return page(mpPage, generator);
     }
 
-    /// 查询对账用订单记录(指定时间和状态的订单)
-    public List<PayOrder> findReconcile(String product, OffsetDateTime startTime, OffsetDateTime endTime) {
-        return this.lambdaQuery()
-                .eq(PayOrder::getProduct, product)
-                .between(PayOrder::getPayTime, startTime, endTime)
-                .eq(PayOrder::getStatus, PayStatusEnum.SUCCESS.getCode())
-                .list();
-    }
-
     /// 查询汇总金额
     public BigDecimal getTotalAmount(PayOrderQuery query){
         QueryWrapper<PayOrder> generator = QueryGenerator.generator(query);
