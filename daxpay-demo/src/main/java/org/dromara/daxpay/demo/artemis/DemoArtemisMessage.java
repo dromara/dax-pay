@@ -1,4 +1,4 @@
-package org.dromara.daxpay.payment.admin.controller.demo.message;
+package org.dromara.daxpay.demo.artemis;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

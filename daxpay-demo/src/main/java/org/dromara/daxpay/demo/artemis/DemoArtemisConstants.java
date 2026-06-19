@@ -1,4 +1,4 @@
-package org.dromara.daxpay.payment.admin.controller.demo.constant;
+package org.dromara.daxpay.demo.artemis;
 
 /// # Artemis 消息队列演示常量
 ///

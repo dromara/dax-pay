@@ -1,11 +1,7 @@
-package org.dromara.daxpay.payment.admin.controller.demo.consumer;
+package org.dromara.daxpay.demo.artemis;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.dromara.daxpay.payment.admin.controller.demo.constant.DemoArtemisConstants;
-import org.dromara.daxpay.payment.admin.controller.demo.message.DemoArtemisMessage;
-import org.dromara.daxpay.payment.admin.controller.demo.result.DemoMessageResult;
-import org.dromara.daxpay.payment.admin.controller.demo.store.DemoMessageStore;
 import org.dromara.daxpay.platform.common.artemis.ArtemisBeanNames;
 import org.dromara.daxpay.platform.common.json.util.JacksonUtil;
 import org.springframework.jms.annotation.JmsListener;

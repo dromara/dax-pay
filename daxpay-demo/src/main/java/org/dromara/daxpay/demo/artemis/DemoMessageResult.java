@@ -1,9 +1,8 @@
-package org.dromara.daxpay.payment.admin.controller.demo.result;
+package org.dromara.daxpay.demo.artemis;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import org.dromara.daxpay.payment.admin.controller.demo.message.DemoArtemisMessage;
 
 import java.time.OffsetDateTime;
 

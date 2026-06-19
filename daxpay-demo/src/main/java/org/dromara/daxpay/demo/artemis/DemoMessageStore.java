@@ -1,7 +1,6 @@
-package org.dromara.daxpay.payment.admin.controller.demo.store;
+package org.dromara.daxpay.demo.artemis;
 
 import lombok.extern.slf4j.Slf4j;
-import org.dromara.daxpay.payment.admin.controller.demo.result.DemoMessageResult;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;

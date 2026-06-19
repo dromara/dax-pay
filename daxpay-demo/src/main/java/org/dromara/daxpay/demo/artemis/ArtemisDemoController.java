@@ -1,14 +1,9 @@
-package org.dromara.daxpay.payment.admin.controller.demo;
+package org.dromara.daxpay.demo.artemis;
 
 import cn.hutool.core.lang.UUID;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
-import org.dromara.daxpay.payment.admin.controller.demo.constant.DemoArtemisConstants;
-import org.dromara.daxpay.payment.admin.controller.demo.message.DemoArtemisMessage;
-import org.dromara.daxpay.payment.admin.controller.demo.param.SendDemoMessageParam;
-import org.dromara.daxpay.payment.admin.controller.demo.result.DemoMessageResult;
-import org.dromara.daxpay.payment.admin.controller.demo.store.DemoMessageStore;
 import org.dromara.daxpay.platform.common.artemis.service.ArtemisTemplateService;
 import org.dromara.daxpay.platform.common.json.util.JacksonUtil;
 import org.dromara.daxpay.platform.core.annotation.IgnoreAuth;

@@ -60,6 +60,13 @@
             <version>${project.version}</version>
         </dependency>
 
+        <!-- 功能演示模块（需隔离时注释此依赖即可从产物中剔除） -->
+        <dependency>
+            <groupId>org.dromara.daxpay</groupId>
+            <artifactId>daxpay-demo</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- 数据库驱动 PG -->
         <dependency>
             <groupId>org.postgresql</groupId>
