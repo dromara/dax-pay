@@ -1,5 +1,6 @@
 package org.dromara.daxpay.platform.common.artemis.service;
 
+import org.dromara.daxpay.platform.common.artemis.ArtemisBeanNames;
 import org.dromara.daxpay.platform.common.artemis.ArtemisCommonAutoConfiguration;
 import org.dromara.daxpay.platform.common.artemis.exception.ArtemisException;
 import cn.hutool.core.lang.UUID;
@@ -52,8 +53,8 @@ public class ArtemisTemplateService {
     /// Topic 模板（pubSubDomain=true），见 [ArtemisCommonAutoConfiguration#topicJmsTemplate]
     private final JmsTemplate topicJmsTemplate;
 
-    public ArtemisTemplateService(@Qualifier("jmsTemplate") JmsTemplate queueJmsTemplate,
-                                  @Qualifier(ArtemisCommonAutoConfiguration.TOPIC_JMS_TEMPLATE) JmsTemplate topicJmsTemplate) {
+    public ArtemisTemplateService(@Qualifier(ArtemisBeanNames.QUEUE_JMS_TEMPLATE) JmsTemplate queueJmsTemplate,
+                                  @Qualifier(ArtemisBeanNames.TOPIC_JMS_TEMPLATE) JmsTemplate topicJmsTemplate) {
         this.queueJmsTemplate = queueJmsTemplate;
         this.topicJmsTemplate = topicJmsTemplate;
     }

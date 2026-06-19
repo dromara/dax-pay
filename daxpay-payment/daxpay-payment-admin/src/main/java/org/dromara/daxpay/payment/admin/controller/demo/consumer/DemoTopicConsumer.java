@@ -6,6 +6,7 @@ import org.dromara.daxpay.payment.admin.controller.demo.constant.DemoArtemisCons
 import org.dromara.daxpay.payment.admin.controller.demo.message.DemoArtemisMessage;
 import org.dromara.daxpay.payment.admin.controller.demo.result.DemoMessageResult;
 import org.dromara.daxpay.payment.admin.controller.demo.store.DemoMessageStore;
+import org.dromara.daxpay.platform.common.artemis.ArtemisBeanNames;
 import org.dromara.daxpay.platform.common.json.util.JacksonUtil;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
@@ -25,13 +26,13 @@ public class DemoTopicConsumer {
     private final DemoMessageStore store;
 
     /// 订阅者 A
-    @JmsListener(destination = DemoArtemisConstants.TOPIC, containerFactory = "topicListenerFactory")
+    @JmsListener(destination = DemoArtemisConstants.TOPIC, containerFactory = ArtemisBeanNames.TOPIC_LISTENER_FACTORY)
     public void onMessageA(String json) {
         handle(json, "demo-topic-consumer-A");
     }
 
     /// 订阅者 B（同节点模拟多订阅者）
-    @JmsListener(destination = DemoArtemisConstants.TOPIC, containerFactory = "topicListenerFactory")
+    @JmsListener(destination = DemoArtemisConstants.TOPIC, containerFactory = ArtemisBeanNames.TOPIC_LISTENER_FACTORY)
     public void onMessageB(String json) {
         handle(json, "demo-topic-consumer-B");
     }

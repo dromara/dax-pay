@@ -44,20 +44,14 @@ import org.springframework.jms.core.JmsTemplate;
 @EnableJms
 public class ArtemisCommonAutoConfiguration {
 
-    /// Topic 发送模板的 Bean 名
-    public static final String TOPIC_JMS_TEMPLATE = "topicJmsTemplate";
-
-    /// Topic 监听容器工厂的 Bean 名，供所有 `@JmsListener` 订阅 Topic 时引用
-    public static final String TOPIC_LISTENER_FACTORY = "topicListenerFactory";
-
     /// Topic 发送专用 JmsTemplate（pubSubDomain=true）
     ///
     /// 与 Spring Boot 默认的 `jmsTemplate`（Queue 模式）共存，
     /// 由 `ArtemisTemplateService` 通过 `@Qualifier` 注入。
     ///
     /// 不设置 MessageConverter，回落到 Spring 默认 `SimpleMessageConverter`（String ↔ TextMessage 透传）。
-    @Bean(TOPIC_JMS_TEMPLATE)
-    @ConditionalOnMissingBean(name = TOPIC_JMS_TEMPLATE)
+    @Bean(ArtemisBeanNames.TOPIC_JMS_TEMPLATE)
+    @ConditionalOnMissingBean(name = ArtemisBeanNames.TOPIC_JMS_TEMPLATE)
     public JmsTemplate topicJmsTemplate(ConnectionFactory connectionFactory) {
         JmsTemplate template = new JmsTemplate(connectionFactory);
         // 关键：开启 pub-sub 模式，destination 解析为 Topic（multicast）
@@ -70,8 +64,8 @@ public class ArtemisCommonAutoConfiguration {
     /// 所有需要订阅 Topic 的 `@JmsListener` 通过
     /// `containerFactory = "topicListenerFactory"` 引用，
     /// 取代各业务模块自行创建重复的 Topic ListenerFactory。
-    @Bean(TOPIC_LISTENER_FACTORY)
-    @ConditionalOnMissingBean(name = TOPIC_LISTENER_FACTORY)
+    @Bean(ArtemisBeanNames.TOPIC_LISTENER_FACTORY)
+    @ConditionalOnMissingBean(name = ArtemisBeanNames.TOPIC_LISTENER_FACTORY)
     public JmsListenerContainerFactory<?> topicListenerFactory(ConnectionFactory connectionFactory) {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory);

@@ -4,6 +4,7 @@ import org.dromara.daxpay.platform.capability.cache.core.LocalCacheRegistry;
 import org.dromara.daxpay.platform.capability.cache.notify.message.CacheInvalidationMessage;
 import org.dromara.daxpay.platform.capability.cache.notify.message.CacheInvalidationType;
 import org.dromara.daxpay.platform.capability.cache.notify.support.CacheTopicConstants;
+import org.dromara.daxpay.platform.common.artemis.ArtemisBeanNames;
 import org.dromara.daxpay.platform.common.json.util.JacksonUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -40,7 +41,7 @@ public class CacheInvalidationConsumer {
     /// 方法签名接收原始 JSON 字符串（统一 Text 传输），手动反序列化为目标类型。
     @JmsListener(
             destination = CacheTopicConstants.TOPIC,
-            containerFactory = "topicListenerFactory"
+            containerFactory = ArtemisBeanNames.TOPIC_LISTENER_FACTORY
     )
     public void onMessage(String json) {
         CacheInvalidationMessage message;
