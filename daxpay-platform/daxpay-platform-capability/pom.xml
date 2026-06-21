@@ -15,6 +15,7 @@
         <module>capability-cache</module>
         <module>capability-nonce</module>
         <module>capability-wechat</module>
+        <module>capability-social</module>
     </modules>
 
     <modelVersion>4.0.0</modelVersion>

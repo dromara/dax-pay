@@ -6,6 +6,21 @@
   "max": "{0}不能大于{1}",
   "parameterError": "参数校验失败",
   "field": {
+    "source": {
+      "notBlank": "平台不能为空"
+    },
+    "clientId": {
+      "notBlank": "客户端ID不能为空"
+    },
+    "clientSecret": {
+      "notBlank": "客户端密钥不能为空"
+    },
+    "redirectUri": {
+      "notBlank": "回调地址不能为空"
+    },
+    "clientCode": {
+      "notBlank": "终端不能为空"
+    },
     "ip": {
       "notValid": "IP地址不合法"
     },

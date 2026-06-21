@@ -1,0 +1,14 @@
+{
+  "configNotExist": "平台配置不存在或未启用",
+  "unsupportedSource": "不支持的平台",
+  "configDuplicated": "该平台配置已存在",
+  "notConfigured": "平台尚未配置，无法启停",
+  "authCodeBlank": "授权码不能为空",
+  "weCom": {
+    "notCorpMember": "非本企业成员，不支持登录"
+  },
+  "bind": {
+    "alreadyBoundByOther": "该第三方账号已被其他用户绑定",
+    "alreadyBoundPlatform": "您已绑定该平台，请先解绑后再绑定新账号"
+  }
+}

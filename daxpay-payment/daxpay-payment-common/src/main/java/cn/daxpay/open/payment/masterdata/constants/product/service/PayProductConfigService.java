@@ -72,15 +72,6 @@ public class PayProductConfigService {
         payProductConfigManager.saveOrUpdate(config);
     }
 
-    /// 更新配置状态
-    @Transactional(rollbackFor = Exception.class)
-    public void markConfigured(String product, boolean configured) {
-        PayProductConfig config = payProductConfigManager.findByProduct(product)
-                .orElseGet(() -> createDefaultConfig(product));
-        config.setConfigured(configured);
-        payProductConfigManager.saveOrUpdate(config);
-    }
-
     /// PayProduct + 库表 + 策略合并为配置结果
     private PayProductConfigResult toConfigResult(PayProduct payProduct, Map<String, PayProductConfig> configMap) {
         ProductEnum productEnum = ProductEnum.findByCode(payProduct.getCode());

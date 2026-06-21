@@ -20,6 +20,12 @@
             <artifactId>capability-auth</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- 第三方社交登录 -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>capability-social</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- 防重放Nonce验证 -->
         <dependency>
             <groupId>cn.daxpay.open</groupId>

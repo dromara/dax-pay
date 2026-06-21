@@ -6,6 +6,21 @@
   "max": "{0} cannot be greater than {1}",
   "parameterError": "Parameter validation failed",
   "field": {
+    "source": {
+      "notBlank": "Platform cannot be blank"
+    },
+    "clientId": {
+      "notBlank": "Client ID cannot be blank"
+    },
+    "clientSecret": {
+      "notBlank": "Client secret cannot be blank"
+    },
+    "redirectUri": {
+      "notBlank": "Redirect URI cannot be blank"
+    },
+    "clientCode": {
+      "notBlank": "Client code cannot be blank"
+    },
     "ip": {
       "notValid": "IP address is invalid"
     },
