@@ -1,4 +1,4 @@
-# 借鉴和部分参考的开源项目
+z# 借鉴和部分参考的开源项目
 
 Spring Cloud Gateway整合Swagger2 Demo，全网首例： 
 https://gitee.com/wxdfun/sw
@@ -47,3 +47,6 @@ https://github.com/xiangshu233/vue3-vant4-mobile
 
 全能第三方支付对接Java开发工具包: 
 https://gitee.com/egzosn/pay-java-parent
+
+JustAuth，一个开源的第三方登录授权库： 
+https://github.com/justauth/JustAuth
