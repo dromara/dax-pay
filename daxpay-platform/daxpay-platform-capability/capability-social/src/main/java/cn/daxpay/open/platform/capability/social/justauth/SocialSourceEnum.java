@@ -16,7 +16,7 @@ import java.util.Arrays;
 public enum SocialSourceEnum implements I18nSupport {
 
 
-    /// 微信公众号
+    /// 微信开放平台
     WECHAT_MP(
             "weChat",
             "https://open.weixin.qq.com/connect/oauth2/authorize",

@@ -23,7 +23,7 @@ public class DingTalkRequest extends AbstractSocialAuthRequest {
         return SocialUrlBuilder.ofBaseUrl(this.getSource().authorize())
             .queryParam("response_type", "code")
             .queryParam("client_id", this.getConfig().getClientId())
-            .queryParam("redirect_uri", this.getConfig().getRedirectUri())
+            .queryParam("redirect_uri", this.buildRedirectUri())
             .queryParam("prompt", "consent")
             .queryParam("state", state)
             .build();

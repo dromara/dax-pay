@@ -1,7 +1,6 @@
 package cn.daxpay.open.platform.iam.service.social;
 
-import cn.daxpay.open.platform.capability.social.bind.SocialBindStore;
-import cn.daxpay.open.platform.capability.social.bind.result.SocialBindResult;
+import cn.daxpay.open.platform.iam.result.social.SocialBindResult;
 import cn.daxpay.open.platform.capability.social.justauth.model.AuthUser;
 import cn.daxpay.open.platform.iam.dao.social.IamUserSocialManager;
 import cn.daxpay.open.platform.iam.entity.social.IamUserSocial;
@@ -14,19 +13,19 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-/// # 用户第三方账号绑定存储实现
+/// # 用户第三方账号绑定存储
 ///
-/// 实现 capability-social 定义的 SocialBindStore 契约, 操作 iam_user_social 表,
-/// 被 SocialEndpoint 通过接口注入使用(无需 capability-social 反向依赖 service-iam)
+/// 操作 iam_user_social 表, 提供"按平台+openId 查用户/保存绑定/列绑定/解绑"等能力,
+/// 被 SocialEndpoint 直接注入使用(同模块, 无需 SPI 抽象).
 ///
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class IamUserSocialBindStore implements SocialBindStore {
+public class IamUserSocialBindStore {
 
     private final IamUserSocialManager iamUserSocialManager;
 
-    @Override
+    /// 根据平台来源和平台用户标识查询绑定的本地用户ID
     public Optional<Long> findUserIdBySourceAndOpenId(String source, String openId) {
         return iamUserSocialManager.lambdaQuery()
             .eq(IamUserSocial::getSource, source)
@@ -35,7 +34,7 @@ public class IamUserSocialBindStore implements SocialBindStore {
             .map(IamUserSocial::getUserId);
     }
 
-    @Override
+    /// 判断指定平台账号是否已被绑定
     public boolean existsBind(String source, String openId) {
         return iamUserSocialManager.lambdaQuery()
             .eq(IamUserSocial::getSource, source)
@@ -43,7 +42,10 @@ public class IamUserSocialBindStore implements SocialBindStore {
             .exists();
     }
 
-    @Override
+    /// 保存绑定关系
+    /// @param userId 本地用户ID
+    /// @param clientCode 终端编码
+    /// @param authUser 平台返回的用户信息
     @Transactional(rollbackFor = Exception.class)
     public void saveBind(Long userId, String clientCode, AuthUser authUser) {
         String source = authUser.getSource();
@@ -84,7 +86,7 @@ public class IamUserSocialBindStore implements SocialBindStore {
         iamUserSocialManager.save(entity);
     }
 
-    @Override
+    /// 查询指定用户已绑定的所有第三方账号
     public List<SocialBindResult> findBindsByUserId(Long userId) {
         return iamUserSocialManager.lambdaQuery()
             .eq(IamUserSocial::getUserId, userId)
@@ -93,7 +95,8 @@ public class IamUserSocialBindStore implements SocialBindStore {
             .toList();
     }
 
-    @Override
+    /// 解除指定用户的某个平台绑定
+    /// @return 是否解绑成功
     public boolean removeBind(Long userId, String source) {
         return iamUserSocialManager.lambdaUpdate()
             .eq(IamUserSocial::getUserId, userId)

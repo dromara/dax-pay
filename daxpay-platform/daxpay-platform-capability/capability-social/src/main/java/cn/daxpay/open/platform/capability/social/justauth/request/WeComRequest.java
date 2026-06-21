@@ -23,7 +23,7 @@ public class WeComRequest extends AbstractSocialAuthRequest {
         return SocialUrlBuilder.ofBaseUrl(this.getSource().authorize())
             .queryParam("appid", this.getConfig().getClientId())
             .queryParam("agentid", this.getConfig().getAgentId())
-            .queryParam("redirect_uri", this.getConfig().getRedirectUri())
+            .queryParam("redirect_uri", this.buildRedirectUri())
             .queryParam("state", state)
             .build();
     }

@@ -10,7 +10,7 @@
     </parent>
 
     <artifactId>capability-social</artifactId>
-    <description>第三方社交登录能力模块(参考JustAuth重新实现)</description>
+    <description>第三方社交登录通用 OAuth 协议能力模块(参考JustAuth重新实现)</description>
 
     <dependencies>
         <!-- web -->
@@ -60,12 +60,6 @@
         <dependency>
             <groupId>cn.daxpay.open</groupId>
             <artifactId>common-config</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <!-- mybatis-plus (社交平台配置表) -->
-        <dependency>
-            <groupId>cn.daxpay.open</groupId>
-            <artifactId>common-mybatis-plus</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!-- hutool http (OAuth2 接口调用) -->

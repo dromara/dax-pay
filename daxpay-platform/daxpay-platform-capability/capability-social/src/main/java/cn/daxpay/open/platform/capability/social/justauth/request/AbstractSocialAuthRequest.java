@@ -40,7 +40,7 @@ public abstract class AbstractSocialAuthRequest implements SocialAuthRequest {
         return SocialUrlBuilder.ofBaseUrl(source.authorize())
             .queryParam("response_type", "code")
             .queryParam("client_id", config.getClientId())
-            .queryParam("redirect_uri", config.getRedirectUri())
+            .queryParam("redirect_uri", this.buildRedirectUri())
             .queryParam("state", state)
             .build();
     }
@@ -70,7 +70,7 @@ public abstract class AbstractSocialAuthRequest implements SocialAuthRequest {
             .queryParam("client_id", config.getClientId())
             .queryParam("client_secret", config.getClientSecret())
             .queryParam("grant_type", "authorization_code")
-            .queryParam("redirect_uri", config.getRedirectUri())
+            .queryParam("redirect_uri", this.buildRedirectUri())
             .build();
     }
 
@@ -79,6 +79,24 @@ public abstract class AbstractSocialAuthRequest implements SocialAuthRequest {
         return SocialUrlBuilder.ofBaseUrl(source.userInfo())
             .queryParam("access_token", token.getAccessToken())
             .build();
+    }
+
+    /// 构建回调地址(配置基础路径 + 平台编码, 形如 .../oauth-callback/{source})
+    /// authorize 与 accessToken 两处必须一致, 集中在此方法保证.
+    /// 配置项 redirect_uri 约定为前端回调基础路径(不含 source), 如:
+    ///   http://127.0.0.1:13333/auth/oauth-callback
+    /// 实际传给第三方的为:
+    ///   http://127.0.0.1:13333/auth/oauth-callback/gitee
+    protected String buildRedirectUri() {
+        String base = config.getRedirectUri();
+        if (base == null) {
+            base = "";
+        }
+        // 去掉末尾斜杠, 避免出现 //gitee
+        if (base.endsWith("/")) {
+            base = base.substring(0, base.length() - 1);
+        }
+        return base + "/" + source.getCode();
     }
 
     /// GET 请求

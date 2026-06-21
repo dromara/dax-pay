@@ -18,3 +18,7 @@ ALTER TABLE iam_social_config DROP COLUMN IF EXISTS frontend_callback_url;
 -- 字段长度 VARCHAR(256) 可容纳密文(appSecret 多为 32~64 字符, 密文 < 200 字符), 无需调整
 -- 开发阶段无历史明文数据, 跳过迁移; 生产环境启用前需写一次性逻辑加密历史明文
 COMMENT ON COLUMN iam_social_config.client_secret IS '客户端密钥(加密存储)';
+
+-- 回调地址不再由社交配置维护, 改由端点配置(PlatformUrlConfig)的 baseUrl 自动生成
+-- 实际回调地址为 {adminBaseUrl|merchantBaseUrl}/auth/oauth-callback/{source}
+ALTER TABLE iam_social_config DROP COLUMN IF EXISTS redirect_uri;

@@ -26,7 +26,7 @@ public class DouyinRequest extends AbstractSocialAuthRequest {
             .queryParam("client_key", this.getConfig().getClientId())
             .queryParam("response_type", "code")
             .queryParam("scope", "user_info")
-            .queryParam("redirect_uri", this.getConfig().getRedirectUri())
+            .queryParam("redirect_uri", this.buildRedirectUri())
             .queryParam("state", state)
             .build();
     }

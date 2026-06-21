@@ -15,9 +15,6 @@
     "clientSecret": {
       "notBlank": "客户端密钥不能为空"
     },
-    "redirectUri": {
-      "notBlank": "回调地址不能为空"
-    },
     "clientCode": {
       "notBlank": "终端不能为空"
     },

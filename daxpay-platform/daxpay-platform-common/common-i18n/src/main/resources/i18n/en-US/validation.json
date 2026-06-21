@@ -15,9 +15,6 @@
     "clientSecret": {
       "notBlank": "Client secret cannot be blank"
     },
-    "redirectUri": {
-      "notBlank": "Redirect URI cannot be blank"
-    },
     "clientCode": {
       "notBlank": "Client code cannot be blank"
     },

@@ -23,7 +23,7 @@ public class WechatMpRequest extends AbstractSocialAuthRequest {
     public String authorize(String state) {
         return SocialUrlBuilder.ofBaseUrl(this.getSource().authorize())
             .queryParam("appid", this.getConfig().getClientId())
-            .queryParam("redirect_uri", this.encode(this.getConfig().getRedirectUri()))
+            .queryParam("redirect_uri", this.encode(this.buildRedirectUri()))
             .queryParam("response_type", "code")
             .queryParam("scope", "snsapi_userinfo")
             .queryParam("state", state.concat("#wechat_redirect"))

@@ -25,7 +25,7 @@ public class FeishuRequest extends AbstractSocialAuthRequest {
     public String authorize(String state) {
         return SocialUrlBuilder.ofBaseUrl(this.getSource().authorize())
             .queryParam("app_id", this.getConfig().getClientId())
-            .queryParam("redirect_uri", this.encode(this.getConfig().getRedirectUri()))
+            .queryParam("redirect_uri", this.encode(this.buildRedirectUri()))
             .queryParam("state", state)
             .build();
     }

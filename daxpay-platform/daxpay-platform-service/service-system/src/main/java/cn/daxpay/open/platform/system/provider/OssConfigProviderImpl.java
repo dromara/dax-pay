@@ -3,7 +3,7 @@ package cn.daxpay.open.platform.system.provider;
 import cn.daxpay.open.platform.capability.file.entity.FileStorageConfig;
 import cn.daxpay.open.platform.capability.file.provider.OssConfigProvider;
 import cn.daxpay.open.platform.system.entity.config.platform.PlatformOssConfig;
-import cn.daxpay.open.platform.system.service.config.PlatformConfigService;
+import cn.daxpay.open.platform.system.service.config.PlatformOssConfigService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,11 +17,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class OssConfigProviderImpl implements OssConfigProvider {
 
-    private final PlatformConfigService platformConfigService;
+    private final PlatformOssConfigService platformOssConfigService;
 
     @Override
     public Optional<FileStorageConfig> getDefaultConfig() {
-        PlatformOssConfig config = platformConfigService.getOssConfig();
+        PlatformOssConfig config = platformOssConfigService.getOssConfig();
         if (config == null || config.getEndpoint() == null) {
             log.warn("OSS配置不存在或未配置");
             return Optional.empty();
