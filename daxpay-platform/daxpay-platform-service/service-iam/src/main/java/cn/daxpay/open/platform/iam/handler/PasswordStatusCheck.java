@@ -16,8 +16,8 @@ import java.util.List;
 public class PasswordStatusCheck implements RouterCheck {
 
     private static final List<String> ALLOWED_PATHS = List.of(
-            "/user/auth/updatePassword",
-            "/user/auth/getLoginAfterUserInfo",
+            "/user/auth/update-password",
+            "/user/auth/get-login-after-user-info",
             "/token/logout",
             "/captcha/"
     );

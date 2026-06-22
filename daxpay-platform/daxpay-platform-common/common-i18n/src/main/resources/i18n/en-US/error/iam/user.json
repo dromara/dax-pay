@@ -10,5 +10,7 @@
   "emailUsedByOtherInClient": "Email already used by another user under this client",
   "dataError": "User data error",
   "notExist": "User not found",
-  "cannotEditNonAdmin": "Cannot edit non-admin client users"
+  "cannotEditNonAdmin": "Cannot edit non-admin client users",
+  "emailUsedByOther": "Email is already used by another user",
+  "phoneUsedByOther": "Phone number is already used by another user"
 }

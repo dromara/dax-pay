@@ -255,7 +255,9 @@
     "reason": {
       "size": "Reason cannot exceed 50 characters"
     },
-
+    "payeeName": {
+      "size": "Payee name cannot exceed 50 characters"
+    },
     "items": {
       "notEmpty": "Product config list cannot be empty"
     },
@@ -330,7 +332,8 @@
       "notBlank": "Platform private key cannot be blank; configure daxpay.platform.config.key-config.private-key"
     },
     "phone": {
-      "notBlank": "Phone number cannot be blank"
+      "notBlank": "Phone number cannot be blank",
+      "format": "Invalid phone number format"
     },
     "roleId": {
       "notNull": "Role ID cannot be blank"
@@ -399,7 +402,8 @@
       "notBlank": "Client type cannot be blank"
     },
     "email": {
-      "notBlank": "Email cannot be blank"
+      "notBlank": "Email cannot be blank",
+      "format": "Invalid email format"
     },
     "realName": {
       "notBlank": "Name cannot be blank"
@@ -461,6 +465,40 @@
     "delaySeconds": {
       "min": "Delay seconds cannot be less than 1",
       "max": "Delay seconds cannot be greater than 300"
+    },
+    "name": {
+      "notBlank": "Name cannot be blank",
+      "size": "Name length must be between 3 and 15 characters"
+    },
+    "enabled": {
+      "notNull": "Enabled status cannot be blank"
+    },
+    "storeNo": {
+      "size": "Store number cannot exceed 64 characters"
+    },
+    "operatorId": {
+      "size": "Operator ID cannot exceed 64 characters"
+    },
+    "deviceName": {
+      "size": "Device name cannot exceed 128 characters"
+    },
+    "deviceIp": {
+      "size": "Device IP cannot exceed 64 characters"
+    },
+    "douyinAppId": {
+      "notBlank": "Douyin app ID cannot be blank"
+    },
+    "douyinDirectAppId": {
+      "notNull": "Douyin direct app ID cannot be blank"
+    },
+    "dyMchId": {
+      "notBlank": "Douyin merchant ID cannot be blank"
+    },
+    "wechatDirectAppId": {
+      "notNull": "WeChat direct app ID cannot be blank"
+    },
+    "appSecret": {
+      "size": "App secret cannot exceed 512 characters"
     }
   }
 }

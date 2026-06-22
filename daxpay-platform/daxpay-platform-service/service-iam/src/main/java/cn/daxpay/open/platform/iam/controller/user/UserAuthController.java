@@ -2,13 +2,13 @@ package cn.daxpay.open.platform.iam.controller.user;
 
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
+import cn.daxpay.open.platform.iam.param.user.UpdatePasswordParam;
 import cn.daxpay.open.platform.iam.param.user.UserBaseInfoParam;
 import cn.daxpay.open.platform.iam.result.user.LoginAfterUserInfoResult;
 import cn.daxpay.open.platform.iam.result.user.UserBaseInfoResult;
 import cn.daxpay.open.platform.iam.service.user.UserInfoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -27,10 +27,8 @@ public class UserAuthController {
 
     @Operation(summary = "修改密码")
     @PostMapping("/update-password")
-    public Result<Void> updatePassword(
-        @NotBlank(message = "{validation.field.oldPassword.notBlank}") String password,
-        @NotBlank(message = "{validation.field.newPassword.notBlank}") String newPassword) {
-        userInfoService.updatePassword(password, newPassword);
+    public Result<Void> updatePassword(@RequestBody @Validated UpdatePasswordParam param) {
+        userInfoService.updatePassword(param.getPassword(), param.getNewPassword());
         return Res.ok();
     }
 

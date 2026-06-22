@@ -10,5 +10,7 @@
   "emailUsedByOtherInClient": "该终端下邮箱已被其他用户使用",
   "dataError": "用户数据有问题",
   "notExist": "用户不存在",
-  "cannotEditNonAdmin": "不允许编辑非运营端用户"
+  "cannotEditNonAdmin": "不允许编辑非运营端用户",
+  "emailUsedByOther": "邮箱已被其他用户使用",
+  "phoneUsedByOther": "手机号已被其他用户使用"
 }

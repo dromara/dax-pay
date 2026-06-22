@@ -27,4 +27,10 @@ public class UserBaseInfoResult {
     @Schema(description = "生日")
     private LocalDate birthday;
 
+    @Schema(description = "邮箱")
+    private String email;
+
+    @Schema(description = "手机号")
+    private String phone;
+
 }

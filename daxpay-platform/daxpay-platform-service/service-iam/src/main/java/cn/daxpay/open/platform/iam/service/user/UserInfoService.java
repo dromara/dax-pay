@@ -48,6 +48,8 @@ public class UserInfoService {
 
     private final PasswordDecryptService passwordDecryptService;
 
+    private final UserQueryService userQueryService;
+
     /// 登录后获取用户信息
     public LoginAfterUserInfoResult getLoginAfterUserInfo() {
         Long userId = SecurityUtil.getUserId();
@@ -81,17 +83,27 @@ public class UserInfoService {
             .setSex(userExpandInfo.getSex())
             .setName(userInfo.getName())
             .setBirthday(userExpandInfo.getBirthday())
-            .setAvatar(userExpandInfo.getAvatar());
+            .setAvatar(userExpandInfo.getAvatar())
+            .setEmail(userInfo.getEmail())
+            .setPhone(userInfo.getPhone());
     }
 
     /// 修改基本信息
     @Transactional(rollbackFor = Exception.class)
     public void updateUserBaseInfo(UserBaseInfoParam param) {
-        UserInfo userInfo = userInfoManager.findById(SecurityUtil.getUserId())
+        Long userId = SecurityUtil.getUserId();
+        UserInfo userInfo = userInfoManager.findById(userId)
             .orElseThrow(UserInfoNotExistsException::new);
-        UserExpandInfo userExpandInfo = userExpandInfoManager.findById(SecurityUtil.getUserId())
+        UserExpandInfo userExpandInfo = userExpandInfoManager.findById(userId)
             .orElseThrow(UserInfoNotExistsException::new);
-        param.setId(null);
+        // 邮箱唯一性校验（排除自身）
+        if (userQueryService.existsEmail(param.getEmail(), userId)) {
+            throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.emailUsedByOther");
+        }
+        // 手机号唯一性校验（排除自身）
+        if (userQueryService.existsPhone(param.getPhone(), userId)) {
+            throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.phoneUsedByOther");
+        }
         UserConvert.CONVERT.copy(param, userExpandInfo);
         UserConvert.CONVERT.copy(param, userInfo);
         userExpandInfoManager.updateById(userExpandInfo);

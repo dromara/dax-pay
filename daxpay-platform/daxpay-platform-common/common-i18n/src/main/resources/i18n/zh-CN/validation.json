@@ -255,8 +255,6 @@
     "reason": {
       "size": "退款原因不可超过50位"
     },
-
-    },
     "payeeName": {
       "size": "收款人姓名不可超过50位"
     },
@@ -337,7 +335,8 @@
       "notBlank": "平台私钥不能为空，请配置 daxpay.platform.config.key-config.private-key"
     },
     "phone": {
-      "notBlank": "手机号不能为空"
+      "notBlank": "手机号不能为空",
+      "format": "手机号格式不正确"
     },
     "roleId": {
       "notNull": "角色ID不可为空"
@@ -406,7 +405,8 @@
       "notBlank": "端类型不能为空"
     },
     "email": {
-      "notBlank": "邮箱不可为空"
+      "notBlank": "邮箱不可为空",
+      "format": "邮箱格式不正确"
     },
     "realName": {
       "notBlank": "姓名不可为空"
@@ -468,6 +468,40 @@
     "delaySeconds": {
       "min": "延时秒数不能小于1",
       "max": "延时秒数不能大于300"
+    },
+    "name": {
+      "notBlank": "名称不可为空",
+      "size": "名称长度必须在3到15之间"
+    },
+    "enabled": {
+      "notNull": "是否启用不可为空"
+    },
+    "storeNo": {
+      "size": "门店编号不可超过64位"
+    },
+    "operatorId": {
+      "size": "操作员ID不可超过64位"
+    },
+    "deviceName": {
+      "size": "设备名称不可超过128位"
+    },
+    "deviceIp": {
+      "size": "设备IP不可超过64位"
+    },
+    "douyinAppId": {
+      "notBlank": "抖音应用ID不可为空"
+    },
+    "douyinDirectAppId": {
+      "notNull": "抖音直连应用ID不可为空"
+    },
+    "dyMchId": {
+      "notBlank": "抖音商户号不可为空"
+    },
+    "wechatDirectAppId": {
+      "notNull": "微信直连应用ID不可为空"
+    },
+    "appSecret": {
+      "size": "应用密钥不可超过512位"
     }
   }
 }
