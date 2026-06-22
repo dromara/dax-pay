@@ -3,6 +3,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>4.1.0</version>
+        <relativePath/>
+    </parent>
+
     <groupId>cn.daxpay.open</groupId>
     <artifactId>daxpay</artifactId>
     <version>4.0.0-SNAPSHOT</version>
@@ -21,11 +28,24 @@
         <module>daxpay-demo</module>
     </modules>
     <properties>
-        <maven.compiler.source>25</maven.compiler.source>
-        <maven.compiler.target>25</maven.compiler.target>
+        <java.version>25</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- 三方库版本集中管理（子模块通过继承获取） -->
         <lombok.version>1.18.46</lombok.version>
         <mapstruct.version>1.6.3</mapstruct.version>
+        <springdoc.version>3.0.3</springdoc.version>
+        <hutool.version>5.8.46</hutool.version>
+        <bouncycastle.version>1.84</bouncycastle.version>
+        <guava.version>33.6.0-jre</guava.version>
+        <mybatis-plus.version>3.5.16</mybatis-plus.version>
+        <mybatis-plus-join.version>1.5.7</mybatis-plus-join.version>
+        <lock4j.version>2.2.7</lock4j.version>
+        <aws-sdk.version>2.46.15</aws-sdk.version>
+        <sa-token.version>1.45.0</sa-token.version>
+        <caffeine.version>3.2.4</caffeine.version>
+        <ip2region.version>3.3.7</ip2region.version>
+        <wxjava.version>4.8.4.B</wxjava.version>
     </properties>
 
     <build>
@@ -34,8 +54,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>${maven.compiler.source}</source>
-                    <target>${maven.compiler.target}</target>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                     <annotationProcessorPaths>
                         <path>
                             <groupId>org.projectlombok</groupId>

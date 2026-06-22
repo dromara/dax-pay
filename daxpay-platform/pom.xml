@@ -5,10 +5,10 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.1.0</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <groupId>cn.daxpay.open</groupId>
+        <artifactId>daxpay</artifactId>
+        <version>4.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <groupId>cn.daxpay.open</groupId>
@@ -24,48 +24,8 @@
         <module>daxpay-platform-service</module>
     </modules>
 
-    <properties>
-        <springdoc.version>3.0.3</springdoc.version>
-        <hutool.version>5.8.46</hutool.version>
-        <bouncycastle.version>1.84</bouncycastle.version>
-        <guava.version>33.6.0-jre</guava.version>
-        <mybatis-plus.version>3.5.16</mybatis-plus.version>
-        <mybatis-plus-join.version>1.5.7</mybatis-plus-join.version>
-        <lock4j.version>2.2.7</lock4j.version>
-        <aws-sdk.version>2.46.15</aws-sdk.version>
-        <sa-token.version>1.45.0</sa-token.version>
-        <caffeine.version>3.2.4</caffeine.version>
-        <mapstruct.version>1.6.3</mapstruct.version>
-        <ip2region.version>3.3.7</ip2region.version>
-
-        <java.version>25</java.version>
-        <maven.compiler.source>25</maven.compiler.source>
-        <maven.compiler.target>25</maven.compiler.target>
-    </properties>
-
-
     <build>
         <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                            <version>${lombok.version}</version>
-                        </path>
-                        <path>
-                            <groupId>org.mapstruct</groupId>
-                            <artifactId>mapstruct-processor</artifactId>
-                            <version>${mapstruct.version}</version>
-                        </path>
-                    </annotationProcessorPaths>
-                </configuration>
-            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>

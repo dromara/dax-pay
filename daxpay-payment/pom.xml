@@ -4,15 +4,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.1.0</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <groupId>cn.daxpay.open</groupId>
+        <artifactId>daxpay</artifactId>
+        <version>4.0.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>cn.daxpay.open</groupId>
     <artifactId>daxpay-payment</artifactId>
-    <version>4.0.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <description>多商户支付核心功能实现</description>
 
@@ -21,41 +19,5 @@
         <module>daxpay-payment-merchant</module>
         <module>daxpay-payment-admin</module>
     </modules>
-
-    <properties>
-        <maven.compiler.source>25</maven.compiler.source>
-        <maven.compiler.target>25</maven.compiler.target>
-        <java.version>25</java.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- 三方库 -->
-        <mapstruct.version>1.6.3</mapstruct.version>
-        <wxjava.version>4.8.4.B</wxjava.version>
-        <alipay.version>4.40.272.ALL</alipay.version>
-    </properties>
-
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>${java.version}</source>
-                    <target>${java.version}</target>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok</artifactId>
-                            <version>${lombok.version}</version>
-                        </path>
-                        <path>
-                            <groupId>org.mapstruct</groupId>
-                            <artifactId>mapstruct-processor</artifactId>
-                            <version>${mapstruct.version}</version>
-                        </path>
-                    </annotationProcessorPaths>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 
 </project>
