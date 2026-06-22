@@ -13,14 +13,24 @@ spring:
     multipart:
       # 上传文件大小限制为100M
       max-file-size: 100MB
-  management:
-    endpoints:
-      web:
-        exposure:
-          include: health,info
-    endpoint:
-      health:
-        show-details: always
+# 监控端点与链路追踪(actuator 配置必须放在顶层, 不能放在 spring: 下)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,httpexchanges
+  endpoint:
+    health:
+      show-details: always
+  # 链路追踪配置(仅日志关联, 不导出到后端)
+  tracing:
+    sampling:
+      probability: 1.0
+  opentelemetry:
+    tracing:
+      export:
+        otlp:
+          enabled: false
 # ORM
 mybatis-plus:
   mapper-locations: classpath*:mapper/**/*Mapper.xml

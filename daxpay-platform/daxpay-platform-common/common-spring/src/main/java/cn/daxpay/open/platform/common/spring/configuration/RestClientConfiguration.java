@@ -1,6 +1,7 @@
 package cn.daxpay.open.platform.common.spring.configuration;
 
 import cn.daxpay.open.platform.common.config.properties.PlatformCommonProperties;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import org.apache.hc.client5.http.config.ConnectionConfig;
 import org.apache.hc.client5.http.config.RequestConfig;
@@ -12,15 +13,31 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.ClientHttpRequestExecution;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.context.request.RequestAttributes;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import jakarta.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 /// # RestClient 配置
 ///
+/// 使用 Spring Boot 自动配置的 [RestClient.Builder], 以便 OpenTelemetry 的
+/// ClientRequestObservation 拦截器自动追加(W3C traceparent 头自动透传)。
+/// 另通过 BusinessContextInterceptor 透传业务上下文(国际化语言、终端编码)。
 @Configuration
 @RequiredArgsConstructor
 public class RestClientConfiguration {
     private final PlatformCommonProperties platformCommonProperties;
+
+    /// 业务上下文 header 名(与 WebHeaderCode 保持一致, 此处为避免底层模块依赖循环而硬编码)
+    private static final String HEADER_ACCEPT_LANGUAGE = "accept-language";
+    private static final String HEADER_X_CLIENT_CODE = "x-client-code";
 
     @Bean
     public CloseableHttpClient httpClient() {
@@ -55,18 +72,58 @@ public class RestClientConfiguration {
                 .build();
     }
 
-    // 4. 将 HttpClient 适配为 Spring 的 ClientHttpRequestFactory
+    // 将 HttpClient 适配为 Spring 的 ClientHttpRequestFactory
     @Bean
     public HttpComponentsClientHttpRequestFactory httpRequestFactory(CloseableHttpClient httpClient) {
         return new HttpComponentsClientHttpRequestFactory(httpClient);
     }
 
-    // 5. 创建 RestClient Bean
+    /// 创建 RestClient Bean
+    ///
+    /// 使用自动配置的 RestClient.Builder 而非静态 [RestClient.builder]，
+    /// 以便 OTel 拦截器自动注入(W3C traceparent 头自动透传)。
     @Bean
-    public RestClient restClient(HttpComponentsClientHttpRequestFactory httpRequestFactory) {
-        return RestClient.builder()
+    public RestClient restClient(RestClient.Builder restClientBuilder,
+                                 HttpComponentsClientHttpRequestFactory httpRequestFactory) {
+        return restClientBuilder
                 .requestFactory(httpRequestFactory)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+                .requestInterceptor(new BusinessContextInterceptor())
                 .build();
+    }
+
+    /// 业务上下文透传拦截器
+    ///
+    /// OTel 仅自动透传 W3C traceparent, 业务上下文(国际化语言、终端编码)需手动透传。
+    /// 通过 Spring 原生 [RequestContextHolder] 获取当前请求, 避免模块循环依赖。
+    static class BusinessContextInterceptor implements ClientHttpRequestInterceptor {
+        @Override
+        public ClientHttpResponse intercept(org.springframework.http.HttpRequest request,
+                                            byte[] body,
+                                            ClientHttpRequestExecution execution) throws IOException {
+            HttpServletRequest currentRequest = getCurrentRequest();
+            if (currentRequest != null) {
+                // 透传国际化语言(子应用异常消息按语言返回)
+                String language = currentRequest.getHeader(HEADER_ACCEPT_LANGUAGE);
+                if (StrUtil.isNotBlank(language)) {
+                    request.getHeaders().set(HttpHeaders.ACCEPT_LANGUAGE, language);
+                }
+                // 透传终端编码(运营端/H5/小程序/API)
+                String clientCode = currentRequest.getHeader(HEADER_X_CLIENT_CODE);
+                if (StrUtil.isNotBlank(clientCode)) {
+                    request.getHeaders().set(HEADER_X_CLIENT_CODE, clientCode);
+                }
+            }
+            return execution.execute(request, body);
+        }
+
+        /// 获取当前线程绑定的 HttpServletRequest(若存在)
+        private static HttpServletRequest getCurrentRequest() {
+            RequestAttributes attrs = RequestContextHolder.getRequestAttributes();
+            if (attrs instanceof ServletRequestAttributes servletAttrs) {
+                return servletAttrs.getRequest();
+            }
+            return null;
+        }
     }
 }

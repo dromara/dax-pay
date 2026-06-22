@@ -14,7 +14,7 @@
     <!-- 控制台 -->
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>%yellow(%date{yyyy-MM-dd HH:mm:ssS})| %highlight(%-5level[%X{traceId:-}]) %boldYellow(%thread) - %boldGreen(%logger{36})| %msg%n</pattern>
+            <pattern>%yellow(%date{yyyy-MM-dd HH:mm:ssS})| %highlight(%-5level[%X{traceId:-},%X{spanId:-}]) %boldYellow(%thread) - %boldGreen(%logger{36})| %msg%n</pattern>
         </layout>
     </appender>
     <!-- log格式日志收集 -->
@@ -27,7 +27,7 @@
         </rollingPolicy>
         <encoder>
             <charset>UTF-8</charset>
-            <pattern>%date{yyyy-MM-dd HH:mm:ssS} | %-5level[%X{traceId:-}] %thread - %logger{36}| %msg%n</pattern>
+            <pattern>%date{yyyy-MM-dd HH:mm:ssS} | %-5level[%X{traceId:-},%X{spanId:-}] %thread - %logger{36}| %msg%n</pattern>
         </encoder>
     </appender>
 
