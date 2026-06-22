@@ -33,15 +33,6 @@ public class IamUserSocialBindStore {
             .oneOpt()
             .map(IamUserSocial::getUserId);
     }
-
-    /// 判断指定平台账号是否已被绑定
-    public boolean existsBind(String source, String openId) {
-        return iamUserSocialManager.lambdaQuery()
-            .eq(IamUserSocial::getSource, source)
-            .eq(IamUserSocial::getOpenId, openId)
-            .exists();
-    }
-
     /// 保存绑定关系
     /// @param userId 本地用户ID
     /// @param clientCode 终端编码

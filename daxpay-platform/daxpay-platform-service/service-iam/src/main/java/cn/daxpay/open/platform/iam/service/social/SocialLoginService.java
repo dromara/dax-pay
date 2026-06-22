@@ -15,7 +15,7 @@ import cn.daxpay.open.platform.iam.enums.SocialClientEnum;
 import cn.daxpay.open.platform.iam.result.social.SocialBindResult;
 import cn.daxpay.open.platform.iam.result.social.SocialEnabledPlatformResult;
 import cn.daxpay.open.platform.iam.result.social.SocialExchangeResult;
-import cn.daxpay.open.platform.iam.service.social.cache.SocialAuthMode;
+import cn.daxpay.open.platform.iam.enums.SocialAuthMode;
 import cn.daxpay.open.platform.system.entity.config.platform.PlatformUrlConfig;
 import cn.daxpay.open.platform.system.service.config.PlatformUrlConfigService;
 import cn.hutool.core.util.IdUtil;

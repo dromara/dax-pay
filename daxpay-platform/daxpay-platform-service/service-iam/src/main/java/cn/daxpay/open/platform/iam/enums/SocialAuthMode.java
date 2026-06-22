@@ -1,4 +1,4 @@
-package cn.daxpay.open.platform.iam.service.social.cache;
+package cn.daxpay.open.platform.iam.enums;
 
 /// # 社交登录授权场景
 ///
