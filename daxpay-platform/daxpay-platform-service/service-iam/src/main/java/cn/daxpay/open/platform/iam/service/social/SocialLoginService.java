@@ -106,7 +106,7 @@ public class SocialLoginService {
                 // 未绑定
                 return new SocialExchangeResult().setError("unbind");
             }
-            String token = socialLoginHandler.login(userId, clientCode, request, response);
+            String token = socialLoginHandler.login(userId, clientCode, source, request, response);
             return new SocialExchangeResult().setToken(token);
         } catch (Exception e) {
             log.error("社交登录兑换失败: source={}, msg={}", source, e.getMessage(), e);
