@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 ///
 /// 瘦控制器, 仅负责 HTTP 参数解包与结果包装, 业务编排全部委托 [SocialLoginService].
 /// 采用前端回调模式: 第三方平台直接重定向到前端回调页, 前端拿到 code+state 后
-/// 调用 exchange 接口完成换 token, 后端不做 302 跳转.
+/// 调用 exchange-login 或 exchange-bind 接口完成换 token, 后端不做 302 跳转.
 ///
 @IgnoreAuth
 @Tag(name = "第三方社交登录")
@@ -49,26 +49,39 @@ public class SocialEndpoint {
     /// @param source 平台来源
     /// @param client 终端编码(admin/merchant), 用于解析端点配置中的 baseUrl
     /// @param mode 授权场景(不传则按登录态判断: 已登录=绑定, 未登录=登录)
-    /// @param redirect 成功后前端跳转路径(可选)
     @Operation(summary = "生成授权地址")
     @GetMapping("/render/{source}")
     public Result<String> render(@PathVariable String source,
                                  @RequestParam String client,
-                                 @RequestParam(required = false) String mode,
-                                 @RequestParam(required = false) String redirect) {
-        return Res.ok(socialLoginService.generateAuthorizeUrl(source, client, mode, redirect));
+                                 @RequestParam(required = false) String mode) {
+        return Res.ok(socialLoginService.generateAuthorizeUrl(source, client, mode));
     }
 
-    /// OAuth 授权码兑换(前端回调模式)
-    /// 前端回调页收到第三方平台的 code+state 后调用此接口,
-    /// 后端完成 code 换 token 并返回结果 JSON.
-    @Operation(summary = "授权码兑换")
-    @PostMapping("/exchange")
-    public Result<SocialExchangeResult> exchange(@RequestParam("code") String code,
-                                                 @RequestParam("state") String state,
-                                                 HttpServletRequest request,
-                                                 HttpServletResponse response) {
-        return Res.ok(socialLoginService.exchangeCode(code, state, request, response));
+    /// OAuth 授权码兑换 - 登录(公开, 无需认证)
+    /// 前端登录回调页(/auth/oauth-callback/{source})收到第三方平台的 code+state 后调用,
+    /// 后端完成 code 换 token 并返回登录结果.
+    @Operation(summary = "授权码兑换-登录")
+    @PostMapping("/exchange-login")
+    public Result<SocialExchangeResult> exchangeLogin(@RequestParam("code") String code,
+                                                       @RequestParam("state") String state,
+                                                       @RequestParam("source") String source,
+                                                       @RequestParam("client") String client,
+                                                       HttpServletRequest request,
+                                                       HttpServletResponse response) {
+        return Res.ok(socialLoginService.exchangeForLogin(code, state, source, client, request, response));
+    }
+
+    /// OAuth 授权码兑换 - 绑定(需登录)
+    /// 前端绑定回调页(/auth/social-bind-callback/{source})收到第三方平台的 code+state 后调用,
+    /// 后端完成 code 换 token 并保存绑定关系到当前登录用户.
+    @IgnoreAuth(login = true)
+    @Operation(summary = "授权码兑换-绑定")
+    @PostMapping("/exchange-bind")
+    public Result<SocialExchangeResult> exchangeBind(@RequestParam("code") String code,
+                                                     @RequestParam("state") String state,
+                                                     @RequestParam("source") String source,
+                                                     @RequestParam("client") String client) {
+        return Res.ok(socialLoginService.exchangeForBind(code, state, source, client));
     }
 
     /// 查询当前登录用户已绑定的第三方账号

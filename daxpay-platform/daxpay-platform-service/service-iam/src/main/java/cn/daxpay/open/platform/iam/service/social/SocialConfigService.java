@@ -114,15 +114,8 @@ public class SocialConfigService {
     }
 
     /// 将配置实体转换为授权配置
-    /// @param baseUrl 端点解析出的前端基础地址, 用于 redirectUri 自动生成(exchange 阶段传 null 表示不需要 redirectUri)
-    public SocialAuthConfig buildAuthConfig(SocialConfig entity, String baseUrl) {
-        // 回调地址由端点配置自动生成: {baseUrl}/auth/oauth-callback(exchange 阶段 baseUrl 为 null 时跳过)
-        String redirectUri = null;
-        if (StrUtil.isNotBlank(baseUrl)) {
-            // 末尾斜杠归一化由 AbstractSocialAuthRequest.buildRedirectUri 处理
-            String base = StrUtil.removeSuffix(baseUrl, "/");
-            redirectUri = base + "/auth/oauth-callback";
-        }
+    /// @param redirectUri 完整回调地址, 由调用方根据 mode 和 source 拼接(render 阶段传入, exchange 阶段可不传)
+    public SocialAuthConfig buildAuthConfig(SocialConfig entity, String redirectUri) {
         // 企业微信 agentId 等平台特有参数从 extra(jsonb) 读取
         String agentId = null;
         if (StrUtil.isNotBlank(entity.getExtra())) {
