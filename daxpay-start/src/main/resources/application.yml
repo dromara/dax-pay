@@ -26,11 +26,18 @@ management:
   tracing:
     sampling:
       probability: 1.0
-  opentelemetry:
-    tracing:
+    # OTLP 导出开关(关闭后不向 OTLP 后端推送 trace)
+    # 注意: Spring Boot 4.1 中 enabled 标准键是 management.tracing.export.otlp.enabled,
+    # 与 endpoint/transport/headers 等连接细节(management.opentelemetry.tracing.export.otlp.*)分属不同前缀;
+    # 旧写法 management.opentelemetry.tracing.export.otlp.enabled 从未存在, 写了不生效。
+    export:
+      otlp:
+        enabled: false
+  # 指标导出配置(仅本地日志关联, 不导出到 OTLP 后端)
+  otlp:
+    metrics:
       export:
-        otlp:
-          enabled: false
+        enabled: false
 # ORM
 mybatis-plus:
   mapper-locations: classpath*:mapper/**/*Mapper.xml
