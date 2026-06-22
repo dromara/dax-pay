@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.6</version>
+        <version>4.1.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -25,19 +25,18 @@
     </modules>
 
     <properties>
-        <springdoc.version>3.0.2</springdoc.version>
-        <hutool.version>5.8.44</hutool.version>
+        <springdoc.version>3.0.3</springdoc.version>
+        <hutool.version>5.8.46</hutool.version>
         <bouncycastle.version>1.84</bouncycastle.version>
         <guava.version>33.6.0-jre</guava.version>
         <mybatis-plus.version>3.5.16</mybatis-plus.version>
         <mybatis-plus-join.version>1.5.7</mybatis-plus-join.version>
         <lock4j.version>2.2.7</lock4j.version>
-        <aws-sdk.version>2.42.36</aws-sdk.version>
+        <aws-sdk.version>2.46.15</aws-sdk.version>
         <sa-token.version>1.45.0</sa-token.version>
-        <caffeine.version>3.2.3</caffeine.version>
+        <caffeine.version>3.2.4</caffeine.version>
         <mapstruct.version>1.6.3</mapstruct.version>
-        <ip2region.version>3.3.6</ip2region.version>
-        <lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
+        <ip2region.version>3.3.7</ip2region.version>
 
         <java.version>25</java.version>
         <maven.compiler.source>25</maven.compiler.source>
@@ -58,11 +57,6 @@
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
                             <version>${lombok.version}</version>
-                        </path>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok-mapstruct-binding</artifactId>
-                            <version>${lombok-mapstruct.version}</version>
                         </path>
                         <path>
                             <groupId>org.mapstruct</groupId>

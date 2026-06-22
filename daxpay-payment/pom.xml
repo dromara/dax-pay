@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.0.6</version>
+        <version>4.1.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -29,7 +29,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- 三方库 -->
         <mapstruct.version>1.6.3</mapstruct.version>
-        <lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
         <wxjava.version>4.8.4.B</wxjava.version>
         <alipay.version>4.40.272.ALL</alipay.version>
     </properties>
@@ -47,11 +46,6 @@
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
                             <version>${lombok.version}</version>
-                        </path>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok-mapstruct-binding</artifactId>
-                            <version>${lombok-mapstruct.version}</version>
                         </path>
                         <path>
                             <groupId>org.mapstruct</groupId>

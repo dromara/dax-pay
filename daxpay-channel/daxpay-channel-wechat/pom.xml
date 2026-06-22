@@ -14,17 +14,4 @@
     <packaging>jar</packaging>
     <description>微信支付通道实现</description>
 
-    <dependencies>
-        <dependency>
-            <groupId>com.github.binarywang</groupId>
-            <artifactId>weixin-java-pay</artifactId>
-            <version>${wxjava.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>guava</artifactId>
-                    <groupId>com.google.guava</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-    </dependencies>
 </project>

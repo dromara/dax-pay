@@ -21,14 +21,6 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- lombok 配合 mapstruct -->
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok-mapstruct-binding</artifactId>
-            <scope>provided</scope>
-            <version>${lombok-mapstruct.version}</version>
-        </dependency>
-
         <!-- 类型转换处理器 -->
         <dependency>
             <groupId>org.mapstruct</groupId>
@@ -111,12 +103,6 @@
             <groupId>cn.daxpay.open</groupId>
             <artifactId>capability-wechat</artifactId>
             <version>${project.version}</version>
-        </dependency>
-        <!-- 支付宝SDK -->
-        <dependency>
-            <groupId>com.alipay.sdk</groupId>
-            <artifactId>alipay-sdk-java</artifactId>
-            <version>${alipay.version}</version>
         </dependency>
 
     </dependencies>

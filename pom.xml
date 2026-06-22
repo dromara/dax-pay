@@ -25,7 +25,6 @@
         <maven.compiler.target>25</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <lombok.version>1.18.46</lombok.version>
-        <lombok-mapstruct.version>0.2.0</lombok-mapstruct.version>
         <mapstruct.version>1.6.3</mapstruct.version>
     </properties>
 
@@ -42,11 +41,6 @@
                             <groupId>org.projectlombok</groupId>
                             <artifactId>lombok</artifactId>
                             <version>${lombok.version}</version>
-                        </path>
-                        <path>
-                            <groupId>org.projectlombok</groupId>
-                            <artifactId>lombok-mapstruct-binding</artifactId>
-                            <version>${lombok-mapstruct.version}</version>
                         </path>
                         <path>
                             <groupId>org.mapstruct</groupId>
