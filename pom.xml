@@ -18,6 +18,15 @@
     <name>dax-pay-open</name>
     <description>DaxPay开源版支付系统</description>
 
+    <!-- 开源协议：GNU LGPL v3.0 或更高版本 -->
+    <licenses>
+        <license>
+            <name>GNU Lesser General Public License v3.0 or later</name>
+            <url>https://www.gnu.org/licenses/lgpl-3.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
     <modules>
         <module>daxpay-platform</module>
         <module>daxpay-payment</module>
