@@ -9,7 +9,7 @@ import cn.daxpay.open.payment.common.util.DaxRes;
 import cn.daxpay.open.payment.common.service.MerchantPermissionService;
 import cn.daxpay.open.payment.old.pay.anno.PaymentVerify;
 import cn.daxpay.open.payment.pay.service.PayCloseService;
-import cn.daxpay.open.payment.pay.service.PayService;
+import cn.daxpay.open.payment.pay.service.NormalPayService;
 import cn.daxpay.open.payment.unipay.param.trade.pay.PayCloseParam;
 import cn.daxpay.open.payment.unipay.param.trade.pay.PayParam;
 import cn.daxpay.open.payment.unipay.result.trade.pay.PayResult;
@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/unipay")
 @RequiredArgsConstructor
 public class UniTradeController {
-    private final PayService payService;
+    private final NormalPayService normalPayService;
     private final PayCloseService payCloseService;
     private final MerchantPermissionService permConfigService;
 
@@ -42,7 +42,7 @@ public class UniTradeController {
             // 订单: 该商户没有此接口的权限
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.order.merchantNoApiPermission");
         }
-        return DaxRes.ok(payService.pay(payParam));
+        return DaxRes.ok(normalPayService.pay(payParam));
     }
 
     @Operation(summary = "关闭和撤销接口")

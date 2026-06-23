@@ -20,7 +20,7 @@ import org.springframework.stereotype.Service;
 
 /// # 支付通道路由服务
 ///
-/// 实现 PayRouteFacade，供 PayService 在支付流程中调用。
+/// 实现 PayRouteFacade，供 NormalPayService 在支付流程中调用。
 /// 已指定 product 则跳过；否则按 appId 加载策略，经基础/场景模式匹配后回填 product。
 /// 调用方需保证 appId 已解析完毕。
 @Slf4j

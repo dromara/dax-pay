@@ -23,12 +23,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
-/// # 支付服务类
+/// # 常规支付服务类
 ///
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PayService {
+public class NormalPayService {
 
     private final PayAssistService payAssistService;
     private final PayUniHandleService payUniHandleService;
