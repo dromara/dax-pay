@@ -15,21 +15,11 @@ spring:
       max-file-size: 100MB
 # 监控端点与链路追踪(actuator 配置必须放在顶层, 不能放在 spring: 下)
 management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,httpexchanges
-  endpoint:
-    health:
-      show-details: always
-  # 链路追踪配置(仅日志关联, 不导出到后端)
+  # 链路追踪配置(仅日志关联, 不导出到后端; 采样率 dev/prod 共享 1.0 全采样)
   tracing:
     sampling:
       probability: 1.0
     # OTLP 导出开关(关闭后不向 OTLP 后端推送 trace)
-    # 注意: Spring Boot 4.1 中 enabled 标准键是 management.tracing.export.otlp.enabled,
-    # 与 endpoint/transport/headers 等连接细节(management.opentelemetry.tracing.export.otlp.*)分属不同前缀;
-    # 旧写法 management.opentelemetry.tracing.export.otlp.enabled 从未存在, 写了不生效。
     export:
       otlp:
         enabled: false
@@ -63,8 +53,3 @@ sa-token:
   is-share: true
   is-log: false
   is-print: false
-# 字段翻译插件
-easy-trans:
-  #启用平铺模式
-  is-enable-tile: true
-

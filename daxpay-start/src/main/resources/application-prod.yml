@@ -1,0 +1,144 @@
+# ====================================================================
+# DaxPay 开源版 - 生产环境配置
+# ====================================================================
+# 部署形态: Docker Compose / 单机容器
+# 凭证注入: 所有敏感字段用 ${VAR} 占位符, 由 docker-compose 的
+#           env_file 或 environment 注入, 真实 .env 文件不入库。
+# 启动方式: docker run -e SPRING_PROFILES_ACTIVE=prod \
+#                  -e DB_PASSWORD=... -e ... daxpay-union
+# 采样率:   与 dev 一致 1.0(全采样, 不导出 trace 到后端时无存储成本,
+#           全采样能让任意请求的日志都能用 traceId 串起来排障)
+# ====================================================================
+
+server:
+  port: ${SERVER_PORT:9999}
+  # 优雅停机(配合 docker stop 的 10s 宽限期)
+  shutdown: graceful
+spring:
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
+  # PostgreSQL 数据库(凭证环境变量注入)
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${DB_HOST:postgresql}:${DB_PORT:5432}/${DB_NAME:daxpay-prod}?autoReconnect=true&reWriteBatchedInserts=true
+    username: ${DB_USERNAME:?missing DB_USERNAME}
+    password: ${DB_PASSWORD:?missing DB_PASSWORD}
+    hikari:
+      minimumIdle: 10
+      maximumPoolSize: 100
+      leak-detection-threshold: 30000
+      connection-timeout: 30000
+      idle-timeout: 600000
+      max-lifetime: 1800000
+  # Redis(凭证环境变量注入)
+  data:
+    redis:
+      host: ${REDIS_HOST:redis}
+      port: ${REDIS_PORT:6379}
+      database: ${REDIS_DATABASE:0}
+      password: ${REDIS_PASSWORD:?missing REDIS_PASSWORD}
+      lettuce:
+        pool:
+          max-wait: 1000ms
+  # Artemis 消息队列(凭证环境变量注入)
+  artemis:
+    mode: native
+    broker-url: ${ARTEMIS_BROKER_URL:tcp://artemis:61616}
+    user: ${ARTEMIS_USER:?missing ARTEMIS_USER}
+    password: ${ARTEMIS_PASSWORD:?missing ARTEMIS_PASSWORD}
+    pool:
+      enabled: true
+      max-connections: 20
+      idle-timeout: 30s
+  jms:
+    cache:
+      enabled: true
+      session-cache-size: 20
+    pub-sub-domain: false
+    listener:
+      auto-startup: true
+# 日志(生产只输出 INFO 及以上, 业务包不切 DEBUG)
+logging:
+  level:
+    root: INFO
+    cn.daxpay.open.**: INFO
+# API 文档(生产关闭, 不暴露接口结构给潜在攻击者)
+springdoc:
+  api-docs:
+    enabled: false
+  swagger-ui:
+    enabled: false
+# 监控端点(Docker Compose 场景与业务同端口, 收紧到最小必要集)
+management:
+  endpoints:
+    web:
+      exposure:
+        # 不开 env/heapdump/beans 等敏感端点
+        include: health,info,metrics
+  endpoint:
+    health:
+      # 生产不暴露 DB/Redis 内部状态给未授权方
+      show-details: never
+      probes:
+        enabled: true
+      group:
+        # liveness 仅看进程存活(不级联 DB, 防止 DB 抖动引发雪崩)
+        liveness:
+          include: ping
+        # readiness 等 DB/Redis 就绪后才接流量
+        readiness:
+          include: db,redis
+  # 链路追踪采样率(prod 与 dev 一致 1.0 全采样, 理由见文件头注释)
+  tracing:
+    sampling:
+      probability: 1.0
+# 基础脚手架配置
+daxpay:
+  platform:
+    common:
+      # 异常信息(生产不返回完整堆栈)
+      exception:
+        show-full-message: false
+    starter:
+      auth:
+        # 关闭超级管理员(生产不应有超管后门)
+        enable-admin: false
+        admin-in-list: false
+        # ignore-urls 严格收紧: 仅放行 health 探针和静态资源
+        # 警告: 绝不能加 /** (dev 中那条会完全关闭认证)
+        ignore-urls:
+          - '/actuator/health'
+          - '/actuator/health/liveness'
+          - '/actuator/health/readiness'
+          - '/actuator/info'
+          - '/error'
+          - '/favicon.ico'
+      audit-log:
+        ip2region:
+          file-path: ${IP2REGION_FILE_PATH:/data/ip/ip2region_v4.xdb}
+          search-type: VECTOR_INDEX
+    config:
+      # RSA 密钥(PEM 文本通过环境变量注入)
+      key-config:
+        private-key: ${RSA_PRIVATE_KEY:?missing RSA_PRIVATE_KEY}
+        public-key: ${RSA_PUBLIC_KEY:?missing RSA_PUBLIC_KEY}
+      # 业务字段加密
+      encrypt:
+        enable: true
+        keys:
+          - key: ${ENCRYPT_KEY:?missing ENCRYPT_KEY}
+            version: 1
+  # 通道适配子应用配置
+  # 按支付通道拆分的独立部署子服务, 主服务通过 HTTP 调用对应子服务完成通道对接。
+  # 拆分目的: 通道 SDK 依赖隔离(避免冲突) + 独立升级 + 弹性伸缩
+  # 子应用编号(one/two/three)固定且不可改名, 与路由策略中的通道分配一一对应。
+  channel:
+    # 子应用1: 支付宝 + 微信支付(已启用, Docker Compose 中 channel-one 容器)
+    one:
+      base-url: ${CHANNEL_ONE_BASE_URL:http://channel-one:20100}
+    # 子应用2: 银联 + 拉卡拉(未来扩展, 暂未启用)
+    # two:
+    #   base-url: ${CHANNEL_TWO_BASE_URL:http://channel-two:20200}
+    # 子应用3: 抖音 + 其他通道(未来扩展, 暂未启用)
+    # three:
+    #   base-url: ${CHANNEL_THREE_BASE_URL:http://channel-three:20300}

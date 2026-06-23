@@ -1,3 +1,16 @@
+# 开发期监控端点配置(无敏感数据, 排障友好; prod 收紧版本见 application-prod.yml)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: >
+          health,info,httpexchanges,
+          metrics,loggers,threaddump,
+          beans,mappings,scheduledtasks,
+          caches,conditions,startup
+  endpoint:
+    health:
+      show-details: always
 spring:
   datasource:
     # Postgresql连接
@@ -50,9 +63,6 @@ spring:
 logging:
   level:
     cn.daxpay.open.**: debug
-    # 打印请求头和响应头（不含 body）
-#    org.apache.hc.client5.http.wire: DEBUG
-#    org.apache.hc.client5.http.headers: DEBUG
 # 接口文档配置
 springdoc:
   # 默认展开对象类型的属性, 主要用在get类型的参数中
@@ -64,9 +74,6 @@ springdoc:
 daxpay:
   platform:
     common:
-      # 通道适配服务配置(daxpay-channel-one, 独立部署的通道对接子服务)
-      channel-one:
-        base-url: http://127.0.0.1:20100
       # 错误信息配置
       exception:
         show-full-message: true
@@ -148,3 +155,17 @@ daxpay:
         keys:
           - key: z0Vd8jDKB80pA6OOptGLO+qDVvWboEko
             version: 1
+  # 通道适配子应用配置
+  # 按支付通道拆分的独立部署子服务, 主服务通过 HTTP 调用对应子服务完成通道对接。
+  # 拆分目的: 通道 SDK 依赖隔离(避免冲突) + 独立升级 + 弹性伸缩
+  # 子应用编号(one/two/three)固定且不可改名, 与路由策略中的通道分配一一对应。
+  channel:
+    # 子应用1: 支付宝 + 微信支付(已启用, 本机启动的 dax-pay-channel-one 服务)
+    one:
+      base-url: http://127.0.0.1:20100
+    # 子应用2: 银联 + 拉卡拉(未来扩展, 暂未启用)
+    # two:
+    #   base-url: http://127.0.0.1:20200
+    # 子应用3: 抖音 + 其他通道(未来扩展, 暂未启用)
+    # three:
+    #   base-url: http://127.0.0.1:20300
