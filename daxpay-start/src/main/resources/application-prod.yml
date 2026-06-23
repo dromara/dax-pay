@@ -57,11 +57,16 @@ spring:
     pub-sub-domain: false
     listener:
       auto-startup: true
-# 日志(生产只输出 INFO 及以上, 业务包不切 DEBUG)
+# 日志(生产只输出 INFO 及以上, 业务包不切 DEBUG, 第三方框架噪音压制到 WARN)
 logging:
   level:
     root: INFO
     cn.daxpay.open.**: INFO
+    # 第三方框架噪音统一降级(组名对应下方 group 定义)
+    framework: WARN
+  group:
+    # 框架与中间件包集合, 统一管理噪音级别
+    framework: org.springframework, com.zaxxer.hikari, org.apache.ibatis, io.lettuce.core, org.apache.activemq.artemis, org.springframework.jms
 # API 文档(生产关闭, 不暴露接口结构给潜在攻击者)
 springdoc:
   api-docs:

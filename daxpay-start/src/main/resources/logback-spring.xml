@@ -1,40 +1,114 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!--
+    DaxPay 主应用日志配置
+    ==================================================
+    如需使用外部 logback 配置文件, 启动时传入:
+    java -jar -Dlogging.config=./logback-spring.xml daxpay-union.jar
+-->
 <configuration>
-    <!--
-    默认情况下，Spring Boot 不会 在 jar 文件之外寻找资源。
-    如果你想使用外部 logback 配置文件，你必须在启动 jar 时传递它的位置：$ java -jar -Dlogging.config=./logback-spring.xml app.jar
-    -->
-
     <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
-    <!--项目名称-->
-    <property name="appname" value="dax-pay-open"/>
-    <!--日志位置-->
-    <property name="logdir" value="logs"/>
 
-    <!-- 控制台 -->
-    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
-        <layout class="ch.qos.logback.classic.PatternLayout">
-            <pattern>%yellow(%date{yyyy-MM-dd HH:mm:ssS})| %highlight(%-5level[%X{traceId:-},%X{spanId:-}]) %boldYellow(%thread) - %boldGreen(%logger{36})| %msg%n</pattern>
-        </layout>
-    </appender>
-    <!-- log格式日志收集 -->
-    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <File>${logdir}/${appname}.log</File>
-        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <FileNamePattern>${logdir}/${appname}.log.%d{yyyy-MM-dd}.gz</FileNamePattern>
-            <!-- 保存30天 -->
-            <maxHistory>30</maxHistory>
-        </rollingPolicy>
-        <encoder>
-            <charset>UTF-8</charset>
-            <pattern>%date{yyyy-MM-dd HH:mm:ssS} | %-5level[%X{traceId:-},%X{spanId:-}] %thread - %logger{36}| %msg%n</pattern>
-        </encoder>
-    </appender>
+    <!-- 控制台彩色 pattern(dev): IDE 内开发, 时间戳精简为 HH:mm:ss 方便阅读, 含 traceId -->
+    <property name="CONSOLE_PATTERN"
+              value="%yellow(%date{HH:mm:ss})| %highlight(%-5level) %boldYellow([%X{traceId:-}]) %cyan(%thread) - %green(%logger{36})| %msg%n"/>
+    <!-- 文件 pattern(prod): 完整时间戳 + traceId + spanId, 用于跨天回溯与 OTel 全链路排障 -->
+    <property name="FILE_PATTERN"
+              value="%date{yyyy-MM-dd HH:mm:ss.SSS} | %-5level [%X{traceId:-},%X{spanId:-}] %thread - %logger{36} | %msg%n"/>
 
-    <!-- 开发输出级别 -->
-    <root level="INFO">
-        <appender-ref ref="console"/>
-        <appender-ref ref="file"/>
-    </root>
+    <!-- ===================== 开发环境(dev) ===================== -->
+    <!-- dev 以 IDE 控制台为主, 不落盘 file(避免历史脏日志残留, 减少磁盘干扰) -->
+    <springProfile name="dev">
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <pattern>${CONSOLE_PATTERN}</pattern>
+                <charset>UTF-8</charset>
+            </encoder>
+        </appender>
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+    </springProfile>
+
+    <!-- ===================== 生产环境(prod) ===================== -->
+    <springProfile name="prod">
+        <!--
+        日志根目录(LOG_PATH)解析优先级(从高到低):
+          1) JVM 启动参数 -DLOG_PATH=xxx 或 环境变量 LOG_PATH
+             —— Docker / k8s 部署用此覆盖, 指向持久化挂载卷, 避免容器销毁后日志丢失
+          2) 默认值 /data/logs/daxpay
+             —— 绝对路径, 适配 Linux/Docker 部署形态(项目生产以容器化为主)
+        说明:
+          - dev 不落盘 file, 故 LOG_PATH 仅在 prod 生效, 因此该 property 定义在 prod profile 内部
+          - Windows 本地切 prod 调试时, 因盘符不同无法写入 /data/..., 请通过
+            环境变量 LOG_PATH 覆盖为本地目录(如 set LOG_PATH=./logs)
+          - 不使用 application.yml 的 logging.file.path, 因其会触发 Spring Boot 默认 FILE
+            appender(写 spring.log), 与本配置自定义的 FILE(写 dax-pay-open.log)冗余
+        -->
+        <property name="LOG_PATH" value="${LOG_PATH:-/data/logs/daxpay}"/>
+
+        <!-- 应用名(用作日志文件名前缀, 如 ${APP_NAME}.log) -->
+        <property name="APP_NAME" value="dax-pay-open"/>
+
+        <!-- 控制台: 精简无色, 供 docker logs / kubectl logs 采集 -->
+        <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+            <encoder>
+                <!-- 含 traceId + spanId, 与文件 pattern 字段对齐, OTel 多 span 场景下可定位"链路哪一步" -->
+                <pattern>%date{yyyy-MM-dd HH:mm:ss.SSS} %-5level [%X{traceId:-},%X{spanId:-}] %thread - %logger{36} - %msg%n</pattern>
+                <charset>UTF-8</charset>
+            </encoder>
+        </appender>
+
+        <!-- 主日志文件原始 appender(被下方 FILE 异步包装, 业务线程不阻塞) -->
+        <appender name="FILE_RAW" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOG_PATH}/${APP_NAME}.log</file>
+            <encoder>
+                <pattern>${FILE_PATTERN}</pattern>
+                <charset>UTF-8</charset>
+            </encoder>
+            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                <!-- 按天 + 按大小滚动, gz 压缩归档; 启动时清理超期历史 -->
+                <fileNamePattern>${LOG_PATH}/${APP_NAME}.log.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+                <maxFileSize>200MB</maxFileSize>
+                <maxHistory>30</maxHistory>
+                <totalSizeCap>10GB</totalSizeCap>
+                <cleanHistoryOnStart>true</cleanHistoryOnStart>
+            </rollingPolicy>
+        </appender>
+        <!-- 异步写盘: 队列满时不阻塞业务线程(neverBlock=true); discardingThreshold=0 保证不丢弃任何级别 -->
+        <appender name="FILE" class="ch.qos.logback.classic.AsyncAppender">
+            <queueCapacity>2048</queueCapacity>
+            <discardingThreshold>0</discardingThreshold>
+            <neverBlock>true</neverBlock>
+            <appender-ref ref="FILE_RAW"/>
+        </appender>
+
+        <!-- 独立 ERROR 日志: 同步写(不经过异步队列, 保证关键故障不丢失), 仅收 ERROR 级别 -->
+        <appender name="ERROR_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+            <file>${LOG_PATH}/${APP_NAME}-error.log</file>
+            <filter class="ch.qos.logback.classic.filter.LevelFilter">
+                <level>ERROR</level>
+                <onMatch>ACCEPT</onMatch>
+                <onMismatch>DENY</onMismatch>
+            </filter>
+            <encoder>
+                <pattern>${FILE_PATTERN}</pattern>
+                <charset>UTF-8</charset>
+            </encoder>
+            <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+                <!-- ERROR 日志保留更久(90 天), 总容量单独限制 5GB -->
+                <fileNamePattern>${LOG_PATH}/${APP_NAME}-error.log.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
+                <maxFileSize>200MB</maxFileSize>
+                <maxHistory>90</maxHistory>
+                <totalSizeCap>5GB</totalSizeCap>
+                <cleanHistoryOnStart>true</cleanHistoryOnStart>
+            </rollingPolicy>
+        </appender>
+
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="FILE"/>
+            <appender-ref ref="ERROR_FILE"/>
+        </root>
+    </springProfile>
 
 </configuration>
