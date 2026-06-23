@@ -1,5 +1,6 @@
 package cn.daxpay.open.platform.common.artemis;
 
+import io.micrometer.observation.ObservationRegistry;
 import jakarta.jms.ConnectionFactory;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -52,10 +53,13 @@ public class ArtemisCommonAutoConfiguration {
     /// 不设置 MessageConverter，回落到 Spring 默认 `SimpleMessageConverter`（String ↔ TextMessage 透传）。
     @Bean(ArtemisBeanNames.TOPIC_JMS_TEMPLATE)
     @ConditionalOnMissingBean(name = ArtemisBeanNames.TOPIC_JMS_TEMPLATE)
-    public JmsTemplate topicJmsTemplate(ConnectionFactory connectionFactory) {
+    public JmsTemplate topicJmsTemplate(ConnectionFactory connectionFactory,
+                                        ObservationRegistry observationRegistry) {
         JmsTemplate template = new JmsTemplate(connectionFactory);
         // 关键：开启 pub-sub 模式，destination 解析为 Topic（multicast）
         template.setPubSubDomain(true);
+        // 启用 jms.message.publish observation, 把 traceparent 写入 message property, 让 trace 跨 MQ 传播
+        template.setObservationRegistry(observationRegistry);
         return template;
     }
 
@@ -66,12 +70,15 @@ public class ArtemisCommonAutoConfiguration {
     /// 取代各业务模块自行创建重复的 Topic ListenerFactory。
     @Bean(ArtemisBeanNames.TOPIC_LISTENER_FACTORY)
     @ConditionalOnMissingBean(name = ArtemisBeanNames.TOPIC_LISTENER_FACTORY)
-    public JmsListenerContainerFactory<?> topicListenerFactory(ConnectionFactory connectionFactory) {
+    public JmsListenerContainerFactory<?> topicListenerFactory(ConnectionFactory connectionFactory,
+                                                               ObservationRegistry observationRegistry) {
         DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory);
         // Topic 模式（pub-sub），对应 broker 端 multicast 路由类型
         factory.setPubSubDomain(true);
         factory.setAutoStartup(true);
+        // 启用 jms.message.process observation, 从 message property 提取 traceparent 恢复 parent context
+        factory.setObservationRegistry(observationRegistry);
         return factory;
     }
 }
