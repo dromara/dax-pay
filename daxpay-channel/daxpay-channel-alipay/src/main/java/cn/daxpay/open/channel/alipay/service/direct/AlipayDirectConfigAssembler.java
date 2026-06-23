@@ -16,8 +16,7 @@ import java.util.Map;
 /// 从进件商户对象([AlipayDirectApp] + [AlipayDirectAppKeyConfig])读取密钥/证书,
 /// 并补充主应用回调地址(notifyUrl)与沙箱标志(sandbox), 组装为下发给子应用的 config Map。
 ///
-/// 供支付策略([cn.daxpay.open.channel.alipay.strategy.direct.AlipayDirectPayStrategy])
-/// 与回调验签([cn.daxpay.open.channel.alipay.service.callback.AlipayCallbackService])复用, 避免重复读取配置。
+/// 供支付策略([cn.daxpay.open.channel.alipay.strategy.direct.AlipayDirectPayStrategy])组装通道调用配置。
 @Slf4j
 @Service
 @RequiredArgsConstructor
