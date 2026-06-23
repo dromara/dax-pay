@@ -1,20 +1,31 @@
 package cn.daxpay.open.channel.douyin.strategy;
 
-import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
+import cn.daxpay.open.channel.douyin.client.DouyinChannelClient;
+import cn.daxpay.open.channel.douyin.dto.DouyinPayReq;
+import cn.daxpay.open.channel.douyin.dto.DouyinPayResp;
+import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.pay.bo.PayTradeResultBo;
 import cn.daxpay.open.payment.strategy.pay.AbsPayStrategy;
+import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.Map;
+
 /// # 抖音支付直连支付策略
 ///
-/// 抖音支付直连模式的支付策略（虚类，暂未实现具体支付逻辑）。
-///
+/// 通过 [DouyinChannelClient] 调用子应用 dax-pay-channel-one 完成抖音支付下单。
+/// TODO 通道配置获取逻辑待补充(需抖音通道配置管理实体)
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class DouyinDirectPayStrategy extends AbsPayStrategy {
+
+    private static final BigDecimal HUNDRED = new BigDecimal("100");
+
+    private final DouyinChannelClient douyinChannelClient;
 
     @Override
     public ProductEnum getProduct() {
@@ -23,6 +34,28 @@ public class DouyinDirectPayStrategy extends AbsPayStrategy {
 
     @Override
     public PayTradeResultBo doPayHandler() {
-        throw new UnsupportedOperationException("抖音支付直连暂未实现");
+        // 构建请求
+        DouyinPayReq req = new DouyinPayReq();
+        req.setChannel(ProductEnum.DOUYIN_PAY.getChannel());
+        req.setBizOrderNo(getPayParam().getBizOrderNo());
+        req.setAmount(getPayParam().getAmount().multiply(HUNDRED).longValue());
+        req.setSubject(getPayParam().getTitle());
+        req.setMethod(getPayParam().getMethod());
+        // TODO 从数据库获取抖音通道配置
+        req.setConfig(Map.of());
+
+        // 调用子应用
+        DaxResult<DouyinPayResp> result = douyinChannelClient.pay(req);
+        if (result.getCode() != 0) {
+            throw new IllegalStateException("抖音通道支付失败: " + result.getMsg());
+        }
+
+        // 解析响应
+        DouyinPayResp data = result.getData();
+        return new PayTradeResultBo()
+                .setOutOrderNo(data.getOutOrderNo())
+                .setComplete(Boolean.TRUE.equals(data.getComplete()))
+                .setPayBody(data.getPayBody())
+                .setTransOrderNo(data.getTransOrderNo());
     }
 }

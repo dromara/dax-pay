@@ -3,7 +3,7 @@ package cn.daxpay.open.payment.old.pay.channel;
 import cn.daxpay.open.payment.old.pay.channel.dto.ChannelPayReq;
 import cn.daxpay.open.payment.old.pay.channel.dto.ChannelPayResp;
 import cn.daxpay.open.payment.old.pay.channel.dto.ChannelResult;
-import cn.daxpay.open.platform.common.config.properties.PlatformCommonProperties;
+import cn.daxpay.open.platform.common.config.properties.DaxpayChannelProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
@@ -13,7 +13,7 @@ import org.springframework.web.client.RestClient;
 /// # 通道服务 HTTP 客户端
 ///
 /// 封装对通道适配服务(daxpay-channel-one)的 HTTP 调用，统一处理地址拼接、结果解析与异常转换。
-/// baseUrl 来自 [PlatformCommonProperties.ChannelOne] 配置。
+/// baseUrl 来自 [DaxpayChannelProperties] 配置。
 ///
 @Slf4j
 @Component
@@ -21,14 +21,14 @@ import org.springframework.web.client.RestClient;
 public class ChannelPayClient {
 
     private final RestClient restClient;
-    private final PlatformCommonProperties properties;
+    private final DaxpayChannelProperties channelProperties;
 
     /// 发起支付下单调用
     ///
     /// @param req 通道支付请求
     /// @return 通道支付响应
     public ChannelPayResp pay(ChannelPayReq req) {
-        String url = properties.getChannelOne().getBaseUrl() + "/channel/pay";
+        String url = channelProperties.getOne().getBaseUrl() + "/channel/pay";
         ChannelResult<ChannelPayResp> result = restClient.post()
                 .uri(url)
                 .body(req)

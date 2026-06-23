@@ -18,6 +18,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <!-- RestClient 声明式 HTTP 客户端(Spring Boot 4 拆为独立 starter, 提供 RestClient.Builder 自动配置 + W3C traceparent 透传) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-restclient</artifactId>
+        </dependency>
         <!-- 切面 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

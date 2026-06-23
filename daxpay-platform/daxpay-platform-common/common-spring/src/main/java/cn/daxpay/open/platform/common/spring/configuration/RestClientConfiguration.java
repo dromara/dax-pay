@@ -9,6 +9,7 @@ import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
 import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
 import org.apache.hc.core5.util.Timeout;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
@@ -80,12 +81,13 @@ public class RestClientConfiguration {
 
     /// 创建 RestClient Bean
     ///
-    /// 使用自动配置的 RestClient.Builder 而非静态 [RestClient.builder]，
-    /// 以便 OTel 拦截器自动注入(W3C traceparent 头自动透传)。
+    /// 优先使用 Spring Boot 自动配置的 RestClient.Builder(携带 OTel 拦截器,
+    /// 自动透传 W3C traceparent); 若 autoconfiguration 未注册则 fallback 到 [RestClient.builder]。
     @Bean
-    public RestClient restClient(RestClient.Builder restClientBuilder,
+    public RestClient restClient(ObjectProvider<RestClient.Builder> builderProvider,
                                  HttpComponentsClientHttpRequestFactory httpRequestFactory) {
-        return restClientBuilder
+        RestClient.Builder builder = builderProvider.getIfAvailable(RestClient::builder);
+        return builder
                 .requestFactory(httpRequestFactory)
                 .defaultHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .requestInterceptor(new BusinessContextInterceptor())

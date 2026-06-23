@@ -35,6 +35,14 @@
             <artifactId>common-artemis</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <!-- 支付宝通道模块 -->
+        <!-- 提供 AlipayChannelClient (@HttpExchange) 及 AlipayPayReq/AlipayPayResp DTO, 供 Demo 控制器直接调用子应用 -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-channel-alipay</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>
