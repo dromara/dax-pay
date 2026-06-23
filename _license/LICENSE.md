@@ -1,4 +1,4 @@
-z# 借鉴和部分参考的开源项目
+# 借鉴和部分参考的开源项目
 
 Spring Cloud Gateway整合Swagger2 Demo，全网首例： 
 https://gitee.com/wxdfun/sw
@@ -50,3 +50,6 @@ https://gitee.com/egzosn/pay-java-parent
 
 JustAuth，一个开源的第三方登录授权库： 
 https://github.com/justauth/JustAuth
+
+unibest 最好用的 uniapp 开发框架，由 uniapp + Vue3 + Ts + Vite5 + UnoCss + wot-ui 构成的跨端快速启动模板:
+https://github.com/feige996/unibest
