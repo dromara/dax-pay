@@ -11,9 +11,11 @@ import lombok.RequiredArgsConstructor;
 import cn.daxpay.open.platform.common.artemis.service.ArtemisTemplateService;
 import cn.daxpay.open.platform.common.json.util.JacksonUtil;
 import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
+import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
+import org.slf4j.MDC;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -49,12 +51,13 @@ public class ArtemisDemoController {
         // 校验场景相关必填字段
         validateSceneParam(param, scene);
 
-        // 构造消息体（公共字段）
+        // 构造消息体（公共字段）, 注入当前 HTTP 请求的 traceId 用于跨 MQ 追踪贯穿验证
         DemoArtemisMessage message = new DemoArtemisMessage()
                 .setId(UUID.randomUUID().toString(true))
                 .setContent(param.getContent())
                 .setScene(scene.name())
-                .setSendTime(OffsetDateTime.now());
+                .setSendTime(OffsetDateTime.now())
+                .setProducerTraceId(MDC.get(CommonCode.TRACE_ID));
 
         // 序列化为 JSON 字符串，发送层只负责搬运文本，不参与对象转换
         String json = JacksonUtil.toJson(message, false);

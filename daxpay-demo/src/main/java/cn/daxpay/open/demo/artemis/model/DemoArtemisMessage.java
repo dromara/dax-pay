@@ -31,4 +31,7 @@ public class DemoArtemisMessage {
 
     /// 发送时间（UTC）
     private OffsetDateTime sendTime;
+
+    /// 生产者 traceId(随消息体跨 MQ 传递, 与消费端 MDC traceId 对比可验证 trace 是否贯穿)
+    private String producerTraceId;
 }

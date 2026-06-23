@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import cn.daxpay.open.platform.common.artemis.ArtemisBeanNames;
 import cn.daxpay.open.platform.common.json.util.JacksonUtil;
+import cn.daxpay.open.platform.core.code.CommonCode;
+import org.slf4j.MDC;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
@@ -45,8 +47,12 @@ public class DemoTopicConsumer {
             log.warn("Topic 消息解析失败，忽略: json={}, error={}", json, e.getMessage());
             return;
         }
-        DemoMessageResult result = DemoMessageResult.from(message, consumer);
+        // OTel JMS observation 若生效, MDC 已被注入与 producer 相同的 traceId
+        String consumerTraceId = MDC.get(CommonCode.TRACE_ID);
+        DemoMessageResult result = DemoMessageResult.from(message, consumer, consumerTraceId);
         store.add(result);
-        log.info("Topic 消费成功 [{}]: id={}, content={}", consumer, message.getId(), message.getContent());
+        log.info("Topic 消费成功 [{}]: id={}, content={}, producerTraceId={}, consumerTraceId={}",
+                consumer, message.getId(), message.getContent(),
+                message.getProducerTraceId(), consumerTraceId);
     }
 }

@@ -6,6 +6,8 @@ import cn.daxpay.open.demo.artemis.constants.DemoArtemisConstants;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import cn.daxpay.open.platform.common.json.util.JacksonUtil;
+import cn.daxpay.open.platform.core.code.CommonCode;
+import org.slf4j.MDC;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
 
@@ -32,9 +34,10 @@ public class DemoDelayConsumer {
             log.warn("Delay 消息解析失败，忽略: json={}, error={}", json, e.getMessage());
             return;
         }
-        DemoMessageResult result = DemoMessageResult.from(message, "demo-delay-consumer");
+        DemoMessageResult result = DemoMessageResult.from(message, "demo-delay-consumer", MDC.get(CommonCode.TRACE_ID));
         store.add(result);
-        log.info("Delay 消费成功: id={}, content={}, costMillis={}",
-                message.getId(), message.getContent(), result.getCostMillis());
+        log.info("Delay 消费成功: id={}, content={}, costMillis={}, producerTraceId={}, consumerTraceId={}",
+                message.getId(), message.getContent(), result.getCostMillis(),
+                message.getProducerTraceId(), result.getConsumerTraceId());
     }
 }
