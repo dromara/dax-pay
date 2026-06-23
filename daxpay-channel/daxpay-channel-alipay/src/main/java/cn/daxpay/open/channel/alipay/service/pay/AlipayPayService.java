@@ -7,6 +7,7 @@ import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.pay.bo.PayTradeResultBo;
 import cn.daxpay.open.payment.pay.order.entity.PayTrade;
 import cn.daxpay.open.payment.unipay.param.trade.pay.PayParam;
+import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
 import cn.daxpay.open.platform.core.enums.unipay.PayBodyTypeEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -34,17 +35,19 @@ public class AlipayPayService {
     ///
     /// @param order    支付订单
     /// @param payParam 支付参数
-    /// @param config   通道调用配置(密钥/证书/授权令牌等)
+    /// @param config   通道调用配置(密钥/证书/回调地址等)
     /// @return 支付结果
     public PayTradeResultBo pay(PayTrade order, PayParam payParam, Map<String, Object> config) {
         // 构建请求
         AlipayPayReq req = new AlipayPayReq();
         req.setChannel("alipay");
-        req.setBizOrderNo(payParam.getBizOrderNo());
+        // 使用支付交易号作为商户订单号透传给支付宝, 回调时凭此反查 PayTrade
+        req.setBizOrderNo(order.getTradeNo());
         req.setAmount(payParam.getAmount().multiply(HUNDRED).longValue());
         req.setSubject(payParam.getTitle());
         req.setDescription(payParam.getDescription());
-        req.setMethod(payParam.getMethod());
+        // 将平台支付方式(PayMethodEnum code)映射为支付宝通道识别码
+        req.setMethod(mapMethod(payParam.getMethod()));
         req.setConfig(config);
 
         // 调用子应用
@@ -54,6 +57,19 @@ public class AlipayPayService {
         }
 
         return toPayResult(result.getData());
+    }
+
+    /// 平台支付方式([PayMethodEnum] code) -> 支付宝通道识别码
+    private static String mapMethod(String methodCode) {
+        PayMethodEnum m = PayMethodEnum.findByCode(methodCode);
+        return switch (m) {
+            case ALIPAY_PC -> "alipay_page";
+            case ALIPAY_H5 -> "alipay_wap";
+            case ALIPAY_APP -> "alipay_app";
+            case ALIPAY_QR, ALIPAY_ORDER_QR -> "alipay_qr";
+            default -> throw new UnsupportedOperationException(
+                    "暂不支持的支付宝支付方式: " + methodCode);
+        };
     }
 
     /// 解析子应用响应为支付结果 BO
