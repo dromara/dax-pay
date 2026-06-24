@@ -49,9 +49,6 @@ public class MchPasswordLoginHandler implements AbstractAuthentication {
     @Getter
     private final String CAPTCHA_CODE_PARAMETER = "captchaCode";
 
-    @Getter
-    private final String REMEMBER_PARAMETER = "remember";
-
     @Resource
     @Getter
     private UserQueryService userQueryService;
@@ -70,13 +67,6 @@ public class MchPasswordLoginHandler implements AbstractAuthentication {
     @Override
     public String getLoginType() {
         return AuthLoginTypeCode.PASSWORD;
-    }
-
-    @Override
-    public void authenticationBefore(LoginAuthContext context) {
-        String rememberParam = context.getRequest().getParameter(this.REMEMBER_PARAMETER);
-        boolean remember = rememberParam == null || Boolean.parseBoolean(rememberParam);
-        context.setRemember(remember);
     }
 
     @Override

@@ -53,7 +53,7 @@ public class TokenService {
             this.validateClientCode(loginAuthContext);
             // 认证并获取结果
             authInfoResult = this.authentication(loginAuthContext);
-            // 登录处理（从上下文读取remember参数）
+            // 登录处理
             this.login(authInfoResult, loginAuthContext);
         }
         catch (LoginFailureException e) {
@@ -126,11 +126,9 @@ public class TokenService {
     private void login(AuthInfoResult authInfoResult, LoginAuthContext context) {
         String authLoginType = context.getAuthLoginType();
         String clientCode = context.getClientCode();
-        // 从上下文读取remember参数
-        boolean remember = context.isRemember();
         var saLoginModel = new SaLoginParameter()
                 .setDeviceType(clientCode)
-                .setIsLastingCookie(remember);
+                .setIsLastingCookie(true);
 
         authInfoResult.setClient(clientCode)
                 .setLoginType(authLoginType);

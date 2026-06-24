@@ -39,8 +39,5 @@ public class LoginAuthContext {
     @NotNull
     private PlatformStarterProperties.Auth authProperties;
 
-    /// 记住我
-    private boolean remember = true;
-
 }
 

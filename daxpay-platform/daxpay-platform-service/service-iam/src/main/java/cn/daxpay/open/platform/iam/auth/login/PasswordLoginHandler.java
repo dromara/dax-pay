@@ -46,9 +46,6 @@ public class PasswordLoginHandler implements AbstractAuthentication {
     @Getter
     private final String CAPTCHA_CODE_PARAMETER = "captchaCode";
 
-    @Getter
-    private final String REMEMBER_PARAMETER = "remember";
-
     @Resource
     @Getter
     private UserQueryService userQueryService;
@@ -65,15 +62,6 @@ public class PasswordLoginHandler implements AbstractAuthentication {
     @Override
     public String getLoginType() {
         return AuthLoginTypeCode.PASSWORD;
-    }
-
-    /// 认证前操作 - 读取remember参数并设置到上下文
-    @Override
-    public void authenticationBefore(LoginAuthContext context) {
-        // 从Request中读取remember参数，默认为true（兼容APP/小程序等不传此参数的场景）
-        String rememberParam = context.getRequest().getParameter(this.REMEMBER_PARAMETER);
-        boolean remember = rememberParam == null || Boolean.parseBoolean(rememberParam);
-        context.setRemember(remember);
     }
 
     /// 认证
