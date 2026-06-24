@@ -47,8 +47,8 @@ public class NotifyUserNoticeService {
         Long userId = SecurityUtil.getUserId();
         // 可见公告
         List<NotifyNotice> visibleNotices = findVisibleNotices();
-        // 用户已读(且未忽略)的公告id集合
-        Set<Long> readNoticeIds = readManager.findAllByUserAndNotIgnored(userId).stream()
+        // 用户已读的公告id集合(含被忽略的, 忽略视同已读, 与 list() 判定一致, 避免已忽略公告被反复计为未读)
+        Set<Long> readNoticeIds = readManager.findAllByUser(userId).stream()
             .map(NotifyNoticeRead::getNoticeId)
             .collect(Collectors.toSet());
         int noticeUnread = (int) visibleNotices.stream()
