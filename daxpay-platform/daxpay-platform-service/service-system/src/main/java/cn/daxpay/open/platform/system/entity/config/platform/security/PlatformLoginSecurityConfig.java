@@ -17,8 +17,8 @@ public class PlatformLoginSecurityConfig {
     private Integer lockoutDurationMinutes;
     /// 失败计数重置时长（分钟）
     private Integer failureResetMinutes;
-    /// 是否启用验证码触发
-    private Boolean captchaEnabled;
-    /// 触发验证码的失败次数
-    private Integer captchaTriggerAttempts;
+    /// 是否启用验证码触发（默认开启：登录失败达阈值后要求输入验证码）
+    private Boolean captchaEnabled = Boolean.TRUE;
+    /// 触发验证码的失败次数（默认3次，累计失败达到此次数后强制要求验证码）
+    private Integer captchaTriggerAttempts = 3;
 }

@@ -96,7 +96,8 @@ public class MchPasswordLoginHandler implements AbstractAuthentication {
 
         // 比对密码未通过
         if (!BCrypt.checkpw(password, userInfoResult.getPassword())) {
-            throw new LoginFailureException(userDetail.getAccount(), "账号或密码不正确");
+            // 必须携带 userId, 否则 LoginRetryService.onLoginFailure 因 userId 为空直接跳过, 失败计数始终为 0
+            throw new LoginFailureException(userDetail.getId(), userDetail.getAccount(), "账号或密码不正确");
         }
 
         // 设置密码状态到 UserDetail（超级管理员不设置密码状态限制）

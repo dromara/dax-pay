@@ -9,7 +9,7 @@ public class CaptchaRequiredException extends BizInfoException {
     private final String captchaKey;
 
     public CaptchaRequiredException(String captchaKey) {
-        super(40001, "请输入验证码");
+        super(40001, "error.auth.auth.captchaRequired");
         this.captchaKey = captchaKey;
     }
 
