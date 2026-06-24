@@ -70,6 +70,12 @@
             <artifactId>service-baseapi</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- 站内通知服务(公告 + 个人消息) -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>service-notify</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- Artemis 消息队列通用模块（供 demo 演示注入 ArtemisTemplateService） -->
         <dependency>
             <groupId>cn.daxpay.open</groupId>
