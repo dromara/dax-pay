@@ -74,6 +74,9 @@
       "size": "Merchant app ID cannot exceed 32 characters",
       "notNull": "Application ID cannot be null"
     },
+    "channelMchNo": {
+      "size": "Channel merchant no. cannot exceed 32 characters"
+    },
     "subMchId": {
       "notBlank": "WeChat sub-merchant ID cannot be blank"
     },

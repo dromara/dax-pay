@@ -74,6 +74,9 @@
       "size": "应用号不可超过32位",
       "notNull": "应用ID不可为空"
     },
+    "channelMchNo": {
+      "size": "通道商户号不可超过32位"
+    },
     "subMchId": {
       "notBlank": "微信子商户号不可为空"
     },
