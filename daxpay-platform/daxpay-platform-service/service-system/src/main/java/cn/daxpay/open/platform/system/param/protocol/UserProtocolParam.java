@@ -40,13 +40,9 @@ public class UserProtocolParam {
     @Schema(description = "端类型")
     private String clientType;
 
-    /// 内容格式
-    @Schema(description = "内容格式")
-    private String contentFormat;
-
-    /// 内容
-    @NotBlank(message = "{validation.field.content.notBlank}")
-    @Schema(description = "内容")
-    private String content;
+    /// 默认语言
+    @NotBlank(message = "{validation.field.language.notBlank}")
+    @Schema(description = "默认语言")
+    private String defaultLanguage;
 }
 

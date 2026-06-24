@@ -30,16 +30,12 @@ public class UserProtocolResult extends BaseResult {
     @Schema(description = "端类型")
     private String clientType;
 
-    /// 内容格式
-    @Schema(description = "内容格式")
-    private String contentFormat;
-
     /// 默认协议
     @Schema(description = "默认协议")
     private Boolean defaultProtocol;
 
-    /// 内容
-    @Schema(description = "内容")
-    private String content;
+    /// 默认语言
+    @Schema(description = "默认语言")
+    private String defaultLanguage;
 }
 

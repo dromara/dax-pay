@@ -2,5 +2,11 @@
   "defaultCannotDelete": "Default protocol cannot be deleted",
   "notExist": "User protocol not found",
   "itemNotExist": "User protocol item not found",
-  "defaultItemNotExist": "No default protocol exists for this type"
+  "defaultItemNotExist": "No default protocol exists for this type",
+  "versionNotExist": "User protocol version not found",
+  "draftOnlyCanEdit": "Only draft versions can be edited",
+  "draftOnlyCanDelete": "Only draft versions can be deleted",
+  "draftOnlyCanPublish": "Only draft versions can be published",
+  "publishedOnlyCanArchive": "Only published versions can be archived",
+  "sameClientType": "Target client type is the same as the source"
 }

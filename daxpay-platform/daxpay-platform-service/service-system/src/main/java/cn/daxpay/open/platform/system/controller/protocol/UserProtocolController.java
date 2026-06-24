@@ -4,6 +4,7 @@ import cn.daxpay.open.platform.system.enums.UserProtocolClientTypeEnum;
 import cn.daxpay.open.platform.system.enums.UserProtocolTypeEnum;
 import cn.daxpay.open.platform.system.param.protocol.UserProtocolParam;
 import cn.daxpay.open.platform.system.param.protocol.UserProtocolQuery;
+import cn.daxpay.open.platform.system.result.protocol.UserProtocolContentResult;
 import cn.daxpay.open.platform.system.result.protocol.UserProtocolResult;
 import cn.daxpay.open.platform.system.service.protocol.UserProtocolService;
 import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
@@ -88,16 +89,19 @@ public class UserProtocolController {
         return Res.ok(userProtocolService.findById(id));
     }
 
-    /// 查询默认协议
+    /// 查询默认协议内容(对外展示, 各端通过 type+clientType+language 拉取当前生效版本)
     ///
     /// @param type 协议类型
-    /// @return 默认协议信息
+    /// @param clientType 端类型
+    /// @param language 语言(可选, 为空时回退到协议默认语言)
+    /// @return 协议内容
     @IgnoreAuth
-    @Operation(summary = "查询默认协议")
+    @Operation(summary = "查询默认协议内容")
     @GetMapping("/find-default")
-    public Result<UserProtocolResult> findDefault(@NotNull(message = "{validation.field.type.notBlank}") String type,
-        @NotNull(message = "{validation.field.clientType.notBlank}") String clientType){
-        return Res.ok(userProtocolService.findDefault(type, clientType));
+    public Result<UserProtocolContentResult> findDefault(@NotNull(message = "{validation.field.type.notBlank}") String type,
+        @NotNull(message = "{validation.field.clientType.notBlank}") String clientType,
+        @RequestParam(required = false) String language){
+        return Res.ok(userProtocolService.findDefault(type, clientType, language));
     }
 
     @Operation(summary = "协议类型列表")
@@ -138,6 +142,16 @@ public class UserProtocolController {
         return Res.ok();
     }
 
+    /// 复制协议到其他端(连同各语言的当前生效版本一起复制)
+    ///
+    /// @param id 源协议ID
+    /// @param clientType 目标端类型
+    /// @return 目标协议ID
+    @Operation(summary = "复制到其他端")
+    @PostMapping("/copy-to-client")
+    public Result<Long> copyToClient(@NotNull(message = "{validation.field.id.notNull}") Long id,
+        @NotNull(message = "{validation.field.clientType.notBlank}") String clientType){
+        return Res.ok(userProtocolService.copyToClient(id, clientType));
+    }
+
 }
-
-

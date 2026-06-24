@@ -407,6 +407,9 @@
     "clientType": {
       "notBlank": "端类型不能为空"
     },
+    "language": {
+      "notBlank": "语言不能为空"
+    },
     "email": {
       "notBlank": "邮箱不可为空",
       "format": "邮箱格式不正确"

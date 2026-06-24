@@ -404,6 +404,9 @@
     "clientType": {
       "notBlank": "Client type cannot be blank"
     },
+    "language": {
+      "notBlank": "Language cannot be blank"
+    },
     "email": {
       "notBlank": "Email cannot be blank",
       "format": "Invalid email format"

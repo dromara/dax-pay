@@ -30,14 +30,11 @@ public class UserProtocol extends MpBaseEntity implements ToResult<UserProtocolR
     /// 端类型
     private String clientType;
 
-    /// 内容格式
-    private String contentFormat;
-
-    /// 协议内容
-    private String content;
-
     /// 默认协议
     private Boolean defaultProtocol;
+
+    /// 默认语言
+    private String defaultLanguage;
 
     @Override
     public UserProtocolResult toResult() {
