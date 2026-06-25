@@ -8,6 +8,7 @@ import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.platform.iam.auth.service.LoginContentService;
 import cn.daxpay.open.platform.iam.auth.service.SecondCheckService;
 import cn.daxpay.open.platform.iam.param.auth.LoginContentParam;
+import cn.daxpay.open.platform.iam.param.auth.SecondVerifyParam;
 import cn.daxpay.open.platform.iam.result.auth.LoginContentResult;
 import cn.daxpay.open.platform.iam.result.auth.SecondCheckResult;
 import io.swagger.v3.oas.annotations.Operation;
@@ -58,6 +59,14 @@ public class TokenEndpoint {
     @PostMapping("/second-check")
     public Result<SecondCheckResult> getSecondCheck(@RequestBody(required = false) LoginContentParam param) {
         return Res.ok(secondCheckService.getSecondCheck(param == null ? new LoginContentParam() : param));
+    }
+
+    @Operation(summary = "双因素认证二次验证")
+    @PostMapping("/second-verify")
+    public Result<String> secondVerify(HttpServletRequest request, HttpServletResponse response,
+                                       @RequestBody SecondVerifyParam param) {
+        return Res.ok(tokenService.secondVerify(request, response,
+                param.getPreAuthToken(), param.getCode(), param.getCodeType()));
     }
 
     @Operation(summary = "退出")

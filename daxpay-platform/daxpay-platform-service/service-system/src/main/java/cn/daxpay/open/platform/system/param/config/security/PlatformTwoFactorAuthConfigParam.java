@@ -31,7 +31,4 @@ public class PlatformTwoFactorAuthConfigParam {
 
     @Schema(description = "备用验证码数量")
     private Integer backupCodesCount;
-
-    @Schema(description = "验证码有效期（分钟）")
-    private Integer codeValidityMinutes;
 }

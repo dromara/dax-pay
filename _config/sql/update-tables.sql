@@ -199,3 +199,42 @@ COMMENT ON COLUMN device_speaker.deleted IS '逻辑删除标志';
 CREATE UNIQUE INDEX IF NOT EXISTS uk_device_speaker_sn ON device_speaker (device_sn) WHERE deleted = false;
 -- 商户号查询索引
 CREATE INDEX IF NOT EXISTS idx_device_speaker_mch_no ON device_speaker (mch_no, deleted);
+
+-- ===================================
+-- 双因素认证: 用户 TOTP 绑定表
+-- ===================================
+
+-- 用户双因素认证绑定记录(一对一, 记录存在即代表该用户已启用 TOTP 双因素认证)
+CREATE TABLE IF NOT EXISTS iam_user_two_factor (
+    id                      bigint          NOT NULL,
+    user_id                 bigint          NOT NULL,
+    secret                  varchar(512)    NOT NULL,
+    backup_codes            jsonb,
+    backup_codes_remaining  int             NOT NULL DEFAULT 0,
+    last_verify_time        timestamptz(6),
+    creator                 bigint,
+    create_time             timestamptz(6),
+    last_modifier           bigint,
+    last_modified_time      timestamptz(6),
+    version                 int             NOT NULL DEFAULT 0,
+    deleted                 boolean         NOT NULL DEFAULT false,
+    CONSTRAINT iam_user_two_factor_pkey PRIMARY KEY (id)
+);
+
+COMMENT ON TABLE iam_user_two_factor IS '用户双因素认证绑定记录';
+COMMENT ON COLUMN iam_user_two_factor.id IS '主键';
+COMMENT ON COLUMN iam_user_two_factor.user_id IS '用户ID';
+COMMENT ON COLUMN iam_user_two_factor.secret IS 'TOTP 密钥';
+COMMENT ON COLUMN iam_user_two_factor.backup_codes IS '备用验证码';
+COMMENT ON COLUMN iam_user_two_factor.backup_codes_remaining IS '剩余可用备用验证码数量';
+COMMENT ON COLUMN iam_user_two_factor.last_verify_time IS '最后验证时间';
+COMMENT ON COLUMN iam_user_two_factor.creator IS '创建人ID';
+COMMENT ON COLUMN iam_user_two_factor.create_time IS '创建时间';
+COMMENT ON COLUMN iam_user_two_factor.last_modifier IS '最后修改人ID';
+COMMENT ON COLUMN iam_user_two_factor.last_modified_time IS '最后修改时间';
+COMMENT ON COLUMN iam_user_two_factor.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN iam_user_two_factor.deleted IS '逻辑删除标志';
+
+-- 用户ID唯一索引(未删除范围内, 一个用户最多一条绑定记录)
+CREATE UNIQUE INDEX IF NOT EXISTS uk_iam_user_two_factor_user_id
+    ON iam_user_two_factor (user_id) WHERE deleted = false;

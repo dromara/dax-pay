@@ -10,6 +10,8 @@ import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.BizWarnException;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
+import cn.daxpay.open.platform.capability.auth.entity.TwoFactorChallengeResult;
+import cn.daxpay.open.platform.capability.auth.exception.TwoFactorRequiredException;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.ValidationException;
@@ -57,6 +59,14 @@ public class RestExceptionHandler {
         log.info(ex.getMessage());
         String message = getMessage(ex);
         return Res.response(ex.getCode(), message, MDC.get(CommonCode.TRACE_ID));
+    }
+
+    /// 双因素认证挑战: 密码通过但需二次验证, 返回预认证令牌, 不计入登录失败
+    @ExceptionHandler(TwoFactorRequiredException.class)
+    public Result<TwoFactorChallengeResult> handleTwoFactorRequiredException(TwoFactorRequiredException ex) {
+        log.info(ex.getMessage());
+        String message = getMessage(ex);
+        return Res.response(TwoFactorRequiredException.CODE, message, new TwoFactorChallengeResult(ex.getPreAuthToken()));
     }
 
     /// 警告业务异常, 如果量多需要关注

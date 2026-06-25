@@ -23,6 +23,4 @@ public class PlatformTwoFactorAuthConfig {
     private String issuer;
     /// 备用验证码数量
     private Integer backupCodesCount;
-    /// 验证码有效期（分钟）
-    private Integer codeValidityMinutes;
 }

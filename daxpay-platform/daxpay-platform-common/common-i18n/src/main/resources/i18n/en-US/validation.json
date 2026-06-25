@@ -511,6 +511,24 @@
     },
     "deviceSn": {
       "notBlank": "Device serial number cannot be blank"
+    },
+    "deviceType": {
+      "notBlank": "Device type cannot be blank"
+    },
+    "vendorCode": {
+      "notBlank": "Vendor code cannot be blank"
+    },
+    "vendorConfigId": {
+      "notNull": "Vendor config cannot be null"
+    },
+    "configName": {
+      "notBlank": "Config name cannot be blank"
+    },
+    "twoFactorCode": {
+      "notBlank": "Verification code cannot be blank"
+    },
+    "preAuthToken": {
+      "notBlank": "Pre-auth token cannot be blank"
     }
   }
 }

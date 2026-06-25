@@ -3,6 +3,7 @@ package cn.daxpay.open.platform.iam.auth.service;
 import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformLoginSecurityConfig;
 import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformPasswordPolicyConfig;
 import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformSessionManagementConfig;
+import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformTwoFactorAuthConfig;
 import cn.daxpay.open.platform.system.service.config.PlatformSecurityConfigService;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,11 @@ public class IamSecurityConfigService {
     /// 获取会话管理配置
     public PlatformSessionManagementConfig getSessionManagement() {
         return platformSecurityConfigService.getSessionManagementConfig();
+    }
+
+    /// 获取双因素认证配置
+    public PlatformTwoFactorAuthConfig getTwoFactorAuthConfig() {
+        return platformSecurityConfigService.getTwoFactorAuthConfig();
     }
 }
 

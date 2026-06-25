@@ -1,0 +1,6 @@
+{
+  "platformDisabled": "平台未启用双因素认证",
+  "alreadyBound": "已绑定双因素认证, 无需重复操作",
+  "notBound": "未绑定双因素认证",
+  "codeError": "动态码错误"
+}

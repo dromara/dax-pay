@@ -514,6 +514,24 @@
     },
     "deviceSn": {
       "notBlank": "设备序列号不能为空"
+    },
+    "deviceType": {
+      "notBlank": "设备类型不能为空"
+    },
+    "vendorCode": {
+      "notBlank": "厂商代码不能为空"
+    },
+    "vendorConfigId": {
+      "notNull": "厂商配置不能为空"
+    },
+    "configName": {
+      "notBlank": "配置名称不能为空"
+    },
+    "twoFactorCode": {
+      "notBlank": "动态验证码不能为空"
+    },
+    "preAuthToken": {
+      "notBlank": "预认证令牌不能为空"
     }
   }
 }
