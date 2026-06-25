@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.iot.speaker.enums;
+package cn.daxpay.open.payment.device.enums;
 
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.i18n.I18nSupport;
@@ -7,12 +7,13 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
 
-/// # 云音响设备状态
+/// # 设备状态
 ///
-/// 字典: iot_speaker_device_status
+/// 通用设备状态字典, 适用于云音响/云打印等各类设备。
+/// 字典: device_status
 @Getter
 @RequiredArgsConstructor
-public enum IotDeviceStatusEnum implements I18nSupport {
+public enum DeviceStatusEnum implements I18nSupport {
 
     /// 未绑定
     UNBOUND("unbound"),
@@ -29,15 +30,15 @@ public enum IotDeviceStatusEnum implements I18nSupport {
     /// 翻译 key 前缀
     @Override
     public String getI18nPrefix() {
-        return "enum.iot_speaker_device_status";
+        return "enum.device_status";
     }
 
     /// 根据编码查找
-    public static IotDeviceStatusEnum findByCode(String code) {
+    public static DeviceStatusEnum findByCode(String code) {
         return Arrays.stream(values())
                 .filter(e -> e.getCode().equals(code))
                 .findFirst()
-                // 通用: 未找到对应的云音响设备状态: {0}
-                .orElseThrow(() -> new DataNotExistException("error.iot.speaker.deviceStatusNotFound", code));
+                // 通用: 未找到对应的设备状态: {0}
+                .orElseThrow(() -> new DataNotExistException("error.device.speaker.deviceStatusNotFound", code));
     }
 }

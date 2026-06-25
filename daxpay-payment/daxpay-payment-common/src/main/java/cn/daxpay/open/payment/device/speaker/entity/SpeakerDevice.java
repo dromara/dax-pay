@@ -1,7 +1,7 @@
-package cn.daxpay.open.payment.iot.speaker.entity;
+package cn.daxpay.open.payment.device.speaker.entity;
 
-import cn.daxpay.open.payment.iot.speaker.enums.IotDeviceStatusEnum;
-import cn.daxpay.open.payment.iot.speaker.result.IotSpeakerDeviceResult;
+import cn.daxpay.open.payment.device.enums.DeviceStatusEnum;
+import cn.daxpay.open.payment.device.speaker.result.SpeakerDeviceResult;
 import cn.daxpay.open.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.daxpay.open.platform.common.mybatisplus.function.ToResult;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -17,8 +17,8 @@ import java.time.OffsetDateTime;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@TableName("iot_speaker_device")
-public class IotSpeakerDevice extends MpBaseEntity implements ToResult<IotSpeakerDeviceResult> {
+@TableName("device_speaker")
+public class SpeakerDevice extends MpBaseEntity implements ToResult<SpeakerDeviceResult> {
 
     /// 商户号
     private String mchNo;
@@ -36,7 +36,7 @@ public class IotSpeakerDevice extends MpBaseEntity implements ToResult<IotSpeake
     private String deviceName;
 
     /// 设备状态
-    /// @see IotDeviceStatusEnum
+    /// @see DeviceStatusEnum
     private String status;
 
     /// 绑定时间
@@ -50,8 +50,8 @@ public class IotSpeakerDevice extends MpBaseEntity implements ToResult<IotSpeake
 
     /// 转换为返回对象
     @Override
-    public IotSpeakerDeviceResult toResult() {
-        IotSpeakerDeviceResult result = new IotSpeakerDeviceResult()
+    public SpeakerDeviceResult toResult() {
+        SpeakerDeviceResult result = new SpeakerDeviceResult()
                 .setMchNo(mchNo)
                 .setDeviceSn(deviceSn)
                 .setImei(imei)

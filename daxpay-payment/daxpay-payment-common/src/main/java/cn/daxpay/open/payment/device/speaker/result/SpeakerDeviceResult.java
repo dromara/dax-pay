@@ -1,6 +1,6 @@
-package cn.daxpay.open.payment.iot.speaker.result;
+package cn.daxpay.open.payment.device.speaker.result;
 
-import cn.daxpay.open.payment.iot.speaker.enums.IotDeviceStatusEnum;
+import cn.daxpay.open.payment.device.enums.DeviceStatusEnum;
 import cn.daxpay.open.platform.core.result.BaseResult;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -14,7 +14,7 @@ import java.time.OffsetDateTime;
 @Data
 @Accessors(chain = true)
 @Schema(title = "云音响设备")
-public class IotSpeakerDeviceResult extends BaseResult {
+public class SpeakerDeviceResult extends BaseResult {
 
     @Schema(description = "商户号")
     private String mchNo;
@@ -32,7 +32,7 @@ public class IotSpeakerDeviceResult extends BaseResult {
     private String deviceName;
 
     /// 设备状态
-    /// @see IotDeviceStatusEnum
+    /// @see DeviceStatusEnum
     @Schema(description = "设备状态(unbound未绑定/online在线/offline离线/fault故障)")
     private String status;
 

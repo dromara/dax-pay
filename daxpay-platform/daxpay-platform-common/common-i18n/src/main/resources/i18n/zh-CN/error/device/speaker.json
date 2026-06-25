@@ -1,5 +1,5 @@
 {
   "deviceNotFound": "云音响设备不存在",
   "deviceSnExists": "设备序列号已存在",
-  "deviceStatusNotFound": "未找到对应的云音响设备状态: {0}"
+  "deviceStatusNotFound": "未找到对应的设备状态: {0}"
 }

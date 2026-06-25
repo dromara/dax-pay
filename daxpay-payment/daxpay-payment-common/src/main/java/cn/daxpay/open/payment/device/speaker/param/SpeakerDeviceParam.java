@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.iot.speaker.param;
+package cn.daxpay.open.payment.device.speaker.param;
 
 import cn.daxpay.open.platform.core.validation.ValidationGroup;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @Schema(title = "云音响设备")
-public class IotSpeakerDeviceParam {
+public class SpeakerDeviceParam {
 
     /// 主键
     @Schema(description = "主键")
