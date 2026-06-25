@@ -4,11 +4,15 @@ import cn.daxpay.open.platform.common.config.properties.PlatformStarterPropertie
 import cn.daxpay.open.platform.capability.auth.handler.SaRouteHandler;
 import cn.dev33.satoken.interceptor.SaInterceptor;
 import cn.dev33.satoken.router.SaRouter;
+import jakarta.servlet.DispatcherType;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -58,7 +62,17 @@ public class SaTokenConfigure implements WebMvcConfigurer {
                         .check(saRouteHandler.check(handler))
         );
         // 注册路由拦截器，自定义验证规则
-        registry.addInterceptor(saInterceptor)
-                .addPathPatterns("/**");
+        // 包装一层: SSE 等异步连接(SseEmitter)在完成/超时/异常时, Servlet 容器会做 ASYNC 重派发,
+        // 此时 SaToken 上下文过滤器(OncePerRequestFilter, 仅 REQUEST 派发)不会重新执行, ThreadLocal 上下文为空,
+        // 若再次进入 SaInterceptor 会抛 SaTokenContextException. 鉴权已在初始 REQUEST 派发完成, ASYNC 派发直接放行.
+        registry.addInterceptor(new HandlerInterceptor() {
+            @Override
+            public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+                if (request.getDispatcherType() == DispatcherType.ASYNC) {
+                    return true;
+                }
+                return saInterceptor.preHandle(request, response, handler);
+            }
+        }).addPathPatterns("/**");
     }
 }
