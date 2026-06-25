@@ -153,3 +153,49 @@ COMMENT ON COLUMN mch_store_info.deleted IS '逻辑删除标志';
 CREATE UNIQUE INDEX IF NOT EXISTS uk_mch_store_info_store_no ON mch_store_info (store_no);
 -- 商户号查询索引
 CREATE INDEX IF NOT EXISTS idx_mch_store_info_mch_no ON mch_store_info (mch_no, deleted);
+
+-- ===================================
+-- 云音响设备(商米云音响, 设备台账与商户/门店绑定关系)
+-- ===================================
+CREATE TABLE IF NOT EXISTS iot_speaker_device (
+    id                  bigint          NOT NULL,
+    mch_no              varchar(32)     NOT NULL,
+    device_sn           varchar(64)     NOT NULL,
+    imei                varchar(32),
+    shop_id             varchar(64),
+    device_name         varchar(128),
+    status              varchar(16)     NOT NULL DEFAULT 'unbound',
+    bind_time           timestamptz(6),
+    last_online_time    timestamptz(6),
+    remark              varchar(512),
+    creator             bigint,
+    create_time         timestamptz(6),
+    last_modifier       bigint,
+    last_modified_time  timestamptz(6),
+    version             int             NOT NULL DEFAULT 0,
+    deleted             boolean         NOT NULL DEFAULT false,
+    CONSTRAINT iot_speaker_device_pkey PRIMARY KEY (id)
+);
+
+COMMENT ON TABLE iot_speaker_device IS '云音响设备(商米云音响, 设备台账与商户/门店绑定关系)';
+COMMENT ON COLUMN iot_speaker_device.id IS '主键';
+COMMENT ON COLUMN iot_speaker_device.mch_no IS '所属商户号';
+COMMENT ON COLUMN iot_speaker_device.device_sn IS '商米设备序列号(SN)';
+COMMENT ON COLUMN iot_speaker_device.imei IS '设备IMEI';
+COMMENT ON COLUMN iot_speaker_device.shop_id IS '商米门店ID';
+COMMENT ON COLUMN iot_speaker_device.device_name IS '设备名称';
+COMMENT ON COLUMN iot_speaker_device.status IS '设备状态(unbound未绑定/online在线/offline离线/fault故障)';
+COMMENT ON COLUMN iot_speaker_device.bind_time IS '绑定时间';
+COMMENT ON COLUMN iot_speaker_device.last_online_time IS '最后在线时间';
+COMMENT ON COLUMN iot_speaker_device.remark IS '备注';
+COMMENT ON COLUMN iot_speaker_device.creator IS '创建人ID';
+COMMENT ON COLUMN iot_speaker_device.create_time IS '创建时间';
+COMMENT ON COLUMN iot_speaker_device.last_modifier IS '最后修改人ID';
+COMMENT ON COLUMN iot_speaker_device.last_modified_time IS '最后修改时间';
+COMMENT ON COLUMN iot_speaker_device.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN iot_speaker_device.deleted IS '逻辑删除标志';
+
+-- 设备序列号唯一索引(未删除范围内)
+CREATE UNIQUE INDEX IF NOT EXISTS uk_iot_speaker_device_sn ON iot_speaker_device (device_sn) WHERE deleted = false;
+-- 商户号查询索引
+CREATE INDEX IF NOT EXISTS idx_iot_speaker_device_mch_no ON iot_speaker_device (mch_no, deleted);
