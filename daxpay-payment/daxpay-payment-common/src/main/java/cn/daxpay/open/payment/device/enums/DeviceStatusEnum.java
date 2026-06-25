@@ -9,7 +9,7 @@ import java.util.Arrays;
 
 /// # 设备状态
 ///
-/// 通用设备状态字典, 适用于云音响/云打印等各类设备。
+/// 通用设备状态字典, 适用于云音箱/云打印等各类设备。
 /// 字典: device_status
 @Getter
 @RequiredArgsConstructor
@@ -39,6 +39,6 @@ public enum DeviceStatusEnum implements I18nSupport {
                 .filter(e -> e.getCode().equals(code))
                 .findFirst()
                 // 通用: 未找到对应的设备状态: {0}
-                .orElseThrow(() -> new DataNotExistException("error.device.speaker.deviceStatusNotFound", code));
+                .orElseThrow(() -> new DataNotExistException("error.device.common.deviceStatusNotFound", code));
     }
 }

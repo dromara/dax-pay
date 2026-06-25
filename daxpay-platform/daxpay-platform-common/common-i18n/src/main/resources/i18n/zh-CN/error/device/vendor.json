@@ -1,0 +1,7 @@
+{
+  "vendorNotFound": "未找到对应的设备厂商: {0}",
+  "configNotFound": "厂商配置不存在",
+  "configNameExists": "配置名称已存在",
+  "vendorConfigNotMatch": "厂商配置与厂商不匹配",
+  "configNotEnabled": "厂商配置未启用"
+}

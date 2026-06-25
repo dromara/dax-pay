@@ -1,0 +1,7 @@
+{
+  "vendorNotFound": "Device vendor not found: {0}",
+  "configNotFound": "Vendor config does not exist",
+  "configNameExists": "Config name already exists",
+  "vendorConfigNotMatch": "Vendor config does not match the vendor",
+  "configNotEnabled": "Vendor config is not enabled"
+}

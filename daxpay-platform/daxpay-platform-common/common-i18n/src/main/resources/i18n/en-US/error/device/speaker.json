@@ -1,5 +1,4 @@
 {
   "deviceNotFound": "Cloud speaker device not found",
-  "deviceSnExists": "Device serial number already exists",
-  "deviceStatusNotFound": "Device status not found: {0}"
+  "deviceSnExists": "Device serial number already exists"
 }

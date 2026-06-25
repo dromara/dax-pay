@@ -1,7 +1,8 @@
 package cn.daxpay.open.payment.device.speaker.entity;
 
 import cn.daxpay.open.payment.device.enums.DeviceStatusEnum;
-import cn.daxpay.open.payment.device.speaker.result.SpeakerDeviceResult;
+import cn.daxpay.open.payment.device.speaker.convert.DeviceSpeakerConvert;
+import cn.daxpay.open.payment.device.speaker.result.DeviceSpeakerResult;
 import cn.daxpay.open.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.daxpay.open.platform.common.mybatisplus.function.ToResult;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -11,25 +12,32 @@ import lombok.experimental.Accessors;
 
 import java.time.OffsetDateTime;
 
-/// # 云音响设备
+/// # 云音箱设备
 ///
-/// 记录商米云音响设备与商户/门店的绑定关系, 真实播报对接由独立服务 dax-pay-iot 完成。
+/// 记录云音箱设备与商户/门店的绑定关系, 真实播报对接由独立服务 dax-pay-iot 完成。
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
 @TableName("device_speaker")
-public class SpeakerDevice extends MpBaseEntity implements ToResult<SpeakerDeviceResult> {
+public class DeviceSpeaker extends MpBaseEntity implements ToResult<DeviceSpeakerResult> {
 
     /// 商户号
     private String mchNo;
 
-    /// 商米设备序列号(SN)
+    /// 厂商代码
+    /// @see cn.daxpay.open.payment.device.enums.DeviceVendorEnum
+    private String vendorCode;
+
+    /// 厂商配置ID
+    private Long vendorConfigId;
+
+    /// 设备序列号(SN)
     private String deviceSn;
 
     /// 设备IMEI
     private String imei;
 
-    /// 商米门店ID
+    /// 厂商门店ID
     private String shopId;
 
     /// 设备名称
@@ -50,19 +58,7 @@ public class SpeakerDevice extends MpBaseEntity implements ToResult<SpeakerDevic
 
     /// 转换为返回对象
     @Override
-    public SpeakerDeviceResult toResult() {
-        SpeakerDeviceResult result = new SpeakerDeviceResult()
-                .setMchNo(mchNo)
-                .setDeviceSn(deviceSn)
-                .setImei(imei)
-                .setShopId(shopId)
-                .setDeviceName(deviceName)
-                .setStatus(status)
-                .setBindTime(bindTime)
-                .setLastOnlineTime(lastOnlineTime)
-                .setRemark(remark);
-        result.setId(getId());
-        result.setCreateTime(getCreateTime());
-        return result;
+    public DeviceSpeakerResult toResult() {
+        return DeviceSpeakerConvert.CONVERT.toResult(this);
     }
 }

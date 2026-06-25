@@ -9,23 +9,29 @@ import lombok.experimental.Accessors;
 
 import java.time.OffsetDateTime;
 
-/// # 云音响设备
+/// # 云音箱设备
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@Schema(title = "云音响设备")
-public class SpeakerDeviceResult extends BaseResult {
+@Schema(title = "云音箱设备")
+public class DeviceSpeakerResult extends BaseResult {
 
     @Schema(description = "商户号")
     private String mchNo;
 
-    @Schema(description = "商米设备序列号(SN)")
+    @Schema(description = "厂商代码")
+    private String vendorCode;
+
+    @Schema(description = "厂商配置ID")
+    private Long vendorConfigId;
+
+    @Schema(description = "设备序列号(SN)")
     private String deviceSn;
 
     @Schema(description = "设备IMEI")
     private String imei;
 
-    @Schema(description = "商米门店ID")
+    @Schema(description = "厂商门店ID")
     private String shopId;
 
     @Schema(description = "设备名称")

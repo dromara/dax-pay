@@ -5,17 +5,22 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-/// # 云音响设备查询参数
+/// # 云音箱设备查询参数
 @Data
 @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
 @Accessors(chain = true)
-@Schema(title = "云音响设备查询参数")
-public class SpeakerDeviceQuery {
+@Schema(title = "云音箱设备查询参数")
+public class DeviceSpeakerQuery {
 
     /// 商户号
     @Schema(description = "商户号")
     @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     private String mchNo;
+
+    /// 厂商代码
+    @Schema(description = "厂商代码")
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
+    private String vendorCode;
 
     /// 设备序列号
     @Schema(description = "设备序列号")
@@ -25,8 +30,8 @@ public class SpeakerDeviceQuery {
     @Schema(description = "设备名称")
     private String deviceName;
 
-    /// 商米门店ID
-    @Schema(description = "商米门店ID")
+    /// 厂商门店ID
+    @Schema(description = "厂商门店ID")
     @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     private String shopId;
 
