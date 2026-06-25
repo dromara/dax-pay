@@ -508,6 +508,12 @@
     },
     "appSecret": {
       "size": "应用密钥不可超过512位"
+    },
+    "storeName": {
+      "notBlank": "门店名称不能为空"
+    },
+    "deviceSn": {
+      "notBlank": "设备序列号不能为空"
     }
   }
 }

@@ -54,9 +54,6 @@
             <artifactId>daxpay-payment-merchant</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <!-- 代理管理 -->
-
-        <!-- 服务商管理 -->
 
         <!-- 翻译模块 -->
         <dependency>

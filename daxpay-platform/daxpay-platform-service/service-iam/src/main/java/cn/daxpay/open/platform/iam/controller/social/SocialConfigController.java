@@ -54,7 +54,7 @@ public class SocialConfigController {
         return Res.ok();
     }
 
-    @PermCode(code = "edit", nameCn = "配置启停", nameEn = "Config Toggle")
+    @PermCode(code = "edit", nameCn = "配置编辑", nameEn = "Config Edit")
     @Operation(summary = "切换平台启用状态(仅已配置平台可启停)")
     @PostMapping("/update-enabled")
     public Result<Void> updateEnabled(

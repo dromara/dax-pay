@@ -505,6 +505,12 @@
     },
     "appSecret": {
       "size": "App secret cannot exceed 512 characters"
+    },
+    "storeName": {
+      "notBlank": "Store name cannot be blank"
+    },
+    "deviceSn": {
+      "notBlank": "Device serial number cannot be blank"
     }
   }
 }
