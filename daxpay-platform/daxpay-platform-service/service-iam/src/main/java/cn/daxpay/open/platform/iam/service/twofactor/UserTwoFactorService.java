@@ -1,7 +1,5 @@
 package cn.daxpay.open.platform.iam.service.twofactor;
 
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
 
@@ -59,9 +57,7 @@ public class UserTwoFactorService {
         if (bound.isPresent()) {
             UserTwoFactor entity = bound.get();
             result.setBound(true)
-                    .setBackupCodesRemaining(entity.getBackupCodesRemaining())
-                    .setLastVerifyTime(entity.getLastVerifyTime() == null ? null
-                            : entity.getLastVerifyTime().toInstant().toEpochMilli());
+                    .setBackupCodesRemaining(entity.getBackupCodesRemaining());
         }
         else {
             result.setBound(false);
@@ -110,31 +106,30 @@ public class UserTwoFactorService {
                 .setUserId(userId)
                 .setSecret(secret)
                 .setBackupCodes(JSONUtil.toJsonStr(generated.entries()))
-                .setBackupCodesRemaining(count)
-                .setLastVerifyTime(OffsetDateTime.now(ZoneOffset.UTC));
+                .setBackupCodesRemaining(count);
         userTwoFactorManager.save(entity);
         return new BackupCodeResult()
                 .setCodes(generated.plaintextCodes())
                 .setTotal(count);
     }
 
-    /// 关闭双因素认证: 需校验动态码二次确认
+    /// 关闭双因素认证: 需校验动态码或备用码二次确认
     @Transactional(rollbackFor = Exception.class)
-    public void disable(String code) {
+    public void disable(String code, String codeType) {
         Long userId = SecurityUtil.getUserId();
         UserTwoFactor entity = requireBound(userId);
-        if (!totpService.verifyCode(entity.getSecret(), code)) {
+        if (!verifyByCodeType(entity, code, codeType)) {
             throw new OperationFailException("error.iam.twoFactor.codeError");
         }
         userTwoFactorManager.deleteById(entity.getId());
     }
 
-    /// 重新生成备用验证码: 需校验动态码, 旧备用码全部作废
+    /// 重新生成备用验证码: 需校验动态码或备用码, 旧备用码全部作废
     @Transactional(rollbackFor = Exception.class)
-    public BackupCodeResult regenerateBackupCodes(String code) {
+    public BackupCodeResult regenerateBackupCodes(String code, String codeType) {
         Long userId = SecurityUtil.getUserId();
         UserTwoFactor entity = requireBound(userId);
-        if (!totpService.verifyCode(entity.getSecret(), code)) {
+        if (!verifyByCodeType(entity, code, codeType)) {
             throw new OperationFailException("error.iam.twoFactor.codeError");
         }
         int count = defaultBackupCodesCount();
@@ -166,20 +161,22 @@ public class UserTwoFactorService {
             return false;
         }
         boolean valid = totpService.verifyCode(entity.getSecret(), code);
-        if (valid) {
-            updateLastVerifyTime(entity);
-        }
         return valid;
     }
 
-    /// 校验并消费备用验证码(命中即置 used, 返回 true; 无效返回 false)
+    /// 校验并消费备用验证码(登录二次验证用, 通过 userId 查 entity)
     @Transactional(rollbackFor = Exception.class)
     public boolean consumeBackupCode(Long userId, String code) {
-        if (StrUtil.isBlank(code)) {
+        UserTwoFactor entity = userTwoFactorManager.findByUserId(userId).orElse(null);
+        if (entity == null) {
             return false;
         }
-        UserTwoFactor entity = userTwoFactorManager.findByUserId(userId).orElse(null);
-        if (entity == null || StrUtil.isBlank(entity.getBackupCodes())) {
+        return consumeBackupCodeInternal(entity, code);
+    }
+
+    /// 校验并消费备用验证码(内部方法, 已持有 entity, 命中即置 used)
+    private boolean consumeBackupCodeInternal(UserTwoFactor entity, String code) {
+        if (StrUtil.isBlank(code) || StrUtil.isBlank(entity.getBackupCodes())) {
             return false;
         }
         List<BackupCodeEntry> entries = JSONUtil.toList(entity.getBackupCodes(), BackupCodeEntry.class);
@@ -196,24 +193,21 @@ public class UserTwoFactorService {
         }
         if (consumed) {
             entity.setBackupCodes(JSONUtil.toJsonStr(entries))
-                    .setBackupCodesRemaining(remaining)
-                    .setLastVerifyTime(OffsetDateTime.now(ZoneOffset.UTC));
+                    .setBackupCodesRemaining(remaining);
             userTwoFactorManager.updateById(entity);
         }
         return consumed;
     }
 
-    /// 更新最后验证时间(登录验证成功后调用)
-    public void updateLastVerifyTime(Long userId) {
-        userTwoFactorManager.findByUserId(userId).ifPresent(this::updateLastVerifyTime);
+    /// 按验证码类型校验: BACKUP 校验并消费备用码, 其他校验 TOTP 动态码
+    private boolean verifyByCodeType(UserTwoFactor entity, String code, String codeType) {
+        if ("BACKUP".equalsIgnoreCase(codeType)) {
+            return consumeBackupCodeInternal(entity, code);
+        }
+        return totpService.verifyCode(entity.getSecret(), code);
     }
 
     // ==================== 内部方法 ====================
-
-    private void updateLastVerifyTime(UserTwoFactor entity) {
-        entity.setLastVerifyTime(OffsetDateTime.now(ZoneOffset.UTC));
-        userTwoFactorManager.updateById(entity);
-    }
 
     /// 校验平台是否启用双因素认证
     private void checkPlatformEnabled() {

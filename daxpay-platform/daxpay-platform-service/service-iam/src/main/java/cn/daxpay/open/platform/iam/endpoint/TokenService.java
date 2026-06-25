@@ -92,7 +92,7 @@ public class TokenService {
     /// 双因素认证二次验证: 校验预认证令牌 + 动态码/备用码, 通过后建立会话
     public String secondVerify(HttpServletRequest request, HttpServletResponse response,
                                String preAuthToken, String code, String codeType) {
-        TwoFactorPreAuthService.PreAuthContext context = twoFactorPreAuthService.consume(preAuthToken);
+        TwoFactorPreAuthService.PreAuthContext context = twoFactorPreAuthService.get(preAuthToken);
         // 预认证令牌无效或已过期
         if (context == null) {
             throw new LoginFailureException("error.auth.twoFactorPreAuthExpired");
@@ -111,6 +111,8 @@ public class TokenService {
             // 双因素认证: 动态码或备用码错误
             throw new LoginFailureException(userId, userInfoResult.getAccount(), "error.auth.twoFactorCodeError");
         }
+        // 验证通过, 删除预认证令牌(单次有效)
+        twoFactorPreAuthService.delete(preAuthToken);
         // 恢复登录流程
         UserDetail userDetail = userInfoResult.toUserDetail();
         AuthInfoResult authInfoResult = new AuthInfoResult()

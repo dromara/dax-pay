@@ -9,8 +9,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.time.OffsetDateTime;
-
 /// # 用户双因素认证绑定记录
 ///
 /// 一对一关联用户, 记录存在即代表该用户已启用 TOTP 双因素认证。
@@ -38,7 +36,4 @@ public class UserTwoFactor extends MpBaseEntity {
 
     /// 剩余可用备用验证码数量(冗余字段, 便于查询展示)
     private Integer backupCodesRemaining;
-
-    /// 最后验证时间 (UTC)
-    private OffsetDateTime lastVerifyTime;
 }

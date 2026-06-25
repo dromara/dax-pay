@@ -32,19 +32,23 @@ public class TwoFactorPreAuthService {
         return token;
     }
 
-    /// 消费预认证令牌(取出并立即删除, 单次有效), 不存在或已过期返回 null
-    public PreAuthContext consume(String token) {
+    /// 读取预认证令牌上下文(不删除, 供二次验证重试), 不存在或已过期返回 null
+    public PreAuthContext get(String token) {
         if (token == null || token.isBlank()) {
             return null;
         }
-        String key = PREFIX + token;
-        String json = stringRedisTemplate.opsForValue().get(key);
+        String json = stringRedisTemplate.opsForValue().get(PREFIX + token);
         if (json == null) {
             return null;
         }
-        // 立即删除, 保证单次有效
-        stringRedisTemplate.delete(key);
         return JSONUtil.toBean(json, PreAuthContext.class);
+    }
+
+    /// 删除预认证令牌(二次验证通过后调用, 保证单次有效)
+    public void delete(String token) {
+        if (token != null && !token.isBlank()) {
+            stringRedisTemplate.delete(PREFIX + token);
+        }
     }
 
     /// 预认证上下文

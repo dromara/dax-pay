@@ -51,13 +51,13 @@ public class UserTwoFactorController {
     @Operation(summary = "关闭双因素认证")
     @PostMapping("/disable")
     public Result<Void> disable(@RequestBody @Validated TwoFactorCodeParam param) {
-        userTwoFactorService.disable(param.getCode());
+        userTwoFactorService.disable(param.getCode(), param.getCodeType());
         return Res.ok();
     }
 
     @Operation(summary = "重新生成备用验证码")
     @PostMapping("/regenerate-backup-codes")
     public Result<BackupCodeResult> regenerateBackupCodes(@RequestBody @Validated TwoFactorCodeParam param) {
-        return Res.ok(userTwoFactorService.regenerateBackupCodes(param.getCode()));
+        return Res.ok(userTwoFactorService.regenerateBackupCodes(param.getCode(), param.getCodeType()));
     }
 }

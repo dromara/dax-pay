@@ -21,7 +21,4 @@ public class TwoFactorStatusResult {
 
     @Schema(description = "剩余可用备用验证码数量")
     private Integer backupCodesRemaining;
-
-    @Schema(description = "最后验证时间(UTC, 毫秒时间戳), 未验证返回null")
-    private Long lastVerifyTime;
 }
