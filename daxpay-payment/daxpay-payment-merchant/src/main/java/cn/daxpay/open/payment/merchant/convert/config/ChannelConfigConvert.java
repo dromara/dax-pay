@@ -9,7 +9,7 @@ import org.mapstruct.factory.Mappers;
 ///
 @Mapper
 public interface ChannelConfigConvert {
-    ChannelConfigConvert INSTANCE = Mappers.getMapper(ChannelConfigConvert.class);
+    ChannelConfigConvert CONVERT = Mappers.getMapper(ChannelConfigConvert.class);
 
     ChannelConfigResult toResult(ChannelConfig in);
 }

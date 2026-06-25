@@ -34,7 +34,7 @@ public class ChannelConfig extends MchBaseEntity implements ToResult<ChannelConf
 
     @Override
     public ChannelConfigResult toResult() {
-        return ChannelConfigConvert.INSTANCE.toResult(this);
+        return ChannelConfigConvert.CONVERT.toResult(this);
     }
 }
 
