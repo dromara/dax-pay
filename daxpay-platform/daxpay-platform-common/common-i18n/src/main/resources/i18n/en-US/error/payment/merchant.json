@@ -18,5 +18,8 @@
   "specifiedAppConfigNotFound": "Specified application configuration not found",
   "specifiedMchConfigNotFound": "Specified merchant configuration not found",
   "adminRoleNotExist": "Merchant admin role not found, please check",
-  "apiConfigNotExist": "Merchant API configuration not found"
+  "apiConfigNotExist": "Merchant API configuration not found",
+  "storeNotFound": "Store not found",
+  "storeNoGenFailed": "Store number generation failed",
+  "storeNoMatch": "Store does not belong to the current merchant"
 }

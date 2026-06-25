@@ -99,3 +99,57 @@ COMMENT ON COLUMN notify_message.version IS '版本号(乐观锁)';
 COMMENT ON COLUMN notify_message.deleted IS '逻辑删除标志';
 
 CREATE INDEX IF NOT EXISTS idx_notify_message_user ON notify_message (user_id, deleted, is_read);
+
+-- ===================================
+-- 商户门店(商户物理经营场所)
+-- ===================================
+CREATE TABLE IF NOT EXISTS mch_store_info (
+    id                  bigint          NOT NULL,
+    mch_no              varchar(32)     NOT NULL,
+    store_no            varchar(32)     NOT NULL,
+    store_name          varchar(128)    NOT NULL,
+    contact_phone       varchar(32),
+    logo_url            varchar(512),
+    facade_url          varchar(512),
+    interior_url        varchar(512),
+    region_code         varchar(12),
+    address             varchar(256),
+    longitude           numeric(10,7),
+    latitude            numeric(10,7),
+    status              varchar(16)     NOT NULL DEFAULT 'enable',
+    remark              varchar(512),
+    creator             bigint,
+    create_time         timestamptz(6),
+    last_modifier       bigint,
+    last_modified_time  timestamptz(6),
+    version             int             NOT NULL DEFAULT 0,
+    deleted             boolean         NOT NULL DEFAULT false,
+    CONSTRAINT mch_store_info_pkey PRIMARY KEY (id)
+);
+
+COMMENT ON TABLE mch_store_info IS '商户门店(商户物理经营场所)';
+COMMENT ON COLUMN mch_store_info.id IS '主键';
+COMMENT ON COLUMN mch_store_info.mch_no IS '商户号';
+COMMENT ON COLUMN mch_store_info.store_no IS '门店号(系统生成, 唯一)';
+COMMENT ON COLUMN mch_store_info.store_name IS '门店名称';
+COMMENT ON COLUMN mch_store_info.contact_phone IS '联系人电话';
+COMMENT ON COLUMN mch_store_info.logo_url IS '门店LOGO';
+COMMENT ON COLUMN mch_store_info.facade_url IS '门头照';
+COMMENT ON COLUMN mch_store_info.interior_url IS '门店内景照';
+COMMENT ON COLUMN mch_store_info.region_code IS '行政区划代码(区县级)';
+COMMENT ON COLUMN mch_store_info.address IS '详细地址';
+COMMENT ON COLUMN mch_store_info.longitude IS '经度';
+COMMENT ON COLUMN mch_store_info.latitude IS '纬度';
+COMMENT ON COLUMN mch_store_info.status IS '状态(enable启用/disabled停用)';
+COMMENT ON COLUMN mch_store_info.remark IS '备注';
+COMMENT ON COLUMN mch_store_info.creator IS '创建人ID';
+COMMENT ON COLUMN mch_store_info.create_time IS '创建时间';
+COMMENT ON COLUMN mch_store_info.last_modifier IS '最后修改人ID';
+COMMENT ON COLUMN mch_store_info.last_modified_time IS '最后修改时间';
+COMMENT ON COLUMN mch_store_info.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN mch_store_info.deleted IS '逻辑删除标志';
+
+-- 门店号唯一索引
+CREATE UNIQUE INDEX IF NOT EXISTS uk_mch_store_info_store_no ON mch_store_info (store_no);
+-- 商户号查询索引
+CREATE INDEX IF NOT EXISTS idx_mch_store_info_mch_no ON mch_store_info (mch_no, deleted);

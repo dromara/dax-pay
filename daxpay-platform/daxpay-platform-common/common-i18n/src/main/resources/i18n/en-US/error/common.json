@@ -27,5 +27,6 @@
   "payRefundStatusNotExist": "Pay refund status not found: {0}",
   "payCallTypeNotSupported": "Unsupported checkout type: {0}",
   "channelAuthTypeNotExist": "Auth type not found: {0}",
-  "mchAppStatusNotFound": "Merchant app status not found: {0}"
+  "mchAppStatusNotFound": "Merchant app status not found: {0}",
+  "storeStatusNotFound": "Store status not found: {0}"
 }

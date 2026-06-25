@@ -18,5 +18,8 @@
   "specifiedAppConfigNotFound": "未找到指定的应用配置",
   "specifiedMchConfigNotFound": "未找到指定的商户配置",
   "adminRoleNotExist": "商户管理员角色不存在, 请检查",
-  "apiConfigNotExist": "商户API配置不存在"
+  "apiConfigNotExist": "商户API配置不存在",
+  "storeNotFound": "门店信息不存在",
+  "storeNoGenFailed": "门店号生成失败",
+  "storeNoMatch": "门店不属于当前商户"
 }
