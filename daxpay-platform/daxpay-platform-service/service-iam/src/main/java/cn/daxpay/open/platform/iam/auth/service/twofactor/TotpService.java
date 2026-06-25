@@ -15,7 +15,9 @@ import org.springframework.stereotype.Service;
 ///
 /// 基于 RFC 6238 自研实现(无第三方依赖), 复用项目已有的 hutool(HMAC + Base32)。
 /// 提供 TOTP 密钥生成、otpauth URI 构造、动态码校验。
-/// 算法 / 步长 / 位数 / 时间窗口偏移均由平台配置 [PlatformTwoFactorAuthConfig] 驱动,
+///
+/// 算法(HmacSHA1) / 步长(30s) / 位数(6) 均固定为 RFC 6238 标准值,
+/// 确保 Google Authenticator / Microsoft Authenticator 等主流验证器兼容。
 /// 校验时按配置的 timeWindowOffset 容忍时钟漂移。
 /// 二维码图片由前端根据 otpauth URI 自行渲染, 本服务不依赖任何图片库。
 ///
@@ -26,6 +28,18 @@ public class TotpService {
 
     /// 密钥字节数(160 bit, RFC 6238 推荐最小长度)
     private static final int SECRET_BYTES = 20;
+
+    /// 固定 6 位动态码(RFC 6238 标准, 主流验证器均支持)
+    private static final int DIGITS = 6;
+
+    /// 固定 30 秒步长(RFC 6238 标准, 主流验证器均支持)
+    private static final int PERIOD = 30;
+
+    /// 固定 HmacSHA1 算法(RFC 6238 标准, Google/Microsoft Authenticator 仅支持 SHA1)
+    private static final HmacAlgorithm ALGORITHM = HmacAlgorithm.HmacSHA1;
+
+    /// 固定时间窗口偏移(前后各 1 个时间桶, 行业标准默认值)
+    private static final int DISCREPANCY = 1;
 
     private final IamSecurityConfigService iamSecurityConfigService;
 
@@ -40,15 +54,12 @@ public class TotpService {
     /// @param account 账号(作为 label, 区分不同用户)
     public String buildOtpAuthUri(String secret, String account) {
         PlatformTwoFactorAuthConfig config = getConfig();
-        String algorithm = parseAlgorithm(config.getAlgorithm());
-        int digits = defaultIfNull(config.getCodeLength(), 6);
-        int period = defaultIfNull(config.getTimeStep(), 30);
         String issuer = (config.getIssuer() == null || config.getIssuer().isBlank()) ? "DaxPay" : config.getIssuer();
-        // otpauth://totp/Issuer:account?secret=...&issuer=...&algorithm=...&digits=...&period=...
+        // otpauth://totp/Issuer:account?secret=...&issuer=...&algorithm=SHA1&digits=6&period=30
         String label = URLUtil.encodeAll(issuer) + ":" + URLUtil.encodeAll(account == null ? "" : account);
         return String.format(
-                "otpauth://totp/%s?secret=%s&issuer=%s&algorithm=%s&digits=%d&period=%d",
-                label, secret, URLUtil.encodeAll(issuer), algorithm, digits, period);
+                "otpauth://totp/%s?secret=%s&issuer=%s&algorithm=SHA1&digits=%d&period=%d",
+                label, secret, URLUtil.encodeAll(issuer), DIGITS, PERIOD);
     }
 
     /// 校验 TOTP 动态码
@@ -61,17 +72,12 @@ public class TotpService {
             return false;
         }
         try {
-            PlatformTwoFactorAuthConfig config = getConfig();
-            String algorithm = parseAlgorithm(config.getAlgorithm());
-            int digits = defaultIfNull(config.getCodeLength(), 6);
-            int period = defaultIfNull(config.getTimeStep(), 30);
-            int discrepancy = defaultIfNull(config.getTimeWindowOffset(), 1);
             byte[] key = Base32.decode(secret);
             // 当前时间桶(Unix 秒 / 步长)
-            long currentBucket = System.currentTimeMillis() / 1000L / period;
-            // 容忍时钟漂移: 前后各 discrepancy 个时间桶
-            for (long offset = -discrepancy; offset <= discrepancy; offset++) {
-                String expected = generateCode(key, currentBucket + offset, algorithm, digits);
+            long currentBucket = System.currentTimeMillis() / 1000L / PERIOD;
+            // 容忍时钟漂移: 前后各 DISCREPANCY 个时间桶
+            for (long offset = -DISCREPANCY; offset <= DISCREPANCY; offset++) {
+                String expected = generateCode(key, currentBucket + offset);
                 if (expected != null && expected.equals(code)) {
                     return true;
                 }
@@ -85,9 +91,9 @@ public class TotpService {
     }
 
     /// 按指定时间桶生成 TOTP 码(RFC 6238 动态截取)
-    private String generateCode(byte[] key, long timeBucket, String algorithm, int digits) {
+    private String generateCode(byte[] key, long timeBucket) {
         byte[] timeBytes = longToBytes(timeBucket);
-        HMac hmac = new HMac(toHmacAlgorithm(algorithm), key);
+        HMac hmac = new HMac(ALGORITHM, key);
         byte[] hash = hmac.digest(timeBytes);
         // 动态截取: 取最后一个字节低 4 位作为偏移
         int offset = hash[hash.length - 1] & 0xf;
@@ -95,10 +101,10 @@ public class TotpService {
                 | ((hash[offset + 1] & 0xff) << 16)
                 | ((hash[offset + 2] & 0xff) << 8)
                 | (hash[offset + 3] & 0xff);
-        int mod = (int) Math.pow(10, digits);
+        int mod = (int) Math.pow(10, DIGITS);
         int code = binary % mod;
         // 前导补零到指定位数
-        return String.format("%0" + digits + "d", code);
+        return String.format("%0" + DIGITS + "d", code);
     }
 
     /// long 转大端 8 字节(RFC 4226 要求的时间因素)
@@ -111,34 +117,7 @@ public class TotpService {
         return bytes;
     }
 
-    /// 算法字符串映射到 hutool 枚举
-    private HmacAlgorithm toHmacAlgorithm(String algorithm) {
-        return switch (algorithm) {
-            case "SHA256" -> HmacAlgorithm.HmacSHA256;
-            case "SHA512" -> HmacAlgorithm.HmacSHA512;
-            default -> HmacAlgorithm.HmacSHA1;
-        };
-    }
-
-    /// 解析算法配置为大写标准名(兼容 HmacSHA256 / SHA256 两种写法), 无法识别回退 SHA1
-    private String parseAlgorithm(String algorithm) {
-        if (algorithm == null || algorithm.isBlank()) {
-            return "SHA1";
-        }
-        // 兼容前端 "HmacSHA256" 与标准 "SHA256" 两种格式, 统一去除 Hmac 前缀
-        String upper = algorithm.toUpperCase().replace("HMAC", "");
-        return switch (upper) {
-            case "SHA256" -> "SHA256";
-            case "SHA512" -> "SHA512";
-            default -> "SHA1";
-        };
-    }
-
     private PlatformTwoFactorAuthConfig getConfig() {
         return iamSecurityConfigService.getTwoFactorAuthConfig();
-    }
-
-    private int defaultIfNull(Integer value, int defaultValue) {
-        return value == null ? defaultValue : value;
     }
 }
