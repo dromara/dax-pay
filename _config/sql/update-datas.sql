@@ -59,16 +59,17 @@ UPDATE "iam_perm_menu" SET
     last_modified_time = now()
 WHERE id = 90202;
 
--- 7. 云打印 (id=90302) 提升为顶层, 合并原目录 title/key/path
+-- 7. 云打印 (id=90302) 提升为顶层, 合并原目录 title/key/path, 并接入已实现的列表组件
 --    原: pid=903, title=云打印管理, key=menu.device.printer.manage, path=/device/printer/device
 --    现: pid=9,     title=云打印,     key=menu.device.printer,         path=/device/printer
 UPDATE "iam_perm_menu" SET
     pid                = 9,
     menu_code          = 'payment:device:printer',
-    name               = 'DevicePrinterDevice',
+    name               = 'DevicePrinterList',
     title_cn           = '云打印',
     title_en           = 'Cloud Printer',
     i18n_key           = 'menu.device.printer',
+    component          = '/payment/device/printer/DevicePrinterList',
     path               = '/device/printer',
     sort_no            = 3,
     last_modified_time = now()

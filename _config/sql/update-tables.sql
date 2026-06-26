@@ -94,6 +94,54 @@ CREATE UNIQUE INDEX IF NOT EXISTS uk_device_speaker_sn ON device_speaker (device
 -- 商户号查询索引
 CREATE INDEX IF NOT EXISTS idx_device_speaker_mch_no ON device_speaker (mch_no, deleted);
 
+-- 云打印设备
+CREATE TABLE IF NOT EXISTS device_printer (
+    id                  bigint          NOT NULL,
+    mch_no              varchar(32),
+    vendor_code         varchar(64),
+    vendor_config_id    bigint,
+    device_sn           varchar(64)     NOT NULL,
+    imei                varchar(32),
+    shop_id             varchar(64),
+    device_name         varchar(128),
+    status              varchar(16)     NOT NULL DEFAULT 'unbound',
+    bind_time           timestamptz(6),
+    last_online_time    timestamptz(6),
+    remark              varchar(512),
+    creator             bigint,
+    create_time         timestamptz(6),
+    last_modifier       bigint,
+    last_modified_time  timestamptz(6),
+    version             int             NOT NULL DEFAULT 0,
+    deleted             boolean         NOT NULL DEFAULT false,
+    CONSTRAINT device_printer_pkey PRIMARY KEY (id)
+);
+
+COMMENT ON TABLE device_printer IS '云打印设备';
+COMMENT ON COLUMN device_printer.id IS '主键';
+COMMENT ON COLUMN device_printer.mch_no IS '商户号';
+COMMENT ON COLUMN device_printer.device_sn IS '设备序列号';
+COMMENT ON COLUMN device_printer.imei IS 'IMEI';
+COMMENT ON COLUMN device_printer.shop_id IS '厂商门店ID';
+COMMENT ON COLUMN device_printer.device_name IS '设备名称';
+COMMENT ON COLUMN device_printer.status IS '设备状态';
+COMMENT ON COLUMN device_printer.bind_time IS '绑定时间';
+COMMENT ON COLUMN device_printer.last_online_time IS '最后在线时间';
+COMMENT ON COLUMN device_printer.remark IS '备注';
+COMMENT ON COLUMN device_printer.creator IS '创建人ID';
+COMMENT ON COLUMN device_printer.create_time IS '创建时间';
+COMMENT ON COLUMN device_printer.last_modifier IS '最后修改人ID';
+COMMENT ON COLUMN device_printer.last_modified_time IS '最后修改时间';
+COMMENT ON COLUMN device_printer.version IS '版本号';
+COMMENT ON COLUMN device_printer.deleted IS '逻辑删除';
+COMMENT ON COLUMN device_printer.vendor_code IS '厂商代码';
+COMMENT ON COLUMN device_printer.vendor_config_id IS '厂商配置ID';
+
+-- 设备序列号唯一索引(未删除范围内)
+CREATE UNIQUE INDEX IF NOT EXISTS uk_device_printer_sn ON device_printer (device_sn) WHERE deleted = false;
+-- 商户号查询索引
+CREATE INDEX IF NOT EXISTS idx_device_printer_mch_no ON device_printer (mch_no, deleted);
+
 -- ===================================
 -- 双因素认证: 用户 TOTP 绑定表
 -- ===================================
