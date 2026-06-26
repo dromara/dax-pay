@@ -14,7 +14,7 @@ public class NotLoginException extends BizException {
 
     public NotLoginException() {
         super(AUTHENTICATION_FAIL, "用户未登录");
-        initMessageKey("error.auth.auth.notLogin");
+        initMessageKey("error.auth.notLogin");
     }
 
 

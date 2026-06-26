@@ -1,4 +1,4 @@
-package cn.daxpay.open.platform.capability.auth.exception;
+package cn.daxpay.open.platform.iam.exception.auth;
 
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 
@@ -7,7 +7,7 @@ import cn.daxpay.open.platform.core.exception.BizInfoException;
 public class ApplicationNotFoundException extends BizInfoException {
 
     public ApplicationNotFoundException() {
-        super("未找到对应的应用");
+        super("error.auth.applicationNotFound");
     }
 
 

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 /// # 二次校验信息服务
 ///
 /// 供登录页预知当前是否启用了双因素认证(平台级开关), 前端据此决定是否展示相关提示。
-/// 具体某用户是否需要二次验证, 在密码校验通过后由 [cn.daxpay.open.platform.iam.endpoint.TokenService] 判定。
+/// 具体某用户是否需要二次验证, 在密码校验通过后由 [TokenService] 判定。
 ///
 @Service
 @RequiredArgsConstructor

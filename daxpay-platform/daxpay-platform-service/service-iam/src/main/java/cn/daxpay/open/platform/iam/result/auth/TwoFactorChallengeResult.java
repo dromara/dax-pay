@@ -1,4 +1,4 @@
-package cn.daxpay.open.platform.capability.auth.entity;
+package cn.daxpay.open.platform.iam.result.auth;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

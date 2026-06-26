@@ -3,7 +3,7 @@ package cn.daxpay.open.platform.iam.service.user;
 import cn.daxpay.open.platform.iam.dao.user.UserInfoManager;
 import cn.daxpay.open.platform.iam.entity.user.UserInfo;
 import cn.daxpay.open.platform.iam.result.user.UserInfoResult;
-import cn.daxpay.open.platform.capability.auth.exception.UserNotFoundException;
+import cn.daxpay.open.platform.iam.exception.auth.UserNotFoundException;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

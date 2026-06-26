@@ -1,19 +1,21 @@
-package cn.daxpay.open.platform.iam.endpoint;
+package cn.daxpay.open.platform.iam.auth.service;
 
-import cn.daxpay.open.platform.core.code.CommonCode;
-import cn.daxpay.open.platform.core.entity.UserDetail;
-import cn.daxpay.open.platform.core.enums.client.ClientEnum;
-import cn.daxpay.open.platform.capability.auth.authentication.AbstractAuthentication;
-import cn.daxpay.open.platform.common.config.properties.PlatformStarterProperties;
-import cn.daxpay.open.platform.capability.auth.entity.AuthInfoResult;
-import cn.daxpay.open.platform.capability.auth.entity.LoginAuthContext;
-import cn.daxpay.open.platform.capability.auth.exception.ApplicationNotFoundException;
-import cn.daxpay.open.platform.capability.auth.exception.LoginFailureException;
-import cn.daxpay.open.platform.capability.auth.exception.TwoFactorRequiredException;
+import cn.daxpay.open.platform.capability.auth.authentication.AuthenticationChallengeException;
+import cn.daxpay.open.platform.capability.auth.authentication.AuthenticationTemplate;
+import cn.daxpay.open.platform.capability.auth.authentication.Authenticator;
+import cn.daxpay.open.platform.capability.auth.authentication.PostAuthenticationChallenge;
 import cn.daxpay.open.platform.capability.auth.handler.LoginFailureHandler;
 import cn.daxpay.open.platform.capability.auth.handler.LoginSuccessHandler;
 import cn.daxpay.open.platform.capability.auth.util.SecurityUtil;
+import cn.daxpay.open.platform.common.config.properties.PlatformStarterProperties;
+import cn.daxpay.open.platform.core.code.CommonCode;
+import cn.daxpay.open.platform.core.entity.UserDetail;
+import cn.daxpay.open.platform.core.enums.client.ClientEnum;
+import cn.daxpay.open.platform.capability.auth.entity.AuthInfoResult;
+import cn.daxpay.open.platform.capability.auth.entity.LoginAuthContext;
+import cn.daxpay.open.platform.capability.auth.exception.LoginFailureException;
 import cn.daxpay.open.platform.iam.auth.service.twofactor.TwoFactorPreAuthService;
+import cn.daxpay.open.platform.iam.exception.auth.ApplicationNotFoundException;
 import cn.daxpay.open.platform.iam.result.user.UserInfoResult;
 import cn.daxpay.open.platform.iam.service.twofactor.UserTwoFactorService;
 import cn.daxpay.open.platform.iam.service.user.UserQueryService;
@@ -38,7 +40,11 @@ public class TokenService {
 
     private final PlatformStarterProperties platformStarterProperties;
 
-    private final List<AbstractAuthentication> abstractAuthentications;
+    private final List<Authenticator> authenticators;
+
+    private final AuthenticationTemplate authenticationTemplate;
+
+    private final List<PostAuthenticationChallenge> postAuthenticationChallenges;
 
     private final List<LoginSuccessHandler> loginSuccessHandlers;
 
@@ -61,22 +67,17 @@ public class TokenService {
                     .setAuthProperties(platformStarterProperties.getAuth())
                     .setAuthLoginType(loginType)
                     .setClientCode(clientCode);
-            // 校验登录终端
-            this.validateClientCode(loginAuthContext);
+            // 校验该终端是否支持此种登录方式(按 clientCode + loginType 双键匹配)
+            this.validateClient(loginAuthContext);
             // 认证并获取结果
             authInfoResult = this.authentication(loginAuthContext);
-            // 双因素认证: 平台已开启且用户已绑定则颁发预认证令牌, 抛出挑战异常(不计入登录失败)
-            Long userId = toLong(authInfoResult.getId());
-            if (userId != null && userTwoFactorService.isTwoFactorRequired(userId)) {
-                String preAuthToken = twoFactorPreAuthService.create(userId, clientCode, loginType);
-                String account = authInfoResult.getUserDetail() == null ? null : authInfoResult.getUserDetail().getAccount();
-                throw new TwoFactorRequiredException(userId, account, preAuthToken);
-            }
+            // 认证后挑战(双因素/设备验证等), 任一需要则抛挑战异常(不计入登录失败)
+            this.applyChallenges(loginAuthContext, authInfoResult);
             // 登录处理
             this.doSaLogin(authInfoResult, clientCode, loginType);
         }
-        catch (TwoFactorRequiredException e) {
-            // 双因素认证挑战: 不触发失败回调, 交由全局处理器返回预认证令牌
+        catch (AuthenticationChallengeException e) {
+            // 挑战流程: 不触发失败回调, 交由全局处理器返回挑战结果
             throw e;
         }
         catch (LoginFailureException e) {
@@ -124,6 +125,15 @@ public class TokenService {
         return StpUtil.getTokenValue();
     }
 
+    /// 认证后挑战: 任一挑战需要则抛出挑战异常(不计入登录失败)
+    private void applyChallenges(LoginAuthContext context, AuthInfoResult authInfoResult) {
+        for (PostAuthenticationChallenge challenge : postAuthenticationChallenges) {
+            if (challenge.required(context, authInfoResult)) {
+                throw challenge.createChallenge(context, authInfoResult);
+            }
+        }
+    }
+
     /// 成功处理
     private void loginSuccessHandler(HttpServletRequest request, HttpServletResponse response,
                                      AuthInfoResult authInfoResult) {
@@ -150,7 +160,7 @@ public class TokenService {
         }
     }
 
-    /// 获取终端编码
+    /// 获取并校验终端编码
     private String getClientCode(HttpServletRequest request) {
         String clientCode = SecurityUtil.getClient(request);
         ClientEnum.findByCode(clientCode)
@@ -158,24 +168,26 @@ public class TokenService {
         return clientCode;
     }
 
-    /// 校验该终端是否支持此种登录方式
-    private void validateClientCode(LoginAuthContext loginAuthContext) {
+    /// 校验该终端是否支持此种登录方式(双键匹配)
+    private void validateClient(LoginAuthContext loginAuthContext) {
+        String clientCode = loginAuthContext.getClientCode();
         String loginType = loginAuthContext.getAuthLoginType();
-        boolean supported = abstractAuthentications.stream()
-                .anyMatch(authentication -> authentication.adaptation(loginType));
+        boolean supported = authenticators.stream()
+                .anyMatch(auth -> auth.adaptation(clientCode, loginType));
         if (!supported) {
             // 认证: 当前终端不支持该登录方式
             throw new LoginFailureException("error.auth.loginMethodNotSupported");
         }
     }
 
-    /// 认证
+    /// 认证(双键路由到唯一认证器, 由模板执行流程)
     private @NotNull AuthInfoResult authentication(LoginAuthContext context) {
+        String clientCode = context.getClientCode();
         String loginType = context.getAuthLoginType();
-        return abstractAuthentications.stream()
-                .filter(o -> o.adaptation(loginType))
+        return authenticators.stream()
+                .filter(auth -> auth.adaptation(clientCode, loginType))
                 .findFirst()
-                .map(o -> o.authentication(context))
+                .map(auth -> authenticationTemplate.authenticate(auth, context))
                 // 认证: 未找到对应的登录认证器
                 .orElseThrow(() -> new LoginFailureException("error.auth.loginAuthenticatorNotFound"));
     }
@@ -194,32 +206,9 @@ public class TokenService {
         session.set(CommonCode.USER, userDetail);
     }
 
-    /// 认证结果 id(Object) 转 Long, 无法转换返回 null
-    private Long toLong(Object id) {
-        if (id == null) {
-            return null;
-        }
-        if (id instanceof Long l) {
-            return l;
-        }
-        if (id instanceof Number n) {
-            return n.longValue();
-        }
-        try {
-            return Long.valueOf(id.toString());
-        }
-        catch (NumberFormatException e) {
-            return null;
-        }
-    }
-
     /// 退出
     public void logout() {
         StpUtil.logout();
     }
 
 }
-
-
-
-

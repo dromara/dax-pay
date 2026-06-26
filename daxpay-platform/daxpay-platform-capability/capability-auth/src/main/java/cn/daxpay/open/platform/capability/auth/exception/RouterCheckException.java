@@ -7,7 +7,7 @@ import cn.daxpay.open.platform.core.exception.BizInfoException;
 public class RouterCheckException extends BizInfoException {
 
     public RouterCheckException() {
-        super("没有对应请求路径的权限");
+        super("error.auth.routerCheck");
     }
     public RouterCheckException(String message) {
         super(message);

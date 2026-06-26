@@ -1,5 +1,6 @@
 package cn.daxpay.open.platform.capability.auth.exception;
 
+import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import lombok.Getter;
 
@@ -31,6 +32,12 @@ public class LoginFailureException extends BizInfoException {
         this.userId = userId;
     }
 
+    /// 使用 i18n messageKey 与占位符参数（携带账号）
+    public LoginFailureException(String account, String messageKey, Object... args) {
+        super(CommonCode.FAIL_CODE, messageKey, args);
+        this.account = account;
+        this.userId = null;
+    }
 
     public LoginFailureException(int code, String messageKey, Object... args) {
         super(code, messageKey, args);

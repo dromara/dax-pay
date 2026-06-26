@@ -1,4 +1,4 @@
-package cn.daxpay.open.platform.capability.auth.exception;
+package cn.daxpay.open.platform.iam.exception.auth;
 
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 
@@ -9,7 +9,7 @@ public class CaptchaRequiredException extends BizInfoException {
     private final String captchaKey;
 
     public CaptchaRequiredException(String captchaKey) {
-        super(40001, "error.auth.auth.captchaRequired");
+        super(40001, "error.auth.captchaRequired");
         this.captchaKey = captchaKey;
     }
 

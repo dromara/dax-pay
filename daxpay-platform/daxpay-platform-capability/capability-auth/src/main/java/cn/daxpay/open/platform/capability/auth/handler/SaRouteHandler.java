@@ -2,6 +2,7 @@ package cn.daxpay.open.platform.capability.auth.handler;
 
 import cn.daxpay.open.platform.common.spring.util.WebServletUtil;
 import cn.daxpay.open.platform.capability.auth.exception.RouterCheckException;
+import cn.daxpay.open.platform.capability.auth.service.AccessPolicy;
 import cn.daxpay.open.platform.capability.auth.service.RouterCheck;
 import cn.daxpay.open.platform.capability.auth.util.SecurityUtil;
 import cn.dev33.satoken.fun.SaFunction;
@@ -18,22 +19,27 @@ import java.util.List;
 ///
 /// 【执行语义 - 统一为"命中放行，未命中拒绝"】
 /// - 所有实现 RouterCheck SPI 的 Bean 在启动时按 sortNo 升序排列。
-/// - 请求进入时遍历 RouterCheck 列表，任意一个返回 true 即调用 SaRouter.stop() 放行。
-/// - 全部未命中：
-/// - 未登录 → SecurityUtil.getUserId() 抛 NotLoginException
-/// - 已登录 → 记录 WARN 日志并抛出 RouterCheckException（403 无权限）
+/// - 请求进入时:
+///   1. 已登录用户先依次执行 [AccessPolicy] (如密码过期强制改密), 不通过即抛异常阻断;
+///   2. 再遍历 RouterCheck 列表, 任意一个返回 true 即调用 SaRouter.stop() 放行。
+/// - RouterCheck 全部未命中：
+///   - 未登录 → SecurityUtil.getUserId() 抛 NotLoginException
+///   - 已登录 → 记录 WARN 日志并抛出 RouterCheckException（403 无权限）
 /// </li>
 ///
 /// 【stop 条件语义】：SaRouter.stop() 会终止后续拦截器执行，但不终止整个过滤器链，
 /// 仅结束 Sa-Token 鉴权阶段的处理。
 ///
 /// @see cn.daxpay.open.platform.capability.auth.service.RouterCheck
+/// @see cn.daxpay.open.platform.capability.auth.service.AccessPolicy
 @Slf4j
 @Component
 @RequiredArgsConstructor
 public class SaRouteHandler implements InitializingBean {
 
     private final List<RouterCheck> routerChecks;
+
+    private final List<AccessPolicy> accessPolicies;
 
     @Override
     public void afterPropertiesSet() {
@@ -47,6 +53,12 @@ public class SaRouteHandler implements InitializingBean {
     public SaFunction check(Object handler) {
         return () -> {
             String path = WebServletUtil.getPath();
+            // 已登录用户: 先执行访问策略(如密码过期强制改密), 不通过则抛异常阻断
+            SecurityUtil.getCurrentUser().ifPresent(user -> {
+                for (AccessPolicy policy : accessPolicies) {
+                    policy.check(WebServletUtil.getRequest(), user);
+                }
+            });
             // 遍历所有 RouterCheck，命中即放行（按 sortNo 顺序执行）
             for (RouterCheck routerCheck : routerChecks) {
                 if (routerCheck.check(handler)) {
@@ -67,5 +79,3 @@ public class SaRouteHandler implements InitializingBean {
     }
 
 }
-
-

@@ -1,7 +1,7 @@
 package cn.daxpay.open.platform.iam.auth.service;
 
-import cn.daxpay.open.platform.capability.auth.exception.CaptchaErrorException;
-import cn.daxpay.open.platform.capability.auth.exception.CaptchaRequiredException;
+import cn.daxpay.open.platform.iam.exception.auth.CaptchaErrorException;
+import cn.daxpay.open.platform.iam.exception.auth.CaptchaRequiredException;
 import cn.daxpay.open.platform.iam.result.captcha.CaptchaDataResult;
 import cn.hutool.captcha.CaptchaUtil;
 import cn.hutool.captcha.LineCaptcha;

@@ -1,4 +1,4 @@
-package cn.daxpay.open.platform.capability.auth.exception;
+package cn.daxpay.open.platform.iam.exception.auth;
 
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 
@@ -7,12 +7,7 @@ import cn.daxpay.open.platform.core.exception.BizInfoException;
 public class PasswordExpiredAccessException extends BizInfoException {
 
     public PasswordExpiredAccessException() {
-        super(40301, "密码已过期，请先修改密码");
-        initMessageKey("error.auth.auth.passwordExpired");
-    }
-
-    public PasswordExpiredAccessException(String message) {
-        super(40301, message);
+        super(40301, "error.auth.passwordExpired");
     }
 
     public PasswordExpiredAccessException(int code, String messageKey, Object... args) {

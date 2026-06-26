@@ -1,4 +1,4 @@
-package cn.daxpay.open.platform.capability.auth.exception;
+package cn.daxpay.open.platform.iam.exception.auth;
 
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 
@@ -7,8 +7,7 @@ import cn.daxpay.open.platform.core.exception.BizInfoException;
 public class CaptchaErrorException extends BizInfoException {
 
     public CaptchaErrorException() {
-        super(40002, "验证码错误");
-        initMessageKey("error.auth.auth.captchaError");
+        super(40002, "error.auth.captchaError");
     }
 
     public CaptchaErrorException(int code, String messageKey, Object... args) {

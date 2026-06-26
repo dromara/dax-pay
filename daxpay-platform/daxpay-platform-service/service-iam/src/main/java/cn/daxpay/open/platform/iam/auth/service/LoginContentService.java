@@ -1,10 +1,10 @@
 package cn.daxpay.open.platform.iam.auth.service;
 
+import cn.daxpay.open.platform.capability.auth.authentication.Authenticator;
 import cn.daxpay.open.platform.core.enums.client.ClientEnum;
+import cn.daxpay.open.platform.iam.exception.auth.ApplicationNotFoundException;
 import cn.daxpay.open.platform.iam.param.auth.LoginContentParam;
 import cn.daxpay.open.platform.iam.result.auth.LoginContentResult;
-import cn.daxpay.open.platform.capability.auth.authentication.AbstractAuthentication;
-import cn.daxpay.open.platform.capability.auth.exception.ApplicationNotFoundException;
 import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformLoginSecurityConfig;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +17,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class LoginContentService {
 
-    private final List<AbstractAuthentication> abstractAuthentications;
+    private final List<Authenticator> authenticators;
 
     private final IamSecurityConfigService iamSecurityConfigService;
 
@@ -29,8 +29,8 @@ public class LoginContentService {
         }
         PlatformLoginSecurityConfig loginSecurity = iamSecurityConfigService.getLoginSecurity();
         return new LoginContentResult()
-                .setLoginTypes(abstractAuthentications.stream()
-                        .map(AbstractAuthentication::getLoginType)
+                .setLoginTypes(authenticators.stream()
+                        .map(Authenticator::getLoginType)
                         .distinct()
                         .toList())
                 // 是否启用验证码触发（登录失败达阈值后要求输入验证码）
@@ -39,4 +39,3 @@ public class LoginContentService {
     }
 
 }
-
