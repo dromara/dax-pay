@@ -1,6 +1,7 @@
 package cn.daxpay.open.payment.merchant.result.route.basic;
 
 import cn.daxpay.open.platform.core.result.BaseResult;
+import cn.daxpay.open.platform.core.rest.dto.LabelValue;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -21,10 +22,10 @@ public class PayRouteBasicConfigResult extends BaseResult {
     @Schema(description = "支付渠道: wechat/alipay/union_pay")
     private String provider;
 
-    @Schema(description = "支付产品编码")
-    private String product;
+    @Schema(description = "通道商户号")
+    private String channelMchNo;
 
-    /// 该渠道下可选支付产品编码列表
-    @Schema(description = "可选支付产品编码")
-    private List<String> products = new ArrayList<>();
+    /// 该渠道下可选通道商户列表(名称/号码)
+    @Schema(description = "可选通道商户列表")
+    private List<LabelValue> channelMchants = new ArrayList<>();
 }

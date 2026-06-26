@@ -75,7 +75,8 @@
       "notNull": "应用ID不可为空"
     },
     "channelMchNo": {
-      "size": "通道商户号不可超过32位"
+      "size": "通道商户号不可超过32位",
+      "notBlank": "通道商户号不可为空"
     },
     "subMchId": {
       "notBlank": "微信子商户号不可为空"
@@ -180,6 +181,9 @@
     "method": {
       "notBlank": "支付方式不可为空",
       "size": "支付方式编码不可超过32位"
+    },
+    "capability": {
+      "size": "支付能力编码不可超过32位"
     },
     "provider": {
       "notBlank": "支付渠道不可为空",

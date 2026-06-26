@@ -31,5 +31,12 @@
   "routeStrategyNotExist": "Route strategy not found",
   "routeModeNotExist": "Route mode not found: {0}",
   "businessSceneNotExist": "Business scene not found: {0}",
-  "terminalSceneNotExist": "Terminal scene not found: {0}"
+  "terminalSceneNotExist": "Terminal scene not found: {0}",
+  "channelMchNoRequired": "Channel merchant no cannot be blank",
+  "channelMchNotExist": "Channel merchant [{0}] not found",
+  "channelMchDisabled": "Channel merchant [{0}] is disabled",
+  "duplicateSceneMethod": "Duplicate scene configuration for pay method [{0}]",
+  "sceneChannelMchCapabilityPair": "For pay method [{0}], select both channel merchant and capability, or leave both empty",
+  "basicChannelMchNotConfigured": "No channel merchant configured for pay brand [{0}]; configure it in basic route mode",
+  "sceneCapabilityChannelMchMismatch": "Capability [{0}] does not match channel merchant [{1}] and method [{2}]"
 }

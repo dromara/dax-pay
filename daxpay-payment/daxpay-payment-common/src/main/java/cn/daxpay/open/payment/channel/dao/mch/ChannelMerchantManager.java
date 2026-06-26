@@ -13,6 +13,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 /// # 通道商户管理
 ///
@@ -50,5 +51,13 @@ public class ChannelMerchantManager extends BaseManager<ChannelMerchantMapper, C
         return this.lambdaQuery()
                 .eq(ChannelMerchant::getMchNo, mchNo)
                 .list();
+    }
+
+    /// 根据商户号与通道商户号查询唯一通道商户(不存在返回 empty)
+    public Optional<ChannelMerchant> findByMchNoAndChannelMchNo(String mchNo, String channelMchNo){
+        return this.lambdaQuery()
+                .eq(ChannelMerchant::getMchNo, mchNo)
+                .eq(ChannelMerchant::getChannelMchNo, channelMchNo)
+                .oneOpt();
     }
 }

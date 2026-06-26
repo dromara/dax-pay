@@ -31,5 +31,12 @@
   "routeStrategyNotExist": "路由策略不存在",
   "routeModeNotExist": "路由模式不存在: {0}",
   "businessSceneNotExist": "业务场景不存在: {0}",
-  "terminalSceneNotExist": "终端场景不存在: {0}"
+  "terminalSceneNotExist": "终端场景不存在: {0}",
+  "channelMchNoRequired": "通道商户号不能为空",
+  "channelMchNotExist": "通道商户号[{0}]不存在",
+  "channelMchDisabled": "通道商户号[{0}]未启用",
+  "duplicateSceneMethod": "场景模式下同一支付方式[{0}]存在多条配置",
+  "sceneChannelMchCapabilityPair": "支付方式[{0}]须同时选择通道商户与支付能力，或同时留空",
+  "basicChannelMchNotConfigured": "支付渠道[{0}]未配置通道商户，请在通道路由基础模式中完成配置",
+  "sceneCapabilityChannelMchMismatch": "支付能力[{0}]与通道商户[{1}]、支付方式[{2}]不匹配"
 }

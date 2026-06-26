@@ -26,8 +26,8 @@ public class PayRouteBasicConfig extends MpBaseEntity implements ToResult<PayRou
     /// @see PayProviderEnum
     private String provider;
 
-    /// 支付产品编码
-    private String product;
+    /// 通道商户号(唯一绑定一个支付产品，替代旧版 product 字段)
+    private String channelMchNo;
 
     @Override
     public PayRouteBasicConfigResult toResult() {

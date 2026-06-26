@@ -75,7 +75,8 @@
       "notNull": "Application ID cannot be null"
     },
     "channelMchNo": {
-      "size": "Channel merchant no. cannot exceed 32 characters"
+      "size": "Channel merchant no cannot exceed 32 characters",
+      "notBlank": "Channel merchant no cannot be blank"
     },
     "subMchId": {
       "notBlank": "WeChat sub-merchant ID cannot be blank"
@@ -180,6 +181,9 @@
     "method": {
       "notBlank": "Payment method cannot be blank",
       "size": "Payment method cannot exceed 32 characters"
+    },
+    "capability": {
+      "size": "Payment capability cannot exceed 32 characters"
     },
     "provider": {
       "notBlank": "Pay brand must not be blank",

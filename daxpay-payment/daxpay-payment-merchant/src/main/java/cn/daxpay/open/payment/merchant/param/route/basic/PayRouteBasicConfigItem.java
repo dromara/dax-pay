@@ -16,6 +16,6 @@ public class PayRouteBasicConfigItem {
     @Schema(description = "支付渠道: wechat/alipay/union_pay")
     private String provider;
 
-    @Schema(description = "支付产品编码，空表示清除该场景配置")
-    private String product;
+    @Schema(description = "通道商户号，空表示清除该渠道配置")
+    private String channelMchNo;
 }

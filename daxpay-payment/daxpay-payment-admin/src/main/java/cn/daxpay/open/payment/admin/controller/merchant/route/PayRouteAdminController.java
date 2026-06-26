@@ -78,15 +78,15 @@ public class PayRouteAdminController {
     }
 
     @PermCode(code = "view", nameCn = "通道路由查看", nameEn = "Pay Route View")
-    @Operation(summary = "通道路由白名单目录下全部产品候选（批量）")
-    @GetMapping("/scene-config/product-candidates-batch")
-    public Result<Map<String, List<LabelValue>>> listSceneProductCandidatesBatch(
+    @Operation(summary = "通道路由白名单目录下全部通道商户候选（批量）")
+    @GetMapping("/scene-config/channel-mch-candidates-batch")
+    public Result<Map<String, List<LabelValue>>> listSceneChannelMchCandidatesBatch(
             @NotBlank(message = "{validation.field.appId.notBlank}") String appId) {
-        return Res.ok(configService.listSceneProductCandidatesBatch(appId));
+        return Res.ok(configService.listSceneChannelMchCandidatesBatch(appId));
     }
 
     @PermCode(code = "view", nameCn = "通道路由查看", nameEn = "Pay Route View")
-    @Operation(summary = "按目录项与产品批量返回支付能力候选")
+    @Operation(summary = "按目录项与通道商户批量返回支付能力候选")
     @PostMapping("/scene-config/capability-candidates-batch")
     public Result<Map<String, List<LabelValue>>> listSceneCapabilityCandidatesBatch(
             @Valid @RequestBody PayRouteSceneCapabilityBatchParam param) {
@@ -94,35 +94,35 @@ public class PayRouteAdminController {
     }
 
     @PermCode(code = "view", nameCn = "通道路由查看", nameEn = "Pay Route View")
-    @Operation(summary = "目录项下商户可用支付产品候选")
-    @GetMapping("/scene-config/product-candidates")
-    public Result<List<LabelValue>> listSceneProductCandidates(
+    @Operation(summary = "目录项下商户已开通的通道商户候选")
+    @GetMapping("/scene-config/channel-mch-candidates")
+    public Result<List<LabelValue>> listSceneChannelMchCandidates(
             @NotBlank(message = "{validation.field.appId.notBlank}") String appId,
             @NotBlank(message = "{validation.field.provider.notBlank}") String provider,
             @NotBlank(message = "{validation.field.method.notBlank}") String method) {
-        return Res.ok(configService.listSceneProductCandidatesForMethod(appId, provider, method));
+        return Res.ok(configService.listSceneChannelMchCandidatesForMethod(appId, provider, method));
     }
 
     @PermCode(code = "view", nameCn = "通道路由查看", nameEn = "Pay Route View")
-    @Operation(summary = "目录项与产品下支付能力候选")
+    @Operation(summary = "目录项与通道商户下支付能力候选")
     @GetMapping("/scene-config/capability-candidates")
     public Result<List<LabelValue>> listSceneCapabilityCandidates(
             @NotBlank(message = "{validation.field.appId.notBlank}") String appId,
             @NotBlank(message = "{validation.field.provider.notBlank}") String provider,
             @NotBlank(message = "{validation.field.method.notBlank}") String method,
-            @NotBlank(message = "{validation.field.product.notBlank}") String product) {
-        return Res.ok(configService.listSceneCapabilityCandidatesForMethod(appId, provider, method, product));
+            @NotBlank(message = "{validation.field.channelMchNo.notBlank}") String channelMchNo) {
+        return Res.ok(configService.listSceneCapabilityCandidatesForMethod(appId, provider, method, channelMchNo));
     }
 
     @PermCode(code = "view", nameCn = "通道路由查看", nameEn = "Pay Route View")
-    @Operation(summary = "推断目录项与产品下唯一支付能力（仅供回显）")
+    @Operation(summary = "推断目录项与通道商户下唯一支付能力（仅供回显）")
     @GetMapping("/scene-config/infer-capability")
     public Result<String> inferSceneCapability(
             @NotBlank(message = "{validation.field.appId.notBlank}") String appId,
             @NotBlank(message = "{validation.field.provider.notBlank}") String provider,
             @NotBlank(message = "{validation.field.method.notBlank}") String method,
-            @NotBlank(message = "{validation.field.product.notBlank}") String product) {
-        return Res.ok(configService.inferSceneCapability(appId, provider, method, product));
+            @NotBlank(message = "{validation.field.channelMchNo.notBlank}") String channelMchNo) {
+        return Res.ok(configService.inferSceneCapability(appId, provider, method, channelMchNo));
     }
 
     @PermCode(code = "view", nameCn = "通道路由查看", nameEn = "Pay Route View")

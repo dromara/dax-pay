@@ -13,5 +13,7 @@ public interface PayRouteBasicConfigConvert {
 
     PayRouteBasicConfigConvert CONVERT = Mappers.getMapper(PayRouteBasicConfigConvert.class);
 
+    /// channelMchants(可选通道商户列表)由 service 按商户开通情况装配，转换时忽略
+    @Mapping(target = "channelMchants", ignore = true)
     PayRouteBasicConfigResult toResult(PayRouteBasicConfig entity);
 }

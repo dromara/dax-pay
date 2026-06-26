@@ -1,6 +1,7 @@
 package cn.daxpay.open.payment.merchant.service.route.scene;
 
-import cn.daxpay.open.payment.common.util.PaymentStrategyFactory;
+import cn.daxpay.open.payment.channel.dao.mch.ChannelMerchantManager;
+import cn.daxpay.open.payment.channel.entity.mch.ChannelMerchant;
 import cn.daxpay.open.payment.merchant.dao.appinfo.MchAppInfoManager;
 import cn.daxpay.open.payment.merchant.dao.route.scene.PayRouteSceneConfigManager;
 import cn.daxpay.open.payment.merchant.dao.route.strategy.PayRouteStrategyManager;
@@ -10,17 +11,12 @@ import cn.daxpay.open.payment.merchant.param.route.scene.PayRouteSceneCapability
 import cn.daxpay.open.payment.merchant.param.route.scene.PayRouteSceneConfigBatchParam;
 import cn.daxpay.open.payment.merchant.param.route.scene.PayRouteSceneConfigItem;
 import cn.daxpay.open.payment.merchant.result.route.scene.PayRouteSceneConfigResult;
-import cn.daxpay.open.payment.merchant.service.route.basic.PayRouteBasicConfigService;
+import cn.daxpay.open.payment.merchant.service.route.runtime.PayRouteProductResolver;
 import cn.daxpay.open.payment.merchant.service.route.support.PayRouteConfigProviders;
 import cn.daxpay.open.payment.merchant.service.route.support.PayRouteI18nHelper;
 import cn.daxpay.open.payment.merchant.service.route.support.PayRouteStrategyCapabilitySupport;
-import cn.daxpay.open.payment.merchant.service.route.runtime.PayRouteProductResolver;
 import cn.daxpay.open.payment.masterdata.constants.provider.service.PayProviderMethodService;
-import cn.daxpay.open.payment.merchant.service.route.support.PayRouteCapabilityService;
-import cn.daxpay.open.payment.strategy.product.AbsProductStrategy;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
-import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
-import cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.rest.dto.LabelValue;
@@ -33,13 +29,12 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Set;
 
 /// # 通道路由场景模式配置
 ///
-/// 按渠道支付方式目录为每个 (provider, method) 绑定支付产品 product；
-/// 批量保存要求通道路由白名单内目录项均已配置支付产品，唯一键为 strategy + provider + method。
+/// 配置粒度为「支付方式 → (通道商户, 支付能力)」，每支付方式唯一一行；
+/// 通道商户唯一绑定支付产品，通道编码由产品派生。批量保存为全量覆盖。
 @Service
 @RequiredArgsConstructor
 public class PayRouteSceneConfigService {
@@ -49,11 +44,9 @@ public class PayRouteSceneConfigService {
     private final PayRouteProductResolver productResolver;
     private final MchAppInfoManager mchAppInfoManager;
     private final PayRouteStrategyCapabilitySupport payRouteStrategyCapabilitySupport;
-    private final PayRouteSceneRouteResolver sceneRouteResolver;
-    private final PayRouteBasicConfigService basicConfigService;
-    private final PayRouteCapabilityService payRouteCapabilityService;
-    private final PayProviderMethodService payProviderMethodService;
     private final PayRouteMethodValidator payRouteMethodValidator;
+    private final ChannelMerchantManager channelMerchantManager;
+    private final PayProviderMethodService payProviderMethodService;
 
     /// 查询场景模式配置列表
     public List<PayRouteSceneConfigResult> listSceneByAppId(String appId) {
@@ -63,61 +56,53 @@ public class PayRouteSceneConfigService {
                 .toList();
     }
 
-    /// 批量保存场景模式配置（全量覆盖：目录完整、provider+method 唯一、产品能力校验）
+    /// 批量保存场景模式配置（全量覆盖：method 唯一、通道商户/能力校验）
     @Transactional(rollbackFor = Exception.class)
     public void saveSceneBatch(PayRouteSceneConfigBatchParam param) {
         String mchNo = mchAppInfoManager.requireMchNoByAppIdNotTenant(param.getAppId());
         PayRouteStrategy strategy = requireStrategy(param.getAppId());
         validateSceneConfigUnique(param.getItems());
-        validateSceneProductCapabilityPairing(param.getItems());
+        validateSceneChannelMchCapabilityPairing(param.getItems());
         sceneConfigManager.deleteByStrategyId(strategy.getId());
         List<PayRouteSceneConfig> configs = new ArrayList<>();
         for (PayRouteSceneConfigItem item : param.getItems()) {
-            String channel;
-            String method;
-            String product;
-            if (StrUtil.isNotBlank(item.getProvider())) {
-                if (!PayRouteConfigProviders.contains(item.getProvider())) {
-                    continue;
-                }
-                if (StrUtil.isBlank(item.getMethod())) {
-                    // 能力: 支付方式不能为空
-                    throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                            "error.payment.capability.methodRequiredWithPayProvider");
-                }
-                if (isSceneDirectoryRowEmpty(item)) {
-                    continue;
-                }
-                payRouteMethodValidator.validateSceneConfigItem(item.getProvider(), item.getMethod());
-                validateSceneMchProduct(mchNo, item.getProduct(), item.getProvider());
-                if (!payRouteCapabilityService.productSupportsMethod(item.getProduct(), item.getProvider(), item.getMethod())) {
-                    throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                            "pay.route.error.sceneMethodProductMismatch",
-                            PayRouteI18nHelper.payMethod(item.getMethod()), PayRouteI18nHelper.product(item.getProduct()));
-                }
-                payRouteStrategyCapabilitySupport.validateSceneCapability(
-                        item.getProvider(), item.getMethod(), item.getProduct(), item.getCapability());
-                var route = sceneRouteResolver.resolve(item.getProduct(), item.getProvider(), item.getMethod());
-                channel = route.channel();
-                method = route.method();
-                product = route.product();
-            } else {
-                if (StrUtil.isBlank(item.getChannel()) || StrUtil.isBlank(item.getMethod())) {
-                    throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                            "pay.route.error.sceneChannelMethodRequired");
-                }
-                payRouteMethodValidator.validateSceneConfigItem(item.getProvider(), item.getMethod());
-                channel = item.getChannel();
-                method = item.getMethod();
-                product = productResolver.resolveAndFill(mchNo, channel, method, item.getProduct());
+            if (StrUtil.isBlank(item.getMethod()) || !PayRouteConfigProviders.contains(item.getProvider())) {
+                continue;
             }
-            validateRouteItem(mchNo, channel, method);
+            if (isSceneRowEmpty(item)) {
+                continue;
+            }
+            payRouteMethodValidator.validateSceneConfigItem(item.getProvider(), item.getMethod());
+            // 校验通道商户属本商户且启用
+            ChannelMerchant mch = channelMerchantManager
+                    .findByMchNoAndChannelMchNo(mchNo, item.getChannelMchNo())
+                    .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                            "pay.route.error.channelMchNotExist", item.getChannelMchNo()));
+            if (!Boolean.TRUE.equals(mch.getEnable())) {
+                // 通道商户[{0}]未启用
+                throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                        "pay.route.error.channelMchDisabled", item.getChannelMchNo());
+            }
+            String product = mch.getProduct();
+            // 校验产品支持该(provider, method)
+            if (!payRouteStrategyCapabilitySupport.routeProductSupportsMethod(
+                    product, item.getProvider(), item.getMethod())) {
+                throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                        "pay.route.error.sceneMethodProductMismatch",
+                        PayRouteI18nHelper.payMethod(item.getMethod()), PayRouteI18nHelper.product(product));
+            }
+            // 校验支付能力在候选集合内
+            payRouteStrategyCapabilitySupport.validateSceneCapability(
+                    item.getProvider(), item.getMethod(), item.getChannelMchNo(), item.getCapability());
+            // 通道编码由产品派生
+            String channel = productResolver.channelOfProduct(product);
             PayRouteSceneConfig config = new PayRouteSceneConfig();
             config.setStrategyId(strategy.getId());
-            config.setProvider(StrUtil.blankToDefault(item.getProvider(), null));
+            config.setProvider(item.getProvider());
             config.setChannel(channel);
-            config.setMethod(method);
-            config.setProduct(product);
+            config.setMethod(item.getMethod());
+            config.setChannelMchNo(item.getChannelMchNo());
+            config.setCapability(item.getCapability());
             configs.add(config);
         }
         for (PayRouteSceneConfig config : configs) {
@@ -125,103 +110,79 @@ public class PayRouteSceneConfigService {
         }
     }
 
-
-    /// 通道路由白名单目录下全部 (provider,method) 的产品候选（批量）
-    public Map<String, List<LabelValue>> listSceneProductCandidatesBatch(String appId) {
+    /// 通道路由白名单目录下全部 (provider,method) 的通道商户候选（批量）
+    public Map<String, List<LabelValue>> listSceneChannelMchCandidatesBatch(String appId) {
         String mchNo = mchAppInfoManager.requireMchNoByAppIdNotTenant(appId);
-        return payRouteStrategyCapabilitySupport.listSceneProductCandidatesBatch(mchNo);
+        return payRouteStrategyCapabilitySupport.listSceneChannelMchCandidatesBatch(mchNo);
     }
 
-    /// 按目录项+产品批量返回支付能力候选
+    /// 按目录项+通道商户批量返回支付能力候选
     public Map<String, List<LabelValue>> listSceneCapabilityCandidatesBatch(PayRouteSceneCapabilityBatchParam param) {
         String mchNo = mchAppInfoManager.requireMchNoByAppIdNotTenant(param.getAppId());
         return payRouteStrategyCapabilitySupport.listSceneCapabilityCandidatesBatch(mchNo, param.getItems());
     }
 
-    /// 按目录项（支付渠道+支付方式）筛选商户已开通且能力匹配的产品候选
-    public List<LabelValue> listSceneProductCandidatesForMethod(String appId, String provider, String method) {
+    /// 按目录项（支付渠道+支付方式）筛选商户已开通的通道商户候选
+    public List<LabelValue> listSceneChannelMchCandidatesForMethod(String appId, String provider, String method) {
         if (StrUtil.isBlank(method) || !payProviderMethodService.contains(provider, method)) {
             return List.of();
         }
         String mchNo = mchAppInfoManager.requireMchNoByAppIdNotTenant(appId);
-        return payRouteStrategyCapabilitySupport.listSceneProductCandidates(provider, method);
+        return payRouteStrategyCapabilitySupport.listSceneChannelMchCandidates(mchNo, provider, method);
     }
 
-    /// 按目录项与支付产品筛选支付能力候选（策略 Map ∩ DB，不落库）
+    /// 按目录项与通道商户筛选支付能力候选（策略 Map ∩ DB，不落库）
     public List<LabelValue> listSceneCapabilityCandidatesForMethod(
-            String appId, String provider, String method, String product) {
-        if (StrUtil.isBlank(product)) {
+            String appId, String provider, String method, String channelMchNo) {
+        if (StrUtil.isBlank(channelMchNo)) {
             return List.of();
         }
-        String mchNo = mchAppInfoManager.requireMchNoByAppIdNotTenant(appId);
-        return payRouteStrategyCapabilitySupport.listSceneCapabilityCandidates(provider, method, product);
+        return payRouteStrategyCapabilitySupport.listSceneCapabilityCandidates(provider, method, channelMchNo);
     }
 
     /// 回显推断支付能力（候选唯一时返回编码）
-    public String inferSceneCapability(String appId, String provider, String method, String product) {
-        if (StrUtil.isBlank(product)) {
+    public String inferSceneCapability(String appId, String provider, String method, String channelMchNo) {
+        if (StrUtil.isBlank(channelMchNo)) {
             return null;
         }
-        String mchNo = mchAppInfoManager.requireMchNoByAppIdNotTenant(appId);
-        return payRouteStrategyCapabilitySupport.inferSceneCapability(provider, method, product);
+        return payRouteStrategyCapabilitySupport.inferSceneCapability(provider, method, channelMchNo);
     }
 
-    /// 校验批量保存项：provider + method 在策略内唯一
+    /// 校验批量保存项：支付方式全局唯一
     private void validateSceneConfigUnique(List<PayRouteSceneConfigItem> items) {
-        Set<String> pairKeys = new HashSet<>();
+        Set<String> methodKeys = new HashSet<>();
         for (PayRouteSceneConfigItem item : items) {
-            if (StrUtil.isBlank(item.getProvider())) {
+            if (StrUtil.isBlank(item.getMethod())) {
                 continue;
             }
-            String key = item.getProvider() + "|" + StrUtil.blankToDefault(item.getMethod(), "");
-            if (!pairKeys.add(key)) {
+            if (!methodKeys.add(item.getMethod())) {
+                // 场景模式下同一支付方式存在多条配置
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                        "pay.route.error.duplicatePayProviderMethod",
-                        PayRouteI18nHelper.provider(item.getProvider()), PayRouteI18nHelper.payMethod(item.getMethod()));
+                        "pay.route.error.duplicateSceneMethod", PayRouteI18nHelper.payMethod(item.getMethod()));
             }
         }
     }
 
-    /// 校验目录行：支付产品与支付能力须同时为空或同时有值，不可只填其一
-    private void validateSceneProductCapabilityPairing(List<PayRouteSceneConfigItem> items) {
+    /// 校验目录行：通道商户号与支付能力须同时为空或同时有值，不可只填其一
+    private void validateSceneChannelMchCapabilityPairing(List<PayRouteSceneConfigItem> items) {
         for (PayRouteSceneConfigItem item : items) {
-            if (StrUtil.isBlank(item.getProvider())) {
+            if (StrUtil.isBlank(item.getMethod())) {
                 continue;
             }
-            boolean hasProduct = StrUtil.isNotBlank(item.getProduct());
-            boolean hasCapability = StrUtil.isNotBlank(item.getCapability());
-            if (hasProduct == hasCapability) {
+            boolean hasMch = StrUtil.isNotBlank(item.getChannelMchNo());
+            boolean hasCap = StrUtil.isNotBlank(item.getCapability());
+            if (hasMch == hasCap) {
                 continue;
             }
+            // 支付方式[{0}]须同时选择通道商户与支付能力，或同时留空
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                    "pay.route.error.sceneProductCapabilityPair",
-                    PayRouteI18nHelper.provider(item.getProvider()),
-                    PayRouteI18nHelper.payMethod(item.getMethod()));
+                    "pay.route.error.sceneChannelMchCapabilityPair", PayRouteI18nHelper.payMethod(item.getMethod()));
         }
     }
 
-    /// 目录行未配置（产品与能力均为空）
-    private boolean isSceneDirectoryRowEmpty(PayRouteSceneConfigItem item) {
-        return StrUtil.isBlank(item.getProduct()) && StrUtil.isBlank(item.getCapability());
-    }
-
-    /// 场景配置所选产品须在商户侧可用且支持该支付渠道
-    private void validateSceneMchProduct(String mchNo, String product, String providerCode) {
-        PayProviderEnum provider = PayProviderEnum.findByCode(providerCode);
-        if (provider == null) {
-            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.route.error.basicProviderInvalid");
-        }
-        basicConfigService.validateBasicProduct(product, provider);
-    }
-
-    /// 校验通道+方式可解析为商户产品且存在对应产品策略
-    private void validateRouteItem(String mchNo, String channel, String method) {
-        PayMethodEnum.findByCode(method);
-        String product = productResolver.resolve(mchNo, channel, method);
-        if (!PaymentStrategyFactory.existsByProduct(product, AbsProductStrategy.class)) {
-            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                    "pay.route.error.productStrategyMissing");
-        }
+    /// 目录行未配置（通道商户与能力均为空）
+    private boolean isSceneRowEmpty(PayRouteSceneConfigItem item) {
+        return StrUtil.isBlank(item.getChannelMchNo()) && StrUtil.isBlank(item.getCapability());
     }
 
     /// 按应用号加载路由策略，不存在则抛业务异常

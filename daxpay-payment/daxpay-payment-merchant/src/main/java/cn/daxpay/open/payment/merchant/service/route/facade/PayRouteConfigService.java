@@ -77,30 +77,30 @@ public class PayRouteConfigService {
         sceneConfigService.saveSceneBatch(param);
     }
 
-    /// 通道路由白名单目录下全部产品候选（批量）
-    public Map<String, List<LabelValue>> listSceneProductCandidatesBatch(String appId) {
-        return sceneConfigService.listSceneProductCandidatesBatch(appId);
+    /// 通道路由白名单目录下全部通道商户候选（批量）
+    public Map<String, List<LabelValue>> listSceneChannelMchCandidatesBatch(String appId) {
+        return sceneConfigService.listSceneChannelMchCandidatesBatch(appId);
     }
 
-    /// 按目录项与产品批量返回支付能力候选
+    /// 按目录项与通道商户批量返回支付能力候选
     public Map<String, List<LabelValue>> listSceneCapabilityCandidatesBatch(PayRouteSceneCapabilityBatchParam param) {
         return sceneConfigService.listSceneCapabilityCandidatesBatch(param);
     }
 
-    /// 目录项下商户可用支付产品候选
-    public List<LabelValue> listSceneProductCandidatesForMethod(String appId, String provider, String method) {
-        return sceneConfigService.listSceneProductCandidatesForMethod(appId, provider, method);
+    /// 目录项下商户已开通的通道商户候选
+    public List<LabelValue> listSceneChannelMchCandidatesForMethod(String appId, String provider, String method) {
+        return sceneConfigService.listSceneChannelMchCandidatesForMethod(appId, provider, method);
     }
 
-    /// 目录项与产品下支付能力候选
+    /// 目录项与通道商户下支付能力候选
     public List<LabelValue> listSceneCapabilityCandidatesForMethod(
-            String appId, String provider, String method, String product) {
-        return sceneConfigService.listSceneCapabilityCandidatesForMethod(appId, provider, method, product);
+            String appId, String provider, String method, String channelMchNo) {
+        return sceneConfigService.listSceneCapabilityCandidatesForMethod(appId, provider, method, channelMchNo);
     }
 
-    /// 推断目录项与产品下唯一支付能力（仅供回显）
-    public String inferSceneCapability(String appId, String provider, String method, String product) {
-        return sceneConfigService.inferSceneCapability(appId, provider, method, product);
+    /// 推断目录项与通道商户下唯一支付能力（仅供回显）
+    public String inferSceneCapability(String appId, String provider, String method, String channelMchNo) {
+        return sceneConfigService.inferSceneCapability(appId, provider, method, channelMchNo);
     }
 
     /// 查询基础模式各支付渠道对应产品

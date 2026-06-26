@@ -181,3 +181,79 @@ COMMENT ON COLUMN iam_user_two_factor.deleted IS '逻辑删除标志';
 -- 用户ID唯一索引(未删除范围内, 一个用户最多一条绑定记录)
 CREATE UNIQUE INDEX IF NOT EXISTS uk_iam_user_two_factor_user_id
     ON iam_user_two_factor (user_id) WHERE deleted = false;
+
+-- ===================================
+-- 支付通道路由: 场景模式配置表 + 基础模式配置表
+-- 重构: 以通道商户号(channel_mch_no)替代支付产品(product)定位，场景模式新增支付能力(capability)
+-- ===================================
+
+DROP TABLE IF EXISTS pay_route_scene_config;
+DROP TABLE IF EXISTS pay_route_basic_config;
+
+-- 支付通道路由场景模式配置(每支付方式一条: 通道商户 + 支付能力)
+CREATE TABLE IF NOT EXISTS pay_route_scene_config (
+    id                  bigint          NOT NULL,
+    strategy_id         bigint          NOT NULL,
+    provider            varchar(32),
+    channel             varchar(32),
+    method              varchar(32)     NOT NULL,
+    channel_mch_no      varchar(32)     NOT NULL,
+    capability          varchar(32)     NOT NULL,
+    creator             bigint,
+    create_time         timestamptz(6),
+    last_modifier       bigint,
+    last_modified_time  timestamptz(6),
+    version             int             NOT NULL DEFAULT 0,
+    deleted             boolean         NOT NULL DEFAULT false,
+    CONSTRAINT pay_route_scene_config_pkey PRIMARY KEY (id)
+);
+
+COMMENT ON TABLE pay_route_scene_config IS '支付通道路由场景模式配置';
+COMMENT ON COLUMN pay_route_scene_config.id IS '主键';
+COMMENT ON COLUMN pay_route_scene_config.strategy_id IS '路由策略ID';
+COMMENT ON COLUMN pay_route_scene_config.provider IS '支付渠道(派生自支付方式)';
+COMMENT ON COLUMN pay_route_scene_config.channel IS '通道编码(派生自通道商户绑定的产品)';
+COMMENT ON COLUMN pay_route_scene_config.method IS '支付方式编码';
+COMMENT ON COLUMN pay_route_scene_config.channel_mch_no IS '通道商户号(唯一绑定支付产品)';
+COMMENT ON COLUMN pay_route_scene_config.capability IS '支付能力编码';
+COMMENT ON COLUMN pay_route_scene_config.creator IS '创建人ID';
+COMMENT ON COLUMN pay_route_scene_config.create_time IS '创建时间';
+COMMENT ON COLUMN pay_route_scene_config.last_modifier IS '最后修改人ID';
+COMMENT ON COLUMN pay_route_scene_config.last_modified_time IS '最后修改时间';
+COMMENT ON COLUMN pay_route_scene_config.version IS '版本号';
+COMMENT ON COLUMN pay_route_scene_config.deleted IS '逻辑删除';
+
+-- 策略 + 支付方式 唯一索引(未删除范围内)
+CREATE UNIQUE INDEX IF NOT EXISTS uk_pay_route_scene_config_method
+    ON pay_route_scene_config (strategy_id, method) WHERE deleted = false;
+
+-- 支付通道路由基础模式配置(每支付渠道一条: 通道商户)
+CREATE TABLE IF NOT EXISTS pay_route_basic_config (
+    id                  bigint          NOT NULL,
+    strategy_id         bigint          NOT NULL,
+    provider            varchar(32)     NOT NULL,
+    channel_mch_no      varchar(32)     NOT NULL,
+    creator             bigint,
+    create_time         timestamptz(6),
+    last_modifier       bigint,
+    last_modified_time  timestamptz(6),
+    version             int             NOT NULL DEFAULT 0,
+    deleted             boolean         NOT NULL DEFAULT false,
+    CONSTRAINT pay_route_basic_config_pkey PRIMARY KEY (id)
+);
+
+COMMENT ON TABLE pay_route_basic_config IS '支付通道路由基础模式配置';
+COMMENT ON COLUMN pay_route_basic_config.id IS '主键';
+COMMENT ON COLUMN pay_route_basic_config.strategy_id IS '路由策略ID';
+COMMENT ON COLUMN pay_route_basic_config.provider IS '支付渠道';
+COMMENT ON COLUMN pay_route_basic_config.channel_mch_no IS '通道商户号(唯一绑定支付产品)';
+COMMENT ON COLUMN pay_route_basic_config.creator IS '创建人ID';
+COMMENT ON COLUMN pay_route_basic_config.create_time IS '创建时间';
+COMMENT ON COLUMN pay_route_basic_config.last_modifier IS '最后修改人ID';
+COMMENT ON COLUMN pay_route_basic_config.last_modified_time IS '最后修改时间';
+COMMENT ON COLUMN pay_route_basic_config.version IS '版本号';
+COMMENT ON COLUMN pay_route_basic_config.deleted IS '逻辑删除';
+
+-- 策略 + 支付渠道 唯一索引(未删除范围内)
+CREATE UNIQUE INDEX IF NOT EXISTS uk_pay_route_basic_config_provider
+    ON pay_route_basic_config (strategy_id, provider) WHERE deleted = false;

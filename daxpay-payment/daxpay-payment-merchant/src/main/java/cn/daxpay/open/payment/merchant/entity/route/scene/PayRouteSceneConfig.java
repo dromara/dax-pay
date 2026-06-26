@@ -31,8 +31,12 @@ public class PayRouteSceneConfig extends MpBaseEntity implements ToResult<PayRou
     /// 支付方式编码
     private String method;
 
-    /// 产品编码
-    private String product;
+    /// 通道商户号(唯一绑定一个支付产品，替代旧版 product 字段)
+    private String channelMchNo;
+
+    /// 支付能力编码(商户为该支付方式+通道商户选定的能力)
+    /// @see cn.daxpay.open.platform.core.enums.pay.channel.PayCapabilityEnum
+    private String capability;
 
     @Override
     public PayRouteSceneConfigResult toResult() {

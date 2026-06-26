@@ -63,6 +63,12 @@ public class PayParam extends MerchantPaymentCommonParam {
     @Size(max = 32, message = "{validation.field.method.size}")
     private String method;
 
+    /// 支付能力编码：路由模式由路由引擎回填；直定模式(已传 channelMchNo)时作为输入参与校验
+    /// @see cn.daxpay.open.platform.core.enums.pay.channel.PayCapabilityEnum
+    @Schema(description = "支付能力编码")
+    @Size(max = 32, message = "{validation.field.capability.size}")
+    private String capability;
+
     // ===== 通道专属参数（策略层校验）=====
 
     /// 用户标识 OpenId（微信 jsapi/mini 场景必填）

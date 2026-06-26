@@ -19,7 +19,7 @@ public class PayRouteSceneCapabilityBatchItem {
     @Schema(description = "支付方式")
     private String method;
 
-    @NotBlank(message = "{validation.field.product.notBlank}")
-    @Schema(description = "支付产品")
-    private String product;
+    @NotBlank(message = "{validation.field.channelMchNo.notBlank}")
+    @Schema(description = "通道商户号")
+    private String channelMchNo;
 }

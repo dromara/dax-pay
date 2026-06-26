@@ -25,6 +25,9 @@ public class PayRouteSceneConfigResult extends BaseResult {
     @Schema(description = "支付方式编码")
     private String method;
 
-    @Schema(description = "产品编码")
-    private String product;
+    @Schema(description = "通道商户号")
+    private String channelMchNo;
+
+    @Schema(description = "支付能力编码")
+    private String capability;
 }
