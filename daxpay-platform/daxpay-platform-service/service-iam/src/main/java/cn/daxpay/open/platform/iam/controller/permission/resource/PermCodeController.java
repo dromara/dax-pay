@@ -47,6 +47,7 @@ public class PermCodeController {
         return Res.ok(permCodeScanService.scan(new PermCodeScanParam()));
     }
 
+    @PermCode(code = "view", nameCn = "菜单查看", nameEn = "Menu View")
     @Operation(summary = "根据菜单查询权限码列表")
     @GetMapping("/get-by-menu")
     public Result<List<MenuPermCodeItemResult>> findByMenu(
