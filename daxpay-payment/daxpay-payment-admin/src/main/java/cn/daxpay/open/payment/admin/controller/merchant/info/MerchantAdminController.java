@@ -20,7 +20,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /// 商户配置(管理)
-@PermCode(menuCode = "payment:merchant")
+@PermCode(menuCode = "merchant:info")
 @Validated
 @Tag(name = "商户配置(管理)")
 @RestController
@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.*;
 public class MerchantAdminController {
     private final MerchantAdminService merchantService;
 
-        @PermCode(code = "add", nameCn = "商户新增", nameEn = "Merchant Add")
+        @PermCode(code = "manage", nameCn = "商户管理", nameEn = "Merchant Manage")
     @Operation(summary = "新增商户")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) MerchantRegisterParam param){
@@ -37,7 +37,7 @@ public class MerchantAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "edit", nameCn = "商户编辑", nameEn = "Merchant Edit")
+    @PermCode(code = "manage", nameCn = "商户管理", nameEn = "Merchant Manage")
     @Operation(summary = "修改商户")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) MerchantInfoParam param){
@@ -66,7 +66,7 @@ public class MerchantAdminController {
         return Res.ok(merchantService.findByMchNo(mchNo));
     }
 
-    @PermCode(code = "delete", nameCn = "商户删除", nameEn = "Merchant Delete")
+    @PermCode(code = "manage", nameCn = "商户管理", nameEn = "Merchant Manage")
     @Operation(summary = "删除商户")
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id){
@@ -74,7 +74,7 @@ public class MerchantAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "edit", nameCn = "商户编辑", nameEn = "Merchant Edit")
+    @PermCode(code = "manage", nameCn = "商户管理", nameEn = "Merchant Manage")
     @Operation(summary = "启用商户")
     @PostMapping("/enable")
     public Result<Void> enable(@NotNull(message = "{validation.field.id.notNull}") Long id) {
@@ -82,7 +82,7 @@ public class MerchantAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "edit", nameCn = "商户编辑", nameEn = "Merchant Edit")
+    @PermCode(code = "manage", nameCn = "商户管理", nameEn = "Merchant Manage")
     @Operation(summary = "禁用商户")
     @PostMapping("/disable")
     public Result<Void> disable(@NotNull(message = "{validation.field.id.notNull}") Long id) {

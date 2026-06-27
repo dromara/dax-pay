@@ -46,7 +46,7 @@ public class SocialConfigController {
         return Res.ok(socialConfigService.findBySource(source));
     }
 
-    @PermCode(code = "edit", nameCn = "配置编辑", nameEn = "Config Edit")
+    @PermCode(code = "manage", nameCn = "配置管理", nameEn = "Config Manage")
     @Operation(summary = "修改平台配置")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated SocialConfigParam param) {
@@ -54,7 +54,7 @@ public class SocialConfigController {
         return Res.ok();
     }
 
-    @PermCode(code = "edit", nameCn = "配置编辑", nameEn = "Config Edit")
+    @PermCode(code = "manage", nameCn = "配置管理", nameEn = "Config Manage")
     @Operation(summary = "切换平台启用状态(仅已配置平台可启停)")
     @PostMapping("/update-enabled")
     public Result<Void> updateEnabled(

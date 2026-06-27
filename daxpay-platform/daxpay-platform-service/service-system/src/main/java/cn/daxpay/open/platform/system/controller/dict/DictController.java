@@ -36,7 +36,7 @@ public class DictController {
     /// 添加字典
     ///
     /// @param param 字典参数
-    @PermCode(code = "dict:manage", nameCn = "字典管理", nameEn = "Dict Manage")
+    @PermCode(code = "manage", nameCn = "字典管理", nameEn = "Dict Manage")
     @Operation(summary = "添加字典")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody DictParam param) {
@@ -48,7 +48,7 @@ public class DictController {
     /// 根据主键删除字典
     ///
     /// @param id 字典ID
-    @PermCode(code = "dict:manage", nameCn = "字典管理", nameEn = "Dict Manage")
+    @PermCode(code = "manage", nameCn = "字典管理", nameEn = "Dict Manage")
     @Operation(summary = "根据主键删除")
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {
@@ -59,7 +59,7 @@ public class DictController {
     /// 更新字典
     ///
     /// @param param 字典参数
-    @PermCode(code = "dict:manage", nameCn = "字典管理", nameEn = "Dict Manage")
+    @PermCode(code = "manage", nameCn = "字典管理", nameEn = "Dict Manage")
     @Operation(summary = "更新字典")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody DictParam param) {
@@ -72,7 +72,7 @@ public class DictController {
     ///
     /// @param id 字典ID
     /// @return 字典信息
-    @PermCode(code = "dict:view", nameCn = "字典查看", nameEn = "Dict View")
+    @PermCode(code = "view", nameCn = "字典查看", nameEn = "Dict View")
     @Operation(summary = "根据主键获取字典")
     @GetMapping("/get")
     public Result<DictResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
@@ -82,7 +82,7 @@ public class DictController {
     /// 查询全部字典
     ///
     /// @return 字典列表
-    @PermCode(code = "dict:view", nameCn = "字典查看", nameEn = "Dict View")
+    @PermCode(code = "view", nameCn = "字典查看", nameEn = "Dict View")
     @Operation(summary = "查询全部字典")
     @GetMapping("/all")
     public Result<List<DictResult>> findAll() {
@@ -94,7 +94,7 @@ public class DictController {
     /// @param pageParam 分页参数
     /// @param param 查询参数
     /// @return 字典分页结果
-    @PermCode(code = "dict:view", nameCn = "字典查看", nameEn = "Dict View")
+    @PermCode(code = "view", nameCn = "字典查看", nameEn = "Dict View")
     @Operation(summary = "字典分页")
     @GetMapping("/page")
     public Result<PageResult<DictResult>> page(PageParam pageParam, DictParam param) {
@@ -105,7 +105,7 @@ public class DictController {
     ///
     /// @param code 字典编码
     /// @return 是否存在
-    @PermCode(code = "dict:view", nameCn = "字典查看", nameEn = "Dict View")
+    @PermCode(code = "view", nameCn = "字典查看", nameEn = "Dict View")
     @Operation(summary = "字典编码是否被使用")
     @GetMapping("/exists-by-code")
     public Result<Boolean> existsByCode(@NotBlank(message = "{validation.field.code.notBlank}") String code) {
@@ -117,7 +117,7 @@ public class DictController {
     /// @param code 字典编码
     /// @param id 字典ID
     /// @return 是否存在
-    @PermCode(code = "dict:view", nameCn = "字典查看", nameEn = "Dict View")
+    @PermCode(code = "view", nameCn = "字典查看", nameEn = "Dict View")
     @Operation(summary = "编码是否被使用(不包含自己)")
     @GetMapping("/exists-by-code-not-id")
     public Result<Boolean> existsByCode(@NotBlank(message = "{validation.field.code.notBlank}") String code, @NotNull(message = "{validation.field.id.notNull}") Long id) {

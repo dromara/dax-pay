@@ -28,7 +28,7 @@ import java.util.List;
 ///
 /// 提供直连商户应用及其密钥配置、授权认证配置的 REST API，支持按商户号和通道商户号查询列表。
 ///
-@PermCode(menuCode = "payment:alipay:mch-app")
+@PermCode(menuCode = "channel:alipay:app")
 @Validated
 @Tag(name = "支付宝直连商户应用管理")
 @RestController
@@ -78,7 +78,7 @@ public class AlipayDirectAppController {
         return Res.ok(alipayDirectAppService.existsAliAppIdByChannel(mchNo, channelMchNo, aliAppId, id));
     }
 
-    @PermCode(code = "add", nameCn = "通道商户新增", nameEn = "Channel Merchant Add")
+    @PermCode(code = "manage", nameCn = "通道商户管理", nameEn = "Channel Merchant Manage")
     @Operation(summary = "新增直连商户应用")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) AlipayDirectAppParam param) {
@@ -87,7 +87,7 @@ public class AlipayDirectAppController {
         return Res.ok();
     }
 
-    @PermCode(code = "edit", nameCn = "通道商户编辑", nameEn = "Channel Merchant Edit")
+    @PermCode(code = "manage", nameCn = "通道商户管理", nameEn = "Channel Merchant Manage")
     @Operation(summary = "修改直连商户应用")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) AlipayDirectAppParam param) {
@@ -96,7 +96,7 @@ public class AlipayDirectAppController {
         return Res.ok();
     }
 
-    @PermCode(code = "edit", nameCn = "通道商户编辑", nameEn = "Channel Merchant Edit")
+    @PermCode(code = "manage", nameCn = "通道商户管理", nameEn = "Channel Merchant Manage")
     @Operation(summary = "删除直连商户应用")
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {
@@ -112,7 +112,7 @@ public class AlipayDirectAppController {
         return Res.ok(alipayDirectAppKeyConfigService.findByAlipayDirectAppId(alipayDirectAppId).toResult());
     }
 
-    @PermCode(code = "edit", nameCn = "通道商户编辑", nameEn = "Channel Merchant Edit")
+    @PermCode(code = "manage", nameCn = "通道商户管理", nameEn = "Channel Merchant Manage")
     @Operation(summary = "保存应用密钥配置")
     @PostMapping("/save-key-config")
     public Result<Void> saveKeyConfig(@RequestBody @Validated AlipayDirectAppKeyConfigParam param) {
@@ -128,7 +128,7 @@ public class AlipayDirectAppController {
         return Res.ok(alipayDirectAppAuthConfigService.findByAlipayDirectAppId(alipayDirectAppId).toResult());
     }
 
-    @PermCode(code = "edit", nameCn = "通道商户编辑", nameEn = "Channel Merchant Edit")
+    @PermCode(code = "manage", nameCn = "通道商户管理", nameEn = "Channel Merchant Manage")
     @Operation(summary = "保存应用授权认证配置")
     @PostMapping("/save-auth-config")
     public Result<Void> saveAuthConfig(@RequestBody @Validated AlipayDirectAppAuthConfigParam param) {

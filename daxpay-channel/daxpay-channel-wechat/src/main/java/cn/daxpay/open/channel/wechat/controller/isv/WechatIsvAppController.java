@@ -67,7 +67,7 @@ public class WechatIsvAppController {
         return Res.ok(wechatIsvAppService.existsWxAppId(wxAppId, id));
     }
 
-    @PermCode(code = "add", nameCn = "微信服务商新增", nameEn = "WeChat ISV Add")
+    @PermCode(code = "manage", nameCn = "微信服务商管理", nameEn = "WeChat ISV Manage")
     @Operation(summary = "新增服务商应用")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) WechatIsvAppParam param) {
@@ -76,7 +76,7 @@ public class WechatIsvAppController {
         return Res.ok();
     }
 
-    @PermCode(code = "edit", nameCn = "微信服务商编辑", nameEn = "WeChat ISV Edit")
+    @PermCode(code = "manage", nameCn = "微信服务商管理", nameEn = "WeChat ISV Manage")
     @Operation(summary = "修改服务商应用")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) WechatIsvAppParam param) {
@@ -85,7 +85,7 @@ public class WechatIsvAppController {
         return Res.ok();
     }
 
-    @PermCode(code = "edit", nameCn = "微信服务商编辑", nameEn = "WeChat ISV Edit")
+    @PermCode(code = "manage", nameCn = "微信服务商管理", nameEn = "WeChat ISV Manage")
     @Operation(summary = "删除服务商应用")
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {
@@ -102,7 +102,7 @@ public class WechatIsvAppController {
         return Res.ok(WechatIsvAppAuthConfigConvert.CONVERT.toResult(config));
     }
 
-    @PermCode(code = "edit", nameCn = "微信服务商编辑", nameEn = "WeChat ISV Edit")
+    @PermCode(code = "manage", nameCn = "微信服务商管理", nameEn = "WeChat ISV Manage")
     @Operation(summary = "保存应用授权认证配置")
     @PostMapping("/save-auth-config")
     public Result<Void> saveAuthConfig(@RequestBody @Validated WechatIsvAppAuthConfigParam param) {

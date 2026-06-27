@@ -33,7 +33,7 @@ public class NotifyNoticeController {
 
     private final NotifyNoticeService noticeService;
 
-    @PermCode(code = "notice:add", nameCn = "公告管理", nameEn = "Notice Manage")
+    @PermCode(code = "manage", nameCn = "公告管理", nameEn = "Notice Manage")
     @Operation(summary = "新建公告")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody NotifyNoticeParam param) {
@@ -42,7 +42,7 @@ public class NotifyNoticeController {
         return Res.ok();
     }
 
-    @PermCode(code = "notice:add", nameCn = "公告管理", nameEn = "Notice Manage")
+    @PermCode(code = "manage", nameCn = "公告管理", nameEn = "Notice Manage")
     @Operation(summary = "编辑公告")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody NotifyNoticeParam param) {
@@ -51,7 +51,7 @@ public class NotifyNoticeController {
         return Res.ok();
     }
 
-    @PermCode(code = "notice:add", nameCn = "公告管理", nameEn = "Notice Manage")
+    @PermCode(code = "manage", nameCn = "公告管理", nameEn = "Notice Manage")
     @Operation(summary = "删除公告")
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {
@@ -59,7 +59,7 @@ public class NotifyNoticeController {
         return Res.ok();
     }
 
-    @PermCode(code = "notice:publish", nameCn = "公告发布", nameEn = "Notice Publish")
+    @PermCode(code = "publish", nameCn = "公告发布", nameEn = "Notice Publish")
     @Operation(summary = "发布公告")
     @PostMapping("/publish")
     public Result<Void> publish(@NotNull(message = "{validation.field.id.notNull}") Long id) {
@@ -67,7 +67,7 @@ public class NotifyNoticeController {
         return Res.ok();
     }
 
-    @PermCode(code = "notice:publish", nameCn = "公告发布", nameEn = "Notice Publish")
+    @PermCode(code = "publish", nameCn = "公告发布", nameEn = "Notice Publish")
     @Operation(summary = "下线公告")
     @PostMapping("/offline")
     public Result<Void> offline(@NotNull(message = "{validation.field.id.notNull}") Long id) {
@@ -75,14 +75,14 @@ public class NotifyNoticeController {
         return Res.ok();
     }
 
-    @PermCode(code = "notice:view", nameCn = "公告查看", nameEn = "Notice View")
+    @PermCode(code = "view", nameCn = "公告查看", nameEn = "Notice View")
     @Operation(summary = "公告详情")
     @GetMapping("/get")
     public Result<NotifyNoticeResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(noticeService.findById(id));
     }
 
-    @PermCode(code = "notice:view", nameCn = "公告查看", nameEn = "Notice View")
+    @PermCode(code = "view", nameCn = "公告查看", nameEn = "Notice View")
     @Operation(summary = "公告分页")
     @GetMapping("/page")
     public Result<PageResult<NotifyNoticeResult>> page(PageParam pageParam, NotifyNoticeQuery query) {

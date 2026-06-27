@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
-@PermCode(menuCode = "starter:log:login")
+@PermCode(menuCode = "system:log:login")
 @Validated
 @Tag(name = "登录日志")
 @RestController

@@ -24,7 +24,7 @@ import java.util.List;
 
 /// # 支付产品管理
 ///
-@PermCode(menuCode = "payment:product")
+@PermCode(menuCode = "payment:platform:product")
 @Validated
 @Tag(name = "支付产品管理")
 @RestController
@@ -55,7 +55,7 @@ public class PayProductController {
         return Res.ok(payProductService.dropdown());
     }
 
-    @PermCode(code = "edit", nameCn = "产品编辑", nameEn = "Product Edit")
+    @PermCode(code = "manage", nameCn = "产品管理", nameEn = "Product Manage")
     @Operation(summary = "切换支付产品启停")
     @PostMapping("/switch-enabled")
     public Result<Void> switchEnabled(

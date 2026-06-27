@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 /// 通道商户管理(运营平台-综合管理)
 /// 全局查看和管理所有通道商户，仅支持查看和编辑
-@PermCode(menuCode = "payment:channel:merchant")
+@PermCode(menuCode = "channel:merchant")
 @Validated
 @Tag(name = "通道商户管理(运营平台-综合管理)")
 @RestController
@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.*;
 public class ChannelMerchantAdminController {
     private final ChannelMerchantService channelMerchantService;
 
-    @PermCode(code = "edit", nameCn = "通道商户编辑", nameEn = "Channel Merchant Edit")
+    @PermCode(code = "manage", nameCn = "通道商户管理", nameEn = "Channel Merchant Manage")
     @Operation(summary = "修改")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated ChannelMerchantEditParam param) {
@@ -49,7 +49,7 @@ public class ChannelMerchantAdminController {
         return Res.ok(channelMerchantService.findById(id));
     }
 
-    @PermCode(code = "edit", nameCn = "通道商户编辑", nameEn = "Channel Merchant Edit")
+    @PermCode(code = "manage", nameCn = "通道商户管理", nameEn = "Channel Merchant Manage")
     @Operation(summary = "更新启用状态")
     @PostMapping("/update-enable")
     public Result<Void> updateEnable(@NotNull(message = "{validation.field.id.notNull}") Long id, @NotNull(message = "{validation.field.enable.notNull}") Boolean enable) {

@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /// # 微信服务商通道商户管理
 ///
-@PermCode(menuCode = "payment:merchant:channelMerchant")
+@PermCode(menuCode = "channel:merchant")
 @Validated
 @Tag(name = "微信服务商通道商户管理")
 @RestController
@@ -29,7 +29,7 @@ public class WechatIsvChannelMerchantController {
 
     private final WechatIsvChannelMerchantService wechatIsvChannelMerchantService;
 
-    @PermCode(code = "view", nameCn = "商户通道商户查看", nameEn = "Merchant Channel Merchant View")
+    @PermCode(code = "view", nameCn = "通道商户查看", nameEn = "Channel Merchant View")
     @Operation(summary = "根据通道商户号查询微信服务商通道商户配置")
     @GetMapping("/find-by-channel-mch-no")
     public Result<WechatIsvChannelMerchantResult> findByChannelMchNo(
@@ -37,7 +37,7 @@ public class WechatIsvChannelMerchantController {
         return Res.ok(wechatIsvChannelMerchantService.findByChannelMchNo(channelMchNo));
     }
 
-    @PermCode(code = "add", nameCn = "商户通道商户新增", nameEn = "Merchant Channel Merchant Add")
+    @PermCode(code = "manage", nameCn = "通道商户管理", nameEn = "Channel Merchant Manage")
     @Operation(summary = "创建微信服务商通道商户")
     @PostMapping("/create")
     public Result<Void> create(@RequestBody @Validated WechatIsvChannelMerchantCreateParam param) {

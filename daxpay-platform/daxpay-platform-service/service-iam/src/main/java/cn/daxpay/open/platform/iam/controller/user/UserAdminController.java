@@ -45,7 +45,7 @@ public class UserAdminController {
         return Res.ok(userQueryService.findById(id));
     }
 
-    @PermCode(code = "add", nameCn = "用户新增", nameEn = "User Add")
+    @PermCode(code = "manage", nameCn = "用户管理", nameEn = "User Manage")
     @Operation(summary = "添加用户")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) UserInfoParam userInfoParam) {
@@ -53,7 +53,7 @@ public class UserAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "edit", nameCn = "用户编辑", nameEn = "User Edit")
+    @PermCode(code = "manage", nameCn = "用户管理", nameEn = "User Manage")
     @Operation(summary = "修改用户")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) UserInfoParam userInfoParam) {
@@ -61,7 +61,7 @@ public class UserAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "resetPassword", nameCn = "重置密码", nameEn = "Reset Password")
+    @PermCode(code = "reset_password", nameCn = "重置密码", nameEn = "Reset Password")
     @Operation(summary = "重置密码")
     @PostMapping("/restart-password")
     public Result<Void> restartPassword(@RequestBody @Validated RestartPwdParam param) {
@@ -69,7 +69,7 @@ public class UserAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "resetPassword", nameCn = "重置密码", nameEn = "Reset Password")
+    @PermCode(code = "reset_password", nameCn = "重置密码", nameEn = "Reset Password")
     @Operation(summary = "批量重置密码")
     @PostMapping("/restart-password-batch")
     public Result<Void> restartPasswordBatch(@RequestBody @Validated RestartPwdBatchParam param) {

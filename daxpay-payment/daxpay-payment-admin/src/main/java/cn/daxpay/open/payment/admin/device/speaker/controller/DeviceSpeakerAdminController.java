@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /// # 云音箱设备管理(运营端)
 ///
-@PermCode(menuCode = "payment:device:speaker")
+@PermCode(menuCode = "device:speaker")
 @Validated
 @Tag(name = "云音箱设备管理")
 @RestController
@@ -33,7 +33,7 @@ public class DeviceSpeakerAdminController {
 
     private final DeviceSpeakerAdminService deviceSpeakerAdminService;
 
-    @PermCode(code = "add", nameCn = "云音箱新增", nameEn = "Speaker Add")
+    @PermCode(code = "manage", nameCn = "云音箱管理", nameEn = "Speaker Manage")
     @Operation(summary = "新增云音箱设备")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) DeviceSpeakerParam param) {
@@ -41,7 +41,7 @@ public class DeviceSpeakerAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "edit", nameCn = "云音箱编辑", nameEn = "Speaker Edit")
+    @PermCode(code = "manage", nameCn = "云音箱管理", nameEn = "Speaker Manage")
     @Operation(summary = "修改云音箱设备")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) DeviceSpeakerParam param) {
@@ -63,7 +63,7 @@ public class DeviceSpeakerAdminController {
         return Res.ok(deviceSpeakerAdminService.findById(id));
     }
 
-    @PermCode(code = "delete", nameCn = "云音箱删除", nameEn = "Speaker Delete")
+    @PermCode(code = "manage", nameCn = "云音箱管理", nameEn = "Speaker Manage")
     @Operation(summary = "删除云音箱设备")
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {
@@ -71,7 +71,7 @@ public class DeviceSpeakerAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "edit", nameCn = "云音箱编辑", nameEn = "Speaker Edit")
+    @PermCode(code = "manage", nameCn = "云音箱管理", nameEn = "Speaker Manage")
     @Operation(summary = "绑定云音箱设备")
     @PostMapping("/bind")
     public Result<Void> bind(@NotNull(message = "{validation.field.id.notNull}") Long id) {
@@ -79,7 +79,7 @@ public class DeviceSpeakerAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "edit", nameCn = "云音箱编辑", nameEn = "Speaker Edit")
+    @PermCode(code = "manage", nameCn = "云音箱管理", nameEn = "Speaker Manage")
     @Operation(summary = "解绑云音箱设备")
     @PostMapping("/unbind")
     public Result<Void> unbind(@NotNull(message = "{validation.field.id.notNull}") Long id) {

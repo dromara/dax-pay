@@ -38,7 +38,7 @@ public class PayProviderController {
         return Res.ok(payProviderService.listByProvider());
     }
 
-    @PermCode(code = "edit", nameCn = "渠道启停编辑", nameEn = "Provider Switch Enable")
+    @PermCode(code = "manage", nameCn = "支付渠道管理", nameEn = "Provider Manage")
     @Operation(summary = "切换支付渠道启停")
     @PostMapping("/switch-enabled")
     public Result<Void> switchEnabled(

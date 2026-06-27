@@ -19,7 +19,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /// 门店信息管理(管理端)
-@PermCode(menuCode = "payment:merchant:store")
+@PermCode(menuCode = "merchant:store")
 @Validated
 @Tag(name = "门店信息管理(管理端)")
 @RestController
@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.*;
 public class MchStoreInfoAdminController {
     private final MchStoreInfoService mchStoreInfoService;
 
-    @PermCode(code = "add", nameCn = "门店新增", nameEn = "Store Add")
+    @PermCode(code = "manage", nameCn = "门店管理", nameEn = "Store Manage")
     @Operation(summary = "新增门店")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) MchStoreInfoParam param) {
@@ -37,7 +37,7 @@ public class MchStoreInfoAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "edit", nameCn = "门店编辑", nameEn = "Store Edit")
+    @PermCode(code = "manage", nameCn = "门店管理", nameEn = "Store Manage")
     @Operation(summary = "修改门店")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) MchStoreInfoParam param) {
@@ -60,7 +60,7 @@ public class MchStoreInfoAdminController {
         return Res.ok(mchStoreInfoService.findById(id));
     }
 
-    @PermCode(code = "delete", nameCn = "门店删除", nameEn = "Store Delete")
+    @PermCode(code = "manage", nameCn = "门店管理", nameEn = "Store Manage")
     @Operation(summary = "删除门店")
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {

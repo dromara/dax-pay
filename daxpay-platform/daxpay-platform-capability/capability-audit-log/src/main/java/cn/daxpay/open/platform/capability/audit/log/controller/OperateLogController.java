@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /// # 操作日志
 ///
-@PermCode(menuCode = "starter:log:operate")
+@PermCode(menuCode = "system:log:operate")
 @Validated
 @Tag(name = "操作日志")
 @RestController

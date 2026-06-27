@@ -72,7 +72,7 @@ public class AlipayIsvAppController {
         return Res.ok(alipayIsvAppService.existsAliAppId(aliAppId, id));
     }
 
-    @PermCode(code = "add", nameCn = "支付宝服务商新增", nameEn = "Alipay ISV Add")
+    @PermCode(code = "manage", nameCn = "支付宝服务商管理", nameEn = "Alipay ISV Manage")
     @Operation(summary = "新增服务商应用")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) AlipayIsvAppParam param) {
@@ -81,7 +81,7 @@ public class AlipayIsvAppController {
         return Res.ok();
     }
 
-    @PermCode(code = "edit", nameCn = "支付宝服务商编辑", nameEn = "Alipay ISV Edit")
+    @PermCode(code = "manage", nameCn = "支付宝服务商管理", nameEn = "Alipay ISV Manage")
     @Operation(summary = "修改服务商应用")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) AlipayIsvAppParam param) {
@@ -90,7 +90,7 @@ public class AlipayIsvAppController {
         return Res.ok();
     }
 
-    @PermCode(code = "edit", nameCn = "支付宝服务商编辑", nameEn = "Alipay ISV Edit")
+    @PermCode(code = "manage", nameCn = "支付宝服务商管理", nameEn = "Alipay ISV Manage")
     @Operation(summary = "删除服务商应用")
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {
@@ -106,7 +106,7 @@ public class AlipayIsvAppController {
         return Res.ok(alipayIsvAppKeyConfigService.findByAlipayIsvAppId(alipayIsvAppId).toResult());
     }
 
-    @PermCode(code = "edit", nameCn = "支付宝服务商编辑", nameEn = "Alipay ISV Edit")
+    @PermCode(code = "manage", nameCn = "支付宝服务商管理", nameEn = "Alipay ISV Manage")
     @Operation(summary = "保存应用密钥配置")
     @PostMapping("/save-key-config")
     public Result<Void> saveKeyConfig(@RequestBody @Validated AlipayIsvAppKeyConfigParam param) {
@@ -122,7 +122,7 @@ public class AlipayIsvAppController {
         return Res.ok(alipayIsvAppAuthConfigService.findByAlipayIsvAppId(alipayIsvAppId).toResult());
     }
 
-    @PermCode(code = "edit", nameCn = "支付宝服务商编辑", nameEn = "Alipay ISV Edit")
+    @PermCode(code = "manage", nameCn = "支付宝服务商管理", nameEn = "Alipay ISV Manage")
     @Operation(summary = "保存应用授权认证配置")
     @PostMapping("/save-auth-config")
     public Result<Void> saveAuthConfig(@RequestBody @Validated AlipayIsvAppAuthConfigParam param) {

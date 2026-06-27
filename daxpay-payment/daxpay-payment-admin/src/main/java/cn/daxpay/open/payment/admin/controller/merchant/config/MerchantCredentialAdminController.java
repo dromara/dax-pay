@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 /// # 商户对接配置管理控制器
 ///
-@PermCode(menuCode = "payment:merchant")
+@PermCode(menuCode = "merchant:credential")
 @Validated
 @Tag(name = "商户对接配置管理")
 @RestController

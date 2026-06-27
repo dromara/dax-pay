@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 /// # 平台安全配置
 ///
 /// 管理密码策略、登录安全、会话管理、异常登录检测、双因素认证等安全类配置
-@PermCode(menuCode = "system:security:config")
+@PermCode(menuCode = "system:security_config")
 @Validated
 @Tag(name = "平台安全配置")
 @RestController
@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 public class PlatformSecurityConfigController {
     private final PlatformSecurityConfigService platformSecurityConfigService;
 
-    @PermCode(code = "security:view", nameCn = "安全配置查看", nameEn = "Security View")
+    @PermCode(code = "view", nameCn = "安全配置查看", nameEn = "Security View")
     @Operation(summary = "获取密码策略配置")
     @GetMapping("/password-policy/get")
     public Result<PlatformPasswordPolicyConfigResult> getPasswordPolicyConfig() {
@@ -39,7 +39,7 @@ public class PlatformSecurityConfigController {
         return Res.ok(platformSecurityConfigService.findPasswordPolicyConfig());
     }
 
-    @PermCode(code = "security:manage", nameCn = "安全配置管理", nameEn = "Security Manage")
+    @PermCode(code = "manage", nameCn = "安全配置管理", nameEn = "Security Manage")
     @Operation(summary = "更新密码策略配置")
     @PostMapping("/password-policy/update")
     public Result<Void> updatePasswordPolicyConfig(@RequestBody @Validated PlatformPasswordPolicyConfigParam param) {
@@ -47,14 +47,14 @@ public class PlatformSecurityConfigController {
         return Res.ok();
     }
 
-    @PermCode(code = "security:view", nameCn = "安全配置查看", nameEn = "Security View")
+    @PermCode(code = "view", nameCn = "安全配置查看", nameEn = "Security View")
     @Operation(summary = "获取登录安全配置")
     @GetMapping("/login/get")
     public Result<PlatformLoginSecurityConfigResult> getLoginSecurityConfig() {
         return Res.ok(platformSecurityConfigService.findLoginSecurityConfig());
     }
 
-    @PermCode(code = "security:manage", nameCn = "安全配置管理", nameEn = "Security Manage")
+    @PermCode(code = "manage", nameCn = "安全配置管理", nameEn = "Security Manage")
     @Operation(summary = "更新登录安全配置")
     @PostMapping("/login/update")
     public Result<Void> updateLoginSecurityConfig(@RequestBody @Validated PlatformLoginSecurityConfigParam param) {
@@ -62,14 +62,14 @@ public class PlatformSecurityConfigController {
         return Res.ok();
     }
 
-    @PermCode(code = "security:view", nameCn = "安全配置查看", nameEn = "Security View")
+    @PermCode(code = "view", nameCn = "安全配置查看", nameEn = "Security View")
     @Operation(summary = "获取会话管理配置")
     @GetMapping("/session/get")
     public Result<PlatformSessionManagementConfigResult> getSessionManagementConfig() {
         return Res.ok(platformSecurityConfigService.findSessionManagementConfig());
     }
 
-    @PermCode(code = "security:manage", nameCn = "安全配置管理", nameEn = "Security Manage")
+    @PermCode(code = "manage", nameCn = "安全配置管理", nameEn = "Security Manage")
     @Operation(summary = "更新会话管理配置")
     @PostMapping("/session/update")
     public Result<Void> updateSessionManagementConfig(@RequestBody @Validated PlatformSessionManagementConfigParam param) {
@@ -77,14 +77,14 @@ public class PlatformSecurityConfigController {
         return Res.ok();
     }
 
-    @PermCode(code = "security:view", nameCn = "安全配置查看", nameEn = "Security View")
+    @PermCode(code = "view", nameCn = "安全配置查看", nameEn = "Security View")
     @Operation(summary = "获取异常登录检测配置")
     @GetMapping("/anomaly-detection/get")
     public Result<PlatformAnomalyDetectionConfigResult> getAnomalyDetectionConfig() {
         return Res.ok(platformSecurityConfigService.findAnomalyDetectionConfig());
     }
 
-    @PermCode(code = "security:manage", nameCn = "安全配置管理", nameEn = "Security Manage")
+    @PermCode(code = "manage", nameCn = "安全配置管理", nameEn = "Security Manage")
     @Operation(summary = "更新异常登录检测配置")
     @PostMapping("/anomaly-detection/update")
     public Result<Void> updateAnomalyDetectionConfig(@RequestBody @Validated PlatformAnomalyDetectionConfigParam param) {
@@ -92,14 +92,14 @@ public class PlatformSecurityConfigController {
         return Res.ok();
     }
 
-    @PermCode(code = "security:view", nameCn = "安全配置查看", nameEn = "Security View")
+    @PermCode(code = "view", nameCn = "安全配置查看", nameEn = "Security View")
     @Operation(summary = "获取双因素认证配置")
     @GetMapping("/two-factor-auth/get")
     public Result<PlatformTwoFactorAuthConfigResult> getTwoFactorAuthConfig() {
         return Res.ok(platformSecurityConfigService.findTwoFactorAuthConfig());
     }
 
-    @PermCode(code = "security:manage", nameCn = "安全配置管理", nameEn = "Security Manage")
+    @PermCode(code = "manage", nameCn = "安全配置管理", nameEn = "Security Manage")
     @Operation(summary = "更新双因素认证配置")
     @PostMapping("/two-factor-auth/update")
     public Result<Void> updateTwoFactorAuthConfig(@RequestBody @Validated PlatformTwoFactorAuthConfigParam param) {

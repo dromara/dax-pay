@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /// # 云打印设备管理(运营端)
 ///
-@PermCode(menuCode = "payment:device:printer")
+@PermCode(menuCode = "device:printer")
 @Validated
 @Tag(name = "云打印设备管理")
 @RestController
@@ -33,7 +33,7 @@ public class DevicePrinterAdminController {
 
     private final DevicePrinterAdminService devicePrinterAdminService;
 
-    @PermCode(code = "add", nameCn = "云打印新增", nameEn = "Printer Add")
+    @PermCode(code = "manage", nameCn = "云打印管理", nameEn = "Printer Manage")
     @Operation(summary = "新增云打印设备")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) DevicePrinterParam param) {
@@ -41,7 +41,7 @@ public class DevicePrinterAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "edit", nameCn = "云打印编辑", nameEn = "Printer Edit")
+    @PermCode(code = "manage", nameCn = "云打印管理", nameEn = "Printer Manage")
     @Operation(summary = "修改云打印设备")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) DevicePrinterParam param) {
@@ -63,7 +63,7 @@ public class DevicePrinterAdminController {
         return Res.ok(devicePrinterAdminService.findById(id));
     }
 
-    @PermCode(code = "delete", nameCn = "云打印删除", nameEn = "Printer Delete")
+    @PermCode(code = "manage", nameCn = "云打印管理", nameEn = "Printer Manage")
     @Operation(summary = "删除云打印设备")
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {
@@ -71,7 +71,7 @@ public class DevicePrinterAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "edit", nameCn = "云打印编辑", nameEn = "Printer Edit")
+    @PermCode(code = "manage", nameCn = "云打印管理", nameEn = "Printer Manage")
     @Operation(summary = "绑定云打印设备")
     @PostMapping("/bind")
     public Result<Void> bind(@NotNull(message = "{validation.field.id.notNull}") Long id) {
@@ -79,7 +79,7 @@ public class DevicePrinterAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "edit", nameCn = "云打印编辑", nameEn = "Printer Edit")
+    @PermCode(code = "manage", nameCn = "云打印管理", nameEn = "Printer Manage")
     @Operation(summary = "解绑云打印设备")
     @PostMapping("/unbind")
     public Result<Void> unbind(@NotNull(message = "{validation.field.id.notNull}") Long id) {

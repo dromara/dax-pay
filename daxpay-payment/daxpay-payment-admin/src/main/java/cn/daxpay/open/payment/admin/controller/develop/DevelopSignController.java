@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /// 签名调试(管理)
-@PermCode(menuCode = "payment:develop:sign")
+@PermCode(menuCode = "develop:sign")
 @Tag(name = "签名调试服务")
 @RestController
 @RequestMapping("/admin/develop/sign")

@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /// # 设备厂商配置管理(运营端)
-@PermCode(menuCode = "payment:device:vendorConfig")
+@PermCode(menuCode = "device:vendor_config")
 @Validated
 @Tag(name = "设备厂商配置管理")
 @RestController
@@ -34,7 +34,7 @@ public class DeviceVendorConfigAdminController {
 
     private final DeviceVendorConfigAdminService deviceVendorConfigAdminService;
 
-    @PermCode(code = "add", nameCn = "厂商配置新增", nameEn = "Vendor Config Add")
+    @PermCode(code = "manage", nameCn = "厂商配置管理", nameEn = "Vendor Config Manage")
     @Operation(summary = "新增厂商配置")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) DeviceVendorConfigParam param) {
@@ -42,7 +42,7 @@ public class DeviceVendorConfigAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "edit", nameCn = "厂商配置编辑", nameEn = "Vendor Config Edit")
+    @PermCode(code = "manage", nameCn = "厂商配置管理", nameEn = "Vendor Config Manage")
     @Operation(summary = "修改厂商配置")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) DeviceVendorConfigParam param) {
@@ -64,7 +64,7 @@ public class DeviceVendorConfigAdminController {
         return Res.ok(deviceVendorConfigAdminService.findById(id));
     }
 
-    @PermCode(code = "delete", nameCn = "厂商配置删除", nameEn = "Vendor Config Delete")
+    @PermCode(code = "manage", nameCn = "厂商配置管理", nameEn = "Vendor Config Manage")
     @Operation(summary = "删除厂商配置")
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {

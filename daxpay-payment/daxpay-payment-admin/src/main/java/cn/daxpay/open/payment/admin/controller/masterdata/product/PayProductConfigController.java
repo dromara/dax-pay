@@ -18,7 +18,7 @@ import java.util.List;
 
 /// # 支付产品配置管理
 ///
-@PermCode(menuCode = "payment:product:config")
+@PermCode(menuCode = "payment:config:product_config")
 @Validated
 @Tag(name = "支付产品配置管理")
 @RestController
@@ -35,7 +35,7 @@ public class PayProductConfigController {
         return Res.ok(payProductConfigService.listAll());
     }
 
-    @PermCode(code = "edit", nameCn = "产品配置编辑", nameEn = "Product Config Edit")
+    @PermCode(code = "manage", nameCn = "产品配置管理", nameEn = "Product Config Manage")
     @Operation(summary = "切换产品生效环境")
     @PostMapping("/switch-env")
     public Result<Void> switchEnv(
@@ -45,7 +45,7 @@ public class PayProductConfigController {
         return Res.ok();
     }
 
-    @PermCode(code = "edit", nameCn = "产品配置编辑", nameEn = "Product Config Edit")
+    @PermCode(code = "manage", nameCn = "产品配置管理", nameEn = "Product Config Manage")
     @Operation(summary = "保存产品配置")
     @PostMapping("/save")
     public Result<Void> save(@RequestBody @Validated PayProductConfigParam param) {

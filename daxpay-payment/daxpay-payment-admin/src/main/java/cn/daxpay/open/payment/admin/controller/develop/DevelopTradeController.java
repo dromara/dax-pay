@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /// 交易开发调试(管理)
-@PermCode(menuCode = "payment:develop:trade")
+@PermCode(menuCode = "develop:trade")
 @Tag(name = "交易开发调试服务")
 @RestController
 @RequestMapping("/admin/develop/trade")

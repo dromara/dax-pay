@@ -25,7 +25,7 @@ import java.util.List;
 /// # 支付通道（管理端，只读）
 ///
 /// 清单来自 `ChannelEnum` + `pay_channel` 表 + 产品策略推断的通道能力。
-@PermCode(menuCode = "payment:platform:channel")
+@PermCode(menuCode = "payment:platform:pay_channel")
 @Validated
 @Tag(name = "支付通道")
 @RestController

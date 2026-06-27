@@ -34,7 +34,7 @@ public class WechatIsvKeyConfigController {
         return Res.ok(WechatIsvKeyConfigConvert.CONVERT.toResult(wechatIsvKeyConfigService.findByProduct(product)));
     }
 
-    @PermCode(code = "edit", nameCn = "微信服务商编辑", nameEn = "WeChat ISV Edit")
+    @PermCode(code = "manage", nameCn = "微信服务商管理", nameEn = "WeChat ISV Manage")
     @Operation(summary = "保存微信服务商密钥配置")
     @PostMapping("/save-config")
     public Result<Void> saveConfig(@RequestBody @Validated WechatIsvKeyConfigParam param) {

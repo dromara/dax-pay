@@ -30,7 +30,7 @@ import java.util.Map;
 /// 「运营」指 Admin 运营端角色，不是支付通道 channel。提供策略、基础/场景配置及
 /// 已启用渠道支付方式扁平目录（`method-directory/flat-list`）。
 ///
-@PermCode(menuCode = "payment:merchant:app:payRoute")
+@PermCode(menuCode = "merchant:app:route")
 @Validated
 @Tag(name = "应用通道路由管理")
 @RestController
@@ -55,7 +55,7 @@ public class PayRouteAdminController {
         return Res.ok(configService.getOrInitByAppId(appId));
     }
 
-    @PermCode(code = "edit", nameCn = "通道路由编辑", nameEn = "Pay Route Edit")
+    @PermCode(code = "manage", nameCn = "通道路由管理", nameEn = "Pay Route Manage")
     @Operation(summary = "更新路由策略")
     @PostMapping("/strategy/update")
     public Result<PayRouteStrategyResult> updateStrategy(@RequestBody @Validated PayRouteStrategyParam param) {
@@ -69,7 +69,7 @@ public class PayRouteAdminController {
         return Res.ok(configService.listSceneByAppId(appId));
     }
 
-    @PermCode(code = "edit", nameCn = "通道路由编辑", nameEn = "Pay Route Edit")
+    @PermCode(code = "manage", nameCn = "通道路由管理", nameEn = "Pay Route Manage")
     @Operation(summary = "批量保存场景模式配置")
     @PostMapping("/scene-config/save-batch")
     public Result<Void> saveSceneBatch(@RequestBody @Validated PayRouteSceneConfigBatchParam param) {
@@ -121,7 +121,7 @@ public class PayRouteAdminController {
         return Res.ok(configService.listBasicByAppId(appId));
     }
 
-    @PermCode(code = "edit", nameCn = "通道路由编辑", nameEn = "Pay Route Edit")
+    @PermCode(code = "manage", nameCn = "通道路由管理", nameEn = "Pay Route Manage")
     @Operation(summary = "批量保存基础模式配置")
     @PostMapping("/basic-config/save-batch")
     public Result<Void> saveBasicBatch(@RequestBody @Validated PayRouteBasicConfigBatchParam param) {

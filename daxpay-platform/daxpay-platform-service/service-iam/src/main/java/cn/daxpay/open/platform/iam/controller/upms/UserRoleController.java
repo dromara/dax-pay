@@ -28,7 +28,7 @@ public class UserRoleController {
 
     private final UserRoleService userRoleService;
 
-    @PermCode(code = "assignRole", nameCn = "分配角色", nameEn = "Assign Role")
+    @PermCode(code = "assign_role", nameCn = "分配角色", nameEn = "Assign Role")
     @Operation(summary = "给用户分配角色")
     @PostMapping(value = "/save-assign")
     public Result<Void> saveAssign(@Validated @RequestBody UserRoleParam param) {
@@ -36,7 +36,7 @@ public class UserRoleController {
         return Res.ok();
     }
 
-    @PermCode(code = "assignRole", nameCn = "分配角色", nameEn = "Assign Role")
+    @PermCode(code = "assign_role", nameCn = "分配角色", nameEn = "Assign Role")
     @Operation(summary = "给用户分配角色(批量)")
     @PostMapping(value = "/save-assign-batch")
     public Result<Void> saveAssignBatch(@RequestBody @Validated UserRoleBatchParam param) {
@@ -51,14 +51,14 @@ public class UserRoleController {
         return Res.ok(userRoleService.findRolesByUser(userId));
     }
 
-    @PermCode(code = "assignRole", nameCn = "分配角色", nameEn = "Assign Role")
+    @PermCode(code = "assign_role", nameCn = "分配角色", nameEn = "Assign Role")
     @Operation(summary = "根据用户ID获取到可分配角色集合")
     @GetMapping(value = "/find-assignable-roles-by-user")
     public Result<List<RoleResult>> findAssignableRolesByUser(@NotNull(message = "{validation.field.userId.notNull}") @Parameter(description = "用户ID") Long userId) {
         return Res.ok(userRoleService.findAssignableRolesByUser(userId));
     }
 
-    @PermCode(code = "assignRole", nameCn = "分配角色", nameEn = "Assign Role")
+    @PermCode(code = "assign_role", nameCn = "分配角色", nameEn = "Assign Role")
     @Operation(summary = "根据用户ID获取到角色id集合")
     @GetMapping(value = "/find-role-ids-by-user")
     public Result<List<Long>> findRoleIdsByUser(@NotNull(message = "{validation.field.userId.notNull}") @Parameter(description = "用户ID") Long userId) {

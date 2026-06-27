@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /// # 支付能力（管理端，只读）
-@PermCode(menuCode = "payment:capability")
+@PermCode(menuCode = "payment:platform:capability")
 @Validated
 @Tag(name = "支付能力管理")
 @RestController
