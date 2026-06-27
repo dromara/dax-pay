@@ -78,3 +78,23 @@ WHERE id = 90302;
 -- 8. 删除 云打印 > 厂商管理 (id=90301)
 --    厂商配置统一到顶层 90201, 各设备类型下不再单设厂商管理入口
 DELETE FROM "iam_perm_menu" WHERE id = 90301;
+
+-- 9. Dashboard 目录 (id=1): 默认进入工作台 (/analytics → /workspace)
+UPDATE "iam_perm_menu" SET
+    redirect            = '/workspace',
+    last_modified_time  = now()
+WHERE id = 1;
+
+-- 10. 工作台 (id=102): 补菜单编码占位 + 排序提前到分析页之前
+UPDATE "iam_perm_menu" SET
+    menu_code           = 'dashboard:workspace',
+    sort_no             = 1,
+    last_modified_time  = now()
+WHERE id = 102;
+
+-- 11. 分析页 (id=101): 补菜单编码占位 + 排序后移到工作台之后
+UPDATE "iam_perm_menu" SET
+    menu_code           = 'dashboard:analytics',
+    sort_no             = 2,
+    last_modified_time  = now()
+WHERE id = 101;
