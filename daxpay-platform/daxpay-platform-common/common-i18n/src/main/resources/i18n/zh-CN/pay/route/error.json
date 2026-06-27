@@ -38,5 +38,6 @@
   "duplicateSceneMethod": "场景模式下同一支付方式[{0}]存在多条配置",
   "sceneChannelMchCapabilityPair": "支付方式[{0}]须同时选择通道商户与支付能力，或同时留空",
   "basicChannelMchNotConfigured": "支付渠道[{0}]未配置通道商户，请在通道路由基础模式中完成配置",
-  "sceneCapabilityChannelMchMismatch": "支付能力[{0}]与通道商户[{1}]、支付方式[{2}]不匹配"
+  "sceneCapabilityChannelMchMismatch": "支付能力[{0}]与通道商户[{1}]、支付方式[{2}]不匹配",
+  "directCapabilityChannelMchMismatch": "支付能力[{0}]与通道商户[{1}]不匹配"
 }

@@ -38,5 +38,6 @@
   "duplicateSceneMethod": "Duplicate scene configuration for pay method [{0}]",
   "sceneChannelMchCapabilityPair": "For pay method [{0}], select both channel merchant and capability, or leave both empty",
   "basicChannelMchNotConfigured": "No channel merchant configured for pay brand [{0}]; configure it in basic route mode",
-  "sceneCapabilityChannelMchMismatch": "Capability [{0}] does not match channel merchant [{1}] and method [{2}]"
+  "sceneCapabilityChannelMchMismatch": "Capability [{0}] does not match channel merchant [{1}] and method [{2}]",
+  "directCapabilityChannelMchMismatch": "Capability [{0}] does not match channel merchant [{1}]"
 }

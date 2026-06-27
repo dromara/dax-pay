@@ -55,14 +55,6 @@ public class ProductStrategySupport {
         return List.copyOf(capabilities);
     }
 
-    /// 按支付方式编码获取策略声明的支付能力
-    public List<PayCapabilityEnum> capabilitiesForMethodCode(AbsProductStrategy strategy, String methodCode) {
-        if (StrUtil.isBlank(methodCode)) {
-            return List.of();
-        }
-        PayMethodEnum method = PayMethodEnum.findByCode(methodCode);
-        return capabilitiesForMethod(strategy, method);
-    }
 
     /// 产品是否支持渠道目录中的某一支付方式
     public boolean supportsDirectoryMethod(AbsProductStrategy strategy, PayMethodEnum method) {
@@ -78,7 +70,7 @@ public class ProductStrategySupport {
     }
 
     /// 按能力编码判断策略是否在该目录方式下声明支持
-    public boolean strategySupportsCapabilityCode(AbsProductStrategy strategy, String methodCode, String capabilityCode) {
+    public static boolean strategySupportsCapabilityCode(AbsProductStrategy strategy, String methodCode, String capabilityCode) {
         if (StrUtil.isBlank(methodCode) || StrUtil.isBlank(capabilityCode)) {
             return false;
         }
@@ -87,8 +79,21 @@ public class ProductStrategySupport {
         return strategySupportsCapability(strategy, method, capability);
     }
 
-    /// 产品已声明能力是否覆盖渠道目录中的某一支付方式（兼容旧调用名）
-    public boolean capabilityCoversDirectoryMethod(AbsProductStrategy strategy, PayMethodEnum method) {
-        return supportsDirectoryMethod(strategy, method);
+    /// 反推: 给定策略与能力, 返回所属支付方式(多归属取首个, 无则 null)
+    public static PayMethodEnum methodForCapability(AbsProductStrategy strategy, PayCapabilityEnum capability) {
+        if (capability == null) {
+            return null;
+        }
+        Map<PayMethodEnum, List<PayCapabilityEnum>> mapping = strategy.methodCapabilityMapping();
+        if (CollUtil.isEmpty(mapping)) {
+            return null;
+        }
+        for (Map.Entry<PayMethodEnum, List<PayCapabilityEnum>> entry : mapping.entrySet()) {
+            if (entry.getValue() != null && entry.getValue().contains(capability)) {
+                return entry.getKey();
+            }
+        }
+        return null;
     }
+
 }

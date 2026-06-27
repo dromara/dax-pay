@@ -91,7 +91,6 @@ public class PayRouteStrategyCapabilitySupport {
 
     /// 从商户全部通道商户中筛出启用且其产品支持该(provider,method)的候选
     private List<LabelValue> filterChannelMchForDirectory(List<ChannelMerchant> mchants, String provider, String method) {
-        PayMethodEnum methodEnum = PayMethodEnum.findByCode(method);
         List<LabelValue> results = new ArrayList<>();
         for (ChannelMerchant mch : mchants) {
             if (!Boolean.TRUE.equals(mch.getEnable())) {
@@ -134,6 +133,51 @@ public class PayRouteStrategyCapabilitySupport {
             return candidates.getFirst().getValue();
         }
         return null;
+    }
+
+    /// 传值模式: 商户全部启用通道商户候选(不按支付方式过滤)
+    public List<LabelValue> listDirectChannelMchCandidates(String mchNo) {
+        List<ChannelMerchant> mchants = channelMerchantManager.findAllByMchNo(mchNo);
+        List<LabelValue> results = new ArrayList<>();
+        for (ChannelMerchant mch : mchants) {
+            if (!Boolean.TRUE.equals(mch.getEnable())) {
+                continue;
+            }
+            String label = StrUtil.isNotBlank(mch.getChannelMerchantName())
+                    ? mch.getChannelMerchantName() : mch.getChannelMchNo();
+            if (results.stream().noneMatch(item -> Objects.equals(item.getValue(), mch.getChannelMchNo()))) {
+                results.add(new LabelValue(label, mch.getChannelMchNo()));
+            }
+        }
+        return results;
+    }
+
+    /// 传值模式: 按通道商户(产品)返回全部启用支付能力候选(不按支付方式过滤)
+    public List<LabelValue> listDirectCapabilityCandidates(String channelMchNo) {
+        String product = productOfChannelMchNo(channelMchNo);
+        if (StrUtil.isBlank(product) || !PaymentStrategyFactory.existsByProduct(product, AbsProductStrategy.class)) {
+            return List.of();
+        }
+        AbsProductStrategy strategy = PaymentStrategyFactory.createByProduct(product, AbsProductStrategy.class);
+        return ProductStrategySupport.supportedPayCapabilities(strategy).stream()
+                .filter(capability -> productCapabilityEnabled(product, capability.getCode()))
+                .map(capability -> new LabelValue(I18nUtil.getEnumName(capability), capability.getCode()))
+                .toList();
+    }
+
+    /// 传值模式: 由(通道商户, 支付能力)反推支付方式编码(策略 Map + DB 启用, 无则 null)
+    public String inferMethodForCapability(String channelMchNo, String capabilityCode) {
+        String product = productOfChannelMchNo(channelMchNo);
+        if (StrUtil.isBlank(product) || !PaymentStrategyFactory.existsByProduct(product, AbsProductStrategy.class)) {
+            return null;
+        }
+        AbsProductStrategy strategy = PaymentStrategyFactory.createByProduct(product, AbsProductStrategy.class);
+        PayCapabilityEnum capability = PayCapabilityEnum.findByCode(capabilityCode);
+        if (capability == null || !productCapabilityEnabled(product, capabilityCode)) {
+            return null;
+        }
+        PayMethodEnum method = ProductStrategySupport.methodForCapability(strategy, capability);
+        return method == null ? null : method.getCode();
     }
 
     /// 校验场景配置项所选能力在候选集合内
