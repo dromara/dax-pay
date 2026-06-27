@@ -23,9 +23,6 @@ public class PayRouteStrategyResult extends BaseResult {
     @Schema(description = "路由模式")
     private String mode;
 
-    @Schema(description = "支付渠道")
-    private String provider;
-
     @Schema(description = "是否启用")
     private boolean enable;
 

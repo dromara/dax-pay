@@ -30,10 +30,9 @@ import java.util.Objects;
 /// # 支付通道路由服务
 ///
 /// 实现 PayRouteFacade，供 NormalPayService 在支付流程中调用。
-/// 三种解析路径：
-/// 1. 直定模式：已传 channelMchNo，跳过路由，直接由 channelMchNo 推导产品并校验/派生能力；
-/// 2. 兼容跳过：未传 channelMchNo 但已指定 product(重付复用)，直接返回；
-/// 3. 路由模式：按 appId 加载策略，经基础/场景模式匹配后回填 product/channelMchNo/capability。
+/// 两种解析路径：
+/// 1. 直定模式：已传 channelMchNo，跳过路由，由 channelMchNo 推导产品；capability 必填，method 未传时由能力反推。
+/// 2. 路由模式：按 appId 加载策略，经基础/场景模式匹配后回填 product/channelMchNo/capability。
 /// 调用方需保证 appId 已解析完毕。
 @Slf4j
 @Service
@@ -47,16 +46,12 @@ public class PayRouteService implements PayRouteFacade {
     private final PayRouteBasicMatcher basicMatcher;
     private final PayRouteStrategyCapabilitySupport payRouteStrategyCapabilitySupport;
 
-    /// 实付路由解析：直定模式优先，其次兼容已指定 product，最后按策略模式匹配
+    /// 实付路由解析：直定模式优先，否则按策略模式匹配
     @Override
     public void resolve(PayParam payParam) {
         // 直定模式：指定通道商户号，跳过路由
         if (StrUtil.isNotBlank(payParam.getChannelMchNo())) {
             resolveDirect(payParam);
-            return;
-        }
-        // 兼容：已指定 product(重付复用)，跳过路由
-        if (StrUtil.isNotBlank(payParam.getProduct())) {
             return;
         }
         String appId = payParam.getAppId();

@@ -98,11 +98,6 @@ public class PayRouteConfigService {
         return sceneConfigService.listSceneCapabilityCandidatesForMethod(appId, provider, method, channelMchNo);
     }
 
-    /// 推断目录项与通道商户下唯一支付能力（仅供回显）
-    public String inferSceneCapability(String appId, String provider, String method, String channelMchNo) {
-        return sceneConfigService.inferSceneCapability(appId, provider, method, channelMchNo);
-    }
-
     /// 查询基础模式各支付渠道对应产品
     public List<PayRouteBasicConfigResult> listBasicByAppId(String appId) {
         return basicConfigService.listBasicByAppId(appId);

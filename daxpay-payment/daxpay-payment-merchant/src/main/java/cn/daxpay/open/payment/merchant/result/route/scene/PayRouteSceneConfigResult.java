@@ -16,12 +16,6 @@ public class PayRouteSceneConfigResult extends BaseResult {
     @Schema(description = "路由策略ID")
     private String strategyId;
 
-    @Schema(description = "支付渠道")
-    private String provider;
-
-    @Schema(description = "通道编码")
-    private String channel;
-
     @Schema(description = "支付方式编码")
     private String method;
 

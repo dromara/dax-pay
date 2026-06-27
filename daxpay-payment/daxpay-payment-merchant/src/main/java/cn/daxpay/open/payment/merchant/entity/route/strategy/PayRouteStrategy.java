@@ -29,10 +29,6 @@ public class PayRouteStrategy extends MchBaseEntity implements ToResult<PayRoute
     /// @see PayRouteModeEnum
     private String mode;
 
-    /// 支付渠道（微信/支付宝/银联）
-    /// @see cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum
-    private String provider;
-
     /// 是否启用
     private boolean enable;
 

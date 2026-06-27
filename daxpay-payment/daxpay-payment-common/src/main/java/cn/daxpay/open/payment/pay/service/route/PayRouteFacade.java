@@ -8,7 +8,7 @@ import cn.daxpay.open.payment.unipay.param.trade.pay.PayParam;
 /// 实现在 merchant 模块（PayRouteService），按应用路由策略匹配并回填产品。
 public interface PayRouteFacade {
 
-    /// 解析支付路由：已指定 product 则跳过，否则按策略模式匹配并回填 product。
+    /// 解析支付路由：直定模式(已传 channelMchNo)直接解析，否则按策略模式匹配并回填。
     /// 调用方需保证 appId 已解析完毕。
     void resolve(PayParam payParam);
 }

@@ -126,15 +126,6 @@ public class PayRouteStrategyCapabilitySupport {
                 .toList();
     }
 
-    /// 候选唯一时返回能力编码（仅供回显）
-    public String inferSceneCapability(String provider, String method, String channelMchNo) {
-        List<LabelValue> candidates = listSceneCapabilityCandidates(provider, method, channelMchNo);
-        if (candidates.size() == 1) {
-            return candidates.getFirst().getValue();
-        }
-        return null;
-    }
-
     /// 传值模式: 商户全部启用通道商户候选(不按支付方式过滤)
     public List<LabelValue> listDirectChannelMchCandidates(String mchNo) {
         List<ChannelMerchant> mchants = channelMerchantManager.findAllByMchNo(mchNo);

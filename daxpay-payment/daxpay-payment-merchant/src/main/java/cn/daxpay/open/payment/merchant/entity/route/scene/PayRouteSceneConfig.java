@@ -4,7 +4,6 @@ import cn.daxpay.open.payment.merchant.convert.route.scene.PayRouteSceneConfigCo
 import cn.daxpay.open.payment.merchant.result.route.scene.PayRouteSceneConfigResult;
 import cn.daxpay.open.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.daxpay.open.platform.common.mybatisplus.function.ToResult;
-import cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -20,13 +19,6 @@ public class PayRouteSceneConfig extends MpBaseEntity implements ToResult<PayRou
 
     /// 路由策略ID
     private Long strategyId;
-
-    /// 支付渠道, 空表示通用方式（qrcode/barcode 等）
-    /// @see PayProviderEnum
-    private String provider;
-
-    /// 通道编码
-    private String channel;
 
     /// 支付方式编码
     private String method;

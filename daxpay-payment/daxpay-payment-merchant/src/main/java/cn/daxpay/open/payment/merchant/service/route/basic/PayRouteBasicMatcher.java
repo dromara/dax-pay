@@ -60,10 +60,9 @@ public class PayRouteBasicMatcher {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.route.error.basicProductNotAvailable", PayRouteI18nHelper.provider(provider.getCode()));
         }
-        String channel = productResolver.channelOfProduct(product);
         // 基础模式不存能力，由 (产品, 支付方式) 派生
         String capability = resolveCapability(product, methodEnum);
-        return new RouteHit(channel, methodEnum.getCode(), product, channelMchNo, capability, null, null);
+        return new RouteHit(product, channelMchNo, capability);
     }
 
     /// 从基础配置中取指定支付渠道已绑定的通道商户号

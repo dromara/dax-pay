@@ -115,17 +115,6 @@ public class PayRouteAdminController {
     }
 
     @PermCode(code = "view", nameCn = "通道路由查看", nameEn = "Pay Route View")
-    @Operation(summary = "推断目录项与通道商户下唯一支付能力（仅供回显）")
-    @GetMapping("/scene-config/infer-capability")
-    public Result<String> inferSceneCapability(
-            @NotBlank(message = "{validation.field.appId.notBlank}") String appId,
-            @NotBlank(message = "{validation.field.provider.notBlank}") String provider,
-            @NotBlank(message = "{validation.field.method.notBlank}") String method,
-            @NotBlank(message = "{validation.field.channelMchNo.notBlank}") String channelMchNo) {
-        return Res.ok(configService.inferSceneCapability(appId, provider, method, channelMchNo));
-    }
-
-    @PermCode(code = "view", nameCn = "通道路由查看", nameEn = "Pay Route View")
     @Operation(summary = "查询基础模式配置列表")
     @GetMapping("/basic-config/list-by-app-id")
     public Result<List<PayRouteBasicConfigResult>> listBasicByAppId(@NotBlank(message = "{validation.field.appId.notBlank}") String appId) {

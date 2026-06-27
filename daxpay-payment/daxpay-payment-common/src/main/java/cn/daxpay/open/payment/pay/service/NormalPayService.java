@@ -56,12 +56,7 @@ public class NormalPayService {
     public PayResult payHandle(PayParam payParam, PayTrade trade) {
         // 解析应用号：空则取商户默认应用
         payAssistService.resolveApp(payParam);
-        // 重付场景：已有订单且 param 未传产品时，复用首次产品，不重复路由
-        if (Objects.nonNull(trade) && StrUtil.isBlank(payParam.getProduct())
-                && StrUtil.isNotBlank(trade.getProduct())) {
-            payParam.setProduct(trade.getProduct());
-        }
-        // 路由解析：已指定 product 则跳过，否则按 appId+method 策略匹配
+        // 路由解析：直定模式(已传 channelMchNo)直接解析，否则按 appId+method 策略匹配
         payRouteFacade.resolve(payParam);
         var payStrategy = PaymentStrategyFactory.createByProduct(payParam.getProduct(), AbsPayStrategy.class);
         payStrategy.setPayParam(payParam);

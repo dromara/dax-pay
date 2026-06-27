@@ -40,6 +40,6 @@ public class PayRouteSceneMatcher {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.route.error.duplicateSceneMethod",
                     method);
         }
-        return RouteHit.fromScene(candidates.getFirst());
+        return RouteHit.fromScene(candidates.getFirst().getChannelMchNo(), candidates.getFirst().getCapability());
     }
 }

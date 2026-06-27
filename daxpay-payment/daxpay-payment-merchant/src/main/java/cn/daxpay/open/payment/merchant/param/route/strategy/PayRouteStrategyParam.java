@@ -24,9 +24,6 @@ public class PayRouteStrategyParam {
     @Schema(description = "路由模式：basic/scene")
     private String mode;
 
-    @Schema(description = "支付渠道")
-    private String provider;
-
     @Schema(description = "是否启用")
     private Boolean enable;
 
