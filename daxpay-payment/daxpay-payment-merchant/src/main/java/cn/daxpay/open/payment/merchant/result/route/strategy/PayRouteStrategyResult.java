@@ -22,10 +22,4 @@ public class PayRouteStrategyResult extends BaseResult {
 
     @Schema(description = "路由模式")
     private String mode;
-
-    @Schema(description = "是否启用")
-    private boolean enable;
-
-    @Schema(description = "策略名称")
-    private String name;
 }

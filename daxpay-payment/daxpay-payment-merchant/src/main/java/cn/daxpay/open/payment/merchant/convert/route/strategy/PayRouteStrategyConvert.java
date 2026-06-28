@@ -1,8 +1,6 @@
 package cn.daxpay.open.payment.merchant.convert.route.strategy;
 
 import cn.daxpay.open.payment.merchant.entity.route.strategy.PayRouteStrategy;
-import cn.daxpay.open.payment.merchant.result.route.strategy.PayRouteStrategyResult;
-import cn.daxpay.open.payment.merchant.entity.route.strategy.PayRouteStrategy;
 import cn.daxpay.open.payment.merchant.param.route.strategy.PayRouteStrategyParam;
 import cn.daxpay.open.payment.merchant.result.route.strategy.PayRouteStrategyResult;
 import org.mapstruct.BeanMapping;

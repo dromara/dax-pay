@@ -29,12 +29,6 @@ public class PayRouteStrategy extends MchBaseEntity implements ToResult<PayRoute
     /// @see PayRouteModeEnum
     private String mode;
 
-    /// 是否启用
-    private boolean enable;
-
-    /// 策略名称
-    private String name;
-
     @Override
     public PayRouteStrategyResult toResult() {
         return PayRouteStrategyConvert.CONVERT.toResult(this);

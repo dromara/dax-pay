@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /// # 通道路由：策略方式→通道商户与能力候选
 ///
@@ -67,20 +68,62 @@ public class PayRouteStrategyCapabilitySupport {
     }
 
     /// 按目录项+通道商户批量返回支付能力候选
-    public Map<String, List<LabelValue>> listSceneCapabilityCandidatesBatch(
-            String mchNo, List<PayRouteSceneCapabilityBatchItem> items) {
+    ///
+    /// 优化：目录、策略、产品能力及 channelMchNo→product 映射在循环外一次性预加载，
+    /// 循环内仅做内存集合求交，避免逐 item 重复查库与扫描 Spring 容器。
+    public Map<String, List<LabelValue>> listSceneCapabilityCandidatesBatch(List<PayRouteSceneCapabilityBatchItem> items) {
         Map<String, List<LabelValue>> index = new LinkedHashMap<>();
         if (CollUtil.isEmpty(items)) {
             return index;
         }
+        RouteBatchContext ctx = buildRouteBatchContext(payProviderMethodService.listDirectoryEntries());
+        // 批量预加载 channelMchNo → product，替代逐次 productOfChannelMchNo 查库
+        Set<String> channelMchNos = new HashSet<>();
+        for (PayRouteSceneCapabilityBatchItem item : items) {
+            if (item != null && StrUtil.isNotBlank(item.getChannelMchNo())) {
+                channelMchNos.add(item.getChannelMchNo());
+            }
+        }
+        Map<String, String> productByChannelMchNo = channelMerchantManager.lambdaQuery()
+                .select(ChannelMerchant::getChannelMchNo, ChannelMerchant::getProduct)
+                .in(ChannelMerchant::getChannelMchNo, channelMchNos)
+                .list()
+                .stream()
+                .collect(Collectors.toMap(ChannelMerchant::getChannelMchNo, ChannelMerchant::getProduct, (a, b) -> a));
         for (PayRouteSceneCapabilityBatchItem item : items) {
             if (item == null || StrUtil.hasBlank(item.getProvider(), item.getMethod(), item.getChannelMchNo())) {
                 continue;
             }
             String key = capabilityBatchKey(item.getProvider(), item.getMethod(), item.getChannelMchNo());
-            index.put(key, listSceneCapabilityCandidates(item.getProvider(), item.getMethod(), item.getChannelMchNo()));
+            if (!ctx.directoryPairKeys().contains(PayProviderMethodManager.pairKey(item.getProvider(), item.getMethod()))) {
+                index.put(key, List.of());
+                continue;
+            }
+            String product = productByChannelMchNo.get(item.getChannelMchNo());
+            if (StrUtil.isBlank(product)) {
+                index.put(key, List.of());
+                continue;
+            }
+            index.put(key, capabilitiesForMethodWithCtx(ctx, product, PayMethodEnum.findByCode(item.getMethod())));
         }
         return index;
+    }
+
+    /// 用预加载上下文计算支付能力候选(策略声明能力 ∩ DB 挂载启用)，零查库
+    private List<LabelValue> capabilitiesForMethodWithCtx(RouteBatchContext ctx, String product, PayMethodEnum method) {
+        AbsProductStrategy strategy = ctx.strategyByProduct().get(product);
+        if (strategy == null) {
+            return List.of();
+        }
+        List<PayCapabilityEnum> declared = ProductStrategySupport.capabilitiesForMethod(strategy, method);
+        if (CollUtil.isEmpty(declared)) {
+            return List.of();
+        }
+        Set<String> mounted = ctx.capabilityCodesByProduct().getOrDefault(product, Set.of());
+        return declared.stream()
+                .filter(capability -> mounted.contains(capability.getCode()))
+                .map(capability -> new LabelValue(I18nUtil.getEnumName(capability), capability.getCode()))
+                .toList();
     }
 
     /// 能力批量候选 Map 的 key：provider|method|channelMchNo
@@ -206,7 +249,7 @@ public class PayRouteStrategyCapabilitySupport {
     }
 
     /// 通道路由：产品是否支持目录支付方式（策略 Map ∧ DB）
-    public boolean routeProductSupportsMethod(String product, PayMethodEnum method) {
+    private boolean routeProductSupportsMethod(String product, PayMethodEnum method) {
         if (!PaymentStrategyFactory.existsByProduct(product, AbsProductStrategy.class)) {
             return false;
         }

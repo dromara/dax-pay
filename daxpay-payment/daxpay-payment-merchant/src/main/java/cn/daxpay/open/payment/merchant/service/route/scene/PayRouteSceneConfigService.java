@@ -120,8 +120,8 @@ public class PayRouteSceneConfigService {
 
     /// 按目录项+通道商户批量返回支付能力候选
     public Map<String, List<LabelValue>> listSceneCapabilityCandidatesBatch(PayRouteSceneCapabilityBatchParam param) {
-        String mchNo = mchAppInfoManager.requireMchNoByAppIdNotTenant(param.getAppId());
-        return payRouteStrategyCapabilitySupport.listSceneCapabilityCandidatesBatch(mchNo, param.getItems());
+        mchAppInfoManager.requireMchNoByAppIdNotTenant(param.getAppId());
+        return payRouteStrategyCapabilitySupport.listSceneCapabilityCandidatesBatch(param.getItems());
     }
 
     /// 按目录项（支付渠道+支付方式）筛选商户已开通的通道商户候选

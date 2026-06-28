@@ -13,9 +13,6 @@ import lombok.experimental.Accessors;
 @Schema(title = "支付通道路由策略参数")
 public class PayRouteStrategyParam {
 
-    @Schema(description = "主键,更新时传入")
-    private Long id;
-
     @NotBlank(message = "{validation.field.appId.notBlank}")
     @Size(max = 32)
     @Schema(description = "应用号")
@@ -23,10 +20,4 @@ public class PayRouteStrategyParam {
 
     @Schema(description = "路由模式：basic/scene")
     private String mode;
-
-    @Schema(description = "是否启用")
-    private Boolean enable;
-
-    @Schema(description = "策略名称")
-    private String name;
 }

@@ -50,8 +50,6 @@ public class PayRouteConfigService {
         strategy.setAppId(appId);
         strategy.setMchNo(mchAppInfoManager.requireMchNoByAppIdNotTenant(appId));
         strategy.setMode(PayRouteModeEnum.BASIC.getCode());
-        strategy.setEnable(true);
-        strategy.setName("默认策略");
         strategyManager.save(strategy);
         return strategy.toResult();
     }

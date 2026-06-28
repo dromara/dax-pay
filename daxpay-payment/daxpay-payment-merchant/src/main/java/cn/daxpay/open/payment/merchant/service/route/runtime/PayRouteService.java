@@ -60,9 +60,6 @@ public class PayRouteService implements PayRouteFacade {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.route.error.strategyNotFound");
         }
         PayRouteStrategy strategy = bundle.getStrategy();
-        if (!strategy.isEnable()) {
-            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.route.error.strategyDisabled");
-        }
         RouteHit hit = resolveByMode(bundle, payParam, strategy.getMode());
         if (hit == null) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.route.error.noMatch");
