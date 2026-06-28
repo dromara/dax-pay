@@ -6,6 +6,8 @@ import cn.daxpay.open.payment.common.util.PaymentStrategyFactory;
 import cn.daxpay.open.payment.merchant.param.route.scene.PayRouteSceneCapabilityBatchItem;
 import cn.daxpay.open.payment.masterdata.constants.capability.dao.PayCapabilityManager;
 import cn.daxpay.open.payment.masterdata.constants.capability.dao.PayProductCapabilityManager;
+import cn.daxpay.open.payment.masterdata.constants.capability.entity.PayCapability;
+import cn.daxpay.open.payment.masterdata.constants.product.entity.PayProductCapability;
 import cn.daxpay.open.payment.masterdata.constants.product.service.PayProductCapabilityService;
 import cn.daxpay.open.payment.masterdata.constants.provider.dao.PayProviderMethodManager;
 import cn.daxpay.open.payment.masterdata.constants.provider.service.PayProviderMethodService;
@@ -178,8 +180,10 @@ public class PayRouteStrategyCapabilitySupport {
         }
         AbsProductStrategy strategy = PaymentStrategyFactory.createByProduct(product, AbsProductStrategy.class);
         PayMethodEnum methodEnum = PayMethodEnum.findByCode(method);
+        // 预加载该产品已挂载且主数据存在的能力集合（替代逐能力查库）
+        Set<String> enabledCodes = loadEnabledCapabilityCodes(product);
         return ProductStrategySupport.capabilitiesForMethod(strategy, methodEnum).stream()
-                .filter(capability -> productCapabilityEnabled(product, capability.getCode()))
+                .filter(capability -> enabledCodes.contains(capability.getCode()))
                 .map(capability -> new LabelValue(I18nUtil.getEnumName(capability), capability.getCode()))
                 .toList();
     }
@@ -208,8 +212,10 @@ public class PayRouteStrategyCapabilitySupport {
             return List.of();
         }
         AbsProductStrategy strategy = PaymentStrategyFactory.createByProduct(product, AbsProductStrategy.class);
+        // 预加载该产品已挂载且主数据存在的能力集合（替代逐能力查库）
+        Set<String> enabledCodes = loadEnabledCapabilityCodes(product);
         return ProductStrategySupport.supportedPayCapabilities(strategy).stream()
-                .filter(capability -> productCapabilityEnabled(product, capability.getCode()))
+                .filter(capability -> enabledCodes.contains(capability.getCode()))
                 .map(capability -> new LabelValue(I18nUtil.getEnumName(capability), capability.getCode()))
                 .toList();
     }
@@ -323,6 +329,24 @@ public class PayRouteStrategyCapabilitySupport {
                 .oneOpt()
                 .map(ChannelMerchant::getProduct)
                 .orElse(null);
+    }
+
+    /// 预加载产品已挂载且主数据存在的能力编码集合（替代逐能力 productCapabilityEnabled 查库）
+    private Set<String> loadEnabledCapabilityCodes(String product) {
+        List<PayProductCapability> rels = payProductCapabilityManager.listByProduct(product);
+        if (rels.isEmpty()) {
+            return Set.of();
+        }
+        Set<String> capabilityCodes = rels.stream()
+                .map(PayProductCapability::getCapabilityCode)
+                .collect(Collectors.toSet());
+        Set<String> validCodes = payCapabilityManager.listByCodes(capabilityCodes).stream()
+                .map(PayCapability::getCode)
+                .collect(Collectors.toSet());
+        return rels.stream()
+                .map(PayProductCapability::getCapabilityCode)
+                .filter(validCodes::contains)
+                .collect(Collectors.toSet());
     }
 
     private boolean productCapabilityEnabled(String productCode, String capabilityCode) {

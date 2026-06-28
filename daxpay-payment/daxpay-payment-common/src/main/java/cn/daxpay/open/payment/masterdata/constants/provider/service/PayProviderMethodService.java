@@ -73,19 +73,14 @@ public class PayProviderMethodService {
 
     /// 判断该支付渠道下是否存在该支付方式（目录有效组合）
     public boolean contains(String providerCode, String methodCode) {
-        PayProviderEnum provider = PayProviderEnum.findByCode(providerCode);
-        if (provider == null) {
-            return false;
-        }
-        PayMethodEnum methodEnum = resolveMethodEnum(methodCode);
-        if (methodEnum == null) {
+        if (PayProviderEnum.findByCode(providerCode) == null) {
             return false;
         }
         if (payMethodManager.findByCode(methodCode).isEmpty()) {
             return false;
         }
-        return listMergedRelationsForProvider(providerCode).stream()
-                .anyMatch(row -> Objects.equals(row.methodEnum().getCode(), methodCode));
+        return payProviderMethodManager.mapByPairKey()
+                .containsKey(PayProviderMethodManager.pairKey(providerCode, methodCode));
     }
 
     /// 某支付渠道目录中的支付方式列表
@@ -110,24 +105,7 @@ public class PayProviderMethodService {
 
     /// 管理端：某支付渠道下的全部支付方式
     public List<MergedRelationRow> listMergedRelationsForProvider(String providerCode) {
-        Map<String, PayMethod> methodMap = payMethodManager.mapByCode();
-        List<MergedRelationRow> rows = new ArrayList<>();
-        int ordinal = 0;
-        for (PayProviderMethod rel : payProviderMethodManager.listByProvider(providerCode)) {
-            PayMethod methodRow = methodMap.get(rel.getMethod());
-            if (methodRow == null) {
-                continue;
-            }
-            PayMethodEnum methodEnum = resolveMethodEnum(rel.getMethod());
-            if (methodEnum == null) {
-                continue;
-            }
-            int sortNo = rel.getSortNo() != null ? rel.getSortNo() : ordinal;
-            rows.add(new MergedRelationRow(methodEnum, sortNo, rel.getDescription()));
-            ordinal++;
-        }
-        rows.sort(Comparator.comparingInt(MergedRelationRow::sortNo));
-        return rows;
+        return mergeRelations(payProviderMethodManager.listByProvider(providerCode), payMethodManager.mapByCode());
     }
 
     /// 转为平铺展示用的渠道+方式结果

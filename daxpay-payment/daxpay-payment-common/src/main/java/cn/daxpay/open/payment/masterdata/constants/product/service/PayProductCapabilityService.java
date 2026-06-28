@@ -66,9 +66,20 @@ public class PayProductCapabilityService {
 
     /// 判断产品是否支持该支付方式（策略声明能力 ∩ 已挂载能力，按产品查库）
     public boolean productSupportsMethod(String productCode, String methodCode) {
-        Set<String> mountedCodes = payProductCapabilityManager.listByProduct(productCode).stream()
+        List<PayProductCapability> rels = payProductCapabilityManager.listByProduct(productCode);
+        if (rels.isEmpty()) {
+            return false;
+        }
+        // 批量获取能力主数据（替代逐个 findByCode）
+        Set<String> capabilityCodes = rels.stream()
                 .map(PayProductCapability::getCapabilityCode)
-                .filter(code -> payCapabilityManager.findByCode(code).isPresent())
+                .collect(Collectors.toSet());
+        Set<String> validCodes = payCapabilityManager.listByCodes(capabilityCodes).stream()
+                .map(PayCapability::getCode)
+                .collect(Collectors.toSet());
+        Set<String> mountedCodes = rels.stream()
+                .map(PayProductCapability::getCapabilityCode)
+                .filter(validCodes::contains)
                 .collect(Collectors.toSet());
         return strategyCapabilitiesForMethod(productCode, methodCode).stream()
                 .map(PayCapabilityEnum::getCode)

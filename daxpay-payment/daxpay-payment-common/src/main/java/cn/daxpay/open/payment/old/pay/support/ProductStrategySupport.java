@@ -70,7 +70,7 @@ public class ProductStrategySupport {
     }
 
     /// 按能力编码判断策略是否在该目录方式下声明支持
-    public static boolean strategySupportsCapabilityCode(AbsProductStrategy strategy, String methodCode, String capabilityCode) {
+    public boolean strategySupportsCapabilityCode(AbsProductStrategy strategy, String methodCode, String capabilityCode) {
         if (StrUtil.isBlank(methodCode) || StrUtil.isBlank(capabilityCode)) {
             return false;
         }
@@ -80,7 +80,7 @@ public class ProductStrategySupport {
     }
 
     /// 反推: 给定策略与能力, 返回所属支付方式(多归属取首个, 无则 null)
-    public static PayMethodEnum methodForCapability(AbsProductStrategy strategy, PayCapabilityEnum capability) {
+    public PayMethodEnum methodForCapability(AbsProductStrategy strategy, PayCapabilityEnum capability) {
         if (capability == null) {
             return null;
         }
