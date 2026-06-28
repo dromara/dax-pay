@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.common.context;
 
+import cn.daxpay.open.payment.common.context.PaymentContextHolder;
 import cn.daxpay.open.payment.old.pay.service.assist.PaymentAssistService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -13,25 +14,23 @@ import java.util.function.Supplier;
 @RequiredArgsConstructor
 public class PaymentScopeManager {
 
-    private final PaymentScope paymentScope;
-
     private final PaymentAssistService paymentAssistService;
 
     /// 开启作用域(空上下文)
     public void start() {
-        paymentScope.start();
+        PaymentContextHolder.bind();
     }
 
     /// 开启作用域并初始化商户信息
     /// 用于定时任务/MQ消费者等非HTTP场景
     public void startWithMch(String mchNo, String appId) {
-        paymentScope.start();
+        PaymentContextHolder.bind();
         paymentAssistService.initMchAndApp(mchNo, appId);
     }
 
     /// 结束作用域
     public void end() {
-        paymentScope.end();
+        PaymentContextHolder.unbind();
     }
 
     /// 在作用域内执行(自动管理生命周期, 同步执行)
