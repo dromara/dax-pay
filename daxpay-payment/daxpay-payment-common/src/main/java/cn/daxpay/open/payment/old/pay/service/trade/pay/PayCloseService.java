@@ -94,11 +94,10 @@ public class PayCloseService {
                 trade.setProduct(payOrder.getProduct());
                 trade.setChannel(payOrder.getChannel());
                 trade.setMethod(payOrder.getMethod());
-                strategy.init(trade, useCancel);
                 // 关闭前准备
-                strategy.doBeforeCloseHandler();
+                strategy.doBeforeClose(trade);
                 // 执行关闭策略, 返回关闭的方式
-                closeType = strategy.doCloseHandler();
+                closeType = strategy.doClose(trade, useCancel);
                 // 成功处理 关闭或撤销订单
                 payStatusEnum = useCancel ? PayStatusEnum.CANCEL : PayStatusEnum.CLOSE;
             }

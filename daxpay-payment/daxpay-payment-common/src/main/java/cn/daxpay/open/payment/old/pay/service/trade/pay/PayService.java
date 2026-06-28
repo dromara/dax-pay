@@ -6,6 +6,7 @@ import cn.daxpay.open.platform.core.exception.system.DataErrorException;
 import cn.daxpay.open.platform.core.exception.PayFailureException;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
+import cn.daxpay.open.payment.common.context.PayContext;
 import cn.daxpay.open.payment.common.util.PaymentStrategyFactory;
 import cn.daxpay.open.payment.old.pay.bo.trade.PayResultBo;
 import cn.daxpay.open.payment.old.pay.dao.order.pay.PayOrderExpandManager;
@@ -78,8 +79,7 @@ public class PayService {
     public PayResult payHandle(PayParam payParam, PayOrder payOrder) {
         // 获取支付策略类
         var payStrategy = PaymentStrategyFactory.createByProduct(payParam.getProduct(), AbsPayStrategy.class);
-        // 初始化支付的参数
-        payStrategy.setPayParam(payParam);
+        PayContext context = new PayContext(payParam);
         // 检测支付能力是否支持（产品已挂载能力覆盖该支付方式）
         var methodEnum = PayMethodEnum.findByCode(payParam.getMethod());
         if (!SpringUtil.getBean(PayProductCapabilityService.class).productSupportsMethod(
@@ -88,7 +88,7 @@ public class PayService {
                     I18nUtil.getEnumName(methodEnum) + "(" + methodEnum.getCode() + ")");
         }
         // 执行支付前处理动作, 进行各种校验, 校验通过才会进行下面的操作
-        payStrategy.doBeforePayHandler();
+        payStrategy.doBeforePay(context);
         // 订单不存在执行支付前的保存动作, 保存支付订单默认状态为支付中
         if (Objects.isNull(payOrder)){
             payOrder = payAssistService.createPayOrder(payParam);
@@ -110,11 +110,11 @@ public class PayService {
         trade.setChannel(payOrder.getChannel());
         trade.setMethod(payOrder.getMethod());
         trade.setAmount(payOrder.getAmount().multiply(java.math.BigDecimal.valueOf(100)).longValue());
-        payStrategy.setTrade(trade);
+        context.setTrade(trade);
         PayResultBo result;
         try {
             // 支付操作
-            var newResult = payStrategy.doPayHandler();
+            var newResult = payStrategy.doPay(context);
             result = new PayResultBo();
             result.setOutOrderNo(newResult.getOutOrderNo());
             result.setComplete(newResult.isComplete());

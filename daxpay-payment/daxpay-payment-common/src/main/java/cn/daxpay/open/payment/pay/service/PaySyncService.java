@@ -87,8 +87,7 @@ public class PaySyncService {
                     .orElse(null);
             var syncStrategy = PaymentStrategyFactory.createByProduct(
                     trade.getProduct(), AbsSyncPayOrderStrategy.class);
-            syncStrategy.setTrade(trade);
-            PaySyncResultBo syncResult = syncStrategy.doSync();
+            PaySyncResultBo syncResult = syncStrategy.doSync(trade);
             if (!Objects.equals(syncResult.getOutOrderNo(), trade.getOutOrderNo())) {
                 trade.setOutOrderNo(syncResult.getOutOrderNo());
                 payTradeManager.updateById(trade);

@@ -3,6 +3,7 @@ package cn.daxpay.open.channel.douyin.strategy;
 import cn.daxpay.open.channel.douyin.client.DouyinChannelClient;
 import cn.daxpay.open.channel.douyin.dto.DouyinPayReq;
 import cn.daxpay.open.channel.douyin.dto.DouyinPayResp;
+import cn.daxpay.open.payment.common.context.PayContext;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.pay.bo.PayTradeResultBo;
 import cn.daxpay.open.payment.strategy.pay.AbsPayStrategy;
@@ -33,14 +34,14 @@ public class DouyinDirectPayStrategy extends AbsPayStrategy {
     }
 
     @Override
-    public PayTradeResultBo doPayHandler() {
+    public PayTradeResultBo doPay(PayContext context) {
         // 构建请求
         DouyinPayReq req = new DouyinPayReq();
         req.setChannel(ProductEnum.DOUYIN_PAY.getChannel());
-        req.setBizOrderNo(getPayParam().getBizOrderNo());
-        req.setAmount(getPayParam().getAmount().multiply(HUNDRED).longValue());
-        req.setSubject(getPayParam().getTitle());
-        req.setMethod(getPayParam().getMethod());
+        req.setBizOrderNo(context.getPayParam().getBizOrderNo());
+        req.setAmount(context.getPayParam().getAmount().multiply(HUNDRED).longValue());
+        req.setSubject(context.getPayParam().getTitle());
+        req.setMethod(context.getPayParam().getMethod());
         // TODO 从数据库获取抖音通道配置
         req.setConfig(Map.of());
 

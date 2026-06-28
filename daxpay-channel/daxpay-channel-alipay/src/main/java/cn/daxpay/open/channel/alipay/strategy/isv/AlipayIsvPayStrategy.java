@@ -7,6 +7,7 @@ import cn.daxpay.open.channel.alipay.entity.isv.AlipayIsvAppKeyConfig;
 import cn.daxpay.open.channel.alipay.entity.isv.AlipayIsvChannelMerchant;
 import cn.daxpay.open.channel.alipay.service.isv.AlipayIsvAppKeyConfigService;
 import cn.daxpay.open.channel.alipay.service.pay.AlipayPayService;
+import cn.daxpay.open.payment.common.context.PayContext;
 import cn.daxpay.open.payment.pay.bo.PayTradeResultBo;
 import cn.daxpay.open.payment.strategy.pay.AbsPayStrategy;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
@@ -40,17 +41,18 @@ public class AlipayIsvPayStrategy extends AbsPayStrategy {
     }
 
     @Override
-    public void doBeforePayHandler() {
-        mapMethod(getPayParam().getMethod());
+    public void doBeforePay(PayContext context) {
+        mapMethod(context.getPayParam().getMethod());
+        // 前置阶段构建配置，存入上下文供 doPay 使用
+        context.setChannelConfig(buildConfig(context.getTrade().getMchNo()));
     }
 
     @Override
-    public PayTradeResultBo doPayHandler() {
-        return alipayPayService.pay(getTrade(), getPayParam(), buildConfig());
+    public PayTradeResultBo doPay(PayContext context) {
+        return alipayPayService.pay(context.getTrade(), context.getPayParam(), context.getChannelConfig());
     }
 
-    private Map<String, Object> buildConfig() {
-        String mchNo = getTrade().getMchNo();
+    private Map<String, Object> buildConfig(String mchNo) {
         AlipayIsvChannelMerchant isvMerchant = alipayIsvChannelMerchantManager.findByMchNo(mchNo)
                 .orElseThrow(() -> new DataNotExistException("error.channel.alipay.mchAppNotFound"));
         AlipayIsvApp isvApp = alipayIsvAppManager.findById(isvMerchant.getIsvAppId())

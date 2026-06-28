@@ -4,6 +4,7 @@ import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.PayFailureException;
 import cn.daxpay.open.payment.common.enums.PayFundStatusEnum;
+import cn.daxpay.open.payment.common.context.PayContext;
 import cn.daxpay.open.payment.common.util.PaymentStrategyFactory;
 import cn.daxpay.open.payment.pay.bo.PayTradeResultBo;
 import cn.daxpay.open.payment.pay.order.dao.PayTradeManager;
@@ -59,7 +60,6 @@ public class NormalPayService {
         // 路由解析：直定模式(已传 channelMchNo)直接解析，否则按 appId+method 策略匹配
         payRouteFacade.resolve(payParam);
         var payStrategy = PaymentStrategyFactory.createByProduct(payParam.getProduct(), AbsPayStrategy.class);
-        payStrategy.setPayParam(payParam);
         // 订单不存在，新建支付订单
         if (Objects.isNull(trade)) {
             trade = payAssistService.createOrder(payParam);
@@ -69,12 +69,12 @@ public class NormalPayService {
                 return payAssistService.buildResult(trade);
             }
         }
-        payStrategy.setTrade(trade);
-        payStrategy.initPayParam(trade, payParam);
-        payStrategy.doBeforePayHandler();
+        // 显式传递上下文（替代原策略实例字段）
+        PayContext context = new PayContext(payParam).setTrade(trade);
+        payStrategy.doBeforePay(context);
         PayTradeResultBo result;
         try {
-            result = payStrategy.doPayHandler();
+            result = payStrategy.doPay(context);
         } catch (Exception e) {
             log.error("支付出现异常", e);
             trade.setStatus(PayFundStatusEnum.FAIL.getCode());

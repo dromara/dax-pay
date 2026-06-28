@@ -76,10 +76,8 @@ public class PayCloseService {
             } else {
                 AbsPayCloseStrategy strategy = PaymentStrategyFactory.createByProduct(
                         trade.getProduct(), AbsPayCloseStrategy.class);
-                strategy.setTrade(trade);
-                strategy.init(trade, useCancel);
-                strategy.doBeforeCloseHandler();
-                strategy.doCloseHandler();
+                strategy.doBeforeClose(trade);
+                strategy.doClose(trade, useCancel);
                 payUniHandleService.payClose(trade, normalOrder);
             }
         } catch (Exception e) {

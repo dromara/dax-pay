@@ -103,10 +103,9 @@ public class PaySyncService {
         trade.setChannel(payOrder.getChannel());
         trade.setMethod(payOrder.getMethod());
         trade.setAmount(payOrder.getAmount().multiply(BigDecimal.valueOf(100)).longValue());
-        syncPayStrategy.setTrade(trade);
         try {
             // 执行操作, 获取支付网关同步的结果
-            var newResult = syncPayStrategy.doSync();
+            var newResult = syncPayStrategy.doSync(trade);
             PaySyncResultBo syncResult = new PaySyncResultBo();
             syncResult.setSyncSuccess(newResult.isSyncSuccess());
             if (newResult.getPayStatus() != null) {
@@ -253,10 +252,9 @@ public class PaySyncService {
         closeTrade.setProduct(order.getProduct());
         closeTrade.setChannel(order.getChannel());
         closeTrade.setMethod(order.getMethod());
-        strategy.setTrade(closeTrade);
-        strategy.doBeforeCloseHandler();
+        strategy.doBeforeClose(closeTrade);
         // 执行策略的关闭方法
-        strategy.doCloseHandler();
+        strategy.doClose(closeTrade, false);
         // 关闭统一处理
         tradeUniHandleService.payClose(order, PayStatusEnum.CLOSE);
     }
