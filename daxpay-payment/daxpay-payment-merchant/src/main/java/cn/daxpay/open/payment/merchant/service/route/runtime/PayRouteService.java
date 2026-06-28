@@ -17,6 +17,7 @@ import cn.daxpay.open.payment.unipay.param.trade.pay.PayParam;
 import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayCapabilityEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
+import cn.daxpay.open.platform.core.enums.pay.route.PayRouteModeEnum;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.hutool.core.util.StrUtil;
@@ -116,7 +117,7 @@ public class PayRouteService implements PayRouteFacade {
 
     /// 按路由模式委托匹配器；未识别模式按场景模式处理
     private RouteHit resolveByMode(PayRouteBundle bundle, PayParam payParam, String mode) {
-        if (Objects.equals(mode, "basic")) {
+        if (Objects.equals(mode, PayRouteModeEnum.BASIC.getCode())) {
             return basicMatcher.match(bundle.getBasicConfigs(), payParam);
         }
         return PayRouteSceneMatcher.match(bundle.getSceneConfigs(), payParam);

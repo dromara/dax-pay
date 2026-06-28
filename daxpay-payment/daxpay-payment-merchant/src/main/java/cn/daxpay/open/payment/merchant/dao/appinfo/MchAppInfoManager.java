@@ -50,22 +50,11 @@ public class MchAppInfoManager extends BaseManager<MchAppInfoMapper, MchAppInfo>
         return requireByAppIdNotTenant(appId).getMchNo();
     }
 
-    /// 商户是否存在APP
-    public boolean existByMchNo(String mchNo) {
-        return existedByField(MchAppInfo::getMchNo, mchNo);
-    }
-
     /// 分页
     public Page<MchAppInfo> page(PageParam pageParam, MchAppInfoQuery query) {
         Page<MchAppInfo> mpPage = MpUtil.getMpPage(pageParam);
         QueryWrapper<MchAppInfo> wrapper = QueryGenerator.generator(query);
         return this.page(mpPage, wrapper);
-    }
-
-    /// 根据状态查询所有
-    public List<MchAppInfo> findAllByStatus(MchAppStatusEnum status) {
-        return findAllByField(MchAppInfo::getStatus, status.getCode());
-
     }
 
     /// 查询默认应用

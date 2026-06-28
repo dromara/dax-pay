@@ -35,6 +35,7 @@ public class PayRouteConfigService {
     private final MchAppInfoManager mchAppInfoManager;
     private final PayRouteSceneConfigService sceneConfigService;
     private final PayRouteBasicConfigService basicConfigService;
+
     /// 按应用号获取路由策略，不存在则创建默认基础模式策略
     @Transactional(rollbackFor = Exception.class)
     public PayRouteStrategyResult getOrInitByAppId(String appId) {

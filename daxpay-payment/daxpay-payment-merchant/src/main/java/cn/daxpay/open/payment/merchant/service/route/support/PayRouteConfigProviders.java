@@ -17,7 +17,9 @@ public class PayRouteConfigProviders {
     public static final List<String> CODES = List.of(
             PayProviderEnum.WECHAT.getCode(),
             PayProviderEnum.ALIPAY.getCode(),
-            PayProviderEnum.UNION_PAY.getCode());
+            PayProviderEnum.UNION_PAY.getCode(),
+            PayProviderEnum.DOUYIN.getCode()
+    );
 
 
     /// 是否属于通道路由配置白名单支付渠道
