@@ -48,7 +48,6 @@ public class AlipayIsvAppKeyConfigService {
     @Transactional(rollbackFor = Exception.class)
     public void save(AlipayIsvAppKeyConfigParam param) {
         AlipayIsvAppKeyConfig config = this.findByAlipayIsvAppId(param.getAlipayIsvAppId());
-        config.setAuthType(param.getAuthType());
         AlipayIsvAppKeyConfigConvert.CONVERT.copy(param, config);
         alipayIsvAppKeyConfigManager.updateById(config);
     }
