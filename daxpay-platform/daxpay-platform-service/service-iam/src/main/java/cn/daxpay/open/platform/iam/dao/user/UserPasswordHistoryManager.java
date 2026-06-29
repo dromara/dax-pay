@@ -2,6 +2,7 @@ package cn.daxpay.open.platform.iam.dao.user;
 
 import cn.daxpay.open.platform.iam.entity.user.UserPasswordHistory;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
@@ -34,9 +35,11 @@ public class UserPasswordHistoryManager {
     public List<UserPasswordHistory> findRecentByUserId(Long userId, int limit) {
         LambdaQueryWrapper<UserPasswordHistory> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(UserPasswordHistory::getUserId, userId)
-                .orderByDesc(UserPasswordHistory::getCreateTime)
-                .last("LIMIT " + limit);
-        return passwordHistoryMapper.selectList(wrapper);
+                .orderByDesc(UserPasswordHistory::getCreateTime);
+        // 分页插件按当前数据库方言生成 limit，避免硬编码 SQL 方言
+        Page<UserPasswordHistory> page = new Page<>(1, limit);
+        page.setSearchCount(false);
+        return passwordHistoryMapper.selectPage(page, wrapper).getRecords();
     }
 
     /// 获取用户所有密码历史记录

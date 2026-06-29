@@ -40,11 +40,26 @@ public class AlipayDirectAppManager extends BaseManager<AlipayDirectAppMapper, A
 
     /// 根据商户号查询首个直连应用(单应用场景, 按创建时间升序取第一条)
     public Optional<AlipayDirectApp> findFirstByMchNo(String mchNo) {
-        return Optional.ofNullable(lambdaQuery()
+        return firstOpt(q -> q
                 .eq(AlipayDirectApp::getMchNo, mchNo)
                 .orderByAsc(AlipayDirectApp::getCreateTime)
-                .orderByAsc(AlipayDirectApp::getId)
-                .last("limit 1")
-                .one());
+                .orderByAsc(AlipayDirectApp::getId));
+    }
+
+    /// 根据通道商户号与应用类型查询首个应用(appType自动推导时使用, 按创建时间升序取第一条)
+    public Optional<AlipayDirectApp> findFirstByChannelMchNoAndAppType(String channelMchNo, String appType) {
+        return firstOpt(q -> q
+                .eq(AlipayDirectApp::getChannelMchNo, channelMchNo)
+                .eq(AlipayDirectApp::getAppType, appType)
+                .orderByAsc(AlipayDirectApp::getCreateTime)
+                .orderByAsc(AlipayDirectApp::getId));
+    }
+
+    /// 根据通道商户号查询首个应用(兜底回退使用, 按创建时间升序取第一条)
+    public Optional<AlipayDirectApp> findFirstByChannelMchNo(String channelMchNo) {
+        return firstOpt(q -> q
+                .eq(AlipayDirectApp::getChannelMchNo, channelMchNo)
+                .orderByAsc(AlipayDirectApp::getCreateTime)
+                .orderByAsc(AlipayDirectApp::getId));
     }
 }

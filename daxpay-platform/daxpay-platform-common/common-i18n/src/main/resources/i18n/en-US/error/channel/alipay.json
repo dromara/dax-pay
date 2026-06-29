@@ -39,5 +39,6 @@
   "mchAppNotFound": "Alipay channel merchant application not found",
   "subMerchantDuplicate": "This sub-merchant already exists under the Alipay application",
   "directMchDuplicate": "The Alipay merchant already exists under this merchant",
-  "userIdTypeInvalid": "Invalid user ID type"
+  "userIdTypeInvalid": "Invalid user ID type",
+  "capabilityDuplicate": "Payment capability [{0}] is duplicated"
 }

@@ -31,6 +31,9 @@ public class AlipayDirectPayStrategy extends AbsPayStrategy {
     @Override
     public PayTradeResultBo doPay(PayContext context) {
         return alipayPayService.pay(context.getTrade(), context.getPayParam(),
-                alipayDirectConfigAssembler.buildConfig(context.getTrade().getMchNo()));
+                alipayDirectConfigAssembler.buildConfig(
+                        context.getTrade().getMchNo(),
+                        context.getPayParam().getChannelMchNo(),
+                        context.getPayParam().getCapability()));
     }
 }

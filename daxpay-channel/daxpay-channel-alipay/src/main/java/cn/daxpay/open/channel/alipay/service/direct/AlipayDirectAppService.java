@@ -30,6 +30,7 @@ public class AlipayDirectAppService {
     private final AlipayDirectAppManager alipayDirectAppManager;
     private final AlipayDirectAppKeyConfigService alipayDirectAppKeyConfigService;
     private final AlipayDirectAppAuthConfigService alipayDirectAppAuthConfigService;
+    private final AlipayDirectAppCapabilityService alipayDirectAppCapabilityService;
 
     /// 根据商户号和通道商户号查询应用列表
     public List<AlipayDirectAppResult> listByMchNoAndChannelMchNo(String mchNo, String channelMchNo) {
@@ -71,13 +72,15 @@ public class AlipayDirectAppService {
         alipayDirectAppManager.updateById(entity);
     }
 
-    /// 删除应用（级联删除密钥配置和授权认证配置）
+    /// 删除应用（级联删除密钥配置、授权认证配置与能力关联）
     public void delete(Long id) {
         alipayDirectAppManager.findById(id)
                 // 支付宝: 直连商户应用不存在
                 .orElseThrow(() -> new DataNotExistException("error.channel.alipay.mchAppNotFound"));
         alipayDirectAppKeyConfigService.deleteByAlipayDirectAppId(id);
         alipayDirectAppAuthConfigService.deleteByAlipayDirectAppId(id);
+        // 级联清理能力关联，避免悬空引用
+        alipayDirectAppCapabilityService.deleteByAlipayDirectAppId(id);
         alipayDirectAppManager.deleteById(id);
     }
 

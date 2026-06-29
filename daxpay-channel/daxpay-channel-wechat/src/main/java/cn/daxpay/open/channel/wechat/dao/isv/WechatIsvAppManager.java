@@ -26,11 +26,9 @@ public class WechatIsvAppManager extends BaseManager<WechatIsvAppMapper, WechatI
 
     /// 查询第一个应用（运行时默认使用）
     public Optional<WechatIsvApp> findFirst() {
-        return lambdaQuery()
+        return firstOpt(q -> q
                 .orderByAsc(WechatIsvApp::getCreateTime)
-                .orderByAsc(WechatIsvApp::getId)
-                .last("LIMIT 1")
-                .oneOpt();
+                .orderByAsc(WechatIsvApp::getId));
     }
 
     /// 校验微信应用AppId是否已存在(排除自身)

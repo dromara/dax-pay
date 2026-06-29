@@ -39,10 +39,7 @@ public class UserRoleManager extends BaseManager<UserRoleMapper, UserRole> {
     }
 
     public UserRole findOneByUser(Long userId) {
-        return lambdaQuery()
-                .eq(UserRole::getUserId, userId)
-                .last("limit 1")
-                .one();
+        return firstOpt(q -> q.eq(UserRole::getUserId, userId)).orElse(null);
     }
 
     public List<UserRole> findAllByRole(Long roleId) {

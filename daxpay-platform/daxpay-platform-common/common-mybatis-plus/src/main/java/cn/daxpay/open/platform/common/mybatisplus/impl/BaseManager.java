@@ -17,6 +17,7 @@ import com.baomidou.mybatisplus.extension.conditions.update.LambdaUpdateChainWra
 import com.baomidou.mybatisplus.extension.conditions.update.UpdateChainWrapper;
 import com.baomidou.mybatisplus.extension.kotlin.KtQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.kotlin.KtUpdateChainWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.toolkit.ChainWrappers;
 import com.baomidou.mybatisplus.extension.toolkit.SqlHelper;
 import com.github.yulichang.base.MPJBaseMapper;
@@ -34,6 +35,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.Serializable;
 import java.util.*;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 /// # 自定义的基础数据库Manager操作类 类似自带的ServiceImpl类
 ///
@@ -101,8 +103,23 @@ public class BaseManager<M extends MPJBaseMapper<T>, T> {
     /// 注意：不支持 Kotlin
     ///
     /// @return LambdaQueryWrapper 的包装类
-    public LambdaQueryChainWrapper<T> lambdaQuery() {
+    public DaxLambdaQueryChainWrapper<T> lambdaQuery() {
         return new DaxLambdaQueryChainWrapper<>(getBaseMapper(), getEntityClass());
+    }
+
+    /// 取排序后第一条(方言无关，由分页插件按当前数据库方言生成 limit，只查 1 条)
+    ///
+    /// 适用于 findFirst* 场景(明确取首条，不校验唯一)，区别于期望唯一的 [lambdaQuery]...one()。
+    ///
+    /// @param customizer 查询条件定制(eq/orderBy 等)
+    /// @return 第一条的 Optional 包装，无数据返回 empty
+    public Optional<T> firstOpt(Consumer<LambdaQueryChainWrapper<T>> customizer) {
+        var query = lambdaQuery();
+        customizer.accept(query);
+        Page<T> page = new Page<>(1, 1);
+        page.setSearchCount(false);
+        List<T> records = query.page(page).getRecords();
+        return records.isEmpty() ? Optional.empty() : Optional.of(records.getFirst());
     }
 
     /// 链式查询 lambda 式 kotlin 使用

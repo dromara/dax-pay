@@ -21,11 +21,9 @@ public class AlipayIsvChannelMerchantManager extends BaseManager<AlipayIsvChanne
 
     /// 根据平台商户号查询服务商通道商户绑定(单绑定场景, 按创建时间升序取第一条)
     public Optional<AlipayIsvChannelMerchant> findByMchNo(String mchNo) {
-        return Optional.ofNullable(lambdaQuery()
+        return firstOpt(q -> q
                 .eq(AlipayIsvChannelMerchant::getMchNo, mchNo)
                 .orderByAsc(AlipayIsvChannelMerchant::getCreateTime)
-                .orderByAsc(AlipayIsvChannelMerchant::getId)
-                .last("limit 1")
-                .one());
+                .orderByAsc(AlipayIsvChannelMerchant::getId));
     }
 }

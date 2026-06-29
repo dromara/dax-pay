@@ -1,6 +1,5 @@
 package cn.daxpay.open.platform.common.mybatisplus.interceptor;
 
-import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
 import org.springframework.context.annotation.Bean;
@@ -11,10 +10,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MpInterceptorConfiguration {
 
-    /// 分页
+    /// 分页(无参构造：由 MyBatis-Plus 从 DataSource 的 JDBC URL 自动推断数据库方言，换库零改动)
     @Bean
     public MpInterceptor paginationInnerInterceptor() {
-        PaginationInnerInterceptor paginationInnerInterceptor = new PaginationInnerInterceptor(DbType.POSTGRE_SQL);
+        PaginationInnerInterceptor paginationInnerInterceptor = new PaginationInnerInterceptor();
         paginationInnerInterceptor.setOptimizeJoin(false);
         return new MpInterceptor(paginationInnerInterceptor, 1);
     }

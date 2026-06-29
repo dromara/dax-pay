@@ -183,7 +183,8 @@
       "size": "Payment method cannot exceed 32 characters"
     },
     "capability": {
-      "size": "Payment capability cannot exceed 32 characters"
+      "size": "Payment capability cannot exceed 32 characters",
+      "notBlank": "Payment capability must not be blank"
     },
     "provider": {
       "notBlank": "Pay brand must not be blank",
