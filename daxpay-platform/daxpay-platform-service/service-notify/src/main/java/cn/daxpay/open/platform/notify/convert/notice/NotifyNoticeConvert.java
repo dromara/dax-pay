@@ -33,6 +33,7 @@ public interface NotifyNoticeConvert {
     @Mapping(target = "message", source = "content")
     @Mapping(target = "isRead", ignore = true)
     @Mapping(target = "link", ignore = true)
+    @Mapping(target = "htmlContent", ignore = true)
     NotifyNoticeBriefResult toBrief(NotifyNotice in);
 
     /// 个人消息转铃铛摘要(类型固定为个人消息, 内容摘要来自正文)
@@ -40,5 +41,6 @@ public interface NotifyNoticeConvert {
     @Mapping(target = "message", source = "content")
     @Mapping(target = "severity", ignore = true)
     @Mapping(target = "isTop", ignore = true)
+    @Mapping(target = "htmlContent", ignore = true)
     NotifyNoticeBriefResult convert(NotifyMessage in);
 }

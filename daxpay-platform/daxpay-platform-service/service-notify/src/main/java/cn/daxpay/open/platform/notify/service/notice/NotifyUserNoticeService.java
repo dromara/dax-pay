@@ -14,6 +14,7 @@ import cn.daxpay.open.platform.notify.enums.NotifyTypeEnum;
 import cn.daxpay.open.platform.notify.param.notice.NotifyUserNoticeQuery;
 import cn.daxpay.open.platform.notify.result.notice.NotifyNoticeBriefResult;
 import cn.daxpay.open.platform.notify.result.notice.NotifyUnreadCountResult;
+import cn.daxpay.open.platform.notify.util.MarkdownRenderUtil;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -87,6 +88,8 @@ public class NotifyUserNoticeService {
             NotifyNoticeRead read = readMap.get(notice.getId());
             // 有阅读记录视为已读
             brief.setIsRead(read != null);
+            // 服务端渲染 Markdown 正文为 HTML, 供前端直接展示
+            brief.setHtmlContent(MarkdownRenderUtil.toHtml(notice.getContent()));
             list.add(brief);
         }
 

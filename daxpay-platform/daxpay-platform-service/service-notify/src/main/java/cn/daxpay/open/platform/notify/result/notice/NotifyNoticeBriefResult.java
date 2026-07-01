@@ -33,6 +33,9 @@ public class NotifyNoticeBriefResult {
     @Schema(description = "是否已读")
     private Boolean isRead;
 
+    @Schema(description = "正文HTML(公告专用, 服务端Markdown渲染结果, 供前端直接渲染)")
+    private String htmlContent;
+
     @Schema(description = "跳转链接(个人消息专用)")
     private String link;
 
