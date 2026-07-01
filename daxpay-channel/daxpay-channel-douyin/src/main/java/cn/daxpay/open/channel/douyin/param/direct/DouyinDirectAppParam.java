@@ -36,7 +36,7 @@ public class DouyinDirectAppParam {
     @Schema(description = "抖音应用AppId(APPID)")
     private String douyinAppId;
 
-    @NotBlank(message = "{validation.field.appType.notBlank}", groups = ValidationGroup.add.class)
+    @NotBlank(message = "{validation.field.appType.notBlank}")
     @Schema(description = "应用类型: mini_program-小程序 mobile_app-移动应用 web_app-网站应用")
     private String appType;
 }

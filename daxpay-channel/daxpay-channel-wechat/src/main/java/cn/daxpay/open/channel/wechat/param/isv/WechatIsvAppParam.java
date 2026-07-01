@@ -22,7 +22,7 @@ public class WechatIsvAppParam {
     @Schema(description = "应用名称")
     private String appName;
 
-    @NotBlank(message = "{validation.field.appType.notBlank}", groups = ValidationGroup.add.class)
+    @NotBlank(message = "{validation.field.appType.notBlank}")
     @Schema(description = "应用类型")
     private String appType;
 
