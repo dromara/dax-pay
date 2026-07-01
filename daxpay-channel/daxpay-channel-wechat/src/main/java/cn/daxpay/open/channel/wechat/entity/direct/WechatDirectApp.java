@@ -28,6 +28,10 @@ public class WechatDirectApp extends MchBaseEntity implements ToResult<WechatDir
     /// 应用名称
     private String appName;
 
+    /// 应用类型
+    @TableField(updateStrategy = FieldStrategy.NEVER)
+    private String appType;
+
     /// 微信应用AppId
     private String wxAppId;
 

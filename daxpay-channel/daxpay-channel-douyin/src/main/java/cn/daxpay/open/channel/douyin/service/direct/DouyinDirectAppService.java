@@ -1,5 +1,6 @@
 package cn.daxpay.open.channel.douyin.service.direct;
 
+import cn.daxpay.open.channel.douyin.code.DouyinDirectAppTypeEnum;
 import cn.daxpay.open.channel.douyin.convert.direct.DouyinDirectAppConvert;
 import cn.daxpay.open.channel.douyin.dao.direct.DouyinDirectAppManager;
 import cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectApp;
@@ -15,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 
 /// # 抖音直连商户应用管理
@@ -28,6 +30,7 @@ public class DouyinDirectAppService {
 
     private final DouyinDirectAppManager douyinDirectAppManager;
     private final DouyinDirectAppAuthConfigService douyinDirectAppAuthConfigService;
+    private final DouyinDirectAppCapabilityService douyinDirectAppCapabilityService;
 
     /// 根据商户号和通道商户号查询应用列表
     public List<DouyinDirectAppResult> listByMchNoAndChannelMchNo(String mchNo, String channelMchNo) {
@@ -54,6 +57,7 @@ public class DouyinDirectAppService {
     /// 新增抖音直连商户应用
     public void add(DouyinDirectAppParam param) {
         this.assertDouyinAppIdUnique(param.getMchNo(), param.getChannelMchNo(), param.getDouyinAppId(), null);
+        this.validateAppType(param.getAppType());
         var entity = DouyinDirectAppConvert.CONVERT.toEntity(param);
         douyinDirectAppManager.save(entity);
     }
@@ -65,6 +69,7 @@ public class DouyinDirectAppService {
                 .orElseThrow(() -> new DataNotExistException("error.channel.douyin.mchAppNotFound"));
         this.assertScopeMatch(entity, param.getMchNo(), param.getChannelMchNo());
         this.assertDouyinAppIdUnique(entity.getMchNo(), entity.getChannelMchNo(), param.getDouyinAppId(), param.getId());
+        this.validateAppType(param.getAppType());
         DouyinDirectAppConvert.CONVERT.copy(param, entity);
         douyinDirectAppManager.updateById(entity);
     }
@@ -76,6 +81,8 @@ public class DouyinDirectAppService {
                 // 抖音: 直连商户应用不存在
                 .orElseThrow(() -> new DataNotExistException("error.channel.douyin.mchAppNotFound"));
         douyinDirectAppAuthConfigService.deleteByDouyinDirectAppId(id);
+        // 级联清理支付能力关联，避免悬空引用
+        douyinDirectAppCapabilityService.deleteByDouyinDirectAppId(id);
         douyinDirectAppManager.deleteById(id);
     }
 
@@ -91,6 +98,15 @@ public class DouyinDirectAppService {
         if (!entity.getMchNo().equals(mchNo) || !entity.getChannelMchNo().equals(channelMchNo)) {
             // 抖音: 直连商户应用不存在或商户号归属不匹配
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.douyin.mchAppNotFound");
+        }
+    }
+
+    /// 校验应用类型
+    private void validateAppType(String appType) {
+        boolean valid = Arrays.stream(DouyinDirectAppTypeEnum.values())
+                .anyMatch(item -> item.getCode().equals(appType));
+        if (!valid) {
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.douyin.appTypeInvalid");
         }
     }
 }

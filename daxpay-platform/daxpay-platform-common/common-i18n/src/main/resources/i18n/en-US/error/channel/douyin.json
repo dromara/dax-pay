@@ -1,0 +1,7 @@
+{
+  "mchAppNotFound": "Douyin channel merchant application not found",
+  "appIdDuplicate": "Douyin AppId already exists under this channel merchant",
+  "directMchDuplicate": "This Douyin direct merchant already exists under the merchant",
+  "appTypeInvalid": "Invalid Douyin application type",
+  "capabilityDuplicate": "Payment capability [{0}] is duplicated under this channel merchant"
+}

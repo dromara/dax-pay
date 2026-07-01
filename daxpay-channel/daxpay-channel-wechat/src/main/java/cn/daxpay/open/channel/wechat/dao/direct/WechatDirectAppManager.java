@@ -5,6 +5,7 @@ import cn.daxpay.open.platform.common.mybatisplus.impl.BaseManager;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /// # 微信直连商户应用
 ///
@@ -21,6 +22,23 @@ public class WechatDirectAppManager extends BaseManager<WechatDirectAppMapper, W
                 .orderByAsc(WechatDirectApp::getCreateTime)
                 .orderByAsc(WechatDirectApp::getId)
                 .list();
+    }
+
+    /// 按通道商户号查询首个应用（能力解析兜底时使用）
+    public Optional<WechatDirectApp> findFirstByChannelMchNo(String channelMchNo) {
+        return firstOpt(q -> q
+                .eq(WechatDirectApp::getChannelMchNo, channelMchNo)
+                .orderByAsc(WechatDirectApp::getCreateTime)
+                .orderByAsc(WechatDirectApp::getId));
+    }
+
+    /// 按通道商户号与应用类型查询首个应用（能力→应用类型推导时使用）
+    public Optional<WechatDirectApp> findFirstByChannelMchNoAndAppType(String channelMchNo, String appType) {
+        return firstOpt(q -> q
+                .eq(WechatDirectApp::getChannelMchNo, channelMchNo)
+                .eq(WechatDirectApp::getAppType, appType)
+                .orderByAsc(WechatDirectApp::getCreateTime)
+                .orderByAsc(WechatDirectApp::getId));
     }
 
     /// 校验同一通道商户下wxAppId是否已存在(排除自身)

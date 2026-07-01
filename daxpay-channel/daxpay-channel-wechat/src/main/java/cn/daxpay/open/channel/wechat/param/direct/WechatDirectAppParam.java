@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 
 /// # 微信直连商户应用保存参数
 ///
-/// 保存/更新微信直连商户应用时接收的请求参数，含商户号、通道商户号、应用名称和微信应用AppId。
+/// 保存/更新微信直连商户应用时接收的请求参数，含商户号、通道商户号、应用名称、应用类型和微信应用AppId。
 ///
 @Data
 @Accessors(chain = true)
@@ -31,6 +31,10 @@ public class WechatDirectAppParam {
     @NotBlank(message = "{validation.field.appName.notBlank}")
     @Schema(description = "应用名称")
     private String appName;
+
+    @NotBlank(message = "{validation.field.appType.notBlank}")
+    @Schema(description = "应用类型")
+    private String appType;
 
     @NotBlank(message = "{validation.field.wxAppId.notBlank}")
     @Schema(description = "微信应用AppId")

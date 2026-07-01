@@ -5,6 +5,7 @@ import cn.daxpay.open.platform.common.mybatisplus.impl.BaseManager;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 /// # 抖音直连商户应用
 ///
@@ -31,5 +32,26 @@ public class DouyinDirectAppManager extends BaseManager<DouyinDirectAppMapper, D
                 .eq(DouyinDirectApp::getDouyinAppId, douyinAppId)
                 .ne(excludeId != null, DouyinDirectApp::getId, excludeId)
                 .exists();
+    }
+
+    /// 根据通道商户号取首个应用(支付能力推导兜底)
+    public Optional<DouyinDirectApp> findFirstByChannelMchNo(String channelMchNo) {
+        return lambdaQuery()
+                .eq(DouyinDirectApp::getChannelMchNo, channelMchNo)
+                .orderByAsc(DouyinDirectApp::getCreateTime)
+                .orderByAsc(DouyinDirectApp::getId)
+                .last("limit 1")
+                .oneOpt();
+    }
+
+    /// 根据通道商户号与应用类型取首个应用(appType自动推导时调用)
+    public Optional<DouyinDirectApp> findFirstByChannelMchNoAndAppType(String channelMchNo, String appType) {
+        return lambdaQuery()
+                .eq(DouyinDirectApp::getChannelMchNo, channelMchNo)
+                .eq(DouyinDirectApp::getAppType, appType)
+                .orderByAsc(DouyinDirectApp::getCreateTime)
+                .orderByAsc(DouyinDirectApp::getId)
+                .last("limit 1")
+                .oneOpt();
     }
 }

@@ -6,7 +6,6 @@ import cn.daxpay.open.channel.wechat.entity.isv.WechatIsvApp;
 import cn.daxpay.open.channel.wechat.code.WechatIsvAppTypeEnum;
 import cn.daxpay.open.channel.wechat.param.isv.WechatIsvAppParam;
 import cn.daxpay.open.channel.wechat.result.isv.WechatIsvAppResult;
-import cn.daxpay.open.channel.wechat.service.isv.WechatIsvAppAuthConfigService;
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
@@ -29,6 +28,7 @@ public class WechatIsvAppService {
 
     private final WechatIsvAppManager wechatIsvAppManager;
     private final WechatIsvAppAuthConfigService wechatIsvAppAuthConfigService;
+    private final WechatIsvAppCapabilityService wechatIsvAppCapabilityService;
 
     /// 查询全部应用列表
     public List<WechatIsvAppResult> listAll() {
@@ -71,16 +71,18 @@ public class WechatIsvAppService {
                 // 微信: 服务商应用不存在
                 .orElseThrow(() -> new DataNotExistException("error.channel.wechat.appNotFound"));
         this.assertWxAppIdUnique(param.getWxAppId(), param.getId());
+        this.validateAppType(param.getAppType());
         WechatIsvAppConvert.CONVERT.copy(param, entity);
         wechatIsvAppManager.updateById(entity);
     }
 
-    /// 删除应用
+    /// 删除应用（级联删除授权认证配置与能力关联）
     public void delete(Long id) {
         wechatIsvAppManager.findById(id)
                 // 微信: 服务商应用不存在
                 .orElseThrow(() -> new DataNotExistException("error.channel.wechat.appNotFound"));
         wechatIsvAppAuthConfigService.deleteByWechatIsvAppId(id);
+        wechatIsvAppCapabilityService.deleteByWechatIsvAppId(id);
         wechatIsvAppManager.deleteById(id);
     }
 

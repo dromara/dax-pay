@@ -1,0 +1,7 @@
+{
+  "mchAppNotFound": "抖音通道商户应用不存在",
+  "appIdDuplicate": "同一通道商户下抖音应用ID已存在",
+  "directMchDuplicate": "同一商户下该抖音直连商户已存在",
+  "appTypeInvalid": "抖音应用类型无效",
+  "capabilityDuplicate": "同一通道商户下支付能力[{0}]重复配置"
+}
