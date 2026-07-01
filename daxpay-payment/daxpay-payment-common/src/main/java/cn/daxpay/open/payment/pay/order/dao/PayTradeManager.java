@@ -1,10 +1,16 @@
 package cn.daxpay.open.payment.pay.order.dao;
 
 import cn.daxpay.open.platform.common.mybatisplus.impl.BaseManager;
+import cn.daxpay.open.platform.common.mybatisplus.query.generator.QueryGenerator;
+import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.open.platform.core.annotation.IgnoreTenant;
 import cn.daxpay.open.platform.core.exception.DangerSqlException;
 import cn.daxpay.open.platform.core.code.CommonCode;
+import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.payment.pay.order.entity.PayTrade;
+import cn.daxpay.open.payment.pay.param.order.PayTradeQuery;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -37,6 +43,15 @@ public class PayTradeManager extends BaseManager<PayTradeMapper, PayTrade> {
         return lambdaQuery()
                 .eq(PayTrade::getContainerId, containerId)
                 .oneOpt();
+    }
+
+    /// 分页查询(管理端), 默认按创建时间倒序
+    public Page<PayTrade> page(PageParam pageParam, PayTradeQuery query) {
+        Page<PayTrade> mpPage = MpUtil.getMpPage(pageParam);
+        QueryWrapper<PayTrade> wrapper = QueryGenerator.generator(query);
+        // 默认按创建时间倒序
+        wrapper.orderByDesc("create_time");
+        return this.page(mpPage, wrapper);
     }
 
     /// 根据id进行更新，失败时抛出异常

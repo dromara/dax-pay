@@ -48,7 +48,7 @@ public class UniTradeController {
     @Operation(summary = "关闭和撤销接口")
     @PostMapping("/close")
     public DaxResult<Void> close(@RequestBody NormalPayCloseParam param){
-        if ( permConfigService.hasApiPerm(PaymentApiEnum.CLOSE.getCode())){
+        if ( !permConfigService.hasApiPerm(PaymentApiEnum.CLOSE.getCode())){
             // 订单: 该商户没有此接口的权限
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.order.merchantNoApiPermission");
         }

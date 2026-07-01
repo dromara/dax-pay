@@ -1,7 +1,13 @@
 package cn.daxpay.open.payment.pay.order.dao;
 
 import cn.daxpay.open.platform.common.mybatisplus.impl.BaseManager;
+import cn.daxpay.open.platform.common.mybatisplus.query.generator.QueryGenerator;
+import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
+import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.payment.pay.order.entity.NormalPayOrder;
+import cn.daxpay.open.payment.pay.param.order.NormalPayOrderQuery;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -16,5 +22,14 @@ public class NormalPayOrderManager extends BaseManager<NormalPayOrderMapper, Nor
         return lambdaQuery()
                 .eq(NormalPayOrder::getBizOrderNo, bizOrderNo)
                 .oneOpt();
+    }
+
+    /// 分页查询(管理端), 默认按创建时间倒序
+    public Page<NormalPayOrder> page(PageParam pageParam, NormalPayOrderQuery query) {
+        Page<NormalPayOrder> mpPage = MpUtil.getMpPage(pageParam);
+        QueryWrapper<NormalPayOrder> wrapper = QueryGenerator.generator(query);
+        // 默认按创建时间倒序
+        wrapper.orderByDesc("create_time");
+        return this.page(mpPage, wrapper);
     }
 }
