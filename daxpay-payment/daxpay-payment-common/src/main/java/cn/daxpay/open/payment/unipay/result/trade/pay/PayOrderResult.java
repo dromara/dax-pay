@@ -78,11 +78,6 @@ public class PayOrderResult {
     @Schema(description = "退款状态")
     private String refundStatus;
 
-    /// 结算状态
-    /// @see SettleStatusEnum
-    @Schema(description = "结算状态")
-    private String settleStatus;
-
     /// 支付渠道 微信/支付宝/银联
     /// @see PayProviderEnum
     @Schema(description = "支付渠道")

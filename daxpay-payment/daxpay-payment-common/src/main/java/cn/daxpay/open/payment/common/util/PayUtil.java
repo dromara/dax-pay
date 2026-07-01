@@ -3,7 +3,6 @@ package cn.daxpay.open.payment.common.util;
 import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum;
-import cn.hutool.core.lang.Opt;
 import cn.hutool.core.util.StrUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.experimental.UtilityClass;
@@ -35,15 +34,6 @@ public class PayUtil {
     public int getPaymentExpiredTime(OffsetDateTime date) {
         Duration duration = Duration.between(OffsetDateTime.now(ZoneOffset.UTC), date);
         return Math.toIntExact(duration.getSeconds() / 60);
-    }
-
-    /// xx.xx%转换为基点表示费率(万分之多少)
-    public String toBasisPointRate(BigDecimal rate) {
-        return Opt.ofBlankAble(rate)
-                .map(o -> o.multiply(new BigDecimal("100"))
-                        .intValue())
-                .map(Object::toString)
-                .orElse(null);
     }
 
     /// 保留两位小数
@@ -99,15 +89,6 @@ public class PayUtil {
         }
         // 订单: 不支持的条码类型
         throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.order.unsupportedBarcodeType");
-    }
-
-    /// 佣金计算, 保留三位小数
-    ///
-    /// @param amount     金额
-    /// @param profitRate 佣金比例, 百分比
-    public BigDecimal calculateProfit(BigDecimal amount, BigDecimal profitRate) {
-        BigDecimal profit = amount.multiply(profitRate.divide(new BigDecimal(100), 3, RoundingMode.HALF_EVEN));
-        return profit.divide(BigDecimal.ONE, 4, RoundingMode.HALF_EVEN);
     }
 
     /// 转换为RestClient使用的form表单参数

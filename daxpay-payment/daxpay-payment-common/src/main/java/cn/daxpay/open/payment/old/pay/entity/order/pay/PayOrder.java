@@ -88,10 +88,6 @@ public class PayOrder extends MchBaseEntity implements ToResult<PayOrderVo> {
     /// @see PayRefundStatusEnum
     private String refundStatus;
 
-    /// 结算状态, 为空不需要进行结算
-    /// @see SettleStatusEnum
-    private String settleStatus;
-
     /// 支付渠道 微信/支付宝/银联
     /// @see PayProviderEnum
     private String provider;

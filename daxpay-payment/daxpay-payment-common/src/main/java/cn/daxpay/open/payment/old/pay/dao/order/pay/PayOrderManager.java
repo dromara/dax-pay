@@ -9,7 +9,6 @@ import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.payment.old.pay.entity.order.pay.PayOrder;
 import cn.daxpay.open.platform.core.enums.pay.pay.PayStatusEnum;
-import cn.daxpay.open.platform.core.enums.pay.trade.SettleStatusEnum;
 import cn.daxpay.open.payment.old.pay.param.order.pay.PayOrderQuery;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -98,16 +97,6 @@ public class PayOrderManager extends BaseManager<PayOrderMapper, PayOrder> {
         return lambdaQuery()
                 .in(PayOrder::getStatus, PayStatusEnum.PROGRESS.getCode(),PayStatusEnum.WAIT.getCode())
                 .between(PayOrder::getExpiredTime, start,end)
-                .list();
-    }
-
-    /// 查询支付完成未结算的订单
-    @IgnoreTenant
-    public List<PayOrder> findAllBySettleAndBeforeNotTenant(OffsetDateTime dateTime) {
-        return lambdaQuery()
-                .eq(PayOrder::getSettleStatus, SettleStatusEnum.NOT_SETTLE.getCode())
-                .eq(PayOrder::getStatus, PayStatusEnum.SUCCESS.getCode())
-                .le(PayOrder::getPayTime, dateTime)
                 .list();
     }
 

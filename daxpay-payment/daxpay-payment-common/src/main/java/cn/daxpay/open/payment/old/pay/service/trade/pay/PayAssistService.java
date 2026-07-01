@@ -7,7 +7,6 @@ import cn.daxpay.open.platform.core.util.DateTimeUtil;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.exception.business.AmountExceedLimitException;
 import cn.daxpay.open.payment.common.util.PayUtil;
-import cn.daxpay.open.payment.common.util.PaymentStrategyFactory;
 import cn.daxpay.open.platform.core.util.TradeNoGenerateUtil;
 import cn.daxpay.open.payment.old.pay.convert.order.pay.PayOrderConvert;
 import cn.daxpay.open.payment.old.pay.dao.order.pay.PayOrderExpandManager;
@@ -22,7 +21,6 @@ import cn.hutool.core.util.StrUtil;
 import cn.daxpay.open.payment.old.pay.exception.TradeStatusErrorException;
 import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.old.pay.service.order.pay.PayOrderQueryService;
-import cn.daxpay.open.payment.strategy.profit.AbsTradeProfitStrategy;
 import cn.daxpay.open.payment.unipay.param.trade.pay.PayParam;
 import cn.daxpay.open.payment.unipay.result.trade.pay.PayResult;
 import lombok.RequiredArgsConstructor;
@@ -92,10 +90,6 @@ public class PayAssistService {
 
     /// 订单初始化处理
     public void initPayOrder(PayOrder order){
-        // 判断该产品是否有分润策略, 有的话记录为待结算
-        if (PaymentStrategyFactory.existsByProduct(order.getProduct(), AbsTradeProfitStrategy.class)){
-            order.setSettleStatus(SettleStatusEnum.NOT_SETTLE.getCode());
-        }
         // 注册支付超时任务
 //        delayJobService.registerByTransaction(order.getId(), DaxPayCode.Event.ORDER_PAY_TIMEOUT, order.getExpiredTime());
     }
@@ -112,10 +106,6 @@ public class PayAssistService {
             if (productEnum != null) {
                 payOrder.setChannel(productEnum.getChannel());
             }
-        }
-        // 判断该产品是否有分润策略, 有的话记录为待结算
-        if (PaymentStrategyFactory.existsByProduct(payParam.getProduct(), AbsTradeProfitStrategy.class)){
-            payOrder.setSettleStatus(SettleStatusEnum.NOT_SETTLE.getCode());
         }
         payOrderManager.updateById(payOrder);
     }
