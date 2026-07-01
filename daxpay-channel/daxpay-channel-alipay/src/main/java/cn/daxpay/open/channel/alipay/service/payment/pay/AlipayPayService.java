@@ -92,10 +92,14 @@ public class AlipayPayService {
 
         // 完成时间
         bo.setFinishTime(resp.getFinishTime());
-        // 实付金额(BARCODE 付款码同步成功时返回)
-        bo.setRealAmount(resp.getRealAmount());
-        // 买家标识(BARCODE 付款码同步成功时返回)
-        bo.setBuyerId(resp.getBuyerId());
+        // 金额(BARCODE 付款码同步成功时返回)
+        bo.setRealAmount(resp.getBuyerPayAmount());
+        bo.setTotalAmount(resp.getTotalAmount());
+        bo.setBuyerPayAmount(resp.getBuyerPayAmount());
+        // 用户标识
+        bo.setBuyerId(resp.getBuyerOpenId());
+        bo.setUserId(resp.getBuyerUserId());
+        bo.setBuyerLogonId(resp.getBuyerLogonId());
         return bo;
     }
 }

@@ -96,10 +96,12 @@ public class NormalPayService {
             trade.setStatus(PayFundStatusEnum.SUCCESS.getCode());
             trade.setPayTime(result.getFinishTime());
         }
+        // trade.status 在 complete=false 时保持 PROCESSING(createOrder 时已设)
         trade.setOutOrderNo(result.getOutOrderNo());
         trade.setTransOrderNo(result.getTransOrderNo());
         trade.setRelationOrderNo(result.getRelationOrderNo());
         trade.setBuyerId(result.getBuyerId());
+        trade.setBuyerLogonId(result.getBuyerLogonId());
         trade.setTradeProduct(result.getTradeProduct());
         trade.setTradeWay(result.getTradeWay());
         trade.setBankType(result.getBankType());
@@ -108,7 +110,8 @@ public class NormalPayService {
         trade.setPayBodyType(Objects.nonNull(result.getPayBodyType())
                 ? result.getPayBodyType().getCode() : null);
         trade.setErrorMsg(null);
-        payUniHandleService.paySuccess(trade);
+        // 参考商业版: 不论是否完成都更新交易单, 仅 SUCCESS 时同步容器
+        payUniHandleService.payAfterHandel(trade);
         return payAssistService.buildResult(trade);
     }
 }

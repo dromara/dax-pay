@@ -54,4 +54,13 @@ public class PayTradeResultBo {
 
     /// 活动类型
     private String promotionType;
+
+    /// 订单总金额(通道返回, 不入库, 仅用于 API 响应展示)
+    private Long totalAmount;
+
+    /// 买家实付金额(通道返回, 不入库)
+    private Long buyerPayAmount;
+
+    /// 买家登录账号(支付宝手机号/邮箱)
+    private String buyerLogonId;
 }

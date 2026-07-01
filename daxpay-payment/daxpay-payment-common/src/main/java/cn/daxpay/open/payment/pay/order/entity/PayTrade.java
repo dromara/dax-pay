@@ -98,6 +98,9 @@ public class PayTrade extends MchBaseEntity {
     /// 付款用户 ID（支付宝 buyer_user_id 等）
     private String buyerId;
 
+    /// 买家登录账号（支付宝手机号/邮箱）
+    private String buyerLogonId;
+
     /// 微信 openid（jsapi/app/miniapp）
     private String openid;
 
