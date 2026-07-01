@@ -17,7 +17,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 /// # 支付订单
@@ -75,11 +74,11 @@ public class PayOrder extends MchBaseEntity implements ToResult<PayOrderVo> {
     /// @see PayLimitPayEnum
     private String limitPay;
 
-    /// 金额(元)
-    private BigDecimal amount;
+    /// 金额（分，最小货币单位）
+    private Long amount;
 
-    /// 可退金额(元)
-    private BigDecimal refundableBalance;
+    /// 可退金额（分，最小货币单位）
+    private Long refundableBalance;
 
     /// 支付状态
     /// @see PayStatusEnum

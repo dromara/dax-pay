@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
@@ -26,8 +25,6 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class AlipayPayService {
-
-    private static final BigDecimal HUNDRED = new BigDecimal("100");
 
     private final AlipayChannelClient alipayChannelClient;
 
@@ -43,7 +40,7 @@ public class AlipayPayService {
         req.setChannel("alipay");
         // 使用支付交易号作为商户订单号透传给支付宝, 回调时凭此反查 PayTrade
         req.setBizOrderNo(order.getTradeNo());
-        req.setAmount(payParam.getAmount().multiply(HUNDRED).longValue());
+        req.setAmount(payParam.getAmount());
         req.setSubject(payParam.getTitle());
         req.setDescription(payParam.getDescription());
         // 将平台支付方式(PayMethodEnum code)映射为支付宝通道识别码

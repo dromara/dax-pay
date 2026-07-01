@@ -109,7 +109,7 @@ public class PayService {
         trade.setProduct(payOrder.getProduct());
         trade.setChannel(payOrder.getChannel());
         trade.setMethod(payOrder.getMethod());
-        trade.setAmount(payOrder.getAmount().multiply(java.math.BigDecimal.valueOf(100)).longValue());
+        trade.setAmount(payOrder.getAmount());
         context.setTrade(trade);
         PayResultBo result;
         try {
@@ -118,7 +118,7 @@ public class PayService {
             result = new PayResultBo();
             result.setOutOrderNo(newResult.getOutOrderNo());
             result.setComplete(newResult.isComplete());
-            result.setRealAmount(newResult.getRealAmount() != null ? java.math.BigDecimal.valueOf(newResult.getRealAmount(), 2) : null);
+            result.setRealAmount(newResult.getRealAmount());
             result.setFinishTime(newResult.getFinishTime());
             result.setPayBody(newResult.getPayBody());
             result.setPayBodyType(newResult.getPayBodyType());

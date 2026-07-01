@@ -23,8 +23,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.math.BigDecimal;
-
 /// # 支付订单控制器
 ///
 @Validated
@@ -70,7 +68,7 @@ public class PayOrderController {
 
     @Operation(summary = "查询金额汇总")
     @GetMapping("/get-total-amount")
-    public Result<BigDecimal> getTotalAmount(PayOrderQuery query){
+    public Result<Long> getTotalAmount(PayOrderQuery query){
         return Res.ok(queryService.getTotalAmount(query));
     }
 

@@ -5,7 +5,6 @@ import cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 /// # 支付同步结果
@@ -23,11 +22,11 @@ public class PaySyncResultBo {
     /// 支付通道对应系统的交易号, 用与和本地记录关联起来
     private String outOrderNo;
 
-    /// 交易金额
-    private BigDecimal amount;
+    /// 交易金额（分，最小货币单位）
+    private Long amount;
 
-    /// 实收金额
-    private BigDecimal realAmount;
+    /// 实收金额（分，最小货币单位）
+    private Long realAmount;
 
     /// 支付完成时间
     private OffsetDateTime finishTime;

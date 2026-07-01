@@ -13,8 +13,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
-import java.math.BigDecimal;
-
 /// # 交易流水
 ///
 @Slf4j
@@ -30,7 +28,7 @@ public class TradeFlowRecordManager extends BaseManager<TradeFlowRecordMapper, T
     }
 
     /// 查询汇总金额
-    public BigDecimal getTotalAmount(TradeFlowRecordQuery query, TradeTypeEnum tradeTypeEnum){
+    public Long getTotalAmount(TradeFlowRecordQuery query, TradeTypeEnum tradeTypeEnum){
         QueryWrapper<TradeFlowRecord> generator = QueryGenerator.generator(query);
         generator.eq(MpUtil.getColumnName(TradeFlowRecord::getType), tradeTypeEnum.getCode());
         return baseMapper.getTotalAmount(generator);

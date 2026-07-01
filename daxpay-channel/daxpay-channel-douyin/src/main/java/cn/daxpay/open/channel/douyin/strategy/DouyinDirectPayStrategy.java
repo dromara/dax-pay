@@ -12,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.Map;
 
 /// # 抖音支付直连支付策略
@@ -23,8 +22,6 @@ import java.util.Map;
 @Service
 @RequiredArgsConstructor
 public class DouyinDirectPayStrategy extends AbsPayStrategy {
-
-    private static final BigDecimal HUNDRED = new BigDecimal("100");
 
     private final DouyinChannelClient douyinChannelClient;
 
@@ -39,7 +36,7 @@ public class DouyinDirectPayStrategy extends AbsPayStrategy {
         DouyinPayReq req = new DouyinPayReq();
         req.setChannel(ProductEnum.DOUYIN_PAY.getChannel());
         req.setBizOrderNo(context.getPayParam().getBizOrderNo());
-        req.setAmount(context.getPayParam().getAmount().multiply(HUNDRED).longValue());
+        req.setAmount(context.getPayParam().getAmount());
         req.setSubject(context.getPayParam().getTitle());
         req.setMethod(context.getPayParam().getMethod());
         // TODO 从数据库获取抖音通道配置

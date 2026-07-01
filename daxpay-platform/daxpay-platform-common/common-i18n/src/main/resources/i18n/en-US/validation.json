@@ -141,9 +141,9 @@
       "size": "Payment order no. cannot exceed 100 characters"
     },
     "amount": {
-      "notNull": "Refund amount cannot be blank",
-      "decimalMin": "Payment amount cannot be less than 0.01",
-      "digits": "Payment amount must be accurate to cents and less than 100 million"
+      "notNull": "Payment amount cannot be blank",
+      "min": "Payment amount cannot be less than 1 cent",
+      "max": "Payment amount cannot exceed 100 million yuan"
     },
     "title": {
       "notBlank": "Title cannot be blank",
@@ -225,8 +225,8 @@
     },
     "unitPrice": {
       "notNull": "Unit price cannot be null",
-      "decimalMin": "Unit price cannot be less than 0.01",
-      "digits": "Unit price precision up to cents"
+      "min": "Unit price cannot be less than 1 cent",
+      "max": "Unit price cannot exceed 100 million yuan"
     },
     "goodsCategory": {
       "size": "Goods category cannot exceed 32 characters"

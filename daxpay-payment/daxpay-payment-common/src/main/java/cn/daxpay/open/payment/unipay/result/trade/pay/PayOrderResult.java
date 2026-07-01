@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 /// # 支付订单
@@ -57,17 +56,17 @@ public class PayOrderResult {
     @Schema(description = "限制用户支付类型")
     private String limitPay;
 
-    /// 金额
-    @Schema(description = "金额")
-    private BigDecimal amount;
+    /// 金额（分，最小货币单位）
+    @Schema(description = "金额(分)")
+    private Long amount;
 
-    /// 实收金额
-    @Schema(description = "实收金额")
-    private BigDecimal realAmount;
+    /// 实收金额（分，最小货币单位）
+    @Schema(description = "实收金额(分)")
+    private Long realAmount;
 
-    /// 可退款余额
-    @Schema(description = "可退款余额")
-    private BigDecimal refundableBalance;
+    /// 可退款余额（分，最小货币单位）
+    @Schema(description = "可退款余额(分)")
+    private Long refundableBalance;
 
     /// 支付状态
     /// @see PayStatusEnum

@@ -12,7 +12,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 /// # 支付订单扩展存储参数
@@ -42,8 +41,8 @@ public class PayOrderExpand extends MchBaseEntity implements ToResult<PayOrderEx
     /// 请求时间
     private OffsetDateTime reqTime;
 
-    /// 实收金额
-    private BigDecimal realAmount;
+    /// 实收金额（分，最小货币单位）
+    private Long realAmount;
 
     /// 终端设备编码
     private String terminalNo;

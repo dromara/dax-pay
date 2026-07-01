@@ -54,7 +54,7 @@ public class PayAssistService {
     public PayTrade createOrder(PayParam payParam) {
         String appId = payParam.getAppId();
         OffsetDateTime expiredTime = this.getExpiredTime(payParam.getExpiredTime());
-        Long amount = Long.valueOf(PayUtil.convertCentAmount(payParam.getAmount()));
+        Long amount = payParam.getAmount();
         // 从产品编码派生通道编码
         String channel = payParam.getProduct();
         if (StrUtil.isNotBlank(channel)) {

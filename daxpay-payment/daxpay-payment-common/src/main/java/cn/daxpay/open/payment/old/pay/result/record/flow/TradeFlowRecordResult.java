@@ -8,8 +8,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.math.BigDecimal;
-
 /// # 资金流水记录
 ///
 @EqualsAndHashCode(callSuper = true)
@@ -21,8 +19,8 @@ public class TradeFlowRecordResult extends MchTradeBaseResult {
     /// 订单标题
     private String title;
 
-    /// 金额
-    private BigDecimal amount;
+    /// 金额（分，最小货币单位）
+    private Long amount;
 
     /// 业务类型
     /// @see TradeFlowTypeEnum

@@ -17,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
-import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
@@ -77,7 +76,7 @@ public class PayOrderManager extends BaseManager<PayOrderMapper, PayOrder> {
     }
 
     /// 查询汇总金额
-    public BigDecimal getTotalAmount(PayOrderQuery query){
+    public Long getTotalAmount(PayOrderQuery query){
         QueryWrapper<PayOrder> generator = QueryGenerator.generator(query);
         // 商户和应用AppId
         generator.eq(MpUtil.getColumnName(PayOrder::getStatus), PayStatusEnum.SUCCESS.getCode());

@@ -39,7 +39,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Objects;
@@ -102,7 +101,7 @@ public class PaySyncService {
         trade.setProduct(payOrder.getProduct());
         trade.setChannel(payOrder.getChannel());
         trade.setMethod(payOrder.getMethod());
-        trade.setAmount(payOrder.getAmount().multiply(BigDecimal.valueOf(100)).longValue());
+        trade.setAmount(payOrder.getAmount());
         try {
             // 执行操作, 获取支付网关同步的结果
             var newResult = syncPayStrategy.doSync(trade);
@@ -118,8 +117,8 @@ public class PaySyncService {
                 });
             }
             syncResult.setOutOrderNo(newResult.getOutOrderNo());
-            syncResult.setAmount(newResult.getAmount() != null ? BigDecimal.valueOf(newResult.getAmount(), 2) : null);
-            syncResult.setRealAmount(newResult.getRealAmount() != null ? BigDecimal.valueOf(newResult.getRealAmount(), 2) : null);
+            syncResult.setAmount(newResult.getAmount());
+            syncResult.setRealAmount(newResult.getRealAmount());
             syncResult.setFinishTime(newResult.getFinishTime());
             syncResult.setSyncData(newResult.getSyncData());
             syncResult.setSyncErrorCode(newResult.getSyncErrorCode());

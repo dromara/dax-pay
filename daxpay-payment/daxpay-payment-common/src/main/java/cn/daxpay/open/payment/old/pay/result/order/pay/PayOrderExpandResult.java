@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 /// # 支付订单扩展信息
@@ -32,8 +31,8 @@ public class PayOrderExpandResult extends BaseResult {
     @Schema(description = "请求时间(UTC)")
     private OffsetDateTime reqTime;
 
-    @Schema(description = "实收金额")
-    private BigDecimal realAmount;
+    @Schema(description = "实收金额(分)")
+    private Long realAmount;
 
     @Schema(description = "终端设备编码")
     private String terminalNo;

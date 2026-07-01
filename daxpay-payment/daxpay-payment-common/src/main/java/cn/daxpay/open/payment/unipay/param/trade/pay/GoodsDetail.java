@@ -1,15 +1,12 @@
 package cn.daxpay.open.payment.unipay.param.trade.pay;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-
-import java.math.BigDecimal;
 
 /// # 订单商品明细
 ///
@@ -38,13 +35,13 @@ public class GoodsDetail {
     @Schema(description = "商品数量")
     private Integer quantity;
 
-    /// 商品单价（分）
+    /// 商品单价（分，最小货币单位）
     /// Alipay 需转为元，WeChat 直接使用分
     @NotNull(message = "{validation.field.unitPrice.notNull}")
-    @DecimalMin(value = "0.01", message = "{validation.field.unitPrice.decimalMin}")
-    @Digits(integer = 10, fraction = 2, message = "{validation.field.unitPrice.digits}")
+    @Min(value = 1, message = "{validation.field.unitPrice.min}")
+    @Max(value = 9999999999L, message = "{validation.field.unitPrice.max}")
     @Schema(description = "商品单价(分)")
-    private BigDecimal unitPrice;
+    private Long unitPrice;
 
     /// 商品分类（Alipay 独有，选填）
     @Size(max = 32, message = "{validation.field.goodsCategory.size}")

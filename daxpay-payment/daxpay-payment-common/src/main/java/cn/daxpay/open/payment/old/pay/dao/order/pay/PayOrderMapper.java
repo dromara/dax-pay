@@ -8,12 +8,10 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
-import java.math.BigDecimal;
-
 
 @Mapper
 public interface PayOrderMapper extends MPJBaseMapper<PayOrder> {
 
-    @Select("select sum(amount) from pay_order ${ew.customSqlSegment}")
-    BigDecimal getTotalAmount(@Param(Constants.WRAPPER) QueryWrapper<PayOrder> param);
+    @Select("select sum(amount)::bigint from pay_order ${ew.customSqlSegment}")
+    Long getTotalAmount(@Param(Constants.WRAPPER) QueryWrapper<PayOrder> param);
 }

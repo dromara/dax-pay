@@ -25,7 +25,6 @@ import cn.daxpay.open.platform.core.code.CommonCode;
 ///
 @UtilityClass
 public class PayUtil {
-    private static final BigDecimal HUNDRED = new BigDecimal(100);
 
     /// 获取支付单的超时时间
     public OffsetDateTime getPaymentExpiredTime(Integer minute) {
@@ -36,25 +35,6 @@ public class PayUtil {
     public int getPaymentExpiredTime(OffsetDateTime date) {
         Duration duration = Duration.between(OffsetDateTime.now(ZoneOffset.UTC), date);
         return Math.toIntExact(duration.getSeconds() / 60);
-    }
-
-    /// 元转分
-    ///
-    /// @param amount 元的金额
-    /// @return 分的金额
-    public int convertCentAmount(BigDecimal amount) {
-        return amount.multiply(HUNDRED)
-                .setScale(0, RoundingMode.HALF_UP)
-                .intValue();
-    }
-
-    /// 分转元,保留两位小数
-    ///
-    /// @param amount 元的金额
-    /// @return 元的金额 两位小数
-    public BigDecimal conversionAmount(int amount) {
-        return BigDecimal.valueOf(amount)
-                .divide(HUNDRED, 2, RoundingMode.HALF_UP);
     }
 
     /// xx.xx%转换为基点表示费率(万分之多少)

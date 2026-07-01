@@ -5,8 +5,6 @@ import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.math.BigDecimal;
-
 /// # 小程序快捷被扫支付参数
 ///
 @Data
@@ -15,10 +13,10 @@ import java.math.BigDecimal;
 public class QuicklyBarPayParam {
 
     @NotNull(message = "{validation.field.amount.notNull}")
-    @DecimalMin(value = "0.01", message = "{validation.field.amount.decimalMin}")
-    @Digits(integer = 8, fraction = 2, message = "{validation.field.amount.digits}")
-    @Schema(description = "支付金额")
-    private BigDecimal amount;
+    @Min(value = 1, message = "{validation.field.amount.min}")
+    @Max(value = 9999999999L, message = "{validation.field.amount.max}")
+    @Schema(description = "支付金额(分)")
+    private Long amount;
 
     /// 支付描述
     @Schema(description = "支付描述")

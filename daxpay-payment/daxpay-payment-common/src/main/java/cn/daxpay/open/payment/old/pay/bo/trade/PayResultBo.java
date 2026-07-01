@@ -4,7 +4,6 @@ import cn.daxpay.open.platform.core.enums.unipay.PayBodyTypeEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 /// # 支付结果业务类
@@ -21,8 +20,8 @@ public class PayResultBo {
     /// 是否支付完成
     private boolean complete;
 
-    /// 实收金额
-    private BigDecimal realAmount;
+    /// 实收金额（分，最小货币单位）
+    private Long realAmount;
 
     /// 完成时间
     private OffsetDateTime finishTime;

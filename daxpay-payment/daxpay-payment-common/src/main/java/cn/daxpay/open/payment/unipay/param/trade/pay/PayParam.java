@@ -11,7 +11,6 @@ import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -41,12 +40,12 @@ public class PayParam extends MerchantPaymentCommonParam {
     @Size(max = 50, message = "{validation.field.description.size}")
     private String description;
 
-    /// 支付金额（元）
-    @Schema(description = "支付金额")
+    /// 支付金额（分，最小货币单位）
+    @Schema(description = "支付金额(分)")
     @NotNull(message = "{validation.field.amount.notNull}")
-    @DecimalMin(value = "0.01", message = "{validation.field.amount.decimalMin}")
-    @Digits(integer = 8, fraction = 2, message = "{validation.field.amount.digits}")
-    private BigDecimal amount;
+    @Min(value = 1, message = "{validation.field.amount.min}")
+    @Max(value = 9999999999L, message = "{validation.field.amount.max}")
+    private Long amount;
 
     // ===== 支付路由 =====
 
