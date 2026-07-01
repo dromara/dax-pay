@@ -151,7 +151,7 @@ public class WechatMaMessageService {
     private void validateConfig(String wxAppId, String appSecret) {
         if (StrUtil.isBlank(wxAppId) || StrUtil.isBlank(appSecret)) {
             log.error("微信配置参数为空，wxAppId: {}", wxAppId);
-            throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.channel.微信配置参数不能为空");
+            throw new OperationFailException(CommonCode.FAIL_CODE, "error.channel.wechat.configParamsRequired");
         }
     }
 

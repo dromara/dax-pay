@@ -34,7 +34,7 @@ public class WechatUserService {
     public WechatUserInfoResult getUserInfo(String openId, String appId, String appSecret) {
         // 验证参数
         if (StrUtil.isBlank(openId) || StrUtil.isBlank(appId) || StrUtil.isBlank(appSecret)) {
-            throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.channel.参数不能为空");
+            throw new OperationFailException(CommonCode.FAIL_CODE, "error.channel.wechat.paramsRequired");
         }
         
         try {
@@ -45,7 +45,7 @@ public class WechatUserService {
             WxMpUser wxMpUser = wxMpService.getUserService().userInfo(openId);
             
             if (wxMpUser == null) {
-                throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.channel.获取用户信息失败");
+                throw new OperationFailException(CommonCode.FAIL_CODE, "error.channel.wechat.userInfoNotFound");
             }
             
             // 转换结果
@@ -68,7 +68,7 @@ public class WechatUserService {
             
             // 判断是否是用户未关注
             if (e.getError().getErrorCode() == 49003) {
-                throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.channel.用户未关注公众号");
+                throw new OperationFailException(CommonCode.FAIL_CODE, "error.channel.wechat.userNotSubscribed");
             }
             
             // 微信: 获取用户信息失败: {0}
@@ -100,7 +100,7 @@ public class WechatUserService {
             WxMaPhoneNumberInfo phoneInfo = wxMaService.getUserService().getPhoneNoInfo(code);
             
             if (phoneInfo == null) {
-                throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.channel.获取手机号失败");
+                throw new OperationFailException(CommonCode.FAIL_CODE, "error.channel.wechat.phoneNotFound");
             }
             
             // 转换结果

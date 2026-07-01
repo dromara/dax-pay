@@ -7,7 +7,7 @@ import static cn.daxpay.open.platform.core.code.CommonErrorCode.NONCE_MISSING;
 public class NonceMissingException extends BizInfoException {
 
     public NonceMissingException() {
-        super(NONCE_MISSING, "Nonce缺失");
+        super(NONCE_MISSING, "error.common.nonceMissing");
         initMessageKey("error.common.nonceMissing");
     }
 

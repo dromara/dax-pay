@@ -23,7 +23,7 @@ public class ConfigErrorException extends PayFailureException {
 
     public ConfigErrorException() {
         // 配置错误
-        super(DaxPayErrorCode.CONFIG_ERROR,"配置错误");
+        super(DaxPayErrorCode.CONFIG_ERROR,"pay.error.configError");
         initMessageKey("pay.error.configError");
     }
 }

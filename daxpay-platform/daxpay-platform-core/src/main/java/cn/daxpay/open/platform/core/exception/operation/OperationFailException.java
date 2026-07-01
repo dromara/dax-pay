@@ -22,7 +22,7 @@ public class OperationFailException extends PayFailureException {
     }
 
     public OperationFailException() {
-        super(DaxPayErrorCode.OPERATION_FAIL,"操作失败");
+        super(DaxPayErrorCode.OPERATION_FAIL,"pay.error.operateFailed");
         initMessageKey("pay.error.operateFailed");
     }
 }
