@@ -11,6 +11,8 @@ import org.springframework.core.annotation.Order;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.Locale;
+
 /// # IAM 认证异常处理
 ///
 /// 集中处理双因素认证挑战等 IAM 认证流程异常, 返回前端可识别的结构化结果。
@@ -21,11 +23,12 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class IamAuthExceptionHandler {
 
-    /// 双因素认证挑战: 密码通过但需二次验证, 返回预认证令牌, 不计入登录失败
+    /// 双因素认证: 密码通过但需二次验证, 返回预认证令牌, 不计入登录失败
     @ExceptionHandler(TwoFactorRequiredException.class)
     public Result<TwoFactorChallengeResult> handleTwoFactorRequired(TwoFactorRequiredException ex) {
-        log.info(ex.getMessage());
-        String message = I18nUtil.get(ex.getMessageKey(), ex.getArgs());
+        String key = ex.resolveMessageKey();
+        log.info("双因素认证 key={}, 消息={}", key, I18nUtil.get(key, Locale.CHINA, ex.getArgs()));
+        String message = I18nUtil.get(key, ex.getArgs());
         return Res.response(TwoFactorRequiredException.CODE, message, new TwoFactorChallengeResult(ex.getPreAuthToken()));
     }
 

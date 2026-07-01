@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,6 +30,10 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
+
+import java.util.Locale;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /// # 项目异常处理
 ///
@@ -57,65 +62,65 @@ public class RestExceptionHandler {
         log.info("SSE 端点异常(通常为客户端断连), 类型={}, 消息={}", ex.getClass().getSimpleName(), ex.getMessage());
     }
 
-    /// 获取异常消息，支持国际化
+    /// 获取异常消息，支持国际化(按请求 locale, 用于响应)
     private String getMessage(BizException ex) {
-        String messageKey = ex.getMessageKey();
-        // 兼容历史两参数构造未写入 messageKey、仅 Throwable.detailMessage 存 key 的情况
-        if (messageKey == null) {
-            messageKey = ex.getMessage();
-        }
+        String messageKey = ex.resolveMessageKey();
         if (messageKey != null) {
             return I18nUtil.get(messageKey, ex.getArgs());
         }
         return ex.getMessage();
     }
 
-    /// 普通业务异常, 不需要进行堆栈跟踪
+    /// 获取异常的固定中文消息(用于日志, 不受请求语言影响)
+    private String zhMessage(BizException ex) {
+        String messageKey = ex.resolveMessageKey();
+        return messageKey != null ? I18nUtil.get(messageKey, Locale.CHINA, ex.getArgs()) : ex.getMessage();
+    }
+
+    /// 业务异常统一处理: SSE 降级 + 日志(由 logger 决定级别与文案) + 国际化响应
+    private Object handleBiz(BizException ex, HttpServletResponse response, Consumer<BizException> logger) {
+        if (isSseStream(response)) {
+            logSse(ex);
+            return ResponseEntity.ok().build();
+        }
+        logger.accept(ex);
+        return Res.response(ex.getCode(), getMessage(ex), MDC.get(CommonCode.TRACE_ID));
+    }
+
+    /// 系统异常统一响应: 按配置决定是否透传原始消息(运行时异常/Throwable 兜底共用)
+    private Object systemErrorResponse(Throwable ex) {
+        if (properties.getException().isShowFullMessage()) {
+            return Res.response(CommonErrorCode.SYSTEM_ERROR, ex.getMessage(), MDC.get(CommonCode.TRACE_ID));
+        }
+        log.error("系统错误 {}", ex.getMessage(), ex);
+        return Res.response(CommonErrorCode.SYSTEM_ERROR, I18nUtil.get("error.common.system"), MDC.get(CommonCode.TRACE_ID));
+    }
+
+    /// 普通业务异常, 不进行堆栈跟踪(debug 级别才跟踪)
     @ExceptionHandler(BizInfoException.class)
     public Object handleBizInfoException(BizInfoException ex, HttpServletResponse response) {
-        if (isSseStream(response)) {
-            logSse(ex);
-            return ResponseEntity.ok().build();
-        }
-        log.info(ex.getMessage());
-        String message = getMessage(ex);
-        return Res.response(ex.getCode(), message, MDC.get(CommonCode.TRACE_ID));
+        return handleBiz(ex, response, e -> {
+            log.info("业务异常 key={}, 消息={}", e.resolveMessageKey(), zhMessage(e));
+            log.debug(e.resolveMessageKey(), e);
+        });
     }
 
-    /// 警告业务异常, 如果量多需要关注
+    /// 警告业务异常, 量多需关注
     @ExceptionHandler(BizWarnException.class)
     public Object handleBizWarnException(BizWarnException ex, HttpServletResponse response) {
-        if (isSseStream(response)) {
-            logSse(ex);
-            return ResponseEntity.ok().build();
-        }
-        log.warn(ex.getMessage(), ex);
-        String message = getMessage(ex);
-        return Res.response(ex.getCode(), message, MDC.get(CommonCode.TRACE_ID));
+        return handleBiz(ex, response, e -> log.warn("业务警告 key={}, 消息={}", e.resolveMessageKey(), zhMessage(e), e));
     }
 
-    /// 致命警告业务异常, 需要进行立即进入排查
+    /// 致命业务异常, 需立即排查
     @ExceptionHandler(BizErrorException.class)
     public Object handleBizErrorException(BizErrorException ex, HttpServletResponse response) {
-        if (isSseStream(response)) {
-            logSse(ex);
-            return ResponseEntity.ok().build();
-        }
-        log.error(ex.getMessage(), ex);
-        String message = getMessage(ex);
-        return Res.response(ex.getCode(), message, MDC.get(CommonCode.TRACE_ID));
+        return handleBiz(ex, response, e -> log.error("业务错误 key={}, 消息={}", e.resolveMessageKey(), zhMessage(e), e));
     }
 
-    /// 业务异常
+    /// 业务异常兜底
     @ExceptionHandler(BizException.class)
     public Object handleBusinessException(BizException ex, HttpServletResponse response) {
-        if (isSseStream(response)) {
-            logSse(ex);
-            return ResponseEntity.ok().build();
-        }
-        log.info(ex.getMessage(), ex);
-        String message = getMessage(ex);
-        return Res.response(ex.getCode(), message, MDC.get(CommonCode.TRACE_ID));
+        return handleBiz(ex, response, e -> log.info("业务异常 key={}, 消息={}", e.resolveMessageKey(), zhMessage(e), e));
     }
 
     /// 请求参数校验未通过
@@ -126,11 +131,10 @@ public class RestExceptionHandler {
             return ResponseEntity.ok().build();
         }
         log.info(ex.getMessage(), ex);
-        StringBuilder message = new StringBuilder();
-        for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
-            message.append(violation.getMessage()).append(System.lineSeparator());
-        }
-        return Res.response(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, message.toString(), MDC.get(CommonCode.TRACE_ID));
+        String message = ex.getConstraintViolations().stream()
+                .map(ConstraintViolation::getMessage)
+                .collect(Collectors.joining("; "));
+        return Res.response(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, message, MDC.get(CommonCode.TRACE_ID));
     }
 
     /// 请求参数校验未通过
@@ -141,11 +145,10 @@ public class RestExceptionHandler {
             return ResponseEntity.ok().build();
         }
         log.info(ex.getMessage(), ex);
-        StringBuilder message = new StringBuilder();
-        for (var violation : ex.getAllErrors()) {
-            message.append(violation.getDefaultMessage()).append(System.lineSeparator());
-        }
-        return Res.response(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, message.toString(), MDC.get(CommonCode.TRACE_ID));
+        String message = ex.getAllErrors().stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .collect(Collectors.joining("; "));
+        return Res.response(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, message, MDC.get(CommonCode.TRACE_ID));
     }
 
     /// 不支持 HTTP 请求方法异常
@@ -238,12 +241,7 @@ public class RestExceptionHandler {
             return ResponseEntity.ok().build();
         }
         log.error(ex.getMessage(), ex);
-        String message = I18nUtil.get("error.common.system");
-        if (properties.getException().isShowFullMessage()) {
-            return Res.response(CommonErrorCode.SYSTEM_ERROR, ex.getMessage(), MDC.get(CommonCode.TRACE_ID));
-        }
-        log.error("系统错误 {}", ex.getMessage(), ex);
-        return Res.response(CommonErrorCode.SYSTEM_ERROR, message, MDC.get(CommonCode.TRACE_ID));
+        return systemErrorResponse(ex);
     }
 
     /// 处理 OutOfMemoryError
@@ -265,12 +263,7 @@ public class RestExceptionHandler {
             logSse(ex);
             return ResponseEntity.ok().build();
         }
-        String message = I18nUtil.get("error.common.system");
-        if (properties.getException().isShowFullMessage()){
-            return Res.response(CommonErrorCode.SYSTEM_ERROR, ex.getMessage(), MDC.get(CommonCode.TRACE_ID));
-        }
-        log.error("系统错误 {}", ex.getMessage(), ex);
-        return Res.response(CommonErrorCode.SYSTEM_ERROR, message, MDC.get(CommonCode.TRACE_ID));
+        return systemErrorResponse(ex);
     }
 
 }

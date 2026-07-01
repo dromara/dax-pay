@@ -34,6 +34,13 @@ public class BizException extends RuntimeException {
         this.args = args;
     }
 
+    /// 解析用于国际化与日志的 messageKey
+    /// 兼容历史两参数构造未写入 messageKey 字段、仅 Throwable.detailMessage 存 key 的情况
+    public String resolveMessageKey() {
+        // messageKey 为 null 时回退到 Throwable.detailMessage
+        return messageKey != null ? messageKey : getMessage();
+    }
+
     /// 指定错误码与 messageKey（两参数形式，Java 优先于 varargs 构造）
     public BizException(int code, String messageKey) {
         super(messageKey);

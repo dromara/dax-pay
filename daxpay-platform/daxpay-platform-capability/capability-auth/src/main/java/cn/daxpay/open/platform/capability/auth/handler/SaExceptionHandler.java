@@ -1,5 +1,6 @@
 package cn.daxpay.open.platform.capability.auth.handler;
 
+import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
@@ -17,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.Locale;
+
 /// # 过滤SaTokenException,需要运行在 RestExceptionHandler 之前
 ///
 @Order(Ordered.LOWEST_PRECEDENCE - 1)
@@ -27,7 +30,9 @@ public class SaExceptionHandler {
     /// 未登录返回401
     @ExceptionHandler(NotLoginException.class)
     public ResponseEntity<Result<Void>> handleNotLoginException(NotLoginException ex){
-        log.info(ex.getMessage(), ex);
+        // 日志固定输出 messageKey 与中文翻译, 不受请求语言影响
+        String key = ex.resolveMessageKey();
+        log.info("鉴权异常 key={}, 消息={}", key, I18nUtil.get(key, Locale.CHINA, ex.getArgs()), ex);
         Result<Void> result = Res.response(ex.getCode(), ex.getMessage(), MDC.get(CommonCode.TRACE_ID));
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
     }
@@ -35,7 +40,9 @@ public class SaExceptionHandler {
     /// 路径无权访问
     @ExceptionHandler(RouterCheckException.class)
     public ResponseEntity<Result<Void>> handleBusinessException(RouterCheckException ex) {
-        log.info(ex.getMessage(), ex);
+        // 日志固定输出 messageKey 与中文翻译, 不受请求语言影响
+        String key = ex.resolveMessageKey();
+        log.info("鉴权异常 key={}, 消息={}", key, I18nUtil.get(key, Locale.CHINA, ex.getArgs()), ex);
         Result<Void> result = Res.response(ex.getCode(), ex.getMessage(), MDC.get(CommonCode.TRACE_ID));
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(result);
     }

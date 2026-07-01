@@ -54,5 +54,11 @@
             <artifactId>common-config</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- 国际化(异常日志输出 messageKey 的固定中文翻译) -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>common-i18n</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>
