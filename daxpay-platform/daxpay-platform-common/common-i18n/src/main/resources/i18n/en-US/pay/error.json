@@ -69,6 +69,7 @@
   },
   "assist": {
     "mchPublicKeyEmpty": "Merchant public key is empty",
+    "privateKeyEmpty": "Merchant private key is empty",
     "signEmpty": "Signature is empty",
     "mchNoAppNoMatch": "Merchant number and application number do not match",
     "mchNotOwnApp": "Merchant does not own this application",

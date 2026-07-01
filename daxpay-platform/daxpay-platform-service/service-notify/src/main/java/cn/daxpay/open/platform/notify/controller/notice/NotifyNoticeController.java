@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /// 公告管理(管理端)
-@PermCode(menuCode = "system:notify")
+@PermCode(menuCode = "system:notify:notice")
 @Validated
 @Tag(name = "公告管理")
 @RestController

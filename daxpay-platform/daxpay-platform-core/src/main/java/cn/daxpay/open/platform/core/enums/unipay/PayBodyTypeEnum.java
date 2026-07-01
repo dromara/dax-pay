@@ -18,6 +18,8 @@ public enum PayBodyTypeEnum implements I18nSupport {
     FROM("from"),
     /// 标识码
     IDENTIFIER("identifier"),
+    /// 二维码内容(前端渲染成二维码图片)
+    QR_CODE("qr_code"),
     /// JSON对象
     JSON("json");
 

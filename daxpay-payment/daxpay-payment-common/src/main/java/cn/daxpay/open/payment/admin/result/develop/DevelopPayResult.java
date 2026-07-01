@@ -11,15 +11,11 @@ import lombok.experimental.Accessors;
 @Schema(title = "支付调试结果")
 public class DevelopPayResult {
 
-    /// 发送的请求体 JSON
-    @Schema(description = "请求体JSON")
-    private String requestBody;
-
-    /// 签名信息(传入私钥时返回)
-    @Schema(description = "签名信息")
-    private DevelopSignResult signInfo;
-
     /// 支付结果
     @Schema(description = "支付结果")
     private NormalPayResult payResult;
+
+    /// 响应签名(平台私钥签名, 可用于验证响应完整性)
+    @Schema(description = "响应签名")
+    private String sign;
 }

@@ -3,5 +3,6 @@
   "jsapi": "JSAPI Object",
   "from": "Form Data",
   "identifier": "Identifier",
+  "qr_code": "QR Code",
   "json": "JSON Object"
 }

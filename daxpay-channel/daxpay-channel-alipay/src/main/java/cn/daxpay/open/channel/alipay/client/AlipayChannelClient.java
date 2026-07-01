@@ -1,7 +1,7 @@
 package cn.daxpay.open.channel.alipay.client;
 
-import cn.daxpay.open.channel.alipay.dto.AlipayPayReq;
-import cn.daxpay.open.channel.alipay.dto.AlipayPayResp;
+import cn.daxpay.open.channel.alipay.client.req.AlipayPayReq;
+import cn.daxpay.open.channel.alipay.client.resp.AlipayPayResp;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;

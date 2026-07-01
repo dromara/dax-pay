@@ -68,6 +68,7 @@
   },
   "assist": {
     "mchPublicKeyEmpty": "商户公钥为空",
+    "privateKeyEmpty": "商户私钥为空",
     "signEmpty": "签名为空",
     "mchNoAppNoMatch": "商户号和应用号不匹配",
     "mchNotOwnApp": "该商户不拥有该应用",
