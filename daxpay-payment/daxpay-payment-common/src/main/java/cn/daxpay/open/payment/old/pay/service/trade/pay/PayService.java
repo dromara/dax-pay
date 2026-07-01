@@ -20,8 +20,8 @@ import cn.daxpay.open.payment.masterdata.constants.product.service.PayProductCap
 import cn.daxpay.open.payment.pay.order.entity.PayTrade;
 import cn.daxpay.open.payment.strategy.pay.AbsPayStrategy;
 import cn.daxpay.open.platform.core.enums.unipay.PayBodyTypeEnum;
-import cn.daxpay.open.payment.unipay.param.trade.pay.PayParam;
-import cn.daxpay.open.payment.unipay.result.trade.pay.PayResult;
+import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
+import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
 import cn.hutool.core.lang.Opt;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
@@ -49,7 +49,7 @@ public class PayService {
     private final TradeUniHandleService tradeUniHandleService;
 
     /// 支付入口
-    public PayResult pay(PayParam payParam){
+    public NormalPayResult pay(NormalPayParam payParam){
         // 校验超时时间, 不可早于当前
         payAssistService.validationExpiredTime(payParam.getExpiredTime());
         // 获取商户订单号
@@ -76,7 +76,7 @@ public class PayService {
 
     /// 支付操作 无事务
     /// 拆分为多阶段，1. 保存订单记录信息 2. 调起支付 3. 支付成功后操作
-    public PayResult payHandle(PayParam payParam, PayOrder payOrder) {
+    public NormalPayResult payHandle(NormalPayParam payParam, PayOrder payOrder) {
         // 获取支付策略类
         var payStrategy = PaymentStrategyFactory.createByProduct(payParam.getProduct(), AbsPayStrategy.class);
         PayContext context = new PayContext(payParam);
@@ -148,7 +148,7 @@ public class PayService {
 
     /// 支付调用成功后操作, 更新订单信息
     @Transactional(rollbackFor = Exception.class)
-    public PayResult paySuccess(PayOrder payOrder, PayResultBo result){
+    public NormalPayResult paySuccess(PayOrder payOrder, PayResultBo result){
         // 如果支付完成, 进行订单完成处理, 同时发送回调消息
         if (result.isComplete()) {
             payOrder.setStatus(PayStatusEnum.SUCCESS.getCode())

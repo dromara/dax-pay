@@ -10,8 +10,8 @@ import cn.daxpay.open.payment.masterdata.constants.provider.result.PayProviderMe
 import cn.daxpay.open.payment.masterdata.constants.provider.service.PayProviderMethodService;
 import cn.daxpay.open.payment.merchant.service.route.support.PayRouteStrategyCapabilitySupport;
 import cn.daxpay.open.payment.pay.service.NormalPayService;
-import cn.daxpay.open.payment.unipay.param.trade.pay.PayParam;
-import cn.daxpay.open.payment.unipay.result.trade.pay.PayResult;
+import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
+import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
 import cn.daxpay.open.platform.common.json.util.JsonUtil;
 import cn.daxpay.open.platform.core.rest.dto.LabelValue;
 import cn.hutool.core.util.StrUtil;
@@ -36,7 +36,7 @@ public class DevelopTradeService {
     private final PayRouteStrategyCapabilitySupport payRouteStrategyCapabilitySupport;
 
     /// 生成支付参数签名(与正式签名逻辑一致)
-    public DevelopSignResult sign(DevelopParam<PayParam> param) {
+    public DevelopSignResult sign(DevelopParam<NormalPayParam> param) {
         // 签名串(与 PaySignUtil 内部一致)
         String signStr = ObjectSignStrUtil.buildSignStr(param.getParam());
         // 签名值
@@ -45,8 +45,8 @@ public class DevelopTradeService {
     }
 
     /// 支付调试(真实发起)
-    public DevelopPayResult pay(DevelopParam<PayParam> param) {
-        PayParam payParam = param.getParam();
+    public DevelopPayResult pay(DevelopParam<NormalPayParam> param) {
+        NormalPayParam payParam = param.getParam();
         // 记录发送的请求体
         String requestBody = JsonUtil.toJsonStr(payParam);
         // 签名信息(传入私钥时生成, 便于核对)
@@ -55,7 +55,7 @@ public class DevelopTradeService {
             signInfo = this.sign(param);
         }
         // 在支付作用域内执行, 初始化商户上下文, 使 mchNo/appId 等字段自动填充
-        PayResult payResult = paymentScopeManager.executeWithScope(
+        NormalPayResult payResult = paymentScopeManager.executeWithScope(
                 payParam.getMchNo(), payParam.getAppId(),
                 () -> normalPayService.pay(payParam)
         );

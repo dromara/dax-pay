@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Schema(title = "支付订单信息同步参数")
-public class PaySyncParam extends MerchantPaymentCommonParam {
+public class NormalPaySyncParam extends MerchantPaymentCommonParam {
 
     /// 支付订单号/商户订单号/通道订单号至少要传输一个，支付订单号 > 商户订单号 > 通道订单号
     @Schema(description = "订单号")

@@ -8,12 +8,12 @@ import cn.daxpay.open.platform.core.exception.PayFailureException;
 import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
 import cn.daxpay.open.payment.common.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.common.util.PaymentStrategyFactory;
-import cn.daxpay.open.payment.pay.order.dao.PayNormalOrderManager;
-import cn.daxpay.open.payment.pay.order.entity.PayNormalOrder;
+import cn.daxpay.open.payment.pay.order.dao.NormalPayOrderManager;
+import cn.daxpay.open.payment.pay.order.entity.NormalPayOrder;
 import cn.daxpay.open.payment.pay.order.dao.PayTradeManager;
 import cn.daxpay.open.payment.pay.order.entity.PayTrade;
 import cn.daxpay.open.payment.strategy.pay.AbsPayCloseStrategy;
-import cn.daxpay.open.payment.unipay.param.trade.pay.PayCloseParam;
+import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayCloseParam;
 import cn.daxpay.open.platform.core.enums.pay.pay.CloseTypeEnum;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.lock.LockInfo;
@@ -33,19 +33,19 @@ import java.util.Objects;
 public class PayCloseService {
 
     private final PayTradeManager payTradeManager;
-    private final PayNormalOrderManager payNormalOrderManager;
+    private final NormalPayOrderManager payNormalOrderManager;
     private final PayUniHandleService payUniHandleService;
     private final LockTemplate lockTemplate;
 
     /// 关闭支付
-    public void close(PayCloseParam param) {
+    public void close(NormalPayCloseParam param) {
         if (StrUtil.isBlank(param.getOrderNo()) && Objects.isNull(param.getBizOrderNo())) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.orderNoRequired");
         }
         PayTrade trade = payTradeManager.findByTradeNo(param.getOrderNo())
                 .orElse(null);
         if (Objects.isNull(trade) && Objects.nonNull(param.getBizOrderNo())) {
-            PayNormalOrder normalOrder = payNormalOrderManager.findByBizOrderNo(param.getBizOrderNo())
+            NormalPayOrder normalOrder = payNormalOrderManager.findByBizOrderNo(param.getBizOrderNo())
                     .orElse(null);
             if (Objects.nonNull(normalOrder)) {
                 trade = payTradeManager.findByContainerId(normalOrder.getId())
@@ -69,7 +69,7 @@ public class PayCloseService {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.closeProcessing");
         }
         try {
-            PayNormalOrder normalOrder = payNormalOrderManager.findById(trade.getContainerId())
+            NormalPayOrder normalOrder = payNormalOrderManager.findById(trade.getContainerId())
                     .orElse(null);
             if (Objects.equals(PayFundStatusEnum.INIT.getCode(), trade.getStatus())) {
                 payUniHandleService.payClose(trade, normalOrder);

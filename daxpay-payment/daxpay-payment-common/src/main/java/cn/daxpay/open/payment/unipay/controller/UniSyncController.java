@@ -1,10 +1,10 @@
 package cn.daxpay.open.payment.unipay.controller;
 
 import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
-import cn.daxpay.open.payment.unipay.param.trade.pay.PaySyncParam;
+import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPaySyncParam;
 
 import cn.daxpay.open.payment.common.result.DaxResult;
-import cn.daxpay.open.payment.unipay.result.trade.pay.PaySyncResult;
+import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPaySyncResult;
 import cn.daxpay.open.payment.common.util.DaxRes;
 import cn.daxpay.open.payment.old.pay.anno.PaymentVerify;
 import cn.daxpay.open.payment.old.pay.service.trade.pay.PaySyncService;
@@ -31,7 +31,7 @@ public class UniSyncController {
 
     @Operation(summary = "支付订单同步接口")
     @PostMapping("/pay")
-    public DaxResult<PaySyncResult> pay(@RequestBody PaySyncParam param){
+    public DaxResult<NormalPaySyncResult> pay(@RequestBody NormalPaySyncParam param){
         return DaxRes.ok(paySyncService.sync(param));
     }
 

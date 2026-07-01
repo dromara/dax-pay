@@ -10,9 +10,9 @@ import cn.daxpay.open.payment.common.service.MerchantPermissionService;
 import cn.daxpay.open.payment.old.pay.anno.PaymentVerify;
 import cn.daxpay.open.payment.pay.service.PayCloseService;
 import cn.daxpay.open.payment.pay.service.NormalPayService;
-import cn.daxpay.open.payment.unipay.param.trade.pay.PayCloseParam;
-import cn.daxpay.open.payment.unipay.param.trade.pay.PayParam;
-import cn.daxpay.open.payment.unipay.result.trade.pay.PayResult;
+import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayCloseParam;
+import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
+import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
 import cn.daxpay.open.platform.core.enums.pay.trade.TradeSourceEnum;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -37,7 +37,7 @@ public class UniTradeController {
 
     @Operation(summary = "支付接口")
     @PostMapping("/pay")
-    public DaxResult<PayResult> pay(@RequestBody PayParam payParam){
+    public DaxResult<NormalPayResult> pay(@RequestBody NormalPayParam payParam){
         if (!permConfigService.hasApiPerm(PaymentApiEnum.PAY.getCode())){
             // 订单: 该商户没有此接口的权限
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.order.merchantNoApiPermission");
@@ -47,7 +47,7 @@ public class UniTradeController {
 
     @Operation(summary = "关闭和撤销接口")
     @PostMapping("/close")
-    public DaxResult<Void> close(@RequestBody PayCloseParam param){
+    public DaxResult<Void> close(@RequestBody NormalPayCloseParam param){
         if ( permConfigService.hasApiPerm(PaymentApiEnum.CLOSE.getCode())){
             // 订单: 该商户没有此接口的权限
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.order.merchantNoApiPermission");

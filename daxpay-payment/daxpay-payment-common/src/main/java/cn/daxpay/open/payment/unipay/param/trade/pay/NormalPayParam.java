@@ -14,12 +14,12 @@ import lombok.EqualsAndHashCode;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-/// # 统一下单参数（国内普通支付）
+/// # 普通支付下单参数
 ///
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Schema(title = "支付参数")
-public class PayParam extends MerchantPaymentCommonParam {
+public class NormalPayParam extends MerchantPaymentCommonParam {
 
     // ===== 业务核心 =====
 

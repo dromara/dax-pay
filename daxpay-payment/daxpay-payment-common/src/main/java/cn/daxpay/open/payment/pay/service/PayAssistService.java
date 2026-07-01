@@ -6,19 +6,19 @@ import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.util.DateTimeUtil;
 import cn.daxpay.open.platform.core.util.TradeNoGenerateUtil;
-import cn.daxpay.open.payment.common.enums.NormalOrderStatusEnum;
+import cn.daxpay.open.payment.common.enums.NormalPayOrderStatusEnum;
 import cn.daxpay.open.payment.common.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.common.enums.PayTradeTypeEnum;
 import cn.daxpay.open.payment.common.service.MchAppInfoAssistQueryService;
 import cn.daxpay.open.payment.common.util.PayUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.daxpay.open.payment.pay.convert.PayTradeConvert;
-import cn.daxpay.open.payment.pay.order.dao.PayNormalOrderManager;
-import cn.daxpay.open.payment.pay.order.entity.PayNormalOrder;
+import cn.daxpay.open.payment.pay.order.dao.NormalPayOrderManager;
+import cn.daxpay.open.payment.pay.order.entity.NormalPayOrder;
 import cn.daxpay.open.payment.pay.order.dao.PayTradeManager;
 import cn.daxpay.open.payment.pay.order.entity.PayTrade;
-import cn.daxpay.open.payment.unipay.param.trade.pay.PayParam;
-import cn.daxpay.open.payment.unipay.result.trade.pay.PayResult;
+import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
+import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -36,12 +36,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class PayAssistService {
 
-    private final PayNormalOrderManager payNormalOrderManager;
+    private final NormalPayOrderManager payNormalOrderManager;
     private final PayTradeManager payTradeManager;
     private final MchAppInfoAssistQueryService mchAppInfoAssistQueryService;
 
     /// 解析应用号：param 有则用，无则取商户默认应用并回填到 param
-    public void resolveApp(PayParam payParam) {
+    public void resolveApp(NormalPayParam payParam) {
         if (StrUtil.isBlank(payParam.getAppId())) {
             String appId = mchAppInfoAssistQueryService.findDefaultAppId(payParam.getMchNo());
             payParam.setAppId(appId);
@@ -51,7 +51,7 @@ public class PayAssistService {
     /// 创建支付订单（容器 + 资金交易）
     /// 调用方需保证 appId 和 product 已解析完毕
     @Transactional(rollbackFor = Exception.class)
-    public PayTrade createOrder(PayParam payParam) {
+    public PayTrade createOrder(NormalPayParam payParam) {
         String appId = payParam.getAppId();
         OffsetDateTime expiredTime = this.getExpiredTime(payParam.getExpiredTime());
         Long amount = payParam.getAmount();
@@ -65,12 +65,12 @@ public class PayAssistService {
         }
         // 终端信息
         String terminalNo = payParam.getTerminal() != null ? payParam.getTerminal().getTerminalNo() : null;
-        // 创建容器 PayNormalOrder（含冗余字段，方便查询）
-        PayNormalOrder normalOrder = new PayNormalOrder();
+        // 创建容器 NormalPayOrder（含冗余字段，方便查询）
+        NormalPayOrder normalOrder = new NormalPayOrder();
         normalOrder.setBizOrderNo(payParam.getBizOrderNo());
         normalOrder.setTitle(payParam.getTitle());
         normalOrder.setDescription(payParam.getDescription());
-        normalOrder.setStatus(NormalOrderStatusEnum.WAIT_PAY.getCode());
+        normalOrder.setStatus(NormalPayOrderStatusEnum.WAIT_PAY.getCode());
         normalOrder.setNotifyUrl(payParam.getNotifyUrl());
         normalOrder.setReturnUrl(payParam.getReturnUrl());
         normalOrder.setAttach(payParam.getAttach());
@@ -110,11 +110,11 @@ public class PayAssistService {
 
     /// 根据业务单号查询并检查支付状态（按商户号自动租户隔离）
     public PayTrade getOrderAndCheck(String bizOrderNo) {
-        Optional<PayNormalOrder> normalOrderOpt = payNormalOrderManager.findByBizOrderNo(bizOrderNo);
+        Optional<NormalPayOrder> normalOrderOpt = payNormalOrderManager.findByBizOrderNo(bizOrderNo);
         if (normalOrderOpt.isEmpty()) {
             return null;
         }
-        PayNormalOrder normalOrder = normalOrderOpt.get();
+        NormalPayOrder normalOrder = normalOrderOpt.get();
         PayTrade trade = payTradeManager.findByContainerId(normalOrder.getId()).orElse(null);
         if (trade == null) {
             return null;
@@ -124,14 +124,14 @@ public class PayAssistService {
     }
 
     /// 检查订单状态
-    public void checkOrder(PayNormalOrder normalOrder, PayTrade trade) {
+    public void checkOrder(NormalPayOrder normalOrder, PayTrade trade) {
         // 容器状态检查
         String bizStatus = normalOrder.getStatus();
-        if (Objects.equals(bizStatus, NormalOrderStatusEnum.PAID.getCode())) {
+        if (Objects.equals(bizStatus, NormalPayOrderStatusEnum.PAID.getCode())) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.alreadySuccess");
         }
-        if (Objects.equals(bizStatus, NormalOrderStatusEnum.CLOSED.getCode())
-                || Objects.equals(bizStatus, NormalOrderStatusEnum.EXPIRED.getCode())) {
+        if (Objects.equals(bizStatus, NormalPayOrderStatusEnum.CLOSED.getCode())
+                || Objects.equals(bizStatus, NormalPayOrderStatusEnum.EXPIRED.getCode())) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.failedOrClosed");
         }
         // 资金状态检查
@@ -151,8 +151,8 @@ public class PayAssistService {
     }
 
     /// 根据 PayTrade 构建支付结果
-    public PayResult buildResult(PayTrade trade) {
-        PayNormalOrder normalOrder = payNormalOrderManager.findById(trade.getContainerId()).orElse(null);
+    public NormalPayResult buildResult(PayTrade trade) {
+        NormalPayOrder normalOrder = payNormalOrderManager.findById(trade.getContainerId()).orElse(null);
         return PayTradeConvert.CONVERT.toResult(trade, normalOrder);
     }
 

@@ -16,7 +16,7 @@ import java.time.OffsetDateTime;
 @Data
 @Accessors(chain = true)
 @Schema(title = "支付订单")
-public class PayOrderResult {
+public class NormalPayOrderResult {
 
     /// 商户订单号
     @Schema(description = "商户订单号")

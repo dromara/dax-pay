@@ -23,7 +23,7 @@ import cn.daxpay.open.payment.old.pay.service.order.pay.PayOrderQueryService;
 import cn.daxpay.open.payment.old.pay.service.record.close.PayCloseRecordService;
 import cn.daxpay.open.payment.old.pay.service.trade.TradeUniHandleService;
 import cn.daxpay.open.payment.strategy.pay.AbsPayCloseStrategy;
-import cn.daxpay.open.payment.unipay.param.trade.pay.PayCloseParam;
+import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayCloseParam;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
@@ -54,7 +54,7 @@ public class PayCloseService {
     private final PaymentContext apiContext;
 
     /// 关闭支付
-    public void close(PayCloseParam param){
+    public void close(NormalPayCloseParam param){
         // 校验参数
         if (StrUtil.isBlank(param.getOrderNo()) && Objects.isNull(param.getBizOrderNo())){
             // 支付订单号不能都为空

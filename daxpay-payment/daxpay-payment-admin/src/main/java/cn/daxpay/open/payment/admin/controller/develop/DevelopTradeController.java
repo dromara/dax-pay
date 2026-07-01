@@ -5,7 +5,7 @@ import cn.daxpay.open.payment.admin.result.develop.DevelopPayResult;
 import cn.daxpay.open.payment.admin.result.develop.DevelopSignResult;
 import cn.daxpay.open.payment.admin.service.develop.DevelopTradeService;
 import cn.daxpay.open.payment.masterdata.constants.provider.result.PayProviderMethodResult;
-import cn.daxpay.open.payment.unipay.param.trade.pay.PayParam;
+import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.dto.LabelValue;
@@ -35,14 +35,14 @@ public class DevelopTradeController {
     @PermCode(code = "sign", nameCn = "签名", nameEn = "Sign")
     @Operation(summary = "支付参数签名")
     @PostMapping("/sign")
-    public Result<DevelopSignResult> sign(@RequestBody DevelopParam<PayParam> param) {
+    public Result<DevelopSignResult> sign(@RequestBody DevelopParam<NormalPayParam> param) {
         return Res.ok(developTradeService.sign(param));
     }
 
     @PermCode(code = "pay", nameCn = "支付", nameEn = "Pay")
     @Operation(summary = "支付调试(真实发起)")
     @PostMapping("/pay")
-    public Result<DevelopPayResult> pay(@RequestBody DevelopParam<PayParam> param) {
+    public Result<DevelopPayResult> pay(@RequestBody DevelopParam<NormalPayParam> param) {
         return Res.ok(developTradeService.pay(param));
     }
 

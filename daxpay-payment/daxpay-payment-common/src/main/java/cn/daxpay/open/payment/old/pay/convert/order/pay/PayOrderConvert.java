@@ -2,8 +2,8 @@ package cn.daxpay.open.payment.old.pay.convert.order.pay;
 
 import cn.daxpay.open.payment.common.context.CallbackInfo;
 import cn.daxpay.open.payment.old.pay.bo.sync.PaySyncResultBo;
-import cn.daxpay.open.payment.unipay.param.trade.pay.PayParam;
-import cn.daxpay.open.payment.unipay.result.trade.pay.PayOrderResult;
+import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
+import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayOrderResult;
 import cn.daxpay.open.payment.old.pay.entity.order.pay.PayOrder;
 import cn.daxpay.open.payment.old.pay.entity.order.pay.PayOrderExpand;
 import cn.daxpay.open.payment.old.pay.result.order.pay.PayOrderExpandResult;
@@ -24,12 +24,12 @@ public interface PayOrderConvert {
 
     PayOrderVo toVo(PayOrder payOrder);
 
-    PayOrderResult toResult(PayOrder payOrder);
+    NormalPayOrderResult toResult(PayOrder payOrder);
 
     PayOrderExpandResult toResult(PayOrderExpand payOrder);
 
     @Mapping(target = "limitPay", source = "limitPay")
-    void copy(PayParam param, @MappingTarget PayOrder payOrder);
+    void copy(NormalPayParam param, @MappingTarget PayOrder payOrder);
 
     /// 将 List<String> limitPay 转换为逗号分隔的字符串
     default String mapListToString(List<String> list) {
@@ -45,5 +45,5 @@ public interface PayOrderConvert {
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void copy(PaySyncResultBo resultBo, @MappingTarget PayOrderExpand payOrderExpand);
 
-    void copy(PayOrderExpand orderExpand, @MappingTarget PayOrderResult noticeResult);
+    void copy(PayOrderExpand orderExpand, @MappingTarget NormalPayOrderResult noticeResult);
 }

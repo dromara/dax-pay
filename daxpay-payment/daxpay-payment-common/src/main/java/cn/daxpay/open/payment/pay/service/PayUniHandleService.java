@@ -1,9 +1,9 @@
 package cn.daxpay.open.payment.pay.service;
 
-import cn.daxpay.open.payment.common.enums.NormalOrderStatusEnum;
+import cn.daxpay.open.payment.common.enums.NormalPayOrderStatusEnum;
 import cn.daxpay.open.payment.common.enums.PayFundStatusEnum;
-import cn.daxpay.open.payment.pay.order.dao.PayNormalOrderManager;
-import cn.daxpay.open.payment.pay.order.entity.PayNormalOrder;
+import cn.daxpay.open.payment.pay.order.dao.NormalPayOrderManager;
+import cn.daxpay.open.payment.pay.order.entity.NormalPayOrder;
 import cn.daxpay.open.payment.pay.order.dao.PayTradeManager;
 import cn.daxpay.open.payment.pay.order.entity.PayTrade;
 import lombok.RequiredArgsConstructor;
@@ -23,14 +23,14 @@ import java.util.Objects;
 public class PayUniHandleService {
 
     private final PayTradeManager payTradeManager;
-    private final PayNormalOrderManager payNormalOrderManager;
+    private final NormalPayOrderManager payNormalOrderManager;
 
     /// 支付成功后续处理（同步冗余时间线到容器）
     public void paySuccess(PayTrade trade) {
-        PayNormalOrder normalOrder = payNormalOrderManager.findById(trade.getContainerId())
+        NormalPayOrder normalOrder = payNormalOrderManager.findById(trade.getContainerId())
                 .orElse(null);
         if (normalOrder != null) {
-            normalOrder.setStatus(NormalOrderStatusEnum.PAID.getCode());
+            normalOrder.setStatus(NormalPayOrderStatusEnum.PAID.getCode());
             normalOrder.setPayTime(trade.getPayTime());
             payNormalOrderManager.updateById(normalOrder);
         }
@@ -38,23 +38,23 @@ public class PayUniHandleService {
     }
 
     /// 支付失败处理（同步冗余时间线到容器）
-    public void payFail(PayTrade trade, PayNormalOrder normalOrder, String errMsg) {
+    public void payFail(PayTrade trade, NormalPayOrder normalOrder, String errMsg) {
         OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
         trade.setStatus(PayFundStatusEnum.FAIL.getCode());
         trade.setErrorMsg(errMsg);
         trade.setCloseTime(now);
-        normalOrder.setStatus(NormalOrderStatusEnum.CLOSED.getCode());
+        normalOrder.setStatus(NormalPayOrderStatusEnum.CLOSED.getCode());
         normalOrder.setCloseTime(now);
         payTradeManager.updateById(trade);
         payNormalOrderManager.updateById(normalOrder);
     }
 
     /// 支付关闭处理（同步冗余时间线到容器）
-    public void payClose(PayTrade trade, PayNormalOrder normalOrder) {
+    public void payClose(PayTrade trade, NormalPayOrder normalOrder) {
         OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
         trade.setStatus(PayFundStatusEnum.CLOSE.getCode());
         trade.setCloseTime(now);
-        normalOrder.setStatus(NormalOrderStatusEnum.CLOSED.getCode());
+        normalOrder.setStatus(NormalPayOrderStatusEnum.CLOSED.getCode());
         normalOrder.setCloseTime(now);
         payTradeManager.updateById(trade);
         payNormalOrderManager.updateById(normalOrder);

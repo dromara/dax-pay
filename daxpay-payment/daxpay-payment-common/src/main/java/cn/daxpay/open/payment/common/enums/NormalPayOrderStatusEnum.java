@@ -13,7 +13,7 @@ import java.util.Arrays;
 /// 字典: normal_order_status
 @Getter
 @RequiredArgsConstructor
-public enum NormalOrderStatusEnum implements I18nSupport {
+public enum NormalPayOrderStatusEnum implements I18nSupport {
 
     /// 待支付
     WAIT_PAY("wait_pay"),
@@ -32,7 +32,7 @@ public enum NormalOrderStatusEnum implements I18nSupport {
         return "enum.normal_order_status";
     }
 
-    public static NormalOrderStatusEnum findByCode(String code) {
+    public static NormalPayOrderStatusEnum findByCode(String code) {
         return Arrays.stream(values())
                 .filter(e -> e.getCode().equals(code))
                 .findFirst()

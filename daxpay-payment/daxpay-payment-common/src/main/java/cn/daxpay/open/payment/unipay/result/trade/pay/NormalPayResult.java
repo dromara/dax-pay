@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @Schema(title = "统一支付响应参数")
-public class PayResult {
+public class NormalPayResult {
 
     /// 订单ID
     @Schema(description = "订单ID")

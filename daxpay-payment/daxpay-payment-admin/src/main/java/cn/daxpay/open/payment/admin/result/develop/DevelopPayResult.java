@@ -1,6 +1,6 @@
 package cn.daxpay.open.payment.admin.result.develop;
 
-import cn.daxpay.open.payment.unipay.result.trade.pay.PayResult;
+import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -21,5 +21,5 @@ public class DevelopPayResult {
 
     /// 支付结果
     @Schema(description = "支付结果")
-    private PayResult payResult;
+    private NormalPayResult payResult;
 }

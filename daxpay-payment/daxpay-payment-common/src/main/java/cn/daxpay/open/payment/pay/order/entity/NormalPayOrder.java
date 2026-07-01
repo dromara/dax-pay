@@ -9,7 +9,7 @@ import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-import cn.daxpay.open.payment.common.enums.NormalOrderStatusEnum;
+import cn.daxpay.open.payment.common.enums.NormalPayOrderStatusEnum;
 import cn.daxpay.open.payment.unipay.param.trade.pay.GoodsDetail;
 import cn.daxpay.open.platform.core.enums.pay.channel.CurrencyEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
@@ -27,7 +27,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName(value = "pay_normal_order", autoResultMap = true)
-public class PayNormalOrder extends MchBaseEntity {
+public class NormalPayOrder extends MchBaseEntity {
 
     /// 应用号
     @TableField(updateStrategy = FieldStrategy.NEVER, fill = FieldFill.INSERT)
@@ -43,7 +43,7 @@ public class PayNormalOrder extends MchBaseEntity {
     private String description;
 
     /// 业务状态
-    /// @see NormalOrderStatusEnum
+    /// @see NormalPayOrderStatusEnum
     private String status;
 
     /// 异步通知地址（出站商户通知用）

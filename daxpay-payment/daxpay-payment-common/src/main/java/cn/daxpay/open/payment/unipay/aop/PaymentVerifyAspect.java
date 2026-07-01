@@ -12,7 +12,7 @@ import cn.daxpay.open.payment.old.pay.anno.PaymentVerify;
 import cn.daxpay.open.payment.old.pay.service.assist.PayParamCapabilityValidator;
 import cn.daxpay.open.payment.old.pay.service.assist.PayParamRouteValidator;
 import cn.daxpay.open.payment.old.pay.service.assist.PaymentAssistService;
-import cn.daxpay.open.payment.unipay.param.trade.pay.PayParam;
+import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -61,7 +61,7 @@ public class PaymentVerifyAspect {
         if (param instanceof MerchantPaymentCommonParam paymentParam){
             // 参数校验
             ValidationUtil.validateParam(paymentParam);
-            if (paymentParam instanceof PayParam payParam) {
+            if (paymentParam instanceof NormalPayParam payParam) {
                 // 先校验支付渠道+支付方式（渠道支付方式目录），再校验路由必填项
                 payParamCapabilityValidator.validate(payParam);
                 payParamRouteValidator.validate(payParam);

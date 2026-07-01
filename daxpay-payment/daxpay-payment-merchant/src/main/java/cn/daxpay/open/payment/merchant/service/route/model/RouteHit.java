@@ -2,7 +2,7 @@ package cn.daxpay.open.payment.merchant.service.route.model;
 
 /// # 通道路由命中结果
 ///
-/// 匹配成功后得到的支付产品、通道商户及能力，供填充 PayParam。
+/// 匹配成功后得到的支付产品、通道商户及能力，供填充 NormalPayParam。
 ///
 /// @param product      支付产品编码（由通道商户号派生）
 /// @param channelMchNo 通道商户号（场景/基础模式命中的核心定位字段）

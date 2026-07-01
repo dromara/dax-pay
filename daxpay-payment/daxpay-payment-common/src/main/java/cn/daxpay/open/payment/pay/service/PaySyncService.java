@@ -10,13 +10,13 @@ import cn.daxpay.open.platform.core.util.DateTimeUtil;
 import cn.daxpay.open.payment.common.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.common.util.PaymentStrategyFactory;
 import cn.daxpay.open.payment.pay.bo.PaySyncResultBo;
-import cn.daxpay.open.payment.pay.order.dao.PayNormalOrderManager;
-import cn.daxpay.open.payment.pay.order.entity.PayNormalOrder;
+import cn.daxpay.open.payment.pay.order.dao.NormalPayOrderManager;
+import cn.daxpay.open.payment.pay.order.entity.NormalPayOrder;
 import cn.daxpay.open.payment.pay.order.dao.PayTradeManager;
 import cn.daxpay.open.payment.pay.order.entity.PayTrade;
 import cn.daxpay.open.payment.strategy.sync.AbsSyncPayOrderStrategy;
-import cn.daxpay.open.payment.unipay.param.trade.pay.PaySyncParam;
-import cn.daxpay.open.payment.unipay.result.trade.pay.PaySyncResult;
+import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPaySyncParam;
+import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPaySyncResult;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
@@ -39,13 +39,13 @@ import java.util.Optional;
 public class PaySyncService {
 
     private final PayTradeManager payTradeManager;
-    private final PayNormalOrderManager payNormalOrderManager;
+    private final NormalPayOrderManager payNormalOrderManager;
     private final PayUniHandleService payUniHandleService;
     private final LockTemplate lockTemplate;
 
     /// 支付同步
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
-    public PaySyncResult sync(PaySyncParam param) {
+    public NormalPaySyncResult sync(NormalPaySyncParam param) {
         if (StrUtil.isBlank(param.getOrderNo()) && Objects.isNull(param.getBizOrderNo())
                 && Objects.isNull(param.getOutOrderNo())) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.orderNoRequired");
@@ -55,7 +55,7 @@ public class PaySyncService {
             trade = payTradeManager.findByTradeNo(param.getOrderNo()).orElse(null);
         }
         if (Objects.isNull(trade) && Objects.nonNull(param.getBizOrderNo())) {
-            PayNormalOrder normalOrder = payNormalOrderManager.findByBizOrderNo(
+            NormalPayOrder normalOrder = payNormalOrderManager.findByBizOrderNo(
                     param.getBizOrderNo()).orElse(null);
             if (Objects.nonNull(normalOrder)) {
                 trade = payTradeManager.findByContainerId(normalOrder.getId())
@@ -74,7 +74,7 @@ public class PaySyncService {
 
     /// 同步支付状态
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
-    public PaySyncResult syncPayOrder(PayTrade trade) {
+    public NormalPaySyncResult syncPayOrder(PayTrade trade) {
         if (Objects.equals(trade.getStatus(), PayFundStatusEnum.INIT.getCode())) {
             throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.pay.syncNotStarted");
         }
@@ -83,7 +83,7 @@ public class PaySyncService {
             throw new RepetitiveOperationException();
         }
         try {
-            PayNormalOrder normalOrder = payNormalOrderManager.findById(trade.getContainerId())
+            NormalPayOrder normalOrder = payNormalOrderManager.findById(trade.getContainerId())
                     .orElse(null);
             var syncStrategy = PaymentStrategyFactory.createByProduct(
                     trade.getProduct(), AbsSyncPayOrderStrategy.class);
@@ -100,7 +100,7 @@ public class PaySyncService {
                     syncResult.setSyncSuccess(false).setSyncErrorMsg(e.getMessage());
                 }
             }
-            return new PaySyncResult()
+            return new NormalPaySyncResult()
                     .setOrderStatus(trade.getStatus())
                     .setAdjust(statusSync);
         } finally {
@@ -131,7 +131,7 @@ public class PaySyncService {
     }
 
     /// 根据同步结果调整支付单状态
-    private void adjustHandler(PaySyncResultBo syncResult, PayTrade trade, PayNormalOrder normalOrder) {
+    private void adjustHandler(PaySyncResultBo syncResult, PayTrade trade, NormalPayOrder normalOrder) {
         var payStatus = syncResult.getPayStatus();
         if (Objects.isNull(payStatus)) {
             return;
@@ -146,7 +146,7 @@ public class PaySyncService {
     }
 
     /// 同步成功后更新
-    private void success(PayTrade trade, PayNormalOrder normalOrder, PaySyncResultBo syncResult) {
+    private void success(PayTrade trade, NormalPayOrder normalOrder, PaySyncResultBo syncResult) {
         trade.setStatus(PayFundStatusEnum.SUCCESS.getCode());
         trade.setPayTime(syncResult.getFinishTime());
         trade.setCloseTime(null);

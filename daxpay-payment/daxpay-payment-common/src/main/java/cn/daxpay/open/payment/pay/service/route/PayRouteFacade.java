@@ -1,6 +1,6 @@
 package cn.daxpay.open.payment.pay.service.route;
 
-import cn.daxpay.open.payment.unipay.param.trade.pay.PayParam;
+import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 
 /// # 支付路由门面接口
 ///
@@ -10,5 +10,5 @@ public interface PayRouteFacade {
 
     /// 解析支付路由：直定模式(已传 channelMchNo)直接解析，否则按策略模式匹配并回填。
     /// 调用方需保证 appId 已解析完毕。
-    void resolve(PayParam payParam);
+    void resolve(NormalPayParam payParam);
 }

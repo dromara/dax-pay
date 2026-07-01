@@ -10,7 +10,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @Schema(title = "支付同步结果")
-public class PaySyncResult {
+public class NormalPaySyncResult {
 
     /// 退款订单同步后的状态状态
     /// @see PayStatusEnum

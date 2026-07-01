@@ -19,8 +19,8 @@ import cn.daxpay.open.payment.old.pay.exception.TradeNotExistException;
 import cn.daxpay.open.payment.old.pay.param.order.pay.PayOrderQuery;
 import cn.daxpay.open.payment.old.pay.result.order.pay.PayOrderExpandResult;
 import cn.daxpay.open.payment.old.pay.result.order.pay.PayOrderVo;
-import cn.daxpay.open.payment.unipay.param.trade.pay.QueryPayParam;
-import cn.daxpay.open.payment.unipay.result.trade.pay.PayOrderResult;
+import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayQueryParam;
+import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayOrderResult;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
@@ -100,7 +100,7 @@ public class PayOrderQueryService {
     }
 
     /// 查询支付记录
-    public PayOrderResult queryPayOrder(QueryPayParam param) {
+    public NormalPayOrderResult queryPayOrder(NormalPayQueryParam param) {
         // 校验参数
         if (StrUtil.isBlank(param.getOrderNo()) && Objects.isNull(param.getBizOrderNo())){
             // 支付订单号不能都为空

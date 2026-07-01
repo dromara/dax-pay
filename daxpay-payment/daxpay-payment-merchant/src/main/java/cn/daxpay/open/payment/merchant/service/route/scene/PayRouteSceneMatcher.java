@@ -2,7 +2,7 @@ package cn.daxpay.open.payment.merchant.service.route.scene;
 
 import cn.daxpay.open.payment.merchant.entity.route.scene.PayRouteSceneConfig;
 import cn.daxpay.open.payment.merchant.service.route.model.RouteHit;
-import cn.daxpay.open.payment.unipay.param.trade.pay.PayParam;
+import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.hutool.core.collection.CollUtil;
@@ -20,7 +20,7 @@ import java.util.Objects;
 public class PayRouteSceneMatcher {
 
     /// 场景模式匹配：按 method 精确命中唯一配置行
-    public RouteHit match(List<PayRouteSceneConfig> configs, PayParam payParam) {
+    public RouteHit match(List<PayRouteSceneConfig> configs, NormalPayParam payParam) {
         if (CollUtil.isEmpty(configs)) {
             return null;
         }

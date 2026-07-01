@@ -5,8 +5,8 @@ import cn.daxpay.open.platform.core.exception.system.DataErrorException;
 import cn.daxpay.open.payment.common.context.CallbackInfo;
 import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.common.enums.PayFundStatusEnum;
-import cn.daxpay.open.payment.pay.order.dao.PayNormalOrderManager;
-import cn.daxpay.open.payment.pay.order.entity.PayNormalOrder;
+import cn.daxpay.open.payment.pay.order.dao.NormalPayOrderManager;
+import cn.daxpay.open.payment.pay.order.entity.NormalPayOrder;
 import cn.daxpay.open.payment.pay.order.dao.PayTradeManager;
 import cn.daxpay.open.payment.pay.order.entity.PayTrade;
 import com.baomidou.lock.LockInfo;
@@ -26,7 +26,7 @@ import java.util.Objects;
 public class PayCallbackService {
 
     private final PayTradeManager payTradeManager;
-    private final PayNormalOrderManager payNormalOrderManager;
+    private final NormalPayOrderManager payNormalOrderManager;
     private final PayUniHandleService payUniHandleService;
     private final PaymentContext apiContext;
     private final LockTemplate lockTemplate;
@@ -57,7 +57,7 @@ public class PayCallbackService {
             if (Objects.nonNull(callbackInfo.getOutTradeNo())) {
                 trade.setOutOrderNo(callbackInfo.getOutTradeNo());
             }
-            PayNormalOrder normalOrder = payNormalOrderManager.findById(trade.getContainerId())
+            NormalPayOrder normalOrder = payNormalOrderManager.findById(trade.getContainerId())
                     .orElseThrow(() -> new DataErrorException("error.payment.order.payOrderNotExist"));
             if (Objects.equals(CallbackStatusEnum.SUCCESS.getCode(), callbackInfo.getTradeStatus())) {
                 this.success(trade, normalOrder, callbackInfo);
@@ -71,7 +71,7 @@ public class PayCallbackService {
     }
 
     /// 成功处理
-    private void success(PayTrade trade, PayNormalOrder normalOrder, CallbackInfo callbackInfo) {
+    private void success(PayTrade trade, NormalPayOrder normalOrder, CallbackInfo callbackInfo) {
         trade.setStatus(PayFundStatusEnum.SUCCESS.getCode());
         trade.setPayTime(callbackInfo.getFinishTime());
         trade.setCloseTime(null);
@@ -82,7 +82,7 @@ public class PayCallbackService {
     }
 
     /// 失败处理
-    private void fail(PayTrade trade, PayNormalOrder normalOrder, CallbackInfo callbackInfo) {
+    private void fail(PayTrade trade, NormalPayOrder normalOrder, CallbackInfo callbackInfo) {
         if (!Objects.equals(trade.getStatus(), PayFundStatusEnum.PROCESSING.getCode())) {
             callbackInfo.setCallbackStatus(CallbackStatusEnum.IGNORE)
                     .setCallbackErrorMsg("订单不是支付中状态，忽略");

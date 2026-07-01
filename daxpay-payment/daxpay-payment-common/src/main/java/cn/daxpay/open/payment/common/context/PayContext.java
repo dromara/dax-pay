@@ -1,7 +1,7 @@
 package cn.daxpay.open.payment.common.context;
 
 import cn.daxpay.open.payment.pay.order.entity.PayTrade;
-import cn.daxpay.open.payment.unipay.param.trade.pay.PayParam;
+import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 public class PayContext {
 
     /// 支付参数
-    private PayParam payParam;
+    private NormalPayParam payParam;
 
     /// 资金交易凭证
     private PayTrade trade;
@@ -26,7 +26,7 @@ public class PayContext {
     public PayContext() {
     }
 
-    public PayContext(PayParam payParam) {
+    public PayContext(NormalPayParam payParam) {
         this.payParam = payParam;
     }
 

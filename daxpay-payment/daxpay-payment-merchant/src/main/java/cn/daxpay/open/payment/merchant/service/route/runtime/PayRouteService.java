@@ -13,7 +13,7 @@ import cn.daxpay.open.payment.merchant.service.route.model.PayRouteBundle;
 import cn.daxpay.open.payment.old.pay.support.ProductStrategySupport;
 import cn.daxpay.open.payment.pay.service.route.PayRouteFacade;
 import cn.daxpay.open.payment.strategy.product.AbsProductStrategy;
-import cn.daxpay.open.payment.unipay.param.trade.pay.PayParam;
+import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayCapabilityEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
@@ -49,7 +49,7 @@ public class PayRouteService implements PayRouteFacade {
 
     /// 实付路由解析：直定模式优先，否则按策略模式匹配
     @Override
-    public void resolve(PayParam payParam) {
+    public void resolve(NormalPayParam payParam) {
         // 直定模式：指定通道商户号，跳过路由
         if (StrUtil.isNotBlank(payParam.getChannelMchNo())) {
             resolveDirect(payParam);
@@ -69,7 +69,7 @@ public class PayRouteService implements PayRouteFacade {
     }
 
     /// 直定模式：capability 必填，由通道商户推导产品；method 未传时由(通道商户, 能力)反推回填
-    private void resolveDirect(PayParam payParam) {
+    private void resolveDirect(NormalPayParam payParam) {
         String channelMchNo = payParam.getChannelMchNo();
         String capability = payParam.getCapability();
         // 传值模式: 支付能力必填
@@ -116,15 +116,15 @@ public class PayRouteService implements PayRouteFacade {
     }
 
     /// 按路由模式委托匹配器；未识别模式按场景模式处理
-    private RouteHit resolveByMode(PayRouteBundle bundle, PayParam payParam, String mode) {
+    private RouteHit resolveByMode(PayRouteBundle bundle, NormalPayParam payParam, String mode) {
         if (Objects.equals(mode, PayRouteModeEnum.BASIC.getCode())) {
             return basicMatcher.match(bundle.getBasicConfigs(), payParam);
         }
         return PayRouteSceneMatcher.match(bundle.getSceneConfigs(), payParam);
     }
 
-    /// 将命中结果写入 PayParam：回填 product(由通道商户号派生)、通道商户号、支付能力
-    private void fillPayParam(PayParam payParam, RouteHit hit) {
+    /// 将命中结果写入 NormalPayParam：回填 product(由通道商户号派生)、通道商户号、支付能力
+    private void fillPayParam(NormalPayParam payParam, RouteHit hit) {
         String product = StrUtil.isNotBlank(hit.product())
                 ? hit.product()
                 : productResolver.productOfChannelMchNo(hit.channelMchNo());

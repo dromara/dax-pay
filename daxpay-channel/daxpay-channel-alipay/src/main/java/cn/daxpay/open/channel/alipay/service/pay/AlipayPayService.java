@@ -6,7 +6,7 @@ import cn.daxpay.open.channel.alipay.dto.AlipayPayResp;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.pay.bo.PayTradeResultBo;
 import cn.daxpay.open.payment.pay.order.entity.PayTrade;
-import cn.daxpay.open.payment.unipay.param.trade.pay.PayParam;
+import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
 import cn.daxpay.open.platform.core.enums.unipay.PayBodyTypeEnum;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +34,7 @@ public class AlipayPayService {
     /// @param payParam 支付参数
     /// @param config   通道调用配置(密钥/证书/回调地址等)
     /// @return 支付结果
-    public PayTradeResultBo pay(PayTrade order, PayParam payParam, Map<String, Object> config) {
+    public PayTradeResultBo pay(PayTrade order, NormalPayParam payParam, Map<String, Object> config) {
         // 构建请求
         AlipayPayReq req = new AlipayPayReq();
         req.setChannel("alipay");

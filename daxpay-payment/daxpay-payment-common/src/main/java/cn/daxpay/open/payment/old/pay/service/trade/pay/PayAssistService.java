@@ -21,8 +21,8 @@ import cn.hutool.core.util.StrUtil;
 import cn.daxpay.open.payment.old.pay.exception.TradeStatusErrorException;
 import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.old.pay.service.order.pay.PayOrderQueryService;
-import cn.daxpay.open.payment.unipay.param.trade.pay.PayParam;
-import cn.daxpay.open.payment.unipay.result.trade.pay.PayResult;
+import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
+import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -50,7 +50,7 @@ public class PayAssistService {
 
     /// 创建支付订单并保存, 返回支付订单
     @Transactional(rollbackFor = Exception.class)
-    public PayOrder createPayOrder(PayParam payParam) {
+    public PayOrder createPayOrder(NormalPayParam payParam) {
         // 订单超时时间
         OffsetDateTime expiredTime = this.getExpiredTime(payParam.getExpiredTime());
         // 构建支付订单对象
@@ -96,7 +96,7 @@ public class PayAssistService {
 
     /// 更新, 通常只有网关支付方式创建的订单才需要进行更新, 用来设置支付方式等信息
     @Transactional(rollbackFor = Exception.class)
-    public void updatePayOrder(PayParam payParam, PayOrder payOrder) {
+    public void updatePayOrder(NormalPayParam payParam, PayOrder payOrder) {
         payOrder.setProduct(payParam.getProduct())
                 .setMethod(payParam.getMethod())
                 .setStatus(PayStatusEnum.PROGRESS.getCode());
@@ -172,9 +172,9 @@ public class PayAssistService {
     ///
     /// @param payOrder 支付订单
     /// @param orderExpand 支付订单扩展信息
-    /// @return PayResult 支付结果
-    public PayResult buildResult(PayOrder payOrder, PayOrderExpand orderExpand) {
-        return new PayResult()
+    /// @return NormalPayResult 支付结果
+    public NormalPayResult buildResult(PayOrder payOrder, PayOrderExpand orderExpand) {
+        return new NormalPayResult()
                 .setBizOrderNo(payOrder.getBizOrderNo())
                 .setOrderNo(payOrder.getOrderNo())
                 .setStatus(payOrder.getStatus())

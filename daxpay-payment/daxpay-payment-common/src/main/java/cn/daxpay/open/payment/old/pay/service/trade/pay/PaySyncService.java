@@ -28,8 +28,8 @@ import cn.daxpay.open.payment.common.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.pay.order.entity.PayTrade;
 import cn.daxpay.open.payment.strategy.pay.AbsPayCloseStrategy;
 import cn.daxpay.open.payment.strategy.sync.AbsSyncPayOrderStrategy;
-import cn.daxpay.open.payment.unipay.param.trade.pay.PaySyncParam;
-import cn.daxpay.open.payment.unipay.result.trade.pay.PaySyncResult;
+import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPaySyncParam;
+import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPaySyncResult;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
@@ -66,7 +66,7 @@ public class PaySyncService {
 
     /// 支付同步, 开启一个新的事务, 不受外部抛出异常的影响
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
-    public PaySyncResult sync(PaySyncParam param) {
+    public NormalPaySyncResult sync(NormalPaySyncParam param) {
         // 校验参数
         if (StrUtil.isBlank(param.getOrderNo()) && Objects.isNull(param.getBizOrderNo())&& Objects.isNull(param.getOutOrderNo())){
             // 支付订单号不能都为空
@@ -82,7 +82,7 @@ public class PaySyncService {
     /// 1. 如果状态一致, 不进行处理， 直接返回
     /// 2. 如果状态不一致, 更新状态/完成时间/关联网关订单号
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
-    public PaySyncResult syncPayOrder(PayOrder payOrder) {
+    public NormalPaySyncResult syncPayOrder(PayOrder payOrder) {
         // 待支付状态不允许同步
         if (Objects.equals(payOrder.getStatus(), PayStatusEnum.WAIT.getCode())){
             // 订单未开始支付, 请重新确认支付状态
@@ -154,7 +154,7 @@ public class PaySyncService {
                 // 同步失败记录日志
                 this.saveRecord(payOrder, syncResult, true);
             }
-            return new PaySyncResult()
+            return new NormalPaySyncResult()
                     .setOrderStatus(payOrder.getStatus())
                     .setAdjust(statusSync);
         } finally {

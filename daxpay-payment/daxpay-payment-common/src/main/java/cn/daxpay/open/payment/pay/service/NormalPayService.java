@@ -12,8 +12,8 @@ import cn.daxpay.open.payment.pay.order.entity.PayTrade;
 import cn.daxpay.open.payment.pay.service.route.PayRouteFacade;
 import cn.hutool.core.util.StrUtil;
 import cn.daxpay.open.payment.strategy.pay.AbsPayStrategy;
-import cn.daxpay.open.payment.unipay.param.trade.pay.PayParam;
-import cn.daxpay.open.payment.unipay.result.trade.pay.PayResult;
+import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
+import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
 import cn.hutool.extra.spring.SpringUtil;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
@@ -24,7 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
-/// # 常规支付服务类
+/// # 普通支付服务
 ///
 @Slf4j
 @Service
@@ -38,7 +38,7 @@ public class NormalPayService {
     private final PayRouteFacade payRouteFacade;
 
     /// 支付入口
-    public PayResult pay(PayParam payParam) {
+    public NormalPayResult pay(NormalPayParam payParam) {
         payAssistService.validationExpiredTime(payParam.getExpiredTime());
         String bizOrderNo = payParam.getBizOrderNo();
         LockInfo lock = lockTemplate.lock("payment:pay:" + bizOrderNo, 10000, 200);
@@ -54,7 +54,7 @@ public class NormalPayService {
     }
 
     /// 支付操作
-    public PayResult payHandle(PayParam payParam, PayTrade trade) {
+    public NormalPayResult payHandle(NormalPayParam payParam, PayTrade trade) {
         // 解析应用号：空则取商户默认应用
         payAssistService.resolveApp(payParam);
         // 路由解析：直定模式(已传 channelMchNo)直接解析，否则按 appId+method 策略匹配
@@ -91,7 +91,7 @@ public class NormalPayService {
 
     /// 支付成功后操作
     @Transactional(rollbackFor = Exception.class)
-    public PayResult paySuccess(PayTrade trade, PayTradeResultBo result) {
+    public NormalPayResult paySuccess(PayTrade trade, PayTradeResultBo result) {
         if (result.isComplete()) {
             trade.setStatus(PayFundStatusEnum.SUCCESS.getCode());
             trade.setPayTime(result.getFinishTime());

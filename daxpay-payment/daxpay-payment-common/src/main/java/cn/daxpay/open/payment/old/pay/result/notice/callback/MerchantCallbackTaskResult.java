@@ -3,7 +3,7 @@ package cn.daxpay.open.payment.old.pay.result.notice.callback;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackNoticeTypeEnum;
 import cn.daxpay.open.platform.core.enums.pay.trade.TradeTypeEnum;
 import cn.daxpay.open.payment.common.result.MchTradeBaseResult;
-import cn.daxpay.open.payment.unipay.result.trade.pay.PayOrderResult;
+import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayOrderResult;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -38,7 +38,7 @@ public class MerchantCallbackTaskResult extends MchTradeBaseResult {
     private String tradeType;
 
     /// 消息内容
-    /// @see PayOrderResult
+    /// @see NormalPayOrderResult
     @Schema(description = "消息内容")
     private String content;
 

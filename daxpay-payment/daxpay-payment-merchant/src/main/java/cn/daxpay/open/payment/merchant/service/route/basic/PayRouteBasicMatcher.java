@@ -7,7 +7,7 @@ import cn.daxpay.open.payment.merchant.service.route.runtime.PayRouteProductReso
 import cn.daxpay.open.payment.merchant.service.route.support.PayRouteI18nHelper;
 import cn.daxpay.open.payment.old.pay.support.ProductStrategySupport;
 import cn.daxpay.open.payment.strategy.product.AbsProductStrategy;
-import cn.daxpay.open.payment.unipay.param.trade.pay.PayParam;
+import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayCapabilityEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
@@ -31,7 +31,7 @@ public class PayRouteBasicMatcher {
     private final PayRouteProductResolver productResolver;
 
     /// 基础模式匹配
-    public RouteHit match(List<PayRouteBasicConfig> basicConfigs, PayParam payParam) {
+    public RouteHit match(List<PayRouteBasicConfig> basicConfigs, NormalPayParam payParam) {
         if (StrUtil.isBlank(payParam.getMethod())) {
             // 场景模式下须选择支付方式
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.route.error.sceneMethodRequired");
