@@ -15,6 +15,6 @@ import org.springframework.web.service.annotation.PostExchange;
 public interface AlipayChannelClient {
 
     /// 支付下单
-    @PostExchange("/channel/pay")
+    @PostExchange("/channel/alipay/pay")
     DaxResult<AlipayPayResp> pay(@RequestBody AlipayPayReq req);
 }
