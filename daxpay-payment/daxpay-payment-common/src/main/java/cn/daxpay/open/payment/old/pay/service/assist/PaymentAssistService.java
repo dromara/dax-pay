@@ -23,6 +23,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 
+import static java.util.Optional.*;
+
 
 /// # 交易支持服务接口
 ///
@@ -78,14 +80,17 @@ public class PaymentAssistService {
             mchNo = apiContext.getTradeInfo().getMchNo();
         }
         // 获取应用信息, 如果应用号不传输, 查询默认应用
-        var mchApp = StrUtil.isBlank(appId)
-                ? java.util.Optional.ofNullable(merchantPaymentQueryService.getDefaultAppByMchNo(mchNo))
+        cn.daxpay.open.payment.common.service.dto.MchAppInfoAccessInfo mchApp;
+        if (StrUtil.isBlank(appId)) {
+            mchApp = ofNullable(merchantPaymentQueryService.getDefaultAppByMchNo(mchNo))
                     // 未找到商户默认应用配置
-                    .orElseThrow(() -> new ConfigNotEnableException("error.payment.merchant.defaultAppConfigNotFound"))
-                : java.util.Optional.ofNullable(merchantPaymentQueryService.getAppByAppId(appId))
+                    .orElseThrow(() -> new ConfigNotEnableException("error.payment.merchant.defaultAppConfigNotFound"));
+        } else {
+            mchApp = ofNullable(merchantPaymentQueryService.getAppByAppId(appId))
                     // 未找到指定的应用配置
                     .orElseThrow(() -> new ConfigNotEnableException("error.payment.merchant.specifiedAppConfigNotFound"));
-        var merchant = java.util.Optional.ofNullable(merchantPaymentQueryService.getMerchantByMchNo(mchNo))
+        }
+        var merchant = ofNullable(merchantPaymentQueryService.getMerchantByMchNo(mchNo))
                 // 未找到指定的商户配置
                 .orElseThrow(() -> new ConfigNotEnableException("error.payment.merchant.specifiedMchConfigNotFound"));
         this.initData(merchant, mchApp);
@@ -99,7 +104,7 @@ public class PaymentAssistService {
     /// 5. 针对核心能力进行包装成功能时(收银台), 手动进行初始化
     public void initMchAndApp(String appId) {
         // 获取应用信息
-        var mchApp = java.util.Optional.ofNullable(merchantPaymentQueryService.getAppByAppId(appId))
+        var mchApp = ofNullable(merchantPaymentQueryService.getAppByAppId(appId))
                 // 未找到指定的应用配置
                 .orElseThrow(() -> new ConfigNotEnableException("error.payment.merchant.specifiedAppConfigNotFound"));
         // 商户端商户号读取系统, 不允许自行设置
@@ -109,7 +114,7 @@ public class PaymentAssistService {
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.assist.mchNotOwnApp");
             }
         }
-        var merchant = java.util.Optional.ofNullable(merchantPaymentQueryService.getMerchantByMchNo(mchApp.getMchNo()))
+        var merchant = ofNullable(merchantPaymentQueryService.getMerchantByMchNo(mchApp.getMchNo()))
                 // 未找到指定的商户配置
                 .orElseThrow(() -> new ConfigNotEnableException("error.payment.merchant.specifiedMchConfigNotFound"));
         this.initData(merchant, mchApp);
