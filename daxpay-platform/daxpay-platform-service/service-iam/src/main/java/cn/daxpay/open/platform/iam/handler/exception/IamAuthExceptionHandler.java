@@ -27,7 +27,7 @@ public class IamAuthExceptionHandler {
     @ExceptionHandler(TwoFactorRequiredException.class)
     public Result<TwoFactorChallengeResult> handleTwoFactorRequired(TwoFactorRequiredException ex) {
         String key = ex.resolveMessageKey();
-        log.info("双因素认证 key={}, 消息={}", key, I18nUtil.get(key, Locale.CHINA, ex.getArgs()));
+        log.info("双因素认证 消息={}, key={}", I18nUtil.get(key, Locale.CHINA, ex.getArgs()), key);
         String message = I18nUtil.get(key, ex.getArgs());
         return Res.response(TwoFactorRequiredException.CODE, message, new TwoFactorChallengeResult(ex.getPreAuthToken()));
     }

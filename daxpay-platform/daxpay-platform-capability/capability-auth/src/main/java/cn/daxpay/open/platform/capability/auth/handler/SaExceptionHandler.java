@@ -32,7 +32,7 @@ public class SaExceptionHandler {
     public ResponseEntity<Result<Void>> handleNotLoginException(NotLoginException ex){
         // 日志固定输出 messageKey 与中文翻译, 不受请求语言影响
         String key = ex.resolveMessageKey();
-        log.info("鉴权异常 key={}, 消息={}", key, I18nUtil.get(key, Locale.CHINA, ex.getArgs()), ex);
+        log.info("鉴权异常 消息={}, key={}", I18nUtil.get(key, Locale.CHINA, ex.getArgs()), key, ex);
         Result<Void> result = Res.response(ex.getCode(), ex.getMessage(), MDC.get(CommonCode.TRACE_ID));
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
     }
@@ -42,7 +42,7 @@ public class SaExceptionHandler {
     public ResponseEntity<Result<Void>> handleBusinessException(RouterCheckException ex) {
         // 日志固定输出 messageKey 与中文翻译, 不受请求语言影响
         String key = ex.resolveMessageKey();
-        log.info("鉴权异常 key={}, 消息={}", key, I18nUtil.get(key, Locale.CHINA, ex.getArgs()), ex);
+        log.info("鉴权异常 消息={}, key={}", I18nUtil.get(key, Locale.CHINA, ex.getArgs()), key, ex);
         Result<Void> result = Res.response(ex.getCode(), ex.getMessage(), MDC.get(CommonCode.TRACE_ID));
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(result);
     }

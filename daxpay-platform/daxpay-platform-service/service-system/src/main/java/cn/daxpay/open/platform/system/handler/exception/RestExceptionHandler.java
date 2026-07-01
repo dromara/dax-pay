@@ -100,7 +100,7 @@ public class RestExceptionHandler {
     @ExceptionHandler(BizInfoException.class)
     public Object handleBizInfoException(BizInfoException ex, HttpServletResponse response) {
         return handleBiz(ex, response, e -> {
-            log.info("业务异常 key={}, 消息={}", e.resolveMessageKey(), zhMessage(e));
+            log.info("业务异常 消息={}, key={}", zhMessage(e), e.resolveMessageKey());
             log.debug(e.resolveMessageKey(), e);
         });
     }
@@ -108,19 +108,19 @@ public class RestExceptionHandler {
     /// 警告业务异常, 量多需关注
     @ExceptionHandler(BizWarnException.class)
     public Object handleBizWarnException(BizWarnException ex, HttpServletResponse response) {
-        return handleBiz(ex, response, e -> log.warn("业务警告 key={}, 消息={}", e.resolveMessageKey(), zhMessage(e), e));
+        return handleBiz(ex, response, e -> log.warn("业务警告 消息={}, key={}", zhMessage(e), e.resolveMessageKey(), e));
     }
 
     /// 致命业务异常, 需立即排查
     @ExceptionHandler(BizErrorException.class)
     public Object handleBizErrorException(BizErrorException ex, HttpServletResponse response) {
-        return handleBiz(ex, response, e -> log.error("业务错误 key={}, 消息={}", e.resolveMessageKey(), zhMessage(e), e));
+        return handleBiz(ex, response, e -> log.error("业务错误 消息={}, key={}", zhMessage(e), e.resolveMessageKey(), e));
     }
 
     /// 业务异常兜底
     @ExceptionHandler(BizException.class)
     public Object handleBusinessException(BizException ex, HttpServletResponse response) {
-        return handleBiz(ex, response, e -> log.info("业务异常 key={}, 消息={}", e.resolveMessageKey(), zhMessage(e), e));
+        return handleBiz(ex, response, e -> log.info("业务异常 消息={}, key={}", zhMessage(e), e.resolveMessageKey(), e));
     }
 
     /// 请求参数校验未通过
