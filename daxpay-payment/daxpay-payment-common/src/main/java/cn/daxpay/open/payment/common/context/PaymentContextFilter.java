@@ -1,6 +1,5 @@
-package cn.daxpay.open.payment.old.pay.filter;
+package cn.daxpay.open.payment.common.context;
 
-import cn.daxpay.open.payment.common.context.PaymentScopeManager;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -13,22 +12,22 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-/// # 支付作用域过滤器
+/// # 支付上下文过滤器
 ///
 /// 在HTTP请求开始时开启作用域, 请求结束时关闭
 @Component
 @RequiredArgsConstructor
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
-public class PaymentScopeFilter extends OncePerRequestFilter implements Ordered {
-    private final PaymentScopeManager paymentScopeManager;
+public class PaymentContextFilter extends OncePerRequestFilter implements Ordered {
+    private final PaymentContextManager paymentContextManager;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        paymentScopeManager.start();
+        paymentContextManager.start();
         try {
             filterChain.doFilter(request, response);
         } finally {
-            paymentScopeManager.end();
+            paymentContextManager.end();
         }
     }
 

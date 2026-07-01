@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.old.pay.service.assist;
+package cn.daxpay.open.payment.common.context;
 
 import cn.daxpay.open.platform.core.enums.client.ClientEnum;
 import cn.daxpay.open.platform.core.exception.ValidationFailedException;
@@ -6,7 +6,6 @@ import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.iam.service.client.ClientCodeService;
-import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.platform.core.exception.config.ConfigNotEnableException;
 import cn.daxpay.open.platform.core.exception.business.VerifySignFailedException;
 import cn.daxpay.open.platform.common.config.properties.PlatformConfigProperties;
@@ -152,4 +151,3 @@ public class PaymentAssistService {
         }
     }
 }
-

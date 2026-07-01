@@ -8,7 +8,7 @@ import cn.daxpay.open.payment.merchant.result.config.ChannelConfigResult;
 import cn.daxpay.open.payment.masterdata.constants.channel.service.PayChannelService;
 import cn.daxpay.open.payment.masterdata.config.entity.ChannelConfig;
 import cn.daxpay.open.payment.masterdata.constants.channel.result.PayChannelResult;
-import cn.daxpay.open.payment.old.pay.service.assist.PaymentAssistService;
+import cn.daxpay.open.payment.common.context.PaymentAssistService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

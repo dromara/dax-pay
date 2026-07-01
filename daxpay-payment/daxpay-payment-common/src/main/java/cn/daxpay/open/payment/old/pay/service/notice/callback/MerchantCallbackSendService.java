@@ -12,7 +12,7 @@ import cn.daxpay.open.payment.old.pay.entity.notice.callback.MerchantCallbackTas
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackNoticeTypeEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.NoticeSendTypeEnum;
 import cn.daxpay.open.payment.old.pay.service.assist.PayPluginAssistService;
-import cn.daxpay.open.payment.old.pay.service.assist.PaymentAssistService;
+import cn.daxpay.open.payment.common.context.PaymentAssistService;
 import cn.daxpay.open.payment.old.pay.service.notice.MerchantNoticeAssistService;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.ContentType;

@@ -11,7 +11,7 @@ import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.old.pay.anno.PaymentVerify;
 import cn.daxpay.open.payment.old.pay.service.assist.PayParamCapabilityValidator;
 import cn.daxpay.open.payment.old.pay.service.assist.PayParamRouteValidator;
-import cn.daxpay.open.payment.old.pay.service.assist.PaymentAssistService;
+import cn.daxpay.open.payment.common.context.PaymentAssistService;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

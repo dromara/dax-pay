@@ -3,7 +3,7 @@ package cn.daxpay.open.payment.old.pay.event;
 import cn.daxpay.open.platform.core.code.DaxPayCode;
 import cn.daxpay.open.payment.old.pay.dao.order.pay.PayOrderManager;
 import cn.daxpay.open.payment.old.pay.entity.order.pay.PayOrder;
-import cn.daxpay.open.payment.old.pay.service.assist.PaymentAssistService;
+import cn.daxpay.open.payment.common.context.PaymentAssistService;
 import cn.daxpay.open.payment.old.pay.service.trade.pay.PayCloseService;
 import cn.daxpay.open.payment.old.pay.service.trade.pay.PaySyncService;
 import lombok.RequiredArgsConstructor;

@@ -3,7 +3,7 @@ package cn.daxpay.open.payment.admin.service.develop;
 import cn.daxpay.open.payment.admin.param.develop.DevelopParam;
 import cn.daxpay.open.payment.admin.result.develop.DevelopPayResult;
 import cn.daxpay.open.payment.admin.result.develop.DevelopSignResult;
-import cn.daxpay.open.payment.common.context.PaymentScopeManager;
+import cn.daxpay.open.payment.common.context.PaymentContextManager;
 import cn.daxpay.open.payment.common.util.ObjectSignStrUtil;
 import cn.daxpay.open.payment.common.util.PaySignUtil;
 import cn.daxpay.open.payment.masterdata.constants.provider.result.PayProviderMethodResult;
@@ -31,7 +31,7 @@ import java.util.List;
 public class DevelopTradeService {
 
     private final NormalPayService normalPayService;
-    private final PaymentScopeManager paymentScopeManager;
+    private final PaymentContextManager paymentContextManager;
     private final PayProviderMethodService payProviderMethodService;
     private final PayRouteStrategyCapabilitySupport payRouteStrategyCapabilitySupport;
 
@@ -55,7 +55,7 @@ public class DevelopTradeService {
             signInfo = this.sign(param);
         }
         // 在支付作用域内执行, 初始化商户上下文, 使 mchNo/appId 等字段自动填充
-        NormalPayResult payResult = paymentScopeManager.executeWithScope(
+        NormalPayResult payResult = paymentContextManager.executeWithScope(
                 payParam.getMchNo(), payParam.getAppId(),
                 () -> normalPayService.pay(payParam)
         );

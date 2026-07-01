@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.old.pay.service.assist;
 
+import cn.daxpay.open.payment.common.context.PaymentAssistService;
 import cn.daxpay.open.payment.common.util.PaymentStrategyFactory;
 import cn.daxpay.open.payment.strategy.auth.AbsChannelAuthStrategy;
 import cn.daxpay.open.platform.common.json.util.JacksonUtil;
