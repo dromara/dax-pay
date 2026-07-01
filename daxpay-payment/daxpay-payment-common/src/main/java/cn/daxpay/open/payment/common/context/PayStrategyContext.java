@@ -12,7 +12,7 @@ import lombok.experimental.Accessors;
 @Getter
 @Setter
 @Accessors(chain = true)
-public class PayContext {
+public class PayStrategyContext {
 
     /// 支付参数
     private NormalPayParam payParam;
@@ -23,10 +23,10 @@ public class PayContext {
     /// 通道配置（doBeforePay 写入，doPay 读取；类型各通道不同）
     private Object channelConfig;
 
-    public PayContext() {
+    public PayStrategyContext() {
     }
 
-    public PayContext(NormalPayParam payParam) {
+    public PayStrategyContext(NormalPayParam payParam) {
         this.payParam = payParam;
     }
 

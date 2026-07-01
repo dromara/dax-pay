@@ -4,7 +4,7 @@ import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.PayFailureException;
 import cn.daxpay.open.payment.common.enums.PayFundStatusEnum;
-import cn.daxpay.open.payment.common.context.PayContext;
+import cn.daxpay.open.payment.common.context.PayStrategyContext;
 import cn.daxpay.open.payment.common.util.PaymentStrategyFactory;
 import cn.daxpay.open.payment.pay.bo.PayTradeResultBo;
 import cn.daxpay.open.payment.pay.order.dao.PayTradeManager;
@@ -70,7 +70,7 @@ public class NormalPayService {
             }
         }
         // 显式传递上下文（替代原策略实例字段）
-        PayContext context = new PayContext(payParam).setTrade(trade);
+        PayStrategyContext context = new PayStrategyContext(payParam).setTrade(trade);
         payStrategy.doBeforePay(context);
         PayTradeResultBo result;
         try {

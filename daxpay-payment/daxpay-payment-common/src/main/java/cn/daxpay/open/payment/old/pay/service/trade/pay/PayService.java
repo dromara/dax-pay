@@ -6,7 +6,7 @@ import cn.daxpay.open.platform.core.exception.system.DataErrorException;
 import cn.daxpay.open.platform.core.exception.PayFailureException;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
-import cn.daxpay.open.payment.common.context.PayContext;
+import cn.daxpay.open.payment.common.context.PayStrategyContext;
 import cn.daxpay.open.payment.common.util.PaymentStrategyFactory;
 import cn.daxpay.open.payment.old.pay.bo.trade.PayResultBo;
 import cn.daxpay.open.payment.old.pay.dao.order.pay.PayOrderExpandManager;
@@ -79,7 +79,7 @@ public class PayService {
     public NormalPayResult payHandle(NormalPayParam payParam, PayOrder payOrder) {
         // 获取支付策略类
         var payStrategy = PaymentStrategyFactory.createByProduct(payParam.getProduct(), AbsPayStrategy.class);
-        PayContext context = new PayContext(payParam);
+        PayStrategyContext context = new PayStrategyContext(payParam);
         // 检测支付能力是否支持（产品已挂载能力覆盖该支付方式）
         var methodEnum = PayMethodEnum.findByCode(payParam.getMethod());
         if (!SpringUtil.getBean(PayProductCapabilityService.class).productSupportsMethod(

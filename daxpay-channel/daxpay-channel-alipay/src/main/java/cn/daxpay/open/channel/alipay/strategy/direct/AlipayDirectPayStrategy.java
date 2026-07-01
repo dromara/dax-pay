@@ -2,7 +2,7 @@ package cn.daxpay.open.channel.alipay.strategy.direct;
 
 import cn.daxpay.open.channel.alipay.service.direct.AlipayDirectConfigAssembler;
 import cn.daxpay.open.channel.alipay.service.pay.AlipayPayService;
-import cn.daxpay.open.payment.common.context.PayContext;
+import cn.daxpay.open.payment.common.context.PayStrategyContext;
 import cn.daxpay.open.payment.pay.bo.PayTradeResultBo;
 import cn.daxpay.open.payment.strategy.pay.AbsPayStrategy;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
@@ -29,7 +29,7 @@ public class AlipayDirectPayStrategy extends AbsPayStrategy {
     }
 
     @Override
-    public PayTradeResultBo doPay(PayContext context) {
+    public PayTradeResultBo doPay(PayStrategyContext context) {
         return alipayPayService.pay(context.getTrade(), context.getPayParam(),
                 alipayDirectConfigAssembler.buildConfig(
                         context.getTrade().getMchNo(),
