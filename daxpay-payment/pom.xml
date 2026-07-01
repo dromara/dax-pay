@@ -12,12 +12,10 @@
 
     <artifactId>daxpay-payment</artifactId>
     <packaging>pom</packaging>
-    <description>多商户支付核心功能实现</description>
+    <description>多商户支付功能实现（核心底座 + 运营端 + 商户端，单模块）</description>
 
     <modules>
         <module>daxpay-payment-common</module>
-        <module>daxpay-payment-merchant</module>
-        <module>daxpay-payment-admin</module>
     </modules>
 
 </project>

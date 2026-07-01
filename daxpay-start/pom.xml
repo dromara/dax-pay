@@ -37,20 +37,10 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- 支付服务和通用控制器 -->
+        <!-- 支付服务和通用控制器（核心底座 + 运营端 + 商户端单模块） -->
         <dependency>
             <groupId>cn.daxpay.open</groupId>
             <artifactId>daxpay-payment-common</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>cn.daxpay.open</groupId>
-            <artifactId>daxpay-payment-merchant</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>cn.daxpay.open</groupId>
-            <artifactId>daxpay-payment-admin</artifactId>
             <version>${project.version}</version>
         </dependency>
 
