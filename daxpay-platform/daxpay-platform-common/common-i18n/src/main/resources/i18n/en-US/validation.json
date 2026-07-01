@@ -534,6 +534,9 @@
     },
     "preAuthToken": {
       "notBlank": "Pre-auth token cannot be blank"
+    },
+    "remark": {
+      "size": "Remark cannot exceed 255 characters"
     }
   }
 }

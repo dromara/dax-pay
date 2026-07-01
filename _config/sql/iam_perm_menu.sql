@@ -156,6 +156,8 @@ INSERT INTO "public"."iam_perm_menu" VALUES (90302, 9, 'device:printer', 'admin'
 INSERT INTO "public"."iam_perm_menu" VALUES (40105, 405, 'payment:config:product_config', 'admin', 'ProductConfig', '支付产品管理', 'Payment Product Management', 'menu.payment.config.productConfig', 'lucide:layout-grid', 'f', 'f', '/payment/config/product/ProductConfig', '/payment/config/product', NULL, 1, 'f', 't', 'f', 1, 1, 0, 'f', 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-13 00:00:00+00', '2026-06-27 13:01:24.317032+00');
 INSERT INTO "public"."iam_perm_menu" VALUES (4040116, 401, 'payment:platform:provider_manage', 'admin', 'PayProviderManage', '支付渠道', 'Payment Provider', 'menu.payment.platform.provider.manage', 'lucide:wallet', 'f', 'f', '/payment/masterdata/provider/PayProviderList', '/payment/platform/pay-provider', NULL, 0.5, 'f', 't', 'f', 1, 1, 0, 'f', 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-17 10:00:31.640482+00', '2026-06-27 13:01:24.318649+00');
 
+INSERT INTO "public"."iam_perm_menu" VALUES (4040118, 40401, 'merchant:notify_config', 'admin', 'MchAppNotifyConfig', '通知配置', 'Notify Config', 'menu.payment.merchant.app.notifyConfig', NULL, 't', 'f', '/payment/merchant/app/MchAppNotifyConfig', '/payment/merchant/app/notify-config', NULL, 11, 'f', 't', 'f', 1, 1, 0, 'f', 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-02 16:00:00+00', '2026-07-02 16:00:00+00');
+
 -- ----------------------------
 -- Primary Key structure for table iam_perm_menu
 -- ----------------------------

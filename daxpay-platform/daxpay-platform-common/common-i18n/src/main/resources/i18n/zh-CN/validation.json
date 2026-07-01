@@ -537,6 +537,9 @@
     },
     "preAuthToken": {
       "notBlank": "预认证令牌不能为空"
+    },
+    "remark": {
+      "size": "备注不可超过255位"
     }
   }
 }
