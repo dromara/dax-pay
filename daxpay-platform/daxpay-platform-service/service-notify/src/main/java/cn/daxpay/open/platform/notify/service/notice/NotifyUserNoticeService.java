@@ -2,6 +2,7 @@ package cn.daxpay.open.platform.notify.service.notice;
 
 import cn.daxpay.open.platform.capability.auth.util.SecurityUtil;
 import cn.daxpay.open.platform.common.mybatisplus.base.MpIdEntity;
+import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.notify.convert.notice.NotifyNoticeConvert;
 import cn.daxpay.open.platform.notify.dao.message.NotifyMessageManager;
 import cn.daxpay.open.platform.notify.dao.notice.NotifyNoticeManager;
@@ -109,6 +110,50 @@ public class NotifyUserNoticeService {
                 .collect(Collectors.toList());
         }
         return list;
+    }
+
+    /// 查看单条详情(公告校验可见性并渲染HTML, 个人消息校验归属当前用户)
+    ///
+    /// 与列表隔离, 防 id 直连: 草稿/下线/未生效/已过期的公告、他人个人消息一律视为不存在.
+    public NotifyNoticeBriefResult detail(String type, Long id) {
+        Long userId = SecurityUtil.getUserId();
+        if (NotifyTypeEnum.notice.getCode().equals(type)) {
+            return detailNotice(id, userId);
+        }
+        if (NotifyTypeEnum.message.getCode().equals(type)) {
+            return detailMessage(id, userId);
+        }
+        // 未知类型
+        throw new DataNotExistException("error.common.dataNotExist");
+    }
+
+    /// 公告详情(校验已发布且在生效期内, 渲染 Markdown 为 HTML, 填充当前用户阅读状态)
+    private NotifyNoticeBriefResult detailNotice(Long id, Long userId) {
+        NotifyNotice notice = noticeManager.findById(id)
+            .orElseThrow(() -> new DataNotExistException("error.notify.notice.notExist"));
+        // 可见性校验: 与 list 的 findVisibleNotices 保持一致
+        OffsetDateTime now = OffsetDateTime.now();
+        boolean visible = NotifyStatusEnum.published.getCode().equals(notice.getStatus())
+            && (notice.getEffectiveTime() == null || !notice.getEffectiveTime().isAfter(now))
+            && (notice.getExpireTime() == null || notice.getExpireTime().isAfter(now));
+        if (!visible) {
+            throw new DataNotExistException("error.notify.notice.notExist");
+        }
+        NotifyNoticeBriefResult brief = NotifyNoticeConvert.CONVERT.toBrief(notice);
+        // 服务端渲染 Markdown 正文为 HTML, 供前端直接展示
+        brief.setHtmlContent(MarkdownRenderUtil.toHtml(notice.getContent()));
+        brief.setIsRead(readManager.findByUserAndNotice(userId, id).isPresent());
+        return brief;
+    }
+
+    /// 个人消息详情(校验归属当前用户, 防越权查看他人消息)
+    private NotifyNoticeBriefResult detailMessage(Long id, Long userId) {
+        NotifyMessage message = messageManager.findById(id)
+            .orElseThrow(() -> new DataNotExistException("error.common.dataNotExist"));
+        if (!userId.equals(message.getUserId())) {
+            throw new DataNotExistException("error.common.dataNotExist");
+        }
+        return NotifyNoticeConvert.CONVERT.convert(message);
     }
 
     /// 标记单条已读

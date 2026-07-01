@@ -47,6 +47,16 @@ public class NotifyUserController {
         return Res.ok(userNoticeService.list(query));
     }
 
+    /// 查看单条详情(公告校验可见性, 个人消息校验归属)
+    ///
+    /// 与列表数据隔离: 前端点击查看时独立请求, 保证数据新鲜且不依赖列表上下文.
+    @Operation(summary = "查看详情")
+    @GetMapping("/detail")
+    public Result<NotifyNoticeBriefResult> detail(@NotBlank(message = "{validation.field.type.notBlank}") String type,
+                                                  @NotNull(message = "{validation.field.id.notNull}") Long id) {
+        return Res.ok(userNoticeService.detail(type, id));
+    }
+
     @Operation(summary = "标记单条已读")
     @PostMapping("/read")
     public Result<Void> read(@NotBlank(message = "{validation.field.type.notBlank}") String type,
