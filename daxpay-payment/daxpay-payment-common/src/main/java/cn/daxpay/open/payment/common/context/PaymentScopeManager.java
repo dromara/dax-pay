@@ -35,7 +35,13 @@ public class PaymentScopeManager {
 
     /// 在作用域内执行(自动管理生命周期, 同步执行)
     /// Lambda是同步执行的, 不是异步, 异常正常向上传播
+    /// 若当前线程已绑定上下文(如HTTP请求已被PaymentScopeFilter绑定), 则复用之, 仅补初始化商户, 避免重复bind抛异常
     public <T> T executeWithScope(String mchNo, String appId, Supplier<T> action) {
+        if (PaymentContextHolder.isBound()) {
+            // 复用已有作用域, 仅初始化商户信息
+            paymentAssistService.initMchAndApp(mchNo, appId);
+            return action.get();
+        }
         startWithMch(mchNo, appId);
         try {
             return action.get();
@@ -46,7 +52,14 @@ public class PaymentScopeManager {
 
     /// 在作用域内执行(自动管理生命周期, 同步执行)
     /// Lambda是同步执行的, 不是异步, 异常正常向上传播
+    /// 若当前线程已绑定上下文(如HTTP请求已被PaymentScopeFilter绑定), 则复用之, 仅补初始化商户, 避免重复bind抛异常
     public void executeWithScope(String mchNo, String appId, Runnable action) {
+        if (PaymentContextHolder.isBound()) {
+            // 复用已有作用域, 仅初始化商户信息
+            paymentAssistService.initMchAndApp(mchNo, appId);
+            action.run();
+            return;
+        }
         startWithMch(mchNo, appId);
         try {
             action.run();
