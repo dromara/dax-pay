@@ -72,28 +72,22 @@
             <artifactId>capability-audit-log</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <!-- 项目配置 -->
-        <dependency>
-            <groupId>cn.daxpay.open</groupId>
-            <artifactId>common-config</artifactId>
-            <version>${project.version}</version>
-        </dependency>
         <!-- Markdown 渲染(公告正文 content -> htmlContent, 服务端渲染规避前端 JS 引擎兼容问题) -->
         <dependency>
             <groupId>org.commonmark</groupId>
             <artifactId>commonmark</artifactId>
-            <version>0.24.0</version>
+            <version>${commonmark.version}</version>
         </dependency>
         <!-- GFM 扩展: 表格 / 删除线 -->
         <dependency>
             <groupId>org.commonmark</groupId>
             <artifactId>commonmark-ext-gfm-tables</artifactId>
-            <version>0.24.0</version>
+            <version>${commonmark.version}</version>
         </dependency>
         <dependency>
             <groupId>org.commonmark</groupId>
             <artifactId>commonmark-ext-gfm-strikethrough</artifactId>
-            <version>0.24.0</version>
+            <version>${commonmark.version}</version>
         </dependency>
     </dependencies>
 

@@ -55,6 +55,7 @@
         <caffeine.version>3.2.4</caffeine.version>
         <ip2region.version>3.3.7</ip2region.version>
         <wxjava.version>4.8.4.B</wxjava.version>
+        <commonmark.version>0.24.0</commonmark.version>
     </properties>
 
     <build>
