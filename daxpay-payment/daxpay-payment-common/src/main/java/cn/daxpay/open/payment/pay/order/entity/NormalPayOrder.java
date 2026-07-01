@@ -88,6 +88,15 @@ public class NormalPayOrder extends MchBaseEntity {
     /// 关闭时间
     private OffsetDateTime closeTime;
 
+    // ===== 通道路由（同步时用于解析通道应用凭证）=====
+
+    /// 通道商户号(路由回填)
+    private String channelMchNo;
+
+    /// 支付能力编码(路由回填)
+    /// @see cn.daxpay.open.platform.core.enums.pay.channel.PayCapabilityEnum
+    private String capability;
+
     // ===== 请求信息（低频，审计排查用）=====
 
     /// 通道附加参数

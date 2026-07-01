@@ -83,6 +83,9 @@ public class PayAssistService {
         normalOrder.setExtraParam(payParam.getExtraParam());
         normalOrder.setGoodsDetail(payParam.getGoodsDetail());
         normalOrder.setTerminalNo(terminalNo);
+        // 通道路由参数(同步时用于解析通道应用凭证)
+        normalOrder.setChannelMchNo(payParam.getChannelMchNo());
+        normalOrder.setCapability(payParam.getCapability());
         normalOrder.setAppId(appId);
         payNormalOrderManager.save(normalOrder);
         // 创建资金交易 PayTrade

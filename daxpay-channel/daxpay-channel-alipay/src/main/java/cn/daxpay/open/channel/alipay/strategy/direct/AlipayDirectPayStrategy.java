@@ -1,7 +1,7 @@
 package cn.daxpay.open.channel.alipay.strategy.direct;
 
 import cn.daxpay.open.channel.alipay.service.direct.AlipayDirectConfigAssembler;
-import cn.daxpay.open.channel.alipay.service.pay.AlipayPayService;
+import cn.daxpay.open.channel.alipay.service.payment.pay.AlipayPayService;
 import cn.daxpay.open.payment.common.context.PayStrategyContext;
 import cn.daxpay.open.payment.pay.bo.PayTradeResultBo;
 import cn.daxpay.open.payment.strategy.pay.AbsPayStrategy;

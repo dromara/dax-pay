@@ -1,7 +1,9 @@
 package cn.daxpay.open.channel.alipay.client;
 
 import cn.daxpay.open.channel.alipay.client.req.AlipayPayReq;
+import cn.daxpay.open.channel.alipay.client.req.AlipaySyncReq;
 import cn.daxpay.open.channel.alipay.client.resp.AlipayPayResp;
+import cn.daxpay.open.channel.alipay.client.resp.AlipaySyncResp;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,4 +19,8 @@ public interface AlipayChannelClient {
     /// 支付下单
     @PostExchange("/channel/alipay/pay")
     DaxResult<AlipayPayResp> pay(@RequestBody AlipayPayReq req);
+
+    /// 支付同步(查询支付宝订单状态)
+    @PostExchange("/channel/alipay/sync")
+    DaxResult<AlipaySyncResp> sync(@RequestBody AlipaySyncReq req);
 }

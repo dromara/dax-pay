@@ -6,7 +6,7 @@ import cn.daxpay.open.channel.alipay.entity.isv.AlipayIsvApp;
 import cn.daxpay.open.channel.alipay.entity.isv.AlipayIsvAppKeyConfig;
 import cn.daxpay.open.channel.alipay.entity.isv.AlipayIsvChannelMerchant;
 import cn.daxpay.open.channel.alipay.service.isv.AlipayIsvAppKeyConfigService;
-import cn.daxpay.open.channel.alipay.service.pay.AlipayPayService;
+import cn.daxpay.open.channel.alipay.service.payment.pay.AlipayPayService;
 import cn.daxpay.open.payment.common.context.PayStrategyContext;
 import cn.daxpay.open.payment.pay.bo.PayTradeResultBo;
 import cn.daxpay.open.payment.strategy.pay.AbsPayStrategy;

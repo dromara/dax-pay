@@ -1,4 +1,4 @@
-package cn.daxpay.open.channel.alipay.service.pay;
+package cn.daxpay.open.channel.alipay.service.payment.pay;
 
 import cn.daxpay.open.channel.alipay.client.AlipayChannelClient;
 import cn.daxpay.open.channel.alipay.client.credential.AlipaySdkCredential;
@@ -91,18 +91,11 @@ public class AlipayPayService {
         }
 
         // 完成时间
-        if (resp.getFinishTime() != null) {
-            bo.setFinishTime(resp.getFinishTime());
-        }
+        bo.setFinishTime(resp.getFinishTime());
         // 实付金额(BARCODE 付款码同步成功时返回)
-        if (resp.getRealAmount() != null) {
-            bo.setRealAmount(resp.getRealAmount());
-        }
+        bo.setRealAmount(resp.getRealAmount());
         // 买家标识(BARCODE 付款码同步成功时返回)
-        if (StrUtil.isNotBlank(resp.getBuyerId())) {
-            bo.setBuyerId(resp.getBuyerId());
-        }
-
+        bo.setBuyerId(resp.getBuyerId());
         return bo;
     }
 }
