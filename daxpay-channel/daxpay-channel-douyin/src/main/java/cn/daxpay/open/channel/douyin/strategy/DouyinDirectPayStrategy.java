@@ -3,10 +3,10 @@ package cn.daxpay.open.channel.douyin.strategy;
 import cn.daxpay.open.channel.douyin.client.DouyinChannelClient;
 import cn.daxpay.open.channel.douyin.dto.DouyinPayReq;
 import cn.daxpay.open.channel.douyin.dto.DouyinPayResp;
-import cn.daxpay.open.payment.common.context.PayStrategyContext;
+import cn.daxpay.open.payment.common.context.NormalPayContext;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.pay.bo.PayTradeResultBo;
-import cn.daxpay.open.payment.strategy.pay.AbsPayStrategy;
+import cn.daxpay.open.payment.strategy.pay.AbsNormalPayStrategy;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ import java.util.Map;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class DouyinDirectPayStrategy extends AbsPayStrategy {
+public class DouyinDirectPayStrategy extends AbsNormalPayStrategy {
 
     private final DouyinChannelClient douyinChannelClient;
 
@@ -31,7 +31,7 @@ public class DouyinDirectPayStrategy extends AbsPayStrategy {
     }
 
     @Override
-    public PayTradeResultBo doPay(PayStrategyContext context) {
+    public PayTradeResultBo doPay(NormalPayContext context) {
         // 构建请求
         DouyinPayReq req = new DouyinPayReq();
         req.setChannel(ProductEnum.DOUYIN_PAY.getChannel());

@@ -20,6 +20,7 @@ import cn.daxpay.open.platform.core.enums.pay.pay.PayStatusEnum;
 import cn.daxpay.open.platform.core.enums.pay.trade.TradeTypeEnum;
 import cn.daxpay.open.payment.old.pay.exception.TradeNotExistException;
 import cn.daxpay.open.payment.old.pay.exception.TradeStatusErrorException;
+import cn.daxpay.open.payment.common.context.NormalPayContext;
 import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.old.pay.service.order.pay.PayOrderQueryService;
 import cn.daxpay.open.payment.old.pay.service.record.sync.TradeSyncRecordService;
@@ -104,7 +105,7 @@ public class PaySyncService {
         trade.setAmount(payOrder.getAmount());
         try {
             // 执行操作, 获取支付网关同步的结果
-            var newResult = syncPayStrategy.doSync(trade);
+            var newResult = syncPayStrategy.doSync(new NormalPayContext().setTrade(trade));
             PaySyncResultBo syncResult = new PaySyncResultBo();
             syncResult.setSyncSuccess(newResult.isSyncSuccess());
             if (newResult.getPayStatus() != null) {
@@ -251,9 +252,10 @@ public class PaySyncService {
         closeTrade.setProduct(order.getProduct());
         closeTrade.setChannel(order.getChannel());
         closeTrade.setMethod(order.getMethod());
-        strategy.doBeforeClose(closeTrade);
+        NormalPayContext closeContext = new NormalPayContext().setTrade(closeTrade);
+        strategy.doBeforeClose(closeContext);
         // 执行策略的关闭方法
-        strategy.doClose(closeTrade, false);
+        strategy.doClose(closeContext, false);
         // 关闭统一处理
         tradeUniHandleService.payClose(order, PayStatusEnum.CLOSE);
     }

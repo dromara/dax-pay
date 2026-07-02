@@ -3,15 +3,15 @@ package cn.daxpay.open.payment.pay.service;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.PayFailureException;
+import cn.daxpay.open.payment.common.context.NormalPayContext;
 import cn.daxpay.open.payment.common.enums.PayFundStatusEnum;
-import cn.daxpay.open.payment.common.context.PayStrategyContext;
 import cn.daxpay.open.payment.common.util.PaymentStrategyFactory;
 import cn.daxpay.open.payment.pay.bo.PayTradeResultBo;
 import cn.daxpay.open.payment.pay.order.dao.PayTradeManager;
 import cn.daxpay.open.payment.pay.order.entity.PayTrade;
 import cn.daxpay.open.payment.pay.service.route.PayRouteFacade;
 import cn.hutool.core.util.StrUtil;
-import cn.daxpay.open.payment.strategy.pay.AbsPayStrategy;
+import cn.daxpay.open.payment.strategy.pay.AbsNormalPayStrategy;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
 import cn.hutool.extra.spring.SpringUtil;
@@ -46,32 +46,35 @@ public class NormalPayService {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.processing");
         }
         try {
-            PayTrade trade = payAssistService.getOrderAndCheck(bizOrderNo);
-            return this.payHandle(payParam, trade);
+            return this.payHandle(payParam);
         } finally {
             lockTemplate.releaseLock(lock);
         }
     }
 
     /// 支付操作
-    public NormalPayResult payHandle(NormalPayParam payParam, PayTrade trade) {
+    /// 拆分为多阶段: 1.校验与配置组装 2.查询已有订单 3.新建订单 4.发起支付 5.支付成功后处理
+    public NormalPayResult payHandle(NormalPayParam payParam) {
         // 解析应用号：空则取商户默认应用
         payAssistService.resolveApp(payParam);
         // 路由解析：直定模式(已传 channelMchNo)直接解析，否则按 appId+method 策略匹配
         payRouteFacade.resolve(payParam);
-        var payStrategy = PaymentStrategyFactory.createByProduct(payParam.getProduct(), AbsPayStrategy.class);
-        // 订单不存在，新建支付订单
-        if (Objects.isNull(trade)) {
-            trade = payAssistService.createOrder(payParam);
-        } else {
-            // 判断是否已经拉起了支付，如果拉起返回保存的支付参数
-            if (StrUtil.isNotBlank(trade.getPayBody())) {
-                return payAssistService.buildResult(trade);
-            }
-        }
-        // 显式传递上下文（替代原策略实例字段）
-        PayStrategyContext context = new PayStrategyContext(payParam).setTrade(trade);
+        var payStrategy = PaymentStrategyFactory.createByProduct(payParam.getProduct(), AbsNormalPayStrategy.class);
+        // 支付前处理: 校验与通道配置组装(只依赖请求参数), 失败直接抛出不持久化(订单尚未创建)
+        NormalPayContext context = new NormalPayContext().setPayParam(payParam);
         payStrategy.doBeforePay(context);
+        // 查询已有订单并校验，结果填充到 context
+        payAssistService.findAndCheckOrder(payParam.getBizOrderNo(), context);
+        // 已拉起支付则返回缓存的支付参数
+        if (Objects.nonNull(context.getTrade()) && StrUtil.isNotBlank(context.getTrade().getPayBody())) {
+            return payAssistService.buildResult(context.getTrade());
+        }
+        // 订单不存在则新建（填充 context）
+        if (Objects.isNull(context.getContainer())) {
+            payAssistService.createOrder(payParam, context);
+        }
+        PayTrade trade = context.getTrade();
+        // 支付操作, 失败标记 trade 为 FAIL 并持久化
         PayTradeResultBo result;
         try {
             result = payStrategy.doPay(context);

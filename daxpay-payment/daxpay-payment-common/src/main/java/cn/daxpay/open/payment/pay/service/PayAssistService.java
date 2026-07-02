@@ -12,6 +12,7 @@ import cn.daxpay.open.payment.common.enums.PayTradeTypeEnum;
 import cn.daxpay.open.payment.common.service.MchAppInfoAssistQueryService;
 import cn.daxpay.open.payment.common.util.PayUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.daxpay.open.payment.common.context.NormalPayContext;
 import cn.daxpay.open.payment.pay.convert.PayTradeConvert;
 import cn.daxpay.open.payment.pay.order.dao.NormalPayOrderManager;
 import cn.daxpay.open.payment.pay.order.entity.NormalPayOrder;
@@ -48,10 +49,10 @@ public class PayAssistService {
         }
     }
 
-    /// 创建支付订单（容器 + 资金交易）
+    /// 创建支付订单（容器 + 资金交易），填充到 context
     /// 调用方需保证 appId 和 product 已解析完毕
     @Transactional(rollbackFor = Exception.class)
-    public PayTrade createOrder(NormalPayParam payParam) {
+    public void createOrder(NormalPayParam payParam, NormalPayContext context) {
         String appId = payParam.getAppId();
         OffsetDateTime expiredTime = this.getExpiredTime(payParam.getExpiredTime());
         Long amount = payParam.getAmount();
@@ -108,22 +109,23 @@ public class PayAssistService {
         trade.setBarCode(payParam.getAuthCode());
         trade.setOpenid(payParam.getOpenId());
         payTradeManager.save(trade);
-        return trade;
+        context.setContainer(normalOrder).setTrade(trade);
     }
 
-    /// 根据业务单号查询并检查支付状态（按商户号自动租户隔离）
-    public PayTrade getOrderAndCheck(String bizOrderNo) {
+    /// 查询已有订单并校验，结果填充到 context
+    /// 订单不存在则 context 保持不变（调用方据此判断是否新建）
+    public void findAndCheckOrder(String bizOrderNo, NormalPayContext context) {
         Optional<NormalPayOrder> normalOrderOpt = payNormalOrderManager.findByBizOrderNo(bizOrderNo);
         if (normalOrderOpt.isEmpty()) {
-            return null;
+            return;
         }
         NormalPayOrder normalOrder = normalOrderOpt.get();
         PayTrade trade = payTradeManager.findByContainerId(normalOrder.getId()).orElse(null);
         if (trade == null) {
-            return null;
+            return;
         }
         this.checkOrder(normalOrder, trade);
-        return trade;
+        context.setContainer(normalOrder).setTrade(trade);
     }
 
     /// 检查订单状态

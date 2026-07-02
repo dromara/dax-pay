@@ -17,6 +17,7 @@ import cn.daxpay.open.platform.core.enums.pay.pay.PayStatusEnum;
 import cn.daxpay.open.payment.old.pay.exception.TradeNotExistException;
 import cn.daxpay.open.payment.old.pay.exception.TradeProcessingException;
 import cn.daxpay.open.payment.old.pay.exception.TradeStatusErrorException;
+import cn.daxpay.open.payment.common.context.NormalPayContext;
 import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.old.pay.service.notice.MerchantNoticeService;
 import cn.daxpay.open.payment.old.pay.service.order.pay.PayOrderQueryService;
@@ -95,9 +96,10 @@ public class PayCloseService {
                 trade.setChannel(payOrder.getChannel());
                 trade.setMethod(payOrder.getMethod());
                 // 关闭前准备
-                strategy.doBeforeClose(trade);
+                NormalPayContext closeContext = new NormalPayContext().setTrade(trade);
+                strategy.doBeforeClose(closeContext);
                 // 执行关闭策略, 返回关闭的方式
-                closeType = strategy.doClose(trade, useCancel);
+                closeType = strategy.doClose(closeContext, useCancel);
                 // 成功处理 关闭或撤销订单
                 payStatusEnum = useCancel ? PayStatusEnum.CANCEL : PayStatusEnum.CLOSE;
             }
