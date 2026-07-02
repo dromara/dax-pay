@@ -7,7 +7,7 @@ import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.common.util.DaxRes;
 import cn.daxpay.open.payment.common.service.MerchantPermissionService;
-import cn.daxpay.open.payment.old.pay.anno.PaymentVerify;
+import cn.daxpay.open.payment.common.aop.PaymentVerify;
 import cn.daxpay.open.payment.pay.service.PayCloseService;
 import cn.daxpay.open.payment.pay.service.NormalPayService;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayCloseParam;

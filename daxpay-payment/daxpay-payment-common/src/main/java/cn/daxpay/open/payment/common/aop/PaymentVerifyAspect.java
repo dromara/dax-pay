@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.unipay.aop;
+package cn.daxpay.open.payment.common.aop;
 
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.exception.BizException;
@@ -8,11 +8,7 @@ import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.util.ValidationUtil;
 import cn.daxpay.open.payment.unipay.param.MerchantPaymentCommonParam;
 import cn.daxpay.open.payment.common.result.DaxResult;
-import cn.daxpay.open.payment.old.pay.anno.PaymentVerify;
-import cn.daxpay.open.payment.old.pay.service.assist.PayParamCapabilityValidator;
-import cn.daxpay.open.payment.old.pay.service.assist.PayParamRouteValidator;
 import cn.daxpay.open.payment.common.context.PaymentAssistService;
-import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -35,8 +31,6 @@ import java.time.ZoneOffset;
 @RequiredArgsConstructor
 public class PaymentVerifyAspect {
     private final PaymentAssistService paymentAssistService;
-    private final PayParamRouteValidator payParamRouteValidator;
-    private final PayParamCapabilityValidator payParamCapabilityValidator;
 
     /// 处理方法上的@PaymentVerify注解
     @Around("@annotation(paymentVerify)")
@@ -45,7 +39,7 @@ public class PaymentVerifyAspect {
     }
 
     /// 处理类上的@PaymentVerify注解（排除方法上也有的情况，避免重复匹配）
-    @Around("@within(paymentVerify) && !@annotation(cn.daxpay.open.payment.old.pay.anno.PaymentVerify)")
+    @Around("@within(paymentVerify) && !@annotation(cn.daxpay.open.payment.common.aop.PaymentVerify)")
     public Object methodPointWithin(ProceedingJoinPoint pjp, PaymentVerify paymentVerify) throws Throwable {
         return doVerify(pjp);
     }
@@ -61,14 +55,9 @@ public class PaymentVerifyAspect {
         if (param instanceof MerchantPaymentCommonParam paymentParam){
             // 参数校验
             ValidationUtil.validateParam(paymentParam);
-            if (paymentParam instanceof NormalPayParam payParam) {
-                // 先校验支付渠道+支付方式（渠道支付方式目录），再校验路由必填项
-                payParamCapabilityValidator.validate(payParam);
-                payParamRouteValidator.validate(payParam);
-            }
             // 商户和应用信息初始化(含状态校验)
             paymentAssistService.initMchAndApp(paymentParam.getMchNo(), paymentParam.getAppId());
-            // 通道路由 resolve 暂未接入支付切面，由商户请求自带 channel/product/method
+            // 通道路由 resolve 由新支付流程(PayRouteFacade)接管, 切面不再介入
             // 参数签名校验
             paymentAssistService.signVerify(paymentParam);
         } else {

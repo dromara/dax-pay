@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.old.pay.anno;
+package cn.daxpay.open.payment.common.aop;
 
 import java.lang.annotation.*;
 
