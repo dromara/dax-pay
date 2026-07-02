@@ -29,10 +29,4 @@ public class PayStrategyContext {
     public PayStrategyContext(NormalPayParam payParam) {
         this.payParam = payParam;
     }
-
-    /// 读取通道配置（各通道策略 cast 自己的配置类型）
-    @SuppressWarnings("unchecked")
-    public <T> T getChannelConfig() {
-        return (T) channelConfig;
-    }
 }
