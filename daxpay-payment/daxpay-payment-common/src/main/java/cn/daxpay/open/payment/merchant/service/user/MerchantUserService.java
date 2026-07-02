@@ -29,7 +29,6 @@ import cn.daxpay.open.platform.iam.entity.user.UserInfo;
 import cn.daxpay.open.platform.iam.param.user.UserInfoParam;
 import cn.daxpay.open.platform.iam.service.upms.UserRoleService;
 import cn.daxpay.open.platform.iam.service.user.UserAdminService;
-import cn.daxpay.open.payment.common.context.PaymentContext;
 
 /// # 商户用户管理服务
 ///
@@ -39,7 +38,7 @@ import cn.daxpay.open.payment.common.context.PaymentContext;
 public class MerchantUserService {
 
     /// 根据用户id查询商户号
-    public String findByUserId(Long userId){
+    public String findMchNoByUserId(Long userId){
         return merchantUserManager.findByUserId(userId)
                 .map(MerchantUser::getMchNo)
                 .orElse(null);
@@ -54,7 +53,6 @@ public class MerchantUserService {
     private final RoleManager roleManager;
     private final UserRoleService userRoleService;
     private final PasswordDecryptService passwordDecryptService;
-    private final PaymentContext apiContext;
 
     /// 注册商户
     @Transactional(rollbackFor = Exception.class)

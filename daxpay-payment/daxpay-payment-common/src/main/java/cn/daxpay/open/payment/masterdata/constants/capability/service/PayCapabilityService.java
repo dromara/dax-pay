@@ -61,10 +61,7 @@ public class PayCapabilityService {
         fillDisplay(result);
         List<LabelValue> products = payProductCapabilityManager.listByCapability(result.getCode()).stream()
                 .map(rel -> {
-                    ProductEnum productEnum = ProductEnum.findByCode(rel.getProductCode());
-                    String label = productEnum != null
-                            ? I18nUtil.getEnumName(productEnum)
-                            : rel.getProductCode();
+                    String label = I18nUtil.getEnumName(ProductEnum.findByCode(rel.getProductCode()));
                     return new LabelValue(label, rel.getProductCode());
                 })
                 .toList();

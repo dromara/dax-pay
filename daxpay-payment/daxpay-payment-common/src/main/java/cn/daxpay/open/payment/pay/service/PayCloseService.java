@@ -6,7 +6,7 @@ import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.PayFailureException;
 import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
-import cn.daxpay.open.payment.common.context.NormalPayContext;
+import cn.daxpay.open.payment.strategy.pay.PayStrategyContext;
 import cn.daxpay.open.payment.common.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.common.util.PaymentStrategyFactory;
 import cn.daxpay.open.payment.pay.order.dao.NormalPayOrderManager;
@@ -75,7 +75,7 @@ public class PayCloseService {
             if (Objects.equals(PayFundStatusEnum.INIT.getCode(), trade.getStatus())) {
                 payUniHandleService.payClose(trade, normalOrder);
             } else {
-                NormalPayContext context = new NormalPayContext()
+                PayStrategyContext context = new PayStrategyContext()
                         .setContainer(normalOrder)
                         .setTrade(trade);
                 AbsPayCloseStrategy strategy = PaymentStrategyFactory.createByProduct(

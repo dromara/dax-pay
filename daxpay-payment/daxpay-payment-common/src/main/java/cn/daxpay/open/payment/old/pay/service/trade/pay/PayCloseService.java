@@ -17,8 +17,7 @@ import cn.daxpay.open.platform.core.enums.pay.pay.PayStatusEnum;
 import cn.daxpay.open.payment.old.pay.exception.TradeNotExistException;
 import cn.daxpay.open.payment.old.pay.exception.TradeProcessingException;
 import cn.daxpay.open.payment.old.pay.exception.TradeStatusErrorException;
-import cn.daxpay.open.payment.common.context.NormalPayContext;
-import cn.daxpay.open.payment.common.context.PaymentContext;
+import cn.daxpay.open.payment.strategy.pay.PayStrategyContext;
 import cn.daxpay.open.payment.old.pay.service.notice.MerchantNoticeService;
 import cn.daxpay.open.payment.old.pay.service.order.pay.PayOrderQueryService;
 import cn.daxpay.open.payment.old.pay.service.record.close.PayCloseRecordService;
@@ -51,8 +50,6 @@ public class PayCloseService {
 
     private final LockTemplate lockTemplate;
     private final TradeUniHandleService tradeUniHandleService;
-
-    private final PaymentContext apiContext;
 
     /// 关闭支付
     public void close(NormalPayCloseParam param){
@@ -96,7 +93,7 @@ public class PayCloseService {
                 trade.setChannel(payOrder.getChannel());
                 trade.setMethod(payOrder.getMethod());
                 // 关闭前准备
-                NormalPayContext closeContext = new NormalPayContext().setTrade(trade);
+                PayStrategyContext closeContext = new PayStrategyContext().setTrade(trade);
                 strategy.doBeforeClose(closeContext);
                 // 执行关闭策略, 返回关闭的方式
                 closeType = strategy.doClose(closeContext, useCancel);

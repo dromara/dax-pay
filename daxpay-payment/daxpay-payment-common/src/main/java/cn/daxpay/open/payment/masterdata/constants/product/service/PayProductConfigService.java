@@ -11,7 +11,6 @@ import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.config.PayEnvEnum;
-import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -74,11 +73,9 @@ public class PayProductConfigService {
 
     /// PayProduct + 库表 + 策略合并为配置结果
     private PayProductConfigResult toConfigResult(PayProduct payProduct, Map<String, PayProductConfig> configMap) {
-        ProductEnum productEnum = ProductEnum.findByCode(payProduct.getCode());
-
         PayProductConfigResult result = new PayProductConfigResult()
                 .setProduct(payProduct.getCode())
-                .setName(productEnum != null ? I18nUtil.getEnumName(productEnum) : payProduct.getCode())
+                .setName(I18nUtil.getEnumName(ProductEnum.findByCode(payProduct.getCode())))
                 .setChannel(payProduct.getChannel())
                 .setChannelName(I18nUtil.getEnumName(ChannelEnum.findByCode(payProduct.getChannel())));
 
@@ -104,9 +101,6 @@ public class PayProductConfigService {
     /// 创建默认配置记录
     private PayProductConfig createDefaultConfig(String product) {
         ProductEnum productEnum = ProductEnum.findByCode(product);
-        if (productEnum == null) {
-            throw new DataNotExistException("error.payment.product.notExist");
-        }
 
         PayProductConfig config = new PayProductConfig();
         config.setProduct(product);

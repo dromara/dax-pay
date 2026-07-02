@@ -20,8 +20,7 @@ import cn.daxpay.open.platform.core.enums.pay.pay.PayStatusEnum;
 import cn.daxpay.open.platform.core.enums.pay.trade.TradeTypeEnum;
 import cn.daxpay.open.payment.old.pay.exception.TradeNotExistException;
 import cn.daxpay.open.payment.old.pay.exception.TradeStatusErrorException;
-import cn.daxpay.open.payment.common.context.NormalPayContext;
-import cn.daxpay.open.payment.common.context.PaymentContext;
+import cn.daxpay.open.payment.strategy.pay.PayStrategyContext;
 import cn.daxpay.open.payment.old.pay.service.order.pay.PayOrderQueryService;
 import cn.daxpay.open.payment.old.pay.service.record.sync.TradeSyncRecordService;
 import cn.daxpay.open.payment.old.pay.service.trade.TradeUniHandleService;
@@ -63,8 +62,6 @@ public class PaySyncService {
 
     private final TradeUniHandleService tradeUniHandleService;
 
-    private final PaymentContext apiContext;
-
     /// 支付同步, 开启一个新的事务, 不受外部抛出异常的影响
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public NormalPaySyncResult sync(NormalPaySyncParam param) {
@@ -105,7 +102,7 @@ public class PaySyncService {
         trade.setAmount(payOrder.getAmount());
         try {
             // 执行操作, 获取支付网关同步的结果
-            var newResult = syncPayStrategy.doSync(new NormalPayContext().setTrade(trade));
+            var newResult = syncPayStrategy.doSync(new PayStrategyContext().setTrade(trade));
             PaySyncResultBo syncResult = new PaySyncResultBo();
             syncResult.setSyncSuccess(newResult.isSyncSuccess());
             if (newResult.getPayStatus() != null) {
@@ -252,7 +249,7 @@ public class PaySyncService {
         closeTrade.setProduct(order.getProduct());
         closeTrade.setChannel(order.getChannel());
         closeTrade.setMethod(order.getMethod());
-        NormalPayContext closeContext = new NormalPayContext().setTrade(closeTrade);
+        PayStrategyContext closeContext = new PayStrategyContext().setTrade(closeTrade);
         strategy.doBeforeClose(closeContext);
         // 执行策略的关闭方法
         strategy.doClose(closeContext, false);

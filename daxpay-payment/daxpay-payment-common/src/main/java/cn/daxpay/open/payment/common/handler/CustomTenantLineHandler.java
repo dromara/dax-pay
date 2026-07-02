@@ -2,7 +2,8 @@ package cn.daxpay.open.payment.common.handler;
 
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.open.platform.iam.service.client.ClientCodeService;
-import cn.daxpay.open.payment.common.context.PaymentContext;
+import cn.daxpay.open.payment.common.runtime.PaymentContext;
+import cn.daxpay.open.payment.common.runtime.TradeActor;
 import cn.daxpay.open.payment.common.entity.merchant.MchBaseEntity;
 import cn.hutool.core.util.ClassUtil;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
@@ -24,13 +25,13 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class CustomTenantLineHandler implements TenantLineHandler {
     private final ClientCodeService clientCodeService;
-    private final PaymentContext apiContext;
+    private final PaymentContext paymentContext;
 
     /// 获取租户ID
     @Override
     public Expression getTenantId() {
         // 商户端和支付网关, 以及其他端, 获取当前用户的商户
-        String mchNo = Optional.ofNullable(apiContext.getTradeInfo().getMchNo()).orElse("");
+        String mchNo = paymentContext.currentActor().map(TradeActor::getMchNo).orElse("");
         // 获取商户
         return new StringValue(mchNo);
     }

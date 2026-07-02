@@ -7,7 +7,7 @@ import cn.daxpay.open.platform.core.exception.PayFailureException;
 import cn.daxpay.open.platform.core.exception.RepetitiveOperationException;
 import cn.daxpay.open.platform.core.exception.system.SystemUnknownErrorException;
 import cn.daxpay.open.platform.core.util.DateTimeUtil;
-import cn.daxpay.open.payment.common.context.NormalPayContext;
+import cn.daxpay.open.payment.strategy.pay.PayStrategyContext;
 import cn.daxpay.open.payment.common.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.common.util.PaymentStrategyFactory;
 import cn.daxpay.open.payment.pay.bo.PaySyncResultBo;
@@ -86,7 +86,7 @@ public class PaySyncService {
         try {
             NormalPayOrder normalOrder = payNormalOrderManager.findById(trade.getContainerId())
                     .orElse(null);
-            NormalPayContext context = new NormalPayContext()
+            PayStrategyContext context = new PayStrategyContext()
                     .setContainer(normalOrder)
                     .setTrade(trade);
             var syncStrategy = PaymentStrategyFactory.createByProduct(

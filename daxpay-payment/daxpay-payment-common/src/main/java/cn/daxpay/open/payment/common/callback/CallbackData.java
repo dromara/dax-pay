@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.common.context;
+package cn.daxpay.open.payment.common.callback;
 
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.daxpay.open.platform.core.enums.pay.pay.PayStatusEnum;
@@ -9,11 +9,13 @@ import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
-/// # 回调信息上下文
+/// # 回调数据(函数传参,非线程上下文)
 ///
+/// 通道回调解析后的结果数据,由回调入口创建并显式传递给回调处理服务。
+/// 不挂 ThreadLocal:它是"流程数据流"而非"线程身份",避免线程池复用时的脏数据残留。
 @Data
 @Accessors(chain = true)
-public class CallbackInfo {
+public class CallbackData {
 
     /// 回调数据内容
     private Map<String, ?> callbackData = new HashMap<>();
@@ -41,4 +43,3 @@ public class CallbackInfo {
     /// @see CallbackStatusEnum
     private CallbackStatusEnum callbackStatus = CallbackStatusEnum.SUCCESS;
 }
-

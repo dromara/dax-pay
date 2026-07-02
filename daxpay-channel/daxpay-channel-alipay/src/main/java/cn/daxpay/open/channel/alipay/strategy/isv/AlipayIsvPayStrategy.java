@@ -3,7 +3,7 @@ package cn.daxpay.open.channel.alipay.strategy.isv;
 import cn.daxpay.open.channel.alipay.client.credential.AlipaySdkCredential;
 import cn.daxpay.open.channel.alipay.service.isv.AlipayIsvConfigAssembler;
 import cn.daxpay.open.channel.alipay.service.payment.pay.AlipayPayService;
-import cn.daxpay.open.payment.common.context.NormalPayContext;
+import cn.daxpay.open.payment.strategy.pay.PayStrategyContext;
 import cn.daxpay.open.payment.pay.bo.PayTradeResultBo;
 import cn.daxpay.open.payment.strategy.pay.AbsNormalPayStrategy;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
@@ -31,13 +31,13 @@ public class AlipayIsvPayStrategy extends AbsNormalPayStrategy {
     /// 支付前预处理: 组装服务商模式通道凭证(含应用授权令牌)写入上下文
     /// 配置缺失在此阶段抛异常, fail-fast, 不会进入 doPay
     @Override
-    public void doBeforePay(NormalPayContext context) {
+    public void doBeforePay(PayStrategyContext context) {
         AlipaySdkCredential credential = alipayIsvConfigAssembler.buildConfig(context.getPayParam().getMchNo());
         context.setChannelConfig(credential);
     }
 
     @Override
-    public PayTradeResultBo doPay(NormalPayContext context) {
+    public PayTradeResultBo doPay(PayStrategyContext context) {
         // 直接使用 doBeforePay 预组装的通道凭证
         AlipaySdkCredential credential = (AlipaySdkCredential) context.getChannelConfig();
         return alipayPayService.pay(context.getTrade(), context.getPayParam(), credential);

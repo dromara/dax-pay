@@ -19,7 +19,6 @@ import cn.daxpay.open.platform.core.enums.pay.trade.*;
 import cn.daxpay.open.platform.core.enums.pay.notice.*;
 import cn.hutool.core.util.StrUtil;
 import cn.daxpay.open.payment.old.pay.exception.TradeStatusErrorException;
-import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.old.pay.service.order.pay.PayOrderQueryService;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
@@ -42,7 +41,6 @@ public class PayAssistService {
 
     private final PayOrderManager payOrderManager;
     private final PayOrderQueryService payOrderQueryService;
-    private final PaymentContext apiContext;
     private final PaySyncService paySyncService;
 //    private final DelayJobService delayJobService;
     private final PayCloseService payCloseService;
@@ -58,10 +56,7 @@ public class PayAssistService {
         PayOrderConvert.CONVERT.copy(payParam, order);
         // 从产品编码派生通道编码
         if (StrUtil.isNotBlank(order.getProduct()) && StrUtil.isBlank(order.getChannel())) {
-            ProductEnum productEnum = ProductEnum.findByCode(order.getProduct());
-            if (productEnum != null) {
-                order.setChannel(productEnum.getChannel());
-            }
+            order.setChannel(ProductEnum.findByCode(order.getProduct()).getChannel());
         }
         order.setOrderNo(TradeNoGenerateUtil.pay())
                 .setStatus(PayStatusEnum.PROGRESS.getCode())
@@ -102,10 +97,7 @@ public class PayAssistService {
                 .setStatus(PayStatusEnum.PROGRESS.getCode());
         // 从产品编码派生通道编码
         if (StrUtil.isNotBlank(payParam.getProduct())) {
-            ProductEnum productEnum = ProductEnum.findByCode(payParam.getProduct());
-            if (productEnum != null) {
-                payOrder.setChannel(productEnum.getChannel());
-            }
+            payOrder.setChannel(ProductEnum.findByCode(payParam.getProduct()).getChannel());
         }
         payOrderManager.updateById(payOrder);
     }

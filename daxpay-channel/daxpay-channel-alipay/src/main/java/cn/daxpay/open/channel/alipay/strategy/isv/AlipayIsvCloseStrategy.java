@@ -3,7 +3,7 @@ package cn.daxpay.open.channel.alipay.strategy.isv;
 import cn.daxpay.open.channel.alipay.client.credential.AlipaySdkCredential;
 import cn.daxpay.open.channel.alipay.service.isv.AlipayIsvConfigAssembler;
 import cn.daxpay.open.channel.alipay.service.payment.close.AlipayCloseService;
-import cn.daxpay.open.payment.common.context.NormalPayContext;
+import cn.daxpay.open.payment.strategy.pay.PayStrategyContext;
 import cn.daxpay.open.payment.pay.order.entity.PayTrade;
 import cn.daxpay.open.payment.strategy.pay.AbsPayCloseStrategy;
 import cn.daxpay.open.platform.core.enums.pay.pay.CloseTypeEnum;
@@ -30,7 +30,7 @@ public class AlipayIsvCloseStrategy extends AbsPayCloseStrategy {
     }
 
     @Override
-    public CloseTypeEnum doClose(NormalPayContext context, boolean useCancel) {
+    public CloseTypeEnum doClose(PayStrategyContext context, boolean useCancel) {
         PayTrade trade = context.getTrade();
         // 组装服务商模式通道调用凭证(含应用授权令牌)
         AlipaySdkCredential credential = alipayIsvConfigAssembler.buildConfig(trade.getMchNo());

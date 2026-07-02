@@ -30,7 +30,7 @@ import java.util.List;
 public class NormalPayOrder extends MchBaseEntity {
 
     /// 应用号
-    @TableField(updateStrategy = FieldStrategy.NEVER, fill = FieldFill.INSERT)
+    @TableField(updateStrategy = FieldStrategy.NEVER)
     private String appId;
 
     /// 商户业务单号

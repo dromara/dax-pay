@@ -3,7 +3,7 @@ package cn.daxpay.open.channel.alipay.strategy.isv;
 import cn.daxpay.open.channel.alipay.client.credential.AlipaySdkCredential;
 import cn.daxpay.open.channel.alipay.service.isv.AlipayIsvConfigAssembler;
 import cn.daxpay.open.channel.alipay.service.payment.sync.AlipaySyncService;
-import cn.daxpay.open.payment.common.context.NormalPayContext;
+import cn.daxpay.open.payment.strategy.pay.PayStrategyContext;
 import cn.daxpay.open.payment.pay.bo.PaySyncResultBo;
 import cn.daxpay.open.payment.pay.order.entity.PayTrade;
 import cn.daxpay.open.payment.strategy.sync.AbsSyncPayOrderStrategy;
@@ -30,7 +30,7 @@ public class AlipayIsvSyncStrategy extends AbsSyncPayOrderStrategy {
     }
 
     @Override
-    public PaySyncResultBo doSync(NormalPayContext context) {
+    public PaySyncResultBo doSync(PayStrategyContext context) {
         PayTrade trade = context.getTrade();
         // 组装服务商模式通道调用凭证(含应用授权令牌)
         AlipaySdkCredential credential = alipayIsvConfigAssembler.buildConfig(trade.getMchNo());

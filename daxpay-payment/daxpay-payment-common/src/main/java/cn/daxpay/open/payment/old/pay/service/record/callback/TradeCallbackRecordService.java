@@ -6,11 +6,8 @@ import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.platform.common.json.util.JsonUtil;
 
-import cn.daxpay.open.payment.common.context.CallbackInfo;
+import cn.daxpay.open.payment.common.callback.CallbackData;
 import cn.daxpay.open.platform.core.enums.pay.trade.TradeTypeEnum;
-import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
-import cn.daxpay.open.platform.core.code.CommonCode;
-import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.old.pay.dao.record.callback.TradeCallbackRecordManager;
 import cn.daxpay.open.payment.old.pay.entity.record.callback.TradeCallbackRecord;
 import cn.daxpay.open.payment.old.pay.param.record.TradeCallbackRecordQuery;
@@ -23,13 +20,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 /// # 交易回调记录服务
 ///
+/// 回调数据通过函数参数显式传递([CallbackData]),不依赖线程上下文。
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class TradeCallbackRecordService {
     private final TradeCallbackRecordManager callbackRecordManager;
-
-    private final PaymentContext apiContext;
 
     /// 根据id查询
     public TradeCallbackRecordResult findById(Long id) {
@@ -43,20 +39,18 @@ public class TradeCallbackRecordService {
 
     /// 保存回调记录
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
-    public void saveCallbackRecord(String channel, String product, TradeTypeEnum callbackType) {
-        CallbackInfo callbackInfo = apiContext.getCallbackInfo();
+    public void saveCallbackRecord(String channel, String product, TradeTypeEnum callbackType, CallbackData callbackData) {
         TradeCallbackRecord payNotifyRecord = new TradeCallbackRecord()
-                .setTradeNo(callbackInfo.getTradeNo())
-                .setOutTradeNo(callbackInfo.getOutTradeNo())
+                .setTradeNo(callbackData.getTradeNo())
+                .setOutTradeNo(callbackData.getOutTradeNo())
                 .setChannel(channel)
                 .setProduct(product)
-                .setNotifyInfo(JsonUtil.toJsonStr(callbackInfo.getCallbackData()))
+                .setNotifyInfo(JsonUtil.toJsonStr(callbackData.getCallbackData()))
                 .setCallbackType(callbackType.getCode())
-                .setStatus(callbackInfo.getCallbackStatus().getCode())
-                .setErrorMsg(callbackInfo.getCallbackErrorMsg());
+                .setStatus(callbackData.getCallbackStatus().getCode())
+                .setErrorMsg(callbackData.getCallbackErrorMsg());
         callbackRecordManager.save(payNotifyRecord);
     }
 
-    
-    
+
 }

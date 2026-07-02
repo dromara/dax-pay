@@ -138,10 +138,7 @@ public class PayProductService {
     /// 补全名称、通道名与策略特性
     private PayProductResult fillProductFeatures(PayProductResult result) {
         String code = result.getCode();
-        ProductEnum productEnum = ProductEnum.findByCode(code);
-        if (productEnum != null) {
-            result.setName(I18nUtil.getEnumName(productEnum));
-        }
+        result.setName(I18nUtil.getEnumName(ProductEnum.findByCode(code)));
         result.setChannelName(I18nUtil.getEnumName(ChannelEnum.findByCode(result.getChannel())));
         AbsProductStrategy strategy = resolveStrategy(code);
         if (strategy != null) {

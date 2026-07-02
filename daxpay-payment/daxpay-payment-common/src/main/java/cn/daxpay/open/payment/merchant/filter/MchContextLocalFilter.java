@@ -4,8 +4,8 @@ import cn.daxpay.open.platform.core.enums.client.ClientEnum;
 import cn.daxpay.open.platform.core.entity.UserDetail;
 import cn.daxpay.open.platform.iam.service.client.ClientCodeService;
 import cn.daxpay.open.platform.capability.auth.util.SecurityUtil;
-import cn.daxpay.open.payment.common.context.PaymentContext;
-import cn.daxpay.open.payment.merchant.service.query.MerchantQueryFacadeService;
+import cn.daxpay.open.payment.common.runtime.PaymentContext;
+import cn.daxpay.open.payment.merchant.service.user.MerchantUserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,9 +25,9 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class MchContextLocalFilter extends OncePerRequestFilter implements Ordered {
-    private final MerchantQueryFacadeService merchantQueryFacadeService;
+    private final MerchantUserService merchantUserService;
     private final ClientCodeService clientCodeService;
-    private final PaymentContext apiContext;
+    private final PaymentContext paymentContext;
 
     /// 需要晚于 {@link org.springframework.web.filter.RequestContextFilter} 执行, 否则获取不到登录用户
     /// RequestContextFilter 默认加载优先级 为 - 150
@@ -45,8 +45,8 @@ public class MchContextLocalFilter extends OncePerRequestFilter implements Order
             Optional<UserDetail> currentUser = SecurityUtil.getCurrentUser();
             currentUser.ifPresent(userDetail -> {
                 // 登录后获取关联商户号
-                String mchNo = merchantQueryFacadeService.findMchNoByUserId(userDetail.getId());
-                apiContext.getTradeInfo().setMchNo(mchNo);
+                String mchNo = merchantUserService.findMchNoByUserId(userDetail.getId());
+                paymentContext.setMchNo(mchNo);
             });
         }
         filterChain.doFilter(request, response);

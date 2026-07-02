@@ -4,7 +4,6 @@ import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
 import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
-import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +22,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class WechatOpenAuthService {
-
-    private final PaymentContext apiContext;
 
     /// 生成内部使用的授权链接, 返回授权码给调用者, 由调用者自己再去获取授权信息
     /// @param authPath 回调的认证路径, 需要为h5项目中的可访问路由路径

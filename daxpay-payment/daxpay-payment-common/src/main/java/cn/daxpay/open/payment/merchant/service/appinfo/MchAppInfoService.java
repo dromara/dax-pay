@@ -14,7 +14,7 @@ import cn.daxpay.open.platform.core.exception.config.ConfigErrorException;
 import cn.daxpay.open.platform.core.exception.config.ConfigNotEnableException;
 import cn.daxpay.open.platform.core.exception.config.ConfigNotExistException;
 import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
-import cn.daxpay.open.payment.common.context.PaymentContext;
+import cn.daxpay.open.payment.common.runtime.PaymentContext;
 import cn.daxpay.open.payment.merchant.convert.appinfo.MchAppInfoConvert;
 import cn.daxpay.open.payment.merchant.dao.appinfo.MchAppInfoManager;
 import cn.daxpay.open.payment.merchant.dao.config.ChannelConfigManager;
@@ -25,7 +25,6 @@ import cn.daxpay.open.platform.core.enums.merchant.MerchantStatusEnum;
 import cn.daxpay.open.payment.merchant.param.appinfo.MchAppInfoParam;
 import cn.daxpay.open.payment.merchant.param.appinfo.MchAppInfoQuery;
 import cn.daxpay.open.payment.merchant.result.appinfo.MchAppInfoResult;
-import cn.daxpay.open.payment.common.service.MchAppInfoAssistQueryService;
 import cn.daxpay.open.payment.masterdata.config.entity.ChannelConfig;
 import cn.hutool.core.util.RandomUtil;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +41,7 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class MchAppInfoService implements MchAppInfoAssistQueryService {
+public class MchAppInfoService {
 
     private final MerchantInfoManager merchantInfoManager;
 
@@ -52,13 +51,13 @@ public class MchAppInfoService implements MchAppInfoAssistQueryService {
 
     private final ChannelConfigManager channelConfigManager;
 
-    private final PaymentContext apiContext;
+    private final PaymentContext paymentContext;
 
     /// 添加应用
     public void add(MchAppInfoParam param) {
         String mchNo;
         if (clientCodeService.getClientCode().equals(ClientEnum.MERCHANT.getCode())) {
-            mchNo = apiContext.getTradeInfo().getMchNo();
+            mchNo = paymentContext.getMchNo();
         } else {
             mchNo = param.getMchNo();
         }
@@ -131,7 +130,7 @@ public class MchAppInfoService implements MchAppInfoAssistQueryService {
 
     /// 商户应用列表
     public List<MchAppInfoResult> list() {
-        String mchNo = apiContext.getTradeInfo().getMchNo();
+        String mchNo = paymentContext.getMchNo();
         return mchAppInfoManager.findAllByMchNo(mchNo).stream()
                 .map(MchAppInfo::toResult)
                 .collect(Collectors.toList());
@@ -158,7 +157,7 @@ public class MchAppInfoService implements MchAppInfoAssistQueryService {
     /// 启用下拉列表, 需要应用和商户都是启用状态
     public List<LabelValue> dropdownByEnable(String mchNo) {
         if (clientCodeService.getClientCode().equals(ClientEnum.MERCHANT.getCode())) {
-            mchNo = apiContext.getTradeInfo().getMchNo();
+            mchNo = paymentContext.getMchNo();
         }
         // 判断商户状态
         MerchantInfo merchantInfo = merchantInfoManager.findByMchNo(mchNo)
@@ -174,7 +173,6 @@ public class MchAppInfoService implements MchAppInfoAssistQueryService {
     }
 
     /// 查询商户默认应用号
-    @Override
     public String findDefaultAppId(String mchNo) {
         return mchAppInfoManager.findDefaultByMchNo(mchNo)
                 .map(MchAppInfo::getAppId)
@@ -184,7 +182,7 @@ public class MchAppInfoService implements MchAppInfoAssistQueryService {
     /// 下拉列表, 不判断应用和商户的状态
     public List<LabelValue> dropdown(String mchNo) {
         if (clientCodeService.getClientCode().equals(ClientEnum.MERCHANT.getCode())) {
-            mchNo = apiContext.getTradeInfo().getMchNo();
+            mchNo = paymentContext.getMchNo();
         }
         return mchAppInfoManager.findAllByMchNo(mchNo).stream()
                 .map(o -> new LabelValue(o.getAppName(), o.getAppId()))
@@ -221,7 +219,7 @@ public class MchAppInfoService implements MchAppInfoAssistQueryService {
     /// 如果和商户不匹配, 抛出错误
     public void checkApp(MchAppInfo mchApp) {
         if (clientCodeService.getClientCode().equals(ClientEnum.MERCHANT.getCode())) {
-            if (!mchApp.getMchNo().equals(apiContext.getTradeInfo().getMchNo())) {
+            if (!mchApp.getMchNo().equals(paymentContext.getMchNo())) {
                 // 商户: 商户应用不匹配
                 throw new ConfigErrorException("error.payment.merchant.mchAppNoMatch");
             }

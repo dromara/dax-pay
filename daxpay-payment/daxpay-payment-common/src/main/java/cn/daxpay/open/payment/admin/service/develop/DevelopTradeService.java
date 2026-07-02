@@ -3,8 +3,9 @@ package cn.daxpay.open.payment.admin.service.develop;
 import cn.daxpay.open.payment.admin.param.develop.DevelopParam;
 import cn.daxpay.open.payment.admin.result.develop.DevelopPayResult;
 import cn.daxpay.open.payment.admin.result.develop.DevelopSignResult;
-import cn.daxpay.open.payment.common.context.PaymentAssistService;
-import cn.daxpay.open.payment.common.context.PaymentContextManager;
+import cn.daxpay.open.payment.common.runtime.PaymentContext;
+import cn.daxpay.open.payment.common.service.MerchantContextLoader;
+import cn.daxpay.open.payment.common.service.PaySignService;
 import cn.daxpay.open.payment.common.util.ObjectSignStrUtil;
 import cn.daxpay.open.payment.common.util.PaySignUtil;
 import cn.daxpay.open.payment.masterdata.constants.provider.result.PayProviderMethodResult;
@@ -34,8 +35,9 @@ import java.util.List;
 public class DevelopTradeService {
 
     private final NormalPayService normalPayService;
-    private final PaymentContextManager paymentContextManager;
-    private final PaymentAssistService paymentAssistService;
+    private final PaymentContext paymentContext;
+    private final MerchantContextLoader merchantContextLoader;
+    private final PaySignService paySignService;
     private final PlatformConfigProperties platformConfigProperties;
     private final PayProviderMethodService payProviderMethodService;
     private final PayRouteStrategyCapabilitySupport payRouteStrategyCapabilitySupport;
@@ -61,24 +63,23 @@ public class DevelopTradeService {
         if (StrUtil.isBlank(param.getPrivateKey())) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.assist.privateKeyEmpty");
         }
-        // 在支付作用域内执行, 初始化商户上下文, 使 mchNo/appId 等字段自动填充
-        return paymentContextManager.executeWithScope(
-                payParam.getMchNo(), payParam.getAppId(),
-                () -> {
-                    // 私钥验证: 用传入私钥签名, 再用系统配置的商户公钥验签
-                    String sign = PaySignUtil.sign(payParam, param.getPrivateKey());
-                    payParam.setSign(sign);
-                    paymentAssistService.signVerify(payParam);
-                    // 发起真实支付
-                    NormalPayResult payResult = normalPayService.pay(payParam);
-                    // 使用平台私钥对支付结果签名
-                    String platformPrivateKey = platformConfigProperties.getKeyConfig().getPrivateKey();
-                    String resultSign = PaySignUtil.sign(payResult, platformPrivateKey);
-                    return new DevelopPayResult()
-                            .setPayResult(payResult)
-                            .setSign(resultSign);
-                }
-        );
+        // 在支付作用域内执行, 初始化商户身份(mchNo 进入线程上下文)
+        return paymentContext.runAs(() -> {
+            // 初始化商户身份(含状态校验)
+            merchantContextLoader.initMch(payParam.getMchNo());
+            // 私钥验证: 用传入私钥签名, 再用系统配置的商户公钥验签
+            String sign = PaySignUtil.sign(payParam, param.getPrivateKey());
+            payParam.setSign(sign);
+            paySignService.signVerify(payParam);
+            // 发起真实支付
+            NormalPayResult payResult = normalPayService.pay(payParam);
+            // 使用平台私钥对支付结果签名
+            String platformPrivateKey = platformConfigProperties.getKeyConfig().getPrivateKey();
+            String resultSign = PaySignUtil.sign(payResult, platformPrivateKey);
+            return new DevelopPayResult()
+                    .setPayResult(payResult)
+                    .setSign(resultSign);
+        });
     }
 
     /// 已启用渠道支付方式目录（供调试页支付方式下拉）

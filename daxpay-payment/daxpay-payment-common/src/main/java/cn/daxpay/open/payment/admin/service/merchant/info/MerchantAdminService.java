@@ -19,7 +19,6 @@ import cn.daxpay.open.platform.iam.param.user.UserInfoParam;
 import cn.daxpay.open.platform.iam.service.client.ClientCodeService;
 import cn.daxpay.open.platform.iam.service.upms.UserRoleService;
 import cn.daxpay.open.platform.iam.service.user.UserAdminService;
-import cn.daxpay.open.payment.common.context.PaymentContext;
 
 import cn.daxpay.open.platform.core.exception.config.ConfigNotExistException;
 import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
@@ -59,7 +58,6 @@ public class MerchantAdminService {
     private final UserRoleService userRoleService;
     private final MerchantUserManager merchantUserManager;
     private final ClientCodeService clientCodeService;
-    private final PaymentContext apiContext;
     private final TransService transService;
 
     /// 添加商户

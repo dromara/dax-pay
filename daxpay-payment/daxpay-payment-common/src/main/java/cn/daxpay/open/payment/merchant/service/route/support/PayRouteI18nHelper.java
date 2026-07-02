@@ -22,7 +22,11 @@ public class PayRouteI18nHelper {
         if (StrUtil.isBlank(productCode)) {
             return productCode;
         }
-        ProductEnum productEnum = ProductEnum.findByCode(productCode);
+        // 路由配置中的 product 可能为非标准编码（自定义/历史通道），未命中时回退原始 code，不抛异常
+        ProductEnum productEnum = Arrays.stream(ProductEnum.values())
+                .filter(e -> e.getCode().equals(productCode))
+                .findFirst()
+                .orElse(null);
         return label(productEnum, productCode);
     }
 

@@ -6,7 +6,7 @@ import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.rest.dto.LabelValue;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
-import cn.daxpay.open.payment.common.service.MerchantPermissionService;
+import cn.daxpay.open.payment.merchant.service.permission.MerchantPermissionService;
 import cn.daxpay.open.payment.channel.dao.mch.ChannelMerchantManager;
 import cn.daxpay.open.payment.channel.entity.mch.ChannelMerchant;
 import cn.daxpay.open.payment.channel.param.mch.ChannelMerchantEditParam;

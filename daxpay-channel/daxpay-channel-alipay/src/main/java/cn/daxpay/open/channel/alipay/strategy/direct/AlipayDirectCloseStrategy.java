@@ -3,7 +3,7 @@ package cn.daxpay.open.channel.alipay.strategy.direct;
 import cn.daxpay.open.channel.alipay.client.credential.AlipaySdkCredential;
 import cn.daxpay.open.channel.alipay.service.direct.AlipayDirectConfigAssembler;
 import cn.daxpay.open.channel.alipay.service.payment.close.AlipayCloseService;
-import cn.daxpay.open.payment.common.context.NormalPayContext;
+import cn.daxpay.open.payment.strategy.pay.PayStrategyContext;
 import cn.daxpay.open.payment.pay.order.entity.NormalPayOrder;
 import cn.daxpay.open.payment.pay.order.entity.PayTrade;
 import cn.daxpay.open.payment.strategy.pay.AbsPayCloseStrategy;
@@ -32,7 +32,7 @@ public class AlipayDirectCloseStrategy extends AbsPayCloseStrategy {
     }
 
     @Override
-    public CloseTypeEnum doClose(NormalPayContext context, boolean useCancel) {
+    public CloseTypeEnum doClose(PayStrategyContext context, boolean useCancel) {
         // 从上下文容器读取通道路由参数, 用于凭证解析
         NormalPayOrder normalOrder = context.getContainer();
         String channelMchNo = normalOrder != null ? normalOrder.getChannelMchNo() : null;

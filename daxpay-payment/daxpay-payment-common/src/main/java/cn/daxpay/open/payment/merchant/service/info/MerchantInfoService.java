@@ -4,8 +4,7 @@ import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.rest.dto.LabelValue;
-import cn.daxpay.open.payment.common.context.PaymentContext;
-import cn.daxpay.open.payment.common.service.MerchantAssistQueryService;
+import cn.daxpay.open.payment.common.runtime.PaymentContext;
 import cn.daxpay.open.payment.merchant.convert.info.MerchantInfoConvert;
 import cn.daxpay.open.payment.merchant.dao.info.MerchantInfoManager;
 import cn.daxpay.open.payment.merchant.entity.info.MerchantInfo;
@@ -24,14 +23,14 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class MerchantInfoService implements MerchantAssistQueryService {
+public class MerchantInfoService {
 
     private final MerchantInfoManager merchantInfoManager;
-    private final PaymentContext apiContext;
+    private final PaymentContext paymentContext;
 
     /// 获取商户信息
     public MerchantInfoResult getMerchant() {
-        String mchNo = apiContext.getTradeInfo().getMchNo();
+        String mchNo = paymentContext.getMchNo();
         if (mchNo == null){
             // 商户: 数据错误, 未发现商户号
             throw new BizInfoException(CommonCode.FAIL_CODE, "error.payment.merchant.dataErrorNoMchNo");
@@ -42,7 +41,7 @@ public class MerchantInfoService implements MerchantAssistQueryService {
 
     /// 修改
     public void update(MerchantInfoParam param) {
-        String mchNo = apiContext.getTradeInfo().getMchNo();
+        String mchNo = paymentContext.getMchNo();
         if (mchNo == null){
             // 商户: 数据错误, 未发现商户号
             throw new BizInfoException(CommonCode.FAIL_CODE, "error.payment.merchant.dataErrorNoMchNo");

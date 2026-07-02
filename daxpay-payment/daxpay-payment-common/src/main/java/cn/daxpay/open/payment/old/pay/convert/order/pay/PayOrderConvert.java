@@ -1,6 +1,6 @@
 package cn.daxpay.open.payment.old.pay.convert.order.pay;
 
-import cn.daxpay.open.payment.common.context.CallbackInfo;
+import cn.daxpay.open.payment.common.callback.CallbackData;
 import cn.daxpay.open.payment.old.pay.bo.sync.PaySyncResultBo;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayOrderResult;
@@ -40,7 +40,7 @@ public interface PayOrderConvert {
     }
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
-    void copy(CallbackInfo callbackInfo, @MappingTarget  PayOrderExpand orderExpand);
+    void copy(CallbackData callbackData, @MappingTarget  PayOrderExpand orderExpand);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
     void copy(PaySyncResultBo resultBo, @MappingTarget PayOrderExpand payOrderExpand);

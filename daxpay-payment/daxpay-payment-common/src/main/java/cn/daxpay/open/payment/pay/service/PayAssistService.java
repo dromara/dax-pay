@@ -9,10 +9,10 @@ import cn.daxpay.open.platform.core.util.TradeNoGenerateUtil;
 import cn.daxpay.open.payment.common.enums.NormalPayOrderStatusEnum;
 import cn.daxpay.open.payment.common.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.common.enums.PayTradeTypeEnum;
-import cn.daxpay.open.payment.common.service.MchAppInfoAssistQueryService;
+import cn.daxpay.open.payment.merchant.service.appinfo.MchAppInfoService;
 import cn.daxpay.open.payment.common.util.PayUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.daxpay.open.payment.common.context.NormalPayContext;
+import cn.daxpay.open.payment.strategy.pay.PayStrategyContext;
 import cn.daxpay.open.payment.pay.convert.PayTradeConvert;
 import cn.daxpay.open.payment.pay.order.dao.NormalPayOrderManager;
 import cn.daxpay.open.payment.pay.order.entity.NormalPayOrder;
@@ -39,31 +39,18 @@ public class PayAssistService {
 
     private final NormalPayOrderManager payNormalOrderManager;
     private final PayTradeManager payTradeManager;
-    private final MchAppInfoAssistQueryService mchAppInfoAssistQueryService;
-
-    /// 解析应用号：param 有则用，无则取商户默认应用并回填到 param
-    public void resolveApp(NormalPayParam payParam) {
-        if (StrUtil.isBlank(payParam.getAppId())) {
-            String appId = mchAppInfoAssistQueryService.findDefaultAppId(payParam.getMchNo());
-            payParam.setAppId(appId);
-        }
-    }
+    private final MchAppInfoService mchAppInfoService;
 
     /// 创建支付订单（容器 + 资金交易），填充到 context
     /// 调用方需保证 appId 和 product 已解析完毕
     @Transactional(rollbackFor = Exception.class)
-    public void createOrder(NormalPayParam payParam, NormalPayContext context) {
+    public void createOrder(NormalPayParam payParam, PayStrategyContext context) {
         String appId = payParam.getAppId();
         OffsetDateTime expiredTime = this.getExpiredTime(payParam.getExpiredTime());
         Long amount = payParam.getAmount();
         // 从产品编码派生通道编码
-        String channel = payParam.getProduct();
-        if (StrUtil.isNotBlank(channel)) {
-            ProductEnum productEnum = ProductEnum.findByCode(payParam.getProduct());
-            if (productEnum != null) {
-                channel = productEnum.getChannel();
-            }
-        }
+        var productEnum = ProductEnum.findByCode(payParam.getProduct());
+        var channel = productEnum.getChannel();
         // 终端信息
         String terminalNo = payParam.getTerminal() != null ? payParam.getTerminal().getTerminalNo() : null;
         // 创建容器 NormalPayOrder（含冗余字段，方便查询）
@@ -114,7 +101,7 @@ public class PayAssistService {
 
     /// 查询已有订单并校验，结果填充到 context
     /// 订单不存在则 context 保持不变（调用方据此判断是否新建）
-    public void findAndCheckOrder(String bizOrderNo, NormalPayContext context) {
+    public void findAndCheckOrder(String bizOrderNo, PayStrategyContext context) {
         Optional<NormalPayOrder> normalOrderOpt = payNormalOrderManager.findByBizOrderNo(bizOrderNo);
         if (normalOrderOpt.isEmpty()) {
             return;

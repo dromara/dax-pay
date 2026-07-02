@@ -1,6 +1,6 @@
 package cn.daxpay.open.payment.merchant.service.store;
 
-import cn.daxpay.open.payment.common.context.PaymentContext;
+import cn.daxpay.open.payment.common.runtime.PaymentContext;
 import cn.daxpay.open.payment.merchant.convert.store.MchStoreInfoConvert;
 import cn.daxpay.open.payment.merchant.dao.info.MerchantInfoManager;
 import cn.daxpay.open.payment.merchant.dao.store.MchStoreInfoManager;
@@ -41,7 +41,7 @@ public class MchStoreInfoService {
 
     private final ClientCodeService clientCodeService;
 
-    private final PaymentContext apiContext;
+    private final PaymentContext paymentContext;
 
     /// 新增门店
     public void add(MchStoreInfoParam param) {
@@ -115,7 +115,7 @@ public class MchStoreInfoService {
     /// 解析商户号, 商户端从上下文获取, 管理端从参数获取
     private String resolveMchNo(String paramMchNo) {
         if (clientCodeService.getClientCode().equals(ClientEnum.MERCHANT.getCode())) {
-            return apiContext.getTradeInfo().getMchNo();
+            return paymentContext.getMchNo();
         }
         if (paramMchNo == null) {
             // 商户: 数据错误，未发现商户号
@@ -127,7 +127,7 @@ public class MchStoreInfoService {
     /// 如果和当前商户不匹配, 抛出错误(商户端校验)
     public void checkStore(MchStoreInfo mchStore) {
         if (clientCodeService.getClientCode().equals(ClientEnum.MERCHANT.getCode())) {
-            if (!mchStore.getMchNo().equals(apiContext.getTradeInfo().getMchNo())) {
+            if (!mchStore.getMchNo().equals(paymentContext.getMchNo())) {
                 // 商户: 门店不属于当前商户
                 throw new ConfigErrorException("error.payment.merchant.storeNoMatch");
             }

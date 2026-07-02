@@ -24,7 +24,7 @@ import java.time.OffsetDateTime;
 public class PayTrade extends MchBaseEntity {
 
     /// 应用号
-    @TableField(updateStrategy = FieldStrategy.NEVER, fill = FieldFill.INSERT)
+    @TableField(updateStrategy = FieldStrategy.NEVER)
     private String appId;
 
     /// 支付交易号（统一雪花，无形态前缀）

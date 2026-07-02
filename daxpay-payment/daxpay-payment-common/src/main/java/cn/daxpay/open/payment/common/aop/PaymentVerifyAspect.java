@@ -8,7 +8,8 @@ import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.util.ValidationUtil;
 import cn.daxpay.open.payment.unipay.param.MerchantPaymentCommonParam;
 import cn.daxpay.open.payment.common.result.DaxResult;
-import cn.daxpay.open.payment.common.context.PaymentAssistService;
+import cn.daxpay.open.payment.common.service.MerchantContextLoader;
+import cn.daxpay.open.payment.common.service.PaySignService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -21,16 +22,18 @@ import org.springframework.stereotype.Component;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
-/// # 支付签名切面, 用于对支付参数进行校验和签名
+/// # 支付签名切面(common.aop.PaymentVerify)
 ///
-/// 执行顺序: 过滤器 -> 拦截器 -> 切面 -> 方法
+/// 执行顺序: 过滤器 -> 拦截器 -> 切面 -> 方法。
+/// 切面只负责"商户身份初始化 + 签名校验",不负责应用解析(由支付流程完成)。
 @Aspect
 @Slf4j
 @Component
 @Order
 @RequiredArgsConstructor
 public class PaymentVerifyAspect {
-    private final PaymentAssistService paymentAssistService;
+    private final PaySignService paySignService;
+    private final MerchantContextLoader merchantContextLoader;
 
     /// 处理方法上的@PaymentVerify注解
     @Around("@annotation(paymentVerify)")
@@ -55,11 +58,10 @@ public class PaymentVerifyAspect {
         if (param instanceof MerchantPaymentCommonParam paymentParam){
             // 参数校验
             ValidationUtil.validateParam(paymentParam);
-            // 商户和应用信息初始化(含状态校验)
-            paymentAssistService.initMchAndApp(paymentParam.getMchNo(), paymentParam.getAppId());
-            // 通道路由 resolve 由新支付流程(PayRouteFacade)接管, 切面不再介入
+            // 商户身份初始化(含状态校验), 使 mchNo 进入线程上下文供签名校验与自动填充
+            merchantContextLoader.initMch(paymentParam.getMchNo());
             // 参数签名校验
-            paymentAssistService.signVerify(paymentParam);
+            paySignService.signVerify(paymentParam);
         } else {
             // 参数需要继承MerchantPaymentCommonParam
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.verify.paramExtendRequired");
@@ -69,13 +71,13 @@ public class PaymentVerifyAspect {
             proceed = pjp.proceed();
         } catch (BizException ex) {
             DaxResult<Void> result = new DaxResult<>(ex.getCode(), ex.getMessage());
-            paymentAssistService.sign(result);
+            paySignService.sign(result);
             return result;
         }
         // 对返回值添加响应时间并进行签名
         if (proceed instanceof DaxResult<?> result){
             result.setResTime(OffsetDateTime.now(ZoneOffset.UTC));
-            paymentAssistService.sign(result);
+            paySignService.sign(result);
         } else {
             // 支付方法返回类型需要为 DaxResult
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.verify.returnTypeRequired");

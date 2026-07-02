@@ -3,7 +3,7 @@ package cn.daxpay.open.payment.unipay.controller;
 import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.open.platform.core.enums.common.PaymentApiEnum;
 import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
-import cn.daxpay.open.payment.common.service.MerchantPermissionService;
+import cn.daxpay.open.payment.merchant.service.permission.MerchantPermissionService;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayQueryParam;
 
 import cn.daxpay.open.payment.common.result.DaxResult;

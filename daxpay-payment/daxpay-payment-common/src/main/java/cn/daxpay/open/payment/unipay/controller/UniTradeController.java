@@ -6,7 +6,7 @@ import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.common.util.DaxRes;
-import cn.daxpay.open.payment.common.service.MerchantPermissionService;
+import cn.daxpay.open.payment.merchant.service.permission.MerchantPermissionService;
 import cn.daxpay.open.payment.common.aop.PaymentVerify;
 import cn.daxpay.open.payment.pay.service.PayCloseService;
 import cn.daxpay.open.payment.pay.service.NormalPayService;

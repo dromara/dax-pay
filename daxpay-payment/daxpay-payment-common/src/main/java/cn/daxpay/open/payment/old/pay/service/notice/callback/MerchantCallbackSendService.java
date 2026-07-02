@@ -10,7 +10,8 @@ import cn.daxpay.open.payment.old.pay.dao.notice.callback.MerchantCallbackTaskMa
 import cn.daxpay.open.payment.old.pay.entity.notice.callback.MerchantCallbackRecord;
 import cn.daxpay.open.payment.old.pay.entity.notice.callback.MerchantCallbackTask;
 import cn.daxpay.open.platform.core.enums.pay.notice.NoticeSendTypeEnum;
-import cn.daxpay.open.payment.common.context.PaymentAssistService;
+import cn.daxpay.open.payment.common.service.MerchantContextLoader;
+import cn.daxpay.open.payment.common.service.PaySignService;
 import cn.daxpay.open.payment.old.pay.service.notice.MerchantNoticeAssistService;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.http.ContentType;
@@ -40,7 +41,9 @@ public class MerchantCallbackSendService {
 
     private final MerchantCallbackTaskManager taskManager;
 
-    private final PaymentAssistService paymentAssistService;
+    private final MerchantContextLoader merchantContextLoader;
+
+    private final PaySignService paySignService;
 
 //    private final DelayJobService delayJobService;
 
@@ -53,7 +56,7 @@ public class MerchantCallbackSendService {
     /// @param task 发送任务
     /// @param autoSend 是否为自动发送
     public void sendDataBySystem(MerchantCallbackTask task, boolean autoSend){
-        paymentAssistService.initMchAndApp(task.getMchNo(), task.getAppId());
+        merchantContextLoader.initMch(task.getMchNo());
         OffsetDateTime sendTime = OffsetDateTime.now(ZoneOffset.UTC);
         // 创建发送记录
         MerchantCallbackRecord record = new MerchantCallbackRecord()
@@ -68,7 +71,7 @@ public class MerchantCallbackSendService {
                     .setAppId(task.getAppId());
             // 设置响应时间并签名
             daxResult.setResTime(OffsetDateTime.now(ZoneOffset.UTC));
-            paymentAssistService.sign(daxResult);
+            paySignService.sign(daxResult);
             HttpResponse execute = HttpUtil.createPost(task.getUrl())
                     .body(JsonUtil.toJsonStr(daxResult), ContentType.JSON.getValue())
                     .timeout(15000)
@@ -137,7 +140,7 @@ public class MerchantCallbackSendService {
         var taskOpt = taskManager.findById(taskId);
         if (taskOpt.isPresent()){
             var task = taskOpt.get();
-            paymentAssistService.initMchAndApp(task.getMchNo(), task.getAppId());
+            merchantContextLoader.initMch(task.getMchNo());
             this.sendData(task,false);
         } else {
             log.error("发送任务不存在，任务ID：{}",taskId);

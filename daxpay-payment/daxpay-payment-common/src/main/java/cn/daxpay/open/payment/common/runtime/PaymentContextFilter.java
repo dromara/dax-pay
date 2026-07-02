@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.common.context;
+package cn.daxpay.open.payment.common.runtime;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -14,20 +14,21 @@ import java.io.IOException;
 
 /// # 支付上下文过滤器
 ///
-/// 在HTTP请求开始时开启作用域, 请求结束时关闭
+/// 在 HTTP 请求开始时开启线程级身份作用域,请求结束时关闭。
+/// 仅管理 [PaymentContext] 的 open/close,不负责身份填充(由切面 / 装载器完成)。
 @Component
 @RequiredArgsConstructor
 @ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class PaymentContextFilter extends OncePerRequestFilter implements Ordered {
-    private final PaymentContextManager paymentContextManager;
+    private final PaymentContext paymentContext;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        paymentContextManager.start();
+        paymentContext.open();
         try {
             filterChain.doFilter(request, response);
         } finally {
-            paymentContextManager.end();
+            paymentContext.close();
         }
     }
 

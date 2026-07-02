@@ -1,5 +1,6 @@
 package cn.daxpay.open.platform.core.enums.pay.channel;
 
+import cn.daxpay.open.platform.core.exception.BizException;
 import cn.daxpay.open.platform.core.i18n.I18nSupport;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -75,6 +76,7 @@ public enum ProductEnum implements I18nSupport {
         return Arrays.stream(values())
                 .filter(e -> e.getCode().equals(code))
                 .findFirst()
-                .orElse(null);
+                // 通用: 未知的支付产品
+                .orElseThrow(() -> new BizException("error.common.enumUnknown", "Product"));
     }
 }

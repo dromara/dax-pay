@@ -3,7 +3,7 @@ package cn.daxpay.open.channel.alipay.strategy.direct;
 import cn.daxpay.open.channel.alipay.client.credential.AlipaySdkCredential;
 import cn.daxpay.open.channel.alipay.service.direct.AlipayDirectConfigAssembler;
 import cn.daxpay.open.channel.alipay.service.payment.pay.AlipayPayService;
-import cn.daxpay.open.payment.common.context.NormalPayContext;
+import cn.daxpay.open.payment.strategy.pay.PayStrategyContext;
 import cn.daxpay.open.payment.pay.bo.PayTradeResultBo;
 import cn.daxpay.open.payment.strategy.pay.AbsNormalPayStrategy;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
@@ -33,7 +33,7 @@ public class AlipayDirectPayStrategy extends AbsNormalPayStrategy {
     /// 支付前预处理: 从容器读取通道路由参数, 组装直连通道凭证写入上下文
     /// 配置缺失在此阶段抛异常, fail-fast, 不会进入 doPay
     @Override
-    public void doBeforePay(NormalPayContext context) {
+    public void doBeforePay(PayStrategyContext context) {
         // 组装直连通道凭证(只依赖请求参数, 订单尚未创建)
         NormalPayParam payParam = context.getPayParam();
         AlipaySdkCredential credential = alipayDirectConfigAssembler.buildConfig(
@@ -42,7 +42,7 @@ public class AlipayDirectPayStrategy extends AbsNormalPayStrategy {
     }
 
     @Override
-    public PayTradeResultBo doPay(NormalPayContext context) {
+    public PayTradeResultBo doPay(PayStrategyContext context) {
         // 直接使用 doBeforePay 预组装的通道凭证
         AlipaySdkCredential credential = context.getChannelConfig(AlipaySdkCredential.class);
         return alipayPayService.pay(context.getTrade(), context.getPayParam(), credential);

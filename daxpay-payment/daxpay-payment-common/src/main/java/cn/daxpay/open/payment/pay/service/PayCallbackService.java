@@ -2,8 +2,7 @@ package cn.daxpay.open.payment.pay.service;
 
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.daxpay.open.platform.core.exception.system.DataErrorException;
-import cn.daxpay.open.payment.common.context.CallbackInfo;
-import cn.daxpay.open.payment.common.context.PaymentContext;
+import cn.daxpay.open.payment.common.callback.CallbackData;
 import cn.daxpay.open.payment.common.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.pay.order.dao.NormalPayOrderManager;
 import cn.daxpay.open.payment.pay.order.entity.NormalPayOrder;
@@ -20,6 +19,7 @@ import java.util.Objects;
 
 /// # 支付回调处理
 ///
+/// 回调数据通过函数参数显式传递([CallbackData]),不依赖线程上下文。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -28,41 +28,39 @@ public class PayCallbackService {
     private final PayTradeManager payTradeManager;
     private final NormalPayOrderManager payNormalOrderManager;
     private final PayUniHandleService payUniHandleService;
-    private final PaymentContext apiContext;
     private final LockTemplate lockTemplate;
 
     /// 支付统一回调处理，返回支付产品编码
     @Transactional(rollbackFor = Exception.class)
-    public String payCallback() {
-        CallbackInfo callbackInfo = apiContext.getCallbackInfo();
-        LockInfo lock = lockTemplate.lock("callback:payment:" + callbackInfo.getTradeNo(), 10000, 200);
+    public String payCallback(CallbackData callbackData) {
+        LockInfo lock = lockTemplate.lock("callback:payment:" + callbackData.getTradeNo(), 10000, 200);
         if (Objects.isNull(lock)) {
-            callbackInfo.setCallbackStatus(CallbackStatusEnum.IGNORE)
+            callbackData.setCallbackStatus(CallbackStatusEnum.IGNORE)
                     .setCallbackErrorMsg("回调正在处理中，忽略本次回调请求");
-            log.warn("订单号: {} 回调正在处理中，忽略本次回调请求", callbackInfo.getTradeNo());
+            log.warn("订单号: {} 回调正在处理中，忽略本次回调请求", callbackData.getTradeNo());
             return null;
         }
         try {
-            PayTrade trade = payTradeManager.findByTradeNo(callbackInfo.getTradeNo())
+            PayTrade trade = payTradeManager.findByTradeNo(callbackData.getTradeNo())
                     .orElse(null);
             if (Objects.isNull(trade)) {
-                trade = payTradeManager.findByOutOrderNo(callbackInfo.getOutTradeNo())
+                trade = payTradeManager.findByOutOrderNo(callbackData.getOutTradeNo())
                         .orElse(null);
             }
             if (Objects.isNull(trade)) {
-                callbackInfo.setCallbackStatus(CallbackStatusEnum.NOT_FOUND)
+                callbackData.setCallbackStatus(CallbackStatusEnum.NOT_FOUND)
                         .setCallbackErrorMsg("支付订单不存在");
                 return null;
             }
-            if (Objects.nonNull(callbackInfo.getOutTradeNo())) {
-                trade.setOutOrderNo(callbackInfo.getOutTradeNo());
+            if (Objects.nonNull(callbackData.getOutTradeNo())) {
+                trade.setOutOrderNo(callbackData.getOutTradeNo());
             }
             NormalPayOrder normalOrder = payNormalOrderManager.findById(trade.getContainerId())
                     .orElseThrow(() -> new DataErrorException("error.payment.order.payOrderNotExist"));
-            if (Objects.equals(CallbackStatusEnum.SUCCESS.getCode(), callbackInfo.getTradeStatus())) {
-                this.success(trade, normalOrder, callbackInfo);
+            if (Objects.equals(CallbackStatusEnum.SUCCESS.getCode(), callbackData.getTradeStatus())) {
+                this.success(trade, normalOrder, callbackData);
             } else {
-                this.fail(trade, normalOrder, callbackInfo);
+                this.fail(trade, normalOrder, callbackData);
             }
             return trade.getProduct();
         } finally {
@@ -71,20 +69,20 @@ public class PayCallbackService {
     }
 
     /// 成功处理
-    private void success(PayTrade trade, NormalPayOrder normalOrder, CallbackInfo callbackInfo) {
+    private void success(PayTrade trade, NormalPayOrder normalOrder, CallbackData callbackData) {
         trade.setStatus(PayFundStatusEnum.SUCCESS.getCode());
-        trade.setPayTime(callbackInfo.getFinishTime());
+        trade.setPayTime(callbackData.getFinishTime());
         trade.setCloseTime(null);
-        if (Objects.nonNull(callbackInfo.getOutTradeNo())) {
-            trade.setOutOrderNo(callbackInfo.getOutTradeNo());
+        if (Objects.nonNull(callbackData.getOutTradeNo())) {
+            trade.setOutOrderNo(callbackData.getOutTradeNo());
         }
         payUniHandleService.paySuccess(trade);
     }
 
     /// 失败处理
-    private void fail(PayTrade trade, NormalPayOrder normalOrder, CallbackInfo callbackInfo) {
+    private void fail(PayTrade trade, NormalPayOrder normalOrder, CallbackData callbackData) {
         if (!Objects.equals(trade.getStatus(), PayFundStatusEnum.PROCESSING.getCode())) {
-            callbackInfo.setCallbackStatus(CallbackStatusEnum.IGNORE)
+            callbackData.setCallbackStatus(CallbackStatusEnum.IGNORE)
                     .setCallbackErrorMsg("订单不是支付中状态，忽略");
             return;
         }

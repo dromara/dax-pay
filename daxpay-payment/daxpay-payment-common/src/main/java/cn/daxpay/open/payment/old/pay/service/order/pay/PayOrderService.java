@@ -5,7 +5,7 @@ import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
 import cn.daxpay.open.payment.old.pay.dao.order.pay.PayOrderManager;
 import cn.daxpay.open.payment.old.pay.entity.order.pay.PayOrder;
 import cn.daxpay.open.payment.old.pay.exception.TradeNotExistException;
-import cn.daxpay.open.payment.common.context.PaymentAssistService;
+import cn.daxpay.open.payment.common.service.MerchantContextLoader;
 import cn.daxpay.open.payment.old.pay.service.trade.pay.PayCloseService;
 import cn.daxpay.open.payment.old.pay.service.trade.pay.PaySyncService;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +22,7 @@ public class PayOrderService {
     private final PayOrderManager payOrderManager;
     private final PaySyncService paySyncService;
 
-    private final PaymentAssistService paymentAssistService;
+    private final MerchantContextLoader merchantContextLoader;
     private final PayCloseService payCloseService;
 
     /// 同步
@@ -30,7 +30,7 @@ public class PayOrderService {
         // 订单: 支付订单不存在
         PayOrder payOrder = payOrderManager.findById(id).orElseThrow(() -> new TradeNotExistException("error.payment.order.payOrderNotExist"));
         // 初始化商户和应用
-        paymentAssistService.initMchAndApp(payOrder.getMchNo(),payOrder.getAppId());
+        merchantContextLoader.initMch(payOrder.getMchNo());
         paySyncService.syncPayOrder(payOrder);
     }
 
@@ -39,7 +39,7 @@ public class PayOrderService {
         // 订单: 支付订单不存在
         PayOrder payOrder = payOrderManager.findById(id).orElseThrow(() -> new TradeNotExistException("error.payment.order.payOrderNotExist"));
         // 初始化商户和应用
-        paymentAssistService.initMchAndApp(payOrder.getMchNo(),payOrder.getAppId());
+        merchantContextLoader.initMch(payOrder.getMchNo());
         payCloseService.closeOrder(payOrder,false);
     }
 
@@ -48,7 +48,7 @@ public class PayOrderService {
         // 订单: 支付订单不存在
         PayOrder payOrder = payOrderManager.findById(id).orElseThrow(() -> new TradeNotExistException("error.payment.order.payOrderNotExist"));
         // 初始化商户和应用
-        paymentAssistService.initMchAndApp(payOrder.getMchNo(),payOrder.getAppId());
+        merchantContextLoader.initMch(payOrder.getMchNo());
         payCloseService.closeOrder(payOrder,true);
     }
 

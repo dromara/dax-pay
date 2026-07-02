@@ -1,6 +1,6 @@
 package cn.daxpay.open.payment.old.pay.service.assist;
 
-import cn.daxpay.open.payment.common.context.PaymentAssistService;
+import cn.daxpay.open.payment.common.service.MerchantContextLoader;
 import cn.daxpay.open.payment.common.util.PaymentStrategyFactory;
 import cn.daxpay.open.payment.strategy.auth.AbsChannelAuthStrategy;
 import cn.daxpay.open.platform.common.json.util.JacksonUtil;
@@ -26,11 +26,11 @@ import java.util.concurrent.TimeUnit;
 public class ChannelAuthService {
     private final RedisTemplate<String, Object> redisTemplate;
     public static final String CHANNEL_AUTH_KEY_PREFIX = "payment:channel-auth:";
-    private final PaymentAssistService paymentAssistService;
+    private final MerchantContextLoader merchantContextLoader;
 
     /// 获取授权链接
     public AuthUrlResult generateAuthUrl(GenerateAuthUrlParam param) {
-        paymentAssistService.initMchAndApp(param.getAppId());
+        merchantContextLoader.initMchByApp(param.getAppId());
         var strategy = PaymentStrategyFactory.create(param.getChannel(), AbsChannelAuthStrategy.class);
         AuthUrlResult authUrlResult = strategy.generateAuthUrl(param);
         // 如果返回有查询Code值, 将结果写入Redis中
@@ -43,7 +43,7 @@ public class ChannelAuthService {
 
     /// 通过AuthCode获取认证结果
     public AuthResult auth(AuthCodeParam param) {
-        paymentAssistService.initMchAndApp(param.getAppId());
+        merchantContextLoader.initMchByApp(param.getAppId());
         var strategy = PaymentStrategyFactory.create(param.getChannel(), AbsChannelAuthStrategy.class);
         AuthResult authResult = strategy.doAuth(param);
         authResult.setStatus(ChannelAuthStatusEnum.SUCCESS.getCode());
