@@ -1,7 +1,9 @@
 package cn.daxpay.open.channel.alipay.client;
 
+import cn.daxpay.open.channel.alipay.client.req.AlipayCloseReq;
 import cn.daxpay.open.channel.alipay.client.req.AlipayPayReq;
 import cn.daxpay.open.channel.alipay.client.req.AlipaySyncReq;
+import cn.daxpay.open.channel.alipay.client.resp.AlipayCloseResp;
 import cn.daxpay.open.channel.alipay.client.resp.AlipayPayResp;
 import cn.daxpay.open.channel.alipay.client.resp.AlipaySyncResp;
 import cn.daxpay.open.payment.common.result.DaxResult;
@@ -23,4 +25,8 @@ public interface AlipayChannelClient {
     /// 支付同步(查询支付宝订单状态)
     @PostExchange("/channel/alipay/sync")
     DaxResult<AlipaySyncResp> sync(@RequestBody AlipaySyncReq req);
+
+    /// 关闭/撤销支付宝订单
+    @PostExchange("/channel/alipay/close")
+    DaxResult<AlipayCloseResp> close(@RequestBody AlipayCloseReq req);
 }
