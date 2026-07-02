@@ -9,9 +9,7 @@ import cn.daxpay.open.payment.old.pay.dao.notice.callback.MerchantCallbackRecord
 import cn.daxpay.open.payment.old.pay.dao.notice.callback.MerchantCallbackTaskManager;
 import cn.daxpay.open.payment.old.pay.entity.notice.callback.MerchantCallbackRecord;
 import cn.daxpay.open.payment.old.pay.entity.notice.callback.MerchantCallbackTask;
-import cn.daxpay.open.platform.core.enums.pay.notice.CallbackNoticeTypeEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.NoticeSendTypeEnum;
-import cn.daxpay.open.payment.old.pay.service.assist.PayPluginAssistService;
 import cn.daxpay.open.payment.common.context.PaymentAssistService;
 import cn.daxpay.open.payment.old.pay.service.notice.MerchantNoticeAssistService;
 import cn.hutool.core.util.StrUtil;
@@ -46,17 +44,9 @@ public class MerchantCallbackSendService {
 
 //    private final DelayJobService delayJobService;
 
-    private final PayPluginAssistService pluginAssistService;
-
     /// 发送通知数据, 如果失败, 注册下次重发的任务
     public void sendData(MerchantCallbackTask task, boolean autoSend){
-        if (Objects.equals(task.getNoticeType(), CallbackNoticeTypeEnum.SYSTEM.getCode())){
-            // 系统内部的回调通知处理
-            this.sendDataBySystem(task, autoSend);
-        } else {
-            // 插件类型的回调通知处理
-            pluginAssistService.noticeSend(task, autoSend);
-        }
+        this.sendDataBySystem(task, autoSend);
     }
 
     /// 发送通知数据, 如果失败, 注册下次重发的任务

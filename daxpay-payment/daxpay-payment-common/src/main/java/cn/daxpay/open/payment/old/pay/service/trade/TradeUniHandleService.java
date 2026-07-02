@@ -8,7 +8,6 @@ import cn.daxpay.open.payment.old.pay.entity.order.pay.PayOrderExpand;
 import cn.daxpay.open.platform.core.enums.pay.pay.PayStatusEnum;
 import cn.daxpay.open.payment.old.pay.service.notice.MerchantNoticeService;
 import cn.daxpay.open.payment.old.pay.service.record.flow.TradeFlowRecordService;
-import cn.daxpay.open.payment.old.pay.service.assist.PayPluginAssistService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,7 +27,6 @@ public class TradeUniHandleService {
     private final PayOrderExpandManager payOrderExpandManager;
     private final TradeFlowRecordService tradeFlowRecordService;
     private final MerchantNoticeService merchantNoticeService;
-    private final PayPluginAssistService payPluginAssistService;
 
     /// 支付成功发起后处理
     public void payAfterHandel(PayOrder payOrder, PayOrderExpand orderExpand){
@@ -40,8 +38,6 @@ public class TradeUniHandleService {
             // 相关操作
             tradeFlowRecordService.savePay(payOrder);
             merchantNoticeService.registerPayNotice(payOrder);
-            // 处理插件策略
-            payPluginAssistService.paySuccess(payOrder, orderExpand);
         }
 
     }
@@ -54,8 +50,6 @@ public class TradeUniHandleService {
                 .setCloseTime(OffsetDateTime.now(ZoneOffset.UTC));
         payOrderManager.updateById(payOrder);
         merchantNoticeService.registerPayNotice(payOrder);
-        // 处理插件策略
-        payPluginAssistService.payFail(payOrder);
     }
 
     /// 支付关闭处理
@@ -66,8 +60,6 @@ public class TradeUniHandleService {
         payOrderManager.updateById(order);
         // 发送通知
         merchantNoticeService.registerPayNotice(order);
-        // 处理插件策略
-        payPluginAssistService.payClose(order);
     }
 
 }
