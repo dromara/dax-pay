@@ -1,8 +1,8 @@
-package cn.daxpay.open.payment.common.util;
+package cn.daxpay.open.payment.core.strategy;
 
 import cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum;
 import cn.daxpay.open.platform.core.exception.business.UnsupportedAbilityException;
-import cn.daxpay.open.payment.common.strategy.PaymentStrategy;
+import cn.daxpay.open.payment.core.strategy.PaymentStrategy;
 import cn.daxpay.open.payment.core.strategy.product.AbsProductStrategy;
 import cn.daxpay.open.payment.old.pay.support.ProductStrategySupport;
 import cn.hutool.extra.spring.SpringUtil;

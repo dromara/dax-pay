@@ -14,7 +14,7 @@ import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
-import cn.daxpay.open.payment.common.util.PaymentStrategyFactory;
+import cn.daxpay.open.payment.core.strategy.PaymentStrategyFactory;
 import cn.daxpay.open.payment.core.strategy.product.AbsProductStrategy;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;

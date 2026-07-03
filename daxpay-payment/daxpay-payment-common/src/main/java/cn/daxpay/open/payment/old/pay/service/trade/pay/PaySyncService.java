@@ -9,7 +9,7 @@ import cn.daxpay.open.platform.core.util.DateTimeUtil;
 import cn.daxpay.open.platform.core.exception.system.DataErrorException;
 import cn.daxpay.open.platform.core.exception.PayFailureException;
 import cn.daxpay.open.platform.core.exception.system.SystemUnknownErrorException;
-import cn.daxpay.open.payment.common.util.PaymentStrategyFactory;
+import cn.daxpay.open.payment.core.strategy.PaymentStrategyFactory;
 import cn.daxpay.open.payment.old.pay.bo.sync.PaySyncResultBo;
 import cn.daxpay.open.payment.old.pay.convert.order.pay.PayOrderConvert;
 import cn.daxpay.open.payment.old.pay.dao.order.pay.PayOrderExpandManager;

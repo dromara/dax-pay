@@ -1,6 +1,6 @@
 package cn.daxpay.open.payment.core.strategy.pay;
 
-import cn.daxpay.open.payment.common.strategy.PaymentStrategy;
+import cn.daxpay.open.payment.core.strategy.PaymentStrategy;
 import cn.daxpay.open.platform.core.enums.pay.pay.CloseTypeEnum;
 
 /// # 支付关闭策略

@@ -2,7 +2,7 @@ package cn.daxpay.open.payment.merchant.service.route.basic;
 
 import cn.daxpay.open.payment.channel.dao.mch.ChannelMerchantManager;
 import cn.daxpay.open.payment.channel.entity.mch.ChannelMerchant;
-import cn.daxpay.open.payment.common.util.PaymentStrategyFactory;
+import cn.daxpay.open.payment.core.strategy.PaymentStrategyFactory;
 import cn.daxpay.open.payment.merchant.dao.appinfo.MchAppInfoManager;
 import cn.daxpay.open.payment.merchant.dao.route.basic.PayRouteBasicConfigManager;
 import cn.daxpay.open.payment.merchant.dao.route.strategy.PayRouteStrategyManager;

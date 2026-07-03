@@ -1,6 +1,6 @@
 package cn.daxpay.open.payment.merchant.service.route.runtime;
 
-import cn.daxpay.open.payment.common.util.PaymentStrategyFactory;
+import cn.daxpay.open.payment.core.strategy.PaymentStrategyFactory;
 import cn.daxpay.open.payment.merchant.dao.route.basic.PayRouteBasicConfigManager;
 import cn.daxpay.open.payment.merchant.dao.route.scene.PayRouteSceneConfigManager;
 import cn.daxpay.open.payment.merchant.dao.route.strategy.PayRouteStrategyManager;

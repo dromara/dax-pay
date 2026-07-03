@@ -7,7 +7,7 @@ import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
 import cn.daxpay.open.platform.core.exception.PayFailureException;
-import cn.daxpay.open.payment.common.util.PaymentStrategyFactory;
+import cn.daxpay.open.payment.core.strategy.PaymentStrategyFactory;
 import cn.daxpay.open.payment.core.trade.entity.PayTrade;
 import cn.daxpay.open.payment.old.pay.dao.order.pay.PayOrderManager;
 import cn.daxpay.open.payment.old.pay.entity.order.pay.PayOrder;

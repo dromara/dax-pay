@@ -1,6 +1,6 @@
 package cn.daxpay.open.payment.core.strategy.pay;
 
-import cn.daxpay.open.payment.common.strategy.PaymentStrategy;
+import cn.daxpay.open.payment.core.strategy.PaymentStrategy;
 import cn.daxpay.open.payment.core.trade.bo.PayTradeResultBo;
 
 /// # 抽象普通支付策略基类

@@ -1,6 +1,6 @@
 package cn.daxpay.open.payment.core.strategy.auth;
 
-import cn.daxpay.open.payment.common.strategy.PaymentStrategy;
+import cn.daxpay.open.payment.core.strategy.PaymentStrategy;
 import cn.daxpay.open.payment.unipay.param.assist.AuthCodeParam;
 import cn.daxpay.open.payment.unipay.param.assist.GenerateAuthUrlParam;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;

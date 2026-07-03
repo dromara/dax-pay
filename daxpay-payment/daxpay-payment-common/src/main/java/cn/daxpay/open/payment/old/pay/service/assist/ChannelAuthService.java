@@ -1,7 +1,7 @@
 package cn.daxpay.open.payment.old.pay.service.assist;
 
 import cn.daxpay.open.payment.common.service.MerchantContextLoader;
-import cn.daxpay.open.payment.common.util.PaymentStrategyFactory;
+import cn.daxpay.open.payment.core.strategy.PaymentStrategyFactory;
 import cn.daxpay.open.payment.core.strategy.auth.AbsChannelAuthStrategy;
 import cn.daxpay.open.platform.common.json.util.JacksonUtil;
 import cn.daxpay.open.platform.core.enums.unipay.ChannelAuthStatusEnum;

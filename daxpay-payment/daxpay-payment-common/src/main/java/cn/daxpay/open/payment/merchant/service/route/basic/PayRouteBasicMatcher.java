@@ -1,6 +1,6 @@
 package cn.daxpay.open.payment.merchant.service.route.basic;
 
-import cn.daxpay.open.payment.common.util.PaymentStrategyFactory;
+import cn.daxpay.open.payment.core.strategy.PaymentStrategyFactory;
 import cn.daxpay.open.payment.merchant.entity.route.basic.PayRouteBasicConfig;
 import cn.daxpay.open.payment.merchant.service.route.model.RouteHit;
 import cn.daxpay.open.payment.merchant.service.route.runtime.PayRouteProductResolver;

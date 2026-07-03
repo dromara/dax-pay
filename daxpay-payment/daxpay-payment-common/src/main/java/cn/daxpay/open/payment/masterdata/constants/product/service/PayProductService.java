@@ -1,6 +1,6 @@
 package cn.daxpay.open.payment.masterdata.constants.product.service;
 
-import cn.daxpay.open.payment.common.util.PaymentStrategyFactory;
+import cn.daxpay.open.payment.core.strategy.PaymentStrategyFactory;
 import cn.daxpay.open.payment.masterdata.constants.product.dao.PayProductManager;
 import cn.daxpay.open.payment.masterdata.constants.product.entity.PayProduct;
 import cn.daxpay.open.payment.masterdata.constants.product.param.PayProductQuery;

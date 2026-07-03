@@ -1,6 +1,6 @@
 package cn.daxpay.open.payment.core.strategy.product;
 
-import cn.daxpay.open.payment.common.strategy.PaymentStrategy;
+import cn.daxpay.open.payment.core.strategy.PaymentStrategy;
 import cn.daxpay.open.platform.core.enums.pay.channel.ChannelApiCallMode;
 import cn.daxpay.open.platform.core.enums.pay.channel.ChannelPayIdType;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayCapabilityEnum;
