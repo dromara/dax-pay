@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.old.pay.support;
+package cn.daxpay.open.payment.core.strategy;
 
 import cn.daxpay.open.payment.core.strategy.product.AbsProductStrategy;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayCapabilityEnum;

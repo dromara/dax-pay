@@ -10,7 +10,7 @@ import cn.daxpay.open.payment.merchant.service.route.support.PayRouteStrategyCap
 import cn.daxpay.open.payment.merchant.service.route.model.RouteHit;
 import cn.daxpay.open.payment.merchant.entity.route.strategy.PayRouteStrategy;
 import cn.daxpay.open.payment.merchant.service.route.model.PayRouteBundle;
-import cn.daxpay.open.payment.old.pay.support.ProductStrategySupport;
+import cn.daxpay.open.payment.core.strategy.ProductStrategySupport;
 import cn.daxpay.open.payment.core.route.PayRouteFacade;
 import cn.daxpay.open.payment.core.strategy.product.AbsProductStrategy;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
