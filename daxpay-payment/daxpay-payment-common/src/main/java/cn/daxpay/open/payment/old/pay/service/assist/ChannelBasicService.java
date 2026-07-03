@@ -3,7 +3,7 @@ package cn.daxpay.open.payment.old.pay.service.assist;
 import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.daxpay.open.platform.core.rest.dto.LabelValue;
 import cn.daxpay.open.payment.common.util.PaymentStrategyFactory;
-import cn.daxpay.open.payment.strategy.product.AbsProductStrategy;
+import cn.daxpay.open.payment.core.strategy.product.AbsProductStrategy;
 import cn.daxpay.open.payment.old.pay.support.ProductStrategySupport;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

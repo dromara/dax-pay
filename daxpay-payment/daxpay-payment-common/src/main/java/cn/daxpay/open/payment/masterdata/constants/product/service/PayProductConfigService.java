@@ -6,7 +6,7 @@ import cn.daxpay.open.payment.masterdata.constants.product.entity.PayProduct;
 import cn.daxpay.open.payment.masterdata.constants.product.entity.PayProductConfig;
 import cn.daxpay.open.payment.masterdata.constants.product.param.PayProductConfigParam;
 import cn.daxpay.open.payment.masterdata.constants.product.result.PayProductConfigResult;
-import cn.daxpay.open.payment.strategy.product.AbsProductStrategy;
+import cn.daxpay.open.payment.core.strategy.product.AbsProductStrategy;
 import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;

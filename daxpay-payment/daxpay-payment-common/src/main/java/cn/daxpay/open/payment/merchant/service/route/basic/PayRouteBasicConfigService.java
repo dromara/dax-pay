@@ -12,7 +12,7 @@ import cn.daxpay.open.payment.merchant.param.route.basic.PayRouteBasicConfigBatc
 import cn.daxpay.open.payment.merchant.param.route.basic.PayRouteBasicConfigItem;
 import cn.daxpay.open.payment.merchant.result.route.basic.PayRouteBasicConfigResult;
 import cn.daxpay.open.payment.merchant.service.route.support.PayRouteConfigProviders;
-import cn.daxpay.open.payment.strategy.product.AbsProductStrategy;
+import cn.daxpay.open.payment.core.strategy.product.AbsProductStrategy;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;

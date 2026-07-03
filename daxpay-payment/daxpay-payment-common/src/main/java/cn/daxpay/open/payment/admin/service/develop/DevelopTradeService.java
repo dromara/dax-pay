@@ -11,7 +11,7 @@ import cn.daxpay.open.payment.common.util.PaySignUtil;
 import cn.daxpay.open.payment.masterdata.constants.provider.result.PayProviderMethodResult;
 import cn.daxpay.open.payment.masterdata.constants.provider.service.PayProviderMethodService;
 import cn.daxpay.open.payment.merchant.service.route.support.PayRouteStrategyCapabilitySupport;
-import cn.daxpay.open.payment.pay.service.NormalPayService;
+import cn.daxpay.open.payment.core.trade.service.NormalPayService;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
 import cn.daxpay.open.platform.common.config.properties.PlatformConfigProperties;

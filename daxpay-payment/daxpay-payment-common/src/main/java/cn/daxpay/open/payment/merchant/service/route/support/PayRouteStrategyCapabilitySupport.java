@@ -12,7 +12,7 @@ import cn.daxpay.open.payment.masterdata.constants.product.service.PayProductCap
 import cn.daxpay.open.payment.masterdata.constants.provider.dao.PayProviderMethodManager;
 import cn.daxpay.open.payment.masterdata.constants.provider.service.PayProviderMethodService;
 import cn.daxpay.open.payment.old.pay.support.ProductStrategySupport;
-import cn.daxpay.open.payment.strategy.product.AbsProductStrategy;
+import cn.daxpay.open.payment.core.strategy.product.AbsProductStrategy;
 import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayCapabilityEnum;
