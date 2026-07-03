@@ -1,0 +1,7 @@
+{
+  "init": "Initialized",
+  "progress": "Refunding",
+  "success": "Refund success",
+  "fail": "Refund failed",
+  "close": "Refund closed"
+}

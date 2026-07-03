@@ -65,4 +65,8 @@ public class PaySyncResultBo {
 
     /// 活动类型
     private String promotionType;
+
+    /// 是否需要远程关闭网关交易
+    /// 本地超时且通道订单仍存活(PROCESSING)时由核心层置 true, 触发主动调用通道关单; 通道策略无需设置
+    private boolean remoteClose;
 }

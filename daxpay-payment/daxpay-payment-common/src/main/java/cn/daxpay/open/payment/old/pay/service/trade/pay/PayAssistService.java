@@ -41,9 +41,6 @@ public class PayAssistService {
 
     private final PayOrderManager payOrderManager;
     private final PayOrderQueryService payOrderQueryService;
-    private final PaySyncService paySyncService;
-//    private final DelayJobService delayJobService;
-    private final PayCloseService payCloseService;
     private final PayOrderExpandManager payOrderExpandManager;
 
     /// 创建支付订单并保存, 返回支付订单
@@ -117,9 +114,8 @@ public class PayAssistService {
     public void checkOrder(PayOrder payOrder){
         // 待支付
         if (Objects.equals(payOrder.getStatus(), PayStatusEnum.WAIT.getCode())){
-            // 如果支付超时, 触发订单同步操作, 同时抛出异常
+            // 支付超时直接提示重试, 订单清理交由同步任务(core PaySyncService 超时关网关)
             if (Objects.nonNull(payOrder.getExpiredTime()) && DateTimeUtil.ge(OffsetDateTime.now(ZoneOffset.UTC), payOrder.getExpiredTime())) {
-                payCloseService.closeOrder(payOrder,false);
                 // 支付已超时，请重新确认支付状态
             throw new TradeStatusErrorException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.pay.timeoutRetry");
             }
@@ -127,9 +123,8 @@ public class PayAssistService {
         }
         // 支付中
         if (Objects.equals(payOrder.getStatus(), PayStatusEnum.PROGRESS.getCode())) {
-            // 如果支付超时, 触发订单同步操作, 同时抛出异常
+            // 支付超时直接提示重试, 订单清理交由同步任务(core PaySyncService 超时关网关)
             if (Objects.nonNull(payOrder.getExpiredTime()) && DateTimeUtil.ge(OffsetDateTime.now(ZoneOffset.UTC), payOrder.getExpiredTime())) {
-                paySyncService.syncPayOrder(payOrder);
                 // 支付已超时，请重新确认支付状态
             throw new TradeStatusErrorException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.pay.timeoutRetry");
             }

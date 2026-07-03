@@ -1,0 +1,8 @@
+{
+  "init": "待支付",
+  "processing": "处理中",
+  "success": "成功",
+  "fail": "失败",
+  "close": "已关闭",
+  "cancel": "已撤销"
+}

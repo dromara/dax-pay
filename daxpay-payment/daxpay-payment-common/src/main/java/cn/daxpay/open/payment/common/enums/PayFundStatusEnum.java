@@ -25,6 +25,8 @@ public enum PayFundStatusEnum implements I18nSupport {
     FAIL("fail"),
     /// 已关闭
     CLOSE("close"),
+    /// 已撤销
+    CANCEL("cancel"),
     ;
 
     private final String code;

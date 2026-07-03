@@ -86,6 +86,6 @@ public class PayCallbackService {
                     .setCallbackErrorMsg("订单不是支付中状态，忽略");
             return;
         }
-        payUniHandleService.payClose(trade, normalOrder);
+        payUniHandleService.payClose(trade, normalOrder, false);
     }
 }

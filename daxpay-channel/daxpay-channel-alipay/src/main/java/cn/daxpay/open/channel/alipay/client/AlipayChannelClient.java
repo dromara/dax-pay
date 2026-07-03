@@ -2,9 +2,13 @@ package cn.daxpay.open.channel.alipay.client;
 
 import cn.daxpay.open.channel.alipay.client.req.AlipayCloseReq;
 import cn.daxpay.open.channel.alipay.client.req.AlipayPayReq;
+import cn.daxpay.open.channel.alipay.client.req.AlipayRefundReq;
+import cn.daxpay.open.channel.alipay.client.req.AlipayRefundSyncReq;
 import cn.daxpay.open.channel.alipay.client.req.AlipaySyncReq;
 import cn.daxpay.open.channel.alipay.client.resp.AlipayCloseResp;
 import cn.daxpay.open.channel.alipay.client.resp.AlipayPayResp;
+import cn.daxpay.open.channel.alipay.client.resp.AlipayRefundResp;
+import cn.daxpay.open.channel.alipay.client.resp.AlipayRefundSyncResp;
 import cn.daxpay.open.channel.alipay.client.resp.AlipaySyncResp;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import org.springframework.http.MediaType;
@@ -29,4 +33,12 @@ public interface AlipayChannelClient {
     /// 关闭/撤销支付宝订单
     @PostExchange("/channel/alipay/close")
     DaxResult<AlipayCloseResp> close(@RequestBody AlipayCloseReq req);
+
+    /// 退款
+    @PostExchange("/channel/alipay/refund")
+    DaxResult<AlipayRefundResp> refund(@RequestBody AlipayRefundReq req);
+
+    /// 退款同步(查询退款状态)
+    @PostExchange("/channel/alipay/refund-sync")
+    DaxResult<AlipayRefundSyncResp> refundSync(@RequestBody AlipayRefundSyncReq req);
 }

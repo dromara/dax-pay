@@ -66,9 +66,12 @@ public class PayUniHandleService {
     }
 
     /// 支付关闭处理（同步冗余时间线到容器）
-    public void payClose(PayTrade trade, NormalPayOrder normalOrder) {
+    /// @param useCancel true=撤销(资金态置 CANCEL), false=关闭(资金态置 CLOSE); 容器统一置 CLOSED
+    public void payClose(PayTrade trade, NormalPayOrder normalOrder, boolean useCancel) {
         OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
-        trade.setStatus(PayFundStatusEnum.CLOSE.getCode());
+        trade.setStatus(useCancel
+                ? PayFundStatusEnum.CANCEL.getCode()
+                : PayFundStatusEnum.CLOSE.getCode());
         trade.setCloseTime(now);
         normalOrder.setStatus(NormalPayOrderStatusEnum.CLOSED.getCode());
         normalOrder.setCloseTime(now);

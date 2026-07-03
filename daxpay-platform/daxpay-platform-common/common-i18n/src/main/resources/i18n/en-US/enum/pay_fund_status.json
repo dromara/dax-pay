@@ -1,0 +1,8 @@
+{
+  "init": "Pending",
+  "processing": "Processing",
+  "success": "Success",
+  "fail": "Failed",
+  "close": "Closed",
+  "cancel": "Cancelled"
+}

@@ -13,6 +13,8 @@ import cn.daxpay.open.payment.core.trade.dao.NormalPayOrderManager;
 import cn.daxpay.open.payment.core.trade.entity.NormalPayOrder;
 import cn.daxpay.open.payment.core.trade.dao.PayTradeManager;
 import cn.daxpay.open.payment.core.trade.entity.PayTrade;
+import cn.daxpay.open.payment.core.trade.record.entity.PayCloseRecord;
+import cn.daxpay.open.payment.core.trade.record.service.PayCloseRecordService;
 import cn.daxpay.open.payment.core.strategy.pay.AbsPayCloseStrategy;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayCloseParam;
 import cn.daxpay.open.platform.core.enums.pay.pay.CloseTypeEnum;
@@ -28,6 +30,7 @@ import java.util.Objects;
 
 /// # 支付关闭和撤销服务
 ///
+/// 关闭(close): 本地置 CLOSE; 撤销(cancel): 本地置 CANCEL, 并通过 useCancel 触发通道撤销
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -36,6 +39,7 @@ public class PayCloseService {
     private final PayTradeManager payTradeManager;
     private final NormalPayOrderManager payNormalOrderManager;
     private final PayUniHandleService payUniHandleService;
+    private final PayCloseRecordService payCloseRecordService;
     private final LockTemplate lockTemplate;
 
     /// 关闭支付
@@ -72,9 +76,14 @@ public class PayCloseService {
         try {
             NormalPayOrder normalOrder = payNormalOrderManager.findById(trade.getContainerId())
                     .orElse(null);
+            CloseTypeEnum closeType;
             if (Objects.equals(PayFundStatusEnum.INIT.getCode(), trade.getStatus())) {
-                payUniHandleService.payClose(trade, normalOrder);
+                // 待支付无通道交易, 仅本地关闭
+                closeType = CloseTypeEnum.CLOSE;
+                payUniHandleService.payClose(trade, normalOrder, false);
             } else {
+                // 处理中: 调用通道关闭/撤销策略
+                closeType = useCancel ? CloseTypeEnum.CANCEL : CloseTypeEnum.CLOSE;
                 PayStrategyContext context = new PayStrategyContext()
                         .setContainer(normalOrder)
                         .setTrade(trade);
@@ -82,10 +91,12 @@ public class PayCloseService {
                         trade.getProduct(), AbsPayCloseStrategy.class);
                 strategy.doBeforeClose(context);
                 strategy.doClose(context, useCancel);
-                payUniHandleService.payClose(trade, normalOrder);
+                payUniHandleService.payClose(trade, normalOrder, useCancel);
             }
+            this.saveRecord(trade, normalOrder, closeType, null);
         } catch (Exception e) {
             log.error("关闭订单失败, id: {}:", trade.getId(), e);
+            this.saveRecord(trade, null, useCancel ? CloseTypeEnum.CANCEL : CloseTypeEnum.CLOSE, e.getMessage());
             if (e instanceof PayFailureException) {
                 throw e;
             }
@@ -93,5 +104,19 @@ public class PayCloseService {
         } finally {
             lockTemplate.releaseLock(lock);
         }
+    }
+
+    /// 保存关闭记录
+    private void saveRecord(PayTrade trade, NormalPayOrder normalOrder, CloseTypeEnum closeType, String errMsg) {
+        PayCloseRecord record = new PayCloseRecord()
+                .setAppId(trade.getAppId())
+                .setTradeNo(trade.getTradeNo())
+                .setBizTradeNo(Objects.nonNull(normalOrder) ? normalOrder.getBizOrderNo() : null)
+                .setProduct(trade.getProduct())
+                .setChannel(trade.getChannel())
+                .setClosed(StrUtil.isBlank(errMsg))
+                .setCloseType(closeType.getCode())
+                .setErrorMsg(errMsg);
+        payCloseRecordService.saveRecord(record);
     }
 }

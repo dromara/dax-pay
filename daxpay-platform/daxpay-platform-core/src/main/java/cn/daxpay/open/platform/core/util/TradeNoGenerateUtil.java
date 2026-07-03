@@ -18,6 +18,11 @@ public final class TradeNoGenerateUtil {
         return prefix() + "PAY" + IdUtil.getSnowflakeNextId();
     }
 
+    /// 生成退款单号
+    public static String refund() {
+        return prefix() + "REF" + IdUtil.getSnowflakeNextId();
+    }
+
     /// 生成修复单号
     public static String repair() {
         return prefix() + "REP" + IdUtil.getSnowflakeNextId();

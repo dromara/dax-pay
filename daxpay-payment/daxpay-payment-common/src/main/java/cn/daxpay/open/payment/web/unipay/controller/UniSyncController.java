@@ -7,7 +7,7 @@ import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPaySyncResult;
 import cn.daxpay.open.payment.common.util.DaxRes;
 import cn.daxpay.open.payment.common.aop.PaymentVerify;
-import cn.daxpay.open.payment.old.pay.service.trade.pay.PaySyncService;
+import cn.daxpay.open.payment.core.trade.service.PaySyncService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
