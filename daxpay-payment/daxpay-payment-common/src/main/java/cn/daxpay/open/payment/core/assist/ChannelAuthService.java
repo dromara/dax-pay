@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.old.pay.service.assist;
+package cn.daxpay.open.payment.core.assist;
 
 import cn.daxpay.open.payment.common.service.MerchantContextLoader;
 import cn.daxpay.open.payment.core.strategy.PaymentStrategyFactory;

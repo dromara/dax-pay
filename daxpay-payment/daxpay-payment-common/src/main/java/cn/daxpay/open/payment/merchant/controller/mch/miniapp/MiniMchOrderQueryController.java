@@ -3,7 +3,7 @@ package cn.daxpay.open.payment.merchant.controller.mch.miniapp;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.platform.core.rest.result.Result;
-import cn.daxpay.open.payment.old.pay.result.order.pay.PayOrderVo;
+import cn.daxpay.open.payment.core.trade.result.NormalPayOrderResult;
 import cn.daxpay.open.payment.merchant.param.miniapp.order.MiniPayOrderQuery;
 import cn.daxpay.open.payment.merchant.service.miniapp.MiniMchOrderQueryService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,19 +26,19 @@ public class MiniMchOrderQueryController {
 
     @Operation(summary = "支付订单分页")
     @PostMapping("/page-by-pay")
-    public Result<PageResult<PayOrderVo>> pageByPay(@RequestBody MiniPayOrderQuery query) {
+    public Result<PageResult<NormalPayOrderResult>> pageByPay(@RequestBody MiniPayOrderQuery query) {
         return Res.ok(miniAppOrderQueryService.pageByPay(query));
     }
 
     @Operation(summary = "支付订单详情")
     @GetMapping("/find-pay-order-by-id")
-    public Result<PayOrderVo> findPayOrderById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
+    public Result<NormalPayOrderResult> findPayOrderById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(miniAppOrderQueryService.findPayOrderById(id));
     }
 
     @Operation(summary = "根据编号查询支付订单详情")
     @GetMapping("/find-pay-order-by-no")
-    public Result<PayOrderVo> findPayOrderByNo(@NotBlank(message = "{validation.field.orderNo.notBlank}") String orderNo,
+    public Result<NormalPayOrderResult> findPayOrderByNo(@NotBlank(message = "{validation.field.orderNo.notBlank}") String orderNo,
         @NotBlank(message = "{validation.field.appId.notBlank}") String appId) {
         return Res.ok(miniAppOrderQueryService.findPayOrderByNo(orderNo,appId));
     }

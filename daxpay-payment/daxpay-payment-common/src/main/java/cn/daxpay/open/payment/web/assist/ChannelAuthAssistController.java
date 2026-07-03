@@ -2,7 +2,7 @@ package cn.daxpay.open.payment.web.assist;
 
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
-import cn.daxpay.open.payment.old.pay.service.assist.ChannelAuthService;
+import cn.daxpay.open.payment.core.assist.ChannelAuthService;
 import cn.daxpay.open.payment.unipay.param.assist.GenerateAuthUrlParam;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
 import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;

@@ -24,6 +24,14 @@ public class NormalPayOrderManager extends BaseManager<NormalPayOrderMapper, Nor
                 .oneOpt();
     }
 
+    /// 根据业务单号和应用号查询
+    public Optional<NormalPayOrder> findByBizOrderNo(String bizOrderNo, String appId) {
+        return lambdaQuery()
+                .eq(NormalPayOrder::getBizOrderNo, bizOrderNo)
+                .eq(NormalPayOrder::getAppId, appId)
+                .oneOpt();
+    }
+
     /// 分页查询(管理端), 默认按创建时间倒序
     public Page<NormalPayOrder> page(PageParam pageParam, NormalPayOrderQuery query) {
         Page<NormalPayOrder> mpPage = MpUtil.getMpPage(pageParam);

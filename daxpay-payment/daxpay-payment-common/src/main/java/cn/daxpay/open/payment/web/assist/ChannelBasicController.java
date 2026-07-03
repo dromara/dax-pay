@@ -4,7 +4,7 @@ import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.dto.LabelValue;
 import cn.daxpay.open.platform.core.rest.result.Result;
-import cn.daxpay.open.payment.old.pay.service.assist.ChannelBasicService;
+import cn.daxpay.open.payment.core.assist.ChannelBasicService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

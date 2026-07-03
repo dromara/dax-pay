@@ -10,7 +10,7 @@ import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayOrderResult;
 import cn.daxpay.open.payment.common.util.DaxRes;
 import cn.daxpay.open.payment.common.aop.PaymentVerify;
-import cn.daxpay.open.payment.old.pay.service.order.pay.PayOrderQueryService;
+import cn.daxpay.open.payment.web.unipay.service.NormalPayOrderQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +30,7 @@ import cn.daxpay.open.platform.core.code.CommonCode;
 @RequiredArgsConstructor
 public class UniQueryController {
 
-    private final PayOrderQueryService payOrderQueryService;
+    private final NormalPayOrderQueryService normalPayOrderQueryService;
     private final MerchantPermissionService permConfigService;
 
     @Operation(summary = "支付订单查询接口")
@@ -40,7 +40,7 @@ public class UniQueryController {
             // 订单: 该商户没有此接口的权限
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.order.merchantNoApiPermission");
         }
-        return DaxRes.ok(payOrderQueryService.queryPayOrder(param));
+        return DaxRes.ok(normalPayOrderQueryService.queryPayOrder(param));
     }
 
 
