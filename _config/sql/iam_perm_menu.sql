@@ -3,16 +3,16 @@
 
  Source Server         : 229本地服务
  Source Server Type    : PostgreSQL
- Source Server Version : 160009 (160009)
+ Source Server Version : 160014 (160014)
  Source Host           : 192.168.1.229:5432
  Source Catalog        : daxpay-dev
  Source Schema         : public
 
  Target Server Type    : PostgreSQL
- Target Server Version : 160009 (160009)
+ Target Server Version : 160014 (160014)
  File Encoding         : 65001
 
- Date: 03/07/2026 12:01:10
+ Date: 03/07/2026 18:32:43
 */
 
 
@@ -154,6 +154,7 @@ INSERT INTO "public"."iam_perm_menu" VALUES (40105, 405, 'payment:config:product
 INSERT INTO "public"."iam_perm_menu" VALUES (4040116, 401, 'payment:platform:provider_manage', 'admin', 'PayProviderManage', '支付渠道', 'Payment Provider', 'menu.payment.platform.provider.manage', 'lucide:wallet', 'f', 'f', '/payment/masterdata/provider/PayProviderList', '/payment/platform/pay-provider', NULL, 0.5, 'f', 't', 'f', 1, 1, 0, 'f', 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-17 10:00:31.640482+00', '2026-06-27 13:01:24.318649+00');
 INSERT INTO "public"."iam_perm_menu" VALUES (309, 308, 'system:notify:notice', 'admin', 'SystemNotify', '通知公告', 'Notification', 'menu.system.notify.notice', 'lucide:megaphone', 'f', 'f', '/system/notify/notice/NoticeList', '/system/notify/notice', NULL, 20, 'f', 't', 'f', 1, 1, 0, 'f', 'menu', NULL, NULL, NULL, NULL, NULL, '2026-06-24 16:00:00+00', '2026-06-24 16:00:00+00', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (308, 3, 'system:notify', 'admin', 'SystemNotice', '通知中心', 'Notification Center', 'menu.system.notify', 'lucide:bell', 'f', 'f', NULL, '/system/notify', '/system/notify/notice', 20, 'f', 't', 'f', 1, 1, 0, 'f', 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-01 07:16:30.927645+00', '2026-07-01 07:16:30.927645+00');
+INSERT INTO "public"."iam_perm_menu" VALUES (603, 6, 'payment:refund', 'admin', 'RefundOrderList', '退款订单', 'Refund Orders', 'menu.trade.refundOrder', 'lucide:rotate-ccw', 'f', 'f', '/payment/order/RefundOrderList', '/trade/refund-order', NULL, 3, 'f', 't', 'f', 1, 1, 0, 'f', 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-03 16:00:00+00', '2026-07-03 16:00:00+00');
 
 -- ----------------------------
 -- Primary Key structure for table iam_perm_menu
