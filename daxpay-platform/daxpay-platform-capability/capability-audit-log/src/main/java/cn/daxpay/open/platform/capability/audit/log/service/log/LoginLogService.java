@@ -1,6 +1,7 @@
 package cn.daxpay.open.platform.capability.audit.log.service.log;
 
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
+import cn.daxpay.open.platform.common.translate.service.TransService;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
@@ -37,6 +38,8 @@ public class LoginLogService {
     private static final int BATCH_SIZE = 200;
 
     private final LoginLogDbManager loginLogManager;
+
+    private final TransService transService;
 
     /// 内存缓冲队列
     private final BlockingQueue<LoginLogParam> bufferQueue = new LinkedBlockingQueue<>(DEFAULT_QUEUE_CAPACITY);
@@ -118,12 +121,16 @@ public class LoginLogService {
 
     /// 获取
     public LoginLogResult findById(Long id) {
-        return loginLogManager.findById(id).map(LoginLogDb::toResult).orElseThrow(DataNotExistException::new);
+        LoginLogResult result = loginLogManager.findById(id).map(LoginLogDb::toResult).orElseThrow(DataNotExistException::new);
+        transService.translate(result);
+        return result;
     }
 
     /// 分页
     public PageResult<LoginLogResult> page(PageParam pageParam, LoginLogQuery query) {
-        return MpUtil.toPageResult(loginLogManager.page(pageParam, query));
+        PageResult<LoginLogResult> pageResult = MpUtil.toPageResult(loginLogManager.page(pageParam, query));
+        transService.translate(pageResult);
+        return pageResult;
     }
 
     /// 删除

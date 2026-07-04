@@ -42,10 +42,27 @@ public @interface Trans {
     /// 实体翻译时无需指定
     String dictCode() default "";
 
+    /// 是否作为 i18n messageKey 翻译（i18n 模式）
+    /// 为 true 时，注解字段本身的值（经 i18nPrefix 拼接后）作为 i18n key，
+    /// 通过 MessageSource 翻译后回填到本字段；entity / dictCode / source / on / result / cacheTtl 均忽略
+    /// 查不到 key 时原样返回字段原值，天然兼容历史脏数据与纯文本
+    /// 使用示例：
+    /// ```java
+    /// @Trans(i18n = true)                                          // 字段值即完整 key
+    /// @Trans(i18n = true, i18nPrefix = "enum.operate_log_type")    // 字段值为枚举 code，需拼前缀
+    /// ```
+    boolean i18n() default false;
+
+    /// i18n key 前缀（仅 i18n = true 时生效）
+    /// 拼接规则：prefix + "." + 字段值；为空则字段值即完整 key
+    /// 用于枚举 code 翻译：如 businessType 字段值为 "add"，i18nPrefix = "enum.operate_log_type" → key = "enum.operate_log_type.add"
+    String i18nPrefix() default "";
+
     /// 源字段名（当前 Result 中作为查询条件的字段名）
     /// 翻译时从当前 Result 对象中读取此字段的值，作为数据库查询的条件值
     /// 例如：source = "mchNo" 表示取当前对象的 mchNo 属性值
-    String source();
+    /// i18n 模式下可省略（直接翻译注解字段本身），实体/字典模式必填
+    String source() default "";
 
     /// 目标实体中的匹配字段名
     /// 在目标实体中按此字段匹配查询条件，不指定时默认与 source 相同
@@ -56,7 +73,8 @@ public @interface Trans {
     /// 目标实体/字典项中要翻译出的字段名
     /// 从目标实体匹配到的记录中取出此字段的值，回填到当前被 @Trans 注解的字段
     /// 例如：result = "name" 表示从目标实体中取出 name 字段的值作为翻译结果
-    String result();
+    /// i18n 模式下可省略（直接翻译注解字段本身），实体/字典模式必填
+    String result() default "";
 
     /// 缓存存活时间（秒）
     /// 翻译结果在缓存中的存活时长，超过后自动过期重新查询

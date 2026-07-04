@@ -20,6 +20,13 @@
             <version>${project.version}</version>
         </dependency>
 
+        <!-- i18n 消息源（TransService 的 i18n 翻译分支依赖 I18nUtil） -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>common-i18n</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- mybatis-plus 核心（含 mybatis-spring） -->
         <dependency>
             <groupId>com.baomidou</groupId>

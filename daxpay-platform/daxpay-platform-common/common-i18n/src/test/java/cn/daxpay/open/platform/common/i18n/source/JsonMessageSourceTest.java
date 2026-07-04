@@ -64,4 +64,25 @@ class JsonMessageSourceTest {
         String message = messageSource.getMessage("channel.error.channelNotFound", null, Locale.forLanguageTag("en-US"));
         assertEquals("Unsupported channel code", message);
     }
+
+    /// 请求纯语言码 en（无 en/ 目录）时应反向匹配到 en-US 资源，而非回退默认中文
+    @Test
+    void shouldReverseMatchEnToEnUs() {
+        String message = messageSource.getMessage("pay.route.error.noMatch", null, Locale.forLanguageTag("en"));
+        assertEquals("No available payment product matched", message);
+    }
+
+    /// 请求纯语言码 zh（无 zh/ 目录）时应反向匹配到 zh-CN 资源
+    @Test
+    void shouldReverseMatchZhToZhCn() {
+        String message = messageSource.getMessage("pay.route.error.noMatch", null, Locale.forLanguageTag("zh"));
+        assertEquals("未匹配到可用支付产品", message);
+    }
+
+    /// 请求 zh-Hans（uni-app 中文 locale，无对应目录）时应反向匹配到 zh-CN 资源
+    @Test
+    void shouldReverseMatchZhHansToZhCn() {
+        String message = messageSource.getMessage("pay.route.error.noMatch", null, Locale.forLanguageTag("zh-Hans"));
+        assertEquals("未匹配到可用支付产品", message);
+    }
 }

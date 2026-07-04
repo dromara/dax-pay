@@ -1,5 +1,6 @@
 package cn.daxpay.open.platform.capability.audit.log.result;
 
+import cn.daxpay.open.platform.core.annotation.Trans;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -43,6 +44,7 @@ public class LoginLogResult {
     @Schema(description = "操作系统")
     private String os;
 
+    @Trans(i18n = true)
     @Schema(description = "提示消息")
     private String msg;
 

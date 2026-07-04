@@ -1,0 +1,12 @@
+{
+  "other": "Other",
+  "add": "Add",
+  "update": "Update",
+  "delete": "Delete",
+  "grant": "Grant",
+  "sync": "Sync",
+  "export": "Export",
+  "import": "Import",
+  "force": "Force Logout",
+  "clean": "Clear"
+}

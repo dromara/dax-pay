@@ -65,6 +65,12 @@
             <artifactId>common-config</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- 字段翻译框架（@Trans 注解的 i18n / 实体 / 字典翻译） -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>common-translate</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 

@@ -1,5 +1,6 @@
 package cn.daxpay.open.platform.common.translate.service;
 
+import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.daxpay.open.platform.common.translate.cache.TransCacheKey;
 import cn.daxpay.open.platform.common.translate.cache.TransCacheManager;
 import cn.daxpay.open.platform.common.translate.model.DictItemData;
@@ -68,7 +69,8 @@ public class TransService {
             return;
         }
 
-        // 遍历所有对象，区分实体翻译和字典翻译
+        // 遍历所有对象，区分 i18n 翻译、实体翻译和字典翻译
+        List<TransFieldInfo> i18nFieldInfos = new ArrayList<>();
         Map<TransGroup, Set<Object>> entityGroupSourceValues = new LinkedHashMap<>();
         List<TransFieldInfo> entityFieldInfos = new ArrayList<>();
         Map<String, Set<Object>> dictGroupSourceValues = new LinkedHashMap<>();
@@ -77,6 +79,11 @@ public class TransService {
         for (Object result : results) {
             List<TransMeta> metaList = scanTransFields(result);
             for (TransMeta meta : metaList) {
+                // i18n 翻译: 字段值即 key, 独立收集, 不走 source / 实体 / 字典逻辑
+                if (meta.annotation().i18n()) {
+                    i18nFieldInfos.add(new TransFieldInfo(result, meta.field(), meta.annotation()));
+                    continue;
+                }
                 Object sourceValue = getFieldValue(result, meta.source());
                 if (sourceValue == null) {
                     continue;
@@ -103,6 +110,11 @@ public class TransService {
         // 处理字典翻译
         if (!dictGroupSourceValues.isEmpty()) {
             processDictTranslations(dictGroupSourceValues, dictFieldInfos);
+        }
+
+        // 处理 i18n 翻译
+        if (!i18nFieldInfos.isEmpty()) {
+            processI18nTranslations(i18nFieldInfos);
         }
     }
 
@@ -156,6 +168,23 @@ public class TransService {
             if (translatedValue != null) {
                 setFieldValue(info.result(), info.field(), translatedValue);
             }
+        }
+    }
+
+    /// 处理 i18n 消息翻译
+    /// 注解字段本身的值（经 i18nPrefix 拼接后）作为 i18n key, 翻译后回填本字段
+    /// 查不到 key 时 I18nUtil 返回 key 原值, 天然兼容历史脏数据与纯文本
+    private void processI18nTranslations(List<TransFieldInfo> fieldInfos) {
+        for (TransFieldInfo info : fieldInfos) {
+            Object sourceValue = getFieldValue(info.result(), info.field().getName());
+            if (sourceValue == null) {
+                continue;
+            }
+            String raw = String.valueOf(sourceValue);
+            String prefix = info.annotation().i18nPrefix();
+            String key = prefix.isEmpty() ? raw : prefix + "." + raw;
+            String translated = I18nUtil.get(key);
+            setFieldValue(info.result(), info.field(), translated);
         }
     }
 

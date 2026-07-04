@@ -14,8 +14,10 @@ import java.net.URLDecoder;
 import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /// # 基于 JSON 文件的消息源, 支持目录嵌套和多文件拆分
@@ -35,8 +37,16 @@ public class JsonMessageSource extends AbstractMessageSource {
     @Setter
     private Locale defaultLocale = Locale.CHINA;
 
+    /// 已加载的可用 locale 标签集合（如 en-US, zh-CN），启动时扫描
+    private final Set<String> availableLocaleTags = new HashSet<>();
+
+    /// 语言码 → 首个匹配的地区 locale 标签（如 en → en-US, zh → zh-CN），用于反向回退
+    /// 当请求纯语言码（如 en）而无对应资源目录时, 据此映射到同语言的地区资源
+    private final Map<String, String> languageToRegionLocale = new HashMap<>();
+
     public JsonMessageSource(ResourcePatternResolver resourceResolver) {
         this.resourceResolver = resourceResolver;
+        this.scanAvailableLocales();
     }
 
     @Override
@@ -49,6 +59,20 @@ public class JsonMessageSource extends AbstractMessageSource {
             if (!langOnly.equals(locale)) {
                 messages = this.loadMessages(langOnly);
                 message = messages.get(code);
+            }
+        }
+        // 仍未命中则按语言反向匹配地区: en -> en-US, zh -> zh-CN, zh-Hans -> zh-CN
+        if (message == null) {
+            String lang = locale.getLanguage();
+            if (!lang.isEmpty()) {
+                String regionTag = this.languageToRegionLocale.get(lang);
+                if (regionTag != null) {
+                    Locale regionLocale = Locale.forLanguageTag(regionTag);
+                    if (!regionLocale.equals(locale)) {
+                        messages = this.loadMessages(regionLocale);
+                        message = messages.get(code);
+                    }
+                }
             }
         }
         // 仍未命中则用默认 locale 回退
@@ -112,6 +136,42 @@ public class JsonMessageSource extends AbstractMessageSource {
         }
         // 路径分隔符替换为 .
         return relative.replace('/', '.').replace('\\', '.');
+    }
+
+    /// 启动时扫描 i18n 目录下所有 locale 子目录，建立「语言码 → 地区 locale」反向映射
+    /// 用于支持请求纯语言码（如 en）时反向匹配到地区资源（如 en-US）
+    private void scanAvailableLocales() {
+        try {
+            Resource[] resources = this.resourceResolver.getResources("classpath*:i18n/**/*.json");
+            for (Resource resource : resources) {
+                String localeTag = this.extractLocaleTag(resource.getURL().toString());
+                if (localeTag != null && this.availableLocaleTags.add(localeTag)) {
+                    // 首次发现该 locale, 记录语言 → 地区映射
+                    Locale locale = Locale.forLanguageTag(localeTag);
+                    String lang = locale.getLanguage();
+                    if (!lang.isEmpty()) {
+                        this.languageToRegionLocale.putIfAbsent(lang, localeTag);
+                    }
+                }
+            }
+            log.debug("扫描到可用 locale: {}, 语言→地区映射: {}", this.availableLocaleTags, this.languageToRegionLocale);
+        } catch (IOException e) {
+            log.warn("扫描可用 locale 失败, 语言→地区反向回退将不可用", e);
+        }
+    }
+
+    /// 从资源 URL 提取 locale 标签
+    /// .../i18n/en-US/enum/xxx.json → "en-US"
+    private String extractLocaleTag(String fileUrl) {
+        String decoded = URLDecoder.decode(fileUrl, StandardCharsets.UTF_8);
+        String marker = "i18n/";
+        int idx = decoded.lastIndexOf(marker);
+        if (idx < 0) {
+            return null;
+        }
+        String after = decoded.substring(idx + marker.length());
+        int slash = after.indexOf('/');
+        return slash > 0 ? after.substring(0, slash) : null;
     }
 
     /// 递归展平 JSON 对象

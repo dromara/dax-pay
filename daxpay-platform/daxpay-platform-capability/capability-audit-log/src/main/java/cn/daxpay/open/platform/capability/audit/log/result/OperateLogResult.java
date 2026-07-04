@@ -1,5 +1,6 @@
 package cn.daxpay.open.platform.capability.audit.log.result;
 
+import cn.daxpay.open.platform.core.annotation.Trans;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -18,6 +19,7 @@ public class OperateLogResult {
     @Schema(description = "操作模块")
     private String title;
 
+    @Trans(i18n = true, i18nPrefix = "enum.operate_log_type")
     @Schema(description = "业务类型")
     private String businessType;
 
@@ -60,6 +62,7 @@ public class OperateLogResult {
     @Schema(description = "操作状态（0正常 1异常）")
     private Boolean success;
 
+    @Trans(i18n = true)
     @Schema(description = "错误消息")
     private String errorMsg;
 
