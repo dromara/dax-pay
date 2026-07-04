@@ -31,7 +31,7 @@ public class SpringCorsConfiguration {
     @ConditionalOnProperty(prefix = "daxpay.platform.common.spring.cors", value = "enable", havingValue = "true")
     public FilterRegistrationBean<CorsFilter> corsWebFilter() {
         PlatformCommonProperties.Spring.Cors cors = platformCommonProperties.getSpring().getCors();
-        CorsConfiguration config = new CorsConfiguration();
+        var config = new CorsConfiguration();
         // 允许跨域发送身份凭证
         config.setAllowCredentials(cors.isAllowCredentials());
         // 预检请求有效期
@@ -44,7 +44,7 @@ public class SpringCorsConfiguration {
         addConfigValues(cors.getAllowedOriginPatterns(), config::addAllowedOriginPattern);
         config.addExposedHeader(HttpHeaders.SET_COOKIE);
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        var source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         FilterRegistrationBean<CorsFilter> bean = new FilterRegistrationBean<>(new CorsFilter(source));
         bean.setOrder(Ordered.HIGHEST_PRECEDENCE);

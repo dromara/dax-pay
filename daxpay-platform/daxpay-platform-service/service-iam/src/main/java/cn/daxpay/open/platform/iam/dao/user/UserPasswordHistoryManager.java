@@ -22,7 +22,7 @@ public class UserPasswordHistoryManager {
 
     /// 添加密码历史记录
     public void addHistory(Long userId, String passwordHash) {
-        UserPasswordHistory history = new UserPasswordHistory()
+        var history = new UserPasswordHistory()
                 .setUserId(userId)
                 .setPassword(passwordHash);
         history.setCreateTime(OffsetDateTime.now(ZoneOffset.UTC));

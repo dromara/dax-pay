@@ -49,7 +49,7 @@ public class WechatDirectChannelMerchantService {
         channelMerchant.setEnable(true);
         channelMerchantManager.save(channelMerchant);
         // 写直连绑定表(wxMchId 作为业务字段, 不参与关联)
-        WechatDirectChannelMerchant entity = new WechatDirectChannelMerchant();
+        var entity = new WechatDirectChannelMerchant();
         entity.setMchNo(param.getMchNo());
         entity.setChannelMchNo(channelMchNo);
         entity.setProduct(param.getProduct());

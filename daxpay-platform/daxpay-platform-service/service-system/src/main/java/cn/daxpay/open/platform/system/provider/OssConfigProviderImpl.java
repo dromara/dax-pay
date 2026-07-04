@@ -31,7 +31,7 @@ public class OssConfigProviderImpl implements OssConfigProvider {
 
     /// 将平台OSS配置转换为文件存储配置
     private FileStorageConfig convertToFileStorageConfig(PlatformOssConfig config) {
-        FileStorageConfig storageConfig = new FileStorageConfig();
+        var storageConfig = new FileStorageConfig();
         storageConfig.setEndpoint(config.getEndpoint())
                 .setRegion(config.getRegion())
                 .setPublicBucket(config.getPublicBucket())

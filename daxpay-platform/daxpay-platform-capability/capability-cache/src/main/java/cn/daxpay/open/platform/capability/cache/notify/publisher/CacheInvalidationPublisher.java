@@ -30,7 +30,7 @@ public class CacheInvalidationPublisher {
     /// @param cacheName 缓存名称
     /// @param key       缓存键
     public void publishEvict(String cacheName, Object key) {
-        CacheInvalidationMessage message = new CacheInvalidationMessage();
+        var message = new CacheInvalidationMessage();
         message.setCacheName(cacheName);
         message.setKey(String.valueOf(key));
         message.setType(CacheInvalidationType.EVICT.name());
@@ -49,7 +49,7 @@ public class CacheInvalidationPublisher {
     ///
     /// @param cacheName 缓存名称
     public void publishClear(String cacheName) {
-        CacheInvalidationMessage message = new CacheInvalidationMessage();
+        var message = new CacheInvalidationMessage();
         message.setCacheName(cacheName);
         message.setType(CacheInvalidationType.CLEAR.name());
 

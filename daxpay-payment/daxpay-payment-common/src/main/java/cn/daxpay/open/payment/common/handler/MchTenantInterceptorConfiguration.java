@@ -17,7 +17,7 @@ public class MchTenantInterceptorConfiguration {
     /// 租户拦截器
     @Bean
     public MpInterceptor MchTenantInterceptor() {
-        TenantLineInnerInterceptor tenantInterceptor = new TenantLineInnerInterceptor();
+        var tenantInterceptor = new TenantLineInnerInterceptor();
         tenantInterceptor.setTenantLineHandler(customTenantHandler);
         return new MpInterceptor(tenantInterceptor, -999);
     }

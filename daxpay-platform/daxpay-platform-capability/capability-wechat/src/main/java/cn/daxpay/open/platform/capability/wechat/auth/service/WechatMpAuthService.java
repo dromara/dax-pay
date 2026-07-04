@@ -82,7 +82,7 @@ public class WechatMpAuthService {
             WxOAuth2UserInfo userInfo = wxMpService.getOAuth2Service().getUserInfo(accessToken, null);
             
             // 转换结果
-            WechatUserInfoResult result = new WechatUserInfoResult();
+            var result = new WechatUserInfoResult();
             result.setOpenId(userInfo.getOpenid());
             result.setNickname(userInfo.getNickname());
             result.setHeadImgUrl(userInfo.getHeadImgUrl());
@@ -106,7 +106,7 @@ public class WechatMpAuthService {
     /// 获取微信公众号API的Service
     public WxMpService getWxMpService(String appId, String appSecret) {
         WxMpService wxMpService = new WxMpServiceImpl();
-        WxMpDefaultConfigImpl wxMpConfig = new WxMpDefaultConfigImpl();
+        var wxMpConfig = new WxMpDefaultConfigImpl();
         wxMpConfig.setAppId(appId);
         wxMpConfig.setSecret(appSecret);
         try {

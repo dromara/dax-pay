@@ -42,7 +42,7 @@ public class AlipayDirectConfigAssembler {
         AlipayDirectApp app = resolveApp(mchNo, channelMchNo, capability);
         AlipayDirectAppKeyConfig keyConfig = alipayDirectAppKeyConfigService.findByAlipayDirectAppId(app.getId());
 
-        AlipaySdkCredential credential = new AlipaySdkCredential();
+        var credential = new AlipaySdkCredential();
         credential.setAliAppId(app.getAliAppId());
         credential.setPrivateKey(keyConfig.getPrivateKey());
         credential.setAlipayPublicKey(keyConfig.getAlipayPublicKey());

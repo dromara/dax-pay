@@ -43,7 +43,7 @@ public class WechatRefundSyncService {
     /// @return 同步结果(含映射后的退款状态)
     public RefundResultBo sync(PayRefundOrder refundOrder, WechatSdkCredential credential) {
         // 构建请求
-        WechatRefundSyncReq req = new WechatRefundSyncReq();
+        var req = new WechatRefundSyncReq();
         req.setOutRefundNo(refundOrder.getRefundNo());
         req.setCredential(credential);
 

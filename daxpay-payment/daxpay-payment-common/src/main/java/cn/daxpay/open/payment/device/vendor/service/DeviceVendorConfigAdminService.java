@@ -34,7 +34,7 @@ public class DeviceVendorConfigAdminService {
                 param.getDeviceType(), param.getVendorCode(), param.getConfigName(), null)) {
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.vendor.configNameExists");
         }
-        DeviceVendorConfig entity = new DeviceVendorConfig()
+        var entity = new DeviceVendorConfig()
                 .setDeviceType(param.getDeviceType())
                 .setVendorCode(param.getVendorCode())
                 .setConfigName(param.getConfigName())

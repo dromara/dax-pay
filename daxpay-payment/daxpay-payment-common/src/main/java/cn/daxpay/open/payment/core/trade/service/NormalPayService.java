@@ -64,7 +64,7 @@ public class NormalPayService {
         payRouteFacade.resolve(payParam);
         var payStrategy = PaymentStrategyFactory.createByProduct(payParam.getProduct(), AbsNormalPayStrategy.class);
         // 支付前处理: 校验与通道配置组装(只依赖请求参数), 失败直接抛出不持久化(订单尚未创建)
-        PayStrategyContext context = new PayStrategyContext().setPayParam(payParam);
+        var context = new PayStrategyContext().setPayParam(payParam);
         payStrategy.doBeforePay(context);
         // 查询已有订单并校验，结果填充到 context
         payAssistService.findAndCheckOrder(payParam.getBizOrderNo(), context);

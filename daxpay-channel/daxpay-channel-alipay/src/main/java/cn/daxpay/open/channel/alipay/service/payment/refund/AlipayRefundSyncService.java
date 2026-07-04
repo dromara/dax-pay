@@ -39,7 +39,7 @@ public class AlipayRefundSyncService {
     /// @return 同步结果(含映射后的退款状态)
     public RefundResultBo sync(PayRefundOrder refundOrder, AlipaySdkCredential credential) {
         // 构建请求
-        AlipayRefundSyncReq req = new AlipayRefundSyncReq();
+        var req = new AlipayRefundSyncReq();
         req.setOutTradeNo(refundOrder.getOrderNo());
         req.setTradeNo(refundOrder.getOutOrderNo());
         req.setOutRequestNo(refundOrder.getRefundNo());

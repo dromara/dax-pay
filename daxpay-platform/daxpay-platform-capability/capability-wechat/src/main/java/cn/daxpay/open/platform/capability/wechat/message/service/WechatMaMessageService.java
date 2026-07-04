@@ -46,7 +46,7 @@ public class WechatMaMessageService {
         WechatMessageRecord record = createMessageRecord(param);
         recordService.saveRecord(record);
         
-        MessageSendResult result = new MessageSendResult()
+        var result = new MessageSendResult()
                 .setRecordId(record.getId())
                 .setSuccess(false);
         
@@ -157,7 +157,7 @@ public class WechatMaMessageService {
 
     /// 创建消息记录
     private WechatMessageRecord createMessageRecord(UniformMessageParam param) {
-        WechatMessageRecord record = new WechatMessageRecord();
+        var record = new WechatMessageRecord();
         record.setMessageType("uniform");
         record.setOpenId(param.getOpenId());
         record.setTemplateId(param.getTemplateId());
@@ -174,7 +174,7 @@ public class WechatMaMessageService {
     /// 注意：weixin-java-miniapp 4.8.1.B版本的统一服务消息API较为复杂
     /// 这里采用简化实现，实际使用时可能需要根据具体需求调整
     private WxMaUniformMessage buildUniformMessage(UniformMessageParam param) {
-        WxMaUniformMessage uniformMessage = new WxMaUniformMessage();
+        var uniformMessage = new WxMaUniformMessage();
         uniformMessage.setToUser(param.getOpenId());
         
         // 设置为使用小程序模板消息
@@ -190,7 +190,7 @@ public class WechatMaMessageService {
     /// 创建微信小程序Service
     private WxMaService createWxMaService(String wxAppId, String appSecret, String accessToken) {
         WxMaService wxMaService = new WxMaServiceImpl();
-        WxMaDefaultConfigImpl config = new WxMaDefaultConfigImpl();
+        var config = new WxMaDefaultConfigImpl();
         config.setAppid(wxAppId);
         config.setSecret(appSecret);
         config.setToken(accessToken);

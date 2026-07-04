@@ -82,7 +82,7 @@ public class PayProviderService {
         int brandOrdinal = 0;
         for (PayProviderEnum brandEnum : PayProviderEnum.values()) {
             PayProvider dbBrand = providerMap.get(brandEnum.getCode());
-            PayProviderGroupResult group = new PayProviderGroupResult()
+            var group = new PayProviderGroupResult()
                     .setProvider(brandEnum.getCode())
                     .setProviderLabel(I18nUtil.getEnumName(brandEnum))
                     .setIcon(dbBrand != null ? dbBrand.getIcon() : null)

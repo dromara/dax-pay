@@ -49,7 +49,7 @@ public class WechatUserService {
             }
             
             // 转换结果
-            WechatUserInfoResult result = new WechatUserInfoResult();
+            var result = new WechatUserInfoResult();
             result.setOpenId(wxMpUser.getOpenId());
             result.setNickname(wxMpUser.getNickname());
             result.setHeadImgUrl(wxMpUser.getHeadImgUrl());
@@ -104,7 +104,7 @@ public class WechatUserService {
             }
             
             // 转换结果
-            WechatPhoneResult result = new WechatPhoneResult();
+            var result = new WechatPhoneResult();
             result.setPhoneNumber(phoneInfo.getPhoneNumber());
             result.setPurePhoneNumber(phoneInfo.getPurePhoneNumber());
             result.setCountryCode(phoneInfo.getCountryCode());
@@ -126,7 +126,7 @@ public class WechatUserService {
     /// 创建微信公众号Service
     private WxMpService createWxMpService(String appId, String appSecret) {
         WxMpService wxMpService = new WxMpServiceImpl();
-        WxMpDefaultConfigImpl config = new WxMpDefaultConfigImpl();
+        var config = new WxMpDefaultConfigImpl();
         config.setAppId(appId);
         config.setSecret(appSecret);
         wxMpService.setWxMpConfigStorage(config);
@@ -136,7 +136,7 @@ public class WechatUserService {
     /// 创建微信小程序Service
     private WxMaService createWxMaService(String appId, String appSecret) {
         WxMaService wxMaService = new WxMaServiceImpl();
-        WxMaDefaultConfigImpl config = new WxMaDefaultConfigImpl();
+        var config = new WxMaDefaultConfigImpl();
         config.setAppid(appId);
         config.setSecret(appSecret);
         wxMaService.setWxMaConfig(config);

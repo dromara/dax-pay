@@ -137,7 +137,7 @@ public class WechatTokenService {
     /// 创建微信公众号Service
     private WxMpService createWxMpService(String wxAppId, String appSecret) {
         WxMpService wxMpService = new WxMpServiceImpl();
-        WxMpDefaultConfigImpl config = new WxMpDefaultConfigImpl();
+        var config = new WxMpDefaultConfigImpl();
         config.setAppId(wxAppId);
         config.setSecret(appSecret);
         wxMpService.setWxMpConfigStorage(config);

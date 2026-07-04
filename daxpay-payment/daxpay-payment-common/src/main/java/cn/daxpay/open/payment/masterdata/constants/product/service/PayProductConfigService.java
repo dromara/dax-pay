@@ -73,7 +73,7 @@ public class PayProductConfigService {
 
     /// PayProduct + 库表 + 策略合并为配置结果
     private PayProductConfigResult toConfigResult(PayProduct payProduct, Map<String, PayProductConfig> configMap) {
-        PayProductConfigResult result = new PayProductConfigResult()
+        var result = new PayProductConfigResult()
                 .setProduct(payProduct.getCode())
                 .setName(I18nUtil.getEnumName(ProductEnum.findByCode(payProduct.getCode())))
                 .setChannel(payProduct.getChannel())

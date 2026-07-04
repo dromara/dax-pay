@@ -72,7 +72,7 @@ public class ArtemisCommonAutoConfiguration {
     @ConditionalOnMissingBean(name = ArtemisBeanNames.TOPIC_LISTENER_FACTORY)
     public JmsListenerContainerFactory<?> topicListenerFactory(ConnectionFactory connectionFactory,
                                                                ObservationRegistry observationRegistry) {
-        DefaultJmsListenerContainerFactory factory = new DefaultJmsListenerContainerFactory();
+        var factory = new DefaultJmsListenerContainerFactory();
         factory.setConnectionFactory(connectionFactory);
         // Topic 模式（pub-sub），对应 broker 端 multicast 路由类型
         factory.setPubSubDomain(true);

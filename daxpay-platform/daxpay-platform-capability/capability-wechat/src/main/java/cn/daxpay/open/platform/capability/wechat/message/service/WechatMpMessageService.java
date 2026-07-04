@@ -47,7 +47,7 @@ public class WechatMpMessageService {
         WechatMessageRecord record = createMessageRecord(param);
         recordService.saveRecord(record);
         
-        MessageSendResult result = new MessageSendResult()
+        var result = new MessageSendResult()
                 .setRecordId(record.getId())
                 .setSuccess(false);
         
@@ -156,7 +156,7 @@ public class WechatMpMessageService {
 
     /// 创建消息记录
     private WechatMessageRecord createMessageRecord(TemplateMessageParam param) {
-        WechatMessageRecord record = new WechatMessageRecord();
+        var record = new WechatMessageRecord();
         record.setMessageType("template");
         record.setOpenId(param.getOpenId());
         record.setTemplateId(param.getTemplateId());
@@ -192,7 +192,7 @@ public class WechatMpMessageService {
     /// 创建微信公众号Service
     private WxMpService createWxMpService(String wxAppId, String appSecret, String accessToken) {
         WxMpService wxMpService = new WxMpServiceImpl();
-        WxMpDefaultConfigImpl config = new WxMpDefaultConfigImpl();
+        var config = new WxMpDefaultConfigImpl();
         config.setAppId(wxAppId);
         config.setSecret(appSecret);
         config.setAccessToken(accessToken);

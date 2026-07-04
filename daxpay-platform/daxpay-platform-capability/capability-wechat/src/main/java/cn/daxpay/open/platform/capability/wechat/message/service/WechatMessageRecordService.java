@@ -55,7 +55,7 @@ public class WechatMessageRecordService {
     /// @param errorMsg 错误信息
     public void updateStatus(Long recordId, String status, String msgId, String errorMsg) {
         try {
-            WechatMessageRecord record = new WechatMessageRecord();
+            var record = new WechatMessageRecord();
             record.setId(recordId);
             record.setStatus(status);
             record.setMsgId(msgId);
@@ -172,7 +172,7 @@ public class WechatMessageRecordService {
     /// 构建模板消息参数
     @SuppressWarnings("unchecked")
     private TemplateMessageParam buildTemplateMessageParam(WechatMessageRecord record) {
-        TemplateMessageParam param = new TemplateMessageParam();
+        var param = new TemplateMessageParam();
         param.setWxAppId(record.getWxAppId());
         // AppSecret需要从外部传入，这里暂时为空，实际使用时需要调用方提供
         param.setOpenId(record.getOpenId());
@@ -192,7 +192,7 @@ public class WechatMessageRecordService {
     /// 构建统一服务消息参数
     @SuppressWarnings("unchecked")
     private UniformMessageParam buildUniformMessageParam(WechatMessageRecord record) {
-        UniformMessageParam param = new UniformMessageParam();
+        var param = new UniformMessageParam();
         param.setWxAppId(record.getWxAppId());
         // AppSecret需要从外部传入，这里暂时为空，实际使用时需要调用方提供
         param.setOpenId(record.getOpenId());

@@ -100,7 +100,7 @@ public class PayRouteSceneConfigService {
             // 校验支付能力在候选集合内
             payRouteStrategyCapabilitySupport.validateSceneCapability(
                     providerCode, item.getMethod(), item.getChannelMchNo(), item.getCapability());
-            PayRouteSceneConfig config = new PayRouteSceneConfig();
+            var config = new PayRouteSceneConfig();
             config.setStrategyId(strategy.getId());
             config.setMethod(item.getMethod());
             config.setChannelMchNo(item.getChannelMchNo());

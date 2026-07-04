@@ -83,7 +83,7 @@ public class PayRouteBasicConfigService {
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "pay.route.error.productStrategyMissing");
             }
-            PayRouteBasicConfig config = new PayRouteBasicConfig();
+            var config = new PayRouteBasicConfig();
             config.setStrategyId(strategy.getId());
             config.setProvider(item.getProvider());
             config.setChannelMchNo(item.getChannelMchNo());

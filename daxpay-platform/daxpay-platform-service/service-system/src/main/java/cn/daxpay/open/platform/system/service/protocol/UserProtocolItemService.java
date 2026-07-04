@@ -61,7 +61,7 @@ public class UserProtocolItemService {
 
     /// 根据协议ID查询协议项列表
     public PageResult<UserProtocolItemResult> page(PageParam pageParam, Long protocolId){
-        UserProtocolItemQuery query = new UserProtocolItemQuery();
+        var query = new UserProtocolItemQuery();
         query.setProtocolId(protocolId);
         return MpUtil.toPageResult(userProtocolItemManager.page(pageParam, query));
     }

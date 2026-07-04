@@ -47,7 +47,7 @@ public class AlipayIsvConfigAssembler {
         // 服务商应用密钥/证书配置
         AlipayIsvAppKeyConfig keyConfig = alipayIsvAppKeyConfigService.findByAlipayIsvAppId(isvMerchant.getIsvAppId());
 
-        AlipaySdkCredential credential = new AlipaySdkCredential();
+        var credential = new AlipaySdkCredential();
         credential.setAliAppId(isvApp.getAliAppId());
         credential.setPrivateKey(keyConfig.getPrivateKey());
         credential.setAlipayPublicKey(keyConfig.getAlipayPublicKey());

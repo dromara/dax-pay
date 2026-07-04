@@ -84,7 +84,7 @@ public class PayCloseService {
             } else {
                 // 处理中: 调用通道关闭/撤销策略
                 closeType = useCancel ? CloseTypeEnum.CANCEL : CloseTypeEnum.CLOSE;
-                PayStrategyContext context = new PayStrategyContext()
+                var context = new PayStrategyContext()
                         .setContainer(normalOrder)
                         .setTrade(trade);
                 AbsPayCloseStrategy strategy = PaymentStrategyFactory.createByProduct(

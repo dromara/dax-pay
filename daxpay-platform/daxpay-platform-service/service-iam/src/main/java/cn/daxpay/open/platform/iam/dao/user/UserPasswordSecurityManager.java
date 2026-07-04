@@ -25,7 +25,7 @@ public class UserPasswordSecurityManager extends BaseManager<UserPasswordSecurit
     /// 根据用户ID查询，不存在则创建默认记录
     public UserPasswordSecurity getOrCreateByUserId(Long userId) {
         return findById(userId).orElseGet(() -> {
-            UserPasswordSecurity security = new UserPasswordSecurity();
+            var security = new UserPasswordSecurity();
             security.setId(userId);
             security.setPasswordErrorCount(0);
             security.setInitialPassword(true);
@@ -101,7 +101,7 @@ public class UserPasswordSecurityManager extends BaseManager<UserPasswordSecurit
 
     /// 初始化用户密码安全信息（创建用户时调用）
     public void initPasswordSecurity(Long userId, OffsetDateTime passwordExpireTime) {
-        UserPasswordSecurity security = new UserPasswordSecurity();
+        var security = new UserPasswordSecurity();
         security.setId(userId);
         security.setPasswordErrorCount(0);
         security.setInitialPassword(true);

@@ -28,7 +28,7 @@ public class RedisAutoConfiguration {
     /// 字符串类型Redis模板，适用于简单字符串值
     @Bean
     public StringRedisTemplate stringRedisTemplate(LettuceConnectionFactory connectionFactory) {
-        StringRedisTemplate template = new StringRedisTemplate();
+        var template = new StringRedisTemplate();
         template.setConnectionFactory(connectionFactory);
         return template;
     }

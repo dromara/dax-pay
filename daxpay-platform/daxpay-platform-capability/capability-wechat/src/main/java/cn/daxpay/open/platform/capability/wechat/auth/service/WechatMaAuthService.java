@@ -38,7 +38,7 @@ public class WechatMaAuthService {
     /// 获取微信小程序API的Service
     public WxMaService getWxMaService(String appId, String appSecret) {
         WxMaService wxMaService = new WxMaServiceImpl();
-        WxMaDefaultConfigImpl wxMaConfig = new WxMaDefaultConfigImpl();
+        var wxMaConfig = new WxMaDefaultConfigImpl();
         wxMaConfig.setAppid(appId);
         wxMaConfig.setSecret(appSecret);
         try {

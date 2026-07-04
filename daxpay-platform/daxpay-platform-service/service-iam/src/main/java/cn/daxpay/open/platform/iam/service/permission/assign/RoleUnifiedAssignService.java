@@ -83,7 +83,7 @@ public class RoleUnifiedAssignService {
             String treePid = menu.getPid() != null ? "menu-" + menu.getPid() : null;
             menuIdToTreeIdMap.put(menu.getId(), treeId);
 
-            RoleUnifiedAssignTreeResult menuNode = new RoleUnifiedAssignTreeResult()
+            var menuNode = new RoleUnifiedAssignTreeResult()
                     .setKey(treeId)
                     .setType("menu")
                     .setTreeId(treeId)
@@ -107,7 +107,7 @@ public class RoleUnifiedAssignService {
 
             for (PermCodeData code : codes) {
                 String codeTreeId = "code-" + code.getId();
-                RoleUnifiedAssignTreeResult codeNode = new RoleUnifiedAssignTreeResult()
+                var codeNode = new RoleUnifiedAssignTreeResult()
                         .setKey(codeTreeId)
                         .setType("code")
                         .setTreeId(codeTreeId)

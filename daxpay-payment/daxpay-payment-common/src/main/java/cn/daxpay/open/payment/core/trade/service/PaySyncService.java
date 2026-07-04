@@ -92,7 +92,7 @@ public class PaySyncService {
         try {
             NormalPayOrder normalOrder = payNormalOrderManager.findById(trade.getContainerId())
                     .orElse(null);
-            PayStrategyContext context = new PayStrategyContext()
+            var context = new PayStrategyContext()
                     .setContainer(normalOrder)
                     .setTrade(trade);
             var syncStrategy = PaymentStrategyFactory.createByProduct(
@@ -190,7 +190,7 @@ public class PaySyncService {
     private void closeRemote(PayTrade trade, NormalPayOrder normalOrder) {
         AbsPayCloseStrategy strategy = PaymentStrategyFactory.createByProduct(
                 trade.getProduct(), AbsPayCloseStrategy.class);
-        PayStrategyContext context = new PayStrategyContext()
+        var context = new PayStrategyContext()
                 .setContainer(normalOrder)
                 .setTrade(trade);
         strategy.doBeforeClose(context);

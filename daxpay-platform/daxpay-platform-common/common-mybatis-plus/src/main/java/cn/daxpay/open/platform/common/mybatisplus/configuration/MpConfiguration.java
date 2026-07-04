@@ -34,7 +34,7 @@ public class MpConfiguration {
     /// 总结: 对sql进行单次改造的优先放入,不对sql进行改造的最后放入
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor(List<MpInterceptor> interceptors) {
-        MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
+        var interceptor = new MybatisPlusInterceptor();
         interceptors.stream()
             .sorted(Comparator.comparing(MpInterceptor::getSortNo))
             .map(MpInterceptor::getInnerInterceptor)

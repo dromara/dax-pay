@@ -50,7 +50,7 @@ public class WechatIsvChannelMerchantService {
         channelMerchant.setEnable(true);
         channelMerchantManager.save(channelMerchant);
         // 写服务商绑定表
-        WechatIsvChannelMerchant entity = new WechatIsvChannelMerchant();
+        var entity = new WechatIsvChannelMerchant();
         entity.setMchNo(param.getMchNo());
         entity.setChannelMchNo(channelMchNo);
         entity.setProduct(param.getProduct());

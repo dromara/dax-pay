@@ -29,7 +29,7 @@ public class RsaSignUtil {
         byte[] decoded = Base64.getDecoder().decode(privateKeyPEM);
 
         try {
-            PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(decoded);
+            var keySpec = new PKCS8EncodedKeySpec(decoded);
             KeyFactory kf = KeyFactory.getInstance("RSA");
             return kf.generatePrivate(keySpec);
         } catch (Exception e) {
@@ -46,7 +46,7 @@ public class RsaSignUtil {
                 .replaceAll("\\s", "");
 
         byte[] decoded = Base64.getDecoder().decode(publicKeyPEM);
-        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(decoded);
+        var keySpec = new X509EncodedKeySpec(decoded);
         try {
             KeyFactory kf = KeyFactory.getInstance("RSA");
             return kf.generatePublic(keySpec);

@@ -51,7 +51,7 @@ public class UserTwoFactorService {
     public TwoFactorStatusResult getStatus() {
         Long userId = SecurityUtil.getUserId();
         PlatformTwoFactorAuthConfig config = getConfig();
-        TwoFactorStatusResult result = new TwoFactorStatusResult()
+        var result = new TwoFactorStatusResult()
                 .setPlatformEnabled(Boolean.TRUE.equals(config.getEnabled()));
         Optional<UserTwoFactor> bound = userTwoFactorManager.findByUserId(userId);
         if (bound.isPresent()) {

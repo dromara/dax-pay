@@ -67,7 +67,7 @@ public class PermCodeScanService {
         Map<String, PermCodeDefinition> definitionMap = this.collectDefinitions();
         this.validateDefinitions(definitionMap);
 
-        PermCodeScanResult result = new PermCodeScanResult();
+        var result = new PermCodeScanResult();
         Map<String, PermCodeData> existedMap = permCodeManager.findAll().stream()
                 .collect(Collectors.toMap(PermCodeData::getCode, item -> item, (a, b) -> a));
 
@@ -175,7 +175,7 @@ public class PermCodeScanService {
             Method method = handlerMethod.getMethod();
             String location = beanType.getName() + "#" + method.getName();
 
-            PermCodeDefinition definition = new PermCodeDefinition()
+            var definition = new PermCodeDefinition()
                     .setCode(code)
                     .setNameCn(nameCn)
                     .setNameEn(nameEn)

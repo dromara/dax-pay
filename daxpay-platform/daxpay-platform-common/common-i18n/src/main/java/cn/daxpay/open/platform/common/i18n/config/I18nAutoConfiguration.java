@@ -19,7 +19,7 @@ public class I18nAutoConfiguration {
 
     @Bean
     public MessageSource messageSource(ResourcePatternResolver resourceResolver) {
-        JsonMessageSource source = new JsonMessageSource(resourceResolver);
+        var source = new JsonMessageSource(resourceResolver);
         source.setDefaultLocale(Locale.CHINA);
         // 初始化 I18nUtil
         I18nUtil.setMessageSource(source);

@@ -46,7 +46,7 @@ public class PlatformFileController {
             @NotNull(message = "{validation.field.fileId.notNull}") @RequestParam Long fileId,
             @NotNull(message = "{validation.field.objectKey.notBlank}") @RequestParam String objectKey,
             @RequestParam(required = false) String etag) {
-        FileUploadConfirmParam param = new FileUploadConfirmParam();
+        var param = new FileUploadConfirmParam();
         param.setFileId(fileId);
         param.setObjectKey(objectKey);
         param.setEtag(etag);

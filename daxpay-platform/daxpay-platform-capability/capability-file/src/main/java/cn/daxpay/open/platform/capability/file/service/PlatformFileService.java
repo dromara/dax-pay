@@ -76,7 +76,7 @@ public class PlatformFileService {
 
         OffsetDateTime expireTime = s3FileStorageService.calculateUploadExpireTime();
 
-        PlatformFileRecord platformFileRecord = new PlatformFileRecord()
+        var platformFileRecord = new PlatformFileRecord()
                 .setPath(path)
                 .setSize(param.getFileSize())
                 .setFilename(filename)
@@ -89,7 +89,7 @@ public class PlatformFileService {
 
         platformFileRecordManager.save(platformFileRecord);
 
-        FileUploadPresignResult result = new FileUploadPresignResult();
+        var result = new FileUploadPresignResult();
         result.setFileId(platformFileRecord.getId());
         result.setObjectKey(objectKey);
         result.setFilename(filename);
@@ -264,7 +264,7 @@ public class PlatformFileService {
 
         s3FileStorageService.upload(data, objectKey, contentType);
 
-        PlatformFileRecord platformFileRecord = new PlatformFileRecord()
+        var platformFileRecord = new PlatformFileRecord()
                 .setPath(path)
                 .setSize((long) data.length)
                 .setFilename(filename)

@@ -135,7 +135,7 @@ public class PayProductCapabilityService {
 
     /// 关联行转为能力展示项
     private PayProductCapabilityResult toItem(PayProductCapability rel, PayCapability cap) {
-        PayProductCapabilityResult item = new PayProductCapabilityResult()
+        var item = new PayProductCapabilityResult()
                 .setCode(cap.getCode())
                 .setSortNo(rel.getSortNo());
         PayCapabilityEnum capabilityEnum = PayCapabilityEnum.findByCode(cap.getCode());

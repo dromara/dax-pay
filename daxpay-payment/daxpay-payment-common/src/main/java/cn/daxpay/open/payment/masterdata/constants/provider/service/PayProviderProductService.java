@@ -36,7 +36,7 @@ public class PayProviderProductService {
         }
         Map<String, Set<String>> capabilityCodesByProduct = payProductCapabilityService.loadCapabilityCodesByProduct();
         for (PayProductResult product : payProductService.listAll()) {
-            PayProviderProductResult productItem = new PayProviderProductResult()
+            var productItem = new PayProviderProductResult()
                     .setLabel(product.getName())
                     .setValue(product.getCode())
                     .setChannel(product.getChannel())

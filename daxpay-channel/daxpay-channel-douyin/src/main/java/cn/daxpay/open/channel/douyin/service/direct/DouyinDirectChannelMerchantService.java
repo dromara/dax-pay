@@ -49,7 +49,7 @@ public class DouyinDirectChannelMerchantService {
         channelMerchant.setEnable(true);
         channelMerchantManager.save(channelMerchant);
         // 写直连绑定表(dyMchId 作为业务字段)
-        DouyinDirectChannelMerchant entity = new DouyinDirectChannelMerchant();
+        var entity = new DouyinDirectChannelMerchant();
         entity.setMchNo(param.getMchNo());
         entity.setChannelMchNo(channelMchNo);
         entity.setProduct(param.getProduct());
