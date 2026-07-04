@@ -4,6 +4,7 @@ import cn.daxpay.open.channel.alipay.dao.isv.AlipayIsvAppManager;
 import cn.daxpay.open.channel.alipay.dao.isv.AlipayIsvChannelMerchantManager;
 import cn.daxpay.open.channel.alipay.entity.isv.AlipayIsvApp;
 import cn.daxpay.open.channel.alipay.entity.isv.AlipayIsvChannelMerchant;
+import cn.daxpay.open.channel.alipay.param.isv.AlipayIsvAppAuthTokenUpdateParam;
 import cn.daxpay.open.channel.alipay.param.isv.AlipayIsvChannelMerchantCreateParam;
 import cn.daxpay.open.channel.alipay.result.isv.AlipayIsvChannelMerchantResult;
 import cn.daxpay.open.payment.channel.dao.mch.ChannelMerchantManager;
@@ -74,5 +75,20 @@ public class AlipayIsvChannelMerchantService {
                 .map(AlipayIsvChannelMerchant::toResult)
                 // 支付宝: 通道商户配置不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
+    }
+
+    /// 更新应用授权令牌
+    ///
+    /// 手动设置或更新子商户的 app_auth_token, 适用于创建时未填写后续补充,
+    /// 或令牌过期/变更后重新绑定的场景。
+    @Transactional(rollbackFor = Exception.class)
+    public void updateAppAuthToken(AlipayIsvAppAuthTokenUpdateParam param) {
+        var entity = alipayIsvChannelMerchantManager.lambdaQuery()
+                .eq(AlipayIsvChannelMerchant::getChannelMchNo, param.getChannelMchNo())
+                .oneOpt()
+                // 支付宝: 通道商户配置不存在
+                .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
+        entity.setAppAuthToken(param.getAppAuthToken());
+        alipayIsvChannelMerchantManager.updateById(entity);
     }
 }

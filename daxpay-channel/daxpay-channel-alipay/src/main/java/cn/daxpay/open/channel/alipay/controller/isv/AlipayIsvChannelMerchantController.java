@@ -3,6 +3,7 @@ package cn.daxpay.open.channel.alipay.controller.isv;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
+import cn.daxpay.open.channel.alipay.param.isv.AlipayIsvAppAuthTokenUpdateParam;
 import cn.daxpay.open.channel.alipay.param.isv.AlipayIsvChannelMerchantCreateParam;
 import cn.daxpay.open.channel.alipay.result.isv.AlipayIsvChannelMerchantResult;
 import cn.daxpay.open.channel.alipay.service.isv.AlipayIsvChannelMerchantService;
@@ -42,6 +43,14 @@ public class AlipayIsvChannelMerchantController {
     @PostMapping("/create")
     public Result<Void> create(@RequestBody @Validated AlipayIsvChannelMerchantCreateParam param) {
         alipayIsvChannelMerchantService.create(param);
+        return Res.ok();
+    }
+
+    @PermCode(code = "manage", nameCn = "通道商户管理", nameEn = "Channel Merchant Manage")
+    @Operation(summary = "更新应用授权令牌")
+    @PostMapping("/update-app-auth-token")
+    public Result<Void> updateAppAuthToken(@RequestBody @Validated AlipayIsvAppAuthTokenUpdateParam param) {
+        alipayIsvChannelMerchantService.updateAppAuthToken(param);
         return Res.ok();
     }
 }
