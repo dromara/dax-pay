@@ -1,0 +1,6 @@
+{
+  "sessionNotExistOrExpired": "会话不存在或已过期",
+  "invalidSessionId": "无效的会话ID",
+  "cannotKickoutAdmin": "不允许强制超级管理员下线",
+  "kickoutFailed": "强制用户下线失败: {0}"
+}

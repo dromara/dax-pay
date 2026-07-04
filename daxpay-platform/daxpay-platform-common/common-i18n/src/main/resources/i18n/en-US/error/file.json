@@ -1,5 +1,10 @@
 {
   "storageConfigNotExist": "Storage configuration not found",
   "recordNotExist": "File record not found",
-  "platformRecordNotExist": "Platform file record not found"
+  "platformRecordNotExist": "Platform file record not found",
+  "statusInvalidForConfirm": "Invalid file status, cannot confirm",
+  "objectKeyMismatch": "Object key mismatch",
+  "notUploadedToStorage": "File has not been uploaded to storage",
+  "notUploadedForAccess": "File upload not completed, cannot access",
+  "notUploadedForDownload": "File upload not completed, cannot download"
 }

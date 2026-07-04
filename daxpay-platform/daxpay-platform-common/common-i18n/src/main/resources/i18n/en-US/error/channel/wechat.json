@@ -2,12 +2,10 @@
   "notEnabled": "WeChat Pay is not enabled",
   "refundV3Failed": "WeChat refund V3 failed: {0}",
   "jsapiNeedOpenid": "WeChat JSAPI payment requires openId",
-  "barcodeNeedAuthCode": "WeChat barcode payment requires authCode",
   "h5Failed": "WeChat H5 payment failed: {0}",
   "appFailed": "WeChat APP payment failed: {0}",
   "jsapiFailed": "WeChat JSAPI payment failed: {0}",
   "scanFailed": "WeChat scan payment failed: {0}",
-  "barcodeV3Failed": "WeChat barcode V3 payment failed: {0}",
   "cancelV3Failed": "WeChat cancel V3 failed: {0}",
   "apiV3KeyRequired": "API V3 key is required",
   "privateKeyRequired": "Merchant private key is required",
@@ -45,5 +43,11 @@
   "privateCertRequired": "API certificate is required",
   "subMerchantDuplicate": "This sub-merchant already exists under the WeChat application",
   "directMchDuplicate": "The WeChat merchant already exists under this merchant",
-  "capabilityDuplicate": "WeChat payment capability [{0}] is duplicated"
+  "capabilityDuplicate": "WeChat payment capability [{0}] is duplicated",
+  "payFailed": "WeChat channel payment failed: {0}",
+  "closeFailed": "WeChat channel close failed: {0}",
+  "unsupportedPayMethod": "Unsupported WeChat payment method: {0}",
+  "accessTokenLockFailed": "Failed to get AccessToken: cannot acquire distributed lock",
+  "refreshAccessTokenFailed": "Failed to refresh AccessToken: {0}",
+  "refreshAccessTokenEmpty": "Failed to refresh AccessToken: returned token is empty"
 }

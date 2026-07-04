@@ -8,6 +8,9 @@ import cn.daxpay.open.platform.capability.file.entity.PlatformFileRecord;
 import cn.daxpay.open.platform.capability.file.param.FileUploadConfirmParam;
 import cn.daxpay.open.platform.capability.file.param.FileUploadPresignParam;
 import cn.daxpay.open.platform.capability.file.result.FileUploadPresignResult;
+import cn.daxpay.open.platform.core.code.CommonErrorCode;
+import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
+import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.IdUtil;
@@ -115,12 +118,12 @@ public class PlatformFileService {
                 .orElseThrow(() -> new DataNotExistException("error.file.recordNotExist"));
 
         if (!FileUploadStatusEnum.PENDING.getCode().equals(platformFileRecord.getStatus())) {
-            throw new IllegalStateException("文件状态不正确，无法确认");
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.file.statusInvalidForConfirm");
         }
 
         String objectKey = buildObjectKey(platformFileRecord.getPath(), platformFileRecord.getFilename());
         if (!objectKey.equals(param.getObjectKey())) {
-            throw new IllegalArgumentException("对象Key不匹配");
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.file.objectKeyMismatch");
         }
 
         var storageConfig = s3FileStorageService.getStorageConfig()
@@ -131,7 +134,7 @@ public class PlatformFileService {
 
         boolean exists = s3FileStorageService.exists(bucket, param.getObjectKey());
         if (!exists) {
-            throw new IllegalStateException("文件尚未上传到存储");
+            throw new BizInfoException(DaxPayErrorCode.OPERATION_FAIL, "error.file.notUploadedToStorage");
         }
 
         if (param.getFileSize() != null && param.getFileSize() > 0) {
@@ -163,7 +166,7 @@ public class PlatformFileService {
                 .orElseThrow(() -> new DataNotExistException("error.file.recordNotExist"));
 
         if (!FileUploadStatusEnum.UPLOADED.getCode().equals(platformFileRecord.getStatus())) {
-            throw new IllegalStateException("文件未上传完成，无法访问");
+            throw new BizInfoException(DaxPayErrorCode.OPERATION_FAIL, "error.file.notUploadedForAccess");
         }
 
         FileStorageConfig storageConfig = s3FileStorageService.getStorageConfig()
@@ -195,7 +198,7 @@ public class PlatformFileService {
                 .orElseThrow(() -> new DataNotExistException("error.file.recordNotExist"));
 
         if (!FileUploadStatusEnum.UPLOADED.getCode().equals(platformFileRecord.getStatus())) {
-            throw new IllegalStateException("文件未上传完成，无法下载");
+            throw new BizInfoException(DaxPayErrorCode.OPERATION_FAIL, "error.file.notUploadedForDownload");
         }
 
         FileStorageConfig storageConfig = s3FileStorageService.getStorageConfig()
@@ -227,7 +230,7 @@ public class PlatformFileService {
                 .orElseThrow(() -> new DataNotExistException("error.file.recordNotExist"));
 
         if (!FileUploadStatusEnum.UPLOADED.getCode().equals(platformFileRecord.getStatus())) {
-            throw new IllegalStateException("文件未上传完成，无法下载");
+            throw new BizInfoException(DaxPayErrorCode.OPERATION_FAIL, "error.file.notUploadedForDownload");
         }
 
         FileStorageConfig storageConfig = s3FileStorageService.getStorageConfig()

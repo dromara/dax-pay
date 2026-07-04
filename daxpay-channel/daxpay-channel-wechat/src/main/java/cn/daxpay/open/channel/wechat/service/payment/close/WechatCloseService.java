@@ -6,7 +6,9 @@ import cn.daxpay.open.channel.wechat.client.req.WechatCloseReq;
 import cn.daxpay.open.channel.wechat.client.resp.WechatCloseResp;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.core.trade.entity.PayTrade;
+import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.pay.CloseTypeEnum;
+import cn.daxpay.open.platform.core.exception.BizInfoException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -39,7 +41,7 @@ public class WechatCloseService {
         // 调用子应用
         DaxResult<WechatCloseResp> result = wechatChannelClient.close(req);
         if (result.getCode() != 0) {
-            throw new IllegalStateException("微信通道关闭失败: " + result.getMsg());
+            throw new BizInfoException(DaxPayErrorCode.OPERATION_FAIL, "error.channel.wechat.closeFailed", result.getMsg());
         }
 
         // 微信仅支持关闭, 无撤销

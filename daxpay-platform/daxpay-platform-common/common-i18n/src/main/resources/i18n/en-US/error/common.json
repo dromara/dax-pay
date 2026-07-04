@@ -28,5 +28,7 @@
   "payCallTypeNotSupported": "Unsupported checkout type: {0}",
   "channelAuthTypeNotExist": "Auth type not found: {0}",
   "mchAppStatusNotFound": "Merchant app status not found: {0}",
-  "storeStatusNotFound": "Store status not found: {0}"
+  "storeStatusNotFound": "Store status not found: {0}",
+  "backendBaseUrlNotConfigured": "Backend base URL (backendBaseUrl) is not configured, cannot generate callback URL",
+  "requestContextMissing": "Cannot obtain request context"
 }

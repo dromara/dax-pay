@@ -7,7 +7,9 @@ import cn.daxpay.open.payment.core.strategy.pay.PayStrategyContext;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.core.trade.bo.PayTradeResultBo;
 import cn.daxpay.open.payment.core.strategy.pay.AbsNormalPayStrategy;
+import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
+import cn.daxpay.open.platform.core.exception.BizInfoException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -45,7 +47,7 @@ public class DouyinDirectPayStrategy extends AbsNormalPayStrategy {
         // 调用子应用
         DaxResult<DouyinPayResp> result = douyinChannelClient.pay(req);
         if (result.getCode() != 0) {
-            throw new IllegalStateException("抖音通道支付失败: " + result.getMsg());
+            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "error.channel.douyin.payFailed", result.getMsg());
         }
 
         // 解析响应

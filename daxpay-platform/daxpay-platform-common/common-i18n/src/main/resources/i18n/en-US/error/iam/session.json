@@ -1,0 +1,6 @@
+{
+  "sessionNotExistOrExpired": "Session does not exist or has expired",
+  "invalidSessionId": "Invalid session ID",
+  "cannotKickoutAdmin": "Cannot force super administrator offline",
+  "kickoutFailed": "Failed to force user offline: {0}"
+}

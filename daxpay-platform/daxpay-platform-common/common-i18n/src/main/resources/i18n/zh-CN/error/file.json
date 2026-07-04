@@ -1,5 +1,10 @@
 {
   "storageConfigNotExist": "存储配置不存在",
   "recordNotExist": "文件记录不存在",
-  "platformRecordNotExist": "平台文件记录不存在"
+  "platformRecordNotExist": "平台文件记录不存在",
+  "statusInvalidForConfirm": "文件状态不正确，无法确认",
+  "objectKeyMismatch": "对象Key不匹配",
+  "notUploadedToStorage": "文件尚未上传到存储",
+  "notUploadedForAccess": "文件未上传完成，无法访问",
+  "notUploadedForDownload": "文件未上传完成，无法下载"
 }

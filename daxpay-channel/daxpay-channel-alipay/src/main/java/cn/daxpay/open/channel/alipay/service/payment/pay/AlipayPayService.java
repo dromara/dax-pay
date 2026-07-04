@@ -10,8 +10,11 @@ import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.core.trade.bo.PayTradeResultBo;
 import cn.daxpay.open.payment.core.trade.entity.PayTrade;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
+import cn.daxpay.open.platform.core.code.CommonErrorCode;
+import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
 import cn.daxpay.open.platform.core.enums.unipay.PayBodyTypeEnum;
+import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -52,7 +55,7 @@ public class AlipayPayService {
         // 调用子应用
         DaxResult<AlipayPayResp> result = alipayChannelClient.pay(req);
         if (result.getCode() != 0) {
-            throw new IllegalStateException("支付宝通道支付失败: " + result.getMsg());
+            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "error.channel.alipay.payFailed", result.getMsg());
         }
 
         return toPayResult(result.getData());
@@ -68,8 +71,8 @@ public class AlipayPayService {
             case ALIPAY_QR, ALIPAY_ORDER_QR -> AlipayPayMethod.QR;
             case ALIPAY_BARCODE -> AlipayPayMethod.BARCODE;
             case ALIPAY_JSAPI, ALIPAY_MINI -> AlipayPayMethod.JSAPI;
-            default -> throw new UnsupportedOperationException(
-                    "暂不支持的支付宝支付方式: " + methodCode);
+            default -> throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
+                    "error.channel.alipay.notSupportMethod", methodCode);
         };
     }
 

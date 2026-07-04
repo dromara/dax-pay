@@ -3,5 +3,6 @@
   "appIdDuplicate": "Douyin AppId already exists under this channel merchant",
   "directMchDuplicate": "This Douyin direct merchant already exists under the merchant",
   "appTypeInvalid": "Invalid Douyin application type",
-  "capabilityDuplicate": "Payment capability [{0}] is duplicated under this channel merchant"
+  "capabilityDuplicate": "Payment capability [{0}] is duplicated under this channel merchant",
+  "payFailed": "Douyin channel payment failed: {0}"
 }

@@ -1,5 +1,7 @@
 package cn.daxpay.open.platform.capability.wechat.token.service;
 
+import cn.daxpay.open.platform.core.code.CommonErrorCode;
+import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
@@ -71,7 +73,7 @@ public class WechatTokenService {
             if (StrUtil.isNotBlank(token)) {
                 return token;
             }
-            throw new RuntimeException("获取AccessToken失败：无法获取分布式锁");
+            throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR, "error.channel.wechat.accessTokenLockFailed");
         }
         
         try {
@@ -90,11 +92,11 @@ public class WechatTokenService {
                 newToken = wxMpService.getAccessToken();
             } catch (WxErrorException e) {
                 log.error("调用微信API获取AccessToken失败，wxAppId: {}, 错误: {}", wxAppId, e.getMessage());
-                throw new RuntimeException("刷新AccessToken失败: " + e.getMessage(), e);
+                throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR, "error.channel.wechat.refreshAccessTokenFailed", e.getMessage());
             }
             
             if (StrUtil.isBlank(newToken)) {
-                throw new RuntimeException("刷新AccessToken失败：返回的Token为空");
+                throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR, "error.channel.wechat.refreshAccessTokenEmpty");
             }
             
             // 缓存新Token

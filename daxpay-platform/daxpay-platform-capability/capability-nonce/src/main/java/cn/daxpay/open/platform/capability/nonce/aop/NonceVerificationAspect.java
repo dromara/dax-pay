@@ -66,7 +66,7 @@ public class NonceVerificationAspect {
     private HttpServletRequest getRequest() {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (attributes == null) {
-            throw new NonceMissingException("无法获取请求上下文");
+            throw new NonceMissingException("error.common.requestContextMissing");
         }
         return attributes.getRequest();
     }

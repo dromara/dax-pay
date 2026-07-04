@@ -1,7 +1,11 @@
 package cn.daxpay.open.platform.iam.service.session;
 
 import cn.daxpay.open.platform.core.code.CommonCode;
+import cn.daxpay.open.platform.core.code.CommonErrorCode;
+import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.entity.UserDetail;
+import cn.daxpay.open.platform.core.exception.BizException;
+import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.platform.iam.param.session.OnlineUserQuery;
@@ -128,12 +132,12 @@ public class OnlineUserService {
             // 使用 Sa-Token API 获取 session，然后获取 loginId
             SaSession session = StpUtil.getSessionBySessionId(sessionId);
             if (session == null) {
-                throw new RuntimeException("会话不存在或已过期");
+                throw new BizInfoException(CommonErrorCode.AUTHENTICATION_FAIL, "error.iam.session.sessionNotExistOrExpired");
             }
 
             Object loginId = session.getLoginId();
             if (loginId == null) {
-                throw new RuntimeException("无效的会话ID");
+                throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.iam.session.invalidSessionId");
             }
 
             Long userId = Long.parseLong(loginId.toString());
@@ -141,16 +145,18 @@ public class OnlineUserService {
             // 不允许踢掉超级管理员
             UserDetail userDetail = session.getModel(CommonCode.USER, UserDetail.class);
             if (userDetail != null && userDetail.isAdmin()) {
-                throw new RuntimeException("不允许强制超级管理员下线");
+                throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE, "error.iam.session.cannotKickoutAdmin");
             }
 
             StpUtil.kickout(userId);
         } catch (NumberFormatException e) {
             log.error("解析用户ID失败: sessionId={}", sessionId, e);
-            throw new RuntimeException("无效的会话ID");
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.iam.session.invalidSessionId");
         } catch (Exception e) {
+            // 业务异常直接透传, 不兜底为系统错误
+            if (e instanceof BizException) throw e;
             log.error("强制用户下线失败: sessionId={}", sessionId, e);
-            throw new RuntimeException("强制用户下线失败: " + e.getMessage());
+            throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR, "error.iam.session.kickoutFailed", e.getMessage());
         }
     }
 

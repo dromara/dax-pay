@@ -10,8 +10,11 @@ import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.core.trade.bo.PayTradeResultBo;
 import cn.daxpay.open.payment.core.trade.entity.PayTrade;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
+import cn.daxpay.open.platform.core.code.CommonErrorCode;
+import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
 import cn.daxpay.open.platform.core.enums.unipay.PayBodyTypeEnum;
+import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.system.service.config.PlatformUrlConfigService;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -63,7 +66,7 @@ public class WechatPayService {
         // 调用子应用
         DaxResult<WechatPayResp> result = wechatChannelClient.pay(req);
         if (result.getCode() != 0) {
-            throw new IllegalStateException("微信通道支付失败: " + result.getMsg());
+            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "error.channel.wechat.payFailed", result.getMsg());
         }
 
         return toPayResult(result.getData());
@@ -77,7 +80,7 @@ public class WechatPayService {
         String base = platformUrlConfigService.getUrlConfig().getBackendBaseUrl();
         if (StrUtil.isBlank(base)) {
             // backendBaseUrl 未配置时抛清晰异常, 避免 null 透传到微信报模糊的必填校验错误
-            throw new IllegalStateException("平台后端访问地址(backendBaseUrl)未配置, 无法生成微信回调地址");
+            throw new BizInfoException(DaxPayErrorCode.CONFIG_ERROR, "error.common.backendBaseUrlNotConfigured");
         }
         return StrUtil.format("{}/unipay/callback/{}/{}/wechat/pay",
                 base, order.getMchNo(), order.getAppId());
@@ -93,8 +96,8 @@ public class WechatPayService {
             case WECHAT_APP -> WechatPayMethod.APP;
             case WECHAT_H5 -> WechatPayMethod.H5;
             case WECHAT_BARCODE -> WechatPayMethod.MICROPAY;
-            default -> throw new UnsupportedOperationException(
-                    "暂不支持的微信支付方式: " + methodCode);
+            default -> throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
+                    "error.channel.wechat.unsupportedPayMethod", methodCode);
         };
     }
 
