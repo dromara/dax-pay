@@ -31,8 +31,7 @@ public class WechatDirectAppAuthConfigParam {
     @Schema(description = "应用密钥")
     private String appSecret;
 
-    @NotBlank(message = "{validation.field.authCallbackUrl.notBlank}")
     @Size(max = 512, message = "{validation.field.authCallbackUrl.size}")
-    @Schema(description = "授权回调地址")
+    @Schema(description = "授权回调地址（仅公众号，非必填）")
     private String authCallbackUrl;
 }
