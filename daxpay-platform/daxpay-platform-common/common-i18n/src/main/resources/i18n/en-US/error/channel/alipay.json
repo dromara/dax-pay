@@ -29,7 +29,7 @@
   "appCertRequired": "Application public certificate is required",
   "alipayCertRequired": "Alipay public certificate is required",
   "alipayRootCertRequired": "Alipay CA root certificate is required",
-  "apiV3KeyRequired": "APIv3 key is required",
+  "apiV3KeyRequired": "API V3 key is required",
   "subConfigNotExist": "Alipay sub-merchant configuration not found",
   "mchProductConfigNotExist": "Alipay merchant product payment configuration not found",
   "appIdDuplicate": "Application ID already exists under the same service provider",

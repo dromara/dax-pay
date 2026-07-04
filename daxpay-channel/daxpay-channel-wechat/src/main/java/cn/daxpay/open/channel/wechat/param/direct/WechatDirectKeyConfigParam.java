@@ -7,7 +7,7 @@ import lombok.experimental.Accessors;
 
 /// # 微信直连密钥配置保存参数
 ///
-/// 保存/更新微信直连密钥和证书时接收的请求参数，含通道商户号和APIv3密钥等信息。
+/// 保存/更新微信直连密钥和证书时接收的请求参数，含通道商户号和API V3密钥等信息。
 ///
 @Data
 @Accessors(chain = true)
@@ -22,7 +22,7 @@ public class WechatDirectKeyConfigParam {
     @Schema(description = "商户号")
     private String mchNo;
 
-    @Schema(description = "APIv3密钥")
+    @Schema(description = "API V3密钥")
     private String apiKeyV3;
 
     @Schema(description = "支付公钥")

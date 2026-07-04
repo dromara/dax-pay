@@ -24,7 +24,7 @@ public class WechatDirectKeyConfigResult extends BaseResult {
     private String channelMchNo;
 
     @SensitiveInfo(front = 12, end = 12)
-    @Schema(description = "APIv3密钥")
+    @Schema(description = "API V3密钥")
     private String apiKeyV3;
 
     @SensitiveInfo(front = 12, end = 12)

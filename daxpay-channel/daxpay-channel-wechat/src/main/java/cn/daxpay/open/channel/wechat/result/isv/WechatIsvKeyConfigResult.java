@@ -22,7 +22,7 @@ public class WechatIsvKeyConfigResult extends BaseResult {
     private String wxMchId;
 
     @SensitiveInfo(front = 12, end = 12)
-    @Schema(description = "APIv3密钥(加密存储)")
+    @Schema(description = "API V3密钥(加密存储)")
     private String apiKeyV3;
 
     @SensitiveInfo(front = 12, end = 12)

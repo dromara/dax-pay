@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
 
 /// # 微信直连密钥配置
 ///
-/// 直连商户维度的APIv3密钥和证书配置，一个微信商户号共享一套密钥/证书，与具体应用无关，敏感字段加密存储。
+/// 直连商户维度的API V3密钥和证书配置，一个微信商户号共享一套密钥/证书，与具体应用无关，敏感字段加密存储。
 ///
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -26,7 +26,7 @@ public class WechatDirectKeyConfig extends MchBaseEntity implements ToResult<Wec
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private String channelMchNo;
 
-    /// APIv3密钥(加密存储)
+    /// API V3密钥(加密存储)
     @TableField(typeHandler = DataEncryptTypeHandler.class)
     private String apiKeyV3;
 

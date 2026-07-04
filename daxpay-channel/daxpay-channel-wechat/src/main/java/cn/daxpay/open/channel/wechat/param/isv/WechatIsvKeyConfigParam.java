@@ -20,7 +20,7 @@ public class WechatIsvKeyConfigParam {
     @Schema(description = "微信服务商商户号")
     private String wxMchId;
 
-    @Schema(description = "APIv3密钥(加密存储)")
+    @Schema(description = "API V3密钥(加密存储)")
     private String apiKeyV3;
 
     @Schema(description = "支付公钥(加密存储)")

@@ -25,7 +25,7 @@ public class WechatIsvKeyConfig extends MpBaseEntity implements ToResult<WechatI
     /// 微信服务商商户号
     private String wxMchId;
 
-    /// APIv3密钥(加密存储)
+    /// API V3密钥(加密存储)
     @TableField(typeHandler = DataEncryptTypeHandler.class)
     private String apiKeyV3;
 

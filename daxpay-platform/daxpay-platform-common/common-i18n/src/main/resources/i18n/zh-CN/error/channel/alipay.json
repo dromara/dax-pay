@@ -29,7 +29,7 @@
   "appCertRequired": "应用公钥证书不可为空",
   "alipayCertRequired": "支付宝公钥证书不可为空",
   "alipayRootCertRequired": "支付宝CA根证书不可为空",
-  "apiV3KeyRequired": "APIv3密钥不可为空",
+  "apiV3KeyRequired": "API V3密钥不可为空",
   "subConfigNotExist": "支付宝子商户配置不存在",
   "mchProductConfigNotExist": "支付宝产品支付配置不存在",
   "appIdDuplicate": "同一服务商下应用ID已存在",

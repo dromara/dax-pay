@@ -13,7 +13,7 @@ public class WechatSdkCredential {
     private String wxMchId;
     /// 微信应用ID(公众号 / 小程序 / APP 的 appId)
     private String wxAppId;
-    /// APIv3 密钥
+    /// API V3 密钥
     private String apiKeyV3;
     /// 商户私钥(PEM 格式 PKCS#8 字符串)
     private String privateKey;
@@ -25,8 +25,6 @@ public class WechatSdkCredential {
     private String publicKey;
     /// 支付公钥ID
     private String publicKeyId;
-    /// APIv2 密钥(仅付款码 MICROPAY 走 V2 接口时需要)
-    private String apiV2Key;
     /// 是否沙箱环境
     private Boolean sandbox;
 }
