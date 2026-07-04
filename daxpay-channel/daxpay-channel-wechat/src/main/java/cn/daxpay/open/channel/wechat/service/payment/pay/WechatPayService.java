@@ -12,6 +12,8 @@ import cn.daxpay.open.payment.core.trade.entity.PayTrade;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
 import cn.daxpay.open.platform.core.enums.unipay.PayBodyTypeEnum;
+import cn.daxpay.open.platform.system.service.config.PlatformUrlConfigService;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,7 @@ import org.springframework.stereotype.Service;
 public class WechatPayService {
 
     private final WechatChannelClient wechatChannelClient;
+    private final PlatformUrlConfigService platformUrlConfigService;
 
     /// 执行微信支付
     ///
@@ -47,7 +50,8 @@ public class WechatPayService {
         req.setAuthCode(payParam.getAuthCode());
         req.setOpenId(payParam.getOpenId());
         req.setAttach(payParam.getAttach());
-        req.setNotifyUrl(payParam.getNotifyUrl());
+        // 通道通知地址: 始终使用平台生成的回调地址(微信→平台), 不使用 payParam.notifyUrl(语义为平台→商户)
+        req.setNotifyUrl(this.buildNotifyUrl(order));
         req.setExpireTime(payParam.getExpiredTime());
         // H5 场景信息(场景参数)
         if (req.getMethod() == WechatPayMethod.H5) {
@@ -63,6 +67,20 @@ public class WechatPayService {
         }
 
         return toPayResult(result.getData());
+    }
+
+    /// 生成微信支付异步通知地址(微信→平台)
+    ///
+    /// 沿用商业版旧版路径约定: `{backendBaseUrl}/unipay/callback/{mchNo}/{appId}/wechat/pay`
+    /// backendBaseUrl 来自平台端点配置 [PlatformUrlConfig], 与社交登录回调地址同源
+    private String buildNotifyUrl(PayTrade order) {
+        String base = platformUrlConfigService.getUrlConfig().getBackendBaseUrl();
+        if (StrUtil.isBlank(base)) {
+            // backendBaseUrl 未配置时抛清晰异常, 避免 null 透传到微信报模糊的必填校验错误
+            throw new IllegalStateException("平台后端访问地址(backendBaseUrl)未配置, 无法生成微信回调地址");
+        }
+        return StrUtil.format("{}/unipay/callback/{}/{}/wechat/pay",
+                base, order.getMchNo(), order.getAppId());
     }
 
     /// 平台支付方式([PayMethodEnum] code) -> 微信通道支付方式
