@@ -54,6 +54,8 @@ public class AlipayPayService {
         req.setOpenId(payParam.getOpenId());
         // 通道通知地址: 始终使用平台生成的回调地址(支付宝→平台), 不使用 payParam.notifyUrl(语义为平台→商户)
         req.setNotifyUrl(this.buildNotifyUrl(order));
+        // 关单时间透传, 子应用据此向支付宝设置 time_expire
+        req.setExpireTime(payParam.getExpiredTime());
         req.setCredential(credential);
 
         // 调用子应用
