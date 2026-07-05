@@ -44,3 +44,8 @@ UPDATE "public"."iam_perm_menu" SET title_cn='抖音应用', title_en='Douyin Ap
 -- 微信服务商通道商户应用 → 微信服务商子商户应用
 UPDATE "public"."iam_perm_menu" SET title_cn='微信服务商子商户应用', title_en='WeChat ISV Sub-merchant App',
   i18n_key='menu.payment.merchant.channelMerchant.wechatIsvApp' WHERE id=4040119;
+
+-- 移动端应用管理(平台级, 商户端/管理端/收银台应用配置)
+INSERT INTO "public"."iam_perm_menu" VALUES (40504, 405, 'payment:config:mobile_app', 'admin', 'MobileAppConfig', '移动端应用管理', 'Mobile App Management', 'menu.payment.config.mobileApp', 'lucide:smartphone', 'f', 'f', '/payment/config/mobileApp/MobileAppConfig', '/payment/config/mobile-app', NULL, 5, 'f', 't', 'f', 1, 1, 0, 'f', 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-05 00:00:00+00', '2026-07-05 00:00:00+00');
+-- 移动端应用详情(按端类型配置各平台, 隐藏子页)
+INSERT INTO "public"."iam_perm_menu" VALUES (40505, 40504, 'payment:config:mobile_app_detail', 'admin', 'MobileAppDetail', '移动端应用详情', 'Mobile App Detail', 'menu.payment.config.mobileAppDetail', NULL, 't', 'f', '/payment/config/mobileApp/detail/MobileAppDetail', '/payment/config/mobile-app/detail/:appType', NULL, 1, 'f', 't', 'f', 1, 1, 0, 'f', 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-05 00:00:00+00', '2026-07-05 00:00:00+00');

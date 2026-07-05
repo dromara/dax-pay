@@ -127,3 +127,41 @@ COMMENT ON COLUMN "public"."wechat_isv_mch_app_auth_config"."deleted" IS '逻辑
 CREATE UNIQUE INDEX IF NOT EXISTS "uk_wechat_isv_mch_app_auth_channel_app"
     ON "public"."wechat_isv_mch_app_auth_config" ("channel_mch_no", "wechat_isv_mch_app_id")
     WHERE "deleted" = false;
+
+-- 移动端应用配置(平台级, 按端类型+移动平台维度, 每组合一条)
+CREATE TABLE IF NOT EXISTS "public"."pay_platform_mobile_app" (
+    "id"                  bigint       NOT NULL PRIMARY KEY,
+    "app_type"            varchar(20)  NOT NULL,
+    "platform"            varchar(20)  NOT NULL,
+    "app_name"            varchar(100),
+    "app_config"          jsonb,
+    "notify_config"       jsonb,
+    "binding_enabled"     boolean      NOT NULL DEFAULT false,
+    "enabled"             boolean      NOT NULL DEFAULT true,
+    "remark"              varchar(500),
+    "creator"             bigint,
+    "create_time"         timestamptz(6),
+    "last_modifier"       bigint,
+    "last_modified_time"  timestamptz(6),
+    "version"             integer      NOT NULL DEFAULT 0,
+    "deleted"             boolean      NOT NULL DEFAULT false
+);
+COMMENT ON TABLE  "public"."pay_platform_mobile_app" IS '移动端应用配置(平台级, 按端+平台维度)';
+COMMENT ON COLUMN "public"."pay_platform_mobile_app"."id" IS '主键';
+COMMENT ON COLUMN "public"."pay_platform_mobile_app"."app_type" IS '端类型(merchant商户端/admin管理端/cashier收银台)';
+COMMENT ON COLUMN "public"."pay_platform_mobile_app"."platform" IS '移动平台(wx_h5微信公众号/wx_mini微信小程序/alipay_mini支付宝小程序/dy_mini抖音小程序/android安卓/ios iOS)';
+COMMENT ON COLUMN "public"."pay_platform_mobile_app"."app_name" IS '应用名称(展示用)';
+COMMENT ON COLUMN "public"."pay_platform_mobile_app"."app_config" IS '平台特有密钥配置(jsonb, 敏感字段加密存储)';
+COMMENT ON COLUMN "public"."pay_platform_mobile_app"."notify_config" IS '消息通知配置(jsonb)';
+COMMENT ON COLUMN "public"."pay_platform_mobile_app"."binding_enabled" IS '是否启用第三方账号用户绑定';
+COMMENT ON COLUMN "public"."pay_platform_mobile_app"."enabled" IS '是否启用';
+COMMENT ON COLUMN "public"."pay_platform_mobile_app"."remark" IS '备注';
+COMMENT ON COLUMN "public"."pay_platform_mobile_app"."creator" IS '创建人ID';
+COMMENT ON COLUMN "public"."pay_platform_mobile_app"."create_time" IS '创建时间(UTC)';
+COMMENT ON COLUMN "public"."pay_platform_mobile_app"."last_modifier" IS '最后修改人ID';
+COMMENT ON COLUMN "public"."pay_platform_mobile_app"."last_modified_time" IS '最后修改时间(UTC)';
+COMMENT ON COLUMN "public"."pay_platform_mobile_app"."version" IS '乐观锁版本号';
+COMMENT ON COLUMN "public"."pay_platform_mobile_app"."deleted" IS '逻辑删除标志';
+CREATE UNIQUE INDEX IF NOT EXISTS "uk_pay_mobile_app_type_platform"
+    ON "public"."pay_platform_mobile_app" ("app_type", "platform")
+    WHERE "deleted" = false;

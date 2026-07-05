@@ -1,0 +1,5 @@
+{
+  "notExist": "Mobile app configuration does not exist",
+  "appTypeNotFound": "No matching mobile app type found: {0}",
+  "platformNotFound": "No matching mobile platform found: {0}"
+}

@@ -1,0 +1,8 @@
+{
+  "wx_h5": "微信公众号",
+  "wx_mini": "微信小程序",
+  "alipay_mini": "支付宝小程序",
+  "dy_mini": "抖音小程序",
+  "android": "安卓APP",
+  "ios": "iOS APP"
+}

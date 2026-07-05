@@ -1,0 +1,5 @@
+{
+  "notExist": "移动端应用配置不存在",
+  "appTypeNotFound": "未找到对应的移动端应用端类型: {0}",
+  "platformNotFound": "未找到对应的移动端平台: {0}"
+}
