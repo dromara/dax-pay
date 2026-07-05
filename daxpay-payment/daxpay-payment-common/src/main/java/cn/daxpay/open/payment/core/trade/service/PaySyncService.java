@@ -214,6 +214,8 @@ public class PaySyncService {
                 .setAdjust(adjust)
                 .setErrorCode(syncResult.getSyncErrorCode())
                 .setErrorMsg(syncResult.getSyncErrorMsg());
+        // 商户号显式赋值, 不依赖线程上下文自动填充(异步通知/定时任务等非HTTP场景上下文缺失会导致填充null)
+        record.setMchNo(trade.getMchNo());
         paySyncRecordService.saveRecord(record);
     }
 }
