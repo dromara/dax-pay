@@ -17,23 +17,23 @@ import java.util.Objects;
 public enum PayMethodEnum implements I18nSupport {
 
     /* 聚合支付 */
-    /// 聚合扫码支付
+    /// 聚合扫码
     AGGREGATE_PAY_QRCODE("aggregate_pay_qrcode", PayProviderEnum.AGGREGATE_PAY),
-    /// 聚合付款码支付
+    /// 聚合付款码
     AGGREGATE_PAY_BARCODE("aggregate_pay_barcode", PayProviderEnum.AGGREGATE_PAY),
 
     /* 微信 */
     /// 微信小程序收银台
     WECHAT_CASHIER("wechat_cashier", PayProviderEnum.WECHAT),
-    /// 微信扫码
+    /// 微信Native
     WECHAT_QR("wechat_qr", PayProviderEnum.WECHAT),
-    /// 微信jsapi
+    /// 微信JSAPI
     WECHAT_JSAPI("wechat_jsapi", PayProviderEnum.WECHAT),
     /// 微信小程序
     WECHAT_MINI("wechat_mini", PayProviderEnum.WECHAT),
     /// 微信H5
     WECHAT_H5("wechat_h5", PayProviderEnum.WECHAT),
-    /// 微信应用支付
+    /// 微信APP
     WECHAT_APP("wechat_app", PayProviderEnum.WECHAT),
     /// 微信付款码
     WECHAT_BARCODE("wechat_barcode", PayProviderEnum.WECHAT),
@@ -43,15 +43,15 @@ public enum PayMethodEnum implements I18nSupport {
     ALIPAY_QR("alipay_qr", PayProviderEnum.ALIPAY),
     /// 支付宝订单码
     ALIPAY_ORDER_QR("alipay_order_qr", PayProviderEnum.ALIPAY),
-    /// 支付宝jsapi
+    /// 支付宝JSAPI
     ALIPAY_JSAPI("alipay_jsapi", PayProviderEnum.ALIPAY),
     /// 支付宝小程序
     ALIPAY_MINI("alipay_mini", PayProviderEnum.ALIPAY),
-    /// 支付宝电脑支付
+    /// 支付宝PC
     ALIPAY_PC("alipay_pc", PayProviderEnum.ALIPAY),
     /// 支付宝H5
     ALIPAY_H5("alipay_h5", PayProviderEnum.ALIPAY),
-    /// 支付宝应用支付
+    /// 支付宝APP
     ALIPAY_APP("alipay_app", PayProviderEnum.ALIPAY),
     /// 支付宝付款码
     ALIPAY_BARCODE("alipay_barcode", PayProviderEnum.ALIPAY),
@@ -59,7 +59,7 @@ public enum PayMethodEnum implements I18nSupport {
     /* 银联 */
     /// 银联扫码
     UNION_QR("union_qr", PayProviderEnum.UNION_PAY),
-    /// 银联jsapi
+    /// 银联JSAPI
     UNION_JSAPI("union_jsapi", PayProviderEnum.UNION_PAY),
     /// 银联H5
     UNION_H5("union_h5", PayProviderEnum.UNION_PAY),
@@ -67,26 +67,26 @@ public enum PayMethodEnum implements I18nSupport {
     UNION_PAY_BARCODE("union_pay_barcode", PayProviderEnum.UNION_PAY),
 
     /* 抖音 */
-    /// 抖音扫码支付
+    /// 抖音扫码
     DOUYIN_QR("douyin_qr", PayProviderEnum.DOUYIN),
-    /// 抖音JSAPI支付
+    /// 抖音JSAPI
     DOUYIN_JSAPI("douyin_jsapi", PayProviderEnum.DOUYIN),
-    /// 抖音H5支付
+    /// 抖音H5
     DOUYIN_H5("douyin_h5", PayProviderEnum.DOUYIN),
-    /// 抖音APP支付
+    /// 抖音APP
     DOUYIN_APP("douyin_app", PayProviderEnum.DOUYIN),
 
     /* 卡组 */
-    /// Visa 网关支付
+    /// Visa网关
     VISA_CARD_GATEWAY("visa_card_gateway", PayProviderEnum.VISA),
-    /// Visa 刷卡支付
+    /// Visa刷卡
     VISA_CARD_PRESENT("visa_card_present", PayProviderEnum.VISA),
-    /// 万事达网关支付
+    /// 万事达网关
     MASTERCARD_CARD_GATEWAY("mastercard_card_gateway", PayProviderEnum.MASTERCARD),
-    /// 万事达刷卡支付
+    /// 万事达刷卡
     MASTERCARD_CARD_PRESENT("mastercard_card_present", PayProviderEnum.MASTERCARD),
 
-    /// 其他支付方式(无固定渠道归属)
+    /// 其他(无固定渠道归属)
     OTHER("other", null),
     ;
 

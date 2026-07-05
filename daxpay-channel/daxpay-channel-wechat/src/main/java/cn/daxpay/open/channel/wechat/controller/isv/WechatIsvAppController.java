@@ -97,7 +97,7 @@ public class WechatIsvAppController {
     @Operation(summary = "查询应用授权认证配置")
     @GetMapping("/find-auth-config-by-app-id")
     public Result<WechatIsvAppAuthConfigResult> findAuthConfigByAppId(
-            @NotNull(message = "{validation.field.id.notNull}") Long wechatIsvAppId) {
+            @NotNull(message = "{validation.field.wechatIsvAppId.notNull}") Long wechatIsvAppId) {
         var config = wechatIsvAppAuthConfigService.findByWechatIsvAppId(wechatIsvAppId);
         return Res.ok(WechatIsvAppAuthConfigConvert.CONVERT.toResult(config));
     }

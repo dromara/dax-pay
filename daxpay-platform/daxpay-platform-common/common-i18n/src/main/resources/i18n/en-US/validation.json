@@ -103,6 +103,9 @@
     "alipayDirectAppId": {
       "notNull": "Alipay direct app id cannot be null"
     },
+    "wechatIsvAppId": {
+      "notNull": "WeChat ISV app id cannot be null"
+    },
     "account": {
       "notBlank": "Account cannot be blank",
       "size": "Account length must be between 6 and 20 characters",
@@ -507,6 +510,9 @@
     },
     "wechatDirectAppId": {
       "notNull": "WeChat direct app ID cannot be blank"
+    },
+    "wechatIsvMchAppId": {
+      "notNull": "WeChat ISV channel merchant app ID cannot be blank"
     },
     "appSecret": {
       "size": "App secret cannot exceed 512 characters"

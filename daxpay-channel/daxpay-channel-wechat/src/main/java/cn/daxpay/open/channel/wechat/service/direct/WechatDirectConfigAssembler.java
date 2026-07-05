@@ -2,7 +2,9 @@ package cn.daxpay.open.channel.wechat.service.direct;
 
 import cn.daxpay.open.channel.wechat.client.credential.WechatSdkCredential;
 import cn.daxpay.open.channel.wechat.dao.direct.WechatDirectAppManager;
+import cn.daxpay.open.channel.wechat.dao.direct.WechatDirectChannelMerchantManager;
 import cn.daxpay.open.channel.wechat.entity.direct.WechatDirectApp;
+import cn.daxpay.open.channel.wechat.entity.direct.WechatDirectChannelMerchant;
 import cn.daxpay.open.channel.wechat.entity.direct.WechatDirectKeyConfig;
 import cn.daxpay.open.payment.masterdata.constants.product.dao.PayProductConfigManager;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
@@ -28,6 +30,7 @@ import org.springframework.stereotype.Service;
 public class WechatDirectConfigAssembler {
 
     private final WechatDirectAppManager wechatDirectAppManager;
+    private final WechatDirectChannelMerchantManager wechatDirectChannelMerchantManager;
     private final WechatDirectKeyConfigService wechatDirectKeyConfigService;
     private final WechatDirectAppCapabilityService wechatDirectAppCapabilityService;
     private final PayProductConfigManager payProductConfigManager;
@@ -35,16 +38,20 @@ public class WechatDirectConfigAssembler {
     /// 组装直连商户的通道调用凭证(下发给子应用)
     ///
     /// @param mchNo        商户号(兜底定位应用)
-    /// @param channelMchNo 通道商户号(微信商户号, 密钥查询与应用定位主键)
+    /// @param channelMchNo 通道商户号(系统雪花号, 密钥查询与应用定位主键, 不等于微信商户号)
     /// @param capability   支付能力编码(用于选择匹配的应用)
     /// @return 微信 SDK 凭证, 字段对齐子应用 WechatSdkCredential
     public WechatSdkCredential buildConfig(String mchNo, String channelMchNo, String capability) {
         WechatDirectApp app = resolveApp(mchNo, channelMchNo, capability);
         WechatDirectKeyConfig keyConfig = wechatDirectKeyConfigService.findByChannelMchNo(channelMchNo);
 
+        // 从通道商户绑定表取真实微信商户号(channelMchNo 是系统雪花号, 不等于 wxMchId)
+        WechatDirectChannelMerchant channelMerchant = wechatDirectChannelMerchantManager.findByChannelMchNo(channelMchNo)
+                // 微信: 通道商户配置不存在
+                .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
+
         WechatSdkCredential credential = new WechatSdkCredential();
-        // 微信商户号 = 通道商户号
-        credential.setWxMchId(app.getChannelMchNo());
+        credential.setWxMchId(channelMerchant.getWxMchId());
         credential.setWxAppId(app.getWxAppId());
         // 密钥与证书
         credential.setApiKeyV3(keyConfig.getApiKeyV3());

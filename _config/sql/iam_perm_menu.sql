@@ -12,7 +12,7 @@
  Target Server Version : 160014 (160014)
  File Encoding         : 65001
 
- Date: 03/07/2026 18:32:43
+ Date: 05/07/2026 10:35:00
 */
 
 
@@ -155,6 +155,7 @@ INSERT INTO "public"."iam_perm_menu" VALUES (4040116, 401, 'payment:platform:pro
 INSERT INTO "public"."iam_perm_menu" VALUES (309, 308, 'system:notify:notice', 'admin', 'SystemNotify', '通知公告', 'Notification', 'menu.system.notify.notice', 'lucide:megaphone', 'f', 'f', '/system/notify/notice/NoticeList', '/system/notify/notice', NULL, 20, 'f', 't', 'f', 1, 1, 0, 'f', 'menu', NULL, NULL, NULL, NULL, NULL, '2026-06-24 16:00:00+00', '2026-06-24 16:00:00+00', NULL);
 INSERT INTO "public"."iam_perm_menu" VALUES (308, 3, 'system:notify', 'admin', 'SystemNotice', '通知中心', 'Notification Center', 'menu.system.notify', 'lucide:bell', 'f', 'f', NULL, '/system/notify', '/system/notify/notice', 20, 'f', 't', 'f', 1, 1, 0, 'f', 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-01 07:16:30.927645+00', '2026-07-01 07:16:30.927645+00');
 INSERT INTO "public"."iam_perm_menu" VALUES (603, 6, 'payment:refund', 'admin', 'RefundOrderList', '退款订单', 'Refund Orders', 'menu.trade.refundOrder', 'lucide:rotate-ccw', 'f', 'f', '/payment/order/RefundOrderList', '/trade/refund-order', NULL, 3, 'f', 't', 'f', 1, 1, 0, 'f', 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-03 16:00:00+00', '2026-07-03 16:00:00+00');
+INSERT INTO "public"."iam_perm_menu" VALUES (4040119, 40401, 'channel:wechat:app', 'admin', 'WechatIsvMchAppManage', '微信服务商通道商户应用', 'WeChat ISV Channel Merchant App', 'menu.payment.merchant.channelMerchant.wechatIsvMchApp', NULL, 't', 'f', '/payment/channel/wechat/manage/mch/isv-app/WechatIsvMchAppManage', '/payment/merchant/channel-merchant/wechat-isv-mch-app-manage', NULL, 14, 'f', 't', 'f', 1, 1, 0, 'f', 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-05 01:49:32.557374+00', '2026-07-05 01:49:32.557374+00');
 
 -- ----------------------------
 -- Primary Key structure for table iam_perm_menu

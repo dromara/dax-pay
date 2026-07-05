@@ -13,7 +13,7 @@ import lombok.experimental.Accessors;
 @Schema(title = "微信服务商应用授权认证配置保存参数")
 public class WechatIsvAppAuthConfigParam {
 
-    @NotNull(message = "{validation.field.id.notNull}")
+    @NotNull(message = "{validation.field.wechatIsvAppId.notNull}")
     @Schema(description = "微信服务商应用ID")
     private Long wechatIsvAppId;
 
