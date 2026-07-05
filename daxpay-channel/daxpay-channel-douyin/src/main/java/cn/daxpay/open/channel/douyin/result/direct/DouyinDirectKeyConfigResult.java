@@ -1,6 +1,7 @@
 package cn.daxpay.open.channel.douyin.result.direct;
 
 import cn.daxpay.open.payment.common.result.MchBaseResult;
+import cn.daxpay.open.platform.common.json.sensitive.SensitiveInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,12 +18,14 @@ public class DouyinDirectKeyConfigResult extends MchBaseResult {
     @Schema(description = "通道商户号")
     private String channelMchNo;
 
+    @SensitiveInfo(front = 12, end = 12)
     @Schema(description = "商户私钥(已脱敏)")
     private String merchantPrivateKey;
 
     @Schema(description = "商家公钥证书序列号")
     private String merchantSerialNumber;
 
+    @SensitiveInfo(front = 12, end = 12)
     @Schema(description = "接口加密密钥(已脱敏)")
     private String encryptKey;
 
