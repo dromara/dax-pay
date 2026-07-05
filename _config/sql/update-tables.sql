@@ -165,3 +165,159 @@ COMMENT ON COLUMN "public"."pay_platform_mobile_app"."deleted" IS '逻辑删除�
 CREATE UNIQUE INDEX IF NOT EXISTS "uk_pay_mobile_app_type_platform"
     ON "public"."pay_platform_mobile_app" ("app_type", "platform")
     WHERE "deleted" = false;
+
+-- ============================================================
+-- 抖音支付直连: 通道商户绑定 / 应用 / 密钥 / 能力 / 授权配置
+-- ============================================================
+
+-- 抖音直连通道商户绑定(一个抖音商户号 dy_mch_id 对应一个 channel_mch_no)
+CREATE TABLE IF NOT EXISTS "public"."douyin_direct_channel_merchant" (
+    "id"                  bigint       NOT NULL PRIMARY KEY,
+    "mch_no"              varchar(32)  NOT NULL,
+    "channel_mch_no"      varchar(64)  NOT NULL,
+    "product"             varchar(32)  NOT NULL,
+    "dy_mch_id"           varchar(64)  NOT NULL,
+    "creator"             bigint,
+    "create_time"         timestamptz(6),
+    "last_modifier"       bigint,
+    "last_modified_time"  timestamptz(6),
+    "version"             integer      NOT NULL DEFAULT 0,
+    "deleted"             boolean      NOT NULL DEFAULT false
+);
+COMMENT ON TABLE  "public"."douyin_direct_channel_merchant" IS '抖音直连通道商户绑定';
+COMMENT ON COLUMN "public"."douyin_direct_channel_merchant"."mch_no" IS '商户号';
+COMMENT ON COLUMN "public"."douyin_direct_channel_merchant"."channel_mch_no" IS '通道商户号(系统生成雪花号)';
+COMMENT ON COLUMN "public"."douyin_direct_channel_merchant"."product" IS '所属支付产品(如 douyin_pay)';
+COMMENT ON COLUMN "public"."douyin_direct_channel_merchant"."dy_mch_id" IS '抖音商户号(MCHID)';
+COMMENT ON COLUMN "public"."douyin_direct_channel_merchant"."creator" IS '创建人ID';
+COMMENT ON COLUMN "public"."douyin_direct_channel_merchant"."create_time" IS '创建时间(UTC)';
+COMMENT ON COLUMN "public"."douyin_direct_channel_merchant"."last_modifier" IS '最后修改人ID';
+COMMENT ON COLUMN "public"."douyin_direct_channel_merchant"."last_modified_time" IS '最后修改时间(UTC)';
+COMMENT ON COLUMN "public"."douyin_direct_channel_merchant"."version" IS '乐观锁版本号';
+COMMENT ON COLUMN "public"."douyin_direct_channel_merchant"."deleted" IS '逻辑删除标志';
+-- 同一商户下抖音商户号不重复
+CREATE UNIQUE INDEX IF NOT EXISTS "uk_douyin_direct_mch_dyid"
+    ON "public"."douyin_direct_channel_merchant" ("mch_no", "dy_mch_id")
+    WHERE "deleted" = false;
+
+-- 抖音直连商户应用(每个应用关联一个通道商户号, 拥有独立的抖音应用 AppId)
+CREATE TABLE IF NOT EXISTS "public"."douyin_direct_app" (
+    "id"                  bigint       NOT NULL PRIMARY KEY,
+    "mch_no"              varchar(32)  NOT NULL,
+    "channel_mch_no"      varchar(64)  NOT NULL,
+    "app_name"            varchar(128) NOT NULL,
+    "douyin_app_id"       varchar(64)  NOT NULL,
+    "app_type"            varchar(32)  NOT NULL,
+    "creator"             bigint,
+    "create_time"         timestamptz(6),
+    "last_modifier"       bigint,
+    "last_modified_time"  timestamptz(6),
+    "version"             integer      NOT NULL DEFAULT 0,
+    "deleted"             boolean      NOT NULL DEFAULT false
+);
+COMMENT ON TABLE  "public"."douyin_direct_app" IS '抖音直连商户应用';
+COMMENT ON COLUMN "public"."douyin_direct_app"."mch_no" IS '商户号';
+COMMENT ON COLUMN "public"."douyin_direct_app"."channel_mch_no" IS '通道商户号';
+COMMENT ON COLUMN "public"."douyin_direct_app"."app_name" IS '应用名称';
+COMMENT ON COLUMN "public"."douyin_direct_app"."douyin_app_id" IS '抖音应用AppId(APPID)';
+COMMENT ON COLUMN "public"."douyin_direct_app"."app_type" IS '应用类型(mini_program小程序/mobile_app移动应用/web_app网站应用)';
+COMMENT ON COLUMN "public"."douyin_direct_app"."creator" IS '创建人ID';
+COMMENT ON COLUMN "public"."douyin_direct_app"."create_time" IS '创建时间(UTC)';
+COMMENT ON COLUMN "public"."douyin_direct_app"."last_modifier" IS '最后修改人ID';
+COMMENT ON COLUMN "public"."douyin_direct_app"."last_modified_time" IS '最后修改时间(UTC)';
+COMMENT ON COLUMN "public"."douyin_direct_app"."version" IS '乐观锁版本号';
+COMMENT ON COLUMN "public"."douyin_direct_app"."deleted" IS '逻辑删除标志';
+-- 同一通道商户下抖音应用ID不重复
+CREATE UNIQUE INDEX IF NOT EXISTS "uk_douyin_direct_app_appid"
+    ON "public"."douyin_direct_app" ("channel_mch_no", "douyin_app_id")
+    WHERE "deleted" = false;
+
+-- 抖音直连密钥配置(直连商户维度, 一个抖音商户号共享一套密钥)
+CREATE TABLE IF NOT EXISTS "public"."douyin_direct_key_config" (
+    "id"                      bigint       NOT NULL PRIMARY KEY,
+    "mch_no"                  varchar(32)  NOT NULL,
+    "channel_mch_no"          varchar(64)  NOT NULL,
+    "merchant_private_key"    text,
+    "merchant_serial_number"  varchar(128),
+    "encrypt_key"             text,
+    "creator"                 bigint,
+    "create_time"             timestamptz(6),
+    "last_modifier"           bigint,
+    "last_modified_time"      timestamptz(6),
+    "version"                 integer      NOT NULL DEFAULT 0,
+    "deleted"                 boolean      NOT NULL DEFAULT false
+);
+COMMENT ON TABLE  "public"."douyin_direct_key_config" IS '抖音直连密钥配置';
+COMMENT ON COLUMN "public"."douyin_direct_key_config"."mch_no" IS '商户号';
+COMMENT ON COLUMN "public"."douyin_direct_key_config"."channel_mch_no" IS '通道商户号(唯一关联)';
+COMMENT ON COLUMN "public"."douyin_direct_key_config"."merchant_private_key" IS '商户私钥(MERCHANT_PRIVATE_KEY, 加密存储)';
+COMMENT ON COLUMN "public"."douyin_direct_key_config"."merchant_serial_number" IS '商家公钥证书序列号(MERCHANT_SERIAL_NO)';
+COMMENT ON COLUMN "public"."douyin_direct_key_config"."encrypt_key" IS '接口加密密钥(ENCRYPT_KEY, 加密存储)';
+COMMENT ON COLUMN "public"."douyin_direct_key_config"."creator" IS '创建人ID';
+COMMENT ON COLUMN "public"."douyin_direct_key_config"."create_time" IS '创建时间(UTC)';
+COMMENT ON COLUMN "public"."douyin_direct_key_config"."last_modifier" IS '最后修改人ID';
+COMMENT ON COLUMN "public"."douyin_direct_key_config"."last_modified_time" IS '最后修改时间(UTC)';
+COMMENT ON COLUMN "public"."douyin_direct_key_config"."version" IS '乐观锁版本号';
+COMMENT ON COLUMN "public"."douyin_direct_key_config"."deleted" IS '逻辑删除标志';
+-- 一个通道商户号唯一一份密钥配置
+CREATE UNIQUE INDEX IF NOT EXISTS "uk_douyin_direct_key_cmchno"
+    ON "public"."douyin_direct_key_config" ("channel_mch_no")
+    WHERE "deleted" = false;
+
+-- 抖音直连商户应用支付能力关联(建立通道商户维度下"支付能力→应用"的绑定关系)
+CREATE TABLE IF NOT EXISTS "public"."douyin_direct_app_capability" (
+    "id"                    bigint       NOT NULL PRIMARY KEY,
+    "mch_no"                varchar(32)  NOT NULL,
+    "channel_mch_no"        varchar(64)  NOT NULL,
+    "capability"            varchar(64)  NOT NULL,
+    "douyin_direct_app_id"  bigint       NOT NULL,
+    "creator"               bigint,
+    "create_time"           timestamptz(6),
+    "last_modifier"         bigint,
+    "last_modified_time"    timestamptz(6),
+    "version"               integer      NOT NULL DEFAULT 0,
+    "deleted"               boolean      NOT NULL DEFAULT false
+);
+COMMENT ON TABLE  "public"."douyin_direct_app_capability" IS '抖音直连商户应用支付能力关联';
+COMMENT ON COLUMN "public"."douyin_direct_app_capability"."mch_no" IS '商户号';
+COMMENT ON COLUMN "public"."douyin_direct_app_capability"."channel_mch_no" IS '通道商户号';
+COMMENT ON COLUMN "public"."douyin_direct_app_capability"."capability" IS '支付能力编码(如 DOUYIN_QR/DOUYIN_JSAPI 等)';
+COMMENT ON COLUMN "public"."douyin_direct_app_capability"."douyin_direct_app_id" IS '关联抖音直连应用ID(指向 douyin_direct_app.id)';
+COMMENT ON COLUMN "public"."douyin_direct_app_capability"."creator" IS '创建人ID';
+COMMENT ON COLUMN "public"."douyin_direct_app_capability"."create_time" IS '创建时间(UTC)';
+COMMENT ON COLUMN "public"."douyin_direct_app_capability"."last_modifier" IS '最后修改人ID';
+COMMENT ON COLUMN "public"."douyin_direct_app_capability"."last_modified_time" IS '最后修改时间(UTC)';
+COMMENT ON COLUMN "public"."douyin_direct_app_capability"."version" IS '乐观锁版本号';
+COMMENT ON COLUMN "public"."douyin_direct_app_capability"."deleted" IS '逻辑删除标志';
+-- 同一通道商户下, 一个支付能力只能绑定一个应用
+CREATE UNIQUE INDEX IF NOT EXISTS "uk_douyin_direct_cap_cmchno_cap"
+    ON "public"."douyin_direct_app_capability" ("channel_mch_no", "capability")
+    WHERE "deleted" = false;
+
+-- 抖音直连商户应用授权认证配置(应用密钥 / 授权回调地址)
+CREATE TABLE IF NOT EXISTS "public"."douyin_direct_app_auth_config" (
+    "id"                    bigint       NOT NULL PRIMARY KEY,
+    "mch_no"                varchar(32)  NOT NULL,
+    "channel_mch_no"        varchar(64)  NOT NULL,
+    "douyin_direct_app_id"  bigint       NOT NULL,
+    "app_secret"            text,
+    "auth_callback_url"     varchar(512),
+    "creator"               bigint,
+    "create_time"           timestamptz(6),
+    "last_modifier"         bigint,
+    "last_modified_time"    timestamptz(6),
+    "version"               integer      NOT NULL DEFAULT 0,
+    "deleted"               boolean      NOT NULL DEFAULT false
+);
+COMMENT ON TABLE  "public"."douyin_direct_app_auth_config" IS '抖音直连商户应用授权认证配置';
+COMMENT ON COLUMN "public"."douyin_direct_app_auth_config"."mch_no" IS '商户号';
+COMMENT ON COLUMN "public"."douyin_direct_app_auth_config"."channel_mch_no" IS '通道商户号';
+COMMENT ON COLUMN "public"."douyin_direct_app_auth_config"."douyin_direct_app_id" IS '关联抖音直连应用ID(指向 douyin_direct_app.id)';
+COMMENT ON COLUMN "public"."douyin_direct_app_auth_config"."app_secret" IS '应用密钥(加密存储)';
+COMMENT ON COLUMN "public"."douyin_direct_app_auth_config"."auth_callback_url" IS '授权回调地址';
+COMMENT ON COLUMN "public"."douyin_direct_app_auth_config"."creator" IS '创建人ID';
+COMMENT ON COLUMN "public"."douyin_direct_app_auth_config"."create_time" IS '创建时间(UTC)';
+COMMENT ON COLUMN "public"."douyin_direct_app_auth_config"."last_modifier" IS '最后修改人ID';
+COMMENT ON COLUMN "public"."douyin_direct_app_auth_config"."last_modified_time" IS '最后修改时间(UTC)';
+COMMENT ON COLUMN "public"."douyin_direct_app_auth_config"."version" IS '乐观锁版本号';
+COMMENT ON COLUMN "public"."douyin_direct_app_auth_config"."deleted" IS '逻辑删除标志';
