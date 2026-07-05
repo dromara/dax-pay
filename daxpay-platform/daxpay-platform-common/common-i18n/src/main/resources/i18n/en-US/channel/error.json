@@ -21,5 +21,12 @@
   "alipayPreCreateFailed": "Alipay pre-create order failed: {0}",
   "alipayPayCallFailed": "Alipay payment call failed: {0}",
   "alipayCloseOrderFailed": "Alipay close order failed: {0}",
-  "alipayClientCreateFailed": "Failed to create AlipayClient: {0}"
+  "alipayClientCreateFailed": "Failed to create AlipayClient: {0}",
+  "lakalaIsvKeyNotConfigured": "Lakala ISV key is not configured",
+  "lakalaMerchantDuplicate": "This Lakala merchant number already exists under the merchant",
+  "lakalaPayFailed": "Lakala payment failed: {0}",
+  "lakalaRefundFailed": "Lakala refund failed: {0}",
+  "lakalaSyncFailed": "Lakala order sync failed: {0}",
+  "lakalaCloseFailed": "Lakala close order failed: {0}",
+  "lakalaUnsupportedPayMethod": "Unsupported payment method for Lakala: {0}"
 }

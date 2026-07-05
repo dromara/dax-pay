@@ -21,5 +21,12 @@
   "alipayPreCreateFailed": "支付宝预创建订单失败: {0}",
   "alipayPayCallFailed": "支付宝支付调用失败: {0}",
   "alipayCloseOrderFailed": "支付宝关闭订单失败: {0}",
-  "alipayClientCreateFailed": "创建AlipayClient失败: {0}"
+  "alipayClientCreateFailed": "创建AlipayClient失败: {0}",
+  "lakalaIsvKeyNotConfigured": "拉卡拉服务商密钥未配置",
+  "lakalaMerchantDuplicate": "该商户下已存在此拉卡拉商户号",
+  "lakalaPayFailed": "拉卡拉支付失败: {0}",
+  "lakalaRefundFailed": "拉卡拉退款失败: {0}",
+  "lakalaSyncFailed": "拉卡拉订单同步失败: {0}",
+  "lakalaCloseFailed": "拉卡拉关闭订单失败: {0}",
+  "lakalaUnsupportedPayMethod": "拉卡拉不支持的支付方式: {0}"
 }

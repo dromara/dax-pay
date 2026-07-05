@@ -1,0 +1,49 @@
+package cn.daxpay.open.channel.lakala.strategy.isv;
+
+import cn.daxpay.open.channel.lakala.client.credential.LakalaSdkCredential;
+import cn.daxpay.open.channel.lakala.service.isv.LakalaIsvConfigAssembler;
+import cn.daxpay.open.channel.lakala.service.payment.isv.LakalaIsvCloseService;
+import cn.daxpay.open.payment.core.strategy.pay.AbsPayCloseStrategy;
+import cn.daxpay.open.payment.core.strategy.pay.PayStrategyContext;
+import cn.daxpay.open.payment.core.trade.entity.NormalPayOrder;
+import cn.daxpay.open.payment.core.trade.entity.PayTrade;
+import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
+import cn.daxpay.open.platform.core.enums.pay.pay.CloseTypeEnum;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+/// # 拉卡拉服务商支付关闭策略
+///
+/// 从上下文容器读取通道路由参数(channelMchNo / capability),
+/// 组装通道凭证(委托 [LakalaIsvConfigAssembler]), 关闭执行委托给 [LakalaIsvCloseService]。
+///
+/// 注意: 拉卡拉仅提供关单接口, 无撤销接口(useCancel 参数由 service 层忽略)。
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class LakalaIsvCloseStrategy extends AbsPayCloseStrategy {
+
+    private final LakalaIsvCloseService lakalaIsvCloseService;
+    private final LakalaIsvConfigAssembler lakalaIsvConfigAssembler;
+
+    @Override
+    public ProductEnum getProduct() {
+        return ProductEnum.LAKALA_PAY;
+    }
+
+    @Override
+    public CloseTypeEnum doClose(PayStrategyContext context, boolean useCancel) {
+        // 从上下文容器读取通道路由参数
+        NormalPayOrder normalOrder = context.getContainer();
+        String channelMchNo = normalOrder != null ? normalOrder.getChannelMchNo() : null;
+        String capability = normalOrder != null ? normalOrder.getCapability() : null;
+        PayTrade trade = context.getTrade();
+
+        // 组装通道调用凭证
+        LakalaSdkCredential credential = lakalaIsvConfigAssembler.buildConfig(
+                trade.getMchNo(), channelMchNo, capability);
+
+        return lakalaIsvCloseService.close(trade, credential, useCancel);
+    }
+}

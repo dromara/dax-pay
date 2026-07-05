@@ -1,0 +1,45 @@
+package cn.daxpay.open.channel.lakala.strategy.isv;
+
+import cn.daxpay.open.channel.lakala.client.credential.LakalaSdkCredential;
+import cn.daxpay.open.channel.lakala.service.isv.LakalaIsvConfigAssembler;
+import cn.daxpay.open.channel.lakala.service.payment.isv.LakalaIsvSyncService;
+import cn.daxpay.open.payment.core.strategy.pay.PayStrategyContext;
+import cn.daxpay.open.payment.core.strategy.sync.AbsSyncPayOrderStrategy;
+import cn.daxpay.open.payment.core.trade.bo.PaySyncResultBo;
+import cn.daxpay.open.payment.core.trade.entity.NormalPayOrder;
+import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+/// # 拉卡拉服务商支付同步策略
+///
+/// 从上下文容器读取通道路由参数(channelMchNo / capability),
+/// 组装通道凭证(委托 [LakalaIsvConfigAssembler]), 同步执行委托给 [LakalaIsvSyncService]。
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class LakalaIsvSyncStrategy extends AbsSyncPayOrderStrategy {
+
+    private final LakalaIsvSyncService lakalaIsvSyncService;
+    private final LakalaIsvConfigAssembler lakalaIsvConfigAssembler;
+
+    @Override
+    public ProductEnum getProduct() {
+        return ProductEnum.LAKALA_PAY;
+    }
+
+    @Override
+    public PaySyncResultBo doSync(PayStrategyContext context) {
+        // 从上下文容器读取通道路由参数
+        NormalPayOrder normalOrder = context.getContainer();
+        String channelMchNo = normalOrder != null ? normalOrder.getChannelMchNo() : null;
+        String capability = normalOrder != null ? normalOrder.getCapability() : null;
+
+        // 组装通道调用凭证
+        LakalaSdkCredential credential = lakalaIsvConfigAssembler.buildConfig(
+                context.getTrade().getMchNo(), channelMchNo, capability);
+
+        return lakalaIsvSyncService.sync(context.getTrade(), credential);
+    }
+}
