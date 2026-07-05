@@ -113,7 +113,8 @@ public class WechatIsvPayService {
             switch (bodyType) {
                 case LINK -> bo.setPayBodyType(PayBodyTypeEnum.LINK);
                 case QR_CODE -> bo.setPayBodyType(PayBodyTypeEnum.QR_CODE);
-                case IDENTIFIER, APP_ORDER_STR -> bo.setPayBodyType(PayBodyTypeEnum.IDENTIFIER);
+                case JSAPI -> bo.setPayBodyType(PayBodyTypeEnum.JSAPI);
+                case APP_ORDER_STR, IDENTIFIER -> bo.setPayBodyType(PayBodyTypeEnum.IDENTIFIER);
             }
         }
 

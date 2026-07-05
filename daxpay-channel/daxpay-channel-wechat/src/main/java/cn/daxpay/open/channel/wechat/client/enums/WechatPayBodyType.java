@@ -8,8 +8,10 @@ public enum WechatPayBodyType {
     LINK,
     /// 二维码内容(NATIVE 扫码场景)
     QR_CODE,
-    /// 调起参数 JSON(JSAPI / 小程序场景)
-    IDENTIFIER,
+    /// JSAPI/小程序调起参数 JSON
+    JSAPI,
     /// APP 调起参数 JSON(APP 场景)
-    APP_ORDER_STR;
+    APP_ORDER_STR,
+    /// 通用标识码(兜底)
+    IDENTIFIER;
 }
