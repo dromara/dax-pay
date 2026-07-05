@@ -7,12 +7,16 @@ import cn.daxpay.open.platform.core.annotation.IgnoreTenant;
 import cn.daxpay.open.platform.core.exception.DangerSqlException;
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
+import cn.daxpay.open.payment.common.enums.PayFundStatusEnum;
+import cn.daxpay.open.payment.common.enums.PayTradeTypeEnum;
 import cn.daxpay.open.payment.core.trade.entity.PayTrade;
 import cn.daxpay.open.payment.core.trade.param.PayTradeQuery;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.stereotype.Repository;
 
+import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Optional;
 
 /// # 资金交易凭证管理器
@@ -52,6 +56,21 @@ public class PayTradeManager extends BaseManager<PayTradeMapper, PayTrade> {
         // 默认按创建时间倒序
         wrapper.orderByDesc("create_time");
         return this.page(mpPage, wrapper);
+    }
+
+    /// 查询普通支付已超时但仍处理中的资金交易(兜底定时任务用)
+    ///
+    /// 条件: tradeType=NORMAL 且 status=PROCESSING 且 expiredTime < now
+    /// 跨租户扫描(定时任务无 HTTP 上下文), 单次上限 500 防积压爆量。
+    @IgnoreTenant
+    public List<PayTrade> findNormalTimeoutTrades(OffsetDateTime now) {
+        return lambdaQuery()
+                .eq(PayTrade::getTradeType, PayTradeTypeEnum.NORMAL.getCode())
+                .eq(PayTrade::getStatus, PayFundStatusEnum.PROCESSING.getCode())
+                .lt(PayTrade::getExpiredTime, now)
+                .orderByAsc(PayTrade::getExpiredTime)
+                .last("limit 500")
+                .list();
     }
 
     /// 根据id进行更新，失败时抛出异常

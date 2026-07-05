@@ -78,4 +78,17 @@ public class PayUniHandleService {
         payTradeManager.updateById(trade);
         payNormalOrderManager.updateById(normalOrder);
     }
+
+    /// 支付超时关闭处理
+    /// 资金态置 CLOSE(与普通关闭等价), 容器态置 EXPIRED(区分业务语义),
+    /// 供 MQ 延时关单 / 兜底定时任务 / 同步发现超时 三条路径统一调用。
+    public void payTimeout(PayTrade trade, NormalPayOrder normalOrder) {
+        OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
+        trade.setStatus(PayFundStatusEnum.CLOSE.getCode());
+        trade.setCloseTime(now);
+        normalOrder.setStatus(NormalPayOrderStatusEnum.EXPIRED.getCode());
+        normalOrder.setCloseTime(now);
+        payTradeManager.updateById(trade);
+        payNormalOrderManager.updateById(normalOrder);
+    }
 }

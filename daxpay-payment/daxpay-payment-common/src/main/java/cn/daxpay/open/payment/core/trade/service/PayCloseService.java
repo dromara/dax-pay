@@ -106,6 +106,64 @@ public class PayCloseService {
         }
     }
 
+    /// 超时自动关单(幂等)
+    ///
+    /// 供 MQ 延时消息消费者 [cn.daxpay.open.payment.core.trade.mq.NormalPayTimeoutConsumer]
+    /// 与兜底定时任务 [cn.daxpay.open.payment.core.trade.job.NormalPayTimeoutJob] 调用。
+    ///
+    /// 与 [closeOrder] 的区别:
+    /// - 仅接受 tradeNo 定位, 非 PROCESSING 状态静默返回(幂等, 不抛异常)
+    /// - closeType 固定 TIMEOUT, 容器态置 EXPIRED(见 [PayUniHandleService#payTimeout])
+    /// - 不接受 useCancel, 超时统一走 close
+    /// - 通道关单失败不阻断本地关闭, 仅记录失败原因, 通道侧由后续同步兜底
+    public void closeForTimeout(String tradeNo) {
+        PayTrade trade = payTradeManager.findByTradeNo(tradeNo).orElse(null);
+        if (Objects.isNull(trade)) {
+            // 订单不存在, 静默返回
+            return;
+        }
+        // 幂等校验: 仅处理中需超时关闭; 已成功/失败/关闭/撤销 直接返回
+        if (!Objects.equals(PayFundStatusEnum.PROCESSING.getCode(), trade.getStatus())) {
+            return;
+        }
+        // 复用与手动关单相同的锁键, 保证两条路径互斥
+        LockInfo lock = lockTemplate.lock("payment:close:" + trade.getId(), 10000, 50);
+        if (Objects.isNull(lock)) {
+            // 并发关单进行中, 当前触发交由兜底任务后续补救
+            log.warn("超时关单获取锁失败(并发关单进行中), 交由兜底任务处理, tradeNo={}", tradeNo);
+            return;
+        }
+        try {
+            // 加锁后再次校验状态(防止加锁期间已被其他路径处理)
+            trade = payTradeManager.findByTradeNo(tradeNo).orElse(null);
+            if (Objects.isNull(trade)
+                    || !Objects.equals(PayFundStatusEnum.PROCESSING.getCode(), trade.getStatus())) {
+                return;
+            }
+            NormalPayOrder normalOrder = payNormalOrderManager.findById(trade.getContainerId())
+                    .orElse(null);
+            String errMsg = null;
+            try {
+                // 处理中: 调用通道关闭策略(超时统一走 close, 不走 cancel)
+                var context = new PayStrategyContext()
+                        .setContainer(normalOrder)
+                        .setTrade(trade);
+                AbsPayCloseStrategy strategy = PaymentStrategyFactory.createByProduct(
+                        trade.getProduct(), AbsPayCloseStrategy.class);
+                strategy.doBeforeClose(context);
+                strategy.doClose(context, false);
+            } catch (Exception e) {
+                // 通道关单失败不阻断本地关闭, 通道侧状态由后续同步兜底
+                errMsg = e.getMessage();
+                log.warn("超时关单调用通道关闭失败, 仅本地关闭, tradeNo={}", tradeNo, e);
+            }
+            payUniHandleService.payTimeout(trade, normalOrder);
+            this.saveRecord(trade, normalOrder, CloseTypeEnum.TIMEOUT, errMsg);
+        } finally {
+            lockTemplate.releaseLock(lock);
+        }
+    }
+
     /// 保存关闭记录
     private void saveRecord(PayTrade trade, NormalPayOrder normalOrder, CloseTypeEnum closeType, String errMsg) {
         PayCloseRecord record = new PayCloseRecord()

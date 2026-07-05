@@ -1,5 +1,7 @@
 package cn.daxpay.open.payment.core.trade.service;
 
+import cn.daxpay.open.platform.common.artemis.service.ArtemisTemplateService;
+import cn.daxpay.open.platform.common.json.util.JacksonUtil;
 import cn.daxpay.open.platform.core.enums.pay.channel.CurrencyEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
@@ -17,6 +19,8 @@ import cn.daxpay.open.payment.core.trade.dao.NormalPayOrderManager;
 import cn.daxpay.open.payment.core.trade.entity.NormalPayOrder;
 import cn.daxpay.open.payment.core.trade.dao.PayTradeManager;
 import cn.daxpay.open.payment.core.trade.entity.PayTrade;
+import cn.daxpay.open.payment.core.trade.mq.NormalPayTimeoutMessage;
+import cn.daxpay.open.payment.core.trade.mq.PayArtemisConstants;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +42,7 @@ public class PayAssistService {
 
     private final NormalPayOrderManager payNormalOrderManager;
     private final PayTradeManager payTradeManager;
+    private final ArtemisTemplateService artemisTemplateService;
 
     /// 创建支付订单（容器 + 资金交易），填充到 context
     /// 调用方需保证 appId 和 product 已解析完毕
@@ -95,6 +100,24 @@ public class PayAssistService {
         trade.setOpenid(payParam.getOpenId());
         payTradeManager.save(trade);
         context.setContainer(normalOrder).setTrade(trade);
+        // 注册超时关单延时消息(按订单过期时间定时投递)
+        this.registerTimeoutClose(trade.getTradeNo(), normalOrder.getBizOrderNo(), expiredTime);
+    }
+
+    /// 注册超时关单延时消息
+    /// 按订单过期时间定时投递到 [PayArtemisConstants#NORMAL_TIMEOUT_QUEUE]。
+    /// 发送失败不阻断下单流程, 由兜底定时任务 [cn.daxpay.open.payment.core.trade.job.NormalPayTimeoutJob] 补救。
+    private void registerTimeoutClose(String tradeNo, String bizOrderNo, OffsetDateTime expiredTime) {
+        NormalPayTimeoutMessage message = new NormalPayTimeoutMessage()
+                .setTradeNo(tradeNo)
+                .setBizOrderNo(bizOrderNo);
+        String json = JacksonUtil.toJson(message);
+        try {
+            artemisTemplateService.sendDelayAt(PayArtemisConstants.NORMAL_TIMEOUT_QUEUE, json, expiredTime);
+        } catch (Exception e) {
+            // broker 不可用等情况, 不阻断下单, 由定时任务兜底
+            log.warn("注册超时关单延时消息失败, 由定时任务兜底, tradeNo={}", tradeNo, e);
+        }
     }
 
     /// 查询已有订单并校验，结果填充到 context

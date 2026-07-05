@@ -186,7 +186,9 @@ public class PaySyncService {
         payUniHandleService.paySuccess(trade);
     }
 
-    /// 主动关闭网关交易(超时场景), 调用通道关闭策略后统一关闭本地
+    /// 主动关闭网关交易(超时场景), 调用通道关闭策略后置超时关闭态
+    /// 资金态置 CLOSE, 容器态置 EXPIRED(见 [PayUniHandleService#payTimeout]),
+    /// 与 MQ 延时关单 / 兜底定时任务 三条路径统一落点。
     private void closeRemote(PayTrade trade, NormalPayOrder normalOrder) {
         AbsPayCloseStrategy strategy = PaymentStrategyFactory.createByProduct(
                 trade.getProduct(), AbsPayCloseStrategy.class);
@@ -195,7 +197,8 @@ public class PaySyncService {
                 .setTrade(trade);
         strategy.doBeforeClose(context);
         strategy.doClose(context, false);
-        payUniHandleService.payClose(trade, normalOrder, false);
+        // 超时关闭: 资金态置 CLOSE, 容器态置 EXPIRED(区分业务语义)
+        payUniHandleService.payTimeout(trade, normalOrder);
     }
 
     /// 保存同步流水记录

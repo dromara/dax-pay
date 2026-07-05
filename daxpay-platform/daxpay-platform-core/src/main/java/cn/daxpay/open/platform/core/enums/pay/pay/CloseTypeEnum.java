@@ -14,6 +14,8 @@ public enum CloseTypeEnum {
     CLOSE("close", PayStatusEnum.CLOSE),
     /// 撤销
     CANCEL("cancel", PayStatusEnum.CANCEL),
+    /// 超时关闭(资金态与 CLOSE 等价, 容器态置 EXPIRED, 区分关闭原因)
+    TIMEOUT("timeout", PayStatusEnum.CLOSE),
     ;
 
     private final String code;

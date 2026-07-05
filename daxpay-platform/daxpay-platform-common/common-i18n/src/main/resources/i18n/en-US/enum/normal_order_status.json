@@ -1,0 +1,6 @@
+{
+  "wait_pay": "Pending",
+  "paid": "Paid",
+  "closed": "Closed",
+  "expired": "Expired"
+}
