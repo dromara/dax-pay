@@ -27,7 +27,7 @@ import java.util.Optional;
 /// - sub_appid ← [WechatIsvMchApp.wxAppId] (子商户应用AppId, 可选; 未配置留空)
 ///
 /// 服务商应用解析(委托 [WechatIsvAppCapabilityService.resolveApp]): 显式配置 > appType自动推导 > 首个兜底。
-/// 子商户应用解析(委托 [WechatIsvMchAppCapabilityService.resolveApp]): 同优先级, 未命中返回 empty(sub_appid 留空)。
+/// 子商户应用解析(委托 [WechatIsvMchAppCapabilityService.resolveApp]): 仅显式配置, 未配置返回 empty(sub_appid 留空)。
 ///
 /// 供支付策略([cn.daxpay.open.channel.wechat.strategy.isv.*])组装通道调用凭证。
 @Slf4j
@@ -47,8 +47,8 @@ public class WechatIsvConfigAssembler {
     /// @param capability   支付能力编码(用于解析应用)
     /// @return 微信 SDK 凭证(服务商模式, subMchId/subAppId 已填充)
     public WechatSdkCredential buildConfig(String mchNo, String channelMchNo, String capability) {
-        // 服务商密钥(全局唯一, 含 sp_mchid 与证书)
-        WechatIsvKeyConfig keyConfig = wechatIsvKeyConfigService.findByProduct(ProductEnum.WECHAT_ISV.getCode());
+        // 服务商密钥(全局唯一, 含 sp_mchid 与证书; 缺失或关键字段为空时 fail-fast)
+        WechatIsvKeyConfig keyConfig = wechatIsvKeyConfigService.getByProductForPay(ProductEnum.WECHAT_ISV.getCode());
         // 特约商户绑定(取 sub_mchid)
         WechatIsvChannelMerchant channelMerchant = wechatIsvChannelMerchantManager.findByChannelMchNo(channelMchNo)
                 // 微信: 通道商户配置不存在

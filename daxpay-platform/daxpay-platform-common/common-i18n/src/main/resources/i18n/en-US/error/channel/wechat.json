@@ -49,5 +49,6 @@
   "unsupportedPayMethod": "Unsupported WeChat payment method: {0}",
   "accessTokenLockFailed": "Failed to get AccessToken: cannot acquire distributed lock",
   "refreshAccessTokenFailed": "Failed to refresh AccessToken: {0}",
-  "refreshAccessTokenEmpty": "Failed to refresh AccessToken: returned token is empty"
+  "refreshAccessTokenEmpty": "Failed to refresh AccessToken: returned token is empty",
+  "isvKeyNotConfigured": "WeChat ISV key is not configured or incomplete, please configure the ISV key first"
 }

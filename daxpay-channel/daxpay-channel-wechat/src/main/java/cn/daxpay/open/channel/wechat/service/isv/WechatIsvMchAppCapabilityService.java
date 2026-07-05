@@ -1,6 +1,5 @@
 package cn.daxpay.open.channel.wechat.service.isv;
 
-import cn.daxpay.open.channel.wechat.code.WechatAppTypeCode;
 import cn.daxpay.open.channel.wechat.convert.isv.WechatIsvMchAppCapabilityConvert;
 import cn.daxpay.open.channel.wechat.dao.isv.WechatIsvMchAppCapabilityManager;
 import cn.daxpay.open.channel.wechat.dao.isv.WechatIsvMchAppManager;
@@ -37,8 +36,8 @@ import java.util.stream.Collectors;
 /// 由调用方(未来的微信服务商支付策略/配置组装器)回退到全局服务商应用配置
 /// ([cn.daxpay.open.channel.wechat.service.isv.WechatIsvAppCapabilityService])。
 ///
-/// 支付时通过 [resolveApp] 解析当前能力对应的应用：显式配置 > appType自动推导 > 通道商户首个兜底,
-/// 三者均未命中返回 empty(语义为"使用全局服务商配置")。
+/// 支付时通过 [resolveApp] 解析当前能力对应的应用：仅读取显式配置, 未配置返回 empty
+/// (语义为"该能力未在子商户维度配置, sub_appid 留空, 走纯服务商应用模式")。
 ///
 @Slf4j
 @Service
@@ -109,33 +108,22 @@ public class WechatIsvMchAppCapabilityService {
         capabilityManager.deleteByWechatIsvMchAppId(wechatIsvMchAppId);
     }
 
-    /// 支付时解析当前支付能力对应的子商户应用：显式配置 > appType自动推导 > 通道商户首个兜底
+    /// 支付时解析当前支付能力对应的子商户应用(仅读取显式配置)
     ///
-    /// 三者均未命中返回 empty,语义为"该能力未在子商户维度配置,请回退到全局服务商应用配置"。
-    /// 调用方(未来的微信服务商配置组装器)应在此基础上回退 [WechatIsvAppCapabilityService.resolveApp]。
+    /// 子商户应用(sub_appid)为可选项, 不做 appType 推导与首个兜底, 避免取到不相关的子应用
+    /// 导致 openid 体系不匹配。未配置返回 empty, 由调用方留空 sub_appid, 走纯服务商应用模式。
     ///
     /// @param channelMchNo 通道商户号(服务商特约商户)
-    /// @param capability    支付能力编码
-    /// @return 命中的子商户应用;未命中返回 empty(应回退全局服务商配置)
+    /// @param capability   支付能力编码
+    /// @return 命中的子商户应用;未配置返回 empty(sub_appid 留空)
     public Optional<WechatIsvMchApp> resolveApp(String channelMchNo, String capability) {
         if (StrUtil.hasBlank(channelMchNo, capability)) {
             return Optional.empty();
         }
-        // 1. 显式配置优先
-        var rel = capabilityManager.findOne(channelMchNo, capability);
-        if (rel.isPresent()) {
-            return wechatIsvMchAppManager.findById(rel.get().getWechatIsvMchAppId());
-        }
-        // 2. 未配置则按能力 → appType 自动推导
-        String appType = WechatAppTypeCode.resolveAppType(capability);
-        if (appType != null) {
-            Optional<WechatIsvMchApp> byType = wechatIsvMchAppManager.findFirstByChannelMchNoAndAppType(channelMchNo, appType);
-            if (byType.isPresent()) {
-                return byType;
-            }
-        }
-        // 3. 最终兜底：按通道商户号取首个子商户应用;仍未命中返回 empty(回退全局)
-        return wechatIsvMchAppManager.findFirstByChannelMchNo(channelMchNo);
+        // 子商户应用(sub_appid)为可选项, 仅读取显式配置, 未配置则返回 empty
+        // (sub_appid 留空时走纯服务商应用 sp_appid + sub_mchid 模式)
+        return capabilityManager.findOne(channelMchNo, capability)
+                .flatMap(rel -> wechatIsvMchAppManager.findById(rel.getWechatIsvMchAppId()));
     }
 
     /// 查询微信服务商产品支持的支付能力候选列表(含国际化名称)
