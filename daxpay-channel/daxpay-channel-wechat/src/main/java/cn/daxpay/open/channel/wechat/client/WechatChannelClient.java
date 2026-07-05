@@ -1,10 +1,12 @@
 package cn.daxpay.open.channel.wechat.client;
 
+import cn.daxpay.open.channel.wechat.client.req.WechatCallbackParseReq;
 import cn.daxpay.open.channel.wechat.client.req.WechatCloseReq;
 import cn.daxpay.open.channel.wechat.client.req.WechatPayReq;
 import cn.daxpay.open.channel.wechat.client.req.WechatRefundReq;
 import cn.daxpay.open.channel.wechat.client.req.WechatRefundSyncReq;
 import cn.daxpay.open.channel.wechat.client.req.WechatSyncReq;
+import cn.daxpay.open.channel.wechat.client.resp.WechatCallbackParseResp;
 import cn.daxpay.open.channel.wechat.client.resp.WechatCloseResp;
 import cn.daxpay.open.channel.wechat.client.resp.WechatPayResp;
 import cn.daxpay.open.channel.wechat.client.resp.WechatRefundResp;
@@ -63,4 +65,12 @@ public interface WechatChannelClient {
     /// 服务商退款同步(查询退款状态)
     @PostExchange("/channel/wechat/isv/refund-sync")
     DaxResult<WechatRefundSyncResp> isvRefundSync(@RequestBody WechatRefundSyncReq req);
+
+    /// 支付回调验签解析(转发到子应用验签)
+    @PostExchange("/channel/wechat/callback/parse-pay")
+    DaxResult<WechatCallbackParseResp> parsePayCallback(@RequestBody WechatCallbackParseReq req);
+
+    /// 退款回调验签解析(转发到子应用验签)
+    @PostExchange("/channel/wechat/callback/parse-refund")
+    DaxResult<WechatCallbackParseResp> parseRefundCallback(@RequestBody WechatCallbackParseReq req);
 }

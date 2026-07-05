@@ -127,6 +127,15 @@
     "channelMerchantName": {
       "notBlank": "Merchant name cannot be blank"
     },
+    "umsAppId": {
+      "notBlank": "UMS App ID cannot be blank"
+    },
+    "appKey": {
+      "notBlank": "App Key cannot be blank"
+    },
+    "secretKey": {
+      "notBlank": "Secret Key cannot be blank"
+    },
     "tradeIdentity": {
       "notBlank": "Merchant trade identity cannot be blank"
     },
@@ -543,6 +552,15 @@
     },
     "remark": {
       "size": "Remark cannot exceed 255 characters"
+    },
+    "lklAppId": {
+      "notBlank": "Lakala application ID cannot be blank"
+    },
+    "lakalaMchNo": {
+      "notBlank": "Lakala merchant number cannot be blank"
+    },
+    "termNo": {
+      "size": "Terminal number cannot exceed 64 characters"
     }
   }
 }

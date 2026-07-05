@@ -321,3 +321,152 @@ COMMENT ON COLUMN "public"."douyin_direct_app_auth_config"."last_modifier" IS '�
 COMMENT ON COLUMN "public"."douyin_direct_app_auth_config"."last_modified_time" IS '最后修改时间(UTC)';
 COMMENT ON COLUMN "public"."douyin_direct_app_auth_config"."version" IS '乐观锁版本号';
 COMMENT ON COLUMN "public"."douyin_direct_app_auth_config"."deleted" IS '逻辑删除标志';
+
+-- ============================================================
+-- 拉卡拉服务商配置(聚合通道: 微信/支付宝/银联)
+-- ============================================================
+
+-- 拉卡拉服务商密钥配置(全局唯一, 按 product 查询)
+CREATE TABLE IF NOT EXISTS "public"."lakala_isv_key_config" (
+    "id"                  bigint       NOT NULL PRIMARY KEY,
+    "product"             varchar(32)  NOT NULL,
+    "lkl_app_id"          varchar(64)  NOT NULL,
+    "mch_serial_no"       varchar(128),
+    "private_key"         text,
+    "public_key"          text,
+    "sm4_key"             varchar(128),
+    "sandbox"             boolean      NOT NULL DEFAULT false,
+    "creator"             bigint,
+    "create_time"         timestamptz(6),
+    "last_modifier"       bigint,
+    "last_modified_time"  timestamptz(6),
+    "version"             integer      NOT NULL DEFAULT 0,
+    "deleted"             boolean      NOT NULL DEFAULT false
+);
+COMMENT ON TABLE  "public"."lakala_isv_key_config" IS '拉卡拉服务商密钥配置(全局唯一)';
+COMMENT ON COLUMN "public"."lakala_isv_key_config"."product" IS '产品编码 @see ProductEnum';
+COMMENT ON COLUMN "public"."lakala_isv_key_config"."lkl_app_id" IS '拉卡拉应用编号';
+COMMENT ON COLUMN "public"."lakala_isv_key_config"."mch_serial_no" IS '商户证书序列号';
+COMMENT ON COLUMN "public"."lakala_isv_key_config"."private_key" IS '商户RSA私钥PEM(加密存储)';
+COMMENT ON COLUMN "public"."lakala_isv_key_config"."public_key" IS '拉卡拉RSA公钥PEM(加密存储)';
+COMMENT ON COLUMN "public"."lakala_isv_key_config"."sm4_key" IS 'SM4对称密钥(加密存储, 进件敏感字段加密用)';
+COMMENT ON COLUMN "public"."lakala_isv_key_config"."sandbox" IS '是否沙箱环境';
+COMMENT ON COLUMN "public"."lakala_isv_key_config"."creator" IS '创建人ID';
+COMMENT ON COLUMN "public"."lakala_isv_key_config"."create_time" IS '创建时间(UTC)';
+COMMENT ON COLUMN "public"."lakala_isv_key_config"."last_modifier" IS '最后修改人ID';
+COMMENT ON COLUMN "public"."lakala_isv_key_config"."last_modified_time" IS '最后修改时间(UTC)';
+COMMENT ON COLUMN "public"."lakala_isv_key_config"."version" IS '乐观锁版本号';
+COMMENT ON COLUMN "public"."lakala_isv_key_config"."deleted" IS '逻辑删除标志';
+
+-- 产品编码唯一(逻辑删除时不重复)
+CREATE UNIQUE INDEX IF NOT EXISTS "uk_lakala_isv_key_product"
+    ON "public"."lakala_isv_key_config" ("product")
+    WHERE "deleted" = false;
+
+-- 拉卡拉通道商户绑定(每个子商户一条, 仅存商户号merchantNo + 终端号termNo)
+CREATE TABLE IF NOT EXISTS "public"."lakala_isv_channel_merchant" (
+    "id"                  bigint       NOT NULL PRIMARY KEY,
+    "mch_no"              varchar(32)  NOT NULL,
+    "channel_mch_no"      varchar(64)  NOT NULL,
+    "product"             varchar(32)  NOT NULL,
+    "lakala_mch_no"       varchar(64)  NOT NULL,
+    "term_no"             varchar(64),
+    "creator"             bigint,
+    "create_time"         timestamptz(6),
+    "last_modifier"       bigint,
+    "last_modified_time"  timestamptz(6),
+    "version"             integer      NOT NULL DEFAULT 0,
+    "deleted"             boolean      NOT NULL DEFAULT false
+);
+COMMENT ON TABLE  "public"."lakala_isv_channel_merchant" IS '拉卡拉通道商户绑定';
+COMMENT ON COLUMN "public"."lakala_isv_channel_merchant"."mch_no" IS '平台商户号';
+COMMENT ON COLUMN "public"."lakala_isv_channel_merchant"."channel_mch_no" IS '通道商户号(LAKALA+雪花)';
+COMMENT ON COLUMN "public"."lakala_isv_channel_merchant"."product" IS '所属支付产品';
+COMMENT ON COLUMN "public"."lakala_isv_channel_merchant"."lakala_mch_no" IS '拉卡拉商户编号(merchantNo)';
+COMMENT ON COLUMN "public"."lakala_isv_channel_merchant"."term_no" IS '终端号';
+COMMENT ON COLUMN "public"."lakala_isv_channel_merchant"."creator" IS '创建人ID';
+COMMENT ON COLUMN "public"."lakala_isv_channel_merchant"."create_time" IS '创建时间(UTC)';
+COMMENT ON COLUMN "public"."lakala_isv_channel_merchant"."last_modifier" IS '最后修改人ID';
+COMMENT ON COLUMN "public"."lakala_isv_channel_merchant"."last_modified_time" IS '最后修改时间(UTC)';
+COMMENT ON COLUMN "public"."lakala_isv_channel_merchant"."version" IS '乐观锁版本号';
+COMMENT ON COLUMN "public"."lakala_isv_channel_merchant"."deleted" IS '逻辑删除标志';
+
+-- 通道商户号全局唯一
+CREATE UNIQUE INDEX IF NOT EXISTS "uk_lakala_isv_channel_mch_no"
+    ON "public"."lakala_isv_channel_merchant" ("channel_mch_no")
+    WHERE "deleted" = false;
+
+-- 同一商户下拉卡拉商户号不重复
+CREATE UNIQUE INDEX IF NOT EXISTS "uk_lakala_isv_mch_lakala_no"
+    ON "public"."lakala_isv_channel_merchant" ("mch_no", "lakala_mch_no")
+    WHERE "deleted" = false;
+
+-- ===== 银联商务(UMS) =====
+
+-- 银联商务直连通道商户绑定
+CREATE TABLE IF NOT EXISTS "public"."ums_direct_channel_merchant" (
+    "id"                  bigint       NOT NULL PRIMARY KEY,
+    "mch_no"              varchar(32)  NOT NULL,
+    "channel_mch_no"      varchar(64)  NOT NULL,
+    "product"             varchar(32)  NOT NULL,
+    "merchant_no"         varchar(64)  NOT NULL,
+    "terminal_no"         varchar(64),
+    "order_prefix"        varchar(16),
+    "sandbox"             boolean      NOT NULL DEFAULT false,
+    "creator"             bigint,
+    "create_time"         timestamptz(6),
+    "last_modifier"       bigint,
+    "last_modified_time"  timestamptz(6),
+    "version"             integer      NOT NULL DEFAULT 0,
+    "deleted"             boolean      NOT NULL DEFAULT false
+);
+COMMENT ON TABLE  "public"."ums_direct_channel_merchant" IS '银联商务直连通道商户绑定';
+COMMENT ON COLUMN "public"."ums_direct_channel_merchant"."mch_no" IS '商户号';
+COMMENT ON COLUMN "public"."ums_direct_channel_merchant"."channel_mch_no" IS '通道商户号(系统生成雪花号)';
+COMMENT ON COLUMN "public"."ums_direct_channel_merchant"."product" IS '所属支付产品(如 ums_qrcode)';
+COMMENT ON COLUMN "public"."ums_direct_channel_merchant"."merchant_no" IS '银联商务商户号(mid)';
+COMMENT ON COLUMN "public"."ums_direct_channel_merchant"."terminal_no" IS '终端号(tid)';
+COMMENT ON COLUMN "public"."ums_direct_channel_merchant"."order_prefix" IS '订单号前缀(生成关联订单号)';
+COMMENT ON COLUMN "public"."ums_direct_channel_merchant"."sandbox" IS '是否沙箱环境';
+COMMENT ON COLUMN "public"."ums_direct_channel_merchant"."creator" IS '创建人ID';
+COMMENT ON COLUMN "public"."ums_direct_channel_merchant"."create_time" IS '创建时间(UTC)';
+COMMENT ON COLUMN "public"."ums_direct_channel_merchant"."last_modifier" IS '最后修改人ID';
+COMMENT ON COLUMN "public"."ums_direct_channel_merchant"."last_modified_time" IS '最后修改时间(UTC)';
+COMMENT ON COLUMN "public"."ums_direct_channel_merchant"."version" IS '乐观锁版本号';
+COMMENT ON COLUMN "public"."ums_direct_channel_merchant"."deleted" IS '逻辑删除标志';
+-- 同一商户下银联商务商户号不重复
+CREATE UNIQUE INDEX IF NOT EXISTS "uk_ums_direct_mch_merchant_no"
+    ON "public"."ums_direct_channel_merchant" ("mch_no", "merchant_no")
+    WHERE "deleted" = false;
+
+-- 银联商务直连密钥配置(商户维度, 敏感字段加密存储)
+CREATE TABLE IF NOT EXISTS "public"."ums_direct_key_config" (
+    "id"                      bigint       NOT NULL PRIMARY KEY,
+    "mch_no"                  varchar(32)  NOT NULL,
+    "channel_mch_no"          varchar(64)  NOT NULL,
+    "ums_app_id"              varchar(128),
+    "app_key"                 text,
+    "secret_key"              text,
+    "creator"                 bigint,
+    "create_time"             timestamptz(6),
+    "last_modifier"           bigint,
+    "last_modified_time"      timestamptz(6),
+    "version"                 integer      NOT NULL DEFAULT 0,
+    "deleted"                 boolean      NOT NULL DEFAULT false
+);
+COMMENT ON TABLE  "public"."ums_direct_key_config" IS '银联商务直连密钥配置';
+COMMENT ON COLUMN "public"."ums_direct_key_config"."mch_no" IS '商户号';
+COMMENT ON COLUMN "public"."ums_direct_key_config"."channel_mch_no" IS '通道商户号(唯一关联)';
+COMMENT ON COLUMN "public"."ums_direct_key_config"."ums_app_id" IS '银联商务应用 AppId';
+COMMENT ON COLUMN "public"."ums_direct_key_config"."app_key" IS '应用密钥(HmacSHA256 签名密钥, 加密存储)';
+COMMENT ON COLUMN "public"."ums_direct_key_config"."secret_key" IS '通讯密钥(回调验签 MD5/SHA256 拼接密钥, 加密存储)';
+COMMENT ON COLUMN "public"."ums_direct_key_config"."creator" IS '创建人ID';
+COMMENT ON COLUMN "public"."ums_direct_key_config"."create_time" IS '创建时间(UTC)';
+COMMENT ON COLUMN "public"."ums_direct_key_config"."last_modifier" IS '最后修改人ID';
+COMMENT ON COLUMN "public"."ums_direct_key_config"."last_modified_time" IS '最后修改时间(UTC)';
+COMMENT ON COLUMN "public"."ums_direct_key_config"."version" IS '乐观锁版本号';
+COMMENT ON COLUMN "public"."ums_direct_key_config"."deleted" IS '逻辑删除标志';
+-- 一个通道商户号唯一一份密钥配置
+CREATE UNIQUE INDEX IF NOT EXISTS "uk_ums_direct_key_cmchno"
+    ON "public"."ums_direct_key_config" ("channel_mch_no")
+    WHERE "deleted" = false;

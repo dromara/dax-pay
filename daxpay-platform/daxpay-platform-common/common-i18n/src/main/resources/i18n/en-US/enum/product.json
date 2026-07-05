@@ -10,5 +10,15 @@
   "ums_mini": "UMS (Mini Program)",
   "ums_h5": "UMS (H5)",
   "ums_barcode": "UMS (B Scan C)",
-  "lakala_pay": "Lakala Pay"
+  "lakala_pay": "Lakala Pay",
+  "ada_pay": "Ada Pay",
+  "dougong_pay": "Dougong Pay",
+  "hkrt_pay": "HKRT Pay",
+  "fuyou_pay": "Fuyou Pay",
+  "sheng_pay": "Sheng Pay",
+  "ysep_pay": "YSEP Pay",
+  "quick_pay": "Quick Pay",
+  "sand_pay": "Sand Pay",
+  "yee_pay": "Yee Pay",
+  "jee_pay": "Jeepay"
 }
