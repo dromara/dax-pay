@@ -25,7 +25,7 @@ public class DouyinDirectKeyConfigResult extends MchBaseResult {
     @Schema(description = "商家公钥证书序列号")
     private String merchantSerialNumber;
 
-    @SensitiveInfo(front = 12, end = 12)
+    @SensitiveInfo
     @Schema(description = "接口加密密钥(已脱敏)")
     private String encryptKey;
 
