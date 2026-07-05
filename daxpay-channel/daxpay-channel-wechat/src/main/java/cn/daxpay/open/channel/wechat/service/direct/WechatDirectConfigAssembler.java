@@ -6,9 +6,6 @@ import cn.daxpay.open.channel.wechat.dao.direct.WechatDirectChannelMerchantManag
 import cn.daxpay.open.channel.wechat.entity.direct.WechatDirectApp;
 import cn.daxpay.open.channel.wechat.entity.direct.WechatDirectChannelMerchant;
 import cn.daxpay.open.channel.wechat.entity.direct.WechatDirectKeyConfig;
-import cn.daxpay.open.payment.masterdata.constants.product.dao.PayProductConfigManager;
-import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
-import cn.daxpay.open.platform.core.enums.pay.config.PayEnvEnum;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +30,6 @@ public class WechatDirectConfigAssembler {
     private final WechatDirectChannelMerchantManager wechatDirectChannelMerchantManager;
     private final WechatDirectKeyConfigService wechatDirectKeyConfigService;
     private final WechatDirectAppCapabilityService wechatDirectAppCapabilityService;
-    private final PayProductConfigManager payProductConfigManager;
 
     /// 组装直连商户的通道调用凭证(下发给子应用)
     ///
@@ -61,11 +57,6 @@ public class WechatDirectConfigAssembler {
         // 支付公钥新模式(为空则子应用走平台证书模式)
         credential.setPublicKey(keyConfig.getPublicKey());
         credential.setPublicKeyId(keyConfig.getPublicKeyId());
-        // 读取支付产品当前生效环境, 判断是否沙箱
-        boolean sandbox = payProductConfigManager.findByProduct(ProductEnum.WECHAT_PAY.getCode())
-                .map(c -> PayEnvEnum.SANDBOX.getCode().equals(c.getActiveEnv()))
-                .orElse(false);
-        credential.setSandbox(sandbox);
         return credential;
     }
 

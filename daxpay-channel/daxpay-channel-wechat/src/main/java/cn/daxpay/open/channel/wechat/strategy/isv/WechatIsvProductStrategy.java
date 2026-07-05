@@ -1,4 +1,4 @@
-package cn.daxpay.open.channel.wechat.strategy;
+package cn.daxpay.open.channel.wechat.strategy.isv;
 
 import cn.daxpay.open.platform.core.enums.pay.channel.ChannelApiCallMode;
 import cn.daxpay.open.platform.core.enums.pay.channel.ChannelPayIdType;
@@ -38,9 +38,6 @@ public class WechatIsvProductStrategy extends AbsProductStrategy {
 
     @Override
     public boolean isIsv() { return true; }
-
-    @Override
-    public boolean isSandbox() { return false; }
 
     @Override
     public ChannelApiCallMode getApiCallMode() { return ChannelApiCallMode.MIX; }

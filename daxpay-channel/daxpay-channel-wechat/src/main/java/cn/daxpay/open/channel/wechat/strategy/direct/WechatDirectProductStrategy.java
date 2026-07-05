@@ -1,4 +1,4 @@
-package cn.daxpay.open.channel.wechat.strategy;
+package cn.daxpay.open.channel.wechat.strategy.direct;
 
 import cn.daxpay.open.platform.core.enums.pay.channel.ChannelApiCallMode;
 import cn.daxpay.open.platform.core.enums.pay.channel.ChannelPayIdType;
@@ -34,11 +34,6 @@ public class WechatDirectProductStrategy extends AbsProductStrategy {
     @Override
     public ProductEnum getProduct() {
         return ProductEnum.WECHAT_PAY;
-    }
-
-    @Override
-    public boolean isSandbox() {
-        return false;
     }
 
     @Override

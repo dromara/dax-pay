@@ -41,4 +41,26 @@ public interface WechatChannelClient {
     /// 退款同步(查询退款状态)
     @PostExchange("/channel/wechat/refund-sync")
     DaxResult<WechatRefundSyncResp> refundSync(@RequestBody WechatRefundSyncReq req);
+
+    // ===== 服务商模式(isv), 对应子应用 /channel/wechat/isv/* 端点 =====
+
+    /// 服务商支付下单
+    @PostExchange("/channel/wechat/isv/pay")
+    DaxResult<WechatPayResp> isvPay(@RequestBody WechatPayReq req);
+
+    /// 服务商支付同步(查询微信订单状态)
+    @PostExchange("/channel/wechat/isv/sync")
+    DaxResult<WechatSyncResp> isvSync(@RequestBody WechatSyncReq req);
+
+    /// 服务商关闭微信订单
+    @PostExchange("/channel/wechat/isv/close")
+    DaxResult<WechatCloseResp> isvClose(@RequestBody WechatCloseReq req);
+
+    /// 服务商退款
+    @PostExchange("/channel/wechat/isv/refund")
+    DaxResult<WechatRefundResp> isvRefund(@RequestBody WechatRefundReq req);
+
+    /// 服务商退款同步(查询退款状态)
+    @PostExchange("/channel/wechat/isv/refund-sync")
+    DaxResult<WechatRefundSyncResp> isvRefundSync(@RequestBody WechatRefundSyncReq req);
 }
