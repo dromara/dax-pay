@@ -55,7 +55,8 @@ public class WechatPayService {
         req.setAttach(payParam.getAttach());
         // 通道通知地址: 始终使用平台生成的回调地址(微信→平台), 不使用 payParam.notifyUrl(语义为平台→商户)
         req.setNotifyUrl(this.buildNotifyUrl(order));
-        req.setExpireTime(payParam.getExpiredTime());
+        // 关单时间取自订单(createOrder 已对 null 兜底默认30分钟), 不用 payParam 原始入参
+        req.setExpireTime(order.getExpiredTime());
         // H5 场景信息(场景参数)
         if (req.getMethod() == WechatPayMethod.H5) {
             req.setWapUrl(payParam.getReturnUrl());
