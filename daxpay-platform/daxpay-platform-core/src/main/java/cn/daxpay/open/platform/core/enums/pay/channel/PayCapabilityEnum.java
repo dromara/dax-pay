@@ -40,8 +40,8 @@ public enum PayCapabilityEnum implements I18nSupport {
     /* 支付宝 */
     /// 支付宝付款码
     ALIPAY_BARCODE("alipay_barcode"),
-    /// 支付宝订单码
-    ALIPAY_ORDER_QR("alipay_order_qr"),
+    /// 支付宝扫码
+    ALIPAY_QR("alipay_qr"),
     /// 支付宝 APP
     ALIPAY_APP("alipay_app"),
     /// 支付宝 H5

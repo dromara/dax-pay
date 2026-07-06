@@ -3,6 +3,7 @@ package cn.daxpay.open.payment.core.trade.service;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.PayFailureException;
+import cn.daxpay.open.platform.common.spring.util.WebServletUtil;
 import cn.daxpay.open.payment.common.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.common.service.MerchantContextLoader;
 import cn.daxpay.open.payment.core.strategy.PaymentStrategyFactory;
@@ -41,6 +42,10 @@ public class NormalPayService {
 
     /// 支付入口
     public NormalPayResult pay(NormalPayParam payParam) {
+        // 客户端IP兜底: 商户未传时从当前HTTP请求提取, 供通道 location_info 等场景使用
+        if (StrUtil.isBlank(payParam.getClientIp())) {
+            payParam.setClientIp(WebServletUtil.getClientIp());
+        }
         payAssistService.validationExpiredTime(payParam.getExpiredTime());
         String bizOrderNo = payParam.getBizOrderNo();
         LockInfo lock = lockTemplate.lock("payment:pay:" + bizOrderNo, 10000, 200);

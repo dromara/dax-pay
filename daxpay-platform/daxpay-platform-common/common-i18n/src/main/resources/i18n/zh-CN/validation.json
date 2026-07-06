@@ -127,9 +127,6 @@
     "channelMerchantName": {
       "notBlank": "商户名称不可为空"
     },
-    "umsAppId": {
-      "notBlank": "银联商务应用ID不可为空"
-    },
     "appKey": {
       "notBlank": "应用密钥不可为空"
     },
@@ -559,10 +556,17 @@
     "lklAppId": {
       "notBlank": "拉卡拉应用编号不可为空"
     },
+    "mchSerialNo": {
+      "notBlank": "商户证书序列号不可为空"
+    },
+    "orgCode": {
+      "notBlank": "机构代码不可为空"
+    },
     "lakalaMchNo": {
       "notBlank": "拉卡拉商户号不可为空"
     },
     "termNo": {
+      "notBlank": "终端号不可为空",
       "size": "终端号不可超过64位"
     }
   }

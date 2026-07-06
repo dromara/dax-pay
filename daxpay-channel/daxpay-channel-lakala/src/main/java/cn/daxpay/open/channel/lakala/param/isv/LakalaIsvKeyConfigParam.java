@@ -20,6 +20,7 @@ public class LakalaIsvKeyConfigParam {
     @Schema(description = "拉卡拉应用编号")
     private String lklAppId;
 
+    @NotBlank(message = "{validation.field.mchSerialNo.notBlank}")
     @Schema(description = "商户证书序列号")
     private String mchSerialNo;
 
@@ -32,6 +33,6 @@ public class LakalaIsvKeyConfigParam {
     @Schema(description = "SM4密钥(加密存储)")
     private String sm4Key;
 
-    @Schema(description = "是否沙箱环境")
-    private Boolean sandbox;
+    @Schema(description = "机构代码")
+    private String orgCode;
 }

@@ -19,7 +19,7 @@ import lombok.experimental.Accessors;
 @TableName(value = "wechat_direct_channel_merchant", autoResultMap = true)
 public class WechatDirectChannelMerchant extends MchBaseEntity implements ToResult<WechatDirectChannelMerchantResult> {
 
-    /// 通道商户号(系统生成雪花号)
+    /// 通道商户号(WECHAT+雪花)
     private String channelMchNo;
 
     /// 所属支付产品

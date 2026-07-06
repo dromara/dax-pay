@@ -41,8 +41,6 @@ public enum PayMethodEnum implements I18nSupport {
     /* 支付宝 */
     /// 支付宝扫码
     ALIPAY_QR("alipay_qr", PayProviderEnum.ALIPAY),
-    /// 支付宝订单码
-    ALIPAY_ORDER_QR("alipay_order_qr", PayProviderEnum.ALIPAY),
     /// 支付宝JSAPI
     ALIPAY_JSAPI("alipay_jsapi", PayProviderEnum.ALIPAY),
     /// 支付宝小程序

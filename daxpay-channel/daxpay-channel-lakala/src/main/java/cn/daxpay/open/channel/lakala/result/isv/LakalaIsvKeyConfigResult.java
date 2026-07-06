@@ -36,6 +36,6 @@ public class LakalaIsvKeyConfigResult extends BaseResult {
     @Schema(description = "SM4密钥(加密存储)")
     private String sm4Key;
 
-    @Schema(description = "是否沙箱环境")
-    private Boolean sandbox;
+    @Schema(description = "机构代码")
+    private String orgCode;
 }

@@ -44,6 +44,8 @@ public class LakalaIsvCloseStrategy extends AbsPayCloseStrategy {
         LakalaSdkCredential credential = lakalaIsvConfigAssembler.buildConfig(
                 trade.getMchNo(), channelMchNo, capability);
 
-        return lakalaIsvCloseService.close(trade, credential, useCancel);
+        // 客户端IP取自原下单订单(超时关单等非HTTP场景亦可用)
+        String clientIp = normalOrder != null ? normalOrder.getClientIp() : null;
+        return lakalaIsvCloseService.close(trade, credential, useCancel, clientIp);
     }
 }

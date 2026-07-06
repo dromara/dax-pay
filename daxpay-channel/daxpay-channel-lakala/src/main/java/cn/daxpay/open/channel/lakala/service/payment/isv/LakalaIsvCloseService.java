@@ -29,12 +29,14 @@ public class LakalaIsvCloseService {
     /// @param order      支付订单
     /// @param credential 通道凭证
     /// @param useCancel  是否撤销(拉卡拉不支持撤销, 忽略此参数)
+    /// @param clientIp   客户端IP(取自原下单订单, 透传至拉卡拉 location_info.request_ip)
     /// @return 关闭类型(恒为 CLOSE)
-    public CloseTypeEnum close(PayTrade order, LakalaSdkCredential credential, boolean useCancel) {
+    public CloseTypeEnum close(PayTrade order, LakalaSdkCredential credential, boolean useCancel, String clientIp) {
         LakalaCloseReq req = new LakalaCloseReq();
         req.setCredential(credential);
         req.setOriginOutTradeNo(order.getTradeNo());
         req.setOriginTradeNo(order.getOutOrderNo());
+        req.setClientIp(clientIp);
 
         DaxResult<LakalaCloseResp> result = lakalaChannelClient.close(req);
         if (result.getCode() != 0) {

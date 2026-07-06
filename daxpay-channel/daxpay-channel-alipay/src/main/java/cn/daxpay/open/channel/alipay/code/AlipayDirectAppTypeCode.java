@@ -35,7 +35,7 @@ public final class AlipayDirectAppTypeCode {
             PayCapabilityEnum.ALIPAY_MINI.getCode(), MINI_PROGRAM,
             PayCapabilityEnum.ALIPAY_APP.getCode(), MOBILE_APP,
             PayCapabilityEnum.ALIPAY_BARCODE.getCode(), WEB_APP,
-            PayCapabilityEnum.ALIPAY_ORDER_QR.getCode(), WEB_APP,
+            PayCapabilityEnum.ALIPAY_QR.getCode(), WEB_APP,
             PayCapabilityEnum.ALIPAY_H5.getCode(), WEB_APP,
             PayCapabilityEnum.ALIPAY_PC.getCode(), WEB_APP,
             PayCapabilityEnum.ALIPAY_JSAPI.getCode(), WEB_APP);

@@ -1,5 +1,6 @@
 package cn.daxpay.open.platform.common.spring.util;
 
+import cn.hutool.extra.servlet.JakartaServletUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.experimental.UtilityClass;
@@ -32,6 +33,13 @@ public class WebServletUtil {
     /// 获取参数
     public String getParameter(String name) {
         return Optional.ofNullable(getRequest()).map(o -> o.getParameter(name)).orElse(null);
+    }
+
+    /// 获取客户端IP地址
+    /// 依次从 X-Forwarded-For / X-Real-IP / Proxy-Client-IP / RemoteAddr 提取(委托 hutool JakartaServletUtil)
+    /// 非 web 请求线程(如 MQ 消费者/定时任务)返回 null
+    public String getClientIp() {
+        return Optional.ofNullable(getRequest()).map(JakartaServletUtil::getClientIP).orElse(null);
     }
 
     /// 获取http响应

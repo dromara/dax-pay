@@ -45,10 +45,10 @@ public class PayProviderMethodUtil {
                 WECHAT_BARCODE,
                 WECHAT_CASHIER
         ));
-        // 支付宝：付款码 / 订单码 / APP / 手机网站 / 电脑网站 / JSAPI
+        // 支付宝：付款码 / 扫码 / APP / 手机网站 / 电脑网站 / JSAPI
         providerMethods.put(PayProviderEnum.ALIPAY, List.of(
                 ALIPAY_BARCODE,
-                ALIPAY_ORDER_QR,
+                ALIPAY_QR,
                 ALIPAY_APP,
                 ALIPAY_H5,
                 ALIPAY_PC,

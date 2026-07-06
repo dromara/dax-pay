@@ -20,7 +20,7 @@ import lombok.experimental.Accessors;
 @TableName(value = "wechat_isv_channel_merchant", autoResultMap = true)
 public class WechatIsvChannelMerchant extends MchBaseEntity implements ToResult<WechatIsvChannelMerchantResult> {
 
-    /// 通道商户号(WISV+雪花)
+    /// 通道商户号(WECHAT+雪花)
     private String channelMchNo;
 
     /// 所属支付产品

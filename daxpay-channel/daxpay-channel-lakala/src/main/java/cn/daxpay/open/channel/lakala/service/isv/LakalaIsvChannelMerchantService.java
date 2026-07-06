@@ -10,7 +10,7 @@ import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.channel.ChannelMerchantSourceEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
-import cn.hutool.core.util.IdUtil;
+import cn.daxpay.open.platform.core.util.ChannelMchNoGenerateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -38,8 +38,8 @@ public class LakalaIsvChannelMerchantService {
             // 拉卡拉: 该商户下已存在此拉卡拉商户号
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.lakala.merchantDuplicate");
         }
-        // 生成通道商户号: 前缀 LAKALA + 雪花ID(无分隔符, 符合 TradeNoGenerateUtil 约定)
-        String channelMchNo = "LAKALA" + IdUtil.getSnowflakeNextId();
+        // 生成通道商户号: 通道前缀 + 雪花ID(无分隔符, 仅供排障辨识)
+        String channelMchNo = ChannelMchNoGenerateUtil.generate("LAKALA");
         // 写通用通道商户主表
         ChannelMerchant channelMerchant = new ChannelMerchant();
         channelMerchant.setMchNo(param.getMchNo());
@@ -55,7 +55,6 @@ public class LakalaIsvChannelMerchantService {
         entity.setChannelMchNo(channelMchNo);
         entity.setProduct(param.getProduct());
         entity.setLakalaMchNo(param.getLakalaMchNo());
-        entity.setTermNo(param.getTermNo());
         lakalaIsvChannelMerchantManager.save(entity);
     }
 
@@ -67,5 +66,15 @@ public class LakalaIsvChannelMerchantService {
                 .map(LakalaIsvChannelMerchant::toResult)
                 // 拉卡拉: 通道商户配置不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
+    }
+
+    /// 更新终端号
+    @Transactional(rollbackFor = Exception.class)
+    public void updateTermNo(String channelMchNo, String termNo) {
+        var entity = lakalaIsvChannelMerchantManager.findByChannelMchNo(channelMchNo)
+                // 拉卡拉: 通道商户配置不存在
+                .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
+        entity.setTermNo(termNo);
+        lakalaIsvChannelMerchantManager.updateById(entity);
     }
 }

@@ -30,8 +30,7 @@ public class LakalaIsvKeyConfigService {
             return existing.get();
         }
         var config = new LakalaIsvKeyConfig()
-                .setProduct(product)
-                .setSandbox(false);
+                .setProduct(product);
         lakalaIsvKeyConfigManager.save(config);
         return config;
     }

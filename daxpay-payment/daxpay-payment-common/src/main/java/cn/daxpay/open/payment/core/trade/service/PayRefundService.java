@@ -5,6 +5,7 @@ import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
+import cn.daxpay.open.platform.common.spring.util.WebServletUtil;
 import cn.daxpay.open.platform.core.util.TradeNoGenerateUtil;
 import cn.daxpay.open.payment.common.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.common.enums.RefundOrderStatusEnum;
@@ -147,6 +148,12 @@ public class PayRefundService {
                     .setCapability(normalOrder.getCapability())
                     .setNotifyUrl(normalOrder.getNotifyUrl());
         }
+        // 客户端IP: 优先取下单时留存的原订单IP, 为空(历史订单/非HTTP场景)则从当前HTTP请求兜底
+        String refundClientIp = normalOrder != null ? normalOrder.getClientIp() : null;
+        if (StrUtil.isBlank(refundClientIp)) {
+            refundClientIp = WebServletUtil.getClientIp();
+        }
+        refundOrder.setClientIp(refundClientIp);
         return refundOrder;
     }
 

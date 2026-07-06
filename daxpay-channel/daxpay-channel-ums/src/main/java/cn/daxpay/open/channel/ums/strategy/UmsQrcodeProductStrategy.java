@@ -25,7 +25,7 @@ public class UmsQrcodeProductStrategy extends AbsProductStrategy {
 
     private static final Map<PayMethodEnum, List<PayCapabilityEnum>> METHOD_CAP_MAP = Map.of(
             PayMethodEnum.WECHAT_QR, List.of(PayCapabilityEnum.WECHAT_QR),
-            PayMethodEnum.ALIPAY_QR, List.of(PayCapabilityEnum.ALIPAY_ORDER_QR),
+            PayMethodEnum.ALIPAY_QR, List.of(PayCapabilityEnum.ALIPAY_QR),
             PayMethodEnum.UNION_QR, List.of(PayCapabilityEnum.UNION_PAY_QR));
 
     @Override

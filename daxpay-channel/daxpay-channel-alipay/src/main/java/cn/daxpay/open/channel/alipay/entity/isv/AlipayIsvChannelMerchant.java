@@ -20,7 +20,7 @@ import lombok.experimental.Accessors;
 @TableName(value = "alipay_isv_channel_merchant", autoResultMap = true)
 public class AlipayIsvChannelMerchant extends MchBaseEntity implements ToResult<AlipayIsvChannelMerchantResult> {
 
-    /// 通道商户号(AISV+雪花)
+    /// 通道商户号(ALIPAY+雪花)
     private String channelMchNo;
 
     /// 所属支付产品

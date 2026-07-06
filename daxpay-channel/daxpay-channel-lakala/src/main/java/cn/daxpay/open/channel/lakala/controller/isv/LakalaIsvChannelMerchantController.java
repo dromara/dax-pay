@@ -44,4 +44,14 @@ public class LakalaIsvChannelMerchantController {
         lakalaIsvChannelMerchantService.create(param);
         return Res.ok();
     }
+
+    @PermCode(code = "manage", nameCn = "通道商户管理", nameEn = "Channel Merchant Manage")
+    @Operation(summary = "更新终端号")
+    @PostMapping("/update-term-no")
+    public Result<Void> updateTermNo(
+            @NotBlank(message = "{validation.field.channelMerchantNo.notBlank}") String channelMchNo,
+            @NotBlank(message = "{validation.field.termNo.notBlank}") String termNo) {
+        lakalaIsvChannelMerchantService.updateTermNo(channelMchNo, termNo);
+        return Res.ok();
+    }
 }

@@ -9,7 +9,7 @@
   "wechat_mini": "WeChat Mini Program",
   "wechat_barcode": "WeChat Barcode",
   "alipay_barcode": "Alipay Barcode",
-  "alipay_order_qr": "Alipay Order QR",
+  "alipay_qr": "Alipay QR",
   "alipay_app": "Alipay App",
   "alipay_h5": "Alipay H5",
   "alipay_pc": "Alipay PC",

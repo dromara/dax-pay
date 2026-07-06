@@ -13,7 +13,7 @@ import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.channel.ChannelMerchantSourceEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
-import cn.hutool.core.util.IdUtil;
+import cn.daxpay.open.platform.core.util.ChannelMchNoGenerateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -45,8 +45,8 @@ public class AlipayIsvChannelMerchantService {
             // 支付宝: 该应用下已存在此子商户号
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.alipay.subMerchantDuplicate");
         }
-        // 生成通道商户号：前缀 AISV + 雪花ID(无分隔符, 符合 TradeNoGenerateUtil 约定)
-        String channelMchNo = "AISV" + IdUtil.getSnowflakeNextId();
+        // 生成通道商户号: 通道前缀 + 雪花ID(无分隔符, 仅供排障辨识)
+        String channelMchNo = ChannelMchNoGenerateUtil.generate("ALIPAY");
         // 写通用通道商户主表
         var channelMerchant = new ChannelMerchant();
         channelMerchant.setMchNo(param.getMchNo());

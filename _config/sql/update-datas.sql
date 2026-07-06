@@ -1,19 +1,7 @@
--- ============================================================
--- 拉卡拉服务商配置菜单 + 权限挂载点
--- ============================================================
+-- 支付能力 alipay_order_qr 统一改为 alipay_qr（消除第三方通道"订单码"歧义，对应支付宝 precreate 预下单能力）
+UPDATE "public"."pay_md_capability" SET code = 'alipay_qr' WHERE code = 'alipay_order_qr';
+UPDATE "public"."pay_md_product_capability" SET capability_code = 'alipay_qr' WHERE capability_code = 'alipay_order_qr';
 
--- 拉卡拉服务商配置入口(通过产品配置列表点击"拉卡拉"跳转 ProductDetailDispatch 分发到 LakalaManage)
--- 同时作为 @PermCode(menuCode="payment:lakala:isv") 的权限挂载点
--- parent_id=40105(支付产品管理), 与微信服务商(40503)/支付宝服务商同级
-INSERT INTO "public"."iam_perm_menu" VALUES (
-    40506, 40105,
-    'payment:lakala:isv', 'admin',
-    'LakalaManage',
-    '拉卡拉服务商配置', 'Lakala ISV Configuration',
-    'menu.payment.lakala.config',
-    NULL, 't', 'f',
-    '/payment/channel/lakala/manage/LakalaManage', '/payment/config/product/lakala-manage',
-    NULL, 5, 'f', 't', 'f', 1, 1, 0, 'f', 'subpage',
-    NULL, NULL, NULL, NULL, NULL, NULL,
-    '2026-07-05 00:00:00+00', '2026-07-05 00:00:00+00'
-) ON CONFLICT (id) DO NOTHING;
+-- 支付方式维度清理（部分环境可能未处理，幂等兜底）
+DELETE FROM "public"."pay_md_method" WHERE code = 'alipay_order_qr';
+UPDATE "public"."pay_md_provider_method" SET method = 'alipay_qr' WHERE provider = 'alipay' AND method = 'alipay_order_qr';

@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
 
 /// # 拉卡拉通道商户绑定
 ///
-/// 拉卡拉服务商模式下, 子商户只需商户号(merchantNo) + 终端号(termNo)即可发起支付,
+/// 拉卡拉服务商模式下, 子商户绑定商户号(merchantNo) + 终端号(termNo),
 /// 密钥/证书由服务商全局配置([LakalaIsvKeyConfig])提供。
 /// 同一商户下拉卡拉商户号不重复。
 @EqualsAndHashCode(callSuper = true)
@@ -30,7 +30,7 @@ public class LakalaIsvChannelMerchant extends MchBaseEntity implements ToResult<
     /// 拉卡拉商户编号(merchantNo)
     private String lakalaMchNo;
 
-    /// 终端号(termNo)
+    /// 终端号
     private String termNo;
 
     /// 转换

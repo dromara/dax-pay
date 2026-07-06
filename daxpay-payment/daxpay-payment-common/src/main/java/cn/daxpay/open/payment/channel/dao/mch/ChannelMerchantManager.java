@@ -60,4 +60,11 @@ public class ChannelMerchantManager extends BaseManager<ChannelMerchantMapper, C
                 .eq(ChannelMerchant::getChannelMchNo, channelMchNo)
                 .oneOpt();
     }
+
+    /// 根据通道商户号查询唯一通道商户(通道商户号为系统生成号, 全局唯一, 不存在返回 empty)
+    public Optional<ChannelMerchant> findByChannelMchNo(String channelMchNo){
+        return this.lambdaQuery()
+                .eq(ChannelMerchant::getChannelMchNo, channelMchNo)
+                .oneOpt();
+    }
 }

@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
 /// # 拉卡拉服务商密钥配置
 ///
 /// 拉卡拉为收单机构服务商模式, 服务商密钥全局唯一(按 product 查询),
-/// 子商户仅需商户号(merchantNo) + 终端号(termNo), 见 [LakalaIsvChannelMerchant]。
+/// 子商户仅需商户号(merchantNo), 终端号见 [LakalaIsvTerminal]。
 ///
 /// 签名算法: RSA2(SHA256withRSA), 私钥签名 / 公钥验签。
 /// 敏感字段(私钥/公钥/sm4Key)通过 [DataEncryptTypeHandler] 加密入库。
@@ -46,8 +46,8 @@ public class LakalaIsvKeyConfig extends MpBaseEntity implements ToResult<LakalaI
     @TableField(typeHandler = DataEncryptTypeHandler.class)
     private String sm4Key;
 
-    /// 是否沙箱环境
-    private Boolean sandbox;
+    /// 机构代码
+    private String orgCode;
 
     /// 转换
     @Override

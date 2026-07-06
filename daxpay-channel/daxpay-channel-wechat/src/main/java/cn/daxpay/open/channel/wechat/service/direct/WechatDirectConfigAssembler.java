@@ -34,14 +34,14 @@ public class WechatDirectConfigAssembler {
     /// 组装直连商户的通道调用凭证(下发给子应用)
     ///
     /// @param mchNo        商户号(兜底定位应用)
-    /// @param channelMchNo 通道商户号(系统雪花号, 密钥查询与应用定位主键, 不等于微信商户号)
+    /// @param channelMchNo 通道商户号(系统生成号, 密钥查询与应用定位主键, 不等于微信商户号)
     /// @param capability   支付能力编码(用于选择匹配的应用)
     /// @return 微信 SDK 凭证, 字段对齐子应用 WechatSdkCredential
     public WechatSdkCredential buildConfig(String mchNo, String channelMchNo, String capability) {
         WechatDirectApp app = resolveApp(mchNo, channelMchNo, capability);
         WechatDirectKeyConfig keyConfig = wechatDirectKeyConfigService.findByChannelMchNo(channelMchNo);
 
-        // 从通道商户绑定表取真实微信商户号(channelMchNo 是系统雪花号, 不等于 wxMchId)
+        // 从通道商户绑定表取真实微信商户号(channelMchNo 是系统生成号, 不等于 wxMchId)
         WechatDirectChannelMerchant channelMerchant = wechatDirectChannelMerchantManager.findByChannelMchNo(channelMchNo)
                 // 微信: 通道商户配置不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));

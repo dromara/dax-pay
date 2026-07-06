@@ -19,7 +19,7 @@ import lombok.experimental.Accessors;
 @TableName(value = "alipay_direct_channel_merchant", autoResultMap = true)
 public class AlipayDirectChannelMerchant extends MchBaseEntity implements ToResult<AlipayDirectChannelMerchantResult> {
 
-    /// 通道商户号(系统生成雪花号)
+    /// 通道商户号(ALIPAY+雪花)
     private String channelMchNo;
 
     /// 所属支付产品

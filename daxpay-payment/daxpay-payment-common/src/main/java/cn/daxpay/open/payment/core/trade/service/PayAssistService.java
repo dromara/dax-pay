@@ -74,6 +74,8 @@ public class PayAssistService {
         normalOrder.setExtraParam(payParam.getExtraParam());
         normalOrder.setGoodsDetail(payParam.getGoodsDetail());
         normalOrder.setTerminalNo(terminalNo);
+        // 客户端IP(支付入口已兜底, 作为单一事实源供退款/关单等后续流程取用)
+        normalOrder.setClientIp(payParam.getClientIp());
         // 通道路由参数(同步时用于解析通道应用凭证)
         normalOrder.setChannelMchNo(payParam.getChannelMchNo());
         normalOrder.setCapability(payParam.getCapability());

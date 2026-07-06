@@ -9,7 +9,7 @@
   "wechat_mini": "微信小程序",
   "wechat_barcode": "微信付款码",
   "alipay_barcode": "支付宝付款码",
-  "alipay_order_qr": "支付宝订单码",
+  "alipay_qr": "支付宝扫码",
   "alipay_app": "支付宝 APP",
   "alipay_h5": "支付宝 H5",
   "alipay_pc": "支付宝电脑",

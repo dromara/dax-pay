@@ -31,8 +31,4 @@ public class LakalaIsvChannelMerchantCreateParam {
     @Schema(description = "拉卡拉商户编号")
     @NotBlank(message = "{validation.field.lakalaMchNo.notBlank}")
     private String lakalaMchNo;
-
-    /// 终端号
-    @Schema(description = "终端号")
-    private String termNo;
 }

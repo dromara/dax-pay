@@ -10,7 +10,7 @@ import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.channel.ChannelMerchantSourceEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
-import cn.hutool.core.util.IdUtil;
+import cn.daxpay.open.platform.core.util.ChannelMchNoGenerateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -37,8 +37,8 @@ public class DouyinDirectChannelMerchantService {
             // 抖音: 同一商户下该抖音商户已存在
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.douyin.directMchDuplicate");
         }
-        // 生成通道商户号(雪花号)
-        String channelMchNo = String.valueOf(IdUtil.getSnowflakeNextId());
+        // 生成通道商户号: 通道前缀 + 雪花ID(无分隔符, 仅供排障辨识)
+        String channelMchNo = ChannelMchNoGenerateUtil.generate("DOUYIN");
         // 写通用通道商户主表
         ChannelMerchant channelMerchant = new ChannelMerchant();
         channelMerchant.setMchNo(param.getMchNo());

@@ -2,5 +2,6 @@
   "privateKeyRequired": "应用私钥不可为空",
   "publicKeyRequired": "应用公钥不可为空",
   "lklAppIdRequired": "拉卡拉应用编号不可为空",
-  "mchSerialNoRequired": "商户证书序列号不可为空"
+  "mchSerialNoRequired": "商户证书序列号不可为空",
+  "termNoNotConfigured": "终端号未配置, 请在商户配置中填写"
 }

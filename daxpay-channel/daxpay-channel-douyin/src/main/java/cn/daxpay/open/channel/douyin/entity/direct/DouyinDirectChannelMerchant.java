@@ -19,7 +19,7 @@ import lombok.experimental.Accessors;
 @TableName(value = "douyin_direct_channel_merchant", autoResultMap = true)
 public class DouyinDirectChannelMerchant extends MchBaseEntity implements ToResult<DouyinDirectChannelMerchantResult> {
 
-    /// 通道商户号(系统生成雪花号)
+    /// 通道商户号(DOUYIN+雪花)
     private String channelMchNo;
 
     /// 所属支付产品

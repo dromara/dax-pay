@@ -6,7 +6,7 @@ import cn.daxpay.open.channel.ums.param.direct.UmsDirectChannelMerchantCreatePar
 import cn.daxpay.open.payment.channel.dao.mch.ChannelMerchantManager;
 import cn.daxpay.open.payment.channel.entity.mch.ChannelMerchant;
 import cn.daxpay.open.platform.core.enums.channel.ChannelMerchantSourceEnum;
-import cn.hutool.core.util.IdUtil;
+import cn.daxpay.open.platform.core.util.ChannelMchNoGenerateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,8 +32,8 @@ public class UmsDirectChannelMerchantService {
     /// umsAppId/terminalNo/appKey/secretKey 由密钥配置单独维护。
     @Transactional(rollbackFor = Exception.class)
     public void create(UmsDirectChannelMerchantCreateParam param) {
-        // 生成通道商户号(雪花号)
-        String channelMchNo = String.valueOf(IdUtil.getSnowflakeNextId());
+        // 生成通道商户号: 通道前缀 + 雪花ID(无分隔符, 仅供排障辨识)
+        String channelMchNo = ChannelMchNoGenerateUtil.generate("UMSPAY");
         // 写通用通道商户主表
         ChannelMerchant channelMerchant = new ChannelMerchant();
         channelMerchant.setMchNo(param.getMchNo());

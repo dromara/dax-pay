@@ -89,7 +89,7 @@ public class AlipayPayService {
             case ALIPAY_PC -> AlipayPayMethod.PC;
             case ALIPAY_H5 -> AlipayPayMethod.WAP;
             case ALIPAY_APP -> AlipayPayMethod.APP;
-            case ALIPAY_QR, ALIPAY_ORDER_QR -> AlipayPayMethod.QR;
+            case ALIPAY_QR -> AlipayPayMethod.QR;
             case ALIPAY_BARCODE -> AlipayPayMethod.BARCODE;
             case ALIPAY_JSAPI, ALIPAY_MINI -> AlipayPayMethod.JSAPI;
             default -> throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
