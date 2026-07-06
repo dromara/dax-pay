@@ -16,7 +16,7 @@ public class DaxpayChannelProperties {
     /// 子应用1(支付宝/微信)
     private ChannelApp one = new ChannelApp();
 
-    /// 子应用2(银联/拉卡拉) — 未来扩展
+    /// 子应用2(其他支付通道) — channel-two 已搭建架子, 通道待对接
     private ChannelApp two = new ChannelApp();
 
     /// 子应用3(抖音/其他) — 未来扩展

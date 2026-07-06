@@ -72,6 +72,9 @@ public class LakalaIsvConfigAssembler {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.lakala.termNoNotConfigured");
         }
         credential.setTermNo(termNo);
+        // 商户门店编号(拉卡拉 V3 接口"支付宝收单上送", 条件必填 C)
+        // TODO 门店对接后从门店配置读取, 当前暂写死占位值
+        credential.setStoreId("1");
         return credential;
     }
 }

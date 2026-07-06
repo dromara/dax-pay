@@ -21,6 +21,10 @@ public class LakalaSdkCredential {
     private String lakalaMchNo;
     /// 终端号(termNo)
     private String termNo;
+    /// 商户门店编号(store_id)
+    /// 拉卡拉 V3 接口要求"支付宝收单上送"(条件必填 C), 走 acc_busi_fields 通道
+    /// TODO 门店对接后从门店配置读取下发, 当前暂写死
+    private String storeId;
     /// 是否沙箱环境
     private Boolean sandbox;
 }
