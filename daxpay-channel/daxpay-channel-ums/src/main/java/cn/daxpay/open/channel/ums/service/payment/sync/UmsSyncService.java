@@ -6,6 +6,7 @@ import cn.daxpay.open.channel.ums.client.enums.UmsPayMethod;
 import cn.daxpay.open.channel.ums.client.req.UmsSyncReq;
 import cn.daxpay.open.channel.ums.client.resp.UmsSyncResp;
 import cn.daxpay.open.channel.ums.code.UmsCode;
+import cn.daxpay.open.channel.ums.util.UmsDateUtil;
 import cn.daxpay.open.payment.common.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.core.trade.bo.PaySyncResultBo;
@@ -14,9 +15,6 @@ import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 
 /// # 银联商务支付同步业务服务
 ///
@@ -29,13 +27,12 @@ public class UmsSyncService {
 
     private final UmsChannelClient umsChannelClient;
 
-    /// 银联商务时间格式
-    private static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-
     /// 执行银联商务支付同步
     public PaySyncResultBo sync(PayTrade trade, UmsSdkCredential credential) {
         UmsSyncReq req = new UmsSyncReq();
         req.setOutTradeNo(trade.getTradeNo());
+        // 原订单创建时间(UTC), 子应用按通道时区转换为银联商务 billDate(yyyy-MM-dd)
+        req.setBillDate(trade.getCreateTime());
         // 首期默认扫码查询
         req.setMethod(UmsPayMethod.QRCODE);
         req.setCredential(credential);
@@ -59,10 +56,8 @@ public class UmsSyncService {
         bo.setRealAmount(resp.getTotalAmount());
         // 买家标识
         bo.setBuyerId(resp.getBuyerId());
-        // 支付成功时间
-        if (StrUtil.isNotBlank(resp.getPayTime())) {
-            bo.setFinishTime(OffsetDateTime.parse(resp.getPayTime(), TIME_FORMAT));
-        }
+        // 支付成功时间(银联商务返回东八区本地时间, 由 UmsDateUtil 解析为带偏移的 OffsetDateTime)
+        bo.setFinishTime(UmsDateUtil.parseCst(resp.getPayTime()));
 
         String tradeStatus = resp.getTradeStatus();
         if (StrUtil.isBlank(tradeStatus)) {

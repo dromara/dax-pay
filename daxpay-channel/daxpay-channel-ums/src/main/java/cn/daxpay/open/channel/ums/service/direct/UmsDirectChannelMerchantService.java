@@ -1,14 +1,11 @@
 package cn.daxpay.open.channel.ums.service.direct;
 
-import cn.daxpay.open.channel.ums.dao.direct.UmsDirectChannelMerchantManager;
-import cn.daxpay.open.channel.ums.entity.direct.UmsDirectChannelMerchant;
+import cn.daxpay.open.channel.ums.dao.direct.UmsDirectKeyConfigManager;
+import cn.daxpay.open.channel.ums.entity.direct.UmsDirectKeyConfig;
 import cn.daxpay.open.channel.ums.param.direct.UmsDirectChannelMerchantCreateParam;
-import cn.daxpay.open.channel.ums.param.direct.UmsDirectKeyConfigParam;
-import cn.daxpay.open.channel.ums.result.direct.UmsDirectChannelMerchantResult;
 import cn.daxpay.open.payment.channel.dao.mch.ChannelMerchantManager;
 import cn.daxpay.open.payment.channel.entity.mch.ChannelMerchant;
 import cn.daxpay.open.platform.core.enums.channel.ChannelMerchantSourceEnum;
-import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.hutool.core.util.IdUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,20 +14,22 @@ import org.springframework.transaction.annotation.Transactional;
 
 /// # 银联商务直连通道商户管理
 ///
-/// 管理通道商户绑定的创建/查询/删除。
-/// 银联商务签名无证书, 创建时需同时写入密钥配置(umsAppId/appKey/secretKey)。
+/// 管理通道商户绑定的创建/删除。
+/// 商户身份(mid)在创建时录入直连配置表,
+/// 应用ID(umsAppId)/终端号(tid)/应用密钥(appKey)/通讯密钥(secretKey)由密钥配置单独维护,
+/// 沙箱环境运行时读取支付产品配置(pay_md_product_config.activeEnv)。
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class UmsDirectChannelMerchantService {
 
     private final ChannelMerchantManager channelMerchantManager;
-    private final UmsDirectChannelMerchantManager umsDirectChannelMerchantManager;
-    private final UmsDirectKeyConfigService umsDirectKeyConfigService;
+    private final UmsDirectKeyConfigManager umsDirectKeyConfigManager;
 
     /// 创建通道商户绑定
     ///
-    /// 同时写入通用通道商户主表、银联商务直连绑定表和密钥配置表。
+    /// 同时写入通用通道商户主表和银联商务直连配置表(含商户号 mid)。
+    /// umsAppId/terminalNo/appKey/secretKey 由密钥配置单独维护。
     @Transactional(rollbackFor = Exception.class)
     public void create(UmsDirectChannelMerchantCreateParam param) {
         // 生成通道商户号(雪花号)
@@ -44,40 +43,18 @@ public class UmsDirectChannelMerchantService {
         channelMerchant.setSource(ChannelMerchantSourceEnum.MANUAL.getCode());
         channelMerchant.setEnable(true);
         channelMerchantManager.save(channelMerchant);
-        // 写银联商务直连绑定表
-        var entity = new UmsDirectChannelMerchant();
-        entity.setMchNo(param.getMchNo());
-        entity.setChannelMchNo(channelMchNo);
-        entity.setProduct(param.getProduct());
-        entity.setMerchantNo(param.getMerchantNo());
-        entity.setTerminalNo(param.getTerminalNo());
-        entity.setOrderPrefix(param.getOrderPrefix());
-        entity.setSandbox(param.isSandbox());
-        umsDirectChannelMerchantManager.save(entity);
-        // 同时保存密钥配置(umsAppId/appKey/secretKey)
-        var keyParam = new UmsDirectKeyConfigParam();
-        keyParam.setChannelMchNo(channelMchNo);
-        keyParam.setMchNo(param.getMchNo());
-        keyParam.setUmsAppId(param.getUmsAppId());
-        keyParam.setAppKey(param.getAppKey());
-        keyParam.setSecretKey(param.getSecretKey());
-        umsDirectKeyConfigService.save(keyParam);
+        // 写银联商务直连配置(仅商户身份 mid, umsAppId/terminalNo/appKey/secretKey 由密钥配置单独维护)
+        var keyConfig = new UmsDirectKeyConfig()
+                .setChannelMchNo(channelMchNo)
+                .setMerchantNo(param.getMerchantNo());
+        // mchNo 继承自 MchBaseEntity, 链式返回父类型, 单独赋值
+        keyConfig.setMchNo(param.getMchNo());
+        umsDirectKeyConfigManager.save(keyConfig);
     }
 
-    /// 根据通道商户号查询银联商务直连通道商户配置
-    public UmsDirectChannelMerchantResult findByChannelMchNo(String channelMchNo) {
-        return umsDirectChannelMerchantManager.findByChannelMchNo(channelMchNo)
-                .map(UmsDirectChannelMerchant::toResult)
-                // 通道: 通道商户配置不存在
-                .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
-    }
-
-    /// 根据通道商户号删除(级联删除密钥)
+    /// 根据通道商户号删除(级联删除直连配置)
     @Transactional(rollbackFor = Exception.class)
     public void deleteByChannelMchNo(String channelMchNo) {
-        umsDirectKeyConfigService.deleteByChannelMchNo(channelMchNo);
-        umsDirectChannelMerchantManager.lambdaUpdate()
-                .eq(UmsDirectChannelMerchant::getChannelMchNo, channelMchNo)
-                .remove();
+        umsDirectKeyConfigManager.deleteByChannelMchNo(channelMchNo);
     }
 }

@@ -7,8 +7,9 @@ import lombok.experimental.Accessors;
 
 /// # 银联商务直连通道商户绑定创建参数
 ///
-/// 银联商务在创建通道商户时需要同时配置密钥(umsAppId/appKey/secretKey),
-/// 因为银联商务签名无证书, 密钥是支付调用的前置条件。
+/// 创建时仅录入商户身份(merchantNo mid)与商户名称,
+/// 应用ID(umsAppId)/终端号(tid)/应用密钥(appKey)/通讯密钥(secretKey)由密钥配置单独维护,
+/// 沙箱环境由支付产品配置(pay_md_product_config.activeEnv)决定。
 @Data
 @Accessors(chain = true)
 @Schema(title = "银联商务直连通道商户绑定创建参数")
@@ -22,32 +23,11 @@ public class UmsDirectChannelMerchantCreateParam {
     @Schema(description = "通道商户名称")
     private String channelMerchantName;
 
-    @NotBlank(message = "{validation.field.merchantNo.notBlank}")
-    @Schema(description = "银联商务商户号")
-    private String merchantNo;
-
-    @Schema(description = "终端号")
-    private String terminalNo;
-
-    @Schema(description = "订单号前缀")
-    private String orderPrefix;
-
-    @Schema(description = "是否沙箱环境")
-    private boolean sandbox;
-
     @NotBlank(message = "{validation.field.product.notBlank}")
     @Schema(description = "所属支付产品")
     private String product;
 
-    @NotBlank(message = "{validation.field.umsAppId.notBlank}")
-    @Schema(description = "银联商务应用 AppId")
-    private String umsAppId;
-
-    @NotBlank(message = "{validation.field.appKey.notBlank}")
-    @Schema(description = "应用密钥(HmacSHA256 签名密钥)")
-    private String appKey;
-
-    @NotBlank(message = "{validation.field.secretKey.notBlank}")
-    @Schema(description = "通讯密钥(回调验签密钥)")
-    private String secretKey;
+    @NotBlank(message = "{validation.field.merchantNo.notBlank}")
+    @Schema(description = "银联商务商户号(mid)")
+    private String merchantNo;
 }

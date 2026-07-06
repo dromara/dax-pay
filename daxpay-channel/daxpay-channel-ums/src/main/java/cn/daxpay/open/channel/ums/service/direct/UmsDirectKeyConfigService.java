@@ -1,10 +1,10 @@
 package cn.daxpay.open.channel.ums.service.direct;
 
 import cn.daxpay.open.channel.ums.convert.direct.UmsDirectKeyConfigConvert;
-import cn.daxpay.open.channel.ums.dao.direct.UmsDirectChannelMerchantManager;
 import cn.daxpay.open.channel.ums.dao.direct.UmsDirectKeyConfigManager;
 import cn.daxpay.open.channel.ums.entity.direct.UmsDirectKeyConfig;
 import cn.daxpay.open.channel.ums.param.direct.UmsDirectKeyConfigParam;
+import cn.daxpay.open.payment.channel.dao.mch.ChannelMerchantManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UmsDirectKeyConfigService {
 
     private final UmsDirectKeyConfigManager umsDirectKeyConfigManager;
-    private final UmsDirectChannelMerchantManager umsDirectChannelMerchantManager;
+    private final ChannelMerchantManager channelMerchantManager;
 
     /// 根据通道商户号查询密钥配置, 不存在则创建默认记录
     @Transactional(rollbackFor = Exception.class)
@@ -30,18 +30,20 @@ public class UmsDirectKeyConfigService {
         }
         var config = new UmsDirectKeyConfig()
                 .setChannelMchNo(channelMchNo);
-        // 查询通道商户记录填充商户号
-        umsDirectChannelMerchantManager.findByChannelMchNo(channelMchNo)
+        // 查询通用通道商户主表填充商户号
+        channelMerchantManager.findByChannelMchNo(channelMchNo)
                 .ifPresent(mch -> config.setMchNo(mch.getMchNo()));
         umsDirectKeyConfigManager.save(config);
         return config;
     }
 
     /// 保存密钥配置(更新)
+    ///
+    /// 以 channelMchNo 定位记录, 仅更新可编辑字段(terminalNo/umsAppId/appKey/secretKey);
+    /// mchNo/merchantNo 为不可变身份字段(实体 FieldStrategy.NEVER), 由 findByChannelMchNo 从 DB 加载后保持不变。
     @Transactional(rollbackFor = Exception.class)
     public void save(UmsDirectKeyConfigParam param) {
         var config = this.findByChannelMchNo(param.getChannelMchNo());
-        config.setMchNo(param.getMchNo());
         UmsDirectKeyConfigConvert.CONVERT.copy(param, config);
         umsDirectKeyConfigManager.updateById(config);
     }

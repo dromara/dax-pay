@@ -12,9 +12,10 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-/// # 银联商务直连密钥配置
+/// # 银联商务直连配置
 ///
-/// 直连商户维度的密钥配置, 敏感字段(appKey/secretKey)加密存储。
+/// 直连商户维度的通道配置, 含商户身份(mid/tid)与签名密钥, 敏感字段(appKey/secretKey)加密存储。
+/// merchantNo(mid) 创建时录入不可修改, terminalNo(tid)/umsAppId/appKey/secretKey 由密钥配置维护。
 /// 银联商务签名无需证书, 仅依赖 appKey(HmacSHA256) 与 secretKey(回调验签)。
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -25,6 +26,13 @@ public class UmsDirectKeyConfig extends MchBaseEntity implements ToResult<UmsDir
     /// 通道商户号
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private String channelMchNo;
+
+    /// 银联商务商户号(mid, 创建时录入不可修改)
+    @TableField(updateStrategy = FieldStrategy.NEVER)
+    private String merchantNo;
+
+    /// 终端号(tid)
+    private String terminalNo;
 
     /// 银联商务应用 AppId
     private String umsAppId;

@@ -2,7 +2,6 @@ package cn.daxpay.open.channel.ums.controller.direct;
 
 import cn.daxpay.open.channel.ums.param.direct.UmsDirectChannelMerchantCreateParam;
 import cn.daxpay.open.channel.ums.param.direct.UmsDirectKeyConfigParam;
-import cn.daxpay.open.channel.ums.result.direct.UmsDirectChannelMerchantResult;
 import cn.daxpay.open.channel.ums.result.direct.UmsDirectKeyConfigResult;
 import cn.daxpay.open.channel.ums.service.direct.UmsDirectChannelMerchantService;
 import cn.daxpay.open.channel.ums.service.direct.UmsDirectKeyConfigService;
@@ -22,8 +21,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 /// # 银联商务直连通道商户管理
 ///
-/// 提供通道商户创建、查询和密钥配置管理。
-/// 银联商务签名无证书, 密钥配置为 umsAppId/appKey/secretKey 三件套。
+/// 提供通道商户创建和密钥配置管理。
+/// 商户身份(mid)创建时录入, 应用ID/终端号(tid)/应用密钥/通讯密钥由密钥配置维护。
 @PermCode(menuCode = "channel:merchant")
 @Validated
 @Tag(name = "银联商务直连通道商户管理")
@@ -34,14 +33,6 @@ public class UmsDirectChannelMerchantController {
 
     private final UmsDirectChannelMerchantService umsDirectChannelMerchantService;
     private final UmsDirectKeyConfigService umsDirectKeyConfigService;
-
-    @PermCode(code = "view", nameCn = "通道商户查看", nameEn = "Channel Merchant View")
-    @Operation(summary = "根据通道商户号查询银联商务直连通道商户配置")
-    @GetMapping("/find-by-channel-mch-no")
-    public Result<UmsDirectChannelMerchantResult> findByChannelMchNo(
-            @NotBlank(message = "{validation.field.channelMerchantNo.notBlank}") String channelMchNo) {
-        return Res.ok(umsDirectChannelMerchantService.findByChannelMchNo(channelMchNo));
-    }
 
     @PermCode(code = "manage", nameCn = "通道商户管理", nameEn = "Channel Merchant Manage")
     @Operation(summary = "创建银联商务直连通道商户")

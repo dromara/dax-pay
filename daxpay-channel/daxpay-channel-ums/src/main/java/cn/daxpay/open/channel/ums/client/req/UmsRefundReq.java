@@ -4,6 +4,8 @@ import cn.daxpay.open.channel.ums.client.credential.UmsSdkCredential;
 import cn.daxpay.open.channel.ums.client.enums.UmsPayMethod;
 import lombok.Data;
 
+import java.time.OffsetDateTime;
+
 /// # 银联商务通道退款请求
 @Data
 public class UmsRefundReq {
@@ -11,8 +13,8 @@ public class UmsRefundReq {
     /// 原商户订单号
     private String outTradeNo;
 
-    /// 原订单日期(yyyy-MM-dd, 扫码退款必填)
-    private String billDate;
+    /// 原订单创建时间(UTC), 由子应用按通道时区转换为银联商务 billDate(yyyy-MM-dd)
+    private OffsetDateTime billDate;
 
     /// 退款单号
     private String outRefundNo;

@@ -6,6 +6,7 @@ import cn.daxpay.open.channel.ums.client.req.UmsCallbackParseReq;
 import cn.daxpay.open.channel.ums.client.resp.UmsCallbackParseResp;
 import cn.daxpay.open.channel.ums.code.UmsCode;
 import cn.daxpay.open.channel.ums.service.direct.UmsDirectConfigAssembler;
+import cn.daxpay.open.channel.ums.util.UmsDateUtil;
 import cn.daxpay.open.payment.common.callback.CallbackData;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.core.trade.service.PayCallbackService;
@@ -19,8 +20,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -39,8 +38,6 @@ public class UmsPayCallbackService {
     private final UmsChannelClient umsChannelClient;
     private final UmsDirectConfigAssembler configAssembler;
     private final PayCallbackService payCallbackService;
-
-    private static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     /// 支付回调处理
     public String payHandle(String mchNo, String channelMchNo, HttpServletRequest request) {
@@ -103,10 +100,8 @@ public class UmsPayCallbackService {
         data.setTradeNo(resp.getOutTradeNo());
         // resp.targetOrderId 是第三方交易号
         data.setOutTradeNo(resp.getTargetOrderId());
-        // 完成时间
-        if (StrUtil.isNotBlank(resp.getFinishTime())) {
-            data.setFinishTime(OffsetDateTime.parse(resp.getFinishTime(), TIME_FORMAT));
-        }
+        // 完成时间(银联商务返回东八区本地时间, 由 UmsDateUtil 解析为带偏移的 OffsetDateTime)
+        data.setFinishTime(UmsDateUtil.parseCst(resp.getFinishTime()));
         // 交易状态映射
         data.setTradeStatus(this.mapStatus(resp.getTradeStatus()));
         return data;

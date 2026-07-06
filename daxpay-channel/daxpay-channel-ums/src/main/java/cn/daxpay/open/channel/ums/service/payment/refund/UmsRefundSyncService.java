@@ -6,17 +6,17 @@ import cn.daxpay.open.channel.ums.client.enums.UmsPayMethod;
 import cn.daxpay.open.channel.ums.client.req.UmsRefundSyncReq;
 import cn.daxpay.open.channel.ums.client.resp.UmsRefundSyncResp;
 import cn.daxpay.open.channel.ums.code.UmsCode;
+import cn.daxpay.open.channel.ums.util.UmsDateUtil;
 import cn.daxpay.open.payment.common.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.core.trade.bo.RefundResultBo;
+import cn.daxpay.open.payment.core.trade.dao.PayTradeManager;
 import cn.daxpay.open.payment.core.trade.entity.PayRefundOrder;
+import cn.daxpay.open.payment.core.trade.entity.PayTrade;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.time.OffsetDateTime;
-import java.time.format.DateTimeFormatter;
 
 /// # 银联商务退款同步业务服务
 ///
@@ -27,8 +27,7 @@ import java.time.format.DateTimeFormatter;
 public class UmsRefundSyncService {
 
     private final UmsChannelClient umsChannelClient;
-
-    private static final DateTimeFormatter TIME_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private final PayTradeManager payTradeManager;
 
     /// 执行银联商务退款同步查询
     public RefundResultBo sync(PayRefundOrder refundOrder, UmsSdkCredential credential) {
@@ -38,6 +37,13 @@ public class UmsRefundSyncService {
         // 首期默认扫码退款查询
         req.setMethod(UmsPayMethod.QRCODE);
         req.setCredential(credential);
+
+        // 银联商务扫码退款查询需要 billDate(原订单创建日, 子应用按通道时区转换)
+        payTradeManager.findByTradeNo(refundOrder.getOrderNo())
+                .ifPresentOrElse(
+                        t -> req.setBillDate(t.getCreateTime()),
+                        () -> log.warn("银联商务退款同步未查到原交易({}), billDate 未填充, 银商可能拒绝",
+                                refundOrder.getOrderNo()));
 
         DaxResult<UmsRefundSyncResp> result = umsChannelClient.refundSync(req);
         if (result.getCode() != 0) {
@@ -54,10 +60,8 @@ public class UmsRefundSyncService {
     private RefundResultBo toSyncResult(UmsRefundSyncResp resp) {
         RefundResultBo bo = new RefundResultBo();
         bo.setOutRefundNo(resp.getOutRefundNo());
-        // 退款完成时间
-        if (StrUtil.isNotBlank(resp.getFinishTime())) {
-            bo.setFinishTime(OffsetDateTime.parse(resp.getFinishTime(), TIME_FORMAT));
-        }
+        // 退款完成时间(银联商务返回东八区本地时间, 由 UmsDateUtil 解析为带偏移的 OffsetDateTime)
+        bo.setFinishTime(UmsDateUtil.parseCst(resp.getFinishTime()));
         // 退款金额
         bo.setRefundAmount(resp.getRefundAmount());
 

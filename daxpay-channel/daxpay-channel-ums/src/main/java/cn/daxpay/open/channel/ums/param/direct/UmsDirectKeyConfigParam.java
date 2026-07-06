@@ -6,6 +6,9 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 /// # 银联商务直连密钥配置保存参数
+///
+/// 以 channelMchNo(通道商户号) 作为唯一标识定位记录,
+/// mchNo(平台商户号)/merchantNo(银联 mid) 为不可变身份字段, 创建时写入后永不可改, 不参与保存。
 @Data
 @Accessors(chain = true)
 @Schema(title = "银联商务直连密钥配置保存参数")
@@ -15,9 +18,8 @@ public class UmsDirectKeyConfigParam {
     @Schema(description = "通道商户号")
     private String channelMchNo;
 
-    @NotBlank(message = "{validation.field.mchNo.notBlank}")
-    @Schema(description = "商户号")
-    private String mchNo;
+    @Schema(description = "终端号(tid)")
+    private String terminalNo;
 
     @Schema(description = "银联商务应用 AppId")
     private String umsAppId;
