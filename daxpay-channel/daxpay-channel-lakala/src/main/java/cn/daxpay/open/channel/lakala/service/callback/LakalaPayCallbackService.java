@@ -18,6 +18,7 @@ import java.security.Signature;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
 import java.util.Map;
@@ -41,7 +42,10 @@ public class LakalaPayCallbackService {
 
     private static final String NOTIFY_SUCCESS = "success";
     private static final String NOTIFY_FAIL = "fail";
-    private static final DateTimeFormatter LKL_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+    /// 拉卡拉属国内通道, 回调时间字段(trade_time)为东八区本地时间字面量(yyyyMMddHHmmss),
+    /// 显式钉死 +08:00 偏移, 避免 OffsetDateTime.parse 因缺 OFFSET_SECONDS 解析失败
+    private static final DateTimeFormatter LKL_TIME_FORMATTER =
+            DateTimeFormatter.ofPattern("yyyyMMddHHmmss").withZone(ZoneOffset.ofHours(8));
 
     private final LakalaIsvKeyConfigManager lakalaIsvKeyConfigManager;
     private final PayCallbackService payCallbackService;
