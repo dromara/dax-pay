@@ -23,7 +23,7 @@ import org.springframework.stereotype.Service;
 
 /// # 拉卡拉服务商支付执行业务服务
 ///
-/// 通过 [LakalaChannelClient] 调用子应用 dax-pay-channel-one 完成拉卡拉支付下单。
+/// 通过 [LakalaChannelClient] 调用子应用 dax-pay-channel-two 完成拉卡拉支付下单。
 /// 请求构建、响应解析全部在本类中完成。
 ///
 /// 拉卡拉聚合通道: 一个接口承载微信/支付宝/银联三种底层渠道, 由 accountType + transType 决定路由。

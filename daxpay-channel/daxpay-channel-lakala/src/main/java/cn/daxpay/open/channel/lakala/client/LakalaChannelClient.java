@@ -18,7 +18,7 @@ import org.springframework.web.service.annotation.PostExchange;
 
 /// # 拉卡拉通道客户端
 ///
-/// 声明式 HTTP 接口, 调用子应用 dax-pay-channel-one 的拉卡拉通道接口。
+/// 声明式 HTTP 接口, 调用子应用 dax-pay-channel-two 的拉卡拉通道接口。
 /// 拉卡拉为聚合服务商模式, 不区分直连/服务商, 路径前缀 `/channel/lakala`。
 @HttpExchange(accept = MediaType.APPLICATION_JSON_VALUE, contentType = MediaType.APPLICATION_JSON_VALUE)
 public interface LakalaChannelClient {

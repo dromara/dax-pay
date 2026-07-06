@@ -4,7 +4,7 @@ import lombok.Data;
 
 /// # 拉卡拉 SDK 凭证(主应用侧)
 ///
-/// 与子应用 dax-pay-channel-one 的 `LakalaSdkCredential` 镜像, 跨 HTTP 传输时字段对齐。
+/// 与子应用 dax-pay-channel-two 的 `LakalaSdkCredential` 镜像, 跨 HTTP 传输时字段对齐。
 /// 主应用从服务商密钥配置(LakalaIsvKeyConfig) + 通道商户绑定(LakalaIsvChannelMerchant) 组装,
 /// 下发给子应用发起拉卡拉 API 调用。
 @Data

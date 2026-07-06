@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 /// # 拉卡拉服务商通道凭证组装器
 ///
 /// 从服务商密钥配置([LakalaIsvKeyConfig]) + 通道商户绑定([LakalaIsvChannelMerchant]) 组装通道调用凭证,
-/// 下发给子应用 dax-pay-channel-one 发起拉卡拉 API 调用。
+/// 下发给子应用 dax-pay-channel-two 发起拉卡拉 API 调用。
 ///
 /// 字段映射(对齐拉卡拉 V3 接口):
 /// - lkl_app_id ← [LakalaIsvKeyConfig.lklAppId] (拉卡拉应用编号, 全局唯一)
