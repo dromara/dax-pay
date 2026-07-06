@@ -1,0 +1,5 @@
+{
+  "payFailed": "支付异常: {0}",
+  "closeFailed": "关闭订单异常: {0}",
+  "notSupportMethod": "暂不支持的银联商务支付方式: {0}"
+}
