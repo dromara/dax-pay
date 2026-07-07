@@ -203,7 +203,6 @@ CREATE TABLE "public"."pay_md_product" (
   "channel" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
   "description" text COLLATE "pg_catalog"."default",
   "icon" varchar(256) COLLATE "pg_catalog"."default",
-  "settle_periods" jsonb,
   "sort_no" int4 DEFAULT 0,
   "creator" int8,
   "create_time" timestamp(6),
@@ -221,7 +220,6 @@ COMMENT ON COLUMN "public"."pay_md_product"."name" IS '产品名称';
 COMMENT ON COLUMN "public"."pay_md_product"."channel" IS '关联通道编码';
 COMMENT ON COLUMN "public"."pay_md_product"."description" IS '产品介绍';
 COMMENT ON COLUMN "public"."pay_md_product"."icon" IS '图标';
-COMMENT ON COLUMN "public"."pay_md_product"."settle_periods" IS '支持的结算周期列表';
 COMMENT ON COLUMN "public"."pay_md_product"."sort_no" IS '排序';
 COMMENT ON COLUMN "public"."pay_md_product"."creator" IS '创建者';
 COMMENT ON COLUMN "public"."pay_md_product"."create_time" IS '创建时间';
