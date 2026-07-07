@@ -31,9 +31,6 @@ public class PayProduct extends MpBaseEntity implements ToResult<PayProductResul
     /// 产品介绍
     private String description;
 
-    /// 图标
-    private String icon;
-
     /// 排序
     private Integer sortNo;
 

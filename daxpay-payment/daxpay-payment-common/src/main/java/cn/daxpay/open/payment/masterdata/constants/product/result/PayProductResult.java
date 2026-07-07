@@ -34,9 +34,6 @@ public class PayProductResult extends BaseResult {
     @Schema(description = "产品介绍")
     private String description;
 
-    @Schema(description = "图标")
-    private String icon;
-
     @Schema(description = "排序")
     private Integer sortNo;
 

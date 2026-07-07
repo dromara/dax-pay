@@ -113,7 +113,6 @@ public class PayProductService {
             result.setEnabled(dbRow.isEnabled());
             result.setSortNo(dbRow.getSortNo());
             result.setDescription(dbRow.getDescription());
-            result.setIcon(dbRow.getIcon());
             if (dbRow.getSandbox() != null) {
                 result.setSandbox(dbRow.getSandbox());
             }
