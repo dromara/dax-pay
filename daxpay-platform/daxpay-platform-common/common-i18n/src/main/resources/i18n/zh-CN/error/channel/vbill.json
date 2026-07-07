@@ -1,0 +1,5 @@
+{
+  "isvKeyNotConfigured": "随行付服务商密钥未配置",
+  "mnoNotConfigured": "天阙商户号(mno)未配置, 请在商户配置中填写",
+  "merchantDuplicate": "该商户下已存在此天阙商户号"
+}

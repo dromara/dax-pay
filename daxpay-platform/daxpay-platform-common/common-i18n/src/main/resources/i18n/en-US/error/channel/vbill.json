@@ -1,0 +1,5 @@
+{
+  "isvKeyNotConfigured": "VBill ISV key not configured",
+  "mnoNotConfigured": "VBill merchant number (mno) not configured, please fill in merchant config",
+  "merchantDuplicate": "This Tianque merchant number already exists under this merchant"
+}
