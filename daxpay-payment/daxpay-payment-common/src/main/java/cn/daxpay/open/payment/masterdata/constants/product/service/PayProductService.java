@@ -114,7 +114,6 @@ public class PayProductService {
             result.setSortNo(dbRow.getSortNo());
             result.setDescription(dbRow.getDescription());
             result.setIcon(dbRow.getIcon());
-            result.setSettlePeriods(dbRow.getSettlePeriods());
             if (dbRow.getSandbox() != null) {
                 result.setSandbox(dbRow.getSandbox());
             }

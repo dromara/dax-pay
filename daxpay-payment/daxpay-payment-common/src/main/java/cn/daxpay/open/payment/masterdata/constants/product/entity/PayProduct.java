@@ -2,17 +2,13 @@ package cn.daxpay.open.payment.masterdata.constants.product.entity;
 
 import cn.daxpay.open.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.open.platform.common.mybatisplus.base.MpBaseEntity;
-import cn.daxpay.open.platform.common.mybatisplus.handler.type.StringListTypeHandler;
 import cn.daxpay.open.payment.masterdata.constants.product.convert.PayProductConvert;
 import cn.daxpay.open.payment.masterdata.constants.product.result.PayProductResult;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
-
-import java.util.List;
 
 /// # 支付产品
 ///
@@ -37,10 +33,6 @@ public class PayProduct extends MpBaseEntity implements ToResult<PayProductResul
 
     /// 图标
     private String icon;
-
-    /// 支持的结算周期列表
-    @TableField(typeHandler = StringListTypeHandler.class)
-    private List<String> settlePeriods;
 
     /// 排序
     private Integer sortNo;

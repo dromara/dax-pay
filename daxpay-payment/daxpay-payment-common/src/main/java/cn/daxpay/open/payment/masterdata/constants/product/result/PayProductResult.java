@@ -37,9 +37,6 @@ public class PayProductResult extends BaseResult {
     @Schema(description = "图标")
     private String icon;
 
-    @Schema(description = "支持的结算周期列表")
-    private List<String> settlePeriods;
-
     @Schema(description = "排序")
     private Integer sortNo;
 
