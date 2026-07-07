@@ -1,0 +1,88 @@
+package cn.daxpay.open.channel.adapay.service.payment.refund;
+
+import cn.daxpay.open.channel.adapay.client.AdapayChannelClient;
+import cn.daxpay.open.channel.adapay.client.credential.AdapaySdkCredential;
+import cn.daxpay.open.channel.adapay.client.req.AdapayRefundReq;
+import cn.daxpay.open.channel.adapay.client.resp.AdapayRefundResp;
+import cn.daxpay.open.channel.adapay.code.AdapayCode;
+import cn.daxpay.open.channel.adapay.util.AdapayDateUtil;
+import cn.daxpay.open.payment.common.enums.RefundOrderStatusEnum;
+import cn.daxpay.open.payment.common.result.DaxResult;
+import cn.daxpay.open.payment.core.trade.bo.RefundResultBo;
+import cn.daxpay.open.payment.core.trade.dao.PayTradeManager;
+import cn.daxpay.open.payment.core.trade.entity.PayRefundOrder;
+import cn.daxpay.open.platform.system.service.config.PlatformUrlConfigService;
+import cn.hutool.core.util.StrUtil;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+/// # 汇付天下退款业务服务
+///
+/// 通过 [AdapayChannelClient] 调用子应用发起汇付天下退款。
+/// 退款需用原汇付支付对象 ID(从原 PayTrade.outOrderNo 读取)。
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class AdapayRefundService {
+
+    private final AdapayChannelClient adapayChannelClient;
+    private final PlatformUrlConfigService platformUrlConfigService;
+    private final PayTradeManager payTradeManager;
+
+    /// 执行汇付天下退款
+    public RefundResultBo refund(PayRefundOrder refundOrder, AdapaySdkCredential credential) {
+        AdapayRefundReq req = new AdapayRefundReq();
+        req.setOutTradeNo(refundOrder.getOrderNo());
+        req.setOutRefundNo(refundOrder.getRefundNo());
+        req.setRefundAmount(refundOrder.getAmount());
+        req.setReason(refundOrder.getReason());
+        req.setNotifyUrl(this.buildRefundNotifyUrl(refundOrder));
+        req.setCredential(credential);
+
+        // 汇付退款需要原支付对象 ID(从原交易读取)
+        payTradeManager.findByTradeNo(refundOrder.getOrderNo())
+                .ifPresentOrElse(
+                        t -> req.setPaymentId(t.getOutOrderNo()),
+                        () -> log.error("汇付天下退款未查到原交易({}), paymentId 未填充, 退款将失败",
+                                refundOrder.getOrderNo()));
+
+        DaxResult<AdapayRefundResp> result = adapayChannelClient.refund(req);
+        if (result.getCode() != 0) {
+            log.error("汇付天下通道退款失败: refundNo={}, msg={}", refundOrder.getRefundNo(), result.getMsg());
+            return new RefundResultBo()
+                    .setComplete(false)
+                    .setStatus(RefundOrderStatusEnum.FAIL)
+                    .setSyncSuccess(false)
+                    .setSyncErrorMsg(result.getMsg());
+        }
+
+        return toRefundResult(result.getData());
+    }
+
+    /// 生成汇付天下退款异步通知地址
+    private String buildRefundNotifyUrl(PayRefundOrder refundOrder) {
+        String base = platformUrlConfigService.getUrlConfig().getBackendBaseUrl();
+        if (StrUtil.isBlank(base)) {
+            throw new IllegalStateException("平台后端访问地址(backendBaseUrl)未配置, 无法生成汇付天下退款回调地址");
+        }
+        return StrUtil.format("{}/unipay/callback/{}/{}/adapay/refund",
+                base, refundOrder.getMchNo(), refundOrder.getAppId());
+    }
+
+    /// 解析子应用响应
+    private RefundResultBo toRefundResult(AdapayRefundResp resp) {
+        RefundResultBo bo = new RefundResultBo();
+        bo.setOutRefundNo(resp.getOutRefundNo());
+        bo.setFinishTime(AdapayDateUtil.parse(resp.getFinishTime()));
+        // SUCCESS 退款即时成功; PROCESSING/FAIL 需同步查询确认
+        if (AdapayCode.REFUND_STATUS_SUCCESS.equals(resp.getRefundStatus())) {
+            bo.setComplete(true)
+                    .setStatus(RefundOrderStatusEnum.SUCCESS);
+        } else {
+            bo.setComplete(false)
+                    .setStatus(RefundOrderStatusEnum.PROGRESS);
+        }
+        return bo;
+    }
+}
