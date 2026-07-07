@@ -1,0 +1,93 @@
+package cn.daxpay.open.channel.hkrt.service.callback;
+
+import cn.daxpay.open.channel.hkrt.client.HkrtChannelClient;
+import cn.daxpay.open.channel.hkrt.client.credential.HkrtSdkCredential;
+import cn.daxpay.open.channel.hkrt.client.req.HkrtCallbackParseReq;
+import cn.daxpay.open.channel.hkrt.client.resp.HkrtCallbackParseResp;
+import cn.daxpay.open.channel.hkrt.dao.isv.HkrtIsvKeyConfigManager;
+import cn.daxpay.open.channel.hkrt.entity.isv.HkrtIsvKeyConfig;
+import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
+import cn.hutool.extra.servlet.JakartaServletUtil;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.util.Objects;
+
+/// # 海科融通退款回调处理服务
+///
+/// 海科融通退款异步通知 → 主应用接收原始 JSON body → 转发子应用验签与解析 →
+/// 记录退款回调结果。
+///
+/// 验签与字段解析统一由子应用 dax-pay-channel-two 的 HkrtCallbackParseService 完成,
+/// 主应用不再自验签。子应用返回抽象态 tradeStatus(SUCCESS/FAIL)。
+///
+/// TODO 退款单状态更新待接入退款回调框架(平台目前无独立 RefundCallbackService,
+///      后续可通过 PayRefundService 或新增退款回调入口完成状态流转)。本期仅记录日志。
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class HkrtRefundCallbackService {
+
+    private static final String NOTIFY_SUCCESS = "success";
+    private static final String NOTIFY_FAIL = "fail";
+    /// 退款成功(抽象态, 由子应用统一转换)
+    private static final String REFUND_STATUS_SUCCESS = "SUCCESS";
+
+    private final HkrtIsvKeyConfigManager hkrtIsvKeyConfigManager;
+    private final HkrtChannelClient hkrtChannelClient;
+
+    /// 退款回调处理
+    public String refundHandle(HttpServletRequest request) {
+        // 1. 提取回调原始数据(JSON body)
+        String body = JakartaServletUtil.getBody(request);
+
+        // 2. 获取全局服务商 accessKey(只读查询, 不创建记录)
+        HkrtIsvKeyConfig keyConfig = hkrtIsvKeyConfigManager.findByProduct(ProductEnum.HKRT_PAY.getCode())
+                .orElse(null);
+        if (keyConfig == null || keyConfig.getAccessKey() == null) {
+            log.error("海科融通退款回调: 服务商密钥未配置, 无法验签");
+            return NOTIFY_FAIL;
+        }
+
+        // 3. 转发子应用验签与解析
+        HkrtCallbackParseResp resp = parseCallback(body, keyConfig.getAccessKey());
+        if (resp == null) {
+            return NOTIFY_FAIL;
+        }
+
+        // 4. 记录退款回调结果, TODO 接入退款单状态更新框架
+        String outRefundNo = resp.getOutTradeNo();
+        String refundNo = resp.getTradeNo();
+        String refundStatus = resp.getTradeStatus();
+        log.info("海科融通退款回调: outRefundNo={}, refundNo={}, refundStatus={}, amount={}, finishTime={}",
+                outRefundNo, refundNo, refundStatus, resp.getAmount(), resp.getFinishTime());
+        if (Objects.equals(REFUND_STATUS_SUCCESS, refundStatus)) {
+            // TODO 退款成功, 更新退款单状态(待接入退款回调框架)
+            log.info("海科融通退款成功: outRefundNo={}", outRefundNo);
+        }
+        return NOTIFY_SUCCESS;
+    }
+
+    /// 转发子应用验签解析(退款回调)
+    private HkrtCallbackParseResp parseCallback(String body, String accessKey) {
+        HkrtSdkCredential credential = new HkrtSdkCredential();
+        credential.setAccessKey(accessKey);
+        HkrtCallbackParseReq req = new HkrtCallbackParseReq();
+        req.setCredential(credential);
+        req.setRawData(body);
+        req.setRefund(true);
+        var result = hkrtChannelClient.parseRefundCallback(req);
+        if (result.getCode() != 0) {
+            log.error("海科融通退款回调: 子应用解析失败: {}", result.getMsg());
+            return null;
+        }
+        HkrtCallbackParseResp resp = result.getData();
+        if (resp == null || !Boolean.TRUE.equals(resp.getSuccess())) {
+            log.error("海科融通退款回调验签失败");
+            return null;
+        }
+        return resp;
+    }
+}
