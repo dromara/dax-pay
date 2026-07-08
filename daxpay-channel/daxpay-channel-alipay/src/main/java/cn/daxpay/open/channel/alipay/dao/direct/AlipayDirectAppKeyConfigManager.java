@@ -24,6 +24,14 @@ public class AlipayDirectAppKeyConfigManager extends BaseManager<AlipayDirectApp
                 .oneOpt();
     }
 
+    /// 根据应用ID和沙箱标志查询(双环境并存)
+    public Optional<AlipayDirectAppKeyConfig> findByAlipayDirectAppIdAndSandbox(Long alipayDirectAppId, boolean sandbox) {
+        return lambdaQuery()
+                .eq(AlipayDirectAppKeyConfig::getAlipayDirectAppId, alipayDirectAppId)
+                .eq(AlipayDirectAppKeyConfig::getSandbox, sandbox)
+                .oneOpt();
+    }
+
     /// 根据应用ID删除密钥配置
     public void deleteByAlipayDirectAppId(Long alipayDirectAppId) {
         lambdaUpdate()

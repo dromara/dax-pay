@@ -23,10 +23,8 @@ public enum ChannelEnum implements I18nSupport {
     LESHUA_PAY("leshua_pay"),
     /// 随行付
     VBILL_PAY("vbill_pay"),
-    /// 汇付天下
+    /// 汇付天下(下挂 ada_pay 与 dougong_pay 两个产品)
     ADA_PAY("ada_pay"),
-    /// 斗拱
-    DOUGONG_PAY("dougong_pay"),
     /// 海科融通
     HKRT_PAY("hkrt_pay"),
     /// 拉卡拉

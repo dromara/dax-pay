@@ -22,15 +22,16 @@ public class LakalaIsvKeyConfigService {
 
     private final LakalaIsvKeyConfigManager lakalaIsvKeyConfigManager;
 
-    /// 根据产品编码查询密钥配置, 不存在则创建默认记录
+    /// 根据产品编码和沙箱标志查询密钥配置, 不存在则创建默认记录
     @Transactional(rollbackFor = Exception.class)
-    public LakalaIsvKeyConfig findByProduct(String product) {
-        var existing = lakalaIsvKeyConfigManager.findByProduct(product);
+    public LakalaIsvKeyConfig findByProduct(String product, boolean sandbox) {
+        var existing = lakalaIsvKeyConfigManager.findByProductAndSandbox(product, sandbox);
         if (existing.isPresent()) {
             return existing.get();
         }
         var config = new LakalaIsvKeyConfig()
-                .setProduct(product);
+                .setProduct(product)
+                .setSandbox(sandbox);
         lakalaIsvKeyConfigManager.save(config);
         return config;
     }
@@ -40,8 +41,8 @@ public class LakalaIsvKeyConfigService {
     /// 与 [findByProduct] 的 upsert 语义不同, 此方法只读不写:
     /// 记录不存在或关键字段(lklAppId/privateKey/publicKey)任一为空时 fail-fast,
     /// 避免空凭证下发到子应用后子应用才发现问题。
-    public LakalaIsvKeyConfig getByProductForPay(String product) {
-        LakalaIsvKeyConfig config = lakalaIsvKeyConfigManager.findByProduct(product)
+    public LakalaIsvKeyConfig getByProductForPay(String product, boolean sandbox) {
+        LakalaIsvKeyConfig config = lakalaIsvKeyConfigManager.findByProductAndSandbox(product, sandbox)
                 // 拉卡拉: 服务商密钥未配置
                 .orElseThrow(() -> new BizInfoException("error.channel.lakala.isvKeyNotConfigured"));
         if (StrUtil.hasBlank(config.getLklAppId(), config.getPrivateKey(), config.getPublicKey())) {
@@ -53,7 +54,7 @@ public class LakalaIsvKeyConfigService {
     /// 保存服务商密钥配置
     @Transactional(rollbackFor = Exception.class)
     public void saveConfig(LakalaIsvKeyConfigParam param) {
-        var config = this.findByProduct(param.getProduct());
+        var config = this.findByProduct(param.getProduct(), Boolean.TRUE.equals(param.getSandbox()));
         LakalaIsvKeyConfigConvert.CONVERT.copy(param, config);
         lakalaIsvKeyConfigManager.updateById(config);
     }

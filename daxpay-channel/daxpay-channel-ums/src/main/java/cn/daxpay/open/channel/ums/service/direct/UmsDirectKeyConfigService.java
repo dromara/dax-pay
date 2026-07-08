@@ -23,13 +23,14 @@ public class UmsDirectKeyConfigService {
 
     /// 根据通道商户号查询密钥配置, 不存在则创建默认记录
     @Transactional(rollbackFor = Exception.class)
-    public UmsDirectKeyConfig findByChannelMchNo(String channelMchNo) {
-        var existing = umsDirectKeyConfigManager.findByChannelMchNo(channelMchNo);
+    public UmsDirectKeyConfig findByChannelMchNo(String channelMchNo, boolean sandbox) {
+        var existing = umsDirectKeyConfigManager.findByChannelMchNoAndSandbox(channelMchNo, sandbox);
         if (existing.isPresent()) {
             return existing.get();
         }
         var config = new UmsDirectKeyConfig()
-                .setChannelMchNo(channelMchNo);
+                .setChannelMchNo(channelMchNo)
+                .setSandbox(sandbox);
         // 查询通用通道商户主表填充商户号
         channelMerchantManager.findByChannelMchNo(channelMchNo)
                 .ifPresent(mch -> config.setMchNo(mch.getMchNo()));
@@ -43,7 +44,7 @@ public class UmsDirectKeyConfigService {
     /// mchNo/merchantNo 为不可变身份字段(实体 FieldStrategy.NEVER), 由 findByChannelMchNo 从 DB 加载后保持不变。
     @Transactional(rollbackFor = Exception.class)
     public void save(UmsDirectKeyConfigParam param) {
-        var config = this.findByChannelMchNo(param.getChannelMchNo());
+        var config = this.findByChannelMchNo(param.getChannelMchNo(), Boolean.TRUE.equals(param.getSandbox()));
         UmsDirectKeyConfigConvert.CONVERT.copy(param, config);
         umsDirectKeyConfigManager.updateById(config);
     }

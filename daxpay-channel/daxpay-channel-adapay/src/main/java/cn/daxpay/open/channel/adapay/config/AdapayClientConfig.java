@@ -8,7 +8,7 @@ import org.springframework.web.client.RestClient;
 import org.springframework.web.client.support.RestClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
 
-/// # 汇付天下通道客户端配置
+/// # Adapay 通道客户端配置
 ///
 /// 复用全局 [RestClient](由 common-spring 的 RestClientConfiguration 提供, 已预装:
 /// OTel traceparent 透传 / BusinessContextInterceptor 业务上下文透传 / Apache HttpClient5 连接池),

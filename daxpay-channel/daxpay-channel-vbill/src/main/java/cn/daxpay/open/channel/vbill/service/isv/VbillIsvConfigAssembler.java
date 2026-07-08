@@ -44,8 +44,13 @@ public class VbillIsvConfigAssembler {
     /// @param capability   支付能力编码(保留参数, 随行付不按能力路由)
     /// @return 随行付 SDK 凭证(含服务商密钥 + 天阙商户号)
     public VbillSdkCredential buildConfig(String mchNo, String channelMchNo, String capability) {
-        // 服务商密钥(全局唯一, 含机构号 + 私钥/公钥; 缺失或关键字段为空时 fail-fast)
-        VbillIsvKeyConfig keyConfig = vbillIsvKeyConfigService.getByProductForPay(ProductEnum.VBILL_PAY.getCode());
+        // 沙箱状态读取支付产品配置的生效环境(需先于密钥查询, 决定取哪份密钥)
+        boolean sandbox = payProductConfigManager.findByProduct(ProductEnum.VBILL_PAY.getCode())
+                .map(PayProductConfig::getActiveEnv)
+                .map(PayEnvEnum.SANDBOX.getCode()::equals)
+                .orElse(false);
+        // 服务商密钥(按生产/沙箱双环境取对应一份, 含机构号 + 私钥/公钥; 缺失或关键字段为空时 fail-fast)
+        VbillIsvKeyConfig keyConfig = vbillIsvKeyConfigService.getByProductForPay(ProductEnum.VBILL_PAY.getCode(), sandbox);
         // 通道商户绑定(取天阙商户号 mno)
         VbillIsvChannelMerchant channelMerchant = vbillIsvChannelMerchantManager.findByChannelMchNo(channelMchNo)
                 // 随行付: 通道商户配置不存在
@@ -56,11 +61,6 @@ public class VbillIsvConfigAssembler {
         credential.setOrgId(keyConfig.getOrgId());
         credential.setPrivateKey(keyConfig.getPrivateKey());
         credential.setPublicKey(keyConfig.getPublicKey());
-        // 沙箱状态读取支付产品配置的生效环境
-        boolean sandbox = payProductConfigManager.findByProduct(ProductEnum.VBILL_PAY.getCode())
-                .map(PayProductConfig::getActiveEnv)
-                .map(PayEnvEnum.SANDBOX.getCode()::equals)
-                .orElse(false);
         credential.setSandbox(sandbox);
         // 子商户身份(天阙商户号 mno)
         String mno = channelMerchant.getVbillMchNo();

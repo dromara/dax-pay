@@ -19,4 +19,12 @@ public class HkrtIsvKeyConfigManager extends BaseManager<HkrtIsvKeyConfigMapper,
                 .eq(HkrtIsvKeyConfig::getProduct, product)
                 .oneOpt();
     }
+
+    /// 根据产品编码和沙箱标志查询(双环境并存)
+    public Optional<HkrtIsvKeyConfig> findByProductAndSandbox(String product, boolean sandbox) {
+        return lambdaQuery()
+                .eq(HkrtIsvKeyConfig::getProduct, product)
+                .eq(HkrtIsvKeyConfig::getSandbox, sandbox)
+                .oneOpt();
+    }
 }

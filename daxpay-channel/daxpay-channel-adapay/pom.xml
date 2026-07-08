@@ -12,5 +12,5 @@
 
     <artifactId>daxpay-channel-adapay</artifactId>
     <packaging>jar</packaging>
-    <description>汇付天下(adapay)支付通道(聚合通道: 微信/支付宝/银联)</description>
+    <description>Adapay(adapay)支付通道(聚合通道: 微信/支付宝/银联)</description>
 </project>

@@ -38,4 +38,7 @@ public class LakalaIsvKeyConfigResult extends BaseResult {
 
     @Schema(description = "机构代码")
     private String orgCode;
+
+    @Schema(description = "是否沙箱环境")
+    private Boolean sandbox;
 }

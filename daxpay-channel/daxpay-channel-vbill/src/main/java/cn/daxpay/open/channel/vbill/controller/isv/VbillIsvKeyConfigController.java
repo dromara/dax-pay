@@ -33,8 +33,9 @@ public class VbillIsvKeyConfigController {
     @Operation(summary = "查询随行付服务商密钥配置")
     @GetMapping("/find-config")
     public Result<VbillIsvKeyConfigResult> findConfig(
-            @NotBlank(message = "{validation.field.product.notBlank}") String product) {
-        return Res.ok(VbillIsvKeyConfigConvert.CONVERT.toResult(vbillIsvKeyConfigService.findByProduct(product)));
+            @NotBlank(message = "{validation.field.product.notBlank}") String product,
+            boolean sandbox) {
+        return Res.ok(VbillIsvKeyConfigConvert.CONVERT.toResult(vbillIsvKeyConfigService.findByProduct(product, sandbox)));
     }
 
     @PermCode(code = "manage", nameCn = "随行付服务商管理", nameEn = "VBill ISV Manage")

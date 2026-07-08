@@ -8,7 +8,7 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
 
-/// # 汇付天下直连密钥配置转换
+/// # Adapay 直连密钥配置转换
 @Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
 public interface AdapayDirectKeyConfigConvert {
 

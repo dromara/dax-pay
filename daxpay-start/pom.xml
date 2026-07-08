@@ -89,6 +89,48 @@
             <artifactId>daxpay-channel-douyin</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- 海科融通通道 -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-channel-hkrt</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 斗拱(汇付天下)通道 -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-channel-dougong</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 随行付(天阙科技)通道 -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-channel-vbill</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 乐刷通道 -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-channel-leshua</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 富友支付通道 -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-channel-fuyou</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 河马付(杉德)通道 -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-channel-hmpay</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- Adapay(汇付天下)通道 -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-channel-adapay</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

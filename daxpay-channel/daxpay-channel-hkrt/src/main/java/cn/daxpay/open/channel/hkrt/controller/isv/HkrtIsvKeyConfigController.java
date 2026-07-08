@@ -34,8 +34,9 @@ public class HkrtIsvKeyConfigController {
     @Operation(summary = "查询海科融通服务商密钥配置")
     @GetMapping("/find-config")
     public Result<HkrtIsvKeyConfigResult> findConfig(
-            @NotBlank(message = "{validation.field.product.notBlank}") String product) {
-        return Res.ok(HkrtIsvKeyConfigConvert.CONVERT.toResult(hkrtIsvKeyConfigService.findByProduct(product)));
+            @NotBlank(message = "{validation.field.product.notBlank}") String product,
+            boolean sandbox) {
+        return Res.ok(HkrtIsvKeyConfigConvert.CONVERT.toResult(hkrtIsvKeyConfigService.findByProduct(product, sandbox)));
     }
 
     @PermCode(code = "manage", nameCn = "海科融通服务商管理", nameEn = "Hkrt ISV Manage")

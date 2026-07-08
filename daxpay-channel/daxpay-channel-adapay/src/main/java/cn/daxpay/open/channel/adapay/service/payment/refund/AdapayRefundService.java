@@ -17,10 +17,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-/// # 汇付天下退款业务服务
+/// # Adapay 退款业务服务
 ///
-/// 通过 [AdapayChannelClient] 调用子应用发起汇付天下退款。
-/// 退款需用原汇付支付对象 ID(从原 PayTrade.outOrderNo 读取)。
+/// 通过 [AdapayChannelClient] 调用子应用发起Adapay 退款。
+/// 退款需用原Adapay 支付对象 ID(从原 PayTrade.outOrderNo 读取)。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -30,7 +30,7 @@ public class AdapayRefundService {
     private final PlatformUrlConfigService platformUrlConfigService;
     private final PayTradeManager payTradeManager;
 
-    /// 执行汇付天下退款
+    /// 执行Adapay 退款
     public RefundResultBo refund(PayRefundOrder refundOrder, AdapaySdkCredential credential) {
         AdapayRefundReq req = new AdapayRefundReq();
         req.setOutTradeNo(refundOrder.getOrderNo());
@@ -40,16 +40,16 @@ public class AdapayRefundService {
         req.setNotifyUrl(this.buildRefundNotifyUrl(refundOrder));
         req.setCredential(credential);
 
-        // 汇付退款需要原支付对象 ID(从原交易读取)
+        // Adapay 退款需要原支付对象 ID(从原交易读取)
         payTradeManager.findByTradeNo(refundOrder.getOrderNo())
                 .ifPresentOrElse(
                         t -> req.setPaymentId(t.getOutOrderNo()),
-                        () -> log.error("汇付天下退款未查到原交易({}), paymentId 未填充, 退款将失败",
+                        () -> log.error("Adapay 退款未查到原交易({}), paymentId 未填充, 退款将失败",
                                 refundOrder.getOrderNo()));
 
         DaxResult<AdapayRefundResp> result = adapayChannelClient.refund(req);
         if (result.getCode() != 0) {
-            log.error("汇付天下通道退款失败: refundNo={}, msg={}", refundOrder.getRefundNo(), result.getMsg());
+            log.error("Adapay 通道退款失败: refundNo={}, msg={}", refundOrder.getRefundNo(), result.getMsg());
             return new RefundResultBo()
                     .setComplete(false)
                     .setStatus(RefundOrderStatusEnum.FAIL)
@@ -60,11 +60,11 @@ public class AdapayRefundService {
         return toRefundResult(result.getData());
     }
 
-    /// 生成汇付天下退款异步通知地址
+    /// 生成Adapay 退款异步通知地址
     private String buildRefundNotifyUrl(PayRefundOrder refundOrder) {
         String base = platformUrlConfigService.getUrlConfig().getBackendBaseUrl();
         if (StrUtil.isBlank(base)) {
-            throw new IllegalStateException("平台后端访问地址(backendBaseUrl)未配置, 无法生成汇付天下退款回调地址");
+            throw new IllegalStateException("平台后端访问地址(backendBaseUrl)未配置, 无法生成Adapay 退款回调地址");
         }
         return StrUtil.format("{}/unipay/callback/{}/{}/adapay/refund",
                 base, refundOrder.getMchNo(), refundOrder.getAppId());

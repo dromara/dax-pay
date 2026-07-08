@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
-/// # 汇付天下直连密钥配置 Manager
+/// # Adapay 直连密钥配置 Manager
 @Repository
 public class AdapayDirectKeyConfigManager extends BaseManager<AdapayDirectKeyConfigMapper, AdapayDirectKeyConfig> {
 
@@ -14,6 +14,14 @@ public class AdapayDirectKeyConfigManager extends BaseManager<AdapayDirectKeyCon
     public Optional<AdapayDirectKeyConfig> findByChannelMchNo(String channelMchNo) {
         return lambdaQuery()
                 .eq(AdapayDirectKeyConfig::getChannelMchNo, channelMchNo)
+                .oneOpt();
+    }
+
+    /// 根据通道商户号和沙箱标志查询(双环境并存)
+    public Optional<AdapayDirectKeyConfig> findByChannelMchNoAndSandbox(String channelMchNo, boolean sandbox) {
+        return lambdaQuery()
+                .eq(AdapayDirectKeyConfig::getChannelMchNo, channelMchNo)
+                .eq(AdapayDirectKeyConfig::getSandbox, sandbox)
                 .oneOpt();
     }
 

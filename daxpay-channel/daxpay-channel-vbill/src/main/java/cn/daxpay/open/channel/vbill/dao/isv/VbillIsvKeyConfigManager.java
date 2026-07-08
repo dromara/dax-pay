@@ -18,4 +18,12 @@ public class VbillIsvKeyConfigManager extends BaseManager<VbillIsvKeyConfigMappe
                 .eq(VbillIsvKeyConfig::getProduct, product)
                 .oneOpt();
     }
+
+    /// 根据产品编码和沙箱标志查询(双环境并存)
+    public Optional<VbillIsvKeyConfig> findByProductAndSandbox(String product, boolean sandbox) {
+        return lambdaQuery()
+                .eq(VbillIsvKeyConfig::getProduct, product)
+                .eq(VbillIsvKeyConfig::getSandbox, sandbox)
+                .oneOpt();
+    }
 }

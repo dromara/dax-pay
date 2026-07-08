@@ -2,6 +2,7 @@ package cn.daxpay.open.channel.hkrt.param.isv;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -26,4 +27,8 @@ public class HkrtIsvKeyConfigParam {
 
     @Schema(description = "签名密钥(加密存储)")
     private String accessKey;
+
+    @NotNull(message = "{validation.field.sandbox.notNull}")
+    @Schema(description = "是否沙箱环境")
+    private Boolean sandbox;
 }

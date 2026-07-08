@@ -43,8 +43,13 @@ public class HkrtIsvConfigAssembler {
     /// @param capability   支付能力编码(保留参数, 海科融通不按能力路由)
     /// @return 海科融通 SDK 凭证(含服务商密钥 + 商户号/终端号)
     public HkrtSdkCredential buildConfig(String mchNo, String channelMchNo, String capability) {
-        // 服务商密钥(全局唯一, 含 agentNo/accessId/accessKey; 缺失或关键字段为空时 fail-fast)
-        HkrtIsvKeyConfig keyConfig = hkrtIsvKeyConfigService.getByProductForPay(ProductEnum.HKRT_PAY.getCode());
+        // 先读取支付产品配置的生效环境判断 sandbox, 再按 sandbox 查对应环境的密钥
+        boolean sandbox = payProductConfigManager.findByProduct(ProductEnum.HKRT_PAY.getCode())
+                .map(PayProductConfig::getActiveEnv)
+                .map(PayEnvEnum.SANDBOX.getCode()::equals)
+                .orElse(false);
+        // 服务商密钥(按 sandbox 分环境, 含 agentNo/accessId/accessKey; 缺失或关键字段为空时 fail-fast)
+        HkrtIsvKeyConfig keyConfig = hkrtIsvKeyConfigService.getByProductForPay(ProductEnum.HKRT_PAY.getCode(), sandbox);
         // 通道商户绑定(取 merchNo + pn)
         HkrtIsvChannelMerchant channelMerchant = hkrtIsvChannelMerchantManager.findByChannelMchNo(channelMchNo)
                 // 海科融通: 通道商户配置不存在
@@ -55,11 +60,6 @@ public class HkrtIsvConfigAssembler {
         credential.setAgentNo(keyConfig.getAgentNo());
         credential.setAccessId(keyConfig.getAccessId());
         credential.setAccessKey(keyConfig.getAccessKey());
-        // 沙箱状态读取支付产品配置的生效环境(不挂在密钥配置上)
-        boolean sandbox = payProductConfigManager.findByProduct(ProductEnum.HKRT_PAY.getCode())
-                .map(PayProductConfig::getActiveEnv)
-                .map(PayEnvEnum.SANDBOX.getCode()::equals)
-                .orElse(false);
         credential.setSandbox(sandbox);
         // 子商户身份
         credential.setMerchNo(channelMerchant.getMerchNo());

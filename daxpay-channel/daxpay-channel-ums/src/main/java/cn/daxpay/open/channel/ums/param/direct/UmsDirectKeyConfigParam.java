@@ -2,6 +2,7 @@ package cn.daxpay.open.channel.ums.param.direct;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -29,4 +30,8 @@ public class UmsDirectKeyConfigParam {
 
     @Schema(description = "通讯密钥(回调验签密钥)")
     private String secretKey;
+
+    @NotNull(message = "{validation.field.sandbox.notNull}")
+    @Schema(description = "是否沙箱环境")
+    private Boolean sandbox;
 }

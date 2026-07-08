@@ -52,4 +52,7 @@ public class AlipayDirectAppKeyConfigResult extends BaseResult {
     @SensitiveInfo
     @Schema(description = "AES通信密钥")
     private String secretKey;
+
+    @Schema(description = "是否沙箱环境")
+    private Boolean sandbox;
 }

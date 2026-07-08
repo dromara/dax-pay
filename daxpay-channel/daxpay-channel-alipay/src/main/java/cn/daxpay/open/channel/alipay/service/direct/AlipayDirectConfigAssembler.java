@@ -40,7 +40,12 @@ public class AlipayDirectConfigAssembler {
     /// @return 支付宝 SDK 凭证, 字段对齐子应用 AlipaySdkCredential
     public AlipaySdkCredential buildConfig(String mchNo, String channelMchNo, String capability) {
         AlipayDirectApp app = resolveApp(mchNo, channelMchNo, capability);
-        AlipayDirectAppKeyConfig keyConfig = alipayDirectAppKeyConfigService.findByAlipayDirectAppId(app.getId());
+
+        // 先读取支付产品当前生效环境, 判断是否沙箱, 再按环境查对应密钥(生产/沙箱并存)
+        boolean sandbox = payProductConfigManager.findByProduct(ProductEnum.ALIPAY.getCode())
+                .map(c -> PayEnvEnum.SANDBOX.getCode().equals(c.getActiveEnv()))
+                .orElse(false);
+        AlipayDirectAppKeyConfig keyConfig = alipayDirectAppKeyConfigService.findByAlipayDirectAppId(app.getId(), sandbox);
 
         var credential = new AlipaySdkCredential();
         credential.setAliAppId(app.getAliAppId());
@@ -50,10 +55,6 @@ public class AlipayDirectConfigAssembler {
         credential.setAppCert(keyConfig.getAppCert());
         credential.setAlipayCert(keyConfig.getAlipayCert());
         credential.setAlipayRootCert(keyConfig.getAlipayRootCert());
-        // 读取支付产品当前生效环境, 判断是否沙箱
-        boolean sandbox = payProductConfigManager.findByProduct(ProductEnum.ALIPAY.getCode())
-                .map(c -> PayEnvEnum.SANDBOX.getCode().equals(c.getActiveEnv()))
-                .orElse(false);
         credential.setSandbox(sandbox);
         // TODO notifyUrl 后续按业务要求手动组装(来源已迁移至进件配置, 待确认组装方式)
         return credential;

@@ -12,9 +12,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-/// # 汇付天下直连支付策略
+/// # Adapay 直连支付策略
 ///
-/// 汇付天下支付(ProductEnum.ADA_PAY)下发起支付的具体执行策略。
+/// Adapay 支付(ProductEnum.ADA_PAY)下发起支付的具体执行策略。
 /// 配置组装在 [doBeforePay] 阶段完成(委托 [AdapayDirectConfigAssembler]),
 /// 支付执行委托给 [AdapayPayService]。
 @Slf4j

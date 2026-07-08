@@ -21,15 +21,16 @@ public class VbillIsvKeyConfigService {
 
     private final VbillIsvKeyConfigManager vbillIsvKeyConfigManager;
 
-    /// 根据产品编码查询密钥配置, 不存在则创建默认记录
+    /// 根据产品编码和沙箱标志查询密钥配置, 不存在则创建默认记录
     @Transactional(rollbackFor = Exception.class)
-    public VbillIsvKeyConfig findByProduct(String product) {
-        var existing = vbillIsvKeyConfigManager.findByProduct(product);
+    public VbillIsvKeyConfig findByProduct(String product, boolean sandbox) {
+        var existing = vbillIsvKeyConfigManager.findByProductAndSandbox(product, sandbox);
         if (existing.isPresent()) {
             return existing.get();
         }
         var config = new VbillIsvKeyConfig()
-                .setProduct(product);
+                .setProduct(product)
+                .setSandbox(sandbox);
         vbillIsvKeyConfigManager.save(config);
         return config;
     }
@@ -38,8 +39,8 @@ public class VbillIsvKeyConfigService {
     ///
     /// 记录不存在或关键字段(orgId/privateKey/publicKey)任一为空时 fail-fast,
     /// 避免空凭证下发到子应用后子应用才发现问题。
-    public VbillIsvKeyConfig getByProductForPay(String product) {
-        VbillIsvKeyConfig config = vbillIsvKeyConfigManager.findByProduct(product)
+    public VbillIsvKeyConfig getByProductForPay(String product, boolean sandbox) {
+        VbillIsvKeyConfig config = vbillIsvKeyConfigManager.findByProductAndSandbox(product, sandbox)
                 // 随行付: 服务商密钥未配置
                 .orElseThrow(() -> new BizInfoException("error.channel.vbill.isvKeyNotConfigured"));
         if (StrUtil.hasBlank(config.getOrgId(), config.getPrivateKey(), config.getPublicKey())) {
@@ -51,7 +52,7 @@ public class VbillIsvKeyConfigService {
     /// 保存服务商密钥配置
     @Transactional(rollbackFor = Exception.class)
     public void saveConfig(VbillIsvKeyConfigParam param) {
-        var config = this.findByProduct(param.getProduct());
+        var config = this.findByProduct(param.getProduct(), Boolean.TRUE.equals(param.getSandbox()));
         VbillIsvKeyConfigConvert.CONVERT.copy(param, config);
         vbillIsvKeyConfigManager.updateById(config);
     }

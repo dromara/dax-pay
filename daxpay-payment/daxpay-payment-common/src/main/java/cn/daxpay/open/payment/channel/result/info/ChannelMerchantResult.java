@@ -40,5 +40,13 @@ public class ChannelMerchantResult extends MchTradeBaseResult {
     @Schema(description = "是否启用")
     private Boolean enable;
 
+    /// 当前生效环境(来自支付产品配置, 商户只读): prod/sandbox
+    @Schema(description = "当前生效环境: prod/sandbox")
+    private String activeEnv;
+
+    /// 是否支持沙箱环境(决定前端是否展示环境标签)
+    @Schema(description = "是否支持沙箱环境")
+    private Boolean sandboxSupport;
+
 }
 

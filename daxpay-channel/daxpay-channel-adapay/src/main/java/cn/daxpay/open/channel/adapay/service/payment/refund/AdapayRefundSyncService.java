@@ -14,9 +14,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-/// # 汇付天下退款同步业务服务
+/// # Adapay 退款同步业务服务
 ///
-/// 通过 [AdapayChannelClient] 调用子应用查询汇付天下退款状态。
+/// 通过 [AdapayChannelClient] 调用子应用查询Adapay 退款状态。
 /// 用平台退款单号(refund_order_no)查询。
 @Slf4j
 @Service
@@ -25,7 +25,7 @@ public class AdapayRefundSyncService {
 
     private final AdapayChannelClient adapayChannelClient;
 
-    /// 执行汇付天下退款同步查询
+    /// 执行Adapay 退款同步查询
     public RefundResultBo sync(PayRefundOrder refundOrder, AdapaySdkCredential credential) {
         AdapayRefundSyncReq req = new AdapayRefundSyncReq();
         req.setOutRefundNo(refundOrder.getRefundNo());
@@ -33,7 +33,7 @@ public class AdapayRefundSyncService {
 
         DaxResult<AdapayRefundSyncResp> result = adapayChannelClient.refundSync(req);
         if (result.getCode() != 0) {
-            log.error("汇付天下通道退款同步失败: refundNo={}, msg={}", refundOrder.getRefundNo(), result.getMsg());
+            log.error("Adapay 通道退款同步失败: refundNo={}, msg={}", refundOrder.getRefundNo(), result.getMsg());
             return new RefundResultBo()
                     .setSyncSuccess(false)
                     .setSyncErrorMsg(result.getMsg());

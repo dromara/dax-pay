@@ -152,7 +152,8 @@
     "amount": {
       "notNull": "支付金额不可为空",
       "min": "支付金额不能小于1分",
-      "max": "支付金额不能大于一亿元"
+      "max": "支付金额不能大于一亿元",
+      "positive": "金额必须大于0"
     },
     "title": {
       "notBlank": "名称不可为空",
@@ -185,11 +186,13 @@
       "notBlank": "商户订单号不可为空"
     },
     "description": {
-      "size": "支付描述不可超过50位"
+      "size": "支付描述不可超过50位",
+      "notBlank": "支付描述不能为空"
     },
     "method": {
       "notBlank": "支付方式不可为空",
-      "size": "支付方式编码不可超过32位"
+      "size": "支付方式编码不可超过32位",
+      "notNull": "支付方式不能为空"
     },
     "capability": {
       "size": "支付能力编码不可超过32位",
@@ -259,7 +262,8 @@
       "size": "异步通知地址不可超过200位"
     },
     "outOrderNo": {
-      "size": "通道支付订单号不可超过150位"
+      "size": "通道支付订单号不可超过150位",
+      "notBlank": "通道支付订单号不能为空"
     },
     "refundNo": {
       "notBlank": "退款号不可为空",
@@ -562,12 +566,106 @@
     "orgCode": {
       "notBlank": "机构代码不可为空"
     },
+    "orgId": {
+      "notBlank": "机构ID不能为空"
+    },
+    "vbillMchNo": {
+      "notBlank": "天阙商户号不能为空"
+    },
     "lakalaMchNo": {
       "notBlank": "拉卡拉商户号不可为空"
     },
     "termNo": {
       "notBlank": "终端号不可为空",
       "size": "终端号不可超过64位"
+    },
+    "agentNo": {
+      "notBlank": "服务商编号不可为空"
+    },
+    "accessId": {
+      "notBlank": "接入机构标识不可为空"
+    },
+    "merchNo": {
+      "notBlank": "海科商户号不可为空"
+    },
+    "pn": {
+      "notBlank": "SAAS终端号不可为空"
+    },
+    "sysId": {
+      "notBlank": "服务商系统ID不可为空"
+    },
+    "productId": {
+      "notBlank": "产品号不可为空"
+    },
+    "merchantNo": {
+      "notBlank": "汇付商户号不可为空"
+    },
+    "dougongAppId": {
+      "notBlank": "商户AppId不可为空"
+    },
+    "sandAppId": {
+      "notBlank": "杉德代理号不可为空"
+    },
+    "credential": {
+      "notNull": "通道凭证不能为空"
+    },
+    "outTradeNo": {
+      "notBlank": "通道交易号不能为空"
+    },
+    "outRefundNo": {
+      "notBlank": "通道退款号不能为空"
+    },
+    "outRequestNo": {
+      "notBlank": "通道请求号不能为空"
+    },
+    "tradeNo": {
+      "notBlank": "平台交易号不能为空"
+    },
+    "tradeProduct": {
+      "notBlank": "交易产品不能为空"
+    },
+    "relationOrderNo": {
+      "notBlank": "关联订单号不能为空"
+    },
+    "refundAmount": {
+      "notNull": "退款金额不能为空",
+      "positive": "退款金额必须大于0"
+    },
+    "subject": {
+      "notBlank": "支付标题不能为空"
+    },
+    "callbackBody": {
+      "notBlank": "回调报文不能为空"
+    },
+    "callbackType": {
+      "notBlank": "回调类型不能为空"
+    },
+    "rawData": {
+      "notBlank": "原始数据不能为空"
+    },
+    "orderCreateTime": {
+      "notBlank": "订单创建时间不能为空"
+    },
+    "orgReqDate": {
+      "notBlank": "原始请求日期不能为空"
+    },
+    "originOutTradeNo": {
+      "notBlank": "原通道交易号不能为空"
+    },
+    "config": {
+      "notNull": "配置不能为空"
+    },
+    "fuyouMchNo": {
+      "notBlank": "富友商户号不能为空"
+    },
+    "fyAppId": {
+      "notBlank": "富友应用ID不能为空"
+    },
+    "leshuaOrderId": {
+      "notBlank": "乐刷订单号不能为空"
+    },
+    "lsMchNo": {
+      "notBlank": "乐刷商户号不能为空"
     }
   }
 }

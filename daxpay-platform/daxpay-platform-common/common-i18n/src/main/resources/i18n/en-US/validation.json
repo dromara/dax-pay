@@ -152,7 +152,8 @@
     "amount": {
       "notNull": "Payment amount cannot be blank",
       "min": "Payment amount cannot be less than 1 cent",
-      "max": "Payment amount cannot exceed 100 million yuan"
+      "max": "Payment amount cannot exceed 100 million yuan",
+      "positive": "Amount must be greater than 0"
     },
     "title": {
       "notBlank": "Title cannot be blank",
@@ -185,11 +186,13 @@
       "notBlank": "Merchant order no. cannot be blank"
     },
     "description": {
-      "size": "Description cannot exceed 50 characters"
+      "size": "Description cannot exceed 50 characters",
+      "notBlank": "Description cannot be blank"
     },
     "method": {
       "notBlank": "Payment method cannot be blank",
-      "size": "Payment method cannot exceed 32 characters"
+      "size": "Payment method cannot exceed 32 characters",
+      "notNull": "Payment method cannot be null"
     },
     "capability": {
       "size": "Payment capability cannot exceed 32 characters",
@@ -259,7 +262,8 @@
       "size": "Notify URL cannot exceed 200 characters"
     },
     "outOrderNo": {
-      "size": "Channel order no. cannot exceed 150 characters"
+      "size": "Channel order no. cannot exceed 150 characters",
+      "notBlank": "Channel order no. cannot be blank"
     },
     "refundNo": {
       "notBlank": "Refund number cannot be blank",
@@ -559,12 +563,106 @@
     "orgCode": {
       "notBlank": "Organization code cannot be blank"
     },
+    "orgId": {
+      "notBlank": "Organization ID cannot be blank"
+    },
+    "vbillMchNo": {
+      "notBlank": "VBill merchant number cannot be blank"
+    },
     "lakalaMchNo": {
       "notBlank": "Lakala merchant number cannot be blank"
     },
     "termNo": {
       "notBlank": "Terminal number cannot be blank",
       "size": "Terminal number cannot exceed 64 characters"
+    },
+    "agentNo": {
+      "notBlank": "Agent number cannot be blank"
+    },
+    "accessId": {
+      "notBlank": "Access ID cannot be blank"
+    },
+    "merchNo": {
+      "notBlank": "Hkrt merchant number cannot be blank"
+    },
+    "pn": {
+      "notBlank": "SAAS terminal number cannot be blank"
+    },
+    "sysId": {
+      "notBlank": "ISV system ID cannot be blank"
+    },
+    "productId": {
+      "notBlank": "Product ID cannot be blank"
+    },
+    "merchantNo": {
+      "notBlank": "Huifu merchant number cannot be blank"
+    },
+    "dougongAppId": {
+      "notBlank": "Merchant AppId cannot be blank"
+    },
+    "sandAppId": {
+      "notBlank": "Sand app ID cannot be blank"
+    },
+    "credential": {
+      "notNull": "Channel credential cannot be null"
+    },
+    "outTradeNo": {
+      "notBlank": "Channel trade no. cannot be blank"
+    },
+    "outRefundNo": {
+      "notBlank": "Channel refund no. cannot be blank"
+    },
+    "outRequestNo": {
+      "notBlank": "Channel request no. cannot be blank"
+    },
+    "tradeNo": {
+      "notBlank": "Platform trade no. cannot be blank"
+    },
+    "tradeProduct": {
+      "notBlank": "Trade product cannot be blank"
+    },
+    "relationOrderNo": {
+      "notBlank": "Related order no. cannot be blank"
+    },
+    "refundAmount": {
+      "notNull": "Refund amount cannot be null",
+      "positive": "Refund amount must be greater than 0"
+    },
+    "subject": {
+      "notBlank": "Payment title cannot be blank"
+    },
+    "callbackBody": {
+      "notBlank": "Callback body cannot be blank"
+    },
+    "callbackType": {
+      "notBlank": "Callback type cannot be blank"
+    },
+    "rawData": {
+      "notBlank": "Raw data cannot be blank"
+    },
+    "orderCreateTime": {
+      "notBlank": "Order create time cannot be blank"
+    },
+    "orgReqDate": {
+      "notBlank": "Original request date cannot be blank"
+    },
+    "originOutTradeNo": {
+      "notBlank": "Original channel trade no. cannot be blank"
+    },
+    "config": {
+      "notNull": "Config cannot be null"
+    },
+    "fuyouMchNo": {
+      "notBlank": "Fuyou merchant number cannot be blank"
+    },
+    "fyAppId": {
+      "notBlank": "Fuyou app ID cannot be blank"
+    },
+    "leshuaOrderId": {
+      "notBlank": "Leshua order ID cannot be blank"
+    },
+    "lsMchNo": {
+      "notBlank": "Leshua merchant number cannot be blank"
     }
   }
 }

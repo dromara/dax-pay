@@ -13,10 +13,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-/// # 汇付天下支付关闭业务服务
+/// # Adapay 支付关闭业务服务
 ///
-/// 通过 [AdapayChannelClient] 调用子应用关闭汇付天下订单。
-/// 关单需用汇付支付对象 ID(PayTrade.outOrderNo)。
+/// 通过 [AdapayChannelClient] 调用子应用关闭Adapay 订单。
+/// 关单需用Adapay 支付对象 ID(PayTrade.outOrderNo)。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -24,11 +24,11 @@ public class AdapayCloseService {
 
     private final AdapayChannelClient adapayChannelClient;
 
-    /// 执行汇付天下订单关闭
+    /// 执行Adapay 订单关闭
     public CloseTypeEnum close(PayTrade trade, AdapaySdkCredential credential, boolean useCancel) {
         AdapayCloseReq req = new AdapayCloseReq();
         req.setOutTradeNo(trade.getTradeNo());
-        // 汇付支付对象 ID
+        // Adapay 支付对象 ID
         req.setPaymentId(trade.getOutOrderNo());
         req.setCredential(credential);
 

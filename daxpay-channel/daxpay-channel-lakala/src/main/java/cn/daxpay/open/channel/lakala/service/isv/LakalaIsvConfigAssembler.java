@@ -27,7 +27,7 @@ import org.springframework.stereotype.Service;
 /// - term_no ← [LakalaIsvChannelMerchant.termNo] (终端号)
 /// - 私钥/公钥/证书序列号 ← [LakalaIsvKeyConfig] (服务商级, 全局唯一)
 ///
-/// 供支付策略([cn.daxpay.open.channel.lakala.strategy.isv.*])组装通道调用凭证。
+/// 供支付策略([cn.daxpay.open.channel.lakala.strategy.*])组装通道调用凭证。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -44,8 +44,13 @@ public class LakalaIsvConfigAssembler {
     /// @param capability   支付能力编码(保留参数, 拉卡拉不按能力路由)
     /// @return 拉卡拉 SDK 凭证(含服务商密钥 + 商户号/终端号)
     public LakalaSdkCredential buildConfig(String mchNo, String channelMchNo, String capability) {
-        // 服务商密钥(全局唯一, 含 lkl_app_id + 私钥/公钥; 缺失或关键字段为空时 fail-fast)
-        LakalaIsvKeyConfig keyConfig = lakalaIsvKeyConfigService.getByProductForPay(ProductEnum.LAKALA_PAY.getCode());
+        // 沙箱状态读取支付产品配置的生效环境
+        boolean sandbox = payProductConfigManager.findByProduct(ProductEnum.LAKALA_PAY.getCode())
+                .map(PayProductConfig::getActiveEnv)
+                .map(PayEnvEnum.SANDBOX.getCode()::equals)
+                .orElse(false);
+        // 服务商密钥(按生效环境取对应环境密钥, 含 lkl_app_id + 私钥/公钥; 缺失或关键字段为空时 fail-fast)
+        LakalaIsvKeyConfig keyConfig = lakalaIsvKeyConfigService.getByProductForPay(ProductEnum.LAKALA_PAY.getCode(), sandbox);
         // 通道商户绑定(取 merchantNo + termNo)
         LakalaIsvChannelMerchant channelMerchant = lakalaIsvChannelMerchantManager.findByChannelMchNo(channelMchNo)
                 // 拉卡拉: 通道商户配置不存在
@@ -57,11 +62,6 @@ public class LakalaIsvConfigAssembler {
         credential.setMchSerialNo(keyConfig.getMchSerialNo());
         credential.setPrivateKey(keyConfig.getPrivateKey());
         credential.setPublicKey(keyConfig.getPublicKey());
-        // 沙箱状态读取支付产品配置的生效环境(不挂在密钥配置上)
-        boolean sandbox = payProductConfigManager.findByProduct(ProductEnum.LAKALA_PAY.getCode())
-                .map(PayProductConfig::getActiveEnv)
-                .map(PayEnvEnum.SANDBOX.getCode()::equals)
-                .orElse(false);
         credential.setSandbox(sandbox);
         // 子商户身份
         credential.setLakalaMchNo(channelMerchant.getLakalaMchNo());

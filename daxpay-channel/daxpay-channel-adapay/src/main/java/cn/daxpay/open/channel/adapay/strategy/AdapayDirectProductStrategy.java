@@ -18,9 +18,9 @@ import static cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum.ALI
 import static cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum.UNION_PAY;
 import static cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum.WECHAT;
 
-/// # 汇付天下(Adapay)直连支付产品策略
+/// # Adapay 直连支付产品策略
 ///
-/// 声明汇付天下(ada_pay)为直连聚合模式, 一个产品覆盖微信/支付宝/银联三类底层渠道。
+/// 声明 Adapay(ada_pay)为直连聚合模式, 一个产品覆盖微信/支付宝/银联三类底层渠道。
 /// 支付方式与子应用 [cn.daxpay.open.channel.adapay.enums.AdapayPayMethod] (16 种) 对齐,
 /// 与 `pay_md_product_capability` 预置数据(id 21017-21032)一致。
 @Slf4j
@@ -28,7 +28,7 @@ import static cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum.WEC
 @RequiredArgsConstructor
 public class AdapayDirectProductStrategy extends AbsProductStrategy {
 
-    /// 支付方式 → 支付能力映射(汇付 Adapay 支持的 16 种支付方式)
+    /// 支付方式 → 支付能力映射(Adapay Adapay 支持的 16 种支付方式)
     private static final Map<PayMethodEnum, List<PayCapabilityEnum>> METHOD_CAP_MAP = Map.ofEntries(
             // 微信(扫码/JSAPI/APP/H5/小程序/付款码)
             Map.entry(PayMethodEnum.WECHAT_QR, List.of(PayCapabilityEnum.WECHAT_QR)),
@@ -55,7 +55,7 @@ public class AdapayDirectProductStrategy extends AbsProductStrategy {
         return ProductEnum.ADA_PAY;
     }
 
-    /// 直连模式: 商户自行持有汇付配置, 非服务商
+    /// 直连模式: 商户自行持有Adapay 配置, 非服务商
     @Override
     public boolean isIsv() {
         return false;
@@ -66,7 +66,7 @@ public class AdapayDirectProductStrategy extends AbsProductStrategy {
         return false;
     }
 
-    /// 汇付 Adapay 提供测试环境(test_api_key)与生产环境(live_api_key)
+    /// Adapay Adapay 提供测试环境(test_api_key)与生产环境(live_api_key)
     @Override
     public boolean isSandbox() {
         return true;

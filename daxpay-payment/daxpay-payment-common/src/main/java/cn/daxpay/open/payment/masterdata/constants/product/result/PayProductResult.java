@@ -55,6 +55,10 @@ public class PayProductResult extends BaseResult {
     @Schema(description = "支付标识类型")
     private String payIdType;
 
+    /// 当前生效环境(来自支付产品配置, 商户只读): prod/sandbox
+    @Schema(description = "当前生效环境: prod/sandbox")
+    private String activeEnv;
+
     @Schema(description = "已挂载的支付能力")
     private List<PayProductCapabilityResult> capabilities;
 }

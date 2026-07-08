@@ -11,6 +11,7 @@ import cn.daxpay.open.platform.core.rest.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -46,8 +47,9 @@ public class UmsDirectChannelMerchantController {
     @Operation(summary = "根据通道商户号查询密钥配置")
     @GetMapping("/find-key-config")
     public Result<UmsDirectKeyConfigResult> findKeyConfig(
-            @NotBlank(message = "{validation.field.channelMerchantNo.notBlank}") String channelMchNo) {
-        var config = umsDirectKeyConfigService.findByChannelMchNo(channelMchNo);
+            @NotBlank(message = "{validation.field.channelMerchantNo.notBlank}") String channelMchNo,
+            @NotNull(message = "{validation.field.sandbox.notNull}") Boolean sandbox) {
+        var config = umsDirectKeyConfigService.findByChannelMchNo(channelMchNo, sandbox);
         var result = config.toResult();
         result.setAppKeyConfigured(config.getAppKey() != null);
         result.setSecretKeyConfigured(config.getSecretKey() != null);

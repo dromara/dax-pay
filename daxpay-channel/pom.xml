@@ -21,6 +21,14 @@
         <module>daxpay-channel-ums</module>
         <module>daxpay-channel-lakala</module>
         <module>daxpay-channel-douyin</module>
+        <module>daxpay-channel-hkrt</module>
+        <module>daxpay-channel-adapay</module>
+        <module>daxpay-channel-dougong</module>
+        <module>daxpay-channel-vbill</module>
+        <module>daxpay-channel-leshua</module>
+        <module>daxpay-channel-hmpay</module>
+        <module>daxpay-channel-fuyou</module>
+        <module>daxpay-channel-yeepay</module>
     </modules>
 
     <dependencies>

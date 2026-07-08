@@ -38,6 +38,9 @@ public class HkrtIsvKeyConfig extends MpBaseEntity implements ToResult<HkrtIsvKe
     @TableField(typeHandler = DataEncryptTypeHandler.class)
     private String accessKey;
 
+    /// 是否沙箱环境
+    private Boolean sandbox;
+
     /// 转换
     @Override
     public HkrtIsvKeyConfigResult toResult() {

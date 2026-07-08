@@ -49,6 +49,9 @@ public class LakalaIsvKeyConfig extends MpBaseEntity implements ToResult<LakalaI
     /// 机构代码
     private String orgCode;
 
+    /// 是否沙箱环境
+    private Boolean sandbox;
+
     /// 转换
     @Override
     public LakalaIsvKeyConfigResult toResult() {

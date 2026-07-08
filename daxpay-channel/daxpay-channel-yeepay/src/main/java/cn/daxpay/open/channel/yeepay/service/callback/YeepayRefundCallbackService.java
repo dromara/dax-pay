@@ -1,0 +1,61 @@
+package cn.daxpay.open.channel.yeepay.service.callback;
+
+import cn.daxpay.open.channel.yeepay.client.YeepayChannelClient;
+import cn.daxpay.open.channel.yeepay.client.credential.YeepaySdkCredential;
+import cn.daxpay.open.channel.yeepay.client.req.YeepayCallbackParseReq;
+import cn.daxpay.open.channel.yeepay.client.resp.YeepayCallbackParseResp;
+import cn.daxpay.open.channel.yeepay.code.YeepayCode;
+import cn.daxpay.open.channel.yeepay.service.direct.YeepayDirectConfigAssembler;
+import cn.daxpay.open.payment.common.result.DaxResult;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+import java.util.Objects;
+
+/// # 易宝退款回调处理服务
+///
+/// 易宝退款异步通知 → 主应用接收 → 组装凭证 → 转发子应用解密验签 → 记录退款结果。
+///
+/// TODO 退款单状态更新待接入退款回调框架(平台目前无独立 RefundCallbackService,
+///      后续可通过 PayRefundService 或新增退款回调入口完成状态流转)。
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class YeepayRefundCallbackService {
+
+    private final YeepayChannelClient yeepayChannelClient;
+    private final YeepayDirectConfigAssembler configAssembler;
+
+    /// 退款回调处理
+    public String refundHandle(String mchNo, String channelMchNo, HttpServletRequest request) {
+        // 1. 提取易宝通知参数
+        String response = request.getParameter("response");
+        String customerIdentification = request.getParameter("customerIdentification");
+
+        // 2. 组装凭证
+        YeepaySdkCredential credential = configAssembler.buildConfig(mchNo, channelMchNo, null);
+
+        // 3. 转发到子应用解密验签
+        YeepayCallbackParseReq req = new YeepayCallbackParseReq();
+        req.setCredential(credential);
+        req.setResponse(response);
+        req.setCustomerIdentification(customerIdentification);
+        DaxResult<YeepayCallbackParseResp> result = yeepayChannelClient.parseRefundCallback(req);
+        if (result.getCode() != 0 || result.getData() == null || !result.getData().isVerified()) {
+            log.error("易宝退款回调验签失败: channelMchNo={}", channelMchNo);
+            return YeepayCode.NOTIFY_FAIL;
+        }
+
+        // 4. 记录退款回调结果, TODO 接入退款单状态更新框架
+        YeepayCallbackParseResp resp = result.getData();
+        log.info("易宝退款回调: outRefundNo={}, tradeStatus={}, amount={}",
+                resp.getOutRefundNo(), resp.getTradeStatus(), resp.getAmount());
+        if (Objects.equals(YeepayCode.TRADE_STATUS_SUCCESS, resp.getTradeStatus())) {
+            // TODO 退款成功, 更新退款单状态(待接入退款回调框架)
+            log.info("易宝退款成功: outRefundNo={}", resp.getOutRefundNo());
+        }
+        return YeepayCode.NOTIFY_SUCCESS;
+    }
+}

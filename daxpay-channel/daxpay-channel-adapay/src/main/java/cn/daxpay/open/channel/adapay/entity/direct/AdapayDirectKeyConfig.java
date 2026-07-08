@@ -12,11 +12,11 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-/// # 汇付天下直连密钥配置
+/// # Adapay 直连密钥配置
 ///
-/// 直连商户维度的通道配置, 含汇付支付应用 ID 与签名密钥, 敏感字段(apiKey/privateKey/publicKey)加密存储。
+/// 直连商户维度的通道配置, 含Adapay 支付应用 ID 与签名密钥, 敏感字段(apiKey/privateKey/publicKey)加密存储。
 /// channelMchNo(通道商户号) 创建时录入不可修改, adapayAppId/apiKey/privateKey/publicKey 由密钥配置维护。
-/// 汇付签名算法: SHA1withRSA, 私钥签名 / 平台公钥验签, 无需证书。
+/// Adapay 签名算法: SHA1withRSA, 私钥签名 / 平台公钥验签, 无需证书。
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
@@ -27,14 +27,14 @@ public class AdapayDirectKeyConfig extends MchBaseEntity implements ToResult<Ada
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private String channelMchNo;
 
-    /// 汇付商户号(创建时录入不可修改)
+    /// Adapay 商户号(创建时录入不可修改)
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private String merchantNo;
 
-    /// 汇付支付应用 ID(app_id)
+    /// Adapay 支付应用 ID(app_id)
     private String adapayAppId;
 
-    /// 汇付 API Key(请求头 Authorization, 加密存储)
+    /// Adapay API Key(请求头 Authorization, 加密存储)
     @TableField(typeHandler = DataEncryptTypeHandler.class)
     private String apiKey;
 
@@ -42,9 +42,12 @@ public class AdapayDirectKeyConfig extends MchBaseEntity implements ToResult<Ada
     @TableField(typeHandler = DataEncryptTypeHandler.class)
     private String privateKey;
 
-    /// 汇付平台公钥(X509 Base64, 响应验签, 加密存储; 为空时使用全局默认公钥)
+    /// Adapay 平台公钥(X509 Base64, 响应验签, 加密存储; 为空时使用全局默认公钥)
     @TableField(typeHandler = DataEncryptTypeHandler.class)
     private String publicKey;
+
+    /// 是否沙箱环境
+    private Boolean sandbox;
 
     @Override
     public AdapayDirectKeyConfigResult toResult() {

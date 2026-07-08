@@ -4,7 +4,7 @@
   "directMchDuplicate": "This Douyin direct merchant already exists under the merchant",
   "appTypeInvalid": "Invalid Douyin application type",
   "capabilityDuplicate": "Payment capability [{0}] is duplicated under this channel merchant",
-  "payFailed": "Payment error: {0}",
-  "closeFailed": "Close order error: {0}",
+  "payFailed": "Douyin payment error: {0}",
+  "closeFailed": "Douyin close order error: {0}",
   "notSupportMethod": "Unsupported Douyin payment method: {0}"
 }

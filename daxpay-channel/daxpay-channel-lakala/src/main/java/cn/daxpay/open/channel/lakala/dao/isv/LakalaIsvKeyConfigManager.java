@@ -19,4 +19,12 @@ public class LakalaIsvKeyConfigManager extends BaseManager<LakalaIsvKeyConfigMap
                 .eq(LakalaIsvKeyConfig::getProduct, product)
                 .oneOpt();
     }
+
+    /// 根据产品编码和沙箱标志查询(双环境并存)
+    public Optional<LakalaIsvKeyConfig> findByProductAndSandbox(String product, boolean sandbox) {
+        return lambdaQuery()
+                .eq(LakalaIsvKeyConfig::getProduct, product)
+                .eq(LakalaIsvKeyConfig::getSandbox, sandbox)
+                .oneOpt();
+    }
 }

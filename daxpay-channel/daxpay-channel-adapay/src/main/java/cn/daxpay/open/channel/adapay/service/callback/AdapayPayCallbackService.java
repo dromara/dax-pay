@@ -20,9 +20,9 @@ import java.security.Signature;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
-/// # 汇付天下支付回调处理服务
+/// # Adapay 支付回调处理服务
 ///
-/// 汇付异步通知 → 主应用接收 {data, signature} → 用平台公钥 SHA1withRSA 验签 data →
+/// Adapay 异步通知 → 主应用接收 {data, signature} → 用平台公钥 SHA1withRSA 验签 data →
 /// 构建 [CallbackData] 交由 [PayCallbackService] 更新订单状态。
 ///
 /// 验签只需全局平台公钥(AdapayCode.PLATFORM_PUBLIC_KEY), 不需 channelMchNo,
@@ -39,7 +39,7 @@ public class AdapayPayCallbackService {
         // 1. 提取回调原始 body
         String body = JakartaServletUtil.getBody(request);
         if (StrUtil.isBlank(body)) {
-            log.error("汇付天下支付回调: body 为空");
+            log.error("Adapay 支付回调: body 为空");
             return AdapayCode.NOTIFY_FAIL;
         }
 
@@ -48,19 +48,19 @@ public class AdapayPayCallbackService {
         try {
             outer = JSONUtil.parseObj(body);
         } catch (Exception e) {
-            log.error("汇付天下支付回调 JSON 解析失败: body={}", body);
+            log.error("Adapay 支付回调 JSON 解析失败: body={}", body);
             return AdapayCode.NOTIFY_FAIL;
         }
         String data = outer.getStr("data");
         String signature = outer.getStr("signature");
         if (StrUtil.isBlank(data) || StrUtil.isBlank(signature)) {
-            log.error("汇付天下支付回调: 缺少 data 或 signature 字段");
+            log.error("Adapay 支付回调: 缺少 data 或 signature 字段");
             return AdapayCode.NOTIFY_FAIL;
         }
 
         // 3. 验签(平台公钥 SHA1withRSA)
         if (!verifySign(data, signature)) {
-            log.error("汇付天下支付回调验签失败");
+            log.error("Adapay 支付回调验签失败");
             return AdapayCode.NOTIFY_FAIL;
         }
 
@@ -73,7 +73,7 @@ public class AdapayPayCallbackService {
             // 5. 交由框架更新订单状态
             payCallbackService.payCallback(callbackData);
         } catch (Exception e) {
-            log.error("汇付天下支付回调业务处理失败: tradeNo={}", callbackData.getTradeNo(), e);
+            log.error("Adapay 支付回调业务处理失败: tradeNo={}", callbackData.getTradeNo(), e);
             return AdapayCode.NOTIFY_FAIL;
         }
         return AdapayCode.NOTIFY_SUCCESS;
@@ -90,7 +90,7 @@ public class AdapayPayCallbackService {
             sign.update(data.getBytes(StandardCharsets.UTF_8));
             return sign.verify(Base64.getDecoder().decode(signature));
         } catch (Exception e) {
-            log.error("汇付天下回调验签异常", e);
+            log.error("Adapay 回调验签异常", e);
             return false;
         }
     }
@@ -102,7 +102,7 @@ public class AdapayPayCallbackService {
             CallbackData callbackData = new CallbackData();
             // order_no = 下单时传入的平台 tradeNo
             callbackData.setTradeNo(dataObj.getStr("order_no"));
-            // id = 汇付支付对象 ID
+            // id = Adapay 支付对象 ID
             callbackData.setOutTradeNo(dataObj.getStr("id"));
             // 交易状态映射(succeeded → SUCCESS, 其他原样透传)
             String status = dataObj.getStr("status");
@@ -110,11 +110,11 @@ public class AdapayPayCallbackService {
                 callbackData.setTradeStatus(CallbackStatusEnum.SUCCESS.getCode());
             } else {
                 callbackData.setTradeStatus(status);
-                callbackData.setCallbackErrorMsg("汇付天下回调状态非成功: " + status);
+                callbackData.setCallbackErrorMsg("Adapay 回调状态非成功: " + status);
             }
             return callbackData;
         } catch (Exception e) {
-            log.error("汇付天下回调 data 解析失败: data={}", data, e);
+            log.error("Adapay 回调 data 解析失败: data={}", data, e);
             return null;
         }
     }

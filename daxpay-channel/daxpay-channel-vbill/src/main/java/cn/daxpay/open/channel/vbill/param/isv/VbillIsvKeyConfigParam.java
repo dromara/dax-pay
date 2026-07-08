@@ -2,6 +2,7 @@ package cn.daxpay.open.channel.vbill.param.isv;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -25,6 +26,7 @@ public class VbillIsvKeyConfigParam {
     @Schema(description = "商户RSA私钥(PKCS8 Base64, 加密存储)")
     private String privateKey;
 
+    @NotNull(message = "{validation.field.sandbox.notNull}")
     @Schema(description = "是否沙箱环境")
     private Boolean sandbox;
 }

@@ -1,6 +1,7 @@
 package cn.daxpay.open.channel.ums.result.direct;
 
 import cn.daxpay.open.platform.common.json.sensitive.SensitiveInfo;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -28,6 +29,10 @@ public class UmsDirectKeyConfigResult {
     /// 通讯密钥(脱敏返回, 保留前后各4位)
     @SensitiveInfo(front = 4, end = 4)
     private String secretKey;
+
+    /// 是否沙箱环境
+    @Schema(description = "是否沙箱环境")
+    private Boolean sandbox;
 
     /// 应用密钥是否已配置
     private boolean appKeyConfigured;

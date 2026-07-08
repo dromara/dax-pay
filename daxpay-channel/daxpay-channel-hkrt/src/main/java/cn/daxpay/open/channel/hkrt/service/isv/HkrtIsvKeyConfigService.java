@@ -22,15 +22,16 @@ public class HkrtIsvKeyConfigService {
 
     private final HkrtIsvKeyConfigManager hkrtIsvKeyConfigManager;
 
-    /// 根据产品编码查询密钥配置, 不存在则创建默认记录
+    /// 根据产品编码和沙箱标志查询密钥配置, 不存在则创建默认记录
     @Transactional(rollbackFor = Exception.class)
-    public HkrtIsvKeyConfig findByProduct(String product) {
-        var existing = hkrtIsvKeyConfigManager.findByProduct(product);
+    public HkrtIsvKeyConfig findByProduct(String product, boolean sandbox) {
+        var existing = hkrtIsvKeyConfigManager.findByProductAndSandbox(product, sandbox);
         if (existing.isPresent()) {
             return existing.get();
         }
         var config = new HkrtIsvKeyConfig()
-                .setProduct(product);
+                .setProduct(product)
+                .setSandbox(sandbox);
         hkrtIsvKeyConfigManager.save(config);
         return config;
     }
@@ -40,8 +41,8 @@ public class HkrtIsvKeyConfigService {
     /// 与 [findByProduct] 的 upsert 语义不同, 此方法只读不写:
     /// 记录不存在或关键字段(agentNo/accessId/accessKey)任一为空时 fail-fast,
     /// 避免空凭证下发到子应用后子应用才发现问题。
-    public HkrtIsvKeyConfig getByProductForPay(String product) {
-        HkrtIsvKeyConfig config = hkrtIsvKeyConfigManager.findByProduct(product)
+    public HkrtIsvKeyConfig getByProductForPay(String product, boolean sandbox) {
+        HkrtIsvKeyConfig config = hkrtIsvKeyConfigManager.findByProductAndSandbox(product, sandbox)
                 // 海科融通: 服务商密钥未配置
                 .orElseThrow(() -> new BizInfoException("channel.error.hkrtIsvKeyNotConfigured"));
         if (StrUtil.hasBlank(config.getAgentNo(), config.getAccessId(), config.getAccessKey())) {
@@ -53,7 +54,7 @@ public class HkrtIsvKeyConfigService {
     /// 保存服务商密钥配置
     @Transactional(rollbackFor = Exception.class)
     public void saveConfig(HkrtIsvKeyConfigParam param) {
-        var config = this.findByProduct(param.getProduct());
+        var config = this.findByProduct(param.getProduct(), Boolean.TRUE.equals(param.getSandbox()));
         HkrtIsvKeyConfigConvert.CONVERT.copy(param, config);
         hkrtIsvKeyConfigManager.updateById(config);
     }

@@ -5,13 +5,13 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-/// # 汇付天下直连通道商户绑定创建参数
+/// # Adapay 直连通道商户绑定创建参数
 ///
-/// 创建时仅录入商户名称与所属产品, 汇付应用 ID/密钥由密钥配置单独维护,
+/// 创建时仅录入商户名称与所属产品, Adapay 应用 ID/密钥由密钥配置单独维护,
 /// 沙箱环境由支付产品配置(pay_md_product_config.activeEnv)决定。
 @Data
 @Accessors(chain = true)
-@Schema(title = "汇付天下直连通道商户绑定创建参数")
+@Schema(title = "Adapay 直连通道商户绑定创建参数")
 public class AdapayDirectChannelMerchantCreateParam {
 
     @NotBlank(message = "{validation.field.mchNo.notBlank}")
@@ -27,6 +27,6 @@ public class AdapayDirectChannelMerchantCreateParam {
     private String product;
 
     @NotBlank(message = "{validation.field.merchantNo.notBlank}")
-    @Schema(description = "汇付商户号")
+    @Schema(description = "Adapay 商户号")
     private String merchantNo;
 }

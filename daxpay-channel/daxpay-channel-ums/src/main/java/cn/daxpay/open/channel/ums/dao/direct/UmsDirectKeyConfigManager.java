@@ -17,6 +17,14 @@ public class UmsDirectKeyConfigManager extends BaseManager<UmsDirectKeyConfigMap
                 .oneOpt();
     }
 
+    /// 根据通道商户号和沙箱标志查询(双环境并存)
+    public Optional<UmsDirectKeyConfig> findByChannelMchNoAndSandbox(String channelMchNo, boolean sandbox) {
+        return lambdaQuery()
+                .eq(UmsDirectKeyConfig::getChannelMchNo, channelMchNo)
+                .eq(UmsDirectKeyConfig::getSandbox, sandbox)
+                .oneOpt();
+    }
+
     /// 根据通道商户号删除
     public void deleteByChannelMchNo(String channelMchNo) {
         lambdaUpdate()

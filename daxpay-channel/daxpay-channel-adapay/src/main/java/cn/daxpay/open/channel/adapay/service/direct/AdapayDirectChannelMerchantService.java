@@ -12,10 +12,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-/// # 汇付天下直连通道商户管理
+/// # Adapay 直连通道商户管理
 ///
 /// 管理通道商户绑定的创建/删除。
-/// 创建时仅录入商户名称与所属产品, 汇付应用 ID/密钥由密钥配置单独维护,
+/// 创建时仅录入商户名称与所属产品, Adapay 应用 ID/密钥由密钥配置单独维护,
 /// 沙箱环境运行时读取支付产品配置(pay_md_product_config.activeEnv)。
 @Slf4j
 @Service
@@ -27,7 +27,7 @@ public class AdapayDirectChannelMerchantService {
 
     /// 创建通道商户绑定
     ///
-    /// 同时写入通用通道商户主表和汇付直连配置表。
+    /// 同时写入通用通道商户主表和Adapay 直连配置表。
     /// adapayAppId/apiKey/privateKey/publicKey 由密钥配置单独维护。
     @Transactional(rollbackFor = Exception.class)
     public void create(AdapayDirectChannelMerchantCreateParam param) {
@@ -42,7 +42,7 @@ public class AdapayDirectChannelMerchantService {
         channelMerchant.setSource(ChannelMerchantSourceEnum.MANUAL.getCode());
         channelMerchant.setEnable(true);
         channelMerchantManager.save(channelMerchant);
-        // 写汇付直连配置(merchantNo 创建时录入不可修改, adapayAppId/apiKey/privateKey/publicKey 由密钥配置单独维护)
+        // 写Adapay 直连配置(merchantNo 创建时录入不可修改, adapayAppId/apiKey/privateKey/publicKey 由密钥配置单独维护)
         var keyConfig = new AdapayDirectKeyConfig()
                 .setChannelMchNo(channelMchNo)
                 .setMerchantNo(param.getMerchantNo());

@@ -41,14 +41,14 @@ public class UmsDirectConfigAssembler {
                 // 通道: 通道商户配置不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
 
-        // 2. 直连配置(商户身份 mid/tid + 密钥 appId/appKey/secretKey)
-        UmsDirectKeyConfig keyConfig = keyConfigService.findByChannelMchNo(channelMchNo);
-
-        // 3. 沙箱状态读取支付产品配置的生效环境(不挂在商户配置上)
+        // 2. 先读取支付产品配置的生效环境, 判断是否沙箱(不挂在商户配置上), 再按环境查对应密钥(生产/沙箱并存)
         boolean sandbox = payProductConfigManager.findByProduct(channelMerchant.getProduct())
                 .map(PayProductConfig::getActiveEnv)
                 .map(PayEnvEnum.SANDBOX.getCode()::equals)
                 .orElse(false);
+
+        // 3. 直连配置(商户身份 mid/tid + 密钥 appId/appKey/secretKey, 按沙箱环境区分)
+        UmsDirectKeyConfig keyConfig = keyConfigService.findByChannelMchNo(channelMchNo, sandbox);
 
         // 4. 组装凭证
         var credential = new UmsSdkCredential();

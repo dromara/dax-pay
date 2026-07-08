@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cn.daxpay.open</groupId>
+        <artifactId>daxpay-channel</artifactId>
+        <version>4.0.0-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>daxpay-channel-dougong</artifactId>
+    <packaging>jar</packaging>
+    <description>斗拱(汇付天下)支付通道主应用适配(聚合通道: 微信/支付宝/银联)</description>
+
+    <dependencies>
+        <!-- 通道调用凭证/请求/响应 DTO(仅 POJO, 经声明式 HTTP 客户端序列化传输, 不依赖汇付 SDK) -->
+        <!-- 父 pom 已提供 lombok / mapstruct-processor / daxpay-payment-common -->
+    </dependencies>
+</project>

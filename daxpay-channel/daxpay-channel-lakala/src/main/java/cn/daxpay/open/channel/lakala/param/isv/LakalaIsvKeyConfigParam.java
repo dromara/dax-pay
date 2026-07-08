@@ -2,6 +2,7 @@ package cn.daxpay.open.channel.lakala.param.isv;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -35,4 +36,8 @@ public class LakalaIsvKeyConfigParam {
 
     @Schema(description = "机构代码")
     private String orgCode;
+
+    @NotNull(message = "{validation.field.sandbox.notNull}")
+    @Schema(description = "是否沙箱环境")
+    private Boolean sandbox;
 }

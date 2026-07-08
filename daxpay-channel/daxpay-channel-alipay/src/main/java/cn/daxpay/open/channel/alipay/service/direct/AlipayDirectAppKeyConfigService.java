@@ -29,18 +29,19 @@ public class AlipayDirectAppKeyConfigService {
 
     /// 根据应用ID查询密钥配置, 不存在则创建默认记录
     @Transactional(rollbackFor = Exception.class)
-    public AlipayDirectAppKeyConfig findByAlipayDirectAppId(Long alipayDirectAppId) {
+    public AlipayDirectAppKeyConfig findByAlipayDirectAppId(Long alipayDirectAppId, boolean sandbox) {
         var app = alipayDirectAppManager.findById(alipayDirectAppId)
                 // 支付宝: 直连商户应用不存在
                 .orElseThrow(() -> new DataNotExistException("error.channel.alipay.mchAppNotFound"));
-        var existing = alipayDirectAppKeyConfigManager.findByAlipayDirectAppId(alipayDirectAppId);
+        var existing = alipayDirectAppKeyConfigManager.findByAlipayDirectAppIdAndSandbox(alipayDirectAppId, sandbox);
         if (existing.isPresent()) {
             return existing.get();
         }
         var config = new AlipayDirectAppKeyConfig()
                 .setChannelMchNo(app.getChannelMchNo())
                 .setAlipayDirectAppId(alipayDirectAppId)
-                .setAuthType(AlipayCode.AuthType.AUTH_TYPE_KEY);
+                .setAuthType(AlipayCode.AuthType.AUTH_TYPE_KEY)
+                .setSandbox(sandbox);
         config.setMchNo(app.getMchNo());
         alipayDirectAppKeyConfigManager.save(config);
         return config;
@@ -49,7 +50,7 @@ public class AlipayDirectAppKeyConfigService {
     /// 保存应用密钥配置(更新)
     @Transactional(rollbackFor = Exception.class)
     public void save(AlipayDirectAppKeyConfigParam param) {
-        var config = this.findByAlipayDirectAppId(param.getAlipayDirectAppId());
+        var config = this.findByAlipayDirectAppId(param.getAlipayDirectAppId(), Boolean.TRUE.equals(param.getSandbox()));
         AlipayDirectAppKeyConfigConvert.CONVERT.copy(param, config);
         alipayDirectAppKeyConfigManager.updateById(config);
     }

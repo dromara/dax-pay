@@ -108,8 +108,9 @@ public class AlipayDirectAppController {
     @Operation(summary = "查询应用密钥配置")
     @GetMapping("/find-key-config-by-app-id")
     public Result<AlipayDirectAppKeyConfigResult> findKeyConfigByAppId(
-            @NotNull(message = "{validation.field.alipayDirectAppId.notNull}") Long alipayDirectAppId) {
-        return Res.ok(alipayDirectAppKeyConfigService.findByAlipayDirectAppId(alipayDirectAppId).toResult());
+            @NotNull(message = "{validation.field.alipayDirectAppId.notNull}") Long alipayDirectAppId,
+            @NotNull(message = "{validation.field.sandbox.notNull}") Boolean sandbox) {
+        return Res.ok(alipayDirectAppKeyConfigService.findByAlipayDirectAppId(alipayDirectAppId, sandbox).toResult());
     }
 
     @PermCode(code = "manage", nameCn = "通道商户管理", nameEn = "Channel Merchant Manage")

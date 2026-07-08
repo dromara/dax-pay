@@ -48,4 +48,8 @@ public class AlipayDirectAppKeyConfigParam {
 
     @Schema(description = "AES通信密钥")
     private String secretKey;
+
+    @NotNull(message = "{validation.field.sandbox.notNull}")
+    @Schema(description = "是否沙箱环境")
+    private Boolean sandbox;
 }

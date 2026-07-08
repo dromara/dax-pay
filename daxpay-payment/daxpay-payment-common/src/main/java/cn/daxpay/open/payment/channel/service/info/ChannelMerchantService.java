@@ -1,7 +1,6 @@
 package cn.daxpay.open.payment.channel.service.info;
 
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
-import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.rest.dto.LabelValue;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
@@ -14,12 +13,20 @@ import cn.daxpay.open.payment.channel.param.mch.ChannelMerchantQuery;
 import cn.daxpay.open.payment.channel.result.info.ChannelMerchantResult;
 import cn.daxpay.open.payment.masterdata.constants.channel.service.PayChannelService;
 import cn.daxpay.open.payment.masterdata.constants.channel.result.PayChannelResult;
+import cn.daxpay.open.payment.masterdata.constants.product.dao.PayProductConfigManager;
+import cn.daxpay.open.payment.masterdata.constants.product.dao.PayProductManager;
+import cn.daxpay.open.payment.masterdata.constants.product.entity.PayProduct;
+import cn.daxpay.open.payment.masterdata.constants.product.entity.PayProductConfig;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /// # 通道商户管理
 ///
@@ -30,18 +37,24 @@ public class ChannelMerchantService {
     private final ChannelMerchantManager channelMerchantManager;
     private final PayChannelService payChannelService;
     private final MerchantPermissionService merchantPermissionService;
+    private final PayProductConfigManager payProductConfigManager;
+    private final PayProductManager payProductManager;
 
     /// 分页
     public PageResult<ChannelMerchantResult> page(PageParam pageParam, ChannelMerchantQuery query){
-        return MpUtil.toPageResult(channelMerchantManager.page(pageParam,query));
+        PageResult<ChannelMerchantResult> pageResult = MpUtil.toPageResult(channelMerchantManager.page(pageParam,query));
+        fillEnvStatus(pageResult.getRecords());
+        return pageResult;
     }
 
     /// 查询详情
     public ChannelMerchantResult findById(Long id){
-        return channelMerchantManager.findById(id)
+        ChannelMerchantResult result = channelMerchantManager.findById(id)
                 .map(ChannelMerchant::toResult)
                 // 通道: 通道商户不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
+        fillEnvStatus(List.of(result));
+        return result;
     }
 
     /// 根据商户号查询通道
@@ -79,9 +92,41 @@ public class ChannelMerchantService {
 
     /// 根据商户号查询所有通道商户
     public List<ChannelMerchantResult> findAllByMchNo(String mchNo){
-        return channelMerchantManager.findAllByMchNo(mchNo).stream()
+        List<ChannelMerchantResult> results = channelMerchantManager.findAllByMchNo(mchNo).stream()
                 .map(ChannelMerchant::toResult)
                 .toList();
+        fillEnvStatus(results);
+        return results;
+    }
+
+    /// 批量填充生效环境与沙箱支持标志(来自支付产品配置, 商户只读)
+    private void fillEnvStatus(List<ChannelMerchantResult> results) {
+        if (results.isEmpty()) {
+            return;
+        }
+        Set<String> products = results.stream()
+                .map(ChannelMerchantResult::getProduct)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+        if (products.isEmpty()) {
+            return;
+        }
+        // 生效环境
+        Map<String, String> envMap = payProductConfigManager.lambdaQuery()
+                .in(PayProductConfig::getProduct, products)
+                .list()
+                .stream()
+                .collect(Collectors.toMap(PayProductConfig::getProduct, PayProductConfig::getActiveEnv, (a, b) -> a));
+        // 沙箱支持标志
+        Map<String, Boolean> sandboxMap = payProductManager.lambdaQuery()
+                .in(PayProduct::getCode, products)
+                .list()
+                .stream()
+                .collect(Collectors.toMap(PayProduct::getCode, p -> Boolean.TRUE.equals(p.getSandbox()), (a, b) -> a));
+        results.forEach(r -> {
+            r.setActiveEnv(envMap.get(r.getProduct()));
+            r.setSandboxSupport(sandboxMap.getOrDefault(r.getProduct(), false));
+        });
     }
 
     /// 更新启用状态

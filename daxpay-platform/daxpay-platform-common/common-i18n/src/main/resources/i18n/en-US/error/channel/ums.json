@@ -1,5 +1,5 @@
 {
-  "payFailed": "Payment error: {0}",
-  "closeFailed": "Close order error: {0}",
+  "payFailed": "UMS payment error: {0}",
+  "closeFailed": "UMS close order error: {0}",
   "notSupportMethod": "Unsupported UMS payment method: {0}"
 }

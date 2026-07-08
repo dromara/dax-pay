@@ -45,6 +45,9 @@ public class UmsDirectKeyConfig extends MchBaseEntity implements ToResult<UmsDir
     @TableField(typeHandler = DataEncryptTypeHandler.class)
     private String secretKey;
 
+    /// 是否沙箱环境
+    private Boolean sandbox;
+
     @Override
     public UmsDirectKeyConfigResult toResult() {
         return UmsDirectKeyConfigConvert.CONVERT.toResult(this);

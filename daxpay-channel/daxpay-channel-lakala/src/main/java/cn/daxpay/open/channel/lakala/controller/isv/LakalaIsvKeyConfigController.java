@@ -34,8 +34,9 @@ public class LakalaIsvKeyConfigController {
     @Operation(summary = "查询拉卡拉服务商密钥配置")
     @GetMapping("/find-config")
     public Result<LakalaIsvKeyConfigResult> findConfig(
-            @NotBlank(message = "{validation.field.product.notBlank}") String product) {
-        return Res.ok(LakalaIsvKeyConfigConvert.CONVERT.toResult(lakalaIsvKeyConfigService.findByProduct(product)));
+            @NotBlank(message = "{validation.field.product.notBlank}") String product,
+            boolean sandbox) {
+        return Res.ok(LakalaIsvKeyConfigConvert.CONVERT.toResult(lakalaIsvKeyConfigService.findByProduct(product, sandbox)));
     }
 
     @PermCode(code = "manage", nameCn = "拉卡拉服务商管理", nameEn = "Lakala ISV Manage")

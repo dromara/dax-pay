@@ -1,8 +1,10 @@
 package cn.daxpay.open.payment.masterdata.constants.product.service;
 
 import cn.daxpay.open.payment.core.strategy.PaymentStrategyFactory;
+import cn.daxpay.open.payment.masterdata.constants.product.dao.PayProductConfigManager;
 import cn.daxpay.open.payment.masterdata.constants.product.dao.PayProductManager;
 import cn.daxpay.open.payment.masterdata.constants.product.entity.PayProduct;
+import cn.daxpay.open.payment.masterdata.constants.product.entity.PayProductConfig;
 import cn.daxpay.open.payment.masterdata.constants.product.param.PayProductQuery;
 import cn.daxpay.open.payment.masterdata.constants.product.result.PayProductResult;
 import cn.daxpay.open.payment.core.strategy.product.AbsProductStrategy;
@@ -24,6 +26,8 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /// # 支付产品主数据
@@ -35,6 +39,7 @@ import java.util.stream.Collectors;
 public class PayProductService {
 
     private final PayProductManager payProductManager;
+    private final PayProductConfigManager payProductConfigManager;
     private final PayProductCapabilityService payProductCapabilityService;
 
     /// 切换支付产品启停
@@ -49,10 +54,12 @@ public class PayProductService {
     /// 分页查询支付产品
     public PageResult<PayProductResult> page(PageParam pageParam, PayProductQuery query, String nameKeyword) {
         PageResult<PayProductResult> pageResult = MpUtil.toPageResult(payProductManager.page(pageParam, query));
-        pageResult.setRecords(pageResult.getRecords().stream()
+        List<PayProductResult> records = pageResult.getRecords().stream()
                 .map(this::fillProductFeatures)
                 .filter(row -> matchNameKeyword(row, nameKeyword))
-                .toList());
+                .toList();
+        fillActiveEnv(records);
+        pageResult.setRecords(records);
         return pageResult;
     }
 
@@ -60,7 +67,9 @@ public class PayProductService {
     public PayProductResult findByCode(String code) {
         PayProduct payProduct = payProductManager.findByCode(code)
                 .orElseThrow(() -> new DataNotExistException("error.payment.product.notExist"));
-        return enrich(payProduct.toResult());
+        PayProductResult result = enrich(payProduct.toResult());
+        fillActiveEnv(List.of(result));
+        return result;
     }
 
     /// 查询全部支付产品，按 sortNo 升序排列
@@ -90,6 +99,26 @@ public class PayProductService {
                                 Comparator.nullsLast(Comparator.naturalOrder()))
                         .thenComparing(PayProductResult::getId, Comparator.nullsLast(Comparator.naturalOrder())))
                 .toList();
+    }
+
+    /// 批量填充当前生效环境(来自支付产品配置, 商户只读)
+    private void fillActiveEnv(List<PayProductResult> results) {
+        if (results.isEmpty()) {
+            return;
+        }
+        Set<String> products = results.stream()
+                .map(PayProductResult::getCode)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+        if (products.isEmpty()) {
+            return;
+        }
+        Map<String, String> envMap = payProductConfigManager.lambdaQuery()
+                .in(PayProductConfig::getProduct, products)
+                .list()
+                .stream()
+                .collect(Collectors.toMap(PayProductConfig::getProduct, PayProductConfig::getActiveEnv, (a, b) -> a));
+        results.forEach(r -> r.setActiveEnv(envMap.get(r.getCode())));
     }
 
     /// 支付产品下拉选项

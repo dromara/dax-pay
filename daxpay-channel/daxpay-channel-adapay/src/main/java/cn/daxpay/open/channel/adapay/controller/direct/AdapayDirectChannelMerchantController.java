@@ -11,6 +11,7 @@ import cn.daxpay.open.platform.core.rest.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,13 +20,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/// # 汇付天下直连通道商户管理
+/// # Adapay 直连通道商户管理
 ///
 /// 提供通道商户创建和密钥配置管理。
-/// 汇付应用 ID/API Key/私钥/公钥 由密钥配置维护。
+/// Adapay 应用 ID/API Key/私钥/公钥 由密钥配置维护。
 @PermCode(menuCode = "channel:merchant")
 @Validated
-@Tag(name = "汇付天下直连通道商户管理")
+@Tag(name = "Adapay 直连通道商户管理")
 @RestController
 @RequestMapping("/admin/adapay/direct-channel-merchant")
 @RequiredArgsConstructor
@@ -35,7 +36,7 @@ public class AdapayDirectChannelMerchantController {
     private final AdapayDirectKeyConfigService adapayDirectKeyConfigService;
 
     @PermCode(code = "manage", nameCn = "通道商户管理", nameEn = "Channel Merchant Manage")
-    @Operation(summary = "创建汇付天下直连通道商户")
+    @Operation(summary = "创建Adapay 直连通道商户")
     @PostMapping("/create")
     public Result<Void> create(@RequestBody @Validated AdapayDirectChannelMerchantCreateParam param) {
         adapayDirectChannelMerchantService.create(param);
@@ -46,8 +47,9 @@ public class AdapayDirectChannelMerchantController {
     @Operation(summary = "根据通道商户号查询密钥配置")
     @GetMapping("/find-key-config")
     public Result<AdapayDirectKeyConfigResult> findKeyConfig(
-            @NotBlank(message = "{validation.field.channelMerchantNo.notBlank}") String channelMchNo) {
-        var config = adapayDirectKeyConfigService.findByChannelMchNo(channelMchNo);
+            @NotBlank(message = "{validation.field.channelMerchantNo.notBlank}") String channelMchNo,
+            @NotNull(message = "{validation.field.sandbox.notNull}") Boolean sandbox) {
+        var config = adapayDirectKeyConfigService.findByChannelMchNo(channelMchNo, sandbox);
         var result = config.toResult();
         result.setApiKeyConfigured(config.getApiKey() != null);
         result.setPrivateKeyConfigured(config.getPrivateKey() != null);

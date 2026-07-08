@@ -27,4 +27,7 @@ public class HkrtIsvKeyConfigResult extends BaseResult {
     @SensitiveInfo(front = 4, end = 4)
     @Schema(description = "签名密钥(加密存储)")
     private String accessKey;
+
+    @Schema(description = "是否沙箱环境")
+    private Boolean sandbox;
 }

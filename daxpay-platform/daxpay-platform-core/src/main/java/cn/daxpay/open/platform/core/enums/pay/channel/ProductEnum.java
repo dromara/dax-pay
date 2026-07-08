@@ -48,13 +48,19 @@ public enum ProductEnum implements I18nSupport {
     /// 拉卡拉支付
     LAKALA_PAY("lakala_pay"),
 
+    // ===== 乐刷 =====
+    /// 乐刷支付
+    LESHUA_PAY("leshua_pay"),
+
     // ===== 第三方聚合通道（一通道一产品）=====
-    /// 汇付天下
+    /// Adapay(直连)
     ADA_PAY("ada_pay"),
-    /// 斗拱
+    /// 斗拱(归属 ADA_PAY 通道)
     DOUGONG_PAY("dougong_pay"),
     /// 海科融通
     HKRT_PAY("hkrt_pay"),
+    /// 随行付
+    VBILL_PAY("vbill_pay"),
     /// 富友
     FUYOU_PAY("fuyou_pay"),
     /// 盛付通
@@ -63,8 +69,8 @@ public enum ProductEnum implements I18nSupport {
     YSEP_PAY("ysep_pay"),
     /// 快钱
     QUICK_PAY("quick_pay"),
-    /// 杉德
-    SAND_PAY("sand_pay"),
+    /// 河马付(杉德旗下产品)
+    HM_PAY("hm_pay"),
     /// 易宝
     YEE_PAY("yee_pay"),
     /// jeepay
@@ -88,17 +94,22 @@ public enum ProductEnum implements I18nSupport {
             case UMS_QRCODE, UMS_JSAPI, UMS_APP, UMS_MINI, UMS_H5, UMS_BARCODE -> ChannelEnum.UMS_PAY.getCode();
             // 拉卡拉
             case LAKALA_PAY -> ChannelEnum.LAKALA_PAY.getCode();
+            // 乐刷
+            case LESHUA_PAY -> ChannelEnum.LESHUA_PAY.getCode();
             // 抖音支付
             case DOUYIN_PAY -> ChannelEnum.DOUYIN_PAY.getCode();
             // 第三方聚合通道(产品 code 与通道 code 一致)
             case ADA_PAY -> ChannelEnum.ADA_PAY.getCode();
-            case DOUGONG_PAY -> ChannelEnum.DOUGONG_PAY.getCode();
+            // 斗拱归属汇付天下(ADA_PAY)通道
+            case DOUGONG_PAY -> ChannelEnum.ADA_PAY.getCode();
             case HKRT_PAY -> ChannelEnum.HKRT_PAY.getCode();
+            case VBILL_PAY -> ChannelEnum.VBILL_PAY.getCode();
             case FUYOU_PAY -> ChannelEnum.FUYOU_PAY.getCode();
             case SHENG_PAY -> ChannelEnum.SHENG_PAY.getCode();
             case YSEP_PAY -> ChannelEnum.YSEP_PAY.getCode();
             case QUICK_PAY -> ChannelEnum.QUICK_PAY.getCode();
-            case SAND_PAY -> ChannelEnum.SAND_PAY.getCode();
+            // 河马付归属杉德通道
+            case HM_PAY -> ChannelEnum.SAND_PAY.getCode();
             case YEE_PAY -> ChannelEnum.YEE_PAY.getCode();
             case JEE_PAY -> ChannelEnum.JEE_PAY.getCode();
         };
@@ -110,6 +121,6 @@ public enum ProductEnum implements I18nSupport {
                 .filter(e -> e.getCode().equals(code))
                 .findFirst()
                 // 通用: 未知的支付产品
-                .orElseThrow(() -> new BizException("error.common.enumUnknown", "Product"));
+                .orElseThrow(() -> new BizException("error.common.enumUnknown", code));
     }
 }

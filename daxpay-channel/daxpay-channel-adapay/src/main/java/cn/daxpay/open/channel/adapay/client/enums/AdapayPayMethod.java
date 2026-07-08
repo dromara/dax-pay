@@ -3,7 +3,7 @@ package cn.daxpay.open.channel.adapay.client.enums;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-/// # 汇付天下通道支付方式(主应用侧)
+/// # Adapay 通道支付方式(主应用侧)
 ///
 /// 与子应用 `cn.daxpay.open.channel.adapay.enums.AdapayPayMethod` 镜像,
 /// 枚举 name 与平台 [cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum] 对齐,

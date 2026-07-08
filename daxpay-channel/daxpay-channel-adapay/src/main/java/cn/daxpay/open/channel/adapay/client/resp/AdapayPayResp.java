@@ -4,7 +4,7 @@ import cn.daxpay.open.channel.adapay.client.enums.AdapayPayBodyType;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-/// # 汇付天下通道支付响应(主应用侧)
+/// # Adapay 通道支付响应(主应用侧)
 @Data
 @Accessors(chain = true)
 public class AdapayPayResp {
@@ -12,7 +12,7 @@ public class AdapayPayResp {
     /// 商户订单号(回显)
     private String outTradeNo;
 
-    /// 汇付支付对象 ID(查询/关单/退款的关键凭证)
+    /// Adapay 支付对象 ID(查询/关单/退款的关键凭证)
     private String paymentId;
 
     /// 支付内容

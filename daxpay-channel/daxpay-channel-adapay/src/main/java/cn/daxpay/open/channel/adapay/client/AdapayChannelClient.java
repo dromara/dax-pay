@@ -16,9 +16,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.service.annotation.HttpExchange;
 import org.springframework.web.service.annotation.PostExchange;
 
-/// # 汇付天下通道客户端
+/// # Adapay 通道客户端
 ///
-/// 声明式 HTTP 接口, 调用子应用 dax-pay-channel-two 的汇付天下通道接口。
+/// 声明式 HTTP 接口, 调用子应用 dax-pay-channel-two 的Adapay 通道接口。
 /// baseUrl 由 [cn.daxpay.open.channel.adapay.config.AdapayClientConfig] 从通道配置统一注入(channel-two)。
 @HttpExchange(accept = MediaType.APPLICATION_JSON_VALUE, contentType = MediaType.APPLICATION_JSON_VALUE)
 public interface AdapayChannelClient {
@@ -27,7 +27,7 @@ public interface AdapayChannelClient {
     @PostExchange("/channel/adapay/pay")
     DaxResult<AdapayPayResp> pay(@RequestBody AdapayPayReq req);
 
-    /// 支付同步(查询汇付订单状态)
+    /// 支付同步(查询Adapay 订单状态)
     @PostExchange("/channel/adapay/sync")
     DaxResult<AdapaySyncResp> sync(@RequestBody AdapaySyncReq req);
 
