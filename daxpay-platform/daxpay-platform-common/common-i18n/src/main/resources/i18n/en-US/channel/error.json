@@ -28,5 +28,8 @@
   "lakalaRefundFailed": "Refund error: {0}",
   "lakalaSyncFailed": "Order sync error: {0}",
   "lakalaCloseFailed": "Close order error: {0}",
-  "lakalaUnsupportedPayMethod": "Unsupported payment method for Lakala: {0}"
+  "lakalaUnsupportedPayMethod": "Unsupported payment method for Lakala: {0}",
+  "yeepayPayFailed": "Yeepay pay order failed",
+  "yeepayCloseFailed": "Yeepay close order failed",
+  "yeepayUnsupportedPayMethod": "Yeepay unsupported pay method: {0}"
 }

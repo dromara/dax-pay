@@ -28,5 +28,8 @@
   "lakalaRefundFailed": "退款异常: {0}",
   "lakalaSyncFailed": "订单同步异常: {0}",
   "lakalaCloseFailed": "关闭订单异常: {0}",
-  "lakalaUnsupportedPayMethod": "拉卡拉不支持的支付方式: {0}"
+  "lakalaUnsupportedPayMethod": "拉卡拉不支持的支付方式: {0}",
+  "yeepayPayFailed": "易宝支付下单失败",
+  "yeepayCloseFailed": "易宝关闭订单失败",
+  "yeepayUnsupportedPayMethod": "易宝不支持该支付方式: {0}"
 }
