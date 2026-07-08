@@ -5,6 +5,7 @@ import cn.daxpay.open.platform.capability.social.justauth.request.DouyinRequest;
 import cn.daxpay.open.platform.capability.social.justauth.request.FeishuRequest;
 import cn.daxpay.open.platform.capability.social.justauth.request.GithubRequest;
 import cn.daxpay.open.platform.capability.social.justauth.request.GiteeRequest;
+import cn.daxpay.open.platform.capability.social.justauth.request.GoogleRequest;
 import cn.daxpay.open.platform.capability.social.justauth.request.QqRequest;
 import cn.daxpay.open.platform.capability.social.justauth.request.SocialAuthRequest;
 import cn.daxpay.open.platform.capability.social.justauth.request.WeComRequest;
@@ -27,6 +28,7 @@ public class SocialAuthRequestFactory {
         return switch (source) {
             case GITHUB -> new GithubRequest(config);
             case GITEE -> new GiteeRequest(config);
+            case GOOGLE -> new GoogleRequest(config);
             case QQ -> new QqRequest(config);
             case WECHAT_MP -> new WechatMpRequest(config);
             case WE_COM -> new WeComRequest(config);

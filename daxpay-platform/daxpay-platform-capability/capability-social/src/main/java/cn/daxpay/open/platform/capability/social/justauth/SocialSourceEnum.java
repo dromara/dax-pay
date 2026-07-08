@@ -80,6 +80,14 @@ public enum SocialSourceEnum implements I18nSupport {
         "https://gitee.com/api/v5/user"
     ),
 
+    /// Google
+    GOOGLE(
+        "google",
+        "https://accounts.google.com/o/oauth2/v2/auth",
+        "https://oauth2.googleapis.com/token",
+        "https://openidconnect.googleapis.com/v1/userinfo"
+    ),
+
     ;
 
     /// 平台编码(与 AuthLoginTypeCode 对应, 作为配置和绑定的唯一标识)
