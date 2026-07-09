@@ -30,6 +30,11 @@ public class WechatIsvChannelMerchant extends MchBaseEntity implements ToResult<
     /// 微信特约商户号/二级商户号(V3 服务商支付 sub_mchid)
     private String subMchId;
 
+    /// 认证应用类型(服务商模式下授权获取openId时使用)
+    /// SP_APP=服务商应用(sp_appid), SUB_APP=子商户应用(sub_appid), 默认 SP_APP
+    /// @see cn.daxpay.open.channel.wechat.code.WechatAuthAppTypeEnum
+    private String authAppType;
+
     /// 转换
     @Override
     public WechatIsvChannelMerchantResult toResult() {

@@ -42,6 +42,13 @@ public class WechatIsvMchAppManager extends BaseManager<WechatIsvMchAppMapper, W
                 .orderByAsc(WechatIsvMchApp::getId));
     }
 
+    /// 按通道商户号与wxAppId查询应用(opAppId显式指定认证应用时使用, 校验该appId在系统中预配过)
+    public Optional<WechatIsvMchApp> findByChannelMchNoAndWxAppId(String channelMchNo, String wxAppId) {
+        return firstOpt(q -> q
+                .eq(WechatIsvMchApp::getChannelMchNo, channelMchNo)
+                .eq(WechatIsvMchApp::getWxAppId, wxAppId));
+    }
+
     /// 校验同一通道商户下wxAppId是否已存在(排除自身)
     public boolean existsByChannelMchNoAndWxAppId(String mchNo, String channelMchNo, String wxAppId, Long excludeId) {
         return lambdaQuery()

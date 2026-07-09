@@ -24,4 +24,9 @@ public class WechatIsvChannelMerchantResult extends MchTradeBaseResult {
 
     @Schema(description = "微信特约商户号/二级商户号")
     private String subMchId;
+
+    /// 认证应用类型(SP_APP=服务商应用, SUB_APP=子商户应用, 默认 SP_APP)
+    /// @see cn.daxpay.open.channel.wechat.code.WechatAuthAppTypeEnum
+    @Schema(description = "认证应用类型")
+    private String authAppType;
 }

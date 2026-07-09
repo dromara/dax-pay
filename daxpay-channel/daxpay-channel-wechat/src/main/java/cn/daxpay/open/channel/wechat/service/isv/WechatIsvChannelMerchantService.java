@@ -1,5 +1,6 @@
 package cn.daxpay.open.channel.wechat.service.isv;
 
+import cn.daxpay.open.channel.wechat.code.WechatAuthAppTypeEnum;
 import cn.daxpay.open.channel.wechat.dao.isv.WechatIsvChannelMerchantManager;
 import cn.daxpay.open.channel.wechat.entity.isv.WechatIsvChannelMerchant;
 import cn.daxpay.open.channel.wechat.param.isv.WechatIsvChannelMerchantCreateParam;
@@ -11,6 +12,7 @@ import cn.daxpay.open.platform.core.enums.channel.ChannelMerchantSourceEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.util.ChannelMchNoGenerateUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -55,6 +57,10 @@ public class WechatIsvChannelMerchantService {
         entity.setChannelMchNo(channelMchNo);
         entity.setProduct(param.getProduct());
         entity.setSubMchId(param.getSubMchId());
+        // 认证应用类型: 不传默认 SP_APP(服务商应用), 认证策略据此路由 sp/sub 应用
+        entity.setAuthAppType(StrUtil.isNotBlank(param.getAuthAppType())
+                ? param.getAuthAppType()
+                : WechatAuthAppTypeEnum.SP_APP.getCode());
         wechatIsvChannelMerchantManager.save(entity);
     }
 

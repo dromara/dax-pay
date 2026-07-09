@@ -20,7 +20,8 @@ import org.springframework.web.service.annotation.PostExchange;
 
 /// # 微信通道客户端
 ///
-/// 声明式 HTTP 接口, 调用子应用 dax-pay-channel-one 的微信通道接口。
+/// 声明式 HTTP 接口, 调用子应用 dax-pay-channel-one 的微信**支付**通道接口。
+/// 公众号/小程序 OAuth 认证见 capability-wechat, 不经本客户端。
 @HttpExchange(accept = MediaType.APPLICATION_JSON_VALUE, contentType = MediaType.APPLICATION_JSON_VALUE)
 public interface WechatChannelClient {
 
