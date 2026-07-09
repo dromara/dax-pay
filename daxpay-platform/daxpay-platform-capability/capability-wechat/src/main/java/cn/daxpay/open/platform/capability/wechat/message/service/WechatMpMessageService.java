@@ -1,13 +1,10 @@
 package cn.daxpay.open.platform.capability.wechat.message.service;
 
-import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
-import cn.daxpay.open.platform.capability.wechat.message.entity.WechatMessageRecord;
 import cn.daxpay.open.platform.capability.wechat.message.param.TemplateMessageParam;
 import cn.daxpay.open.platform.capability.wechat.message.result.MessageSendResult;
 import cn.daxpay.open.platform.capability.wechat.token.service.WechatTokenService;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
@@ -19,115 +16,69 @@ import me.chanjar.weixin.mp.config.impl.WxMpDefaultConfigImpl;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
-/// # 微信公众号消息服务
+/// # 微信公众号消息服务(纯执行层)
 ///
+/// 所有配置(wxAppId/appSecret/openId/templateId/data)均由调用方传入, 本类不读取配置、不写记录,
+/// 仅负责调用微信 SDK 发送模板消息并返回结果. 失败封装进 [MessageSendResult] 返回(不抛异常),
+/// 便于上层(service-notify)统一记录成功/失败, 无需 try-catch.
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class WechatMpMessageService {
 
     private final WechatTokenService tokenService;
-    private final WechatMessageRecordService recordService;
 
-    /// 发送模板消息
-    /// @param param 模板消息参数（包含配置信息）
-    /// @return 消息发送结果
+    /// 发送模板消息(纯发送, 失败封装进 result 返回, 不抛异常)
     public MessageSendResult sendTemplateMessage(TemplateMessageParam param) {
-        // 验证配置参数
-        validateConfig(param.getWxAppId(), param.getAppSecret());
-        
-        // 创建消息记录
-        WechatMessageRecord record = createMessageRecord(param);
-        recordService.saveRecord(record);
-        
-        var result = new MessageSendResult()
-                .setRecordId(record.getId())
-                .setSuccess(false);
-        
+        var result = new MessageSendResult().setSuccess(false);
+        // 参数校验: 配置不全直接返回失败结果
+        if (StrUtil.isBlank(param.getWxAppId()) || StrUtil.isBlank(param.getAppSecret())) {
+            log.error("微信配置参数为空，wxAppId: {}", param.getWxAppId());
+            return result.setErrorMsg("wxAppId/appSecret is required");
+        }
         try {
-            // 获取AccessToken
+            // 获取 AccessToken
             String accessToken = tokenService.getAccessToken(param.getWxAppId(), param.getAppSecret());
-            
-            // 构建模板消息
+            // 构建模板消息并发送
             WxMpTemplateMessage templateMessage = buildTemplateMessage(param);
-            
-            // 创建微信服务
             WxMpService wxMpService = createWxMpService(param.getWxAppId(), param.getAppSecret(), accessToken);
-            
-            // 发送消息
             String msgId = wxMpService.getTemplateMsgService().sendTemplateMsg(templateMessage);
-            
-            // 更新结果
-            result.setSuccess(true)
-                    .setMsgId(msgId);
-            
-            // 更新消息记录状态
-            recordService.updateStatus(record.getId(), "success", msgId, null);
-            
-            log.info("发送公众号模板消息成功，openId: {}, templateId: {}, msgId: {}", 
+            result.setSuccess(true).setMsgId(msgId);
+            log.info("发送公众号模板消息成功，openId: {}, templateId: {}, msgId: {}",
                     param.getOpenId(), param.getTemplateId(), msgId);
-            
         } catch (WxErrorException e) {
-            log.error("发送公众号模板消息失败，openId: {}, templateId: {}, 错误: {}", 
+            log.error("发送公众号模板消息失败，openId: {}, templateId: {}, 错误: {}",
                     param.getOpenId(), param.getTemplateId(), e.getMessage());
-            
             result.setErrorCode(String.valueOf(e.getError().getErrorCode()))
                     .setErrorMsg(e.getError().getErrorMsg());
-            
-            // 更新消息记录状态
-            recordService.updateStatus(record.getId(), "failed", null, e.getError().getErrorMsg());
-            
-            // 微信: 发送公众号模板消息失败: {0}
-            throw new OperationFailException("error.channel.wechat.mpTemplateMessageFailed", e.getError().getErrorMsg());
         } catch (Exception e) {
-            log.error("发送公众号模板消息异常，openId: {}, templateId: {}", 
+            log.error("发送公众号模板消息异常，openId: {}, templateId: {}",
                     param.getOpenId(), param.getTemplateId(), e);
-            
             result.setErrorMsg(e.getMessage());
-            
-            // 更新消息记录状态
-            recordService.updateStatus(record.getId(), "failed", null, e.getMessage());
-            
-            // 微信: 发送公众号模板消息异常: {0}
-            throw new OperationFailException("error.channel.wechat.mpTemplateMessageError", e.getMessage());
         }
-        
         return result;
     }
 
-    /// 批量发送模板消息（使用异步处理）
-    /// @param params 模板消息参数列表（包含配置信息）
-    /// @return 消息发送结果列表
+    /// 批量发送模板消息(异步处理)
     public List<MessageSendResult> batchSendTemplateMessage(List<TemplateMessageParam> params) {
         List<MessageSendResult> results = new ArrayList<>();
-        
-        // 使用CompletableFuture异步处理
         List<CompletableFuture<MessageSendResult>> futures = new ArrayList<>();
-        
         for (TemplateMessageParam param : params) {
-            CompletableFuture<MessageSendResult> future = sendTemplateMessageAsync(param);
-            futures.add(future);
+            futures.add(sendTemplateMessageAsync(param));
         }
-        
-        // 等待所有任务完成
         for (CompletableFuture<MessageSendResult> future : futures) {
             try {
                 results.add(future.get());
             } catch (Exception e) {
                 log.error("批量发送消息异常", e);
-                results.add(new MessageSendResult()
-                        .setSuccess(false)
-                        .setErrorMsg(e.getMessage()));
+                results.add(new MessageSendResult().setSuccess(false).setErrorMsg(e.getMessage()));
             }
         }
-        
         return results;
     }
 
@@ -145,30 +96,6 @@ public class WechatMpMessageService {
         }
     }
 
-    /// 验证配置参数
-    private void validateConfig(String wxAppId, String appSecret) {
-        if (StrUtil.isBlank(wxAppId) || StrUtil.isBlank(appSecret)) {
-            log.error("微信配置参数为空，wxAppId: {}", wxAppId);
-            // 微信: 微信配置参数不能为空
-            throw new OperationFailException("error.channel.wechat.configParamsRequired");
-        }
-    }
-
-    /// 创建消息记录
-    private WechatMessageRecord createMessageRecord(TemplateMessageParam param) {
-        var record = new WechatMessageRecord();
-        record.setMessageType("template");
-        record.setOpenId(param.getOpenId());
-        record.setTemplateId(param.getTemplateId());
-        record.setTemplateData(JSONUtil.toJsonStr(param.getData()));
-        record.setUrl(param.getUrl());
-        record.setStatus("sending");
-        record.setSendTime(OffsetDateTime.now(ZoneOffset.UTC));
-        record.setScene(param.getScene());
-        record.setWxAppId(param.getWxAppId());
-        return record;
-    }
-
     /// 构建模板消息
     private WxMpTemplateMessage buildTemplateMessage(TemplateMessageParam param) {
         WxMpTemplateMessage templateMessage = WxMpTemplateMessage.builder()
@@ -176,7 +103,6 @@ public class WechatMpMessageService {
                 .templateId(param.getTemplateId())
                 .url(param.getUrl())
                 .build();
-        
         // 设置模板数据
         if (CollUtil.isNotEmpty(param.getData())) {
             List<WxMpTemplateData> dataList = new ArrayList<>();
@@ -185,11 +111,10 @@ public class WechatMpMessageService {
             }
             templateMessage.setData(dataList);
         }
-        
         return templateMessage;
     }
 
-    /// 创建微信公众号Service
+    /// 创建微信公众号 Service
     private WxMpService createWxMpService(String wxAppId, String appSecret, String accessToken) {
         WxMpService wxMpService = new WxMpServiceImpl();
         var config = new WxMpDefaultConfigImpl();
@@ -200,4 +125,3 @@ public class WechatMpMessageService {
         return wxMpService;
     }
 }
-

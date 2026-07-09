@@ -95,39 +95,12 @@ CREATE UNIQUE INDEX IF NOT EXISTS uk_wechat_isv_mch_app_auth_config ON wechat_is
 CREATE INDEX IF NOT EXISTS idx_wechat_isv_mch_app_auth_config_mch_app_id ON wechat_isv_mch_app_auth_config (wechat_isv_mch_app_id);
 
 -- ------------------------------------------------------------
--- 平台微信公众号配置表
--- 全局单条记录(id=1), 存储公众号 AppId/AppSecret(加密)与交易/操作通知模板ID,
--- 供公众号模板通知发送链路使用. AppSecret 由应用层 DataEncryptTypeHandler 加解密.
+-- 微信消息通知模板配置已迁入 system_platform_config
+-- (config_type=wechat_notify, 非加密 JSON: tradeTemplateId/operateTemplateId).
+-- 公众号凭据仍在 system_platform_encrypt_config (wechat_mp_auth).
+-- 兼容已建独立表环境: 直接丢弃废弃表.
 -- ------------------------------------------------------------
-CREATE TABLE IF NOT EXISTS pay_platform_wechat_config (
-    id                    int8          NOT NULL,
-    qrcode                varchar(500),
-    wx_app_id             varchar(64),
-    app_secret            varchar(512),
-    trade_template_id     varchar(64),
-    operate_template_id   varchar(64),
-    creator               int8,
-    create_time           timestamptz(6),
-    last_modifier         int8,
-    last_modified_time    timestamptz(6),
-    version               int4          NOT NULL DEFAULT 0,
-    deleted               bool          NOT NULL DEFAULT false,
-    CONSTRAINT pk_pay_platform_wechat_config PRIMARY KEY (id)
-);
-
-COMMENT ON TABLE  pay_platform_wechat_config IS '平台微信公众号配置(全局单条)';
-COMMENT ON COLUMN pay_platform_wechat_config.id IS '主键(固定为1)';
-COMMENT ON COLUMN pay_platform_wechat_config.qrcode IS '微信公众号二维码';
-COMMENT ON COLUMN pay_platform_wechat_config.wx_app_id IS '微信公众号 AppId';
-COMMENT ON COLUMN pay_platform_wechat_config.app_secret IS '微信公众号 AppSecret(AES-256-GCM 加密存储)';
-COMMENT ON COLUMN pay_platform_wechat_config.trade_template_id IS '交易通知模板Id(场景 trade)';
-COMMENT ON COLUMN pay_platform_wechat_config.operate_template_id IS '操作通知模板Id(场景 operate)';
-COMMENT ON COLUMN pay_platform_wechat_config.creator IS '创建者ID';
-COMMENT ON COLUMN pay_platform_wechat_config.create_time IS '创建时间';
-COMMENT ON COLUMN pay_platform_wechat_config.last_modifier IS '最后修改者ID';
-COMMENT ON COLUMN pay_platform_wechat_config.last_modified_time IS '最后修改时间';
-COMMENT ON COLUMN pay_platform_wechat_config.version IS '版本号(乐观锁)';
-COMMENT ON COLUMN pay_platform_wechat_config.deleted IS '逻辑删除标记';
+DROP TABLE IF EXISTS pay_platform_wechat_config;
 
 -- ------------------------------------------------------------
 -- 微信消息发送记录表

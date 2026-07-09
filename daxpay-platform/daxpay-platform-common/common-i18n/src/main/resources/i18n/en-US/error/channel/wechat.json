@@ -11,7 +11,8 @@
   "privateKeyRequired": "Merchant private key is required",
   "messageRecordNotExist": "Message record not found",
   "onlyFailedCanResend": "Only failed messages can be resent",
-  "platformConfigNotExist": "WeChat configuration not found",
+  "platformConfigNotExist": "WeChat message notification configuration not found",
+  "mpAuthConfigIncomplete": "WeChat MP credentials not configured in third-party platform (AppId/AppSecret)",
   "configParamsRequired": "WeChat configuration parameters are required",
   "mpTemplateMessageFailed": "Failed to send official account template message: {0}",
   "mpTemplateMessageError": "Official account template message error: {0}",
@@ -50,5 +51,8 @@
   "accessTokenLockFailed": "Failed to get AccessToken: cannot acquire distributed lock",
   "refreshAccessTokenFailed": "Failed to refresh AccessToken: {0}",
   "refreshAccessTokenEmpty": "Failed to refresh AccessToken: returned token is empty",
-  "isvKeyNotConfigured": "WeChat ISV key is not configured or incomplete, please configure the ISV key first"
+  "isvKeyNotConfigured": "WeChat ISV key is not configured or incomplete, please configure the ISV key first",
+  "authUrlFailed": "Failed to get auth url: {0}",
+  "authFailed": "Failed to get user identifier (openId): {0}",
+  "opAppIdNotFound": "The specified AppId [{0}] is not configured in the system"
 }

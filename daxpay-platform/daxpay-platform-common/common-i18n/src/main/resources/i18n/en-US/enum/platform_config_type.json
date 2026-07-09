@@ -4,5 +4,6 @@
   "security_session": "Session management",
   "anomaly_detection": "Anomaly login detection",
   "security_two_factor_auth": "Two-factor authentication",
-  "url": "System URL settings"
+  "url": "System URL settings",
+  "wechat_notify": "WeChat message notify template config"
 }

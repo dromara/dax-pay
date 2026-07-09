@@ -24,7 +24,9 @@ public enum PlatformConfigTypeEnum implements I18nSupport {
     /// 双因素认证配置
     SECURITY_TWO_FACTOR_AUTH("security_two_factor_auth"),
     /// 系统访问地址配置
-    URL("url");
+    URL("url"),
+    /// 微信消息通知模板配置(非敏感, 仅模板Id)
+    WECHAT_NOTIFY("wechat_notify");
 
     /// 编码
     private final String code;

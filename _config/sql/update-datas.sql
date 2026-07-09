@@ -56,8 +56,8 @@ WHERE id = 900001;
 -- menu_code 保留 iam:social:login-config, SocialLoginConfigController 与 PlatformAlipayAuthConfigController 共享菜单权限
 UPDATE iam_perm_menu SET
   name = 'ThirdPlatform',
-  name_cn = '三方平台管理',
-  name_en = 'Third-party Platform Management',
+  title_cn = '三方平台管理',
+  title_en = 'Third-party Platform Management',
   i18n_key = 'menu.system.config.thirdPlatform',
   component = 'views/system/config/third-platform/ThirdPlatform',
   path = '/system/config/third-platform'
@@ -74,6 +74,20 @@ DELETE FROM iam_user_social WHERE source IN ('wechatMpPublic', 'douyinH5');
 -- 三方平台管理中的抖音应用配置(H5 OAuth)已移除, 清理加密配置残留
 -- 三方登录抖音扫码(iam_social_login_config source=douyin)不受影响
 DELETE FROM system_platform_encrypt_config WHERE config_type = 'douyin_auth';
+
+-- ===== 通知中心: 微信消息通知(单菜单, 页内 Tabs: 通知配置 / 发送记录) =====
+-- 凭据在三方平台 wechat_mp_auth; 配置与记录共用 menu_code=system:notify:wechat-config
+-- 删除旧的独立「微信通知记录」菜单(id=311)
+DELETE FROM "public"."iam_perm_menu" WHERE id IN (310, 311);
+INSERT INTO "public"."iam_perm_menu" VALUES (
+  310, 308, 'system:notify:wechat-config', 'admin', 'WechatNotify',
+  '微信消息通知', 'Wechat Message Notification', 'menu.system.notify.wechatConfig',
+  'lucide:message-circle', 'f', 'f',
+  '/system/notify/wechat/index', '/system/notify/wechat', NULL,
+  30, 'f', 't', 'f', 1, 1, 0, 'f', 'menu',
+  NULL, NULL, NULL, NULL, NULL, NULL,
+  '2026-07-09 00:00:00+00', '2026-07-09 00:00:00+00'
+);
 
 -- ===== 开发调试 - 认证调试菜单 =====
 -- menuCode=develop:auth, 组件 views/payment/develop/auth/ChannelAuth

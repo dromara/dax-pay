@@ -66,6 +66,24 @@
             <artifactId>capability-auth</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- 微信能力(纯执行层, 发送公众号模板消息) -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>capability-wechat</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 身份识别(反查 userId -> openId 社交绑定) -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>service-iam</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 平台配置(三方平台微信公众号凭据 PlatformWechatMpAuthConfigService) -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>service-system</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- 审计日志 -->
         <dependency>
             <groupId>cn.daxpay.open</groupId>
