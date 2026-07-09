@@ -468,6 +468,13 @@
     "queryCode": {
       "notBlank": "Query code cannot be blank"
     },
+    "authToken": {
+      "notBlank": "Auth token cannot be blank",
+      "size": "Auth token cannot exceed 64 characters"
+    },
+    "returnPath": {
+      "size": "Return path cannot exceed 200 characters"
+    },
     "taskId": {
       "notNull": "Message ID cannot be blank"
     },

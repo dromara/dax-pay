@@ -30,5 +30,6 @@
   "mchAppStatusNotFound": "Merchant app status not found: {0}",
   "storeStatusNotFound": "Store status not found: {0}",
   "backendBaseUrlNotConfigured": "Backend base URL (backendBaseUrl) is not configured, cannot generate callback URL",
-  "requestContextMissing": "Cannot obtain request context"
+  "requestContextMissing": "Cannot obtain request context",
+  "gatewayUrlNotConfigured": "Payment gateway base URL (paymentGatewayBaseUrl) is not configured, cannot generate auth callback URL"
 }

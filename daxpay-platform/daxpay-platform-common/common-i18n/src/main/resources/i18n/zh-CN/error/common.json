@@ -30,5 +30,6 @@
   "mchAppStatusNotFound": "未找到对应的商户应用状态类型: {0}",
   "storeStatusNotFound": "未找到对应的门店状态类型: {0}",
   "backendBaseUrlNotConfigured": "平台后端访问地址(backendBaseUrl)未配置, 无法生成回调地址",
-  "requestContextMissing": "无法获取请求上下文"
+  "requestContextMissing": "无法获取请求上下文",
+  "gatewayUrlNotConfigured": "支付网关前端地址(paymentGatewayBaseUrl)未配置, 无法生成认证回调地址"
 }

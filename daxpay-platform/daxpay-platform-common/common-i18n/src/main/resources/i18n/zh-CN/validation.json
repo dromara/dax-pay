@@ -471,6 +471,13 @@
     "queryCode": {
       "notBlank": "查询码不可为空"
     },
+    "authToken": {
+      "notBlank": "认证会话码不可为空",
+      "size": "认证会话码不可超过64位"
+    },
+    "returnPath": {
+      "size": "来源回跳路径不可超过200位"
+    },
     "taskId": {
       "notNull": "消息ID不可为空"
     },

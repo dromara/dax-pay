@@ -27,5 +27,9 @@ public class AuthResult {
     /// @see ChannelAuthStatusEnum
     @Schema(description = "状态")
     private String status;
+
+    /// 来源回跳路径(会话恢复时回填), 前端授权完成后据此跳回业务页面
+    @Schema(description = "来源回跳路径")
+    private String returnPath;
 }
 

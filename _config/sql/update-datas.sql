@@ -74,3 +74,17 @@ DELETE FROM iam_user_social WHERE source IN ('wechatMpPublic', 'douyinH5');
 -- 三方平台管理中的抖音应用配置(H5 OAuth)已移除, 清理加密配置残留
 -- 三方登录抖音扫码(iam_social_login_config source=douyin)不受影响
 DELETE FROM system_platform_encrypt_config WHERE config_type = 'douyin_auth';
+
+-- ===== 开发调试 - 认证调试菜单 =====
+-- menuCode=develop:auth, 组件 views/payment/develop/auth/ChannelAuth
+-- 权限: develop:auth:view (后端 @PermCode 自动注册)
+DELETE FROM "public"."iam_perm_menu" WHERE id = 803;
+INSERT INTO "public"."iam_perm_menu" VALUES (
+  803, 8, 'develop:auth', 'admin', 'ChannelAuth',
+  '认证调试', 'Auth Develop', 'menu.develop.auth',
+  'lucide:key-round', 'f', 'f',
+  '/payment/develop/auth/ChannelAuth', '/develop/auth', NULL,
+  3, 'f', 't', 'f', 1, 1, 0, 'f', 'menu',
+  NULL, NULL, NULL, NULL, NULL, NULL,
+  '2026-07-09 16:00:00+00', '2026-07-09 16:00:00+00'
+);

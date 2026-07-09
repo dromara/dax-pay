@@ -104,6 +104,12 @@
             <artifactId>capability-wechat</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- 支付宝开放平台能力(AlipayAuthStrategy 通道认证使用) -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>capability-alipay</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- 翻译模块 -->
         <dependency>
             <groupId>cn.daxpay.open</groupId>
