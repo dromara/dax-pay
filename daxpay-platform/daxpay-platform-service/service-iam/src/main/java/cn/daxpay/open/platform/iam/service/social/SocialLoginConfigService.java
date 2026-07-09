@@ -164,15 +164,15 @@ public class SocialLoginConfigService {
             .setAgentId(agentId);
     }
 
-    /// 平台级跳转型保存: 仅更新 enabled 占位, 忽略 clientId/clientSecret 空串, 与平台凭据是否齐全无关
+    /// 平台级跳转型保存: 仅更新 enabled 占位, 忽略 clientId/clientSecret 占位符, 与平台凭据是否齐全无关
+    /// 显式写入 configured=true + enabled, 保证 enabled-list(configured AND enabled) 可命中
     private void updatePlatformRedirect(SocialLoginConfigParam param) {
         SocialLoginConfig entity = socialLoginConfigManager.findBySource(param.getSource())
             .orElseGet(() -> this.createDefaultConfig(param.getSource()));
-        if (param.getEnabled() != null) {
-            entity.setEnabled(param.getEnabled());
-        }
+        // 前端抽屉必传 enabled; 未传时默认 false, 避免 null 导致 enabled-list 查不到
+        entity.setEnabled(Boolean.TRUE.equals(param.getEnabled()));
         // 保存即标记已配置(供 enabled-list 查询; 与平台凭据解耦)
-        // 不写入 clientId/clientSecret: 前端空串仅为占位, 真实凭据在平台级配置
+        // 不写入 clientId/clientSecret: 前端 '-' 仅为占位, 真实凭据在平台级配置
         entity.setConfigured(true);
         socialLoginConfigManager.updateById(entity);
     }
