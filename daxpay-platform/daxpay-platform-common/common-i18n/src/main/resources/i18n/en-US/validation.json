@@ -663,6 +663,12 @@
     },
     "lsMchNo": {
       "notBlank": "Leshua merchant number cannot be blank"
+    },
+    "fileName": {
+      "notBlank": "File name cannot be blank"
+    },
+    "fileContent": {
+      "notBlank": "File content cannot be blank"
     }
   }
 }

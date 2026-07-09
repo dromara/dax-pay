@@ -21,5 +21,14 @@
   "apiConfigNotExist": "Merchant API configuration not found",
   "storeNotFound": "Store not found",
   "storeNoGenFailed": "Store number generation failed",
-  "storeNoMatch": "Store does not belong to the current merchant"
+  "storeNoMatch": "Store does not belong to the current merchant",
+  "wxVerifyNotFound": "WeChat domain verification file not found",
+  "wxVerifyFileNameEmpty": "WeChat domain verification file name is empty",
+  "wxVerifyFileNameInvalid": "WeChat domain verification file name format is invalid, expected MP_verify_<random>.txt",
+  "wxVerifyFileReadFailed": "WeChat domain verification file read failed",
+  "wxVerifyFileContentEmpty": "WeChat domain verification file content is empty",
+  "wxVerifyFileContentTooLong": "WeChat domain verification file content is too long",
+  "wxVerifyCodeDuplicate": "The verification file already exists, please do not upload again",
+  "wxVerifyUploadNotSupported": "The current client does not support uploading WeChat domain verification file",
+  "wxVerifyNoMatch": "WeChat domain verification file does not belong to the current merchant"
 }

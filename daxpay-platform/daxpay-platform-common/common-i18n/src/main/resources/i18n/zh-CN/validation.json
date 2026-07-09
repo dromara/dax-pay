@@ -666,6 +666,12 @@
     },
     "lsMchNo": {
       "notBlank": "乐刷商户号不能为空"
+    },
+    "fileName": {
+      "notBlank": "文件名不能为空"
+    },
+    "fileContent": {
+      "notBlank": "文件内容不能为空"
     }
   }
 }

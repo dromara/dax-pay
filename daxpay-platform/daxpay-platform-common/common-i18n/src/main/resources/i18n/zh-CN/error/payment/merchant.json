@@ -21,5 +21,14 @@
   "apiConfigNotExist": "商户API配置不存在",
   "storeNotFound": "门店信息不存在",
   "storeNoGenFailed": "门店号生成失败",
-  "storeNoMatch": "门店不属于当前商户"
+  "storeNoMatch": "门店不属于当前商户",
+  "wxVerifyNotFound": "微信域名验证文件不存在",
+  "wxVerifyFileNameEmpty": "微信域名验证文件名为空",
+  "wxVerifyFileNameInvalid": "微信域名验证文件名格式不正确，应为 MP_verify_随机字符串.txt",
+  "wxVerifyFileReadFailed": "微信域名验证文件读取失败",
+  "wxVerifyFileContentEmpty": "微信域名验证文件内容为空",
+  "wxVerifyFileContentTooLong": "微信域名验证文件内容过长",
+  "wxVerifyCodeDuplicate": "该验证文件已存在，请勿重复上传",
+  "wxVerifyUploadNotSupported": "当前终端不支持上传微信域名验证文件",
+  "wxVerifyNoMatch": "微信域名验证文件不属于当前商户"
 }
