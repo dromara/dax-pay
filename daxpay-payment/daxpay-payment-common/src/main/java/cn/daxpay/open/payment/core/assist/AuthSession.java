@@ -12,6 +12,20 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class AuthSession {
 
+    /// 认证来源: 平台级微信公众号配置(系统公众号配置调试场景)
+    ///
+    /// 该标记表示本次认证使用平台级 `PlatformWechatMpAuthConfig`(appId/appSecret) 换票,
+    /// 而非商户级支付产品策略。由 [PlatformAuthService] 在 generateWechatMpAuthUrl 时写入,
+    /// 认证分发层据此走平台级微信换票分支([PlatformAuthService.authWechatMp])。
+    public static final String SOURCE_PLATFORM_MP = "platform_mp";
+
+    /// 认证来源
+    ///
+    /// 标识本次认证的配置来源:
+    /// - [SOURCE_PLATFORM_MP]: 平台级微信公众号配置(调试场景)
+    /// - null/空: 走商户级支付产品策略(直连/服务商)
+    private String source;
+
     /// 支付产品编码
     /// @see cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum
     private String product;
@@ -28,4 +42,11 @@ public class AuthSession {
 
     /// 来源回跳路径(授权完成后前端回跳的目标路径)
     private String returnPath;
+
+    /// 查询码(调试轮询用)
+    ///
+    /// 微信 OAuth 重定向场景下, 回调 URL 仅含 authToken(微信不透传 queryCode),
+    /// 故将 queryCode 随会话保存, auth 时从会话恢复并据此把结果写回轮询 redis。
+    /// 支付宝走 H5 中间页, queryCode 在 URL 中直接透传, 不依赖此字段。
+    private String queryCode;
 }

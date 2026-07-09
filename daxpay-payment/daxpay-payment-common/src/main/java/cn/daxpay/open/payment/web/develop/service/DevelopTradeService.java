@@ -87,9 +87,9 @@ public class DevelopTradeService {
         return payProviderMethodService.listDirectoryFlat();
     }
 
-    /// 传值模式：商户全部启用通道商户候选
-    public List<LabelValue> listChannelMchCandidates(String mchNo) {
-        return payRouteStrategyCapabilitySupport.listDirectChannelMchCandidates(mchNo);
+    /// 传值模式：商户全部启用通道商户候选, channel 为空返回全部, 非空按通道过滤(如 wechat 仅返回微信产品通道商户)
+    public List<LabelValue> listChannelMchCandidates(String mchNo, String channel) {
+        return payRouteStrategyCapabilitySupport.listDirectChannelMchCandidates(mchNo, channel);
     }
 
     /// 传值模式：按通道商户(产品)返回全部启用支付能力候选

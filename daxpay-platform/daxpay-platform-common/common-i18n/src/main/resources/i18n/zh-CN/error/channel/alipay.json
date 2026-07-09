@@ -38,5 +38,10 @@
   "subMerchantDuplicate": "该支付宝应用下已存在此子商户号",
   "directMchDuplicate": "同一商户下该支付宝商户已存在",
   "userIdTypeInvalid": "用户标识类型不合法",
-  "capabilityDuplicate": "支付能力[{0}]重复配置"
+  "capabilityDuplicate": "支付能力[{0}]重复配置",
+  "authUserIdMismatch": "授权返回的商户号与通道商户绑定的子商户号不一致，已拒绝绑定",
+  "subMerchantNoRequired": "请先配置子商户号(2088)后再发起代运营授权",
+  "authCodeInvalid": "支付宝授权码无效或已过期",
+  "authTokenExchangeFailed": "换取应用授权令牌失败: {0}",
+  "paymentGatewayUrlRequired": "平台支付网关地址(paymentGatewayBaseUrl)未配置，无法生成授权回调地址"
 }

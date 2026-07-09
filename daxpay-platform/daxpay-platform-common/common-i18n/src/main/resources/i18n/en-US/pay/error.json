@@ -78,7 +78,9 @@
     "wechatAuthFail": "WeChat authentication failed: {0}",
     "wechatAuthConfigError": "WeChat authentication configuration error: {0}",
     "wechatMiniAuthConfigError": "WeChat mini program authentication configuration error: {0}",
-    "signVerifyFailDetail": "Signature verification failed: {0}"
+    "signVerifyFailDetail": "Signature verification failed: {0}",
+    "productOrChannelMchRequired": "Either payment product or channel merchant number must be provided",
+    "channelMchNotFound": "Channel merchant [{0}] not found"
   },
   "verify": {
     "methodParamRequired": "Payment method must have at least one parameter, and the signed payment parameter must be in the first position",

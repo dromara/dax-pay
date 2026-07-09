@@ -1,11 +1,13 @@
 package cn.daxpay.open.channel.alipay.client;
 
+import cn.daxpay.open.channel.alipay.client.req.AlipayAppAuthTokenReq;
 import cn.daxpay.open.channel.alipay.client.req.AlipayCallbackParseReq;
 import cn.daxpay.open.channel.alipay.client.req.AlipayCloseReq;
 import cn.daxpay.open.channel.alipay.client.req.AlipayPayReq;
 import cn.daxpay.open.channel.alipay.client.req.AlipayRefundReq;
 import cn.daxpay.open.channel.alipay.client.req.AlipayRefundSyncReq;
 import cn.daxpay.open.channel.alipay.client.req.AlipaySyncReq;
+import cn.daxpay.open.channel.alipay.client.resp.AlipayAppAuthTokenResp;
 import cn.daxpay.open.channel.alipay.client.resp.AlipayCallbackParseResp;
 import cn.daxpay.open.channel.alipay.client.resp.AlipayCloseResp;
 import cn.daxpay.open.channel.alipay.client.resp.AlipayPayResp;
@@ -51,4 +53,8 @@ public interface AlipayChannelClient {
     /// 退款回调验签解析(转发子应用)
     @PostExchange("/channel/alipay/callback/parse-refund")
     DaxResult<AlipayCallbackParseResp> parseRefundCallback(@RequestBody AlipayCallbackParseReq req);
+
+    /// 应用授权码换取 app_auth_token(代运营授权)
+    @PostExchange("/channel/alipay/auth/app-token")
+    DaxResult<AlipayAppAuthTokenResp> exchangeAppAuthToken(@RequestBody AlipayAppAuthTokenReq req);
 }

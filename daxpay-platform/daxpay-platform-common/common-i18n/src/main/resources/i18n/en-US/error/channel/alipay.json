@@ -38,5 +38,10 @@
   "subMerchantDuplicate": "This sub-merchant already exists under the Alipay application",
   "directMchDuplicate": "The Alipay merchant already exists under this merchant",
   "userIdTypeInvalid": "Invalid user ID type",
-  "capabilityDuplicate": "Payment capability [{0}] is duplicated"
+  "capabilityDuplicate": "Payment capability [{0}] is duplicated",
+  "authUserIdMismatch": "Authorized merchant ID does not match the bound sub-merchant ID; binding rejected",
+  "subMerchantNoRequired": "Please configure the sub-merchant ID (2088) before agent authorization",
+  "authCodeInvalid": "Alipay authorization code is invalid or expired",
+  "authTokenExchangeFailed": "Failed to exchange app auth token: {0}",
+  "paymentGatewayUrlRequired": "Payment gateway base URL is not configured; cannot build auth redirect URI"
 }

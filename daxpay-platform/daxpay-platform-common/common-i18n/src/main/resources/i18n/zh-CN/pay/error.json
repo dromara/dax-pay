@@ -77,7 +77,9 @@
     "wechatAuthFail": "微信认证失败: {0}",
     "wechatAuthConfigError": "微信认证配置错误: {0}",
     "wechatMiniAuthConfigError": "微信小程序认证配置错误: {0}",
-    "signVerifyFailDetail": "验签失败: {0}"
+    "signVerifyFailDetail": "验签失败: {0}",
+    "productOrChannelMchRequired": "支付产品与通道商户号至少传入其一",
+    "channelMchNotFound": "通道商户[{0}]不存在"
   },
   "verify": {
     "methodParamRequired": "支付方法至少有一个参数，并且需要签名的支付参数放在第一位",

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -57,8 +58,9 @@ public class DevelopTradeController {
     @Operation(summary = "传值模式通道商户候选")
     @GetMapping("/channel-mch-candidates")
     public Result<List<LabelValue>> channelMchCandidates(
-            @NotBlank(message = "{validation.field.mchNo.notBlank}") String mchNo) {
-        return Res.ok(developTradeService.listChannelMchCandidates(mchNo));
+            @NotBlank(message = "{validation.field.mchNo.notBlank}") String mchNo,
+            @RequestParam(required = false) String channel) {
+        return Res.ok(developTradeService.listChannelMchCandidates(mchNo, channel));
     }
 
     @PermCode(code = "view", nameCn = "查看", nameEn = "View")

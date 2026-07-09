@@ -14,7 +14,7 @@ import me.chanjar.weixin.mp.config.impl.WxMpDefaultConfigImpl;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.concurrent.TimeUnit;
+import java.time.Duration;
 
 /// # 微信Token管理服务
 ///
@@ -32,8 +32,8 @@ public class WechatTokenService {
     private static final String TOKEN_EXPIRE_KEY = "wechat:token:expire:";
     /// Token刷新锁Key前缀
     private static final String TOKEN_LOCK_KEY = "wechat:token:lock:";
-    /// Token默认过期时间（秒），微信AccessToken有效期为7200秒，提前5分钟刷新
-    private static final long TOKEN_EXPIRE_TIME = 7200 - 300;
+    /// Token默认过期时间，微信AccessToken有效期为7200秒，提前5分钟刷新
+    private static final Duration TOKEN_EXPIRE = Duration.ofSeconds(7200 - 300);
 
     /// 获取AccessToken（自动刷新，支持多副本部署）
     /// @param wxAppId 微信AppId
@@ -100,10 +100,10 @@ public class WechatTokenService {
             }
             
             // 缓存新Token
-            redisTemplate.opsForValue().set(cacheKey, newToken, TOKEN_EXPIRE_TIME, TimeUnit.SECONDS);
+            redisTemplate.opsForValue().set(cacheKey, newToken, TOKEN_EXPIRE);
             // 记录过期时间
-            long expireTime = System.currentTimeMillis() + TOKEN_EXPIRE_TIME * 1000;
-            redisTemplate.opsForValue().set(expireKey, String.valueOf(expireTime), TOKEN_EXPIRE_TIME, TimeUnit.SECONDS);
+            long expireTime = System.currentTimeMillis() + TOKEN_EXPIRE.toMillis();
+            redisTemplate.opsForValue().set(expireKey, String.valueOf(expireTime), TOKEN_EXPIRE);
             
             log.info("刷新AccessToken成功，wxAppId: {}", wxAppId);
             return newToken;

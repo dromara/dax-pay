@@ -17,6 +17,7 @@ import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayCapabilityEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
+import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.model.PayProviderMethodEntry;
 import cn.daxpay.open.platform.core.rest.dto.LabelValue;
@@ -26,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -188,12 +190,16 @@ public class PayRouteStrategyCapabilitySupport {
                 .toList();
     }
 
-    /// 传值模式: 商户全部启用通道商户候选(不按支付方式过滤)
-    public List<LabelValue> listDirectChannelMchCandidates(String mchNo) {
+    /// 传值模式: 商户全部启用通道商户候选(不按支付方式过滤), channel 为空返回全部, 非空按通道过滤
+    public List<LabelValue> listDirectChannelMchCandidates(String mchNo, String channel) {
         List<ChannelMerchant> mchants = channelMerchantManager.findAllByMchNo(mchNo);
         List<LabelValue> results = new ArrayList<>();
         for (ChannelMerchant mch : mchants) {
             if (!Boolean.TRUE.equals(mch.getEnable())) {
+                continue;
+            }
+            // channel 非空时仅保留归属该通道的产品(如 wechat → wechat_pay/wechat_isv)
+            if (StrUtil.isNotBlank(channel) && !productMatchesChannel(mch.getProduct(), channel)) {
                 continue;
             }
             String label = StrUtil.isNotBlank(mch.getChannelMerchantName())
@@ -203,6 +209,21 @@ public class PayRouteStrategyCapabilitySupport {
             }
         }
         return results;
+    }
+
+    /// 传值模式: 商户全部启用通道商户候选(不按通道过滤)
+    public List<LabelValue> listDirectChannelMchCandidates(String mchNo) {
+        return listDirectChannelMchCandidates(mchNo, null);
+    }
+
+    /// 产品是否归属指定通道(按 [ProductEnum.getChannel] 判断, 未知产品返回 false)
+    private boolean productMatchesChannel(String product, String channel) {
+        if (StrUtil.hasBlank(product, channel)) {
+            return false;
+        }
+        return Arrays.stream(ProductEnum.values())
+                .filter(e -> Objects.equals(e.getChannel(), channel))
+                .anyMatch(e -> Objects.equals(e.getCode(), product));
     }
 
     /// 传值模式: 按通道商户(产品)返回全部启用支付能力候选(不按支付方式过滤)

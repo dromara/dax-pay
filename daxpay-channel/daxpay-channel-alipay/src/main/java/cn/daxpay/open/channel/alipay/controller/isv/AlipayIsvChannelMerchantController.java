@@ -4,8 +4,11 @@ import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.channel.alipay.param.isv.AlipayIsvAppAuthTokenUpdateParam;
+import cn.daxpay.open.channel.alipay.param.isv.AlipayIsvAuthParam;
 import cn.daxpay.open.channel.alipay.param.isv.AlipayIsvChannelMerchantCreateParam;
+import cn.daxpay.open.channel.alipay.result.isv.AlipayIsvAuthUrlResult;
 import cn.daxpay.open.channel.alipay.result.isv.AlipayIsvChannelMerchantResult;
+import cn.daxpay.open.channel.alipay.service.isv.AlipayIsvAuthService;
 import cn.daxpay.open.channel.alipay.service.isv.AlipayIsvChannelMerchantService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -29,6 +32,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AlipayIsvChannelMerchantController {
 
     private final AlipayIsvChannelMerchantService alipayIsvChannelMerchantService;
+    private final AlipayIsvAuthService alipayIsvAuthService;
 
     @PermCode(code = "view", nameCn = "通道商户查看", nameEn = "Channel Merchant View")
     @Operation(summary = "根据通道商户号查询支付宝服务商通道商户配置")
@@ -52,5 +56,12 @@ public class AlipayIsvChannelMerchantController {
     public Result<Void> updateAppAuthToken(@RequestBody @Validated AlipayIsvAppAuthTokenUpdateParam param) {
         alipayIsvChannelMerchantService.updateAppAuthToken(param);
         return Res.ok();
+    }
+
+    @PermCode(code = "manage", nameCn = "通道商户管理", nameEn = "Channel Merchant Manage")
+    @Operation(summary = "生成代运营授权链接")
+    @PostMapping("/gen-auth-url")
+    public Result<AlipayIsvAuthUrlResult> genAuthUrl(@RequestBody @Validated AlipayIsvAuthParam param) {
+        return Res.ok(alipayIsvAuthService.genAuthUrl(param));
     }
 }
