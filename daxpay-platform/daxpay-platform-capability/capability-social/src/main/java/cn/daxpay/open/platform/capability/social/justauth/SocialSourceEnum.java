@@ -48,10 +48,8 @@ public enum SocialSourceEnum implements I18nSupport {
             "https://api.dingtalk.com/v1.0/contact/users/me"
     ),
 
-    /// 支付宝(非标准 OAuth2, 不走 JustAuth 流程)
-    /// 端点地址留空, 实际授权由 iam 模块的 AlipayAuthEndpoint 独立处理(调用 alipay.system.oauth.token)。
-    /// 在 [SocialAuthRequestFactory] 中会对该 source 抛出"请使用支付宝专用端点"异常,
-    /// 避免误走标准 OAuth2 工厂分支。
+    /// 支付宝(非标准 OAuth2: alipay.system.oauth.token)
+    /// 端点地址留空; 授权由 iam 模块 [AlipaySocialAuthRequest] 实现, 经统一 SocialEndpoint 入口编排。
     /// 排序位于钉钉之后、抖音之前。
     ALIPAY("alipay", "", "", ""),
 

@@ -4,7 +4,6 @@
   "configDuplicated": "该平台配置已存在",
   "notConfigured": "平台尚未配置，无法启停",
   "authCodeBlank": "授权码不能为空",
-  "alipayUseDedicatedEndpoint": "支付宝非标准 OAuth2，请使用专用授权端点 /social/alipay/render",
   "alipayNotConfigured": "平台级支付宝配置不完整，请先在「三方平台管理」中配置",
   "weCom": {
     "notCorpMember": "非本企业成员，不支持登录"

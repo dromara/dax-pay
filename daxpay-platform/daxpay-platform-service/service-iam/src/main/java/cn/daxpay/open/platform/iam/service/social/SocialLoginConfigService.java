@@ -15,6 +15,7 @@ import cn.daxpay.open.platform.iam.result.social.SocialEnabledPlatformResult;
 import cn.daxpay.open.platform.capability.social.justauth.SocialAuthConfig;
 import cn.daxpay.open.platform.capability.social.justauth.SocialSourceEnum;
 import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
+import cn.daxpay.open.platform.iam.service.social.other.AlipaySocialAuthRequest;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
@@ -30,7 +31,7 @@ import org.springframework.stereotype.Service;
 /// 配置表 source 全局唯一, 占位记录仅插入一次.
 ///
 /// **平台级跳转型**(如支付宝): 凭据在独立平台配置中维护, 本表仅存 enabled 占位;
-/// 「是否启用」与平台凭据解耦——可先启用登录入口, 凭据是否齐全在发起授权时由专用端点校验。
+/// 「是否启用」与平台凭据解耦——可先启用登录入口, 凭据是否齐全在发起授权时由 [AlipaySocialAuthRequest] 校验。
 ///
 @Slf4j
 @Service
@@ -135,8 +136,8 @@ public class SocialLoginConfigService {
         socialLoginConfigManager.updateById(entity);
     }
 
-    /// 根据平台来源查询已配置且启用的配置(供 SocialAuthRequestFactory / 支付宝端点使用)
-    /// 仅看本表 enabled+configured; 平台凭据完整性由专用端点在发起授权时校验。
+    /// 根据平台来源查询已配置且启用的配置(供 SocialLoginService 授权编排使用)
+    /// 仅看本表 enabled+configured; 平台凭据完整性由 AlipaySocialAuthRequest 在发起授权时校验。
     public SocialLoginConfig findEnabledBySource(String source) {
         return socialLoginConfigManager.findEnabledBySource(source).orElse(null);
     }

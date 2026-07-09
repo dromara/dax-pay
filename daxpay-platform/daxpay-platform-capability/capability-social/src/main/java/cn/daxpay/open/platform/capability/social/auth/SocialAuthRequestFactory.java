@@ -35,8 +35,8 @@ public class SocialAuthRequestFactory {
             case FEISHU -> new FeishuRequest(config);
             case DINGTALK -> new DingTalkRequest(config);
             case DOUYIN -> new DouyinRequest(config);
-            // 支付宝非标准 OAuth2, 不走 JustAuth 工厂, 由 iam 模块 AlipayAuthEndpoint 独立处理
-            case ALIPAY -> throw new OperationFailException("error.social.alipayUseDedicatedEndpoint");
+            // 支付宝由 iam 模块 AlipaySocialAuthRequestFactory 创建, 不走本工厂
+            case ALIPAY -> throw new OperationFailException("error.social.unsupportedSource");
         };
     }
 

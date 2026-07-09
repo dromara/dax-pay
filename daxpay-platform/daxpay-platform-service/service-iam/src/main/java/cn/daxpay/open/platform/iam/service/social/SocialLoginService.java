@@ -16,6 +16,8 @@ import cn.daxpay.open.platform.iam.result.social.SocialBindResult;
 import cn.daxpay.open.platform.iam.result.social.SocialEnabledPlatformResult;
 import cn.daxpay.open.platform.iam.result.social.SocialExchangeResult;
 import cn.daxpay.open.platform.iam.enums.SocialAuthMode;
+import cn.daxpay.open.platform.iam.service.social.other.AlipaySocialAuthRequest;
+import cn.daxpay.open.platform.iam.service.social.other.AlipaySocialAuthRequestFactory;
 import cn.daxpay.open.platform.system.entity.config.platform.PlatformUrlConfig;
 import cn.daxpay.open.platform.system.service.config.PlatformUrlConfigService;
 import cn.hutool.core.util.IdUtil;
@@ -33,6 +35,7 @@ import org.springframework.stereotype.Service;
 /// 前端拿到 code+state 后调用 exchange 接口完成换 token.
 /// state 仅用于 OAuth2 合规(CSRF), 不携带业务上下文.
 /// 登录和绑定的区分由回调页路由决定(两个不同的前端页面), exchange 时显式传 source + client.
+/// 支付宝非标准 OAuth 经 [AlipaySocialAuthRequest] 收口, 对外与标准平台共用本服务入口.
 ///
 @Slf4j
 @Service
@@ -46,6 +49,8 @@ public class SocialLoginService {
     private static final String BIND_CALLBACK_PATH = "/auth/social-bind-callback";
 
     private final SocialAuthRequestFactory socialAuthRequestFactory;
+
+    private final AlipaySocialAuthRequestFactory alipaySocialAuthRequestFactory;
 
     private final IamUserSocialBindStore socialBindStore;
 
@@ -84,7 +89,7 @@ public class SocialLoginService {
         String redirectUri = this.buildRedirectUri(baseUrl, authMode);
         // 构建授权请求
         SocialAuthConfig authConfig = socialLoginConfigService.buildAuthConfig(config, redirectUri);
-        SocialAuthRequest request = socialAuthRequestFactory.create(socialSource, authConfig);
+        SocialAuthRequest request = this.createAuthRequest(socialSource, authConfig);
         // state 仅用于 OAuth2 合规, 不缓存业务上下文
         String state = IdUtil.fastSimpleUUID();
         return request.authorize(state);
@@ -157,8 +162,16 @@ public class SocialLoginService {
         if (socialSource == null) {
             throw new OperationFailException("error.social.unsupportedSource");
         }
-        SocialAuthRequest authRequest = socialAuthRequestFactory.create(socialSource, authConfig);
+        SocialAuthRequest authRequest = this.createAuthRequest(socialSource, authConfig);
         return authRequest.login(AuthCallback.of(code, state));
+    }
+
+    /// 按平台创建授权请求: 支付宝走 iam 侧 [AlipaySocialAuthRequest], 其余走 JustAuth 工厂
+    private SocialAuthRequest createAuthRequest(SocialSourceEnum socialSource, SocialAuthConfig authConfig) {
+        if (socialSource == SocialSourceEnum.ALIPAY) {
+            return alipaySocialAuthRequestFactory.create(authConfig);
+        }
+        return socialAuthRequestFactory.create(socialSource, authConfig);
     }
 
     /// 解析授权场景(未传 mode 时按登录态判断)

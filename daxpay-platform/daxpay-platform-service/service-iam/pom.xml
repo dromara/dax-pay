@@ -26,7 +26,7 @@
             <artifactId>capability-social</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <!-- 支付宝开放平台能力(AlipayAuthEndpoint 授权登录使用) -->
+        <!-- 支付宝开放平台能力(AlipaySocialAuthRequest 授权登录使用) -->
         <dependency>
             <groupId>cn.daxpay.open</groupId>
             <artifactId>capability-alipay</artifactId>
