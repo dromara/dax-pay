@@ -1,6 +1,7 @@
 package cn.daxpay.open.channel.vbill.controller.callback;
 
 import cn.daxpay.open.channel.vbill.service.callback.VbillPayCallbackService;
+import cn.daxpay.open.channel.vbill.service.callback.VbillRefundCallbackService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,6 +25,7 @@ import java.util.Map;
 public class VbillCallbackController {
 
     private final VbillPayCallbackService vbillPayCallbackService;
+    private final VbillRefundCallbackService vbillRefundCallbackService;
 
     /// 随行付支付回调
     ///
@@ -34,5 +36,14 @@ public class VbillCallbackController {
                                          @PathVariable("appId") String appId,
                                          HttpServletRequest request) {
         return vbillPayCallbackService.payHandle(request);
+    }
+
+    /// 随行付退款回调
+    @Operation(summary = "随行付退款回调")
+    @PostMapping("/refund")
+    public Map<String, String> refundNotify(@PathVariable("mchNo") String mchNo,
+                                            @PathVariable("appId") String appId,
+                                            HttpServletRequest request) {
+        return vbillRefundCallbackService.refundHandle(request);
     }
 }

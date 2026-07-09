@@ -6,7 +6,10 @@ import cn.daxpay.open.channel.hkrt.client.req.HkrtCallbackParseReq;
 import cn.daxpay.open.channel.hkrt.client.resp.HkrtCallbackParseResp;
 import cn.daxpay.open.channel.hkrt.dao.isv.HkrtIsvKeyConfigManager;
 import cn.daxpay.open.channel.hkrt.entity.isv.HkrtIsvKeyConfig;
+import cn.daxpay.open.payment.common.callback.RefundCallbackData;
+import cn.daxpay.open.payment.core.trade.service.RefundCallbackService;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
+import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.hutool.extra.servlet.JakartaServletUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +40,7 @@ public class HkrtRefundCallbackService {
 
     private final HkrtIsvKeyConfigManager hkrtIsvKeyConfigManager;
     private final HkrtChannelClient hkrtChannelClient;
+    private final RefundCallbackService refundCallbackService;
 
     /// 退款回调处理
     public String refundHandle(HttpServletRequest request) {
@@ -57,16 +61,18 @@ public class HkrtRefundCallbackService {
             return NOTIFY_FAIL;
         }
 
-        // 4. 记录退款回调结果, TODO 接入退款单状态更新框架
-        String outRefundNo = resp.getOutTradeNo();
-        String refundNo = resp.getTradeNo();
-        String refundStatus = resp.getTradeStatus();
-        log.info("海科融通退款回调: outRefundNo={}, refundNo={}, refundStatus={}, amount={}, finishTime={}",
-                outRefundNo, refundNo, refundStatus, resp.getAmount(), resp.getFinishTime());
-        if (Objects.equals(REFUND_STATUS_SUCCESS, refundStatus)) {
-            // TODO 退款成功, 更新退款单状态(待接入退款回调框架)
-            log.info("海科融通退款成功: outRefundNo={}", outRefundNo);
+        // 4. 构建退款回调数据, 交框架更新退款单状态
+        RefundCallbackData callbackData = new RefundCallbackData();
+        // out_trade_no = 平台退款号(下单时透传), trade_no = 海科退款流水号
+        callbackData.setRefundNo(resp.getOutTradeNo());
+        callbackData.setOutRefundNo(resp.getTradeNo());
+        if (Objects.equals(REFUND_STATUS_SUCCESS, resp.getTradeStatus())) {
+            callbackData.setTradeStatus(CallbackStatusEnum.SUCCESS.getCode());
+        } else {
+            callbackData.setTradeErrorMsg("海科融通退款状态非成功: " + resp.getTradeStatus());
         }
+        callbackData.setFinishTime(resp.getFinishTime());
+        refundCallbackService.refundCallback(callbackData);
         return NOTIFY_SUCCESS;
     }
 

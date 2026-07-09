@@ -1,10 +1,12 @@
 package cn.daxpay.open.channel.fuyou.client;
 
+import cn.daxpay.open.channel.fuyou.client.req.FuyouCallbackParseReq;
 import cn.daxpay.open.channel.fuyou.client.req.FuyouCloseReq;
 import cn.daxpay.open.channel.fuyou.client.req.FuyouPayReq;
 import cn.daxpay.open.channel.fuyou.client.req.FuyouRefundReq;
 import cn.daxpay.open.channel.fuyou.client.req.FuyouRefundSyncReq;
 import cn.daxpay.open.channel.fuyou.client.req.FuyouSyncReq;
+import cn.daxpay.open.channel.fuyou.client.resp.FuyouCallbackParseResp;
 import cn.daxpay.open.channel.fuyou.client.resp.FuyouCloseResp;
 import cn.daxpay.open.channel.fuyou.client.resp.FuyouPayResp;
 import cn.daxpay.open.channel.fuyou.client.resp.FuyouRefundResp;
@@ -42,4 +44,12 @@ public interface FuyouChannelClient {
     /// 退款同步(查询退款状态)
     @PostExchange("/channel/fuyou/refund-sync")
     DaxResult<FuyouRefundSyncResp> refundSync(@RequestBody FuyouRefundSyncReq req);
+
+    /// 支付回调验签解析(转发子应用)
+    @PostExchange("/channel/fuyou/callback/parse-pay")
+    DaxResult<FuyouCallbackParseResp> parsePayCallback(@RequestBody FuyouCallbackParseReq req);
+
+    /// 退款回调验签解析(转发子应用)
+    @PostExchange("/channel/fuyou/callback/parse-refund")
+    DaxResult<FuyouCallbackParseResp> parseRefundCallback(@RequestBody FuyouCallbackParseReq req);
 }

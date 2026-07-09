@@ -22,6 +22,11 @@ public class PayRefundOrderManager extends BaseManager<PayRefundOrderMapper, Pay
         return findByField(PayRefundOrder::getRefundNo, refundNo);
     }
 
+    /// 根据通道退款流水号查询(回调容错:部分通道仅回传其内部退款号)
+    public Optional<PayRefundOrder> findByOutRefundNo(String outRefundNo) {
+        return findByField(PayRefundOrder::getOutRefundNo, outRefundNo);
+    }
+
     /// 根据原支付订单号查询退款订单数量(用于判断是否已退款)
     public long countByOrderNo(String orderNo) {
         return lambdaQuery()

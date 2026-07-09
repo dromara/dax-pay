@@ -1,10 +1,12 @@
 package cn.daxpay.open.channel.alipay.client;
 
+import cn.daxpay.open.channel.alipay.client.req.AlipayCallbackParseReq;
 import cn.daxpay.open.channel.alipay.client.req.AlipayCloseReq;
 import cn.daxpay.open.channel.alipay.client.req.AlipayPayReq;
 import cn.daxpay.open.channel.alipay.client.req.AlipayRefundReq;
 import cn.daxpay.open.channel.alipay.client.req.AlipayRefundSyncReq;
 import cn.daxpay.open.channel.alipay.client.req.AlipaySyncReq;
+import cn.daxpay.open.channel.alipay.client.resp.AlipayCallbackParseResp;
 import cn.daxpay.open.channel.alipay.client.resp.AlipayCloseResp;
 import cn.daxpay.open.channel.alipay.client.resp.AlipayPayResp;
 import cn.daxpay.open.channel.alipay.client.resp.AlipayRefundResp;
@@ -41,4 +43,12 @@ public interface AlipayChannelClient {
     /// 退款同步(查询退款状态)
     @PostExchange("/channel/alipay/refund-sync")
     DaxResult<AlipayRefundSyncResp> refundSync(@RequestBody AlipayRefundSyncReq req);
+
+    /// 支付回调验签解析(转发子应用)
+    @PostExchange("/channel/alipay/callback/parse-pay")
+    DaxResult<AlipayCallbackParseResp> parsePayCallback(@RequestBody AlipayCallbackParseReq req);
+
+    /// 退款回调验签解析(转发子应用)
+    @PostExchange("/channel/alipay/callback/parse-refund")
+    DaxResult<AlipayCallbackParseResp> parseRefundCallback(@RequestBody AlipayCallbackParseReq req);
 }

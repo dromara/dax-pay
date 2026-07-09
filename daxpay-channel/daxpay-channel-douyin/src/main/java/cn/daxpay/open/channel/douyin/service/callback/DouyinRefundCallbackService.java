@@ -9,7 +9,10 @@ import cn.daxpay.open.channel.douyin.dao.direct.DouyinDirectChannelMerchantManag
 import cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectChannelMerchant;
 import cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectKeyConfig;
 import cn.daxpay.open.channel.douyin.service.direct.DouyinDirectKeyConfigService;
+import cn.daxpay.open.payment.common.callback.RefundCallbackData;
 import cn.daxpay.open.payment.common.result.DaxResult;
+import cn.daxpay.open.payment.core.trade.service.RefundCallbackService;
+import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.hutool.extra.servlet.JakartaServletUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +37,7 @@ public class DouyinRefundCallbackService {
     private final DouyinChannelClient douyinChannelClient;
     private final DouyinDirectKeyConfigService keyConfigService;
     private final DouyinDirectChannelMerchantManager channelMerchantManager;
+    private final RefundCallbackService refundCallbackService;
 
     /// 退款回调处理
     public String refundHandle(String mchNo, String channelMchNo, HttpServletRequest request) {
@@ -65,13 +69,16 @@ public class DouyinRefundCallbackService {
             return DouyinPayCode.NOTIFY_FAIL;
         }
 
-        // 4. 记录退款回调结果, TODO 接入退款单状态更新框架
-        log.info("抖音退款回调: outRefundNo={}, refundId={}, refundStatus={}, amount={}",
-                resp.getOutRefundNo(), resp.getRefundId(), resp.getRefundStatus(), resp.getAmount());
+        // 4. 构建退款回调数据, 交框架更新退款单状态
+        RefundCallbackData callbackData = new RefundCallbackData();
+        callbackData.setRefundNo(resp.getOutRefundNo());
+        callbackData.setOutRefundNo(resp.getRefundId());
         if (Objects.equals(DouyinPayCode.REFUND_STATUS_SUCCESS, resp.getRefundStatus())) {
-            // TODO 退款成功, 更新退款单状态(待接入退款回调框架)
-            log.info("抖音退款成功: outRefundNo={}", resp.getOutRefundNo());
+            callbackData.setTradeStatus(CallbackStatusEnum.SUCCESS.getCode());
+        } else {
+            callbackData.setTradeErrorMsg("抖音退款状态非成功: " + resp.getRefundStatus());
         }
+        refundCallbackService.refundCallback(callbackData);
         return DouyinPayCode.NOTIFY_SUCCESS;
     }
 

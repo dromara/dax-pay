@@ -6,7 +6,10 @@ import cn.daxpay.open.channel.ums.client.req.UmsCallbackParseReq;
 import cn.daxpay.open.channel.ums.client.resp.UmsCallbackParseResp;
 import cn.daxpay.open.channel.ums.code.UmsCode;
 import cn.daxpay.open.channel.ums.service.direct.UmsDirectConfigAssembler;
+import cn.daxpay.open.payment.common.callback.RefundCallbackData;
 import cn.daxpay.open.payment.common.result.DaxResult;
+import cn.daxpay.open.payment.core.trade.service.RefundCallbackService;
+import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.JakartaServletUtil;
 import cn.hutool.json.JSONObject;
@@ -33,6 +36,7 @@ public class UmsRefundCallbackService {
 
     private final UmsChannelClient umsChannelClient;
     private final UmsDirectConfigAssembler configAssembler;
+    private final RefundCallbackService refundCallbackService;
 
     /// 退款回调处理
     public String refundHandle(String mchNo, String channelMchNo, HttpServletRequest request) {
@@ -52,14 +56,16 @@ public class UmsRefundCallbackService {
             return UmsCode.NOTIFY_FAIL;
         }
 
-        // 4. 记录退款回调结果, TODO 接入退款单状态更新框架
+        // 4. 构建退款回调数据, 交框架更新退款单状态
         UmsCallbackParseResp resp = result.getData();
-        log.info("银联商务退款回调: outRefundNo={}, tradeStatus={}, amount={}",
-                resp.getOutRefundNo(), resp.getTradeStatus(), resp.getAmount());
+        RefundCallbackData callbackData = new RefundCallbackData();
+        callbackData.setRefundNo(resp.getOutRefundNo());
         if (Objects.equals(UmsCode.TRADE_STATUS_SUCCESS, resp.getTradeStatus())) {
-            // TODO 退款成功, 更新退款单状态(待接入退款回调框架)
-            log.info("银联商务退款成功: outRefundNo={}", resp.getOutRefundNo());
+            callbackData.setTradeStatus(CallbackStatusEnum.SUCCESS.getCode());
+        } else {
+            callbackData.setTradeErrorMsg("银联商务退款状态非成功: " + resp.getTradeStatus());
         }
+        refundCallbackService.refundCallback(callbackData);
         return UmsCode.NOTIFY_SUCCESS;
     }
 

@@ -7,7 +7,10 @@ import cn.daxpay.open.channel.leshua.client.resp.LeshuaCallbackParseResp;
 import cn.daxpay.open.channel.leshua.code.LeshuaCode;
 import cn.daxpay.open.channel.leshua.dao.isv.LeshuaIsvKeyConfigManager;
 import cn.daxpay.open.channel.leshua.entity.isv.LeshuaIsvKeyConfig;
+import cn.daxpay.open.payment.common.callback.RefundCallbackData;
 import cn.daxpay.open.payment.common.result.DaxResult;
+import cn.daxpay.open.payment.core.trade.service.RefundCallbackService;
+import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.JakartaServletUtil;
@@ -33,6 +36,7 @@ public class LeshuaRefundCallbackService {
 
     private final LeshuaChannelClient leshuaChannelClient;
     private final LeshuaIsvKeyConfigManager leshuaIsvKeyConfigManager;
+    private final RefundCallbackService refundCallbackService;
 
     /// 退款回调处理
     public String refundHandle(HttpServletRequest request) {
@@ -65,14 +69,17 @@ public class LeshuaRefundCallbackService {
         }
         LeshuaCallbackParseResp resp = result.getData();
 
-        // 4. 记录退款回调结果, TODO 接入退款单状态更新框架
-        log.info("乐刷退款回调: outRefundNo={}, leshuaOrderId={}, refundStatus={}, amount={}, finishTime={}",
-                resp.getOutTradeNo(), resp.getLeshuaOrderId(), resp.getTradeStatus(),
-                resp.getAmount(), resp.getFinishTime());
+        // 4. 构建退款回调数据, 交框架更新退款单状态
+        RefundCallbackData callbackData = new RefundCallbackData();
+        callbackData.setRefundNo(resp.getOutTradeNo());
+        callbackData.setOutRefundNo(resp.getLeshuaOrderId());
         if (Objects.equals(resp.getTradeStatus(), LeshuaCode.REFUND_STATUS_SUCCESS)) {
-            // TODO 退款成功, 更新退款单状态(待接入退款回调框架)
-            log.info("乐刷退款成功: outRefundNo={}", resp.getOutTradeNo());
+            callbackData.setTradeStatus(CallbackStatusEnum.SUCCESS.getCode());
+        } else {
+            callbackData.setTradeErrorMsg("乐刷退款状态非成功: " + resp.getTradeStatus());
         }
+        callbackData.setFinishTime(resp.getFinishTime());
+        refundCallbackService.refundCallback(callbackData);
         return NOTIFY_SUCCESS;
     }
 }

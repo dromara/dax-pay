@@ -6,8 +6,11 @@ import cn.daxpay.open.channel.dougong.client.req.DougongCallbackParseReq;
 import cn.daxpay.open.channel.dougong.client.resp.DougongCallbackParseResp;
 import cn.daxpay.open.channel.dougong.dao.isv.DougongIsvKeyConfigManager;
 import cn.daxpay.open.channel.dougong.entity.isv.DougongIsvKeyConfig;
+import cn.daxpay.open.payment.common.callback.RefundCallbackData;
 import cn.daxpay.open.payment.common.result.DaxResult;
+import cn.daxpay.open.payment.core.trade.service.RefundCallbackService;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
+import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.JakartaServletUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,6 +34,7 @@ public class DougongRefundCallbackService {
 
     private final DougongChannelClient dougongChannelClient;
     private final DougongIsvKeyConfigManager dougongIsvKeyConfigManager;
+    private final RefundCallbackService refundCallbackService;
 
     /// 退款回调处理
     public String refundHandle(HttpServletRequest request) {
@@ -61,14 +65,18 @@ public class DougongRefundCallbackService {
         }
         DougongCallbackParseResp resp = result.getData();
 
-        // 4. 记录退款回调结果, TODO 接入退款单状态更新框架
-        log.info("斗拱退款回调: outRefundNo={}, tradeNo={}, refundStatus={}, amount={}, finishTime={}",
-                resp.getOutTradeNo(), resp.getTradeNo(), resp.getTradeStatus(),
-                resp.getAmount(), resp.getFinishTime());
+        // 4. 构建退款回调数据, 交框架更新退款单状态
+        RefundCallbackData callbackData = new RefundCallbackData();
+        // out_trade_no = 平台退款号(下单时透传), trade_no = 汇付流水号
+        callbackData.setRefundNo(resp.getOutTradeNo());
+        callbackData.setOutRefundNo(resp.getTradeNo());
         if (REFUND_STATUS_SUCCESS.equals(resp.getTradeStatus())) {
-            // TODO 退款成功, 更新退款单状态(待接入退款回调框架)
-            log.info("斗拱退款成功: outRefundNo={}", resp.getOutTradeNo());
+            callbackData.setTradeStatus(CallbackStatusEnum.SUCCESS.getCode());
+        } else {
+            callbackData.setTradeErrorMsg("斗拱退款状态非成功: " + resp.getTradeStatus());
         }
+        callbackData.setFinishTime(resp.getFinishTime());
+        refundCallbackService.refundCallback(callbackData);
         // 汇付要求返回 RECV_ORD_ID_{hfSeqId} 表示接收成功
         return "RECV_ORD_ID_" + resp.getTradeNo();
     }

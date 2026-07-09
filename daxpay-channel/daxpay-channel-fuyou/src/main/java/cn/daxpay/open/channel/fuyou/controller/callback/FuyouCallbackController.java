@@ -1,6 +1,7 @@
 package cn.daxpay.open.channel.fuyou.controller.callback;
 
 import cn.daxpay.open.channel.fuyou.service.callback.FuyouPayCallbackService;
+import cn.daxpay.open.channel.fuyou.service.callback.FuyouRefundCallbackService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class FuyouCallbackController {
 
     private final FuyouPayCallbackService fuyouPayCallbackService;
+    private final FuyouRefundCallbackService fuyouRefundCallbackService;
 
     /// 富友支付回调
     ///
@@ -32,5 +34,14 @@ public class FuyouCallbackController {
                             @PathVariable("appId") String appId,
                             @RequestParam("req") String req) {
         return fuyouPayCallbackService.payHandle(req);
+    }
+
+    /// 富友退款回调
+    @Operation(summary = "富友退款回调")
+    @PostMapping("/refund")
+    public String refundNotify(@PathVariable("mchNo") String mchNo,
+                               @PathVariable("appId") String appId,
+                               @RequestParam("req") String req) {
+        return fuyouRefundCallbackService.refundHandle(req);
     }
 }

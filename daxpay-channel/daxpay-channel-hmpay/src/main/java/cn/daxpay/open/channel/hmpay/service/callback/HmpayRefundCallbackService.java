@@ -6,7 +6,10 @@ import cn.daxpay.open.channel.hmpay.client.req.HmpayCallbackParseReq;
 import cn.daxpay.open.channel.hmpay.client.resp.HmpayCallbackParseResp;
 import cn.daxpay.open.channel.hmpay.dao.isv.HmpayIsvKeyConfigManager;
 import cn.daxpay.open.channel.hmpay.entity.isv.HmpayIsvKeyConfig;
+import cn.daxpay.open.payment.common.callback.RefundCallbackData;
 import cn.daxpay.open.payment.common.result.DaxResult;
+import cn.daxpay.open.payment.core.trade.service.RefundCallbackService;
+import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.JakartaServletUtil;
@@ -14,6 +17,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 /// # 河马付退款回调处理服务
 ///
@@ -31,6 +36,7 @@ public class HmpayRefundCallbackService {
 
     private final HmpayChannelClient hmpayChannelClient;
     private final HmpayIsvKeyConfigManager hmpayIsvKeyConfigManager;
+    private final RefundCallbackService refundCallbackService;
 
     /// 退款回调处理
     public String refundHandle(HttpServletRequest request) {
@@ -61,11 +67,17 @@ public class HmpayRefundCallbackService {
         }
         HmpayCallbackParseResp resp = result.getData();
 
-        // 4. 记录退款回调结果, TODO 接入退款单状态更新框架
-        log.info("河马付退款回调: outRefundNo={}, tradeNo={}, amount={}, finishTime={}",
-                resp.getOutTradeNo(), resp.getTradeNo(), resp.getAmount(), resp.getFinishTime());
-        // TODO 退款成功, 更新退款单状态(待接入退款回调框架)
-        log.info("河马付退款成功: outRefundNo={}", resp.getOutTradeNo());
+        // 4. 构建退款回调数据, 交框架更新退款单状态
+        RefundCallbackData callbackData = new RefundCallbackData();
+        callbackData.setRefundNo(resp.getOutTradeNo());
+        callbackData.setOutRefundNo(resp.getTradeNo());
+        if (Objects.equals("SUCCESS", resp.getTradeStatus())) {
+            callbackData.setTradeStatus(CallbackStatusEnum.SUCCESS.getCode());
+        } else {
+            callbackData.setTradeErrorMsg("河马付退款状态非成功: " + resp.getTradeStatus());
+        }
+        callbackData.setFinishTime(resp.getFinishTime());
+        refundCallbackService.refundCallback(callbackData);
         // 杉德要求返回 success 表示接收成功
         return NOTIFY_SUCCESS;
     }

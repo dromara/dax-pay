@@ -1,10 +1,12 @@
 package cn.daxpay.open.channel.vbill.client;
 
+import cn.daxpay.open.channel.vbill.client.req.VbillCallbackParseReq;
 import cn.daxpay.open.channel.vbill.client.req.VbillCloseReq;
 import cn.daxpay.open.channel.vbill.client.req.VbillPayReq;
 import cn.daxpay.open.channel.vbill.client.req.VbillRefundReq;
 import cn.daxpay.open.channel.vbill.client.req.VbillRefundSyncReq;
 import cn.daxpay.open.channel.vbill.client.req.VbillSyncReq;
+import cn.daxpay.open.channel.vbill.client.resp.VbillCallbackParseResp;
 import cn.daxpay.open.channel.vbill.client.resp.VbillCloseResp;
 import cn.daxpay.open.channel.vbill.client.resp.VbillPayResp;
 import cn.daxpay.open.channel.vbill.client.resp.VbillRefundResp;
@@ -42,4 +44,12 @@ public interface VbillChannelClient {
     /// 退款同步(查询退款状态)
     @PostExchange("/channel/vbill/refund-sync")
     DaxResult<VbillRefundSyncResp> refundSync(@RequestBody VbillRefundSyncReq req);
+
+    /// 支付回调验签解析(转发子应用)
+    @PostExchange("/channel/vbill/callback/parse-pay")
+    DaxResult<VbillCallbackParseResp> parsePayCallback(@RequestBody VbillCallbackParseReq req);
+
+    /// 退款回调验签解析(转发子应用)
+    @PostExchange("/channel/vbill/callback/parse-refund")
+    DaxResult<VbillCallbackParseResp> parseRefundCallback(@RequestBody VbillCallbackParseReq req);
 }

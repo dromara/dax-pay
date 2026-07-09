@@ -6,7 +6,10 @@ import cn.daxpay.open.channel.yeepay.client.req.YeepayCallbackParseReq;
 import cn.daxpay.open.channel.yeepay.client.resp.YeepayCallbackParseResp;
 import cn.daxpay.open.channel.yeepay.code.YeepayCode;
 import cn.daxpay.open.channel.yeepay.service.direct.YeepayDirectConfigAssembler;
+import cn.daxpay.open.payment.common.callback.RefundCallbackData;
 import cn.daxpay.open.payment.common.result.DaxResult;
+import cn.daxpay.open.payment.core.trade.service.RefundCallbackService;
+import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,6 +30,7 @@ public class YeepayRefundCallbackService {
 
     private final YeepayChannelClient yeepayChannelClient;
     private final YeepayDirectConfigAssembler configAssembler;
+    private final RefundCallbackService refundCallbackService;
 
     /// 退款回调处理
     public String refundHandle(String mchNo, String channelMchNo, HttpServletRequest request) {
@@ -48,14 +52,16 @@ public class YeepayRefundCallbackService {
             return YeepayCode.NOTIFY_FAIL;
         }
 
-        // 4. 记录退款回调结果, TODO 接入退款单状态更新框架
+        // 4. 构建退款回调数据, 交框架更新退款单状态
         YeepayCallbackParseResp resp = result.getData();
-        log.info("易宝退款回调: outRefundNo={}, tradeStatus={}, amount={}",
-                resp.getOutRefundNo(), resp.getTradeStatus(), resp.getAmount());
+        RefundCallbackData callbackData = new RefundCallbackData();
+        callbackData.setRefundNo(resp.getOutRefundNo());
         if (Objects.equals(YeepayCode.TRADE_STATUS_SUCCESS, resp.getTradeStatus())) {
-            // TODO 退款成功, 更新退款单状态(待接入退款回调框架)
-            log.info("易宝退款成功: outRefundNo={}", resp.getOutRefundNo());
+            callbackData.setTradeStatus(CallbackStatusEnum.SUCCESS.getCode());
+        } else {
+            callbackData.setTradeErrorMsg("易宝退款状态非成功: " + resp.getTradeStatus());
         }
+        refundCallbackService.refundCallback(callbackData);
         return YeepayCode.NOTIFY_SUCCESS;
     }
 }

@@ -6,7 +6,10 @@ import cn.daxpay.open.channel.wechat.client.req.WechatCallbackParseReq;
 import cn.daxpay.open.channel.wechat.client.resp.WechatCallbackParseResp;
 import cn.daxpay.open.channel.wechat.code.WechatCode;
 import cn.daxpay.open.channel.wechat.service.direct.WechatDirectConfigAssembler;
+import cn.daxpay.open.payment.common.callback.RefundCallbackData;
 import cn.daxpay.open.payment.common.result.DaxResult;
+import cn.daxpay.open.payment.core.trade.service.RefundCallbackService;
+import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.hutool.extra.servlet.JakartaServletUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +31,7 @@ public class WechatRefundCallbackService {
 
     private final WechatChannelClient wechatChannelClient;
     private final WechatDirectConfigAssembler wechatDirectConfigAssembler;
+    private final RefundCallbackService refundCallbackService;
 
     /// 退款回调处理
     public String refundHandle(String mchNo, String channelMchNo, HttpServletRequest request) {
@@ -53,14 +57,17 @@ public class WechatRefundCallbackService {
             return WechatCode.NOTIFY_FAIL;
         }
 
-        // 4. 记录退款回调结果, TODO 接入退款单状态更新框架
+        // 4. 构建退款回调数据, 交框架更新退款单状态
         WechatCallbackParseResp resp = result.getData();
-        log.info("微信退款回调: outRefundNo={}, refundId={}, refundStatus={}, amount={}",
-                resp.getOutRefundNo(), resp.getRefundId(), resp.getRefundStatus(), resp.getAmount());
+        RefundCallbackData callbackData = new RefundCallbackData();
+        callbackData.setRefundNo(resp.getOutRefundNo());
+        callbackData.setOutRefundNo(resp.getRefundId());
         if (Objects.equals(WechatCode.REFUND_STATUS_SUCCESS, resp.getRefundStatus())) {
-            // TODO 退款成功, 更新退款单状态(待接入退款回调框架)
-            log.info("微信退款成功: outRefundNo={}", resp.getOutRefundNo());
+            callbackData.setTradeStatus(CallbackStatusEnum.SUCCESS.getCode());
+        } else {
+            callbackData.setTradeErrorMsg("微信退款状态非成功: " + resp.getRefundStatus());
         }
+        refundCallbackService.refundCallback(callbackData);
         return WechatCode.NOTIFY_SUCCESS;
     }
 

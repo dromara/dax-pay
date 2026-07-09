@@ -1,10 +1,12 @@
 package cn.daxpay.open.channel.adapay.client;
 
+import cn.daxpay.open.channel.adapay.client.req.AdapayCallbackParseReq;
 import cn.daxpay.open.channel.adapay.client.req.AdapayCloseReq;
 import cn.daxpay.open.channel.adapay.client.req.AdapayPayReq;
 import cn.daxpay.open.channel.adapay.client.req.AdapayRefundReq;
 import cn.daxpay.open.channel.adapay.client.req.AdapayRefundSyncReq;
 import cn.daxpay.open.channel.adapay.client.req.AdapaySyncReq;
+import cn.daxpay.open.channel.adapay.client.resp.AdapayCallbackParseResp;
 import cn.daxpay.open.channel.adapay.client.resp.AdapayCloseResp;
 import cn.daxpay.open.channel.adapay.client.resp.AdapayPayResp;
 import cn.daxpay.open.channel.adapay.client.resp.AdapayRefundResp;
@@ -42,4 +44,12 @@ public interface AdapayChannelClient {
     /// 退款同步(查询退款状态)
     @PostExchange("/channel/adapay/refund-sync")
     DaxResult<AdapayRefundSyncResp> refundSync(@RequestBody AdapayRefundSyncReq req);
+
+    /// 支付回调验签解析(转发子应用)
+    @PostExchange("/channel/adapay/callback/parse-pay")
+    DaxResult<AdapayCallbackParseResp> parsePayCallback(@RequestBody AdapayCallbackParseReq req);
+
+    /// 退款回调验签解析(转发子应用)
+    @PostExchange("/channel/adapay/callback/parse-refund")
+    DaxResult<AdapayCallbackParseResp> parseRefundCallback(@RequestBody AdapayCallbackParseReq req);
 }

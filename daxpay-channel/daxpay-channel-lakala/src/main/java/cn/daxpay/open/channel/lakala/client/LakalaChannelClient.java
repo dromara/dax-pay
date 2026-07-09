@@ -1,10 +1,12 @@
 package cn.daxpay.open.channel.lakala.client;
 
+import cn.daxpay.open.channel.lakala.client.req.LakalaCallbackParseReq;
 import cn.daxpay.open.channel.lakala.client.req.LakalaCloseReq;
 import cn.daxpay.open.channel.lakala.client.req.LakalaPayReq;
 import cn.daxpay.open.channel.lakala.client.req.LakalaRefundReq;
 import cn.daxpay.open.channel.lakala.client.req.LakalaRefundSyncReq;
 import cn.daxpay.open.channel.lakala.client.req.LakalaSyncReq;
+import cn.daxpay.open.channel.lakala.client.resp.LakalaCallbackParseResp;
 import cn.daxpay.open.channel.lakala.client.resp.LakalaCloseResp;
 import cn.daxpay.open.channel.lakala.client.resp.LakalaPayResp;
 import cn.daxpay.open.channel.lakala.client.resp.LakalaRefundResp;
@@ -42,4 +44,12 @@ public interface LakalaChannelClient {
     /// 退款同步(查询退款状态)
     @PostExchange("/channel/lakala/refund-sync")
     DaxResult<LakalaRefundSyncResp> refundSync(@RequestBody LakalaRefundSyncReq req);
+
+    /// 支付回调验签解析(转发子应用)
+    @PostExchange("/channel/lakala/callback/parse-pay")
+    DaxResult<LakalaCallbackParseResp> parsePayCallback(@RequestBody LakalaCallbackParseReq req);
+
+    /// 退款回调验签解析(转发子应用)
+    @PostExchange("/channel/lakala/callback/parse-refund")
+    DaxResult<LakalaCallbackParseResp> parseRefundCallback(@RequestBody LakalaCallbackParseReq req);
 }

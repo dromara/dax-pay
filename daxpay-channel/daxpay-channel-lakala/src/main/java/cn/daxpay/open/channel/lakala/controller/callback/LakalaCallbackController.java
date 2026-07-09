@@ -1,6 +1,7 @@
 package cn.daxpay.open.channel.lakala.controller.callback;
 
 import cn.daxpay.open.channel.lakala.service.callback.LakalaPayCallbackService;
+import cn.daxpay.open.channel.lakala.service.callback.LakalaRefundCallbackService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class LakalaCallbackController {
 
     private final LakalaPayCallbackService lakalaPayCallbackService;
+    private final LakalaRefundCallbackService lakalaRefundCallbackService;
 
     /// 拉卡拉支付回调
     @Operation(summary = "拉卡拉支付回调")
@@ -30,5 +32,14 @@ public class LakalaCallbackController {
                             @PathVariable("appId") String appId,
                             HttpServletRequest request) {
         return lakalaPayCallbackService.payHandle(request);
+    }
+
+    /// 拉卡拉退款回调
+    @Operation(summary = "拉卡拉退款回调")
+    @PostMapping("/refund")
+    public String refundNotify(@PathVariable("mchNo") String mchNo,
+                               @PathVariable("appId") String appId,
+                               HttpServletRequest request) {
+        return lakalaRefundCallbackService.refundHandle(request);
     }
 }
