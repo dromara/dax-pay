@@ -29,6 +29,9 @@ import org.springframework.stereotype.Service;
 /// 数据访问全部委托 [SocialLoginConfigManager], 本层不直接使用 lambdaQuery.
 /// 配置表 source 全局唯一, 占位记录仅插入一次.
 ///
+/// **平台级跳转型**(如支付宝): 凭据在独立平台配置中维护, 本表仅存 enabled 占位;
+/// 「是否启用」与平台凭据解耦——可先启用登录入口, 凭据是否齐全在发起授权时由专用端点校验。
+///
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -39,8 +42,7 @@ public class SocialLoginConfigService {
     /// 全量查询平台配置(枚举驱动, 内存合并, 不落库)
     /// 已配置平台返回库表记录, 未配置平台返回 `configured=false` 的瞬态展示项(无 id).
     /// 真正的初始化落库延迟到 [findBySource] 按需触发, 避免读操作产生写副作用.
-    /// **平台级跳转型平台**(如支付宝, [SocialSourceEnum#isPlatformRedirect])不在本表存凭据,
-    /// 仅返回瞬态展示项(带 platformRedirect=true 标志), 前端据此渲染跳转按钮。
+    /// **平台级跳转型平台**(如支付宝)不在本表存凭据, `configured`/`enabled` 均取本表占位行。
     public List<SocialLoginConfigResult> findAll() {
         // 库表已有配置按 source 索引
         Map<String, SocialLoginConfig> configMap = socialLoginConfigManager.listAll().stream()
@@ -68,31 +70,37 @@ public class SocialLoginConfigService {
 
     /// 根据平台编码查询, 记录不存在则按需初始化占位记录(configured=false)
     /// 前端点击未配置平台"配置"按钮时调用, 触发该平台的首次落库.
-    /// **平台级跳转型平台**(如支付宝)不落库, 直接返回瞬态项(前端据此跳转到平台级配置页)。
+    /// **平台级跳转型平台**(如支付宝)也落库占位记录(只存 source + enabled), 但不存凭据。
     public SocialLoginConfigResult findBySource(String source) {
         SocialSourceEnum socialSource = SocialSourceEnum.of(source);
         if (socialSource == null) {
             // 社交登录: 不支持的平台
             throw new OperationFailException("error.social.unsupportedSource");
         }
-        // 平台级跳转型: 不在本表存凭据, 返回瞬态展示项, 前端跳转到平台级配置
-        if (socialSource.isPlatformRedirect()) {
-            return new SocialLoginConfigResult()
-                    .setSource(source)
-                    .setConfigured(false)
-                    .setEnabled(false)
-                    .setPlatformRedirect(true);
-        }
         SocialLoginConfig config = socialLoginConfigManager.findBySource(source)
             .orElseGet(() -> this.createDefaultConfig(source));
-        return config.toResult().setPlatformRedirect(false);
+        return config.toResult().setPlatformRedirect(socialSource.isPlatformRedirect());
     }
 
     /// 修改配置(按 source 查后更新, 保存即标记为已配置)
-    /// clientSecret 采用"加密存储 + 脱敏返回 + 前端 diffForm"模式:
+    /// 标准平台: clientSecret 采用"加密存储 + 脱敏返回 + 前端 diffForm"模式,
     /// 前端未修改时不传该字段(undefined), copy 后 entity.clientSecret 暂为 null,
     /// 默认 NOT_NULL 策略下 null 字段不参与 UPDATE, 数据库原值(密文)保持不变, 无需 Service 层兜底.
+    /// 平台级跳转型(支付宝): 忽略 clientId/clientSecret 占位空串, 仅更新 enabled(与平台凭据解耦)。
     public void update(SocialLoginConfigParam param) {
+        SocialSourceEnum socialSource = SocialSourceEnum.of(param.getSource());
+        if (socialSource == null) {
+            throw new OperationFailException("error.social.unsupportedSource");
+        }
+        // 跳转型(SocialSourceEnum.isPlatformRedirect, 如 ALIPAY): 不校验/不写入 clientId, 只启停
+        if (this.isPlatformRedirectSource(socialSource)) {
+            this.updatePlatformRedirect(param);
+            return;
+        }
+        // 标准 OAuth 平台: clientId 必填
+        if (StrUtil.isBlank(param.getClientId())) {
+            throw new OperationFailException("error.social.notConfigured");
+        }
         SocialLoginConfig entity = socialLoginConfigManager.findBySource(param.getSource())
             // 社交登录: 平台配置不存在
             .orElseThrow(() -> new OperationFailException("error.social.configNotExist"));
@@ -103,7 +111,19 @@ public class SocialLoginConfigService {
     }
 
     /// 切换启用状态(按 source 查后更新, 仅已配置平台可启停)
+    /// 跳转型也可调用(与 update 同路径), 支付宝抽屉统一走 update, 本方法保留兼容。
     public void updateEnabled(String source, Boolean enabled) {
+        SocialSourceEnum socialSource = SocialSourceEnum.of(source);
+        if (socialSource == null) {
+            throw new OperationFailException("error.social.unsupportedSource");
+        }
+        if (this.isPlatformRedirectSource(socialSource)) {
+            SocialLoginConfigParam param = new SocialLoginConfigParam()
+                    .setSource(source)
+                    .setEnabled(enabled);
+            this.updatePlatformRedirect(param);
+            return;
+        }
         SocialLoginConfig entity = socialLoginConfigManager.findBySource(source)
             // 社交登录: 平台配置不存在
             .orElseThrow(() -> new OperationFailException("error.social.configNotExist"));
@@ -115,7 +135,8 @@ public class SocialLoginConfigService {
         socialLoginConfigManager.updateById(entity);
     }
 
-    /// 根据平台来源查询已配置且启用的配置(供 SocialAuthRequestFactory 使用)
+    /// 根据平台来源查询已配置且启用的配置(供 SocialAuthRequestFactory / 支付宝端点使用)
+    /// 仅看本表 enabled+configured; 平台凭据完整性由专用端点在发起授权时校验。
     public SocialLoginConfig findEnabledBySource(String source) {
         return socialLoginConfigManager.findEnabledBySource(source).orElse(null);
     }
@@ -141,6 +162,24 @@ public class SocialLoginConfigService {
             .setClientSecret(entity.getClientSecret())
             .setRedirectUri(redirectUri)
             .setAgentId(agentId);
+    }
+
+    /// 平台级跳转型保存: 仅更新 enabled 占位, 忽略 clientId/clientSecret 空串, 与平台凭据是否齐全无关
+    private void updatePlatformRedirect(SocialLoginConfigParam param) {
+        SocialLoginConfig entity = socialLoginConfigManager.findBySource(param.getSource())
+            .orElseGet(() -> this.createDefaultConfig(param.getSource()));
+        if (param.getEnabled() != null) {
+            entity.setEnabled(param.getEnabled());
+        }
+        // 保存即标记已配置(供 enabled-list 查询; 与平台凭据解耦)
+        // 不写入 clientId/clientSecret: 前端空串仅为占位, 真实凭据在平台级配置
+        entity.setConfigured(true);
+        socialLoginConfigManager.updateById(entity);
+    }
+
+    /// 是否平台级跳转型(委托 [SocialSourceEnum#isPlatformRedirect], 如 [SocialSourceEnum#ALIPAY])
+    private boolean isPlatformRedirectSource(SocialSourceEnum socialSource) {
+        return socialSource != null && socialSource.isPlatformRedirect();
     }
 
     /// 创建并保存占位记录(configured=false), 业务字段留空

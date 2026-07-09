@@ -50,3 +50,27 @@ UPDATE iam_perm_menu SET
   component = 'views/iam/social/social-login-config',
   path = '/system/config/social-login'
 WHERE id = 900001;
+
+-- ===== 第三方平台管理改造: 原"三方平台登录"升级为 tab 形式的"三方平台管理" =====
+-- 整合: 登录平台配置(标准 OAuth2 卡片) + 支付宝开放平台(平台级配置) + (后续)微信公众号/抖音
+-- menu_code 保留 iam:social:login-config, SocialLoginConfigController 与 PlatformAlipayAuthConfigController 共享菜单权限
+UPDATE iam_perm_menu SET
+  name = 'ThirdPlatform',
+  name_cn = '三方平台管理',
+  name_en = 'Third-party Platform Management',
+  i18n_key = 'menu.system.config.thirdPlatform',
+  component = 'views/system/config/third-platform/ThirdPlatform',
+  path = '/system/config/third-platform'
+WHERE id = 900001;
+
+-- ===== 微信公众号/抖音 H5 退出三方登录体系 =====
+-- wechatMpPublic / douyinH5 不再属于 SocialSourceEnum, 清理历史登录配置占位行
+-- 微信公众号平台级凭据(wechat_mp_auth)保留; 抖音 H5 平台授权(douyin_auth)已下线
+DELETE FROM iam_social_login_config WHERE source IN ('wechatMpPublic', 'douyinH5');
+-- 历史绑定关系一并清理(若有)
+DELETE FROM iam_user_social WHERE source IN ('wechatMpPublic', 'douyinH5');
+
+-- ===== 抖音 H5 平台授权配置下线 =====
+-- 三方平台管理中的抖音应用配置(H5 OAuth)已移除, 清理加密配置残留
+-- 三方登录抖音扫码(iam_social_login_config source=douyin)不受影响
+DELETE FROM system_platform_encrypt_config WHERE config_type = 'douyin_auth';

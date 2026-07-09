@@ -26,6 +26,18 @@
             <artifactId>capability-social</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- 支付宝开放平台能力(AlipayAuthEndpoint 授权登录使用) -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>capability-alipay</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 微信公众号能力(WechatMpAuthEndpoint 授权登录使用 WechatMpAuthService) -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>capability-wechat</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- 防重放Nonce验证 -->
         <dependency>
             <groupId>cn.daxpay.open</groupId>

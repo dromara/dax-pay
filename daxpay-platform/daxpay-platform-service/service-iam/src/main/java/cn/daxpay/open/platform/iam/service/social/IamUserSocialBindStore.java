@@ -33,6 +33,17 @@ public class IamUserSocialBindStore {
             .oneOpt()
             .map(IamUserSocial::getUserId);
     }
+
+    /// 根据本地用户ID和平台来源反查平台用户标识(如微信 openId)
+    ///
+    /// 供通知发送链路使用: 由平台 userId 反查 openId 后投递消息.
+    public Optional<String> findOpenIdByUserId(Long userId, String source) {
+        return iamUserSocialManager.lambdaQuery()
+            .eq(IamUserSocial::getUserId, userId)
+            .eq(IamUserSocial::getSource, source)
+            .oneOpt()
+            .map(IamUserSocial::getOpenId);
+    }
     /// 保存绑定关系
     /// @param userId 本地用户ID
     /// @param clientCode 终端编码

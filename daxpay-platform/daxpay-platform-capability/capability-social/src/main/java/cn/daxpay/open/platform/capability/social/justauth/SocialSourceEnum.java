@@ -48,6 +48,13 @@ public enum SocialSourceEnum implements I18nSupport {
             "https://api.dingtalk.com/v1.0/contact/users/me"
     ),
 
+    /// 支付宝(非标准 OAuth2, 不走 JustAuth 流程)
+    /// 端点地址留空, 实际授权由 iam 模块的 AlipayAuthEndpoint 独立处理(调用 alipay.system.oauth.token)。
+    /// 在 [SocialAuthRequestFactory] 中会对该 source 抛出"请使用支付宝专用端点"异常,
+    /// 避免误走标准 OAuth2 工厂分支。
+    /// 排序位于钉钉之后、抖音之前。
+    ALIPAY("alipay", "", "", ""),
+
     /// 抖音(网站应用扫码登录)
     DOUYIN(
             "douyin",
@@ -134,5 +141,17 @@ public enum SocialSourceEnum implements I18nSupport {
         return Arrays.stream(values())
                 .filter(source -> source.code.equalsIgnoreCase(name))
                 .findFirst().orElse(null);
+    }
+
+    /// 是否"平台级跳转型"配置
+    ///
+    /// 此类平台(支付宝)非标准 OAuth2 或配置较重,
+    /// 不在 iam_social_login_config 表内存 clientId/clientSecret,
+    /// 而是使用独立的平台级配置(EncryptPlatformConfigTypeEnum / 独立表)。
+    /// 前端登录配置抽屉据此隐藏 clientId/clientSecret, 仅保留启用开关与「前往配置凭据」入口。
+    ///
+    /// 新增此类平台时在此方法追加判断。
+    public boolean isPlatformRedirect() {
+        return this == ALIPAY;
     }
 }

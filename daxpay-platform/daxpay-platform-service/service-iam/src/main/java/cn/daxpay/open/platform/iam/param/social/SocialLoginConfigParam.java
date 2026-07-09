@@ -18,8 +18,8 @@ public class SocialLoginConfigParam {
     @NotBlank(message = "{validation.field.source.notBlank}")
     private String source;
 
+    /// 客户端ID(标准 OAuth 平台必填; 平台级跳转型如支付宝不传, 由 Service 分支校验)
     @Schema(description = "客户端ID")
-    @NotBlank(message = "{validation.field.clientId.notBlank}")
     private String clientId;
 
     /// 客户端密钥(新增必填, 编辑未修改不传该字段, 修改传新值)

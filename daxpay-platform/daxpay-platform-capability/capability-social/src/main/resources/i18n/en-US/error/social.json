@@ -4,6 +4,8 @@
   "configDuplicated": "The platform configuration already exists",
   "notConfigured": "The platform is not configured and cannot be toggled",
   "authCodeBlank": "Authorization code cannot be empty",
+  "alipayUseDedicatedEndpoint": "Alipay uses non-standard OAuth2, please use the dedicated endpoint /social/alipay/render",
+  "alipayNotConfigured": "Platform-level Alipay configuration is incomplete, please configure it in 'Third-party Platform Management' first",
   "weCom": {
     "notCorpMember": "Not a member of this enterprise, login is not supported"
   },

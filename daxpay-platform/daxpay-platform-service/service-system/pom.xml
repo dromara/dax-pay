@@ -85,7 +85,12 @@
             <artifactId>capability-file</artifactId>
             <version>${project.version}</version>
         </dependency>
-
+        <!-- 支付宝开放平台能力(PlatformAlipayAuthConfigService 装载配置时转换为 capability 层 POJO) -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>capability-alipay</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- 项目配置 -->
         <dependency>
             <groupId>cn.daxpay.open</groupId>

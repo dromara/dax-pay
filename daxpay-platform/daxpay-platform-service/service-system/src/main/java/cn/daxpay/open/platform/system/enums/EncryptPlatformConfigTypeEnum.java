@@ -15,7 +15,13 @@ import java.util.Arrays;
 public enum EncryptPlatformConfigTypeEnum implements I18nSupport {
 
     /// 对象存储配置
-    OSS("oss");
+    OSS("oss"),
+
+    /// 支付宝开放平台认证配置(appId/私钥/证书, 含敏感信息加密存储)
+    ALIPAY_AUTH("alipay_auth"),
+
+    /// 微信公众号 H5 认证配置(appId/appSecret, 含敏感信息加密存储)
+    WECHAT_MP_AUTH("wechat_mp_auth");
 
     /// 编码
     private final String code;
