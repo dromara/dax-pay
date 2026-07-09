@@ -182,3 +182,6 @@ COMMENT ON COLUMN pay_platform_wechat_message_record.deleted IS '逻辑删除标
 CREATE INDEX IF NOT EXISTS idx_pay_platform_wechat_message_record_user_id ON pay_platform_wechat_message_record (user_id);
 CREATE INDEX IF NOT EXISTS idx_pay_platform_wechat_message_record_status ON pay_platform_wechat_message_record (status);
 CREATE INDEX IF NOT EXISTS idx_pay_platform_wechat_message_record_send_time ON pay_platform_wechat_message_record (send_time);
+
+-- rename iam_social_config -> iam_social_login_config (avoid naming clash with upcoming third-party platform management)
+ALTER TABLE IF EXISTS iam_social_config RENAME TO iam_social_login_config;

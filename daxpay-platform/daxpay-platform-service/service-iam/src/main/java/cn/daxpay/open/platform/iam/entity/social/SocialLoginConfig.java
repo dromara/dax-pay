@@ -1,7 +1,7 @@
 package cn.daxpay.open.platform.iam.entity.social;
 
-import cn.daxpay.open.platform.iam.convert.social.SocialConfigConvert;
-import cn.daxpay.open.platform.iam.result.social.SocialConfigResult;
+import cn.daxpay.open.platform.iam.convert.social.SocialLoginConfigConvert;
+import cn.daxpay.open.platform.iam.result.social.SocialLoginConfigResult;
 import cn.daxpay.open.platform.capability.social.justauth.SocialSourceEnum;
 import cn.daxpay.open.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.daxpay.open.platform.common.mybatisplus.function.ToResult;
@@ -23,8 +23,8 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
-@TableName(value = "iam_social_config", autoResultMap = true)
-public class SocialConfig extends MpBaseEntity implements ToResult<SocialConfigResult> {
+@TableName(value = "iam_social_login_config", autoResultMap = true)
+public class SocialLoginConfig extends MpBaseEntity implements ToResult<SocialLoginConfigResult> {
 
     /// 平台编码
     /// @see SocialSourceEnum
@@ -49,7 +49,7 @@ public class SocialConfig extends MpBaseEntity implements ToResult<SocialConfigR
     private Boolean enabled;
 
     @Override
-    public SocialConfigResult toResult() {
-        return SocialConfigConvert.CONVERT.toResult(this);
+    public SocialLoginConfigResult toResult() {
+        return SocialLoginConfigConvert.CONVERT.toResult(this);
     }
 }

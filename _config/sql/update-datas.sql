@@ -41,3 +41,12 @@ INSERT INTO "public"."iam_perm_menu" VALUES (
   NULL, NULL, NULL, NULL, NULL, NULL,
   '2026-07-09 16:00:00+00', '2026-07-09 16:00:00+00'
 );
+
+-- ===== social login config migration: menu_code/name/i18n_key/component/path =====
+UPDATE iam_perm_menu SET
+  menu_code = 'iam:social:login-config',
+  name = 'SocialLoginConfig',
+  i18n_key = 'menu.system.config.socialLogin',
+  component = 'views/iam/social/social-login-config',
+  path = '/system/config/social-login'
+WHERE id = 900001;

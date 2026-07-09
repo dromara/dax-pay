@@ -12,7 +12,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @Schema(title = "第三方平台登录配置参数")
-public class SocialConfigParam {
+public class SocialLoginConfigParam {
 
     @Schema(description = "平台编码")
     @NotBlank(message = "{validation.field.source.notBlank}")

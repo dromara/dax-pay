@@ -3,9 +3,9 @@ package cn.daxpay.open.platform.iam.convert.social;
 import java.util.Collections;
 import java.util.Map;
 
-import cn.daxpay.open.platform.iam.entity.social.SocialConfig;
-import cn.daxpay.open.platform.iam.param.social.SocialConfigParam;
-import cn.daxpay.open.platform.iam.result.social.SocialConfigResult;
+import cn.daxpay.open.platform.iam.entity.social.SocialLoginConfig;
+import cn.daxpay.open.platform.iam.param.social.SocialLoginConfigParam;
+import cn.daxpay.open.platform.iam.result.social.SocialLoginConfigResult;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import org.mapstruct.Mapper;
@@ -18,15 +18,15 @@ import org.mapstruct.factory.Mappers;
 /// 通过 default 类型转换方法桥接, MapStruct 会按参数方向自动套用.
 ///
 @Mapper
-public interface SocialConfigConvert {
+public interface SocialLoginConfigConvert {
 
-    SocialConfigConvert CONVERT = Mappers.getMapper(SocialConfigConvert.class);
+    SocialLoginConfigConvert CONVERT = Mappers.getMapper(SocialLoginConfigConvert.class);
 
-    SocialConfigResult toResult(SocialConfig entity);
+    SocialLoginConfigResult toResult(SocialLoginConfig entity);
 
-    SocialConfig toEntity(SocialConfigParam param);
+    SocialLoginConfig toEntity(SocialLoginConfigParam param);
 
-    void copy(SocialConfigParam param, @MappingTarget SocialConfig entity);
+    void copy(SocialLoginConfigParam param, @MappingTarget SocialLoginConfig entity);
 
     /// Map -> jsonb 原始文本(Param.extra -> Entity.extra)
     default String map(Map<String, String> map) {

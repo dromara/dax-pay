@@ -10,7 +10,7 @@ import cn.daxpay.open.platform.capability.social.justauth.model.AuthCallback;
 import cn.daxpay.open.platform.capability.social.justauth.model.AuthUser;
 import cn.daxpay.open.platform.capability.social.justauth.request.SocialAuthRequest;
 import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
-import cn.daxpay.open.platform.iam.entity.social.SocialConfig;
+import cn.daxpay.open.platform.iam.entity.social.SocialLoginConfig;
 import cn.daxpay.open.platform.iam.enums.SocialClientEnum;
 import cn.daxpay.open.platform.iam.result.social.SocialBindResult;
 import cn.daxpay.open.platform.iam.result.social.SocialEnabledPlatformResult;
@@ -51,14 +51,14 @@ public class SocialLoginService {
 
     private final IamSocialLoginHandler socialLoginHandler;
 
-    private final SocialConfigService socialConfigService;
+    private final SocialLoginConfigService socialLoginConfigService;
 
     private final PlatformUrlConfigService platformUrlConfigService;
 
     /// 查询已启用的第三方登录平台(登录页公开接口)
     /// 仅返回平台编码列表, 不含任何敏感字段, 供登录页动态渲染第三方登录按钮.
     public List<SocialEnabledPlatformResult> enabledList() {
-        return socialConfigService.findEnabledList();
+        return socialLoginConfigService.findEnabledList();
     }
 
     /// 生成授权地址
@@ -67,7 +67,7 @@ public class SocialLoginService {
     /// @param mode 授权场景(不传则按登录态判断: 已登录=绑定, 未登录=登录)
     public String generateAuthorizeUrl(String source, String client, String mode) {
         // 加载平台配置(全局唯一)
-        SocialConfig config = this.loadEnabledConfig(source);
+        SocialLoginConfig config = this.loadEnabledConfig(source);
         SocialSourceEnum socialSource = SocialSourceEnum.of(source);
         if (socialSource == null) {
             // 社交登录: 不支持的平台
@@ -83,7 +83,7 @@ public class SocialLoginService {
         // 根据场景拼接回调基础地址
         String redirectUri = this.buildRedirectUri(baseUrl, authMode);
         // 构建授权请求
-        SocialAuthConfig authConfig = socialConfigService.buildAuthConfig(config, redirectUri);
+        SocialAuthConfig authConfig = socialLoginConfigService.buildAuthConfig(config, redirectUri);
         SocialAuthRequest request = socialAuthRequestFactory.create(socialSource, authConfig);
         // state 仅用于 OAuth2 合规, 不缓存业务上下文
         String state = IdUtil.fastSimpleUUID();
@@ -147,12 +147,12 @@ public class SocialLoginService {
 
     /// 共享: code 换 AuthUser(登录/绑定共用)
     private AuthUser doExchange(String code, String state, String source, String redirectUri) {
-        SocialConfig config = socialConfigService.findEnabledBySource(source);
+        SocialLoginConfig config = socialLoginConfigService.findEnabledBySource(source);
         if (config == null) {
             // 社交登录: 平台未配置或未启用
             throw new OperationFailException("error.social.configNotExist");
         }
-        SocialAuthConfig authConfig = socialConfigService.buildAuthConfig(config, redirectUri);
+        SocialAuthConfig authConfig = socialLoginConfigService.buildAuthConfig(config, redirectUri);
         SocialSourceEnum socialSource = SocialSourceEnum.of(source);
         if (socialSource == null) {
             throw new OperationFailException("error.social.unsupportedSource");
@@ -190,8 +190,8 @@ public class SocialLoginService {
     }
 
     /// 加载已启用的平台配置(不存在则抛业务异常)
-    private SocialConfig loadEnabledConfig(String source) {
-        SocialConfig config = socialConfigService.findEnabledBySource(source);
+    private SocialLoginConfig loadEnabledConfig(String source) {
+        SocialLoginConfig config = socialLoginConfigService.findEnabledBySource(source);
         if (config == null) {
             // 社交登录: 平台未配置或未启用
             throw new OperationFailException("error.social.configNotExist");

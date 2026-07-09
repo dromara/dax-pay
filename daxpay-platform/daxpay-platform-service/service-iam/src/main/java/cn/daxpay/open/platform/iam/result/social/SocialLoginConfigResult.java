@@ -12,7 +12,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @Schema(title = "第三方平台登录配置结果")
-public class SocialConfigResult {
+public class SocialLoginConfigResult {
 
     @Schema(description = "主键")
     private Long id;
@@ -37,4 +37,10 @@ public class SocialConfigResult {
 
     @Schema(description = "是否启用")
     private Boolean enabled;
+
+    /// 是否"平台级跳转型"配置(运行时由 SocialSourceEnum.isPlatformRedirect() 计算, 不落库)
+    /// true: 不在本表存 clientId/clientSecret, 使用独立平台级配置, 前端卡片渲染为跳转按钮
+    /// false: 标准 OAuth2 平台, 在本表存 clientId/clientSecret
+    @Schema(description = "是否平台级跳转型配置(前端据此渲染跳转按钮)")
+    private boolean platformRedirect;
 }
