@@ -158,3 +158,46 @@ CREATE INDEX IF NOT EXISTS idx_pay_platform_wechat_message_record_send_time ON p
 
 -- rename iam_social_config -> iam_social_login_config (avoid naming clash with upcoming third-party platform management)
 ALTER TABLE IF EXISTS iam_social_config RENAME TO iam_social_login_config;
+
+-- ----------------------------
+-- 平台级移动端应用配置(按 app_type + platform 维度, 每组合一条)
+-- app_config/notify_config 使用 text + DataEncryptTypeHandler 加密存储(密文非合法JSON, 故不用 jsonb)
+-- ----------------------------
+CREATE TABLE IF NOT EXISTS pay_platform_mobile_app (
+    id                    int8          NOT NULL,
+    app_type              varchar(32)   NOT NULL,
+    platform              varchar(32)   NOT NULL,
+    app_name              varchar(64),
+    app_config            text,
+    notify_config         text,
+    binding_enabled       bool          NOT NULL DEFAULT false,
+    enabled               bool          NOT NULL DEFAULT true,
+    remark                varchar(500),
+    creator               int8,
+    create_time           timestamptz(6),
+    last_modifier         int8,
+    last_modified_time    timestamptz(6),
+    version               int4          NOT NULL DEFAULT 0,
+    deleted               bool          NOT NULL DEFAULT false,
+    CONSTRAINT pk_pay_platform_mobile_app PRIMARY KEY (id)
+);
+
+COMMENT ON TABLE  pay_platform_mobile_app IS '平台级移动端应用配置';
+COMMENT ON COLUMN pay_platform_mobile_app.id IS '主键';
+COMMENT ON COLUMN pay_platform_mobile_app.app_type IS '端类型: merchant-商户端 / admin-管理端 / cashier-收银台';
+COMMENT ON COLUMN pay_platform_mobile_app.platform IS '移动平台: wx_h5/wx_mini/alipay_mini/dy_mini/android/ios';
+COMMENT ON COLUMN pay_platform_mobile_app.app_name IS '应用名称(展示用)';
+COMMENT ON COLUMN pay_platform_mobile_app.app_config IS '平台特有密钥配置(JSON文本, AES-256-GCM加密存储)';
+COMMENT ON COLUMN pay_platform_mobile_app.notify_config IS '消息通知配置(JSON文本, AES-256-GCM加密存储)';
+COMMENT ON COLUMN pay_platform_mobile_app.binding_enabled IS '是否启用第三方账号用户绑定';
+COMMENT ON COLUMN pay_platform_mobile_app.enabled IS '是否启用';
+COMMENT ON COLUMN pay_platform_mobile_app.remark IS '备注';
+COMMENT ON COLUMN pay_platform_mobile_app.creator IS '创建者ID';
+COMMENT ON COLUMN pay_platform_mobile_app.create_time IS '创建时间';
+COMMENT ON COLUMN pay_platform_mobile_app.last_modifier IS '最后修改者ID';
+COMMENT ON COLUMN pay_platform_mobile_app.last_modified_time IS '最后修改时间';
+COMMENT ON COLUMN pay_platform_mobile_app.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN pay_platform_mobile_app.deleted IS '逻辑删除标记';
+
+CREATE UNIQUE INDEX IF NOT EXISTS uk_pay_platform_mobile_app_type_platform
+    ON pay_platform_mobile_app (app_type, platform) WHERE deleted = false;
