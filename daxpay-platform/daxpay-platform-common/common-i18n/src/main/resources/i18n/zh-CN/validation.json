@@ -340,6 +340,9 @@
     "appType": {
       "notBlank": "应用类型不可为空"
     },
+    "authAppType": {
+      "notBlank": "认证应用类型不可为空"
+    },
     "wxAppId": {
       "notBlank": "微信应用AppId不可为空"
     },

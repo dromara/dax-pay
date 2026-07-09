@@ -3,6 +3,7 @@ package cn.daxpay.open.channel.wechat.service.isv;
 import cn.daxpay.open.channel.wechat.code.WechatAuthAppTypeEnum;
 import cn.daxpay.open.channel.wechat.dao.isv.WechatIsvChannelMerchantManager;
 import cn.daxpay.open.channel.wechat.entity.isv.WechatIsvChannelMerchant;
+import cn.daxpay.open.channel.wechat.param.isv.WechatIsvAuthAppTypeUpdateParam;
 import cn.daxpay.open.channel.wechat.param.isv.WechatIsvChannelMerchantCreateParam;
 import cn.daxpay.open.channel.wechat.result.isv.WechatIsvChannelMerchantResult;
 import cn.daxpay.open.payment.channel.dao.mch.ChannelMerchantManager;
@@ -17,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Arrays;
 
 /// # 微信服务商通道商户管理
 ///
@@ -58,9 +61,12 @@ public class WechatIsvChannelMerchantService {
         entity.setProduct(param.getProduct());
         entity.setSubMchId(param.getSubMchId());
         // 认证应用类型: 不传默认 SP_APP(服务商应用), 认证策略据此路由 sp/sub 应用
-        entity.setAuthAppType(StrUtil.isNotBlank(param.getAuthAppType())
-                ? param.getAuthAppType()
-                : WechatAuthAppTypeEnum.SP_APP.getCode());
+        if (StrUtil.isNotBlank(param.getAuthAppType())) {
+            validateAuthAppType(param.getAuthAppType());
+            entity.setAuthAppType(param.getAuthAppType());
+        } else {
+            entity.setAuthAppType(WechatAuthAppTypeEnum.SP_APP.getCode());
+        }
         wechatIsvChannelMerchantManager.save(entity);
     }
 
@@ -72,5 +78,30 @@ public class WechatIsvChannelMerchantService {
                 .map(WechatIsvChannelMerchant::toResult)
                 // 微信: 通道商户配置不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
+    }
+
+    /// 更新认证应用类型
+    ///
+    /// 控制 OpenId 授权使用服务商应用还是子商户应用。
+    @Transactional(rollbackFor = Exception.class)
+    public void updateAuthAppType(WechatIsvAuthAppTypeUpdateParam param) {
+        validateAuthAppType(param.getAuthAppType());
+        var entity = wechatIsvChannelMerchantManager.lambdaQuery()
+                .eq(WechatIsvChannelMerchant::getChannelMchNo, param.getChannelMchNo())
+                .oneOpt()
+                // 微信: 通道商户配置不存在
+                .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
+        entity.setAuthAppType(param.getAuthAppType());
+        wechatIsvChannelMerchantManager.updateById(entity);
+    }
+
+    /// 校验认证应用类型
+    private void validateAuthAppType(String authAppType) {
+        boolean valid = Arrays.stream(WechatAuthAppTypeEnum.values())
+                .anyMatch(item -> item.getCode().equals(authAppType));
+        if (!valid) {
+            // 微信: 认证应用类型无效
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.wechat.authAppTypeInvalid");
+        }
     }
 }
