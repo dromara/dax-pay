@@ -24,11 +24,22 @@
             <artifactId>daxpay-platform-core</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <!-- 支付宝开放平台 SDK -->
+        <!-- hutool http (OpenAPI 直连) -->
         <dependency>
-            <groupId>com.alipay.sdk</groupId>
-            <artifactId>alipay-sdk-java</artifactId>
-            <version>${alipay-sdk.version}</version>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-http</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
+        <!-- hutool json (响应解析) -->
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-json</artifactId>
+            <version>${hutool.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

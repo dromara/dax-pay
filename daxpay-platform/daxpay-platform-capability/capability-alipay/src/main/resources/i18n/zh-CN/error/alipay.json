@@ -1,4 +1,4 @@
 {
   "authFailed": "换取支付宝用户标识失败: {0}",
-  "clientInitFailed": "支付宝 SDK 客户端构造失败: {0}"
+  "clientInitFailed": "支付宝 OpenAPI 初始化失败: {0}"
 }
