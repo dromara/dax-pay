@@ -109,7 +109,7 @@ daxpay:
           # 查询模式: VECTOR_INDEX(推荐) 或 CACHE
           search-type: VECTOR_INDEX
     config:
-      # 证书配置0
+      # 平台公私钥(证书)配置, 用于接口请求/回调的 RSA 签名与验签
       key-config:
             # 私钥配置
             private-key: '-----BEGIN PRIVATE KEY-----
@@ -150,11 +150,22 @@ daxpay:
               qEYdxyjbqztxm0SmYwl885mcGPBNPTt9ApoRWR3CGRfE8pcQieuB0YdsdSh9+ZSa
               IwIDAQAB
               -----END PUBLIC KEY-----'
+      # 数据加密配置(数据库敏感字段透明加解密, AES-256-GCM, 由 MyBatis-Plus TypeHandler 自动处理)
       encrypt:
+        # 是否启用数据加密; 启用后敏感字段写入自动加密、读取自动解密
+        # 注意: 启用并写入加密数据后不要关闭, 否则历史密文读取时不再解密(以密文原文返回)
         enable: true
+        # 密钥列表(支持密钥轮换, 列表内版本号不可重复)
+        # 第一个为当前密钥(用于加密新数据), 其余为历史密钥(仅用于解密旧数据)
+        # 密文格式: v{版本号}:{base64(IV + AES-GCM 密文)}, 解密时按版本前缀匹配对应密钥
         keys:
+          # 32 位 AES 密钥(必须正好 32 个字符); 轮换时生成新密钥置于列表首位并使用更大的版本号
           - key: z0Vd8jDKB80pA6OOptGLO+qDVvWboEko
+            # 密钥版本号(整数, 列表内唯一)
             version: 1
+      # 沙箱环境全局开关: false=生产模式(本机开发默认), true=沙箱模式
+      # 关闭后不可切换到沙箱; 若启动时已有产品处于沙箱, 将自动重置为生产环境
+      sandbox-enabled: false
   # 通道适配子应用配置
   # 按支付通道拆分的独立部署子服务, 主服务通过 HTTP 调用对应子服务完成通道对接。
   # 拆分目的: 通道 SDK 依赖隔离(避免冲突) + 独立升级 + 弹性伸缩

@@ -55,6 +55,10 @@ public class LakalaIsvConfigAssembler {
         LakalaIsvChannelMerchant channelMerchant = lakalaIsvChannelMerchantManager.findByChannelMchNo(channelMchNo)
                 // 拉卡拉: 通道商户配置不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
+        // 环境一致性校验
+        if (channelMerchant.isSandbox() != sandbox) {
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.envMismatch");
+        }
 
         LakalaSdkCredential credential = new LakalaSdkCredential();
         // 服务商身份与密钥

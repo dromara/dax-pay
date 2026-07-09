@@ -29,6 +29,9 @@ public class AlipayDirectChannelMerchant extends MchBaseEntity implements ToResu
     /// 支付宝商家唯一识别码(2088开头的16位数字)
     private String alipayUserId;
 
+    /// 是否沙箱环境商户
+    private boolean sandbox;
+
     /// 转换
     @Override
     public AlipayDirectChannelMerchantResult toResult() {

@@ -6,8 +6,10 @@ import cn.daxpay.open.channel.hmpay.entity.isv.HmpayIsvChannelMerchant;
 import cn.daxpay.open.channel.hmpay.entity.isv.HmpayIsvKeyConfig;
 import cn.daxpay.open.payment.masterdata.constants.product.dao.PayProductConfigManager;
 import cn.daxpay.open.payment.masterdata.constants.product.entity.PayProductConfig;
+import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.config.PayEnvEnum;
+import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,6 +52,11 @@ public class HmpayIsvConfigAssembler {
         HmpayIsvChannelMerchant channelMerchant = hmpayIsvChannelMerchantManager.findByChannelMchNo(channelMchNo)
                 // 河马付: 通道商户配置不存在
                 .orElseThrow(() -> new DataNotExistException("payment.error.channel.channelMerchantNotExist"));
+
+        // 环境一致性校验
+        if (channelMerchant.isSandbox() != sandbox) {
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.envMismatch");
+        }
 
         HmpaySdkCredential credential = new HmpaySdkCredential();
         // 服务商身份与密钥

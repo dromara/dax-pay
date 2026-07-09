@@ -74,6 +74,11 @@ public class NormalPayParam extends MerchantPaymentCommonParam {
     @Schema(description = "用户标识OpenId")
     private String openId;
 
+    /// 指定支付/认证使用的应用AppId, 优先级高于配置自动解析, 必须在系统中预先配置过
+    @Size(max = 128, message = "{validation.field.opAppId.size}")
+    @Schema(description = "指定应用AppId")
+    private String opAppId;
+
     /// 付款码（被扫支付必填）
     @Size(max = 128, message = "{validation.field.authCode.size}")
     @Schema(description = "付款码")

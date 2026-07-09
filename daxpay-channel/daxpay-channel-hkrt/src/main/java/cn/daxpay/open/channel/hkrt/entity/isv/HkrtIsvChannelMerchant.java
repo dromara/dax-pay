@@ -27,6 +27,9 @@ public class HkrtIsvChannelMerchant extends MchBaseEntity implements ToResult<Hk
     /// @see cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum
     private String product;
 
+    /// 是否沙箱环境商户
+    private boolean sandbox;
+
     /// 海科商户号(merch_no)
     private String merchNo;
 

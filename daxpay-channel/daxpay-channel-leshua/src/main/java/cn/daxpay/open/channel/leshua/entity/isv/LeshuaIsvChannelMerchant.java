@@ -27,6 +27,9 @@ public class LeshuaIsvChannelMerchant extends MchBaseEntity implements ToResult<
     /// @see cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum
     private String product;
 
+    /// 是否沙箱环境商户
+    private boolean sandbox;
+
     /// 乐刷商户编号(merchant_id)
     private String lsMchNo;
 

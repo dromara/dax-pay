@@ -27,6 +27,9 @@ public class FuyouIsvChannelMerchant extends MchBaseEntity implements ToResult<F
     /// @see cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum
     private String product;
 
+    /// 是否沙箱环境商户
+    private boolean sandbox;
+
     /// 富友商户号(mchnt_cd)
     private String fuyouMchNo;
 

@@ -13,10 +13,9 @@ import cn.daxpay.open.payment.channel.param.mch.ChannelMerchantQuery;
 import cn.daxpay.open.payment.channel.result.info.ChannelMerchantResult;
 import cn.daxpay.open.payment.masterdata.constants.channel.service.PayChannelService;
 import cn.daxpay.open.payment.masterdata.constants.channel.result.PayChannelResult;
-import cn.daxpay.open.payment.masterdata.constants.product.dao.PayProductConfigManager;
 import cn.daxpay.open.payment.masterdata.constants.product.dao.PayProductManager;
 import cn.daxpay.open.payment.masterdata.constants.product.entity.PayProduct;
-import cn.daxpay.open.payment.masterdata.constants.product.entity.PayProductConfig;
+import cn.daxpay.open.platform.core.enums.pay.config.PayEnvEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -37,7 +36,6 @@ public class ChannelMerchantService {
     private final ChannelMerchantManager channelMerchantManager;
     private final PayChannelService payChannelService;
     private final MerchantPermissionService merchantPermissionService;
-    private final PayProductConfigManager payProductConfigManager;
     private final PayProductManager payProductManager;
 
     /// 分页
@@ -99,7 +97,8 @@ public class ChannelMerchantService {
         return results;
     }
 
-    /// 批量填充生效环境与沙箱支持标志(来自支付产品配置, 商户只读)
+    /// 批量填充生效环境与沙箱支持标志
+    /// activeEnv 从商户自身的 sandbox 字段推导, sandboxSupport 从支付产品表读取
     private void fillEnvStatus(List<ChannelMerchantResult> results) {
         if (results.isEmpty()) {
             return;
@@ -111,20 +110,15 @@ public class ChannelMerchantService {
         if (products.isEmpty()) {
             return;
         }
-        // 生效环境
-        Map<String, String> envMap = payProductConfigManager.lambdaQuery()
-                .in(PayProductConfig::getProduct, products)
-                .list()
-                .stream()
-                .collect(Collectors.toMap(PayProductConfig::getProduct, PayProductConfig::getActiveEnv, (a, b) -> a));
-        // 沙箱支持标志
+        // 沙箱支持标志(来自支付产品表, 决定前端是否显示环境标签)
         Map<String, Boolean> sandboxMap = payProductManager.lambdaQuery()
                 .in(PayProduct::getCode, products)
                 .list()
                 .stream()
                 .collect(Collectors.toMap(PayProduct::getCode, p -> Boolean.TRUE.equals(p.getSandbox()), (a, b) -> a));
         results.forEach(r -> {
-            r.setActiveEnv(envMap.get(r.getProduct()));
+            // activeEnv 从商户自身的 sandbox 字段推导
+            r.setActiveEnv(r.isSandbox() ? PayEnvEnum.SANDBOX.getCode() : PayEnvEnum.PROD.getCode());
             r.setSandboxSupport(sandboxMap.getOrDefault(r.getProduct(), false));
         });
     }

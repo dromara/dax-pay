@@ -29,4 +29,8 @@ public class ChannelMerchantQuery {
     @Schema(description = "所属商户")
     private String mchNo;
 
+    /// 是否沙箱环境商户
+    @Schema(description = "是否沙箱环境商户")
+    private Boolean sandbox;
+
 }

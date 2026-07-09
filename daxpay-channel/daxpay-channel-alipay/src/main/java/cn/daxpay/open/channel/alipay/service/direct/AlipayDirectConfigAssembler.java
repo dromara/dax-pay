@@ -1,12 +1,16 @@
 package cn.daxpay.open.channel.alipay.service.direct;
 
 import cn.daxpay.open.channel.alipay.dao.direct.AlipayDirectAppManager;
+import cn.daxpay.open.channel.alipay.dao.direct.AlipayDirectChannelMerchantManager;
 import cn.daxpay.open.channel.alipay.client.credential.AlipaySdkCredential;
 import cn.daxpay.open.channel.alipay.entity.direct.AlipayDirectApp;
 import cn.daxpay.open.channel.alipay.entity.direct.AlipayDirectAppKeyConfig;
+import cn.daxpay.open.channel.alipay.entity.direct.AlipayDirectChannelMerchant;
 import cn.daxpay.open.payment.masterdata.constants.product.dao.PayProductConfigManager;
+import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.config.PayEnvEnum;
+import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +32,7 @@ import java.util.Optional;
 public class AlipayDirectConfigAssembler {
 
     private final AlipayDirectAppManager alipayDirectAppManager;
+    private final AlipayDirectChannelMerchantManager alipayDirectChannelMerchantManager;
     private final AlipayDirectAppKeyConfigService alipayDirectAppKeyConfigService;
     private final AlipayDirectAppCapabilityService alipayDirectAppCapabilityService;
     private final PayProductConfigManager payProductConfigManager;
@@ -45,6 +50,14 @@ public class AlipayDirectConfigAssembler {
         boolean sandbox = payProductConfigManager.findByProduct(ProductEnum.ALIPAY.getCode())
                 .map(c -> PayEnvEnum.SANDBOX.getCode().equals(c.getActiveEnv()))
                 .orElse(false);
+        // 环境一致性校验: 通道商户绑定的沙箱标记需与产品当前生效环境一致
+        AlipayDirectChannelMerchant channelMerchant = alipayDirectChannelMerchantManager.lambdaQuery()
+                .eq(AlipayDirectChannelMerchant::getChannelMchNo, channelMchNo)
+                .oneOpt()
+                .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
+        if (channelMerchant.isSandbox() != sandbox) {
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.envMismatch");
+        }
         AlipayDirectAppKeyConfig keyConfig = alipayDirectAppKeyConfigService.findByAlipayDirectAppId(app.getId(), sandbox);
 
         var credential = new AlipaySdkCredential();

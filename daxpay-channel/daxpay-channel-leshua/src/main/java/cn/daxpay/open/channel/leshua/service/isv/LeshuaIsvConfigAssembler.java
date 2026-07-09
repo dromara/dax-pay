@@ -6,8 +6,10 @@ import cn.daxpay.open.channel.leshua.entity.isv.LeshuaIsvChannelMerchant;
 import cn.daxpay.open.channel.leshua.entity.isv.LeshuaIsvKeyConfig;
 import cn.daxpay.open.payment.masterdata.constants.product.dao.PayProductConfigManager;
 import cn.daxpay.open.payment.masterdata.constants.product.entity.PayProductConfig;
+import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.config.PayEnvEnum;
+import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,6 +49,14 @@ public class LeshuaIsvConfigAssembler {
                 .orElse(false);
         // 服务商密钥(按生效环境取对应环境密钥, 含 lsMchNo + tradeKey + signType)
         LeshuaIsvKeyConfig keyConfig = leshuaIsvKeyConfigService.getByProductForPay(ProductEnum.LESHUA_PAY.getCode(), sandbox);
+        // 通道商户绑定(校验环境一致性)
+        LeshuaIsvChannelMerchant channelMerchant = leshuaIsvChannelMerchantManager.findByChannelMchNo(channelMchNo)
+                // 乐刷: 通道商户配置不存在
+                .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
+        // 环境一致性校验
+        if (channelMerchant.isSandbox() != sandbox) {
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.envMismatch");
+        }
 
         LeshuaSdkCredential credential = new LeshuaSdkCredential();
         credential.setLsMchNo(keyConfig.getLsMchNo());

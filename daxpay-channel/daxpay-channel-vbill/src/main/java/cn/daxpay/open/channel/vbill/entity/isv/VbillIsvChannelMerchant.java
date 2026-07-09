@@ -27,6 +27,9 @@ public class VbillIsvChannelMerchant extends MchBaseEntity implements ToResult<V
     /// @see cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum
     private String product;
 
+    /// 是否沙箱环境商户
+    private boolean sandbox;
+
     /// 天阙商户号(mno)
     private String vbillMchNo;
 

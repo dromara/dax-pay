@@ -66,7 +66,7 @@ public class NotifySseService {
         if (emitters.isEmpty()) {
             return;
         }
-        emitters.forEach((userId, set) -> sendAll(set, payload));
+        emitters.forEach((_, set) -> sendAll(set, payload));
     }
 
     /// 推送给指定用户(个人消息场景)

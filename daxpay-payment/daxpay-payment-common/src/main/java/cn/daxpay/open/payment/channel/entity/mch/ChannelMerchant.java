@@ -43,6 +43,9 @@ public class ChannelMerchant extends MchBaseEntity implements ToResult<ChannelMe
     /// 申请单ID
     private Long applyId;
 
+    /// 是否沙箱环境商户
+    private boolean sandbox;
+
     public Boolean getEnable() {
         return Objects.equals(enable, true);
     }

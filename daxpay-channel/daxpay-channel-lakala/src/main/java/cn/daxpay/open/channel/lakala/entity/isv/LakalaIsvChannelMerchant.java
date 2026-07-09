@@ -27,6 +27,9 @@ public class LakalaIsvChannelMerchant extends MchBaseEntity implements ToResult<
     /// @see cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum
     private String product;
 
+    /// 是否沙箱环境商户
+    private boolean sandbox;
+
     /// 拉卡拉商户编号(merchantNo)
     private String lakalaMchNo;
 

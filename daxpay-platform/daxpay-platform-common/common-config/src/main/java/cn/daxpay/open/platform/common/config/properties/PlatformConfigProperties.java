@@ -30,6 +30,9 @@ public class PlatformConfigProperties {
     @Valid
     private Encrypt encrypt = new Encrypt();
 
+    /// 沙箱环境全局开关(关闭后不可切换到沙箱, 已在沙箱的产品启动时自动重置为生产)
+    private boolean sandboxEnabled = true;
+
     /// # 平台公私钥配置
     ///
     @Slf4j
