@@ -43,7 +43,6 @@ public class WechatIsvAppAuthConfigService {
     public void save(WechatIsvAppAuthConfigParam param) {
         var config = this.findByWechatIsvAppId(param.getWechatIsvAppId());
         config.setAppSecret(param.getAppSecret());
-        config.setAuthCallbackUrl(param.getAuthCallbackUrl());
         wechatIsvAppAuthConfigManager.updateById(config);
     }
 

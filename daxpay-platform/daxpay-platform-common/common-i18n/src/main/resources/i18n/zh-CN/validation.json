@@ -48,10 +48,6 @@
     "userIdType": {
       "notBlank": "用户标识类型不可为空"
     },
-    "authCallbackUrl": {
-      "notBlank": "授权回调地址不可为空",
-      "size": "授权回调地址不可超过512位"
-    },
     "product": {
       "notBlank": "产品编码不可为空",
       "size": "支付产品不可超过32位",

@@ -48,10 +48,6 @@
     "userIdType": {
       "notBlank": "User ID type cannot be blank"
     },
-    "authCallbackUrl": {
-      "notBlank": "Authorization callback URL cannot be blank",
-      "size": "Authorization callback URL cannot exceed 512 characters"
-    },
     "product": {
       "notBlank": "Product code cannot be blank",
       "size": "Product code cannot exceed 32 characters",

@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 
 /// # 抖音直连商户应用授权认证配置保存参数
 ///
-/// 保存/更新抖音直连商户应用授权认证配置时接收的请求参数，含商户号、通道商户号、应用密钥和授权回调地址。
+/// 保存/更新抖音直连商户应用授权认证配置时接收的请求参数，含商户号、通道商户号、应用密钥。
 ///
 @Data
 @Accessors(chain = true)
@@ -31,8 +31,4 @@ public class DouyinDirectAppAuthConfigParam {
     @Size(max = 512, message = "{validation.field.appSecret.size}")
     @Schema(description = "应用密钥")
     private String appSecret;
-
-    @Size(max = 512, message = "{validation.field.authCallbackUrl.size}")
-    @Schema(description = "授权回调地址")
-    private String authCallbackUrl;
 }

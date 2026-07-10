@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 /// # 微信服务商应用授权认证配置
 ///
 /// 服务商应用(WechatIsvApp)本身为平台级全局配置, 不挂商户维度,
-/// 其授权认证配置(appSecret/回调地址)同样为全局配置。
+/// 其授权认证配置(appSecret)同样为全局配置。
 ///
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -30,9 +30,6 @@ public class WechatIsvAppAuthConfig extends MpBaseEntity implements ToResult<Wec
     /// 应用密钥(加密存储)
     @TableField(typeHandler = DataEncryptTypeHandler.class)
     private String appSecret;
-
-    /// 授权回调地址
-    private String authCallbackUrl;
 
     /// 转换
     @Override

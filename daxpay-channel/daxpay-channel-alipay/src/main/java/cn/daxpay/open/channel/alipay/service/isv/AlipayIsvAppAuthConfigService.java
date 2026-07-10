@@ -58,7 +58,6 @@ public class AlipayIsvAppAuthConfigService {
         this.validateUserIdType(param.getUserIdType());
         var config = this.findByAlipayIsvAppId(param.getAlipayIsvAppId());
         config.setUserIdType(param.getUserIdType());
-        config.setAuthCallbackUrl(param.getAuthCallbackUrl());
         alipayIsvAppAuthConfigManager.updateById(config);
     }
 

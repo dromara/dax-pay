@@ -55,7 +55,6 @@ public class WechatDirectAppAuthConfigService {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.wechat.mchAppNotFound");
         }
         var config = this.findByWechatDirectAppId(param.getWechatDirectAppId());
-        config.setAuthCallbackUrl(param.getAuthCallbackUrl());
         WechatDirectAppAuthConfigConvert.CONVERT.copy(param, config);
         wechatDirectAppAuthConfigManager.updateById(config);
     }

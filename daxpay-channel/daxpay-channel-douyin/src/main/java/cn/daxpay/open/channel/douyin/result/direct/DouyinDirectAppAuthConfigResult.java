@@ -24,7 +24,4 @@ public class DouyinDirectAppAuthConfigResult extends MchBaseResult {
     @SensitiveInfo
     @Schema(description = "应用密钥 (已脱敏)")
     private String appSecret;
-
-    @Schema(description = "授权回调地址")
-    private String authCallbackUrl;
 }

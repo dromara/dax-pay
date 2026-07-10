@@ -13,7 +13,7 @@ import lombok.experimental.Accessors;
 
 /// # 支付宝直连商户应用授权认证配置
 ///
-/// 配置直连商户应用的用户标识类型和授权回调地址，用于支付宝用户授权流程中的身份识别与回调跳转。
+/// 配置直连商户应用的用户标识类型，用于支付宝用户授权流程中的身份识别。
 ///
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -31,9 +31,6 @@ public class AlipayDirectAppAuthConfig extends MchBaseEntity implements ToResult
 
     /// 用户标识类型
     private String userIdType;
-
-    /// 授权回调地址
-    private String authCallbackUrl;
 
     /// 转换
     @Override

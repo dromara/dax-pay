@@ -67,7 +67,6 @@ public class AlipayDirectAppAuthConfigService {
         this.validateUserIdType(param.getUserIdType());
         var config = this.findByAlipayDirectAppId(param.getAlipayDirectAppId());
         config.setUserIdType(param.getUserIdType());
-        config.setAuthCallbackUrl(param.getAuthCallbackUrl());
         alipayDirectAppAuthConfigManager.updateById(config);
     }
 

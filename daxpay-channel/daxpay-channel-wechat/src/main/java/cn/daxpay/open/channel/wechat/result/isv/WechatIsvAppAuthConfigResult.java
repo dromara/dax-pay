@@ -21,7 +21,4 @@ public class WechatIsvAppAuthConfigResult extends BaseResult {
     @SensitiveInfo(front = 12, end = 12)
     @Schema(description = "应用密钥(已脱敏)")
     private String appSecret;
-
-    @Schema(description = "授权回调地址（仅公众号）")
-    private String authCallbackUrl;
 }

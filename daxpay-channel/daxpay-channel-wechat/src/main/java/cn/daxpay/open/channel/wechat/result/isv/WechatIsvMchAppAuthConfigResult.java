@@ -9,7 +9,7 @@ import lombok.experimental.Accessors;
 
 /// # 微信服务商通道商户应用授权认证配置
 ///
-/// 微信服务商通道商户应用授权认证配置的返回结果对象,含商户号、通道商户号、应用密钥(脱敏)和授权回调地址。
+/// 微信服务商通道商户应用授权认证配置的返回结果对象,含商户号、通道商户号、应用密钥(脱敏)。
 ///
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -30,7 +30,4 @@ public class WechatIsvMchAppAuthConfigResult extends BaseResult {
     @SensitiveInfo
     @Schema(description = "应用密钥(已脱敏)")
     private String appSecret;
-
-    @Schema(description = "授权回调地址")
-    private String authCallbackUrl;
 }

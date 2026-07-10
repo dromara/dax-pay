@@ -54,7 +54,6 @@ public class DouyinDirectAppAuthConfigService {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.douyin.mchAppNotFound");
         }
         var config = this.findByDouyinDirectAppId(param.getDouyinDirectAppId());
-        config.setAuthCallbackUrl(param.getAuthCallbackUrl());
         // Convert copy(IGNORE) 自动处理 appSecret：null 不覆盖，非 null 设置新值
         DouyinDirectAppAuthConfigConvert.CONVERT.copy(param, config);
         douyinDirectAppAuthConfigManager.updateById(config);

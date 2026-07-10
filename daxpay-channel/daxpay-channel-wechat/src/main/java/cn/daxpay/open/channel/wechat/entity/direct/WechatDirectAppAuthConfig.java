@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
 
 /// # 微信直连商户应用授权认证配置
 ///
-/// 配置直连商户应用的应用密钥和授权回调地址，用于微信OAuth授权流程中的身份验证与回调跳转。
+/// 配置直连商户应用的应用密钥，用于微信OAuth授权流程中的身份验证。
 ///
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -33,9 +33,6 @@ public class WechatDirectAppAuthConfig extends MchBaseEntity implements ToResult
     /// 应用密钥(加密存储)
     @TableField(typeHandler = DataEncryptTypeHandler.class)
     private String appSecret;
-
-    /// 授权回调地址
-    private String authCallbackUrl;
 
     /// 转换
     @Override

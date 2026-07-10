@@ -10,7 +10,7 @@ import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
 /// # 通道抽象认证策略
 ///
 /// 负责获取支付所需的用户标识(微信 openId / 支付宝 userId)。按支付产品([cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum])
-/// 注册, 与支付策略粒度一致。策略复用支付的商户配置体系定位通道应用(appId/appSecret/authCallbackUrl)。
+/// 注册, 与支付策略粒度一致。策略复用支付的商户配置体系定位通道应用(appId/appSecret)。
 public abstract class AbsChannelAuthStrategy implements PaymentStrategy {
 
     /// 获取授权链接

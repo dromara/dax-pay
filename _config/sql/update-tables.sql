@@ -58,7 +58,7 @@ COMMENT ON COLUMN wechat_isv_channel_merchant.auth_app_type IS '认证应用类�
 
 -- ------------------------------------------------------------
 -- 微信服务商通道商户应用授权认证配置表
--- 配置服务商通道商户应用(子商户应用)的应用密钥和授权回调地址, 用于微信OAuth授权流程中的身份验证与回调跳转
+-- 配置服务商通道商户应用(子商户应用)的应用密钥, 用于微信OAuth授权流程中的身份验证
 -- 一个应用对应一份授权配置(由唯一约束 channel_mch_no + wechat_isv_mch_app_id 保证)
 -- ------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS wechat_isv_mch_app_auth_config (
@@ -66,7 +66,6 @@ CREATE TABLE IF NOT EXISTS wechat_isv_mch_app_auth_config (
     channel_mch_no            varchar(32)   NOT NULL,
     wechat_isv_mch_app_id     int8          NOT NULL,
     app_secret                varchar(255),
-    auth_callback_url         varchar(255),
     mch_no                    varchar(32),
     creator                   int8,
     create_time               timestamptz(6),
@@ -82,7 +81,6 @@ COMMENT ON COLUMN wechat_isv_mch_app_auth_config.id IS '主键';
 COMMENT ON COLUMN wechat_isv_mch_app_auth_config.channel_mch_no IS '通道商户号(服务商特约商户)';
 COMMENT ON COLUMN wechat_isv_mch_app_auth_config.wechat_isv_mch_app_id IS '关联服务商通道商户应用ID';
 COMMENT ON COLUMN wechat_isv_mch_app_auth_config.app_secret IS '应用密钥(加密存储)';
-COMMENT ON COLUMN wechat_isv_mch_app_auth_config.auth_callback_url IS '授权回调地址';
 COMMENT ON COLUMN wechat_isv_mch_app_auth_config.mch_no IS '商户号';
 COMMENT ON COLUMN wechat_isv_mch_app_auth_config.creator IS '创建者ID';
 COMMENT ON COLUMN wechat_isv_mch_app_auth_config.create_time IS '创建时间';

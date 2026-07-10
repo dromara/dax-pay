@@ -8,7 +8,7 @@ import lombok.experimental.Accessors;
 
 /// # 支付宝服务商应用授权认证配置
 ///
-/// 支付宝服务商应用授权认证配置的返回结果对象，包含用户标识类型和授权回调地址。
+/// 支付宝服务商应用授权认证配置的返回结果对象，包含用户标识类型。
 ///
 @EqualsAndHashCode(callSuper = true)
 @Data
@@ -23,8 +23,4 @@ public class AlipayIsvAppAuthConfigResult extends BaseResult {
     /// 用户标识类型
     @Schema(description = "用户标识类型")
     private String userIdType;
-
-    /// 授权回调地址
-    @Schema(description = "授权回调地址")
-    private String authCallbackUrl;
 }

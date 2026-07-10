@@ -2,7 +2,6 @@ package cn.daxpay.open.channel.wechat.param.isv;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -19,8 +18,4 @@ public class WechatIsvAppAuthConfigParam {
 
     @Schema(description = "应用密钥(加密存储)，所有应用类型首次保存时必填")
     private String appSecret;
-
-    @Size(max = 512, message = "{validation.field.authCallbackUrl.size}")
-    @Schema(description = "授权回调地址（仅公众号应用需要）")
-    private String authCallbackUrl;
 }

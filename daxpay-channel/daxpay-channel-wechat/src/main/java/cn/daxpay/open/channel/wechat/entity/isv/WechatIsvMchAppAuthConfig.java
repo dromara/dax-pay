@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
 
 /// # 微信服务商通道商户应用授权认证配置
 ///
-/// 配置服务商通道商户应用(子商户应用)的应用密钥和授权回调地址,用于微信OAuth授权流程中的身份验证与回调跳转。
+/// 配置服务商通道商户应用(子商户应用)的应用密钥,用于微信OAuth授权流程中的身份验证。
 /// 一个应用对应一份授权配置(由唯一约束 channel_mch_no + wechat_isv_mch_app_id 保证)。
 ///
 @EqualsAndHashCode(callSuper = true)
@@ -34,9 +34,6 @@ public class WechatIsvMchAppAuthConfig extends MchBaseEntity implements ToResult
     /// 应用密钥(加密存储)
     @TableField(typeHandler = DataEncryptTypeHandler.class)
     private String appSecret;
-
-    /// 授权回调地址
-    private String authCallbackUrl;
 
     /// 转换
     @Override
