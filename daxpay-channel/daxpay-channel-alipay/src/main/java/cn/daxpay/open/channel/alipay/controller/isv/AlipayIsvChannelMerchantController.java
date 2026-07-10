@@ -64,4 +64,11 @@ public class AlipayIsvChannelMerchantController {
     public Result<AlipayIsvAuthUrlResult> genAuthUrl(@RequestBody @Validated AlipayIsvAuthParam param) {
         return Res.ok(alipayIsvAuthService.genAuthUrl(param));
     }
+
+    @PermCode(code = "view", nameCn = "通道商户查看", nameEn = "Channel Merchant View")
+    @Operation(summary = "获取代运营授权回调地址")
+    @GetMapping("/auth-callback-url")
+    public Result<String> getAuthCallbackUrl() {
+        return Res.ok(alipayIsvAuthService.getAuthCallbackUrl());
+    }
 }

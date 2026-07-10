@@ -83,6 +83,16 @@ public class AlipayIsvAuthService {
         return new AlipayIsvAuthUrlResult().setAuthUrl(authUrl);
     }
 
+    /// 获取代运营授权回调地址(用于支付宝开放平台配置)
+    public String getAuthCallbackUrl() {
+        String gatewayBase = platformUrlConfigService.getUrlConfig().getPaymentGatewayBaseUrl();
+        if (StrUtil.isBlank(gatewayBase)) {
+            throw new BizInfoException(DaxPayErrorCode.OPERATION_FAIL,
+                    "error.channel.alipay.paymentGatewayUrlRequired");
+        }
+        return gatewayBase + "/isv-auth/alipay";
+    }
+
     /// H5 回调: 授权码换 token + 绑定校验 + 写回通道商户
     @Transactional(rollbackFor = Exception.class)
     public void auth(AlipayIsvAuthParam param) {
