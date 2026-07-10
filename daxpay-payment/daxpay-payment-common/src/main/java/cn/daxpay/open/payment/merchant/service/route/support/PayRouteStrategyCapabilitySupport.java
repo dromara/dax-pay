@@ -17,7 +17,7 @@ import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayCapabilityEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
-import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
+import cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.model.PayProviderMethodEntry;
 import cn.daxpay.open.platform.core.rest.dto.LabelValue;
@@ -27,7 +27,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
@@ -190,16 +189,24 @@ public class PayRouteStrategyCapabilitySupport {
                 .toList();
     }
 
-    /// 传值模式: 商户全部启用通道商户候选(不按支付方式过滤), channel 为空返回全部, 非空按通道过滤
-    public List<LabelValue> listDirectChannelMchCandidates(String mchNo, String channel) {
+    /// 传值模式: 商户全部启用通道商户候选(不按支付方式过滤)
+    ///
+    /// `providerCode` 为支付渠道编码(PayProviderEnum, 如 wechat/alipay/union_pay),
+    /// 非空时仅返回其产品声明支持该渠道的通道商户(含官方通道与三方聚合通道, 如 wechat 同时匹配 wechat_pay 与 lakala_pay);
+    /// 为空返回全部。
+    public List<LabelValue> listDirectChannelMchCandidates(String mchNo, String providerCode) {
+        PayProviderEnum provider = StrUtil.isBlank(providerCode) ? null : PayProviderEnum.findByCode(providerCode);
         List<ChannelMerchant> mchants = channelMerchantManager.findAllByMchNo(mchNo);
+        // 同产品多商户只判断一次, 避免重复创建策略扫描容器
+        Map<String, Boolean> productSupportCache = new HashMap<>();
         List<LabelValue> results = new ArrayList<>();
         for (ChannelMerchant mch : mchants) {
             if (!Boolean.TRUE.equals(mch.getEnable())) {
                 continue;
             }
-            // channel 非空时仅保留归属该通道的产品(如 wechat → wechat_pay/wechat_isv)
-            if (StrUtil.isNotBlank(channel) && !productMatchesChannel(mch.getProduct(), channel)) {
+            // provider 非空时仅保留产品声明支持该支付渠道的通道商户
+            if (provider != null
+                    && !productSupportCache.computeIfAbsent(mch.getProduct(), p -> productSupportsProvider(p, provider))) {
                 continue;
             }
             String label = StrUtil.isNotBlank(mch.getChannelMerchantName())
@@ -211,19 +218,16 @@ public class PayRouteStrategyCapabilitySupport {
         return results;
     }
 
-    /// 传值模式: 商户全部启用通道商户候选(不按通道过滤)
-    public List<LabelValue> listDirectChannelMchCandidates(String mchNo) {
-        return listDirectChannelMchCandidates(mchNo, null);
-    }
-
-    /// 产品是否归属指定通道(按 [ProductEnum.getChannel] 判断, 未知产品返回 false)
-    private boolean productMatchesChannel(String product, String channel) {
-        if (StrUtil.hasBlank(product, channel)) {
+    /// 产品策略是否声明支持指定支付渠道(如 lakala_pay 支持 wechat/alipay/union_pay)
+    private boolean productSupportsProvider(String product, PayProviderEnum provider) {
+        if (StrUtil.isBlank(product) || provider == null) {
             return false;
         }
-        return Arrays.stream(ProductEnum.values())
-                .filter(e -> Objects.equals(e.getChannel(), channel))
-                .anyMatch(e -> Objects.equals(e.getCode(), product));
+        if (!PaymentStrategyFactory.existsByProduct(product, AbsProductStrategy.class)) {
+            return false;
+        }
+        AbsProductStrategy strategy = PaymentStrategyFactory.createByProduct(product, AbsProductStrategy.class);
+        return ProductStrategySupport.supportsPayProvider(strategy, provider);
     }
 
     /// 传值模式: 按通道商户(产品)返回全部启用支付能力候选(不按支付方式过滤)

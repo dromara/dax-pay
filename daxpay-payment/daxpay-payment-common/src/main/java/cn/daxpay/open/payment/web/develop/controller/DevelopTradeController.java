@@ -59,8 +59,8 @@ public class DevelopTradeController {
     @GetMapping("/channel-mch-candidates")
     public Result<List<LabelValue>> channelMchCandidates(
             @NotBlank(message = "{validation.field.mchNo.notBlank}") String mchNo,
-            @RequestParam(required = false) String channel) {
-        return Res.ok(developTradeService.listChannelMchCandidates(mchNo, channel));
+            @RequestParam(required = false) String provider) {
+        return Res.ok(developTradeService.listChannelMchCandidates(mchNo, provider));
     }
 
     @PermCode(code = "view", nameCn = "查看", nameEn = "View")
