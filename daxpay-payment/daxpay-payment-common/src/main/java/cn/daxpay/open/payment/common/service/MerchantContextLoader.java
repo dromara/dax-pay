@@ -27,6 +27,8 @@ import static java.util.Optional.ofNullable;
 /// - `initMch`:商户身份进上下文(所有交易场景必调)
 /// - `resolveApp`:应用解析(推导默认/校验启用),仅需要应用归属时调,返回应用信息供调用方显式 setAppId
 ///
+/// 引导阶段通过 [MerchantAccessQueryService] 的 `*NotTenant` 读路径装载身份;
+/// **initMch 成功之后**业务链路应走正常租户过滤,勿再散落 `@IgnoreTenant`。
 /// appId 不进线程上下文:它是可空、可推导的业务属性,由调用方按需显式赋值到实体。
 @Slf4j
 @Service

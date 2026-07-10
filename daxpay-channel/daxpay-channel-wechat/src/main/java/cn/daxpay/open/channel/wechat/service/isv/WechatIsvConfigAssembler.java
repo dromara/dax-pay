@@ -50,10 +50,11 @@ public class WechatIsvConfigAssembler {
         // 服务商密钥(全局唯一, 含 sp_mchid 与证书; 缺失或关键字段为空时 fail-fast)
         WechatIsvKeyConfig keyConfig = wechatIsvKeyConfigService.getByProductForPay(ProductEnum.WECHAT_ISV.getCode());
         // 特约商户绑定(取 sub_mchid)
+        // 支付/回调须已装载 mchNo，通道商户走租户内查询
         WechatIsvChannelMerchant channelMerchant = wechatIsvChannelMerchantManager.findByChannelMchNo(channelMchNo)
                 // 微信: 通道商户配置不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
-        // 服务商应用(取 sp_appid, 必须存在)
+        // 服务商应用为平台级(非 MchBaseEntity)，无租户过滤
         WechatIsvApp isvApp = wechatIsvAppCapabilityService.resolveApp(capability)
                 // 微信: 服务商应用不存在
                 .orElseThrow(() -> new DataNotExistException("error.channel.wechat.appNotFound"));

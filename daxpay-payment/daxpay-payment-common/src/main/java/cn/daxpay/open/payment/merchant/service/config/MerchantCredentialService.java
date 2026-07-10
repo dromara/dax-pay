@@ -1,6 +1,5 @@
 package cn.daxpay.open.payment.merchant.service.config;
 
-import cn.daxpay.open.platform.core.annotation.IgnoreTenant;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.common.config.properties.PlatformConfigProperties;
 import cn.daxpay.open.platform.core.util.RsaSignUtil;
@@ -15,8 +14,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-/// # 商户API配置服务
+/// # 商户API配置服务（配置态）
 ///
+/// 管理端/商户端凭证查询与更新。须在已有租户上下文（登录 Filter / 运营端 ignoreTable）下调用。
+/// 网关验签取公钥请走 [cn.daxpay.open.payment.merchant.service.query.MerchantAccessQueryService]。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -25,8 +26,7 @@ public class MerchantCredentialService {
     private final MerchantInfoManager merchantInfoManager;
     private final PlatformConfigProperties platformConfigProperties;
 
-    /// 根据商户号查询
-    @IgnoreTenant
+    /// 根据商户号查询（配置态，租户内；运营端由 ignoreTable 放开）
     public MerchantCredentialResult findByMchNo(String mchNo) {
         String publicKey = platformConfigProperties.getKeyConfig().getPublicKey();
         var credentialOptional = credentialManager.findByMchNo(mchNo);

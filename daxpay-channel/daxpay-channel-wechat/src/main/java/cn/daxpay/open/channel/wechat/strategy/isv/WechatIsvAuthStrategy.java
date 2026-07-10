@@ -127,7 +127,7 @@ public class WechatIsvAuthStrategy extends AbsChannelAuthStrategy {
             return new ResolvedAuthApp(app.getWxAppId(), cfg.getAppSecret());
         }
         // SUB_APP: 子商户应用(仅显式配置, 未配置返回empty)
-        WechatIsvMchApp app = wechatIsvMchAppCapabilityService.resolveApp(channelMchNo, capability)
+        WechatIsvMchApp app = wechatIsvMchAppCapabilityService.resolveAppNotTenant(channelMchNo, capability)
                 // 微信: 服务商通道商户应用不存在
                 .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "error.channel.wechat.mchAppNotFound"));

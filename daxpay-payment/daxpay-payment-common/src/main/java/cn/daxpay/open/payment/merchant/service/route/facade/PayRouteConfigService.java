@@ -39,7 +39,8 @@ public class PayRouteConfigService {
     /// 按应用号获取路由策略，不存在则创建默认基础模式策略
     @Transactional(rollbackFor = Exception.class)
     public PayRouteStrategyResult getOrInitByAppId(String appId) {
-        mchAppInfoManager.requireByAppIdNotTenant(appId);
+        // 配置态：运营端 ignoreTable / 租户内查应用
+        mchAppInfoManager.requireByAppId(appId);
         return strategyManager.findByAppId(appId)
                 .map(PayRouteStrategy::toResult)
                 .orElseGet(() -> createDefaultStrategy(appId));
@@ -49,7 +50,7 @@ public class PayRouteConfigService {
     private PayRouteStrategyResult createDefaultStrategy(String appId) {
         PayRouteStrategy strategy = new PayRouteStrategy();
         strategy.setAppId(appId);
-        strategy.setMchNo(mchAppInfoManager.requireMchNoByAppIdNotTenant(appId));
+        strategy.setMchNo(mchAppInfoManager.requireMchNoByAppId(appId));
         strategy.setMode(PayRouteModeEnum.BASIC.getCode());
         strategyManager.save(strategy);
         return strategy.toResult();
@@ -58,7 +59,7 @@ public class PayRouteConfigService {
     /// 更新应用路由策略（模式、支付渠道、启用状态、名称）
     @Transactional(rollbackFor = Exception.class)
     public PayRouteStrategyResult updateStrategy(PayRouteStrategyParam param) {
-        mchAppInfoManager.requireByAppIdNotTenant(param.getAppId());
+        mchAppInfoManager.requireByAppId(param.getAppId());
         PayRouteStrategy strategy = strategyManager.findByAppId(param.getAppId())
                 .orElseThrow(() -> new DataNotExistException("pay.route.error.routeStrategyNotExist"));
         PayRouteStrategyConvert.CONVERT.copy(param, strategy);

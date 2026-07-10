@@ -96,7 +96,7 @@ public class WechatDirectAuthStrategy extends AbsChannelAuthStrategy {
                     .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                             "error.channel.wechat.opAppIdNotFound", opAppId));
         }
-        return wechatDirectAppCapabilityService.resolveApp(channelMchNo, capability)
+        return wechatDirectAppCapabilityService.resolveAppNotTenant(channelMchNo, capability)
                 // 微信: 直连商户应用不存在
                 .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "error.channel.wechat.mchAppNotFound"));

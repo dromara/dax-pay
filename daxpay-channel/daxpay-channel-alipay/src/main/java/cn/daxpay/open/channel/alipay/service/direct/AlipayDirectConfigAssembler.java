@@ -73,7 +73,8 @@ public class AlipayDirectConfigAssembler {
         return credential;
     }
 
-    /// 解析支付使用的应用，优先级：能力关联 > 通道商户首个 > 商户号首个兜底
+    /// 解析支付使用的应用（须已装载 mchNo，租户内）
+    /// 优先级：能力关联 > 通道商户首个 > 商户号首个兜底
     private AlipayDirectApp resolveApp(String mchNo, String channelMchNo, String capability) {
         // 1. 能力关联解析(显式配置 > appType自动推导)
         Optional<AlipayDirectApp> resolved = alipayDirectAppCapabilityService.resolveApp(channelMchNo, capability);

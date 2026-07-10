@@ -25,18 +25,30 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MchAppInfoManager extends BaseManager<MchAppInfoMapper, MchAppInfo> {
 
-    /// 根据应用AppId查询, 商户端使用会过滤租户
+    /// 根据应用AppId查询（配置态，租户内）
     public Optional<MchAppInfo> findByAppId(String appId) {
         return this.findByField(MchAppInfo::getAppId, appId);
     }
+
+    /// 按应用号加载商户应用，不存在则抛配置异常（配置态，租户内；运营端 ignoreTable）
+    public MchAppInfo requireByAppId(String appId) {
+        return findByAppId(appId)
+                // 商户: 未找到指定应用的配置
+                .orElseThrow(() -> new ConfigNotExistException("error.payment.merchant.specifiedAppConfigNotFound"));
+    }
+
+    /// 按应用号解析商户号（配置态，租户内）
+    public String requireMchNoByAppId(String appId) {
+        return requireByAppId(appId).getMchNo();
+    }
     
-    /// 根据应用AppId查询， 忽略租户拦截
+    /// 根据应用AppId查询（运行态引导，忽略租户）
     @IgnoreTenant
     public Optional<MchAppInfo> findByAppIdNotTenant(String appId) {
         return this.findByField(MchAppInfo::getAppId, appId);
     }
 
-    /// 按应用号加载商户应用，不存在则抛配置异常（忽略租户）
+    /// 按应用号加载商户应用（运行态引导，忽略租户）
     @IgnoreTenant
     public MchAppInfo requireByAppIdNotTenant(String appId) {
         return findByAppIdNotTenant(appId)
@@ -44,7 +56,7 @@ public class MchAppInfoManager extends BaseManager<MchAppInfoMapper, MchAppInfo>
                 .orElseThrow(() -> new ConfigNotExistException("error.payment.merchant.specifiedAppConfigNotFound"));
     }
 
-    /// 按应用号解析商户号（忽略租户）
+    /// 按应用号解析商户号（运行态引导，忽略租户）
     @IgnoreTenant
     public String requireMchNoByAppIdNotTenant(String appId) {
         return requireByAppIdNotTenant(appId).getMchNo();

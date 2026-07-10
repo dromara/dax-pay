@@ -2,6 +2,7 @@ package cn.daxpay.open.channel.wechat.dao.direct;
 
 import cn.daxpay.open.channel.wechat.entity.direct.WechatDirectAppAuthConfig;
 import cn.daxpay.open.platform.common.mybatisplus.impl.BaseManager;
+import cn.daxpay.open.platform.core.annotation.IgnoreTenant;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -15,6 +16,14 @@ public class WechatDirectAppAuthConfigManager extends BaseManager<WechatDirectAp
 
     /// 根据应用ID查询授权认证配置
     public Optional<WechatDirectAppAuthConfig> findByWechatDirectAppId(Long wechatDirectAppId) {
+        return lambdaQuery()
+                .eq(WechatDirectAppAuthConfig::getWechatDirectAppId, wechatDirectAppId)
+                .oneOpt();
+    }
+
+    /// 根据应用ID查询授权认证配置（运行态认证使用, 忽略租户隔离）
+    @IgnoreTenant
+    public Optional<WechatDirectAppAuthConfig> findByWechatDirectAppIdNotTenant(Long wechatDirectAppId) {
         return lambdaQuery()
                 .eq(WechatDirectAppAuthConfig::getWechatDirectAppId, wechatDirectAppId)
                 .oneOpt();

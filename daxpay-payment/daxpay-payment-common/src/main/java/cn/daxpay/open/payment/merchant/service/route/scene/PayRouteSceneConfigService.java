@@ -59,7 +59,7 @@ public class PayRouteSceneConfigService {
     /// 批量保存场景模式配置（全量覆盖：method 唯一、通道商户/能力校验）
     @Transactional(rollbackFor = Exception.class)
     public void saveSceneBatch(PayRouteSceneConfigBatchParam param) {
-        String mchNo = mchAppInfoManager.requireMchNoByAppIdNotTenant(param.getAppId());
+        String mchNo = mchAppInfoManager.requireMchNoByAppId(param.getAppId());
         PayRouteStrategy strategy = requireStrategy(param.getAppId());
         validateSceneConfigUnique(param.getItems());
         validateSceneChannelMchCapabilityPairing(param.getItems());
@@ -114,13 +114,13 @@ public class PayRouteSceneConfigService {
 
     /// 通道路由白名单目录下全部 (provider,method) 的通道商户候选（批量）
     public Map<String, List<LabelValue>> listSceneChannelMchCandidatesBatch(String appId) {
-        String mchNo = mchAppInfoManager.requireMchNoByAppIdNotTenant(appId);
+        String mchNo = mchAppInfoManager.requireMchNoByAppId(appId);
         return payRouteStrategyCapabilitySupport.listSceneChannelMchCandidatesBatch(mchNo);
     }
 
     /// 按目录项+通道商户批量返回支付能力候选
     public Map<String, List<LabelValue>> listSceneCapabilityCandidatesBatch(PayRouteSceneCapabilityBatchParam param) {
-        mchAppInfoManager.requireMchNoByAppIdNotTenant(param.getAppId());
+        mchAppInfoManager.requireMchNoByAppId(param.getAppId());
         return payRouteStrategyCapabilitySupport.listSceneCapabilityCandidatesBatch(param.getItems());
     }
 
@@ -129,7 +129,7 @@ public class PayRouteSceneConfigService {
         if (StrUtil.isBlank(method) || !payProviderMethodService.contains(provider, method)) {
             return List.of();
         }
-        String mchNo = mchAppInfoManager.requireMchNoByAppIdNotTenant(appId);
+        String mchNo = mchAppInfoManager.requireMchNoByAppId(appId);
         return payRouteStrategyCapabilitySupport.listSceneChannelMchCandidates(mchNo, provider, method);
     }
 

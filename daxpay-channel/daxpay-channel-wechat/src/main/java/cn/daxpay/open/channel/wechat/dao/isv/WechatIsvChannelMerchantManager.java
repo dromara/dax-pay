@@ -2,6 +2,7 @@ package cn.daxpay.open.channel.wechat.dao.isv;
 
 import cn.daxpay.open.channel.wechat.entity.isv.WechatIsvChannelMerchant;
 import cn.daxpay.open.platform.common.mybatisplus.impl.BaseManager;
+import cn.daxpay.open.platform.core.annotation.IgnoreTenant;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
@@ -19,10 +20,16 @@ public class WechatIsvChannelMerchantManager extends BaseManager<WechatIsvChanne
                 .exists();
     }
 
-    /// 根据通道商户号查询
+    /// 根据通道商户号查询（支付/回调，已装载 mchNo，租户内）
     public Optional<WechatIsvChannelMerchant> findByChannelMchNo(String channelMchNo) {
         return lambdaQuery()
                 .eq(WechatIsvChannelMerchant::getChannelMchNo, channelMchNo)
                 .oneOpt();
+    }
+
+    /// 根据通道商户号查询（认证引导，忽略租户）
+    @IgnoreTenant
+    public Optional<WechatIsvChannelMerchant> findByChannelMchNoNotTenant(String channelMchNo) {
+        return findByChannelMchNo(channelMchNo);
     }
 }

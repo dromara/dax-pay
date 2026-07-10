@@ -41,7 +41,7 @@ public class PayRouteBasicConfigService {
 
     /// 查询基础模式面板数据（已保存通道商户号 + 各渠道可选通道商户列表）
     public List<PayRouteBasicConfigResult> listBasicByAppId(String appId) {
-        String mchNo = mchAppInfoManager.requireMchNoByAppIdNotTenant(appId);
+        String mchNo = mchAppInfoManager.requireMchNoByAppId(appId);
         PayRouteStrategy strategy = requireStrategy(appId);
         Map<String, String> mchMap = basicConfigManager.findByStrategyId(strategy.getId()).stream()
                 .filter(config -> StrUtil.isNotBlank(config.getProvider()))
@@ -55,7 +55,7 @@ public class PayRouteBasicConfigService {
     /// 批量保存基础模式配置（先删后插）
     @Transactional(rollbackFor = Exception.class)
     public void saveBasicBatch(PayRouteBasicConfigBatchParam param) {
-        String mchNo = mchAppInfoManager.requireMchNoByAppIdNotTenant(param.getAppId());
+        String mchNo = mchAppInfoManager.requireMchNoByAppId(param.getAppId());
         PayRouteStrategy strategy = requireStrategy(param.getAppId());
         basicConfigManager.deleteByStrategyId(strategy.getId());
         for (PayRouteBasicConfigItem item : param.getItems()) {

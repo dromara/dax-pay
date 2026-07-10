@@ -60,7 +60,7 @@ public class WechatDirectConfigAssembler {
         return credential;
     }
 
-    /// 解析支付使用的应用
+    /// 解析支付使用的应用（须已装载 mchNo，租户内）
     ///
     /// 优先级(委托 [WechatDirectAppCapabilityService.resolveApp]):
     /// 能力关联(显式配置 > appType自动推导) > 通道商户首个应用
