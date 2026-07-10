@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 /// # 易宝直连支付策略
 ///
 /// 易宝支付(ProductEnum.YEE_PAY)下发起支付的具体执行策略。
-/// 配置组装在 [doBeforePay] 阶段完成(委托 [YeepayDirectConfigAssembler]),
+/// 配置组装在 [#doBeforePay] 阶段完成(委托 [YeepayDirectConfigAssembler]),
 /// 支付执行委托给 [YeepayPayService]。
 @Slf4j
 @Service

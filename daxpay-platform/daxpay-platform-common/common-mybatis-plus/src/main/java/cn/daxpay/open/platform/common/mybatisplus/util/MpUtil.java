@@ -183,7 +183,7 @@ public class MpUtil {
         return tableInfo.getPropertyValue(object, keyProperty);
     }
 
-    /// 进入忽略租户作用域（可重入，与 [clearIgnoreTenant] 成对使用）
+    /// 进入忽略租户作用域（可重入，与 [#clearIgnoreTenant] 成对使用）
     ///
     /// 基于线程内引用计数：仅 depth 从 0→1 时真正打开 MP 忽略策略；
     /// 嵌套调用不会互相 clear，直到最外层 exit 才恢复租户过滤。

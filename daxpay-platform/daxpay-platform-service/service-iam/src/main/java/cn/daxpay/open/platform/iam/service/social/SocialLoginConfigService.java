@@ -25,9 +25,9 @@ import org.springframework.stereotype.Service;
 /// # 第三方平台登录配置服务
 ///
 /// 配置页采用"枚举驱动 + 惰性初始化"模式: 平台清单来源于 [SocialSourceEnum] 枚举.
-/// [findAll] 仅内存合并展示(不落库), 未配置平台返回无 id 的瞬态展示项;
-/// [findBySource] 在平台记录不存在时按需初始化占位记录(`configured=false`), 用户保存配置后置 `configured=true`.
-/// 数据访问全部委托 [SocialLoginConfigManager], 本层不直接使用 lambdaQuery.
+/// [#findAll] 仅内存合并展示(不落库), 未配置平台返回无 id 的瞬态展示项;
+/// [#findBySource] 在平台记录不存在时按需初始化占位记录(`configured=false`), 用户保存配置后置 `configured=true`.
+/// 数据访问全部委托 [SocialLoginConfigManager#listAll], 本层不直接使用 lambdaQuery.
 /// 配置表 source 全局唯一, 占位记录仅插入一次.
 ///
 /// **平台级跳转型**(如支付宝): 凭据在独立平台配置中维护, 本表仅存 enabled 占位;
@@ -42,7 +42,7 @@ public class SocialLoginConfigService {
 
     /// 全量查询平台配置(枚举驱动, 内存合并, 不落库)
     /// 已配置平台返回库表记录, 未配置平台返回 `configured=false` 的瞬态展示项(无 id).
-    /// 真正的初始化落库延迟到 [findBySource] 按需触发, 避免读操作产生写副作用.
+    /// 真正的初始化落库延迟到 [#findBySource] 按需触发, 避免读操作产生写副作用.
     /// **平台级跳转型平台**(如支付宝)不在本表存凭据, `configured`/`enabled` 均取本表占位行。
     public List<SocialLoginConfigResult> findAll() {
         // 库表已有配置按 source 索引

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 /// # 支付宝服务商支付策略
 ///
 /// 支付宝服务商模式(ProductEnum.ALIPAY_ISV)下发起支付的具体执行策略。
-/// 配置组装(含应用授权令牌)在 [doBeforePay] 阶段完成(委托 [AlipayIsvConfigAssembler]), 支付执行委托给 [AlipayPayService]。
+/// 配置组装(含应用授权令牌)在 [#doBeforePay] 阶段完成(委托 [AlipayIsvConfigAssembler]), 支付执行委托给 [AlipayPayService]。
 @Slf4j
 @Service
 @RequiredArgsConstructor

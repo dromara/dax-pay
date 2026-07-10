@@ -15,6 +15,7 @@ import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayCapabilityEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
+import cn.daxpay.open.platform.core.annotation.IgnoreTenant;
 import cn.daxpay.open.payment.core.strategy.PaymentStrategyFactory;
 import cn.daxpay.open.payment.core.strategy.product.AbsProductStrategy;
 import cn.hutool.core.collection.CollUtil;
@@ -34,7 +35,7 @@ import java.util.stream.Collectors;
 /// # 支付宝直连商户应用支付能力关联
 ///
 /// 管理通道商户维度下「支付能力 → 应用」的绑定关系。
-/// 支付时通过 [resolveApp] 解析当前能力对应的应用：显式配置 > appType自动推导。
+/// 支付时通过 [#resolveApp] 解析当前能力对应的应用：显式配置 > appType自动推导。
 ///
 @Slf4j
 @Service
@@ -102,7 +103,9 @@ public class AlipayDirectAppCapabilityService {
         capabilityManager.deleteByAlipayDirectAppId(alipayDirectAppId);
     }
 
-    /// 支付时解析当前支付能力对应的应用：显式配置 > appType自动推导
+    /// 支付/回调解析应用：显式配置 > appType 自动推导（须已装载 mchNo，租户内）
+    ///
+    /// 认证无上下文请用 [#resolveAppNotTenant]。
     ///
     /// @param channelMchNo 通道商户号
     /// @param capability    支付能力编码
@@ -122,6 +125,12 @@ public class AlipayDirectAppCapabilityService {
             return alipayDirectAppManager.findFirstByChannelMchNoAndAppType(channelMchNo, appType);
         }
         return Optional.empty();
+    }
+
+    /// 认证等无租户上下文时解析应用（忽略租户）
+    @IgnoreTenant
+    public Optional<AlipayDirectApp> resolveAppNotTenant(String channelMchNo, String capability) {
+        return resolveApp(channelMchNo, capability);
     }
 
     /// 查询支付宝直连产品支持的支付能力候选列表(含国际化名称)

@@ -13,6 +13,7 @@ import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
+import cn.daxpay.open.platform.core.annotation.IgnoreTenant;
 import cn.daxpay.open.payment.core.strategy.PaymentStrategyFactory;
 import cn.daxpay.open.payment.core.strategy.product.AbsProductStrategy;
 import cn.hutool.core.collection.CollUtil;
@@ -36,7 +37,7 @@ import java.util.stream.Collectors;
 /// 由调用方(未来的微信服务商支付策略/配置组装器)回退到全局服务商应用配置
 /// ([cn.daxpay.open.channel.wechat.service.isv.WechatIsvAppCapabilityService])。
 ///
-/// 支付时通过 [resolveApp] 解析当前能力对应的应用：仅读取显式配置, 未配置返回 empty
+/// 支付时通过 [#resolveApp] 解析当前能力对应的应用：仅读取显式配置, 未配置返回 empty
 /// (语义为"该能力未在子商户维度配置, sub_appid 留空, 走纯服务商应用模式")。
 ///
 @Slf4j
@@ -108,10 +109,10 @@ public class WechatIsvMchAppCapabilityService {
         capabilityManager.deleteByWechatIsvMchAppId(wechatIsvMchAppId);
     }
 
-    /// 支付时解析当前支付能力对应的子商户应用(仅读取显式配置)
+    /// 支付/回调解析子商户应用(仅读取显式配置，须已装载 mchNo，租户内)
     ///
-    /// 子商户应用(sub_appid)为可选项, 不做 appType 推导与首个兜底, 避免取到不相关的子应用
-    /// 导致 openid 体系不匹配。未配置返回 empty, 由调用方留空 sub_appid, 走纯服务商应用模式。
+    /// 子商户应用(sub_appid)为可选项, 不做 appType 推导与首个兜底。
+    /// 未配置返回 empty, 由调用方留空 sub_appid。认证无上下文请用 [#resolveAppNotTenant]。
     ///
     /// @param channelMchNo 通道商户号(服务商特约商户)
     /// @param capability   支付能力编码
@@ -120,10 +121,14 @@ public class WechatIsvMchAppCapabilityService {
         if (StrUtil.hasBlank(channelMchNo, capability)) {
             return Optional.empty();
         }
-        // 子商户应用(sub_appid)为可选项, 仅读取显式配置, 未配置则返回 empty
-        // (sub_appid 留空时走纯服务商应用 sp_appid + sub_mchid 模式)
         return capabilityManager.findOne(channelMchNo, capability)
                 .flatMap(rel -> wechatIsvMchAppManager.findById(rel.getWechatIsvMchAppId()));
+    }
+
+    /// 认证等无租户上下文时解析子商户应用（忽略租户）
+    @IgnoreTenant
+    public Optional<WechatIsvMchApp> resolveAppNotTenant(String channelMchNo, String capability) {
+        return resolveApp(channelMchNo, capability);
     }
 
     /// 查询微信服务商产品支持的支付能力候选列表(含国际化名称)

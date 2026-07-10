@@ -69,13 +69,13 @@ public class AlipaySocialAuthRequest implements SocialAuthRequest {
                 .setToken(token);
     }
 
-    /// 支付宝换用户在 [login] 内一次完成, 不单独暴露 accessToken 步骤
+    /// 支付宝换用户在 [#login] 内一次完成, 不单独暴露 accessToken 步骤
     @Override
     public AuthToken getAccessToken(AuthCallback callback) {
         throw new SocialException("error.social.unsupportedSource");
     }
 
-    /// 支付宝换用户在 [login] 内一次完成, 不单独暴露 userInfo 步骤
+    /// 支付宝换用户在 [#login] 内一次完成, 不单独暴露 userInfo 步骤
     @Override
     public AuthUser getUserInfo(AuthToken token) {
         throw new SocialException("error.social.unsupportedSource");

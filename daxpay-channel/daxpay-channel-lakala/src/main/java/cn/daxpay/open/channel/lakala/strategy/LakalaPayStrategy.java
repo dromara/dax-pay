@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 /// # 拉卡拉服务商支付策略
 ///
 /// 拉卡拉支付(ProductEnum.LAKALA_PAY)下发起支付的具体执行策略。
-/// 配置组装在 [doBeforePay] 阶段完成(委托 [LakalaIsvConfigAssembler]), 支付执行委托给 [LakalaPayService]。
+/// 配置组装在 [#doBeforePay] 阶段完成(委托 [LakalaIsvConfigAssembler]), 支付执行委托给 [LakalaPayService]。
 ///
 /// 拉卡拉为聚合服务商模式, 不区分直连/服务商, 仅有一个产品 LAKALA_PAY。
 @Slf4j

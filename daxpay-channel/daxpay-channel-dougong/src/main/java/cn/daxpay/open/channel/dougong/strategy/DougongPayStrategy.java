@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 /// # 斗拱服务商支付策略
 ///
-/// 配置组装在 [doBeforePay] 阶段完成(委托 [DougongIsvConfigAssembler]),
+/// 配置组装在 [#doBeforePay] 阶段完成(委托 [DougongIsvConfigAssembler]),
 /// 支付执行委托给 [DougongPayService]。
 ///
 /// 斗拱为聚合服务商模式, 仅有一个产品 DOUGONG_PAY(覆盖微信/支付宝/银联)。

@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 /// # 富友服务商支付策略
 ///
 /// 富友支付(ProductEnum.FUYOU_PAY)下发起支付的具体执行策略。
-/// 配置组装在 [doBeforePay] 阶段完成(委托 [FuyouIsvConfigAssembler]), 支付执行委托给 [FuyouPayService]。
+/// 配置组装在 [#doBeforePay] 阶段完成(委托 [FuyouIsvConfigAssembler]), 支付执行委托给 [FuyouPayService]。
 ///
 /// 富友为聚合服务商模式, 不区分直连/服务商, 仅有一个产品 FUYOU_PAY。
 @Slf4j

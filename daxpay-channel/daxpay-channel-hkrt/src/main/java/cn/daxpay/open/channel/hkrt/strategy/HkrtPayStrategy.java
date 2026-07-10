@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 /// # 海科融通服务商支付策略
 ///
 /// 海科融通支付(ProductEnum.HKRT_PAY)下发起支付的具体执行策略。
-/// 配置组装在 [doBeforePay] 阶段完成(委托 [HkrtIsvConfigAssembler]), 支付执行委托给 [HkrtPayService]。
+/// 配置组装在 [#doBeforePay] 阶段完成(委托 [HkrtIsvConfigAssembler]), 支付执行委托给 [HkrtPayService]。
 ///
 /// 海科融通为聚合服务商模式, 仅有一个产品 HKRT_PAY。
 @Slf4j

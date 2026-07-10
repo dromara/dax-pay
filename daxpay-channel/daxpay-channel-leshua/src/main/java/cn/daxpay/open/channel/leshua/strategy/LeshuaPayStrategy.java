@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 /// # 乐刷服务商支付策略
 ///
 /// 乐刷支付(ProductEnum.LESHUA_PAY)下发起支付的具体执行策略。
-/// 配置组装在 [doBeforePay] 阶段完成(委托 [LeshuaIsvConfigAssembler]), 支付执行委托给 [LeshuaPayService]。
+/// 配置组装在 [#doBeforePay] 阶段完成(委托 [LeshuaIsvConfigAssembler]), 支付执行委托给 [LeshuaPayService]。
 @Slf4j
 @Service
 @RequiredArgsConstructor

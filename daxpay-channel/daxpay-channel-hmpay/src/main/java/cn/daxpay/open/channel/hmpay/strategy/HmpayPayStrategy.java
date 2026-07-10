@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 /// # 河马付服务商支付策略
 ///
-/// 配置组装在 [doBeforePay] 阶段完成(委托 [HmpayIsvConfigAssembler]),
+/// 配置组装在 [#doBeforePay] 阶段完成(委托 [HmpayIsvConfigAssembler]),
 /// 支付执行委托给 [HmpayPayService]。
 @Slf4j
 @Service

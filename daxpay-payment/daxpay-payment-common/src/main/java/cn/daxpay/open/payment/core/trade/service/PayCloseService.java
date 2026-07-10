@@ -111,7 +111,7 @@ public class PayCloseService {
     /// 供 MQ 延时消息消费者 [cn.daxpay.open.payment.core.trade.mq.NormalPayTimeoutConsumer]
     /// 与兜底定时任务 [cn.daxpay.open.payment.core.trade.job.NormalPayTimeoutJob] 调用。
     ///
-    /// 与 [closeOrder] 的区别:
+    /// 与 [#closeOrder] 的区别:
     /// - 仅接受 tradeNo 定位, 非 PROCESSING 状态静默返回(幂等, 不抛异常)
     /// - closeType 固定 TIMEOUT, 容器态置 EXPIRED(见 [PayUniHandleService#payTimeout])
     /// - 不接受 useCancel, 超时统一走 close

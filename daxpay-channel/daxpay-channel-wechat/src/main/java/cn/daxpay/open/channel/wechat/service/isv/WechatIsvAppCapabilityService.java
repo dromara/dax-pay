@@ -33,7 +33,7 @@ import java.util.stream.Collectors;
 /// # 微信服务商应用支付能力关联
 ///
 /// 管理全局维度下「支付能力 → 服务商应用」的绑定关系(微信服务商应用全局共享)。
-/// 支付时通过 [resolveApp] 解析当前能力对应的应用：显式配置 > appType自动推导 > 取首个兜底。
+/// 支付时通过 [#resolveApp] 解析当前能力对应的应用：显式配置 > appType自动推导 > 取首个兜底。
 ///
 @Slf4j
 @Service

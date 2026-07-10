@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 /// # Adapay 直连支付策略
 ///
 /// Adapay 支付(ProductEnum.ADA_PAY)下发起支付的具体执行策略。
-/// 配置组装在 [doBeforePay] 阶段完成(委托 [AdapayDirectConfigAssembler]),
+/// 配置组装在 [#doBeforePay] 阶段完成(委托 [AdapayDirectConfigAssembler]),
 /// 支付执行委托给 [AdapayPayService]。
 @Slf4j
 @Service

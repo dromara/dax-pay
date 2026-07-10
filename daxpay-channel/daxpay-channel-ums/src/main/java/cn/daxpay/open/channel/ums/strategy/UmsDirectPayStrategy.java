@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 /// # 银联商务直连支付策略
 ///
 /// 银联商务直连模式(ProductEnum.UMS_QRCODE)下发起支付的具体执行策略。
-/// 配置组装在 [doBeforePay] 阶段完成(委托 [UmsDirectConfigAssembler]),
+/// 配置组装在 [#doBeforePay] 阶段完成(委托 [UmsDirectConfigAssembler]),
 /// 支付执行委托给 [UmsPayService]。
 @Slf4j
 @Service

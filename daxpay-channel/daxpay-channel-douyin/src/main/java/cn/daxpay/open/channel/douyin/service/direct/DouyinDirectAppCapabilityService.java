@@ -14,6 +14,7 @@ import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
+import cn.daxpay.open.platform.core.annotation.IgnoreTenant;
 import cn.daxpay.open.payment.core.strategy.PaymentStrategyFactory;
 import cn.daxpay.open.payment.core.strategy.product.AbsProductStrategy;
 import cn.hutool.core.collection.CollUtil;
@@ -33,7 +34,7 @@ import java.util.stream.Collectors;
 /// # 抖音直连商户应用支付能力关联
 ///
 /// 管理通道商户维度下「支付能力 → 直连应用」的绑定关系。
-/// 支付时通过 [resolveApp] 解析当前能力对应的应用：显式配置 > appType自动推导 > 通道商户首个兜底。
+/// 支付时通过 [#resolveApp] 解析当前能力对应的应用：显式配置 > appType自动推导 > 通道商户首个兜底。
 ///
 @Slf4j
 @Service
@@ -101,7 +102,9 @@ public class DouyinDirectAppCapabilityService {
         capabilityManager.deleteByDouyinDirectAppId(douyinDirectAppId);
     }
 
-    /// 支付时解析当前支付能力对应的应用：显式配置 > appType自动推导 > 通道商户首个兜底
+    /// 支付/回调解析应用：显式配置 > appType 自动推导 > 通道商户首个兜底（须已装载 mchNo，租户内）
+    ///
+    /// 认证无上下文请用 [#resolveAppNotTenant]。
     ///
     /// @param channelMchNo 通道商户号
     /// @param capability    支付能力编码
@@ -125,6 +128,12 @@ public class DouyinDirectAppCapabilityService {
         }
         // 3. 最终兜底：按通道商户号取首个应用
         return douyinDirectAppManager.findFirstByChannelMchNo(channelMchNo);
+    }
+
+    /// 认证等无租户上下文时解析应用（忽略租户）
+    @IgnoreTenant
+    public Optional<DouyinDirectApp> resolveAppNotTenant(String channelMchNo, String capability) {
+        return resolveApp(channelMchNo, capability);
     }
 
     /// 查询抖音直连产品支持的支付能力候选列表(含国际化名称)

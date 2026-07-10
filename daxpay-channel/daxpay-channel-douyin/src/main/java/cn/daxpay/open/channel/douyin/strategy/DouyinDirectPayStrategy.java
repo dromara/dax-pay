@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 /// # 抖音支付直连支付策略
 ///
 /// 抖音直连模式(ProductEnum.DOUYIN_PAY)下发起支付的具体执行策略。
-/// 配置组装在 [doBeforePay] 阶段完成(委托 [DouyinDirectConfigAssembler]), 支付执行委托给 [DouyinPayService]。
+/// 配置组装在 [#doBeforePay] 阶段完成(委托 [DouyinDirectConfigAssembler]), 支付执行委托给 [DouyinPayService]。
 @Slf4j
 @Service
 @RequiredArgsConstructor

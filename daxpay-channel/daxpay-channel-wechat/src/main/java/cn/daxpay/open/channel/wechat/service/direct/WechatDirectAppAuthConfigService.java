@@ -9,6 +9,7 @@ import cn.daxpay.open.channel.wechat.param.direct.WechatDirectAppAuthConfigParam
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
+import cn.daxpay.open.platform.core.annotation.IgnoreTenant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,28 @@ public class WechatDirectAppAuthConfigService {
             return existing.get();
         }
         var app = wechatDirectAppManager.findById(wechatDirectAppId)
+                // 微信: 直连商户应用不存在
+                .orElseThrow(() -> new DataNotExistException("error.channel.wechat.mchAppNotFound"));
+        var config = new WechatDirectAppAuthConfig()
+                .setChannelMchNo(app.getChannelMchNo())
+                .setWechatDirectAppId(wechatDirectAppId);
+        config.setMchNo(app.getMchNo());
+        wechatDirectAppAuthConfigManager.save(config);
+        return config;
+    }
+
+    /// 根据应用ID查询授权认证配置(运行态认证使用, 忽略租户隔离)
+    ///
+    /// 与 [#findByWechatDirectAppId] 的区别: 走 NotTenant 查询路径, 供认证策略(网关端无登录态)调用;
+    /// [#save] 等配置态仍调原方法(保留租户隔离)。
+    @IgnoreTenant
+    @Transactional(rollbackFor = Exception.class)
+    public WechatDirectAppAuthConfig findByWechatDirectAppIdForAuth(Long wechatDirectAppId) {
+        var existing = wechatDirectAppAuthConfigManager.findByWechatDirectAppIdNotTenant(wechatDirectAppId);
+        if (existing.isPresent()) {
+            return existing.get();
+        }
+        var app = wechatDirectAppManager.findByIdNotTenant(wechatDirectAppId)
                 // 微信: 直连商户应用不存在
                 .orElseThrow(() -> new DataNotExistException("error.channel.wechat.mchAppNotFound"));
         var config = new WechatDirectAppAuthConfig()

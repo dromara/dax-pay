@@ -37,7 +37,7 @@ public class LeshuaIsvKeyConfigService {
 
     /// 支付场景查询服务商密钥(必填校验, 不创建记录)
     ///
-    /// 与 [findByProduct] 的 upsert 语义不同, 此方法只读不写:
+    /// 与 [#findByProduct] 的 upsert 语义不同, 此方法只读不写:
     /// 记录不存在或关键字段(lsMchNo/tradeKey/signType)任一为空时 fail-fast。
     public LeshuaIsvKeyConfig getByProductForPay(String product, boolean sandbox) {
         LeshuaIsvKeyConfig config = leshuaIsvKeyConfigManager.findByProductAndSandbox(product, sandbox)

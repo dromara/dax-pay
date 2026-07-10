@@ -54,7 +54,7 @@ public final class PaymentContext {
         }
     }
 
-    /// 在作用域内执行(无返回值),语义同 [runAs]
+    /// 在作用域内执行(无返回值),语义同 [#runAs]
     public void runAs(Runnable action) {
         if (isOpen()) {
             action.run();

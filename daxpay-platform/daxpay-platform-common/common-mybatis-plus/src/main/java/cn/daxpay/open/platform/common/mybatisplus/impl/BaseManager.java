@@ -110,7 +110,7 @@ public class BaseManager<M extends MPJBaseMapper<T>, T> {
 
     /// 取排序后第一条(方言无关，由分页插件按当前数据库方言生成 limit，只查 1 条)
     ///
-    /// 适用于 findFirst* 场景(明确取首条，不校验唯一)，区别于期望唯一的 [lambdaQuery]...one()。
+    /// 适用于 findFirst* 场景(明确取首条，不校验唯一)，区别于期望唯一的 [#lambdaQuery]...one()。
     ///
     /// @param customizer 查询条件定制(eq/orderBy 等)
     /// @return 第一条的 Optional 包装，无数据返回 empty
@@ -271,7 +271,7 @@ public class BaseManager<M extends MPJBaseMapper<T>, T> {
 
     /// 按主键查询（忽略租户隔离）
     ///
-    /// 运行态认证/支付解析/网关引导等无租户上下文时使用；配置态 CRUD 请用 [findById]。
+    /// 运行态认证/支付解析/网关引导等无租户上下文时使用；配置态 CRUD 请用 [#findById]。
     /// 须经 Spring 注入的 Manager Bean 外部调用（同类 this 自调用不走 AOP）。
     @IgnoreTenant
     public Optional<T> findByIdNotTenant(Serializable id) {

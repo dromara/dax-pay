@@ -36,9 +36,9 @@ public class AuthSession {
     /// 认证来源
     ///
     /// 标识本次认证的配置来源:
-    /// - [SOURCE_PLATFORM_ALIPAY]: 平台级支付宝配置(调试场景)
-    /// - [SOURCE_PLATFORM_MP]: 平台级微信公众号配置(调试场景)
-    /// - [SOURCE_PLATFORM_DOUYIN]: 平台级抖音 H5 应用配置(调试场景)
+    /// - [#SOURCE_PLATFORM_ALIPAY]: 平台级支付宝配置(调试场景)
+    /// - [#SOURCE_PLATFORM_MP]: 平台级微信公众号配置(调试场景)
+    /// - [#SOURCE_PLATFORM_DOUYIN]: 平台级抖音 H5 应用配置(调试场景)
     /// - null/空: 走商户级支付产品策略(直连/服务商)
     private String source;
 

@@ -2,6 +2,7 @@ package cn.daxpay.open.channel.douyin.dao.direct;
 
 import cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectApp;
 import cn.daxpay.open.platform.common.mybatisplus.impl.BaseManager;
+import cn.daxpay.open.platform.core.annotation.IgnoreTenant;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -9,7 +10,9 @@ import java.util.Optional;
 
 /// # 抖音直连商户应用
 ///
-/// 直连商户应用数据访问管理器，提供按商户号和通道商户号查询列表、同一通道下应用ID唯一性校验等方法。
+/// - 配置态 CRUD: [#listByMchNoAndChannelMchNo]、[#existsByChannelMchNoAndDouyinAppId]
+/// - 支付/回调（已装载 mchNo）: 租户内 [#findFirstByChannelMchNo]、[#findFirstByChannelMchNoAndAppType]
+/// - 认证引导: 方法名带 NotTenant
 ///
 @Repository
 public class DouyinDirectAppManager extends BaseManager<DouyinDirectAppMapper, DouyinDirectApp> {
@@ -34,20 +37,37 @@ public class DouyinDirectAppManager extends BaseManager<DouyinDirectAppMapper, D
                 .exists();
     }
 
-    /// 按通道商户号查询首个应用（能力解析兜底时使用）
+    /// 根据通道商户号取首个应用（支付/回调，租户内）
     public Optional<DouyinDirectApp> findFirstByChannelMchNo(String channelMchNo) {
-        return firstOpt(q -> q
+        return lambdaQuery()
                 .eq(DouyinDirectApp::getChannelMchNo, channelMchNo)
                 .orderByAsc(DouyinDirectApp::getCreateTime)
-                .orderByAsc(DouyinDirectApp::getId));
+                .orderByAsc(DouyinDirectApp::getId)
+                .last("limit 1")
+                .oneOpt();
     }
 
-    /// 按通道商户号与应用类型查询首个应用（appType自动推导时使用）
+    /// 根据通道商户号与应用类型取首个应用（支付/回调，租户内）
     public Optional<DouyinDirectApp> findFirstByChannelMchNoAndAppType(String channelMchNo, String appType) {
-        return firstOpt(q -> q
+        return lambdaQuery()
                 .eq(DouyinDirectApp::getChannelMchNo, channelMchNo)
                 .eq(DouyinDirectApp::getAppType, appType)
                 .orderByAsc(DouyinDirectApp::getCreateTime)
-                .orderByAsc(DouyinDirectApp::getId));
+                .orderByAsc(DouyinDirectApp::getId)
+                .last("limit 1")
+                .oneOpt();
     }
+
+    /// 根据通道商户号取首个应用（认证引导，忽略租户）
+    @IgnoreTenant
+    public Optional<DouyinDirectApp> findFirstByChannelMchNoNotTenant(String channelMchNo) {
+        return findFirstByChannelMchNo(channelMchNo);
+    }
+
+    /// 根据通道商户号与应用类型取首个应用（认证引导，忽略租户）
+    @IgnoreTenant
+    public Optional<DouyinDirectApp> findFirstByChannelMchNoAndAppTypeNotTenant(String channelMchNo, String appType) {
+        return findFirstByChannelMchNoAndAppType(channelMchNo, appType);
+    }
+
 }

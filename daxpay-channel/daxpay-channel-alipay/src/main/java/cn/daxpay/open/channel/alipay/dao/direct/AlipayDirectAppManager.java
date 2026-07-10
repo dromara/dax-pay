@@ -2,6 +2,7 @@ package cn.daxpay.open.channel.alipay.dao.direct;
 
 import cn.daxpay.open.platform.common.mybatisplus.impl.BaseManager;
 import cn.daxpay.open.channel.alipay.entity.direct.AlipayDirectApp;
+import cn.daxpay.open.platform.core.annotation.IgnoreTenant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -11,7 +12,9 @@ import java.util.Optional;
 
 /// # 支付宝直连商户应用
 ///
-/// 直连商户应用数据访问管理器，提供按商户号和通道商户号查询列表、同一通道下应用ID唯一性校验等方法。
+/// - 配置态 CRUD: [#listByMchNoAndChannelMchNo]、[#existsByChannelMchNoAndAliAppId]、[#findFirstByMchNo]
+/// - 支付/回调（已装载 mchNo）: 租户内 [#findFirstByChannelMchNo]、[#findFirstByChannelMchNoAndAppType]
+/// - 认证引导: 方法名带 NotTenant
 ///
 @Slf4j
 @Service
@@ -46,7 +49,7 @@ public class AlipayDirectAppManager extends BaseManager<AlipayDirectAppMapper, A
                 .orderByAsc(AlipayDirectApp::getId));
     }
 
-    /// 根据通道商户号与应用类型查询首个应用(appType自动推导时使用, 按创建时间升序取第一条)
+    /// 根据通道商户号与应用类型查询首个应用（支付/回调，租户内）
     public Optional<AlipayDirectApp> findFirstByChannelMchNoAndAppType(String channelMchNo, String appType) {
         return firstOpt(q -> q
                 .eq(AlipayDirectApp::getChannelMchNo, channelMchNo)
@@ -55,11 +58,24 @@ public class AlipayDirectAppManager extends BaseManager<AlipayDirectAppMapper, A
                 .orderByAsc(AlipayDirectApp::getId));
     }
 
-    /// 根据通道商户号查询首个应用(兜底回退使用, 按创建时间升序取第一条)
+    /// 根据通道商户号查询首个应用（支付/回调，租户内）
     public Optional<AlipayDirectApp> findFirstByChannelMchNo(String channelMchNo) {
         return firstOpt(q -> q
                 .eq(AlipayDirectApp::getChannelMchNo, channelMchNo)
                 .orderByAsc(AlipayDirectApp::getCreateTime)
                 .orderByAsc(AlipayDirectApp::getId));
     }
+
+    /// 根据通道商户号与应用类型查询首个应用（认证引导，忽略租户）
+    @IgnoreTenant
+    public Optional<AlipayDirectApp> findFirstByChannelMchNoAndAppTypeNotTenant(String channelMchNo, String appType) {
+        return findFirstByChannelMchNoAndAppType(channelMchNo, appType);
+    }
+
+    /// 根据通道商户号查询首个应用（认证引导，忽略租户）
+    @IgnoreTenant
+    public Optional<AlipayDirectApp> findFirstByChannelMchNoNotTenant(String channelMchNo) {
+        return findFirstByChannelMchNo(channelMchNo);
+    }
+
 }

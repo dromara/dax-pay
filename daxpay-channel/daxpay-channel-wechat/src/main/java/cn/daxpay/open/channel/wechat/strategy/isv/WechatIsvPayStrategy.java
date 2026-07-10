@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 /// # 微信服务商支付策略
 ///
 /// 微信服务商模式(ProductEnum.WECHAT_ISV)下发起支付的具体执行策略。
-/// 配置组装在 [doBeforePay] 阶段完成(委托 [WechatIsvConfigAssembler]), 支付执行委托给 [WechatPayService]。
+/// 配置组装在 [#doBeforePay] 阶段完成(委托 [WechatIsvConfigAssembler]), 支付执行委托给 [WechatPayService]。
 @Slf4j
 @Service
 @RequiredArgsConstructor

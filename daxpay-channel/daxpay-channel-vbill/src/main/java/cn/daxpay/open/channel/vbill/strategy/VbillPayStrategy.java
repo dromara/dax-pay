@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 /// # 随行付服务商支付策略
 ///
 /// 随行付支付(ProductEnum.VBILL_PAY)下发起支付的具体执行策略。
-/// 配置组装在 [doBeforePay] 阶段完成(委托 [VbillIsvConfigAssembler]), 支付执行委托给 [VbillPayService]。
+/// 配置组装在 [#doBeforePay] 阶段完成(委托 [VbillIsvConfigAssembler]), 支付执行委托给 [VbillPayService]。
 ///
 /// 随行付为聚合服务商模式, 不区分直连/服务商, 仅有一个产品 VBILL_PAY。
 @Slf4j
