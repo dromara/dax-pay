@@ -1,17 +1,19 @@
-package cn.daxpay.open.payment.app.mobile.result;
+package cn.daxpay.open.platform.system.param.mobile;
 
-import cn.daxpay.open.platform.core.result.BaseResult;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-/// # 移动端应用配置结果
-@EqualsAndHashCode(callSuper = true)
+/// # 移动端应用配置参数
+///
+/// 保存时按 appType + platform 进行 upsert, 二者组合为唯一键。
 @Data
 @Accessors(chain = true)
-@Schema(title = "移动端应用配置结果")
-public class MobileAppResult extends BaseResult {
+@Schema(title = "移动端应用配置参数")
+public class MobileAppParam {
+
+    @Schema(description = "主键(更新时必填)")
+    private Long id;
 
     @Schema(description = "端类型")
     private String appType;

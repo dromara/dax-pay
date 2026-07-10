@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.app.mobile.enums;
+package cn.daxpay.open.platform.system.enums;
 
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.i18n.I18nSupport;

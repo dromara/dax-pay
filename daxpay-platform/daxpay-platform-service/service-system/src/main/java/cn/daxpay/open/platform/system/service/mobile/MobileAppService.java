@@ -1,12 +1,12 @@
-package cn.daxpay.open.payment.app.mobile.service;
+package cn.daxpay.open.platform.system.service.mobile;
 
-import cn.daxpay.open.payment.app.mobile.convert.MobileAppConvert;
-import cn.daxpay.open.payment.app.mobile.dao.MobileAppManager;
-import cn.daxpay.open.payment.app.mobile.entity.MobileApp;
-import cn.daxpay.open.payment.app.mobile.param.MobileAppParam;
-import cn.daxpay.open.payment.app.mobile.result.MobileAppResult;
 import cn.daxpay.open.platform.common.json.util.JacksonUtil;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
+import cn.daxpay.open.platform.system.convert.mobile.MobileAppConvert;
+import cn.daxpay.open.platform.system.dao.mobile.MobileAppManager;
+import cn.daxpay.open.platform.system.entity.mobile.MobileApp;
+import cn.daxpay.open.platform.system.param.mobile.MobileAppParam;
+import cn.daxpay.open.platform.system.result.mobile.MobileAppResult;
 import cn.hutool.core.util.DesensitizedUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ import java.util.Set;
 ///
 /// 平台级配置, 按端类型(appType)+移动平台(platform)维度管理。
 /// app_config/notify_config 经 [cn.daxpay.open.platform.common.mybatisplus.handler.encrypt.DataEncryptTypeHandler] 加密入库;
-/// 返回前端时对 app_config 内敏感键(appSecret/privateKey/clientSecret)脱敏;
+/// 返回前端时对 app_config 内敏感键(appSecret/privateKey/alipayPublicKey/证书等)脱敏;
 /// 保存时敏感键为空则保留库中原值(配合前端 diffForm)。
 @Slf4j
 @Service
@@ -32,8 +32,10 @@ import java.util.Set;
 public class MobileAppService {
 
     /// app_config 中需要脱敏/保护的敏感键
+    /// 含支付宝小程序公钥字段与证书模式三本证书
     private static final Set<String> SENSITIVE_KEYS = Set.of(
-            "appSecret", "privateKey", "alipayPublicKey", "clientSecret");
+            "appSecret", "privateKey", "alipayPublicKey", "clientSecret",
+            "appCert", "alipayCert", "alipayRootCert");
 
     private final MobileAppManager manager;
 

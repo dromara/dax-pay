@@ -1,11 +1,11 @@
-package cn.daxpay.open.payment.web.admin.controller.app.mobile;
+package cn.daxpay.open.platform.system.controller.config.mobile;
 
-import cn.daxpay.open.payment.app.mobile.param.MobileAppParam;
-import cn.daxpay.open.payment.app.mobile.result.MobileAppResult;
-import cn.daxpay.open.payment.app.mobile.service.MobileAppService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
+import cn.daxpay.open.platform.system.param.mobile.MobileAppParam;
+import cn.daxpay.open.platform.system.result.mobile.MobileAppResult;
+import cn.daxpay.open.platform.system.service.mobile.MobileAppService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
@@ -20,13 +20,13 @@ import java.util.List;
 ///
 /// 平台级移动端应用(商户端/管理端/收银台小程序)的密钥、通知、用户绑定配置管理。
 /// 按端类型(appType)+移动平台(platform)维度, 每组合一条配置记录。
-@PermCode(menuCode = "payment:config:mobile_app")
+@PermCode(menuCode = "system:config:mobile_app")
 @Validated
 @Tag(name = "移动端应用配置管理")
 @RestController
-@RequestMapping("/admin/mobile-app")
+@RequestMapping("/platform/config/mobile-app")
 @RequiredArgsConstructor
-public class MobileAppAdminController {
+public class MobileAppController {
 
     private final MobileAppService mobileAppService;
 

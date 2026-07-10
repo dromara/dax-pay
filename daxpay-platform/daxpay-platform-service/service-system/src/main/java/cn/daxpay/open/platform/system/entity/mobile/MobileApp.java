@@ -1,10 +1,10 @@
-package cn.daxpay.open.payment.app.mobile.entity;
+package cn.daxpay.open.platform.system.entity.mobile;
 
-import cn.daxpay.open.payment.app.mobile.convert.MobileAppConvert;
-import cn.daxpay.open.payment.app.mobile.result.MobileAppResult;
 import cn.daxpay.open.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.daxpay.open.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.open.platform.common.mybatisplus.handler.encrypt.DataEncryptTypeHandler;
+import cn.daxpay.open.platform.system.convert.mobile.MobileAppConvert;
+import cn.daxpay.open.platform.system.result.mobile.MobileAppResult;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -22,11 +22,11 @@ import lombok.experimental.Accessors;
 public class MobileApp extends MpBaseEntity implements ToResult<MobileAppResult> {
 
     /// 端类型
-    /// @see cn.daxpay.open.payment.app.mobile.enums.MobileAppTypeEnum
+    /// @see cn.daxpay.open.platform.system.enums.MobileAppTypeEnum
     private String appType;
 
     /// 移动平台
-    /// @see cn.daxpay.open.payment.app.mobile.enums.MobilePlatformEnum
+    /// @see cn.daxpay.open.platform.system.enums.MobilePlatformEnum
     private String platform;
 
     /// 应用名称(展示用)

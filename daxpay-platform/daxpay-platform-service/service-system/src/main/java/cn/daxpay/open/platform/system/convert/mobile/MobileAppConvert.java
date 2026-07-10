@@ -1,8 +1,8 @@
-package cn.daxpay.open.payment.app.mobile.convert;
+package cn.daxpay.open.platform.system.convert.mobile;
 
-import cn.daxpay.open.payment.app.mobile.entity.MobileApp;
-import cn.daxpay.open.payment.app.mobile.param.MobileAppParam;
-import cn.daxpay.open.payment.app.mobile.result.MobileAppResult;
+import cn.daxpay.open.platform.system.entity.mobile.MobileApp;
+import cn.daxpay.open.platform.system.param.mobile.MobileAppParam;
+import cn.daxpay.open.platform.system.result.mobile.MobileAppResult;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
