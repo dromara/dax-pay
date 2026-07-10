@@ -25,16 +25,6 @@ public class DeviceQrCodeParam {
     @Size(max = 100, message = "{validation.field.qrCodeName.size}")
     private String name;
 
-    /// 商户号(新增快捷绑定时必填; 编辑不改归属, 仅 add 校验)
-    @Schema(description = "商户号")
-    @NotBlank(message = "{validation.field.mchNo.notBlank}", groups = ValidationGroup.add.class)
-    private String mchNo;
-
-    /// 关联应用号(可空, 空则使用商户默认应用)
-    @Schema(description = "关联应用号")
-    @Size(max = 50, message = "{validation.field.appId.size}")
-    private String appId;
-
     /// 金额类型: random-自定义金额 / fixed-固定金额
     /// @see cn.daxpay.open.payment.device.enums.QrCodeAmountTypeEnum
     @Schema(description = "金额类型(random-自定义/fixed-固定)")

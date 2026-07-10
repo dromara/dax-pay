@@ -18,7 +18,8 @@ import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
-import cn.hutool.core.util.IdUtil;
+import cn.daxpay.open.platform.system.entity.config.platform.infra.PlatformUrlConfig;
+import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,33 +38,13 @@ import java.util.stream.IntStream;
 @RequiredArgsConstructor
 public class DeviceQrCodeAdminService {
 
-    /// 码牌编码前缀(单条快捷新增)
-    private static final String CODE_PREFIX = "QR";
+    /// H5 码牌支付页路径前缀(与 dax-pay-h5 RoutePath.CODE_PAY 一致)
+    private static final String CODE_PAY_PATH = "/code-pay/";
 
     private final DeviceQrCodeManager deviceQrCodeManager;
     private final MerchantContextLoader merchantContextLoader;
     private final TransService transService;
-
-    /// 新增码牌(快捷路径: 直接绑定商户, 自动生成编码)
-    @Transactional(rollbackFor = Exception.class)
-    public void add(DeviceQrCodeParam param) {
-        // 金额类型校验
-        QrCodeAmountTypeEnum amountType = QrCodeAmountTypeEnum.findByCode(param.getAmountType());
-        // 固定金额: fixed 类型必填且大于 0
-        validateFixedAmount(amountType, param.getFixedAmount());
-        // 应用解析: appId 空则取商户默认应用, 否则校验启用与归属, 回填 appId
-        String appId = resolveAppId(param.getMchNo(), param.getAppId());
-        DeviceQrCode entity = new DeviceQrCode()
-                .setCode(generateCode())
-                .setName(param.getName())
-                .setMchNo(param.getMchNo())
-                .setAppId(appId)
-                .setAmountType(amountType.getCode())
-                .setFixedAmount(amountType == QrCodeAmountTypeEnum.FIXED ? param.getFixedAmount() : null)
-                .setStatus(QrCodeStatusEnum.ENABLED.getCode())
-                .setRemark(param.getRemark());
-        deviceQrCodeManager.save(entity);
-    }
+    private final PlatformUrlConfigService platformUrlConfigService;
 
     /// 批量创建空白码牌(不绑商户, 进入平台库存)
     @Transactional(rollbackFor = Exception.class)
@@ -171,9 +152,20 @@ public class DeviceQrCodeAdminService {
         deviceQrCodeManager.updateById(entity);
     }
 
-    /// 生成码牌编码: 前缀 + 雪花ID
-    private String generateCode() {
-        return CODE_PREFIX + IdUtil.getSnowflakeNextId();
+    /// 获取码牌 H5 扫码链接
+    ///
+    /// 拼接规则: {paymentGatewayBaseUrl}/code-pay/{code}
+    public String getCodeLink(String code) {
+        deviceQrCodeManager.findByCode(code)
+                // 码牌: 码牌不存在
+                .orElseThrow(() -> new DataNotExistException("error.device.qrcode.notFound"));
+        PlatformUrlConfig urlConfig = platformUrlConfigService.getUrlConfig();
+        String gatewayBase = urlConfig.getPaymentGatewayBaseUrl();
+        if (StrUtil.isBlank(gatewayBase)) {
+            // 支付网关前端地址未配置
+            throw new OperationFailException(CommonCode.FAIL_CODE, "error.common.gatewayUrlNotConfigured");
+        }
+        return gatewayBase + CODE_PAY_PATH + code;
     }
 
     /// 应用解析: 复用 [MerchantContextLoader.resolveApp], appId 空取商户默认应用, 返回解析后的 appId

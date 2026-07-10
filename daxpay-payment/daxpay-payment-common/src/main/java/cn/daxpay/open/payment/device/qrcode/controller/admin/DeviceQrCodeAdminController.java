@@ -40,14 +40,6 @@ public class DeviceQrCodeAdminController {
     private final DeviceQrCodeAdminService deviceQrCodeAdminService;
 
     @PermCode(code = "manage", nameCn = "码牌管理", nameEn = "QrCode Manage")
-    @Operation(summary = "新增码牌(快捷绑定商户)")
-    @PostMapping("/add")
-    public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) DeviceQrCodeParam param) {
-        deviceQrCodeAdminService.add(param);
-        return Res.ok();
-    }
-
-    @PermCode(code = "manage", nameCn = "码牌管理", nameEn = "QrCode Manage")
     @Operation(summary = "批量创建空白码牌")
     @PostMapping("/create-batch")
     public Result<Void> createBatch(@RequestBody @Validated DeviceQrCodeBatchParam param) {
@@ -98,6 +90,13 @@ public class DeviceQrCodeAdminController {
     @GetMapping("/get")
     public Result<DeviceQrCodeResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(deviceQrCodeAdminService.findById(id));
+    }
+
+    @PermCode(code = "view", nameCn = "码牌查看", nameEn = "QrCode View")
+    @Operation(summary = "获取码牌扫码链接")
+    @GetMapping("/get-code-link")
+    public Result<String> getCodeLink(@NotBlank(message = "{validation.field.code.notBlank}") String code) {
+        return Res.ok(deviceQrCodeAdminService.getCodeLink(code));
     }
 
     @PermCode(code = "manage", nameCn = "码牌管理", nameEn = "QrCode Manage")
