@@ -2,6 +2,7 @@ package cn.daxpay.open.platform.common.mybatisplus.impl;
 
 import cn.daxpay.open.platform.common.mybatisplus.extension.DaxLambdaQueryChainWrapper;
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
+import cn.daxpay.open.platform.core.annotation.IgnoreTenant;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.enums.SqlMethod;
@@ -266,6 +267,15 @@ public class BaseManager<M extends MPJBaseMapper<T>, T> {
     /// 根据主键查询
     public Optional<T> findById(Serializable id) {
         return Optional.ofNullable(baseMapper.selectById(id));
+    }
+
+    /// 按主键查询（忽略租户隔离）
+    ///
+    /// 运行态认证/支付解析/网关引导等无租户上下文时使用；配置态 CRUD 请用 [findById]。
+    /// 须经 Spring 注入的 Manager Bean 外部调用（同类 this 自调用不走 AOP）。
+    @IgnoreTenant
+    public Optional<T> findByIdNotTenant(Serializable id) {
+        return findById(id);
     }
 
     /// 根据字段查询唯一值
