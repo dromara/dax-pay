@@ -1,4 +1,4 @@
-package cn.daxpay.open.platform.system.param.config;
+package cn.daxpay.open.platform.system.param.config.infra;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

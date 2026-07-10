@@ -1,4 +1,4 @@
-package cn.daxpay.open.platform.system.result.config.platform;
+package cn.daxpay.open.platform.system.result.config.security;
 
 import cn.daxpay.open.platform.core.result.BaseResult;
 import io.swagger.v3.oas.annotations.media.Schema;

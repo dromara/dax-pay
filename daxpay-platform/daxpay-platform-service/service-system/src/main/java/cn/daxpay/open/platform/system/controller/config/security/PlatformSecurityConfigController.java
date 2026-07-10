@@ -1,12 +1,12 @@
-package cn.daxpay.open.platform.system.controller.config;
+package cn.daxpay.open.platform.system.controller.config.security;
 
 import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.platform.system.param.config.security.*;
-import cn.daxpay.open.platform.system.result.config.platform.*;
-import cn.daxpay.open.platform.system.service.config.PlatformSecurityConfigService;
+import cn.daxpay.open.platform.system.result.config.security.*;
+import cn.daxpay.open.platform.system.service.config.security.PlatformSecurityConfigService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

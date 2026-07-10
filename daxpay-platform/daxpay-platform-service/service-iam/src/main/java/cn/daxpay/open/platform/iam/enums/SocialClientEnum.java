@@ -2,7 +2,7 @@ package cn.daxpay.open.platform.iam.enums;
 
 import java.util.Arrays;
 
-import cn.daxpay.open.platform.system.entity.config.platform.PlatformUrlConfig;
+import cn.daxpay.open.platform.system.entity.config.platform.infra.PlatformUrlConfig;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

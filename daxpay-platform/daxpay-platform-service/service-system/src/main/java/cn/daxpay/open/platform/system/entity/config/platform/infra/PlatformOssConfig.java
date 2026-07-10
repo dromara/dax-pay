@@ -1,4 +1,4 @@
-package cn.daxpay.open.platform.system.entity.config.platform;
+package cn.daxpay.open.platform.system.entity.config.platform.infra;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

@@ -11,7 +11,7 @@ import cn.daxpay.open.platform.notify.param.wechat.WechatMessageQuery;
 import cn.daxpay.open.platform.notify.result.wechat.WechatMessageRecordResult;
 import cn.daxpay.open.platform.notify.service.wechat.WechatMessageRecordService;
 import cn.daxpay.open.platform.notify.service.wechat.WechatNotifyService;
-import cn.daxpay.open.platform.system.service.config.PlatformWechatNotifyConfigService;
+import cn.daxpay.open.platform.system.service.config.notify.PlatformWechatNotifyConfigService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;

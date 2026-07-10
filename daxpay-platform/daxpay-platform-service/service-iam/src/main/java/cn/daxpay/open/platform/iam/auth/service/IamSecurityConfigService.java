@@ -4,7 +4,7 @@ import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformLo
 import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformPasswordPolicyConfig;
 import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformSessionManagementConfig;
 import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformTwoFactorAuthConfig;
-import cn.daxpay.open.platform.system.service.config.PlatformSecurityConfigService;
+import cn.daxpay.open.platform.system.service.config.security.PlatformSecurityConfigService;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

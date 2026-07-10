@@ -1,8 +1,8 @@
-package cn.daxpay.open.platform.system.convert;
+package cn.daxpay.open.platform.system.convert.config.infra;
 
-import cn.daxpay.open.platform.system.entity.config.platform.PlatformOssConfig;
-import cn.daxpay.open.platform.system.param.config.PlatformOssConfigParam;
-import cn.daxpay.open.platform.system.result.config.platform.PlatformOssConfigResult;
+import cn.daxpay.open.platform.system.entity.config.platform.infra.PlatformOssConfig;
+import cn.daxpay.open.platform.system.param.config.infra.PlatformOssConfigParam;
+import cn.daxpay.open.platform.system.result.config.infra.PlatformOssConfigResult;
 import org.mapstruct.BeanMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;

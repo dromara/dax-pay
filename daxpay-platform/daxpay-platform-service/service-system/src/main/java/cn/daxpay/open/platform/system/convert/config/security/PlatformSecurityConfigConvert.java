@@ -1,8 +1,8 @@
-package cn.daxpay.open.platform.system.convert;
+package cn.daxpay.open.platform.system.convert.config.security;
 
 import cn.daxpay.open.platform.system.entity.config.platform.security.*;
 import cn.daxpay.open.platform.system.param.config.security.*;
-import cn.daxpay.open.platform.system.result.config.platform.*;
+import cn.daxpay.open.platform.system.result.config.security.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;

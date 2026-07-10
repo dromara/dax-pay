@@ -1,10 +1,11 @@
-package cn.daxpay.open.platform.system.service.config;
+package cn.daxpay.open.platform.system.service.config.infra;
 
-import cn.daxpay.open.platform.system.convert.PlatformOssConfigConvert;
-import cn.daxpay.open.platform.system.entity.config.platform.PlatformOssConfig;
+import cn.daxpay.open.platform.system.convert.config.infra.PlatformOssConfigConvert;
+import cn.daxpay.open.platform.system.entity.config.platform.infra.PlatformOssConfig;
 import cn.daxpay.open.platform.system.enums.EncryptPlatformConfigTypeEnum;
-import cn.daxpay.open.platform.system.param.config.PlatformOssConfigParam;
-import cn.daxpay.open.platform.system.result.config.platform.PlatformOssConfigResult;
+import cn.daxpay.open.platform.system.param.config.infra.PlatformOssConfigParam;
+import cn.daxpay.open.platform.system.result.config.infra.PlatformOssConfigResult;
+import cn.daxpay.open.platform.system.service.config.SystemPlatformEncryptConfigService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

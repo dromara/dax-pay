@@ -1,11 +1,11 @@
-package cn.daxpay.open.platform.system.controller.config;
+package cn.daxpay.open.platform.system.controller.config.infra;
 
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
-import cn.daxpay.open.platform.system.param.config.PlatformOssConfigParam;
-import cn.daxpay.open.platform.system.result.config.platform.PlatformOssConfigResult;
-import cn.daxpay.open.platform.system.service.config.PlatformOssConfigService;
+import cn.daxpay.open.platform.system.param.config.infra.PlatformOssConfigParam;
+import cn.daxpay.open.platform.system.result.config.infra.PlatformOssConfigResult;
+import cn.daxpay.open.platform.system.service.config.infra.PlatformOssConfigService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

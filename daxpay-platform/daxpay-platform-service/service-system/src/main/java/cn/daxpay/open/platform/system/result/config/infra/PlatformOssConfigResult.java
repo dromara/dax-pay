@@ -1,4 +1,4 @@
-package cn.daxpay.open.platform.system.result.config.platform;
+package cn.daxpay.open.platform.system.result.config.infra;
 
 import cn.daxpay.open.platform.common.json.sensitive.SensitiveInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
