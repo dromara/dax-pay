@@ -26,7 +26,7 @@ import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
-import cn.daxpay.open.platform.system.service.config.PlatformUrlConfigService;
+import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -69,9 +69,9 @@ public class WechatIsvAuthStrategy extends AbsChannelAuthStrategy {
     @Override
     public AuthUrlResult generateAuthUrl(GenerateAuthUrlParam param, String authToken) {
         ResolvedAuthApp app = resolveAuthApp(param.getChannelMchNo(), param.getCapability(), param.getOpAppId());
-        String redirectUri = buildRedirectUri(authToken);
+        String redirectUri = buildRedirectUri();
         WechatAuthUrlResult result = wechatMpAuthService.generateAuthUrl(
-                redirectUri, app.wxAppId(), app.appSecret());
+                redirectUri, app.wxAppId(), app.appSecret(), authToken);
         return new AuthUrlResult().setAuthUrl(result.getAuthUrl());
     }
 
@@ -109,7 +109,7 @@ public class WechatIsvAuthStrategy extends AbsChannelAuthStrategy {
 
     /// 读取特约商户的认证应用类型, 默认 SP_APP(服务商应用)
     private WechatAuthAppTypeEnum loadAuthAppType(String channelMchNo) {
-        return wechatIsvChannelMerchantManager.findByChannelMchNo(channelMchNo)
+        return wechatIsvChannelMerchantManager.findByChannelMchNoNotTenant(channelMchNo)
                 .map(WechatIsvChannelMerchant::getAuthAppType)
                 .filter(StrUtil::isNotBlank)
                 .map(WechatAuthAppTypeEnum::valueOf)
@@ -131,7 +131,7 @@ public class WechatIsvAuthStrategy extends AbsChannelAuthStrategy {
                 // 微信: 服务商通道商户应用不存在
                 .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "error.channel.wechat.mchAppNotFound"));
-        WechatIsvMchAppAuthConfig cfg = wechatIsvMchAppAuthConfigService.findByWechatIsvMchAppId(app.getId());
+        WechatIsvMchAppAuthConfig cfg = wechatIsvMchAppAuthConfigService.findByWechatIsvMchAppIdForAuth(app.getId());
         return new ResolvedAuthApp(app.getWxAppId(), cfg.getAppSecret());
     }
 
@@ -144,21 +144,23 @@ public class WechatIsvAuthStrategy extends AbsChannelAuthStrategy {
             WechatIsvAppAuthConfig cfg = wechatIsvAppAuthConfigService.findByWechatIsvAppId(app.getId());
             return new ResolvedAuthApp(app.getWxAppId(), cfg.getAppSecret());
         }
-        WechatIsvMchApp app = wechatIsvMchAppManager.findByChannelMchNoAndWxAppId(channelMchNo, opAppId)
+        WechatIsvMchApp app = wechatIsvMchAppManager.findByChannelMchNoAndWxAppIdNotTenant(channelMchNo, opAppId)
                 .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "error.channel.wechat.opAppIdNotFound", opAppId));
-        WechatIsvMchAppAuthConfig cfg = wechatIsvMchAppAuthConfigService.findByWechatIsvMchAppId(app.getId());
+        WechatIsvMchAppAuthConfig cfg = wechatIsvMchAppAuthConfigService.findByWechatIsvMchAppIdForAuth(app.getId());
         return new ResolvedAuthApp(app.getWxAppId(), cfg.getAppSecret());
     }
 
-    /// 拼接认证回调地址: {paymentGatewayBaseUrl}/auth/wechat/{authToken}
-    private String buildRedirectUri(String authToken) {
+    /// 拼接认证回调地址: {paymentGatewayBaseUrl}/auth/wechat
+    ///
+    /// 固定路径(不含动态段), 会话标识 authToken 通过 OAuth state 参数透传。
+    private String buildRedirectUri() {
         String base = platformUrlConfigService.getUrlConfig().getPaymentGatewayBaseUrl();
         if (StrUtil.isBlank(base)) {
             // 支付网关前端地址未配置
             throw new BizInfoException(DaxPayErrorCode.CONFIG_ERROR, "error.common.gatewayUrlNotConfigured");
         }
-        return StrUtil.removeSuffix(base, "/") + "/auth/wechat/" + authToken;
+        return StrUtil.removeSuffix(base, "/") + "/auth/wechat";
     }
 
     /// 解析后的认证应用(wxAppId + appSecret)

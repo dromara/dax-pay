@@ -13,8 +13,9 @@ import org.springframework.stereotype.Service;
 /// # 认证调试服务
 ///
 /// 调试入口, 按认证来源分别委托:
-/// - **支付宝H5(平台级)**: 委托 [PlatformAuthService] 生成 H5 中间页授权链接, 轮询 queryCode 取结果
+/// - **支付宝(平台级)**: 委托 [PlatformAuthService] 生成 OAuth 授权链接, 轮询 queryCode 取结果
 /// - **微信公众号配置(平台级)**: 委托 [PlatformAuthService], OAuth 重定向取 openId, 仅验证配置是否正确
+/// - **抖音H5(平台级)**: 委托 [PlatformAuthService], silent_auth 静默授权取 openId, 仅验证配置是否正确
 /// - **微信支付(直连/服务商)**: 委托 [ChannelAuthService] 按支付产品路由认证策略,
 ///   依赖商户上下文(channelMchNo/产品/能力)
 /// - **支付宝小程序**: 暂未实现
@@ -30,7 +31,7 @@ public class DevelopAuthService {
     private final ChannelAuthService channelAuthService;
     private final AuthSessionStore authSessionStore;
 
-    /// 生成支付宝H5授权链接(平台级中间页 + queryCode)
+    /// 生成支付宝授权链接(平台级 OAuth + queryCode 轮询)
     public AuthUrlResult generateAlipayAuthUrl() {
         return platformAuthService.generateAlipayAuthUrl();
     }
@@ -38,6 +39,11 @@ public class DevelopAuthService {
     /// 生成微信公众号配置授权链接(平台级, 仅调试)
     public AuthUrlResult generateWechatMpAuthUrl() {
         return platformAuthService.generateWechatMpAuthUrl();
+    }
+
+    /// 生成抖音 H5 授权链接(平台级, 仅调试)
+    public AuthUrlResult generateDouyinAuthUrl() {
+        return platformAuthService.generateDouyinAuthUrl();
     }
 
     /// 生成微信支付(直连/服务商)授权链接

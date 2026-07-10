@@ -12,7 +12,7 @@ import cn.daxpay.open.platform.capability.social.justauth.model.AuthUser;
 import cn.daxpay.open.platform.capability.social.justauth.request.SocialAuthRequest;
 import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
 import cn.daxpay.open.platform.iam.service.social.SocialLoginService;
-import cn.daxpay.open.platform.system.service.config.PlatformAlipayAuthConfigService;
+import cn.daxpay.open.platform.system.service.config.auth.PlatformAlipayAuthConfigService;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 

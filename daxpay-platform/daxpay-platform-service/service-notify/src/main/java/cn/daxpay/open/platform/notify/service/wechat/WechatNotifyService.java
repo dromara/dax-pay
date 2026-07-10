@@ -6,9 +6,9 @@ import cn.daxpay.open.platform.capability.wechat.message.result.MessageSendResul
 import cn.daxpay.open.platform.capability.wechat.message.service.WechatMpMessageService;
 import cn.daxpay.open.platform.iam.service.social.IamUserSocialBindStore;
 import cn.daxpay.open.platform.notify.entity.wechat.WechatMessageRecord;
-import cn.daxpay.open.platform.system.entity.config.platform.PlatformWechatMpAuthConfig;
-import cn.daxpay.open.platform.system.service.config.PlatformWechatMpAuthConfigService;
-import cn.daxpay.open.platform.system.service.config.PlatformWechatNotifyConfigService;
+import cn.daxpay.open.platform.system.entity.config.platform.auth.PlatformWechatMpAuthConfig;
+import cn.daxpay.open.platform.system.service.config.auth.PlatformWechatMpAuthConfigService;
+import cn.daxpay.open.platform.system.service.config.notify.PlatformWechatNotifyConfigService;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;

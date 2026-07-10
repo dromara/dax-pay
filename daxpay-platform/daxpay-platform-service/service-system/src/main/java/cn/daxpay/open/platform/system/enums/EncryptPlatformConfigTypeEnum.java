@@ -21,7 +21,10 @@ public enum EncryptPlatformConfigTypeEnum implements I18nSupport {
     ALIPAY_AUTH("alipay_auth"),
 
     /// 微信公众号 H5 认证配置(appId/appSecret, 含敏感信息加密存储)
-    WECHAT_MP_AUTH("wechat_mp_auth");
+    WECHAT_MP_AUTH("wechat_mp_auth"),
+
+    /// 抖音开放平台 H5 应用认证配置(clientKey/clientSecret, 含敏感信息加密存储)
+    DOUYIN_H5_AUTH("douyin_h5_auth");
 
     /// 编码
     private final String code;

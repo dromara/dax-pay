@@ -26,7 +26,7 @@ import java.util.Objects;
 public class LeshuaRefundService {
 
     private final LeshuaChannelClient leshuaChannelClient;
-    private final cn.daxpay.open.platform.system.service.config.PlatformUrlConfigService platformUrlConfigService;
+    private final cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService platformUrlConfigService;
 
     /// 执行退款
     public RefundResultBo refund(PayRefundOrder refundOrder, LeshuaSdkCredential credential) {

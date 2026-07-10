@@ -28,8 +28,9 @@ import java.util.Objects;
 /// # 通道认证服务
 ///
 /// 认证来源薄分发入口:
-/// - **生成授权链接**: authType=ALIPAY 走平台级支付宝中间页([PlatformAuthService]); 其余按支付产品走通道策略([ChannelAuthService])
-/// - **换票回调**: 支付宝平台级 / 微信系统公众号(session.source=platform_mp) 走 [PlatformAuthService]; 其余走通道策略
+/// - **生成授权链接**: authType=ALIPAY 走平台级支付宝 OAuth([PlatformAuthService]); 其余按支付产品走通道策略([ChannelAuthService])
+/// - **换票回调**: 优先按 session.source 分发平台级分支(alipay/mp/douyin), 否则走通道策略;
+///   authType=ALIPAY 且无 session 时走平台级(小程序等直连兜底)
 @IgnoreAuth
 @Tag(name = "通道认证服务")
 @RestController
@@ -45,7 +46,7 @@ public class ChannelAuthController {
     @Operation(summary = "获取授权链接")
     @PostMapping("/generate-auth-url")
     public DaxResult<AuthUrlResult> generateAuthUrl(@RequestBody GenerateAuthUrlParam param) {
-        // 支付宝: 平台级 H5 中间页(不依赖商户上下文)
+        // 支付宝: 平台级 OAuth(不依赖商户上下文)
         if (isAlipayAuth(param.getAuthType())) {
             return DaxRes.ok(platformAuthService.generateAlipayAuthUrl());
         }
@@ -67,26 +68,44 @@ public class ChannelAuthController {
 
     /// 认证换票薄分发
     ///
-    /// 优先级: 支付宝平台级(authType=ALIPAY) > 微信系统公众号(session.source=platform_mp) > 通道策略。
-    /// 微信等 OAuth 重定向通道回调仅含 authToken, 故先从会话恢复上下文再判断来源。
+    /// 优先级: 会话来源 platform_alipay / platform_mp / platform_douyin >
+    /// authType=ALIPAY 且无会话(小程序直连兜底) > 通道策略。
+    /// OAuth 重定向通道回调仅含 authToken, 故先从会话恢复上下文再判断来源。
     private AuthResult doAuth(AuthCodeParam param) {
-        if (isAlipayAuth(param.getAuthType())) {
-            return platformAuthService.authAlipay(param);
-        }
         AuthSession session = authSessionStore.loadSession(param.getAuthToken());
+        if (isPlatformAlipay(session)) {
+            return platformAuthService.authAlipay(param, session);
+        }
         if (isPlatformMp(session)) {
             return platformAuthService.authWechatMp(param, session);
+        }
+        if (isPlatformDouyin(session)) {
+            return platformAuthService.authDouyin(param, session);
+        }
+        // 无会话且 authType=alipay: 小程序等直连场景兜底
+        if (isAlipayAuth(param.getAuthType()) && session == null) {
+            return platformAuthService.authAlipay(param, null);
         }
         return channelAuthService.auth(param, session);
     }
 
-    /// 是否支付宝认证类型(平台级支付宝走 H5 中间页)
+    /// 是否支付宝认证类型(平台级支付宝走 OAuth)
     private boolean isAlipayAuth(String authType) {
         return Objects.equals(authType, ChannelAuthTypeEnum.ALIPAY.getCode());
+    }
+
+    /// 是否支付宝平台级配置来源
+    private boolean isPlatformAlipay(AuthSession session) {
+        return session != null && AuthSession.SOURCE_PLATFORM_ALIPAY.equals(session.getSource());
     }
 
     /// 是否微信系统公众号配置来源(平台级)
     private boolean isPlatformMp(AuthSession session) {
         return session != null && AuthSession.SOURCE_PLATFORM_MP.equals(session.getSource());
+    }
+
+    /// 是否抖音 H5 应用配置来源(平台级)
+    private boolean isPlatformDouyin(AuthSession session) {
+        return session != null && AuthSession.SOURCE_PLATFORM_DOUYIN.equals(session.getSource());
     }
 }

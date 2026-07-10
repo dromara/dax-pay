@@ -1,5 +1,6 @@
 {
   "oss": "Object storage configuration",
   "alipay_auth": "Alipay Open Platform Auth Configuration",
-  "wechat_mp_auth": "WeChat Official Account H5 Auth Configuration"
+  "wechat_mp_auth": "WeChat Official Account H5 Auth Configuration",
+  "douyin_h5_auth": "Douyin Open Platform H5 App Auth Configuration"
 }

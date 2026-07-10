@@ -19,7 +19,9 @@ public enum ChannelAuthTypeEnum implements I18nSupport {
     /// 支付宝
     ALIPAY("alipay"),
     /// 银联
-    UNION_PAY("union_pay");
+    UNION_PAY("union_pay"),
+    /// 抖音
+    DOUYIN("douyin");
 
     /// 编码
     private final String code;

@@ -6,6 +6,8 @@
   "authCodeBlank": "Authorization code cannot be empty",
   "alipayNotConfigured": "Platform-level Alipay configuration is incomplete, please configure it in 'Third-party Platform Management' first",
   "wechatMpNotConfigured": "Platform-level WeChat Official Account configuration is incomplete, please configure it in 'Third-party Platform Management' first",
+  "douyinH5NotConfigured": "Platform-level Douyin H5 app configuration is incomplete, please configure it in 'Third-party Platform Management' first",
+  "douyinAuthFailed": "Douyin: failed to get user identifier: {0}",
   "weCom": {
     "notCorpMember": "Not a member of this enterprise, login is not supported"
   },

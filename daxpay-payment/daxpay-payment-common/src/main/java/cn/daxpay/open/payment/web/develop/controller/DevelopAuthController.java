@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 /// 调试入口:
 /// - 支付宝H5平台级配置(中间页授权链接)
 /// - 微信公众号配置(平台级 OAuth)
+/// - 抖音 H5 应用配置(平台级 silent_auth 静默授权)
 /// - 微信支付(直连/服务商, 需商户参数)
 /// - 支付宝小程序(暂未实现)
 /// - 微信小程序(商户端/运营端, 暂未实现)
@@ -50,6 +51,13 @@ public class DevelopAuthController {
     @PostMapping("/generate-wechat-mp-auth-url")
     public Result<AuthUrlResult> generateWechatMpAuthUrl() {
         return Res.ok(developAuthService.generateWechatMpAuthUrl());
+    }
+
+    @PermCode(code = "view", nameCn = "查看", nameEn = "View")
+    @Operation(summary = "生成抖音H5授权链接")
+    @PostMapping("/generate-douyin-auth-url")
+    public Result<AuthUrlResult> generateDouyinAuthUrl() {
+        return Res.ok(developAuthService.generateDouyinAuthUrl());
     }
 
     @PermCode(code = "view", nameCn = "查看", nameEn = "View")

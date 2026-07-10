@@ -6,6 +6,8 @@
   "authCodeBlank": "授权码不能为空",
   "alipayNotConfigured": "平台级支付宝配置不完整，请先在「三方平台管理」中配置",
   "wechatMpNotConfigured": "平台级微信公众号配置不完整，请先在「三方平台管理」中配置",
+  "douyinH5NotConfigured": "平台级抖音 H5 应用配置不完整，请先在「三方平台管理」中配置",
+  "douyinAuthFailed": "抖音: 获取用户标识失败: {0}",
   "weCom": {
     "notCorpMember": "非本企业成员，不支持登录"
   },

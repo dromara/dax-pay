@@ -16,7 +16,7 @@ import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
 import cn.daxpay.open.platform.core.enums.unipay.PayBodyTypeEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
-import cn.daxpay.open.platform.system.service.config.PlatformUrlConfigService;
+import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

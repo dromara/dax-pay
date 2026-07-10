@@ -19,7 +19,7 @@ import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.config.PayEnvEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
-import cn.daxpay.open.platform.system.service.config.PlatformUrlConfigService;
+import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;

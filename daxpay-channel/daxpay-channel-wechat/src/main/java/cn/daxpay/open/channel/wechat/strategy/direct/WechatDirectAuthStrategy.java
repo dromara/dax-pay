@@ -18,7 +18,7 @@ import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
-import cn.daxpay.open.platform.system.service.config.PlatformUrlConfigService;
+import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -50,14 +50,15 @@ public class WechatDirectAuthStrategy extends AbsChannelAuthStrategy {
 
     /// 生成公众号 OAuth 授权链接
     ///
-    /// 拼接回调地址({paymentGatewayBaseUrl}/auth/wechat/{authToken}), 委托 capability-wechat 生成微信 OAuth URL。
+    /// 拼接回调地址({paymentGatewayBaseUrl}/auth/wechat, 固定路径), 委托 capability-wechat 生成微信 OAuth URL。
+    /// 会话标识 authToken 通过 OAuth state 参数透传。
     @Override
     public AuthUrlResult generateAuthUrl(GenerateAuthUrlParam param, String authToken) {
         WechatDirectApp app = resolveApp(param.getChannelMchNo(), param.getCapability(), param.getOpAppId());
-        WechatDirectAppAuthConfig authConfig = wechatDirectAppAuthConfigService.findByWechatDirectAppId(app.getId());
-        String redirectUri = buildRedirectUri(authToken);
+        WechatDirectAppAuthConfig authConfig = wechatDirectAppAuthConfigService.findByWechatDirectAppIdForAuth(app.getId());
+        String redirectUri = buildRedirectUri();
         WechatAuthUrlResult result = wechatMpAuthService.generateAuthUrl(
-                redirectUri, app.getWxAppId(), authConfig.getAppSecret());
+                redirectUri, app.getWxAppId(), authConfig.getAppSecret(), authToken);
         return new AuthUrlResult().setAuthUrl(result.getAuthUrl());
     }
 
@@ -73,7 +74,7 @@ public class WechatDirectAuthStrategy extends AbsChannelAuthStrategy {
         String opAppId = session != null && StrUtil.isNotBlank(session.getOpAppId())
                 ? session.getOpAppId() : param.getOpAppId();
         WechatDirectApp app = resolveApp(channelMchNo, capability, opAppId);
-        WechatDirectAppAuthConfig authConfig = wechatDirectAppAuthConfigService.findByWechatDirectAppId(app.getId());
+        WechatDirectAppAuthConfig authConfig = wechatDirectAppAuthConfigService.findByWechatDirectAppIdForAuth(app.getId());
         WechatAuthResult data = wechatMpAuthService.getTokenAndOpenId(
                 param.getAuthCode(), app.getWxAppId(), authConfig.getAppSecret());
         if (StrUtil.isBlank(data.getOpenId())) {
@@ -86,10 +87,12 @@ public class WechatDirectAuthStrategy extends AbsChannelAuthStrategy {
     }
 
     /// 解析认证应用: opAppId 显式指定(校验预配) > capability 自动解析
+    ///
+    /// 认证场景处于网关端(无登录态), 全部走 NotTenant 查询路径避免被租户拦截器误加 mch_no='' 条件。
     private WechatDirectApp resolveApp(String channelMchNo, String capability, String opAppId) {
         if (StrUtil.isNotBlank(opAppId)) {
             // opAppId 必须在系统预配过(硬约束, 防任意 appId 滥用)
-            return wechatDirectAppManager.findByChannelMchNoAndWxAppId(channelMchNo, opAppId)
+            return wechatDirectAppManager.findByChannelMchNoAndWxAppIdNotTenant(channelMchNo, opAppId)
                     .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                             "error.channel.wechat.opAppIdNotFound", opAppId));
         }
@@ -99,13 +102,15 @@ public class WechatDirectAuthStrategy extends AbsChannelAuthStrategy {
                         "error.channel.wechat.mchAppNotFound"));
     }
 
-    /// 拼接认证回调地址: {paymentGatewayBaseUrl}/auth/wechat/{authToken}
-    private String buildRedirectUri(String authToken) {
+    /// 拼接认证回调地址: {paymentGatewayBaseUrl}/auth/wechat
+    ///
+    /// 固定路径(不含动态段), 会话标识 authToken 通过 OAuth state 参数透传。
+    private String buildRedirectUri() {
         String base = platformUrlConfigService.getUrlConfig().getPaymentGatewayBaseUrl();
         if (StrUtil.isBlank(base)) {
             // 支付网关前端地址未配置
             throw new BizInfoException(DaxPayErrorCode.CONFIG_ERROR, "error.common.gatewayUrlNotConfigured");
         }
-        return StrUtil.removeSuffix(base, "/") + "/auth/wechat/" + authToken;
+        return StrUtil.removeSuffix(base, "/") + "/auth/wechat";
     }
 }

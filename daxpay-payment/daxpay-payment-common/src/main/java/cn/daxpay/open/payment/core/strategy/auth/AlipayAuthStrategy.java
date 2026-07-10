@@ -7,8 +7,8 @@ import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
-import cn.daxpay.open.platform.system.service.config.PlatformAlipayAuthConfigService;
-import cn.daxpay.open.platform.system.service.config.PlatformUrlConfigService;
+import cn.daxpay.open.platform.system.service.config.auth.PlatformAlipayAuthConfigService;
+import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
 import cn.daxpay.open.payment.core.assist.AuthSession;
 import cn.daxpay.open.payment.unipay.param.assist.AuthCodeParam;
 import cn.daxpay.open.payment.unipay.param.assist.GenerateAuthUrlParam;
@@ -29,16 +29,16 @@ import org.springframework.stereotype.Service;
 /// - 三方登录的支付宝授权(iam 模块 AlipaySocialAuthRequest 复用同一份平台配置)
 ///
 /// ## 回调机制
-/// 与微信策略同构: 回调地址 = `{paymentGatewayBaseUrl}/auth/alipay/{authToken}`,
-/// 授权回跳时凭 authToken 恢复会话上下文(由 [ChannelAuthService] 管理)。
-///
+/// 与微信/抖音策略同构: 回调地址固定为 `{paymentGatewayBaseUrl}/auth/alipay`,
+/// 会话标识 authToken 通过 OAuth state 参数透传, 授权回跳时凭 authToken 恢复会话上下文
+/// (由 [ChannelAuthService] 管理)。
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class AlipayAuthStrategy extends AbsChannelAuthStrategy {
 
-    /// 支付宝通道认证回调路径(支付网关前端路由)
-    private static final String AUTH_CALLBACK_PATH = "/auth/alipay/";
+    /// 支付宝通道认证回调路径(支付网关前端路由, 固定路径)
+    private static final String AUTH_CALLBACK_PATH = "/auth/alipay";
 
     /// 授权范围: auth_base(静默授权, 仅取 userId, 不弹确认页, 支付场景体验更好)
     private static final String SCOPE = "auth_base";
@@ -54,8 +54,8 @@ public class AlipayAuthStrategy extends AbsChannelAuthStrategy {
 
     /// 生成支付宝授权链接
     ///
-    /// 拼接回调地址(`{paymentGatewayBaseUrl}/auth/alipay/{authToken}`),
-    /// 用平台级配置调 [AlipayAuthCapability] 生成支付宝授权页 URL。
+    /// 拼接固定回调地址(`/auth/alipay`), 用平台级配置调 [AlipayAuthCapability] 生成支付宝授权页 URL。
+    /// authToken 通过 OAuth state 透传。
     @Override
     public AuthUrlResult generateAuthUrl(GenerateAuthUrlParam param, String authToken) {
         AlipayAuthConfig capabilityConfig = platformAlipayAuthConfigService.toCapabilityConfig();
@@ -63,8 +63,8 @@ public class AlipayAuthStrategy extends AbsChannelAuthStrategy {
             // 支付宝: 平台级支付宝配置不完整, 请先在「三方平台管理」中配置
             throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR, "error.social.alipayNotConfigured");
         }
-        String redirectUri = this.buildRedirectUri(authToken);
-        // state 用 authToken, 支付宝回调原样回传, 但 ChannelAuthService 已通过路径里的 authToken 恢复上下文, 这里 state 仅做合规
+        String redirectUri = this.buildRedirectUri();
+        // state 用 authToken, 支付宝回调原样回传, H5 从 state 恢复会话
         // 平台级配置固定生产环境, 不再读取 sandbox
         String authUrl = alipayAuthCapability.generateAuthUrl(capabilityConfig, redirectUri, SCOPE, authToken, false);
         return new AuthUrlResult().setAuthUrl(authUrl);
@@ -87,13 +87,13 @@ public class AlipayAuthStrategy extends AbsChannelAuthStrategy {
                 .setUserId(authResult.getUserId());
     }
 
-    /// 拼接认证回调地址: {paymentGatewayBaseUrl}/auth/alipay/{authToken}
-    private String buildRedirectUri(String authToken) {
+    /// 拼接认证回调地址: {paymentGatewayBaseUrl}/auth/alipay(固定路径)
+    private String buildRedirectUri() {
         String base = platformUrlConfigService.getUrlConfig().getPaymentGatewayBaseUrl();
         if (StrUtil.isBlank(base)) {
             // 支付网关前端地址未配置
             throw new BizInfoException(DaxPayErrorCode.CONFIG_ERROR, "error.common.gatewayUrlNotConfigured");
         }
-        return StrUtil.removeSuffix(base, "/") + AUTH_CALLBACK_PATH + authToken;
+        return StrUtil.removeSuffix(base, "/") + AUTH_CALLBACK_PATH;
     }
 }

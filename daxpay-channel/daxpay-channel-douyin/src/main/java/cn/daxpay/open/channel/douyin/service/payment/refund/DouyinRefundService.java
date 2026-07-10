@@ -9,7 +9,7 @@ import cn.daxpay.open.payment.common.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.core.trade.bo.RefundResultBo;
 import cn.daxpay.open.payment.core.trade.entity.PayRefundOrder;
-import cn.daxpay.open.platform.system.service.config.PlatformUrlConfigService;
+import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

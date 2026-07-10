@@ -33,7 +33,7 @@ public class ChannelAuthAssistController {
     @Operation(summary = "获取授权链接")
     @PostMapping("/generate-auth-url")
     public Result<AuthUrlResult> generateAuthUrl(@RequestBody GenerateAuthUrlParam param) {
-        // 支付宝: 平台级 H5 中间页(不依赖商户上下文)
+        // 支付宝: 平台级 OAuth(不依赖商户上下文)
         if (isAlipayAuth(param.getAuthType())) {
             return Res.ok(platformAuthService.generateAlipayAuthUrl());
         }
@@ -46,7 +46,7 @@ public class ChannelAuthAssistController {
         return Res.ok(authSessionStore.queryAuthResult(queryCode));
     }
 
-    /// 是否支付宝认证类型(平台级支付宝走 H5 中间页)
+    /// 是否支付宝认证类型(平台级支付宝走 OAuth)
     private boolean isAlipayAuth(String authType) {
         return Objects.equals(authType, ChannelAuthTypeEnum.ALIPAY.getCode());
     }

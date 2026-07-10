@@ -25,26 +25,28 @@ import org.springframework.stereotype.Service;
 public class WechatMpAuthService {
 
     /// 生成授权链接（静默授权）
-    /// @param redirectUrl 回调地址
+    /// @param redirectUrl 回调地址(固定路径, 不含动态段)
     /// @param appId 微信公众号AppId
     /// @param appSecret 微信公众号AppSecret
-    public WechatAuthUrlResult generateAuthUrl(String redirectUrl, String appId, String appSecret) {
+    /// @param state OAuth state 参数(透传会话标识 authToken, 回调后从 state 恢复)
+    public WechatAuthUrlResult generateAuthUrl(String redirectUrl, String appId, String appSecret, String state) {
         WxMpService wxMpService = this.getWxMpService(appId, appSecret);
         String queryCode = RandomUtil.randomString(10);
-        String authUrl = wxMpService.getOAuth2Service().buildAuthorizationUrl(redirectUrl, WxConsts.OAuth2Scope.SNSAPI_BASE, "");
+        String authUrl = wxMpService.getOAuth2Service().buildAuthorizationUrl(redirectUrl, WxConsts.OAuth2Scope.SNSAPI_BASE, state);
         return new WechatAuthUrlResult().setAuthUrl(authUrl).setQueryCode(queryCode);
     }
 
     /// 生成用户信息授权链接
-    /// @param redirectUrl 回调地址
+    /// @param redirectUrl 回调地址(固定路径, 不含动态段)
     /// @param appId 公众号AppId
     /// @param appSecret 公众号AppSecret
+    /// @param state OAuth state 参数(透传会话标识 authToken)
     /// @return 授权链接结果
-    public WechatAuthUrlResult generateUserInfoAuthUrl(String redirectUrl, String appId, String appSecret) {
+    public WechatAuthUrlResult generateUserInfoAuthUrl(String redirectUrl, String appId, String appSecret, String state) {
         WxMpService wxMpService = this.getWxMpService(appId, appSecret);
         String queryCode = RandomUtil.randomString(10);
         // 使用SNSAPI_USERINFO获取用户信息
-        String authUrl = wxMpService.getOAuth2Service().buildAuthorizationUrl(redirectUrl, WxConsts.OAuth2Scope.SNSAPI_USERINFO, "");
+        String authUrl = wxMpService.getOAuth2Service().buildAuthorizationUrl(redirectUrl, WxConsts.OAuth2Scope.SNSAPI_USERINFO, state);
         return new WechatAuthUrlResult().setAuthUrl(authUrl).setQueryCode(queryCode);
     }
 
