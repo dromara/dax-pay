@@ -1,0 +1,35 @@
+package cn.daxpay.open.payment.device.qrcode.controller.client;
+
+import cn.daxpay.open.payment.device.qrcode.result.CodePayInfoResult;
+import cn.daxpay.open.payment.device.qrcode.service.CodePayAssistService;
+import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
+import cn.daxpay.open.platform.core.rest.Res;
+import cn.daxpay.open.platform.core.rest.result.Result;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotBlank;
+import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+/// # 码牌支付(公开/H5 侧)
+///
+/// 供 H5 码牌支付页(/code-pay/:code)扫码后调用, 无需登录态。
+@IgnoreAuth
+@Validated
+@Tag(name = "码牌支付")
+@RestController
+@RequestMapping("/client/device/qrcode")
+@RequiredArgsConstructor
+public class DeviceQrCodeClientController {
+
+    private final CodePayAssistService codePayAssistService;
+
+    @Operation(summary = "根据码牌编码查询支付信息")
+    @GetMapping("/get-by-code")
+    public Result<CodePayInfoResult> getByCode(@NotBlank(message = "{validation.field.code.notBlank}") String code) {
+        return Res.ok(codePayAssistService.getByCode(code));
+    }
+}

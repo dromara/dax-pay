@@ -1,0 +1,11 @@
+{
+  "notFound": "码牌不存在",
+  "disabled": "码牌已停用",
+  "mchNotFound": "码牌所属商户不存在",
+  "amountTypeNotFound": "未找到对应的码牌金额类型: {0}",
+  "statusNotFound": "未找到对应的码牌状态: {0}",
+  "fixedAmountInvalid": "固定金额必须大于0",
+  "batchNoExists": "批次号已存在",
+  "notAssigned": "码牌未分配商户",
+  "idsEmpty": "请选择码牌"
+}

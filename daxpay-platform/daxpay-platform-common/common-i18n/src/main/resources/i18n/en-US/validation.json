@@ -15,6 +15,9 @@
     "clientSecret": {
       "notBlank": "Client secret cannot be blank"
     },
+    "clientKey": {
+      "notBlank": "Client Key cannot be blank"
+    },
     "clientCode": {
       "notBlank": "Client code cannot be blank"
     },
@@ -551,6 +554,25 @@
     },
     "vendorConfigId": {
       "notNull": "Vendor config cannot be null"
+    },
+    "qrCodeName": {
+      "notBlank": "QR code name cannot be blank",
+      "size": "QR code name cannot exceed 100 characters"
+    },
+    "amountType": {
+      "notBlank": "Amount type cannot be blank"
+    },
+    "batchNo": {
+      "notBlank": "Batch number cannot be blank",
+      "size": "Batch number cannot exceed 64 characters"
+    },
+    "count": {
+      "notNull": "Count cannot be null",
+      "min": "Count cannot be less than 1",
+      "max": "Count cannot be greater than 999"
+    },
+    "ids": {
+      "notEmpty": "Please select QR code boards"
     },
     "configName": {
       "notBlank": "Config name cannot be blank"

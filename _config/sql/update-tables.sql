@@ -201,3 +201,13 @@ COMMENT ON COLUMN pay_platform_mobile_app.deleted IS '逻辑删除标记';
 
 CREATE UNIQUE INDEX IF NOT EXISTS uk_pay_platform_mobile_app_type_platform
     ON pay_platform_mobile_app (app_type, platform) WHERE deleted = false;
+
+-- ------------------------------------------------------------
+-- 码牌: 支持空白库存与划拨(批次号 + 商户号可空)
+-- ------------------------------------------------------------
+ALTER TABLE device_qr_code ADD COLUMN IF NOT EXISTS batch_no varchar(64);
+ALTER TABLE device_qr_code ALTER COLUMN mch_no DROP NOT NULL;
+
+COMMENT ON COLUMN device_qr_code.batch_no IS '批次号(批量创建空白码时写入)';
+COMMENT ON COLUMN device_qr_code.mch_no IS '所属商户号(空白码为空, 划拨后写入)';
+

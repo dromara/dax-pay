@@ -15,6 +15,9 @@
     "clientSecret": {
       "notBlank": "客户端密钥不能为空"
     },
+    "clientKey": {
+      "notBlank": "Client Key不能为空"
+    },
     "clientCode": {
       "notBlank": "终端不能为空"
     },
@@ -554,6 +557,25 @@
     },
     "vendorConfigId": {
       "notNull": "厂商配置不能为空"
+    },
+    "qrCodeName": {
+      "notBlank": "码牌名称不能为空",
+      "size": "码牌名称不可超过100位"
+    },
+    "amountType": {
+      "notBlank": "金额类型不能为空"
+    },
+    "batchNo": {
+      "notBlank": "批次号不能为空",
+      "size": "批次号不可超过64位"
+    },
+    "count": {
+      "notNull": "创建数量不能为空",
+      "min": "创建数量不能小于1",
+      "max": "创建数量不能大于999"
+    },
+    "ids": {
+      "notEmpty": "请选择码牌"
     },
     "configName": {
       "notBlank": "配置名称不能为空"
