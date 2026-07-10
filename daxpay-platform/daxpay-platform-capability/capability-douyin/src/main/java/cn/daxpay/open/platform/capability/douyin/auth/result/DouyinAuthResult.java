@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.core.assist;
+package cn.daxpay.open.platform.capability.douyin.auth.result;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

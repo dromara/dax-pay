@@ -17,6 +17,7 @@
         <module>capability-wechat</module>
         <module>capability-social</module>
         <module>capability-alipay</module>
+        <module>capability-douyin</module>
     </modules>
 
     <modelVersion>4.0.0</modelVersion>

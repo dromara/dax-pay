@@ -6,6 +6,8 @@ import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
 import cn.daxpay.open.platform.capability.alipay.auth.config.AlipayAuthConfig;
 import cn.daxpay.open.platform.capability.alipay.auth.result.AlipayAuthResult;
 import cn.daxpay.open.platform.capability.alipay.auth.service.AlipayAuthCapability;
+import cn.daxpay.open.platform.capability.douyin.auth.result.DouyinAuthResult;
+import cn.daxpay.open.platform.capability.douyin.auth.service.DouyinH5AuthService;
 import cn.daxpay.open.platform.capability.wechat.auth.result.WechatAuthResult;
 import cn.daxpay.open.platform.capability.wechat.auth.result.WechatAuthUrlResult;
 import cn.daxpay.open.platform.capability.wechat.auth.service.WechatMpAuthService;
@@ -133,7 +135,7 @@ public class PlatformAuthService {
 
     /// 生成抖音 H5 静默授权链接(平台级, 无商户上下文, 仅调试)
     ///
-    /// 读取平台级 [PlatformDouyinH5AuthConfig], 调用 [DouyinH5AuthService] 构造 silent_auth 链接,
+    /// 读取平台级 [PlatformDouyinH5AuthConfig], 调用 capability-douyin [DouyinH5AuthService] 构造 silent_auth 链接,
     /// 回调指向固定的 `/auth/douyin`(抖音要求 redirect_uri 与平台配置完全一致, 不支持 path 段或 query 参数)。
     /// 会话标识 authToken 通过 state 参数透传, 回调后从 state 恢复会话。
     /// session 标记 `source=platform_douyin`, 认证分发层据此走平台级抖音换票分支([authDouyin])。
@@ -222,7 +224,7 @@ public class PlatformAuthService {
                 config.getClientKey(), config.getClientSecret(), param.getAuthCode());
         if (StrUtil.isBlank(data.getOpenId())) {
             // 抖音: 获取用户标识失败
-            throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR, "error.social.douyinAuthFailed", "openId is blank");
+            throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR, "error.douyin.authFailed", "openId is blank");
         }
         AuthResult authResult = new AuthResult()
                 .setOpenId(data.getOpenId())

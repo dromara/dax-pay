@@ -110,6 +110,12 @@
             <artifactId>capability-alipay</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- 抖音开放平台能力(平台级 H5 静默授权调试使用) -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>capability-douyin</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- 翻译模块 -->
         <dependency>
             <groupId>cn.daxpay.open</groupId>

@@ -1,7 +1,7 @@
-package cn.daxpay.open.payment.core.assist;
+package cn.daxpay.open.platform.capability.douyin.auth.service;
 
-import cn.daxpay.open.platform.core.code.CommonErrorCode;
-import cn.daxpay.open.platform.core.exception.BizInfoException;
+import cn.daxpay.open.platform.capability.douyin.auth.result.DouyinAuthResult;
+import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.http.HttpRequest;
@@ -21,8 +21,9 @@ import org.springframework.stereotype.Service;
 /// 与微信公众号 SDK([WechatMpAuthService]) 不同, 抖音 H5 静默授权仅需简单 HTTP 调用,
 /// 不依赖第三方 SDK, 直接使用 Hutool HttpUtil 完成。
 ///
-/// 配置来源: 平台级 [cn.daxpay.open.platform.system.entity.config.platform.auth.PlatformDouyinH5AuthConfig]
-/// (clientKey / clientSecret)。
+/// ## 能力边界
+/// - 生成静默授权链接 / authCode 换 openId(HTTP 直连, 无官方 SDK)
+/// - 不做配置存储 / state / queryCode 缓存(由调用方自行管理)
 ///
 /// 参考文档: https://developer.open-douyin.com/docs/resource/zh-CN/dop/ability/opensdk/user-authorization/get-login-openid
 @Slf4j
@@ -41,7 +42,7 @@ public class DouyinH5AuthService {
     /// 构造抖音静默授权链接
     ///
     /// 抖音 silent_auth 不支持在 redirect_uri 中携带 query 参数,
-    /// authToken 通过 path 段传递(`/auth/douyin/{authToken}`), state 用于 CSRF 校验。
+    /// authToken 通过 path 段或 state 传递, state 用于 CSRF 校验。
     ///
     /// @param clientKey   抖音开放平台 Client Key
     /// @param redirectUri 授权回调地址(不含 query 参数)
@@ -82,20 +83,20 @@ public class DouyinH5AuthService {
         JSONObject data = object.getJSONObject("data");
         if (data == null) {
             // 抖音: 换取用户标识失败: {0}
-            throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR, "error.social.douyinAuthFailed",
+            throw new OperationFailException("error.douyin.authFailed",
                     object.getStr("message", body));
         }
         // error_code 非 0 表示业务错误
         int errorCode = data.getInt("error_code", -1);
         if (errorCode != 0) {
             // 抖音: 换取用户标识失败: {0}
-            throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR, "error.social.douyinAuthFailed",
+            throw new OperationFailException("error.douyin.authFailed",
                     data.getStr("description", "error_code=" + errorCode));
         }
         String openId = data.getStr("open_id");
         if (StrUtil.isBlank(openId)) {
             // 抖音: 获取用户标识失败
-            throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR, "error.social.douyinAuthFailed", "openId is blank");
+            throw new OperationFailException("error.douyin.authFailed", "openId is blank");
         }
         return new DouyinAuthResult()
                 .setOpenId(openId)
