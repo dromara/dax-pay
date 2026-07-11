@@ -34,5 +34,7 @@
   "gatewayUrlNotConfigured": "Payment gateway base URL (paymentGatewayBaseUrl) is not configured, cannot generate auth callback URL",
   "cashierSceneNotExist": "Cashier scene not found: {0}",
   "gatewayPayTypeNotExist": "Gateway pay type not found: {0}",
-  "aggregateConfigLevelNotExist": "Aggregate config level not found: {0}"
+  "aggregateConfigLevelNotExist": "Aggregate config level not found: {0}",
+  "gatewayCashierTypeNotExist": "Gateway cashier type not found: {0}",
+  "cashierItemResolveModeNotExist": "Cashier item resolve mode not found: {0}"
 }

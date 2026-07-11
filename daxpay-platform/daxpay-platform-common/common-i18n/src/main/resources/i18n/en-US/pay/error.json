@@ -55,7 +55,14 @@
     "aggregateSceneMethodRequired": "Payment method required for each scene in METHOD level",
     "aggregateSceneChannelMchRequired": "Channel merchant required for each scene in DIRECT level",
     "aggregateSceneCapabilityRequired": "Capability required for each scene in DIRECT level",
-    "channelLocked": "Payment method locked for this order"
+    "channelLocked": "Payment method locked for this order",
+    "cashierSceneRequired": "H5 cashier requires a terminal scene",
+    "cashierItemNotFound": "Cashier payment item not found",
+    "cashierItemAppIdImmutable": "Cashier item appId cannot be changed",
+    "cashierItemMethodRequired": "Payment method is required in METHOD mode",
+    "cashierItemChannelMchRequired": "Channel merchant is required in DIRECT mode",
+    "cashierItemCapabilityRequired": "Capability is required in DIRECT mode",
+    "cashierItemNameRequired": "Payment item name cannot be blank"
   },
   "refund": {
     "processing": "Refund processing, do not repeat",

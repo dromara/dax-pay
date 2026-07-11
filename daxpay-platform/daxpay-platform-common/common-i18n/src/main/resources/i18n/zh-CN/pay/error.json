@@ -54,7 +54,14 @@
     "aggregateSceneMethodRequired": "方式模式下每场景的支付方式必填",
     "aggregateSceneChannelMchRequired": "精确模式下每场景的通道商户号必填",
     "aggregateSceneCapabilityRequired": "精确模式下每场景的支付能力必填",
-    "channelLocked": "订单已锁定支付方式，请勿切换"
+    "channelLocked": "订单已锁定支付方式，请勿切换",
+    "cashierSceneRequired": "H5收银台必须指定终端场景",
+    "cashierItemNotFound": "收银台支付项不存在",
+    "cashierItemAppIdImmutable": "收银台支付项应用号不可修改",
+    "cashierItemMethodRequired": "方式模式下支付方式必填",
+    "cashierItemChannelMchRequired": "精确模式下通道商户号必填",
+    "cashierItemCapabilityRequired": "精确模式下支付能力必填",
+    "cashierItemNameRequired": "支付项名称不能为空"
   },
   "refund": {
     "processing": "退款处理中，请勿重复操作",

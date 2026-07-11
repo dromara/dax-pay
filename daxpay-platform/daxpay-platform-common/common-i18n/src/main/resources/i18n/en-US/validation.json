@@ -81,6 +81,20 @@
       "notBlank": "Config level cannot be blank",
       "size": "Config level cannot exceed 32 characters"
     },
+    "cashierType": {
+      "notBlank": "Cashier type cannot be blank",
+      "size": "Cashier type cannot exceed 16 characters"
+    },
+    "resolveMode": {
+      "notBlank": "Resolve mode cannot be blank",
+      "size": "Resolve mode cannot exceed 16 characters"
+    },
+    "icon": {
+      "size": "Icon code cannot exceed 32 characters"
+    },
+    "itemName": {
+      "size": "Payment item name cannot exceed 64 characters"
+    },
     "subMchId": {
       "notBlank": "WeChat sub-merchant ID cannot be blank"
     },

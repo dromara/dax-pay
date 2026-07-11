@@ -81,6 +81,20 @@
       "notBlank": "配置深度不可为空",
       "size": "配置深度不可超过32位"
     },
+    "cashierType": {
+      "notBlank": "收银台类型不可为空",
+      "size": "收银台类型不可超过16位"
+    },
+    "resolveMode": {
+      "notBlank": "解析模式不可为空",
+      "size": "解析模式不可超过16位"
+    },
+    "icon": {
+      "size": "图标编码不可超过32位"
+    },
+    "itemName": {
+      "size": "支付项名称不可超过64位"
+    },
     "subMchId": {
       "notBlank": "微信子商户号不可为空"
     },

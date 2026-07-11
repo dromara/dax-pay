@@ -34,5 +34,7 @@
   "gatewayUrlNotConfigured": "支付网关前端地址(paymentGatewayBaseUrl)未配置, 无法生成认证回调地址",
   "cashierSceneNotExist": "收银场景不存在: {0}",
   "gatewayPayTypeNotExist": "网关支付类型不存在: {0}",
-  "aggregateConfigLevelNotExist": "聚合扫码配置深度不存在: {0}"
+  "aggregateConfigLevelNotExist": "聚合扫码配置深度不存在: {0}",
+  "gatewayCashierTypeNotExist": "收银台类型不存在: {0}",
+  "cashierItemResolveModeNotExist": "收银台支付项解析模式不存在: {0}"
 }

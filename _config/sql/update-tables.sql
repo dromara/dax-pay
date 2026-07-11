@@ -414,3 +414,54 @@ COMMENT ON COLUMN pay_gateway_aggregate_scene.version IS '版本号(乐观锁)';
 COMMENT ON COLUMN pay_gateway_aggregate_scene.deleted IS '逻辑删除标记';
 
 CREATE UNIQUE INDEX IF NOT EXISTS uk_pay_gateway_aggregate_scene ON pay_gateway_aggregate_scene (config_id, scene) WHERE deleted = false;
+
+-- ----------------------------
+-- 网关收银台支付项配置(应用级, H5 按终端分桶 / WEB 扁平列表)
+-- ----------------------------
+CREATE TABLE IF NOT EXISTS pay_gateway_cashier_item (
+    id                   int8          NOT NULL,
+    mch_no               varchar(32)   NOT NULL,
+    app_id               varchar(32)   NOT NULL,
+    cashier_type         varchar(16)   NOT NULL,
+    scene                varchar(32),
+    name                 varchar(64)   NOT NULL,
+    icon                 varchar(32),
+    recommend            bool          NOT NULL DEFAULT false,
+    sort_no              int4          NOT NULL DEFAULT 0,
+    resolve_mode         varchar(16)   NOT NULL,
+    method               varchar(32),
+    channel_mch_no       varchar(64),
+    capability           varchar(64),
+    creator              int8,
+    create_time          timestamptz(6),
+    last_modifier        int8,
+    last_modified_time   timestamptz(6),
+    version              int4          NOT NULL DEFAULT 0,
+    deleted              bool          NOT NULL DEFAULT false,
+    CONSTRAINT pk_pay_gateway_cashier_item PRIMARY KEY (id)
+);
+
+COMMENT ON TABLE  pay_gateway_cashier_item IS '网关收银台支付项配置(应用级)';
+COMMENT ON COLUMN pay_gateway_cashier_item.id IS '主键';
+COMMENT ON COLUMN pay_gateway_cashier_item.mch_no IS '商户号';
+COMMENT ON COLUMN pay_gateway_cashier_item.app_id IS '应用号';
+COMMENT ON COLUMN pay_gateway_cashier_item.cashier_type IS '收银台类型: h5/web';
+COMMENT ON COLUMN pay_gateway_cashier_item.scene IS 'H5终端场景: browser/wechat_pay/alipay/union_pay/douyin; WEB为空';
+COMMENT ON COLUMN pay_gateway_cashier_item.name IS '前台展示名称';
+COMMENT ON COLUMN pay_gateway_cashier_item.icon IS '图标编码: wechat/alipay/union/douyin/aggregate';
+COMMENT ON COLUMN pay_gateway_cashier_item.recommend IS '是否推荐';
+COMMENT ON COLUMN pay_gateway_cashier_item.sort_no IS '排序号, 越小越前';
+COMMENT ON COLUMN pay_gateway_cashier_item.resolve_mode IS '解析模式: method/direct';
+COMMENT ON COLUMN pay_gateway_cashier_item.method IS '支付方式(METHOD模式填)';
+COMMENT ON COLUMN pay_gateway_cashier_item.channel_mch_no IS '通道商户号(DIRECT模式填)';
+COMMENT ON COLUMN pay_gateway_cashier_item.capability IS '支付能力(DIRECT模式填)';
+COMMENT ON COLUMN pay_gateway_cashier_item.creator IS '创建者ID';
+COMMENT ON COLUMN pay_gateway_cashier_item.create_time IS '创建时间';
+COMMENT ON COLUMN pay_gateway_cashier_item.last_modifier IS '最后修改者ID';
+COMMENT ON COLUMN pay_gateway_cashier_item.last_modified_time IS '最后修改时间';
+COMMENT ON COLUMN pay_gateway_cashier_item.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN pay_gateway_cashier_item.deleted IS '逻辑删除标记';
+
+CREATE INDEX IF NOT EXISTS idx_pay_gateway_cashier_item_list
+    ON pay_gateway_cashier_item (app_id, cashier_type, scene)
+    WHERE deleted = false;
