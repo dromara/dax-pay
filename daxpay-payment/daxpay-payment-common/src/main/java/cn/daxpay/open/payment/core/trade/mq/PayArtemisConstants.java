@@ -12,4 +12,8 @@ public interface PayArtemisConstants {
     /// 下单时通过 `sendDelayAt(...)` 按订单过期时间定时投递，到期后由
     /// [NormalPayTimeoutConsumer] 消费触发自动关单。
     String NORMAL_TIMEOUT_QUEUE = "pay.normal.timeout";
+
+    /// 网关支付超时关单队列 address
+    /// 预下单时按容器过期时间投递，到期后由 [GatewayTimeoutConsumer] 消费。
+    String GATEWAY_TIMEOUT_QUEUE = "pay.gateway.timeout";
 }

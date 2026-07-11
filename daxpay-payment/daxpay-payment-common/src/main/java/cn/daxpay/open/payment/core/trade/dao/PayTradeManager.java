@@ -49,6 +49,26 @@ public class PayTradeManager extends BaseManager<PayTradeMapper, PayTrade> {
                 .oneOpt();
     }
 
+    /// 根据容器ID + 交易形态查询
+    public Optional<PayTrade> findByContainerId(Long containerId, String tradeType) {
+        return lambdaQuery()
+                .eq(PayTrade::getContainerId, containerId)
+                .eq(PayTrade::getTradeType, tradeType)
+                .oneOpt();
+    }
+
+    /// 查询网关支付已超时但仍处理中的资金交易(兜底)
+    @IgnoreTenant
+    public List<PayTrade> findGatewayTimeoutTrades(OffsetDateTime now) {
+        return lambdaQuery()
+                .eq(PayTrade::getTradeType, PayTradeTypeEnum.GATEWAY.getCode())
+                .eq(PayTrade::getStatus, PayFundStatusEnum.PROCESSING.getCode())
+                .lt(PayTrade::getExpiredTime, now)
+                .orderByAsc(PayTrade::getExpiredTime)
+                .last("limit 500")
+                .list();
+    }
+
     /// 分页查询(管理端), 默认按创建时间倒序
     public Page<PayTrade> page(PageParam pageParam, PayTradeQuery query) {
         Page<PayTrade> mpPage = MpUtil.getMpPage(pageParam);

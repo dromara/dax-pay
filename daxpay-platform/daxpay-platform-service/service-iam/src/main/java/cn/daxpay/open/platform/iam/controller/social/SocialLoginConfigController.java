@@ -32,21 +32,21 @@ public class SocialLoginConfigController {
 
     private final SocialLoginConfigService socialLoginConfigService;
 
-    @PermCode(code = "view", nameCn = "配置查看", nameEn = "Config View")
+    @PermCode(code = "view", nameCn = "社交登录配置查看", nameEn = "Social Login Config View")
     @Operation(summary = "全量查询平台配置(枚举驱动, 读时初始化缺失平台)")
     @GetMapping("/find-all")
     public Result<List<SocialLoginConfigResult>> findAll() {
         return Res.ok(socialLoginConfigService.findAll());
     }
 
-    @PermCode(code = "view", nameCn = "配置查看", nameEn = "Config View")
+    @PermCode(code = "view", nameCn = "社交登录配置查看", nameEn = "Social Login Config View")
     @Operation(summary = "根据平台编码查询(不存在则初始化占位记录)")
     @GetMapping("/get-by-source")
     public Result<SocialLoginConfigResult> findBySource(@NotBlank(message = "{validation.field.source.notBlank}") String source) {
         return Res.ok(socialLoginConfigService.findBySource(source));
     }
 
-    @PermCode(code = "manage", nameCn = "配置管理", nameEn = "Config Manage")
+    @PermCode(code = "manage", nameCn = "社交登录配置管理", nameEn = "Social Login Config Manage")
     @Operation(summary = "修改平台配置")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated SocialLoginConfigParam param) {
@@ -54,7 +54,7 @@ public class SocialLoginConfigController {
         return Res.ok();
     }
 
-    @PermCode(code = "manage", nameCn = "配置管理", nameEn = "Config Manage")
+    @PermCode(code = "manage", nameCn = "社交登录配置管理", nameEn = "Social Login Config Manage")
     @Operation(summary = "切换平台启用状态(仅已配置平台可启停)")
     @PostMapping("/update-enabled")
     public Result<Void> updateEnabled(

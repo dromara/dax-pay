@@ -17,6 +17,8 @@ public enum PayTradeTypeEnum implements I18nSupport {
 
     /// 普通支付
     NORMAL("normal"),
+    /// 网关支付(聚合扫码/收银台)
+    GATEWAY("gateway"),
     /// 预授权冻结
     AUTHORIZE("authorize"),
     /// 预授权捕获扣款

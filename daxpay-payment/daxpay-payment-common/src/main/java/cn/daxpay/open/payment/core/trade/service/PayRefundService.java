@@ -109,7 +109,8 @@ public class PayRefundService {
         // 按 bizOrderNo 查容器, 再查关联交易
         NormalPayOrder normalOrder = payNormalOrderManager.findByBizOrderNo(bizOrderNo)
                 .orElseThrow(() -> new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.notExists"));
-        return payTradeManager.findByContainerId(normalOrder.getId())
+        return payTradeManager.findByContainerId(normalOrder.getId(),
+                cn.daxpay.open.payment.common.enums.PayTradeTypeEnum.NORMAL.getCode())
                 .orElseThrow(() -> new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.notExists"));
     }
 

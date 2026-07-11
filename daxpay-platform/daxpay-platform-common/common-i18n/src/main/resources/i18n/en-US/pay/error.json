@@ -41,7 +41,16 @@
     "closeProcessing": "Order closing in progress, do not repeat",
     "closeFailed": "Close order failed",
     "syncNotStarted": "Order payment not started, please confirm payment status",
-    "syncProcessing": "Payment sync in progress, do not repeat"
+    "syncProcessing": "Payment sync in progress, do not repeat",
+    "processing": "Payment processing, do not repeat"
+  },
+  "gateway": {
+    "cashierNotReady": "Cashier payment is not available yet",
+    "typeMismatch": "Gateway order type mismatch",
+    "sceneNotSupport": "Unsupported cashier scene",
+    "sceneNotConfigured": "Payment product/method not configured for this scene",
+    "aggregateConfigMissing": "Aggregate QR pay config missing for app",
+    "channelLocked": "Payment method locked for this order"
   },
   "refund": {
     "processing": "Refund processing, do not repeat",

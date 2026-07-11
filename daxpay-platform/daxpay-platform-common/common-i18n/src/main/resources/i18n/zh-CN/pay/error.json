@@ -40,7 +40,16 @@
     "closeProcessing": "支付订单已在关闭中，请勿重复发起",
     "closeFailed": "关闭订单失败",
     "syncNotStarted": "订单未开始支付, 请重新确认支付状态",
-    "syncProcessing": "支付同步处理中，请勿重复操作"
+    "syncProcessing": "支付同步处理中，请勿重复操作",
+    "processing": "支付处理中，请勿重复操作"
+  },
+  "gateway": {
+    "cashierNotReady": "收银台支付尚未开放",
+    "typeMismatch": "网关订单类型不匹配",
+    "sceneNotSupport": "不支持的收银场景",
+    "sceneNotConfigured": "该场景未配置支付产品/方式",
+    "aggregateConfigMissing": "应用未配置聚合扫码支付",
+    "channelLocked": "订单已锁定支付方式，请勿切换"
   },
   "refund": {
     "processing": "退款处理中，请勿重复操作",
