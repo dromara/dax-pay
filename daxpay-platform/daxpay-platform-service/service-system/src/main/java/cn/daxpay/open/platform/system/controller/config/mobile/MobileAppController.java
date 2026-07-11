@@ -53,6 +53,15 @@ public class MobileAppController {
         return Res.ok(mobileAppService.findById(id));
     }
 
+    @PermCode(code = "view", nameCn = "移动端应用查看", nameEn = "Mobile App View")
+    @Operation(summary = "按端类型+平台查询(不存在返回 null)")
+    @GetMapping("/get-by-type-platform")
+    public Result<MobileAppResult> findByAppTypeAndPlatform(
+            @NotBlank(message = "{validation.field.appType.notBlank}") String appType,
+            @NotBlank(message = "{validation.field.platform.notBlank}") String platform) {
+        return Res.ok(mobileAppService.findByAppTypeAndPlatform(appType, platform).orElse(null));
+    }
+
     @PermCode(code = "manage", nameCn = "移动端应用管理", nameEn = "Mobile App Manage")
     @Operation(summary = "保存(按端类型+平台 upsert)")
     @PostMapping("/save")

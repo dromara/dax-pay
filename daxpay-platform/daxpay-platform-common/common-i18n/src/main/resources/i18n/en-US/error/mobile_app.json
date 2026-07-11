@@ -1,5 +1,10 @@
 {
   "notExist": "Mobile app configuration does not exist",
+  "notEnabled": "Mobile app configuration is disabled: {0}/{1}",
   "appTypeNotFound": "No matching mobile app type found: {0}",
-  "platformNotFound": "No matching mobile platform found: {0}"
+  "platformNotFound": "No matching mobile platform found: {0}",
+  "platformNotAllowed": "App type {0} does not support mobile platform {1}",
+  "configRequired": "Please submit app config for platform {0}",
+  "configPlatformMismatch": "App config does not match platform {0}",
+  "alipayCertRequired": "In certificate mode, please upload app cert, Alipay cert and root cert"
 }

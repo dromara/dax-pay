@@ -3,6 +3,7 @@ package cn.daxpay.open.platform.system.entity.mobile;
 import cn.daxpay.open.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.daxpay.open.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.open.platform.common.mybatisplus.handler.encrypt.DataEncryptTypeHandler;
+import cn.daxpay.open.platform.common.mybatisplus.handler.type.JsonbStringTypeHandler;
 import cn.daxpay.open.platform.system.convert.mobile.MobileAppConvert;
 import cn.daxpay.open.platform.system.result.mobile.MobileAppResult;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -14,7 +15,8 @@ import lombok.experimental.Accessors;
 /// # 移动端应用配置
 ///
 /// 平台级移动端应用配置, 按端类型(appType)+移动平台(platform)维度, 每组合一条记录。
-/// app_config/notify_config 以 JSON 文本存储, 通过 [DataEncryptTypeHandler] AES-256-GCM 加密入库。
+/// - app_config: text, 含密钥, 经 [DataEncryptTypeHandler] AES-256-GCM 加密入库
+/// - notify_config: jsonb, 通知模板/开关等非敏感配置, 经 [JsonbStringTypeHandler] 明文存储
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
@@ -29,15 +31,12 @@ public class MobileApp extends MpBaseEntity implements ToResult<MobileAppResult>
     /// @see cn.daxpay.open.platform.system.enums.MobilePlatformEnum
     private String platform;
 
-    /// 应用名称(展示用)
-    private String appName;
-
-    /// 平台特有密钥配置(JSON文本, 加密存储)
+    /// 平台特有密钥配置(JSON文本, 加密存储为 text)
     @TableField(typeHandler = DataEncryptTypeHandler.class)
     private String appConfig;
 
-    /// 消息通知配置(JSON文本, 加密存储)
-    @TableField(typeHandler = DataEncryptTypeHandler.class)
+    /// 消息通知配置(jsonb, 非敏感, 明文; Java 侧为原始 JSON 字符串)
+    @TableField(typeHandler = JsonbStringTypeHandler.class)
     private String notifyConfig;
 
     /// 是否启用第三方账号用户绑定

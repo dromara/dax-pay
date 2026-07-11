@@ -1,5 +1,10 @@
 {
   "notExist": "移动端应用配置不存在",
+  "notEnabled": "移动端应用配置未启用: {0}/{1}",
   "appTypeNotFound": "未找到对应的移动端应用端类型: {0}",
-  "platformNotFound": "未找到对应的移动端平台: {0}"
+  "platformNotFound": "未找到对应的移动端平台: {0}",
+  "platformNotAllowed": "端类型 {0} 不支持移动平台 {1}",
+  "configRequired": "请提交与平台 {0} 对应的应用配置",
+  "configPlatformMismatch": "应用配置与平台 {0} 不匹配",
+  "alipayCertRequired": "证书模式下请上传应用公钥证书、支付宝公钥证书与根证书"
 }
