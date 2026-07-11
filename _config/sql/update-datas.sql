@@ -136,3 +136,100 @@ SET "pid" = 40508, "last_modified_time" = CURRENT_TIMESTAMP
 WHERE "id" IN (40502, 40503, 40506);
 
 -- 注: 40501(产品配置详情)、40505(移动端应用详情) 仅1个子页面, 保留直挂 menu 不强制分组
+
+-- ----------------------------
+-- 收银台配置菜单(应用 subpage, 从应用管理/应用工作台进入)
+-- menu_code = merchant:gateway-cashier
+-- 权限码: merchant:gateway-cashier:view / merchant:gateway-cashier:update
+-- ----------------------------
+INSERT INTO public.iam_perm_menu (
+    id, pid, menu_code, client_code, name,
+    title_cn, title_en, i18n_key, icon,
+    hidden, hide_children_menu, component, path, redirect, sort_no,
+    root, keep_alive, affix_tab, creator, last_modifier, version, deleted,
+    menu_type, active_icon, badge, badge_type, badge_variants, iframe_src, link,
+    create_time, last_modified_time
+)
+SELECT
+    4040122,
+    4040130,
+    'merchant:gateway-cashier',
+    'admin',
+    'CashierConfig',
+    '收银台配置',
+    'Cashier Config',
+    'menu.payment.merchant.cashierConfig',
+    NULL,
+    true,
+    false,
+    '/payment/merchant/cashier/CashierConfig',
+    '/payment/merchant/cashier',
+    NULL,
+    4,
+    false,
+    true,
+    false,
+    1,
+    1,
+    1,
+    false,
+    'subpage',
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    '2026-07-11 03:00:13.374496+00',
+    '2026-07-11 03:37:15.424776+00'
+WHERE NOT EXISTS (
+    SELECT 1 FROM public.iam_perm_menu WHERE id = 4040122 OR menu_code = 'merchant:gateway-cashier'
+);
+
+-- ----------------------------
+-- 应用工作台菜单(应用 subpage, 从应用列表进入)
+-- menu_code = merchant:app (与应用管理同权)
+-- ----------------------------
+INSERT INTO public.iam_perm_menu (
+    id, pid, menu_code, client_code, name,
+    title_cn, title_en, i18n_key, icon,
+    hidden, hide_children_menu, component, path, redirect, sort_no,
+    root, keep_alive, affix_tab, creator, last_modifier, version, deleted,
+    menu_type, active_icon, badge, badge_type, badge_variants, iframe_src, link,
+    create_time, last_modified_time
+)
+SELECT
+    4040123,
+    4040130,
+    'merchant:app',
+    'admin',
+    'MchAppWorkbench',
+    '应用配置',
+    'App Configuration',
+    'menu.payment.merchant.appWorkbench',
+    NULL,
+    true,
+    false,
+    '/payment/merchant/app/MchAppWorkbench',
+    '/payment/merchant/app/manage',
+    NULL,
+    11,
+    false,
+    true,
+    false,
+    1,
+    1,
+    1,
+    false,
+    'subpage',
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    NULL,
+    '2026-07-11 08:00:00+00',
+    '2026-07-11 08:00:00+00'
+WHERE NOT EXISTS (
+    SELECT 1 FROM public.iam_perm_menu WHERE id = 4040123 OR name = 'MchAppWorkbench'
+);
