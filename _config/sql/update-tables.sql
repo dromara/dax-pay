@@ -166,7 +166,6 @@ CREATE TABLE IF NOT EXISTS pay_platform_mobile_app (
     id                    int8          NOT NULL,
     app_type              varchar(32)   NOT NULL,
     platform              varchar(32)   NOT NULL,
-    app_name              varchar(64),
     app_config            text,
     notify_config         jsonb,
     binding_enabled       bool          NOT NULL DEFAULT false,
@@ -185,7 +184,6 @@ COMMENT ON TABLE  pay_platform_mobile_app IS '平台级移动端应用配置';
 COMMENT ON COLUMN pay_platform_mobile_app.id IS '主键';
 COMMENT ON COLUMN pay_platform_mobile_app.app_type IS '端类型: merchant-商户端 / admin-管理端 / cashier-收银台';
 COMMENT ON COLUMN pay_platform_mobile_app.platform IS '移动平台: wx_h5/wx_mini/alipay_mini/dy_mini/android/ios';
-COMMENT ON COLUMN pay_platform_mobile_app.app_name IS '应用名称(展示用)';
 COMMENT ON COLUMN pay_platform_mobile_app.app_config IS '平台特有密钥配置(JSON文本, AES-256-GCM加密存储)';
 COMMENT ON COLUMN pay_platform_mobile_app.notify_config IS '消息通知配置(jsonb, 明文, 非敏感)';
 COMMENT ON COLUMN pay_platform_mobile_app.binding_enabled IS '是否启用第三方账号用户绑定';
