@@ -24,3 +24,21 @@ SET "menu_code" = 'system:config:mobile_app_detail',
     "path" = '/system/config/mobile-app/detail/:appType',
     "last_modified_time" = CURRENT_TIMESTAMP
 WHERE "id" = 40505;
+
+-- ----------------------------
+-- 2026-07-11 开源版取消硬件对接：移除云音箱/云打印/厂商配置/辅助终端菜单
+-- 码牌(device:qrcode)与目录 device 保留；硬件能力归商业版
+-- ----------------------------
+DELETE FROM "public"."iam_perm_menu"
+WHERE "menu_code" IN (
+    'device:vendor_config',
+    'device:speaker',
+    'device:printer',
+    'device:assistant'
+);
+
+-- 目录图标由音箱改为码牌语义（可选，已有库同步）
+UPDATE "public"."iam_perm_menu"
+SET "icon" = 'lucide:qr-code',
+    "last_modified_time" = CURRENT_TIMESTAMP
+WHERE "id" = 9 AND "menu_code" = 'device';

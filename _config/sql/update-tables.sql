@@ -201,6 +201,12 @@ CREATE UNIQUE INDEX IF NOT EXISTS uk_pay_platform_mobile_app_type_platform
     ON pay_platform_mobile_app (app_type, platform) WHERE deleted = false;
 
 -- ------------------------------------------------------------
+-- 开源版已取消硬件对接(云音箱/云打印/厂商配置), 相关表 device_speaker /
+-- device_printer / device_vendor_config 不再由开源维护, 可手工 DROP。
+-- 码牌 device_qr_code 仍为开源能力(收款入口)。
+-- ------------------------------------------------------------
+
+-- ------------------------------------------------------------
 -- 码牌: 支持空白库存与划拨(批次号 + 商户号可空)
 -- ------------------------------------------------------------
 ALTER TABLE device_qr_code ADD COLUMN IF NOT EXISTS batch_no varchar(64);
