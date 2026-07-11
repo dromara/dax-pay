@@ -1,5 +1,6 @@
 {
   "wechat_pay": "微信环境",
   "alipay": "支付宝环境",
-  "union_pay": "云闪付环境"
+  "union_pay": "云闪付环境",
+  "douyin": "抖音环境"
 }

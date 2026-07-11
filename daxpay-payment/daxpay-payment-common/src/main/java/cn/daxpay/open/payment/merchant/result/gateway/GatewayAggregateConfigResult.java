@@ -4,6 +4,8 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.util.List;
+
 /// # 网关聚合扫码配置结果
 @Data
 @Accessors(chain = true)
@@ -19,24 +21,13 @@ public class GatewayAggregateConfigResult {
     @Schema(description = "应用号")
     private String appId;
 
-    @Schema(description = "微信场景支付产品")
-    private String wxProduct;
-
-    @Schema(description = "微信场景支付方式")
-    private String wxMethod;
-
-    @Schema(description = "支付宝场景支付产品")
-    private String alipayProduct;
-
-    @Schema(description = "支付宝场景支付方式")
-    private String alipayMethod;
-
-    @Schema(description = "云闪付场景支付产品")
-    private String unionProduct;
-
-    @Schema(description = "云闪付场景支付方式")
-    private String unionMethod;
+    /// @see cn.daxpay.open.payment.common.enums.AggregateConfigLevelEnum
+    @Schema(description = "配置深度: auto/method/direct")
+    private String level;
 
     @Schema(description = "是否自动拉起支付")
     private Boolean autoLaunch;
+
+    @Schema(description = "场景配置列表")
+    private List<GatewayAggregateSceneResult> scenes;
 }

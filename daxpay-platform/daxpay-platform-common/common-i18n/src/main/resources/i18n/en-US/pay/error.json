@@ -48,8 +48,13 @@
     "cashierNotReady": "Cashier payment is not available yet",
     "typeMismatch": "Gateway order type mismatch",
     "sceneNotSupport": "Unsupported cashier scene",
-    "sceneNotConfigured": "Payment product/method not configured for this scene",
+    "sceneNotConfigured": "Payment method not configured for this scene",
     "aggregateConfigMissing": "Aggregate QR pay config missing for app",
+    "aggregateScenesRequired": "Scene config required for this config level",
+    "aggregateSceneBlank": "Scene code must not be blank",
+    "aggregateSceneMethodRequired": "Payment method required for each scene in METHOD level",
+    "aggregateSceneChannelMchRequired": "Channel merchant required for each scene in DIRECT level",
+    "aggregateSceneCapabilityRequired": "Capability required for each scene in DIRECT level",
     "channelLocked": "Payment method locked for this order"
   },
   "refund": {

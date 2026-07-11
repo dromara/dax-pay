@@ -159,7 +159,8 @@ ALTER TABLE IF EXISTS iam_social_config RENAME TO iam_social_login_config;
 
 -- ----------------------------
 -- 平台级移动端应用配置(按 app_type + platform 维度, 每组合一条)
--- app_config/notify_config 使用 text + DataEncryptTypeHandler 加密存储(密文非合法JSON, 故不用 jsonb)
+-- app_config: text + DataEncryptTypeHandler 加密(密文非合法JSON, 不用 jsonb)
+-- notify_config: jsonb 明文(模板/开关等非敏感配置, JsonbStringTypeHandler)
 -- ----------------------------
 CREATE TABLE IF NOT EXISTS pay_platform_mobile_app (
     id                    int8          NOT NULL,
@@ -167,7 +168,7 @@ CREATE TABLE IF NOT EXISTS pay_platform_mobile_app (
     platform              varchar(32)   NOT NULL,
     app_name              varchar(64),
     app_config            text,
-    notify_config         text,
+    notify_config         jsonb,
     binding_enabled       bool          NOT NULL DEFAULT false,
     enabled               bool          NOT NULL DEFAULT true,
     remark                varchar(500),
@@ -186,7 +187,7 @@ COMMENT ON COLUMN pay_platform_mobile_app.app_type IS '端类型: merchant-商�
 COMMENT ON COLUMN pay_platform_mobile_app.platform IS '移动平台: wx_h5/wx_mini/alipay_mini/dy_mini/android/ios';
 COMMENT ON COLUMN pay_platform_mobile_app.app_name IS '应用名称(展示用)';
 COMMENT ON COLUMN pay_platform_mobile_app.app_config IS '平台特有密钥配置(JSON文本, AES-256-GCM加密存储)';
-COMMENT ON COLUMN pay_platform_mobile_app.notify_config IS '消息通知配置(JSON文本, AES-256-GCM加密存储)';
+COMMENT ON COLUMN pay_platform_mobile_app.notify_config IS '消息通知配置(jsonb, 明文, 非敏感)';
 COMMENT ON COLUMN pay_platform_mobile_app.binding_enabled IS '是否启用第三方账号用户绑定';
 COMMENT ON COLUMN pay_platform_mobile_app.enabled IS '是否启用';
 COMMENT ON COLUMN pay_platform_mobile_app.remark IS '备注';
@@ -199,6 +200,23 @@ COMMENT ON COLUMN pay_platform_mobile_app.deleted IS '逻辑删除标记';
 
 CREATE UNIQUE INDEX IF NOT EXISTS uk_pay_platform_mobile_app_type_platform
     ON pay_platform_mobile_app (app_type, platform) WHERE deleted = false;
+
+-- 兼容历史列类型:
+-- app_config: 若曾为 jsonb 需改为 text(加密密文)
+-- notify_config: 若为 text 需改为 jsonb(明文配置); 空串按 NULL
+-- 目标类型已正确时再执行无副作用(jsonb::text::jsonb 可逆)
+ALTER TABLE pay_platform_mobile_app
+    ALTER COLUMN app_config TYPE text USING app_config::text;
+ALTER TABLE pay_platform_mobile_app
+    ALTER COLUMN notify_config TYPE jsonb USING (
+        CASE
+            WHEN notify_config IS NULL THEN NULL
+            WHEN btrim(notify_config::text) = '' THEN NULL
+            ELSE notify_config::text::jsonb
+        END
+    );
+COMMENT ON COLUMN pay_platform_mobile_app.app_config IS '平台特有密钥配置(JSON文本, AES-256-GCM加密存储)';
+COMMENT ON COLUMN pay_platform_mobile_app.notify_config IS '消息通知配置(jsonb, 明文, 非敏感)';
 
 -- ------------------------------------------------------------
 -- 开源版已取消硬件对接(云音箱/云打印/厂商配置), 相关表 device_speaker /
@@ -350,3 +368,48 @@ COMMENT ON COLUMN pay_trade.biz_order_no IS '商户业务单号(冗余自容器,
 COMMENT ON COLUMN pay_trade.channel_mch_no IS '通道商户号(路由回填, 冗余自容器, 供策略层直接读取)';
 COMMENT ON COLUMN pay_trade.capability IS '支付能力编码(路由回填, 冗余自容器, 供策略层直接读取)';
 COMMENT ON COLUMN pay_trade.client_ip IS '客户端IP(冗余自容器, 供关闭/同步等策略读取)';
+
+-- ------------------------------------------------------------
+-- 网关聚合扫码配置重构: 三级配置深度(AUTO/METHOD/DIRECT) + 场景子表
+-- ------------------------------------------------------------
+ALTER TABLE pay_gateway_aggregate_config DROP COLUMN IF EXISTS wx_product;
+ALTER TABLE pay_gateway_aggregate_config DROP COLUMN IF EXISTS wx_method;
+ALTER TABLE pay_gateway_aggregate_config DROP COLUMN IF EXISTS alipay_product;
+ALTER TABLE pay_gateway_aggregate_config DROP COLUMN IF EXISTS alipay_method;
+ALTER TABLE pay_gateway_aggregate_config DROP COLUMN IF EXISTS union_product;
+ALTER TABLE pay_gateway_aggregate_config DROP COLUMN IF EXISTS union_method;
+ALTER TABLE pay_gateway_aggregate_config ADD COLUMN IF NOT EXISTS level varchar(16) NOT NULL DEFAULT 'auto';
+
+COMMENT ON COLUMN pay_gateway_aggregate_config.level IS '配置深度: auto-自动/method-方式/direct-精确';
+
+CREATE TABLE IF NOT EXISTS pay_gateway_aggregate_scene (
+    id                   int8          NOT NULL,
+    config_id            int8          NOT NULL,
+    scene                varchar(32)   NOT NULL,
+    method               varchar(32),
+    channel_mch_no       varchar(64),
+    capability           varchar(64),
+    creator              int8,
+    create_time          timestamptz(6),
+    last_modifier        int8,
+    last_modified_time   timestamptz(6),
+    version              int4          NOT NULL DEFAULT 0,
+    deleted              bool          NOT NULL DEFAULT false,
+    CONSTRAINT pk_pay_gateway_aggregate_scene PRIMARY KEY (id)
+);
+
+COMMENT ON TABLE  pay_gateway_aggregate_scene IS '网关聚合扫码场景配置(子表, 每场景一行)';
+COMMENT ON COLUMN pay_gateway_aggregate_scene.id IS '主键';
+COMMENT ON COLUMN pay_gateway_aggregate_scene.config_id IS '聚合配置主表ID';
+COMMENT ON COLUMN pay_gateway_aggregate_scene.scene IS '场景编码: wechat_pay/alipay/union_pay/douyin';
+COMMENT ON COLUMN pay_gateway_aggregate_scene.method IS '支付方式(METHOD模式填)';
+COMMENT ON COLUMN pay_gateway_aggregate_scene.channel_mch_no IS '通道商户号(DIRECT模式填)';
+COMMENT ON COLUMN pay_gateway_aggregate_scene.capability IS '支付能力(DIRECT模式填)';
+COMMENT ON COLUMN pay_gateway_aggregate_scene.creator IS '创建者ID';
+COMMENT ON COLUMN pay_gateway_aggregate_scene.create_time IS '创建时间';
+COMMENT ON COLUMN pay_gateway_aggregate_scene.last_modifier IS '最后修改者ID';
+COMMENT ON COLUMN pay_gateway_aggregate_scene.last_modified_time IS '最后修改时间';
+COMMENT ON COLUMN pay_gateway_aggregate_scene.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN pay_gateway_aggregate_scene.deleted IS '逻辑删除标记';
+
+CREATE UNIQUE INDEX IF NOT EXISTS uk_pay_gateway_aggregate_scene ON pay_gateway_aggregate_scene (config_id, scene) WHERE deleted = false;

@@ -20,6 +20,8 @@ public enum CashierSceneEnum implements I18nSupport {
     ALIPAY("alipay"),
     /// 云闪付环境
     UNION_PAY("union_pay"),
+    /// 抖音环境
+    DOUYIN("douyin"),
     ;
 
     private final String code;

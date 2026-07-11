@@ -53,3 +53,17 @@ UPDATE "public"."iam_perm_menu"
 SET "icon" = 'lucide:qr-code',
     "last_modified_time" = CURRENT_TIMESTAMP
 WHERE "id" = 9 AND "menu_code" = 'device';
+
+-- ----------------------------
+-- 聚合扫码配置菜单（应用级子页面）
+-- 对接后端 GatewayAggregateConfigAdminController, 三级配置深度(AUTO/METHOD/DIRECT)
+-- ----------------------------
+INSERT INTO "public"."iam_perm_menu"
+SELECT 4040120, 40401, 'merchant:gateway-aggregate', 'admin', 'AggregateScanConfig', '聚合扫码', 'Aggregate QR Pay',
+       'menu.payment.merchant.aggregateScan', NULL, 't', 'f',
+       '/payment/merchant/aggregate/AggregateScanConfig', '/payment/merchant/aggregate', NULL, 3, 'f', 't', 'f', 1, 1, 1, 'f', 'subpage',
+       NULL, NULL, NULL, NULL, NULL, NULL,
+       CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
+WHERE NOT EXISTS (
+    SELECT 1 FROM "public"."iam_perm_menu" WHERE "id" = 4040120 OR "menu_code" = 'merchant:gateway-aggregate'
+);

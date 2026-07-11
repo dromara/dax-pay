@@ -77,6 +77,10 @@
       "size": "通道商户号不可超过32位",
       "notBlank": "通道商户号不可为空"
     },
+    "level": {
+      "notBlank": "配置深度不可为空",
+      "size": "配置深度不可超过32位"
+    },
     "subMchId": {
       "notBlank": "微信子商户号不可为空"
     },
@@ -339,6 +343,9 @@
     "appType": {
       "notBlank": "应用类型不可为空"
     },
+    "platform": {
+      "notBlank": "移动平台不可为空"
+    },
     "authAppType": {
       "notBlank": "认证应用类型不可为空"
     },
@@ -493,7 +500,8 @@
       "notBlank": "旧密码不能为空"
     },
     "scene": {
-      "notNull": "消息场景不能为空"
+      "notNull": "消息场景不能为空",
+      "size": "场景编码不可超过32位"
     },
     "demoContent": {
       "notBlank": "消息内容不能为空"

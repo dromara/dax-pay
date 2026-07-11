@@ -1,11 +1,20 @@
 package cn.daxpay.open.payment.merchant.param.gateway;
 
+import cn.daxpay.open.payment.common.enums.AggregateConfigLevelEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+import java.util.List;
+
 /// # 网关聚合扫码配置参数
+///
+/// level 控制场景子表的填充要求:
+/// - AUTO: scenes 可为空
+/// - METHOD: 每场景填 method
+/// - DIRECT: 每场景填 channelMchNo + capability
 @Data
 @Schema(title = "网关聚合扫码配置参数")
 public class GatewayAggregateConfigParam {
@@ -20,30 +29,16 @@ public class GatewayAggregateConfigParam {
     @Size(max = 32, message = "{validation.field.appId.size}")
     private String appId;
 
-    @Schema(description = "微信场景支付产品")
-    @Size(max = 32, message = "{validation.field.product.size}")
-    private String wxProduct;
-
-    @Schema(description = "微信场景支付方式")
-    @Size(max = 32, message = "{validation.field.method.size}")
-    private String wxMethod;
-
-    @Schema(description = "支付宝场景支付产品")
-    @Size(max = 32, message = "{validation.field.product.size}")
-    private String alipayProduct;
-
-    @Schema(description = "支付宝场景支付方式")
-    @Size(max = 32, message = "{validation.field.method.size}")
-    private String alipayMethod;
-
-    @Schema(description = "云闪付场景支付产品")
-    @Size(max = 32, message = "{validation.field.product.size}")
-    private String unionProduct;
-
-    @Schema(description = "云闪付场景支付方式")
-    @Size(max = 32, message = "{validation.field.method.size}")
-    private String unionMethod;
+    /// @see AggregateConfigLevelEnum
+    @Schema(description = "配置深度: auto/method/direct")
+    @NotBlank(message = "{validation.field.level.notBlank}")
+    @Size(max = 32, message = "{validation.field.level.size}")
+    private String level;
 
     @Schema(description = "是否自动拉起支付")
     private Boolean autoLaunch;
+
+    @Valid
+    @Schema(description = "场景配置列表")
+    private List<GatewayAggregateSceneParam> scenes;
 }

@@ -1,6 +1,7 @@
 package cn.daxpay.open.payment.merchant.entity.gateway;
 
 import cn.daxpay.open.payment.common.entity.merchant.MchBaseEntity;
+import cn.daxpay.open.payment.common.enums.AggregateConfigLevelEnum;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -10,7 +11,10 @@ import lombok.experimental.Accessors;
 
 /// # 网关聚合扫码配置(应用级)
 ///
-/// 按场景映射支付产品与支付方式, 扫码识别环境后用于建 Trade。
+/// 按配置深度(level)控制场景解析支付方式的自由度, 场景明细存储在 [GatewayAggregateScene] 子表。
+/// - AUTO: 子表无需配置, 系统按扫码环境推导支付方式
+/// - METHOD: 子表每场景配置支付方式(method)
+/// - DIRECT: 子表每场景配置通道商户号(channelMchNo)+支付能力(capability)
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
@@ -21,23 +25,9 @@ public class GatewayAggregateConfig extends MchBaseEntity {
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private String appId;
 
-    /// 微信场景支付产品
-    private String wxProduct;
-
-    /// 微信场景支付方式
-    private String wxMethod;
-
-    /// 支付宝场景支付产品
-    private String alipayProduct;
-
-    /// 支付宝场景支付方式
-    private String alipayMethod;
-
-    /// 云闪付场景支付产品
-    private String unionProduct;
-
-    /// 云闪付场景支付方式
-    private String unionMethod;
+    /// 配置深度: auto/method/direct
+    /// @see AggregateConfigLevelEnum
+    private String level;
 
     /// 是否自动拉起支付
     private Boolean autoLaunch;

@@ -47,8 +47,13 @@
     "cashierNotReady": "收银台支付尚未开放",
     "typeMismatch": "网关订单类型不匹配",
     "sceneNotSupport": "不支持的收银场景",
-    "sceneNotConfigured": "该场景未配置支付产品/方式",
+    "sceneNotConfigured": "该场景未配置支付方式",
     "aggregateConfigMissing": "应用未配置聚合扫码支付",
+    "aggregateScenesRequired": "当前配置深度下场景配置不能为空",
+    "aggregateSceneBlank": "场景编码不能为空",
+    "aggregateSceneMethodRequired": "方式模式下每场景的支付方式必填",
+    "aggregateSceneChannelMchRequired": "精确模式下每场景的通道商户号必填",
+    "aggregateSceneCapabilityRequired": "精确模式下每场景的支付能力必填",
     "channelLocked": "订单已锁定支付方式，请勿切换"
   },
   "refund": {

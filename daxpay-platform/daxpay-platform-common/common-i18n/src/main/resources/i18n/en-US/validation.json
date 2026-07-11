@@ -77,6 +77,10 @@
       "size": "Channel merchant no cannot exceed 32 characters",
       "notBlank": "Channel merchant no cannot be blank"
     },
+    "level": {
+      "notBlank": "Config level cannot be blank",
+      "size": "Config level cannot exceed 32 characters"
+    },
     "subMchId": {
       "notBlank": "WeChat sub-merchant ID cannot be blank"
     },
@@ -339,6 +343,9 @@
     "appType": {
       "notBlank": "Application type cannot be blank"
     },
+    "platform": {
+      "notBlank": "Mobile platform cannot be blank"
+    },
     "authAppType": {
       "notBlank": "Auth application type cannot be blank"
     },
@@ -490,7 +497,8 @@
       "notBlank": "Old password cannot be blank"
     },
     "scene": {
-      "notNull": "Message scene cannot be blank"
+      "notNull": "Message scene cannot be blank",
+      "size": "Scene code cannot exceed 32 characters"
     },
     "demoContent": {
       "notBlank": "Message content cannot be blank"

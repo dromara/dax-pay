@@ -50,7 +50,11 @@ public class GatewayPayHandleService {
     private final LockTemplate lockTemplate;
 
     /// 发起网关支付
+    ///
+    /// @param channelMchNo 通道商户号(DIRECT 模式传入跳过路由, 为空走路由解析)
+    /// @param capability   支付能力(DIRECT 模式必填)
     public NormalPayResult handle(GatewayPayOrder order, String product, String method,
+                                  String channelMchNo, String capability,
                                   String openId, String scene, String device, String clientIp) {
         LockInfo lock = lockTemplate.lock("payment:gateway:pay:" + order.getOrderNo(), 10000, 200);
         if (Objects.isNull(lock)) {
@@ -89,7 +93,7 @@ public class GatewayPayHandleService {
             }
 
             // 组装路由用参数
-            NormalPayParam payParam = this.buildPayParam(order, product, method, openId, clientIp);
+            NormalPayParam payParam = this.buildPayParam(order, product, method, channelMchNo, capability, openId, clientIp);
             payRouteFacade.resolve(payParam);
             var payStrategy = PaymentStrategyFactory.createByProduct(payParam.getProduct(), AbsNormalPayStrategy.class);
             var context = new PayStrategyContext().setPayParam(payParam);
@@ -200,6 +204,7 @@ public class GatewayPayHandleService {
     }
 
     private NormalPayParam buildPayParam(GatewayPayOrder order, String product, String method,
+                                         String channelMchNo, String capability,
                                          String openId, String clientIp) {
         NormalPayParam payParam = new NormalPayParam();
         payParam.setMchNo(order.getMchNo());
@@ -210,6 +215,8 @@ public class GatewayPayHandleService {
         payParam.setAmount(order.getAmount());
         payParam.setProduct(product);
         payParam.setMethod(method);
+        payParam.setChannelMchNo(channelMchNo);
+        payParam.setCapability(capability);
         payParam.setOpenId(openId);
         payParam.setNotifyUrl(order.getNotifyUrl());
         payParam.setReturnUrl(order.getReturnUrl());
