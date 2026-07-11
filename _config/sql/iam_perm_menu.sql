@@ -12,7 +12,7 @@
  Target Server Version : 160014 (160014)
  File Encoding         : 65001
 
- Date: 11/07/2026 10:27:03
+ Date: 11/07/2026 11:04:59
 */
 
 
@@ -76,7 +76,7 @@ COMMENT ON COLUMN "public"."iam_perm_menu"."creator" IS '创建者ID';
 COMMENT ON COLUMN "public"."iam_perm_menu"."last_modifier" IS '最后修改ID';
 COMMENT ON COLUMN "public"."iam_perm_menu"."version" IS '版本号';
 COMMENT ON COLUMN "public"."iam_perm_menu"."deleted" IS '删除标志';
-COMMENT ON COLUMN "public"."iam_perm_menu"."menu_type" IS '菜单类型: catalog-目录, menu-菜单, embedded-内嵌, link-外链';
+COMMENT ON COLUMN "public"."iam_perm_menu"."menu_type" IS '菜单类型: catalog-目录, menu-菜单, subpage-子页面, subpage_group-子页面分组, embedded-内嵌, link-外链';
 COMMENT ON COLUMN "public"."iam_perm_menu"."active_icon" IS '激活状态图标';
 COMMENT ON COLUMN "public"."iam_perm_menu"."badge" IS '徽章显示文本';
 COMMENT ON COLUMN "public"."iam_perm_menu"."badge_type" IS '徽章类型: dot-圆点, normal-文本';
@@ -160,6 +160,7 @@ INSERT INTO "public"."iam_perm_menu" VALUES (803, 8, 'develop:auth', 'admin', 'C
 INSERT INTO "public"."iam_perm_menu" VALUES (310, 308, 'system:notify:wechat-config', 'admin', 'WechatNotify', '微信消息通知', 'Wechat Message Notification', 'menu.system.notify.wechatConfig', 'lucide:message-circle', 'f', 'f', '/system/notify/wechat/index', '/system/notify/wechat', NULL, 30, 'f', 't', 'f', 1, 1, 0, 'f', 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-09 00:00:00+00', '2026-07-09 00:00:00+00');
 INSERT INTO "public"."iam_perm_menu" VALUES (40504, 304, 'system:config:mobile_app', 'admin', 'MobileAppConfig', '移动端应用管理', 'Mobile App Management', 'menu.system.config.mobileApp', 'lucide:smartphone', 'f', 'f', '/system/config/mobileApp/MobileAppConfig', '/system/config/mobile-app', NULL, 6, 'f', 't', 'f', 1, 1, 0, 'f', 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-05 00:00:00+00', '2026-07-10 08:54:32.213917+00');
 INSERT INTO "public"."iam_perm_menu" VALUES (40505, 40504, 'system:config:mobile_app_detail', 'admin', 'MobileAppDetail', '移动端应用详情', 'Mobile App Detail', 'menu.system.config.mobileAppDetail', NULL, 't', 'f', '/system/config/mobileApp/detail/MobileAppDetail', '/system/config/mobile-app/detail/:appType', NULL, 1, 'f', 't', 'f', 1, 1, 0, 'f', 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-05 00:00:00+00', '2026-07-10 08:54:32.222476+00');
+INSERT INTO "public"."iam_perm_menu" VALUES (4040121, 40401, 'merchant:gateway-aggregate', 'admin', 'AggregateScanConfig', '聚合扫码', 'Aggregate QR Pay', 'menu.payment.merchant.aggregateScan', NULL, 't', 'f', '/payment/merchant/aggregate/AggregateScanConfig', '/payment/merchant/aggregate', NULL, 3, 'f', 't', 'f', 1, 1, 1, 'f', 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-11 03:00:13.374496+00', '2026-07-11 03:00:13.374496+00');
 
 -- ----------------------------
 -- Primary Key structure for table iam_perm_menu

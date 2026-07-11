@@ -47,9 +47,8 @@ public class PermMenuService {
                 throw new BizException(CommonCode.FAIL_CODE, "error.iam.menu.codeExists");
             }
         }
-        if (MenuTypeEnum.SUBPAGE.equalsCode(param.getMenuType())) {
-            param.setHidden(true);
-        }
+        // 子页面类菜单(subpage/subpage_group)统一处理
+        applySubpageLikeRules(param, false);
         PermMenu permMenu = PermMenu.init(param);
         permMenuManager.save(permMenu);
     }
@@ -61,6 +60,10 @@ public class PermMenuService {
                 // 权限: 菜单不存在
                 .orElseThrow(() -> new DataNotExistException("error.iam.menu.notExist"));
 
+        // 菜单类型创建后不可修改
+        if (!Objects.equals(permMenu.getMenuType(), param.getMenuType())) {
+            throw new BizException(CommonCode.FAIL_CODE, "error.iam.menu.typeImmutable");
+        }
         // 校验父级菜单类型
         validateParentType(param.getPid(), param.getMenuType());
         // 检查上级菜单是否出现了循环依赖
@@ -79,9 +82,8 @@ public class PermMenuService {
             // 权限: 子页面不能有下级菜单
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.menu.subpageNoChildren");
         }
-        if (MenuTypeEnum.SUBPAGE.equalsCode(param.getMenuType())) {
-            param.setHidden(true);
-        }
+        // 子页面类菜单统一处理(含分组下级类型校验)
+        applySubpageLikeRules(param, true);
         PermMenuConvert.CONVERT.copy(param, permMenu);
         permMenuManager.updateById(permMenu);
     }
@@ -168,7 +170,8 @@ public class PermMenuService {
     /// 校验父级菜单类型
     /// - 目录类型可以选择目录作为父级，也可以不选（作为根目录）
     /// - 菜单、内嵌页面、外链的上级必须是目录类型
-    /// - 子页面的上级必须是菜单类型
+    /// - 子页面的上级必须是菜单或子页面分组
+    /// - 子页面分组的上级必须是菜单（一级限制，不可嵌套）
     ///
     /// @param pid 父级菜单ID
     /// @param menuType 当前菜单类型
@@ -182,18 +185,21 @@ public class PermMenuService {
             return;
         }
         if (MenuTypeEnum.SUBPAGE.equals(typeEnum)) {
-            if (pid == null) {
-                // 权限: 子页面必须选择上级菜单
-                throw new BizException(CommonCode.FAIL_CODE, "error.iam.menu.subpageNeedParent");
+            PermMenu parent = validateAndGetParent(pid, "error.iam.menu.subpageNeedParent");
+            String parentType = parent.getMenuType();
+            // 子页面的上级可以是菜单或子页面分组
+            if (!MenuTypeEnum.MENU.equalsCode(parentType) && !MenuTypeEnum.SUBPAGE_GROUP.equalsCode(parentType)) {
+                // 权限: 子页面的上级必须是菜单或子页面分组
+                throw new BizException(CommonCode.FAIL_CODE, "error.iam.menu.subpageParentInvalid");
             }
-            PermMenu parent = permMenuManager.findById(pid).orElse(null);
-            if (parent == null) {
-                // 权限: 上级菜单不存在
-                throw new BizException(CommonCode.FAIL_CODE, "error.iam.menu.parentNotExist");
-            }
+            return;
+        }
+        if (MenuTypeEnum.SUBPAGE_GROUP.equals(typeEnum)) {
+            PermMenu parent = validateAndGetParent(pid, "error.iam.menu.subpageGroupNeedParent");
+            // 子页面分组的上级必须是菜单（不可嵌套分组）
             if (!MenuTypeEnum.MENU.equalsCode(parent.getMenuType())) {
-                // 权限: 子页面的上级菜单必须是菜单类型
-                throw new BizException(CommonCode.FAIL_CODE, "error.iam.menu.subpageParentMustBeMenu");
+                // 权限: 子页面分组的上级必须是菜单类型
+                throw new BizException(CommonCode.FAIL_CODE, "error.iam.menu.subpageGroupParentMustBeMenu");
             }
             return;
         }
@@ -209,6 +215,56 @@ public class PermMenuService {
         if (!MenuTypeEnum.CATALOG.equalsCode(parent.getMenuType())) {
             // 权限: 菜单、内嵌页面、外链的上级菜单必须是目录类型
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.menu.parentMustBeCatalog");
+        }
+    }
+
+    /// 校验并获取父级菜单（子页面/子页面分组共用）
+    ///
+    /// @param pid 父级菜单ID
+    /// @param needParentKey pid 为空时抛出的错误消息 key
+    /// @return 父级菜单实体
+    private PermMenu validateAndGetParent(Long pid, String needParentKey) {
+        if (pid == null) {
+            throw new BizException(CommonCode.FAIL_CODE, needParentKey);
+        }
+        PermMenu parent = permMenuManager.findById(pid).orElse(null);
+        if (parent == null) {
+            // 权限: 上级菜单不存在
+            throw new BizException(CommonCode.FAIL_CODE, "error.iam.menu.parentNotExist");
+        }
+        return parent;
+    }
+
+    /// 子页面类菜单(subpage/subpage_group)的统一处理
+    /// - 强制隐藏（不在侧边栏显示）
+    /// - 子页面分组额外校验下级只能是子页面，并清空路由/组件/编码（纯容器）
+    ///
+    /// @param param 菜单参数
+    /// @param checkChildren 是否校验下级类型（编辑时为 true）
+    private void applySubpageLikeRules(PermMenuParam param, boolean checkChildren) {
+        String menuType = param.getMenuType();
+        boolean isSubpage = MenuTypeEnum.SUBPAGE.equalsCode(menuType);
+        boolean isGroup = MenuTypeEnum.SUBPAGE_GROUP.equalsCode(menuType);
+        if (!isSubpage && !isGroup) {
+            return;
+        }
+        // 强制隐藏
+        param.setHidden(true);
+        if (isGroup) {
+            // 子页面分组: 编辑时校验下级只能是子页面
+            if (checkChildren && param.getId() != null) {
+                List<PermMenu> children = permMenuManager.findAllByPid(param.getId());
+                for (PermMenu child : children) {
+                    if (!MenuTypeEnum.SUBPAGE.equalsCode(child.getMenuType())) {
+                        // 权限: 子页面分组下只能包含子页面
+                        throw new BizException(CommonCode.FAIL_CODE, "error.iam.menu.subpageGroupChildMustBeSubpage");
+                    }
+                }
+            }
+            // 清空路由/组件/编码（纯容器节点）
+            param.setMenuCode(null);
+            param.setComponent(null);
+            param.setPath(null);
         }
     }
 

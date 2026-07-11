@@ -16,6 +16,8 @@ public enum MenuTypeEnum implements I18nSupport {
     MENU("menu"),
     /// 子页面
     SUBPAGE("subpage"),
+    /// 子页面分组
+    SUBPAGE_GROUP("subpage_group"),
     /// 内嵌页面
     EMBEDDED("embedded"),
     /// 外链
@@ -46,7 +48,7 @@ public enum MenuTypeEnum implements I18nSupport {
     }
 
     public boolean canAddChild() {
-        return this == CATALOG || this == MENU;
+        return this == CATALOG || this == MENU || this == SUBPAGE_GROUP;
     }
 
     public boolean needParent() {

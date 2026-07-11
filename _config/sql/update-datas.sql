@@ -57,13 +57,82 @@ WHERE "id" = 9 AND "menu_code" = 'device';
 -- ----------------------------
 -- 聚合扫码配置菜单（应用级子页面）
 -- 对接后端 GatewayAggregateConfigAdminController, 三级配置深度(AUTO/METHOD/DIRECT)
+-- 注意: id 不能用 4040120, 该 ID 已被"微信域名验证"(merchant:wx_verify)占用
 -- ----------------------------
-INSERT INTO "public"."iam_perm_menu"
-SELECT 4040120, 40401, 'merchant:gateway-aggregate', 'admin', 'AggregateScanConfig', '聚合扫码', 'Aggregate QR Pay',
-       'menu.payment.merchant.aggregateScan', NULL, 't', 'f',
-       '/payment/merchant/aggregate/AggregateScanConfig', '/payment/merchant/aggregate', NULL, 3, 'f', 't', 'f', 1, 1, 1, 'f', 'subpage',
-       NULL, NULL, NULL, NULL, NULL, NULL,
-       CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
-WHERE NOT EXISTS (
-    SELECT 1 FROM "public"."iam_perm_menu" WHERE "id" = 4040120 OR "menu_code" = 'merchant:gateway-aggregate'
+INSERT INTO "public"."iam_perm_menu" VALUES (
+    4040121, 40401, 'merchant:gateway-aggregate', 'admin', 'AggregateScanConfig',
+    '聚合扫码', 'Aggregate QR Pay', 'menu.payment.merchant.aggregateScan',
+    NULL, 't', 'f',
+    '/payment/merchant/aggregate/AggregateScanConfig', '/payment/merchant/aggregate',
+    NULL, 3, 'f', 't', 'f', 1, 1, 1, 'f', 'subpage',
+    NULL, NULL, NULL, NULL, NULL, NULL,
+    CURRENT_TIMESTAMP, CURRENT_TIMESTAMP
 );
+
+-- ----------------------------
+-- 2026-07-11 菜单子页面分组(subpage_group)升级
+-- 新增 subpage_group 类型用于组织 menu 下大量平铺的 subpage, 不在侧边栏显示
+-- 详见方案: catalog > menu > subpage_group(隐藏) > subpage, 面包屑显示完整四级
+-- ----------------------------
+
+-- 更新 menu_type 字段注释
+COMMENT ON COLUMN "public"."iam_perm_menu"."menu_type" IS '菜单类型: catalog-目录, menu-菜单, subpage-子页面, subpage_group-子页面分组, embedded-内嵌, link-外链';
+
+-- 新建 4 个子页面分组节点(纯容器: 无 path/component/menu_code, 强制隐藏)
+-- 40401 商户列表下 3 个分组
+INSERT INTO "public"."iam_perm_menu"
+    (id, pid, menu_code, client_code, name, title_cn, title_en, i18n_key, icon,
+     hidden, hide_children_menu, component, path, redirect, sort_no, root,
+     keep_alive, affix_tab, creator, last_modifier, version, deleted, menu_type,
+     active_icon, badge, badge_type, badge_variants, iframe_src, link,
+     create_time, last_modified_time)
+VALUES
+    (4040130, 40401, NULL, 'admin', 'MchManageGroup', '商户管理', 'Merchant Management',
+     'menu.payment.merchant.group.manage', 'lucide:settings-2',
+     true, false, NULL, NULL, NULL, 1, false,
+     false, false, 1, 1, 0, false, 'subpage_group',
+     NULL, NULL, NULL, NULL, NULL, NULL,
+     CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (4040131, 40401, NULL, 'admin', 'ChannelMerchantGroup', '通道商户', 'Channel Merchant',
+     'menu.payment.merchant.group.channelMerchant', 'lucide:repeat',
+     true, false, NULL, NULL, NULL, 2, false,
+     false, false, 1, 1, 0, false, 'subpage_group',
+     NULL, NULL, NULL, NULL, NULL, NULL,
+     CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    (4040132, 40401, NULL, 'admin', 'ChannelAppGroup', '渠道应用', 'Channel App',
+     'menu.payment.merchant.group.channelApp', 'lucide:layout-grid',
+     true, false, NULL, NULL, NULL, 3, false,
+     false, false, 1, 1, 0, false, 'subpage_group',
+     NULL, NULL, NULL, NULL, NULL, NULL,
+     CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+    -- 40105 支付产品管理下 1 个分组
+    (40508, 40105, NULL, 'admin', 'ChannelIsvConfigGroup', '渠道服务商配置', 'Channel ISV Config',
+     'menu.payment.config.group.channelIsv', 'lucide:server',
+     true, false, NULL, NULL, NULL, 1, false,
+     false, false, 1, 1, 0, false, 'subpage_group',
+     NULL, NULL, NULL, NULL, NULL, NULL,
+     CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+ON CONFLICT (id) DO NOTHING;
+
+-- 将子页面 pid 迁移到对应分组
+-- 4040130 商户管理组(9个)
+UPDATE "public"."iam_perm_menu"
+SET "pid" = 4040130, "last_modified_time" = CURRENT_TIMESTAMP
+WHERE "id" IN (4040101, 4040103, 4040102, 4040110, 4040111, 4040108, 4040117, 4040121, 4040120);
+
+-- 4040131 通道商户组(3个)
+UPDATE "public"."iam_perm_menu"
+SET "pid" = 4040131, "last_modified_time" = CURRENT_TIMESTAMP
+WHERE "id" IN (4040106, 4040109, 4040112);
+
+-- 4040132 渠道应用组(4个)
+UPDATE "public"."iam_perm_menu"
+SET "pid" = 4040132, "last_modified_time" = CURRENT_TIMESTAMP
+WHERE "id" IN (4040113, 4040114, 4040115, 4040119);
+
+-- 40508 渠道服务商配置组(3个)
+UPDATE "public"."iam_perm_menu"
+SET "pid" = 40508, "last_modified_time" = CURRENT_TIMESTAMP
+WHERE "id" IN (40502, 40503, 40506);
+
+-- 注: 40501(产品配置详情)、40505(移动端应用详情) 仅1个子页面, 保留直挂 menu 不强制分组

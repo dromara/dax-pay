@@ -2,6 +2,7 @@
   "catalog": "Catalog",
   "menu": "Menu",
   "subpage": "Subpage",
+  "subpage_group": "Subpage Group",
   "embedded": "Embedded Page",
   "link": "External Link"
 }
