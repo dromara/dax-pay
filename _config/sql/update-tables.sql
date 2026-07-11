@@ -186,6 +186,9 @@ COMMENT ON COLUMN pay_platform_mobile_app.app_type IS '端类型: merchant-商�
 COMMENT ON COLUMN pay_platform_mobile_app.platform IS '移动平台: wx_h5/wx_mini/alipay_mini/dy_mini/android/ios';
 COMMENT ON COLUMN pay_platform_mobile_app.app_config IS '平台特有密钥配置(JSON文本, AES-256-GCM加密存储)';
 COMMENT ON COLUMN pay_platform_mobile_app.notify_config IS '消息通知配置(jsonb, 明文, 非敏感)';
+
+-- 移除无用的展示字段 app_name(以端类型/平台区分即可)
+ALTER TABLE pay_platform_mobile_app DROP COLUMN IF EXISTS app_name;
 COMMENT ON COLUMN pay_platform_mobile_app.binding_enabled IS '是否启用第三方账号用户绑定';
 COMMENT ON COLUMN pay_platform_mobile_app.enabled IS '是否启用';
 COMMENT ON COLUMN pay_platform_mobile_app.remark IS '备注';
