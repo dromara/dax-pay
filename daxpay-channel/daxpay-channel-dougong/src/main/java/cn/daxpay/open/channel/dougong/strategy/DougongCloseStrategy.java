@@ -5,7 +5,6 @@ import cn.daxpay.open.channel.dougong.service.isv.DougongIsvConfigAssembler;
 import cn.daxpay.open.channel.dougong.service.payment.DougongCloseService;
 import cn.daxpay.open.payment.core.strategy.pay.AbsPayCloseStrategy;
 import cn.daxpay.open.payment.core.strategy.pay.PayStrategyContext;
-import cn.daxpay.open.payment.core.trade.entity.NormalPayOrder;
 import cn.daxpay.open.payment.core.trade.entity.PayTrade;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.pay.CloseTypeEnum;
@@ -31,15 +30,12 @@ public class DougongCloseStrategy extends AbsPayCloseStrategy {
 
     @Override
     public CloseTypeEnum doClose(PayStrategyContext context, boolean useCancel) {
-        NormalPayOrder normalOrder = context.getContainer();
-        String channelMchNo = normalOrder != null ? normalOrder.getChannelMchNo() : null;
-        String capability = normalOrder != null ? normalOrder.getCapability() : null;
+        // 直接从 trade 读取路由参数, 不再需要 container 中间层
         PayTrade trade = context.getTrade();
 
         DougongSdkCredential credential = dougongIsvConfigAssembler.buildConfig(
-                trade.getMchNo(), channelMchNo, capability);
+                trade.getMchNo(), trade.getChannelMchNo(), trade.getCapability());
 
-        String clientIp = normalOrder != null ? normalOrder.getClientIp() : null;
-        return dougongCloseService.close(trade, credential, useCancel, clientIp);
+        return dougongCloseService.close(trade, credential, useCancel, trade.getClientIp());
     }
 }

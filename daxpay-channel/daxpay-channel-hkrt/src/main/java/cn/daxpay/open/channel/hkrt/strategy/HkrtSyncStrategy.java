@@ -6,7 +6,6 @@ import cn.daxpay.open.channel.hkrt.service.payment.HkrtSyncService;
 import cn.daxpay.open.payment.core.strategy.pay.PayStrategyContext;
 import cn.daxpay.open.payment.core.strategy.sync.AbsSyncPayOrderStrategy;
 import cn.daxpay.open.payment.core.trade.bo.PaySyncResultBo;
-import cn.daxpay.open.payment.core.trade.entity.NormalPayOrder;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,14 +30,11 @@ public class HkrtSyncStrategy extends AbsSyncPayOrderStrategy {
 
     @Override
     public PaySyncResultBo doSync(PayStrategyContext context) {
-        // 从上下文容器读取通道路由参数
-        NormalPayOrder normalOrder = context.getContainer();
-        String channelMchNo = normalOrder != null ? normalOrder.getChannelMchNo() : null;
-        String capability = normalOrder != null ? normalOrder.getCapability() : null;
+        // 直接从 trade 读取路由参数, 不再需要 container 中间层
 
         // 组装通道调用凭证
         HkrtSdkCredential credential = hkrtIsvConfigAssembler.buildConfig(
-                context.getTrade().getMchNo(), channelMchNo, capability);
+                context.getTrade().getMchNo(), context.getTrade().getChannelMchNo(), context.getTrade().getCapability());
 
         return hkrtSyncService.sync(context.getTrade(), credential);
     }

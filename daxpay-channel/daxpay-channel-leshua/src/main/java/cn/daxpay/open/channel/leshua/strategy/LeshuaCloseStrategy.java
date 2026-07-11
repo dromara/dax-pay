@@ -5,7 +5,6 @@ import cn.daxpay.open.channel.leshua.service.isv.LeshuaIsvConfigAssembler;
 import cn.daxpay.open.channel.leshua.service.payment.LeshuaCloseService;
 import cn.daxpay.open.payment.core.strategy.pay.AbsPayCloseStrategy;
 import cn.daxpay.open.payment.core.strategy.pay.PayStrategyContext;
-import cn.daxpay.open.payment.core.trade.entity.NormalPayOrder;
 import cn.daxpay.open.payment.core.trade.entity.PayTrade;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.pay.CloseTypeEnum;
@@ -31,14 +30,10 @@ public class LeshuaCloseStrategy extends AbsPayCloseStrategy {
 
     @Override
     public CloseTypeEnum doClose(PayStrategyContext context, boolean useCancel) {
-        NormalPayOrder normalOrder = context.getContainer();
-        String channelMchNo = normalOrder != null ? normalOrder.getChannelMchNo() : null;
-        String capability = normalOrder != null ? normalOrder.getCapability() : null;
         PayTrade trade = context.getTrade();
-
+        // 直接从 trade 读取路由参数, 不再需要 container 中间层
         LeshuaSdkCredential credential = leshuaIsvConfigAssembler.buildConfig(
-                trade.getMchNo(), channelMchNo, capability);
-        String clientIp = normalOrder != null ? normalOrder.getClientIp() : null;
-        return leshuaCloseService.close(trade, credential, useCancel, clientIp);
+                trade.getMchNo(), trade.getChannelMchNo(), trade.getCapability());
+        return leshuaCloseService.close(trade, credential, useCancel, trade.getClientIp());
     }
 }

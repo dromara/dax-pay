@@ -161,16 +161,12 @@ public class AlipayCallbackService {
         if (trade == null) {
             return null;
         }
-        NormalPayOrder normal = normalPayOrderManager.findById(trade.getContainerId()).orElse(null);
-        if (normal == null) {
-            return null;
-        }
         // 按支付产品分发: 服务商 / 直连
         if (ProductEnum.ALIPAY_ISV.getCode().equals(trade.getProduct())) {
             return alipayIsvConfigAssembler.buildConfig(trade.getMchNo());
         }
         return alipayDirectConfigAssembler.buildConfig(
-                trade.getMchNo(), normal.getChannelMchNo(), normal.getCapability());
+                trade.getMchNo(), trade.getChannelMchNo(), trade.getCapability());
     }
 
     /// 提取 request 全部表单参数为 Map<String,String>(多值取首项)

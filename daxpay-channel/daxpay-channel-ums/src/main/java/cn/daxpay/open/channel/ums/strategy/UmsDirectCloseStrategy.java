@@ -5,7 +5,6 @@ import cn.daxpay.open.channel.ums.service.direct.UmsDirectConfigAssembler;
 import cn.daxpay.open.channel.ums.service.payment.close.UmsCloseService;
 import cn.daxpay.open.payment.core.strategy.pay.AbsPayCloseStrategy;
 import cn.daxpay.open.payment.core.strategy.pay.PayStrategyContext;
-import cn.daxpay.open.payment.core.trade.entity.NormalPayOrder;
 import cn.daxpay.open.payment.core.trade.entity.PayTrade;
 import cn.daxpay.open.platform.core.enums.pay.pay.CloseTypeEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
@@ -29,13 +28,11 @@ public class UmsDirectCloseStrategy extends AbsPayCloseStrategy {
 
     @Override
     public CloseTypeEnum doClose(PayStrategyContext context, boolean useCancel) {
-        NormalPayOrder normalOrder = context.getContainer();
-        String channelMchNo = normalOrder != null ? normalOrder.getChannelMchNo() : null;
-        String capability = normalOrder != null ? normalOrder.getCapability() : null;
+        // 直接从 trade 读取路由参数, 不再需要 container 中间层
         PayTrade trade = context.getTrade();
 
         UmsSdkCredential credential = umsDirectConfigAssembler.buildConfig(
-                trade.getMchNo(), channelMchNo, capability);
+                trade.getMchNo(), trade.getChannelMchNo(), trade.getCapability());
         return umsCloseService.close(trade, credential, useCancel);
     }
 }

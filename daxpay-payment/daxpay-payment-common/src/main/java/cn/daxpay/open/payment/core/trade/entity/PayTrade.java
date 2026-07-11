@@ -39,6 +39,9 @@ public class PayTrade extends MchBaseEntity {
     /// normal → pay_normal_order / authorize/capture → pay_auth / recurring → pay_recurring / combine_sub → pay_combine
     private Long containerId;
 
+    /// 商户业务单号(冗余自容器, 供同步/关闭/回调等流程直接读取, 免查容器)
+    private String bizOrderNo;
+
     /// 支付产品编码，策略工厂通过此字段创建策略
     /// @see cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum
     private String product;
@@ -124,6 +127,16 @@ public class PayTrade extends MchBaseEntity {
 
     /// 支付参数体类型（jsapi/sdk/app）
     private String payBodyType;
+
+    /// 通道商户号(路由回填, 冗余自容器, 供策略层直接读取)
+    private String channelMchNo;
+
+    /// 支付能力编码(路由回填, 冗余自容器, 供策略层直接读取)
+    /// @see cn.daxpay.open.platform.core.enums.pay.channel.PayCapabilityEnum
+    private String capability;
+
+    /// 客户端 IP(冗余自容器, 供关闭/同步等策略读取)
+    private String clientIp;
 
     /// 错误信息
     @TableField(updateStrategy = FieldStrategy.ALWAYS)

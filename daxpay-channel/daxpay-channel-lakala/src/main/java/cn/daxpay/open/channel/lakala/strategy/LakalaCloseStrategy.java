@@ -5,7 +5,6 @@ import cn.daxpay.open.channel.lakala.service.isv.LakalaIsvConfigAssembler;
 import cn.daxpay.open.channel.lakala.service.payment.LakalaCloseService;
 import cn.daxpay.open.payment.core.strategy.pay.AbsPayCloseStrategy;
 import cn.daxpay.open.payment.core.strategy.pay.PayStrategyContext;
-import cn.daxpay.open.payment.core.trade.entity.NormalPayOrder;
 import cn.daxpay.open.payment.core.trade.entity.PayTrade;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.pay.CloseTypeEnum;
@@ -15,7 +14,7 @@ import org.springframework.stereotype.Service;
 
 /// # 拉卡拉服务商支付关闭策略
 ///
-/// 从上下文容器读取通道路由参数(channelMchNo / capability),
+/// 从 trade 读取通道路由参数(channelMchNo / capability),
 /// 组装通道凭证(委托 [LakalaIsvConfigAssembler]), 关闭执行委托给 [LakalaCloseService]。
 ///
 /// 注意: 拉卡拉仅提供关单接口, 无撤销接口(useCancel 参数由 service 层忽略)。
@@ -34,18 +33,13 @@ public class LakalaCloseStrategy extends AbsPayCloseStrategy {
 
     @Override
     public CloseTypeEnum doClose(PayStrategyContext context, boolean useCancel) {
-        // 从上下文容器读取通道路由参数
-        NormalPayOrder normalOrder = context.getContainer();
-        String channelMchNo = normalOrder != null ? normalOrder.getChannelMchNo() : null;
-        String capability = normalOrder != null ? normalOrder.getCapability() : null;
+        // 直接从 trade 读取路由参数, 不再需要 container 中间层
         PayTrade trade = context.getTrade();
 
         // 组装通道调用凭证
         LakalaSdkCredential credential = lakalaIsvConfigAssembler.buildConfig(
-                trade.getMchNo(), channelMchNo, capability);
+                trade.getMchNo(), trade.getChannelMchNo(), trade.getCapability());
 
-        // 客户端IP取自原下单订单(超时关单等非HTTP场景亦可用)
-        String clientIp = normalOrder != null ? normalOrder.getClientIp() : null;
-        return lakalaCloseService.close(trade, credential, useCancel, clientIp);
+        return lakalaCloseService.close(trade, credential, useCancel, trade.getClientIp());
     }
 }

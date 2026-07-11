@@ -4,7 +4,6 @@ import cn.daxpay.open.channel.douyin.client.credential.DouyinSdkCredential;
 import cn.daxpay.open.channel.douyin.service.direct.DouyinDirectConfigAssembler;
 import cn.daxpay.open.channel.douyin.service.payment.close.DouyinCloseService;
 import cn.daxpay.open.payment.core.strategy.pay.PayStrategyContext;
-import cn.daxpay.open.payment.core.trade.entity.NormalPayOrder;
 import cn.daxpay.open.payment.core.trade.entity.PayTrade;
 import cn.daxpay.open.payment.core.strategy.pay.AbsPayCloseStrategy;
 import cn.daxpay.open.platform.core.enums.pay.pay.CloseTypeEnum;
@@ -16,7 +15,7 @@ import org.springframework.stereotype.Service;
 /// # 抖音直连支付关闭策略
 ///
 /// 抖音直连模式(ProductEnum.DOUYIN_PAY)下的支付关闭策略。
-/// 从上下文容器读取通道路由参数(channelMchNo / capability),
+/// 从交易凭证读取通道路由参数(channelMchNo / capability),
 /// 组装通道凭证(委托 [DouyinDirectConfigAssembler]), 关闭执行委托给 [DouyinCloseService]。
 @Slf4j
 @Service
@@ -33,13 +32,10 @@ public class DouyinDirectCloseStrategy extends AbsPayCloseStrategy {
 
     @Override
     public CloseTypeEnum doClose(PayStrategyContext context, boolean useCancel) {
-        NormalPayOrder normalOrder = context.getContainer();
-        String channelMchNo = normalOrder != null ? normalOrder.getChannelMchNo() : null;
-        String capability = normalOrder != null ? normalOrder.getCapability() : null;
         PayTrade trade = context.getTrade();
-
+        // 直接从 trade 读取路由参数, 不再需要 container 中间层
         DouyinSdkCredential credential = douyinDirectConfigAssembler.buildConfig(
-                trade.getMchNo(), channelMchNo, capability);
+                trade.getMchNo(), trade.getChannelMchNo(), trade.getCapability());
         return douyinCloseService.close(trade, credential, useCancel);
     }
 }

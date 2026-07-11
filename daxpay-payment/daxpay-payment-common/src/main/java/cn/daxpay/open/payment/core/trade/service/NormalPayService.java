@@ -78,7 +78,7 @@ public class NormalPayService {
             return payAssistService.buildResult(context.getTrade());
         }
         // 订单不存在则新建（填充 context）
-        if (Objects.isNull(context.getContainer())) {
+        if (Objects.isNull(context.getTrade())) {
             payAssistService.createOrder(payParam, context);
         }
         PayTrade trade = context.getTrade();

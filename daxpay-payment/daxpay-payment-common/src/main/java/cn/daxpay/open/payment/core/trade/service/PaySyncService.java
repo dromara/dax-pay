@@ -1,5 +1,20 @@
 package cn.daxpay.open.payment.core.trade.service;
 
+import cn.daxpay.open.payment.common.enums.PayFundStatusEnum;
+import cn.daxpay.open.payment.common.enums.PayTradeTypeEnum;
+import cn.daxpay.open.payment.core.strategy.PaymentStrategyFactory;
+import cn.daxpay.open.payment.core.strategy.pay.AbsPayCloseStrategy;
+import cn.daxpay.open.payment.core.strategy.pay.PayStrategyContext;
+import cn.daxpay.open.payment.core.strategy.sync.AbsSyncPayOrderStrategy;
+import cn.daxpay.open.payment.core.trade.bo.PaySyncResultBo;
+import cn.daxpay.open.payment.core.trade.dao.NormalPayOrderManager;
+import cn.daxpay.open.payment.core.trade.dao.PayTradeManager;
+import cn.daxpay.open.payment.core.trade.entity.NormalPayOrder;
+import cn.daxpay.open.payment.core.trade.entity.PayTrade;
+import cn.daxpay.open.payment.core.trade.record.entity.PaySyncRecord;
+import cn.daxpay.open.payment.core.trade.record.service.PaySyncRecordService;
+import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPaySyncParam;
+import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPaySyncResult;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
@@ -7,20 +22,6 @@ import cn.daxpay.open.platform.core.exception.PayFailureException;
 import cn.daxpay.open.platform.core.exception.RepetitiveOperationException;
 import cn.daxpay.open.platform.core.exception.system.SystemUnknownErrorException;
 import cn.daxpay.open.platform.core.util.DateTimeUtil;
-import cn.daxpay.open.payment.core.strategy.pay.PayStrategyContext;
-import cn.daxpay.open.payment.common.enums.PayFundStatusEnum;
-import cn.daxpay.open.payment.core.strategy.PaymentStrategyFactory;
-import cn.daxpay.open.payment.core.trade.bo.PaySyncResultBo;
-import cn.daxpay.open.payment.core.trade.dao.NormalPayOrderManager;
-import cn.daxpay.open.payment.core.trade.entity.NormalPayOrder;
-import cn.daxpay.open.payment.core.trade.dao.PayTradeManager;
-import cn.daxpay.open.payment.core.trade.entity.PayTrade;
-import cn.daxpay.open.payment.core.trade.record.entity.PaySyncRecord;
-import cn.daxpay.open.payment.core.trade.record.service.PaySyncRecordService;
-import cn.daxpay.open.payment.core.strategy.pay.AbsPayCloseStrategy;
-import cn.daxpay.open.payment.core.strategy.sync.AbsSyncPayOrderStrategy;
-import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPaySyncParam;
-import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPaySyncResult;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
@@ -36,9 +37,6 @@ import java.util.Objects;
 import java.util.Optional;
 
 /// # 支付同步服务
-///
-/// 通道策略层返回同步结果, 本服务负责本地资金凭证(PayTrade)与通道状态对齐,
-/// 含: 状态比对、超时主动关网关、成功/失败/关闭调整, 以及同步流水记录持久化
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -65,7 +63,7 @@ public class PaySyncService {
             NormalPayOrder normalOrder = payNormalOrderManager.findByBizOrderNo(
                     param.getBizOrderNo()).orElse(null);
             if (Objects.nonNull(normalOrder)) {
-                trade = payTradeManager.findByContainerId(normalOrder.getId())
+                trade = payTradeManager.findByContainerId(normalOrder.getId(), PayTradeTypeEnum.NORMAL.getCode())
                         .orElse(null);
             }
         }
@@ -90,10 +88,7 @@ public class PaySyncService {
             throw new RepetitiveOperationException();
         }
         try {
-            NormalPayOrder normalOrder = payNormalOrderManager.findById(trade.getContainerId())
-                    .orElse(null);
             var context = new PayStrategyContext()
-                    .setContainer(normalOrder)
                     .setTrade(trade);
             var syncStrategy = PaymentStrategyFactory.createByProduct(
                     trade.getProduct(), AbsSyncPayOrderStrategy.class);
@@ -105,13 +100,12 @@ public class PaySyncService {
             boolean statusSync = this.checkAndAdjust(syncResult, trade);
             if (!statusSync) {
                 try {
-                    this.adjustHandler(syncResult, trade, normalOrder);
+                    this.adjustHandler(syncResult, trade);
                 } catch (PayFailureException e) {
                     syncResult.setSyncSuccess(false).setSyncErrorMsg(e.getMessage());
                 }
             }
-            // 保存同步流水记录(成功/失败均记录)
-            this.saveRecord(trade, normalOrder, syncResult, !statusSync);
+            this.saveRecord(trade, syncResult, !statusSync);
             return new NormalPaySyncResult()
                     .setOrderStatus(trade.getStatus())
                     .setAdjust(statusSync);
@@ -120,20 +114,16 @@ public class PaySyncService {
         }
     }
 
-    /// 判断本地与通道状态是否一致, 并在本地支付中且超时时标记需要远程关网关
     private boolean checkAndAdjust(PaySyncResultBo syncResult, PayTrade trade) {
         var payStatus = Optional.ofNullable(syncResult.getPayStatus())
                 .orElse(PayFundStatusEnum.PROCESSING);
         String orderStatus = trade.getStatus();
-        // 本地已失败, 直接返回需要调整
         if (orderStatus.equals(PayFundStatusEnum.FAIL.getCode())) {
             return false;
         }
         if (orderStatus.equals(PayFundStatusEnum.PROCESSING.getCode())) {
-            // 通道也是处理中, 进一步判断是否超时
             if (Objects.equals(PayFundStatusEnum.PROCESSING, payStatus)) {
                 if (DateTimeUtil.le(trade.getExpiredTime(), OffsetDateTime.now(ZoneOffset.UTC))) {
-                    // 本地超时且通道订单仍存活, 标记需要主动关闭网关交易
                     syncResult.setPayStatus(PayFundStatusEnum.CLOSE);
                     syncResult.setRemoteClose(true);
                     return false;
@@ -141,36 +131,32 @@ public class PaySyncService {
                 return true;
             }
         } else {
-            // 本地非处理中(已成功/已关闭/已撤销), 视为一致
             return true;
         }
         return false;
     }
 
-    /// 根据同步结果调整资金凭证状态
-    private void adjustHandler(PaySyncResultBo syncResult, PayTrade trade, NormalPayOrder normalOrder) {
+    private void adjustHandler(PaySyncResultBo syncResult, PayTrade trade) {
         var payStatus = syncResult.getPayStatus();
         if (Objects.isNull(payStatus)) {
             return;
         }
         switch (payStatus) {
             case PROCESSING -> {}
-            case SUCCESS -> this.success(trade, normalOrder, syncResult);
+            case SUCCESS -> this.success(trade, syncResult);
             case CLOSE -> {
-                // 通道已关闭 → 本地关闭; 超时(remoteClose) → 主动调用通道关单后本地关闭
                 if (syncResult.isRemoteClose()) {
-                    this.closeRemote(trade, normalOrder);
+                    this.closeRemote(trade);
                 } else {
-                    payUniHandleService.payClose(trade, normalOrder, false);
+                    payUniHandleService.payClose(trade, false);
                 }
             }
-            case FAIL -> payUniHandleService.payFail(trade, normalOrder, syncResult.getSyncErrorMsg());
+            case FAIL -> payUniHandleService.payFail(trade, syncResult.getSyncErrorMsg());
             default -> throw new SystemUnknownErrorException();
         }
     }
 
-    /// 同步成功后更新资金凭证与容器
-    private void success(PayTrade trade, NormalPayOrder normalOrder, PaySyncResultBo syncResult) {
+    private void success(PayTrade trade, PaySyncResultBo syncResult) {
         trade.setStatus(PayFundStatusEnum.SUCCESS.getCode());
         trade.setPayTime(syncResult.getFinishTime());
         trade.setCloseTime(null);
@@ -186,27 +172,21 @@ public class PaySyncService {
         payUniHandleService.paySuccess(trade);
     }
 
-    /// 主动关闭网关交易(超时场景), 调用通道关闭策略后置超时关闭态
-    /// 资金态置 CLOSE, 容器态置 EXPIRED(见 [PayUniHandleService#payTimeout]),
-    /// 与 MQ 延时关单 / 兜底定时任务 三条路径统一落点。
-    private void closeRemote(PayTrade trade, NormalPayOrder normalOrder) {
+    private void closeRemote(PayTrade trade) {
         AbsPayCloseStrategy strategy = PaymentStrategyFactory.createByProduct(
                 trade.getProduct(), AbsPayCloseStrategy.class);
         var context = new PayStrategyContext()
-                .setContainer(normalOrder)
                 .setTrade(trade);
         strategy.doBeforeClose(context);
         strategy.doClose(context, false);
-        // 超时关闭: 资金态置 CLOSE, 容器态置 EXPIRED(区分业务语义)
-        payUniHandleService.payTimeout(trade, normalOrder);
+        payUniHandleService.payTimeout(trade);
     }
 
-    /// 保存同步流水记录
-    private void saveRecord(PayTrade trade, NormalPayOrder normalOrder, PaySyncResultBo syncResult, boolean adjust) {
+    private void saveRecord(PayTrade trade, PaySyncResultBo syncResult, boolean adjust) {
         PaySyncRecord record = new PaySyncRecord()
                 .setAppId(trade.getAppId())
                 .setTradeNo(trade.getTradeNo())
-                .setBizTradeNo(Objects.nonNull(normalOrder) ? normalOrder.getBizOrderNo() : null)
+                .setBizTradeNo(trade.getBizOrderNo())
                 .setOutTradeNo(trade.getOutOrderNo())
                 .setOutTradeStatus(Objects.nonNull(syncResult.getPayStatus())
                         ? syncResult.getPayStatus().getCode() : null)
@@ -217,7 +197,6 @@ public class PaySyncService {
                 .setAdjust(adjust)
                 .setErrorCode(syncResult.getSyncErrorCode())
                 .setErrorMsg(syncResult.getSyncErrorMsg());
-        // 商户号显式赋值, 不依赖线程上下文自动填充(异步通知/定时任务等非HTTP场景上下文缺失会导致填充null)
         record.setMchNo(trade.getMchNo());
         paySyncRecordService.saveRecord(record);
     }

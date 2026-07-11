@@ -209,3 +209,138 @@ ALTER TABLE device_qr_code ALTER COLUMN mch_no DROP NOT NULL;
 COMMENT ON COLUMN device_qr_code.batch_no IS '批次号(批量创建空白码时写入)';
 COMMENT ON COLUMN device_qr_code.mch_no IS '所属商户号(空白码为空, 划拨后写入)';
 
+-- ------------------------------------------------------------
+-- 网关支付业务单(容器): 预下单时创建, 支付时再挂 pay_trade
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS pay_gateway_order (
+    id                   int8          NOT NULL,
+    mch_no               varchar(32)   NOT NULL,
+    app_id               varchar(32)   NOT NULL,
+    order_no             varchar(64)   NOT NULL,
+    biz_order_no         varchar(64)   NOT NULL,
+    gateway_type         varchar(32)   NOT NULL,
+    title                varchar(128)  NOT NULL,
+    description          varchar(512),
+    amount               int8          NOT NULL,
+    currency             varchar(8)    NOT NULL DEFAULT 'CNY',
+    status               varchar(32)   NOT NULL,
+    notify_url           varchar(256),
+    return_url           varchar(256),
+    attach               varchar(512),
+    expired_time         timestamptz(6),
+    channel              varchar(32),
+    method               varchar(32),
+    product              varchar(32),
+    capability           varchar(64),
+    channel_mch_no       varchar(64),
+    scene                varchar(32),
+    device               varchar(16),
+    pay_time             timestamptz(6),
+    close_time           timestamptz(6),
+    client_ip            varchar(64),
+    terminal_no          varchar(64),
+    goods_detail         jsonb,
+    creator              int8,
+    create_time          timestamptz(6),
+    last_modifier        int8,
+    last_modified_time   timestamptz(6),
+    version              int4          NOT NULL DEFAULT 0,
+    deleted              bool          NOT NULL DEFAULT false,
+    CONSTRAINT pk_pay_gateway_order PRIMARY KEY (id)
+);
+
+COMMENT ON TABLE  pay_gateway_order IS '网关支付业务单容器(聚合扫码/收银台预下单)';
+COMMENT ON COLUMN pay_gateway_order.id IS '主键';
+COMMENT ON COLUMN pay_gateway_order.mch_no IS '商户号';
+COMMENT ON COLUMN pay_gateway_order.app_id IS '应用号';
+COMMENT ON COLUMN pay_gateway_order.order_no IS '平台网关单号(URL用)';
+COMMENT ON COLUMN pay_gateway_order.biz_order_no IS '商户业务单号';
+COMMENT ON COLUMN pay_gateway_order.gateway_type IS '网关类型: cashier/aggregate';
+COMMENT ON COLUMN pay_gateway_order.title IS '标题';
+COMMENT ON COLUMN pay_gateway_order.description IS '描述';
+COMMENT ON COLUMN pay_gateway_order.amount IS '金额(最小货币单位)';
+COMMENT ON COLUMN pay_gateway_order.currency IS '币种';
+COMMENT ON COLUMN pay_gateway_order.status IS '业务状态: wait_pay/paying/paid/closed/expired';
+COMMENT ON COLUMN pay_gateway_order.notify_url IS '异步通知地址';
+COMMENT ON COLUMN pay_gateway_order.return_url IS '同步跳转地址';
+COMMENT ON COLUMN pay_gateway_order.attach IS '商户附加参数';
+COMMENT ON COLUMN pay_gateway_order.expired_time IS '过期时间';
+COMMENT ON COLUMN pay_gateway_order.channel IS '支付通道(支付后冗余)';
+COMMENT ON COLUMN pay_gateway_order.method IS '支付方式(支付后冗余)';
+COMMENT ON COLUMN pay_gateway_order.product IS '支付产品(支付后冗余)';
+COMMENT ON COLUMN pay_gateway_order.capability IS '支付能力(路由回填)';
+COMMENT ON COLUMN pay_gateway_order.channel_mch_no IS '通道商户号(路由回填)';
+COMMENT ON COLUMN pay_gateway_order.scene IS '收银场景 wechat_pay/alipay/union_pay';
+COMMENT ON COLUMN pay_gateway_order.device IS '最后发起设备 mobile/pc';
+COMMENT ON COLUMN pay_gateway_order.pay_time IS '支付成功时间';
+COMMENT ON COLUMN pay_gateway_order.close_time IS '关闭时间';
+COMMENT ON COLUMN pay_gateway_order.client_ip IS '客户端IP';
+COMMENT ON COLUMN pay_gateway_order.terminal_no IS '终端设备编码';
+COMMENT ON COLUMN pay_gateway_order.goods_detail IS '商品明细(jsonb)';
+COMMENT ON COLUMN pay_gateway_order.creator IS '创建者ID';
+COMMENT ON COLUMN pay_gateway_order.create_time IS '创建时间';
+COMMENT ON COLUMN pay_gateway_order.last_modifier IS '最后修改者ID';
+COMMENT ON COLUMN pay_gateway_order.last_modified_time IS '最后修改时间';
+COMMENT ON COLUMN pay_gateway_order.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN pay_gateway_order.deleted IS '逻辑删除标记';
+
+CREATE UNIQUE INDEX IF NOT EXISTS uk_pay_gateway_order_no ON pay_gateway_order (order_no) WHERE deleted = false;
+CREATE UNIQUE INDEX IF NOT EXISTS uk_pay_gateway_biz ON pay_gateway_order (app_id, biz_order_no) WHERE deleted = false;
+CREATE INDEX IF NOT EXISTS idx_pay_gateway_status_expired ON pay_gateway_order (status, expired_time);
+CREATE INDEX IF NOT EXISTS idx_pay_gateway_mch_time ON pay_gateway_order (mch_no, create_time);
+
+-- ------------------------------------------------------------
+-- 网关聚合扫码配置(应用级一行)
+-- ------------------------------------------------------------
+CREATE TABLE IF NOT EXISTS pay_gateway_aggregate_config (
+    id                   int8          NOT NULL,
+    mch_no               varchar(32)   NOT NULL,
+    app_id               varchar(32)   NOT NULL,
+    wx_product           varchar(32),
+    wx_method            varchar(32),
+    alipay_product       varchar(32),
+    alipay_method        varchar(32),
+    union_product        varchar(32),
+    union_method         varchar(32),
+    auto_launch          bool          NOT NULL DEFAULT false,
+    creator              int8,
+    create_time          timestamptz(6),
+    last_modifier        int8,
+    last_modified_time   timestamptz(6),
+    version              int4          NOT NULL DEFAULT 0,
+    deleted              bool          NOT NULL DEFAULT false,
+    CONSTRAINT pk_pay_gateway_aggregate_config PRIMARY KEY (id)
+);
+
+COMMENT ON TABLE  pay_gateway_aggregate_config IS '网关聚合扫码支付配置(应用级)';
+COMMENT ON COLUMN pay_gateway_aggregate_config.id IS '主键';
+COMMENT ON COLUMN pay_gateway_aggregate_config.mch_no IS '商户号';
+COMMENT ON COLUMN pay_gateway_aggregate_config.app_id IS '应用号';
+COMMENT ON COLUMN pay_gateway_aggregate_config.wx_product IS '微信场景支付产品';
+COMMENT ON COLUMN pay_gateway_aggregate_config.wx_method IS '微信场景支付方式';
+COMMENT ON COLUMN pay_gateway_aggregate_config.alipay_product IS '支付宝场景支付产品';
+COMMENT ON COLUMN pay_gateway_aggregate_config.alipay_method IS '支付宝场景支付方式';
+COMMENT ON COLUMN pay_gateway_aggregate_config.union_product IS '云闪付场景支付产品';
+COMMENT ON COLUMN pay_gateway_aggregate_config.union_method IS '云闪付场景支付方式';
+COMMENT ON COLUMN pay_gateway_aggregate_config.auto_launch IS '是否自动拉起支付';
+COMMENT ON COLUMN pay_gateway_aggregate_config.creator IS '创建者ID';
+COMMENT ON COLUMN pay_gateway_aggregate_config.create_time IS '创建时间';
+COMMENT ON COLUMN pay_gateway_aggregate_config.last_modifier IS '最后修改者ID';
+COMMENT ON COLUMN pay_gateway_aggregate_config.last_modified_time IS '最后修改时间';
+COMMENT ON COLUMN pay_gateway_aggregate_config.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN pay_gateway_aggregate_config.deleted IS '逻辑删除标记';
+
+CREATE UNIQUE INDEX IF NOT EXISTS uk_pay_gateway_aggregate_app ON pay_gateway_aggregate_config (app_id) WHERE deleted = false;
+
+-- ------------------------------------------------------------
+-- pay_trade: 冗余路由参数 + 业务单号 + 客户端IP, 消除 sync/close/callback 对容器的依赖
+-- ------------------------------------------------------------
+ALTER TABLE pay_trade ADD COLUMN IF NOT EXISTS biz_order_no varchar(64);
+ALTER TABLE pay_trade ADD COLUMN IF NOT EXISTS channel_mch_no varchar(64);
+ALTER TABLE pay_trade ADD COLUMN IF NOT EXISTS capability varchar(64);
+ALTER TABLE pay_trade ADD COLUMN IF NOT EXISTS client_ip varchar(64);
+
+COMMENT ON COLUMN pay_trade.biz_order_no IS '商户业务单号(冗余自容器, 供同步/关闭/回调等流程直接读取)';
+COMMENT ON COLUMN pay_trade.channel_mch_no IS '通道商户号(路由回填, 冗余自容器, 供策略层直接读取)';
+COMMENT ON COLUMN pay_trade.capability IS '支付能力编码(路由回填, 冗余自容器, 供策略层直接读取)';
+COMMENT ON COLUMN pay_trade.client_ip IS '客户端IP(冗余自容器, 供关闭/同步等策略读取)';

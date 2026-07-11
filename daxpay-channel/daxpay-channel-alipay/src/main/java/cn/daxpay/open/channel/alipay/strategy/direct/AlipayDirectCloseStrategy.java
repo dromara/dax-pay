@@ -4,7 +4,6 @@ import cn.daxpay.open.channel.alipay.client.credential.AlipaySdkCredential;
 import cn.daxpay.open.channel.alipay.service.direct.AlipayDirectConfigAssembler;
 import cn.daxpay.open.channel.alipay.service.payment.close.AlipayCloseService;
 import cn.daxpay.open.payment.core.strategy.pay.PayStrategyContext;
-import cn.daxpay.open.payment.core.trade.entity.NormalPayOrder;
 import cn.daxpay.open.payment.core.trade.entity.PayTrade;
 import cn.daxpay.open.payment.core.strategy.pay.AbsPayCloseStrategy;
 import cn.daxpay.open.platform.core.enums.pay.pay.CloseTypeEnum;
@@ -16,7 +15,7 @@ import org.springframework.stereotype.Service;
 /// # 支付宝直连支付关闭策略
 ///
 /// 支付宝直连模式(ProductEnum.ALIPAY)下的支付关闭策略。
-/// 从上下文容器读取通道路由参数(channelMchNo / capability),
+/// 从 trade 读取通道路由参数(channelMchNo / capability),
 /// 组装通道凭证(委托 [AlipayDirectConfigAssembler]), 关闭执行委托给 [AlipayCloseService]。
 @Slf4j
 @Service
@@ -33,15 +32,12 @@ public class AlipayDirectCloseStrategy extends AbsPayCloseStrategy {
 
     @Override
     public CloseTypeEnum doClose(PayStrategyContext context, boolean useCancel) {
-        // 从上下文容器读取通道路由参数, 用于凭证解析
-        NormalPayOrder normalOrder = context.getContainer();
-        String channelMchNo = normalOrder != null ? normalOrder.getChannelMchNo() : null;
-        String capability = normalOrder != null ? normalOrder.getCapability() : null;
+        // 直接从 trade 读取路由参数, 不再需要 container 中间层
         PayTrade trade = context.getTrade();
 
         // 组装通道调用凭证
         AlipaySdkCredential credential = alipayDirectConfigAssembler.buildConfig(
-                trade.getMchNo(), channelMchNo, capability);
+                trade.getMchNo(), trade.getChannelMchNo(), trade.getCapability());
 
         return alipayCloseService.close(trade, credential, useCancel);
     }

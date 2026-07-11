@@ -87,9 +87,13 @@ public class PayAssistService {
         trade.setTradeNo(TradeNoGenerateUtil.pay());
         trade.setTradeType(PayTradeTypeEnum.NORMAL.getCode());
         trade.setContainerId(normalOrder.getId());
+        trade.setBizOrderNo(payParam.getBizOrderNo());
         trade.setProduct(payParam.getProduct());
         trade.setChannel(channel);
         trade.setMethod(payParam.getMethod());
+        trade.setChannelMchNo(payParam.getChannelMchNo());
+        trade.setCapability(payParam.getCapability());
+        trade.setClientIp(payParam.getClientIp());
         trade.setLimitPay(payParam.getLimitPay() != null
                 ? String.join(",", payParam.getLimitPay()) : null);
         trade.setAmount(amount);
@@ -101,7 +105,7 @@ public class PayAssistService {
         trade.setBarCode(payParam.getAuthCode());
         trade.setOpenid(payParam.getOpenId());
         payTradeManager.save(trade);
-        context.setContainer(normalOrder).setTrade(trade);
+        context.setTrade(trade);
         // 注册超时关单延时消息(按订单过期时间定时投递)
         this.registerTimeoutClose(trade.getTradeNo(), normalOrder.getBizOrderNo(), expiredTime);
     }
@@ -130,12 +134,12 @@ public class PayAssistService {
             return;
         }
         NormalPayOrder normalOrder = normalOrderOpt.get();
-        PayTrade trade = payTradeManager.findByContainerId(normalOrder.getId()).orElse(null);
+        PayTrade trade = payTradeManager.findByContainerId(normalOrder.getId(), PayTradeTypeEnum.NORMAL.getCode()).orElse(null);
         if (trade == null) {
             return;
         }
         this.checkOrder(normalOrder, trade);
-        context.setContainer(normalOrder).setTrade(trade);
+        context.setTrade(trade);
     }
 
     /// 检查订单状态
@@ -167,8 +171,7 @@ public class PayAssistService {
 
     /// 根据 PayTrade 构建支付结果
     public NormalPayResult buildResult(PayTrade trade) {
-        NormalPayOrder normalOrder = payNormalOrderManager.findById(trade.getContainerId()).orElse(null);
-        return PayTradeConvert.CONVERT.toResult(trade, normalOrder);
+        return PayTradeConvert.CONVERT.toResult(trade);
     }
 
     /// 获取支付超时时间

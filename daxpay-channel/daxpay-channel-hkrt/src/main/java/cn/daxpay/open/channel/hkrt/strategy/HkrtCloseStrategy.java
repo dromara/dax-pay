@@ -5,7 +5,6 @@ import cn.daxpay.open.channel.hkrt.service.isv.HkrtIsvConfigAssembler;
 import cn.daxpay.open.channel.hkrt.service.payment.HkrtCloseService;
 import cn.daxpay.open.payment.core.strategy.pay.AbsPayCloseStrategy;
 import cn.daxpay.open.payment.core.strategy.pay.PayStrategyContext;
-import cn.daxpay.open.payment.core.trade.entity.NormalPayOrder;
 import cn.daxpay.open.payment.core.trade.entity.PayTrade;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.pay.CloseTypeEnum;
@@ -34,18 +33,13 @@ public class HkrtCloseStrategy extends AbsPayCloseStrategy {
 
     @Override
     public CloseTypeEnum doClose(PayStrategyContext context, boolean useCancel) {
-        // 从上下文容器读取通道路由参数
-        NormalPayOrder normalOrder = context.getContainer();
-        String channelMchNo = normalOrder != null ? normalOrder.getChannelMchNo() : null;
-        String capability = normalOrder != null ? normalOrder.getCapability() : null;
+        // 直接从 trade 读取路由参数, 不再需要 container 中间层
         PayTrade trade = context.getTrade();
 
         // 组装通道调用凭证
         HkrtSdkCredential credential = hkrtIsvConfigAssembler.buildConfig(
-                trade.getMchNo(), channelMchNo, capability);
+                trade.getMchNo(), trade.getChannelMchNo(), trade.getCapability());
 
-        // 客户端IP取自原下单订单(超时关单等非HTTP场景亦可用)
-        String clientIp = normalOrder != null ? normalOrder.getClientIp() : null;
-        return hkrtCloseService.close(trade, credential, useCancel, clientIp);
+        return hkrtCloseService.close(trade, credential, useCancel, trade.getClientIp());
     }
 }
