@@ -26,15 +26,26 @@ SET "menu_code" = 'system:config:mobile_app_detail',
 WHERE "id" = 40505;
 
 -- ----------------------------
--- 2026-07-11 开源版取消硬件对接：移除云音箱/云打印/厂商配置/辅助终端菜单
--- 码牌(device:qrcode)与目录 device 保留；硬件能力归商业版
+-- 2026-07-11 开源版取消硬件对接：移除云音箱/云打印/厂商配置菜单
+-- 码牌(device:qrcode)、辅助支付终端(device:assistant)、目录 device 保留
+-- 辅助终端不属于 IoT 硬件对接，勿与音箱/打印一并删除
 -- ----------------------------
 DELETE FROM "public"."iam_perm_menu"
 WHERE "menu_code" IN (
     'device:vendor_config',
     'device:speaker',
-    'device:printer',
-    'device:assistant'
+    'device:printer'
+);
+
+-- 若误删过辅助支付终端菜单，补回（已存在则跳过）
+INSERT INTO "public"."iam_perm_menu"
+SELECT 904, 9, 'device:assistant', 'admin', 'DeviceAssistant', '辅助支付终端', 'Payment Assistant Terminal',
+       'menu.device.assistant', 'lucide:monitor-smartphone', 'f', 'f',
+       '/_core/fallback/coming-soon', '/device/assistant', NULL, 5, 'f', 't', 'f', 1, 1, 0, 'f', 'menu',
+       NULL, NULL, NULL, NULL, NULL, NULL,
+       '2026-06-25 12:51:25.252086+00', '2026-06-25 12:51:25.252086+00'
+WHERE NOT EXISTS (
+    SELECT 1 FROM "public"."iam_perm_menu" WHERE "id" = 904 OR "menu_code" = 'device:assistant'
 );
 
 -- 目录图标由音箱改为码牌语义（可选，已有库同步）
