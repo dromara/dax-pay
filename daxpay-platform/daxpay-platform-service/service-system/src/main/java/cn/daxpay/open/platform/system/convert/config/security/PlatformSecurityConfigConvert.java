@@ -9,7 +9,7 @@ import org.mapstruct.factory.Mappers;
 
 /// # 平台安全配置转换
 ///
-/// 转换密码策略、登录安全、会话管理、异常登录检测、双因素认证等安全类配置
+/// 转换密码策略、登录安全、会话管理、双因素认证等安全类配置
 @Mapper
 public interface PlatformSecurityConfigConvert {
     PlatformSecurityConfigConvert CONVERT = Mappers.getMapper(PlatformSecurityConfigConvert.class);
@@ -28,11 +28,6 @@ public interface PlatformSecurityConfigConvert {
     PlatformSessionManagementConfigResult toSessionManagementResult(PlatformSessionManagementConfig data);
 
     void copy(PlatformSessionManagementConfigParam param, @MappingTarget PlatformSessionManagementConfig data);
-
-    // ========== 异常登录检测配置转换 ==========
-    PlatformAnomalyDetectionConfigResult toAnomalyDetectionResult(PlatformAnomalyDetectionConfig data);
-
-    void copy(PlatformAnomalyDetectionConfigParam param, @MappingTarget PlatformAnomalyDetectionConfig data);
 
     // ========== 双因素认证配置转换 ==========
     PlatformTwoFactorAuthConfigResult toTwoFactorAuthResult(PlatformTwoFactorAuthConfig data);

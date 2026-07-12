@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 
 /// # 平台安全配置服务
 ///
-/// 统一管理密码策略、登录安全、会话管理、异常登录检测、双因素认证等安全类配置
+/// 统一管理密码策略、登录安全、会话管理、双因素认证等安全类配置
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -75,25 +75,6 @@ public class PlatformSecurityConfigService {
         PlatformSessionManagementConfig data = this.getSessionManagementConfig();
         PlatformSecurityConfigConvert.CONVERT.copy(param, data);
         systemConfigService.updateConfig(PlatformConfigTypeEnum.SECURITY_SESSION, data);
-    }
-
-    /// 获取异常登录检测配置
-    public PlatformAnomalyDetectionConfig getAnomalyDetectionConfig() {
-        return systemConfigService.getOrCreateConfig(PlatformConfigTypeEnum.ANOMALY_DETECTION,
-                PlatformAnomalyDetectionConfig.class,
-                new PlatformAnomalyDetectionConfig());
-    }
-
-    /// 获取异常登录检测配置
-    public PlatformAnomalyDetectionConfigResult findAnomalyDetectionConfig() {
-        return PlatformSecurityConfigConvert.CONVERT.toAnomalyDetectionResult(this.getAnomalyDetectionConfig());
-    }
-
-    /// 更新异常登录检测配置
-    public void updateAnomalyDetectionConfig(PlatformAnomalyDetectionConfigParam param) {
-        PlatformAnomalyDetectionConfig data = this.getAnomalyDetectionConfig();
-        PlatformSecurityConfigConvert.CONVERT.copy(param, data);
-        systemConfigService.updateConfig(PlatformConfigTypeEnum.ANOMALY_DETECTION, data);
     }
 
     /// 获取双因素认证配置

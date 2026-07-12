@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 /// # 平台安全配置
 ///
-/// 管理密码策略、登录安全、会话管理、异常登录检测、双因素认证等安全类配置
+/// 管理密码策略、登录安全、会话管理、双因素认证等安全类配置
 @PermCode(menuCode = "system:security_config")
 @Validated
 @Tag(name = "平台安全配置")
@@ -74,21 +74,6 @@ public class PlatformSecurityConfigController {
     @PostMapping("/session/update")
     public Result<Void> updateSessionManagementConfig(@RequestBody @Validated PlatformSessionManagementConfigParam param) {
         platformSecurityConfigService.updateSessionManagementConfig(param);
-        return Res.ok();
-    }
-
-    @PermCode(code = "view", nameCn = "安全配置查看", nameEn = "Security View")
-    @Operation(summary = "获取异常登录检测配置")
-    @GetMapping("/anomaly-detection/get")
-    public Result<PlatformAnomalyDetectionConfigResult> getAnomalyDetectionConfig() {
-        return Res.ok(platformSecurityConfigService.findAnomalyDetectionConfig());
-    }
-
-    @PermCode(code = "manage", nameCn = "安全配置管理", nameEn = "Security Manage")
-    @Operation(summary = "更新异常登录检测配置")
-    @PostMapping("/anomaly-detection/update")
-    public Result<Void> updateAnomalyDetectionConfig(@RequestBody @Validated PlatformAnomalyDetectionConfigParam param) {
-        platformSecurityConfigService.updateAnomalyDetectionConfig(param);
         return Res.ok();
     }
 

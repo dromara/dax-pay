@@ -19,8 +19,6 @@ public enum PlatformConfigTypeEnum implements I18nSupport {
     SECURITY_LOGIN("security_login"),
     /// 会话管理配置
     SECURITY_SESSION("security_session"),
-    /// 异常登录检测配置
-    ANOMALY_DETECTION("anomaly_detection"),
     /// 双因素认证配置
     SECURITY_TWO_FACTOR_AUTH("security_two_factor_auth"),
     /// 系统访问地址配置
