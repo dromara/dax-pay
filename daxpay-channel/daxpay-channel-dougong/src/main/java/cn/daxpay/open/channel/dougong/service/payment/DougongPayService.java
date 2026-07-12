@@ -2,13 +2,12 @@ package cn.daxpay.open.channel.dougong.service.payment;
 
 import cn.daxpay.open.channel.dougong.client.DougongChannelClient;
 import cn.daxpay.open.channel.dougong.client.credential.DougongSdkCredential;
-import cn.daxpay.open.channel.dougong.client.enums.DougongPayBodyType;
 import cn.daxpay.open.channel.dougong.client.enums.DougongPayMethod;
 import cn.daxpay.open.channel.dougong.client.req.DougongPayReq;
 import cn.daxpay.open.channel.dougong.client.resp.DougongPayResp;
 import cn.daxpay.open.payment.common.result.DaxResult;
-import cn.daxpay.open.payment.core.trade.bo.PayTradeResultBo;
-import cn.daxpay.open.payment.core.trade.entity.PayTrade;
+import cn.daxpay.open.payment.core.trade.runtime.bo.PayTradeResultBo;
+import cn.daxpay.open.payment.core.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;

@@ -2,13 +2,12 @@ package cn.daxpay.open.channel.yeepay.service.payment.pay;
 
 import cn.daxpay.open.channel.yeepay.client.YeepayChannelClient;
 import cn.daxpay.open.channel.yeepay.client.credential.YeepaySdkCredential;
-import cn.daxpay.open.channel.yeepay.client.enums.YeepayPayBodyType;
 import cn.daxpay.open.channel.yeepay.client.enums.YeepayPayMethod;
 import cn.daxpay.open.channel.yeepay.client.req.YeepayPayReq;
 import cn.daxpay.open.channel.yeepay.client.resp.YeepayPayResp;
 import cn.daxpay.open.payment.common.result.DaxResult;
-import cn.daxpay.open.payment.core.trade.bo.PayTradeResultBo;
-import cn.daxpay.open.payment.core.trade.entity.PayTrade;
+import cn.daxpay.open.payment.core.trade.runtime.bo.PayTradeResultBo;
+import cn.daxpay.open.payment.core.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;

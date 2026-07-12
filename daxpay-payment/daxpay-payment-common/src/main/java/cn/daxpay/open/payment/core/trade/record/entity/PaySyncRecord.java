@@ -1,6 +1,6 @@
 package cn.daxpay.open.payment.core.trade.record.entity;
 
-import cn.daxpay.open.payment.common.entity.merchant.MchBaseEntity;
+import cn.daxpay.open.payment.common.entity.MchBaseEntity;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;

@@ -13,7 +13,7 @@ import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
 import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
 import cn.daxpay.open.payment.common.util.DaxRes;
-import cn.daxpay.open.payment.common.aop.PaymentVerify;
+import cn.daxpay.open.payment.unipay.aop.PaymentVerify;
 import cn.daxpay.open.platform.core.enums.unipay.ChannelAuthTypeEnum;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

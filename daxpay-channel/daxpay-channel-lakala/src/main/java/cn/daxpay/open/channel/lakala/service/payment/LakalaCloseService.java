@@ -5,7 +5,7 @@ import cn.daxpay.open.channel.lakala.client.credential.LakalaSdkCredential;
 import cn.daxpay.open.channel.lakala.client.req.LakalaCloseReq;
 import cn.daxpay.open.channel.lakala.client.resp.LakalaCloseResp;
 import cn.daxpay.open.payment.common.result.DaxResult;
-import cn.daxpay.open.payment.core.trade.entity.PayTrade;
+import cn.daxpay.open.payment.core.trade.order.entity.PayTrade;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.pay.CloseTypeEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;

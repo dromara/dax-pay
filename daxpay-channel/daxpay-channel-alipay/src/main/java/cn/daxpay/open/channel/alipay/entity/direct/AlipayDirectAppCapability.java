@@ -2,7 +2,7 @@ package cn.daxpay.open.channel.alipay.entity.direct;
 
 import cn.daxpay.open.channel.alipay.convert.direct.AlipayDirectAppCapabilityConvert;
 import cn.daxpay.open.channel.alipay.result.direct.AlipayDirectAppCapabilityResult;
-import cn.daxpay.open.payment.common.entity.merchant.MchBaseEntity;
+import cn.daxpay.open.payment.common.entity.MchBaseEntity;
 import cn.daxpay.open.platform.common.mybatisplus.function.ToResult;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;

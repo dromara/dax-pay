@@ -5,7 +5,7 @@ import cn.daxpay.open.channel.vbill.service.isv.VbillIsvConfigAssembler;
 import cn.daxpay.open.channel.vbill.service.payment.VbillCloseService;
 import cn.daxpay.open.payment.core.strategy.pay.AbsPayCloseStrategy;
 import cn.daxpay.open.payment.core.strategy.pay.PayStrategyContext;
-import cn.daxpay.open.payment.core.trade.entity.PayTrade;
+import cn.daxpay.open.payment.core.trade.order.entity.PayTrade;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.pay.CloseTypeEnum;
 import lombok.RequiredArgsConstructor;

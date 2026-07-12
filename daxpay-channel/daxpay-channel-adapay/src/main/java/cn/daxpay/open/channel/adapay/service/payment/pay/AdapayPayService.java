@@ -2,14 +2,12 @@ package cn.daxpay.open.channel.adapay.service.payment.pay;
 
 import cn.daxpay.open.channel.adapay.client.AdapayChannelClient;
 import cn.daxpay.open.channel.adapay.client.credential.AdapaySdkCredential;
-import cn.daxpay.open.channel.adapay.client.enums.AdapayPayBodyType;
 import cn.daxpay.open.channel.adapay.client.enums.AdapayPayMethod;
 import cn.daxpay.open.channel.adapay.client.req.AdapayPayReq;
 import cn.daxpay.open.channel.adapay.client.resp.AdapayPayResp;
-import cn.daxpay.open.channel.adapay.code.AdapayCode;
 import cn.daxpay.open.payment.common.result.DaxResult;
-import cn.daxpay.open.payment.core.trade.bo.PayTradeResultBo;
-import cn.daxpay.open.payment.core.trade.entity.PayTrade;
+import cn.daxpay.open.payment.core.trade.runtime.bo.PayTradeResultBo;
+import cn.daxpay.open.payment.core.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;

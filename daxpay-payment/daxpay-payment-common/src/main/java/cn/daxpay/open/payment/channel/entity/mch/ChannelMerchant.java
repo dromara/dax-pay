@@ -1,7 +1,7 @@
 package cn.daxpay.open.payment.channel.entity.mch;
 
 import cn.daxpay.open.platform.common.mybatisplus.function.ToResult;
-import cn.daxpay.open.payment.common.entity.merchant.MchBaseEntity;
+import cn.daxpay.open.payment.common.entity.MchBaseEntity;
 import cn.daxpay.open.payment.channel.convert.ChannelMerchantConvert;
 import cn.daxpay.open.platform.core.enums.channel.ChannelMerchantSourceEnum;
 import cn.daxpay.open.payment.channel.result.info.ChannelMerchantResult;

@@ -2,7 +2,7 @@ package cn.daxpay.open.payment.core.strategy.sync;
 
 import cn.daxpay.open.payment.core.strategy.pay.PayStrategyContext;
 import cn.daxpay.open.payment.core.strategy.PaymentStrategy;
-import cn.daxpay.open.payment.core.trade.bo.PaySyncResultBo;
+import cn.daxpay.open.payment.core.trade.runtime.bo.PaySyncResultBo;
 
 /// # 支付同步抽象类
 ///

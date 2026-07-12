@@ -4,7 +4,7 @@ import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.open.platform.iam.service.client.ClientCodeService;
 import cn.daxpay.open.payment.common.runtime.PaymentContext;
 import cn.daxpay.open.payment.common.runtime.TradeActor;
-import cn.daxpay.open.payment.common.entity.merchant.MchBaseEntity;
+import cn.daxpay.open.payment.common.entity.MchBaseEntity;
 import cn.hutool.core.util.ClassUtil;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
@@ -16,7 +16,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Stream;
 
 /// # 租户拦截处理器, 处理商户数据隔离

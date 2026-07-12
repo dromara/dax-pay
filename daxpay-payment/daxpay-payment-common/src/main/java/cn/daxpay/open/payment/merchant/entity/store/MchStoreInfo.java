@@ -1,6 +1,6 @@
 package cn.daxpay.open.payment.merchant.entity.store;
 
-import cn.daxpay.open.payment.common.entity.merchant.MchBaseEntity;
+import cn.daxpay.open.payment.common.entity.MchBaseEntity;
 import cn.daxpay.open.payment.merchant.convert.store.MchStoreInfoConvert;
 import cn.daxpay.open.payment.merchant.result.store.MchStoreInfoResult;
 import cn.daxpay.open.platform.common.mybatisplus.function.ToResult;

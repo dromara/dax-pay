@@ -2,7 +2,7 @@ package cn.daxpay.open.channel.wechat.entity.direct;
 
 import cn.daxpay.open.channel.wechat.convert.direct.WechatDirectChannelMerchantConvert;
 import cn.daxpay.open.channel.wechat.result.direct.WechatDirectChannelMerchantResult;
-import cn.daxpay.open.payment.common.entity.merchant.MchBaseEntity;
+import cn.daxpay.open.payment.common.entity.MchBaseEntity;
 import cn.daxpay.open.platform.common.mybatisplus.function.ToResult;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;

@@ -2,7 +2,7 @@ package cn.daxpay.open.payment.masterdata.config.entity;
 
 import cn.daxpay.open.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
-import cn.daxpay.open.payment.common.entity.merchant.MchBaseEntity;
+import cn.daxpay.open.payment.common.entity.MchBaseEntity;
 import cn.daxpay.open.payment.masterdata.config.convert.ChannelConfigConvert;
 import cn.daxpay.open.payment.masterdata.config.result.ChannelConfigResult;
 import com.baomidou.mybatisplus.annotation.FieldFill;

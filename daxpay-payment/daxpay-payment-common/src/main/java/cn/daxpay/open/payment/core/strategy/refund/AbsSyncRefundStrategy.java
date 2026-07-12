@@ -1,8 +1,8 @@
 package cn.daxpay.open.payment.core.strategy.refund;
 
 import cn.daxpay.open.payment.core.strategy.PaymentStrategy;
-import cn.daxpay.open.payment.core.trade.bo.RefundResultBo;
-import cn.daxpay.open.payment.core.trade.entity.PayRefundOrder;
+import cn.daxpay.open.payment.core.trade.runtime.bo.RefundResultBo;
+import cn.daxpay.open.payment.core.trade.order.entity.PayRefundOrder;
 
 /// # 退款同步抽象策略
 ///

@@ -5,7 +5,7 @@ import cn.daxpay.open.channel.ums.service.direct.UmsDirectConfigAssembler;
 import cn.daxpay.open.channel.ums.service.payment.pay.UmsPayService;
 import cn.daxpay.open.payment.core.strategy.pay.AbsNormalPayStrategy;
 import cn.daxpay.open.payment.core.strategy.pay.PayStrategyContext;
-import cn.daxpay.open.payment.core.trade.bo.PayTradeResultBo;
+import cn.daxpay.open.payment.core.trade.runtime.bo.PayTradeResultBo;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import lombok.RequiredArgsConstructor;

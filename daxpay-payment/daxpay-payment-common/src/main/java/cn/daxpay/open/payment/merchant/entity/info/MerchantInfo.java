@@ -3,7 +3,7 @@ package cn.daxpay.open.payment.merchant.entity.info;
 import cn.daxpay.open.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.open.platform.core.enums.merchant.MerchantStatusEnum;
 import cn.daxpay.open.platform.core.enums.subject.SubjectTypeEnum;
-import cn.daxpay.open.payment.common.entity.merchant.MchBaseEntity;
+import cn.daxpay.open.payment.common.entity.MchBaseEntity;
 import cn.daxpay.open.payment.merchant.convert.info.MerchantInfoConvert;
 import cn.daxpay.open.payment.merchant.result.info.MerchantInfoResult;
 import com.baomidou.mybatisplus.annotation.TableName;

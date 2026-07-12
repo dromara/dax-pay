@@ -1,6 +1,6 @@
 package cn.daxpay.open.payment.core.strategy.pay;
 
-import cn.daxpay.open.payment.core.trade.entity.PayTrade;
+import cn.daxpay.open.payment.core.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import lombok.Getter;
 import lombok.Setter;

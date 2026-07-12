@@ -16,7 +16,7 @@ public class AuthSession {
     ///
     /// 该标记表示本次认证使用平台级 `PlatformAlipayAuthConfig` 换票,
     /// 而非商户级支付产品策略。由 [PlatformAuthService] 在 generateAlipayAuthUrl 时写入,
-    /// 认证分发层据此走平台级支付宝换票分支([PlatformAuthService.authAlipay])。
+    /// 认证分发层据此走平台级支付宝换票分支([PlatformAuthServiceauthAlipay])。
     public static final String SOURCE_PLATFORM_ALIPAY = "platform_alipay";
 
     /// 认证来源: 平台级微信公众号配置(系统公众号配置调试场景)

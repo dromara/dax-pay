@@ -2,7 +2,7 @@ package cn.daxpay.open.channel.douyin.entity.direct;
 
 import cn.daxpay.open.channel.douyin.convert.direct.DouyinDirectChannelMerchantConvert;
 import cn.daxpay.open.channel.douyin.result.direct.DouyinDirectChannelMerchantResult;
-import cn.daxpay.open.payment.common.entity.merchant.MchBaseEntity;
+import cn.daxpay.open.payment.common.entity.MchBaseEntity;
 import cn.daxpay.open.platform.common.mybatisplus.function.ToResult;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;

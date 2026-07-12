@@ -9,7 +9,7 @@ import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayQueryParam;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayOrderResult;
 import cn.daxpay.open.payment.common.util.DaxRes;
-import cn.daxpay.open.payment.common.aop.PaymentVerify;
+import cn.daxpay.open.payment.unipay.aop.PaymentVerify;
 import cn.daxpay.open.payment.web.unipay.service.NormalPayOrderQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

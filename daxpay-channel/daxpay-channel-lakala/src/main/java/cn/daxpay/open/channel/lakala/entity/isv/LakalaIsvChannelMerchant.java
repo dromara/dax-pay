@@ -2,7 +2,7 @@ package cn.daxpay.open.channel.lakala.entity.isv;
 
 import cn.daxpay.open.channel.lakala.convert.isv.LakalaIsvChannelMerchantConvert;
 import cn.daxpay.open.channel.lakala.result.isv.LakalaIsvChannelMerchantResult;
-import cn.daxpay.open.payment.common.entity.merchant.MchBaseEntity;
+import cn.daxpay.open.payment.common.entity.MchBaseEntity;
 import cn.daxpay.open.platform.common.mybatisplus.function.ToResult;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;

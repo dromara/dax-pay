@@ -2,7 +2,7 @@ package cn.daxpay.open.channel.douyin.entity.direct;
 
 import cn.daxpay.open.channel.douyin.convert.direct.DouyinDirectKeyConfigConvert;
 import cn.daxpay.open.channel.douyin.result.direct.DouyinDirectKeyConfigResult;
-import cn.daxpay.open.payment.common.entity.merchant.MchBaseEntity;
+import cn.daxpay.open.payment.common.entity.MchBaseEntity;
 import cn.daxpay.open.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.open.platform.common.mybatisplus.handler.encrypt.DataEncryptTypeHandler;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;

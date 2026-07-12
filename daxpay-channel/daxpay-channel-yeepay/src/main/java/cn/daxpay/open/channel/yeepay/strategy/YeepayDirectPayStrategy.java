@@ -5,7 +5,7 @@ import cn.daxpay.open.channel.yeepay.service.direct.YeepayDirectConfigAssembler;
 import cn.daxpay.open.channel.yeepay.service.payment.pay.YeepayPayService;
 import cn.daxpay.open.payment.core.strategy.pay.AbsNormalPayStrategy;
 import cn.daxpay.open.payment.core.strategy.pay.PayStrategyContext;
-import cn.daxpay.open.payment.core.trade.bo.PayTradeResultBo;
+import cn.daxpay.open.payment.core.trade.runtime.bo.PayTradeResultBo;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import lombok.RequiredArgsConstructor;

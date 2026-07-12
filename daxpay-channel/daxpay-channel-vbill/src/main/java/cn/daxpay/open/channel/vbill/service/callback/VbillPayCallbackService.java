@@ -7,7 +7,7 @@ import cn.daxpay.open.channel.vbill.client.resp.VbillCallbackParseResp;
 import cn.daxpay.open.channel.vbill.dao.isv.VbillIsvKeyConfigManager;
 import cn.daxpay.open.channel.vbill.entity.isv.VbillIsvKeyConfig;
 import cn.daxpay.open.payment.common.callback.CallbackData;
-import cn.daxpay.open.payment.core.trade.service.PayCallbackService;
+import cn.daxpay.open.payment.core.trade.runtime.service.callback.PayCallbackService;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.hutool.core.util.StrUtil;

@@ -7,8 +7,8 @@ import cn.daxpay.open.channel.leshua.client.enums.LeshuaPayMethod;
 import cn.daxpay.open.channel.leshua.client.req.LeshuaPayReq;
 import cn.daxpay.open.channel.leshua.client.resp.LeshuaPayResp;
 import cn.daxpay.open.payment.common.result.DaxResult;
-import cn.daxpay.open.payment.core.trade.bo.PayTradeResultBo;
-import cn.daxpay.open.payment.core.trade.entity.PayTrade;
+import cn.daxpay.open.payment.core.trade.runtime.bo.PayTradeResultBo;
+import cn.daxpay.open.payment.core.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
@@ -18,7 +18,6 @@ import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 /// # 乐刷服务商支付执行业务服务

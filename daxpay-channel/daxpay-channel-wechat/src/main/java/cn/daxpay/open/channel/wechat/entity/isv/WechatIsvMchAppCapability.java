@@ -2,7 +2,7 @@ package cn.daxpay.open.channel.wechat.entity.isv;
 
 import cn.daxpay.open.channel.wechat.convert.isv.WechatIsvMchAppCapabilityConvert;
 import cn.daxpay.open.channel.wechat.result.isv.WechatIsvMchAppCapabilityResult;
-import cn.daxpay.open.payment.common.entity.merchant.MchBaseEntity;
+import cn.daxpay.open.payment.common.entity.MchBaseEntity;
 import cn.daxpay.open.platform.common.mybatisplus.function.ToResult;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;

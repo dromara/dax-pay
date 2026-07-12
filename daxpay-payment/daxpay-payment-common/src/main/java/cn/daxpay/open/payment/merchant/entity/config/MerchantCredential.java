@@ -2,7 +2,7 @@ package cn.daxpay.open.payment.merchant.entity.config;
 
 import cn.daxpay.open.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.open.platform.common.mybatisplus.handler.encrypt.DataEncryptTypeHandler;
-import cn.daxpay.open.payment.common.entity.merchant.MchBaseEntity;
+import cn.daxpay.open.payment.common.entity.MchBaseEntity;
 import cn.daxpay.open.payment.merchant.convert.config.MerchantCredentialConvert;
 import cn.daxpay.open.payment.merchant.result.config.MerchantCredentialResult;
 import com.baomidou.mybatisplus.annotation.TableField;

@@ -1,6 +1,6 @@
 package cn.daxpay.open.payment.merchant.entity.wxverify;
 
-import cn.daxpay.open.payment.common.entity.merchant.MchBaseEntity;
+import cn.daxpay.open.payment.common.entity.MchBaseEntity;
 import cn.daxpay.open.payment.merchant.convert.wxverify.WxDomainVerifyConvert;
 import cn.daxpay.open.payment.merchant.result.wxverify.WxDomainVerifyResult;
 import cn.daxpay.open.platform.common.mybatisplus.function.ToResult;

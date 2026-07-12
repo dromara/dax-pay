@@ -1,7 +1,7 @@
 package cn.daxpay.open.payment.merchant.entity.appinfo;
 
 import cn.daxpay.open.platform.common.mybatisplus.function.ToResult;
-import cn.daxpay.open.payment.common.entity.merchant.MchBaseEntity;
+import cn.daxpay.open.payment.common.entity.MchBaseEntity;
 import cn.daxpay.open.payment.merchant.convert.appinfo.MchAppInfoConvert;
 import cn.daxpay.open.platform.core.enums.merchant.MchAppStatusEnum;
 import cn.daxpay.open.payment.merchant.result.appinfo.MchAppInfoResult;

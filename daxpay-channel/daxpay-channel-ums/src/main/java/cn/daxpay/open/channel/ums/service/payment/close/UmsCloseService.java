@@ -6,7 +6,7 @@ import cn.daxpay.open.channel.ums.client.enums.UmsPayMethod;
 import cn.daxpay.open.channel.ums.client.req.UmsCloseReq;
 import cn.daxpay.open.channel.ums.client.resp.UmsCloseResp;
 import cn.daxpay.open.payment.common.result.DaxResult;
-import cn.daxpay.open.payment.core.trade.entity.PayTrade;
+import cn.daxpay.open.payment.core.trade.order.entity.PayTrade;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.pay.CloseTypeEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;

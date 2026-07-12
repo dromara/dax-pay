@@ -1,7 +1,7 @@
 package cn.daxpay.open.payment.merchant.entity.config;
 
 import cn.daxpay.open.platform.common.mybatisplus.function.ToResult;
-import cn.daxpay.open.payment.common.entity.merchant.MchBaseEntity;
+import cn.daxpay.open.payment.common.entity.MchBaseEntity;
 import cn.daxpay.open.payment.merchant.convert.config.MchAppNotifyConfigConvert;
 import cn.daxpay.open.payment.merchant.result.config.MchAppNotifyConfigResult;
 import com.baomidou.mybatisplus.annotation.TableName;
