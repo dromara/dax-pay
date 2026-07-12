@@ -89,12 +89,9 @@ public class NormalPayService {
         } catch (Exception e) {
             log.error("支付出现异常", e);
             trade.setStatus(PayFundStatusEnum.FAIL.getCode());
-            if (e instanceof PayFailureException) {
-                trade.setErrorMsg(e.getMessage());
-            } else {
-                trade.setErrorMsg("支付出现异常: " + e.getMessage());
-            }
-            payTradeManager.updateById(trade);
+            String errMsg = (e instanceof PayFailureException)
+                    ? e.getMessage() : "支付出现异常: " + e.getMessage();
+            payUniHandleService.payFail(trade, errMsg);
             throw e;
         }
         return SpringUtil.getBean(this.getClass()).paySuccess(trade, result);
@@ -109,20 +106,12 @@ public class NormalPayService {
         }
         // trade.status 在 complete=false 时保持 PROCESSING(createOrder 时已设)
         trade.setOutOrderNo(result.getOutOrderNo());
-        trade.setTransOrderNo(result.getTransOrderNo());
-        trade.setRelationOrderNo(result.getRelationOrderNo());
-        trade.setBuyerId(result.getBuyerId());
-        trade.setBuyerLogonId(result.getBuyerLogonId());
-        trade.setTradeProduct(result.getTradeProduct());
-        trade.setTradeWay(result.getTradeWay());
-        trade.setBankType(result.getBankType());
-        trade.setPromotionType(result.getPromotionType());
+        // payBody/payBodyType 留 trade(已拉起缓存标记)
         trade.setPayBody(result.getPayBody());
         trade.setPayBodyType(Objects.nonNull(result.getPayBodyType())
                 ? result.getPayBodyType().getCode() : null);
-        trade.setErrorMsg(null);
-        // 参考商业版: 不论是否完成都更新交易单, 仅 SUCCESS 时同步容器
-        payUniHandleService.payAfterHandel(trade);
+        // 回执字段写容器, 由 payAfterHandel 统一处理
+        payUniHandleService.payAfterHandel(trade, result);
         return payAssistService.buildResult(trade);
     }
 }

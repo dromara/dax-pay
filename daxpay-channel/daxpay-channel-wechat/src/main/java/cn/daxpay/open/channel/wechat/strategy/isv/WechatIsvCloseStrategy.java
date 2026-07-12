@@ -39,7 +39,7 @@ public class WechatIsvCloseStrategy extends AbsPayCloseStrategy {
 
         // 组装服务商通道调用凭证
         WechatSdkCredential credential = wechatIsvConfigAssembler.buildConfig(
-                trade.getMchNo(), trade.getChannelMchNo(), trade.getCapability());
+                trade.getMchNo(), context.getChannelMchNo(), context.getCapability());
 
         return wechatIsvCloseService.close(trade, credential, useCancel);
     }

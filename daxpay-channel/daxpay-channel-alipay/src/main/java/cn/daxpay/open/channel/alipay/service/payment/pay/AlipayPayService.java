@@ -55,7 +55,7 @@ public class AlipayPayService {
         // 通道通知地址: 始终使用平台生成的回调地址(支付宝→平台), 不使用 payParam.notifyUrl(语义为平台→商户)
         req.setNotifyUrl(this.buildNotifyUrl(order));
         // 关单时间取自订单(createOrder 已对 null 兜底默认30分钟), 子应用据此向支付宝设置 time_expire
-        req.setExpireTime(order.getExpiredTime());
+        req.setExpireTime(payParam.getExpiredTime());
         req.setCredential(credential);
 
         // 调用子应用

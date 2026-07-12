@@ -37,7 +37,7 @@ public class AlipayDirectCloseStrategy extends AbsPayCloseStrategy {
 
         // 组装通道调用凭证
         AlipaySdkCredential credential = alipayDirectConfigAssembler.buildConfig(
-                trade.getMchNo(), trade.getChannelMchNo(), trade.getCapability());
+                trade.getMchNo(), context.getChannelMchNo(), context.getCapability());
 
         return alipayCloseService.close(trade, credential, useCancel);
     }

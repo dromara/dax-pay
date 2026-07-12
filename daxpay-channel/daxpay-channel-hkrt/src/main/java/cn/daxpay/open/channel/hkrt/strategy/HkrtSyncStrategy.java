@@ -34,7 +34,7 @@ public class HkrtSyncStrategy extends AbsSyncPayOrderStrategy {
 
         // 组装通道调用凭证
         HkrtSdkCredential credential = hkrtIsvConfigAssembler.buildConfig(
-                context.getTrade().getMchNo(), context.getTrade().getChannelMchNo(), context.getTrade().getCapability());
+                context.getTrade().getMchNo(), context.getChannelMchNo(), context.getCapability());
 
         return hkrtSyncService.sync(context.getTrade(), credential);
     }

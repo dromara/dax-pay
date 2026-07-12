@@ -161,12 +161,17 @@ public class AlipayCallbackService {
         if (trade == null) {
             return null;
         }
+        // 从容器获取 product/channelMchNo/capability
+        NormalPayOrder order = normalPayOrderManager.findById(trade.getContainerId()).orElse(null);
+        if (order == null) {
+            return null;
+        }
         // 按支付产品分发: 服务商 / 直连
-        if (ProductEnum.ALIPAY_ISV.getCode().equals(trade.getProduct())) {
+        if (ProductEnum.ALIPAY_ISV.getCode().equals(order.getProduct())) {
             return alipayIsvConfigAssembler.buildConfig(trade.getMchNo());
         }
         return alipayDirectConfigAssembler.buildConfig(
-                trade.getMchNo(), trade.getChannelMchNo(), trade.getCapability());
+                trade.getMchNo(), order.getChannelMchNo(), order.getCapability());
     }
 
     /// 提取 request 全部表单参数为 Map<String,String>(多值取首项)

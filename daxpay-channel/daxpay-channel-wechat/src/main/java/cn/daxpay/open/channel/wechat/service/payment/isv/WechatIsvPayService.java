@@ -56,7 +56,7 @@ public class WechatIsvPayService {
         req.setAttach(payParam.getAttach());
         req.setNotifyUrl(this.buildNotifyUrl(order));
         // 关单时间取自订单(createOrder 已对 null 兜底默认30分钟), 不用 payParam 原始入参
-        req.setExpireTime(order.getExpiredTime());
+        req.setExpireTime(payParam.getExpiredTime());
         if (req.getMethod() == WechatPayMethod.H5) {
             req.setWapUrl(payParam.getReturnUrl());
             req.setWapName(payParam.getTitle());

@@ -76,9 +76,24 @@ public class NormalPayOrder extends MchBaseEntity {
     /// @see PayMethodEnum
     private String method;
 
+    /// 其他支付方式，method=other 时生效
+    private String otherMethod;
+
+    /// 限制支付类型（如限制信用卡）
+    /// @see cn.daxpay.open.platform.core.enums.unipay.PayLimitPayEnum
+    private String limitPay;
+
     /// 支付产品编码
     /// @see ProductEnum
     private String product;
+
+    // ===== 支付请求参数（下单时写入）=====
+
+    /// 微信 openid（jsapi/app/miniapp）
+    private String openid;
+
+    /// 付款码（被扫支付）
+    private String barCode;
 
     // ===== 时间线（冗余，查询展示用）=====
 
@@ -97,6 +112,38 @@ public class NormalPayOrder extends MchBaseEntity {
     /// @see cn.daxpay.open.platform.core.enums.pay.channel.PayCapabilityEnum
     private String capability;
 
+    // ===== 通道回执（支付成功/同步后写入）=====
+
+    /// 支付渠道（微信/支付宝/银联等，三方通道透传时填）
+    /// @see cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum
+    private String provider;
+
+    /// 付款用户 ID（支付宝 buyer_user_id 等）
+    private String buyerId;
+
+    /// 买家登录账号（支付宝手机号/邮箱）
+    private String buyerLogonId;
+
+    /// 通道方记录的支付产品
+    private String tradeProduct;
+
+    /// 通道方记录的交易方式
+    private String tradeWay;
+
+    /// 银行卡类型（借记卡/贷记卡）
+    private String bankType;
+
+    /// 活动类型
+    private String promotionType;
+
+    // ===== 通道关联订单号（部分通道专用）=====
+
+    /// 透传订单号（三方通道产生的透传订单号）
+    private String transOrderNo;
+
+    /// 特殊通道关联订单号（部分通道订单号有前缀/长度限制时使用）
+    private String relationOrderNo;
+
     // ===== 请求信息（低频，审计排查用）=====
 
     /// 通道附加参数
@@ -111,4 +158,8 @@ public class NormalPayOrder extends MchBaseEntity {
 
     /// 终端设备编码
     private String terminalNo;
+
+    /// 错误信息
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
+    private String errorMsg;
 }

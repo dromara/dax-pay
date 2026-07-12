@@ -60,7 +60,7 @@ public class HkrtPayService {
         req.setAuthCode(payParam.getAuthCode());
         req.setClientIp(payParam.getClientIp());
         req.setNotifyUrl(this.buildNotifyUrl(order));
-        req.setExpireTime(order.getExpiredTime());
+        req.setExpireTime(payParam.getExpiredTime());
         req.setCredential(credential);
 
         // 调用子应用

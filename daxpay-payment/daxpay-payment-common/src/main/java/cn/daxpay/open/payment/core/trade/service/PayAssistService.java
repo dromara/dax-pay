@@ -70,6 +70,10 @@ public class PayAssistService {
         normalOrder.setCurrency(CurrencyEnum.CNY.getCode());
         normalOrder.setChannel(channel);
         normalOrder.setMethod(payParam.getMethod());
+        normalOrder.setLimitPay(payParam.getLimitPay() != null
+                ? String.join(",", payParam.getLimitPay()) : null);
+        normalOrder.setOpenid(payParam.getOpenId());
+        normalOrder.setBarCode(payParam.getAuthCode());
         normalOrder.setProduct(payParam.getProduct());
         normalOrder.setExtraParam(payParam.getExtraParam());
         normalOrder.setGoodsDetail(payParam.getGoodsDetail());
@@ -87,23 +91,11 @@ public class PayAssistService {
         trade.setTradeNo(TradeNoGenerateUtil.pay());
         trade.setTradeType(PayTradeTypeEnum.NORMAL.getCode());
         trade.setContainerId(normalOrder.getId());
-        trade.setBizOrderNo(payParam.getBizOrderNo());
-        trade.setProduct(payParam.getProduct());
-        trade.setChannel(channel);
-        trade.setMethod(payParam.getMethod());
-        trade.setChannelMchNo(payParam.getChannelMchNo());
-        trade.setCapability(payParam.getCapability());
-        trade.setClientIp(payParam.getClientIp());
-        trade.setLimitPay(payParam.getLimitPay() != null
-                ? String.join(",", payParam.getLimitPay()) : null);
         trade.setAmount(amount);
         trade.setCurrency(CurrencyEnum.CNY.getCode());
         trade.setRefundableBalance(amount);
         trade.setStatus(PayFundStatusEnum.PROCESSING.getCode());
-        trade.setExpiredTime(expiredTime);
         trade.setSource(cn.daxpay.open.platform.core.enums.pay.trade.TradeSourceEnum.MCH_API.getCode());
-        trade.setBarCode(payParam.getAuthCode());
-        trade.setOpenid(payParam.getOpenId());
         payTradeManager.save(trade);
         context.setTrade(trade);
         // 注册超时关单延时消息(按订单过期时间定时投递)
@@ -163,8 +155,8 @@ public class PayAssistService {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.failedOrClosed");
         }
         // 超时检查
-        if (Objects.nonNull(trade.getExpiredTime())
-                && DateTimeUtil.ge(OffsetDateTime.now(ZoneOffset.UTC), trade.getExpiredTime())) {
+        if (Objects.nonNull(normalOrder.getExpiredTime())
+                && DateTimeUtil.ge(OffsetDateTime.now(ZoneOffset.UTC), normalOrder.getExpiredTime())) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.timeoutRetry");
         }
     }

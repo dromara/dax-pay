@@ -32,7 +32,7 @@ public class UmsDirectCloseStrategy extends AbsPayCloseStrategy {
         PayTrade trade = context.getTrade();
 
         UmsSdkCredential credential = umsDirectConfigAssembler.buildConfig(
-                trade.getMchNo(), trade.getChannelMchNo(), trade.getCapability());
+                trade.getMchNo(), context.getChannelMchNo(), context.getCapability());
         return umsCloseService.close(trade, credential, useCancel);
     }
 }

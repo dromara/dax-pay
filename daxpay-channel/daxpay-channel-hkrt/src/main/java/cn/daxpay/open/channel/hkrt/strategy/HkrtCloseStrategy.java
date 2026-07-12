@@ -38,8 +38,8 @@ public class HkrtCloseStrategy extends AbsPayCloseStrategy {
 
         // 组装通道调用凭证
         HkrtSdkCredential credential = hkrtIsvConfigAssembler.buildConfig(
-                trade.getMchNo(), trade.getChannelMchNo(), trade.getCapability());
+                trade.getMchNo(), context.getChannelMchNo(), context.getCapability());
 
-        return hkrtCloseService.close(trade, credential, useCancel, trade.getClientIp());
+        return hkrtCloseService.close(trade, credential, useCancel, context.getClientIp());
     }
 }

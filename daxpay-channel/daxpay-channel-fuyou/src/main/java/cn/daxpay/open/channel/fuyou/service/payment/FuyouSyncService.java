@@ -8,6 +8,7 @@ import cn.daxpay.open.payment.common.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.core.trade.bo.PaySyncResultBo;
 import cn.daxpay.open.payment.core.trade.entity.PayTrade;
+import cn.daxpay.open.payment.core.trade.service.ContainerFieldResolver;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,14 +30,15 @@ public class FuyouSyncService {
     private static final String STATUS_CLOSED = "CLOSED";
 
     private final FuyouChannelClient fuyouChannelClient;
+    private final ContainerFieldResolver containerFieldResolver;
 
     /// 同步订单状态
     public PaySyncResultBo sync(PayTrade order, FuyouSdkCredential credential) {
         FuyouSyncReq req = new FuyouSyncReq();
         req.setCredential(credential);
         // 富友凭关联订单号(mchnt_order_no) + order_type 查询
-        req.setRelationOrderNo(order.getRelationOrderNo());
-        req.setTradeProduct(order.getTradeProduct());
+        req.setRelationOrderNo(containerFieldResolver.getRelationOrderNo(order));
+        req.setTradeProduct(containerFieldResolver.getTradeProduct(order));
 
         DaxResult<FuyouSyncResp> result = fuyouChannelClient.sync(req);
         PaySyncResultBo bo = new PaySyncResultBo();

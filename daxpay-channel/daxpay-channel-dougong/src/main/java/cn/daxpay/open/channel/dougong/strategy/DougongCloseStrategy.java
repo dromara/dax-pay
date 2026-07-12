@@ -34,8 +34,8 @@ public class DougongCloseStrategy extends AbsPayCloseStrategy {
         PayTrade trade = context.getTrade();
 
         DougongSdkCredential credential = dougongIsvConfigAssembler.buildConfig(
-                trade.getMchNo(), trade.getChannelMchNo(), trade.getCapability());
+                trade.getMchNo(), context.getChannelMchNo(), context.getCapability());
 
-        return dougongCloseService.close(trade, credential, useCancel, trade.getClientIp());
+        return dougongCloseService.close(trade, credential, useCancel, context.getClientIp());
     }
 }

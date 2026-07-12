@@ -7,8 +7,10 @@ import cn.daxpay.open.payment.core.strategy.pay.AbsPayCloseStrategy;
 import cn.daxpay.open.payment.core.strategy.pay.PayStrategyContext;
 import cn.daxpay.open.payment.core.strategy.sync.AbsSyncPayOrderStrategy;
 import cn.daxpay.open.payment.core.trade.bo.PaySyncResultBo;
+import cn.daxpay.open.payment.core.trade.dao.GatewayPayOrderManager;
 import cn.daxpay.open.payment.core.trade.dao.NormalPayOrderManager;
 import cn.daxpay.open.payment.core.trade.dao.PayTradeManager;
+import cn.daxpay.open.payment.core.trade.entity.GatewayPayOrder;
 import cn.daxpay.open.payment.core.trade.entity.NormalPayOrder;
 import cn.daxpay.open.payment.core.trade.entity.PayTrade;
 import cn.daxpay.open.payment.core.trade.record.entity.PaySyncRecord;
@@ -44,6 +46,7 @@ public class PaySyncService {
 
     private final PayTradeManager payTradeManager;
     private final NormalPayOrderManager payNormalOrderManager;
+    private final GatewayPayOrderManager gatewayPayOrderManager;
     private final PayUniHandleService payUniHandleService;
     private final PaySyncRecordService paySyncRecordService;
     private final LockTemplate lockTemplate;
@@ -88,24 +91,28 @@ public class PaySyncService {
             throw new RepetitiveOperationException();
         }
         try {
+            ContainerInfo info = loadContainerInfo(trade);
             var context = new PayStrategyContext()
-                    .setTrade(trade);
+                    .setTrade(trade)
+                    .setChannelMchNo(info.channelMchNo())
+                    .setCapability(info.capability())
+                    .setClientIp(info.clientIp());
             var syncStrategy = PaymentStrategyFactory.createByProduct(
-                    trade.getProduct(), AbsSyncPayOrderStrategy.class);
+                    info.product(), AbsSyncPayOrderStrategy.class);
             PaySyncResultBo syncResult = syncStrategy.doSync(context);
             if (!Objects.equals(syncResult.getOutOrderNo(), trade.getOutOrderNo())) {
                 trade.setOutOrderNo(syncResult.getOutOrderNo());
                 payTradeManager.updateById(trade);
             }
-            boolean statusSync = this.checkAndAdjust(syncResult, trade);
+            boolean statusSync = this.checkAndAdjust(syncResult, trade, info);
             if (!statusSync) {
                 try {
-                    this.adjustHandler(syncResult, trade);
+                    this.adjustHandler(syncResult, trade, info);
                 } catch (PayFailureException e) {
                     syncResult.setSyncSuccess(false).setSyncErrorMsg(e.getMessage());
                 }
             }
-            this.saveRecord(trade, syncResult, !statusSync);
+            this.saveRecord(trade, syncResult, !statusSync, info);
             return new NormalPaySyncResult()
                     .setOrderStatus(trade.getStatus())
                     .setAdjust(statusSync);
@@ -114,7 +121,7 @@ public class PaySyncService {
         }
     }
 
-    private boolean checkAndAdjust(PaySyncResultBo syncResult, PayTrade trade) {
+    private boolean checkAndAdjust(PaySyncResultBo syncResult, PayTrade trade, ContainerInfo info) {
         var payStatus = Optional.ofNullable(syncResult.getPayStatus())
                 .orElse(PayFundStatusEnum.PROCESSING);
         String orderStatus = trade.getStatus();
@@ -123,7 +130,8 @@ public class PaySyncService {
         }
         if (orderStatus.equals(PayFundStatusEnum.PROCESSING.getCode())) {
             if (Objects.equals(PayFundStatusEnum.PROCESSING, payStatus)) {
-                if (DateTimeUtil.le(trade.getExpiredTime(), OffsetDateTime.now(ZoneOffset.UTC))) {
+                if (info.expiredTime() != null
+                        && DateTimeUtil.le(info.expiredTime(), OffsetDateTime.now(ZoneOffset.UTC))) {
                     syncResult.setPayStatus(PayFundStatusEnum.CLOSE);
                     syncResult.setRemoteClose(true);
                     return false;
@@ -136,7 +144,7 @@ public class PaySyncService {
         return false;
     }
 
-    private void adjustHandler(PaySyncResultBo syncResult, PayTrade trade) {
+    private void adjustHandler(PaySyncResultBo syncResult, PayTrade trade, ContainerInfo info) {
         var payStatus = syncResult.getPayStatus();
         if (Objects.isNull(payStatus)) {
             return;
@@ -146,7 +154,7 @@ public class PaySyncService {
             case SUCCESS -> this.success(trade, syncResult);
             case CLOSE -> {
                 if (syncResult.isRemoteClose()) {
-                    this.closeRemote(trade);
+                    this.closeRemote(trade, info);
                 } else {
                     payUniHandleService.payClose(trade, false);
                 }
@@ -160,39 +168,34 @@ public class PaySyncService {
         trade.setStatus(PayFundStatusEnum.SUCCESS.getCode());
         trade.setPayTime(syncResult.getFinishTime());
         trade.setCloseTime(null);
-        trade.setErrorMsg(null);
-        if (Objects.nonNull(syncResult.getProvider())) {
-            trade.setProvider(syncResult.getProvider().getCode());
-        }
-        trade.setBuyerId(syncResult.getBuyerId());
-        trade.setTradeProduct(syncResult.getTradeProduct());
-        trade.setTradeWay(syncResult.getTradeWay());
-        trade.setBankType(syncResult.getBankType());
-        trade.setPromotionType(syncResult.getPromotionType());
-        payUniHandleService.paySuccess(trade);
+        // 通道回执写容器, 由 payUniHandleService 统一处理
+        payUniHandleService.paySuccess(trade, syncResult);
     }
 
-    private void closeRemote(PayTrade trade) {
-        AbsPayCloseStrategy strategy = PaymentStrategyFactory.createByProduct(
-                trade.getProduct(), AbsPayCloseStrategy.class);
+    private void closeRemote(PayTrade trade, ContainerInfo info) {
         var context = new PayStrategyContext()
-                .setTrade(trade);
+                .setTrade(trade)
+                .setChannelMchNo(info.channelMchNo())
+                .setCapability(info.capability())
+                .setClientIp(info.clientIp());
+        AbsPayCloseStrategy strategy = PaymentStrategyFactory.createByProduct(
+                info.product(), AbsPayCloseStrategy.class);
         strategy.doBeforeClose(context);
         strategy.doClose(context, false);
         payUniHandleService.payTimeout(trade);
     }
 
-    private void saveRecord(PayTrade trade, PaySyncResultBo syncResult, boolean adjust) {
+    private void saveRecord(PayTrade trade, PaySyncResultBo syncResult, boolean adjust, ContainerInfo info) {
         PaySyncRecord record = new PaySyncRecord()
                 .setAppId(trade.getAppId())
                 .setTradeNo(trade.getTradeNo())
-                .setBizTradeNo(trade.getBizOrderNo())
+                .setBizTradeNo(info.bizOrderNo())
                 .setOutTradeNo(trade.getOutOrderNo())
                 .setOutTradeStatus(Objects.nonNull(syncResult.getPayStatus())
                         ? syncResult.getPayStatus().getCode() : null)
                 .setTradeType(trade.getTradeType())
-                .setProduct(trade.getProduct())
-                .setChannel(trade.getChannel())
+                .setProduct(info.product())
+                .setChannel(info.channel())
                 .setSyncInfo(syncResult.getSyncData())
                 .setAdjust(adjust)
                 .setErrorCode(syncResult.getSyncErrorCode())
@@ -200,4 +203,32 @@ public class PaySyncService {
         record.setMchNo(trade.getMchNo());
         paySyncRecordService.saveRecord(record);
     }
+
+    /// 从容器(normal/gateway)提取同步流程所需字段
+    private ContainerInfo loadContainerInfo(PayTrade trade) {
+        if (Objects.equals(trade.getTradeType(), PayTradeTypeEnum.GATEWAY.getCode())) {
+            GatewayPayOrder order = gatewayPayOrderManager.findById(trade.getContainerId()).orElse(null);
+            if (order != null) {
+                return new ContainerInfo(
+                        order.getProduct(), order.getChannel(), order.getBizOrderNo(),
+                        order.getExpiredTime(), order.getChannelMchNo(),
+                        order.getCapability(), order.getClientIp());
+            }
+        } else {
+            NormalPayOrder order = payNormalOrderManager.findById(trade.getContainerId()).orElse(null);
+            if (order != null) {
+                return new ContainerInfo(
+                        order.getProduct(), order.getChannel(), order.getBizOrderNo(),
+                        order.getExpiredTime(), order.getChannelMchNo(),
+                        order.getCapability(), order.getClientIp());
+            }
+        }
+        throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.payOrderNotExist");
+    }
+
+    /// 容器信息持有者(避免在各方法间传整个容器对象)
+    private record ContainerInfo(
+            String product, String channel, String bizOrderNo,
+            OffsetDateTime expiredTime, String channelMchNo,
+            String capability, String clientIp) {}
 }

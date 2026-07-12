@@ -77,9 +77,9 @@ public class GatewayPayHandleService {
                 }
                 if (Objects.equals(existing.getStatus(), PayFundStatusEnum.PROCESSING.getCode())
                         || Objects.equals(existing.getStatus(), PayFundStatusEnum.INIT.getCode())) {
-                    // 通道/方式不一致则拒绝换端
-                    if (!Objects.equals(existing.getProduct(), product)
-                            || !Objects.equals(existing.getMethod(), method)) {
+                    // 通道/方式不一致则拒绝换端(product/method 在容器上)
+                    if (!Objects.equals(order.getProduct(), product)
+                            || !Objects.equals(order.getMethod(), method)) {
                         throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                                 "pay.error.gateway.channelLocked");
                     }
@@ -115,13 +115,9 @@ public class GatewayPayHandleService {
                 result = payStrategy.doPay(context);
             } catch (Exception e) {
                 log.error("网关支付出现异常", e);
-                existing.setStatus(PayFundStatusEnum.FAIL.getCode());
-                if (e instanceof PayFailureException) {
-                    existing.setErrorMsg(e.getMessage());
-                } else {
-                    existing.setErrorMsg("支付出现异常: " + e.getMessage());
-                }
-                payTradeManager.updateById(existing);
+                String errMsg = (e instanceof PayFailureException)
+                        ? e.getMessage() : "支付出现异常: " + e.getMessage();
+                payUniHandleService.payFail(existing, errMsg);
                 throw e;
             }
             return SpringUtil.getBean(this.getClass()).paySuccess(order, existing, result);
@@ -141,26 +137,21 @@ public class GatewayPayHandleService {
         trade.setTradeNo(TradeNoGenerateUtil.pay());
         trade.setTradeType(PayTradeTypeEnum.GATEWAY.getCode());
         trade.setContainerId(order.getId());
-        trade.setBizOrderNo(order.getBizOrderNo());
-        trade.setProduct(payParam.getProduct());
-        trade.setChannel(channel);
-        trade.setMethod(payParam.getMethod());
-        trade.setChannelMchNo(payParam.getChannelMchNo());
-        trade.setCapability(payParam.getCapability());
-        trade.setClientIp(order.getClientIp());
         trade.setAmount(order.getAmount());
         trade.setCurrency(CurrencyEnum.CNY.getCode());
         trade.setRefundableBalance(order.getAmount());
         trade.setStatus(PayFundStatusEnum.PROCESSING.getCode());
-        trade.setExpiredTime(order.getExpiredTime());
         trade.setSource(TradeSourceEnum.AGGRESS_PAY.getCode());
-        trade.setOpenid(payParam.getOpenId());
         payTradeManager.save(trade);
 
         this.fillRouteOnOrder(order, payParam, scene, device);
         order.setStatus(GatewayOrderStatusEnum.PAYING.getCode());
         order.setChannel(channel);
         order.setMethod(payParam.getMethod());
+        order.setLimitPay(payParam.getLimitPay() != null
+                ? String.join(",", payParam.getLimitPay()) : null);
+        order.setOpenid(payParam.getOpenId());
+        order.setBarCode(payParam.getAuthCode());
         order.setProduct(payParam.getProduct());
         gatewayPayOrderManager.updateById(order);
         return trade;
@@ -173,19 +164,12 @@ public class GatewayPayHandleService {
             trade.setPayTime(result.getFinishTime());
         }
         trade.setOutOrderNo(result.getOutOrderNo());
-        trade.setTransOrderNo(result.getTransOrderNo());
-        trade.setRelationOrderNo(result.getRelationOrderNo());
-        trade.setBuyerId(result.getBuyerId());
-        trade.setBuyerLogonId(result.getBuyerLogonId());
-        trade.setTradeProduct(result.getTradeProduct());
-        trade.setTradeWay(result.getTradeWay());
-        trade.setBankType(result.getBankType());
-        trade.setPromotionType(result.getPromotionType());
+        // payBody/payBodyType 留 trade(已拉起缓存标记)
         trade.setPayBody(result.getPayBody());
         trade.setPayBodyType(Objects.nonNull(result.getPayBodyType())
                 ? result.getPayBodyType().getCode() : null);
-        trade.setErrorMsg(null);
-        payUniHandleService.payAfterHandel(trade);
+        // 回执字段写容器, 由 payAfterHandel 统一处理
+        payUniHandleService.payAfterHandel(trade, result);
         return this.buildResult(order, trade);
     }
 

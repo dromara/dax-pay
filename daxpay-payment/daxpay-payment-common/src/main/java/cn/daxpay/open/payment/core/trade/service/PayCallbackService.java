@@ -2,7 +2,12 @@ package cn.daxpay.open.payment.core.trade.service;
 
 import cn.daxpay.open.payment.common.callback.CallbackData;
 import cn.daxpay.open.payment.common.enums.PayFundStatusEnum;
+import cn.daxpay.open.payment.common.enums.PayTradeTypeEnum;
+import cn.daxpay.open.payment.core.trade.dao.GatewayPayOrderManager;
+import cn.daxpay.open.payment.core.trade.dao.NormalPayOrderManager;
 import cn.daxpay.open.payment.core.trade.dao.PayTradeManager;
+import cn.daxpay.open.payment.core.trade.entity.GatewayPayOrder;
+import cn.daxpay.open.payment.core.trade.entity.NormalPayOrder;
 import cn.daxpay.open.payment.core.trade.entity.PayTrade;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import com.baomidou.lock.LockInfo;
@@ -23,6 +28,8 @@ import java.util.Objects;
 public class PayCallbackService {
 
     private final PayTradeManager payTradeManager;
+    private final NormalPayOrderManager payNormalOrderManager;
+    private final GatewayPayOrderManager gatewayPayOrderManager;
     private final PayUniHandleService payUniHandleService;
     private final LockTemplate lockTemplate;
 
@@ -56,10 +63,20 @@ public class PayCallbackService {
             } else {
                 this.fail(trade, callbackData);
             }
-            return trade.getProduct();
+            return resolveProduct(trade);
         } finally {
             lockTemplate.releaseLock(lock);
         }
+    }
+
+    /// 从容器获取 product(回调返回供通道策略识别来源)
+    private String resolveProduct(PayTrade trade) {
+        if (Objects.equals(trade.getTradeType(), PayTradeTypeEnum.GATEWAY.getCode())) {
+            return gatewayPayOrderManager.findById(trade.getContainerId())
+                    .map(GatewayPayOrder::getProduct).orElse(null);
+        }
+        return payNormalOrderManager.findById(trade.getContainerId())
+                .map(NormalPayOrder::getProduct).orElse(null);
     }
 
     private void success(PayTrade trade, CallbackData callbackData) {

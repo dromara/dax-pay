@@ -38,8 +38,8 @@ public class LakalaCloseStrategy extends AbsPayCloseStrategy {
 
         // 组装通道调用凭证
         LakalaSdkCredential credential = lakalaIsvConfigAssembler.buildConfig(
-                trade.getMchNo(), trade.getChannelMchNo(), trade.getCapability());
+                trade.getMchNo(), context.getChannelMchNo(), context.getCapability());
 
-        return lakalaCloseService.close(trade, credential, useCancel, trade.getClientIp());
+        return lakalaCloseService.close(trade, credential, useCancel, context.getClientIp());
     }
 }

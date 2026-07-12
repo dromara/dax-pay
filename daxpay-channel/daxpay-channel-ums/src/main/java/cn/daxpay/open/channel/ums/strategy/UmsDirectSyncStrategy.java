@@ -29,7 +29,7 @@ public class UmsDirectSyncStrategy extends AbsSyncPayOrderStrategy {
     public PaySyncResultBo doSync(PayStrategyContext context) {
         // 直接从 trade 读取路由参数, 不再需要 container 中间层
         UmsSdkCredential credential = umsDirectConfigAssembler.buildConfig(
-                context.getTrade().getMchNo(), context.getTrade().getChannelMchNo(), context.getTrade().getCapability());
+                context.getTrade().getMchNo(), context.getChannelMchNo(), context.getCapability());
         return umsSyncService.sync(context.getTrade(), credential);
     }
 }

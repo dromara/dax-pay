@@ -465,3 +465,93 @@ COMMENT ON COLUMN pay_gateway_cashier_item.deleted IS '逻辑删除标记';
 CREATE INDEX IF NOT EXISTS idx_pay_gateway_cashier_item_list
     ON pay_gateway_cashier_item (app_id, cashier_type, scene)
     WHERE deleted = false;
+
+-- ============================================================
+-- PayTrade 瘦身: 业务/路由/回执字段归容器, trade 仅留资金动作固有属性
+-- ============================================================
+
+-- pay_normal_order 补充 14 字段(请求参数 + 回执 + 通道关联 + 错误)
+ALTER TABLE pay_normal_order ADD COLUMN IF NOT EXISTS other_method varchar(64);
+ALTER TABLE pay_normal_order ADD COLUMN IF NOT EXISTS limit_pay varchar(128);
+ALTER TABLE pay_normal_order ADD COLUMN IF NOT EXISTS openid varchar(128);
+ALTER TABLE pay_normal_order ADD COLUMN IF NOT EXISTS bar_code varchar(64);
+ALTER TABLE pay_normal_order ADD COLUMN IF NOT EXISTS error_msg varchar(500);
+ALTER TABLE pay_normal_order ADD COLUMN IF NOT EXISTS buyer_id varchar(64);
+ALTER TABLE pay_normal_order ADD COLUMN IF NOT EXISTS buyer_logon_id varchar(128);
+ALTER TABLE pay_normal_order ADD COLUMN IF NOT EXISTS trade_product varchar(64);
+ALTER TABLE pay_normal_order ADD COLUMN IF NOT EXISTS trade_way varchar(64);
+ALTER TABLE pay_normal_order ADD COLUMN IF NOT EXISTS bank_type varchar(32);
+ALTER TABLE pay_normal_order ADD COLUMN IF NOT EXISTS promotion_type varchar(64);
+ALTER TABLE pay_normal_order ADD COLUMN IF NOT EXISTS provider varchar(32);
+ALTER TABLE pay_normal_order ADD COLUMN IF NOT EXISTS trans_order_no varchar(64);
+ALTER TABLE pay_normal_order ADD COLUMN IF NOT EXISTS relation_order_no varchar(64);
+
+COMMENT ON COLUMN pay_normal_order.other_method IS '其他支付方式, method=other 时生效';
+COMMENT ON COLUMN pay_normal_order.limit_pay IS '限制支付类型(如限制信用卡)';
+COMMENT ON COLUMN pay_normal_order.openid IS '微信 openid(jsapi/app/miniapp)';
+COMMENT ON COLUMN pay_normal_order.bar_code IS '付款码(被扫支付)';
+COMMENT ON COLUMN pay_normal_order.error_msg IS '错误信息';
+COMMENT ON COLUMN pay_normal_order.buyer_id IS '付款用户 ID(支付宝 buyer_user_id 等)';
+COMMENT ON COLUMN pay_normal_order.buyer_logon_id IS '买家登录账号(支付宝手机号/邮箱)';
+COMMENT ON COLUMN pay_normal_order.trade_product IS '通道方记录的支付产品';
+COMMENT ON COLUMN pay_normal_order.trade_way IS '通道方记录的交易方式';
+COMMENT ON COLUMN pay_normal_order.bank_type IS '银行卡类型(借记卡/贷记卡)';
+COMMENT ON COLUMN pay_normal_order.promotion_type IS '活动类型';
+COMMENT ON COLUMN pay_normal_order.provider IS '支付渠道(微信/支付宝/银联等)';
+COMMENT ON COLUMN pay_normal_order.trans_order_no IS '透传订单号(三方通道产生的透传订单号)';
+COMMENT ON COLUMN pay_normal_order.relation_order_no IS '特殊通道关联订单号(部分通道订单号有前缀/长度限制时使用)';
+
+-- pay_gateway_order 补充 14 字段
+ALTER TABLE pay_gateway_order ADD COLUMN IF NOT EXISTS other_method varchar(64);
+ALTER TABLE pay_gateway_order ADD COLUMN IF NOT EXISTS limit_pay varchar(128);
+ALTER TABLE pay_gateway_order ADD COLUMN IF NOT EXISTS openid varchar(128);
+ALTER TABLE pay_gateway_order ADD COLUMN IF NOT EXISTS bar_code varchar(64);
+ALTER TABLE pay_gateway_order ADD COLUMN IF NOT EXISTS error_msg varchar(500);
+ALTER TABLE pay_gateway_order ADD COLUMN IF NOT EXISTS buyer_id varchar(64);
+ALTER TABLE pay_gateway_order ADD COLUMN IF NOT EXISTS buyer_logon_id varchar(128);
+ALTER TABLE pay_gateway_order ADD COLUMN IF NOT EXISTS trade_product varchar(64);
+ALTER TABLE pay_gateway_order ADD COLUMN IF NOT EXISTS trade_way varchar(64);
+ALTER TABLE pay_gateway_order ADD COLUMN IF NOT EXISTS bank_type varchar(32);
+ALTER TABLE pay_gateway_order ADD COLUMN IF NOT EXISTS promotion_type varchar(64);
+ALTER TABLE pay_gateway_order ADD COLUMN IF NOT EXISTS provider varchar(32);
+ALTER TABLE pay_gateway_order ADD COLUMN IF NOT EXISTS trans_order_no varchar(64);
+ALTER TABLE pay_gateway_order ADD COLUMN IF NOT EXISTS relation_order_no varchar(64);
+
+COMMENT ON COLUMN pay_gateway_order.other_method IS '其他支付方式, method=other 时生效';
+COMMENT ON COLUMN pay_gateway_order.limit_pay IS '限制支付类型(如限制信用卡)';
+COMMENT ON COLUMN pay_gateway_order.openid IS '微信 openid(jsapi/app/miniapp)';
+COMMENT ON COLUMN pay_gateway_order.bar_code IS '付款码(被扫支付)';
+COMMENT ON COLUMN pay_gateway_order.error_msg IS '错误信息';
+COMMENT ON COLUMN pay_gateway_order.buyer_id IS '付款用户 ID(支付宝 buyer_user_id 等)';
+COMMENT ON COLUMN pay_gateway_order.buyer_logon_id IS '买家登录账号(支付宝手机号/邮箱)';
+COMMENT ON COLUMN pay_gateway_order.trade_product IS '通道方记录的支付产品';
+COMMENT ON COLUMN pay_gateway_order.trade_way IS '通道方记录的交易方式';
+COMMENT ON COLUMN pay_gateway_order.bank_type IS '银行卡类型(借记卡/贷记卡)';
+COMMENT ON COLUMN pay_gateway_order.promotion_type IS '活动类型';
+COMMENT ON COLUMN pay_gateway_order.provider IS '支付渠道(微信/支付宝/银联等)';
+COMMENT ON COLUMN pay_gateway_order.trans_order_no IS '透传订单号(三方通道产生的透传订单号)';
+COMMENT ON COLUMN pay_gateway_order.relation_order_no IS '特殊通道关联订单号(部分通道订单号有前缀/长度限制时使用)';
+
+-- pay_trade 删除 22 字段(已归容器)
+ALTER TABLE pay_trade DROP COLUMN IF EXISTS biz_order_no;
+ALTER TABLE pay_trade DROP COLUMN IF EXISTS product;
+ALTER TABLE pay_trade DROP COLUMN IF EXISTS channel;
+ALTER TABLE pay_trade DROP COLUMN IF EXISTS method;
+ALTER TABLE pay_trade DROP COLUMN IF EXISTS other_method;
+ALTER TABLE pay_trade DROP COLUMN IF EXISTS limit_pay;
+ALTER TABLE pay_trade DROP COLUMN IF EXISTS provider;
+ALTER TABLE pay_trade DROP COLUMN IF EXISTS expired_time;
+ALTER TABLE pay_trade DROP COLUMN IF EXISTS trans_order_no;
+ALTER TABLE pay_trade DROP COLUMN IF EXISTS relation_order_no;
+ALTER TABLE pay_trade DROP COLUMN IF EXISTS buyer_id;
+ALTER TABLE pay_trade DROP COLUMN IF EXISTS buyer_logon_id;
+ALTER TABLE pay_trade DROP COLUMN IF EXISTS openid;
+ALTER TABLE pay_trade DROP COLUMN IF EXISTS trade_product;
+ALTER TABLE pay_trade DROP COLUMN IF EXISTS trade_way;
+ALTER TABLE pay_trade DROP COLUMN IF EXISTS bank_type;
+ALTER TABLE pay_trade DROP COLUMN IF EXISTS bar_code;
+ALTER TABLE pay_trade DROP COLUMN IF EXISTS promotion_type;
+ALTER TABLE pay_trade DROP COLUMN IF EXISTS channel_mch_no;
+ALTER TABLE pay_trade DROP COLUMN IF EXISTS capability;
+ALTER TABLE pay_trade DROP COLUMN IF EXISTS client_ip;
+ALTER TABLE pay_trade DROP COLUMN IF EXISTS error_msg;

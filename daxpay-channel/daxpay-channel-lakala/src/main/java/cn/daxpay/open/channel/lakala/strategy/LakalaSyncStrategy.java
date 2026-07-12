@@ -33,7 +33,7 @@ public class LakalaSyncStrategy extends AbsSyncPayOrderStrategy {
         // 直接从 trade 读取路由参数, 不再需要 container 中间层
         // 组装通道调用凭证
         LakalaSdkCredential credential = lakalaIsvConfigAssembler.buildConfig(
-                context.getTrade().getMchNo(), context.getTrade().getChannelMchNo(), context.getTrade().getCapability());
+                context.getTrade().getMchNo(), context.getChannelMchNo(), context.getCapability());
 
         return lakalaSyncService.sync(context.getTrade(), credential);
     }

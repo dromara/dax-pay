@@ -32,7 +32,7 @@ public class YeepayDirectCloseStrategy extends AbsPayCloseStrategy {
         PayTrade trade = context.getTrade();
 
         YeepaySdkCredential credential = yeepayDirectConfigAssembler.buildConfig(
-                trade.getMchNo(), trade.getChannelMchNo(), trade.getCapability());
+                trade.getMchNo(), context.getChannelMchNo(), context.getCapability());
         return yeepayCloseService.close(trade, credential, useCancel);
     }
 }

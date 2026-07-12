@@ -71,9 +71,10 @@ public class PayRefundService {
             refundOrder.setStatus(RefundOrderStatusEnum.PROGRESS.getCode());
             payRefundOrderManager.save(refundOrder);
 
-            // 调用通道退款策略
+            // 调用通道退款策略(product 从容器获取)
+            String product = normalOrder != null ? normalOrder.getProduct() : null;
             AbsRefundStrategy strategy = PaymentStrategyFactory.createByProduct(
-                    lockedTrade.getProduct(), AbsRefundStrategy.class);
+                    product, AbsRefundStrategy.class);
             RefundResultBo result;
             try {
                 strategy.doBeforeRefund(refundOrder);
@@ -138,12 +139,12 @@ public class PayRefundService {
                 .setAmount(param.getAmount())
                 .setOrderAmount(trade.getAmount())
                 .setCurrency(trade.getCurrency())
-                .setReason(param.getReason())
-                .setChannel(trade.getChannel())
-                .setProduct(trade.getProduct())
-                .setMethod(trade.getMethod());
+                .setReason(param.getReason());
         if (normalOrder != null) {
-            refundOrder.setTitle(normalOrder.getTitle())
+            refundOrder.setChannel(normalOrder.getChannel())
+                    .setProduct(normalOrder.getProduct())
+                    .setMethod(normalOrder.getMethod())
+                    .setTitle(normalOrder.getTitle())
                     .setBizOrderNo(normalOrder.getBizOrderNo())
                     .setChannelMchNo(normalOrder.getChannelMchNo())
                     .setCapability(normalOrder.getCapability())

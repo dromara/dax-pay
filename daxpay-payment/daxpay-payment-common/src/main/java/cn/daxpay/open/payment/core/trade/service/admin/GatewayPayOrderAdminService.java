@@ -58,7 +58,6 @@ public class GatewayPayOrderAdminService {
             result.setOutOrderNo(trade.getOutOrderNo());
             result.setFundStatus(trade.getStatus());
             result.setRefundableBalance(trade.getRefundableBalance());
-            result.setErrorMsg(trade.getErrorMsg());
         }
         return result;
     }

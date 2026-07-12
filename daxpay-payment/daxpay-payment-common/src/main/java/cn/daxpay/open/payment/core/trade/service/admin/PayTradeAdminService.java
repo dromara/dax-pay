@@ -52,12 +52,20 @@ public class PayTradeAdminService {
         PayTrade entity = payTradeManager.findById(id)
                 .orElseThrow(() -> new DataNotExistException("pay.error.payOrderNotExist"));
         PayTradeResult result = PayTradeAdminConvert.CONVERT.toResult(entity);
-        // 联表查询容器, 补充业务字段
+        // 联表查询容器, 补充业务字段与回执
         NormalPayOrder normalOrder = normalPayOrderManager.findById(entity.getContainerId()).orElse(null);
         if (Objects.nonNull(normalOrder)) {
             result.setBizOrderNo(normalOrder.getBizOrderNo());
             result.setTitle(normalOrder.getTitle());
             result.setContainerStatus(normalOrder.getStatus());
+            result.setProduct(normalOrder.getProduct());
+            result.setChannel(normalOrder.getChannel());
+            result.setMethod(normalOrder.getMethod());
+            result.setBuyerId(normalOrder.getBuyerId());
+            result.setTradeProduct(normalOrder.getTradeProduct());
+            result.setTradeWay(normalOrder.getTradeWay());
+            result.setBankType(normalOrder.getBankType());
+            result.setErrorMsg(normalOrder.getErrorMsg());
         }
         return result;
     }

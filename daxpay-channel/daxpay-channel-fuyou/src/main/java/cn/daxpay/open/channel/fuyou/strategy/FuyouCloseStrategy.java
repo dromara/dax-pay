@@ -34,7 +34,7 @@ public class FuyouCloseStrategy extends AbsPayCloseStrategy {
         PayTrade trade = context.getTrade();
 
         FuyouSdkCredential credential = fuyouIsvConfigAssembler.buildConfig(
-                trade.getMchNo(), trade.getChannelMchNo(), trade.getCapability());
+                trade.getMchNo(), context.getChannelMchNo(), context.getCapability());
         return fuyouCloseService.close(trade, credential, useCancel);
     }
 }

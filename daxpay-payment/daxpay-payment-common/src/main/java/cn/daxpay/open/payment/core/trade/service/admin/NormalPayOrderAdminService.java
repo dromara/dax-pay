@@ -62,12 +62,6 @@ public class NormalPayOrderAdminService {
             result.setRefundableBalance(trade.getRefundableBalance());
             result.setPayBody(trade.getPayBody());
             result.setPayBodyType(trade.getPayBodyType());
-            result.setBuyerId(trade.getBuyerId());
-            result.setOpenid(trade.getOpenid());
-            result.setTradeProduct(trade.getTradeProduct());
-            result.setTradeWay(trade.getTradeWay());
-            result.setBankType(trade.getBankType());
-            result.setErrorMsg(trade.getErrorMsg());
         }
         return result;
     }

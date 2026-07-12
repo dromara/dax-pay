@@ -34,7 +34,7 @@ public class VbillSyncStrategy extends AbsSyncPayOrderStrategy {
 
         // 组装通道调用凭证
         VbillSdkCredential credential = vbillIsvConfigAssembler.buildConfig(
-                context.getTrade().getMchNo(), context.getTrade().getChannelMchNo(), context.getTrade().getCapability());
+                context.getTrade().getMchNo(), context.getChannelMchNo(), context.getCapability());
 
         return vbillSyncService.sync(context.getTrade(), credential);
     }

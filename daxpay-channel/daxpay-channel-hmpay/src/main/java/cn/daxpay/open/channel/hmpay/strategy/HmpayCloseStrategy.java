@@ -33,7 +33,7 @@ public class HmpayCloseStrategy extends AbsPayCloseStrategy {
         PayTrade trade = context.getTrade();
         // 直接从 trade 读取路由参数, 不再需要 container 中间层
         HmpaySdkCredential credential = hmpayIsvConfigAssembler.buildConfig(
-                trade.getMchNo(), trade.getChannelMchNo(), trade.getCapability());
+                trade.getMchNo(), context.getChannelMchNo(), context.getCapability());
 
         return hmpayCloseService.close(trade, credential);
     }

@@ -38,7 +38,7 @@ public class VbillCloseStrategy extends AbsPayCloseStrategy {
 
         // 组装通道调用凭证
         VbillSdkCredential credential = vbillIsvConfigAssembler.buildConfig(
-                trade.getMchNo(), trade.getChannelMchNo(), trade.getCapability());
+                trade.getMchNo(), context.getChannelMchNo(), context.getCapability());
 
         return vbillCloseService.close(trade, credential, useCancel);
     }

@@ -31,7 +31,7 @@ public class AdapayDirectCloseStrategy extends AbsPayCloseStrategy {
         PayTrade trade = context.getTrade();
         // 直接从 trade 读取路由参数, 不再需要 container 中间层
         AdapaySdkCredential credential = adapayDirectConfigAssembler.buildConfig(
-                trade.getMchNo(), trade.getChannelMchNo(), trade.getCapability());
+                trade.getMchNo(), context.getChannelMchNo(), context.getCapability());
         return adapayCloseService.close(trade, credential, useCancel);
     }
 }
