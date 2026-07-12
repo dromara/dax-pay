@@ -7,7 +7,7 @@ import cn.daxpay.open.platform.core.exception.business.VerifySignFailedException
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.common.runtime.PaymentContext;
 import cn.daxpay.open.payment.common.util.PaySignUtil;
-import cn.daxpay.open.payment.merchant.service.query.MerchantAccessQueryService;
+import cn.daxpay.open.payment.common.service.query.MerchantAccessQueryService;
 import cn.daxpay.open.payment.unipay.param.PaymentCommonParam;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;

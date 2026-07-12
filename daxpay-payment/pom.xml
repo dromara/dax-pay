@@ -16,6 +16,9 @@
 
     <modules>
         <module>daxpay-payment-common</module>
+        <module>daxpay-payment-admin</module>
+        <module>daxpay-payment-gateway</module>
+        <module>daxpay-payment-merchant</module>
     </modules>
 
 </project>

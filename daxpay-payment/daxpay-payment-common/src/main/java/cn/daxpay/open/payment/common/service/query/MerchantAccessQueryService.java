@@ -1,7 +1,7 @@
-package cn.daxpay.open.payment.merchant.service.query;
+package cn.daxpay.open.payment.common.service.query;
 
-import cn.daxpay.open.payment.merchant.dto.MchAppInfoAccessInfo;
-import cn.daxpay.open.payment.merchant.dto.MerchantAccessInfo;
+import cn.daxpay.open.payment.common.dto.MchAppInfoAccessInfo;
+import cn.daxpay.open.payment.common.dto.MerchantAccessInfo;
 import cn.daxpay.open.payment.merchant.dao.appinfo.MchAppInfoManager;
 import cn.daxpay.open.payment.merchant.dao.config.MerchantCredentialManager;
 import cn.daxpay.open.payment.merchant.dao.info.MerchantInfoManager;
@@ -21,7 +21,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class MerchantAccessQueryService {
     private final MerchantInfoManager merchantInfoManager;
+
     private final MchAppInfoManager mchAppInfoManager;
+
     private final MerchantCredentialManager merchantCredentialManager;
 
     /// 根据商户号查询商户接入信息（引导用，忽略租户）

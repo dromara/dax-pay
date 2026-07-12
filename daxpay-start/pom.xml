@@ -37,10 +37,31 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- 支付服务和通用控制器（核心底座 + 运营端 + 商户端单模块） -->
+        <!-- 支付公共底座（核心交易引擎 + 商户领域共享内核 + 网关订单模型） -->
         <dependency>
             <groupId>cn.daxpay.open</groupId>
             <artifactId>daxpay-payment-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- 运营管理端（控制器 + 管理服务） -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-payment-admin</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- 支付网关端（下单/退款/转账/查询/聚合支付） -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-payment-gateway</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- 商户自助端（商户管理自己资源/订单的控制器） -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-payment-merchant</artifactId>
             <version>${project.version}</version>
         </dependency>
 

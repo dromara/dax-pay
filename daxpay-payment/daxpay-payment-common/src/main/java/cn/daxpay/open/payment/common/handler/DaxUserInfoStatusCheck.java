@@ -7,7 +7,7 @@ import cn.daxpay.open.platform.capability.auth.entity.AuthInfoResult;
 import cn.daxpay.open.platform.capability.auth.entity.LoginAuthContext;
 import cn.daxpay.open.platform.capability.auth.exception.LoginFailureException;
 import cn.daxpay.open.platform.core.code.CommonCode;
-import cn.daxpay.open.payment.merchant.service.query.MerchantAccessQueryService;
+import cn.daxpay.open.payment.common.service.query.MerchantAccessQueryService;
 import cn.daxpay.open.payment.merchant.service.user.MerchantUserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

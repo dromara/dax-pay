@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.merchant.dto;
+package cn.daxpay.open.payment.common.dto;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

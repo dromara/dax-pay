@@ -10,7 +10,7 @@ import cn.daxpay.open.payment.device.qrcode.param.DeviceQrCodeBindMerchantParam;
 import cn.daxpay.open.payment.device.qrcode.param.DeviceQrCodeParam;
 import cn.daxpay.open.payment.device.qrcode.param.DeviceQrCodeQuery;
 import cn.daxpay.open.payment.device.qrcode.result.DeviceQrCodeResult;
-import cn.daxpay.open.payment.merchant.dto.MchAppInfoAccessInfo;
+import cn.daxpay.open.payment.common.dto.MchAppInfoAccessInfo;
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.open.platform.common.translate.service.TransService;
 import cn.daxpay.open.platform.core.code.CommonCode;

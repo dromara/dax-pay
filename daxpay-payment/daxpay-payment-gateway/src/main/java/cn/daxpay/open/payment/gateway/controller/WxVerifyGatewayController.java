@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.merchant.controller.gateway;
+package cn.daxpay.open.payment.gateway.controller;
 
 import cn.daxpay.open.payment.merchant.service.wxverify.WxDomainVerifyService;
 import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
