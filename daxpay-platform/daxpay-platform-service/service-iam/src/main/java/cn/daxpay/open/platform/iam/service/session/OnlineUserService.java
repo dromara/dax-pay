@@ -10,6 +10,7 @@ import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.platform.iam.param.session.OnlineUserQuery;
 import cn.daxpay.open.platform.iam.result.session.OnlineUserResult;
+import cn.dev33.satoken.SaManager;
 import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.core.collection.CollUtil;
@@ -17,7 +18,6 @@ import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -35,9 +35,6 @@ import java.util.stream.Collectors;
 public class OnlineUserService {
 
     private final StringRedisTemplate stringRedisTemplate;
-
-    /// .     * Sa-Token 使用的 Jackson 序列化器（会保存类型信息）
-    private static final GenericJackson2JsonRedisSerializer SERIALIZER = new GenericJackson2JsonRedisSerializer();
 
     /// 分页查询在线用户
     /// 优化：使用 Sa-Token API 获取会话列表，批量获取会话详情
@@ -73,8 +70,8 @@ public class OnlineUserService {
                 continue;
             }
             try {
-                // 使用 Sa-Token 的序列化器反序列化（会保存类型信息）
-                SaSession session = (SaSession) SERIALIZER.deserialize(json.getBytes(java.nio.charset.StandardCharsets.UTF_8));
+                // 使用 Sa-Token 自身的 JSON 模板反序列化，与写入时完全对称（自动保留类型信息）
+                SaSession session = SaManager.getSaJsonTemplate().jsonToObject(json, SaSession.class);
                 if (session == null) {
                     continue;
                 }
