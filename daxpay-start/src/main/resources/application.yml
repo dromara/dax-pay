@@ -50,6 +50,7 @@ sa-token:
   #  是否允许同一账号多地同时登
   is-concurrent: true
   # 在多人登录同一账号时，是否共用一个 token
-  is-share: true
+  # false: 每次登录生成独立 token, 实现逐设备会话隔离(改密踢人时可精确保留当前 token)
+  is-share: false
   is-log: false
   is-print: false

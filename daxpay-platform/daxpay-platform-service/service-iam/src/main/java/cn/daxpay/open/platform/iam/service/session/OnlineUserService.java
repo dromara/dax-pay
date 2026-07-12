@@ -25,6 +25,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /// # 在线用户服务
@@ -166,6 +167,25 @@ public class OnlineUserService {
                 log.warn("批量强制用户下线失败: sessionId={}, error={}", sessionId, e.getMessage());
             }
         }
+    }
+
+    /// 修改密码后: 强制该用户除当前 token 外的所有会话下线(保留当前设备)
+    /// 用于个人修改密码场景, 避免自己被踢下线
+    public void kickoutOtherSessions(Long userId) {
+        String currentToken = StpUtil.getTokenValue();
+        List<String> tokenList = StpUtil.getTokenValueListByLoginId(userId);
+        for (String token : tokenList) {
+            if (!Objects.equals(token, currentToken)) {
+                // 标记为踢下线, 前端下次请求会收到 KICK_OUT 类型的未登录异常
+                StpUtil.kickoutByTokenValue(token);
+            }
+        }
+    }
+
+    /// 强制用户全部会话下线(不保留任何 token)
+    /// 用于管理员重置密码场景
+    public void kickoutAllSessions(Long userId) {
+        StpUtil.kickout(userId);
     }
 
     /// 时间戳转 OffsetDateTime (UTC)

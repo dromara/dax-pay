@@ -12,6 +12,7 @@ import cn.daxpay.open.platform.iam.dao.user.UserPasswordSecurityManager;
 import cn.daxpay.open.platform.iam.entity.user.UserExpandInfo;
 import cn.daxpay.open.platform.iam.entity.user.UserInfo;
 import cn.daxpay.open.platform.iam.exception.user.UserInfoNotExistsException;
+import cn.daxpay.open.platform.iam.service.session.OnlineUserService;
 import cn.daxpay.open.platform.iam.param.user.UserBaseInfoParam;
 import cn.daxpay.open.platform.iam.result.user.LoginAfterUserInfoResult;
 import cn.daxpay.open.platform.iam.result.user.PasswordStatusResult;
@@ -23,6 +24,8 @@ import cn.hutool.crypto.digest.BCrypt;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -49,6 +52,8 @@ public class UserInfoService {
     private final PasswordDecryptService passwordDecryptService;
 
     private final UserQueryService userQueryService;
+
+    private final OnlineUserService onlineUserService;
 
     /// 登录后获取用户信息
     public LoginAfterUserInfoResult getLoginAfterUserInfo() {
@@ -140,6 +145,14 @@ public class UserInfoService {
         // 更新密码过期时间和初始密码标记
         OffsetDateTime passwordExpireTime = this.calculatePasswordExpireTime();
         passwordSecurityManager.updatePasswordExpireTime(userInfo.getId(), passwordExpireTime);
+        // 修改密码成功后, 保留当前会话, 强制该用户其他所有会话下线
+        // 注册事务提交后回调, 避免事务回滚时误踢下线
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                onlineUserService.kickoutOtherSessions(userInfo.getId());
+            }
+        });
     }
 
     /// 计算密码过期时间 (UTC)

@@ -18,6 +18,7 @@ import cn.daxpay.open.platform.iam.exception.user.UserInfoNotExistsException;
 import cn.daxpay.open.platform.iam.param.user.UserInfoParam;
 import cn.daxpay.open.platform.iam.param.user.UserInfoQuery;
 import cn.daxpay.open.platform.iam.result.user.UserWholeInfoResult;
+import cn.daxpay.open.platform.iam.service.session.OnlineUserService;
 import cn.daxpay.open.platform.common.config.properties.PlatformStarterProperties;
 import cn.daxpay.open.platform.core.enums.client.ClientEnum;
 import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformPasswordPolicyConfig;
@@ -29,6 +30,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -58,6 +61,8 @@ public class UserAdminService {
     private final IamSecurityConfigService iamSecurityConfigService;
 
     private final PasswordDecryptService passwordDecryptService;
+
+    private final OnlineUserService onlineUserService;
 
     /// 分页查询（按终端过滤）
     public PageResult<UserWholeInfoResult> page(PageParam pageParam, UserInfoQuery query) {
@@ -208,6 +213,14 @@ public class UserAdminService {
         // 更新密码过期时间和初始密码标记
         OffsetDateTime passwordExpireTime = this.calculatePasswordExpireTime();
         passwordSecurityManager.updatePasswordExpireTime(userId, passwordExpireTime);
+        // 重置密码成功后, 强制该用户全部会话下线(管理员操作, 不保留任何会话)
+        // 注册事务提交后回调, 避免事务回滚时误踢下线
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                onlineUserService.kickoutAllSessions(userId);
+            }
+        });
     }
 
     /// 批量重置密码
@@ -228,6 +241,16 @@ public class UserAdminService {
             passwordSecurityManager.updatePasswordExpireTime(userId, passwordExpireTime);
         }
         userInfoManager.restartPasswordBatch(userIds, passwordHash);
+        // 批量重置密码成功后, 强制每个目标用户全部会话下线
+        // 注册事务提交后回调, 避免事务回滚时误踢下线
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                for (Long userId : userIds) {
+                    onlineUserService.kickoutAllSessions(userId);
+                }
+            }
+        });
     }
 
     /// 编辑用户信息（禁止修改终端归属）
