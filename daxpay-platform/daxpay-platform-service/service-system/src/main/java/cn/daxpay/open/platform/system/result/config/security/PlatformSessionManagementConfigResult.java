@@ -28,4 +28,7 @@ public class PlatformSessionManagementConfigResult extends BaseResult {
 
     @Schema(description = "并发会话策略")
     private String concurrentStrategy;
+
+    @Schema(description = "并发计数范围(GLOBAL全局共享 / PER_DEVICE按终端独立)")
+    private String concurrentScope;
 }

@@ -23,6 +23,7 @@ import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformSe
 import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.stp.parameter.SaLoginParameter;
+import cn.dev33.satoken.stp.parameter.enums.SaLogoutMode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotNull;
@@ -197,25 +198,38 @@ public class TokenService {
 
     /// 执行 Sa-Token 登录(建立会话)
     private void doSaLogin(AuthInfoResult authInfoResult, String clientCode, String loginType) {
+        Object userId = authInfoResult.getId();
         var saLoginModel = new SaLoginParameter()
                 .setDeviceType(clientCode)
-                .setIsLastingCookie(true);
-        // 应用会话管理配置(在线时长/活跃超时/并发策略)
-        this.applySessionConfig(saLoginModel, authInfoResult.getId());
+                .setIsLastingCookie(true)
+                // 逐设备隔离, 不依赖全局配置(代码自洽)
+                .setIsShare(false);
+
+        var config = iamSecurityConfigService.getSessionManagement();
+        // 应用在线时长/活跃超时(对所有终端生效)
+        this.applyTimeConfig(saLoginModel, config);
+        // 应用并发控制(GATEWAY豁免), 返回是否需要login后按终端踢人
+        boolean perDeviceKickOldest = this.applyConcurrentConfig(saLoginModel, config, userId, clientCode);
 
         authInfoResult.setClient(clientCode)
                 .setLoginType(loginType);
-        StpUtil.login(authInfoResult.getId(), saLoginModel);
+        StpUtil.login(userId, saLoginModel);
+
+        // PER_DEVICE + KICK_OLDEST 必须在 login 后执行(login前本终端尚无token)
+        if (perDeviceKickOldest && config.getMaxConcurrentSessions() != null) {
+            StpUtil.stpLogic.logoutByMaxLoginCount(
+                    userId, null, clientCode,
+                    config.getMaxConcurrentSessions(), SaLogoutMode.KICKOUT);
+        }
+
         SaSession session = StpUtil.getSession();
         UserDetail userDetail = authInfoResult.getUserDetail();
         session.set(CommonCode.USER, userDetail);
     }
 
-    /// 应用会话管理配置到 Sa-Token 登录参数
-    /// 配置未启用时跳过, 继续使用 application.yml 中的静态默认值
-    private void applySessionConfig(SaLoginParameter model, Object userId) {
-        PlatformSessionManagementConfig config = iamSecurityConfigService.getSessionManagement();
-        if (config == null || !Boolean.TRUE.equals(config.getEnabled())) {
+    /// 应用在线时长与活跃超时配置
+    private void applyTimeConfig(SaLoginParameter model, PlatformSessionManagementConfig config) {
+        if (config == null) {
             return;
         }
         // 在线时长 -> token 固定有效期(秒)
@@ -226,26 +240,53 @@ public class TokenService {
         if (config.getActiveTimeoutHours() != null && config.getActiveTimeoutHours() > 0) {
             model.setActiveTimeout(config.getActiveTimeoutHours() * 3600L);
         }
-        // 并发登录策略
+    }
+
+    /// 应用并发登录控制
+    /// 返回 true 表示需要在 login 后手动按终端踢最早会话(PER_DEVICE + KICK_OLDEST 场景)
+    private boolean applyConcurrentConfig(SaLoginParameter model, PlatformSessionManagementConfig config,
+                                          Object userId, String clientCode) {
+        if (config == null || !Boolean.TRUE.equals(config.getEnabled())) {
+            return false;
+        }
+        // GATEWAY 终端豁免: 网关为机器API调用, 不受并发限制
+        if (ClientEnum.GATEWAY.getCode().equals(clientCode)) {
+            return false;
+        }
         Integer max = config.getMaxConcurrentSessions();
         String strategy = config.getConcurrentStrategy();
-        if ("KICK_OLDEST".equals(strategy) && max != null && max > 0) {
-            // 允许并发, 超出上限时 Sa-Token 自动注销最早的会话
-            model.setIsConcurrent(true).setMaxLoginCount(max);
+        boolean perDevice = "PER_DEVICE".equals(config.getConcurrentScope());
+
+        // NEW_SESSION 或未配并发数: 允许并发, 不限制
+        if (max == null || max <= 0 || "NEW_SESSION".equals(strategy)) {
+            model.setIsConcurrent(true);
+            return false;
         }
-        else if ("DENY_NEW".equals(strategy) && max != null && max > 0) {
-            // 登录前预检: 已达上限则拒绝新登录
-            int current = StpUtil.getTokenValueListByLoginId(userId).size();
-            if (current >= max) {
+        if ("KICK_OLDEST".equals(strategy)) {
+            model.setIsConcurrent(true);
+            if (perDevice) {
+                // PER_DEVICE: setMaxLoginCount是全局的, 需login后手动按deviceType踢
+                return true;
+            }
+            // GLOBAL: Sa-Token login内部自动注销超额最早会话
+            model.setMaxLoginCount(max)
+                 .setOverflowLogoutMode(SaLogoutMode.KICKOUT);
+            return false;
+        }
+        if ("DENY_NEW".equals(strategy)) {
+            // 登录前预检: PER_DEVICE按当前终端计数, GLOBAL按所有终端总和
+            List<String> tokens = perDevice
+                    ? StpUtil.getTokenValueListByLoginId(userId, clientCode)
+                    : StpUtil.getTokenValueListByLoginId(userId);
+            if (tokens.size() >= max) {
                 throw new LoginFailureException("error.auth.concurrentLimitExceeded");
             }
-            // 不设 maxLoginCount, 保持"拒绝"语义, 避免触发 Sa-Token 自动踢旧
             model.setIsConcurrent(true);
+            return false;
         }
-        else {
-            // NEW_SESSION 或未配置策略: 允许并发, 不限制数量
-            model.setIsConcurrent(true);
-        }
+        // 未知策略: 允许并发, 不限制
+        model.setIsConcurrent(true);
+        return false;
     }
 
     /// 退出

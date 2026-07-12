@@ -62,7 +62,18 @@ public class PlatformSecurityConfigService {
     public PlatformSessionManagementConfig getSessionManagementConfig() {
         return systemConfigService.getOrCreateConfig(PlatformConfigTypeEnum.SECURITY_SESSION,
                 PlatformSessionManagementConfig.class,
-                new PlatformSessionManagementConfig());
+                defaultSessionConfig());
+    }
+
+    /// 会话管理配置默认值: 新系统开箱即用
+    private PlatformSessionManagementConfig defaultSessionConfig() {
+        return new PlatformSessionManagementConfig()
+                .setEnabled(true)
+                .setMaxOnlineHours(72)
+                .setActiveTimeoutHours(24)
+                .setMaxConcurrentSessions(5)
+                .setConcurrentStrategy("KICK_OLDEST")
+                .setConcurrentScope("GLOBAL");
     }
 
     /// 获取会话管理配置
