@@ -2,6 +2,7 @@ package cn.daxpay.open.platform.capability.auth.handler;
 
 import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.daxpay.open.platform.core.code.CommonCode;
+import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.platform.capability.auth.exception.NotLoginException;
@@ -34,6 +35,31 @@ public class SaExceptionHandler {
         String key = ex.resolveMessageKey();
         log.info("鉴权异常 消息={}, key={}", I18nUtil.get(key, Locale.CHINA, ex.getArgs()), key, ex);
         Result<Void> result = Res.response(ex.getCode(), ex.getMessage(), MDC.get(CommonCode.TRACE_ID));
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
+    }
+
+    /// 处理 Sa-Token 抛出的未登录异常(被踢下线/顶下线/过期等)
+    ///
+    /// Sa-Token 自身的 [cn.dev33.satoken.exception.NotLoginException] 与本项目自定义的
+    /// [NotLoginException] 同名但不同包, 互无继承关系; 前者继承自 [SaTokenException],
+    /// 若不在此单独处理, 会落入下方 [SaTokenException] 兜底而返回 500, 前端 401 拦截无法感知。
+    /// 按异常 type 映射不同 i18n 文案, 返回 401 以便前端识别并跳转登录页。
+    @ExceptionHandler(cn.dev33.satoken.exception.NotLoginException.class)
+    public ResponseEntity<Result<Void>> handleSaTokenNotLoginException(cn.dev33.satoken.exception.NotLoginException ex) {
+        String type = ex.getType();
+        // 按未登录原因映射 i18n 消息 key
+        String messageKey = switch (type) {
+            case cn.dev33.satoken.exception.NotLoginException.NOT_TOKEN      -> "error.auth.notToken";
+            case cn.dev33.satoken.exception.NotLoginException.INVALID_TOKEN  -> "error.auth.invalidToken";
+            case cn.dev33.satoken.exception.NotLoginException.TOKEN_TIMEOUT  -> "error.auth.tokenTimeout";
+            case cn.dev33.satoken.exception.NotLoginException.BE_REPLACED    -> "error.auth.beReplaced";
+            case cn.dev33.satoken.exception.NotLoginException.KICK_OUT       -> "error.auth.kickOut";
+            case cn.dev33.satoken.exception.NotLoginException.TOKEN_FREEZE   -> "error.auth.tokenFreeze";
+            default -> "error.auth.notLogin";
+        };
+        String message = I18nUtil.get(messageKey);
+        log.info("Sa-Token 未登录 type={}, key={}", type, messageKey);
+        Result<Void> result = Res.response(CommonErrorCode.AUTHENTICATION_FAIL, message, MDC.get(CommonCode.TRACE_ID));
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
     }
 
