@@ -19,6 +19,7 @@ import cn.daxpay.open.platform.iam.exception.auth.ApplicationNotFoundException;
 import cn.daxpay.open.platform.iam.result.user.UserInfoResult;
 import cn.daxpay.open.platform.iam.service.twofactor.UserTwoFactorService;
 import cn.daxpay.open.platform.iam.service.user.UserQueryService;
+import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformSessionManagementConfig;
 import cn.dev33.satoken.session.SaSession;
 import cn.dev33.satoken.stp.StpUtil;
 import cn.dev33.satoken.stp.parameter.SaLoginParameter;
@@ -55,6 +56,8 @@ public class TokenService {
     private final TwoFactorPreAuthService twoFactorPreAuthService;
 
     private final UserQueryService userQueryService;
+
+    private final IamSecurityConfigService iamSecurityConfigService;
 
     /// 登录
     public String login(HttpServletRequest request, HttpServletResponse response) {
@@ -197,6 +200,8 @@ public class TokenService {
         var saLoginModel = new SaLoginParameter()
                 .setDeviceType(clientCode)
                 .setIsLastingCookie(true);
+        // 应用会话管理配置(在线时长/活跃超时/并发策略)
+        this.applySessionConfig(saLoginModel, authInfoResult.getId());
 
         authInfoResult.setClient(clientCode)
                 .setLoginType(loginType);
@@ -204,6 +209,43 @@ public class TokenService {
         SaSession session = StpUtil.getSession();
         UserDetail userDetail = authInfoResult.getUserDetail();
         session.set(CommonCode.USER, userDetail);
+    }
+
+    /// 应用会话管理配置到 Sa-Token 登录参数
+    /// 配置未启用时跳过, 继续使用 application.yml 中的静态默认值
+    private void applySessionConfig(SaLoginParameter model, Object userId) {
+        PlatformSessionManagementConfig config = iamSecurityConfigService.getSessionManagement();
+        if (config == null || !Boolean.TRUE.equals(config.getEnabled())) {
+            return;
+        }
+        // 在线时长 -> token 固定有效期(秒)
+        if (config.getMaxOnlineHours() != null && config.getMaxOnlineHours() > 0) {
+            model.setTimeout(config.getMaxOnlineHours() * 3600L);
+        }
+        // 活跃超时 -> 无操作超时(秒), 0或null表示不限制
+        if (config.getActiveTimeoutHours() != null && config.getActiveTimeoutHours() > 0) {
+            model.setActiveTimeout(config.getActiveTimeoutHours() * 3600L);
+        }
+        // 并发登录策略
+        Integer max = config.getMaxConcurrentSessions();
+        String strategy = config.getConcurrentStrategy();
+        if ("KICK_OLDEST".equals(strategy) && max != null && max > 0) {
+            // 允许并发, 超出上限时 Sa-Token 自动注销最早的会话
+            model.setIsConcurrent(true).setMaxLoginCount(max);
+        }
+        else if ("DENY_NEW".equals(strategy) && max != null && max > 0) {
+            // 登录前预检: 已达上限则拒绝新登录
+            int current = StpUtil.getTokenValueListByLoginId(userId).size();
+            if (current >= max) {
+                throw new LoginFailureException("error.auth.concurrentLimitExceeded");
+            }
+            // 不设 maxLoginCount, 保持"拒绝"语义, 避免触发 Sa-Token 自动踢旧
+            model.setIsConcurrent(true);
+        }
+        else {
+            // NEW_SESSION 或未配置策略: 允许并发, 不限制数量
+            model.setIsConcurrent(true);
+        }
     }
 
     /// 退出

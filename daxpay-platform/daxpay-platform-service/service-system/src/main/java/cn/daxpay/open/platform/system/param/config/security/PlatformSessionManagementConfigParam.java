@@ -17,6 +17,9 @@ public class PlatformSessionManagementConfigParam {
     @Schema(description = "最大在线时长（小时）")
     private Integer maxOnlineHours;
 
+    @Schema(description = "最大活跃时长（小时），0或留空表示不限制")
+    private Integer activeTimeoutHours;
+
     @Schema(description = "最大并发会话数")
     private Integer maxConcurrentSessions;
 

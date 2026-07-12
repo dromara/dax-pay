@@ -13,6 +13,8 @@ public class PlatformSessionManagementConfig {
     private Boolean enabled;
     /// 最大在线时长（小时）
     private Integer maxOnlineHours;
+    /// 最大活跃时长(小时), 0或null表示不限制
+    private Integer activeTimeoutHours;
     /// 最大并发会话数
     private Integer maxConcurrentSessions;
     /// 并发会话策略
