@@ -1,9 +1,9 @@
 package cn.daxpay.open.platform.iam.auth.service;
 
-import cn.daxpay.open.platform.capability.auth.authentication.AuthenticationChallengeException;
 import cn.daxpay.open.platform.capability.auth.authentication.AuthenticationTemplate;
 import cn.daxpay.open.platform.capability.auth.authentication.Authenticator;
-import cn.daxpay.open.platform.capability.auth.authentication.PostAuthenticationChallenge;
+import cn.daxpay.open.platform.capability.auth.authentication.PostAuthenticationCheck;
+import cn.daxpay.open.platform.capability.auth.authentication.SecondaryAuthRequiredException;
 import cn.daxpay.open.platform.capability.auth.handler.LoginFailureHandler;
 import cn.daxpay.open.platform.capability.auth.handler.LoginSuccessHandler;
 import cn.daxpay.open.platform.capability.auth.util.SecurityUtil;
@@ -46,7 +46,7 @@ public class TokenService {
 
     private final AuthenticationTemplate authenticationTemplate;
 
-    private final List<PostAuthenticationChallenge> postAuthenticationChallenges;
+    private final List<PostAuthenticationCheck> postAuthenticationChecks;
 
     private final List<LoginSuccessHandler> loginSuccessHandlers;
 
@@ -74,11 +74,11 @@ public class TokenService {
             this.validateClient(loginAuthContext);
             // 认证并获取结果
             AuthInfoResult authInfoResult = this.authentication(loginAuthContext);
-            // 挑战 → 建会话 → 成功回调(与社交登录共用)
+            // 二次验证检查后建会话, 密码与社交登录共用
             return this.completeAuthenticatedLogin(authInfoResult, loginAuthContext);
         }
-        catch (AuthenticationChallengeException e) {
-            // 挑战流程: 不触发失败回调, 交由全局处理器返回挑战结果
+        catch (SecondaryAuthRequiredException e) {
+            // 需二次验证: 不走失败回调, 交给全局异常处理
             throw e;
         }
         catch (LoginFailureException e) {
@@ -88,13 +88,13 @@ public class TokenService {
         }
     }
 
-    /// 认证已通过后的统一收尾: 2FA 等挑战 → doSaLogin → 成功回调
+    /// 认证已通过后的统一收尾: 双因素等补验 → 建立会话 → 成功回调
     ///
-    /// 密码与社交登录共用, 保证会话超时/并发/deviceType 与 2FA 行为一致.
-    /// 若需 2FA 则抛 [AuthenticationChallengeException], 不建立最终会话.
+    /// 密码与社交登录共用, 保证会话超时/并发/deviceType 与双因素行为一致。
+    /// 若需双因素则抛 [SecondaryAuthRequiredException], 不建立最终会话。
     public String completeAuthenticatedLogin(AuthInfoResult authInfoResult, LoginAuthContext context) {
-        // 认证后挑战(双因素等)
-        this.applyChallenges(context, authInfoResult);
+        // 认证后补验(双因素等)
+        this.applyPostAuthChecks(context, authInfoResult);
         // 建立会话
         this.doSaLogin(authInfoResult, context.getClientCode(), context.getAuthLoginType());
         // 登录成功回调
@@ -137,11 +137,11 @@ public class TokenService {
         return StpUtil.getTokenValue();
     }
 
-    /// 认证后挑战: 任一挑战需要则抛出挑战异常(不计入登录失败)
-    private void applyChallenges(LoginAuthContext context, AuthInfoResult authInfoResult) {
-        for (PostAuthenticationChallenge challenge : postAuthenticationChallenges) {
-            if (challenge.required(context, authInfoResult)) {
-                throw challenge.createChallenge(context, authInfoResult);
+    /// 认证后补验: 任一扩展检查要求二次验证则抛异常(不计入登录失败)
+    private void applyPostAuthChecks(LoginAuthContext context, AuthInfoResult authInfoResult) {
+        for (PostAuthenticationCheck check : postAuthenticationChecks) {
+            if (check.required(context, authInfoResult)) {
+                throw check.createException(context, authInfoResult);
             }
         }
     }

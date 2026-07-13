@@ -163,12 +163,12 @@ public class SocialLoginService {
             }
             // 身份域 + 用户状态检查(对齐密码路径 UserInfoStatusCheck 链)
             this.validateSocialLoginUser(userId, clientCode, source, request, response);
-            // 统一建会话 + 2FA 挑战(TokenService.completeAuthenticatedLogin)
+            // 统一建会话(内含双因素检查, TokenService.completeAuthenticatedLogin)
             String token = socialLoginHandler.login(userId, clientCode, source, request, response);
             return new SocialExchangeResult().setToken(token);
         }
         catch (LoginFailureException e) {
-            // 业务拒绝 / 2FA 挑战(子类 AuthenticationChallengeException): 交给全局异常
+            // 业务拒绝或需二次验证: 原样抛出, 由全局处理器响应
             throw e;
         }
         catch (Exception e) {

@@ -10,7 +10,7 @@ import java.time.Duration;
 
 /// # 双因素认证预认证令牌服务
 ///
-/// 密码校验通过但用户已启用 2FA 时, 颁发一次性预认证令牌(preAuthToken)存入 Redis,
+/// 密码校验通过但用户已启用 2FA 时, 生成一次性预认证令牌(preAuthToken)存入 Redis,
 /// 携带登录上下文(userId/clientCode/loginType)。二次验证通过后凭此令牌恢复登录流程。
 /// 令牌单次有效, 5 分钟过期, 与 [cn.daxpay.open.platform.iam.auth.service.CaptchaService] 同模式。
 ///

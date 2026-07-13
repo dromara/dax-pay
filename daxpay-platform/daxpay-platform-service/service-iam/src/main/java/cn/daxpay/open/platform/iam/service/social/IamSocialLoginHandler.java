@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 /// # 社交登录处理器
 ///
 /// 在 LOGIN 场景下, 绑定关系与状态检查已通过后, 走 [TokenService.completeAuthenticatedLogin]
-/// 统一完成 2FA 挑战、会话建立(超时/并发)与成功回调.
+/// 统一做双因素检查、建会话(超时/并发)与成功回调。
 ///
 @Slf4j
 @Service
@@ -50,7 +50,7 @@ public class IamSocialLoginHandler {
                 .setAuthLoginType(source)
                 .setAuthProperties(platformStarterProperties.getAuth())
                 .setUserDetail(userDetail);
-        // 2FA 挑战 / 统一 doSaLogin / 成功日志
+        // 走统一登录收尾(含双因素检查)
         return tokenService.completeAuthenticatedLogin(authInfoResult, context);
     }
 }
