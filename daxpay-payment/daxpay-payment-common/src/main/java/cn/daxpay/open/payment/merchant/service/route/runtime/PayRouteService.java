@@ -11,7 +11,6 @@ import cn.daxpay.open.payment.merchant.service.route.model.RouteHit;
 import cn.daxpay.open.payment.merchant.entity.route.strategy.PayRouteStrategy;
 import cn.daxpay.open.payment.merchant.service.route.model.PayRouteBundle;
 import cn.daxpay.open.payment.strategy.ProductStrategySupport;
-import cn.daxpay.open.payment.route.PayRouteFacade;
 import cn.daxpay.open.payment.strategy.product.AbsProductStrategy;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
@@ -25,12 +24,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Objects;
 
 /// # 支付通道路由服务
 ///
-/// 实现 PayRouteFacade，供 NormalPayService 在支付流程中调用。
+/// 供支付流程（NormalPayService / GatewayPayHandleService）调用。
 /// 两种解析路径：
 /// 1. 直定模式：已传 channelMchNo，跳过路由，由 channelMchNo 推导产品；capability 必填，method 未传时由能力反推。
 /// 2. 路由模式：按 appId 加载策略，经基础/场景模式匹配后回填 product/channelMchNo/capability。
@@ -38,7 +36,7 @@ import java.util.Objects;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PayRouteService implements PayRouteFacade {
+public class PayRouteService {
 
     private final PayRouteStrategyManager strategyManager;
     private final PayRouteSceneConfigManager sceneConfigManager;
@@ -48,7 +46,6 @@ public class PayRouteService implements PayRouteFacade {
     private final PayRouteStrategyCapabilitySupport payRouteStrategyCapabilitySupport;
 
     /// 实付路由解析：直定模式优先，否则按策略模式匹配
-    @Override
     public void resolve(NormalPayParam payParam) {
         // 直定模式：指定通道商户号，跳过路由
         if (StrUtil.isNotBlank(payParam.getChannelMchNo())) {

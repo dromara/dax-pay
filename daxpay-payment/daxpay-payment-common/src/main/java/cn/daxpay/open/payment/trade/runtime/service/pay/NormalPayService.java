@@ -10,7 +10,7 @@ import cn.daxpay.open.payment.strategy.PaymentStrategyFactory;
 import cn.daxpay.open.payment.trade.runtime.bo.PayTradeResultBo;
 import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
-import cn.daxpay.open.payment.route.PayRouteFacade;
+import cn.daxpay.open.payment.merchant.service.route.runtime.PayRouteService;
 import cn.daxpay.open.payment.strategy.pay.AbsNormalPayStrategy;
 import cn.daxpay.open.payment.strategy.pay.PayStrategyContext;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
@@ -37,7 +37,7 @@ public class NormalPayService {
     private final PayUniHandleService payUniHandleService;
     private final LockTemplate lockTemplate;
     private final PayTradeManager payTradeManager;
-    private final PayRouteFacade payRouteFacade;
+    private final PayRouteService payRouteService;
     private final MerchantContextLoader merchantContextLoader;
 
     /// 支付入口
@@ -66,7 +66,7 @@ public class NormalPayService {
         var mchApp = merchantContextLoader.resolveApp(payParam.getMchNo(), payParam.getAppId());
         payParam.setAppId(mchApp.getAppId());
         // 路由解析：直定模式(已传 channelMchNo)直接解析，否则按 appId+method 策略匹配
-        payRouteFacade.resolve(payParam);
+        payRouteService.resolve(payParam);
         var payStrategy = PaymentStrategyFactory.createByProduct(payParam.getProduct(), AbsNormalPayStrategy.class);
         // 支付前处理: 校验与通道配置组装(只依赖请求参数), 失败直接抛出不持久化(订单尚未创建)
         var context = new PayStrategyContext().setPayParam(payParam);
