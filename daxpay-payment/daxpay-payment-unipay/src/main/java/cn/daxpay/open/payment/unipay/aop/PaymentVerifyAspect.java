@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
-/// # 支付签名切面(common.aop.PaymentVerify)
+/// # 开放支付验签切面（[PaymentVerify]）
 ///
 /// 执行顺序: 过滤器 -> 拦截器 -> 切面 -> 方法。
 /// 切面只负责"商户身份初始化 + 签名校验",不负责应用解析(由支付流程完成)。

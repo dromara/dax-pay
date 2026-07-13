@@ -5,9 +5,13 @@ import org.springframework.context.annotation.ComponentScan;
 
 /// # 商户自助端装配入口
 ///
-/// 扫描 `cn.daxpay.open.payment.merchant` 及其子包（controller），注册商户自助控制器。
-/// 本模块依赖 `daxpay-payment-common` 公共底座；商户领域 entity/dao/service 留公共层共享，
-/// 此处仅负责商户端 HTTP 接口的装配。
+/// 扫描 `cn.daxpay.open.payment.merchant` 及其子包，注册：
+/// - 商户端 HTTP 控制器（controller）
+/// - 端特有能力：登录 Handler、商户上下文 Filter、本端查询 service（如 MerchantInfo / ChannelConfig 展示）
+/// - 小程序编排 service
+///
+/// 本模块依赖 `daxpay-payment-common` 公共底座；商户领域 entity/dao 与多端共享 service
+/// （用户/应用/凭证/路由/权限等）仍在公共层，供 admin / unipay / 交易引擎共用。
 @AutoConfiguration
 @ComponentScan
 public class DaxpayMerchantApp {
