@@ -1,9 +1,9 @@
-package cn.daxpay.open.payment.web.develop.controller;
+package cn.daxpay.open.payment.admin.controller.develop;
 
 import cn.daxpay.open.payment.unipay.param.assist.GenerateAuthUrlParam;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
 import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
-import cn.daxpay.open.payment.web.develop.service.DevelopAuthService;
+import cn.daxpay.open.payment.admin.service.develop.DevelopAuthService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;

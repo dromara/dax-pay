@@ -1,6 +1,7 @@
 {
   "strategyNotFound": "Payment route strategy not configured for this app",
   "noMatch": "No available payment product matched",
+  "methodRequired": "Pay method is required in route mode",
   "providerRequired": "Pay brand is required when product is not specified",
   "methodRequiredWhenProductSet": "Pay method is required when product is specified",
   "basicProviderInvalid": "Invalid pay brand",

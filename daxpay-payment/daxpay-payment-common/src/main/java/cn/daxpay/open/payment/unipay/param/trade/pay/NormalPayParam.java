@@ -55,9 +55,10 @@ public class NormalPayParam extends MerchantPaymentCommonParam {
     private String product;
 
     /// 支付方式编码
+    /// - 路由模式: 必填, 由路由引擎按 appId+method 匹配
+    /// - 直定模式(已传 channelMchNo+capability): 可空, 由 PayRouteService 按能力反推回填
     /// @see PayMethodEnum
-    @Schema(description = "支付方式编码")
-    @NotBlank(message = "{validation.field.method.notBlank}")
+    @Schema(description = "支付方式编码(路由模式必填; 直定模式可空, 由能力反推)")
     @Size(max = 32, message = "{validation.field.method.size}")
     private String method;
 

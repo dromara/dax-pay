@@ -55,6 +55,10 @@ public class PayRouteService implements PayRouteFacade {
             resolveDirect(payParam);
             return;
         }
+        // 路由模式: 支付方式必填(Bean Validation 已放宽以兼容直定可空, 此处显式校验)
+        if (StrUtil.isBlank(payParam.getMethod())) {
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.route.error.methodRequired");
+        }
         String appId = payParam.getAppId();
         var bundle = loadBundle(appId);
         if (bundle == null || bundle.getStrategy() == null) {

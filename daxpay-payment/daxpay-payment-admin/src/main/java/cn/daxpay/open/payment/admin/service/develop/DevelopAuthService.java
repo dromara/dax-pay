@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.web.develop.service;
+package cn.daxpay.open.payment.admin.service.develop;
 
 import cn.daxpay.open.payment.core.assist.AuthSessionStore;
 import cn.daxpay.open.payment.core.assist.ChannelAuthService;

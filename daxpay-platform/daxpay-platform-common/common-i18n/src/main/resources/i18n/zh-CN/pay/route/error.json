@@ -1,6 +1,7 @@
 {
   "strategyNotFound": "应用未配置通道路由策略",
   "noMatch": "未匹配到可用支付产品",
+  "methodRequired": "路由模式下支付方式不能为空",
   "providerRequired": "未指定支付产品时，支付渠道不能为空",
   "methodRequiredWhenProductSet": "指定支付产品时，支付方式不能为空",
   "basicProviderInvalid": "支付渠道无效",

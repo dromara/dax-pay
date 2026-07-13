@@ -1,9 +1,9 @@
-package cn.daxpay.open.payment.web.develop.controller;
+package cn.daxpay.open.payment.admin.controller.develop;
 
-import cn.daxpay.open.payment.web.develop.param.DevelopSignParam;
-import cn.daxpay.open.payment.web.develop.param.DevelopVerifyParam;
-import cn.daxpay.open.payment.web.develop.result.DevelopSignResult;
-import cn.daxpay.open.payment.web.develop.service.DevelopSignService;
+import cn.daxpay.open.payment.admin.param.develop.DevelopSignParam;
+import cn.daxpay.open.payment.admin.param.develop.DevelopVerifyParam;
+import cn.daxpay.open.payment.admin.result.develop.DevelopSignResult;
+import cn.daxpay.open.payment.admin.service.develop.DevelopSignService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;

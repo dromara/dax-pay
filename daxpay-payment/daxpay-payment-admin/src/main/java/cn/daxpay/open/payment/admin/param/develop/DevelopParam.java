@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.web.develop.param;
+package cn.daxpay.open.payment.admin.param.develop;
 
 import cn.daxpay.open.payment.unipay.param.MerchantPaymentCommonParam;
 import io.swagger.v3.oas.annotations.media.Schema;

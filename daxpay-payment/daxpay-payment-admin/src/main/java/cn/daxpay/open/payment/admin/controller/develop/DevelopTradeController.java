@@ -1,9 +1,8 @@
-package cn.daxpay.open.payment.web.develop.controller;
+package cn.daxpay.open.payment.admin.controller.develop;
 
-import cn.daxpay.open.payment.web.develop.param.DevelopParam;
-import cn.daxpay.open.payment.web.develop.result.DevelopPayResult;
-import cn.daxpay.open.payment.web.develop.result.DevelopSignResult;
-import cn.daxpay.open.payment.web.develop.service.DevelopTradeService;
+import cn.daxpay.open.payment.admin.param.develop.DevelopParam;
+import cn.daxpay.open.payment.admin.result.develop.DevelopSignResult;
+import cn.daxpay.open.payment.admin.service.develop.DevelopTradeService;
 import cn.daxpay.open.payment.masterdata.constants.provider.result.PayProviderMethodResult;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.platform.core.annotation.PermCode;
@@ -24,6 +23,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 /// 交易开发调试(管理)
+///
+/// 仅提供签名与元数据辅助, 真实支付由前端模拟商户请求调用 `/unipay/pay`。
 @PermCode(menuCode = "develop:trade")
 @Tag(name = "交易开发调试服务")
 @RestController
@@ -38,13 +39,6 @@ public class DevelopTradeController {
     @PostMapping("/sign")
     public Result<DevelopSignResult> sign(@RequestBody DevelopParam<NormalPayParam> param) {
         return Res.ok(developTradeService.sign(param));
-    }
-
-    @PermCode(code = "pay", nameCn = "支付", nameEn = "Pay")
-    @Operation(summary = "支付调试(真实发起)")
-    @PostMapping("/pay")
-    public Result<DevelopPayResult> pay(@RequestBody DevelopParam<NormalPayParam> param) {
-        return Res.ok(developTradeService.pay(param));
     }
 
     @PermCode(code = "view", nameCn = "查看", nameEn = "View")
