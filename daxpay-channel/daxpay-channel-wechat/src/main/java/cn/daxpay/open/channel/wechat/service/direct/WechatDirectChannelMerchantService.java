@@ -4,8 +4,8 @@ import cn.daxpay.open.channel.wechat.dao.direct.WechatDirectChannelMerchantManag
 import cn.daxpay.open.channel.wechat.entity.direct.WechatDirectChannelMerchant;
 import cn.daxpay.open.channel.wechat.param.direct.WechatDirectChannelMerchantCreateParam;
 import cn.daxpay.open.channel.wechat.result.direct.WechatDirectChannelMerchantResult;
-import cn.daxpay.open.payment.channel.dao.ChannelMerchantManager;
-import cn.daxpay.open.payment.channel.entity.ChannelMerchant;
+import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
+import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.channel.ChannelMerchantSourceEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;

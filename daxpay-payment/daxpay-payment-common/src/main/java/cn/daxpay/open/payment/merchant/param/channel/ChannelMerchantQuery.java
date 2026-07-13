@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.channel.param;
+package cn.daxpay.open.payment.merchant.param.channel;
 
 import cn.daxpay.open.platform.core.annotation.QueryParam;
 import io.swagger.v3.oas.annotations.media.Schema;

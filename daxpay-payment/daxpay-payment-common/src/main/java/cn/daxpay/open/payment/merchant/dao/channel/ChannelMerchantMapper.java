@@ -1,6 +1,6 @@
-package cn.daxpay.open.payment.channel.dao;
+package cn.daxpay.open.payment.merchant.dao.channel;
 
-import cn.daxpay.open.payment.channel.entity.ChannelMerchant;
+import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
 import com.github.yulichang.base.MPJBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 

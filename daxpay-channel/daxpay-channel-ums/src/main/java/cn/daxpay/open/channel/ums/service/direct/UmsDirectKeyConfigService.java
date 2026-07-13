@@ -4,7 +4,7 @@ import cn.daxpay.open.channel.ums.convert.direct.UmsDirectKeyConfigConvert;
 import cn.daxpay.open.channel.ums.dao.direct.UmsDirectKeyConfigManager;
 import cn.daxpay.open.channel.ums.entity.direct.UmsDirectKeyConfig;
 import cn.daxpay.open.channel.ums.param.direct.UmsDirectKeyConfigParam;
-import cn.daxpay.open.payment.channel.dao.ChannelMerchantManager;
+import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

@@ -4,7 +4,7 @@ import cn.daxpay.open.channel.adapay.convert.direct.AdapayDirectKeyConfigConvert
 import cn.daxpay.open.channel.adapay.dao.direct.AdapayDirectKeyConfigManager;
 import cn.daxpay.open.channel.adapay.entity.direct.AdapayDirectKeyConfig;
 import cn.daxpay.open.channel.adapay.param.direct.AdapayDirectKeyConfigParam;
-import cn.daxpay.open.payment.channel.dao.ChannelMerchantManager;
+import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

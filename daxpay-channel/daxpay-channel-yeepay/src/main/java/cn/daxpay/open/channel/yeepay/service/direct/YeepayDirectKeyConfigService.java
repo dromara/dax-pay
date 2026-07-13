@@ -4,7 +4,7 @@ import cn.daxpay.open.channel.yeepay.convert.direct.YeepayDirectKeyConfigConvert
 import cn.daxpay.open.channel.yeepay.dao.direct.YeepayDirectKeyConfigManager;
 import cn.daxpay.open.channel.yeepay.entity.direct.YeepayDirectKeyConfig;
 import cn.daxpay.open.channel.yeepay.param.direct.YeepayDirectKeyConfigParam;
-import cn.daxpay.open.payment.channel.dao.ChannelMerchantManager;
+import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.channel.result;
+package cn.daxpay.open.payment.merchant.result.channel;
 
 import cn.daxpay.open.platform.core.enums.channel.ChannelMerchantSourceEnum;
 import cn.daxpay.open.payment.common.result.MchTradeBaseResult;
@@ -53,4 +53,3 @@ public class ChannelMerchantResult extends MchTradeBaseResult {
     private Boolean sandboxSupport;
 
 }
-

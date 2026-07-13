@@ -1,8 +1,8 @@
-package cn.daxpay.open.payment.channel.convert;
+package cn.daxpay.open.payment.merchant.convert.channel;
 
-import cn.daxpay.open.payment.channel.entity.ChannelMerchant;
-import cn.daxpay.open.payment.channel.param.ChannelMerchantGenParam;
-import cn.daxpay.open.payment.channel.result.ChannelMerchantResult;
+import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
+import cn.daxpay.open.payment.merchant.param.channel.ChannelMerchantGenParam;
+import cn.daxpay.open.payment.merchant.result.channel.ChannelMerchantResult;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

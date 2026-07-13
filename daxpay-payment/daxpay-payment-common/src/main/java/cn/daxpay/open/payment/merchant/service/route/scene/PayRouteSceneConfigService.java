@@ -1,7 +1,7 @@
 package cn.daxpay.open.payment.merchant.service.route.scene;
 
-import cn.daxpay.open.payment.channel.dao.ChannelMerchantManager;
-import cn.daxpay.open.payment.channel.entity.ChannelMerchant;
+import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
+import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
 import cn.daxpay.open.payment.merchant.dao.appinfo.MchAppInfoManager;
 import cn.daxpay.open.payment.merchant.dao.route.scene.PayRouteSceneConfigManager;
 import cn.daxpay.open.payment.merchant.dao.route.strategy.PayRouteStrategyManager;

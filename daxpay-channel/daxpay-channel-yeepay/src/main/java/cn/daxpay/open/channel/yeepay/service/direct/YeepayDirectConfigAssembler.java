@@ -2,8 +2,8 @@ package cn.daxpay.open.channel.yeepay.service.direct;
 
 import cn.daxpay.open.channel.yeepay.client.credential.YeepaySdkCredential;
 import cn.daxpay.open.channel.yeepay.entity.direct.YeepayDirectKeyConfig;
-import cn.daxpay.open.payment.channel.dao.ChannelMerchantManager;
-import cn.daxpay.open.payment.channel.entity.ChannelMerchant;
+import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
+import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
 import cn.daxpay.open.payment.masterdata.constants.product.dao.PayProductConfigManager;
 import cn.daxpay.open.payment.masterdata.constants.product.entity.PayProductConfig;
 import cn.daxpay.open.platform.core.enums.pay.config.PayEnvEnum;
