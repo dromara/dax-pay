@@ -1,7 +1,7 @@
 package cn.daxpay.open.payment.merchant.service.route.runtime;
 
-import cn.daxpay.open.payment.channel.dao.mch.ChannelMerchantManager;
-import cn.daxpay.open.payment.channel.entity.mch.ChannelMerchant;
+import cn.daxpay.open.payment.channel.dao.ChannelMerchantManager;
+import cn.daxpay.open.payment.channel.entity.ChannelMerchant;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.hutool.core.util.StrUtil;

@@ -1,9 +1,9 @@
 package cn.daxpay.open.payment.app.admin.service.channel;
 
-import cn.daxpay.open.payment.channel.param.mch.ChannelMerchantEditParam;
-import cn.daxpay.open.payment.channel.param.mch.ChannelMerchantQuery;
-import cn.daxpay.open.payment.channel.result.info.ChannelMerchantResult;
-import cn.daxpay.open.payment.channel.service.info.ChannelMerchantService;
+import cn.daxpay.open.payment.channel.param.ChannelMerchantEditParam;
+import cn.daxpay.open.payment.channel.param.ChannelMerchantQuery;
+import cn.daxpay.open.payment.channel.result.ChannelMerchantResult;
+import cn.daxpay.open.payment.channel.service.ChannelMerchantService;
 import cn.daxpay.open.payment.masterdata.constants.channel.result.PayChannelResult;
 import cn.daxpay.open.platform.core.rest.dto.LabelValue;
 import cn.daxpay.open.platform.core.rest.param.PageParam;

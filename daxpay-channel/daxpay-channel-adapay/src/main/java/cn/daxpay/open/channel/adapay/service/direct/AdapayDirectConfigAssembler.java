@@ -2,8 +2,8 @@ package cn.daxpay.open.channel.adapay.service.direct;
 
 import cn.daxpay.open.channel.adapay.client.credential.AdapaySdkCredential;
 import cn.daxpay.open.channel.adapay.entity.direct.AdapayDirectKeyConfig;
-import cn.daxpay.open.payment.channel.dao.mch.ChannelMerchantManager;
-import cn.daxpay.open.payment.channel.entity.mch.ChannelMerchant;
+import cn.daxpay.open.payment.channel.dao.ChannelMerchantManager;
+import cn.daxpay.open.payment.channel.entity.ChannelMerchant;
 import cn.daxpay.open.payment.masterdata.constants.product.dao.PayProductConfigManager;
 import cn.daxpay.open.payment.masterdata.constants.product.entity.PayProductConfig;
 import cn.daxpay.open.platform.core.enums.pay.config.PayEnvEnum;

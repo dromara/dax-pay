@@ -1,11 +1,11 @@
-package cn.daxpay.open.payment.channel.dao.mch;
+package cn.daxpay.open.payment.channel.dao;
 
 import cn.daxpay.open.platform.common.mybatisplus.impl.BaseManager;
 import cn.daxpay.open.platform.common.mybatisplus.query.generator.QueryGenerator;
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
-import cn.daxpay.open.payment.channel.entity.mch.ChannelMerchant;
-import cn.daxpay.open.payment.channel.param.mch.ChannelMerchantQuery;
+import cn.daxpay.open.payment.channel.entity.ChannelMerchant;
+import cn.daxpay.open.payment.channel.param.ChannelMerchantQuery;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;

@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.channel.service.info;
+package cn.daxpay.open.payment.channel.service;
 
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
@@ -6,11 +6,11 @@ import cn.daxpay.open.platform.core.rest.dto.LabelValue;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.payment.merchant.service.permission.MerchantPermissionService;
-import cn.daxpay.open.payment.channel.dao.mch.ChannelMerchantManager;
-import cn.daxpay.open.payment.channel.entity.mch.ChannelMerchant;
-import cn.daxpay.open.payment.channel.param.mch.ChannelMerchantEditParam;
-import cn.daxpay.open.payment.channel.param.mch.ChannelMerchantQuery;
-import cn.daxpay.open.payment.channel.result.info.ChannelMerchantResult;
+import cn.daxpay.open.payment.channel.dao.ChannelMerchantManager;
+import cn.daxpay.open.payment.channel.entity.ChannelMerchant;
+import cn.daxpay.open.payment.channel.param.ChannelMerchantEditParam;
+import cn.daxpay.open.payment.channel.param.ChannelMerchantQuery;
+import cn.daxpay.open.payment.channel.result.ChannelMerchantResult;
 import cn.daxpay.open.payment.masterdata.constants.channel.service.PayChannelService;
 import cn.daxpay.open.payment.masterdata.constants.channel.result.PayChannelResult;
 import cn.daxpay.open.payment.masterdata.constants.product.dao.PayProductManager;

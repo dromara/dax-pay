@@ -4,8 +4,8 @@ import cn.daxpay.open.channel.alipay.dao.direct.AlipayDirectChannelMerchantManag
 import cn.daxpay.open.channel.alipay.entity.direct.AlipayDirectChannelMerchant;
 import cn.daxpay.open.channel.alipay.param.direct.AlipayDirectChannelMerchantCreateParam;
 import cn.daxpay.open.channel.alipay.result.direct.AlipayDirectChannelMerchantResult;
-import cn.daxpay.open.payment.channel.dao.mch.ChannelMerchantManager;
-import cn.daxpay.open.payment.channel.entity.mch.ChannelMerchant;
+import cn.daxpay.open.payment.channel.dao.ChannelMerchantManager;
+import cn.daxpay.open.payment.channel.entity.ChannelMerchant;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.channel.ChannelMerchantSourceEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;

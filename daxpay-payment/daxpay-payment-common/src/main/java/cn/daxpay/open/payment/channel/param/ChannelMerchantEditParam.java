@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.channel.param.mch;
+package cn.daxpay.open.payment.channel.param;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;

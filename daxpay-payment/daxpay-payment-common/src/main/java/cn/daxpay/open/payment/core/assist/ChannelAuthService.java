@@ -1,7 +1,7 @@
 package cn.daxpay.open.payment.core.assist;
 
-import cn.daxpay.open.payment.channel.dao.mch.ChannelMerchantManager;
-import cn.daxpay.open.payment.channel.entity.mch.ChannelMerchant;
+import cn.daxpay.open.payment.channel.dao.ChannelMerchantManager;
+import cn.daxpay.open.payment.channel.entity.ChannelMerchant;
 import cn.daxpay.open.payment.common.service.MerchantContextLoader;
 import cn.daxpay.open.payment.core.strategy.PaymentStrategyFactory;
 import cn.daxpay.open.payment.core.strategy.auth.AbsChannelAuthStrategy;

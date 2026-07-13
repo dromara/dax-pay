@@ -1,10 +1,10 @@
-package cn.daxpay.open.payment.channel.entity.mch;
+package cn.daxpay.open.payment.channel.entity;
 
 import cn.daxpay.open.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.open.payment.common.entity.MchBaseEntity;
 import cn.daxpay.open.payment.channel.convert.ChannelMerchantConvert;
 import cn.daxpay.open.platform.core.enums.channel.ChannelMerchantSourceEnum;
-import cn.daxpay.open.payment.channel.result.info.ChannelMerchantResult;
+import cn.daxpay.open.payment.channel.result.ChannelMerchantResult;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;

@@ -4,8 +4,8 @@ import cn.daxpay.open.channel.douyin.dao.direct.DouyinDirectChannelMerchantManag
 import cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectChannelMerchant;
 import cn.daxpay.open.channel.douyin.param.direct.DouyinDirectChannelMerchantCreateParam;
 import cn.daxpay.open.channel.douyin.result.direct.DouyinDirectChannelMerchantResult;
-import cn.daxpay.open.payment.channel.dao.mch.ChannelMerchantManager;
-import cn.daxpay.open.payment.channel.entity.mch.ChannelMerchant;
+import cn.daxpay.open.payment.channel.dao.ChannelMerchantManager;
+import cn.daxpay.open.payment.channel.entity.ChannelMerchant;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.channel.ChannelMerchantSourceEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;

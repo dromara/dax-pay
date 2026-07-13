@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.channel.result.info;
+package cn.daxpay.open.payment.channel.result;
 
 import cn.daxpay.open.platform.core.enums.channel.ChannelMerchantSourceEnum;
 import cn.daxpay.open.payment.common.result.MchTradeBaseResult;
