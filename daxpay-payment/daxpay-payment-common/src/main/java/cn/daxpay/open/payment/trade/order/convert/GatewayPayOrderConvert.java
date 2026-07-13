@@ -1,7 +1,7 @@
-package cn.daxpay.open.payment.gateway.convert;
+package cn.daxpay.open.payment.trade.order.convert;
 
-import cn.daxpay.open.payment.gateway.entity.GatewayPayOrder;
-import cn.daxpay.open.payment.gateway.result.GatewayPayOrderResult;
+import cn.daxpay.open.payment.trade.order.entity.GatewayPayOrder;
+import cn.daxpay.open.payment.trade.order.result.GatewayPayOrderResult;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

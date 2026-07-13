@@ -19,6 +19,7 @@ import java.util.List;
 
 /// # 普通支付业务单容器
 ///
+/// 业务容器统一落在 trade.order（与 GatewayPayOrder 等同包，纯持久化无编排 service）。
 /// 普通支付场景的容器，承载商户业务单信息（bizOrderNo / 商品标题 / 回调地址 等）
 /// 与 pay_trade 一对一关联（trade_type = normal）
 /// 冗余存储金额/支付/时间线字段，便于后台查询无需 JOIN pay_trade

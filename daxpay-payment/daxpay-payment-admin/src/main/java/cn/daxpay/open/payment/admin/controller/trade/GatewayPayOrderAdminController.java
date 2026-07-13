@@ -1,7 +1,7 @@
 package cn.daxpay.open.payment.admin.controller.trade;
 
-import cn.daxpay.open.payment.gateway.param.GatewayPayOrderQuery;
-import cn.daxpay.open.payment.gateway.result.GatewayPayOrderResult;
+import cn.daxpay.open.payment.trade.order.param.GatewayPayOrderQuery;
+import cn.daxpay.open.payment.trade.order.result.GatewayPayOrderResult;
 import cn.daxpay.open.payment.admin.service.trade.GatewayPayOrderAdminService;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPaySyncResult;
 import cn.daxpay.open.platform.core.annotation.PermCode;

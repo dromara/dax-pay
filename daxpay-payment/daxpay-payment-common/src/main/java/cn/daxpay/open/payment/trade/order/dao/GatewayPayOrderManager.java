@@ -1,8 +1,8 @@
-package cn.daxpay.open.payment.gateway.dao;
+package cn.daxpay.open.payment.trade.order.dao;
 
 import cn.daxpay.open.payment.common.enums.GatewayOrderStatusEnum;
-import cn.daxpay.open.payment.gateway.entity.GatewayPayOrder;
-import cn.daxpay.open.payment.gateway.param.GatewayPayOrderQuery;
+import cn.daxpay.open.payment.trade.order.entity.GatewayPayOrder;
+import cn.daxpay.open.payment.trade.order.param.GatewayPayOrderQuery;
 import cn.daxpay.open.platform.common.mybatisplus.impl.BaseManager;
 import cn.daxpay.open.platform.common.mybatisplus.query.generator.QueryGenerator;
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;

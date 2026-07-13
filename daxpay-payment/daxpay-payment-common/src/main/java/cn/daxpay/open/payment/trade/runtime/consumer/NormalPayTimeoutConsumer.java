@@ -1,6 +1,6 @@
-package cn.daxpay.open.payment.trade.runtime.close.consumer;
+package cn.daxpay.open.payment.trade.runtime.consumer;
 
-import cn.daxpay.open.payment.trade.runtime.close.service.PayCloseService;
+import cn.daxpay.open.payment.trade.runtime.service.close.PayCloseService;
 import cn.daxpay.open.payment.trade.runtime.mq.NormalPayTimeoutMessage;
 import cn.daxpay.open.payment.trade.runtime.mq.PayArtemisConstants;
 import cn.daxpay.open.platform.common.json.util.JacksonUtil;

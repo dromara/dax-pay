@@ -1,11 +1,11 @@
-package cn.daxpay.open.payment.trade.runtime.close.job;
+package cn.daxpay.open.payment.trade.runtime.job;
 
-import cn.daxpay.open.payment.gateway.dao.GatewayPayOrderManager;
+import cn.daxpay.open.payment.trade.order.dao.GatewayPayOrderManager;
 import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
-import cn.daxpay.open.payment.gateway.entity.GatewayPayOrder;
+import cn.daxpay.open.payment.trade.order.entity.GatewayPayOrder;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
-import cn.daxpay.open.payment.trade.runtime.close.service.GatewayTimeoutService;
-import cn.daxpay.open.payment.trade.runtime.close.service.PayCloseService;
+import cn.daxpay.open.payment.trade.runtime.service.close.GatewayTimeoutService;
+import cn.daxpay.open.payment.trade.runtime.service.close.PayCloseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;

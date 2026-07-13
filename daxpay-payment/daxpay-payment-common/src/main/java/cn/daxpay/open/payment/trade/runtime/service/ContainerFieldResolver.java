@@ -4,8 +4,8 @@ import cn.daxpay.open.payment.common.enums.PayTradeTypeEnum;
 import cn.daxpay.open.payment.trade.order.dao.NormalPayOrderManager;
 import cn.daxpay.open.payment.trade.order.entity.NormalPayOrder;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
-import cn.daxpay.open.payment.gateway.dao.GatewayPayOrderManager;
-import cn.daxpay.open.payment.gateway.entity.GatewayPayOrder;
+import cn.daxpay.open.payment.trade.order.dao.GatewayPayOrderManager;
+import cn.daxpay.open.payment.trade.order.entity.GatewayPayOrder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

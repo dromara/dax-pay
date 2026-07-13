@@ -1,11 +1,11 @@
-package cn.daxpay.open.payment.trade.runtime.close.service;
+package cn.daxpay.open.payment.trade.runtime.service.close;
 
 import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.common.enums.GatewayOrderStatusEnum;
 import cn.daxpay.open.payment.common.enums.PayTradeTypeEnum;
-import cn.daxpay.open.payment.gateway.dao.GatewayPayOrderManager;
+import cn.daxpay.open.payment.trade.order.dao.GatewayPayOrderManager;
 import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
-import cn.daxpay.open.payment.gateway.entity.GatewayPayOrder;
+import cn.daxpay.open.payment.trade.order.entity.GatewayPayOrder;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.trade.runtime.service.pay.PayUniHandleService;
 import cn.hutool.core.util.StrUtil;

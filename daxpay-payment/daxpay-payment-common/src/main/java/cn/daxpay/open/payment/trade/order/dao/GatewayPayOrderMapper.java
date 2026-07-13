@@ -1,6 +1,6 @@
-package cn.daxpay.open.payment.gateway.dao;
+package cn.daxpay.open.payment.trade.order.dao;
 
-import cn.daxpay.open.payment.gateway.entity.GatewayPayOrder;
+import cn.daxpay.open.payment.trade.order.entity.GatewayPayOrder;
 import com.github.yulichang.base.MPJBaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 

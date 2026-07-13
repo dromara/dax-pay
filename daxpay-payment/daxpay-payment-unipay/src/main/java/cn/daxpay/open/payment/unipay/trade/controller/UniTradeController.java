@@ -8,7 +8,7 @@ import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.common.util.DaxRes;
 import cn.daxpay.open.payment.merchant.service.permission.MerchantPermissionService;
 import cn.daxpay.open.payment.unipay.aop.PaymentVerify;
-import cn.daxpay.open.payment.trade.runtime.close.service.PayCloseService;
+import cn.daxpay.open.payment.trade.runtime.service.close.PayCloseService;
 import cn.daxpay.open.payment.trade.runtime.service.pay.NormalPayService;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayCloseParam;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;

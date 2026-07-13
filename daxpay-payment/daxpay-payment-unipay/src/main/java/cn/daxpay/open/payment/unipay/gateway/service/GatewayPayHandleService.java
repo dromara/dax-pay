@@ -4,15 +4,15 @@ import cn.daxpay.open.payment.common.enums.GatewayOrderStatusEnum;
 import cn.daxpay.open.payment.common.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.common.enums.PayTradeTypeEnum;
 import cn.daxpay.open.payment.common.assist.MerchantContextLoader;
-import cn.daxpay.open.payment.route.PayRouteFacade;
+import cn.daxpay.open.payment.merchant.service.route.runtime.PayRouteService;
 import cn.daxpay.open.payment.strategy.PaymentStrategyFactory;
 import cn.daxpay.open.payment.strategy.pay.AbsNormalPayStrategy;
 import cn.daxpay.open.payment.strategy.pay.PayStrategyContext;
 import cn.daxpay.open.payment.trade.runtime.bo.PayTradeResultBo;
 import cn.daxpay.open.payment.trade.runtime.service.pay.PayUniHandleService;
-import cn.daxpay.open.payment.gateway.dao.GatewayPayOrderManager;
+import cn.daxpay.open.payment.trade.order.dao.GatewayPayOrderManager;
 import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
-import cn.daxpay.open.payment.gateway.entity.GatewayPayOrder;
+import cn.daxpay.open.payment.trade.order.entity.GatewayPayOrder;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
@@ -44,7 +44,7 @@ public class GatewayPayHandleService {
 
     private final GatewayPayOrderManager gatewayPayOrderManager;
     private final PayTradeManager payTradeManager;
-    private final PayRouteFacade payRouteFacade;
+    private final PayRouteService payRouteService;
     private final MerchantContextLoader merchantContextLoader;
     private final PayUniHandleService payUniHandleService;
     private final GatewayPayAssistService gatewayPayAssistService;
@@ -95,7 +95,7 @@ public class GatewayPayHandleService {
 
             // 组装路由用参数
             NormalPayParam payParam = this.buildPayParam(order, product, method, channelMchNo, capability, openId, clientIp);
-            payRouteFacade.resolve(payParam);
+            payRouteService.resolve(payParam);
             var payStrategy = PaymentStrategyFactory.createByProduct(payParam.getProduct(), AbsNormalPayStrategy.class);
             var context = new PayStrategyContext().setPayParam(payParam);
             payStrategy.doBeforePay(context);

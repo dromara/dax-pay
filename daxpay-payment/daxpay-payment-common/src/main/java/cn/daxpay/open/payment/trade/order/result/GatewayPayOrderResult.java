@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.gateway.result;
+package cn.daxpay.open.payment.trade.order.result;
 
 import cn.daxpay.open.platform.core.result.BaseResult;
 import io.swagger.v3.oas.annotations.media.Schema;

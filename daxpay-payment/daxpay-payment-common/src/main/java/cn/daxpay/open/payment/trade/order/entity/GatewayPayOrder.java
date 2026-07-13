@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.gateway.entity;
+package cn.daxpay.open.payment.trade.order.entity;
 
 import cn.daxpay.open.payment.common.entity.MchBaseEntity;
 import cn.daxpay.open.payment.common.enums.GatewayOrderStatusEnum;
@@ -20,6 +20,7 @@ import java.util.List;
 
 /// # 网关支付业务单容器
 ///
+/// 业务容器统一落在 trade.order（与 NormalPayOrder 同包）。
 /// 聚合扫码/收银台预下单场景: 创建时不知具体通道, 仅承载收款意图。
 /// 用户真正支付时再创建 pay_trade(trade_type=gateway) 并回填 channel/product/method。
 @Data

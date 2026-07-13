@@ -10,7 +10,7 @@ import cn.daxpay.open.payment.trade.order.entity.NormalPayOrder;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.trade.order.param.PayTradeQuery;
 import cn.daxpay.open.payment.trade.order.result.PayTradeResult;
-import cn.daxpay.open.payment.trade.runtime.close.service.PayCloseService;
+import cn.daxpay.open.payment.trade.runtime.service.close.PayCloseService;
 import cn.daxpay.open.payment.trade.runtime.service.sync.PaySyncService;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPaySyncResult;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
