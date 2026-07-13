@@ -5,9 +5,9 @@ import cn.daxpay.open.payment.device.enums.QrCodeAmountTypeEnum;
 import cn.daxpay.open.payment.device.enums.QrCodeStatusEnum;
 import cn.daxpay.open.payment.device.qrcode.dao.DeviceQrCodeManager;
 import cn.daxpay.open.payment.device.qrcode.entity.DeviceQrCode;
-import cn.daxpay.open.payment.device.qrcode.param.DeviceQrCodeBatchParam;
-import cn.daxpay.open.payment.device.qrcode.param.DeviceQrCodeBindMerchantParam;
-import cn.daxpay.open.payment.device.qrcode.param.DeviceQrCodeParam;
+import cn.daxpay.open.payment.admin.param.device.DeviceQrCodeBatchParam;
+import cn.daxpay.open.payment.admin.param.device.DeviceQrCodeBindMerchantParam;
+import cn.daxpay.open.payment.admin.param.device.DeviceQrCodeParam;
 import cn.daxpay.open.payment.device.qrcode.param.DeviceQrCodeQuery;
 import cn.daxpay.open.payment.device.qrcode.result.DeviceQrCodeResult;
 import cn.daxpay.open.payment.common.dto.MchAppInfoAccessInfo;
@@ -32,7 +32,7 @@ import java.util.stream.IntStream;
 /// # 支付码牌管理(运营端)
 ///
 /// 维护码牌台账, 支持批量创建空白码与划拨绑定商户。
-/// 扫码后的支付编排由 [CodePayAssistService] 承担。
+/// 扫码后的支付编排由 unipay 模块 CodePayAssistService 承担。
 @Slf4j
 @Service
 @RequiredArgsConstructor

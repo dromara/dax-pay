@@ -22,11 +22,23 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- 支付公共底座（传递获得 spring-boot-starter-web / mapstruct / validation / platform 各模块） -->
+        <!-- 支付公共底座（传递获得 spring-boot-starter-web / validation / platform 各模块） -->
         <dependency>
             <groupId>cn.daxpay.open</groupId>
             <artifactId>daxpay-payment-common</artifactId>
             <version>${project.version}</version>
+        </dependency>
+        <!-- 管理端 MapStruct Convert（PayTradeAdminConvert 等） -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+            <version>${mapstruct.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+            <scope>provided</scope>
+            <version>${mapstruct.version}</version>
         </dependency>
     </dependencies>
 

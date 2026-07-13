@@ -58,10 +58,10 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!-- 支付网关端（下单/退款/转账/查询/聚合支付） -->
+        <!-- 开放支付端（统一收单/网关产品/公开 H5） -->
         <dependency>
             <groupId>cn.daxpay.open</groupId>
-            <artifactId>daxpay-payment-gateway</artifactId>
+            <artifactId>daxpay-payment-unipay</artifactId>
             <version>${project.version}</version>
         </dependency>
 

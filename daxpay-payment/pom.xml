@@ -12,13 +12,13 @@
 
     <artifactId>daxpay-payment</artifactId>
     <packaging>pom</packaging>
-    <description>多商户支付功能实现（核心底座 + 运营端 + 商户端，单模块）</description>
+    <description>多商户支付功能（common 底座 + admin/app-admin/merchant/unipay 按端 HTTP）</description>
 
     <modules>
         <module>daxpay-payment-common</module>
         <module>daxpay-payment-admin</module>
         <module>daxpay-payment-app-admin</module>
-        <module>daxpay-payment-gateway</module>
+        <module>daxpay-payment-unipay</module>
         <module>daxpay-payment-merchant</module>
     </modules>
 

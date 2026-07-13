@@ -11,7 +11,7 @@
 
     <artifactId>daxpay-payment-common</artifactId>
     <packaging>jar</packaging>
-    <description>多商户支付功能实现（含核心底座、运营端、商户端）</description>
+    <description>支付公共底座（领域模型、交易引擎、开放 unipay/client HTTP，不含运营/商户端 Controller）</description>
 
     <dependencies>
         <!-- lombok -->

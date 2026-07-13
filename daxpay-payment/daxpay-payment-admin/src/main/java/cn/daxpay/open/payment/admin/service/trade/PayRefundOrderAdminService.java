@@ -3,7 +3,7 @@ package cn.daxpay.open.payment.admin.service.trade;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
-import cn.daxpay.open.payment.core.trade.order.convert.PayRefundOrderConvert;
+import cn.daxpay.open.payment.admin.convert.trade.PayRefundOrderConvert;
 import cn.daxpay.open.payment.core.trade.order.dao.PayRefundOrderManager;
 import cn.daxpay.open.payment.core.trade.order.entity.PayRefundOrder;
 import cn.daxpay.open.payment.core.trade.order.param.PayRefundOrderQuery;

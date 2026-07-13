@@ -1,8 +1,8 @@
 package cn.daxpay.open.payment.admin.controller.device;
 
-import cn.daxpay.open.payment.device.qrcode.param.DeviceQrCodeBatchParam;
-import cn.daxpay.open.payment.device.qrcode.param.DeviceQrCodeBindMerchantParam;
-import cn.daxpay.open.payment.device.qrcode.param.DeviceQrCodeParam;
+import cn.daxpay.open.payment.admin.param.device.DeviceQrCodeBatchParam;
+import cn.daxpay.open.payment.admin.param.device.DeviceQrCodeBindMerchantParam;
+import cn.daxpay.open.payment.admin.param.device.DeviceQrCodeParam;
 import cn.daxpay.open.payment.device.qrcode.param.DeviceQrCodeQuery;
 import cn.daxpay.open.payment.device.qrcode.result.DeviceQrCodeResult;
 import cn.daxpay.open.payment.admin.service.device.DeviceQrCodeAdminService;
