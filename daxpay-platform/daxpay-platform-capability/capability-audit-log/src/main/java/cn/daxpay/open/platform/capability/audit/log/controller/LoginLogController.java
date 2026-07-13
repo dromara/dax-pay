@@ -1,5 +1,7 @@
 package cn.daxpay.open.platform.capability.audit.log.controller;
 
+
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
@@ -19,7 +21,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
-@PermCode(menuCode = "system:log:login")
+@PermCode(menuCode = PermCodes.System.Log.Login.MENU)
 @Validated
 @Tag(name = "登录日志")
 @RestController
@@ -29,21 +31,21 @@ public class LoginLogController {
 
     private final LoginLogService loginLogService;
 
-    @PermCode(code = "view", nameCn = "登录日志查看", nameEn = "Login Log View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "登录日志查看", nameEn = "Login Log View")
     @Operation(summary = "分页")
     @GetMapping("/page")
     public Result<PageResult<LoginLogResult>> page(PageParam pageParam, LoginLogQuery query) {
         return Res.ok(loginLogService.page(pageParam, query));
     }
 
-    @PermCode(code = "view", nameCn = "登录日志查看", nameEn = "Login Log View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "登录日志查看", nameEn = "Login Log View")
     @Operation(summary = "获取")
     @GetMapping("/get")
     public Result<LoginLogResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(loginLogService.findById(id));
     }
 
-    @PermCode(code = "manage", nameCn = "登录日志管理", nameEn = "Login Log Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "登录日志管理", nameEn = "Login Log Manage")
     @Operation(summary = "清除指定天数之前的日志")
     @PostMapping("/delete-by-day")
     public Result<Void> deleteByDay(@NotNull(message = "{validation.field.deleteDay.notNull}") Integer deleteDay){

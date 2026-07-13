@@ -5,6 +5,7 @@ import cn.daxpay.open.channel.fuyou.param.isv.FuyouIsvKeyConfigParam;
 import cn.daxpay.open.channel.fuyou.result.isv.FuyouIsvKeyConfigResult;
 import cn.daxpay.open.channel.fuyou.service.isv.FuyouIsvKeyConfigService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /// # 富友服务商密钥配置
-@PermCode(menuCode = "payment:fuyou:isv")
+@PermCode(menuCode = PermCodes.Payment.Fuyou.MENU)
 @Validated
 @Tag(name = "富友服务商密钥配置")
 @RestController
@@ -29,7 +30,7 @@ public class FuyouIsvKeyConfigController {
 
     private final FuyouIsvKeyConfigService fuyouIsvKeyConfigService;
 
-    @PermCode(code = "view", nameCn = "富友服务商查看", nameEn = "Fuyou ISV View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "富友服务商查看", nameEn = "Fuyou ISV View")
     @Operation(summary = "查询富友服务商密钥配置")
     @GetMapping("/find-config")
     public Result<FuyouIsvKeyConfigResult> findConfig(
@@ -38,7 +39,7 @@ public class FuyouIsvKeyConfigController {
         return Res.ok(FuyouIsvKeyConfigConvert.CONVERT.toResult(fuyouIsvKeyConfigService.findByProduct(product, sandbox)));
     }
 
-    @PermCode(code = "manage", nameCn = "富友服务商管理", nameEn = "Fuyou ISV Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "富友服务商管理", nameEn = "Fuyou ISV Manage")
     @Operation(summary = "保存富友服务商密钥配置")
     @PostMapping("/save-config")
     public Result<Void> saveConfig(@RequestBody @Validated FuyouIsvKeyConfigParam param) {

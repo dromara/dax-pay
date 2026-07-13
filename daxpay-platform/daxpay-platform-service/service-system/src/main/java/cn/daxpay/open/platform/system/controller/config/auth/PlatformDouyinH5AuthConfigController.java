@@ -1,5 +1,7 @@
 package cn.daxpay.open.platform.system.controller.config.auth;
 
+
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
@@ -21,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 /// 管理抖音开放平台 H5 应用凭据(clientKey/clientSecret), 挂载在「三方平台管理」菜单下(与登录平台配置共享菜单权限)。
 /// 本配置独立于「三方平台登录配置」中的抖音 OAuth 登录凭据。
 ///
-@PermCode(menuCode = "iam:social:login-config")
+@PermCode(menuCode = PermCodes.Iam.Social.MENU)
 @Validated
 @Tag(name = "平台抖音开放平台 H5 应用认证配置")
 @RestController
@@ -31,14 +33,14 @@ public class PlatformDouyinH5AuthConfigController {
 
     private final PlatformDouyinH5AuthConfigService platformDouyinH5AuthConfigService;
 
-    @PermCode(code = "view", nameCn = "社交登录配置查看", nameEn = "Social Login Config View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "社交登录配置查看", nameEn = "Social Login Config View")
     @Operation(summary = "获取抖音 H5 应用认证配置")
     @GetMapping("/get")
     public Result<PlatformDouyinH5AuthConfigResult> getDouyinH5AuthConfig() {
         return Res.ok(platformDouyinH5AuthConfigService.findDouyinH5AuthConfig());
     }
 
-    @PermCode(code = "manage", nameCn = "社交登录配置管理", nameEn = "Social Login Config Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "社交登录配置管理", nameEn = "Social Login Config Manage")
     @Operation(summary = "更新抖音 H5 应用认证配置")
     @PostMapping("/update")
     public Result<Void> updateDouyinH5AuthConfig(@RequestBody @Validated PlatformDouyinH5AuthConfigParam param) {

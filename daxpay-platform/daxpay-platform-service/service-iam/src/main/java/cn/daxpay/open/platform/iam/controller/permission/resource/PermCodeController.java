@@ -1,6 +1,7 @@
 package cn.daxpay.open.platform.iam.controller.permission.resource;
 
 import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.entity.UserDetail;
 import cn.daxpay.open.platform.core.rest.Res;
@@ -28,7 +29,7 @@ import java.util.List;
 
 /// # 权限码管理
 ///
-@PermCode(menuCode = "iam:perm:menu")
+@PermCode(menuCode = PermCodes.Iam.PermMenu.MENU)
 @Validated
 @Tag(name = "权限码管理")
 @RestController
@@ -40,14 +41,14 @@ public class PermCodeController {
     private final UserRolePremService userRoleService;
     private final PermCodeScanService permCodeScanService;
 
-    @PermCode(code = "manage", nameCn = "菜单管理", nameEn = "Menu Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "菜单管理", nameEn = "Menu Manage")
     @Operation(summary = "手动扫描同步权限码")
     @PostMapping("/scan")
     public Result<PermCodeScanResult> scan() {
         return Res.ok(permCodeScanService.scan(new PermCodeScanParam()));
     }
 
-    @PermCode(code = "view", nameCn = "菜单查看", nameEn = "Menu View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "菜单查看", nameEn = "Menu View")
     @Operation(summary = "根据菜单查询权限码列表")
     @GetMapping("/get-by-menu")
     public Result<List<MenuPermCodeItemResult>> findByMenu(

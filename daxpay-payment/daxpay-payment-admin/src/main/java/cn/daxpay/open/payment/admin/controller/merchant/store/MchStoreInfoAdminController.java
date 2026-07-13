@@ -1,5 +1,7 @@
 package cn.daxpay.open.payment.admin.controller.merchant.store;
 
+
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.payment.merchant.param.store.MchStoreInfoParam;
 import cn.daxpay.open.payment.merchant.param.store.MchStoreInfoQuery;
 import cn.daxpay.open.payment.merchant.result.store.MchStoreInfoResult;
@@ -19,7 +21,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /// 门店信息管理(管理端)
-@PermCode(menuCode = "merchant:store")
+@PermCode(menuCode = PermCodes.Merchant.Store.MENU)
 @Validated
 @Tag(name = "门店信息管理(管理端)")
 @RestController
@@ -28,7 +30,7 @@ import org.springframework.web.bind.annotation.*;
 public class MchStoreInfoAdminController {
     private final MchStoreInfoService mchStoreInfoService;
 
-    @PermCode(code = "manage", nameCn = "门店管理", nameEn = "Store Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "门店管理", nameEn = "Store Manage")
     @Operation(summary = "新增门店")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) MchStoreInfoParam param) {
@@ -37,7 +39,7 @@ public class MchStoreInfoAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "manage", nameCn = "门店管理", nameEn = "Store Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "门店管理", nameEn = "Store Manage")
     @Operation(summary = "修改门店")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) MchStoreInfoParam param) {
@@ -46,21 +48,21 @@ public class MchStoreInfoAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "view", nameCn = "门店查看", nameEn = "Store View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "门店查看", nameEn = "Store View")
     @Operation(summary = "门店分页")
     @GetMapping("/page")
     public Result<PageResult<MchStoreInfoResult>> page(PageParam pageParam, MchStoreInfoQuery query) {
         return Res.ok(mchStoreInfoService.page(pageParam, query));
     }
 
-    @PermCode(code = "view", nameCn = "门店查看", nameEn = "Store View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "门店查看", nameEn = "Store View")
     @Operation(summary = "根据id查询门店")
     @GetMapping("/get")
     public Result<MchStoreInfoResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(mchStoreInfoService.findById(id));
     }
 
-    @PermCode(code = "manage", nameCn = "门店管理", nameEn = "Store Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "门店管理", nameEn = "Store Manage")
     @Operation(summary = "删除门店")
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {

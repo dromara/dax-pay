@@ -1,5 +1,7 @@
 package cn.daxpay.open.payment.admin.controller.develop;
 
+
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.payment.admin.param.develop.DevelopSignParam;
 import cn.daxpay.open.payment.admin.param.develop.DevelopVerifyParam;
 import cn.daxpay.open.payment.admin.result.develop.DevelopSignResult;
@@ -16,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /// 签名调试(管理)
-@PermCode(menuCode = "develop:sign")
+@PermCode(menuCode = PermCodes.Develop.Sign.MENU)
 @Tag(name = "签名调试服务")
 @RestController
 @RequestMapping("/admin/develop/sign")
@@ -25,14 +27,14 @@ public class DevelopSignController {
 
     private final DevelopSignService developSignService;
 
-    @PermCode(code = "view", nameCn = "查看", nameEn = "View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "查看", nameEn = "View")
     @Operation(summary = "生成签名")
     @PostMapping("/gen")
     public Result<DevelopSignResult> sign(@RequestBody DevelopSignParam param) {
         return Res.ok(developSignService.sign(param));
     }
 
-    @PermCode(code = "view", nameCn = "查看", nameEn = "View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "查看", nameEn = "View")
     @Operation(summary = "验签")
     @PostMapping("/verify")
     public Result<Boolean> verify(@RequestBody DevelopVerifyParam param) {

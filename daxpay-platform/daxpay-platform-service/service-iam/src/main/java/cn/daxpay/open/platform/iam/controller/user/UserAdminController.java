@@ -1,6 +1,7 @@
 package cn.daxpay.open.platform.iam.controller.user;
 
 import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
@@ -26,7 +27,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
-@PermCode(menuCode = "iam:user:manager")
+@PermCode(menuCode = PermCodes.Iam.UserManager.MENU)
 @Validated
 @Tag(name = "管理用户(管理员级别)")
 @RestController
@@ -38,14 +39,14 @@ public class UserAdminController {
 
     private final UserQueryService userQueryService;
 
-    @PermCode(code = "view", nameCn = "用户查看", nameEn = "User View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "用户查看", nameEn = "User View")
     @Operation(summary = "根据用户id查询用户")
     @GetMapping("/get")
     public Result<UserInfoResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(userQueryService.findById(id));
     }
 
-    @PermCode(code = "manage", nameCn = "用户管理", nameEn = "User Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "用户管理", nameEn = "User Manage")
     @Operation(summary = "添加用户")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) UserInfoParam userInfoParam) {
@@ -53,7 +54,7 @@ public class UserAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "manage", nameCn = "用户管理", nameEn = "User Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "用户管理", nameEn = "User Manage")
     @Operation(summary = "修改用户")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) UserInfoParam userInfoParam) {
@@ -61,7 +62,7 @@ public class UserAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "reset_password", nameCn = "重置密码", nameEn = "Reset Password")
+    @PermCode(code = PermCodes.Action.RESET_PASSWORD, nameCn = "重置密码", nameEn = "Reset Password")
     @Operation(summary = "重置密码")
     @PostMapping("/restart-password")
     public Result<Void> restartPassword(@RequestBody @Validated RestartPwdParam param) {
@@ -69,7 +70,7 @@ public class UserAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "reset_password", nameCn = "重置密码", nameEn = "Reset Password")
+    @PermCode(code = PermCodes.Action.RESET_PASSWORD, nameCn = "重置密码", nameEn = "Reset Password")
     @Operation(summary = "批量重置密码")
     @PostMapping("/restart-password-batch")
     public Result<Void> restartPasswordBatch(@RequestBody @Validated RestartPwdBatchParam param) {
@@ -77,7 +78,7 @@ public class UserAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "status", nameCn = "用户状态管理", nameEn = "User Status Manage")
+    @PermCode(code = PermCodes.Action.STATUS, nameCn = "用户状态管理", nameEn = "User Status Manage")
     @Operation(summary = "封禁用户")
     @PostMapping("/ban")
     public Result<Void> ban(@NotNull(message = "{validation.field.userId.notNull}") Long userId) {
@@ -85,7 +86,7 @@ public class UserAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "status", nameCn = "用户状态管理", nameEn = "User Status Manage")
+    @PermCode(code = PermCodes.Action.STATUS, nameCn = "用户状态管理", nameEn = "User Status Manage")
     @Operation(summary = "批量封禁用户")
     @PostMapping("/ban-batch")
     public Result<Void> banBatch(@RequestBody @Validated UserBatchParam param) {
@@ -93,7 +94,7 @@ public class UserAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "status", nameCn = "用户状态管理", nameEn = "User Status Manage")
+    @PermCode(code = PermCodes.Action.STATUS, nameCn = "用户状态管理", nameEn = "User Status Manage")
     @Operation(summary = "解锁用户")
     @PostMapping("/unlock")
     public Result<Void> unlock(@NotNull(message = "{validation.field.userId.notNull}") Long userId) {
@@ -101,7 +102,7 @@ public class UserAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "status", nameCn = "用户状态管理", nameEn = "User Status Manage")
+    @PermCode(code = PermCodes.Action.STATUS, nameCn = "用户状态管理", nameEn = "User Status Manage")
     @Operation(summary = "批量解锁用户")
     @PostMapping("/unlock-batch")
     public Result<Void> unlockBatch(@RequestBody @Validated UserBatchParam param) {
@@ -109,7 +110,7 @@ public class UserAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "status", nameCn = "用户状态管理", nameEn = "User Status Manage")
+    @PermCode(code = PermCodes.Action.STATUS, nameCn = "用户状态管理", nameEn = "User Status Manage")
     @Operation(summary = "锁定用户")
     @PostMapping("/lock")
     public Result<Void> lock(@NotNull(message = "{validation.field.userId.notNull}") Long userId) {
@@ -117,7 +118,7 @@ public class UserAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "status", nameCn = "用户状态管理", nameEn = "User Status Manage")
+    @PermCode(code = PermCodes.Action.STATUS, nameCn = "用户状态管理", nameEn = "User Status Manage")
     @Operation(summary = "批量锁定用户")
     @PostMapping("/lock-batch")
     public Result<Void> lockBatch(@RequestBody @Validated UserBatchParam param) {
@@ -125,7 +126,7 @@ public class UserAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "view", nameCn = "用户查看", nameEn = "User View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "用户查看", nameEn = "User View")
     @Operation(summary = "用户分页")
     @GetMapping("/page")
     public Result<PageResult<UserWholeInfoResult>> page(PageParam pageParam, UserInfoQuery query) {

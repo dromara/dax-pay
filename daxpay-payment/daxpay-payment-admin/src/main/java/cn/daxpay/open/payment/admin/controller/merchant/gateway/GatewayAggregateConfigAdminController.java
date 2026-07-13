@@ -4,6 +4,7 @@ import cn.daxpay.open.payment.merchant.param.gateway.GatewayAggregateConfigParam
 import cn.daxpay.open.payment.merchant.result.gateway.GatewayAggregateConfigResult;
 import cn.daxpay.open.payment.merchant.service.gateway.GatewayAggregateConfigService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,7 +15,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /// # 网关聚合扫码配置(管理)
-@PermCode(menuCode = "merchant:gateway-aggregate")
+@PermCode(menuCode = PermCodes.Merchant.GatewayAggregate.MENU)
 @Validated
 @Tag(name = "网关聚合扫码配置")
 @RestController
@@ -24,7 +25,7 @@ public class GatewayAggregateConfigAdminController {
 
     private final GatewayAggregateConfigService gatewayAggregateConfigService;
 
-    @PermCode(code = "view", nameCn = "配置查看", nameEn = "Config View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "配置查看", nameEn = "Config View")
     @Operation(summary = "按应用查询聚合扫码配置")
     @GetMapping("/get-by-app-id")
     public Result<GatewayAggregateConfigResult> getByAppId(
@@ -32,7 +33,7 @@ public class GatewayAggregateConfigAdminController {
         return Res.ok(gatewayAggregateConfigService.findByAppId(appId));
     }
 
-    @PermCode(code = "update", nameCn = "配置更新", nameEn = "Config Update")
+    @PermCode(code = PermCodes.Action.UPDATE, nameCn = "配置更新", nameEn = "Config Update")
     @Operation(summary = "保存或更新聚合扫码配置")
     @PostMapping("/save-or-update")
     public Result<Void> saveOrUpdate(@RequestBody @Validated GatewayAggregateConfigParam param) {

@@ -1,5 +1,7 @@
 package cn.daxpay.open.channel.alipay.controller.isv;
 
+
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
@@ -23,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /// # 支付宝服务商通道商户管理
 ///
-@PermCode(menuCode = "channel:merchant")
+@PermCode(menuCode = PermCodes.Channel.Merchant.MENU)
 @Validated
 @Tag(name = "支付宝服务商通道商户管理")
 @RestController
@@ -34,7 +36,7 @@ public class AlipayIsvChannelMerchantController {
     private final AlipayIsvChannelMerchantService alipayIsvChannelMerchantService;
     private final AlipayIsvAuthService alipayIsvAuthService;
 
-    @PermCode(code = "view", nameCn = "通道商户查看", nameEn = "Channel Merchant View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
     @Operation(summary = "根据通道商户号查询支付宝服务商通道商户配置")
     @GetMapping("/find-by-channel-mch-no")
     public Result<AlipayIsvChannelMerchantResult> findByChannelMchNo(
@@ -42,7 +44,7 @@ public class AlipayIsvChannelMerchantController {
         return Res.ok(alipayIsvChannelMerchantService.findByChannelMchNo(channelMchNo));
     }
 
-    @PermCode(code = "manage", nameCn = "通道商户管理", nameEn = "Channel Merchant Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.Merchant.MANAGE_NAME_CN, nameEn = PermCodes.Channel.Merchant.MANAGE_NAME_EN)
     @Operation(summary = "创建支付宝服务商通道商户")
     @PostMapping("/create")
     public Result<Void> create(@RequestBody @Validated AlipayIsvChannelMerchantCreateParam param) {
@@ -50,7 +52,7 @@ public class AlipayIsvChannelMerchantController {
         return Res.ok();
     }
 
-    @PermCode(code = "manage", nameCn = "通道商户管理", nameEn = "Channel Merchant Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.Merchant.MANAGE_NAME_CN, nameEn = PermCodes.Channel.Merchant.MANAGE_NAME_EN)
     @Operation(summary = "更新应用授权令牌")
     @PostMapping("/update-app-auth-token")
     public Result<Void> updateAppAuthToken(@RequestBody @Validated AlipayIsvAppAuthTokenUpdateParam param) {
@@ -58,14 +60,14 @@ public class AlipayIsvChannelMerchantController {
         return Res.ok();
     }
 
-    @PermCode(code = "manage", nameCn = "通道商户管理", nameEn = "Channel Merchant Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.Merchant.MANAGE_NAME_CN, nameEn = PermCodes.Channel.Merchant.MANAGE_NAME_EN)
     @Operation(summary = "生成代运营授权链接")
     @PostMapping("/gen-auth-url")
     public Result<AlipayIsvAuthUrlResult> genAuthUrl(@RequestBody @Validated AlipayIsvAuthParam param) {
         return Res.ok(alipayIsvAuthService.genAuthUrl(param));
     }
 
-    @PermCode(code = "view", nameCn = "通道商户查看", nameEn = "Channel Merchant View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
     @Operation(summary = "获取代运营授权回调地址")
     @GetMapping("/auth-callback-url")
     public Result<String> getAuthCallbackUrl() {

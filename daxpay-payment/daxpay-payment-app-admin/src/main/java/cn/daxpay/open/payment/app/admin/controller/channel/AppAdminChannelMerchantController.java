@@ -6,6 +6,7 @@ import cn.daxpay.open.payment.channel.param.mch.ChannelMerchantQuery;
 import cn.daxpay.open.payment.channel.result.info.ChannelMerchantResult;
 import cn.daxpay.open.payment.masterdata.constants.channel.result.PayChannelResult;
 import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.dto.LabelValue;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /// 运营移动端-商户通道商户管理
-@PermCode(menuCode = "channel:merchant")
+@PermCode(menuCode = PermCodes.Channel.Merchant.MENU)
 @Validated
 @Tag(name = "运营移动端-商户通道商户管理")
 @RestController
@@ -32,21 +33,21 @@ public class AppAdminChannelMerchantController {
 
     private final AppAdminChannelMerchantService channelMerchantService;
 
-    @PermCode(code = "view", nameCn = "通道商户查看", nameEn = "Channel Merchant View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
     @Operation(summary = "分页查询")
     @GetMapping("/page")
     public Result<PageResult<ChannelMerchantResult>> page(PageParam pageParam, ChannelMerchantQuery query) {
         return Res.ok(channelMerchantService.page(pageParam, query));
     }
 
-    @PermCode(code = "view", nameCn = "通道商户查看", nameEn = "Channel Merchant View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
     @Operation(summary = "查询详情")
     @GetMapping("/get")
     public Result<ChannelMerchantResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(channelMerchantService.findById(id));
     }
 
-    @PermCode(code = "view", nameCn = "通道商户查看", nameEn = "Channel Merchant View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
     @Operation(summary = "根据商户号查询所有通道商户")
     @GetMapping("/all-by-mch-no")
     public Result<List<ChannelMerchantResult>> findAllByMchNo(
@@ -54,7 +55,7 @@ public class AppAdminChannelMerchantController {
         return Res.ok(channelMerchantService.findAllByMchNo(mchNo));
     }
 
-    @PermCode(code = "manage", nameCn = "通道商户管理", nameEn = "Channel Merchant Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.Merchant.MANAGE_NAME_CN, nameEn = PermCodes.Channel.Merchant.MANAGE_NAME_EN)
     @Operation(summary = "更新启用状态")
     @PostMapping("/update-enable")
     public Result<Void> updateEnable(
@@ -64,7 +65,7 @@ public class AppAdminChannelMerchantController {
         return Res.ok();
     }
 
-    @PermCode(code = "manage", nameCn = "通道商户管理", nameEn = "Channel Merchant Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.Merchant.MANAGE_NAME_CN, nameEn = PermCodes.Channel.Merchant.MANAGE_NAME_EN)
     @Operation(summary = "修改商户名称")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated ChannelMerchantEditParam param) {
@@ -72,7 +73,7 @@ public class AppAdminChannelMerchantController {
         return Res.ok();
     }
 
-    @PermCode(code = "view", nameCn = "通道商户查看", nameEn = "Channel Merchant View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
     @Operation(summary = "根据商户和通道查询通道商户号列表")
     @GetMapping("/dropdown")
     public Result<List<LabelValue>> dropdown(
@@ -81,7 +82,7 @@ public class AppAdminChannelMerchantController {
         return Res.ok(channelMerchantService.dropdown(mchNo, channel));
     }
 
-    @PermCode(code = "view", nameCn = "通道商户查看", nameEn = "Channel Merchant View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
     @Operation(summary = "根据商户号查询通道")
     @GetMapping("/channel/dropdown-by-mch-no")
     public Result<List<PayChannelResult>> dropdownByMchNo(

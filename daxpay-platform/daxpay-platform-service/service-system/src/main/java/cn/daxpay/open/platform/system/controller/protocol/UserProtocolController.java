@@ -8,6 +8,7 @@ import cn.daxpay.open.platform.system.result.protocol.UserProtocolContentResult;
 import cn.daxpay.open.platform.system.result.protocol.UserProtocolResult;
 import cn.daxpay.open.platform.system.service.protocol.UserProtocolService;
 import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.daxpay.open.platform.core.rest.dto.LabelValue;
@@ -28,7 +29,7 @@ import java.util.List;
 
 /// # 用户协议控制器
 ///
-@PermCode(menuCode = "system:protocol")
+@PermCode(menuCode = PermCodes.System.Protocol.MENU)
 @Validated
 @Tag(name = "用户协议")
 @RestController
@@ -42,7 +43,7 @@ public class UserProtocolController {
     /// @param pageParam 分页参数
     /// @param query 查询条件
     /// @return 用户协议分页结果
-    @PermCode(code = "view", nameCn = "协议查看", nameEn = "Protocol View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "协议查看", nameEn = "Protocol View")
     @Operation(summary = "分页")
     @GetMapping("/page")
     public Result<PageResult<UserProtocolResult>> page(PageParam pageParam, UserProtocolQuery query){
@@ -53,7 +54,7 @@ public class UserProtocolController {
     ///
     /// @param param 用户协议参数
     /// @return 操作结果
-    @PermCode(code = "manage", nameCn = "协议管理", nameEn = "Protocol Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "协议管理", nameEn = "Protocol Manage")
     @Operation(summary = "新增")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody  @Validated(ValidationGroup.add.class) UserProtocolParam param){
@@ -65,7 +66,7 @@ public class UserProtocolController {
     ///
     /// @param param 用户协议参数
     /// @return 操作结果
-    @PermCode(code = "manage", nameCn = "协议管理", nameEn = "Protocol Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "协议管理", nameEn = "Protocol Manage")
     @Operation(summary = "修改")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody  @Validated(ValidationGroup.edit.class) UserProtocolParam param){
@@ -77,7 +78,7 @@ public class UserProtocolController {
     ///
     /// @param id 协议ID
     /// @return 操作结果
-    @PermCode(code = "manage", nameCn = "协议管理", nameEn = "Protocol Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "协议管理", nameEn = "Protocol Manage")
     @Operation(summary = "删除")
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id){
@@ -89,7 +90,7 @@ public class UserProtocolController {
     ///
     /// @param id 协议ID
     /// @return 用户协议信息
-    @PermCode(code = "view", nameCn = "协议查看", nameEn = "Protocol View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "协议查看", nameEn = "Protocol View")
     @Operation(summary = "查询")
     @GetMapping("/get")
     public Result<UserProtocolResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id){
@@ -111,7 +112,7 @@ public class UserProtocolController {
         return Res.ok(userProtocolService.findDefault(type, clientType, language));
     }
 
-    @PermCode(code = "view", nameCn = "协议查看", nameEn = "Protocol View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "协议查看", nameEn = "Protocol View")
     @Operation(summary = "协议类型列表")
     @GetMapping("/type-options")
     public Result<List<LabelValue>> typeOptions(){
@@ -120,7 +121,7 @@ public class UserProtocolController {
                 .toList());
     }
 
-    @PermCode(code = "view", nameCn = "协议查看", nameEn = "Protocol View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "协议查看", nameEn = "Protocol View")
     @Operation(summary = "协议端类型列表")
     @GetMapping("/client-type-options")
     public Result<List<LabelValue>> clientTypeOptions(){
@@ -133,7 +134,7 @@ public class UserProtocolController {
     ///
     /// @param id 协议ID
     /// @return 操作结果
-    @PermCode(code = "manage", nameCn = "协议管理", nameEn = "Protocol Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "协议管理", nameEn = "Protocol Manage")
     @Operation(summary = "设置默认")
     @PostMapping("/set-default")
     public Result<Void> setDefault(@NotNull(message = "{validation.field.id.notNull}") Long id){
@@ -145,7 +146,7 @@ public class UserProtocolController {
     ///
     /// @param id 协议ID
     /// @return 操作结果
-    @PermCode(code = "manage", nameCn = "协议管理", nameEn = "Protocol Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "协议管理", nameEn = "Protocol Manage")
     @Operation(summary = "取消默认")
     @PostMapping("/cancel-default")
     public Result<Void> cancelDefault(@NotNull(message = "{validation.field.id.notNull}") Long id){
@@ -158,7 +159,7 @@ public class UserProtocolController {
     /// @param id 源协议ID
     /// @param clientType 目标端类型
     /// @return 目标协议ID
-    @PermCode(code = "manage", nameCn = "协议管理", nameEn = "Protocol Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "协议管理", nameEn = "Protocol Manage")
     @Operation(summary = "复制到其他端")
     @PostMapping("/copy-to-client")
     public Result<Long> copyToClient(@NotNull(message = "{validation.field.id.notNull}") Long id,

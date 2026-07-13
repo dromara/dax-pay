@@ -5,6 +5,7 @@ import cn.daxpay.open.channel.douyin.result.DouyinCapabilityOption;
 import cn.daxpay.open.channel.douyin.result.direct.DouyinDirectAppCapabilityResult;
 import cn.daxpay.open.channel.douyin.service.direct.DouyinDirectAppCapabilityService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,7 +25,7 @@ import java.util.List;
 ///
 /// 提供通道商户维度下「支付能力 → 直连应用」绑定关系的查询、批量保存及能力候选查询。
 ///
-@PermCode(menuCode = "channel:douyin:app")
+@PermCode(menuCode = PermCodes.Channel.DouyinApp.MENU)
 @Validated
 @Tag(name = "抖音直连商户应用支付能力关联管理")
 @RestController
@@ -34,7 +35,7 @@ public class DouyinDirectAppCapabilityController {
 
     private final DouyinDirectAppCapabilityService douyinDirectAppCapabilityService;
 
-    @PermCode(code = "view", nameCn = "通道商户查看", nameEn = "Channel Merchant View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
     @Operation(summary = "查询通道商户的能力应用关联列表")
     @GetMapping("/list-by-channel-mch-no")
     public Result<List<DouyinDirectAppCapabilityResult>> listByChannelMchNo(
@@ -43,7 +44,7 @@ public class DouyinDirectAppCapabilityController {
         return Res.ok(douyinDirectAppCapabilityService.listByChannelMchNo(mchNo, channelMchNo));
     }
 
-    @PermCode(code = "manage", nameCn = "通道商户管理", nameEn = "Channel Merchant Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.Merchant.MANAGE_NAME_CN, nameEn = PermCodes.Channel.Merchant.MANAGE_NAME_EN)
     @Operation(summary = "全量保存能力应用关联")
     @PostMapping("/save-batch")
     public Result<Void> saveBatch(@RequestBody @Validated DouyinDirectAppCapabilityBatchParam param) {
@@ -51,7 +52,7 @@ public class DouyinDirectAppCapabilityController {
         return Res.ok();
     }
 
-    @PermCode(code = "view", nameCn = "通道商户查看", nameEn = "Channel Merchant View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
     @Operation(summary = "查询抖音直连支持的支付能力候选")
     @GetMapping("/list-supported-capabilities")
     public Result<List<DouyinCapabilityOption>> listSupportedCapabilities() {

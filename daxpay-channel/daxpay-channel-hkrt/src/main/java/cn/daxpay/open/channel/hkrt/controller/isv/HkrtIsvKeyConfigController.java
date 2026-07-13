@@ -5,6 +5,7 @@ import cn.daxpay.open.channel.hkrt.param.isv.HkrtIsvKeyConfigParam;
 import cn.daxpay.open.channel.hkrt.result.isv.HkrtIsvKeyConfigResult;
 import cn.daxpay.open.channel.hkrt.service.isv.HkrtIsvKeyConfigService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /// # 海科融通服务商密钥配置
 ///
-@PermCode(menuCode = "payment:hkrt:isv")
+@PermCode(menuCode = PermCodes.Payment.Hkrt.MENU)
 @Validated
 @Tag(name = "海科融通服务商密钥配置")
 @RestController
@@ -30,7 +31,7 @@ public class HkrtIsvKeyConfigController {
 
     private final HkrtIsvKeyConfigService hkrtIsvKeyConfigService;
 
-    @PermCode(code = "view", nameCn = "海科融通服务商查看", nameEn = "Hkrt ISV View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "海科融通服务商查看", nameEn = "Hkrt ISV View")
     @Operation(summary = "查询海科融通服务商密钥配置")
     @GetMapping("/find-config")
     public Result<HkrtIsvKeyConfigResult> findConfig(
@@ -39,7 +40,7 @@ public class HkrtIsvKeyConfigController {
         return Res.ok(HkrtIsvKeyConfigConvert.CONVERT.toResult(hkrtIsvKeyConfigService.findByProduct(product, sandbox)));
     }
 
-    @PermCode(code = "manage", nameCn = "海科融通服务商管理", nameEn = "Hkrt ISV Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "海科融通服务商管理", nameEn = "Hkrt ISV Manage")
     @Operation(summary = "保存海科融通服务商密钥配置")
     @PostMapping("/save-config")
     public Result<Void> saveConfig(@RequestBody @Validated HkrtIsvKeyConfigParam param) {

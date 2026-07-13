@@ -4,6 +4,7 @@ import cn.daxpay.open.payment.masterdata.constants.provider.result.PayProviderGr
 import cn.daxpay.open.payment.masterdata.constants.provider.result.PayProviderMethodResult;
 import cn.daxpay.open.payment.admin.service.masterdata.provider.PayProviderService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,7 +22,7 @@ import java.util.List;
 
 /// # 支付渠道（管理端）
 ///
-@PermCode(menuCode = "payment:platform:provider")
+@PermCode(menuCode = PermCodes.Payment.Platform.Provider.MENU)
 @Validated
 @Tag(name = "支付渠道")
 @RestController
@@ -31,14 +32,14 @@ public class PayProviderController {
 
     private final PayProviderService payProviderService;
 
-    @PermCode(code = "view", nameCn = "品牌目录查看", nameEn = "Brand Method Directory View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "品牌目录查看", nameEn = "Brand Method Directory View")
     @Operation(summary = "按支付渠道分组查询支付方式列表")
     @GetMapping("/list-by-provider")
     public Result<List<PayProviderGroupResult>> listByProvider() {
         return Res.ok(payProviderService.listByProvider());
     }
 
-    @PermCode(code = "manage", nameCn = "支付渠道管理", nameEn = "Provider Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "支付渠道管理", nameEn = "Provider Manage")
     @Operation(summary = "切换支付渠道启停")
     @PostMapping("/switch-enabled")
     public Result<Void> switchEnabled(
@@ -48,7 +49,7 @@ public class PayProviderController {
         return Res.ok();
     }
 
-    @PermCode(code = "view", nameCn = "品牌目录查看", nameEn = "Brand Method Directory View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "品牌目录查看", nameEn = "Brand Method Directory View")
     @Operation(summary = "查询单条支付渠道项")
     @GetMapping("/get")
     public Result<PayProviderMethodResult> get(

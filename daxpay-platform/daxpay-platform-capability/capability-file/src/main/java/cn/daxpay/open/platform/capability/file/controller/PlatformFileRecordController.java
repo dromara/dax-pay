@@ -4,6 +4,7 @@ import cn.daxpay.open.platform.capability.file.param.PlatformFileRecordPageParam
 import cn.daxpay.open.platform.capability.file.result.PlatformFileRecordResult;
 import cn.daxpay.open.platform.capability.file.service.PlatformFileRecordService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.platform.core.rest.result.Result;
@@ -20,21 +21,21 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/file/platform/record")
 @RequiredArgsConstructor
-@PermCode(menuCode = "system:file:platform")
+@PermCode(menuCode = PermCodes.System.FilePlatform.MENU)
 public class PlatformFileRecordController {
 
     private final PlatformFileRecordService platformFileRecordService;
 
     @Operation(summary = "分页查询")
     @GetMapping("/page")
-    @PermCode(code = "view", nameCn = "文件查看", nameEn = "File View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "文件查看", nameEn = "File View")
     public Result<PageResult<PlatformFileRecordResult>> page(PlatformFileRecordPageParam param) {
         return Res.ok(platformFileRecordService.page(param));
     }
 
     @Operation(summary = "查询详情")
     @GetMapping("/{id}")
-    @PermCode(code = "view", nameCn = "文件查看", nameEn = "File View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "文件查看", nameEn = "File View")
     public Result<PlatformFileRecordResult> findById(@PathVariable Long id) {
         return Res.ok(platformFileRecordService.findById(id));
     }

@@ -1,6 +1,7 @@
 package cn.daxpay.open.payment.admin.controller.merchant.config;
 
 import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.payment.merchant.param.config.MchAppNotifyConfigParam;
@@ -15,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 /// # 商户应用事件通知配置管理控制器
 ///
-@PermCode(menuCode = "merchant:notify_config")
+@PermCode(menuCode = PermCodes.Merchant.NotifyConfig.MENU)
 @Validated
 @Tag(name = "商户应用事件通知配置管理")
 @RestController
@@ -25,7 +26,7 @@ public class MchAppNotifyConfigAdminController {
 
     private final MchAppNotifyConfigService notifyConfigService;
 
-    @PermCode(code = "view", nameCn = "商户查看", nameEn = "Merchant View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "商户查看", nameEn = "Merchant View")
     @Operation(summary = "根据应用ID查询通知配置")
     @GetMapping("/get-by-app-id")
     public Result<MchAppNotifyConfigResult> findByAppId(
@@ -33,7 +34,7 @@ public class MchAppNotifyConfigAdminController {
         return Res.ok(notifyConfigService.findByAppId(appId));
     }
 
-    @PermCode(code = "notify_config_update", nameCn = "通知配置更新", nameEn = "Notify Config Update")
+    @PermCode(code = PermCodes.Merchant.NotifyConfig.NOTIFY_CONFIG_UPDATE, nameCn = "通知配置更新", nameEn = "Notify Config Update")
     @Operation(summary = "保存或更新通知配置")
     @PostMapping("/save-or-update")
     public Result<Void> saveOrUpdate(@RequestBody @Validated MchAppNotifyConfigParam param) {

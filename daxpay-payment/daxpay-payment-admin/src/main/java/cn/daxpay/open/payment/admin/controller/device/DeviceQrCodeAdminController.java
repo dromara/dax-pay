@@ -7,6 +7,7 @@ import cn.daxpay.open.payment.device.qrcode.param.DeviceQrCodeQuery;
 import cn.daxpay.open.payment.device.qrcode.result.DeviceQrCodeResult;
 import cn.daxpay.open.payment.admin.service.device.DeviceQrCodeAdminService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
@@ -29,7 +30,7 @@ import java.util.List;
 
 /// # 支付码牌管理(运营端)
 ///
-@PermCode(menuCode = "device:qrcode")
+@PermCode(menuCode = PermCodes.Device.QrCode.MENU)
 @Validated
 @Tag(name = "支付码牌管理")
 @RestController
@@ -39,7 +40,7 @@ public class DeviceQrCodeAdminController {
 
     private final DeviceQrCodeAdminService deviceQrCodeAdminService;
 
-    @PermCode(code = "manage", nameCn = "码牌管理", nameEn = "QrCode Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "码牌管理", nameEn = "QrCode Manage")
     @Operation(summary = "批量创建空白码牌")
     @PostMapping("/create-batch")
     public Result<Void> createBatch(@RequestBody @Validated DeviceQrCodeBatchParam param) {
@@ -47,14 +48,14 @@ public class DeviceQrCodeAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "view", nameCn = "码牌查看", nameEn = "QrCode View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "码牌查看", nameEn = "QrCode View")
     @Operation(summary = "判断批次号是否已存在")
     @GetMapping("/exists-by-batch-no")
     public Result<Boolean> existsByBatchNo(@NotBlank(message = "{validation.field.batchNo.notBlank}") String batchNo) {
         return Res.ok(deviceQrCodeAdminService.existsByBatchNo(batchNo));
     }
 
-    @PermCode(code = "manage", nameCn = "码牌管理", nameEn = "QrCode Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "码牌管理", nameEn = "QrCode Manage")
     @Operation(summary = "批量绑定商户")
     @PostMapping("/bind-merchant")
     public Result<Void> bindMerchant(@RequestBody @Validated DeviceQrCodeBindMerchantParam param) {
@@ -62,7 +63,7 @@ public class DeviceQrCodeAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "manage", nameCn = "码牌管理", nameEn = "QrCode Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "码牌管理", nameEn = "QrCode Manage")
     @Operation(summary = "批量解绑商户")
     @PostMapping("/unbind-merchant")
     public Result<Void> unbindMerchant(@RequestBody @NotEmpty(message = "{validation.field.ids.notEmpty}") List<Long> ids) {
@@ -70,7 +71,7 @@ public class DeviceQrCodeAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "manage", nameCn = "码牌管理", nameEn = "QrCode Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "码牌管理", nameEn = "QrCode Manage")
     @Operation(summary = "修改码牌")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) DeviceQrCodeParam param) {
@@ -78,28 +79,28 @@ public class DeviceQrCodeAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "view", nameCn = "码牌查看", nameEn = "QrCode View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "码牌查看", nameEn = "QrCode View")
     @Operation(summary = "码牌分页")
     @GetMapping("/page")
     public Result<PageResult<DeviceQrCodeResult>> page(PageParam pageParam, DeviceQrCodeQuery query) {
         return Res.ok(deviceQrCodeAdminService.page(pageParam, query));
     }
 
-    @PermCode(code = "view", nameCn = "码牌查看", nameEn = "QrCode View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "码牌查看", nameEn = "QrCode View")
     @Operation(summary = "根据id查询码牌")
     @GetMapping("/get")
     public Result<DeviceQrCodeResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(deviceQrCodeAdminService.findById(id));
     }
 
-    @PermCode(code = "view", nameCn = "码牌查看", nameEn = "QrCode View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "码牌查看", nameEn = "QrCode View")
     @Operation(summary = "获取码牌扫码链接")
     @GetMapping("/get-code-link")
     public Result<String> getCodeLink(@NotBlank(message = "{validation.field.code.notBlank}") String code) {
         return Res.ok(deviceQrCodeAdminService.getCodeLink(code));
     }
 
-    @PermCode(code = "manage", nameCn = "码牌管理", nameEn = "QrCode Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "码牌管理", nameEn = "QrCode Manage")
     @Operation(summary = "删除码牌")
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {
@@ -107,7 +108,7 @@ public class DeviceQrCodeAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "manage", nameCn = "码牌管理", nameEn = "QrCode Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "码牌管理", nameEn = "QrCode Manage")
     @Operation(summary = "修改码牌状态")
     @PostMapping("/change-status")
     public Result<Void> changeStatus(@NotNull(message = "{validation.field.id.notNull}") Long id,

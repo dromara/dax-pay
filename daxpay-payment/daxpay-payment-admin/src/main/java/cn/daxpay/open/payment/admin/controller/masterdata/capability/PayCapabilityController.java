@@ -1,5 +1,7 @@
 package cn.daxpay.open.payment.admin.controller.masterdata.capability;
 
+
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.payment.masterdata.constants.capability.param.PayCapabilityQuery;
 import cn.daxpay.open.payment.masterdata.constants.capability.result.PayCapabilityResult;
 import cn.daxpay.open.payment.admin.service.masterdata.capability.PayCapabilityService;
@@ -18,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /// # 支付能力（管理端，只读）
-@PermCode(menuCode = "payment:platform:capability")
+@PermCode(menuCode = PermCodes.Payment.Platform.Capability.MENU)
 @Validated
 @Tag(name = "支付能力管理")
 @RestController
@@ -28,14 +30,14 @@ public class PayCapabilityController {
 
     private final PayCapabilityService payCapabilityService;
 
-    @PermCode(code = "view", nameCn = "支付能力查看", nameEn = "Pay Capability View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "支付能力查看", nameEn = "Pay Capability View")
     @Operation(summary = "分页查询")
     @GetMapping("/page")
     public Result<PageResult<PayCapabilityResult>> page(PageParam pageParam, PayCapabilityQuery query, String name) {
         return Res.ok(payCapabilityService.page(pageParam, query, name));
     }
 
-    @PermCode(code = "view", nameCn = "支付能力查看", nameEn = "Pay Capability View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "支付能力查看", nameEn = "Pay Capability View")
     @Operation(summary = "根据编码查询详情")
     @GetMapping("/get")
     public Result<PayCapabilityResult> findByCode(@NotBlank(message = "{validation.field.code.notBlank}") String code) {

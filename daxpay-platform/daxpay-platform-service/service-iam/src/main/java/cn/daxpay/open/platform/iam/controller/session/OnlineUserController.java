@@ -1,6 +1,7 @@
 package cn.daxpay.open.platform.iam.controller.session;
 
 import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
@@ -19,7 +20,7 @@ import java.util.List;
 
 /// # 在线用户管理
 ///
-@PermCode(menuCode = "iam:online:user")
+@PermCode(menuCode = PermCodes.Iam.OnlineUser.MENU)
 @Validated
 @Tag(name = "在线用户管理")
 @RestController
@@ -29,14 +30,14 @@ public class OnlineUserController {
 
     private final OnlineUserService onlineUserService;
 
-    @PermCode(code = "view", nameCn = "在线用户查看", nameEn = "Online User View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "在线用户查看", nameEn = "Online User View")
     @Operation(summary = "在线用户分页")
     @GetMapping("/page")
     public Result<PageResult<OnlineUserResult>> page(PageParam pageParam, OnlineUserQuery query) {
         return Res.ok(onlineUserService.page(pageParam, query));
     }
 
-    @PermCode(code = "kickout", nameCn = "强制下线", nameEn = "Kickout")
+    @PermCode(code = PermCodes.Action.KICKOUT, nameCn = "强制下线", nameEn = "Kickout")
     @Operation(summary = "强制用户下线")
     @PostMapping("/kickout")
     public Result<Void> kickout(@RequestParam String sessionId) {
@@ -44,7 +45,7 @@ public class OnlineUserController {
         return Res.ok();
     }
 
-    @PermCode(code = "kickout", nameCn = "强制下线", nameEn = "Kickout")
+    @PermCode(code = PermCodes.Action.KICKOUT, nameCn = "强制下线", nameEn = "Kickout")
     @Operation(summary = "批量强制用户下线")
     @PostMapping("/kickout-batch")
     public Result<Void> kickoutBatch(@RequestBody @NotEmpty(message = "{validation.field.sessionIds.notEmpty}") List<String> sessionIds) {

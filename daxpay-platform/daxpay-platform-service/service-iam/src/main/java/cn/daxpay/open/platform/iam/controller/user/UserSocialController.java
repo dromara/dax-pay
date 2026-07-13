@@ -3,6 +3,7 @@ package cn.daxpay.open.platform.iam.controller.user;
 import java.util.List;
 
 import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.platform.iam.result.social.SocialBindResult;
@@ -24,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 /// 归属用户管理域, 与 [UserAdminController] 同包同 menuCode,
 /// 直接注入 [IamUserSocialBindStore] 操作数据层, 与登录/绑定流程([SocialEndpoint])完全分离.
 ///
-@PermCode(menuCode = "iam:user:manager")
+@PermCode(menuCode = PermCodes.Iam.UserManager.MENU)
 @Validated
 @Tag(name = "用户三方账号绑定管理")
 @RestController
@@ -36,7 +37,7 @@ public class UserSocialController {
 
     /// 查询指定用户的第三方账号绑定列表
     /// @param userId 目标用户ID
-    @PermCode(code = "view", nameCn = "用户查看", nameEn = "User View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "用户查看", nameEn = "User View")
     @Operation(summary = "查询指定用户的第三方账号绑定列表")
     @GetMapping("/bind-list")
     public Result<List<SocialBindResult>> bindList(@NotNull(message = "{validation.field.userId.notNull}") Long userId) {
@@ -46,7 +47,7 @@ public class UserSocialController {
     /// 解除指定用户的第三方账号绑定
     /// @param userId 目标用户ID
     /// @param source 平台编码
-    @PermCode(code = "view", nameCn = "用户查看", nameEn = "User View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "用户查看", nameEn = "User View")
     @Operation(summary = "解除指定用户的第三方账号绑定")
     @PostMapping("/unbind")
     public Result<Void> unbind(@NotNull(message = "{validation.field.userId.notNull}") Long userId,

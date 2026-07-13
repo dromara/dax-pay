@@ -6,6 +6,7 @@ import cn.daxpay.open.channel.ums.result.direct.UmsDirectKeyConfigResult;
 import cn.daxpay.open.channel.ums.service.direct.UmsDirectChannelMerchantService;
 import cn.daxpay.open.channel.ums.service.direct.UmsDirectKeyConfigService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 ///
 /// 提供通道商户创建和密钥配置管理。
 /// 商户身份(mid)创建时录入, 应用ID/终端号(tid)/应用密钥/通讯密钥由密钥配置维护。
-@PermCode(menuCode = "channel:merchant")
+@PermCode(menuCode = PermCodes.Channel.Merchant.MENU)
 @Validated
 @Tag(name = "银联商务直连通道商户管理")
 @RestController
@@ -35,7 +36,7 @@ public class UmsDirectChannelMerchantController {
     private final UmsDirectChannelMerchantService umsDirectChannelMerchantService;
     private final UmsDirectKeyConfigService umsDirectKeyConfigService;
 
-    @PermCode(code = "manage", nameCn = "通道商户管理", nameEn = "Channel Merchant Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.Merchant.MANAGE_NAME_CN, nameEn = PermCodes.Channel.Merchant.MANAGE_NAME_EN)
     @Operation(summary = "创建银联商务直连通道商户")
     @PostMapping("/create")
     public Result<Void> create(@RequestBody @Validated UmsDirectChannelMerchantCreateParam param) {
@@ -43,7 +44,7 @@ public class UmsDirectChannelMerchantController {
         return Res.ok();
     }
 
-    @PermCode(code = "view", nameCn = "通道商户查看", nameEn = "Channel Merchant View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
     @Operation(summary = "根据通道商户号查询密钥配置")
     @GetMapping("/find-key-config")
     public Result<UmsDirectKeyConfigResult> findKeyConfig(
@@ -56,7 +57,7 @@ public class UmsDirectChannelMerchantController {
         return Res.ok(result);
     }
 
-    @PermCode(code = "manage", nameCn = "通道商户管理", nameEn = "Channel Merchant Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.Merchant.MANAGE_NAME_CN, nameEn = PermCodes.Channel.Merchant.MANAGE_NAME_EN)
     @Operation(summary = "保存密钥配置")
     @PostMapping("/save-key-config")
     public Result<Void> saveKeyConfig(@RequestBody @Validated UmsDirectKeyConfigParam param) {

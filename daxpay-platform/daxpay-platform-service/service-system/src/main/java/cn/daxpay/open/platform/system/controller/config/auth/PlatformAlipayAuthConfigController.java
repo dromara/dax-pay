@@ -1,6 +1,7 @@
 package cn.daxpay.open.platform.system.controller.config.auth;
 
 import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.platform.system.param.config.auth.PlatformAlipayAuthConfigParam;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 /// 管理支付宝 OAuth 凭据(appId/私钥/证书), 挂载在「三方平台管理」菜单下(与登录平台配置共享菜单权限)。
 /// 凭据同时服务于: 三方登录的支付宝授权登录(iam 模块)、支付场景的通道认证(payment 模块)。
 ///
-@PermCode(menuCode = "iam:social:login-config")
+@PermCode(menuCode = PermCodes.Iam.Social.MENU)
 @Validated
 @Tag(name = "平台支付宝开放平台认证配置")
 @RestController
@@ -31,14 +32,14 @@ public class PlatformAlipayAuthConfigController {
 
     private final PlatformAlipayAuthConfigService platformAlipayAuthConfigService;
 
-    @PermCode(code = "view", nameCn = "社交登录配置查看", nameEn = "Social Login Config View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "社交登录配置查看", nameEn = "Social Login Config View")
     @Operation(summary = "获取支付宝认证配置")
     @GetMapping("/get")
     public Result<PlatformAlipayAuthConfigResult> getAlipayAuthConfig() {
         return Res.ok(platformAlipayAuthConfigService.findAlipayAuthConfig());
     }
 
-    @PermCode(code = "manage", nameCn = "社交登录配置管理", nameEn = "Social Login Config Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "社交登录配置管理", nameEn = "Social Login Config Manage")
     @Operation(summary = "更新支付宝认证配置")
     @PostMapping("/update")
     public Result<Void> updateAlipayAuthConfig(@RequestBody @Validated PlatformAlipayAuthConfigParam param) {

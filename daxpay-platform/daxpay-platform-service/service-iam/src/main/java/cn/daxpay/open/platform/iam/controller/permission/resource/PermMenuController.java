@@ -1,6 +1,7 @@
 package cn.daxpay.open.platform.iam.controller.permission.resource;
 
 import cn.daxpay.open.platform.core.annotation.*;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.platform.core.validation.ValidationGroup;
@@ -21,7 +22,7 @@ import java.util.List;
 
 /// # 菜单权限
 ///
-@PermCode(menuCode = "iam:perm:menu")
+@PermCode(menuCode = PermCodes.Iam.PermMenu.MENU)
 @Validated
 @Tag(name = "菜单权限管理")
 @RestController
@@ -33,7 +34,7 @@ public class PermMenuController {
 
     private final UserRolePremService userRoleService;
 
-    @PermCode(code = "manage", nameCn = "菜单管理", nameEn = "Menu Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "菜单管理", nameEn = "Menu Manage")
     @InternalPath
     @Operation(summary = "添加菜单权限")
     @PostMapping("/add")
@@ -42,7 +43,7 @@ public class PermMenuController {
         return Res.ok();
     }
 
-    @PermCode(code = "manage", nameCn = "菜单管理", nameEn = "Menu Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "菜单管理", nameEn = "Menu Manage")
     @InternalPath
     @Operation(summary = "修改菜单权限")
     @PostMapping("/update")
@@ -51,7 +52,7 @@ public class PermMenuController {
         return Res.ok();
     }
 
-    @PermCode(code = "view", nameCn = "菜单查看", nameEn = "Menu View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "菜单查看", nameEn = "Menu View")
     @InternalPath
     @Operation(summary = "获取菜单树", description = "管理端接口，终端编码通过参数传递")
     @GetMapping("/tree")
@@ -59,21 +60,21 @@ public class PermMenuController {
         return Res.ok(permMenuService.tree(clientCode));
     }
 
-    @PermCode(code = "view", nameCn = "菜单查看", nameEn = "Menu View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "菜单查看", nameEn = "Menu View")
     @Operation(summary = "获取当前用户菜单树", description = "登录用户获取个人菜单，终端编码从请求头读取")
     @GetMapping("/my")
     public Result<List<PermMenuResult>> myMenuTree() {
         return Res.ok(userRoleService.menuTreeByCurrentUser());
     }
 
-    @PermCode(code = "view", nameCn = "菜单查看", nameEn = "Menu View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "菜单查看", nameEn = "Menu View")
     @Operation(summary = "根据id查询")
     @GetMapping("/get")
     public Result<PermMenuResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(permMenuService.findById(id));
     }
 
-    @PermCode(code = "manage", nameCn = "菜单管理", nameEn = "Menu Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "菜单管理", nameEn = "Menu Manage")
     @InternalPath
     @Operation(summary = "删除菜单权限")
     @PostMapping("/delete")
@@ -82,7 +83,7 @@ public class PermMenuController {
         return Res.ok();
     }
 
-    @PermCode(code = "view", nameCn = "菜单查看", nameEn = "Menu View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "菜单查看", nameEn = "Menu View")
     @Operation(summary = "检查菜单编码是否存在")
     @GetMapping("/check-menu-code-exists")
     public Result<Boolean> checkMenuCodeExists(

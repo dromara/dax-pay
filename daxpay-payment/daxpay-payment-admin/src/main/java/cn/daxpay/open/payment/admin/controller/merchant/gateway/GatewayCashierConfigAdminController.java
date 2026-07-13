@@ -4,6 +4,7 @@ import cn.daxpay.open.payment.merchant.param.gateway.GatewayCashierItemParam;
 import cn.daxpay.open.payment.merchant.result.gateway.GatewayCashierItemResult;
 import cn.daxpay.open.payment.admin.service.merchant.gateway.GatewayCashierConfigService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.platform.core.util.ValidationUtil;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /// # 网关收银台配置(管理)
-@PermCode(menuCode = "merchant:gateway-cashier")
+@PermCode(menuCode = PermCodes.Merchant.GatewayCashier.MENU)
 @Validated
 @Tag(name = "网关收银台配置")
 @RestController
@@ -29,7 +30,7 @@ public class GatewayCashierConfigAdminController {
 
     private final GatewayCashierConfigService gatewayCashierConfigService;
 
-    @PermCode(code = "view", nameCn = "配置查看", nameEn = "Config View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "配置查看", nameEn = "Config View")
     @Operation(summary = "按应用与分桶查询收银台支付项列表")
     @GetMapping("/list")
     public Result<List<GatewayCashierItemResult>> list(
@@ -39,7 +40,7 @@ public class GatewayCashierConfigAdminController {
         return Res.ok(gatewayCashierConfigService.list(appId, cashierType, scene));
     }
 
-    @PermCode(code = "view", nameCn = "配置查看", nameEn = "Config View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "配置查看", nameEn = "Config View")
     @Operation(summary = "按ID查询收银台支付项")
     @GetMapping("/get-by-id")
     public Result<GatewayCashierItemResult> getById(
@@ -47,7 +48,7 @@ public class GatewayCashierConfigAdminController {
         return Res.ok(gatewayCashierConfigService.findById(id));
     }
 
-    @PermCode(code = "update", nameCn = "配置更新", nameEn = "Config Update")
+    @PermCode(code = PermCodes.Action.UPDATE, nameCn = "配置更新", nameEn = "Config Update")
     @Operation(summary = "新建收银台支付项")
     @PostMapping("/save")
     public Result<Void> save(@RequestBody @Validated GatewayCashierItemParam param) {
@@ -55,7 +56,7 @@ public class GatewayCashierConfigAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "update", nameCn = "配置更新", nameEn = "Config Update")
+    @PermCode(code = PermCodes.Action.UPDATE, nameCn = "配置更新", nameEn = "Config Update")
     @Operation(summary = "更新收银台支付项")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) GatewayCashierItemParam param) {
@@ -65,7 +66,7 @@ public class GatewayCashierConfigAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "update", nameCn = "配置更新", nameEn = "Config Update")
+    @PermCode(code = PermCodes.Action.UPDATE, nameCn = "配置更新", nameEn = "Config Update")
     @Operation(summary = "删除收银台支付项")
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {

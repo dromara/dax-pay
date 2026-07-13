@@ -5,6 +5,7 @@ import cn.daxpay.open.channel.hmpay.param.isv.HmpayIsvKeyConfigParam;
 import cn.daxpay.open.channel.hmpay.result.isv.HmpayIsvKeyConfigResult;
 import cn.daxpay.open.channel.hmpay.service.isv.HmpayIsvKeyConfigService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /// # 河马付服务商密钥配置
-@PermCode(menuCode = "payment:hmpay:isv")
+@PermCode(menuCode = PermCodes.Payment.Hmpay.MENU)
 @Validated
 @Tag(name = "河马付服务商密钥配置")
 @RestController
@@ -29,7 +30,7 @@ public class HmpayIsvKeyConfigController {
 
     private final HmpayIsvKeyConfigService hmpayIsvKeyConfigService;
 
-    @PermCode(code = "view", nameCn = "河马付服务商查看", nameEn = "Hmpay ISV View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "河马付服务商查看", nameEn = "Hmpay ISV View")
     @Operation(summary = "查询河马付服务商密钥配置")
     @GetMapping("/find-config")
     public Result<HmpayIsvKeyConfigResult> findConfig(
@@ -38,7 +39,7 @@ public class HmpayIsvKeyConfigController {
         return Res.ok(HmpayIsvKeyConfigConvert.CONVERT.toResult(hmpayIsvKeyConfigService.findByProduct(product, sandbox)));
     }
 
-    @PermCode(code = "manage", nameCn = "河马付服务商管理", nameEn = "Hmpay ISV Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "河马付服务商管理", nameEn = "Hmpay ISV Manage")
     @Operation(summary = "保存河马付服务商密钥配置")
     @PostMapping("/save-config")
     public Result<Void> saveConfig(@RequestBody @Validated HmpayIsvKeyConfigParam param) {

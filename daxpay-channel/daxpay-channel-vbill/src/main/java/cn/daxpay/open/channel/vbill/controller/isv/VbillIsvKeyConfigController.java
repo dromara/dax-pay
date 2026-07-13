@@ -5,6 +5,7 @@ import cn.daxpay.open.channel.vbill.param.isv.VbillIsvKeyConfigParam;
 import cn.daxpay.open.channel.vbill.result.isv.VbillIsvKeyConfigResult;
 import cn.daxpay.open.channel.vbill.service.isv.VbillIsvKeyConfigService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /// # 随行付服务商密钥配置
-@PermCode(menuCode = "payment:vbill:isv")
+@PermCode(menuCode = PermCodes.Payment.Vbill.MENU)
 @Validated
 @Tag(name = "随行付服务商密钥配置")
 @RestController
@@ -29,7 +30,7 @@ public class VbillIsvKeyConfigController {
 
     private final VbillIsvKeyConfigService vbillIsvKeyConfigService;
 
-    @PermCode(code = "view", nameCn = "随行付服务商查看", nameEn = "VBill ISV View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "随行付服务商查看", nameEn = "VBill ISV View")
     @Operation(summary = "查询随行付服务商密钥配置")
     @GetMapping("/find-config")
     public Result<VbillIsvKeyConfigResult> findConfig(
@@ -38,7 +39,7 @@ public class VbillIsvKeyConfigController {
         return Res.ok(VbillIsvKeyConfigConvert.CONVERT.toResult(vbillIsvKeyConfigService.findByProduct(product, sandbox)));
     }
 
-    @PermCode(code = "manage", nameCn = "随行付服务商管理", nameEn = "VBill ISV Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "随行付服务商管理", nameEn = "VBill ISV Manage")
     @Operation(summary = "保存随行付服务商密钥配置")
     @PostMapping("/save-config")
     public Result<Void> saveConfig(@RequestBody @Validated VbillIsvKeyConfigParam param) {

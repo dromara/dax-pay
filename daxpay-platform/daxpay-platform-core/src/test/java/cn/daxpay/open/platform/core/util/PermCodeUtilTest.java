@@ -1,6 +1,7 @@
 package cn.daxpay.open.platform.core.util;
 
 import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import org.junit.jupiter.api.Test;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -26,7 +27,7 @@ class PermCodeUtilTest {
     @RestController
     static class SampleController {
 
-        @PermCode(code = "view", nameCn = "查看", nameEn = "View")
+        @PermCode(code = PermCodes.Action.VIEW, nameCn = "查看", nameEn = "View")
         @GetMapping("/page")
         public void page() {
         }

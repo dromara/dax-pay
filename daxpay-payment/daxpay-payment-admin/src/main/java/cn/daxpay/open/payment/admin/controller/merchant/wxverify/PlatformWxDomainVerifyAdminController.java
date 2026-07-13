@@ -6,6 +6,7 @@ import cn.daxpay.open.payment.merchant.param.wxverify.WxDomainVerifyUploadParam;
 import cn.daxpay.open.payment.merchant.result.wxverify.WxDomainVerifyResult;
 import cn.daxpay.open.payment.merchant.service.wxverify.WxDomainVerifyService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
@@ -22,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 ///
 /// 管理平台自身的公众号/小程序验证文件，挂载在支付配置菜单下。
 /// 上传走 JSON（fileName + fileContent），不走 multipart。
-@PermCode(menuCode = "payment:config:wx_verify")
+@PermCode(menuCode = PermCodes.Payment.Config.WxDomainVerify.MENU)
 @Validated
 @Tag(name = "平台微信域名验证文件")
 @RestController
@@ -32,14 +33,14 @@ public class PlatformWxDomainVerifyAdminController {
 
     private final WxDomainVerifyService wxDomainVerifyService;
 
-    @PermCode(code = "manage", nameCn = "管理", nameEn = "Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "管理", nameEn = "Manage")
     @Operation(summary = "上传验证文件")
     @PostMapping("/upload")
     public Result<WxDomainVerifyResult> upload(@RequestBody @Validated WxDomainVerifyUploadParam param) {
         return Res.ok(wxDomainVerifyService.uploadPlatform(param));
     }
 
-    @PermCode(code = "manage", nameCn = "管理", nameEn = "Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "管理", nameEn = "Manage")
     @Operation(summary = "修改验证文件元数据")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) WxDomainVerifyParam param) {
@@ -47,7 +48,7 @@ public class PlatformWxDomainVerifyAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "view", nameCn = "查看", nameEn = "View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "查看", nameEn = "View")
     @Operation(summary = "分页查询")
     @GetMapping("/page")
     public Result<PageResult<WxDomainVerifyResult>> page(PageParam pageParam, WxDomainVerifyQuery query) {
@@ -55,14 +56,14 @@ public class PlatformWxDomainVerifyAdminController {
         return Res.ok(wxDomainVerifyService.page(pageParam, query));
     }
 
-    @PermCode(code = "view", nameCn = "查看", nameEn = "View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "查看", nameEn = "View")
     @Operation(summary = "详情")
     @GetMapping("/get")
     public Result<WxDomainVerifyResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(wxDomainVerifyService.findById(id));
     }
 
-    @PermCode(code = "manage", nameCn = "管理", nameEn = "Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "管理", nameEn = "Manage")
     @Operation(summary = "删除")
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {

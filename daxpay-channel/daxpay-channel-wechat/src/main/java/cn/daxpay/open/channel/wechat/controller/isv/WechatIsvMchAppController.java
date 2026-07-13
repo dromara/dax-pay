@@ -7,6 +7,7 @@ import cn.daxpay.open.channel.wechat.result.isv.WechatIsvMchAppResult;
 import cn.daxpay.open.channel.wechat.service.isv.WechatIsvMchAppAuthConfigService;
 import cn.daxpay.open.channel.wechat.service.isv.WechatIsvMchAppService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.platform.core.util.ValidationUtil;
@@ -29,7 +30,7 @@ import java.util.List;
 ///
 /// 提供服务商通道商户应用(子商户应用)及其授权认证配置的 REST API,支持按商户号和通道商户号查询列表。
 ///
-@PermCode(menuCode = "channel:wechat:app")
+@PermCode(menuCode = PermCodes.Channel.WechatApp.MENU)
 @Validated
 @Tag(name = "微信服务商通道商户应用管理")
 @RestController
@@ -40,7 +41,7 @@ public class WechatIsvMchAppController {
     private final WechatIsvMchAppService wechatIsvMchAppService;
     private final WechatIsvMchAppAuthConfigService wechatIsvMchAppAuthConfigService;
 
-    @PermCode(code = "view", nameCn = "通道商户查看", nameEn = "Channel Merchant View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
     @Operation(summary = "根据商户号和通道商户号查询应用列表")
     @GetMapping("/list-by-channel-mch-no")
     public Result<List<WechatIsvMchAppResult>> listByChannelMchNo(
@@ -49,7 +50,7 @@ public class WechatIsvMchAppController {
         return Res.ok(wechatIsvMchAppService.listByMchNoAndChannelMchNo(mchNo, channelMchNo));
     }
 
-    @PermCode(code = "view", nameCn = "通道商户查看", nameEn = "Channel Merchant View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
     @Operation(summary = "查询应用详情")
     @GetMapping("/find-by-id")
     public Result<WechatIsvMchAppResult> findById(
@@ -57,7 +58,7 @@ public class WechatIsvMchAppController {
         return Res.ok(wechatIsvMchAppService.findById(id));
     }
 
-    @PermCode(code = "view", nameCn = "通道商户查看", nameEn = "Channel Merchant View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
     @Operation(summary = "同一通道商户下微信应用ID是否已存在")
     @GetMapping("/exists-wx-app-id-by-channel")
     public Result<Boolean> existsWxAppIdByChannel(
@@ -67,7 +68,7 @@ public class WechatIsvMchAppController {
         return Res.ok(wechatIsvMchAppService.existsWxAppIdByChannel(mchNo, channelMchNo, wxAppId, null));
     }
 
-    @PermCode(code = "view", nameCn = "通道商户查看", nameEn = "Channel Merchant View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
     @Operation(summary = "同一通道商户下微信应用ID是否已存在(排除自身)")
     @GetMapping("/exists-wx-app-id-by-channel-not-id")
     public Result<Boolean> existsWxAppIdByChannelNotId(
@@ -78,7 +79,7 @@ public class WechatIsvMchAppController {
         return Res.ok(wechatIsvMchAppService.existsWxAppIdByChannel(mchNo, channelMchNo, wxAppId, id));
     }
 
-    @PermCode(code = "manage", nameCn = "通道商户管理", nameEn = "Channel Merchant Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.Merchant.MANAGE_NAME_CN, nameEn = PermCodes.Channel.Merchant.MANAGE_NAME_EN)
     @Operation(summary = "新增服务商通道商户应用")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) WechatIsvMchAppParam param) {
@@ -87,7 +88,7 @@ public class WechatIsvMchAppController {
         return Res.ok();
     }
 
-    @PermCode(code = "manage", nameCn = "通道商户管理", nameEn = "Channel Merchant Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.Merchant.MANAGE_NAME_CN, nameEn = PermCodes.Channel.Merchant.MANAGE_NAME_EN)
     @Operation(summary = "修改服务商通道商户应用")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) WechatIsvMchAppParam param) {
@@ -96,7 +97,7 @@ public class WechatIsvMchAppController {
         return Res.ok();
     }
 
-    @PermCode(code = "manage", nameCn = "通道商户管理", nameEn = "Channel Merchant Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.Merchant.MANAGE_NAME_CN, nameEn = PermCodes.Channel.Merchant.MANAGE_NAME_EN)
     @Operation(summary = "删除服务商通道商户应用")
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {
@@ -104,7 +105,7 @@ public class WechatIsvMchAppController {
         return Res.ok();
     }
 
-    @PermCode(code = "view", nameCn = "通道商户查看", nameEn = "Channel Merchant View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
     @Operation(summary = "查询应用授权认证配置")
     @GetMapping("/find-auth-config-by-app-id")
     public Result<WechatIsvMchAppAuthConfigResult> findAuthConfigByAppId(
@@ -113,7 +114,7 @@ public class WechatIsvMchAppController {
         return Res.ok(config.toResult());
     }
 
-    @PermCode(code = "manage", nameCn = "通道商户管理", nameEn = "Channel Merchant Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.Merchant.MANAGE_NAME_CN, nameEn = PermCodes.Channel.Merchant.MANAGE_NAME_EN)
     @Operation(summary = "保存应用授权认证配置")
     @PostMapping("/save-auth-config")
     public Result<Void> saveAuthConfig(@RequestBody @Validated WechatIsvMchAppAuthConfigParam param) {

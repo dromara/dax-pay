@@ -1,5 +1,7 @@
 package cn.daxpay.open.payment.admin.controller.merchant.route;
 
+
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.payment.masterdata.constants.provider.result.PayProviderMethodResult;
 import cn.daxpay.open.payment.masterdata.constants.provider.service.PayProviderMethodService;
 import cn.daxpay.open.payment.merchant.param.route.basic.PayRouteBasicConfigBatchParam;
@@ -30,7 +32,7 @@ import java.util.Map;
 /// 「运营」指 Admin 运营端角色，不是支付通道 channel。提供策略、基础/场景配置及
 /// 已启用渠道支付方式扁平目录（`method-directory/flat-list`）。
 ///
-@PermCode(menuCode = "merchant:app:route")
+@PermCode(menuCode = PermCodes.Merchant.AppRoute.MENU)
 @Validated
 @Tag(name = "应用通道路由管理")
 @RestController
@@ -41,35 +43,35 @@ public class PayRouteAdminController {
     private final PayRouteConfigService configService;
     private final PayProviderMethodService payProviderMethodService;
 
-    @PermCode(code = "view", nameCn = "通道路由查看", nameEn = "Pay Route View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "通道路由查看", nameEn = "Pay Route View")
     @Operation(summary = "已启用渠道支付方式扁平列表")
     @GetMapping("/method-directory/flat-list")
     public Result<List<PayProviderMethodResult>> listMethodDirectoryFlat() {
         return Res.ok(payProviderMethodService.listDirectoryFlat());
     }
 
-    @PermCode(code = "view", nameCn = "通道路由查看", nameEn = "Pay Route View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "通道路由查看", nameEn = "Pay Route View")
     @Operation(summary = "获取或初始化应用路由策略")
     @GetMapping("/strategy/get-or-init-by-app-id")
     public Result<PayRouteStrategyResult> getOrInitByAppId(@NotBlank(message = "{validation.field.appId.notBlank}") String appId) {
         return Res.ok(configService.getOrInitByAppId(appId));
     }
 
-    @PermCode(code = "manage", nameCn = "通道路由管理", nameEn = "Pay Route Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "通道路由管理", nameEn = "Pay Route Manage")
     @Operation(summary = "更新路由策略")
     @PostMapping("/strategy/update")
     public Result<PayRouteStrategyResult> updateStrategy(@RequestBody @Validated PayRouteStrategyParam param) {
         return Res.ok(configService.updateStrategy(param));
     }
 
-    @PermCode(code = "view", nameCn = "通道路由查看", nameEn = "Pay Route View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "通道路由查看", nameEn = "Pay Route View")
     @Operation(summary = "查询场景模式配置列表")
     @GetMapping("/scene-config/list-by-app-id")
     public Result<List<PayRouteSceneConfigResult>> listSceneByAppId(@NotBlank(message = "{validation.field.appId.notBlank}") String appId) {
         return Res.ok(configService.listSceneByAppId(appId));
     }
 
-    @PermCode(code = "manage", nameCn = "通道路由管理", nameEn = "Pay Route Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "通道路由管理", nameEn = "Pay Route Manage")
     @Operation(summary = "批量保存场景模式配置")
     @PostMapping("/scene-config/save-batch")
     public Result<Void> saveSceneBatch(@RequestBody @Validated PayRouteSceneConfigBatchParam param) {
@@ -77,7 +79,7 @@ public class PayRouteAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = "view", nameCn = "通道路由查看", nameEn = "Pay Route View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "通道路由查看", nameEn = "Pay Route View")
     @Operation(summary = "通道路由白名单目录下全部通道商户候选（批量）")
     @GetMapping("/scene-config/channel-mch-candidates-batch")
     public Result<Map<String, List<LabelValue>>> listSceneChannelMchCandidatesBatch(
@@ -85,7 +87,7 @@ public class PayRouteAdminController {
         return Res.ok(configService.listSceneChannelMchCandidatesBatch(appId));
     }
 
-    @PermCode(code = "view", nameCn = "通道路由查看", nameEn = "Pay Route View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "通道路由查看", nameEn = "Pay Route View")
     @Operation(summary = "按目录项与通道商户批量返回支付能力候选")
     @PostMapping("/scene-config/capability-candidates-batch")
     public Result<Map<String, List<LabelValue>>> listSceneCapabilityCandidatesBatch(
@@ -93,7 +95,7 @@ public class PayRouteAdminController {
         return Res.ok(configService.listSceneCapabilityCandidatesBatch(param));
     }
 
-    @PermCode(code = "view", nameCn = "通道路由查看", nameEn = "Pay Route View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "通道路由查看", nameEn = "Pay Route View")
     @Operation(summary = "目录项下商户已开通的通道商户候选")
     @GetMapping("/scene-config/channel-mch-candidates")
     public Result<List<LabelValue>> listSceneChannelMchCandidates(
@@ -103,7 +105,7 @@ public class PayRouteAdminController {
         return Res.ok(configService.listSceneChannelMchCandidatesForMethod(appId, provider, method));
     }
 
-    @PermCode(code = "view", nameCn = "通道路由查看", nameEn = "Pay Route View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "通道路由查看", nameEn = "Pay Route View")
     @Operation(summary = "目录项与通道商户下支付能力候选")
     @GetMapping("/scene-config/capability-candidates")
     public Result<List<LabelValue>> listSceneCapabilityCandidates(
@@ -114,14 +116,14 @@ public class PayRouteAdminController {
         return Res.ok(configService.listSceneCapabilityCandidatesForMethod(appId, provider, method, channelMchNo));
     }
 
-    @PermCode(code = "view", nameCn = "通道路由查看", nameEn = "Pay Route View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "通道路由查看", nameEn = "Pay Route View")
     @Operation(summary = "查询基础模式配置列表")
     @GetMapping("/basic-config/list-by-app-id")
     public Result<List<PayRouteBasicConfigResult>> listBasicByAppId(@NotBlank(message = "{validation.field.appId.notBlank}") String appId) {
         return Res.ok(configService.listBasicByAppId(appId));
     }
 
-    @PermCode(code = "manage", nameCn = "通道路由管理", nameEn = "Pay Route Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "通道路由管理", nameEn = "Pay Route Manage")
     @Operation(summary = "批量保存基础模式配置")
     @PostMapping("/basic-config/save-batch")
     public Result<Void> saveBasicBatch(@RequestBody @Validated PayRouteBasicConfigBatchParam param) {

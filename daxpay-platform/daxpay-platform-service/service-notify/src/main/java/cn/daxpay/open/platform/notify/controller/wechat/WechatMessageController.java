@@ -3,6 +3,7 @@ package cn.daxpay.open.platform.notify.controller.wechat;
 import cn.daxpay.open.platform.capability.auth.util.SecurityUtil;
 import cn.daxpay.open.platform.capability.wechat.message.result.MessageSendResult;
 import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
@@ -28,7 +29,7 @@ import java.util.Map;
 ///
 /// 与配置页共用菜单 [system:notify:wechat-config], 页内 Tabs 切换.
 /// 查询发送记录 / 失败重发 / 测试发送(给当前登录用户发一条, 验证配置与绑定链路).
-@PermCode(menuCode = "system:notify:wechat-config")
+@PermCode(menuCode = PermCodes.System.WechatNotify.MENU)
 @Validated
 @Tag(name = "微信消息通知记录")
 @RestController
@@ -40,21 +41,21 @@ public class WechatMessageController {
 
     private final WechatNotifyService wechatNotifyService;
 
-    @PermCode(code = "view", nameCn = "通知记录查看", nameEn = "Wechat Message View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "通知记录查看", nameEn = "Wechat Message View")
     @Operation(summary = "分页查询")
     @GetMapping("/page")
     public Result<PageResult<WechatMessageRecordResult>> page(PageParam pageParam, WechatMessageQuery query) {
         return Res.ok(messageRecordService.page(pageParam, query));
     }
 
-    @PermCode(code = "view", nameCn = "通知记录查看", nameEn = "Wechat Message View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "通知记录查看", nameEn = "Wechat Message View")
     @Operation(summary = "记录详情")
     @GetMapping("/get")
     public Result<WechatMessageRecordResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(messageRecordService.findById(id));
     }
 
-    @PermCode(code = "resend", nameCn = "通知重发", nameEn = "Wechat Message Resend")
+    @PermCode(code = PermCodes.Action.RESEND, nameCn = "通知重发", nameEn = "Wechat Message Resend")
     @Operation(summary = "重发失败消息")
     @PostMapping("/resend")
     public Result<Void> resend(@NotNull(message = "{validation.field.id.notNull}") Long id) {
@@ -63,7 +64,7 @@ public class WechatMessageController {
     }
 
     /// 测试发送(给当前登录用户发一条操作通知, 验证配置 + 绑定链路是否打通)
-    @PermCode(code = "test", nameCn = "测试发送", nameEn = "Wechat Message Test")
+    @PermCode(code = PermCodes.Action.TEST, nameCn = "测试发送", nameEn = "Wechat Message Test")
     @Operation(summary = "测试发送(发给当前登录用户)")
     @PostMapping("/test-send")
     public Result<MessageSendResult> testSend() {

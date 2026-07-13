@@ -5,6 +5,7 @@ import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
 import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
 import cn.daxpay.open.payment.admin.service.develop.DevelopAuthService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 ///
 /// 已实现项均通过查询码轮询认证结果。
 @Validated
-@PermCode(menuCode = "develop:auth")
+@PermCode(menuCode = PermCodes.Develop.Auth.MENU)
 @Tag(name = "认证调试服务")
 @RestController
 @RequestMapping("/admin/develop/auth")
@@ -39,28 +40,28 @@ public class DevelopAuthController {
 
     private final DevelopAuthService developAuthService;
 
-    @PermCode(code = "view", nameCn = "查看", nameEn = "View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "查看", nameEn = "View")
     @Operation(summary = "生成支付宝H5授权链接")
     @PostMapping("/generate-alipay-auth-url")
     public Result<AuthUrlResult> generateAlipayAuthUrl() {
         return Res.ok(developAuthService.generateAlipayAuthUrl());
     }
 
-    @PermCode(code = "view", nameCn = "查看", nameEn = "View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "查看", nameEn = "View")
     @Operation(summary = "生成微信公众号配置授权链接")
     @PostMapping("/generate-wechat-mp-auth-url")
     public Result<AuthUrlResult> generateWechatMpAuthUrl() {
         return Res.ok(developAuthService.generateWechatMpAuthUrl());
     }
 
-    @PermCode(code = "view", nameCn = "查看", nameEn = "View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "查看", nameEn = "View")
     @Operation(summary = "生成抖音H5授权链接")
     @PostMapping("/generate-douyin-auth-url")
     public Result<AuthUrlResult> generateDouyinAuthUrl() {
         return Res.ok(developAuthService.generateDouyinAuthUrl());
     }
 
-    @PermCode(code = "view", nameCn = "查看", nameEn = "View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "查看", nameEn = "View")
     @Operation(summary = "生成微信支付授权链接")
     @PostMapping("/generate-channel-auth-url")
     public Result<AuthUrlResult> generateChannelAuthUrl(@RequestBody GenerateAuthUrlParam param) {
@@ -69,7 +70,7 @@ public class DevelopAuthController {
         return Res.ok(developAuthService.generateChannelAuthUrl(param));
     }
 
-    @PermCode(code = "view", nameCn = "查看", nameEn = "View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "查看", nameEn = "View")
     @Operation(summary = "通过查询码获取认证结果")
     @GetMapping("/query-auth-result")
     public Result<AuthResult> queryAuthResult(
