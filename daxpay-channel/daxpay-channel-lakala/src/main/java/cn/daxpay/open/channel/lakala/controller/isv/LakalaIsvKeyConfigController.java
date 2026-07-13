@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /// # 拉卡拉服务商密钥配置
 ///
-@PermCode(menuCode = PermCodes.Payment.Lakala.MENU)
+@PermCode(menuCode = PermCodes.Payment.Isv.MENU)
 @Validated
 @Tag(name = "拉卡拉服务商密钥配置")
 @RestController
@@ -31,7 +31,7 @@ public class LakalaIsvKeyConfigController {
 
     private final LakalaIsvKeyConfigService lakalaIsvKeyConfigService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "拉卡拉服务商查看", nameEn = "Lakala ISV View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Payment.Isv.VIEW_NAME_CN, nameEn = PermCodes.Payment.Isv.VIEW_NAME_EN)
     @Operation(summary = "查询拉卡拉服务商密钥配置")
     @GetMapping("/find-config")
     public Result<LakalaIsvKeyConfigResult> findConfig(
@@ -40,7 +40,7 @@ public class LakalaIsvKeyConfigController {
         return Res.ok(LakalaIsvKeyConfigConvert.CONVERT.toResult(lakalaIsvKeyConfigService.findByProduct(product, sandbox)));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "拉卡拉服务商管理", nameEn = "Lakala ISV Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Payment.Isv.MANAGE_NAME_CN, nameEn = PermCodes.Payment.Isv.MANAGE_NAME_EN)
     @Operation(summary = "保存拉卡拉服务商密钥配置")
     @PostMapping("/save-config")
     public Result<Void> saveConfig(@RequestBody @Validated LakalaIsvKeyConfigParam param) {

@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 /// # 资金交易凭证(管理)
 ///
 /// 面向运营/商户后台的资金交易(凭证)管理: 分页查询、详情、状态同步、关闭/撤销
-@PermCode(menuCode = PermCodes.Payment.Trade.MENU)
+@PermCode(menuCode = PermCodes.Trade.Fund.MENU)
 @Validated
 @Tag(name = "资金交易凭证(管理)")
 @RestController

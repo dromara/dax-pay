@@ -20,7 +20,7 @@ import java.util.List;
 
 /// # 在线用户管理
 ///
-@PermCode(menuCode = PermCodes.Iam.OnlineUser.MENU)
+@PermCode(menuCode = PermCodes.Iam.Online.MENU)
 @Validated
 @Tag(name = "在线用户管理")
 @RestController

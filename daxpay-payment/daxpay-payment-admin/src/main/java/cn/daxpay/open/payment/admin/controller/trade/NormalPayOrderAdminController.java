@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 /// # 普通支付业务单(管理)
 ///
 /// 面向运营/商户后台的业务订单(容器)管理: 分页查询、详情、状态同步、关闭/撤销
-@PermCode(menuCode = PermCodes.Payment.Order.MENU)
+@PermCode(menuCode = PermCodes.Trade.Order.MENU)
 @Validated
 @Tag(name = "普通支付业务单(管理)")
 @RestController
@@ -34,14 +34,14 @@ public class NormalPayOrderAdminController {
 
     private final NormalPayOrderAdminService normalPayOrderAdminService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "订单查看", nameEn = "Order View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Trade.Order.VIEW_NAME_CN, nameEn = PermCodes.Trade.Order.VIEW_NAME_EN)
     @Operation(summary = "普通支付业务单分页")
     @GetMapping("/page")
     public Result<PageResult<NormalPayOrderResult>> page(PageParam pageParam, NormalPayOrderQuery query) {
         return Res.ok(normalPayOrderAdminService.page(pageParam, query));
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "订单查看", nameEn = "Order View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Trade.Order.VIEW_NAME_CN, nameEn = PermCodes.Trade.Order.VIEW_NAME_EN)
     @Operation(summary = "根据ID查询普通支付业务单详情")
     @GetMapping("/get-by-id")
     public Result<NormalPayOrderResult> findById(
@@ -49,7 +49,7 @@ public class NormalPayOrderAdminController {
         return Res.ok(normalPayOrderAdminService.findById(id));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "订单管理", nameEn = "Order Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Trade.Order.MANAGE_NAME_CN, nameEn = PermCodes.Trade.Order.MANAGE_NAME_EN)
     @Operation(summary = "同步支付状态")
     @PostMapping("/sync")
     public Result<NormalPaySyncResult> sync(
@@ -57,7 +57,7 @@ public class NormalPayOrderAdminController {
         return Res.ok(normalPayOrderAdminService.sync(id));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "订单管理", nameEn = "Order Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Trade.Order.MANAGE_NAME_CN, nameEn = PermCodes.Trade.Order.MANAGE_NAME_EN)
     @Operation(summary = "关闭/撤销订单")
     @PostMapping("/close")
     public Result<Void> close(

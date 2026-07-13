@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/file/platform/record")
 @RequiredArgsConstructor
-@PermCode(menuCode = PermCodes.System.FilePlatform.MENU)
+@PermCode(menuCode = PermCodes.System.File.MENU)
 public class PlatformFileRecordController {
 
     private final PlatformFileRecordService platformFileRecordService;

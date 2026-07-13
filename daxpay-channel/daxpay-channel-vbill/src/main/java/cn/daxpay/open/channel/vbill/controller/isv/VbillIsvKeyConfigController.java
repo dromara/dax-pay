@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /// # 随行付服务商密钥配置
-@PermCode(menuCode = PermCodes.Payment.Vbill.MENU)
+@PermCode(menuCode = PermCodes.Payment.Isv.MENU)
 @Validated
 @Tag(name = "随行付服务商密钥配置")
 @RestController
@@ -30,7 +30,7 @@ public class VbillIsvKeyConfigController {
 
     private final VbillIsvKeyConfigService vbillIsvKeyConfigService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "随行付服务商查看", nameEn = "VBill ISV View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Payment.Isv.VIEW_NAME_CN, nameEn = PermCodes.Payment.Isv.VIEW_NAME_EN)
     @Operation(summary = "查询随行付服务商密钥配置")
     @GetMapping("/find-config")
     public Result<VbillIsvKeyConfigResult> findConfig(
@@ -39,7 +39,7 @@ public class VbillIsvKeyConfigController {
         return Res.ok(VbillIsvKeyConfigConvert.CONVERT.toResult(vbillIsvKeyConfigService.findByProduct(product, sandbox)));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "随行付服务商管理", nameEn = "VBill ISV Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Payment.Isv.MANAGE_NAME_CN, nameEn = PermCodes.Payment.Isv.MANAGE_NAME_EN)
     @Operation(summary = "保存随行付服务商密钥配置")
     @PostMapping("/save-config")
     public Result<Void> saveConfig(@RequestBody @Validated VbillIsvKeyConfigParam param) {

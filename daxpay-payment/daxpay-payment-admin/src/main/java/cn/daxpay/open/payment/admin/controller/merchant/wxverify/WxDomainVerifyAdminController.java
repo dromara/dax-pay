@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.*;
 public class WxDomainVerifyAdminController {
     private final WxDomainVerifyService wxDomainVerifyService;
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "商户管理", nameEn = "Merchant Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Merchant.WxDomainVerify.MANAGE_NAME_CN, nameEn = PermCodes.Merchant.WxDomainVerify.MANAGE_NAME_EN)
     @Operation(summary = "上传验证文件")
     @PostMapping("/upload")
     public Result<WxDomainVerifyResult> upload(@RequestBody @Validated WxDomainVerifyUploadParam param,
@@ -41,7 +41,7 @@ public class WxDomainVerifyAdminController {
         return Res.ok(wxDomainVerifyService.upload(param, mchNo));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "商户管理", nameEn = "Merchant Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Merchant.WxDomainVerify.MANAGE_NAME_CN, nameEn = PermCodes.Merchant.WxDomainVerify.MANAGE_NAME_EN)
     @Operation(summary = "修改验证文件元数据")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) WxDomainVerifyParam param) {
@@ -49,21 +49,21 @@ public class WxDomainVerifyAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "商户查看", nameEn = "Merchant View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Merchant.WxDomainVerify.VIEW_NAME_CN, nameEn = PermCodes.Merchant.WxDomainVerify.VIEW_NAME_EN)
     @Operation(summary = "分页查询")
     @GetMapping("/page")
     public Result<PageResult<WxDomainVerifyResult>> page(PageParam pageParam, WxDomainVerifyQuery query) {
         return Res.ok(wxDomainVerifyService.page(pageParam, query));
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "商户查看", nameEn = "Merchant View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Merchant.WxDomainVerify.VIEW_NAME_CN, nameEn = PermCodes.Merchant.WxDomainVerify.VIEW_NAME_EN)
     @Operation(summary = "详情")
     @GetMapping("/get")
     public Result<WxDomainVerifyResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(wxDomainVerifyService.findById(id));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "商户管理", nameEn = "Merchant Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Merchant.WxDomainVerify.MANAGE_NAME_CN, nameEn = PermCodes.Merchant.WxDomainVerify.MANAGE_NAME_EN)
     @Operation(summary = "删除")
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {

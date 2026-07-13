@@ -25,7 +25,7 @@ import java.util.List;
 ///
 /// 提供通道商户(特约商户)维度下「支付能力 → 子商户应用」绑定关系的查询、批量保存及能力候选查询。
 ///
-@PermCode(menuCode = PermCodes.Channel.WechatApp.MENU)
+@PermCode(menuCode = PermCodes.Channel.App.MENU)
 @Validated
 @Tag(name = "微信服务商通道商户应用支付能力关联管理")
 @RestController
@@ -35,7 +35,7 @@ public class WechatIsvMchAppCapabilityController {
 
     private final WechatIsvMchAppCapabilityService wechatIsvMchAppCapabilityService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.App.VIEW_NAME_CN, nameEn = PermCodes.Channel.App.VIEW_NAME_EN)
     @Operation(summary = "查询通道商户的能力应用关联列表")
     @GetMapping("/list-by-channel-mch-no")
     public Result<List<WechatIsvMchAppCapabilityResult>> listByChannelMchNo(
@@ -44,7 +44,7 @@ public class WechatIsvMchAppCapabilityController {
         return Res.ok(wechatIsvMchAppCapabilityService.listByChannelMchNo(mchNo, channelMchNo));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.Merchant.MANAGE_NAME_CN, nameEn = PermCodes.Channel.Merchant.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.App.MANAGE_NAME_CN, nameEn = PermCodes.Channel.App.MANAGE_NAME_EN)
     @Operation(summary = "全量保存能力应用关联")
     @PostMapping("/save-batch")
     public Result<Void> saveBatch(@RequestBody @Validated WechatIsvMchAppCapabilityBatchParam param) {
@@ -52,7 +52,7 @@ public class WechatIsvMchAppCapabilityController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.App.VIEW_NAME_CN, nameEn = PermCodes.Channel.App.VIEW_NAME_EN)
     @Operation(summary = "查询微信服务商支持的支付能力候选")
     @GetMapping("/list-supported-capabilities")
     public Result<List<WechatCapabilityOption>> listSupportedCapabilities() {

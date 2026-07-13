@@ -28,14 +28,14 @@ public class AppAdminPayProductConfigController {
 
     private final AppAdminPayProductConfigService payProductConfigService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "产品配置查看", nameEn = "Product Config View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Payment.ProductConfig.VIEW_NAME_CN, nameEn = PermCodes.Payment.ProductConfig.VIEW_NAME_EN)
     @Operation(summary = "全量查询产品配置列表")
     @GetMapping("/list-all")
     public Result<List<PayProductConfigResult>> listAll() {
         return Res.ok(payProductConfigService.listAll());
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "产品配置管理", nameEn = "Product Config Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Payment.ProductConfig.MANAGE_NAME_CN, nameEn = PermCodes.Payment.ProductConfig.MANAGE_NAME_EN)
     @Operation(summary = "切换产品生效环境")
     @PostMapping("/switch-env")
     public Result<Void> switchEnv(
@@ -45,7 +45,7 @@ public class AppAdminPayProductConfigController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "产品配置管理", nameEn = "Product Config Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Payment.ProductConfig.MANAGE_NAME_CN, nameEn = PermCodes.Payment.ProductConfig.MANAGE_NAME_EN)
     @Operation(summary = "保存产品配置")
     @PostMapping("/save")
     public Result<Void> save(@RequestBody @Validated PayProductConfigParam param) {

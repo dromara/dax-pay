@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 
-@PermCode(menuCode = PermCodes.Iam.UserManager.MENU)
+@PermCode(menuCode = PermCodes.Iam.User.MENU)
 @Validated
 @Tag(name = "用户角色管理")
 @RestController
@@ -46,7 +46,7 @@ public class UserRoleController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "用户查看", nameEn = "User View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Iam.User.VIEW_NAME_CN, nameEn = PermCodes.Iam.User.VIEW_NAME_EN)
     @Operation(summary = "根据用户ID获取角色")
     @GetMapping(value = "/find-roles-by-user")
     public Result<RoleResult> findRolesByUser(@NotNull(message = "{validation.field.userId.notNull}") @Parameter(description = "用户ID") Long userId) {

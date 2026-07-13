@@ -29,7 +29,7 @@ import java.util.List;
 
 /// # 权限码管理
 ///
-@PermCode(menuCode = PermCodes.Iam.PermMenu.MENU)
+@PermCode(menuCode = PermCodes.Iam.Menu.MENU)
 @Validated
 @Tag(name = "权限码管理")
 @RestController
@@ -41,14 +41,14 @@ public class PermCodeController {
     private final UserRolePremService userRoleService;
     private final PermCodeScanService permCodeScanService;
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "菜单管理", nameEn = "Menu Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Iam.Menu.MANAGE_NAME_CN, nameEn = PermCodes.Iam.Menu.MANAGE_NAME_EN)
     @Operation(summary = "手动扫描同步权限码")
     @PostMapping("/scan")
     public Result<PermCodeScanResult> scan() {
         return Res.ok(permCodeScanService.scan(new PermCodeScanParam()));
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "菜单查看", nameEn = "Menu View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Iam.Menu.VIEW_NAME_CN, nameEn = PermCodes.Iam.Menu.VIEW_NAME_EN)
     @Operation(summary = "根据菜单查询权限码列表")
     @GetMapping("/get-by-menu")
     public Result<List<MenuPermCodeItemResult>> findByMenu(

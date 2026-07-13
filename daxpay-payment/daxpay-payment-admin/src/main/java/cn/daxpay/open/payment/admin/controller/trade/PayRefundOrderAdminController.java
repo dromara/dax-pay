@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 /// # 退款订单(管理)
 ///
 /// 面向运营/商户后台的退款订单管理: 分页查询、详情、发起退款、退款状态同步
-@PermCode(menuCode = PermCodes.Payment.Refund.MENU)
+@PermCode(menuCode = PermCodes.Trade.Refund.MENU)
 @Validated
 @Tag(name = "退款订单(管理)")
 @RestController

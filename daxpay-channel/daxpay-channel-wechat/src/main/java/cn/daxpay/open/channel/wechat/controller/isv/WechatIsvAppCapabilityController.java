@@ -24,7 +24,7 @@ import java.util.List;
 ///
 /// 提供全局维度下「支付能力 → 服务商应用」绑定关系的查询、批量保存及能力候选查询。
 ///
-@PermCode(menuCode = PermCodes.Payment.WechatIsv.MENU)
+@PermCode(menuCode = PermCodes.Payment.Isv.MENU)
 @Validated
 @Tag(name = "微信服务商应用支付能力关联管理")
 @RestController
@@ -34,14 +34,14 @@ public class WechatIsvAppCapabilityController {
 
     private final WechatIsvAppCapabilityService wechatIsvAppCapabilityService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "微信服务商查看", nameEn = "WeChat ISV View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Payment.Isv.VIEW_NAME_CN, nameEn = PermCodes.Payment.Isv.VIEW_NAME_EN)
     @Operation(summary = "查询能力应用关联列表")
     @GetMapping("/list-all")
     public Result<List<WechatIsvAppCapabilityResult>> listAll() {
         return Res.ok(wechatIsvAppCapabilityService.listAll());
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "微信服务商管理", nameEn = "WeChat ISV Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Payment.Isv.MANAGE_NAME_CN, nameEn = PermCodes.Payment.Isv.MANAGE_NAME_EN)
     @Operation(summary = "全量保存能力应用关联")
     @PostMapping("/save-batch")
     public Result<Void> saveBatch(@RequestBody @Validated WechatIsvAppCapabilityBatchParam param) {
@@ -49,7 +49,7 @@ public class WechatIsvAppCapabilityController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "微信服务商查看", nameEn = "WeChat ISV View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Payment.Isv.VIEW_NAME_CN, nameEn = PermCodes.Payment.Isv.VIEW_NAME_EN)
     @Operation(summary = "查询微信服务商支持的支付能力候选")
     @GetMapping("/list-supported-capabilities")
     public Result<List<WechatCapabilityOption>> listSupportedCapabilities() {

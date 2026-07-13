@@ -31,7 +31,7 @@ public class AppAdminMerchantController {
 
     private final AppAdminMerchantService merchantService;
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "商户管理", nameEn = "Merchant Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Merchant.Info.MANAGE_NAME_CN, nameEn = PermCodes.Merchant.Info.MANAGE_NAME_EN)
     @Operation(summary = "新增商户")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) MerchantRegisterParam param) {
@@ -39,7 +39,7 @@ public class AppAdminMerchantController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "商户管理", nameEn = "Merchant Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Merchant.Info.MANAGE_NAME_CN, nameEn = PermCodes.Merchant.Info.MANAGE_NAME_EN)
     @Operation(summary = "修改商户")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) MerchantInfoParam param) {
@@ -47,28 +47,28 @@ public class AppAdminMerchantController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "商户查看", nameEn = "Merchant View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Merchant.Info.VIEW_NAME_CN, nameEn = PermCodes.Merchant.Info.VIEW_NAME_EN)
     @Operation(summary = "商户分页")
     @GetMapping("/page")
     public Result<PageResult<MerchantInfoResult>> page(PageParam pageParam, MerchantInfoQuery param) {
         return Res.ok(merchantService.page(pageParam, param));
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "商户查看", nameEn = "Merchant View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Merchant.Info.VIEW_NAME_CN, nameEn = PermCodes.Merchant.Info.VIEW_NAME_EN)
     @Operation(summary = "根据id查询商户")
     @GetMapping("/get")
     public Result<MerchantInfoResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(merchantService.findById(id));
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "商户查看", nameEn = "Merchant View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Merchant.Info.VIEW_NAME_CN, nameEn = PermCodes.Merchant.Info.VIEW_NAME_EN)
     @Operation(summary = "根据商户号查询商户")
     @GetMapping("/get-by-mch-no")
     public Result<MerchantInfoResult> findByMchNo(@NotBlank(message = "{validation.field.mchNo.notBlank}") String mchNo) {
         return Res.ok(merchantService.findByMchNo(mchNo));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "商户管理", nameEn = "Merchant Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Merchant.Info.MANAGE_NAME_CN, nameEn = PermCodes.Merchant.Info.MANAGE_NAME_EN)
     @Operation(summary = "删除商户")
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {
@@ -76,7 +76,7 @@ public class AppAdminMerchantController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "商户管理", nameEn = "Merchant Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Merchant.Info.MANAGE_NAME_CN, nameEn = PermCodes.Merchant.Info.MANAGE_NAME_EN)
     @Operation(summary = "启用商户")
     @PostMapping("/enable")
     public Result<Void> enable(@NotNull(message = "{validation.field.id.notNull}") Long id) {
@@ -84,7 +84,7 @@ public class AppAdminMerchantController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "商户管理", nameEn = "Merchant Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Merchant.Info.MANAGE_NAME_CN, nameEn = PermCodes.Merchant.Info.MANAGE_NAME_EN)
     @Operation(summary = "禁用商户")
     @PostMapping("/disable")
     public Result<Void> disable(@NotNull(message = "{validation.field.id.notNull}") Long id) {

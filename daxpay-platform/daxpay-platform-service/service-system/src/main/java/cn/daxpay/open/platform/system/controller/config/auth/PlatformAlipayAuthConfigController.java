@@ -32,14 +32,14 @@ public class PlatformAlipayAuthConfigController {
 
     private final PlatformAlipayAuthConfigService platformAlipayAuthConfigService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "社交登录配置查看", nameEn = "Social Login Config View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Iam.Social.VIEW_NAME_CN, nameEn = PermCodes.Iam.Social.VIEW_NAME_EN)
     @Operation(summary = "获取支付宝认证配置")
     @GetMapping("/get")
     public Result<PlatformAlipayAuthConfigResult> getAlipayAuthConfig() {
         return Res.ok(platformAlipayAuthConfigService.findAlipayAuthConfig());
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "社交登录配置管理", nameEn = "Social Login Config Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Iam.Social.MANAGE_NAME_CN, nameEn = PermCodes.Iam.Social.MANAGE_NAME_EN)
     @Operation(summary = "更新支付宝认证配置")
     @PostMapping("/update")
     public Result<Void> updateAlipayAuthConfig(@RequestBody @Validated PlatformAlipayAuthConfigParam param) {

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /// # 斗拱服务商密钥配置
-@PermCode(menuCode = PermCodes.Payment.Dougong.MENU)
+@PermCode(menuCode = PermCodes.Payment.Isv.MENU)
 @Validated
 @Tag(name = "斗拱服务商密钥配置")
 @RestController
@@ -30,7 +30,7 @@ public class DougongIsvKeyConfigController {
 
     private final DougongIsvKeyConfigService dougongIsvKeyConfigService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "斗拱服务商查看", nameEn = "Dougong ISV View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Payment.Isv.VIEW_NAME_CN, nameEn = PermCodes.Payment.Isv.VIEW_NAME_EN)
     @Operation(summary = "查询斗拱服务商密钥配置")
     @GetMapping("/find-config")
     public Result<DougongIsvKeyConfigResult> findConfig(
@@ -38,7 +38,7 @@ public class DougongIsvKeyConfigController {
         return Res.ok(DougongIsvKeyConfigConvert.CONVERT.toResult(dougongIsvKeyConfigService.findByProduct(product)));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "斗拱服务商管理", nameEn = "Dougong ISV Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Payment.Isv.MANAGE_NAME_CN, nameEn = PermCodes.Payment.Isv.MANAGE_NAME_EN)
     @Operation(summary = "保存斗拱服务商密钥配置")
     @PostMapping("/save-config")
     public Result<Void> saveConfig(@RequestBody @Validated DougongIsvKeyConfigParam param) {

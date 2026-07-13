@@ -25,7 +25,7 @@ public class AppAdminMerchantCredentialController {
 
     private final AppAdminMerchantCredentialService credentialService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "商户查看", nameEn = "Merchant View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Merchant.Credential.VIEW_NAME_CN, nameEn = PermCodes.Merchant.Credential.VIEW_NAME_EN)
     @Operation(summary = "根据商户号查询对接配置")
     @GetMapping("/get-by-mch-no")
     public Result<MerchantCredentialResult> findByMchNo(
@@ -33,7 +33,7 @@ public class AppAdminMerchantCredentialController {
         return Res.ok(credentialService.findByMchNo(mchNo));
     }
 
-    @PermCode(code = PermCodes.Merchant.Credential.CREDENTIAL_CONFIG_UPDATE, nameCn = "对接配置更新", nameEn = "Credential Config Update")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Merchant.Credential.MANAGE_NAME_CN, nameEn = PermCodes.Merchant.Credential.MANAGE_NAME_EN)
     @Operation(summary = "更新商户对接配置")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated MerchantCredentialParam param) {

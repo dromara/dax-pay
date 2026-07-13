@@ -39,7 +39,7 @@ public class DictItemController {
     ///
     /// @param param 字典项参数
     /// @return 操作结果
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "字典管理", nameEn = "Dict Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.System.Dict.MANAGE_NAME_CN, nameEn = PermCodes.System.Dict.MANAGE_NAME_EN)
     @Operation(summary = "添加字典项")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) DictItemParam param) {
@@ -51,7 +51,7 @@ public class DictItemController {
     ///
     /// @param param 字典项参数
     /// @return 操作结果
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "字典管理", nameEn = "Dict Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.System.Dict.MANAGE_NAME_CN, nameEn = PermCodes.System.Dict.MANAGE_NAME_EN)
     @Operation(summary = "修改字典项")
     @PostMapping(value = "/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) DictItemParam param) {
@@ -63,7 +63,7 @@ public class DictItemController {
     ///
     /// @param id 字典项ID
     /// @return 操作结果
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "字典管理", nameEn = "Dict Manage")
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.System.Dict.MANAGE_NAME_CN, nameEn = PermCodes.System.Dict.MANAGE_NAME_EN)
     @Operation(summary = "删除字典项")
     @PostMapping(value = "/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {
@@ -75,7 +75,7 @@ public class DictItemController {
     ///
     /// @param id 字典项ID
     /// @return 字典项信息
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "字典查看", nameEn = "Dict View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.System.Dict.VIEW_NAME_CN, nameEn = PermCodes.System.Dict.VIEW_NAME_EN)
     @Operation(summary = "根据字典项ID查询")
     @GetMapping("/get")
     public Result<DictItemResult> findById(@NotNull(message = "{validation.field.dictItemId.notNull}") Long id) {
@@ -86,7 +86,7 @@ public class DictItemController {
     ///
     /// @param dictId 字典ID
     /// @return 字典项列表
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "字典查看", nameEn = "Dict View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.System.Dict.VIEW_NAME_CN, nameEn = PermCodes.System.Dict.VIEW_NAME_EN)
     @Operation(summary = "查询指定字典ID下的所有字典项")
     @GetMapping("/get-by-dictionary-id")
     public Result<List<DictItemResult>> findByDictionaryId(@NotNull(message = "{validation.field.dictId.notNull}") Long dictId) {
@@ -98,7 +98,7 @@ public class DictItemController {
     /// @param pageParam 分页参数
     /// @param dictId 字典ID
     /// @return 字典项分页结果
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "字典查看", nameEn = "Dict View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.System.Dict.VIEW_NAME_CN, nameEn = PermCodes.System.Dict.VIEW_NAME_EN)
     @Operation(summary = "分页查询指定字典下的字典项")
     @GetMapping("/page-by-dictionary-id")
     public Result<PageResult<DictItemResult>> pageByDictionaryId(PageParam pageParam, @Parameter(description = "字典ID") Long dictId) {
@@ -108,7 +108,7 @@ public class DictItemController {
     /// 获取全部字典项
     ///
     /// @return 所有字典项列表
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "字典查看", nameEn = "Dict View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.System.Dict.VIEW_NAME_CN, nameEn = PermCodes.System.Dict.VIEW_NAME_EN)
     @Operation(summary = "获取全部字典项")
     @GetMapping("/all")
     public Result<List<DictItemResult>> findAll() {
@@ -130,7 +130,7 @@ public class DictItemController {
     /// @param code 字典项编码
     /// @param dictId 字典ID
     /// @return 是否存在
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "字典查看", nameEn = "Dict View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.System.Dict.VIEW_NAME_CN, nameEn = PermCodes.System.Dict.VIEW_NAME_EN)
     @Operation(summary = "字典项编码是否被使用")
     @GetMapping("/exists-by-code")
     public Result<Boolean> existsByCode(
@@ -145,7 +145,7 @@ public class DictItemController {
     /// @param dictId 字典ID
     /// @param id 字典项ID
     /// @return 是否存在
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "字典查看", nameEn = "Dict View")
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.System.Dict.VIEW_NAME_CN, nameEn = PermCodes.System.Dict.VIEW_NAME_EN)
     @Operation(summary = "字典项编码是否被使用(不包含自己)")
     @GetMapping("/exists-by-code-not-id")
     public Result<Boolean> existsByCode(@Parameter(description = "编码") @NotBlank(message = "{validation.field.code.notBlank}") String code,

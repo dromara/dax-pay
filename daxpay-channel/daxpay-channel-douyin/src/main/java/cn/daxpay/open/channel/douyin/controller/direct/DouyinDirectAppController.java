@@ -31,7 +31,7 @@ import java.util.List;
 ///
 /// 提供直连商户应用及其授权认证配置的 REST API，支持按商户号和通道商户号查询列表。
 ///
-@PermCode(menuCode = PermCodes.Channel.DouyinApp.MENU)
+@PermCode(menuCode = PermCodes.Channel.App.MENU)
 @Validated
 @Tag(name = "抖音直连商户应用管理")
 @RestController
@@ -42,7 +42,7 @@ public class DouyinDirectAppController {
     private final DouyinDirectAppService douyinDirectAppService;
     private final DouyinDirectAppAuthConfigService douyinDirectAppAuthConfigService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.App.VIEW_NAME_CN, nameEn = PermCodes.Channel.App.VIEW_NAME_EN)
     @Operation(summary = "根据商户号和通道商户号查询应用列表")
     @GetMapping("/list-by-channel-mch-no")
     public Result<List<DouyinDirectAppResult>> listByChannelMchNo(
@@ -51,7 +51,7 @@ public class DouyinDirectAppController {
         return Res.ok(douyinDirectAppService.listByMchNoAndChannelMchNo(mchNo, channelMchNo));
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.App.VIEW_NAME_CN, nameEn = PermCodes.Channel.App.VIEW_NAME_EN)
     @Operation(summary = "查询应用详情")
     @GetMapping("/find-by-id")
     public Result<DouyinDirectAppResult> findById(
@@ -59,7 +59,7 @@ public class DouyinDirectAppController {
         return Res.ok(douyinDirectAppService.findById(id));
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.App.VIEW_NAME_CN, nameEn = PermCodes.Channel.App.VIEW_NAME_EN)
     @Operation(summary = "同一通道商户下抖音应用ID是否已存在")
     @GetMapping("/exists-douyin-app-id-by-channel")
     public Result<Boolean> existsDouyinAppIdByChannel(
@@ -69,7 +69,7 @@ public class DouyinDirectAppController {
         return Res.ok(douyinDirectAppService.existsDouyinAppIdByChannel(mchNo, channelMchNo, douyinAppId, null));
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.App.VIEW_NAME_CN, nameEn = PermCodes.Channel.App.VIEW_NAME_EN)
     @Operation(summary = "同一通道商户下抖音应用ID是否已存在(排除自身)")
     @GetMapping("/exists-douyin-app-id-by-channel-not-id")
     public Result<Boolean> existsDouyinAppIdByChannelNotId(
@@ -80,7 +80,7 @@ public class DouyinDirectAppController {
         return Res.ok(douyinDirectAppService.existsDouyinAppIdByChannel(mchNo, channelMchNo, douyinAppId, id));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.Merchant.MANAGE_NAME_CN, nameEn = PermCodes.Channel.Merchant.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.App.MANAGE_NAME_CN, nameEn = PermCodes.Channel.App.MANAGE_NAME_EN)
     @Operation(summary = "新增直连商户应用")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) DouyinDirectAppParam param) {
@@ -89,7 +89,7 @@ public class DouyinDirectAppController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.Merchant.MANAGE_NAME_CN, nameEn = PermCodes.Channel.Merchant.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.App.MANAGE_NAME_CN, nameEn = PermCodes.Channel.App.MANAGE_NAME_EN)
     @Operation(summary = "修改直连商户应用")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) DouyinDirectAppParam param) {
@@ -98,7 +98,7 @@ public class DouyinDirectAppController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.Merchant.MANAGE_NAME_CN, nameEn = PermCodes.Channel.Merchant.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.App.MANAGE_NAME_CN, nameEn = PermCodes.Channel.App.MANAGE_NAME_EN)
     @Operation(summary = "删除直连商户应用")
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {
@@ -106,7 +106,7 @@ public class DouyinDirectAppController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.App.VIEW_NAME_CN, nameEn = PermCodes.Channel.App.VIEW_NAME_EN)
     @Operation(summary = "查询应用授权认证配置")
     @GetMapping("/find-auth-config-by-app-id")
     public Result<DouyinDirectAppAuthConfigResult> findAuthConfigByAppId(
@@ -115,7 +115,7 @@ public class DouyinDirectAppController {
         return Res.ok(config.toResult());
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.Merchant.MANAGE_NAME_CN, nameEn = PermCodes.Channel.Merchant.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.App.MANAGE_NAME_CN, nameEn = PermCodes.Channel.App.MANAGE_NAME_EN)
     @Operation(summary = "保存应用授权认证配置")
     @PostMapping("/save-auth-config")
     public Result<Void> saveAuthConfig(@RequestBody @Validated DouyinDirectAppAuthConfigParam param) {
