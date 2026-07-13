@@ -51,6 +51,13 @@
             <version>${project.version}</version>
         </dependency>
 
+        <!-- 运营移动端 APP/小程序（/app-admin/**，转发 admin/common Service） -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-payment-app-admin</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- 支付网关端（下单/退款/转账/查询/聚合支付） -->
         <dependency>
             <groupId>cn.daxpay.open</groupId>
