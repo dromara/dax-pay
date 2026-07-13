@@ -1,7 +1,7 @@
 package cn.daxpay.open.payment.admin.controller.masterdata.provider;
 
-import cn.daxpay.open.payment.masterdata.constants.provider.result.PayProviderGroupResult;
-import cn.daxpay.open.payment.masterdata.constants.provider.result.PayProviderMethodResult;
+import cn.daxpay.open.payment.masterdata.result.provider.PayProviderGroupResult;
+import cn.daxpay.open.payment.masterdata.result.provider.PayProviderMethodResult;
 import cn.daxpay.open.payment.admin.service.masterdata.provider.PayProviderService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;

@@ -57,14 +57,14 @@ public class YeepayPayService {
 
     /// 生成易宝支付异步通知地址(易宝→平台)
     ///
-    /// 路径约定: `{backendBaseUrl}/unipay/callback/{mchNo}/{appId}/yeepay/{channelMchNo}/pay`
+    /// 路径约定: `{backendBaseUrl}/unipay/callback/{mchNo}/{channelMchNo}/yeepay/pay`
     private String buildNotifyUrl(PayTrade order, String channelMchNo) {
         String base = platformUrlConfigService.getUrlConfig().getBackendBaseUrl();
         if (StrUtil.isBlank(base)) {
             throw new BizInfoException(DaxPayErrorCode.CONFIG_ERROR, "error.common.backendBaseUrlNotConfigured");
         }
-        return StrUtil.format("{}/unipay/callback/{}/{}/yeepay/{}/pay",
-                base, order.getMchNo(), order.getAppId(), channelMchNo);
+        return StrUtil.format("{}/unipay/callback/{}/{}/yeepay/pay",
+                base, order.getMchNo(), channelMchNo);
     }
 
     /// 平台支付方式([PayMethodEnum] code) → 易宝支付方式

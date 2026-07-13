@@ -6,8 +6,8 @@ import cn.daxpay.open.channel.alipay.client.req.AlipayCallbackParseReq;
 import cn.daxpay.open.channel.alipay.client.resp.AlipayCallbackParseResp;
 import cn.daxpay.open.channel.alipay.service.direct.AlipayDirectConfigAssembler;
 import cn.daxpay.open.channel.alipay.service.isv.AlipayIsvConfigAssembler;
-import cn.daxpay.open.payment.common.callback.CallbackData;
-import cn.daxpay.open.payment.common.callback.RefundCallbackData;
+import cn.daxpay.open.payment.trade.runtime.bo.CallbackData;
+import cn.daxpay.open.payment.trade.runtime.bo.RefundCallbackData;
 import cn.daxpay.open.payment.trade.order.dao.NormalPayOrderManager;
 import cn.daxpay.open.payment.trade.order.dao.PayRefundOrderManager;
 import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
@@ -18,6 +18,7 @@ import cn.daxpay.open.payment.trade.runtime.service.callback.PayCallbackService;
 import cn.daxpay.open.payment.trade.runtime.service.callback.RefundCallbackService;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
+import cn.hutool.core.util.StrUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,13 +30,13 @@ import java.util.Objects;
 
 /// # 支付宝回调处理服务(支付/退款统一入口)
 ///
-/// 支付宝支付与退款共用同一回调端点 `/unipay/callback/{mchNo}/{appId}/alipay`(无 /pay 后缀,
-/// 旧版约定, 见 AlipayPayService.buildNotifyUrl), 通过表单参数区分:
+/// 支付宝支付与退款共用同一回调端点 `/unipay/callback/{mchNo}/{channelMchNo}/alipay`(无 /pay 后缀,
+/// 见 AlipayPayService.buildNotifyUrl), 通过表单参数区分:
 /// - 含 `out_request_no` → 退款回调
 /// - 否则 → 支付回调
 ///
-/// 流程: 主应用接收原始表单 → 凭 out_trade_no/out_request_no 反查订单 → 组装通道凭证(直连/服务商) →
-/// 转发子应用验签解析 → 构建 CallbackData/RefundCallbackData 交框架更新订单状态。
+/// 流程: 主应用接收原始表单 → 凭 out_trade_no/out_request_no 反查订单(channelMchNo 可加速/校验) →
+/// 组装通道凭证(直连/服务商) → 转发子应用验签解析 → 构建 CallbackData/RefundCallbackData 交框架更新订单状态。
 /// 主应用零加密代码, 验签与字段解析集中在子应用 dax-pay-channel-one。
 @Slf4j
 @Service
@@ -55,7 +56,9 @@ public class AlipayCallbackService {
     private final RefundCallbackService refundCallbackService;
 
     /// 回调统一处理(自动区分支付/退款)
-    public String handle(HttpServletRequest request) {
+    ///
+    /// @param channelMchNo 路径上的通道商户号(直连凭证定位; 服务商模式仍以订单 product 为准)
+    public String handle(String channelMchNo, HttpServletRequest request) {
         // 1. 提取全部表单参数
         Map<String, String> params = extractFormParams(request);
         if (params.isEmpty()) {
@@ -67,9 +70,9 @@ public class AlipayCallbackService {
         boolean refund = params.containsKey("out_request_no");
         try {
             if (refund) {
-                return handleRefund(params);
+                return handleRefund(channelMchNo, params);
             }
-            return handlePay(params);
+            return handlePay(channelMchNo, params);
         } catch (Exception e) {
             log.error("支付宝回调业务处理失败", e);
             return NOTIFY_FAIL;
@@ -77,12 +80,12 @@ public class AlipayCallbackService {
     }
 
     /// 支付回调处理
-    private String handlePay(Map<String, String> params) {
-        // 凭 out_trade_no(平台交易号) 反查凭证
+    private String handlePay(String channelMchNo, Map<String, String> params) {
+        // 凭 out_trade_no(平台交易号) 反查凭证; channelMchNo 作直连兜底/一致性校验
         String tradeNo = params.get("out_trade_no");
-        AlipaySdkCredential credential = resolveCredentialByTradeNo(tradeNo);
+        AlipaySdkCredential credential = resolveCredentialByTradeNo(tradeNo, channelMchNo);
         if (credential == null) {
-            log.error("支付宝支付回调: 无法解析通道凭证, tradeNo={}", tradeNo);
+            log.error("支付宝支付回调: 无法解析通道凭证, tradeNo={}, channelMchNo={}", tradeNo, channelMchNo);
             return NOTIFY_FAIL;
         }
         AlipayCallbackParseResp resp = parse(params, credential, false);
@@ -105,7 +108,7 @@ public class AlipayCallbackService {
     }
 
     /// 退款回调处理
-    private String handleRefund(Map<String, String> params) {
+    private String handleRefund(String channelMchNo, Map<String, String> params) {
         // out_request_no 为平台退款号, 凭原支付订单号反查凭证
         String refundNo = params.get("out_request_no");
         PayRefundOrder refundOrder = payRefundOrderManager.findByRefundNo(refundNo).orElse(null);
@@ -113,9 +116,9 @@ public class AlipayCallbackService {
             log.error("支付宝退款回调: 退款单不存在 refundNo={}", refundNo);
             return NOTIFY_FAIL;
         }
-        AlipaySdkCredential credential = resolveCredentialByTradeNo(refundOrder.getOrderNo());
+        AlipaySdkCredential credential = resolveCredentialByTradeNo(refundOrder.getOrderNo(), channelMchNo);
         if (credential == null) {
-            log.error("支付宝退款回调: 无法解析通道凭证, refundNo={}", refundNo);
+            log.error("支付宝退款回调: 无法解析通道凭证, refundNo={}, channelMchNo={}", refundNo, channelMchNo);
             return NOTIFY_FAIL;
         }
         AlipayCallbackParseResp resp = parse(params, credential, true);
@@ -153,7 +156,9 @@ public class AlipayCallbackService {
     }
 
     /// 凭原支付交易号反查通道凭证(直连/服务商自动分发)
-    private AlipaySdkCredential resolveCredentialByTradeNo(String tradeNo) {
+    ///
+    /// @param pathChannelMchNo 回调 path 上的通道商户号; 订单侧 channelMchNo 优先, 空则用 path
+    private AlipaySdkCredential resolveCredentialByTradeNo(String tradeNo, String pathChannelMchNo) {
         if (tradeNo == null || tradeNo.isBlank()) {
             return null;
         }
@@ -170,8 +175,9 @@ public class AlipayCallbackService {
         if (ProductEnum.ALIPAY_ISV.getCode().equals(order.getProduct())) {
             return alipayIsvConfigAssembler.buildConfig(trade.getMchNo());
         }
+        String channelMchNo = StrUtil.blankToDefault(order.getChannelMchNo(), pathChannelMchNo);
         return alipayDirectConfigAssembler.buildConfig(
-                trade.getMchNo(), order.getChannelMchNo(), order.getCapability());
+                trade.getMchNo(), channelMchNo, order.getCapability());
     }
 
     /// 提取 request 全部表单参数为 Map<String,String>(多值取首项)

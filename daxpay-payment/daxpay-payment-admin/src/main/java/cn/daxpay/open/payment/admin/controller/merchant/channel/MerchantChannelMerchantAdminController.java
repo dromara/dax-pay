@@ -12,7 +12,7 @@ import cn.daxpay.open.payment.merchant.param.channel.ChannelMerchantEditParam;
 import cn.daxpay.open.payment.merchant.param.channel.ChannelMerchantQuery;
 import cn.daxpay.open.payment.merchant.result.channel.ChannelMerchantResult;
 import cn.daxpay.open.payment.merchant.service.channel.ChannelMerchantService;
-import cn.daxpay.open.payment.masterdata.constants.channel.result.PayChannelResult;
+import cn.daxpay.open.payment.masterdata.result.channel.PayChannelResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;

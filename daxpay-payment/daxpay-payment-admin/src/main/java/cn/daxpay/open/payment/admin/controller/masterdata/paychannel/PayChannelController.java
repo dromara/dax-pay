@@ -2,11 +2,11 @@ package cn.daxpay.open.payment.admin.controller.masterdata.paychannel;
 
 
 import cn.daxpay.open.platform.core.code.PermCodes;
-import cn.daxpay.open.payment.masterdata.constants.channel.param.PayChannelQuery;
-import cn.daxpay.open.payment.masterdata.constants.channel.result.PayChannelResult;
-import cn.daxpay.open.payment.masterdata.constants.product.result.PayProductResult;
-import cn.daxpay.open.payment.masterdata.constants.channel.service.PayChannelService;
-import cn.daxpay.open.payment.masterdata.constants.product.service.PayProductService;
+import cn.daxpay.open.payment.masterdata.param.channel.PayChannelQuery;
+import cn.daxpay.open.payment.masterdata.result.channel.PayChannelResult;
+import cn.daxpay.open.payment.masterdata.result.product.PayProductResult;
+import cn.daxpay.open.payment.masterdata.service.channel.PayChannelService;
+import cn.daxpay.open.payment.masterdata.service.product.PayProductService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.dto.LabelValue;

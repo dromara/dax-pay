@@ -59,7 +59,7 @@ public class HkrtPayService {
         req.setOpenId(payParam.getOpenId());
         req.setAuthCode(payParam.getAuthCode());
         req.setClientIp(payParam.getClientIp());
-        req.setNotifyUrl(this.buildNotifyUrl(order));
+        req.setNotifyUrl(this.buildNotifyUrl(order, payParam.getChannelMchNo()));
         req.setExpireTime(payParam.getExpiredTime());
         req.setCredential(credential);
 
@@ -74,14 +74,14 @@ public class HkrtPayService {
 
     /// 生成海科融通支付异步通知地址(海科融通→平台)
     ///
-    /// 路径约定: `{backendBaseUrl}/unipay/callback/{mchNo}/{appId}/hkrt/pay`
-    private String buildNotifyUrl(PayTrade order) {
+    /// 路径约定: `{backendBaseUrl}/unipay/callback/{mchNo}/{channelMchNo}/hkrt/pay`
+    private String buildNotifyUrl(PayTrade order, String channelMchNo) {
         String base = platformUrlConfigService.getUrlConfig().getBackendBaseUrl();
         if (StrUtil.isBlank(base)) {
             throw new BizInfoException(DaxPayErrorCode.CONFIG_ERROR, "error.common.backendBaseUrlNotConfigured");
         }
         return StrUtil.format("{}/unipay/callback/{}/{}/hkrt/pay",
-                base, order.getMchNo(), order.getAppId());
+                base, order.getMchNo(), channelMchNo);
     }
 
     /// 平台支付方式([PayMethodEnum] code) → 海科融通 method + bodyType

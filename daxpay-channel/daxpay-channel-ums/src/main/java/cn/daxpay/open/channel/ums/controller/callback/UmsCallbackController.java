@@ -2,6 +2,7 @@ package cn.daxpay.open.channel.ums.controller.callback;
 
 import cn.daxpay.open.channel.ums.service.callback.UmsPayCallbackService;
 import cn.daxpay.open.channel.ums.service.callback.UmsRefundCallbackService;
+import cn.daxpay.open.payment.common.assist.MerchantContextLoader;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,9 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "银联商务支付回调通知控制器")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/unipay/callback/{mchNo}/{appId}/ums/{channelMchNo}")
+@RequestMapping("/unipay/callback/{mchNo}/{channelMchNo}/ums")
 public class UmsCallbackController {
 
+    private final MerchantContextLoader merchantContextLoader;
     private final UmsPayCallbackService umsPayCallbackService;
     private final UmsRefundCallbackService umsRefundCallbackService;
 
@@ -28,9 +30,9 @@ public class UmsCallbackController {
     @Operation(summary = "银联商务支付回调")
     @PostMapping("/pay")
     public String payNotify(@PathVariable("mchNo") String mchNo,
-                            @PathVariable("appId") String appId,
                             @PathVariable("channelMchNo") String channelMchNo,
                             HttpServletRequest request) {
+        merchantContextLoader.bindMchNoForCallback(mchNo);
         return umsPayCallbackService.payHandle(mchNo, channelMchNo, request);
     }
 
@@ -38,9 +40,9 @@ public class UmsCallbackController {
     @Operation(summary = "银联商务退款回调")
     @PostMapping("/refund")
     public String refundNotify(@PathVariable("mchNo") String mchNo,
-                               @PathVariable("appId") String appId,
                                @PathVariable("channelMchNo") String channelMchNo,
                                HttpServletRequest request) {
+        merchantContextLoader.bindMchNoForCallback(mchNo);
         return umsRefundCallbackService.refundHandle(mchNo, channelMchNo, request);
     }
 }

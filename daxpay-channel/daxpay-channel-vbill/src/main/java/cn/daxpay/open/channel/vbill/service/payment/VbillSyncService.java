@@ -4,7 +4,7 @@ import cn.daxpay.open.channel.vbill.client.VbillChannelClient;
 import cn.daxpay.open.channel.vbill.client.credential.VbillSdkCredential;
 import cn.daxpay.open.channel.vbill.client.req.VbillSyncReq;
 import cn.daxpay.open.channel.vbill.client.resp.VbillSyncResp;
-import cn.daxpay.open.payment.common.enums.PayFundStatusEnum;
+import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.PaySyncResultBo;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;

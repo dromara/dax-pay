@@ -53,7 +53,7 @@ public class AlipayPayService {
         req.setAuthCode(payParam.getAuthCode());
         req.setOpenId(payParam.getOpenId());
         // 通道通知地址: 始终使用平台生成的回调地址(支付宝→平台), 不使用 payParam.notifyUrl(语义为平台→商户)
-        req.setNotifyUrl(this.buildNotifyUrl(order));
+        req.setNotifyUrl(this.buildNotifyUrl(order, payParam.getChannelMchNo()));
         // 关单时间取自订单(createOrder 已对 null 兜底默认30分钟), 子应用据此向支付宝设置 time_expire
         req.setExpireTime(payParam.getExpiredTime());
         req.setCredential(credential);
@@ -69,17 +69,17 @@ public class AlipayPayService {
 
     /// 生成支付宝支付异步通知地址(支付宝→平台)
     ///
-    /// 沿用商业版旧版路径约定: `{backendBaseUrl}/unipay/callback/{mchNo}/{appId}/alipay`
+    /// 路径约定: `{backendBaseUrl}/unipay/callback/{mchNo}/{channelMchNo}/alipay`
     /// backendBaseUrl 来自平台端点配置 [PlatformUrlConfig], 与社交登录回调地址同源
-    /// 注: 支付宝支付/退款共用同一回调端点(旧版设计), 无 /pay 后缀, 与微信路径不同
-    private String buildNotifyUrl(PayTrade order) {
+    /// 注: 支付宝支付/退款共用同一回调端点, 无 /pay 后缀, 与微信路径不同
+    private String buildNotifyUrl(PayTrade order, String channelMchNo) {
         String base = platformUrlConfigService.getUrlConfig().getBackendBaseUrl();
         if (StrUtil.isBlank(base)) {
             // backendBaseUrl 未配置时抛清晰异常, 避免 null 透传到支付宝导致无异步回调
             throw new IllegalStateException("平台后端访问地址(backendBaseUrl)未配置, 无法生成支付宝回调地址");
         }
         return StrUtil.format("{}/unipay/callback/{}/{}/alipay",
-                base, order.getMchNo(), order.getAppId());
+                base, order.getMchNo(), channelMchNo);
     }
 
     /// 平台支付方式([PayMethodEnum] code) -> 支付宝通道支付方式

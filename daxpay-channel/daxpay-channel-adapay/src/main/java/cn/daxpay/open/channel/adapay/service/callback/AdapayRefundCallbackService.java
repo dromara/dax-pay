@@ -5,7 +5,7 @@ import cn.daxpay.open.channel.adapay.client.credential.AdapaySdkCredential;
 import cn.daxpay.open.channel.adapay.client.req.AdapayCallbackParseReq;
 import cn.daxpay.open.channel.adapay.client.resp.AdapayCallbackParseResp;
 import cn.daxpay.open.channel.adapay.code.AdapayCode;
-import cn.daxpay.open.payment.common.callback.RefundCallbackData;
+import cn.daxpay.open.payment.trade.runtime.bo.RefundCallbackData;
 import cn.daxpay.open.payment.trade.runtime.service.callback.RefundCallbackService;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.hutool.core.util.StrUtil;

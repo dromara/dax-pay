@@ -7,7 +7,7 @@ import cn.daxpay.open.channel.leshua.client.resp.LeshuaCallbackParseResp;
 import cn.daxpay.open.channel.leshua.code.LeshuaCode;
 import cn.daxpay.open.channel.leshua.dao.isv.LeshuaIsvKeyConfigManager;
 import cn.daxpay.open.channel.leshua.entity.isv.LeshuaIsvKeyConfig;
-import cn.daxpay.open.payment.common.callback.RefundCallbackData;
+import cn.daxpay.open.payment.trade.runtime.bo.RefundCallbackData;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.service.callback.RefundCallbackService;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;

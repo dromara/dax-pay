@@ -3,7 +3,7 @@ package cn.daxpay.open.channel.lakala.service.callback;
 import cn.daxpay.open.channel.lakala.client.resp.LakalaCallbackParseResp;
 import cn.daxpay.open.channel.lakala.dao.isv.LakalaIsvKeyConfigManager;
 import cn.daxpay.open.channel.lakala.entity.isv.LakalaIsvKeyConfig;
-import cn.daxpay.open.payment.common.callback.RefundCallbackData;
+import cn.daxpay.open.payment.trade.runtime.bo.RefundCallbackData;
 import cn.daxpay.open.payment.trade.runtime.service.callback.RefundCallbackService;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;

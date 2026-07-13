@@ -5,7 +5,7 @@ import cn.daxpay.open.channel.leshua.client.credential.LeshuaSdkCredential;
 import cn.daxpay.open.channel.leshua.client.req.LeshuaRefundSyncReq;
 import cn.daxpay.open.channel.leshua.client.resp.LeshuaRefundSyncResp;
 import cn.daxpay.open.channel.leshua.code.LeshuaCode;
-import cn.daxpay.open.payment.common.enums.RefundOrderStatusEnum;
+import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
 import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;

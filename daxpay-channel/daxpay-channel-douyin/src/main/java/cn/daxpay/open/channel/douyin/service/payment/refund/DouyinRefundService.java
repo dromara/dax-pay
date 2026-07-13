@@ -5,7 +5,7 @@ import cn.daxpay.open.channel.douyin.client.credential.DouyinSdkCredential;
 import cn.daxpay.open.channel.douyin.client.req.DouyinRefundReq;
 import cn.daxpay.open.channel.douyin.client.resp.DouyinRefundResp;
 import cn.daxpay.open.channel.douyin.code.DouyinPayCode;
-import cn.daxpay.open.payment.common.enums.RefundOrderStatusEnum;
+import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
 import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
@@ -61,8 +61,8 @@ public class DouyinRefundService {
         if (StrUtil.isBlank(base)) {
             throw new IllegalStateException("平台后端访问地址(backendBaseUrl)未配置, 无法生成抖音退款回调地址");
         }
-        return StrUtil.format("{}/unipay/callback/{}/{}/douyin/{}/refund",
-                base, refundOrder.getMchNo(), refundOrder.getAppId(), refundOrder.getChannelMchNo());
+        return StrUtil.format("{}/unipay/callback/{}/{}/douyin/refund",
+                base, refundOrder.getMchNo(), refundOrder.getChannelMchNo());
     }
 
     /// 解析子应用响应

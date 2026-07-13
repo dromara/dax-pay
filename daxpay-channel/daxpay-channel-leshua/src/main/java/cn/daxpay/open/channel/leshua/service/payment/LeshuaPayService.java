@@ -54,7 +54,7 @@ public class LeshuaPayService {
         req.setOpenId(payParam.getOpenId());
         req.setAuthCode(payParam.getAuthCode());
         req.setClientIp(payParam.getClientIp());
-        req.setNotifyUrl(this.buildNotifyUrl(order));
+        req.setNotifyUrl(this.buildNotifyUrl(order, payParam.getChannelMchNo()));
         req.setCredential(credential);
 
         // 调用子应用
@@ -68,14 +68,14 @@ public class LeshuaPayService {
 
     /// 生成乐刷支付异步通知地址(乐刷→平台)
     ///
-    /// 路径约定: `{backendBaseUrl}/unipay/callback/{mchNo}/{appId}/leshua/pay`
-    private String buildNotifyUrl(PayTrade order) {
+    /// 路径约定: `{backendBaseUrl}/unipay/callback/{mchNo}/{channelMchNo}/leshua/pay`
+    private String buildNotifyUrl(PayTrade order, String channelMchNo) {
         String base = platformUrlConfigService.getUrlConfig().getBackendBaseUrl();
         if (StrUtil.isBlank(base)) {
             throw new BizInfoException(DaxPayErrorCode.CONFIG_ERROR, "error.common.backendBaseUrlNotConfigured");
         }
         return StrUtil.format("{}/unipay/callback/{}/{}/leshua/pay",
-                base, order.getMchNo(), order.getAppId());
+                base, order.getMchNo(), channelMchNo);
     }
 
     /// 平台支付方式([PayMethodEnum] code) → 乐刷三要素

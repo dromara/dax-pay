@@ -50,7 +50,7 @@ public class DougongPayService {
         // JSAPI/MINI 场景的用户标识(微信 openid / 支付宝 buyerId)
         req.setOpenId(payParam.getOpenId());
         req.setClientIp(payParam.getClientIp());
-        req.setNotifyUrl(this.buildNotifyUrl(order));
+        req.setNotifyUrl(this.buildNotifyUrl(order, payParam.getChannelMchNo()));
         req.setExpireTime(payParam.getExpiredTime());
         req.setCredential(credential);
 
@@ -65,14 +65,14 @@ public class DougongPayService {
 
     /// 生成斗拱支付异步通知地址(汇付→平台)
     ///
-    /// 路径约定: `{backendBaseUrl}/unipay/callback/{mchNo}/{appId}/dougong/pay`
-    private String buildNotifyUrl(PayTrade order) {
+    /// 路径约定: `{backendBaseUrl}/unipay/callback/{mchNo}/{channelMchNo}/dougong/pay`
+    private String buildNotifyUrl(PayTrade order, String channelMchNo) {
         String base = platformUrlConfigService.getUrlConfig().getBackendBaseUrl();
         if (StrUtil.isBlank(base)) {
             throw new BizInfoException(DaxPayErrorCode.CONFIG_ERROR, "error.common.backendBaseUrlNotConfigured");
         }
         return StrUtil.format("{}/unipay/callback/{}/{}/dougong/pay",
-                base, order.getMchNo(), order.getAppId());
+                base, order.getMchNo(), channelMchNo);
     }
 
     /// 平台支付方式([PayMethodEnum] code) → 斗拱支付方式

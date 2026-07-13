@@ -7,7 +7,6 @@ import cn.daxpay.open.platform.core.util.ValidationUtil;
 import cn.daxpay.open.payment.unipay.param.MerchantPaymentCommonParam;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.common.assist.MerchantContextLoader;
-import cn.daxpay.open.payment.common.assist.PaySignService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -30,7 +29,7 @@ import java.time.ZoneOffset;
 @Order
 @RequiredArgsConstructor
 public class PaymentVerifyAspect {
-    private final PaySignService paySignService;
+    private final PaymentSignService paymentSignService;
     private final MerchantContextLoader merchantContextLoader;
 
     /// 处理方法上的@PaymentVerify注解
@@ -59,7 +58,7 @@ public class PaymentVerifyAspect {
             // 商户身份初始化(含状态校验), 使 mchNo 进入线程上下文供签名校验与自动填充
             merchantContextLoader.initMch(paymentParam.getMchNo());
             // 参数签名校验
-            paySignService.signVerify(paymentParam);
+            paymentSignService.signVerify(paymentParam);
         } else {
             // 参数需要继承MerchantPaymentCommonParam
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.verify.paramExtendRequired");
@@ -69,13 +68,13 @@ public class PaymentVerifyAspect {
             proceed = pjp.proceed();
         } catch (BizException ex) {
             DaxResult<Void> result = new DaxResult<>(ex.getCode(), ex.getMessage());
-            paySignService.sign(result);
+            paymentSignService.sign(result);
             return result;
         }
         // 对返回值添加响应时间并进行签名
         if (proceed instanceof DaxResult<?> result){
             result.setResTime(OffsetDateTime.now(ZoneOffset.UTC));
-            paySignService.sign(result);
+            paymentSignService.sign(result);
         } else {
             // 支付方法返回类型需要为 DaxResult
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.verify.returnTypeRequired");

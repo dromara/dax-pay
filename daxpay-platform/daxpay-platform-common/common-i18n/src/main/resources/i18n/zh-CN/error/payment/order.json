@@ -1,7 +1,6 @@
 {
   "unsupportedBarcodeType": "不支持的条码类型",
   "merchantNoRefundPermission": "该商户没有退款权限",
-  "merchantNoApiPermission": "该商户没有此接口的权限",
   "payOrderNotExist": "支付订单不存在",
   "payOrderExtNotExist": "支付订单扩展信息不存在",
   "refundOrderNotExist": "退款订单不存在",

@@ -4,7 +4,7 @@ import cn.daxpay.open.channel.fuyou.client.FuyouChannelClient;
 import cn.daxpay.open.channel.fuyou.client.credential.FuyouSdkCredential;
 import cn.daxpay.open.channel.fuyou.client.req.FuyouRefundSyncReq;
 import cn.daxpay.open.channel.fuyou.client.resp.FuyouRefundSyncResp;
-import cn.daxpay.open.payment.common.enums.RefundOrderStatusEnum;
+import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
 import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;

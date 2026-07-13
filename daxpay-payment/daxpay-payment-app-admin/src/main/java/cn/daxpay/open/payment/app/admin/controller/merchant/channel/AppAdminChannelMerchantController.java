@@ -4,7 +4,7 @@ import cn.daxpay.open.payment.app.admin.service.merchant.channel.AppAdminChannel
 import cn.daxpay.open.payment.merchant.param.channel.ChannelMerchantEditParam;
 import cn.daxpay.open.payment.merchant.param.channel.ChannelMerchantQuery;
 import cn.daxpay.open.payment.merchant.result.channel.ChannelMerchantResult;
-import cn.daxpay.open.payment.masterdata.constants.channel.result.PayChannelResult;
+import cn.daxpay.open.payment.masterdata.result.channel.PayChannelResult;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;

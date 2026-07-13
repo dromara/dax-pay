@@ -2,6 +2,7 @@ package cn.daxpay.open.channel.dougong.controller.callback;
 
 import cn.daxpay.open.channel.dougong.service.callback.DougongPayCallbackService;
 import cn.daxpay.open.channel.dougong.service.callback.DougongRefundCallbackService;
+import cn.daxpay.open.payment.common.assist.MerchantContextLoader;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,10 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 /// 验签转发子应用(汇付 RsaUtils 在子应用侧), 凭 req_seq_id 反查 PayTrade/PayRefundOrder。
 @Tag(name = "斗拱支付回调通知控制器")
 @RestController
-@RequestMapping("/unipay/callback/{mchNo}/{appId}/dougong")
+@RequestMapping("/unipay/callback/{mchNo}/{channelMchNo}/dougong")
 @RequiredArgsConstructor
 public class DougongCallbackController {
 
+    private final MerchantContextLoader merchantContextLoader;
     private final DougongPayCallbackService dougongPayCallbackService;
     private final DougongRefundCallbackService dougongRefundCallbackService;
 
@@ -28,8 +30,9 @@ public class DougongCallbackController {
     @Operation(summary = "斗拱支付回调")
     @PostMapping("/pay")
     public String payNotify(@PathVariable("mchNo") String mchNo,
-                            @PathVariable("appId") String appId,
+                            @PathVariable("channelMchNo") String channelMchNo,
                             HttpServletRequest request) {
+        merchantContextLoader.bindMchNoForCallback(mchNo);
         return dougongPayCallbackService.payHandle(request);
     }
 
@@ -37,8 +40,9 @@ public class DougongCallbackController {
     @Operation(summary = "斗拱退款回调")
     @PostMapping("/refund")
     public String refundNotify(@PathVariable("mchNo") String mchNo,
-                               @PathVariable("appId") String appId,
+                               @PathVariable("channelMchNo") String channelMchNo,
                                HttpServletRequest request) {
+        merchantContextLoader.bindMchNoForCallback(mchNo);
         return dougongRefundCallbackService.refundHandle(request);
     }
 }

@@ -2,6 +2,7 @@ package cn.daxpay.open.channel.fuyou.controller.callback;
 
 import cn.daxpay.open.channel.fuyou.service.callback.FuyouPayCallbackService;
 import cn.daxpay.open.channel.fuyou.service.callback.FuyouRefundCallbackService;
+import cn.daxpay.open.payment.common.assist.MerchantContextLoader;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -18,10 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 /// 凭 mchnt_order_no(关联订单号) 反查 PayTrade。
 @Tag(name = "富友支付回调通知控制器")
 @RestController
-@RequestMapping("/unipay/callback/{mchNo}/{appId}/fuyou")
+@RequestMapping("/unipay/callback/{mchNo}/{channelMchNo}/fuyou")
 @RequiredArgsConstructor
 public class FuyouCallbackController {
 
+    private final MerchantContextLoader merchantContextLoader;
     private final FuyouPayCallbackService fuyouPayCallbackService;
     private final FuyouRefundCallbackService fuyouRefundCallbackService;
 
@@ -31,8 +33,9 @@ public class FuyouCallbackController {
     @Operation(summary = "富友支付回调")
     @PostMapping("/pay")
     public String payNotify(@PathVariable("mchNo") String mchNo,
-                            @PathVariable("appId") String appId,
+                            @PathVariable("channelMchNo") String channelMchNo,
                             @RequestParam("req") String req) {
+        merchantContextLoader.bindMchNoForCallback(mchNo);
         return fuyouPayCallbackService.payHandle(req);
     }
 
@@ -40,8 +43,9 @@ public class FuyouCallbackController {
     @Operation(summary = "富友退款回调")
     @PostMapping("/refund")
     public String refundNotify(@PathVariable("mchNo") String mchNo,
-                               @PathVariable("appId") String appId,
+                               @PathVariable("channelMchNo") String channelMchNo,
                                @RequestParam("req") String req) {
+        merchantContextLoader.bindMchNoForCallback(mchNo);
         return fuyouRefundCallbackService.refundHandle(req);
     }
 }

@@ -2,16 +2,16 @@ package cn.daxpay.open.payment.admin.controller.merchant.route;
 
 
 import cn.daxpay.open.platform.core.code.PermCodes;
-import cn.daxpay.open.payment.masterdata.constants.provider.result.PayProviderMethodResult;
-import cn.daxpay.open.payment.masterdata.constants.provider.service.PayProviderMethodService;
-import cn.daxpay.open.payment.merchant.param.route.basic.PayRouteBasicConfigBatchParam;
-import cn.daxpay.open.payment.merchant.param.route.scene.PayRouteSceneCapabilityBatchParam;
-import cn.daxpay.open.payment.merchant.param.route.scene.PayRouteSceneConfigBatchParam;
-import cn.daxpay.open.payment.merchant.param.route.strategy.PayRouteStrategyParam;
+import cn.daxpay.open.payment.masterdata.result.provider.PayProviderMethodResult;
+import cn.daxpay.open.payment.masterdata.service.provider.PayProviderMethodService;
+import cn.daxpay.open.payment.route.param.basic.PayRouteBasicConfigBatchParam;
+import cn.daxpay.open.payment.route.param.scene.PayRouteSceneCapabilityBatchParam;
+import cn.daxpay.open.payment.route.param.scene.PayRouteSceneConfigBatchParam;
+import cn.daxpay.open.payment.route.param.strategy.PayRouteStrategyParam;
 import cn.daxpay.open.platform.core.rest.dto.LabelValue;
-import cn.daxpay.open.payment.merchant.result.route.basic.PayRouteBasicConfigResult;
-import cn.daxpay.open.payment.merchant.result.route.scene.PayRouteSceneConfigResult;
-import cn.daxpay.open.payment.merchant.result.route.strategy.PayRouteStrategyResult;
+import cn.daxpay.open.payment.route.result.basic.PayRouteBasicConfigResult;
+import cn.daxpay.open.payment.route.result.scene.PayRouteSceneConfigResult;
+import cn.daxpay.open.payment.route.result.strategy.PayRouteStrategyResult;
 import cn.daxpay.open.payment.admin.service.merchant.route.PayRouteConfigService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.rest.Res;

@@ -4,7 +4,7 @@ import cn.daxpay.open.channel.hmpay.client.HmpayChannelClient;
 import cn.daxpay.open.channel.hmpay.client.credential.HmpaySdkCredential;
 import cn.daxpay.open.channel.hmpay.client.req.HmpaySyncReq;
 import cn.daxpay.open.channel.hmpay.client.resp.HmpaySyncResp;
-import cn.daxpay.open.payment.common.enums.PayFundStatusEnum;
+import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.PaySyncResultBo;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;

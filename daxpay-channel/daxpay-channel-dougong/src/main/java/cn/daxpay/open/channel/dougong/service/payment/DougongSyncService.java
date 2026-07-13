@@ -4,7 +4,7 @@ import cn.daxpay.open.channel.dougong.client.DougongChannelClient;
 import cn.daxpay.open.channel.dougong.client.credential.DougongSdkCredential;
 import cn.daxpay.open.channel.dougong.client.req.DougongSyncReq;
 import cn.daxpay.open.channel.dougong.client.resp.DougongSyncResp;
-import cn.daxpay.open.payment.common.enums.PayFundStatusEnum;
+import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.PaySyncResultBo;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;

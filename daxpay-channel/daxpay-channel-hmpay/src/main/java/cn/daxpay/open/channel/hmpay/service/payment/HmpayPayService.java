@@ -15,6 +15,7 @@ import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
 import cn.daxpay.open.platform.core.enums.unipay.PayBodyTypeEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -49,8 +50,9 @@ public class HmpayPayService {
         // JSAPI/MINI 场景的用户标识(微信 openid / 支付宝 buyerId)
         req.setOpenId(payParam.getOpenId());
         req.setClientIp(payParam.getClientIp());
-        req.setCredential(credential);
         // 杉德 notify_url 由子应用从 credential.notifyUrl 透传
+        credential.setNotifyUrl(this.buildNotifyUrl(order, payParam.getChannelMchNo()));
+        req.setCredential(credential);
         // 条码支付需要付款码
         if (method == HmpayPayMethod.BARCODE) {
             req.setAuthCode(payParam.getAuthCode());
@@ -63,6 +65,16 @@ public class HmpayPayService {
         }
 
         return toPayResult(result.getData());
+    }
+
+    /// 路径约定: `{backendBaseUrl}/unipay/callback/{mchNo}/{channelMchNo}/hmpay/pay`
+    private String buildNotifyUrl(PayTrade order, String channelMchNo) {
+        String base = platformUrlConfigService.getUrlConfig().getBackendBaseUrl();
+        if (StrUtil.isBlank(base)) {
+            throw new BizInfoException(DaxPayErrorCode.CONFIG_ERROR, "error.common.backendBaseUrlNotConfigured");
+        }
+        return StrUtil.format("{}/unipay/callback/{}/{}/hmpay/pay",
+                base, order.getMchNo(), channelMchNo);
     }
 
     /// 平台支付方式([PayMethodEnum] code) → 河马付支付方式

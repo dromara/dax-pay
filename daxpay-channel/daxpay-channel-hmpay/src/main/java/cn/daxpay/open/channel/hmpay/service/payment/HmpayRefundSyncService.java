@@ -4,7 +4,7 @@ import cn.daxpay.open.channel.hmpay.client.HmpayChannelClient;
 import cn.daxpay.open.channel.hmpay.client.credential.HmpaySdkCredential;
 import cn.daxpay.open.channel.hmpay.client.req.HmpayRefundSyncReq;
 import cn.daxpay.open.channel.hmpay.client.resp.HmpayRefundSyncResp;
-import cn.daxpay.open.payment.common.enums.RefundOrderStatusEnum;
+import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
 import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;

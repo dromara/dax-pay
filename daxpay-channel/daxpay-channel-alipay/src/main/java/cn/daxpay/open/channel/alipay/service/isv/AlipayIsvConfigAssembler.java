@@ -6,7 +6,7 @@ import cn.daxpay.open.channel.alipay.dao.isv.AlipayIsvChannelMerchantManager;
 import cn.daxpay.open.channel.alipay.entity.isv.AlipayIsvApp;
 import cn.daxpay.open.channel.alipay.entity.isv.AlipayIsvAppKeyConfig;
 import cn.daxpay.open.channel.alipay.entity.isv.AlipayIsvChannelMerchant;
-import cn.daxpay.open.payment.masterdata.constants.product.dao.PayProductConfigManager;
+import cn.daxpay.open.payment.masterdata.dao.product.PayProductConfigManager;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.config.PayEnvEnum;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;

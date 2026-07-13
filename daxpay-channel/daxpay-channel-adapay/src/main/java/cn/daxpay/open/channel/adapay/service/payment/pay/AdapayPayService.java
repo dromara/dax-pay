@@ -48,7 +48,7 @@ public class AdapayPayService {
         req.setOpenId(payParam.getOpenId());
         req.setAuthCode(payParam.getAuthCode());
         req.setClientIp(payParam.getClientIp());
-        req.setNotifyUrl(this.buildNotifyUrl(order));
+        req.setNotifyUrl(this.buildNotifyUrl(order, payParam.getChannelMchNo()));
         req.setCredential(credential);
 
         // 调用子应用
@@ -62,15 +62,15 @@ public class AdapayPayService {
 
     /// 生成Adapay 支付异步通知地址(Adapay→平台)
     ///
-    /// 路径约定: `{backendBaseUrl}/unipay/callback/{mchNo}/{appId}/adapay/pay`
-    /// Adapay 回调验签只需平台公钥(全局固定), 路径不带 channelMchNo, 凭 order_no 反查 PayTrade。
-    private String buildNotifyUrl(PayTrade order) {
+    /// 路径约定: `{backendBaseUrl}/unipay/callback/{mchNo}/{channelMchNo}/adapay/pay`
+    /// Adapay 回调验签只需平台公钥(全局固定), 凭 order_no 反查 PayTrade。
+    private String buildNotifyUrl(PayTrade order, String channelMchNo) {
         String base = platformUrlConfigService.getUrlConfig().getBackendBaseUrl();
         if (StrUtil.isBlank(base)) {
             throw new BizInfoException(DaxPayErrorCode.CONFIG_ERROR, "error.common.backendBaseUrlNotConfigured");
         }
         return StrUtil.format("{}/unipay/callback/{}/{}/adapay/pay",
-                base, order.getMchNo(), order.getAppId());
+                base, order.getMchNo(), channelMchNo);
     }
 
     /// 平台支付方式([PayMethodEnum] code) → Adapay 通道支付方式

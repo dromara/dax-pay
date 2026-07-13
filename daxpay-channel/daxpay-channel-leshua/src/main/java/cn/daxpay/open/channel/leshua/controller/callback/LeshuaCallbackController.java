@@ -2,6 +2,7 @@ package cn.daxpay.open.channel.leshua.controller.callback;
 
 import cn.daxpay.open.channel.leshua.service.callback.LeshuaPayCallbackService;
 import cn.daxpay.open.channel.leshua.service.callback.LeshuaRefundCallbackService;
+import cn.daxpay.open.payment.common.assist.MerchantContextLoader;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,10 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 /// 验签转发子应用(MD5/SM3 签名工具在子应用侧), 凭 third_order_id 反查 PayTrade。
 @Tag(name = "乐刷支付回调通知控制器")
 @RestController
-@RequestMapping("/unipay/callback/{mchNo}/{appId}/leshua")
+@RequestMapping("/unipay/callback/{mchNo}/{channelMchNo}/leshua")
 @RequiredArgsConstructor
 public class LeshuaCallbackController {
 
+    private final MerchantContextLoader merchantContextLoader;
     private final LeshuaPayCallbackService leshuaPayCallbackService;
     private final LeshuaRefundCallbackService leshuaRefundCallbackService;
 
@@ -28,8 +30,9 @@ public class LeshuaCallbackController {
     @Operation(summary = "乐刷支付回调")
     @PostMapping("/pay")
     public String payNotify(@PathVariable("mchNo") String mchNo,
-                            @PathVariable("appId") String appId,
+                            @PathVariable("channelMchNo") String channelMchNo,
                             HttpServletRequest request) {
+        merchantContextLoader.bindMchNoForCallback(mchNo);
         return leshuaPayCallbackService.payHandle(request);
     }
 
@@ -37,8 +40,9 @@ public class LeshuaCallbackController {
     @Operation(summary = "乐刷退款回调")
     @PostMapping("/refund")
     public String refundNotify(@PathVariable("mchNo") String mchNo,
-                               @PathVariable("appId") String appId,
+                               @PathVariable("channelMchNo") String channelMchNo,
                                HttpServletRequest request) {
+        merchantContextLoader.bindMchNoForCallback(mchNo);
         return leshuaRefundCallbackService.refundHandle(request);
     }
 }

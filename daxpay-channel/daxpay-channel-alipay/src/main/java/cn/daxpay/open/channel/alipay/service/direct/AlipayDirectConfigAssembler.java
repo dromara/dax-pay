@@ -6,7 +6,7 @@ import cn.daxpay.open.channel.alipay.client.credential.AlipaySdkCredential;
 import cn.daxpay.open.channel.alipay.entity.direct.AlipayDirectApp;
 import cn.daxpay.open.channel.alipay.entity.direct.AlipayDirectAppKeyConfig;
 import cn.daxpay.open.channel.alipay.entity.direct.AlipayDirectChannelMerchant;
-import cn.daxpay.open.payment.masterdata.constants.product.dao.PayProductConfigManager;
+import cn.daxpay.open.payment.masterdata.dao.product.PayProductConfigManager;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.config.PayEnvEnum;

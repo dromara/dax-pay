@@ -1,6 +1,6 @@
 package cn.daxpay.open.payment.unipay.gateway.param;
 
-import cn.daxpay.open.payment.common.enums.GatewayPayTypeEnum;
+import cn.daxpay.open.payment.trade.enums.GatewayPayTypeEnum;
 import cn.daxpay.open.payment.unipay.param.MerchantPaymentCommonParam;
 import cn.daxpay.open.payment.unipay.param.trade.pay.GoodsDetail;
 import cn.daxpay.open.payment.unipay.param.trade.pay.TerminalInfo;

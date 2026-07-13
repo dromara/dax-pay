@@ -2,6 +2,7 @@ package cn.daxpay.open.channel.yeepay.controller.callback;
 
 import cn.daxpay.open.channel.yeepay.service.callback.YeepayPayCallbackService;
 import cn.daxpay.open.channel.yeepay.service.callback.YeepayRefundCallbackService;
+import cn.daxpay.open.payment.common.assist.MerchantContextLoader;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,9 +19,10 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "易宝支付回调通知控制器")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/unipay/callback/{mchNo}/{appId}/yeepay/{channelMchNo}")
+@RequestMapping("/unipay/callback/{mchNo}/{channelMchNo}/yeepay")
 public class YeepayCallbackController {
 
+    private final MerchantContextLoader merchantContextLoader;
     private final YeepayPayCallbackService yeepayPayCallbackService;
     private final YeepayRefundCallbackService yeepayRefundCallbackService;
 
@@ -28,9 +30,9 @@ public class YeepayCallbackController {
     @Operation(summary = "易宝支付回调")
     @PostMapping("/pay")
     public String payNotify(@PathVariable("mchNo") String mchNo,
-                            @PathVariable("appId") String appId,
                             @PathVariable("channelMchNo") String channelMchNo,
                             HttpServletRequest request) {
+        merchantContextLoader.bindMchNoForCallback(mchNo);
         return yeepayPayCallbackService.payHandle(mchNo, channelMchNo, request);
     }
 
@@ -38,9 +40,9 @@ public class YeepayCallbackController {
     @Operation(summary = "易宝退款回调")
     @PostMapping("/refund")
     public String refundNotify(@PathVariable("mchNo") String mchNo,
-                               @PathVariable("appId") String appId,
                                @PathVariable("channelMchNo") String channelMchNo,
                                HttpServletRequest request) {
+        merchantContextLoader.bindMchNoForCallback(mchNo);
         return yeepayRefundCallbackService.refundHandle(mchNo, channelMchNo, request);
     }
 }

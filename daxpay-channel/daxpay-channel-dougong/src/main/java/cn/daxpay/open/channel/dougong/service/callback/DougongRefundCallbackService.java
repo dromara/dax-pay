@@ -6,7 +6,7 @@ import cn.daxpay.open.channel.dougong.client.req.DougongCallbackParseReq;
 import cn.daxpay.open.channel.dougong.client.resp.DougongCallbackParseResp;
 import cn.daxpay.open.channel.dougong.dao.isv.DougongIsvKeyConfigManager;
 import cn.daxpay.open.channel.dougong.entity.isv.DougongIsvKeyConfig;
-import cn.daxpay.open.payment.common.callback.RefundCallbackData;
+import cn.daxpay.open.payment.trade.runtime.bo.RefundCallbackData;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.service.callback.RefundCallbackService;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;

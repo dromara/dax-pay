@@ -6,7 +6,7 @@ import cn.daxpay.open.channel.yeepay.client.req.YeepayCallbackParseReq;
 import cn.daxpay.open.channel.yeepay.client.resp.YeepayCallbackParseResp;
 import cn.daxpay.open.channel.yeepay.code.YeepayCode;
 import cn.daxpay.open.channel.yeepay.service.direct.YeepayDirectConfigAssembler;
-import cn.daxpay.open.payment.common.callback.CallbackData;
+import cn.daxpay.open.payment.trade.runtime.bo.CallbackData;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.service.callback.PayCallbackService;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;

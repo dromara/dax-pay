@@ -1,8 +1,8 @@
 package cn.daxpay.open.payment.app.admin.controller.masterdata.product;
 
 import cn.daxpay.open.payment.app.admin.service.masterdata.product.AppAdminPayProductService;
-import cn.daxpay.open.payment.masterdata.constants.product.param.PayProductQuery;
-import cn.daxpay.open.payment.masterdata.constants.product.result.PayProductResult;
+import cn.daxpay.open.payment.masterdata.param.product.PayProductQuery;
+import cn.daxpay.open.payment.masterdata.result.product.PayProductResult;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;

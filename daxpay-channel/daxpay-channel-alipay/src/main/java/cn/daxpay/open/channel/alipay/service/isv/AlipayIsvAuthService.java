@@ -12,7 +12,7 @@ import cn.daxpay.open.channel.alipay.entity.isv.AlipayIsvChannelMerchant;
 import cn.daxpay.open.channel.alipay.param.isv.AlipayIsvAuthParam;
 import cn.daxpay.open.channel.alipay.result.isv.AlipayIsvAuthUrlResult;
 import cn.daxpay.open.payment.common.result.DaxResult;
-import cn.daxpay.open.payment.masterdata.constants.product.dao.PayProductConfigManager;
+import cn.daxpay.open.payment.masterdata.dao.product.PayProductConfigManager;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;

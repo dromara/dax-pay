@@ -6,7 +6,7 @@ import cn.daxpay.open.channel.adapay.client.req.AdapayRefundReq;
 import cn.daxpay.open.channel.adapay.client.resp.AdapayRefundResp;
 import cn.daxpay.open.channel.adapay.code.AdapayCode;
 import cn.daxpay.open.channel.adapay.util.AdapayDateUtil;
-import cn.daxpay.open.payment.common.enums.RefundOrderStatusEnum;
+import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
 import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
@@ -67,7 +67,7 @@ public class AdapayRefundService {
             throw new IllegalStateException("平台后端访问地址(backendBaseUrl)未配置, 无法生成Adapay 退款回调地址");
         }
         return StrUtil.format("{}/unipay/callback/{}/{}/adapay/refund",
-                base, refundOrder.getMchNo(), refundOrder.getAppId());
+                base, refundOrder.getMchNo(), refundOrder.getChannelMchNo());
     }
 
     /// 解析子应用响应

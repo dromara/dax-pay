@@ -1,10 +1,10 @@
 package cn.daxpay.open.payment.admin.service.masterdata.capability;
 
-import cn.daxpay.open.payment.masterdata.constants.capability.dao.PayCapabilityManager;
-import cn.daxpay.open.payment.masterdata.constants.capability.dao.PayProductCapabilityManager;
-import cn.daxpay.open.payment.masterdata.constants.capability.entity.PayCapability;
-import cn.daxpay.open.payment.masterdata.constants.capability.param.PayCapabilityQuery;
-import cn.daxpay.open.payment.masterdata.constants.capability.result.PayCapabilityResult;
+import cn.daxpay.open.payment.masterdata.dao.capability.PayCapabilityManager;
+import cn.daxpay.open.payment.masterdata.dao.capability.PayProductCapabilityManager;
+import cn.daxpay.open.payment.masterdata.entity.capability.PayCapability;
+import cn.daxpay.open.payment.masterdata.param.capability.PayCapabilityQuery;
+import cn.daxpay.open.payment.masterdata.result.capability.PayCapabilityResult;
 import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayCapabilityEnum;

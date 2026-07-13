@@ -6,7 +6,7 @@ import cn.daxpay.open.channel.fuyou.client.req.FuyouCallbackParseReq;
 import cn.daxpay.open.channel.fuyou.client.resp.FuyouCallbackParseResp;
 import cn.daxpay.open.channel.fuyou.dao.isv.FuyouIsvKeyConfigManager;
 import cn.daxpay.open.channel.fuyou.entity.isv.FuyouIsvKeyConfig;
-import cn.daxpay.open.payment.common.callback.CallbackData;
+import cn.daxpay.open.payment.trade.runtime.bo.CallbackData;
 import cn.daxpay.open.payment.trade.order.dao.NormalPayOrderManager;
 import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
 import cn.daxpay.open.payment.trade.order.entity.NormalPayOrder;

@@ -7,7 +7,7 @@ import cn.daxpay.open.channel.ums.client.req.UmsSyncReq;
 import cn.daxpay.open.channel.ums.client.resp.UmsSyncResp;
 import cn.daxpay.open.channel.ums.code.UmsCode;
 import cn.daxpay.open.channel.ums.util.UmsDateUtil;
-import cn.daxpay.open.payment.common.enums.PayFundStatusEnum;
+import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.PaySyncResultBo;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;

@@ -7,7 +7,7 @@ import cn.daxpay.open.channel.ums.client.req.UmsRefundReq;
 import cn.daxpay.open.channel.ums.client.resp.UmsRefundResp;
 import cn.daxpay.open.channel.ums.code.UmsCode;
 import cn.daxpay.open.channel.ums.util.UmsDateUtil;
-import cn.daxpay.open.payment.common.enums.RefundOrderStatusEnum;
+import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
 import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
@@ -69,8 +69,8 @@ public class UmsRefundService {
         if (StrUtil.isBlank(base)) {
             throw new IllegalStateException("平台后端访问地址(backendBaseUrl)未配置, 无法生成银联商务退款回调地址");
         }
-        return StrUtil.format("{}/unipay/callback/{}/{}/ums/{}/refund",
-                base, refundOrder.getMchNo(), refundOrder.getAppId(), refundOrder.getChannelMchNo());
+        return StrUtil.format("{}/unipay/callback/{}/{}/ums/refund",
+                base, refundOrder.getMchNo(), refundOrder.getChannelMchNo());
     }
 
     /// 解析子应用响应

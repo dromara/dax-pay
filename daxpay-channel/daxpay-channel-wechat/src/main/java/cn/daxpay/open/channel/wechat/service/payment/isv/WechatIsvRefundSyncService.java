@@ -4,7 +4,7 @@ import cn.daxpay.open.channel.wechat.client.WechatChannelClient;
 import cn.daxpay.open.channel.wechat.client.credential.WechatSdkCredential;
 import cn.daxpay.open.channel.wechat.client.req.WechatRefundSyncReq;
 import cn.daxpay.open.channel.wechat.client.resp.WechatRefundSyncResp;
-import cn.daxpay.open.payment.common.enums.RefundOrderStatusEnum;
+import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
 import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;

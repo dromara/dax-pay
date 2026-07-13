@@ -3,7 +3,7 @@ package cn.daxpay.open.channel.fuyou.service.callback;
 import cn.daxpay.open.channel.fuyou.client.resp.FuyouCallbackParseResp;
 import cn.daxpay.open.channel.fuyou.dao.isv.FuyouIsvKeyConfigManager;
 import cn.daxpay.open.channel.fuyou.entity.isv.FuyouIsvKeyConfig;
-import cn.daxpay.open.payment.common.callback.RefundCallbackData;
+import cn.daxpay.open.payment.trade.runtime.bo.RefundCallbackData;
 import cn.daxpay.open.payment.trade.runtime.service.callback.RefundCallbackService;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;

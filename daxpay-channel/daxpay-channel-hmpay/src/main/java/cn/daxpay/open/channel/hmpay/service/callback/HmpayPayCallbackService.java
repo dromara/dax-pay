@@ -6,7 +6,7 @@ import cn.daxpay.open.channel.hmpay.client.req.HmpayCallbackParseReq;
 import cn.daxpay.open.channel.hmpay.client.resp.HmpayCallbackParseResp;
 import cn.daxpay.open.channel.hmpay.dao.isv.HmpayIsvKeyConfigManager;
 import cn.daxpay.open.channel.hmpay.entity.isv.HmpayIsvKeyConfig;
-import cn.daxpay.open.payment.common.callback.CallbackData;
+import cn.daxpay.open.payment.trade.runtime.bo.CallbackData;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.service.callback.PayCallbackService;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;

@@ -54,7 +54,7 @@ public class WechatIsvPayService {
         req.setAuthCode(payParam.getAuthCode());
         req.setOpenId(payParam.getOpenId());
         req.setAttach(payParam.getAttach());
-        req.setNotifyUrl(this.buildNotifyUrl(order));
+        req.setNotifyUrl(this.buildNotifyUrl(order, payParam.getChannelMchNo()));
         // 关单时间取自订单(createOrder 已对 null 兜底默认30分钟), 不用 payParam 原始入参
         req.setExpireTime(payParam.getExpiredTime());
         if (req.getMethod() == WechatPayMethod.H5) {
@@ -74,16 +74,16 @@ public class WechatIsvPayService {
 
     /// 生成微信服务商支付异步通知地址(微信→平台)
     ///
-    /// 服务商回调路径: `{backendBaseUrl}/unipay/callback/{mchNo}/{appId}/wechat/isv/pay`
+    /// 服务商回调路径: `{backendBaseUrl}/unipay/callback/{mchNo}/{channelMchNo}/wechat/isv/pay`
     /// (与直连 `/wechat/pay` 分离, 服务商回调用服务商 apiV3Key 解密)
-    private String buildNotifyUrl(PayTrade order) {
+    private String buildNotifyUrl(PayTrade order, String channelMchNo) {
         String base = platformUrlConfigService.getUrlConfig().getBackendBaseUrl();
         if (StrUtil.isBlank(base)) {
             // backendBaseUrl 未配置时抛清晰异常
             throw new BizInfoException(DaxPayErrorCode.CONFIG_ERROR, "error.common.backendBaseUrlNotConfigured");
         }
         return StrUtil.format("{}/unipay/callback/{}/{}/wechat/isv/pay",
-                base, order.getMchNo(), order.getAppId());
+                base, order.getMchNo(), channelMchNo);
     }
 
     /// 平台支付方式([PayMethodEnum] code) -> 微信通道支付方式

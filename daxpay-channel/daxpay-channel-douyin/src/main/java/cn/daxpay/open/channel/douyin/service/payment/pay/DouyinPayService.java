@@ -61,7 +61,7 @@ public class DouyinPayService {
 
     /// 生成抖音支付异步通知地址(抖音→平台)
     ///
-    /// 路径约定: `{backendBaseUrl}/unipay/callback/{mchNo}/{appId}/douyin/{channelMchNo}/pay`
+    /// 路径约定: `{backendBaseUrl}/unipay/callback/{mchNo}/{channelMchNo}/douyin/pay`
     /// 抖音回调 body 加密, 验签前无法解析 out_trade_no, 因此将 channelMchNo 编码到 URL 中,
     /// 回调时直接从 URL 取 channelMchNo 组装凭证验签。
     private String buildNotifyUrl(PayTrade order, String channelMchNo) {
@@ -69,8 +69,8 @@ public class DouyinPayService {
         if (StrUtil.isBlank(base)) {
             throw new IllegalStateException("平台后端访问地址(backendBaseUrl)未配置, 无法生成抖音回调地址");
         }
-        return StrUtil.format("{}/unipay/callback/{}/{}/douyin/{}/pay",
-                base, order.getMchNo(), order.getAppId(), channelMchNo);
+        return StrUtil.format("{}/unipay/callback/{}/{}/douyin/pay",
+                base, order.getMchNo(), channelMchNo);
     }
 
     /// 平台支付方式([PayMethodEnum] code) -> 抖音通道支付方式

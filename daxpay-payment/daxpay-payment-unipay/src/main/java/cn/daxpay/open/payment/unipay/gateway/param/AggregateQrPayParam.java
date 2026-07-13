@@ -1,6 +1,6 @@
 package cn.daxpay.open.payment.unipay.gateway.param;
 
-import cn.daxpay.open.payment.common.enums.CashierSceneEnum;
+import cn.daxpay.open.payment.merchant.enums.CashierSceneEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;

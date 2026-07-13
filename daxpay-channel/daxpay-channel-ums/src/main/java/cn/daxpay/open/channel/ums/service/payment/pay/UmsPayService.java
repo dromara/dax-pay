@@ -58,14 +58,14 @@ public class UmsPayService {
 
     /// 生成银联商务支付异步通知地址(银联商务→平台)
     ///
-    /// 路径约定: `{backendBaseUrl}/unipay/callback/{mchNo}/{appId}/ums/{channelMchNo}/pay`
+    /// 路径约定: `{backendBaseUrl}/unipay/callback/{mchNo}/{channelMchNo}/ums/pay`
     private String buildNotifyUrl(PayTrade order, String channelMchNo) {
         String base = platformUrlConfigService.getUrlConfig().getBackendBaseUrl();
         if (StrUtil.isBlank(base)) {
             throw new BizInfoException(DaxPayErrorCode.CONFIG_ERROR, "error.common.backendBaseUrlNotConfigured");
         }
-        return StrUtil.format("{}/unipay/callback/{}/{}/ums/{}/pay",
-                base, order.getMchNo(), order.getAppId(), channelMchNo);
+        return StrUtil.format("{}/unipay/callback/{}/{}/ums/pay",
+                base, order.getMchNo(), channelMchNo);
     }
 
     /// 平台支付方式([PayMethodEnum] code) -> 银联商务通道支付方式

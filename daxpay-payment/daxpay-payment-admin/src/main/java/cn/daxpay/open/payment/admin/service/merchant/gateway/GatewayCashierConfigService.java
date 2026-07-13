@@ -1,8 +1,8 @@
 package cn.daxpay.open.payment.admin.service.merchant.gateway;
 
-import cn.daxpay.open.payment.common.enums.CashierItemResolveModeEnum;
-import cn.daxpay.open.payment.common.enums.CashierSceneEnum;
-import cn.daxpay.open.payment.common.enums.GatewayCashierTypeEnum;
+import cn.daxpay.open.payment.merchant.enums.CashierItemResolveModeEnum;
+import cn.daxpay.open.payment.merchant.enums.CashierSceneEnum;
+import cn.daxpay.open.payment.merchant.enums.GatewayCashierTypeEnum;
 import cn.daxpay.open.payment.merchant.dao.gateway.GatewayCashierItemManager;
 import cn.daxpay.open.payment.merchant.entity.gateway.GatewayCashierItem;
 import cn.daxpay.open.payment.merchant.param.gateway.GatewayCashierItemParam;

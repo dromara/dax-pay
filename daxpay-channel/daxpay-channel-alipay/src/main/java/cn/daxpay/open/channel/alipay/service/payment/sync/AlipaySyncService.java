@@ -5,7 +5,7 @@ import cn.daxpay.open.channel.alipay.client.credential.AlipaySdkCredential;
 import cn.daxpay.open.channel.alipay.client.req.AlipaySyncReq;
 import cn.daxpay.open.channel.alipay.client.resp.AlipaySyncResp;
 import cn.daxpay.open.payment.common.result.DaxResult;
-import cn.daxpay.open.payment.common.enums.PayFundStatusEnum;
+import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.trade.runtime.bo.PaySyncResultBo;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.hutool.core.util.StrUtil;

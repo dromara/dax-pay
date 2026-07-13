@@ -16,6 +16,6 @@
 
     <dependencies>
         <!-- 通道调用凭证/请求/响应 DTO(仅 POJO, 经声明式 HTTP 客户端序列化传输, 不依赖汇付 SDK) -->
-        <!-- 父 pom 已提供 lombok / mapstruct-processor / daxpay-payment-common -->
+        <!-- 父 pom 已提供 lombok / mapstruct-processor / daxpay-payment-core -->
     </dependencies>
 </project>

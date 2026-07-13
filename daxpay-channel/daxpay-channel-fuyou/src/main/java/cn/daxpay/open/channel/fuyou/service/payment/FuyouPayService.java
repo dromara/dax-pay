@@ -52,7 +52,7 @@ public class FuyouPayService {
         req.setOpenId(payParam.getOpenId());
         req.setAuthCode(payParam.getAuthCode());
         req.setClientIp(payParam.getClientIp());
-        req.setNotifyUrl(this.buildNotifyUrl(order));
+        req.setNotifyUrl(this.buildNotifyUrl(order, payParam.getChannelMchNo()));
         req.setCredential(credential);
 
         DaxResult<FuyouPayResp> result = fuyouChannelClient.pay(req);
@@ -64,14 +64,14 @@ public class FuyouPayService {
 
     /// 生成富友支付异步通知地址(富友→平台)
     ///
-    /// 路径约定: `{backendBaseUrl}/unipay/callback/{mchNo}/{appId}/fuyou/pay`
-    private String buildNotifyUrl(PayTrade order) {
+    /// 路径约定: `{backendBaseUrl}/unipay/callback/{mchNo}/{channelMchNo}/fuyou/pay`
+    private String buildNotifyUrl(PayTrade order, String channelMchNo) {
         String base = platformUrlConfigService.getUrlConfig().getBackendBaseUrl();
         if (StrUtil.isBlank(base)) {
             throw new BizInfoException(DaxPayErrorCode.CONFIG_ERROR, "error.common.backendBaseUrlNotConfigured");
         }
         return StrUtil.format("{}/unipay/callback/{}/{}/fuyou/pay",
-                base, order.getMchNo(), order.getAppId());
+                base, order.getMchNo(), channelMchNo);
     }
 
     /// 平台支付方式([PayMethodEnum] code) → 富友支付方式 + 内容类型

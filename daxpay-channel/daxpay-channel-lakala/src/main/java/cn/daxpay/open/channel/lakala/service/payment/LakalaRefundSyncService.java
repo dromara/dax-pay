@@ -4,7 +4,7 @@ import cn.daxpay.open.channel.lakala.client.LakalaChannelClient;
 import cn.daxpay.open.channel.lakala.client.credential.LakalaSdkCredential;
 import cn.daxpay.open.channel.lakala.client.req.LakalaRefundSyncReq;
 import cn.daxpay.open.channel.lakala.client.resp.LakalaRefundSyncResp;
-import cn.daxpay.open.payment.common.enums.RefundOrderStatusEnum;
+import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
 import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;

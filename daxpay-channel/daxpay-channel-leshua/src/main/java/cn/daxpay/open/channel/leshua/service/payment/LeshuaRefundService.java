@@ -5,7 +5,7 @@ import cn.daxpay.open.channel.leshua.client.credential.LeshuaSdkCredential;
 import cn.daxpay.open.channel.leshua.client.req.LeshuaRefundReq;
 import cn.daxpay.open.channel.leshua.client.resp.LeshuaRefundResp;
 import cn.daxpay.open.channel.leshua.code.LeshuaCode;
-import cn.daxpay.open.payment.common.enums.RefundOrderStatusEnum;
+import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
 import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
@@ -62,7 +62,7 @@ public class LeshuaRefundService {
             return null;
         }
         return cn.hutool.core.util.StrUtil.format("{}/unipay/callback/{}/{}/leshua/refund",
-                base, refundOrder.getMchNo(), refundOrder.getAppId());
+                base, refundOrder.getMchNo(), refundOrder.getChannelMchNo());
     }
 
     /// 乐刷退款 status → 平台退款状态

@@ -9,7 +9,7 @@ import cn.daxpay.open.channel.douyin.dao.direct.DouyinDirectChannelMerchantManag
 import cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectChannelMerchant;
 import cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectKeyConfig;
 import cn.daxpay.open.channel.douyin.service.direct.DouyinDirectKeyConfigService;
-import cn.daxpay.open.payment.common.callback.RefundCallbackData;
+import cn.daxpay.open.payment.trade.runtime.bo.RefundCallbackData;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.service.callback.RefundCallbackService;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;

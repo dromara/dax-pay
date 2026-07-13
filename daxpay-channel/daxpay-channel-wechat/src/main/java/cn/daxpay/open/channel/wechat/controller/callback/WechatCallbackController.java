@@ -2,6 +2,7 @@ package cn.daxpay.open.channel.wechat.controller.callback;
 
 import cn.daxpay.open.channel.wechat.service.callback.WechatPayCallbackService;
 import cn.daxpay.open.channel.wechat.service.callback.WechatRefundCallbackService;
+import cn.daxpay.open.payment.common.assist.MerchantContextLoader;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,29 +19,50 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "微信支付回调通知控制器")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/unipay/callback/{mchNo}/{appId}/wechat/{channelMchNo}")
+@RequestMapping("/unipay/callback/{mchNo}/{channelMchNo}/wechat")
 public class WechatCallbackController {
 
+    private final MerchantContextLoader merchantContextLoader;
     private final WechatPayCallbackService wechatPayCallbackService;
     private final WechatRefundCallbackService wechatRefundCallbackService;
 
-    /// 微信支付回调
+    /// 微信支付回调(直连)
     @Operation(summary = "微信支付回调")
     @PostMapping("/pay")
     public String payNotify(@PathVariable("mchNo") String mchNo,
-                            @PathVariable("appId") String appId,
                             @PathVariable("channelMchNo") String channelMchNo,
                             HttpServletRequest request) {
+        merchantContextLoader.bindMchNoForCallback(mchNo);
         return wechatPayCallbackService.payHandle(mchNo, channelMchNo, request);
     }
 
-    /// 微信退款回调
+    /// 微信退款回调(直连)
     @Operation(summary = "微信退款回调")
     @PostMapping("/refund")
     public String refundNotify(@PathVariable("mchNo") String mchNo,
-                               @PathVariable("appId") String appId,
                                @PathVariable("channelMchNo") String channelMchNo,
                                HttpServletRequest request) {
+        merchantContextLoader.bindMchNoForCallback(mchNo);
         return wechatRefundCallbackService.refundHandle(mchNo, channelMchNo, request);
+    }
+
+    /// 微信支付回调(服务商)
+    @Operation(summary = "微信服务商支付回调")
+    @PostMapping("/isv/pay")
+    public String isvPayNotify(@PathVariable("mchNo") String mchNo,
+                               @PathVariable("channelMchNo") String channelMchNo,
+                               HttpServletRequest request) {
+        merchantContextLoader.bindMchNoForCallback(mchNo);
+        return wechatPayCallbackService.isvPayHandle(mchNo, channelMchNo, request);
+    }
+
+    /// 微信退款回调(服务商)
+    @Operation(summary = "微信服务商退款回调")
+    @PostMapping("/isv/refund")
+    public String isvRefundNotify(@PathVariable("mchNo") String mchNo,
+                                  @PathVariable("channelMchNo") String channelMchNo,
+                                  HttpServletRequest request) {
+        merchantContextLoader.bindMchNoForCallback(mchNo);
+        return wechatRefundCallbackService.isvRefundHandle(mchNo, channelMchNo, request);
     }
 }

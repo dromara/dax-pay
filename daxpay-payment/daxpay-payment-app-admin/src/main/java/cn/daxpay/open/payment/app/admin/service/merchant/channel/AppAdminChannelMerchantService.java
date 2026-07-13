@@ -4,7 +4,7 @@ import cn.daxpay.open.payment.merchant.param.channel.ChannelMerchantEditParam;
 import cn.daxpay.open.payment.merchant.param.channel.ChannelMerchantQuery;
 import cn.daxpay.open.payment.merchant.result.channel.ChannelMerchantResult;
 import cn.daxpay.open.payment.merchant.service.channel.ChannelMerchantService;
-import cn.daxpay.open.payment.masterdata.constants.channel.result.PayChannelResult;
+import cn.daxpay.open.payment.masterdata.result.channel.PayChannelResult;
 import cn.daxpay.open.platform.core.rest.dto.LabelValue;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;

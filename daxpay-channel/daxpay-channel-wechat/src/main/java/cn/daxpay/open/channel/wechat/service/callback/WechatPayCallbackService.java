@@ -6,7 +6,8 @@ import cn.daxpay.open.channel.wechat.client.req.WechatCallbackParseReq;
 import cn.daxpay.open.channel.wechat.client.resp.WechatCallbackParseResp;
 import cn.daxpay.open.channel.wechat.code.WechatCode;
 import cn.daxpay.open.channel.wechat.service.direct.WechatDirectConfigAssembler;
-import cn.daxpay.open.payment.common.callback.CallbackData;
+import cn.daxpay.open.channel.wechat.service.isv.WechatIsvConfigAssembler;
+import cn.daxpay.open.payment.trade.runtime.bo.CallbackData;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.service.callback.PayCallbackService;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
@@ -33,16 +34,28 @@ public class WechatPayCallbackService {
 
     private final WechatChannelClient wechatChannelClient;
     private final WechatDirectConfigAssembler wechatDirectConfigAssembler;
+    private final WechatIsvConfigAssembler wechatIsvConfigAssembler;
     private final PayCallbackService payCallbackService;
 
-    /// 支付回调处理
+    /// 直连支付回调处理
     public String payHandle(String mchNo, String channelMchNo, HttpServletRequest request) {
+        return this.doPayHandle(mchNo, channelMchNo, request, false);
+    }
+
+    /// 服务商支付回调处理
+    public String isvPayHandle(String mchNo, String channelMchNo, HttpServletRequest request) {
+        return this.doPayHandle(mchNo, channelMchNo, request, true);
+    }
+
+    private String doPayHandle(String mchNo, String channelMchNo, HttpServletRequest request, boolean isv) {
         // 1. 提取回调原始数据
         String body = JakartaServletUtil.getBody(request);
         Map<String, String> headerMap = JakartaServletUtil.getHeaderMap(request);
 
-        // 2. 组装凭证
-        WechatSdkCredential credential = wechatDirectConfigAssembler.buildConfig(mchNo, channelMchNo, null);
+        // 2. 组装凭证(直连/服务商分发)
+        WechatSdkCredential credential = isv
+                ? wechatIsvConfigAssembler.buildConfig(mchNo, channelMchNo, null)
+                : wechatDirectConfigAssembler.buildConfig(mchNo, channelMchNo, null);
 
         // 3. 转发到子应用验签
         WechatCallbackParseReq req = new WechatCallbackParseReq();
@@ -55,7 +68,7 @@ public class WechatPayCallbackService {
 
         DaxResult<WechatCallbackParseResp> result = wechatChannelClient.parsePayCallback(req);
         if (result.getCode() != 0 || result.getData() == null || !result.getData().isVerified()) {
-            log.error("微信支付回调验签失败: channelMchNo={}", channelMchNo);
+            log.error("微信支付回调验签失败: channelMchNo={}, isv={}", channelMchNo, isv);
             return WechatCode.NOTIFY_FAIL;
         }
 

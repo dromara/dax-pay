@@ -4,7 +4,7 @@ import cn.daxpay.open.channel.dougong.client.DougongChannelClient;
 import cn.daxpay.open.channel.dougong.client.credential.DougongSdkCredential;
 import cn.daxpay.open.channel.dougong.client.req.DougongRefundReq;
 import cn.daxpay.open.channel.dougong.client.resp.DougongRefundResp;
-import cn.daxpay.open.payment.common.enums.RefundOrderStatusEnum;
+import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
 import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
@@ -65,14 +65,14 @@ public class DougongRefundService {
 
     /// 生成斗拱退款异步通知地址(汇付→平台)
     ///
-    /// 路径约定: `{backendBaseUrl}/unipay/callback/{mchNo}/{appId}/dougong/refund`
+    /// 路径约定: `{backendBaseUrl}/unipay/callback/{mchNo}/{channelMchNo}/dougong/refund`
     private String buildRefundNotifyUrl(PayRefundOrder refundOrder) {
         String base = platformUrlConfigService.getUrlConfig().getBackendBaseUrl();
         if (StrUtil.isBlank(base)) {
             return null;
         }
         return StrUtil.format("{}/unipay/callback/{}/{}/dougong/refund",
-                base, refundOrder.getMchNo(), refundOrder.getAppId());
+                base, refundOrder.getMchNo(), refundOrder.getChannelMchNo());
     }
 
     /// OffsetDateTime → yyyyMMdd(东八区)

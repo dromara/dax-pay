@@ -6,7 +6,8 @@ import cn.daxpay.open.channel.wechat.client.req.WechatCallbackParseReq;
 import cn.daxpay.open.channel.wechat.client.resp.WechatCallbackParseResp;
 import cn.daxpay.open.channel.wechat.code.WechatCode;
 import cn.daxpay.open.channel.wechat.service.direct.WechatDirectConfigAssembler;
-import cn.daxpay.open.payment.common.callback.RefundCallbackData;
+import cn.daxpay.open.channel.wechat.service.isv.WechatIsvConfigAssembler;
+import cn.daxpay.open.payment.trade.runtime.bo.RefundCallbackData;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.service.callback.RefundCallbackService;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
@@ -21,9 +22,7 @@ import java.util.Objects;
 
 /// # 微信退款回调处理服务
 ///
-/// 微信退款异步通知 → 主应用接收 → 组装凭证 → 转发子应用验签 → 日志记录退款结果。
-///
-/// TODO 退款单状态更新待接入退款回调框架(平台目前无独立 RefundCallbackService)。
+/// 微信退款异步通知 → 主应用接收 → 组装凭证 → 转发子应用验签 → 更新退款单状态。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -31,16 +30,28 @@ public class WechatRefundCallbackService {
 
     private final WechatChannelClient wechatChannelClient;
     private final WechatDirectConfigAssembler wechatDirectConfigAssembler;
+    private final WechatIsvConfigAssembler wechatIsvConfigAssembler;
     private final RefundCallbackService refundCallbackService;
 
-    /// 退款回调处理
+    /// 直连退款回调处理
     public String refundHandle(String mchNo, String channelMchNo, HttpServletRequest request) {
+        return this.doRefundHandle(mchNo, channelMchNo, request, false);
+    }
+
+    /// 服务商退款回调处理
+    public String isvRefundHandle(String mchNo, String channelMchNo, HttpServletRequest request) {
+        return this.doRefundHandle(mchNo, channelMchNo, request, true);
+    }
+
+    private String doRefundHandle(String mchNo, String channelMchNo, HttpServletRequest request, boolean isv) {
         // 1. 提取回调原始数据
         String body = JakartaServletUtil.getBody(request);
         Map<String, String> headerMap = JakartaServletUtil.getHeaderMap(request);
 
-        // 2. 组装凭证
-        WechatSdkCredential credential = wechatDirectConfigAssembler.buildConfig(mchNo, channelMchNo, null);
+        // 2. 组装凭证(直连/服务商分发)
+        WechatSdkCredential credential = isv
+                ? wechatIsvConfigAssembler.buildConfig(mchNo, channelMchNo, null)
+                : wechatDirectConfigAssembler.buildConfig(mchNo, channelMchNo, null);
 
         // 3. 转发到子应用验签
         WechatCallbackParseReq req = new WechatCallbackParseReq();
@@ -53,7 +64,7 @@ public class WechatRefundCallbackService {
 
         DaxResult<WechatCallbackParseResp> result = wechatChannelClient.parseRefundCallback(req);
         if (result.getCode() != 0 || result.getData() == null || !result.getData().isVerified()) {
-            log.error("微信退款回调验签失败: channelMchNo={}", channelMchNo);
+            log.error("微信退款回调验签失败: channelMchNo={}, isv={}", channelMchNo, isv);
             return WechatCode.NOTIFY_FAIL;
         }
 

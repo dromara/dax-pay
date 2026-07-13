@@ -4,7 +4,7 @@ import cn.daxpay.open.channel.yeepay.client.YeepayChannelClient;
 import cn.daxpay.open.channel.yeepay.client.credential.YeepaySdkCredential;
 import cn.daxpay.open.channel.yeepay.client.req.YeepayRefundReq;
 import cn.daxpay.open.channel.yeepay.client.resp.YeepayRefundResp;
-import cn.daxpay.open.payment.common.enums.RefundOrderStatusEnum;
+import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
 import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
@@ -55,8 +55,8 @@ public class YeepayRefundService {
         if (StrUtil.isBlank(base)) {
             throw new IllegalStateException("平台后端访问地址(backendBaseUrl)未配置, 无法生成易宝退款回调地址");
         }
-        return StrUtil.format("{}/unipay/callback/{}/{}/yeepay/{}/refund",
-                base, refundOrder.getMchNo(), refundOrder.getAppId(), refundOrder.getChannelMchNo());
+        return StrUtil.format("{}/unipay/callback/{}/{}/yeepay/refund",
+                base, refundOrder.getMchNo(), refundOrder.getChannelMchNo());
     }
 
     /// 解析子应用响应

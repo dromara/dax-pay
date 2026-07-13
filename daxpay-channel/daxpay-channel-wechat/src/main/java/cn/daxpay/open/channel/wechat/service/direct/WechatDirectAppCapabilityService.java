@@ -104,7 +104,7 @@ public class WechatDirectAppCapabilityService {
 
     /// 支付/回调解析应用：显式配置 > appType 自动推导 > 通道商户首个兜底
     ///
-    /// **须已装载 mchNo**（[PaymentVerify] 的 initMch / 回调 Filter），走租户过滤。
+    /// **须已装载 mchNo**（[PaymentVerify] 的 initMch / 回调 bindMchNoForCallback），走租户过滤。
     /// 认证无上下文请用 [#resolveAppNotTenant]。
     ///
     /// @param channelMchNo 通道商户号

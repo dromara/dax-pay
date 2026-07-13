@@ -7,7 +7,7 @@ import cn.daxpay.open.channel.ums.client.resp.UmsCallbackParseResp;
 import cn.daxpay.open.channel.ums.code.UmsCode;
 import cn.daxpay.open.channel.ums.service.direct.UmsDirectConfigAssembler;
 import cn.daxpay.open.channel.ums.util.UmsDateUtil;
-import cn.daxpay.open.payment.common.callback.CallbackData;
+import cn.daxpay.open.payment.trade.runtime.bo.CallbackData;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.service.callback.PayCallbackService;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;

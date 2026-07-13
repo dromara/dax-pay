@@ -33,7 +33,7 @@
         <!-- 支付服务实现类 -->
         <dependency>
             <groupId>cn.daxpay.open</groupId>
-            <artifactId>daxpay-payment-common</artifactId>
+            <artifactId>daxpay-payment-core</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

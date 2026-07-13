@@ -4,7 +4,7 @@ import cn.daxpay.open.channel.yeepay.client.YeepayChannelClient;
 import cn.daxpay.open.channel.yeepay.client.credential.YeepaySdkCredential;
 import cn.daxpay.open.channel.yeepay.client.req.YeepaySyncReq;
 import cn.daxpay.open.channel.yeepay.client.resp.YeepaySyncResp;
-import cn.daxpay.open.payment.common.enums.PayFundStatusEnum;
+import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.PaySyncResultBo;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;

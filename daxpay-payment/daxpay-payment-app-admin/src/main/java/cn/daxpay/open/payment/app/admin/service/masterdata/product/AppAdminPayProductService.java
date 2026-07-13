@@ -1,8 +1,8 @@
 package cn.daxpay.open.payment.app.admin.service.masterdata.product;
 
-import cn.daxpay.open.payment.masterdata.constants.product.param.PayProductQuery;
-import cn.daxpay.open.payment.masterdata.constants.product.result.PayProductResult;
-import cn.daxpay.open.payment.masterdata.constants.product.service.PayProductService;
+import cn.daxpay.open.payment.masterdata.param.product.PayProductQuery;
+import cn.daxpay.open.payment.masterdata.result.product.PayProductResult;
+import cn.daxpay.open.payment.masterdata.service.product.PayProductService;
 import cn.daxpay.open.platform.core.rest.dto.LabelValue;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;

@@ -1,7 +1,6 @@
 {
   "unsupportedBarcodeType": "Unsupported barcode type",
   "merchantNoRefundPermission": "Merchant does not have refund permission",
-  "merchantNoApiPermission": "Merchant does not have API permission",
   "payOrderNotExist": "Payment order not found",
   "payOrderExtNotExist": "Payment order extension not found",
   "refundOrderNotExist": "Refund order not found",

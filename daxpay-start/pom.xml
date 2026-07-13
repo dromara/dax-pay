@@ -37,10 +37,10 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- 支付公共底座（核心交易引擎 + 商户领域共享内核 + 网关订单模型） -->
+        <!-- 支付域内核（交易引擎 + 商户领域 + 网关订单模型 + 开放 API 契约） -->
         <dependency>
             <groupId>cn.daxpay.open</groupId>
-            <artifactId>daxpay-payment-common</artifactId>
+            <artifactId>daxpay-payment-core</artifactId>
             <version>${project.version}</version>
         </dependency>
 

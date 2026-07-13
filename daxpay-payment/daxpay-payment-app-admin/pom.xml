@@ -12,7 +12,7 @@
 
     <artifactId>daxpay-payment-app-admin</artifactId>
     <packaging>jar</packaging>
-    <description>运营移动端（APP/小程序）支付接口；逻辑转发至 payment-admin / common Service</description>
+    <description>运营移动端（APP/小程序）支付接口；逻辑转发至 payment-admin / core Service</description>
 
     <dependencies>
         <!-- lombok（provided 不传递，需显式声明） -->
@@ -22,7 +22,7 @@
             <scope>provided</scope>
         </dependency>
 
-        <!-- 运营管理端（复用 Admin*Service 与 common 传递依赖） -->
+        <!-- 运营管理端（复用 Admin*Service 与 payment-core 传递依赖） -->
         <dependency>
             <groupId>cn.daxpay.open</groupId>
             <artifactId>daxpay-payment-admin</artifactId>

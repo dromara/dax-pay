@@ -3,7 +3,7 @@ package cn.daxpay.open.payment.admin.controller.develop;
 import cn.daxpay.open.payment.admin.param.develop.DevelopParam;
 import cn.daxpay.open.payment.admin.result.develop.DevelopSignResult;
 import cn.daxpay.open.payment.admin.service.develop.DevelopTradeService;
-import cn.daxpay.open.payment.masterdata.constants.provider.result.PayProviderMethodResult;
+import cn.daxpay.open.payment.masterdata.result.provider.PayProviderMethodResult;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;

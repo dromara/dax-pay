@@ -12,7 +12,7 @@
 
     <artifactId>daxpay-payment-unipay</artifactId>
     <packaging>jar</packaging>
-    <description>开放支付端（统一收单 /unipay/**、网关产品、公开 H5 client），依赖支付公共底座</description>
+    <description>开放支付端（统一收单 /unipay/**、网关产品、公开 H5 client），依赖支付域内核</description>
 
     <dependencies>
         <dependency>
@@ -33,7 +33,7 @@
         </dependency>
         <dependency>
             <groupId>cn.daxpay.open</groupId>
-            <artifactId>daxpay-payment-common</artifactId>
+            <artifactId>daxpay-payment-core</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

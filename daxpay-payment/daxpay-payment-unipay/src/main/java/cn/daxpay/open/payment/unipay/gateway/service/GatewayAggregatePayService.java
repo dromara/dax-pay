@@ -1,8 +1,8 @@
 package cn.daxpay.open.payment.unipay.gateway.service;
 
-import cn.daxpay.open.payment.common.enums.AggregateConfigLevelEnum;
-import cn.daxpay.open.payment.common.enums.CashierSceneEnum;
-import cn.daxpay.open.payment.common.enums.GatewayPayTypeEnum;
+import cn.daxpay.open.payment.merchant.enums.AggregateConfigLevelEnum;
+import cn.daxpay.open.payment.merchant.enums.CashierSceneEnum;
+import cn.daxpay.open.payment.trade.enums.GatewayPayTypeEnum;
 import cn.daxpay.open.payment.trade.order.entity.GatewayPayOrder;
 import cn.daxpay.open.payment.merchant.dao.gateway.GatewayAggregateSceneManager;
 import cn.daxpay.open.payment.merchant.entity.gateway.GatewayAggregateConfig;

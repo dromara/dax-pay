@@ -6,7 +6,7 @@ import cn.daxpay.open.channel.adapay.client.req.AdapayRefundSyncReq;
 import cn.daxpay.open.channel.adapay.client.resp.AdapayRefundSyncResp;
 import cn.daxpay.open.channel.adapay.code.AdapayCode;
 import cn.daxpay.open.channel.adapay.util.AdapayDateUtil;
-import cn.daxpay.open.payment.common.enums.RefundOrderStatusEnum;
+import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
 import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;

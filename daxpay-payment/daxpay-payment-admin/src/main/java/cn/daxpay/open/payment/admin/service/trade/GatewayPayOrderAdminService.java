@@ -1,7 +1,7 @@
 package cn.daxpay.open.payment.admin.service.trade;
 
-import cn.daxpay.open.payment.common.enums.GatewayOrderStatusEnum;
-import cn.daxpay.open.payment.common.enums.PayTradeTypeEnum;
+import cn.daxpay.open.payment.trade.enums.GatewayOrderStatusEnum;
+import cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum;
 import cn.daxpay.open.payment.trade.order.convert.GatewayPayOrderConvert;
 import cn.daxpay.open.payment.trade.order.dao.GatewayPayOrderManager;
 import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;

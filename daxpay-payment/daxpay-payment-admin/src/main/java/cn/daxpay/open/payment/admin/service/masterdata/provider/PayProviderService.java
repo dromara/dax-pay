@@ -1,13 +1,13 @@
 package cn.daxpay.open.payment.admin.service.masterdata.provider;
 
-import cn.daxpay.open.payment.masterdata.constants.provider.dao.PayProviderManager;
-import cn.daxpay.open.payment.masterdata.constants.provider.dao.PayProviderMethodManager;
-import cn.daxpay.open.payment.masterdata.constants.provider.entity.PayProvider;
-import cn.daxpay.open.payment.masterdata.constants.provider.result.PayProviderGroupResult;
-import cn.daxpay.open.payment.masterdata.constants.provider.result.PayProviderMethodResult;
-import cn.daxpay.open.payment.masterdata.constants.provider.result.PayProviderProductResult;
-import cn.daxpay.open.payment.masterdata.constants.provider.service.PayProviderMethodService;
-import cn.daxpay.open.payment.masterdata.constants.provider.service.PayProviderProductService;
+import cn.daxpay.open.payment.masterdata.dao.provider.PayProviderManager;
+import cn.daxpay.open.payment.masterdata.dao.provider.PayProviderMethodManager;
+import cn.daxpay.open.payment.masterdata.entity.provider.PayProvider;
+import cn.daxpay.open.payment.masterdata.result.provider.PayProviderGroupResult;
+import cn.daxpay.open.payment.masterdata.result.provider.PayProviderMethodResult;
+import cn.daxpay.open.payment.masterdata.result.provider.PayProviderProductResult;
+import cn.daxpay.open.payment.masterdata.service.provider.PayProviderMethodService;
+import cn.daxpay.open.payment.masterdata.service.provider.PayProviderProductService;
 import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;

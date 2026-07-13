@@ -49,7 +49,7 @@ public class NormalPayOrderQueryService {
         }
         // 联表资金凭证补充交易字段
         PayTrade trade = payTradeManager.findByContainerId(order.getId(),
-                cn.daxpay.open.payment.common.enums.PayTradeTypeEnum.NORMAL.getCode()).orElse(null);
+                cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum.NORMAL.getCode()).orElse(null);
         return UnipayNormalPayOrderConvert.CONVERT.toResult(order, trade);
     }
 }

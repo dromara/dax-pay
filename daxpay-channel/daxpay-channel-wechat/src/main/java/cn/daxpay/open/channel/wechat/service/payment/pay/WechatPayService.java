@@ -54,7 +54,7 @@ public class WechatPayService {
         req.setOpenId(payParam.getOpenId());
         req.setAttach(payParam.getAttach());
         // 通道通知地址: 始终使用平台生成的回调地址(微信→平台), 不使用 payParam.notifyUrl(语义为平台→商户)
-        req.setNotifyUrl(this.buildNotifyUrl(order));
+        req.setNotifyUrl(this.buildNotifyUrl(order, payParam.getChannelMchNo()));
         // 关单时间取自订单(createOrder 已对 null 兜底默认30分钟), 不用 payParam 原始入参
         req.setExpireTime(payParam.getExpiredTime());
         // H5 场景信息(场景参数)
@@ -75,16 +75,16 @@ public class WechatPayService {
 
     /// 生成微信支付异步通知地址(微信→平台)
     ///
-    /// 沿用商业版旧版路径约定: `{backendBaseUrl}/unipay/callback/{mchNo}/{appId}/wechat/pay`
-    /// backendBaseUrl 来自平台端点配置 [PlatformUrlConfig], 与社交登录回调地址同源
-    private String buildNotifyUrl(PayTrade order) {
+    /// 路径约定: `{backendBaseUrl}/unipay/callback/{mchNo}/{channelMchNo}/wechat/pay`
+    /// channelMchNo 编码到 URL, 回调时 body 加密无法先反查订单, 须凭 path 组装凭证验签
+    private String buildNotifyUrl(PayTrade order, String channelMchNo) {
         String base = platformUrlConfigService.getUrlConfig().getBackendBaseUrl();
         if (StrUtil.isBlank(base)) {
             // backendBaseUrl 未配置时抛清晰异常, 避免 null 透传到微信报模糊的必填校验错误
             throw new BizInfoException(DaxPayErrorCode.CONFIG_ERROR, "error.common.backendBaseUrlNotConfigured");
         }
         return StrUtil.format("{}/unipay/callback/{}/{}/wechat/pay",
-                base, order.getMchNo(), order.getAppId());
+                base, order.getMchNo(), channelMchNo);
     }
 
     /// 平台支付方式([PayMethodEnum] code) -> 微信通道支付方式

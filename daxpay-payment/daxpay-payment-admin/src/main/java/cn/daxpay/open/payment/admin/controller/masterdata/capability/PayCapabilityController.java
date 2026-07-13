@@ -2,8 +2,8 @@ package cn.daxpay.open.payment.admin.controller.masterdata.capability;
 
 
 import cn.daxpay.open.platform.core.code.PermCodes;
-import cn.daxpay.open.payment.masterdata.constants.capability.param.PayCapabilityQuery;
-import cn.daxpay.open.payment.masterdata.constants.capability.result.PayCapabilityResult;
+import cn.daxpay.open.payment.masterdata.param.capability.PayCapabilityQuery;
+import cn.daxpay.open.payment.masterdata.result.capability.PayCapabilityResult;
 import cn.daxpay.open.payment.admin.service.masterdata.capability.PayCapabilityService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.rest.Res;
