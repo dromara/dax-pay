@@ -1,9 +1,13 @@
 {
   "configNotExist": "平台配置不存在或未启用",
   "unsupportedSource": "不支持的平台",
+  "unsupportedClient": "社交登录仅支持运营端(admin)与商户端(merchant)",
   "configDuplicated": "该平台配置已存在",
   "notConfigured": "平台尚未配置，无法启停",
   "authCodeBlank": "授权码不能为空",
+  "endpointNotConfigured": "端点配置中缺少对应前端访问地址，无法生成回调 URL",
+  "adminEndpointNotConfigured": "请先在端点配置中设置「管理端访问地址」(adminBaseUrl)",
+  "merchantEndpointNotConfigured": "请先在端点配置中设置「商户端访问地址」(merchantBaseUrl)，商户社交登录依赖该地址生成回调",
   "alipayNotConfigured": "平台级支付宝配置不完整，请先在「三方平台管理」中配置",
   "wechatMpNotConfigured": "平台级微信公众号配置不完整，请先在「三方平台管理」中配置",
   "douyinH5NotConfigured": "平台级抖音 H5 应用配置不完整，请先在「三方平台管理」中配置",
@@ -12,6 +16,8 @@
   },
   "bind": {
     "alreadyBoundByOther": "该第三方账号已被其他用户绑定",
-    "alreadyBoundPlatform": "您已绑定该平台，请先解绑后再绑定新账号"
+    "alreadyBoundPlatform": "您已绑定该平台，请先解绑后再绑定新账号",
+    "clientMismatch": "当前登录用户不属于该终端，无法完成绑定"
   }
 }
+

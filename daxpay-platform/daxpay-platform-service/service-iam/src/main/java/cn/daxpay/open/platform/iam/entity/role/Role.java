@@ -27,7 +27,7 @@ public class Role extends MpBaseEntity implements ToResult<RoleResult> {
     /// 英文名称
     private String nameEn;
 
-    /// 终端编码: ADMIN/ISV/AGENT/MCH
+    /// 身份域终端编码: admin / merchant / gateway
     private String clientCode;
 
     /// 是否系统内置 不能修改

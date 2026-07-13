@@ -1,8 +1,10 @@
 package cn.daxpay.open.platform.iam.controller.social;
 
 import cn.daxpay.open.platform.iam.param.social.SocialLoginConfigParam;
+import cn.daxpay.open.platform.iam.result.social.SocialCallbackUrlResult;
 import cn.daxpay.open.platform.iam.result.social.SocialLoginConfigResult;
 import cn.daxpay.open.platform.iam.service.social.SocialLoginConfigService;
+import cn.daxpay.open.platform.iam.service.social.SocialLoginService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
@@ -33,11 +35,21 @@ public class SocialLoginConfigController {
 
     private final SocialLoginConfigService socialLoginConfigService;
 
+    private final SocialLoginService socialLoginService;
+
     @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Iam.Social.VIEW_NAME_CN, nameEn = PermCodes.Iam.Social.VIEW_NAME_EN)
     @Operation(summary = "全量查询平台配置(枚举驱动, 读时初始化缺失平台)")
     @GetMapping("/find-all")
     public Result<List<SocialLoginConfigResult>> findAll() {
         return Res.ok(socialLoginConfigService.findAll());
+    }
+
+    /// 列出应在第三方平台登记的 OAuth 回调地址(运营/商户 × 平台 × 登录/绑定)
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Iam.Social.VIEW_NAME_CN, nameEn = PermCodes.Iam.Social.VIEW_NAME_EN)
+    @Operation(summary = "查询应登记的社交回调地址清单")
+    @GetMapping("/callback-urls")
+    public Result<List<SocialCallbackUrlResult>> callbackUrls() {
+        return Res.ok(socialLoginService.listCallbackUrls());
     }
 
     @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Iam.Social.VIEW_NAME_CN, nameEn = PermCodes.Iam.Social.VIEW_NAME_EN)

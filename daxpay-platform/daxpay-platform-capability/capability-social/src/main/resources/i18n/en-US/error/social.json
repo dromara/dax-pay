@@ -1,9 +1,13 @@
 {
   "configNotExist": "Platform configuration does not exist or is not enabled",
   "unsupportedSource": "Unsupported platform",
+  "unsupportedClient": "Social login only supports admin and merchant clients",
   "configDuplicated": "The platform configuration already exists",
   "notConfigured": "The platform is not configured and cannot be toggled",
   "authCodeBlank": "Authorization code cannot be empty",
+  "endpointNotConfigured": "Frontend base URL is missing in endpoint configuration, cannot build callback URL",
+  "adminEndpointNotConfigured": "Please set Admin Base URL (adminBaseUrl) in endpoint configuration first",
+  "merchantEndpointNotConfigured": "Please set Merchant Base URL (merchantBaseUrl) in endpoint configuration first; merchant social login needs it for OAuth callbacks",
   "alipayNotConfigured": "Platform-level Alipay configuration is incomplete, please configure it in 'Third-party Platform Management' first",
   "wechatMpNotConfigured": "Platform-level WeChat Official Account configuration is incomplete, please configure it in 'Third-party Platform Management' first",
   "douyinH5NotConfigured": "Platform-level Douyin H5 app configuration is incomplete, please configure it in 'Third-party Platform Management' first",
@@ -12,6 +16,8 @@
   },
   "bind": {
     "alreadyBoundByOther": "The third-party account has been bound by another user",
-    "alreadyBoundPlatform": "You have already bound this platform, please unbind first"
+    "alreadyBoundPlatform": "You have already bound this platform, please unbind first",
+    "clientMismatch": "Current user does not belong to this client, binding is not allowed"
   }
 }
+

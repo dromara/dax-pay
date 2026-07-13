@@ -15,9 +15,9 @@ import java.util.List;
 
 /// # 用户工作台快捷入口偏好
 ///
-/// 按用户 + 终端(clientCode)维度存储用户在工作台自定义的快捷入口序列.
+/// 按用户 + 身份域终端(clientCode: admin/merchant/gateway)存储工作台快捷入口序列.
 /// 仅存已选入口的 key 有序列表, 入口元信息(图标/标题/路由)由前端各端自行维护, 后端不感知.
-/// PC 与移动端通过 clientCode 区分, 互不影响.
+/// 一期 Web 与 App 共用同一 clientCode(如均为 admin), 会话/偏好分池见 channel 二期.
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
@@ -27,7 +27,7 @@ public class UserDashboardPreference extends MpBaseEntity implements ToResult<Qu
     /// 用户ID
     private Long userId;
 
-    /// 终端编码(WEB / MOBILE), PC 与移动分开管理
+    /// 身份域终端编码(admin / merchant / gateway), 非 WEB/MOBILE 壳
     private String clientCode;
 
     /// 已选快捷入口有序序列(纯 key 数组), 如 ["merchant","notify","app"]

@@ -62,7 +62,6 @@ public class TokenService {
 
     /// 登录
     public String login(HttpServletRequest request, HttpServletResponse response) {
-        AuthInfoResult authInfoResult;
         String clientCode = this.getClientCode(request);
         String loginType = SecurityUtil.getLoginType(request);
         try {
@@ -74,11 +73,9 @@ public class TokenService {
             // 校验该终端是否支持此种登录方式(按 clientCode + loginType 双键匹配)
             this.validateClient(loginAuthContext);
             // 认证并获取结果
-            authInfoResult = this.authentication(loginAuthContext);
-            // 认证后挑战(双因素/设备验证等), 任一需要则抛挑战异常(不计入登录失败)
-            this.applyChallenges(loginAuthContext, authInfoResult);
-            // 登录处理
-            this.doSaLogin(authInfoResult, clientCode, loginType);
+            AuthInfoResult authInfoResult = this.authentication(loginAuthContext);
+            // 挑战 → 建会话 → 成功回调(与社交登录共用)
+            return this.completeAuthenticatedLogin(authInfoResult, loginAuthContext);
         }
         catch (AuthenticationChallengeException e) {
             // 挑战流程: 不触发失败回调, 交由全局处理器返回挑战结果
@@ -89,8 +86,19 @@ public class TokenService {
             this.loginFailureHandler(request, response, e);
             throw e;
         }
+    }
+
+    /// 认证已通过后的统一收尾: 2FA 等挑战 → doSaLogin → 成功回调
+    ///
+    /// 密码与社交登录共用, 保证会话超时/并发/deviceType 与 2FA 行为一致.
+    /// 若需 2FA 则抛 [AuthenticationChallengeException], 不建立最终会话.
+    public String completeAuthenticatedLogin(AuthInfoResult authInfoResult, LoginAuthContext context) {
+        // 认证后挑战(双因素等)
+        this.applyChallenges(context, authInfoResult);
+        // 建立会话
+        this.doSaLogin(authInfoResult, context.getClientCode(), context.getAuthLoginType());
         // 登录成功回调
-        this.loginSuccessHandler(request, response, authInfoResult);
+        this.loginSuccessHandler(context.getRequest(), context.getResponse(), authInfoResult);
         return StpUtil.getTokenValue();
     }
 

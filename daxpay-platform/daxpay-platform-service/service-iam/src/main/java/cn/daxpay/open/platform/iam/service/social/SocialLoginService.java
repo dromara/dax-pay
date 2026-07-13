@@ -1,7 +1,13 @@
 package cn.daxpay.open.platform.iam.service.social;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
+import cn.daxpay.open.platform.capability.auth.authentication.UserInfoStatusCheck;
+import cn.daxpay.open.platform.capability.auth.entity.AuthInfoResult;
+import cn.daxpay.open.platform.capability.auth.entity.LoginAuthContext;
+import cn.daxpay.open.platform.capability.auth.exception.LoginFailureException;
 import cn.daxpay.open.platform.capability.auth.util.SecurityUtil;
 import cn.daxpay.open.platform.capability.social.auth.SocialAuthRequestFactory;
 import cn.daxpay.open.platform.capability.social.justauth.SocialAuthConfig;
@@ -9,15 +15,20 @@ import cn.daxpay.open.platform.capability.social.justauth.SocialSourceEnum;
 import cn.daxpay.open.platform.capability.social.justauth.model.AuthCallback;
 import cn.daxpay.open.platform.capability.social.justauth.model.AuthUser;
 import cn.daxpay.open.platform.capability.social.justauth.request.SocialAuthRequest;
+import cn.daxpay.open.platform.common.config.properties.PlatformStarterProperties;
+import cn.daxpay.open.platform.core.entity.UserDetail;
 import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
 import cn.daxpay.open.platform.iam.entity.social.SocialLoginConfig;
+import cn.daxpay.open.platform.iam.enums.SocialAuthMode;
 import cn.daxpay.open.platform.iam.enums.SocialClientEnum;
 import cn.daxpay.open.platform.iam.result.social.SocialBindResult;
+import cn.daxpay.open.platform.iam.result.social.SocialCallbackUrlResult;
 import cn.daxpay.open.platform.iam.result.social.SocialEnabledPlatformResult;
 import cn.daxpay.open.platform.iam.result.social.SocialExchangeResult;
-import cn.daxpay.open.platform.iam.enums.SocialAuthMode;
+import cn.daxpay.open.platform.iam.result.user.UserInfoResult;
 import cn.daxpay.open.platform.iam.service.social.other.AlipaySocialAuthRequest;
 import cn.daxpay.open.platform.iam.service.social.other.AlipaySocialAuthRequestFactory;
+import cn.daxpay.open.platform.iam.service.user.UserQueryService;
 import cn.daxpay.open.platform.system.entity.config.platform.infra.PlatformUrlConfig;
 import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
 import cn.hutool.core.util.IdUtil;
@@ -60,10 +71,47 @@ public class SocialLoginService {
 
     private final PlatformUrlConfigService platformUrlConfigService;
 
+    private final UserQueryService userQueryService;
+
+    private final PlatformStarterProperties platformStarterProperties;
+
+    private final List<UserInfoStatusCheck> userInfoStatusChecks;
+
     /// 查询已启用的第三方登录平台(登录页公开接口)
     /// 仅返回平台编码列表, 不含任何敏感字段, 供登录页动态渲染第三方登录按钮.
     public List<SocialEnabledPlatformResult> enabledList() {
         return socialLoginConfigService.findEnabledList();
+    }
+
+    /// 列出应在第三方开放平台登记的回调地址(运营/商户 × 全平台 × 登录/绑定)
+    ///
+    /// 完整 URL 形态: {baseUrl}/auth/oauth-callback/{source} 与 bind 路径.
+    public List<SocialCallbackUrlResult> listCallbackUrls() {
+        PlatformUrlConfig urlConfig = platformUrlConfigService.getUrlConfig();
+        List<SocialCallbackUrlResult> list = new ArrayList<>();
+        for (SocialClientEnum client : SocialClientEnum.values()) {
+            String baseUrl = client.resolveBaseUrl(urlConfig);
+            boolean configured = StrUtil.isNotBlank(baseUrl);
+            String base = configured ? StrUtil.removeSuffix(baseUrl, "/") : "";
+            for (SocialSourceEnum source : SocialSourceEnum.values()) {
+                String code = source.getCode();
+                list.add(buildCallbackItem(client.getCode(), code, SocialAuthMode.LOGIN, base, configured));
+                list.add(buildCallbackItem(client.getCode(), code, SocialAuthMode.BIND, base, configured));
+            }
+        }
+        return list;
+    }
+
+    private SocialCallbackUrlResult buildCallbackItem(String clientCode, String source,
+                                                      SocialAuthMode mode, String base, boolean configured) {
+        String path = mode == SocialAuthMode.BIND ? BIND_CALLBACK_PATH : LOGIN_CALLBACK_PATH;
+        String url = configured ? base + path + "/" + source : "";
+        return new SocialCallbackUrlResult()
+                .setClientCode(clientCode)
+                .setSource(source)
+                .setMode(mode.name())
+                .setUrl(url)
+                .setBaseUrlConfigured(configured);
     }
 
     /// 生成授权地址
@@ -71,6 +119,8 @@ public class SocialLoginService {
     /// @param client 终端编码(admin/merchant), 用于解析端点配置中的 baseUrl
     /// @param mode 授权场景(不传则按登录态判断: 已登录=绑定, 未登录=登录)
     public String generateAuthorizeUrl(String source, String client, String mode) {
+        // 仅 admin/merchant
+        SocialClientEnum socialClient = this.requireSocialClient(client);
         // 加载平台配置(全局唯一)
         SocialLoginConfig config = this.loadEnabledConfig(source);
         SocialSourceEnum socialSource = SocialSourceEnum.of(source);
@@ -79,10 +129,9 @@ public class SocialLoginService {
             throw new OperationFailException("error.social.unsupportedSource");
         }
         // 按 client 解析前端 baseUrl
-        String baseUrl = this.resolveBaseUrl(client);
+        String baseUrl = this.resolveBaseUrl(socialClient);
         if (StrUtil.isBlank(baseUrl)) {
-            // 社交登录: 端点配置缺失
-            throw new OperationFailException("error.social.endpointNotConfigured");
+            throw new OperationFailException(this.endpointMissingKey(socialClient));
         }
         SocialAuthMode authMode = this.resolveMode(mode);
         // 根据场景拼接回调基础地址
@@ -102,7 +151,8 @@ public class SocialLoginService {
                                                   String source, String clientCode,
                                                   HttpServletRequest request, HttpServletResponse response) {
         try {
-            String baseUrl = this.resolveBaseUrl(clientCode);
+            SocialClientEnum socialClient = this.requireSocialClient(clientCode);
+            String baseUrl = this.requireBaseUrl(socialClient);
             String redirectUri = this.buildRedirectUri(baseUrl, SocialAuthMode.LOGIN);
             AuthUser authUser = this.doExchange(code, state, source, redirectUri);
             // 查绑定关系
@@ -111,11 +161,45 @@ public class SocialLoginService {
                 // 未绑定
                 return new SocialExchangeResult().setError("unbind");
             }
+            // 身份域 + 用户状态检查(对齐密码路径 UserInfoStatusCheck 链)
+            this.validateSocialLoginUser(userId, clientCode, source, request, response);
+            // 统一建会话 + 2FA 挑战(TokenService.completeAuthenticatedLogin)
             String token = socialLoginHandler.login(userId, clientCode, source, request, response);
             return new SocialExchangeResult().setToken(token);
-        } catch (Exception e) {
+        }
+        catch (LoginFailureException e) {
+            // 业务拒绝 / 2FA 挑战(子类 AuthenticationChallengeException): 交给全局异常
+            throw e;
+        }
+        catch (Exception e) {
             log.error("社交登录兑换失败: source={}, msg={}", source, e.getMessage(), e);
             return new SocialExchangeResult().setError("oauth_failed");
+        }
+    }
+
+    /// 社交登录用户校验: client 归属 + 状态检查链
+    private void validateSocialLoginUser(Long userId, String clientCode, String source,
+                                         HttpServletRequest request, HttpServletResponse response) {
+        UserInfoResult userInfo = userQueryService.findById(userId);
+        // 绑定用户必须属于当前登录终端, 防止运营/商户串号
+        if (!Objects.equals(clientCode, userInfo.getClientCode())) {
+            throw new LoginFailureException(userId, userInfo.getAccount(), "error.auth.clientMismatch");
+        }
+        UserDetail userDetail = userInfo.toUserDetail();
+        AuthInfoResult authInfoResult = new AuthInfoResult()
+                .setId(userId)
+                .setUserDetail(userDetail)
+                .setClient(clientCode)
+                .setLoginType(source);
+        LoginAuthContext context = new LoginAuthContext()
+                .setRequest(request)
+                .setResponse(response)
+                .setClientCode(clientCode)
+                .setAuthLoginType(source)
+                .setAuthProperties(platformStarterProperties.getAuth())
+                .setUserDetail(userDetail);
+        for (UserInfoStatusCheck check : userInfoStatusChecks) {
+            check.check(authInfoResult, context);
         }
     }
 
@@ -125,14 +209,24 @@ public class SocialLoginService {
     public SocialExchangeResult exchangeForBind(String code, String state,
                                                  String source, String clientCode) {
         try {
+            SocialClientEnum socialClient = this.requireSocialClient(clientCode);
             // 绑定场景必须已登录
             Long userId = SecurityUtil.getUserId();
-            String baseUrl = this.resolveBaseUrl(clientCode);
+            // 当前用户必须属于该身份域, 防止跨端绑定
+            UserInfoResult userInfo = userQueryService.findById(userId);
+            if (!Objects.equals(clientCode, userInfo.getClientCode())) {
+                throw new OperationFailException("error.social.bind.clientMismatch");
+            }
+            String baseUrl = this.requireBaseUrl(socialClient);
             String redirectUri = this.buildRedirectUri(baseUrl, SocialAuthMode.BIND);
             AuthUser authUser = this.doExchange(code, state, source, redirectUri);
             socialBindStore.saveBind(userId, clientCode, authUser);
             return new SocialExchangeResult().setResult("bind_success");
-        } catch (Exception e) {
+        }
+        catch (OperationFailException e) {
+            throw e;
+        }
+        catch (Exception e) {
             log.error("社交绑定失败: source={}, msg={}", source, e.getMessage(), e);
             return new SocialExchangeResult().setError("oauth_failed");
         }
@@ -187,13 +281,35 @@ public class SocialLoginService {
         return login ? SocialAuthMode.BIND : SocialAuthMode.LOGIN;
     }
 
-    /// 按 client 解析前端 baseUrl(用于 redirectUri 拼接)
-    private String resolveBaseUrl(String clientCode) {
-        PlatformUrlConfig urlConfig = platformUrlConfigService.getUrlConfig();
-        return SocialClientEnum.of(clientCode).resolveBaseUrl(urlConfig);
+    /// 校验并解析社交登录终端(仅 admin/merchant)
+    private SocialClientEnum requireSocialClient(String clientCode) {
+        return SocialClientEnum.findByCode(clientCode)
+                .orElseThrow(() -> new OperationFailException("error.social.unsupportedClient"));
     }
 
-    /// 构建回调基础地址
+    /// 解析并校验 baseUrl 非空
+    private String requireBaseUrl(SocialClientEnum socialClient) {
+        String baseUrl = this.resolveBaseUrl(socialClient);
+        if (StrUtil.isBlank(baseUrl)) {
+            throw new OperationFailException(this.endpointMissingKey(socialClient));
+        }
+        return baseUrl;
+    }
+
+    /// 按 client 解析前端 baseUrl
+    private String resolveBaseUrl(SocialClientEnum socialClient) {
+        PlatformUrlConfig urlConfig = platformUrlConfigService.getUrlConfig();
+        return socialClient.resolveBaseUrl(urlConfig);
+    }
+
+    /// 端点缺失时的 i18n key(区分运营/商户便于配置)
+    private String endpointMissingKey(SocialClientEnum socialClient) {
+        return socialClient == SocialClientEnum.MERCHANT
+                ? "error.social.merchantEndpointNotConfigured"
+                : "error.social.adminEndpointNotConfigured";
+    }
+
+    /// 构建回调基础地址(不含 source 后缀, JustAuth 层再拼 /{source})
     private String buildRedirectUri(String baseUrl, SocialAuthMode mode) {
         String base = StrUtil.removeSuffix(baseUrl, "/");
         String callbackPath = mode == SocialAuthMode.BIND
