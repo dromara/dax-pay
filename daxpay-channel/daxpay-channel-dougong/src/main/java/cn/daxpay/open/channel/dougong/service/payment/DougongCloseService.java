@@ -5,7 +5,7 @@ import cn.daxpay.open.channel.dougong.client.credential.DougongSdkCredential;
 import cn.daxpay.open.channel.dougong.client.req.DougongCloseReq;
 import cn.daxpay.open.channel.dougong.client.resp.DougongCloseResp;
 import cn.daxpay.open.payment.common.result.DaxResult;
-import cn.daxpay.open.payment.core.trade.order.entity.PayTrade;
+import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.pay.CloseTypeEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;

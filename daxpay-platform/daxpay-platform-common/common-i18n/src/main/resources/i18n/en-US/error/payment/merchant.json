@@ -5,7 +5,6 @@
   "dataErrorNoMchNo": "Data error, merchant number not found",
   "mchNotExist": "Merchant information not found",
   "mchAppNotFound": "Merchant application not found",
-  "mchAppHasChannelConfig": "Merchant application has channel configuration, cannot be deleted",
   "appNoGenFailed": "Application number generation failed",
   "mchAppNoMatch": "Merchant and application number do not match",
   "mchNotAllowDelete": "Merchant cannot be deleted",

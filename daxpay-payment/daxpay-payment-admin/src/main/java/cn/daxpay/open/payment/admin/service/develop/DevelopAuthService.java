@@ -1,8 +1,8 @@
 package cn.daxpay.open.payment.admin.service.develop;
 
-import cn.daxpay.open.payment.core.assist.AuthSessionStore;
-import cn.daxpay.open.payment.core.assist.ChannelAuthService;
-import cn.daxpay.open.payment.core.assist.PlatformAuthService;
+import cn.daxpay.open.payment.auth.AuthSessionStore;
+import cn.daxpay.open.payment.auth.ChannelAuthService;
+import cn.daxpay.open.payment.auth.PlatformAuthService;
 import cn.daxpay.open.payment.unipay.param.assist.GenerateAuthUrlParam;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
 import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;

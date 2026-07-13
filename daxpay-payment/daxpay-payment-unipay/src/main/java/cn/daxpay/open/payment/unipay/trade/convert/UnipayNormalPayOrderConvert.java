@@ -1,7 +1,7 @@
 package cn.daxpay.open.payment.unipay.trade.convert;
 
-import cn.daxpay.open.payment.core.trade.order.entity.NormalPayOrder;
-import cn.daxpay.open.payment.core.trade.order.entity.PayTrade;
+import cn.daxpay.open.payment.trade.order.entity.NormalPayOrder;
+import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayOrderResult;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;

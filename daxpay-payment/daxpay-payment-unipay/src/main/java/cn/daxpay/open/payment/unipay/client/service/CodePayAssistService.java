@@ -5,7 +5,7 @@ import cn.daxpay.open.payment.device.qrcode.dao.DeviceQrCodeManager;
 import cn.daxpay.open.payment.device.qrcode.entity.DeviceQrCode;
 import cn.daxpay.open.payment.unipay.client.result.CodePayInfoResult;
 import cn.daxpay.open.payment.common.dto.MerchantAccessInfo;
-import cn.daxpay.open.payment.common.service.query.MerchantAccessQueryService;
+import cn.daxpay.open.payment.common.assist.query.MerchantAccessQueryService;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
 import cn.daxpay.open.platform.core.code.CommonCode;

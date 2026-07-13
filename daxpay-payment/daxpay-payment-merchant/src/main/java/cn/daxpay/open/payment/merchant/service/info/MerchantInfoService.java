@@ -4,7 +4,7 @@ import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.rest.dto.LabelValue;
-import cn.daxpay.open.payment.common.runtime.PaymentContext;
+import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.merchant.convert.info.MerchantInfoConvert;
 import cn.daxpay.open.payment.merchant.dao.info.MerchantInfoManager;
 import cn.daxpay.open.payment.merchant.entity.info.MerchantInfo;

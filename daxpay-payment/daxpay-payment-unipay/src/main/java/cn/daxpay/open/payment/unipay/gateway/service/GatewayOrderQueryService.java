@@ -1,10 +1,11 @@
 package cn.daxpay.open.payment.unipay.gateway.service;
 
+import cn.daxpay.open.payment.common.assist.MerchantContextLoader;
 import cn.daxpay.open.payment.common.enums.PayTradeTypeEnum;
 import cn.daxpay.open.payment.gateway.dao.GatewayPayOrderManager;
-import cn.daxpay.open.payment.core.trade.order.dao.PayTradeManager;
+import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
 import cn.daxpay.open.payment.gateway.entity.GatewayPayOrder;
-import cn.daxpay.open.payment.core.trade.order.entity.PayTrade;
+import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.unipay.gateway.param.GatewayOrderQueryParam;
 import cn.daxpay.open.payment.unipay.gateway.result.GatewayOrderResult;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
@@ -20,6 +21,7 @@ public class GatewayOrderQueryService {
 
     private final GatewayPayOrderManager gatewayPayOrderManager;
     private final PayTradeManager payTradeManager;
+    private final MerchantContextLoader merchantContextLoader;
 
     public GatewayOrderResult query(GatewayOrderQueryParam param) {
         if (StrUtil.isBlank(param.getOrderNo()) && StrUtil.isBlank(param.getBizOrderNo())) {
@@ -41,11 +43,14 @@ public class GatewayOrderQueryService {
         return this.toResult(order);
     }
 
-    /// H5 侧按 orderNo 查(忽略租户)
+    /// H5 侧按 orderNo 引导查询
+    ///
+    /// Manager 引导读可跨租户定位订单；装载 mchNo 后附属 Trade 走租户内查询。
     public GatewayOrderResult queryByOrderNoNotTenant(String orderNo) {
         GatewayPayOrder order = gatewayPayOrderManager.findByOrderNoNotTenant(orderNo)
                 .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "pay.error.payOrderNotExist"));
+        merchantContextLoader.initMch(order.getMchNo());
         return this.toResult(order);
     }
 

@@ -6,8 +6,8 @@ import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.util.ValidationUtil;
 import cn.daxpay.open.payment.unipay.param.MerchantPaymentCommonParam;
 import cn.daxpay.open.payment.common.result.DaxResult;
-import cn.daxpay.open.payment.common.service.MerchantContextLoader;
-import cn.daxpay.open.payment.common.service.PaySignService;
+import cn.daxpay.open.payment.common.assist.MerchantContextLoader;
+import cn.daxpay.open.payment.common.assist.PaySignService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
@@ -22,7 +22,8 @@ import java.time.ZoneOffset;
 /// # 开放支付验签切面（[PaymentVerify]）
 ///
 /// 执行顺序: 过滤器 -> 拦截器 -> 切面 -> 方法。
-/// 切面只负责"商户身份初始化 + 签名校验",不负责应用解析(由支付流程完成)。
+/// 切面负责**签名 API 身份源**：校验参数后 `initMch` + 验签；不负责应用解析。
+/// 装载后的 mchNo 供 TenantLine / 自动填充使用。
 @Aspect
 @Slf4j
 @Component

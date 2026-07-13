@@ -2,12 +2,12 @@ package cn.daxpay.open.payment.unipay.gateway.service;
 
 import cn.daxpay.open.payment.common.enums.GatewayOrderStatusEnum;
 import cn.daxpay.open.payment.common.enums.GatewayPayTypeEnum;
-import cn.daxpay.open.payment.common.service.MerchantContextLoader;
+import cn.daxpay.open.payment.common.assist.MerchantContextLoader;
 import cn.daxpay.open.payment.gateway.dao.GatewayPayOrderManager;
 import cn.daxpay.open.payment.gateway.entity.GatewayPayOrder;
-import cn.daxpay.open.payment.core.trade.runtime.service.pay.PayAssistService;
-import cn.daxpay.open.payment.core.trade.runtime.mq.GatewayTimeoutMessage;
-import cn.daxpay.open.payment.core.trade.runtime.mq.PayArtemisConstants;
+import cn.daxpay.open.payment.trade.runtime.service.pay.PayAssistService;
+import cn.daxpay.open.payment.trade.runtime.mq.GatewayTimeoutMessage;
+import cn.daxpay.open.payment.trade.runtime.mq.PayArtemisConstants;
 import cn.daxpay.open.payment.unipay.gateway.param.GatewayPrePayParam;
 import cn.daxpay.open.payment.unipay.gateway.result.GatewayPrePayResult;
 import cn.daxpay.open.platform.common.artemis.service.ArtemisTemplateService;
@@ -122,10 +122,14 @@ public class GatewayPayAssistService {
     }
 
     /// 按 orderNo 加载并校验可支付
+    ///
+    /// 引导读用 NotTenant 定位订单后 **立即** initMch，后续聚合配置/交易均走租户过滤。
     public GatewayPayOrder getOrderAndCheck(String orderNo) {
         GatewayPayOrder order = gatewayPayOrderManager.findByOrderNoNotTenant(orderNo)
                 .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "pay.error.payOrderNotExist"));
+        // 立即装载商户上下文，防止后续 MchBaseEntity 查询无 mchNo
+        merchantContextLoader.initMch(order.getMchNo());
         this.checkPayable(order);
         return order;
     }

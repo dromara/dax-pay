@@ -1,7 +1,7 @@
 package cn.daxpay.open.payment.admin.convert.trade;
 
-import cn.daxpay.open.payment.core.trade.order.entity.PayTrade;
-import cn.daxpay.open.payment.core.trade.order.result.PayTradeResult;
+import cn.daxpay.open.payment.trade.order.entity.PayTrade;
+import cn.daxpay.open.payment.trade.order.result.PayTradeResult;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 import org.mapstruct.ReportingPolicy;

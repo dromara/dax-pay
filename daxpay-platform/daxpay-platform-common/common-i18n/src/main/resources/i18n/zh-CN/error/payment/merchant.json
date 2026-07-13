@@ -5,7 +5,6 @@
   "dataErrorNoMchNo": "数据错误, 未发现商户号",
   "mchNotExist": "商户信息不存在",
   "mchAppNotFound": "商户应用未找到",
-  "mchAppHasChannelConfig": "该商户应用已有通道配置, 不允许被删除",
   "appNoGenFailed": "应用号生成失败",
   "mchAppNoMatch": "商户和应用号不匹配",
   "mchNotAllowDelete": "商户不允许删除",

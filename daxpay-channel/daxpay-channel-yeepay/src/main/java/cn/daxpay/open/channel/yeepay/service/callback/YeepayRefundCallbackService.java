@@ -8,7 +8,7 @@ import cn.daxpay.open.channel.yeepay.code.YeepayCode;
 import cn.daxpay.open.channel.yeepay.service.direct.YeepayDirectConfigAssembler;
 import cn.daxpay.open.payment.common.callback.RefundCallbackData;
 import cn.daxpay.open.payment.common.result.DaxResult;
-import cn.daxpay.open.payment.core.trade.runtime.service.callback.RefundCallbackService;
+import cn.daxpay.open.payment.trade.runtime.service.callback.RefundCallbackService;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

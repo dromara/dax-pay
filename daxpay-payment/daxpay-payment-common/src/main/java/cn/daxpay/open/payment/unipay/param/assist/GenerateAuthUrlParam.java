@@ -36,7 +36,7 @@ public class GenerateAuthUrlParam extends MerchantPaymentCommonParam {
     private String authPath;
 
     /// 支付产品编码, 决定走哪个通道产品的认证策略
-    /// 可选: 缺失时由 [cn.daxpay.open.payment.core.assist.ChannelAuthService] 从通道商户号(channelMchNo)反查
+    /// 可选: 缺失时由 [cn.daxpay.open.payment.auth.ChannelAuthService] 从通道商户号(channelMchNo)反查
     /// @see cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum
     @Size(max = 32, message = "{validation.field.product.size}")
     @Schema(description = "支付产品编码")

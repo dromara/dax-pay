@@ -1,6 +1,6 @@
 package cn.daxpay.open.payment.merchant.service.store;
 
-import cn.daxpay.open.payment.common.runtime.PaymentContext;
+import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.merchant.convert.store.MchStoreInfoConvert;
 import cn.daxpay.open.payment.merchant.dao.info.MerchantInfoManager;
 import cn.daxpay.open.payment.merchant.dao.store.MchStoreInfoManager;

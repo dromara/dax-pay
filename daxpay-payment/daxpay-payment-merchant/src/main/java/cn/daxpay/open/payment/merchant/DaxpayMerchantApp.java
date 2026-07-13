@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan;
 ///
 /// 扫描 `cn.daxpay.open.payment.merchant` 及其子包，注册：
 /// - 商户端 HTTP 控制器（controller）
-/// - 端特有能力：登录 Handler、商户上下文 Filter、本端查询 service（如 MerchantInfo / ChannelConfig 展示）
+/// - 端特有能力：登录 Handler、商户上下文 Filter、本端查询 service（如 MerchantInfo 展示）
 /// - 小程序编排 service
 ///
 /// 本模块依赖 `daxpay-payment-common` 公共底座；商户领域 entity/dao 与多端共享 service

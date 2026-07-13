@@ -1,5 +1,5 @@
 {
-  "auto": "Auto",
+  "auto": "Follow Channel Routing",
   "method": "By Method",
-  "direct": "Direct"
+  "direct": "Explicit Channel Merchant"
 }

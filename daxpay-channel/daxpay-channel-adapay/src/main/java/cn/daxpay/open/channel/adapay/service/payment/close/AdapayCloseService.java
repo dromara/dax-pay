@@ -5,7 +5,7 @@ import cn.daxpay.open.channel.adapay.client.credential.AdapaySdkCredential;
 import cn.daxpay.open.channel.adapay.client.req.AdapayCloseReq;
 import cn.daxpay.open.channel.adapay.client.resp.AdapayCloseResp;
 import cn.daxpay.open.payment.common.result.DaxResult;
-import cn.daxpay.open.payment.core.trade.order.entity.PayTrade;
+import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.pay.CloseTypeEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;

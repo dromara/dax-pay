@@ -51,16 +51,16 @@
     "aggregateConfigMissing": "应用未配置聚合扫码支付",
     "aggregateScenesRequired": "当前配置深度下场景配置不能为空",
     "aggregateSceneBlank": "场景编码不能为空",
-    "aggregateSceneMethodRequired": "方式模式下每场景的支付方式必填",
-    "aggregateSceneChannelMchRequired": "精确模式下每场景的通道商户号必填",
-    "aggregateSceneCapabilityRequired": "精确模式下每场景的支付能力必填",
+    "aggregateSceneMethodRequired": "指定支付方式时，每个打开环境的支付方式必填",
+    "aggregateSceneChannelMchRequired": "指定通道商户时，每个打开环境的通道商户号必填",
+    "aggregateSceneCapabilityRequired": "指定通道商户时，每个打开环境的支付能力必填",
     "channelLocked": "订单已锁定支付方式，请勿切换",
     "cashierSceneRequired": "H5收银台必须指定终端场景",
     "cashierItemNotFound": "收银台支付项不存在",
     "cashierItemAppIdImmutable": "收银台支付项应用号不可修改",
-    "cashierItemMethodRequired": "方式模式下支付方式必填",
-    "cashierItemChannelMchRequired": "精确模式下通道商户号必填",
-    "cashierItemCapabilityRequired": "精确模式下支付能力必填",
+    "cashierItemMethodRequired": "指定支付方式时支付方式必填",
+    "cashierItemChannelMchRequired": "指定通道商户时通道商户号必填",
+    "cashierItemCapabilityRequired": "指定通道商户时支付能力必填",
     "cashierItemNameRequired": "支付项名称不能为空"
   },
   "refund": {
@@ -100,7 +100,8 @@
     "wechatMiniAuthConfigError": "微信小程序认证配置错误: {0}",
     "signVerifyFailDetail": "验签失败: {0}",
     "productOrChannelMchRequired": "支付产品与通道商户号至少传入其一",
-    "channelMchNotFound": "通道商户[{0}]不存在"
+    "channelMchNotFound": "通道商户[{0}]不存在",
+    "mchContextMissing": "商户上下文未装载，无法进行数据隔离操作"
   },
   "verify": {
     "methodParamRequired": "支付方法至少有一个参数，并且需要签名的支付参数放在第一位",

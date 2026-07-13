@@ -3,7 +3,7 @@ package cn.daxpay.open.payment.merchant.controller.miniapp;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.platform.core.rest.result.Result;
-import cn.daxpay.open.payment.core.trade.order.result.NormalPayOrderResult;
+import cn.daxpay.open.payment.trade.order.result.NormalPayOrderResult;
 import cn.daxpay.open.payment.merchant.param.miniapp.order.MiniPayOrderQuery;
 import cn.daxpay.open.payment.merchant.service.miniapp.MiniMchOrderQueryService;
 import io.swagger.v3.oas.annotations.Operation;

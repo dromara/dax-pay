@@ -1,13 +1,13 @@
 package cn.daxpay.open.payment.admin.service.masterdata.product;
 
-import cn.daxpay.open.payment.core.strategy.PaymentStrategyFactory;
+import cn.daxpay.open.payment.strategy.PaymentStrategyFactory;
 import cn.daxpay.open.payment.masterdata.constants.product.dao.PayProductConfigManager;
 import cn.daxpay.open.payment.masterdata.constants.product.entity.PayProduct;
 import cn.daxpay.open.payment.masterdata.constants.product.entity.PayProductConfig;
 import cn.daxpay.open.payment.masterdata.constants.product.param.PayProductConfigParam;
 import cn.daxpay.open.payment.masterdata.constants.product.result.PayProductConfigResult;
 import cn.daxpay.open.payment.masterdata.constants.product.service.PayProductService;
-import cn.daxpay.open.payment.core.strategy.product.AbsProductStrategy;
+import cn.daxpay.open.payment.strategy.product.AbsProductStrategy;
 import cn.daxpay.open.platform.common.config.properties.PlatformConfigProperties;
 import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;

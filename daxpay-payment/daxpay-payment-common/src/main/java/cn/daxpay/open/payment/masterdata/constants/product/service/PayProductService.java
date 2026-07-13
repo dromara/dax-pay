@@ -1,13 +1,13 @@
 package cn.daxpay.open.payment.masterdata.constants.product.service;
 
-import cn.daxpay.open.payment.core.strategy.PaymentStrategyFactory;
+import cn.daxpay.open.payment.strategy.PaymentStrategyFactory;
 import cn.daxpay.open.payment.masterdata.constants.product.dao.PayProductConfigManager;
 import cn.daxpay.open.payment.masterdata.constants.product.dao.PayProductManager;
 import cn.daxpay.open.payment.masterdata.constants.product.entity.PayProduct;
 import cn.daxpay.open.payment.masterdata.constants.product.entity.PayProductConfig;
 import cn.daxpay.open.payment.masterdata.constants.product.param.PayProductQuery;
 import cn.daxpay.open.payment.masterdata.constants.product.result.PayProductResult;
-import cn.daxpay.open.payment.core.strategy.product.AbsProductStrategy;
+import cn.daxpay.open.payment.strategy.product.AbsProductStrategy;
 import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;

@@ -6,7 +6,6 @@ import cn.daxpay.open.payment.unipay.gateway.param.AggregateQrPayParam;
 import cn.daxpay.open.payment.unipay.gateway.result.GatewayOrderResult;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
 import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
-import cn.daxpay.open.platform.core.annotation.IgnoreTenant;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,8 +16,10 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /// # 网关 H5 侧接口(无商户签名)
+///
+/// 不使用类级 `@IgnoreTenant`。引导读订单在 Service/Manager 的 `*NotTenant` 方法内完成，
+/// 装载 mchNo 后后续配置/交易查询走正常租户过滤。
 @IgnoreAuth
-@IgnoreTenant
 @Validated
 @Tag(name = "网关支付(H5)")
 @RestController

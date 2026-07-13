@@ -13,11 +13,9 @@ import cn.daxpay.open.platform.iam.service.client.ClientCodeService;
 import cn.daxpay.open.platform.core.exception.config.ConfigErrorException;
 import cn.daxpay.open.platform.core.exception.config.ConfigNotEnableException;
 import cn.daxpay.open.platform.core.exception.config.ConfigNotExistException;
-import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
-import cn.daxpay.open.payment.common.runtime.PaymentContext;
+import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.merchant.convert.appinfo.MchAppInfoConvert;
 import cn.daxpay.open.payment.merchant.dao.appinfo.MchAppInfoManager;
-import cn.daxpay.open.payment.merchant.dao.config.ChannelConfigManager;
 import cn.daxpay.open.payment.merchant.dao.info.MerchantInfoManager;
 import cn.daxpay.open.payment.merchant.entity.appinfo.MchAppInfo;
 import cn.daxpay.open.payment.merchant.entity.info.MerchantInfo;
@@ -25,7 +23,6 @@ import cn.daxpay.open.platform.core.enums.merchant.MerchantStatusEnum;
 import cn.daxpay.open.payment.merchant.param.appinfo.MchAppInfoParam;
 import cn.daxpay.open.payment.merchant.param.appinfo.MchAppInfoQuery;
 import cn.daxpay.open.payment.merchant.result.appinfo.MchAppInfoResult;
-import cn.daxpay.open.payment.masterdata.config.entity.ChannelConfig;
 import cn.hutool.core.util.RandomUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -48,8 +45,6 @@ public class MchAppInfoService {
     private final MchAppInfoManager mchAppInfoManager;
 
     private final ClientCodeService clientCodeService;
-
-    private final ChannelConfigManager channelConfigManager;
 
     private final PaymentContext paymentContext;
 
@@ -195,11 +190,6 @@ public class MchAppInfoService {
                 // 商户: 商户应用不存在
                 .orElseThrow(() -> new ConfigNotExistException("error.payment.merchant.mchAppNotFound"));
         this.checkApp(mchApp);
-        // 查看是否有配置的支付配置
-        if (channelConfigManager.existedByField(ChannelConfig::getAppId, mchApp.getAppId())) {
-            // 商户: 商户应用存在通道配置，无法删除
-            throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.merchant.mchAppHasChannelConfig");
-        }
         mchAppInfoManager.deleteById(id);
     }
 

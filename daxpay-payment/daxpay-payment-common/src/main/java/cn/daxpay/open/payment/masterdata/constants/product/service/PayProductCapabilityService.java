@@ -1,14 +1,14 @@
 package cn.daxpay.open.payment.masterdata.constants.product.service;
 
-import cn.daxpay.open.payment.core.strategy.PaymentStrategyFactory;
+import cn.daxpay.open.payment.strategy.PaymentStrategyFactory;
 import cn.daxpay.open.payment.masterdata.constants.capability.dao.PayCapabilityManager;
 import cn.daxpay.open.payment.masterdata.constants.capability.dao.PayProductCapabilityManager;
 import cn.daxpay.open.payment.masterdata.constants.capability.entity.PayCapability;
 import cn.daxpay.open.payment.masterdata.constants.product.entity.PayProductCapability;
 import cn.daxpay.open.payment.masterdata.constants.product.result.PayProductCapabilityResult;
 import cn.daxpay.open.payment.masterdata.constants.product.result.PayProductResult;
-import cn.daxpay.open.payment.core.strategy.product.AbsProductStrategy;
-import cn.daxpay.open.payment.core.strategy.ProductStrategySupport;
+import cn.daxpay.open.payment.strategy.product.AbsProductStrategy;
+import cn.daxpay.open.payment.strategy.ProductStrategySupport;
 import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayCapabilityEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
