@@ -26,7 +26,7 @@ import org.springframework.stereotype.Service;
 ///
 /// **职责边界**: 本服务仅处理商户级通道认证; 平台级认证(平台支付宝配置 / 系统公众号配置)
 /// 由 [PlatformAuthService] 承担, 会话与结果缓存由 [AuthSessionStore] 统一管理。
-/// 平台级 vs 通道级 的来源分发由认证入口(Controller)薄分发完成。
+/// 平台级 vs 通道级 的来源分发由认证入口(Controller)按来源分流完成。
 @Slf4j
 @Service
 @RequiredArgsConstructor

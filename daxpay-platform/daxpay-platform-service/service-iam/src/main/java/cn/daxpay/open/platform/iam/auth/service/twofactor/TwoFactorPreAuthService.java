@@ -8,11 +8,11 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 
-/// # 双因素认证预认证令牌服务
+/// # 二次验证临时凭证服务
 ///
-/// 密码校验通过但用户已启用 2FA 时, 生成一次性预认证令牌(preAuthToken)存入 Redis,
-/// 携带登录上下文(userId/clientCode/loginType)。二次验证通过后凭此令牌恢复登录流程。
-/// 令牌单次有效, 5 分钟过期, 与 [cn.daxpay.open.platform.iam.auth.service.CaptchaService] 同模式。
+/// 密码通过但用户已启用 2FA 时, 下发一次性临时凭证(preAuthToken)到 Redis,
+/// 并带上登录上下文(userId/clientCode/loginType)。二次验证通过后凭此凭证完成登录。
+/// 单次有效, 5 分钟过期, 与 [cn.daxpay.open.platform.iam.auth.service.CaptchaService] 同模式。
 ///
 @Service
 @RequiredArgsConstructor
@@ -24,7 +24,7 @@ public class TwoFactorPreAuthService {
 
     private final StringRedisTemplate stringRedisTemplate;
 
-    /// 创建预认证令牌并缓存登录上下文
+    /// 创建临时凭证并缓存登录上下文
     public String create(Long userId, String clientCode, String loginType) {
         String token = UUID.fastUUID().toString(true);
         PreAuthContext context = new PreAuthContext(userId, clientCode, loginType);
@@ -32,7 +32,7 @@ public class TwoFactorPreAuthService {
         return token;
     }
 
-    /// 读取预认证令牌上下文(不删除, 供二次验证重试), 不存在或已过期返回 null
+    /// 读取临时凭证上下文(不删除, 供二次验证重试), 不存在或已过期返回 null
     public PreAuthContext get(String token) {
         if (token == null || token.isBlank()) {
             return null;
@@ -44,7 +44,7 @@ public class TwoFactorPreAuthService {
         return JSONUtil.toBean(json, PreAuthContext.class);
     }
 
-    /// 删除预认证令牌(二次验证通过后调用, 保证单次有效)
+    /// 删除临时凭证(二次验证通过后调用, 保证单次有效)
     public void delete(String token) {
         if (token != null && !token.isBlank()) {
             stringRedisTemplate.delete(PREFIX + token);

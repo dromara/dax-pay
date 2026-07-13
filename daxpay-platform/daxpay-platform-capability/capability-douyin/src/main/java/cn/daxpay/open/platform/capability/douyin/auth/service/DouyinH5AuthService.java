@@ -78,7 +78,7 @@ public class DouyinH5AuthService {
         try (HttpResponse response = request.execute()) {
             body = response.body();
         }
-        log.info("抖音 access_token 换票响应: {}", body);
+        log.info("抖音 access_token 换取响应: {}", body);
         JSONObject object = JSONUtil.parseObj(body);
         JSONObject data = object.getJSONObject("data");
         if (data == null) {

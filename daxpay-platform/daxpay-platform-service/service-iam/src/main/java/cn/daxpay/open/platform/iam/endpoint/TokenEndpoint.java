@@ -62,7 +62,7 @@ public class TokenEndpoint {
         return Res.ok(secondCheckService.getSecondCheck(param == null ? new LoginContentParam() : param));
     }
 
-    @Operation(summary = "双因素认证二次验证")
+    @Operation(summary = "二次验证")
     @PostMapping("/second-verify")
     public Result<String> secondVerify(HttpServletRequest request, HttpServletResponse response,
                                        @RequestBody SecondVerifyParam param) {

@@ -23,11 +23,11 @@ import java.util.Locale;
 @RestControllerAdvice
 public class IamAuthExceptionHandler {
 
-    /// 双因素认证: 密码通过但需二次验证, 返回预认证令牌, 不计入登录失败
+    /// 密码通过但需二次验证, 返回临时凭证, 不计入登录失败
     @ExceptionHandler(TwoFactorRequiredException.class)
     public Result<TwoFactorRequiredResult> handleTwoFactorRequired(TwoFactorRequiredException ex) {
         String key = ex.resolveMessageKey();
-        log.info("双因素认证 消息={}, key={}", I18nUtil.get(key, Locale.CHINA, ex.getArgs()), key);
+        log.info("二次验证 消息={}, key={}", I18nUtil.get(key, Locale.CHINA, ex.getArgs()), key);
         String message = I18nUtil.get(key, ex.getArgs());
         return Res.response(TwoFactorRequiredException.CODE, message, new TwoFactorRequiredResult(ex.getPreAuthToken()));
     }

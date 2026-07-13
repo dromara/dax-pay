@@ -27,9 +27,9 @@ import java.util.Objects;
 
 /// # 通道认证服务
 ///
-/// 认证来源薄分发入口:
+/// 按来源把认证请求分流到平台或通道:
 /// - **生成授权链接**: authType=ALIPAY 走平台级支付宝 OAuth([PlatformAuthService]); 其余按支付产品走通道策略([ChannelAuthService])
-/// - **换票回调**: 优先按 session.source 分发平台级分支(alipay/mp/douyin), 否则走通道策略;
+/// - **授权码回调**: 优先按 session.source 走平台级分支(alipay/mp/douyin), 否则走通道策略;
 ///   authType=ALIPAY 且无 session 时走平台级(小程序等直连兜底)
 @IgnoreAuth
 @Tag(name = "通道认证服务")
@@ -66,11 +66,11 @@ public class ChannelAuthController {
         return Res.ok();
     }
 
-    /// 认证换票薄分发
+    /// 按会话来源把授权码回调分到平台或通道处理
     ///
     /// 优先级: 会话来源 platform_alipay / platform_mp / platform_douyin >
     /// authType=ALIPAY 且无会话(小程序直连兜底) > 通道策略。
-    /// OAuth 重定向通道回调仅含 authToken, 故先从会话恢复上下文再判断来源。
+    /// OAuth 重定向回调通常只有 authToken, 先从会话恢复上下文再判断来源。
     private AuthResult doAuth(AuthCodeParam param) {
         AuthSession session = authSessionStore.loadSession(param.getAuthToken());
         if (isPlatformAlipay(session)) {

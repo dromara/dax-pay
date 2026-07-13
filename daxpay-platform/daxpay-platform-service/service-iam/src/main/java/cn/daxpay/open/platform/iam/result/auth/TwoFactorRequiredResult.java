@@ -4,17 +4,17 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-/// # 双因素二次验证结果
+/// # 二次验证结果
 ///
-/// 密码校验通过但用户已启用双因素认证时返回, 携带一次性预认证令牌(preAuthToken)。
-/// 前端据此切换到二次验证界面, 凭 preAuthToken + 动态码完成登录。
+/// 密码通过但还需双因素时返回, 携带临时凭证 preAuthToken。
+/// 前端切到二次验证页, 凭凭证 + 动态码完成登录。
 ///
 @Data
 @Accessors(chain = true)
-@Schema(title = "双因素二次验证结果")
+@Schema(title = "二次验证结果")
 public class TwoFactorRequiredResult {
 
-    @Schema(description = "一次性预认证令牌(用于二次验证接口, 5分钟内有效)")
+    @Schema(description = "临时凭证(二次验证接口使用, 5分钟内有效)")
     private String preAuthToken;
 
     public TwoFactorRequiredResult() {

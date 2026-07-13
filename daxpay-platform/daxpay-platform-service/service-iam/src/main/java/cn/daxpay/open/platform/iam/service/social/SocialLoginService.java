@@ -163,7 +163,7 @@ public class SocialLoginService {
             }
             // 身份域 + 用户状态检查(对齐密码路径 UserInfoStatusCheck 链)
             this.validateSocialLoginUser(userId, clientCode, source, request, response);
-            // 统一建会话(内含双因素检查, TokenService.completeAuthenticatedLogin)
+            // 统一创建登录态(内含双因素检查, TokenService.completeAuthenticatedLogin)
             String token = socialLoginHandler.login(userId, clientCode, source, request, response);
             return new SocialExchangeResult().setToken(token);
         }

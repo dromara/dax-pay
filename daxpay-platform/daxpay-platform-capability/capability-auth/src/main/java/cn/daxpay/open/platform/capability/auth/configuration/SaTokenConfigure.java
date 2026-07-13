@@ -20,24 +20,16 @@ import java.util.Collections;
 
 /// # Sa-Token 全局认证配置
 ///
-/// 运行时唯一鉴权主链（固化，禁止新增并行拦截器）：
-/// ```java
-/// 请求 → SaInterceptor（全局拦截器，入口）
-/// ↓
-/// SaRouteHandler.check()（路由匹配分发）
-/// ↓
-/// List<RouterCheck> 按 sortNo 顺序执行
-/// ↓
-/// 命中任一 RouterCheck → SaRouter.stop()（放行）
-/// ↓ 未命中
-/// 未登录 → SecurityUtil.getUserId() 抛 NotLoginException
-/// 已登录 → RouterCheckException（无权限）
+/// 运行时只有这一条鉴权链(不要再加并行鉴权拦截器):
+/// ```
+/// 请求 → SaInterceptor → SaRouteHandler → 各 RouterCheck(按 sortNo)
+/// 任一检查通过 → SaRouter.stop() 放行
+/// 全都不通过 → 未登录抛 NotLoginException / 已登录抛 RouterCheckException
 /// ```
 ///
-/// 【主链固化规则】
-/// - 仅允许注册 SaInterceptor，禁止新增其他鉴权拦截器。
-/// - 鉴权逻辑全部下沉到 RouterCheck SPI 实现，由 SaRouteHandler 统一编排。
-/// - 拦截路径为 /**，由 platformStarterProperties.getAuth().getIgnoreUrls() 控制排除列表。
+/// 规则:
+/// - 只注册 SaInterceptor, 具体规则写在 RouterCheck 实现里, 由 SaRouteHandler 按顺序调用。
+/// - 拦截路径 /**, 排除列表见 platformStarterProperties.getAuth().getIgnoreUrls()。
 ///
 /// @see SaRouteHandler
 /// @see cn.daxpay.open.platform.capability.auth.service.RouterCheck

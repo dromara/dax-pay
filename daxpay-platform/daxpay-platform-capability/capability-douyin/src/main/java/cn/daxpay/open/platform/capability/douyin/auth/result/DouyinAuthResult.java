@@ -5,7 +5,7 @@ import lombok.experimental.Accessors;
 
 /// # 抖音 H5 授权结果
 ///
-/// 封装抖音开放平台 `/oauth/access_token/` 换票返回的核心字段(openId / accessToken)。
+/// 封装抖音开放平台 `/oauth/access_token/` 返回的核心字段(openId / accessToken)。
 ///
 @Data
 @Accessors(chain = true)

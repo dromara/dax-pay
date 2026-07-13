@@ -74,7 +74,7 @@ public class TokenService {
             this.validateClient(loginAuthContext);
             // 认证并获取结果
             AuthInfoResult authInfoResult = this.authentication(loginAuthContext);
-            // 二次验证检查后建会话, 密码与社交登录共用
+            // 二次验证检查后创建登录态, 密码与社交登录共用
             return this.completeAuthenticatedLogin(authInfoResult, loginAuthContext);
         }
         catch (SecondaryAuthRequiredException e) {
@@ -88,25 +88,25 @@ public class TokenService {
         }
     }
 
-    /// 认证已通过后的统一收尾: 双因素等补验 → 建立会话 → 成功回调
+    /// 认证已通过后的统一收尾: 二次验证检查 → 创建登录态 → 成功回调
     ///
-    /// 密码与社交登录共用, 保证会话超时/并发/deviceType 与双因素行为一致。
-    /// 若需双因素则抛 [SecondaryAuthRequiredException], 不建立最终会话。
+    /// 密码与社交登录共用, 保证超时/并发/deviceType 与双因素行为一致。
+    /// 若需二次验证则抛 [SecondaryAuthRequiredException], 不创建最终登录态。
     public String completeAuthenticatedLogin(AuthInfoResult authInfoResult, LoginAuthContext context) {
-        // 认证后补验(双因素等)
+        // 认证后额外检查(如双因素)
         this.applyPostAuthChecks(context, authInfoResult);
-        // 建立会话
+        // 创建登录态
         this.doSaLogin(authInfoResult, context.getClientCode(), context.getAuthLoginType());
         // 登录成功回调
         this.loginSuccessHandler(context.getRequest(), context.getResponse(), authInfoResult);
         return StpUtil.getTokenValue();
     }
 
-    /// 双因素认证二次验证: 校验预认证令牌 + 动态码/备用码, 通过后建立会话
+    /// 二次验证: 校验临时凭证 + 动态码/备用码, 通过后创建登录态
     public String secondVerify(HttpServletRequest request, HttpServletResponse response,
                                String preAuthToken, String code, String codeType) {
         TwoFactorPreAuthService.PreAuthContext context = twoFactorPreAuthService.get(preAuthToken);
-        // 预认证令牌无效或已过期
+        // 临时凭证无效或已过期
         if (context == null) {
             throw new LoginFailureException("error.auth.twoFactorPreAuthExpired");
         }
@@ -124,7 +124,7 @@ public class TokenService {
             // 双因素认证: 动态码或备用码错误
             throw new LoginFailureException(userId, userInfoResult.getAccount(), "error.auth.twoFactorCodeError");
         }
-        // 验证通过, 删除预认证令牌(单次有效)
+        // 验证通过, 删除临时凭证(单次有效)
         twoFactorPreAuthService.delete(preAuthToken);
         // 恢复登录流程
         UserDetail userDetail = userInfoResult.toUserDetail();
@@ -137,7 +137,7 @@ public class TokenService {
         return StpUtil.getTokenValue();
     }
 
-    /// 认证后补验: 任一扩展检查要求二次验证则抛异常(不计入登录失败)
+    /// 认证后额外检查: 任一扩展要求二次验证则抛异常(不计入登录失败)
     private void applyPostAuthChecks(LoginAuthContext context, AuthInfoResult authInfoResult) {
         for (PostAuthenticationCheck check : postAuthenticationChecks) {
             if (check.required(context, authInfoResult)) {
@@ -210,7 +210,7 @@ public class TokenService {
         var saLoginModel = new SaLoginParameter()
                 .setDeviceType(clientCode)
                 .setIsLastingCookie(true)
-                // 逐设备隔离, 不依赖全局配置(代码自洽)
+                // 按终端隔离会话, 不共用全局 isShare
                 .setIsShare(false);
 
         var config = iamSecurityConfigService.getSessionManagement();

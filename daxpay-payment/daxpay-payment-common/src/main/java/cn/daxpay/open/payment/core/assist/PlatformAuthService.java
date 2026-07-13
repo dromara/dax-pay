@@ -36,7 +36,7 @@ import org.springframework.stereotype.Service;
 /// - **抖音 H5 应用**: 平台级抖音 H5 配置([PlatformDouyinH5AuthConfig]), silent_auth 静默授权, 仅调试场景
 ///
 /// 与按支付产品路由策略的 [ChannelAuthService] 解耦: 本服务不读取商户级通道配置,
-/// 只消费平台级配置并调用 capability(alipay/wechat/douyin) 完成换票; 会话与结果缓存委托 [AuthSessionStore]。
+/// 只消费平台级配置并调用 capability(alipay/wechat/douyin) 用授权码换 token/openId; 会话与结果缓存委托 [AuthSessionStore]。
 ///
 /// 三通道统一模式: 固定 redirect_uri + OAuth state 透传 authToken, 回调后从 state 恢复会话。
 @Slf4j
@@ -79,7 +79,7 @@ public class PlatformAuthService {
     ///
     /// 读取平台级 [PlatformAlipayAuthConfig], 调用 capability-alipay 生成支付宝 OAuth 授权链接,
     /// 回调指向固定的 `/auth/alipay`。会话标识 authToken 通过 OAuth state 参数透传, 回调后从 state 恢复会话。
-    /// session 标记 `source=platform_alipay`, 认证分发层据此走平台级支付宝换票分支([#authAlipay])。
+    /// session 标记 `source=platform_alipay`, 认证分发层据此走平台级支付宝授权回调分支([#authAlipay])。
     public AuthUrlResult generateAlipayAuthUrl() {
         AlipayAuthConfig config = platformAlipayAuthConfigService.toCapabilityConfig();
         if (!alipayAuthCapability.isConfigured(config)) {
@@ -108,7 +108,7 @@ public class PlatformAuthService {
     ///
     /// 读取平台级 [PlatformWechatMpAuthConfig], 调用 capability-wechat 生成微信公众号 OAuth 授权链接,
     /// 回调指向固定的 `/auth/wechat`。会话标识 authToken 通过 OAuth state 参数透传, 回调后从 state 恢复会话。
-    /// session 标记 `source=platform_mp`, 认证分发层据此走平台级微信换票分支([#authWechatMp])。
+    /// session 标记 `source=platform_mp`, 认证分发层据此走平台级微信授权回调分支([#authWechatMp])。
     public AuthUrlResult generateWechatMpAuthUrl() {
         PlatformWechatMpAuthConfig config = platformWechatMpAuthConfigService.getWechatMpAuthConfig();
         if (!isWechatMpConfigured(config)) {
@@ -138,7 +138,7 @@ public class PlatformAuthService {
     /// 读取平台级 [PlatformDouyinH5AuthConfig], 调用 capability-douyin [DouyinH5AuthService] 构造 silent_auth 链接,
     /// 回调指向固定的 `/auth/douyin`(抖音要求 redirect_uri 与平台配置完全一致, 不支持 path 段或 query 参数)。
     /// 会话标识 authToken 通过 state 参数透传, 回调后从 state 恢复会话。
-    /// session 标记 `source=platform_douyin`, 认证分发层据此走平台级抖音换票分支([#authDouyin])。
+    /// session 标记 `source=platform_douyin`, 认证分发层据此走平台级抖音授权回调分支([#authDouyin])。
     public AuthUrlResult generateDouyinAuthUrl() {
         PlatformDouyinH5AuthConfig config = platformDouyinH5AuthConfigService.getDouyinH5AuthConfig();
         if (!isDouyinH5Configured(config)) {
@@ -188,7 +188,7 @@ public class PlatformAuthService {
         return authResult;
     }
 
-    /// 微信系统公众号配置平台级换票(读 [PlatformWechatMpAuthConfig])
+    /// 微信系统公众号平台级用授权码换 openId(读 [PlatformWechatMpAuthConfig])
     public AuthResult authWechatMp(AuthCodeParam param, AuthSession session) {
         PlatformWechatMpAuthConfig config = platformWechatMpAuthConfigService.getWechatMpAuthConfig();
         if (!isWechatMpConfigured(config)) {
@@ -213,7 +213,7 @@ public class PlatformAuthService {
         return StrUtil.isNotBlank(config.getAppId()) && StrUtil.isNotBlank(config.getAppSecret());
     }
 
-    /// 抖音 H5 应用配置平台级换票(读 [PlatformDouyinH5AuthConfig])
+    /// 抖音 H5 应用平台级用授权码换 openId(读 [PlatformDouyinH5AuthConfig])
     public AuthResult authDouyin(AuthCodeParam param, AuthSession session) {
         PlatformDouyinH5AuthConfig config = platformDouyinH5AuthConfigService.getDouyinH5AuthConfig();
         if (!isDouyinH5Configured(config)) {

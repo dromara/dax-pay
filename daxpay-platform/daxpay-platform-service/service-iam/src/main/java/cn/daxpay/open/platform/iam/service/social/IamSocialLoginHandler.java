@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 /// # 社交登录处理器
 ///
 /// 在 LOGIN 场景下, 绑定关系与状态检查已通过后, 走 [TokenService.completeAuthenticatedLogin]
-/// 统一做双因素检查、建会话(超时/并发)与成功回调。
+/// 统一做双因素检查、创建登录态(超时/并发)与成功回调。
 ///
 @Slf4j
 @Service

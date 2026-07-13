@@ -15,20 +15,18 @@ import org.springframework.stereotype.Component;
 import java.util.Comparator;
 import java.util.List;
 
-/// # 鉴权路由统一处理类（主链编排器）
+/// # 路由鉴权统一分发
 ///
-/// 【执行语义 - 统一为"命中放行，未命中拒绝"】
-/// - 所有实现 RouterCheck SPI 的 Bean 在启动时按 sortNo 升序排列。
+/// 规则: **任一 [RouterCheck] 通过就放行; 全都不通过再拒绝**。
+/// - 启动时按 sortNo 升序收集全部 RouterCheck 实现。
 /// - 请求进入时:
-///   1. 已登录用户先依次执行 [AccessPolicy] (如密码过期强制改密), 不通过即抛异常阻断;
-///   2. 再遍历 RouterCheck 列表, 任意一个返回 true 即调用 SaRouter.stop() 放行。
-/// - RouterCheck 全部未命中：
+///   1. 已登录用户先依次执行 [AccessPolicy](如密码过期强制改密), 不通过即抛异常阻断;
+///   2. 再遍历 RouterCheck, 任意一个返回 true 即调用 SaRouter.stop() 放行。
+/// - 全部未命中:
 ///   - 未登录 → SecurityUtil.getUserId() 抛 NotLoginException
-///   - 已登录 → 记录 WARN 日志并抛出 RouterCheckException（403 无权限）
-/// </li>
+///   - 已登录 → 记 WARN 并抛 RouterCheckException(403 无权限)
 ///
-/// 【stop 条件语义】：SaRouter.stop() 会终止后续拦截器执行，但不终止整个过滤器链，
-/// 仅结束 Sa-Token 鉴权阶段的处理。
+/// SaRouter.stop() 只结束 Sa-Token 鉴权阶段, 不终止整个过滤器链。
 ///
 /// @see cn.daxpay.open.platform.capability.auth.service.RouterCheck
 /// @see cn.daxpay.open.platform.capability.auth.service.AccessPolicy
@@ -77,5 +75,4 @@ public class SaRouteHandler implements InitializingBean {
             throw new RouterCheckException();
         };
     }
-
 }

@@ -12,8 +12,8 @@ import org.springframework.stereotype.Component;
 
 /// # 双因素二次验证检查
 ///
-/// 认证通过后, 若用户已启用 TOTP 双因素认证, 生成一次性预认证令牌并要求二次验证。
-/// 令牌由 [TwoFactorPreAuthService] 存入 Redis, 5 分钟过期, 二次验证通过后单次消费。
+/// 认证通过后, 若用户已启用 TOTP, 下发临时凭证并要求二次验证。
+/// 凭证由 [TwoFactorPreAuthService] 存 Redis, 5 分钟过期, 验证通过后单次消费。
 ///
 @Slf4j
 @Component
