@@ -12,9 +12,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-import static cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum.ALIPAY;
-import static cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum.WECHAT;
-
 /// # 银联商务APP支付产品策略
 ///
 @Slf4j
@@ -39,7 +36,7 @@ public class UmsAppProductStrategy extends AbsProductStrategy {
 
     @Override
     public List<PayProviderEnum> supportedPayProviders() {
-        return List.of(WECHAT, ALIPAY);
+        return List.of(PayProviderEnum.WECHAT, PayProviderEnum.ALIPAY);
     }
 
     @Override

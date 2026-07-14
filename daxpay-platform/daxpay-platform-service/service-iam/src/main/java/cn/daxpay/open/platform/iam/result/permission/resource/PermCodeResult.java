@@ -18,11 +18,9 @@ public class PermCodeResult {
     @Schema(description = "权限码")
     private String code;
 
-    @Schema(description = "中文名称")
-    private String nameCn;
-
-    @Schema(description = "英文名称")
-    private String nameEn;
+    /// 过渡期保留：展示以 i18nKey 为准，文案真相源在语言包
+    @Schema(description = "国际化key")
+    private String i18nKey;
 
     @Schema(description = "菜单编码")
     private String menuCode;
@@ -33,11 +31,11 @@ public class PermCodeResult {
     @Schema(description = "备注")
     private String remark;
 
-    /// 显示标题
+    /// 显示标题（i18nKey 优先，fallback code）
     public String getTitle(){
-        if (StrUtil.isBlank(code)){
-            return nameCn;
+        if (StrUtil.isNotBlank(i18nKey)){
+            return i18nKey;
         }
-        return code + "(" + nameCn + ")";
+        return code;
     }
 }

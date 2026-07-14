@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 /// # 银联商务支付执行业务服务
 ///
 /// 通过 [UmsChannelClient] 调用子应用 dax-pay-channel-one 完成银联商务支付下单。
-/// 银联商务为聚合支付, 扫码方式(支付宝/微信/银联扫码)统一映射为 [UmsPayMethod.QRCODE]。
+/// 银联商务为聚合支付, 扫码方式(支付宝/微信/银联扫码)统一映射为 [UmsPayMethod#QRCODE]。
 @Slf4j
 @Service
 @RequiredArgsConstructor

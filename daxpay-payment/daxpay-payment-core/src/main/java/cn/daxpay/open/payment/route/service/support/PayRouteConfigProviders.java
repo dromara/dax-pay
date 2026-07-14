@@ -21,7 +21,6 @@ public class PayRouteConfigProviders {
             PayProviderEnum.DOUYIN.getCode()
     );
 
-
     /// 是否属于通道路由配置白名单支付渠道
     public boolean contains(String providerCode) {
         return StrUtil.isNotBlank(providerCode) && CODES.contains(providerCode);

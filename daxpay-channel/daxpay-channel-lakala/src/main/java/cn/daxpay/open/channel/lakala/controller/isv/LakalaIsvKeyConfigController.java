@@ -31,7 +31,7 @@ public class LakalaIsvKeyConfigController {
 
     private final LakalaIsvKeyConfigService lakalaIsvKeyConfigService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Payment.Isv.VIEW_NAME_CN, nameEn = PermCodes.Payment.Isv.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "查询拉卡拉服务商密钥配置")
     @GetMapping("/find-config")
     public Result<LakalaIsvKeyConfigResult> findConfig(
@@ -40,7 +40,7 @@ public class LakalaIsvKeyConfigController {
         return Res.ok(LakalaIsvKeyConfigConvert.CONVERT.toResult(lakalaIsvKeyConfigService.findByProduct(product, sandbox)));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Payment.Isv.MANAGE_NAME_CN, nameEn = PermCodes.Payment.Isv.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "保存拉卡拉服务商密钥配置")
     @PostMapping("/save-config")
     public Result<Void> saveConfig(@RequestBody @Validated LakalaIsvKeyConfigParam param) {

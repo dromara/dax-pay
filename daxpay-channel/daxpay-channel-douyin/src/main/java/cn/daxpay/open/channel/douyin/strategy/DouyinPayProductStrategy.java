@@ -14,8 +14,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-import static cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum.DOUYIN;
-
 /// # 抖音支付直连产品策略
 ///
 @Slf4j
@@ -51,7 +49,7 @@ public class DouyinPayProductStrategy extends AbsProductStrategy {
 
     @Override
     public List<PayProviderEnum> supportedPayProviders() {
-        return List.of(DOUYIN);
+        return List.of(PayProviderEnum.DOUYIN);
     }
 
     @Override

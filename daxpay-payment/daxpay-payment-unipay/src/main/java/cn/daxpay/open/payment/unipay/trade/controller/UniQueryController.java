@@ -34,5 +34,4 @@ public class UniQueryController {
         return DaxRes.ok(normalPayOrderQueryService.queryPayOrder(param));
     }
 
-
 }

@@ -31,7 +31,7 @@ public class HkrtIsvKeyConfigController {
 
     private final HkrtIsvKeyConfigService hkrtIsvKeyConfigService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Payment.Isv.VIEW_NAME_CN, nameEn = PermCodes.Payment.Isv.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "查询海科融通服务商密钥配置")
     @GetMapping("/find-config")
     public Result<HkrtIsvKeyConfigResult> findConfig(
@@ -40,7 +40,7 @@ public class HkrtIsvKeyConfigController {
         return Res.ok(HkrtIsvKeyConfigConvert.CONVERT.toResult(hkrtIsvKeyConfigService.findByProduct(product, sandbox)));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Payment.Isv.MANAGE_NAME_CN, nameEn = PermCodes.Payment.Isv.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "保存海科融通服务商密钥配置")
     @PostMapping("/save-config")
     public Result<Void> saveConfig(@RequestBody @Validated HkrtIsvKeyConfigParam param) {

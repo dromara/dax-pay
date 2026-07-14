@@ -15,7 +15,6 @@ import java.util.Arrays;
 @AllArgsConstructor
 public enum SocialSourceEnum implements I18nSupport {
 
-
     /// 微信开放平台
     WECHAT_MP(
             "weChat",

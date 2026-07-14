@@ -1,6 +1,5 @@
 package cn.daxpay.open.platform.capability.audit.log.controller;
 
-
 import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.rest.Res;
@@ -32,21 +31,21 @@ public class OperateLogController {
 
     private final OperateLogService operateLogService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "操作日志查看", nameEn = "Operate Log View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "分页")
     @GetMapping("/page")
     public Result<PageResult<OperateLogResult>> page(PageParam pageParam, OperateLogQuery operateLogParam) {
         return Res.ok(operateLogService.page(pageParam, operateLogParam));
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "操作日志查看", nameEn = "Operate Log View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "获取")
     @GetMapping("/get")
     public Result<OperateLogResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(operateLogService.findById(id));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "操作日志管理", nameEn = "Operate Log Manage")
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "清除指定天数的日志")
     @PostMapping("/delete-by-day")
     public Result<Void> deleteByDay(@NotNull(message = "{validation.field.deleteDay.notNull}") Integer deleteDay){

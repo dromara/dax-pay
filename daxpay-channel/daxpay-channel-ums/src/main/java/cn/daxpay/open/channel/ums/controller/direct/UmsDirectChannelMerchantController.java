@@ -36,7 +36,7 @@ public class UmsDirectChannelMerchantController {
     private final UmsDirectChannelMerchantService umsDirectChannelMerchantService;
     private final UmsDirectKeyConfigService umsDirectKeyConfigService;
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.Merchant.MANAGE_NAME_CN, nameEn = PermCodes.Channel.Merchant.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "创建银联商务直连通道商户")
     @PostMapping("/create")
     public Result<Void> create(@RequestBody @Validated UmsDirectChannelMerchantCreateParam param) {
@@ -44,7 +44,7 @@ public class UmsDirectChannelMerchantController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据通道商户号查询密钥配置")
     @GetMapping("/find-key-config")
     public Result<UmsDirectKeyConfigResult> findKeyConfig(
@@ -57,7 +57,7 @@ public class UmsDirectChannelMerchantController {
         return Res.ok(result);
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.Merchant.MANAGE_NAME_CN, nameEn = PermCodes.Channel.Merchant.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "保存密钥配置")
     @PostMapping("/save-key-config")
     public Result<Void> saveKeyConfig(@RequestBody @Validated UmsDirectKeyConfigParam param) {

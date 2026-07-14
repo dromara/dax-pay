@@ -41,21 +41,21 @@ public class WechatMessageController {
 
     private final WechatNotifyService wechatNotifyService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "通知记录查看", nameEn = "Wechat Message View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "分页查询")
     @GetMapping("/page")
     public Result<PageResult<WechatMessageRecordResult>> page(PageParam pageParam, WechatMessageQuery query) {
         return Res.ok(messageRecordService.page(pageParam, query));
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "通知记录查看", nameEn = "Wechat Message View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "记录详情")
     @GetMapping("/get")
     public Result<WechatMessageRecordResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(messageRecordService.findById(id));
     }
 
-    @PermCode(code = PermCodes.Action.RESEND, nameCn = "通知重发", nameEn = "Wechat Message Resend")
+    @PermCode(code = PermCodes.Action.RESEND)
     @Operation(summary = "重发失败消息")
     @PostMapping("/resend")
     public Result<Void> resend(@NotNull(message = "{validation.field.id.notNull}") Long id) {
@@ -64,7 +64,7 @@ public class WechatMessageController {
     }
 
     /// 测试发送(给当前登录用户发一条操作通知, 验证配置 + 绑定链路是否打通)
-    @PermCode(code = PermCodes.Action.TEST, nameCn = "测试发送", nameEn = "Wechat Message Test")
+    @PermCode(code = PermCodes.Action.TEST)
     @Operation(summary = "测试发送(发给当前登录用户)")
     @PostMapping("/test-send")
     public Result<MessageSendResult> testSend() {

@@ -61,4 +61,3 @@ public class UserInfo extends MpBaseEntity implements ToResult<UserInfoResult> {
 
 }
 
-

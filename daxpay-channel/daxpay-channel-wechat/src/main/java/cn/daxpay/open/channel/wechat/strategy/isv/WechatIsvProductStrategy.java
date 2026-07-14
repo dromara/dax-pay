@@ -14,8 +14,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-import static cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum.WECHAT;
-
 /// # 微信服务商产品策略
 ///
 @Slf4j
@@ -47,7 +45,7 @@ public class WechatIsvProductStrategy extends AbsProductStrategy {
 
     @Override
     public List<PayProviderEnum> supportedPayProviders() {
-        return List.of(WECHAT);
+        return List.of(PayProviderEnum.WECHAT);
     }
 
     @Override

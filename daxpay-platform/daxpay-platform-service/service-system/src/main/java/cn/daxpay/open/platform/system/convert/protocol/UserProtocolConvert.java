@@ -57,4 +57,3 @@ public interface UserProtocolConvert {
     void copy(UserProtocolParam param, @MappingTarget UserProtocol userProtocol);
 }
 
-

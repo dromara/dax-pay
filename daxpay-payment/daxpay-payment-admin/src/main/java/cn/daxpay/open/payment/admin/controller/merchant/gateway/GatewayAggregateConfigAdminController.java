@@ -25,7 +25,7 @@ public class GatewayAggregateConfigAdminController {
 
     private final GatewayAggregateConfigService gatewayAggregateConfigService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Merchant.GatewayAggregate.VIEW_NAME_CN, nameEn = PermCodes.Merchant.GatewayAggregate.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "按应用查询聚合扫码配置")
     @GetMapping("/get-by-app-id")
     public Result<GatewayAggregateConfigResult> getByAppId(
@@ -33,7 +33,7 @@ public class GatewayAggregateConfigAdminController {
         return Res.ok(gatewayAggregateConfigService.findByAppId(appId));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Merchant.GatewayAggregate.MANAGE_NAME_CN, nameEn = PermCodes.Merchant.GatewayAggregate.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "保存或更新聚合扫码配置")
     @PostMapping("/save-or-update")
     public Result<Void> saveOrUpdate(@RequestBody @Validated GatewayAggregateConfigParam param) {

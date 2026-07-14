@@ -13,7 +13,7 @@ import java.util.Optional;
 /// 服务商通道商户应用(子商户应用)数据访问管理器。方法按租户隔离边界分两类:
 /// - 配置态(管理端 CRUD, 带租户隔离): [#listByMchNoAndChannelMchNo]、[#existsByChannelMchNoAndWxAppId]
 /// - 运行态(认证/支付解析, 忽略租户, 方法名带 NotTenant): [#findByChannelMchNoAndWxAppIdNotTenant]；
-///   按主键见基类 [BaseManager.findByIdNotTenant]
+///   按主键见基类 [BaseManager#findByIdNotTenant]
 ///
 @Repository
 public class WechatIsvMchAppManager extends BaseManager<WechatIsvMchAppMapper, WechatIsvMchApp> {

@@ -51,28 +51,12 @@ public interface PermCodes {
         interface Merchant {
             /// 菜单编码
             String MENU = "channel:merchant";
-            /// 查看权限中文名（高复用，跨通道 Controller 共用）
-            String VIEW_NAME_CN = "通道商户查看";
-            /// 查看权限英文名
-            String VIEW_NAME_EN = "Channel Merchant View";
-            /// 管理权限中文名
-            String MANAGE_NAME_CN = "通道商户管理";
-            /// 管理权限英文名
-            String MANAGE_NAME_EN = "Channel Merchant Manage";
         }
 
         /// 通道应用（直连应用 + 通道侧子商户应用等，全通道共用）menuCode=channel:app
         interface App {
             /// 菜单编码
             String MENU = "channel:app";
-            /// 查看权限中文名
-            String VIEW_NAME_CN = "通道应用查看";
-            /// 查看权限英文名
-            String VIEW_NAME_EN = "Channel App View";
-            /// 管理权限中文名
-            String MANAGE_NAME_CN = "通道应用管理";
-            /// 管理权限英文名
-            String MANAGE_NAME_EN = "Channel App Manage";
         }
     }
 
@@ -82,56 +66,24 @@ public interface PermCodes {
         interface Info {
             /// 菜单编码
             String MENU = "merchant:info";
-            /// 查看权限中文名（admin + app-admin 共用）
-            String VIEW_NAME_CN = "商户查看";
-            /// 查看权限英文名
-            String VIEW_NAME_EN = "Merchant View";
-            /// 管理权限中文名
-            String MANAGE_NAME_CN = "商户管理";
-            /// 管理权限英文名
-            String MANAGE_NAME_EN = "Merchant Manage";
         }
 
         /// 对接配置 menuCode=merchant:credential
         interface Credential {
             /// 菜单编码
             String MENU = "merchant:credential";
-            /// 查看权限中文名
-            String VIEW_NAME_CN = "对接配置查看";
-            /// 查看权限英文名
-            String VIEW_NAME_EN = "Credential Config View";
-            /// 管理权限中文名
-            String MANAGE_NAME_CN = "对接配置管理";
-            /// 管理权限英文名
-            String MANAGE_NAME_EN = "Credential Config Manage";
         }
 
         /// 通知配置 menuCode=merchant:notify-config
         interface NotifyConfig {
             /// 菜单编码
             String MENU = "merchant:notify-config";
-            /// 查看权限中文名
-            String VIEW_NAME_CN = "通知配置查看";
-            /// 查看权限英文名
-            String VIEW_NAME_EN = "Notify Config View";
-            /// 管理权限中文名
-            String MANAGE_NAME_CN = "通知配置管理";
-            /// 管理权限英文名
-            String MANAGE_NAME_EN = "Notify Config Manage";
         }
 
         /// 商户应用 menuCode=merchant:app
         interface App {
             /// 菜单编码
             String MENU = "merchant:app";
-            /// 查看权限中文名
-            String VIEW_NAME_CN = "应用查看";
-            /// 查看权限英文名
-            String VIEW_NAME_EN = "App View";
-            /// 管理权限中文名
-            String MANAGE_NAME_CN = "应用管理";
-            /// 管理权限英文名
-            String MANAGE_NAME_EN = "App Manage";
         }
 
         /// 通道路由 menuCode=merchant:app:route
@@ -150,56 +102,24 @@ public interface PermCodes {
         interface GatewayAggregate {
             /// 菜单编码
             String MENU = "merchant:gateway-aggregate";
-            /// 查看权限中文名（与收银台配置共用文案）
-            String VIEW_NAME_CN = "网关配置查看";
-            /// 查看权限英文名
-            String VIEW_NAME_EN = "Gateway Config View";
-            /// 管理权限中文名
-            String MANAGE_NAME_CN = "网关配置管理";
-            /// 管理权限英文名
-            String MANAGE_NAME_EN = "Gateway Config Manage";
         }
 
         /// 收银台配置 menuCode=merchant:gateway-cashier
         interface GatewayCashier {
             /// 菜单编码
             String MENU = "merchant:gateway-cashier";
-            /// 查看权限中文名
-            String VIEW_NAME_CN = "网关配置查看";
-            /// 查看权限英文名
-            String VIEW_NAME_EN = "Gateway Config View";
-            /// 管理权限中文名
-            String MANAGE_NAME_CN = "网关配置管理";
-            /// 管理权限英文名
-            String MANAGE_NAME_EN = "Gateway Config Manage";
         }
 
         /// 门店 menuCode=merchant:store
         interface Store {
             /// 菜单编码
             String MENU = "merchant:store";
-            /// 查看权限中文名
-            String VIEW_NAME_CN = "门店查看";
-            /// 查看权限英文名
-            String VIEW_NAME_EN = "Store View";
-            /// 管理权限中文名
-            String MANAGE_NAME_CN = "门店管理";
-            /// 管理权限英文名
-            String MANAGE_NAME_EN = "Store Manage";
         }
 
         /// 微信域名验证文件（商户侧）menuCode=merchant:wx-verify
         interface WxDomainVerify {
             /// 菜单编码
             String MENU = "merchant:wx-verify";
-            /// 查看权限中文名
-            String VIEW_NAME_CN = "微信域名验证查看";
-            /// 查看权限英文名
-            String VIEW_NAME_EN = "WeChat Domain Verify View";
-            /// 管理权限中文名
-            String MANAGE_NAME_CN = "微信域名验证管理";
-            /// 管理权限英文名
-            String MANAGE_NAME_EN = "WeChat Domain Verify Manage";
         }
     }
 
@@ -209,14 +129,6 @@ public interface PermCodes {
         interface Isv {
             /// 菜单编码
             String MENU = "payment:isv";
-            /// 查看权限中文名
-            String VIEW_NAME_CN = "服务商配置查看";
-            /// 查看权限英文名
-            String VIEW_NAME_EN = "ISV Config View";
-            /// 管理权限中文名
-            String MANAGE_NAME_CN = "服务商配置管理";
-            /// 管理权限英文名
-            String MANAGE_NAME_EN = "ISV Config Manage";
         }
 
         /// 支付主数据 menuCode=payment:platform:*
@@ -225,15 +137,7 @@ public interface PermCodes {
             interface Product {
                 /// 菜单编码
                 String MENU = "payment:platform:product";
-                /// 查看权限中文名
-                String VIEW_NAME_CN = "产品查看";
-                /// 查看权限英文名
-                String VIEW_NAME_EN = "Product View";
-                /// 管理权限中文名
-                String MANAGE_NAME_CN = "产品管理";
-                /// 管理权限英文名
-                String MANAGE_NAME_EN = "Product Manage";
-            }
+        }
 
             /// 支付方式 menuCode=payment:platform:pay-method
             interface PayMethod {
@@ -264,14 +168,6 @@ public interface PermCodes {
         interface ProductConfig {
             /// 菜单编码
             String MENU = "payment:config:product-config";
-            /// 查看权限中文名
-            String VIEW_NAME_CN = "产品配置查看";
-            /// 查看权限英文名
-            String VIEW_NAME_EN = "Product Config View";
-            /// 管理权限中文名
-            String MANAGE_NAME_CN = "产品配置管理";
-            /// 管理权限英文名
-            String MANAGE_NAME_EN = "Product Config Manage";
         }
 
         /// 支付配置子域
@@ -290,28 +186,12 @@ public interface PermCodes {
         interface Order {
             /// 菜单编码
             String MENU = "trade:order";
-            /// 查看权限中文名（与网关订单 Controller 共用文案）
-            String VIEW_NAME_CN = "订单查看";
-            /// 查看权限英文名
-            String VIEW_NAME_EN = "Order View";
-            /// 管理权限中文名
-            String MANAGE_NAME_CN = "订单管理";
-            /// 管理权限英文名
-            String MANAGE_NAME_EN = "Order Manage";
         }
 
         /// 网关支付订单 menuCode=trade:gateway-order
         interface GatewayOrder {
             /// 菜单编码
             String MENU = "trade:gateway-order";
-            /// 查看权限中文名
-            String VIEW_NAME_CN = "订单查看";
-            /// 查看权限英文名
-            String VIEW_NAME_EN = "Order View";
-            /// 管理权限中文名
-            String MANAGE_NAME_CN = "订单管理";
-            /// 管理权限英文名
-            String MANAGE_NAME_EN = "Order Manage";
         }
 
         /// 退款订单 menuCode=trade:refund
@@ -333,14 +213,6 @@ public interface PermCodes {
         interface Menu {
             /// 菜单编码
             String MENU = "iam:menu";
-            /// 查看权限中文名（菜单 + 权限码 Controller 共用）
-            String VIEW_NAME_CN = "菜单查看";
-            /// 查看权限英文名
-            String VIEW_NAME_EN = "Menu View";
-            /// 管理权限中文名
-            String MANAGE_NAME_CN = "菜单管理";
-            /// 管理权限英文名
-            String MANAGE_NAME_EN = "Menu Manage";
         }
 
         /// 角色管理 menuCode=iam:role
@@ -353,14 +225,6 @@ public interface PermCodes {
         interface User {
             /// 菜单编码
             String MENU = "iam:user";
-            /// 查看权限中文名（用户/角色分配/社交绑定等 Controller 共用）
-            String VIEW_NAME_CN = "用户查看";
-            /// 查看权限英文名
-            String VIEW_NAME_EN = "User View";
-            /// 管理权限中文名
-            String MANAGE_NAME_CN = "用户管理";
-            /// 管理权限英文名
-            String MANAGE_NAME_EN = "User Manage";
         }
 
         /// 在线用户 menuCode=iam:online（原 iam:online:user）
@@ -373,14 +237,6 @@ public interface PermCodes {
         interface Social {
             /// 菜单编码
             String MENU = "iam:social";
-            /// 查看权限中文名（多端登录配置 Controller 共用）
-            String VIEW_NAME_CN = "社交登录配置查看";
-            /// 查看权限英文名
-            String VIEW_NAME_EN = "Social Login Config View";
-            /// 管理权限中文名
-            String MANAGE_NAME_CN = "社交登录配置管理";
-            /// 管理权限英文名
-            String MANAGE_NAME_EN = "Social Login Config Manage";
         }
     }
 
@@ -390,14 +246,6 @@ public interface PermCodes {
         interface Dict {
             /// 菜单编码
             String MENU = "system:dict";
-            /// 查看权限中文名（字典 + 字典项 Controller 共用）
-            String VIEW_NAME_CN = "字典查看";
-            /// 查看权限英文名
-            String VIEW_NAME_EN = "Dict View";
-            /// 管理权限中文名
-            String MANAGE_NAME_CN = "字典管理";
-            /// 管理权限英文名
-            String MANAGE_NAME_EN = "Dict Manage";
         }
 
         /// 日志 menuCode=system:log:*
@@ -455,14 +303,6 @@ public interface PermCodes {
         interface Protocol {
             /// 菜单编码
             String MENU = "system:protocol";
-            /// 查看权限中文名
-            String VIEW_NAME_CN = "协议查看";
-            /// 查看权限英文名
-            String VIEW_NAME_EN = "Protocol View";
-            /// 管理权限中文名
-            String MANAGE_NAME_CN = "协议管理";
-            /// 管理权限英文名
-            String MANAGE_NAME_EN = "Protocol Manage";
         }
 
         /// 移动端应用管理 menuCode=system:config:mobile-app

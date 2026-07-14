@@ -9,7 +9,7 @@ import java.util.List;
 /// # 单条数据读取安全
 ///
 /// 重写 [#one]：查询结果不唯一时记录告警(查全部，方言无关)，适用于期望唯一的场景。
-/// 取"排序后第一条"的方言无关写法(只查 1 条、不校验唯一)见 [cn.daxpay.open.platform.common.mybatisplus.impl.BaseManager.firstOpt]。
+/// 取"排序后第一条"的方言无关写法(只查 1 条、不校验唯一)见 [cn.daxpay.open.platform.common.mybatisplus.impl.BaseManager#firstOpt]。
 ///
 @Slf4j
 public class DaxLambdaQueryChainWrapper<T> extends LambdaQueryChainWrapper<T> {

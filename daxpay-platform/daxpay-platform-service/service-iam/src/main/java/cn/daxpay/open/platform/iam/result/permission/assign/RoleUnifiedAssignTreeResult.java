@@ -41,23 +41,14 @@ public class RoleUnifiedAssignTreeResult {
     @Schema(description = "权限码编码")
     private String code;
 
-    @Schema(description = "权限码中文名称")
-    private String nameCn;
-
-    @Schema(description = "权限码英文名称")
-    private String nameEn;
+    @Schema(description = "国际化key")
+    private String i18nKey;
 
     @Schema(description = "菜单编码")
     private String menuCode;
 
     @Schema(description = "终端编码")
     private String clientCode;
-
-    @Schema(description = "标题-中文")
-    private String titleCn;
-
-    @Schema(description = "标题-英文")
-    private String titleEn;
 
     @Schema(description = "菜单类型")
     private String menuType;

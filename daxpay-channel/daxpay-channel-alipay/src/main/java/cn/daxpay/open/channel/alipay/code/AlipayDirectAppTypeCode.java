@@ -6,7 +6,7 @@ import java.util.Map;
 
 /// # 支付宝直连应用类型与支付能力映射
 ///
-/// 定义支付宝直连商户应用类型([AlipayDirectApp].appType)常量，
+/// 定义支付宝直连商户应用类型([AlipayDirectApp#appType])常量，
 /// 以及支付能力(PayCapabilityEnum)到应用类型的默认推导关系。
 ///
 /// 当通道商户未显式配置「能力→应用」关联时，[AlipayDirectConfigAssembler] 会依据本映射

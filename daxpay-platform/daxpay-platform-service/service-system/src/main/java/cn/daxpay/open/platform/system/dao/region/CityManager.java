@@ -23,4 +23,3 @@ public class CityManager extends BaseManager<CityMapper, City> {
 
 }
 
-

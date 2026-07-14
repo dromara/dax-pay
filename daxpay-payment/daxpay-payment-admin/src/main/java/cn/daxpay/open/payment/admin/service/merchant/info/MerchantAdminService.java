@@ -66,7 +66,6 @@ public class MerchantAdminService {
         var merchant = MerchantInfoConvert.CONVERT.toEntity(param);
         merchant.setMchNo(this.getMchNo());
 
-
         merchant.setStatus(MerchantStatusEnum.ENABLE.getCode());
         // 创建商户管理员
         this.createMerchantAdmin(param,  merchant);

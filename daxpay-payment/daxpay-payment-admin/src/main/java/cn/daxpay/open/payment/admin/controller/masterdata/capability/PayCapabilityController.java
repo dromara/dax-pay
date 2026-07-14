@@ -1,6 +1,5 @@
 package cn.daxpay.open.payment.admin.controller.masterdata.capability;
 
-
 import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.payment.masterdata.param.capability.PayCapabilityQuery;
 import cn.daxpay.open.payment.masterdata.result.capability.PayCapabilityResult;
@@ -30,14 +29,14 @@ public class PayCapabilityController {
 
     private final PayCapabilityService payCapabilityService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "支付能力查看", nameEn = "Pay Capability View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "分页查询")
     @GetMapping("/page")
     public Result<PageResult<PayCapabilityResult>> page(PageParam pageParam, PayCapabilityQuery query, String name) {
         return Res.ok(payCapabilityService.page(pageParam, query, name));
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "支付能力查看", nameEn = "Pay Capability View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据编码查询详情")
     @GetMapping("/get")
     public Result<PayCapabilityResult> findByCode(@NotBlank(message = "{validation.field.code.notBlank}") String code) {

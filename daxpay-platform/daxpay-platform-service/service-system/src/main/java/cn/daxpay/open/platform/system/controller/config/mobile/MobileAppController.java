@@ -31,14 +31,14 @@ public class MobileAppController {
 
     private final MobileAppService mobileAppService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "移动端应用查看", nameEn = "Mobile App View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "查询全部(按端类型分组)")
     @GetMapping("/list")
     public Result<List<MobileAppResult>> list() {
         return Res.ok(mobileAppService.findAll());
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "移动端应用查看", nameEn = "Mobile App View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "按端类型查询所有平台配置")
     @GetMapping("/list-by-app-type")
     public Result<List<MobileAppResult>> listByAppType(
@@ -46,7 +46,7 @@ public class MobileAppController {
         return Res.ok(mobileAppService.findAllByAppType(appType));
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "移动端应用查看", nameEn = "Mobile App View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "查询单条详情")
     @GetMapping("/get")
     public Result<MobileAppResult> findById(
@@ -54,7 +54,7 @@ public class MobileAppController {
         return Res.ok(mobileAppService.findById(id));
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "移动端应用查看", nameEn = "Mobile App View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "按端类型+平台查询(不存在返回 null)")
     @GetMapping("/get-by-type-platform")
     public Result<MobileAppResult> findByAppTypeAndPlatform(
@@ -63,14 +63,14 @@ public class MobileAppController {
         return Res.ok(mobileAppService.findByAppTypeAndPlatform(appType, platform).orElse(null));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "移动端应用管理", nameEn = "Mobile App Manage")
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "保存(按端类型+平台 upsert)")
     @PostMapping("/save")
     public Result<MobileAppResult> save(@RequestBody @Validated MobileAppParam param) {
         return Res.ok(mobileAppService.save(param));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "移动端应用管理", nameEn = "Mobile App Manage")
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "更新启用状态")
     @PostMapping("/update-enabled")
     public Result<Void> updateEnabled(

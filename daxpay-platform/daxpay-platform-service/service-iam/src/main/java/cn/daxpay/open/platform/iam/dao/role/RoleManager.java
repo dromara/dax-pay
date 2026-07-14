@@ -32,42 +32,12 @@ public class RoleManager extends BaseManager<RoleMapper, Role> {
         return existedByField(Role::getCode, code, id);
     }
 
-    /// 根据中文名称判断是否存在
-    public boolean existsByNameCn(String nameCn) {
-        return existedByField(Role::getNameCn, nameCn);
-    }
-
-    /// 根据中文名称判断是否存在(排除指定ID)
-    public boolean existsByNameCn(String nameCn, Long id) {
-        return existedByField(Role::getNameCn, nameCn, id);
-    }
-
-    /// 根据英文名称判断是否存在
-    public boolean existsByNameEn(String nameEn) {
-        return existedByField(Role::getNameEn, nameEn);
-    }
-
-    /// 根据英文名称判断是否存在(排除指定ID)
-    public boolean existsByNameEn(String nameEn, Long id) {
-        return existedByField(Role::getNameEn, nameEn, id);
-    }
-
-    /// 根据当前语言判断名称是否存在
-    public boolean existsByName(String nameCn, String nameEn) {
-        return existedByField(Role::getNameCn, nameCn);
-    }
-
-    /// 根据当前语言判断名称是否存在(排除指定ID)
-    public boolean existsByName(String nameCn, String nameEn, Long id) {
-        return existedByField(Role::getNameCn, nameCn, id);
-    }
-
-    /// 下拉框查询，根据语言返回对应名称
+    /// 下拉框查询，返回 i18nKey 供前端翻译
     public List<KeyValue> findDropdown() {
-        return lambdaQuery().select(Role::getId, Role::getNameCn, Role::getNameEn)
+        return lambdaQuery().select(Role::getId, Role::getCode, Role::getI18nKey)
             .list()
             .stream()
-            .map(role -> new KeyValue(String.valueOf(role.getId()),role.getNameCn()))
+            .map(role -> new KeyValue(String.valueOf(role.getId()),role.getI18nKey()))
             .collect(Collectors.toList());
     }
 

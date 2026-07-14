@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 /// # 微信服务商支付关闭业务服务
 ///
 /// 通过 [WechatChannelClient] 调用子应用 dax-pay-channel-one 服务商端点关闭微信订单。
-/// 微信 V3 仅提供关单接口(closePartnerOrderV3), 无撤销接口(useCancel 参数忽略, 统一返回 [CloseTypeEnum.CLOSE])。
+/// 微信 V3 仅提供关单接口(closePartnerOrderV3), 无撤销接口(useCancel 参数忽略, 统一返回 [CloseTypeEnum#CLOSE])。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -29,7 +29,7 @@ public class WechatIsvCloseService {
     /// @param trade      支付订单(tradeNo 作为 out_trade_no)
     /// @param credential 通道调用凭证(服务商模式)
     /// @param useCancel  是否使用撤销方式(微信无撤销接口, 忽略)
-    /// @return 关闭方式(微信固定返回 [CloseTypeEnum.CLOSE])
+    /// @return 关闭方式(微信固定返回 [CloseTypeEnum#CLOSE])
     public CloseTypeEnum close(PayTrade trade, WechatSdkCredential credential, boolean useCancel) {
         // 构建请求(与直连一致)
         WechatCloseReq req = new WechatCloseReq();

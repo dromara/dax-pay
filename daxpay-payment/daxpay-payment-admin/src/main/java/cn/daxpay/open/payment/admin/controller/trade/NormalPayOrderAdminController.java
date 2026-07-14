@@ -34,14 +34,14 @@ public class NormalPayOrderAdminController {
 
     private final NormalPayOrderAdminService normalPayOrderAdminService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Trade.Order.VIEW_NAME_CN, nameEn = PermCodes.Trade.Order.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "普通支付业务单分页")
     @GetMapping("/page")
     public Result<PageResult<NormalPayOrderResult>> page(PageParam pageParam, NormalPayOrderQuery query) {
         return Res.ok(normalPayOrderAdminService.page(pageParam, query));
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Trade.Order.VIEW_NAME_CN, nameEn = PermCodes.Trade.Order.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据ID查询普通支付业务单详情")
     @GetMapping("/get-by-id")
     public Result<NormalPayOrderResult> findById(
@@ -49,7 +49,7 @@ public class NormalPayOrderAdminController {
         return Res.ok(normalPayOrderAdminService.findById(id));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Trade.Order.MANAGE_NAME_CN, nameEn = PermCodes.Trade.Order.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "同步支付状态")
     @PostMapping("/sync")
     public Result<NormalPaySyncResult> sync(
@@ -57,7 +57,7 @@ public class NormalPayOrderAdminController {
         return Res.ok(normalPayOrderAdminService.sync(id));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Trade.Order.MANAGE_NAME_CN, nameEn = PermCodes.Trade.Order.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "关闭/撤销订单")
     @PostMapping("/close")
     public Result<Void> close(

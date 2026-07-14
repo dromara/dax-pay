@@ -82,7 +82,7 @@ public class RestClientConfiguration {
     /// 创建 RestClient Bean
     ///
     /// 优先使用 Spring Boot 自动配置的 RestClient.Builder(携带 OTel 拦截器,
-    /// 自动透传 W3C traceparent); 若 autoconfiguration 未注册则 fallback 到 [RestClient.builder]。
+    /// 自动透传 W3C traceparent); 若 autoconfiguration 未注册则 fallback 到 [RestClient#builder]。
     @Bean
     public RestClient restClient(ObjectProvider<RestClient.Builder> builderProvider,
                                  HttpComponentsClientHttpRequestFactory httpRequestFactory) {

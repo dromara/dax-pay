@@ -30,7 +30,7 @@ public class AppAdminMchAppInfoController {
 
     private final AppAdminMchAppInfoService mchAppInfoService;
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Merchant.App.MANAGE_NAME_CN, nameEn = PermCodes.Merchant.App.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "新增商户应用")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) MchAppInfoParam param) {
@@ -39,7 +39,7 @@ public class AppAdminMchAppInfoController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Merchant.App.MANAGE_NAME_CN, nameEn = PermCodes.Merchant.App.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "修改商户应用")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) MchAppInfoParam param) {
@@ -48,21 +48,21 @@ public class AppAdminMchAppInfoController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Merchant.App.VIEW_NAME_CN, nameEn = PermCodes.Merchant.App.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "商户应用分页")
     @GetMapping("/page")
     public Result<PageResult<MchAppInfoResult>> page(PageParam pageParam, MchAppInfoQuery query) {
         return Res.ok(mchAppInfoService.page(pageParam, query));
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Merchant.App.VIEW_NAME_CN, nameEn = PermCodes.Merchant.App.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据id查询商户应用")
     @GetMapping("/get")
     public Result<MchAppInfoResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(mchAppInfoService.findById(id));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Merchant.App.MANAGE_NAME_CN, nameEn = PermCodes.Merchant.App.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "删除商户应用")
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {
@@ -70,7 +70,7 @@ public class AppAdminMchAppInfoController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Merchant.App.MANAGE_NAME_CN, nameEn = PermCodes.Merchant.App.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "设置默认商户应用")
     @PostMapping("/set-default")
     public Result<Void> setDefault(@NotNull(message = "{validation.field.id.notNull}") Long id) {
@@ -78,7 +78,7 @@ public class AppAdminMchAppInfoController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Merchant.App.MANAGE_NAME_CN, nameEn = PermCodes.Merchant.App.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "取消默认商户应用")
     @PostMapping("/clear-default")
     public Result<Void> clearDefault(@NotNull(message = "{validation.field.id.notNull}") Long id) {

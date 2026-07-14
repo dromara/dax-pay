@@ -40,7 +40,6 @@ public class PayStrategyContext {
     /// 客户端 IP(service 层从容器提取填入,供 close/sync 策略使用)
     private String clientIp;
 
-
     @SuppressWarnings("unchecked")
     public <T> T getChannelConfig(Class<T> clazz) {
         return (T) channelConfig;

@@ -168,7 +168,7 @@ public class DeviceQrCodeAdminService {
         return gatewayBase + CODE_PAY_PATH + code;
     }
 
-    /// 应用解析: 复用 [MerchantContextLoader.resolveApp], appId 空取商户默认应用, 返回解析后的 appId
+    /// 应用解析: 复用 [MerchantContextLoader#resolveApp], appId 空取商户默认应用, 返回解析后的 appId
     private String resolveAppId(String mchNo, String appId) {
         MchAppInfoAccessInfo mchApp = merchantContextLoader.resolveApp(mchNo, appId);
         return mchApp.getAppId();

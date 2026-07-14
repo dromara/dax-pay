@@ -58,4 +58,3 @@ public interface DictConvert {
     void copy(DictItemParam param, @MappingTarget DictItem dictItem);
 }
 
-

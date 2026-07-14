@@ -30,7 +30,7 @@ public class HmpayIsvKeyConfigController {
 
     private final HmpayIsvKeyConfigService hmpayIsvKeyConfigService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Payment.Isv.VIEW_NAME_CN, nameEn = PermCodes.Payment.Isv.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "查询河马付服务商密钥配置")
     @GetMapping("/find-config")
     public Result<HmpayIsvKeyConfigResult> findConfig(
@@ -39,7 +39,7 @@ public class HmpayIsvKeyConfigController {
         return Res.ok(HmpayIsvKeyConfigConvert.CONVERT.toResult(hmpayIsvKeyConfigService.findByProduct(product, sandbox)));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Payment.Isv.MANAGE_NAME_CN, nameEn = PermCodes.Payment.Isv.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "保存河马付服务商密钥配置")
     @PostMapping("/save-config")
     public Result<Void> saveConfig(@RequestBody @Validated HmpayIsvKeyConfigParam param) {

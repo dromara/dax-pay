@@ -35,7 +35,7 @@ import org.springframework.stereotype.Service;
 /// # 微信服务商认证策略
 ///
 /// 微信服务商模式(WECHAT_ISV)下获取用户标识(openId)。按特约商户配置的认证应用类型
-/// ([cn.daxpay.open.channel.wechat.entity.isv.WechatIsvChannelMerchant.authAppType]) 路由:
+/// ([cn.daxpay.open.channel.wechat.entity.isv.WechatIsvChannelMerchant#authAppType]) 路由:
 ///
 /// - **SP_APP(默认)**: 用服务商应用(WechatIsvApp.sp_appid) + WechatIsvAppAuthConfig 认证, 所得为 sp 维度 openId
 /// - **SUB_APP**: 用子商户应用(WechatIsvMchApp.sub_appid) + WechatIsvMchAppAuthConfig 认证, 所得为 sub 维度 openId

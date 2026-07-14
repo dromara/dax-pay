@@ -19,11 +19,8 @@ public class Dict extends MpBaseEntity implements ToResult<DictResult> {
     /// 名称
     private String name;
 
-    /// 中文名称
-    private String nameCn;
-
-    /// 英文名称
-    private String nameEn;
+    /// 国际化key（有值时走语言包翻译）
+    private String i18nKey;
 
     /// 字典类型
     private String dictType;

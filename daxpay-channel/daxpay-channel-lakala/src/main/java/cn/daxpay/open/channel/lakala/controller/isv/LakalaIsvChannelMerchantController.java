@@ -30,7 +30,7 @@ public class LakalaIsvChannelMerchantController {
 
     private final LakalaIsvChannelMerchantService lakalaIsvChannelMerchantService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据通道商户号查询拉卡拉通道商户配置")
     @GetMapping("/find-by-channel-mch-no")
     public Result<LakalaIsvChannelMerchantResult> findByChannelMchNo(
@@ -38,7 +38,7 @@ public class LakalaIsvChannelMerchantController {
         return Res.ok(lakalaIsvChannelMerchantService.findByChannelMchNo(channelMchNo));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.Merchant.MANAGE_NAME_CN, nameEn = PermCodes.Channel.Merchant.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "创建拉卡拉通道商户")
     @PostMapping("/create")
     public Result<Void> create(@RequestBody @Validated LakalaIsvChannelMerchantCreateParam param) {
@@ -46,7 +46,7 @@ public class LakalaIsvChannelMerchantController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.Merchant.MANAGE_NAME_CN, nameEn = PermCodes.Channel.Merchant.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "更新终端号")
     @PostMapping("/update-term-no")
     public Result<Void> updateTermNo(

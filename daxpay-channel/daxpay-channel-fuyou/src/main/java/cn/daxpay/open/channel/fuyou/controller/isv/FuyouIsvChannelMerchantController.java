@@ -29,7 +29,7 @@ public class FuyouIsvChannelMerchantController {
 
     private final FuyouIsvChannelMerchantService fuyouIsvChannelMerchantService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据通道商户号查询富友通道商户配置")
     @GetMapping("/find-by-channel-mch-no")
     public Result<FuyouIsvChannelMerchantResult> findByChannelMchNo(
@@ -37,7 +37,7 @@ public class FuyouIsvChannelMerchantController {
         return Res.ok(fuyouIsvChannelMerchantService.findByChannelMchNo(channelMchNo));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.Merchant.MANAGE_NAME_CN, nameEn = PermCodes.Channel.Merchant.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "创建富友通道商户")
     @PostMapping("/create")
     public Result<Void> create(@RequestBody @Validated FuyouIsvChannelMerchantCreateParam param) {

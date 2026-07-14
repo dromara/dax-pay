@@ -30,7 +30,7 @@ public class VbillIsvKeyConfigController {
 
     private final VbillIsvKeyConfigService vbillIsvKeyConfigService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Payment.Isv.VIEW_NAME_CN, nameEn = PermCodes.Payment.Isv.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "查询随行付服务商密钥配置")
     @GetMapping("/find-config")
     public Result<VbillIsvKeyConfigResult> findConfig(
@@ -39,7 +39,7 @@ public class VbillIsvKeyConfigController {
         return Res.ok(VbillIsvKeyConfigConvert.CONVERT.toResult(vbillIsvKeyConfigService.findByProduct(product, sandbox)));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Payment.Isv.MANAGE_NAME_CN, nameEn = PermCodes.Payment.Isv.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "保存随行付服务商密钥配置")
     @PostMapping("/save-config")
     public Result<Void> saveConfig(@RequestBody @Validated VbillIsvKeyConfigParam param) {

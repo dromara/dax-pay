@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 /// # 微信直连商户应用类型
 ///
-/// 定义微信直连商户应用([cn.daxpay.open.channel.wechat.entity.direct.WechatDirectApp].appType)的取值范围，
+/// 定义微信直连商户应用([cn.daxpay.open.channel.wechat.entity.direct.WechatDirectApp#appType])的取值范围，
 /// 与微信服务商应用类型([WechatIsvAppTypeEnum])取值保持一致，便于能力与应用类型统一推导。
 ///
 @Getter

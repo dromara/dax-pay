@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 /// 从进件对象([WechatDirectApp] + [WechatDirectKeyConfig])读取密钥/证书,
 /// 组装为下发给子应用的通道调用凭证 [WechatSdkCredential]。
 ///
-/// 应用解析优先级(委托 [WechatDirectAppCapabilityService.resolveApp]):
+/// 应用解析优先级(委托 [WechatDirectAppCapabilityService#resolveApp]):
 /// 能力关联(显式配置 > appType自动推导) > 通道商户首个应用。
 /// 密钥配置按通道商户号维度查询(一个商户号共享一套密钥/证书)。
 ///
@@ -62,7 +62,7 @@ public class WechatDirectConfigAssembler {
 
     /// 解析支付使用的应用（须已装载 mchNo，租户内）
     ///
-    /// 优先级(委托 [WechatDirectAppCapabilityService.resolveApp]):
+    /// 优先级(委托 [WechatDirectAppCapabilityService#resolveApp]):
     /// 能力关联(显式配置 > appType自动推导) > 通道商户首个应用
     private WechatDirectApp resolveApp(String mchNo, String channelMchNo, String capability) {
         return wechatDirectAppCapabilityService.resolveApp(channelMchNo, capability)

@@ -13,7 +13,6 @@ public class RouterCheckException extends BizInfoException {
         super(message);
     }
 
-
     public RouterCheckException(int code, String messageKey, Object... args) {
         super(code, messageKey, args);
     }

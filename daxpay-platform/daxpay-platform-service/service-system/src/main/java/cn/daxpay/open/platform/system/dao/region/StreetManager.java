@@ -23,4 +23,3 @@ public class StreetManager extends BaseManager<StreetMapper, Street> {
 
 }
 
-

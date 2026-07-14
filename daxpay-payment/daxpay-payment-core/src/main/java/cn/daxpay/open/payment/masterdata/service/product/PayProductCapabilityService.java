@@ -39,7 +39,6 @@ public class PayProductCapabilityService {
     private final PayProductCapabilityManager payProductCapabilityManager;
     private final PayCapabilityManager payCapabilityManager;
 
-
     /// 预加载「支付产品 → 能力编码」，供批量判断使用
     public Map<String, Set<String>> loadCapabilityCodesByProduct() {
         Map<String, PayCapability> capabilityMap = payCapabilityManager.mapByCode();

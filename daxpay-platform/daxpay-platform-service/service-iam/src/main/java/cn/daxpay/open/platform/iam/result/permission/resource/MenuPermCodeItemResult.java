@@ -17,11 +17,8 @@ public class MenuPermCodeItemResult {
     @Schema(description = "权限码")
     private String code;
 
-    @Schema(description = "中文名称")
-    private String nameCn;
-
-    @Schema(description = "英文名称")
-    private String nameEn;
+    @Schema(description = "国际化key")
+    private String i18nKey;
 
     @Schema(description = "菜单编码")
     private String menuCode;

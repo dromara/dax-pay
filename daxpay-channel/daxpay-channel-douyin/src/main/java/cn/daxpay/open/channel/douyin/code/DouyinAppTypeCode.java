@@ -6,7 +6,7 @@ import java.util.Map;
 
 /// # 抖音应用类型与支付能力映射
 ///
-/// 定义抖音直连商户应用([cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectApp].appType)的常量，
+/// 定义抖音直连商户应用([cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectApp#appType])的常量，
 /// 以及支付能力(PayCapabilityEnum)到应用类型的默认推导关系。
 ///
 /// 当未显式配置「能力→应用」关联时，[cn.daxpay.open.channel.douyin.service.direct.DouyinDirectAppCapabilityService]

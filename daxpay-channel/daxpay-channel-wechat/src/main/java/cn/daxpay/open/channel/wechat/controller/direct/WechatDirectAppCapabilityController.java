@@ -35,7 +35,7 @@ public class WechatDirectAppCapabilityController {
 
     private final WechatDirectAppCapabilityService wechatDirectAppCapabilityService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.App.VIEW_NAME_CN, nameEn = PermCodes.Channel.App.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "查询通道商户的能力应用关联列表")
     @GetMapping("/list-by-channel-mch-no")
     public Result<List<WechatDirectAppCapabilityResult>> listByChannelMchNo(
@@ -44,7 +44,7 @@ public class WechatDirectAppCapabilityController {
         return Res.ok(wechatDirectAppCapabilityService.listByChannelMchNo(mchNo, channelMchNo));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.App.MANAGE_NAME_CN, nameEn = PermCodes.Channel.App.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "全量保存能力应用关联")
     @PostMapping("/save-batch")
     public Result<Void> saveBatch(@RequestBody @Validated WechatDirectAppCapabilityBatchParam param) {
@@ -52,7 +52,7 @@ public class WechatDirectAppCapabilityController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.App.VIEW_NAME_CN, nameEn = PermCodes.Channel.App.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "查询微信直连支持的支付能力候选")
     @GetMapping("/list-supported-capabilities")
     public Result<List<WechatCapabilityOption>> listSupportedCapabilities() {

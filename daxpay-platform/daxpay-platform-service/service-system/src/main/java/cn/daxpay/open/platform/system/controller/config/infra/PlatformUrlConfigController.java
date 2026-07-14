@@ -1,6 +1,5 @@
 package cn.daxpay.open.platform.system.controller.config.infra;
 
-
 import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.rest.Res;
@@ -28,21 +27,21 @@ import org.springframework.web.bind.annotation.*;
 public class PlatformUrlConfigController {
     private final PlatformUrlConfigService platformUrlConfigService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "平台配置查看", nameEn = "Platform Config View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "获取端点配置")
     @GetMapping("/get")
     public Result<PlatformUrlConfigResult> getUrlConfig() {
         return Res.ok(platformUrlConfigService.findUrlConfig());
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "平台配置查看", nameEn = "Platform Config View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "检查端点连通性")
     @PostMapping("/check")
     public Result<ConnectivityCheckResult> checkUrl(@RequestBody @Validated PlatformUrlCheckParam param) {
         return Res.ok(platformUrlConfigService.checkUrl(param));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "平台配置管理", nameEn = "Platform Config Manage")
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "更新端点配置")
     @PostMapping("/update")
     public Result<Void> updateUrlConfig(@RequestBody @Validated PlatformUrlConfigParam param) {

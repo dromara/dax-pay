@@ -34,7 +34,7 @@ public class UserProtocolVersionController {
     /// @param pageParam 分页参数
     /// @param query 查询条件
     /// @return 版本分页结果
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.System.Protocol.VIEW_NAME_CN, nameEn = PermCodes.System.Protocol.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "分页")
     @GetMapping("/page")
     public Result<PageResult<UserProtocolVersionResult>> page(PageParam pageParam, UserProtocolVersionQuery query){
@@ -44,7 +44,7 @@ public class UserProtocolVersionController {
     /// 新建草稿
     ///
     /// @param param 版本参数
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.System.Protocol.MANAGE_NAME_CN, nameEn = PermCodes.System.Protocol.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "新建草稿")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) UserProtocolVersionParam param){
@@ -55,7 +55,7 @@ public class UserProtocolVersionController {
     /// 编辑草稿内容(仅草稿可编辑)
     ///
     /// @param param 版本参数
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.System.Protocol.MANAGE_NAME_CN, nameEn = PermCodes.System.Protocol.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "编辑草稿")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) UserProtocolVersionParam param){
@@ -66,7 +66,7 @@ public class UserProtocolVersionController {
     /// 删除草稿(仅草稿可删除)
     ///
     /// @param id 版本ID
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.System.Protocol.MANAGE_NAME_CN, nameEn = PermCodes.System.Protocol.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "删除草稿")
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id){
@@ -78,7 +78,7 @@ public class UserProtocolVersionController {
     ///
     /// @param id 版本ID
     /// @return 版本信息
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.System.Protocol.VIEW_NAME_CN, nameEn = PermCodes.System.Protocol.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "查询")
     @GetMapping("/get")
     public Result<UserProtocolVersionResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id){
@@ -88,7 +88,7 @@ public class UserProtocolVersionController {
     /// 发布版本(草稿 -> 已发布, 同协议同语言原已发布自动归档)
     ///
     /// @param id 版本ID
-    @PermCode(code = PermCodes.Action.PUBLISH, nameCn = "协议发布", nameEn = "Protocol Publish")
+    @PermCode(code = PermCodes.Action.PUBLISH)
     @Operation(summary = "发布版本")
     @PostMapping("/publish")
     public Result<Void> publish(@NotNull(message = "{validation.field.id.notNull}") Long id){
@@ -99,7 +99,7 @@ public class UserProtocolVersionController {
     /// 归档版本(已发布 -> 归档)
     ///
     /// @param id 版本ID
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.System.Protocol.MANAGE_NAME_CN, nameEn = PermCodes.System.Protocol.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "归档版本")
     @PostMapping("/archive")
     public Result<Void> archive(@NotNull(message = "{validation.field.id.notNull}") Long id){

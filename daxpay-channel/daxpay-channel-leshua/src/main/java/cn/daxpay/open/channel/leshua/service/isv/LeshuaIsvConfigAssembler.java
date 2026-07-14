@@ -21,9 +21,9 @@ import org.springframework.stereotype.Service;
 /// 下发给子应用 dax-pay-channel-two 发起乐刷 API 调用。
 ///
 /// 字段映射(对齐乐刷交易接口):
-/// - merchant_id ← [LeshuaIsvKeyConfig.lsMchNo](服务商级商户号, 全局唯一)
-/// - tradeKey ← [LeshuaIsvKeyConfig.tradeKey]
-/// - signType ← [LeshuaIsvKeyConfig.signType]
+/// - merchant_id ← [LeshuaIsvKeyConfig#lsMchNo](服务商级商户号, 全局唯一)
+/// - tradeKey ← [LeshuaIsvKeyConfig#tradeKey]
+/// - signType ← [LeshuaIsvKeyConfig#signType]
 ///
 /// 注: 乐刷交易接口只需 merchant_id + tradeKey, 子商户号(merchant_id)由服务商全局配置提供。
 @Slf4j

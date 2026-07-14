@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 /// 从进件对象([DouyinDirectApp] + [DouyinDirectKeyConfig] + [DouyinDirectChannelMerchant])读取
 /// appId / mchId / 私钥 / 证书序列号 / 加密密钥, 组装为下发给子应用的通道调用凭证 [DouyinSdkCredential]。
 ///
-/// 应用解析优先级(委托 [DouyinDirectAppCapabilityService.resolveApp]):
+/// 应用解析优先级(委托 [DouyinDirectAppCapabilityService#resolveApp]):
 /// 显式能力关联 > appType 自动推导 > 通道商户首个应用兜底。
 ///
 /// 供抖音直连策略([cn.daxpay.open.channel.douyin.strategy.DouyinDirectPayStrategy] 等)组装通道调用凭证。

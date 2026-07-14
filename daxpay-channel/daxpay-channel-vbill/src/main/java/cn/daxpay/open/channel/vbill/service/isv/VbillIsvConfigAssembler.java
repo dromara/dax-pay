@@ -22,9 +22,9 @@ import org.springframework.stereotype.Service;
 /// 下发给子应用 dax-pay-channel-two 发起随行付 API 调用。
 ///
 /// 字段映射(对齐随行付天阙开放平台接口):
-/// - orgId ← [VbillIsvKeyConfig.orgId] (天阙合作机构ID, 全局唯一)
+/// - orgId ← [VbillIsvKeyConfig#orgId] (天阙合作机构ID, 全局唯一)
 /// - privateKey/publicKey ← [VbillIsvKeyConfig] (服务商级, 全局唯一)
-/// - mno ← [VbillIsvChannelMerchant.vbillMchNo] (天阙商户号, 子商户级)
+/// - mno ← [VbillIsvChannelMerchant#vbillMchNo] (天阙商户号, 子商户级)
 /// - sandbox ← PayProductConfig.activeEnv (沙箱/生产)
 ///
 /// 供支付策略([cn.daxpay.open.channel.vbill.strategy.*])组装通道调用凭证。

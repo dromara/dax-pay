@@ -35,7 +35,6 @@ public class DouyinDirectAppCapabilityManager extends BaseManager<DouyinDirectAp
                 .oneOpt();
     }
 
-
     /// 根据通道商户号删除全部关联(批量保存时先清后插)
     public void deleteByChannelMchNo(String channelMchNo) {
         lambdaUpdate()

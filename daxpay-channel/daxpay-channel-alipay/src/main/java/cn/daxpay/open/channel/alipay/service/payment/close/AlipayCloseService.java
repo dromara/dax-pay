@@ -29,7 +29,7 @@ public class AlipayCloseService {
     /// @param trade      支付订单(tradeNo 作为 out_trade_no, outOrderNo 作为 trade_no)
     /// @param credential 通道调用凭证
     /// @param useCancel  是否使用撤销方式关闭
-    /// @return 实际使用的关闭方式([CloseTypeEnum.CLOSE] / [CloseTypeEnum.CANCEL])
+    /// @return 实际使用的关闭方式([CloseTypeEnum#CLOSE] / [CloseTypeEnum#CANCEL])
     public CloseTypeEnum close(PayTrade trade, AlipaySdkCredential credential, boolean useCancel) {
         // 构建请求
         AlipayCloseReq req = new AlipayCloseReq();

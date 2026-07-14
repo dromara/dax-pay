@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-
 @PermCode(menuCode = PermCodes.Iam.User.MENU)
 @Validated
 @Tag(name = "管理用户(管理员级别)")
@@ -34,23 +33,18 @@ import java.util.List;
 @RequestMapping("/user/admin")
 @RequiredArgsConstructor
 public class UserAdminController {
-
-    /// 单 Controller 内重复使用的状态权限名称
-    private static final String STATUS_NAME_CN = "用户状态管理";
-    private static final String STATUS_NAME_EN = "User Status Manage";
-
     private final UserAdminService userAdminService;
 
     private final UserQueryService userQueryService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Iam.User.VIEW_NAME_CN, nameEn = PermCodes.Iam.User.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据用户id查询用户")
     @GetMapping("/get")
     public Result<UserInfoResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(userQueryService.findById(id));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Iam.User.MANAGE_NAME_CN, nameEn = PermCodes.Iam.User.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "添加用户")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) UserInfoParam userInfoParam) {
@@ -58,7 +52,7 @@ public class UserAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Iam.User.MANAGE_NAME_CN, nameEn = PermCodes.Iam.User.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "修改用户")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) UserInfoParam userInfoParam) {
@@ -66,7 +60,7 @@ public class UserAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.RESET_PASSWORD, nameCn = "重置密码", nameEn = "Reset Password")
+    @PermCode(code = PermCodes.Action.RESET_PASSWORD)
     @Operation(summary = "重置密码")
     @PostMapping("/restart-password")
     public Result<Void> restartPassword(@RequestBody @Validated RestartPwdParam param) {
@@ -74,7 +68,7 @@ public class UserAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.RESET_PASSWORD, nameCn = "重置密码", nameEn = "Reset Password")
+    @PermCode(code = PermCodes.Action.RESET_PASSWORD)
     @Operation(summary = "批量重置密码")
     @PostMapping("/restart-password-batch")
     public Result<Void> restartPasswordBatch(@RequestBody @Validated RestartPwdBatchParam param) {
@@ -82,7 +76,7 @@ public class UserAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.STATUS, nameCn = STATUS_NAME_CN, nameEn = STATUS_NAME_EN)
+    @PermCode(code = PermCodes.Action.STATUS)
     @Operation(summary = "封禁用户")
     @PostMapping("/ban")
     public Result<Void> ban(@NotNull(message = "{validation.field.userId.notNull}") Long userId) {
@@ -90,7 +84,7 @@ public class UserAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.STATUS, nameCn = STATUS_NAME_CN, nameEn = STATUS_NAME_EN)
+    @PermCode(code = PermCodes.Action.STATUS)
     @Operation(summary = "批量封禁用户")
     @PostMapping("/ban-batch")
     public Result<Void> banBatch(@RequestBody @Validated UserBatchParam param) {
@@ -98,7 +92,7 @@ public class UserAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.STATUS, nameCn = STATUS_NAME_CN, nameEn = STATUS_NAME_EN)
+    @PermCode(code = PermCodes.Action.STATUS)
     @Operation(summary = "解锁用户")
     @PostMapping("/unlock")
     public Result<Void> unlock(@NotNull(message = "{validation.field.userId.notNull}") Long userId) {
@@ -106,7 +100,7 @@ public class UserAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.STATUS, nameCn = STATUS_NAME_CN, nameEn = STATUS_NAME_EN)
+    @PermCode(code = PermCodes.Action.STATUS)
     @Operation(summary = "批量解锁用户")
     @PostMapping("/unlock-batch")
     public Result<Void> unlockBatch(@RequestBody @Validated UserBatchParam param) {
@@ -114,7 +108,7 @@ public class UserAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.STATUS, nameCn = STATUS_NAME_CN, nameEn = STATUS_NAME_EN)
+    @PermCode(code = PermCodes.Action.STATUS)
     @Operation(summary = "锁定用户")
     @PostMapping("/lock")
     public Result<Void> lock(@NotNull(message = "{validation.field.userId.notNull}") Long userId) {
@@ -122,7 +116,7 @@ public class UserAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.STATUS, nameCn = STATUS_NAME_CN, nameEn = STATUS_NAME_EN)
+    @PermCode(code = PermCodes.Action.STATUS)
     @Operation(summary = "批量锁定用户")
     @PostMapping("/lock-batch")
     public Result<Void> lockBatch(@RequestBody @Validated UserBatchParam param) {
@@ -130,7 +124,7 @@ public class UserAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Iam.User.VIEW_NAME_CN, nameEn = PermCodes.Iam.User.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "用户分页")
     @GetMapping("/page")
     public Result<PageResult<UserWholeInfoResult>> page(PageParam pageParam, UserInfoQuery query) {

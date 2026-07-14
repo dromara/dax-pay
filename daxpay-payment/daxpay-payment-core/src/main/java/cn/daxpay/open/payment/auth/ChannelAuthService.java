@@ -68,7 +68,7 @@ public class ChannelAuthService {
     /// 通过AuthCode获取通道认证结果
     ///
     /// @param session 认证会话上下文(H5场景从 authToken 恢复; 小程序直连场景可为空, 此时从 param 取上下文)。
-    ///                由认证分发层在调用前通过 [AuthSessionStore.loadSession] 加载后注入。
+    ///                由认证分发层在调用前通过 [AuthSessionStore#loadSession] 加载后注入。
     public AuthResult auth(AuthCodeParam param, AuthSession session) {
         initMchContext(param.getAppId(), param.getMchNo());
         // product 优先从会话恢复, 其次取参数(小程序直连场景)

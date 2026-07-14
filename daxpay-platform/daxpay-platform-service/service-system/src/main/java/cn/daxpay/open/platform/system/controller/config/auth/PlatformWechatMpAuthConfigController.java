@@ -31,14 +31,14 @@ public class PlatformWechatMpAuthConfigController {
 
     private final PlatformWechatMpAuthConfigService platformWechatMpAuthConfigService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Iam.Social.VIEW_NAME_CN, nameEn = PermCodes.Iam.Social.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "获取微信公众号认证配置")
     @GetMapping("/get")
     public Result<PlatformWechatMpAuthConfigResult> getWechatMpAuthConfig() {
         return Res.ok(platformWechatMpAuthConfigService.findWechatMpAuthConfig());
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Iam.Social.MANAGE_NAME_CN, nameEn = PermCodes.Iam.Social.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "更新微信公众号认证配置")
     @PostMapping("/update")
     public Result<Void> updateWechatMpAuthConfig(@RequestBody @Validated PlatformWechatMpAuthConfigParam param) {

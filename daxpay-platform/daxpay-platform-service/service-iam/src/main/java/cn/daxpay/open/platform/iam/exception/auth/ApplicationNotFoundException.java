@@ -10,7 +10,6 @@ public class ApplicationNotFoundException extends BizInfoException {
         super("error.auth.applicationNotFound");
     }
 
-
     public ApplicationNotFoundException(int code, String messageKey, Object... args) {
         super(code, messageKey, args);
     }

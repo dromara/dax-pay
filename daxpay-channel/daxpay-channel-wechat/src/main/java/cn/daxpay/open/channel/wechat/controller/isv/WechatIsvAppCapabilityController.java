@@ -34,14 +34,14 @@ public class WechatIsvAppCapabilityController {
 
     private final WechatIsvAppCapabilityService wechatIsvAppCapabilityService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Payment.Isv.VIEW_NAME_CN, nameEn = PermCodes.Payment.Isv.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "查询能力应用关联列表")
     @GetMapping("/list-all")
     public Result<List<WechatIsvAppCapabilityResult>> listAll() {
         return Res.ok(wechatIsvAppCapabilityService.listAll());
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Payment.Isv.MANAGE_NAME_CN, nameEn = PermCodes.Payment.Isv.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "全量保存能力应用关联")
     @PostMapping("/save-batch")
     public Result<Void> saveBatch(@RequestBody @Validated WechatIsvAppCapabilityBatchParam param) {
@@ -49,7 +49,7 @@ public class WechatIsvAppCapabilityController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Payment.Isv.VIEW_NAME_CN, nameEn = PermCodes.Payment.Isv.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "查询微信服务商支持的支付能力候选")
     @GetMapping("/list-supported-capabilities")
     public Result<List<WechatCapabilityOption>> listSupportedCapabilities() {

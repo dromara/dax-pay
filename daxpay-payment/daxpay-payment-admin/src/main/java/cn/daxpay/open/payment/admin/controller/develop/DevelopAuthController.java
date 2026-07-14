@@ -40,28 +40,28 @@ public class DevelopAuthController {
 
     private final DevelopAuthService developAuthService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "查看", nameEn = "View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "生成支付宝H5授权链接")
     @PostMapping("/generate-alipay-auth-url")
     public Result<AuthUrlResult> generateAlipayAuthUrl() {
         return Res.ok(developAuthService.generateAlipayAuthUrl());
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "查看", nameEn = "View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "生成微信公众号配置授权链接")
     @PostMapping("/generate-wechat-mp-auth-url")
     public Result<AuthUrlResult> generateWechatMpAuthUrl() {
         return Res.ok(developAuthService.generateWechatMpAuthUrl());
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "查看", nameEn = "View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "生成抖音H5授权链接")
     @PostMapping("/generate-douyin-auth-url")
     public Result<AuthUrlResult> generateDouyinAuthUrl() {
         return Res.ok(developAuthService.generateDouyinAuthUrl());
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "查看", nameEn = "View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "生成微信支付授权链接")
     @PostMapping("/generate-channel-auth-url")
     public Result<AuthUrlResult> generateChannelAuthUrl(@RequestBody GenerateAuthUrlParam param) {
@@ -70,7 +70,7 @@ public class DevelopAuthController {
         return Res.ok(developAuthService.generateChannelAuthUrl(param));
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "查看", nameEn = "View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "通过查询码获取认证结果")
     @GetMapping("/query-auth-result")
     public Result<AuthResult> queryAuthResult(

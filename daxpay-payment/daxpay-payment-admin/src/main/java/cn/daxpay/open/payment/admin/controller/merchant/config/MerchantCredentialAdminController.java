@@ -1,6 +1,5 @@
 package cn.daxpay.open.payment.admin.controller.merchant.config;
 
-
 import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.rest.Res;
@@ -27,7 +26,7 @@ public class MerchantCredentialAdminController {
 
     private final MerchantCredentialService credentialService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Merchant.Credential.VIEW_NAME_CN, nameEn = PermCodes.Merchant.Credential.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据商户号查询对接配置")
     @GetMapping("/get-by-mch-no")
     public Result<MerchantCredentialResult> findByMchNo(
@@ -35,7 +34,7 @@ public class MerchantCredentialAdminController {
         return Res.ok(credentialService.findByMchNo(mchNo));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Merchant.Credential.MANAGE_NAME_CN, nameEn = PermCodes.Merchant.Credential.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "更新商户对接配置")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated MerchantCredentialParam param) {

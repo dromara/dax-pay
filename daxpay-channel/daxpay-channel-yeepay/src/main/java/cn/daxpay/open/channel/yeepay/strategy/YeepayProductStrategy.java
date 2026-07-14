@@ -12,10 +12,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-import static cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum.ALIPAY;
-import static cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum.UNION_PAY;
-import static cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum.WECHAT;
-
 /// # 易宝聚合支付产品策略
 ///
 /// 易宝为聚合支付通道, 单产品(YEE_PAY)承载微信/支付宝/银联的扫码与 H5 支付。
@@ -50,7 +46,7 @@ public class YeepayProductStrategy extends AbsProductStrategy {
 
     @Override
     public List<PayProviderEnum> supportedPayProviders() {
-        return List.of(WECHAT, ALIPAY, UNION_PAY);
+        return List.of(PayProviderEnum.WECHAT, PayProviderEnum.ALIPAY, PayProviderEnum.UNION_PAY);
     }
 
     @Override

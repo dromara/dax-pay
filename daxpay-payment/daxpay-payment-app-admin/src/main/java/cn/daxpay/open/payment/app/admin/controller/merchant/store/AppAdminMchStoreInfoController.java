@@ -30,7 +30,7 @@ public class AppAdminMchStoreInfoController {
 
     private final AppAdminMchStoreInfoService mchStoreInfoService;
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Merchant.Store.MANAGE_NAME_CN, nameEn = PermCodes.Merchant.Store.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "新增门店")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) MchStoreInfoParam param) {
@@ -39,7 +39,7 @@ public class AppAdminMchStoreInfoController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Merchant.Store.MANAGE_NAME_CN, nameEn = PermCodes.Merchant.Store.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "修改门店")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) MchStoreInfoParam param) {
@@ -48,21 +48,21 @@ public class AppAdminMchStoreInfoController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Merchant.Store.VIEW_NAME_CN, nameEn = PermCodes.Merchant.Store.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "门店分页")
     @GetMapping("/page")
     public Result<PageResult<MchStoreInfoResult>> page(PageParam pageParam, MchStoreInfoQuery query) {
         return Res.ok(mchStoreInfoService.page(pageParam, query));
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Merchant.Store.VIEW_NAME_CN, nameEn = PermCodes.Merchant.Store.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据id查询门店")
     @GetMapping("/get")
     public Result<MchStoreInfoResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(mchStoreInfoService.findById(id));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Merchant.Store.MANAGE_NAME_CN, nameEn = PermCodes.Merchant.Store.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "删除门店")
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {

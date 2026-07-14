@@ -82,8 +82,7 @@ public class PermCodeScanService {
                     if (Objects.isNull(existed)) {
                         PermCodeData entity = new PermCodeData()
                                 .setCode(definition.getCode())
-                                .setNameCn(definition.getNameCn())
-                                .setNameEn(definition.getNameEn())
+                                .setI18nKey(definition.getI18nKey())
                                 .setMenuCode(definition.getMenuCode())
                                 .setInternal(true)
                                 .setRemark("由 @PermCode 扫描同步生成");
@@ -92,13 +91,11 @@ public class PermCodeScanService {
                         result.setAddedCount(result.getAddedCount() + 1);
                         return;
                     }
-                    boolean changed = !Objects.equals(existed.getNameCn(), definition.getNameCn())
-                            || !Objects.equals(existed.getNameEn(), definition.getNameEn())
+                    boolean changed = !Objects.equals(existed.getI18nKey(), definition.getI18nKey())
                             || !Objects.equals(existed.getMenuCode(), definition.getMenuCode())
                             || !existed.isInternal();
                     if (changed) {
-                        existed.setNameCn(definition.getNameCn());
-                        existed.setNameEn(definition.getNameEn());
+                        existed.setI18nKey(definition.getI18nKey());
                         existed.setMenuCode(definition.getMenuCode());
                         existed.setInternal(true);
                         if (StrUtil.isBlank(existed.getRemark())) {
@@ -170,15 +167,12 @@ public class PermCodeScanService {
                 continue;
             }
             String menuCode = PermCodeUtil.resolveMenuCode(classPermCode, methodPermCode);
-            String nameCn = PermCodeUtil.resolveNameCn(classPermCode, methodPermCode);
-            String nameEn = PermCodeUtil.resolveNameEn(classPermCode, methodPermCode);
             Method method = handlerMethod.getMethod();
             String location = beanType.getName() + "#" + method.getName();
 
             var definition = new PermCodeDefinition()
                     .setCode(code)
-                    .setNameCn(nameCn)
-                    .setNameEn(nameEn)
+                    .setI18nKey("perm." + code)
                     .setMenuCode(menuCode)
                     .setLocation(location);
             PermCodeDefinition existed = definitionMap.get(code);
@@ -186,9 +180,7 @@ public class PermCodeScanService {
                 definitionMap.put(code, definition);
                 continue;
             }
-            if (!Objects.equals(existed.getNameCn(), definition.getNameCn())
-                    || !Objects.equals(existed.getNameEn(), definition.getNameEn())
-                    || !Objects.equals(existed.getMenuCode(), definition.getMenuCode())) {
+            if (!Objects.equals(existed.getMenuCode(), definition.getMenuCode())) {
                 conflicts.add(code + "(" + existed.getLocation() + " / " + definition.getLocation() + ")");
             }
         }
@@ -209,14 +201,6 @@ public class PermCodeScanService {
             // 权限: 存在未配置 code 的权限码声明
             throw new ValidationFailedException("error.iam.perm.codeNotConfigured");
         }
-        if (definitionMap.values().stream().map(PermCodeDefinition::getNameCn).anyMatch(StrUtil::isBlank)) {
-            // 权限: 存在未配置 nameCn 的权限码声明
-            throw new ValidationFailedException("error.iam.perm.nameCnNotConfigured");
-        }
-        if (definitionMap.values().stream().map(PermCodeDefinition::getNameEn).anyMatch(StrUtil::isBlank)) {
-            // 权限: 存在未配置 nameEn 的权限码声明
-            throw new ValidationFailedException("error.iam.perm.nameEnNotConfigured");
-        }
     }
 
     /// # 扫描得到的权限码定义。
@@ -227,15 +211,12 @@ public class PermCodeScanService {
     private static class PermCodeDefinition {
         /// 权限码编码。
         private String code;
-        /// 中文名称。
-        private String nameCn;
-        /// 英文名称。
-        private String nameEn;
+        /// 国际化key（由 code 推导: perm.{code}）。
+        private String i18nKey;
         /// 归属菜单编码。
         private String menuCode;
         /// 注解声明位置，格式为 全限定类名#方法名。
         private String location;
     }
 }
-
 

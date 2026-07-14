@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 /// - **支付宝小程序**: 暂未实现
 /// - **微信小程序(商户端/运营端)**: 暂未实现
 ///
-/// 已实现项共用 queryCode 轮询机制(由 [AuthSessionStore.queryAuthResult] 统一查询)。
+/// 已实现项共用 queryCode 轮询机制(由 [AuthSessionStore#queryAuthResult] 统一查询)。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -48,7 +48,7 @@ public class DevelopAuthService {
 
     /// 生成微信支付(直连/服务商)授权链接
     ///
-    /// 委托 [ChannelAuthService.generateAuthUrl], 按支付产品路由对应认证策略:
+    /// 委托 [ChannelAuthService#generateAuthUrl], 按支付产品路由对应认证策略:
     /// 直连(WECHAT_PAY) → WechatDirectAuthStrategy; 服务商(WECHAT_ISV) → WechatIsvAuthStrategy。
     public AuthUrlResult generateChannelAuthUrl(GenerateAuthUrlParam param) {
         return channelAuthService.generateAuthUrl(param);

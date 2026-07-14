@@ -35,21 +35,21 @@ public class DevelopTradeController {
 
     private final DevelopTradeService developTradeService;
 
-    @PermCode(code = PermCodes.Action.SIGN, nameCn = "签名", nameEn = "Sign")
+    @PermCode(code = PermCodes.Action.SIGN)
     @Operation(summary = "支付参数签名")
     @PostMapping("/sign")
     public Result<DevelopSignResult> sign(@RequestBody DevelopParam<NormalPayParam> param) {
         return Res.ok(developTradeService.sign(param));
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "查看", nameEn = "View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "已启用渠道支付方式目录")
     @GetMapping("/method-directory")
     public Result<List<PayProviderMethodResult>> methodDirectory() {
         return Res.ok(developTradeService.listMethodDirectory());
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "查看", nameEn = "View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "传值模式通道商户候选")
     @GetMapping("/channel-mch-candidates")
     public Result<List<LabelValue>> channelMchCandidates(
@@ -58,7 +58,7 @@ public class DevelopTradeController {
         return Res.ok(developTradeService.listChannelMchCandidates(mchNo, provider));
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "查看", nameEn = "View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "传值模式支付能力候选")
     @GetMapping("/capability-candidates")
     public Result<List<LabelValue>> capabilityCandidates(

@@ -26,11 +26,8 @@ public class DictItem extends MpBaseEntity implements ToResult<DictItemResult> {
     /// 字典项编码
     private String code;
 
-    /// 中文名称
-    private String nameCn;
-
-    /// 英文名称
-    private String nameEn;
+    /// 国际化key（有值时走语言包翻译）
+    private String i18nKey;
 
     /// 字典项排序
     private Integer sortNo;

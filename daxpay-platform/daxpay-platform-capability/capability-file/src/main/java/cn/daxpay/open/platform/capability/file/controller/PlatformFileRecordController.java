@@ -28,14 +28,14 @@ public class PlatformFileRecordController {
 
     @Operation(summary = "分页查询")
     @GetMapping("/page")
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "文件查看", nameEn = "File View")
+    @PermCode(code = PermCodes.Action.VIEW)
     public Result<PageResult<PlatformFileRecordResult>> page(PlatformFileRecordPageParam param) {
         return Res.ok(platformFileRecordService.page(param));
     }
 
     @Operation(summary = "查询详情")
     @GetMapping("/{id}")
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "文件查看", nameEn = "File View")
+    @PermCode(code = PermCodes.Action.VIEW)
     public Result<PlatformFileRecordResult> findById(@PathVariable Long id) {
         return Res.ok(platformFileRecordService.findById(id));
     }

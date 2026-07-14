@@ -1,6 +1,5 @@
 package cn.daxpay.open.platform.system.controller.config.infra;
 
-
 import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.rest.Res;
@@ -27,21 +26,21 @@ import org.springframework.web.bind.annotation.*;
 public class PlatformOssConfigController {
     private final PlatformOssConfigService platformOssConfigService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "OSS配置查看", nameEn = "OSS Config View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "获取OSS配置")
     @GetMapping("/get")
     public Result<PlatformOssConfigResult> getOssConfig() {
         return Res.ok(platformOssConfigService.findOssConfig());
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "OSS配置查看", nameEn = "OSS Config View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "检查OSS连通性")
     @PostMapping("/check")
     public Result<ConnectivityCheckResult> checkOss(@RequestBody(required = false) PlatformOssConfigParam param) {
         return Res.ok(platformOssConfigService.checkOss(param));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "OSS配置管理", nameEn = "OSS Config Manage")
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "更新OSS配置")
     @PostMapping("/update")
     public Result<Void> updateOssConfig(@RequestBody @Validated PlatformOssConfigParam param) {

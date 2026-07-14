@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-
 @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
 @Data
 @Accessors(chain = true)

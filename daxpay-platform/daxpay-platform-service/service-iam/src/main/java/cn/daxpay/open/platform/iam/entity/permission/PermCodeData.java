@@ -21,11 +21,8 @@ public class PermCodeData extends MpBaseEntity implements ToResult<PermCodeResul
     /// 权限码
     private String code;
 
-    /// 中文名称
-    private String nameCn;
-
-    /// 英文名称
-    private String nameEn;
+    /// 国际化key（由 code 推导: perm.{code}）
+    private String i18nKey;
 
     /// 菜单编码
     private String menuCode;

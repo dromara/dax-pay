@@ -7,7 +7,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-
 @Data
 @Accessors(chain = true)
 @Schema(title = "角色")
@@ -21,13 +20,8 @@ public class RoleParam {
     @Schema(description = "角色code")
     private String code;
 
-    @NotBlank(message = "{validation.field.nameCn.notBlank}")
-    @Schema(description = "中文名称")
-    private String nameCn;
-
-    @NotBlank(message = "{validation.field.nameEn.notBlank}")
-    @Schema(description = "英文名称")
-    private String nameEn;
+    @Schema(description = "国际化key")
+    private String i18nKey;
 
     @NotBlank(message = "{validation.field.clientCode.notBlank}")
     @Schema(description = "终端编码")

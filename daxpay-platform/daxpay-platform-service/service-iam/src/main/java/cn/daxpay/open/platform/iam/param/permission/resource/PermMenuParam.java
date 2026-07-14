@@ -7,7 +7,6 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-
 @Data
 @Accessors(chain = true)
 @Schema(title = "菜单权限")
@@ -26,14 +25,6 @@ public class PermMenuParam {
     @NotBlank(message = "{validation.field.clientCode.notBlank}")
     @Schema(description = "关联应用code")
     private String clientCode;
-
-    @NotBlank(message = "{validation.field.titleCn.notBlank}")
-    @Schema(description = "菜单标题-中文")
-    private String titleCn;
-
-    @NotBlank(message = "{validation.field.titleEn.notBlank}")
-    @Schema(description = "菜单标题-英文")
-    private String titleEn;
 
     @NotBlank(message = "{validation.field.i18nKey.notBlank}")
     @Schema(description = "国际化key")

@@ -28,11 +28,8 @@ public class DictParam {
     @Schema(description = "名称")
     private String name;
 
-    @Schema(description = "中文名称")
-    private String nameCn;
-
-    @Schema(description = "英文名称")
-    private String nameEn;
+    @Schema(description = "国际化key")
+    private String i18nKey;
 
     @NotNull(message = "{validation.field.enable.notNull}", groups = ValidationGroup.add.class)
     @Schema(description = "启用状态")

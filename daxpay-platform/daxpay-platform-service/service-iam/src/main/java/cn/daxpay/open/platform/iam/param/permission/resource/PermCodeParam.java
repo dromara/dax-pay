@@ -22,14 +22,6 @@ public class PermCodeParam {
     @Schema(description = "权限码")
     private String code;
 
-    @NotBlank(message = "{validation.field.nameCn.notBlank}")
-    @Schema(description = "中文名称")
-    private String nameCn;
-
-    @NotBlank(message = "{validation.field.nameEn.notBlank}")
-    @Schema(description = "英文名称")
-    private String nameEn;
-
     @NotBlank(message = "{validation.field.menuCode.notBlank}")
     @Schema(description = "菜单编码")
     private String menuCode;

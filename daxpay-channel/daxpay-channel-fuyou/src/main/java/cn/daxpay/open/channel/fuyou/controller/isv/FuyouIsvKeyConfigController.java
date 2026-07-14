@@ -30,7 +30,7 @@ public class FuyouIsvKeyConfigController {
 
     private final FuyouIsvKeyConfigService fuyouIsvKeyConfigService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Payment.Isv.VIEW_NAME_CN, nameEn = PermCodes.Payment.Isv.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "查询富友服务商密钥配置")
     @GetMapping("/find-config")
     public Result<FuyouIsvKeyConfigResult> findConfig(
@@ -39,7 +39,7 @@ public class FuyouIsvKeyConfigController {
         return Res.ok(FuyouIsvKeyConfigConvert.CONVERT.toResult(fuyouIsvKeyConfigService.findByProduct(product, sandbox)));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Payment.Isv.MANAGE_NAME_CN, nameEn = PermCodes.Payment.Isv.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "保存富友服务商密钥配置")
     @PostMapping("/save-config")
     public Result<Void> saveConfig(@RequestBody @Validated FuyouIsvKeyConfigParam param) {

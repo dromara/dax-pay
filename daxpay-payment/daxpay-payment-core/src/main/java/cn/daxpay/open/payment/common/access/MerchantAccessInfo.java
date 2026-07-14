@@ -15,5 +15,4 @@ public class MerchantAccessInfo {
     /// 商户状态
     private String status;
 
-
 }

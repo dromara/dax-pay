@@ -33,7 +33,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class WechatNotifyService {
 
-    /// 社交来源: 微信公众号(对应 [SocialSourceEnum.WECHAT_MP], 绑定存于 iam_user_social)
+    /// 社交来源: 微信公众号(对应 [SocialSourceEnum#WECHAT_MP], 绑定存于 iam_user_social)
     private static final String SOURCE_WECHAT_MP = SocialSourceEnum.WECHAT_MP.getCode();
 
     private final PlatformWechatMpAuthConfigService mpAuthConfigService;

@@ -37,7 +37,7 @@ public class UserSocialController {
 
     /// 查询指定用户的第三方账号绑定列表
     /// @param userId 目标用户ID
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Iam.User.VIEW_NAME_CN, nameEn = PermCodes.Iam.User.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "查询指定用户的第三方账号绑定列表")
     @GetMapping("/bind-list")
     public Result<List<SocialBindResult>> bindList(@NotNull(message = "{validation.field.userId.notNull}") Long userId) {
@@ -47,7 +47,7 @@ public class UserSocialController {
     /// 解除指定用户的第三方账号绑定
     /// @param userId 目标用户ID
     /// @param source 平台编码
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Iam.User.VIEW_NAME_CN, nameEn = PermCodes.Iam.User.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "解除指定用户的第三方账号绑定")
     @PostMapping("/unbind")
     public Result<Void> unbind(@NotNull(message = "{validation.field.userId.notNull}") Long userId,

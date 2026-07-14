@@ -1,6 +1,5 @@
 package cn.daxpay.open.payment.admin.controller.masterdata.paychannel;
 
-
 import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.payment.masterdata.param.channel.PayChannelQuery;
 import cn.daxpay.open.payment.masterdata.result.channel.PayChannelResult;
@@ -38,21 +37,21 @@ public class PayChannelController {
     private final PayChannelService payChannelService;
     private final PayProductService payProductService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "支付通道查看", nameEn = "Pay Channel View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "分页查询")
     @GetMapping("/page")
     public Result<PageResult<PayChannelResult>> page(PageParam pageParam, PayChannelQuery query, String name) {
         return Res.ok(payChannelService.page(pageParam, query, name));
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "支付通道查看", nameEn = "Pay Channel View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据编码查询详情")
     @GetMapping("/get")
     public Result<PayChannelResult> findByCode(@NotBlank(message = "{validation.field.code.notBlank}") String code) {
         return Res.ok(payChannelService.findByCode(code));
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "支付通道查看", nameEn = "Pay Channel View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "按通道编码查询所属支付产品")
     @GetMapping("/list-products")
     public Result<List<PayProductResult>> listProducts(
@@ -60,7 +59,7 @@ public class PayChannelController {
         return Res.ok(payProductService.listByChannel(channel));
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "支付通道查看", nameEn = "Pay Channel View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "启用通道下拉列表")
     @GetMapping("/dropdown")
     public Result<List<LabelValue>> dropdown() {

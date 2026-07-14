@@ -24,7 +24,7 @@ public class DictTranslatorImpl implements DictTranslator {
         List<DictItem> items = dictItemService.findAllEnableByDictCode(dictCode);
         Map<String, DictItemData> result = new HashMap<>();
         for (DictItem item : items) {
-            result.put(item.getCode(), new DictItemData(item.getNameCn(), item.getNameEn()));
+            result.put(item.getCode(), new DictItemData(item.getI18nKey()));
         }
         return result;
     }

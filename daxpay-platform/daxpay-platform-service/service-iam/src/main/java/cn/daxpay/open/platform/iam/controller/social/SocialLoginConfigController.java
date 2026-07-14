@@ -37,7 +37,7 @@ public class SocialLoginConfigController {
 
     private final SocialLoginService socialLoginService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Iam.Social.VIEW_NAME_CN, nameEn = PermCodes.Iam.Social.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "全量查询平台配置(枚举驱动, 读时初始化缺失平台)")
     @GetMapping("/find-all")
     public Result<List<SocialLoginConfigResult>> findAll() {
@@ -45,21 +45,21 @@ public class SocialLoginConfigController {
     }
 
     /// 列出应在第三方平台登记的 OAuth 回调地址(运营/商户 × 平台 × 登录/绑定)
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Iam.Social.VIEW_NAME_CN, nameEn = PermCodes.Iam.Social.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "查询应登记的社交回调地址清单")
     @GetMapping("/callback-urls")
     public Result<List<SocialCallbackUrlResult>> callbackUrls() {
         return Res.ok(socialLoginService.listCallbackUrls());
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Iam.Social.VIEW_NAME_CN, nameEn = PermCodes.Iam.Social.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据平台编码查询(不存在则初始化占位记录)")
     @GetMapping("/get-by-source")
     public Result<SocialLoginConfigResult> findBySource(@NotBlank(message = "{validation.field.source.notBlank}") String source) {
         return Res.ok(socialLoginConfigService.findBySource(source));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Iam.Social.MANAGE_NAME_CN, nameEn = PermCodes.Iam.Social.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "修改平台配置")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated SocialLoginConfigParam param) {
@@ -67,7 +67,7 @@ public class SocialLoginConfigController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Iam.Social.MANAGE_NAME_CN, nameEn = PermCodes.Iam.Social.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "切换平台启用状态(仅已配置平台可启停)")
     @PostMapping("/update-enabled")
     public Result<Void> updateEnabled(

@@ -6,7 +6,6 @@ import lombok.experimental.Accessors;
 
 import java.util.List;
 
-
 @Data
 @Accessors(chain = true)
 @Schema(title = "权限码")

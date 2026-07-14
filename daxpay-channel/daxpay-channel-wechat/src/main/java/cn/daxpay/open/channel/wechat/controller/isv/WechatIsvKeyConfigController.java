@@ -27,7 +27,7 @@ public class WechatIsvKeyConfigController {
 
     private final WechatIsvKeyConfigService wechatIsvKeyConfigService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Payment.Isv.VIEW_NAME_CN, nameEn = PermCodes.Payment.Isv.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "查询微信服务商密钥配置")
     @GetMapping("/find-config")
     public Result<WechatIsvKeyConfigResult> findConfig(
@@ -35,7 +35,7 @@ public class WechatIsvKeyConfigController {
         return Res.ok(WechatIsvKeyConfigConvert.CONVERT.toResult(wechatIsvKeyConfigService.findByProduct(product)));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Payment.Isv.MANAGE_NAME_CN, nameEn = PermCodes.Payment.Isv.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "保存微信服务商密钥配置")
     @PostMapping("/save-config")
     public Result<Void> saveConfig(@RequestBody @Validated WechatIsvKeyConfigParam param) {

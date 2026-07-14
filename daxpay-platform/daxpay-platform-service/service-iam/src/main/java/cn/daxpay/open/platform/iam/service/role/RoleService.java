@@ -39,10 +39,6 @@ public class RoleService {
         if (roleManager.existsByCode(roleParam.getCode())) {
             throw new RoleAlreadyExistedException();
         }
-        // nameCn唯一性校验
-        if (roleManager.existsByNameCn(roleParam.getNameCn())) {
-            throw new RoleAlreadyExistedException();
-        }
         Role role = Role.init(roleParam);
         roleManager.save(role);
     }
@@ -55,10 +51,6 @@ public class RoleService {
 
         // code唯一性校验
         if (roleManager.existsByCode(roleParam.getCode(), id)) {
-            throw new RoleAlreadyExistedException();
-        }
-        // nameCn唯一性校验
-        if (roleManager.existsByNameCn(roleParam.getNameCn(), id)) {
             throw new RoleAlreadyExistedException();
         }
         // 禁止修改终端归属

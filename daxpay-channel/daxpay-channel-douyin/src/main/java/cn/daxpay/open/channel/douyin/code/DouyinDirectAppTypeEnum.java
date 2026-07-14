@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 
 /// # 抖音直连商户应用类型
 ///
-/// 定义抖音直连商户应用([cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectApp].appType)的取值范围。
+/// 定义抖音直连商户应用([cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectApp#appType])的取值范围。
 ///
 @Getter
 @RequiredArgsConstructor

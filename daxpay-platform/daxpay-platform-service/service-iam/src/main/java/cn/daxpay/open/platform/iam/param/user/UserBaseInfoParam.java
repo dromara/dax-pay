@@ -8,7 +8,6 @@ import lombok.experimental.Accessors;
 
 import java.time.LocalDate;
 
-
 @Data
 @Accessors(chain = true)
 @Schema(title = "用户基础信息")

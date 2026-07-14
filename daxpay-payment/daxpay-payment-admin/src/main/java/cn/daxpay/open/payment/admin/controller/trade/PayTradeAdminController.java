@@ -34,14 +34,14 @@ public class PayTradeAdminController {
 
     private final PayTradeAdminService payTradeAdminService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "交易查看", nameEn = "Trade View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "资金交易凭证分页")
     @GetMapping("/page")
     public Result<PageResult<PayTradeResult>> page(PageParam pageParam, PayTradeQuery query) {
         return Res.ok(payTradeAdminService.page(pageParam, query));
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "交易查看", nameEn = "Trade View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据ID查询资金交易凭证详情")
     @GetMapping("/get-by-id")
     public Result<PayTradeResult> findById(
@@ -49,7 +49,7 @@ public class PayTradeAdminController {
         return Res.ok(payTradeAdminService.findById(id));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "交易管理", nameEn = "Trade Manage")
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "同步支付状态")
     @PostMapping("/sync")
     public Result<NormalPaySyncResult> sync(
@@ -57,7 +57,7 @@ public class PayTradeAdminController {
         return Res.ok(payTradeAdminService.sync(id));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "交易管理", nameEn = "Trade Manage")
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "关闭/撤销订单")
     @PostMapping("/close")
     public Result<Void> close(

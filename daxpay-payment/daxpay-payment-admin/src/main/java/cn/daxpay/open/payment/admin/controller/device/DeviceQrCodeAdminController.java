@@ -37,15 +37,10 @@ import java.util.List;
 @RequestMapping("/admin/device/qrcode")
 @RequiredArgsConstructor
 public class DeviceQrCodeAdminController {
-    private static final String VIEW_NAME_CN = "码牌查看";
-    private static final String VIEW_NAME_EN = "QrCode View";
-    private static final String MANAGE_NAME_CN = "码牌管理";
-    private static final String MANAGE_NAME_EN = "QrCode Manage";
-
 
     private final DeviceQrCodeAdminService deviceQrCodeAdminService;
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = MANAGE_NAME_CN, nameEn = MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "批量创建空白码牌")
     @PostMapping("/create-batch")
     public Result<Void> createBatch(@RequestBody @Validated DeviceQrCodeBatchParam param) {
@@ -53,14 +48,14 @@ public class DeviceQrCodeAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = VIEW_NAME_CN, nameEn = VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "判断批次号是否已存在")
     @GetMapping("/exists-by-batch-no")
     public Result<Boolean> existsByBatchNo(@NotBlank(message = "{validation.field.batchNo.notBlank}") String batchNo) {
         return Res.ok(deviceQrCodeAdminService.existsByBatchNo(batchNo));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = MANAGE_NAME_CN, nameEn = MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "批量绑定商户")
     @PostMapping("/bind-merchant")
     public Result<Void> bindMerchant(@RequestBody @Validated DeviceQrCodeBindMerchantParam param) {
@@ -68,7 +63,7 @@ public class DeviceQrCodeAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = MANAGE_NAME_CN, nameEn = MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "批量解绑商户")
     @PostMapping("/unbind-merchant")
     public Result<Void> unbindMerchant(@RequestBody @NotEmpty(message = "{validation.field.ids.notEmpty}") List<Long> ids) {
@@ -76,7 +71,7 @@ public class DeviceQrCodeAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = MANAGE_NAME_CN, nameEn = MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "修改码牌")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) DeviceQrCodeParam param) {
@@ -84,28 +79,28 @@ public class DeviceQrCodeAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = VIEW_NAME_CN, nameEn = VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "码牌分页")
     @GetMapping("/page")
     public Result<PageResult<DeviceQrCodeResult>> page(PageParam pageParam, DeviceQrCodeQuery query) {
         return Res.ok(deviceQrCodeAdminService.page(pageParam, query));
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = VIEW_NAME_CN, nameEn = VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据id查询码牌")
     @GetMapping("/get")
     public Result<DeviceQrCodeResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(deviceQrCodeAdminService.findById(id));
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = VIEW_NAME_CN, nameEn = VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "获取码牌扫码链接")
     @GetMapping("/get-code-link")
     public Result<String> getCodeLink(@NotBlank(message = "{validation.field.code.notBlank}") String code) {
         return Res.ok(deviceQrCodeAdminService.getCodeLink(code));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = MANAGE_NAME_CN, nameEn = MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "删除码牌")
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {
@@ -113,7 +108,7 @@ public class DeviceQrCodeAdminController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = MANAGE_NAME_CN, nameEn = MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "修改码牌状态")
     @PostMapping("/change-status")
     public Result<Void> changeStatus(@NotNull(message = "{validation.field.id.notNull}") Long id,

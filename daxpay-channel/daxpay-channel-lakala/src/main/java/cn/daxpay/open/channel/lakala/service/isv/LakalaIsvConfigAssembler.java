@@ -22,9 +22,9 @@ import org.springframework.stereotype.Service;
 /// 下发给子应用 dax-pay-channel-two 发起拉卡拉 API 调用。
 ///
 /// 字段映射(对齐拉卡拉 V3 接口):
-/// - lkl_app_id ← [LakalaIsvKeyConfig.lklAppId] (拉卡拉应用编号, 全局唯一)
-/// - merchant_no ← [LakalaIsvChannelMerchant.lakalaMchNo] (拉卡拉商户号)
-/// - term_no ← [LakalaIsvChannelMerchant.termNo] (终端号)
+/// - lkl_app_id ← [LakalaIsvKeyConfig#lklAppId] (拉卡拉应用编号, 全局唯一)
+/// - merchant_no ← [LakalaIsvChannelMerchant#lakalaMchNo] (拉卡拉商户号)
+/// - term_no ← [LakalaIsvChannelMerchant#termNo] (终端号)
 /// - 私钥/公钥/证书序列号 ← [LakalaIsvKeyConfig] (服务商级, 全局唯一)
 ///
 /// 供支付策略([cn.daxpay.open.channel.lakala.strategy.*])组装通道调用凭证。

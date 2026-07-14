@@ -35,7 +35,7 @@ public class PlatformWebsiteConfigController {
         return Res.ok(platformWebsiteConfigService.findWebsiteConfig());
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "平台配置管理", nameEn = "Platform Config Manage")
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "更新站点配置")
     @PostMapping("/update")
     public Result<Void> updateWebsiteConfig(@RequestBody @Validated PlatformWebsiteConfigParam param) {

@@ -27,7 +27,7 @@ class PermCodeUtilTest {
     @RestController
     static class SampleController {
 
-        @PermCode(code = PermCodes.Action.VIEW, nameCn = "查看", nameEn = "View")
+        @PermCode(code = PermCodes.Action.VIEW)
         @GetMapping("/page")
         public void page() {
         }
@@ -36,7 +36,7 @@ class PermCodeUtilTest {
     @RestController
     static class StandaloneController {
 
-        @PermCode(code = "standalone_action", nameCn = "操作", nameEn = "Action")
+        @PermCode(code = "standalone_action")
         @GetMapping("/action")
         public void action() {
         }

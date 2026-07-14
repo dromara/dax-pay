@@ -14,9 +14,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-import static cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum.ALIPAY;
-import static cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum.WECHAT;
-
 /// # 河马付支付产品策略
 ///
 /// 声明河马付(杉德)为聚合服务商模式(ISV), 一个产品覆盖微信/支付宝两类底层渠道,
@@ -72,7 +69,7 @@ public class HmpayProductStrategy extends AbsProductStrategy {
 
     @Override
     public List<PayProviderEnum> supportedPayProviders() {
-        return List.of(WECHAT, ALIPAY);
+        return List.of(PayProviderEnum.WECHAT, PayProviderEnum.ALIPAY);
     }
 
     @Override

@@ -76,4 +76,3 @@ public class UserWholeInfoResult extends BaseResult {
     private String registerChannel;
 }
 
-

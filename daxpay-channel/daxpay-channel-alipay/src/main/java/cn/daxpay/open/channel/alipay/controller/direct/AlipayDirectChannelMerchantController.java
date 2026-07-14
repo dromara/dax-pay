@@ -1,6 +1,5 @@
 package cn.daxpay.open.channel.alipay.controller.direct;
 
-
 import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.rest.Res;
@@ -31,7 +30,7 @@ public class AlipayDirectChannelMerchantController {
 
     private final AlipayDirectChannelMerchantService alipayDirectChannelMerchantService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据通道商户号查询支付宝直连通道商户配置")
     @GetMapping("/find-by-channel-mch-no")
     public Result<AlipayDirectChannelMerchantResult> findByChannelMchNo(
@@ -39,7 +38,7 @@ public class AlipayDirectChannelMerchantController {
         return Res.ok(alipayDirectChannelMerchantService.findByChannelMchNo(channelMchNo));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.Merchant.MANAGE_NAME_CN, nameEn = PermCodes.Channel.Merchant.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "创建支付宝直连通道商户")
     @PostMapping("/create")
     public Result<Void> create(@RequestBody @Validated AlipayDirectChannelMerchantCreateParam param) {

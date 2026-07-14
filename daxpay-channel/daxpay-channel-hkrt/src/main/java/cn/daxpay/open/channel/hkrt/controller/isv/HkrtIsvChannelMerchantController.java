@@ -30,7 +30,7 @@ public class HkrtIsvChannelMerchantController {
 
     private final HkrtIsvChannelMerchantService hkrtIsvChannelMerchantService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据通道商户号查询海科融通通道商户配置")
     @GetMapping("/find-by-channel-mch-no")
     public Result<HkrtIsvChannelMerchantResult> findByChannelMchNo(
@@ -38,7 +38,7 @@ public class HkrtIsvChannelMerchantController {
         return Res.ok(hkrtIsvChannelMerchantService.findByChannelMchNo(channelMchNo));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.Merchant.MANAGE_NAME_CN, nameEn = PermCodes.Channel.Merchant.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "创建海科融通通道商户")
     @PostMapping("/create")
     public Result<Void> create(@RequestBody @Validated HkrtIsvChannelMerchantCreateParam param) {
@@ -46,7 +46,7 @@ public class HkrtIsvChannelMerchantController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.Merchant.MANAGE_NAME_CN, nameEn = PermCodes.Channel.Merchant.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "更新SAAS终端号")
     @PostMapping("/update-pn")
     public Result<Void> updatePn(

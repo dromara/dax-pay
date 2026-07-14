@@ -6,7 +6,7 @@ import java.util.Map;
 
 /// # 微信应用类型与支付能力映射
 ///
-/// 定义微信应用类型([cn.daxpay.open.channel.wechat.entity.isv.WechatIsvApp].appType)常量，
+/// 定义微信应用类型([cn.daxpay.open.channel.wechat.entity.isv.WechatIsvApp#appType])常量，
 /// 以及支付能力(PayCapabilityEnum)到应用类型的默认推导关系。
 ///
 /// 当未显式配置「能力→应用」关联时，[cn.daxpay.open.channel.wechat.service.isv.WechatIsvAppCapabilityService]

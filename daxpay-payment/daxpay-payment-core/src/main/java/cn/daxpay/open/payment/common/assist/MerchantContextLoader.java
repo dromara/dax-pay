@@ -18,8 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
-
-import static java.util.Optional.ofNullable;
+import java.util.Optional;
 
 /// # 商户上下文装载器（多端共用）
 ///
@@ -61,7 +60,7 @@ public class MerchantContextLoader {
         if (Objects.equals(clientCodeService.getClientCode(), ClientEnum.MERCHANT.getCode())) {
             mchNo = paymentContext.getMchNo();
         }
-        var merchant = ofNullable(merchantAccessPort.getMerchantByMchNo(mchNo))
+        var merchant = Optional.ofNullable(merchantAccessPort.getMerchantByMchNo(mchNo))
                 // 未找到指定的商户配置
                 .orElseThrow(() -> new ConfigNotEnableException("error.payment.merchant.specifiedMchConfigNotFound"));
         // 商户状态校验
@@ -78,11 +77,11 @@ public class MerchantContextLoader {
         MchAppInfoAccessInfo mchApp;
         if (StrUtil.isBlank(appId)) {
             // appId 为空,取商户默认应用
-            mchApp = ofNullable(merchantAccessPort.getDefaultAppByMchNo(mchNo))
+            mchApp = Optional.ofNullable(merchantAccessPort.getDefaultAppByMchNo(mchNo))
                     // 未找到商户默认应用配置
                     .orElseThrow(() -> new ConfigNotEnableException("error.payment.merchant.defaultAppConfigNotFound"));
         } else {
-            mchApp = ofNullable(merchantAccessPort.getAppByAppId(appId))
+            mchApp = Optional.ofNullable(merchantAccessPort.getAppByAppId(appId))
                     // 未找到指定的应用配置
                     .orElseThrow(() -> new ConfigNotEnableException("error.payment.merchant.specifiedAppConfigNotFound"));
         }
@@ -102,7 +101,7 @@ public class MerchantContextLoader {
     /// 按应用号反推商户身份并初始化(应用号已知、商户号未知的场景,如渠道配置/通道认证)。
     /// 商户端会校验应用归属当前登录商户。
     public void initMchByApp(String appId) {
-        var mchApp = ofNullable(merchantAccessPort.getAppByAppId(appId))
+        var mchApp = Optional.ofNullable(merchantAccessPort.getAppByAppId(appId))
                 // 未找到指定的应用配置
                 .orElseThrow(() -> new ConfigNotEnableException("error.payment.merchant.specifiedAppConfigNotFound"));
         // 应用状态校验

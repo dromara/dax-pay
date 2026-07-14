@@ -59,7 +59,6 @@ public class StorageClientService {
     /// AWS SDK要求必须设置region，但对于MinIO等S3兼容存储，此值不影响实际功能。
     private static final String DEFAULT_REGION = "us-east-1";
 
-
     /// 获取S3客户端
     ///
     /// 采用双重检查锁定模式实现懒加载，确保线程安全。
@@ -184,6 +183,4 @@ public class StorageClientService {
     }
 
 }
-
-
 

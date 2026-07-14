@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 /// # 忽略租户(商户)数据权限切面
 ///
-/// 与 [MpUtil.ignoreTenant]/[MpUtil.clearIgnoreTenant] 的线程内引用计数配合，
+/// 与 [MpUtil#ignoreTenant]/[MpUtil#clearIgnoreTenant] 的线程内引用计数配合，
 /// 支持 `@IgnoreTenant` 嵌套：内层返回后不会清掉外层 ignore，直到最外层 finally 才恢复过滤。
 ///
 @Slf4j

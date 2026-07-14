@@ -36,7 +36,7 @@ public class AdapayDirectChannelMerchantController {
     private final AdapayDirectChannelMerchantService adapayDirectChannelMerchantService;
     private final AdapayDirectKeyConfigService adapayDirectKeyConfigService;
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.Merchant.MANAGE_NAME_CN, nameEn = PermCodes.Channel.Merchant.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "创建Adapay 直连通道商户")
     @PostMapping("/create")
     public Result<Void> create(@RequestBody @Validated AdapayDirectChannelMerchantCreateParam param) {
@@ -44,7 +44,7 @@ public class AdapayDirectChannelMerchantController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据通道商户号查询密钥配置")
     @GetMapping("/find-key-config")
     public Result<AdapayDirectKeyConfigResult> findKeyConfig(
@@ -57,7 +57,7 @@ public class AdapayDirectChannelMerchantController {
         return Res.ok(result);
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.Merchant.MANAGE_NAME_CN, nameEn = PermCodes.Channel.Merchant.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "保存密钥配置")
     @PostMapping("/save-key-config")
     public Result<Void> saveKeyConfig(@RequestBody @Validated AdapayDirectKeyConfigParam param) {

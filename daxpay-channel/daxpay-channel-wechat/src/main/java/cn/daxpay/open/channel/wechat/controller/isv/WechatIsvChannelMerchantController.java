@@ -1,6 +1,5 @@
 package cn.daxpay.open.channel.wechat.controller.isv;
 
-
 import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.rest.Res;
@@ -32,7 +31,7 @@ public class WechatIsvChannelMerchantController {
 
     private final WechatIsvChannelMerchantService wechatIsvChannelMerchantService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据通道商户号查询微信服务商通道商户配置")
     @GetMapping("/find-by-channel-mch-no")
     public Result<WechatIsvChannelMerchantResult> findByChannelMchNo(
@@ -40,7 +39,7 @@ public class WechatIsvChannelMerchantController {
         return Res.ok(wechatIsvChannelMerchantService.findByChannelMchNo(channelMchNo));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.Merchant.MANAGE_NAME_CN, nameEn = PermCodes.Channel.Merchant.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "创建微信服务商通道商户")
     @PostMapping("/create")
     public Result<Void> create(@RequestBody @Validated WechatIsvChannelMerchantCreateParam param) {
@@ -48,7 +47,7 @@ public class WechatIsvChannelMerchantController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.Merchant.MANAGE_NAME_CN, nameEn = PermCodes.Channel.Merchant.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "更新认证应用类型")
     @PostMapping("/update-auth-app-type")
     public Result<Void> updateAuthAppType(@RequestBody @Validated WechatIsvAuthAppTypeUpdateParam param) {

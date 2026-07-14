@@ -21,11 +21,8 @@ public class Role extends MpBaseEntity implements ToResult<RoleResult> {
     /// 编码
     private String code;
 
-    /// 中文名称
-    private String nameCn;
-
-    /// 英文名称
-    private String nameEn;
+    /// 国际化key（有值时走语言包翻译）
+    private String i18nKey;
 
     /// 身份域终端编码: admin / merchant / gateway
     private String clientCode;

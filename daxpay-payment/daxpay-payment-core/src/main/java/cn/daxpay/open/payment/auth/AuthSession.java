@@ -16,21 +16,21 @@ public class AuthSession {
     ///
     /// 该标记表示本次认证使用平台级 `PlatformAlipayAuthConfig` 用授权码换 openId,
     /// 而非商户级支付产品策略。由 [PlatformAuthService] 在 generateAlipayAuthUrl 时写入,
-    /// 认证分发层据此走平台级支付宝授权回调分支([PlatformAuthService.authAlipay])。
+    /// 认证分发层据此走平台级支付宝授权回调分支([PlatformAuthService#authAlipay])。
     public static final String SOURCE_PLATFORM_ALIPAY = "platform_alipay";
 
     /// 认证来源: 平台级微信公众号配置(系统公众号配置调试场景)
     ///
     /// 该标记表示本次认证使用平台级 `PlatformWechatMpAuthConfig`(appId/appSecret) 用授权码换 openId,
     /// 而非商户级支付产品策略。由 [PlatformAuthService] 在 generateWechatMpAuthUrl 时写入,
-    /// 认证分发层据此走平台级微信授权回调分支([PlatformAuthService.authWechatMp])。
+    /// 认证分发层据此走平台级微信授权回调分支([PlatformAuthService#authWechatMp])。
     public static final String SOURCE_PLATFORM_MP = "platform_mp";
 
     /// 认证来源: 平台级抖音 H5 应用配置(抖音支付调试场景)
     ///
     /// 该标记表示本次认证使用平台级 `PlatformDouyinH5AuthConfig`(clientKey/clientSecret) 用授权码换 openId,
     /// 通过抖音开放平台 silent_auth 静默授权获取 openId。由 [PlatformAuthService] 在
-    /// generateDouyinAuthUrl 时写入, 认证分发层据此走平台级抖音授权回调分支([PlatformAuthService.authDouyin])。
+    /// generateDouyinAuthUrl 时写入, 认证分发层据此走平台级抖音授权回调分支([PlatformAuthService#authDouyin])。
     public static final String SOURCE_PLATFORM_DOUYIN = "platform_douyin";
 
     /// 认证来源

@@ -14,10 +14,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-import static cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum.ALIPAY;
-import static cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum.UNION_PAY;
-import static cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum.WECHAT;
-
 /// # 随行付支付产品策略
 ///
 /// 声明随行付(天阙科技)聚合通道支持的服务商模式 + 微信/支付宝/银联 的 JSAPI/扫码/付款码/小程序收银台。
@@ -66,7 +62,7 @@ public class VbillProductStrategy extends AbsProductStrategy {
 
     @Override
     public List<PayProviderEnum> supportedPayProviders() {
-        return List.of(WECHAT, ALIPAY, UNION_PAY);
+        return List.of(PayProviderEnum.WECHAT, PayProviderEnum.ALIPAY, PayProviderEnum.UNION_PAY);
     }
 
     @Override

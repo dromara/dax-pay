@@ -25,12 +25,6 @@ public class PermMenuResult {
     @Schema(description = "关联终端code")
     private String clientCode;
 
-    @Schema(description = "菜单标题-中文")
-    private String titleCn;
-
-    @Schema(description = "菜单标题-英文")
-    private String titleEn;
-
     @Schema(description = "国际化key")
     private String i18nKey;
 

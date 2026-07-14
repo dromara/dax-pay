@@ -1,6 +1,5 @@
 package cn.daxpay.open.platform.system.controller.config.auth;
 
-
 import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.rest.Res;
@@ -33,14 +32,14 @@ public class PlatformDouyinH5AuthConfigController {
 
     private final PlatformDouyinH5AuthConfigService platformDouyinH5AuthConfigService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Iam.Social.VIEW_NAME_CN, nameEn = PermCodes.Iam.Social.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "获取抖音 H5 应用认证配置")
     @GetMapping("/get")
     public Result<PlatformDouyinH5AuthConfigResult> getDouyinH5AuthConfig() {
         return Res.ok(platformDouyinH5AuthConfigService.findDouyinH5AuthConfig());
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Iam.Social.MANAGE_NAME_CN, nameEn = PermCodes.Iam.Social.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "更新抖音 H5 应用认证配置")
     @PostMapping("/update")
     public Result<Void> updateDouyinH5AuthConfig(@RequestBody @Validated PlatformDouyinH5AuthConfigParam param) {

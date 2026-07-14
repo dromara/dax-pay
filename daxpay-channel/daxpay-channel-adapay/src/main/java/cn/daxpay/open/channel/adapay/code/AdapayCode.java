@@ -32,7 +32,7 @@ public interface AdapayCode {
     String REFUND_STATUS_FAIL = "FAIL";
 
     /// Adapay 平台公钥(控制台可见, 用于回调响应验签, RSA X509 Base64 字符串)
-    /// 与子应用 [cn.daxpay.open.channel.adapay.code.AdapayCode.PLATFORM_PUBLIC_KEY] 一致
+    /// 与子应用 [cn.daxpay.open.channel.adapay.code.AdapayCode#PLATFORM_PUBLIC_KEY] 一致
     String PLATFORM_PUBLIC_KEY =
             "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCwN6xgd6Ad8v2hIIsQVnbt8a3JituR8o4Tc3B5WlcFR55bz4OMqrG/356Ur3cPbc2Fe8ArNd/0gZbC9q56Eb16JTkVNA/fye4SXznWxdyBPR7+guuJZHc/VW2fKH2lfZ2P3Tt0QkKZZoawYOGSMdIvO+WqK44updyax0ikK6JlNQIDAQAB";
 }

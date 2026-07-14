@@ -33,21 +33,21 @@ public class AppAdminChannelMerchantController {
 
     private final AppAdminChannelMerchantService channelMerchantService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "分页查询")
     @GetMapping("/page")
     public Result<PageResult<ChannelMerchantResult>> page(PageParam pageParam, ChannelMerchantQuery query) {
         return Res.ok(channelMerchantService.page(pageParam, query));
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "查询详情")
     @GetMapping("/get")
     public Result<ChannelMerchantResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(channelMerchantService.findById(id));
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据商户号查询所有通道商户")
     @GetMapping("/all-by-mch-no")
     public Result<List<ChannelMerchantResult>> findAllByMchNo(
@@ -55,7 +55,7 @@ public class AppAdminChannelMerchantController {
         return Res.ok(channelMerchantService.findAllByMchNo(mchNo));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.Merchant.MANAGE_NAME_CN, nameEn = PermCodes.Channel.Merchant.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "更新启用状态")
     @PostMapping("/update-enable")
     public Result<Void> updateEnable(
@@ -65,7 +65,7 @@ public class AppAdminChannelMerchantController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.Merchant.MANAGE_NAME_CN, nameEn = PermCodes.Channel.Merchant.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "修改商户名称")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated ChannelMerchantEditParam param) {
@@ -73,7 +73,7 @@ public class AppAdminChannelMerchantController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据商户和通道查询通道商户号列表")
     @GetMapping("/dropdown")
     public Result<List<LabelValue>> dropdown(
@@ -82,7 +82,7 @@ public class AppAdminChannelMerchantController {
         return Res.ok(channelMerchantService.dropdown(mchNo, channel));
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据商户号查询通道")
     @GetMapping("/channel/dropdown-by-mch-no")
     public Result<List<PayChannelResult>> dropdownByMchNo(

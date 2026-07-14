@@ -14,10 +14,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-import static cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum.ALIPAY;
-import static cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum.UNION_PAY;
-import static cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum.WECHAT;
-
 /// # 拉卡拉支付产品策略
 ///
 @Slf4j
@@ -60,7 +56,7 @@ public class LakalaProductStrategy extends AbsProductStrategy {
 
     @Override
     public List<PayProviderEnum> supportedPayProviders() {
-        return List.of(WECHAT, ALIPAY, UNION_PAY);
+        return List.of(PayProviderEnum.WECHAT, PayProviderEnum.ALIPAY, PayProviderEnum.UNION_PAY);
     }
 
     @Override

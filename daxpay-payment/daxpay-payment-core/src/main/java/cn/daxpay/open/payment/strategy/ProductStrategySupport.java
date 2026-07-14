@@ -55,7 +55,6 @@ public class ProductStrategySupport {
         return List.copyOf(capabilities);
     }
 
-
     /// 产品是否支持渠道目录中的某一支付方式
     public boolean supportsDirectoryMethod(AbsProductStrategy strategy, PayMethodEnum method) {
         return !capabilitiesForMethod(strategy, method).isEmpty();

@@ -21,7 +21,6 @@ public class DangerSqlException extends BizException {
         initMessageKey("error.common.dangerSql");
     }
 
-
     public DangerSqlException(int code, String messageKey, Object... args) {
         super(code, messageKey, args);
     }

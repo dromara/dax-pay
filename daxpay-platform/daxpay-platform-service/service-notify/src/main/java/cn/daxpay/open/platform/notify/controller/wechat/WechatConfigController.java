@@ -29,14 +29,14 @@ public class WechatConfigController {
 
     private final PlatformWechatNotifyConfigService wechatNotifyConfigService;
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "微信消息通知管理", nameEn = "Wechat Message Notify Manage")
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "查询配置")
     @GetMapping("/find")
     public Result<PlatformWechatNotifyConfigResult> find() {
         return Res.ok(wechatNotifyConfigService.findConfig());
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "微信消息通知管理", nameEn = "Wechat Message Notify Manage")
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "更新配置")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody PlatformWechatNotifyConfigParam param) {

@@ -16,7 +16,6 @@ public class UserNotFoundException extends LoginFailureException {
         initMessageKey("error.auth.userNotFound");
     }
 
-
     public UserNotFoundException(int code, String messageKey, Object... args) {
         super(code, messageKey, args);
     }

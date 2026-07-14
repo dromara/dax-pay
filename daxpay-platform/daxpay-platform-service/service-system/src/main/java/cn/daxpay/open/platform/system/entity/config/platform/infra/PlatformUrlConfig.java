@@ -7,7 +7,7 @@ import lombok.experimental.Accessors;
 /// # 平台端点配置
 ///
 /// 各端(管理端/商户端/支付网关/后端 API)的访问地址, 用于第三方登录回调 URL 自动生成、
-/// 支付回调地址拼接等场景. 全局唯一, 通过 [PlatformConfigTypeEnum.URL] 存储于系统配置表.
+/// 支付回调地址拼接等场景. 全局唯一, 通过 [PlatformConfigTypeEnum#URL] 存储于系统配置表.
 ///
 /// getter 会自动去除 URL 尾部斜杠, 方便后续拼接路径.
 ///

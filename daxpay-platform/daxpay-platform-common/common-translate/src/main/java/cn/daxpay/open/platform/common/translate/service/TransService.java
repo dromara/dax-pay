@@ -162,11 +162,10 @@ public class TransService {
             if (itemData == null) {
                 continue;
             }
-            // 根据当前请求语言选择对应的语言字段
-            String resultField = resolveLocaleAwareField(info.annotation().result());
-            String translatedValue = itemData.get(resultField);
-            if (translatedValue != null) {
-                setFieldValue(info.result(), info.field(), translatedValue);
+            // 走 i18n key 语言包翻译
+            if (itemData.i18nKey() != null && !itemData.i18nKey().isBlank()) {
+                String translated = I18nUtil.get(itemData.i18nKey());
+                setFieldValue(info.result(), info.field(), translated);
             }
         }
     }
@@ -186,23 +185,6 @@ public class TransService {
             String translated = I18nUtil.get(key);
             setFieldValue(info.result(), info.field(), translated);
         }
-    }
-
-    /// 根据当前请求语言解析多语言字段名
-    /// 规则：
-    /// - result="nameCn" 或 "nameEn" → 显式指定了语言，按指定字段名取值，不切换
-    /// - result="name" 或其他通用名 → 根据 Accept-Language 自动选择 nameEn/nameCn
-    private String resolveLocaleAwareField(String resultField) {
-        // 显式指定了中/英文，按开发者意图走，不切换
-        if ("nameCn".equals(resultField) || "nameEn".equals(resultField)) {
-            return resultField;
-        }
-        // 通用字段名，根据请求语言自动选择
-        Locale locale = LocaleContextHolder.getLocale();
-        if (locale.getLanguage().equals(Locale.ENGLISH.getLanguage())) {
-            return "nameEn";
-        }
-        return "nameCn";
     }
 
     /// 回填实体翻译结果

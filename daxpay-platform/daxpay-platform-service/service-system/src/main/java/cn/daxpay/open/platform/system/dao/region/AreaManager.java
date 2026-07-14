@@ -23,4 +23,3 @@ public class AreaManager extends BaseManager<AreaMapper, Area> {
 
 }
 
-

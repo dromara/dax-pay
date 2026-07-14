@@ -41,8 +41,6 @@ public class MerchantInfoResult extends BaseResult implements ToResult<MerchantI
     @Schema(description = "主体类型")
     private String subjectType;
 
-
-
     /// 商户状态
     /// @see MerchantStatusEnum
     @Schema(description = "商户状态")

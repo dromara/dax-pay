@@ -31,12 +31,6 @@ public class PermMenu extends MpBaseEntity implements ToResult<PermMenuResult> {
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private String clientCode;
 
-    /// 菜单标题-中文
-    private String titleCn;
-
-    /// 菜单标题-英文
-    private String titleEn;
-
     /// 国际化key
     private String i18nKey;
 

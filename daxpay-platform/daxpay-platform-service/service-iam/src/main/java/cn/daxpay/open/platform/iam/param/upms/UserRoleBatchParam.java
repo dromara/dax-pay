@@ -7,7 +7,6 @@ import lombok.Data;
 
 import java.util.List;
 
-
 @Data
 @Schema(title = "用户角色批量分配参数")
 public class UserRoleBatchParam {

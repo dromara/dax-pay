@@ -11,11 +11,10 @@ import java.util.Map;
 public interface DictTranslator {
 
     /// 根据字典编码获取所有字典项的多语言数据
-    /// 返回的 DictItemData 中包含各语言名称，翻译引擎按 @Trans.result 提取对应语言值
+    /// 返回的 DictItemData 包含 i18nKey（优先）和 nameCn/nameEn（fallback）
     ///
     /// @param dictCode 字典编码
-    /// @return code -> DictItemData 的映射（如 {"01": {nameCn="微信支付", nameEn="WeChat Pay"}}）
+    /// @return code -> DictItemData 的映射
     Map<String, DictItemData> findByDictCode(String dictCode);
 }
-
 

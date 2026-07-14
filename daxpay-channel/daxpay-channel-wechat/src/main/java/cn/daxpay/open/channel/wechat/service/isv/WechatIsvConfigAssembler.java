@@ -21,13 +21,13 @@ import java.util.Optional;
 /// 下发给子应用构建 WxJava 服务商模式 [com.github.binarywang.wxpay.service.WxPayService]。
 ///
 /// 字段映射(对齐微信支付 V3 服务商接口):
-/// - sp_mchid ← [WechatIsvKeyConfig.wxMchId] (服务商商户号, 全局唯一)
-/// - sp_appid ← [WechatIsvApp.wxAppId] (服务商应用AppId, 按能力解析)
-/// - sub_mchid ← [WechatIsvChannelMerchant.subMchId] (特约商户号)
-/// - sub_appid ← [WechatIsvMchApp.wxAppId] (子商户应用AppId, 可选; 未配置留空)
+/// - sp_mchid ← [WechatIsvKeyConfig#wxMchId] (服务商商户号, 全局唯一)
+/// - sp_appid ← [WechatIsvApp#wxAppId] (服务商应用AppId, 按能力解析)
+/// - sub_mchid ← [WechatIsvChannelMerchant#subMchId] (特约商户号)
+/// - sub_appid ← [WechatIsvMchApp#wxAppId] (子商户应用AppId, 可选; 未配置留空)
 ///
-/// 服务商应用解析(委托 [WechatIsvAppCapabilityService.resolveApp]): 显式配置 > appType自动推导 > 首个兜底。
-/// 子商户应用解析(委托 [WechatIsvMchAppCapabilityService.resolveApp]): 仅显式配置, 未配置返回 empty(sub_appid 留空)。
+/// 服务商应用解析(委托 [WechatIsvAppCapabilityService#resolveApp]): 显式配置 > appType自动推导 > 首个兜底。
+/// 子商户应用解析(委托 [WechatIsvMchAppCapabilityService#resolveApp]): 仅显式配置, 未配置返回 empty(sub_appid 留空)。
 ///
 /// 供支付策略([cn.daxpay.open.channel.wechat.strategy.isv.*])组装通道调用凭证。
 @Slf4j

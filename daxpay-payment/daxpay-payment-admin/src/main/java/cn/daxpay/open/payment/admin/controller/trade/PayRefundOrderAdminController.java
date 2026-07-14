@@ -35,14 +35,14 @@ public class PayRefundOrderAdminController {
 
     private final PayRefundOrderAdminService payRefundOrderAdminService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "退款查看", nameEn = "Refund View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "退款订单分页")
     @GetMapping("/page")
     public Result<PageResult<PayRefundOrderResult>> page(PageParam pageParam, PayRefundOrderQuery query) {
         return Res.ok(payRefundOrderAdminService.page(pageParam, query));
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "退款查看", nameEn = "Refund View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据ID查询退款订单详情")
     @GetMapping("/get-by-id")
     public Result<PayRefundOrderResult> findById(
@@ -50,14 +50,14 @@ public class PayRefundOrderAdminController {
         return Res.ok(payRefundOrderAdminService.findById(id));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "退款管理", nameEn = "Refund Manage")
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "发起退款")
     @PostMapping("/refund")
     public Result<PayRefundOrderResult> refund(@Valid @RequestBody PayRefundParam param) {
         return Res.ok(payRefundOrderAdminService.refund(param));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "退款管理", nameEn = "Refund Manage")
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "同步退款状态")
     @PostMapping("/sync")
     public Result<PayRefundOrderResult> sync(

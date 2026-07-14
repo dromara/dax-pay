@@ -26,7 +26,7 @@ public class MchAppNotifyConfigAdminController {
 
     private final MchAppNotifyConfigService notifyConfigService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Merchant.NotifyConfig.VIEW_NAME_CN, nameEn = PermCodes.Merchant.NotifyConfig.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据应用ID查询通知配置")
     @GetMapping("/get-by-app-id")
     public Result<MchAppNotifyConfigResult> findByAppId(
@@ -34,7 +34,7 @@ public class MchAppNotifyConfigAdminController {
         return Res.ok(notifyConfigService.findByAppId(appId));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Merchant.NotifyConfig.MANAGE_NAME_CN, nameEn = PermCodes.Merchant.NotifyConfig.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "保存或更新通知配置")
     @PostMapping("/save-or-update")
     public Result<Void> saveOrUpdate(@RequestBody @Validated MchAppNotifyConfigParam param) {

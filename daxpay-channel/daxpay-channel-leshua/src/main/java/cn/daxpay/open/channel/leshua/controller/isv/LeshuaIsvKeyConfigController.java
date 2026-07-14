@@ -31,7 +31,7 @@ public class LeshuaIsvKeyConfigController {
 
     private final LeshuaIsvKeyConfigService leshuaIsvKeyConfigService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Payment.Isv.VIEW_NAME_CN, nameEn = PermCodes.Payment.Isv.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "查询乐刷服务商密钥配置")
     @GetMapping("/find-config")
     public Result<LeshuaIsvKeyConfigResult> findConfig(
@@ -40,7 +40,7 @@ public class LeshuaIsvKeyConfigController {
         return Res.ok(LeshuaIsvKeyConfigConvert.CONVERT.toResult(leshuaIsvKeyConfigService.findByProduct(product, sandbox)));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Payment.Isv.MANAGE_NAME_CN, nameEn = PermCodes.Payment.Isv.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "保存乐刷服务商密钥配置")
     @PostMapping("/save-config")
     public Result<Void> saveConfig(@RequestBody @Validated LeshuaIsvKeyConfigParam param) {

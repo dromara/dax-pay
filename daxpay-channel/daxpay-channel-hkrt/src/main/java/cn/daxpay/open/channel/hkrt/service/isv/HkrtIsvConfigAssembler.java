@@ -23,8 +23,8 @@ import org.springframework.stereotype.Service;
 ///
 /// 字段映射(对齐海科融通接口):
 /// - agent_no / access_id / access_key ← [HkrtIsvKeyConfig](服务商级, 全局唯一)
-/// - merch_no ← [HkrtIsvChannelMerchant.merchNo](海科商户号)
-/// - pn ← [HkrtIsvChannelMerchant.pn](SAAS 终端号)
+/// - merch_no ← [HkrtIsvChannelMerchant#merchNo](海科商户号)
+/// - pn ← [HkrtIsvChannelMerchant#pn](SAAS 终端号)
 ///
 /// 供支付策略([cn.daxpay.open.channel.hkrt.strategy.*])组装通道调用凭证。
 @Slf4j

@@ -14,8 +14,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-import static cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum.ALIPAY;
-
 /// # 支付宝服务商产品策略
 ///
 /// 支付宝服务商(ISV)模式的支付产品策略，定义支持条码、扫码、JSAPI、小程序、PC、H5和APP等全部支付方式，使用服务商API调用模式。
@@ -54,7 +52,7 @@ public class AlipayIsvProductStrategy extends AbsProductStrategy {
 
     @Override
     public List<PayProviderEnum> supportedPayProviders() {
-        return List.of(ALIPAY);
+        return List.of(PayProviderEnum.ALIPAY);
     }
 
     @Override

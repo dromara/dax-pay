@@ -92,8 +92,7 @@ public class RoleUnifiedAssignService {
                     .setPid(menu.getPid())
                     .setMenuCode(menu.getMenuCode())
                     .setClientCode(menu.getClientCode())
-                    .setTitleCn(menu.getTitleCn())
-                    .setTitleEn(menu.getTitleEn())
+                    .setI18nKey(menu.getI18nKey())
                     .setMenuType(menu.getMenuType())
                     .setSortNo(menu.getSortNo())
                     .setChildren(new ArrayList<>());
@@ -116,12 +115,9 @@ public class RoleUnifiedAssignService {
                         .setPid(menu.getId())
                         .setCodeId(code.getId())
                         .setCode(code.getCode())
-                        .setNameCn(code.getNameCn())
-                        .setNameEn(code.getNameEn())
+                        .setI18nKey(code.getI18nKey())
                         .setMenuCode(code.getMenuCode())
                         .setClientCode(menu.getClientCode())
-                        .setTitleCn(code.getNameCn())
-                        .setTitleEn(code.getNameEn())
                         .setSortNo(menu.getSortNo())
                         .setChildren(new ArrayList<>());
                 allNodes.add(codeNode);

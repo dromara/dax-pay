@@ -12,8 +12,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-import static cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum.UNION_PAY;
-
 /// # 银联商务B扫C支付（被扫）产品策略
 ///
 @Slf4j
@@ -37,7 +35,7 @@ public class UmsBarcodeProductStrategy extends AbsProductStrategy {
 
     @Override
     public List<PayProviderEnum> supportedPayProviders() {
-        return List.of(UNION_PAY);
+        return List.of(PayProviderEnum.UNION_PAY);
     }
 
     @Override

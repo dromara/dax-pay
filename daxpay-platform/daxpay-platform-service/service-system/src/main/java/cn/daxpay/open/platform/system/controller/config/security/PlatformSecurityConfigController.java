@@ -1,6 +1,5 @@
 package cn.daxpay.open.platform.system.controller.config.security;
 
-
 import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.open.platform.core.annotation.PermCode;
@@ -27,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
 public class PlatformSecurityConfigController {
     private final PlatformSecurityConfigService platformSecurityConfigService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "安全配置查看", nameEn = "Security View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "获取密码策略配置")
     @GetMapping("/password-policy/get")
     public Result<PlatformPasswordPolicyConfigResult> getPasswordPolicyConfig() {
@@ -41,7 +40,7 @@ public class PlatformSecurityConfigController {
         return Res.ok(platformSecurityConfigService.findPasswordPolicyConfig());
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "安全配置管理", nameEn = "Security Manage")
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "更新密码策略配置")
     @PostMapping("/password-policy/update")
     public Result<Void> updatePasswordPolicyConfig(@RequestBody @Validated PlatformPasswordPolicyConfigParam param) {
@@ -49,14 +48,14 @@ public class PlatformSecurityConfigController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "安全配置查看", nameEn = "Security View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "获取登录安全配置")
     @GetMapping("/login/get")
     public Result<PlatformLoginSecurityConfigResult> getLoginSecurityConfig() {
         return Res.ok(platformSecurityConfigService.findLoginSecurityConfig());
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "安全配置管理", nameEn = "Security Manage")
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "更新登录安全配置")
     @PostMapping("/login/update")
     public Result<Void> updateLoginSecurityConfig(@RequestBody @Validated PlatformLoginSecurityConfigParam param) {
@@ -64,14 +63,14 @@ public class PlatformSecurityConfigController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "安全配置查看", nameEn = "Security View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "获取会话管理配置")
     @GetMapping("/session/get")
     public Result<PlatformSessionManagementConfigResult> getSessionManagementConfig() {
         return Res.ok(platformSecurityConfigService.findSessionManagementConfig());
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "安全配置管理", nameEn = "Security Manage")
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "更新会话管理配置")
     @PostMapping("/session/update")
     public Result<Void> updateSessionManagementConfig(@RequestBody @Validated PlatformSessionManagementConfigParam param) {
@@ -79,14 +78,14 @@ public class PlatformSecurityConfigController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "安全配置查看", nameEn = "Security View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "获取双因素认证配置")
     @GetMapping("/two-factor-auth/get")
     public Result<PlatformTwoFactorAuthConfigResult> getTwoFactorAuthConfig() {
         return Res.ok(platformSecurityConfigService.findTwoFactorAuthConfig());
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "安全配置管理", nameEn = "Security Manage")
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "更新双因素认证配置")
     @PostMapping("/two-factor-auth/update")
     public Result<Void> updateTwoFactorAuthConfig(@RequestBody @Validated PlatformTwoFactorAuthConfigParam param) {

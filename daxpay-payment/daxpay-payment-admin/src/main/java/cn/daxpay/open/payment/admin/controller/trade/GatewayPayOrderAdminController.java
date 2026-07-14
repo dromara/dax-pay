@@ -28,14 +28,14 @@ public class GatewayPayOrderAdminController {
 
     private final GatewayPayOrderAdminService gatewayPayOrderAdminService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Trade.GatewayOrder.VIEW_NAME_CN, nameEn = PermCodes.Trade.GatewayOrder.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "网关支付业务单分页")
     @GetMapping("/page")
     public Result<PageResult<GatewayPayOrderResult>> page(PageParam pageParam, GatewayPayOrderQuery query) {
         return Res.ok(gatewayPayOrderAdminService.page(pageParam, query));
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Trade.GatewayOrder.VIEW_NAME_CN, nameEn = PermCodes.Trade.GatewayOrder.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据ID查询详情")
     @GetMapping("/get-by-id")
     public Result<GatewayPayOrderResult> findById(
@@ -43,7 +43,7 @@ public class GatewayPayOrderAdminController {
         return Res.ok(gatewayPayOrderAdminService.findById(id));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Trade.GatewayOrder.MANAGE_NAME_CN, nameEn = PermCodes.Trade.GatewayOrder.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "同步支付状态")
     @PostMapping("/sync")
     public Result<NormalPaySyncResult> sync(
@@ -51,7 +51,7 @@ public class GatewayPayOrderAdminController {
         return Res.ok(gatewayPayOrderAdminService.sync(id));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Trade.GatewayOrder.MANAGE_NAME_CN, nameEn = PermCodes.Trade.GatewayOrder.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "关闭订单")
     @PostMapping("/close")
     public Result<Void> close(

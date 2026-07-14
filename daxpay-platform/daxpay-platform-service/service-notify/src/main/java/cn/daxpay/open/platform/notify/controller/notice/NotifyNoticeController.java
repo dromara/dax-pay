@@ -1,6 +1,5 @@
 package cn.daxpay.open.platform.notify.controller.notice;
 
-
 import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.rest.Res;
@@ -35,7 +34,7 @@ public class NotifyNoticeController {
 
     private final NotifyNoticeService noticeService;
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "公告管理", nameEn = "Notice Manage")
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "新建公告")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody NotifyNoticeParam param) {
@@ -44,7 +43,7 @@ public class NotifyNoticeController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "公告管理", nameEn = "Notice Manage")
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "编辑公告")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody NotifyNoticeParam param) {
@@ -53,7 +52,7 @@ public class NotifyNoticeController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "公告管理", nameEn = "Notice Manage")
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "删除公告")
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {
@@ -61,7 +60,7 @@ public class NotifyNoticeController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.PUBLISH, nameCn = "公告发布", nameEn = "Notice Publish")
+    @PermCode(code = PermCodes.Action.PUBLISH)
     @Operation(summary = "发布公告")
     @PostMapping("/publish")
     public Result<Void> publish(@NotNull(message = "{validation.field.id.notNull}") Long id) {
@@ -69,7 +68,7 @@ public class NotifyNoticeController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.PUBLISH, nameCn = "公告发布", nameEn = "Notice Publish")
+    @PermCode(code = PermCodes.Action.PUBLISH)
     @Operation(summary = "下线公告")
     @PostMapping("/offline")
     public Result<Void> offline(@NotNull(message = "{validation.field.id.notNull}") Long id) {
@@ -77,14 +76,14 @@ public class NotifyNoticeController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "公告查看", nameEn = "Notice View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "公告详情")
     @GetMapping("/get")
     public Result<NotifyNoticeResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(noticeService.findById(id));
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "公告查看", nameEn = "Notice View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "公告分页")
     @GetMapping("/page")
     public Result<PageResult<NotifyNoticeResult>> page(PageParam pageParam, NotifyNoticeQuery query) {

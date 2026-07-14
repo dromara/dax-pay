@@ -4,7 +4,6 @@ package cn.daxpay.open.platform.capability.cache.notify.support;
 ///
 public interface CacheTopicConstants {
 
-
     /// 缓存失效通知 Topic
     String TOPIC = "cache-invalidation-topic";
 

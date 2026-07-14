@@ -32,14 +32,14 @@ public class PayProviderController {
 
     private final PayProviderService payProviderService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "品牌目录查看", nameEn = "Brand Method Directory View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "按支付渠道分组查询支付方式列表")
     @GetMapping("/list-by-provider")
     public Result<List<PayProviderGroupResult>> listByProvider() {
         return Res.ok(payProviderService.listByProvider());
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = "支付渠道管理", nameEn = "Provider Manage")
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "切换支付渠道启停")
     @PostMapping("/switch-enabled")
     public Result<Void> switchEnabled(
@@ -49,7 +49,7 @@ public class PayProviderController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = "品牌目录查看", nameEn = "Brand Method Directory View")
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "查询单条支付渠道项")
     @GetMapping("/get")
     public Result<PayProviderMethodResult> get(

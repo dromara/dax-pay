@@ -1,6 +1,5 @@
 package cn.daxpay.open.channel.wechat.controller.direct;
 
-
 import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.rest.Res;
@@ -35,7 +34,7 @@ public class WechatDirectChannelMerchantController {
     private final WechatDirectChannelMerchantService wechatDirectChannelMerchantService;
     private final WechatDirectKeyConfigService wechatDirectKeyConfigService;
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据通道商户号查询微信直连通道商户配置")
     @GetMapping("/find-by-channel-mch-no")
     public Result<WechatDirectChannelMerchantResult> findByChannelMchNo(
@@ -43,7 +42,7 @@ public class WechatDirectChannelMerchantController {
         return Res.ok(wechatDirectChannelMerchantService.findByChannelMchNo(channelMchNo));
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.Merchant.MANAGE_NAME_CN, nameEn = PermCodes.Channel.Merchant.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "创建微信直连通道商户")
     @PostMapping("/create")
     public Result<Void> create(@RequestBody @Validated WechatDirectChannelMerchantCreateParam param) {
@@ -51,7 +50,7 @@ public class WechatDirectChannelMerchantController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.VIEW, nameCn = PermCodes.Channel.Merchant.VIEW_NAME_CN, nameEn = PermCodes.Channel.Merchant.VIEW_NAME_EN)
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据通道商户号查询密钥配置")
     @GetMapping("/find-key-config")
     public Result<WechatDirectKeyConfigResult> findKeyConfig(
@@ -59,7 +58,7 @@ public class WechatDirectChannelMerchantController {
         return Res.ok(wechatDirectKeyConfigService.findByChannelMchNo(channelMchNo).toResult());
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE, nameCn = PermCodes.Channel.Merchant.MANAGE_NAME_CN, nameEn = PermCodes.Channel.Merchant.MANAGE_NAME_EN)
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "保存密钥配置")
     @PostMapping("/save-key-config")
     public Result<Void> saveKeyConfig(@RequestBody @Validated WechatDirectKeyConfigParam param) {

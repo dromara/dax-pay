@@ -23,4 +23,3 @@ public class MchBaseEntity extends MpBaseEntity {
 
 }
 
-

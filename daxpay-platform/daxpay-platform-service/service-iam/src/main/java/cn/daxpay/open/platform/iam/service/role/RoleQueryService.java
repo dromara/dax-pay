@@ -54,24 +54,4 @@ public class RoleQueryService {
         return roleManager.existsByCode(code, id);
     }
 
-    /// 中文名称是否存在
-    public boolean existsByNameCn(String nameCn) {
-        return roleManager.existsByNameCn(nameCn);
-    }
-
-    /// 中文名称是否存在(排除指定ID)
-    public boolean existsByNameCn(String nameCn, Long id) {
-        return roleManager.existsByNameCn(nameCn, id);
-    }
-
-    /// 英文名称是否存在
-    public boolean existsByNameEn(String nameEn) {
-        return roleManager.existsByNameEn(nameEn);
-    }
-
-    /// 英文名称是否存在(排除指定ID)
-    public boolean existsByNameEn(String nameEn, Long id) {
-        return roleManager.existsByNameEn(nameEn, id);
-    }
-
 }
