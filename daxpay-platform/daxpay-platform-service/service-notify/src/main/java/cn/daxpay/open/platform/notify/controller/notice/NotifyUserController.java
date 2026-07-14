@@ -1,6 +1,7 @@
 package cn.daxpay.open.platform.notify.controller.notice;
 
 import cn.daxpay.open.platform.capability.auth.util.SecurityUtil;
+import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.platform.notify.param.notice.NotifyUserNoticeQuery;
@@ -24,6 +25,7 @@ import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import java.util.List;
 
 /// 站内通知(用户端, 登录即可访问)
+@IgnoreAuth(login = true)
 @Validated
 @Tag(name = "站内通知")
 @RestController
@@ -82,8 +84,8 @@ public class NotifyUserController {
 
     /// 建立实时推送连接(Server-Sent Events)
     ///
-    /// 浏览器 EventSource 同源连接, 依赖 Sa-Token 会话识别(同源 cookie);
-    /// 收到推送时前端刷新未读数与铃铛列表.
+    /// 浏览器 EventSource 无法自定义请求头, 依赖登录时写入的 `Accesstoken` 同源 Cookie
+    /// (withCredentials) 识别会话; 收到推送时前端刷新未读数与铃铛列表.
     @Operation(summary = "建立实时推送连接(SSE)")
     @GetMapping(value = "/sse/connect", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter sseConnect() {

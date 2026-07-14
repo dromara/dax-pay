@@ -7,7 +7,10 @@ import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.platform.capability.auth.exception.NotLoginException;
 import cn.daxpay.open.platform.capability.auth.exception.RouterCheckException;
+import cn.dev33.satoken.exception.SaTokenContextException;
 import cn.dev33.satoken.exception.SaTokenException;
+import jakarta.servlet.DispatcherType;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.MDC;
@@ -23,10 +26,29 @@ import java.util.Locale;
 
 /// # 过滤SaTokenException,需要运行在 RestExceptionHandler 之前
 ///
+/// ## SSE / 异步派发
+/// SSE 端点(如 `/notify/user/sse/connect`)基于 `SseEmitter`, 完成/超时/断连时容器会 ASYNC/ERROR 重派发.
+/// 此时 Sa-Token ThreadLocal 上下文常为空, 可能抛 [SaTokenContextException].
+/// 与 [cn.daxpay.open.platform.system.handler.exception.RestExceptionHandler] 对齐:
+/// SSE 或非 REQUEST 派发时不写 JSON body, 避免 EventSource 把 `code:1` 当致命错误狂重连.
 @Order(Ordered.LOWEST_PRECEDENCE - 1)
 @Slf4j
 @RestControllerAdvice
 public class SaExceptionHandler {
+
+    /// 判断当前响应是否为 SSE 事件流(Content-Type 已锁定为 text/event-stream)
+    private boolean isSseStream(HttpServletResponse response) {
+        String contentType = response.getContentType();
+        return contentType != null && contentType.contains(MediaType.TEXT_EVENT_STREAM_VALUE);
+    }
+
+    /// SSE 流或非 REQUEST 派发(ASYNC/ERROR 等): 上下文/鉴权异常按常态降级
+    private boolean isSseOrNonRequest(HttpServletRequest request, HttpServletResponse response) {
+        if (request.getDispatcherType() != DispatcherType.REQUEST) {
+            return true;
+        }
+        return isSseStream(response);
+    }
 
     /// 未登录返回401
     @ExceptionHandler(NotLoginException.class)
@@ -73,18 +95,46 @@ public class SaExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(result);
     }
 
+    /// Sa-Token 请求上下文未初始化
+    ///
+    /// SSE/异步派发下属常态噪声; REQUEST 派发仍出现则多为 ContextFilter 未生效, 按认证失败返回 401。
+    @ExceptionHandler(SaTokenContextException.class)
+    public ResponseEntity<?> handleSaTokenContextException(SaTokenContextException ex,
+                                                           HttpServletRequest request,
+                                                           HttpServletResponse response) {
+        // SSE 流 / 非 REQUEST: 无 JSON body, 避免 EventSource 狂重连
+        if (isSseOrNonRequest(request, response)) {
+            log.info("SaToken 上下文未初始化(SSE/异步派发), dispatcher={}, msg={}",
+                    request.getDispatcherType(), ex.getMessage());
+            return ResponseEntity.ok().build();
+        }
+        // REQUEST 派发仍无上下文: 需排查 SaTokenContextFilter 装配
+        log.warn("SaToken 上下文未初始化(REQUEST 派发, 需排查 ContextFilter), path={}, msg={}",
+                request.getRequestURI(), ex.getMessage());
+        // 认证上下文未初始化，请重新登录或刷新页面
+        String message = I18nUtil.get("error.auth.contextNotInit");
+        Result<Void> result = Res.response(CommonErrorCode.AUTHENTICATION_FAIL, message, MDC.get(CommonCode.TRACE_ID));
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(result);
+    }
+
     /// sa鉴权业务异常
     ///
     /// 注意: SSE 等异步端点产生的事件流响应 Content-Type 已锁定为 text/event-stream,
-    /// 无 JSON 消息转换器, 此时返回 Result 会抛 HttpMessageNotWritableException, 故仅返回无 body 的状态码.
+    /// 无 JSON 消息转换器, 此时返回 Result 会抛 HttpMessageNotWritableException, 故仅返回无 body.
     @ExceptionHandler(SaTokenException.class)
-    public ResponseEntity<?> handleBusinessException(SaTokenException ex, HttpServletResponse response) {
-        log.info(ex.getMessage(), ex);
-        String contentType = response.getContentType();
-        // SSE 事件流响应: 无 JSON 转换器, 不写 body, 避免二次异常
-        if (contentType != null && contentType.contains(MediaType.TEXT_EVENT_STREAM_VALUE)) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    public ResponseEntity<?> handleBusinessException(SaTokenException ex,
+                                                     HttpServletRequest request,
+                                                     HttpServletResponse response) {
+        // SSE / 非 REQUEST: 与 RestExceptionHandler 对齐, 无 body 200, 不打完整堆栈
+        if (isSseOrNonRequest(request, response)) {
+            log.info("Sa-Token 异常(SSE/异步派发), 类型={}, 消息={}",
+                    ex.getClass().getSimpleName(), ex.getMessage());
+            return ResponseEntity.ok().build();
         }
+        log.info("Sa-Token 异常 类型={}, 消息={}", ex.getClass().getSimpleName(), ex.getMessage());
+        log.debug("Sa-Token 异常堆栈", ex);
         Result<Void> result = Res.response(CommonCode.FAIL_CODE, ex.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .contentType(MediaType.APPLICATION_JSON)
