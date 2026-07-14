@@ -51,7 +51,8 @@ public class RoleUnifiedAssignService {
     /// 查询角色在指定终端下的统一授权数据。
     /// 这里返回的是"菜单树 + 挂载到菜单下的权限码节点"，前端基于该结果直接渲染统一授权树。
     /// 其中菜单作为树骨架节点，权限码作为菜单子节点返回，勾选态则分别由菜单 ID、权限码 ID 两组数据维护。
-    /// 为避免菜单 ID 与权限码 ID 数值冲突，采用带类型前缀的字符串树主键进行混合构树。
+    /// 为避免菜单 ID 与权限码 ID 数值冲突，以及同一权限码挂到多个同 menuCode 菜单时 key 重复，
+    /// 采用带类型前缀的字符串树主键进行混合构树：菜单 `menu-{menuId}`，权限码 `code-{codeId}-menu-{menuId}`。
     public RoleUnifiedAssignResult getByRole(Long roleId, String clientCode) {
         Role role = roleManager.findById(roleId).orElseThrow(RoleNotExistedException::new);
         if (!Objects.equals(role.getClientCode(), clientCode)) {
@@ -105,7 +106,8 @@ public class RoleUnifiedAssignService {
             String menuTreeId = menuIdToTreeIdMap.get(menu.getId());
 
             for (PermCodeData code : codes) {
-                String codeTreeId = "code-" + code.getId();
+                // 同一 code 可挂到多个同 menuCode 菜单，key 必须含所属菜单 id 才能全局唯一
+                String codeTreeId = "code-" + code.getId() + "-menu-" + menu.getId();
                 var codeNode = new RoleUnifiedAssignTreeResult()
                         .setKey(codeTreeId)
                         .setType("code")
