@@ -2,6 +2,7 @@
   "wait_pay": "待支付",
   "paying": "支付中",
   "paid": "已支付",
+  "failed": "支付失败",
   "closed": "已关闭",
   "expired": "已过期"
 }

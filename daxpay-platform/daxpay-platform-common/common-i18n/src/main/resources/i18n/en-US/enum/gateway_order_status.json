@@ -1,7 +1,8 @@
 {
-  "wait_pay": "Wait Pay",
+  "wait_pay": "Pending payment",
   "paying": "Paying",
   "paid": "Paid",
+  "failed": "Failed",
   "closed": "Closed",
   "expired": "Expired"
 }

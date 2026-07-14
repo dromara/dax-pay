@@ -23,13 +23,14 @@ import java.util.List;
 /// 业务容器统一落在 trade.order（与 NormalPayOrder 同包）。
 /// 聚合扫码/收银台预下单场景: 创建时不知具体通道, 仅承载收款意图。
 /// 用户真正支付时再创建 pay_trade(trade_type=gateway) 并回填 channel/product/method。
+/// 网关 orderNo 为预下单 URL 号, 与资金 tradeNo 身份分离。
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName(value = "pay_gateway_order", autoResultMap = true)
 public class GatewayPayOrder extends MchBaseEntity {
 
-    /// 平台网关单号(URL 用)
+    /// 平台网关业务单号(URL 用, 预下单即生成, 可无 trade)
     private String orderNo;
 
     /// 商户业务单号
@@ -140,12 +141,18 @@ public class GatewayPayOrder extends MchBaseEntity {
     /// 活动类型
     private String promotionType;
 
+    /// 支付参数体（已拉起缓存，仅落容器）
+    private String payBody;
+
+    /// 支付参数体类型
+    private String payBodyType;
+
     // ===== 通道关联订单号（部分通道专用）=====
 
     /// 透传订单号（三方通道产生的透传订单号）
     private String transOrderNo;
 
-    /// 特殊通道关联订单号（部分通道订单号有前缀/长度限制时使用）
+    /// 实际上送通道的商户订单号（展示冗余；反查权威在 pay_trade.relation_order_no）
     private String relationOrderNo;
 
 

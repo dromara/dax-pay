@@ -1,6 +1,7 @@
 {
-  "wait_pay": "Chưa giải quyết",
-  "paid": "Trả",
+  "wait_pay": "Chờ thanh toán",
+  "paid": "Đã thanh toán",
+  "failed": "Thất bại",
   "closed": "Đã đóng",
   "expired": "Hết hạn"
 }

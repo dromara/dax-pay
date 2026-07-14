@@ -84,7 +84,8 @@ public class GatewayPayHandleService {
                         throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                                 "pay.error.gateway.channelLocked");
                     }
-                    if (StrUtil.isNotBlank(existing.getPayBody())) {
+                    // payBody 仅在容器, 已拉起则幂等返回
+                    if (StrUtil.isNotBlank(order.getPayBody())) {
                         return this.buildResult(order, existing);
                     }
                 } else {
@@ -144,6 +145,8 @@ public class GatewayPayHandleService {
         trade.setPostedAmount(0L);
         trade.setRefundableBalance(order.getAmount());
         trade.setStatus(PayFundStatusEnum.PROCESSING.getCode());
+        // 默认上送网关业务单号; 特殊通道返回后可覆盖
+        trade.setRelationOrderNo(order.getOrderNo());
         trade.setSource(TradeSourceEnum.AGGRESS_PAY.getCode());
         payTradeManager.save(trade);
 
@@ -167,11 +170,7 @@ public class GatewayPayHandleService {
             trade.setPayTime(result.getFinishTime());
         }
         trade.setOutOrderNo(result.getOutOrderNo());
-        // payBody/payBodyType 留 trade(已拉起缓存标记)
-        trade.setPayBody(result.getPayBody());
-        trade.setPayBodyType(Objects.nonNull(result.getPayBodyType())
-                ? result.getPayBodyType().getCode() : null);
-        // 回执字段写容器, 由 payAfterHandel 统一处理
+        // 回执与 payBody 写容器, 由 payAfterHandel 统一处理
         payUniHandleService.payAfterHandel(trade, result);
         return this.buildResult(order, trade);
     }
@@ -222,9 +221,11 @@ public class GatewayPayHandleService {
         return new NormalPayResult()
                 .setOrderId(order.getId())
                 .setBizOrderNo(order.getBizOrderNo())
-                .setOrderNo(trade.getTradeNo())
+                // 网关业务单号 vs 资金交易号分离
+                .setOrderNo(order.getOrderNo())
+                .setTradeNo(trade.getTradeNo())
                 .setStatus(trade.getStatus())
-                .setPayBody(trade.getPayBody())
-                .setPayBodyType(trade.getPayBodyType());
+                .setPayBody(order.getPayBody())
+                .setPayBodyType(order.getPayBodyType());
     }
 }

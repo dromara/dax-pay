@@ -19,9 +19,11 @@ public enum NormalPayOrderStatusEnum implements I18nSupport {
     WAIT_PAY("wait_pay"),
     /// 已支付
     PAID("paid"),
-    /// 已关闭
+    /// 支付失败（资金态 fail，与主动关单 closed 区分）
+    FAILED("failed"),
+    /// 已关闭（主动关单/撤销）
     CLOSED("closed"),
-    /// 已过期
+    /// 已过期（超时关单）
     EXPIRED("expired"),
     ;
 

@@ -22,8 +22,13 @@ public class NormalPayOrderResult {
     @Schema(description = "商户订单号")
     private String bizOrderNo;
 
-    @Schema(description = "支付订单号")
+    /// 平台业务单号(容器 orderNo)
+    @Schema(description = "平台业务单号")
     private String orderNo;
+
+    /// 资金交易号(tradeNo)
+    @Schema(description = "资金交易号")
+    private String tradeNo;
 
     /// 通道系统交易号
     @Schema(description = "通道支付订单号")

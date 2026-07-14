@@ -1,7 +1,8 @@
 {
-  "wait_pay": "기다려 지불",
-  "paying": "지불 중",
-  "paid": "유급의",
-  "closed": "닫은",
-  "expired": "만료됨"
+  "wait_pay": "결제 대기",
+  "paying": "결제 중",
+  "paid": "결제 완료",
+  "failed": "결제 실패",
+  "closed": "종료",
+  "expired": "만료"
 }

@@ -28,6 +28,10 @@ public class NormalPayOrderResult extends BaseResult {
     @Schema(description = "应用号")
     private String appId;
 
+    /// 平台业务单号
+    @Schema(description = "平台业务单号")
+    private String orderNo;
+
     /// 商户业务单号
     @Schema(description = "商户业务单号")
     private String bizOrderNo;

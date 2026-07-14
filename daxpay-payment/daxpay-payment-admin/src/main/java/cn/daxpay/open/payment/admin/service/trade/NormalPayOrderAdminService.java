@@ -55,13 +55,12 @@ public class NormalPayOrderAdminService {
         NormalPayOrderResult result = NormalPayOrderConvert.CONVERT.toResult(entity);
         // 联表查询资金凭证, 补充交易字段
         PayTrade trade = payTradeManager.findByContainerId(id, cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum.NORMAL.getCode()).orElse(null);
+        // payBody 仅在容器, Convert 已映射; 此处补资金凭证字段
         if (Objects.nonNull(trade)) {
             result.setTradeNo(trade.getTradeNo());
             result.setOutOrderNo(trade.getOutOrderNo());
             result.setFundStatus(trade.getStatus());
             result.setRefundableBalance(trade.getRefundableBalance());
-            result.setPayBody(trade.getPayBody());
-            result.setPayBodyType(trade.getPayBodyType());
         }
         return result;
     }

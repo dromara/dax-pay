@@ -1,6 +1,7 @@
 {
-  "wait_pay": "Belum selesai",
+  "wait_pay": "Menunggu bayar",
   "paid": "Dibayar",
-  "closed": "tertutup",
+  "failed": "Gagal",
+  "closed": "Ditutup",
   "expired": "Tamat tempoh"
 }

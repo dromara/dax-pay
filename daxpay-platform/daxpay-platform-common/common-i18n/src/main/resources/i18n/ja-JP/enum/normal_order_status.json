@@ -1,6 +1,7 @@
 {
-  "wait_pay": "保留中",
-  "paid": "有料",
-  "closed": "閉店",
+  "wait_pay": "支払待ち",
+  "paid": "支払済",
+  "failed": "支払失敗",
+  "closed": "クローズ",
   "expired": "期限切れ"
 }

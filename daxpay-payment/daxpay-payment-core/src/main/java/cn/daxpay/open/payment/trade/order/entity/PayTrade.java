@@ -16,14 +16,15 @@ import java.time.OffsetDateTime;
 ///
 /// 统一资金交易表，记录每一笔资金动作（普通支付/预授权冻结/预授权捕获/周期代扣/合单子单）
 /// 与容器层（业务单/协议）分离，通过 trade_type + 容器关联字段建立联系。
-/// 仅保留资金动作固有属性与通道调用命脉字段；业务上下文/路由参数/通道回执统一归容器。
+/// 仅保留资金动作固有属性与通道反查命脉字段；业务上下文/路由/payBody/回执统一归容器。
+/// 过期时间只在容器，本表不存 expiredTime。
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName("pay_trade")
 public class PayTrade extends MchBaseEntity {
 
-    /// 支付交易号（各种交易的）
+    /// 资金交易号（平台生成，与业务单 orderNo 独立）
     private String tradeNo;
 
     /// 交易形态
@@ -59,22 +60,14 @@ public class PayTrade extends MchBaseEntity {
     /// 关闭时间
     private OffsetDateTime closeTime;
 
-    /// 超时时间
-    private OffsetDateTime expiredTime;
-
     /// 订单来源
     private String source;
 
     /// 通道订单号（三方通道返回的订单号，通道 close/sync 调用参数 + 回调反查索引）
     private String outOrderNo;
 
-    /// 支付参数体（如微信 prepay_id 组装串，非空表示已拉起支付，免重复请求通道）
-    private String payBody;
-
-    /// 支付参数体类型（jsapi/sdk/app）
-    private String payBodyType;
-
-    /// 特殊通道关联订单号（部分通道订单号有前缀/长度限制时使用）
+    /// 实际上送通道的商户订单号（回调/关退同步反查权威）
+    /// 普通通道 = 容器 orderNo；特殊通道（前缀/长度限制）= 变形号，可与 orderNo 不同
     private String relationOrderNo;
 
     /// 应用号

@@ -17,6 +17,13 @@ import java.util.Optional;
 @Repository
 public class NormalPayOrderManager extends BaseManager<NormalPayOrderMapper, NormalPayOrder> {
 
+    /// 根据平台业务单号查询（按商户号自动租户隔离）
+    public Optional<NormalPayOrder> findByOrderNo(String orderNo) {
+        return lambdaQuery()
+                .eq(NormalPayOrder::getOrderNo, orderNo)
+                .oneOpt();
+    }
+
     /// 根据业务单号查询（按商户号自动租户隔离）
     public Optional<NormalPayOrder> findByBizOrderNo(String bizOrderNo) {
         return lambdaQuery()
@@ -24,7 +31,7 @@ public class NormalPayOrderManager extends BaseManager<NormalPayOrderMapper, Nor
                 .oneOpt();
     }
 
-    /// 根据业务单号和应用号查询
+    /// 根据业务单号和应用号查询（主路径, 避免同商户多应用串单）
     public Optional<NormalPayOrder> findByBizOrderNo(String bizOrderNo, String appId) {
         return lambdaQuery()
                 .eq(NormalPayOrder::getBizOrderNo, bizOrderNo)

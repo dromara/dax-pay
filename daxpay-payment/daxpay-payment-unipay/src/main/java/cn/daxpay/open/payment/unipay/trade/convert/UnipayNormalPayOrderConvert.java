@@ -19,10 +19,13 @@ public interface UnipayNormalPayOrderConvert {
     UnipayNormalPayOrderConvert CONVERT = Mappers.getMapper(UnipayNormalPayOrderConvert.class);
 
     /// NormalPayOrder + PayTrade → 对外 NormalPayOrderResult
-    // 改名
-    @Mapping(target = "orderNo", source = "trade.tradeNo")
+    // 业务单号取容器, 资金交易号取 trade
+    @Mapping(target = "orderNo", source = "order.orderNo")
+    @Mapping(target = "tradeNo", source = "trade.tradeNo")
     // 多源同名消歧：资金态取 trade，业务容器取 order
     @Mapping(target = "status", source = "trade.status")
+    @Mapping(target = "outOrderNo", source = "trade.outOrderNo")
+    @Mapping(target = "refundableBalance", source = "trade.refundableBalance")
     @Mapping(target = "bizOrderNo", source = "order.bizOrderNo")
     @Mapping(target = "channel", source = "order.channel")
     @Mapping(target = "method", source = "order.method")

@@ -24,7 +24,7 @@ import java.util.Objects;
 /// # 交易统一处理服务
 ///
 /// 支付成功/失败/关闭后的统一处理逻辑, 按 trade_type 回写对应业务容器。
-/// 通道回执字段(含 payBody)统一写容器, trade 仅保留资金态与 outOrderNo 等。
+/// 通道回执字段(含 payBody)统一写容器; trade 仅资金态、outOrderNo、relationOrderNo(实际上送串)。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -36,8 +36,12 @@ public class PayUniHandleService {
 
     /// 支付发起后处理
     /// 不论是否完成都更新交易单; 仅资金状态为 SUCCESS 时同步容器为 PAID。
-    /// 回执字段(transOrderNo/buyerId 等)写容器。
+    /// 回执字段(transOrderNo/buyerId/payBody 等)写容器; 特殊 relation 同步写 trade。
     public void payAfterHandel(PayTrade trade, PayTradeResultBo result) {
+        // 特殊通道返回的上送变形号写 trade 反查权威
+        if (result.getRelationOrderNo() != null) {
+            trade.setRelationOrderNo(result.getRelationOrderNo());
+        }
         // 按 status/tradeType 回写入账金额后再落库
         updateTradeWithPosted(trade);
         if (isGateway(trade)) {
@@ -91,13 +95,13 @@ public class PayUniHandleService {
         markContainerPaid(trade);
     }
 
-    /// 支付失败处理
+    /// 支付失败处理: 资金态 FAIL, 容器态 FAILED（与主动关单 closed 区分）
     public void payFail(PayTrade trade, String errMsg) {
         OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
         trade.setStatus(PayFundStatusEnum.FAIL.getCode());
         trade.setCloseTime(now);
         updateTradeWithPosted(trade);
-        this.markContainerClosed(trade, now, false, errMsg);
+        this.markContainerFailed(trade, now, errMsg);
     }
 
     /// 支付关闭处理
@@ -161,6 +165,28 @@ public class PayUniHandleService {
         }
     }
 
+    /// 支付失败: 容器 FAILED
+    private void markContainerFailed(PayTrade trade, OffsetDateTime now, String errMsg) {
+        String msg = truncateErrorMsg(errMsg);
+        if (isGateway(trade)) {
+            GatewayPayOrder order = gatewayPayOrderManager.findById(trade.getContainerId()).orElse(null);
+            if (order != null) {
+                order.setStatus(GatewayOrderStatusEnum.FAILED.getCode());
+                order.setCloseTime(now);
+                order.setErrorMsg(msg);
+                gatewayPayOrderManager.updateById(order);
+            }
+            return;
+        }
+        NormalPayOrder normalOrder = payNormalOrderManager.findById(trade.getContainerId()).orElse(null);
+        if (normalOrder != null) {
+            normalOrder.setStatus(NormalPayOrderStatusEnum.FAILED.getCode());
+            normalOrder.setCloseTime(now);
+            normalOrder.setErrorMsg(msg);
+            payNormalOrderManager.updateById(normalOrder);
+        }
+    }
+
     private void markContainerClosed(PayTrade trade, OffsetDateTime now, boolean expired, String errMsg) {
         if (isGateway(trade)) {
             GatewayPayOrder order = gatewayPayOrderManager.findById(trade.getContainerId()).orElse(null);
@@ -170,7 +196,7 @@ public class PayUniHandleService {
                         : GatewayOrderStatusEnum.CLOSED.getCode());
                 order.setCloseTime(now);
                 if (errMsg != null) {
-                    order.setErrorMsg(errMsg);
+                    order.setErrorMsg(truncateErrorMsg(errMsg));
                 }
                 gatewayPayOrderManager.updateById(order);
             }
@@ -183,21 +209,32 @@ public class PayUniHandleService {
                     : NormalPayOrderStatusEnum.CLOSED.getCode());
             normalOrder.setCloseTime(now);
             if (errMsg != null) {
-                normalOrder.setErrorMsg(errMsg);
+                normalOrder.setErrorMsg(truncateErrorMsg(errMsg));
             }
             payNormalOrderManager.updateById(normalOrder);
         }
     }
 
+    /// 错误信息截断, 避免通道超长报文撑爆列
+    private static String truncateErrorMsg(String errMsg) {
+        if (errMsg == null) {
+            return null;
+        }
+        return errMsg.length() <= 500 ? errMsg : errMsg.substring(0, 500);
+    }
+
     private void applyNormalReceipts(NormalPayOrder order, PayTradeResultBo result) {
         order.setTransOrderNo(result.getTransOrderNo());
-        order.setRelationOrderNo(result.getRelationOrderNo());
+        // 特殊通道返回变形上送号时回写容器展示; 空则保留创建时的 orderNo 副本
+        if (result.getRelationOrderNo() != null) {
+            order.setRelationOrderNo(result.getRelationOrderNo());
+        }
         order.setBuyerId(result.getBuyerId());
         order.setTradeProduct(result.getTradeProduct());
         order.setTradeWay(result.getTradeWay());
         order.setBankType(result.getBankType());
         order.setPromotionType(result.getPromotionType());
-        // 支付参数体落容器, 作为已拉起缓存标记
+        // 支付参数体仅落容器, 作为已拉起缓存标记
         order.setPayBody(result.getPayBody());
         order.setPayBodyType(Objects.nonNull(result.getPayBodyType())
                 ? result.getPayBodyType().getCode() : null);
@@ -206,12 +243,18 @@ public class PayUniHandleService {
 
     private void applyGatewayReceipts(GatewayPayOrder order, PayTradeResultBo result) {
         order.setTransOrderNo(result.getTransOrderNo());
-        order.setRelationOrderNo(result.getRelationOrderNo());
+        if (result.getRelationOrderNo() != null) {
+            order.setRelationOrderNo(result.getRelationOrderNo());
+        }
         order.setBuyerId(result.getBuyerId());
         order.setTradeProduct(result.getTradeProduct());
         order.setTradeWay(result.getTradeWay());
         order.setBankType(result.getBankType());
         order.setPromotionType(result.getPromotionType());
+        // 支付参数体仅落容器
+        order.setPayBody(result.getPayBody());
+        order.setPayBodyType(Objects.nonNull(result.getPayBodyType())
+                ? result.getPayBodyType().getCode() : null);
         order.setErrorMsg(null);
     }
 

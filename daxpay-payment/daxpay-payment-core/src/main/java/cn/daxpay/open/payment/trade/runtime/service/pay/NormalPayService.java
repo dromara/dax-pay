@@ -76,9 +76,11 @@ public class NormalPayService {
         payStrategy.doBeforePay(context);
         // 查询已有订单并校验，结果填充到 context
         payAssistService.findAndCheckOrder(payParam.getBizOrderNo(), context);
-        // 已拉起支付则返回缓存的支付参数
-        if (Objects.nonNull(context.getTrade()) && StrUtil.isNotBlank(context.getTrade().getPayBody())) {
-            return payAssistService.buildResult(context.getTrade());
+        // 已拉起支付则返回缓存的支付参数(payBody 仅在容器)
+        if (Objects.nonNull(context.getNormalOrder())
+                && StrUtil.isNotBlank(context.getNormalOrder().getPayBody())
+                && Objects.nonNull(context.getTrade())) {
+            return payAssistService.buildResult(context.getTrade(), context.getNormalOrder());
         }
         // 订单不存在则新建（填充 context）
         if (Objects.isNull(context.getTrade())) {
@@ -122,11 +124,7 @@ public class NormalPayService {
         }
         // trade.status 在 complete=false 时保持 PROCESSING(createOrder 时已设)
         trade.setOutOrderNo(result.getOutOrderNo());
-        // payBody/payBodyType 留 trade(已拉起缓存标记)
-        trade.setPayBody(result.getPayBody());
-        trade.setPayBodyType(Objects.nonNull(result.getPayBodyType())
-                ? result.getPayBodyType().getCode() : null);
-        // 回执字段写容器, 由 payAfterHandel 统一处理
+        // 回执与 payBody 写容器, 由 payAfterHandel 统一处理
         payUniHandleService.payAfterHandel(trade, result);
         return payAssistService.buildResult(trade);
     }

@@ -13,7 +13,6 @@ import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum;
 import cn.daxpay.open.payment.common.util.PayUtil;
 import cn.daxpay.open.payment.strategy.pay.PayStrategyContext;
-import cn.daxpay.open.payment.trade.order.convert.PayTradeConvert;
 import cn.daxpay.open.payment.trade.order.dao.NormalPayOrderManager;
 import cn.daxpay.open.payment.trade.order.entity.NormalPayOrder;
 import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
@@ -22,7 +21,6 @@ import cn.daxpay.open.payment.trade.runtime.mq.NormalPayTimeoutMessage;
 import cn.daxpay.open.payment.trade.runtime.mq.PayArtemisConstants;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
-import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -46,6 +44,7 @@ public class PayAssistService {
 
     /// 创建支付订单（容器 + 资金交易），填充到 context
     /// 调用方需保证 appId 和 product 已解析完毕
+    /// orderNo 与 tradeNo 独立生成; 普通通道实际上送串 relationOrderNo 默认=orderNo
     @Transactional(rollbackFor = Exception.class)
     public void createOrder(NormalPayParam payParam, PayStrategyContext context) {
         String appId = payParam.getAppId();
@@ -56,8 +55,14 @@ public class PayAssistService {
         var channel = productEnum.getChannel();
         // 终端信息
         String terminalNo = payParam.getTerminal() != null ? payParam.getTerminal().getTerminalNo() : null;
+        // 双号独立生成
+        String orderNo = TradeNoGenerateUtil.order();
+        String tradeNo = TradeNoGenerateUtil.pay();
         // 创建容器 NormalPayOrder（含冗余字段，方便查询）
         NormalPayOrder normalOrder = new NormalPayOrder();
+        normalOrder.setOrderNo(orderNo);
+        // 普通通道默认上送 orderNo, 特殊通道下单后再覆盖 relation
+        normalOrder.setRelationOrderNo(orderNo);
         normalOrder.setBizOrderNo(payParam.getBizOrderNo());
         normalOrder.setTitle(payParam.getTitle());
         normalOrder.setDescription(payParam.getDescription());
@@ -90,7 +95,7 @@ public class PayAssistService {
         // 创建资金交易 PayTrade
         PayTrade trade = new PayTrade();
         trade.setAppId(appId);
-        trade.setTradeNo(TradeNoGenerateUtil.pay());
+        trade.setTradeNo(tradeNo);
         trade.setTradeType(PayTradeTypeEnum.NORMAL.getCode());
         trade.setContainerId(normalOrder.getId());
         trade.setAmount(amount);
@@ -99,9 +104,12 @@ public class PayAssistService {
         trade.setPostedAmount(0L);
         trade.setRefundableBalance(amount);
         trade.setStatus(PayFundStatusEnum.PROCESSING.getCode());
+        // 实际上送串权威: 默认=orderNo, 特殊通道支付返回后可覆盖
+        trade.setRelationOrderNo(orderNo);
         trade.setSource(cn.daxpay.open.platform.core.enums.pay.trade.TradeSourceEnum.MCH_API.getCode());
         payTradeManager.save(trade);
         context.setTrade(trade);
+        context.setNormalOrder(normalOrder);
         // 注册超时关单延时消息(按订单过期时间定时投递)
         this.registerTimeoutClose(trade.getTradeNo(), normalOrder.getBizOrderNo(), expiredTime);
     }
@@ -136,6 +144,7 @@ public class PayAssistService {
         }
         this.checkOrder(normalOrder, trade);
         context.setTrade(trade);
+        context.setNormalOrder(normalOrder);
     }
 
     /// 检查订单状态
@@ -146,7 +155,8 @@ public class PayAssistService {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.alreadySuccess");
         }
         if (Objects.equals(bizStatus, NormalPayOrderStatusEnum.CLOSED.getCode())
-                || Objects.equals(bizStatus, NormalPayOrderStatusEnum.EXPIRED.getCode())) {
+                || Objects.equals(bizStatus, NormalPayOrderStatusEnum.EXPIRED.getCode())
+                || Objects.equals(bizStatus, NormalPayOrderStatusEnum.FAILED.getCode())) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.failedOrClosed");
         }
         // 资金状态检查
@@ -155,7 +165,8 @@ public class PayAssistService {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.alreadySuccess");
         }
         if (Objects.equals(fundStatus, PayFundStatusEnum.CLOSE.getCode())
-                || Objects.equals(fundStatus, PayFundStatusEnum.FAIL.getCode())) {
+                || Objects.equals(fundStatus, PayFundStatusEnum.FAIL.getCode())
+                || Objects.equals(fundStatus, PayFundStatusEnum.CANCEL.getCode())) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.failedOrClosed");
         }
         // 超时检查
@@ -165,9 +176,29 @@ public class PayAssistService {
         }
     }
 
-    /// 根据 PayTrade 构建支付结果
+    /// 根据 PayTrade + 容器构建支付结果（orderNo/payBody 取自容器）
     public NormalPayResult buildResult(PayTrade trade) {
-        return PayTradeConvert.CONVERT.toResult(trade);
+        NormalPayOrder order = null;
+        if (trade.getContainerId() != null) {
+            order = payNormalOrderManager.findById(trade.getContainerId()).orElse(null);
+        }
+        return buildResult(trade, order);
+    }
+
+    /// 根据资金凭证与业务容器构建支付结果
+    public NormalPayResult buildResult(PayTrade trade, NormalPayOrder order) {
+        NormalPayResult result = new NormalPayResult();
+        result.setOrderId(order != null ? order.getId() : trade.getContainerId());
+        result.setBizOrderNo(order != null ? order.getBizOrderNo() : null);
+        // 业务单号与资金交易号分离暴露
+        result.setOrderNo(order != null ? order.getOrderNo() : null);
+        result.setTradeNo(trade.getTradeNo());
+        result.setStatus(trade.getStatus());
+        if (order != null) {
+            result.setPayBody(order.getPayBody());
+            result.setPayBodyType(order.getPayBodyType());
+        }
+        return result;
     }
 
     /// 获取支付超时时间

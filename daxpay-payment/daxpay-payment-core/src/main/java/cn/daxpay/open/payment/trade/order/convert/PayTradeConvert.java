@@ -8,15 +8,18 @@ import org.mapstruct.factory.Mappers;
 
 /// # 支付交易转换器
 ///
-/// 仅从 PayTrade 映射对外支付响应；同名字段(status/bizOrderNo/payBody 等)自动映射，
-/// 仅声明改名字段
+/// 仅从 PayTrade 映射部分字段; orderNo/payBody 属容器, 由 [PayAssistService#buildResult] 组装
 @Mapper
 public interface PayTradeConvert {
 
     PayTradeConvert CONVERT = Mappers.getMapper(PayTradeConvert.class);
 
-    /// PayTrade → NormalPayResult
+    /// PayTrade → NormalPayResult（不含 orderNo/payBody, 需配合容器）
     @Mapping(target = "orderId", source = "id")
-    @Mapping(target = "orderNo", source = "tradeNo")
+    @Mapping(target = "tradeNo", source = "tradeNo")
+    @Mapping(target = "orderNo", ignore = true)
+    @Mapping(target = "bizOrderNo", ignore = true)
+    @Mapping(target = "payBody", ignore = true)
+    @Mapping(target = "payBodyType", ignore = true)
     NormalPayResult toResult(PayTrade trade);
 }

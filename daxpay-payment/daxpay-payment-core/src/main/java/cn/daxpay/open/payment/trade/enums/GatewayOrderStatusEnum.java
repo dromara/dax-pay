@@ -20,6 +20,8 @@ public enum GatewayOrderStatusEnum implements I18nSupport {
     PAYING("paying"),
     /// 已支付
     PAID("paid"),
+    /// 支付失败（资金态 fail，与主动关单 closed 区分）
+    FAILED("failed"),
     /// 已关闭
     CLOSED("closed"),
     /// 已过期

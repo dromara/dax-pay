@@ -1,6 +1,7 @@
 {
-  "wait_pay": "Tertunda",
-  "paid": "Dibayar",
-  "closed": "Tertutup",
+  "wait_pay": "Menunggu bayar",
+  "paid": "Lunas",
+  "failed": "Gagal",
+  "closed": "Ditutup",
   "expired": "Kedaluwarsa"
 }

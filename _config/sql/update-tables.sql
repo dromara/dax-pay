@@ -133,3 +133,25 @@ COMMENT ON COLUMN "public"."pay_gateway_order"."channel_app_id" IS '通道应用
 
 ALTER TABLE "public"."pay_refund_order" ADD COLUMN IF NOT EXISTS "channel_app_id" varchar(128);
 COMMENT ON COLUMN "public"."pay_refund_order"."channel_app_id" IS '通道应用AppId(继承自原支付单)';
+
+-- ----------------------------
+-- 支付订单号体系: orderNo(业务单) 与 tradeNo(资金) 分离; payBody 仅容器; trade 去掉 pay_body/expired_time
+-- ----------------------------
+ALTER TABLE "public"."pay_normal_order" ADD COLUMN IF NOT EXISTS "order_no" varchar(64);
+COMMENT ON COLUMN "public"."pay_normal_order"."order_no" IS '平台业务单号(与 trade_no 独立; 普通通道默认上送)';
+
+ALTER TABLE "public"."pay_gateway_order" ADD COLUMN IF NOT EXISTS "pay_body" text;
+COMMENT ON COLUMN "public"."pay_gateway_order"."pay_body" IS '支付参数体(已拉起缓存, 仅容器)';
+ALTER TABLE "public"."pay_gateway_order" ADD COLUMN IF NOT EXISTS "pay_body_type" varchar(32);
+COMMENT ON COLUMN "public"."pay_gateway_order"."pay_body_type" IS '支付参数体类型';
+
+-- 实际上送串索引(回调反查)
+CREATE INDEX IF NOT EXISTS "idx_pay_trade_relation_order_no" ON "public"."pay_trade" ("relation_order_no");
+CREATE INDEX IF NOT EXISTS "idx_pay_normal_order_order_no" ON "public"."pay_normal_order" ("order_no");
+
+-- trade 瘦身: pay_body / pay_body_type / expired_time 迁出或废弃(若列存在则删除)
+ALTER TABLE "public"."pay_trade" DROP COLUMN IF EXISTS "pay_body";
+ALTER TABLE "public"."pay_trade" DROP COLUMN IF EXISTS "pay_body_type";
+ALTER TABLE "public"."pay_trade" DROP COLUMN IF EXISTS "expired_time";
+
+COMMENT ON COLUMN "public"."pay_trade"."relation_order_no" IS '实际上送通道的商户订单号(普通=order_no, 特殊=变形号; 回调反查权威)';

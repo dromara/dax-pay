@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.strategy.pay;
 
+import cn.daxpay.open.payment.trade.order.entity.NormalPayOrder;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import lombok.Getter;
@@ -8,7 +9,7 @@ import lombok.experimental.Accessors;
 
 /// # 支付策略执行上下文(请求级,显式传参)
 ///
-/// 持有单笔支付策略管线的"资金凭证 + 通道配置 + 路由参数"三要素,
+/// 持有单笔支付策略管线的"资金凭证 + 业务容器 + 通道配置 + 路由参数",
 /// 每次支付/同步/关闭创建新实例,显式传递,不进 ThreadLocal。
 ///
 /// close/sync 策略直接从本类读取路由参数(channelMchNo / capability / channelAppId / clientIp),
@@ -24,6 +25,9 @@ public class PayStrategyContext {
 
     /// 资金交易凭证(记录本笔资金动作的状态与通道回执)
     private PayTrade trade;
+
+    /// 普通支付业务容器(pay 流程查询/创建后填入; 重入读 payBody 用)
+    private NormalPayOrder normalOrder;
 
     /// 普通支付请求参数(pay 流程必填;sync/close 流程可为空)
     private NormalPayParam payParam;

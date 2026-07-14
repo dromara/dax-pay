@@ -21,13 +21,16 @@ import java.util.List;
 ///
 /// 业务容器统一落在 trade.order（与 GatewayPayOrder 等同包，纯持久化无编排 service）。
 /// 普通支付场景的容器，承载商户业务单信息（bizOrderNo / 商品标题 / 回调地址 等）
-/// 与 pay_trade 一对一关联（trade_type = normal）
-/// 冗余存储金额/支付/时间线字段，便于后台查询无需 JOIN pay_trade
+/// 与 pay_trade 一对一关联（trade_type = normal，当前实现；模型上 orderNo 与 tradeNo 身份分离）。
+/// 冗余存储金额/支付/时间线字段，便于后台查询无需 JOIN pay_trade。
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName(value = "pay_normal_order", autoResultMap = true)
 public class NormalPayOrder extends MchBaseEntity {
+
+    /// 平台业务单号（容器身份，与 tradeNo 独立生成；普通通道默认作为上送号）
+    private String orderNo;
 
     /// 商户业务单号
     private String bizOrderNo;
@@ -51,7 +54,7 @@ public class NormalPayOrder extends MchBaseEntity {
     /// 商户附加参数（回调原样返回）
     private String attach;
 
-    /// 业务单过期时间
+    /// 业务单过期时间（超时关单权威，不落 pay_trade）
     private OffsetDateTime expiredTime;
 
     // ===== 金额（冗余自 PayTrade，方便查询）=====
@@ -81,12 +84,12 @@ public class NormalPayOrder extends MchBaseEntity {
     /// @see ProductEnum
     private String product;
 
-    // ===== 支付请求参数（下单时写入）=====
+    // ===== 支付请求参数（下单时写入，审计保留）=====
 
     /// 微信 openid（jsapi/app/miniapp）
     private String openid;
 
-    /// 付款码（被扫支付）
+    /// 付款码（被扫支付，终态后仍保留供审计）
     private String barCode;
 
     // ===== 时间线（冗余，查询展示用）=====
@@ -115,7 +118,7 @@ public class NormalPayOrder extends MchBaseEntity {
     /// @see cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum
     private String provider;
 
-    /// 付款用户 ID（支付宝 userID/微信AppId 等）
+    /// 付款用户标识（支付宝 user_id、微信 openid 等，非通道 AppId）
     private String buyerId;
 
     /// 通道方记录的支付产品
@@ -130,22 +133,19 @@ public class NormalPayOrder extends MchBaseEntity {
     /// 活动类型
     private String promotionType;
 
-    /// 支付参数体（如微信 prepay_id 组装串，非空表示已拉起支付，免重复请求通道）
+    /// 支付参数体（如微信 prepay_id 组装串，非空表示已拉起支付，免重复请求通道；仅落容器）
     private String payBody;
 
     /// 支付参数体类型（jsapi/sdk/app）
     private String payBodyType;
 
-    // ===== 关联订单号=====
-
-    /// 订单号 通常上送给支付通道使用, 特殊情况下会上送[#relationOrderNo]
-    private String orderNo;
+    // ===== 关联订单号 =====
 
     /// 透传订单号（三方通道产生的透传订单号）
     private String transOrderNo;
 
-    /// 特殊通道关联订单号（部分通道订单号有前缀/长度限制时使用）
-    /// 如果没有特殊情况, 直接使用交易订单号作为关联订单号, 通常
+    /// 实际上送通道的商户订单号（展示冗余；反查权威在 pay_trade.relation_order_no）
+    /// 普通通道与 orderNo 一致；特殊通道为变形号
     private String relationOrderNo;
 
     // ===== 请求信息（关单/同步/退款透传依赖 + 审计）=====

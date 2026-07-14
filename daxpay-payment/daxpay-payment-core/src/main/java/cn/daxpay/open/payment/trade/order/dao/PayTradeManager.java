@@ -42,6 +42,13 @@ public class PayTradeManager extends BaseManager<PayTradeMapper, PayTrade> {
                 .oneOpt();
     }
 
+    /// 根据实际上送串(relationOrderNo/submitNo)反查
+    public Optional<PayTrade> findByRelationOrderNo(String relationOrderNo) {
+        return lambdaQuery()
+                .eq(PayTrade::getRelationOrderNo, relationOrderNo)
+                .oneOpt();
+    }
+
     /// 根据容器ID查询（按商户号自动租户隔离）
     public Optional<PayTrade> findByContainerId(Long containerId) {
         return lambdaQuery()
