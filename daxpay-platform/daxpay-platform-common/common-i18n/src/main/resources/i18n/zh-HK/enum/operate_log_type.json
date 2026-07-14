@@ -1,0 +1,12 @@
+{
+  "other": "其它",
+  "add": "新增",
+  "update": "修改",
+  "delete": "刪除",
+  "grant": "授權",
+  "sync": "同步",
+  "export": "導出",
+  "import": "導入",
+  "force": "強退",
+  "clean": "清空"
+}

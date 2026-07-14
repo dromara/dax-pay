@@ -1,0 +1,8 @@
+{
+  "link": "支付鏈接",
+  "jsapi": "JSAPI對象",
+  "from": "表單數據",
+  "identifier": "標識碼",
+  "qr_code": "二維碼",
+  "json": "JSON對象"
+}

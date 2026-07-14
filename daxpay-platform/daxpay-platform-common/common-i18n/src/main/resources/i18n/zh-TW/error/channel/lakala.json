@@ -1,0 +1,7 @@
+{
+  "privateKeyRequired": "應用私鑰不可為空",
+  "publicKeyRequired": "應用公鑰不可為空",
+  "lklAppIdRequired": "拉卡拉應用編號不可為空",
+  "mchSerialNoRequired": "商戶證書序列號不可為空",
+  "termNoNotConfigured": "終端號未配置, 請在商戶配置中填寫"
+}

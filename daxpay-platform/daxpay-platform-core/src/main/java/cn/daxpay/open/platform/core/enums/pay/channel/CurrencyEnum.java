@@ -41,6 +41,6 @@ public enum CurrencyEnum implements I18nSupport {
         return Arrays.stream(values())
                 .filter(e -> e.getCode().equals(code))
                 .findFirst()
-                .orElseThrow(() -> new DataNotExistException("不存在的币种: " + code));
+                .orElseThrow(() -> new DataNotExistException("error.common.currencyNotExist", code));
     }
 }

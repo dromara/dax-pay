@@ -1,0 +1,7 @@
+{
+  "browser": "瀏覽器環境",
+  "wechat_pay": "微信環境",
+  "alipay": "支付寶環境",
+  "union_pay": "雲閃付環境",
+  "douyin": "抖音環境"
+}

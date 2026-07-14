@@ -1,0 +1,744 @@
+{
+  "notBlank": "{0}不能為空",
+  "notEmpty": "{0}不能為空",
+  "lengthRange": "{0}長度必須在{1}到{2}之間",
+  "min": "{0}不能小於{1}",
+  "max": "{0}不能大於{1}",
+  "parameterError": "引數校驗失敗",
+  "field": {
+    "source": {
+      "notBlank": "平臺不能為空"
+    },
+    "clientId": {
+      "notBlank": "客戶端ID不能為空"
+    },
+    "clientSecret": {
+      "notBlank": "客戶端金鑰不能為空"
+    },
+    "clientKey": {
+      "notBlank": "Client Key不能為空"
+    },
+    "clientCode": {
+      "notBlank": "終端編碼不可為空"
+    },
+    "ip": {
+      "notValid": "IP地址不合法"
+    },
+    "aliAppId": {
+      "notBlank": "支付寶商戶appId不可為空"
+    },
+    "authType": {
+      "notBlank": "認證型別不可為空"
+    },
+    "signType": {
+      "notBlank": "簽名型別不可為空"
+    },
+    "alipayPublicKey": {
+      "notBlank": "支付寶公鑰不可為空"
+    },
+    "mchAppPrivateKey": {
+      "notBlank": "應用私鑰不可為空"
+    },
+    "appSecret": {
+      "size": "應用金鑰不可超過512位"
+    },
+    "douyinMchId": {
+      "notBlank": "抖音商戶號不可為空"
+    },
+    "userIdType": {
+      "notBlank": "使用者標識型別不可為空"
+    },
+    "product": {
+      "notBlank": "產品編碼不可為空",
+      "size": "支付產品不可超過32位",
+      "notNull": "支付產品必填"
+    },
+    "channel": {
+      "notBlank": "通道編碼不可為空",
+      "size": "通道不可超過32位"
+    },
+    "sandbox": {
+      "notNull": "沙箱環境不可為空"
+    },
+    "enable": {
+      "notNull": "是否啟用不可為空"
+    },
+    "mchNo": {
+      "notBlank": "商戶號不可為空",
+      "size": "商戶號不可超過32位",
+      "notNull": "商戶號不可為空"
+    },
+    "appId": {
+      "notBlank": "商戶AppId不可為空",
+      "size": "應用號不可超過32位",
+      "notNull": "應用ID不可為空"
+    },
+    "channelMchNo": {
+      "size": "通道商戶號不可超過32位",
+      "notBlank": "通道商戶號不可為空"
+    },
+    "level": {
+      "notBlank": "配置深度不可為空",
+      "size": "配置深度不可超過32位"
+    },
+    "cashierType": {
+      "notBlank": "收銀臺型別不可為空",
+      "size": "收銀臺型別不可超過16位"
+    },
+    "resolveMode": {
+      "notBlank": "解析模式不可為空",
+      "size": "解析模式不可超過16位"
+    },
+    "icon": {
+      "size": "圖示編碼不可超過32位"
+    },
+    "itemName": {
+      "size": "支付項名稱不可超過64位"
+    },
+    "subMchId": {
+      "notBlank": "微信子商戶號不可為空"
+    },
+    "wxMchId": {
+      "notBlank": "微信商戶Id不可為空"
+    },
+    "wxAppId": {
+      "notBlank": "微信應用AppId不可為空"
+    },
+    "publicKeyId": {
+      "notBlank": "支付公鑰ID不可為空"
+    },
+    "certSerialNo": {
+      "notBlank": "證書序列號不可為空"
+    },
+    "id": {
+      "notNull": "主鍵不可為空",
+      "mustBeNullOnAdd": "Id需要為空"
+    },
+    "alipayIsvAppId": {
+      "notNull": "支付寶服務商應用ID不可為空"
+    },
+    "alipayDirectAppId": {
+      "notNull": "支付寶直連應用ID不可為空"
+    },
+    "wechatIsvAppId": {
+      "notNull": "微信服務商應用ID不可為空"
+    },
+    "account": {
+      "notBlank": "登入賬號不可為空",
+      "size": "賬號長度為6-20個字元",
+      "pattern": "賬號只能包含字母、數字、下劃線和中劃線"
+    },
+    "password": {
+      "notBlank": "密碼不可為空"
+    },
+    "subjectType": {
+      "notBlank": "主體型別不可為空"
+    },
+    "pass": {
+      "notNull": "稽核結果不可為空"
+    },
+    "channelMerchantNo": {
+      "notBlank": "通道商戶號不可為空"
+    },
+    "channelMerchantName": {
+      "notBlank": "商戶名稱不可為空"
+    },
+    "appKey": {
+      "notBlank": "應用金鑰不可為空"
+    },
+    "secretKey": {
+      "notBlank": "通訊金鑰不可為空"
+    },
+    "tradeIdentity": {
+      "notBlank": "商戶交易標識不可為空"
+    },
+    "subMchNo": {
+      "notBlank": "子商戶號不可為空"
+    },
+    "parentMchNo": {
+      "notBlank": "父級通道商戶號不可為空"
+    },
+    "subMchName": {
+      "notBlank": "子商戶名稱不可為空"
+    },
+    "orderNo": {
+      "notBlank": "支付訂單號不可為空",
+      "size": "支付訂單號不可超過100位"
+    },
+    "amount": {
+      "notNull": "支付金額不可為空",
+      "min": "支付金額不能小於1分",
+      "max": "支付金額不能大於一億元",
+      "positive": "金額必須大於0"
+    },
+    "title": {
+      "notBlank": "名稱不可為空",
+      "size": "支付標題不可超過100位"
+    },
+    "date": {
+      "notNull": "日期不可為空"
+    },
+    "fileType": {
+      "notNull": "檔案型別不能為空"
+    },
+    "authCode": {
+      "notBlank": "標識碼不可為空",
+      "size": "付款碼不可超過128位"
+    },
+    "clientIp": {
+      "size": "客戶端ip不可超過64位"
+    },
+    "nonceStr": {
+      "size": "隨機數不可超過32位"
+    },
+    "sign": {
+      "size": "簽名不可超過1024位"
+    },
+    "reqTime": {
+      "notNull": "請求時間必填"
+    },
+    "bizOrderNo": {
+      "size": "商戶支付訂單號不可超過100位",
+      "notBlank": "商戶訂單號不可為空"
+    },
+    "description": {
+      "size": "支付描述不可超過50位",
+      "notBlank": "支付描述不能為空"
+    },
+    "method": {
+      "notBlank": "支付方式不可為空",
+      "size": "支付方式編碼不可超過32位",
+      "notNull": "支付方式不能為空"
+    },
+    "capability": {
+      "size": "支付能力編碼不可超過32位",
+      "notBlank": "支付能力編碼不可為空"
+    },
+    "provider": {
+      "notBlank": "支付渠道不可為空",
+      "size": "支付渠道編碼不可超過32位"
+    },
+    "otherMethod": {
+      "size": "支付方式編碼不可超過128位"
+    },
+    "limitPay": {
+      "size": "限制使用者支付型別不能超過128位"
+    },
+    "opAppId": {
+      "size": "opAppId不可超過128位"
+    },
+    "openId": {
+      "size": "使用者標識不可超過128位"
+    },
+    "terminalNo": {
+      "size": "終端裝置編碼不可超過128位"
+    },
+    "extraParam": {
+      "size": "支付擴充套件引數不可超過2048位"
+    },
+    "goodsDetail": {
+      "size": "商品明細列表不可超過50條"
+    },
+    "goodsId": {
+      "notBlank": "商品編碼不可為空",
+      "size": "商品編碼不可超過64位"
+    },
+    "goodsName": {
+      "notBlank": "商品名稱不可為空",
+      "size": "商品名稱不可超過256位"
+    },
+    "quantity": {
+      "notNull": "商品數量不可為空",
+      "min": "商品數量不能小於1"
+    },
+    "unitPrice": {
+      "notNull": "商品單價不可為空",
+      "min": "商品單價不能小於1分",
+      "max": "商品單價不能大於一億元"
+    },
+    "goodsCategory": {
+      "size": "商品分類不可超過32位"
+    },
+    "goodsDescription": {
+      "size": "商品描述不可超過1000位"
+    },
+    "showUrl": {
+      "size": "商品展示連結不可超過400位"
+    },
+    "attach": {
+      "size": "商戶擴充套件引數不可超過500位"
+    },
+    "returnUrl": {
+      "size": "同步通知URL不可超過200位"
+    },
+    "quitUrl": {
+      "size": "退出地址不可超過200位"
+    },
+    "notifyUrl": {
+      "size": "非同步通知地址不可超過200位"
+    },
+    "outOrderNo": {
+      "size": "通道支付訂單號不可超過150位",
+      "notBlank": "通道支付訂單號不能為空"
+    },
+    "refundNo": {
+      "notBlank": "退款號不可為空",
+      "size": "退款號不可超過100位"
+    },
+    "bizRefundNo": {
+      "size": "商戶退款號不可超過100位",
+      "notBlank": "商戶退款號不可為空"
+    },
+    "reason": {
+      "size": "退款原因不可超過50位"
+    },
+    "payeeName": {
+      "size": "收款人姓名不可超過50位"
+    },
+    "items": {
+      "notEmpty": "產品配置列表不可為空"
+    },
+    "shortName": {
+      "notBlank": "簡稱不能為空"
+    },
+    "status": {
+      "notBlank": "狀態不可為空"
+    },
+    "accountType": {
+      "notBlank": "賬戶型別不可為空"
+    },
+    "appAuthToken": {
+      "notBlank": "應用授權令牌不可為空"
+    },
+    "isvAppId": {
+      "notBlank": "支付寶應用不可為空"
+    },
+    "alipayUserId": {
+      "notBlank": "子商戶號不可為空"
+    },
+    "accountName": {
+      "notBlank": "銀行卡賬戶名不可為空"
+    },
+    "cardNo": {
+      "notBlank": "銀行卡號不可為空"
+    },
+    "bankName": {
+      "notBlank": "開戶行名稱不可為空"
+    },
+    "cardFrontPic": {
+      "notBlank": "銀行卡正面照片不可為空"
+    },
+    "legalName": {
+      "notBlank": "法人姓名不可為空"
+    },
+    "certNo": {
+      "notBlank": "身份證號不可為空"
+    },
+    "frontPic": {
+      "notBlank": "身份證人像面照片不可為空"
+    },
+    "backPic": {
+      "notBlank": "身份證國徽面照片不可為空"
+    },
+    "licenseNo": {
+      "notBlank": "營業執照號不可為空"
+    },
+    "licenseName": {
+      "notBlank": "營業執照名稱不可為空"
+    },
+    "licensePic": {
+      "notBlank": "營業執照照片不可為空"
+    },
+    "appName": {
+      "notBlank": "應用名稱不可為空",
+      "notNull": "應用名稱不可為空"
+    },
+    "appType": {
+      "notBlank": "應用型別不可為空"
+    },
+    "platform": {
+      "notBlank": "移動平臺不可為空"
+    },
+    "authAppType": {
+      "notBlank": "認證應用型別不可為空"
+    },
+    "mchName": {
+      "notBlank": "商戶名稱不可為空"
+    },
+    "mchShortName": {
+      "notBlank": "商戶簡稱不可為空"
+    },
+    "publicKey": {
+      "notBlank": "平臺公鑰不能為空，請配置 daxpay.platform.config.key-config.public-key"
+    },
+    "privateKey": {
+      "notBlank": "平臺私鑰不能為空，請配置 daxpay.platform.config.key-config.private-key"
+    },
+    "phone": {
+      "notBlank": "手機號不能為空",
+      "format": "手機號格式不正確"
+    },
+    "roleId": {
+      "notNull": "角色ID不可為空"
+    },
+    "code": {
+      "notBlank": "編碼不可為空"
+    },
+    "nameCn": {
+      "notBlank": "中文名稱不可為空"
+    },
+    "nameEn": {
+      "notBlank": "英文名稱不可為空"
+    },
+    "menuCode": {
+      "notBlank": "選單編碼不可為空"
+    },
+    "titleCn": {
+      "notBlank": "選單標題-中文不可為空"
+    },
+    "titleEn": {
+      "notBlank": "選單標題-英文不可為空"
+    },
+    "i18nKey": {
+      "notBlank": "國際化key不可為空"
+    },
+    "userIds": {
+      "notEmpty": "使用者集合不能為空"
+    },
+    "userId": {
+      "notNull": "使用者 ID 不能為空"
+    },
+    "newPassword": {
+      "notBlank": "新密碼不能為空"
+    },
+    "configName": {
+      "notBlank": "配置名稱不能為空"
+    },
+    "endpoint": {
+      "notBlank": "服務端點不能為空"
+    },
+    "publicBucket": {
+      "notBlank": "公開儲存桶不能為空"
+    },
+    "privateBucket": {
+      "notBlank": "私有儲存桶不能為空"
+    },
+    "urlType": {
+      "notBlank": "端點型別不能為空"
+    },
+    "systemName": {
+      "size": "系統名稱長度不能超過{max}個字元"
+    },
+    "companyName": {
+      "size": "公司全稱長度不能超過{max}個字元"
+    },
+    "companyEmail": {
+      "email": "郵箱格式不正確"
+    },
+    "companyWechat": {
+      "size": "微訊號長度不能超過{max}個字元"
+    },
+    "copyright": {
+      "size": "版權資訊長度不能超過{max}個字元"
+    },
+    "icpLink": {
+      "pattern": "連結必須以 http:// 或 https:// 開頭"
+    },
+    "mpsLink": {
+      "pattern": "連結必須以 http:// 或 https:// 開頭"
+    },
+    "pcacLink": {
+      "pattern": "連結必須以 http:// 或 https:// 開頭"
+    },
+    "icpPlusLink": {
+      "pattern": "連結必須以 http:// 或 https:// 開頭"
+    },
+    "dictId": {
+      "notNull": "字典ID不可為空"
+    },
+    "protocolId": {
+      "notNull": "協議id不能為空"
+    },
+    "content": {
+      "notBlank": "協議內容不能為空"
+    },
+    "showName": {
+      "notBlank": "顯示名稱不能為空"
+    },
+    "type": {
+      "notBlank": "型別不能為空"
+    },
+    "clientType": {
+      "notBlank": "端型別不能為空"
+    },
+    "language": {
+      "notBlank": "語言不能為空"
+    },
+    "email": {
+      "notBlank": "郵箱不可為空",
+      "format": "郵箱格式不正確"
+    },
+    "realName": {
+      "notBlank": "姓名不可為空"
+    },
+    "regionCode": {
+      "notBlank": "區劃程式碼不可為空"
+    },
+    "dictItemId": {
+      "notNull": "字典項主鍵不可為空"
+    },
+    "configItems": {
+      "notEmpty": "配置項不可為空"
+    },
+    "payOrderId": {
+      "notNull": "支付訂單ID不可為空"
+    },
+    "orderId": {
+      "notNull": "訂單ID不可為空"
+    },
+    "fileId": {
+      "notNull": "檔案ID不可為空"
+    },
+    "objectKey": {
+      "notBlank": "物件Key不可為空"
+    },
+    "sessionIds": {
+      "notEmpty": "會話ID列表不可為空"
+    },
+    "orderSource": {
+      "mustBeNull": "訂單來源欄位不允許進行設定"
+    },
+    "minLengthNotGreaterThanMax": {
+      "assertTrue": "最小長度不能大於最大長度"
+    },
+    "captchaFailCountNotGreaterThanMax": {
+      "assertTrue": "觸發驗證碼的失敗次數不能大於最大失敗次數"
+    },
+    "queryCode": {
+      "notBlank": "查詢碼不可為空"
+    },
+    "authToken": {
+      "notBlank": "認證會話碼不可為空",
+      "size": "認證會話碼不可超過64位"
+    },
+    "returnPath": {
+      "size": "來源回跳路徑不可超過200位"
+    },
+    "taskId": {
+      "notNull": "訊息ID不可為空"
+    },
+    "deleteDay": {
+      "notNull": "天數不可為空"
+    },
+    "menuId": {
+      "notNull": "選單ID不可為空"
+    },
+    "oldPassword": {
+      "notBlank": "舊密碼不能為空"
+    },
+    "scene": {
+      "notNull": "訊息場景不能為空",
+      "size": "場景編碼不可超過32位"
+    },
+    "demoContent": {
+      "notBlank": "訊息內容不能為空"
+    },
+    "delaySeconds": {
+      "min": "延時秒數不能小於1",
+      "max": "延時秒數不能大於300"
+    },
+    "name": {
+      "notBlank": "名稱不可為空",
+      "size": "名稱長度必須在3到15之間"
+    },
+    "enabled": {
+      "notNull": "是否啟用不可為空"
+    },
+    "storeNo": {
+      "size": "門店編號不可超過64位"
+    },
+    "operatorId": {
+      "size": "操作員ID不可超過64位"
+    },
+    "deviceName": {
+      "size": "裝置名稱不可超過128位"
+    },
+    "deviceIp": {
+      "size": "裝置IP不可超過64位"
+    },
+    "douyinAppId": {
+      "notBlank": "抖音應用ID不可為空"
+    },
+    "douyinDirectAppId": {
+      "notNull": "抖音直連應用ID不可為空"
+    },
+    "dyMchId": {
+      "notBlank": "抖音商戶號不可為空"
+    },
+    "wechatDirectAppId": {
+      "notNull": "微信直連應用ID不可為空"
+    },
+    "wechatIsvMchAppId": {
+      "notNull": "微信服務商通道商戶應用ID不可為空"
+    },
+    "storeName": {
+      "notBlank": "門店名稱不能為空"
+    },
+    "deviceSn": {
+      "notBlank": "裝置序列號不能為空"
+    },
+    "deviceType": {
+      "notBlank": "裝置型別不能為空"
+    },
+    "vendorCode": {
+      "notBlank": "廠商程式碼不能為空"
+    },
+    "vendorConfigId": {
+      "notNull": "廠商配置不能為空"
+    },
+    "qrCodeName": {
+      "notBlank": "碼牌名稱不能為空",
+      "size": "碼牌名稱不可超過100位"
+    },
+    "amountType": {
+      "notBlank": "金額型別不能為空"
+    },
+    "batchNo": {
+      "notBlank": "批次號不能為空",
+      "size": "批次號不可超過64位"
+    },
+    "count": {
+      "notNull": "建立數量不能為空",
+      "min": "建立數量不能小於1",
+      "max": "建立數量不能大於999"
+    },
+    "ids": {
+      "notEmpty": "請選擇碼牌"
+    },
+    "twoFactorCode": {
+      "notBlank": "動態驗證碼不能為空"
+    },
+    "preAuthToken": {
+      "notBlank": "預認證令牌不能為空"
+    },
+    "remark": {
+      "size": "備註不可超過255位"
+    },
+    "lklAppId": {
+      "notBlank": "拉卡拉應用編號不可為空"
+    },
+    "mchSerialNo": {
+      "notBlank": "商戶證書序列號不可為空"
+    },
+    "orgCode": {
+      "notBlank": "機構程式碼不可為空"
+    },
+    "orgId": {
+      "notBlank": "機構ID不能為空"
+    },
+    "vbillMchNo": {
+      "notBlank": "天闕商戶號不能為空"
+    },
+    "lakalaMchNo": {
+      "notBlank": "拉卡拉商戶號不可為空"
+    },
+    "termNo": {
+      "notBlank": "終端號不可為空",
+      "size": "終端號不可超過64位"
+    },
+    "agentNo": {
+      "notBlank": "服務商編號不可為空"
+    },
+    "accessId": {
+      "notBlank": "接入機構標識不可為空"
+    },
+    "merchNo": {
+      "notBlank": "海科商戶號不可為空"
+    },
+    "pn": {
+      "notBlank": "SAAS終端號不可為空"
+    },
+    "sysId": {
+      "notBlank": "服務商系統ID不可為空"
+    },
+    "productId": {
+      "notBlank": "產品號不可為空"
+    },
+    "merchantNo": {
+      "notBlank": "匯付商戶號不可為空"
+    },
+    "dougongAppId": {
+      "notBlank": "商戶AppId不可為空"
+    },
+    "sandAppId": {
+      "notBlank": "杉德代理號不可為空"
+    },
+    "credential": {
+      "notNull": "通道憑證不能為空"
+    },
+    "outTradeNo": {
+      "notBlank": "通道交易號不能為空"
+    },
+    "outRefundNo": {
+      "notBlank": "通道退款號不能為空"
+    },
+    "outRequestNo": {
+      "notBlank": "通道請求號不能為空"
+    },
+    "tradeNo": {
+      "notBlank": "平臺交易號不能為空"
+    },
+    "tradeProduct": {
+      "notBlank": "交易產品不能為空"
+    },
+    "relationOrderNo": {
+      "notBlank": "關聯訂單號不能為空"
+    },
+    "refundAmount": {
+      "notNull": "退款金額不能為空",
+      "positive": "退款金額必須大於0"
+    },
+    "subject": {
+      "notBlank": "支付標題不能為空"
+    },
+    "callbackBody": {
+      "notBlank": "回撥報文不能為空"
+    },
+    "callbackType": {
+      "notBlank": "回撥型別不能為空"
+    },
+    "rawData": {
+      "notBlank": "原始資料不能為空"
+    },
+    "orderCreateTime": {
+      "notBlank": "訂單建立時間不能為空"
+    },
+    "orgReqDate": {
+      "notBlank": "原始請求日期不能為空"
+    },
+    "originOutTradeNo": {
+      "notBlank": "原通道交易號不能為空"
+    },
+    "config": {
+      "notNull": "配置不能為空"
+    },
+    "fuyouMchNo": {
+      "notBlank": "富友商戶號不能為空"
+    },
+    "fyAppId": {
+      "notBlank": "富友應用ID不能為空"
+    },
+    "leshuaOrderId": {
+      "notBlank": "樂刷訂單號不能為空"
+    },
+    "lsMchNo": {
+      "notBlank": "樂刷商戶號不能為空"
+    },
+    "fileName": {
+      "notBlank": "檔名不能為空"
+    },
+    "fileContent": {
+      "notBlank": "檔案內容不能為空"
+    }
+  }
+}

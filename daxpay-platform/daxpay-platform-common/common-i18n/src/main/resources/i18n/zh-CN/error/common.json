@@ -36,5 +36,10 @@
   "gatewayPayTypeNotExist": "网关支付类型不存在: {0}",
   "aggregateConfigLevelNotExist": "聚合扫码配置深度不存在: {0}",
   "gatewayCashierTypeNotExist": "收银台类型不存在: {0}",
-  "cashierItemResolveModeNotExist": "收银台支付项解析模式不存在: {0}"
+  "cashierItemResolveModeNotExist": "收银台支付项解析模式不存在: {0}",
+  "currencyNotExist": "币种不存在: {0}",
+  "payTradeTypeNotExist": "资金交易形态不存在: {0}",
+  "payFundStatusNotExist": "资金交易状态不存在: {0}",
+  "normalOrderStatusNotExist": "普通支付订单状态不存在: {0}",
+  "gatewayOrderStatusNotExist": "网关支付订单状态不存在: {0}"
 }

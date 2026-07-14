@@ -1,0 +1,10 @@
+{
+  "roleNotExisted": "角色不存在",
+  "roleAlreadyUsed": "該角色下分配了用户，無法刪除",
+  "roleAlreadyExisted": "角色已經存在",
+  "permissionDbError": "用户沒有權限",
+  "internalCannotDelete": "內置角色不允許刪除",
+  "assignOutOfScope": "角色分配超出了可分配的範圍",
+  "assignCrossClient": "禁止為用户分配跨終端角色：用户歸屬終端[{0}]，角色歸屬終端[{1}]",
+  "notExist": "角色不存在"
+}

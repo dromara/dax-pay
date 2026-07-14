@@ -1,0 +1,5 @@
+{
+  "isvKeyNotConfigured": "隨行付服務商金鑰未配置",
+  "mnoNotConfigured": "天闕商戶號(mno)未配置, 請在商戶配置中填寫",
+  "merchantDuplicate": "該商戶下已存在此天闕商戶號"
+}

@@ -1,0 +1,20 @@
+{
+  "alipay": "支付寶",
+  "wechat": "微信支付",
+  "union_pay": "雲閃付",
+  "leshua_pay": "樂刷",
+  "vbill_pay": "隨行付",
+  "ada_pay": "匯付天下",
+  "dougong_pay": "斗拱",
+  "hkrt_pay": "海科融通",
+  "lakala_pay": "拉卡拉",
+  "fuyou_pay": "富友",
+  "sheng_pay": "盛付通",
+  "ysep_pay": "銀盛",
+  "quick_pay": "快錢",
+  "sand_pay": "杉德",
+  "yee_pay": "易寶",
+  "ums_pay": "銀聯商務",
+  "douyin_pay": "抖音支付",
+  "jee_pay": "jeepay"
+}

@@ -1,0 +1,11 @@
+{
+  "notFound": "碼牌不存在",
+  "disabled": "碼牌已停用",
+  "mchNotFound": "碼牌所屬商戶不存在",
+  "amountTypeNotFound": "未找到對應的碼牌金額型別: {0}",
+  "statusNotFound": "未找到對應的碼牌狀態: {0}",
+  "fixedAmountInvalid": "固定金額必須大於0",
+  "batchNoExists": "批次號已存在",
+  "notAssigned": "碼牌未分配商戶",
+  "idsEmpty": "請選擇碼牌"
+}

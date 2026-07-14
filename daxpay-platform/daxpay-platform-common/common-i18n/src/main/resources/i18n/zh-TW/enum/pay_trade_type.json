@@ -1,0 +1,8 @@
+{
+  "normal": "普通支付",
+  "gateway": "閘道器支付",
+  "authorize": "預授權凍結",
+  "capture": "預授權捕獲",
+  "recurring": "週期代扣",
+  "combine_sub": "合單子單"
+}

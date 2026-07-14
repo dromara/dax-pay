@@ -5,5 +5,6 @@
   "permissionDbError": "User has no permission",
   "internalCannotDelete": "Built-in role cannot be deleted",
   "assignOutOfScope": "Role assignment exceeds the assignable scope",
+  "assignCrossClient": "Cannot assign a role across terminals: user client [{0}], role client [{1}]",
   "notExist": "Role not found"
 }

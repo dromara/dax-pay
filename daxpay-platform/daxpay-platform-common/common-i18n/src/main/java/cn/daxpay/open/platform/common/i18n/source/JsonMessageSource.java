@@ -25,6 +25,13 @@ import java.util.concurrent.ConcurrentHashMap;
 /// 扫描规则: 扫描 classpath*:i18n/{locale}/**\/*.json, 文件路径映射为 key 前缀
 /// 例如: i18n/zh-CN/channel/enum.json → key 前缀 "channel.enum"
 /// JSON 内容: { "alipay": "支付宝" } → 完整 key: "channel.enum.alipay"
+///
+/// ## 地区别名
+/// 无独立资源目录的 Accept-Language 变体会先映射到主资源 locale:
+/// - `zh-Hant` / `zh-Hant-TW` → `zh-TW`
+/// - `zh-HK` / `zh-Hant-HK` / `zh-MO` / `zh-Hant-MO` → `zh-HK`
+/// - `zh-Hans` / `zh-Hans-CN` → `zh-CN`
+/// 缺 key 时: 精确资源 → 默认 `zh-CN`（台港互不为 fallback）
 @Slf4j
 public class JsonMessageSource extends AbstractMessageSource {
 
@@ -40,9 +47,25 @@ public class JsonMessageSource extends AbstractMessageSource {
     /// 已加载的可用 locale 标签集合（如 en-US, zh-CN），启动时扫描
     private final Set<String> availableLocaleTags = new HashSet<>();
 
-    /// 语言码 → 首个匹配的地区 locale 标签（如 en → en-US, zh → zh-CN），用于反向回退
-    /// 当请求纯语言码（如 en）而无对应资源目录时, 据此映射到同语言的地区资源
+    /// 语言码 → 地区 locale 标签（如 en → en-US, zh → zh-CN），用于反向回退
     private final Map<String, String> languageToRegionLocale = new HashMap<>();
+
+    /// Accept-Language / 客户端变体 → 资源目录 locale 标签
+    private static final Map<String, String> LOCALE_ALIASES = Map.ofEntries(
+            Map.entry("zh-hans", "zh-CN"),
+            Map.entry("zh-hans-cn", "zh-CN"),
+            Map.entry("zh-cn", "zh-CN"),
+            Map.entry("zh-hant", "zh-TW"),
+            Map.entry("zh-hant-tw", "zh-TW"),
+            Map.entry("zh-tw", "zh-TW"),
+            Map.entry("zh-hant-hk", "zh-HK"),
+            Map.entry("zh-hk", "zh-HK"),
+            Map.entry("zh-hant-mo", "zh-HK"),
+            Map.entry("zh-mo", "zh-HK"),
+            Map.entry("en", "en-US"),
+            Map.entry("en-us", "en-US"),
+            Map.entry("en-gb", "en-US")
+    );
 
     public JsonMessageSource(ResourcePatternResolver resourceResolver) {
         this.resourceResolver = resourceResolver;
@@ -51,36 +74,54 @@ public class JsonMessageSource extends AbstractMessageSource {
 
     @Override
     protected MessageFormat resolveCode(String code, Locale locale) {
-        Map<String, String> messages = this.loadMessages(locale);
+        Locale resolved = this.resolveResourceLocale(locale);
+        Map<String, String> messages = this.loadMessages(resolved);
         String message = messages.get(code);
-        // 未命中则按语言（不含地区）回退: zh-CN -> zh
+
+        // 未命中则按语言反向匹配地区: en -> en-US；zh 优先 zh-CN
         if (message == null) {
-            Locale langOnly = Locale.of(locale.getLanguage());
-            if (!langOnly.equals(locale)) {
-                messages = this.loadMessages(langOnly);
-                message = messages.get(code);
-            }
-        }
-        // 仍未命中则按语言反向匹配地区: en -> en-US, zh -> zh-CN, zh-Hans -> zh-CN
-        if (message == null) {
-            String lang = locale.getLanguage();
+            String lang = resolved.getLanguage();
             if (!lang.isEmpty()) {
                 String regionTag = this.languageToRegionLocale.get(lang);
                 if (regionTag != null) {
                     Locale regionLocale = Locale.forLanguageTag(regionTag);
-                    if (!regionLocale.equals(locale)) {
+                    if (!regionLocale.equals(resolved)) {
                         messages = this.loadMessages(regionLocale);
                         message = messages.get(code);
                     }
                 }
             }
         }
-        // 仍未命中则用默认 locale 回退
-        if (message == null && !locale.equals(this.defaultLocale)) {
+
+        // 仍未命中则用默认 locale 回退（台港互不回退，统一可回 zh-CN）
+        if (message == null && !resolved.equals(this.defaultLocale)) {
             messages = this.loadMessages(this.defaultLocale);
             message = messages.get(code);
         }
         return message != null ? new MessageFormat(message, locale) : null;
+    }
+
+    /// 将请求 locale 规范为资源目录标签对应的 Locale
+    private Locale resolveResourceLocale(Locale locale) {
+        if (locale == null) {
+            return this.defaultLocale;
+        }
+        String tag = locale.toLanguageTag();
+        String lower = tag.toLowerCase(Locale.ROOT);
+        String alias = LOCALE_ALIASES.get(lower);
+        if (alias != null) {
+            return Locale.forLanguageTag(alias);
+        }
+        // 脚本 Hant 无地区 → 台湾
+        if ("zh".equals(locale.getLanguage()) && "Hant".equalsIgnoreCase(locale.getScript())
+                && (locale.getCountry() == null || locale.getCountry().isEmpty())) {
+            return Locale.forLanguageTag("zh-TW");
+        }
+        // 脚本 Hans → 简体
+        if ("zh".equals(locale.getLanguage()) && "Hans".equalsIgnoreCase(locale.getScript())) {
+            return Locale.forLanguageTag("zh-CN");
+        }
+        return locale;
     }
 
     private Map<String, String> loadMessages(Locale locale) {
@@ -90,25 +131,20 @@ public class JsonMessageSource extends AbstractMessageSource {
     private Map<String, String> loadFromFiles(Locale locale) {
         Map<String, String> result = new HashMap<>();
         String localeTag = locale.toLanguageTag();
-        // 兼容 zh-CN 和 zh_CN 两种格式
         String basePath = "classpath*:i18n/" + localeTag + "/**/*.json";
         try {
             Resource[] resources = this.resourceResolver.getResources(basePath);
             for (Resource resource : resources) {
                 String filePath = resource.getURL().toString();
-                // 提取相对路径: 从 i18n/{locale}/ 之后到 .json 之前
                 String relativePath = this.extractRelativePath(filePath, localeTag);
                 if (relativePath == null) {
                     continue;
                 }
-                // 读取文件内容
                 String content = this.readResourceContent(resource);
                 if (content == null || content.isBlank()) {
                     continue;
                 }
-                // 解析 JSON
                 JSONObject jsonObj = JSONUtil.parseObj(content);
-                // 递归展平
                 this.flattenJson(relativePath, jsonObj, result);
             }
             log.debug("加载国际化文件完成, locale={}, 条目数={}", localeTag, result.size());
@@ -121,7 +157,6 @@ public class JsonMessageSource extends AbstractMessageSource {
 
     /// 从完整 URL 路径中提取 locale 后的相对路径
     /// 例如: .../i18n/zh-CN/channel/enum.json → channel.enum
-    /// 从资源 URL 解析 i18n 相对路径前缀（供单测校验）
     String extractRelativePath(String fileUrl, String localeTag) {
         String decoded = URLDecoder.decode(fileUrl, StandardCharsets.UTF_8);
         String marker = "i18n/" + localeTag + "/";
@@ -130,23 +165,19 @@ public class JsonMessageSource extends AbstractMessageSource {
             return null;
         }
         String relative = decoded.substring(idx + marker.length());
-        // 去掉 .json 后缀
         if (relative.endsWith(".json")) {
             relative = relative.substring(0, relative.length() - 5);
         }
-        // 路径分隔符替换为 .
         return relative.replace('/', '.').replace('\\', '.');
     }
 
     /// 启动时扫描 i18n 目录下所有 locale 子目录，建立「语言码 → 地区 locale」反向映射
-    /// 用于支持请求纯语言码（如 en）时反向匹配到地区资源（如 en-US）
     private void scanAvailableLocales() {
         try {
             Resource[] resources = this.resourceResolver.getResources("classpath*:i18n/**/*.json");
             for (Resource resource : resources) {
                 String localeTag = this.extractLocaleTag(resource.getURL().toString());
                 if (localeTag != null && this.availableLocaleTags.add(localeTag)) {
-                    // 首次发现该 locale, 记录语言 → 地区映射
                     Locale locale = Locale.forLanguageTag(localeTag);
                     String lang = locale.getLanguage();
                     if (!lang.isEmpty()) {
@@ -154,14 +185,21 @@ public class JsonMessageSource extends AbstractMessageSource {
                     }
                 }
             }
+            // 多中文地区并存时，纯语言码 zh 固定落到简体，避免扫序导致落到 zh-TW/zh-HK
+            if (this.availableLocaleTags.contains("zh-CN")) {
+                this.languageToRegionLocale.put("zh", "zh-CN");
+            }
+            if (this.availableLocaleTags.contains("en-US")) {
+                this.languageToRegionLocale.put("en", "en-US");
+            }
             log.debug("扫描到可用 locale: {}, 语言→地区映射: {}", this.availableLocaleTags, this.languageToRegionLocale);
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             log.warn("扫描可用 locale 失败, 语言→地区反向回退将不可用", e);
         }
     }
 
     /// 从资源 URL 提取 locale 标签
-    /// .../i18n/en-US/enum/xxx.json → "en-US"
     private String extractLocaleTag(String fileUrl) {
         String decoded = URLDecoder.decode(fileUrl, StandardCharsets.UTF_8);
         String marker = "i18n/";
@@ -174,9 +212,6 @@ public class JsonMessageSource extends AbstractMessageSource {
         return slash > 0 ? after.substring(0, slash) : null;
     }
 
-    /// 递归展平 JSON 对象
-    /// 例如: { "alipay": "支付宝", "amount": { "exceed": "金额超限" } }
-    /// 前缀 "channel.enum" → channel.enum.alipay="支付宝", channel.enum.amount.exceed="金额超限"
     private void flattenJson(String prefix, JSONObject json, Map<String, String> result) {
         for (Map.Entry<String, Object> entry : json.entrySet()) {
             String key = prefix.isEmpty() ? entry.getKey() : prefix + "." + entry.getKey();

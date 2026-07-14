@@ -1,0 +1,18 @@
+{
+  "codeExists": "選單編碼已存在",
+  "cycleDependency": "上級選單不能是自身或下級選單",
+  "subpageNoChildren": "子頁面不能有下級選單",
+  "hasChildrenCannotDelete": "有子選單不可以刪除",
+  "invalidType": "無效的選單型別",
+  "typeImmutable": "選單型別建立後不可修改",
+  "subpageNeedParent": "子頁面必須選擇上級選單",
+  "parentNotExist": "上級選單不存在",
+  "subpageParentMustBeMenu": "子頁面的上級選單必須是選單型別",
+  "subpageParentInvalid": "子頁面的上級必須是選單或子頁面分組",
+  "subpageGroupNeedParent": "子頁面分組必須選擇上級選單",
+  "subpageGroupParentMustBeMenu": "子頁面分組的上級必須是選單型別",
+  "subpageGroupChildMustBeSubpage": "子頁面分組下只能包含子頁面",
+  "needParentCatalog": "選單、內嵌頁面、外鏈必須選擇上級目錄",
+  "parentMustBeCatalog": "選單、內嵌頁面、外鏈的上級選單必須是目錄型別",
+  "notExist": "選單不存在"
+}

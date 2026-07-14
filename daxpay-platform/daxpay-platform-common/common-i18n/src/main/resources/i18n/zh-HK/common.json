@@ -1,0 +1,12 @@
+{
+  "save": "保存",
+  "delete": "刪除",
+  "confirm": "確認",
+  "cancel": "取消",
+  "submit": "提交",
+  "enable": "啓用",
+  "disable": "停用",
+  "operation": "操作",
+  "createTime": "創建時間",
+  "updateTime": "更新時間"
+}

@@ -1,0 +1,8 @@
+{
+  "normal": "Normal Pay",
+  "gateway": "Gateway Pay",
+  "authorize": "Authorize",
+  "capture": "Capture",
+  "recurring": "Recurring",
+  "combine_sub": "Combine Sub-order"
+}

@@ -1,0 +1,22 @@
+{
+  "configNotExist": "平臺配置不存在或未啟用",
+  "unsupportedSource": "不支援的平臺",
+  "unsupportedClient": "社交登入僅支援運營端(admin)與商戶端(merchant)",
+  "configDuplicated": "該平臺配置已存在",
+  "notConfigured": "平臺尚未配置，無法啟停",
+  "authCodeBlank": "授權碼不能為空",
+  "endpointNotConfigured": "端點配置中缺少對應前端訪問地址，無法生成回撥 URL",
+  "adminEndpointNotConfigured": "請先在端點配置中設定「管理端訪問地址」(adminBaseUrl)",
+  "merchantEndpointNotConfigured": "請先在端點配置中設定「商戶端訪問地址」(merchantBaseUrl)，商戶社交登入依賴該地址生成回撥",
+  "alipayNotConfigured": "平臺級支付寶配置不完整，請先在「三方平臺管理」中配置",
+  "wechatMpNotConfigured": "平臺級微信公眾號配置不完整，請先在「三方平臺管理」中配置",
+  "douyinH5NotConfigured": "平臺級抖音 H5 應用配置不完整，請先在「三方平臺管理」中配置",
+  "weCom": {
+    "notCorpMember": "非本企業成員，不支援登入"
+  },
+  "bind": {
+    "alreadyBoundByOther": "該第三方賬號已被其他使用者繫結",
+    "alreadyBoundPlatform": "您已繫結該平臺，請先解綁後再繫結新賬號",
+    "clientMismatch": "當前登入使用者不屬於該終端，無法完成繫結"
+  }
+}

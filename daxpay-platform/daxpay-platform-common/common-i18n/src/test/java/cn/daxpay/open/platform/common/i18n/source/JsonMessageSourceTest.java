@@ -56,7 +56,7 @@ class JsonMessageSourceTest {
     @Test
     void shouldResolveRouteModeNotExistWithPlaceholder() {
         String message = messageSource.getMessage("pay.route.error.routeModeNotExist", new Object[]{"invalid"}, Locale.CHINA);
-        assertEquals("路由模式不存在: invalid", message);
+        assertEquals("通道路由配置维度不存在: invalid", message);
     }
 
     @Test
@@ -84,5 +84,21 @@ class JsonMessageSourceTest {
     void shouldReverseMatchZhHansToZhCn() {
         String message = messageSource.getMessage("pay.route.error.noMatch", null, Locale.forLanguageTag("zh-Hans"));
         assertEquals("未匹配到可用支付产品", message);
+    }
+
+    /// 无地区繁体 zh-Hant 默认落到 zh-TW
+    @Test
+    void shouldAliasZhHantToZhTw() {
+        String tw = messageSource.getMessage("pay.route.error.noMatch", null, Locale.forLanguageTag("zh-TW"));
+        String hant = messageSource.getMessage("pay.route.error.noMatch", null, Locale.forLanguageTag("zh-Hant"));
+        assertEquals(tw, hant);
+    }
+
+    /// 澳门映射到香港繁体包
+    @Test
+    void shouldAliasZhMoToZhHk() {
+        String hk = messageSource.getMessage("pay.route.error.noMatch", null, Locale.forLanguageTag("zh-HK"));
+        String mo = messageSource.getMessage("pay.route.error.noMatch", null, Locale.forLanguageTag("zh-MO"));
+        assertEquals(hk, mo);
     }
 }

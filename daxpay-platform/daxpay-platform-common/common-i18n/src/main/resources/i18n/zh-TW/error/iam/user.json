@@ -1,0 +1,16 @@
+{
+  "userInfoNotExists": "使用者資訊不存在",
+  "userPhoneAlreadyExisted": "使用者手機已存在",
+  "userNonePhoneAndEmail": "使用者的電話和電子郵件必須包含一個",
+  "oldPasswordError": "舊密碼錯誤",
+  "accountExistsInClient": "該終端下賬號已存在",
+  "phoneUsedInClient": "該終端下手機號已被使用",
+  "emailUsedInClient": "該終端下郵箱已被使用",
+  "phoneUsedByOtherInClient": "該終端下手機號已被其他使用者使用",
+  "emailUsedByOtherInClient": "該終端下郵箱已被其他使用者使用",
+  "dataError": "使用者資料有問題",
+  "notExist": "使用者不存在",
+  "cannotEditNonAdmin": "不允許編輯非運營端使用者",
+  "emailUsedByOther": "郵箱已被其他使用者使用",
+  "phoneUsedByOther": "手機號已被其他使用者使用"
+}

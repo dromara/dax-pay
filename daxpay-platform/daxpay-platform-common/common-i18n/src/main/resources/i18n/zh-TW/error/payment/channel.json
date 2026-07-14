@@ -1,0 +1,10 @@
+{
+  "notExist": "支付通道不存在",
+  "subMchNoExists": "系統中已存在該子商戶號",
+  "merchantNoChannelPerm": "商戶沒有該通道的許可權，無法新增通道商戶",
+  "channelMerchantExists": "系統中已存在該通道商戶資訊，不要重複新增",
+  "onlyDraftCanDelete": "非草稿狀態，不能刪除",
+  "signVerifyFailIllegal": "簽名驗證失敗，非法請求",
+  "channelMerchantNotExist": "通道商戶資訊不存在",
+  "merchantInfoNotFound": "未查詢到商戶資訊"
+}

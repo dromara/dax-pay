@@ -1,0 +1,10 @@
+{
+  "storageConfigNotExist": "存儲配置不存在",
+  "recordNotExist": "文件記錄不存在",
+  "platformRecordNotExist": "平台文件記錄不存在",
+  "statusInvalidForConfirm": "文件狀態不正確，無法確認",
+  "objectKeyMismatch": "對象Key不匹配",
+  "notUploadedToStorage": "文件尚未上傳到存儲",
+  "notUploadedForAccess": "文件未上傳完成，無法訪問",
+  "notUploadedForDownload": "文件未上傳完成，無法下載"
+}

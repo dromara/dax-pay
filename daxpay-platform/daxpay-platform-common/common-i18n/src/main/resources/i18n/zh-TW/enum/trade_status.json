@@ -1,0 +1,8 @@
+{
+  "progress": "執行中",
+  "success": "成功",
+  "fail": "失敗",
+  "closed": "關閉",
+  "revoked": "撤銷",
+  "exception": "異常"
+}

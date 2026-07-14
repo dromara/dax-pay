@@ -1,0 +1,4 @@
+{
+  "authFailed": "換取支付寶用户標識失敗: {0}",
+  "clientInitFailed": "支付寶 OpenAPI 初始化失敗: {0}"
+}

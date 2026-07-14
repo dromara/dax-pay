@@ -1,0 +1,5 @@
+{
+  "payFailed": "銀聯商務支付異常: {0}",
+  "closeFailed": "銀聯商務關閉訂單異常: {0}",
+  "notSupportMethod": "暫不支持的銀聯商務支付方式: {0}"
+}

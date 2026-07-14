@@ -1,0 +1,6 @@
+{
+  "paySuccessTitle": "支付成功通知",
+  "paySuccessBody": "您的訂單 {0} 已支付成功，金額 {1}",
+  "refundSuccessTitle": "退款成功通知",
+  "refundSuccessBody": "您的訂單 {0} 已退款成功，金額 {1}"
+}

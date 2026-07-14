@@ -1,0 +1,8 @@
+{
+  "qr_code": "掃碼支付",
+  "link": "跳轉連結",
+  "mini_app": "小程式跳轉連結",
+  "jsapi": "JSAPI",
+  "from": "表單方式",
+  "app": "APP支付方式"
+}

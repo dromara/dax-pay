@@ -1,0 +1,12 @@
+{
+  "defaultCannotDelete": "預設協議不可刪除",
+  "notExist": "使用者協議不存在",
+  "itemNotExist": "使用者協議項不存在",
+  "defaultItemNotExist": "該型別下不存在預設協議",
+  "versionNotExist": "使用者協議版本不存在",
+  "draftOnlyCanEdit": "僅草稿狀態的版本可編輯",
+  "draftOnlyCanDelete": "僅草稿狀態的版本可刪除",
+  "draftOnlyCanPublish": "僅草稿狀態的版本可釋出",
+  "publishedOnlyCanArchive": "僅已釋出狀態的版本可歸檔",
+  "sameClientType": "目標端型別與源端型別一致"
+}

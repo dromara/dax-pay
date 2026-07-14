@@ -1,0 +1,8 @@
+{
+  "incomplete": "OSS 配置不完整, 請填寫服務端點、儲存桶與金鑰",
+  "checkSuccess": "OSS 連通性檢查通過",
+  "checkFailed": "OSS 連通性檢查失敗, 狀態碼: {0}",
+  "authFailed": "OSS 認證失敗, 請檢查 AccessKey / SecretKey",
+  "bucketNotFound": "儲存桶不存在, 請檢查公開/私有桶名稱",
+  "networkError": "無法連線物件儲存, 請檢查端點與網路"
+}

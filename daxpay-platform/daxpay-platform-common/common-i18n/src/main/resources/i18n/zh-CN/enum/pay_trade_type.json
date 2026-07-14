@@ -1,0 +1,8 @@
+{
+  "normal": "普通支付",
+  "gateway": "网关支付",
+  "authorize": "预授权冻结",
+  "capture": "预授权捕获",
+  "recurring": "周期代扣",
+  "combine_sub": "合单子单"
+}

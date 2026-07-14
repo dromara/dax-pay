@@ -1,0 +1,18 @@
+{
+  "codeExists": "菜單編碼已存在",
+  "cycleDependency": "上級菜單不能是自身或下級菜單",
+  "subpageNoChildren": "子頁面不能有下級菜單",
+  "hasChildrenCannotDelete": "有子菜單不可以刪除",
+  "invalidType": "無效的菜單類型",
+  "typeImmutable": "菜單類型創建後不可修改",
+  "subpageNeedParent": "子頁面必須選擇上級菜單",
+  "parentNotExist": "上級菜單不存在",
+  "subpageParentMustBeMenu": "子頁面的上級菜單必須是菜單類型",
+  "subpageParentInvalid": "子頁面的上級必須是菜單或子頁面分組",
+  "subpageGroupNeedParent": "子頁面分組必須選擇上級菜單",
+  "subpageGroupParentMustBeMenu": "子頁面分組的上級必須是菜單類型",
+  "subpageGroupChildMustBeSubpage": "子頁面分組下只能包含子頁面",
+  "needParentCatalog": "菜單、內嵌頁面、外鏈必須選擇上級目錄",
+  "parentMustBeCatalog": "菜單、內嵌頁面、外鏈的上級菜單必須是目錄類型",
+  "notExist": "菜單不存在"
+}

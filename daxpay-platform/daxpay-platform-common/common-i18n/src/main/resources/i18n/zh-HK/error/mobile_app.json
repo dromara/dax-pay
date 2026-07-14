@@ -1,0 +1,10 @@
+{
+  "notExist": "移動端應用配置不存在",
+  "notEnabled": "移動端應用配置未啓用: {0}/{1}",
+  "appTypeNotFound": "未找到對應的移動端應用端類型: {0}",
+  "platformNotFound": "未找到對應的移動端平台: {0}",
+  "platformNotAllowed": "端類型 {0} 不支持移動平台 {1}",
+  "configRequired": "請提交與平台 {0} 對應的應用配置",
+  "configPlatformMismatch": "應用配置與平台 {0} 不匹配",
+  "alipayCertRequired": "證書模式下請上傳應用公鑰證書、支付寶公鑰證書與根證書"
+}

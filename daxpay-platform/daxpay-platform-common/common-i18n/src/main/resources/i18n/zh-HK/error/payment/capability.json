@@ -1,0 +1,5 @@
+{
+  "notExist": "支付能力不存在",
+  "duplicateProduct": "關聯支付產品不可重複",
+  "productNotExist": "支付產品不存在"
+}

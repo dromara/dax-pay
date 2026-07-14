@@ -1,0 +1,7 @@
+{
+  "roleClientMismatch": "角色所屬終端與請求終端不一致",
+  "invalidMenuData": "存在無效的選單資料",
+  "roleMenuClientMismatch": "角色所屬終端與選單終端不一致",
+  "invalidPermCodeData": "存在無效的許可權碼資料",
+  "permCodeNotOnSelectedMenus": "存在未掛載到已選選單的許可權碼: {0}"
+}

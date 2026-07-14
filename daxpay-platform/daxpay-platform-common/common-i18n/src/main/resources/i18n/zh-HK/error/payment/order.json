@@ -1,0 +1,12 @@
+{
+  "unsupportedBarcodeType": "不支持的條碼類型",
+  "merchantNoRefundPermission": "該商户沒有退款權限",
+  "payOrderNotExist": "支付訂單不存在",
+  "payOrderExtNotExist": "支付訂單擴展信息不存在",
+  "refundOrderNotExist": "退款訂單不存在",
+  "refundOrderExtNotExist": "退款訂單擴展信息不存在",
+  "refundPayOrderNotExist": "退款訂單關聯支付訂單不存在",
+  "tradeFlowNotExist": "交易流水記錄不存在",
+  "callbackTaskNotExist": "商户回調通知任務不存在",
+  "subscribeRecordNotExist": "商户訂閲通知記錄不存在"
+}

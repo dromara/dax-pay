@@ -1,0 +1,5 @@
+{
+  "mchDisabled": "該商户已禁用",
+  "noAdminPermUseMerchant": "您沒有運營端的權限，請使用商户端登錄",
+  "noMerchantPerm": "您沒有商户端的登錄權限"
+}

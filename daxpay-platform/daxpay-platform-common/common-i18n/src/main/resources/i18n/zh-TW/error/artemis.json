@@ -1,0 +1,7 @@
+{
+  "sendFailed": "訊息傳送失敗: {0}",
+  "delaySendFailed": "延時訊息傳送失敗: {0}",
+  "serializeFailed": "訊息序列化失敗: {0}",
+  "parseBodyFailed": "訊息體解析失敗: {0}",
+  "typeConvertFailed": "訊息型別轉換失敗: {0}"
+}
