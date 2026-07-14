@@ -2,7 +2,7 @@ package cn.daxpay.open.channel.lakala.controller.callback;
 
 import cn.daxpay.open.channel.lakala.service.callback.LakalaPayCallbackService;
 import cn.daxpay.open.channel.lakala.service.callback.LakalaRefundCallbackService;
-import cn.daxpay.open.payment.common.assist.MerchantContextLoader;
+import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;

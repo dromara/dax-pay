@@ -2,7 +2,7 @@ package cn.daxpay.open.channel.hkrt.controller.callback;
 
 import cn.daxpay.open.channel.hkrt.service.callback.HkrtPayCallbackService;
 import cn.daxpay.open.channel.hkrt.service.callback.HkrtRefundCallbackService;
-import cn.daxpay.open.payment.common.assist.MerchantContextLoader;
+import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;

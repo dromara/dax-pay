@@ -2,7 +2,7 @@ package cn.daxpay.open.channel.fuyou.controller.callback;
 
 import cn.daxpay.open.channel.fuyou.service.callback.FuyouPayCallbackService;
 import cn.daxpay.open.channel.fuyou.service.callback.FuyouRefundCallbackService;
-import cn.daxpay.open.payment.common.assist.MerchantContextLoader;
+import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

@@ -2,7 +2,7 @@ package cn.daxpay.open.channel.ums.controller.callback;
 
 import cn.daxpay.open.channel.ums.service.callback.UmsPayCallbackService;
 import cn.daxpay.open.channel.ums.service.callback.UmsRefundCallbackService;
-import cn.daxpay.open.payment.common.assist.MerchantContextLoader;
+import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;

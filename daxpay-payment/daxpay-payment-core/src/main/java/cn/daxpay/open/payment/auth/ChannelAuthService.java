@@ -2,7 +2,7 @@ package cn.daxpay.open.payment.auth;
 
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
 import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
-import cn.daxpay.open.payment.common.assist.MerchantContextLoader;
+import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import cn.daxpay.open.payment.strategy.PaymentStrategyFactory;
 import cn.daxpay.open.payment.strategy.auth.AbsChannelAuthStrategy;
 import cn.daxpay.open.payment.unipay.param.assist.AuthCodeParam;

@@ -5,7 +5,7 @@ import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.PayFailureException;
 import cn.daxpay.open.platform.common.spring.util.WebServletUtil;
 import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
-import cn.daxpay.open.payment.common.assist.MerchantContextLoader;
+import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import cn.daxpay.open.payment.strategy.PaymentStrategyFactory;
 import cn.daxpay.open.payment.trade.runtime.bo.PayTradeResultBo;
 import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;

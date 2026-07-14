@@ -2,7 +2,7 @@ package cn.daxpay.open.channel.yeepay.controller.callback;
 
 import cn.daxpay.open.channel.yeepay.service.callback.YeepayPayCallbackService;
 import cn.daxpay.open.channel.yeepay.service.callback.YeepayRefundCallbackService;
-import cn.daxpay.open.payment.common.assist.MerchantContextLoader;
+import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;

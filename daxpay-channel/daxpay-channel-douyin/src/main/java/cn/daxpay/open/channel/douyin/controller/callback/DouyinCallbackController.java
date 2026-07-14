@@ -2,7 +2,7 @@ package cn.daxpay.open.channel.douyin.controller.callback;
 
 import cn.daxpay.open.channel.douyin.service.callback.DouyinPayCallbackService;
 import cn.daxpay.open.channel.douyin.service.callback.DouyinRefundCallbackService;
-import cn.daxpay.open.payment.common.assist.MerchantContextLoader;
+import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;

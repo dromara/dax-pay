@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.common.assist;
+package cn.daxpay.open.payment.common.context;
 
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
@@ -8,10 +8,8 @@ import cn.daxpay.open.platform.core.enums.merchant.MerchantStatusEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.config.ConfigNotEnableException;
 import cn.daxpay.open.platform.iam.service.client.ClientCodeService;
-import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.common.access.MchAppInfoAccessInfo;
-import cn.daxpay.open.payment.common.access.MerchantAccessInfo;
-import cn.daxpay.open.payment.common.access.MerchantAccessPort;
+import cn.daxpay.open.payment.merchant.service.access.MerchantAccessQueryService;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,7 +28,7 @@ import java.util.Optional;
 /// - `resolveApp`:应用解析(推导默认/校验启用),仅需要应用归属时调
 ///
 /// **商户端**特判：忽略入参 mchNo，强制用登录上下文已装载的商户号（防越权自报）。
-/// 引导阶段通过 [MerchantAccessPort] 的 `*NotTenant` 读路径；
+/// 引导阶段通过 [MerchantAccessQueryService] 的 `*NotTenant` 读路径；
 /// **initMch 成功之后**业务链路应走正常租户过滤，勿再散落类级 `@IgnoreTenant`。
 /// appId 不进线程上下文。详见 `_doc/design/mch-no-tenant-isolation.md`。
 @Slf4j
@@ -39,7 +37,7 @@ import java.util.Optional;
 public class MerchantContextLoader {
 
     private final ClientCodeService clientCodeService;
-    private final MerchantAccessPort merchantAccessPort;
+    private final MerchantAccessQueryService merchantAccessQueryService;
     private final PaymentContext paymentContext;
 
     /// 通道回调身份装载:仅将 path 上的 mchNo 写入上下文,不查库、不校验商户启用。
@@ -60,7 +58,7 @@ public class MerchantContextLoader {
         if (Objects.equals(clientCodeService.getClientCode(), ClientEnum.MERCHANT.getCode())) {
             mchNo = paymentContext.getMchNo();
         }
-        var merchant = Optional.ofNullable(merchantAccessPort.getMerchantByMchNo(mchNo))
+        var merchant = Optional.ofNullable(merchantAccessQueryService.getMerchantByMchNo(mchNo))
                 // 未找到指定的商户配置
                 .orElseThrow(() -> new ConfigNotEnableException("error.payment.merchant.specifiedMchConfigNotFound"));
         // 商户状态校验
@@ -77,11 +75,11 @@ public class MerchantContextLoader {
         MchAppInfoAccessInfo mchApp;
         if (StrUtil.isBlank(appId)) {
             // appId 为空,取商户默认应用
-            mchApp = Optional.ofNullable(merchantAccessPort.getDefaultAppByMchNo(mchNo))
+            mchApp = Optional.ofNullable(merchantAccessQueryService.getDefaultAppByMchNo(mchNo))
                     // 未找到商户默认应用配置
                     .orElseThrow(() -> new ConfigNotEnableException("error.payment.merchant.defaultAppConfigNotFound"));
         } else {
-            mchApp = Optional.ofNullable(merchantAccessPort.getAppByAppId(appId))
+            mchApp = Optional.ofNullable(merchantAccessQueryService.getAppByAppId(appId))
                     // 未找到指定的应用配置
                     .orElseThrow(() -> new ConfigNotEnableException("error.payment.merchant.specifiedAppConfigNotFound"));
         }
@@ -101,7 +99,7 @@ public class MerchantContextLoader {
     /// 按应用号反推商户身份并初始化(应用号已知、商户号未知的场景,如渠道配置/通道认证)。
     /// 商户端会校验应用归属当前登录商户。
     public void initMchByApp(String appId) {
-        var mchApp = Optional.ofNullable(merchantAccessPort.getAppByAppId(appId))
+        var mchApp = Optional.ofNullable(merchantAccessQueryService.getAppByAppId(appId))
                 // 未找到指定的应用配置
                 .orElseThrow(() -> new ConfigNotEnableException("error.payment.merchant.specifiedAppConfigNotFound"));
         // 应用状态校验

@@ -1,6 +1,6 @@
 package cn.daxpay.open.payment.admin.service.device;
 
-import cn.daxpay.open.payment.common.assist.MerchantContextLoader;
+import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import cn.daxpay.open.payment.device.enums.QrCodeAmountTypeEnum;
 import cn.daxpay.open.payment.device.enums.QrCodeStatusEnum;
 import cn.daxpay.open.payment.device.qrcode.dao.DeviceQrCodeManager;

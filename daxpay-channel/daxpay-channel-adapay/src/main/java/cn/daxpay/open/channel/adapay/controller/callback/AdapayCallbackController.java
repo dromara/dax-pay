@@ -2,7 +2,7 @@ package cn.daxpay.open.channel.adapay.controller.callback;
 
 import cn.daxpay.open.channel.adapay.service.callback.AdapayPayCallbackService;
 import cn.daxpay.open.channel.adapay.service.callback.AdapayRefundCallbackService;
-import cn.daxpay.open.payment.common.assist.MerchantContextLoader;
+import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
