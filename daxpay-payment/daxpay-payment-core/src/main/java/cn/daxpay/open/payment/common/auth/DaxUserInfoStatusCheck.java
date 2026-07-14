@@ -8,7 +8,7 @@ import cn.daxpay.open.platform.capability.auth.entity.AuthInfoResult;
 import cn.daxpay.open.platform.capability.auth.entity.LoginAuthContext;
 import cn.daxpay.open.platform.capability.auth.exception.LoginFailureException;
 import cn.daxpay.open.platform.core.code.CommonCode;
-import cn.daxpay.open.payment.common.access.MerchantAccessPort;
+import cn.daxpay.open.payment.merchant.service.access.MerchantAccessQueryService;
 import cn.daxpay.open.payment.merchant.service.user.MerchantUserService;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class DaxUserInfoStatusCheck implements UserInfoStatusCheck {
     private final MerchantUserService merchantUserService;
-    private final MerchantAccessPort merchantAccessPort;
+    private final MerchantAccessQueryService merchantAccessQueryService;
     private final ClientCodeService clientCodeService;
 
     /// 检查用户是否拥有当前终端的权限
@@ -43,7 +43,7 @@ public class DaxUserInfoStatusCheck implements UserInfoStatusCheck {
             String merchantNo = Optional.ofNullable(merchantUserService.findMchNoByUserId(userId))
                     // 登录: 您没有商户端的登录权限
                     .orElseThrow(() -> new LoginFailureException(CommonCode.FAIL_CODE, "error.payment.login.noMerchantPerm"));
-            var merchant = Optional.ofNullable(merchantAccessPort.getMerchantByMchNo(merchantNo))
+            var merchant = Optional.ofNullable(merchantAccessQueryService.getMerchantByMchNo(merchantNo))
                     // 登录: 您没有商户端的登录权限
                     .orElseThrow(() -> new LoginFailureException(CommonCode.FAIL_CODE, "error.payment.login.noMerchantPerm"));
             if (Objects.equals(merchant.getStatus(), MerchantStatusEnum.DISABLED.getCode())) {

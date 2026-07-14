@@ -5,7 +5,7 @@ import cn.daxpay.open.payment.device.qrcode.dao.DeviceQrCodeManager;
 import cn.daxpay.open.payment.device.qrcode.entity.DeviceQrCode;
 import cn.daxpay.open.payment.unipay.client.result.CodePayInfoResult;
 import cn.daxpay.open.payment.common.access.MerchantAccessInfo;
-import cn.daxpay.open.payment.common.access.MerchantAccessPort;
+import cn.daxpay.open.payment.merchant.service.access.MerchantAccessQueryService;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
 import cn.daxpay.open.platform.core.code.CommonCode;
@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 public class CodePayAssistService {
 
     private final DeviceQrCodeManager deviceQrCodeManager;
-    private final MerchantAccessPort merchantAccessPort;
+    private final MerchantAccessQueryService merchantAccessQueryService;
 
     /// 根据码牌编码查询支付信息(公开接口, 脱敏返回)
     ///
@@ -42,7 +42,7 @@ public class CodePayAssistService {
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.qrcode.notAssigned");
         }
         // 查商户并校验存在(启用校验留待二期支付链路 NormalPayService 统一处理)
-        MerchantAccessInfo merchant = merchantAccessPort.getMerchantByMchNo(entity.getMchNo());
+        MerchantAccessInfo merchant = merchantAccessQueryService.getMerchantByMchNo(entity.getMchNo());
         if (merchant == null) {
             // 码牌: 商户不存在
             throw new DataNotExistException("error.device.qrcode.mchNotFound");

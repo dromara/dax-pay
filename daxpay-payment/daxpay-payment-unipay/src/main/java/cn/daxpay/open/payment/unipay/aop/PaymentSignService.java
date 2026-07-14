@@ -7,7 +7,7 @@ import cn.daxpay.open.platform.core.exception.business.VerifySignFailedException
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.common.util.PaySignUtil;
-import cn.daxpay.open.payment.common.access.MerchantAccessPort;
+import cn.daxpay.open.payment.merchant.service.access.MerchantAccessQueryService;
 import cn.daxpay.open.payment.unipay.param.PaymentCommonParam;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -25,13 +25,13 @@ import org.springframework.stereotype.Service;
 public class PaymentSignService {
 
     private final PlatformConfigProperties platformConfigProperties;
-    private final MerchantAccessPort merchantAccessPort;
+    private final MerchantAccessQueryService merchantAccessQueryService;
     private final PaymentContext paymentContext;
 
     /// 入参签名校验:使用线程上下文中的商户号查询商户公钥进行验签
     public void signVerify(PaymentCommonParam param) {
         // 获取商户公钥
-        String publicKey = merchantAccessPort.findMerchantPublicKey(paymentContext.getMchNo());
+        String publicKey = merchantAccessQueryService.findMerchantPublicKey(paymentContext.getMchNo());
         // 签名和公钥校验
         if (StrUtil.isBlank(publicKey)) {
             // 商户公钥为空

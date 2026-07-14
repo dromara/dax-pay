@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 /// # 商户API配置服务（配置态）
 ///
 /// 管理端/商户端凭证查询与更新。须在已有租户上下文（登录 Filter / 运营端 ignoreTable）下调用。
-/// 网关验签取公钥请走 [cn.daxpay.open.payment.common.access.MerchantAccessPort]。
+/// 网关验签取公钥请走 [cn.daxpay.open.payment.merchant.service.access.MerchantAccessQueryService]。
 @Slf4j
 @Service
 @RequiredArgsConstructor
