@@ -16,10 +16,9 @@ import cn.daxpay.open.payment.strategy.pay.AbsNormalPayStrategy;
 import cn.daxpay.open.payment.strategy.pay.PayStrategyContext;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
+import cn.daxpay.open.platform.common.redis.lock.LockExecutor;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
-import com.baomidou.lock.LockInfo;
-import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -36,8 +35,7 @@ public class NormalPayService {
 
     private final PayAssistService payAssistService;
     private final PayUniHandleService payUniHandleService;
-    private final LockTemplate lockTemplate;
-    private final PayTradeManager payTradeManager;
+    private final LockExecutor lockExecutor;
     private final PayRouteService payRouteService;
     private final MerchantContextLoader merchantContextLoader;
 
@@ -49,15 +47,11 @@ public class NormalPayService {
         }
         payAssistService.validationExpiredTime(payParam.getExpiredTime());
         String bizOrderNo = payParam.getBizOrderNo();
-        LockInfo lock = lockTemplate.lock("payment:pay:" + bizOrderNo, 10000, 200);
-        if (Objects.isNull(lock)) {
-            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.processing");
-        }
-        try {
-            return this.payHandle(payParam);
-        } finally {
-            lockTemplate.releaseLock(lock);
-        }
+        return lockExecutor.execute(
+                "payment:pay:" + bizOrderNo,
+                () -> this.payHandle(payParam),
+                () -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.processing")
+        );
     }
 
     /// 支付操作
@@ -68,7 +62,7 @@ public class NormalPayService {
         payParam.setAppId(mchApp.getAppId());
         // 付款码: 有 authCode 且 method 空时按前缀识别并回填分钱包 method, 再走路由
         resolveBarcodeMethodIfNeeded(payParam);
-        // 路由解析：直定模式(已传 channelMchNo)直接解析，否则按 appId+method 策略匹配
+        // 路由解析：直接指定(已传 channelMchNo)优先，否则按 appId+method 跟随通道路由匹配
         payRouteService.resolve(payParam);
         var payStrategy = PaymentStrategyFactory.createByProduct(payParam.getProduct(), AbsNormalPayStrategy.class);
         // 支付前处理: 校验与通道配置组装(只依赖请求参数), 失败直接抛出不持久化(订单尚未创建)

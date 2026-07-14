@@ -50,7 +50,7 @@ public class DevelopTradeController {
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
-    @Operation(summary = "传值模式通道商户候选")
+    @Operation(summary = "直接指定通道商户候选")
     @GetMapping("/channel-mch-candidates")
     public Result<List<LabelValue>> channelMchCandidates(
             @NotBlank(message = "{validation.field.mchNo.notBlank}") String mchNo,
@@ -59,7 +59,7 @@ public class DevelopTradeController {
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
-    @Operation(summary = "传值模式支付能力候选")
+    @Operation(summary = "直接指定支付能力候选")
     @GetMapping("/capability-candidates")
     public Result<List<LabelValue>> capabilityCandidates(
             @NotBlank(message = "{validation.field.channelMchNo.notBlank}") String channelMchNo) {

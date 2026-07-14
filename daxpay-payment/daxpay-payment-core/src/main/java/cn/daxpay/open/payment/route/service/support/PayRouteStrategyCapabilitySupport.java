@@ -175,7 +175,8 @@ public class PayRouteStrategyCapabilitySupport {
         if (!payProviderMethodService.contains(provider, method)) {
             return List.of();
         }
-        String product = productOfChannelMchNo(channelMchNo);
+        // 单条路径：走 Manager 一次查询（批路径仍用 IN 预加载 Map，见 listSceneCapabilityCandidatesBatch）
+        String product = channelMerchantManager.findProductByChannelMchNo(channelMchNo);
         if (StrUtil.isBlank(product) || !PaymentStrategyFactory.existsByProduct(product, AbsProductStrategy.class)) {
             return List.of();
         }
@@ -189,7 +190,7 @@ public class PayRouteStrategyCapabilitySupport {
                 .toList();
     }
 
-    /// 传值模式: 商户全部启用通道商户候选(不按支付方式过滤)
+    /// 直接指定: 商户全部启用通道商户候选(不按支付方式过滤)
     ///
     /// `providerCode` 为支付渠道编码(PayProviderEnum, 如 wechat/alipay/union_pay),
     /// 非空时仅返回其产品声明支持该渠道的通道商户(含官方通道与三方聚合通道, 如 wechat 同时匹配 wechat_pay 与 lakala_pay);
@@ -230,9 +231,10 @@ public class PayRouteStrategyCapabilitySupport {
         return ProductStrategySupport.supportsPayProvider(strategy, provider);
     }
 
-    /// 传值模式: 按通道商户(产品)返回全部启用支付能力候选(不按支付方式过滤)
+    /// 直接指定: 按通道商户(产品)返回全部启用支付能力候选(不按支付方式过滤)
     public List<LabelValue> listDirectCapabilityCandidates(String channelMchNo) {
-        String product = productOfChannelMchNo(channelMchNo);
+        // 单条路径：走 Manager 一次查询
+        String product = channelMerchantManager.findProductByChannelMchNo(channelMchNo);
         if (StrUtil.isBlank(product) || !PaymentStrategyFactory.existsByProduct(product, AbsProductStrategy.class)) {
             return List.of();
         }
@@ -243,21 +245,6 @@ public class PayRouteStrategyCapabilitySupport {
                 .filter(capability -> enabledCodes.contains(capability.getCode()))
                 .map(capability -> new LabelValue(I18nUtil.getEnumName(capability), capability.getCode()))
                 .toList();
-    }
-
-    /// 传值模式: 由(通道商户, 支付能力)反推支付方式编码(策略 Map + DB 启用, 无则 null)
-    public String inferMethodForCapability(String channelMchNo, String capabilityCode) {
-        String product = productOfChannelMchNo(channelMchNo);
-        if (StrUtil.isBlank(product) || !PaymentStrategyFactory.existsByProduct(product, AbsProductStrategy.class)) {
-            return null;
-        }
-        AbsProductStrategy strategy = PaymentStrategyFactory.createByProduct(product, AbsProductStrategy.class);
-        PayCapabilityEnum capability = PayCapabilityEnum.findByCode(capabilityCode);
-        if (capability == null || !productCapabilityEnabled(product, capabilityCode)) {
-            return null;
-        }
-        PayMethodEnum method = ProductStrategySupport.methodForCapability(strategy, capability);
-        return method == null ? null : method.getCode();
     }
 
     /// 校验场景配置项所选能力在候选集合内
@@ -285,7 +272,8 @@ public class PayRouteStrategyCapabilitySupport {
             return false;
         }
         AbsProductStrategy strategy = PaymentStrategyFactory.createByProduct(product, AbsProductStrategy.class);
-        if (!ProductStrategySupport.supportsDirectoryMethod(strategy, method)) {
+        // 策略未声明该方式下任何能力则不支持
+        if (ProductStrategySupport.capabilitiesForMethod(strategy, method).isEmpty()) {
             return false;
         }
         return payProductCapabilityService.productSupportsMethod(product, method.getCode());
@@ -347,15 +335,6 @@ public class PayRouteStrategyCapabilitySupport {
         return false;
     }
 
-    /// 通道商户号→产品编码(不存在返回 null)
-    private String productOfChannelMchNo(String channelMchNo) {
-        return channelMerchantManager.lambdaQuery()
-                .eq(ChannelMerchant::getChannelMchNo, channelMchNo)
-                .oneOpt()
-                .map(ChannelMerchant::getProduct)
-                .orElse(null);
-    }
-
     /// 预加载产品已挂载且主数据存在的能力编码集合（替代逐能力 productCapabilityEnabled 查库）
     private Set<String> loadEnabledCapabilityCodes(String product) {
         List<PayProductCapability> rels = payProductCapabilityManager.listByProduct(product);
@@ -372,12 +351,5 @@ public class PayRouteStrategyCapabilitySupport {
                 .map(PayProductCapability::getCapabilityCode)
                 .filter(validCodes::contains)
                 .collect(Collectors.toSet());
-    }
-
-    private boolean productCapabilityEnabled(String productCode, String capabilityCode) {
-        if (!payProductCapabilityManager.exists(productCode, capabilityCode)) {
-            return false;
-        }
-        return payCapabilityManager.findByCode(capabilityCode).isPresent();
     }
 }

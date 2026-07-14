@@ -11,15 +11,15 @@ import java.util.Arrays;
 ///
 /// 字典: cashier_item_resolve_mode；
 /// 按支付项控制支付解析方式(无 auto, 收银台由用户点选):
-/// - METHOD: 配置支付方式, 走路由场景模式
-/// - DIRECT: 配置通道商户号+支付能力, 走路由直定模式
+/// - METHOD: 配置支付方式, 跟随通道路由(按支付方式)
+/// - DIRECT: 配置通道商户号+支付能力, 直接指定
 @Getter
 @RequiredArgsConstructor
 public enum CashierItemResolveModeEnum implements I18nSupport {
 
-    /// 方式模式: 配置支付方式
+    /// 指定支付方式: 配置支付方式后跟随通道路由
     METHOD("method"),
-    /// 精确模式: 配置通道商户号+支付能力
+    /// 直接指定: 配置通道商户号+支付能力
     DIRECT("direct"),
     ;
 

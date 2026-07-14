@@ -5,7 +5,7 @@ import cn.daxpay.open.channel.fuyou.client.credential.FuyouSdkCredential;
 import cn.daxpay.open.channel.fuyou.client.req.FuyouCloseReq;
 import cn.daxpay.open.platform.core.enums.pay.pay.CloseTypeEnum;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
-import cn.daxpay.open.payment.trade.runtime.service.ContainerFieldResolver;
+import cn.daxpay.open.payment.trade.runtime.service.PayTradeContainerFields;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,14 +20,15 @@ import org.springframework.stereotype.Service;
 public class FuyouCloseService {
 
     private final FuyouChannelClient fuyouChannelClient;
-    private final ContainerFieldResolver containerFieldResolver;
+    private final PayTradeContainerFields payTradeContainerFields;
 
     /// 关闭订单(富友无撤销, 统一关单)
     public CloseTypeEnum close(PayTrade order, FuyouSdkCredential credential, boolean useCancel) {
         FuyouCloseReq req = new FuyouCloseReq();
         req.setCredential(credential);
-        req.setRelationOrderNo(containerFieldResolver.getRelationOrderNo(order));
-        req.setTradeProduct(containerFieldResolver.getTradeProduct(order));
+        var fields = payTradeContainerFields.resolve(order);
+        req.setRelationOrderNo(fields.relationOrderNo());
+        req.setTradeProduct(fields.tradeProduct());
         fuyouChannelClient.close(req);
         return CloseTypeEnum.CLOSE;
     }

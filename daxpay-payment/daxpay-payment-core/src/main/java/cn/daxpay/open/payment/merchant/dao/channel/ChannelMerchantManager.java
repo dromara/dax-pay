@@ -3,9 +3,12 @@ package cn.daxpay.open.payment.merchant.dao.channel;
 import cn.daxpay.open.platform.common.mybatisplus.impl.BaseManager;
 import cn.daxpay.open.platform.common.mybatisplus.query.generator.QueryGenerator;
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
+import cn.daxpay.open.platform.core.code.CommonErrorCode;
+import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
 import cn.daxpay.open.payment.merchant.param.channel.ChannelMerchantQuery;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
@@ -66,5 +69,27 @@ public class ChannelMerchantManager extends BaseManager<ChannelMerchantMapper, C
         return this.lambdaQuery()
                 .eq(ChannelMerchant::getChannelMchNo, channelMchNo)
                 .oneOpt();
+    }
+
+    /// 通道商户号 → 产品编码；不存在返回 null（配置单条候选/反推用，仅单次路径）
+    public String findProductByChannelMchNo(String channelMchNo) {
+        if (StrUtil.isBlank(channelMchNo)) {
+            return null;
+        }
+        return findByChannelMchNo(channelMchNo)
+                .map(ChannelMerchant::getProduct)
+                .orElse(null);
+    }
+
+    /// 通道商户号 → 产品编码；空白或不存在抛业务异常（运行时路由用，仅单次路径）
+    public String requireProductByChannelMchNo(String channelMchNo) {
+        if (StrUtil.isBlank(channelMchNo)) {
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "pay.route.error.channelMchNoRequired");
+        }
+        return findByChannelMchNo(channelMchNo)
+                .map(ChannelMerchant::getProduct)
+                .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                        "pay.route.error.channelMchNotExist", channelMchNo));
     }
 }

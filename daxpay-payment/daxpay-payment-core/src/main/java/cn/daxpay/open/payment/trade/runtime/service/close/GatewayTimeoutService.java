@@ -8,9 +8,8 @@ import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
 import cn.daxpay.open.payment.trade.order.entity.GatewayPayOrder;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.trade.runtime.service.pay.PayUniHandleService;
+import cn.daxpay.open.platform.common.redis.lock.LockExecutor;
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.lock.LockInfo;
-import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,7 +29,7 @@ public class GatewayTimeoutService {
     private final PayTradeManager payTradeManager;
     private final PayCloseService payCloseService;
     private final PayUniHandleService payUniHandleService;
-    private final LockTemplate lockTemplate;
+    private final LockExecutor lockExecutor;
     private final PaymentContext paymentContext;
 
     /// 按网关单号超时关闭(幂等)
@@ -43,19 +42,14 @@ public class GatewayTimeoutService {
                 .contains(order.getStatus())) {
             return;
         }
-        LockInfo lock = lockTemplate.lock("payment:gateway:timeout:" + order.getId(), 10000, 50);
-        if (lock == null) {
-            log.warn("网关超时关单获取锁失败, orderNo={}", orderNo);
-            return;
-        }
-        try {
-            order = gatewayPayOrderManager.findByOrderNoNotTenant(orderNo).orElse(null);
-            if (order == null
+        if (!lockExecutor.tryRun("payment:gateway:timeout:" + order.getId(), 10000, 50, () -> {
+            GatewayPayOrder current = gatewayPayOrderManager.findByOrderNoNotTenant(orderNo).orElse(null);
+            if (current == null
                     || !List.of(GatewayOrderStatusEnum.WAIT_PAY.getCode(), GatewayOrderStatusEnum.PAYING.getCode())
-                    .contains(order.getStatus())) {
+                    .contains(current.getStatus())) {
                 return;
             }
-            GatewayPayOrder finalOrder = order;
+            GatewayPayOrder finalOrder = current;
             // 定时/MQ 无登录上下文：按订单 mchNo 开启作用域后走租户过滤
             paymentContext.runAs(() -> {
                 if (StrUtil.isBlank(finalOrder.getMchNo())) {
@@ -73,8 +67,8 @@ public class GatewayTimeoutService {
                     payUniHandleService.gatewayOrderTimeout(finalOrder);
                 }
             });
-        } finally {
-            lockTemplate.releaseLock(lock);
+        })) {
+            log.warn("网关超时关单获取锁失败, orderNo={}", orderNo);
         }
     }
 }

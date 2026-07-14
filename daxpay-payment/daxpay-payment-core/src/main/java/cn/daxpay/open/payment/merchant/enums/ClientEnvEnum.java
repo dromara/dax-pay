@@ -1,5 +1,8 @@
 package cn.daxpay.open.payment.merchant.enums;
 
+import cn.daxpay.open.platform.core.code.CommonErrorCode;
+import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
+import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.i18n.I18nSupport;
 import lombok.Getter;
@@ -42,5 +45,21 @@ public enum ClientEnvEnum implements I18nSupport {
                 .filter(e -> e.getCode().equals(code))
                 .findFirst()
                 .orElseThrow(() -> new DataNotExistException("error.common.clientEnvNotExist", code));
+    }
+
+    /// 聚合扫码 L1 AUTO：按客户端环境推导默认支付方式编码（原生环境一律 JSAPI）
+    public String defaultMethodCode() {
+        PayMethodEnum method = switch (this) {
+            case WECHAT_PAY -> PayMethodEnum.WECHAT_JSAPI;
+            case ALIPAY -> PayMethodEnum.ALIPAY_JSAPI;
+            case UNION_PAY -> PayMethodEnum.UNION_JSAPI;
+            case DOUYIN -> PayMethodEnum.DOUYIN_JSAPI;
+            // browser 等非聚合扫码环境不支持
+            default -> null;
+        };
+        if (method == null) {
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.gateway.clientEnvNotSupport");
+        }
+        return method.getCode();
     }
 }

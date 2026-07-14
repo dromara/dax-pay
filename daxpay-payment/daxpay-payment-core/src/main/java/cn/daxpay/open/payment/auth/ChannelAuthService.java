@@ -43,7 +43,7 @@ public class ChannelAuthService {
     /// 不含 queryCode, 需随会话保存)。
     public AuthUrlResult generateAuthUrl(GenerateAuthUrlParam param) {
         initMchContext(param.getAppId(), param.getMchNo());
-        // 支付产品: 显式传入优先, 否则从通道商户号反查(调试工具/直传商户号场景)
+        // 支付产品: 显式传入优先, 否则从通道商户号反查(调试工具/直接指定通道商户场景)
         String product = resolveProduct(param);
         var strategy = PaymentStrategyFactory.createByProduct(product, AbsChannelAuthStrategy.class);
         // 生成认证会话码并保存上下文, 授权回调后凭此恢复
@@ -86,7 +86,7 @@ public class ChannelAuthService {
         return authResult;
     }
 
-    /// 商户上下文初始化: appId 优先(渠道配置/小程序直连), appId 为空则用 mchNo(调试/直传商户号场景),
+    /// 商户上下文初始化: appId 优先(渠道配置/小程序直连), appId 为空则用 mchNo(调试/直接指定通道商户场景),
     /// 两者均空时跳过(微信 OAuth 重定向回调仅含 authToken, 商户上下文由 session.channelMchNo 维度定位, 无需线程级 mchNo)。
     private void initMchContext(String appId, String mchNo) {
         if (StrUtil.isNotBlank(appId)) {

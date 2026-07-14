@@ -24,7 +24,7 @@ public abstract class MerchantPaymentCommonParam extends PaymentCommonParam{
     @Size(max = 32, message = "{validation.field.appId.size}")
     private String appId;
 
-    /// 通道商户号(可选, 调试或指定通道商户时传入)
+    /// 通道商户号(可选, 调试或直接指定时传入)
     @Schema(description = "通道商户号")
     @Size(max = 32, message = "{validation.field.channelMchNo.size}")
     private String channelMchNo;

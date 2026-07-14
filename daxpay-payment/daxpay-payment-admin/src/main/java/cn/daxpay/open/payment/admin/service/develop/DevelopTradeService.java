@@ -44,13 +44,13 @@ public class DevelopTradeService {
         return payProviderMethodService.listDirectoryFlat();
     }
 
-    /// 传值模式：商户全部启用通道商户候选, provider 为空返回全部,
+    /// 直接指定：商户全部启用通道商户候选, provider 为空返回全部,
     /// 非空按支付渠道过滤(如 wechat 返回所有声明支持微信的产品通道商户, 含官方与三方聚合通道)
     public List<LabelValue> listChannelMchCandidates(String mchNo, String provider) {
         return payRouteStrategyCapabilitySupport.listDirectChannelMchCandidates(mchNo, provider);
     }
 
-    /// 传值模式：按通道商户(产品)返回全部启用支付能力候选
+    /// 直接指定：按通道商户(产品)返回全部启用支付能力候选
     public List<LabelValue> listCapabilityCandidates(String channelMchNo) {
         return payRouteStrategyCapabilitySupport.listDirectCapabilityCandidates(channelMchNo);
     }

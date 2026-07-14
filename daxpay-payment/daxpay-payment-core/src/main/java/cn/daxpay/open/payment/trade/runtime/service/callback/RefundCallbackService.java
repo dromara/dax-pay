@@ -5,9 +5,8 @@ import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.trade.order.dao.PayRefundOrderManager;
 import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
 import cn.daxpay.open.payment.trade.runtime.service.refund.PayRefundSettleService;
+import cn.daxpay.open.platform.common.redis.lock.LockExecutor;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
-import com.baomidou.lock.LockInfo;
-import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,19 +28,12 @@ public class RefundCallbackService {
 
     private final PayRefundOrderManager payRefundOrderManager;
     private final PayRefundSettleService payRefundSettleService;
-    private final LockTemplate lockTemplate;
+    private final LockExecutor lockExecutor;
 
     /// 退款统一回调处理
     @Transactional(rollbackFor = Exception.class)
     public void refundCallback(RefundCallbackData callbackData) {
-        LockInfo lock = lockTemplate.lock("callback:refund:" + callbackData.getRefundNo(), 10000, 200);
-        if (Objects.isNull(lock)) {
-            callbackData.setCallbackStatus(CallbackStatusEnum.IGNORE)
-                    .setCallbackErrorMsg("退款回调正在处理中，忽略本次回调请求");
-            log.warn("退款号: {} 回调正在处理中，忽略本次回调请求", callbackData.getRefundNo());
-            return;
-        }
-        try {
+        if (!lockExecutor.tryRun("callback:refund:" + callbackData.getRefundNo(), () -> {
             PayRefundOrder refundOrder = payRefundOrderManager.findByRefundNo(callbackData.getRefundNo())
                     .orElse(null);
             // 容错:部分通道仅回传其内部退款号, 用通道退款流水号反查
@@ -71,8 +63,10 @@ public class RefundCallbackService {
             } else {
                 this.fail(refundOrder, callbackData);
             }
-        } finally {
-            lockTemplate.releaseLock(lock);
+        })) {
+            callbackData.setCallbackStatus(CallbackStatusEnum.IGNORE)
+                    .setCallbackErrorMsg("退款回调正在处理中，忽略本次回调请求");
+            log.warn("退款号: {} 回调正在处理中，忽略本次回调请求", callbackData.getRefundNo());
         }
     }
 

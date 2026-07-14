@@ -1,10 +1,10 @@
 package cn.daxpay.open.platform.capability.wechat.token.service;
 
+import cn.daxpay.open.platform.common.redis.lock.LockExecutor;
+import cn.daxpay.open.platform.common.redis.lock.TryLockResult;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.lock.LockInfo;
-import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.error.WxErrorException;
@@ -24,7 +24,7 @@ import java.time.Duration;
 public class WechatTokenService {
 
     private final RedisTemplate<String, String> redisTemplate;
-    private final LockTemplate lockTemplate;
+    private final LockExecutor lockExecutor;
 
     /// Token缓存Key前缀
     private static final String TOKEN_CACHE_KEY = "wechat:token:";
@@ -63,27 +63,15 @@ public class WechatTokenService {
         String lockKey = TOKEN_LOCK_KEY + wxAppId;
         String cacheKey = TOKEN_CACHE_KEY + wxAppId;
         String expireKey = TOKEN_EXPIRE_KEY + wxAppId;
-        
-        // 使用lock4j获取分布式锁
-        LockInfo lockInfo = lockTemplate.lock(lockKey, 30000L, 5000L);
-        if (lockInfo == null) {
-            log.warn("获取Token刷新锁失败，wxAppId: {}", wxAppId);
-            // 获取锁失败，尝试从缓存获取
-            String token = redisTemplate.opsForValue().get(cacheKey);
-            if (StrUtil.isNotBlank(token)) {
-                return token;
-            }
-            throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR, "error.channel.wechat.accessTokenLockFailed");
-        }
-        
-        try {
+
+        TryLockResult<String> result = lockExecutor.tryExecute(lockKey, 30000L, 5000L, () -> {
             // 双重检查，避免重复刷新
             String token = redisTemplate.opsForValue().get(cacheKey);
             if (StrUtil.isNotBlank(token) && !isTokenExpiringSoon(wxAppId)) {
                 log.debug("其他实例已刷新Token，直接返回，wxAppId: {}", wxAppId);
                 return token;
             }
-            
+
             // 调用微信API获取新Token
             log.info("开始刷新AccessToken，wxAppId: {}", wxAppId);
             WxMpService wxMpService = createWxMpService(wxAppId, appSecret);
@@ -94,24 +82,31 @@ public class WechatTokenService {
                 log.error("调用微信API获取AccessToken失败，wxAppId: {}, 错误: {}", wxAppId, e.getMessage());
                 throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR, "error.channel.wechat.refreshAccessTokenFailed", e.getMessage());
             }
-            
+
             if (StrUtil.isBlank(newToken)) {
                 throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR, "error.channel.wechat.refreshAccessTokenEmpty");
             }
-            
+
             // 缓存新Token
             redisTemplate.opsForValue().set(cacheKey, newToken, TOKEN_EXPIRE);
             // 记录过期时间
             long expireTime = System.currentTimeMillis() + TOKEN_EXPIRE.toMillis();
             redisTemplate.opsForValue().set(expireKey, String.valueOf(expireTime), TOKEN_EXPIRE);
-            
+
             log.info("刷新AccessToken成功，wxAppId: {}", wxAppId);
             return newToken;
-            
-        } finally {
-            // 释放锁
-            lockTemplate.releaseLock(lockInfo);
+        });
+
+        if (!result.acquired()) {
+            log.warn("获取Token刷新锁失败，wxAppId: {}", wxAppId);
+            // 获取锁失败，尝试从缓存获取
+            String token = redisTemplate.opsForValue().get(cacheKey);
+            if (StrUtil.isNotBlank(token)) {
+                return token;
+            }
+            throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR, "error.channel.wechat.accessTokenLockFailed");
         }
+        return result.value();
     }
 
     /// 检查Token是否即将过期（过期前5分钟）

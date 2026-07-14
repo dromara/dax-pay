@@ -24,10 +24,9 @@ import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.PayFailureException;
 import cn.daxpay.open.platform.core.exception.RepetitiveOperationException;
 import cn.daxpay.open.platform.core.exception.system.SystemUnknownErrorException;
+import cn.daxpay.open.platform.common.redis.lock.LockExecutor;
 import cn.daxpay.open.platform.core.util.DateTimeUtil;
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.lock.LockInfo;
-import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -50,7 +49,7 @@ public class PaySyncService {
     private final GatewayPayOrderManager gatewayPayOrderManager;
     private final PayUniHandleService payUniHandleService;
     private final PaySyncRecordService paySyncRecordService;
-    private final LockTemplate lockTemplate;
+    private final LockExecutor lockExecutor;
 
     /// 支付同步
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
@@ -87,42 +86,40 @@ public class PaySyncService {
         if (Objects.equals(trade.getStatus(), PayFundStatusEnum.INIT.getCode())) {
             throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.pay.syncNotStarted");
         }
-        LockInfo lock = lockTemplate.lock("sync:pay:" + trade.getId(), 10000, 200);
-        if (Objects.isNull(lock)) {
-            throw new RepetitiveOperationException();
-        }
-        try {
-            ContainerInfo info = loadContainerInfo(trade);
-            var context = new PayStrategyContext()
-                    .setTrade(trade)
-                    .setChannelMchNo(info.channelMchNo())
-                    .setCapability(info.capability())
-                    .setChannelAppId(info.channelAppId())
-                    .setClientIp(info.clientIp());
-            var syncStrategy = PaymentStrategyFactory.createByProduct(
-                    info.product(), AbsSyncPayOrderStrategy.class);
-            PaySyncResultBo syncResult = syncStrategy.doSync(context);
-            if (!Objects.equals(syncResult.getOutOrderNo(), trade.getOutOrderNo())) {
-                trade.setOutOrderNo(syncResult.getOutOrderNo());
-                payTradeManager.updateById(trade);
-            }
-            boolean statusSync = this.checkAndAdjust(syncResult, trade, info);
-            if (!statusSync) {
-                try {
-                    this.adjustHandler(syncResult, trade, info);
-                } catch (PayFailureException e) {
-                    syncResult.setSyncSuccess(false).setSyncErrorMsg(e.getMessage());
-                }
-            }
-            // statusSync=true 表示本地与通道已一致、无需调整; API adjust 表示「是否触发了调整」
-            boolean adjusted = !statusSync;
-            this.saveRecord(trade, syncResult, adjusted, info);
-            return new NormalPaySyncResult()
-                    .setOrderStatus(trade.getStatus())
-                    .setAdjust(adjusted);
-        } finally {
-            lockTemplate.releaseLock(lock);
-        }
+        return lockExecutor.execute(
+                "sync:pay:" + trade.getId(),
+                () -> {
+                    ContainerInfo info = loadContainerInfo(trade);
+                    var context = new PayStrategyContext()
+                            .setTrade(trade)
+                            .setChannelMchNo(info.channelMchNo())
+                            .setCapability(info.capability())
+                            .setChannelAppId(info.channelAppId())
+                            .setClientIp(info.clientIp());
+                    var syncStrategy = PaymentStrategyFactory.createByProduct(
+                            info.product(), AbsSyncPayOrderStrategy.class);
+                    PaySyncResultBo syncResult = syncStrategy.doSync(context);
+                    if (!Objects.equals(syncResult.getOutOrderNo(), trade.getOutOrderNo())) {
+                        trade.setOutOrderNo(syncResult.getOutOrderNo());
+                        payTradeManager.updateById(trade);
+                    }
+                    boolean statusSync = this.checkAndAdjust(syncResult, trade, info);
+                    if (!statusSync) {
+                        try {
+                            this.adjustHandler(syncResult, trade, info);
+                        } catch (PayFailureException e) {
+                            syncResult.setSyncSuccess(false).setSyncErrorMsg(e.getMessage());
+                        }
+                    }
+                    // statusSync=true 表示本地与通道已一致、无需调整; API adjust 表示「是否触发了调整」
+                    boolean adjusted = !statusSync;
+                    this.saveRecord(trade, syncResult, adjusted, info);
+                    return new NormalPaySyncResult()
+                            .setOrderStatus(trade.getStatus())
+                            .setAdjust(adjusted);
+                },
+                RepetitiveOperationException::new
+        );
     }
 
     private boolean checkAndAdjust(PaySyncResultBo syncResult, PayTrade trade, ContainerInfo info) {

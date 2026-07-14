@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 /// # 通道路由场景模式配置
@@ -44,7 +45,6 @@ public class PayRouteSceneConfigService {
     private final PayRouteSceneConfigManager sceneConfigManager;
     private final MchAppInfoManager mchAppInfoManager;
     private final PayRouteStrategyCapabilitySupport payRouteStrategyCapabilitySupport;
-    private final PayRouteMethodValidator payRouteMethodValidator;
     private final ChannelMerchantManager channelMerchantManager;
     private final PayProviderMethodService payProviderMethodService;
 
@@ -78,7 +78,7 @@ public class PayRouteSceneConfigService {
             if (isSceneRowEmpty(item)) {
                 continue;
             }
-            payRouteMethodValidator.validateSceneConfigItem(providerCode, item.getMethod());
+            validateSceneConfigItem(providerCode, item.getMethod());
             // 校验通道商户属本商户且启用
             ChannelMerchant mch = channelMerchantManager
                     .findByMchNoAndChannelMchNo(mchNo, item.getChannelMchNo())
@@ -177,6 +177,34 @@ public class PayRouteSceneConfigService {
     /// 目录行未配置（通道商户与能力均为空）
     private boolean isSceneRowEmpty(PayRouteSceneConfigItem item) {
         return StrUtil.isBlank(item.getChannelMchNo()) && StrUtil.isBlank(item.getCapability());
+    }
+
+    /// 校验场景配置项支付渠道与支付方式
+    ///
+    /// - 无 provider：仅允许 other 等无渠道绑定的支付方式；
+    /// - 有 provider：支付方式须落在已启用的渠道支付方式目录内。
+    private void validateSceneConfigItem(String providerCode, String method) {
+        boolean genericMethod = Objects.equals(PayMethodEnum.OTHER.getCode(), method);
+        if (StrUtil.isBlank(providerCode)) {
+            // 非品牌绑定行：只能是跨支付渠道通用支付方式
+            if (!genericMethod) {
+                throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                        "pay.route.error.scenePayProviderRequiredForMethod", PayRouteI18nHelper.payMethod(method));
+            }
+            return;
+        }
+        PayProviderEnum provider = PayProviderEnum.findByCode(providerCode);
+        if (provider == null) {
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "pay.route.error.basicProviderInvalid");
+        }
+        // 品牌绑定行：须在合并且启用的渠道支付方式目录内
+        if (!payProviderMethodService.contains(providerCode, method)) {
+            // 能力: 支付方式不在渠道目录中
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "error.payment.capability.methodNotInDirectory",
+                    PayRouteI18nHelper.payMethod(method), PayRouteI18nHelper.provider(providerCode));
+        }
     }
 
     /// 按应用号加载路由策略，不存在则抛业务异常

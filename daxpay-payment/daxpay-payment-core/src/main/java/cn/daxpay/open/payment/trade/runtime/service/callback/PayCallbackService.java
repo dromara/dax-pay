@@ -10,9 +10,9 @@ import cn.daxpay.open.payment.trade.order.entity.GatewayPayOrder;
 import cn.daxpay.open.payment.trade.order.entity.NormalPayOrder;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.trade.runtime.service.pay.PayUniHandleService;
+import cn.daxpay.open.platform.common.redis.lock.LockExecutor;
+import cn.daxpay.open.platform.common.redis.lock.TryLockResult;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
-import com.baomidou.lock.LockInfo;
-import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,44 +33,45 @@ public class PayCallbackService {
     private final NormalPayOrderManager payNormalOrderManager;
     private final GatewayPayOrderManager gatewayPayOrderManager;
     private final PayUniHandleService payUniHandleService;
-    private final LockTemplate lockTemplate;
+    private final LockExecutor lockExecutor;
 
     /// 支付统一回调处理，返回支付产品编码
     @Transactional(rollbackFor = Exception.class)
     public String payCallback(CallbackData callbackData) {
-        LockInfo lock = lockTemplate.lock("callback:payment:" + callbackData.getTradeNo(), 10000, 200);
-        if (Objects.isNull(lock)) {
+        TryLockResult<String> result = lockExecutor.tryExecute(
+                "callback:payment:" + callbackData.getTradeNo(),
+                () -> {
+                    PayTrade trade = payTradeManager.findByTradeNo(callbackData.getTradeNo())
+                            .orElse(null);
+                    if (Objects.isNull(trade)) {
+                        trade = payTradeManager.findByOutOrderNo(callbackData.getOutTradeNo())
+                                .orElse(null);
+                    }
+                    if (Objects.isNull(trade)) {
+                        callbackData.setCallbackStatus(CallbackStatusEnum.NOT_FOUND)
+                                .setCallbackErrorMsg("支付订单不存在");
+                        return null;
+                    }
+                    // 持锁后二次读取, 避免与关单/同步竞态使用过期状态
+                    trade = payTradeManager.findById(trade.getId()).orElse(trade);
+                    if (Objects.nonNull(callbackData.getOutTradeNo())) {
+                        trade.setOutOrderNo(callbackData.getOutTradeNo());
+                    }
+                    if (Objects.equals(CallbackStatusEnum.SUCCESS.getCode(), callbackData.getTradeStatus())) {
+                        this.success(trade, callbackData);
+                    } else {
+                        this.fail(trade, callbackData);
+                    }
+                    return resolveProduct(trade);
+                }
+        );
+        if (!result.acquired()) {
             callbackData.setCallbackStatus(CallbackStatusEnum.IGNORE)
                     .setCallbackErrorMsg("回调正在处理中，忽略本次回调请求");
             log.warn("订单号: {} 回调正在处理中，忽略本次回调请求", callbackData.getTradeNo());
             return null;
         }
-        try {
-            PayTrade trade = payTradeManager.findByTradeNo(callbackData.getTradeNo())
-                    .orElse(null);
-            if (Objects.isNull(trade)) {
-                trade = payTradeManager.findByOutOrderNo(callbackData.getOutTradeNo())
-                        .orElse(null);
-            }
-            if (Objects.isNull(trade)) {
-                callbackData.setCallbackStatus(CallbackStatusEnum.NOT_FOUND)
-                        .setCallbackErrorMsg("支付订单不存在");
-                return null;
-            }
-            // 持锁后二次读取, 避免与关单/同步竞态使用过期状态
-            trade = payTradeManager.findById(trade.getId()).orElse(trade);
-            if (Objects.nonNull(callbackData.getOutTradeNo())) {
-                trade.setOutOrderNo(callbackData.getOutTradeNo());
-            }
-            if (Objects.equals(CallbackStatusEnum.SUCCESS.getCode(), callbackData.getTradeStatus())) {
-                this.success(trade, callbackData);
-            } else {
-                this.fail(trade, callbackData);
-            }
-            return resolveProduct(trade);
-        } finally {
-            lockTemplate.releaseLock(lock);
-        }
+        return result.value();
     }
 
     /// 从容器获取 product(回调返回供通道策略识别来源)

@@ -42,16 +42,11 @@
             <artifactId>weixin-java-miniapp</artifactId>
             <version>${wxjava.version}</version>
         </dependency>
-        <!-- lock4j分布式锁 -->
+        <!-- Redis + 分布式锁封装 -->
         <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>lock4j-redis-template-spring-boot-starter</artifactId>
-            <version>${lock4j.version}</version>
-        </dependency>
-        <!-- Redis -->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>common-redis</artifactId>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>

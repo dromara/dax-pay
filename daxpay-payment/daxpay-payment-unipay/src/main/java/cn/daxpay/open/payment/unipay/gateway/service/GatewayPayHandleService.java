@@ -23,10 +23,9 @@ import cn.daxpay.open.platform.core.enums.pay.trade.TradeSourceEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.PayFailureException;
 import cn.daxpay.open.platform.core.util.TradeNoGenerateUtil;
+import cn.daxpay.open.platform.common.redis.lock.LockExecutor;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
-import com.baomidou.lock.LockInfo;
-import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -48,7 +47,7 @@ public class GatewayPayHandleService {
     private final MerchantContextLoader merchantContextLoader;
     private final PayUniHandleService payUniHandleService;
     private final GatewayPayAssistService gatewayPayAssistService;
-    private final LockTemplate lockTemplate;
+    private final LockExecutor lockExecutor;
 
     /// 发起网关支付
     ///
@@ -57,75 +56,76 @@ public class GatewayPayHandleService {
     public NormalPayResult handle(GatewayPayOrder order, String product, String method,
                                   String channelMchNo, String capability,
                                   String openId, String clientEnv, String device, String clientIp) {
-        LockInfo lock = lockTemplate.lock("payment:gateway:pay:" + order.getOrderNo(), 10000, 200);
-        if (Objects.isNull(lock)) {
-            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.processing");
-        }
-        try {
-            // 重新加载最新状态
-            order = gatewayPayOrderManager.findById(order.getId())
-                    .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                            "pay.error.payOrderNotExist"));
-            gatewayPayAssistService.checkPayable(order);
-            merchantContextLoader.initMch(order.getMchNo());
+        return lockExecutor.execute(
+                "payment:gateway:pay:" + order.getOrderNo(),
+                () -> {
+                    // 重新加载最新状态
+                    GatewayPayOrder current = gatewayPayOrderManager.findById(order.getId())
+                            .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                                    "pay.error.payOrderNotExist"));
+                    gatewayPayAssistService.checkPayable(current);
+                    merchantContextLoader.initMch(current.getMchNo());
 
-            // 已有 Trade: 幂等 / 锁定规则
-            PayTrade existing = payTradeManager.findByContainerId(order.getId(), PayTradeTypeEnum.GATEWAY.getCode())
-                    .orElse(null);
-            if (existing != null) {
-                if (Objects.equals(existing.getStatus(), PayFundStatusEnum.SUCCESS.getCode())) {
-                    throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.alreadySuccess");
-                }
-                if (Objects.equals(existing.getStatus(), PayFundStatusEnum.PROCESSING.getCode())
-                        || Objects.equals(existing.getStatus(), PayFundStatusEnum.INIT.getCode())) {
-                    // 通道/方式不一致则拒绝换端(product/method 在容器上)
-                    if (!Objects.equals(order.getProduct(), product)
-                            || !Objects.equals(order.getMethod(), method)) {
-                        throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                                "pay.error.gateway.channelLocked");
+                    // 已有 Trade: 幂等 / 锁定规则
+                    PayTrade existing = payTradeManager.findByContainerId(current.getId(), PayTradeTypeEnum.GATEWAY.getCode())
+                            .orElse(null);
+                    if (existing != null) {
+                        if (Objects.equals(existing.getStatus(), PayFundStatusEnum.SUCCESS.getCode())) {
+                            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.alreadySuccess");
+                        }
+                        if (Objects.equals(existing.getStatus(), PayFundStatusEnum.PROCESSING.getCode())
+                                || Objects.equals(existing.getStatus(), PayFundStatusEnum.INIT.getCode())) {
+                            // 通道/方式不一致则拒绝换端(product/method 在容器上)
+                            if (!Objects.equals(current.getProduct(), product)
+                                    || !Objects.equals(current.getMethod(), method)) {
+                                throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                                        "pay.error.gateway.channelLocked");
+                            }
+                            // payBody 仅在容器, 已拉起则幂等返回
+                            if (StrUtil.isNotBlank(current.getPayBody())) {
+                                return this.buildResult(current, existing);
+                            }
+                        } else {
+                            // fail/close 等终态: 首期不允许换方式重试
+                            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.failedOrClosed");
+                        }
                     }
-                    // payBody 仅在容器, 已拉起则幂等返回
-                    if (StrUtil.isNotBlank(order.getPayBody())) {
-                        return this.buildResult(order, existing);
+
+                    // 组装路由用参数
+                    NormalPayParam payParam = this.buildPayParam(current, product, method, channelMchNo, capability, openId, clientIp);
+                    payRouteService.resolve(payParam);
+                    var payStrategy = PaymentStrategyFactory.createByProduct(payParam.getProduct(), AbsNormalPayStrategy.class);
+                    var context = new PayStrategyContext().setPayParam(payParam);
+                    payStrategy.doBeforePay(context);
+
+                    // 建 Trade(若无) + 回填容器
+                    if (existing == null) {
+                        existing = SpringUtil.getBean(this.getClass())
+                                .createTrade(current, payParam, clientEnv, device);
+                    } else {
+                        // 回填路由结果到容器
+                        this.fillRouteOnOrder(current, payParam, clientEnv, device);
+                        gatewayPayOrderManager.updateById(current);
                     }
-                } else {
-                    // fail/close 等终态: 首期不允许换方式重试
-                    throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.failedOrClosed");
-                }
-            }
+                    context.setTrade(existing);
 
-            // 组装路由用参数
-            NormalPayParam payParam = this.buildPayParam(order, product, method, channelMchNo, capability, openId, clientIp);
-            payRouteService.resolve(payParam);
-            var payStrategy = PaymentStrategyFactory.createByProduct(payParam.getProduct(), AbsNormalPayStrategy.class);
-            var context = new PayStrategyContext().setPayParam(payParam);
-            payStrategy.doBeforePay(context);
-
-            // 建 Trade(若无) + 回填容器
-            if (existing == null) {
-                existing = SpringUtil.getBean(this.getClass())
-                        .createTrade(order, payParam, clientEnv, device);
-            } else {
-                // 回填路由结果到容器
-                this.fillRouteOnOrder(order, payParam, clientEnv, device);
-                gatewayPayOrderManager.updateById(order);
-            }
-            context.setTrade(existing);
-
-            PayTradeResultBo result;
-            try {
-                result = payStrategy.doPay(context);
-            } catch (Exception e) {
-                log.error("网关支付出现异常", e);
-                String errMsg = (e instanceof PayFailureException)
-                        ? e.getMessage() : "支付出现异常: " + e.getMessage();
-                payUniHandleService.payFail(existing, errMsg);
-                throw e;
-            }
-            return SpringUtil.getBean(this.getClass()).paySuccess(order, existing, result);
-        } finally {
-            lockTemplate.releaseLock(lock);
-        }
+                    PayTradeResultBo result;
+                    try {
+                        result = payStrategy.doPay(context);
+                    } catch (Exception e) {
+                        log.error("网关支付出现异常", e);
+                        String errMsg = (e instanceof PayFailureException)
+                                ? e.getMessage() : "支付出现异常: " + e.getMessage();
+                        payUniHandleService.payFail(existing, errMsg);
+                        if (e instanceof RuntimeException re) {
+                            throw re;
+                        }
+                        throw new PayFailureException(errMsg);
+                    }
+                    return SpringUtil.getBean(this.getClass()).paySuccess(current, existing, result);
+                },
+                () -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.processing")
+        );
     }
 
     /// 创建资金凭证并更新容器为 paying
@@ -158,7 +158,7 @@ public class GatewayPayHandleService {
                 ? String.join(",", payParam.getLimitPay()) : null);
         order.setOpenid(payParam.getOpenId());
         order.setProduct(payParam.getProduct());
-        // 与 Normal 对齐: 容器冗余 relationOrderNo, 供 ContainerFieldResolver / 管理展示
+        // 与 Normal 对齐: 容器冗余 relationOrderNo, 供 PayTradeContainerFields / 管理展示
         order.setRelationOrderNo(order.getOrderNo());
         gatewayPayOrderManager.updateById(order);
         return trade;

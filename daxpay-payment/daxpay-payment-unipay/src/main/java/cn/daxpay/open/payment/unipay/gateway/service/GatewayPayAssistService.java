@@ -22,9 +22,8 @@ import cn.daxpay.open.platform.core.util.DateTimeUtil;
 import cn.daxpay.open.platform.core.util.TradeNoGenerateUtil;
 import cn.daxpay.open.platform.system.entity.config.platform.infra.PlatformUrlConfig;
 import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
+import cn.daxpay.open.platform.common.redis.lock.LockExecutor;
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.lock.LockInfo;
-import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -47,7 +46,7 @@ public class GatewayPayAssistService {
     private final MerchantContextLoader merchantContextLoader;
     private final PlatformUrlConfigService platformUrlConfigService;
     private final ArtemisTemplateService artemisTemplateService;
-    private final LockTemplate lockTemplate;
+    private final LockExecutor lockExecutor;
     private final PayAssistService payAssistService;
 
     /// 预下单: 仅创建容器, 返回落地页 URL
@@ -66,16 +65,11 @@ public class GatewayPayAssistService {
         param.setAppId(mchApp.getAppId());
         merchantContextLoader.initMch(param.getMchNo());
 
-        LockInfo lock = lockTemplate.lock(
-                "payment:gateway:pre:" + param.getAppId() + ":" + param.getBizOrderNo(), 10000, 200);
-        if (Objects.isNull(lock)) {
-            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.processing");
-        }
-        try {
-            return cn.hutool.extra.spring.SpringUtil.getBean(this.getClass()).doPrePay(param, typeEnum);
-        } finally {
-            lockTemplate.releaseLock(lock);
-        }
+        return lockExecutor.execute(
+                "payment:gateway:pre:" + param.getAppId() + ":" + param.getBizOrderNo(),
+                () -> cn.hutool.extra.spring.SpringUtil.getBean(this.getClass()).doPrePay(param, typeEnum),
+                () -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.processing")
+        );
     }
 
     @Transactional(rollbackFor = Exception.class)

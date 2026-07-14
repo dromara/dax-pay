@@ -56,14 +56,14 @@ public class NormalPayParam extends MerchantPaymentCommonParam {
 
     /// 支付方式编码
     /// - 路由模式: 一般必填; 被扫场景可空, 有 authCode 时由平台按前缀识别回填分钱包 method
-    /// - 直定模式(已传 channelMchNo+capability): 可空, 由 PayRouteService 按能力反推回填
+    /// - 直接指定(已传 channelMchNo+capability): 可空, 由 PayRouteService 按能力反推回填
     /// - 聚合扫码: 传 `aggregate_pay_qrcode` 走通道原生通扫码
     /// @see PayMethodEnum
-    @Schema(description = "支付方式编码(路由模式一般必填; 被扫可仅传authCode; 直定模式可空)")
+    @Schema(description = "支付方式编码(跟随通道路由时一般必填; 被扫可仅传authCode; 直接指定可空)")
     @Size(max = 32, message = "{validation.field.method.size}")
     private String method;
 
-    /// 支付能力编码：路由模式由路由引擎回填；直定模式(已传 channelMchNo)时作为输入参与校验
+    /// 支付能力编码：跟随通道路由时由路由引擎回填；直接指定(已传 channelMchNo)时作为输入参与校验
     /// @see cn.daxpay.open.platform.core.enums.pay.channel.PayCapabilityEnum
     @Schema(description = "支付能力编码")
     @Size(max = 32, message = "{validation.field.capability.size}")

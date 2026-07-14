@@ -22,9 +22,8 @@ import cn.daxpay.open.payment.trade.order.entity.NormalPayOrder;
 import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.trade.runtime.param.PayRefundParam;
+import cn.daxpay.open.platform.common.redis.lock.LockExecutor;
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.lock.LockInfo;
-import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -46,7 +45,7 @@ public class PayRefundService {
     private final GatewayPayOrderManager gatewayPayOrderManager;
     private final PayRefundOrderManager payRefundOrderManager;
     private final PayRefundSettleService payRefundSettleService;
-    private final LockTemplate lockTemplate;
+    private final LockExecutor lockExecutor;
 
     /// 发起退款
     public PayRefundOrder refund(PayRefundParam param) {
@@ -61,50 +60,51 @@ public class PayRefundService {
         validateRefundable(trade, param.getAmount());
 
         // 分布式锁: 预占与结算共用, 防止并发超退
-        LockInfo lock = lockTemplate.lock(PayRefundSettleService.lockKey(trade.getTradeNo()), 10000, 50);
-        if (Objects.isNull(lock)) {
-            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.refund.processing");
-        }
         try {
-            // 二次校验可退余额(持锁后)
-            PayTrade lockedTrade = payTradeManager.findById(trade.getId()).orElseThrow();
-            validateRefundable(lockedTrade, param.getAmount());
+            return lockExecutor.execute(
+                    PayRefundSettleService.lockKey(trade.getTradeNo()),
+                    10000,
+                    50,
+                    () -> {
+                        // 二次校验可退余额(持锁后)
+                        PayTrade lockedTrade = payTradeManager.findById(trade.getId()).orElseThrow();
+                        validateRefundable(lockedTrade, param.getAmount());
 
-            // 按 tradeType 解析容器路由字段
-            RefundRouteContext route = resolveRoute(lockedTrade);
+                        // 按 tradeType 解析容器路由字段
+                        RefundRouteContext route = resolveRoute(lockedTrade);
 
-            // 预占可退余额 + 创建退款单(progress)
-            payRefundSettleService.reserveBalanceUnderLock(lockedTrade, param.getAmount());
-            PayRefundOrder refundOrder = buildRefundOrder(lockedTrade, route, param);
-            refundOrder.setStatus(RefundOrderStatusEnum.PROGRESS.getCode());
-            payRefundOrderManager.save(refundOrder);
+                        // 预占可退余额 + 创建退款单(progress)
+                        payRefundSettleService.reserveBalanceUnderLock(lockedTrade, param.getAmount());
+                        PayRefundOrder refundOrder = buildRefundOrder(lockedTrade, route, param);
+                        refundOrder.setStatus(RefundOrderStatusEnum.PROGRESS.getCode());
+                        payRefundOrderManager.save(refundOrder);
 
-            // 调用通道退款策略
-            AbsRefundStrategy strategy = PaymentStrategyFactory.createByProduct(
-                    route.getProduct(), AbsRefundStrategy.class);
-            RefundResultBo result;
-            try {
-                strategy.doBeforeRefund(refundOrder);
-                result = strategy.doRefund(refundOrder);
-            } catch (Exception e) {
-                log.error("通道退款失败, refundNo={}", refundOrder.getRefundNo(), e);
-                // 预占回滚 + 退款单 FAIL
-                payRefundSettleService.settleFailOrCloseUnderLock(
-                        refundOrder.getId(), false, null, null, e.getMessage());
-                throw e;
-            }
+                        // 调用通道退款策略
+                        AbsRefundStrategy strategy = PaymentStrategyFactory.createByProduct(
+                                route.getProduct(), AbsRefundStrategy.class);
+                        RefundResultBo result;
+                        try {
+                            strategy.doBeforeRefund(refundOrder);
+                            result = strategy.doRefund(refundOrder);
+                        } catch (Exception e) {
+                            log.error("通道退款失败, refundNo={}", refundOrder.getRefundNo(), e);
+                            // 预占回滚 + 退款单 FAIL
+                            payRefundSettleService.settleFailOrCloseUnderLock(
+                                    refundOrder.getId(), false, null, null, e.getMessage());
+                            throw e;
+                        }
 
-            // 回写结果(SUCCESS 不二次扣; FAIL 回滚; PROGRESS 保持预占)
-            applyRefundResult(refundOrder, result);
-            return payRefundOrderManager.findById(refundOrder.getId()).orElse(refundOrder);
+                        // 回写结果(SUCCESS 不二次扣; FAIL 回滚; PROGRESS 保持预占)
+                        applyRefundResult(refundOrder, result);
+                        return payRefundOrderManager.findById(refundOrder.getId()).orElse(refundOrder);
+                    },
+                    () -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.refund.processing")
+            );
+        } catch (BizInfoException e) {
+            throw e;
         } catch (Exception e) {
-            if (e instanceof BizInfoException) {
-                throw e;
-            }
             log.error("退款处理失败, orderNo={}", param.getOrderNo(), e);
             throw new OperationFailException(CommonCode.FAIL_CODE, "pay.error.operateFailed");
-        } finally {
-            lockTemplate.releaseLock(lock);
         }
     }
 

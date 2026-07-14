@@ -29,6 +29,12 @@
             <artifactId>common-json</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- 分布式锁（RedisTemplate 实现） -->
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>lock4j-redis-template-spring-boot-starter</artifactId>
+            <version>${lock4j.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

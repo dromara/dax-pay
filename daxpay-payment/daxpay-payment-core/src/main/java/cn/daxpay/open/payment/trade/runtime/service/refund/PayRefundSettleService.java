@@ -7,10 +7,9 @@ import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
+import cn.daxpay.open.platform.common.redis.lock.LockExecutor;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.lock.LockInfo;
-import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -38,7 +37,7 @@ public class PayRefundSettleService {
 
     private final PayRefundOrderManager payRefundOrderManager;
     private final PayTradeManager payTradeManager;
-    private final LockTemplate lockTemplate;
+    private final LockExecutor lockExecutor;
 
     /// 构建退款结算锁键
     public static String lockKey(String tradeNo) {
@@ -60,15 +59,11 @@ public class PayRefundSettleService {
     public boolean settleSuccess(Long refundOrderId, OffsetDateTime finishTime, String outRefundNo) {
         PayRefundOrder boot = payRefundOrderManager.findById(refundOrderId)
                 .orElseThrow(() -> new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.refund.orderNotFound"));
-        LockInfo lock = lockTemplate.lock(lockKey(boot.getOrderNo()), 10000, 200);
-        if (Objects.isNull(lock)) {
-            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.refund.processing");
-        }
-        try {
-            return settleSuccessUnderLock(refundOrderId, finishTime, outRefundNo);
-        } finally {
-            lockTemplate.releaseLock(lock);
-        }
+        return lockExecutor.execute(
+                lockKey(boot.getOrderNo()),
+                () -> settleSuccessUnderLock(refundOrderId, finishTime, outRefundNo),
+                () -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.refund.processing")
+        );
     }
 
     /// 调用方已持有 [lockKey] 对应锁时使用。
@@ -116,15 +111,11 @@ public class PayRefundSettleService {
                                      OffsetDateTime finishTime, String outRefundNo, String errorMsg) {
         PayRefundOrder boot = payRefundOrderManager.findById(refundOrderId)
                 .orElseThrow(() -> new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.refund.orderNotFound"));
-        LockInfo lock = lockTemplate.lock(lockKey(boot.getOrderNo()), 10000, 200);
-        if (Objects.isNull(lock)) {
-            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.refund.processing");
-        }
-        try {
-            return settleFailOrCloseUnderLock(refundOrderId, close, finishTime, outRefundNo, errorMsg);
-        } finally {
-            lockTemplate.releaseLock(lock);
-        }
+        return lockExecutor.execute(
+                lockKey(boot.getOrderNo()),
+                () -> settleFailOrCloseUnderLock(refundOrderId, close, finishTime, outRefundNo, errorMsg),
+                () -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.refund.processing")
+        );
     }
 
     /// 调用方已持有锁: progress→fail/close 并回滚预占。

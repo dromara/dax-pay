@@ -22,10 +22,9 @@ import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.pay.CloseTypeEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.PayFailureException;
+import cn.daxpay.open.platform.common.redis.lock.LockExecutor;
 import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
 import cn.hutool.core.util.StrUtil;
-import com.baomidou.lock.LockInfo;
-import com.baomidou.lock.LockTemplate;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -52,7 +51,7 @@ public class PayCloseService {
     private final GatewayPayOrderManager gatewayPayOrderManager;
     private final PayUniHandleService payUniHandleService;
     private final PayCloseRecordService payCloseRecordService;
-    private final LockTemplate lockTemplate;
+    private final LockExecutor lockExecutor;
     private final PaymentContext paymentContext;
 
     /// 关闭支付(商户 API)
@@ -84,54 +83,56 @@ public class PayCloseService {
                 .contains(trade.getStatus())) {
             throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.pay.closeNotPaying");
         }
-        LockInfo lock = lockTemplate.lock("payment:close:" + trade.getId(), 10000, 50);
-        if (Objects.isNull(lock)) {
-            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.closeProcessing");
-        }
-        try {
-            // 持锁后二次读取状态, 避免与回调成功竞态把已成功单关掉
-            PayTrade locked = payTradeManager.findById(trade.getId()).orElse(null);
-            if (Objects.isNull(locked)) {
-                throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.payOrderNotExist");
-            }
-            if (!List.of(PayFundStatusEnum.INIT.getCode(), PayFundStatusEnum.PROCESSING.getCode())
-                    .contains(locked.getStatus())) {
-                // 状态已变(如回调已成功), 不写失败关单记录
-                throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.pay.closeNotPaying");
-            }
-            trade = locked;
-            try {
-                CloseTypeEnum closeType;
-                if (Objects.equals(PayFundStatusEnum.INIT.getCode(), trade.getStatus())) {
-                    closeType = CloseTypeEnum.CLOSE;
-                    payUniHandleService.payClose(trade, false);
-                } else {
-                    closeType = useCancel ? CloseTypeEnum.CANCEL : CloseTypeEnum.CLOSE;
-                    ContainerInfo info = loadContainerInfo(trade);
-                    var context = new PayStrategyContext()
-                            .setTrade(trade)
-                            .setChannelMchNo(info.channelMchNo())
-                            .setCapability(info.capability())
-                            .setChannelAppId(info.channelAppId())
-                            .setClientIp(info.clientIp());
-                    AbsPayCloseStrategy strategy = PaymentStrategyFactory.createByProduct(
-                            info.product(), AbsPayCloseStrategy.class);
-                    strategy.doBeforeClose(context);
-                    strategy.doClose(context, useCancel);
-                    payUniHandleService.payClose(trade, useCancel);
-                }
-                this.saveRecord(trade, closeType, null);
-            } catch (Exception e) {
-                log.error("关闭订单失败, id: {}:", trade.getId(), e);
-                this.saveRecord(trade, useCancel ? CloseTypeEnum.CANCEL : CloseTypeEnum.CLOSE, e.getMessage());
-                if (e instanceof PayFailureException || e instanceof BizInfoException) {
-                    throw e;
-                }
-                throw new OperationFailException(CommonCode.FAIL_CODE, "pay.error.pay.closeFailed");
-            }
-        } finally {
-            lockTemplate.releaseLock(lock);
-        }
+        lockExecutor.run(
+                "payment:close:" + trade.getId(),
+                10000,
+                50,
+                () -> {
+                    // 持锁后二次读取状态, 避免与回调成功竞态把已成功单关掉
+                    PayTrade locked = payTradeManager.findById(trade.getId()).orElse(null);
+                    if (Objects.isNull(locked)) {
+                        throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.payOrderNotExist");
+                    }
+                    if (!List.of(PayFundStatusEnum.INIT.getCode(), PayFundStatusEnum.PROCESSING.getCode())
+                            .contains(locked.getStatus())) {
+                        // 状态已变(如回调已成功), 不写失败关单记录
+                        throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.pay.closeNotPaying");
+                    }
+                    PayTrade current = locked;
+                    try {
+                        CloseTypeEnum closeType;
+                        if (Objects.equals(PayFundStatusEnum.INIT.getCode(), current.getStatus())) {
+                            closeType = CloseTypeEnum.CLOSE;
+                            payUniHandleService.payClose(current, false);
+                        } else {
+                            closeType = useCancel ? CloseTypeEnum.CANCEL : CloseTypeEnum.CLOSE;
+                            ContainerInfo info = loadContainerInfo(current);
+                            var context = new PayStrategyContext()
+                                    .setTrade(current)
+                                    .setChannelMchNo(info.channelMchNo())
+                                    .setCapability(info.capability())
+                                    .setChannelAppId(info.channelAppId())
+                                    .setClientIp(info.clientIp());
+                            AbsPayCloseStrategy strategy = PaymentStrategyFactory.createByProduct(
+                                    info.product(), AbsPayCloseStrategy.class);
+                            strategy.doBeforeClose(context);
+                            strategy.doClose(context, useCancel);
+                            payUniHandleService.payClose(current, useCancel);
+                        }
+                        this.saveRecord(current, closeType, null);
+                    } catch (Exception e) {
+                        log.error("关闭订单失败, id: {}:", current.getId(), e);
+                        this.saveRecord(current, useCancel ? CloseTypeEnum.CANCEL : CloseTypeEnum.CLOSE, e.getMessage());
+                        if (e instanceof PayFailureException || e instanceof BizInfoException) {
+                            if (e instanceof RuntimeException re) {
+                                throw re;
+                            }
+                        }
+                        throw new OperationFailException(CommonCode.FAIL_CODE, "pay.error.pay.closeFailed");
+                    }
+                },
+                () -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.closeProcessing")
+        );
     }
 
     /// 超时自动关单(幂等)
@@ -150,41 +151,35 @@ public class PayCloseService {
             log.error("超时关单交易缺少 mchNo, tradeNo={}", tradeNo);
             return;
         }
-        LockInfo lock = lockTemplate.lock("payment:close:" + boot.getId(), 10000, 50);
-        if (Objects.isNull(lock)) {
+        if (!lockExecutor.tryRun("payment:close:" + boot.getId(), 10000, 50, () ->
+                paymentContext.runAs(() -> {
+                    paymentContext.setMchNo(boot.getMchNo());
+                    PayTrade trade = payTradeManager.findByTradeNo(tradeNo).orElse(null);
+                    if (Objects.isNull(trade)
+                            || !Objects.equals(PayFundStatusEnum.PROCESSING.getCode(), trade.getStatus())) {
+                        return;
+                    }
+                    String errMsg = null;
+                    try {
+                        ContainerInfo info = loadContainerInfo(trade);
+                        var context = new PayStrategyContext()
+                                .setTrade(trade)
+                                .setChannelMchNo(info.channelMchNo())
+                                .setCapability(info.capability())
+                                .setChannelAppId(info.channelAppId())
+                                .setClientIp(info.clientIp());
+                        AbsPayCloseStrategy strategy = PaymentStrategyFactory.createByProduct(
+                                info.product(), AbsPayCloseStrategy.class);
+                        strategy.doBeforeClose(context);
+                        strategy.doClose(context, false);
+                    } catch (Exception e) {
+                        errMsg = e.getMessage();
+                        log.warn("超时关单调用通道关闭失败, 仅本地关闭, tradeNo={}", tradeNo, e);
+                    }
+                    payUniHandleService.payTimeout(trade);
+                    this.saveRecord(trade, CloseTypeEnum.TIMEOUT, errMsg);
+                }))) {
             log.warn("超时关单获取锁失败(并发关单进行中), 交由兜底任务处理, tradeNo={}", tradeNo);
-            return;
-        }
-        try {
-            paymentContext.runAs(() -> {
-                paymentContext.setMchNo(boot.getMchNo());
-                PayTrade trade = payTradeManager.findByTradeNo(tradeNo).orElse(null);
-                if (Objects.isNull(trade)
-                        || !Objects.equals(PayFundStatusEnum.PROCESSING.getCode(), trade.getStatus())) {
-                    return;
-                }
-                String errMsg = null;
-                try {
-                    ContainerInfo info = loadContainerInfo(trade);
-                    var context = new PayStrategyContext()
-                            .setTrade(trade)
-                            .setChannelMchNo(info.channelMchNo())
-                            .setCapability(info.capability())
-                            .setChannelAppId(info.channelAppId())
-                            .setClientIp(info.clientIp());
-                    AbsPayCloseStrategy strategy = PaymentStrategyFactory.createByProduct(
-                            info.product(), AbsPayCloseStrategy.class);
-                    strategy.doBeforeClose(context);
-                    strategy.doClose(context, false);
-                } catch (Exception e) {
-                    errMsg = e.getMessage();
-                    log.warn("超时关单调用通道关闭失败, 仅本地关闭, tradeNo={}", tradeNo, e);
-                }
-                payUniHandleService.payTimeout(trade);
-                this.saveRecord(trade, CloseTypeEnum.TIMEOUT, errMsg);
-            });
-        } finally {
-            lockTemplate.releaseLock(lock);
         }
     }
 
