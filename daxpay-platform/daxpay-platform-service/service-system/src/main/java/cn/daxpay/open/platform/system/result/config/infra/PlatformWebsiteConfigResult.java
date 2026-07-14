@@ -23,11 +23,14 @@ public class PlatformWebsiteConfigResult {
     @Schema(description = "公司邮箱")
     private String companyEmail;
 
-    @Schema(description = "系统完整 logo")
-    private String wholeLogo;
+    @Schema(description = "客服/商务微信号")
+    private String companyWechat;
 
-    @Schema(description = "系统简化 logo")
-    private String simpleLogo;
+    @Schema(description = "系统亮色 logo")
+    private String logo;
+
+    @Schema(description = "系统暗色 logo, 不传则复用亮色")
+    private String logoDark;
 
     @Schema(description = "工信部 ICP 备案信息")
     private String icpInfo;
@@ -56,6 +59,7 @@ public class PlatformWebsiteConfigResult {
     @Schema(description = "版权信息")
     private String copyright;
 
-    @Schema(description = "版权信息链接")
-    private String copyrightLink;
+    /// 配置内容哈希(只读, 不入库; 供客户端缓存比对, 一致则跳过 re-apply)
+    @Schema(description = "配置内容哈希, 供客户端缓存比对")
+    private String contentHash;
 }

@@ -430,6 +430,33 @@
     "urlType": {
       "notBlank": "URL type cannot be blank"
     },
+    "systemName": {
+      "size": "System name must not exceed {max} characters"
+    },
+    "companyName": {
+      "size": "Company name must not exceed {max} characters"
+    },
+    "companyEmail": {
+      "email": "Invalid email format"
+    },
+    "companyWechat": {
+      "size": "WeChat ID must not exceed {max} characters"
+    },
+    "copyright": {
+      "size": "Copyright text must not exceed {max} characters"
+    },
+    "icpLink": {
+      "pattern": "URL must start with http:// or https://"
+    },
+    "mpsLink": {
+      "pattern": "URL must start with http:// or https://"
+    },
+    "pcacLink": {
+      "pattern": "URL must start with http:// or https://"
+    },
+    "icpPlusLink": {
+      "pattern": "URL must start with http:// or https://"
+    },
     "dictId": {
       "notNull": "Dictionary ID cannot be blank"
     },

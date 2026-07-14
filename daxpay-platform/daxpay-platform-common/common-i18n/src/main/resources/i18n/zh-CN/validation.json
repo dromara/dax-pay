@@ -433,6 +433,33 @@
     "urlType": {
       "notBlank": "端点类型不能为空"
     },
+    "systemName": {
+      "size": "系统名称长度不能超过{max}个字符"
+    },
+    "companyName": {
+      "size": "公司全称长度不能超过{max}个字符"
+    },
+    "companyEmail": {
+      "email": "邮箱格式不正确"
+    },
+    "companyWechat": {
+      "size": "微信号长度不能超过{max}个字符"
+    },
+    "copyright": {
+      "size": "版权信息长度不能超过{max}个字符"
+    },
+    "icpLink": {
+      "pattern": "链接必须以 http:// 或 https:// 开头"
+    },
+    "mpsLink": {
+      "pattern": "链接必须以 http:// 或 https:// 开头"
+    },
+    "pcacLink": {
+      "pattern": "链接必须以 http:// 或 https:// 开头"
+    },
+    "icpPlusLink": {
+      "pattern": "链接必须以 http:// 或 https:// 开头"
+    },
     "dictId": {
       "notNull": "字典ID不可为空"
     },
