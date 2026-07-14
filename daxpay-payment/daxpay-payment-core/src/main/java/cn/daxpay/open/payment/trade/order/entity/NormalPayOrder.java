@@ -1,6 +1,8 @@
 package cn.daxpay.open.payment.trade.order.entity;
 
 import cn.daxpay.open.payment.common.entity.MchBaseEntity;
+import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
+import cn.daxpay.open.platform.core.enums.unipay.PayLimitPayEnum;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -54,7 +56,7 @@ public class NormalPayOrder extends MchBaseEntity {
     /// 商户附加参数（回调原样返回）
     private String attach;
 
-    /// 业务单过期时间（超时关单权威，不落 pay_trade）
+    /// 业务单过期时间
     private OffsetDateTime expiredTime;
 
     // ===== 金额（冗余自 PayTrade，方便查询）=====
@@ -69,7 +71,7 @@ public class NormalPayOrder extends MchBaseEntity {
     // ===== 支付信息（冗余，查询过滤用）=====
 
     /// 支付通道编码（冗余自 product → ProductEnum#getChannel，对应 ChannelEnum；非 PayProviderEnum）
-    /// @see cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum
+    /// @see ChannelEnum
     private String channel;
 
     /// 支付方式
@@ -77,7 +79,7 @@ public class NormalPayOrder extends MchBaseEntity {
     private String method;
 
     /// 限制支付类型（如限制信用卡）
-    /// @see cn.daxpay.open.platform.core.enums.unipay.PayLimitPayEnum
+    /// @see PayLimitPayEnum
     private String limitPay;
 
     /// 支付产品编码
