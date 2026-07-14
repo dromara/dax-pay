@@ -80,11 +80,6 @@ public class DictItemService {
                 .orElseThrow(() -> new DataNotExistException("error.system.dict.itemNotExist"));
     }
 
-    /// 根据字典编码和字典项编码查询启用的菜单项
-    public Optional<DictItem> findEnableByCode(String dictCode, String code) {
-        return dictItemManager.findByCodeAndEnable(dictCode, code, true);
-    }
-
     /// 查询指定目录下的所有内容
     public List<DictItemResult> findByDictionaryId(Long dictionaryId) {
         return dictItemManager.findByDictId(dictionaryId)
@@ -94,20 +89,8 @@ public class DictItemService {
                 .toList();
     }
 
-    /// 查询指定字典编码下的所有启用的字典项
-    /// @return code -> nameCn 的映射
-    @Cacheable(value = "system:dict", key = "#dictCode")
-    public Map<String, String> findEnableByDictCode(String dictCode) {
-        return dictItemManager.findByDictCodeAndEnable(dictCode, true)
-                .stream()
-                .collect(HashMap::new,
-                        (map, item) -> map.put(item.getCode(), item.getNameCn()),
-                        HashMap::putAll);
-
-    }
-
     /// 查询指定字典编码下所有启用的字典项完整列表（含多语言字段）
-    /// 供 DictTranslatorImpl 使用，缓存键与 findEnableByDictCode 区分以避免类型冲突
+    /// 供 DictTranslatorImpl 使用
     /// @return 字典项完整实体列表
     @Cacheable(value = "system:dict", key = "#dictCode + ':list'")
     public List<DictItem> findAllEnableByDictCode(String dictCode) {

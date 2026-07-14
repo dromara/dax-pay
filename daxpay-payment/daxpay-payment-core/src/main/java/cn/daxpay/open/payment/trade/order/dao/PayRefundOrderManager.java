@@ -27,13 +27,6 @@ public class PayRefundOrderManager extends BaseManager<PayRefundOrderMapper, Pay
         return findByField(PayRefundOrder::getOutRefundNo, outRefundNo);
     }
 
-    /// 根据原支付订单号查询退款订单数量(用于判断是否已退款)
-    public long countByOrderNo(String orderNo) {
-        return lambdaQuery()
-                .eq(PayRefundOrder::getOrderNo, orderNo)
-                .count();
-    }
-
     /// 分页查询(管理端), 默认按创建时间倒序
     public Page<PayRefundOrder> page(PageParam pageParam, PayRefundOrderQuery query) {
         Page<PayRefundOrder> mpPage = MpUtil.getMpPage(pageParam);

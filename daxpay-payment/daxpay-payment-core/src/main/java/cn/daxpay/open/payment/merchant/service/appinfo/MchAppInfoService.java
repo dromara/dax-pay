@@ -11,7 +11,6 @@ import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.platform.iam.service.client.ClientCodeService;
 import cn.daxpay.open.platform.core.exception.config.ConfigErrorException;
-import cn.daxpay.open.platform.core.exception.config.ConfigNotEnableException;
 import cn.daxpay.open.platform.core.exception.config.ConfigNotExistException;
 import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.merchant.convert.appinfo.MchAppInfoConvert;
@@ -19,7 +18,6 @@ import cn.daxpay.open.payment.merchant.dao.appinfo.MchAppInfoManager;
 import cn.daxpay.open.payment.merchant.dao.info.MerchantInfoManager;
 import cn.daxpay.open.payment.merchant.entity.appinfo.MchAppInfo;
 import cn.daxpay.open.payment.merchant.entity.info.MerchantInfo;
-import cn.daxpay.open.platform.core.enums.merchant.MerchantStatusEnum;
 import cn.daxpay.open.payment.merchant.param.appinfo.MchAppInfoParam;
 import cn.daxpay.open.payment.merchant.param.appinfo.MchAppInfoQuery;
 import cn.daxpay.open.payment.merchant.result.appinfo.MchAppInfoResult;
@@ -147,31 +145,6 @@ public class MchAppInfoService {
                 .orElseThrow(() -> new ConfigNotExistException("error.payment.merchant.mchAppNotFound"));
         this.checkApp(mchApp);
         return mchApp.toResult();
-    }
-
-    /// 启用下拉列表, 需要应用和商户都是启用状态
-    public List<LabelValue> dropdownByEnable(String mchNo) {
-        if (clientCodeService.getClientCode().equals(ClientEnum.MERCHANT.getCode())) {
-            mchNo = paymentContext.getMchNo();
-        }
-        // 判断商户状态
-        MerchantInfo merchantInfo = merchantInfoManager.findByMchNo(mchNo)
-                // 商户: 商户不存在
-                .orElseThrow(() -> new DataNotExistException("error.payment.merchant.mchNotExist"));
-        if (!Objects.equals(merchantInfo.getStatus(), MerchantStatusEnum.ENABLE.getCode())) {
-            throw new ConfigNotEnableException(CommonCode.FAIL_CODE, "pay.error.assist.mchNotEnabled");
-        }
-        // 查询启用的应用
-        return mchAppInfoManager.findAllByMchNoAndEnable(mchNo).stream()
-                .map(o -> new LabelValue(o.getAppName(), o.getAppId()))
-                .collect(Collectors.toList());
-    }
-
-    /// 查询商户默认应用号
-    public String findDefaultAppId(String mchNo) {
-        return mchAppInfoManager.findDefaultByMchNo(mchNo)
-                .map(MchAppInfo::getAppId)
-                .orElseThrow(() -> new DataNotExistException("error.payment.merchant.defaultAppNotConfigured"));
     }
 
     /// 下拉列表, 不判断应用和商户的状态

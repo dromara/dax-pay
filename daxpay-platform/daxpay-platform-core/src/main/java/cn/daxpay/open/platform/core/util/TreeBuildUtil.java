@@ -63,32 +63,6 @@ public class TreeBuildUtil {
         }
         return children;
     }
-
-    /// 展开树为list列表
-    ///
-    /// @param list        要进行展开的列表
-    /// @param getChildren 获取子节点列表的方法引用
-    /// @return 展开后的结果列表
-    public <T> List<T> unfold(List<T> list, Function<T, List<T>> getChildren){
-        return unfold(list,getChildren, new ArrayList<>());
-    }
-
-    /// 展开树为list列表
-    ///
-    /// @param list        要进行展开的列表
-    /// @param getChildren 获取子节点列表的方法引用
-    /// @param result      用于存储展开后的列表对象
-    /// @return 展开后的结果列表
-    private  <T> List<T> unfold(List<T> list, Function<T, List<T>> getChildren, List<T> result){
-        if (CollectionUtil.isEmpty(list)) {
-            return new ArrayList<>(0);
-        }
-        for (T region : list) {
-            unfold(getChildren.apply(region), getChildren, result);
-            result.add(region);
-        }
-        return result;
-    }
 }
 
 

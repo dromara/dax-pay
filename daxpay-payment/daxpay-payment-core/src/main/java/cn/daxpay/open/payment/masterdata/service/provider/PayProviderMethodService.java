@@ -90,11 +90,6 @@ public class PayProviderMethodService {
                 .toList();
     }
 
-    /// 同 {@link #listMethodsForProvider(PayProviderEnum)}
-    public List<PayMethodEnum> listMethodsForBrand(PayProviderEnum brand) {
-        return listMethodsForProvider(brand);
-    }
-
     /// 平铺返回目录中的渠道与支付方式（不按渠道分组，不含支持的产品）
     public List<PayProviderMethodResult> listDirectoryFlat() {
         DirectoryLoadContext context = loadDirectoryContext();

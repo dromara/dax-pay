@@ -73,11 +73,6 @@ public class PayChannelService {
         return buildChannels();
     }
 
-    /// 按通道编码取展示名称
-    public String findNameByCode(String code) {
-        return resolveChannelName(code);
-    }
-
     /// 枚举与库表合并为通道列表
     private List<PayChannelResult> buildChannels() {
         Map<String, PayChannel> dbMap = payChannelManager.listAllOrdered().stream()

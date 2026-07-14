@@ -49,9 +49,4 @@ public class MerchantInfoManager extends BaseManager<MerchantInfoMapper, Merchan
                 .list();
     }
 
-    /// 查询商户号是否存在
-    public boolean existedByMchNo(String mchNo) {
-        return existedByField(MerchantInfo::getMchNo, mchNo);
-    }
-
 }

@@ -16,20 +16,6 @@ import java.util.List;
 @UtilityClass
 public class PaymentStrategyFactory {
 
-    /// 根据通道编码获取策略
-    /// @param channel 通道编码
-    /// @param clazz 策略类型
-    /// @return 策略类
-    /// @param <T> 需要为 PaymentStrategy 的子类
-    public <T extends PaymentStrategy> T create(String channel, Class<T> clazz) {
-        var beansOfType = SpringUtil.getBeansOfType(clazz);
-        return beansOfType.values().stream()
-                .filter(strategy -> strategy.getProduct().getChannel().equals(channel))
-                .findFirst()
-                // 不支持的能力: {0}
-                .orElseThrow(() -> new UnsupportedAbilityException("pay.error.unsupportedAbilityWithDetail", channel));
-    }
-
     /// 根据产品编码获取策略
     /// @param product 产品编码
     /// @param clazz 策略类型
@@ -42,12 +28,6 @@ public class PaymentStrategyFactory {
                 .findFirst()
                 // 不支持的能力: {0}
                 .orElseThrow(() -> new UnsupportedAbilityException("pay.error.unsupportedAbilityWithDetail", product));
-    }
-
-    /// 判断传入通道的策略是否存在
-    public <T extends PaymentStrategy> boolean existsByChannel(String channel, Class<T> clazz) {
-        var beansOfType = SpringUtil.getBeansOfType(clazz);
-        return beansOfType.values().stream().anyMatch(strategy -> strategy.getProduct().getChannel().equals(channel));
     }
 
     /// 判断传入产品的策略是否存在

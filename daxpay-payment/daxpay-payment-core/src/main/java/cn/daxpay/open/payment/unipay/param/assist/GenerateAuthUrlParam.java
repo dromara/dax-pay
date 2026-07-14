@@ -29,14 +29,6 @@ public class GenerateAuthUrlParam extends MerchantPaymentCommonParam {
     @Schema(description = "认证类型")
     private String authType = ChannelAuthTypeEnum.WECHAT.getCode();
 
-    /// 自定义授权认证路径(暂未实现)
-    ///
-    /// 当前三通道统一使用固定路径(`/auth/wechat` / `/auth/alipay` / `/auth/douyin`) + state 透传 authToken,
-    /// 本字段传入会被忽略。保留字段仅为兼容旧调用方, 后续若支持自定义路径再启用。
-    @Deprecated
-    @Schema(description = "授权认证路径(暂未实现, 忽略)")
-    private String authPath;
-
     /// 支付产品编码, 决定走哪个通道产品的认证策略
     /// 可选: 缺失时由 [cn.daxpay.open.payment.auth.ChannelAuthService] 从通道商户号(channelMchNo)反查
     /// @see cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum

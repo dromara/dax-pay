@@ -2,7 +2,6 @@ package cn.daxpay.open.channel.alipay.dao.direct;
 
 import cn.daxpay.open.channel.alipay.entity.direct.AlipayDirectAppCapability;
 import cn.daxpay.open.platform.common.mybatisplus.impl.BaseManager;
-import cn.daxpay.open.platform.core.annotation.IgnoreTenant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,12 +33,6 @@ public class AlipayDirectAppCapabilityManager extends BaseManager<AlipayDirectAp
                 .eq(AlipayDirectAppCapability::getChannelMchNo, channelMchNo)
                 .eq(AlipayDirectAppCapability::getCapability, capability)
                 .oneOpt();
-    }
-
-    /// 根据通道商户号与支付能力查询单条关联（认证引导，忽略租户）
-    @IgnoreTenant
-    public Optional<AlipayDirectAppCapability> findOneNotTenant(String channelMchNo, String capability) {
-        return findOne(channelMchNo, capability);
     }
 
     /// 根据通道商户号删除全部关联(批量保存时先清后插)

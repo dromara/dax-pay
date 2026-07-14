@@ -2,7 +2,6 @@ package cn.daxpay.open.channel.wechat.dao.direct;
 
 import cn.daxpay.open.channel.wechat.entity.direct.WechatDirectAppCapability;
 import cn.daxpay.open.platform.common.mybatisplus.impl.BaseManager;
-import cn.daxpay.open.platform.core.annotation.IgnoreTenant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,12 +33,6 @@ public class WechatDirectAppCapabilityManager extends BaseManager<WechatDirectAp
                 .eq(WechatDirectAppCapability::getChannelMchNo, channelMchNo)
                 .eq(WechatDirectAppCapability::getCapability, capability)
                 .oneOpt();
-    }
-
-    /// 根据通道商户号与支付能力查询单条关联（认证等无租户上下文时使用，忽略租户）
-    @IgnoreTenant
-    public Optional<WechatDirectAppCapability> findOneNotTenant(String channelMchNo, String capability) {
-        return findOne(channelMchNo, capability);
     }
 
     /// 根据通道商户号删除全部关联(批量保存时先清后插)

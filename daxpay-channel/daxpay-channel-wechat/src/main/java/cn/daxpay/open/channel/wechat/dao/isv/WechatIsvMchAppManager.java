@@ -12,8 +12,7 @@ import java.util.Optional;
 ///
 /// 服务商通道商户应用(子商户应用)数据访问管理器。方法按租户隔离边界分两类:
 /// - 配置态(管理端 CRUD, 带租户隔离): [#listByMchNoAndChannelMchNo]、[#existsByChannelMchNoAndWxAppId]
-/// - 运行态(认证/支付解析, 忽略租户, 方法名带 NotTenant): [#findFirstByChannelMchNoNotTenant]、
-///   [#findFirstByChannelMchNoAndAppTypeNotTenant]、[#findByChannelMchNoAndWxAppIdNotTenant]；
+/// - 运行态(认证/支付解析, 忽略租户, 方法名带 NotTenant): [#findByChannelMchNoAndWxAppIdNotTenant]；
 ///   按主键见基类 [BaseManager.findByIdNotTenant]
 ///
 @Repository
@@ -27,25 +26,6 @@ public class WechatIsvMchAppManager extends BaseManager<WechatIsvMchAppMapper, W
                 .orderByAsc(WechatIsvMchApp::getCreateTime)
                 .orderByAsc(WechatIsvMchApp::getId)
                 .list();
-    }
-
-    /// 按通道商户号查询首个应用(能力解析兜底时使用, 忽略租户隔离)
-    @IgnoreTenant
-    public Optional<WechatIsvMchApp> findFirstByChannelMchNoNotTenant(String channelMchNo) {
-        return firstOpt(q -> q
-                .eq(WechatIsvMchApp::getChannelMchNo, channelMchNo)
-                .orderByAsc(WechatIsvMchApp::getCreateTime)
-                .orderByAsc(WechatIsvMchApp::getId));
-    }
-
-    /// 按通道商户号与应用类型查询首个应用(能力→应用类型推导时使用, 忽略租户隔离)
-    @IgnoreTenant
-    public Optional<WechatIsvMchApp> findFirstByChannelMchNoAndAppTypeNotTenant(String channelMchNo, String appType) {
-        return firstOpt(q -> q
-                .eq(WechatIsvMchApp::getChannelMchNo, channelMchNo)
-                .eq(WechatIsvMchApp::getAppType, appType)
-                .orderByAsc(WechatIsvMchApp::getCreateTime)
-                .orderByAsc(WechatIsvMchApp::getId));
     }
 
     /// 按通道商户号与wxAppId查询应用(opAppId显式指定认证应用时使用, 校验该appId在系统中预配过, 忽略租户隔离)

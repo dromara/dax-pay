@@ -92,40 +92,6 @@ public class MobileAppService {
                 .map(this::toMaskedResult);
     }
 
-    /// 运行时读取实体(不脱敏, appConfig 为解密后 JSON 明文)
-    public MobileApp getEntity(String appType, String platform) {
-        return manager.findByAppTypeAndPlatform(appType, platform)
-                .orElseThrow(() -> new DataNotExistException("error.mobile_app.notExist"));
-    }
-
-    /// 运行时读取已启用的配置实体
-    public MobileApp getEnabledEntity(String appType, String platform) {
-        MobileApp entity = getEntity(appType, platform);
-        if (!Boolean.TRUE.equals(entity.getEnabled())) {
-            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                    "error.mobile_app.notEnabled", appType, platform);
-        }
-        return entity;
-    }
-
-    /// 运行时: 解析微信小程序配置(明文密钥)
-    public WxMiniAppConfig getWxMiniConfig(String appType) {
-        return parseConfig(getEnabledEntity(appType, MobilePlatformEnum.WX_MINI.getCode()).getAppConfig(),
-                WxMiniAppConfig.class);
-    }
-
-    /// 运行时: 解析支付宝小程序配置(明文密钥)
-    public AlipayMiniAppConfig getAlipayMiniConfig(String appType) {
-        return parseConfig(getEnabledEntity(appType, MobilePlatformEnum.ALIPAY_MINI.getCode()).getAppConfig(),
-                AlipayMiniAppConfig.class);
-    }
-
-    /// 运行时: 解析抖音小程序配置(明文密钥)
-    public DyMiniAppConfig getDyMiniConfig(String appType) {
-        return parseConfig(getEnabledEntity(appType, MobilePlatformEnum.DY_MINI.getCode()).getAppConfig(),
-                DyMiniAppConfig.class);
-    }
-
     /// 保存(按端类型+平台组合 upsert)
     @Transactional(rollbackFor = Exception.class)
     public MobileAppResult save(MobileAppParam param) {

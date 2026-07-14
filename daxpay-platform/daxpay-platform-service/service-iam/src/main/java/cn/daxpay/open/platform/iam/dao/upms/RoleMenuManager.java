@@ -30,15 +30,4 @@ public class RoleMenuManager extends BaseManager<RoleMenuMapper, RoleMenu> {
     public List<RoleMenu> findAllByRole(Long roleId) {
         return findAllByField(RoleMenu::getRoleId, roleId);
     }
-
-    /// 根据角色id、菜单ID进行删除
-    public void deleteByMenuIds(Long roleId, List<Long> menuIds) {
-        if (menuIds.isEmpty()) {
-            return;
-        }
-        lambdaUpdate()
-                .eq(RoleMenu::getRoleId, roleId)
-                .in(RoleMenu::getMenuId, menuIds)
-                .remove();
-    }
 }

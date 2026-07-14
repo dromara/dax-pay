@@ -28,7 +28,7 @@ public final class PermCodeUtil {
     }
 
     /// 解析操作码（未拼接 menuCode）。
-    public static String resolveActionCode(PermCode classPermCode, PermCode methodPermCode) {
+    private static String resolveActionCode(PermCode classPermCode, PermCode methodPermCode) {
         if (Objects.nonNull(methodPermCode) && StrUtil.isNotBlank(methodPermCode.code())) {
             return methodPermCode.code();
         }
@@ -45,28 +45,6 @@ public final class PermCodeUtil {
         }
         if (Objects.nonNull(classPermCode) && StrUtil.isNotBlank(classPermCode.menuCode())) {
             return classPermCode.menuCode();
-        }
-        return "";
-    }
-
-    /// 解析中文名称。
-    public static String resolveNameCn(PermCode classPermCode, PermCode methodPermCode) {
-        if (Objects.nonNull(methodPermCode) && StrUtil.isNotBlank(methodPermCode.nameCn())) {
-            return methodPermCode.nameCn();
-        }
-        if (Objects.nonNull(classPermCode) && StrUtil.isNotBlank(classPermCode.nameCn())) {
-            return classPermCode.nameCn();
-        }
-        return "";
-    }
-
-    /// 解析英文名称。
-    public static String resolveNameEn(PermCode classPermCode, PermCode methodPermCode) {
-        if (Objects.nonNull(methodPermCode) && StrUtil.isNotBlank(methodPermCode.nameEn())) {
-            return methodPermCode.nameEn();
-        }
-        if (Objects.nonNull(classPermCode) && StrUtil.isNotBlank(classPermCode.nameEn())) {
-            return classPermCode.nameEn();
         }
         return "";
     }

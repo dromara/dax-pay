@@ -52,18 +52,6 @@ public class WechatDirectAppManager extends BaseManager<WechatDirectAppMapper, W
                 .eq(WechatDirectApp::getWxAppId, wxAppId));
     }
 
-    /// 按通道商户号查询首个应用（认证引导，忽略租户）
-    @IgnoreTenant
-    public Optional<WechatDirectApp> findFirstByChannelMchNoNotTenant(String channelMchNo) {
-        return findFirstByChannelMchNo(channelMchNo);
-    }
-
-    /// 按通道商户号与应用类型查询首个应用（认证引导，忽略租户）
-    @IgnoreTenant
-    public Optional<WechatDirectApp> findFirstByChannelMchNoAndAppTypeNotTenant(String channelMchNo, String appType) {
-        return findFirstByChannelMchNoAndAppType(channelMchNo, appType);
-    }
-
     /// 按通道商户号与wxAppId查询应用（认证引导，忽略租户）
     @IgnoreTenant
     public Optional<WechatDirectApp> findByChannelMchNoAndWxAppIdNotTenant(String channelMchNo, String wxAppId) {

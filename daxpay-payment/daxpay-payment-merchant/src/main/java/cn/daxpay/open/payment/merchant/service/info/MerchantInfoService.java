@@ -61,12 +61,4 @@ public class MerchantInfoService {
                 .collect(Collectors.toList());
     }
 
-    /// 商户下拉框
-    public List<LabelValue> dropdownByEnable() {
-        List<MerchantInfo> list = merchantInfoManager.findAllByEnable();
-        return list.stream()
-                .map(mch -> new LabelValue(mch.getMchName(),mch.getMchNo()))
-                .collect(Collectors.toList());
-    }
-
 }

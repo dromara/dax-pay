@@ -37,15 +37,6 @@ public class PayProviderMethodManager extends BaseManager<PayProviderMethodMappe
         return provider + "|" + method;
     }
 
-    /// 某支付方式下的全部关联（未删除）
-    public List<PayProviderMethod> listByMethod(String methodCode) {
-        return lambdaQuery()
-                .eq(PayProviderMethod::getMethod, methodCode)
-                .orderByAsc(PayProviderMethod::getSortNo)
-                .orderByAsc(PayProviderMethod::getId)
-                .list();
-    }
-
     /// 某支付渠道下的全部关联（未删除）
     public List<PayProviderMethod> listByProvider(String providerCode) {
         return lambdaQuery()

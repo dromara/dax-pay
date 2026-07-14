@@ -3,13 +3,10 @@ package cn.daxpay.open.platform.capability.wechat.auth.service;
 import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
 import cn.daxpay.open.platform.capability.wechat.auth.result.WechatAuthResult;
 import cn.daxpay.open.platform.capability.wechat.auth.result.WechatAuthUrlResult;
-import cn.daxpay.open.platform.capability.wechat.auth.result.WechatUserInfoResult;
 import cn.hutool.core.util.RandomUtil;
-import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import me.chanjar.weixin.common.api.WxConsts;
-import me.chanjar.weixin.common.bean.WxOAuth2UserInfo;
 import me.chanjar.weixin.common.bean.oauth2.WxOAuth2AccessToken;
 import me.chanjar.weixin.common.error.WxErrorException;
 import me.chanjar.weixin.mp.api.WxMpService;
@@ -36,20 +33,6 @@ public class WechatMpAuthService {
         return new WechatAuthUrlResult().setAuthUrl(authUrl).setQueryCode(queryCode);
     }
 
-    /// 生成用户信息授权链接
-    /// @param redirectUrl 回调地址(固定路径, 不含动态段)
-    /// @param appId 公众号AppId
-    /// @param appSecret 公众号AppSecret
-    /// @param state OAuth state 参数(透传会话标识 authToken)
-    /// @return 授权链接结果
-    public WechatAuthUrlResult generateUserInfoAuthUrl(String redirectUrl, String appId, String appSecret, String state) {
-        WxMpService wxMpService = this.getWxMpService(appId, appSecret);
-        String queryCode = RandomUtil.randomString(10);
-        // 使用SNSAPI_USERINFO获取用户信息
-        String authUrl = wxMpService.getOAuth2Service().buildAuthorizationUrl(redirectUrl, WxConsts.OAuth2Scope.SNSAPI_USERINFO, state);
-        return new WechatAuthUrlResult().setAuthUrl(authUrl).setQueryCode(queryCode);
-    }
-
     /// 获取微信AccessToken和OpenId
     /// @param authCode 授权码
     /// @param appId 微信公众号AppId
@@ -66,43 +49,6 @@ public class WechatMpAuthService {
         return new WechatAuthResult()
                 .setAccessToken(accessToken.getAccessToken())
                 .setOpenId(accessToken.getOpenId());
-    }
-
-    /// 获取用户信息（包含OpenId和用户详情）
-    /// @param authCode 授权码
-    /// @param appId 公众号AppId
-    /// @param appSecret 公众号AppSecret
-    /// @return 用户信息结果
-    public WechatUserInfoResult getUserInfoByAuthCode(String authCode, String appId, String appSecret) {
-        WxMpService wxMpService = this.getWxMpService(appId, appSecret);
-        
-        try {
-            // 获取AccessToken
-            WxOAuth2AccessToken accessToken = wxMpService.getOAuth2Service().getAccessToken(authCode);
-            
-            // 获取用户信息
-            WxOAuth2UserInfo userInfo = wxMpService.getOAuth2Service().getUserInfo(accessToken, null);
-            
-            // 转换结果
-            var result = new WechatUserInfoResult();
-            result.setOpenId(userInfo.getOpenid());
-            result.setNickname(userInfo.getNickname());
-            result.setHeadImgUrl(userInfo.getHeadImgUrl());
-            result.setSex(userInfo.getSex());
-            result.setCountry(userInfo.getCountry());
-            result.setProvince(userInfo.getProvince());
-            result.setCity(userInfo.getCity());
-            // 注意：weixin-java-common 4.8.1.B版本的WxOAuth2UserInfo不再提供getLanguage()方法
-            result.setUnionId(userInfo.getUnionId());
-            
-            log.info("获取用户信息成功，openId: {}", userInfo.getOpenid());
-            return result;
-            
-        } catch (WxErrorException e) {
-            log.error("获取用户信息失败，错误: {}", e.getMessage());
-            // 微信: 获取用户信息失败: {0}
-            throw new OperationFailException("error.channel.wechat.userInfoFetchFailed", e.getMessage());
-        }
     }
 
     /// 获取微信公众号API的Service

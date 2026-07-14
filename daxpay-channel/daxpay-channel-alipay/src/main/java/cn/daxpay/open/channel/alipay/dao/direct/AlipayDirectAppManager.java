@@ -2,7 +2,6 @@ package cn.daxpay.open.channel.alipay.dao.direct;
 
 import cn.daxpay.open.platform.common.mybatisplus.impl.BaseManager;
 import cn.daxpay.open.channel.alipay.entity.direct.AlipayDirectApp;
-import cn.daxpay.open.platform.core.annotation.IgnoreTenant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,7 +13,6 @@ import java.util.Optional;
 ///
 /// - 配置态 CRUD: [#listByMchNoAndChannelMchNo]、[#existsByChannelMchNoAndAliAppId]、[#findFirstByMchNo]
 /// - 支付/回调（已装载 mchNo）: 租户内 [#findFirstByChannelMchNo]、[#findFirstByChannelMchNoAndAppType]
-/// - 认证引导: 方法名带 NotTenant
 ///
 @Slf4j
 @Service
@@ -64,18 +62,6 @@ public class AlipayDirectAppManager extends BaseManager<AlipayDirectAppMapper, A
                 .eq(AlipayDirectApp::getChannelMchNo, channelMchNo)
                 .orderByAsc(AlipayDirectApp::getCreateTime)
                 .orderByAsc(AlipayDirectApp::getId));
-    }
-
-    /// 根据通道商户号与应用类型查询首个应用（认证引导，忽略租户）
-    @IgnoreTenant
-    public Optional<AlipayDirectApp> findFirstByChannelMchNoAndAppTypeNotTenant(String channelMchNo, String appType) {
-        return findFirstByChannelMchNoAndAppType(channelMchNo, appType);
-    }
-
-    /// 根据通道商户号查询首个应用（认证引导，忽略租户）
-    @IgnoreTenant
-    public Optional<AlipayDirectApp> findFirstByChannelMchNoNotTenant(String channelMchNo) {
-        return findFirstByChannelMchNo(channelMchNo);
     }
 
 }

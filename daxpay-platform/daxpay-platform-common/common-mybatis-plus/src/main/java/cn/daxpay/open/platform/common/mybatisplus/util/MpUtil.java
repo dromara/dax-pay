@@ -1,15 +1,8 @@
 package cn.daxpay.open.platform.common.mybatisplus.util;
 
 import cn.daxpay.open.platform.common.mybatisplus.function.ToResult;
-import cn.daxpay.open.platform.core.annotation.BigField;
-import cn.daxpay.open.platform.core.exception.BizException;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.collection.ListUtil;
-import cn.hutool.core.util.ArrayUtil;
-import cn.hutool.extra.spring.SpringUtil;
-import com.baomidou.mybatisplus.core.metadata.TableFieldInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfo;
 import com.baomidou.mybatisplus.core.metadata.TableInfoHelper;
 import com.baomidou.mybatisplus.core.plugins.IgnoreStrategy;
@@ -19,23 +12,16 @@ import com.baomidou.mybatisplus.core.toolkit.LambdaUtils;
 import com.baomidou.mybatisplus.core.toolkit.support.ColumnCache;
 import com.baomidou.mybatisplus.core.toolkit.support.LambdaMeta;
 import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
-import com.baomidou.mybatisplus.extension.conditions.query.LambdaQueryChainWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.experimental.UtilityClass;
 import org.apache.ibatis.reflection.property.PropertyNamer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.sql.DataSource;
-import java.lang.reflect.Method;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Consumer;
-import cn.daxpay.open.platform.core.code.CommonCode;
 
 /// # MP工具类
 ///
@@ -72,27 +58,6 @@ public class MpUtil {
         return columnCache.getColumn();
     }
 
-    /// 获取行名称
-    /// @param readMethod 对象字段对应的读取方法对象
-    /// @param clazz 实体类类型. 辅助进行判断, 传多个只有第一个生效，可以为空, 为空时使用读取方法对应的Class类，
-    /// @return 字段名
-    @SafeVarargs
-    public <T> String getColumnName(Method readMethod, Class<T>... clazz) {
-        Class<?> beanClass;
-        if (ArrayUtil.isNotEmpty(clazz)) {
-            beanClass = clazz[0];
-        }
-        else {
-            beanClass = readMethod.getDeclaringClass();
-        }
-
-        Map<String, ColumnCache> columnMap = LambdaUtils.getColumnMap(beanClass);
-        Assert.notEmpty(columnMap, "错误:无法执行.因为无法获取到实体类的表对应缓存!");
-        String fieldName = PropertyNamer.methodToProperty(readMethod.getName());
-        ColumnCache columnCache = columnMap.get(LambdaUtils.formatKey(fieldName));
-        return columnCache.getColumn();
-    }
-
     /// mp page转换为 PageResult 同时进行dto转换
     public <T> PageResult<T> toPageResult(Page<? extends ToResult<T>> page) {
         if (Objects.isNull(page)) {
@@ -111,38 +76,6 @@ public class MpUtil {
         return list.stream().map(ToResult::toResult).toList();
     }
 
-    /// 批量执行语句, 通常用于for循环方式的批量插入
-    public <T> void executeBatch(List<T> saveList, Consumer<List<T>> consumer, int batchSize) {
-        // 开始游标
-        int start = 0;
-        // 结束游标
-        int end = Math.min(batchSize, saveList.size());
-        while (start < end) {
-            List<T> list = ListUtil.sub(saveList, start, end);
-            start = end;
-            end = Math.min(end + batchSize, saveList.size());
-            consumer.accept(list);
-        }
-    }
-
-    /// 字段是否存在长文本注解
-    public static boolean excludeBigField(TableFieldInfo tableFieldInfo) {
-        BigField annotation = tableFieldInfo.getField().getAnnotation(BigField.class);
-        return Objects.isNull(annotation);
-    }
-
-    /// 获取的一条数据, 有多条取第一条
-    public <T> Optional<T> findOne(LambdaQueryChainWrapper<T> lambdaQuery) {
-        Page<T> mpPage = new Page<>(0, 1);
-        Page<T> page = lambdaQuery.page(mpPage);
-        // 关闭 count 查询
-        page.setSearchCount(false);
-        if (CollUtil.isNotEmpty(page.getRecords())) {
-            return Optional.of(page.getRecords().getFirst());
-        }
-        return Optional.empty();
-    }
-
     /// 获取关联的 TableInfo
     public TableInfo getTableInfo(String tableName) {
         for (TableInfo tableInfo : TableInfoHelper.getTableInfos()) {
@@ -153,17 +86,6 @@ public class MpUtil {
         return null;
     }
 
-    /// 获取当前数据库类型, 别忘了关闭, 不然会连接池泄露
-    public String getDbType(){
-        try {
-            try (Connection connection = SpringUtil.getBean(DataSource.class).getConnection()) {
-                    return connection.getMetaData().getDatabaseProductName();
-            }
-        } catch (SQLException e) {
-            throw new BizException(CommonCode.FAIL_CODE, "error.common.dbTypeNotFound");
-        }
-    }
-
     /// 获取主键名称
     public String getKeyProperty(Class<?> clazz) {
         TableInfo tableInfo = TableInfoHelper.getTableInfo(clazz);
@@ -171,16 +93,6 @@ public class MpUtil {
         String keyProperty = tableInfo.getKeyProperty();
         Assert.notEmpty(keyProperty, "错误:无法执行.因为无法从实体中找到主键的列!");
         return keyProperty;
-    }
-
-    /// 获取主键值
-    public Object getKeyPropertyValue(Object object) {
-        TableInfo tableInfo = TableInfoHelper.getTableInfo(object.getClass());
-        Assert.notNull(tableInfo, "错误:无法执行.因为找不到实体的 TableInfo 缓存!");
-        String keyProperty = tableInfo.getKeyProperty();
-        Assert.notEmpty(keyProperty, "错误:无法执行.因为无法从实体中找到主键的列!");
-        // 反射获取值
-        return tableInfo.getPropertyValue(object, keyProperty);
     }
 
     /// 进入忽略租户作用域（可重入，与 [#clearIgnoreTenant] 成对使用）

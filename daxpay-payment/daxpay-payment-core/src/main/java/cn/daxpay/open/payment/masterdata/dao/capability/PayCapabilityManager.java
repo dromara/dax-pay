@@ -30,11 +30,6 @@ public class PayCapabilityManager extends BaseManager<PayCapabilityMapper, PayCa
         return lambdaQuery().eq(PayCapability::getCode, code).oneOpt();
     }
 
-    /// 是否存在任意主数据行（预留：后续若能力参与运行时收窄可据此分支）
-    public boolean hasAny() {
-        return lambdaQuery().count() > 0;
-    }
-
     /// 分页（默认 sort_no、id 升序）
     public Page<PayCapability> page(PageParam pageParam, PayCapabilityQuery query) {
         Page<PayCapability> mpPage = MpUtil.getMpPage(pageParam);

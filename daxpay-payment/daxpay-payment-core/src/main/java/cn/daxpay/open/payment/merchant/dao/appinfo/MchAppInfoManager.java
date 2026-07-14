@@ -7,7 +7,6 @@ import cn.daxpay.open.platform.core.annotation.IgnoreTenant;
 import cn.daxpay.open.platform.core.exception.config.ConfigNotExistException;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.payment.merchant.entity.appinfo.MchAppInfo;
-import cn.daxpay.open.platform.core.enums.merchant.MchAppStatusEnum;
 import cn.daxpay.open.payment.merchant.param.appinfo.MchAppInfoQuery;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -48,20 +47,6 @@ public class MchAppInfoManager extends BaseManager<MchAppInfoMapper, MchAppInfo>
         return this.findByField(MchAppInfo::getAppId, appId);
     }
 
-    /// 按应用号加载商户应用（运行态引导，忽略租户）
-    @IgnoreTenant
-    public MchAppInfo requireByAppIdNotTenant(String appId) {
-        return findByAppIdNotTenant(appId)
-                // 商户: 未找到指定应用的配置
-                .orElseThrow(() -> new ConfigNotExistException("error.payment.merchant.specifiedAppConfigNotFound"));
-    }
-
-    /// 按应用号解析商户号（运行态引导，忽略租户）
-    @IgnoreTenant
-    public String requireMchNoByAppIdNotTenant(String appId) {
-        return requireByAppIdNotTenant(appId).getMchNo();
-    }
-
     /// 分页
     public Page<MchAppInfo> page(PageParam pageParam, MchAppInfoQuery query) {
         Page<MchAppInfo> mpPage = MpUtil.getMpPage(pageParam);
@@ -84,14 +69,6 @@ public class MchAppInfoManager extends BaseManager<MchAppInfoMapper, MchAppInfo>
                 .eq(MchAppInfo::isDefaultApp, true)
                 .eq(MchAppInfo::getMchNo, mchNo)
                 .oneOpt();
-    }
-
-    /// 根据商户号查询启用的应用
-    public List<MchAppInfo> findAllByMchNoAndEnable(String mchNo) {
-        return lambdaQuery()
-                .eq(MchAppInfo::getMchNo, mchNo)
-                .eq(MchAppInfo::getStatus, MchAppStatusEnum.ENABLE.getCode())
-                .list();
     }
 
     /// 根据商户号查询应用
