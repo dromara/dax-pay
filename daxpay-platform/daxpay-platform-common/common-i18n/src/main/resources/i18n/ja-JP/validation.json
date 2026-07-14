@@ -1,0 +1,744 @@
+{
+  "notBlank": "{0} を空白にすることはできません",
+  "notEmpty": "{0} を空にすることはできません",
+  "lengthRange": "{0} の長さは {1} から {2} の間である必要があります",
+  "min": "{0} を {1} 未満にすることはできません",
+  "max": "{0} は {1} より大きくすることはできません",
+  "parameterError": "パラメータの検証に失敗しました",
+  "field": {
+    "source": {
+      "notBlank": "プラットフォームを空白にすることはできません"
+    },
+    "clientId": {
+      "notBlank": "クライアント ID を空白にすることはできません"
+    },
+    "clientSecret": {
+      "notBlank": "クライアントシークレットを空白にすることはできません"
+    },
+    "clientKey": {
+      "notBlank": "クライアントキーを空白にすることはできません"
+    },
+    "clientCode": {
+      "notBlank": "クライアントコードを空白にすることはできません"
+    },
+    "ip": {
+      "notValid": "IPアドレスが無効です"
+    },
+    "aliAppId": {
+      "notBlank": "Alipay アプリ ID を空白にすることはできません"
+    },
+    "authType": {
+      "notBlank": "認証タイプを空白にすることはできません"
+    },
+    "signType": {
+      "notBlank": "記号タイプを空白にすることはできません"
+    },
+    "alipayPublicKey": {
+      "notBlank": "Alipay 公開キーを空白にすることはできません"
+    },
+    "mchAppPrivateKey": {
+      "notBlank": "アプリの秘密キーを空白にすることはできません"
+    },
+    "appSecret": {
+      "size": "アプリのシークレットは 512 文字を超えることはできません"
+    },
+    "douyinMchId": {
+      "notBlank": "Douyin 販売者 ID を空白にすることはできません"
+    },
+    "userIdType": {
+      "notBlank": "ユーザー ID タイプを空白にすることはできません"
+    },
+    "product": {
+      "notBlank": "製品コードを空白にすることはできません",
+      "size": "製品コードは 32 文字を超えることはできません",
+      "notNull": "製品コードを空白にすることはできません"
+    },
+    "channel": {
+      "notBlank": "チャンネルコードを空白にすることはできません",
+      "size": "チャンネルコードは32文字を超えることはできません"
+    },
+    "sandbox": {
+      "notNull": "サンドボックス環境を空白にすることはできません"
+    },
+    "enable": {
+      "notNull": "有効ステータスを空白にすることはできません"
+    },
+    "mchNo": {
+      "notBlank": "販売者番号空白にすることはできません",
+      "size": "販売者番号32 文字を超えることはできません",
+      "notNull": "販売者番号空白にすることはできません"
+    },
+    "appId": {
+      "notBlank": "販売者アプリ ID を空白にすることはできません",
+      "size": "販売者アプリ ID は 32 文字を超えることはできません",
+      "notNull": "アプリケーション ID を null にすることはできません"
+    },
+    "channelMchNo": {
+      "size": "チャネル販売者番号は 32 文字を超えることはできません",
+      "notBlank": "チャネル販売者番号を空白にすることはできません"
+    },
+    "level": {
+      "notBlank": "構成レベルを空白にすることはできません",
+      "size": "構成レベルは 32 文字を超えることはできません"
+    },
+    "cashierType": {
+      "notBlank": "レジ係タイプを空白にすることはできません",
+      "size": "レジ係のタイプは 16 文字を超えることはできません"
+    },
+    "resolveMode": {
+      "notBlank": "解決モードを空白にすることはできません",
+      "size": "解決モードは 16 文字を超えることはできません"
+    },
+    "icon": {
+      "size": "アイコンコードは32文字を超えることはできません"
+    },
+    "itemName": {
+      "size": "支払い項目名は 64 文字を超えることはできません"
+    },
+    "subMchId": {
+      "notBlank": "WeChat サブマーチャント ID を空白にすることはできません"
+    },
+    "wxMchId": {
+      "notBlank": "WeChat 販売者 ID を空白にすることはできません"
+    },
+    "wxAppId": {
+      "notBlank": "WeChat AppId を空白にすることはできません"
+    },
+    "publicKeyId": {
+      "notBlank": "支払い公開キー ID を空白にすることはできません"
+    },
+    "certSerialNo": {
+      "notBlank": "証明書のシリアル番号空白にすることはできません"
+    },
+    "id": {
+      "notNull": "主キーを空白にすることはできません",
+      "mustBeNullOnAdd": "ID は空でなければなりません"
+    },
+    "alipayIsvAppId": {
+      "notNull": "Alipay ISV アプリ ID を null にすることはできません"
+    },
+    "alipayDirectAppId": {
+      "notNull": "Alipay ダイレクト アプリ ID を null にすることはできません"
+    },
+    "wechatIsvAppId": {
+      "notNull": "WeChat ISV アプリ ID を null にすることはできません"
+    },
+    "account": {
+      "notBlank": "アカウントを空白にすることはできません",
+      "size": "アカウントの長さは 6 ～ 20 文字である必要があります",
+      "pattern": "アカウントの形式が無効です"
+    },
+    "password": {
+      "notBlank": "パスワードを空白にすることはできません"
+    },
+    "subjectType": {
+      "notBlank": "件名タイプを空白にすることはできません"
+    },
+    "pass": {
+      "notNull": "監査結果を空白にすることはできません"
+    },
+    "channelMerchantNo": {
+      "notBlank": "チャネル加盟店番号空白にすることはできません"
+    },
+    "channelMerchantName": {
+      "notBlank": "販売者名を空白にすることはできません"
+    },
+    "appKey": {
+      "notBlank": "アプリキーを空白にすることはできません"
+    },
+    "secretKey": {
+      "notBlank": "秘密キーを空白にすることはできません"
+    },
+    "tradeIdentity": {
+      "notBlank": "販売者の取引 ID を空白にすることはできません"
+    },
+    "subMchNo": {
+      "notBlank": "サブマーチャント番号空白にすることはできません"
+    },
+    "parentMchNo": {
+      "notBlank": "親チャネルの販売者番号空白にすることはできません"
+    },
+    "subMchName": {
+      "notBlank": "サブマーチャント名を空白にすることはできません"
+    },
+    "orderNo": {
+      "notBlank": "支払い注文番号空白にすることはできません",
+      "size": "支払い注文番号100文字を超えることはできません"
+    },
+    "amount": {
+      "notNull": "支払い金額を空白にすることはできません",
+      "min": "支払い金額は 1 セント未満にすることはできません",
+      "max": "支払額は1億元を超えることはできません",
+      "positive": "金額は0より大きくなければなりません"
+    },
+    "title": {
+      "notBlank": "タイトルを空白にすることはできません",
+      "size": "タイトルは 100 文字を超えることはできません"
+    },
+    "date": {
+      "notNull": "日付を空白にすることはできません"
+    },
+    "fileType": {
+      "notNull": "ファイルタイプを空白にすることはできません"
+    },
+    "authCode": {
+      "notBlank": "認証コードを空白にすることはできません",
+      "size": "認証コードは 128 文字を超えることはできません"
+    },
+    "clientIp": {
+      "size": "クライアント IP は 64 文字を超えることはできません"
+    },
+    "nonceStr": {
+      "size": "ナンスは 32 文字を超えることはできません"
+    },
+    "sign": {
+      "size": "署名は 1024 文字を超えることはできません"
+    },
+    "reqTime": {
+      "notNull": "リクエスト時間を空白にすることはできません"
+    },
+    "bizOrderNo": {
+      "size": "販売者の注文番号100文字を超えることはできません",
+      "notBlank": "販売者の注文番号空白にすることはできません"
+    },
+    "description": {
+      "size": "説明は 50 文字を超えることはできません",
+      "notBlank": "説明を空白にすることはできません"
+    },
+    "method": {
+      "notBlank": "支払い方法を空白にすることはできません",
+      "size": "支払い方法は 32 文字を超えることはできません",
+      "notNull": "支払い方法を null にすることはできません"
+    },
+    "capability": {
+      "size": "支払い能力は 32 文字を超えることはできません",
+      "notBlank": "支払い能力を空白にすることはできません"
+    },
+    "provider": {
+      "notBlank": "有料ブランドを空白にすることはできません",
+      "size": "有料ブランドコードは32文字を超えてはなりません"
+    },
+    "otherMethod": {
+      "size": "他の支払い方法は 128 文字を超えることはできません"
+    },
+    "limitPay": {
+      "size": "支払いタイプの制限は 128 文字を超えることはできません"
+    },
+    "opAppId": {
+      "size": "操作アプリ ID は 128 文字を超えることはできません"
+    },
+    "openId": {
+      "size": "オープン ID は 128 文字を超えることはできません"
+    },
+    "terminalNo": {
+      "size": "端子番号128文字を超えることはできません"
+    },
+    "extraParam": {
+      "size": "追加パラメータは 2048 文字を超えることはできません"
+    },
+    "goodsDetail": {
+      "size": "商品詳細リストは 50 項目を超えることはできません"
+    },
+    "goodsId": {
+      "notBlank": "商品IDを空にすることはできません",
+      "size": "商品IDは64文字を超えることはできません"
+    },
+    "goodsName": {
+      "notBlank": "商品名を空白にすることはできません",
+      "size": "商品名は256文字を超えることはできません"
+    },
+    "quantity": {
+      "notNull": "数量を null にすることはできません",
+      "min": "数量は 1 未満にすることはできません"
+    },
+    "unitPrice": {
+      "notNull": "単価を null にすることはできません",
+      "min": "単価は 1 セント未満にすることはできません",
+      "max": "単価が1億元を超えることはできない"
+    },
+    "goodsCategory": {
+      "size": "商品カテゴリは 32​​ 文字を超えることはできません"
+    },
+    "goodsDescription": {
+      "size": "商品説明は1000文字を超えることはできません"
+    },
+    "showUrl": {
+      "size": "表示 URL は 400 文字を超えることはできません"
+    },
+    "attach": {
+      "size": "添付は 500 文字を超えることはできません"
+    },
+    "returnUrl": {
+      "size": "戻り先の URL は 200 文字を超えることはできません"
+    },
+    "quitUrl": {
+      "size": "終了 URL は 200 文字を超えることはできません"
+    },
+    "notifyUrl": {
+      "size": "通知 URL は 200 文字を超えることはできません"
+    },
+    "outOrderNo": {
+      "size": "チャンネル注文番号150文字を超えることはできません",
+      "notBlank": "チャンネル注文番号空白にすることはできません"
+    },
+    "refundNo": {
+      "notBlank": "払い戻し番号を空白にすることはできません",
+      "size": "払い戻し番号は 100 文字を超えることはできません"
+    },
+    "bizRefundNo": {
+      "size": "販売者の返金番号100文字を超えることはできません",
+      "notBlank": "販売者の返金番号空白にすることはできません"
+    },
+    "reason": {
+      "size": "理由は50文字を超えることはできません"
+    },
+    "payeeName": {
+      "size": "受取人名は50文字を超えることはできません"
+    },
+    "items": {
+      "notEmpty": "製品構成リストを空にすることはできません"
+    },
+    "shortName": {
+      "notBlank": "短い名前を空白にすることはできません"
+    },
+    "status": {
+      "notBlank": "ステータスを空白にすることはできません"
+    },
+    "accountType": {
+      "notBlank": "アカウントの種類を空白にすることはできません"
+    },
+    "appAuthToken": {
+      "notBlank": "アプリ認証トークンを空白にすることはできません"
+    },
+    "isvAppId": {
+      "notBlank": "Alipay アプリケーションを空白にすることはできません"
+    },
+    "alipayUserId": {
+      "notBlank": "サブマーチャント番号空白にすることはできません"
+    },
+    "accountName": {
+      "notBlank": "銀行口座名を空白にすることはできません"
+    },
+    "cardNo": {
+      "notBlank": "銀行カード番号空白にすることはできません"
+    },
+    "bankName": {
+      "notBlank": "銀行名を空白にすることはできません"
+    },
+    "cardFrontPic": {
+      "notBlank": "銀行カードの表面写真を空白にすることはできません"
+    },
+    "legalName": {
+      "notBlank": "法人名を空白にすることはできません"
+    },
+    "certNo": {
+      "notBlank": "IDカード番号空白にすることはできません"
+    },
+    "frontPic": {
+      "notBlank": "ID カードの表面の写真を空白にすることはできません"
+    },
+    "backPic": {
+      "notBlank": "ID カードの裏面の写真を空白にすることはできません"
+    },
+    "licenseNo": {
+      "notBlank": "営業許可番号空白にすることはできません"
+    },
+    "licenseName": {
+      "notBlank": "ビジネスライセンス名を空白にすることはできません"
+    },
+    "licensePic": {
+      "notBlank": "ビジネスライセンスの写真を空白にすることはできません"
+    },
+    "appName": {
+      "notBlank": "アプリケーション名を空白にすることはできません",
+      "notNull": "アプリケーション名を空白にすることはできません"
+    },
+    "appType": {
+      "notBlank": "アプリケーションタイプを空白にすることはできません"
+    },
+    "platform": {
+      "notBlank": "モバイル プラットフォームを空白にすることはできません"
+    },
+    "authAppType": {
+      "notBlank": "認証アプリケーションのタイプを空白にすることはできません"
+    },
+    "mchName": {
+      "notBlank": "販売者名を空白にすることはできません"
+    },
+    "mchShortName": {
+      "notBlank": "販売者の短縮名を空白にすることはできません"
+    },
+    "publicKey": {
+      "notBlank": "プラットフォーム公開キーを空白にすることはできません。 daxpay.platform.config.key-config.public-key を設定する"
+    },
+    "privateKey": {
+      "notBlank": "プラットフォームの秘密キーを空白にすることはできません。 daxpay.platform.config.key-config.private-key を構成する"
+    },
+    "phone": {
+      "notBlank": "電話番号を空白にすることはできません",
+      "format": "電話番号の形式が無効です"
+    },
+    "roleId": {
+      "notNull": "ロール ID を空白にすることはできません"
+    },
+    "code": {
+      "notBlank": "コードを空白にすることはできません"
+    },
+    "nameCn": {
+      "notBlank": "中国語名を空白にすることはできません"
+    },
+    "nameEn": {
+      "notBlank": "英語名を空白にすることはできません"
+    },
+    "menuCode": {
+      "notBlank": "メニューコードを空白にすることはできません"
+    },
+    "titleCn": {
+      "notBlank": "メニュータイトル（中国語）は空白にすることはできません"
+    },
+    "titleEn": {
+      "notBlank": "メニュータイトル（英語）は空白にすることはできません"
+    },
+    "i18nKey": {
+      "notBlank": "I18n キーを空白にすることはできません"
+    },
+    "userIds": {
+      "notEmpty": "ユーザーリストを空にすることはできません"
+    },
+    "userId": {
+      "notNull": "ユーザーIDを空白にすることはできません"
+    },
+    "newPassword": {
+      "notBlank": "新しいパスワードを空白にすることはできません"
+    },
+    "configName": {
+      "notBlank": "構成名を空白にすることはできません"
+    },
+    "endpoint": {
+      "notBlank": "エンドポイントを空白にすることはできません"
+    },
+    "publicBucket": {
+      "notBlank": "パブリックバケットを空にすることはできません"
+    },
+    "privateBucket": {
+      "notBlank": "プライベートバケットを空白にすることはできません"
+    },
+    "urlType": {
+      "notBlank": "URL タイプを空白にすることはできません"
+    },
+    "systemName": {
+      "size": "システム名は{max}文字を超えてはなりません"
+    },
+    "companyName": {
+      "size": "会社名は{max}文字を超えてはなりません"
+    },
+    "companyEmail": {
+      "email": "無効な電子メール形式"
+    },
+    "companyWechat": {
+      "size": "WeChat ID は {max} 文字を超えてはなりません"
+    },
+    "copyright": {
+      "size": "著作権テキストは {max} 文字を超えてはなりません"
+    },
+    "icpLink": {
+      "pattern": "URL は http:// または https:// で始まる必要があります"
+    },
+    "mpsLink": {
+      "pattern": "URL は http:// または https:// で始まる必要があります"
+    },
+    "pcacLink": {
+      "pattern": "URL は http:// または https:// で始まる必要があります"
+    },
+    "icpPlusLink": {
+      "pattern": "URL は http:// または https:// で始まる必要があります"
+    },
+    "dictId": {
+      "notNull": "辞書 ID を空白にすることはできません"
+    },
+    "protocolId": {
+      "notNull": "プロトコル ID を空白にすることはできません"
+    },
+    "content": {
+      "notBlank": "プロトコルの内容を空白にすることはできません"
+    },
+    "showName": {
+      "notBlank": "表示名を空白にすることはできません"
+    },
+    "type": {
+      "notBlank": "タイプを空白にすることはできません"
+    },
+    "clientType": {
+      "notBlank": "クライアントタイプを空白にすることはできません"
+    },
+    "language": {
+      "notBlank": "言語を空白にすることはできません"
+    },
+    "email": {
+      "notBlank": "メールアドレスを空白にすることはできません",
+      "format": "無効な電子メール形式"
+    },
+    "realName": {
+      "notBlank": "名前を空白にすることはできません"
+    },
+    "regionCode": {
+      "notBlank": "地域コードを空白にすることはできません"
+    },
+    "dictItemId": {
+      "notNull": "辞書項目 ID を空白にすることはできません"
+    },
+    "configItems": {
+      "notEmpty": "構成項目を空にすることはできません"
+    },
+    "payOrderId": {
+      "notNull": "支払い注文 ID を空白にすることはできません"
+    },
+    "orderId": {
+      "notNull": "注文IDを空白にすることはできません"
+    },
+    "fileId": {
+      "notNull": "ファイルIDを空白にすることはできません"
+    },
+    "objectKey": {
+      "notBlank": "オブジェクトキーを空白にすることはできません"
+    },
+    "sessionIds": {
+      "notEmpty": "セッション ID リストを空にすることはできません"
+    },
+    "orderSource": {
+      "mustBeNull": "注文元フィールドは設定できません"
+    },
+    "minLengthNotGreaterThanMax": {
+      "assertTrue": "最小長は最大長を超えることはできません"
+    },
+    "captchaFailCountNotGreaterThanMax": {
+      "assertTrue": "キャプチャ トリガーの失敗数は最大失敗数を超えることはできません"
+    },
+    "queryCode": {
+      "notBlank": "クエリコードを空白にすることはできません"
+    },
+    "authToken": {
+      "notBlank": "認証トークンを空白にすることはできません",
+      "size": "認証トークンは 64 文字を超えることはできません"
+    },
+    "returnPath": {
+      "size": "戻りパスは 200 文字を超えることはできません"
+    },
+    "taskId": {
+      "notNull": "メッセージ ID を空白にすることはできません"
+    },
+    "deleteDay": {
+      "notNull": "日を空白にすることはできません"
+    },
+    "menuId": {
+      "notNull": "メニュー ID を空白にすることはできません"
+    },
+    "oldPassword": {
+      "notBlank": "古いパスワードを空白にすることはできません"
+    },
+    "scene": {
+      "notNull": "メッセージシーンを空白にすることはできません",
+      "size": "シーンコードは32文字を超えることはできません"
+    },
+    "demoContent": {
+      "notBlank": "メッセージの内容を空白にすることはできません"
+    },
+    "delaySeconds": {
+      "min": "遅延秒数は 1 未満にはできません",
+      "max": "遅延秒数は 300 を超えることはできません"
+    },
+    "name": {
+      "notBlank": "名前を空白にすることはできません",
+      "size": "名前の長さは 3 ～ 15 文字にする必要があります"
+    },
+    "enabled": {
+      "notNull": "有効ステータスを空白にすることはできません"
+    },
+    "storeNo": {
+      "size": "店舗番号は64文字を超えることはできません"
+    },
+    "operatorId": {
+      "size": "オペレータ ID は 64 文字を超えることはできません"
+    },
+    "deviceName": {
+      "size": "デバイス名は 128 文字を超えることはできません"
+    },
+    "deviceIp": {
+      "size": "デバイス IP は 64 文字を超えることはできません"
+    },
+    "douyinAppId": {
+      "notBlank": "Douyin アプリ ID を空白にすることはできません"
+    },
+    "douyinDirectAppId": {
+      "notNull": "Douyin ダイレクト アプリ ID を空白にすることはできません"
+    },
+    "dyMchId": {
+      "notBlank": "Douyin 販売者 ID を空白にすることはできません"
+    },
+    "wechatDirectAppId": {
+      "notNull": "WeChat ダイレクト アプリ ID を空白にすることはできません"
+    },
+    "wechatIsvMchAppId": {
+      "notNull": "WeChat ISV チャネル販売者アプリ ID を空白にすることはできません"
+    },
+    "storeName": {
+      "notBlank": "店舗名を空白にすることはできません"
+    },
+    "deviceSn": {
+      "notBlank": "デバイスのシリアル番号を空白にすることはできません"
+    },
+    "deviceType": {
+      "notBlank": "デバイスタイプを空白にすることはできません"
+    },
+    "vendorCode": {
+      "notBlank": "ベンダーコードを空白にすることはできません"
+    },
+    "vendorConfigId": {
+      "notNull": "ベンダー構成を null にすることはできません"
+    },
+    "qrCodeName": {
+      "notBlank": "QRコード名を空白にすることはできません",
+      "size": "QRコード名は100文字を超えることはできません"
+    },
+    "amountType": {
+      "notBlank": "金額タイプを空白にすることはできません"
+    },
+    "batchNo": {
+      "notBlank": "バッチ番号を空白にすることはできません",
+      "size": "バッチ番号は 64 文字を超えることはできません"
+    },
+    "count": {
+      "notNull": "カウントを null にすることはできません",
+      "min": "カウントは 1 未満にはできません",
+      "max": "カウントは 999 を超えることはできません"
+    },
+    "ids": {
+      "notEmpty": "QRコードボードを選択してください"
+    },
+    "twoFactorCode": {
+      "notBlank": "確認コードを空白にすることはできません"
+    },
+    "preAuthToken": {
+      "notBlank": "事前認証トークンを空白にすることはできません"
+    },
+    "remark": {
+      "size": "備考は 255 文字を超えることはできません"
+    },
+    "lklAppId": {
+      "notBlank": "Lakala アプリケーション ID を空白にすることはできません"
+    },
+    "mchSerialNo": {
+      "notBlank": "販売者証明書のシリアル番号を空白にすることはできません"
+    },
+    "orgCode": {
+      "notBlank": "組織コードを空白にすることはできません"
+    },
+    "orgId": {
+      "notBlank": "組織 ID を空白にすることはできません"
+    },
+    "vbillMchNo": {
+      "notBlank": "VBill 販売者番号を空白にすることはできません"
+    },
+    "lakalaMchNo": {
+      "notBlank": "Lakala 販売者番号を空白にすることはできません"
+    },
+    "termNo": {
+      "notBlank": "端子番号を空白にすることはできません",
+      "size": "端末番号は 64 文字を超えることはできません"
+    },
+    "agentNo": {
+      "notBlank": "エージェント番号を空白にすることはできません"
+    },
+    "accessId": {
+      "notBlank": "アクセス ID を空白にすることはできません"
+    },
+    "merchNo": {
+      "notBlank": "Hkrt 販売者番号を空白にすることはできません"
+    },
+    "pn": {
+      "notBlank": "SAAS 端末番号を空白にすることはできません"
+    },
+    "sysId": {
+      "notBlank": "ISV システム ID を空白にすることはできません"
+    },
+    "productId": {
+      "notBlank": "製品IDを空白にすることはできません"
+    },
+    "merchantNo": {
+      "notBlank": "Huifu 販売者番号を空白にすることはできません"
+    },
+    "dougongAppId": {
+      "notBlank": "販売者の AppId を空白にすることはできません"
+    },
+    "sandAppId": {
+      "notBlank": "Sand アプリ ID を空白にすることはできません"
+    },
+    "credential": {
+      "notNull": "チャネル資格情報を null にすることはできません"
+    },
+    "outTradeNo": {
+      "notBlank": "チャネルトレードNo.空白にすることはできません"
+    },
+    "outRefundNo": {
+      "notBlank": "チャンネル返金番号空白にすることはできません"
+    },
+    "outRequestNo": {
+      "notBlank": "チャンネルリクエスト番号空白にすることはできません"
+    },
+    "tradeNo": {
+      "notBlank": "プラットフォーム取引番号空白にすることはできません"
+    },
+    "tradeProduct": {
+      "notBlank": "貿易商品を空白にすることはできません"
+    },
+    "relationOrderNo": {
+      "notBlank": "関連する注文番号空白にすることはできません"
+    },
+    "refundAmount": {
+      "notNull": "払い戻し金額を null にすることはできません",
+      "positive": "払い戻し金額は 0 より大きくなければなりません"
+    },
+    "subject": {
+      "notBlank": "支払いタイトルを空白にすることはできません"
+    },
+    "callbackBody": {
+      "notBlank": "コールバック本文を空白にすることはできません"
+    },
+    "callbackType": {
+      "notBlank": "コールバックタイプを空白にすることはできません"
+    },
+    "rawData": {
+      "notBlank": "生データを空白にすることはできません"
+    },
+    "orderCreateTime": {
+      "notBlank": "注文作成時間を空白にすることはできません"
+    },
+    "orgReqDate": {
+      "notBlank": "元のリクエストの日付を空白にすることはできません"
+    },
+    "originOutTradeNo": {
+      "notBlank": "オリジナルチャネルトレードNo.空白にすることはできません"
+    },
+    "config": {
+      "notNull": "構成を null にすることはできません"
+    },
+    "fuyouMchNo": {
+      "notBlank": "Fuyou 販売者番号を空白にすることはできません"
+    },
+    "fyAppId": {
+      "notBlank": "Fuyou アプリ ID を空白にすることはできません"
+    },
+    "leshuaOrderId": {
+      "notBlank": "Leshua 注文 ID を空白にすることはできません"
+    },
+    "lsMchNo": {
+      "notBlank": "Leshua 販売者番号を空白にすることはできません"
+    },
+    "fileName": {
+      "notBlank": "ファイル名を空白にすることはできません"
+    },
+    "fileContent": {
+      "notBlank": "ファイルの内容を空白にすることはできません"
+    }
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "link": "支払いリンク",
+  "jsapi": "JSAPIオブジェクト",
+  "from": "フォームデータ",
+  "identifier": "識別子",
+  "qr_code": "QRコード",
+  "json": "JSONオブジェクト"
+}

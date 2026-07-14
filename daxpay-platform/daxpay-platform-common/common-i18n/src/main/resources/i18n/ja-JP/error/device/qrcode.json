@@ -1,0 +1,11 @@
+{
+  "notFound": "QRコードボードは存在しません",
+  "disabled": "QRコードボードが無効になっています",
+  "mchNotFound": "QRコード掲示板の加盟店は存在しません",
+  "amountTypeNotFound": "一致する QR コード金額タイプが見つかりません: {0}",
+  "statusNotFound": "一致する QR コード ステータスが見つかりません: {0}",
+  "fixedAmountInvalid": "固定量は 0 より大きくなければなりません",
+  "batchNoExists": "バッチ番号はすでに存在します",
+  "notAssigned": "QRコードボードが加盟店に割り当てられていません",
+  "idsEmpty": "QRコードボードを選択してください"
+}

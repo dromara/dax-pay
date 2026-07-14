@@ -1,0 +1,7 @@
+{
+  "codeExists": "辞書コードはすでに存在します",
+  "notExist": "辞書が見つかりません",
+  "hasItems": "辞書に項目があり、削除できません",
+  "itemCodeDuplicate": "辞書項目コードが重複しています",
+  "itemNotExist": "辞書項目が見つかりません"
+}

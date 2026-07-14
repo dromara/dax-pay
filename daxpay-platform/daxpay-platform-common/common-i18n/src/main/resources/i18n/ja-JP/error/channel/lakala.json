@@ -1,0 +1,7 @@
+{
+  "privateKeyRequired": "秘密キーが必要です",
+  "publicKeyRequired": "公開キーが必要です",
+  "lklAppIdRequired": "LakalaアプリケーションIDが必要です",
+  "mchSerialNoRequired": "販売者証明書のシリアル番号が必要です",
+  "termNoNotConfigured": "端末番号が設定されていません。マーチャント設定で設定してください"
+}

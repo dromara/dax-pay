@@ -1,0 +1,5 @@
+{
+  "notExist": "支払い方法が存在しません",
+  "duplicateProvider": "関連付けられている重複した支払いプロバイダー",
+  "providerNotExist": "有料プロバイダーは存在しません"
+}

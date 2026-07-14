@@ -1,0 +1,7 @@
+{
+  "codeExists": "사전 코드가 이미 존재합니다.",
+  "notExist": "사전을 찾을 수 없습니다",
+  "hasItems": "사전에 항목이 있으므로 삭제할 수 없습니다.",
+  "itemCodeDuplicate": "사전 항목 코드가 중복되었습니다.",
+  "itemNotExist": "사전 항목을 찾을 수 없습니다."
+}

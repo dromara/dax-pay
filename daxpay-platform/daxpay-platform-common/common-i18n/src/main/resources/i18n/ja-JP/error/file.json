@@ -1,0 +1,10 @@
+{
+  "storageConfigNotExist": "ストレージ構成が見つかりません",
+  "recordNotExist": "ファイルレコードが見つかりません",
+  "platformRecordNotExist": "プラットフォーム ファイル レコードが見つかりません",
+  "statusInvalidForConfirm": "ファイルのステータスが無効です。確認できません",
+  "objectKeyMismatch": "オブジェクトキーの不一致",
+  "notUploadedToStorage": "ファイルがストレージにアップロードされていません",
+  "notUploadedForAccess": "ファイルのアップロードが完了していないため、アクセスできません",
+  "notUploadedForDownload": "ファイルのアップロードが完了していないため、ダウンロードできません"
+}

@@ -1,0 +1,12 @@
+{
+  "unsupportedBarcodeType": "지원되지 않는 바코드 유형",
+  "merchantNoRefundPermission": "판매자에게 환불 권한이 없습니다.",
+  "payOrderNotExist": "결제 주문을 찾을 수 없습니다.",
+  "payOrderExtNotExist": "결제 주문 확장 프로그램을 찾을 수 없습니다.",
+  "refundOrderNotExist": "환불 주문을 찾을 수 없습니다.",
+  "refundOrderExtNotExist": "환불 주문 연장을 찾을 수 없습니다.",
+  "refundPayOrderNotExist": "환불 주문에 연결된 결제 주문을 찾을 수 없습니다.",
+  "tradeFlowNotExist": "거래 흐름 기록을 찾을 수 없습니다",
+  "callbackTaskNotExist": "판매자 콜백 알림 작업을 찾을 수 없습니다.",
+  "subscribeRecordNotExist": "가맹점 가입 알림 기록을 찾을 수 없습니다"
+}

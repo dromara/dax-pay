@@ -1,0 +1,10 @@
+{
+  "storageConfigNotExist": "스토리지 구성을 찾을 수 없습니다.",
+  "recordNotExist": "파일 기록을 찾을 수 없습니다",
+  "platformRecordNotExist": "플랫폼 파일 기록을 찾을 수 없습니다.",
+  "statusInvalidForConfirm": "파일 상태가 잘못되어 확인할 수 없습니다.",
+  "objectKeyMismatch": "객체 키 불일치",
+  "notUploadedToStorage": "파일이 저장소에 업로드되지 않았습니다.",
+  "notUploadedForAccess": "파일 업로드가 완료되지 않아 액세스할 수 없습니다.",
+  "notUploadedForDownload": "파일 업로드가 완료되지 않아 다운로드할 수 없습니다."
+}

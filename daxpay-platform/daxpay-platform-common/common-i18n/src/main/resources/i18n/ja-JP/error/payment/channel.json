@@ -1,0 +1,10 @@
+{
+  "notExist": "有料チャンネルは存在しません",
+  "subMchNoExists": "サブ加盟店番号はシステムにすでに存在します",
+  "merchantNoChannelPerm": "販売者にはこのチャネルに対する権限がないため、チャネル販売者を追加できません",
+  "channelMerchantExists": "チャネル販売者はシステムにすでに存在します。再度追加しないでください",
+  "onlyDraftCanDelete": "削除できるのは下書きステータスのみです",
+  "signVerifyFailIllegal": "署名検証に失敗しました。不正なリクエストです",
+  "channelMerchantNotExist": "チャネル販売者情報が見つかりません",
+  "merchantInfoNotFound": "販売者情報が見つかりません"
+}

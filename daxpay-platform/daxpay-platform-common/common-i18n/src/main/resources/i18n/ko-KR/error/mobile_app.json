@@ -1,0 +1,10 @@
+{
+  "notExist": "모바일 앱 구성이 존재하지 않습니다.",
+  "notEnabled": "모바일 앱 구성이 비활성화되었습니다: {0}/{1}",
+  "appTypeNotFound": "일치하는 모바일 앱 유형을 찾을 수 없습니다: {0}",
+  "platformNotFound": "일치하는 모바일 플랫폼을 찾을 수 없습니다: {0}",
+  "platformNotAllowed": "앱 유형 {0}은(는) 모바일 플랫폼을 지원하지 않습니다. {1}",
+  "configRequired": "{0} 플랫폼에 대한 앱 구성을 제출하세요.",
+  "configPlatformMismatch": "앱 구성이 플랫폼 {0}과(와) 일치하지 않습니다.",
+  "alipayCertRequired": "인증서 모드에서는 앱 인증서, Alipay 인증서 및 루트 인증서를 업로드하세요."
+}

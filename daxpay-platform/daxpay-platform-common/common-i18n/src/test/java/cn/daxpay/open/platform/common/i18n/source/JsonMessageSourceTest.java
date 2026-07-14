@@ -101,4 +101,40 @@ class JsonMessageSourceTest {
         String mo = messageSource.getMessage("pay.route.error.noMatch", null, Locale.forLanguageTag("zh-MO"));
         assertEquals(hk, mo);
     }
+
+    /// 日语资源精确命中
+    @Test
+    void shouldResolvePayRouteNoMatchInJaJp() {
+        String message = messageSource.getMessage("pay.route.error.noMatch", null, Locale.forLanguageTag("ja-JP"));
+        assertNotNull(message);
+        // 不应回退为中文默认文案
+        assertEquals(false, "未匹配到可用支付产品".equals(message));
+        // 不应返回 key 原串
+        assertEquals(false, "pay.route.error.noMatch".equals(message));
+    }
+
+    /// 韩语资源精确命中
+    @Test
+    void shouldResolvePayRouteNoMatchInKoKr() {
+        String message = messageSource.getMessage("pay.route.error.noMatch", null, Locale.forLanguageTag("ko-KR"));
+        assertNotNull(message);
+        assertEquals(false, "未匹配到可用支付产品".equals(message));
+        assertEquals(false, "pay.route.error.noMatch".equals(message));
+    }
+
+    /// 纯语言码 ja 反向/别名匹配到 ja-JP
+    @Test
+    void shouldAliasJaToJaJp() {
+        String jaJp = messageSource.getMessage("pay.route.error.noMatch", null, Locale.forLanguageTag("ja-JP"));
+        String ja = messageSource.getMessage("pay.route.error.noMatch", null, Locale.forLanguageTag("ja"));
+        assertEquals(jaJp, ja);
+    }
+
+    /// 纯语言码 ko 反向/别名匹配到 ko-KR
+    @Test
+    void shouldAliasKoToKoKr() {
+        String koKr = messageSource.getMessage("pay.route.error.noMatch", null, Locale.forLanguageTag("ko-KR"));
+        String ko = messageSource.getMessage("pay.route.error.noMatch", null, Locale.forLanguageTag("ko"));
+        assertEquals(koKr, ko);
+    }
 }

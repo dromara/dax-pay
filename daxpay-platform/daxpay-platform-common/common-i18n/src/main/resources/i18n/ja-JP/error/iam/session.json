@@ -1,0 +1,6 @@
+{
+  "sessionNotExistOrExpired": "セッションが存在しないか、期限が切れています",
+  "invalidSessionId": "無効なセッションID",
+  "cannotKickoutAdmin": "スーパー管理者を強制的にオフラインにすることはできません",
+  "kickoutFailed": "ユーザーを強制的にオフラインにできませんでした: {0}"
+}

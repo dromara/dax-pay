@@ -1,0 +1,6 @@
+{
+  "paySuccessTitle": "결제 성공 알림",
+  "paySuccessBody": "귀하의 주문 {0}이(가) 성공적으로 결제되었습니다. 금액: {1}",
+  "refundSuccessTitle": "환불 성공 알림",
+  "refundSuccessBody": "귀하의 주문 {0}이(가) 환불되었습니다. 금액: {1}"
+}

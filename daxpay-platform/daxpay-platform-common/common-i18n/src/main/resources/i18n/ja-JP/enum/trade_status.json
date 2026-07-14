@@ -1,0 +1,8 @@
+{
+  "progress": "進行中",
+  "success": "成功",
+  "fail": "失敗した",
+  "closed": "閉店",
+  "revoked": "取り消されました",
+  "exception": "例外"
+}

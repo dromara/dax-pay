@@ -1,0 +1,5 @@
+{
+  "notExist": "결제 수단이 존재하지 않습니다.",
+  "duplicateProvider": "협회에 중복된 지불 제공업체가 있습니다.",
+  "providerNotExist": "결제 제공업체가 존재하지 않습니다."
+}

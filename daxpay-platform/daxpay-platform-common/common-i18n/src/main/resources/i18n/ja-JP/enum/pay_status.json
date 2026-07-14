@@ -1,0 +1,9 @@
+{
+  "wait": "保留中",
+  "progress": "処理",
+  "success": "成功",
+  "close": "閉店",
+  "cancel": "キャンセル",
+  "fail": "失敗した",
+  "timeout": "タイムアウト"
+}

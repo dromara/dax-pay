@@ -1,0 +1,12 @@
+{
+  "defaultCannotDelete": "기본 프로토콜은 삭제할 수 없습니다.",
+  "notExist": "사용자 프로토콜을 찾을 수 없습니다.",
+  "itemNotExist": "사용자 프로토콜 항목을 찾을 수 없습니다.",
+  "defaultItemNotExist": "이 유형에 대한 기본 프로토콜이 없습니다.",
+  "versionNotExist": "사용자 프로토콜 버전을 찾을 수 없습니다.",
+  "draftOnlyCanEdit": "초안 버전만 편집할 수 있습니다.",
+  "draftOnlyCanDelete": "초안 버전만 삭제할 수 있습니다.",
+  "draftOnlyCanPublish": "초안 버전만 게시할 수 있습니다.",
+  "publishedOnlyCanArchive": "게시된 버전만 보관할 수 있습니다.",
+  "sameClientType": "대상 클라이언트 유형이 소스와 동일합니다."
+}

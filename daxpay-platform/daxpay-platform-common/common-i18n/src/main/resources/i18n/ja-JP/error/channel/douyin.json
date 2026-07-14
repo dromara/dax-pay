@@ -1,0 +1,10 @@
+{
+  "mchAppNotFound": "Douyin チャネル販売者アプリケーションが見つかりません",
+  "appIdDuplicate": "Douyin AppId はこのチャネル販売者の下にすでに存在します",
+  "directMchDuplicate": "このDouyin直接販売者はすでに販売者の下に存在します",
+  "appTypeInvalid": "無効なDouyinアプリケーションタイプです",
+  "capabilityDuplicate": "支払い機能 [{0}] はこのチャネル販売者の下で複製されています",
+  "payFailed": "Douyin 支払いエラー: {0}",
+  "closeFailed": "Douyin 成約注文エラー: {0}",
+  "notSupportMethod": "サポートされていない Douyin 支払い方法: {0}"
+}

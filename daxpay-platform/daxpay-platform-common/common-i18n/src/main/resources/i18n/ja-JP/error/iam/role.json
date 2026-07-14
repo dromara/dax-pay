@@ -1,0 +1,10 @@
+{
+  "roleNotExisted": "役割が存在しません",
+  "roleAlreadyUsed": "ロールにはユーザーが割り当てられているため、削除できません",
+  "roleAlreadyExisted": "ロールはすでに存在します",
+  "permissionDbError": "ユーザーには権限がありません",
+  "internalCannotDelete": "組み込みロールは削除できません",
+  "assignOutOfScope": "ロールの割り当てが割り当て可能な範囲を超えています",
+  "assignCrossClient": "端末間でロールを割り当てることはできません: ユーザー クライアント [{0}]、ロール クライアント [{1}]",
+  "notExist": "役割が見つかりません"
+}

@@ -1,0 +1,12 @@
+{
+  "defaultCannotDelete": "デフォルトのプロトコルは削除できません",
+  "notExist": "ユーザープロトコルが見つかりません",
+  "itemNotExist": "ユーザープロトコル項目が見つかりません",
+  "defaultItemNotExist": "このタイプにはデフォルトのプロトコルが存在しません",
+  "versionNotExist": "ユーザープロトコルのバージョンが見つかりません",
+  "draftOnlyCanEdit": "編集できるのは下書きバージョンのみです",
+  "draftOnlyCanDelete": "削除できるのは下書きバージョンのみです",
+  "draftOnlyCanPublish": "公開できるのはドラフト版のみです",
+  "publishedOnlyCanArchive": "公開されたバージョンのみをアーカイブできます",
+  "sameClientType": "ターゲットクライアントタイプはソースと同じです"
+}

@@ -1,0 +1,18 @@
+{
+  "codeExists": "メニューコードはすでに存在します",
+  "cycleDependency": "親メニューをそれ自体または子メニューにすることはできません",
+  "subpageNoChildren": "サブページには子メニューを含めることはできません",
+  "hasChildrenCannotDelete": "子メニューのあるメニューは削除できません",
+  "invalidType": "無効なメニュータイプです",
+  "typeImmutable": "メニュータイプは作成後に変更できません",
+  "subpageNeedParent": "サブページは親メニューを選択する必要があります",
+  "parentNotExist": "親メニューが見つかりません",
+  "subpageParentMustBeMenu": "サブページの親はメニュー タイプである必要があります",
+  "subpageParentInvalid": "サブページの親はメニューまたはサブページ グループである必要があります",
+  "subpageGroupNeedParent": "サブページグループは親メニューを選択する必要があります",
+  "subpageGroupParentMustBeMenu": "サブページグループの親はメニュータイプである必要があります",
+  "subpageGroupChildMustBeSubpage": "サブページ グループにはサブページのみを含めることができます",
+  "needParentCatalog": "メニュー、埋め込みページ、または外部リンクは親ディレクトリを選択する必要があります",
+  "parentMustBeCatalog": "メニュー、埋め込みページ、または外部リンクの親はディレクトリ タイプである必要があります",
+  "notExist": "メニューが見つかりません"
+}

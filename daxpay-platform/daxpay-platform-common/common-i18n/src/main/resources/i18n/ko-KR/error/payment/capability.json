@@ -1,0 +1,5 @@
+{
+  "notExist": "결제 기능이 존재하지 않습니다",
+  "duplicateProduct": "연결된 결제 상품은 고유해야 합니다.",
+  "productNotExist": "결제상품이 존재하지 않습니다."
+}

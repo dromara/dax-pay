@@ -1,0 +1,7 @@
+{
+  "roleClientMismatch": "역할 클라이언트가 요청 클라이언트와 일치하지 않습니다.",
+  "invalidMenuData": "잘못된 메뉴 데이터가 존재합니다",
+  "roleMenuClientMismatch": "역할 클라이언트가 메뉴 클라이언트와 일치하지 않습니다.",
+  "invalidPermCodeData": "잘못된 권한 코드 데이터가 존재합니다.",
+  "permCodeNotOnSelectedMenus": "선택한 메뉴에 권한 코드가 탑재되지 않았습니다: {0}"
+}

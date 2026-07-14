@@ -1,0 +1,12 @@
+{
+  "unsupportedBarcodeType": "サポートされていないバーコード タイプです",
+  "merchantNoRefundPermission": "販売者には返金の許可がありません",
+  "payOrderNotExist": "支払い注文が見つかりません",
+  "payOrderExtNotExist": "支払い注文の延長が見つかりません",
+  "refundOrderNotExist": "返金注文が見つかりません",
+  "refundOrderExtNotExist": "払い戻し注文の延長が見つかりません",
+  "refundPayOrderNotExist": "返金注文にリンクされた支払い注文が見つかりません",
+  "tradeFlowNotExist": "トレードフローレコードが見つかりません",
+  "callbackTaskNotExist": "販売者コールバック通知タスクが見つかりません",
+  "subscribeRecordNotExist": "販売者のサブスクリプション通知レコードが見つかりません"
+}

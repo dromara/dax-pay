@@ -1,0 +1,7 @@
+{
+  "user": "ユーザー操作",
+  "mch_api": "マーチャントAPI",
+  "cashier_code": "レジコード",
+  "checkout": "チェックアウトの支払い",
+  "aggress_pay": "総計/チェックアウト支払い"
+}

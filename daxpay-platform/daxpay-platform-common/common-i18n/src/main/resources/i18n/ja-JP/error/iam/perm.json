@@ -1,0 +1,6 @@
+{
+  "codeDefinitionConflict": "競合する権限コード定義: {0}",
+  "codeNotConfigured": "許可コード宣言の欠落コード",
+  "nameCnNotConfigured": "許可コード宣言がありません nameCn",
+  "nameEnNotConfigured": "許可コード宣言がありません nameEn"
+}

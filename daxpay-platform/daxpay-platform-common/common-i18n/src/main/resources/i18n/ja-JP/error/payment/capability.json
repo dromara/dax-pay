@@ -1,0 +1,5 @@
+{
+  "notExist": "支払い機能が存在しない",
+  "duplicateProduct": "リンクされた支払い商品は一意である必要があります",
+  "productNotExist": "決済商品が存在しません"
+}

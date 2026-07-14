@@ -1,0 +1,9 @@
+{
+  "aggregate_pay": "총액지불",
+  "wechat": "위챗페이",
+  "alipay": "알리페이",
+  "union_pay": "유니온페이",
+  "visa": "비자",
+  "mastercard": "마스터 카드",
+  "douyin": "두인페이"
+}

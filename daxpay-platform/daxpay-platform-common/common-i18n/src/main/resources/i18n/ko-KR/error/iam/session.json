@@ -1,0 +1,6 @@
+{
+  "sessionNotExistOrExpired": "세션이 존재하지 않거나 만료되었습니다.",
+  "invalidSessionId": "잘못된 세션 ID",
+  "cannotKickoutAdmin": "최고 관리자를 오프라인으로 강제할 수 없습니다.",
+  "kickoutFailed": "사용자를 강제로 오프라인으로 전환하지 못했습니다: {0}"
+}

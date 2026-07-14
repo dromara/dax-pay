@@ -1,0 +1,16 @@
+{
+  "userInfoNotExists": "ユーザー情報が存在しません",
+  "userPhoneAlreadyExisted": "ユーザーの電話はすでに存在します",
+  "userNonePhoneAndEmail": "電話または電子メールのいずれかを提供する必要があります",
+  "oldPasswordError": "古いパスワードが間違っています",
+  "accountExistsInClient": "アカウントはこのクライアントの下にすでに存在します",
+  "phoneUsedInClient": "このクライアントですでに使用されている電話番号",
+  "emailUsedInClient": "このクライアントで電子メールがすでに使用されています",
+  "phoneUsedByOtherInClient": "このクライアントで別のユーザーがすでに使用している電話番号",
+  "emailUsedByOtherInClient": "このクライアントで別のユーザーがすでに使用している電子メール",
+  "dataError": "ユーザーデータエラー",
+  "notExist": "ユーザーが見つかりません",
+  "cannotEditNonAdmin": "管理者以外のクライアント ユーザーは編集できません",
+  "emailUsedByOther": "電子メールはすでに別のユーザーによって使用されています",
+  "phoneUsedByOther": "電話番号はすでに別のユーザーによって使用されています"
+}

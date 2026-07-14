@@ -1,0 +1,7 @@
+{
+  "roleClientMismatch": "ロールクライアントがリクエストクライアントと一致しません",
+  "invalidMenuData": "無効なメニューデータが存在します",
+  "roleMenuClientMismatch": "ロールクライアントがメニュークライアントと一致しません",
+  "invalidPermCodeData": "無効な許可コードデータが存在します",
+  "permCodeNotOnSelectedMenus": "選択したメニューに許可コードがマウントされていません: {0}"
+}

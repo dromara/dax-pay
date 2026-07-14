@@ -1,0 +1,18 @@
+{
+  "codeExists": "메뉴 코드가 이미 존재합니다.",
+  "cycleDependency": "상위 메뉴는 그 자체이거나 하위 메뉴일 수 없습니다.",
+  "subpageNoChildren": "하위 페이지에는 하위 메뉴가 있을 수 없습니다.",
+  "hasChildrenCannotDelete": "하위 메뉴가 있는 메뉴는 삭제할 수 없습니다.",
+  "invalidType": "잘못된 메뉴 유형",
+  "typeImmutable": "생성 후에는 메뉴 유형을 변경할 수 없습니다.",
+  "subpageNeedParent": "하위 페이지는 상위 메뉴를 선택해야 합니다.",
+  "parentNotExist": "상위 메뉴를 찾을 수 없습니다",
+  "subpageParentMustBeMenu": "하위 페이지 상위 항목은 메뉴 유형이어야 합니다.",
+  "subpageParentInvalid": "하위 페이지 상위는 메뉴 또는 하위 페이지 그룹이어야 합니다.",
+  "subpageGroupNeedParent": "하위 페이지 그룹은 상위 메뉴를 선택해야 합니다.",
+  "subpageGroupParentMustBeMenu": "하위 페이지 그룹 상위는 메뉴 유형이어야 합니다.",
+  "subpageGroupChildMustBeSubpage": "하위 페이지 그룹은 하위 페이지만 포함할 수 있습니다.",
+  "needParentCatalog": "메뉴, 삽입된 페이지 또는 외부 링크는 상위 디렉터리를 선택해야 합니다.",
+  "parentMustBeCatalog": "메뉴, 삽입된 페이지 또는 외부 링크의 상위 항목은 디렉터리 유형이어야 합니다.",
+  "notExist": "메뉴를 찾을 수 없습니다"
+}

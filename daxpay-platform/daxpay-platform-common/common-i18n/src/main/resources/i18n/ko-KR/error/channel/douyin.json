@@ -1,0 +1,10 @@
+{
+  "mchAppNotFound": "Douyin 채널 판매자 애플리케이션을 찾을 수 없습니다.",
+  "appIdDuplicate": "Douyin AppId가 이미 이 채널 판매자에 존재합니다.",
+  "directMchDuplicate": "이 Douyin 직접 판매자는 이미 판매자 아래에 존재합니다.",
+  "appTypeInvalid": "잘못된 Douyin 애플리케이션 유형",
+  "capabilityDuplicate": "이 채널 판매자에 결제 기능 [{0}]이(가) 중복되었습니다.",
+  "payFailed": "Douyin 결제 오류: {0}",
+  "closeFailed": "Douyin 마감 주문 오류: {0}",
+  "notSupportMethod": "지원되지 않는 Douyin 결제 수단: {0}"
+}

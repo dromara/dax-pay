@@ -1,0 +1,8 @@
+{
+  "incomplete": "OSS 구성이 불완전합니다. 엔드포인트, 버킷, 자격 증명을 입력하세요.",
+  "checkSuccess": "OSS 연결 확인 통과",
+  "checkFailed": "OSS 연결 확인 실패, 상태: {0}",
+  "authFailed": "OSS 인증에 실패했습니다. AccessKey / SecretKey를 확인하세요.",
+  "bucketNotFound": "버킷을 찾을 수 없습니다. 공개/비공개 버킷 이름을 확인하세요.",
+  "networkError": "객체 스토리지에 연결할 수 없습니다. 엔드포인트와 네트워크를 확인하세요."
+}

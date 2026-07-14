@@ -1,0 +1,10 @@
+{
+  "roleNotExisted": "역할이 존재하지 않습니다.",
+  "roleAlreadyUsed": "역할에 사용자가 할당되어 있으므로 삭제할 수 없습니다.",
+  "roleAlreadyExisted": "역할이 이미 존재합니다.",
+  "permissionDbError": "사용자에게 권한이 없습니다",
+  "internalCannotDelete": "기본 제공 역할은 삭제할 수 없습니다.",
+  "assignOutOfScope": "역할 할당이 할당 가능한 범위를 초과합니다.",
+  "assignCrossClient": "터미널 전체에 역할을 할당할 수 없습니다: 사용자 클라이언트 [{0}], 역할 클라이언트 [{1}]",
+  "notExist": "역할을 찾을 수 없습니다."
+}

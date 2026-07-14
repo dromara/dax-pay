@@ -1,0 +1,5 @@
+{
+  "isvKeyNotConfigured": "VBill ISV 키가 구성되지 않았습니다.",
+  "mnoNotConfigured": "VBill 판매자 번호(mno)가 구성되지 않았습니다. 판매자 구성을 입력하세요.",
+  "merchantDuplicate": "이 Tianque 판매자 번호는 이 판매자 아래에 이미 존재합니다."
+}

@@ -1,0 +1,9 @@
+{
+  "security_password_policy": "비밀번호 정책",
+  "security_login": "로그인 보안",
+  "security_session": "세션 관리",
+  "security_two_factor_auth": "이중 인증",
+  "url": "시스템 URL 설정",
+  "website": "웹사이트 표시 설정",
+  "wechat_notify": "WeChat 메시지 알림 템플릿 구성"
+}

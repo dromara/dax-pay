@@ -64,7 +64,11 @@ public class JsonMessageSource extends AbstractMessageSource {
             Map.entry("zh-mo", "zh-HK"),
             Map.entry("en", "en-US"),
             Map.entry("en-us", "en-US"),
-            Map.entry("en-gb", "en-US")
+            Map.entry("en-gb", "en-US"),
+            Map.entry("ja", "ja-JP"),
+            Map.entry("ja-jp", "ja-JP"),
+            Map.entry("ko", "ko-KR"),
+            Map.entry("ko-kr", "ko-KR")
     );
 
     public JsonMessageSource(ResourcePatternResolver resourceResolver) {

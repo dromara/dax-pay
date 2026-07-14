@@ -10,7 +10,6 @@
   "channelNotEnable": "Payment channel not enabled",
   "unsupportedAbility": "Unsupported Ability",
   "unsupportedAbilityWithDetail": "Unsupported ability: {0}",
-  "reconciliationFail": "Reconciliation Failed",
   "amount": {
     "exceed": "Amount Exceeded",
     "invalid": "Invalid Amount"

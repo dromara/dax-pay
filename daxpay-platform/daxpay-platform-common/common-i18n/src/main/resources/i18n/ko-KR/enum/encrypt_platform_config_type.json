@@ -1,0 +1,6 @@
+{
+  "oss": "객체 스토리지 구성",
+  "alipay_auth": "Alipay 오픈 플랫폼 인증 구성",
+  "wechat_mp_auth": "WeChat 공식 계정 H5 인증 구성",
+  "douyin_h5_auth": "Douyin 개방형 플랫폼 H5 앱 인증 구성"
+}

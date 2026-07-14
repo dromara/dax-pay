@@ -1,0 +1,7 @@
+{
+  "sendFailed": "메시지 전송 실패: {0}",
+  "delaySendFailed": "지연된 메시지 전송 실패: {0}",
+  "serializeFailed": "메시지 직렬화 실패: {0}",
+  "parseBodyFailed": "메시지 본문 구문 분석 실패: {0}",
+  "typeConvertFailed": "메시지 유형 변환 실패: {0}"
+}

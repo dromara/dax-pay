@@ -1,0 +1,744 @@
+{
+  "notBlank": "{0}은 비워둘 수 없습니다.",
+  "notEmpty": "{0}은 비워둘 수 없습니다.",
+  "lengthRange": "{0} 길이는 {1}에서 {2} 사이여야 합니다.",
+  "min": "{0}은(는) {1}보다 작을 수 없습니다.",
+  "max": "{0}은(는) {1}보다 클 수 없습니다.",
+  "parameterError": "매개변수 검증 실패",
+  "field": {
+    "source": {
+      "notBlank": "플랫폼은 비워둘 수 없습니다."
+    },
+    "clientId": {
+      "notBlank": "클라이언트 ID는 비워둘 수 없습니다."
+    },
+    "clientSecret": {
+      "notBlank": "클라이언트 비밀번호는 비워둘 수 없습니다."
+    },
+    "clientKey": {
+      "notBlank": "클라이언트 키는 비워둘 수 없습니다."
+    },
+    "clientCode": {
+      "notBlank": "클라이언트 코드는 비워둘 수 없습니다."
+    },
+    "ip": {
+      "notValid": "IP 주소가 유효하지 않습니다"
+    },
+    "aliAppId": {
+      "notBlank": "Alipay 앱 ID는 비워둘 수 없습니다."
+    },
+    "authType": {
+      "notBlank": "인증 유형은 비워둘 수 없습니다."
+    },
+    "signType": {
+      "notBlank": "서명 유형은 비워둘 수 없습니다."
+    },
+    "alipayPublicKey": {
+      "notBlank": "Alipay 공개 키는 비워둘 수 없습니다."
+    },
+    "mchAppPrivateKey": {
+      "notBlank": "앱 비공개 키는 비워둘 수 없습니다."
+    },
+    "appSecret": {
+      "size": "앱 비밀번호는 512자를 초과할 수 없습니다."
+    },
+    "douyinMchId": {
+      "notBlank": "Douyin 판매자 ID는 비워둘 수 없습니다."
+    },
+    "userIdType": {
+      "notBlank": "사용자 ID 유형은 비워둘 수 없습니다."
+    },
+    "product": {
+      "notBlank": "제품 코드는 비워둘 수 없습니다.",
+      "size": "제품 코드는 32자를 초과할 수 없습니다.",
+      "notNull": "제품 코드는 비워둘 수 없습니다."
+    },
+    "channel": {
+      "notBlank": "채널 코드는 비워둘 수 없습니다.",
+      "size": "채널 코드는 32자를 초과할 수 없습니다."
+    },
+    "sandbox": {
+      "notNull": "샌드박스 환경은 비워둘 수 없습니다."
+    },
+    "enable": {
+      "notNull": "활성화 상태는 비워둘 수 없습니다."
+    },
+    "mchNo": {
+      "notBlank": "판매자 번호 비워둘 수 없습니다.",
+      "size": "판매자 번호 32자를 초과할 수 없습니다.",
+      "notNull": "판매자 번호 비워둘 수 없습니다."
+    },
+    "appId": {
+      "notBlank": "판매자 앱 ID는 비워둘 수 없습니다.",
+      "size": "판매자 앱 ID는 32자를 초과할 수 없습니다.",
+      "notNull": "애플리케이션 ID는 null일 수 없습니다."
+    },
+    "channelMchNo": {
+      "size": "채널 판매자 번호는 32자를 초과할 수 없습니다.",
+      "notBlank": "채널 판매자 번호는 비워둘 수 없습니다."
+    },
+    "level": {
+      "notBlank": "구성 수준은 비워둘 수 없습니다.",
+      "size": "구성 수준은 32자를 초과할 수 없습니다."
+    },
+    "cashierType": {
+      "notBlank": "계산원 유형은 비워둘 수 없습니다.",
+      "size": "계산원 유형은 16자를 초과할 수 없습니다."
+    },
+    "resolveMode": {
+      "notBlank": "해결 모드는 비워둘 수 없습니다.",
+      "size": "해결 모드는 16자를 초과할 수 없습니다."
+    },
+    "icon": {
+      "size": "아이콘 코드는 32자를 초과할 수 없습니다."
+    },
+    "itemName": {
+      "size": "결제 항목 이름은 64자를 초과할 수 없습니다."
+    },
+    "subMchId": {
+      "notBlank": "WeChat 하위 판매자 ID는 비워둘 수 없습니다."
+    },
+    "wxMchId": {
+      "notBlank": "WeChat 판매자 ID는 비워둘 수 없습니다."
+    },
+    "wxAppId": {
+      "notBlank": "WeChat 앱 ID는 비워둘 수 없습니다."
+    },
+    "publicKeyId": {
+      "notBlank": "결제 공개 키 ID는 비워둘 수 없습니다."
+    },
+    "certSerialNo": {
+      "notBlank": "인증서 일련번호 비워둘 수 없습니다."
+    },
+    "id": {
+      "notNull": "기본 키는 비워둘 수 없습니다.",
+      "mustBeNullOnAdd": "ID는 비어 있어야 합니다."
+    },
+    "alipayIsvAppId": {
+      "notNull": "Alipay ISV 앱 ID는 null일 수 없습니다."
+    },
+    "alipayDirectAppId": {
+      "notNull": "Alipay 다이렉트 앱 ID는 null일 수 없습니다."
+    },
+    "wechatIsvAppId": {
+      "notNull": "WeChat ISV 앱 ID는 null일 수 없습니다."
+    },
+    "account": {
+      "notBlank": "계정은 비워둘 수 없습니다.",
+      "size": "계정 길이는 6~20자 사이여야 합니다.",
+      "pattern": "계정 형식이 잘못되었습니다."
+    },
+    "password": {
+      "notBlank": "비밀번호는 비워둘 수 없습니다."
+    },
+    "subjectType": {
+      "notBlank": "제목 유형은 비워둘 수 없습니다."
+    },
+    "pass": {
+      "notNull": "감사 결과는 비워둘 수 없습니다."
+    },
+    "channelMerchantNo": {
+      "notBlank": "채널 판매자 번호 비워둘 수 없습니다."
+    },
+    "channelMerchantName": {
+      "notBlank": "판매자 이름은 비워둘 수 없습니다."
+    },
+    "appKey": {
+      "notBlank": "앱 키는 비워둘 수 없습니다."
+    },
+    "secretKey": {
+      "notBlank": "비밀 키는 비워둘 수 없습니다."
+    },
+    "tradeIdentity": {
+      "notBlank": "판매자 거래 ID는 비워둘 수 없습니다."
+    },
+    "subMchNo": {
+      "notBlank": "하위 판매자 번호 비워둘 수 없습니다."
+    },
+    "parentMchNo": {
+      "notBlank": "상위 채널 판매자 번호 비워둘 수 없습니다."
+    },
+    "subMchName": {
+      "notBlank": "하위 판매자 이름은 비워둘 수 없습니다."
+    },
+    "orderNo": {
+      "notBlank": "결제주문번호 비워둘 수 없습니다.",
+      "size": "결제주문번호 100자를 초과할 수 없습니다."
+    },
+    "amount": {
+      "notNull": "결제 금액은 비워둘 수 없습니다.",
+      "min": "결제 금액은 1센트 미만일 수 없습니다.",
+      "max": "결제금액은 100만원을 초과할 수 없습니다.",
+      "positive": "금액은 0보다 커야 합니다."
+    },
+    "title": {
+      "notBlank": "제목은 비워둘 수 없습니다.",
+      "size": "제목은 100자를 초과할 수 없습니다."
+    },
+    "date": {
+      "notNull": "날짜는 비워둘 수 없습니다."
+    },
+    "fileType": {
+      "notNull": "파일 형식은 비워둘 수 없습니다."
+    },
+    "authCode": {
+      "notBlank": "인증 코드는 비워둘 수 없습니다.",
+      "size": "인증 코드는 128자를 초과할 수 없습니다."
+    },
+    "clientIp": {
+      "size": "클라이언트 IP는 64자를 초과할 수 없습니다."
+    },
+    "nonceStr": {
+      "size": "Nonce는 32자를 초과할 수 없습니다."
+    },
+    "sign": {
+      "size": "서명은 1024자를 초과할 수 없습니다."
+    },
+    "reqTime": {
+      "notNull": "요청 시간은 비워둘 수 없습니다."
+    },
+    "bizOrderNo": {
+      "size": "판매자 주문번호 100자를 초과할 수 없습니다.",
+      "notBlank": "판매자 주문번호 비워둘 수 없습니다."
+    },
+    "description": {
+      "size": "설명은 50자를 초과할 수 없습니다.",
+      "notBlank": "설명은 비워둘 수 없습니다."
+    },
+    "method": {
+      "notBlank": "결제 수단은 비워둘 수 없습니다.",
+      "size": "결제 수단은 32자를 초과할 수 없습니다.",
+      "notNull": "결제 방법은 null일 수 없습니다."
+    },
+    "capability": {
+      "size": "결제 가능 여부는 32자를 초과할 수 없습니다.",
+      "notBlank": "결제 기능은 비워둘 수 없습니다."
+    },
+    "provider": {
+      "notBlank": "유료 브랜드는 비워둘 수 없습니다.",
+      "size": "유료 브랜드 코드는 32자를 초과할 수 없습니다."
+    },
+    "otherMethod": {
+      "size": "기타 결제 수단은 128자를 초과할 수 없습니다."
+    },
+    "limitPay": {
+      "size": "한도 지불 유형은 128자를 초과할 수 없습니다."
+    },
+    "opAppId": {
+      "size": "Op 앱 ID는 128자를 초과할 수 없습니다."
+    },
+    "openId": {
+      "size": "오픈 ID는 128자를 초과할 수 없습니다."
+    },
+    "terminalNo": {
+      "size": "터미널 번호 128자를 초과할 수 없습니다."
+    },
+    "extraParam": {
+      "size": "추가 매개변수는 2,048자를 초과할 수 없습니다."
+    },
+    "goodsDetail": {
+      "size": "상품 세부정보 목록은 50개 항목을 초과할 수 없습니다."
+    },
+    "goodsId": {
+      "notBlank": "상품 ID는 비워둘 수 없습니다.",
+      "size": "상품 ID는 64자를 초과할 수 없습니다."
+    },
+    "goodsName": {
+      "notBlank": "상품 이름은 비워둘 수 없습니다.",
+      "size": "상품 이름은 256자를 초과할 수 없습니다."
+    },
+    "quantity": {
+      "notNull": "수량은 null일 수 없습니다.",
+      "min": "수량은 1보다 작을 수 없습니다."
+    },
+    "unitPrice": {
+      "notNull": "단가는 null일 수 없습니다.",
+      "min": "단가는 1센트 미만일 수 없습니다.",
+      "max": "단가는 1억 위안을 초과할 수 없습니다."
+    },
+    "goodsCategory": {
+      "size": "상품 카테고리는 32자를 초과할 수 없습니다."
+    },
+    "goodsDescription": {
+      "size": "상품 설명은 1000자를 초과할 수 없습니다."
+    },
+    "showUrl": {
+      "size": "표시 URL은 400자를 초과할 수 없습니다."
+    },
+    "attach": {
+      "size": "첨부는 500자를 초과할 수 없습니다."
+    },
+    "returnUrl": {
+      "size": "반환 URL은 200자를 초과할 수 없습니다."
+    },
+    "quitUrl": {
+      "size": "종료 URL은 200자를 초과할 수 없습니다."
+    },
+    "notifyUrl": {
+      "size": "알림 URL은 200자를 초과할 수 없습니다."
+    },
+    "outOrderNo": {
+      "size": "채널 주문번호 150자를 초과할 수 없습니다.",
+      "notBlank": "채널 주문번호 비워둘 수 없습니다."
+    },
+    "refundNo": {
+      "notBlank": "환불 번호는 비워둘 수 없습니다.",
+      "size": "환불 번호는 100자를 초과할 수 없습니다."
+    },
+    "bizRefundNo": {
+      "size": "가맹점 환불번호 100자를 초과할 수 없습니다.",
+      "notBlank": "가맹점 환불번호 비워둘 수 없습니다."
+    },
+    "reason": {
+      "size": "이유는 50자를 초과할 수 없습니다."
+    },
+    "payeeName": {
+      "size": "수취인 이름은 50자를 초과할 수 없습니다."
+    },
+    "items": {
+      "notEmpty": "제품 구성 목록은 비워둘 수 없습니다."
+    },
+    "shortName": {
+      "notBlank": "닉네임은 비워둘 수 없습니다."
+    },
+    "status": {
+      "notBlank": "상태는 비워둘 수 없습니다."
+    },
+    "accountType": {
+      "notBlank": "계정 유형은 비워둘 수 없습니다."
+    },
+    "appAuthToken": {
+      "notBlank": "앱 인증 토큰은 비워둘 수 없습니다."
+    },
+    "isvAppId": {
+      "notBlank": "Alipay 애플리케이션은 비워둘 수 없습니다."
+    },
+    "alipayUserId": {
+      "notBlank": "하위 판매자 번호 비워둘 수 없습니다."
+    },
+    "accountName": {
+      "notBlank": "은행 계좌 이름은 비워둘 수 없습니다."
+    },
+    "cardNo": {
+      "notBlank": "은행카드번호 비워둘 수 없습니다."
+    },
+    "bankName": {
+      "notBlank": "은행 이름은 비워둘 수 없습니다."
+    },
+    "cardFrontPic": {
+      "notBlank": "은행 카드 앞면 사진은 비워둘 수 없습니다."
+    },
+    "legalName": {
+      "notBlank": "법인 이름은 비워둘 수 없습니다."
+    },
+    "certNo": {
+      "notBlank": "신분증번호 비워둘 수 없습니다."
+    },
+    "frontPic": {
+      "notBlank": "신분증 앞면 사진은 비워둘 수 없습니다."
+    },
+    "backPic": {
+      "notBlank": "신분증 뒷면 사진은 비워둘 수 없습니다."
+    },
+    "licenseNo": {
+      "notBlank": "사업자등록번호 비워둘 수 없습니다."
+    },
+    "licenseName": {
+      "notBlank": "사업자 등록증 이름은 비워둘 수 없습니다."
+    },
+    "licensePic": {
+      "notBlank": "사업자 등록증 사진은 비워둘 수 없습니다."
+    },
+    "appName": {
+      "notBlank": "애플리케이션 이름은 비워둘 수 없습니다.",
+      "notNull": "애플리케이션 이름은 비워둘 수 없습니다."
+    },
+    "appType": {
+      "notBlank": "애플리케이션 유형은 비워둘 수 없습니다."
+    },
+    "platform": {
+      "notBlank": "모바일 플랫폼은 비워둘 수 없습니다."
+    },
+    "authAppType": {
+      "notBlank": "인증 신청 유형은 비워둘 수 없습니다."
+    },
+    "mchName": {
+      "notBlank": "판매자 이름은 비워둘 수 없습니다."
+    },
+    "mchShortName": {
+      "notBlank": "판매자 닉네임은 비워둘 수 없습니다."
+    },
+    "publicKey": {
+      "notBlank": "플랫폼 공개 키는 비워둘 수 없습니다. daxpay.platform.config.key-config.public-key 구성"
+    },
+    "privateKey": {
+      "notBlank": "플랫폼 개인 키는 비워둘 수 없습니다. daxpay.platform.config.key-config.private-key 구성"
+    },
+    "phone": {
+      "notBlank": "전화번호는 비워둘 수 없습니다.",
+      "format": "잘못된 전화번호 형식"
+    },
+    "roleId": {
+      "notNull": "역할 ID는 비워둘 수 없습니다."
+    },
+    "code": {
+      "notBlank": "코드는 비워둘 수 없습니다."
+    },
+    "nameCn": {
+      "notBlank": "중국어 이름은 비워둘 수 없습니다."
+    },
+    "nameEn": {
+      "notBlank": "영문 이름은 비워둘 수 없습니다."
+    },
+    "menuCode": {
+      "notBlank": "메뉴 코드는 비워둘 수 없습니다."
+    },
+    "titleCn": {
+      "notBlank": "메뉴 제목(중국어)은 비워둘 수 없습니다."
+    },
+    "titleEn": {
+      "notBlank": "메뉴 제목(영문)은 비워둘 수 없습니다."
+    },
+    "i18nKey": {
+      "notBlank": "I18n 키는 비워둘 수 없습니다."
+    },
+    "userIds": {
+      "notEmpty": "사용자 목록은 비워둘 수 없습니다."
+    },
+    "userId": {
+      "notNull": "사용자 ID는 비워둘 수 없습니다."
+    },
+    "newPassword": {
+      "notBlank": "새 비밀번호는 비워둘 수 없습니다."
+    },
+    "configName": {
+      "notBlank": "구성 이름은 비워둘 수 없습니다."
+    },
+    "endpoint": {
+      "notBlank": "끝점은 비워둘 수 없습니다."
+    },
+    "publicBucket": {
+      "notBlank": "공개 버킷은 비워둘 수 없습니다."
+    },
+    "privateBucket": {
+      "notBlank": "비공개 버킷은 비워둘 수 없습니다."
+    },
+    "urlType": {
+      "notBlank": "URL 유형은 비워둘 수 없습니다."
+    },
+    "systemName": {
+      "size": "시스템 이름은 {max}자를 초과할 수 없습니다."
+    },
+    "companyName": {
+      "size": "회사 이름은 {max}자를 초과할 수 없습니다."
+    },
+    "companyEmail": {
+      "email": "잘못된 이메일 형식"
+    },
+    "companyWechat": {
+      "size": "WeChat ID는 {max}자를 초과할 수 없습니다."
+    },
+    "copyright": {
+      "size": "저작권 텍스트는 {max}자를 초과할 수 없습니다."
+    },
+    "icpLink": {
+      "pattern": "URL은 http:// 또는 https://로 시작해야 합니다."
+    },
+    "mpsLink": {
+      "pattern": "URL은 http:// 또는 https://로 시작해야 합니다."
+    },
+    "pcacLink": {
+      "pattern": "URL은 http:// 또는 https://로 시작해야 합니다."
+    },
+    "icpPlusLink": {
+      "pattern": "URL은 http:// 또는 https://로 시작해야 합니다."
+    },
+    "dictId": {
+      "notNull": "사전 ID는 비워둘 수 없습니다."
+    },
+    "protocolId": {
+      "notNull": "프로토콜 ID는 비워둘 수 없습니다."
+    },
+    "content": {
+      "notBlank": "프로토콜 내용은 비워둘 수 없습니다."
+    },
+    "showName": {
+      "notBlank": "표시 이름은 비워둘 수 없습니다."
+    },
+    "type": {
+      "notBlank": "유형은 비워둘 수 없습니다."
+    },
+    "clientType": {
+      "notBlank": "클라이언트 유형은 비워둘 수 없습니다."
+    },
+    "language": {
+      "notBlank": "언어는 비워둘 수 없습니다."
+    },
+    "email": {
+      "notBlank": "이메일은 비워둘 수 없습니다.",
+      "format": "잘못된 이메일 형식"
+    },
+    "realName": {
+      "notBlank": "이름은 비워둘 수 없습니다."
+    },
+    "regionCode": {
+      "notBlank": "지역 코드는 비워둘 수 없습니다."
+    },
+    "dictItemId": {
+      "notNull": "사전 항목 ID는 비워둘 수 없습니다."
+    },
+    "configItems": {
+      "notEmpty": "구성 항목은 비워둘 수 없습니다."
+    },
+    "payOrderId": {
+      "notNull": "결제 주문 ID는 비워둘 수 없습니다."
+    },
+    "orderId": {
+      "notNull": "주문 ID는 비워둘 수 없습니다."
+    },
+    "fileId": {
+      "notNull": "파일 ID는 비워둘 수 없습니다."
+    },
+    "objectKey": {
+      "notBlank": "객체 키는 비워둘 수 없습니다."
+    },
+    "sessionIds": {
+      "notEmpty": "세션 ID 목록은 비워둘 수 없습니다."
+    },
+    "orderSource": {
+      "mustBeNull": "주문 출처 필드는 설정할 수 없습니다."
+    },
+    "minLengthNotGreaterThanMax": {
+      "assertTrue": "최소 길이는 최대 길이보다 클 수 없습니다."
+    },
+    "captchaFailCountNotGreaterThanMax": {
+      "assertTrue": "보안 문자 트리거 실패 횟수는 최대 실패 횟수보다 클 수 없습니다."
+    },
+    "queryCode": {
+      "notBlank": "쿼리 코드는 비워둘 수 없습니다."
+    },
+    "authToken": {
+      "notBlank": "인증 토큰은 비워둘 수 없습니다.",
+      "size": "인증 토큰은 64자를 초과할 수 없습니다."
+    },
+    "returnPath": {
+      "size": "반환 경로는 200자를 초과할 수 없습니다."
+    },
+    "taskId": {
+      "notNull": "메시지 ID는 비워둘 수 없습니다."
+    },
+    "deleteDay": {
+      "notNull": "요일은 비워둘 수 없습니다."
+    },
+    "menuId": {
+      "notNull": "메뉴 ID는 비워둘 수 없습니다."
+    },
+    "oldPassword": {
+      "notBlank": "이전 비밀번호는 비워둘 수 없습니다."
+    },
+    "scene": {
+      "notNull": "메시지 장면은 비워둘 수 없습니다.",
+      "size": "장면 코드는 32자를 초과할 수 없습니다."
+    },
+    "demoContent": {
+      "notBlank": "메시지 내용은 비워둘 수 없습니다."
+    },
+    "delaySeconds": {
+      "min": "지연 시간(초)은 1보다 작을 수 없습니다.",
+      "max": "지연 시간(초)은 300초를 초과할 수 없습니다."
+    },
+    "name": {
+      "notBlank": "이름은 비워둘 수 없습니다.",
+      "size": "이름 길이는 3~15자 사이여야 합니다."
+    },
+    "enabled": {
+      "notNull": "활성화 상태는 비워둘 수 없습니다."
+    },
+    "storeNo": {
+      "size": "상점 번호는 64자를 초과할 수 없습니다."
+    },
+    "operatorId": {
+      "size": "운영자 ID는 64자를 초과할 수 없습니다."
+    },
+    "deviceName": {
+      "size": "장치 이름은 128자를 초과할 수 없습니다."
+    },
+    "deviceIp": {
+      "size": "장치 IP는 64자를 초과할 수 없습니다."
+    },
+    "douyinAppId": {
+      "notBlank": "Douyin 앱 ID는 비워둘 수 없습니다."
+    },
+    "douyinDirectAppId": {
+      "notNull": "Douyin 다이렉트 앱 ID는 비워둘 수 없습니다."
+    },
+    "dyMchId": {
+      "notBlank": "Douyin 판매자 ID는 비워둘 수 없습니다."
+    },
+    "wechatDirectAppId": {
+      "notNull": "WeChat 다이렉트 앱 ID는 비워둘 수 없습니다."
+    },
+    "wechatIsvMchAppId": {
+      "notNull": "WeChat ISV 채널 판매자 앱 ID는 비워둘 수 없습니다."
+    },
+    "storeName": {
+      "notBlank": "상점 이름은 비워둘 수 없습니다."
+    },
+    "deviceSn": {
+      "notBlank": "기기 일련번호는 비워둘 수 없습니다."
+    },
+    "deviceType": {
+      "notBlank": "기기 유형은 비워둘 수 없습니다."
+    },
+    "vendorCode": {
+      "notBlank": "공급업체 코드는 비워둘 수 없습니다."
+    },
+    "vendorConfigId": {
+      "notNull": "공급업체 구성은 null일 수 없습니다."
+    },
+    "qrCodeName": {
+      "notBlank": "QR 코드 이름은 비워둘 수 없습니다.",
+      "size": "QR 코드 이름은 100자를 초과할 수 없습니다."
+    },
+    "amountType": {
+      "notBlank": "금액 유형은 비워둘 수 없습니다."
+    },
+    "batchNo": {
+      "notBlank": "배치 번호는 비워둘 수 없습니다.",
+      "size": "배치 번호는 64자를 초과할 수 없습니다."
+    },
+    "count": {
+      "notNull": "개수는 null일 수 없습니다.",
+      "min": "개수는 1보다 작을 수 없습니다.",
+      "max": "개수는 999보다 클 수 없습니다."
+    },
+    "ids": {
+      "notEmpty": "QR코드 보드를 선택해주세요."
+    },
+    "twoFactorCode": {
+      "notBlank": "인증 코드는 비워둘 수 없습니다."
+    },
+    "preAuthToken": {
+      "notBlank": "사전 인증 토큰은 비워둘 수 없습니다."
+    },
+    "remark": {
+      "size": "비고는 255자를 초과할 수 없습니다."
+    },
+    "lklAppId": {
+      "notBlank": "Lakala 애플리케이션 ID는 비워둘 수 없습니다."
+    },
+    "mchSerialNo": {
+      "notBlank": "판매자 인증서 일련번호는 비워둘 수 없습니다."
+    },
+    "orgCode": {
+      "notBlank": "조직 코드는 비워둘 수 없습니다."
+    },
+    "orgId": {
+      "notBlank": "조직 ID는 비워둘 수 없습니다."
+    },
+    "vbillMchNo": {
+      "notBlank": "VBill 판매자 번호는 비워둘 수 없습니다."
+    },
+    "lakalaMchNo": {
+      "notBlank": "Lakala 판매자 번호는 비워둘 수 없습니다."
+    },
+    "termNo": {
+      "notBlank": "터미널 번호는 비워둘 수 없습니다.",
+      "size": "터미널 번호는 64자를 초과할 수 없습니다."
+    },
+    "agentNo": {
+      "notBlank": "대리인 번호는 비워둘 수 없습니다."
+    },
+    "accessId": {
+      "notBlank": "액세스 ID는 비워둘 수 없습니다."
+    },
+    "merchNo": {
+      "notBlank": "Hkrt 판매자 번호는 비워둘 수 없습니다."
+    },
+    "pn": {
+      "notBlank": "SAAS 터미널 번호는 비워둘 수 없습니다."
+    },
+    "sysId": {
+      "notBlank": "ISV 시스템 ID는 비워둘 수 없습니다."
+    },
+    "productId": {
+      "notBlank": "제품 ID는 비워둘 수 없습니다."
+    },
+    "merchantNo": {
+      "notBlank": "Huifu 판매자 번호는 비워둘 수 없습니다."
+    },
+    "dougongAppId": {
+      "notBlank": "판매자 앱 ID는 비워둘 수 없습니다."
+    },
+    "sandAppId": {
+      "notBlank": "샌드 앱 ID는 비워둘 수 없습니다."
+    },
+    "credential": {
+      "notNull": "채널 자격 증명은 null일 수 없습니다."
+    },
+    "outTradeNo": {
+      "notBlank": "채널 거래 번호 비워둘 수 없습니다."
+    },
+    "outRefundNo": {
+      "notBlank": "채널 환불 번호 비워둘 수 없습니다."
+    },
+    "outRequestNo": {
+      "notBlank": "채널 요청 번호 비워둘 수 없습니다."
+    },
+    "tradeNo": {
+      "notBlank": "플랫폼 거래번호 비워둘 수 없습니다."
+    },
+    "tradeProduct": {
+      "notBlank": "무역 제품은 비워둘 수 없습니다."
+    },
+    "relationOrderNo": {
+      "notBlank": "관련 주문번호 비워둘 수 없습니다."
+    },
+    "refundAmount": {
+      "notNull": "환불 금액은 null일 수 없습니다.",
+      "positive": "환불 금액은 0보다 커야 합니다."
+    },
+    "subject": {
+      "notBlank": "지불 제목은 비워둘 수 없습니다."
+    },
+    "callbackBody": {
+      "notBlank": "콜백 본문은 비워둘 수 없습니다."
+    },
+    "callbackType": {
+      "notBlank": "콜백 유형은 비워둘 수 없습니다."
+    },
+    "rawData": {
+      "notBlank": "원시 데이터는 비워둘 수 없습니다."
+    },
+    "orderCreateTime": {
+      "notBlank": "주문 생성 시간은 비워둘 수 없습니다."
+    },
+    "orgReqDate": {
+      "notBlank": "원래 요청 날짜는 비워둘 수 없습니다."
+    },
+    "originOutTradeNo": {
+      "notBlank": "원래 채널 거래 번호 비워둘 수 없습니다."
+    },
+    "config": {
+      "notNull": "구성은 null일 수 없습니다."
+    },
+    "fuyouMchNo": {
+      "notBlank": "Fuyou 판매자 번호는 비워둘 수 없습니다."
+    },
+    "fyAppId": {
+      "notBlank": "Fuyou 앱 ID는 비워둘 수 없습니다."
+    },
+    "leshuaOrderId": {
+      "notBlank": "Leshua 주문 ID는 비워둘 수 없습니다."
+    },
+    "lsMchNo": {
+      "notBlank": "Leshua 판매자 번호는 비워둘 수 없습니다."
+    },
+    "fileName": {
+      "notBlank": "파일 이름은 비워둘 수 없습니다."
+    },
+    "fileContent": {
+      "notBlank": "파일 콘텐츠는 비워둘 수 없습니다."
+    }
+  }
+}

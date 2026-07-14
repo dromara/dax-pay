@@ -1,0 +1,7 @@
+{
+  "sendFailed": "メッセージの送信に失敗しました: {0}",
+  "delaySendFailed": "遅延メッセージの送信に失敗しました: {0}",
+  "serializeFailed": "メッセージのシリアル化に失敗しました: {0}",
+  "parseBodyFailed": "メッセージ本文の解析に失敗しました: {0}",
+  "typeConvertFailed": "メッセージタイプの変換に失敗しました: {0}"
+}

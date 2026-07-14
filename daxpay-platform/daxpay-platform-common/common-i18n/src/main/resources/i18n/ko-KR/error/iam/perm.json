@@ -1,0 +1,6 @@
+{
+  "codeDefinitionConflict": "충돌하는 권한 코드 정의: {0}",
+  "codeNotConfigured": "권한 코드 선언 누락 코드",
+  "nameCnNotConfigured": "권한 코드 선언에 nameCn이 누락되었습니다.",
+  "nameEnNotConfigured": "권한 코드 선언에 nameEn이 누락되었습니다."
+}

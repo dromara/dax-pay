@@ -1,0 +1,8 @@
+{
+  "normal": "通常の給与",
+  "gateway": "ゲートウェイペイ",
+  "authorize": "承認する",
+  "capture": "捕獲",
+  "recurring": "繰り返し発生する",
+  "combine_sub": "サブオーダーを結合する"
+}

@@ -1,0 +1,7 @@
+{
+  "notConfigured": "액세스 URL이 구성되지 않았습니다.",
+  "checkSuccess": "연결 확인 통과",
+  "checkFailed": "연결 확인 실패, HTTP 상태: {0}",
+  "echoMismatch": "연결 확인 실패, 백엔드 에코 응답 불일치",
+  "networkError": "네트워크에 연결할 수 없습니다. URL과 서비스 가용성을 확인하세요."
+}

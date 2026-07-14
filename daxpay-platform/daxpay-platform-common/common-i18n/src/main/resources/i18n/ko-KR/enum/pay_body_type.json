@@ -1,0 +1,8 @@
+{
+  "link": "결제 링크",
+  "jsapi": "JSAPI 객체",
+  "from": "양식 데이터",
+  "identifier": "식별자",
+  "qr_code": "QR코드",
+  "json": "JSON 객체"
+}

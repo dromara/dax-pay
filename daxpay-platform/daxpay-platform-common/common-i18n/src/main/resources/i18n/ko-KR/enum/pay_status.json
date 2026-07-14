@@ -1,0 +1,9 @@
+{
+  "wait": "보류 중",
+  "progress": "처리",
+  "success": "성공",
+  "close": "닫은",
+  "cancel": "취소",
+  "fail": "실패한",
+  "timeout": "시간 초과"
+}

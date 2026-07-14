@@ -1,0 +1,6 @@
+{
+  "no_refund": "환불되지 않음",
+  "refunding": "환불 중",
+  "partial_refund": "부분 환불됨",
+  "refunded": "전액 환불됨"
+}

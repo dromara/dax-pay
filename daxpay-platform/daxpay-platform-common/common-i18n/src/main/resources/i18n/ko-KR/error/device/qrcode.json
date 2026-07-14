@@ -1,0 +1,11 @@
+{
+  "notFound": "QR 코드 보드가 존재하지 않습니다",
+  "disabled": "QR 코드 보드가 비활성화되었습니다",
+  "mchNotFound": "QR코드판의 판매자가 존재하지 않습니다.",
+  "amountTypeNotFound": "일치하는 QR 코드 금액 유형이 없습니다: {0}",
+  "statusNotFound": "일치하는 QR 코드 상태가 없습니다: {0}",
+  "fixedAmountInvalid": "고정 금액은 0보다 커야 합니다.",
+  "batchNoExists": "배치 번호가 이미 존재합니다.",
+  "notAssigned": "QR코드 보드가 가맹점에 할당되지 않았습니다.",
+  "idsEmpty": "QR코드 보드를 선택해주세요."
+}

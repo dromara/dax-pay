@@ -1,0 +1,5 @@
+{
+  "notExist": "결제 상품을 찾을 수 없습니다.",
+  "duplicateCapability": "중복된 결제 기능 코드",
+  "capabilityNotExist": "결제 기능을 찾을 수 없습니다."
+}

@@ -1,0 +1,7 @@
+{
+  "privateKeyRequired": "비공개 키는 필수 항목입니다.",
+  "publicKeyRequired": "공개 키는 필수 항목입니다.",
+  "lklAppIdRequired": "Lakala 애플리케이션 ID가 필요합니다.",
+  "mchSerialNoRequired": "판매자 인증서 일련번호가 필요합니다.",
+  "termNoNotConfigured": "터미널 번호가 구성되지 않았습니다. 판매자 구성에서 설정하세요."
+}

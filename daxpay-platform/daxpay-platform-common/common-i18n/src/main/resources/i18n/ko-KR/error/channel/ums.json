@@ -1,0 +1,5 @@
+{
+  "payFailed": "UMS 결제 오류: {0}",
+  "closeFailed": "UMS 주문 종료 오류: {0}",
+  "notSupportMethod": "지원되지 않는 UMS 결제 수단: {0}"
+}
