@@ -1,7 +1,7 @@
 package cn.daxpay.open.payment.admin.service.merchant.gateway;
 
 import cn.daxpay.open.payment.merchant.enums.CashierItemResolveModeEnum;
-import cn.daxpay.open.payment.merchant.enums.CashierSceneEnum;
+import cn.daxpay.open.payment.merchant.enums.ClientEnvEnum;
 import cn.daxpay.open.payment.merchant.enums.GatewayCashierTypeEnum;
 import cn.daxpay.open.payment.merchant.dao.gateway.GatewayCashierItemManager;
 import cn.daxpay.open.payment.merchant.entity.gateway.GatewayCashierItem;
@@ -22,7 +22,7 @@ import java.util.Objects;
 
 /// # 网关收银台配置服务
 ///
-/// 管理应用级收银台支付项: H5 按终端 scene 分桶, WEB 扁平列表;
+/// 管理应用级收银台支付项: H5 按客户端环境 clientEnv 分桶, WEB 扁平列表;
 /// 每项支持 method / direct 两种支付解析模式。
 @Slf4j
 @Service
@@ -31,11 +31,11 @@ public class GatewayCashierConfigService {
 
     private final GatewayCashierItemManager itemManager;
 
-    /// 按应用 + 收银台类型 + 场景列出支付项
-    public List<GatewayCashierItemResult> list(String appId, String cashierType, String scene) {
+    /// 按应用 + 收银台类型 + 客户端环境列出支付项
+    public List<GatewayCashierItemResult> list(String appId, String cashierType, String clientEnv) {
         GatewayCashierTypeEnum typeEnum = GatewayCashierTypeEnum.findByCode(cashierType);
-        String normalizedScene = normalizeSceneForQuery(typeEnum, scene);
-        return itemManager.listByAppAndBucket(appId, typeEnum.getCode(), normalizedScene).stream()
+        String normalizedClientEnv = normalizeClientEnvForQuery(typeEnum, clientEnv);
+        return itemManager.listByAppAndBucket(appId, typeEnum.getCode(), normalizedClientEnv).stream()
                 .map(this::toResult)
                 .toList();
     }
@@ -80,18 +80,18 @@ public class GatewayCashierConfigService {
                 .orElseThrow(() -> new DataNotExistException("pay.error.gateway.cashierItemNotFound"));
     }
 
-    /// 规范化 scene 查询参数
-    private String normalizeSceneForQuery(GatewayCashierTypeEnum typeEnum, String scene) {
+    /// 规范化 clientEnv 查询参数
+    private String normalizeClientEnvForQuery(GatewayCashierTypeEnum typeEnum, String clientEnv) {
         if (typeEnum == GatewayCashierTypeEnum.WEB) {
             return null;
         }
-        if (StrUtil.isBlank(scene)) {
+        if (StrUtil.isBlank(clientEnv)) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                    "pay.error.gateway.cashierSceneRequired");
+                    "pay.error.gateway.clientEnvRequired");
         }
-        // 校验 scene 合法
-        CashierSceneEnum.findByCode(scene);
-        return scene;
+        // 校验 clientEnv 合法
+        ClientEnvEnum.findByCode(clientEnv);
+        return clientEnv;
     }
 
     /// 校验并规范化写入字段
@@ -99,16 +99,16 @@ public class GatewayCashierConfigService {
         GatewayCashierTypeEnum typeEnum = GatewayCashierTypeEnum.findByCode(param.getCashierType());
         CashierItemResolveModeEnum resolveMode = CashierItemResolveModeEnum.findByCode(param.getResolveMode());
 
-        String scene = param.getScene();
+        String clientEnv = param.getClientEnv();
         if (typeEnum == GatewayCashierTypeEnum.WEB) {
-            // WEB 固定无 scene
-            scene = null;
+            // WEB 固定无 clientEnv
+            clientEnv = null;
         } else {
-            if (StrUtil.isBlank(scene)) {
+            if (StrUtil.isBlank(clientEnv)) {
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                        "pay.error.gateway.cashierSceneRequired");
+                        "pay.error.gateway.clientEnvRequired");
             }
-            CashierSceneEnum.findByCode(scene);
+            ClientEnvEnum.findByCode(clientEnv);
         }
 
         String method = StrUtil.trimToNull(param.getMethod());
@@ -146,7 +146,7 @@ public class GatewayCashierConfigService {
         Integer sortNo = param.getSortNo() != null ? param.getSortNo() : 0;
         String icon = StrUtil.trimToNull(param.getIcon());
 
-        return new NormalizedItem(typeEnum.getCode(), scene, name, icon, recommend, sortNo,
+        return new NormalizedItem(typeEnum.getCode(), clientEnv, name, icon, recommend, sortNo,
                 resolveMode.getCode(), method, channelMchNo, capability);
     }
 
@@ -156,7 +156,7 @@ public class GatewayCashierConfigService {
             entity.setAppId(appId);
         }
         entity.setCashierType(n.cashierType());
-        entity.setScene(n.scene());
+        entity.setClientEnv(n.clientEnv());
         entity.setName(n.name());
         entity.setIcon(n.icon());
         entity.setRecommend(n.recommend());
@@ -175,7 +175,7 @@ public class GatewayCashierConfigService {
 
     private record NormalizedItem(
             String cashierType,
-            String scene,
+            String clientEnv,
             String name,
             String icon,
             Boolean recommend,

@@ -36,8 +36,8 @@ public class GatewayCashierConfigAdminController {
     public Result<List<GatewayCashierItemResult>> list(
             @NotBlank(message = "{validation.field.appId.notBlank}") String appId,
             @NotBlank(message = "{validation.field.cashierType.notBlank}") String cashierType,
-            String scene) {
-        return Res.ok(gatewayCashierConfigService.list(appId, cashierType, scene));
+            String clientEnv) {
+        return Res.ok(gatewayCashierConfigService.list(appId, cashierType, clientEnv));
     }
 
     @PermCode(code = PermCodes.Action.VIEW)

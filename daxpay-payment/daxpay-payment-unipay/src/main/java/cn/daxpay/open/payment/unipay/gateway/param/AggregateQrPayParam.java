@@ -1,6 +1,6 @@
 package cn.daxpay.open.payment.unipay.gateway.param;
 
-import cn.daxpay.open.payment.merchant.enums.CashierSceneEnum;
+import cn.daxpay.open.payment.merchant.enums.ClientEnvEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -16,12 +16,12 @@ public class AggregateQrPayParam {
     @Size(max = 64, message = "{validation.field.orderNo.size}")
     private String orderNo;
 
-    /// 收银场景（环境识别，与聚合/收银台配置共用 [CashierSceneEnum]）
-    /// @see CashierSceneEnum
-    @Schema(description = "收银场景(CashierSceneEnum: wechat_pay/alipay/union_pay/douyin/browser)")
-    @NotBlank(message = "{validation.field.scene.notBlank}")
-    @Size(max = 32, message = "{validation.field.scene.size}")
-    private String scene;
+    /// 客户端环境（UA/宿主识别，与聚合/收银台配置共用 [ClientEnvEnum]）
+    /// @see ClientEnvEnum
+    @Schema(description = "客户端环境(ClientEnvEnum: wechat_pay/alipay/union_pay/douyin/browser)")
+    @NotBlank(message = "{validation.field.clientEnv.notBlank}")
+    @Size(max = 32, message = "{validation.field.clientEnv.size}")
+    private String clientEnv;
 
     @Schema(description = "OpenId(微信 JSAPI 等)")
     @Size(max = 128, message = "{validation.field.openId.size}")

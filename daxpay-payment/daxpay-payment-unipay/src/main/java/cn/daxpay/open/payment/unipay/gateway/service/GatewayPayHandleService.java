@@ -56,7 +56,7 @@ public class GatewayPayHandleService {
     /// @param capability   支付能力(DIRECT 模式必填)
     public NormalPayResult handle(GatewayPayOrder order, String product, String method,
                                   String channelMchNo, String capability,
-                                  String openId, String scene, String device, String clientIp) {
+                                  String openId, String clientEnv, String device, String clientIp) {
         LockInfo lock = lockTemplate.lock("payment:gateway:pay:" + order.getOrderNo(), 10000, 200);
         if (Objects.isNull(lock)) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.processing");
@@ -104,10 +104,10 @@ public class GatewayPayHandleService {
             // 建 Trade(若无) + 回填容器
             if (existing == null) {
                 existing = SpringUtil.getBean(this.getClass())
-                        .createTrade(order, payParam, scene, device);
+                        .createTrade(order, payParam, clientEnv, device);
             } else {
                 // 回填路由结果到容器
-                this.fillRouteOnOrder(order, payParam, scene, device);
+                this.fillRouteOnOrder(order, payParam, clientEnv, device);
                 gatewayPayOrderManager.updateById(order);
             }
             context.setTrade(existing);
@@ -130,7 +130,7 @@ public class GatewayPayHandleService {
 
     /// 创建资金凭证并更新容器为 paying
     @Transactional(rollbackFor = Exception.class)
-    public PayTrade createTrade(GatewayPayOrder order, NormalPayParam payParam, String scene, String device) {
+    public PayTrade createTrade(GatewayPayOrder order, NormalPayParam payParam, String clientEnv, String device) {
         var productEnum = ProductEnum.findByCode(payParam.getProduct());
         String channel = productEnum.getChannel();
 
@@ -150,7 +150,7 @@ public class GatewayPayHandleService {
         trade.setSource(TradeSourceEnum.AGGRESS_PAY.getCode());
         payTradeManager.save(trade);
 
-        this.fillRouteOnOrder(order, payParam, scene, device);
+        this.fillRouteOnOrder(order, payParam, clientEnv, device);
         order.setStatus(GatewayOrderStatusEnum.PAYING.getCode());
         order.setChannel(channel);
         order.setMethod(payParam.getMethod());
@@ -178,13 +178,13 @@ public class GatewayPayHandleService {
         return this.buildResult(latest, trade);
     }
 
-    private void fillRouteOnOrder(GatewayPayOrder order, NormalPayParam payParam, String scene, String device) {
+    private void fillRouteOnOrder(GatewayPayOrder order, NormalPayParam payParam, String clientEnv, String device) {
         order.setChannelMchNo(payParam.getChannelMchNo());
         order.setCapability(payParam.getCapability());
         // doBeforePay 后 payParam.channelAppId 为实际解析值
         order.setChannelAppId(payParam.getChannelAppId());
-        if (StrUtil.isNotBlank(scene)) {
-            order.setScene(scene);
+        if (StrUtil.isNotBlank(clientEnv)) {
+            order.setClientEnv(clientEnv);
         }
         if (StrUtil.isNotBlank(device)) {
             order.setDevice(device);

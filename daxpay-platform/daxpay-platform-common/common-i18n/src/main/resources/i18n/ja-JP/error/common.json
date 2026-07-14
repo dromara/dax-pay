@@ -32,7 +32,7 @@
   "backendBaseUrlNotConfigured": "バックエンド ベース URL (backendBaseUrl) が構成されていないため、コールバック URL を生成できません",
   "requestContextMissing": "リクエストコンテキストを取得できません",
   "gatewayUrlNotConfigured": "支払いゲートウェイのベース URL (paymentGatewayBaseUrl) が構成されていないため、認証コールバック URL を生成できません",
-  "cashierSceneNotExist": "レジ係のシーンが見つかりません: {0}",
+  "clientEnvNotExist": "クライアント環境が見つかりません: {0}",
   "gatewayPayTypeNotExist": "ゲートウェイの支払いタイプが見つかりません: {0}",
   "aggregateConfigLevelNotExist": "集約構成レベルが見つかりません: {0}",
   "gatewayCashierTypeNotExist": "ゲートウェイ レジ係のタイプが見つかりません: {0}",

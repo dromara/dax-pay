@@ -2,13 +2,13 @@ package cn.daxpay.open.payment.merchant.service.gateway;
 
 import cn.daxpay.open.payment.merchant.enums.AggregateConfigLevelEnum;
 import cn.daxpay.open.payment.merchant.dao.gateway.GatewayAggregateConfigManager;
-import cn.daxpay.open.payment.merchant.dao.gateway.GatewayAggregateSceneManager;
+import cn.daxpay.open.payment.merchant.dao.gateway.GatewayAggregateClientEnvManager;
 import cn.daxpay.open.payment.merchant.entity.gateway.GatewayAggregateConfig;
-import cn.daxpay.open.payment.merchant.entity.gateway.GatewayAggregateScene;
+import cn.daxpay.open.payment.merchant.entity.gateway.GatewayAggregateClientEnv;
 import cn.daxpay.open.payment.merchant.param.gateway.GatewayAggregateConfigParam;
-import cn.daxpay.open.payment.merchant.param.gateway.GatewayAggregateSceneParam;
+import cn.daxpay.open.payment.merchant.param.gateway.GatewayAggregateClientEnvParam;
 import cn.daxpay.open.payment.merchant.result.gateway.GatewayAggregateConfigResult;
-import cn.daxpay.open.payment.merchant.result.gateway.GatewayAggregateSceneResult;
+import cn.daxpay.open.payment.merchant.result.gateway.GatewayAggregateClientEnvResult;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.hutool.core.bean.BeanUtil;
@@ -24,25 +24,25 @@ import java.util.List;
 
 /// # 网关聚合扫码配置服务
 ///
-/// 管理聚合扫码配置的主表(配置深度)与场景子表(每场景支付方式/通道),
-/// 按 level 校验场景子表填充完整性。
+/// 管理聚合扫码配置的主表(配置深度)与客户端环境子表(每环境支付方式/通道),
+/// 按 level 校验客户端环境子表填充完整性。
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class GatewayAggregateConfigService {
 
     private final GatewayAggregateConfigManager configManager;
-    private final GatewayAggregateSceneManager sceneManager;
+    private final GatewayAggregateClientEnvManager clientEnvManager;
 
     /// 按应用查询, 不存在返回空对象(含 level 默认 AUTO)
     public GatewayAggregateConfigResult findByAppId(String appId) {
         return configManager.findByAppId(appId)
-                .map(this::toResultWithScenes)
+                .map(this::toResultWithClientEnvs)
                 .orElseGet(() -> new GatewayAggregateConfigResult()
                         .setAppId(appId)
                         .setLevel(AggregateConfigLevelEnum.AUTO.getCode())
                         .setAutoLaunch(false)
-                        .setScenes(List.of()));
+                        .setClientEnvs(List.of()));
     }
 
     /// 支付时必须已配置
@@ -56,7 +56,7 @@ public class GatewayAggregateConfigService {
     @Transactional(rollbackFor = Exception.class)
     public void saveOrUpdate(GatewayAggregateConfigParam param) {
         AggregateConfigLevelEnum level = AggregateConfigLevelEnum.findByCode(param.getLevel());
-        validateScenes(level, param.getScenes());
+        validateClientEnvs(level, param.getClientEnvs());
 
         // 主表保存或更新
         GatewayAggregateConfig config = configManager.findByAppId(param.getAppId())
@@ -73,67 +73,67 @@ public class GatewayAggregateConfigService {
         configManager.saveOrUpdate(config);
 
         // 子表替换: 先删后插
-        sceneManager.deleteByConfigId(config.getId());
-        if (CollUtil.isNotEmpty(param.getScenes())) {
-            List<GatewayAggregateScene> scenes = new ArrayList<>();
-            for (GatewayAggregateSceneParam sceneParam : param.getScenes()) {
-                GatewayAggregateScene scene = new GatewayAggregateScene()
+        clientEnvManager.deleteByConfigId(config.getId());
+        if (CollUtil.isNotEmpty(param.getClientEnvs())) {
+            List<GatewayAggregateClientEnv> clientEnvs = new ArrayList<>();
+            for (GatewayAggregateClientEnvParam envParam : param.getClientEnvs()) {
+                GatewayAggregateClientEnv env = new GatewayAggregateClientEnv()
                         .setConfigId(config.getId())
-                        .setScene(sceneParam.getScene())
-                        .setMethod(sceneParam.getMethod())
-                        .setChannelMchNo(sceneParam.getChannelMchNo())
-                        .setCapability(sceneParam.getCapability());
-                scenes.add(scene);
+                        .setClientEnv(envParam.getClientEnv())
+                        .setMethod(envParam.getMethod())
+                        .setChannelMchNo(envParam.getChannelMchNo())
+                        .setCapability(envParam.getCapability());
+                clientEnvs.add(env);
             }
-            sceneManager.saveAll(scenes);
+            clientEnvManager.saveAll(clientEnvs);
         }
     }
 
-    /// 按 level 校验场景子表填充完整性
-    private void validateScenes(AggregateConfigLevelEnum level, List<GatewayAggregateSceneParam> scenes) {
+    /// 按 level 校验客户端环境子表填充完整性
+    private void validateClientEnvs(AggregateConfigLevelEnum level, List<GatewayAggregateClientEnvParam> clientEnvs) {
         if (level == AggregateConfigLevelEnum.AUTO) {
             // AUTO 模式不校验子表
             return;
         }
-        if (CollUtil.isEmpty(scenes)) {
+        if (CollUtil.isEmpty(clientEnvs)) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                    "pay.error.gateway.aggregateScenesRequired");
+                    "pay.error.gateway.aggregateClientEnvsRequired");
         }
-        for (GatewayAggregateSceneParam scene : scenes) {
-            if (StrUtil.isBlank(scene.getScene())) {
+        for (GatewayAggregateClientEnvParam env : clientEnvs) {
+            if (StrUtil.isBlank(env.getClientEnv())) {
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                        "pay.error.gateway.aggregateSceneBlank");
+                        "pay.error.gateway.aggregateClientEnvBlank");
             }
-            if (level == AggregateConfigLevelEnum.METHOD && StrUtil.isBlank(scene.getMethod())) {
+            if (level == AggregateConfigLevelEnum.METHOD && StrUtil.isBlank(env.getMethod())) {
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                        "pay.error.gateway.aggregateSceneMethodRequired");
+                        "pay.error.gateway.aggregateClientEnvMethodRequired");
             }
             if (level == AggregateConfigLevelEnum.DIRECT) {
-                if (StrUtil.isBlank(scene.getChannelMchNo())) {
+                if (StrUtil.isBlank(env.getChannelMchNo())) {
                     throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                            "pay.error.gateway.aggregateSceneChannelMchRequired");
+                            "pay.error.gateway.aggregateClientEnvChannelMchRequired");
                 }
-                if (StrUtil.isBlank(scene.getCapability())) {
+                if (StrUtil.isBlank(env.getCapability())) {
                     throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                            "pay.error.gateway.aggregateSceneCapabilityRequired");
+                            "pay.error.gateway.aggregateClientEnvCapabilityRequired");
                 }
             }
         }
     }
 
-    /// 组装主表 + 场景子表为 Result
-    private GatewayAggregateConfigResult toResultWithScenes(GatewayAggregateConfig entity) {
+    /// 组装主表 + 客户端环境子表为 Result
+    private GatewayAggregateConfigResult toResultWithClientEnvs(GatewayAggregateConfig entity) {
         GatewayAggregateConfigResult result = new GatewayAggregateConfigResult();
         BeanUtil.copyProperties(entity, result);
-        List<GatewayAggregateScene> scenes = sceneManager.findByConfigId(entity.getId());
-        List<GatewayAggregateSceneResult> sceneResults = scenes.stream()
-                .map(s -> new GatewayAggregateSceneResult()
-                        .setScene(s.getScene())
+        List<GatewayAggregateClientEnv> clientEnvs = clientEnvManager.findByConfigId(entity.getId());
+        List<GatewayAggregateClientEnvResult> envResults = clientEnvs.stream()
+                .map(s -> new GatewayAggregateClientEnvResult()
+                        .setClientEnv(s.getClientEnv())
                         .setMethod(s.getMethod())
                         .setChannelMchNo(s.getChannelMchNo())
                         .setCapability(s.getCapability()))
                 .toList();
-        result.setScenes(sceneResults);
+        result.setClientEnvs(envResults);
         return result;
     }
 }

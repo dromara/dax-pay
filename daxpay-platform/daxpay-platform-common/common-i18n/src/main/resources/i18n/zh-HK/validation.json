@@ -533,9 +533,12 @@
     "oldPassword": {
       "notBlank": "舊密碼不能為空"
     },
+    "clientEnv": {
+      "notBlank": "用戶端環境不能為空",
+      "size": "用戶端環境編碼不可超過32位"
+    },
     "scene": {
-      "notNull": "消息場景不能為空",
-      "size": "場景編碼不可超過32位"
+      "notNull": "訊息場景不能為空"
     },
     "demoContent": {
       "notBlank": "消息內容不能為空"

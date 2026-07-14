@@ -533,9 +533,12 @@
     "oldPassword": {
       "notBlank": "Kata laluan lama tidak boleh kosong"
     },
+    "clientEnv": {
+      "notBlank": "Persekitaran klien tidak boleh kosong",
+      "size": "Kod persekitaran klien tidak boleh melebihi 32 aksara"
+    },
     "scene": {
-      "notNull": "Adegan mesej tidak boleh kosong",
-      "size": "Kod adegan tidak boleh melebihi 32 aksara"
+      "notNull": "Adegan mesej tidak boleh kosong"
     },
     "demoContent": {
       "notBlank": "Kandungan mesej tidak boleh kosong"

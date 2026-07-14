@@ -11,10 +11,10 @@ import lombok.experimental.Accessors;
 
 /// # 网关聚合扫码配置(应用级)
 ///
-/// 按配置深度(level)控制场景解析支付方式的自由度, 场景明细存储在 [GatewayAggregateScene] 子表。
+/// 按配置深度(level)控制客户端环境解析支付方式的自由度, 明细存储在 [GatewayAggregateClientEnv] 子表。
 /// - AUTO: 子表无需配置, 系统按扫码环境推导支付方式
-/// - METHOD: 子表每场景配置支付方式(method)
-/// - DIRECT: 子表每场景配置通道商户号(channelMchNo)+支付能力(capability)
+/// - METHOD: 子表每客户端环境配置支付方式(method)
+/// - DIRECT: 子表每客户端环境配置通道商户号(channelMchNo)+支付能力(capability)
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)

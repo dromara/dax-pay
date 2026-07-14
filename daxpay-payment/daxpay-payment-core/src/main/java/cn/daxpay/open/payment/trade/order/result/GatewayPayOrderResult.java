@@ -12,7 +12,7 @@ import java.time.OffsetDateTime;
 ///
 /// 列表场景仅填充容器(GatewayPayOrder)字段;
 /// 详情场景额外填充资金凭证(PayTrade)字段: tradeNo / outOrderNo / fundStatus 等。
-/// 字段契约与 [NormalPayOrderResult] 对齐, 另含网关独有 gatewayType / scene / device。
+/// 字段契约与 [NormalPayOrderResult] 对齐, 另含网关独有 gatewayType / clientEnv / device。
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
@@ -77,9 +77,9 @@ public class GatewayPayOrderResult extends BaseResult {
     @Schema(description = "限制支付类型")
     private String limitPay;
 
-    /// @see cn.daxpay.open.payment.merchant.enums.CashierSceneEnum
-    @Schema(description = "收银场景(环境识别)")
-    private String scene;
+    /// @see cn.daxpay.open.payment.merchant.enums.ClientEnvEnum
+    @Schema(description = "客户端环境(UA/宿主识别)")
+    private String clientEnv;
 
     @Schema(description = "设备(mobile/pc)")
     private String device;

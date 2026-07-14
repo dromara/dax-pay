@@ -1,7 +1,7 @@
 package cn.daxpay.open.payment.merchant.param.gateway;
 
 import cn.daxpay.open.payment.merchant.enums.CashierItemResolveModeEnum;
-import cn.daxpay.open.payment.merchant.enums.CashierSceneEnum;
+import cn.daxpay.open.payment.merchant.enums.ClientEnvEnum;
 import cn.daxpay.open.payment.merchant.enums.GatewayCashierTypeEnum;
 import cn.daxpay.open.platform.core.validation.ValidationGroup;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -35,10 +35,10 @@ public class GatewayCashierItemParam {
     @Size(max = 16, message = "{validation.field.cashierType.size}")
     private String cashierType;
 
-    /// @see CashierSceneEnum
-    @Schema(description = "H5终端场景; WEB为空")
-    @Size(max = 32, message = "{validation.field.scene.size}")
-    private String scene;
+    /// @see ClientEnvEnum
+    @Schema(description = "H5客户端环境; WEB为空")
+    @Size(max = 32, message = "{validation.field.clientEnv.size}")
+    private String clientEnv;
 
     @Schema(description = "前台展示名称")
     @NotBlank(message = "{validation.field.name.notBlank}")

@@ -28,6 +28,6 @@ public class GatewayAggregateConfigResult {
     @Schema(description = "是否自动拉起支付")
     private Boolean autoLaunch;
 
-    @Schema(description = "场景配置列表")
-    private List<GatewayAggregateSceneResult> scenes;
+    @Schema(description = "客户端环境配置列表")
+    private List<GatewayAggregateClientEnvResult> clientEnvs;
 }

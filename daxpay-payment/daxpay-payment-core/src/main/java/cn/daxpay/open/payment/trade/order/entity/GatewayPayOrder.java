@@ -1,12 +1,14 @@
 package cn.daxpay.open.payment.trade.order.entity;
 
 import cn.daxpay.open.payment.common.entity.MchBaseEntity;
-import cn.daxpay.open.payment.merchant.enums.CashierSceneEnum;
+import cn.daxpay.open.payment.merchant.enums.ClientEnvEnum;
 import cn.daxpay.open.payment.trade.enums.GatewayOrderStatusEnum;
 import cn.daxpay.open.payment.trade.enums.GatewayPayTypeEnum;
 import cn.daxpay.open.payment.unipay.param.trade.pay.GoodsDetail;
 import cn.daxpay.open.platform.core.enums.pay.channel.CurrencyEnum;
+import cn.daxpay.open.platform.core.enums.pay.channel.PayCapabilityEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
+import cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
@@ -61,7 +63,7 @@ public class GatewayPayOrder extends MchBaseEntity {
     /// 商户附加参数（回调原样返回）
     private String attach;
 
-    /// 业务单过期时间（超时关单权威，不落 pay_trade）
+    /// 业务单过期时间
     private OffsetDateTime expiredTime;
 
     // ===== 金额（冗余，方便查询；预下单即确定，支付前可无 Trade）=====
@@ -96,9 +98,9 @@ public class GatewayPayOrder extends MchBaseEntity {
     /// 微信 openid（jsapi/app/miniapp）
     private String openid;
 
-    /// 收银场景（环境识别，支付时回填；与聚合/收银台配置共用同一字典）
-    /// @see CashierSceneEnum
-    private String scene;
+    /// 客户端环境（UA/宿主识别，支付时回填；与聚合/收银台配置共用同一字典；非支付渠道、非沙箱环境）
+    /// @see ClientEnvEnum
+    private String clientEnv;
 
     /// 最后发起设备（mobile/pc，支付时回填；与 H5 端 window.__DEVICE__ 一致）
     private String device;
@@ -117,7 +119,7 @@ public class GatewayPayOrder extends MchBaseEntity {
     private String channelMchNo;
 
     /// 支付能力编码(路由回填)
-    /// @see cn.daxpay.open.platform.core.enums.pay.channel.PayCapabilityEnum
+    /// @see PayCapabilityEnum
     private String capability;
 
     /// 通道应用 AppId（本笔交易实际使用的微信/通道侧 AppId 快照；解析后写入，关退同步复用）
@@ -126,7 +128,7 @@ public class GatewayPayOrder extends MchBaseEntity {
     // ===== 通道回执（支付成功/同步后写入）=====
 
     /// 支付渠道（微信/支付宝/银联等，三方通道透传时填）
-    /// @see cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum
+    /// @see PayProviderEnum
     private String provider;
 
     /// 付款用户标识（支付宝 user_id、微信 openid 等，非通道 AppId）

@@ -15,9 +15,9 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public enum GatewayCashierTypeEnum implements I18nSupport {
 
-    /// H5 收银台(按终端 scene 再分桶)
+    /// H5 收银台(按客户端环境 clientEnv 再分桶)
     H5("h5"),
-    /// WEB/PC 收银台(扁平列表, scene 为空)
+    /// WEB/PC 收银台(扁平列表, clientEnv 为空)
     WEB("web"),
     ;
 

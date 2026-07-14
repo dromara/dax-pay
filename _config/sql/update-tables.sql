@@ -163,3 +163,48 @@ ALTER TABLE "public"."pay_trade" DROP COLUMN IF EXISTS "pay_body_type";
 ALTER TABLE "public"."pay_trade" DROP COLUMN IF EXISTS "expired_time";
 
 COMMENT ON COLUMN "public"."pay_trade"."relation_order_no" IS '实际上送通道的商户订单号(普通=order_no, 特殊=变形号; 回调反查权威)';
+
+
+-- ClientEnv rename: cashier scene -> client_env
+-- 网关订单
+DO $$ BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public' AND table_name = 'pay_gateway_order' AND column_name = 'scene'
+  ) THEN
+    ALTER TABLE "public"."pay_gateway_order" RENAME COLUMN "scene" TO "client_env";
+  END IF;
+END $$;
+COMMENT ON COLUMN "public"."pay_gateway_order"."client_env" IS '客户端环境(ClientEnvEnum)';
+
+-- 收银台支付项
+DO $$ BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public' AND table_name = 'pay_gateway_cashier_item' AND column_name = 'scene'
+  ) THEN
+    ALTER TABLE "public"."pay_gateway_cashier_item" RENAME COLUMN "scene" TO "client_env";
+  END IF;
+END $$;
+COMMENT ON COLUMN "public"."pay_gateway_cashier_item"."client_env" IS '客户端环境(ClientEnvEnum)；WEB 为空';
+
+-- 聚合配置子表: 表名 + 列名
+DO $$ BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.tables
+    WHERE table_schema = 'public' AND table_name = 'pay_gateway_aggregate_scene'
+  ) THEN
+    ALTER TABLE "public"."pay_gateway_aggregate_scene" RENAME TO "pay_gateway_aggregate_client_env";
+  END IF;
+END $$;
+
+DO $$ BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public' AND table_name = 'pay_gateway_aggregate_client_env' AND column_name = 'scene'
+  ) THEN
+    ALTER TABLE "public"."pay_gateway_aggregate_client_env" RENAME COLUMN "scene" TO "client_env";
+  END IF;
+END $$;
+COMMENT ON TABLE "public"."pay_gateway_aggregate_client_env" IS '网关聚合配置-客户端环境项';
+COMMENT ON COLUMN "public"."pay_gateway_aggregate_client_env"."client_env" IS '客户端环境(ClientEnvEnum)';

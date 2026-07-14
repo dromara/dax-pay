@@ -11,15 +11,15 @@ import java.util.List;
 @Repository
 public class GatewayCashierItemManager extends BaseManager<GatewayCashierItemMapper, GatewayCashierItem> {
 
-    /// 按应用 + 收银台类型 + 场景查询, 按 sort_no 升序
+    /// 按应用 + 收银台类型 + 客户端环境查询, 按 sort_no 升序
     ///
-    /// WEB 的 scene 传 null, 条件为 scene is null。
-    public List<GatewayCashierItem> listByAppAndBucket(String appId, String cashierType, String scene) {
+    /// WEB 的 clientEnv 传 null, 条件为 client_env is null。
+    public List<GatewayCashierItem> listByAppAndBucket(String appId, String cashierType, String clientEnv) {
         return lambdaQuery()
                 .eq(GatewayCashierItem::getAppId, appId)
                 .eq(GatewayCashierItem::getCashierType, cashierType)
-                .eq(StrUtil.isNotBlank(scene), GatewayCashierItem::getScene, scene)
-                .isNull(StrUtil.isBlank(scene), GatewayCashierItem::getScene)
+                .eq(StrUtil.isNotBlank(clientEnv), GatewayCashierItem::getClientEnv, clientEnv)
+                .isNull(StrUtil.isBlank(clientEnv), GatewayCashierItem::getClientEnv)
                 .orderByAsc(GatewayCashierItem::getSortNo)
                 .orderByAsc(GatewayCashierItem::getId)
                 .list();

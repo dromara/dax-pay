@@ -32,7 +32,7 @@
   "backendBaseUrlNotConfigured": "URL asas backend (backendBaseUrl) tidak dikonfigurasikan, tidak boleh menjana URL panggil balik",
   "requestContextMissing": "Tidak boleh mendapatkan konteks permintaan",
   "gatewayUrlNotConfigured": "URL asas get laluan pembayaran (paymentGatewayBaseUrl) tidak dikonfigurasikan, tidak boleh menjana URL panggil balik pengesahan",
-  "cashierSceneNotExist": "Adegan juruwang tidak ditemui: {0}",
+  "clientEnvNotExist": "Persekitaran klien tidak ditemui: {0}",
   "gatewayPayTypeNotExist": "Jenis pembayaran gerbang tidak ditemui: {0}",
   "aggregateConfigLevelNotExist": "Tahap konfigurasi agregat tidak ditemui: {0}",
   "gatewayCashierTypeNotExist": "Jenis juruwang pintu masuk tidak ditemui: {0}",

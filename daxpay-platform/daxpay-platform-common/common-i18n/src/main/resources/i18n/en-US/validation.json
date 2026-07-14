@@ -537,9 +537,12 @@
     "oldPassword": {
       "notBlank": "Old password cannot be blank"
     },
+    "clientEnv": {
+      "notBlank": "Client environment must not be blank",
+      "size": "Client environment code must not exceed 32 characters"
+    },
     "scene": {
-      "notNull": "Message scene cannot be blank",
-      "size": "Scene code cannot exceed 32 characters"
+      "notNull": "Message scene must not be null"
     },
     "demoContent": {
       "notBlank": "Message content cannot be blank"

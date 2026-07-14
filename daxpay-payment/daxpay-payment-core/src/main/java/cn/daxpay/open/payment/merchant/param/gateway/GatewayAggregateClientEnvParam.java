@@ -4,15 +4,15 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
-/// # 网关聚合扫码场景配置参数(子表)
+/// # 网关聚合扫码客户端环境配置参数(子表)
 @Data
-@Schema(title = "网关聚合扫码场景配置参数")
-public class GatewayAggregateSceneParam {
+@Schema(title = "网关聚合扫码客户端环境配置参数")
+public class GatewayAggregateClientEnvParam {
 
-    /// @see cn.daxpay.open.payment.merchant.enums.CashierSceneEnum
-    @Schema(description = "场景编码: wechat_pay/alipay/union_pay/douyin")
-    @Size(max = 32, message = "{validation.field.scene.size}")
-    private String scene;
+    /// @see cn.daxpay.open.payment.merchant.enums.ClientEnvEnum
+    @Schema(description = "客户端环境编码: wechat_pay/alipay/union_pay/douyin")
+    @Size(max = 32, message = "{validation.field.clientEnv.size}")
+    private String clientEnv;
 
     /// @see cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum
     @Schema(description = "支付方式(METHOD 模式填)")

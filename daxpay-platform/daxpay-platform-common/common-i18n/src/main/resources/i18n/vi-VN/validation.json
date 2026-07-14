@@ -533,9 +533,12 @@
     "oldPassword": {
       "notBlank": "Mật khẩu cũ không được để trống"
     },
+    "clientEnv": {
+      "notBlank": "Môi trường máy khách không được để trống",
+      "size": "Mã môi trường máy khách không được vượt quá 32 ký tự"
+    },
     "scene": {
-      "notNull": "Cảnh tin nhắn không được để trống",
-      "size": "Mã cảnh không được vượt quá 32 ký tự"
+      "notNull": "Cảnh tin nhắn không được để trống"
     },
     "demoContent": {
       "notBlank": "Nội dung tin nhắn không được để trống"

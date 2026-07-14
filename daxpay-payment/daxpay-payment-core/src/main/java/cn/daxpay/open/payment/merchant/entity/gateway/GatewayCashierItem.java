@@ -2,7 +2,7 @@ package cn.daxpay.open.payment.merchant.entity.gateway;
 
 import cn.daxpay.open.payment.common.entity.MchBaseEntity;
 import cn.daxpay.open.payment.merchant.enums.CashierItemResolveModeEnum;
-import cn.daxpay.open.payment.merchant.enums.CashierSceneEnum;
+import cn.daxpay.open.payment.merchant.enums.ClientEnvEnum;
 import cn.daxpay.open.payment.merchant.enums.GatewayCashierTypeEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayCapabilityEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
@@ -15,9 +15,9 @@ import lombok.experimental.Accessors;
 
 /// # 网关收银台支付项配置(应用级)
 ///
-/// 一张表按 cashier_type + scene 分桶:
-/// - H5: scene 必填(browser/wechat_pay/alipay/union_pay/douyin), 每终端一套支付项
-/// - WEB: scene 为空, 一套扁平支付项
+/// 一张表按 cashier_type + client_env 分桶:
+/// - H5: clientEnv 必填(browser/wechat_pay/alipay/union_pay/douyin), 每终端一套支付项
+/// - WEB: clientEnv 为空, 一套扁平支付项
 /// 支付解析按项 resolve_mode:
 /// - METHOD: 填 method
 /// - DIRECT: 填 channelMchNo + capability
@@ -35,9 +35,9 @@ public class GatewayCashierItem extends MchBaseEntity {
     /// @see GatewayCashierTypeEnum
     private String cashierType;
 
-    /// H5 终端场景; WEB 为空
-    /// @see CashierSceneEnum
-    private String scene;
+    /// 客户端环境（UA/宿主识别；聚合扫码与收银台 H5 共用；非支付渠道、非沙箱环境）；WEB 为空
+    /// @see ClientEnvEnum
+    private String clientEnv;
 
     /// 前台展示名称
     private String name;

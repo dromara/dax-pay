@@ -11,10 +11,10 @@ import java.util.List;
 
 /// # 网关聚合扫码配置参数
 ///
-/// level 控制场景子表的填充要求:
-/// - AUTO: scenes 可为空
-/// - METHOD: 每场景填 method
-/// - DIRECT: 每场景填 channelMchNo + capability
+/// level 控制客户端环境子表的填充要求:
+/// - AUTO: clientEnvs 可为空
+/// - METHOD: 每环境填 method
+/// - DIRECT: 每环境填 channelMchNo + capability
 @Data
 @Schema(title = "网关聚合扫码配置参数")
 public class GatewayAggregateConfigParam {
@@ -39,6 +39,6 @@ public class GatewayAggregateConfigParam {
     private Boolean autoLaunch;
 
     @Valid
-    @Schema(description = "场景配置列表")
-    private List<GatewayAggregateSceneParam> scenes;
+    @Schema(description = "客户端环境配置列表")
+    private List<GatewayAggregateClientEnvParam> clientEnvs;
 }

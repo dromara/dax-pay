@@ -32,7 +32,7 @@
   "backendBaseUrlNotConfigured": "ไม่ได้กำหนดค่า URL ฐานแบ็กเอนด์ (backendBaseUrl) ไม่สามารถสร้าง URL เรียกกลับได้",
   "requestContextMissing": "ไม่สามารถรับบริบทคำขอได้",
   "gatewayUrlNotConfigured": "ไม่ได้กำหนดค่า URL ฐานเกตเวย์การชำระเงิน (PaymentGatewayBaseUrl) ไม่สามารถสร้าง URL เรียกกลับการรับรองความถูกต้องได้",
-  "cashierSceneNotExist": "ไม่พบฉากแคชเชียร์: {0}",
+  "clientEnvNotExist": "ไม่พบสภาพแวดล้อมไคลเอนต์: {0}",
   "gatewayPayTypeNotExist": "ไม่พบประเภทการชำระเงินของเกตเวย์: {0}",
   "aggregateConfigLevelNotExist": "ไม่พบระดับการกำหนดค่ารวม: {0}",
   "gatewayCashierTypeNotExist": "ไม่พบประเภทแคชเชียร์ของเกตเวย์: {0}",

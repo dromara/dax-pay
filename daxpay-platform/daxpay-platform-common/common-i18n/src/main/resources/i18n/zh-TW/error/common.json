@@ -32,7 +32,7 @@
   "backendBaseUrlNotConfigured": "平臺後端訪問地址(backendBaseUrl)未配置, 無法生成回撥地址",
   "requestContextMissing": "無法獲取請求上下文",
   "gatewayUrlNotConfigured": "支付閘道器前端地址(paymentGatewayBaseUrl)未配置, 無法生成認證回撥地址",
-  "cashierSceneNotExist": "收銀場景不存在: {0}",
+  "clientEnvNotExist": "用戶端環境不存在: {0}",
   "gatewayPayTypeNotExist": "閘道器支付型別不存在: {0}",
   "aggregateConfigLevelNotExist": "聚合掃碼配置深度不存在: {0}",
   "gatewayCashierTypeNotExist": "收銀臺型別不存在: {0}",

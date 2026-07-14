@@ -32,7 +32,7 @@
   "backendBaseUrlNotConfigured": "Backend base URL (backendBaseUrl) is not configured, cannot generate callback URL",
   "requestContextMissing": "Cannot obtain request context",
   "gatewayUrlNotConfigured": "Payment gateway base URL (paymentGatewayBaseUrl) is not configured, cannot generate auth callback URL",
-  "cashierSceneNotExist": "Cashier scene not found: {0}",
+  "clientEnvNotExist": "Client environment not found: {0}",
   "gatewayPayTypeNotExist": "Gateway pay type not found: {0}",
   "aggregateConfigLevelNotExist": "Aggregate config level not found: {0}",
   "gatewayCashierTypeNotExist": "Gateway cashier type not found: {0}",
