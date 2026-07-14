@@ -6,10 +6,13 @@ import lombok.RequiredArgsConstructor;
 
 /// # 角色编码枚举
 ///
+/// 开源版身份域仅 admin / merchant；内置角色与之对称。
 @Getter
 @RequiredArgsConstructor
 public enum RoleCodeEnum implements I18nSupport {
 
+    /// 运营管理员
+    ADMIN_ADMIN("admin_admin"),
     /// 商户管理员
     MERCHANT_ADMIN("merchant_admin");
 

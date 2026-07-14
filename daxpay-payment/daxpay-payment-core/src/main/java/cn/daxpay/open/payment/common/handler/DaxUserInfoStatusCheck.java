@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.common.auth;
+package cn.daxpay.open.payment.common.handler;
 
 import cn.daxpay.open.platform.core.enums.client.ClientEnum;
 import cn.daxpay.open.platform.core.enums.merchant.MerchantStatusEnum;
