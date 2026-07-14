@@ -28,6 +28,12 @@
             <artifactId>daxpay-payment-core</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- 站内通知(公告 + 个人消息)：运营端铃铛 / 通知中心 / SSE -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>service-notify</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- 管理端 MapStruct Convert（PayTradeAdminConvert 等） -->
         <dependency>
             <groupId>org.mapstruct</groupId>
