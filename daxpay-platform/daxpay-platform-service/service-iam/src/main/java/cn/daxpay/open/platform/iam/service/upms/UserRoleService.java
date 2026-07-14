@@ -47,7 +47,7 @@ public class UserRoleService {
             List<Long> roleIdsByUser = this.findRoleIdsByUser();
             if (!roleIdsByUser.contains(roleId)){
                 // 权限: 角色分配超出了可分配的范围
-                throw new ValidationFailedException("error.iam.role.assign_out_of_scope");
+                throw new ValidationFailedException("error.iam.role.assignOutOfScope");
             }
         }
 
@@ -86,7 +86,7 @@ public class UserRoleService {
     public List<RoleResult> findAssignableRolesByUser(Long userId) {
         UserInfo userInfo = userInfoManager.findById(userId)
                 // 权限: 用户不存在
-                .orElseThrow(() -> new DataNotExistException("error.iam.user.not_exist"));
+                .orElseThrow(() -> new DataNotExistException("error.iam.user.notExist"));
         return MpUtil.toListResult(roleManager.findAllByClientCode(userInfo.getClientCode()));
     }
 
@@ -94,14 +94,15 @@ public class UserRoleService {
     private void validateUserRoleTerminalConsistency(Long userId, Long roleId) {
         UserInfo userInfo = userInfoManager.findById(userId)
                 // 权限: 用户不存在
-                .orElseThrow(() -> new DataNotExistException("error.iam.user.not_exist"));
+                .orElseThrow(() -> new DataNotExistException("error.iam.user.notExist"));
         String userClientCode = userInfo.getClientCode();
         Role role = roleManager.findById(roleId)
                 // 权限: 角色不存在
-                .orElseThrow(() -> new DataNotExistException("error.iam.role.not_exist"));
+                .orElseThrow(() -> new DataNotExistException("error.iam.role.notExist"));
         if (!Objects.equals(userClientCode, role.getClientCode())) {
+            // 权限: 禁止跨终端分配角色
             throw new ValidationFailedException(
-                    "禁止为用户分配跨终端角色：用户归属终端[" + userClientCode + "]，角色归属终端[" + role.getClientCode() + "]");
+                    "error.iam.role.assignCrossClient", userClientCode, role.getClientCode());
         }
     }
 
