@@ -49,6 +49,8 @@ public class DougongPayService {
         req.setMethod(method);
         // JSAPI/MINI 场景的用户标识(微信 openid / 支付宝 buyerId)
         req.setOpenId(payParam.getOpenId());
+        // 通道应用 AppId(微信 sub_appid 等)
+        req.setChannelAppId(payParam.getChannelAppId());
         req.setClientIp(payParam.getClientIp());
         req.setNotifyUrl(this.buildNotifyUrl(order, payParam.getChannelMchNo()));
         req.setExpireTime(payParam.getExpiredTime());

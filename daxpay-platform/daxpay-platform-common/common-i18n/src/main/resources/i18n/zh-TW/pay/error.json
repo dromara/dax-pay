@@ -27,7 +27,6 @@
   "unsupportedPayMethod": "不支援的支付方式: {0}",
   "methodNotExist": "不存在的支付方式",
   "methodNotEnable": "支付方式未啟用",
-  "otherMethodRequired": "其他支付方法不能為空",
   "orderNoRequired": "支付訂單號不能都為空",
   "pay": {
     "timeoutRetry": "支付已超時，請重新確認支付狀態",
@@ -72,7 +71,8 @@
     "amountExceed": "退款金額不能大於支付金額",
     "orderNotFound": "未查詢到退款訂單",
     "syncProcessing": "退款同步處理中，請勿重複操作",
-    "noPermission": "該商戶沒有退款許可權"
+    "noPermission": "該商戶沒有退款許可權",
+    "gatewayNotSupported": "閘道支付訂單暫不支援退款"
   },
   "callback": {
     "processing": "回撥正在處理中，忽略本次回撥請求",
@@ -107,5 +107,10 @@
     "methodParamRequired": "支付方法至少有一個引數，並且需要簽名的支付引數放在第一位",
     "paramExtendRequired": "引數需要繼承MerchantPaymentCommonParam",
     "returnTypeRequired": "支付方法返回型別需要為 DaxResult 型別的物件"
+  },
+  "barcode": {
+    "invalid": "付款碼無效",
+    "unsupportedType": "不支援的付款碼類型",
+    "methodMismatch": "付款碼與支付方式不相符"
   }
 }

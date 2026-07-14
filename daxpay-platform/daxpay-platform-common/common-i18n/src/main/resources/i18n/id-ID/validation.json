@@ -218,13 +218,10 @@
       "notBlank": "Merek pembayaran wajib diisi",
       "size": "Kode merek pembayaran tidak boleh melebihi 32 karakter"
     },
-    "otherMethod": {
-      "size": "Metode pembayaran lainnya tidak boleh melebihi 128 karakter"
-    },
     "limitPay": {
       "size": "Jenis pembayaran batas tidak boleh melebihi 128 karakter"
     },
-    "opAppId": {
+    "channelAppId": {
       "size": "ID aplikasi op tidak boleh melebihi 128 karakter"
     },
     "openId": {

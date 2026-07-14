@@ -3,8 +3,8 @@ package cn.daxpay.open.payment.trade.runtime.service.callback;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundCallbackData;
 import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.trade.order.dao.PayRefundOrderManager;
-import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
 import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
+import cn.daxpay.open.payment.trade.runtime.service.refund.PayRefundSettleService;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import com.baomidou.lock.LockInfo;
 import com.baomidou.lock.LockTemplate;
@@ -18,7 +18,8 @@ import java.util.Objects;
 /// # 退款回调处理
 ///
 /// 与 [PayCallbackService] 对称:支付回调用 tradeNo 反查支付单,
-/// 退款回调用 refundNo 反查退款单, 完成退款单状态流转与可退余额扣减。
+/// 退款回调用 refundNo 反查退款单。
+/// 成功/失败结算委托 [PayRefundSettleService](预占模型, 与发起/同步共用 trade 级锁)。
 ///
 /// 回调数据通过函数参数显式传递([RefundCallbackData]),不依赖线程上下文。
 @Slf4j
@@ -27,7 +28,7 @@ import java.util.Objects;
 public class RefundCallbackService {
 
     private final PayRefundOrderManager payRefundOrderManager;
-    private final PayTradeManager payTradeManager;
+    private final PayRefundSettleService payRefundSettleService;
     private final LockTemplate lockTemplate;
 
     /// 退款统一回调处理
@@ -65,10 +66,6 @@ public class RefundCallbackService {
                 log.warn("退款回调: 退款单 {} 已处于终态 {}，忽略", refundOrder.getRefundNo(), oldStatus);
                 return;
             }
-            // 回填通道退款流水号
-            if (Objects.nonNull(callbackData.getOutRefundNo())) {
-                refundOrder.setOutRefundNo(callbackData.getOutRefundNo());
-            }
             if (Objects.equals(CallbackStatusEnum.SUCCESS.getCode(), callbackData.getTradeStatus())) {
                 this.success(refundOrder, callbackData);
             } else {
@@ -79,30 +76,26 @@ public class RefundCallbackService {
         }
     }
 
-    /// 退款成功: 状态置成功, 记完成时间, 扣减原支付订单可退余额
+    /// 退款成功: 仅改态(余额已在发起时预占)
     private void success(PayRefundOrder refundOrder, RefundCallbackData callbackData) {
-        refundOrder.setStatus(RefundOrderStatusEnum.SUCCESS.getCode());
-        if (Objects.nonNull(callbackData.getFinishTime())) {
-            refundOrder.setFinishTime(callbackData.getFinishTime());
+        boolean settled = payRefundSettleService.settleSuccess(
+                refundOrder.getId(), callbackData.getFinishTime(), callbackData.getOutRefundNo());
+        if (!settled) {
+            callbackData.setCallbackStatus(CallbackStatusEnum.IGNORE)
+                    .setCallbackErrorMsg("退款单已处理，忽略回调");
         }
-        refundOrder.setErrorMsg(null);
-        payRefundOrderManager.updateById(refundOrder);
-        // 扣减原支付订单可退余额(与 PayRefundSyncService 同口径)
-        payTradeManager.findByTradeNo(refundOrder.getOrderNo()).ifPresent(trade -> {
-            long newBalance = (trade.getRefundableBalance() == null ? 0 : trade.getRefundableBalance())
-                    - refundOrder.getAmount();
-            trade.setRefundableBalance(Math.max(newBalance, 0));
-            payTradeManager.updateById(trade);
-        });
     }
 
-    /// 退款失败: 状态置失败, 记错误信息
+    /// 退款失败: 改态 + 回滚预占
     private void fail(PayRefundOrder refundOrder, RefundCallbackData callbackData) {
-        refundOrder.setStatus(RefundOrderStatusEnum.FAIL.getCode());
-        if (Objects.nonNull(callbackData.getFinishTime())) {
-            refundOrder.setFinishTime(callbackData.getFinishTime());
+        boolean settled = payRefundSettleService.settleFail(
+                refundOrder.getId(),
+                callbackData.getFinishTime(),
+                callbackData.getOutRefundNo(),
+                callbackData.getTradeErrorMsg());
+        if (!settled) {
+            callbackData.setCallbackStatus(CallbackStatusEnum.IGNORE)
+                    .setCallbackErrorMsg("退款单已处理，忽略回调");
         }
-        refundOrder.setErrorMsg(callbackData.getTradeErrorMsg());
-        payRefundOrderManager.updateById(refundOrder);
     }
 }

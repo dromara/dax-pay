@@ -29,10 +29,6 @@ import java.util.List;
 @TableName(value = "pay_gateway_order", autoResultMap = true)
 public class GatewayPayOrder extends MchBaseEntity {
 
-    /// 应用号
-    @TableField(updateStrategy = FieldStrategy.NEVER)
-    private String appId;
-
     /// 平台网关单号(URL 用)
     private String orderNo;
 
@@ -72,15 +68,13 @@ public class GatewayPayOrder extends MchBaseEntity {
     /// @see CurrencyEnum
     private String currency;
 
-    /// 支付通道(支付后冗余)
+    /// 支付通道编码（冗余自 product → ProductEnum#getChannel，对应 ChannelEnum；非 PayProviderEnum）
+    /// @see cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum
     private String channel;
 
     /// 支付方式
     /// @see PayMethodEnum
     private String method;
-
-    /// 其他支付方式，method=other 时生效
-    private String otherMethod;
 
     /// 限制支付类型（如限制信用卡）
     /// @see cn.daxpay.open.platform.core.enums.unipay.PayLimitPayEnum
@@ -95,6 +89,9 @@ public class GatewayPayOrder extends MchBaseEntity {
 
     /// 通道商户号(路由回填)
     private String channelMchNo;
+
+    /// 通道应用 AppId（本笔交易实际使用的微信/通道侧 AppId 快照；解析后写入，关退同步复用）
+    private String channelAppId;
 
     // ===== 支付请求参数（支付时写入）=====
 
@@ -116,7 +113,7 @@ public class GatewayPayOrder extends MchBaseEntity {
     /// 关闭时间
     private OffsetDateTime closeTime;
 
-    /// 客户端 IP
+    /// 下单客户端 IP；关单/同步/退款透传通道的单一事实源，兼审计排查
     private String clientIp;
 
     /// 终端设备编码
@@ -130,9 +127,6 @@ public class GatewayPayOrder extends MchBaseEntity {
 
     /// 付款用户 ID（支付宝 buyer_user_id 等）
     private String buyerId;
-
-    /// 买家登录账号（支付宝手机号/邮箱）
-    private String buyerLogonId;
 
     /// 通道方记录的支付产品
     private String tradeProduct;
@@ -153,6 +147,11 @@ public class GatewayPayOrder extends MchBaseEntity {
 
     /// 特殊通道关联订单号（部分通道订单号有前缀/长度限制时使用）
     private String relationOrderNo;
+
+
+    /// 应用号
+    @TableField(updateStrategy = FieldStrategy.NEVER)
+    private String appId;
 
     /// 商品明细
     @TableField(typeHandler = JacksonTypeHandler.class)

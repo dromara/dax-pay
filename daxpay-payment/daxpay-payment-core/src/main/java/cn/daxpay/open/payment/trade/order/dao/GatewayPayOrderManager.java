@@ -35,6 +35,13 @@ public class GatewayPayOrderManager extends BaseManager<GatewayPayOrderMapper, G
                 .oneOpt();
     }
 
+    /// 按商户业务单号查询（按商户号自动租户隔离）
+    public Optional<GatewayPayOrder> findByBizOrderNo(String bizOrderNo) {
+        return lambdaQuery()
+                .eq(GatewayPayOrder::getBizOrderNo, bizOrderNo)
+                .oneOpt();
+    }
+
     /// 按商户业务单号 + 应用号查询
     public Optional<GatewayPayOrder> findByBizOrderNo(String bizOrderNo, String appId) {
         return lambdaQuery()

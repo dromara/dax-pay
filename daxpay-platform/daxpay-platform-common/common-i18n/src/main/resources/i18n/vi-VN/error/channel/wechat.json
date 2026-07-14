@@ -55,5 +55,5 @@
   "isvKeyNotConfigured": "Khóa ISV của WeChat chưa được định cấu hình hoặc chưa đầy đủ, trước tiên hãy định cấu hình khóa ISV",
   "authUrlFailed": "Không lấy được url xác thực: {0}",
   "authFailed": "Không lấy được mã định danh người dùng (openId): {0}",
-  "opAppIdNotFound": "AppId được chỉ định [{0}] không được định cấu hình trong hệ thống"
+  "channelAppIdNotFound": "AppId được chỉ định [{0}] không được định cấu hình trong hệ thống"
 }

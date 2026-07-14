@@ -107,3 +107,29 @@ COMMENT ON COLUMN "public"."notify_message"."create_time" IS '创建时间';
 
 CREATE INDEX IF NOT EXISTS "idx_notify_message_user" ON "public"."notify_message" ("user_id");
 CREATE INDEX IF NOT EXISTS "idx_notify_message_user_read" ON "public"."notify_message" ("user_id", "is_read");
+
+-- ----------------------------
+-- pay_trade: 入账金额 posted_amount
+-- 结算类 SUCCESS = amount; 预授权冻结(authorize)等非结算动作 = 0
+-- ----------------------------
+ALTER TABLE "public"."pay_trade" ADD COLUMN IF NOT EXISTS "posted_amount" int8 NOT NULL DEFAULT 0;
+COMMENT ON COLUMN "public"."pay_trade"."posted_amount" IS '入账金额(最小货币单位); 结算类成功=amount, 预授权冻结等非结算动作=0';
+
+-- 存量成功单回填(authorize 保持 0)
+UPDATE "public"."pay_trade"
+SET "posted_amount" = COALESCE("amount", 0)
+WHERE "status" = 'success'
+  AND COALESCE("trade_type", '') <> 'authorize'
+  AND COALESCE("posted_amount", 0) = 0;
+
+-- ----------------------------
+-- channel_app_id: 订单/退款通道应用 AppId 快照
+-- ----------------------------
+ALTER TABLE "public"."pay_normal_order" ADD COLUMN IF NOT EXISTS "channel_app_id" varchar(128);
+COMMENT ON COLUMN "public"."pay_normal_order"."channel_app_id" IS '通道应用AppId(本笔交易实际使用)';
+
+ALTER TABLE "public"."pay_gateway_order" ADD COLUMN IF NOT EXISTS "channel_app_id" varchar(128);
+COMMENT ON COLUMN "public"."pay_gateway_order"."channel_app_id" IS '通道应用AppId(本笔交易实际使用)';
+
+ALTER TABLE "public"."pay_refund_order" ADD COLUMN IF NOT EXISTS "channel_app_id" varchar(128);
+COMMENT ON COLUMN "public"."pay_refund_order"."channel_app_id" IS '通道应用AppId(继承自原支付单)';

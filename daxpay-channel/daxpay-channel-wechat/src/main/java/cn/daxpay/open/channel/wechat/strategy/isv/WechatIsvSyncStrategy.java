@@ -34,7 +34,8 @@ public class WechatIsvSyncStrategy extends AbsSyncPayOrderStrategy {
         // 直接从 trade 读取路由参数, 不再需要 container 中间层
         // 组装服务商通道调用凭证
         WechatSdkCredential credential = wechatIsvConfigAssembler.buildConfig(
-                context.getTrade().getMchNo(), context.getChannelMchNo(), context.getCapability());
+                context.getTrade().getMchNo(), context.getChannelMchNo(), context.getCapability(),
+                context.getChannelAppId());
 
         return wechatIsvSyncService.sync(context.getTrade(), credential);
     }

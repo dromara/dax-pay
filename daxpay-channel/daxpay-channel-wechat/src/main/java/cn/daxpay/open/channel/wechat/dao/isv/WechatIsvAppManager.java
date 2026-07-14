@@ -39,7 +39,7 @@ public class WechatIsvAppManager extends BaseManager<WechatIsvAppMapper, WechatI
                 .orderByAsc(WechatIsvApp::getId));
     }
 
-    /// 按 wxAppId 查询应用(opAppId显式指定认证应用时使用, 校验该appId在系统中预配过)
+    /// 按 wxAppId 查询应用(channelAppId显式指定认证应用时使用, 校验该appId在系统中预配过)
     public Optional<WechatIsvApp> findByWxAppId(String wxAppId) {
         return firstOpt(q -> q.eq(WechatIsvApp::getWxAppId, wxAppId));
     }

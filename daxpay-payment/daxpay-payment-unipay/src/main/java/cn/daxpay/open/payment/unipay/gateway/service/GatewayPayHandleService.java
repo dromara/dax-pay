@@ -140,6 +140,8 @@ public class GatewayPayHandleService {
         trade.setContainerId(order.getId());
         trade.setAmount(order.getAmount());
         trade.setCurrency(CurrencyEnum.CNY.getCode());
+        // 入账金额: 未成功前为 0, 成功后由 PayUniHandleService 按规则回写
+        trade.setPostedAmount(0L);
         trade.setRefundableBalance(order.getAmount());
         trade.setStatus(PayFundStatusEnum.PROCESSING.getCode());
         trade.setSource(TradeSourceEnum.AGGRESS_PAY.getCode());
@@ -177,6 +179,8 @@ public class GatewayPayHandleService {
     private void fillRouteOnOrder(GatewayPayOrder order, NormalPayParam payParam, String scene, String device) {
         order.setChannelMchNo(payParam.getChannelMchNo());
         order.setCapability(payParam.getCapability());
+        // doBeforePay 后 payParam.channelAppId 为实际解析值
+        order.setChannelAppId(payParam.getChannelAppId());
         if (StrUtil.isNotBlank(scene)) {
             order.setScene(scene);
         }
@@ -202,6 +206,8 @@ public class GatewayPayHandleService {
         payParam.setMethod(method);
         payParam.setChannelMchNo(channelMchNo);
         payParam.setCapability(capability);
+        // 已支付过则带上订单快照的通道应用
+        payParam.setChannelAppId(order.getChannelAppId());
         payParam.setOpenId(openId);
         payParam.setNotifyUrl(order.getNotifyUrl());
         payParam.setReturnUrl(order.getReturnUrl());

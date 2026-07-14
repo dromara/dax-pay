@@ -46,11 +46,6 @@ public class NormalPayOrderResult {
     @Schema(description = "支付方式")
     private String method;
 
-    /// 其他支付方式, 只有在 支付方式编码(method) 为 其他支付(other)时才会生效
-    /// 用于处理各种通道各自定义的支付方式
-    @Schema(description = "其他支付方式")
-    private String otherMethod;
-
     /// 限制用户支付类型, 目前支持限制信用卡
     /// @see PayLimitPayEnum
     @Schema(description = "限制用户支付类型")

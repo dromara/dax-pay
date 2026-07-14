@@ -28,7 +28,7 @@ public class WechatIsvMchAppManager extends BaseManager<WechatIsvMchAppMapper, W
                 .list();
     }
 
-    /// 按通道商户号与wxAppId查询应用(opAppId显式指定认证应用时使用, 校验该appId在系统中预配过, 忽略租户隔离)
+    /// 按通道商户号与wxAppId查询应用(channelAppId显式指定认证应用时使用, 校验该appId在系统中预配过, 忽略租户隔离)
     @IgnoreTenant
     public Optional<WechatIsvMchApp> findByChannelMchNoAndWxAppIdNotTenant(String channelMchNo, String wxAppId) {
         return firstOpt(q -> q

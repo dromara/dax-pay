@@ -97,6 +97,10 @@ public class NormalPayOrderResult extends BaseResult {
     @Schema(description = "支付能力编码")
     private String capability;
 
+    /// 通道应用 AppId（实际支付所用）
+    @Schema(description = "通道应用AppId")
+    private String channelAppId;
+
     /// 客户端IP
     @Schema(description = "客户端IP")
     private String clientIp;

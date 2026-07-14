@@ -33,7 +33,8 @@ public class WechatDirectRefundStrategy extends AbsRefundStrategy {
     public RefundResultBo doRefund(PayRefundOrder refundOrder) {
         // 组装直连通道调用凭证
         WechatSdkCredential credential = wechatDirectConfigAssembler.buildConfig(
-                refundOrder.getMchNo(), refundOrder.getChannelMchNo(), refundOrder.getCapability());
+                refundOrder.getMchNo(), refundOrder.getChannelMchNo(), refundOrder.getCapability(),
+                refundOrder.getChannelAppId());
         return wechatRefundService.refund(refundOrder, credential);
     }
 }

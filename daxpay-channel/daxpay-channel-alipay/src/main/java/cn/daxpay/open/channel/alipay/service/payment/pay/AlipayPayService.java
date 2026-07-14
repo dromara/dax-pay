@@ -123,7 +123,6 @@ public class AlipayPayService {
         // 用户标识
         bo.setBuyerId(resp.getBuyerOpenId());
         bo.setUserId(resp.getBuyerUserId());
-        bo.setBuyerLogonId(resp.getBuyerLogonId());
         return bo;
     }
 }

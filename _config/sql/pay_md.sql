@@ -51,7 +51,6 @@ COMMENT ON TABLE "public"."pay_md_capability" IS '支付能力主数据';
 -- Records of pay_md_capability
 -- ----------------------------
 INSERT INTO "public"."pay_md_capability" VALUES (5001, 'aggregate_pay_qrcode', 0, 't', NULL, 'f', 1, '2026-05-29 04:18:20.415995', 0, 1, '2026-05-29 04:18:20.415995');
-INSERT INTO "public"."pay_md_capability" VALUES (5002, 'aggregate_pay_barcode', 1, 't', NULL, 'f', 1, '2026-05-29 04:18:20.415995', 0, 1, '2026-05-29 04:18:20.415995');
 INSERT INTO "public"."pay_md_capability" VALUES (5003, 'wechat_cashier', 2, 't', NULL, 'f', 1, '2026-05-29 04:18:20.415995', 0, 1, '2026-05-29 04:18:20.415995');
 INSERT INTO "public"."pay_md_capability" VALUES (5004, 'wechat_jsapi', 3, 't', NULL, 'f', 1, '2026-05-29 04:18:20.415995', 0, 1, '2026-05-29 04:18:20.415995');
 INSERT INTO "public"."pay_md_capability" VALUES (5005, 'wechat_app', 4, 't', NULL, 'f', 1, '2026-05-29 04:18:20.415995', 0, 1, '2026-05-29 04:18:20.415995');
@@ -163,7 +162,6 @@ COMMENT ON TABLE "public"."pay_md_method" IS '支付方式';
 -- Records of pay_md_method
 -- ----------------------------
 INSERT INTO "public"."pay_md_method" VALUES (502003001, 'aggregate_pay_qrcode', 1, NULL, 'f', NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977');
-INSERT INTO "public"."pay_md_method" VALUES (502003002, 'aggregate_pay_barcode', 2, NULL, 'f', NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977');
 INSERT INTO "public"."pay_md_method" VALUES (502003003, 'wechat_cashier', 3, NULL, 'f', NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977');
 INSERT INTO "public"."pay_md_method" VALUES (502003004, 'wechat_qr', 4, NULL, 'f', NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977');
 INSERT INTO "public"."pay_md_method" VALUES (502003005, 'wechat_jsapi', 5, NULL, 'f', NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977');
@@ -457,6 +455,7 @@ INSERT INTO "public"."pay_md_product_capability" VALUES (21157, 'yee_pay', 'unio
 INSERT INTO "public"."pay_md_product_capability" VALUES (21158, 'yee_pay', 'union_pay_jsapi', 13, 't', NULL, 'f', 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
 INSERT INTO "public"."pay_md_product_capability" VALUES (21159, 'yee_pay', 'union_pay_h5', 14, 't', NULL, 'f', 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
 INSERT INTO "public"."pay_md_product_capability" VALUES (21160, 'yee_pay', 'union_pay_barcode', 15, 't', NULL, 'f', 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
+INSERT INTO "public"."pay_md_product_capability" VALUES (21161, 'yee_pay', 'aggregate_pay_qrcode', 16, 't', NULL, 'f', 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
 INSERT INTO "public"."pay_md_product_capability" VALUES (21161, 'jee_pay', 'wechat_qr', 0, 't', NULL, 'f', 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
 INSERT INTO "public"."pay_md_product_capability" VALUES (21162, 'jee_pay', 'wechat_jsapi', 1, 't', NULL, 'f', 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
 INSERT INTO "public"."pay_md_product_capability" VALUES (21163, 'jee_pay', 'wechat_app', 2, 't', NULL, 'f', 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
@@ -488,13 +487,14 @@ INSERT INTO "public"."pay_md_product_capability" VALUES (6107, 'leshua_pay', 'al
 INSERT INTO "public"."pay_md_product_capability" VALUES (6108, 'leshua_pay', 'union_pay_qr', 8, 't', NULL, 'f', 1, '2026-07-06 00:00:00', 0, 1, '2026-07-06 00:00:00');
 INSERT INTO "public"."pay_md_product_capability" VALUES (6109, 'leshua_pay', 'union_pay_jsapi', 9, 't', NULL, 'f', 1, '2026-07-06 00:00:00', 0, 1, '2026-07-06 00:00:00');
 INSERT INTO "public"."pay_md_product_capability" VALUES (6200, 'hm_pay', 'aggregate_pay_qrcode', 0, 't', NULL, 'f', 1, '2026-07-07 00:00:00', 0, 1, '2026-07-07 00:00:00');
-INSERT INTO "public"."pay_md_product_capability" VALUES (6201, 'hm_pay', 'aggregate_pay_barcode', 1, 't', NULL, 'f', 1, '2026-07-07 00:00:00', 0, 1, '2026-07-07 00:00:00');
+INSERT INTO "public"."pay_md_product_capability" VALUES (6201, 'hm_pay', 'wechat_barcode', 1, 't', NULL, 'f', 1, '2026-07-07 00:00:00', 0, 1, '2026-07-07 00:00:00');
 INSERT INTO "public"."pay_md_product_capability" VALUES (6202, 'hm_pay', 'wechat_qr', 2, 't', NULL, 'f', 1, '2026-07-07 00:00:00', 0, 1, '2026-07-07 00:00:00');
 INSERT INTO "public"."pay_md_product_capability" VALUES (6203, 'hm_pay', 'wechat_jsapi', 3, 't', NULL, 'f', 1, '2026-07-07 00:00:00', 0, 1, '2026-07-07 00:00:00');
 INSERT INTO "public"."pay_md_product_capability" VALUES (6204, 'hm_pay', 'wechat_mini', 4, 't', NULL, 'f', 1, '2026-07-07 00:00:00', 0, 1, '2026-07-07 00:00:00');
 INSERT INTO "public"."pay_md_product_capability" VALUES (6205, 'hm_pay', 'alipay_qr', 5, 't', NULL, 'f', 1, '2026-07-07 00:00:00', 0, 1, '2026-07-07 00:00:00');
 INSERT INTO "public"."pay_md_product_capability" VALUES (6206, 'hm_pay', 'alipay_jsapi', 6, 't', NULL, 'f', 1, '2026-07-07 00:00:00', 0, 1, '2026-07-07 00:00:00');
 INSERT INTO "public"."pay_md_product_capability" VALUES (6207, 'hm_pay', 'alipay_mini', 7, 't', NULL, 'f', 1, '2026-07-07 00:00:00', 0, 1, '2026-07-07 00:00:00');
+INSERT INTO "public"."pay_md_product_capability" VALUES (6208, 'hm_pay', 'alipay_barcode', 8, 't', NULL, 'f', 1, '2026-07-07 00:00:00', 0, 1, '2026-07-07 00:00:00');
 INSERT INTO "public"."pay_md_product_capability" VALUES (6300, 'vbill_pay', 'wechat_jsapi', 0, 't', NULL, 'f', 1, '2026-07-06 00:00:00', 0, 1, '2026-07-06 00:00:00');
 INSERT INTO "public"."pay_md_product_capability" VALUES (6301, 'vbill_pay', 'wechat_mini', 1, 't', NULL, 'f', 1, '2026-07-06 00:00:00', 0, 1, '2026-07-06 00:00:00');
 INSERT INTO "public"."pay_md_product_capability" VALUES (6302, 'vbill_pay', 'wechat_qr', 2, 't', NULL, 'f', 1, '2026-07-06 00:00:00', 0, 1, '2026-07-06 00:00:00');
@@ -631,7 +631,6 @@ COMMENT ON TABLE "public"."pay_md_provider_method" IS '支付渠道和方式关�
 -- Records of pay_md_provider_method
 -- ----------------------------
 INSERT INTO "public"."pay_md_provider_method" VALUES (502001901, 'aggregate_pay', 'aggregate_pay_qrcode', 1, 'f', NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977', NULL);
-INSERT INTO "public"."pay_md_provider_method" VALUES (502001902, 'aggregate_pay', 'aggregate_pay_barcode', 2, 'f', NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977', NULL);
 INSERT INTO "public"."pay_md_provider_method" VALUES (502002001, 'wechat', 'wechat_jsapi', 1, 'f', NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977', NULL);
 INSERT INTO "public"."pay_md_provider_method" VALUES (502002002, 'wechat', 'wechat_app', 2, 'f', NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977', NULL);
 INSERT INTO "public"."pay_md_provider_method" VALUES (502002003, 'wechat', 'wechat_h5', 3, 'f', NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977', NULL);

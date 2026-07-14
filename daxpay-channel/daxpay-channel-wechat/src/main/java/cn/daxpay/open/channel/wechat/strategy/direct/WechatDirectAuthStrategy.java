@@ -30,7 +30,7 @@ import org.springframework.stereotype.Service;
 /// (WechatDirectApp + WechatDirectAppAuthConfig), 调用 capability-wechat 完成 OAuth。
 ///
 /// ## appId 解析优先级
-/// 1. opAppId 显式指定 → 校验该 appId 在系统预配过(按 channelMchNo + wxAppId 查), 命中即用
+/// 1. channelAppId 显式指定 → 校验该 appId 在系统预配过(按 channelMchNo + wxAppId 查), 命中即用
 /// 2. 否则按 capability 自动解析(显式能力配置 > appType 推导 > 首个兜底)
 @Slf4j
 @Service
@@ -54,7 +54,7 @@ public class WechatDirectAuthStrategy extends AbsChannelAuthStrategy {
     /// 会话标识 authToken 通过 OAuth state 参数透传。
     @Override
     public AuthUrlResult generateAuthUrl(GenerateAuthUrlParam param, String authToken) {
-        WechatDirectApp app = resolveApp(param.getChannelMchNo(), param.getCapability(), param.getOpAppId());
+        WechatDirectApp app = resolveApp(param.getChannelMchNo(), param.getCapability(), param.getChannelAppId());
         WechatDirectAppAuthConfig authConfig = wechatDirectAppAuthConfigService.findByWechatDirectAppIdForAuth(app.getId());
         String redirectUri = buildRedirectUri();
         WechatAuthUrlResult result = wechatMpAuthService.generateAuthUrl(
@@ -71,9 +71,9 @@ public class WechatDirectAuthStrategy extends AbsChannelAuthStrategy {
                 ? session.getChannelMchNo() : param.getChannelMchNo();
         String capability = session != null && StrUtil.isNotBlank(session.getCapability())
                 ? session.getCapability() : param.getCapability();
-        String opAppId = session != null && StrUtil.isNotBlank(session.getOpAppId())
-                ? session.getOpAppId() : param.getOpAppId();
-        WechatDirectApp app = resolveApp(channelMchNo, capability, opAppId);
+        String channelAppId = session != null && StrUtil.isNotBlank(session.getChannelAppId())
+                ? session.getChannelAppId() : param.getChannelAppId();
+        WechatDirectApp app = resolveApp(channelMchNo, capability, channelAppId);
         WechatDirectAppAuthConfig authConfig = wechatDirectAppAuthConfigService.findByWechatDirectAppIdForAuth(app.getId());
         WechatAuthResult data = wechatMpAuthService.getTokenAndOpenId(
                 param.getAuthCode(), app.getWxAppId(), authConfig.getAppSecret());
@@ -86,15 +86,15 @@ public class WechatDirectAuthStrategy extends AbsChannelAuthStrategy {
                 .setAccessToken(data.getAccessToken());
     }
 
-    /// 解析认证应用: opAppId 显式指定(校验预配) > capability 自动解析
+    /// 解析认证应用: channelAppId 显式指定(校验预配) > capability 自动解析
     ///
     /// 认证场景处于网关端(无登录态), 全部走 NotTenant 查询路径避免被租户拦截器误加 mch_no='' 条件。
-    private WechatDirectApp resolveApp(String channelMchNo, String capability, String opAppId) {
-        if (StrUtil.isNotBlank(opAppId)) {
-            // opAppId 必须在系统预配过(硬约束, 防任意 appId 滥用)
-            return wechatDirectAppManager.findByChannelMchNoAndWxAppIdNotTenant(channelMchNo, opAppId)
+    private WechatDirectApp resolveApp(String channelMchNo, String capability, String channelAppId) {
+        if (StrUtil.isNotBlank(channelAppId)) {
+            // channelAppId 必须在系统预配过(硬约束, 防任意 appId 滥用)
+            return wechatDirectAppManager.findByChannelMchNoAndWxAppIdNotTenant(channelMchNo, channelAppId)
                     .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                            "error.channel.wechat.opAppIdNotFound", opAppId));
+                            "error.channel.wechat.channelAppIdNotFound", channelAppId));
         }
         return wechatDirectAppCapabilityService.resolveAppNotTenant(channelMchNo, capability)
                 // 微信: 直连商户应用不存在

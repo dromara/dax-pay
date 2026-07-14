@@ -218,14 +218,11 @@
       "notBlank": "支付渠道不可為空",
       "size": "支付渠道編碼不可超過32位"
     },
-    "otherMethod": {
-      "size": "支付方式編碼不可超過128位"
-    },
     "limitPay": {
       "size": "限制使用者支付型別不能超過128位"
     },
-    "opAppId": {
-      "size": "opAppId不可超過128位"
+    "channelAppId": {
+      "size": "channelAppId不可超過128位"
     },
     "openId": {
       "size": "使用者標識不可超過128位"

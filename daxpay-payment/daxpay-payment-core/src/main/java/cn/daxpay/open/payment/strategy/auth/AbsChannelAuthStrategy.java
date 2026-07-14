@@ -22,7 +22,7 @@ public abstract class AbsChannelAuthStrategy implements PaymentStrategy {
     /// 通过AuthCode获取认证结果
     ///
     /// @param session 认证会话上下文(H5场景从 authToken 恢复; 小程序直连场景可为空, 此时从 param 取上下文)。
-    ///                策略需兼容 session 为 null 的情况(优先用 param 的 channelMchNo/capability/opAppId)。
+    ///                策略需兼容 session 为 null 的情况(优先用 param 的 channelMchNo/capability/channelAppId)。
     public abstract AuthResult doAuth(AuthCodeParam param, AuthSession session);
 
 }

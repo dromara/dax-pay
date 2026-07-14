@@ -55,5 +55,5 @@
   "isvKeyNotConfigured": "WeChat ISV 키가 구성되지 않았거나 불완전합니다. 먼저 ISV 키를 구성하십시오.",
   "authUrlFailed": "인증 URL을 가져오지 못했습니다: {0}",
   "authFailed": "사용자 식별자(openId)를 가져오지 못했습니다: {0}",
-  "opAppIdNotFound": "지정된 AppId [{0}]가 시스템에 구성되어 있지 않습니다."
+  "channelAppIdNotFound": "지정된 AppId [{0}]가 시스템에 구성되어 있지 않습니다."
 }

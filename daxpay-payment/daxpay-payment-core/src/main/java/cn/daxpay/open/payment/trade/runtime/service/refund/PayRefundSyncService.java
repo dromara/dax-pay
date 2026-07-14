@@ -7,7 +7,6 @@ import cn.daxpay.open.payment.strategy.PaymentStrategyFactory;
 import cn.daxpay.open.payment.strategy.refund.AbsSyncRefundStrategy;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
 import cn.daxpay.open.payment.trade.order.dao.PayRefundOrderManager;
-import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
 import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,15 +16,15 @@ import java.util.Objects;
 
 /// # 退款同步服务
 ///
-/// 查询通道网关方的退款最终状态, 回写退款单与可退余额。
-/// 适用于退款发起时 fund_change=N(未即时成功)的场景。
+/// 查询通道网关方的退款最终状态, 回写退款单。
+/// 成功/失败结算委托 [PayRefundSettleService](预占模型: SUCCESS 不二次扣, FAIL/CLOSE 回滚)。
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class PayRefundSyncService {
 
     private final PayRefundOrderManager payRefundOrderManager;
-    private final PayTradeManager payTradeManager;
+    private final PayRefundSettleService payRefundSettleService;
 
     /// 退款同步(传入退款单ID)
     public PayRefundOrder syncById(Long refundOrderId) {
@@ -38,7 +37,8 @@ public class PayRefundSyncService {
     public PayRefundOrder sync(PayRefundOrder refundOrder) {
         // 终态不重复同步
         if (Objects.equals(refundOrder.getStatus(), RefundOrderStatusEnum.SUCCESS.getCode())
-                || Objects.equals(refundOrder.getStatus(), RefundOrderStatusEnum.FAIL.getCode())) {
+                || Objects.equals(refundOrder.getStatus(), RefundOrderStatusEnum.FAIL.getCode())
+                || Objects.equals(refundOrder.getStatus(), RefundOrderStatusEnum.CLOSE.getCode())) {
             return refundOrder;
         }
 
@@ -53,24 +53,20 @@ public class PayRefundSyncService {
             return refundOrder;
         }
 
-        // 回写退款单状态
-        String oldStatus = refundOrder.getStatus();
-        refundOrder.setStatus(result.getStatus().getCode());
-        if (result.getFinishTime() != null) {
-            refundOrder.setFinishTime(result.getFinishTime());
+        if (Objects.equals(result.getStatus(), RefundOrderStatusEnum.SUCCESS)) {
+            payRefundSettleService.settleSuccess(
+                    refundOrder.getId(), result.getFinishTime(), result.getOutRefundNo());
+        } else if (Objects.equals(result.getStatus(), RefundOrderStatusEnum.FAIL)) {
+            payRefundSettleService.settleFail(
+                    refundOrder.getId(), result.getFinishTime(), result.getOutRefundNo(), result.getSyncErrorMsg());
+        } else if (Objects.equals(result.getStatus(), RefundOrderStatusEnum.CLOSE)) {
+            payRefundSettleService.settleClose(
+                    refundOrder.getId(), result.getFinishTime(), result.getOutRefundNo(), result.getSyncErrorMsg());
+        } else {
+            // PROGRESS: 补写字段, 不改余额
+            payRefundSettleService.applyProgressResult(
+                    refundOrder, result.getFinishTime(), result.getOutRefundNo(), result.getSyncErrorMsg());
         }
-        payRefundOrderManager.updateById(refundOrder);
-
-        // 若从未成功变为成功, 扣减可退余额
-        if (Objects.equals(result.getStatus(), RefundOrderStatusEnum.SUCCESS)
-                && !Objects.equals(oldStatus, RefundOrderStatusEnum.SUCCESS.getCode())) {
-            payTradeManager.findByTradeNo(refundOrder.getOrderNo()).ifPresent(trade -> {
-                long newBalance = (trade.getRefundableBalance() == null ? 0 : trade.getRefundableBalance())
-                        - refundOrder.getAmount();
-                trade.setRefundableBalance(Math.max(newBalance, 0));
-                payTradeManager.updateById(trade);
-            });
-        }
-        return refundOrder;
+        return payRefundOrderManager.findById(refundOrder.getId()).orElse(refundOrder);
     }
 }

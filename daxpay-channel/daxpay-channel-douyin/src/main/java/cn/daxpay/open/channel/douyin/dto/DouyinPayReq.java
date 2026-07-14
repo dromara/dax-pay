@@ -16,6 +16,5 @@ public class DouyinPayReq {
     private String description;
     private String method;
     private String expireTime;
-    private String otherMethod;
     private Map<String, Object> config;
 }

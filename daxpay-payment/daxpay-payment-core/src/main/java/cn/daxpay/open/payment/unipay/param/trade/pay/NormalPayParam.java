@@ -55,10 +55,11 @@ public class NormalPayParam extends MerchantPaymentCommonParam {
     private String product;
 
     /// 支付方式编码
-    /// - 路由模式: 必填, 由路由引擎按 appId+method 匹配
+    /// - 路由模式: 一般必填; 被扫场景可空, 有 authCode 时由平台按前缀识别回填分钱包 method
     /// - 直定模式(已传 channelMchNo+capability): 可空, 由 PayRouteService 按能力反推回填
+    /// - 聚合扫码: 传 `aggregate_pay_qrcode` 走通道原生通扫码
     /// @see PayMethodEnum
-    @Schema(description = "支付方式编码(路由模式必填; 直定模式可空, 由能力反推)")
+    @Schema(description = "支付方式编码(路由模式一般必填; 被扫可仅传authCode; 直定模式可空)")
     @Size(max = 32, message = "{validation.field.method.size}")
     private String method;
 
@@ -75,10 +76,10 @@ public class NormalPayParam extends MerchantPaymentCommonParam {
     @Schema(description = "用户标识OpenId")
     private String openId;
 
-    /// 指定支付/认证使用的应用AppId, 优先级高于配置自动解析, 必须在系统中预先配置过
-    @Size(max = 128, message = "{validation.field.opAppId.size}")
-    @Schema(description = "指定应用AppId")
-    private String opAppId;
+    /// 通道应用 AppId（微信 wxAppId 等）；非空则强制使用(须预配)，空则按 capability 路由解析
+    @Size(max = 128, message = "{validation.field.channelAppId.size}")
+    @Schema(description = "通道应用AppId")
+    private String channelAppId;
 
     /// 付款码（被扫支付必填）
     @Size(max = 128, message = "{validation.field.authCode.size}")

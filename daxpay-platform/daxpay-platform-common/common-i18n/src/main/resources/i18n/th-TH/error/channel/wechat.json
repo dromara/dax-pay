@@ -55,5 +55,5 @@
   "isvKeyNotConfigured": "คีย์ WeChat ISV ไม่ได้รับการกำหนดค่าหรือไม่สมบูรณ์ โปรดกำหนดค่าคีย์ ISV ก่อน",
   "authUrlFailed": "ไม่สามารถรับ URL การรับรองความถูกต้อง: {0}",
   "authFailed": "ไม่สามารถรับตัวระบุผู้ใช้ (openId): {0}",
-  "opAppIdNotFound": "AppId ที่ระบุ [{0}] ไม่ได้รับการกำหนดค่าในระบบ"
+  "channelAppIdNotFound": "AppId ที่ระบุ [{0}] ไม่ได้รับการกำหนดค่าในระบบ"
 }

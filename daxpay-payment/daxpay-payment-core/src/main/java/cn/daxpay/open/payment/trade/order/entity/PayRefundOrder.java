@@ -13,8 +13,9 @@ import java.time.OffsetDateTime;
 
 /// # 退款订单
 ///
-/// 记录每笔退款交易, 与原支付订单(pay_normal_order / pay_trade)通过 orderNo 关联。
-/// 同一笔支付订单可多次部分退款, 每笔退款生成一条 refund_order 记录, 退款号 refundNo 唯一。
+/// 记录每笔退款交易, 与原支付资金凭证通过 orderNo(= [PayTrade#getTradeNo]) 关联。
+/// 支持普通支付与网关支付容器; 同一支付可多次部分退款, 每笔一条记录, refundNo 唯一。
+/// 资金口径: 发起时预占 [PayTrade#getRefundableBalance], SUCCESS 不二次扣, FAIL/CLOSE 回滚。
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
@@ -79,6 +80,9 @@ public class PayRefundOrder extends MchBaseEntity {
 
     /// 支付能力编码(路由回填)
     private String capability;
+
+    /// 通道应用 AppId（继承自原支付单快照，退款组装凭证用）
+    private String channelAppId;
 
     /// 异步通知地址(出站商户通知用)
     private String notifyUrl;

@@ -27,7 +27,6 @@
   "unsupportedPayMethod": "Kaedah pembayaran tidak disokong: {0}",
   "methodNotExist": "Kaedah pembayaran tidak wujud",
   "methodNotEnable": "Kaedah pembayaran tidak didayakan",
-  "otherMethodRequired": "Kaedah pembayaran lain diperlukan",
   "orderNoRequired": "Nombor pesanan pembayaran tidak boleh kosong",
   "pay": {
     "timeoutRetry": "Tamat masa pembayaran, sila sahkan status pembayaran",
@@ -107,5 +106,10 @@
     "methodParamRequired": "Kaedah pembayaran mesti mempunyai sekurang-kurangnya satu parameter dan parameter pembayaran yang ditandatangani mesti berada di kedudukan pertama",
     "paramExtendRequired": "Parameter mesti melanjutkan MerchantPaymentCommonParam",
     "returnTypeRequired": "Jenis pemulangan kaedah pembayaran mestilah DaxResult"
+  },
+  "barcode": {
+    "invalid": "Kod bar pembayaran tidak sah",
+    "unsupportedType": "Jenis kod bar pembayaran tidak disokong",
+    "methodMismatch": "Kod bar tidak sepadan dengan kaedah pembayaran"
   }
 }

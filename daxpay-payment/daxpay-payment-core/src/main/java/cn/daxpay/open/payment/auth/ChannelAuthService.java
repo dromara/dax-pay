@@ -54,7 +54,7 @@ public class ChannelAuthService {
                 .setProduct(product)
                 .setChannelMchNo(param.getChannelMchNo())
                 .setCapability(param.getCapability())
-                .setOpAppId(param.getOpAppId())
+                .setChannelAppId(param.getChannelAppId())
                 .setReturnPath(param.getReturnPath())
                 .setQueryCode(queryCode);
         authSessionStore.saveSession(authToken, session);

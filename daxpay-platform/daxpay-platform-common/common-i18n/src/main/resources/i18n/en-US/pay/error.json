@@ -27,7 +27,6 @@
   "unsupportedPayMethod": "Unsupported payment method: {0}",
   "methodNotExist": "Payment method does not exist",
   "methodNotEnable": "Payment method not enabled",
-  "otherMethodRequired": "Other payment method is required",
   "orderNoRequired": "Payment order number cannot be empty",
   "pay": {
     "timeoutRetry": "Payment timeout, please confirm payment status",
@@ -72,7 +71,8 @@
     "amountExceed": "Refund amount cannot exceed payment amount",
     "orderNotFound": "Refund order not found",
     "syncProcessing": "Refund sync in progress, do not repeat",
-    "noPermission": "Merchant does not have refund permission"
+    "noPermission": "Merchant does not have refund permission",
+    "gatewayNotSupported": "Gateway payment orders do not support refund yet"
   },
   "callback": {
     "processing": "Callback processing, ignoring this callback request",
@@ -107,5 +107,10 @@
     "methodParamRequired": "Payment method must have at least one parameter, and the signed payment parameter must be in the first position",
     "paramExtendRequired": "Parameter must extend MerchantPaymentCommonParam",
     "returnTypeRequired": "Payment method return type must be DaxResult"
+  },
+  "barcode": {
+    "invalid": "Invalid payment barcode",
+    "unsupportedType": "Unsupported payment barcode type",
+    "methodMismatch": "Barcode does not match the payment method"
   }
 }

@@ -38,7 +38,4 @@ public class AlipayRefundResp {
 
     /// 买家支付宝开放ID(buyer_open_id)
     private String buyerOpenId;
-
-    /// 买家登录账号(buyer_logon_id)
-    private String buyerLogonId;
 }

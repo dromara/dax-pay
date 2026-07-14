@@ -23,7 +23,7 @@ import java.time.OffsetDateTime;
 @TableName("pay_trade")
 public class PayTrade extends MchBaseEntity {
 
-    /// 支付交易号（统一雪花，无形态前缀）
+    /// 支付交易号（各种交易的）
     private String tradeNo;
 
     /// 交易形态
@@ -41,6 +41,11 @@ public class PayTrade extends MchBaseEntity {
     /// 币种 ISO 4217，默认 CNY
     private String currency;
 
+    /// 入账金额（最小货币单位）
+    /// 结算类动作(normal/gateway/capture 等)且资金态 SUCCESS 时 = amount；
+    /// 预授权冻结(authorize)等非结算动作恒为 0。对账/成交汇总用此字段，勿直接 sum(amount)。
+    private Long postedAmount;
+
     /// 可退金额（最小货币单位）
     private Long refundableBalance;
 
@@ -54,6 +59,9 @@ public class PayTrade extends MchBaseEntity {
     /// 关闭时间
     private OffsetDateTime closeTime;
 
+    /// 超时时间
+    private OffsetDateTime expiredTime;
+
     /// 订单来源
     private String source;
 
@@ -65,6 +73,9 @@ public class PayTrade extends MchBaseEntity {
 
     /// 支付参数体类型（jsapi/sdk/app）
     private String payBodyType;
+
+    /// 特殊通道关联订单号（部分通道订单号有前缀/长度限制时使用）
+    private String relationOrderNo;
 
     /// 应用号
     @TableField(updateStrategy = FieldStrategy.NEVER)

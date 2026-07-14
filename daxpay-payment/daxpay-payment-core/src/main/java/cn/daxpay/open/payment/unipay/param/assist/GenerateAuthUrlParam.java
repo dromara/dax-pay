@@ -37,9 +37,9 @@ public class GenerateAuthUrlParam extends MerchantPaymentCommonParam {
     private String product;
 
     /// 指定认证使用的应用AppId, 优先级高于配置自动解析, 必须在系统中预先配置过
-    @Size(max = 128, message = "{validation.field.opAppId.size}")
+    @Size(max = 128, message = "{validation.field.channelAppId.size}")
     @Schema(description = "指定认证应用AppId")
-    private String opAppId;
+    private String channelAppId;
 
     /// 来源回跳路径, 授权完成后前端回跳的目标路径, 会随会话码一起保存
     @Size(max = 200, message = "{validation.field.returnPath.size}")

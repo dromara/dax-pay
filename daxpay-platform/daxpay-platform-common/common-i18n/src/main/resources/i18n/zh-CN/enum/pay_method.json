@@ -1,6 +1,5 @@
 {
   "aggregate_pay_qrcode": "聚合扫码",
-  "aggregate_pay_barcode": "聚合付款码",
   "wechat_cashier": "微信小程序收银台",
   "wechat_qr": "微信Native",
   "wechat_jsapi": "微信JSAPI",

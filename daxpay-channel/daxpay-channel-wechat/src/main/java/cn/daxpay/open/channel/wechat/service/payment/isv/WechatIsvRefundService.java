@@ -8,6 +8,10 @@ import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
 import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
+import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
+import cn.daxpay.open.platform.core.exception.BizInfoException;
+import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,6 +26,7 @@ import org.springframework.stereotype.Service;
 public class WechatIsvRefundService {
 
     private final WechatChannelClient wechatChannelClient;
+    private final PlatformUrlConfigService platformUrlConfigService;
 
     /// 微信退款状态
     private static final String STATUS_SUCCESS = "SUCCESS";
@@ -38,7 +43,8 @@ public class WechatIsvRefundService {
         req.setTotalAmount(refundOrder.getOrderAmount());
         req.setRefundAmount(refundOrder.getAmount());
         req.setReason(refundOrder.getReason());
-        req.setNotifyUrl(refundOrder.getNotifyUrl());
+        // 通道通知地址: 服务商回调路径 /wechat/isv/refund, 禁止用商户出站 notifyUrl
+        req.setNotifyUrl(this.buildRefundNotifyUrl(refundOrder));
         req.setCredential(credential);
 
         // 调用子应用服务商端点
@@ -54,6 +60,18 @@ public class WechatIsvRefundService {
         }
 
         return toRefundResult(result.getData());
+    }
+
+    /// 生成微信服务商退款异步通知地址(微信→平台)
+    ///
+    /// 路径约定: `{backendBaseUrl}/unipay/callback/{mchNo}/{channelMchNo}/wechat/isv/refund`
+    private String buildRefundNotifyUrl(PayRefundOrder refundOrder) {
+        String base = platformUrlConfigService.getUrlConfig().getBackendBaseUrl();
+        if (StrUtil.isBlank(base)) {
+            throw new BizInfoException(DaxPayErrorCode.CONFIG_ERROR, "error.common.backendBaseUrlNotConfigured");
+        }
+        return StrUtil.format("{}/unipay/callback/{}/{}/wechat/isv/refund",
+                base, refundOrder.getMchNo(), refundOrder.getChannelMchNo());
     }
 
     /// 解析子应用响应

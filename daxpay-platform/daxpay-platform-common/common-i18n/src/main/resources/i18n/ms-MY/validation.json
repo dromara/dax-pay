@@ -218,13 +218,10 @@
       "notBlank": "Jenama bayar tidak boleh kosong",
       "size": "Kod jenama bayar tidak boleh melebihi 32 aksara"
     },
-    "otherMethod": {
-      "size": "Kaedah pembayaran lain tidak boleh melebihi 128 aksara"
-    },
     "limitPay": {
       "size": "Jenis bayaran had tidak boleh melebihi 128 aksara"
     },
-    "opAppId": {
+    "channelAppId": {
       "size": "ID apl Op tidak boleh melebihi 128 aksara"
     },
     "openId": {

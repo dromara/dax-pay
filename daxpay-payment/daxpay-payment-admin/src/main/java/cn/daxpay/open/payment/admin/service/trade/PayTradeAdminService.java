@@ -61,6 +61,7 @@ public class PayTradeAdminService {
             result.setProduct(normalOrder.getProduct());
             result.setChannel(normalOrder.getChannel());
             result.setMethod(normalOrder.getMethod());
+            result.setChannelAppId(normalOrder.getChannelAppId());
             result.setBuyerId(normalOrder.getBuyerId());
             result.setTradeProduct(normalOrder.getTradeProduct());
             result.setTradeWay(normalOrder.getTradeWay());

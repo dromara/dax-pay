@@ -15,6 +15,8 @@ import java.util.Set;
 public class PayRouteConfigProviders {
 
     public static final List<String> CODES = List.of(
+            // 聚合扫码(通道原生通扫码目录)
+            PayProviderEnum.AGGREGATE_PAY.getCode(),
             PayProviderEnum.WECHAT.getCode(),
             PayProviderEnum.ALIPAY.getCode(),
             PayProviderEnum.UNION_PAY.getCode(),

@@ -89,32 +89,46 @@ public class PayCloseService {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.closeProcessing");
         }
         try {
-            CloseTypeEnum closeType;
-            if (Objects.equals(PayFundStatusEnum.INIT.getCode(), trade.getStatus())) {
-                closeType = CloseTypeEnum.CLOSE;
-                payUniHandleService.payClose(trade, false);
-            } else {
-                closeType = useCancel ? CloseTypeEnum.CANCEL : CloseTypeEnum.CLOSE;
-                ContainerInfo info = loadContainerInfo(trade);
-                var context = new PayStrategyContext()
-                        .setTrade(trade)
-                        .setChannelMchNo(info.channelMchNo())
-                        .setCapability(info.capability())
-                        .setClientIp(info.clientIp());
-                AbsPayCloseStrategy strategy = PaymentStrategyFactory.createByProduct(
-                        info.product(), AbsPayCloseStrategy.class);
-                strategy.doBeforeClose(context);
-                strategy.doClose(context, useCancel);
-                payUniHandleService.payClose(trade, useCancel);
+            // 持锁后二次读取状态, 避免与回调成功竞态把已成功单关掉
+            PayTrade locked = payTradeManager.findById(trade.getId()).orElse(null);
+            if (Objects.isNull(locked)) {
+                throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.payOrderNotExist");
             }
-            this.saveRecord(trade, closeType, null);
-        } catch (Exception e) {
-            log.error("关闭订单失败, id: {}:", trade.getId(), e);
-            this.saveRecord(trade, useCancel ? CloseTypeEnum.CANCEL : CloseTypeEnum.CLOSE, e.getMessage());
-            if (e instanceof PayFailureException) {
-                throw e;
+            if (!List.of(PayFundStatusEnum.INIT.getCode(), PayFundStatusEnum.PROCESSING.getCode())
+                    .contains(locked.getStatus())) {
+                // 状态已变(如回调已成功), 不写失败关单记录
+                throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.pay.closeNotPaying");
             }
-            throw new OperationFailException(CommonCode.FAIL_CODE, "pay.error.pay.closeFailed");
+            trade = locked;
+            try {
+                CloseTypeEnum closeType;
+                if (Objects.equals(PayFundStatusEnum.INIT.getCode(), trade.getStatus())) {
+                    closeType = CloseTypeEnum.CLOSE;
+                    payUniHandleService.payClose(trade, false);
+                } else {
+                    closeType = useCancel ? CloseTypeEnum.CANCEL : CloseTypeEnum.CLOSE;
+                    ContainerInfo info = loadContainerInfo(trade);
+                    var context = new PayStrategyContext()
+                            .setTrade(trade)
+                            .setChannelMchNo(info.channelMchNo())
+                            .setCapability(info.capability())
+                            .setChannelAppId(info.channelAppId())
+                            .setClientIp(info.clientIp());
+                    AbsPayCloseStrategy strategy = PaymentStrategyFactory.createByProduct(
+                            info.product(), AbsPayCloseStrategy.class);
+                    strategy.doBeforeClose(context);
+                    strategy.doClose(context, useCancel);
+                    payUniHandleService.payClose(trade, useCancel);
+                }
+                this.saveRecord(trade, closeType, null);
+            } catch (Exception e) {
+                log.error("关闭订单失败, id: {}:", trade.getId(), e);
+                this.saveRecord(trade, useCancel ? CloseTypeEnum.CANCEL : CloseTypeEnum.CLOSE, e.getMessage());
+                if (e instanceof PayFailureException || e instanceof BizInfoException) {
+                    throw e;
+                }
+                throw new OperationFailException(CommonCode.FAIL_CODE, "pay.error.pay.closeFailed");
+            }
         } finally {
             lockTemplate.releaseLock(lock);
         }
@@ -156,6 +170,7 @@ public class PayCloseService {
                             .setTrade(trade)
                             .setChannelMchNo(info.channelMchNo())
                             .setCapability(info.capability())
+                            .setChannelAppId(info.channelAppId())
                             .setClientIp(info.clientIp());
                     AbsPayCloseStrategy strategy = PaymentStrategyFactory.createByProduct(
                             info.product(), AbsPayCloseStrategy.class);
@@ -195,14 +210,14 @@ public class PayCloseService {
             if (order != null) {
                 return new ContainerInfo(
                         order.getProduct(), order.getChannel(), order.getBizOrderNo(),
-                        order.getChannelMchNo(), order.getCapability(), order.getClientIp());
+                        order.getChannelMchNo(), order.getCapability(), order.getChannelAppId(), order.getClientIp());
             }
         } else {
             NormalPayOrder order = payNormalOrderManager.findById(trade.getContainerId()).orElse(null);
             if (order != null) {
                 return new ContainerInfo(
                         order.getProduct(), order.getChannel(), order.getBizOrderNo(),
-                        order.getChannelMchNo(), order.getCapability(), order.getClientIp());
+                        order.getChannelMchNo(), order.getCapability(), order.getChannelAppId(), order.getClientIp());
             }
         }
         throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.payOrderNotExist");
@@ -210,5 +225,5 @@ public class PayCloseService {
 
     private record ContainerInfo(
             String product, String channel, String bizOrderNo,
-            String channelMchNo, String capability, String clientIp) {}
+            String channelMchNo, String capability, String channelAppId, String clientIp) {}
 }

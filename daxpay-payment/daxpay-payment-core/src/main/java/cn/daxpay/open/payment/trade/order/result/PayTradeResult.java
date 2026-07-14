@@ -53,9 +53,9 @@ public class PayTradeResult extends BaseResult {
     @Schema(description = "支付方式")
     private String method;
 
-    /// 其他支付方式
-    @Schema(description = "其他支付方式")
-    private String otherMethod;
+    /// 通道应用 AppId（实际支付所用）
+    @Schema(description = "通道应用AppId")
+    private String channelAppId;
 
     /// 限制支付类型
     @Schema(description = "限制支付类型")
@@ -72,6 +72,11 @@ public class PayTradeResult extends BaseResult {
     /// 币种
     @Schema(description = "币种")
     private String currency;
+
+    /// 入账金额(最小货币单位)
+    /// 结算类 SUCCESS = amount；预授权冻结(authorize)等非结算动作 = 0
+    @Schema(description = "入账金额(分)")
+    private Long postedAmount;
 
     /// 可退金额(最小货币单位)
     @Schema(description = "可退金额(分)")

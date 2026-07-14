@@ -54,7 +54,7 @@ public class AuthSession {
     private String capability;
 
     /// 指定认证应用AppId(可选, 优先级高于配置自动解析)
-    private String opAppId;
+    private String channelAppId;
 
     /// 来源回跳路径(授权完成后前端回跳的目标路径)
     private String returnPath;

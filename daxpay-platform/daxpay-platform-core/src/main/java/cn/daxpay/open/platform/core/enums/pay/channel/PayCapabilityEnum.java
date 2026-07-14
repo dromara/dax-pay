@@ -16,10 +16,8 @@ import java.util.Objects;
 public enum PayCapabilityEnum implements I18nSupport {
 
     /* 聚合支付 */
-    /// 聚合扫码
+    /// 聚合扫码（通道原生通扫码）
     AGGREGATE_PAY_QRCODE("aggregate_pay_qrcode"),
-    /// 聚合付款码
-    AGGREGATE_PAY_BARCODE("aggregate_pay_barcode"),
 
     /* 微信 */
     /// 微信小程序收银台

@@ -29,10 +29,6 @@ import java.util.List;
 @TableName(value = "pay_normal_order", autoResultMap = true)
 public class NormalPayOrder extends MchBaseEntity {
 
-    /// 应用号
-    @TableField(updateStrategy = FieldStrategy.NEVER)
-    private String appId;
-
     /// 商户业务单号
     private String bizOrderNo;
 
@@ -69,15 +65,13 @@ public class NormalPayOrder extends MchBaseEntity {
 
     // ===== 支付信息（冗余，查询过滤用）=====
 
-    /// 支付通道
+    /// 支付通道编码（冗余自 product → ProductEnum#getChannel，对应 ChannelEnum；非 PayProviderEnum）
+    /// @see cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum
     private String channel;
 
     /// 支付方式
     /// @see PayMethodEnum
     private String method;
-
-    /// 其他支付方式，method=other 时生效
-    private String otherMethod;
 
     /// 限制支付类型（如限制信用卡）
     /// @see cn.daxpay.open.platform.core.enums.unipay.PayLimitPayEnum
@@ -112,17 +106,17 @@ public class NormalPayOrder extends MchBaseEntity {
     /// @see cn.daxpay.open.platform.core.enums.pay.channel.PayCapabilityEnum
     private String capability;
 
+    /// 通道应用 AppId（本笔交易实际使用的微信/通道侧 AppId 快照；解析后写入，关退同步复用）
+    private String channelAppId;
+
     // ===== 通道回执（支付成功/同步后写入）=====
 
     /// 支付渠道（微信/支付宝/银联等，三方通道透传时填）
     /// @see cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum
     private String provider;
 
-    /// 付款用户 ID（支付宝 buyer_user_id 等）
+    /// 付款用户 ID（支付宝 userID/微信AppId 等）
     private String buyerId;
-
-    /// 买家登录账号（支付宝手机号/邮箱）
-    private String buyerLogonId;
 
     /// 通道方记录的支付产品
     private String tradeProduct;
@@ -136,24 +130,38 @@ public class NormalPayOrder extends MchBaseEntity {
     /// 活动类型
     private String promotionType;
 
-    // ===== 通道关联订单号（部分通道专用）=====
+    /// 支付参数体（如微信 prepay_id 组装串，非空表示已拉起支付，免重复请求通道）
+    private String payBody;
+
+    /// 支付参数体类型（jsapi/sdk/app）
+    private String payBodyType;
+
+    // ===== 关联订单号=====
+
+    /// 订单号 通常上送给支付通道使用, 特殊情况下会上送[#relationOrderNo]
+    private String orderNo;
 
     /// 透传订单号（三方通道产生的透传订单号）
     private String transOrderNo;
 
     /// 特殊通道关联订单号（部分通道订单号有前缀/长度限制时使用）
+    /// 如果没有特殊情况, 直接使用交易订单号作为关联订单号, 通常
     private String relationOrderNo;
 
-    // ===== 请求信息（低频，审计排查用）=====
+    // ===== 请求信息（关单/同步/退款透传依赖 + 审计）=====
 
     /// 通道附加参数
     private String extraParam;
+
+    /// 应用号
+    @TableField(updateStrategy = FieldStrategy.NEVER)
+    private String appId;
 
     /// 订单商品明细列表（jsonb 存储）
     @TableField(typeHandler = JacksonTypeHandler.class)
     private List<GoodsDetail> goodsDetail;
 
-    /// 客户端 IP
+    /// 下单客户端 IP；关单/同步/退款透传通道的单一事实源，兼审计排查
     private String clientIp;
 
     /// 终端设备编码

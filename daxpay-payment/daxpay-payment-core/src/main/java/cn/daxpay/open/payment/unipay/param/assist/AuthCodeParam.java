@@ -63,8 +63,8 @@ public class AuthCodeParam extends MerchantPaymentCommonParam {
     private String capability;
 
     /// 指定认证使用的应用AppId, 会话码恢复上下文时可不传, 优先级高于配置自动解析
-    @Size(max = 128, message = "{validation.field.opAppId.size}")
+    @Size(max = 128, message = "{validation.field.channelAppId.size}")
     @Schema(description = "指定认证应用AppId")
-    private String opAppId;
+    private String channelAppId;
 }
 

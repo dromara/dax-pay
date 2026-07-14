@@ -8,6 +8,7 @@ import cn.daxpay.open.payment.strategy.pay.PayStrategyContext;
 import cn.daxpay.open.payment.trade.runtime.bo.PayTradeResultBo;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -35,8 +36,12 @@ public class WechatIsvPayStrategy extends AbsNormalPayStrategy {
     public void doBeforePay(PayStrategyContext context) {
         NormalPayParam payParam = context.getPayParam();
         WechatSdkCredential credential = wechatIsvConfigAssembler.buildConfig(
-                payParam.getMchNo(), payParam.getChannelMchNo(), payParam.getCapability());
+                payParam.getMchNo(), payParam.getChannelMchNo(), payParam.getCapability(),
+                payParam.getChannelAppId());
         context.setChannelConfig(credential);
+        // 回填实际使用的通道应用: 优先 sub_appid(与 openId 绑定侧), 否则 sp_appid
+        payParam.setChannelAppId(StrUtil.blankToDefault(
+                credential.getSubAppId(), credential.getWxAppId()));
     }
 
     @Override

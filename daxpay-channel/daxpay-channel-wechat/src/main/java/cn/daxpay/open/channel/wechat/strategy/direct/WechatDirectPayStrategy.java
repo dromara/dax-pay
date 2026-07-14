@@ -36,8 +36,11 @@ public class WechatDirectPayStrategy extends AbsNormalPayStrategy {
         // 组装直连通道凭证(只依赖请求参数, 订单尚未创建)
         NormalPayParam payParam = context.getPayParam();
         WechatSdkCredential credential = wechatDirectConfigAssembler.buildConfig(
-                payParam.getMchNo(), payParam.getChannelMchNo(), payParam.getCapability());
+                payParam.getMchNo(), payParam.getChannelMchNo(), payParam.getCapability(),
+                payParam.getChannelAppId());
         context.setChannelConfig(credential);
+        // 回填实际使用的通道应用 AppId, 供 createOrder 落库
+        payParam.setChannelAppId(credential.getWxAppId());
     }
 
     @Override

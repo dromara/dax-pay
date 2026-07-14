@@ -8,13 +8,16 @@ import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
 import cn.daxpay.open.platform.common.spring.util.WebServletUtil;
 import cn.daxpay.open.platform.core.util.TradeNoGenerateUtil;
 import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
+import cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum;
 import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.strategy.PaymentStrategyFactory;
 import cn.daxpay.open.payment.strategy.refund.AbsRefundStrategy;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
+import cn.daxpay.open.payment.trade.order.dao.GatewayPayOrderManager;
 import cn.daxpay.open.payment.trade.order.dao.NormalPayOrderManager;
 import cn.daxpay.open.payment.trade.order.dao.PayRefundOrderManager;
 import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
+import cn.daxpay.open.payment.trade.order.entity.GatewayPayOrder;
 import cn.daxpay.open.payment.trade.order.entity.NormalPayOrder;
 import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
@@ -30,8 +33,9 @@ import java.util.Objects;
 
 /// # 退款服务
 ///
-/// 退款编排: 查找原支付订单 → 校验可退 → 创建退款单 → 调用通道退款策略 → 回写状态与可退余额。
-/// 参照 [PayCloseService] 的锁与编排模式。
+/// 退款编排: 查找原支付交易 → 解析容器路由 → 预占可退余额 → 创建退款单 → 调通道 → 终态结算。
+/// 资金预占/成功/失败回滚委托 [PayRefundSettleService], 与同步/回调共用 trade 级锁。
+/// 支持 [PayTradeTypeEnum#NORMAL] 与 [PayTradeTypeEnum#GATEWAY] 两种容器。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -39,7 +43,9 @@ public class PayRefundService {
 
     private final PayTradeManager payTradeManager;
     private final NormalPayOrderManager payNormalOrderManager;
+    private final GatewayPayOrderManager gatewayPayOrderManager;
     private final PayRefundOrderManager payRefundOrderManager;
+    private final PayRefundSettleService payRefundSettleService;
     private final LockTemplate lockTemplate;
 
     /// 发起退款
@@ -48,14 +54,14 @@ public class PayRefundService {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.orderNoRequired");
         }
 
-        // 查找原支付交易
+        // 查找原支付交易(支持 normal / gateway)
         PayTrade trade = resolveTrade(param.getOrderNo(), param.getBizOrderNo());
 
         // 校验可退状态
         validateRefundable(trade, param.getAmount());
 
-        // 分布式锁, 防止并发退款导致可退余额超扣
-        LockInfo lock = lockTemplate.lock("payment:refund:" + trade.getId(), 10000, 50);
+        // 分布式锁: 预占与结算共用, 防止并发超退
+        LockInfo lock = lockTemplate.lock(PayRefundSettleService.lockKey(trade.getTradeNo()), 10000, 50);
         if (Objects.isNull(lock)) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.refund.processing");
         }
@@ -64,32 +70,33 @@ public class PayRefundService {
             PayTrade lockedTrade = payTradeManager.findById(trade.getId()).orElseThrow();
             validateRefundable(lockedTrade, param.getAmount());
 
-            NormalPayOrder normalOrder = payNormalOrderManager.findById(lockedTrade.getContainerId()).orElse(null);
+            // 按 tradeType 解析容器路由字段
+            RefundRouteContext route = resolveRoute(lockedTrade);
 
-            // 创建退款单
-            PayRefundOrder refundOrder = buildRefundOrder(lockedTrade, normalOrder, param);
+            // 预占可退余额 + 创建退款单(progress)
+            payRefundSettleService.reserveBalanceUnderLock(lockedTrade, param.getAmount());
+            PayRefundOrder refundOrder = buildRefundOrder(lockedTrade, route, param);
             refundOrder.setStatus(RefundOrderStatusEnum.PROGRESS.getCode());
             payRefundOrderManager.save(refundOrder);
 
-            // 调用通道退款策略(product 从容器获取)
-            String product = normalOrder != null ? normalOrder.getProduct() : null;
+            // 调用通道退款策略
             AbsRefundStrategy strategy = PaymentStrategyFactory.createByProduct(
-                    product, AbsRefundStrategy.class);
+                    route.getProduct(), AbsRefundStrategy.class);
             RefundResultBo result;
             try {
                 strategy.doBeforeRefund(refundOrder);
                 result = strategy.doRefund(refundOrder);
             } catch (Exception e) {
                 log.error("通道退款失败, refundNo={}", refundOrder.getRefundNo(), e);
-                refundOrder.setStatus(RefundOrderStatusEnum.FAIL.getCode());
-                refundOrder.setErrorMsg(StrUtil.maxLength(e.getMessage(), 500));
-                payRefundOrderManager.updateById(refundOrder);
+                // 预占回滚 + 退款单 FAIL
+                payRefundSettleService.settleFailOrCloseUnderLock(
+                        refundOrder.getId(), false, null, null, e.getMessage());
                 throw e;
             }
 
-            // 回写退款单状态与可退余额
-            applyRefundResult(refundOrder, lockedTrade, result);
-            return refundOrder;
+            // 回写结果(SUCCESS 不二次扣; FAIL 回滚; PROGRESS 保持预占)
+            applyRefundResult(refundOrder, result);
+            return payRefundOrderManager.findById(refundOrder.getId()).orElse(refundOrder);
         } catch (Exception e) {
             if (e instanceof BizInfoException) {
                 throw e;
@@ -101,18 +108,78 @@ public class PayRefundService {
         }
     }
 
-    /// 解析原支付交易(优先 orderNo, 其次 bizOrderNo)
+    /// 解析原支付交易
+    ///
+    /// 优先 orderNo(= PayTrade.tradeNo); 若无 Trade 再尝试网关容器 orderNo。
+    /// 仅 bizOrderNo 时: 先 Normal 再 Gateway。
     private PayTrade resolveTrade(String orderNo, String bizOrderNo) {
         if (StrUtil.isNotBlank(orderNo)) {
-            return payTradeManager.findByTradeNo(orderNo)
+            var byTradeNo = payTradeManager.findByTradeNo(orderNo);
+            if (byTradeNo.isPresent()) {
+                return byTradeNo.get();
+            }
+            // 运营友好: 支持用网关 URL 单号反查
+            GatewayPayOrder gateway = gatewayPayOrderManager.findByOrderNo(orderNo).orElse(null);
+            if (gateway != null) {
+                return payTradeManager.findByContainerId(gateway.getId(), PayTradeTypeEnum.GATEWAY.getCode())
+                        .orElseThrow(() -> new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.notExists"));
+            }
+            throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.notExists");
+        }
+
+        // 按 bizOrderNo: Normal 优先, 再 Gateway
+        NormalPayOrder normalOrder = payNormalOrderManager.findByBizOrderNo(bizOrderNo).orElse(null);
+        if (normalOrder != null) {
+            return payTradeManager.findByContainerId(normalOrder.getId(), PayTradeTypeEnum.NORMAL.getCode())
                     .orElseThrow(() -> new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.notExists"));
         }
-        // 按 bizOrderNo 查容器, 再查关联交易
-        NormalPayOrder normalOrder = payNormalOrderManager.findByBizOrderNo(bizOrderNo)
+        GatewayPayOrder gatewayOrder = gatewayPayOrderManager.findByBizOrderNo(bizOrderNo).orElse(null);
+        if (gatewayOrder != null) {
+            return payTradeManager.findByContainerId(gatewayOrder.getId(), PayTradeTypeEnum.GATEWAY.getCode())
+                    .orElseThrow(() -> new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.notExists"));
+        }
+        throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.notExists");
+    }
+
+    /// 按 tradeType 从容器读取退款路由字段
+    private RefundRouteContext resolveRoute(PayTrade trade) {
+        if (Objects.equals(trade.getTradeType(), PayTradeTypeEnum.GATEWAY.getCode())) {
+            GatewayPayOrder order = gatewayPayOrderManager.findById(trade.getContainerId())
+                    .orElseThrow(() -> new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.notExists"));
+            if (StrUtil.isBlank(order.getProduct())) {
+                throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.refund.statusNotAllow", trade.getStatus());
+            }
+            return new RefundRouteContext()
+                    .setProduct(order.getProduct())
+                    .setChannel(order.getChannel())
+                    .setMethod(order.getMethod())
+                    .setChannelMchNo(order.getChannelMchNo())
+                    .setCapability(order.getCapability())
+                    .setChannelAppId(order.getChannelAppId())
+                    .setTitle(order.getTitle())
+                    .setBizOrderNo(order.getBizOrderNo())
+                    .setNotifyUrl(order.getNotifyUrl())
+                    .setClientIp(order.getClientIp())
+                    .setAttach(order.getAttach());
+        }
+        // 默认普通支付(含 future 扩展未知类型时尽量按 normal 查, 查不到再失败)
+        NormalPayOrder order = payNormalOrderManager.findById(trade.getContainerId())
                 .orElseThrow(() -> new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.notExists"));
-        return payTradeManager.findByContainerId(normalOrder.getId(),
-                cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum.NORMAL.getCode())
-                .orElseThrow(() -> new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.notExists"));
+        if (StrUtil.isBlank(order.getProduct())) {
+            throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.refund.statusNotAllow", trade.getStatus());
+        }
+        return new RefundRouteContext()
+                .setProduct(order.getProduct())
+                .setChannel(order.getChannel())
+                .setMethod(order.getMethod())
+                .setChannelMchNo(order.getChannelMchNo())
+                .setCapability(order.getCapability())
+                .setChannelAppId(order.getChannelAppId())
+                .setTitle(order.getTitle())
+                .setBizOrderNo(order.getBizOrderNo())
+                .setNotifyUrl(order.getNotifyUrl())
+                .setClientIp(order.getClientIp())
+                .setAttach(order.getAttach());
     }
 
     /// 校验交易可退: 状态须为 SUCCESS, 退款金额不能超过可退余额
@@ -126,8 +193,8 @@ public class PayRefundService {
         }
     }
 
-    /// 构建退款订单(从原支付交易与容器复制路由信息)
-    private PayRefundOrder buildRefundOrder(PayTrade trade, NormalPayOrder normalOrder, PayRefundParam param) {
+    /// 构建退款订单
+    private PayRefundOrder buildRefundOrder(PayTrade trade, RefundRouteContext route, PayRefundParam param) {
         PayRefundOrder refundOrder = new PayRefundOrder();
         // setMchNo 继承自父类, 单独调用避免链式返回父类型
         refundOrder.setMchNo(trade.getMchNo());
@@ -140,18 +207,19 @@ public class PayRefundService {
                 .setOrderAmount(trade.getAmount())
                 .setCurrency(trade.getCurrency())
                 .setReason(param.getReason());
-        if (normalOrder != null) {
-            refundOrder.setChannel(normalOrder.getChannel())
-                    .setProduct(normalOrder.getProduct())
-                    .setMethod(normalOrder.getMethod())
-                    .setTitle(normalOrder.getTitle())
-                    .setBizOrderNo(normalOrder.getBizOrderNo())
-                    .setChannelMchNo(normalOrder.getChannelMchNo())
-                    .setCapability(normalOrder.getCapability())
-                    .setNotifyUrl(normalOrder.getNotifyUrl());
-        }
-        // 客户端IP: 优先取下单时留存的原订单IP, 为空(历史订单/非HTTP场景)则从当前HTTP请求兜底
-        String refundClientIp = normalOrder != null ? normalOrder.getClientIp() : null;
+        refundOrder.setChannel(route.getChannel())
+                .setProduct(route.getProduct())
+                .setMethod(route.getMethod())
+                .setTitle(route.getTitle())
+                .setBizOrderNo(route.getBizOrderNo())
+                .setChannelMchNo(route.getChannelMchNo())
+                .setCapability(route.getCapability())
+                .setChannelAppId(route.getChannelAppId())
+                // notifyUrl 语义: 商户出站通知地址, 通道回调 URL 由各通道 buildRefundNotifyUrl 生成
+                .setNotifyUrl(route.getNotifyUrl())
+                .setAttach(route.getAttach());
+        // 客户端IP: 优先取下单时留存的原订单IP, 为空则从当前HTTP请求兜底
+        String refundClientIp = route.getClientIp();
         if (StrUtil.isBlank(refundClientIp)) {
             refundClientIp = WebServletUtil.getClientIp();
         }
@@ -159,22 +227,25 @@ public class PayRefundService {
         return refundOrder;
     }
 
-    /// 回写退款结果: 更新退款单状态 + 扣减可退余额
-    private void applyRefundResult(PayRefundOrder refundOrder, PayTrade trade, RefundResultBo result) {
-        refundOrder.setStatus(result.getStatus().getCode());
-        if (result.getFinishTime() != null) {
-            refundOrder.setFinishTime(result.getFinishTime());
+    /// 回写退款结果: SUCCESS 仅改态; FAIL 回滚预占; PROGRESS 保持预占
+    private void applyRefundResult(PayRefundOrder refundOrder, RefundResultBo result) {
+        if (result.getStatus() == null) {
+            return;
         }
-        if (StrUtil.isNotBlank(result.getOutRefundNo())) {
-            refundOrder.setOutRefundNo(result.getOutRefundNo());
-        }
-        // 仅退款成功时扣减可退余额
         if (Objects.equals(result.getStatus(), RefundOrderStatusEnum.SUCCESS)) {
-            long newBalance = (trade.getRefundableBalance() == null ? 0 : trade.getRefundableBalance())
-                    - refundOrder.getAmount();
-            trade.setRefundableBalance(Math.max(newBalance, 0));
-            payTradeManager.updateById(trade);
+            payRefundSettleService.settleSuccessUnderLock(
+                    refundOrder.getId(), result.getFinishTime(), result.getOutRefundNo());
+            return;
         }
-        payRefundOrderManager.updateById(refundOrder);
+        if (Objects.equals(result.getStatus(), RefundOrderStatusEnum.FAIL)
+                || Objects.equals(result.getStatus(), RefundOrderStatusEnum.CLOSE)) {
+            boolean close = Objects.equals(result.getStatus(), RefundOrderStatusEnum.CLOSE);
+            payRefundSettleService.settleFailOrCloseUnderLock(
+                    refundOrder.getId(), close, result.getFinishTime(), result.getOutRefundNo(), null);
+            return;
+        }
+        // PROGRESS 等中间态: 补写通道退款号, 余额保持已预占
+        payRefundSettleService.applyProgressResult(
+                refundOrder, result.getFinishTime(), result.getOutRefundNo(), null);
     }
 }

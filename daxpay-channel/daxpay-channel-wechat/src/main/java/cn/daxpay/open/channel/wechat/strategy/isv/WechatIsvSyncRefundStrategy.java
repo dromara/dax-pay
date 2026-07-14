@@ -32,7 +32,8 @@ public class WechatIsvSyncRefundStrategy extends AbsSyncRefundStrategy {
     public RefundResultBo doSync(PayRefundOrder refundOrder) {
         // 组装服务商通道调用凭证
         WechatSdkCredential credential = wechatIsvConfigAssembler.buildConfig(
-                refundOrder.getMchNo(), refundOrder.getChannelMchNo(), refundOrder.getCapability());
+                refundOrder.getMchNo(), refundOrder.getChannelMchNo(), refundOrder.getCapability(),
+                refundOrder.getChannelAppId());
         return wechatIsvRefundSyncService.sync(refundOrder, credential);
     }
 }

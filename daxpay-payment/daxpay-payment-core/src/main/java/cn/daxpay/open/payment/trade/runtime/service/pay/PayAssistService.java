@@ -22,6 +22,7 @@ import cn.daxpay.open.payment.trade.runtime.mq.NormalPayTimeoutMessage;
 import cn.daxpay.open.payment.trade.runtime.mq.PayArtemisConstants;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -82,6 +83,8 @@ public class PayAssistService {
         // 通道路由参数(同步时用于解析通道应用凭证)
         normalOrder.setChannelMchNo(payParam.getChannelMchNo());
         normalOrder.setCapability(payParam.getCapability());
+        // 通道应用 AppId: doBeforePay 已将解析后的实际值回填到 payParam
+        normalOrder.setChannelAppId(payParam.getChannelAppId());
         normalOrder.setAppId(appId);
         payNormalOrderManager.save(normalOrder);
         // 创建资金交易 PayTrade
@@ -92,6 +95,8 @@ public class PayAssistService {
         trade.setContainerId(normalOrder.getId());
         trade.setAmount(amount);
         trade.setCurrency(CurrencyEnum.CNY.getCode());
+        // 入账金额: 未成功前为 0, 成功后由 PayUniHandleService 按规则回写
+        trade.setPostedAmount(0L);
         trade.setRefundableBalance(amount);
         trade.setStatus(PayFundStatusEnum.PROCESSING.getCode());
         trade.setSource(cn.daxpay.open.platform.core.enums.pay.trade.TradeSourceEnum.MCH_API.getCode());

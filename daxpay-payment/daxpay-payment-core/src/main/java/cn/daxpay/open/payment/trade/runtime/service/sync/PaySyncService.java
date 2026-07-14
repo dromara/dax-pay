@@ -97,6 +97,7 @@ public class PaySyncService {
                     .setTrade(trade)
                     .setChannelMchNo(info.channelMchNo())
                     .setCapability(info.capability())
+                    .setChannelAppId(info.channelAppId())
                     .setClientIp(info.clientIp());
             var syncStrategy = PaymentStrategyFactory.createByProduct(
                     info.product(), AbsSyncPayOrderStrategy.class);
@@ -113,10 +114,12 @@ public class PaySyncService {
                     syncResult.setSyncSuccess(false).setSyncErrorMsg(e.getMessage());
                 }
             }
-            this.saveRecord(trade, syncResult, !statusSync, info);
+            // statusSync=true 表示本地与通道已一致、无需调整; API adjust 表示「是否触发了调整」
+            boolean adjusted = !statusSync;
+            this.saveRecord(trade, syncResult, adjusted, info);
             return new NormalPaySyncResult()
                     .setOrderStatus(trade.getStatus())
-                    .setAdjust(statusSync);
+                    .setAdjust(adjusted);
         } finally {
             lockTemplate.releaseLock(lock);
         }
@@ -178,6 +181,7 @@ public class PaySyncService {
                 .setTrade(trade)
                 .setChannelMchNo(info.channelMchNo())
                 .setCapability(info.capability())
+                .setChannelAppId(info.channelAppId())
                 .setClientIp(info.clientIp());
         AbsPayCloseStrategy strategy = PaymentStrategyFactory.createByProduct(
                 info.product(), AbsPayCloseStrategy.class);
@@ -213,7 +217,7 @@ public class PaySyncService {
                 return new ContainerInfo(
                         order.getProduct(), order.getChannel(), order.getBizOrderNo(),
                         order.getExpiredTime(), order.getChannelMchNo(),
-                        order.getCapability(), order.getClientIp());
+                        order.getCapability(), order.getChannelAppId(), order.getClientIp());
             }
         } else {
             NormalPayOrder order = payNormalOrderManager.findById(trade.getContainerId()).orElse(null);
@@ -221,7 +225,7 @@ public class PaySyncService {
                 return new ContainerInfo(
                         order.getProduct(), order.getChannel(), order.getBizOrderNo(),
                         order.getExpiredTime(), order.getChannelMchNo(),
-                        order.getCapability(), order.getClientIp());
+                        order.getCapability(), order.getChannelAppId(), order.getClientIp());
             }
         }
         throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.payOrderNotExist");
@@ -231,5 +235,5 @@ public class PaySyncService {
     private record ContainerInfo(
             String product, String channel, String bizOrderNo,
             OffsetDateTime expiredTime, String channelMchNo,
-            String capability, String clientIp) {}
+            String capability, String channelAppId, String clientIp) {}
 }

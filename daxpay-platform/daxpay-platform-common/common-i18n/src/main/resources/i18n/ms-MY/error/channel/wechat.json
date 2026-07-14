@@ -55,5 +55,5 @@
   "isvKeyNotConfigured": "Kunci ISV WeChat tidak dikonfigurasikan atau tidak lengkap, sila konfigurasikan kekunci ISV dahulu",
   "authUrlFailed": "Gagal mendapatkan url pengesahan: {0}",
   "authFailed": "Gagal mendapatkan pengecam pengguna (openId): {0}",
-  "opAppIdNotFound": "AppId [{0}] yang ditentukan tidak dikonfigurasikan dalam sistem"
+  "channelAppIdNotFound": "AppId [{0}] yang ditentukan tidak dikonfigurasikan dalam sistem"
 }

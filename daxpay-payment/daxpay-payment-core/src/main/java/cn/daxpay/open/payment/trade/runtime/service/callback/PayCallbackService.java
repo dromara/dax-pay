@@ -23,6 +23,7 @@ import java.util.Objects;
 /// # 支付回调处理
 ///
 /// 回调数据通过函数参数显式传递([CallbackData]),不依赖线程上下文。
+/// 成功/失败均做终态守卫: 已 SUCCESS 幂等忽略; 非 PROCESSING 不可再流转。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -56,6 +57,8 @@ public class PayCallbackService {
                         .setCallbackErrorMsg("支付订单不存在");
                 return null;
             }
+            // 持锁后二次读取, 避免与关单/同步竞态使用过期状态
+            trade = payTradeManager.findById(trade.getId()).orElse(trade);
             if (Objects.nonNull(callbackData.getOutTradeNo())) {
                 trade.setOutOrderNo(callbackData.getOutTradeNo());
             }
@@ -80,7 +83,22 @@ public class PayCallbackService {
                 .map(NormalPayOrder::getProduct).orElse(null);
     }
 
+    /// 支付成功: 仅 PROCESSING/INIT 可转入 SUCCESS; 已 SUCCESS 幂等忽略; 其他终态忽略
     private void success(PayTrade trade, CallbackData callbackData) {
+        String status = trade.getStatus();
+        if (Objects.equals(status, PayFundStatusEnum.SUCCESS.getCode())) {
+            callbackData.setCallbackStatus(CallbackStatusEnum.IGNORE)
+                    .setCallbackErrorMsg("支付单已是成功状态，忽略回调");
+            log.info("支付回调: 交易 {} 已成功，幂等忽略", trade.getTradeNo());
+            return;
+        }
+        if (!Objects.equals(status, PayFundStatusEnum.PROCESSING.getCode())
+                && !Objects.equals(status, PayFundStatusEnum.INIT.getCode())) {
+            callbackData.setCallbackStatus(CallbackStatusEnum.IGNORE)
+                    .setCallbackErrorMsg("订单非支付中状态，忽略成功回调");
+            log.warn("支付回调: 交易 {} 状态为 {}，忽略成功回调", trade.getTradeNo(), status);
+            return;
+        }
         trade.setStatus(PayFundStatusEnum.SUCCESS.getCode());
         trade.setPayTime(callbackData.getFinishTime());
         trade.setCloseTime(null);
@@ -90,12 +108,13 @@ public class PayCallbackService {
         payUniHandleService.paySuccess(trade);
     }
 
+    /// 支付失败: 仅 PROCESSING 可关失败; 与同步路径一致走 payFail(资金态 FAIL)
     private void fail(PayTrade trade, CallbackData callbackData) {
         if (!Objects.equals(trade.getStatus(), PayFundStatusEnum.PROCESSING.getCode())) {
             callbackData.setCallbackStatus(CallbackStatusEnum.IGNORE)
                     .setCallbackErrorMsg("订单不是支付中状态，忽略");
             return;
         }
-        payUniHandleService.payClose(trade, false);
+        payUniHandleService.payFail(trade, callbackData.getTradeErrorMsg());
     }
 }

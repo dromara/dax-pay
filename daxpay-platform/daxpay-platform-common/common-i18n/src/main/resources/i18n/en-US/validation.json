@@ -219,13 +219,10 @@
       "notBlank": "Pay brand must not be blank",
       "size": "Pay brand code must not exceed 32 characters"
     },
-    "otherMethod": {
-      "size": "Other payment method cannot exceed 128 characters"
-    },
     "limitPay": {
       "size": "Limit pay type cannot exceed 128 characters"
     },
-    "opAppId": {
+    "channelAppId": {
       "size": "Op app ID cannot exceed 128 characters"
     },
     "openId": {

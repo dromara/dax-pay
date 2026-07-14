@@ -41,7 +41,7 @@ import org.springframework.stereotype.Service;
 /// - **SUB_APP**: 用子商户应用(WechatIsvMchApp.sub_appid) + WechatIsvMchAppAuthConfig 认证, 所得为 sub 维度 openId
 ///
 /// ## appId 解析优先级
-/// 1. opAppId 显式指定 → 按 authAppType 查对应表校验预配, 命中即用
+/// 1. channelAppId 显式指定 → 按 authAppType 查对应表校验预配, 命中即用
 /// 2. 否则按 authAppType + capability 自动解析
 ///
 /// 微信 OAuth 调用 capability-wechat, 与支付通道子应用解耦; 区别仅是主应用传入的 wxAppId/appSecret 来源不同。
@@ -68,7 +68,7 @@ public class WechatIsvAuthStrategy extends AbsChannelAuthStrategy {
     /// 生成公众号 OAuth 授权链接
     @Override
     public AuthUrlResult generateAuthUrl(GenerateAuthUrlParam param, String authToken) {
-        ResolvedAuthApp app = resolveAuthApp(param.getChannelMchNo(), param.getCapability(), param.getOpAppId());
+        ResolvedAuthApp app = resolveAuthApp(param.getChannelMchNo(), param.getCapability(), param.getChannelAppId());
         String redirectUri = buildRedirectUri();
         WechatAuthUrlResult result = wechatMpAuthService.generateAuthUrl(
                 redirectUri, app.wxAppId(), app.appSecret(), authToken);
@@ -82,9 +82,9 @@ public class WechatIsvAuthStrategy extends AbsChannelAuthStrategy {
                 ? session.getChannelMchNo() : param.getChannelMchNo();
         String capability = session != null && StrUtil.isNotBlank(session.getCapability())
                 ? session.getCapability() : param.getCapability();
-        String opAppId = session != null && StrUtil.isNotBlank(session.getOpAppId())
-                ? session.getOpAppId() : param.getOpAppId();
-        ResolvedAuthApp app = resolveAuthApp(channelMchNo, capability, opAppId);
+        String channelAppId = session != null && StrUtil.isNotBlank(session.getChannelAppId())
+                ? session.getChannelAppId() : param.getChannelAppId();
+        ResolvedAuthApp app = resolveAuthApp(channelMchNo, capability, channelAppId);
         WechatAuthResult data = wechatMpAuthService.getTokenAndOpenId(
                 param.getAuthCode(), app.wxAppId(), app.appSecret());
         if (StrUtil.isBlank(data.getOpenId())) {
@@ -98,11 +98,11 @@ public class WechatIsvAuthStrategy extends AbsChannelAuthStrategy {
 
     /// 解析认证应用(返回 wxAppId + appSecret)
     ///
-    /// 优先级: opAppId(按authAppType校验对应表) > authAppType + capability 自动解析
-    private ResolvedAuthApp resolveAuthApp(String channelMchNo, String capability, String opAppId) {
+    /// 优先级: channelAppId(按authAppType校验对应表) > authAppType + capability 自动解析
+    private ResolvedAuthApp resolveAuthApp(String channelMchNo, String capability, String channelAppId) {
         WechatAuthAppTypeEnum authAppType = loadAuthAppType(channelMchNo);
-        if (StrUtil.isNotBlank(opAppId)) {
-            return resolveByOpAppId(channelMchNo, opAppId, authAppType);
+        if (StrUtil.isNotBlank(channelAppId)) {
+            return resolveByChannelAppId(channelMchNo, channelAppId, authAppType);
         }
         return resolveByConfig(channelMchNo, capability, authAppType);
     }
@@ -135,18 +135,18 @@ public class WechatIsvAuthStrategy extends AbsChannelAuthStrategy {
         return new ResolvedAuthApp(app.getWxAppId(), cfg.getAppSecret());
     }
 
-    /// 按 opAppId 解析应用(按 authAppType 查对应表校验预配)
-    private ResolvedAuthApp resolveByOpAppId(String channelMchNo, String opAppId, WechatAuthAppTypeEnum authAppType) {
+    /// 按 channelAppId 解析应用(按 authAppType 查对应表校验预配)
+    private ResolvedAuthApp resolveByChannelAppId(String channelMchNo, String channelAppId, WechatAuthAppTypeEnum authAppType) {
         if (authAppType == WechatAuthAppTypeEnum.SP_APP) {
-            WechatIsvApp app = wechatIsvAppManager.findByWxAppId(opAppId)
+            WechatIsvApp app = wechatIsvAppManager.findByWxAppId(channelAppId)
                     .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                            "error.channel.wechat.opAppIdNotFound", opAppId));
+                            "error.channel.wechat.channelAppIdNotFound", channelAppId));
             WechatIsvAppAuthConfig cfg = wechatIsvAppAuthConfigService.findByWechatIsvAppId(app.getId());
             return new ResolvedAuthApp(app.getWxAppId(), cfg.getAppSecret());
         }
-        WechatIsvMchApp app = wechatIsvMchAppManager.findByChannelMchNoAndWxAppIdNotTenant(channelMchNo, opAppId)
+        WechatIsvMchApp app = wechatIsvMchAppManager.findByChannelMchNoAndWxAppIdNotTenant(channelMchNo, channelAppId)
                 .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                        "error.channel.wechat.opAppIdNotFound", opAppId));
+                        "error.channel.wechat.channelAppIdNotFound", channelAppId));
         WechatIsvMchAppAuthConfig cfg = wechatIsvMchAppAuthConfigService.findByWechatIsvMchAppIdForAuth(app.getId());
         return new ResolvedAuthApp(app.getWxAppId(), cfg.getAppSecret());
     }

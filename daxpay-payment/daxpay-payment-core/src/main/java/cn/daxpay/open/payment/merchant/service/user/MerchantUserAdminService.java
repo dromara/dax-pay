@@ -7,8 +7,10 @@ import cn.daxpay.open.platform.core.exception.BizException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
+import cn.daxpay.open.platform.iam.auth.service.IamSecurityConfigService;
 import cn.daxpay.open.platform.iam.auth.service.PasswordDecryptService;
 import cn.daxpay.open.platform.iam.auth.service.PasswordPolicyService;
+import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformPasswordPolicyConfig;
 import cn.daxpay.open.platform.iam.code.UserStatusEnum;
 import cn.daxpay.open.platform.iam.dao.user.UserExpandInfoManager;
 import cn.daxpay.open.platform.iam.dao.user.UserInfoManager;
@@ -58,6 +60,7 @@ public class MerchantUserAdminService {
     private final UserRoleService userRoleService;
     private final UserQueryService userQueryService;
     private final UserAdminService userAdminService;
+    private final IamSecurityConfigService iamSecurityConfigService;
 
     /// 分页查询商户用户
     public PageResult<MerchantUserResult> page(PageParam pageParam, MerchantUserQuery query) {
@@ -205,9 +208,14 @@ public class MerchantUserAdminService {
         userAdminService.restartPasswordBatch(userIds, newPassword);
     }
 
-    /// 计算密码过期时间
+    /// 按平台密码策略计算过期时间(UTC); 未启用轮换则 null
     private OffsetDateTime calculatePasswordExpireTime() {
-        return null;
+        PlatformPasswordPolicyConfig config = iamSecurityConfigService.getPasswordPolicy();
+        Integer rotationDays = config.getRotationDays();
+        if (rotationDays == null || rotationDays <= 0) {
+            return null;
+        }
+        return OffsetDateTime.now(ZoneOffset.UTC).plusDays(rotationDays);
     }
 
     /// 校验用户是否属于商户

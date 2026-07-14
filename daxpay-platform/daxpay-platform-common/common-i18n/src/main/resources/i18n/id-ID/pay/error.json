@@ -27,7 +27,6 @@
   "unsupportedPayMethod": "Metode pembayaran tidak didukung: {0}",
   "methodNotExist": "Metode pembayaran tidak ada",
   "methodNotEnable": "Metode pembayaran tidak diaktifkan",
-  "otherMethodRequired": "Metode pembayaran lain diperlukan",
   "orderNoRequired": "Nomor perintah pembayaran wajib diisi",
   "pay": {
     "timeoutRetry": "Batas waktu pembayaran habis, harap konfirmasi status pembayaran",
@@ -107,5 +106,10 @@
     "methodParamRequired": "Metode pembayaran harus memiliki minimal satu parameter, dan parameter pembayaran yang ditandatangani harus berada di posisi pertama",
     "paramExtendRequired": "Parameter harus memperluas MerchantPaymentCommonParam",
     "returnTypeRequired": "Jenis pengembalian metode pembayaran harus DaxResult"
+  },
+  "barcode": {
+    "invalid": "Barcode pembayaran tidak valid",
+    "unsupportedType": "Jenis barcode pembayaran tidak didukung",
+    "methodMismatch": "Barcode tidak cocok dengan metode pembayaran"
   }
 }

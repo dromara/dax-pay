@@ -27,7 +27,6 @@
   "unsupportedPayMethod": "Phương thức thanh toán không được hỗ trợ: {0}",
   "methodNotExist": "Phương thức thanh toán không tồn tại",
   "methodNotEnable": "Phương thức thanh toán chưa được kích hoạt",
-  "otherMethodRequired": "Phương thức thanh toán khác là bắt buộc",
   "orderNoRequired": "Số lệnh thanh toán không được để trống",
   "pay": {
     "timeoutRetry": "Hết thời gian thanh toán, vui lòng xác nhận trạng thái thanh toán",
@@ -107,5 +106,10 @@
     "methodParamRequired": "Phương thức thanh toán phải có ít nhất một tham số và tham số thanh toán đã ký phải ở vị trí đầu tiên",
     "paramExtendRequired": "Tham số phải mở rộng MerchantPaymentCommonParam",
     "returnTypeRequired": "Loại trả về phương thức thanh toán phải là DaxResult"
+  },
+  "barcode": {
+    "invalid": "Mã thanh toán không hợp lệ",
+    "unsupportedType": "Loại mã thanh toán không được hỗ trợ",
+    "methodMismatch": "Mã thanh toán không khớp với phương thức"
   }
 }

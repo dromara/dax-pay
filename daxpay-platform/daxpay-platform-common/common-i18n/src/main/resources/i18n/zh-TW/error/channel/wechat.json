@@ -55,5 +55,5 @@
   "isvKeyNotConfigured": "微信服務商金鑰未配置或不完整，請先完成服務商金鑰配置",
   "authUrlFailed": "獲取授權連結失敗: {0}",
   "authFailed": "獲取使用者標識(openId)失敗: {0}",
-  "opAppIdNotFound": "指定的應用AppId[{0}]未在系統中配置"
+  "channelAppIdNotFound": "指定的應用AppId[{0}]未在系統中配置"
 }

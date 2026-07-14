@@ -34,7 +34,7 @@ public class DougongPayReq {
     private String openId;
 
     /// 第三方应用ID(微信 sub_appid / 支付宝应用ID)
-    private String opAppId;
+    private String channelAppId;
 
     /// 客户端IP
     private String clientIp;

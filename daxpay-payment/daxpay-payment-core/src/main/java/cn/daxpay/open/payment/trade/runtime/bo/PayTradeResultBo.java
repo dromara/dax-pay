@@ -60,7 +60,4 @@ public class PayTradeResultBo {
 
     /// 买家实付金额(通道返回, 不入库)
     private Long buyerPayAmount;
-
-    /// 买家登录账号(支付宝手机号/邮箱)
-    private String buyerLogonId;
 }

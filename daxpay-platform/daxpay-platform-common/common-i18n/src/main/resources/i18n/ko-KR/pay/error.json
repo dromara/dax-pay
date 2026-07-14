@@ -27,7 +27,6 @@
   "unsupportedPayMethod": "지원되지 않는 결제 수단: {0}",
   "methodNotExist": "결제 수단이 존재하지 않습니다.",
   "methodNotEnable": "결제 수단이 활성화되지 않았습니다.",
-  "otherMethodRequired": "다른 결제 수단이 필요합니다.",
   "orderNoRequired": "결제 주문 번호는 비워둘 수 없습니다.",
   "pay": {
     "timeoutRetry": "결제 시간이 초과되었습니다. 결제 상태를 확인하세요.",
@@ -72,7 +71,8 @@
     "amountExceed": "환불 금액은 결제 금액을 초과할 수 없습니다.",
     "orderNotFound": "환불 주문을 찾을 수 없습니다.",
     "syncProcessing": "환불 동기화가 진행 중입니다. 반복하지 마세요.",
-    "noPermission": "판매자에게 환불 권한이 없습니다."
+    "noPermission": "판매자에게 환불 권한이 없습니다.",
+    "gatewayNotSupported": "게이트웨이 결제 주문은 아직 환불을 지원하지 않습니다"
   },
   "callback": {
     "processing": "콜백 처리, 이 콜백 요청 무시",
@@ -107,5 +107,10 @@
     "methodParamRequired": "결제 방법에는 매개변수가 하나 이상 있어야 하며 서명된 결제 매개변수가 첫 번째 위치에 있어야 합니다.",
     "paramExtendRequired": "매개변수는 MerchantPaymentCommonParam을 확장해야 합니다.",
     "returnTypeRequired": "결제 방법 반환 유형은 DaxResult여야 합니다."
+  },
+  "barcode": {
+    "invalid": "유효하지 않은 결제 바코드입니다",
+    "unsupportedType": "지원하지 않는 결제 바코드 유형입니다",
+    "methodMismatch": "바코드와 결제 방식이 일치하지 않습니다"
   }
 }

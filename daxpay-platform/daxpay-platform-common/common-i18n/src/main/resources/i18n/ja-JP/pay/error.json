@@ -27,7 +27,6 @@
   "unsupportedPayMethod": "サポートされていない支払い方法: {0}",
   "methodNotExist": "支払い方法が存在しません",
   "methodNotEnable": "支払い方法が有効になっていません",
-  "otherMethodRequired": "他の支払い方法が必要です",
   "orderNoRequired": "支払い注文番号を空にすることはできません",
   "pay": {
     "timeoutRetry": "支払いがタイムアウトしました。支払いステータスを確認してください",
@@ -72,7 +71,8 @@
     "amountExceed": "払い戻し額はお支払い額を超えることはできません",
     "orderNotFound": "返金注文が見つかりません",
     "syncProcessing": "返金同期が進行中です。繰り返さないでください",
-    "noPermission": "販売者には返金の許可がありません"
+    "noPermission": "販売者には返金の許可がありません",
+    "gatewayNotSupported": "ゲートウェイ決済注文は現在返金に対応していません"
   },
   "callback": {
     "processing": "コールバック処理。このコールバック要求は無視されます。",
@@ -107,5 +107,10 @@
     "methodParamRequired": "支払い方法には少なくとも 1 つのパラメータが必要で、署名付き支払いパラメータが最初の位置にある必要があります",
     "paramExtendRequired": "パラメータは MerchantPaymentCommonParam を拡張する必要があります",
     "returnTypeRequired": "支払い方法の戻り値の型は DaxResult である必要があります"
+  },
+  "barcode": {
+    "invalid": "無効な決済バーコードです",
+    "unsupportedType": "未対応の決済バーコード種別です",
+    "methodMismatch": "バーコードと支払方法が一致しません"
   }
 }

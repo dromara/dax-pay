@@ -12,6 +12,7 @@ import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
 import cn.daxpay.open.payment.trade.order.entity.GatewayPayOrder;
 import cn.daxpay.open.payment.trade.order.entity.NormalPayOrder;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
+import cn.daxpay.open.payment.trade.util.PayTradeAmountUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,7 +24,7 @@ import java.util.Objects;
 /// # 交易统一处理服务
 ///
 /// 支付成功/失败/关闭后的统一处理逻辑, 按 trade_type 回写对应业务容器。
-/// 通道回执字段统一写容器, trade 仅保留资金态(payBody/outOrderNo 等)。
+/// 通道回执字段(含 payBody)统一写容器, trade 仅保留资金态与 outOrderNo 等。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -37,7 +38,8 @@ public class PayUniHandleService {
     /// 不论是否完成都更新交易单; 仅资金状态为 SUCCESS 时同步容器为 PAID。
     /// 回执字段(transOrderNo/buyerId 等)写容器。
     public void payAfterHandel(PayTrade trade, PayTradeResultBo result) {
-        payTradeManager.updateById(trade);
+        // 按 status/tradeType 回写入账金额后再落库
+        updateTradeWithPosted(trade);
         if (isGateway(trade)) {
             GatewayPayOrder order = gatewayPayOrderManager.findById(trade.getContainerId()).orElse(null);
             if (order != null) {
@@ -63,7 +65,7 @@ public class PayUniHandleService {
 
     /// 支付成功后续处理(同步/回调路径), 含通道回执写容器
     public void paySuccess(PayTrade trade, PaySyncResultBo syncResult) {
-        payTradeManager.updateById(trade);
+        updateTradeWithPosted(trade);
         if (isGateway(trade)) {
             GatewayPayOrder order = gatewayPayOrderManager.findById(trade.getContainerId()).orElse(null);
             if (order != null) {
@@ -85,7 +87,7 @@ public class PayUniHandleService {
 
     /// 支付成功后续处理(回调路径, 无回执详情)
     public void paySuccess(PayTrade trade) {
-        payTradeManager.updateById(trade);
+        updateTradeWithPosted(trade);
         markContainerPaid(trade);
     }
 
@@ -94,7 +96,7 @@ public class PayUniHandleService {
         OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
         trade.setStatus(PayFundStatusEnum.FAIL.getCode());
         trade.setCloseTime(now);
-        payTradeManager.updateById(trade);
+        updateTradeWithPosted(trade);
         this.markContainerClosed(trade, now, false, errMsg);
     }
 
@@ -106,7 +108,7 @@ public class PayUniHandleService {
                 ? PayFundStatusEnum.CANCEL.getCode()
                 : PayFundStatusEnum.CLOSE.getCode());
         trade.setCloseTime(now);
-        payTradeManager.updateById(trade);
+        updateTradeWithPosted(trade);
         this.markContainerClosed(trade, now, false, null);
     }
 
@@ -115,8 +117,14 @@ public class PayUniHandleService {
         OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
         trade.setStatus(PayFundStatusEnum.CLOSE.getCode());
         trade.setCloseTime(now);
-        payTradeManager.updateById(trade);
+        updateTradeWithPosted(trade);
         this.markContainerClosed(trade, now, true, null);
+    }
+
+    /// 回写入账金额后更新资金凭证
+    private void updateTradeWithPosted(PayTrade trade) {
+        PayTradeAmountUtil.applyPostedAmount(trade);
+        payTradeManager.updateById(trade);
     }
 
     /// 仅关闭网关容器(尚未创建 Trade 的预下单超时)
@@ -185,11 +193,14 @@ public class PayUniHandleService {
         order.setTransOrderNo(result.getTransOrderNo());
         order.setRelationOrderNo(result.getRelationOrderNo());
         order.setBuyerId(result.getBuyerId());
-        order.setBuyerLogonId(result.getBuyerLogonId());
         order.setTradeProduct(result.getTradeProduct());
         order.setTradeWay(result.getTradeWay());
         order.setBankType(result.getBankType());
         order.setPromotionType(result.getPromotionType());
+        // 支付参数体落容器, 作为已拉起缓存标记
+        order.setPayBody(result.getPayBody());
+        order.setPayBodyType(Objects.nonNull(result.getPayBodyType())
+                ? result.getPayBodyType().getCode() : null);
         order.setErrorMsg(null);
     }
 
@@ -197,7 +208,6 @@ public class PayUniHandleService {
         order.setTransOrderNo(result.getTransOrderNo());
         order.setRelationOrderNo(result.getRelationOrderNo());
         order.setBuyerId(result.getBuyerId());
-        order.setBuyerLogonId(result.getBuyerLogonId());
         order.setTradeProduct(result.getTradeProduct());
         order.setTradeWay(result.getTradeWay());
         order.setBankType(result.getBankType());

@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
 /// 持有单笔支付策略管线的"资金凭证 + 通道配置 + 路由参数"三要素,
 /// 每次支付/同步/关闭创建新实例,显式传递,不进 ThreadLocal。
 ///
-/// close/sync 策略直接从本类读取路由参数(channelMchNo / capability / clientIp),
+/// close/sync 策略直接从本类读取路由参数(channelMchNo / capability / channelAppId / clientIp),
 /// 这些字段由 service 层从容器提取后填入。
 ///
 /// 与线程级身份上下文严格区分:
@@ -36,6 +36,9 @@ public class PayStrategyContext {
 
     /// 支付能力编码(service 层从容器提取填入,供 close/sync 策略组装凭证)
     private String capability;
+
+    /// 通道应用 AppId(订单快照; close/sync 优先使用, 保证与下单同一 App)
+    private String channelAppId;
 
     /// 客户端 IP(service 层从容器提取填入,供 close/sync 策略使用)
     private String clientIp;

@@ -17,10 +17,8 @@ import java.util.Objects;
 public enum PayMethodEnum implements I18nSupport {
 
     /* 聚合支付 */
-    /// 聚合扫码
+    /// 聚合扫码（通道原生通扫码；付款码由平台按 authCode 前缀识别为分钱包 method）
     AGGREGATE_PAY_QRCODE("aggregate_pay_qrcode", PayProviderEnum.AGGREGATE_PAY),
-    /// 聚合付款码
-    AGGREGATE_PAY_BARCODE("aggregate_pay_barcode", PayProviderEnum.AGGREGATE_PAY),
 
     /* 微信 */
     /// 微信小程序收银台

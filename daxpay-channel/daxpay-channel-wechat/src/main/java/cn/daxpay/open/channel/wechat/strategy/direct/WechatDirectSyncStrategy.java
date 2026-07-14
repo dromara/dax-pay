@@ -34,7 +34,8 @@ public class WechatDirectSyncStrategy extends AbsSyncPayOrderStrategy {
         // 直接从 trade 读取路由参数, 不再需要 container 中间层
         // 组装通道调用凭证
         WechatSdkCredential credential = wechatDirectConfigAssembler.buildConfig(
-                context.getTrade().getMchNo(), context.getChannelMchNo(), context.getCapability());
+                context.getTrade().getMchNo(), context.getChannelMchNo(), context.getCapability(),
+                context.getChannelAppId());
 
         return wechatSyncService.sync(context.getTrade(), credential);
     }

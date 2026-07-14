@@ -49,6 +49,8 @@ public class HmpayPayService {
         req.setMethod(method);
         // JSAPI/MINI 场景的用户标识(微信 openid / 支付宝 buyerId)
         req.setOpenId(payParam.getOpenId());
+        // 通道应用 AppId(微信 mer_app_id 等)
+        req.setChannelAppId(payParam.getChannelAppId());
         req.setClientIp(payParam.getClientIp());
         // 杉德 notify_url 由子应用从 credential.notifyUrl 透传
         credential.setNotifyUrl(this.buildNotifyUrl(order, payParam.getChannelMchNo()));
@@ -81,9 +83,8 @@ public class HmpayPayService {
     private static HmpayPayMethod mapMethod(String methodCode) {
         PayMethodEnum m = PayMethodEnum.findByCode(methodCode);
         return switch (m) {
-            // 聚合(扫码/条码)
+            // 聚合扫码(通道原生通扫码)
             case AGGREGATE_PAY_QRCODE -> HmpayPayMethod.AGGREGATE_QR;
-            case AGGREGATE_PAY_BARCODE -> HmpayPayMethod.BARCODE;
             // 微信(扫码/JSAPI/小程序)
             case WECHAT_QR -> HmpayPayMethod.WECHAT_QR;
             case WECHAT_JSAPI -> HmpayPayMethod.WECHAT_JSAPI;
@@ -91,6 +92,8 @@ public class HmpayPayService {
             // 支付宝(扫码/JSAPI/小程序)
             case ALIPAY_QR -> HmpayPayMethod.ALIPAY_QR;
             case ALIPAY_JSAPI, ALIPAY_MINI -> HmpayPayMethod.ALIPAY_JSAPI;
+            // 付款码: 平台已识别分钱包 method, 通道折叠为统一条码 API
+            case WECHAT_BARCODE, ALIPAY_BARCODE -> HmpayPayMethod.BARCODE;
             default -> throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
                     "channel.error.hmpayUnsupportedPayMethod", methodCode);
         };

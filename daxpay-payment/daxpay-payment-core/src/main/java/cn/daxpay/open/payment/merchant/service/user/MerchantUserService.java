@@ -1,8 +1,11 @@
 package cn.daxpay.open.payment.merchant.service.user;
 
 import cn.daxpay.open.platform.core.enums.client.ClientEnum;
+import cn.daxpay.open.platform.core.exception.DataNotExistException;
+import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.config.ConfigNotExistException;
 import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
+import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.payment.merchant.convert.info.MerchantInfoConvert;
 import cn.daxpay.open.payment.merchant.dao.appinfo.MchAppInfoManager;
 import cn.daxpay.open.payment.merchant.dao.info.MerchantInfoManager;
@@ -15,20 +18,28 @@ import cn.daxpay.open.payment.merchant.param.info.MerchantForgotParam;
 import cn.daxpay.open.payment.merchant.param.info.MerchantRegisterParam;
 import cn.daxpay.open.payment.merchant.service.appinfo.MchAppInfoService;
 import cn.daxpay.open.platform.core.enums.role.RoleCodeEnum;
+import cn.daxpay.open.platform.iam.auth.service.IamSecurityConfigService;
+import cn.daxpay.open.platform.iam.auth.service.PasswordDecryptService;
+import cn.daxpay.open.platform.iam.auth.service.PasswordPolicyService;
+import cn.daxpay.open.platform.iam.dao.role.RoleManager;
+import cn.daxpay.open.platform.iam.dao.user.UserInfoManager;
+import cn.daxpay.open.platform.iam.dao.user.UserPasswordSecurityManager;
+import cn.daxpay.open.platform.iam.entity.role.Role;
+import cn.daxpay.open.platform.iam.entity.user.UserInfo;
+import cn.daxpay.open.platform.iam.param.user.UserInfoParam;
+import cn.daxpay.open.platform.iam.service.upms.UserRoleService;
+import cn.daxpay.open.platform.iam.service.user.UserAdminService;
+import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformPasswordPolicyConfig;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.BCrypt;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import cn.daxpay.open.platform.iam.auth.service.PasswordDecryptService;
-import cn.daxpay.open.platform.iam.dao.role.RoleManager;
-import cn.daxpay.open.platform.iam.dao.user.UserInfoManager;
-import cn.daxpay.open.platform.iam.entity.role.Role;
-import cn.daxpay.open.platform.iam.entity.user.UserInfo;
-import cn.daxpay.open.platform.iam.param.user.UserInfoParam;
-import cn.daxpay.open.platform.iam.service.upms.UserRoleService;
-import cn.daxpay.open.platform.iam.service.user.UserAdminService;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.util.Objects;
 
 /// # 商户用户管理服务
 ///
@@ -36,13 +47,6 @@ import cn.daxpay.open.platform.iam.service.user.UserAdminService;
 @Service
 @RequiredArgsConstructor
 public class MerchantUserService {
-
-    /// 根据用户id查询商户号
-    public String findMchNoByUserId(Long userId){
-        return merchantUserManager.findByUserId(userId)
-                .map(MerchantUser::getMchNo)
-                .orElse(null);
-    }
 
     private final MerchantInfoManager merchantInfoManager;
     private final MchAppInfoManager mchAppInfoManager;
@@ -53,6 +57,16 @@ public class MerchantUserService {
     private final RoleManager roleManager;
     private final UserRoleService userRoleService;
     private final PasswordDecryptService passwordDecryptService;
+    private final PasswordPolicyService passwordPolicyService;
+    private final UserPasswordSecurityManager passwordSecurityManager;
+    private final IamSecurityConfigService iamSecurityConfigService;
+
+    /// 根据用户id查询商户号
+    public String findMchNoByUserId(Long userId) {
+        return merchantUserManager.findByUserId(userId)
+                .map(MerchantUser::getMchNo)
+                .orElse(null);
+    }
 
     /// 注册商户
     @Transactional(rollbackFor = Exception.class)
@@ -63,7 +77,7 @@ public class MerchantUserService {
         // 创建商户管理员
         this.createMerchantAdmin(param, merchant);
         merchantInfoManager.save(merchant);
-        // 是否创建创建默认应用
+        // 创建默认应用
         MchAppInfo mchApp = new MchAppInfo()
                 .setAppName(merchant.getMchName() + "的默认应用")
                 .setDefaultApp(true)
@@ -91,10 +105,10 @@ public class MerchantUserService {
     }
 
     /// 生成商户号
-    private String getMchNo(){
+    private String getMchNo() {
         String mchNo = "M" + System.currentTimeMillis();
-        for (int i = 0; i < 10; i++){
-            if (!merchantInfoManager.existedByField(MerchantInfo::getMchNo, mchNo)){
+        for (int i = 0; i < 10; i++) {
+            if (!merchantInfoManager.existedByField(MerchantInfo::getMchNo, mchNo)) {
                 return mchNo;
             }
             mchNo = "M" + System.currentTimeMillis();
@@ -104,17 +118,42 @@ public class MerchantUserService {
     }
 
     /// 忘记密码 - 重新设置密码
+    ///
+    /// 公开接口([IgnoreAuth]): 必须用绑定手机号核验身份, 禁止仅凭账号改密。
     @Transactional(rollbackFor = Exception.class)
     public void forgot(MerchantForgotParam param) {
-        // 按服务商+账号查找用户
-        UserInfo userInfo = userInfoManager.findByClientCodeAndAccount("mch", param.getAccount())
-                // 商户: 账号或手机号未找到
-                .orElseThrow(() -> new cn.daxpay.open.platform.core.exception.DataNotExistException("error.payment.merchant.accountOrPhoneNotFound"));
-        // 解密密码
+        if (StrUtil.isBlank(param.getPhone())) {
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.payment.merchant.accountOrPhoneError");
+        }
+        // 按商户终端 + 账号查找用户
+        UserInfo userInfo = userInfoManager.findByClientCodeAndAccount(
+                        ClientEnum.MERCHANT.getCode(), param.getAccount())
+                // 商户: 账号或手机号未找到(统一文案, 避免枚举账号是否存在)
+                .orElseThrow(() -> new DataNotExistException("error.payment.merchant.accountOrPhoneNotFound"));
+        // 绑定手机号核验: 未绑定或与请求不一致均拒绝
+        if (StrUtil.isBlank(userInfo.getPhone())
+                || !Objects.equals(userInfo.getPhone(), param.getPhone())) {
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "error.payment.merchant.accountOrPhoneError");
+        }
+        // 解密并校验密码策略
         String newPassword = passwordDecryptService.decryptPassword(param.getNewPassword());
-        // 修改密码
-        var passwordHash = BCrypt.hashpw(newPassword, BCrypt.gensalt());
+        passwordPolicyService.validatePasswordHistory(userInfo.getId(), newPassword);
+        passwordPolicyService.validatePassword(newPassword);
+        String passwordHash = BCrypt.hashpw(newPassword, BCrypt.gensalt());
         userInfo.setPassword(passwordHash);
         userInfoManager.updateById(userInfo);
+        passwordPolicyService.savePasswordHistory(userInfo.getId(), passwordHash);
+        passwordSecurityManager.updatePasswordExpireTime(userInfo.getId(), calculatePasswordExpireTime());
+    }
+
+    /// 按平台密码策略计算过期时间(UTC); 未启用轮换则 null
+    private OffsetDateTime calculatePasswordExpireTime() {
+        PlatformPasswordPolicyConfig config = iamSecurityConfigService.getPasswordPolicy();
+        Integer rotationDays = config.getRotationDays();
+        if (rotationDays == null || rotationDays <= 0) {
+            return null;
+        }
+        return OffsetDateTime.now(ZoneOffset.UTC).plusDays(rotationDays);
     }
 }

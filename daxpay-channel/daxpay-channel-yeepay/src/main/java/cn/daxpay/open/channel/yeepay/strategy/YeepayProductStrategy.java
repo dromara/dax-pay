@@ -46,7 +46,9 @@ public class YeepayProductStrategy extends AbsProductStrategy {
 
     @Override
     public List<PayProviderEnum> supportedPayProviders() {
-        return List.of(PayProviderEnum.WECHAT, PayProviderEnum.ALIPAY, PayProviderEnum.UNION_PAY);
+        // AGGREGATE_PAY: 通道路由基础模式可按聚合扫码 method 绑定本产品
+        return List.of(PayProviderEnum.AGGREGATE_PAY, PayProviderEnum.WECHAT, PayProviderEnum.ALIPAY,
+                PayProviderEnum.UNION_PAY);
     }
 
     @Override

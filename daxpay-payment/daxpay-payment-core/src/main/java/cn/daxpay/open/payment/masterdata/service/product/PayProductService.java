@@ -9,7 +9,7 @@ import cn.daxpay.open.payment.masterdata.param.product.PayProductQuery;
 import cn.daxpay.open.payment.masterdata.result.product.PayProductResult;
 import cn.daxpay.open.payment.strategy.product.AbsProductStrategy;
 import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
-import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
+import cn.daxpay.open.platform.common.mybatisplus.query.generator.QueryGenerator;
 import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
@@ -17,6 +17,7 @@ import cn.daxpay.open.platform.core.rest.dto.LabelValue;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.hutool.core.util.StrUtil;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -52,15 +53,34 @@ public class PayProductService {
     }
 
     /// 分页查询支付产品
+    ///
+    /// 展示名来自 i18n 枚举, 无法下推 SQL LIKE。产品主数据规模小: 先按 DB 条件全量查询,
+    /// 填充名称后按关键字过滤, 再内存分页, 保证 total 与页大小正确。
     public PageResult<PayProductResult> page(PageParam pageParam, PayProductQuery query, String nameKeyword) {
-        PageResult<PayProductResult> pageResult = MpUtil.toPageResult(payProductManager.page(pageParam, query));
-        List<PayProductResult> records = pageResult.getRecords().stream()
+        QueryWrapper<PayProduct> wrapper = QueryGenerator.generator(query);
+        wrapper.lambda().orderByAsc(PayProduct::getSortNo).orderByAsc(PayProduct::getId);
+        List<PayProductResult> filtered = payProductManager.findAll(wrapper).stream()
+                .map(PayProduct::toResult)
                 .map(this::fillProductFeatures)
                 .filter(row -> matchNameKeyword(row, nameKeyword))
                 .toList();
-        fillActiveEnv(records);
-        pageResult.setRecords(records);
-        return pageResult;
+
+        int current = Math.max(pageParam.getCurrent(), 1);
+        int size = Math.max(pageParam.getSize(), 1);
+        int from = (current - 1) * size;
+        List<PayProductResult> pageRecords;
+        if (from >= filtered.size()) {
+            pageRecords = List.of();
+        } else {
+            int to = Math.min(from + size, filtered.size());
+            pageRecords = filtered.subList(from, to);
+        }
+        fillActiveEnv(pageRecords);
+        return new PageResult<PayProductResult>()
+                .setCurrent(current)
+                .setSize(size)
+                .setTotal(filtered.size())
+                .setRecords(pageRecords);
     }
 
     /// 根据产品编码查询
@@ -191,7 +211,7 @@ public class PayProductService {
                 .setPayIdType(strategy.getPayIdType().getCode());
     }
 
-    /// 按产品名称关键字过滤（分页后在内存中匹配 i18n 展示名）
+    /// 按产品名称关键字过滤（匹配 i18n 展示名）
     private boolean matchNameKeyword(PayProductResult row, String nameKeyword) {
         if (StrUtil.isBlank(nameKeyword)) {
             return true;

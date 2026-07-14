@@ -1,6 +1,5 @@
 {
   "aggregate_pay_qrcode": "Kod QR Agregat",
-  "aggregate_pay_barcode": "Kod Bar Agregat",
   "wechat_cashier": "Juruwang Mini WeChat",
   "wechat_jsapi": "WeChat JSAPI",
   "wechat_app": "Apl WeChat",

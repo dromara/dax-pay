@@ -39,7 +39,8 @@ public class WechatDirectCloseStrategy extends AbsPayCloseStrategy {
 
         // 组装通道调用凭证
         WechatSdkCredential credential = wechatDirectConfigAssembler.buildConfig(
-                trade.getMchNo(), context.getChannelMchNo(), context.getCapability());
+                trade.getMchNo(), context.getChannelMchNo(), context.getCapability(),
+                context.getChannelAppId());
 
         return wechatCloseService.close(trade, credential, useCancel);
     }
