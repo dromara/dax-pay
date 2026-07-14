@@ -1,0 +1,8 @@
+{
+  "incomplete": "OSS configuration is incomplete. Please fill endpoint, buckets and credentials",
+  "checkSuccess": "OSS connectivity check passed",
+  "checkFailed": "OSS connectivity check failed, status: {0}",
+  "authFailed": "OSS authentication failed, please check AccessKey / SecretKey",
+  "bucketNotFound": "Bucket not found, please check public/private bucket names",
+  "networkError": "Cannot reach object storage, please check endpoint and network"
+}

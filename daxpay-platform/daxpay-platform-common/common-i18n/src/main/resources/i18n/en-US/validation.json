@@ -427,6 +427,9 @@
     "privateBucket": {
       "notBlank": "Private bucket cannot be blank"
     },
+    "urlType": {
+      "notBlank": "URL type cannot be blank"
+    },
     "dictId": {
       "notNull": "Dictionary ID cannot be blank"
     },

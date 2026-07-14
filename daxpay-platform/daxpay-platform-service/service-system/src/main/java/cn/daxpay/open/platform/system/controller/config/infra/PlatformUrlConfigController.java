@@ -5,7 +5,9 @@ import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
+import cn.daxpay.open.platform.system.param.config.infra.PlatformUrlCheckParam;
 import cn.daxpay.open.platform.system.param.config.infra.PlatformUrlConfigParam;
+import cn.daxpay.open.platform.system.result.config.infra.ConnectivityCheckResult;
 import cn.daxpay.open.platform.system.result.config.infra.PlatformUrlConfigResult;
 import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -31,6 +33,13 @@ public class PlatformUrlConfigController {
     @GetMapping("/get")
     public Result<PlatformUrlConfigResult> getUrlConfig() {
         return Res.ok(platformUrlConfigService.findUrlConfig());
+    }
+
+    @PermCode(code = PermCodes.Action.VIEW, nameCn = "平台配置查看", nameEn = "Platform Config View")
+    @Operation(summary = "检查端点连通性")
+    @PostMapping("/check")
+    public Result<ConnectivityCheckResult> checkUrl(@RequestBody @Validated PlatformUrlCheckParam param) {
+        return Res.ok(platformUrlConfigService.checkUrl(param));
     }
 
     @PermCode(code = PermCodes.Action.MANAGE, nameCn = "平台配置管理", nameEn = "Platform Config Manage")

@@ -10,6 +10,7 @@ import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.S3Configuration;
 import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 
 import java.net.URI;
@@ -92,6 +93,31 @@ public class StorageClientService {
         return s3Presigner;
     }
 
+    /// 丢弃缓存的 S3 客户端与预签名器
+    ///
+    /// OSS 配置更新后调用, 下次访问按新配置重建客户端.
+    public void invalidate() {
+        synchronized (this) {
+            if (s3Client != null) {
+                try {
+                    s3Client.close();
+                } catch (Exception e) {
+                    log.warn("关闭 S3Client 失败: {}", e.getMessage());
+                }
+                s3Client = null;
+            }
+            if (s3Presigner != null) {
+                try {
+                    s3Presigner.close();
+                } catch (Exception e) {
+                    log.warn("关闭 S3Presigner 失败: {}", e.getMessage());
+                }
+                s3Presigner = null;
+            }
+            log.info("已使 S3 客户端缓存失效");
+        }
+    }
+
     /// 创建S3客户端
     ///
     /// 根据配置创建S3客户端，支持自定义endpoint（用于MinIO等兼容存储）。
@@ -148,10 +174,16 @@ public class StorageClientService {
             builder.endpointOverride(URI.create(config.getEndpoint()));
         }
 
-        log.info("创建S3预签名器");
+        // 与 S3Client 保持一致: MinIO 等需 path-style, 否则预签名 URL 主机形态不正确
+        builder.serviceConfiguration(S3Configuration.builder()
+                .pathStyleAccessEnabled(config.isPathStyleAccess())
+                .build());
+
+        log.info("创建S3预签名器: pathStyleAccess={}", config.isPathStyleAccess());
         return builder.build();
     }
 
 }
+
 
 

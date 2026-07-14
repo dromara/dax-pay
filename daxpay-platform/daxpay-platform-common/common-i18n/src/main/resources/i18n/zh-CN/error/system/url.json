@@ -1,0 +1,7 @@
+{
+  "notConfigured": "访问地址未配置",
+  "checkSuccess": "连通性检查通过",
+  "checkFailed": "连通性检查失败, HTTP 状态码: {0}",
+  "echoMismatch": "连通性检查失败, 后端 echo 响应不符合预期",
+  "networkError": "网络不通, 请检查地址是否正确或服务是否可达"
+}

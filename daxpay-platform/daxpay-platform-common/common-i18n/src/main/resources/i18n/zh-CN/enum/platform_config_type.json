@@ -4,5 +4,7 @@
   "security_session": "会话管理配置",
   "security_two_factor_auth": "双因素认证配置",
   "url": "系统访问地址配置",
+  "website": "站点显示内容配置",
   "wechat_notify": "微信消息通知模板配置"
 }
+

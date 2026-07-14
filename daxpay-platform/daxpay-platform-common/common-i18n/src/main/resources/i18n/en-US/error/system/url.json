@@ -1,0 +1,7 @@
+{
+  "notConfigured": "Access URL is not configured",
+  "checkSuccess": "Connectivity check passed",
+  "checkFailed": "Connectivity check failed, HTTP status: {0}",
+  "echoMismatch": "Connectivity check failed, backend echo response mismatch",
+  "networkError": "Network unreachable, please verify the URL and service availability"
+}

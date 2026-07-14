@@ -430,6 +430,9 @@
     "privateBucket": {
       "notBlank": "私有存储桶不能为空"
     },
+    "urlType": {
+      "notBlank": "端点类型不能为空"
+    },
     "dictId": {
       "notNull": "字典ID不可为空"
     },

@@ -1,0 +1,8 @@
+{
+  "incomplete": "OSS 配置不完整, 请填写服务端点、存储桶与密钥",
+  "checkSuccess": "OSS 连通性检查通过",
+  "checkFailed": "OSS 连通性检查失败, 状态码: {0}",
+  "authFailed": "OSS 认证失败, 请检查 AccessKey / SecretKey",
+  "bucketNotFound": "存储桶不存在, 请检查公开/私有桶名称",
+  "networkError": "无法连接对象存储, 请检查端点与网络"
+}
