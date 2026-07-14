@@ -21,9 +21,6 @@ public interface AuthLoginTypeCode {
     /// 账号密码登录(GoView)
     String PASSWORD_GO_VIEW = "passwordGoView";
 
-    /// 手机号登录
-    String PHONE = "phone";
-
     /// 微信登录(公众号)
     String WE_CHAT = "weChat";
 
