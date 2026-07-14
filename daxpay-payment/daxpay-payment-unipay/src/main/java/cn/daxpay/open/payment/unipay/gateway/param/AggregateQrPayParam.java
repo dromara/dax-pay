@@ -16,8 +16,9 @@ public class AggregateQrPayParam {
     @Size(max = 64, message = "{validation.field.orderNo.size}")
     private String orderNo;
 
+    /// 收银场景（环境识别，与聚合/收银台配置共用 [CashierSceneEnum]）
     /// @see CashierSceneEnum
-    @Schema(description = "收银场景 wechat_pay/alipay/union_pay")
+    @Schema(description = "收银场景(CashierSceneEnum: wechat_pay/alipay/union_pay/douyin/browser)")
     @NotBlank(message = "{validation.field.scene.notBlank}")
     @Size(max = 32, message = "{validation.field.scene.size}")
     private String scene;
@@ -26,7 +27,7 @@ public class AggregateQrPayParam {
     @Size(max = 128, message = "{validation.field.openId.size}")
     private String openId;
 
-    @Schema(description = "设备 mobile/pc")
+    @Schema(description = "设备(mobile/pc, 与 H5 __DEVICE__ 一致)")
     @Size(max = 16, message = "{validation.field.device.size}")
     private String device;
 

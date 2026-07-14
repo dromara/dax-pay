@@ -3,9 +3,7 @@ package cn.daxpay.open.payment.unipay.gateway.param;
 import cn.daxpay.open.payment.trade.enums.GatewayPayTypeEnum;
 import cn.daxpay.open.payment.unipay.param.MerchantPaymentCommonParam;
 import cn.daxpay.open.payment.unipay.param.trade.pay.GoodsDetail;
-import cn.daxpay.open.payment.unipay.param.trade.pay.TerminalInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -57,12 +55,13 @@ public class GatewayPrePayParam extends MerchantPaymentCommonParam {
     @Size(max = 512, message = "{validation.field.attach.size}")
     private String attach;
 
+    /// 支付扩展参数（JSON 格式，通道特有的长尾参数；与 [NormalPayParam#extraParam] 对齐）
+    @Schema(description = "支付扩展参数")
+    @Size(max = 2048, message = "{validation.field.extraParam.size}")
+    private String extraParam;
+
     @Schema(description = "过期时间")
     private OffsetDateTime expiredTime;
-
-    @Valid
-    @Schema(description = "终端信息")
-    private TerminalInfo terminal;
 
     @Schema(description = "商品明细")
     private List<GoodsDetail> goodsDetail;

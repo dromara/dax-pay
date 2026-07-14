@@ -88,19 +88,20 @@ public class GatewayPayAssistService {
             if (Objects.equals(status, GatewayOrderStatusEnum.PAID.getCode())) {
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.alreadySuccess");
             }
-            if (List.of(GatewayOrderStatusEnum.CLOSED.getCode(), GatewayOrderStatusEnum.EXPIRED.getCode())
-                    .contains(status)) {
+            // failed 与 closed/expired 同为终态, 不允许再返回原 URL 假装可付
+            if (List.of(GatewayOrderStatusEnum.CLOSED.getCode(), GatewayOrderStatusEnum.EXPIRED.getCode(),
+                    GatewayOrderStatusEnum.FAILED.getCode()).contains(status)) {
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.failedOrClosed");
             }
             return this.buildPrePayResult(order);
         }
 
         OffsetDateTime expiredTime = payAssistService.getExpiredTime(param.getExpiredTime());
-        String terminalNo = param.getTerminal() != null ? param.getTerminal().getTerminalNo() : null;
 
         GatewayPayOrder order = new GatewayPayOrder();
         order.setAppId(param.getAppId());
-        order.setOrderNo(TradeNoGenerateUtil.pay());
+        // 容器业务单号用 order() 号段(ORD…), 与资金 tradeNo 的 pay() 号段(PAY…)身份分离
+        order.setOrderNo(TradeNoGenerateUtil.order());
         order.setBizOrderNo(param.getBizOrderNo());
         order.setGatewayType(typeEnum.getCode());
         order.setTitle(param.getTitle());
@@ -109,11 +110,11 @@ public class GatewayPayAssistService {
         order.setNotifyUrl(param.getNotifyUrl());
         order.setReturnUrl(param.getReturnUrl());
         order.setAttach(param.getAttach());
+        order.setExtraParam(param.getExtraParam());
         order.setExpiredTime(expiredTime);
         order.setAmount(param.getAmount());
         order.setCurrency(CurrencyEnum.CNY.getCode());
         order.setClientIp(param.getClientIp());
-        order.setTerminalNo(terminalNo);
         order.setGoodsDetail(param.getGoodsDetail());
         gatewayPayOrderManager.save(order);
 
@@ -140,8 +141,9 @@ public class GatewayPayAssistService {
         if (Objects.equals(status, GatewayOrderStatusEnum.PAID.getCode())) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.alreadySuccess");
         }
-        if (List.of(GatewayOrderStatusEnum.CLOSED.getCode(), GatewayOrderStatusEnum.EXPIRED.getCode())
-                .contains(status)) {
+        // 与 NormalPayOrder 终态校验对齐: failed / closed / expired 均不可继续支付
+        if (List.of(GatewayOrderStatusEnum.CLOSED.getCode(), GatewayOrderStatusEnum.EXPIRED.getCode(),
+                GatewayOrderStatusEnum.FAILED.getCode()).contains(status)) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.failedOrClosed");
         }
         if (Objects.nonNull(order.getExpiredTime())

@@ -1,6 +1,7 @@
 package cn.daxpay.open.payment.trade.order.entity;
 
 import cn.daxpay.open.payment.common.entity.MchBaseEntity;
+import cn.daxpay.open.payment.merchant.enums.CashierSceneEnum;
 import cn.daxpay.open.payment.trade.enums.GatewayOrderStatusEnum;
 import cn.daxpay.open.payment.trade.enums.GatewayPayTypeEnum;
 import cn.daxpay.open.payment.unipay.param.trade.pay.GoodsDetail;
@@ -20,23 +21,24 @@ import java.util.List;
 
 /// # 网关支付业务单容器
 ///
-/// 业务容器统一落在 trade.order（与 NormalPayOrder 同包）。
-/// 聚合扫码/收银台预下单场景: 创建时不知具体通道, 仅承载收款意图。
+/// 业务容器统一落在 trade.order（与 [NormalPayOrder] 同包，纯持久化无编排 service）。
+/// 聚合扫码/收银台预下单场景: 创建时不知具体通道, 仅承载收款意图（bizOrderNo / 标题 / 回调 等）;
 /// 用户真正支付时再创建 pay_trade(trade_type=gateway) 并回填 channel/product/method。
-/// 网关 orderNo 为预下单 URL 号, 与资金 tradeNo 身份分离。
+/// 网关 orderNo 为预下单 URL 号（号段 order()=ORD…）, 与资金 tradeNo（PAY…）身份分离;
+/// 冗余存储金额/支付/时间线字段, 便于后台查询无需 JOIN pay_trade。
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName(value = "pay_gateway_order", autoResultMap = true)
 public class GatewayPayOrder extends MchBaseEntity {
 
-    /// 平台网关业务单号(URL 用, 预下单即生成, 可无 trade)
+    /// 平台业务单号（容器身份，与 tradeNo 独立生成；预下单即生成、可无 trade；普通通道默认作为上送号 / URL 落地号）
     private String orderNo;
 
     /// 商户业务单号
     private String bizOrderNo;
 
-    /// 网关类型
+    /// 网关支付类型（预下单写入）
     /// @see GatewayPayTypeEnum
     private String gatewayType;
 
@@ -50,24 +52,28 @@ public class GatewayPayOrder extends MchBaseEntity {
     /// @see GatewayOrderStatusEnum
     private String status;
 
-    /// 异步通知地址
+    /// 异步通知地址（出站商户通知用）
     private String notifyUrl;
 
     /// 同步跳转地址
     private String returnUrl;
 
-    /// 商户附加参数
+    /// 商户附加参数（回调原样返回）
     private String attach;
 
-    /// 过期时间
+    /// 业务单过期时间（超时关单权威，不落 pay_trade）
     private OffsetDateTime expiredTime;
 
-    /// 金额(最小货币单位)
+    // ===== 金额（冗余，方便查询；预下单即确定，支付前可无 Trade）=====
+
+    /// 业务单金额（最小货币单位）
     private Long amount;
 
     /// 币种
     /// @see CurrencyEnum
     private String currency;
+
+    // ===== 支付信息（支付时回填，查询过滤用）=====
 
     /// 支付通道编码（冗余自 product → ProductEnum#getChannel，对应 ChannelEnum；非 PayProviderEnum）
     /// @see cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum
@@ -81,32 +87,23 @@ public class GatewayPayOrder extends MchBaseEntity {
     /// @see cn.daxpay.open.platform.core.enums.unipay.PayLimitPayEnum
     private String limitPay;
 
-    /// 支付产品
+    /// 支付产品编码
     /// @see ProductEnum
     private String product;
 
-    /// 支付能力(路由回填)
-    private String capability;
-
-    /// 通道商户号(路由回填)
-    private String channelMchNo;
-
-    /// 通道应用 AppId（本笔交易实际使用的微信/通道侧 AppId 快照；解析后写入，关退同步复用）
-    private String channelAppId;
-
-    // ===== 支付请求参数（支付时写入）=====
+    // ===== 支付请求参数（支付时写入，审计保留；网关无被扫，不承载 barCode）=====
 
     /// 微信 openid（jsapi/app/miniapp）
     private String openid;
 
-    /// 付款码（被扫支付）
-    private String barCode;
-
-    /// 收银场景 wechat_pay/alipay/union_pay
+    /// 收银场景（环境识别，支付时回填；与聚合/收银台配置共用同一字典）
+    /// @see CashierSceneEnum
     private String scene;
 
-    /// 最后发起设备 mobile/pc
+    /// 最后发起设备（mobile/pc，支付时回填；与 H5 端 window.__DEVICE__ 一致）
     private String device;
+
+    // ===== 时间线（冗余，查询展示用）=====
 
     /// 支付成功时间
     private OffsetDateTime payTime;
@@ -114,11 +111,17 @@ public class GatewayPayOrder extends MchBaseEntity {
     /// 关闭时间
     private OffsetDateTime closeTime;
 
-    /// 下单客户端 IP；关单/同步/退款透传通道的单一事实源，兼审计排查
-    private String clientIp;
+    // ===== 通道路由（同步时用于解析通道应用凭证；支付路由后回填）=====
 
-    /// 终端设备编码
-    private String terminalNo;
+    /// 通道商户号(路由回填)
+    private String channelMchNo;
+
+    /// 支付能力编码(路由回填)
+    /// @see cn.daxpay.open.platform.core.enums.pay.channel.PayCapabilityEnum
+    private String capability;
+
+    /// 通道应用 AppId（本笔交易实际使用的微信/通道侧 AppId 快照；解析后写入，关退同步复用）
+    private String channelAppId;
 
     // ===== 通道回执（支付成功/同步后写入）=====
 
@@ -126,7 +129,7 @@ public class GatewayPayOrder extends MchBaseEntity {
     /// @see cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum
     private String provider;
 
-    /// 付款用户 ID（支付宝 buyer_user_id 等）
+    /// 付款用户标识（支付宝 user_id、微信 openid 等，非通道 AppId）
     private String buyerId;
 
     /// 通道方记录的支付产品
@@ -141,28 +144,36 @@ public class GatewayPayOrder extends MchBaseEntity {
     /// 活动类型
     private String promotionType;
 
-    /// 支付参数体（已拉起缓存，仅落容器）
+    /// 支付参数体（如微信 prepay_id 组装串，非空表示已拉起支付，免重复请求通道；仅落容器）
     private String payBody;
 
-    /// 支付参数体类型
+    /// 支付参数体类型（jsapi/sdk/app）
     private String payBodyType;
 
-    // ===== 通道关联订单号（部分通道专用）=====
+    // ===== 关联订单号 =====
 
     /// 透传订单号（三方通道产生的透传订单号）
     private String transOrderNo;
 
     /// 实际上送通道的商户订单号（展示冗余；反查权威在 pay_trade.relation_order_no）
+    /// 普通通道与 orderNo 一致；特殊通道为变形号
     private String relationOrderNo;
 
+    // ===== 请求信息（关单/同步/退款透传依赖 + 审计）=====
+
+    /// 通道附加参数
+    private String extraParam;
 
     /// 应用号
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private String appId;
 
-    /// 商品明细
+    /// 订单商品明细列表（jsonb 存储）
     @TableField(typeHandler = JacksonTypeHandler.class)
     private List<GoodsDetail> goodsDetail;
+
+    /// 下单客户端 IP；关单/同步/退款透传通道的单一事实源，兼审计排查
+    private String clientIp;
 
     /// 错误信息
     @TableField(updateStrategy = FieldStrategy.ALWAYS)

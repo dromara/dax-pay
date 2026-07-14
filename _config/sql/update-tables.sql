@@ -145,6 +145,14 @@ COMMENT ON COLUMN "public"."pay_gateway_order"."pay_body" IS '支付参数体(�
 ALTER TABLE "public"."pay_gateway_order" ADD COLUMN IF NOT EXISTS "pay_body_type" varchar(32);
 COMMENT ON COLUMN "public"."pay_gateway_order"."pay_body_type" IS '支付参数体类型';
 
+-- 网关容器对齐普通容器: 通道附加参数
+ALTER TABLE "public"."pay_gateway_order" ADD COLUMN IF NOT EXISTS "extra_param" varchar(2048);
+COMMENT ON COLUMN "public"."pay_gateway_order"."extra_param" IS '通道附加参数';
+
+-- 网关不支持线下终端/被扫: 移除无用列（重构期可破坏性变更）
+ALTER TABLE "public"."pay_gateway_order" DROP COLUMN IF EXISTS "terminal_no";
+ALTER TABLE "public"."pay_gateway_order" DROP COLUMN IF EXISTS "bar_code";
+
 -- 实际上送串索引(回调反查)
 CREATE INDEX IF NOT EXISTS "idx_pay_trade_relation_order_no" ON "public"."pay_trade" ("relation_order_no");
 CREATE INDEX IF NOT EXISTS "idx_pay_normal_order_order_no" ON "public"."pay_normal_order" ("order_no");

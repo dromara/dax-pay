@@ -8,6 +8,8 @@ import lombok.experimental.Accessors;
 import java.time.OffsetDateTime;
 
 /// # 网关支付业务单查询参数(管理)
+///
+/// 查询维度与 [NormalPayOrderQuery] 对齐, 另含网关类型 gatewayType / 平台单号 orderNo。
 @Data
 @Accessors(chain = true)
 @Schema(title = "网关支付业务单查询参数")
@@ -29,10 +31,16 @@ public class GatewayPayOrderQuery {
     @Schema(description = "商户业务单号")
     private String bizOrderNo;
 
+    @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
+    @Schema(description = "订单标题")
+    private String title;
+
+    /// @see cn.daxpay.open.payment.trade.enums.GatewayPayTypeEnum
     @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "网关类型")
     private String gatewayType;
 
+    /// @see cn.daxpay.open.payment.trade.enums.GatewayOrderStatusEnum
     @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "业务状态")
     private String status;
@@ -41,6 +49,12 @@ public class GatewayPayOrderQuery {
     @Schema(description = "支付通道")
     private String channel;
 
+    /// @see cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
+    @Schema(description = "支付方式")
+    private String method;
+
+    /// @see cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum
     @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "支付产品")
     private String product;
@@ -52,4 +66,12 @@ public class GatewayPayOrderQuery {
     @QueryParam(type = QueryParam.CompareTypeEnum.LE, fieldName = "create_time")
     @Schema(description = "创建时间-结束")
     private OffsetDateTime createTimeEnd;
+
+    @QueryParam(type = QueryParam.CompareTypeEnum.GE, fieldName = "amount")
+    @Schema(description = "金额下限(分)")
+    private Long amountMin;
+
+    @QueryParam(type = QueryParam.CompareTypeEnum.LE, fieldName = "amount")
+    @Schema(description = "金额上限(分)")
+    private Long amountMax;
 }

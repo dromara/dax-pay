@@ -157,8 +157,9 @@ public class GatewayPayHandleService {
         order.setLimitPay(payParam.getLimitPay() != null
                 ? String.join(",", payParam.getLimitPay()) : null);
         order.setOpenid(payParam.getOpenId());
-        order.setBarCode(payParam.getAuthCode());
         order.setProduct(payParam.getProduct());
+        // 与 Normal 对齐: 容器冗余 relationOrderNo, 供 ContainerFieldResolver / 管理展示
+        order.setRelationOrderNo(order.getOrderNo());
         gatewayPayOrderManager.updateById(order);
         return trade;
     }
@@ -170,9 +171,11 @@ public class GatewayPayHandleService {
             trade.setPayTime(result.getFinishTime());
         }
         trade.setOutOrderNo(result.getOutOrderNo());
-        // 回执与 payBody 写容器, 由 payAfterHandel 统一处理
+        // 回执与 payBody 写容器, 由 payAfterHandel 统一处理(内部 reload 容器)
         payUniHandleService.payAfterHandel(trade, result);
-        return this.buildResult(order, trade);
+        // 必须 reload: payAfterHandel 写的是另一份实体, 入参 order 无 payBody
+        GatewayPayOrder latest = gatewayPayOrderManager.findById(order.getId()).orElse(order);
+        return this.buildResult(latest, trade);
     }
 
     private void fillRouteOnOrder(GatewayPayOrder order, NormalPayParam payParam, String scene, String device) {
@@ -211,6 +214,8 @@ public class GatewayPayHandleService {
         payParam.setNotifyUrl(order.getNotifyUrl());
         payParam.setReturnUrl(order.getReturnUrl());
         payParam.setAttach(order.getAttach());
+        // 预下单写入的通道扩展参数, 与 Normal 容器透传一致
+        payParam.setExtraParam(order.getExtraParam());
         payParam.setExpiredTime(order.getExpiredTime());
         payParam.setClientIp(StrUtil.blankToDefault(clientIp, order.getClientIp()));
         payParam.setGoodsDetail(order.getGoodsDetail());
