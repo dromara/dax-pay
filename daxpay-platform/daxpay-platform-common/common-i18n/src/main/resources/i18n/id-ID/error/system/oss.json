@@ -1,0 +1,8 @@
+{
+  "incomplete": "Konfigurasi OSS tidak lengkap. Silakan isi titik akhir, keranjang, dan kredensial",
+  "checkSuccess": "Pemeriksaan konektivitas OSS berhasil",
+  "checkFailed": "Pemeriksaan konektivitas OSS gagal, status: {0}",
+  "authFailed": "Otentikasi OSS gagal, silakan periksa AccessKey/SecretKey",
+  "bucketNotFound": "Bucket tidak ditemukan, harap periksa nama bucket publik/pribadi",
+  "networkError": "Tidak dapat menjangkau penyimpanan objek, harap periksa titik akhir dan jaringan"
+}

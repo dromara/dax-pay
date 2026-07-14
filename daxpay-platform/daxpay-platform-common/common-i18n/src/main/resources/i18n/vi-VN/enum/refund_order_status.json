@@ -1,0 +1,7 @@
+{
+  "init": "Đã khởi tạo",
+  "progress": "Hoàn tiền",
+  "success": "Hoàn tiền thành công",
+  "fail": "Hoàn tiền không thành công",
+  "close": "Hoàn tiền đã đóng"
+}

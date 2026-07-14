@@ -68,7 +68,16 @@ public class JsonMessageSource extends AbstractMessageSource {
             Map.entry("ja", "ja-JP"),
             Map.entry("ja-jp", "ja-JP"),
             Map.entry("ko", "ko-KR"),
-            Map.entry("ko-kr", "ko-KR")
+            Map.entry("ko-kr", "ko-KR"),
+            // 东盟核心：印尼 / 越南 / 泰国 / 马来西亚
+            Map.entry("id", "id-ID"),
+            Map.entry("id-id", "id-ID"),
+            Map.entry("vi", "vi-VN"),
+            Map.entry("vi-vn", "vi-VN"),
+            Map.entry("th", "th-TH"),
+            Map.entry("th-th", "th-TH"),
+            Map.entry("ms", "ms-MY"),
+            Map.entry("ms-my", "ms-MY")
     );
 
     public JsonMessageSource(ResourcePatternResolver resourceResolver) {

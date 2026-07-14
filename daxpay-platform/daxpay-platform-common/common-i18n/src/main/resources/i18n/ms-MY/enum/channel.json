@@ -1,0 +1,20 @@
+{
+  "alipay": "Alipay",
+  "wechat": "WeChat Pay",
+  "union_pay": "UnionPay",
+  "leshua_pay": "Leshua Pay",
+  "vbill_pay": "Vbill Pay",
+  "ada_pay": "Ada Pay",
+  "dougong_pay": "Dougong Pay",
+  "hkrt_pay": "Bayar HKRT",
+  "lakala_pay": "Lakala Pay",
+  "fuyou_pay": "Fuyou Bayar",
+  "sheng_pay": "Sheng Pay",
+  "ysep_pay": "Bayar YSEP",
+  "quick_pay": "Bayar Cepat",
+  "sand_pay": "Bayar Pasir",
+  "yee_pay": "Yee Bayar",
+  "ums_pay": "UMS Pay",
+  "douyin_pay": "Douyin Pay",
+  "jee_pay": "Jeepay"
+}

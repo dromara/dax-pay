@@ -1,0 +1,12 @@
+{
+  "defaultCannotDelete": "Giao thức mặc định không thể bị xóa",
+  "notExist": "Không tìm thấy giao thức người dùng",
+  "itemNotExist": "Không tìm thấy mục giao thức người dùng",
+  "defaultItemNotExist": "Không có giao thức mặc định nào tồn tại cho loại này",
+  "versionNotExist": "Không tìm thấy phiên bản giao thức người dùng",
+  "draftOnlyCanEdit": "Chỉ có thể chỉnh sửa phiên bản nháp",
+  "draftOnlyCanDelete": "Chỉ có thể xóa phiên bản nháp",
+  "draftOnlyCanPublish": "Chỉ có thể xuất bản phiên bản nháp",
+  "publishedOnlyCanArchive": "Chỉ có thể lưu trữ các phiên bản đã xuất bản",
+  "sameClientType": "Loại khách hàng mục tiêu giống với loại khách hàng nguồn"
+}

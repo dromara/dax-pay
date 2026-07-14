@@ -1,0 +1,5 @@
+{
+  "notExist": "Phương thức thanh toán không tồn tại",
+  "duplicateProvider": "Nhà cung cấp dịch vụ thanh toán trùng lặp trong hiệp hội",
+  "providerNotExist": "Nhà cung cấp dịch vụ thanh toán không tồn tại"
+}

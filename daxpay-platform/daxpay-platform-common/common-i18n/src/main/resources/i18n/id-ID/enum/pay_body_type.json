@@ -1,0 +1,8 @@
+{
+  "link": "Tautan Pembayaran",
+  "jsapi": "Objek JSAPI",
+  "from": "Data Formulir",
+  "identifier": "Pengidentifikasi",
+  "qr_code": "Kode QR",
+  "json": "Objek JSON"
+}

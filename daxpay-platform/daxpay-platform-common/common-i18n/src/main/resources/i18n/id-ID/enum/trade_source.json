@@ -1,0 +1,7 @@
+{
+  "user": "Operasi Pengguna",
+  "mch_api": "API Pedagang",
+  "cashier_code": "Kode Kasir",
+  "checkout": "Pembayaran Keluar",
+  "aggress_pay": "Pembayaran Agregat/Checkout"
+}

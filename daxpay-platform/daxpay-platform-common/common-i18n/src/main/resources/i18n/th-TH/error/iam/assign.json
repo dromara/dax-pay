@@ -1,0 +1,7 @@
+{
+  "roleClientMismatch": "ไคลเอ็นต์บทบาทไม่ตรงกับไคลเอ็นต์คำขอ",
+  "invalidMenuData": "มีข้อมูลเมนูไม่ถูกต้อง",
+  "roleMenuClientMismatch": "ไคลเอนต์บทบาทไม่ตรงกับไคลเอนต์เมนู",
+  "invalidPermCodeData": "มีข้อมูลรหัสอนุญาตที่ไม่ถูกต้อง",
+  "permCodeNotOnSelectedMenus": "รหัสสิทธิ์ไม่ได้ติดตั้งบนเมนูที่เลือก: {0}"
+}

@@ -1,0 +1,5 @@
+{
+  "notExist": "Keupayaan pembayaran tidak wujud",
+  "duplicateProduct": "Produk pembayaran yang dipautkan mestilah unik",
+  "productNotExist": "Produk pembayaran tidak wujud"
+}

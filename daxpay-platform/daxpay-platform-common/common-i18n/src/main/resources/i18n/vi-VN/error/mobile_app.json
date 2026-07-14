@@ -1,0 +1,10 @@
+{
+  "notExist": "Cấu hình ứng dụng di động không tồn tại",
+  "notEnabled": "Cấu hình ứng dụng dành cho thiết bị di động bị tắt: {0}/{1}",
+  "appTypeNotFound": "Không tìm thấy loại ứng dụng dành cho thiết bị di động phù hợp: {0}",
+  "platformNotFound": "Không tìm thấy nền tảng di động phù hợp: {0}",
+  "platformNotAllowed": "Loại ứng dụng {0} không hỗ trợ nền tảng di động {1}",
+  "configRequired": "Vui lòng gửi cấu hình ứng dụng cho nền tảng {0}",
+  "configPlatformMismatch": "Cấu hình ứng dụng không khớp với nền tảng {0}",
+  "alipayCertRequired": "Trong chế độ chứng chỉ, vui lòng tải lên chứng chỉ ứng dụng, chứng chỉ Alipay và chứng chỉ gốc"
+}

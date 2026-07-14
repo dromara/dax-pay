@@ -1,0 +1,8 @@
+{
+  "init": "Tertunda",
+  "processing": "Pengolahan",
+  "success": "Kesuksesan",
+  "fail": "Gagal",
+  "close": "Tertutup",
+  "cancel": "Dibatalkan"
+}

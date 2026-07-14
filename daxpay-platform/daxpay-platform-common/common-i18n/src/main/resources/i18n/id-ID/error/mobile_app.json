@@ -1,0 +1,10 @@
+{
+  "notExist": "Konfigurasi aplikasi seluler tidak ada",
+  "notEnabled": "Konfigurasi aplikasi seluler dinonaktifkan: {0}/{1}",
+  "appTypeNotFound": "Tidak ditemukan jenis aplikasi seluler yang cocok: {0}",
+  "platformNotFound": "Tidak ditemukan platform seluler yang cocok: {0}",
+  "platformNotAllowed": "Jenis aplikasi {0} tidak mendukung platform seluler {1}",
+  "configRequired": "Silakan kirimkan konfigurasi aplikasi untuk platform {0}",
+  "configPlatformMismatch": "Konfigurasi aplikasi tidak cocok dengan platform {0}",
+  "alipayCertRequired": "Dalam mode sertifikat, silakan unggah sertifikat aplikasi, sertifikat Alipay, dan sertifikat root"
+}

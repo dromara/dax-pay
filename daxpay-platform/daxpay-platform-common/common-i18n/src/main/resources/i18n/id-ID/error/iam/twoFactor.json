@@ -1,0 +1,6 @@
+{
+  "platformDisabled": "Otentikasi dua faktor tidak diaktifkan pada platform",
+  "alreadyBound": "Otentikasi dua faktor sudah terikat",
+  "notBound": "Otentikasi dua faktor tidak terikat",
+  "codeError": "Kode verifikasi salah"
+}

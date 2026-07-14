@@ -1,0 +1,6 @@
+{
+  "sessionNotExistOrExpired": "Phiên không tồn tại hoặc đã hết hạn",
+  "invalidSessionId": "ID phiên không hợp lệ",
+  "cannotKickoutAdmin": "Không thể buộc quản trị viên cấp cao ngoại tuyến",
+  "kickoutFailed": "Không thể buộc người dùng ngoại tuyến: {0}"
+}

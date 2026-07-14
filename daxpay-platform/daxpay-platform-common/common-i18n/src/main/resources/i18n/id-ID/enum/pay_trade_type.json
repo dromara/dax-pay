@@ -1,0 +1,8 @@
+{
+  "normal": "Pembayaran Biasa",
+  "gateway": "Pembayaran Gerbang",
+  "authorize": "Mengizinkan",
+  "capture": "Menangkap",
+  "recurring": "Berulang",
+  "combine_sub": "Gabungkan Sub-pesanan"
+}

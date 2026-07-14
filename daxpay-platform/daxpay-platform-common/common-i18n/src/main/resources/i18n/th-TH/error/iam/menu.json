@@ -1,0 +1,18 @@
+{
+  "codeExists": "รหัสเมนูมีอยู่แล้ว",
+  "cycleDependency": "เมนูหลักไม่สามารถเป็นเมนูของตัวเองหรือเมนูย่อยได้",
+  "subpageNoChildren": "หน้าย่อยไม่สามารถมีเมนูย่อยได้",
+  "hasChildrenCannotDelete": "ไม่สามารถลบเมนูที่มีเมนูย่อยได้",
+  "invalidType": "ประเภทเมนูไม่ถูกต้อง",
+  "typeImmutable": "ประเภทเมนูไม่สามารถเปลี่ยนแปลงได้หลังจากการสร้าง",
+  "subpageNeedParent": "หน้าย่อยต้องเลือกเมนูหลัก",
+  "parentNotExist": "ไม่พบเมนูหลัก",
+  "subpageParentMustBeMenu": "พาเรนต์ของเพจย่อยต้องเป็นประเภทเมนู",
+  "subpageParentInvalid": "เพจย่อยจะต้องเป็นเมนูหรือกลุ่มเพจย่อย",
+  "subpageGroupNeedParent": "กลุ่มเพจย่อยต้องเลือกเมนูหลัก",
+  "subpageGroupParentMustBeMenu": "พาเรนต์กลุ่มเพจย่อยต้องเป็นประเภทเมนู",
+  "subpageGroupChildMustBeSubpage": "กลุ่มเพจย่อยสามารถมีได้เฉพาะเพจย่อยเท่านั้น",
+  "needParentCatalog": "เมนู หน้าที่ฝัง หรือลิงก์ภายนอกต้องเลือกไดเรกทอรีหลัก",
+  "parentMustBeCatalog": "พาเรนต์ของเมนู หน้าที่ฝัง หรือลิงก์ภายนอกต้องเป็นประเภทไดเร็กทอรี",
+  "notExist": "ไม่พบเมนู"
+}

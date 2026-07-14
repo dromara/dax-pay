@@ -1,0 +1,10 @@
+{
+  "storageConfigNotExist": "Konfigurasi penyimpanan tidak ditemukan",
+  "recordNotExist": "Catatan file tidak ditemukan",
+  "platformRecordNotExist": "Catatan file platform tidak ditemukan",
+  "statusInvalidForConfirm": "Status file tidak valid, tidak dapat dikonfirmasi",
+  "objectKeyMismatch": "Ketidakcocokan kunci objek",
+  "notUploadedToStorage": "File belum diunggah ke penyimpanan",
+  "notUploadedForAccess": "Pengunggahan file belum selesai, tidak dapat diakses",
+  "notUploadedForDownload": "Pengunggahan file belum selesai, tidak dapat diunduh"
+}

@@ -1,0 +1,12 @@
+{
+  "defaultCannotDelete": "Protokol default tidak dapat dihapus",
+  "notExist": "Protokol pengguna tidak ditemukan",
+  "itemNotExist": "Item protokol pengguna tidak ditemukan",
+  "defaultItemNotExist": "Tidak ada protokol default untuk jenis ini",
+  "versionNotExist": "Versi protokol pengguna tidak ditemukan",
+  "draftOnlyCanEdit": "Hanya versi draf yang dapat diedit",
+  "draftOnlyCanDelete": "Hanya versi draf yang dapat dihapus",
+  "draftOnlyCanPublish": "Hanya versi draf yang dapat dipublikasikan",
+  "publishedOnlyCanArchive": "Hanya versi yang dipublikasikan yang dapat diarsipkan",
+  "sameClientType": "Jenis klien target sama dengan sumbernya"
+}

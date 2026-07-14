@@ -1,0 +1,7 @@
+{
+  "sendFailed": "Hantar mesej gagal: {0}",
+  "delaySendFailed": "Penghantaran mesej tertunda gagal: {0}",
+  "serializeFailed": "Penyiaran mesej gagal: {0}",
+  "parseBodyFailed": "Penghuraian isi mesej gagal: {0}",
+  "typeConvertFailed": "Penukaran jenis mesej gagal: {0}"
+}

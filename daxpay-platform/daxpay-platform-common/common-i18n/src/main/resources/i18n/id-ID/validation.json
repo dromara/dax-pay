@@ -1,0 +1,744 @@
+{
+  "notBlank": "{0} tidak boleh kosong",
+  "notEmpty": "{0} tidak boleh kosong",
+  "lengthRange": "Panjang {0} harus antara {1} dan {2}",
+  "min": "{0} tidak boleh kurang dari {1}",
+  "max": "{0} tidak boleh lebih besar dari {1}",
+  "parameterError": "Validasi parameter gagal",
+  "field": {
+    "source": {
+      "notBlank": "Platform wajib diisi"
+    },
+    "clientId": {
+      "notBlank": "ID Klien tidak boleh kosong"
+    },
+    "clientSecret": {
+      "notBlank": "Rahasia klien tidak boleh kosong"
+    },
+    "clientKey": {
+      "notBlank": "Kunci Klien tidak boleh kosong"
+    },
+    "clientCode": {
+      "notBlank": "Kode klien tidak boleh kosong"
+    },
+    "ip": {
+      "notValid": "Alamat IP tidak valid"
+    },
+    "aliAppId": {
+      "notBlank": "ID aplikasi Alipay tidak boleh kosong"
+    },
+    "authType": {
+      "notBlank": "Jenis autentikasi tidak boleh kosong"
+    },
+    "signType": {
+      "notBlank": "Jenis tanda tidak boleh kosong"
+    },
+    "alipayPublicKey": {
+      "notBlank": "Kunci publik Alipay tidak boleh kosong"
+    },
+    "mchAppPrivateKey": {
+      "notBlank": "Kunci pribadi aplikasi tidak boleh kosong"
+    },
+    "appSecret": {
+      "size": "Rahasia aplikasi tidak boleh melebihi 512 karakter"
+    },
+    "douyinMchId": {
+      "notBlank": "ID pedagang Douyin tidak boleh kosong"
+    },
+    "userIdType": {
+      "notBlank": "Jenis ID Pengguna tidak boleh kosong"
+    },
+    "product": {
+      "notBlank": "Kode produk tidak boleh kosong",
+      "size": "Kode produk tidak boleh melebihi 32 karakter",
+      "notNull": "Kode produk tidak boleh kosong"
+    },
+    "channel": {
+      "notBlank": "Kode saluran tidak boleh kosong",
+      "size": "Kode saluran tidak boleh melebihi 32 karakter"
+    },
+    "sandbox": {
+      "notNull": "Lingkungan Sandbox tidak boleh kosong"
+    },
+    "enable": {
+      "notNull": "Status pengaktifan tidak boleh kosong"
+    },
+    "mchNo": {
+      "notBlank": "Pedagang no. tidak boleh kosong",
+      "size": "Pedagang no. tidak boleh melebihi 32 karakter",
+      "notNull": "Pedagang no. tidak boleh kosong"
+    },
+    "appId": {
+      "notBlank": "ID aplikasi pedagang tidak boleh kosong",
+      "size": "ID aplikasi pedagang tidak boleh melebihi 32 karakter",
+      "notNull": "ID Aplikasi tidak boleh nol"
+    },
+    "channelMchNo": {
+      "size": "Jumlah pedagang saluran tidak boleh melebihi 32 karakter",
+      "notBlank": "Nomor pedagang saluran tidak boleh kosong"
+    },
+    "level": {
+      "notBlank": "Tingkat konfigurasi tidak boleh kosong",
+      "size": "Level konfigurasi tidak boleh melebihi 32 karakter"
+    },
+    "cashierType": {
+      "notBlank": "Jenis kasir wajib diisi",
+      "size": "Jenis kasir tidak boleh melebihi 16 karakter"
+    },
+    "resolveMode": {
+      "notBlank": "Mode penyelesaian tidak boleh kosong",
+      "size": "Mode penyelesaian tidak boleh melebihi 16 karakter"
+    },
+    "icon": {
+      "size": "Kode ikon tidak boleh melebihi 32 karakter"
+    },
+    "itemName": {
+      "size": "Nama item pembayaran tidak boleh melebihi 64 karakter"
+    },
+    "subMchId": {
+      "notBlank": "ID sub-pedagang WeChat tidak boleh kosong"
+    },
+    "wxMchId": {
+      "notBlank": "ID pedagang WeChat tidak boleh kosong"
+    },
+    "wxAppId": {
+      "notBlank": "AppId WeChat wajib diisi"
+    },
+    "publicKeyId": {
+      "notBlank": "ID kunci publik pembayaran tidak boleh kosong"
+    },
+    "certSerialNo": {
+      "notBlank": "Nomor seri sertifikat. tidak boleh kosong"
+    },
+    "id": {
+      "notNull": "Kunci utama tidak boleh kosong",
+      "mustBeNullOnAdd": "Id harus kosong"
+    },
+    "alipayIsvAppId": {
+      "notNull": "Id aplikasi Alipay ISV tidak boleh nol"
+    },
+    "alipayDirectAppId": {
+      "notNull": "ID aplikasi langsung Alipay tidak boleh nol"
+    },
+    "wechatIsvAppId": {
+      "notNull": "ID aplikasi WeChat ISV tidak boleh nol"
+    },
+    "account": {
+      "notBlank": "Akun tidak boleh kosong",
+      "size": "Panjang akun harus antara 6 dan 20 karakter",
+      "pattern": "Format akun tidak valid"
+    },
+    "password": {
+      "notBlank": "Kata sandi tidak boleh kosong"
+    },
+    "subjectType": {
+      "notBlank": "Jenis subjek wajib diisi"
+    },
+    "pass": {
+      "notNull": "Hasil audit wajib diisi"
+    },
+    "channelMerchantNo": {
+      "notBlank": "Pedagang saluran no. tidak boleh kosong"
+    },
+    "channelMerchantName": {
+      "notBlank": "Nama pedagang tidak boleh kosong"
+    },
+    "appKey": {
+      "notBlank": "Kunci Aplikasi tidak boleh kosong"
+    },
+    "secretKey": {
+      "notBlank": "Kunci Rahasia tidak boleh kosong"
+    },
+    "tradeIdentity": {
+      "notBlank": "Identitas dagang pedagang tidak boleh kosong"
+    },
+    "subMchNo": {
+      "notBlank": "Sub-pedagang no. tidak boleh kosong"
+    },
+    "parentMchNo": {
+      "notBlank": "Pedagang saluran induk no. tidak boleh kosong"
+    },
+    "subMchName": {
+      "notBlank": "Nama sub-pedagang tidak boleh kosong"
+    },
+    "orderNo": {
+      "notBlank": "Nomor pesanan pembayaran. tidak boleh kosong",
+      "size": "Nomor pesanan pembayaran. tidak boleh melebihi 100 karakter"
+    },
+    "amount": {
+      "notNull": "Jumlah pembayaran tidak boleh kosong",
+      "min": "Jumlah pembayaran tidak boleh kurang dari 1 sen",
+      "max": "Jumlah pembayaran tidak boleh melebihi 100 juta yuan",
+      "positive": "Jumlahnya harus lebih besar dari 0"
+    },
+    "title": {
+      "notBlank": "Judul tidak boleh kosong",
+      "size": "Judul tidak boleh melebihi 100 karakter"
+    },
+    "date": {
+      "notNull": "Tanggal tidak boleh kosong"
+    },
+    "fileType": {
+      "notNull": "Jenis file tidak boleh kosong"
+    },
+    "authCode": {
+      "notBlank": "Kode autentikasi tidak boleh kosong",
+      "size": "Kode autentikasi tidak boleh melebihi 128 karakter"
+    },
+    "clientIp": {
+      "size": "IP klien tidak boleh melebihi 64 karakter"
+    },
+    "nonceStr": {
+      "size": "Nonce tidak boleh melebihi 32 karakter"
+    },
+    "sign": {
+      "size": "Tanda tangan tidak boleh melebihi 1024 karakter"
+    },
+    "reqTime": {
+      "notNull": "Waktu permintaan tidak boleh kosong"
+    },
+    "bizOrderNo": {
+      "size": "Pesanan pedagang no. tidak boleh melebihi 100 karakter",
+      "notBlank": "Pesanan pedagang no. tidak boleh kosong"
+    },
+    "description": {
+      "size": "Deskripsi tidak boleh melebihi 50 karakter",
+      "notBlank": "Deskripsi tidak boleh kosong"
+    },
+    "method": {
+      "notBlank": "Metode pembayaran wajib diisi",
+      "size": "Metode pembayaran tidak boleh melebihi 32 karakter",
+      "notNull": "Metode pembayaran tidak boleh nol"
+    },
+    "capability": {
+      "size": "Kemampuan pembayaran tidak boleh melebihi 32 karakter",
+      "notBlank": "Kemampuan pembayaran wajib diisi"
+    },
+    "provider": {
+      "notBlank": "Merek pembayaran wajib diisi",
+      "size": "Kode merek pembayaran tidak boleh melebihi 32 karakter"
+    },
+    "otherMethod": {
+      "size": "Metode pembayaran lainnya tidak boleh melebihi 128 karakter"
+    },
+    "limitPay": {
+      "size": "Jenis pembayaran batas tidak boleh melebihi 128 karakter"
+    },
+    "opAppId": {
+      "size": "ID aplikasi op tidak boleh melebihi 128 karakter"
+    },
+    "openId": {
+      "size": "ID Terbuka tidak boleh melebihi 128 karakter"
+    },
+    "terminalNo": {
+      "size": "Terminal no. tidak boleh melebihi 128 karakter"
+    },
+    "extraParam": {
+      "size": "Param ekstra tidak boleh melebihi 2048 karakter"
+    },
+    "goodsDetail": {
+      "size": "Daftar detail barang tidak boleh melebihi 50 item"
+    },
+    "goodsId": {
+      "notBlank": "ID Barang tidak boleh kosong",
+      "size": "ID Barang tidak boleh melebihi 64 karakter"
+    },
+    "goodsName": {
+      "notBlank": "Nama barang wajib diisi",
+      "size": "Nama barang tidak boleh melebihi 256 karakter"
+    },
+    "quantity": {
+      "notNull": "Kuantitas tidak boleh nol",
+      "min": "Kuantitas tidak boleh kurang dari 1"
+    },
+    "unitPrice": {
+      "notNull": "Harga satuan tidak boleh nol",
+      "min": "Harga satuan tidak boleh kurang dari 1 sen",
+      "max": "Harga satuan tidak boleh melebihi 100 juta yuan"
+    },
+    "goodsCategory": {
+      "size": "Kategori barang tidak boleh melebihi 32 karakter"
+    },
+    "goodsDescription": {
+      "size": "Deskripsi barang tidak boleh melebihi 1000 karakter"
+    },
+    "showUrl": {
+      "size": "URL tayangan tidak boleh melebihi 400 karakter"
+    },
+    "attach": {
+      "size": "Lampiran tidak boleh melebihi 500 karakter"
+    },
+    "returnUrl": {
+      "size": "URL pengembalian tidak boleh melebihi 200 karakter"
+    },
+    "quitUrl": {
+      "size": "URL Keluar tidak boleh melebihi 200 karakter"
+    },
+    "notifyUrl": {
+      "size": "URL Pemberitahuan tidak boleh melebihi 200 karakter"
+    },
+    "outOrderNo": {
+      "size": "Nomor pesanan saluran. tidak boleh melebihi 150 karakter",
+      "notBlank": "Nomor pesanan saluran. tidak boleh kosong"
+    },
+    "refundNo": {
+      "notBlank": "Nomor pengembalian dana tidak boleh kosong",
+      "size": "Nomor pengembalian dana tidak boleh melebihi 100 karakter"
+    },
+    "bizRefundNo": {
+      "size": "Pengembalian dana pedagang no. tidak boleh melebihi 100 karakter",
+      "notBlank": "Pengembalian dana pedagang no. tidak boleh kosong"
+    },
+    "reason": {
+      "size": "Alasan tidak boleh melebihi 50 karakter"
+    },
+    "payeeName": {
+      "size": "Nama penerima pembayaran tidak boleh melebihi 50 karakter"
+    },
+    "items": {
+      "notEmpty": "Daftar konfigurasi produk tidak boleh kosong"
+    },
+    "shortName": {
+      "notBlank": "Nama pendek wajib diisi"
+    },
+    "status": {
+      "notBlank": "Status tidak boleh kosong"
+    },
+    "accountType": {
+      "notBlank": "Jenis akun tidak boleh kosong"
+    },
+    "appAuthToken": {
+      "notBlank": "Token autentikasi aplikasi tidak boleh kosong"
+    },
+    "isvAppId": {
+      "notBlank": "Aplikasi Alipay wajib diisi"
+    },
+    "alipayUserId": {
+      "notBlank": "Sub-pedagang no. tidak boleh kosong"
+    },
+    "accountName": {
+      "notBlank": "Nama rekening bank tidak boleh kosong"
+    },
+    "cardNo": {
+      "notBlank": "Nomor kartu bank. tidak boleh kosong"
+    },
+    "bankName": {
+      "notBlank": "Nama bank tidak boleh kosong"
+    },
+    "cardFrontPic": {
+      "notBlank": "Foto depan kartu bank tidak boleh kosong"
+    },
+    "legalName": {
+      "notBlank": "Nama badan hukum tidak boleh kosong"
+    },
+    "certNo": {
+      "notBlank": "nomor KTP. tidak boleh kosong"
+    },
+    "frontPic": {
+      "notBlank": "Foto depan KTP tidak boleh kosong"
+    },
+    "backPic": {
+      "notBlank": "Foto belakang KTP tidak boleh kosong"
+    },
+    "licenseNo": {
+      "notBlank": "Izin usaha no. tidak boleh kosong"
+    },
+    "licenseName": {
+      "notBlank": "Nama izin usaha tidak boleh kosong"
+    },
+    "licensePic": {
+      "notBlank": "Foto izin usaha wajib diisi"
+    },
+    "appName": {
+      "notBlank": "Nama aplikasi tidak boleh kosong",
+      "notNull": "Nama aplikasi tidak boleh kosong"
+    },
+    "appType": {
+      "notBlank": "Jenis aplikasi tidak boleh kosong"
+    },
+    "platform": {
+      "notBlank": "Platform seluler wajib diisi"
+    },
+    "authAppType": {
+      "notBlank": "Jenis aplikasi autentikasi tidak boleh kosong"
+    },
+    "mchName": {
+      "notBlank": "Nama pedagang tidak boleh kosong"
+    },
+    "mchShortName": {
+      "notBlank": "Nama pendek pedagang tidak boleh kosong"
+    },
+    "publicKey": {
+      "notBlank": "Kunci publik platform tidak boleh kosong; konfigurasikan daxpay.platform.config.key-config.public-key"
+    },
+    "privateKey": {
+      "notBlank": "Kunci pribadi platform tidak boleh kosong; konfigurasikan daxpay.platform.config.key-config.private-key"
+    },
+    "phone": {
+      "notBlank": "Nomor telepon tidak boleh kosong",
+      "format": "Format nomor telepon tidak valid"
+    },
+    "roleId": {
+      "notNull": "ID Peran tidak boleh kosong"
+    },
+    "code": {
+      "notBlank": "Kode tidak boleh kosong"
+    },
+    "nameCn": {
+      "notBlank": "Nama Cina wajib diisi"
+    },
+    "nameEn": {
+      "notBlank": "Nama dalam bahasa Inggris wajib diisi"
+    },
+    "menuCode": {
+      "notBlank": "Kode menu tidak boleh kosong"
+    },
+    "titleCn": {
+      "notBlank": "Judul menu (bahasa Cina) tidak boleh kosong"
+    },
+    "titleEn": {
+      "notBlank": "Judul menu (Bahasa Inggris) tidak boleh kosong"
+    },
+    "i18nKey": {
+      "notBlank": "Kunci I18n tidak boleh kosong"
+    },
+    "userIds": {
+      "notEmpty": "Daftar pengguna tidak boleh kosong"
+    },
+    "userId": {
+      "notNull": "ID Pengguna tidak boleh kosong"
+    },
+    "newPassword": {
+      "notBlank": "Kata sandi baru tidak boleh kosong"
+    },
+    "configName": {
+      "notBlank": "Nama konfigurasi tidak boleh kosong"
+    },
+    "endpoint": {
+      "notBlank": "Titik akhir tidak boleh kosong"
+    },
+    "publicBucket": {
+      "notBlank": "Keranjang publik tidak boleh kosong"
+    },
+    "privateBucket": {
+      "notBlank": "Keranjang pribadi tidak boleh kosong"
+    },
+    "urlType": {
+      "notBlank": "Jenis URL tidak boleh kosong"
+    },
+    "systemName": {
+      "size": "Nama sistem tidak boleh melebihi {max} karakter"
+    },
+    "companyName": {
+      "size": "Nama perusahaan tidak boleh melebihi {max} karakter"
+    },
+    "companyEmail": {
+      "email": "Format email tidak valid"
+    },
+    "companyWechat": {
+      "size": "ID WeChat tidak boleh melebihi {max} karakter"
+    },
+    "copyright": {
+      "size": "Teks hak cipta tidak boleh melebihi {max} karakter"
+    },
+    "icpLink": {
+      "pattern": "URL harus diawali dengan http:// atau https://"
+    },
+    "mpsLink": {
+      "pattern": "URL harus diawali dengan http:// atau https://"
+    },
+    "pcacLink": {
+      "pattern": "URL harus diawali dengan http:// atau https://"
+    },
+    "icpPlusLink": {
+      "pattern": "URL harus diawali dengan http:// atau https://"
+    },
+    "dictId": {
+      "notNull": "ID Kamus tidak boleh kosong"
+    },
+    "protocolId": {
+      "notNull": "ID Protokol tidak boleh kosong"
+    },
+    "content": {
+      "notBlank": "Konten protokol wajib diisi"
+    },
+    "showName": {
+      "notBlank": "Nama tampilan tidak boleh kosong"
+    },
+    "type": {
+      "notBlank": "Jenis tidak boleh kosong"
+    },
+    "clientType": {
+      "notBlank": "Jenis klien tidak boleh kosong"
+    },
+    "language": {
+      "notBlank": "Bahasa tidak boleh kosong"
+    },
+    "email": {
+      "notBlank": "Email tidak boleh kosong",
+      "format": "Format email tidak valid"
+    },
+    "realName": {
+      "notBlank": "Nama tidak boleh kosong"
+    },
+    "regionCode": {
+      "notBlank": "Kode wilayah tidak boleh kosong"
+    },
+    "dictItemId": {
+      "notNull": "ID item kamus tidak boleh kosong"
+    },
+    "configItems": {
+      "notEmpty": "Item konfigurasi tidak boleh kosong"
+    },
+    "payOrderId": {
+      "notNull": "ID perintah pembayaran tidak boleh kosong"
+    },
+    "orderId": {
+      "notNull": "ID Pesanan tidak boleh kosong"
+    },
+    "fileId": {
+      "notNull": "ID File tidak boleh kosong"
+    },
+    "objectKey": {
+      "notBlank": "Kunci objek tidak boleh kosong"
+    },
+    "sessionIds": {
+      "notEmpty": "Daftar ID sesi tidak boleh kosong"
+    },
+    "orderSource": {
+      "mustBeNull": "Bidang sumber pesanan tidak boleh disetel"
+    },
+    "minLengthNotGreaterThanMax": {
+      "assertTrue": "Panjang minimum tidak boleh lebih besar dari panjang maksimum"
+    },
+    "captchaFailCountNotGreaterThanMax": {
+      "assertTrue": "Jumlah kegagalan pemicu Captcha tidak boleh lebih besar dari jumlah kegagalan maksimum"
+    },
+    "queryCode": {
+      "notBlank": "Kode kueri tidak boleh kosong"
+    },
+    "authToken": {
+      "notBlank": "Token autentikasi tidak boleh kosong",
+      "size": "Token autentikasi tidak boleh melebihi 64 karakter"
+    },
+    "returnPath": {
+      "size": "Jalur kembali tidak boleh melebihi 200 karakter"
+    },
+    "taskId": {
+      "notNull": "ID Pesan tidak boleh kosong"
+    },
+    "deleteDay": {
+      "notNull": "Hari tidak boleh kosong"
+    },
+    "menuId": {
+      "notNull": "ID Menu tidak boleh kosong"
+    },
+    "oldPassword": {
+      "notBlank": "Kata sandi lama tidak boleh kosong"
+    },
+    "scene": {
+      "notNull": "Adegan pesan tidak boleh kosong",
+      "size": "Kode adegan tidak boleh melebihi 32 karakter"
+    },
+    "demoContent": {
+      "notBlank": "Isi pesan tidak boleh kosong"
+    },
+    "delaySeconds": {
+      "min": "Detik tunda tidak boleh kurang dari 1",
+      "max": "Detik tunda tidak boleh lebih dari 300"
+    },
+    "name": {
+      "notBlank": "Nama tidak boleh kosong",
+      "size": "Panjang nama harus antara 3 dan 15 karakter"
+    },
+    "enabled": {
+      "notNull": "Status diaktifkan tidak boleh kosong"
+    },
+    "storeNo": {
+      "size": "Nomor toko tidak boleh melebihi 64 karakter"
+    },
+    "operatorId": {
+      "size": "ID Operator tidak boleh melebihi 64 karakter"
+    },
+    "deviceName": {
+      "size": "Nama perangkat tidak boleh melebihi 128 karakter"
+    },
+    "deviceIp": {
+      "size": "IP perangkat tidak boleh melebihi 64 karakter"
+    },
+    "douyinAppId": {
+      "notBlank": "ID aplikasi Douyin tidak boleh kosong"
+    },
+    "douyinDirectAppId": {
+      "notNull": "ID aplikasi langsung Douyin tidak boleh kosong"
+    },
+    "dyMchId": {
+      "notBlank": "ID pedagang Douyin tidak boleh kosong"
+    },
+    "wechatDirectAppId": {
+      "notNull": "ID aplikasi langsung WeChat tidak boleh kosong"
+    },
+    "wechatIsvMchAppId": {
+      "notNull": "ID aplikasi pedagang saluran WeChat ISV tidak boleh kosong"
+    },
+    "storeName": {
+      "notBlank": "Nama toko tidak boleh kosong"
+    },
+    "deviceSn": {
+      "notBlank": "Nomor seri perangkat tidak boleh kosong"
+    },
+    "deviceType": {
+      "notBlank": "Jenis perangkat tidak boleh kosong"
+    },
+    "vendorCode": {
+      "notBlank": "Kode vendor tidak boleh kosong"
+    },
+    "vendorConfigId": {
+      "notNull": "Konfigurasi vendor tidak boleh nol"
+    },
+    "qrCodeName": {
+      "notBlank": "Nama kode QR tidak boleh kosong",
+      "size": "Nama kode QR tidak boleh melebihi 100 karakter"
+    },
+    "amountType": {
+      "notBlank": "Jenis jumlah tidak boleh kosong"
+    },
+    "batchNo": {
+      "notBlank": "Nomor batch tidak boleh kosong",
+      "size": "Nomor batch tidak boleh melebihi 64 karakter"
+    },
+    "count": {
+      "notNull": "Hitungan tidak boleh nol",
+      "min": "Hitungan tidak boleh kurang dari 1",
+      "max": "Jumlahnya tidak boleh lebih besar dari 999"
+    },
+    "ids": {
+      "notEmpty": "Silakan pilih papan kode QR"
+    },
+    "twoFactorCode": {
+      "notBlank": "Kode verifikasi tidak boleh kosong"
+    },
+    "preAuthToken": {
+      "notBlank": "Token pra-autentikasi tidak boleh kosong"
+    },
+    "remark": {
+      "size": "Komentar tidak boleh melebihi 255 karakter"
+    },
+    "lklAppId": {
+      "notBlank": "ID aplikasi Lakala tidak boleh kosong"
+    },
+    "mchSerialNo": {
+      "notBlank": "Nomor seri sertifikat pedagang tidak boleh kosong"
+    },
+    "orgCode": {
+      "notBlank": "Kode organisasi tidak boleh kosong"
+    },
+    "orgId": {
+      "notBlank": "ID Organisasi tidak boleh kosong"
+    },
+    "vbillMchNo": {
+      "notBlank": "Nomor merchant VBill tidak boleh kosong"
+    },
+    "lakalaMchNo": {
+      "notBlank": "Nomor pedagang Lakala tidak boleh kosong"
+    },
+    "termNo": {
+      "notBlank": "Nomor terminal tidak boleh kosong",
+      "size": "Nomor terminal tidak boleh melebihi 64 karakter"
+    },
+    "agentNo": {
+      "notBlank": "Nomor agen tidak boleh kosong"
+    },
+    "accessId": {
+      "notBlank": "ID Akses tidak boleh kosong"
+    },
+    "merchNo": {
+      "notBlank": "Nomor pedagang Hkrt tidak boleh kosong"
+    },
+    "pn": {
+      "notBlank": "Nomor terminal SAAS tidak boleh kosong"
+    },
+    "sysId": {
+      "notBlank": "ID sistem ISV ​​tidak boleh kosong"
+    },
+    "productId": {
+      "notBlank": "ID Produk tidak boleh kosong"
+    },
+    "merchantNo": {
+      "notBlank": "Nomor pedagang Huifu tidak boleh kosong"
+    },
+    "dougongAppId": {
+      "notBlank": "AppId Penjual tidak boleh kosong"
+    },
+    "sandAppId": {
+      "notBlank": "ID aplikasi pasir tidak boleh kosong"
+    },
+    "credential": {
+      "notNull": "Kredensial saluran tidak boleh nol"
+    },
+    "outTradeNo": {
+      "notBlank": "Perdagangan saluran no. tidak boleh kosong"
+    },
+    "outRefundNo": {
+      "notBlank": "Pengembalian dana saluran no. tidak boleh kosong"
+    },
+    "outRequestNo": {
+      "notBlank": "Permintaan saluran no. tidak boleh kosong"
+    },
+    "tradeNo": {
+      "notBlank": "Perdagangan platform no. tidak boleh kosong"
+    },
+    "tradeProduct": {
+      "notBlank": "Produk Dagang wajib diisi"
+    },
+    "relationOrderNo": {
+      "notBlank": "Nomor pesanan terkait. tidak boleh kosong"
+    },
+    "refundAmount": {
+      "notNull": "Jumlah pengembalian dana tidak boleh nol",
+      "positive": "Jumlah pengembalian dana harus lebih besar dari 0"
+    },
+    "subject": {
+      "notBlank": "Judul pembayaran tidak boleh kosong"
+    },
+    "callbackBody": {
+      "notBlank": "Isi panggilan balik tidak boleh kosong"
+    },
+    "callbackType": {
+      "notBlank": "Jenis panggilan balik tidak boleh kosong"
+    },
+    "rawData": {
+      "notBlank": "Data mentah tidak boleh kosong"
+    },
+    "orderCreateTime": {
+      "notBlank": "Waktu pembuatan pesanan tidak boleh kosong"
+    },
+    "orgReqDate": {
+      "notBlank": "Tanggal permintaan awal tidak boleh kosong"
+    },
+    "originOutTradeNo": {
+      "notBlank": "Perdagangan Channel Asli No. tidak boleh kosong"
+    },
+    "config": {
+      "notNull": "Konfigurasi tidak boleh nol"
+    },
+    "fuyouMchNo": {
+      "notBlank": "Nomor pedagang Fuyou tidak boleh kosong"
+    },
+    "fyAppId": {
+      "notBlank": "ID aplikasi Fuyou tidak boleh kosong"
+    },
+    "leshuaOrderId": {
+      "notBlank": "ID pesanan Leshua tidak boleh kosong"
+    },
+    "lsMchNo": {
+      "notBlank": "Nomor pedagang Leshua tidak boleh kosong"
+    },
+    "fileName": {
+      "notBlank": "Nama file tidak boleh kosong"
+    },
+    "fileContent": {
+      "notBlank": "Konten file tidak boleh kosong"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "storageConfigNotExist": "ไม่พบการกำหนดค่าพื้นที่เก็บข้อมูล",
+  "recordNotExist": "ไม่พบบันทึกไฟล์",
+  "platformRecordNotExist": "ไม่พบบันทึกไฟล์แพลตฟอร์ม",
+  "statusInvalidForConfirm": "สถานะไฟล์ไม่ถูกต้อง ไม่สามารถยืนยันได้",
+  "objectKeyMismatch": "คีย์วัตถุไม่ตรงกัน",
+  "notUploadedToStorage": "ไฟล์ยังไม่ได้อัปโหลดไปยังที่เก็บข้อมูล",
+  "notUploadedForAccess": "การอัพโหลดไฟล์ไม่เสร็จสิ้น ไม่สามารถเข้าถึงได้",
+  "notUploadedForDownload": "การอัพโหลดไฟล์ไม่เสร็จสิ้น ไม่สามารถดาวน์โหลดได้"
+}

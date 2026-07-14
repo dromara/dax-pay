@@ -1,0 +1,8 @@
+{
+  "incomplete": "Konfigurasi OSS tidak lengkap. Sila isi titik akhir, baldi dan bukti kelayakan",
+  "checkSuccess": "Semakan sambungan OSS lulus",
+  "checkFailed": "Semakan sambungan OSS gagal, status: {0}",
+  "authFailed": "Pengesahan OSS gagal, sila semak AccessKey / SecretKey",
+  "bucketNotFound": "Baldi tidak ditemui, sila semak nama baldi awam/peribadi",
+  "networkError": "Tidak dapat mencapai storan objek, sila semak titik akhir dan rangkaian"
+}

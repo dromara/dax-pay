@@ -1,0 +1,10 @@
+{
+  "roleNotExisted": "Peranan tidak wujud",
+  "roleAlreadyUsed": "Peranan telah ditetapkan pengguna, tidak boleh dipadamkan",
+  "roleAlreadyExisted": "Peranan sudah wujud",
+  "permissionDbError": "Pengguna tidak mempunyai kebenaran",
+  "internalCannotDelete": "Peranan terbina dalam tidak boleh dipadamkan",
+  "assignOutOfScope": "Tugasan peranan melebihi skop yang boleh diberikan",
+  "assignCrossClient": "Tidak boleh menetapkan peranan merentas terminal: klien pengguna [{0}], klien peranan [{1}]",
+  "notExist": "Peranan tidak ditemui"
+}

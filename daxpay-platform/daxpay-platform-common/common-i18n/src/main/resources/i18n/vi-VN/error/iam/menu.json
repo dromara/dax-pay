@@ -1,0 +1,18 @@
+{
+  "codeExists": "Mã thực đơn đã tồn tại",
+  "cycleDependency": "Menu gốc không thể là menu chính hoặc menu con",
+  "subpageNoChildren": "Trang con không thể có menu con",
+  "hasChildrenCannotDelete": "Không thể xóa menu có menu con",
+  "invalidType": "Loại menu không hợp lệ",
+  "typeImmutable": "Loại menu không thể thay đổi sau khi tạo",
+  "subpageNeedParent": "Trang con phải chọn menu gốc",
+  "parentNotExist": "Không tìm thấy menu gốc",
+  "subpageParentMustBeMenu": "Trang con gốc phải là một loại menu",
+  "subpageParentInvalid": "Trang con gốc phải là một menu hoặc nhóm trang con",
+  "subpageGroupNeedParent": "Nhóm trang con phải chọn menu gốc",
+  "subpageGroupParentMustBeMenu": "Nhóm trang con gốc phải là loại menu",
+  "subpageGroupChildMustBeSubpage": "Nhóm trang con chỉ có thể chứa các trang con",
+  "needParentCatalog": "Menu, trang nhúng hoặc liên kết ngoài phải chọn thư mục mẹ",
+  "parentMustBeCatalog": "Phần gốc của menu, trang được nhúng hoặc liên kết ngoài phải là loại thư mục",
+  "notExist": "Không tìm thấy thực đơn"
+}

@@ -1,0 +1,7 @@
+{
+  "codeExists": "Mã từ điển đã tồn tại",
+  "notExist": "Không tìm thấy từ điển",
+  "hasItems": "Từ điển có mục, không thể xóa được",
+  "itemCodeDuplicate": "Mã mục từ điển bị trùng lặp",
+  "itemNotExist": "Không tìm thấy mục từ điển"
+}

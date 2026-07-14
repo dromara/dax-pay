@@ -1,0 +1,744 @@
+{
+  "notBlank": "{0} không được để trống",
+  "notEmpty": "{0} không được để trống",
+  "lengthRange": "Độ dài {0} phải nằm trong khoảng {1} đến {2}",
+  "min": "{0} không thể nhỏ hơn {1}",
+  "max": "{0} không được lớn hơn {1}",
+  "parameterError": "Xác thực tham số không thành công",
+  "field": {
+    "source": {
+      "notBlank": "Nền tảng không được để trống"
+    },
+    "clientId": {
+      "notBlank": "ID khách hàng không được để trống"
+    },
+    "clientSecret": {
+      "notBlank": "Bí mật của khách hàng không được để trống"
+    },
+    "clientKey": {
+      "notBlank": "Khóa khách hàng không được để trống"
+    },
+    "clientCode": {
+      "notBlank": "Mã khách hàng không được để trống"
+    },
+    "ip": {
+      "notValid": "Địa chỉ IP không hợp lệ"
+    },
+    "aliAppId": {
+      "notBlank": "ID ứng dụng Alipay không được để trống"
+    },
+    "authType": {
+      "notBlank": "Loại xác thực không được để trống"
+    },
+    "signType": {
+      "notBlank": "Loại dấu hiệu không được để trống"
+    },
+    "alipayPublicKey": {
+      "notBlank": "Khóa công khai Alipay không được để trống"
+    },
+    "mchAppPrivateKey": {
+      "notBlank": "Khóa riêng của ứng dụng không được để trống"
+    },
+    "appSecret": {
+      "size": "Bí mật ứng dụng không được vượt quá 512 ký tự"
+    },
+    "douyinMchId": {
+      "notBlank": "ID người bán Douyin không được để trống"
+    },
+    "userIdType": {
+      "notBlank": "Loại ID người dùng không được để trống"
+    },
+    "product": {
+      "notBlank": "Mã sản phẩm không được để trống",
+      "size": "Mã sản phẩm không được vượt quá 32 ký tự",
+      "notNull": "Mã sản phẩm không được để trống"
+    },
+    "channel": {
+      "notBlank": "Mã kênh không được để trống",
+      "size": "Mã kênh không được vượt quá 32 ký tự"
+    },
+    "sandbox": {
+      "notNull": "Môi trường hộp cát không được để trống"
+    },
+    "enable": {
+      "notNull": "Trạng thái bật không được để trống"
+    },
+    "mchNo": {
+      "notBlank": "Thương gia không. không thể để trống",
+      "size": "Thương gia không. không thể vượt quá 32 ký tự",
+      "notNull": "Thương gia không. không thể để trống"
+    },
+    "appId": {
+      "notBlank": "ID ứng dụng người bán không được để trống",
+      "size": "ID ứng dụng người bán không được vượt quá 32 ký tự",
+      "notNull": "ID ứng dụng không thể rỗng"
+    },
+    "channelMchNo": {
+      "size": "Số người bán kênh không được vượt quá 32 ký tự",
+      "notBlank": "Số người bán kênh không được để trống"
+    },
+    "level": {
+      "notBlank": "Cấp độ cấu hình không được để trống",
+      "size": "Mức cấu hình không thể vượt quá 32 ký tự"
+    },
+    "cashierType": {
+      "notBlank": "Loại thu ngân không được để trống",
+      "size": "Loại thu ngân không được vượt quá 16 ký tự"
+    },
+    "resolveMode": {
+      "notBlank": "Chế độ giải quyết không được để trống",
+      "size": "Chế độ giải quyết không thể vượt quá 16 ký tự"
+    },
+    "icon": {
+      "size": "Mã biểu tượng không được vượt quá 32 ký tự"
+    },
+    "itemName": {
+      "size": "Tên mục thanh toán không được vượt quá 64 ký tự"
+    },
+    "subMchId": {
+      "notBlank": "ID người bán phụ WeChat không được để trống"
+    },
+    "wxMchId": {
+      "notBlank": "ID người bán WeChat không được để trống"
+    },
+    "wxAppId": {
+      "notBlank": "WeChat AppId không được để trống"
+    },
+    "publicKeyId": {
+      "notBlank": "ID khóa công khai thanh toán không được để trống"
+    },
+    "certSerialNo": {
+      "notBlank": "Số sê-ri chứng chỉ không thể để trống"
+    },
+    "id": {
+      "notNull": "Khóa chính không được để trống",
+      "mustBeNullOnAdd": "Id phải trống"
+    },
+    "alipayIsvAppId": {
+      "notNull": "Id ứng dụng Alipay ISV không được rỗng"
+    },
+    "alipayDirectAppId": {
+      "notNull": "Id ứng dụng trực tiếp Alipay không thể rỗng"
+    },
+    "wechatIsvAppId": {
+      "notNull": "Id ứng dụng WeChat ISV không được rỗng"
+    },
+    "account": {
+      "notBlank": "Tài khoản không được để trống",
+      "size": "Độ dài tài khoản phải từ 6 đến 20 ký tự",
+      "pattern": "Định dạng tài khoản không hợp lệ"
+    },
+    "password": {
+      "notBlank": "Mật khẩu không được để trống"
+    },
+    "subjectType": {
+      "notBlank": "Loại chủ đề không được để trống"
+    },
+    "pass": {
+      "notNull": "Kết quả kiểm tra không được để trống"
+    },
+    "channelMerchantNo": {
+      "notBlank": "Kênh thương gia không. không thể để trống"
+    },
+    "channelMerchantName": {
+      "notBlank": "Tên người bán không được để trống"
+    },
+    "appKey": {
+      "notBlank": "Khóa ứng dụng không được để trống"
+    },
+    "secretKey": {
+      "notBlank": "Khóa bí mật không được để trống"
+    },
+    "tradeIdentity": {
+      "notBlank": "Danh tính thương mại của người bán không được để trống"
+    },
+    "subMchNo": {
+      "notBlank": "Người bán phụ không. không thể để trống"
+    },
+    "parentMchNo": {
+      "notBlank": "Người bán kênh phụ huynh không. không thể để trống"
+    },
+    "subMchName": {
+      "notBlank": "Tên người bán phụ không được để trống"
+    },
+    "orderNo": {
+      "notBlank": "Lệnh thanh toán số không thể để trống",
+      "size": "Lệnh thanh toán số không thể vượt quá 100 ký tự"
+    },
+    "amount": {
+      "notNull": "Số tiền thanh toán không được để trống",
+      "min": "Số tiền thanh toán không thể nhỏ hơn 1 xu",
+      "max": "Số tiền thanh toán không thể vượt quá 100 triệu nhân dân tệ",
+      "positive": "Số tiền phải lớn hơn 0"
+    },
+    "title": {
+      "notBlank": "Tiêu đề không được để trống",
+      "size": "Tiêu đề không thể vượt quá 100 ký tự"
+    },
+    "date": {
+      "notNull": "Ngày không được để trống"
+    },
+    "fileType": {
+      "notNull": "Loại tệp không được để trống"
+    },
+    "authCode": {
+      "notBlank": "Mã xác thực không được để trống",
+      "size": "Mã xác thực không được vượt quá 128 ký tự"
+    },
+    "clientIp": {
+      "size": "IP khách hàng không thể vượt quá 64 ký tự"
+    },
+    "nonceStr": {
+      "size": "Nonce không thể vượt quá 32 ký tự"
+    },
+    "sign": {
+      "size": "Chữ ký không thể vượt quá 1024 ký tự"
+    },
+    "reqTime": {
+      "notNull": "Thời gian yêu cầu không được để trống"
+    },
+    "bizOrderNo": {
+      "size": "Số đơn đặt hàng của người bán không thể vượt quá 100 ký tự",
+      "notBlank": "Số đơn đặt hàng của người bán không thể để trống"
+    },
+    "description": {
+      "size": "Mô tả không thể vượt quá 50 ký tự",
+      "notBlank": "Mô tả không được để trống"
+    },
+    "method": {
+      "notBlank": "Phương thức thanh toán không được để trống",
+      "size": "Phương thức thanh toán không được vượt quá 32 ký tự",
+      "notNull": "Phương thức thanh toán không thể rỗng"
+    },
+    "capability": {
+      "size": "Khả năng thanh toán không được vượt quá 32 ký tự",
+      "notBlank": "Khả năng thanh toán không được để trống"
+    },
+    "provider": {
+      "notBlank": "Thương hiệu thanh toán không được để trống",
+      "size": "Mã thương hiệu Pay không được vượt quá 32 ký tự"
+    },
+    "otherMethod": {
+      "size": "Phương thức thanh toán khác không được vượt quá 128 ký tự"
+    },
+    "limitPay": {
+      "size": "Loại thanh toán giới hạn không thể vượt quá 128 ký tự"
+    },
+    "opAppId": {
+      "size": "ID ứng dụng Op không được vượt quá 128 ký tự"
+    },
+    "openId": {
+      "size": "ID mở không được vượt quá 128 ký tự"
+    },
+    "terminalNo": {
+      "size": "Thiết bị đầu cuối số không thể vượt quá 128 ký tự"
+    },
+    "extraParam": {
+      "size": "Thông số bổ sung không được vượt quá 2048 ký tự"
+    },
+    "goodsDetail": {
+      "size": "Danh sách chi tiết hàng hóa không quá 50 mặt hàng"
+    },
+    "goodsId": {
+      "notBlank": "ID hàng hóa không được để trống",
+      "size": "ID hàng hóa không được vượt quá 64 ký tự"
+    },
+    "goodsName": {
+      "notBlank": "Tên hàng không được để trống",
+      "size": "Tên hàng không được vượt quá 256 ký tự"
+    },
+    "quantity": {
+      "notNull": "Số lượng không thể rỗng",
+      "min": "Số lượng không thể nhỏ hơn 1"
+    },
+    "unitPrice": {
+      "notNull": "Đơn giá không thể rỗng",
+      "min": "Đơn giá không thể nhỏ hơn 1 xu",
+      "max": "Đơn giá không thể vượt quá 100 triệu nhân dân tệ"
+    },
+    "goodsCategory": {
+      "size": "Danh mục hàng hóa không được vượt quá 32 ký tự"
+    },
+    "goodsDescription": {
+      "size": "Mô tả hàng hóa không quá 1000 ký tự"
+    },
+    "showUrl": {
+      "size": "URL hiển thị không được vượt quá 400 ký tự"
+    },
+    "attach": {
+      "size": "Đính kèm không được vượt quá 500 ký tự"
+    },
+    "returnUrl": {
+      "size": "URL trả về không được vượt quá 200 ký tự"
+    },
+    "quitUrl": {
+      "size": "URL thoát không được vượt quá 200 ký tự"
+    },
+    "notifyUrl": {
+      "size": "URL thông báo không được vượt quá 200 ký tự"
+    },
+    "outOrderNo": {
+      "size": "Số thứ tự kênh không thể vượt quá 150 ký tự",
+      "notBlank": "Số thứ tự kênh không thể để trống"
+    },
+    "refundNo": {
+      "notBlank": "Số hoàn tiền không được để trống",
+      "size": "Số hoàn tiền không được vượt quá 100 ký tự"
+    },
+    "bizRefundNo": {
+      "size": "Số tiền hoàn lại của người bán không thể vượt quá 100 ký tự",
+      "notBlank": "Số tiền hoàn lại của người bán không thể để trống"
+    },
+    "reason": {
+      "size": "Lý do không thể vượt quá 50 ký tự"
+    },
+    "payeeName": {
+      "size": "Tên người nhận thanh toán không được vượt quá 50 ký tự"
+    },
+    "items": {
+      "notEmpty": "Danh sách cấu hình sản phẩm không được để trống"
+    },
+    "shortName": {
+      "notBlank": "Tên ngắn không được để trống"
+    },
+    "status": {
+      "notBlank": "Trạng thái không được để trống"
+    },
+    "accountType": {
+      "notBlank": "Loại tài khoản không được để trống"
+    },
+    "appAuthToken": {
+      "notBlank": "Mã thông báo xác thực ứng dụng không được để trống"
+    },
+    "isvAppId": {
+      "notBlank": "Ứng dụng Alipay không được để trống"
+    },
+    "alipayUserId": {
+      "notBlank": "Người bán phụ không. không thể để trống"
+    },
+    "accountName": {
+      "notBlank": "Tên tài khoản ngân hàng không được để trống"
+    },
+    "cardNo": {
+      "notBlank": "Số thẻ ngân hàng không thể để trống"
+    },
+    "bankName": {
+      "notBlank": "Tên ngân hàng không được để trống"
+    },
+    "cardFrontPic": {
+      "notBlank": "Ảnh mặt trước thẻ ngân hàng không được để trống"
+    },
+    "legalName": {
+      "notBlank": "Tên pháp nhân không được để trống"
+    },
+    "certNo": {
+      "notBlank": "Số CMND không thể để trống"
+    },
+    "frontPic": {
+      "notBlank": "Ảnh mặt trước CMND không được để trống"
+    },
+    "backPic": {
+      "notBlank": "Ảnh mặt sau CMND không được để trống"
+    },
+    "licenseNo": {
+      "notBlank": "Giấy phép kinh doanh số không thể để trống"
+    },
+    "licenseName": {
+      "notBlank": "Tên giấy phép kinh doanh không được để trống"
+    },
+    "licensePic": {
+      "notBlank": "Ảnh giấy phép kinh doanh không được để trống"
+    },
+    "appName": {
+      "notBlank": "Tên ứng dụng không được để trống",
+      "notNull": "Tên ứng dụng không được để trống"
+    },
+    "appType": {
+      "notBlank": "Loại ứng dụng không được để trống"
+    },
+    "platform": {
+      "notBlank": "Nền tảng di động không được để trống"
+    },
+    "authAppType": {
+      "notBlank": "Loại ứng dụng xác thực không được để trống"
+    },
+    "mchName": {
+      "notBlank": "Tên người bán không được để trống"
+    },
+    "mchShortName": {
+      "notBlank": "Tên ngắn của người bán không được để trống"
+    },
+    "publicKey": {
+      "notBlank": "Khóa công khai của nền tảng không được để trống; định cấu hình daxpay.platform.config.key-config.public-key"
+    },
+    "privateKey": {
+      "notBlank": "Khóa riêng của nền tảng không được để trống; định cấu hình daxpay.platform.config.key-config.private-key"
+    },
+    "phone": {
+      "notBlank": "Số điện thoại không được để trống",
+      "format": "Định dạng số điện thoại không hợp lệ"
+    },
+    "roleId": {
+      "notNull": "ID vai trò không được để trống"
+    },
+    "code": {
+      "notBlank": "Mã không được để trống"
+    },
+    "nameCn": {
+      "notBlank": "Tên tiếng Trung không được để trống"
+    },
+    "nameEn": {
+      "notBlank": "Tên tiếng Anh không được để trống"
+    },
+    "menuCode": {
+      "notBlank": "Mã menu không được để trống"
+    },
+    "titleCn": {
+      "notBlank": "Tiêu đề menu (tiếng Trung) không được để trống"
+    },
+    "titleEn": {
+      "notBlank": "Tiêu đề menu (tiếng Anh) không được để trống"
+    },
+    "i18nKey": {
+      "notBlank": "Khóa I18n không được để trống"
+    },
+    "userIds": {
+      "notEmpty": "Danh sách người dùng không được để trống"
+    },
+    "userId": {
+      "notNull": "ID người dùng không được để trống"
+    },
+    "newPassword": {
+      "notBlank": "Mật khẩu mới không được để trống"
+    },
+    "configName": {
+      "notBlank": "Tên cấu hình không được để trống"
+    },
+    "endpoint": {
+      "notBlank": "Điểm cuối không được để trống"
+    },
+    "publicBucket": {
+      "notBlank": "Nhóm công khai không được để trống"
+    },
+    "privateBucket": {
+      "notBlank": "Nhóm riêng tư không được để trống"
+    },
+    "urlType": {
+      "notBlank": "Loại URL không được để trống"
+    },
+    "systemName": {
+      "size": "Tên hệ thống không được vượt quá {max} ký tự"
+    },
+    "companyName": {
+      "size": "Tên công ty không được vượt quá {max} ký tự"
+    },
+    "companyEmail": {
+      "email": "Định dạng email không hợp lệ"
+    },
+    "companyWechat": {
+      "size": "ID WeChat không được vượt quá {max} ký tự"
+    },
+    "copyright": {
+      "size": "Văn bản bản quyền không được vượt quá {max} ký tự"
+    },
+    "icpLink": {
+      "pattern": "URL phải bắt đầu bằng http:// hoặc https://"
+    },
+    "mpsLink": {
+      "pattern": "URL phải bắt đầu bằng http:// hoặc https://"
+    },
+    "pcacLink": {
+      "pattern": "URL phải bắt đầu bằng http:// hoặc https://"
+    },
+    "icpPlusLink": {
+      "pattern": "URL phải bắt đầu bằng http:// hoặc https://"
+    },
+    "dictId": {
+      "notNull": "ID từ điển không được để trống"
+    },
+    "protocolId": {
+      "notNull": "ID giao thức không được để trống"
+    },
+    "content": {
+      "notBlank": "Nội dung giao thức không được để trống"
+    },
+    "showName": {
+      "notBlank": "Tên hiển thị không được để trống"
+    },
+    "type": {
+      "notBlank": "Loại không được để trống"
+    },
+    "clientType": {
+      "notBlank": "Loại khách hàng không được để trống"
+    },
+    "language": {
+      "notBlank": "Ngôn ngữ không được để trống"
+    },
+    "email": {
+      "notBlank": "Email không được để trống",
+      "format": "Định dạng email không hợp lệ"
+    },
+    "realName": {
+      "notBlank": "Tên không được để trống"
+    },
+    "regionCode": {
+      "notBlank": "Mã vùng không được để trống"
+    },
+    "dictItemId": {
+      "notNull": "ID mục từ điển không được để trống"
+    },
+    "configItems": {
+      "notEmpty": "Các mục cấu hình không được để trống"
+    },
+    "payOrderId": {
+      "notNull": "ID lệnh thanh toán không được để trống"
+    },
+    "orderId": {
+      "notNull": "ID đơn hàng không được để trống"
+    },
+    "fileId": {
+      "notNull": "ID tệp không được để trống"
+    },
+    "objectKey": {
+      "notBlank": "Khóa đối tượng không được để trống"
+    },
+    "sessionIds": {
+      "notEmpty": "Danh sách ID phiên không được để trống"
+    },
+    "orderSource": {
+      "mustBeNull": "Trường nguồn đơn hàng không được phép thiết lập"
+    },
+    "minLengthNotGreaterThanMax": {
+      "assertTrue": "Độ dài tối thiểu không được lớn hơn độ dài tối đa"
+    },
+    "captchaFailCountNotGreaterThanMax": {
+      "assertTrue": "Số lần kích hoạt hình ảnh xác thực không được lớn hơn số lần thất bại tối đa"
+    },
+    "queryCode": {
+      "notBlank": "Mã truy vấn không được để trống"
+    },
+    "authToken": {
+      "notBlank": "Mã xác thực không được để trống",
+      "size": "Mã thông báo xác thực không thể vượt quá 64 ký tự"
+    },
+    "returnPath": {
+      "size": "Đường dẫn trả về không được vượt quá 200 ký tự"
+    },
+    "taskId": {
+      "notNull": "ID tin nhắn không được để trống"
+    },
+    "deleteDay": {
+      "notNull": "Ngày không được để trống"
+    },
+    "menuId": {
+      "notNull": "ID menu không được để trống"
+    },
+    "oldPassword": {
+      "notBlank": "Mật khẩu cũ không được để trống"
+    },
+    "scene": {
+      "notNull": "Cảnh tin nhắn không được để trống",
+      "size": "Mã cảnh không được vượt quá 32 ký tự"
+    },
+    "demoContent": {
+      "notBlank": "Nội dung tin nhắn không được để trống"
+    },
+    "delaySeconds": {
+      "min": "Giây trễ không được nhỏ hơn 1",
+      "max": "Giây trễ không được lớn hơn 300"
+    },
+    "name": {
+      "notBlank": "Tên không được để trống",
+      "size": "Độ dài tên phải từ 3 đến 15 ký tự"
+    },
+    "enabled": {
+      "notNull": "Trạng thái đã bật không được để trống"
+    },
+    "storeNo": {
+      "size": "Số cửa hàng không thể vượt quá 64 ký tự"
+    },
+    "operatorId": {
+      "size": "ID nhà điều hành không thể vượt quá 64 ký tự"
+    },
+    "deviceName": {
+      "size": "Tên thiết bị không được vượt quá 128 ký tự"
+    },
+    "deviceIp": {
+      "size": "IP thiết bị không thể vượt quá 64 ký tự"
+    },
+    "douyinAppId": {
+      "notBlank": "ID ứng dụng Douyin không được để trống"
+    },
+    "douyinDirectAppId": {
+      "notNull": "ID ứng dụng trực tiếp Douyin không được để trống"
+    },
+    "dyMchId": {
+      "notBlank": "ID người bán Douyin không được để trống"
+    },
+    "wechatDirectAppId": {
+      "notNull": "ID ứng dụng trực tiếp WeChat không được để trống"
+    },
+    "wechatIsvMchAppId": {
+      "notNull": "ID ứng dụng người bán kênh WeChat ISV không được để trống"
+    },
+    "storeName": {
+      "notBlank": "Tên cửa hàng không được để trống"
+    },
+    "deviceSn": {
+      "notBlank": "Số sê-ri thiết bị không được để trống"
+    },
+    "deviceType": {
+      "notBlank": "Loại thiết bị không được để trống"
+    },
+    "vendorCode": {
+      "notBlank": "Mã nhà cung cấp không được để trống"
+    },
+    "vendorConfigId": {
+      "notNull": "Cấu hình nhà cung cấp không được rỗng"
+    },
+    "qrCodeName": {
+      "notBlank": "Tên mã QR không được để trống",
+      "size": "Tên mã QR không được vượt quá 100 ký tự"
+    },
+    "amountType": {
+      "notBlank": "Loại số tiền không được để trống"
+    },
+    "batchNo": {
+      "notBlank": "Số lô không được để trống",
+      "size": "Số lô không được vượt quá 64 ký tự"
+    },
+    "count": {
+      "notNull": "Số lượng không thể rỗng",
+      "min": "Số lượng không thể nhỏ hơn 1",
+      "max": "Số lượng không thể lớn hơn 999"
+    },
+    "ids": {
+      "notEmpty": "Vui lòng chọn bảng mã QR"
+    },
+    "twoFactorCode": {
+      "notBlank": "Mã xác minh không được để trống"
+    },
+    "preAuthToken": {
+      "notBlank": "Mã thông báo xác thực trước không được để trống"
+    },
+    "remark": {
+      "size": "Ghi chú không được vượt quá 255 ký tự"
+    },
+    "lklAppId": {
+      "notBlank": "ID ứng dụng Lakala không được để trống"
+    },
+    "mchSerialNo": {
+      "notBlank": "Số sê-ri chứng chỉ người bán không được để trống"
+    },
+    "orgCode": {
+      "notBlank": "Mã tổ chức không được để trống"
+    },
+    "orgId": {
+      "notBlank": "ID tổ chức không được để trống"
+    },
+    "vbillMchNo": {
+      "notBlank": "Số người bán VBill không được để trống"
+    },
+    "lakalaMchNo": {
+      "notBlank": "Mã người bán Lakala không được để trống"
+    },
+    "termNo": {
+      "notBlank": "Số thiết bị đầu cuối không được để trống",
+      "size": "Số thiết bị đầu cuối không thể vượt quá 64 ký tự"
+    },
+    "agentNo": {
+      "notBlank": "Mã số đại lý không được để trống"
+    },
+    "accessId": {
+      "notBlank": "ID truy cập không được để trống"
+    },
+    "merchNo": {
+      "notBlank": "Số người bán Hkrt không được để trống"
+    },
+    "pn": {
+      "notBlank": "Số thiết bị đầu cuối SAAS không được để trống"
+    },
+    "sysId": {
+      "notBlank": "ID hệ thống ISV không được để trống"
+    },
+    "productId": {
+      "notBlank": "ID sản phẩm không được để trống"
+    },
+    "merchantNo": {
+      "notBlank": "Số người bán Huifu không được để trống"
+    },
+    "dougongAppId": {
+      "notBlank": "AppId người bán không được để trống"
+    },
+    "sandAppId": {
+      "notBlank": "ID ứng dụng cát không được để trống"
+    },
+    "credential": {
+      "notNull": "Thông tin xác thực kênh không được rỗng"
+    },
+    "outTradeNo": {
+      "notBlank": "Kênh giao dịch số. không thể để trống"
+    },
+    "outRefundNo": {
+      "notBlank": "Số hoàn tiền của kênh không thể để trống"
+    },
+    "outRequestNo": {
+      "notBlank": "Số yêu cầu kênh không thể để trống"
+    },
+    "tradeNo": {
+      "notBlank": "Nền tảng giao dịch số. không thể để trống"
+    },
+    "tradeProduct": {
+      "notBlank": "Sản phẩm thương mại không được để trống"
+    },
+    "relationOrderNo": {
+      "notBlank": "Số thứ tự liên quan không thể để trống"
+    },
+    "refundAmount": {
+      "notNull": "Số tiền hoàn lại không thể rỗng",
+      "positive": "Số tiền hoàn lại phải lớn hơn 0"
+    },
+    "subject": {
+      "notBlank": "Tiêu đề thanh toán không được để trống"
+    },
+    "callbackBody": {
+      "notBlank": "Nội dung gọi lại không được để trống"
+    },
+    "callbackType": {
+      "notBlank": "Loại gọi lại không được để trống"
+    },
+    "rawData": {
+      "notBlank": "Dữ liệu thô không được để trống"
+    },
+    "orderCreateTime": {
+      "notBlank": "Thời gian tạo đơn hàng không được để trống"
+    },
+    "orgReqDate": {
+      "notBlank": "Ngày yêu cầu ban đầu không được để trống"
+    },
+    "originOutTradeNo": {
+      "notBlank": "Số giao dịch kênh gốc không thể để trống"
+    },
+    "config": {
+      "notNull": "Cấu hình không thể rỗng"
+    },
+    "fuyouMchNo": {
+      "notBlank": "Số người bán Fuyou không được để trống"
+    },
+    "fyAppId": {
+      "notBlank": "ID ứng dụng Fuyou không được để trống"
+    },
+    "leshuaOrderId": {
+      "notBlank": "ID đơn hàng Leshua không được để trống"
+    },
+    "lsMchNo": {
+      "notBlank": "Số thương gia Leshua không được để trống"
+    },
+    "fileName": {
+      "notBlank": "Tên tệp không được để trống"
+    },
+    "fileContent": {
+      "notBlank": "Nội dung tập tin không được để trống"
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "notConfigured": "URL truy cập chưa được định cấu hình",
+  "checkSuccess": "Đã vượt qua kiểm tra kết nối",
+  "checkFailed": "Kiểm tra kết nối không thành công, trạng thái HTTP: {0}",
+  "echoMismatch": "Kiểm tra kết nối không thành công, phản hồi tiếng vang phụ trợ không khớp",
+  "networkError": "Không thể truy cập mạng, vui lòng xác minh URL và tính khả dụng của dịch vụ"
+}

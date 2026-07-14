@@ -1,0 +1,16 @@
+{
+  "userInfoNotExists": "Info pengguna tidak ada",
+  "userPhoneAlreadyExisted": "Telepon pengguna sudah ada",
+  "userNonePhoneAndEmail": "Telepon atau email harus disediakan",
+  "oldPasswordError": "Kata sandi lama salah",
+  "accountExistsInClient": "Akun sudah ada di bawah klien ini",
+  "phoneUsedInClient": "Nomor telepon sudah digunakan pada klien ini",
+  "emailUsedInClient": "Email sudah digunakan di klien ini",
+  "phoneUsedByOtherInClient": "Nomor telepon sudah digunakan oleh pengguna lain di bawah klien ini",
+  "emailUsedByOtherInClient": "Email sudah digunakan oleh pengguna lain di bawah klien ini",
+  "dataError": "Kesalahan data pengguna",
+  "notExist": "Pengguna tidak ditemukan",
+  "cannotEditNonAdmin": "Tidak dapat mengedit pengguna klien non-admin",
+  "emailUsedByOther": "Email sudah digunakan oleh pengguna lain",
+  "phoneUsedByOther": "Nomor telepon sudah digunakan oleh pengguna lain"
+}

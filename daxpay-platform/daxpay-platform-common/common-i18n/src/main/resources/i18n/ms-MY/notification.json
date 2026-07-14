@@ -1,0 +1,6 @@
+{
+  "paySuccessTitle": "Pemberitahuan Kejayaan Pembayaran",
+  "paySuccessBody": "Pesanan anda {0} telah berjaya dibayar, jumlah: {1}",
+  "refundSuccessTitle": "Pemberitahuan Kejayaan Bayaran Balik",
+  "refundSuccessBody": "Pesanan anda {0} telah dibayar balik, jumlah: {1}"
+}

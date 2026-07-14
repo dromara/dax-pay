@@ -1,0 +1,5 @@
+{
+  "isvKeyNotConfigured": "Kunci VBill ISV tidak dikonfigurasi",
+  "mnoNotConfigured": "Nomor merchant VBill (mno) tidak dikonfigurasi, silakan isi konfigurasi merchant",
+  "merchantDuplicate": "Nomor pedagang Tianque ini sudah ada di bawah pedagang ini"
+}

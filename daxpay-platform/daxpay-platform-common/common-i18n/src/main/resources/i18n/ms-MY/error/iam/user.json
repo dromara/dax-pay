@@ -1,0 +1,16 @@
+{
+  "userInfoNotExists": "Maklumat pengguna tidak wujud",
+  "userPhoneAlreadyExisted": "Telefon pengguna sudah wujud",
+  "userNonePhoneAndEmail": "Sama ada telefon atau e-mel mesti disediakan",
+  "oldPasswordError": "Kata laluan lama tidak betul",
+  "accountExistsInClient": "Akaun sudah wujud di bawah pelanggan ini",
+  "phoneUsedInClient": "Nombor telefon sudah digunakan di bawah pelanggan ini",
+  "emailUsedInClient": "E-mel telah digunakan di bawah pelanggan ini",
+  "phoneUsedByOtherInClient": "Nombor telefon telah digunakan oleh pengguna lain di bawah pelanggan ini",
+  "emailUsedByOtherInClient": "E-mel telah digunakan oleh pengguna lain di bawah klien ini",
+  "dataError": "Ralat data pengguna",
+  "notExist": "Pengguna tidak ditemui",
+  "cannotEditNonAdmin": "Tidak boleh mengedit pengguna pelanggan bukan pentadbir",
+  "emailUsedByOther": "E-mel sudah digunakan oleh pengguna lain",
+  "phoneUsedByOther": "Nombor telefon sudah digunakan oleh pengguna lain"
+}

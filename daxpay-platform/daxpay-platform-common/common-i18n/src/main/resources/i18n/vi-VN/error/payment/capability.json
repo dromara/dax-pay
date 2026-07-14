@@ -1,0 +1,5 @@
+{
+  "notExist": "Khả năng thanh toán không tồn tại",
+  "duplicateProduct": "Các sản phẩm thanh toán được liên kết phải là duy nhất",
+  "productNotExist": "Sản phẩm thanh toán không tồn tại"
+}

@@ -1,0 +1,9 @@
+{
+  "aggregate_pay": "Bayaran Agregat",
+  "wechat": "WeChat Pay",
+  "alipay": "Alipay",
+  "union_pay": "UnionPay",
+  "visa": "Visa",
+  "mastercard": "Mastercard",
+  "douyin": "Douyin Pay"
+}

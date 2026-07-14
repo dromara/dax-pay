@@ -1,0 +1,7 @@
+{
+  "privateKeyRequired": "Kunci pribadi diperlukan",
+  "publicKeyRequired": "Kunci publik diperlukan",
+  "lklAppIdRequired": "ID aplikasi Lakala diperlukan",
+  "mchSerialNoRequired": "Nomor seri sertifikat pedagang diperlukan",
+  "termNoNotConfigured": "Nomor terminal tidak dikonfigurasi, harap atur di konfigurasi pedagang"
+}

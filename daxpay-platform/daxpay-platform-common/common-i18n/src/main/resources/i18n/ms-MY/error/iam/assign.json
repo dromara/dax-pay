@@ -1,0 +1,7 @@
+{
+  "roleClientMismatch": "Klien peranan tidak sepadan dengan pelanggan permintaan",
+  "invalidMenuData": "Data menu tidak sah wujud",
+  "roleMenuClientMismatch": "Pelanggan peranan tidak sepadan dengan klien menu",
+  "invalidPermCodeData": "Data kod kebenaran tidak sah wujud",
+  "permCodeNotOnSelectedMenus": "Kod kebenaran tidak dipasang pada menu yang dipilih: {0}"
+}

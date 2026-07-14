@@ -1,0 +1,22 @@
+{
+  "configNotExist": "Konfigurasi platform tidak ada atau tidak diaktifkan",
+  "unsupportedSource": "Platform tidak didukung",
+  "unsupportedClient": "Login sosial hanya mendukung klien admin dan pedagang",
+  "configDuplicated": "Konfigurasi platform sudah ada",
+  "notConfigured": "Platform tidak dikonfigurasi dan tidak dapat diubah",
+  "authCodeBlank": "Kode otorisasi tidak boleh kosong",
+  "endpointNotConfigured": "URL dasar frontend tidak ada dalam konfigurasi titik akhir, tidak dapat membuat URL panggilan balik",
+  "adminEndpointNotConfigured": "Harap atur URL Basis Admin (adminBaseUrl) dalam konfigurasi titik akhir terlebih dahulu",
+  "merchantEndpointNotConfigured": "Harap tetapkan URL Merchant Base (merchantBaseUrl) di konfigurasi titik akhir terlebih dahulu; login sosial pedagang memerlukannya untuk panggilan balik OAuth",
+  "alipayNotConfigured": "Konfigurasi Alipay tingkat platform tidak lengkap, harap konfigurasikan di 'Manajemen Platform Pihak Ketiga' terlebih dahulu",
+  "wechatMpNotConfigured": "Konfigurasi Akun Resmi WeChat tingkat platform tidak lengkap, harap konfigurasikan di 'Manajemen Platform Pihak Ketiga' terlebih dahulu",
+  "douyinH5NotConfigured": "Konfigurasi aplikasi Douyin H5 tingkat platform tidak lengkap, harap konfigurasikan di 'Manajemen Platform Pihak Ketiga' terlebih dahulu",
+  "weCom": {
+    "notCorpMember": "Bukan anggota perusahaan ini, login tidak didukung"
+  },
+  "bind": {
+    "alreadyBoundByOther": "Akun pihak ketiga telah diikat oleh pengguna lain",
+    "alreadyBoundPlatform": "Anda sudah mengikat platform ini, silakan unbind terlebih dahulu",
+    "clientMismatch": "Pengguna saat ini bukan milik klien ini, pengikatan tidak diperbolehkan"
+  }
+}

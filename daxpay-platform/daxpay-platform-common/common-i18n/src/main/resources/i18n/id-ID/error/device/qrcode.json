@@ -1,0 +1,11 @@
+{
+  "notFound": "Papan kode QR tidak ada",
+  "disabled": "Papan kode QR dinonaktifkan",
+  "mchNotFound": "Pedagang papan kode QR tidak ada",
+  "amountTypeNotFound": "Tidak ditemukan jenis jumlah kode QR yang cocok: {0}",
+  "statusNotFound": "Tidak ditemukan status kode QR yang cocok: {0}",
+  "fixedAmountInvalid": "Jumlah tetap harus lebih besar dari 0",
+  "batchNoExists": "Nomor batch sudah ada",
+  "notAssigned": "Papan kode QR belum ditetapkan ke pedagang",
+  "idsEmpty": "Silakan pilih papan kode QR"
+}

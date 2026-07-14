@@ -1,0 +1,7 @@
+{
+  "notConfigured": "URL akses tidak dikonfigurasikan",
+  "checkSuccess": "Semakan ketersambungan lulus",
+  "checkFailed": "Semakan kesambungan gagal, status HTTP: {0}",
+  "echoMismatch": "Semakan ketersambungan gagal, jawapan gema bahagian belakang tidak sepadan",
+  "networkError": "Rangkaian tidak dapat dicapai, sila sahkan URL dan ketersediaan perkhidmatan"
+}

@@ -1,0 +1,6 @@
+{
+  "paySuccessTitle": "Thông báo thanh toán thành công",
+  "paySuccessBody": "Đơn hàng {0} của bạn đã được thanh toán thành công, số tiền: {1}",
+  "refundSuccessTitle": "Thông báo hoàn tiền thành công",
+  "refundSuccessBody": "Đơn đặt hàng {0} của bạn đã được hoàn lại, số tiền: {1}"
+}

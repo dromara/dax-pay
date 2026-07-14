@@ -1,0 +1,10 @@
+{
+  "roleNotExisted": "Vai trò không tồn tại",
+  "roleAlreadyUsed": "Vai trò đã được người dùng chỉ định, không thể xóa được",
+  "roleAlreadyExisted": "Vai trò đã tồn tại",
+  "permissionDbError": "Người dùng không có quyền",
+  "internalCannotDelete": "Không thể xóa vai trò tích hợp",
+  "assignOutOfScope": "Phân công vai trò vượt quá phạm vi được chỉ định",
+  "assignCrossClient": "Không thể chỉ định vai trò trên các thiết bị đầu cuối: ứng dụng khách người dùng [{0}], ứng dụng khách vai trò [{1}]",
+  "notExist": "Không tìm thấy vai trò"
+}

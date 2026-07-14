@@ -1,0 +1,6 @@
+{
+  "sessionNotExistOrExpired": "Sesi tidak wujud atau telah tamat tempoh",
+  "invalidSessionId": "ID sesi tidak sah",
+  "cannotKickoutAdmin": "Tidak boleh memaksa pentadbir super di luar talian",
+  "kickoutFailed": "Gagal memaksa pengguna di luar talian: {0}"
+}

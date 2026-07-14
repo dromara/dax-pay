@@ -1,0 +1,11 @@
+{
+  "notFound": "Bảng mã QR không tồn tại",
+  "disabled": "Bảng mã QR bị vô hiệu hóa",
+  "mchNotFound": "Người bán bảng mã QR không tồn tại",
+  "amountTypeNotFound": "Không tìm thấy loại số tiền mã QR phù hợp: {0}",
+  "statusNotFound": "Không tìm thấy trạng thái mã QR phù hợp: {0}",
+  "fixedAmountInvalid": "Số tiền cố định phải lớn hơn 0",
+  "batchNoExists": "Số lô đã tồn tại",
+  "notAssigned": "Bảng mã QR chưa được gán cho người bán",
+  "idsEmpty": "Vui lòng chọn bảng mã QR"
+}

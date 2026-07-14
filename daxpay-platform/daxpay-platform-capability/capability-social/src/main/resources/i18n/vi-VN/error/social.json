@@ -1,0 +1,22 @@
+{
+  "configNotExist": "Cấu hình nền tảng không tồn tại hoặc không được kích hoạt",
+  "unsupportedSource": "Nền tảng không được hỗ trợ",
+  "unsupportedClient": "Đăng nhập xã hội chỉ hỗ trợ khách hàng quản trị và người bán",
+  "configDuplicated": "Cấu hình nền tảng đã tồn tại",
+  "notConfigured": "Nền tảng chưa được định cấu hình và không thể chuyển đổi",
+  "authCodeBlank": "Mã ủy quyền không được để trống",
+  "endpointNotConfigured": "URL cơ sở giao diện người dùng bị thiếu trong cấu hình điểm cuối, không thể tạo URL gọi lại",
+  "adminEndpointNotConfigured": "Trước tiên, vui lòng đặt URL cơ sở quản trị (adminBaseUrl) trong cấu hình điểm cuối",
+  "merchantEndpointNotConfigured": "Trước tiên, vui lòng đặt URL cơ sở người bán (merchantBaseUrl) trong cấu hình điểm cuối; thông tin đăng nhập xã hội của người bán cần nó cho các cuộc gọi lại OAuth",
+  "alipayNotConfigured": "Cấu hình Alipay cấp nền tảng chưa hoàn chỉnh, trước tiên hãy định cấu hình nó trong 'Quản lý nền tảng của bên thứ ba'",
+  "wechatMpNotConfigured": "Cấu hình Tài khoản chính thức WeChat cấp nền tảng chưa hoàn chỉnh, trước tiên hãy định cấu hình nó trong 'Quản lý nền tảng của bên thứ ba'",
+  "douyinH5NotConfigured": "Cấu hình ứng dụng Douyin H5 cấp nền tảng chưa hoàn chỉnh, trước tiên vui lòng định cấu hình nó trong 'Quản lý nền tảng bên thứ ba'",
+  "weCom": {
+    "notCorpMember": "Không phải là thành viên của doanh nghiệp này, đăng nhập không được hỗ trợ"
+  },
+  "bind": {
+    "alreadyBoundByOther": "Tài khoản của bên thứ ba đã bị ràng buộc bởi người dùng khác",
+    "alreadyBoundPlatform": "Bạn đã ràng buộc nền tảng này, vui lòng hủy liên kết trước",
+    "clientMismatch": "Người dùng hiện tại không thuộc về khách hàng này, không được phép ràng buộc"
+  }
+}

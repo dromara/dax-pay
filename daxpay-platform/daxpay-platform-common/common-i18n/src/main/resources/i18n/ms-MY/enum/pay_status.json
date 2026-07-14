@@ -1,0 +1,9 @@
+{
+  "wait": "Belum selesai",
+  "progress": "Memproses",
+  "success": "Kejayaan",
+  "close": "tertutup",
+  "cancel": "Dibatalkan",
+  "fail": "gagal",
+  "timeout": "tamat masa"
+}

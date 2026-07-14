@@ -1,0 +1,11 @@
+{
+  "notFound": "Papan kod QR tidak wujud",
+  "disabled": "Papan kod QR dilumpuhkan",
+  "mchNotFound": "Pedagang papan kod QR tidak wujud",
+  "amountTypeNotFound": "Tiada jenis jumlah kod QR yang sepadan ditemui: {0}",
+  "statusNotFound": "Tiada status kod QR yang sepadan ditemui: {0}",
+  "fixedAmountInvalid": "Jumlah tetap mestilah lebih besar daripada 0",
+  "batchNoExists": "Nombor kelompok sudah wujud",
+  "notAssigned": "Papan kod QR belum diberikan kepada pedagang",
+  "idsEmpty": "Sila pilih papan kod QR"
+}

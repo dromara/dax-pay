@@ -1,0 +1,4 @@
+{
+  "authFailed": "Không lấy được mã định danh người dùng Alipay: {0}",
+  "clientInitFailed": "Không thể khởi tạo ứng dụng khách OpenAPI của Alipay: {0}"
+}

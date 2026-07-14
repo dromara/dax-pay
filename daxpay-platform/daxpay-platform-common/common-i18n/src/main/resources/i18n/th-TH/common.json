@@ -1,0 +1,12 @@
+{
+  "save": "บันทึก",
+  "delete": "ลบ",
+  "confirm": "ยืนยัน",
+  "cancel": "ยกเลิก",
+  "submit": "ส่ง",
+  "enable": "เปิดใช้งาน",
+  "disable": "ปิดการใช้งาน",
+  "operation": "การดำเนินการ",
+  "createTime": "สร้างเวลา",
+  "updateTime": "เวลาอัปเดต"
+}

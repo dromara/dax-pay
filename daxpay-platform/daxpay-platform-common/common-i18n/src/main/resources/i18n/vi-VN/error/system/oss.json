@@ -1,0 +1,8 @@
+{
+  "incomplete": "Cấu hình OSS chưa đầy đủ. Vui lòng điền điểm cuối, nhóm và thông tin xác thực",
+  "checkSuccess": "Đã vượt qua kiểm tra kết nối OSS",
+  "checkFailed": "Kiểm tra kết nối OSS không thành công, trạng thái: {0}",
+  "authFailed": "Xác thực OSS không thành công, vui lòng kiểm tra AccessKey/SecretKey",
+  "bucketNotFound": "Không tìm thấy nhóm, vui lòng kiểm tra tên nhóm công khai/riêng tư",
+  "networkError": "Không thể truy cập bộ nhớ đối tượng, vui lòng kiểm tra điểm cuối và mạng"
+}

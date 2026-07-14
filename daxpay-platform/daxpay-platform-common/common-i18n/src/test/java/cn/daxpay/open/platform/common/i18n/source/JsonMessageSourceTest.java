@@ -137,4 +137,72 @@ class JsonMessageSourceTest {
         String ko = messageSource.getMessage("pay.route.error.noMatch", null, Locale.forLanguageTag("ko"));
         assertEquals(koKr, ko);
     }
+
+    /// 印尼语资源精确命中
+    @Test
+    void shouldResolvePayRouteNoMatchInIdId() {
+        String message = messageSource.getMessage("pay.route.error.noMatch", null, Locale.forLanguageTag("id-ID"));
+        assertNotNull(message);
+        assertEquals(false, "未匹配到可用支付产品".equals(message));
+        assertEquals(false, "pay.route.error.noMatch".equals(message));
+    }
+
+    /// 越南语资源精确命中
+    @Test
+    void shouldResolvePayRouteNoMatchInViVn() {
+        String message = messageSource.getMessage("pay.route.error.noMatch", null, Locale.forLanguageTag("vi-VN"));
+        assertNotNull(message);
+        assertEquals(false, "未匹配到可用支付产品".equals(message));
+        assertEquals(false, "pay.route.error.noMatch".equals(message));
+    }
+
+    /// 泰语资源精确命中
+    @Test
+    void shouldResolvePayRouteNoMatchInThTh() {
+        String message = messageSource.getMessage("pay.route.error.noMatch", null, Locale.forLanguageTag("th-TH"));
+        assertNotNull(message);
+        assertEquals(false, "未匹配到可用支付产品".equals(message));
+        assertEquals(false, "pay.route.error.noMatch".equals(message));
+    }
+
+    /// 马来语资源精确命中
+    @Test
+    void shouldResolvePayRouteNoMatchInMsMy() {
+        String message = messageSource.getMessage("pay.route.error.noMatch", null, Locale.forLanguageTag("ms-MY"));
+        assertNotNull(message);
+        assertEquals(false, "未匹配到可用支付产品".equals(message));
+        assertEquals(false, "pay.route.error.noMatch".equals(message));
+    }
+
+    /// 纯语言码 id 反向/别名匹配到 id-ID
+    @Test
+    void shouldAliasIdToIdId() {
+        String full = messageSource.getMessage("pay.route.error.noMatch", null, Locale.forLanguageTag("id-ID"));
+        String shortLang = messageSource.getMessage("pay.route.error.noMatch", null, Locale.forLanguageTag("id"));
+        assertEquals(full, shortLang);
+    }
+
+    /// 纯语言码 vi 反向/别名匹配到 vi-VN
+    @Test
+    void shouldAliasViToViVn() {
+        String full = messageSource.getMessage("pay.route.error.noMatch", null, Locale.forLanguageTag("vi-VN"));
+        String shortLang = messageSource.getMessage("pay.route.error.noMatch", null, Locale.forLanguageTag("vi"));
+        assertEquals(full, shortLang);
+    }
+
+    /// 纯语言码 th 反向/别名匹配到 th-TH
+    @Test
+    void shouldAliasThToThTh() {
+        String full = messageSource.getMessage("pay.route.error.noMatch", null, Locale.forLanguageTag("th-TH"));
+        String shortLang = messageSource.getMessage("pay.route.error.noMatch", null, Locale.forLanguageTag("th"));
+        assertEquals(full, shortLang);
+    }
+
+    /// 纯语言码 ms 反向/别名匹配到 ms-MY
+    @Test
+    void shouldAliasMsToMsMy() {
+        String full = messageSource.getMessage("pay.route.error.noMatch", null, Locale.forLanguageTag("ms-MY"));
+        String shortLang = messageSource.getMessage("pay.route.error.noMatch", null, Locale.forLanguageTag("ms"));
+        assertEquals(full, shortLang);
+    }
 }

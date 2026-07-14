@@ -1,0 +1,10 @@
+{
+  "mchAppNotFound": "ไม่พบแอปพลิเคชันผู้ค้าช่องทาง Douyin",
+  "appIdDuplicate": "Douyin AppId มีอยู่แล้วภายใต้ร้านค้าช่องทางนี้",
+  "directMchDuplicate": "ผู้ค้าโดยตรง Douyin รายนี้มีอยู่แล้วภายใต้ผู้ค้ารายนี้",
+  "appTypeInvalid": "ประเภทแอปพลิเคชัน Douyin ไม่ถูกต้อง",
+  "capabilityDuplicate": "ความสามารถในการชำระเงิน [{0}] ซ้ำกันภายใต้ผู้ขายช่องทางนี้",
+  "payFailed": "ข้อผิดพลาดในการชำระเงิน Douyin: {0}",
+  "closeFailed": "ข้อผิดพลาดในการสั่งซื้อปิด Douyin: {0}",
+  "notSupportMethod": "วิธีการชำระเงิน Douyin ที่ไม่รองรับ: {0}"
+}

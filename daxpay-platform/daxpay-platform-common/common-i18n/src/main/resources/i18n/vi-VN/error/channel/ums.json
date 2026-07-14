@@ -1,0 +1,5 @@
+{
+  "payFailed": "Lỗi thanh toán UMS: {0}",
+  "closeFailed": "Lỗi đóng lệnh UMS: {0}",
+  "notSupportMethod": "Phương thức thanh toán UMS không được hỗ trợ: {0}"
+}

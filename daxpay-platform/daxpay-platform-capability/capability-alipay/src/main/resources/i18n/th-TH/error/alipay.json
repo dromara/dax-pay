@@ -1,0 +1,4 @@
+{
+  "authFailed": "ไม่สามารถรับตัวระบุผู้ใช้ Alipay: {0}",
+  "clientInitFailed": "ไม่สามารถเริ่มต้นไคลเอนต์ Alipay OpenAPI: {0}"
+}

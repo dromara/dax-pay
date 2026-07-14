@@ -1,0 +1,6 @@
+{
+  "platformDisabled": "Pengesahan dua faktor tidak didayakan pada platform",
+  "alreadyBound": "Pengesahan dua faktor sudah terikat",
+  "notBound": "Pengesahan dua faktor tidak terikat",
+  "codeError": "Kod pengesahan yang salah"
+}

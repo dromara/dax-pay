@@ -1,0 +1,13 @@
+{
+  "pay": {
+    "create": "Buat pesanan pembayaran, nomor pesanan: {0}, jumlah: {1}",
+    "success": "Pembayaran berhasil, nomor pesanan: {0}, jumlah: {1}",
+    "close": "Pembayaran ditutup, no pesanan: {0}",
+    "fail": "Pembayaran gagal, nomor pesanan: {0}, alasan: {1}"
+  },
+  "refund": {
+    "create": "Buat pengembalian dana, nomor pesanan: {0}, jumlah pengembalian dana: {1}",
+    "success": "Pengembalian dana berhasil, no pesanan: {0}",
+    "fail": "Pengembalian dana gagal, nomor pesanan: {0}, alasan: {1}"
+  }
+}

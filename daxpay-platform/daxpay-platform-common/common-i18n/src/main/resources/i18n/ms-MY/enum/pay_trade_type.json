@@ -1,0 +1,8 @@
+{
+  "normal": "Gaji Biasa",
+  "gateway": "Bayar Gateway",
+  "authorize": "membenarkan",
+  "capture": "Tangkap",
+  "recurring": "Berulang",
+  "combine_sub": "Gabungkan Subperintah"
+}

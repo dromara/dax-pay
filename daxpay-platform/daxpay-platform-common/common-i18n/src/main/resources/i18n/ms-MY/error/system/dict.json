@@ -1,0 +1,7 @@
+{
+  "codeExists": "Kod kamus sudah wujud",
+  "notExist": "Kamus tidak ditemui",
+  "hasItems": "Kamus mempunyai item, tidak boleh dipadamkan",
+  "itemCodeDuplicate": "Kod item kamus disalin",
+  "itemNotExist": "Item kamus tidak ditemui"
+}

@@ -1,0 +1,9 @@
+{
+  "wait": "Chưa giải quyết",
+  "progress": "Xử lý",
+  "success": "Thành công",
+  "close": "Đã đóng",
+  "cancel": "Đã hủy",
+  "fail": "Thất bại",
+  "timeout": "Hết giờ"
+}

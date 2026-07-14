@@ -1,0 +1,6 @@
+{
+  "codeDefinitionConflict": "Definisi kode izin yang bertentangan: {0}",
+  "codeNotConfigured": "Deklarasi kode izin kode tidak ada",
+  "nameCnNotConfigured": "Deklarasi kode izin tidak memiliki namaCn",
+  "nameEnNotConfigured": "Deklarasi kode izin tidak memiliki namaEn"
+}

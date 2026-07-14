@@ -1,0 +1,12 @@
+{
+  "unsupportedBarcodeType": "ประเภทบาร์โค้ดที่ไม่รองรับ",
+  "merchantNoRefundPermission": "ผู้ขายไม่ได้รับอนุญาตให้คืนเงิน",
+  "payOrderNotExist": "ไม่พบคำสั่งการชำระเงิน",
+  "payOrderExtNotExist": "ไม่พบส่วนขยายคำสั่งการชำระเงิน",
+  "refundOrderNotExist": "ไม่พบคำสั่งซื้อคืนเงิน",
+  "refundOrderExtNotExist": "ไม่พบส่วนขยายคำสั่งซื้อสำหรับการคืนเงิน",
+  "refundPayOrderNotExist": "ไม่พบคำสั่งการชำระเงินที่เชื่อมโยงกับคำสั่งคืนเงิน",
+  "tradeFlowNotExist": "ไม่พบบันทึกกระแสการค้า",
+  "callbackTaskNotExist": "ไม่พบงานการแจ้งเตือนการโทรกลับของผู้ขาย",
+  "subscribeRecordNotExist": "ไม่พบบันทึกการแจ้งเตือนการสมัครสมาชิกผู้ขาย"
+}

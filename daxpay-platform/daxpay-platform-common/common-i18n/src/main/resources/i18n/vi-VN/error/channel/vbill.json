@@ -1,0 +1,5 @@
+{
+  "isvKeyNotConfigured": "Khóa VBill ISV chưa được định cấu hình",
+  "mnoNotConfigured": "Mã số người bán VBill (mno) chưa được định cấu hình, vui lòng điền cấu hình người bán",
+  "merchantDuplicate": "Số người bán Tianque này đã tồn tại dưới tên người bán này"
+}

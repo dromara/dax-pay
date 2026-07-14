@@ -1,0 +1,10 @@
+{
+  "mchAppNotFound": "Không tìm thấy ứng dụng thương gia kênh Douyin",
+  "appIdDuplicate": "Douyin AppId đã tồn tại dưới kênh người bán này",
+  "directMchDuplicate": "Người bán trực tiếp Douyin này đã tồn tại dưới tên người bán",
+  "appTypeInvalid": "Loại ứng dụng Douyin không hợp lệ",
+  "capabilityDuplicate": "Khả năng thanh toán [{0}] bị trùng lặp trong kênh này của người bán",
+  "payFailed": "Lỗi thanh toán Douyin: {0}",
+  "closeFailed": "Lỗi đóng lệnh Douyin: {0}",
+  "notSupportMethod": "Phương thức thanh toán Douyin không được hỗ trợ: {0}"
+}

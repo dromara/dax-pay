@@ -1,0 +1,9 @@
+{
+  "security_password_policy": "Dasar kata laluan",
+  "security_login": "Keselamatan log masuk",
+  "security_session": "Pengurusan sesi",
+  "security_two_factor_auth": "Pengesahan dua faktor",
+  "url": "Tetapan URL sistem",
+  "website": "Tetapan paparan laman web",
+  "wechat_notify": "Konfigurasi templat pemberitahuan mesej WeChat"
+}

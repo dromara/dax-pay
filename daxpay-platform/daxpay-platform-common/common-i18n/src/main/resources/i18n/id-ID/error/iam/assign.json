@@ -1,0 +1,7 @@
+{
+  "roleClientMismatch": "Klien peran tidak cocok dengan permintaan klien",
+  "invalidMenuData": "Ada data menu yang tidak valid",
+  "roleMenuClientMismatch": "Klien peran tidak cocok dengan klien menu",
+  "invalidPermCodeData": "Ada data kode izin yang tidak valid",
+  "permCodeNotOnSelectedMenus": "Kode izin tidak dipasang pada menu yang dipilih: {0}"
+}

@@ -1,0 +1,16 @@
+{
+  "userInfoNotExists": "Thông tin người dùng không tồn tại",
+  "userPhoneAlreadyExisted": "Điện thoại người dùng đã tồn tại",
+  "userNonePhoneAndEmail": "Phải cung cấp điện thoại hoặc email",
+  "oldPasswordError": "Mật khẩu cũ không đúng",
+  "accountExistsInClient": "Tài khoản đã tồn tại dưới tên khách hàng này",
+  "phoneUsedInClient": "Số điện thoại đã được sử dụng cho khách hàng này",
+  "emailUsedInClient": "Email đã được sử dụng trong ứng dụng khách này",
+  "phoneUsedByOtherInClient": "Số điện thoại đã được người dùng khác sử dụng trong ứng dụng khách này",
+  "emailUsedByOtherInClient": "Email đã được người dùng khác sử dụng trong ứng dụng khách này",
+  "dataError": "Lỗi dữ liệu người dùng",
+  "notExist": "Không tìm thấy người dùng",
+  "cannotEditNonAdmin": "Không thể chỉnh sửa người dùng khách hàng không phải quản trị viên",
+  "emailUsedByOther": "Email đã được người dùng khác sử dụng",
+  "phoneUsedByOther": "Số điện thoại đã được người dùng khác sử dụng"
+}

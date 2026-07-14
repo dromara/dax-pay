@@ -1,0 +1,18 @@
+{
+  "codeExists": "Kod menu sudah wujud",
+  "cycleDependency": "Menu induk tidak boleh menjadi menu sendiri atau menu anak",
+  "subpageNoChildren": "Subhalaman tidak boleh mempunyai menu kanak-kanak",
+  "hasChildrenCannotDelete": "Tidak boleh memadamkan menu dengan menu kanak-kanak",
+  "invalidType": "Jenis menu tidak sah",
+  "typeImmutable": "Jenis menu tidak boleh ditukar selepas dibuat",
+  "subpageNeedParent": "Subhalaman mesti memilih menu induk",
+  "parentNotExist": "Menu induk tidak ditemui",
+  "subpageParentMustBeMenu": "Induk subhalaman mestilah jenis menu",
+  "subpageParentInvalid": "Induk subhalaman mestilah menu atau kumpulan subhalaman",
+  "subpageGroupNeedParent": "Kumpulan subhalaman mesti memilih menu induk",
+  "subpageGroupParentMustBeMenu": "Induk kumpulan subhalaman mestilah jenis menu",
+  "subpageGroupChildMustBeSubpage": "Kumpulan subhalaman hanya boleh mengandungi subhalaman",
+  "needParentCatalog": "Menu, halaman terbenam atau pautan luaran mesti memilih direktori induk",
+  "parentMustBeCatalog": "Induk menu, halaman terbenam atau pautan luaran mestilah jenis direktori",
+  "notExist": "Menu tidak ditemui"
+}

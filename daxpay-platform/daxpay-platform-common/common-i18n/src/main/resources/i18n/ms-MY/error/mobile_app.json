@@ -1,0 +1,10 @@
+{
+  "notExist": "Konfigurasi apl mudah alih tidak wujud",
+  "notEnabled": "Konfigurasi apl mudah alih dilumpuhkan: {0}/{1}",
+  "appTypeNotFound": "Tiada jenis apl mudah alih yang sepadan ditemui: {0}",
+  "platformNotFound": "Tiada platform mudah alih yang sepadan ditemui: {0}",
+  "platformNotAllowed": "Jenis apl {0} tidak menyokong platform mudah alih {1}",
+  "configRequired": "Sila serahkan konfigurasi apl untuk platform {0}",
+  "configPlatformMismatch": "Konfigurasi apl tidak sepadan dengan platform {0}",
+  "alipayCertRequired": "Dalam mod sijil, sila muat naik sijil apl, sijil Alipay dan sijil akar"
+}

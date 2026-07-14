@@ -1,0 +1,5 @@
+{
+  "notExist": "Không tìm thấy sản phẩm thanh toán",
+  "duplicateCapability": "Mã khả năng thanh toán trùng lặp",
+  "capabilityNotExist": "Không tìm thấy khả năng thanh toán"
+}

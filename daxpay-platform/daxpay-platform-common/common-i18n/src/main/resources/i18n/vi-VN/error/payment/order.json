@@ -1,0 +1,12 @@
+{
+  "unsupportedBarcodeType": "Loại mã vạch không được hỗ trợ",
+  "merchantNoRefundPermission": "Người bán không có quyền hoàn tiền",
+  "payOrderNotExist": "Không tìm thấy lệnh thanh toán",
+  "payOrderExtNotExist": "Không tìm thấy tiện ích mở rộng lệnh thanh toán",
+  "refundOrderNotExist": "Không tìm thấy lệnh hoàn tiền",
+  "refundOrderExtNotExist": "Không tìm thấy tiện ích hoàn tiền cho đơn đặt hàng",
+  "refundPayOrderNotExist": "Không tìm thấy lệnh thanh toán được liên kết với lệnh hoàn tiền",
+  "tradeFlowNotExist": "Không tìm thấy bản ghi luồng giao dịch",
+  "callbackTaskNotExist": "Không tìm thấy tác vụ thông báo gọi lại của người bán",
+  "subscribeRecordNotExist": "Không tìm thấy bản ghi thông báo đăng ký của người bán"
+}

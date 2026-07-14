@@ -1,0 +1,7 @@
+{
+  "sendFailed": "Gửi tin nhắn không thành công: {0}",
+  "delaySendFailed": "Gửi tin nhắn bị trì hoãn không thành công: {0}",
+  "serializeFailed": "Tuần tự hóa tin nhắn không thành công: {0}",
+  "parseBodyFailed": "Phân tích nội dung thư không thành công: {0}",
+  "typeConvertFailed": "Chuyển đổi loại tin nhắn không thành công: {0}"
+}

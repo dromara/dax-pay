@@ -1,0 +1,12 @@
+{
+  "defaultCannotDelete": "Protokol lalai tidak boleh dipadamkan",
+  "notExist": "Protokol pengguna tidak ditemui",
+  "itemNotExist": "Item protokol pengguna tidak ditemui",
+  "defaultItemNotExist": "Tiada protokol lalai wujud untuk jenis ini",
+  "versionNotExist": "Versi protokol pengguna tidak ditemui",
+  "draftOnlyCanEdit": "Hanya versi draf boleh diedit",
+  "draftOnlyCanDelete": "Hanya versi draf boleh dipadamkan",
+  "draftOnlyCanPublish": "Hanya versi draf boleh diterbitkan",
+  "publishedOnlyCanArchive": "Hanya versi yang diterbitkan boleh diarkibkan",
+  "sameClientType": "Jenis klien sasaran adalah sama dengan sumber"
+}

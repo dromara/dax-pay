@@ -1,0 +1,5 @@
+{
+  "payFailed": "Ralat pembayaran UMS: {0}",
+  "closeFailed": "Ralat pesanan tutup UMS: {0}",
+  "notSupportMethod": "Kaedah pembayaran UMS tidak disokong: {0}"
+}

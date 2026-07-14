@@ -1,0 +1,12 @@
+{
+  "unsupportedBarcodeType": "Jenis kode batang tidak didukung",
+  "merchantNoRefundPermission": "Penjual tidak memiliki izin pengembalian dana",
+  "payOrderNotExist": "Perintah pembayaran tidak ditemukan",
+  "payOrderExtNotExist": "Ekstensi perintah pembayaran tidak ditemukan",
+  "refundOrderNotExist": "Perintah pengembalian dana tidak ditemukan",
+  "refundOrderExtNotExist": "Ekstensi pesanan pengembalian dana tidak ditemukan",
+  "refundPayOrderNotExist": "Perintah pembayaran yang ditautkan ke perintah pengembalian dana tidak ditemukan",
+  "tradeFlowNotExist": "Catatan arus perdagangan tidak ditemukan",
+  "callbackTaskNotExist": "Tugas pemberitahuan panggilan balik pedagang tidak ditemukan",
+  "subscribeRecordNotExist": "Catatan pemberitahuan langganan pedagang tidak ditemukan"
+}

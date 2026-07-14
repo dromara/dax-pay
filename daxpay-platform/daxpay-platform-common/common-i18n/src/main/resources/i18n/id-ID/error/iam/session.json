@@ -1,0 +1,6 @@
+{
+  "sessionNotExistOrExpired": "Sesi tidak ada atau telah kedaluwarsa",
+  "invalidSessionId": "ID sesi tidak valid",
+  "cannotKickoutAdmin": "Tidak dapat memaksa administrator super offline",
+  "kickoutFailed": "Gagal memaksa pengguna offline: {0}"
+}

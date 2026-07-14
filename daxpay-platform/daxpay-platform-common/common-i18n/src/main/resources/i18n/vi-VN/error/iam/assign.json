@@ -1,0 +1,7 @@
+{
+  "roleClientMismatch": "Vai trò của khách hàng không khớp với khách hàng yêu cầu",
+  "invalidMenuData": "Tồn tại dữ liệu menu không hợp lệ",
+  "roleMenuClientMismatch": "Vai trò khách hàng không khớp với khách hàng menu",
+  "invalidPermCodeData": "Tồn tại dữ liệu mã quyền không hợp lệ",
+  "permCodeNotOnSelectedMenus": "Mã quyền không được gắn trên menu đã chọn: {0}"
+}

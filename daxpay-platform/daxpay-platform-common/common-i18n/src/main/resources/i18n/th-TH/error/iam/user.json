@@ -1,0 +1,16 @@
+{
+  "userInfoNotExists": "ไม่มีข้อมูลผู้ใช้",
+  "userPhoneAlreadyExisted": "มีหมายเลขโทรศัพท์ของผู้ใช้อยู่แล้ว",
+  "userNonePhoneAndEmail": "ต้องระบุโทรศัพท์หรืออีเมล",
+  "oldPasswordError": "รหัสผ่านเก่าไม่ถูกต้อง",
+  "accountExistsInClient": "มีบัญชีอยู่แล้วภายใต้ลูกค้ารายนี้",
+  "phoneUsedInClient": "หมายเลขโทรศัพท์ที่ใช้อยู่แล้วภายใต้ลูกค้ารายนี้",
+  "emailUsedInClient": "อีเมลถูกใช้แล้วภายใต้ไคลเอนต์นี้",
+  "phoneUsedByOtherInClient": "หมายเลขโทรศัพท์ที่ใช้แล้วโดยผู้ใช้รายอื่นภายใต้ไคลเอ็นต์นี้",
+  "emailUsedByOtherInClient": "อีเมลถูกใช้โดยผู้ใช้รายอื่นภายใต้ไคลเอนต์นี้",
+  "dataError": "ข้อมูลผู้ใช้ผิดพลาด",
+  "notExist": "ไม่พบผู้ใช้",
+  "cannotEditNonAdmin": "แก้ไขผู้ใช้ไคลเอ็นต์ที่ไม่ใช่ผู้ดูแลระบบไม่ได้",
+  "emailUsedByOther": "อีเมลถูกใช้โดยผู้ใช้รายอื่นแล้ว",
+  "phoneUsedByOther": "หมายเลขโทรศัพท์ถูกใช้โดยผู้ใช้รายอื่นแล้ว"
+}

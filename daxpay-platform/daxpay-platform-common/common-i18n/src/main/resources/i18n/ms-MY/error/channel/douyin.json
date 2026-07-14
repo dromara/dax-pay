@@ -1,0 +1,10 @@
+{
+  "mchAppNotFound": "Aplikasi pedagang saluran Douyin tidak ditemui",
+  "appIdDuplicate": "Douyin AppId sudah wujud di bawah pedagang saluran ini",
+  "directMchDuplicate": "Peniaga langsung Douyin ini sudah wujud di bawah pedagang",
+  "appTypeInvalid": "Jenis aplikasi Douyin tidak sah",
+  "capabilityDuplicate": "Keupayaan pembayaran [{0}] diduakan di bawah pedagang saluran ini",
+  "payFailed": "Ralat pembayaran Douyin: {0}",
+  "closeFailed": "Ralat tutup pesanan Douyin: {0}",
+  "notSupportMethod": "Kaedah pembayaran Douyin tidak disokong: {0}"
+}

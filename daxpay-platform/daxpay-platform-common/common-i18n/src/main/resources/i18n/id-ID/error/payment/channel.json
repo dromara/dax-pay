@@ -1,0 +1,10 @@
+{
+  "notExist": "Saluran berbayar tidak ada",
+  "subMchNoExists": "Nomor sub merchant sudah ada di sistem",
+  "merchantNoChannelPerm": "Penjual tidak memiliki izin untuk saluran ini, tidak dapat menambahkan saluran pedagang",
+  "channelMerchantExists": "Channel merchant sudah ada di sistem, jangan ditambah lagi",
+  "onlyDraftCanDelete": "Hanya status draf yang dapat dihapus",
+  "signVerifyFailIllegal": "Verifikasi tanda tangan gagal, permintaan ilegal",
+  "channelMerchantNotExist": "Informasi pedagang saluran tidak ditemukan",
+  "merchantInfoNotFound": "Informasi pedagang tidak ditemukan"
+}

@@ -1,0 +1,13 @@
+{
+  "pay": {
+    "create": "Tạo lệnh thanh toán, mã đơn hàng: {0}, số tiền: {1}",
+    "success": "Thanh toán thành công, số đơn hàng: {0}, số tiền: {1}",
+    "close": "Đã đóng thanh toán, số đơn hàng: {0}",
+    "fail": "Thanh toán không thành công, số đơn hàng: {0}, lý do: {1}"
+  },
+  "refund": {
+    "create": "Tạo khoản tiền hoàn lại, số đơn hàng: {0}, số tiền hoàn lại: {1}",
+    "success": "Hoàn tiền thành công, số đơn hàng: {0}",
+    "fail": "Hoàn tiền không thành công, số đơn hàng: {0}, lý do: {1}"
+  }
+}

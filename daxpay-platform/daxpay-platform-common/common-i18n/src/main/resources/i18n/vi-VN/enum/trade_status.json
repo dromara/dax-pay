@@ -1,0 +1,8 @@
+{
+  "progress": "Đang tiến hành",
+  "success": "Thành công",
+  "fail": "Thất bại",
+  "closed": "Đã đóng",
+  "revoked": "Đã thu hồi",
+  "exception": "Ngoại lệ"
+}

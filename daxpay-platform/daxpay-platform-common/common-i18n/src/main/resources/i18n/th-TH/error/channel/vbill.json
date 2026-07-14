@@ -1,0 +1,5 @@
+{
+  "isvKeyNotConfigured": "ไม่ได้กำหนดค่าคีย์ VBill ISV",
+  "mnoNotConfigured": "ไม่ได้กำหนดค่าหมายเลขผู้ขาย VBill (mno) โปรดกรอกการกำหนดค่าผู้ขาย",
+  "merchantDuplicate": "หมายเลขผู้ค้า Tianque นี้มีอยู่แล้วภายใต้ผู้ขายรายนี้"
+}

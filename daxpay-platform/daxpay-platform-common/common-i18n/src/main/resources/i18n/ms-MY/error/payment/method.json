@@ -1,0 +1,5 @@
+{
+  "notExist": "Kaedah pembayaran tidak wujud",
+  "duplicateProvider": "Penyedia gaji pendua dalam persatuan",
+  "providerNotExist": "Pembekal bayar tidak wujud"
+}

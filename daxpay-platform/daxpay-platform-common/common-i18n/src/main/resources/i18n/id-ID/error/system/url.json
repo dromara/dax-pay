@@ -1,0 +1,7 @@
+{
+  "notConfigured": "URL akses tidak dikonfigurasi",
+  "checkSuccess": "Pemeriksaan konektivitas berhasil",
+  "checkFailed": "Pemeriksaan konektivitas gagal, status HTTP: {0}",
+  "echoMismatch": "Pemeriksaan konektivitas gagal, respons gema backend tidak cocok",
+  "networkError": "Jaringan tidak dapat dijangkau, harap verifikasi URL dan ketersediaan layanan"
+}
