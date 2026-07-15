@@ -8,7 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
-/// # 网关收银台发起支付参数(H5/WEB 侧)
+/// # 网关收银台发起支付参数(H5/WEB/MINI 侧)
 ///
 /// 用户点选支付项后提交; 服务端按 itemId 读取配置解析支付方式, 不信任前端传入 method/通道字段。
 @Data
@@ -25,14 +25,14 @@ public class CashierPayParam {
     private Long itemId;
 
     /// @see GatewayCashierTypeEnum
-    @Schema(description = "收银台类型 h5/web")
+    @Schema(description = "收银台类型 h5/web/mini")
     @NotBlank(message = "{validation.field.cashierType.notBlank}")
     @Size(max = 16, message = "{validation.field.cashierType.size}")
     private String cashierType;
 
-    /// H5 必填; WEB 可空
+    /// H5/MINI 必填; WEB 可空
     /// @see ClientEnvEnum
-    @Schema(description = "客户端环境(H5 必填; WEB 可空)")
+    @Schema(description = "客户端环境(H5五档/MINI四档必填; WEB 可空)")
     @Size(max = 32, message = "{validation.field.clientEnv.size}")
     private String clientEnv;
 

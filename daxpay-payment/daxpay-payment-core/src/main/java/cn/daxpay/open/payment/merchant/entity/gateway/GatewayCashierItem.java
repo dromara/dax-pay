@@ -17,6 +17,7 @@ import lombok.experimental.Accessors;
 ///
 /// 一张表按 cashier_type + client_env 分桶:
 /// - H5: clientEnv 必填(browser/wechat_pay/alipay/union_pay/douyin), 每终端一套支付项
+/// - MINI: clientEnv 必填(wechat_pay/alipay/union_pay/douyin), 各宿主一套
 /// - WEB: clientEnv 为空, 一套扁平支付项
 /// 支付解析按项 resolve_mode:
 /// - METHOD: 填 method
@@ -31,11 +32,11 @@ public class GatewayCashierItem extends MchBaseEntity {
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private String appId;
 
-    /// 收银台类型: h5/web
+    /// 收银台类型: h5/web/mini
     /// @see GatewayCashierTypeEnum
     private String cashierType;
 
-    /// 客户端环境（UA/宿主识别；聚合扫码与收银台 H5 共用；非支付渠道、非沙箱环境）；WEB 为空
+    /// 客户端环境（UA/宿主识别；H5 五档 / MINI 四档不含 browser；WEB 为空）
     /// @see ClientEnvEnum
     private String clientEnv;
 

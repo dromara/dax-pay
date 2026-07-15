@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /// # 网关收银台支付服务
 ///
@@ -30,6 +31,14 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class CashierPayService {
+
+    /// 小程序收银台允许的 clientEnv(与配置侧白名单一致, 不含 browser)
+    private static final Set<String> MINI_CLIENT_ENVS = Set.of(
+            ClientEnvEnum.WECHAT_PAY.getCode(),
+            ClientEnvEnum.ALIPAY.getCode(),
+            ClientEnvEnum.UNION_PAY.getCode(),
+            ClientEnvEnum.DOUYIN.getCode()
+    );
 
     private final GatewayPayAssistService gatewayPayAssistService;
     private final GatewayPayHandleService gatewayPayHandleService;
@@ -88,10 +97,10 @@ public class CashierPayService {
         }
 
         String clientIp = StrUtil.blankToDefault(param.getClientIp(), WebServletUtil.getClientIp());
-        // H5 带 clientEnv 编码; WEB 分桶 clientEnv 为 null, 仍可把入参原值写入订单快照
-        String clientEnvForOrder = typeEnum == GatewayCashierTypeEnum.WEB
-                ? param.getClientEnv()
-                : bucketClientEnv;
+        // H5/MINI 带 clientEnv 编码; WEB 分桶 clientEnv 为 null, 仍可把入参原值写入订单快照
+        String clientEnvForOrder = typeEnum.requiresClientEnv()
+                ? bucketClientEnv
+                : param.getClientEnv();
         return gatewayPayHandleService.handle(order, null, method, channelMchNo, capability,
                 param.getOpenId(), clientEnvForOrder, param.getDevice(), clientIp);
     }
@@ -109,8 +118,8 @@ public class CashierPayService {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.gateway.cashierItemNotFound");
         }
-        // H5: clientEnv 必须一致; WEB: 项上 clientEnv 为空
-        if (typeEnum == GatewayCashierTypeEnum.WEB) {
+        // H5/MINI: clientEnv 必须一致; WEB: 项上 clientEnv 为空
+        if (!typeEnum.requiresClientEnv()) {
             if (StrUtil.isNotBlank(item.getClientEnv())) {
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "pay.error.gateway.cashierItemNotFound");
@@ -122,16 +131,21 @@ public class CashierPayService {
         return item;
     }
 
-    /// 规范化分桶用 clientEnv: WEB 固定 null; H5 校验合法枚举
+    /// 规范化分桶用 clientEnv: WEB 固定 null; H5 五档; MINI 四档(无 browser)
     private String normalizeClientEnvForBucket(GatewayCashierTypeEnum typeEnum, String clientEnv) {
-        if (typeEnum == GatewayCashierTypeEnum.WEB) {
+        if (!typeEnum.requiresClientEnv()) {
             return null;
         }
         if (StrUtil.isBlank(clientEnv)) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.gateway.clientEnvRequired");
         }
-        return ClientEnvEnum.findByCode(clientEnv).getCode();
+        ClientEnvEnum env = ClientEnvEnum.findByCode(clientEnv);
+        if (typeEnum == GatewayCashierTypeEnum.MINI && !MINI_CLIENT_ENVS.contains(env.getCode())) {
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "pay.error.gateway.clientEnvNotSupport");
+        }
+        return env.getCode();
     }
 
     private CashierItemPublicResult toPublicResult(GatewayCashierItem item) {

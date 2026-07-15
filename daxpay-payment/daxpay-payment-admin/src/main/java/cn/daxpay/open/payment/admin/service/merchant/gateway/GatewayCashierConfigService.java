@@ -19,15 +19,27 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /// # 网关收银台配置服务
 ///
-/// 管理应用级收银台支付项: H5 按客户端环境 clientEnv 分桶, WEB 扁平列表;
+/// 管理应用级收银台支付项:
+/// - H5: 按 clientEnv 五档分桶
+/// - MINI: 按 clientEnv 分桶(wechat_pay/alipay/union_pay/douyin, 不含 browser)
+/// - WEB: 扁平列表, 无 clientEnv
 /// 每项支持 method / direct 两种支付解析模式。
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class GatewayCashierConfigService {
+
+    /// 小程序收银台允许的 clientEnv(不含 browser)
+    private static final Set<String> MINI_CLIENT_ENVS = Set.of(
+            ClientEnvEnum.WECHAT_PAY.getCode(),
+            ClientEnvEnum.ALIPAY.getCode(),
+            ClientEnvEnum.UNION_PAY.getCode(),
+            ClientEnvEnum.DOUYIN.getCode()
+    );
 
     private final GatewayCashierItemManager itemManager;
 
@@ -80,18 +92,16 @@ public class GatewayCashierConfigService {
                 .orElseThrow(() -> new DataNotExistException("pay.error.gateway.cashierItemNotFound"));
     }
 
-    /// 规范化 clientEnv 查询参数
+    /// 规范化 clientEnv 查询参数: WEB 固定 null; H5/MINI 必填且按类型校验
     private String normalizeClientEnvForQuery(GatewayCashierTypeEnum typeEnum, String clientEnv) {
-        if (typeEnum == GatewayCashierTypeEnum.WEB) {
+        if (!typeEnum.requiresClientEnv()) {
             return null;
         }
         if (StrUtil.isBlank(clientEnv)) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.gateway.clientEnvRequired");
         }
-        // 校验 clientEnv 合法
-        ClientEnvEnum.findByCode(clientEnv);
-        return clientEnv;
+        return validateClientEnvForType(typeEnum, clientEnv);
     }
 
     /// 校验并规范化写入字段
@@ -100,7 +110,7 @@ public class GatewayCashierConfigService {
         CashierItemResolveModeEnum resolveMode = CashierItemResolveModeEnum.findByCode(param.getResolveMode());
 
         String clientEnv = param.getClientEnv();
-        if (typeEnum == GatewayCashierTypeEnum.WEB) {
+        if (!typeEnum.requiresClientEnv()) {
             // WEB 固定无 clientEnv
             clientEnv = null;
         } else {
@@ -108,7 +118,7 @@ public class GatewayCashierConfigService {
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "pay.error.gateway.clientEnvRequired");
             }
-            ClientEnvEnum.findByCode(clientEnv);
+            clientEnv = validateClientEnvForType(typeEnum, clientEnv);
         }
 
         String method = StrUtil.trimToNull(param.getMethod());
@@ -148,6 +158,16 @@ public class GatewayCashierConfigService {
 
         return new NormalizedItem(typeEnum.getCode(), clientEnv, name, icon, recommend, sortNo,
                 resolveMode.getCode(), method, channelMchNo, capability);
+    }
+
+    /// 按收银台类型校验 clientEnv: H5 允许全部 ClientEnvEnum; MINI 四档(无 browser)
+    private String validateClientEnvForType(GatewayCashierTypeEnum typeEnum, String clientEnv) {
+        ClientEnvEnum env = ClientEnvEnum.findByCode(clientEnv);
+        if (typeEnum == GatewayCashierTypeEnum.MINI && !MINI_CLIENT_ENVS.contains(env.getCode())) {
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "pay.error.gateway.clientEnvNotSupport");
+        }
+        return env.getCode();
     }
 
     private void applyNormalized(GatewayCashierItem entity, NormalizedItem n, String mchNo, String appId) {

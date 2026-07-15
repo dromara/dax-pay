@@ -30,13 +30,13 @@ public class GatewayCashierItemParam {
     private String appId;
 
     /// @see GatewayCashierTypeEnum
-    @Schema(description = "收银台类型: h5/web")
+    @Schema(description = "收银台类型: h5/web/mini")
     @NotBlank(message = "{validation.field.cashierType.notBlank}")
     @Size(max = 16, message = "{validation.field.cashierType.size}")
     private String cashierType;
 
     /// @see ClientEnvEnum
-    @Schema(description = "H5客户端环境; WEB为空")
+    @Schema(description = "客户端环境(H5五档/MINI四档必填; WEB为空)")
     @Size(max = 32, message = "{validation.field.clientEnv.size}")
     private String clientEnv;
 

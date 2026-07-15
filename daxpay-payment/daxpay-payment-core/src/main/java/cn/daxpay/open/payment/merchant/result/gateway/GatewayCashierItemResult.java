@@ -19,10 +19,10 @@ public class GatewayCashierItemResult {
     @Schema(description = "应用号")
     private String appId;
 
-    @Schema(description = "收银台类型: h5/web")
+    @Schema(description = "收银台类型: h5/web/mini")
     private String cashierType;
 
-    @Schema(description = "H5客户端环境; WEB为空")
+    @Schema(description = "客户端环境(H5五档/MINI四档; WEB为空)")
     private String clientEnv;
 
     @Schema(description = "前台展示名称")
