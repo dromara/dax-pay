@@ -7,13 +7,13 @@
     <parent>
         <groupId>cn.daxpay.open</groupId>
         <artifactId>daxpay</artifactId>
-        <version>4.0.0-SNAPSHOT</version>
+        <version>4.0.0-beta1</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
     <groupId>cn.daxpay.open</groupId>
     <artifactId>daxpay-platform</artifactId>
-    <version>4.0.0-SNAPSHOT</version>
+    <version>4.0.0-beta1</version>
     <packaging>pom</packaging>
     <description>基础脚手架服务</description>
 
