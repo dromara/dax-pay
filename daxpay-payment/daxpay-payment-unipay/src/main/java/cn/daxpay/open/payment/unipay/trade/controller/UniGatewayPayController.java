@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.unipay.gateway.controller;
+package cn.daxpay.open.payment.unipay.trade.controller;
 
 import cn.daxpay.open.payment.unipay.aop.PaymentVerify;
 import cn.daxpay.open.payment.common.result.DaxResult;
@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /// # 网关支付开放接口
+///
+/// 商户签名 API（`@PaymentVerify`），与 [UniTradeController] 等同属 trade 开放层；
+/// 产品语义「网关支付」体现在 URL `/unipay/gateway` 与 param/result.gateway，而非独立 controller 包。
 @PaymentVerify
 @IgnoreAuth
 @Tag(name = "网关支付接口")
