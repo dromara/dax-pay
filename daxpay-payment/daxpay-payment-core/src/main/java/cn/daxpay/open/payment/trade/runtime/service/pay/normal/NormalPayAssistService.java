@@ -9,11 +9,13 @@ import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.util.DateTimeUtil;
 import cn.daxpay.open.platform.core.util.TradeNoGenerateUtil;
+import cn.daxpay.open.payment.common.context.PaymentContext;
+import cn.daxpay.open.payment.common.util.PayUtil;
+import cn.daxpay.open.payment.merchant.service.store.MchStoreInfoService;
+import cn.daxpay.open.payment.strategy.pay.PayStrategyContext;
 import cn.daxpay.open.payment.trade.enums.NormalPayOrderStatusEnum;
 import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum;
-import cn.daxpay.open.payment.common.util.PayUtil;
-import cn.daxpay.open.payment.strategy.pay.PayStrategyContext;
 import cn.daxpay.open.payment.trade.order.dao.NormalPayOrderManager;
 import cn.daxpay.open.payment.trade.order.entity.NormalPayOrder;
 import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
@@ -44,6 +46,8 @@ public class NormalPayAssistService {
     private final NormalPayOrderManager payNormalOrderManager;
     private final PayTradeManager payTradeManager;
     private final ArtemisTemplateService artemisTemplateService;
+    private final MchStoreInfoService mchStoreInfoService;
+    private final PaymentContext paymentContext;
 
     /// 创建支付订单（容器 + 资金交易），填充到 context
     /// 调用方需保证 appId 和 product 已解析完毕
@@ -51,12 +55,15 @@ public class NormalPayAssistService {
     @Transactional(rollbackFor = Exception.class)
     public void createOrder(NormalPayParam payParam, PayStrategyContext context) {
         OffsetDateTime expiredTime = this.getExpiredTime(payParam.getExpiredTime());
+        // 门店号(线下归属, 可空; 有值则校验存在/归属/启用)
+        String storeNo = payParam.getTerminal() != null ? payParam.getTerminal().getStoreNo() : null;
+        mchStoreInfoService.validateStoreForPay(storeNo, paymentContext.getMchNo());
         // 双号独立生成
         String orderNo = TradeNoGenerateUtil.order();
         String tradeNo = TradeNoGenerateUtil.pay();
         String source = resolveSource(payParam);
 
-        NormalPayOrder normalOrder = buildNormalOrder(payParam, orderNo, expiredTime, source);
+        NormalPayOrder normalOrder = buildNormalOrder(payParam, orderNo, expiredTime, source, storeNo);
         payNormalOrderManager.save(normalOrder);
 
         PayTrade trade = buildPayTrade(payParam, normalOrder, tradeNo, orderNo, source);
@@ -77,7 +84,7 @@ public class NormalPayAssistService {
 
     /// 组装普通支付业务容器（未落库）
     private NormalPayOrder buildNormalOrder(NormalPayParam payParam, String orderNo,
-                                            OffsetDateTime expiredTime, String source) {
+                                            OffsetDateTime expiredTime, String source, String storeNo) {
         // 从产品编码派生通道编码
         var productEnum = ProductEnum.findByCode(payParam.getProduct());
         String channel = productEnum.getChannel();
@@ -111,8 +118,10 @@ public class NormalPayAssistService {
         normalOrder.setCapability(payParam.getCapability());
         // 通道应用 AppId: doBeforePay 已将解析后的实际值回填到 payParam
         normalOrder.setChannelAppId(payParam.getChannelAppId());
-        // --- 终端与客户端 ---
+        // --- 终端 / 门店 / 客户端 ---
         normalOrder.setTerminalNo(terminalNo);
+        // 门店号: 线下经营归属权威落容器
+        normalOrder.setStoreNo(storeNo);
         // 客户端IP(支付入口已兜底, 作为单一事实源供退款/关单等后续流程取用)
         normalOrder.setClientIp(payParam.getClientIp());
         // --- 回调与扩展 ---
@@ -126,6 +135,7 @@ public class NormalPayAssistService {
     }
 
     /// 组装资金交易（未落库）; relationOrderNo 默认=orderNo, 特殊通道支付返回后可覆盖
+    /// channelMchNo / storeNo 冗余自容器，资金列表免 JOIN
     private PayTrade buildPayTrade(NormalPayParam payParam, NormalPayOrder normalOrder,
                                    String tradeNo, String orderNo, String source) {
         return PayTradeInitUtil.initProcessing(
@@ -135,7 +145,9 @@ public class NormalPayAssistService {
                 normalOrder.getId(),
                 payParam.getAmount(),
                 orderNo,
-                source);
+                source,
+                normalOrder.getChannelMchNo(),
+                normalOrder.getStoreNo());
     }
 
     /// 注册超时关单延时消息

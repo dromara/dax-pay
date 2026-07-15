@@ -63,6 +63,16 @@ public class PayTradeQuery {
     @Schema(description = "支付产品")
     private String product;
 
+    /// 通道商户号
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
+    @Schema(description = "通道商户号")
+    private String channelMchNo;
+
+    /// 门店号
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
+    @Schema(description = "门店号")
+    private String storeNo;
+
     /// 关联容器ID
     @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "关联容器ID")

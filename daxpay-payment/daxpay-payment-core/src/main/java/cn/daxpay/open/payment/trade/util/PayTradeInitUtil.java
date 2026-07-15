@@ -7,7 +7,8 @@ import cn.daxpay.open.platform.core.enums.pay.channel.CurrencyEnum;
 /// # 资金交易初始化工具
 ///
 /// PROCESSING 态资金凭证公共字段的单一事实源。
-/// 调用方负责 tradeType / container / source 等业务差异，本工具只填「待处理结算类交易」公共规则：
+/// 调用方负责 tradeType / container / source / channelMchNo / storeNo 等业务差异，本工具只填
+/// 「待处理结算类交易」公共规则：
 /// - currency = CNY
 /// - postedAmount = 0（成功后由 [cn.daxpay.open.payment.trade.runtime.service.pay.common.PayUniHandleService]
 ///   / [PayTradeAmountUtil] 按规则回写）
@@ -27,6 +28,8 @@ public final class PayTradeInitUtil {
     /// @param amount          交易金额
     /// @param relationOrderNo 实际上送串（默认与业务单号对齐，特殊通道可后覆盖）
     /// @param source          订单来源（冗余自容器）
+    /// @param channelMchNo    通道商户号（冗余自容器/路由结果，可空仅当路由未定时）
+    /// @param storeNo         门店号（冗余自容器，可空）
     public static PayTrade initProcessing(
             String appId,
             String tradeNo,
@@ -34,7 +37,9 @@ public final class PayTradeInitUtil {
             Long containerId,
             Long amount,
             String relationOrderNo,
-            String source) {
+            String source,
+            String channelMchNo,
+            String storeNo) {
         return new PayTrade()
                 .setAppId(appId)
                 .setTradeNo(tradeNo)
@@ -47,6 +52,9 @@ public final class PayTradeInitUtil {
                 .setRefundableBalance(amount)
                 .setStatus(PayFundStatusEnum.PROCESSING.getCode())
                 .setRelationOrderNo(relationOrderNo)
-                .setSource(source);
+                .setSource(source)
+                // 轻量组织冗余: 权威在业务容器
+                .setChannelMchNo(channelMchNo)
+                .setStoreNo(storeNo);
     }
 }

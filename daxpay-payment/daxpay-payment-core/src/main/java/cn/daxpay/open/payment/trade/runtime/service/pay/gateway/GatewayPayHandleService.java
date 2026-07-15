@@ -143,6 +143,7 @@ public class GatewayPayHandleService {
         }
 
         // 默认上送网关业务单号; 特殊通道返回后可覆盖
+        // channelMchNo 取自路由后的 payParam; storeNo 冗余自预下单容器
         PayTrade trade = PayTradeInitUtil.initProcessing(
                 order.getAppId(),
                 TradeNoGenerateUtil.pay(),
@@ -150,7 +151,9 @@ public class GatewayPayHandleService {
                 order.getId(),
                 order.getAmount(),
                 order.getOrderNo(),
-                source);
+                source,
+                payParam.getChannelMchNo(),
+                order.getStoreNo());
         payTradeManager.save(trade);
 
         this.fillRouteOnOrder(order, payParam, clientEnv, device);

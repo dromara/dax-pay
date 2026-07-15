@@ -206,3 +206,15 @@ CREATE INDEX IF NOT EXISTS idx_normal_order_mch_store ON pay_normal_order (mch_n
 CREATE INDEX IF NOT EXISTS idx_gateway_order_mch_store ON pay_gateway_order (mch_no, store_no);
 CREATE INDEX IF NOT EXISTS idx_refund_order_mch_store ON pay_refund_order (mch_no, store_no);
 
+-- ============================================================
+-- pay_trade 轻量组织冗余: channel_mch_no + store_no
+-- ============================================================
+ALTER TABLE pay_trade ADD COLUMN IF NOT EXISTS channel_mch_no varchar(64);
+COMMENT ON COLUMN pay_trade.channel_mch_no IS '通道商户号(冗余自业务容器, 路由确定后写入)';
+
+ALTER TABLE pay_trade ADD COLUMN IF NOT EXISTS store_no varchar(32);
+COMMENT ON COLUMN pay_trade.store_no IS '门店号(冗余自业务容器, 可空; 权威在容器)';
+
+CREATE INDEX IF NOT EXISTS idx_pay_trade_mch_channel ON pay_trade (mch_no, channel_mch_no);
+CREATE INDEX IF NOT EXISTS idx_pay_trade_mch_store ON pay_trade (mch_no, store_no);
+

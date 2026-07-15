@@ -103,6 +103,14 @@ public class PayTradeResult extends BaseResult {
     @Schema(description = "订单来源")
     private String source;
 
+    /// 通道商户号(冗余自业务容器)
+    @Schema(description = "通道商户号")
+    private String channelMchNo;
+
+    /// 门店号(冗余自业务容器, 可空)
+    @Schema(description = "门店号")
+    private String storeNo;
+
     /// 通道订单号
     @Schema(description = "通道订单号")
     private String outOrderNo;
