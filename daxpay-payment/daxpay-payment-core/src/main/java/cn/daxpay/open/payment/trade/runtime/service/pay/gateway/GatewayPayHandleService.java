@@ -1,7 +1,6 @@
 package cn.daxpay.open.payment.trade.runtime.service.pay.gateway;
 
 import cn.daxpay.open.payment.trade.enums.GatewayOrderStatusEnum;
-import cn.daxpay.open.payment.trade.enums.GatewayPayTypeEnum;
 import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
@@ -18,12 +17,11 @@ import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
-import cn.daxpay.open.platform.core.enums.pay.channel.CurrencyEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
-import cn.daxpay.open.platform.core.enums.pay.trade.TradeSourceEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.PayFailureException;
 import cn.daxpay.open.platform.core.util.TradeNoGenerateUtil;
+import cn.daxpay.open.payment.trade.util.PayTradeInitUtil;
 import cn.daxpay.open.platform.common.redis.lock.LockExecutor;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
@@ -135,21 +133,24 @@ public class GatewayPayHandleService {
         var productEnum = ProductEnum.findByCode(payParam.getProduct());
         String channel = productEnum.getChannel();
 
-        PayTrade trade = new PayTrade();
-        trade.setAppId(order.getAppId());
-        trade.setTradeNo(TradeNoGenerateUtil.pay());
-        trade.setTradeType(PayTradeTypeEnum.GATEWAY.getCode());
-        trade.setContainerId(order.getId());
-        trade.setAmount(order.getAmount());
-        trade.setCurrency(CurrencyEnum.CNY.getCode());
-        // 入账金额: 未成功前为 0, 成功后由 PayUniHandleService 按规则回写
-        trade.setPostedAmount(0L);
-        trade.setRefundableBalance(order.getAmount());
-        trade.setStatus(PayFundStatusEnum.PROCESSING.getCode());
+        // 来源: 冗余自容器(预下单权威); 历史单无 source 时按 gatewayType 派生
+        String source = StrUtil.isNotBlank(order.getSource())
+                ? order.getSource()
+                : GatewayPayAssistService.resolveSourceByGatewayTypeCode(order.getGatewayType());
+        // 历史预下单可能未写容器 source, 建 trade 时回填
+        if (StrUtil.isBlank(order.getSource())) {
+            order.setSource(source);
+        }
+
         // 默认上送网关业务单号; 特殊通道返回后可覆盖
-        trade.setRelationOrderNo(order.getOrderNo());
-        // 来源: 聚合 aggress_pay / 收银台 cashier
-        trade.setSource(resolveTradeSource(order.getGatewayType()));
+        PayTrade trade = PayTradeInitUtil.initProcessing(
+                order.getAppId(),
+                TradeNoGenerateUtil.pay(),
+                PayTradeTypeEnum.GATEWAY.getCode(),
+                order.getId(),
+                order.getAmount(),
+                order.getOrderNo(),
+                source);
         payTradeManager.save(trade);
 
         this.fillRouteOnOrder(order, payParam, clientEnv, device);
@@ -236,12 +237,4 @@ public class GatewayPayHandleService {
                 .setPayBodyType(order.getPayBodyType());
     }
 
-    /// 按网关产品类型解析交易来源
-    private static String resolveTradeSource(String gatewayType) {
-        if (Objects.equals(gatewayType, GatewayPayTypeEnum.CASHIER.getCode())) {
-            return TradeSourceEnum.CASHIER.getCode();
-        }
-        // 默认聚合扫码
-        return TradeSourceEnum.AGGRESS_PAY.getCode();
-    }
 }

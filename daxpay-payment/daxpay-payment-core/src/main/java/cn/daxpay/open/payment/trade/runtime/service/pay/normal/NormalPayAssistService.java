@@ -4,6 +4,7 @@ import cn.daxpay.open.platform.common.artemis.service.ArtemisTemplateService;
 import cn.daxpay.open.platform.common.json.util.JacksonUtil;
 import cn.daxpay.open.platform.core.enums.pay.channel.CurrencyEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
+import cn.daxpay.open.platform.core.enums.pay.trade.TradeSourceEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.util.DateTimeUtil;
@@ -19,6 +20,7 @@ import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.trade.runtime.mq.NormalPayTimeoutMessage;
 import cn.daxpay.open.payment.trade.runtime.mq.PayArtemisConstants;
+import cn.daxpay.open.payment.trade.util.PayTradeInitUtil;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
 import cn.hutool.core.util.StrUtil;
@@ -48,32 +50,55 @@ public class NormalPayAssistService {
     /// orderNo 与 tradeNo 独立生成; 普通通道实际上送串 relationOrderNo 默认=orderNo
     @Transactional(rollbackFor = Exception.class)
     public void createOrder(NormalPayParam payParam, PayStrategyContext context) {
-        String appId = payParam.getAppId();
         OffsetDateTime expiredTime = this.getExpiredTime(payParam.getExpiredTime());
-        Long amount = payParam.getAmount();
-        // 从产品编码派生通道编码
-        var productEnum = ProductEnum.findByCode(payParam.getProduct());
-        var channel = productEnum.getChannel();
-        // 终端信息
-        String terminalNo = payParam.getTerminal() != null ? payParam.getTerminal().getTerminalNo() : null;
         // 双号独立生成
         String orderNo = TradeNoGenerateUtil.order();
         String tradeNo = TradeNoGenerateUtil.pay();
-        // 创建容器 NormalPayOrder（含冗余字段，方便查询）
+        String source = resolveSource(payParam);
+
+        NormalPayOrder normalOrder = buildNormalOrder(payParam, orderNo, expiredTime, source);
+        payNormalOrderManager.save(normalOrder);
+
+        PayTrade trade = buildPayTrade(payParam, normalOrder, tradeNo, orderNo, source);
+        payTradeManager.save(trade);
+
+        context.setTrade(trade);
+        context.setNormalOrder(normalOrder);
+        // 注册超时关单延时消息(按订单过期时间定时投递)
+        this.registerTimeoutClose(trade.getTradeNo(), normalOrder.getBizOrderNo(), expiredTime);
+    }
+
+    /// 来源: 容器权威; 协议层(易支付/码牌)可显式传入, 默认商户 API
+    private String resolveSource(NormalPayParam payParam) {
+        return StrUtil.isNotBlank(payParam.getSource())
+                ? payParam.getSource()
+                : TradeSourceEnum.MCH_API.getCode();
+    }
+
+    /// 组装普通支付业务容器（未落库）
+    private NormalPayOrder buildNormalOrder(NormalPayParam payParam, String orderNo,
+                                            OffsetDateTime expiredTime, String source) {
+        // 从产品编码派生通道编码
+        var productEnum = ProductEnum.findByCode(payParam.getProduct());
+        String channel = productEnum.getChannel();
+        // 终端信息
+        String terminalNo = payParam.getTerminal() != null ? payParam.getTerminal().getTerminalNo() : null;
+
         NormalPayOrder normalOrder = new NormalPayOrder();
+        // --- 业务身份 ---
         normalOrder.setOrderNo(orderNo);
         // 普通通道默认上送 orderNo, 特殊通道下单后再覆盖 relation
         normalOrder.setRelationOrderNo(orderNo);
         normalOrder.setBizOrderNo(payParam.getBizOrderNo());
         normalOrder.setTitle(payParam.getTitle());
         normalOrder.setDescription(payParam.getDescription());
+        normalOrder.setSource(source);
+        // --- 状态与金额 ---
         normalOrder.setStatus(NormalPayOrderStatusEnum.WAIT_PAY.getCode());
-        normalOrder.setNotifyUrl(payParam.getNotifyUrl());
-        normalOrder.setReturnUrl(payParam.getReturnUrl());
-        normalOrder.setAttach(payParam.getAttach());
         normalOrder.setExpiredTime(expiredTime);
-        normalOrder.setAmount(amount);
+        normalOrder.setAmount(payParam.getAmount());
         normalOrder.setCurrency(CurrencyEnum.CNY.getCode());
+        // --- 支付路由 ---
         normalOrder.setChannel(channel);
         normalOrder.setMethod(payParam.getMethod());
         normalOrder.setLimitPay(payParam.getLimitPay() != null
@@ -81,42 +106,36 @@ public class NormalPayAssistService {
         normalOrder.setOpenid(payParam.getOpenId());
         normalOrder.setAuthCode(payParam.getAuthCode());
         normalOrder.setProduct(payParam.getProduct());
-        normalOrder.setExtraParam(payParam.getExtraParam());
-        normalOrder.setGoodsDetail(payParam.getGoodsDetail());
-        normalOrder.setTerminalNo(terminalNo);
-        // 客户端IP(支付入口已兜底, 作为单一事实源供退款/关单等后续流程取用)
-        normalOrder.setClientIp(payParam.getClientIp());
         // 通道路由参数(同步时用于解析通道应用凭证)
         normalOrder.setChannelMchNo(payParam.getChannelMchNo());
         normalOrder.setCapability(payParam.getCapability());
         // 通道应用 AppId: doBeforePay 已将解析后的实际值回填到 payParam
         normalOrder.setChannelAppId(payParam.getChannelAppId());
-        normalOrder.setAppId(appId);
-        payNormalOrderManager.save(normalOrder);
-        // 创建资金交易 PayTrade
-        PayTrade trade = new PayTrade();
-        trade.setAppId(appId);
-        trade.setTradeNo(tradeNo);
-        trade.setTradeType(PayTradeTypeEnum.NORMAL.getCode());
-        trade.setContainerId(normalOrder.getId());
-        trade.setAmount(amount);
-        trade.setCurrency(CurrencyEnum.CNY.getCode());
-        // 入账金额: 未成功前为 0, 成功后由 PayUniHandleService 按规则回写
-        trade.setPostedAmount(0L);
-        trade.setRefundableBalance(amount);
-        trade.setStatus(PayFundStatusEnum.PROCESSING.getCode());
-        // 实际上送串权威: 默认=orderNo, 特殊通道支付返回后可覆盖
-        trade.setRelationOrderNo(orderNo);
-        // 来源: 协议层(如易支付)可显式传入, 默认商户 API
-        String source = StrUtil.isNotBlank(payParam.getSource())
-                ? payParam.getSource()
-                : cn.daxpay.open.platform.core.enums.pay.trade.TradeSourceEnum.MCH_API.getCode();
-        trade.setSource(source);
-        payTradeManager.save(trade);
-        context.setTrade(trade);
-        context.setNormalOrder(normalOrder);
-        // 注册超时关单延时消息(按订单过期时间定时投递)
-        this.registerTimeoutClose(trade.getTradeNo(), normalOrder.getBizOrderNo(), expiredTime);
+        // --- 终端与客户端 ---
+        normalOrder.setTerminalNo(terminalNo);
+        // 客户端IP(支付入口已兜底, 作为单一事实源供退款/关单等后续流程取用)
+        normalOrder.setClientIp(payParam.getClientIp());
+        // --- 回调与扩展 ---
+        normalOrder.setNotifyUrl(payParam.getNotifyUrl());
+        normalOrder.setReturnUrl(payParam.getReturnUrl());
+        normalOrder.setAttach(payParam.getAttach());
+        normalOrder.setExtraParam(payParam.getExtraParam());
+        normalOrder.setGoodsDetail(payParam.getGoodsDetail());
+        normalOrder.setAppId(payParam.getAppId());
+        return normalOrder;
+    }
+
+    /// 组装资金交易（未落库）; relationOrderNo 默认=orderNo, 特殊通道支付返回后可覆盖
+    private PayTrade buildPayTrade(NormalPayParam payParam, NormalPayOrder normalOrder,
+                                   String tradeNo, String orderNo, String source) {
+        return PayTradeInitUtil.initProcessing(
+                payParam.getAppId(),
+                tradeNo,
+                PayTradeTypeEnum.NORMAL.getCode(),
+                normalOrder.getId(),
+                payParam.getAmount(),
+                orderNo,
+                source);
     }
 
     /// 注册超时关单延时消息
