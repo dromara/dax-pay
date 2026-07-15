@@ -21,6 +21,7 @@
   "storeNotFound": "ストアが見つかりません",
   "storeNoGenFailed": "店舗番号の生成に失敗しました",
   "storeNoMatch": "ストアは現在の販売者に属していません",
+  "storeDisabled": "ストアは無効です",
   "wxVerifyNotFound": "WeChat ドメイン検証ファイルが見つかりません",
   "wxVerifyFileNameEmpty": "WeChat ドメイン検証ファイル名が空です",
   "wxVerifyFileNameInvalid": "WeChat ドメイン検証ファイル名の形式が無効です。MP_verify_<ランダム>.txt が必要です",

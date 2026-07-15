@@ -57,6 +57,11 @@ public class NormalPayOrderQuery {
     @Schema(description = "支付产品")
     private String product;
 
+    /// 门店号
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
+    @Schema(description = "门店号")
+    private String storeNo;
+
     /// 创建时间-开始
     @QueryParam(type = QueryParam.CompareTypeEnum.GE, fieldName = "create_time")
     @Schema(description = "创建时间-开始")

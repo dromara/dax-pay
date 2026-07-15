@@ -1,11 +1,13 @@
 {
   "notFound": "碼牌不存在",
   "disabled": "碼牌已停用",
-  "mchNotFound": "碼牌所屬商户不存在",
+  "mchNotFound": "碼牌所屬商戶不存在",
   "amountTypeNotFound": "未找到對應的碼牌金額類型: {0}",
   "statusNotFound": "未找到對應的碼牌狀態: {0}",
   "fixedAmountInvalid": "固定金額必須大於0",
   "batchNoExists": "批次號已存在",
-  "notAssigned": "碼牌未分配商户",
-  "idsEmpty": "請選擇碼牌"
+  "notAssigned": "碼牌未分配商戶",
+  "idsEmpty": "請選擇碼牌",
+  "clientEnvNotSupport": "目前開啟環境不支援碼牌支付，請使用微信/支付寶等掃碼",
+  "amountRequired": "請輸入支付金額"
 }

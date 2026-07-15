@@ -21,6 +21,7 @@
   "storeNotFound": "ไม่พบร้านค้า",
   "storeNoGenFailed": "การสร้างหมายเลขร้านค้าล้มเหลว",
   "storeNoMatch": "ร้านค้าไม่ได้เป็นของผู้ค้าปัจจุบัน",
+  "storeDisabled": "ร้านค้าถูกปิดใช้งาน",
   "wxVerifyNotFound": "ไม่พบไฟล์การยืนยันโดเมน WeChat",
   "wxVerifyFileNameEmpty": "ชื่อไฟล์การยืนยันโดเมน WeChat ว่างเปล่า",
   "wxVerifyFileNameInvalid": "รูปแบบชื่อไฟล์การยืนยันโดเมน WeChat ไม่ถูกต้อง ต้องใช้ MP_verify_<random>.txt",

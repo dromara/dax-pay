@@ -3,6 +3,7 @@ package cn.daxpay.open.payment.trade.runtime.service.pay.gateway;
 import cn.daxpay.open.payment.trade.enums.GatewayOrderStatusEnum;
 import cn.daxpay.open.payment.trade.enums.GatewayPayTypeEnum;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
+import cn.daxpay.open.payment.merchant.service.store.MchStoreInfoService;
 import cn.daxpay.open.payment.trade.order.dao.GatewayPayOrderManager;
 import cn.daxpay.open.payment.trade.order.entity.GatewayPayOrder;
 import cn.daxpay.open.payment.trade.runtime.service.pay.normal.NormalPayAssistService;
@@ -16,6 +17,7 @@ import cn.daxpay.open.platform.common.spring.util.WebServletUtil;
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.CurrencyEnum;
+import cn.daxpay.open.platform.core.enums.pay.trade.TradeSourceEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
 import cn.daxpay.open.platform.core.util.DateTimeUtil;
@@ -48,6 +50,7 @@ public class GatewayPayAssistService {
     private final ArtemisTemplateService artemisTemplateService;
     private final LockExecutor lockExecutor;
     private final NormalPayAssistService payAssistService;
+    private final MchStoreInfoService mchStoreInfoService;
 
     /// 预下单: 仅创建容器, 返回落地页 URL
     public GatewayPrePayResult prePay(GatewayPrePayParam param) {
@@ -87,6 +90,8 @@ public class GatewayPayAssistService {
         }
 
         OffsetDateTime expiredTime = payAssistService.getExpiredTime(param.getExpiredTime());
+        // 门店号(线下归属, 可空; 有值则校验存在/归属/启用)
+        mchStoreInfoService.validateStoreForPay(param.getStoreNo(), param.getMchNo());
 
         GatewayPayOrder order = new GatewayPayOrder();
         order.setAppId(param.getAppId());
@@ -94,6 +99,8 @@ public class GatewayPayAssistService {
         order.setOrderNo(TradeNoGenerateUtil.order());
         order.setBizOrderNo(param.getBizOrderNo());
         order.setGatewayType(typeEnum.getCode());
+        // 来源: 容器权威, 预下单即写入(trade 创建时再冗余拷贝)
+        order.setSource(resolveSourceByGatewayType(typeEnum));
         order.setTitle(param.getTitle());
         order.setDescription(param.getDescription());
         order.setStatus(GatewayOrderStatusEnum.WAIT_PAY.getCode());
@@ -106,6 +113,8 @@ public class GatewayPayAssistService {
         order.setCurrency(CurrencyEnum.CNY.getCode());
         order.setClientIp(param.getClientIp());
         order.setGoodsDetail(param.getGoodsDetail());
+        // 门店号: 预下单写入, 支付回填路由时不改
+        order.setStoreNo(param.getStoreNo());
         gatewayPayOrderManager.save(order);
 
         this.registerTimeout(order.getOrderNo(), order.getBizOrderNo(), expiredTime);
@@ -175,5 +184,21 @@ public class GatewayPayAssistService {
         } catch (Exception e) {
             log.warn("注册网关超时关单延时消息失败, 由定时任务兜底, orderNo={}", orderNo, e);
         }
+    }
+
+    /// 网关产品类型 → 交易来源
+    public static String resolveSourceByGatewayType(GatewayPayTypeEnum typeEnum) {
+        if (typeEnum == GatewayPayTypeEnum.CASHIER) {
+            return TradeSourceEnum.CASHIER.getCode();
+        }
+        return TradeSourceEnum.AGGRESS_PAY.getCode();
+    }
+
+    /// 网关产品类型编码 → 交易来源(缺省聚合)
+    public static String resolveSourceByGatewayTypeCode(String gatewayType) {
+        if (Objects.equals(gatewayType, GatewayPayTypeEnum.CASHIER.getCode())) {
+            return TradeSourceEnum.CASHIER.getCode();
+        }
+        return TradeSourceEnum.AGGRESS_PAY.getCode();
     }
 }

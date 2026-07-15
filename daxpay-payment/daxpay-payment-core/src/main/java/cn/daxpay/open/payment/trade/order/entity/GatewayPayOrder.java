@@ -44,6 +44,10 @@ public class GatewayPayOrder extends MchBaseEntity {
     /// @see GatewayPayTypeEnum
     private String gatewayType;
 
+    /// 订单来源(业务入口权威；预下单即写入，与 gatewayType 对应 cashier/aggress_pay)
+    /// @see cn.daxpay.open.platform.core.enums.pay.trade.TradeSourceEnum
+    private String source;
+
     /// 标题
     private String title;
 
@@ -176,6 +180,9 @@ public class GatewayPayOrder extends MchBaseEntity {
 
     /// 下单客户端 IP；关单/同步/退款透传通道的单一事实源，兼审计排查
     private String clientIp;
+
+    /// 门店号（线下经营归属，可空；预下单写入；对应 [MchStoreInfo#storeNo]）
+    private String storeNo;
 
     /// 错误信息
     @TableField(updateStrategy = FieldStrategy.ALWAYS)

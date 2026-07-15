@@ -161,7 +161,9 @@ public class PayRefundService {
                     .setBizOrderNo(order.getBizOrderNo())
                     .setNotifyUrl(order.getNotifyUrl())
                     .setClientIp(order.getClientIp())
-                    .setAttach(order.getAttach());
+                    .setAttach(order.getAttach())
+                    // 门店号: 继承原支付容器
+                    .setStoreNo(order.getStoreNo());
         }
         // 默认普通支付(含 future 扩展未知类型时尽量按 normal 查, 查不到再失败)
         NormalPayOrder order = payNormalOrderManager.findById(trade.getContainerId())
@@ -180,7 +182,9 @@ public class PayRefundService {
                 .setBizOrderNo(order.getBizOrderNo())
                 .setNotifyUrl(order.getNotifyUrl())
                 .setClientIp(order.getClientIp())
-                .setAttach(order.getAttach());
+                .setAttach(order.getAttach())
+                // 门店号: 继承原支付容器
+                .setStoreNo(order.getStoreNo());
     }
 
     /// 校验交易可退: 状态须为 SUCCESS, 退款金额不能超过可退余额
@@ -218,7 +222,9 @@ public class PayRefundService {
                 .setChannelAppId(snapshot.getChannelAppId())
                 // notifyUrl 语义: 商户出站通知地址, 通道回调 URL 由各通道 buildRefundNotifyUrl 生成
                 .setNotifyUrl(snapshot.getNotifyUrl())
-                .setAttach(snapshot.getAttach());
+                .setAttach(snapshot.getAttach())
+                // 门店号: 继承原支付容器, 禁止退款入参改写
+                .setStoreNo(snapshot.getStoreNo());
         // 客户端IP: 优先取下单时留存的原订单IP, 为空则从当前HTTP请求兜底
         String refundClientIp = snapshot.getClientIp();
         if (StrUtil.isBlank(refundClientIp)) {

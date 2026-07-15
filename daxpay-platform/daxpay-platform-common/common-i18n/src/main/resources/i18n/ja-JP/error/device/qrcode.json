@@ -7,5 +7,7 @@
   "fixedAmountInvalid": "固定量は 0 より大きくなければなりません",
   "batchNoExists": "バッチ番号はすでに存在します",
   "notAssigned": "QRコードボードが加盟店に割り当てられていません",
-  "idsEmpty": "QRコードボードを選択してください"
+  "idsEmpty": "QRコードボードを選択してください",
+  "clientEnvNotSupport": "現在の環境ではコードプレート決済に対応していません。WeChat/Alipayなどでスキャンしてください",
+  "amountRequired": "支払金額を入力してください"
 }

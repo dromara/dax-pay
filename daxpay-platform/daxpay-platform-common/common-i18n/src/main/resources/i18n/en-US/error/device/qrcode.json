@@ -7,5 +7,7 @@
   "fixedAmountInvalid": "Fixed amount must be greater than 0",
   "batchNoExists": "Batch number already exists",
   "notAssigned": "QR code board has not been assigned to a merchant",
-  "idsEmpty": "Please select QR code boards"
+  "idsEmpty": "Please select QR code boards",
+  "clientEnvNotSupport": "Current client environment does not support code-plate pay. Please scan with WeChat/Alipay etc.",
+  "amountRequired": "Please enter the payment amount"
 }

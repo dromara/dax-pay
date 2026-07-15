@@ -36,6 +36,11 @@ public class NormalPayOrderResult extends BaseResult {
     @Schema(description = "商户业务单号")
     private String bizOrderNo;
 
+    /// 订单来源
+    /// @see cn.daxpay.open.platform.core.enums.pay.trade.TradeSourceEnum
+    @Schema(description = "订单来源")
+    private String source;
+
     /// 标题
     @Schema(description = "标题")
     private String title;
@@ -112,6 +117,10 @@ public class NormalPayOrderResult extends BaseResult {
     /// 终端设备编码
     @Schema(description = "终端设备编码")
     private String terminalNo;
+
+    /// 门店号（线下经营归属，可空）
+    @Schema(description = "门店号")
+    private String storeNo;
 
     // ===== 资金凭证(PayTrade)联表字段, 仅详情时填充 =====
 

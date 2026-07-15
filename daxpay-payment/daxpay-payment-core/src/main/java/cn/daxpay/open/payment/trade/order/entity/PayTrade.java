@@ -60,7 +60,8 @@ public class PayTrade extends MchBaseEntity {
     /// 关闭时间
     private OffsetDateTime closeTime;
 
-    /// 订单来源
+    /// 订单来源(冗余自容器, 插件/资金列表免回表; 权威在容器 source)
+    /// @see cn.daxpay.open.platform.core.enums.pay.trade.TradeSourceEnum
     private String source;
 
     /// 通道订单号（三方通道返回的订单号，通道 close/sync 调用参数 + 回调反查索引）

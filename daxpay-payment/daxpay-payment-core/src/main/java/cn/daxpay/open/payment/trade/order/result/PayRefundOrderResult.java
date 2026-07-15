@@ -85,6 +85,10 @@ public class PayRefundOrderResult extends BaseResult {
     @Schema(description = "支付方式")
     private String method;
 
+    /// 门店号（继承自原支付容器，可空）
+    @Schema(description = "门店号")
+    private String storeNo;
+
     /// 错误信息
     @Schema(description = "错误信息")
     private String errorMsg;

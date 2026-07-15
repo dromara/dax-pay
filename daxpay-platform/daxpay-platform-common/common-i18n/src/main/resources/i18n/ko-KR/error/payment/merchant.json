@@ -21,6 +21,7 @@
   "storeNotFound": "매장을 찾을 수 없습니다",
   "storeNoGenFailed": "매장번호 생성 실패",
   "storeNoMatch": "매장이 현재 판매자의 소유가 아닙니다.",
+  "storeDisabled": "매장이 비활성화되었습니다",
   "wxVerifyNotFound": "WeChat 도메인 확인 파일을 찾을 수 없습니다",
   "wxVerifyFileNameEmpty": "WeChat 도메인 확인 파일 이름이 비어 있습니다.",
   "wxVerifyFileNameInvalid": "WeChat 도메인 확인 파일 이름 형식이 잘못되었습니다. MP_verify_<random>.txt가 필요합니다.",

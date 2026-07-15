@@ -31,6 +31,12 @@ public class AggregateQrPayParam {
     @Size(max = 16, message = "{validation.field.device.size}")
     private String device;
 
+    /// 运行形态 h5/mini, 默认 h5; 小程序接入口时传 mini
+    /// @see cn.daxpay.open.payment.merchant.enums.ClientRuntimeEnum
+    @Schema(description = "运行形态(h5/mini, 默认 h5)")
+    @Size(max = 16, message = "{validation.field.runtime.size}")
+    private String runtime;
+
     @Schema(description = "客户端IP")
     @Size(max = 64, message = "{validation.field.clientIp.size}")
     private String clientIp;

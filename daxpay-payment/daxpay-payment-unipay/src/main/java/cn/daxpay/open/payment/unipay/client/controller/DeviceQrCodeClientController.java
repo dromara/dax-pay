@@ -2,6 +2,8 @@ package cn.daxpay.open.payment.unipay.client.controller;
 
 import cn.daxpay.open.payment.unipay.client.result.CodePayInfoResult;
 import cn.daxpay.open.payment.unipay.client.service.CodePayAssistService;
+import cn.daxpay.open.payment.unipay.param.device.CodePayParam;
+import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
 import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
@@ -11,10 +13,12 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/// # 码牌支付(公开/H5 侧)
+/// # 码牌支付(公开/H5/小程序侧)
 ///
 /// 供 H5 码牌支付页(/code-pay/:code)扫码后调用, 无需登录态。
 @IgnoreAuth
@@ -31,5 +35,11 @@ public class DeviceQrCodeClientController {
     @GetMapping("/get-by-code")
     public Result<CodePayInfoResult> getByCode(@NotBlank(message = "{validation.field.code.notBlank}") String code) {
         return Res.ok(codePayAssistService.getByCode(code));
+    }
+
+    @Operation(summary = "码牌发起支付")
+    @PostMapping("/pay")
+    public Result<NormalPayResult> pay(@RequestBody @Validated CodePayParam param) {
+        return Res.ok(codePayAssistService.pay(param));
     }
 }

@@ -46,4 +46,7 @@ public class RefundOrderSnapshot {
 
     /// 商户附加参数(继承自原支付单)
     private String attach;
+
+    /// 门店号(继承自原支付容器，可空)
+    private String storeNo;
 }

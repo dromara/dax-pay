@@ -21,6 +21,7 @@
   "storeNotFound": "Không tìm thấy cửa hàng",
   "storeNoGenFailed": "Tạo số cửa hàng không thành công",
   "storeNoMatch": "Cửa hàng không thuộc về người bán hiện tại",
+  "storeDisabled": "Cửa hàng đã bị vô hiệu hóa",
   "wxVerifyNotFound": "Không tìm thấy tệp xác minh tên miền WeChat",
   "wxVerifyFileNameEmpty": "Tên tệp xác minh miền WeChat trống",
   "wxVerifyFileNameInvalid": "Định dạng tên tệp xác minh miền WeChat không hợp lệ, dự kiến ​​là MP_verify_<random>.txt",

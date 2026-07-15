@@ -21,6 +21,7 @@
   "storeNotFound": "Kedai tidak ditemui",
   "storeNoGenFailed": "Penjanaan nombor kedai gagal",
   "storeNoMatch": "Kedai bukan milik peniaga semasa",
+  "storeDisabled": "Kedai telah dilumpuhkan",
   "wxVerifyNotFound": "Fail pengesahan domain WeChat tidak ditemui",
   "wxVerifyFileNameEmpty": "Nama fail pengesahan domain WeChat kosong",
   "wxVerifyFileNameInvalid": "Format nama fail pengesahan domain WeChat tidak sah, dijangka MP_verify_<random>.txt",

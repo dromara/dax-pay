@@ -21,6 +21,7 @@
   "storeNotFound": "Store not found",
   "storeNoGenFailed": "Store number generation failed",
   "storeNoMatch": "Store does not belong to the current merchant",
+  "storeDisabled": "Store is disabled",
   "wxVerifyNotFound": "WeChat domain verification file not found",
   "wxVerifyFileNameEmpty": "WeChat domain verification file name is empty",
   "wxVerifyFileNameInvalid": "WeChat domain verification file name format is invalid, expected MP_verify_<random>.txt",

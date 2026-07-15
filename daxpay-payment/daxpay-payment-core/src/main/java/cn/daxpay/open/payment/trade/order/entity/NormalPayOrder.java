@@ -37,6 +37,10 @@ public class NormalPayOrder extends MchBaseEntity {
     /// 商户业务单号
     private String bizOrderNo;
 
+    /// 订单来源(业务入口权威)
+    /// @see cn.daxpay.open.platform.core.enums.pay.trade.TradeSourceEnum
+    private String source;
+
     /// 标题
     private String title;
 
@@ -168,6 +172,9 @@ public class NormalPayOrder extends MchBaseEntity {
 
     /// 终端设备编码
     private String terminalNo;
+
+    /// 门店号（线下经营归属，可空；对应 [MchStoreInfo#storeNo]）
+    private String storeNo;
 
     /// 错误信息
     @TableField(updateStrategy = FieldStrategy.ALWAYS)

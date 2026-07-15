@@ -1,11 +1,13 @@
 {
-  "notFound": "ไม่มีบอร์ดรหัส QR",
-  "disabled": "บอร์ดรหัส QR ถูกปิดใช้งาน",
-  "mchNotFound": "ไม่มีผู้ขายบอร์ดรหัส QR",
-  "amountTypeNotFound": "ไม่พบประเภทจำนวนรหัส QR ที่ตรงกัน: {0}",
-  "statusNotFound": "ไม่พบสถานะรหัส QR ที่ตรงกัน: {0}",
-  "fixedAmountInvalid": "จำนวนเงินคงที่ต้องมากกว่า 0",
-  "batchNoExists": "มีหมายเลขแบทช์อยู่แล้ว",
-  "notAssigned": "ยังไม่ได้กำหนดบอร์ดรหัส QR ให้กับร้านค้า",
-  "idsEmpty": "กรุณาเลือกบอร์ดรหัส QR"
+  "notFound": "QR code board does not exist",
+  "disabled": "QR code board is disabled",
+  "mchNotFound": "The merchant of the QR code board does not exist",
+  "amountTypeNotFound": "No matching QR code amount type found: {0}",
+  "statusNotFound": "No matching QR code status found: {0}",
+  "fixedAmountInvalid": "Fixed amount must be greater than 0",
+  "batchNoExists": "Batch number already exists",
+  "notAssigned": "QR code board has not been assigned to a merchant",
+  "idsEmpty": "Please select QR code boards",
+  "clientEnvNotSupport": "Current client environment does not support code-plate pay. Please scan with WeChat/Alipay etc.",
+  "amountRequired": "Please enter the payment amount"
 }

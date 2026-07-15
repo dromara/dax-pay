@@ -63,6 +63,11 @@ public class GatewayPrePayParam extends MerchantPaymentCommonParam {
     @Schema(description = "过期时间")
     private OffsetDateTime expiredTime;
 
+    /// 门店号（线下经营归属，可空；对应 mch_store_info.store_no）
+    @Schema(description = "门店号")
+    @Size(max = 64, message = "{validation.field.storeNo.size}")
+    private String storeNo;
+
     @Schema(description = "商品明细")
     private List<GoodsDetail> goodsDetail;
 }

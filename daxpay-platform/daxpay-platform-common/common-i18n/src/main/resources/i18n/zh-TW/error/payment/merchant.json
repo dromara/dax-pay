@@ -21,6 +21,7 @@
   "storeNotFound": "門店資訊不存在",
   "storeNoGenFailed": "門店號生成失敗",
   "storeNoMatch": "門店不屬於當前商戶",
+  "storeDisabled": "門店已停用",
   "wxVerifyNotFound": "微信域名驗證檔案不存在",
   "wxVerifyFileNameEmpty": "微信域名驗證檔名為空",
   "wxVerifyFileNameInvalid": "微信域名驗證檔名格式不正確，應為 MP_verify_隨機字串.txt",

@@ -59,6 +59,11 @@ public class GatewayPayOrderQuery {
     @Schema(description = "支付产品")
     private String product;
 
+    /// 门店号
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
+    @Schema(description = "门店号")
+    private String storeNo;
+
     @QueryParam(type = QueryParam.CompareTypeEnum.GE, fieldName = "create_time")
     @Schema(description = "创建时间-开始")
     private OffsetDateTime createTimeStart;

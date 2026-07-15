@@ -7,5 +7,7 @@
   "fixedAmountInvalid": "固定金额必须大于0",
   "batchNoExists": "批次号已存在",
   "notAssigned": "码牌未分配商户",
-  "idsEmpty": "请选择码牌"
+  "idsEmpty": "请选择码牌",
+  "clientEnvNotSupport": "当前打开环境不支持码牌支付, 请使用微信/支付宝等扫码",
+  "amountRequired": "请输入支付金额"
 }

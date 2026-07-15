@@ -5,6 +5,7 @@ import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.i18n.I18nSupport;
+import cn.hutool.core.util.StrUtil;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -47,19 +48,50 @@ public enum ClientEnvEnum implements I18nSupport {
                 .orElseThrow(() -> new DataNotExistException("error.common.clientEnvNotExist", code));
     }
 
-    /// 聚合扫码 L1 AUTO：按客户端环境推导默认支付方式编码（原生环境一律 JSAPI）
+    /// 聚合扫码 L1 AUTO：按客户端环境推导默认支付方式（H5 默认 JSAPI）
     public String defaultMethodCode() {
-        PayMethodEnum method = switch (this) {
-            case WECHAT_PAY -> PayMethodEnum.WECHAT_JSAPI;
-            case ALIPAY -> PayMethodEnum.ALIPAY_JSAPI;
-            case UNION_PAY -> PayMethodEnum.UNION_JSAPI;
-            case DOUYIN -> PayMethodEnum.DOUYIN_JSAPI;
-            // browser 等非聚合扫码环境不支持
-            default -> null;
-        };
+        return defaultMethodCode(ClientRuntimeEnum.H5);
+    }
+
+    /// 按运行形态推导默认支付方式: H5→JSAPI, 小程序→MINI(无独立 mini 时回退 JSAPI)
+    public String defaultMethodCode(ClientRuntimeEnum runtime) {
+        ClientRuntimeEnum rt = runtime == null ? ClientRuntimeEnum.H5 : runtime;
+        PayMethodEnum method;
+        if (rt == ClientRuntimeEnum.MINI) {
+            method = switch (this) {
+                case WECHAT_PAY -> PayMethodEnum.WECHAT_MINI;
+                case ALIPAY -> PayMethodEnum.ALIPAY_MINI;
+                case UNION_PAY -> PayMethodEnum.UNION_JSAPI;
+                case DOUYIN -> PayMethodEnum.DOUYIN_JSAPI;
+                default -> null;
+            };
+        } else {
+            method = switch (this) {
+                case WECHAT_PAY -> PayMethodEnum.WECHAT_JSAPI;
+                case ALIPAY -> PayMethodEnum.ALIPAY_JSAPI;
+                case UNION_PAY -> PayMethodEnum.UNION_JSAPI;
+                case DOUYIN -> PayMethodEnum.DOUYIN_JSAPI;
+                // browser 等非聚合扫码环境不支持
+                default -> null;
+            };
+        }
         if (method == null) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.gateway.clientEnvNotSupport");
         }
         return method.getCode();
+    }
+
+    /// METHOD 配置的 method 按 runtime 升级(jsapi→mini), 商户心智保持「配微信/支付宝」即可
+    public static String adaptMethodForRuntime(String method, ClientRuntimeEnum runtime) {
+        if (StrUtil.isBlank(method) || runtime != ClientRuntimeEnum.MINI) {
+            return method;
+        }
+        if (PayMethodEnum.WECHAT_JSAPI.getCode().equals(method)) {
+            return PayMethodEnum.WECHAT_MINI.getCode();
+        }
+        if (PayMethodEnum.ALIPAY_JSAPI.getCode().equals(method)) {
+            return PayMethodEnum.ALIPAY_MINI.getCode();
+        }
+        return method;
     }
 }

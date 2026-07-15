@@ -1,11 +1,13 @@
 {
   "notFound": "QR 코드 보드가 존재하지 않습니다",
   "disabled": "QR 코드 보드가 비활성화되었습니다",
-  "mchNotFound": "QR코드판의 판매자가 존재하지 않습니다.",
-  "amountTypeNotFound": "일치하는 QR 코드 금액 유형이 없습니다: {0}",
-  "statusNotFound": "일치하는 QR 코드 상태가 없습니다: {0}",
-  "fixedAmountInvalid": "고정 금액은 0보다 커야 합니다.",
-  "batchNoExists": "배치 번호가 이미 존재합니다.",
-  "notAssigned": "QR코드 보드가 가맹점에 할당되지 않았습니다.",
-  "idsEmpty": "QR코드 보드를 선택해주세요."
+  "mchNotFound": "QR 코드 보드 소속 가맹점이 존재하지 않습니다",
+  "amountTypeNotFound": "일치하는 QR 코드 금액 유형을 찾을 수 없습니다: {0}",
+  "statusNotFound": "일치하는 QR 코드 상태를 찾을 수 없습니다: {0}",
+  "fixedAmountInvalid": "고정 금액은 0보다 커야 합니다",
+  "batchNoExists": "배치 번호가 이미 존재합니다",
+  "notAssigned": "QR 코드 보드가 가맹점에 할당되지 않았습니다",
+  "idsEmpty": "QR 코드 보드를 선택하세요",
+  "clientEnvNotSupport": "현재 환경에서는 코드플레이트 결제를 지원하지 않습니다. WeChat/Alipay 등으로 스캔하세요",
+  "amountRequired": "결제 금액을 입력하세요"
 }

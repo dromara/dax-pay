@@ -99,6 +99,10 @@ public class NormalPayOrderResult {
     @Schema(description = "终端设备编码")
     private String terminalNo;
 
+    /// 门店号（线下经营归属，可空）
+    @Schema(description = "门店号")
+    private String storeNo;
+
     /// 付款用户ID
     @Schema(description = "付款用户ID")
     private String buyerId;

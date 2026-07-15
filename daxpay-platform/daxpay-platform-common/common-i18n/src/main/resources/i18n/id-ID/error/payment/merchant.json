@@ -21,6 +21,7 @@
   "storeNotFound": "Toko tidak ditemukan",
   "storeNoGenFailed": "Pembuatan nomor toko gagal",
   "storeNoMatch": "Toko bukan milik pedagang saat ini",
+  "storeDisabled": "Toko dinonaktifkan",
   "wxVerifyNotFound": "File verifikasi domain WeChat tidak ditemukan",
   "wxVerifyFileNameEmpty": "Nama file verifikasi domain WeChat kosong",
   "wxVerifyFileNameInvalid": "Format nama file verifikasi domain WeChat tidak valid, diharapkan MP_verify_<random>.txt",

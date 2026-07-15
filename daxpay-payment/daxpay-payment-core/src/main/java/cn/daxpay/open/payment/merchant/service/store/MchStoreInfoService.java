@@ -11,7 +11,9 @@ import cn.daxpay.open.payment.merchant.param.store.MchStoreInfoQuery;
 import cn.daxpay.open.payment.merchant.result.store.MchStoreInfoResult;
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.open.platform.core.code.CommonCode;
+import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.client.ClientEnum;
+import cn.daxpay.open.platform.core.enums.merchant.StoreStatusEnum;
 import cn.daxpay.open.platform.core.exception.BizException;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
@@ -20,12 +22,14 @@ import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.platform.iam.service.client.ClientCodeService;
 import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /// # 门店信息管理
@@ -131,6 +135,27 @@ public class MchStoreInfoService {
                 // 商户: 门店不属于当前商户
                 throw new ConfigErrorException("error.payment.merchant.storeNoMatch");
             }
+        }
+    }
+
+    /// 下单校验门店: 空则跳过; 非空须存在、归属商户、启用
+    ///
+    /// @param storeNo 门店号(可空)
+    /// @param mchNo   当前下单商户号
+    public void validateStoreForPay(String storeNo, String mchNo) {
+        if (StrUtil.isBlank(storeNo)) {
+            return;
+        }
+        MchStoreInfo store = mchStoreInfoManager.findByStoreNo(storeNo)
+                // 商户: 门店不存在
+                .orElseThrow(() -> new DataNotExistException("error.payment.merchant.storeNotFound"));
+        if (StrUtil.isNotBlank(mchNo) && !Objects.equals(store.getMchNo(), mchNo)) {
+            // 商户: 门店不属于当前商户
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.payment.merchant.storeNoMatch");
+        }
+        if (!Objects.equals(StoreStatusEnum.ENABLE.getCode(), store.getStatus())) {
+            // 商户: 门店已停用
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.payment.merchant.storeDisabled");
         }
     }
 }

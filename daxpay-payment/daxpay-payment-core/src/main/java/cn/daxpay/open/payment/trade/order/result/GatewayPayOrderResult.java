@@ -37,6 +37,10 @@ public class GatewayPayOrderResult extends BaseResult {
     @Schema(description = "网关类型")
     private String gatewayType;
 
+    /// @see cn.daxpay.open.platform.core.enums.pay.trade.TradeSourceEnum
+    @Schema(description = "订单来源")
+    private String source;
+
     @Schema(description = "标题")
     private String title;
 
@@ -101,6 +105,10 @@ public class GatewayPayOrderResult extends BaseResult {
 
     @Schema(description = "客户端IP")
     private String clientIp;
+
+    /// 门店号（线下经营归属，可空）
+    @Schema(description = "门店号")
+    private String storeNo;
 
     @Schema(description = "通道附加参数")
     private String extraParam;

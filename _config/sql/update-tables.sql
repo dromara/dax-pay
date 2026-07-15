@@ -2,6 +2,41 @@
 ALTER TABLE pay_normal_order RENAME COLUMN bar_code TO auth_code;
 COMMENT ON COLUMN pay_normal_order.auth_code IS '付款码（被扫支付，审计保留）';
 
+-- 订单来源: 容器权威 + pay_trade 冗余(方案 C)
+ALTER TABLE pay_normal_order ADD COLUMN IF NOT EXISTS source varchar(32);
+COMMENT ON COLUMN pay_normal_order.source IS '订单来源(业务入口权威, TradeSourceEnum)';
+
+ALTER TABLE pay_gateway_order ADD COLUMN IF NOT EXISTS source varchar(32);
+COMMENT ON COLUMN pay_gateway_order.source IS '订单来源(业务入口权威, TradeSourceEnum; 预下单写入)';
+
+-- 历史数据: 从 pay_trade 回填容器(仅空值)
+UPDATE pay_normal_order o
+SET source = t.source
+FROM pay_trade t
+WHERE t.container_id = o.id
+  AND t.trade_type = 'normal'
+  AND t.deleted = false
+  AND o.source IS NULL
+  AND t.source IS NOT NULL;
+
+UPDATE pay_gateway_order o
+SET source = t.source
+FROM pay_trade t
+WHERE t.container_id = o.id
+  AND t.trade_type = 'gateway'
+  AND t.deleted = false
+  AND o.source IS NULL
+  AND t.source IS NOT NULL;
+
+-- 网关预下单尚未建 trade 的: 按 gateway_type 派生
+UPDATE pay_gateway_order
+SET source = CASE gateway_type
+    WHEN 'cashier' THEN 'cashier'
+    ELSE 'aggress_pay'
+END
+WHERE source IS NULL
+  AND gateway_type IS NOT NULL;
+
 -- ============================================================
 -- 易支付协议插件表
 -- ============================================================
@@ -151,3 +186,23 @@ COMMENT ON COLUMN pay_easy_pay_order.last_modifier IS '最后修改人';
 COMMENT ON COLUMN pay_easy_pay_order.last_modified_time IS '最后修改时间';
 COMMENT ON COLUMN pay_easy_pay_order.version IS '乐观锁版本';
 COMMENT ON COLUMN pay_easy_pay_order.deleted IS '逻辑删除';
+
+-- ============================================================
+-- 订单门店维度: store_no（线下经营归属，可空）
+
+-- ============================================================
+-- 订单门店维度: store_no（线下经营归属，可空）
+-- ============================================================
+ALTER TABLE pay_normal_order ADD COLUMN IF NOT EXISTS store_no varchar(32);
+COMMENT ON COLUMN pay_normal_order.store_no IS '门店号(线下经营归属, 可空; 对应 mch_store_info.store_no)';
+
+ALTER TABLE pay_gateway_order ADD COLUMN IF NOT EXISTS store_no varchar(32);
+COMMENT ON COLUMN pay_gateway_order.store_no IS '门店号(线下经营归属, 可空; 对应 mch_store_info.store_no)';
+
+ALTER TABLE pay_refund_order ADD COLUMN IF NOT EXISTS store_no varchar(32);
+COMMENT ON COLUMN pay_refund_order.store_no IS '门店号(继承自原支付容器, 可空)';
+
+CREATE INDEX IF NOT EXISTS idx_normal_order_mch_store ON pay_normal_order (mch_no, store_no);
+CREATE INDEX IF NOT EXISTS idx_gateway_order_mch_store ON pay_gateway_order (mch_no, store_no);
+CREATE INDEX IF NOT EXISTS idx_refund_order_mch_store ON pay_refund_order (mch_no, store_no);
+

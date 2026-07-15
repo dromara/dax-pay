@@ -93,6 +93,9 @@ public class PayRefundOrder extends MchBaseEntity {
     /// 客户端 IP
     private String clientIp;
 
+    /// 门店号（继承自原支付容器，可空；对应 [MchStoreInfo#storeNo]）
+    private String storeNo;
+
     /// 错误信息
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String errorMsg;
