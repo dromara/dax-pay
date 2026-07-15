@@ -5,6 +5,7 @@ import cn.daxpay.open.payment.trade.order.dao.PayRefundOrderManager;
 import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
 import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
+import cn.daxpay.open.payment.trade.runtime.service.plugin.PayPluginAssistService;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.common.redis.lock.LockExecutor;
@@ -38,6 +39,7 @@ public class PayRefundSettleService {
     private final PayRefundOrderManager payRefundOrderManager;
     private final PayTradeManager payTradeManager;
     private final LockExecutor lockExecutor;
+    private final PayPluginAssistService payPluginAssistService;
 
     /// 构建退款结算锁键
     public static String lockKey(String tradeNo) {
@@ -93,6 +95,9 @@ public class PayRefundSettleService {
         refundOrder.setStatus(RefundOrderStatusEnum.SUCCESS.getCode());
         refundOrder.setErrorMsg(null);
         payRefundOrderManager.updateById(refundOrder);
+        // 插件: 按原支付 tradeNo 回查资金单后广播退款成功
+        payTradeManager.findByTradeNo(refundOrder.getOrderNo()).ifPresent(trade ->
+                payPluginAssistService.refundSuccess(trade, refundOrder));
         return true;
     }
 

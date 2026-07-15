@@ -16,10 +16,12 @@ public enum TradeSourceEnum implements I18nSupport {
     MCH_API("mch_api"),
     /// 码牌
     CASHIER_CODE("cashier_code"),
-    /// 收银台支付
-    CHECKOUT("checkout"),
-    /// 聚合/收银台支付
-    AGGRESS_PAY("aggress_pay");
+    /// 网关收银台
+    CASHIER("cashier"),
+    /// 聚合扫码
+    AGGRESS_PAY("aggress_pay"),
+    /// 易支付协议
+    EASY_PAY("easy_pay");
 
     /// 编码
     private final String code;

@@ -1,0 +1,16 @@
+{
+  "easypay": {
+    "credentialNotFound": "易支付凭证不存在",
+    "credentialDisabled": "易支付凭证已停用",
+    "pidGenerateFailed": "易支付商户号生成失败",
+    "v1Disabled": "易支付V1接口未开启",
+    "v2Disabled": "易支付V2接口未开启",
+    "publicKeyMissing": "易支付商户公钥未配置",
+    "md5KeyMissing": "易支付MD5密钥未配置",
+    "signInvalid": "易支付签名校验失败",
+    "unsupportedType": "不支持的支付方式",
+    "unsupportedMethod": "不支持的接口类型",
+    "orderNotFound": "易支付订单不存在",
+    "tradeNotFound": "关联支付交易不存在"
+  }
+}

@@ -7,7 +7,7 @@ import cn.daxpay.open.payment.strategy.pay.AbsPayCloseStrategy;
 import cn.daxpay.open.payment.strategy.pay.PayStrategyContext;
 import cn.daxpay.open.payment.strategy.sync.AbsSyncPayOrderStrategy;
 import cn.daxpay.open.payment.trade.runtime.bo.PaySyncResultBo;
-import cn.daxpay.open.payment.trade.runtime.service.pay.PayUniHandleService;
+import cn.daxpay.open.payment.trade.runtime.service.pay.common.PayUniHandleService;
 import cn.daxpay.open.payment.trade.order.dao.GatewayPayOrderManager;
 import cn.daxpay.open.payment.trade.order.dao.NormalPayOrderManager;
 import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;

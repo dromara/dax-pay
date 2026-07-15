@@ -159,6 +159,12 @@
             <artifactId>daxpay-channel-adapay</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- 易支付协议插件 -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-plugin-easypay</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

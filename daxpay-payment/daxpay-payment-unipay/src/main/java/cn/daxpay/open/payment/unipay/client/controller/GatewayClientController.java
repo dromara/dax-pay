@@ -1,9 +1,12 @@
 package cn.daxpay.open.payment.unipay.client.controller;
 
-import cn.daxpay.open.payment.unipay.gateway.service.GatewayAggregatePayService;
-import cn.daxpay.open.payment.unipay.gateway.service.GatewayOrderQueryService;
-import cn.daxpay.open.payment.unipay.gateway.param.AggregateQrPayParam;
-import cn.daxpay.open.payment.unipay.gateway.result.GatewayOrderResult;
+import cn.daxpay.open.payment.trade.runtime.service.pay.gateway.AggregatePayService;
+import cn.daxpay.open.payment.trade.runtime.service.pay.gateway.CashierPayService;
+import cn.daxpay.open.payment.trade.runtime.service.pay.gateway.GatewayOrderQueryService;
+import cn.daxpay.open.payment.unipay.param.gateway.AggregateQrPayParam;
+import cn.daxpay.open.payment.unipay.param.gateway.CashierPayParam;
+import cn.daxpay.open.payment.unipay.result.gateway.CashierItemPublicResult;
+import cn.daxpay.open.payment.unipay.result.gateway.GatewayOrderResult;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
 import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.open.platform.core.rest.Res;
@@ -14,6 +17,8 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /// # 网关 H5 侧接口(无商户签名)
 ///
@@ -28,7 +33,8 @@ import org.springframework.web.bind.annotation.*;
 public class GatewayClientController {
 
     private final GatewayOrderQueryService gatewayOrderQueryService;
-    private final GatewayAggregatePayService gatewayAggregatePayService;
+    private final AggregatePayService aggregatePayService;
+    private final CashierPayService cashierPayService;
 
     @Operation(summary = "查询网关订单摘要")
     @GetMapping("/order")
@@ -40,6 +46,21 @@ public class GatewayClientController {
     @Operation(summary = "聚合扫码发起支付")
     @PostMapping("/aggregate/pay")
     public Result<NormalPayResult> aggregatePay(@RequestBody @Validated AggregateQrPayParam param) {
-        return Res.ok(gatewayAggregatePayService.aggregateQrPay(param));
+        return Res.ok(aggregatePayService.aggregateQrPay(param));
+    }
+
+    @Operation(summary = "收银台支付项列表")
+    @GetMapping("/cashier/items")
+    public Result<List<CashierItemPublicResult>> listCashierItems(
+            @NotBlank(message = "{validation.field.orderNo.notBlank}") String orderNo,
+            @NotBlank(message = "{validation.field.cashierType.notBlank}") String cashierType,
+            String clientEnv) {
+        return Res.ok(cashierPayService.listPublicItems(orderNo, cashierType, clientEnv));
+    }
+
+    @Operation(summary = "收银台发起支付")
+    @PostMapping("/cashier/pay")
+    public Result<NormalPayResult> cashierPay(@RequestBody @Validated CashierPayParam param) {
+        return Res.ok(cashierPayService.pay(param));
     }
 }

@@ -137,4 +137,12 @@ public class NormalPayParam extends MerchantPaymentCommonParam {
     @Schema(description = "终端信息")
     private TerminalInfo terminal;
 
+    // ===== 来源 =====
+
+    /// 交易来源（内部使用，如易支付协议层写入 easy_pay；空则默认 mch_api）
+    /// @see cn.daxpay.open.platform.core.enums.pay.trade.TradeSourceEnum
+    @Schema(description = "交易来源", hidden = true)
+    @Size(max = 32, message = "{validation.field.source.size}")
+    private String source;
+
 }

@@ -5,7 +5,7 @@ import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.common.util.DaxRes;
 import cn.daxpay.open.payment.unipay.aop.PaymentVerify;
 import cn.daxpay.open.payment.trade.runtime.service.close.PayCloseService;
-import cn.daxpay.open.payment.trade.runtime.service.pay.NormalPayService;
+import cn.daxpay.open.payment.trade.runtime.service.pay.normal.NormalPayService;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayCloseParam;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;

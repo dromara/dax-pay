@@ -110,6 +110,12 @@ public interface PermCodes {
             String MENU = "merchant:gateway-cashier";
         }
 
+        /// 易支付协议配置 menuCode=merchant:easypay
+        interface EasyPay {
+            /// 菜单编码
+            String MENU = "merchant:easypay";
+        }
+
         /// 门店 menuCode=merchant:store
         interface Store {
             /// 菜单编码

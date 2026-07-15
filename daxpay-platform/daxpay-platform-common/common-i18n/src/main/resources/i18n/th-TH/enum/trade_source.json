@@ -2,6 +2,7 @@
   "user": "การดำเนินงานของผู้ใช้",
   "mch_api": "API ของผู้ขาย",
   "cashier_code": "รหัสแคชเชียร์",
-  "checkout": "ชำระเงิน เช็คเอ้าท์",
-  "aggress_pay": "การชำระเงินรวม/การชำระเงิน"
+  "cashier": "ชำระเงินที่แคชเชียร์",
+  "aggress_pay": "ชำระเงินรวม",
+  "easy_pay": "EasyPay protocol"
 }

@@ -1,0 +1,16 @@
+{
+  "easypay": {
+    "credentialNotFound": "EasyPay credential not found",
+    "credentialDisabled": "EasyPay credential disabled",
+    "pidGenerateFailed": "Failed to generate EasyPay merchant id",
+    "v1Disabled": "EasyPay V1 API is disabled",
+    "v2Disabled": "EasyPay V2 API is disabled",
+    "publicKeyMissing": "EasyPay merchant public key missing",
+    "md5KeyMissing": "EasyPay MD5 key missing",
+    "signInvalid": "EasyPay signature invalid",
+    "unsupportedType": "Unsupported payment type",
+    "unsupportedMethod": "Unsupported method",
+    "orderNotFound": "EasyPay order not found",
+    "tradeNotFound": "Related payment trade not found"
+  }
+}

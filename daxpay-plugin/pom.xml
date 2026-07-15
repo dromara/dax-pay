@@ -14,6 +14,10 @@
     <packaging>pom</packaging>
     <description>支付插件功能实现</description>
 
+    <modules>
+        <module>daxpay-plugin-easypay</module>
+    </modules>
+
     <dependencies>
         <!-- lombok -->
         <dependency>

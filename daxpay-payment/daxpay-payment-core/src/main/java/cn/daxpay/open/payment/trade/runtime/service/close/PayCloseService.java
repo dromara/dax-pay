@@ -14,7 +14,7 @@ import cn.daxpay.open.payment.trade.order.entity.NormalPayOrder;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.trade.record.entity.PayCloseRecord;
 import cn.daxpay.open.payment.trade.record.service.PayCloseRecordService;
-import cn.daxpay.open.payment.trade.runtime.service.pay.PayUniHandleService;
+import cn.daxpay.open.payment.trade.runtime.service.pay.common.PayUniHandleService;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayCloseParam;
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;

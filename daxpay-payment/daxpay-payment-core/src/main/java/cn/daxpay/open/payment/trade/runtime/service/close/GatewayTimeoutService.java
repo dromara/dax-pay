@@ -7,7 +7,7 @@ import cn.daxpay.open.payment.trade.order.dao.GatewayPayOrderManager;
 import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
 import cn.daxpay.open.payment.trade.order.entity.GatewayPayOrder;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
-import cn.daxpay.open.payment.trade.runtime.service.pay.PayUniHandleService;
+import cn.daxpay.open.payment.trade.runtime.service.pay.common.PayUniHandleService;
 import cn.daxpay.open.platform.common.redis.lock.LockExecutor;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;

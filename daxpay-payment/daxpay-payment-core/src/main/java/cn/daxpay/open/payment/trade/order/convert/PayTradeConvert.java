@@ -8,7 +8,7 @@ import org.mapstruct.factory.Mappers;
 
 /// # 支付交易转换器
 ///
-/// 仅从 PayTrade 映射部分字段; orderNo/payBody 属容器, 由 [PayAssistService#buildResult] 组装
+/// 仅从 PayTrade 映射部分字段; orderNo/payBody 属容器, 由 [NormalPayAssistService#buildResult] 组装
 @Mapper
 public interface PayTradeConvert {
 

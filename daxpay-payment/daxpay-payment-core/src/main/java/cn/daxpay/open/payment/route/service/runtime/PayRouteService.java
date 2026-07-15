@@ -34,7 +34,7 @@ import java.util.Objects;
 
 /// # 支付通道路由服务
 ///
-/// 供支付流程（NormalPayService / GatewayPayHandleService）调用，唯一运行时入口 [PayRouteService#resolve]。
+/// 供支付流程（[NormalPayService] / [GatewayPayHandleService]）调用，唯一运行时入口 [PayRouteService#resolve]。
 /// 两种路径：
 /// 1. 直接指定：已传 channelMchNo（+ capability），跳过应用路由策略，由 channelMchNo 推导产品；capability 必填，method 未传时由能力反推。
 /// 2. 跟随通道路由：未传 channelMchNo，按 appId 加载策略，经基础/场景匹配后回填 product/channelMchNo/capability。

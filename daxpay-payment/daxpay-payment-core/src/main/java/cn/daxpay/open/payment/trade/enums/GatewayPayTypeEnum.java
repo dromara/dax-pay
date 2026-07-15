@@ -14,7 +14,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public enum GatewayPayTypeEnum implements I18nSupport {
 
-    /// 统一收银台(设备自适应, 本期仅预留下单类型)
+    /// 统一收银台(H5/WEB 点选支付项)
     CASHIER("cashier"),
     /// 聚合扫码一码多付
     AGGREGATE("aggregate"),

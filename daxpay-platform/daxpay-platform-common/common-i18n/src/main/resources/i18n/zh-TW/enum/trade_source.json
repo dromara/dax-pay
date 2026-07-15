@@ -2,6 +2,7 @@
   "user": "使用者操作",
   "mch_api": "商戶API",
   "cashier_code": "碼牌",
-  "checkout": "收銀臺支付",
-  "aggress_pay": "聚合/收銀臺支付"
+  "cashier": "收銀臺支付",
+  "aggress_pay": "聚合支付",
+  "easy_pay": "易支付協議"
 }
