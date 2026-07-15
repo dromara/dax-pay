@@ -743,6 +743,9 @@
     "oauthCode": {
       "notBlank": "Kode otorisasi tidak boleh kosong",
       "size": "Kode otorisasi tidak boleh melebihi 128 karakter"
+    },
+    "programType": {
+      "notBlank": "Program type cannot be blank"
     }
   }
 }

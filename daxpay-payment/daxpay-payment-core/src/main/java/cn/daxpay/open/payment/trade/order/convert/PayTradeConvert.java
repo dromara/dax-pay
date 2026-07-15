@@ -8,7 +8,8 @@ import org.mapstruct.factory.Mappers;
 
 /// # 支付交易转换器
 ///
-/// 仅从 PayTrade 映射部分字段; orderNo/payBody 属容器, 由 [NormalPayAssistService#buildResult] 组装
+/// 仅改名映射 orderId ← id；其余同名字段自动映射；orderNo/payBody 等无源字段保持 null，
+/// 由 [cn.daxpay.open.payment.trade.runtime.service.pay.normal.NormalPayAssistService#buildResult] 组装
 @Mapper
 public interface PayTradeConvert {
 
@@ -16,10 +17,5 @@ public interface PayTradeConvert {
 
     /// PayTrade → NormalPayResult（不含 orderNo/payBody, 需配合容器）
     @Mapping(target = "orderId", source = "id")
-    @Mapping(target = "tradeNo", source = "tradeNo")
-    @Mapping(target = "orderNo", ignore = true)
-    @Mapping(target = "bizOrderNo", ignore = true)
-    @Mapping(target = "payBody", ignore = true)
-    @Mapping(target = "payBodyType", ignore = true)
     NormalPayResult toResult(PayTrade trade);
 }

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /// # 码牌支付(公开/H5/小程序侧)
 ///
-/// 供 H5 码牌支付页(/code-pay/:code)扫码后调用, 无需登录态。
+/// 供 H5 码牌支付页(/h/:code)扫码后调用, 无需登录态。
 @IgnoreAuth
 @Validated
 @Tag(name = "码牌支付")

@@ -9,5 +9,6 @@
   "notAssigned": "QRコードボードが加盟店に割り当てられていません",
   "idsEmpty": "QRコードボードを選択してください",
   "clientEnvNotSupport": "現在の環境ではコードプレート決済に対応していません。WeChat/Alipayなどでスキャンしてください",
-  "amountRequired": "支払金額を入力してください"
+  "amountRequired": "支払金額を入力してください",
+  "programTypeNotFound": "対応するコード牌プログラム種別が見つかりません: {0}"
 }

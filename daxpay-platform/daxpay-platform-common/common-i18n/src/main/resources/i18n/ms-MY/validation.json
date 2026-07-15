@@ -743,6 +743,9 @@
     "oauthCode": {
       "notBlank": "Kod kebenaran tidak boleh kosong",
       "size": "Kod kebenaran tidak boleh melebihi 128 aksara"
+    },
+    "programType": {
+      "notBlank": "Program type cannot be blank"
     }
   }
 }

@@ -9,5 +9,6 @@
   "notAssigned": "码牌未分配商户",
   "idsEmpty": "请选择码牌",
   "clientEnvNotSupport": "当前打开环境不支持码牌支付, 请使用微信/支付宝等扫码",
-  "amountRequired": "请输入支付金额"
+  "amountRequired": "请输入支付金额",
+  "programTypeNotFound": "未找到对应的码牌程序类型: {0}"
 }

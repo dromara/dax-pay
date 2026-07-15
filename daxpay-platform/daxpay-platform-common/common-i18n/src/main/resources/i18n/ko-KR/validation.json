@@ -743,6 +743,9 @@
     "oauthCode": {
       "notBlank": "인증 코드는 필수입니다",
       "size": "인증 코드는 128자를 초과할 수 없습니다"
+    },
+    "programType": {
+      "notBlank": "프로그램 유형은 비워 둘 수 없습니다"
     }
   }
 }

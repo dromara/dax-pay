@@ -2,6 +2,7 @@ package cn.daxpay.open.payment.admin.service.device;
 
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import cn.daxpay.open.payment.device.enums.QrCodeAmountTypeEnum;
+import cn.daxpay.open.payment.device.enums.QrCodeProgramTypeEnum;
 import cn.daxpay.open.payment.device.enums.QrCodeStatusEnum;
 import cn.daxpay.open.payment.device.qrcode.dao.DeviceQrCodeManager;
 import cn.daxpay.open.payment.device.qrcode.entity.DeviceQrCode;
@@ -38,8 +39,11 @@ import java.util.stream.IntStream;
 @RequiredArgsConstructor
 public class DeviceQrCodeAdminService {
 
-    /// H5 码牌支付页路径前缀(与 dax-pay-h5 RoutePath.CODE_PAY 一致)
-    private static final String CODE_PAY_PATH = "/code-pay/";
+    /// H5 码牌支付页路径前缀(与 dax-pay-h5 RoutePath.CODE_PAY 一致: /h/:code)
+    private static final String CODE_H5_PATH = "/h/";
+
+    /// 小程序码牌扫码 path 前缀(映射域名落地后置, 本期仅生成链接)
+    private static final String CODE_MINI_PATH = "/m/";
 
     private final DeviceQrCodeManager deviceQrCodeManager;
     private final MerchantContextLoader merchantContextLoader;
@@ -54,6 +58,8 @@ public class DeviceQrCodeAdminService {
             // 码牌: 批次号已存在
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.qrcode.batchNoExists");
         }
+        // 落地程序类型(创建后不可改)
+        QrCodeProgramTypeEnum programType = QrCodeProgramTypeEnum.findByCode(param.getProgramType());
         // 金额类型校验
         QrCodeAmountTypeEnum amountType = QrCodeAmountTypeEnum.findByCode(param.getAmountType());
         validateFixedAmount(amountType, param.getFixedAmount());
@@ -68,6 +74,7 @@ public class DeviceQrCodeAdminService {
                         .setCode(param.getBatchNo() + String.format("%03d", i))
                         .setName(param.getName())
                         .setBatchNo(param.getBatchNo())
+                        .setProgramType(programType.getCode())
                         .setAmountType(amountType.getCode())
                         .setFixedAmount(fixedAmount)
                         .setStatus(status)
@@ -152,11 +159,13 @@ public class DeviceQrCodeAdminService {
         deviceQrCodeManager.updateById(entity);
     }
 
-    /// 获取码牌 H5 扫码链接
+    /// 获取码牌扫码链接
     ///
-    /// 拼接规则: {paymentGatewayBaseUrl}/code-pay/{code}
+    /// 同一 paymentGatewayBaseUrl 下按 programType 分流 path:
+    /// - h5 → /h/{code}
+    /// - mini_app → /m/{code}
     public String getCodeLink(String code) {
-        deviceQrCodeManager.findByCode(code)
+        DeviceQrCode qrCode = deviceQrCodeManager.findByCode(code)
                 // 码牌: 码牌不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.qrcode.notFound"));
         PlatformUrlConfig urlConfig = platformUrlConfigService.getUrlConfig();
@@ -165,7 +174,11 @@ public class DeviceQrCodeAdminService {
             // 支付网关前端地址未配置
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.common.gatewayUrlNotConfigured");
         }
-        return gatewayBase + CODE_PAY_PATH + code;
+        // 按落地程序类型选 path; 历史空值按 H5
+        String path = QrCodeProgramTypeEnum.MINI_APP.getCode().equals(qrCode.getProgramType())
+                ? CODE_MINI_PATH
+                : CODE_H5_PATH;
+        return gatewayBase + path + code;
     }
 
     /// 应用解析: 复用 [MerchantContextLoader#resolveApp], appId 空取商户默认应用, 返回解析后的 appId

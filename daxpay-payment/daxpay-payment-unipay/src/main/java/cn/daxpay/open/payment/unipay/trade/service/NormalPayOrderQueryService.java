@@ -47,9 +47,17 @@ public class NormalPayOrderQueryService {
             order = normalPayOrderManager.findByBizOrderNo(param.getBizOrderNo(), param.getAppId())
                     .orElseThrow(() -> new DataNotExistException("pay.error.payOrderNotExist"));
         }
-        // 联表资金凭证补充交易字段
+        // 同名映射业务容器，再联表资金凭证补充/覆盖交易字段
+        NormalPayOrderResult result = UnipayNormalPayOrderConvert.CONVERT.toResult(order);
         PayTrade trade = payTradeManager.findByContainerId(order.getId(),
                 cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum.NORMAL.getCode()).orElse(null);
-        return UnipayNormalPayOrderConvert.CONVERT.toResult(order, trade);
+        if (Objects.nonNull(trade)) {
+            result.setTradeNo(trade.getTradeNo());
+            result.setOutOrderNo(trade.getOutOrderNo());
+            // 对外契约 status = 资金态，覆盖容器业务 status
+            result.setStatus(trade.getStatus());
+            result.setRefundableBalance(trade.getRefundableBalance());
+        }
+        return result;
     }
 }

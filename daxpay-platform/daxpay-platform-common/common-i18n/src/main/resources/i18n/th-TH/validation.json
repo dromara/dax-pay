@@ -743,6 +743,9 @@
     "oauthCode": {
       "notBlank": "รหัสอนุญาตต้องไม่เว้นว่าง",
       "size": "รหัสอนุญาตต้องไม่เกิน 128 ตัวอักษร"
+    },
+    "programType": {
+      "notBlank": "Program type cannot be blank"
     }
   }
 }

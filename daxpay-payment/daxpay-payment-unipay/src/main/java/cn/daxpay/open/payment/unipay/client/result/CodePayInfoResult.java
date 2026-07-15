@@ -6,7 +6,7 @@ import lombok.experimental.Accessors;
 
 /// # 码牌支付信息(公开接口返回, 脱敏)
 ///
-/// 供 H5 码牌支付页(/code-pay/:code)扫码后查询展示, 不含 appId/mchNo 等内部字段。
+/// 供 H5 码牌支付页(/h/:code)扫码后查询展示, 不含 appId/mchNo 等内部字段。
 @Data
 @Accessors(chain = true)
 @Schema(title = "码牌支付信息")

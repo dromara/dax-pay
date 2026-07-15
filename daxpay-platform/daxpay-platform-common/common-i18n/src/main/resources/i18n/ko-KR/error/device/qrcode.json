@@ -9,5 +9,6 @@
   "notAssigned": "QR 코드 보드가 가맹점에 할당되지 않았습니다",
   "idsEmpty": "QR 코드 보드를 선택하세요",
   "clientEnvNotSupport": "현재 환경에서는 코드플레이트 결제를 지원하지 않습니다. WeChat/Alipay 등으로 스캔하세요",
-  "amountRequired": "결제 금액을 입력하세요"
+  "amountRequired": "결제 금액을 입력하세요",
+  "programTypeNotFound": "일치하는 코드 프로그램 유형을 찾을 수 없습니다: {0}"
 }

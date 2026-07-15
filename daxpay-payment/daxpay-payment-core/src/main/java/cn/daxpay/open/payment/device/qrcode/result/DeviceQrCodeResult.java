@@ -35,6 +35,11 @@ public class DeviceQrCodeResult extends BaseResult {
     @Schema(description = "关联应用号(空表示使用商户默认应用)")
     private String appId;
 
+    /// 落地程序类型
+    /// @see cn.daxpay.open.payment.device.enums.QrCodeProgramTypeEnum
+    @Schema(description = "落地程序类型(h5/mini_app)")
+    private String programType;
+
     /// 金额类型
     /// @see cn.daxpay.open.payment.device.enums.QrCodeAmountTypeEnum
     @Schema(description = "金额类型(random-自定义/fixed-固定)")

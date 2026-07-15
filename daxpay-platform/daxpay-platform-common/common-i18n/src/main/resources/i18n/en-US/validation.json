@@ -743,6 +743,9 @@
     "oauthCode": {
       "notBlank": "Authorization code cannot be blank",
       "size": "Authorization code cannot exceed 128 characters"
+    },
+    "programType": {
+      "notBlank": "Program type cannot be blank"
     }
   }
 }

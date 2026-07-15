@@ -743,6 +743,9 @@
     "oauthCode": {
       "notBlank": "授權碼不可為空",
       "size": "授權碼不可超過128位"
+    },
+    "programType": {
+      "notBlank": "落地程式類型不能為空"
     }
   }
 }
