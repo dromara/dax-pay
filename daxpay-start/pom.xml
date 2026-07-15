@@ -165,6 +165,12 @@
             <artifactId>daxpay-plugin-easypay</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- 支付风控插件（黑名单 + 命中记录） -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-plugin-risk</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

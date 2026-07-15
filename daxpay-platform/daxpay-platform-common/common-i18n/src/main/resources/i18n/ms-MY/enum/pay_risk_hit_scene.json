@@ -1,0 +1,7 @@
+{
+  "api": "API",
+  "gateway": "Gateway",
+  "code": "QR Code",
+  "manual": "Manual",
+  "unknown": "Unknown"
+}

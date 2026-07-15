@@ -1,0 +1,7 @@
+{
+  "pending": "待处理",
+  "ignored": "已忽略",
+  "added_blacklist": "已加入黑名单",
+  "merchant_disabled": "已标记停用商户",
+  "other": "其他"
+}

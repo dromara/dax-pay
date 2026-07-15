@@ -1,0 +1,7 @@
+{
+  "api": "API",
+  "gateway": "网关",
+  "code": "码牌",
+  "manual": "手工",
+  "unknown": "未知"
+}

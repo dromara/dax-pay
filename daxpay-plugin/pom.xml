@@ -16,6 +16,7 @@
 
     <modules>
         <module>daxpay-plugin-easypay</module>
+        <module>daxpay-plugin-risk</module>
     </modules>
 
     <dependencies>

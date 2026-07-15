@@ -76,3 +76,8 @@ UPDATE pay_gateway_aggregate_client_env SET method = 'union_barcode' WHERE metho
 UPDATE pay_gateway_code_client_env SET method = 'union_barcode' WHERE method = 'union_pay_barcode';
 UPDATE pay_gateway_cashier_item SET method = 'union_barcode' WHERE method = 'union_pay_barcode';
 UPDATE pay_trade SET method = 'union_barcode' WHERE method = 'union_pay_barcode';
+
+-- ========== 支付风控菜单 (2026-07-15) ==========
+INSERT INTO "public"."iam_perm_menu" VALUES (406, 4, 'payment:risk', 'admin', 'PaymentRisk', 'menu.payment.risk', 'lucide:shield-alert', 'f', 'f', NULL, '/payment/risk', NULL, 4, 'f', 't', 'f', 0, 1, 0, 'f', 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-15 00:00:00+00', '2026-07-15 00:00:00+00') ON CONFLICT (id) DO NOTHING;
+INSERT INTO "public"."iam_perm_menu" VALUES (40601, 406, 'payment:risk:blacklist', 'admin', 'PayBlacklistList', 'menu.payment.risk.blacklist', 'lucide:ban', 'f', 'f', '/payment/risk/blacklist/PayBlacklistList', '/payment/risk/blacklist', NULL, 1, 'f', 't', 'f', 1, 1, 0, 'f', 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-15 00:00:00+00', '2026-07-15 00:00:00+00') ON CONFLICT (id) DO NOTHING;
+INSERT INTO "public"."iam_perm_menu" VALUES (40602, 406, 'payment:risk:hit', 'admin', 'PayRiskHitList', 'menu.payment.risk.hit', 'lucide:triangle-alert', 'f', 'f', '/payment/risk/hit/PayRiskHitList', '/payment/risk/hit', NULL, 2, 'f', 't', 'f', 1, 1, 0, 'f', 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-15 00:00:00+00', '2026-07-15 00:00:00+00') ON CONFLICT (id) DO NOTHING;

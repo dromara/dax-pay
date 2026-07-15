@@ -121,5 +121,14 @@
     "invalid": "유효하지 않은 결제 바코드입니다",
     "unsupportedType": "지원하지 않는 결제 바코드 유형입니다",
     "methodMismatch": "바코드와 결제 방식이 일치하지 않습니다"
+  },
+  "risk": {
+    "blacklist": "거래가 제한되었습니다",
+    "blacklistDuplicate": "블랙리스트가 이미 존재합니다",
+    "blacklistNotFound": "블랙리스트가 존재하지 않습니다",
+    "blacklistTypeInvalid": "블랙리스트 유형이 유효하지 않습니다",
+    "blacklistStatusInvalid": "블랙리스트 상태가 유효하지 않습니다",
+    "hitNotFound": "리스크 적중 기록이 존재하지 않습니다",
+    "handleStatusInvalid": "처리 상태가 유효하지 않습니다"
   }
 }

@@ -121,5 +121,14 @@
     "invalid": "付款碼無效",
     "unsupportedType": "不支援的付款碼類型",
     "methodMismatch": "付款碼與支付方式不相符"
+  },
+  "risk": {
+    "blacklist": "交易被限制",
+    "blacklistDuplicate": "該黑名單已存在",
+    "blacklistNotFound": "黑名單不存在",
+    "blacklistTypeInvalid": "黑名單類型無效",
+    "blacklistStatusInvalid": "黑名單狀態無效",
+    "hitNotFound": "風險命中記錄不存在",
+    "handleStatusInvalid": "處理狀態無效"
   }
 }

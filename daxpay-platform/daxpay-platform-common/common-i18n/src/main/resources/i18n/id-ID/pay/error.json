@@ -120,5 +120,14 @@
     "invalid": "Barcode pembayaran tidak valid",
     "unsupportedType": "Jenis barcode pembayaran tidak didukung",
     "methodMismatch": "Barcode tidak cocok dengan metode pembayaran"
+  },
+  "risk": {
+    "blacklist": "Transaction is restricted",
+    "blacklistDuplicate": "Blacklist entry already exists",
+    "blacklistNotFound": "Blacklist entry not found",
+    "blacklistTypeInvalid": "Invalid blacklist type",
+    "blacklistStatusInvalid": "Invalid blacklist status",
+    "hitNotFound": "Risk hit record not found",
+    "handleStatusInvalid": "Invalid handle status"
   }
 }

@@ -168,6 +168,10 @@ INSERT INTO "public"."iam_perm_menu" VALUES (4040132, 40401, NULL, 'admin', 'Cha
 INSERT INTO "public"."iam_perm_menu" VALUES (40508, 40105, NULL, 'admin', 'ChannelIsvConfigGroup', 'menu.payment.config.group.channelIsv', 'lucide:server', 't', 'f', NULL, NULL, NULL, 1, 'f', 'f', 'f', 1, 1, 0, 'f', 'subpage_group', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-11 03:37:15.421585+00', '2026-07-13 10:13:20.806797+00');
 
 -- ----------------------------
+INSERT INTO "public"."iam_perm_menu" VALUES (406, 4, 'payment:risk', 'admin', 'PaymentRisk', 'menu.payment.risk', 'lucide:shield-alert', 'f', 'f', NULL, '/payment/risk', NULL, 4, 'f', 't', 'f', 0, 1, 0, 'f', 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-15 00:00:00+00', '2026-07-15 00:00:00+00');
+INSERT INTO "public"."iam_perm_menu" VALUES (40601, 406, 'payment:risk:blacklist', 'admin', 'PayBlacklistList', 'menu.payment.risk.blacklist', 'lucide:ban', 'f', 'f', '/payment/risk/blacklist/PayBlacklistList', '/payment/risk/blacklist', NULL, 1, 'f', 't', 'f', 1, 1, 0, 'f', 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-15 00:00:00+00', '2026-07-15 00:00:00+00');
+INSERT INTO "public"."iam_perm_menu" VALUES (40602, 406, 'payment:risk:hit', 'admin', 'PayRiskHitList', 'menu.payment.risk.hit', 'lucide:triangle-alert', 'f', 'f', '/payment/risk/hit/PayRiskHitList', '/payment/risk/hit', NULL, 2, 'f', 't', 'f', 1, 1, 0, 'f', 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-15 00:00:00+00', '2026-07-15 00:00:00+00');
+
 -- Primary Key structure for table iam_perm_menu
 -- ----------------------------
 ALTER TABLE "public"."iam_perm_menu" ADD CONSTRAINT "iam_perm_menu_pkey" PRIMARY KEY ("id");

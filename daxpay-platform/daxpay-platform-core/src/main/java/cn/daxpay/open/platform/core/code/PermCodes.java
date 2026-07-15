@@ -190,6 +190,21 @@ public interface PermCodes {
                 String MENU = "payment:config:wx-verify";
             }
         }
+
+        /// 支付风控 menuCode=payment:risk:*
+        interface Risk {
+            /// 黑名单管理 menuCode=payment:risk:blacklist
+            interface Blacklist {
+                /// 菜单编码
+                String MENU = "payment:risk:blacklist";
+            }
+
+            /// 风险命中记录 menuCode=payment:risk:hit
+            interface Hit {
+                /// 菜单编码
+                String MENU = "payment:risk:hit";
+            }
+        }
     }
 
     /// 交易单据域（从 payment 拆出，对齐侧栏「交易管理」）

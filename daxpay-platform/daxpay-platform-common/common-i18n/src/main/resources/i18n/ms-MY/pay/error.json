@@ -120,5 +120,14 @@
     "invalid": "Kod bar pembayaran tidak sah",
     "unsupportedType": "Jenis kod bar pembayaran tidak disokong",
     "methodMismatch": "Kod bar tidak sepadan dengan kaedah pembayaran"
+  },
+  "risk": {
+    "blacklist": "Transaction is restricted",
+    "blacklistDuplicate": "Blacklist entry already exists",
+    "blacklistNotFound": "Blacklist entry not found",
+    "blacklistTypeInvalid": "Invalid blacklist type",
+    "blacklistStatusInvalid": "Invalid blacklist status",
+    "hitNotFound": "Risk hit record not found",
+    "handleStatusInvalid": "Invalid handle status"
   }
 }

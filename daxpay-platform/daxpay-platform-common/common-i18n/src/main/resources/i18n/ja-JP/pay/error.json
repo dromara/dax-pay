@@ -121,5 +121,14 @@
     "invalid": "無効な決済バーコードです",
     "unsupportedType": "未対応の決済バーコード種別です",
     "methodMismatch": "バーコードと支払方法が一致しません"
+  },
+  "risk": {
+    "blacklist": "取引が制限されています",
+    "blacklistDuplicate": "ブラックリストが既に存在します",
+    "blacklistNotFound": "ブラックリストが存在しません",
+    "blacklistTypeInvalid": "ブラックリスト種別が無効です",
+    "blacklistStatusInvalid": "ブラックリスト状態が無効です",
+    "hitNotFound": "リスクヒット記録が存在しません",
+    "handleStatusInvalid": "処理状態が無効です"
   }
 }
