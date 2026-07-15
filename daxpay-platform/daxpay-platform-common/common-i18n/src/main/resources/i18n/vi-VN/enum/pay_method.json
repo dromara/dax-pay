@@ -8,8 +8,7 @@
   "wechat_app": "Ứng dụng WeChat",
   "wechat_barcode": "Mã vạch WeChat",
   "alipay_qr": "Alipay QR",
-  "alipay_jsapi": "JSAPI của Alipay",
-  "alipay_mini": "Chương trình nhỏ của Alipay",
+  "alipay_jsapi": "JSAPI Alipay (gồm Mini Program)",
   "alipay_pc": "Máy tính Alipay",
   "alipay_h5": "Alipay H5",
   "alipay_app": "Ứng dụng Alipay",
@@ -17,7 +16,6 @@
   "union_qr": "UnionPay QR",
   "union_jsapi": "JSAPI của UnionPay",
   "union_h5": "UnionPay H5",
-  "union_pay_barcode": "Mã vạch UnionPay",
   "douyin_qr": "Douyin QR",
   "douyin_jsapi": "Douyin JSAPI",
   "douyin_h5": "Douyin H5",
@@ -26,5 +24,6 @@
   "visa_card_present": "Tặng thẻ Visa",
   "mastercard_card_gateway": "Cổng Mastercard",
   "mastercard_card_present": "Tặng thẻ Mastercard",
-  "other": "Khác"
+  "other": "Khác",
+  "union_barcode": "Mã vạch UnionPay"
 }

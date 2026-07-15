@@ -24,7 +24,7 @@ public class GatewayAggregateClientEnv extends MpBaseEntity {
     /// 聚合配置主表ID
     private Long configId;
 
-    /// 客户端环境编码: wechat_pay/alipay/union_pay/douyin
+    /// 客户端环境编码: wechat/alipay/union_pay/douyin
     /// @see ClientEnvEnum
     private String clientEnv;
 

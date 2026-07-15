@@ -53,9 +53,9 @@ public enum ProductEnum implements I18nSupport {
     LESHUA_PAY("leshua_pay"),
 
     // ===== 第三方聚合通道（一通道一产品）=====
-    /// Adapay(直连)
+    /// Adapay(直连, 归属汇付天下通道 huifu)
     ADA_PAY("ada_pay"),
-    /// 斗拱(归属 ADA_PAY 通道)
+    /// 斗拱(归属汇付天下通道 huifu)
     DOUGONG_PAY("dougong_pay"),
     /// 海科融通
     HKRT_PAY("hkrt_pay"),
@@ -96,12 +96,10 @@ public enum ProductEnum implements I18nSupport {
             case LAKALA_PAY -> ChannelEnum.LAKALA_PAY.getCode();
             // 乐刷
             case LESHUA_PAY -> ChannelEnum.LESHUA_PAY.getCode();
-            // 抖音支付
-            case DOUYIN_PAY -> ChannelEnum.DOUYIN_PAY.getCode();
-            // 第三方聚合通道(产品 code 与通道 code 一致)
-            case ADA_PAY -> ChannelEnum.ADA_PAY.getCode();
-            // 斗拱归属汇付天下(ADA_PAY)通道
-            case DOUGONG_PAY -> ChannelEnum.ADA_PAY.getCode();
+            // 抖音支付(通道 code 为 douyin，产品为 douyin_pay)
+            case DOUYIN_PAY -> ChannelEnum.DOUYIN.getCode();
+            // 汇付天下: Adapay / 斗拱 两产品共用通道 huifu
+            case ADA_PAY, DOUGONG_PAY -> ChannelEnum.HUIFU.getCode();
             case HKRT_PAY -> ChannelEnum.HKRT_PAY.getCode();
             case VBILL_PAY -> ChannelEnum.VBILL_PAY.getCode();
             case FUYOU_PAY -> ChannelEnum.FUYOU_PAY.getCode();

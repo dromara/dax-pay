@@ -12,12 +12,7 @@
   "alipay_app": "Aplikasi Alipay",
   "alipay_h5": "Alipay H5",
   "alipay_pc": "PC Alipay",
-  "alipay_jsapi": "Alipay JSAPI",
-  "alipay_mini": "Program Mini Alipay",
-  "union_pay_qr": "QR UnionPay",
-  "union_pay_barcode": "Kod Bar UnionPay",
-  "union_pay_h5": "UnionPay H5",
-  "union_pay_jsapi": "UnionPay JSAPI",
+  "alipay_jsapi": "Alipay JSAPI (termasuk Mini Program)",
   "douyin_qr": "Douyin QR",
   "douyin_jsapi": "Douyin JSAPI",
   "douyin_h5": "Douyin H5",
@@ -25,5 +20,9 @@
   "visa_card_gateway": "Gerbang Visa",
   "visa_card_present": "Visa Hadir",
   "mastercard_card_gateway": "Gerbang Mastercard",
-  "mastercard_card_present": "Mastercard Hadir"
+  "mastercard_card_present": "Mastercard Hadir",
+  "union_qr": "QR UnionPay",
+  "union_jsapi": "UnionPay JSAPI",
+  "union_h5": "UnionPay H5",
+  "union_barcode": "Kod Bar UnionPay"
 }

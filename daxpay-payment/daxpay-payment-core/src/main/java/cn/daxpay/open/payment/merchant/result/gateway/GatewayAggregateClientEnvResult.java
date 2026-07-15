@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
 public class GatewayAggregateClientEnvResult {
 
     /// @see cn.daxpay.open.payment.merchant.enums.ClientEnvEnum
-    @Schema(description = "客户端环境编码: wechat_pay/alipay/union_pay/douyin")
+    @Schema(description = "客户端环境编码: wechat/alipay/union_pay/douyin")
     private String clientEnv;
 
     /// @see cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum

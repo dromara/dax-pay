@@ -24,7 +24,7 @@ public class UmsQrcodeProductStrategy extends AbsProductStrategy {
             PayMethodEnum.AGGREGATE_PAY_QRCODE, List.of(PayCapabilityEnum.AGGREGATE_PAY_QRCODE),
             PayMethodEnum.WECHAT_QR, List.of(PayCapabilityEnum.WECHAT_QR),
             PayMethodEnum.ALIPAY_QR, List.of(PayCapabilityEnum.ALIPAY_QR),
-            PayMethodEnum.UNION_QR, List.of(PayCapabilityEnum.UNION_PAY_QR));
+            PayMethodEnum.UNION_QR, List.of(PayCapabilityEnum.UNION_QR));
 
     @Override
     public ProductEnum getProduct() {

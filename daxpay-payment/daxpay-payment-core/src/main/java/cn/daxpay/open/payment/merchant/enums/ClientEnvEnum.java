@@ -24,8 +24,8 @@ public enum ClientEnvEnum implements I18nSupport {
 
     /// 普通浏览器环境(仅收银台 H5 配置使用)
     BROWSER("browser"),
-    /// 微信环境
-    WECHAT_PAY("wechat_pay"),
+    /// 微信环境(与 PayProviderEnum.WECHAT 同码; 历史值 wechat_pay 见 findByCode 兼容)
+    WECHAT("wechat"),
     /// 支付宝环境
     ALIPAY("alipay"),
     /// 云闪付环境
@@ -42,8 +42,10 @@ public enum ClientEnvEnum implements I18nSupport {
     }
 
     public static ClientEnvEnum findByCode(String code) {
+        // 兼容历史 clientEnv=wechat_pay(现统一为 wechat, wechat_pay 仅作支付产品码)
+        String normalized = "wechat_pay".equals(code) ? WECHAT.getCode() : code;
         return Arrays.stream(values())
-                .filter(e -> e.getCode().equals(code))
+                .filter(e -> e.getCode().equals(normalized))
                 .findFirst()
                 .orElseThrow(() -> new DataNotExistException("error.common.clientEnvNotExist", code));
     }
@@ -53,21 +55,22 @@ public enum ClientEnvEnum implements I18nSupport {
         return defaultMethodCode(ClientRuntimeEnum.H5);
     }
 
-    /// 按运行形态推导默认支付方式: H5→JSAPI, 小程序→MINI(无独立 mini 时回退 JSAPI)
+    /// 按运行形态推导默认支付方式: H5→JSAPI, 小程序→MINI(支付宝无独立 mini, 统一 JSAPI)
     public String defaultMethodCode(ClientRuntimeEnum runtime) {
         ClientRuntimeEnum rt = runtime == null ? ClientRuntimeEnum.H5 : runtime;
         PayMethodEnum method;
         if (rt == ClientRuntimeEnum.MINI) {
             method = switch (this) {
-                case WECHAT_PAY -> PayMethodEnum.WECHAT_MINI;
-                case ALIPAY -> PayMethodEnum.ALIPAY_MINI;
+                case WECHAT -> PayMethodEnum.WECHAT_MINI;
+                // 支付宝官方 JSAPI 即小程序场景, 与 H5 同用 alipay_jsapi
+                case ALIPAY -> PayMethodEnum.ALIPAY_JSAPI;
                 case UNION_PAY -> PayMethodEnum.UNION_JSAPI;
                 case DOUYIN -> PayMethodEnum.DOUYIN_JSAPI;
                 default -> null;
             };
         } else {
             method = switch (this) {
-                case WECHAT_PAY -> PayMethodEnum.WECHAT_JSAPI;
+                case WECHAT -> PayMethodEnum.WECHAT_JSAPI;
                 case ALIPAY -> PayMethodEnum.ALIPAY_JSAPI;
                 case UNION_PAY -> PayMethodEnum.UNION_JSAPI;
                 case DOUYIN -> PayMethodEnum.DOUYIN_JSAPI;
@@ -81,16 +84,14 @@ public enum ClientEnvEnum implements I18nSupport {
         return method.getCode();
     }
 
-    /// METHOD 配置的 method 按 runtime 升级(jsapi→mini), 商户心智保持「配微信/支付宝」即可
+    /// METHOD 配置的 method 按 runtime 升级(微信 jsapi→mini), 商户心智保持「配微信」即可
+    /// 支付宝无独立 mini method, 不升级
     public static String adaptMethodForRuntime(String method, ClientRuntimeEnum runtime) {
         if (StrUtil.isBlank(method) || runtime != ClientRuntimeEnum.MINI) {
             return method;
         }
         if (PayMethodEnum.WECHAT_JSAPI.getCode().equals(method)) {
             return PayMethodEnum.WECHAT_MINI.getCode();
-        }
-        if (PayMethodEnum.ALIPAY_JSAPI.getCode().equals(method)) {
-            return PayMethodEnum.ALIPAY_MINI.getCode();
         }
         return method;
     }

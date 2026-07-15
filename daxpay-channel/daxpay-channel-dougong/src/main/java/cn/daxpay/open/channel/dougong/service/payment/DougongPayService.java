@@ -87,7 +87,7 @@ public class DougongPayService {
             case WECHAT_MINI -> DougongPayMethod.WECHAT_MINI;
             // 支付宝(扫码/JSAPI/小程序)
             case ALIPAY_QR -> DougongPayMethod.ALIPAY_QR;
-            case ALIPAY_JSAPI, ALIPAY_MINI -> DougongPayMethod.ALIPAY_JSAPI;
+            case ALIPAY_JSAPI -> DougongPayMethod.ALIPAY_JSAPI;
             // 银联(扫码)
             case UNION_QR -> DougongPayMethod.UNION_QR;
             default -> throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,

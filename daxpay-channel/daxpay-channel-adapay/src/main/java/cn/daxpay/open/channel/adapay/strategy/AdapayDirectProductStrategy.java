@@ -41,10 +41,10 @@ public class AdapayDirectProductStrategy extends AbsProductStrategy {
             Map.entry(PayMethodEnum.ALIPAY_PC, List.of(PayCapabilityEnum.ALIPAY_PC)),
             Map.entry(PayMethodEnum.ALIPAY_BARCODE, List.of(PayCapabilityEnum.ALIPAY_BARCODE)),
             // 银联(扫码/JSAPI/H5/付款码)
-            Map.entry(PayMethodEnum.UNION_QR, List.of(PayCapabilityEnum.UNION_PAY_QR)),
-            Map.entry(PayMethodEnum.UNION_JSAPI, List.of(PayCapabilityEnum.UNION_PAY_JSAPI)),
-            Map.entry(PayMethodEnum.UNION_H5, List.of(PayCapabilityEnum.UNION_PAY_H5)),
-            Map.entry(PayMethodEnum.UNION_PAY_BARCODE, List.of(PayCapabilityEnum.UNION_PAY_BARCODE)));
+            Map.entry(PayMethodEnum.UNION_QR, List.of(PayCapabilityEnum.UNION_QR)),
+            Map.entry(PayMethodEnum.UNION_JSAPI, List.of(PayCapabilityEnum.UNION_JSAPI)),
+            Map.entry(PayMethodEnum.UNION_H5, List.of(PayCapabilityEnum.UNION_H5)),
+            Map.entry(PayMethodEnum.UNION_BARCODE, List.of(PayCapabilityEnum.UNION_BARCODE)));
 
     @Override
     public ProductEnum getProduct() {

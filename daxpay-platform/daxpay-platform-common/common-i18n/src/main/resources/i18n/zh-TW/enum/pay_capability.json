@@ -12,12 +12,7 @@
   "alipay_app": "支付寶 APP",
   "alipay_h5": "支付寶 H5",
   "alipay_pc": "支付寶電腦",
-  "alipay_jsapi": "支付寶 JSAPI",
-  "alipay_mini": "支付寶小程式",
-  "union_pay_qr": "銀聯掃碼",
-  "union_pay_barcode": "銀聯付款碼",
-  "union_pay_h5": "銀聯 H5",
-  "union_pay_jsapi": "銀聯 JSAPI",
+  "alipay_jsapi": "支付寶 JSAPI（含小程式）",
   "douyin_qr": "抖音掃碼",
   "douyin_jsapi": "抖音 JSAPI",
   "douyin_h5": "抖音 H5",
@@ -25,5 +20,9 @@
   "visa_card_gateway": "Visa 閘道器",
   "visa_card_present": "Visa 線下",
   "mastercard_card_gateway": "萬事達閘道器",
-  "mastercard_card_present": "萬事達線下"
+  "mastercard_card_present": "萬事達線下",
+  "union_qr": "銀聯掃碼",
+  "union_jsapi": "銀聯 JSAPI",
+  "union_h5": "銀聯 H5",
+  "union_barcode": "銀聯付款碼"
 }

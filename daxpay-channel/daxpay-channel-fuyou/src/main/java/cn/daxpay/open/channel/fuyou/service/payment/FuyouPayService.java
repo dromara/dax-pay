@@ -84,7 +84,7 @@ public class FuyouPayService {
             case WECHAT_QR -> new MethodMapping(FuyouPayMethod.WECHAT_QR, FuyouPayBodyType.QR_CODE);
             case WECHAT_BARCODE -> new MethodMapping(FuyouPayMethod.BARCODE, null);
             // 支付宝
-            case ALIPAY_JSAPI, ALIPAY_MINI -> new MethodMapping(FuyouPayMethod.ALIPAY_JSAPI, FuyouPayBodyType.IDENTIFIER);
+            case ALIPAY_JSAPI -> new MethodMapping(FuyouPayMethod.ALIPAY_JSAPI, FuyouPayBodyType.IDENTIFIER);
             case ALIPAY_QR -> new MethodMapping(FuyouPayMethod.ALIPAY_QR, FuyouPayBodyType.QR_CODE);
             case ALIPAY_BARCODE -> new MethodMapping(FuyouPayMethod.BARCODE, null);
             // 银联

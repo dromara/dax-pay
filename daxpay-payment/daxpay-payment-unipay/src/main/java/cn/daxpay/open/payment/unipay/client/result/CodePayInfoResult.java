@@ -25,4 +25,9 @@ public class CodePayInfoResult {
 
     @Schema(description = "固定金额(分)")
     private Long fixedAmount;
+
+    /// @see cn.daxpay.open.payment.device.enums.QrCodeProgramTypeEnum
+    @Schema(description = "落地程序类型(h5/mini_app)")
+    private String programType;
 }
+

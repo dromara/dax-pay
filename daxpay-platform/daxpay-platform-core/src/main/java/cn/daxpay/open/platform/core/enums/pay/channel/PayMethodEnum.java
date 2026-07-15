@@ -39,10 +39,8 @@ public enum PayMethodEnum implements I18nSupport {
     /* 支付宝 */
     /// 支付宝扫码
     ALIPAY_QR("alipay_qr", PayProviderEnum.ALIPAY),
-    /// 支付宝JSAPI
+    /// 支付宝 JSAPI（含小程序；官方产品码 JSAPI_PAY）
     ALIPAY_JSAPI("alipay_jsapi", PayProviderEnum.ALIPAY),
-    /// 支付宝小程序
-    ALIPAY_MINI("alipay_mini", PayProviderEnum.ALIPAY),
     /// 支付宝PC
     ALIPAY_PC("alipay_pc", PayProviderEnum.ALIPAY),
     /// 支付宝H5
@@ -60,7 +58,7 @@ public enum PayMethodEnum implements I18nSupport {
     /// 银联H5
     UNION_H5("union_h5", PayProviderEnum.UNION_PAY),
     /// 银联付款码
-    UNION_PAY_BARCODE("union_pay_barcode", PayProviderEnum.UNION_PAY),
+    UNION_BARCODE("union_barcode", PayProviderEnum.UNION_PAY),
 
     /* 抖音 */
     /// 抖音扫码

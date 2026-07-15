@@ -8,8 +8,7 @@
   "wechat_app": "WeChat App",
   "wechat_barcode": "WeChat Barcode",
   "alipay_qr": "Alipay QR",
-  "alipay_jsapi": "Alipay JSAPI",
-  "alipay_mini": "Alipay Mini Program",
+  "alipay_jsapi": "Alipay JSAPI (incl. Mini Program)",
   "alipay_pc": "Alipay PC",
   "alipay_h5": "Alipay H5",
   "alipay_app": "Alipay App",
@@ -17,7 +16,6 @@
   "union_qr": "UnionPay QR",
   "union_jsapi": "UnionPay JSAPI",
   "union_h5": "UnionPay H5",
-  "union_pay_barcode": "UnionPay Barcode",
   "douyin_qr": "Douyin QR",
   "douyin_jsapi": "Douyin JSAPI",
   "douyin_h5": "Douyin H5",
@@ -26,5 +24,6 @@
   "visa_card_present": "Visa Card Present",
   "mastercard_card_gateway": "Mastercard Gateway",
   "mastercard_card_present": "Mastercard Card Present",
-  "other": "Other"
+  "other": "Other",
+  "union_barcode": "UnionPay Barcode"
 }

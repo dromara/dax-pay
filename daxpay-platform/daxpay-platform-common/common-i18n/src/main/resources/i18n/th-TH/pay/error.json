@@ -60,7 +60,16 @@
     "cashierItemMethodRequired": "ต้องระบุวิธีการชำระเงินในโหมดวิธี",
     "cashierItemChannelMchRequired": "จำเป็นต้องมีผู้ค้าช่องทางในโหมด DIRECT",
     "cashierItemCapabilityRequired": "จำเป็นต้องมีความสามารถในโหมด DIRECT",
-    "cashierItemNameRequired": "ชื่อรายการชำระเงินไม่สามารถเว้นว่างได้"
+    "cashierItemNameRequired": "ชื่อรายการชำระเงินไม่สามารถเว้นว่างได้",
+    "codeConfigMissing": "QR code pay strategy config missing for app",
+    "codeClientEnvMethodRequired": "Method required for each env and form in METHOD mode",
+    "codeClientEnvCapabilityRequired": "Capability required for each env and form in DIRECT mode",
+    "codeClientEnvsRequired": "Client env configs required for current level",
+    "codePayFormBlank": "Pay form cannot be blank",
+    "codeClientEnvBlank": "Client environment code cannot be blank",
+    "codeClientEnvNotConfigured": "Payment method not configured for this client env and form",
+    "codeRuntimeMismatch": "QR program type does not match runtime",
+    "codeClientEnvChannelMchRequired": "Channel merchant required for each env and form in DIRECT mode"
   },
   "refund": {
     "processing": "ดำเนินการคืนเงินอย่าทำซ้ำ",

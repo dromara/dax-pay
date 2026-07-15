@@ -28,17 +28,16 @@ public final class AlipayDirectAppTypeCode {
 
     /// 支付能力 → 应用类型的默认推导映射
     ///
-    /// - 小程序支付 → 小程序应用
+    /// - JSAPI 支付(含小程序) → 小程序应用(官方 JSAPI_PAY 主场景)
     /// - APP支付 → 移动应用
-    /// - 其余支付宝能力(付款码/扫码/H5/PC/JSAPI) → 网站应用
+    /// - 其余支付宝能力(付款码/扫码/H5/PC) → 网站应用
     private static final Map<String, String> CAPABILITY_APP_TYPE_MAP = Map.of(
-            PayCapabilityEnum.ALIPAY_MINI.getCode(), MINI_PROGRAM,
+            PayCapabilityEnum.ALIPAY_JSAPI.getCode(), MINI_PROGRAM,
             PayCapabilityEnum.ALIPAY_APP.getCode(), MOBILE_APP,
             PayCapabilityEnum.ALIPAY_BARCODE.getCode(), WEB_APP,
             PayCapabilityEnum.ALIPAY_QR.getCode(), WEB_APP,
             PayCapabilityEnum.ALIPAY_H5.getCode(), WEB_APP,
-            PayCapabilityEnum.ALIPAY_PC.getCode(), WEB_APP,
-            PayCapabilityEnum.ALIPAY_JSAPI.getCode(), WEB_APP);
+            PayCapabilityEnum.ALIPAY_PC.getCode(), WEB_APP);
 
     /// 根据支付能力编码推导默认应用类型；未知能力返回 null
     public static String resolveAppType(String capabilityCode) {

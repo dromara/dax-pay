@@ -41,5 +41,6 @@
   "payTradeTypeNotExist": "資金交易形態不存在: {0}",
   "payFundStatusNotExist": "資金交易狀態不存在: {0}",
   "normalOrderStatusNotExist": "普通支付訂單狀態不存在: {0}",
-  "gatewayOrderStatusNotExist": "閘道器支付訂單狀態不存在: {0}"
+  "gatewayOrderStatusNotExist": "閘道器支付訂單狀態不存在: {0}",
+  "codePayFormNotExist": "碼牌支付形態不存在: {0}"
 }

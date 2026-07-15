@@ -98,10 +98,16 @@ public interface PermCodes {
             String MENU = "merchant:app:workbench";
         }
 
-        /// 码牌和聚合支付配置 menuCode=merchant:gateway-aggregate
+        /// 聚合支付配置 menuCode=merchant:gateway-aggregate
         interface GatewayAggregate {
             /// 菜单编码
             String MENU = "merchant:gateway-aggregate";
+        }
+
+        /// 码牌支付配置 menuCode=merchant:gateway-code
+        interface GatewayCode {
+            /// 菜单编码
+            String MENU = "merchant:gateway-code";
         }
 
         /// 收银台配置 menuCode=merchant:gateway-cashier

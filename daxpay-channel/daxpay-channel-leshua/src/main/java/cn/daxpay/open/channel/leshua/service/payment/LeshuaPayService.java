@@ -83,14 +83,14 @@ public class LeshuaPayService {
         PayMethodEnum m = PayMethodEnum.findByCode(methodCode);
         return switch (m) {
             // 条码支付(微信/支付宝/银联付款码, 走 upload_authcode, 乐刷据 authCode 自动识别底层渠道)
-            case WECHAT_BARCODE, ALIPAY_BARCODE, UNION_PAY_BARCODE ->
+            case WECHAT_BARCODE, ALIPAY_BARCODE, UNION_BARCODE ->
                     new MethodMapping(LeshuaPayMethod.UPLOAD_AUTHCODE, null, null, null);
             // 微信预下单(JSAPI 公众号 / MINI 小程序)
             case WECHAT_JSAPI -> new MethodMapping(LeshuaPayMethod.GET_TDCODE, "WXZF", "1", LeshuaPayBodyType.JSAPI);
             case WECHAT_MINI -> new MethodMapping(LeshuaPayMethod.GET_TDCODE, "WXZF", "3", LeshuaPayBodyType.JSAPI);
             // 支付宝预下单(扫码 / JSAPI / 小程序)
             case ALIPAY_QR -> new MethodMapping(LeshuaPayMethod.GET_TDCODE, "ZFBZF", "0", LeshuaPayBodyType.QR_CODE);
-            case ALIPAY_JSAPI, ALIPAY_MINI -> new MethodMapping(LeshuaPayMethod.GET_TDCODE, "ZFBZF", "1", LeshuaPayBodyType.IDENTIFIER);
+            case ALIPAY_JSAPI -> new MethodMapping(LeshuaPayMethod.GET_TDCODE, "ZFBZF", "1", LeshuaPayBodyType.IDENTIFIER);
             // 云闪付预下单(扫码 / JSAPI)
             case UNION_QR -> new MethodMapping(LeshuaPayMethod.GET_TDCODE, "UPSMZF", "0", LeshuaPayBodyType.QR_CODE);
             case UNION_JSAPI -> new MethodMapping(LeshuaPayMethod.GET_TDCODE, "UPSMZF", "1", LeshuaPayBodyType.LINK);

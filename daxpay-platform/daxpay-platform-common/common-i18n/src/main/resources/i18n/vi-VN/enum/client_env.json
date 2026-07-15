@@ -1,7 +1,7 @@
 {
   "browser": "Trình duyệt",
-  "wechat_pay": "WeChat",
   "alipay": "Alipay",
   "union_pay": "UnionPay",
-  "douyin": "Douyin"
+  "douyin": "Douyin",
+  "wechat": "WeChat"
 }

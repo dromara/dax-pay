@@ -41,5 +41,6 @@
   "payTradeTypeNotExist": "Không tìm thấy loại giao dịch thanh toán: {0}",
   "payFundStatusNotExist": "Không tìm thấy trạng thái quỹ thanh toán: {0}",
   "normalOrderStatusNotExist": "Không tìm thấy trạng thái lệnh thanh toán thông thường: {0}",
-  "gatewayOrderStatusNotExist": "Không tìm thấy trạng thái đơn hàng cổng: {0}"
+  "gatewayOrderStatusNotExist": "Không tìm thấy trạng thái đơn hàng cổng: {0}",
+  "codePayFormNotExist": "Code pay form not found: {0}"
 }

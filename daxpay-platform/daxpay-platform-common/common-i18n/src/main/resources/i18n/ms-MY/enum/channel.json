@@ -4,8 +4,6 @@
   "union_pay": "UnionPay",
   "leshua_pay": "Leshua Pay",
   "vbill_pay": "Vbill Pay",
-  "ada_pay": "Ada Pay",
-  "dougong_pay": "Dougong Pay",
   "hkrt_pay": "Bayar HKRT",
   "lakala_pay": "Lakala Pay",
   "fuyou_pay": "Fuyou Bayar",
@@ -15,6 +13,7 @@
   "sand_pay": "Bayar Pasir",
   "yee_pay": "Yee Bayar",
   "ums_pay": "UMS Pay",
-  "douyin_pay": "Douyin Pay",
-  "jee_pay": "Jeepay"
+  "jee_pay": "Jeepay",
+  "huifu": "Ada Pay",
+  "douyin": "Douyin Pay"
 }

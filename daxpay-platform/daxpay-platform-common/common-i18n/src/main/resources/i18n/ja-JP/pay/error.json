@@ -60,7 +60,16 @@
     "cashierItemMethodRequired": "METHODモードでは支払い方法が必要です",
     "cashierItemChannelMchRequired": "DIRECT モードではチャネル販売者が必要です",
     "cashierItemCapabilityRequired": "DIRECT モードでは機能が必要です",
-    "cashierItemNameRequired": "支払い項目名を空白にすることはできません"
+    "cashierItemNameRequired": "支払い項目名を空白にすることはできません",
+    "codeConfigMissing": "アプリにQRコード支払戦略設定がありません",
+    "codeClientEnvMethodRequired": "METHOD モードでは各環境・形態の支払方法が必須です",
+    "codeClientEnvCapabilityRequired": "DIRECT モードでは各環境・形態の支払能力が必須です",
+    "codeClientEnvsRequired": "現在の設定深度では環境設定を空にできません",
+    "codePayFormBlank": "支払形態は必須です",
+    "codeClientEnvBlank": "クライアント環境コードは必須です",
+    "codeClientEnvNotConfigured": "この環境と形態には支払方法が設定されていません",
+    "codeRuntimeMismatch": "QRのプログラム種別とランタイムが一致しません",
+    "codeClientEnvChannelMchRequired": "DIRECT モードでは各環境・形態のチャネル加盟店番号が必須です"
   },
   "refund": {
     "processing": "返金処理、繰り返さない",

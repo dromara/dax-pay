@@ -18,7 +18,7 @@ public class AggregateQrPayParam {
 
     /// 客户端环境（UA/宿主识别，与聚合/收银台配置共用 [ClientEnvEnum]）
     /// @see ClientEnvEnum
-    @Schema(description = "客户端环境(ClientEnvEnum: wechat_pay/alipay/union_pay/douyin/browser)")
+    @Schema(description = "客户端环境(ClientEnvEnum: wechat/alipay/union_pay/douyin/browser)")
     @NotBlank(message = "{validation.field.clientEnv.notBlank}")
     @Size(max = 32, message = "{validation.field.clientEnv.size}")
     private String clientEnv;

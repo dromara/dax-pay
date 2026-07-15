@@ -45,7 +45,7 @@ public enum AdapayPayMethod {
     /// 银联 H5
     UNION_H5("union_h5"),
     /// 银联付款码(条码)
-    UNION_PAY_BARCODE("union_pay_barcode");
+    UNION_BARCODE("union_barcode");
 
     private final String code;
 }

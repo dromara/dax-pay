@@ -12,12 +12,7 @@
   "alipay_app": "알리페이 앱",
   "alipay_h5": "알리페이 H5",
   "alipay_pc": "알리페이 PC",
-  "alipay_jsapi": "알리페이 JSAPI",
-  "alipay_mini": "알리페이 미니 프로그램",
-  "union_pay_qr": "유니온페이QR",
-  "union_pay_barcode": "유니온페이 바코드",
-  "union_pay_h5": "유니온페이 H5",
-  "union_pay_jsapi": "유니온페이 JSAPI",
+  "alipay_jsapi": "알리페이 JSAPI（미니 프로그램 포함）",
   "douyin_qr": "두인QR",
   "douyin_jsapi": "Douyin JSAPI",
   "douyin_h5": "두인 H5",
@@ -25,5 +20,9 @@
   "visa_card_gateway": "비자 게이트웨이",
   "visa_card_present": "비자 제시",
   "mastercard_card_gateway": "마스터카드 게이트웨이",
-  "mastercard_card_present": "마스터카드 선물"
+  "mastercard_card_present": "마스터카드 선물",
+  "union_qr": "유니온페이QR",
+  "union_jsapi": "유니온페이 JSAPI",
+  "union_h5": "유니온페이 H5",
+  "union_barcode": "유니온페이 바코드"
 }

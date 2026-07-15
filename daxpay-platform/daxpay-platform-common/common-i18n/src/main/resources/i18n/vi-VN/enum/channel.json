@@ -4,8 +4,6 @@
   "union_pay": "UnionPay",
   "leshua_pay": "Leshua Pay",
   "vbill_pay": "Vbill Pay",
-  "ada_pay": "Ada trả tiền",
-  "dougong_pay": "Dougong Pay",
   "hkrt_pay": "HKRT trả tiền",
   "lakala_pay": "Lakala Pay",
   "fuyou_pay": "Fuyou Pay",
@@ -15,6 +13,7 @@
   "sand_pay": "Trả cát",
   "yee_pay": "Yee Pay",
   "ums_pay": "UMS trả tiền",
-  "douyin_pay": "Douyin Pay",
-  "jee_pay": "Jeepay"
+  "jee_pay": "Jeepay",
+  "huifu": "Ada trả tiền",
+  "douyin": "Douyin Pay"
 }

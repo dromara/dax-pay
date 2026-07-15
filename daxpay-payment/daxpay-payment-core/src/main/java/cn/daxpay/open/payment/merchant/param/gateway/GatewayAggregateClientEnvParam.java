@@ -10,7 +10,7 @@ import lombok.Data;
 public class GatewayAggregateClientEnvParam {
 
     /// @see cn.daxpay.open.payment.merchant.enums.ClientEnvEnum
-    @Schema(description = "客户端环境编码: wechat_pay/alipay/union_pay/douyin")
+    @Schema(description = "客户端环境编码: wechat/alipay/union_pay/douyin")
     @Size(max = 32, message = "{validation.field.clientEnv.size}")
     private String clientEnv;
 

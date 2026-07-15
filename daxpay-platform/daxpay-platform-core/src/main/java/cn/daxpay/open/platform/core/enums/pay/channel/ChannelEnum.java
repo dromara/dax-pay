@@ -24,7 +24,7 @@ public enum ChannelEnum implements I18nSupport {
     /// 随行付
     VBILL_PAY("vbill_pay"),
     /// 汇付天下(下挂 ada_pay 与 dougong_pay 两个产品)
-    ADA_PAY("ada_pay"),
+    HUIFU("huifu"),
     /// 海科融通
     HKRT_PAY("hkrt_pay"),
     /// 拉卡拉
@@ -44,7 +44,7 @@ public enum ChannelEnum implements I18nSupport {
     /// 银联商务
     UMS_PAY("ums_pay"),
     /// 抖音支付
-    DOUYIN_PAY("douyin_pay"),
+    DOUYIN("douyin"),
     /// jeepay
     JEE_PAY("jee_pay"),
     ;

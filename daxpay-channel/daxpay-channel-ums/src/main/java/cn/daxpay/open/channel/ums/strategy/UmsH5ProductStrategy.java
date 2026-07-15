@@ -22,7 +22,7 @@ public class UmsH5ProductStrategy extends AbsProductStrategy {
     private static final Map<PayMethodEnum, List<PayCapabilityEnum>> METHOD_CAP_MAP = Map.of(
             PayMethodEnum.WECHAT_H5, List.of(PayCapabilityEnum.WECHAT_H5),
             PayMethodEnum.ALIPAY_H5, List.of(PayCapabilityEnum.ALIPAY_H5),
-            PayMethodEnum.UNION_H5, List.of(PayCapabilityEnum.UNION_PAY_H5));
+            PayMethodEnum.UNION_H5, List.of(PayCapabilityEnum.UNION_H5));
 
     @Override
     public ProductEnum getProduct() {

@@ -8,8 +8,7 @@
   "wechat_app": "微信APP",
   "wechat_barcode": "微信付款碼",
   "alipay_qr": "支付寶掃碼",
-  "alipay_jsapi": "支付寶JSAPI",
-  "alipay_mini": "支付寶小程式",
+  "alipay_jsapi": "支付寶JSAPI（含小程式）",
   "alipay_pc": "支付寶PC",
   "alipay_h5": "支付寶H5",
   "alipay_app": "支付寶APP",
@@ -17,7 +16,6 @@
   "union_qr": "銀聯掃碼",
   "union_jsapi": "銀聯JSAPI",
   "union_h5": "銀聯H5",
-  "union_pay_barcode": "銀聯付款碼",
   "douyin_qr": "抖音掃碼",
   "douyin_jsapi": "抖音JSAPI",
   "douyin_h5": "抖音H5",
@@ -26,5 +24,6 @@
   "visa_card_present": "Visa刷卡",
   "mastercard_card_gateway": "萬事達閘道器",
   "mastercard_card_present": "萬事達刷卡",
-  "other": "其他"
+  "other": "其他",
+  "union_barcode": "銀聯付款碼"
 }

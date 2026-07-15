@@ -41,5 +41,6 @@
   "payTradeTypeNotExist": "支払い取引タイプが見つかりません: {0}",
   "payFundStatusNotExist": "支払い資金ステータスが見つかりません: {0}",
   "normalOrderStatusNotExist": "通常の支払い注文ステータスが見つかりません: {0}",
-  "gatewayOrderStatusNotExist": "ゲートウェイの注文ステータスが見つかりません: {0}"
+  "gatewayOrderStatusNotExist": "ゲートウェイの注文ステータスが見つかりません: {0}",
+  "codePayFormNotExist": "支払形態が存在しません: {0}"
 }

@@ -90,7 +90,7 @@ public class LakalaPayService {
         PayMethodEnum m = PayMethodEnum.findByCode(methodCode);
         return switch (m) {
             // 条码支付(微信/支付宝/银联付款码, 走 micropay, accountType 由拉卡拉自动识别)
-            case WECHAT_BARCODE, ALIPAY_BARCODE, UNION_PAY_BARCODE ->
+            case WECHAT_BARCODE, ALIPAY_BARCODE, UNION_BARCODE ->
                     new MethodMapping(LakalaPayMethod.MICROPAY, null, null, null);
             // 微信预下单
             case WECHAT_JSAPI -> new MethodMapping(LakalaPayMethod.PREORDER, "WECHAT", "51", LakalaPayBodyType.JSAPI);
@@ -98,7 +98,7 @@ public class LakalaPayService {
             case WECHAT_APP -> new MethodMapping(LakalaPayMethod.PREORDER, "WECHAT", "61", LakalaPayBodyType.JSAPI);
             // 支付宝预下单
             case ALIPAY_QR -> new MethodMapping(LakalaPayMethod.PREORDER, "ALIPAY", "41", LakalaPayBodyType.QR_CODE);
-            case ALIPAY_JSAPI, ALIPAY_MINI -> new MethodMapping(LakalaPayMethod.PREORDER, "ALIPAY", "51", LakalaPayBodyType.IDENTIFIER);
+            case ALIPAY_JSAPI -> new MethodMapping(LakalaPayMethod.PREORDER, "ALIPAY", "51", LakalaPayBodyType.IDENTIFIER);
             // 银联预下单
             case UNION_QR -> new MethodMapping(LakalaPayMethod.PREORDER, "UQRCODEPAY", "41", LakalaPayBodyType.QR_CODE);
             case UNION_JSAPI -> new MethodMapping(LakalaPayMethod.PREORDER, "UQRCODEPAY", "51", LakalaPayBodyType.LINK);

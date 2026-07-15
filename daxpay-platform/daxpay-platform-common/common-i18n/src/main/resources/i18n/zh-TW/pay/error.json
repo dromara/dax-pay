@@ -60,7 +60,16 @@
     "cashierItemMethodRequired": "指定支付方式時支付方式必填",
     "cashierItemChannelMchRequired": "直接指定時通道商戶號必填",
     "cashierItemCapabilityRequired": "直接指定時支付能力必填",
-    "cashierItemNameRequired": "支付項名稱不能為空"
+    "cashierItemNameRequired": "支付項名稱不能為空",
+    "codeConfigMissing": "應用未配置碼牌支付策略",
+    "codeClientEnvMethodRequired": "指定支付方式時，每個環境與形態的支付方式必填",
+    "codeClientEnvCapabilityRequired": "直接指定時，每個環境與形態的支付能力必填",
+    "codeClientEnvsRequired": "當前配置深度下碼牌環境配置不能為空",
+    "codePayFormBlank": "支付形態不能為空",
+    "codeClientEnvBlank": "用戶端環境編碼不能為空",
+    "codeClientEnvNotConfigured": "該用戶端環境與支付形態未配置支付方式",
+    "codeRuntimeMismatch": "碼牌落地類型與運行形態不匹配",
+    "codeClientEnvChannelMchRequired": "直接指定時，每個環境與形態的通道商戶號必填"
   },
   "refund": {
     "processing": "退款處理中，請勿重複操作",

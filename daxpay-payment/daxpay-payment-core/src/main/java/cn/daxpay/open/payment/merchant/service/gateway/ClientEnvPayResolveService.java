@@ -14,11 +14,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-/// # 客户端环境支付方式解析(共享)
+/// # 聚合扫码支付方式解析
 ///
-/// 读应用级聚合扫码配置(AUTO/METHOD/DIRECT), 输出 method / channelMchNo / capability。
-/// 供 [cn.daxpay.open.payment.trade.runtime.service.pay.gateway.AggregatePayService] 与码牌支付共用。
-/// 无配置记录时按 AUTO 降级(仅码牌友好; 聚合仍可走 getRequired)。
+/// 读应用级**聚合**扫码配置(AUTO/METHOD/DIRECT), 输出 method / channelMchNo / capability。
+/// 仅供 [cn.daxpay.open.payment.trade.runtime.service.pay.gateway.AggregatePayService] 使用。
+/// 码牌支付请使用 [CodePayResolveService], 不再读本服务。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -67,7 +67,7 @@ public class ClientEnvPayResolveService {
         };
     }
 
-    /// 聚合支付: 必须已有配置(与历史 getRequiredByAppId 行为一致)
+    /// 聚合支付: 必须已有聚合配置
     public Resolved resolveRequired(String appId, ClientEnvEnum clientEnv, ClientRuntimeEnum runtime) {
         if (configManager.findByAppId(appId).isEmpty()) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,

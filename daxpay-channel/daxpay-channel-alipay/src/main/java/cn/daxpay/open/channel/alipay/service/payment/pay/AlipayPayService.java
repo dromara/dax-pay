@@ -91,7 +91,7 @@ public class AlipayPayService {
             case ALIPAY_APP -> AlipayPayMethod.APP;
             case ALIPAY_QR -> AlipayPayMethod.QR;
             case ALIPAY_BARCODE -> AlipayPayMethod.BARCODE;
-            case ALIPAY_JSAPI, ALIPAY_MINI -> AlipayPayMethod.JSAPI;
+            case ALIPAY_JSAPI -> AlipayPayMethod.JSAPI;
             default -> throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
                     "error.channel.alipay.notSupportMethod", methodCode);
         };

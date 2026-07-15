@@ -31,7 +31,7 @@ public class CodePayParam {
 
     /// 客户端环境
     /// @see ClientEnvEnum
-    @Schema(description = "客户端环境(wechat_pay/alipay/union_pay/douyin)")
+    @Schema(description = "客户端环境(wechat/alipay/union_pay/douyin)")
     @NotBlank(message = "{validation.field.clientEnv.notBlank}")
     @Size(max = 32, message = "{validation.field.clientEnv.size}")
     private String clientEnv;

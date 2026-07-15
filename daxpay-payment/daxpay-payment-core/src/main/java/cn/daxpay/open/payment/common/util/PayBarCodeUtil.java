@@ -22,7 +22,7 @@ public class PayBarCodeUtil {
     /// 根据付款码解析平台支付方式编码
     ///
     /// @param authCode 付款码
-    /// @return `wechat_barcode` / `alipay_barcode` / `union_pay_barcode`
+    /// @return `wechat_barcode` / `alipay_barcode` / `union_barcode`
     public String resolveMethodCode(String authCode) {
         return resolveMethod(authCode).getCode();
     }
@@ -40,7 +40,7 @@ public class PayBarCodeUtil {
             return PayMethodEnum.ALIPAY_BARCODE;
         }
         if (UNION_PREFIX.equals(prefix)) {
-            return PayMethodEnum.UNION_PAY_BARCODE;
+            return PayMethodEnum.UNION_BARCODE;
         }
         throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.barcode.unsupportedType");
     }
@@ -64,6 +64,6 @@ public class PayBarCodeUtil {
     public boolean isBarcodeMethod(String methodCode) {
         return PayMethodEnum.WECHAT_BARCODE.getCode().equals(methodCode)
                 || PayMethodEnum.ALIPAY_BARCODE.getCode().equals(methodCode)
-                || PayMethodEnum.UNION_PAY_BARCODE.getCode().equals(methodCode);
+                || PayMethodEnum.UNION_BARCODE.getCode().equals(methodCode);
     }
 }

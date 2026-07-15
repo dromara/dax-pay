@@ -8,8 +8,7 @@
   "wechat_app": "위챗 앱",
   "wechat_barcode": "위챗 바코드",
   "alipay_qr": "알리페이QR",
-  "alipay_jsapi": "알리페이 JSAPI",
-  "alipay_mini": "알리페이 미니 프로그램",
+  "alipay_jsapi": "알리페이 JSAPI（미니 프로그램 포함）",
   "alipay_pc": "알리페이 PC",
   "alipay_h5": "알리페이 H5",
   "alipay_app": "알리페이 앱",
@@ -17,7 +16,6 @@
   "union_qr": "유니온페이QR",
   "union_jsapi": "유니온페이 JSAPI",
   "union_h5": "유니온페이 H5",
-  "union_pay_barcode": "유니온페이 바코드",
   "douyin_qr": "두인QR",
   "douyin_jsapi": "Douyin JSAPI",
   "douyin_h5": "두인 H5",
@@ -26,5 +24,6 @@
   "visa_card_present": "비자카드 제시",
   "mastercard_card_gateway": "마스터카드 게이트웨이",
   "mastercard_card_present": "마스터카드 카드 선물",
-  "other": "다른"
+  "other": "다른",
+  "union_barcode": "유니온페이 바코드"
 }

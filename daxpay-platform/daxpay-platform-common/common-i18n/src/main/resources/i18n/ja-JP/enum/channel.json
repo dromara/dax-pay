@@ -4,8 +4,6 @@
   "union_pay": "銀聯",
   "leshua_pay": "レスア・ペイ",
   "vbill_pay": "Vビルペイ",
-  "ada_pay": "エイダペイ",
-  "dougong_pay": "ドゥゴンペイ",
   "hkrt_pay": "香港RT支払い",
   "lakala_pay": "ラカラ・ペイ",
   "fuyou_pay": "芙蓉ペイ",
@@ -15,6 +13,7 @@
   "sand_pay": "サンドペイ",
   "yee_pay": "イーペイ",
   "ums_pay": "UMSペイ",
-  "douyin_pay": "ドゥインペイ",
-  "jee_pay": "ジーペイ"
+  "jee_pay": "ジーペイ",
+  "huifu": "匯付天下",
+  "douyin": "ドゥインペイ"
 }

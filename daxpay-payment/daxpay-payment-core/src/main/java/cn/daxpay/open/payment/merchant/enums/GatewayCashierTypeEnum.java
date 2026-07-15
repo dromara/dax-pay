@@ -19,7 +19,7 @@ public enum GatewayCashierTypeEnum implements I18nSupport {
     H5("h5"),
     /// WEB/PC 收银台(扁平列表, clientEnv 为空)
     WEB("web"),
-    /// 小程序收银台(按 clientEnv 分桶, wechat_pay/alipay/union_pay/douyin, 不含 browser)
+    /// 小程序收银台(按 clientEnv 分桶, wechat/alipay/union_pay/douyin, 不含 browser)
     MINI("mini"),
     ;
 

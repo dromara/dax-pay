@@ -16,8 +16,8 @@ import lombok.experimental.Accessors;
 /// # 网关收银台支付项配置(应用级)
 ///
 /// 一张表按 cashier_type + client_env 分桶:
-/// - H5: clientEnv 必填(browser/wechat_pay/alipay/union_pay/douyin), 每终端一套支付项
-/// - MINI: clientEnv 必填(wechat_pay/alipay/union_pay/douyin), 各宿主一套
+/// - H5: clientEnv 必填(browser/wechat/alipay/union_pay/douyin), 每终端一套支付项
+/// - MINI: clientEnv 必填(wechat/alipay/union_pay/douyin), 各宿主一套
 /// - WEB: clientEnv 为空, 一套扁平支付项
 /// 支付解析按项 resolve_mode:
 /// - METHOD: 填 method

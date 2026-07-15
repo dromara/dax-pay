@@ -46,20 +46,18 @@ public enum PayCapabilityEnum implements I18nSupport {
     ALIPAY_H5("alipay_h5"),
     /// 支付宝电脑
     ALIPAY_PC("alipay_pc"),
-    /// 支付宝 JSAPI
+    /// 支付宝 JSAPI（含小程序；官方产品码 JSAPI_PAY）
     ALIPAY_JSAPI("alipay_jsapi"),
-    /// 支付宝小程序
-    ALIPAY_MINI("alipay_mini"),
 
-    /* 银联 */
+    /* 银联(与 PayMethodEnum 同码: union_qr / union_jsapi / union_h5 / union_barcode) */
     /// 银联扫码
-    UNION_PAY_QR("union_pay_qr"),
+    UNION_QR("union_qr"),
     /// 银联付款码
-    UNION_PAY_BARCODE("union_pay_barcode"),
+    UNION_BARCODE("union_barcode"),
     /// 银联 H5
-    UNION_PAY_H5("union_pay_h5"),
+    UNION_H5("union_h5"),
     /// 银联 JSAPI
-    UNION_PAY_JSAPI("union_pay_jsapi"),
+    UNION_JSAPI("union_jsapi"),
 
     /* 抖音 */
     /// 抖音扫码

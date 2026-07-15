@@ -41,5 +41,6 @@
   "payTradeTypeNotExist": "ไม่พบประเภทการค้าแบบชำระเงิน: {0}",
   "payFundStatusNotExist": "ไม่พบสถานะกองทุนการชำระเงิน: {0}",
   "normalOrderStatusNotExist": "ไม่พบสถานะการสั่งซื้อการจ่ายเงินปกติ: {0}",
-  "gatewayOrderStatusNotExist": "ไม่พบสถานะการสั่งซื้อเกตเวย์: {0}"
+  "gatewayOrderStatusNotExist": "ไม่พบสถานะการสั่งซื้อเกตเวย์: {0}",
+  "codePayFormNotExist": "Code pay form not found: {0}"
 }

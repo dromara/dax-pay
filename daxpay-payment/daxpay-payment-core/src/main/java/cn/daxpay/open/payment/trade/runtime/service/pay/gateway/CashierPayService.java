@@ -34,7 +34,7 @@ public class CashierPayService {
 
     /// 小程序收银台允许的 clientEnv(与配置侧白名单一致, 不含 browser)
     private static final Set<String> MINI_CLIENT_ENVS = Set.of(
-            ClientEnvEnum.WECHAT_PAY.getCode(),
+            ClientEnvEnum.WECHAT.getCode(),
             ClientEnvEnum.ALIPAY.getCode(),
             ClientEnvEnum.UNION_PAY.getCode(),
             ClientEnvEnum.DOUYIN.getCode()

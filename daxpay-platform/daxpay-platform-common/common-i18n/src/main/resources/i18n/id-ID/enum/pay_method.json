@@ -8,8 +8,7 @@
   "wechat_app": "Aplikasi WeChat",
   "wechat_barcode": "Kode Batang WeChat",
   "alipay_qr": "Alipay QR",
-  "alipay_jsapi": "Alipay JSAPI",
-  "alipay_mini": "Program Mini Alipay",
+  "alipay_jsapi": "Alipay JSAPI (termasuk Mini Program)",
   "alipay_pc": "Alipay PC",
   "alipay_h5": "Alipay H5",
   "alipay_app": "Aplikasi Alipay",
@@ -17,7 +16,6 @@
   "union_qr": "QR UnionPay",
   "union_jsapi": "UnionPay JSAPI",
   "union_h5": "UnionPay H5",
-  "union_pay_barcode": "Kode Batang UnionPay",
   "douyin_qr": "Douyin QR",
   "douyin_jsapi": "Douyin JSAPI",
   "douyin_h5": "Douyin H5",
@@ -26,5 +24,6 @@
   "visa_card_present": "Kartu Visa Hadir",
   "mastercard_card_gateway": "Gerbang Mastercard",
   "mastercard_card_present": "Hadiah Kartu Mastercard",
-  "other": "Lainnya"
+  "other": "Lainnya",
+  "union_barcode": "Kode Batang UnionPay"
 }

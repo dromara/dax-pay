@@ -41,5 +41,6 @@
   "payTradeTypeNotExist": "Pay trade type not found: {0}",
   "payFundStatusNotExist": "Pay fund status not found: {0}",
   "normalOrderStatusNotExist": "Normal pay order status not found: {0}",
-  "gatewayOrderStatusNotExist": "Gateway order status not found: {0}"
+  "gatewayOrderStatusNotExist": "Gateway order status not found: {0}",
+  "codePayFormNotExist": "Code pay form not found: {0}"
 }

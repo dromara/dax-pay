@@ -20,7 +20,7 @@ import java.util.Map;
 public class UmsBarcodeProductStrategy extends AbsProductStrategy {
 
     private static final Map<PayMethodEnum, List<PayCapabilityEnum>> METHOD_CAP_MAP = Map.of(
-            PayMethodEnum.UNION_PAY_BARCODE, List.of(PayCapabilityEnum.UNION_PAY_BARCODE));
+            PayMethodEnum.UNION_BARCODE, List.of(PayCapabilityEnum.UNION_BARCODE));
 
     @Override
     public ProductEnum getProduct() {

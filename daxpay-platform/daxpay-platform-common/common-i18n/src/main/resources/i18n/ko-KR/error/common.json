@@ -41,5 +41,6 @@
   "payTradeTypeNotExist": "지불 거래 유형을 찾을 수 없습니다: {0}",
   "payFundStatusNotExist": "지불 상태를 찾을 수 없습니다: {0}",
   "normalOrderStatusNotExist": "일반 지불 주문 상태를 찾을 수 없습니다: {0}",
-  "gatewayOrderStatusNotExist": "게이트웨이 주문 상태를 찾을 수 없습니다: {0}"
+  "gatewayOrderStatusNotExist": "게이트웨이 주문 상태를 찾을 수 없습니다: {0}",
+  "codePayFormNotExist": "결제 형태가 없습니다: {0}"
 }

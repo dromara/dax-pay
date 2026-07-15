@@ -25,7 +25,7 @@ import java.util.Set;
 ///
 /// 管理应用级收银台支付项:
 /// - H5: 按 clientEnv 五档分桶
-/// - MINI: 按 clientEnv 分桶(wechat_pay/alipay/union_pay/douyin, 不含 browser)
+/// - MINI: 按 clientEnv 分桶(wechat/alipay/union_pay/douyin, 不含 browser)
 /// - WEB: 扁平列表, 无 clientEnv
 /// 每项支持 method / direct 两种支付解析模式。
 @Slf4j
@@ -35,7 +35,7 @@ public class GatewayCashierConfigService {
 
     /// 小程序收银台允许的 clientEnv(不含 browser)
     private static final Set<String> MINI_CLIENT_ENVS = Set.of(
-            ClientEnvEnum.WECHAT_PAY.getCode(),
+            ClientEnvEnum.WECHAT.getCode(),
             ClientEnvEnum.ALIPAY.getCode(),
             ClientEnvEnum.UNION_PAY.getCode(),
             ClientEnvEnum.DOUYIN.getCode()

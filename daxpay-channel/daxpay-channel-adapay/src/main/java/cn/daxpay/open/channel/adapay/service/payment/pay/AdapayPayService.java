@@ -76,7 +76,7 @@ public class AdapayPayService {
     /// 平台支付方式([PayMethodEnum] code) → Adapay 通道支付方式
     ///
     /// Adapay [AdapayPayMethod] 枚举 name 与 [PayMethodEnum] 对齐, 直接按 name 映射;
-    /// 不在Adapay 支持列表的方式(如 WECHAT_CASHIER/ALIPAY_MINI/抖音/Visa 等)抛不支持异常。
+    /// 不在 Adapay 支持列表的方式(如 WECHAT_CASHIER/抖音/Visa 等)抛不支持异常。
     private static AdapayPayMethod mapMethod(String methodCode) {
         PayMethodEnum m = PayMethodEnum.findByCode(methodCode);
         try {

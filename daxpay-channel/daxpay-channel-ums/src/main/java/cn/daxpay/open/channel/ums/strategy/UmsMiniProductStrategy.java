@@ -21,7 +21,8 @@ public class UmsMiniProductStrategy extends AbsProductStrategy {
 
     private static final Map<PayMethodEnum, List<PayCapabilityEnum>> METHOD_CAP_MAP = Map.of(
             PayMethodEnum.WECHAT_MINI, List.of(PayCapabilityEnum.WECHAT_MINI),
-            PayMethodEnum.ALIPAY_MINI, List.of(PayCapabilityEnum.ALIPAY_MINI));
+            // 支付宝无独立 mini method, 小程序场景统一 alipay_jsapi
+            PayMethodEnum.ALIPAY_JSAPI, List.of(PayCapabilityEnum.ALIPAY_JSAPI));
 
     @Override
     public ProductEnum getProduct() {

@@ -8,8 +8,7 @@
   "wechat_app": "แอพวีแชต",
   "wechat_barcode": "บาร์โค้ด WeChat",
   "alipay_qr": "อาลีเพย์ คิวอาร์",
-  "alipay_jsapi": "อาลีเพย์ JSAPI",
-  "alipay_mini": "อาลีเพย์ มินิโปรแกรม",
+  "alipay_jsapi": "อาลีเพย์ JSAPI (รวมมินิโปรแกรม)",
   "alipay_pc": "อาลีเพย์พีซี",
   "alipay_h5": "อาลีเพย์ H5",
   "alipay_app": "แอพอาลีเพย์",
@@ -17,7 +16,6 @@
   "union_qr": "ยูเนี่ยนเพย์ คิวอาร์",
   "union_jsapi": "ยูเนี่ยนเพย์ JSAPI",
   "union_h5": "ยูเนี่ยนเพย์ H5",
-  "union_pay_barcode": "บาร์โค้ดยูเนี่ยนเพย์",
   "douyin_qr": "โต่วยิน QR",
   "douyin_jsapi": "โต่วยิน JSAPI",
   "douyin_h5": "โต่วอิน H5",
@@ -26,5 +24,6 @@
   "visa_card_present": "แสดงบัตรวีซ่า",
   "mastercard_card_gateway": "มาสเตอร์การ์ดเกตเวย์",
   "mastercard_card_present": "แสดงบัตรมาสเตอร์การ์ด",
-  "other": "อื่น"
+  "other": "อื่น",
+  "union_barcode": "บาร์โค้ดยูเนี่ยนเพย์"
 }

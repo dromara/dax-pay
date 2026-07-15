@@ -93,11 +93,11 @@ public class HkrtPayService {
             // 支付宝扫码(当面付二维码)
             case ALIPAY_QR -> HkrtPayMethod.ALIPAY_QR;
             // 支付宝 JSAPI / 小程序
-            case ALIPAY_JSAPI, ALIPAY_MINI -> HkrtPayMethod.ALIPAY_JSAPI;
+            case ALIPAY_JSAPI -> HkrtPayMethod.ALIPAY_JSAPI;
             // 银联二维码(云闪付)
             case UNION_QR -> HkrtPayMethod.UNION_QR;
             // 条码支付(微信/支付宝/银联付款码被扫)
-            case WECHAT_BARCODE, ALIPAY_BARCODE, UNION_PAY_BARCODE -> HkrtPayMethod.BARCODE;
+            case WECHAT_BARCODE, ALIPAY_BARCODE, UNION_BARCODE -> HkrtPayMethod.BARCODE;
             default -> throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
                     "channel.error.hkrtUnsupportedPayMethod", methodCode);
         };

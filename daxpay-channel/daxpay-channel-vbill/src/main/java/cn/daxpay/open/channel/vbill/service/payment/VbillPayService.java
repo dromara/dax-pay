@@ -97,13 +97,13 @@ public class VbillPayService {
             case WECHAT_BARCODE -> new MethodMapping(VbillPayMethod.BAR_CODE, null, null, null);
             case WECHAT_CASHIER -> new MethodMapping(VbillPayMethod.APPLET_CASHIER, null, null, VbillPayBodyType.JSAPI);
             // 支付宝
-            case ALIPAY_JSAPI, ALIPAY_MINI -> new MethodMapping(VbillPayMethod.UNI_PAY, "ALIPAY", "02", VbillPayBodyType.IDENTIFIER);
+            case ALIPAY_JSAPI -> new MethodMapping(VbillPayMethod.UNI_PAY, "ALIPAY", "02", VbillPayBodyType.IDENTIFIER);
             case ALIPAY_QR -> new MethodMapping(VbillPayMethod.QR_CODE, null, null, VbillPayBodyType.QR_CODE);
             case ALIPAY_BARCODE -> new MethodMapping(VbillPayMethod.BAR_CODE, null, null, null);
             // 银联
             case UNION_JSAPI -> new MethodMapping(VbillPayMethod.UNI_PAY, "UNIONPAY", "02", VbillPayBodyType.LINK);
             case UNION_QR -> new MethodMapping(VbillPayMethod.QR_CODE, null, null, VbillPayBodyType.QR_CODE);
-            case UNION_PAY_BARCODE -> new MethodMapping(VbillPayMethod.BAR_CODE, null, null, null);
+            case UNION_BARCODE -> new MethodMapping(VbillPayMethod.BAR_CODE, null, null, null);
             default -> throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
                     "channel.error.vbillUnsupportedPayMethod", methodCode);
         };

@@ -41,5 +41,6 @@
   "payTradeTypeNotExist": "Jenis perdagangan bayar tidak ditemui: {0}",
   "payFundStatusNotExist": "Status dana bayar tidak ditemui: {0}",
   "normalOrderStatusNotExist": "Status pesanan gaji biasa tidak ditemui: {0}",
-  "gatewayOrderStatusNotExist": "Status pesanan gerbang tidak ditemui: {0}"
+  "gatewayOrderStatusNotExist": "Status pesanan gerbang tidak ditemui: {0}",
+  "codePayFormNotExist": "Code pay form not found: {0}"
 }

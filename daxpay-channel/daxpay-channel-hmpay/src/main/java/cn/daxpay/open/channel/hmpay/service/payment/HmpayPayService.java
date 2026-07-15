@@ -91,7 +91,7 @@ public class HmpayPayService {
             case WECHAT_MINI -> HmpayPayMethod.WECHAT_MINI;
             // 支付宝(扫码/JSAPI/小程序)
             case ALIPAY_QR -> HmpayPayMethod.ALIPAY_QR;
-            case ALIPAY_JSAPI, ALIPAY_MINI -> HmpayPayMethod.ALIPAY_JSAPI;
+            case ALIPAY_JSAPI -> HmpayPayMethod.ALIPAY_JSAPI;
             // 付款码: 平台已识别分钱包 method, 通道折叠为统一条码 API
             case WECHAT_BARCODE, ALIPAY_BARCODE -> HmpayPayMethod.BARCODE;
             default -> throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
