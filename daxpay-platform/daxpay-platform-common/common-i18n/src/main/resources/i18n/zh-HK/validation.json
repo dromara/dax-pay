@@ -182,7 +182,7 @@
       "notNull": "文件類型不能為空"
     },
     "authCode": {
-      "notBlank": "標識碼不可為空",
+      "notBlank": "付款碼不可為空",
       "size": "付款碼不可超過128位"
     },
     "clientIp": {
@@ -739,6 +739,10 @@
     },
     "fileContent": {
       "notBlank": "文件內容不能為空"
+    },
+    "oauthCode": {
+      "notBlank": "授權碼不可為空",
+      "size": "授權碼不可超過128位"
     }
   }
 }

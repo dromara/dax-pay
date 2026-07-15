@@ -26,9 +26,9 @@ public class AuthCodeParam extends MerchantPaymentCommonParam {
     @Schema(description = "认证类型")
     private String authType;
 
-    /// 三方通道可以直接获取到OpeId, 可以写入这个至
-    @Schema(description = "标识码/")
-    @NotBlank(message = "{validation.field.authCode.notBlank}")
+    /// 三方通道 OAuth 授权码(换 openId/userId); 亦可直接写入已拿到的 openId
+    @Schema(description = "授权码")
+    @NotBlank(message = "{validation.field.oauthCode.notBlank}")
     private String authCode;
 
     /// 三方通道可以直接获取到这个值

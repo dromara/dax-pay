@@ -182,8 +182,8 @@
       "notNull": "Jenis file tidak boleh kosong"
     },
     "authCode": {
-      "notBlank": "Kode autentikasi tidak boleh kosong",
-      "size": "Kode autentikasi tidak boleh melebihi 128 karakter"
+      "notBlank": "Kode pembayaran tidak boleh kosong",
+      "size": "Kode pembayaran tidak boleh melebihi 128 karakter"
     },
     "clientIp": {
       "size": "IP klien tidak boleh melebihi 64 karakter"
@@ -739,6 +739,10 @@
     },
     "fileContent": {
       "notBlank": "Konten file tidak boleh kosong"
+    },
+    "oauthCode": {
+      "notBlank": "Kode otorisasi tidak boleh kosong",
+      "size": "Kode otorisasi tidak boleh melebihi 128 karakter"
     }
   }
 }

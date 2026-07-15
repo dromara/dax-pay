@@ -19,7 +19,7 @@
       "notBlank": "Client Key不能为空"
     },
     "clientCode": {
-      "notBlank": "终端不能为空"
+      "notBlank": "终端编码不可为空"
     },
     "ip": {
       "notValid": "IP地址不合法"
@@ -40,7 +40,7 @@
       "notBlank": "应用私钥不可为空"
     },
     "appSecret": {
-      "notBlank": "应用密钥不可为空"
+      "size": "应用密钥不可超过512位"
     },
     "douyinMchId": {
       "notBlank": "抖音商户号不可为空"
@@ -102,7 +102,7 @@
       "notBlank": "微信商户Id不可为空"
     },
     "wxAppId": {
-      "notBlank": "微信应用appId不可为空"
+      "notBlank": "微信应用AppId不可为空"
     },
     "publicKeyId": {
       "notBlank": "支付公钥ID不可为空"
@@ -137,7 +137,6 @@
     "pass": {
       "notNull": "审核结果不可为空"
     },
-
     "channelMerchantNo": {
       "notBlank": "通道商户号不可为空"
     },
@@ -183,7 +182,7 @@
       "notNull": "文件类型不能为空"
     },
     "authCode": {
-      "notBlank": "标识码不可为空",
+      "notBlank": "付款码不可为空",
       "size": "付款码不可超过128位"
     },
     "clientIp": {
@@ -360,9 +359,6 @@
     "authAppType": {
       "notBlank": "认证应用类型不可为空"
     },
-    "wxAppId": {
-      "notBlank": "微信应用AppId不可为空"
-    },
     "mchName": {
       "notBlank": "商户名称不可为空"
     },
@@ -381,9 +377,6 @@
     },
     "roleId": {
       "notNull": "角色ID不可为空"
-    },
-    "clientCode": {
-      "notBlank": "终端编码不可为空"
     },
     "code": {
       "notBlank": "编码不可为空"
@@ -588,9 +581,6 @@
     "wechatIsvMchAppId": {
       "notNull": "微信服务商通道商户应用ID不可为空"
     },
-    "appSecret": {
-      "size": "应用密钥不可超过512位"
-    },
     "storeName": {
       "notBlank": "门店名称不能为空"
     },
@@ -624,9 +614,6 @@
     },
     "ids": {
       "notEmpty": "请选择码牌"
-    },
-    "configName": {
-      "notBlank": "配置名称不能为空"
     },
     "twoFactorCode": {
       "notBlank": "动态验证码不能为空"
@@ -752,6 +739,10 @@
     },
     "fileContent": {
       "notBlank": "文件内容不能为空"
+    },
+    "oauthCode": {
+      "notBlank": "授权码不可为空",
+      "size": "授权码不可超过128位"
     }
   }
 }

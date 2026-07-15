@@ -78,7 +78,7 @@ public class PayAssistService {
         normalOrder.setLimitPay(payParam.getLimitPay() != null
                 ? String.join(",", payParam.getLimitPay()) : null);
         normalOrder.setOpenid(payParam.getOpenId());
-        normalOrder.setBarCode(payParam.getAuthCode());
+        normalOrder.setAuthCode(payParam.getAuthCode());
         normalOrder.setProduct(payParam.getProduct());
         normalOrder.setExtraParam(payParam.getExtraParam());
         normalOrder.setGoodsDetail(payParam.getGoodsDetail());

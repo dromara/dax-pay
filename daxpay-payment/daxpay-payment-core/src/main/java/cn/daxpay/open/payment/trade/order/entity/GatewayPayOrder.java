@@ -93,7 +93,7 @@ public class GatewayPayOrder extends MchBaseEntity {
     /// @see ProductEnum
     private String product;
 
-    // ===== 支付请求参数（支付时写入，审计保留；网关无被扫，不承载 barCode）=====
+    // ===== 支付请求参数（支付时写入，审计保留；网关无被扫，不承载 authCode）=====
 
     /// 微信 openid（jsapi/app/miniapp）
     private String openid;

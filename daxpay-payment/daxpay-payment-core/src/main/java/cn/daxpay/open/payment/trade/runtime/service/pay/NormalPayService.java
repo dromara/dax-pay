@@ -61,7 +61,7 @@ public class NormalPayService {
         var mchApp = merchantContextLoader.resolveApp(payParam.getMchNo(), payParam.getAppId());
         payParam.setAppId(mchApp.getAppId());
         // 付款码: 有 authCode 且 method 空时按前缀识别并回填分钱包 method, 再走路由
-        resolveBarcodeMethodIfNeeded(payParam);
+        this.resolveBarcodeMethodIfNeeded(payParam);
         // 路由解析：直接指定(已传 channelMchNo)优先，否则按 appId+method 跟随通道路由匹配
         payRouteService.resolve(payParam);
         var payStrategy = PaymentStrategyFactory.createByProduct(payParam.getProduct(), AbsNormalPayStrategy.class);

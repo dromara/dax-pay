@@ -182,8 +182,8 @@
       "notNull": "Loại tệp không được để trống"
     },
     "authCode": {
-      "notBlank": "Mã xác thực không được để trống",
-      "size": "Mã xác thực không được vượt quá 128 ký tự"
+      "notBlank": "Mã thanh toán không được để trống",
+      "size": "Mã thanh toán không được vượt quá 128 ký tự"
     },
     "clientIp": {
       "size": "IP khách hàng không thể vượt quá 64 ký tự"
@@ -739,6 +739,10 @@
     },
     "fileContent": {
       "notBlank": "Nội dung tập tin không được để trống"
+    },
+    "oauthCode": {
+      "notBlank": "Mã ủy quyền không được để trống",
+      "size": "Mã ủy quyền không được vượt quá 128 ký tự"
     }
   }
 }

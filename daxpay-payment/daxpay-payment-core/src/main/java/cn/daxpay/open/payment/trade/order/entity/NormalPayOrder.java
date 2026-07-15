@@ -92,7 +92,7 @@ public class NormalPayOrder extends MchBaseEntity {
     private String openid;
 
     /// 付款码（被扫支付，终态后仍保留供审计）
-    private String barCode;
+    private String authCode;
 
     // ===== 时间线（冗余，查询展示用）=====
 

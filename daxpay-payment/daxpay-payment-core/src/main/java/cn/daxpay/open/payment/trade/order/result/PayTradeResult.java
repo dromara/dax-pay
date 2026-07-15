@@ -137,7 +137,7 @@ public class PayTradeResult extends BaseResult {
 
     /// 付款码(被扫支付)
     @Schema(description = "付款码")
-    private String barCode;
+    private String authCode;
 
     /// 活动类型
     @Schema(description = "活动类型")

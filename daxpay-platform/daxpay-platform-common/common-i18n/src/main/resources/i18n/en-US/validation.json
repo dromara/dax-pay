@@ -40,7 +40,7 @@
       "notBlank": "App private key cannot be blank"
     },
     "appSecret": {
-      "notBlank": "App secret cannot be blank"
+      "size": "App secret cannot exceed 512 characters"
     },
     "douyinMchId": {
       "notBlank": "Douyin merchant ID cannot be blank"
@@ -137,7 +137,6 @@
     "pass": {
       "notNull": "Audit result cannot be blank"
     },
-
     "channelMerchantNo": {
       "notBlank": "Channel merchant no. cannot be blank"
     },
@@ -183,8 +182,8 @@
       "notNull": "File type cannot be blank"
     },
     "authCode": {
-      "notBlank": "Auth code cannot be blank",
-      "size": "Auth code cannot exceed 128 characters"
+      "notBlank": "Payment code cannot be blank",
+      "size": "Payment code cannot exceed 128 characters"
     },
     "clientIp": {
       "size": "Client IP cannot exceed 64 characters"
@@ -378,9 +377,6 @@
     },
     "roleId": {
       "notNull": "Role ID cannot be blank"
-    },
-    "clientCode": {
-      "notBlank": "Client code cannot be blank"
     },
     "code": {
       "notBlank": "Code cannot be blank"
@@ -585,9 +581,6 @@
     "wechatIsvMchAppId": {
       "notNull": "WeChat ISV channel merchant app ID cannot be blank"
     },
-    "appSecret": {
-      "size": "App secret cannot exceed 512 characters"
-    },
     "storeName": {
       "notBlank": "Store name cannot be blank"
     },
@@ -621,9 +614,6 @@
     },
     "ids": {
       "notEmpty": "Please select QR code boards"
-    },
-    "configName": {
-      "notBlank": "Config name cannot be blank"
     },
     "twoFactorCode": {
       "notBlank": "Verification code cannot be blank"
@@ -749,6 +739,10 @@
     },
     "fileContent": {
       "notBlank": "File content cannot be blank"
+    },
+    "oauthCode": {
+      "notBlank": "Authorization code cannot be blank",
+      "size": "Authorization code cannot exceed 128 characters"
     }
   }
 }

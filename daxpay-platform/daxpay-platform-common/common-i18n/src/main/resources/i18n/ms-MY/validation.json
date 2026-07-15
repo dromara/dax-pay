@@ -182,8 +182,8 @@
       "notNull": "Jenis fail tidak boleh kosong"
     },
     "authCode": {
-      "notBlank": "Kod pengesahan tidak boleh kosong",
-      "size": "Kod pengesahan tidak boleh melebihi 128 aksara"
+      "notBlank": "Kod pembayaran tidak boleh kosong",
+      "size": "Kod pembayaran tidak boleh melebihi 128 aksara"
     },
     "clientIp": {
       "size": "IP pelanggan tidak boleh melebihi 64 aksara"
@@ -739,6 +739,10 @@
     },
     "fileContent": {
       "notBlank": "Kandungan fail tidak boleh kosong"
+    },
+    "oauthCode": {
+      "notBlank": "Kod kebenaran tidak boleh kosong",
+      "size": "Kod kebenaran tidak boleh melebihi 128 aksara"
     }
   }
 }
