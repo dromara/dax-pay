@@ -29,6 +29,7 @@ public class EasyPayQueryV2Service {
     private final EasyPayAssistService easyPayAssistService;
     private final EasyPayOrderManager easyPayOrderManager;
 
+    /// 订单查询
     public EasyPayOrderV2Result query(EasyPayQueryV2Param param) {
         var credential = easyPayCredentialService.getAndCheck(param.getPid());
         easyPayAssistService.checkSignV2(param, credential, param.getSign());

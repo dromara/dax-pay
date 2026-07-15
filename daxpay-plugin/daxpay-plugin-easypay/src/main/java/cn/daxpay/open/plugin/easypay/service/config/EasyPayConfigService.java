@@ -35,6 +35,7 @@ public class EasyPayConfigService {
         return config;
     }
 
+    /// 更新场景配置
     @Transactional(rollbackFor = Exception.class)
     public void update(EasyPayConfigParam param) {
         var config = this.findByPid(param.getPid());

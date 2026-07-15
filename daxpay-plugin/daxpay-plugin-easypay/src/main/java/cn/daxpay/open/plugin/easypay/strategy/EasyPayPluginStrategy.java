@@ -13,6 +13,7 @@ import java.util.Objects;
 
 /// # 易支付插件生命周期策略
 ///
+/// 仅处理来源为易支付协议（TradeSourceEnum.EASY_PAY）的交易钩子
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -20,6 +21,7 @@ public class EasyPayPluginStrategy implements AbsPayPluginStrategy {
 
     private final EasyPayOrderService easyPayOrderService;
 
+    /// 支付成功：回写协议单状态
     @Override
     public void paySuccess(PayTrade trade) {
         if (!Objects.equals(TradeSourceEnum.EASY_PAY.getCode(), trade.getSource())) {
@@ -28,6 +30,7 @@ public class EasyPayPluginStrategy implements AbsPayPluginStrategy {
         easyPayOrderService.paySuccess(trade);
     }
 
+    /// 关单：一期仅日志
     @Override
     public void payClose(PayTrade trade) {
         if (!Objects.equals(TradeSourceEnum.EASY_PAY.getCode(), trade.getSource())) {
@@ -36,6 +39,7 @@ public class EasyPayPluginStrategy implements AbsPayPluginStrategy {
         easyPayOrderService.payClose(trade);
     }
 
+    /// 退款成功：累加协议单已退金额
     @Override
     public void refundSuccess(PayTrade trade, PayRefundOrder refundOrder) {
         if (!Objects.equals(TradeSourceEnum.EASY_PAY.getCode(), trade.getSource())) {

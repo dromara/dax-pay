@@ -37,6 +37,7 @@ public class EasyPayPayV1Service {
     private final NormalPayService normalPayService;
     private final PlatformUrlConfigService platformUrlConfigService;
 
+    /// 页面跳转支付 → 收银台 URL
     public String submit(EasyPaySubmitV1Param param) {
         var credential = easyPayCredentialService.getAndCheck(param.getPid());
         easyPayAssistService.checkSignV1(param, credential, param.getSign());
@@ -54,6 +55,7 @@ public class EasyPayPayV1Service {
         return order.getPayUrl();
     }
 
+    /// 统一下单（mapi.php）
     public EasyPayCreateV1Result create(EasyPayCreateV1Param param) {
         var credential = easyPayCredentialService.getAndCheck(param.getPid());
         easyPayAssistService.checkSignV1(param, credential, param.getSign());
@@ -104,6 +106,7 @@ public class EasyPayPayV1Service {
         }
     }
 
+    /// 组装 V1 下单成功响应
     private EasyPayCreateV1Result fillResult(EasyPayCreateV1Result result, EasyPayOrder order) {
         result.setCode(0).setMsg("success").setTradeNo(order.getTradeNo());
         String body = StrUtil.blankToDefault(order.getPayBody(), order.getPayUrl());
@@ -122,6 +125,7 @@ public class EasyPayPayV1Service {
                 || PayBodyTypeEnum.LINK.getCode().equals(callType);
     }
 
+    /// 创建协议订单实体
     private EasyPayOrder newOrder(String outTradeNo, String type, String name, String money,
                                   String notifyUrl, String returnUrl, String param, String clientIp,
                                   cn.daxpay.open.plugin.easypay.entity.EasyPayCredential credential) {

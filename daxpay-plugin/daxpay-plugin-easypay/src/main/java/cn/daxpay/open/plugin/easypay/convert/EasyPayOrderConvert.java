@@ -5,6 +5,8 @@ import cn.daxpay.open.plugin.easypay.result.order.EasyPayOrderResult;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
+/// # 易支付协议订单转换
+///
 @Mapper
 public interface EasyPayOrderConvert {
     EasyPayOrderConvert CONVERT = Mappers.getMapper(EasyPayOrderConvert.class);

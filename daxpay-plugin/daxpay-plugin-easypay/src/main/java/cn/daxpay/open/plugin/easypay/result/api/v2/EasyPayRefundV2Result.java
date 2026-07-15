@@ -5,38 +5,60 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+/// # 易支付 V2 退款响应
+///
 @Data
 @Accessors(chain = true)
-@Schema(title = "EasyPayRefundV2Result")
+@Schema(title = "易支付V2退款响应")
 public class EasyPayRefundV2Result {
 
+    /// 返回状态码（0 成功）
+    @Schema(description = "返回状态码")
     @JsonProperty("code")
     private Integer code;
 
+    /// 错误信息
+    @Schema(description = "错误信息")
     @JsonProperty("msg")
     private String msg;
 
+    /// 平台退款单号
+    @Schema(description = "平台退款单号")
     @JsonProperty("refund_no")
     private String refundNo;
 
+    /// 商户退款单号
+    @Schema(description = "商户退款单号")
     @JsonProperty("out_refund_no")
     private String outRefundNo;
 
+    /// 平台业务单号
+    @Schema(description = "平台业务单号")
     @JsonProperty("trade_no")
     private String tradeNo;
 
+    /// 退款金额（元，字符串）
+    @Schema(description = "退款金额（元）")
     @JsonProperty("money")
     private String money;
 
+    /// 实退金额（元，字符串）
+    @Schema(description = "实退金额（元）")
     @JsonProperty("reducemoney")
     private String reducemoney;
 
+    /// 当前时间戳（秒）
+    @Schema(description = "当前时间戳")
     @JsonProperty("timestamp")
     private String timestamp;
 
+    /// 签名
+    @Schema(description = "签名")
     @JsonProperty("sign")
     private String sign;
 
+    /// 签名类型（RSA）
+    @Schema(description = "签名类型")
     @JsonProperty("sign_type")
     private String signType;
 

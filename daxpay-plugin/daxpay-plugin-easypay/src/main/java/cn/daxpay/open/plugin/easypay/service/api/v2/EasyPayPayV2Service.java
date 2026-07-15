@@ -151,6 +151,7 @@ public class EasyPayPayV2Service {
         return payResult;
     }
 
+    /// 将内核支付结果回写协议单
     private void fillOrderFromPayResult(EasyPayOrder order, NormalPayResult payResult) {
         order.setOrderId(payResult.getOrderId())
                 .setTradeNo(payResult.getOrderNo())
@@ -162,6 +163,7 @@ public class EasyPayPayV2Service {
         }
     }
 
+    /// 调用内核普通支付
     private NormalPayResult doNormalPay(EasyPayOrder order, EasyPayCredential credential,
                                         String payMethod, String openId, String authCode) {
         NormalPayParam payParam = new NormalPayParam();
@@ -181,6 +183,7 @@ public class EasyPayPayV2Service {
         return normalPayService.pay(payParam);
     }
 
+    /// 创建协议订单实体
     private EasyPayOrder buildOrder(String outTradeNo, String type, String name, String money,
                                     String notifyUrl, String returnUrl, String param, String clientIp,
                                     EasyPayCredential credential, String apiVersion) {
@@ -204,6 +207,7 @@ public class EasyPayPayV2Service {
         return order;
     }
 
+    /// 已有订单组装成功响应并签名
     private EasyPayCreateV2Result successFromOrder(EasyPayCreateV2Result result, EasyPayCredential credential, EasyPayOrder order) {
         result.setCode(0)
                 .setMsg("success")
@@ -216,6 +220,7 @@ public class EasyPayPayV2Service {
         return result;
     }
 
+    /// 失败响应并尽量签名
     private EasyPayCreateV2Result fail(EasyPayCreateV2Result result, EasyPayCredential credential, String msg) {
         result.setCode(-1)
                 .setMsg(msg)

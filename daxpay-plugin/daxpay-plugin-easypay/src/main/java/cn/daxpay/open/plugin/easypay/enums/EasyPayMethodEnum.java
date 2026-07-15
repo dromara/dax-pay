@@ -11,12 +11,19 @@ import java.util.Objects;
 @Getter
 @RequiredArgsConstructor
 public enum EasyPayMethodEnum {
+
+    /// 支付宝
     ALIPAY("alipay"),
+
+    /// 微信
     WECHAT("wxpay"),
+
+    /// 聚合
     AGGREGATE("aggregate");
 
     private final String code;
 
+    /// 按协议 code 查找
     public static EasyPayMethodEnum findByCode(String code) {
         return Arrays.stream(values())
                 .filter(e -> Objects.equals(e.code, code))

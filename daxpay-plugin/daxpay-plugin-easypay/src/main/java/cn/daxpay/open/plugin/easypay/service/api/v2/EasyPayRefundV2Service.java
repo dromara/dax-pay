@@ -32,6 +32,7 @@ public class EasyPayRefundV2Service {
     private final PayRefundService payRefundService;
     private final PayRefundOrderManager payRefundOrderManager;
 
+    /// 退款
     public EasyPayRefundV2Result refund(EasyPayRefundV2Param param) {
         var credential = easyPayCredentialService.getAndCheck(param.getPid());
         easyPayAssistService.checkSignV2(param, credential, param.getSign());
@@ -74,6 +75,7 @@ public class EasyPayRefundV2Service {
         return sign(result, credential);
     }
 
+    /// 退款查询
     public EasyPayRefundOrderV2Result refundQuery(EasyPayRefundQueryV2Param param) {
         var credential = easyPayCredentialService.getAndCheck(param.getPid());
         easyPayAssistService.checkSignV2(param, credential, param.getSign());

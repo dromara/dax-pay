@@ -9,6 +9,8 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.factory.Mappers;
 
+/// # 易支付场景配置转换
+///
 @Mapper
 public interface EasyPayConfigConvert {
     EasyPayConfigConvert CONVERT = Mappers.getMapper(EasyPayConfigConvert.class);

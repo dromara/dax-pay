@@ -27,6 +27,7 @@ public class EasyPayQueryV1Service {
     private final EasyPayCredentialService easyPayCredentialService;
     private final EasyPayOrderManager easyPayOrderManager;
 
+    /// 订单查询（act=order）
     public EasyPayOrderV1Result query(EasyPayQueryV1Param param) {
         EasyPayOrderV1Result result = new EasyPayOrderV1Result();
         if (!Objects.equals(param.getAct(), "order")) {

@@ -11,11 +11,16 @@ import java.util.Objects;
 @Getter
 @RequiredArgsConstructor
 public enum EasyPayApiVersionEnum {
+
+    /// V1（MD5）
     V1("v1"),
+
+    /// V2（RSA）
     V2("v2");
 
     private final String code;
 
+    /// 按版本 code 查找
     public static EasyPayApiVersionEnum findByCode(String code) {
         return Arrays.stream(values())
                 .filter(e -> Objects.equals(e.code, code))

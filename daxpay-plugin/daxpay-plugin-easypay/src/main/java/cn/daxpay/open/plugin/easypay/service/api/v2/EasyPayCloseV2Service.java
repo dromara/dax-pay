@@ -25,6 +25,7 @@ public class EasyPayCloseV2Service {
     private final EasyPayOrderManager easyPayOrderManager;
     private final PayCloseService payCloseService;
 
+    /// 关单
     public EasyPayCloseV2Result close(EasyPayCloseV2Param param) {
         var credential = easyPayCredentialService.getAndCheck(param.getPid());
         easyPayAssistService.checkSignV2(param, credential, param.getSign());

@@ -132,6 +132,7 @@ public class EasyPayAssistService {
         return "qrcode";
     }
 
+    /// 查询协议订单状态（内部轮询）
     public EasyPayOrderStatusResult queryOrderStatus(Long id) {
         var order = easyPayOrderManager.findByIdNotTenant(id)
                 .orElseThrow(() -> new DataNotExistException("error.plugin.easypay.orderNotFound"));
@@ -142,6 +143,7 @@ public class EasyPayAssistService {
                 .setOutTradeNo(order.getOutTradeNo());
     }
 
+    /// 查询收银台订单信息（内部）
     public EasyPaySubmitInfoResult findSubmitInfo(Long id) {
         var order = easyPayOrderManager.findByIdNotTenant(id)
                 .orElseThrow(() -> new DataNotExistException("error.plugin.easypay.orderNotFound"));
@@ -166,6 +168,7 @@ public class EasyPayAssistService {
         throw new DataNotExistException("error.plugin.easypay.tradeNotFound");
     }
 
+    /// 交易来源编码（易支付协议）
     public String sourceCode() {
         return TradeSourceEnum.EASY_PAY.getCode();
     }

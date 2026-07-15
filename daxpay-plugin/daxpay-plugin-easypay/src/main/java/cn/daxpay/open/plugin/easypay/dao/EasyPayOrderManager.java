@@ -8,27 +8,34 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
+/// # 易支付协议订单 Manager
+///
 @Repository
 @RequiredArgsConstructor
 public class EasyPayOrderManager extends BaseManager<EasyPayOrderMapper, EasyPayOrder> {
 
+    /// 按商户订单号查询
     public Optional<EasyPayOrder> findByOutTradeNo(String outTradeNo) {
         return findByField(EasyPayOrder::getOutTradeNo, outTradeNo);
     }
 
+    /// 按平台业务单号查询
     public Optional<EasyPayOrder> findByTradeNo(String tradeNo) {
         return findByField(EasyPayOrder::getTradeNo, tradeNo);
     }
 
+    /// 按内核容器 ID 查询
     public Optional<EasyPayOrder> findByOrderId(Long orderId) {
         return findByField(EasyPayOrder::getOrderId, orderId);
     }
 
+    /// 忽略租户按主键查询
     @IgnoreTenant
     public Optional<EasyPayOrder> findByIdNotTenant(Long id) {
         return findById(id);
     }
 
+    /// 忽略租户按内核容器 ID 查询
     @IgnoreTenant
     public Optional<EasyPayOrder> findByOrderIdNotTenant(Long orderId) {
         return findByField(EasyPayOrder::getOrderId, orderId);
