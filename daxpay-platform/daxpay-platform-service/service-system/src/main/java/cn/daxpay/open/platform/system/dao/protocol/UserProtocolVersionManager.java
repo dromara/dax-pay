@@ -40,6 +40,21 @@ public class UserProtocolVersionManager extends BaseManager<UserProtocolVersionM
                 .oneOpt();
     }
 
+    /// 查询可继承的源版本: 同协议同语言已发布优先, 否则取 versionNo 最大的归档版
+    public Optional<UserProtocolVersion> findLatestForInherit(Long protocolId, String language){
+        Optional<UserProtocolVersion> published = this.findPublished(protocolId, language);
+        if (published.isPresent()) {
+            return published;
+        }
+        return this.lambdaQuery()
+                .eq(UserProtocolVersion::getProtocolId, protocolId)
+                .eq(UserProtocolVersion::getLanguage, language)
+                .eq(UserProtocolVersion::getStatus, "ARCHIVED")
+                .orderByDesc(UserProtocolVersion::getVersionNo)
+                .last("LIMIT 1")
+                .oneOpt();
+    }
+
     /// 查询某协议下所有版本(级联删除/复制用)
     public List<UserProtocolVersion> findAllByProtocol(Long protocolId){
         return this.lambdaQuery()

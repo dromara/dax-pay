@@ -13,6 +13,7 @@ import cn.daxpay.open.platform.system.result.protocol.UserProtocolVersionResult;
 import cn.daxpay.open.platform.system.service.protocol.UserProtocolVersionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -83,6 +84,20 @@ public class UserProtocolVersionController {
     @GetMapping("/get")
     public Result<UserProtocolVersionResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id){
         return Res.ok(userProtocolVersionService.findById(id));
+    }
+
+    /// 查询新建草稿可继承的源版本(同语言已发布优先, 否则最新归档)
+    ///
+    /// @param protocolId 协议ID
+    /// @param language 语言
+    /// @return 源版本, 无则 null
+    @PermCode(code = PermCodes.Action.VIEW)
+    @Operation(summary = "查询可继承源版本")
+    @GetMapping("/find-inherit-source")
+    public Result<UserProtocolVersionResult> findInheritSource(
+            @NotNull(message = "{validation.field.protocolId.notNull}") Long protocolId,
+            @NotBlank(message = "{validation.field.language.notBlank}") String language){
+        return Res.ok(userProtocolVersionService.findInheritSource(protocolId, language));
     }
 
     /// 发布版本(草稿 -> 已发布, 同协议同语言原已发布自动归档)

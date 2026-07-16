@@ -114,6 +114,13 @@ public class UserProtocolVersionService {
                 .orElse(null);
     }
 
+    /// 查询新建草稿可继承的源版本(已发布优先, 否则最新归档; 无则 null)
+    public UserProtocolVersionResult findInheritSource(Long protocolId, String language){
+        return userProtocolVersionManager.findLatestForInherit(protocolId, language)
+                .map(UserProtocolVersion::toResult)
+                .orElse(null);
+    }
+
     /// 复制版本到目标协议(用于复制到其他端, 直接以已发布状态写入)
     @Transactional(rollbackFor = Exception.class)
     public void copyVersion(UserProtocolVersion source, Long targetProtocolId){
