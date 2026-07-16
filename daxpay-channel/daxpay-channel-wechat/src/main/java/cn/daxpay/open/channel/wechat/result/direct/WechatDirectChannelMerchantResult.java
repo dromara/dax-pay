@@ -1,6 +1,6 @@
 package cn.daxpay.open.channel.wechat.result.direct;
 
-import cn.daxpay.open.payment.common.result.MchTradeBaseResult;
+import cn.daxpay.open.payment.common.result.MchBaseResult;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @Schema(title = "微信直连通道商户绑定结果")
-public class WechatDirectChannelMerchantResult extends MchTradeBaseResult {
+public class WechatDirectChannelMerchantResult extends MchBaseResult {
 
     @Schema(description = "通道商户号")
     private String channelMchNo;
