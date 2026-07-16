@@ -1,6 +1,7 @@
 package cn.daxpay.open.payment.merchant.service.channel;
 
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
+import cn.daxpay.open.platform.common.translate.service.TransService;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.rest.dto.LabelValue;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
@@ -33,6 +34,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ChannelMerchantService {
     private final ChannelMerchantManager channelMerchantManager;
+    private final TransService transService;
     private final PayChannelService payChannelService;
     private final PayProductManager payProductManager;
 
@@ -40,6 +42,8 @@ public class ChannelMerchantService {
     public PageResult<ChannelMerchantResult> page(PageParam pageParam, ChannelMerchantQuery query){
         PageResult<ChannelMerchantResult> pageResult = MpUtil.toPageResult(channelMerchantManager.page(pageParam,query));
         fillEnvStatus(pageResult.getRecords());
+        // 翻译商户名称(mchNo -> mchName, 走系统 @Trans 机制)
+        transService.translate(pageResult);
         return pageResult;
     }
 
@@ -50,6 +54,8 @@ public class ChannelMerchantService {
                 // 通道: 通道商户不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
         fillEnvStatus(List.of(result));
+        // 翻译商户名称
+        transService.translate(result);
         return result;
     }
 

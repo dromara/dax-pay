@@ -1,19 +1,28 @@
 package cn.daxpay.open.payment.merchant.result.channel;
 
+import cn.daxpay.open.payment.common.result.MchBaseResult;
 import cn.daxpay.open.platform.core.enums.channel.ChannelMerchantSourceEnum;
-import cn.daxpay.open.payment.common.result.MchTradeBaseResult;
+import cn.daxpay.open.payment.merchant.entity.info.MerchantInfo;
+import cn.daxpay.open.platform.core.annotation.Trans;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import lombok.experimental.FieldNameConstants;
 
 /// # 通道商户信息
 ///
 @EqualsAndHashCode(callSuper = true)
 @Data
+@FieldNameConstants
 @Accessors(chain = true)
 @Schema(title = "通道商户信息")
-public class ChannelMerchantResult extends MchTradeBaseResult {
+public class ChannelMerchantResult extends MchBaseResult {
+
+    /// 商户名称(由 mchNo 翻译, 走系统 @Trans 机制)
+    @Trans(entity = MerchantInfo.class, source = MchBaseResult.Fields.mchNo, result = MerchantInfo.Fields.mchName)
+    @Schema(description = "商户名称")
+    private String mchName;
 
     /// 申请单ID
     @Schema(description = "申请单ID")
