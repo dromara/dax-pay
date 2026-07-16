@@ -26,7 +26,9 @@ public enum PlatformConfigTypeEnum implements I18nSupport {
     /// 站点显示内容配置(系统名/Logo/备案/版权等)
     WEBSITE("website"),
     /// 微信消息通知模板配置(非敏感, 仅模板Id)
-    WECHAT_NOTIFY("wechat_notify");
+    WECHAT_NOTIFY("wechat_notify"),
+    /// 敏感词策略配置
+    SENSITIVE_WORD("sensitive_word");
 
     /// 编码
     private final String code;

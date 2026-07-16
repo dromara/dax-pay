@@ -119,3 +119,92 @@ CREATE INDEX IF NOT EXISTS "idx_pay_risk_hit_type_value" ON "public"."pay_risk_h
 CREATE INDEX IF NOT EXISTS "idx_pay_risk_hit_mch_no" ON "public"."pay_risk_hit" ("mch_no");
 CREATE INDEX IF NOT EXISTS "idx_pay_risk_hit_trade_no" ON "public"."pay_risk_hit" ("trade_no");
 CREATE INDEX IF NOT EXISTS "idx_pay_risk_hit_order_no" ON "public"."pay_risk_hit" ("order_no");
+
+-- ----------------------------
+-- 敏感词词库 + 命中审计（capability-sensitive-word）
+-- ----------------------------
+CREATE TABLE IF NOT EXISTS "public"."system_sensitive_word" (
+  "id" int8 NOT NULL,
+  "word" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
+  "category" varchar(32) COLLATE "pg_catalog"."default",
+  "match_mode" varchar(16) COLLATE "pg_catalog"."default" NOT NULL DEFAULT 'contains',
+  "level" varchar(16) COLLATE "pg_catalog"."default" DEFAULT 'reject',
+  "status" varchar(16) COLLATE "pg_catalog"."default" NOT NULL,
+  "remark" varchar(255) COLLATE "pg_catalog"."default",
+  "creator" int8,
+  "create_time" timestamptz(6),
+  "last_modifier" int8,
+  "last_modified_time" timestamptz(6),
+  "version" int4 DEFAULT 0,
+  "deleted" bool NOT NULL DEFAULT false
+);
+
+COMMENT ON TABLE "public"."system_sensitive_word" IS '敏感词词库';
+COMMENT ON COLUMN "public"."system_sensitive_word"."id" IS '主键';
+COMMENT ON COLUMN "public"."system_sensitive_word"."word" IS '敏感词原文(建议简体)';
+COMMENT ON COLUMN "public"."system_sensitive_word"."category" IS '分类: politic/porn/violence/ad/custom';
+COMMENT ON COLUMN "public"."system_sensitive_word"."match_mode" IS '匹配模式: contains/exact';
+COMMENT ON COLUMN "public"."system_sensitive_word"."level" IS '处理级别: reject/warn';
+COMMENT ON COLUMN "public"."system_sensitive_word"."status" IS '状态: enable/disable';
+COMMENT ON COLUMN "public"."system_sensitive_word"."remark" IS '备注';
+COMMENT ON COLUMN "public"."system_sensitive_word"."creator" IS '创建者ID';
+COMMENT ON COLUMN "public"."system_sensitive_word"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."system_sensitive_word"."last_modifier" IS '最后修改者ID';
+COMMENT ON COLUMN "public"."system_sensitive_word"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."system_sensitive_word"."version" IS '版本号';
+COMMENT ON COLUMN "public"."system_sensitive_word"."deleted" IS '删除标志';
+
+ALTER TABLE "public"."system_sensitive_word" DROP CONSTRAINT IF EXISTS "system_sensitive_word_pkey";
+ALTER TABLE "public"."system_sensitive_word" ADD CONSTRAINT "system_sensitive_word_pkey" PRIMARY KEY ("id");
+
+CREATE UNIQUE INDEX IF NOT EXISTS "uk_system_sensitive_word_word" ON "public"."system_sensitive_word" ("word") WHERE deleted = false;
+CREATE INDEX IF NOT EXISTS "idx_system_sensitive_word_status" ON "public"."system_sensitive_word" ("status");
+
+CREATE TABLE IF NOT EXISTS "public"."system_sensitive_word_hit" (
+  "id" int8 NOT NULL,
+  "word_id" int8,
+  "hit_word" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
+  "content_preview" varchar(200) COLLATE "pg_catalog"."default",
+  "scene" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "source" varchar(32) COLLATE "pg_catalog"."default",
+  "mch_no" varchar(32) COLLATE "pg_catalog"."default",
+  "app_id" varchar(50) COLLATE "pg_catalog"."default",
+  "operator_id" int8,
+  "client_ip" varchar(64) COLLATE "pg_catalog"."default",
+  "request_path" varchar(255) COLLATE "pg_catalog"."default",
+  "remark" varchar(255) COLLATE "pg_catalog"."default",
+  "creator" int8,
+  "create_time" timestamptz(6),
+  "last_modifier" int8,
+  "last_modified_time" timestamptz(6),
+  "version" int4 DEFAULT 0,
+  "deleted" bool NOT NULL DEFAULT false
+);
+
+COMMENT ON TABLE "public"."system_sensitive_word_hit" IS '敏感词命中记录';
+COMMENT ON COLUMN "public"."system_sensitive_word_hit"."id" IS '主键';
+COMMENT ON COLUMN "public"."system_sensitive_word_hit"."word_id" IS '关联词库ID';
+COMMENT ON COLUMN "public"."system_sensitive_word_hit"."hit_word" IS '命中词快照';
+COMMENT ON COLUMN "public"."system_sensitive_word_hit"."content_preview" IS '原文摘要';
+COMMENT ON COLUMN "public"."system_sensitive_word_hit"."scene" IS '场景: pay_title/goods_name/...';
+COMMENT ON COLUMN "public"."system_sensitive_word_hit"."source" IS '来源: admin/merchant/unipay/app_admin';
+COMMENT ON COLUMN "public"."system_sensitive_word_hit"."mch_no" IS '商户号';
+COMMENT ON COLUMN "public"."system_sensitive_word_hit"."app_id" IS '应用号';
+COMMENT ON COLUMN "public"."system_sensitive_word_hit"."operator_id" IS '操作人用户ID';
+COMMENT ON COLUMN "public"."system_sensitive_word_hit"."client_ip" IS '客户端IP';
+COMMENT ON COLUMN "public"."system_sensitive_word_hit"."request_path" IS '请求路径';
+COMMENT ON COLUMN "public"."system_sensitive_word_hit"."remark" IS '备注';
+COMMENT ON COLUMN "public"."system_sensitive_word_hit"."creator" IS '创建者ID';
+COMMENT ON COLUMN "public"."system_sensitive_word_hit"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."system_sensitive_word_hit"."last_modifier" IS '最后修改者ID';
+COMMENT ON COLUMN "public"."system_sensitive_word_hit"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."system_sensitive_word_hit"."version" IS '版本号';
+COMMENT ON COLUMN "public"."system_sensitive_word_hit"."deleted" IS '删除标志';
+
+ALTER TABLE "public"."system_sensitive_word_hit" DROP CONSTRAINT IF EXISTS "system_sensitive_word_hit_pkey";
+ALTER TABLE "public"."system_sensitive_word_hit" ADD CONSTRAINT "system_sensitive_word_hit_pkey" PRIMARY KEY ("id");
+
+CREATE INDEX IF NOT EXISTS "idx_system_sensitive_word_hit_time" ON "public"."system_sensitive_word_hit" ("create_time");
+CREATE INDEX IF NOT EXISTS "idx_system_sensitive_word_hit_word" ON "public"."system_sensitive_word_hit" ("hit_word");
+CREATE INDEX IF NOT EXISTS "idx_system_sensitive_word_hit_mch" ON "public"."system_sensitive_word_hit" ("mch_no", "create_time");
+CREATE INDEX IF NOT EXISTS "idx_system_sensitive_word_hit_scene" ON "public"."system_sensitive_word_hit" ("scene");

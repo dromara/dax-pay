@@ -85,6 +85,12 @@
             <artifactId>capability-file</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- 敏感词（策略配置实现 SensitiveWordPolicy） -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>capability-sensitive-word</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- 支付宝开放平台能力(PlatformAlipayAuthConfigService 装载配置时转换为 capability 层 POJO) -->
         <dependency>
             <groupId>cn.daxpay.open</groupId>

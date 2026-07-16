@@ -171,6 +171,12 @@
             <artifactId>daxpay-plugin-risk</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- 敏感词过滤（词库 + 命中 + 运行时校验；service-system 已传递引入，此处显式保证装配） -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>capability-sensitive-word</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

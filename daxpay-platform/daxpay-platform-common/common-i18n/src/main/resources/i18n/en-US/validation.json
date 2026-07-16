@@ -299,7 +299,7 @@
       "notBlank": "Short name cannot be blank"
     },
     "status": {
-      "notBlank": "Status cannot be blank"
+      "size": "Status must be at most 16 characters"
     },
     "accountType": {
       "notBlank": "Account type cannot be blank"
@@ -746,6 +746,19 @@
     },
     "programType": {
       "notBlank": "Program type cannot be blank"
+    },
+    "sensitiveWord": {
+      "rejected": "Content contains sensitive words"
+    },
+    "word": {
+      "notBlank": "Word is required",
+      "size": "Word must be at most 64 characters"
+    },
+    "category": {
+      "size": "Category must be at most 32 characters"
+    },
+    "matchMode": {
+      "size": "Match mode must be at most 16 characters"
     }
   }
 }

@@ -299,7 +299,7 @@
       "notBlank": "닉네임은 비워둘 수 없습니다."
     },
     "status": {
-      "notBlank": "상태는 비워둘 수 없습니다."
+      "size": "상태는 16자 이내여야 합니다"
     },
     "accountType": {
       "notBlank": "계정 유형은 비워둘 수 없습니다."
@@ -746,6 +746,19 @@
     },
     "programType": {
       "notBlank": "프로그램 유형은 비워 둘 수 없습니다"
+    },
+    "sensitiveWord": {
+      "rejected": "민감한 단어가 포함되어 있습니다"
+    },
+    "word": {
+      "notBlank": "민감어는 필수입니다",
+      "size": "민감어는 64자 이내여야 합니다"
+    },
+    "category": {
+      "size": "분류는 32자 이내여야 합니다"
+    },
+    "matchMode": {
+      "size": "일치 모드는 16자 이내여야 합니다"
     }
   }
 }

@@ -18,6 +18,7 @@
         <module>capability-social</module>
         <module>capability-alipay</module>
         <module>capability-douyin</module>
+        <module>capability-sensitive-word</module>
     </modules>
 
     <modelVersion>4.0.0</modelVersion>

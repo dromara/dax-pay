@@ -1,0 +1,15 @@
+{
+  "pay_title": "支付標題",
+  "pay_description": "支付描述",
+  "goods_name": "商品名稱",
+  "goods_description": "商品描述",
+  "mch_name": "商戶名稱",
+  "app_name": "應用名稱",
+  "store_name": "門店名稱",
+  "user_name": "用戶名稱",
+  "qr_name": "碼牌名稱",
+  "notice": "公告",
+  "protocol": "協議",
+  "manual_check": "試檢",
+  "general": "通用"
+}

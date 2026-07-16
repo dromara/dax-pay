@@ -42,5 +42,13 @@
   "payFundStatusNotExist": "Pay fund status not found: {0}",
   "normalOrderStatusNotExist": "Normal pay order status not found: {0}",
   "gatewayOrderStatusNotExist": "Gateway order status not found: {0}",
-  "codePayFormNotExist": "Code pay form not found: {0}"
+  "codePayFormNotExist": "Code pay form not found: {0}",
+  "sensitiveWord": "Content contains sensitive words. Please modify and try again.",
+  "sensitiveWordHit": "Content contains sensitive word \"{0}\"",
+  "sensitiveWordDuplicate": "This sensitive word already exists",
+  "sensitiveWordNotFound": "Sensitive word not found",
+  "sensitiveWordHitNotFound": "Hit record not found",
+  "sensitiveWordStatusInvalid": "Invalid sensitive word status",
+  "sensitiveWordMatchModeInvalid": "Invalid match mode",
+  "sensitiveWordCategoryInvalid": "Invalid category"
 }

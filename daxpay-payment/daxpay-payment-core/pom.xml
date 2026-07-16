@@ -116,6 +116,12 @@
             <artifactId>capability-douyin</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- 敏感词过滤（下单 title/商品名等运行时校验） -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>capability-sensitive-word</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- 翻译模块 -->
         <dependency>
             <groupId>cn.daxpay.open</groupId>

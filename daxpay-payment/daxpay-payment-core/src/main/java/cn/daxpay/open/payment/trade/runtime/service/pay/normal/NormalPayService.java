@@ -1,5 +1,7 @@
 package cn.daxpay.open.payment.trade.runtime.service.pay.normal;
 
+import cn.daxpay.open.platform.capability.sensitiveword.enums.SensitiveWordSceneEnum;
+import cn.daxpay.open.platform.capability.sensitiveword.service.SensitiveWordCheckService;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.PayFailureException;
@@ -14,9 +16,11 @@ import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.route.service.runtime.PayRouteService;
 import cn.daxpay.open.payment.strategy.pay.AbsNormalPayStrategy;
 import cn.daxpay.open.payment.strategy.pay.PayStrategyContext;
+import cn.daxpay.open.payment.unipay.param.trade.pay.GoodsDetail;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
 import cn.daxpay.open.platform.common.redis.lock.LockExecutor;
+import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import lombok.RequiredArgsConstructor;
@@ -38,6 +42,7 @@ public class NormalPayService {
     private final LockExecutor lockExecutor;
     private final PayRouteService payRouteService;
     private final MerchantContextLoader merchantContextLoader;
+    private final SensitiveWordCheckService sensitiveWordCheckService;
 
     /// 支付入口
     public NormalPayResult pay(NormalPayParam payParam) {
@@ -45,6 +50,8 @@ public class NormalPayService {
         if (StrUtil.isBlank(payParam.getClientIp())) {
             payParam.setClientIp(WebServletUtil.getClientIp());
         }
+        // 敏感词：支付标题/描述/商品名（开放 API 不走 Spring @Validated 注解注入）
+        this.assertSensitiveWordClean(payParam);
         payAssistService.validationExpiredTime(payParam.getExpiredTime());
         String bizOrderNo = payParam.getBizOrderNo();
         return lockExecutor.execute(
@@ -52,6 +59,25 @@ public class NormalPayService {
                 () -> this.payHandle(payParam),
                 () -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.processing")
         );
+    }
+
+    /// 校验支付展示类文本敏感词
+    private void assertSensitiveWordClean(NormalPayParam payParam) {
+        if (payParam == null) {
+            return;
+        }
+        sensitiveWordCheckService.assertClean(payParam.getTitle(), SensitiveWordSceneEnum.PAY_TITLE);
+        sensitiveWordCheckService.assertClean(payParam.getDescription(), SensitiveWordSceneEnum.PAY_DESCRIPTION);
+        if (CollUtil.isEmpty(payParam.getGoodsDetail())) {
+            return;
+        }
+        for (GoodsDetail goods : payParam.getGoodsDetail()) {
+            if (goods == null) {
+                continue;
+            }
+            sensitiveWordCheckService.assertClean(goods.getGoodsName(), SensitiveWordSceneEnum.GOODS_NAME);
+            sensitiveWordCheckService.assertClean(goods.getDescription(), SensitiveWordSceneEnum.GOODS_DESCRIPTION);
+        }
     }
 
     /// 支付操作

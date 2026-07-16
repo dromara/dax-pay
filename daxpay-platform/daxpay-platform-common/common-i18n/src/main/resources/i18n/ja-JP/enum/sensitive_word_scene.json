@@ -1,0 +1,15 @@
+{
+  "pay_title": "支払タイトル",
+  "pay_description": "支払説明",
+  "goods_name": "商品名",
+  "goods_description": "商品説明",
+  "mch_name": "加盟店名",
+  "app_name": "アプリ名",
+  "store_name": "店舗名",
+  "user_name": "ユーザー名",
+  "qr_name": "QR名",
+  "notice": "お知らせ",
+  "protocol": "規約",
+  "manual_check": "テスト",
+  "general": "一般"
+}

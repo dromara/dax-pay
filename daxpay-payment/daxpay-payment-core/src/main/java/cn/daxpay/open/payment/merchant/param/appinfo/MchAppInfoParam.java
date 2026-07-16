@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.merchant.param.appinfo;
 
+import cn.daxpay.open.platform.capability.sensitiveword.validation.SensitiveWord;
 import cn.daxpay.open.platform.core.validation.ValidationGroup;
 import cn.daxpay.open.platform.core.enums.merchant.MchAppStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -27,6 +28,7 @@ public class MchAppInfoParam {
     /// 应用名称
     @Schema(description = "应用名称")
     @NotNull(message = "{validation.field.appName.notNull}")
+    @SensitiveWord
     private String appName;
 
     /// 应用状态

@@ -42,5 +42,13 @@
   "payFundStatusNotExist": "支払い資金ステータスが見つかりません: {0}",
   "normalOrderStatusNotExist": "通常の支払い注文ステータスが見つかりません: {0}",
   "gatewayOrderStatusNotExist": "ゲートウェイの注文ステータスが見つかりません: {0}",
-  "codePayFormNotExist": "支払形態が存在しません: {0}"
+  "codePayFormNotExist": "支払形態が存在しません: {0}",
+  "sensitiveWord": "不適切な語句が含まれています。修正してください。",
+  "sensitiveWordHit": "不適切な語句「{0}」が含まれています",
+  "sensitiveWordDuplicate": "この語句は既に存在します",
+  "sensitiveWordNotFound": "語句が見つかりません",
+  "sensitiveWordHitNotFound": "ヒット記録が見つかりません",
+  "sensitiveWordStatusInvalid": "状態が無効です",
+  "sensitiveWordMatchModeInvalid": "一致モードが無効です",
+  "sensitiveWordCategoryInvalid": "分類が無効です"
 }

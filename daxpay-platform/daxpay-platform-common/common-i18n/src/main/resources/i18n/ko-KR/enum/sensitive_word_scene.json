@@ -1,0 +1,15 @@
+{
+  "pay_title": "결제 제목",
+  "pay_description": "결제 설명",
+  "goods_name": "상품명",
+  "goods_description": "상품 설명",
+  "mch_name": "가맹점명",
+  "app_name": "앱 이름",
+  "store_name": "매장명",
+  "user_name": "사용자명",
+  "qr_name": "QR 이름",
+  "notice": "공지",
+  "protocol": "약관",
+  "manual_check": "검사",
+  "general": "일반"
+}

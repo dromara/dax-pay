@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.merchant.param.store;
 
+import cn.daxpay.open.platform.capability.sensitiveword.validation.SensitiveWord;
 import cn.daxpay.open.platform.core.validation.ValidationGroup;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -28,6 +29,7 @@ public class MchStoreInfoParam {
     /// 门店名称
     @Schema(description = "门店名称")
     @NotBlank(message = "{validation.field.storeName.notBlank}")
+    @SensitiveWord
     private String storeName;
 
     /// 联系人电话

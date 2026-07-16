@@ -337,6 +337,18 @@ public interface PermCodes {
             /// 菜单编码
             String MENU = "system:config:mobile-app";
         }
+
+        /// 敏感词词库 menuCode=system:sensitive-word
+        interface SensitiveWord {
+            /// 菜单编码
+            String MENU = "system:sensitive-word";
+        }
+
+        /// 敏感词命中记录 menuCode=system:sensitive-word-hit
+        interface SensitiveWordHit {
+            /// 菜单编码
+            String MENU = "system:sensitive-word-hit";
+        }
     }
 
     /// 开发调试

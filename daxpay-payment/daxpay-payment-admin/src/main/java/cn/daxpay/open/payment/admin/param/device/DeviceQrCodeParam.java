@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.admin.param.device;
 
+import cn.daxpay.open.platform.capability.sensitiveword.validation.SensitiveWord;
 import cn.daxpay.open.platform.core.validation.ValidationGroup;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -23,6 +24,7 @@ public class DeviceQrCodeParam {
     @Schema(description = "码牌名称")
     @NotBlank(message = "{validation.field.qrCodeName.notBlank}")
     @Size(max = 100, message = "{validation.field.qrCodeName.size}")
+    @SensitiveWord
     private String name;
 
     /// 金额类型: random-自定义金额 / fixed-固定金额

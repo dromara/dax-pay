@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.merchant.param.info;
 
+import cn.daxpay.open.platform.capability.sensitiveword.validation.SensitiveWord;
 import cn.daxpay.open.platform.core.enums.subject.SubjectTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -15,11 +16,13 @@ public class MerchantRegisterParam {
 
     /// 商户名称
     @NotBlank(message = "{validation.field.mchName.notBlank}")
+    @SensitiveWord
     @Schema(description = "商户名称")
     private String mchName;
 
     /// 商户简称
     @NotBlank(message = "{validation.field.mchShortName.notBlank}")
+    @SensitiveWord
     @Schema(description = "商户简称")
     private String mchShortName;
 

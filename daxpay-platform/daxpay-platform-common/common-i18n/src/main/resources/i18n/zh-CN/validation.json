@@ -299,7 +299,7 @@
       "notBlank": "简称不能为空"
     },
     "status": {
-      "notBlank": "状态不可为空"
+      "size": "状态不可超过16位"
     },
     "accountType": {
       "notBlank": "账户类型不可为空"
@@ -746,6 +746,19 @@
     },
     "programType": {
       "notBlank": "落地程序类型不能为空"
+    },
+    "sensitiveWord": {
+      "rejected": "内容包含敏感词"
+    },
+    "word": {
+      "notBlank": "敏感词不可为空",
+      "size": "敏感词不可超过64位"
+    },
+    "category": {
+      "size": "分类不可超过32位"
+    },
+    "matchMode": {
+      "size": "匹配模式不可超过16位"
     }
   }
 }

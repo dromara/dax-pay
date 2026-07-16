@@ -5,5 +5,6 @@
   "security_two_factor_auth": "二要素認証",
   "url": "システムURL設定",
   "website": "Webサイトの表示設定",
-  "wechat_notify": "WeChat メッセージ通知テンプレートの構成"
+  "wechat_notify": "WeChat メッセージ通知テンプレートの構成",
+  "sensitive_word": "センシティブワード設定"
 }

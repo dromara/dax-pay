@@ -1,0 +1,7 @@
+{
+  "admin": "运营端",
+  "merchant": "商户端",
+  "unipay": "开放支付",
+  "app_admin": "管理端小程序",
+  "unknown": "未知"
+}

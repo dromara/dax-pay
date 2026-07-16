@@ -5,6 +5,6 @@
   "security_two_factor_auth": "双因素认证配置",
   "url": "系统访问地址配置",
   "website": "站点显示内容配置",
-  "wechat_notify": "微信消息通知模板配置"
+  "wechat_notify": "微信消息通知模板配置",
+  "sensitive_word": "敏感词策略配置"
 }
-

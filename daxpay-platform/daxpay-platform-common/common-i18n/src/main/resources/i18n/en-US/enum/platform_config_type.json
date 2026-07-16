@@ -5,6 +5,6 @@
   "security_two_factor_auth": "Two-factor authentication",
   "url": "System URL settings",
   "website": "Website display settings",
-  "wechat_notify": "WeChat message notify template config"
+  "wechat_notify": "WeChat message notify template config",
+  "sensitive_word": "Sensitive word policy"
 }
-

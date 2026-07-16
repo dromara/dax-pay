@@ -1,0 +1,15 @@
+{
+  "pay_title": "Pay title",
+  "pay_description": "Pay description",
+  "goods_name": "Goods name",
+  "goods_description": "Goods description",
+  "mch_name": "Merchant name",
+  "app_name": "App name",
+  "store_name": "Store name",
+  "user_name": "User name",
+  "qr_name": "QR name",
+  "notice": "Notice",
+  "protocol": "Protocol",
+  "manual_check": "Manual check",
+  "general": "General"
+}

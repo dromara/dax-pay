@@ -42,5 +42,13 @@
   "payFundStatusNotExist": "資金交易狀態不存在: {0}",
   "normalOrderStatusNotExist": "普通支付訂單狀態不存在: {0}",
   "gatewayOrderStatusNotExist": "閘道器支付訂單狀態不存在: {0}",
-  "codePayFormNotExist": "碼牌支付形態不存在: {0}"
+  "codePayFormNotExist": "碼牌支付形態不存在: {0}",
+  "sensitiveWord": "內容包含敏感詞，請修改後重試",
+  "sensitiveWordHit": "內容包含敏感詞「{0}」",
+  "sensitiveWordDuplicate": "該敏感詞已存在",
+  "sensitiveWordNotFound": "敏感詞不存在",
+  "sensitiveWordHitNotFound": "命中記錄不存在",
+  "sensitiveWordStatusInvalid": "敏感詞狀態無效",
+  "sensitiveWordMatchModeInvalid": "匹配模式無效",
+  "sensitiveWordCategoryInvalid": "分類無效"
 }

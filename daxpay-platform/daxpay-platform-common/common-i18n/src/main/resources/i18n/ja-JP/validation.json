@@ -299,7 +299,7 @@
       "notBlank": "短い名前を空白にすることはできません"
     },
     "status": {
-      "notBlank": "ステータスを空白にすることはできません"
+      "size": "状態は16文字以内です"
     },
     "accountType": {
       "notBlank": "アカウントの種類を空白にすることはできません"
@@ -746,6 +746,19 @@
     },
     "programType": {
       "notBlank": "プログラム種別を入力してください"
+    },
+    "sensitiveWord": {
+      "rejected": "不適切な語句が含まれています"
+    },
+    "word": {
+      "notBlank": "語句は必須です",
+      "size": "語句は64文字以内です"
+    },
+    "category": {
+      "size": "分類は32文字以内です"
+    },
+    "matchMode": {
+      "size": "一致モードは16文字以内です"
     }
   }
 }
