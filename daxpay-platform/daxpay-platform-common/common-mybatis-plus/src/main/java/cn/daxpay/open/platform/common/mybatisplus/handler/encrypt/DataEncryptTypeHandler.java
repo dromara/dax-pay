@@ -1,5 +1,6 @@
 package cn.daxpay.open.platform.common.mybatisplus.handler.encrypt;
 
+import cn.daxpay.open.platform.common.config.encrypt.SecureAesGcmEncryptor;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.type.BaseTypeHandler;
@@ -13,6 +14,7 @@ import java.sql.SQLException;
 /// # 数据加密类型处理器, 使用 AES-256-GCM 加密
 ///
 /// 支持多密钥版本，密文格式：v{version}:{encrypted}
+/// 加密器由 [DataEncryptTypeHandlerConfiguration] 注入全进程唯一的 [SecureAesGcmEncryptor] Bean。
 @Slf4j
 public class DataEncryptTypeHandler extends BaseTypeHandler<String> {
 

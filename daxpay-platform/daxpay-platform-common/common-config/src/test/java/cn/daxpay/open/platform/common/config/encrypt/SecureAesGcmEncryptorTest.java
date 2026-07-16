@@ -1,4 +1,4 @@
-package cn.daxpay.open.platform.common.mybatisplus.handler.encrypt;
+package cn.daxpay.open.platform.common.config.encrypt;
 
 import cn.daxpay.open.platform.common.config.properties.EncryptKeyInfo;
 import org.junit.jupiter.api.BeforeEach;

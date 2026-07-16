@@ -4,6 +4,9 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /// # 平台通用配置属性
 ///
 /// 整合了缓存、异常处理、Spring 和 Swagger 配置
@@ -28,6 +31,10 @@ public class PlatformCommonProperties {
         private L1 l1 = new L1();
         /// L2 Redis 缓存配置
         private L2 l2 = new L2();
+        /// 敏感缓存名前缀；匹配的 L2 value 整包 AES-GCM 加密（默认 secure:）
+        private String securePrefix = "secure:";
+        /// 额外视为敏感的 cacheName 精确列表（可选）
+        private List<String> secureNames = new ArrayList<>();
 
         /// # L1 本地缓存配置
         ///

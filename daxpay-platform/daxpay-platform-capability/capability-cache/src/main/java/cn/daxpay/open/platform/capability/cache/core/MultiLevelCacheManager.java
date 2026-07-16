@@ -1,6 +1,7 @@
 package cn.daxpay.open.platform.capability.cache.core;
 
 import cn.daxpay.open.platform.capability.cache.notify.publisher.CacheInvalidationPublisher;
+import cn.daxpay.open.platform.capability.cache.secure.SecureCacheNameMatcher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.Cache;
@@ -18,7 +19,8 @@ import java.util.concurrent.ConcurrentHashMap;
 /// 设计要点：
 /// - 作为 Spring 默认 CacheManager，通过 @Primary 标识
 /// - L1 本地缓存始终启用，不需要开关控制
-/// - 缓存失效通知通过 RocketMQ 广播，始终启用
+/// - 缓存失效通知通过 Artemis 广播，始终启用
+/// - 敏感 cacheName 结合 secureL2Enabled 决定是否写 Redis
 @Slf4j
 @RequiredArgsConstructor
 public class MultiLevelCacheManager implements CacheManager {
@@ -28,6 +30,11 @@ public class MultiLevelCacheManager implements CacheManager {
     private final LocalCacheRegistry localCacheRegistry;
 
     private final CacheInvalidationPublisher publisher;
+
+    private final SecureCacheNameMatcher secureMatcher;
+
+    /// 敏感缓存是否允许 L2（数据加密已启用时为 true）
+    private final boolean secureL2Enabled;
 
     private final Map<String, MultiLevelCache> cacheMap = new ConcurrentHashMap<>();
 
@@ -50,13 +57,15 @@ public class MultiLevelCacheManager implements CacheManager {
             throw new IllegalStateException("Redis cache not found: " + name);
         }
 
-        log.debug("创建二级缓存: name={}", name);
+        boolean secureCache = this.secureMatcher != null && this.secureMatcher.matches(name);
+        log.debug("创建二级缓存: name={}, secure={}, secureL2Enabled={}", name, secureCache, this.secureL2Enabled);
         return new MultiLevelCache(
                 name,
                 this.localCacheRegistry,
                 redisCache,
-                this.publisher
+                this.publisher,
+                secureCache,
+                this.secureL2Enabled
         );
     }
 }
-

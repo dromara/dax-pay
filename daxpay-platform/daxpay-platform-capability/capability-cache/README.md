@@ -39,6 +39,10 @@ daxpay:
           maximum-size: 10000    # L1 本地缓存最大容量
         l2:
           default-ttl: 1800      # L2 Redis 缓存默认过期时间（秒）
+        secure-prefix: "secure:" # 敏感缓存名前缀，匹配的 L2 value 整包 AES-GCM 加密
+        # secure-names: []       # 额外精确敏感 cacheName 列表（可选）
+  # 敏感 L2 加密复用 DB 字段加密密钥（全进程同一 SecureAesGcmEncryptor）
+  # platform.config.encrypt.enable / keys
 ```
 
 ## 架构设计
@@ -178,6 +182,8 @@ public void clearUserCache() {
 @Cacheable(value = "merchant:config", key = "#mchNo")
 ```
 
+**含密钥/证书等敏感数据的缓存名必须以 `secure:` 开头**（见下文「敏感缓存」）。
+
 ### 7. 如何处理缓存穿透？
 
 当前实现不缓存 null 值（`disableCachingNullValues()`），如需防止缓存穿透：
@@ -208,3 +214,57 @@ public void printCacheStats(String cacheName) {
     log.info("命中次数: {}, 未命中次数: {}", stats.hitCount(), stats.missCount());
 }
 ```
+
+## 敏感缓存（secure:）
+
+通道密钥、商户对接密钥等敏感对象若使用 Spring Cache，**必须**使用 `secure:` 前缀的 cacheName，基础设施会自动对 L2 Redis value 做**整包 AES-GCM 加密**。
+
+### 与 DB 字段加密的区别
+
+| 层 | 粒度 | 说明 |
+|----|------|------|
+| DB（DataEncryptTypeHandler） | **字段级** | 仅 `privateKey` / `apiKey` 等列密文，其它列明文 |
+| Redis L2（secure:） | **整包** | 整个缓存对象 JSON 一次加密，Redis 中不可见任何字段明文 |
+| L1 本地 | 明文对象 | 进程内，与普通缓存一致 |
+
+密钥管理复用 `daxpay.platform.config.encrypt`（与 DB 同一 `SecureAesGcmEncryptor` Bean）。
+
+### 业务写法（与普通缓存相同）
+
+```java
+// 读：默认 CacheManager，仅 cacheName 用 secure: 前缀
+@Cacheable(value = "secure:channel-key:adapay-direct",
+           key = "#channelMchNo + ':' + #sandbox")
+public AdapayDirectKeyConfig getForPay(String channelMchNo, boolean sandbox) {
+    return manager.find(...).orElseThrow(...);
+}
+
+// 写：必须同名同 key 失效
+@CacheEvict(value = "secure:channel-key:adapay-direct",
+            key = "#param.channelMchNo + ':' + #param.sandbox")
+public void saveConfig(AdapayDirectKeyConfigParam param) {
+    // ...
+}
+```
+
+命名建议：
+
+```
+secure:channel-key:wechat-isv
+secure:channel-key:adapay-direct
+secure:merchant-credential
+secure:platform-encrypt-config
+```
+
+### 数据加密未启用时
+
+若 `daxpay.platform.config.encrypt.enable=false`：
+
+- `secure:*` **禁止写 Redis**（L1-only 降级），避免明文密钥落盘
+- 启动日志会 warn 提示
+
+### 禁止事项
+
+- 禁止对含密钥的实体使用非 `secure:` 的 cacheName（会明文进 Redis）
+- 禁止缓存完整 `*SdkCredential` 到普通 cacheName
+- 不需要也不应指定第二个 `cacheManager`：统一用默认二级缓存即可

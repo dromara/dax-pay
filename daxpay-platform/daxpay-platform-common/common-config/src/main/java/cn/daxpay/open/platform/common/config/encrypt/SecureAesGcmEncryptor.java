@@ -1,4 +1,4 @@
-package cn.daxpay.open.platform.common.mybatisplus.handler.encrypt;
+package cn.daxpay.open.platform.common.config.encrypt;
 
 import cn.daxpay.open.platform.common.config.properties.EncryptKeyInfo;
 import cn.hutool.core.collection.CollUtil;
@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 
 /// # 安全的 AES-256-GCM 加密工具（支持多密钥版本）
 ///
-/// 适用于支付系统中加密各类敏感数据使用
+/// 适用于支付系统中加密各类敏感数据：DB 字段 TypeHandler、缓存 L2 整包 value 等。
 ///
 /// 密文格式：v{version}:{base64(IV + AES-GCM-Encrypt(plaintext))}
 /// 示例：v2:7Kf8jD2mNpQrStUvWxYz...
@@ -47,32 +47,32 @@ public class SecureAesGcmEncryptor {
         if (CollUtil.isEmpty(keys)) {
             throw new IllegalArgumentException("密钥列表不能为空");
         }
-        
+
         // 校验密钥配置
         validateKeys(keys);
-        
+
         // 第一个密钥为当前密钥
         this.currentKey = keys.getFirst();
-        
+
         // 构建密钥映射表
         this.keyMap = keys.stream()
                 .collect(Collectors.toMap(EncryptKeyInfo::getVersion, k -> k, (k1, k2) -> {
                     throw new IllegalArgumentException("存在重复的密钥版本号: " + k1.getVersion());
                 }));
-        
+
         // 初始化密钥缓存
         this.secretKeyCache = new HashMap<>();
         for (EncryptKeyInfo keyInfo : keys) {
             secretKeyCache.put(keyInfo.getVersion(), createSecretKey(keyInfo.getKey()));
         }
-        
+
         // 记录日志
         List<Integer> historyVersions = keys.stream()
                 .skip(1)
                 .map(EncryptKeyInfo::getVersion)
                 .toList();
-        log.info("加密器初始化成功，当前版本: v{}，历史版本: {}", 
-                currentKey.getVersion(), 
+        log.info("加密器初始化成功，当前版本: v{}，历史版本: {}",
+                currentKey.getVersion(),
                 historyVersions.isEmpty() ? "无" : historyVersions.stream().map(v -> "v" + v).toList());
     }
 
@@ -88,7 +88,7 @@ public class SecureAesGcmEncryptor {
                 throw new IllegalArgumentException("存在重复的密钥版本号: " + keyInfo.getVersion());
             }
             versions.add(keyInfo.getVersion());
-            
+
             // 校验密钥长度
             if (keyInfo.getKey() == null || keyInfo.getKey().length() != KEY_LENGTH) {
                 throw new IllegalArgumentException("密钥版本 v" + keyInfo.getVersion() + " 的密钥长度需要为32位");
@@ -146,13 +146,13 @@ public class SecureAesGcmEncryptor {
                 log.warn("密文格式错误，缺少版本前缀");
                 return null;
             }
-            
+
             int separatorIndex = ciphertext.indexOf(VERSION_SEPARATOR);
             if (separatorIndex == -1) {
                 log.warn("密文格式错误，缺少版本分隔符");
                 return null;
             }
-            
+
             int version;
             try {
                 version = Integer.parseInt(ciphertext.substring(1, separatorIndex));
@@ -160,16 +160,16 @@ public class SecureAesGcmEncryptor {
                 log.warn("密文版本号格式错误");
                 return null;
             }
-            
+
             String encryptedBase64 = ciphertext.substring(separatorIndex + 1);
-            
+
             // 获取对应版本的密钥
             SecretKey secretKey = secretKeyCache.get(version);
             if (secretKey == null) {
                 log.warn("找不到版本 v{} 对应的密钥", version);
                 return null;
             }
-            
+
             // 解密
             byte[] combined = Base64.getDecoder().decode(encryptedBase64);
             byte[] iv = new byte[GCM_IV_LENGTH];
@@ -196,4 +196,3 @@ public class SecureAesGcmEncryptor {
     }
 
 }
-
