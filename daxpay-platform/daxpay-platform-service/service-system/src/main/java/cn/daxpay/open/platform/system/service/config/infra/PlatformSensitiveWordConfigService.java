@@ -1,12 +1,14 @@
 package cn.daxpay.open.platform.system.service.config.infra;
 
 import cn.daxpay.open.platform.capability.sensitiveword.policy.SensitiveWordPolicy;
+import cn.daxpay.open.platform.common.json.util.JacksonUtil;
 import cn.daxpay.open.platform.system.convert.config.infra.PlatformSensitiveWordConfigConvert;
 import cn.daxpay.open.platform.system.entity.config.platform.infra.PlatformSensitiveWordConfig;
 import cn.daxpay.open.platform.system.enums.PlatformConfigTypeEnum;
 import cn.daxpay.open.platform.system.param.config.infra.PlatformSensitiveWordConfigParam;
 import cn.daxpay.open.platform.system.result.config.infra.PlatformSensitiveWordConfigResult;
 import cn.daxpay.open.platform.system.service.config.SystemPlatformConfigService;
+import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -17,6 +19,9 @@ import org.springframework.stereotype.Service;
 /// # 平台敏感词策略服务
 ///
 /// 同时实现 [SensitiveWordPolicy]，供 capability 运行时读取.
+///
+/// 缓存存 **JSON 字符串** 而非实体：Redis 缓存反序列化为 `Object.class`
+/// （JSON 对象 → LinkedHashMap），直接缓存 POJO 会在 L2 回填后 ClassCastException.
 @Slf4j
 @Primary
 @Service
@@ -36,13 +41,26 @@ public class PlatformSensitiveWordConfigService implements SensitiveWordPolicy {
         this.self = self;
     }
 
-    /// 获取配置实体（带默认）
-    @Cacheable(value = CACHE_NAME, key = "'current'")
-    public PlatformSensitiveWordConfig getConfig() {
+    /// 缓存配置 JSON（L2 安全类型：String；key 带 :json 避免命中旧版 POJO 缓存）
+    @Cacheable(value = CACHE_NAME, key = "'current:json'")
+    public String getConfigJson() {
         PlatformSensitiveWordConfig config = systemConfigService.getOrCreateConfig(
                 PlatformConfigTypeEnum.SENSITIVE_WORD,
                 PlatformSensitiveWordConfig.class,
                 new PlatformSensitiveWordConfig());
+        if (config == null) {
+            config = new PlatformSensitiveWordConfig();
+        }
+        return JacksonUtil.toJson(config);
+    }
+
+    /// 获取配置实体（带默认）；从缓存 JSON 显式还原类型
+    public PlatformSensitiveWordConfig getConfig() {
+        String json = self.getConfigJson();
+        if (StrUtil.isBlank(json)) {
+            return new PlatformSensitiveWordConfig();
+        }
+        PlatformSensitiveWordConfig config = JacksonUtil.toBean(json, PlatformSensitiveWordConfig.class);
         return config == null ? new PlatformSensitiveWordConfig() : config;
     }
 

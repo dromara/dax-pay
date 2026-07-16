@@ -84,7 +84,7 @@ public class SensitiveWordCheckService {
         if (CollUtil.isEmpty(hits)) {
             return;
         }
-        String hitWord = hits.get(0);
+        String hitWord = hits.getFirst();
         SensitiveWordSceneEnum sc = scene == null ? SensitiveWordSceneEnum.GENERAL : scene;
         if (sensitiveWordPolicy.isRecordHit()) {
             try {
@@ -106,7 +106,7 @@ public class SensitiveWordCheckService {
         List<String> hits = findHits(text, false);
         if (recordHit && CollUtil.isNotEmpty(hits)) {
             try {
-                recordHit(text, hits.get(0), SensitiveWordSceneEnum.MANUAL_CHECK);
+                recordHit(text, hits.getFirst(), SensitiveWordSceneEnum.MANUAL_CHECK);
             } catch (Exception e) {
                 log.warn("试检写命中失败: {}", e.getMessage());
             }
@@ -171,7 +171,7 @@ public class SensitiveWordCheckService {
             if (path.startsWith("/app-admin/")) {
                 return SensitiveWordSourceEnum.APP_ADMIN.getCode();
             }
-            if (path.startsWith("/unipay/") || path.startsWith("/gateway/")) {
+            if (path.startsWith("/unipay/") || path.startsWith("/client/")) {
                 return SensitiveWordSourceEnum.UNIPAY.getCode();
             }
         } catch (Exception ignored) {
