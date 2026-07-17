@@ -47,32 +47,32 @@
   "gateway": {
     "cashierNotReady": "Bayaran juruwang belum tersedia",
     "typeMismatch": "Jenis pesanan gerbang tidak padan",
-    "clientEnvNotSupport": "Unsupported client environment",
-    "clientEnvNotConfigured": "Payment method not configured for this client environment",
+    "clientEnvNotSupport": "Persekitaran klien tidak disokong",
+    "clientEnvNotConfigured": "Kaedah pembayaran belum dikonfigurasi untuk persekitaran klien ini",
     "aggregateConfigMissing": "Konfigurasi pembayaran QR agregat tiada untuk apl",
-    "aggregateClientEnvsRequired": "Configure at least one open environment",
-    "aggregateClientEnvBlank": "Client environment code must not be blank",
-    "aggregateClientEnvMethodRequired": "Payment method is required for each filled environment",
-    "aggregateClientEnvChannelMchRequired": "Channel merchant required for each client environment in DIRECT level",
-    "aggregateClientEnvCapabilityRequired": "Capability required for each client environment in DIRECT level",
+    "aggregateClientEnvsRequired": "Konfigurasikan sekurang-kurangnya satu persekitaran buka",
+    "aggregateClientEnvBlank": "Kod persekitaran klien tidak boleh kosong",
+    "aggregateClientEnvMethodRequired": "Persekitaran yang diisi mesti memilih kaedah pembayaran",
+    "aggregateClientEnvChannelMchRequired": "Dalam mod DIRECT, nombor peniaga saluran wajib untuk setiap persekitaran",
+    "aggregateClientEnvCapabilityRequired": "Dalam mod DIRECT, keupayaan pembayaran wajib untuk setiap persekitaran",
     "channelLocked": "Kaedah pembayaran dikunci untuk pesanan ini",
-    "clientEnvRequired": "H5 cashier requires a client environment",
+    "clientEnvRequired": "Kaunter H5 mesti menentukan persekitaran klien",
     "cashierItemNotFound": "Item pembayaran juruwang tidak ditemui",
     "cashierItemAppIdImmutable": "AppId item juruwang tidak boleh ditukar",
     "cashierItemMethodRequired": "Kaedah pembayaran diperlukan dalam mod METHOD",
     "cashierItemChannelMchRequired": "Pedagang saluran diperlukan dalam mod LANGSUNG",
     "cashierItemCapabilityRequired": "Keupayaan diperlukan dalam mod LANGSUNG",
     "cashierItemNameRequired": "Nama item pembayaran tidak boleh kosong",
-    "codeConfigMissing": "QR code pay strategy config missing for app",
-    "codeClientEnvMethodRequired": "Payment method is required for each filled env and form",
-    "codeClientEnvCapabilityRequired": "Capability required for each env and form in DIRECT mode",
-    "codeClientEnvsRequired": "Configure at least one environment and form",
-    "codePayFormBlank": "Pay form cannot be blank",
-    "codeClientEnvBlank": "Client environment code cannot be blank",
-    "codeClientEnvNotConfigured": "Payment method not configured for this client env and form",
-    "codeRuntimeMismatch": "QR program type does not match runtime",
-    "codeClientEnvChannelMchRequired": "Channel merchant required for each env and form in DIRECT mode",
-    "returnPathInvalid": "Invalid auth return path"
+    "codeConfigMissing": "Aplikasi belum mengkonfigurasi strategi pembayaran kod QR",
+    "codeClientEnvMethodRequired": "Persekitaran dan bentuk yang diisi mesti memilih kaedah pembayaran",
+    "codeClientEnvCapabilityRequired": "Dalam mod DIRECT, keupayaan pembayaran baris yang diisi wajib",
+    "codeClientEnvsRequired": "Konfigurasikan sekurang-kurangnya satu pasangan persekitaran dan bentuk",
+    "codePayFormBlank": "Bentuk pembayaran tidak boleh kosong",
+    "codeClientEnvBlank": "Kod persekitaran klien tidak boleh kosong",
+    "codeClientEnvNotConfigured": "Kaedah pembayaran belum dikonfigurasi untuk persekitaran dan bentuk ini",
+    "codeRuntimeMismatch": "Jenis pendaratan kod QR tidak sepadan dengan runtime",
+    "codeClientEnvChannelMchRequired": "Dalam mod DIRECT, nombor peniaga saluran baris yang diisi wajib",
+    "returnPathInvalid": "Laluan kembali kebenaran tidak sah"
   },
   "refund": {
     "processing": "Pemprosesan bayaran balik, jangan ulangi",
@@ -83,7 +83,8 @@
     "amountExceed": "Jumlah bayaran balik tidak boleh melebihi jumlah bayaran",
     "orderNotFound": "Pesanan bayaran balik tidak ditemui",
     "syncProcessing": "Penyegerakan bayaran balik sedang dijalankan, jangan ulangi",
-    "noPermission": "Pedagang tidak mempunyai kebenaran bayaran balik"
+    "noPermission": "Pedagang tidak mempunyai kebenaran bayaran balik",
+    "gatewayNotSupported": "Pesanan bayaran gateway belum menyokong bayaran balik"
   },
   "callback": {
     "processing": "Pemprosesan panggilan balik, mengabaikan permintaan panggilan balik ini",
@@ -125,12 +126,12 @@
     "methodMismatch": "Kod bar tidak sepadan dengan kaedah pembayaran"
   },
   "risk": {
-    "blacklist": "Transaction is restricted",
-    "blacklistDuplicate": "Blacklist entry already exists",
-    "blacklistNotFound": "Blacklist entry not found",
-    "blacklistTypeInvalid": "Invalid blacklist type",
-    "blacklistStatusInvalid": "Invalid blacklist status",
-    "hitNotFound": "Risk hit record not found",
-    "handleStatusInvalid": "Invalid handle status"
+    "blacklist": "Transaksi dihadkan",
+    "blacklistDuplicate": "Entri senarai hitam sudah wujud",
+    "blacklistNotFound": "Entri senarai hitam tidak ditemui",
+    "blacklistTypeInvalid": "Jenis senarai hitam tidak sah",
+    "blacklistStatusInvalid": "Status senarai hitam tidak sah",
+    "hitNotFound": "Rekod hit risiko tidak ditemui",
+    "handleStatusInvalid": "Status pengendalian tidak sah"
   }
 }

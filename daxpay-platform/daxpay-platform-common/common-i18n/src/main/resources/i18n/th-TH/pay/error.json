@@ -47,32 +47,32 @@
   "gateway": {
     "cashierNotReady": "ยังไม่มีการชำระเงินผ่านแคชเชียร์",
     "typeMismatch": "ประเภทคำสั่งเกตเวย์ไม่ตรงกัน",
-    "clientEnvNotSupport": "Unsupported client environment",
-    "clientEnvNotConfigured": "Payment method not configured for this client environment",
+    "clientEnvNotSupport": "ไม่รองรับสภาพแวดล้อมของไคลเอนต์นี้",
+    "clientEnvNotConfigured": "สภาพแวดล้อมไคลเอนต์นี้ยังไม่ได้กำหนดวิธีการชำระเงิน",
     "aggregateConfigMissing": "การกำหนดค่าการจ่าย QR รวมหายไปสำหรับแอป",
-    "aggregateClientEnvsRequired": "Configure at least one open environment",
-    "aggregateClientEnvBlank": "Client environment code must not be blank",
-    "aggregateClientEnvMethodRequired": "Payment method is required for each filled environment",
-    "aggregateClientEnvChannelMchRequired": "Channel merchant required for each client environment in DIRECT level",
-    "aggregateClientEnvCapabilityRequired": "Capability required for each client environment in DIRECT level",
+    "aggregateClientEnvsRequired": "โปรดกำหนดค่าสภาพแวดล้อมการเปิดอย่างน้อยหนึ่งรายการ",
+    "aggregateClientEnvBlank": "รหัสสภาพแวดล้อมไคลเอนต์ต้องไม่ว่าง",
+    "aggregateClientEnvMethodRequired": "สภาพแวดล้อมที่กรอกแล้วต้องเลือกวิธีการชำระเงิน",
+    "aggregateClientEnvChannelMchRequired": "โหมด DIRECT: ต้องระบุหมายเลขร้านค้าช่องทางของสภาพแวดล้อมที่กรอก",
+    "aggregateClientEnvCapabilityRequired": "โหมด DIRECT: ต้องระบุความสามารถในการชำระเงินของสภาพแวดล้อมที่กรอก",
     "channelLocked": "วิธีการชำระเงินถูกล็อคสำหรับคำสั่งซื้อนี้",
-    "clientEnvRequired": "H5 cashier requires a client environment",
+    "clientEnvRequired": "แคชเชียร์ H5 ต้องระบุสภาพแวดล้อมไคลเอนต์",
     "cashierItemNotFound": "ไม่พบรายการชำระเงินของแคชเชียร์",
     "cashierItemAppIdImmutable": "ไม่สามารถเปลี่ยนรหัสแอปรายการแคชเชียร์ได้",
     "cashierItemMethodRequired": "ต้องระบุวิธีการชำระเงินในโหมดวิธี",
     "cashierItemChannelMchRequired": "จำเป็นต้องมีผู้ค้าช่องทางในโหมด DIRECT",
     "cashierItemCapabilityRequired": "จำเป็นต้องมีความสามารถในโหมด DIRECT",
     "cashierItemNameRequired": "ชื่อรายการชำระเงินไม่สามารถเว้นว่างได้",
-    "codeConfigMissing": "QR code pay strategy config missing for app",
-    "codeClientEnvMethodRequired": "Payment method is required for each filled env and form",
-    "codeClientEnvCapabilityRequired": "Capability required for each env and form in DIRECT mode",
-    "codeClientEnvsRequired": "Configure at least one environment and form",
-    "codePayFormBlank": "Pay form cannot be blank",
-    "codeClientEnvBlank": "Client environment code cannot be blank",
-    "codeClientEnvNotConfigured": "Payment method not configured for this client env and form",
-    "codeRuntimeMismatch": "QR program type does not match runtime",
-    "codeClientEnvChannelMchRequired": "Channel merchant required for each env and form in DIRECT mode",
-    "returnPathInvalid": "Invalid auth return path"
+    "codeConfigMissing": "แอปยังไม่ได้กำหนดค่านโยบายการชำระเงินด้วยรหัส QR",
+    "codeClientEnvMethodRequired": "สภาพแวดล้อมและรูปแบบที่กรอกแล้วต้องเลือกวิธีการชำระเงิน",
+    "codeClientEnvCapabilityRequired": "โหมด DIRECT: ต้องระบุความสามารถในการชำระเงินของแถวที่กรอก",
+    "codeClientEnvsRequired": "โปรดกำหนดค่าสภาพแวดล้อมและรูปแบบอย่างน้อยหนึ่งรายการ",
+    "codePayFormBlank": "รูปแบบการชำระเงินต้องไม่ว่าง",
+    "codeClientEnvBlank": "รหัสสภาพแวดล้อมไคลเอนต์ต้องไม่ว่าง",
+    "codeClientEnvNotConfigured": "สภาพแวดล้อมและรูปแบบนี้ยังไม่ได้กำหนดวิธีการชำระเงิน",
+    "codeRuntimeMismatch": "ประเภทการลงจอดของรหัส QR ไม่ตรงกับรันไทม์",
+    "codeClientEnvChannelMchRequired": "โหมด DIRECT: ต้องระบุหมายเลขร้านค้าช่องทางของแถวที่กรอก",
+    "returnPathInvalid": "เส้นทางกลับหลังการอนุญาตไม่ถูกต้อง"
   },
   "refund": {
     "processing": "ดำเนินการคืนเงินอย่าทำซ้ำ",
@@ -83,7 +83,8 @@
     "amountExceed": "จำนวนเงินคืนต้องไม่เกินจำนวนเงินที่ชำระ",
     "orderNotFound": "ไม่พบคำสั่งซื้อคืนเงิน",
     "syncProcessing": "อยู่ระหว่างการซิงค์การคืนเงิน อย่าทำซ้ำ",
-    "noPermission": "ผู้ขายไม่ได้รับอนุญาตให้คืนเงิน"
+    "noPermission": "ผู้ขายไม่ได้รับอนุญาตให้คืนเงิน",
+    "gatewayNotSupported": "คำสั่งชำระเงินเกตเวย์ยังไม่รองรับการคืนเงิน"
   },
   "callback": {
     "processing": "การประมวลผลการโทรกลับ โดยไม่สนใจคำขอโทรกลับนี้",
@@ -125,12 +126,12 @@
     "methodMismatch": "บาร์โค้ดไม่ตรงกับวิธีชำระเงิน"
   },
   "risk": {
-    "blacklist": "Transaction is restricted",
-    "blacklistDuplicate": "Blacklist entry already exists",
-    "blacklistNotFound": "Blacklist entry not found",
-    "blacklistTypeInvalid": "Invalid blacklist type",
-    "blacklistStatusInvalid": "Invalid blacklist status",
-    "hitNotFound": "Risk hit record not found",
-    "handleStatusInvalid": "Invalid handle status"
+    "blacklist": "ธุรกรรมถูกจำกัด",
+    "blacklistDuplicate": "รายการบัญชีดำนี้มีอยู่แล้ว",
+    "blacklistNotFound": "ไม่พบรายการบัญชีดำ",
+    "blacklistTypeInvalid": "ประเภทบัญชีดำไม่ถูกต้อง",
+    "blacklistStatusInvalid": "สถานะบัญชีดำไม่ถูกต้อง",
+    "hitNotFound": "ไม่พบบันทึกการตรวจพบความเสี่ยง",
+    "handleStatusInvalid": "สถานะการจัดการไม่ถูกต้อง"
   }
 }

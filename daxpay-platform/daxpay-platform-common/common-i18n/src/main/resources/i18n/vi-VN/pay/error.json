@@ -47,32 +47,32 @@
   "gateway": {
     "cashierNotReady": "Thanh toán bằng tiền mặt vẫn chưa có sẵn",
     "typeMismatch": "Loại thứ tự cổng không khớp",
-    "clientEnvNotSupport": "Unsupported client environment",
-    "clientEnvNotConfigured": "Payment method not configured for this client environment",
+    "clientEnvNotSupport": "Môi trường máy khách không được hỗ trợ",
+    "clientEnvNotConfigured": "Môi trường máy khách này chưa cấu hình phương thức thanh toán",
     "aggregateConfigMissing": "Thiếu cấu hình thanh toán QR tổng hợp cho ứng dụng",
-    "aggregateClientEnvsRequired": "Configure at least one open environment",
-    "aggregateClientEnvBlank": "Client environment code must not be blank",
-    "aggregateClientEnvMethodRequired": "Payment method is required for each filled environment",
-    "aggregateClientEnvChannelMchRequired": "Channel merchant required for each client environment in DIRECT level",
-    "aggregateClientEnvCapabilityRequired": "Capability required for each client environment in DIRECT level",
+    "aggregateClientEnvsRequired": "Vui lòng cấu hình ít nhất một môi trường mở",
+    "aggregateClientEnvBlank": "Mã môi trường máy khách không được để trống",
+    "aggregateClientEnvMethodRequired": "Môi trường đã điền phải chọn phương thức thanh toán",
+    "aggregateClientEnvChannelMchRequired": "Chế độ DIRECT: bắt buộc có số thương nhân kênh cho mỗi môi trường đã điền",
+    "aggregateClientEnvCapabilityRequired": "Chế độ DIRECT: bắt buộc có năng lực thanh toán cho mỗi môi trường đã điền",
     "channelLocked": "Phương thức thanh toán bị khóa cho đơn hàng này",
-    "clientEnvRequired": "H5 cashier requires a client environment",
+    "clientEnvRequired": "Thu ngân H5 phải chỉ định môi trường máy khách",
     "cashierItemNotFound": "Không tìm thấy mục thanh toán thu ngân",
     "cashierItemAppIdImmutable": "Id ứng dụng của mặt hàng thu ngân không thể thay đổi",
     "cashierItemMethodRequired": "Phương thức thanh toán là bắt buộc trong chế độ METHOD",
     "cashierItemChannelMchRequired": "Người bán kênh được yêu cầu ở chế độ TRỰC TIẾP",
     "cashierItemCapabilityRequired": "Cần có khả năng ở chế độ TRỰC TIẾP",
     "cashierItemNameRequired": "Tên mục thanh toán không được để trống",
-    "codeConfigMissing": "QR code pay strategy config missing for app",
-    "codeClientEnvMethodRequired": "Payment method is required for each filled env and form",
-    "codeClientEnvCapabilityRequired": "Capability required for each env and form in DIRECT mode",
-    "codeClientEnvsRequired": "Configure at least one environment and form",
-    "codePayFormBlank": "Pay form cannot be blank",
-    "codeClientEnvBlank": "Client environment code cannot be blank",
-    "codeClientEnvNotConfigured": "Payment method not configured for this client env and form",
-    "codeRuntimeMismatch": "QR program type does not match runtime",
-    "codeClientEnvChannelMchRequired": "Channel merchant required for each env and form in DIRECT mode",
-    "returnPathInvalid": "Invalid auth return path"
+    "codeConfigMissing": "Ứng dụng chưa cấu hình chiến lược thanh toán mã QR",
+    "codeClientEnvMethodRequired": "Môi trường và hình thức đã điền phải chọn phương thức thanh toán",
+    "codeClientEnvCapabilityRequired": "Chế độ DIRECT: bắt buộc có năng lực thanh toán cho mỗi dòng đã điền",
+    "codeClientEnvsRequired": "Vui lòng cấu hình ít nhất một cặp môi trường và hình thức",
+    "codePayFormBlank": "Hình thức thanh toán không được để trống",
+    "codeClientEnvBlank": "Mã môi trường máy khách không được để trống",
+    "codeClientEnvNotConfigured": "Môi trường và hình thức này chưa cấu hình phương thức thanh toán",
+    "codeRuntimeMismatch": "Loại landing mã QR không khớp với runtime",
+    "codeClientEnvChannelMchRequired": "Chế độ DIRECT: bắt buộc có số thương nhân kênh cho mỗi dòng đã điền",
+    "returnPathInvalid": "Đường dẫn quay lại sau ủy quyền không hợp lệ"
   },
   "refund": {
     "processing": "Xử lý hoàn tiền, không lặp lại",
@@ -83,7 +83,8 @@
     "amountExceed": "Số tiền hoàn lại không thể vượt quá số tiền thanh toán",
     "orderNotFound": "Không tìm thấy lệnh hoàn tiền",
     "syncProcessing": "Đang đồng bộ hóa hoàn tiền, không lặp lại",
-    "noPermission": "Người bán không có quyền hoàn tiền"
+    "noPermission": "Người bán không có quyền hoàn tiền",
+    "gatewayNotSupported": "Đơn thanh toán cổng tạm thời không hỗ trợ hoàn tiền"
   },
   "callback": {
     "processing": "Xử lý cuộc gọi lại, bỏ qua yêu cầu gọi lại này",
@@ -125,12 +126,12 @@
     "methodMismatch": "Mã thanh toán không khớp với phương thức"
   },
   "risk": {
-    "blacklist": "Transaction is restricted",
-    "blacklistDuplicate": "Blacklist entry already exists",
-    "blacklistNotFound": "Blacklist entry not found",
-    "blacklistTypeInvalid": "Invalid blacklist type",
-    "blacklistStatusInvalid": "Invalid blacklist status",
-    "hitNotFound": "Risk hit record not found",
-    "handleStatusInvalid": "Invalid handle status"
+    "blacklist": "Giao dịch bị hạn chế",
+    "blacklistDuplicate": "Mục danh sách đen đã tồn tại",
+    "blacklistNotFound": "Không tìm thấy mục danh sách đen",
+    "blacklistTypeInvalid": "Loại danh sách đen không hợp lệ",
+    "blacklistStatusInvalid": "Trạng thái danh sách đen không hợp lệ",
+    "hitNotFound": "Không tìm thấy bản ghi trúng rủi ro",
+    "handleStatusInvalid": "Trạng thái xử lý không hợp lệ"
   }
 }
