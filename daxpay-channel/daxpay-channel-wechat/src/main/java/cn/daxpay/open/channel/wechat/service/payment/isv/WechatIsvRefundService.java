@@ -7,7 +7,7 @@ import cn.daxpay.open.channel.wechat.client.resp.WechatRefundResp;
 import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
-import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
@@ -33,12 +33,12 @@ public class WechatIsvRefundService {
     private static final String STATUS_CLOSED = "CLOSED";
 
     /// 执行微信服务商退款
-    public RefundResultBo refund(PayRefundOrder refundOrder, WechatSdkCredential credential) {
+    public RefundResultBo refund(RefundOrder refundOrder, WechatSdkCredential credential) {
         // 构建请求(与直连一致)
         WechatRefundReq req = new WechatRefundReq();
-        req.setOutTradeNo(refundOrder.getOrderNo());
+        req.setOutTradeNo(refundOrder.getTradeNo());
         req.setTransactionId(refundOrder.getOutOrderNo());
-        req.setOutRefundNo(refundOrder.getRefundNo());
+        req.setOutRefundNo(refundOrder.getRelationOrderNo());
         // 微信退款需原订单总额(orderAmount)与退款金额(amount)
         req.setTotalAmount(refundOrder.getOrderAmount());
         req.setRefundAmount(refundOrder.getAmount());
@@ -65,7 +65,7 @@ public class WechatIsvRefundService {
     /// 生成微信服务商退款异步通知地址(微信→平台)
     ///
     /// 路径约定: `{backendBaseUrl}/unipay/callback/{mchNo}/{channelMchNo}/wechat/isv/refund`
-    private String buildRefundNotifyUrl(PayRefundOrder refundOrder) {
+    private String buildRefundNotifyUrl(RefundOrder refundOrder) {
         String base = platformUrlConfigService.getUrlConfig().getBackendBaseUrl();
         if (StrUtil.isBlank(base)) {
             throw new BizInfoException(DaxPayErrorCode.CONFIG_ERROR, "error.common.backendBaseUrlNotConfigured");

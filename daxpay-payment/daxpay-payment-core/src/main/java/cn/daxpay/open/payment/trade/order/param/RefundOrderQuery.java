@@ -12,7 +12,7 @@ import java.time.OffsetDateTime;
 @Data
 @Accessors(chain = true)
 @Schema(title = "退款订单查询参数")
-public class PayRefundOrderQuery {
+public class RefundOrderQuery {
 
     /// 商户号
     @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
@@ -34,10 +34,16 @@ public class PayRefundOrderQuery {
     @Schema(description = "商户退款号")
     private String bizRefundNo;
 
-    /// 原支付订单号
+    /// 原支付资金交易号
     @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
-    @Schema(description = "原支付订单号")
-    private String orderNo;
+    @Schema(description = "原支付资金交易号")
+    private String tradeNo;
+
+    /// 交易类型(原支付形态)
+    /// @see cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
+    @Schema(description = "交易类型")
+    private String tradeType;
 
     /// 商户业务订单号
     @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
@@ -50,10 +56,11 @@ public class PayRefundOrderQuery {
     @Schema(description = "退款状态")
     private String status;
 
-    /// 支付通道
+    /// 支付产品
+    /// @see cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum
     @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
-    @Schema(description = "支付通道")
-    private String channel;
+    @Schema(description = "支付产品")
+    private String product;
 
     /// 门店号
     @QueryParam(type = QueryParam.CompareTypeEnum.EQ)

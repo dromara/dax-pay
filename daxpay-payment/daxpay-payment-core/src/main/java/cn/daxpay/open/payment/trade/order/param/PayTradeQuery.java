@@ -46,22 +46,7 @@ public class PayTradeQuery {
     @Schema(description = "交易形态")
     private String tradeType;
 
-    /// 支付通道
-    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
-    @Schema(description = "支付通道")
-    private String channel;
-
-    /// 支付方式
-    /// @see cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum
-    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
-    @Schema(description = "支付方式")
-    private String method;
-
-    /// 支付产品
-    /// @see cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum
-    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
-    @Schema(description = "支付产品")
-    private String product;
+    // 注意: pay_trade 表无 channel/method/product 列，禁止在此加无效筛选
 
     /// 通道商户号
     @QueryParam(type = QueryParam.CompareTypeEnum.EQ)

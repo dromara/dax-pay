@@ -14,7 +14,7 @@ import java.time.OffsetDateTime;
 /// # 资金交易凭证(管理)
 ///
 /// 列表场景仅填充凭证(PayTrade)字段;
-/// 详情场景额外填充容器(NormalPayOrder)字段: bizOrderNo / title / containerStatus
+/// 详情场景由 Assembler 按 tradeType 填充容器字段(normal / gateway 等)
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
@@ -174,7 +174,11 @@ public class PayTradeResult extends BaseResult {
     @Schema(description = "错误信息")
     private String errorMsg;
 
-    // ===== 容器(NormalPayOrder)联表字段, 仅详情时填充 =====
+    // ===== 容器联表字段, 仅详情时按 tradeType 填充 =====
+
+    /// 容器平台业务单号(orderNo)
+    @Schema(description = "容器平台业务单号")
+    private String containerOrderNo;
 
     /// 商户业务单号
     @Schema(description = "商户业务单号")
@@ -185,7 +189,6 @@ public class PayTradeResult extends BaseResult {
     private String title;
 
     /// 容器业务状态
-    /// @see cn.daxpay.open.payment.trade.enums.NormalPayOrderStatusEnum
     @Schema(description = "容器业务状态")
     private String containerStatus;
 }

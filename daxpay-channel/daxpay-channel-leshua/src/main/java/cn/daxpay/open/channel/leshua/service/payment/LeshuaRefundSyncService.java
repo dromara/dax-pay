@@ -8,7 +8,7 @@ import cn.daxpay.open.channel.leshua.code.LeshuaCode;
 import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
-import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,12 +26,12 @@ public class LeshuaRefundSyncService {
     private final LeshuaChannelClient leshuaChannelClient;
 
     /// 查询退款状态
-    public RefundResultBo sync(PayRefundOrder refundOrder, LeshuaSdkCredential credential) {
+    public RefundResultBo sync(RefundOrder refundOrder, LeshuaSdkCredential credential) {
         LeshuaRefundSyncReq req = new LeshuaRefundSyncReq();
         req.setCredential(credential);
         req.setLeshuaOrderId(refundOrder.getOutOrderNo());
         req.setLeshuaRefundId(refundOrder.getOutRefundNo());
-        req.setOutRefundNo(refundOrder.getRefundNo());
+        req.setOutRefundNo(refundOrder.getRelationOrderNo());
 
         DaxResult<LeshuaRefundSyncResp> result = leshuaChannelClient.refundSync(req);
         RefundResultBo bo = new RefundResultBo();

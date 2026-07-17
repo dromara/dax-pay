@@ -7,7 +7,7 @@ import cn.daxpay.open.channel.hkrt.client.resp.HkrtRefundSyncResp;
 import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
-import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,10 +25,10 @@ public class HkrtRefundSyncService {
     private final HkrtChannelClient hkrtChannelClient;
 
     /// 同步退款状态
-    public RefundResultBo sync(PayRefundOrder refundOrder, HkrtSdkCredential credential) {
+    public RefundResultBo sync(RefundOrder refundOrder, HkrtSdkCredential credential) {
         HkrtRefundSyncReq req = new HkrtRefundSyncReq();
         req.setCredential(credential);
-        req.setOutRefundNo(refundOrder.getRefundNo());
+        req.setOutRefundNo(refundOrder.getRelationOrderNo());
         req.setOriginTradeNo(refundOrder.getOutRefundNo());
 
         DaxResult<HkrtRefundSyncResp> result = hkrtChannelClient.refundSync(req);

@@ -7,7 +7,7 @@ import cn.daxpay.open.channel.vbill.client.resp.VbillRefundResp;
 import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
-import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import lombok.RequiredArgsConstructor;
@@ -25,11 +25,11 @@ public class VbillRefundService {
     private final VbillChannelClient vbillChannelClient;
 
     /// 执行退款
-    public RefundResultBo refund(PayRefundOrder refundOrder, VbillSdkCredential credential) {
+    public RefundResultBo refund(RefundOrder refundOrder, VbillSdkCredential credential) {
         VbillRefundReq req = new VbillRefundReq();
         req.setCredential(credential);
         // 退款单号(作为随行付 ordNo)
-        req.setOutRefundNo(refundOrder.getRefundNo());
+        req.setOutRefundNo(refundOrder.getRelationOrderNo());
         // 原支付订单的网关订单号(随行付 uuid)
         req.setOutOrderNo(refundOrder.getOutOrderNo());
         req.setAmount(refundOrder.getAmount());

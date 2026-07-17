@@ -7,7 +7,7 @@ import cn.daxpay.open.channel.hkrt.client.resp.HkrtRefundResp;
 import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
-import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import lombok.RequiredArgsConstructor;
@@ -26,13 +26,13 @@ public class HkrtRefundService {
     private final HkrtRefundSyncService hkrtRefundSyncService;
 
     /// 执行退款
-    public RefundResultBo refund(PayRefundOrder refundOrder, HkrtSdkCredential credential) {
+    public RefundResultBo refund(RefundOrder refundOrder, HkrtSdkCredential credential) {
         HkrtRefundReq req = new HkrtRefundReq();
         req.setCredential(credential);
         // 退款单号(作为海科融通 out_refund_no)
-        req.setOutRefundNo(refundOrder.getRefundNo());
+        req.setOutRefundNo(refundOrder.getRelationOrderNo());
         // 原支付订单号(平台 tradeNo 作为原 out_trade_no)
-        req.setOriginOutTradeNo(refundOrder.getOrderNo());
+        req.setOriginOutTradeNo(refundOrder.getTradeNo());
         // 原通道交易号(退款同步查询用, 首次退款时可能为空)
         req.setOriginTradeNo(refundOrder.getOutOrderNo());
         req.setAmount(refundOrder.getAmount());

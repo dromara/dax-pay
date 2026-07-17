@@ -7,7 +7,7 @@ import cn.daxpay.open.channel.fuyou.client.resp.FuyouRefundSyncResp;
 import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
-import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,11 +26,11 @@ public class FuyouRefundSyncService {
     private final FuyouChannelClient fuyouChannelClient;
 
     /// 同步退款状态
-    public RefundResultBo sync(PayRefundOrder refundOrder, FuyouSdkCredential credential) {
+    public RefundResultBo sync(RefundOrder refundOrder, FuyouSdkCredential credential) {
         FuyouRefundSyncReq req = new FuyouRefundSyncReq();
         req.setCredential(credential);
         // 富友凭 refund_order_no(平台 refundNo) 查询
-        req.setOutRefundNo(refundOrder.getRefundNo());
+        req.setOutRefundNo(refundOrder.getRelationOrderNo());
 
         DaxResult<FuyouRefundSyncResp> result = fuyouChannelClient.refundSync(req);
         RefundResultBo bo = new RefundResultBo();

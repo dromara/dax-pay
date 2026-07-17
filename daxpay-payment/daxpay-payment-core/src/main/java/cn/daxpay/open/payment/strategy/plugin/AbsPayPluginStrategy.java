@@ -1,6 +1,6 @@
 package cn.daxpay.open.payment.strategy.plugin;
 
-import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 
 /// # 支付插件策略
@@ -25,10 +25,10 @@ public interface AbsPayPluginStrategy {
     }
 
     /// 退款成功
-    default void refundSuccess(PayTrade trade, PayRefundOrder refundOrder) {
+    default void refundSuccess(PayTrade trade, RefundOrder refundOrder) {
     }
 
     /// 退款关闭
-    default void refundClose(PayTrade trade, PayRefundOrder refundOrder) {
+    default void refundClose(PayTrade trade, RefundOrder refundOrder) {
     }
 }

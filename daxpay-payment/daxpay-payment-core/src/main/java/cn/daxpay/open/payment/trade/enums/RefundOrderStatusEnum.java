@@ -15,9 +15,7 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public enum RefundOrderStatusEnum implements I18nSupport {
 
-    /// 初始化(退款单已创建, 尚未调用通道)
-    INIT("init"),
-    /// 退款中(已调用通道, 等待结果)
+    /// 退款中(已创建并调用通道, 等待结果)
     PROGRESS("progress"),
     /// 退款成功
     SUCCESS("success"),

@@ -11,7 +11,7 @@ import java.util.Map;
 /// # 退款回调数据(函数传参,非线程上下文)
 ///
 /// 通道退款回调解析后的结果数据,由退款回调入口创建并显式传递给 [RefundCallbackService]。
-/// 与 [CallbackData] 对称:支付回调用 tradeNo 反查支付单,退款回调用 refundNo 反查退款单。
+/// 与 [CallbackData] 对称:支付回调用 tradeNo 反查支付单,退款回调用 refundNo/relationOrderNo 反查退款单。
 /// 不挂 ThreadLocal,避免线程池复用时的脏数据残留。
 @Data
 @Accessors(chain = true)
@@ -20,8 +20,11 @@ public class RefundCallbackData {
     /// 回调数据内容(原始解析结果,供日志/溯源)
     private Map<String, ?> callbackData = new HashMap<>();
 
-    /// 平台退款号(对应通道 out_request_no,反查退款单的主键)
+    /// 平台退款号(对应通道 out_request_no,反查退款单)
     private String refundNo;
+
+    /// 实际上送通道的商户退款关联号(特殊通道变形号, 回调容错反查)
+    private String relationOrderNo;
 
     /// 通道退款流水号(三方通道返回的退款流水号)
     private String outRefundNo;

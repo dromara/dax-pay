@@ -327,3 +327,140 @@ CREATE INDEX IF NOT EXISTS "idx_starter_audit_unipay_log_trace" ON "public"."sta
 CREATE INDEX IF NOT EXISTS "idx_starter_audit_unipay_log_success_time" ON "public"."starter_audit_unipay_log" ("success", "operate_time" DESC);
 
 -- ----------------------------
+-- Table structure for pay_refund_order（退款订单）
+-- 对齐实体 RefundOrder：trade_no + trade_type + relation_order_no，无 method
+-- capability 仅通道凭证组装运行时使用，管理端不展示
+-- ----------------------------
+CREATE TABLE IF NOT EXISTS "public"."pay_refund_order" (
+  "id" int8 NOT NULL,
+  "mch_no" varchar(32) COLLATE "pg_catalog"."default",
+  "app_id" varchar(32) COLLATE "pg_catalog"."default",
+  "refund_no" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
+  "biz_refund_no" varchar(100) COLLATE "pg_catalog"."default",
+  "relation_order_no" varchar(100) COLLATE "pg_catalog"."default",
+  "trade_no" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
+  "trade_type" varchar(32) COLLATE "pg_catalog"."default",
+  "biz_order_no" varchar(100) COLLATE "pg_catalog"."default",
+  "out_order_no" varchar(150) COLLATE "pg_catalog"."default",
+  "title" varchar(200) COLLATE "pg_catalog"."default",
+  "out_refund_no" varchar(150) COLLATE "pg_catalog"."default",
+  "amount" int8 NOT NULL,
+  "order_amount" int8,
+  "currency" varchar(8) COLLATE "pg_catalog"."default",
+  "reason" varchar(256) COLLATE "pg_catalog"."default",
+  "status" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "finish_time" timestamptz(6),
+  "error_msg" varchar(500) COLLATE "pg_catalog"."default",
+  "channel" varchar(32) COLLATE "pg_catalog"."default",
+  "product" varchar(64) COLLATE "pg_catalog"."default",
+  "channel_mch_no" varchar(64) COLLATE "pg_catalog"."default",
+  "capability" varchar(64) COLLATE "pg_catalog"."default",
+  "channel_app_id" varchar(64) COLLATE "pg_catalog"."default",
+  "notify_url" varchar(256) COLLATE "pg_catalog"."default",
+  "attach" varchar(512) COLLATE "pg_catalog"."default",
+  "client_ip" varchar(64) COLLATE "pg_catalog"."default",
+  "store_no" varchar(64) COLLATE "pg_catalog"."default",
+  "creator" int8,
+  "create_time" timestamptz(6),
+  "last_modifier" int8,
+  "last_modified_time" timestamptz(6),
+  "version" int4 NOT NULL DEFAULT 0,
+  "deleted" bool NOT NULL DEFAULT false
+);
+
+COMMENT ON TABLE "public"."pay_refund_order" IS '退款订单';
+COMMENT ON COLUMN "public"."pay_refund_order"."id" IS '主键';
+COMMENT ON COLUMN "public"."pay_refund_order"."mch_no" IS '商户号';
+COMMENT ON COLUMN "public"."pay_refund_order"."app_id" IS '应用号';
+COMMENT ON COLUMN "public"."pay_refund_order"."refund_no" IS '平台退款号';
+COMMENT ON COLUMN "public"."pay_refund_order"."biz_refund_no" IS '商户退款号';
+COMMENT ON COLUMN "public"."pay_refund_order"."relation_order_no" IS '实际上送通道的商户退款关联号(普通=refund_no,特殊通道可变形)';
+COMMENT ON COLUMN "public"."pay_refund_order"."trade_no" IS '原支付资金交易号(pay_trade.trade_no)';
+COMMENT ON COLUMN "public"."pay_refund_order"."trade_type" IS '原支付交易形态(normal/gateway等, 冗余自 pay_trade.trade_type)';
+COMMENT ON COLUMN "public"."pay_refund_order"."biz_order_no" IS '商户业务订单号(冗余)';
+COMMENT ON COLUMN "public"."pay_refund_order"."out_order_no" IS '通道原支付订单号';
+COMMENT ON COLUMN "public"."pay_refund_order"."title" IS '标题(冗余自原支付)';
+COMMENT ON COLUMN "public"."pay_refund_order"."out_refund_no" IS '通道退款流水号';
+COMMENT ON COLUMN "public"."pay_refund_order"."amount" IS '退款金额(分)';
+COMMENT ON COLUMN "public"."pay_refund_order"."order_amount" IS '原支付总金额(分)';
+COMMENT ON COLUMN "public"."pay_refund_order"."currency" IS '币种';
+COMMENT ON COLUMN "public"."pay_refund_order"."reason" IS '退款原因';
+COMMENT ON COLUMN "public"."pay_refund_order"."status" IS '退款状态: progress/success/fail/close';
+COMMENT ON COLUMN "public"."pay_refund_order"."finish_time" IS '退款完成时间';
+COMMENT ON COLUMN "public"."pay_refund_order"."error_msg" IS '错误信息';
+COMMENT ON COLUMN "public"."pay_refund_order"."channel" IS '支付通道';
+COMMENT ON COLUMN "public"."pay_refund_order"."product" IS '支付产品编码';
+COMMENT ON COLUMN "public"."pay_refund_order"."channel_mch_no" IS '通道商户号';
+COMMENT ON COLUMN "public"."pay_refund_order"."capability" IS '支付能力编码';
+COMMENT ON COLUMN "public"."pay_refund_order"."channel_app_id" IS '通道应用AppId';
+COMMENT ON COLUMN "public"."pay_refund_order"."notify_url" IS '商户异步通知地址';
+COMMENT ON COLUMN "public"."pay_refund_order"."attach" IS '商户附加参数';
+COMMENT ON COLUMN "public"."pay_refund_order"."client_ip" IS '客户端IP';
+COMMENT ON COLUMN "public"."pay_refund_order"."store_no" IS '门店号';
+COMMENT ON COLUMN "public"."pay_refund_order"."creator" IS '创建者ID';
+COMMENT ON COLUMN "public"."pay_refund_order"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."pay_refund_order"."last_modifier" IS '最后修改者ID';
+COMMENT ON COLUMN "public"."pay_refund_order"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."pay_refund_order"."version" IS '版本号(乐观锁)';
+COMMENT ON COLUMN "public"."pay_refund_order"."deleted" IS '删除标志';
+
+ALTER TABLE "public"."pay_refund_order" DROP CONSTRAINT IF EXISTS "pay_refund_order_pkey";
+ALTER TABLE "public"."pay_refund_order" ADD CONSTRAINT "pay_refund_order_pkey" PRIMARY KEY ("id");
+
+CREATE UNIQUE INDEX IF NOT EXISTS "uk_pay_refund_order_refund_no" ON "public"."pay_refund_order" ("refund_no") WHERE deleted = false;
+CREATE INDEX IF NOT EXISTS "idx_pay_refund_order_relation_no" ON "public"."pay_refund_order" ("relation_order_no");
+CREATE INDEX IF NOT EXISTS "idx_pay_refund_order_out_refund_no" ON "public"."pay_refund_order" ("out_refund_no");
+CREATE INDEX IF NOT EXISTS "idx_pay_refund_order_trade_no" ON "public"."pay_refund_order" ("trade_no");
+CREATE INDEX IF NOT EXISTS "idx_pay_refund_order_trade_type" ON "public"."pay_refund_order" ("trade_type");
+CREATE INDEX IF NOT EXISTS "idx_pay_refund_order_biz_refund_no" ON "public"."pay_refund_order" ("biz_refund_no");
+CREATE INDEX IF NOT EXISTS "idx_pay_refund_order_biz_order_no" ON "public"."pay_refund_order" ("biz_order_no");
+CREATE INDEX IF NOT EXISTS "idx_pay_refund_order_mch_time" ON "public"."pay_refund_order" ("mch_no", "create_time" DESC);
+
+-- 若旧表已存在 order_no / method 列，迁移到新模型（幂等）
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public' AND table_name = 'pay_refund_order' AND column_name = 'order_no'
+  ) AND NOT EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public' AND table_name = 'pay_refund_order' AND column_name = 'trade_no'
+  ) THEN
+    ALTER TABLE "public"."pay_refund_order" RENAME COLUMN "order_no" TO "trade_no";
+  END IF;
+
+  IF EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public' AND table_name = 'pay_refund_order' AND column_name = 'method'
+  ) THEN
+    ALTER TABLE "public"."pay_refund_order" DROP COLUMN "method";
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public' AND table_name = 'pay_refund_order' AND column_name = 'relation_order_no'
+  ) THEN
+    ALTER TABLE "public"."pay_refund_order" ADD COLUMN "relation_order_no" varchar(100);
+    UPDATE "public"."pay_refund_order" SET "relation_order_no" = "refund_no" WHERE "relation_order_no" IS NULL;
+  END IF;
+
+  -- 交易类型：冗余自 pay_trade.trade_type
+  IF NOT EXISTS (
+    SELECT 1 FROM information_schema.columns
+    WHERE table_schema = 'public' AND table_name = 'pay_refund_order' AND column_name = 'trade_type'
+  ) THEN
+    ALTER TABLE "public"."pay_refund_order" ADD COLUMN "trade_type" varchar(32);
+  END IF;
+END $$;
+
+COMMENT ON COLUMN "public"."pay_refund_order"."trade_type" IS '原支付交易形态(normal/gateway等, 冗余自 pay_trade.trade_type)';
+
+-- 历史数据回填 trade_type
+UPDATE "public"."pay_refund_order" r
+SET "trade_type" = t."trade_type"
+FROM "public"."pay_trade" t
+WHERE r."trade_no" = t."trade_no"
+  AND r."trade_type" IS NULL
+  AND (t."deleted" = false OR t."deleted" IS NULL);
+
+CREATE INDEX IF NOT EXISTS "idx_pay_refund_order_trade_type" ON "public"."pay_refund_order" ("trade_type");

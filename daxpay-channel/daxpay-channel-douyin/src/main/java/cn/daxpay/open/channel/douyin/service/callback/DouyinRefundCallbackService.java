@@ -28,7 +28,7 @@ import java.util.Objects;
 /// 转发到子应用验签解密 → 日志记录退款结果。
 ///
 /// TODO 退款单状态更新待接入退款回调框架(平台目前无独立 RefundCallbackService,
-///      后续可通过 PayRefundService 或新增退款回调入口完成状态流转)。
+///      后续可通过 RefundService 或新增退款回调入口完成状态流转)。
 @Slf4j
 @Service
 @RequiredArgsConstructor

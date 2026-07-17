@@ -5,7 +5,7 @@ import cn.daxpay.open.channel.dougong.service.isv.DougongIsvConfigAssembler;
 import cn.daxpay.open.channel.dougong.service.payment.DougongRefundService;
 import cn.daxpay.open.payment.strategy.refund.AbsRefundStrategy;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
-import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ public class DougongRefundStrategy extends AbsRefundStrategy {
     }
 
     @Override
-    public RefundResultBo doRefund(PayRefundOrder refundOrder) {
+    public RefundResultBo doRefund(RefundOrder refundOrder) {
         DougongSdkCredential credential = dougongIsvConfigAssembler.buildConfig(
                 refundOrder.getMchNo(), refundOrder.getChannelMchNo(), refundOrder.getCapability());
         return dougongRefundService.refund(refundOrder, credential);

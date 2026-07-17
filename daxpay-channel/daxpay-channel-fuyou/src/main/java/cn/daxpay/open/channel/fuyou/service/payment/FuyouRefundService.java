@@ -8,7 +8,7 @@ import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
 import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
-import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.trade.runtime.service.PayTradeContainerFields;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
@@ -35,9 +35,9 @@ public class FuyouRefundService {
     private final PayTradeContainerFields payTradeContainerFields;
 
     /// 执行退款
-    public RefundResultBo refund(PayRefundOrder refundOrder, FuyouSdkCredential credential) {
+    public RefundResultBo refund(RefundOrder refundOrder, FuyouSdkCredential credential) {
         // 反查原支付订单(富友退款需原订单关联订单号 + 支付厂商 + 原支付日期)
-        PayTrade originOrder = payTradeManager.findByTradeNo(refundOrder.getOrderNo())
+        PayTrade originOrder = payTradeManager.findByTradeNo(refundOrder.getTradeNo())
                 .orElseThrow(() -> new DataNotExistException("error.payment.channel.originOrderNotExist"));
 
         FuyouRefundReq req = new FuyouRefundReq();
@@ -48,7 +48,7 @@ public class FuyouRefundService {
         // 原支付厂商(富友 order_type)
         req.setTradeProduct(fields.tradeProduct());
         // 退款单号(平台 refundNo, 作为富友 refund_order_no)
-        req.setOutRefundNo(refundOrder.getRefundNo());
+        req.setOutRefundNo(refundOrder.getRelationOrderNo());
         // 原订单总金额
         req.setTotalAmount(refundOrder.getOrderAmount());
         // 退款金额

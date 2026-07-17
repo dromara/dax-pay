@@ -10,7 +10,7 @@ import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
 import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
-import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -31,21 +31,21 @@ public class AdapayRefundService {
     private final PayTradeManager payTradeManager;
 
     /// 执行Adapay 退款
-    public RefundResultBo refund(PayRefundOrder refundOrder, AdapaySdkCredential credential) {
+    public RefundResultBo refund(RefundOrder refundOrder, AdapaySdkCredential credential) {
         AdapayRefundReq req = new AdapayRefundReq();
-        req.setOutTradeNo(refundOrder.getOrderNo());
-        req.setOutRefundNo(refundOrder.getRefundNo());
+        req.setOutTradeNo(refundOrder.getTradeNo());
+        req.setOutRefundNo(refundOrder.getRelationOrderNo());
         req.setRefundAmount(refundOrder.getAmount());
         req.setReason(refundOrder.getReason());
         req.setNotifyUrl(this.buildRefundNotifyUrl(refundOrder));
         req.setCredential(credential);
 
         // Adapay 退款需要原支付对象 ID(从原交易读取)
-        payTradeManager.findByTradeNo(refundOrder.getOrderNo())
+        payTradeManager.findByTradeNo(refundOrder.getTradeNo())
                 .ifPresentOrElse(
                         t -> req.setPaymentId(t.getOutOrderNo()),
                         () -> log.error("Adapay 退款未查到原交易({}), paymentId 未填充, 退款将失败",
-                                refundOrder.getOrderNo()));
+                                refundOrder.getTradeNo()));
 
         DaxResult<AdapayRefundResp> result = adapayChannelClient.refund(req);
         if (result.getCode() != 0) {
@@ -61,7 +61,7 @@ public class AdapayRefundService {
     }
 
     /// 生成Adapay 退款异步通知地址
-    private String buildRefundNotifyUrl(PayRefundOrder refundOrder) {
+    private String buildRefundNotifyUrl(RefundOrder refundOrder) {
         String base = platformUrlConfigService.getUrlConfig().getBackendBaseUrl();
         if (StrUtil.isBlank(base)) {
             throw new IllegalStateException("平台后端访问地址(backendBaseUrl)未配置, 无法生成Adapay 退款回调地址");

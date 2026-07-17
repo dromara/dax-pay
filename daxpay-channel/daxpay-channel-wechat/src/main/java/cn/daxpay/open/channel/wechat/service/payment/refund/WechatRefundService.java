@@ -7,7 +7,7 @@ import cn.daxpay.open.channel.wechat.client.resp.WechatRefundResp;
 import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
-import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
@@ -41,12 +41,12 @@ public class WechatRefundService {
     /// @param refundOrder 退款订单(refundNo 作为 out_refund_no, orderNo 作为 out_trade_no, outOrderNo 作为 transaction_id)
     /// @param credential  通道调用凭证
     /// @return 退款结果(含映射后的退款状态)
-    public RefundResultBo refund(PayRefundOrder refundOrder, WechatSdkCredential credential) {
+    public RefundResultBo refund(RefundOrder refundOrder, WechatSdkCredential credential) {
         // 构建请求
         WechatRefundReq req = new WechatRefundReq();
-        req.setOutTradeNo(refundOrder.getOrderNo());
+        req.setOutTradeNo(refundOrder.getTradeNo());
         req.setTransactionId(refundOrder.getOutOrderNo());
-        req.setOutRefundNo(refundOrder.getRefundNo());
+        req.setOutRefundNo(refundOrder.getRelationOrderNo());
         // 微信退款需原订单总额(orderAmount)与退款金额(amount)
         req.setTotalAmount(refundOrder.getOrderAmount());
         req.setRefundAmount(refundOrder.getAmount());
@@ -73,7 +73,7 @@ public class WechatRefundService {
     /// 生成微信退款异步通知地址(微信→平台)
     ///
     /// 路径约定: `{backendBaseUrl}/unipay/callback/{mchNo}/{channelMchNo}/wechat/refund`
-    private String buildRefundNotifyUrl(PayRefundOrder refundOrder) {
+    private String buildRefundNotifyUrl(RefundOrder refundOrder) {
         String base = platformUrlConfigService.getUrlConfig().getBackendBaseUrl();
         if (StrUtil.isBlank(base)) {
             throw new BizInfoException(DaxPayErrorCode.CONFIG_ERROR, "error.common.backendBaseUrlNotConfigured");

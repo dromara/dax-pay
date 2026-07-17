@@ -45,19 +45,15 @@ public class GatewayPayOrderQuery {
     @Schema(description = "业务状态")
     private String status;
 
-    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
-    @Schema(description = "支付通道")
-    private String channel;
-
-    /// @see cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum
-    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
-    @Schema(description = "支付方式")
-    private String method;
-
     /// @see cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum
     @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "支付产品")
     private String product;
+
+    /// @see cn.daxpay.open.platform.core.enums.pay.channel.PayCapabilityEnum
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
+    @Schema(description = "支付能力")
+    private String capability;
 
     /// 门店号
     @QueryParam(type = QueryParam.CompareTypeEnum.EQ)

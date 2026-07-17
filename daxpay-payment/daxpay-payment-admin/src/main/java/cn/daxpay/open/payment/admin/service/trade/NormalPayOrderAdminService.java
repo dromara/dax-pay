@@ -4,6 +4,7 @@ import cn.daxpay.open.platform.common.translate.service.TransService;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
+import cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum;
 import cn.daxpay.open.payment.trade.order.convert.NormalPayOrderConvert;
 import cn.daxpay.open.payment.trade.order.dao.NormalPayOrderManager;
 import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
@@ -19,12 +20,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
-
 /// # 普通支付业务单管理服务(管理端)
 ///
 /// 提供业务订单(容器)的分页/详情查询, 以及状态同步、关闭/撤销管理操作。
-/// 详情场景联表资金凭证(PayTrade)补充交易字段; 同步/关闭复用 [PaySyncService] / [PayCloseService]。
+/// 详情场景由 [TradeOrderDetailAssembler] 联表资金凭证补充交易字段。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -35,11 +34,11 @@ public class NormalPayOrderAdminService {
     private final PaySyncService paySyncService;
     private final PayCloseService payCloseService;
     private final TransService transService;
+    private final TradeOrderDetailAssembler tradeOrderDetailAssembler;
 
     /// 分页查询
     public PageResult<NormalPayOrderResult> page(PageParam pageParam, NormalPayOrderQuery query) {
         Page<NormalPayOrder> page = normalPayOrderManager.page(pageParam, query);
-        // 手动转换, 避免侵入核心实体(不实现 ToResult)
         var records = page.getRecords().stream()
                 .map(NormalPayOrderConvert.CONVERT::toResult)
                 .toList();
@@ -58,15 +57,7 @@ public class NormalPayOrderAdminService {
         NormalPayOrder entity = normalPayOrderManager.findById(id)
                 .orElseThrow(() -> new DataNotExistException("pay.error.payOrderNotExist"));
         NormalPayOrderResult result = NormalPayOrderConvert.CONVERT.toResult(entity);
-        // 联表查询资金凭证, 补充交易字段
-        PayTrade trade = payTradeManager.findByContainerId(id, cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum.NORMAL.getCode()).orElse(null);
-        // payBody 仅在容器, Convert 已映射; 此处补资金凭证字段
-        if (Objects.nonNull(trade)) {
-            result.setTradeNo(trade.getTradeNo());
-            result.setOutOrderNo(trade.getOutOrderNo());
-            result.setFundStatus(trade.getStatus());
-            result.setRefundableBalance(trade.getRefundableBalance());
-        }
+        tradeOrderDetailAssembler.fillFundOnNormal(result, id);
         // 翻译商户名称
         transService.translate(result);
         return result;
@@ -74,14 +65,14 @@ public class NormalPayOrderAdminService {
 
     /// 同步支付状态(传入业务订单ID)
     public NormalPaySyncResult sync(Long id) {
-        PayTrade trade = payTradeManager.findByContainerId(id, cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum.NORMAL.getCode())
+        PayTrade trade = payTradeManager.findByContainerId(id, PayTradeTypeEnum.NORMAL.getCode())
                 .orElseThrow(() -> new DataNotExistException("pay.error.payOrderNotExist"));
         return paySyncService.syncPayOrder(trade);
     }
 
     /// 关闭/撤销订单(传入业务订单ID)
     public void close(Long id, boolean useCancel) {
-        PayTrade trade = payTradeManager.findByContainerId(id, cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum.NORMAL.getCode())
+        PayTrade trade = payTradeManager.findByContainerId(id, PayTradeTypeEnum.NORMAL.getCode())
                 .orElseThrow(() -> new DataNotExistException("pay.error.payOrderNotExist"));
         payCloseService.closeOrder(trade, useCancel);
     }

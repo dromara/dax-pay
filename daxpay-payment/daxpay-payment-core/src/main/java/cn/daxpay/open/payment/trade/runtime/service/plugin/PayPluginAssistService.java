@@ -1,7 +1,7 @@
 package cn.daxpay.open.payment.trade.runtime.service.plugin;
 
 import cn.daxpay.open.payment.strategy.plugin.AbsPayPluginStrategy;
-import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -57,7 +57,7 @@ public class PayPluginAssistService {
     }
 
     /// 退款成功
-    public void refundSuccess(PayTrade trade, PayRefundOrder refundOrder) {
+    public void refundSuccess(PayTrade trade, RefundOrder refundOrder) {
         for (var strategy : absPayPluginStrategies) {
             try {
                 strategy.refundSuccess(trade, refundOrder);
@@ -68,7 +68,7 @@ public class PayPluginAssistService {
     }
 
     /// 退款关闭
-    public void refundClose(PayTrade trade, PayRefundOrder refundOrder) {
+    public void refundClose(PayTrade trade, RefundOrder refundOrder) {
         for (var strategy : absPayPluginStrategies) {
             try {
                 strategy.refundClose(trade, refundOrder);

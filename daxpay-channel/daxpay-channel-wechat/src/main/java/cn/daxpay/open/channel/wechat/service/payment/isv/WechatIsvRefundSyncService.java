@@ -7,7 +7,7 @@ import cn.daxpay.open.channel.wechat.client.resp.WechatRefundSyncResp;
 import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
-import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,10 +29,10 @@ public class WechatIsvRefundSyncService {
     private static final String STATUS_ABNORMAL = "ABNORMAL";
 
     /// 执行微信服务商退款同步查询
-    public RefundResultBo sync(PayRefundOrder refundOrder, WechatSdkCredential credential) {
+    public RefundResultBo sync(RefundOrder refundOrder, WechatSdkCredential credential) {
         // 构建请求(与直连一致)
         var req = new WechatRefundSyncReq();
-        req.setOutRefundNo(refundOrder.getRefundNo());
+        req.setOutRefundNo(refundOrder.getRelationOrderNo());
         req.setCredential(credential);
 
         // 调用子应用服务商端点

@@ -1,7 +1,7 @@
 package cn.daxpay.open.plugin.easypay.strategy;
 
 import cn.daxpay.open.payment.strategy.plugin.AbsPayPluginStrategy;
-import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.platform.core.enums.pay.trade.TradeSourceEnum;
 import cn.daxpay.open.plugin.easypay.service.order.EasyPayOrderService;
@@ -41,7 +41,7 @@ public class EasyPayPluginStrategy implements AbsPayPluginStrategy {
 
     /// 退款成功：累加协议单已退金额
     @Override
-    public void refundSuccess(PayTrade trade, PayRefundOrder refundOrder) {
+    public void refundSuccess(PayTrade trade, RefundOrder refundOrder) {
         if (!Objects.equals(TradeSourceEnum.EASY_PAY.getCode(), trade.getSource())) {
             return;
         }

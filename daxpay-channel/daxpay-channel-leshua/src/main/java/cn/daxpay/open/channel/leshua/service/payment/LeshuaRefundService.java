@@ -8,7 +8,7 @@ import cn.daxpay.open.channel.leshua.code.LeshuaCode;
 import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
-import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import lombok.RequiredArgsConstructor;
@@ -29,13 +29,13 @@ public class LeshuaRefundService {
     private final cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService platformUrlConfigService;
 
     /// 执行退款
-    public RefundResultBo refund(PayRefundOrder refundOrder, LeshuaSdkCredential credential) {
+    public RefundResultBo refund(RefundOrder refundOrder, LeshuaSdkCredential credential) {
         LeshuaRefundReq req = new LeshuaRefundReq();
         req.setCredential(credential);
         // 原乐刷订单号(原支付 leshua_order_id)
         req.setLeshuaOrderId(refundOrder.getOutOrderNo());
         // 退款单号(作为乐刷 merchant_refund_id)
-        req.setOutRefundNo(refundOrder.getRefundNo());
+        req.setOutRefundNo(refundOrder.getRelationOrderNo());
         req.setAmount(refundOrder.getAmount());
         req.setReason(refundOrder.getReason());
         req.setNotifyUrl(this.buildRefundNotifyUrl(refundOrder));
@@ -56,7 +56,7 @@ public class LeshuaRefundService {
     }
 
     /// 生成乐刷退款异步通知地址
-    private String buildRefundNotifyUrl(PayRefundOrder refundOrder) {
+    private String buildRefundNotifyUrl(RefundOrder refundOrder) {
         String base = platformUrlConfigService.getUrlConfig().getBackendBaseUrl();
         if (cn.hutool.core.util.StrUtil.isBlank(base)) {
             return null;

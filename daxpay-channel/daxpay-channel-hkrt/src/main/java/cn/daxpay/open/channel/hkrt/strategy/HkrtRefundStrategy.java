@@ -5,7 +5,7 @@ import cn.daxpay.open.channel.hkrt.service.isv.HkrtIsvConfigAssembler;
 import cn.daxpay.open.channel.hkrt.service.payment.HkrtRefundService;
 import cn.daxpay.open.payment.strategy.refund.AbsRefundStrategy;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
-import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ public class HkrtRefundStrategy extends AbsRefundStrategy {
     }
 
     @Override
-    public RefundResultBo doRefund(PayRefundOrder refundOrder) {
+    public RefundResultBo doRefund(RefundOrder refundOrder) {
         // 组装通道调用凭证
         HkrtSdkCredential credential = hkrtIsvConfigAssembler.buildConfig(
                 refundOrder.getMchNo(), refundOrder.getChannelMchNo(), refundOrder.getCapability());

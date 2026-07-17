@@ -7,7 +7,7 @@ import cn.daxpay.open.channel.alipay.client.resp.AlipayRefundSyncResp;
 import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
-import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,12 +37,12 @@ public class AlipayRefundSyncService {
     /// @param refundOrder 退款订单(refundNo 作为 out_request_no, orderNo 作为 out_trade_no)
     /// @param credential  通道调用凭证
     /// @return 同步结果(含映射后的退款状态)
-    public RefundResultBo sync(PayRefundOrder refundOrder, AlipaySdkCredential credential) {
+    public RefundResultBo sync(RefundOrder refundOrder, AlipaySdkCredential credential) {
         // 构建请求
         var req = new AlipayRefundSyncReq();
-        req.setOutTradeNo(refundOrder.getOrderNo());
+        req.setOutTradeNo(refundOrder.getTradeNo());
         req.setTradeNo(refundOrder.getOutOrderNo());
-        req.setOutRequestNo(refundOrder.getRefundNo());
+        req.setOutRequestNo(refundOrder.getRelationOrderNo());
         req.setCredential(credential);
 
         // 调用子应用

@@ -1,10 +1,10 @@
 package cn.daxpay.open.plugin.easypay.service.api.v2;
 
 import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
-import cn.daxpay.open.payment.trade.order.dao.PayRefundOrderManager;
-import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
-import cn.daxpay.open.payment.trade.runtime.param.PayRefundParam;
-import cn.daxpay.open.payment.trade.runtime.service.refund.PayRefundService;
+import cn.daxpay.open.payment.trade.order.dao.RefundOrderManager;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
+import cn.daxpay.open.payment.trade.runtime.param.RefundParam;
+import cn.daxpay.open.payment.trade.runtime.service.refund.RefundService;
 import cn.daxpay.open.plugin.easypay.param.api.v2.EasyPayRefundQueryV2Param;
 import cn.daxpay.open.plugin.easypay.param.api.v2.EasyPayRefundV2Param;
 import cn.daxpay.open.plugin.easypay.result.api.v2.EasyPayRefundOrderV2Result;
@@ -29,8 +29,8 @@ public class EasyPayRefundV2Service {
 
     private final EasyPayCredentialService easyPayCredentialService;
     private final EasyPayAssistService easyPayAssistService;
-    private final PayRefundService payRefundService;
-    private final PayRefundOrderManager payRefundOrderManager;
+    private final RefundService payRefundService;
+    private final RefundOrderManager payRefundOrderManager;
 
     /// 退款
     public EasyPayRefundV2Result refund(EasyPayRefundV2Param param) {
@@ -42,18 +42,17 @@ public class EasyPayRefundV2Service {
             return sign(result, credential);
         }
         try {
-            PayRefundParam refundParam = new PayRefundParam();
-            // 协议 trade_no 约定为容器 orderNo；内核退款 orderNo 字段期望 tradeNo
-            // 优先传 bizOrderNo=out_trade_no 更稳
+            RefundParam refundParam = new RefundParam();
+            // 协议 out_trade_no = 商户业务单号；trade_no 可能是平台业务单号/资金号
+            // 优先 bizOrderNo 解析容器，再按 tradeNo 尝试资金号/网关容器号
             refundParam.setBizOrderNo(param.getOutTradeNo());
             if (StrUtil.isNotBlank(param.getTradeNo())) {
-                // 若对接方传的是平台业务单号，内核会尝试按 tradeNo 查；可能失败则依赖 bizOrderNo
-                refundParam.setOrderNo(null);
+                refundParam.setTradeNo(param.getTradeNo());
             }
             refundParam.setBizRefundNo(param.getOutRefundNo());
             refundParam.setAmount(EasyPayUtil.yuanToFen(param.getMoney()));
             refundParam.setReason("easypay refund");
-            PayRefundOrder refundOrder = payRefundService.refund(refundParam);
+            RefundOrder refundOrder = payRefundService.refund(refundParam);
             if (Objects.equals(refundOrder.getStatus(), RefundOrderStatusEnum.SUCCESS.getCode())) {
                 result.setCode(0).setMsg("success");
             } else if (Objects.equals(refundOrder.getStatus(), RefundOrderStatusEnum.PROGRESS.getCode())) {
@@ -80,13 +79,13 @@ public class EasyPayRefundV2Service {
         var credential = easyPayCredentialService.getAndCheck(param.getPid());
         easyPayAssistService.checkSignV2(param, credential, param.getSign());
         EasyPayRefundOrderV2Result result = new EasyPayRefundOrderV2Result();
-        Optional<PayRefundOrder> opt;
+        Optional<RefundOrder> opt;
         if (StrUtil.isNotBlank(param.getRefundNo())) {
             opt = payRefundOrderManager.findByRefundNo(param.getRefundNo());
         } else if (StrUtil.isNotBlank(param.getOutRefundNo())) {
             opt = payRefundOrderManager.firstOpt(q -> q
-                    .eq(PayRefundOrder::getBizRefundNo, param.getOutRefundNo())
-                    .eq(PayRefundOrder::getAppId, credential.getAppId()));
+                    .eq(RefundOrder::getBizRefundNo, param.getOutRefundNo())
+                    .eq(RefundOrder::getAppId, credential.getAppId()));
         } else {
             result.setCode(-1).setMsg("退款单号不能为空");
             return sign(result, credential);
@@ -95,12 +94,12 @@ public class EasyPayRefundV2Service {
             result.setCode(-1).setMsg("退款订单不存在");
             return sign(result, credential);
         }
-        PayRefundOrder refund = opt.get();
+        RefundOrder refund = opt.get();
         result.setCode(0)
                 .setMsg("success")
                 .setRefundNo(refund.getRefundNo())
                 .setOutRefundNo(refund.getBizRefundNo())
-                .setTradeNo(refund.getOrderNo())
+                .setTradeNo(refund.getTradeNo())
                 .setOutTradeNo(refund.getBizOrderNo())
                 .setMoney(EasyPayUtil.fenToYuanString(refund.getAmount()))
                 .setReducemoney(EasyPayUtil.fenToYuanString(refund.getAmount()))

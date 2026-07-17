@@ -6,7 +6,7 @@ import lombok.experimental.Accessors;
 /// # 退款建单快照
 ///
 /// 从原支付业务容器([NormalPayOrder] / [GatewayPayOrder])拷贝的字段投影，用于：
-/// 1. 填充 [PayRefundOrder]（通道凭证与业务展示/通知字段）
+/// 1. 填充 [RefundOrder]（通道凭证与业务展示/通知字段）
 /// 2. 按 [#product] 选择 [AbsRefundStrategy]
 ///
 /// **不是** [PayRouteService] 的选路结果；退款锚定原支付，禁止再走应用路由。
@@ -19,9 +19,6 @@ public class RefundOrderSnapshot {
 
     /// 支付通道(继承自原支付单)
     private String channel;
-
-    /// 支付方式(继承自原支付单)
-    private String method;
 
     /// 通道商户号(继承自原支付单)
     private String channelMchNo;

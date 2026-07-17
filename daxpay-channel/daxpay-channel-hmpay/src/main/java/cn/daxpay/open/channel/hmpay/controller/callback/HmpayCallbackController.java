@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 /// # 河马付支付回调通知控制器
 ///
 /// 杉德异步通知入口(支付/退款), 不走 Sa-Token 认证(由安全配置放行 `/unipay/callback/**`)。
-/// 验签转发子应用(杉德 RSA 验签在子应用侧), 凭 out_order_no 反查 PayTrade/PayRefundOrder。
+/// 验签转发子应用(杉德 RSA 验签在子应用侧), 凭 out_order_no 反查 PayTrade/RefundOrder。
 @Tag(name = "河马付支付回调通知控制器")
 @RestController
 @RequestMapping("/unipay/callback/{mchNo}/{channelMchNo}/hmpay")

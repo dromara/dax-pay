@@ -7,7 +7,7 @@ import cn.daxpay.open.channel.dougong.client.resp.DougongRefundResp;
 import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
-import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
@@ -34,11 +34,11 @@ public class DougongRefundService {
     private final PlatformUrlConfigService platformUrlConfigService;
 
     /// 执行退款
-    public RefundResultBo refund(PayRefundOrder refundOrder, DougongSdkCredential credential) {
+    public RefundResultBo refund(RefundOrder refundOrder, DougongSdkCredential credential) {
         DougongRefundReq req = new DougongRefundReq();
         req.setCredential(credential);
         // 退款单号(作为汇付 reqSeqId)
-        req.setOutRefundNo(refundOrder.getRefundNo());
+        req.setOutRefundNo(refundOrder.getRelationOrderNo());
         // 原汇付支付流水号(原支付 hf_seq_id)
         req.setTradeNo(refundOrder.getOutOrderNo());
         // 原请求日期(取退款订单创建时间近似, 汇付主要靠 org_hf_seq_id 定位)
@@ -66,7 +66,7 @@ public class DougongRefundService {
     /// 生成斗拱退款异步通知地址(汇付→平台)
     ///
     /// 路径约定: `{backendBaseUrl}/unipay/callback/{mchNo}/{channelMchNo}/dougong/refund`
-    private String buildRefundNotifyUrl(PayRefundOrder refundOrder) {
+    private String buildRefundNotifyUrl(RefundOrder refundOrder) {
         String base = platformUrlConfigService.getUrlConfig().getBackendBaseUrl();
         if (StrUtil.isBlank(base)) {
             return null;

@@ -6,8 +6,8 @@ import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.strategy.PaymentStrategyFactory;
 import cn.daxpay.open.payment.strategy.refund.AbsSyncRefundStrategy;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
-import cn.daxpay.open.payment.trade.order.dao.PayRefundOrderManager;
-import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
+import cn.daxpay.open.payment.trade.order.dao.RefundOrderManager;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -17,24 +17,24 @@ import java.util.Objects;
 /// # 退款同步服务
 ///
 /// 查询通道网关方的退款最终状态, 回写退款单。
-/// 成功/失败结算委托 [PayRefundSettleService](预占模型: SUCCESS 不二次扣, FAIL/CLOSE 回滚)。
+/// 成功/失败结算委托 [RefundSettleService](预占模型: SUCCESS 不二次扣, FAIL/CLOSE 回滚)。
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PayRefundSyncService {
+public class RefundSyncService {
 
-    private final PayRefundOrderManager payRefundOrderManager;
-    private final PayRefundSettleService payRefundSettleService;
+    private final RefundOrderManager refundOrderManager;
+    private final RefundSettleService refundSettleService;
 
     /// 退款同步(传入退款单ID)
-    public PayRefundOrder syncById(Long refundOrderId) {
-        PayRefundOrder refundOrder = payRefundOrderManager.findById(refundOrderId)
+    public RefundOrder syncById(Long refundOrderId) {
+        RefundOrder refundOrder = refundOrderManager.findById(refundOrderId)
                 .orElseThrow(() -> new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.refund.orderNotFound"));
         return this.sync(refundOrder);
     }
 
     /// 退款同步
-    public PayRefundOrder sync(PayRefundOrder refundOrder) {
+    public RefundOrder sync(RefundOrder refundOrder) {
         // 终态不重复同步
         if (Objects.equals(refundOrder.getStatus(), RefundOrderStatusEnum.SUCCESS.getCode())
                 || Objects.equals(refundOrder.getStatus(), RefundOrderStatusEnum.FAIL.getCode())
@@ -54,19 +54,23 @@ public class PayRefundSyncService {
         }
 
         if (Objects.equals(result.getStatus(), RefundOrderStatusEnum.SUCCESS)) {
-            payRefundSettleService.settleSuccess(
-                    refundOrder.getId(), result.getFinishTime(), result.getOutRefundNo());
+            refundSettleService.settleSuccess(
+                    refundOrder.getId(), result.getFinishTime(),
+                    result.getOutRefundNo(), result.getRelationOrderNo());
         } else if (Objects.equals(result.getStatus(), RefundOrderStatusEnum.FAIL)) {
-            payRefundSettleService.settleFail(
-                    refundOrder.getId(), result.getFinishTime(), result.getOutRefundNo(), result.getSyncErrorMsg());
+            refundSettleService.settleFail(
+                    refundOrder.getId(), result.getFinishTime(),
+                    result.getOutRefundNo(), result.getRelationOrderNo(), result.getSyncErrorMsg());
         } else if (Objects.equals(result.getStatus(), RefundOrderStatusEnum.CLOSE)) {
-            payRefundSettleService.settleClose(
-                    refundOrder.getId(), result.getFinishTime(), result.getOutRefundNo(), result.getSyncErrorMsg());
+            refundSettleService.settleClose(
+                    refundOrder.getId(), result.getFinishTime(),
+                    result.getOutRefundNo(), result.getRelationOrderNo(), result.getSyncErrorMsg());
         } else {
             // PROGRESS: 补写字段, 不改余额
-            payRefundSettleService.applyProgressResult(
-                    refundOrder, result.getFinishTime(), result.getOutRefundNo(), result.getSyncErrorMsg());
+            refundSettleService.applyProgressResult(
+                    refundOrder, result.getFinishTime(),
+                    result.getOutRefundNo(), result.getRelationOrderNo(), result.getSyncErrorMsg());
         }
-        return payRefundOrderManager.findById(refundOrder.getId()).orElse(refundOrder);
+        return refundOrderManager.findById(refundOrder.getId()).orElse(refundOrder);
     }
 }

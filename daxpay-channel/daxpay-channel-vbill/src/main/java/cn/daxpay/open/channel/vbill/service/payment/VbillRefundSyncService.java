@@ -7,7 +7,7 @@ import cn.daxpay.open.channel.vbill.client.resp.VbillRefundSyncResp;
 import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
-import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,12 +26,12 @@ public class VbillRefundSyncService {
     private final VbillChannelClient vbillChannelClient;
 
     /// 同步退款状态
-    public RefundResultBo sync(PayRefundOrder refundOrder, VbillSdkCredential credential) {
+    public RefundResultBo sync(RefundOrder refundOrder, VbillSdkCredential credential) {
         VbillRefundSyncReq req = new VbillRefundSyncReq();
         req.setCredential(credential);
         // 优先用网关退款单号 uuid, 兜底用商户退款单号
         req.setOutRefundOrderNo(refundOrder.getOutRefundNo());
-        req.setOutRefundNo(refundOrder.getRefundNo());
+        req.setOutRefundNo(refundOrder.getRelationOrderNo());
 
         DaxResult<VbillRefundSyncResp> result = vbillChannelClient.refundSync(req);
         RefundResultBo bo = new RefundResultBo();

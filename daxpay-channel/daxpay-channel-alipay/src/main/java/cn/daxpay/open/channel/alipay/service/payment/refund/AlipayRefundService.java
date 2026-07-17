@@ -7,7 +7,7 @@ import cn.daxpay.open.channel.alipay.client.resp.AlipayRefundResp;
 import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
-import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,12 +32,12 @@ public class AlipayRefundService {
     /// @param refundOrder 退款订单(refundNo 作为 out_request_no, orderNo 作为 out_trade_no, outOrderNo 作为 trade_no)
     /// @param credential  通道调用凭证
     /// @return 退款结果(含映射后的退款状态)
-    public RefundResultBo refund(PayRefundOrder refundOrder, AlipaySdkCredential credential) {
+    public RefundResultBo refund(RefundOrder refundOrder, AlipaySdkCredential credential) {
         // 构建请求
         AlipayRefundReq req = new AlipayRefundReq();
-        req.setOutTradeNo(refundOrder.getOrderNo());
+        req.setOutTradeNo(refundOrder.getTradeNo());
         req.setTradeNo(refundOrder.getOutOrderNo());
-        req.setOutRequestNo(refundOrder.getRefundNo());
+        req.setOutRequestNo(refundOrder.getRelationOrderNo());
         req.setRefundAmount(refundOrder.getAmount());
         req.setCredential(credential);
 

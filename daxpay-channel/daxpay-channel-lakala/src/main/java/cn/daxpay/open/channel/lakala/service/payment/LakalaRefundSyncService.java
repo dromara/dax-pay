@@ -7,7 +7,7 @@ import cn.daxpay.open.channel.lakala.client.resp.LakalaRefundSyncResp;
 import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
-import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,10 +25,10 @@ public class LakalaRefundSyncService {
     private final LakalaChannelClient lakalaChannelClient;
 
     /// 同步退款状态
-    public RefundResultBo sync(PayRefundOrder refundOrder, LakalaSdkCredential credential) {
+    public RefundResultBo sync(RefundOrder refundOrder, LakalaSdkCredential credential) {
         LakalaRefundSyncReq req = new LakalaRefundSyncReq();
         req.setCredential(credential);
-        req.setOutRefundNo(refundOrder.getRefundNo());
+        req.setOutRefundNo(refundOrder.getRelationOrderNo());
         req.setOriginTradeNo(refundOrder.getOutRefundNo());
 
         DaxResult<LakalaRefundSyncResp> result = lakalaChannelClient.refundSync(req);

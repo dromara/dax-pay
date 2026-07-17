@@ -7,7 +7,7 @@ import cn.daxpay.open.channel.hmpay.client.resp.HmpayRefundResp;
 import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
-import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import lombok.RequiredArgsConstructor;
@@ -31,12 +31,12 @@ public class HmpayRefundService {
     private final HmpayChannelClient hmpayChannelClient;
 
     /// 执行退款
-    public RefundResultBo refund(PayRefundOrder refundOrder, HmpaySdkCredential credential) {
+    public RefundResultBo refund(RefundOrder refundOrder, HmpaySdkCredential credential) {
         HmpayRefundReq req = new HmpayRefundReq();
         req.setCredential(credential);
-        req.setOutRefundNo(refundOrder.getRefundNo());
+        req.setOutRefundNo(refundOrder.getRelationOrderNo());
         // 原商户订单号(支付时下送给杉德的 out_order_no, 即平台支付交易号)
-        req.setOutTradeNo(refundOrder.getOrderNo());
+        req.setOutTradeNo(refundOrder.getTradeNo());
         // 原支付下单时间(杉德 order_create_time, 取退款单创建时间近似, 杉德主要靠 out_order_no 定位)
         req.setOrderCreateTime(formatPureDateTime(refundOrder.getCreateTime()));
         req.setAmount(refundOrder.getAmount());

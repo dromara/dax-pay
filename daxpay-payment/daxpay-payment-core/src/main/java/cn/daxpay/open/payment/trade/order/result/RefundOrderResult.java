@@ -17,7 +17,7 @@ import java.time.OffsetDateTime;
 @Data
 @Accessors(chain = true)
 @Schema(title = "退款订单")
-public class PayRefundOrderResult extends BaseResult {
+public class RefundOrderResult extends BaseResult {
 
     /// 商户号
     @Schema(description = "商户号")
@@ -43,13 +43,22 @@ public class PayRefundOrderResult extends BaseResult {
     @Schema(description = "商户退款号")
     private String bizRefundNo;
 
+    /// 实际上送通道的商户退款关联号
+    @Schema(description = "实际上送通道关联号")
+    private String relationOrderNo;
+
     /// 标题
     @Schema(description = "标题")
     private String title;
 
-    /// 原支付订单号
-    @Schema(description = "原支付订单号")
-    private String orderNo;
+    /// 原支付资金交易号
+    @Schema(description = "原支付资金交易号")
+    private String tradeNo;
+
+    /// 原支付交易形态
+    /// @see cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum
+    @Schema(description = "交易类型")
+    private String tradeType;
 
     /// 商户业务订单号
     @Schema(description = "商户业务订单号")
@@ -70,6 +79,10 @@ public class PayRefundOrderResult extends BaseResult {
     /// 订单总金额(分)
     @Schema(description = "订单总金额(分)")
     private Long orderAmount;
+
+    /// 币种
+    @Schema(description = "币种")
+    private String currency;
 
     /// 退款原因
     @Schema(description = "退款原因")
@@ -92,9 +105,25 @@ public class PayRefundOrderResult extends BaseResult {
     @Schema(description = "支付产品")
     private String product;
 
-    /// 支付方式
-    @Schema(description = "支付方式")
-    private String method;
+    /// 通道商户号
+    @Schema(description = "通道商户号")
+    private String channelMchNo;
+
+    /// 通道应用 AppId
+    @Schema(description = "通道应用AppId")
+    private String channelAppId;
+
+    /// 异步通知地址
+    @Schema(description = "异步通知地址")
+    private String notifyUrl;
+
+    /// 商户附加参数
+    @Schema(description = "商户附加参数")
+    private String attach;
+
+    /// 客户端 IP
+    @Schema(description = "客户端IP")
+    private String clientIp;
 
     /// 门店号（继承自原支付容器，可空）
     @Schema(description = "门店号")

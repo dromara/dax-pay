@@ -13,6 +13,7 @@ import cn.daxpay.open.payment.trade.runtime.service.close.PayCloseService;
 import cn.daxpay.open.payment.trade.runtime.service.sync.PaySyncService;
 import cn.daxpay.open.payment.trade.runtime.service.pay.common.PayUniHandleService;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPaySyncResult;
+import cn.daxpay.open.platform.common.translate.service.TransService;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
@@ -23,7 +24,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
 
 /// # 网关支付业务单管理服务
 @Service
@@ -35,30 +35,30 @@ public class GatewayPayOrderAdminService {
     private final PaySyncService paySyncService;
     private final PayCloseService payCloseService;
     private final PayUniHandleService payUniHandleService;
+    private final TransService transService;
+    private final TradeOrderDetailAssembler tradeOrderDetailAssembler;
 
     public PageResult<GatewayPayOrderResult> page(PageParam pageParam, GatewayPayOrderQuery query) {
         Page<GatewayPayOrder> page = gatewayPayOrderManager.page(pageParam, query);
         var records = page.getRecords().stream()
                 .map(GatewayPayOrderConvert.CONVERT::toResult)
                 .toList();
-        return new PageResult<GatewayPayOrderResult>()
+        PageResult<GatewayPayOrderResult> pageResult = new PageResult<GatewayPayOrderResult>()
                 .setRecords(records)
                 .setTotal(page.getTotal())
                 .setSize(page.getSize())
                 .setCurrent(page.getCurrent());
+        // 翻译商户名称
+        transService.translate(pageResult);
+        return pageResult;
     }
 
     public GatewayPayOrderResult findById(Long id) {
         GatewayPayOrder entity = gatewayPayOrderManager.findById(id)
                 .orElseThrow(() -> new DataNotExistException("pay.error.payOrderNotExist"));
         GatewayPayOrderResult result = GatewayPayOrderConvert.CONVERT.toResult(entity);
-        PayTrade trade = payTradeManager.findByContainerId(id, PayTradeTypeEnum.GATEWAY.getCode()).orElse(null);
-        if (Objects.nonNull(trade)) {
-            result.setTradeNo(trade.getTradeNo());
-            result.setOutOrderNo(trade.getOutOrderNo());
-            result.setFundStatus(trade.getStatus());
-            result.setRefundableBalance(trade.getRefundableBalance());
-        }
+        tradeOrderDetailAssembler.fillFundOnGateway(result, id);
+        transService.translate(result);
         return result;
     }
 

@@ -9,10 +9,10 @@ import cn.daxpay.open.channel.alipay.service.isv.AlipayIsvConfigAssembler;
 import cn.daxpay.open.payment.trade.runtime.bo.CallbackData;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundCallbackData;
 import cn.daxpay.open.payment.trade.order.dao.NormalPayOrderManager;
-import cn.daxpay.open.payment.trade.order.dao.PayRefundOrderManager;
+import cn.daxpay.open.payment.trade.order.dao.RefundOrderManager;
 import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
 import cn.daxpay.open.payment.trade.order.entity.NormalPayOrder;
-import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.trade.runtime.service.callback.PayCallbackService;
 import cn.daxpay.open.payment.trade.runtime.service.callback.RefundCallbackService;
@@ -51,7 +51,7 @@ public class AlipayCallbackService {
     private final AlipayIsvConfigAssembler alipayIsvConfigAssembler;
     private final PayTradeManager payTradeManager;
     private final NormalPayOrderManager normalPayOrderManager;
-    private final PayRefundOrderManager payRefundOrderManager;
+    private final RefundOrderManager payRefundOrderManager;
     private final PayCallbackService payCallbackService;
     private final RefundCallbackService refundCallbackService;
 
@@ -111,12 +111,12 @@ public class AlipayCallbackService {
     private String handleRefund(String channelMchNo, Map<String, String> params) {
         // out_request_no 为平台退款号, 凭原支付订单号反查凭证
         String refundNo = params.get("out_request_no");
-        PayRefundOrder refundOrder = payRefundOrderManager.findByRefundNo(refundNo).orElse(null);
+        RefundOrder refundOrder = payRefundOrderManager.findByRefundNo(refundNo).orElse(null);
         if (refundOrder == null) {
             log.error("支付宝退款回调: 退款单不存在 refundNo={}", refundNo);
             return NOTIFY_FAIL;
         }
-        AlipaySdkCredential credential = resolveCredentialByTradeNo(refundOrder.getOrderNo(), channelMchNo);
+        AlipaySdkCredential credential = resolveCredentialByTradeNo(refundOrder.getTradeNo(), channelMchNo);
         if (credential == null) {
             log.error("支付宝退款回调: 无法解析通道凭证, refundNo={}, channelMchNo={}", refundNo, channelMchNo);
             return NOTIFY_FAIL;

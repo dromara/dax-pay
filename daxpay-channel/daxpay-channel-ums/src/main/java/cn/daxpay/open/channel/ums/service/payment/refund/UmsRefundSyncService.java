@@ -11,7 +11,7 @@ import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
 import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
-import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -28,20 +28,20 @@ public class UmsRefundSyncService {
     private final PayTradeManager payTradeManager;
 
     /// 执行银联商务退款同步查询
-    public RefundResultBo sync(PayRefundOrder refundOrder, UmsSdkCredential credential) {
+    public RefundResultBo sync(RefundOrder refundOrder, UmsSdkCredential credential) {
         UmsRefundSyncReq req = new UmsRefundSyncReq();
-        req.setOutRefundNo(refundOrder.getRefundNo());
-        req.setOutTradeNo(refundOrder.getOrderNo());
+        req.setOutRefundNo(refundOrder.getRelationOrderNo());
+        req.setOutTradeNo(refundOrder.getTradeNo());
         // 首期默认扫码退款查询
         req.setMethod(UmsPayMethod.QRCODE);
         req.setCredential(credential);
 
         // 银联商务扫码退款查询需要 billDate(原订单创建日, 子应用按通道时区转换)
-        payTradeManager.findByTradeNo(refundOrder.getOrderNo())
+        payTradeManager.findByTradeNo(refundOrder.getTradeNo())
                 .ifPresentOrElse(
                         t -> req.setBillDate(t.getCreateTime()),
                         () -> log.warn("银联商务退款同步未查到原交易({}), billDate 未填充, 银商可能拒绝",
-                                refundOrder.getOrderNo()));
+                                refundOrder.getTradeNo()));
 
         DaxResult<UmsRefundSyncResp> result = umsChannelClient.refundSync(req);
         if (result.getCode() != 0) {

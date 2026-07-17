@@ -5,9 +5,7 @@ import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.payment.admin.convert.trade.PayTradeAdminConvert;
-import cn.daxpay.open.payment.trade.order.dao.NormalPayOrderManager;
 import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
-import cn.daxpay.open.payment.trade.order.entity.NormalPayOrder;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.trade.order.param.PayTradeQuery;
 import cn.daxpay.open.payment.trade.order.result.PayTradeResult;
@@ -19,22 +17,20 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
-
 /// # 资金交易凭证管理服务(管理端)
 ///
 /// 提供资金交易(凭证)的分页/详情查询, 以及状态同步、关闭/撤销管理操作。
-/// 详情场景联表容器(NormalPayOrder)补充业务字段; 同步/关闭复用 [PaySyncService] / [PayCloseService]。
+/// 详情场景由 [TradeOrderDetailAssembler] 按 tradeType 联表容器补充业务字段。
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class PayTradeAdminService {
 
     private final PayTradeManager payTradeManager;
-    private final NormalPayOrderManager normalPayOrderManager;
     private final PaySyncService paySyncService;
     private final PayCloseService payCloseService;
     private final TransService transService;
+    private final TradeOrderDetailAssembler tradeOrderDetailAssembler;
 
     /// 分页查询
     public PageResult<PayTradeResult> page(PageParam pageParam, PayTradeQuery query) {
@@ -52,29 +48,12 @@ public class PayTradeAdminService {
         return pageResult;
     }
 
-    /// 详情查询(联表容器补充业务字段)
+    /// 详情查询(按 tradeType 联表容器补充业务字段)
     public PayTradeResult findById(Long id) {
         PayTrade entity = payTradeManager.findById(id)
                 .orElseThrow(() -> new DataNotExistException("pay.error.payOrderNotExist"));
         PayTradeResult result = PayTradeAdminConvert.CONVERT.toResult(entity);
-        // 联表查询容器, 补充业务字段与回执
-        NormalPayOrder normalOrder = normalPayOrderManager.findById(entity.getContainerId()).orElse(null);
-        if (Objects.nonNull(normalOrder)) {
-            result.setBizOrderNo(normalOrder.getBizOrderNo());
-            result.setTitle(normalOrder.getTitle());
-            result.setContainerStatus(normalOrder.getStatus());
-            result.setProduct(normalOrder.getProduct());
-            result.setChannel(normalOrder.getChannel());
-            result.setMethod(normalOrder.getMethod());
-            result.setChannelAppId(normalOrder.getChannelAppId());
-            result.setBuyerId(normalOrder.getBuyerId());
-            result.setOpenid(normalOrder.getOpenid());
-            result.setAuthCode(normalOrder.getAuthCode());
-            result.setTradeProduct(normalOrder.getTradeProduct());
-            result.setTradeWay(normalOrder.getTradeWay());
-            result.setBankType(normalOrder.getBankType());
-            result.setErrorMsg(normalOrder.getErrorMsg());
-        }
+        tradeOrderDetailAssembler.fillContainerOnTrade(result, entity);
         // 翻译商户名称
         transService.translate(result);
         return result;

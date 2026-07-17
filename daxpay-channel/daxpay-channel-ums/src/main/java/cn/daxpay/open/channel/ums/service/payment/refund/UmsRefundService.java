@@ -11,7 +11,7 @@ import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
 import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
-import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -32,10 +32,10 @@ public class UmsRefundService {
     private final PayTradeManager payTradeManager;
 
     /// 执行银联商务退款
-    public RefundResultBo refund(PayRefundOrder refundOrder, UmsSdkCredential credential) {
+    public RefundResultBo refund(RefundOrder refundOrder, UmsSdkCredential credential) {
         UmsRefundReq req = new UmsRefundReq();
-        req.setOutTradeNo(refundOrder.getOrderNo());
-        req.setOutRefundNo(refundOrder.getRefundNo());
+        req.setOutTradeNo(refundOrder.getTradeNo());
+        req.setOutRefundNo(refundOrder.getRelationOrderNo());
         req.setRefundAmount(refundOrder.getAmount());
         req.setReason(refundOrder.getReason());
         req.setNotifyUrl(this.buildRefundNotifyUrl(refundOrder));
@@ -44,11 +44,11 @@ public class UmsRefundService {
         req.setCredential(credential);
 
         // 银联商务扫码退款需要 billDate(原订单创建日, 子应用按通道时区转换)
-        payTradeManager.findByTradeNo(refundOrder.getOrderNo())
+        payTradeManager.findByTradeNo(refundOrder.getTradeNo())
                 .ifPresentOrElse(
                         t -> req.setBillDate(t.getCreateTime()),
                         () -> log.warn("银联商务退款未查到原交易({}), billDate 未填充, 银商可能拒绝",
-                                refundOrder.getOrderNo()));
+                                refundOrder.getTradeNo()));
 
         DaxResult<UmsRefundResp> result = umsChannelClient.refund(req);
         if (result.getCode() != 0) {
@@ -64,7 +64,7 @@ public class UmsRefundService {
     }
 
     /// 生成银联商务退款异步通知地址
-    private String buildRefundNotifyUrl(PayRefundOrder refundOrder) {
+    private String buildRefundNotifyUrl(RefundOrder refundOrder) {
         String base = platformUrlConfigService.getUrlConfig().getBackendBaseUrl();
         if (StrUtil.isBlank(base)) {
             throw new IllegalStateException("平台后端访问地址(backendBaseUrl)未配置, 无法生成银联商务退款回调地址");

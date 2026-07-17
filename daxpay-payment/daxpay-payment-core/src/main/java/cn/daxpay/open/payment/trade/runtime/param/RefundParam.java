@@ -5,17 +5,18 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
-/// # 退款发起参数(管理端)
+/// # 退款发起参数
 ///
 /// 从已支付的订单发起退款, 支持部分退款。
-/// orderNo 与 bizOrderNo 至少传一个, 优先使用 orderNo。
+/// tradeNo 与 bizOrderNo 至少传一个, 优先使用 tradeNo。
+/// 兼容: tradeNo 解析时若按资金号查不到, 可再尝试网关容器 orderNo 反查。
 @Data
 @Schema(title = "退款发起参数")
-public class PayRefundParam {
+public class RefundParam {
 
-    /// 原支付订单号(平台 tradeNo)
-    @Schema(description = "原支付订单号")
-    private String orderNo;
+    /// 原支付资金交易号(平台 tradeNo)
+    @Schema(description = "原支付资金交易号")
+    private String tradeNo;
 
     /// 商户业务订单号
     @Schema(description = "商户业务订单号")

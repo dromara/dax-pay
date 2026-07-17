@@ -9,7 +9,7 @@ import cn.daxpay.open.channel.adapay.util.AdapayDateUtil;
 import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
-import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,9 +26,9 @@ public class AdapayRefundSyncService {
     private final AdapayChannelClient adapayChannelClient;
 
     /// 执行Adapay 退款同步查询
-    public RefundResultBo sync(PayRefundOrder refundOrder, AdapaySdkCredential credential) {
+    public RefundResultBo sync(RefundOrder refundOrder, AdapaySdkCredential credential) {
         AdapayRefundSyncReq req = new AdapayRefundSyncReq();
-        req.setOutRefundNo(refundOrder.getRefundNo());
+        req.setOutRefundNo(refundOrder.getRelationOrderNo());
         req.setCredential(credential);
 
         DaxResult<AdapayRefundSyncResp> result = adapayChannelClient.refundSync(req);

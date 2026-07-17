@@ -7,7 +7,7 @@ import cn.daxpay.open.channel.hmpay.client.resp.HmpayRefundSyncResp;
 import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
-import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -25,11 +25,11 @@ public class HmpayRefundSyncService {
     private final HmpayChannelClient hmpayChannelClient;
 
     /// 查询退款状态
-    public RefundResultBo sync(PayRefundOrder refundOrder, HmpaySdkCredential credential) {
+    public RefundResultBo sync(RefundOrder refundOrder, HmpaySdkCredential credential) {
         HmpayRefundSyncReq req = new HmpayRefundSyncReq();
         req.setCredential(credential);
-        req.setOutTradeNo(refundOrder.getOrderNo());
-        req.setOutRefundNo(refundOrder.getRefundNo());
+        req.setOutTradeNo(refundOrder.getTradeNo());
+        req.setOutRefundNo(refundOrder.getRelationOrderNo());
 
         DaxResult<HmpayRefundSyncResp> result = hmpayChannelClient.refundSync(req);
         RefundResultBo bo = new RefundResultBo();

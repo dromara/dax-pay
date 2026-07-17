@@ -5,7 +5,7 @@ import cn.daxpay.open.channel.wechat.service.direct.WechatDirectConfigAssembler;
 import cn.daxpay.open.channel.wechat.service.payment.refund.WechatRefundSyncService;
 import cn.daxpay.open.payment.strategy.refund.AbsSyncRefundStrategy;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
-import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,7 +29,7 @@ public class WechatDirectSyncRefundStrategy extends AbsSyncRefundStrategy {
     }
 
     @Override
-    public RefundResultBo doSync(PayRefundOrder refundOrder) {
+    public RefundResultBo doSync(RefundOrder refundOrder) {
         // 组装直连通道调用凭证
         WechatSdkCredential credential = wechatDirectConfigAssembler.buildConfig(
                 refundOrder.getMchNo(), refundOrder.getChannelMchNo(), refundOrder.getCapability(),

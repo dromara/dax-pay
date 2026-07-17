@@ -7,7 +7,7 @@ import cn.daxpay.open.channel.yeepay.client.resp.YeepayRefundResp;
 import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
-import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -27,10 +27,10 @@ public class YeepayRefundService {
     private final PlatformUrlConfigService platformUrlConfigService;
 
     /// 执行易宝退款
-    public RefundResultBo refund(PayRefundOrder refundOrder, YeepaySdkCredential credential) {
+    public RefundResultBo refund(RefundOrder refundOrder, YeepaySdkCredential credential) {
         YeepayRefundReq req = new YeepayRefundReq();
-        req.setOriginOutTradeNo(refundOrder.getOrderNo());
-        req.setOutRefundNo(refundOrder.getRefundNo());
+        req.setOriginOutTradeNo(refundOrder.getTradeNo());
+        req.setOutRefundNo(refundOrder.getRelationOrderNo());
         req.setAmount(refundOrder.getAmount());
         req.setReason(refundOrder.getReason());
         req.setNotifyUrl(this.buildRefundNotifyUrl(refundOrder));
@@ -50,7 +50,7 @@ public class YeepayRefundService {
     }
 
     /// 生成易宝退款异步通知地址
-    private String buildRefundNotifyUrl(PayRefundOrder refundOrder) {
+    private String buildRefundNotifyUrl(RefundOrder refundOrder) {
         String base = platformUrlConfigService.getUrlConfig().getBackendBaseUrl();
         if (StrUtil.isBlank(base)) {
             throw new IllegalStateException("平台后端访问地址(backendBaseUrl)未配置, 无法生成易宝退款回调地址");

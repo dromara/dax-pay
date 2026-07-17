@@ -5,7 +5,7 @@ import cn.daxpay.open.channel.ums.service.direct.UmsDirectConfigAssembler;
 import cn.daxpay.open.channel.ums.service.payment.refund.UmsRefundService;
 import cn.daxpay.open.payment.strategy.refund.AbsRefundStrategy;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
-import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +26,7 @@ public class UmsDirectRefundStrategy extends AbsRefundStrategy {
     }
 
     @Override
-    public RefundResultBo doRefund(PayRefundOrder refundOrder) {
+    public RefundResultBo doRefund(RefundOrder refundOrder) {
         UmsSdkCredential credential = umsDirectConfigAssembler.buildConfig(
                 refundOrder.getMchNo(), refundOrder.getChannelMchNo(), refundOrder.getCapability());
         return umsRefundService.refund(refundOrder, credential);

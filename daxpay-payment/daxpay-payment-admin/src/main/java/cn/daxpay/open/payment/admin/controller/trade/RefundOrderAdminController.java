@@ -6,10 +6,10 @@ import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.platform.core.rest.result.Result;
-import cn.daxpay.open.payment.trade.order.param.PayRefundOrderQuery;
-import cn.daxpay.open.payment.trade.runtime.param.PayRefundParam;
-import cn.daxpay.open.payment.trade.order.result.PayRefundOrderResult;
-import cn.daxpay.open.payment.admin.service.trade.PayRefundOrderAdminService;
+import cn.daxpay.open.payment.trade.order.param.RefundOrderQuery;
+import cn.daxpay.open.payment.trade.runtime.param.RefundParam;
+import cn.daxpay.open.payment.trade.order.result.RefundOrderResult;
+import cn.daxpay.open.payment.admin.service.trade.RefundOrderAdminService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -31,37 +31,37 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/admin/order/refund")
 @RequiredArgsConstructor
-public class PayRefundOrderAdminController {
+public class RefundOrderAdminController {
 
-    private final PayRefundOrderAdminService payRefundOrderAdminService;
+    private final RefundOrderAdminService refundOrderAdminService;
 
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "退款订单分页")
     @GetMapping("/page")
-    public Result<PageResult<PayRefundOrderResult>> page(PageParam pageParam, PayRefundOrderQuery query) {
-        return Res.ok(payRefundOrderAdminService.page(pageParam, query));
+    public Result<PageResult<RefundOrderResult>> page(PageParam pageParam, RefundOrderQuery query) {
+        return Res.ok(refundOrderAdminService.page(pageParam, query));
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据ID查询退款订单详情")
     @GetMapping("/get-by-id")
-    public Result<PayRefundOrderResult> findById(
+    public Result<RefundOrderResult> findById(
             @NotNull(message = "{validation.field.id.notNull}") Long id) {
-        return Res.ok(payRefundOrderAdminService.findById(id));
+        return Res.ok(refundOrderAdminService.findById(id));
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "发起退款")
     @PostMapping("/refund")
-    public Result<PayRefundOrderResult> refund(@Valid @RequestBody PayRefundParam param) {
-        return Res.ok(payRefundOrderAdminService.refund(param));
+    public Result<RefundOrderResult> refund(@Valid @RequestBody RefundParam param) {
+        return Res.ok(refundOrderAdminService.refund(param));
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "同步退款状态")
     @PostMapping("/sync")
-    public Result<PayRefundOrderResult> sync(
+    public Result<RefundOrderResult> sync(
             @NotNull(message = "{validation.field.id.notNull}") Long id) {
-        return Res.ok(payRefundOrderAdminService.sync(id));
+        return Res.ok(refundOrderAdminService.sync(id));
     }
 }

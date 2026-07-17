@@ -7,7 +7,7 @@ import cn.daxpay.open.channel.yeepay.client.resp.YeepayRefundSyncResp;
 import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
-import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -23,10 +23,10 @@ public class YeepayRefundSyncService {
     private final YeepayChannelClient yeepayChannelClient;
 
     /// 执行易宝退款同步查询
-    public RefundResultBo sync(PayRefundOrder refundOrder, YeepaySdkCredential credential) {
+    public RefundResultBo sync(RefundOrder refundOrder, YeepaySdkCredential credential) {
         YeepayRefundSyncReq req = new YeepayRefundSyncReq();
-        req.setOriginOutTradeNo(refundOrder.getOrderNo());
-        req.setOutRefundNo(refundOrder.getRefundNo());
+        req.setOriginOutTradeNo(refundOrder.getTradeNo());
+        req.setOutRefundNo(refundOrder.getRelationOrderNo());
         req.setCredential(credential);
 
         DaxResult<YeepayRefundSyncResp> result = yeepayChannelClient.refundSync(req);

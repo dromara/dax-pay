@@ -27,7 +27,7 @@ import java.util.Objects;
 /// 主应用不再自验签。子应用返回抽象态 tradeStatus(SUCCESS/FAIL)。
 ///
 /// TODO 退款单状态更新待接入退款回调框架(平台目前无独立 RefundCallbackService,
-///      后续可通过 PayRefundService 或新增退款回调入口完成状态流转)。本期仅记录日志。
+///      后续可通过 RefundService 或新增退款回调入口完成状态流转)。本期仅记录日志。
 @Slf4j
 @Service
 @RequiredArgsConstructor

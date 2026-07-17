@@ -8,7 +8,7 @@ import cn.daxpay.open.channel.douyin.code.DouyinPayCode;
 import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
-import cn.daxpay.open.payment.trade.order.entity.PayRefundOrder;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -32,9 +32,9 @@ public class DouyinRefundSyncService {
     private final DouyinChannelClient douyinChannelClient;
 
     /// 执行抖音退款同步查询
-    public RefundResultBo sync(PayRefundOrder refundOrder, DouyinSdkCredential credential) {
+    public RefundResultBo sync(RefundOrder refundOrder, DouyinSdkCredential credential) {
         DouyinRefundSyncReq req = new DouyinRefundSyncReq();
-        req.setOutRefundNo(refundOrder.getRefundNo());
+        req.setOutRefundNo(refundOrder.getRelationOrderNo());
         req.setCredential(credential);
 
         DaxResult<DouyinRefundSyncResp> result = douyinChannelClient.refundSync(req);
