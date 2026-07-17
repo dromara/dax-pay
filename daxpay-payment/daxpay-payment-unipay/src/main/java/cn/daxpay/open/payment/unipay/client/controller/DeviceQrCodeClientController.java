@@ -1,8 +1,11 @@
 package cn.daxpay.open.payment.unipay.client.controller;
 
 import cn.daxpay.open.payment.unipay.client.result.CodePayInfoResult;
+import cn.daxpay.open.payment.unipay.client.result.CodePayOrderStatusResult;
 import cn.daxpay.open.payment.unipay.client.service.CodePayAssistService;
+import cn.daxpay.open.payment.unipay.param.device.CodePayAuthUrlParam;
 import cn.daxpay.open.payment.unipay.param.device.CodePayParam;
+import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
 import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.open.platform.core.rest.Res;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /// # 码牌支付(公开/H5/小程序侧)
@@ -33,13 +37,28 @@ public class DeviceQrCodeClientController {
 
     @Operation(summary = "根据码牌编码查询支付信息")
     @GetMapping("/get-by-code")
-    public Result<CodePayInfoResult> getByCode(@NotBlank(message = "{validation.field.code.notBlank}") String code) {
-        return Res.ok(codePayAssistService.getByCode(code));
+    public Result<CodePayInfoResult> getByCode(
+            @NotBlank(message = "{validation.field.code.notBlank}") String code,
+            @RequestParam(required = false) String clientEnv) {
+        return Res.ok(codePayAssistService.getByCode(code, clientEnv));
     }
 
     @Operation(summary = "码牌发起支付")
     @PostMapping("/pay")
     public Result<NormalPayResult> pay(@RequestBody @Validated CodePayParam param) {
         return Res.ok(codePayAssistService.pay(param));
+    }
+
+    @Operation(summary = "码牌生成 OAuth 授权链接")
+    @PostMapping("/generate-auth-url")
+    public Result<AuthUrlResult> generateAuthUrl(@RequestBody @Validated CodePayAuthUrlParam param) {
+        return Res.ok(codePayAssistService.generateAuthUrl(param));
+    }
+
+    @Operation(summary = "查询码牌订单状态")
+    @GetMapping("/order-status")
+    public Result<CodePayOrderStatusResult> orderStatus(
+            @NotBlank(message = "{validation.field.orderNo.notBlank}") String orderNo) {
+        return Res.ok(codePayAssistService.orderStatus(orderNo));
     }
 }

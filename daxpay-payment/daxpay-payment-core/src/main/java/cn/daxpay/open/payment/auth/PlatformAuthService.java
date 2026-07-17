@@ -83,11 +83,19 @@ public class PlatformAuthService {
     /// 回调指向固定的 `/auth/alipay`。会话标识 authToken 通过 OAuth state 参数透传, 回调后从 state 恢复会话。
     /// session 标记 `source=platform_alipay`, 认证分发层据此走平台级支付宝授权回调分支([#authAlipay])。
     public AuthUrlResult generateAlipayAuthUrl() {
+        return generateAlipayAuthUrl(null);
+    }
+
+    /// 生成支付宝授权链接, 可携带授权完成后前端回跳路径
+    ///
+    /// @param returnPath 授权完成后前端业务回跳路径(如 `/cashier/{orderNo}/alipay`), 可空
+    public AuthUrlResult generateAlipayAuthUrl(String returnPath) {
         String authToken = IdUtil.fastSimpleUUID();
         String queryCode = RandomUtil.randomString(10);
         AuthSession session = new AuthSession()
                 .setSource(AuthSession.SOURCE_PLATFORM_ALIPAY)
-                .setQueryCode(queryCode);
+                .setQueryCode(queryCode)
+                .setReturnPath(returnPath);
         authSessionStore.saveSession(authToken, session);
         String authUrl = buildAlipayAuthUrl(authToken);
         authSessionStore.saveWaitingResult(queryCode);
@@ -120,6 +128,13 @@ public class PlatformAuthService {
     /// 回调指向固定的 `/auth/wechat`。会话标识 authToken 通过 OAuth state 参数透传, 回调后从 state 恢复会话。
     /// session 标记 `source=platform_mp`, 认证分发层据此走平台级微信授权回调分支([#authWechatMp])。
     public AuthUrlResult generateWechatMpAuthUrl() {
+        return generateWechatMpAuthUrl(null);
+    }
+
+    /// 生成微信公众号授权链接, 可携带授权完成后前端回跳路径
+    ///
+    /// @param returnPath 授权完成后前端业务回跳路径(如 `/cashier/{orderNo}/wechat`), 可空
+    public AuthUrlResult generateWechatMpAuthUrl(String returnPath) {
         PlatformWechatMpAuthConfig config = platformWechatMpAuthConfigService.getWechatMpAuthConfig();
         if (!isWechatMpConfigured(config)) {
             // 微信: 平台级微信公众号配置不完整, 请先在「平台配置」中配置
@@ -134,7 +149,8 @@ public class PlatformAuthService {
         String queryCode = RandomUtil.randomString(10);
         AuthSession session = new AuthSession()
                 .setSource(AuthSession.SOURCE_PLATFORM_MP)
-                .setQueryCode(queryCode);
+                .setQueryCode(queryCode)
+                .setReturnPath(returnPath);
         authSessionStore.saveSession(authToken, session);
         // redirect_uri 为固定路径, authToken 通过 OAuth state 透传
         String redirectUri = StrUtil.removeSuffix(gatewayBase, "/") + WECHAT_AUTH_PATH;
@@ -150,6 +166,13 @@ public class PlatformAuthService {
     /// 会话标识 authToken 通过 state 参数透传, 回调后从 state 恢复会话。
     /// session 标记 `source=platform_douyin`, 认证分发层据此走平台级抖音授权回调分支([#authDouyin])。
     public AuthUrlResult generateDouyinAuthUrl() {
+        return generateDouyinAuthUrl(null);
+    }
+
+    /// 生成抖音 H5 静默授权链接, 可携带授权完成后前端回跳路径
+    ///
+    /// @param returnPath 授权完成后前端业务回跳路径, 可空
+    public AuthUrlResult generateDouyinAuthUrl(String returnPath) {
         PlatformDouyinH5AuthConfig config = platformDouyinH5AuthConfigService.getDouyinH5AuthConfig();
         if (!isDouyinH5Configured(config)) {
             // 抖音: 平台级抖音 H5 应用配置不完整, 请先在「三方平台管理」中配置
@@ -164,7 +187,8 @@ public class PlatformAuthService {
         String queryCode = RandomUtil.randomString(10);
         AuthSession session = new AuthSession()
                 .setSource(AuthSession.SOURCE_PLATFORM_DOUYIN)
-                .setQueryCode(queryCode);
+                .setQueryCode(queryCode)
+                .setReturnPath(returnPath);
         authSessionStore.saveSession(authToken, session);
         // redirect_uri 为固定路径(需与抖音开放平台配置完全一致), authToken 通过 state 透传
         String redirectUri = StrUtil.removeSuffix(gatewayBase, "/") + DOUYIN_AUTH_PATH;
@@ -194,6 +218,8 @@ public class PlatformAuthService {
                 .setUserId(userId)
                 .setAccessToken(alipayResult.getAccessToken())
                 .setStatus(ChannelAuthStatusEnum.SUCCESS.getCode());
+        // 回填业务回跳路径, 供前端跳回收银台/聚合等页面
+        fillReturnPath(authResult, session);
         authSessionStore.writeResultByQueryCode(param.getQueryCode(), session, authResult);
         return authResult;
     }
@@ -214,6 +240,7 @@ public class PlatformAuthService {
                 .setOpenId(data.getOpenId())
                 .setAccessToken(data.getAccessToken())
                 .setStatus(ChannelAuthStatusEnum.SUCCESS.getCode());
+        fillReturnPath(authResult, session);
         authSessionStore.writeResultByQueryCode(param.getQueryCode(), session, authResult);
         return authResult;
     }
@@ -240,6 +267,7 @@ public class PlatformAuthService {
                 .setOpenId(data.getOpenId())
                 .setAccessToken(data.getAccessToken())
                 .setStatus(ChannelAuthStatusEnum.SUCCESS.getCode());
+        fillReturnPath(authResult, session);
         authSessionStore.writeResultByQueryCode(param.getQueryCode(), session, authResult);
         return authResult;
     }
@@ -247,5 +275,12 @@ public class PlatformAuthService {
     /// 抖音 H5 应用配置是否完整(clientKey/clientSecret 均非空)
     private boolean isDouyinH5Configured(PlatformDouyinH5AuthConfig config) {
         return StrUtil.isNotBlank(config.getClientKey()) && StrUtil.isNotBlank(config.getClientSecret());
+    }
+
+    /// 将会话中的 returnPath 回填到认证结果
+    private void fillReturnPath(AuthResult authResult, AuthSession session) {
+        if (session != null && StrUtil.isNotBlank(session.getReturnPath())) {
+            authResult.setReturnPath(session.getReturnPath());
+        }
     }
 }

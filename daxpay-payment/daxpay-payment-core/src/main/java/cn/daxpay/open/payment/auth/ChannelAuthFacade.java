@@ -5,6 +5,7 @@ import cn.daxpay.open.payment.unipay.param.assist.GenerateAuthUrlParam;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
 import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
 import cn.daxpay.open.platform.core.enums.unipay.ChannelAuthTypeEnum;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -33,7 +34,8 @@ public class ChannelAuthFacade {
     /// 生成授权链接: 支付宝走平台级 OAuth, 其余按支付产品走通道策略
     public AuthUrlResult generateAuthUrl(GenerateAuthUrlParam param) {
         if (isAlipayAuth(param.getAuthType())) {
-            return platformAuthService.generateAlipayAuthUrl();
+            // 透传 returnPath, 供码牌等业务页授权完成后回跳
+            return platformAuthService.generateAlipayAuthUrl(param.getReturnPath());
         }
         return channelAuthService.generateAuthUrl(param);
     }
@@ -42,6 +44,11 @@ public class ChannelAuthFacade {
     public AuthResult auth(AuthCodeParam param) {
         AuthSession session = authSessionStore.loadSession(param.getAuthToken());
         AuthResult result = doAuth(param, session);
+        // 平台级 auth 方法未回填 returnPath 时, 从会话补齐
+        if (session != null && StrUtil.isNotBlank(session.getReturnPath())
+                && StrUtil.isBlank(result.getReturnPath())) {
+            result.setReturnPath(session.getReturnPath());
+        }
         // 成功后失效 authToken, 避免 TTL 内重复消费会话上下文
         authSessionStore.deleteSession(param.getAuthToken());
         return result;

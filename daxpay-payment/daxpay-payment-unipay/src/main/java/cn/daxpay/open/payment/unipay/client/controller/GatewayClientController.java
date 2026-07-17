@@ -2,9 +2,13 @@ package cn.daxpay.open.payment.unipay.client.controller;
 
 import cn.daxpay.open.payment.trade.runtime.service.pay.gateway.AggregatePayService;
 import cn.daxpay.open.payment.trade.runtime.service.pay.gateway.CashierPayService;
+import cn.daxpay.open.payment.trade.runtime.service.pay.gateway.GatewayAuthService;
 import cn.daxpay.open.payment.trade.runtime.service.pay.gateway.GatewayOrderQueryService;
 import cn.daxpay.open.payment.unipay.param.gateway.AggregateQrPayParam;
 import cn.daxpay.open.payment.unipay.param.gateway.CashierPayParam;
+import cn.daxpay.open.payment.unipay.param.gateway.GatewayAuthUrlParam;
+import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
+import cn.daxpay.open.payment.unipay.result.gateway.AggregatePayMetaResult;
 import cn.daxpay.open.payment.unipay.result.gateway.CashierItemPublicResult;
 import cn.daxpay.open.payment.unipay.result.gateway.GatewayOrderResult;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
@@ -35,12 +39,22 @@ public class GatewayClientController {
     private final GatewayOrderQueryService gatewayOrderQueryService;
     private final AggregatePayService aggregatePayService;
     private final CashierPayService cashierPayService;
+    private final GatewayAuthService gatewayAuthService;
 
     @Operation(summary = "查询网关订单摘要")
     @GetMapping("/order")
     public Result<GatewayOrderResult> getOrder(
             @NotBlank(message = "{validation.field.orderNo.notBlank}") String orderNo) {
         return Res.ok(gatewayOrderQueryService.queryByOrderNoNotTenant(orderNo));
+    }
+
+    @Operation(summary = "聚合扫码元数据(autoLaunch/needOpenId)")
+    @GetMapping("/aggregate/meta")
+    public Result<AggregatePayMetaResult> aggregateMeta(
+            @NotBlank(message = "{validation.field.orderNo.notBlank}") String orderNo,
+            @NotBlank(message = "{validation.field.clientEnv.notBlank}") String clientEnv,
+            String runtime) {
+        return Res.ok(aggregatePayService.getMeta(orderNo, clientEnv, runtime));
     }
 
     @Operation(summary = "聚合扫码发起支付")
@@ -62,5 +76,11 @@ public class GatewayClientController {
     @PostMapping("/cashier/pay")
     public Result<NormalPayResult> cashierPay(@RequestBody @Validated CashierPayParam param) {
         return Res.ok(cashierPayService.pay(param));
+    }
+
+    @Operation(summary = "网关 H5 生成授权链接(取 openId, 无商户签名)")
+    @PostMapping("/auth/generate-url")
+    public Result<AuthUrlResult> generateAuthUrl(@RequestBody @Validated GatewayAuthUrlParam param) {
+        return Res.ok(gatewayAuthService.generateAuthUrl(param));
     }
 }

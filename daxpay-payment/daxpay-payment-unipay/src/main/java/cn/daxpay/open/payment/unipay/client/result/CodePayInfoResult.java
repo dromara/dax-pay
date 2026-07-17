@@ -29,5 +29,9 @@ public class CodePayInfoResult {
     /// @see cn.daxpay.open.payment.device.enums.QrCodeProgramTypeEnum
     @Schema(description = "落地程序类型(h5/mini_app)")
     private String programType;
+
+    /// 是否需要 openId(传入 clientEnv 时按策略 method 判定; 未传 clientEnv 时为 null)
+    @Schema(description = "是否需要 openId")
+    private Boolean needOpenId;
 }
 

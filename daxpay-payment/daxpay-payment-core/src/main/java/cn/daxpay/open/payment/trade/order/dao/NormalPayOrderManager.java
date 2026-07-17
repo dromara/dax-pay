@@ -3,6 +3,7 @@ package cn.daxpay.open.payment.trade.order.dao;
 import cn.daxpay.open.platform.common.mybatisplus.impl.BaseManager;
 import cn.daxpay.open.platform.common.mybatisplus.query.generator.QueryGenerator;
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
+import cn.daxpay.open.platform.core.annotation.IgnoreTenant;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.payment.trade.order.entity.NormalPayOrder;
 import cn.daxpay.open.payment.trade.order.param.NormalPayOrderQuery;
@@ -19,6 +20,14 @@ public class NormalPayOrderManager extends BaseManager<NormalPayOrderMapper, Nor
 
     /// 根据平台业务单号查询（按商户号自动租户隔离）
     public Optional<NormalPayOrder> findByOrderNo(String orderNo) {
+        return lambdaQuery()
+                .eq(NormalPayOrder::getOrderNo, orderNo)
+                .oneOpt();
+    }
+
+    /// 根据平台业务单号查询(忽略租户, H5 码牌订单状态轮询用)
+    @IgnoreTenant
+    public Optional<NormalPayOrder> findByOrderNoNotTenant(String orderNo) {
         return lambdaQuery()
                 .eq(NormalPayOrder::getOrderNo, orderNo)
                 .oneOpt();
