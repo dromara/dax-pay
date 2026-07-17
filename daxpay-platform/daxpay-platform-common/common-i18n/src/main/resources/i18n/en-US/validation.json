@@ -759,6 +759,36 @@
     },
     "matchMode": {
       "size": "Match mode must be at most 16 characters"
+    },
+    "nonceVerifyEnabled": {
+      "notNull": "Anti-replay nonce verification toggle cannot be empty"
+    },
+    "reqTimeoutEnabled": {
+      "notNull": "Request timestamp window verification toggle cannot be empty"
+    },
+    "reqTimeoutSeconds": {
+      "min": "Request timestamp tolerance cannot be less than 1 second"
+    },
+    "nonceTtlSeconds": {
+      "min": "Nonce TTL cannot be less than 1 second"
+    },
+    "replayProtectEnabled": {
+      "notNull": "Anti-replay verification toggle cannot be empty"
+    },
+    "nonceTimeoutSeconds": {
+      "min": "Nonce TTL cannot be less than 1 second"
+    },
+    "timestampToleranceSeconds": {
+      "min": "Timestamp tolerance cannot be less than 1 second"
+    },
+    "riskEnabled": {
+      "notNull": "Risk control master toggle cannot be empty"
+    },
+    "riskBlockBeforePay": {
+      "notNull": "Block-on-hit toggle cannot be empty"
+    },
+    "riskCheckAfterPay": {
+      "notNull": "Post-pay logging toggle cannot be empty"
     }
   }
 }

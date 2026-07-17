@@ -759,6 +759,36 @@
     },
     "matchMode": {
       "size": "일치 모드는 16자 이내여야 합니다"
+    },
+    "nonceVerifyEnabled": {
+      "notNull": "논스 재생 방지 검증 활성화 여부는 필수입니다"
+    },
+    "reqTimeoutEnabled": {
+      "notNull": "요청 시간 윈도우 검증 활성화 여부는 필수입니다"
+    },
+    "reqTimeoutSeconds": {
+      "min": "요청 시간 허용 오차는 1초 이상이어야 합니다"
+    },
+    "nonceTtlSeconds": {
+      "min": "논스 유효 기간은 1초 이상이어야 합니다"
+    },
+    "replayProtectEnabled": {
+      "notNull": "재생 방지 검증 활성화 여부는 필수입니다"
+    },
+    "nonceTimeoutSeconds": {
+      "min": "논스 유효 기간은 1초 이상이어야 합니다"
+    },
+    "timestampToleranceSeconds": {
+      "min": "타임스탬프 허용 오차는 1초 이상이어야 합니다"
+    },
+    "riskEnabled": {
+      "notNull": "리스크 관리 마스터 스위치는 필수입니다"
+    },
+    "riskBlockBeforePay": {
+      "notNull": "히트 시 차단 스위치는 필수입니다"
+    },
+    "riskCheckAfterPay": {
+      "notNull": "결제 후 기록 스위치는 필수입니다"
     }
   }
 }

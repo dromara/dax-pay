@@ -92,4 +92,49 @@ public class PlatformSecurityConfigController {
         platformSecurityConfigService.updateTwoFactorAuthConfig(param);
         return Res.ok();
     }
+
+    @PermCode(code = PermCodes.Action.VIEW)
+    @Operation(summary = "获取API安全配置")
+    @GetMapping("/api-security/get")
+    public Result<PlatformApiSecurityConfigResult> getApiSecurityConfig() {
+        return Res.ok(platformSecurityConfigService.findApiSecurityConfig());
+    }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "更新API安全配置")
+    @PostMapping("/api-security/update")
+    public Result<Void> updateApiSecurityConfig(@RequestBody @Validated PlatformApiSecurityConfigParam param) {
+        platformSecurityConfigService.updateApiSecurityConfig(param);
+        return Res.ok();
+    }
+
+    @PermCode(code = PermCodes.Action.VIEW)
+    @Operation(summary = "获取IAM域防重放配置")
+    @GetMapping("/iam-replay-protect/get")
+    public Result<PlatformIamReplayProtectConfigResult> getIamReplayProtectConfig() {
+        return Res.ok(platformSecurityConfigService.findIamReplayProtectConfig());
+    }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "更新IAM域防重放配置")
+    @PostMapping("/iam-replay-protect/update")
+    public Result<Void> updateIamReplayProtectConfig(@RequestBody @Validated PlatformIamReplayProtectConfigParam param) {
+        platformSecurityConfigService.updateIamReplayProtectConfig(param);
+        return Res.ok();
+    }
+
+    @PermCode(code = PermCodes.Action.VIEW)
+    @Operation(summary = "获取支付安全配置")
+    @GetMapping("/pay-security/get")
+    public Result<PlatformPaySecurityConfigResult> getPaySecurityConfig() {
+        return Res.ok(platformSecurityConfigService.findPaySecurityConfig());
+    }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "更新支付安全配置")
+    @PostMapping("/pay-security/update")
+    public Result<Void> updatePaySecurityConfig(@RequestBody @Validated PlatformPaySecurityConfigParam param) {
+        platformSecurityConfigService.updatePaySecurityConfig(param);
+        return Res.ok();
+    }
 }

@@ -30,6 +30,7 @@ import java.time.ZoneOffset;
 @RequiredArgsConstructor
 public class PaymentVerifyAspect {
     private final PaymentSignService paymentSignService;
+    private final PaymentReplayProtectService paymentReplayProtectService;
     private final MerchantContextLoader merchantContextLoader;
 
     /// 处理方法上的@PaymentVerify注解
@@ -59,6 +60,8 @@ public class PaymentVerifyAspect {
             merchantContextLoader.initMch(paymentParam.getMchNo());
             // 参数签名校验
             paymentSignService.signVerify(paymentParam);
+            // 防重放校验（Nonce一次性消费 + 请求时间窗口，受平台API安全配置开关控制）
+            paymentReplayProtectService.verify(paymentParam, paymentParam.getMchNo());
         } else {
             // 参数需要继承MerchantPaymentCommonParam
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.verify.paramExtendRequired");

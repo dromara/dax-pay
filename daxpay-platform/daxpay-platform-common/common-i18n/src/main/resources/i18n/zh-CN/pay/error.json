@@ -69,7 +69,8 @@
     "codeClientEnvBlank": "客户端环境编码不能为空",
     "codeClientEnvNotConfigured": "该客户端环境与支付形态未配置支付方式",
     "codeRuntimeMismatch": "码牌落地类型与运行形态不匹配",
-    "codeClientEnvChannelMchRequired": "直接指定时，已填写行的通道商户号必填"
+    "codeClientEnvChannelMchRequired": "直接指定时，已填写行的通道商户号必填",
+    "returnPathInvalid": "授权回跳路径不合法"
   },
   "refund": {
     "processing": "退款处理中，请勿重复操作",

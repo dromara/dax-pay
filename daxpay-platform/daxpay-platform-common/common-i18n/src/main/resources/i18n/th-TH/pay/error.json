@@ -69,7 +69,8 @@
     "codeClientEnvBlank": "Client environment code cannot be blank",
     "codeClientEnvNotConfigured": "Payment method not configured for this client env and form",
     "codeRuntimeMismatch": "QR program type does not match runtime",
-    "codeClientEnvChannelMchRequired": "Channel merchant required for each env and form in DIRECT mode"
+    "codeClientEnvChannelMchRequired": "Channel merchant required for each env and form in DIRECT mode",
+    "returnPathInvalid": "Invalid auth return path"
   },
   "refund": {
     "processing": "ดำเนินการคืนเงินอย่าทำซ้ำ",

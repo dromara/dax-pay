@@ -6,5 +6,8 @@
   "url": "System URL settings",
   "website": "Website display settings",
   "wechat_notify": "WeChat message notify template config",
-  "sensitive_word": "Sensitive word policy"
+  "sensitive_word": "Sensitive word policy",
+  "api_security": "API Security Config",
+  "pay_security": "Pay Security Config",
+  "iam_replay_protect": "IAM Anti-Replay Config"
 }

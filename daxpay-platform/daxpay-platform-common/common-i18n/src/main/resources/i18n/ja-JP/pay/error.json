@@ -69,7 +69,8 @@
     "codeClientEnvBlank": "クライアント環境コードは必須です",
     "codeClientEnvNotConfigured": "この環境と形態には支払方法が設定されていません",
     "codeRuntimeMismatch": "QRのプログラム種別とランタイムが一致しません",
-    "codeClientEnvChannelMchRequired": "DIRECT モードでは各環境・形態のチャネル加盟店番号が必須です"
+    "codeClientEnvChannelMchRequired": "DIRECT モードでは各環境・形態のチャネル加盟店番号が必須です",
+    "returnPathInvalid": "認可後の戻りパスが不正です"
   },
   "refund": {
     "processing": "返金処理、繰り返さない",

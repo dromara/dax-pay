@@ -746,6 +746,27 @@
     },
     "programType": {
       "notBlank": "Program type cannot be blank"
+    },
+    "nonceVerifyEnabled": {
+      "notNull": "ไม่สามารถเว้นว่างการเปิด/ปิดการตรวจสอบ nonce ป้องกันการเล่นซ้ำได้"
+    },
+    "reqTimeoutEnabled": {
+      "notNull": "ไม่สามารถเว้นว่างการเปิด/ปิดการตรวจสอบหน้าต่างเวลาคำขอได้"
+    },
+    "reqTimeoutSeconds": {
+      "min": "ค่าคลาดเคลื่อนเวลาคำขอต้องไม่น้อยกว่า 1 วินาที"
+    },
+    "nonceTtlSeconds": {
+      "min": "อายุการใช้งาน nonce ต้องไม่น้อยกว่า 1 วินาที"
+    },
+    "replayProtectEnabled": {
+      "notNull": "ไม่สามารถเว้นว่างการเปิด/ปิดการตรวจสอบการป้องกันการเล่นซ้ำได้"
+    },
+    "nonceTimeoutSeconds": {
+      "min": "อายุการใช้งาน nonce ต้องไม่น้อยกว่า 1 วินาที"
+    },
+    "timestampToleranceSeconds": {
+      "min": "ค่าคลาดเคลื่อนการประทับเวลาต้องไม่น้อยกว่า 1 วินาที"
     }
   }
 }

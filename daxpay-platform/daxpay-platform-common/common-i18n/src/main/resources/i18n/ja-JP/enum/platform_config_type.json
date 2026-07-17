@@ -6,5 +6,8 @@
   "url": "システムURL設定",
   "website": "Webサイトの表示設定",
   "wechat_notify": "WeChat メッセージ通知テンプレートの構成",
-  "sensitive_word": "センシティブワード設定"
+  "sensitive_word": "センシティブワード設定",
+  "api_security": "APIセキュリティ設定",
+  "pay_security": "決済セキュリティ設定",
+  "iam_replay_protect": "IAMドメインリプレイ防止設定"
 }

@@ -370,6 +370,12 @@ public interface PermCodes {
             /// 菜单编码
             String MENU = "develop:auth";
         }
+
+        /// 网关支付调试 menuCode=develop:gateway
+        interface Gateway {
+            /// 菜单编码
+            String MENU = "develop:gateway";
+        }
     }
 
     /// 设备管理（开源仅码牌）

@@ -746,6 +746,27 @@
     },
     "programType": {
       "notBlank": "Program type cannot be blank"
+    },
+    "nonceVerifyEnabled": {
+      "notNull": "Không được để trống bật/tắt xác thực nonce chống phát lại"
+    },
+    "reqTimeoutEnabled": {
+      "notNull": "Không được để trống bật/tắt xác thực cửa sổ thời gian yêu cầu"
+    },
+    "reqTimeoutSeconds": {
+      "min": "Dung sai thời gian yêu cầu không được nhỏ hơn 1 giây"
+    },
+    "nonceTtlSeconds": {
+      "min": "Thời gian sống của nonce không được nhỏ hơn 1 giây"
+    },
+    "replayProtectEnabled": {
+      "notNull": "Không được để trống bật/tắt xác thực chống phát lại"
+    },
+    "nonceTimeoutSeconds": {
+      "min": "Thời gian sống của nonce không được nhỏ hơn 1 giây"
+    },
+    "timestampToleranceSeconds": {
+      "min": "Dung sai dấu thời gian không được nhỏ hơn 1 giây"
     }
   }
 }

@@ -746,6 +746,27 @@
     },
     "programType": {
       "notBlank": "Program type cannot be blank"
+    },
+    "nonceVerifyEnabled": {
+      "notNull": "Sakelar verifikasi nonce anti-replay tidak boleh kosong"
+    },
+    "reqTimeoutEnabled": {
+      "notNull": "Sakelar verifikasi jendela waktu permintaan tidak boleh kosong"
+    },
+    "reqTimeoutSeconds": {
+      "min": "Toleransi waktu permintaan tidak boleh kurang dari 1 detik"
+    },
+    "nonceTtlSeconds": {
+      "min": "TTL nonce tidak boleh kurang dari 1 detik"
+    },
+    "replayProtectEnabled": {
+      "notNull": "Sakelar verifikasi anti-replay tidak boleh kosong"
+    },
+    "nonceTimeoutSeconds": {
+      "min": "TTL nonce tidak boleh kurang dari 1 detik"
+    },
+    "timestampToleranceSeconds": {
+      "min": "Toleransi stempel waktu tidak boleh kurang dari 1 detik"
     }
   }
 }

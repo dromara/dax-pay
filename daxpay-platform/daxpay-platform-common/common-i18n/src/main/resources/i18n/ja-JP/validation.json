@@ -759,6 +759,36 @@
     },
     "matchMode": {
       "size": "一致モードは16文字以内です"
+    },
+    "nonceVerifyEnabled": {
+      "notNull": "Nonceリプレイ防止検証の有効/無効は必須です"
+    },
+    "reqTimeoutEnabled": {
+      "notNull": "リクエスト時間枠検証の有効/無効は必須です"
+    },
+    "reqTimeoutSeconds": {
+      "min": "リクエスト時間許容誤差は1秒以上である必要があります"
+    },
+    "nonceTtlSeconds": {
+      "min": "Nonce有効期間は1秒以上である必要があります"
+    },
+    "replayProtectEnabled": {
+      "notNull": "リプレイ防止検証の有効/無効は必須です"
+    },
+    "nonceTimeoutSeconds": {
+      "min": "Nonce有効期間は1秒以上である必要があります"
+    },
+    "timestampToleranceSeconds": {
+      "min": "タイムスタンプ許容誤差は1秒以上である必要があります"
+    },
+    "riskEnabled": {
+      "notNull": "リスク管理のメインスイッチは必須です"
+    },
+    "riskBlockBeforePay": {
+      "notNull": "ヒット時ブロックスイッチは必須です"
+    },
+    "riskCheckAfterPay": {
+      "notNull": "決済後記録スイッチは必須です"
     }
   }
 }

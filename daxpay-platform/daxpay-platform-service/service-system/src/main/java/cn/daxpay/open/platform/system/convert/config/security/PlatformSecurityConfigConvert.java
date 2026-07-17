@@ -33,4 +33,19 @@ public interface PlatformSecurityConfigConvert {
     PlatformTwoFactorAuthConfigResult toTwoFactorAuthResult(PlatformTwoFactorAuthConfig data);
 
     void copy(PlatformTwoFactorAuthConfigParam param, @MappingTarget PlatformTwoFactorAuthConfig data);
+
+    // ========== API安全配置转换 ==========
+    PlatformApiSecurityConfigResult toApiSecurityResult(PlatformApiSecurityConfig data);
+
+    void copy(PlatformApiSecurityConfigParam param, @MappingTarget PlatformApiSecurityConfig data);
+
+    // ========== IAM域防重放配置转换 ==========
+    PlatformIamReplayProtectConfigResult toIamReplayProtectResult(PlatformIamReplayProtectConfig data);
+
+    void copy(PlatformIamReplayProtectConfigParam param, @MappingTarget PlatformIamReplayProtectConfig data);
+
+    // ========== 支付安全配置（风控开关）转换 ==========
+    PlatformPaySecurityConfigResult toPaySecurityResult(PlatformPaySecurityConfig data);
+
+    void copy(PlatformPaySecurityConfigParam param, @MappingTarget PlatformPaySecurityConfig data);
 }

@@ -759,6 +759,36 @@
     },
     "matchMode": {
       "size": "匹配模式不可超过16位"
+    },
+    "nonceVerifyEnabled": {
+      "notNull": "是否启用Nonce防重放校验不能为空"
+    },
+    "reqTimeoutEnabled": {
+      "notNull": "是否启用请求时间窗口校验不能为空"
+    },
+    "reqTimeoutSeconds": {
+      "min": "请求时间窗口容差不能小于1秒"
+    },
+    "nonceTtlSeconds": {
+      "min": "Nonce有效期不能小于1秒"
+    },
+    "replayProtectEnabled": {
+      "notNull": "是否启用防重放校验不能为空"
+    },
+    "nonceTimeoutSeconds": {
+      "min": "Nonce有效期不能小于1秒"
+    },
+    "timestampToleranceSeconds": {
+      "min": "时间戳容差不能小于1秒"
+    },
+    "riskEnabled": {
+      "notNull": "风控总开关不能为空"
+    },
+    "riskBlockBeforePay": {
+      "notNull": "命中阻断开关不能为空"
+    },
+    "riskCheckAfterPay": {
+      "notNull": "事后补录开关不能为空"
     }
   }
 }

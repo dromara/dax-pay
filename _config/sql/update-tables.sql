@@ -208,3 +208,58 @@ CREATE INDEX IF NOT EXISTS "idx_system_sensitive_word_hit_time" ON "public"."sys
 CREATE INDEX IF NOT EXISTS "idx_system_sensitive_word_hit_word" ON "public"."system_sensitive_word_hit" ("hit_word");
 CREATE INDEX IF NOT EXISTS "idx_system_sensitive_word_hit_mch" ON "public"."system_sensitive_word_hit" ("mch_no", "create_time");
 CREATE INDEX IF NOT EXISTS "idx_system_sensitive_word_hit_scene" ON "public"."system_sensitive_word_hit" ("scene");
+
+-- ----------------------------
+-- Table structure for pay_gateway_cashier_item
+-- 网关收银台支付项配置(应用级): H5 按 client_env 五档 / MINI 四档 / WEB 扁平(client_env 空)
+-- ----------------------------
+CREATE TABLE IF NOT EXISTS "public"."pay_gateway_cashier_item" (
+  "id" int8 NOT NULL,
+  "mch_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "app_id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "cashier_type" varchar(16) COLLATE "pg_catalog"."default" NOT NULL,
+  "client_env" varchar(32) COLLATE "pg_catalog"."default",
+  "name" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
+  "icon" varchar(32) COLLATE "pg_catalog"."default",
+  "recommend" bool NOT NULL DEFAULT false,
+  "sort_no" int4 DEFAULT 0,
+  "resolve_mode" varchar(16) COLLATE "pg_catalog"."default" NOT NULL,
+  "method" varchar(32) COLLATE "pg_catalog"."default",
+  "channel_mch_no" varchar(64) COLLATE "pg_catalog"."default",
+  "capability" varchar(64) COLLATE "pg_catalog"."default",
+  "creator" int8,
+  "create_time" timestamptz(6),
+  "last_modifier" int8,
+  "last_modified_time" timestamptz(6),
+  "version" int4 DEFAULT 0,
+  "deleted" bool NOT NULL DEFAULT false
+);
+
+COMMENT ON TABLE "public"."pay_gateway_cashier_item" IS '网关收银台支付项配置(应用级)';
+COMMENT ON COLUMN "public"."pay_gateway_cashier_item"."id" IS '主键';
+COMMENT ON COLUMN "public"."pay_gateway_cashier_item"."mch_no" IS '商户号';
+COMMENT ON COLUMN "public"."pay_gateway_cashier_item"."app_id" IS '应用号';
+COMMENT ON COLUMN "public"."pay_gateway_cashier_item"."cashier_type" IS '收银台类型: h5/web/mini';
+COMMENT ON COLUMN "public"."pay_gateway_cashier_item"."client_env" IS '客户端环境(H5五档/MINI四档; WEB为空)';
+COMMENT ON COLUMN "public"."pay_gateway_cashier_item"."name" IS '前台展示名称';
+COMMENT ON COLUMN "public"."pay_gateway_cashier_item"."icon" IS '图标编码(与 PayProvider 对齐)';
+COMMENT ON COLUMN "public"."pay_gateway_cashier_item"."recommend" IS '是否推荐';
+COMMENT ON COLUMN "public"."pay_gateway_cashier_item"."sort_no" IS '排序号(越小越前)';
+COMMENT ON COLUMN "public"."pay_gateway_cashier_item"."resolve_mode" IS '解析模式: method/direct';
+COMMENT ON COLUMN "public"."pay_gateway_cashier_item"."method" IS '支付方式(METHOD 模式)';
+COMMENT ON COLUMN "public"."pay_gateway_cashier_item"."channel_mch_no" IS '通道商户号(DIRECT 模式)';
+COMMENT ON COLUMN "public"."pay_gateway_cashier_item"."capability" IS '支付能力(DIRECT 模式)';
+COMMENT ON COLUMN "public"."pay_gateway_cashier_item"."creator" IS '创建者ID';
+COMMENT ON COLUMN "public"."pay_gateway_cashier_item"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."pay_gateway_cashier_item"."last_modifier" IS '最后修改者ID';
+COMMENT ON COLUMN "public"."pay_gateway_cashier_item"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."pay_gateway_cashier_item"."version" IS '版本号';
+COMMENT ON COLUMN "public"."pay_gateway_cashier_item"."deleted" IS '删除标志';
+
+ALTER TABLE "public"."pay_gateway_cashier_item" DROP CONSTRAINT IF EXISTS "pay_gateway_cashier_item_pkey";
+ALTER TABLE "public"."pay_gateway_cashier_item" ADD CONSTRAINT "pay_gateway_cashier_item_pkey" PRIMARY KEY ("id");
+
+CREATE INDEX IF NOT EXISTS "idx_pay_gateway_cashier_item_bucket"
+  ON "public"."pay_gateway_cashier_item" ("app_id", "cashier_type", "client_env");
+CREATE INDEX IF NOT EXISTS "idx_pay_gateway_cashier_item_mch"
+  ON "public"."pay_gateway_cashier_item" ("mch_no", "app_id");

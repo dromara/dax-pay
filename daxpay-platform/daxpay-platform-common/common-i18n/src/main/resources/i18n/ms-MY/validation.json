@@ -746,6 +746,27 @@
     },
     "programType": {
       "notBlank": "Program type cannot be blank"
+    },
+    "nonceVerifyEnabled": {
+      "notNull": "Togol pengesahan nonce anti-replay tidak boleh kosong"
+    },
+    "reqTimeoutEnabled": {
+      "notNull": "Togol pengesahan tetingkap masa permintaan tidak boleh kosong"
+    },
+    "reqTimeoutSeconds": {
+      "min": "Toleransi masa permintaan tidak boleh kurang daripada 1 saat"
+    },
+    "nonceTtlSeconds": {
+      "min": "TTL nonce tidak boleh kurang daripada 1 saat"
+    },
+    "replayProtectEnabled": {
+      "notNull": "Togol pengesahan anti-main semula tidak boleh kosong"
+    },
+    "nonceTimeoutSeconds": {
+      "min": "TTL nonce tidak boleh kurang daripada 1 saat"
+    },
+    "timestampToleranceSeconds": {
+      "min": "Toleransi cap masa tidak boleh kurang daripada 1 saat"
     }
   }
 }

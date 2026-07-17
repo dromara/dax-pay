@@ -1,28 +1,105 @@
--- 敏感词菜单（系统管理 · 方案 A）：catalog + 词库 + 命中
--- 策略开关在「平台配置」Tab，不新增菜单
--- 不预置敏感词词条
--- 列序对齐 iam_perm_menu 全量导出
 
-INSERT INTO "public"."iam_perm_menu" VALUES
-(311, 3, 'system:sensitive', 'admin', 'SensitiveWord', 'menu.system.sensitive', 'lucide:shield-ban',
- 'f', 'f', NULL, '/system/sensitive', NULL, 15,
- 'f', 't', 'f', 1, 1, 0, 'f', 'catalog',
- NULL, NULL, NULL, NULL, NULL, NULL,
- NOW(), NOW())
-ON CONFLICT ("id") DO NOTHING;
+-- ----------------------------
+-- 收银台模拟配置: 商户 M1781861282382 / 应用 A7846150576259390
+-- H5(五环境 browser/wechat/alipay/union_pay/douyin) + WEB + MINI(四环境)
+-- resolve_mode 全部 method; 固定 ID 段 9100000000000100001~026, 可重复执行
+-- ----------------------------
+DELETE FROM "public"."pay_gateway_cashier_item"
+WHERE "mch_no" = 'M1781861282382'
+  AND "app_id" = 'A7846150576259390';
 
-INSERT INTO "public"."iam_perm_menu" VALUES
-(31101, 311, 'system:sensitive-word', 'admin', 'SensitiveWordList', 'menu.system.sensitive.word', 'lucide:book-x',
- 'f', 'f', '/system/sensitive-word/SensitiveWordList', '/system/sensitive/word', NULL, 1,
- 'f', 't', 'f', 1, 1, 0, 'f', 'menu',
- NULL, NULL, NULL, NULL, NULL, NULL,
- NOW(), NOW())
-ON CONFLICT ("id") DO NOTHING;
-
-INSERT INTO "public"."iam_perm_menu" VALUES
-(31102, 311, 'system:sensitive-word-hit', 'admin', 'SensitiveWordHitList', 'menu.system.sensitive.hit', 'lucide:scan-search',
- 'f', 'f', '/system/sensitive-word/SensitiveWordHitList', '/system/sensitive/hit', NULL, 2,
- 'f', 't', 'f', 1, 1, 0, 'f', 'menu',
- NULL, NULL, NULL, NULL, NULL, NULL,
- NOW(), NOW())
-ON CONFLICT ("id") DO NOTHING;
+INSERT INTO "public"."pay_gateway_cashier_item" (
+  "id", "mch_no", "app_id", "cashier_type", "client_env",
+  "name", "icon", "recommend", "sort_no",
+  "resolve_mode", "method", "channel_mch_no", "capability",
+  "creator", "create_time", "last_modifier", "last_modified_time",
+  "version", "deleted"
+) VALUES
+-- H5 · browser
+(9100000000000100001, 'M1781861282382', 'A7846150576259390', 'h5', 'browser',
+ '微信支付', 'wechat', 't', 1, 'method', 'wechat_h5', NULL, NULL,
+ 1, '2026-07-17 00:00:00+00', 1, '2026-07-17 00:00:00+00', 0, 'f'),
+(9100000000000100002, 'M1781861282382', 'A7846150576259390', 'h5', 'browser',
+ '支付宝', 'alipay', 'f', 2, 'method', 'alipay_h5', NULL, NULL,
+ 1, '2026-07-17 00:00:00+00', 1, '2026-07-17 00:00:00+00', 0, 'f'),
+(9100000000000100003, 'M1781861282382', 'A7846150576259390', 'h5', 'browser',
+ '云闪付', 'union_pay', 'f', 3, 'method', 'union_h5', NULL, NULL,
+ 1, '2026-07-17 00:00:00+00', 1, '2026-07-17 00:00:00+00', 0, 'f'),
+(9100000000000100004, 'M1781861282382', 'A7846150576259390', 'h5', 'browser',
+ '抖音支付', 'douyin', 'f', 4, 'method', 'douyin_h5', NULL, NULL,
+ 1, '2026-07-17 00:00:00+00', 1, '2026-07-17 00:00:00+00', 0, 'f'),
+-- H5 · wechat
+(9100000000000100005, 'M1781861282382', 'A7846150576259390', 'h5', 'wechat',
+ '微信支付', 'wechat', 't', 1, 'method', 'wechat_jsapi', NULL, NULL,
+ 1, '2026-07-17 00:00:00+00', 1, '2026-07-17 00:00:00+00', 0, 'f'),
+(9100000000000100006, 'M1781861282382', 'A7846150576259390', 'h5', 'wechat',
+ '微信扫码', 'wechat', 'f', 2, 'method', 'wechat_qr', NULL, NULL,
+ 1, '2026-07-17 00:00:00+00', 1, '2026-07-17 00:00:00+00', 0, 'f'),
+-- H5 · alipay
+(9100000000000100007, 'M1781861282382', 'A7846150576259390', 'h5', 'alipay',
+ '支付宝', 'alipay', 't', 1, 'method', 'alipay_jsapi', NULL, NULL,
+ 1, '2026-07-17 00:00:00+00', 1, '2026-07-17 00:00:00+00', 0, 'f'),
+(9100000000000100008, 'M1781861282382', 'A7846150576259390', 'h5', 'alipay',
+ '支付宝扫码', 'alipay', 'f', 2, 'method', 'alipay_qr', NULL, NULL,
+ 1, '2026-07-17 00:00:00+00', 1, '2026-07-17 00:00:00+00', 0, 'f'),
+-- H5 · union_pay
+(9100000000000100009, 'M1781861282382', 'A7846150576259390', 'h5', 'union_pay',
+ '云闪付', 'union_pay', 't', 1, 'method', 'union_jsapi', NULL, NULL,
+ 1, '2026-07-17 00:00:00+00', 1, '2026-07-17 00:00:00+00', 0, 'f'),
+(9100000000000100010, 'M1781861282382', 'A7846150576259390', 'h5', 'union_pay',
+ '银联扫码', 'union_pay', 'f', 2, 'method', 'union_qr', NULL, NULL,
+ 1, '2026-07-17 00:00:00+00', 1, '2026-07-17 00:00:00+00', 0, 'f'),
+-- H5 · douyin
+(9100000000000100011, 'M1781861282382', 'A7846150576259390', 'h5', 'douyin',
+ '抖音支付', 'douyin', 't', 1, 'method', 'douyin_jsapi', NULL, NULL,
+ 1, '2026-07-17 00:00:00+00', 1, '2026-07-17 00:00:00+00', 0, 'f'),
+(9100000000000100012, 'M1781861282382', 'A7846150576259390', 'h5', 'douyin',
+ '抖音扫码', 'douyin', 'f', 2, 'method', 'douyin_qr', NULL, NULL,
+ 1, '2026-07-17 00:00:00+00', 1, '2026-07-17 00:00:00+00', 0, 'f'),
+-- MINI · wechat
+(9100000000000100013, 'M1781861282382', 'A7846150576259390', 'mini', 'wechat',
+ '微信支付', 'wechat', 't', 1, 'method', 'wechat_mini', NULL, NULL,
+ 1, '2026-07-17 00:00:00+00', 1, '2026-07-17 00:00:00+00', 0, 'f'),
+(9100000000000100014, 'M1781861282382', 'A7846150576259390', 'mini', 'wechat',
+ '微信扫码', 'wechat', 'f', 2, 'method', 'wechat_qr', NULL, NULL,
+ 1, '2026-07-17 00:00:00+00', 1, '2026-07-17 00:00:00+00', 0, 'f'),
+-- MINI · alipay
+(9100000000000100015, 'M1781861282382', 'A7846150576259390', 'mini', 'alipay',
+ '支付宝', 'alipay', 't', 1, 'method', 'alipay_jsapi', NULL, NULL,
+ 1, '2026-07-17 00:00:00+00', 1, '2026-07-17 00:00:00+00', 0, 'f'),
+(9100000000000100016, 'M1781861282382', 'A7846150576259390', 'mini', 'alipay',
+ '支付宝扫码', 'alipay', 'f', 2, 'method', 'alipay_qr', NULL, NULL,
+ 1, '2026-07-17 00:00:00+00', 1, '2026-07-17 00:00:00+00', 0, 'f'),
+-- MINI · union_pay
+(9100000000000100017, 'M1781861282382', 'A7846150576259390', 'mini', 'union_pay',
+ '云闪付', 'union_pay', 't', 1, 'method', 'union_jsapi', NULL, NULL,
+ 1, '2026-07-17 00:00:00+00', 1, '2026-07-17 00:00:00+00', 0, 'f'),
+(9100000000000100018, 'M1781861282382', 'A7846150576259390', 'mini', 'union_pay',
+ '银联扫码', 'union_pay', 'f', 2, 'method', 'union_qr', NULL, NULL,
+ 1, '2026-07-17 00:00:00+00', 1, '2026-07-17 00:00:00+00', 0, 'f'),
+-- MINI · douyin
+(9100000000000100019, 'M1781861282382', 'A7846150576259390', 'mini', 'douyin',
+ '抖音支付', 'douyin', 't', 1, 'method', 'douyin_jsapi', NULL, NULL,
+ 1, '2026-07-17 00:00:00+00', 1, '2026-07-17 00:00:00+00', 0, 'f'),
+(9100000000000100020, 'M1781861282382', 'A7846150576259390', 'mini', 'douyin',
+ '抖音扫码', 'douyin', 'f', 2, 'method', 'douyin_qr', NULL, NULL,
+ 1, '2026-07-17 00:00:00+00', 1, '2026-07-17 00:00:00+00', 0, 'f'),
+-- WEB · 扁平(client_env 为空)
+(9100000000000100021, 'M1781861282382', 'A7846150576259390', 'web', NULL,
+ '微信扫码', 'wechat', 't', 1, 'method', 'wechat_qr', NULL, NULL,
+ 1, '2026-07-17 00:00:00+00', 1, '2026-07-17 00:00:00+00', 0, 'f'),
+(9100000000000100022, 'M1781861282382', 'A7846150576259390', 'web', NULL,
+ '支付宝扫码', 'alipay', 'f', 2, 'method', 'alipay_qr', NULL, NULL,
+ 1, '2026-07-17 00:00:00+00', 1, '2026-07-17 00:00:00+00', 0, 'f'),
+(9100000000000100023, 'M1781861282382', 'A7846150576259390', 'web', NULL,
+ '支付宝电脑', 'alipay', 'f', 3, 'method', 'alipay_pc', NULL, NULL,
+ 1, '2026-07-17 00:00:00+00', 1, '2026-07-17 00:00:00+00', 0, 'f'),
+(9100000000000100024, 'M1781861282382', 'A7846150576259390', 'web', NULL,
+ '银联扫码', 'union_pay', 'f', 4, 'method', 'union_qr', NULL, NULL,
+ 1, '2026-07-17 00:00:00+00', 1, '2026-07-17 00:00:00+00', 0, 'f'),
+(9100000000000100025, 'M1781861282382', 'A7846150576259390', 'web', NULL,
+ '抖音扫码', 'douyin', 'f', 5, 'method', 'douyin_qr', NULL, NULL,
+ 1, '2026-07-17 00:00:00+00', 1, '2026-07-17 00:00:00+00', 0, 'f'),
+(9100000000000100026, 'M1781861282382', 'A7846150576259390', 'web', NULL,
+ '微信 H5', 'wechat', 'f', 6, 'method', 'wechat_h5', NULL, NULL,
+ 1, '2026-07-17 00:00:00+00', 1, '2026-07-17 00:00:00+00', 0, 'f');
