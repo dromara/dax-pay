@@ -22,9 +22,8 @@ import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
 import cn.daxpay.open.platform.common.redis.lock.LockExecutor;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.extra.spring.SpringUtil;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +33,6 @@ import java.util.Objects;
 ///
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class NormalPayService {
 
     private final NormalPayAssistService payAssistService;
@@ -43,6 +41,25 @@ public class NormalPayService {
     private final PayRouteService payRouteService;
     private final MerchantContextLoader merchantContextLoader;
     private final SensitiveWordCheckService sensitiveWordCheckService;
+
+    /// 自注入，保证 [NormalPayService#paySuccess] 走 Spring 事务代理
+    private final NormalPayService self;
+
+    public NormalPayService(NormalPayAssistService payAssistService,
+                            PayUniHandleService payUniHandleService,
+                            LockExecutor lockExecutor,
+                            PayRouteService payRouteService,
+                            MerchantContextLoader merchantContextLoader,
+                            SensitiveWordCheckService sensitiveWordCheckService,
+                            @Lazy NormalPayService self) {
+        this.payAssistService = payAssistService;
+        this.payUniHandleService = payUniHandleService;
+        this.lockExecutor = lockExecutor;
+        this.payRouteService = payRouteService;
+        this.merchantContextLoader = merchantContextLoader;
+        this.sensitiveWordCheckService = sensitiveWordCheckService;
+        this.self = self;
+    }
 
     /// 支付入口
     public NormalPayResult pay(NormalPayParam payParam) {
@@ -119,7 +136,7 @@ public class NormalPayService {
             payUniHandleService.payFail(trade, errMsg);
             throw e;
         }
-        return SpringUtil.getBean(this.getClass()).paySuccess(trade, result);
+        return self.paySuccess(trade, result);
     }
 
     /// 付款码 method 回填: 仅 authCode 时识别; 已传分钱包条码 method 时校验前缀一致

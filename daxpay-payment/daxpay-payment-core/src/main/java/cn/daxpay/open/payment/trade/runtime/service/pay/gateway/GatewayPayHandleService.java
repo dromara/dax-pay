@@ -24,9 +24,8 @@ import cn.daxpay.open.platform.core.util.TradeNoGenerateUtil;
 import cn.daxpay.open.payment.trade.util.PayTradeInitUtil;
 import cn.daxpay.open.platform.common.redis.lock.LockExecutor;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.extra.spring.SpringUtil;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,7 +36,6 @@ import java.util.Objects;
 /// 在 product/method 已解析后: 懒创建 Trade → 调通道策略 → 回写容器。
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class GatewayPayHandleService {
 
     private final GatewayPayOrderManager gatewayPayOrderManager;
@@ -47,6 +45,27 @@ public class GatewayPayHandleService {
     private final PayUniHandleService payUniHandleService;
     private final GatewayPayAssistService gatewayPayAssistService;
     private final LockExecutor lockExecutor;
+
+    /// 自注入，保证 [GatewayPayHandleService#createTrade] / [GatewayPayHandleService#paySuccess] 走 Spring 事务代理
+    private final GatewayPayHandleService self;
+
+    public GatewayPayHandleService(GatewayPayOrderManager gatewayPayOrderManager,
+                                   PayTradeManager payTradeManager,
+                                   PayRouteService payRouteService,
+                                   MerchantContextLoader merchantContextLoader,
+                                   PayUniHandleService payUniHandleService,
+                                   GatewayPayAssistService gatewayPayAssistService,
+                                   LockExecutor lockExecutor,
+                                   @Lazy GatewayPayHandleService self) {
+        this.gatewayPayOrderManager = gatewayPayOrderManager;
+        this.payTradeManager = payTradeManager;
+        this.payRouteService = payRouteService;
+        this.merchantContextLoader = merchantContextLoader;
+        this.payUniHandleService = payUniHandleService;
+        this.gatewayPayAssistService = gatewayPayAssistService;
+        this.lockExecutor = lockExecutor;
+        this.self = self;
+    }
 
     /// 发起网关支付
     ///
@@ -99,8 +118,7 @@ public class GatewayPayHandleService {
 
                     // 建 Trade(若无) + 回填容器
                     if (existing == null) {
-                        existing = SpringUtil.getBean(this.getClass())
-                                .createTrade(current, payParam, clientEnv, device);
+                        existing = self.createTrade(current, payParam, clientEnv, device);
                     } else {
                         // 回填路由结果到容器
                         this.fillRouteOnOrder(current, payParam, clientEnv, device);
@@ -121,7 +139,7 @@ public class GatewayPayHandleService {
                         }
                         throw new PayFailureException(errMsg);
                     }
-                    return SpringUtil.getBean(this.getClass()).paySuccess(current, existing, result);
+                    return self.paySuccess(current, existing, result);
                 },
                 () -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.processing")
         );

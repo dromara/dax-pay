@@ -5,6 +5,7 @@ import cn.daxpay.open.platform.capability.nonce.result.NonceResult;
 import cn.daxpay.open.platform.core.exception.NonceInvalidException;
 import cn.daxpay.open.platform.core.exception.TimestampExpiredException;
 import cn.hutool.core.lang.UUID;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -18,6 +19,7 @@ import java.time.Duration;
 /// 则从其读取 nonce 有效期等参数；否则使用默认值 300 秒，保持向后兼容。
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class NonceService {
 
     private final StringRedisTemplate stringRedisTemplate;
@@ -25,12 +27,6 @@ public class NonceService {
 
     private static final String NONCE_PREFIX = "nonce:";
     private static final int DEFAULT_TIMEOUT_SECONDS = 300;
-
-    public NonceService(StringRedisTemplate stringRedisTemplate,
-                        ObjectProvider<NonceVerificationConfigProvider> configProviderProvider) {
-        this.stringRedisTemplate = stringRedisTemplate;
-        this.configProviderProvider = configProviderProvider;
-    }
 
     /// 从配置提供者读取 nonce 有效期，无实现时回退默认值
     private int resolveTimeout() {

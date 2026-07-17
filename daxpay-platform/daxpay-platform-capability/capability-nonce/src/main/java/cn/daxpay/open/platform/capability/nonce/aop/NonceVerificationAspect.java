@@ -8,6 +8,7 @@ import cn.daxpay.open.platform.core.exception.NonceMissingException;
 import cn.hutool.core.util.StrUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
+import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -27,16 +28,11 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @Component
 @Order
 @Slf4j
+@RequiredArgsConstructor
 public class NonceVerificationAspect {
 
     private final NonceService nonceService;
     private final ObjectProvider<NonceVerificationConfigProvider> configProviderProvider;
-
-    public NonceVerificationAspect(NonceService nonceService,
-                                   ObjectProvider<NonceVerificationConfigProvider> configProviderProvider) {
-        this.nonceService = nonceService;
-        this.configProviderProvider = configProviderProvider;
-    }
 
     /// 处理方法上的@NonceVerification注解
     @Around("@annotation(nonceVerification)")

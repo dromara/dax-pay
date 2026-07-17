@@ -26,8 +26,8 @@ import cn.daxpay.open.platform.system.entity.config.platform.infra.PlatformUrlCo
 import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
 import cn.daxpay.open.platform.common.redis.lock.LockExecutor;
 import cn.hutool.core.util.StrUtil;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,7 +41,6 @@ import java.util.Objects;
 /// 预下单建容器、URL 生成、状态校验、超时消息注册。
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class GatewayPayAssistService {
 
     private final GatewayPayOrderManager gatewayPayOrderManager;
@@ -51,6 +50,27 @@ public class GatewayPayAssistService {
     private final LockExecutor lockExecutor;
     private final NormalPayAssistService payAssistService;
     private final MchStoreInfoService mchStoreInfoService;
+
+    /// 自注入，保证 [GatewayPayAssistService#doPrePay] 走 Spring 事务代理
+    private final GatewayPayAssistService self;
+
+    public GatewayPayAssistService(GatewayPayOrderManager gatewayPayOrderManager,
+                                   MerchantContextLoader merchantContextLoader,
+                                   PlatformUrlConfigService platformUrlConfigService,
+                                   ArtemisTemplateService artemisTemplateService,
+                                   LockExecutor lockExecutor,
+                                   NormalPayAssistService payAssistService,
+                                   MchStoreInfoService mchStoreInfoService,
+                                   @Lazy GatewayPayAssistService self) {
+        this.gatewayPayOrderManager = gatewayPayOrderManager;
+        this.merchantContextLoader = merchantContextLoader;
+        this.platformUrlConfigService = platformUrlConfigService;
+        this.artemisTemplateService = artemisTemplateService;
+        this.lockExecutor = lockExecutor;
+        this.payAssistService = payAssistService;
+        this.mchStoreInfoService = mchStoreInfoService;
+        this.self = self;
+    }
 
     /// 预下单: 仅创建容器, 返回落地页 URL
     public GatewayPrePayResult prePay(GatewayPrePayParam param) {
@@ -66,7 +86,7 @@ public class GatewayPayAssistService {
 
         return lockExecutor.execute(
                 "payment:gateway:pre:" + param.getAppId() + ":" + param.getBizOrderNo(),
-                () -> cn.hutool.extra.spring.SpringUtil.getBean(this.getClass()).doPrePay(param, typeEnum),
+                () -> self.doPrePay(param, typeEnum),
                 () -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.processing")
         );
     }
