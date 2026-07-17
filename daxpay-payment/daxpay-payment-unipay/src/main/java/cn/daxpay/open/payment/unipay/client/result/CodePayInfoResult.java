@@ -18,6 +18,10 @@ public class CodePayInfoResult {
     @Schema(description = "码牌名称")
     private String name;
 
+    /// 商户简称(展示用; 简称空时回退商户全称, 不含 mchNo)
+    @Schema(description = "商户简称(展示用)")
+    private String mchShortName;
+
     /// 金额类型
     /// @see cn.daxpay.open.payment.device.enums.QrCodeAmountTypeEnum
     @Schema(description = "金额类型(random-自定义/fixed-固定)")

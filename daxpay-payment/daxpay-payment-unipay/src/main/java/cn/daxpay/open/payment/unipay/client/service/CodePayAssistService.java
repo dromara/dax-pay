@@ -1,16 +1,16 @@
 package cn.daxpay.open.payment.unipay.client.service;
 
 import cn.daxpay.open.payment.auth.ChannelAuthFacade;
-import cn.daxpay.open.payment.common.access.MerchantAccessInfo;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import cn.daxpay.open.payment.device.enums.QrCodeAmountTypeEnum;
 import cn.daxpay.open.payment.device.enums.QrCodeStatusEnum;
 import cn.daxpay.open.payment.device.qrcode.dao.DeviceQrCodeManager;
 import cn.daxpay.open.payment.device.qrcode.entity.DeviceQrCode;
+import cn.daxpay.open.payment.merchant.dao.info.MerchantInfoManager;
+import cn.daxpay.open.payment.merchant.entity.info.MerchantInfo;
 import cn.daxpay.open.payment.merchant.enums.ClientEnvEnum;
 import cn.daxpay.open.payment.merchant.enums.ClientRuntimeEnum;
 import cn.daxpay.open.payment.merchant.enums.CodePayFormEnum;
-import cn.daxpay.open.payment.merchant.service.access.MerchantAccessQueryService;
 import cn.daxpay.open.payment.merchant.service.gateway.CodePayResolveService;
 import cn.daxpay.open.payment.route.service.runtime.PayRouteService;
 import cn.daxpay.open.payment.trade.order.dao.NormalPayOrderManager;
@@ -52,7 +52,7 @@ import org.springframework.stereotype.Service;
 public class CodePayAssistService {
 
     private final DeviceQrCodeManager deviceQrCodeManager;
-    private final MerchantAccessQueryService merchantAccessQueryService;
+    private final MerchantInfoManager merchantInfoManager;
     private final MerchantContextLoader merchantContextLoader;
     private final CodePayResolveService codePayResolveService;
     private final NormalPayService normalPayService;
@@ -65,13 +65,15 @@ public class CodePayAssistService {
     /// @param clientEnv 可选; 传入时解析策略 method 并填充 needOpenId
     public CodePayInfoResult getByCode(String code, String clientEnv) {
         DeviceQrCode entity = this.loadEnabledAssigned(code);
-        MerchantAccessInfo merchant = merchantAccessQueryService.getMerchantByMchNo(entity.getMchNo());
-        if (merchant == null) {
-            throw new DataNotExistException("error.device.qrcode.mchNotFound");
-        }
+        // 忽略租户查商户: 公开 H5 无商户上下文; 仅取展示名, 不回 mchNo
+        MerchantInfo merchant = merchantInfoManager.findByMchNoNotTenant(entity.getMchNo())
+                .orElseThrow(() -> new DataNotExistException("error.device.qrcode.mchNotFound"));
+        // 展示优先简称, 空则回退全称
+        String mchShortName = StrUtil.blankToDefault(merchant.getMchShortName(), merchant.getMchName());
         CodePayInfoResult result = new CodePayInfoResult()
                 .setCode(entity.getCode())
                 .setName(entity.getName())
+                .setMchShortName(mchShortName)
                 .setAmountType(entity.getAmountType())
                 .setFixedAmount(entity.getFixedAmount())
                 .setProgramType(entity.getProgramType());
