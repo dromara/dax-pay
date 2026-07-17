@@ -180,3 +180,4 @@ INSERT INTO "public"."iam_perm_menu" VALUES (31102, 311, 'system:sensitive-word-
 -- Primary Key structure for table iam_perm_menu
 -- ----------------------------
 ALTER TABLE "public"."iam_perm_menu" ADD CONSTRAINT "iam_perm_menu_pkey" PRIMARY KEY ("id");
+INSERT INTO "public"."iam_perm_menu" VALUES (30203, 302, 'system:log:unipay', 'admin', 'SystemUnipayApiLog', 'menu.system.log.unipay', 'lucide:webhook', 'f', 'f', '/system/log/unipay/UnipayApiLogList', '/system/log/unipay', NULL, 3, 'f', 't', 'f', 0, 1, 1, 'f', 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-17 00:00:00+00', '2026-07-17 00:00:00+00');

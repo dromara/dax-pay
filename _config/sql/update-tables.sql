@@ -263,3 +263,67 @@ CREATE INDEX IF NOT EXISTS "idx_pay_gateway_cashier_item_bucket"
   ON "public"."pay_gateway_cashier_item" ("app_id", "cashier_type", "client_env");
 CREATE INDEX IF NOT EXISTS "idx_pay_gateway_cashier_item_mch"
   ON "public"."pay_gateway_cashier_item" ("mch_no", "app_id");
+
+-- ----------------------------
+-- Table structure for starter_audit_unipay_log（统一支付接口审计日志）
+-- 索引键：mch_no + req_id；不单独存 appId/业务单号（可在 body 中查看）
+-- ----------------------------
+CREATE TABLE IF NOT EXISTS "public"."starter_audit_unipay_log" (
+  "id" int8 NOT NULL,
+  "mch_no" varchar(32) COLLATE "pg_catalog"."default",
+  "req_id" varchar(64) COLLATE "pg_catalog"."default",
+  "api_path" varchar(256) COLLATE "pg_catalog"."default",
+  "api_title" varchar(64) COLLATE "pg_catalog"."default",
+  "request_method" varchar(16) COLLATE "pg_catalog"."default",
+  "client_ip" varchar(64) COLLATE "pg_catalog"."default",
+  "request_ip" varchar(64) COLLATE "pg_catalog"."default",
+  "request_location" varchar(128) COLLATE "pg_catalog"."default",
+  "success" bool,
+  "error_code" int4,
+  "error_msg" varchar(512) COLLATE "pg_catalog"."default",
+  "duration_ms" int8,
+  "trace_id" varchar(64) COLLATE "pg_catalog"."default",
+  "req_param" jsonb,
+  "res_body" jsonb,
+  "operate_time" timestamptz(6)
+);
+
+COMMENT ON TABLE "public"."starter_audit_unipay_log" IS '统一支付接口审计日志';
+COMMENT ON COLUMN "public"."starter_audit_unipay_log"."id" IS '主键';
+COMMENT ON COLUMN "public"."starter_audit_unipay_log"."mch_no" IS '商户号';
+COMMENT ON COLUMN "public"."starter_audit_unipay_log"."req_id" IS '请求ID(商户传入,审计主索引)';
+COMMENT ON COLUMN "public"."starter_audit_unipay_log"."api_path" IS '接口路径';
+COMMENT ON COLUMN "public"."starter_audit_unipay_log"."api_title" IS '接口标题';
+COMMENT ON COLUMN "public"."starter_audit_unipay_log"."request_method" IS 'HTTP方法';
+COMMENT ON COLUMN "public"."starter_audit_unipay_log"."client_ip" IS '商户入参声明的客户端IP';
+COMMENT ON COLUMN "public"."starter_audit_unipay_log"."request_ip" IS '真实接入IP';
+COMMENT ON COLUMN "public"."starter_audit_unipay_log"."request_location" IS '接入IP归属地';
+COMMENT ON COLUMN "public"."starter_audit_unipay_log"."success" IS '是否成功';
+COMMENT ON COLUMN "public"."starter_audit_unipay_log"."error_code" IS '业务错误码';
+COMMENT ON COLUMN "public"."starter_audit_unipay_log"."error_msg" IS '错误信息';
+COMMENT ON COLUMN "public"."starter_audit_unipay_log"."duration_ms" IS '耗时毫秒';
+COMMENT ON COLUMN "public"."starter_audit_unipay_log"."trace_id" IS '链路追踪ID';
+COMMENT ON COLUMN "public"."starter_audit_unipay_log"."req_param" IS '请求参数(脱敏后)';
+COMMENT ON COLUMN "public"."starter_audit_unipay_log"."res_body" IS '响应体(脱敏后)';
+COMMENT ON COLUMN "public"."starter_audit_unipay_log"."operate_time" IS '操作时间UTC';
+
+ALTER TABLE "public"."starter_audit_unipay_log" DROP CONSTRAINT IF EXISTS "starter_audit_unipay_log_pkey";
+ALTER TABLE "public"."starter_audit_unipay_log" ADD CONSTRAINT "starter_audit_unipay_log_pkey" PRIMARY KEY ("id");
+
+-- 若已按旧版建表：补 req_id、删业务键列（审计表可重建，无历史依赖）
+ALTER TABLE "public"."starter_audit_unipay_log" ADD COLUMN IF NOT EXISTS "req_id" varchar(64);
+ALTER TABLE "public"."starter_audit_unipay_log" DROP COLUMN IF EXISTS "app_id";
+ALTER TABLE "public"."starter_audit_unipay_log" DROP COLUMN IF EXISTS "channel_mch_no";
+ALTER TABLE "public"."starter_audit_unipay_log" DROP COLUMN IF EXISTS "biz_order_no";
+ALTER TABLE "public"."starter_audit_unipay_log" DROP COLUMN IF EXISTS "order_no";
+ALTER TABLE "public"."starter_audit_unipay_log" DROP COLUMN IF EXISTS "trade_no";
+
+DROP INDEX IF EXISTS "idx_starter_audit_unipay_log_biz_order";
+CREATE INDEX IF NOT EXISTS "idx_starter_audit_unipay_log_time" ON "public"."starter_audit_unipay_log" ("operate_time" DESC);
+CREATE INDEX IF NOT EXISTS "idx_starter_audit_unipay_log_mch_time" ON "public"."starter_audit_unipay_log" ("mch_no", "operate_time" DESC);
+CREATE INDEX IF NOT EXISTS "idx_starter_audit_unipay_log_mch_req" ON "public"."starter_audit_unipay_log" ("mch_no", "req_id");
+CREATE INDEX IF NOT EXISTS "idx_starter_audit_unipay_log_req" ON "public"."starter_audit_unipay_log" ("req_id");
+CREATE INDEX IF NOT EXISTS "idx_starter_audit_unipay_log_trace" ON "public"."starter_audit_unipay_log" ("trace_id");
+CREATE INDEX IF NOT EXISTS "idx_starter_audit_unipay_log_success_time" ON "public"."starter_audit_unipay_log" ("success", "operate_time" DESC);
+
+-- ----------------------------

@@ -3,6 +3,7 @@ package cn.daxpay.open.payment.unipay.param;
 import cn.daxpay.open.platform.core.validation.IpAddress;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -22,6 +23,12 @@ public abstract class PaymentCommonParam {
     @IpAddress
     @Size(max=64, message = "{validation.field.clientIp.size}")
     private String clientIp;
+
+    /// 请求ID（商户侧生成，调用追踪与审计索引；参与签名）
+    @Schema(description = "请求ID")
+    @NotBlank(message = "{validation.field.reqId.notBlank}")
+    @Size(max = 64, message = "{validation.field.reqId.size}")
+    private String reqId;
 
     /// 随机数
     @Schema(description = "随机数")

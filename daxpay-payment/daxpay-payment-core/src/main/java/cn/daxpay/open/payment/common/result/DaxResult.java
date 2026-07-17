@@ -32,6 +32,10 @@ public class DaxResult<T>{
     @Schema(description = "响应时间(UTC)")
     private OffsetDateTime resTime;
 
+    /// 请求ID（回显入参 reqId）
+    @Schema(description = "请求ID")
+    private String reqId;
+
     /// 追踪ID
     @Schema(description = "追踪ID")
     private String traceId;

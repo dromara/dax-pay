@@ -767,6 +767,10 @@
     },
     "timestampToleranceSeconds": {
       "min": "ค่าคลาดเคลื่อนการประทับเวลาต้องไม่น้อยกว่า 1 วินาที"
+    },
+    "reqId": {
+      "notBlank": "ต้องระบุ Request ID",
+      "size": "Request ID ต้องไม่เกิน 64 ตัวอักษร"
     }
   }
 }

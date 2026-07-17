@@ -103,3 +103,10 @@ INSERT INTO "public"."pay_gateway_cashier_item" (
 (9100000000000100026, 'M1781861282382', 'A7846150576259390', 'web', NULL,
  '微信 H5', 'wechat', 'f', 6, 'method', 'wechat_h5', NULL, NULL,
  1, '2026-07-17 00:00:00+00', 1, '2026-07-17 00:00:00+00', 0, 'f');
+
+-- ----------------------------
+-- 日志管理：支付接口审计菜单 system:log:unipay
+-- ----------------------------
+DELETE FROM "public"."iam_perm_menu" WHERE "id" = 30203;
+INSERT INTO "public"."iam_perm_menu" VALUES (30203, 302, 'system:log:unipay', 'admin', 'SystemUnipayApiLog', 'menu.system.log.unipay', 'lucide:webhook', 'f', 'f', '/system/log/unipay/UnipayApiLogList', '/system/log/unipay', NULL, 3, 'f', 't', 'f', 0, 1, 1, 'f', 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-17 00:00:00+00', '2026-07-17 00:00:00+00');
+

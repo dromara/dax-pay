@@ -789,6 +789,10 @@
     },
     "riskCheckAfterPay": {
       "notNull": "事后补录开关不能为空"
+    },
+    "reqId": {
+      "notBlank": "请求ID不可为空",
+      "size": "请求ID不可超过64位"
     }
   }
 }

@@ -767,6 +767,10 @@
     },
     "timestampToleranceSeconds": {
       "min": "Toleransi cap masa tidak boleh kurang daripada 1 saat"
+    },
+    "reqId": {
+      "notBlank": "Request ID diperlukan",
+      "size": "Request ID tidak boleh melebihi 64 aksara"
     }
   }
 }

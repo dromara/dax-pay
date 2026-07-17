@@ -789,6 +789,10 @@
     },
     "riskCheckAfterPay": {
       "notNull": "事後補錄開關不能為空"
+    },
+    "reqId": {
+      "notBlank": "請求ID不可為空",
+      "size": "請求ID不可超過64位"
     }
   }
 }

@@ -767,6 +767,10 @@
     },
     "timestampToleranceSeconds": {
       "min": "Dung sai dấu thời gian không được nhỏ hơn 1 giây"
+    },
+    "reqId": {
+      "notBlank": "Request ID không được để trống",
+      "size": "Request ID không quá 64 ký tự"
     }
   }
 }

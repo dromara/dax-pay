@@ -288,6 +288,12 @@ public interface PermCodes {
                 /// 菜单编码
                 String MENU = "system:log:operate";
             }
+
+            /// 支付接口日志 menuCode=system:log:unipay
+            interface Unipay {
+                /// 菜单编码
+                String MENU = "system:log:unipay";
+            }
         }
 
         /// 公告通知 menuCode=system:notify:notice

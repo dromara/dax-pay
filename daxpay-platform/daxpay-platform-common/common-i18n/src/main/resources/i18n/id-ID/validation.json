@@ -767,6 +767,10 @@
     },
     "timestampToleranceSeconds": {
       "min": "Toleransi stempel waktu tidak boleh kurang dari 1 detik"
+    },
+    "reqId": {
+      "notBlank": "Request ID wajib diisi",
+      "size": "Request ID maksimal 64 karakter"
     }
   }
 }

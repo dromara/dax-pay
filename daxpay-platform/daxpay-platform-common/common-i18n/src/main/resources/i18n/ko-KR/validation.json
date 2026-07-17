@@ -789,6 +789,10 @@
     },
     "riskCheckAfterPay": {
       "notNull": "결제 후 기록 스위치는 필수입니다"
+    },
+    "reqId": {
+      "notBlank": "요청 ID는 필수입니다",
+      "size": "요청 ID는 64자를 초과할 수 없습니다"
     }
   }
 }
