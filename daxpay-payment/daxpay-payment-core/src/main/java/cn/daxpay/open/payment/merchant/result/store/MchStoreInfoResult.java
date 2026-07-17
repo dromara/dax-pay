@@ -54,6 +54,10 @@ public class MchStoreInfoResult extends BaseResult {
     @Schema(description = "状态")
     private String status;
 
+    /// 是否默认门店
+    @Schema(description = "是否默认门店")
+    private boolean defaultStore;
+
     @Schema(description = "备注")
     private String remark;
 }

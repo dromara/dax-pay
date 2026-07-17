@@ -9,6 +9,7 @@ import cn.daxpay.open.payment.merchant.entity.store.MchStoreInfo;
 import cn.daxpay.open.payment.merchant.param.store.MchStoreInfoParam;
 import cn.daxpay.open.payment.merchant.param.store.MchStoreInfoQuery;
 import cn.daxpay.open.payment.merchant.result.store.MchStoreInfoResult;
+import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
@@ -48,6 +49,7 @@ public class MchStoreInfoService {
     private final PaymentContext paymentContext;
 
     /// 新增门店
+    @Transactional(rollbackFor = Exception.class)
     public void add(MchStoreInfoParam param) {
         String mchNo = this.resolveMchNo(param.getMchNo());
         MerchantInfo merchant = merchantInfoManager.findByMchNo(mchNo)
@@ -58,7 +60,32 @@ public class MchStoreInfoService {
         // 生成门店号
         entity.setStoreNo(this.generateStoreNo());
         entity.setMchNo(mchNo);
+        // 首店或显式 defaultStore: 设为默认(同商户仅一个)
+        boolean firstStore = !mchStoreInfoManager.existsByMchNo(mchNo);
+        boolean wantDefault = firstStore || param.isDefaultStore();
+        entity.setDefaultStore(false);
         mchStoreInfoManager.save(entity);
+        if (wantDefault) {
+            this.setDefault(entity.getId());
+        }
+    }
+
+    /// 为商户创建默认门店（启用 + defaultStore=true；名称按当前请求语言生成）
+    ///
+    /// @param mchNo         商户号
+    /// @param mchName       商户名称（用于生成默认门店名）
+    /// @param contactPhone  联系电话（可空）
+    public void createDefaultStore(String mchNo, String mchName, String contactPhone) {
+        MchStoreInfo store = new MchStoreInfo();
+        // 默认门店名称（payment.merchant.defaultStoreName，{0}=商户名）
+        store.setStoreName(I18nUtil.get("payment.merchant.defaultStoreName", mchName));
+        store.setContactPhone(contactPhone);
+        store.setStatus(StoreStatusEnum.ENABLE.getCode());
+        store.setDefaultStore(true);
+        store.setStoreNo(this.generateStoreNo());
+        // 运营端创建无 PaymentContext，必须显式写 mchNo
+        store.setMchNo(mchNo);
+        mchStoreInfoManager.save(store);
     }
 
     /// 修改门店
@@ -68,8 +95,18 @@ public class MchStoreInfoService {
                 // 商户: 门店不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.merchant.storeNotFound"));
         this.checkStore(mchStore);
+        boolean wasDefault = mchStore.isDefaultStore();
         MchStoreInfoConvert.CONVERT.copy(param, mchStore);
+        // 默认标记不直接 copy 覆盖, 走 set/clear 保证同商户唯一
+        mchStore.setDefaultStore(wasDefault);
         mchStoreInfoManager.updateById(mchStore);
+        if (!Objects.equals(wasDefault, param.isDefaultStore())) {
+            if (param.isDefaultStore()) {
+                this.setDefault(mchStore.getId());
+            } else {
+                this.clearDefault(mchStore.getId());
+            }
+        }
     }
 
     /// 分页
@@ -138,6 +175,32 @@ public class MchStoreInfoService {
         }
     }
 
+    /// 设为默认门店(同商户先清后设)
+    @Transactional(rollbackFor = Exception.class)
+    public void setDefault(Long id) {
+        MchStoreInfo mchStore = mchStoreInfoManager.findById(id)
+                // 商户: 门店不存在
+                .orElseThrow(() -> new DataNotExistException("error.payment.merchant.storeNotFound"));
+        this.checkStore(mchStore);
+        mchStoreInfoManager.clearDefault(mchStore.getMchNo());
+        // clearDefault 后重新加载, 避免 version 冲突
+        mchStore = mchStoreInfoManager.findById(id)
+                .orElseThrow(() -> new DataNotExistException("error.payment.merchant.storeNotFound"));
+        mchStore.setDefaultStore(true);
+        mchStoreInfoManager.updateById(mchStore);
+    }
+
+    /// 取消默认门店
+    @Transactional(rollbackFor = Exception.class)
+    public void clearDefault(Long id) {
+        MchStoreInfo mchStore = mchStoreInfoManager.findById(id)
+                // 商户: 门店不存在
+                .orElseThrow(() -> new DataNotExistException("error.payment.merchant.storeNotFound"));
+        this.checkStore(mchStore);
+        mchStore.setDefaultStore(false);
+        mchStoreInfoManager.updateById(mchStore);
+    }
+
     /// 下单校验门店: 空则跳过; 非空须存在、归属商户、启用
     ///
     /// @param storeNo 门店号(可空)
@@ -157,5 +220,23 @@ public class MchStoreInfoService {
             // 商户: 门店已停用
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.payment.merchant.storeDisabled");
         }
+    }
+
+    /// 解析门店号: 非空原样返回; 空则取商户**启用**的默认门店; 无默认或默认停用则 null
+    ///
+    /// @param mchNo   商户号
+    /// @param storeNo 显式门店号(可空)
+    /// @return 解析后的门店号, 可空
+    public String resolveStoreNo(String mchNo, String storeNo) {
+        if (StrUtil.isNotBlank(storeNo)) {
+            return storeNo;
+        }
+        if (StrUtil.isBlank(mchNo)) {
+            return null;
+        }
+        return mchStoreInfoManager.findDefaultByMchNo(mchNo)
+                .filter(s -> Objects.equals(StoreStatusEnum.ENABLE.getCode(), s.getStatus()))
+                .map(MchStoreInfo::getStoreNo)
+                .orElse(null);
     }
 }

@@ -59,6 +59,9 @@ public class MchStoreInfo extends MchBaseEntity implements ToResult<MchStoreInfo
     /// @see cn.daxpay.open.platform.core.enums.merchant.StoreStatusEnum
     private String status;
 
+    /// 是否默认门店(同商户至多一个; 支付未指定 storeNo 时回落)
+    private boolean defaultStore;
+
     /// 备注
     private String remark;
 

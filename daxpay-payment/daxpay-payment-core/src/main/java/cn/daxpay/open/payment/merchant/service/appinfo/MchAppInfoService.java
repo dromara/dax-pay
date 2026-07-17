@@ -2,6 +2,8 @@ package cn.daxpay.open.payment.merchant.service.appinfo;
 
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.enums.client.ClientEnum;
+import cn.daxpay.open.platform.core.enums.merchant.MchAppStatusEnum;
+import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.open.platform.core.exception.BizException;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
@@ -69,6 +71,22 @@ public class MchAppInfoService {
         entity.setAppId(this.generateAppId());
         entity.setMchNo(mchNo);
         mchAppInfoManager.save(entity);
+    }
+
+    /// 为商户创建默认应用（启用 + defaultApp=true；名称按当前请求语言生成）
+    ///
+    /// @param mchNo   商户号
+    /// @param mchName 商户名称（用于生成默认应用名）
+    public void createDefaultApp(String mchNo, String mchName) {
+        MchAppInfo mchApp = new MchAppInfo();
+        // 默认应用名称（payment.merchant.defaultAppName，{0}=商户名）
+        mchApp.setAppName(I18nUtil.get("payment.merchant.defaultAppName", mchName));
+        mchApp.setDefaultApp(true);
+        mchApp.setStatus(MchAppStatusEnum.ENABLE.getCode());
+        mchApp.setAppId(this.generateAppId());
+        // 运营端创建无 PaymentContext，必须显式写 mchNo
+        mchApp.setMchNo(mchNo);
+        mchAppInfoManager.save(mchApp);
     }
 
     /// 修改

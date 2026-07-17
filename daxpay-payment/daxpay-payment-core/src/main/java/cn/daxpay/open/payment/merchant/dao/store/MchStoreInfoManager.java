@@ -43,4 +43,25 @@ public class MchStoreInfoManager extends BaseManager<MchStoreInfoMapper, MchStor
     public List<MchStoreInfo> findAllByMchNo(String mchNo) {
         return this.findAllByField(MchStoreInfo::getMchNo, mchNo);
     }
+
+    /// 查询商户默认门店
+    public Optional<MchStoreInfo> findDefaultByMchNo(String mchNo) {
+        return lambdaQuery()
+                .eq(MchStoreInfo::isDefaultStore, true)
+                .eq(MchStoreInfo::getMchNo, mchNo)
+                .oneOpt();
+    }
+
+    /// 商户下是否已有门店
+    public boolean existsByMchNo(String mchNo) {
+        return existedByField(MchStoreInfo::getMchNo, mchNo);
+    }
+
+    /// 清除商户下全部默认门店标记
+    public void clearDefault(String mchNo) {
+        lambdaUpdate()
+                .eq(MchStoreInfo::getMchNo, mchNo)
+                .set(MchStoreInfo::isDefaultStore, false)
+                .update();
+    }
 }

@@ -7,16 +7,15 @@ import cn.daxpay.open.platform.core.exception.config.ConfigNotExistException;
 import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.payment.merchant.convert.info.MerchantInfoConvert;
-import cn.daxpay.open.payment.merchant.dao.appinfo.MchAppInfoManager;
 import cn.daxpay.open.payment.merchant.dao.info.MerchantInfoManager;
 import cn.daxpay.open.payment.merchant.dao.info.MerchantUserManager;
-import cn.daxpay.open.payment.merchant.entity.appinfo.MchAppInfo;
 import cn.daxpay.open.payment.merchant.entity.info.MerchantInfo;
 import cn.daxpay.open.payment.merchant.entity.info.MerchantUser;
 import cn.daxpay.open.platform.core.enums.merchant.MerchantStatusEnum;
 import cn.daxpay.open.payment.merchant.param.info.MerchantForgotParam;
 import cn.daxpay.open.payment.merchant.param.info.MerchantRegisterParam;
 import cn.daxpay.open.payment.merchant.service.appinfo.MchAppInfoService;
+import cn.daxpay.open.payment.merchant.service.store.MchStoreInfoService;
 import cn.daxpay.open.platform.core.enums.role.RoleCodeEnum;
 import cn.daxpay.open.platform.iam.auth.service.IamSecurityConfigService;
 import cn.daxpay.open.platform.iam.auth.service.PasswordDecryptService;
@@ -49,8 +48,8 @@ import java.util.Objects;
 public class MerchantUserService {
 
     private final MerchantInfoManager merchantInfoManager;
-    private final MchAppInfoManager mchAppInfoManager;
     private final MchAppInfoService mchAppInfoService;
+    private final MchStoreInfoService mchStoreInfoService;
     private final UserInfoManager userInfoManager;
     private final MerchantUserManager merchantUserManager;
     private final UserAdminService userAdminService;
@@ -77,14 +76,10 @@ public class MerchantUserService {
         // 创建商户管理员
         this.createMerchantAdmin(param, merchant);
         merchantInfoManager.save(merchant);
-        // 创建默认应用
-        MchAppInfo mchApp = new MchAppInfo()
-                .setAppName(merchant.getMchName() + "的默认应用")
-                .setDefaultApp(true)
-                .setStatus(MerchantStatusEnum.ENABLE.getCode());
-        mchApp.setAppId(mchAppInfoService.generateAppId())
-                .setMchNo(merchant.getMchNo());
-        mchAppInfoManager.save(mchApp);
+        // 创建默认应用（名称按请求语言）
+        mchAppInfoService.createDefaultApp(merchant.getMchNo(), merchant.getMchName());
+        // 创建默认门店（名称按请求语言）
+        mchStoreInfoService.createDefaultStore(merchant.getMchNo(), merchant.getMchName(), param.getPhone());
     }
 
     /// 创建商户管理员

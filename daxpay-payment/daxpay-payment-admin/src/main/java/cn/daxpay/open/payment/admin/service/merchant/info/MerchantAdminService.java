@@ -32,6 +32,8 @@ import cn.daxpay.open.payment.merchant.param.info.MerchantInfoParam;
 import cn.daxpay.open.payment.merchant.param.info.MerchantInfoQuery;
 import cn.daxpay.open.payment.merchant.param.info.MerchantRegisterParam;
 import cn.daxpay.open.payment.merchant.result.info.MerchantInfoResult;
+import cn.daxpay.open.payment.merchant.service.appinfo.MchAppInfoService;
+import cn.daxpay.open.payment.merchant.service.store.MchStoreInfoService;
 import cn.daxpay.open.platform.common.translate.service.TransService;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -59,6 +61,8 @@ public class MerchantAdminService {
     private final MerchantUserManager merchantUserManager;
     private final ClientCodeService clientCodeService;
     private final TransService transService;
+    private final MchAppInfoService mchAppInfoService;
+    private final MchStoreInfoService mchStoreInfoService;
 
     /// 添加商户
     @Transactional(rollbackFor = Exception.class)
@@ -70,6 +74,10 @@ public class MerchantAdminService {
         // 创建商户管理员
         this.createMerchantAdmin(param,  merchant);
         merchantInfoManager.save(merchant);
+        // 创建默认应用（名称按请求语言）
+        mchAppInfoService.createDefaultApp(merchant.getMchNo(), merchant.getMchName());
+        // 创建默认门店（名称按请求语言）
+        mchStoreInfoService.createDefaultStore(merchant.getMchNo(), merchant.getMchName(), param.getPhone());
     }
 
     /// 创建商户管理员

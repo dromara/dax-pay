@@ -70,6 +70,10 @@ public class MchStoreInfoParam {
     @NotBlank(message = "{validation.field.status.notBlank}")
     private String status;
 
+    /// 是否默认门店(编辑时可改; true 时 Service 会 clear 同商户其它默认)
+    @Schema(description = "是否默认门店")
+    private boolean defaultStore;
+
     /// 备注
     @Schema(description = "备注")
     private String remark;
