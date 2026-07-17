@@ -8,6 +8,7 @@ import cn.daxpay.open.payment.merchant.param.wxverify.WxDomainVerifyQuery;
 import cn.daxpay.open.payment.merchant.param.wxverify.WxDomainVerifyUploadParam;
 import cn.daxpay.open.payment.merchant.result.wxverify.WxDomainVerifyResult;
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
+import cn.daxpay.open.platform.common.translate.service.TransService;
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
@@ -42,6 +43,7 @@ public class WxDomainVerifyService {
     private static final String PLATFORM_MCH_NO = "0";
 
     private final WxDomainVerifyManager wxDomainVerifyManager;
+    private final TransService transService;
 
     /// 商户级上传单个验证文件（运营代指定商户上传）
     @Transactional(rollbackFor = Exception.class)
@@ -78,7 +80,10 @@ public class WxDomainVerifyService {
 
     /// 分页
     public PageResult<WxDomainVerifyResult> page(PageParam pageParam, WxDomainVerifyQuery query) {
-        return MpUtil.toPageResult(wxDomainVerifyManager.page(pageParam, query));
+        PageResult<WxDomainVerifyResult> pageResult = MpUtil.toPageResult(wxDomainVerifyManager.page(pageParam, query));
+        // 翻译商户名称(mchNo -> mchName; 平台级无 mchNo 则跳过)
+        transService.translate(pageResult);
+        return pageResult;
     }
 
     /// 详情
@@ -86,7 +91,10 @@ public class WxDomainVerifyService {
         WxDomainVerify entity = wxDomainVerifyManager.findById(id)
                 // 微信域名验证文件不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.merchant.wxVerifyNotFound"));
-        return entity.toResult();
+        WxDomainVerifyResult result = entity.toResult();
+        // 翻译商户名称
+        transService.translate(result);
+        return result;
     }
 
     /// 删除

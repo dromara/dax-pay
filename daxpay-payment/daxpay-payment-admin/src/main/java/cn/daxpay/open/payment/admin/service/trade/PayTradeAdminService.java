@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.admin.service.trade;
 
+import cn.daxpay.open.platform.common.translate.service.TransService;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
@@ -33,6 +34,7 @@ public class PayTradeAdminService {
     private final NormalPayOrderManager normalPayOrderManager;
     private final PaySyncService paySyncService;
     private final PayCloseService payCloseService;
+    private final TransService transService;
 
     /// 分页查询
     public PageResult<PayTradeResult> page(PageParam pageParam, PayTradeQuery query) {
@@ -40,11 +42,14 @@ public class PayTradeAdminService {
         var records = page.getRecords().stream()
                 .map(PayTradeAdminConvert.CONVERT::toResult)
                 .toList();
-        return new PageResult<PayTradeResult>()
+        PageResult<PayTradeResult> pageResult = new PageResult<PayTradeResult>()
                 .setRecords(records)
                 .setTotal(page.getTotal())
                 .setSize(page.getSize())
                 .setCurrent(page.getCurrent());
+        // 翻译商户名称(mchNo -> mchName)
+        transService.translate(pageResult);
+        return pageResult;
     }
 
     /// 详情查询(联表容器补充业务字段)
@@ -70,6 +75,8 @@ public class PayTradeAdminService {
             result.setBankType(normalOrder.getBankType());
             result.setErrorMsg(normalOrder.getErrorMsg());
         }
+        // 翻译商户名称
+        transService.translate(result);
         return result;
     }
 

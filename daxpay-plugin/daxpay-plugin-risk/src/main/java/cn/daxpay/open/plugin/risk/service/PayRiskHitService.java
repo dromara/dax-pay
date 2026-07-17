@@ -3,6 +3,7 @@ package cn.daxpay.open.plugin.risk.service;
 import cn.daxpay.open.payment.strategy.risk.PayRiskCheckContext;
 import cn.daxpay.open.platform.capability.auth.util.SecurityUtil;
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
+import cn.daxpay.open.platform.common.translate.service.TransService;
 import cn.daxpay.open.platform.core.code.PayErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
@@ -35,15 +36,22 @@ public class PayRiskHitService {
 
     private final PayRiskHitManager payRiskHitManager;
     private final PayBlacklistService payBlacklistService;
+    private final TransService transService;
 
     /// 分页
     public PageResult<PayRiskHitResult> page(PageParam pageParam, PayRiskHitQuery query) {
-        return MpUtil.toPageResult(payRiskHitManager.page(pageParam, query));
+        PageResult<PayRiskHitResult> pageResult = MpUtil.toPageResult(payRiskHitManager.page(pageParam, query));
+        // 翻译商户名称(mchNo -> mchName)
+        transService.translate(pageResult);
+        return pageResult;
     }
 
     /// 详情
     public PayRiskHitResult findById(Long id) {
-        return getEntity(id).toResult();
+        PayRiskHitResult result = getEntity(id).toResult();
+        // 翻译商户名称
+        transService.translate(result);
+        return result;
     }
 
     /// 处理命中

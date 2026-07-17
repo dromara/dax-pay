@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.device.qrcode.result;
 
+import cn.daxpay.open.payment.common.result.MchBaseResult;
 import cn.daxpay.open.payment.merchant.entity.info.MerchantInfo;
 import cn.daxpay.open.platform.core.annotation.Trans;
 import cn.daxpay.open.platform.core.result.BaseResult;
@@ -28,7 +29,10 @@ public class DeviceQrCodeResult extends BaseResult {
     private String mchNo;
 
     /// 商户名称(由 mchNo 翻译, 未绑定为空)
-    @Trans(entity = MerchantInfo.class, source = "mchNo", result = "mchName")
+    @Trans(
+            entity = MerchantInfo.class,
+            source = MchBaseResult.Fields.mchNo,
+            result = MerchantInfo.Fields.mchName)
     @Schema(description = "商户名称")
     private String mchName;
 

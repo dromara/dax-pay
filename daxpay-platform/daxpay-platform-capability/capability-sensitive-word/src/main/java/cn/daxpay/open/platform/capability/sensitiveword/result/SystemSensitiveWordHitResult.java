@@ -32,6 +32,10 @@ public class SystemSensitiveWordHitResult extends BaseResult {
     @Schema(description = "商户号")
     private String mchNo;
 
+    /// 商户名称(platform 模块不依赖 payment, 本轮不走 @Trans; 预留字段)
+    @Schema(description = "商户名称")
+    private String mchName;
+
     @Schema(description = "应用号")
     private String appId;
 

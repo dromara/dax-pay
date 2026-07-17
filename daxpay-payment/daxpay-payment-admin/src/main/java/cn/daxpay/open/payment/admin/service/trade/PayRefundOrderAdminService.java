@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.admin.service.trade;
 
+import cn.daxpay.open.platform.common.translate.service.TransService;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
@@ -27,6 +28,7 @@ public class PayRefundOrderAdminService {
     private final PayRefundOrderManager payRefundOrderManager;
     private final PayRefundService payRefundService;
     private final PayRefundSyncService payRefundSyncService;
+    private final TransService transService;
 
     /// 分页查询
     public PageResult<PayRefundOrderResult> page(PageParam pageParam, PayRefundOrderQuery query) {
@@ -34,29 +36,41 @@ public class PayRefundOrderAdminService {
         var records = page.getRecords().stream()
                 .map(PayRefundOrderConvert.CONVERT::toResult)
                 .toList();
-        return new PageResult<PayRefundOrderResult>()
+        PageResult<PayRefundOrderResult> pageResult = new PageResult<PayRefundOrderResult>()
                 .setRecords(records)
                 .setTotal(page.getTotal())
                 .setSize(page.getSize())
                 .setCurrent(page.getCurrent());
+        // 翻译商户名称(mchNo -> mchName)
+        transService.translate(pageResult);
+        return pageResult;
     }
 
     /// 详情查询
     public PayRefundOrderResult findById(Long id) {
         PayRefundOrder entity = payRefundOrderManager.findById(id)
                 .orElseThrow(() -> new DataNotExistException("pay.error.refund.orderNotFound"));
-        return PayRefundOrderConvert.CONVERT.toResult(entity);
+        PayRefundOrderResult result = PayRefundOrderConvert.CONVERT.toResult(entity);
+        // 翻译商户名称
+        transService.translate(result);
+        return result;
     }
 
     /// 发起退款
     public PayRefundOrderResult refund(PayRefundParam param) {
         PayRefundOrder refundOrder = payRefundService.refund(param);
-        return PayRefundOrderConvert.CONVERT.toResult(refundOrder);
+        PayRefundOrderResult result = PayRefundOrderConvert.CONVERT.toResult(refundOrder);
+        // 翻译商户名称
+        transService.translate(result);
+        return result;
     }
 
     /// 同步退款状态(传入退款单ID)
     public PayRefundOrderResult sync(Long id) {
         PayRefundOrder refundOrder = payRefundSyncService.syncById(id);
-        return PayRefundOrderConvert.CONVERT.toResult(refundOrder);
+        PayRefundOrderResult result = PayRefundOrderConvert.CONVERT.toResult(refundOrder);
+        // 翻译商户名称
+        transService.translate(result);
+        return result;
     }
 }
