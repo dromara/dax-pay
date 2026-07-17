@@ -28,6 +28,7 @@
   "methodNotExist": "Kaedah pembayaran tidak wujud",
   "methodNotEnable": "Kaedah pembayaran tidak didayakan",
   "orderNoRequired": "Nombor pesanan pembayaran tidak boleh kosong",
+  "payOrderNotExist": "Pesanan pembayaran tidak ditemui",
   "pay": {
     "timeoutRetry": "Tamat masa pembayaran, sila sahkan status pembayaran",
     "alreadySuccess": "Pembayaran sudah berjaya, jangan ulang",
@@ -40,7 +41,8 @@
     "closeFailed": "Tutup pesanan gagal",
     "syncNotStarted": "Pembayaran pesanan belum bermula, sila sahkan status pembayaran",
     "syncProcessing": "Penyegerakan pembayaran sedang dijalankan, jangan ulangi",
-    "processing": "Pemprosesan pembayaran, jangan ulangi"
+    "processing": "Pemprosesan pembayaran, jangan ulangi",
+    "updateTradeFailed": "Gagal mengemas kini transaksi pembayaran: {0}"
   },
   "gateway": {
     "cashierNotReady": "Bayaran juruwang belum tersedia",

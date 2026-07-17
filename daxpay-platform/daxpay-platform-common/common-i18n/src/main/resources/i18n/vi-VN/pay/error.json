@@ -28,6 +28,7 @@
   "methodNotExist": "Phương thức thanh toán không tồn tại",
   "methodNotEnable": "Phương thức thanh toán chưa được kích hoạt",
   "orderNoRequired": "Số lệnh thanh toán không được để trống",
+  "payOrderNotExist": "Không tìm thấy lệnh thanh toán",
   "pay": {
     "timeoutRetry": "Hết thời gian thanh toán, vui lòng xác nhận trạng thái thanh toán",
     "alreadySuccess": "Thanh toán đã thành công, không lặp lại",
@@ -40,7 +41,8 @@
     "closeFailed": "Đóng lệnh không thành công",
     "syncNotStarted": "Thanh toán đơn hàng chưa bắt đầu, vui lòng xác nhận trạng thái thanh toán",
     "syncProcessing": "Đang đồng bộ hóa thanh toán, không lặp lại",
-    "processing": "Xử lý thanh toán, không lặp lại"
+    "processing": "Xử lý thanh toán, không lặp lại",
+    "updateTradeFailed": "Cập nhật giao dịch thanh toán thất bại: {0}"
   },
   "gateway": {
     "cashierNotReady": "Thanh toán bằng tiền mặt vẫn chưa có sẵn",

@@ -28,6 +28,7 @@
   "methodNotExist": "支払い方法が存在しません",
   "methodNotEnable": "支払い方法が有効になっていません",
   "orderNoRequired": "支払い注文番号を空にすることはできません",
+  "payOrderNotExist": "支払い注文が見つかりません",
   "pay": {
     "timeoutRetry": "支払いがタイムアウトしました。支払いステータスを確認してください",
     "alreadySuccess": "支払いはすでに完了しています。繰り返さないでください",
@@ -40,7 +41,8 @@
     "closeFailed": "決済注文に失敗しました",
     "syncNotStarted": "注文の支払いが開始されていません。支払い状況を確認してください",
     "syncProcessing": "支払いの同期が進行中です。繰り返さないでください",
-    "processing": "支払い処理、繰り返さない"
+    "processing": "支払い処理、繰り返さない",
+    "updateTradeFailed": "支払い取引の更新に失敗しました: {0}"
   },
   "gateway": {
     "cashierNotReady": "レジでの支払いはまだ利用できません",

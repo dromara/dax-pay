@@ -28,6 +28,7 @@
   "methodNotExist": "不存在的支付方式",
   "methodNotEnable": "支付方式未啟用",
   "orderNoRequired": "支付訂單號不能都為空",
+  "payOrderNotExist": "支付訂單不存在",
   "pay": {
     "timeoutRetry": "支付已超時，請重新確認支付狀態",
     "alreadySuccess": "已經支付成功，請勿重新支付",
@@ -40,7 +41,8 @@
     "closeFailed": "關閉訂單失敗",
     "syncNotStarted": "訂單未開始支付, 請重新確認支付狀態",
     "syncProcessing": "支付同步處理中，請勿重複操作",
-    "processing": "支付處理中，請勿重複操作"
+    "processing": "支付處理中，請勿重複操作",
+    "updateTradeFailed": "更新支付交易失敗: {0}"
   },
   "gateway": {
     "cashierNotReady": "收銀臺支付尚未開放",

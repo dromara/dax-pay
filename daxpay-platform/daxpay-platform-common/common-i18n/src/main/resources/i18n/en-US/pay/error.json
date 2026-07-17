@@ -28,6 +28,7 @@
   "methodNotExist": "Payment method does not exist",
   "methodNotEnable": "Payment method not enabled",
   "orderNoRequired": "Payment order number cannot be empty",
+  "payOrderNotExist": "Payment order not found",
   "pay": {
     "timeoutRetry": "Payment timeout, please confirm payment status",
     "alreadySuccess": "Payment already successful, do not repeat",
@@ -40,7 +41,8 @@
     "closeFailed": "Close order failed",
     "syncNotStarted": "Order payment not started, please confirm payment status",
     "syncProcessing": "Payment sync in progress, do not repeat",
-    "processing": "Payment processing, do not repeat"
+    "processing": "Payment processing, do not repeat",
+    "updateTradeFailed": "Failed to update payment trade: {0}"
   },
   "gateway": {
     "cashierNotReady": "Cashier payment is not available yet",

@@ -28,6 +28,7 @@
   "methodNotExist": "Metode pembayaran tidak ada",
   "methodNotEnable": "Metode pembayaran tidak diaktifkan",
   "orderNoRequired": "Nomor perintah pembayaran wajib diisi",
+  "payOrderNotExist": "Perintah pembayaran tidak ditemukan",
   "pay": {
     "timeoutRetry": "Batas waktu pembayaran habis, harap konfirmasi status pembayaran",
     "alreadySuccess": "Pembayaran sudah berhasil, jangan ulangi",
@@ -40,7 +41,8 @@
     "closeFailed": "Penutupan pesanan gagal",
     "syncNotStarted": "Pembayaran pesanan belum dimulai, harap konfirmasi status pembayaran",
     "syncProcessing": "Sinkronisasi pembayaran sedang berlangsung, jangan ulangi",
-    "processing": "Proses pembayaran, jangan ulangi"
+    "processing": "Proses pembayaran, jangan ulangi",
+    "updateTradeFailed": "Gagal memperbarui transaksi pembayaran: {0}"
   },
   "gateway": {
     "cashierNotReady": "Pembayaran kasir belum tersedia",
