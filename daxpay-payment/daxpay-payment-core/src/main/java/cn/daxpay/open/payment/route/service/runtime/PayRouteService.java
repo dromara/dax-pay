@@ -112,8 +112,10 @@ public class PayRouteService {
     }
 
     /// 直接指定: 由(通道商户, 支付能力)反推支付方式编码(策略 Map + DB 启用, 无则 null)
-    /// 查询次数与迁前一致：1 次通道商户 + 能力挂载/主数据检查
-    private String inferMethodForCapability(String channelMchNo, String capabilityCode) {
+    ///
+    /// 供码牌/聚合 DIRECT 解析与路由直接指定共用，避免两处默认 method 语义漂移。
+    /// 查询次数：1 次通道商户 + 能力挂载/主数据检查
+    public String inferMethodForCapability(String channelMchNo, String capabilityCode) {
         String product = channelMerchantManager.findProductByChannelMchNo(channelMchNo);
         if (StrUtil.isBlank(product) || !PaymentStrategyFactory.existsByProduct(product, AbsProductStrategy.class)) {
             return null;

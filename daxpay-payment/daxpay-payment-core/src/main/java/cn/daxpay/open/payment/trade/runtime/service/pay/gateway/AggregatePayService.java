@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.trade.runtime.service.pay.gateway;
 
+import cn.daxpay.open.payment.common.util.PayMethodOpenIdSupport;
 import cn.daxpay.open.payment.merchant.dao.gateway.GatewayAggregateConfigManager;
 import cn.daxpay.open.payment.merchant.entity.gateway.GatewayAggregateConfig;
 import cn.daxpay.open.payment.merchant.enums.ClientEnvEnum;
@@ -12,7 +13,6 @@ import cn.daxpay.open.payment.unipay.result.gateway.AggregatePayMetaResult;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
 import cn.daxpay.open.platform.common.spring.util.WebServletUtil;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
-import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
-import java.util.Set;
 
 /// # 聚合扫码支付服务
 ///
@@ -29,15 +28,6 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class AggregatePayService {
-
-    /// 需要买家标识(openId/userId)的支付方式
-    private static final Set<String> METHODS_NEED_OPEN_ID = Set.of(
-            PayMethodEnum.WECHAT_JSAPI.getCode(),
-            PayMethodEnum.WECHAT_MINI.getCode(),
-            PayMethodEnum.ALIPAY_JSAPI.getCode(),
-            PayMethodEnum.UNION_JSAPI.getCode(),
-            PayMethodEnum.DOUYIN_JSAPI.getCode()
-    );
 
     private final GatewayPayAssistService gatewayPayAssistService;
     private final ClientEnvPayResolveService clientEnvPayResolveService;
@@ -60,7 +50,8 @@ public class AggregatePayService {
 
         return new AggregatePayMetaResult()
                 .setAutoLaunch(Boolean.TRUE.equals(config.getAutoLaunch()))
-                .setNeedOpenId(METHODS_NEED_OPEN_ID.contains(resolved.method()));
+                // 与码牌同源: 按 method 判定是否需 OAuth 取 openId
+                .setNeedOpenId(PayMethodOpenIdSupport.needsOpenId(resolved.method()));
     }
 
     /// 聚合扫码发起支付

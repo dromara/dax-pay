@@ -7,7 +7,10 @@ import cn.daxpay.open.payment.merchant.entity.gateway.GatewayAggregateConfig;
 import cn.daxpay.open.payment.merchant.enums.AggregateConfigLevelEnum;
 import cn.daxpay.open.payment.merchant.enums.ClientEnvEnum;
 import cn.daxpay.open.payment.merchant.enums.ClientRuntimeEnum;
+import cn.daxpay.open.payment.route.service.runtime.PayRouteService;
+import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
+import cn.daxpay.open.platform.core.enums.pay.channel.PayCapabilityEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +22,7 @@ import org.springframework.stereotype.Service;
 /// 读应用级**聚合**扫码配置(AUTO/METHOD/DIRECT), 输出 method / channelMchNo / capability。
 /// 仅供 [cn.daxpay.open.payment.trade.runtime.service.pay.gateway.AggregatePayService] 使用。
 /// 码牌支付请使用 [CodePayResolveService], 不再读本服务。
+/// DIRECT: 与路由直接指定对齐——method 空时由 channelMch+capability 反推。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -26,6 +30,7 @@ public class ClientEnvPayResolveService {
 
     private final GatewayAggregateConfigManager configManager;
     private final GatewayAggregateClientEnvManager clientEnvManager;
+    private final PayRouteService payRouteService;
 
     /// 解析结果
     public record Resolved(String method, String channelMchNo, String capability) {}
@@ -55,13 +60,27 @@ public class ClientEnvPayResolveService {
             }
             case DIRECT -> {
                 GatewayAggregateClientEnv envConfig = requireEnvConfig(config, clientEnv);
-                if (StrUtil.isBlank(envConfig.getChannelMchNo())) {
+                if (StrUtil.isBlank(envConfig.getChannelMchNo()) || StrUtil.isBlank(envConfig.getCapability())) {
                     throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                             "pay.error.gateway.clientEnvNotConfigured");
                 }
-                String method = StrUtil.isNotBlank(envConfig.getMethod())
-                        ? ClientEnvEnum.adaptMethodForRuntime(envConfig.getMethod(), rt)
-                        : clientEnv.defaultMethodCode(rt);
+                String method;
+                if (StrUtil.isNotBlank(envConfig.getMethod())) {
+                    method = ClientEnvEnum.adaptMethodForRuntime(envConfig.getMethod(), rt);
+                }
+                else {
+                    // 与码牌/路由 DIRECT 一致：按能力反推，禁止静默默认 JSAPI
+                    String inferred = payRouteService.inferMethodForCapability(
+                            envConfig.getChannelMchNo(), envConfig.getCapability());
+                    if (StrUtil.isBlank(inferred)) {
+                        PayCapabilityEnum capEnum = PayCapabilityEnum.findByCode(envConfig.getCapability());
+                        String capLabel = capEnum != null ? I18nUtil.getEnumName(capEnum) : envConfig.getCapability();
+                        throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                                "pay.route.error.directCapabilityChannelMchMismatch",
+                                capLabel, envConfig.getChannelMchNo());
+                    }
+                    method = ClientEnvEnum.adaptMethodForRuntime(inferred, rt);
+                }
                 yield new Resolved(method, envConfig.getChannelMchNo(), envConfig.getCapability());
             }
         };

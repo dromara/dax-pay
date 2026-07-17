@@ -10,5 +10,8 @@
   "idsEmpty": "Please select QR code boards",
   "clientEnvNotSupport": "Current client environment does not support code-plate pay. Please scan with WeChat/Alipay etc.",
   "amountRequired": "Please enter the payment amount",
-  "programTypeNotFound": "No matching QR code program type found: {0}"
+  "programTypeNotFound": "No matching QR code program type found: {0}",
+  "openIdRequired": "This payment method requires user authorization. Please complete authorization first",
+  "authNotRequired": "This payment method does not require authorization",
+  "storeBindMchInconsistent": "Apabila mengikat kedai secara kelompok, pilih papan kod di bawah peniaga yang sama"
 }

@@ -2,6 +2,7 @@ package cn.daxpay.open.payment.unipay.client.service;
 
 import cn.daxpay.open.payment.auth.ChannelAuthFacade;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
+import cn.daxpay.open.payment.common.util.PayMethodOpenIdSupport;
 import cn.daxpay.open.payment.device.enums.QrCodeAmountTypeEnum;
 import cn.daxpay.open.payment.device.enums.QrCodeStatusEnum;
 import cn.daxpay.open.payment.device.qrcode.dao.DeviceQrCodeManager;
@@ -22,12 +23,12 @@ import cn.daxpay.open.payment.unipay.param.assist.GenerateAuthUrlParam;
 import cn.daxpay.open.payment.unipay.param.device.CodePayAuthUrlParam;
 import cn.daxpay.open.payment.unipay.param.device.CodePayParam;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
+import cn.daxpay.open.payment.unipay.param.trade.pay.TerminalInfo;
 import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
 import cn.daxpay.open.platform.common.spring.util.WebServletUtil;
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
-import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.trade.TradeSourceEnum;
 import cn.daxpay.open.platform.core.enums.unipay.ChannelAuthTypeEnum;
@@ -80,11 +81,12 @@ public class CodePayAssistService {
         if (StrUtil.isNotBlank(clientEnv)) {
             try {
                 String method = this.resolveMethod(entity, clientEnv);
-                result.setNeedOpenId(this.needOpenId(method));
+                // 严格按 method 判定；非 JSAPI/MINI 不强制 OAuth
+                result.setNeedOpenId(PayMethodOpenIdSupport.needsOpenId(method));
             } catch (Exception e) {
-                // 策略未配置等: 默认 JSAPI 路径需要 openId, 避免前端跳过授权
+                // 策略未配置等: 不误强制授权(false)；支付时会因策略失败再报错
                 log.warn("码牌 needOpenId 解析失败 code={} clientEnv={}: {}", code, clientEnv, e.getMessage());
-                result.setNeedOpenId(true);
+                result.setNeedOpenId(false);
             }
         }
         return result;
@@ -107,6 +109,10 @@ public class CodePayAssistService {
         validateRuntimeMatchesPayForm(param.getRuntime(), payForm);
 
         var resolved = codePayResolveService.resolveRequired(mchApp.getAppId(), clientEnv, payForm);
+        // JSAPI/MINI 必须已在授权回跳页换好 openId，支付只带 openId、禁止支付时再换 code
+        if (PayMethodOpenIdSupport.needsOpenId(resolved.method()) && StrUtil.isBlank(param.getOpenId())) {
+            throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.qrcode.openIdRequired");
+        }
 
         String codeName = StrUtil.blankToDefault(entity.getName(), entity.getCode());
         String amountYuan = String.format("%.2f", amount / 100.0);
@@ -125,11 +131,18 @@ public class CodePayAssistService {
         payParam.setOpenId(param.getOpenId());
         payParam.setClientIp(StrUtil.blankToDefault(param.getClientIp(), WebServletUtil.getClientIp()));
         payParam.setSource(TradeSourceEnum.CASHIER_CODE.getCode());
+        // 门店: 码牌显式 storeNo 优先; 空则由下单侧 resolve 默认门店, 仍注入 terminal 便于统一路径
+        // 此处只传码牌上的显式值(可空), NormalPayAssistService 再 resolveStoreNo
+        TerminalInfo terminal = new TerminalInfo();
+        terminal.setStoreNo(entity.getStoreNo());
+        payParam.setTerminal(terminal);
 
         return normalPayService.pay(payParam);
     }
 
     /// 生成码牌 OAuth 授权链接(公开, 按码牌解析商户/策略/路由)
+    ///
+    /// 仅 needOpenId 的 method 应调用；回跳落地页立即 code→openId，非支付时再换。
     public AuthUrlResult generateAuthUrl(CodePayAuthUrlParam param) {
         DeviceQrCode entity = this.loadEnabledAssigned(param.getCode());
         merchantContextLoader.initMch(entity.getMchNo());
@@ -141,6 +154,10 @@ public class CodePayAssistService {
         }
         CodePayFormEnum payForm = CodePayFormEnum.fromProgramType(entity.getProgramType());
         var resolved = codePayResolveService.resolveRequired(mchApp.getAppId(), clientEnv, payForm);
+        if (!PayMethodOpenIdSupport.needsOpenId(resolved.method())) {
+            // 当前支付方式无需授权(H5/主扫等)
+            throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.qrcode.authNotRequired");
+        }
 
         // 跟随支付同路径路由, 拿到 product/channelMchNo/capability 供通道认证
         NormalPayParam routeParam = new NormalPayParam();
@@ -241,23 +258,6 @@ public class CodePayAssistService {
         var mchApp = merchantContextLoader.resolveApp(entity.getMchNo(), entity.getAppId());
         CodePayFormEnum payForm = CodePayFormEnum.fromProgramType(entity.getProgramType());
         return codePayResolveService.resolveRequired(mchApp.getAppId(), clientEnv, payForm).method();
-    }
-
-    /// method 是否需要用户标识(JSAPI/小程序类)
-    private boolean needOpenId(String methodCode) {
-        if (StrUtil.isBlank(methodCode)) {
-            return false;
-        }
-        try {
-            PayMethodEnum method = PayMethodEnum.findByCode(methodCode);
-            return switch (method) {
-                case WECHAT_JSAPI, WECHAT_MINI, ALIPAY_JSAPI, UNION_JSAPI, DOUYIN_JSAPI -> true;
-                default -> false;
-            };
-        } catch (Exception e) {
-            // 未知 method: 含 jsapi/mini 视作需要
-            return methodCode.contains("jsapi") || methodCode.contains("mini");
-        }
     }
 
     /// 分端页 returnPath: /h/wechat|{alipay}/:code?authed=1

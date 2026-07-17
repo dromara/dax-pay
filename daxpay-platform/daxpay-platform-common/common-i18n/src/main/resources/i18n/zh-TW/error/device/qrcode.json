@@ -10,5 +10,8 @@
   "idsEmpty": "請選擇碼牌",
   "clientEnvNotSupport": "目前開啟環境不支援碼牌支付，請使用微信/支付寶等掃碼",
   "amountRequired": "請輸入支付金額",
-  "programTypeNotFound": "未找到對應的碼牌程式類型: {0}"
+  "programTypeNotFound": "未找到對應的碼牌程式類型: {0}",
+  "openIdRequired": "目前支付方式需要使用者授權，請先完成授權後重試",
+  "authNotRequired": "目前支付方式無需授權",
+  "storeBindMchInconsistent": "批量綁定門店時須選擇同一商戶下的碼牌"
 }

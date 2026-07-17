@@ -10,5 +10,8 @@
   "idsEmpty": "QRコードボードを選択してください",
   "clientEnvNotSupport": "現在の環境ではコードプレート決済に対応していません。WeChat/Alipayなどでスキャンしてください",
   "amountRequired": "支払金額を入力してください",
-  "programTypeNotFound": "対応するコード牌プログラム種別が見つかりません: {0}"
+  "programTypeNotFound": "対応するコード牌プログラム種別が見つかりません: {0}",
+  "openIdRequired": "この支払い方法ではユーザー認可が必要です。先に認可を完了してください",
+  "authNotRequired": "この支払い方法では認可は不要です",
+  "storeBindMchInconsistent": "店舗を一括バインドする場合、同一加盟店のコード札を選択してください"
 }
