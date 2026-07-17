@@ -279,6 +279,9 @@ public class TransService {
 
     /// 通过 Mapper 执行数据库查询，获取 source → result 映射
     /// on 字段指定目标实体中的属性名，为空时使用 source 的值
+    ///
+    /// 使用 [BaseMapper#selectList] 映射为实体再按属性名取值，避免 selectMaps 的 Map key
+    /// 与列名大小写/驼峰不一致导致取值为 null、翻译静默失败。
     @SuppressWarnings({"unchecked", "rawtypes"})
     private Map<Object, Object> queryFromDatabase(TransGroup group, Set<Object> sourceValues) {
         BaseMapper<?> mapper = mapperRegistry.getMapper(group.entity());
@@ -297,24 +300,27 @@ public class TransService {
         String targetProperty = group.on().isEmpty() ? group.source() : group.on();
         String sourceColumn = getColumnByPropertyName(tableInfo, targetProperty);
         String resultColumn = getColumnByPropertyName(tableInfo, group.result());
+        String resultProperty = group.result();
 
-        // 构造 QueryWrapper，使用普通 QueryWrapper + 列名方式
+        // 构造 QueryWrapper：只查匹配列 + 结果列，按源列 IN 批量查
         // 不使用链式调用，因为 raw type 的链式调用会导致类型推断问题
         QueryWrapper queryWrapper = new QueryWrapper<>();
         queryWrapper.select(sourceColumn, resultColumn);
         queryWrapper.in(sourceColumn, sourceValues);
 
-        // 执行查询
-        List<Map<String, Object>> queryResults = mapper.selectMaps(queryWrapper);
-
-        // 将查询结果转为 source → result 映射
+        // selectList 映射为实体，再按 Java 属性名取值（含父类字段）
+        List<?> entities = mapper.selectList(queryWrapper);
         Map<Object, Object> resultMap = new LinkedHashMap<>();
-        for (Map<String, Object> row : queryResults) {
-            Object sourceObj = row.get(sourceColumn);
-            Object resultObj = row.get(resultColumn);
+        for (Object entity : entities) {
+            Object sourceObj = getFieldValue(entity, targetProperty);
+            Object resultObj = getFieldValue(entity, resultProperty);
             if (sourceObj != null) {
                 resultMap.put(sourceObj, resultObj);
             }
+        }
+        if (log.isDebugEnabled()) {
+            log.debug("翻译模块查询 {} 命中 {} 行 (条件数 {})",
+                    group.entity().getSimpleName(), resultMap.size(), sourceValues.size());
         }
 
         return resultMap;
