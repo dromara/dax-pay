@@ -1,0 +1,10 @@
+{
+  "systemNotFound": "Terminal sistem tidak ditemukan",
+  "channelNotFound": "Terminal saluran tidak ditemukan",
+  "typeNotFound": "Jenis laporan terminal tidak ditemukan: {0}",
+  "statusNotFound": "Status terminal tidak ditemukan: {0}",
+  "terminalNoGenFailed": "Gagal membuat nomor terminal sistem",
+  "mchMismatch": "Terminal sistem dan saluran harus milik merchant yang sama",
+  "bindExists": "Ikatan sudah ada",
+  "bindNotFound": "Ikatan tidak ditemukan"
+}

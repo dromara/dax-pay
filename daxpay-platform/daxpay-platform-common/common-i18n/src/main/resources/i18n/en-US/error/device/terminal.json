@@ -1,0 +1,10 @@
+{
+  "systemNotFound": "System terminal not found",
+  "channelNotFound": "Channel terminal not found",
+  "typeNotFound": "Terminal report type not found: {0}",
+  "statusNotFound": "Terminal status not found: {0}",
+  "terminalNoGenFailed": "Failed to generate system terminal number",
+  "mchMismatch": "System and channel terminals must belong to the same merchant",
+  "bindExists": "Binding already exists",
+  "bindNotFound": "Binding not found"
+}

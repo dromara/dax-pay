@@ -128,6 +128,12 @@ public interface PermCodes {
             String MENU = "merchant:store";
         }
 
+        /// 系统终端 menuCode=merchant:terminal（通道终端归通道商户, 复用 channel:merchant）
+        interface Terminal {
+            /// 菜单编码
+            String MENU = "merchant:terminal";
+        }
+
         /// 微信域名验证文件（商户侧）menuCode=merchant:wx-verify
         interface WxDomainVerify {
             /// 菜单编码
@@ -384,7 +390,7 @@ public interface PermCodes {
         }
     }
 
-    /// 设备管理（开源仅码牌）
+    /// 设备管理（码牌）
     interface Device {
         /// 码牌 menuCode=device:qrcode
         interface QrCode {
@@ -393,3 +399,4 @@ public interface PermCodes {
         }
     }
 }
+

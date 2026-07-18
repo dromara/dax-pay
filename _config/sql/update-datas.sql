@@ -60,3 +60,19 @@
 --    新增应用/门店后调用「设为默认」接口(set-default);
 --    或通过 MerchantAdminService.createDefaultApp / MchStoreInfoService.createDefaultStore 触发。
 -- ============================================================
+
+-- ----------------------------
+-- 系统终端菜单迁移: 从设备管理移到商户管理(照搬门店 subpage 模式)
+-- 权限码 device:terminal:system → merchant:terminal
+-- ----------------------------
+UPDATE "public"."iam_perm_menu"
+SET "pid"         = 4040130,
+    "menu_code"   = 'merchant:terminal',
+    "i18n_key"    = 'menu.payment.merchant.terminal',
+    "icon"        = NULL,
+    "hidden"      = true,
+    "component"   = '/payment/merchant/terminal/SystemTerminalList',
+    "path"        = '/payment/merchant/terminal',
+    "sort_no"     = 16,
+    "menu_type"   = 'subpage'
+WHERE "id" = 905;

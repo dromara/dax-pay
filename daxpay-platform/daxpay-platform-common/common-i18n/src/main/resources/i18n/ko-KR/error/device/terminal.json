@@ -1,0 +1,10 @@
+{
+  "systemNotFound": "시스템 단말이 존재하지 않습니다",
+  "channelNotFound": "채널 단말이 존재하지 않습니다",
+  "typeNotFound": "해당 신고 유형을 찾을 수 없습니다: {0}",
+  "statusNotFound": "해당 등록 상태를 찾을 수 없습니다: {0}",
+  "terminalNoGenFailed": "시스템 단말 번호 생성에 실패했습니다",
+  "mchMismatch": "시스템 단말과 채널 단말은 동일 가맹점에 속해야 합니다",
+  "bindExists": "바인딩이 이미 존재합니다",
+  "bindNotFound": "바인딩이 존재하지 않습니다"
+}

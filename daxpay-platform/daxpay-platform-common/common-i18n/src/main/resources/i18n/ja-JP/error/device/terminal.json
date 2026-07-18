@@ -1,0 +1,10 @@
+{
+  "systemNotFound": "システム端末が存在しません",
+  "channelNotFound": "チャネル端末が存在しません",
+  "typeNotFound": "該当する届出タイプが見つかりません: {0}",
+  "statusNotFound": "該当する登録状態が見つかりません: {0}",
+  "terminalNoGenFailed": "システム端末番号の生成に失敗しました",
+  "mchMismatch": "システム端末とチャネル端末は同一加盟店である必要があります",
+  "bindExists": "紐付けは既に存在します",
+  "bindNotFound": "紐付けが存在しません"
+}

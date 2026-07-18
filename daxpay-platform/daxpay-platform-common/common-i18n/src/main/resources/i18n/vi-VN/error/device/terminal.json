@@ -1,0 +1,10 @@
+{
+  "systemNotFound": "Không tìm thấy thiết bị đầu cuối hệ thống",
+  "channelNotFound": "Không tìm thấy thiết bị đầu cuối kênh",
+  "typeNotFound": "Không tìm thấy loại báo cáo: {0}",
+  "statusNotFound": "Không tìm thấy trạng thái đăng ký: {0}",
+  "terminalNoGenFailed": "Tạo mã thiết bị đầu cuối hệ thống thất bại",
+  "mchMismatch": "Thiết bị hệ thống và kênh phải thuộc cùng một thương gia",
+  "bindExists": "Liên kết đã tồn tại",
+  "bindNotFound": "Không tìm thấy liên kết"
+}

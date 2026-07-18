@@ -1,0 +1,10 @@
+{
+  "systemNotFound": "系统终端不存在",
+  "channelNotFound": "通道终端不存在",
+  "typeNotFound": "未找到对应的报送类型: {0}",
+  "statusNotFound": "未找到对应的登记状态: {0}",
+  "terminalNoGenFailed": "系统终端号生成失败",
+  "mchMismatch": "系统终端与通道终端须属于同一商户",
+  "bindExists": "绑定关系已存在",
+  "bindNotFound": "绑定关系不存在"
+}
