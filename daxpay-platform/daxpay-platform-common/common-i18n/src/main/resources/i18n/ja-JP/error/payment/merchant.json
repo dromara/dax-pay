@@ -30,5 +30,10 @@
   "wxVerifyFileContentTooLong": "WeChat ドメイン検証ファイルの内容が長すぎます",
   "wxVerifyCodeDuplicate": "検証ファイルはすでに存在します。再度アップロードしないでください。",
   "wxVerifyUploadNotSupported": "現在のクライアントは WeChat ドメイン検証ファイルのアップロードをサポートしていません",
-  "wxVerifyNoMatch": "WeChat ドメイン検証ファイルは現在の販売者に属していません"
+  "wxVerifyNoMatch": "WeChat ドメイン検証ファイルは現在の販売者に属していません",
+  "defaultAppCannotDelete": "デフォルトアプリケーションは削除できません。先にデフォルトマークを移譲してください",
+  "defaultAppDisabled": "販売者のデフォルトアプリケーションが無効です。有効化するか、デフォルトマークを移譲してください",
+  "defaultStoreCannotDelete": "デフォルトストアは削除できません。先にデフォルトマークを移譲してください",
+  "defaultStoreNotConfigured": "販売者にデフォルトストアが設定されていません。ストア管理で設定してください",
+  "defaultStoreDisabled": "販売者のデフォルトストアが無効です。有効化するか、デフォルトマークを移譲してください"
 }

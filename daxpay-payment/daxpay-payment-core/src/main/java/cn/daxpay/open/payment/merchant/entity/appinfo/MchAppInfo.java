@@ -34,7 +34,7 @@ public class MchAppInfo extends MchBaseEntity implements ToResult<MchAppInfoResu
     /// @see MchAppStatusEnum
     private String status;
 
-    /// 默认应用
+    /// 是否默认应用(同商户至多一个; 支付未指定 appId 时回落)
     private boolean defaultApp;
 
     @Override

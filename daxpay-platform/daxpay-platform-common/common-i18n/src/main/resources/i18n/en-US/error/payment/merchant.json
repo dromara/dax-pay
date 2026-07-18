@@ -30,5 +30,10 @@
   "wxVerifyFileContentTooLong": "WeChat domain verification file content is too long",
   "wxVerifyCodeDuplicate": "The verification file already exists, please do not upload again",
   "wxVerifyUploadNotSupported": "The current client does not support uploading WeChat domain verification file",
-  "wxVerifyNoMatch": "WeChat domain verification file does not belong to the current merchant"
+  "wxVerifyNoMatch": "WeChat domain verification file does not belong to the current merchant",
+  "defaultAppCannotDelete": "Default application cannot be deleted, please transfer the default flag first",
+  "defaultAppDisabled": "Merchant default application is disabled, please enable it or transfer the default flag",
+  "defaultStoreCannotDelete": "Default store cannot be deleted, please transfer the default flag first",
+  "defaultStoreNotConfigured": "Merchant has no default store configured, please configure one in store management",
+  "defaultStoreDisabled": "Merchant default store is disabled, please enable it or transfer the default flag"
 }

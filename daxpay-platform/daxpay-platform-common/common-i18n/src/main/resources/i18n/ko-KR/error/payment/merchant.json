@@ -30,5 +30,10 @@
   "wxVerifyFileContentTooLong": "WeChat 도메인 확인 파일 콘텐츠가 너무 깁니다.",
   "wxVerifyCodeDuplicate": "확인 파일이 이미 존재합니다. 다시 업로드하지 마세요.",
   "wxVerifyUploadNotSupported": "현재 클라이언트는 WeChat 도메인 확인 파일 업로드를 지원하지 않습니다.",
-  "wxVerifyNoMatch": "WeChat 도메인 확인 파일은 현재 판매자의 소유가 아닙니다."
+  "wxVerifyNoMatch": "WeChat 도메인 확인 파일은 현재 판매자의 소유가 아닙니다.",
+  "defaultAppCannotDelete": "기본 애플리케이션은 삭제할 수 없습니다. 먼저 기본 마크를 양도하세요.",
+  "defaultAppDisabled": "판매자의 기본 애플리케이션이 비활성화되었습니다. 활성화하거나 기본 마크를 양도하세요.",
+  "defaultStoreCannotDelete": "기본 매장은 삭제할 수 없습니다. 먼저 기본 마크를 양도하세요.",
+  "defaultStoreNotConfigured": "판매자에게 기본 매장이 구성되지 않았습니다. 매장 관리에서 구성하세요.",
+  "defaultStoreDisabled": "판매자의 기본 매장이 비활성화되었습니다. 활성화하거나 기본 마크를 양도하세요."
 }

@@ -49,6 +49,10 @@ public class MchAppInfoService {
     private final PaymentContext paymentContext;
 
     /// 添加应用
+    ///
+    /// 首应用自动设为默认(与 [MchStoreInfoService#add] 对齐);
+    /// 显式 `defaultApp=true` 也会设为默认(同商户至多一个, 由 [setDefault] 内部 clearDefault 保证)。
+    @Transactional(rollbackFor = Exception.class)
     public void add(MchAppInfoParam param) {
         String mchNo;
         if (clientCodeService.getClientCode().equals(ClientEnum.MERCHANT.getCode())) {
@@ -64,13 +68,19 @@ public class MchAppInfoService {
                 // 商户: 商户不存在
                 .orElseThrow(() -> new BizException(CommonCode.FAIL_CODE, "error.payment.merchant.mchNotExist"));
         param.setMchNo(mchNo);
-        // 新建应用默认为非默认，需通过 setDefault 或编辑时手动指定
+        // 首应用或显式 defaultApp: 设为默认(同商户仅一个)
+        boolean firstApp = !mchAppInfoManager.existsByMchNo(mchNo);
+        boolean wantDefault = firstApp || param.isDefaultApp();
+        // 先按非默认入库, 通过 setDefault 保证同商户唯一(避免并发直插默认)
         param.setDefaultApp(false);
         MchAppInfo entity = MchAppInfoConvert.CONVERT.toEntity(param);
         // 生成应用号
         entity.setAppId(this.generateAppId());
         entity.setMchNo(mchNo);
         mchAppInfoManager.save(entity);
+        if (wantDefault) {
+            this.setDefault(entity.getId());
+        }
     }
 
     /// 为商户创建默认应用（启用 + defaultApp=true；名称按当前请求语言生成）
@@ -176,11 +186,17 @@ public class MchAppInfoService {
     }
 
     /// 删除
+    ///
+    /// 默认应用禁止删除(与 [MchStoreInfoService#delete] 对齐), 需先调用 [setDefault] 转交默认标记。
     public void delete(Long id) {
         MchAppInfo mchApp = mchAppInfoManager.findById(id)
                 // 商户: 商户应用不存在
                 .orElseThrow(() -> new ConfigNotExistException("error.payment.merchant.mchAppNotFound"));
         this.checkApp(mchApp);
+        if (mchApp.isDefaultApp()) {
+            // 商户: 默认应用不可删除, 请先转交默认标记
+            throw new BizInfoException(CommonCode.FAIL_CODE, "error.payment.merchant.defaultAppCannotDelete");
+        }
         mchAppInfoManager.deleteById(id);
     }
 

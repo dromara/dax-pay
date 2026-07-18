@@ -71,9 +71,16 @@ public class MerchantContextLoader {
 
     /// 解析应用:appId 空则取商户默认应用,否则按 appId 查询;校验启用与商户匹配。
     /// 返回应用信息(含推导后的 appId),由调用方显式赋值到实体,不进线程上下文。
+    ///
+    /// 异常分类(便于排查):
+    /// - 未传 appId 且无默认应用 → `error.payment.merchant.defaultAppConfigNotFound`
+    /// - 未传 appId 且默认应用已停用 → `error.payment.merchant.defaultAppDisabled`
+    /// - 显式 appId 不存在 → `error.payment.merchant.specifiedAppConfigNotFound`
+    /// - 显式 appId 已停用 → `pay.error.assist.mchAppNotEnabled`
     public MchAppInfoAccessInfo resolveApp(String mchNo, String appId) {
         MchAppInfoAccessInfo mchApp;
-        if (StrUtil.isBlank(appId)) {
+        boolean fallbackDefault = StrUtil.isBlank(appId);
+        if (fallbackDefault) {
             // appId 为空,取商户默认应用
             mchApp = Optional.ofNullable(merchantAccessQueryService.getDefaultAppByMchNo(mchNo))
                     // 未找到商户默认应用配置
@@ -83,8 +90,12 @@ public class MerchantContextLoader {
                     // 未找到指定的应用配置
                     .orElseThrow(() -> new ConfigNotEnableException("error.payment.merchant.specifiedAppConfigNotFound"));
         }
-        // 应用状态校验
+        // 应用状态校验: 默认应用停用与指定应用停用分别提示, 便于排查
         if (!Objects.equals(mchApp.getStatus(), MchAppStatusEnum.ENABLE.getCode())) {
+            if (fallbackDefault) {
+                // 商户默认应用已停用, 请先启用或转交默认标记
+                throw new ConfigNotEnableException(CommonCode.FAIL_CODE, "error.payment.merchant.defaultAppDisabled");
+            }
             // 商户应用未启用
             throw new ConfigNotEnableException(CommonCode.FAIL_CODE, "pay.error.assist.mchAppNotEnabled");
         }

@@ -132,11 +132,17 @@ public class MchStoreInfoService {
     }
 
     /// 删除
+    ///
+    /// 默认门店禁止删除(与 [MchAppInfoService#delete] 对齐), 需先调用 [setDefault] 转交默认标记。
     public void delete(Long id) {
         MchStoreInfo mchStore = mchStoreInfoManager.findById(id)
                 // 商户: 门店不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.merchant.storeNotFound"));
         this.checkStore(mchStore);
+        if (mchStore.isDefaultStore()) {
+            // 商户: 默认门店不可删除, 请先转交默认标记
+            throw new BizInfoException(CommonCode.FAIL_CODE, "error.payment.merchant.defaultStoreCannotDelete");
+        }
         mchStoreInfoManager.deleteById(id);
     }
 
@@ -222,21 +228,34 @@ public class MchStoreInfoService {
         }
     }
 
-    /// 解析门店号: 非空原样返回; 空则取商户**启用**的默认门店; 无默认或默认停用则 null
+    /// 解析门店号: 非空原样返回; 空则取商户默认门店。
+    ///
+    /// 与 [cn.daxpay.open.payment.common.context.MerchantContextLoader#resolveApp] 对齐,
+    /// 默认门店不存在或已停用时**抛异常阻断下单**(替代早期返回 null 的宽松策略),
+    /// 保证订单 storeNo 维度完整。
+    ///
+    /// 异常分类(便于排查):
+    /// - 未传 storeNo 且无默认门店 → `error.payment.merchant.defaultStoreNotConfigured`
+    /// - 未传 storeNo 且默认门店已停用 → `error.payment.merchant.defaultStoreDisabled`
     ///
     /// @param mchNo   商户号
     /// @param storeNo 显式门店号(可空)
-    /// @return 解析后的门店号, 可空
+    /// @return 解析后的门店号
     public String resolveStoreNo(String mchNo, String storeNo) {
         if (StrUtil.isNotBlank(storeNo)) {
             return storeNo;
         }
         if (StrUtil.isBlank(mchNo)) {
-            return null;
+            // 商户: 商户未配置默认门店
+            throw new BizInfoException(CommonCode.FAIL_CODE, "error.payment.merchant.defaultStoreNotConfigured");
         }
-        return mchStoreInfoManager.findDefaultByMchNo(mchNo)
-                .filter(s -> Objects.equals(StoreStatusEnum.ENABLE.getCode(), s.getStatus()))
-                .map(MchStoreInfo::getStoreNo)
-                .orElse(null);
+        MchStoreInfo defaultStore = mchStoreInfoManager.findDefaultByMchNo(mchNo)
+                // 商户: 商户未配置默认门店
+                .orElseThrow(() -> new BizInfoException(CommonCode.FAIL_CODE, "error.payment.merchant.defaultStoreNotConfigured"));
+        if (!Objects.equals(StoreStatusEnum.ENABLE.getCode(), defaultStore.getStatus())) {
+            // 商户: 默认门店已停用, 请先启用或转交默认标记
+            throw new BizInfoException(CommonCode.FAIL_CODE, "error.payment.merchant.defaultStoreDisabled");
+        }
+        return defaultStore.getStoreNo();
     }
 }

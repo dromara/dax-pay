@@ -30,5 +30,10 @@
   "wxVerifyFileContentTooLong": "微信域名驗證文件內容過長",
   "wxVerifyCodeDuplicate": "該驗證文件已存在，請勿重複上傳",
   "wxVerifyUploadNotSupported": "當前終端不支持上傳微信域名驗證文件",
-  "wxVerifyNoMatch": "微信域名驗證文件不屬於當前商户"
+  "wxVerifyNoMatch": "微信域名驗證文件不屬於當前商户",
+  "defaultAppCannotDelete": "預設應用不可刪除, 請先轉交預設標記",
+  "defaultAppDisabled": "商户預設應用已停用, 請先啟用或轉交預設標記",
+  "defaultStoreCannotDelete": "預設門店不可刪除, 請先轉交預設標記",
+  "defaultStoreNotConfigured": "商户未配置預設門店, 請先在門店管理中配置",
+  "defaultStoreDisabled": "商户預設門店已停用, 請先啟用或轉交預設標記"
 }

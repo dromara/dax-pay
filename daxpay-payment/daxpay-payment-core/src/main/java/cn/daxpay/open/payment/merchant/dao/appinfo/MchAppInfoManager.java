@@ -83,6 +83,11 @@ public class MchAppInfoManager extends BaseManager<MchAppInfoMapper, MchAppInfo>
         return existedByField(MchAppInfo::getAppId, appId);
     }
 
+    /// 商户下是否已有应用
+    public boolean existsByMchNo(String mchNo) {
+        return existedByField(MchAppInfo::getMchNo, mchNo);
+    }
+
     /// 清除默认应用
     public void clearDefault(String mchNo) {
         lambdaUpdate()
