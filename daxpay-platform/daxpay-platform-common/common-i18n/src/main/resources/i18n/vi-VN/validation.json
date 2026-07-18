@@ -555,7 +555,8 @@
       "notNull": "Trạng thái đã bật không được để trống"
     },
     "storeNo": {
-      "size": "Số cửa hàng không thể vượt quá 64 ký tự"
+      "size": "Số cửa hàng không thể vượt quá 64 ký tự",
+      "notBlank": "Số cửa hàng không được để trống"
     },
     "operatorId": {
       "size": "ID nhà điều hành không thể vượt quá 64 ký tự"

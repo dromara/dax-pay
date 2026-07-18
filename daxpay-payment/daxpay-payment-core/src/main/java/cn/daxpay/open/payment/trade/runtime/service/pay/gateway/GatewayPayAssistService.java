@@ -110,8 +110,9 @@ public class GatewayPayAssistService {
         }
 
         OffsetDateTime expiredTime = payAssistService.getExpiredTime(param.getExpiredTime());
-        // 门店号(线下归属, 可空; 有值则校验存在/归属/启用)
-        mchStoreInfoService.validateStoreForPay(param.getStoreNo(), param.getMchNo());
+        // 门店号: 显式优先, 空则回落商户默认门店; 有值则校验存在/归属/启用
+        String storeNo = mchStoreInfoService.resolveStoreNo(param.getMchNo(), param.getStoreNo());
+        mchStoreInfoService.validateStoreForPay(storeNo, param.getMchNo());
 
         GatewayPayOrder order = new GatewayPayOrder();
         order.setAppId(param.getAppId());
@@ -133,8 +134,8 @@ public class GatewayPayAssistService {
         order.setCurrency(CurrencyEnum.CNY.getCode());
         order.setClientIp(param.getClientIp());
         order.setGoodsDetail(param.getGoodsDetail());
-        // 门店号: 预下单写入, 支付回填路由时不改
-        order.setStoreNo(param.getStoreNo());
+        // 门店号: 预下单写入(已 resolve 默认), 支付回填路由时不改
+        order.setStoreNo(storeNo);
         gatewayPayOrderManager.save(order);
 
         this.registerTimeout(order.getOrderNo(), order.getBizOrderNo(), expiredTime);

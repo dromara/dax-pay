@@ -13,9 +13,10 @@ import lombok.experimental.Accessors;
 
 /// # 支付码牌
 ///
-/// 记录码牌与商户/应用的绑定关系。
+/// 记录码牌与商户/应用/门店的绑定关系。
 /// 扫码链接按 [programType] 分流: H5 为 `/h/{code}`, 小程序为 `/m/{code}`。
 /// 支持运营端批量创建空白码牌后划拨给商户: mchNo 初始为空, 绑定后写入。
+/// 门店号 [storeNo] 可空, 对应 [MchStoreInfo#storeNo]; 解绑商户时同步清空。
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
@@ -36,6 +37,9 @@ public class DeviceQrCode extends MpBaseEntity implements ToResult<DeviceQrCodeR
 
     /// 关联应用号(可空, 空白码为空; 绑定后空则使用商户默认应用)
     private String appId;
+
+    /// 绑定门店号(可空; 对应 [cn.daxpay.open.payment.merchant.entity.store.MchStoreInfo#storeNo])
+    private String storeNo;
 
     /// 落地程序类型: h5 / mini_app, 创建写入后不可改
     /// @see cn.daxpay.open.payment.device.enums.QrCodeProgramTypeEnum

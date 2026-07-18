@@ -40,19 +40,53 @@ public class DeviceQrCodeManager extends BaseManager<DeviceQrCodeMapper, DeviceQ
         return existedByField(DeviceQrCode::getBatchNo, batchNo);
     }
 
-    /// 批量绑定商户与应用
-    public void bindMerchant(Collection<Long> ids, String mchNo, String appId) {
+    /// 批量绑定商户与应用; storeNo 可空, 空则清空原门店(换绑商户防脏数据)
+    public void bindMerchant(Collection<Long> ids, String mchNo, String appId, String storeNo) {
         lambdaUpdate()
                 .set(DeviceQrCode::getMchNo, mchNo)
+                .set(DeviceQrCode::getAppId, appId)
+                .set(DeviceQrCode::getStoreNo, storeNo)
+                .in(DeviceQrCode::getId, ids)
+                .update();
+    }
+
+    /// 批量解绑商户与应用(回空白库存, 同步清空门店)
+    public void unbindMerchant(Collection<Long> ids) {
+        lambdaUpdate()
+                .set(DeviceQrCode::getMchNo, null)
+                .set(DeviceQrCode::getAppId, null)
+                .set(DeviceQrCode::getStoreNo, null)
+                .in(DeviceQrCode::getId, ids)
+                .update();
+    }
+
+    /// 批量绑定门店
+    public void bindStore(Collection<Long> ids, String storeNo) {
+        lambdaUpdate()
+                .set(DeviceQrCode::getStoreNo, storeNo)
+                .in(DeviceQrCode::getId, ids)
+                .update();
+    }
+
+    /// 批量解绑门店(保留商户/应用)
+    public void unbindStore(Collection<Long> ids) {
+        lambdaUpdate()
+                .set(DeviceQrCode::getStoreNo, null)
+                .in(DeviceQrCode::getId, ids)
+                .update();
+    }
+
+    /// 批量绑定应用(须已绑商户)
+    public void bindApp(Collection<Long> ids, String appId) {
+        lambdaUpdate()
                 .set(DeviceQrCode::getAppId, appId)
                 .in(DeviceQrCode::getId, ids)
                 .update();
     }
 
-    /// 批量解绑商户与应用(回空白库存)
-    public void unbindMerchant(Collection<Long> ids) {
+    /// 批量解绑应用(仅清 appId, 支付时走默认应用)
+    public void unbindApp(Collection<Long> ids) {
         lambdaUpdate()
-                .set(DeviceQrCode::getMchNo, null)
                 .set(DeviceQrCode::getAppId, null)
                 .in(DeviceQrCode::getId, ids)
                 .update();

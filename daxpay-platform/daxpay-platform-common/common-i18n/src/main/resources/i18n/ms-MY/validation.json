@@ -555,7 +555,8 @@
       "notNull": "Status yang didayakan tidak boleh kosong"
     },
     "storeNo": {
-      "size": "Nombor kedai tidak boleh melebihi 64 aksara"
+      "size": "Nombor kedai tidak boleh melebihi 64 aksara",
+      "notBlank": "Nombor kedai tidak boleh kosong"
     },
     "operatorId": {
       "size": "ID Operator tidak boleh melebihi 64 aksara"

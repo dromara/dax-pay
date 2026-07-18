@@ -555,7 +555,8 @@
       "notNull": "Enabled status cannot be blank"
     },
     "storeNo": {
-      "size": "Store number cannot exceed 64 characters"
+      "size": "Store number cannot exceed 64 characters",
+      "notBlank": "Store number cannot be blank"
     },
     "operatorId": {
       "size": "Operator ID cannot exceed 64 characters"

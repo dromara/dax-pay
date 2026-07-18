@@ -555,7 +555,8 @@
       "notNull": "是否启用不可为空"
     },
     "storeNo": {
-      "size": "门店编号不可超过64位"
+      "size": "门店编号不可超过64位",
+      "notBlank": "门店编号不可为空"
     },
     "operatorId": {
       "size": "操作员ID不可超过64位"

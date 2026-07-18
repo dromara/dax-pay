@@ -42,4 +42,14 @@ public class AppAdminMchStoreInfoService {
     public void delete(Long id) {
         mchStoreInfoService.delete(id);
     }
+
+    /// 设为默认门店
+    public void setDefault(Long id) {
+        mchStoreInfoService.setDefault(id);
+    }
+
+    /// 取消默认门店
+    public void clearDefault(Long id) {
+        mchStoreInfoService.clearDefault(id);
+    }
 }

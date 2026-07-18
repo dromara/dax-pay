@@ -9,29 +9,20 @@ import lombok.experimental.Accessors;
 
 import java.util.List;
 
-/// # 码牌绑定商户参数
+/// # 码牌绑定门店参数
 @Data
 @Accessors(chain = true)
-@Schema(title = "码牌绑定商户参数")
-public class DeviceQrCodeBindMerchantParam {
+@Schema(title = "码牌绑定门店参数")
+public class DeviceQrCodeBindStoreParam {
 
     /// 码牌主键列表
     @Schema(description = "码牌主键列表")
     @NotEmpty(message = "{validation.field.ids.notEmpty}")
     private List<Long> ids;
 
-    /// 商户号
-    @Schema(description = "商户号")
-    @NotBlank(message = "{validation.field.mchNo.notBlank}")
-    private String mchNo;
-
-    /// 关联应用号(可空, 空则使用商户默认应用)
-    @Schema(description = "关联应用号")
-    @Size(max = 50, message = "{validation.field.appId.size}")
-    private String appId;
-
-    /// 绑定门店号(可空; 有值须归属本商户; 空则清空原门店)
-    @Schema(description = "绑定门店号(可空)")
+    /// 门店号(对应 mch_store_info.store_no)
+    @Schema(description = "门店号")
+    @NotBlank(message = "{validation.field.storeNo.notBlank}")
     @Size(max = 64, message = "{validation.field.storeNo.size}")
     private String storeNo;
 }

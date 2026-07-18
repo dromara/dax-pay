@@ -55,8 +55,9 @@ public class NormalPayAssistService {
     @Transactional(rollbackFor = Exception.class)
     public void createOrder(NormalPayParam payParam, PayStrategyContext context) {
         OffsetDateTime expiredTime = this.getExpiredTime(payParam.getExpiredTime());
-        // 门店号(线下归属, 可空; 有值则校验存在/归属/启用)
+        // 门店号: 显式优先, 空则回落商户默认门店; 有值则校验存在/归属/启用
         String storeNo = payParam.getTerminal() != null ? payParam.getTerminal().getStoreNo() : null;
+        storeNo = mchStoreInfoService.resolveStoreNo(paymentContext.getMchNo(), storeNo);
         mchStoreInfoService.validateStoreForPay(storeNo, paymentContext.getMchNo());
         // 双号独立生成
         String orderNo = TradeNoGenerateUtil.order();

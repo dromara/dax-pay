@@ -1,7 +1,9 @@
 package cn.daxpay.open.payment.admin.controller.device;
 
 import cn.daxpay.open.payment.admin.param.device.DeviceQrCodeBatchParam;
+import cn.daxpay.open.payment.admin.param.device.DeviceQrCodeBindAppParam;
 import cn.daxpay.open.payment.admin.param.device.DeviceQrCodeBindMerchantParam;
+import cn.daxpay.open.payment.admin.param.device.DeviceQrCodeBindStoreParam;
 import cn.daxpay.open.payment.admin.param.device.DeviceQrCodeParam;
 import cn.daxpay.open.payment.device.qrcode.param.DeviceQrCodeQuery;
 import cn.daxpay.open.payment.device.qrcode.result.DeviceQrCodeResult;
@@ -68,6 +70,38 @@ public class DeviceQrCodeAdminController {
     @PostMapping("/unbind-merchant")
     public Result<Void> unbindMerchant(@RequestBody @NotEmpty(message = "{validation.field.ids.notEmpty}") List<Long> ids) {
         deviceQrCodeAdminService.unbindMerchant(ids);
+        return Res.ok();
+    }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "批量绑定应用")
+    @PostMapping("/bind-app")
+    public Result<Void> bindApp(@RequestBody @Validated DeviceQrCodeBindAppParam param) {
+        deviceQrCodeAdminService.bindApp(param);
+        return Res.ok();
+    }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "批量解绑应用")
+    @PostMapping("/unbind-app")
+    public Result<Void> unbindApp(@RequestBody @NotEmpty(message = "{validation.field.ids.notEmpty}") List<Long> ids) {
+        deviceQrCodeAdminService.unbindApp(ids);
+        return Res.ok();
+    }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "批量绑定门店")
+    @PostMapping("/bind-store")
+    public Result<Void> bindStore(@RequestBody @Validated DeviceQrCodeBindStoreParam param) {
+        deviceQrCodeAdminService.bindStore(param);
+        return Res.ok();
+    }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "批量解绑门店")
+    @PostMapping("/unbind-store")
+    public Result<Void> unbindStore(@RequestBody @NotEmpty(message = "{validation.field.ids.notEmpty}") List<Long> ids) {
+        deviceQrCodeAdminService.unbindStore(ids);
         return Res.ok();
     }
 

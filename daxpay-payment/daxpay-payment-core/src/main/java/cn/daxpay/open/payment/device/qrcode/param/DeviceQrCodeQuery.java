@@ -31,6 +31,11 @@ public class DeviceQrCodeQuery {
     @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     private String mchNo;
 
+    /// 绑定门店号
+    @Schema(description = "绑定门店号")
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
+    private String storeNo;
+
     /// 落地程序类型
     /// @see cn.daxpay.open.payment.device.enums.QrCodeProgramTypeEnum
     @Schema(description = "落地程序类型(h5/mini_app)")

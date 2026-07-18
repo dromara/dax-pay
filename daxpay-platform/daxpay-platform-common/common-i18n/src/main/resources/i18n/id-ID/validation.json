@@ -555,7 +555,8 @@
       "notNull": "Status diaktifkan tidak boleh kosong"
     },
     "storeNo": {
-      "size": "Nomor toko tidak boleh melebihi 64 karakter"
+      "size": "Nomor toko tidak boleh melebihi 64 karakter",
+      "notBlank": "Nomor toko tidak boleh kosong"
     },
     "operatorId": {
       "size": "ID Operator tidak boleh melebihi 64 karakter"

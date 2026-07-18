@@ -555,7 +555,8 @@
       "notNull": "是否啟用不可為空"
     },
     "storeNo": {
-      "size": "門店編號不可超過64位"
+      "size": "門店編號不可超過64位",
+      "notBlank": "門店編號不可為空"
     },
     "operatorId": {
       "size": "操作員ID不可超過64位"

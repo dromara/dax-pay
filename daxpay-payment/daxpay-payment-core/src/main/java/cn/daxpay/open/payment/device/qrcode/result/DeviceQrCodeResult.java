@@ -2,16 +2,19 @@ package cn.daxpay.open.payment.device.qrcode.result;
 
 import cn.daxpay.open.payment.common.result.MchBaseResult;
 import cn.daxpay.open.payment.merchant.entity.info.MerchantInfo;
+import cn.daxpay.open.payment.merchant.entity.store.MchStoreInfo;
 import cn.daxpay.open.platform.core.annotation.Trans;
 import cn.daxpay.open.platform.core.result.BaseResult;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import lombok.experimental.FieldNameConstants;
 
 /// # 支付码牌
 @EqualsAndHashCode(callSuper = true)
 @Data
+@FieldNameConstants
 @Accessors(chain = true)
 @Schema(title = "支付码牌")
 public class DeviceQrCodeResult extends BaseResult {
@@ -38,6 +41,18 @@ public class DeviceQrCodeResult extends BaseResult {
 
     @Schema(description = "关联应用号(空表示使用商户默认应用)")
     private String appId;
+
+    /// 绑定门店号(可空; 对应 [MchStoreInfo#storeNo])
+    @Schema(description = "绑定门店号(空表示未绑定门店)")
+    private String storeNo;
+
+    /// 门店名称(由 storeNo 翻译, 未绑定为空)
+    @Trans(
+            entity = MchStoreInfo.class,
+            source = Fields.storeNo,
+            result = MchStoreInfo.Fields.storeName)
+    @Schema(description = "门店名称")
+    private String storeName;
 
     /// 落地程序类型
     /// @see cn.daxpay.open.payment.device.enums.QrCodeProgramTypeEnum

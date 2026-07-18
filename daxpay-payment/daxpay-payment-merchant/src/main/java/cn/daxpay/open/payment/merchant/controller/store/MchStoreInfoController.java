@@ -66,4 +66,18 @@ public class MchStoreInfoController {
         mchStoreInfoService.delete(id);
         return Res.ok();
     }
+
+    @Operation(summary = "设为默认门店")
+    @PostMapping("/set-default")
+    public Result<Void> setDefault(@NotNull(message = "{validation.field.id.notNull}") Long id) {
+        mchStoreInfoService.setDefault(id);
+        return Res.ok();
+    }
+
+    @Operation(summary = "取消默认门店")
+    @PostMapping("/clear-default")
+    public Result<Void> clearDefault(@NotNull(message = "{validation.field.id.notNull}") Long id) {
+        mchStoreInfoService.clearDefault(id);
+        return Res.ok();
+    }
 }
