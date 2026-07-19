@@ -59,7 +59,7 @@ public class FuyouRefundService {
 
         DaxResult<FuyouRefundResp> result = fuyouChannelClient.refund(req);
         if (result.getCode() != 0) {
-            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "channel.error.fuyouRefundFailed", result.getMsg());
+            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "error.channel.fuyou.refundFailed", result.getMsg());
         }
 
         FuyouRefundResp resp = result.getData();

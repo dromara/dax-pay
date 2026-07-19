@@ -1,0 +1,8 @@
+{
+  "payFailed": "河馬付支付異常: {0}",
+  "refundFailed": "河馬付退款異常: {0}",
+  "closeFailed": "河馬付關閉訂單異常: {0}",
+  "unsupportedPayMethod": "河馬付不支援的支付方式: {0}",
+  "isvKeyNotConfigured": "河馬付服務商金鑰未配置",
+  "merchantDuplicate": "該商戶下已存在此河馬付商戶號"
+}

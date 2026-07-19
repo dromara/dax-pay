@@ -18,5 +18,6 @@
     "alreadyBoundByOther": "Akun pihak ketiga telah diikat oleh pengguna lain",
     "alreadyBoundPlatform": "Anda sudah mengikat platform ini, silakan unbind terlebih dahulu",
     "clientMismatch": "Pengguna saat ini bukan milik klien ini, pengikatan tidak diperbolehkan"
-  }
+  },
+  "oauthFailed": "Otorisasi pihak ketiga gagal"
 }

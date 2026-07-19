@@ -42,7 +42,7 @@ public class LeshuaRefundService {
 
         DaxResult<LeshuaRefundResp> result = leshuaChannelClient.refund(req);
         if (result.getCode() != 0) {
-            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "channel.error.leshuaRefundFailed", result.getMsg());
+            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "error.channel.leshua.refundFailed", result.getMsg());
         }
 
         LeshuaRefundResp resp = result.getData();

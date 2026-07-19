@@ -1,0 +1,5 @@
+{
+  "payFailed": "YeePay支払エラー: {0}",
+  "closeFailed": "YeePay注文クローズエラー: {0}",
+  "unsupportedPayMethod": "YeePayでサポートされていない支払方法: {0}"
+}

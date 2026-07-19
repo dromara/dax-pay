@@ -50,5 +50,6 @@
   "sensitiveWordHitNotFound": "ヒット記録が見つかりません",
   "sensitiveWordStatusInvalid": "状態が無効です",
   "sensitiveWordMatchModeInvalid": "一致モードが無効です",
-  "sensitiveWordCategoryInvalid": "分類が無効です"
+  "sensitiveWordCategoryInvalid": "分類が無効です",
+  "clientRuntimeNotExist": "クライアントランタイムタイプが存在しません: {0}"
 }

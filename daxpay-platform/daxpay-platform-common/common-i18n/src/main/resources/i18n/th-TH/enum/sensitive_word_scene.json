@@ -1,0 +1,15 @@
+{
+  "pay_title": "ชื่อเรื่องการชำระเงิน",
+  "pay_description": "คำอธิบายการชำระเงิน",
+  "goods_name": "ชื่อสินค้า",
+  "goods_description": "คำอธิบายสินค้า",
+  "mch_name": "ชื่อผู้ค้า",
+  "app_name": "ชื่อแอป",
+  "store_name": "ชื่อร้านค้า",
+  "user_name": "ชื่อผู้ใช้",
+  "qr_name": "ชื่อ QR code",
+  "notice": "ประกาศ",
+  "protocol": "ข้อตกลง",
+  "manual_check": "ตรวจสอบด้วยตนเอง",
+  "general": "ทั่วไป"
+}

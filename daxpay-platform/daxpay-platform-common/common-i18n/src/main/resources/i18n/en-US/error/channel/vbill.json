@@ -1,5 +1,9 @@
 {
-  "isvKeyNotConfigured": "VBill ISV key not configured",
-  "mnoNotConfigured": "VBill merchant number (mno) not configured, please fill in merchant config",
-  "merchantDuplicate": "This Tianque merchant number already exists under this merchant"
+  "payFailed": "Vbill payment error: {0}",
+  "refundFailed": "Vbill refund error: {0}",
+  "closeFailed": "Vbill close order error: {0}",
+  "unsupportedPayMethod": "Unsupported payment method for Vbill: {0}",
+  "merchantDuplicate": "A Vbill merchant number already exists under this merchant",
+  "isvKeyNotConfigured": "Vbill service provider key not configured",
+  "mnoNotConfigured": "Vbill MNO (Mobile Network Operator) not configured"
 }

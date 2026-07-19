@@ -1,0 +1,8 @@
+{
+  "payFailed": "Dougong payment error: {0}",
+  "refundFailed": "Dougong refund error: {0}",
+  "closeFailed": "Dougong close order error: {0}",
+  "unsupportedPayMethod": "Unsupported payment method for Dougong: {0}",
+  "isvKeyNotConfigured": "Dougong service provider key not configured",
+  "merchantDuplicate": "A Dougong merchant number already exists under this merchant"
+}

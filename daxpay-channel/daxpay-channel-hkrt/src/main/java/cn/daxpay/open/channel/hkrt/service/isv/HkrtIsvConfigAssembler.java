@@ -71,7 +71,7 @@ public class HkrtIsvConfigAssembler {
         String pn = channelMerchant.getPn();
         if (StrUtil.isBlank(pn)) {
             // 海科融通: 终端号未配置, 请在商户配置中填写
-            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "channel.error.hkrtTermNoNotConfigured");
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.hkrt.termNoNotConfigured");
         }
         credential.setPn(pn);
         return credential;

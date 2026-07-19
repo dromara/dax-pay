@@ -1,4 +1,6 @@
 {
-  "isvKeyNotConfigured": "乐刷服务商密钥未配置",
-  "merchantDuplicate": "该商户下已存在此乐刷商户号"
+  "payFailed": "乐刷支付异常: {0}",
+  "refundFailed": "乐刷退款异常: {0}",
+  "closeFailed": "乐刷关闭订单异常: {0}",
+  "unsupportedPayMethod": "乐刷不支持的支付方式: {0}"
 }

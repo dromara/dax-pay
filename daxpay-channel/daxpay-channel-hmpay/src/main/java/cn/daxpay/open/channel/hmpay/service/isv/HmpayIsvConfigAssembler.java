@@ -51,7 +51,7 @@ public class HmpayIsvConfigAssembler {
         // 通道商户绑定(取 merchantNo/storeId)
         HmpayIsvChannelMerchant channelMerchant = hmpayIsvChannelMerchantManager.findByChannelMchNo(channelMchNo)
                 // 河马付: 通道商户配置不存在
-                .orElseThrow(() -> new DataNotExistException("payment.error.channel.channelMerchantNotExist"));
+                .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
 
         // 环境一致性校验
         if (channelMerchant.isSandbox() != sandbox) {

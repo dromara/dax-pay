@@ -6,5 +6,6 @@
   "onlyDraftCanDelete": "ลบได้เฉพาะสถานะฉบับร่างเท่านั้น",
   "signVerifyFailIllegal": "การตรวจสอบลายเซ็นล้มเหลว คำขอที่ผิดกฎหมาย",
   "channelMerchantNotExist": "ไม่พบข้อมูลร้านค้าช่องทาง",
-  "merchantInfoNotFound": "ไม่พบข้อมูลร้านค้า"
+  "merchantInfoNotFound": "ไม่พบข้อมูลร้านค้า",
+  "originOrderNotExist": "ไม่พบคำสั่งเดิม"
 }

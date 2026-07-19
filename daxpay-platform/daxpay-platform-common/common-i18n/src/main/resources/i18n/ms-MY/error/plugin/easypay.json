@@ -1,0 +1,16 @@
+{
+  "easypay": {
+    "credentialNotFound": "Kredensial EasyPay tidak dijumpai",
+    "credentialDisabled": "Kredensial EasyPay dilumpuhkan",
+    "pidGenerateFailed": "Gagal menjana nombor merchant EasyPay",
+    "v1Disabled": "Antaramuka EasyPay V1 tidak diaktifkan",
+    "v2Disabled": "Antaramuka EasyPay V2 tidak diaktifkan",
+    "publicKeyMissing": "Kunci awam merchant EasyPay tidak dikonfigurasi",
+    "md5KeyMissing": "Kunci MD5 EasyPay tidak dikonfigurasi",
+    "signInvalid": "Pengesahan tandatangan EasyPay gagal",
+    "unsupportedType": "Kaedah pembayaran tidak disokong",
+    "unsupportedMethod": "Jenis antaramuka tidak disokong",
+    "orderNotFound": "Pesanan EasyPay tidak dijumpai",
+    "tradeNotFound": "Transaksi pembayaran berkaitan tidak dijumpai"
+  }
+}

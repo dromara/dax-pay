@@ -1,0 +1,8 @@
+{
+  "payFailed": "Hmpay支払エラー: {0}",
+  "refundFailed": "Hmpay返金エラー: {0}",
+  "closeFailed": "Hmpay注文クローズエラー: {0}",
+  "unsupportedPayMethod": "Hmpayでサポートされていない支払方法: {0}",
+  "isvKeyNotConfigured": "Hmpayサービスプロバイダキーが設定されていません",
+  "merchantDuplicate": "このマーチャントの下にHmpayマーチャント番号がすでに存在します"
+}

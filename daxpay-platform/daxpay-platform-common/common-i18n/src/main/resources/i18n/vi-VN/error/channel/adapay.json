@@ -1,0 +1,5 @@
+{
+  "payFailed": "Lỗi thanh toán Adapay: {0}",
+  "closeFailed": "Lỗi đóng đơn hàng Adapay: {0}",
+  "unsupportedPayMethod": "Phương thức thanh toán không được hỗ trợ cho Adapay: {0}"
+}

@@ -63,7 +63,7 @@ public class HmpayPayService {
         // 调用子应用
         DaxResult<HmpayPayResp> result = hmpayChannelClient.pay(req);
         if (result.getCode() != 0) {
-            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "channel.error.hmpayPayFailed", result.getMsg());
+            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "error.channel.hmpay.payFailed", result.getMsg());
         }
 
         return toPayResult(result.getData());
@@ -95,7 +95,7 @@ public class HmpayPayService {
             // 付款码: 平台已识别分钱包 method, 通道折叠为统一条码 API
             case WECHAT_BARCODE, ALIPAY_BARCODE -> HmpayPayMethod.BARCODE;
             default -> throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
-                    "channel.error.hmpayUnsupportedPayMethod", methodCode);
+                    "error.channel.hmpay.unsupportedPayMethod", methodCode);
         };
     }
 

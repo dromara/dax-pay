@@ -30,5 +30,10 @@
   "wxVerifyFileContentTooLong": "Isi file verifikasi domain WeChat terlalu panjang",
   "wxVerifyCodeDuplicate": "File verifikasi sudah ada, mohon jangan diupload lagi",
   "wxVerifyUploadNotSupported": "Klien saat ini tidak mendukung pengunggahan file verifikasi domain WeChat",
-  "wxVerifyNoMatch": "File verifikasi domain WeChat bukan milik pedagang saat ini"
+  "wxVerifyNoMatch": "File verifikasi domain WeChat bukan milik pedagang saat ini",
+  "defaultAppCannotDelete": "Aplikasi default tidak dapat dihapus, harap pindahkan penanda default terlebih dahulu",
+  "defaultAppDisabled": "Aplikasi default merchant dinonaktifkan, harap aktifkan atau pindahkan penanda default terlebih dahulu",
+  "defaultStoreCannotDelete": "Toko default tidak dapat dihapus, harap pindahkan penanda default terlebih dahulu",
+  "defaultStoreNotConfigured": "Merchant belum mengonfigurasi toko default, harap konfigurasikan di manajemen toko terlebih dahulu",
+  "defaultStoreDisabled": "Toko default merchant dinonaktifkan, harap aktifkan atau pindahkan penanda default terlebih dahulu"
 }

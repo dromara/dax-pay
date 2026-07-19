@@ -1,4 +1,6 @@
 {
-  "isvKeyNotConfigured": "Leshua ISV key is not configured",
-  "merchantDuplicate": "This Leshua merchant number already exists under the merchant"
+  "payFailed": "Leshua payment error: {0}",
+  "refundFailed": "Leshua refund error: {0}",
+  "closeFailed": "Leshua close order error: {0}",
+  "unsupportedPayMethod": "Unsupported payment method for Leshua: {0}"
 }

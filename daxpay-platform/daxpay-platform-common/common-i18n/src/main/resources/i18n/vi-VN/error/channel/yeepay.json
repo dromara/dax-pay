@@ -1,0 +1,5 @@
+{
+  "payFailed": "Lỗi thanh toán YeePay: {0}",
+  "closeFailed": "Lỗi đóng đơn hàng YeePay: {0}",
+  "unsupportedPayMethod": "Phương thức thanh toán không được hỗ trợ cho YeePay: {0}"
+}

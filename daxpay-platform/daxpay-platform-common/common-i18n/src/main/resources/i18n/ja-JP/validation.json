@@ -672,7 +672,7 @@
       "notBlank": "販売者の AppId を空白にすることはできません"
     },
     "sandAppId": {
-      "notBlank": "Sand アプリ ID を空白にすることはできません"
+      "notBlank": "Sand appIdは必須です"
     },
     "credential": {
       "notNull": "チャネル資格情報を null にすることはできません"
@@ -794,6 +794,9 @@
     "reqId": {
       "notBlank": "リクエストIDは必須です",
       "size": "リクエストIDは64文字以内です"
+    },
+    "yopIsvNo": {
+      "notBlank": "YeePay ISV番号は必須です"
     }
   }
 }

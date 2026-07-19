@@ -34,7 +34,7 @@ public class AdapayCloseService {
 
         DaxResult<AdapayCloseResp> result = adapayChannelClient.close(req);
         if (result.getCode() != 0) {
-            throw new BizInfoException(DaxPayErrorCode.OPERATION_FAIL, "channel.error.adapayCloseFailed", result.getMsg());
+            throw new BizInfoException(DaxPayErrorCode.OPERATION_FAIL, "error.channel.adapay.closeFailed", result.getMsg());
         }
 
         return useCancel ? CloseTypeEnum.CANCEL : CloseTypeEnum.CLOSE;

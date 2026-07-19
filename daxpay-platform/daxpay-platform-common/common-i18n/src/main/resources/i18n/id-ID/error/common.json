@@ -42,5 +42,14 @@
   "payFundStatusNotExist": "Status dana pembayaran tidak ditemukan: {0}",
   "normalOrderStatusNotExist": "Status perintah pembayaran normal tidak ditemukan: {0}",
   "gatewayOrderStatusNotExist": "Status pesanan gerbang tidak ditemukan: {0}",
-  "codePayFormNotExist": "Code pay form not found: {0}"
+  "codePayFormNotExist": "Code pay form not found: {0}",
+  "clientRuntimeNotExist": "Tipe runtime klien tidak ada: {0}",
+  "sensitiveWord": "Konten berisi kata sensitif, harap ubah dan coba lagi",
+  "sensitiveWordHit": "Konten berisi kata sensitif \"{0}\"",
+  "sensitiveWordDuplicate": "Kata sensitif ini sudah ada",
+  "sensitiveWordNotFound": "Kata sensitif tidak ditemukan",
+  "sensitiveWordHitNotFound": "Catatan temuan tidak ada",
+  "sensitiveWordStatusInvalid": "Status kata sensitif tidak valid",
+  "sensitiveWordMatchModeInvalid": "Mode pencocokan tidak valid",
+  "sensitiveWordCategoryInvalid": "Kategori tidak valid"
 }

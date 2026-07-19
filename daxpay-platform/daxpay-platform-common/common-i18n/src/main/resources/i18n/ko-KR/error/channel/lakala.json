@@ -3,5 +3,11 @@
   "publicKeyRequired": "공개 키는 필수 항목입니다.",
   "lklAppIdRequired": "Lakala 애플리케이션 ID가 필요합니다.",
   "mchSerialNoRequired": "판매자 인증서 일련번호가 필요합니다.",
-  "termNoNotConfigured": "터미널 번호가 구성되지 않았습니다. 판매자 구성에서 설정하세요."
+  "termNoNotConfigured": "터미널 번호가 구성되지 않았습니다. 판매자 구성에서 설정하세요.",
+  "isvKeyNotConfigured": "Lakala 서비스 제공자 키가 구성되지 않았습니다",
+  "merchantDuplicate": "이 가맹점에 이미 Lakala 가맹점 번호가 존재합니다",
+  "payFailed": "Lakala 결제 오류: {0}",
+  "refundFailed": "Lakala 환불 오류: {0}",
+  "closeFailed": "Lakala 주문 종료 오류: {0}",
+  "unsupportedPayMethod": "Lakala에서 지원하지 않는 결제 방식: {0}"
 }

@@ -54,7 +54,7 @@ public class AdapayPayService {
         // 调用子应用
         DaxResult<AdapayPayResp> result = adapayChannelClient.pay(req);
         if (result.getCode() != 0) {
-            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "channel.error.adapayPayFailed", result.getMsg());
+            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "error.channel.adapay.payFailed", result.getMsg());
         }
 
         return toPayResult(result.getData());
@@ -84,7 +84,7 @@ public class AdapayPayService {
         } catch (IllegalArgumentException e) {
             // Adapay: 不支持的支付方式
             throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
-                    "channel.error.adapayUnsupportedPayMethod", methodCode);
+                    "error.channel.adapay.unsupportedPayMethod", methodCode);
         }
     }
 

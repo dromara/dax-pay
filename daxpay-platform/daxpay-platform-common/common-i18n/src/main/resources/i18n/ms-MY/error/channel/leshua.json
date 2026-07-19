@@ -1,4 +1,6 @@
 {
-  "isvKeyNotConfigured": "Kunci ISV Leshua tidak dikonfigurasikan",
-  "merchantDuplicate": "Nombor pedagang Leshua ini sudah wujud di bawah pedagang"
+  "payFailed": "Ralat pembayaran Leshua: {0}",
+  "refundFailed": "Ralat bayaran balik Leshua: {0}",
+  "closeFailed": "Ralat tutup pesanan Leshua: {0}",
+  "unsupportedPayMethod": "Kaedah pembayaran tidak disokong untuk Leshua: {0}"
 }

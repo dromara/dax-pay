@@ -42,5 +42,14 @@
   "payFundStatusNotExist": "Không tìm thấy trạng thái quỹ thanh toán: {0}",
   "normalOrderStatusNotExist": "Không tìm thấy trạng thái lệnh thanh toán thông thường: {0}",
   "gatewayOrderStatusNotExist": "Không tìm thấy trạng thái đơn hàng cổng: {0}",
-  "codePayFormNotExist": "Code pay form not found: {0}"
+  "codePayFormNotExist": "Code pay form not found: {0}",
+  "clientRuntimeNotExist": "Loại runtime khách hàng không tồn tại: {0}",
+  "sensitiveWord": "Nội dung chứa từ nhạy cảm, vui lòng sửa đổi và thử lại",
+  "sensitiveWordHit": "Nội dung chứa từ nhạy cảm「{0}」",
+  "sensitiveWordDuplicate": "Từ nhạy cảm này đã tồn tại",
+  "sensitiveWordNotFound": "Không tìm thấy từ nhạy cảm",
+  "sensitiveWordHitNotFound": "Không tìm thấy bản ghi trúng khớp",
+  "sensitiveWordStatusInvalid": "Trạng thái từ nhạy cảm không hợp lệ",
+  "sensitiveWordMatchModeInvalid": "Chế độ khớp không hợp lệ",
+  "sensitiveWordCategoryInvalid": "Danh mục không hợp lệ"
 }

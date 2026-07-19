@@ -299,7 +299,7 @@
       "notBlank": "Nama pendek tidak boleh kosong"
     },
     "status": {
-      "notBlank": "Status tidak boleh kosong"
+      "size": "Panjang status mesti antara {min} dan {max}"
     },
     "accountType": {
       "notBlank": "Jenis akaun tidak boleh kosong"
@@ -672,7 +672,7 @@
       "notBlank": "Merchant AppId tidak boleh kosong"
     },
     "sandAppId": {
-      "notBlank": "ID apl pasir tidak boleh kosong"
+      "notBlank": "Sand appId tidak boleh kosong"
     },
     "credential": {
       "notNull": "Bukti kelayakan saluran tidak boleh batal"
@@ -772,6 +772,31 @@
     "reqId": {
       "notBlank": "Request ID diperlukan",
       "size": "Request ID tidak boleh melebihi 64 aksara"
+    },
+    "yopIsvNo": {
+      "notBlank": "Nombor ISV YeePay tidak boleh kosong"
+    },
+    "sensitiveWord": {
+      "rejected": "Kandungan mengandungi perkataan sensitif dan ditolak"
+    },
+    "word": {
+      "notBlank": "Perkataan sensitif tidak boleh kosong",
+      "size": "Panjang perkataan sensitif mesti antara {min} dan {max}"
+    },
+    "category": {
+      "size": "Panjang kategori mesti antara {min} dan {max}"
+    },
+    "matchMode": {
+      "size": "Panjang mod padanan mesti antara {min} dan {max}"
+    },
+    "riskEnabled": {
+      "notNull": "Status pengaktifan pengurusan risiko tidak boleh kosong"
+    },
+    "riskBlockBeforePay": {
+      "notNull": "Pilihan halang sebelum pembayaran tidak boleh kosong"
+    },
+    "riskCheckAfterPay": {
+      "notNull": "Pilihan semakan selepas pembayaran tidak boleh kosong"
     }
   }
 }

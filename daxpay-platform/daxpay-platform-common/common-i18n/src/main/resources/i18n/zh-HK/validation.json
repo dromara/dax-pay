@@ -672,7 +672,7 @@
       "notBlank": "商户AppId不可為空"
     },
     "sandAppId": {
-      "notBlank": "杉德代理號不可為空"
+      "notBlank": "杉德 appId 不能為空"
     },
     "credential": {
       "notNull": "通道憑證不能為空"
@@ -794,6 +794,9 @@
     "reqId": {
       "notBlank": "請求ID不可為空",
       "size": "請求ID不可超過64位"
+    },
+    "yopIsvNo": {
+      "notBlank": "易寶服務商號不能為空"
     }
   }
 }

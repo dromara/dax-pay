@@ -1,0 +1,16 @@
+{
+  "easypay": {
+    "credentialNotFound": "ไม่พบข้อมูลรับรอง EasyPay",
+    "credentialDisabled": "ข้อมูลรับรอง EasyPay ถูกปิดใช้งาน",
+    "pidGenerateFailed": "สร้างหมายเลขผู้ค้า EasyPay ล้มเหลว",
+    "v1Disabled": "อินเทอร์เฟซ EasyPay V1 ไม่ได้เปิดใช้งาน",
+    "v2Disabled": "อินเทอร์เฟซ EasyPay V2 ไม่ได้เปิดใช้งาน",
+    "publicKeyMissing": "ไม่ได้กำหนดค่าคีย์สาธารณะของผู้ค้า EasyPay",
+    "md5KeyMissing": "ไม่ได้กำหนดค่าคีย์ MD5 EasyPay",
+    "signInvalid": "การตรวจสอบลายเซ็น EasyPay ล้มเหลว",
+    "unsupportedType": "ไม่รองรับวิธีการชำระเงิน",
+    "unsupportedMethod": "ไม่รองรับประเภทอินเทอร์เฟซ",
+    "orderNotFound": "ไม่พบคำสั่ง EasyPay",
+    "tradeNotFound": "ไม่พบธุรกรรมการชำระเงินที่เกี่ยวข้อง"
+  }
+}

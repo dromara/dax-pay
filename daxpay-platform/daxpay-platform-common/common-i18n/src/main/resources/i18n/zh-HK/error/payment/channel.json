@@ -6,5 +6,6 @@
   "onlyDraftCanDelete": "非草稿狀態，不能刪除",
   "signVerifyFailIllegal": "簽名驗證失敗，非法請求",
   "channelMerchantNotExist": "通道商户信息不存在",
-  "merchantInfoNotFound": "未查詢到商户信息"
+  "merchantInfoNotFound": "未查詢到商户信息",
+  "originOrderNotExist": "原訂單不存在"
 }

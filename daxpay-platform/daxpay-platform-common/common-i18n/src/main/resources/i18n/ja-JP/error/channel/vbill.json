@@ -1,5 +1,9 @@
 {
-  "isvKeyNotConfigured": "VBill ISV キーが構成されていません",
-  "mnoNotConfigured": "VBill 加盟店番号 (MNO) が設定されていません。加盟店設定を入力してください",
-  "merchantDuplicate": "この Tianque 販売者番号はこの販売者の下にすでに存在します"
+  "payFailed": "Vbill支払エラー: {0}",
+  "refundFailed": "Vbill返金エラー: {0}",
+  "closeFailed": "Vbill注文クローズエラー: {0}",
+  "unsupportedPayMethod": "Vbillでサポートされていない支払方法: {0}",
+  "merchantDuplicate": "このマーチャントの下にVbillマーチャント番号がすでに存在します",
+  "isvKeyNotConfigured": "Vbillサービスプロバイダキーが設定されていません",
+  "mnoNotConfigured": "Vbill MNO(移動体ネットワーク事業者)が設定されていません"
 }

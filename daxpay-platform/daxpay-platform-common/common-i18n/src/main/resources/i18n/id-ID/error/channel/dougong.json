@@ -1,0 +1,8 @@
+{
+  "payFailed": "Kesalahan pembayaran Dougong: {0}",
+  "refundFailed": "Kesalahan pengembalian dana Dougong: {0}",
+  "closeFailed": "Kesalahan menutup pesanan Dougong: {0}",
+  "unsupportedPayMethod": "Metode pembayaran tidak didukung untuk Dougong: {0}",
+  "isvKeyNotConfigured": "Kunci penyedia layanan Dougong tidak dikonfigurasi",
+  "merchantDuplicate": "Nomor merchant Dougong sudah ada di bawah merchant ini"
+}

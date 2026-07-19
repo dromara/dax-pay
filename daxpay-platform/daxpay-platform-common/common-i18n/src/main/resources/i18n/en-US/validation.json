@@ -672,7 +672,7 @@
       "notBlank": "Merchant AppId cannot be blank"
     },
     "sandAppId": {
-      "notBlank": "Sand app ID cannot be blank"
+      "notBlank": "Sand appId cannot be blank"
     },
     "credential": {
       "notNull": "Channel credential cannot be null"
@@ -794,6 +794,9 @@
     "reqId": {
       "notBlank": "Request ID is required",
       "size": "Request ID must not exceed 64 characters"
+    },
+    "yopIsvNo": {
+      "notBlank": "YeePay ISV number cannot be blank"
     }
   }
 }

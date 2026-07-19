@@ -44,7 +44,7 @@ public class HmpayRefundService {
 
         DaxResult<HmpayRefundResp> result = hmpayChannelClient.refund(req);
         if (result.getCode() != 0) {
-            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "channel.error.hmpayRefundFailed", result.getMsg());
+            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "error.channel.hmpay.refundFailed", result.getMsg());
         }
 
         HmpayRefundResp resp = result.getData();

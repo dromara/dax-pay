@@ -3,5 +3,11 @@
   "publicKeyRequired": "應用公鑰不可為空",
   "lklAppIdRequired": "拉卡拉應用編號不可為空",
   "mchSerialNoRequired": "商戶證書序列號不可為空",
-  "termNoNotConfigured": "終端號未配置, 請在商戶配置中填寫"
+  "termNoNotConfigured": "終端號未配置, 請在商戶配置中填寫",
+  "isvKeyNotConfigured": "拉卡拉服務商金鑰未配置",
+  "merchantDuplicate": "該商戶下已存在此拉卡拉商戶號",
+  "payFailed": "拉卡拉支付異常: {0}",
+  "refundFailed": "拉卡拉退款異常: {0}",
+  "closeFailed": "拉卡拉關閉訂單異常: {0}",
+  "unsupportedPayMethod": "拉卡拉不支援的支付方式: {0}"
 }

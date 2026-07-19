@@ -31,7 +31,7 @@ public class YeepayCloseService {
 
         DaxResult<YeepayCloseResp> result = yeepayChannelClient.close(req);
         if (result.getCode() != 0) {
-            throw new BizInfoException(DaxPayErrorCode.OPERATION_FAIL, "channel.error.yeepayCloseFailed", result.getMsg());
+            throw new BizInfoException(DaxPayErrorCode.OPERATION_FAIL, "error.channel.yeepay.closeFailed", result.getMsg());
         }
 
         return useCancel ? CloseTypeEnum.CANCEL : CloseTypeEnum.CLOSE;

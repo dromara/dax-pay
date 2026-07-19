@@ -1,0 +1,9 @@
+{
+  "payFailed": "Lỗi thanh toán HKRT: {0}",
+  "refundFailed": "Lỗi hoàn tiền HKRT: {0}",
+  "closeFailed": "Lỗi đóng đơn hàng HKRT: {0}",
+  "unsupportedPayMethod": "Phương thức thanh toán không được hỗ trợ cho HKRT: {0}",
+  "isvKeyNotConfigured": "Khóa nhà cung cấp dịch vụ HKRT chưa được cấu hình",
+  "termNoNotConfigured": "Số terminal HKRT chưa được cấu hình",
+  "merchantDuplicate": "Số merchant HKRT đã tồn tại dưới merchant này"
+}

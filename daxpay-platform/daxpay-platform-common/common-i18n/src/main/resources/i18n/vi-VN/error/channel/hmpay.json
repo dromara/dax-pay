@@ -1,0 +1,8 @@
+{
+  "payFailed": "Lỗi thanh toán Hmpay: {0}",
+  "refundFailed": "Lỗi hoàn tiền Hmpay: {0}",
+  "closeFailed": "Lỗi đóng đơn hàng Hmpay: {0}",
+  "unsupportedPayMethod": "Phương thức thanh toán không được hỗ trợ cho Hmpay: {0}",
+  "isvKeyNotConfigured": "Khóa nhà cung cấp dịch vụ Hmpay chưa được cấu hình",
+  "merchantDuplicate": "Số merchant Hmpay đã tồn tại dưới merchant này"
+}

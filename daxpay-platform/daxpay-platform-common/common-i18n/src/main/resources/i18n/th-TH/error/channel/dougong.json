@@ -1,0 +1,8 @@
+{
+  "payFailed": "ข้อผิดพลาดการชำระเงิน Dougong: {0}",
+  "refundFailed": "ข้อผิดพลาดการคืนเงิน Dougong: {0}",
+  "closeFailed": "ข้อผิดพลาดการปิดคำสั่ง Dougong: {0}",
+  "unsupportedPayMethod": "วิธีการชำระเงินไม่ได้รับการสนับสนุนสำหรับ Dougong: {0}",
+  "isvKeyNotConfigured": "ไม่ได้กำหนดค่าคีย์ผู้ให้บริการ Dougong",
+  "merchantDuplicate": "หมายเลขผู้ค้า Dougong มีอยู่แล้วภายใต้ผู้ค้ารายนี้"
+}

@@ -1,0 +1,8 @@
+{
+  "payFailed": "Fuyou支払エラー: {0}",
+  "refundFailed": "Fuyou返金エラー: {0}",
+  "unsupportedPayMethod": "Fuyouでサポートされていない支払方法: {0}",
+  "merchantDuplicate": "このマーチャントの下にFuyouマーチャント番号がすでに存在します",
+  "isvKeyNotConfigured": "Fuyouサービスプロバイダキーが設定されていません",
+  "mchNoNotConfigured": "Fuyouマーチャント番号が設定されていません"
+}

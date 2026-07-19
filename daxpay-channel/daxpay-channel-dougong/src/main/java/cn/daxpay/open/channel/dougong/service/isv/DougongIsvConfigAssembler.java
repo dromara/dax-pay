@@ -44,7 +44,7 @@ public class DougongIsvConfigAssembler {
         // 通道商户绑定(取 merchantNo + appId)
         DougongIsvChannelMerchant channelMerchant = dougongIsvChannelMerchantManager.findByChannelMchNo(channelMchNo)
                 // 斗拱: 通道商户配置不存在
-                .orElseThrow(() -> new DataNotExistException("payment.error.channel.channelMerchantNotExist"));
+                .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
 
         DougongSdkCredential credential = new DougongSdkCredential();
         // 服务商身份与密钥

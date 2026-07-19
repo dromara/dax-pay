@@ -1,0 +1,8 @@
+{
+  "payFailed": "富友支付異常: {0}",
+  "refundFailed": "富友退款異常: {0}",
+  "unsupportedPayMethod": "富友不支援的支付方式: {0}",
+  "merchantDuplicate": "該商戶下已存在此富友商戶號",
+  "isvKeyNotConfigured": "富友服務商金鑰未配置",
+  "mchNoNotConfigured": "富友商戶號未配置"
+}

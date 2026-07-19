@@ -1,5 +1,9 @@
 {
-  "isvKeyNotConfigured": "ไม่ได้กำหนดค่าคีย์ VBill ISV",
-  "mnoNotConfigured": "ไม่ได้กำหนดค่าหมายเลขผู้ขาย VBill (mno) โปรดกรอกการกำหนดค่าผู้ขาย",
-  "merchantDuplicate": "หมายเลขผู้ค้า Tianque นี้มีอยู่แล้วภายใต้ผู้ขายรายนี้"
+  "payFailed": "ข้อผิดพลาดการชำระเงิน Vbill: {0}",
+  "refundFailed": "ข้อผิดพลาดการคืนเงิน Vbill: {0}",
+  "closeFailed": "ข้อผิดพลาดการปิดคำสั่ง Vbill: {0}",
+  "unsupportedPayMethod": "วิธีการชำระเงินไม่ได้รับการสนับสนุนสำหรับ Vbill: {0}",
+  "merchantDuplicate": "หมายเลขผู้ค้า Vbill มีอยู่แล้วภายใต้ผู้ค้ารายนี้",
+  "isvKeyNotConfigured": "ไม่ได้กำหนดค่าคีย์ผู้ให้บริการ Vbill",
+  "mnoNotConfigured": "ไม่ได้กำหนดค่า Vbill MNO (ผู้ให้บริการเครือข่ายมือถือ)"
 }

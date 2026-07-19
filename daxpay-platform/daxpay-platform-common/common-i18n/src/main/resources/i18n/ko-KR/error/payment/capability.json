@@ -1,5 +1,7 @@
 {
   "notExist": "결제 기능이 존재하지 않습니다",
   "duplicateProduct": "연결된 결제 상품은 고유해야 합니다.",
-  "productNotExist": "결제상품이 존재하지 않습니다."
+  "productNotExist": "결제상품이 존재하지 않습니다.",
+  "methodNotInDirectory": "결제 방식이 결제 디렉토리에 없습니다",
+  "invalidProvider": "유효하지 않은 결제 서비스 제공자"
 }

@@ -41,7 +41,7 @@ public class HkrtRefundService {
 
         DaxResult<HkrtRefundResp> result = hkrtChannelClient.refund(req);
         if (result.getCode() != 0) {
-            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "channel.error.hkrtRefundFailed", result.getMsg());
+            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "error.channel.hkrt.refundFailed", result.getMsg());
         }
 
         HkrtRefundResp resp = result.getData();
@@ -54,7 +54,7 @@ public class HkrtRefundService {
         if ("FAIL".equals(tradeStatus)) {
             // 退款失败
             bo.setStatus(RefundOrderStatusEnum.FAIL);
-            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "channel.error.hkrtRefundFailed",
+            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "error.channel.hkrt.refundFailed",
                     "refund trade_status=FAIL");
         }
         bo.setStatus(Boolean.TRUE.equals(resp.getComplete())

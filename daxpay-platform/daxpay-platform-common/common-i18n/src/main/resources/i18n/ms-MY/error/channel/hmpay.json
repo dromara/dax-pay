@@ -1,0 +1,8 @@
+{
+  "payFailed": "Ralat pembayaran Hmpay: {0}",
+  "refundFailed": "Ralat bayaran balik Hmpay: {0}",
+  "closeFailed": "Ralat tutup pesanan Hmpay: {0}",
+  "unsupportedPayMethod": "Kaedah pembayaran tidak disokong untuk Hmpay: {0}",
+  "isvKeyNotConfigured": "Kunci penyedia perkhidmatan Hmpay tidak dikonfigurasi",
+  "merchantDuplicate": "Nombor merchant Hmpay sudah wujud di bawah merchant ini"
+}

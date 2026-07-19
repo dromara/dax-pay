@@ -1,0 +1,8 @@
+{
+  "payFailed": "斗拱支付异常: {0}",
+  "refundFailed": "斗拱退款异常: {0}",
+  "closeFailed": "斗拱关闭订单异常: {0}",
+  "unsupportedPayMethod": "斗拱不支持的支付方式: {0}",
+  "isvKeyNotConfigured": "斗拱服务商密钥未配置",
+  "merchantDuplicate": "该商户下已存在此斗拱商户号"
+}

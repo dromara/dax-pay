@@ -42,5 +42,14 @@
   "payFundStatusNotExist": "ไม่พบสถานะกองทุนการชำระเงิน: {0}",
   "normalOrderStatusNotExist": "ไม่พบสถานะการสั่งซื้อการจ่ายเงินปกติ: {0}",
   "gatewayOrderStatusNotExist": "ไม่พบสถานะการสั่งซื้อเกตเวย์: {0}",
-  "codePayFormNotExist": "Code pay form not found: {0}"
+  "codePayFormNotExist": "Code pay form not found: {0}",
+  "clientRuntimeNotExist": "ประเภทรันไทม์ไคลเอนต์ไม่มีอยู่: {0}",
+  "sensitiveWord": "เนื้อหามีคำที่ละเอียดอ่อน โปรดแก้ไขแล้วลองอีกครั้ง",
+  "sensitiveWordHit": "เนื้อหามีคำที่ละเอียดอ่อน「{0}」",
+  "sensitiveWordDuplicate": "คำที่ละเอียดอ่อนนี้มีอยู่แล้ว",
+  "sensitiveWordNotFound": "ไม่พบคำที่ละเอียดอ่อน",
+  "sensitiveWordHitNotFound": "ไม่พบบันทึกที่ตรงกัน",
+  "sensitiveWordStatusInvalid": "สถานะคำที่ละเอียดอ่อนไม่ถูกต้อง",
+  "sensitiveWordMatchModeInvalid": "โหมดการจับคู่ไม่ถูกต้อง",
+  "sensitiveWordCategoryInvalid": "หมวดหมู่ไม่ถูกต้อง"
 }

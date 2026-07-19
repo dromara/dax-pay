@@ -299,7 +299,7 @@
       "notBlank": "Tên ngắn không được để trống"
     },
     "status": {
-      "notBlank": "Trạng thái không được để trống"
+      "size": "Độ dài trạng thái phải từ {min} đến {max}"
     },
     "accountType": {
       "notBlank": "Loại tài khoản không được để trống"
@@ -672,7 +672,7 @@
       "notBlank": "AppId người bán không được để trống"
     },
     "sandAppId": {
-      "notBlank": "ID ứng dụng cát không được để trống"
+      "notBlank": "Sand appId không được để trống"
     },
     "credential": {
       "notNull": "Thông tin xác thực kênh không được rỗng"
@@ -772,6 +772,31 @@
     "reqId": {
       "notBlank": "Request ID không được để trống",
       "size": "Request ID không quá 64 ký tự"
+    },
+    "yopIsvNo": {
+      "notBlank": "Số ISV YeePay không được để trống"
+    },
+    "sensitiveWord": {
+      "rejected": "Nội dung chứa từ nhạy cảm và bị từ chối"
+    },
+    "word": {
+      "notBlank": "Từ nhạy cảm không được để trống",
+      "size": "Độ dài từ nhạy cảm phải từ {min} đến {max}"
+    },
+    "category": {
+      "size": "Độ dài danh mục phải từ {min} đến {max}"
+    },
+    "matchMode": {
+      "size": "Độ dài chế độ khớp phải từ {min} đến {max}"
+    },
+    "riskEnabled": {
+      "notNull": "Trạng thái kích hoạt quản lý rủi ro là bắt buộc"
+    },
+    "riskBlockBeforePay": {
+      "notNull": "Tùy chọn chặn trước thanh toán là bắt buộc"
+    },
+    "riskCheckAfterPay": {
+      "notNull": "Tùy chọn kiểm tra sau thanh toán là bắt buộc"
     }
   }
 }

@@ -7,5 +7,7 @@
   "website": "Tetapan paparan laman web",
   "wechat_notify": "Konfigurasi templat pemberitahuan mesej WeChat",
   "api_security": "Konfigurasi Keselamatan API",
-  "iam_replay_protect": "Konfigurasi Anti-Main Semula IAM"
+  "iam_replay_protect": "Konfigurasi Anti-Main Semula IAM",
+  "sensitive_word": "Konfigurasi perkataan sensitif",
+  "pay_security": "Konfigurasi keselamatan pembayaran"
 }

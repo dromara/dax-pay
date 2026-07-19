@@ -49,7 +49,7 @@ public class YeepayPayService {
         // 调用子应用
         DaxResult<YeepayPayResp> result = yeepayChannelClient.pay(req);
         if (result.getCode() != 0) {
-            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "channel.error.yeepayPayFailed", result.getMsg());
+            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "error.channel.yeepay.payFailed", result.getMsg());
         }
 
         return toPayResult(result.getData());
@@ -82,7 +82,7 @@ public class YeepayPayService {
             // 银联
             case UNION_QR -> YeepayPayMethod.UNION_QR;
             default -> throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
-                    "channel.error.yeepayUnsupportedPayMethod", methodCode);
+                    "error.channel.yeepay.unsupportedPayMethod", methodCode);
         };
     }
 

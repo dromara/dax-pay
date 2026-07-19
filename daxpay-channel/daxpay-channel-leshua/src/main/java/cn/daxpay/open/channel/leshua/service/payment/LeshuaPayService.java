@@ -60,7 +60,7 @@ public class LeshuaPayService {
         // 调用子应用
         DaxResult<LeshuaPayResp> result = leshuaChannelClient.pay(req);
         if (result.getCode() != 0) {
-            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "channel.error.leshuaPayFailed", result.getMsg());
+            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "error.channel.leshua.payFailed", result.getMsg());
         }
 
         return toPayResult(result.getData());
@@ -95,7 +95,7 @@ public class LeshuaPayService {
             case UNION_QR -> new MethodMapping(LeshuaPayMethod.GET_TDCODE, "UPSMZF", "0", LeshuaPayBodyType.QR_CODE);
             case UNION_JSAPI -> new MethodMapping(LeshuaPayMethod.GET_TDCODE, "UPSMZF", "1", LeshuaPayBodyType.LINK);
             default -> throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
-                    "channel.error.leshuaUnsupportedPayMethod", methodCode);
+                    "error.channel.leshua.unsupportedPayMethod", methodCode);
         };
     }
 

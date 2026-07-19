@@ -1,5 +1,9 @@
 {
-  "isvKeyNotConfigured": "Khóa VBill ISV chưa được định cấu hình",
-  "mnoNotConfigured": "Mã số người bán VBill (mno) chưa được định cấu hình, vui lòng điền cấu hình người bán",
-  "merchantDuplicate": "Số người bán Tianque này đã tồn tại dưới tên người bán này"
+  "payFailed": "Lỗi thanh toán Vbill: {0}",
+  "refundFailed": "Lỗi hoàn tiền Vbill: {0}",
+  "closeFailed": "Lỗi đóng đơn hàng Vbill: {0}",
+  "unsupportedPayMethod": "Phương thức thanh toán không được hỗ trợ cho Vbill: {0}",
+  "merchantDuplicate": "Số merchant Vbill đã tồn tại dưới merchant này",
+  "isvKeyNotConfigured": "Khóa nhà cung cấp dịch vụ Vbill chưa được cấu hình",
+  "mnoNotConfigured": "Vbill MNO (Nhà khai thác mạng di động) chưa được cấu hình"
 }

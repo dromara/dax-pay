@@ -1,4 +1,6 @@
 {
-  "isvKeyNotConfigured": "Leshua ISV 키가 구성되지 않았습니다.",
-  "merchantDuplicate": "이 Leshua 판매자 번호는 이미 판매자 아래에 존재합니다."
+  "payFailed": "Leshua 결제 오류: {0}",
+  "refundFailed": "Leshua 환불 오류: {0}",
+  "closeFailed": "Leshua 주문 종료 오류: {0}",
+  "unsupportedPayMethod": "Leshua에서 지원하지 않는 결제 방식: {0}"
 }

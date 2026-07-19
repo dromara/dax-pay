@@ -1,0 +1,9 @@
+{
+  "payFailed": "HKRT 결제 오류: {0}",
+  "refundFailed": "HKRT 환불 오류: {0}",
+  "closeFailed": "HKRT 주문 종료 오류: {0}",
+  "unsupportedPayMethod": "HKRT에서 지원하지 않는 결제 방식: {0}",
+  "isvKeyNotConfigured": "HKRT 서비스 제공자 키가 구성되지 않았습니다",
+  "termNoNotConfigured": "HKRT 단말기 번호가 구성되지 않았습니다",
+  "merchantDuplicate": "이 가맹점에 이미 HKRT 가맹점 번호가 존재합니다"
+}

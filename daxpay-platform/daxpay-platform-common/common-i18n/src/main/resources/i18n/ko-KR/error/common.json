@@ -50,5 +50,6 @@
   "sensitiveWordHitNotFound": "적중 기록을 찾을 수 없습니다",
   "sensitiveWordStatusInvalid": "상태가 올바르지 않습니다",
   "sensitiveWordMatchModeInvalid": "일치 모드가 올바르지 않습니다",
-  "sensitiveWordCategoryInvalid": "분류가 올바르지 않습니다"
+  "sensitiveWordCategoryInvalid": "분류가 올바르지 않습니다",
+  "clientRuntimeNotExist": "클라이언트 런타임 유형이 존재하지 않습니다: {0}"
 }

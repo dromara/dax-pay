@@ -6,5 +6,6 @@
   "onlyDraftCanDelete": "Chỉ có thể xóa trạng thái dự thảo",
   "signVerifyFailIllegal": "Xác minh chữ ký không thành công, yêu cầu bất hợp pháp",
   "channelMerchantNotExist": "Không tìm thấy thông tin người bán kênh",
-  "merchantInfoNotFound": "Không tìm thấy thông tin người bán"
+  "merchantInfoNotFound": "Không tìm thấy thông tin người bán",
+  "originOrderNotExist": "Đơn hàng gốc không tồn tại"
 }

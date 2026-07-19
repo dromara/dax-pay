@@ -1,0 +1,8 @@
+{
+  "payFailed": "Lỗi thanh toán Fuyou: {0}",
+  "refundFailed": "Lỗi hoàn tiền Fuyou: {0}",
+  "unsupportedPayMethod": "Phương thức thanh toán không được hỗ trợ cho Fuyou: {0}",
+  "merchantDuplicate": "Số merchant Fuyou đã tồn tại dưới merchant này",
+  "isvKeyNotConfigured": "Khóa nhà cung cấp dịch vụ Fuyou chưa được cấu hình",
+  "mchNoNotConfigured": "Số merchant Fuyou chưa được cấu hình"
+}

@@ -59,7 +59,7 @@ public class DougongPayService {
         // 调用子应用
         DaxResult<DougongPayResp> result = dougongChannelClient.pay(req);
         if (result.getCode() != 0) {
-            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "channel.error.dougongPayFailed", result.getMsg());
+            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "error.channel.dougong.payFailed", result.getMsg());
         }
 
         return toPayResult(result.getData());
@@ -91,7 +91,7 @@ public class DougongPayService {
             // 银联(扫码)
             case UNION_QR -> DougongPayMethod.UNION_QR;
             default -> throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
-                    "channel.error.dougongUnsupportedPayMethod", methodCode);
+                    "error.channel.dougong.unsupportedPayMethod", methodCode);
         };
     }
 

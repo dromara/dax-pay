@@ -30,5 +30,10 @@
   "wxVerifyFileContentTooLong": "Nội dung tệp xác minh tên miền WeChat quá dài",
   "wxVerifyCodeDuplicate": "Tệp xác minh đã tồn tại, vui lòng không tải lên lại",
   "wxVerifyUploadNotSupported": "Ứng dụng khách hiện tại không hỗ trợ tải lên tệp xác minh tên miền WeChat",
-  "wxVerifyNoMatch": "Tệp xác minh tên miền WeChat không thuộc về người bán hiện tại"
+  "wxVerifyNoMatch": "Tệp xác minh tên miền WeChat không thuộc về người bán hiện tại",
+  "defaultAppCannotDelete": "Ứng dụng mặc định không thể xóa, vui lòng chuyển đánh dấu mặc định trước",
+  "defaultAppDisabled": "Ứng dụng mặc định của merchant đã bị vô hiệu hóa, vui lòng kích hoạt hoặc chuyển đánh dấu mặc định trước",
+  "defaultStoreCannotDelete": "Cửa hàng mặc định không thể xóa, vui lòng chuyển đánh dấu mặc định trước",
+  "defaultStoreNotConfigured": "Merchant chưa cấu hình cửa hàng mặc định, vui lòng cấu hình trong quản lý cửa hàng trước",
+  "defaultStoreDisabled": "Cửa hàng mặc định của merchant đã bị vô hiệu hóa, vui lòng kích hoạt hoặc chuyển đánh dấu mặc định trước"
 }

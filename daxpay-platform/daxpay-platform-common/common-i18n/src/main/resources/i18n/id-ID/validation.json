@@ -299,7 +299,7 @@
       "notBlank": "Nama pendek wajib diisi"
     },
     "status": {
-      "notBlank": "Status tidak boleh kosong"
+      "size": "Panjang status harus antara {min} dan {max}"
     },
     "accountType": {
       "notBlank": "Jenis akun tidak boleh kosong"
@@ -672,7 +672,7 @@
       "notBlank": "AppId Penjual tidak boleh kosong"
     },
     "sandAppId": {
-      "notBlank": "ID aplikasi pasir tidak boleh kosong"
+      "notBlank": "Sand appId tidak boleh kosong"
     },
     "credential": {
       "notNull": "Kredensial saluran tidak boleh nol"
@@ -772,6 +772,31 @@
     "reqId": {
       "notBlank": "Request ID wajib diisi",
       "size": "Request ID maksimal 64 karakter"
+    },
+    "yopIsvNo": {
+      "notBlank": "Nomor ISV YeePay tidak boleh kosong"
+    },
+    "sensitiveWord": {
+      "rejected": "Konten berisi kata sensitif dan ditolak"
+    },
+    "word": {
+      "notBlank": "Kata sensitif tidak boleh kosong",
+      "size": "Panjang kata sensitif harus antara {min} dan {max}"
+    },
+    "category": {
+      "size": "Panjang kategori harus antara {min} dan {max}"
+    },
+    "matchMode": {
+      "size": "Panjang mode pencocokan harus antara {min} dan {max}"
+    },
+    "riskEnabled": {
+      "notNull": "Status aktivasi pengelolaan risiko wajib diisi"
+    },
+    "riskBlockBeforePay": {
+      "notNull": "Pilihan blokir sebelum pembayaran wajib diisi"
+    },
+    "riskCheckAfterPay": {
+      "notNull": "Pilihan pemeriksaan setelah pembayaran wajib diisi"
     }
   }
 }

@@ -3,5 +3,11 @@
   "publicKeyRequired": "公開キーが必要です",
   "lklAppIdRequired": "LakalaアプリケーションIDが必要です",
   "mchSerialNoRequired": "販売者証明書のシリアル番号が必要です",
-  "termNoNotConfigured": "端末番号が設定されていません。マーチャント設定で設定してください"
+  "termNoNotConfigured": "端末番号が設定されていません。マーチャント設定で設定してください",
+  "isvKeyNotConfigured": "Lakalaサービスプロバイダキーが設定されていません",
+  "merchantDuplicate": "このマーチャントの下にLakalaマーチャント番号がすでに存在します",
+  "payFailed": "Lakala支払エラー: {0}",
+  "refundFailed": "Lakala返金エラー: {0}",
+  "closeFailed": "Lakala注文クローズエラー: {0}",
+  "unsupportedPayMethod": "Lakalaでサポートされていない支払方法: {0}"
 }

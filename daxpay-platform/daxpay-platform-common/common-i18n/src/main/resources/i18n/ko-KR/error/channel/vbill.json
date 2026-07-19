@@ -1,5 +1,9 @@
 {
-  "isvKeyNotConfigured": "VBill ISV 키가 구성되지 않았습니다.",
-  "mnoNotConfigured": "VBill 판매자 번호(mno)가 구성되지 않았습니다. 판매자 구성을 입력하세요.",
-  "merchantDuplicate": "이 Tianque 판매자 번호는 이 판매자 아래에 이미 존재합니다."
+  "payFailed": "Vbill 결제 오류: {0}",
+  "refundFailed": "Vbill 환불 오류: {0}",
+  "closeFailed": "Vbill 주문 종료 오류: {0}",
+  "unsupportedPayMethod": "Vbill에서 지원하지 않는 결제 방식: {0}",
+  "merchantDuplicate": "이 가맹점에 이미 Vbill 가맹점 번호가 존재합니다",
+  "isvKeyNotConfigured": "Vbill 서비스 제공자 키가 구성되지 않았습니다",
+  "mnoNotConfigured": "Vbill MNO(이동통신망 사업자)가 구성되지 않았습니다"
 }

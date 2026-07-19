@@ -3,5 +3,11 @@
   "publicKeyRequired": "ต้องใช้รหัสสาธารณะ",
   "lklAppIdRequired": "ต้องระบุรหัสแอปพลิเคชัน Lakala",
   "mchSerialNoRequired": "ต้องระบุหมายเลขซีเรียลใบรับรองผู้ขาย",
-  "termNoNotConfigured": "ไม่ได้กำหนดค่าหมายเลขเทอร์มินัล โปรดตั้งค่าในการกำหนดค่าผู้ขาย"
+  "termNoNotConfigured": "ไม่ได้กำหนดค่าหมายเลขเทอร์มินัล โปรดตั้งค่าในการกำหนดค่าผู้ขาย",
+  "isvKeyNotConfigured": "ไม่ได้กำหนดค่าคีย์ผู้ให้บริการ Lakala",
+  "merchantDuplicate": "หมายเลขผู้ค้า Lakala มีอยู่แล้วภายใต้ผู้ค้ารายนี้",
+  "payFailed": "ข้อผิดพลาดการชำระเงิน Lakala: {0}",
+  "refundFailed": "ข้อผิดพลาดการคืนเงิน Lakala: {0}",
+  "closeFailed": "ข้อผิดพลาดการปิดคำสั่ง Lakala: {0}",
+  "unsupportedPayMethod": "วิธีการชำระเงินไม่ได้รับการสนับสนุนสำหรับ Lakala: {0}"
 }

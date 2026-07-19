@@ -1,0 +1,8 @@
+{
+  "payFailed": "Fuyou payment error: {0}",
+  "refundFailed": "Fuyou refund error: {0}",
+  "unsupportedPayMethod": "Unsupported payment method for Fuyou: {0}",
+  "merchantDuplicate": "A Fuyou merchant number already exists under this merchant",
+  "isvKeyNotConfigured": "Fuyou service provider key not configured",
+  "mchNoNotConfigured": "Fuyou merchant number not configured"
+}

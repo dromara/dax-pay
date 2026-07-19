@@ -18,5 +18,6 @@
     "alreadyBoundByOther": "該第三方賬號已被其他用户綁定",
     "alreadyBoundPlatform": "您已綁定該平台，請先解綁後再綁定新賬號",
     "clientMismatch": "當前登錄用户不屬於該終端，無法完成綁定"
-  }
+  },
+  "oauthFailed": "三方授權失敗"
 }

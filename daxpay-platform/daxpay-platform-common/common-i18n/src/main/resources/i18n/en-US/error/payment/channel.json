@@ -6,5 +6,6 @@
   "onlyDraftCanDelete": "Only draft status can be deleted",
   "signVerifyFailIllegal": "Signature verification failed, illegal request",
   "channelMerchantNotExist": "Channel merchant information not found",
-  "merchantInfoNotFound": "Merchant information not found"
+  "merchantInfoNotFound": "Merchant information not found",
+  "originOrderNotExist": "Original order does not exist"
 }

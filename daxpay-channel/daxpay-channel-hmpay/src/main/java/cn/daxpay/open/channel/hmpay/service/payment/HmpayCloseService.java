@@ -37,7 +37,7 @@ public class HmpayCloseService {
 
         DaxResult<HmpayCloseResp> result = hmpayChannelClient.close(req);
         if (result.getCode() != 0) {
-            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "channel.error.hmpayCloseFailed", result.getMsg());
+            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "error.channel.hmpay.closeFailed", result.getMsg());
         }
         return CloseTypeEnum.CLOSE;
     }

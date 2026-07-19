@@ -50,5 +50,6 @@
   "sensitiveWordHitNotFound": "命中记录不存在",
   "sensitiveWordStatusInvalid": "敏感词状态无效",
   "sensitiveWordMatchModeInvalid": "匹配模式无效",
-  "sensitiveWordCategoryInvalid": "分类无效"
+  "sensitiveWordCategoryInvalid": "分类无效",
+  "clientRuntimeNotExist": "客户端运行类型不存在: {0}"
 }

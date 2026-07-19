@@ -42,9 +42,9 @@ public class HmpayIsvKeyConfigService {
     public HmpayIsvKeyConfig getByProductForPay(String product, boolean sandbox) {
         HmpayIsvKeyConfig config = hmpayIsvKeyConfigManager.findByProductAndSandbox(product, sandbox)
                 // 河马付: 服务商密钥未配置
-                .orElseThrow(() -> new BizInfoException("channel.error.hmpayIsvKeyNotConfigured"));
+                .orElseThrow(() -> new BizInfoException("error.channel.hmpay.isvKeyNotConfigured"));
         if (StrUtil.hasBlank(config.getSandAppId(), config.getPrivateKey(), config.getPublicKey())) {
-            throw new BizInfoException("channel.error.hmpayIsvKeyNotConfigured");
+            throw new BizInfoException("error.channel.hmpay.isvKeyNotConfigured");
         }
         return config;
     }

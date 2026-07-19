@@ -1,0 +1,5 @@
+{
+  "payFailed": "汇付支付异常: {0}",
+  "closeFailed": "汇付关闭订单异常: {0}",
+  "unsupportedPayMethod": "汇付不支持的支付方式: {0}"
+}

@@ -67,7 +67,7 @@ public class LakalaPayService {
         // 调用子应用
         DaxResult<LakalaPayResp> result = lakalaChannelClient.pay(req);
         if (result.getCode() != 0) {
-            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "channel.error.lakalaPayFailed", result.getMsg());
+            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "error.channel.lakala.payFailed", result.getMsg());
         }
 
         return toPayResult(result.getData());
@@ -103,7 +103,7 @@ public class LakalaPayService {
             case UNION_QR -> new MethodMapping(LakalaPayMethod.PREORDER, "UQRCODEPAY", "41", LakalaPayBodyType.QR_CODE);
             case UNION_JSAPI -> new MethodMapping(LakalaPayMethod.PREORDER, "UQRCODEPAY", "51", LakalaPayBodyType.LINK);
             default -> throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
-                    "channel.error.lakalaUnsupportedPayMethod", methodCode);
+                    "error.channel.lakala.unsupportedPayMethod", methodCode);
         };
     }
 

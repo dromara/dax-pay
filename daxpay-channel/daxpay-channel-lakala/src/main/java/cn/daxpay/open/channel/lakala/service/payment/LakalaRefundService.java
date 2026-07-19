@@ -40,7 +40,7 @@ public class LakalaRefundService {
 
         DaxResult<LakalaRefundResp> result = lakalaChannelClient.refund(req);
         if (result.getCode() != 0) {
-            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "channel.error.lakalaRefundFailed", result.getMsg());
+            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "error.channel.lakala.refundFailed", result.getMsg());
         }
 
         LakalaRefundResp resp = result.getData();

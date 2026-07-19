@@ -1,5 +1,9 @@
 {
+  "payFailed": "隨行付支付異常: {0}",
+  "refundFailed": "隨行付退款異常: {0}",
+  "closeFailed": "隨行付關閉訂單異常: {0}",
+  "unsupportedPayMethod": "隨行付不支援的支付方式: {0}",
+  "merchantDuplicate": "該商戶下已存在此隨行付商戶號",
   "isvKeyNotConfigured": "隨行付服務商金鑰未配置",
-  "mnoNotConfigured": "天闕商戶號(mno)未配置, 請在商戶配置中填寫",
-  "merchantDuplicate": "該商戶下已存在此天闕商戶號"
+  "mnoNotConfigured": "隨行付 MNO(行動網路營運商)未配置"
 }

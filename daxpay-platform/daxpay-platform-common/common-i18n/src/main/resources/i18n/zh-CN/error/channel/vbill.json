@@ -1,5 +1,9 @@
 {
+  "payFailed": "随行付支付异常: {0}",
+  "refundFailed": "随行付退款异常: {0}",
+  "closeFailed": "随行付关闭订单异常: {0}",
+  "unsupportedPayMethod": "随行付不支持的支付方式: {0}",
+  "merchantDuplicate": "该商户下已存在此随行付商户号",
   "isvKeyNotConfigured": "随行付服务商密钥未配置",
-  "mnoNotConfigured": "天阙商户号(mno)未配置, 请在商户配置中填写",
-  "merchantDuplicate": "该商户下已存在此天阙商户号"
+  "mnoNotConfigured": "随行付 MNO(移动网络运营商)未配置"
 }

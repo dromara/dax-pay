@@ -1,0 +1,15 @@
+{
+  "pay_title": "Tiêu đề thanh toán",
+  "pay_description": "Mô tả thanh toán",
+  "goods_name": "Tên hàng hóa",
+  "goods_description": "Mô tả hàng hóa",
+  "mch_name": "Tên merchant",
+  "app_name": "Tên ứng dụng",
+  "store_name": "Tên cửa hàng",
+  "user_name": "Tên người dùng",
+  "qr_name": "Tên mã QR",
+  "notice": "Thông báo",
+  "protocol": "Giao thức",
+  "manual_check": "Kiểm tra thủ công",
+  "general": "Chung"
+}

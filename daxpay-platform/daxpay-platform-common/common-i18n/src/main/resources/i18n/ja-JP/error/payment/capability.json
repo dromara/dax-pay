@@ -1,5 +1,7 @@
 {
   "notExist": "支払い機能が存在しない",
   "duplicateProduct": "リンクされた支払い商品は一意である必要があります",
-  "productNotExist": "決済商品が存在しません"
+  "productNotExist": "決済商品が存在しません",
+  "methodNotInDirectory": "支払方法が支払ディレクトリにありません",
+  "invalidProvider": "無効な支払プロバイダ"
 }

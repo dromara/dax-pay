@@ -1,0 +1,5 @@
+{
+  "payFailed": "易寶支付異常: {0}",
+  "closeFailed": "易寶關閉訂單異常: {0}",
+  "unsupportedPayMethod": "易寶不支援的支付方式: {0}"
+}

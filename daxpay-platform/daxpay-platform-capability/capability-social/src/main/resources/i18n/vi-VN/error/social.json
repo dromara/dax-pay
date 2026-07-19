@@ -18,5 +18,6 @@
     "alreadyBoundByOther": "Tài khoản của bên thứ ba đã bị ràng buộc bởi người dùng khác",
     "alreadyBoundPlatform": "Bạn đã ràng buộc nền tảng này, vui lòng hủy liên kết trước",
     "clientMismatch": "Người dùng hiện tại không thuộc về khách hàng này, không được phép ràng buộc"
-  }
+  },
+  "oauthFailed": "Ủy quyền bên thứ ba thất bại"
 }

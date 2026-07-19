@@ -1,0 +1,15 @@
+{
+  "pay_title": "Judul pembayaran",
+  "pay_description": "Deskripsi pembayaran",
+  "goods_name": "Nama barang",
+  "goods_description": "Deskripsi barang",
+  "mch_name": "Nama merchant",
+  "app_name": "Nama aplikasi",
+  "store_name": "Nama toko",
+  "user_name": "Nama pengguna",
+  "qr_name": "Nama QR code",
+  "notice": "Pengumuman",
+  "protocol": "Protokol",
+  "manual_check": "Pemeriksaan manual",
+  "general": "Umum"
+}

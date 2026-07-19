@@ -30,5 +30,10 @@
   "wxVerifyFileContentTooLong": "Kandungan fail pengesahan domain WeChat terlalu panjang",
   "wxVerifyCodeDuplicate": "Fail pengesahan sudah wujud, sila jangan muat naik lagi",
   "wxVerifyUploadNotSupported": "Pelanggan semasa tidak menyokong memuat naik fail pengesahan domain WeChat",
-  "wxVerifyNoMatch": "Fail pengesahan domain WeChat bukan milik pedagang semasa"
+  "wxVerifyNoMatch": "Fail pengesahan domain WeChat bukan milik pedagang semasa",
+  "defaultAppCannotDelete": "Aplikasi lalai tidak boleh dipadam, sila pindahkan penanda lalai terlebih dahulu",
+  "defaultAppDisabled": "Aplikasi lalai merchant dilumpuhkan, sila aktifkan atau pindahkan penanda lalai terlebih dahulu",
+  "defaultStoreCannotDelete": "Kedai lalai tidak boleh dipadam, sila pindahkan penanda lalai terlebih dahulu",
+  "defaultStoreNotConfigured": "Merchant belum mengkonfigurasi kedai lalai, sila konfigurasikan dalam pengurusan kedai terlebih dahulu",
+  "defaultStoreDisabled": "Kedai lalai merchant dilumpuhkan, sila aktifkan atau pindahkan penanda lalai terlebih dahulu"
 }

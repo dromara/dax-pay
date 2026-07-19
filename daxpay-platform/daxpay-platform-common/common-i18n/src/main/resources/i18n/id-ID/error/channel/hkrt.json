@@ -1,0 +1,9 @@
+{
+  "payFailed": "Kesalahan pembayaran HKRT: {0}",
+  "refundFailed": "Kesalahan pengembalian dana HKRT: {0}",
+  "closeFailed": "Kesalahan menutup pesanan HKRT: {0}",
+  "unsupportedPayMethod": "Metode pembayaran tidak didukung untuk HKRT: {0}",
+  "isvKeyNotConfigured": "Kunci penyedia layanan HKRT tidak dikonfigurasi",
+  "termNoNotConfigured": "Nomor terminal HKRT tidak dikonfigurasi",
+  "merchantDuplicate": "Nomor merchant HKRT sudah ada di bawah merchant ini"
+}

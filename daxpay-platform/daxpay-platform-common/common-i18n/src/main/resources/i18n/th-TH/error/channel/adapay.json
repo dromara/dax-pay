@@ -1,0 +1,5 @@
+{
+  "payFailed": "ข้อผิดพลาดการชำระเงิน Adapay: {0}",
+  "closeFailed": "ข้อผิดพลาดการปิดคำสั่ง Adapay: {0}",
+  "unsupportedPayMethod": "วิธีการชำระเงินไม่ได้รับการสนับสนุนสำหรับ Adapay: {0}"
+}

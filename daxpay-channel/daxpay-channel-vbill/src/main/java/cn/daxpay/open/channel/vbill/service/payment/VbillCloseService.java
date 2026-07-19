@@ -38,7 +38,7 @@ public class VbillCloseService {
 
         DaxResult<VbillCloseResp> result = vbillChannelClient.close(req);
         if (result.getCode() != 0) {
-            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "channel.error.vbillCloseFailed", result.getMsg());
+            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "error.channel.vbill.closeFailed", result.getMsg());
         }
         return CloseTypeEnum.CLOSE;
     }

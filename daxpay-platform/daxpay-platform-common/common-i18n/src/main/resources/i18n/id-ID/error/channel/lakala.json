@@ -3,5 +3,11 @@
   "publicKeyRequired": "Kunci publik diperlukan",
   "lklAppIdRequired": "ID aplikasi Lakala diperlukan",
   "mchSerialNoRequired": "Nomor seri sertifikat pedagang diperlukan",
-  "termNoNotConfigured": "Nomor terminal tidak dikonfigurasi, harap atur di konfigurasi pedagang"
+  "termNoNotConfigured": "Nomor terminal tidak dikonfigurasi, harap atur di konfigurasi pedagang",
+  "isvKeyNotConfigured": "Kunci penyedia layanan Lakala tidak dikonfigurasi",
+  "merchantDuplicate": "Nomor merchant Lakala sudah ada di bawah merchant ini",
+  "payFailed": "Kesalahan pembayaran Lakala: {0}",
+  "refundFailed": "Kesalahan pengembalian dana Lakala: {0}",
+  "closeFailed": "Kesalahan menutup pesanan Lakala: {0}",
+  "unsupportedPayMethod": "Metode pembayaran tidak didukung untuk Lakala: {0}"
 }

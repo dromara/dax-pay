@@ -50,5 +50,6 @@
   "sensitiveWordHitNotFound": "Hit record not found",
   "sensitiveWordStatusInvalid": "Invalid sensitive word status",
   "sensitiveWordMatchModeInvalid": "Invalid match mode",
-  "sensitiveWordCategoryInvalid": "Invalid category"
+  "sensitiveWordCategoryInvalid": "Invalid category",
+  "clientRuntimeNotExist": "Client runtime type does not exist: {0}"
 }

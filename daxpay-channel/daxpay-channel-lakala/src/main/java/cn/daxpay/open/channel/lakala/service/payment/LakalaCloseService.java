@@ -40,7 +40,7 @@ public class LakalaCloseService {
 
         DaxResult<LakalaCloseResp> result = lakalaChannelClient.close(req);
         if (result.getCode() != 0) {
-            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "channel.error.lakalaCloseFailed", result.getMsg());
+            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "error.channel.lakala.closeFailed", result.getMsg());
         }
         // 拉卡拉只有关单, 返回 CLOSE
         return CloseTypeEnum.CLOSE;

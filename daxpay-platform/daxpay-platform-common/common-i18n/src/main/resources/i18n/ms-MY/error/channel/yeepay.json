@@ -1,0 +1,5 @@
+{
+  "payFailed": "Ralat pembayaran YeePay: {0}",
+  "closeFailed": "Ralat tutup pesanan YeePay: {0}",
+  "unsupportedPayMethod": "Kaedah pembayaran tidak disokong untuk YeePay: {0}"
+}

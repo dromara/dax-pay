@@ -1,0 +1,16 @@
+{
+  "easypay": {
+    "credentialNotFound": "Không tìm thấy thông tin EasyPay",
+    "credentialDisabled": "Thông tin EasyPay đã bị vô hiệu hóa",
+    "pidGenerateFailed": "Tạo số merchant EasyPay thất bại",
+    "v1Disabled": "Giao diện EasyPay V1 không được bật",
+    "v2Disabled": "Giao diện EasyPay V2 không được bật",
+    "publicKeyMissing": "Khóa công khai merchant EasyPay chưa được cấu hình",
+    "md5KeyMissing": "Khóa MD5 EasyPay chưa được cấu hình",
+    "signInvalid": "Xác thực chữ ký EasyPay thất bại",
+    "unsupportedType": "Phương thức thanh toán không được hỗ trợ",
+    "unsupportedMethod": "Loại giao diện không được hỗ trợ",
+    "orderNotFound": "Không tìm thấy đơn hàng EasyPay",
+    "tradeNotFound": "Không tìm thấy giao dịch thanh toán liên quan"
+  }
+}

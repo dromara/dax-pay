@@ -1,0 +1,5 @@
+{
+  "payFailed": "Ralat pembayaran Adapay: {0}",
+  "closeFailed": "Ralat tutup pesanan Adapay: {0}",
+  "unsupportedPayMethod": "Kaedah pembayaran tidak disokong untuk Adapay: {0}"
+}

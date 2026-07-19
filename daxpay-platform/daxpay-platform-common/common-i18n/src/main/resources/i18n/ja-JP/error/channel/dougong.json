@@ -1,0 +1,8 @@
+{
+  "payFailed": "Dougong支払エラー: {0}",
+  "refundFailed": "Dougong返金エラー: {0}",
+  "closeFailed": "Dougong注文クローズエラー: {0}",
+  "unsupportedPayMethod": "Dougongでサポートされていない支払方法: {0}",
+  "isvKeyNotConfigured": "Dougongサービスプロバイダキーが設定されていません",
+  "merchantDuplicate": "このマーチャントの下にDougongマーチャント番号がすでに存在します"
+}

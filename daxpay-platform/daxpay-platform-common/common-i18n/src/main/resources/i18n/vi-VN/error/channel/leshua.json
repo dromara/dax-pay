@@ -1,4 +1,6 @@
 {
-  "isvKeyNotConfigured": "Khóa ISV của Leshua chưa được định cấu hình",
-  "merchantDuplicate": "Mã số thương gia Leshua này đã tồn tại dưới tên thương gia"
+  "payFailed": "Lỗi thanh toán Leshua: {0}",
+  "refundFailed": "Lỗi hoàn tiền Leshua: {0}",
+  "closeFailed": "Lỗi đóng đơn hàng Leshua: {0}",
+  "unsupportedPayMethod": "Phương thức thanh toán không được hỗ trợ cho Leshua: {0}"
 }

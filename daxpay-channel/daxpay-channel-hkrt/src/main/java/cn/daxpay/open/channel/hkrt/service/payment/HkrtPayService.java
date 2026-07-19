@@ -66,7 +66,7 @@ public class HkrtPayService {
         // 调用子应用
         DaxResult<HkrtPayResp> result = hkrtChannelClient.pay(req);
         if (result.getCode() != 0) {
-            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "channel.error.hkrtPayFailed", result.getMsg());
+            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "error.channel.hkrt.payFailed", result.getMsg());
         }
 
         return toPayResult(result.getData());
@@ -99,7 +99,7 @@ public class HkrtPayService {
             // 条码支付(微信/支付宝/银联付款码被扫)
             case WECHAT_BARCODE, ALIPAY_BARCODE, UNION_BARCODE -> HkrtPayMethod.BARCODE;
             default -> throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
-                    "channel.error.hkrtUnsupportedPayMethod", methodCode);
+                    "error.channel.hkrt.unsupportedPayMethod", methodCode);
         };
         // 支付内容类型由 method 推导
         HkrtPayBodyType bodyType = switch (method) {

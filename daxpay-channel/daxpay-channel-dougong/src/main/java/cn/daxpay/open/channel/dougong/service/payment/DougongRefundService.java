@@ -49,7 +49,7 @@ public class DougongRefundService {
 
         DaxResult<DougongRefundResp> result = dougongChannelClient.refund(req);
         if (result.getCode() != 0) {
-            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "channel.error.dougongRefundFailed", result.getMsg());
+            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "error.channel.dougong.refundFailed", result.getMsg());
         }
 
         DougongRefundResp resp = result.getData();

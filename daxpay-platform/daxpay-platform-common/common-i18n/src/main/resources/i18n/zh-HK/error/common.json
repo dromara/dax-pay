@@ -50,5 +50,6 @@
   "sensitiveWordHitNotFound": "命中記錄不存在",
   "sensitiveWordStatusInvalid": "敏感詞狀態無效",
   "sensitiveWordMatchModeInvalid": "匹配模式無效",
-  "sensitiveWordCategoryInvalid": "分類無效"
+  "sensitiveWordCategoryInvalid": "分類無效",
+  "clientRuntimeNotExist": "客戶端執行類型不存在: {0}"
 }

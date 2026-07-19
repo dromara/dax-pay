@@ -44,9 +44,9 @@ public class HkrtIsvKeyConfigService {
     public HkrtIsvKeyConfig getByProductForPay(String product, boolean sandbox) {
         HkrtIsvKeyConfig config = hkrtIsvKeyConfigManager.findByProductAndSandbox(product, sandbox)
                 // 海科融通: 服务商密钥未配置
-                .orElseThrow(() -> new BizInfoException("channel.error.hkrtIsvKeyNotConfigured"));
+                .orElseThrow(() -> new BizInfoException("error.channel.hkrt.isvKeyNotConfigured"));
         if (StrUtil.hasBlank(config.getAgentNo(), config.getAccessId(), config.getAccessKey())) {
-            throw new BizInfoException("channel.error.hkrtIsvKeyNotConfigured");
+            throw new BizInfoException("error.channel.hkrt.isvKeyNotConfigured");
         }
         return config;
     }

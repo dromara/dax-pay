@@ -1,0 +1,5 @@
+{
+  "payFailed": "Adapay支払エラー: {0}",
+  "closeFailed": "Adapay注文クローズエラー: {0}",
+  "unsupportedPayMethod": "Adapayでサポートされていない支払方法: {0}"
+}

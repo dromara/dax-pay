@@ -68,7 +68,7 @@ public class VbillPayService {
         // 调用子应用
         DaxResult<VbillPayResp> result = vbillChannelClient.pay(req);
         if (result.getCode() != 0) {
-            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "channel.error.vbillPayFailed", result.getMsg());
+            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "error.channel.vbill.payFailed", result.getMsg());
         }
 
         return toPayResult(result.getData());
@@ -105,7 +105,7 @@ public class VbillPayService {
             case UNION_QR -> new MethodMapping(VbillPayMethod.QR_CODE, null, null, VbillPayBodyType.QR_CODE);
             case UNION_BARCODE -> new MethodMapping(VbillPayMethod.BAR_CODE, null, null, null);
             default -> throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
-                    "channel.error.vbillUnsupportedPayMethod", methodCode);
+                    "error.channel.vbill.unsupportedPayMethod", methodCode);
         };
     }
 

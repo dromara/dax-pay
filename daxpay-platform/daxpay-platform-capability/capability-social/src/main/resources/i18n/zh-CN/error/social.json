@@ -18,6 +18,6 @@
     "alreadyBoundByOther": "该第三方账号已被其他用户绑定",
     "alreadyBoundPlatform": "您已绑定该平台，请先解绑后再绑定新账号",
     "clientMismatch": "当前登录用户不属于该终端，无法完成绑定"
-  }
+  },
+  "oauthFailed": "三方授权失败"
 }
-

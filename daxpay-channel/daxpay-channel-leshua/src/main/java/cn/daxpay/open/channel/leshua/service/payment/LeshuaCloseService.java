@@ -40,7 +40,7 @@ public class LeshuaCloseService {
 
         DaxResult<LeshuaCloseResp> result = leshuaChannelClient.close(req);
         if (result.getCode() != 0) {
-            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "channel.error.leshuaCloseFailed", result.getMsg());
+            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "error.channel.leshua.closeFailed", result.getMsg());
         }
         return CloseTypeEnum.CLOSE;
     }

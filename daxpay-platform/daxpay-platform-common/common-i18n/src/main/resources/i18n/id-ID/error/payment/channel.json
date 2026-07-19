@@ -6,5 +6,6 @@
   "onlyDraftCanDelete": "Hanya status draf yang dapat dihapus",
   "signVerifyFailIllegal": "Verifikasi tanda tangan gagal, permintaan ilegal",
   "channelMerchantNotExist": "Informasi pedagang saluran tidak ditemukan",
-  "merchantInfoNotFound": "Informasi pedagang tidak ditemukan"
+  "merchantInfoNotFound": "Informasi pedagang tidak ditemukan",
+  "originOrderNotExist": "Pesanan asli tidak ditemukan"
 }

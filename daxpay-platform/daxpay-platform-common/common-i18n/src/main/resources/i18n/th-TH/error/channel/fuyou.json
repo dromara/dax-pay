@@ -1,0 +1,8 @@
+{
+  "payFailed": "ข้อผิดพลาดการชำระเงิน Fuyou: {0}",
+  "refundFailed": "ข้อผิดพลาดการคืนเงิน Fuyou: {0}",
+  "unsupportedPayMethod": "วิธีการชำระเงินไม่ได้รับการสนับสนุนสำหรับ Fuyou: {0}",
+  "merchantDuplicate": "หมายเลขผู้ค้า Fuyou มีอยู่แล้วภายใต้ผู้ค้ารายนี้",
+  "isvKeyNotConfigured": "ไม่ได้กำหนดค่าคีย์ผู้ให้บริการ Fuyou",
+  "mchNoNotConfigured": "ไม่ได้กำหนดค่าหมายเลขผู้ค้า Fuyou"
+}

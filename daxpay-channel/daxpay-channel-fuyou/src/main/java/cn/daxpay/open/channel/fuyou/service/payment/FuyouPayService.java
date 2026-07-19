@@ -57,7 +57,7 @@ public class FuyouPayService {
 
         DaxResult<FuyouPayResp> result = fuyouChannelClient.pay(req);
         if (result.getCode() != 0) {
-            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "channel.error.fuyouPayFailed", result.getMsg());
+            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "error.channel.fuyou.payFailed", result.getMsg());
         }
         return toPayResult(result.getData());
     }
@@ -90,7 +90,7 @@ public class FuyouPayService {
             // 银联
             case UNION_QR -> new MethodMapping(FuyouPayMethod.UNION_QR, FuyouPayBodyType.QR_CODE);
             default -> throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
-                    "channel.error.fuyouUnsupportedPayMethod", methodCode);
+                    "error.channel.fuyou.unsupportedPayMethod", methodCode);
         };
     }
 

@@ -40,7 +40,7 @@ public class HkrtCloseService {
 
         DaxResult<HkrtCloseResp> result = hkrtChannelClient.close(req);
         if (result.getCode() != 0) {
-            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "channel.error.hkrtCloseFailed", result.getMsg());
+            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "error.channel.hkrt.closeFailed", result.getMsg());
         }
         // 海科融通只有关单, 返回 CLOSE
         return CloseTypeEnum.CLOSE;

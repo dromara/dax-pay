@@ -3,5 +3,11 @@
   "publicKeyRequired": "Public key is required",
   "lklAppIdRequired": "Lakala application ID is required",
   "mchSerialNoRequired": "Merchant certificate serial number is required",
-  "termNoNotConfigured": "Terminal number is not configured, please set it in merchant config"
+  "termNoNotConfigured": "Terminal number is not configured, please set it in merchant config",
+  "isvKeyNotConfigured": "Lakala service provider key not configured",
+  "merchantDuplicate": "A Lakala merchant number already exists under this merchant",
+  "payFailed": "Lakala payment error: {0}",
+  "refundFailed": "Lakala refund error: {0}",
+  "closeFailed": "Lakala close order error: {0}",
+  "unsupportedPayMethod": "Unsupported payment method for Lakala: {0}"
 }

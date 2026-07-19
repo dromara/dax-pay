@@ -1,0 +1,9 @@
+{
+  "payFailed": "HKRT payment error: {0}",
+  "refundFailed": "HKRT refund error: {0}",
+  "closeFailed": "HKRT close order error: {0}",
+  "unsupportedPayMethod": "Unsupported payment method for HKRT: {0}",
+  "isvKeyNotConfigured": "HKRT service provider key not configured",
+  "termNoNotConfigured": "HKRT terminal number not configured",
+  "merchantDuplicate": "A HKRT merchant number already exists under this merchant"
+}

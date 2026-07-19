@@ -42,5 +42,14 @@
   "payFundStatusNotExist": "Status dana bayar tidak ditemui: {0}",
   "normalOrderStatusNotExist": "Status pesanan gaji biasa tidak ditemui: {0}",
   "gatewayOrderStatusNotExist": "Status pesanan gerbang tidak ditemui: {0}",
-  "codePayFormNotExist": "Code pay form not found: {0}"
+  "codePayFormNotExist": "Code pay form not found: {0}",
+  "clientRuntimeNotExist": "Jenis runtime klien tidak wujud: {0}",
+  "sensitiveWord": "Kandungan mengandungi perkataan sensitif, sila ubah dan cuba lagi",
+  "sensitiveWordHit": "Kandungan mengandungi perkataan sensitif「{0}」",
+  "sensitiveWordDuplicate": "Perkataan sensitif ini sudah wujud",
+  "sensitiveWordNotFound": "Perkataan sensitif tidak dijumpai",
+  "sensitiveWordHitNotFound": "Rekod padanan tidak dijumpai",
+  "sensitiveWordStatusInvalid": "Status perkataan sensitif tidak sah",
+  "sensitiveWordMatchModeInvalid": "Mod padanan tidak sah",
+  "sensitiveWordCategoryInvalid": "Kategori tidak sah"
 }

@@ -1,0 +1,9 @@
+{
+  "payFailed": "海科融通支付異常: {0}",
+  "refundFailed": "海科融通退款異常: {0}",
+  "closeFailed": "海科融通關閉訂單異常: {0}",
+  "unsupportedPayMethod": "海科融通不支援的支付方式: {0}",
+  "isvKeyNotConfigured": "海科融通服務商金鑰未配置",
+  "termNoNotConfigured": "海科融通終端號未配置",
+  "merchantDuplicate": "該商戶下已存在此海科融通商戶號"
+}

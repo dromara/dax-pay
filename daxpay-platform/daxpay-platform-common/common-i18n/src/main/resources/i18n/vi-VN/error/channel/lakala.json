@@ -3,5 +3,11 @@
   "publicKeyRequired": "Cần có khóa công khai",
   "lklAppIdRequired": "Cần có ID ứng dụng Lakala",
   "mchSerialNoRequired": "Cần có số sê-ri chứng chỉ người bán",
-  "termNoNotConfigured": "Số thiết bị đầu cuối chưa được định cấu hình, vui lòng đặt số này trong cấu hình người bán"
+  "termNoNotConfigured": "Số thiết bị đầu cuối chưa được định cấu hình, vui lòng đặt số này trong cấu hình người bán",
+  "isvKeyNotConfigured": "Khóa nhà cung cấp dịch vụ Lakala chưa được cấu hình",
+  "merchantDuplicate": "Số merchant Lakala đã tồn tại dưới merchant này",
+  "payFailed": "Lỗi thanh toán Lakala: {0}",
+  "refundFailed": "Lỗi hoàn tiền Lakala: {0}",
+  "closeFailed": "Lỗi đóng đơn hàng Lakala: {0}",
+  "unsupportedPayMethod": "Phương thức thanh toán không được hỗ trợ cho Lakala: {0}"
 }

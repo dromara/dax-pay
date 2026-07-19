@@ -1,0 +1,8 @@
+{
+  "payFailed": "ข้อผิดพลาดการชำระเงิน Hmpay: {0}",
+  "refundFailed": "ข้อผิดพลาดการคืนเงิน Hmpay: {0}",
+  "closeFailed": "ข้อผิดพลาดการปิดคำสั่ง Hmpay: {0}",
+  "unsupportedPayMethod": "วิธีการชำระเงินไม่ได้รับการสนับสนุนสำหรับ Hmpay: {0}",
+  "isvKeyNotConfigured": "ไม่ได้กำหนดค่าคีย์ผู้ให้บริการ Hmpay",
+  "merchantDuplicate": "หมายเลขผู้ค้า Hmpay มีอยู่แล้วภายใต้ผู้ค้ารายนี้"
+}

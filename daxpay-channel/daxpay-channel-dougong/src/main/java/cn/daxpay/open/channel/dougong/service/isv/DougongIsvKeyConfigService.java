@@ -41,9 +41,9 @@ public class DougongIsvKeyConfigService {
     public DougongIsvKeyConfig getByProductForPay(String product) {
         DougongIsvKeyConfig config = dougongIsvKeyConfigManager.findByProduct(product)
                 // 斗拱: 服务商密钥未配置
-                .orElseThrow(() -> new BizInfoException("channel.error.dougongIsvKeyNotConfigured"));
+                .orElseThrow(() -> new BizInfoException("error.channel.dougong.isvKeyNotConfigured"));
         if (StrUtil.hasBlank(config.getSysId(), config.getProductId(), config.getPrivateKey(), config.getDgPublicKey())) {
-            throw new BizInfoException("channel.error.dougongIsvKeyNotConfigured");
+            throw new BizInfoException("error.channel.dougong.isvKeyNotConfigured");
         }
         return config;
     }

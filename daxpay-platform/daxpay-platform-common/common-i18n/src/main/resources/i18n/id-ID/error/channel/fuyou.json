@@ -1,0 +1,8 @@
+{
+  "payFailed": "Kesalahan pembayaran Fuyou: {0}",
+  "refundFailed": "Kesalahan pengembalian dana Fuyou: {0}",
+  "unsupportedPayMethod": "Metode pembayaran tidak didukung untuk Fuyou: {0}",
+  "merchantDuplicate": "Nomor merchant Fuyou sudah ada di bawah merchant ini",
+  "isvKeyNotConfigured": "Kunci penyedia layanan Fuyou tidak dikonfigurasi",
+  "mchNoNotConfigured": "Nomor merchant Fuyou tidak dikonfigurasi"
+}

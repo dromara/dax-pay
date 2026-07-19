@@ -1,5 +1,9 @@
 {
-  "isvKeyNotConfigured": "Kunci VBill ISV tidak dikonfigurasi",
-  "mnoNotConfigured": "Nomor merchant VBill (mno) tidak dikonfigurasi, silakan isi konfigurasi merchant",
-  "merchantDuplicate": "Nomor pedagang Tianque ini sudah ada di bawah pedagang ini"
+  "payFailed": "Kesalahan pembayaran Vbill: {0}",
+  "refundFailed": "Kesalahan pengembalian dana Vbill: {0}",
+  "closeFailed": "Kesalahan menutup pesanan Vbill: {0}",
+  "unsupportedPayMethod": "Metode pembayaran tidak didukung untuk Vbill: {0}",
+  "merchantDuplicate": "Nomor merchant Vbill sudah ada di bawah merchant ini",
+  "isvKeyNotConfigured": "Kunci penyedia layanan Vbill tidak dikonfigurasi",
+  "mnoNotConfigured": "Vbill MNO (Operator Jaringan Seluler) tidak dikonfigurasi"
 }

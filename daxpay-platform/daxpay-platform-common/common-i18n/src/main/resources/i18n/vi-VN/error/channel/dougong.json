@@ -1,0 +1,8 @@
+{
+  "payFailed": "Lỗi thanh toán Dougong: {0}",
+  "refundFailed": "Lỗi hoàn tiền Dougong: {0}",
+  "closeFailed": "Lỗi đóng đơn hàng Dougong: {0}",
+  "unsupportedPayMethod": "Phương thức thanh toán không được hỗ trợ cho Dougong: {0}",
+  "isvKeyNotConfigured": "Khóa nhà cung cấp dịch vụ Dougong chưa được cấu hình",
+  "merchantDuplicate": "Số merchant Dougong đã tồn tại dưới merchant này"
+}

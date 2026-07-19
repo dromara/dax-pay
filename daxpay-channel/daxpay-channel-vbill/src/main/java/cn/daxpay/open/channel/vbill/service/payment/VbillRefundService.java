@@ -37,7 +37,7 @@ public class VbillRefundService {
 
         DaxResult<VbillRefundResp> result = vbillChannelClient.refund(req);
         if (result.getCode() != 0) {
-            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "channel.error.vbillRefundFailed", result.getMsg());
+            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "error.channel.vbill.refundFailed", result.getMsg());
         }
 
         VbillRefundResp resp = result.getData();
