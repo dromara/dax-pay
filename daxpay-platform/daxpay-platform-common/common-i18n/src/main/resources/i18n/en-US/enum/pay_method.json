@@ -8,7 +8,7 @@
   "wechat_app": "WeChat App",
   "wechat_barcode": "WeChat Barcode",
   "alipay_qr": "Alipay QR",
-  "alipay_jsapi": "Alipay JSAPI (incl. Mini Program)",
+  "alipay_jsapi": "Alipay JSAPI",
   "alipay_pc": "Alipay PC",
   "alipay_h5": "Alipay H5",
   "alipay_app": "Alipay App",

@@ -8,7 +8,7 @@
   "wechat_app": "微信APP",
   "wechat_barcode": "微信付款碼",
   "alipay_qr": "支付寶掃碼",
-  "alipay_jsapi": "支付寶JSAPI（含小程序）",
+  "alipay_jsapi": "支付寶JSAPI",
   "alipay_pc": "支付寶PC",
   "alipay_h5": "支付寶H5",
   "alipay_app": "支付寶APP",
