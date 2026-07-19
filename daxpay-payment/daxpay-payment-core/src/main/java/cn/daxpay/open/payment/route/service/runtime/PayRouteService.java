@@ -2,7 +2,9 @@ package cn.daxpay.open.payment.route.service.runtime;
 
 import cn.daxpay.open.payment.masterdata.dao.capability.PayCapabilityManager;
 import cn.daxpay.open.payment.masterdata.dao.capability.PayProductCapabilityManager;
+import cn.daxpay.open.payment.masterdata.dao.product.PayProductConfigManager;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
+import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
 import cn.daxpay.open.payment.route.dao.basic.PayRouteBasicConfigManager;
 import cn.daxpay.open.payment.route.dao.scene.PayRouteSceneConfigManager;
 import cn.daxpay.open.payment.route.dao.strategy.PayRouteStrategyManager;
@@ -50,12 +52,15 @@ public class PayRouteService {
     private final ChannelMerchantManager channelMerchantManager;
     private final PayProductCapabilityManager payProductCapabilityManager;
     private final PayCapabilityManager payCapabilityManager;
+    private final PayProductConfigManager payProductConfigManager;
 
     /// 实付路由解析：直接指定优先，否则跟随通道路由匹配
     public void resolve(NormalPayParam payParam) {
         // 直接指定：已传通道商户号，跳过应用路由策略
         if (StrUtil.isNotBlank(payParam.getChannelMchNo())) {
             resolveDirect(payParam);
+            // 环境一致性校验(直接指定路径)
+            validateChannelMchEnvMatch(payParam.getChannelMchNo(), payParam.getProduct());
             return;
         }
         // 跟随通道路由: 支付方式必填(Bean Validation 已放宽以兼容直接指定可空, 此处显式校验)
@@ -73,6 +78,28 @@ public class PayRouteService {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.route.error.noMatch");
         }
         fillPayParam(payParam, hit);
+        // 环境一致性校验(跟随路由路径)
+        validateChannelMchEnvMatch(payParam.getChannelMchNo(), payParam.getProduct());
+    }
+
+    /// 环境一致性校验: 通道商户固化的 sandbox 标识必须与产品当前生效环境(activeEnv)匹配
+    ///
+    /// 沙箱产品 → 只能路由到 sandbox 通道商户; 生产产品 → 只能路由到 prod 通道商户。
+    /// 不匹配抛 noMatch(等价"无可用的支付产品", 实现沙箱/生产路由层隔离)。
+    /// 注意: 通道商户 sandbox 在创建时固化, 不随产品环境切换改变; 一个产品下可同时存在两种商户。
+    private void validateChannelMchEnvMatch(String channelMchNo, String product) {
+        if (StrUtil.isBlank(channelMchNo) || StrUtil.isBlank(product)) {
+            return;
+        }
+        boolean mchSandbox = channelMerchantManager.findByChannelMchNo(channelMchNo)
+                .map(ChannelMerchant::isSandbox)
+                .orElse(false);
+        boolean prodSandbox = payProductConfigManager.isSandboxActive(product);
+        if (mchSandbox != prodSandbox) {
+            log.info("通道商户[{}]固化环境(sandbox={})与产品[{}]当前生效环境(sandbox={})不匹配, 路由拒绝",
+                    channelMchNo, mchSandbox, product, prodSandbox);
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.route.error.noMatch");
+        }
     }
 
     // --- 直接指定 ---

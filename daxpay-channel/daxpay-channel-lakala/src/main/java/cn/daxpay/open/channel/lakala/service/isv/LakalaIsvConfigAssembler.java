@@ -4,11 +4,8 @@ import cn.daxpay.open.channel.lakala.client.credential.LakalaSdkCredential;
 import cn.daxpay.open.channel.lakala.dao.isv.LakalaIsvChannelMerchantManager;
 import cn.daxpay.open.channel.lakala.entity.isv.LakalaIsvChannelMerchant;
 import cn.daxpay.open.channel.lakala.entity.isv.LakalaIsvKeyConfig;
-import cn.daxpay.open.payment.masterdata.dao.product.PayProductConfigManager;
-import cn.daxpay.open.payment.masterdata.entity.product.PayProductConfig;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
-import cn.daxpay.open.platform.core.enums.pay.config.PayEnvEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.hutool.core.util.StrUtil;
@@ -20,6 +17,9 @@ import org.springframework.stereotype.Service;
 ///
 /// 从服务商密钥配置([LakalaIsvKeyConfig]) + 通道商户绑定([LakalaIsvChannelMerchant]) 组装通道调用凭证,
 /// 下发给子应用 dax-pay-channel-two 发起拉卡拉 API 调用。
+///
+/// 沙箱标识直接读通道商户固化的 [LakalaIsvChannelMerchant#isSandbox]
+/// (创建时按当时产品 activeEnv 写入, 不随产品切换改变), 据此选择对应环境的密钥与网关地址。
 ///
 /// 字段映射(对齐拉卡拉 V3 接口):
 /// - lkl_app_id ← [LakalaIsvKeyConfig#lklAppId] (拉卡拉应用编号, 全局唯一)
@@ -35,7 +35,6 @@ public class LakalaIsvConfigAssembler {
 
     private final LakalaIsvChannelMerchantManager lakalaIsvChannelMerchantManager;
     private final LakalaIsvKeyConfigService lakalaIsvKeyConfigService;
-    private final PayProductConfigManager payProductConfigManager;
 
     /// 组装拉卡拉通道调用凭证(下发给子应用)
     ///
@@ -44,21 +43,14 @@ public class LakalaIsvConfigAssembler {
     /// @param capability   支付能力编码(保留参数, 拉卡拉不按能力路由)
     /// @return 拉卡拉 SDK 凭证(含服务商密钥 + 商户号/终端号)
     public LakalaSdkCredential buildConfig(String mchNo, String channelMchNo, String capability) {
-        // 沙箱状态读取支付产品配置的生效环境
-        boolean sandbox = payProductConfigManager.findByProduct(ProductEnum.LAKALA_PAY.getCode())
-                .map(PayProductConfig::getActiveEnv)
-                .map(PayEnvEnum.SANDBOX.getCode()::equals)
-                .orElse(false);
-        // 服务商密钥(按生效环境取对应环境密钥, 含 lkl_app_id + 私钥/公钥; 缺失或关键字段为空时 fail-fast)
-        LakalaIsvKeyConfig keyConfig = lakalaIsvKeyConfigService.getByProductForPay(ProductEnum.LAKALA_PAY.getCode(), sandbox);
-        // 通道商户绑定(取 merchantNo + termNo)
+        // 通道商户绑定(取 merchantNo + termNo + sandbox)
         LakalaIsvChannelMerchant channelMerchant = lakalaIsvChannelMerchantManager.findByChannelMchNo(channelMchNo)
                 // 拉卡拉: 通道商户配置不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
-        // 环境一致性校验
-        if (channelMerchant.isSandbox() != sandbox) {
-            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.envMismatch");
-        }
+        // 沙箱标识直接读通道商户固化的快照(创建时按当时产品 activeEnv 写入, 不随产品切换改变)
+        boolean sandbox = channelMerchant.isSandbox();
+        // 服务商密钥(按 sandbox 分环境取对应密钥, 含 lkl_app_id + 私钥/公钥; 缺失或关键字段为空时 fail-fast)
+        LakalaIsvKeyConfig keyConfig = lakalaIsvKeyConfigService.getByProductForPay(ProductEnum.LAKALA_PAY.getCode(), sandbox);
 
         LakalaSdkCredential credential = new LakalaSdkCredential();
         // 服务商身份与密钥

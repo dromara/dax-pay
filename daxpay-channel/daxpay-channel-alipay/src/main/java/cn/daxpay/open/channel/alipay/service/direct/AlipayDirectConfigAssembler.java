@@ -6,11 +6,6 @@ import cn.daxpay.open.channel.alipay.client.credential.AlipaySdkCredential;
 import cn.daxpay.open.channel.alipay.entity.direct.AlipayDirectApp;
 import cn.daxpay.open.channel.alipay.entity.direct.AlipayDirectAppKeyConfig;
 import cn.daxpay.open.channel.alipay.entity.direct.AlipayDirectChannelMerchant;
-import cn.daxpay.open.payment.masterdata.dao.product.PayProductConfigManager;
-import cn.daxpay.open.platform.core.code.CommonErrorCode;
-import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
-import cn.daxpay.open.platform.core.enums.pay.config.PayEnvEnum;
-import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +17,9 @@ import java.util.Optional;
 ///
 /// 从进件商户对象([AlipayDirectApp] + [AlipayDirectAppKeyConfig])读取密钥/证书,
 /// 组装为下发给子应用的通道调用凭证 [AlipaySdkCredential]。
+///
+/// 沙箱标识直接读通道商户固化的 [AlipayDirectChannelMerchant#isSandbox]
+/// (创建时按当时产品 activeEnv 写入, 不随产品切换改变), 据此选择对应环境的密钥与网关地址。
 ///
 /// 应用解析优先级：能力关联(显式配置 > appType自动推导) > 通道商户首个应用 > 商户号首个应用(兜底)。
 ///
@@ -35,7 +33,6 @@ public class AlipayDirectConfigAssembler {
     private final AlipayDirectChannelMerchantManager alipayDirectChannelMerchantManager;
     private final AlipayDirectAppKeyConfigService alipayDirectAppKeyConfigService;
     private final AlipayDirectAppCapabilityService alipayDirectAppCapabilityService;
-    private final PayProductConfigManager payProductConfigManager;
 
     /// 组装直连商户的通道调用凭证(下发给子应用)
     ///
@@ -45,19 +42,12 @@ public class AlipayDirectConfigAssembler {
     /// @return 支付宝 SDK 凭证, 字段对齐子应用 AlipaySdkCredential
     public AlipaySdkCredential buildConfig(String mchNo, String channelMchNo, String capability) {
         AlipayDirectApp app = resolveApp(mchNo, channelMchNo, capability);
-
-        // 先读取支付产品当前生效环境, 判断是否沙箱, 再按环境查对应密钥(生产/沙箱并存)
-        boolean sandbox = payProductConfigManager.findByProduct(ProductEnum.ALIPAY.getCode())
-                .map(c -> PayEnvEnum.SANDBOX.getCode().equals(c.getActiveEnv()))
-                .orElse(false);
-        // 环境一致性校验: 通道商户绑定的沙箱标记需与产品当前生效环境一致
         AlipayDirectChannelMerchant channelMerchant = alipayDirectChannelMerchantManager.lambdaQuery()
                 .eq(AlipayDirectChannelMerchant::getChannelMchNo, channelMchNo)
                 .oneOpt()
                 .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
-        if (channelMerchant.isSandbox() != sandbox) {
-            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.envMismatch");
-        }
+        // 沙箱标识直接读通道商户固化的快照(创建时按当时产品 activeEnv 写入), 据此查对应环境密钥
+        boolean sandbox = channelMerchant.isSandbox();
         AlipayDirectAppKeyConfig keyConfig = alipayDirectAppKeyConfigService.findByAlipayDirectAppId(app.getId(), sandbox);
 
         var credential = new AlipaySdkCredential();
