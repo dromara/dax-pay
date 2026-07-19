@@ -85,7 +85,6 @@ public class PayProductConfigService {
         config.setProduct(param.getProduct());
         config.setChannel(param.getChannel());
         config.setActiveEnv(param.getActiveEnv() != null ? param.getActiveEnv() : PayEnvEnum.PROD.getCode());
-        config.setConfigured(param.isConfigured());
         config.setRemark(param.getRemark());
         payProductConfigManager.saveOrUpdate(config);
     }
@@ -127,10 +126,8 @@ public class PayProductConfigService {
         if (config != null) {
             result.setId(config.getId());
             result.setActiveEnv(config.getActiveEnv());
-            result.setConfigured(config.isConfigured());
         } else {
             result.setActiveEnv(PayEnvEnum.PROD.getCode());
-            result.setConfigured(false);
         }
 
         return result;
@@ -144,7 +141,6 @@ public class PayProductConfigService {
         config.setProduct(product);
         config.setChannel(productEnum.getChannel());
         config.setActiveEnv(PayEnvEnum.PROD.getCode());
-        config.setConfigured(false);
         payProductConfigManager.save(config);
         return config;
     }

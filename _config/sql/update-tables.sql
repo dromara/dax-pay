@@ -61,3 +61,17 @@ WHERE t.container_id = o.id
   AND t.trade_type = 'gateway'
   AND t.provider IS NULL
   AND o.provider IS NOT NULL;
+
+-- ============================================================
+-- pay_md_product_config 删除 configured 字段
+-- ============================================================
+-- 背景:
+--   该字段仅用于前端卡片"未配置"标签展示, 由前端保存时手动设置,
+--   无任何后端业务逻辑读取(通道模块只读 activeEnv).
+--   每个支付产品的配置存储方式各不相同(20+ 张独立 key_config/channel_merchant 表,
+--   字段差异极大), 无法用统一规则判定"是否已配置", 故该字段不可靠, 一并移除.
+-- 影响:
+--   - 升级后前端不再展示"未配置"标签, 卡片仅显示产品图标与名称.
+--   - 无任何业务逻辑受影响(路由匹配/订单处理/通道选择均不读此字段).
+-- ============================================================
+ALTER TABLE pay_md_product_config DROP COLUMN IF EXISTS configured;

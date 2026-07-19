@@ -26,9 +26,6 @@ public class PayProductConfig extends MpBaseEntity implements ToResult<PayProduc
     /// 生效环境: prod/sandbox
     private String activeEnv;
 
-    /// 是否已配置参数
-    private boolean configured;
-
     /// 备注
     private String remark;
 
