@@ -17,9 +17,11 @@ import java.time.OffsetDateTime;
 /// 统一资金交易表，记录每一笔资金动作（普通支付/预授权冻结/预授权捕获/周期代扣/合单子单）
 /// 与容器层（业务单/协议）分离，通过 trade_type + 容器关联字段建立联系。
 /// 保留资金动作固有属性、通道反查命脉字段，以及 **轻量组织冗余**
-///（source / channelMchNo / storeNo），便于资金列表与汇总免 JOIN 容器；
+///（source / channelMchNo / storeNo / provider），便于资金列表与汇总免 JOIN 容器；
 /// 完整业务上下文/路由细节/payBody/回执仍以容器为准。
 /// 过期时间只在容器，本表不存 expiredTime。
+/// 注意: 本表不冗余 channel(支付通道), 通道反查用 channelMchNo;
+/// 渠道分布报表/资金列表筛选走 provider(支付渠道)。
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
@@ -68,6 +70,10 @@ public class PayTrade extends MchBaseEntity {
 
     /// 通道商户号(冗余自业务容器, 路由确定后写入; 权威在容器 channelMchNo)
     private String channelMchNo;
+
+    /// 支付渠道(冗余自业务容器, 支付成功sync后回填; 权威在容器 provider)
+    /// @see cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum
+    private String provider;
 
     /// 门店号(冗余自业务容器, 可空; 权威在容器 storeNo)
     private String storeNo;

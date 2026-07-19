@@ -23,3 +23,41 @@ CREATE UNIQUE INDEX IF NOT EXISTS uk_mch_app_info_default
 CREATE UNIQUE INDEX IF NOT EXISTS uk_mch_store_info_default
     ON mch_store_info (mch_no)
     WHERE default_store = TRUE AND deleted = FALSE;
+
+-- ============================================================
+-- pay_trade 冗余支付渠道字段（升级脚本）
+-- ============================================================
+-- 背景:
+--   渠道分布报表/资金列表筛选需要按支付渠道(provider)维度统计,
+--   原 pay_trade 仅冗余 channelMchNo, 无渠道字段, 报表 SQL 报错或需 JOIN 容器表.
+--   按"轻量组织冗余"哲学(source/channelMchNo/storeNo/provider), 加 provider 列,
+--   与现有冗余字段并列; 权威仍在业务容器(NormalPayOrder/GatewayPayOrder).
+-- 写入时机:
+--   支付成功 sync 回执时由 PayUniHandleService.applyXxxSyncReceipts 同步写容器+资金凭证.
+-- 历史数据:
+--   通过 container_id JOIN 容器表回填(normal/gateway 两种主流 trade_type).
+--   其他 trade_type 历史无 provider 数据可回填, 留 NULL, 不影响新交易.
+-- ============================================================
+
+-- 1. 加列(允许 NULL, 历史数据回填前为空)
+ALTER TABLE pay_trade ADD COLUMN IF NOT EXISTS provider varchar(32);
+
+COMMENT ON COLUMN pay_trade.provider IS '支付渠道(冗余自容器, 支付成功sync后回填; 权威在容器 provider)';
+
+-- 2. 历史数据回填: normal 容器
+UPDATE pay_trade t
+SET provider = o.provider
+FROM pay_normal_order o
+WHERE t.container_id = o.id
+  AND t.trade_type = 'normal'
+  AND t.provider IS NULL
+  AND o.provider IS NOT NULL;
+
+-- 3. 历史数据回填: gateway 容器
+UPDATE pay_trade t
+SET provider = o.provider
+FROM pay_gateway_order o
+WHERE t.container_id = o.id
+  AND t.trade_type = 'gateway'
+  AND t.provider IS NULL
+  AND o.provider IS NOT NULL;

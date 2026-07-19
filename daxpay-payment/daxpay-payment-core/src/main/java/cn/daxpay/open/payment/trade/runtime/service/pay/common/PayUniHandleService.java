@@ -81,7 +81,7 @@ public class PayUniHandleService {
             if (order != null) {
                 order.setStatus(GatewayOrderStatusEnum.PAID.getCode());
                 order.setPayTime(trade.getPayTime());
-                applyGatewaySyncReceipts(order, syncResult);
+                applyGatewaySyncReceipts(trade, order, syncResult);
                 gatewayPayOrderManager.updateById(order);
             }
             payPluginAssistService.paySuccess(trade);
@@ -91,7 +91,7 @@ public class PayUniHandleService {
         if (order != null) {
             order.setStatus(NormalPayOrderStatusEnum.PAID.getCode());
             order.setPayTime(trade.getPayTime());
-            applyNormalSyncReceipts(order, syncResult);
+            applyNormalSyncReceipts(trade, order, syncResult);
             payNormalOrderManager.updateById(order);
         }
         payPluginAssistService.paySuccess(trade);
@@ -270,12 +270,14 @@ public class PayUniHandleService {
         order.setErrorMsg(null);
     }
 
-    private void applyNormalSyncReceipts(NormalPayOrder order, PaySyncResultBo syncResult) {
+    private void applyNormalSyncReceipts(PayTrade trade, NormalPayOrder order, PaySyncResultBo syncResult) {
         if (syncResult == null) {
             return;
         }
         if (Objects.nonNull(syncResult.getProvider())) {
             order.setProvider(syncResult.getProvider().getCode());
+            // 冗余至资金凭证, 渠道分布报表/资金列表免 JOIN 容器
+            trade.setProvider(syncResult.getProvider().getCode());
         }
         order.setBuyerId(syncResult.getBuyerId());
         order.setTradeProduct(syncResult.getTradeProduct());
@@ -285,12 +287,14 @@ public class PayUniHandleService {
         order.setErrorMsg(null);
     }
 
-    private void applyGatewaySyncReceipts(GatewayPayOrder order, PaySyncResultBo syncResult) {
+    private void applyGatewaySyncReceipts(PayTrade trade, GatewayPayOrder order, PaySyncResultBo syncResult) {
         if (syncResult == null) {
             return;
         }
         if (Objects.nonNull(syncResult.getProvider())) {
             order.setProvider(syncResult.getProvider().getCode());
+            // 冗余至资金凭证, 渠道分布报表/资金列表免 JOIN 容器
+            trade.setProvider(syncResult.getProvider().getCode());
         }
         order.setBuyerId(syncResult.getBuyerId());
         order.setTradeProduct(syncResult.getTradeProduct());
