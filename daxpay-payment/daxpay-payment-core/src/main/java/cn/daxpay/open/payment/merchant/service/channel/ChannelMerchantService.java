@@ -13,10 +13,8 @@ import cn.daxpay.open.payment.merchant.param.channel.ChannelMerchantQuery;
 import cn.daxpay.open.payment.merchant.result.channel.ChannelMerchantResult;
 import cn.daxpay.open.payment.masterdata.service.channel.PayChannelService;
 import cn.daxpay.open.payment.masterdata.result.channel.PayChannelResult;
-import cn.daxpay.open.payment.masterdata.dao.product.PayProductConfigManager;
 import cn.daxpay.open.payment.masterdata.dao.product.PayProductManager;
 import cn.daxpay.open.payment.masterdata.entity.product.PayProduct;
-import cn.daxpay.open.platform.core.enums.pay.config.PayEnvEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -38,7 +36,6 @@ public class ChannelMerchantService {
     private final TransService transService;
     private final PayChannelService payChannelService;
     private final PayProductManager payProductManager;
-    private final PayProductConfigManager payProductConfigManager;
 
     /// 分页
     public PageResult<ChannelMerchantResult> page(PageParam pageParam, ChannelMerchantQuery query){
@@ -98,11 +95,14 @@ public class ChannelMerchantService {
         return results;
     }
 
-    /// 批量填充生效环境与沙箱支持标志
+    /// 批量填充沙箱支持标志
     ///
     /// - sandbox: 直接读实体固化的字段(创建时按当时产品 activeEnv 写入, 之后不再随产品切换改变)
-    /// - activeEnv: 当前产品生效环境(决定该商户是否参与路由), 来自 pay_md_product_config
     /// - sandboxSupport: 该产品是否支持沙箱(决定前端是否显示环境标签), 来自 pay_md_product
+    ///
+    /// 注意: 不再填充"产品当前 activeEnv"到商户 Result。
+    /// 商户环境信息以固化的 [ChannelMerchantResult#isSandbox] 为准;
+    /// 产品当前生效环境属于产品级状态(可通过产品配置接口查询), 不应冗余到商户 Result 上。
     private void fillEnvStatus(List<ChannelMerchantResult> results) {
         if (results.isEmpty()) {
             return;
@@ -120,14 +120,7 @@ public class ChannelMerchantService {
                 .list()
                 .stream()
                 .collect(Collectors.toMap(PayProduct::getCode, p -> Boolean.TRUE.equals(p.getSandbox()), (a, b) -> a));
-        // 产品当前生效环境(决定路由目标; 不再回写通道商户 sandbox)
-        Map<String, String> activeEnvMap = payProductConfigManager.mapActiveEnvByProducts(products);
-        results.forEach(r -> {
-            String activeEnv = activeEnvMap.getOrDefault(r.getProduct(), PayEnvEnum.PROD.getCode());
-            r.setActiveEnv(activeEnv);
-            // sandbox 字段为创建时固化的快照, 直接读实体, 不再用产品 activeEnv 覆盖
-            r.setSandboxSupport(sandboxMap.getOrDefault(r.getProduct(), false));
-        });
+        results.forEach(r -> r.setSandboxSupport(sandboxMap.getOrDefault(r.getProduct(), false)));
     }
 
     /// 更新启用状态

@@ -49,15 +49,11 @@ public class ChannelMerchantResult extends MchBaseResult {
     @Schema(description = "是否启用")
     private Boolean enable;
 
-    /// 是否沙箱环境商户
-    @Schema(description = "是否沙箱环境商户")
+    /// 是否沙箱(创建时按当时产品 activeEnv 固化写入, 之后不随产品切换改变)
+    @Schema(description = "是否沙箱(创建时固化的环境标识)")
     private boolean sandbox;
 
-    /// 当前生效环境(来自商户 sandbox 字段, 商户只读): prod/sandbox
-    @Schema(description = "当前生效环境: prod/sandbox")
-    private String activeEnv;
-
-    /// 是否支持沙箱环境(决定前端是否展示环境标签)
+    /// 是否支持沙箱环境(所属产品的能力标志, 决定前端是否展示环境标签)
     @Schema(description = "是否支持沙箱环境")
     private Boolean sandboxSupport;
 
