@@ -8,6 +8,7 @@ import cn.daxpay.open.payment.route.param.basic.PayRouteBasicConfigBatchParam;
 import cn.daxpay.open.payment.route.param.scene.PayRouteSceneCapabilityBatchParam;
 import cn.daxpay.open.payment.route.param.scene.PayRouteSceneConfigBatchParam;
 import cn.daxpay.open.payment.route.param.strategy.PayRouteStrategyParam;
+import cn.daxpay.open.platform.core.rest.dto.ChannelMchOption;
 import cn.daxpay.open.platform.core.rest.dto.LabelValue;
 import cn.daxpay.open.payment.route.result.basic.PayRouteBasicConfigResult;
 import cn.daxpay.open.payment.route.result.scene.PayRouteSceneConfigResult;
@@ -78,7 +79,7 @@ public class PayRouteConfigService {
     }
 
     /// 通道路由白名单目录下全部通道商户候选（批量）
-    public Map<String, List<LabelValue>> listSceneChannelMchCandidatesBatch(String appId) {
+    public Map<String, List<ChannelMchOption>> listSceneChannelMchCandidatesBatch(String appId) {
         return sceneConfigService.listSceneChannelMchCandidatesBatch(appId);
     }
 
@@ -88,7 +89,7 @@ public class PayRouteConfigService {
     }
 
     /// 目录项下商户已开通的通道商户候选
-    public List<LabelValue> listSceneChannelMchCandidatesForMethod(String appId, String provider, String method) {
+    public List<ChannelMchOption> listSceneChannelMchCandidatesForMethod(String appId, String provider, String method) {
         return sceneConfigService.listSceneChannelMchCandidatesForMethod(appId, provider, method);
     }
 

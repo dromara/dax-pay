@@ -8,6 +8,7 @@ import cn.daxpay.open.payment.masterdata.result.provider.PayProviderMethodResult
 import cn.daxpay.open.payment.masterdata.service.provider.PayProviderMethodService;
 import cn.daxpay.open.payment.route.service.support.PayRouteStrategyCapabilitySupport;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
+import cn.daxpay.open.platform.core.rest.dto.ChannelMchOption;
 import cn.daxpay.open.platform.core.rest.dto.LabelValue;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -46,7 +47,7 @@ public class DevelopTradeService {
 
     /// 直接指定：商户全部启用通道商户候选, provider 为空返回全部,
     /// 非空按支付渠道过滤(如 wechat 返回所有声明支持微信的产品通道商户, 含官方与三方聚合通道)
-    public List<LabelValue> listChannelMchCandidates(String mchNo, String provider) {
+    public List<ChannelMchOption> listChannelMchCandidates(String mchNo, String provider) {
         return payRouteStrategyCapabilitySupport.listDirectChannelMchCandidates(mchNo, provider);
     }
 

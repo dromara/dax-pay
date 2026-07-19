@@ -20,6 +20,7 @@ import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
+import cn.daxpay.open.platform.core.rest.dto.ChannelMchOption;
 import cn.daxpay.open.platform.core.rest.dto.LabelValue;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -113,7 +114,7 @@ public class PayRouteSceneConfigService {
     }
 
     /// 通道路由白名单目录下全部 (provider,method) 的通道商户候选（批量）
-    public Map<String, List<LabelValue>> listSceneChannelMchCandidatesBatch(String appId) {
+    public Map<String, List<ChannelMchOption>> listSceneChannelMchCandidatesBatch(String appId) {
         String mchNo = mchAppInfoManager.requireMchNoByAppId(appId);
         return payRouteStrategyCapabilitySupport.listSceneChannelMchCandidatesBatch(mchNo);
     }
@@ -125,7 +126,7 @@ public class PayRouteSceneConfigService {
     }
 
     /// 按目录项（支付渠道+支付方式）筛选商户已开通的通道商户候选
-    public List<LabelValue> listSceneChannelMchCandidatesForMethod(String appId, String provider, String method) {
+    public List<ChannelMchOption> listSceneChannelMchCandidatesForMethod(String appId, String provider, String method) {
         if (StrUtil.isBlank(method) || !payProviderMethodService.contains(provider, method)) {
             return List.of();
         }

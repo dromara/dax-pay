@@ -177,10 +177,12 @@ public class MerchantAdminService {
     }
 
     /// 商户下拉列表
+    ///
+    /// 显示商户简称(mchShortName), 简称在建表时已强制必填。
     public List<LabelValue> dropdown() {
         List<MerchantInfo> merchants = merchantInfoManager.findAllByEnable();
         return merchants.stream()
-                .map(m -> new LabelValue(m.getMchName(), m.getMchNo()))
+                .map(m -> new LabelValue(m.getMchShortName(), m.getMchNo()))
                 .collect(Collectors.toList());
     }
 

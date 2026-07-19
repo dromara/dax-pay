@@ -7,6 +7,7 @@ import cn.daxpay.open.payment.route.param.basic.PayRouteBasicConfigBatchParam;
 import cn.daxpay.open.payment.route.param.scene.PayRouteSceneCapabilityBatchParam;
 import cn.daxpay.open.payment.route.param.scene.PayRouteSceneConfigBatchParam;
 import cn.daxpay.open.payment.route.param.strategy.PayRouteStrategyParam;
+import cn.daxpay.open.platform.core.rest.dto.ChannelMchOption;
 import cn.daxpay.open.platform.core.rest.dto.LabelValue;
 import cn.daxpay.open.payment.route.result.basic.PayRouteBasicConfigResult;
 import cn.daxpay.open.payment.route.result.scene.PayRouteSceneConfigResult;
@@ -81,7 +82,7 @@ public class PayRouteAdminController {
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "通道路由白名单目录下全部通道商户候选（批量）")
     @GetMapping("/scene-config/channel-mch-candidates-batch")
-    public Result<Map<String, List<LabelValue>>> listSceneChannelMchCandidatesBatch(
+    public Result<Map<String, List<ChannelMchOption>>> listSceneChannelMchCandidatesBatch(
             @NotBlank(message = "{validation.field.appId.notBlank}") String appId) {
         return Res.ok(configService.listSceneChannelMchCandidatesBatch(appId));
     }
@@ -97,7 +98,7 @@ public class PayRouteAdminController {
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "目录项下商户已开通的通道商户候选")
     @GetMapping("/scene-config/channel-mch-candidates")
-    public Result<List<LabelValue>> listSceneChannelMchCandidates(
+    public Result<List<ChannelMchOption>> listSceneChannelMchCandidates(
             @NotBlank(message = "{validation.field.appId.notBlank}") String appId,
             @NotBlank(message = "{validation.field.provider.notBlank}") String provider,
             @NotBlank(message = "{validation.field.method.notBlank}") String method) {

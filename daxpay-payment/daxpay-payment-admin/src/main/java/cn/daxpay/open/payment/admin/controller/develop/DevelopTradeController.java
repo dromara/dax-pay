@@ -8,6 +8,7 @@ import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
+import cn.daxpay.open.platform.core.rest.dto.ChannelMchOption;
 import cn.daxpay.open.platform.core.rest.dto.LabelValue;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
@@ -52,7 +53,7 @@ public class DevelopTradeController {
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "直接指定通道商户候选")
     @GetMapping("/channel-mch-candidates")
-    public Result<List<LabelValue>> channelMchCandidates(
+    public Result<List<ChannelMchOption>> channelMchCandidates(
             @NotBlank(message = "{validation.field.mchNo.notBlank}") String mchNo,
             @RequestParam(required = false) String provider) {
         return Res.ok(developTradeService.listChannelMchCandidates(mchNo, provider));

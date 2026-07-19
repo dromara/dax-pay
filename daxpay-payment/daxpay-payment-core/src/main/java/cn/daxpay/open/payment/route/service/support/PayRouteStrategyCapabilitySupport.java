@@ -18,8 +18,10 @@ import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayCapabilityEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum;
+import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.model.PayProviderMethodEntry;
+import cn.daxpay.open.platform.core.rest.dto.ChannelMchOption;
 import cn.daxpay.open.platform.core.rest.dto.LabelValue;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
@@ -55,11 +57,11 @@ public class PayRouteStrategyCapabilitySupport {
     ///
     /// 优化：目录、策略、产品能力在循环外一次性预加载，循环内仅做内存集合求交，
     /// 避免逐 (目录项 × 通道商户) 重复查库与扫描 Spring 容器。
-    public Map<String, List<LabelValue>> listSceneChannelMchCandidatesBatch(String mchNo) {
+    public Map<String, List<ChannelMchOption>> listSceneChannelMchCandidatesBatch(String mchNo) {
         List<PayProviderMethodEntry> entries = payProviderMethodService.listDirectoryEntries();
         RouteBatchContext ctx = buildRouteBatchContext(entries);
         List<ChannelMerchant> mchants = channelMerchantManager.findAllByMchNo(mchNo);
-        Map<String, List<LabelValue>> index = new LinkedHashMap<>();
+        Map<String, List<ChannelMchOption>> index = new LinkedHashMap<>();
         for (PayProviderMethodEntry entry : entries) {
             if (!PayRouteConfigProviders.contains(entry.getProviderCode())) {
                 continue;
@@ -135,19 +137,19 @@ public class PayRouteStrategyCapabilitySupport {
     }
 
     /// 目录项下商户已开通且其产品支持该(provider,method)的通道商户候选
-    public List<LabelValue> listSceneChannelMchCandidates(String mchNo, String provider, String method) {
+    public List<ChannelMchOption> listSceneChannelMchCandidates(String mchNo, String provider, String method) {
         if (!payProviderMethodService.contains(provider, method)) {
             return List.of();
         }
-        // 单次请求也复用批量上下文，避免内层逐商户查库 / 扫容器
+        // 单次请求也复用批量上下文, 避免内层逐商户查库 / 扫容器
         RouteBatchContext ctx = buildRouteBatchContext(payProviderMethodService.listDirectoryEntries());
         return filterChannelMchForDirectory(ctx, channelMerchantManager.findAllByMchNo(mchNo), provider, method);
     }
 
     /// 从商户全部通道商户中筛出启用且其产品支持该(provider,method)的候选（用预加载上下文，零查库）
-    private List<LabelValue> filterChannelMchForDirectory(
+    private List<ChannelMchOption> filterChannelMchForDirectory(
             RouteBatchContext ctx, List<ChannelMerchant> mchants, String provider, String method) {
-        List<LabelValue> results = new ArrayList<>();
+        List<ChannelMchOption> results = new ArrayList<>();
         // 目录键与支付方式枚举预解析，避免逐商户重复计算
         if (!ctx.directoryPairKeys().contains(PayProviderMethodManager.pairKey(provider, method))) {
             return results;
@@ -161,13 +163,24 @@ public class PayRouteStrategyCapabilitySupport {
             if (!routeProductSupportsMethod(ctx, product, methodEnum)) {
                 continue;
             }
-            String label = StrUtil.isNotBlank(mch.getChannelMerchantName())
-                    ? mch.getChannelMerchantName() : mch.getChannelMchNo();
-            if (results.stream().noneMatch(item -> Objects.equals(item.getValue(), mch.getChannelMchNo()))) {
-                results.add(new LabelValue(label, mch.getChannelMchNo()));
+            if (results.stream().noneMatch(item -> Objects.equals(item.getChannelMchNo(), mch.getChannelMchNo()))) {
+                results.add(toChannelMchOption(mch));
             }
         }
         return results;
+    }
+
+    /// 将 [ChannelMerchant] 转为下拉选项; channel 由 product 反查得到(ProductEnum.getChannel)
+    private static ChannelMchOption toChannelMchOption(ChannelMerchant mch) {
+        String channel = null;
+        if (StrUtil.isNotBlank(mch.getProduct())) {
+            channel = ProductEnum.findByCode(mch.getProduct()).getChannel();
+        }
+        return new ChannelMchOption(
+                mch.getChannelMchNo(),
+                mch.getChannelMerchantName(),
+                channel,
+                mch.getProduct());
     }
 
     /// 指定通道商户+目录项下支付能力候选（策略 Map ∩ DB ∩ 能力主数据启用）
@@ -195,12 +208,12 @@ public class PayRouteStrategyCapabilitySupport {
     /// `providerCode` 为支付渠道编码(PayProviderEnum, 如 wechat/alipay/union_pay),
     /// 非空时仅返回其产品声明支持该渠道的通道商户(含官方通道与三方聚合通道, 如 wechat 同时匹配 wechat_pay 与 lakala_pay);
     /// 为空返回全部。
-    public List<LabelValue> listDirectChannelMchCandidates(String mchNo, String providerCode) {
+    public List<ChannelMchOption> listDirectChannelMchCandidates(String mchNo, String providerCode) {
         PayProviderEnum provider = StrUtil.isBlank(providerCode) ? null : PayProviderEnum.findByCode(providerCode);
         List<ChannelMerchant> mchants = channelMerchantManager.findAllByMchNo(mchNo);
         // 同产品多商户只判断一次, 避免重复创建策略扫描容器
         Map<String, Boolean> productSupportCache = new HashMap<>();
-        List<LabelValue> results = new ArrayList<>();
+        List<ChannelMchOption> results = new ArrayList<>();
         for (ChannelMerchant mch : mchants) {
             if (!Boolean.TRUE.equals(mch.getEnable())) {
                 continue;
@@ -210,10 +223,8 @@ public class PayRouteStrategyCapabilitySupport {
                     && !productSupportCache.computeIfAbsent(mch.getProduct(), p -> productSupportsProvider(p, provider))) {
                 continue;
             }
-            String label = StrUtil.isNotBlank(mch.getChannelMerchantName())
-                    ? mch.getChannelMerchantName() : mch.getChannelMchNo();
-            if (results.stream().noneMatch(item -> Objects.equals(item.getValue(), mch.getChannelMchNo()))) {
-                results.add(new LabelValue(label, mch.getChannelMchNo()));
+            if (results.stream().noneMatch(item -> Objects.equals(item.getChannelMchNo(), mch.getChannelMchNo()))) {
+                results.add(toChannelMchOption(mch));
             }
         }
         return results;

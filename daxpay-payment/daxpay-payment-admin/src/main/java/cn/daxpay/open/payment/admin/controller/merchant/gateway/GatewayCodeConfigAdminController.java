@@ -8,6 +8,7 @@ import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
+import cn.daxpay.open.platform.core.rest.dto.ChannelMchOption;
 import cn.daxpay.open.platform.core.rest.dto.LabelValue;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -50,7 +51,7 @@ public class GatewayCodeConfigAdminController {
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "直接指定-通道商户候选")
     @GetMapping("/direct-channel-mch-candidates")
-    public Result<List<LabelValue>> listDirectChannelMchCandidates(
+    public Result<List<ChannelMchOption>> listDirectChannelMchCandidates(
             @NotBlank(message = "{validation.field.mchNo.notBlank}") String mchNo,
             @NotBlank(message = "{validation.field.provider.notBlank}") String provider) {
         return Res.ok(payRouteStrategyCapabilitySupport.listDirectChannelMchCandidates(mchNo, provider));
