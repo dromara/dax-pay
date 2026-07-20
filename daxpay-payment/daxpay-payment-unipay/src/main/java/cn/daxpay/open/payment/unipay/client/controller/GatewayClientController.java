@@ -26,13 +26,15 @@ import java.util.List;
 
 /// # 网关 H5 侧接口(无商户签名)
 ///
+/// 与商户签名面 [cn.daxpay.open.payment.unipay.trade.controller.UniGatewayPayController]
+/// 共用前缀 `/unipay/gateway`，本类不加 `@PaymentVerify`，响应为平台 [Result] 而非 [cn.daxpay.open.payment.common.result.DaxResult]。
 /// 不使用类级 `@IgnoreTenant`。引导读订单在 Service/Manager 的 `*NotTenant` 方法内完成，
 /// 装载 mchNo 后后续配置/交易查询走正常租户过滤。
 @IgnoreAuth
 @Validated
 @Tag(name = "网关支付(H5)")
 @RestController
-@RequestMapping("/client/gateway")
+@RequestMapping("/unipay/gateway")
 @RequiredArgsConstructor
 public class GatewayClientController {
 
