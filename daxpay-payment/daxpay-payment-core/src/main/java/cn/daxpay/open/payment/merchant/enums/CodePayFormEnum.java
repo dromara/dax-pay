@@ -47,7 +47,10 @@ public enum CodePayFormEnum implements I18nSupport {
         return H5;
     }
 
-    /// AUTO 模式默认支付方式(所见即所得; 微信 H5→jsapi/小程序→mini, 支付宝统一 jsapi)
+    /// AUTO 模式默认支付方式(所见即所得)
+    /// 微信: H5→jsapi / 小程序→mini
+    /// 支付宝: H5→扫码(alipay_qr, 免 OAuth) / 小程序→jsapi(无独立 mini)
+    /// 云闪付、抖音: 统一 jsapi
     public String defaultMethodCode(ClientEnvEnum clientEnv) {
         if (this == MINI) {
             return switch (clientEnv) {
@@ -61,7 +64,8 @@ public enum CodePayFormEnum implements I18nSupport {
         }
         return switch (clientEnv) {
             case WECHAT -> PayMethodEnum.WECHAT_JSAPI.getCode();
-            case ALIPAY -> PayMethodEnum.ALIPAY_JSAPI.getCode();
+            // 支付宝 H5 默认扫码(alipay_qr): 免 OAuth, 预下单返回支付链接
+            case ALIPAY -> PayMethodEnum.ALIPAY_QR.getCode();
             case UNION_PAY -> PayMethodEnum.UNION_JSAPI.getCode();
             case DOUYIN -> PayMethodEnum.DOUYIN_JSAPI.getCode();
             default -> throw new DataNotExistException("error.common.clientEnvNotExist", clientEnv.getCode());
