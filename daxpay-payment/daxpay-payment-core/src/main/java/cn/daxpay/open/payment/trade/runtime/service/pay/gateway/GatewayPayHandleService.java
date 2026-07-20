@@ -106,7 +106,9 @@ public class GatewayPayHandleService {
                         if (Objects.equals(existing.getStatus(), PayFundStatusEnum.PROCESSING.getCode())
                                 || Objects.equals(existing.getStatus(), PayFundStatusEnum.INIT.getCode())) {
                             // 通道/方式不一致则拒绝换端(product/method 在容器上)
-                            if (!Objects.equals(current.getProduct(), product)
+                            // 聚合支付 product 传 null(由路由解析填充) 是合法设计, 用容器已持久化值补位避免误判切换支付方式
+                            String effectiveProduct = StrUtil.blankToDefault(product, current.getProduct());
+                            if (!Objects.equals(current.getProduct(), effectiveProduct)
                                     || !Objects.equals(current.getMethod(), method)) {
                                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                                         "pay.error.gateway.channelLocked");

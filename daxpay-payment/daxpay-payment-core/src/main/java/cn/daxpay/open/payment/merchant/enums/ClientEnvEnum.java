@@ -50,19 +50,21 @@ public enum ClientEnvEnum implements I18nSupport {
                 .orElseThrow(() -> new DataNotExistException("error.common.clientEnvNotExist", code));
     }
 
-    /// 聚合扫码 L1 AUTO：按客户端环境推导默认支付方式（H5 默认 JSAPI）
+    /// 聚合扫码 L1 AUTO：按客户端环境推导默认支付方式
     public String defaultMethodCode() {
         return defaultMethodCode(ClientRuntimeEnum.H5);
     }
 
-    /// 按运行形态推导默认支付方式: H5→JSAPI, 小程序→MINI(支付宝无独立 mini, 统一 JSAPI)
+    /// 按运行形态推导默认支付方式
+    /// H5: 微信→jsapi / 支付宝→扫码(alipay_qr, 免 OAuth) / 云闪付、抖音→jsapi
+    /// 小程序: 微信→mini / 支付宝、云闪付、抖音→jsapi(无独立 mini)
     public String defaultMethodCode(ClientRuntimeEnum runtime) {
         ClientRuntimeEnum rt = runtime == null ? ClientRuntimeEnum.H5 : runtime;
         PayMethodEnum method;
         if (rt == ClientRuntimeEnum.MINI) {
             method = switch (this) {
                 case WECHAT -> PayMethodEnum.WECHAT_MINI;
-                // 支付宝官方 JSAPI 即小程序场景, 与 H5 同用 alipay_jsapi
+                // 支付宝官方 JSAPI 即小程序场景, 小程序仅走 jsapi
                 case ALIPAY -> PayMethodEnum.ALIPAY_JSAPI;
                 case UNION_PAY -> PayMethodEnum.UNION_JSAPI;
                 case DOUYIN -> PayMethodEnum.DOUYIN_JSAPI;
@@ -71,7 +73,8 @@ public enum ClientEnvEnum implements I18nSupport {
         } else {
             method = switch (this) {
                 case WECHAT -> PayMethodEnum.WECHAT_JSAPI;
-                case ALIPAY -> PayMethodEnum.ALIPAY_JSAPI;
+                // 支付宝 H5 默认扫码(alipay_qr): 免 OAuth, 预下单返回支付链接
+                case ALIPAY -> PayMethodEnum.ALIPAY_QR;
                 case UNION_PAY -> PayMethodEnum.UNION_JSAPI;
                 case DOUYIN -> PayMethodEnum.DOUYIN_JSAPI;
                 // browser 等非聚合扫码环境不支持
