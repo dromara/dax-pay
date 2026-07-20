@@ -17,7 +17,7 @@ import java.time.format.DateTimeFormatter;
 /// # Java 8 时间类型格式定制模块
 ///
 /// Jackson 3 内置了时间类型支持, 此模块仅覆盖默认的序列化格式
-/// OffsetDateTime -> yyyy-MM-ddTHH:mm:ssZ (UTC)
+/// OffsetDateTime -> yyyy-MM-ddTHH:mm:ssZ (UTC, 秒精度无小数)
 /// LocalDate -> yyyy-MM-dd
 /// LocalTime -> HH:mm:ss
 public class Java8TimeFormatModule extends SimpleModule {
@@ -34,7 +34,11 @@ public class Java8TimeFormatModule extends SimpleModule {
     }
 
     static class OffsetDateTimeToStringSerializer extends ValueSerializer<OffsetDateTime> {
-        private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+        // 秒精度 ISO 8601 偏移时间格式, 避免纳秒级精度输出 (如 .0546373) 造成视觉混乱与协议冗余
+        // 支付场景秒级足够, 符合行业惯例 (Stripe / 微信支付 / 支付宝)
+        private static final DateTimeFormatter FORMATTER =
+                DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ssXXX");
+
         @Override
         public void serialize(OffsetDateTime value, JsonGenerator gen, SerializationContext ctxt) throws JacksonException {
             gen.writeString(value.withOffsetSameInstant(ZoneOffset.UTC).format(FORMATTER));
