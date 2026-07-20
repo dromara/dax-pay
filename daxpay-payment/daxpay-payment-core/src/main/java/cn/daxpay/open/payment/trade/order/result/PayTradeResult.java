@@ -43,6 +43,10 @@ public class PayTradeResult extends BaseResult {
     @Schema(description = "支付交易号")
     private String tradeNo;
 
+    /// 订单标题(冗余自容器, 资金列表/工作台免JOIN)
+    @Schema(description = "订单标题")
+    private String title;
+
     /// 交易形态
     /// @see cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum
     @Schema(description = "交易形态")
@@ -183,10 +187,6 @@ public class PayTradeResult extends BaseResult {
     /// 商户业务单号
     @Schema(description = "商户业务单号")
     private String bizOrderNo;
-
-    /// 订单标题
-    @Schema(description = "订单标题")
-    private String title;
 
     /// 容器业务状态
     @Schema(description = "容器业务状态")

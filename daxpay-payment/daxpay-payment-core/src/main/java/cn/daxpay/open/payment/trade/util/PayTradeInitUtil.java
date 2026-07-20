@@ -30,6 +30,7 @@ public final class PayTradeInitUtil {
     /// @param source          订单来源（冗余自容器）
     /// @param channelMchNo    通道商户号（冗余自容器/路由结果，可空仅当路由未定时）
     /// @param storeNo         门店号（冗余自容器，可空）
+    /// @param title           订单标题（冗余自容器，资金列表/工作台免JOIN）
     public static PayTrade initProcessing(
             String appId,
             String tradeNo,
@@ -39,10 +40,12 @@ public final class PayTradeInitUtil {
             String relationOrderNo,
             String source,
             String channelMchNo,
-            String storeNo) {
+            String storeNo,
+            String title) {
         return new PayTrade()
                 .setAppId(appId)
                 .setTradeNo(tradeNo)
+                .setTitle(title)
                 .setTradeType(tradeType)
                 .setContainerId(containerId)
                 .setAmount(amount)

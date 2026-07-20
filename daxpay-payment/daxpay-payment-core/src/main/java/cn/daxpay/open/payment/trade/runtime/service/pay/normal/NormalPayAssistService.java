@@ -148,7 +148,8 @@ public class NormalPayAssistService {
                 orderNo,
                 source,
                 normalOrder.getChannelMchNo(),
-                normalOrder.getStoreNo());
+                normalOrder.getStoreNo(),
+                normalOrder.getTitle());
     }
 
     /// 注册超时关单延时消息

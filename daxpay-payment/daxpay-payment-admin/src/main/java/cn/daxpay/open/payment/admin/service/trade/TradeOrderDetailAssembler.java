@@ -92,7 +92,7 @@ public class TradeOrderDetailAssembler {
     private void fillFromNormal(PayTradeResult result, NormalPayOrder order) {
         result.setContainerOrderNo(order.getOrderNo());
         result.setBizOrderNo(order.getBizOrderNo());
-        result.setTitle(order.getTitle());
+        // title 不再从容器覆盖: 统一使用 PayTrade 冗余的 title(列表/详情同源)
         result.setContainerStatus(order.getStatus());
         result.setProduct(order.getProduct());
         result.setChannel(order.getChannel());
@@ -117,7 +117,7 @@ public class TradeOrderDetailAssembler {
     private void fillFromGateway(PayTradeResult result, GatewayPayOrder order) {
         result.setContainerOrderNo(order.getOrderNo());
         result.setBizOrderNo(order.getBizOrderNo());
-        result.setTitle(order.getTitle());
+        // title 不再从容器覆盖: 统一使用 PayTrade 冗余的 title(列表/详情同源)
         result.setContainerStatus(order.getStatus());
         result.setProduct(order.getProduct());
         result.setChannel(order.getChannel());

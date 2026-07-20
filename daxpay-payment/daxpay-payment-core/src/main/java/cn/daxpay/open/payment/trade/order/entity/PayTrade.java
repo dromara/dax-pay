@@ -31,6 +31,9 @@ public class PayTrade extends MchBaseEntity {
     /// 资金交易号（平台生成，与业务单 orderNo 独立）
     private String tradeNo;
 
+    /// 订单标题(冗余自容器, 资金列表/工作台免JOIN; 权威在容器)
+    private String title;
+
     /// 交易形态
     /// @see PayTradeTypeEnum
     private String tradeType;

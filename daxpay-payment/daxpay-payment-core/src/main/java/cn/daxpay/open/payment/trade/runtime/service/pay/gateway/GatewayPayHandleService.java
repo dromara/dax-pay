@@ -171,7 +171,8 @@ public class GatewayPayHandleService {
                 order.getOrderNo(),
                 source,
                 payParam.getChannelMchNo(),
-                order.getStoreNo());
+                order.getStoreNo(),
+                order.getTitle());
         payTradeManager.save(trade);
 
         this.fillRouteOnOrder(order, payParam, clientEnv, device);
