@@ -29,6 +29,8 @@ import cn.daxpay.open.payment.route.dao.basic.PayRouteBasicConfigManager;
 import cn.daxpay.open.payment.route.dao.scene.PayRouteSceneConfigManager;
 import cn.daxpay.open.payment.route.entity.basic.PayRouteBasicConfig;
 import cn.daxpay.open.payment.route.entity.scene.PayRouteSceneConfig;
+import cn.daxpay.open.payment.strategy.PaymentStrategyFactory;
+import cn.daxpay.open.payment.strategy.merchant.ChannelMerchantCleanupStrategy;
 import cn.daxpay.open.payment.trade.order.dao.GatewayPayOrderManager;
 import cn.daxpay.open.payment.trade.order.dao.NormalPayOrderManager;
 import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
@@ -115,7 +117,8 @@ public class ChannelMerchantService {
     /// 策略：
     /// - **交易类数据存在则拒删**（资金交易/订单/退款硬引用，必须可追溯）
     /// - 通过校验后，按 `channelMchNo` 级联逻辑删除所有平台配置类子表
-    /// - 各通道子模块扩展数据通过 [ChannelMerchantCleanupStrategyFactory] 策略清理（未实现的通道跳过）
+    /// - 各通道子模块扩展数据通过 [PaymentStrategyFactory#findOptionallyByProduct] 按产品查找
+    ///   [ChannelMerchantCleanupStrategy] 策略清理（未实现的通道跳过）
     ///
     /// 设计权衡：
     /// - 路由 `pay_route_*` 与 `gateway_*` 子表均按 `channelMchNo` 强关联，主表删除后必须清理避免脏数据
@@ -154,27 +157,12 @@ public class ChannelMerchantService {
         gatewayAggregateClientEnvManager.deleteByField(GatewayAggregateClientEnv::getChannelMchNo, channelMchNo);
         channelTerminalManager.deleteByField(ChannelTerminal::getChannelMchNo, channelMchNo);
 
-        // 3. 通道扩展表 + KeyConfig 清理（策略工厂按 channel 反查实现）
-        String channel = resolveChannelByProduct(mchInfo.getProduct());
-        if (channel != null) {
-            ChannelMerchantCleanupStrategyFactory.cleanup(channel, channelMchNo);
-        }
+        // 3. 通道扩展表 + KeyConfig 清理（按 product 一对一,未实现策略的通道静默跳过）
+        PaymentStrategyFactory.findOptionallyByProduct(mchInfo.getProduct(), ChannelMerchantCleanupStrategy.class)
+                .ifPresent(strategy -> strategy.deleteByChannelMchNo(channelMchNo));
 
         // 4. 主表逻辑删
         channelMerchantManager.deleteById(id);
-    }
-
-    /// 通过支付产品编码反查通道编码
-    ///
-    /// 用于删除通道商户时定位通道扩展清理 SPI 实现。
-    /// 不存在则返回 null（跳过 SPI 清理，仅删主表与平台配置）。
-    private String resolveChannelByProduct(String product) {
-        if (product == null || product.isBlank()) {
-            return null;
-        }
-        return payProductManager.findByField(PayProduct::getCode, product)
-                .map(PayProduct::getChannel)
-                .orElse(null);
     }
 
     /// 根据商户和支付产品查询通道商户号列表, 多数支付通道配置使用

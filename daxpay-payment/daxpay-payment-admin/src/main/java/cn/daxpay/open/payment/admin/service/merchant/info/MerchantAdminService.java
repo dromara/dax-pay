@@ -198,7 +198,7 @@ public class MerchantAdminService {
     /// - 通道扩展表（各通道 `XxxChannelMerchant` + `XxxKeyConfig`）**不在本次级联范围**，
     ///   避免事务过深与跨模块循环依赖；主表 `mch_channel_merchant` 删除后路由不再命中，
     ///   扩展表孤儿数据对业务无影响。
-    /// - 通道商户主表删除仅清主表，不触发 [cn.daxpay.open.payment.merchant.service.channel.ChannelMerchantCleanupStrategyFactory]。
+    /// - 通道商户主表删除仅清主表，不触发 [cn.daxpay.open.payment.strategy.merchant.ChannelMerchantCleanupStrategy]。
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
         MerchantInfo merchant = merchantInfoManager.findById(id)

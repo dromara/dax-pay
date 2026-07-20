@@ -1,0 +1,50 @@
+package cn.daxpay.open.channel.douyin.strategy.merchant;
+
+import cn.daxpay.open.channel.douyin.dao.direct.DouyinDirectAppAuthConfigManager;
+import cn.daxpay.open.channel.douyin.dao.direct.DouyinDirectAppCapabilityManager;
+import cn.daxpay.open.channel.douyin.dao.direct.DouyinDirectAppManager;
+import cn.daxpay.open.channel.douyin.dao.direct.DouyinDirectChannelMerchantManager;
+import cn.daxpay.open.channel.douyin.dao.direct.DouyinDirectKeyConfigManager;
+import cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectApp;
+import cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectAppAuthConfig;
+import cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectAppCapability;
+import cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectChannelMerchant;
+import cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectKeyConfig;
+import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
+import cn.daxpay.open.payment.strategy.merchant.ChannelMerchantCleanupStrategy;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+/// # 抖音直连通道商户清理策略
+///
+/// 在通道商户删除时清理抖音直连相关的所有扩展表（直连扩展表、应用、应用密钥、应用能力、应用授权配置）。
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class DouyinDirectChannelMerchantCleanupStrategy implements ChannelMerchantCleanupStrategy {
+
+    private final DouyinDirectChannelMerchantManager douyinDirectChannelMerchantManager;
+    private final DouyinDirectAppManager douyinDirectAppManager;
+    private final DouyinDirectKeyConfigManager douyinDirectAppKeyConfigManager;
+    private final DouyinDirectAppCapabilityManager douyinDirectAppCapabilityManager;
+    private final DouyinDirectAppAuthConfigManager douyinDirectAppAuthConfigManager;
+
+    /// 对应产品: 抖音支付直连
+    @Override
+    public ProductEnum getProduct() {
+        return ProductEnum.DOUYIN_PAY;
+    }
+
+    /// 清理指定通道商户号下抖音直连的所有扩展数据
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteByChannelMchNo(String channelMchNo) {
+        douyinDirectChannelMerchantManager.deleteByField(DouyinDirectChannelMerchant::getChannelMchNo, channelMchNo);
+        douyinDirectAppManager.deleteByField(DouyinDirectApp::getChannelMchNo, channelMchNo);
+        douyinDirectAppKeyConfigManager.deleteByField(DouyinDirectKeyConfig::getChannelMchNo, channelMchNo);
+        douyinDirectAppCapabilityManager.deleteByField(DouyinDirectAppCapability::getChannelMchNo, channelMchNo);
+        douyinDirectAppAuthConfigManager.deleteByField(DouyinDirectAppAuthConfig::getChannelMchNo, channelMchNo);
+    }
+}

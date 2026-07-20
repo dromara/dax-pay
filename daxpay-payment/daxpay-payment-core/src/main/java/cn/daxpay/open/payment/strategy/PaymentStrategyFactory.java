@@ -10,6 +10,7 @@ import lombok.experimental.UtilityClass;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /// # 策略工厂工具类
 ///
@@ -28,6 +29,17 @@ public class PaymentStrategyFactory {
                 .findFirst()
                 // 不支持的能力: {0}
                 .orElseThrow(() -> new UnsupportedAbilityException("pay.error.unsupportedAbilityWithDetail", product));
+    }
+
+    /// 软查找: 未匹配返回 [Optional#empty], 不抛异常
+    ///
+    /// 用于"未实现策略的 product 静默跳过"场景(如通道商户清理 SPI,
+    /// 未实现清理策略的通道留孤儿数据,业务无影响)。
+    public <T extends PaymentStrategy> Optional<T> findOptionallyByProduct(String product, Class<T> clazz) {
+        var beansOfType = SpringUtil.getBeansOfType(clazz);
+        return beansOfType.values().stream()
+                .filter(strategy -> strategy.getProduct().getCode().equals(product))
+                .findFirst();
     }
 
     /// 判断传入产品的策略是否存在
