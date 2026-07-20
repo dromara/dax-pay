@@ -113,7 +113,8 @@
     "signVerifyFailDetail": "驗籤失敗: {0}",
     "productOrChannelMchRequired": "支付產品與通道商户號至少傳入其一",
     "channelMchNotFound": "通道商户[{0}]不存在",
-    "mchContextMissing": "商户上下文未裝載，無法進行數據隔離操作"
+    "mchContextMissing": "商户上下文未裝載，無法進行數據隔離操作",
+    "authSessionExpired": "授權連結已失效，請重新產生"
   },
   "verify": {
     "methodParamRequired": "支付方法至少有一個參數，並且需要簽名的支付參數放在第一位",

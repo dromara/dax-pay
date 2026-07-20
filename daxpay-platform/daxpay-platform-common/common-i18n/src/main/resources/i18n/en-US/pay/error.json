@@ -113,7 +113,8 @@
     "signVerifyFailDetail": "Signature verification failed: {0}",
     "productOrChannelMchRequired": "Either payment product or channel merchant number must be provided",
     "channelMchNotFound": "Channel merchant [{0}] not found",
-    "mchContextMissing": "Merchant context is not loaded; cannot apply tenant isolation"
+    "mchContextMissing": "Merchant context is not loaded; cannot apply tenant isolation",
+    "authSessionExpired": "Authorization link expired. Please regenerate it."
   },
   "verify": {
     "methodParamRequired": "Payment method must have at least one parameter, and the signed payment parameter must be in the first position",

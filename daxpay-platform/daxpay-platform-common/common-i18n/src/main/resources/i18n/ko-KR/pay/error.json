@@ -113,7 +113,8 @@
     "signVerifyFailDetail": "서명 확인 실패: {0}",
     "productOrChannelMchRequired": "결제 상품 또는 채널 판매자 번호를 제공해야 합니다.",
     "channelMchNotFound": "채널 판매자 [{0}]을(를) 찾을 수 없습니다.",
-    "mchContextMissing": "판매자 컨텍스트가 로드되지 않았습니다. 테넌트 격리를 적용할 수 없습니다."
+    "mchContextMissing": "판매자 컨텍스트가 로드되지 않았습니다. 테넌트 격리를 적용할 수 없습니다.",
+    "authSessionExpired": "인증 링크가 만료되었습니다. 다시 생성해 주세요."
   },
   "verify": {
     "methodParamRequired": "결제 방법에는 매개변수가 하나 이상 있어야 하며 서명된 결제 매개변수가 첫 번째 위치에 있어야 합니다.",

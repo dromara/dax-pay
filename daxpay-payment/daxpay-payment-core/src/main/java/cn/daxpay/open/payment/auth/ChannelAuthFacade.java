@@ -4,7 +4,9 @@ import cn.daxpay.open.payment.unipay.param.assist.AuthCodeParam;
 import cn.daxpay.open.payment.unipay.param.assist.GenerateAuthUrlParam;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
 import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
+import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.enums.unipay.ChannelAuthTypeEnum;
+import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,6 +45,13 @@ public class ChannelAuthFacade {
     /// 通过 AuthCode 换取认证结果, 成功后销毁会话(一次使用)
     public AuthResult auth(AuthCodeParam param) {
         AuthSession session = authSessionStore.loadSession(param.getAuthToken());
+        // 会话已失效(且非支付宝直连兜底场景): 提示重新生成, 避免下游抛"不支持的能力: null"
+        // 支付宝平台级 OAuth 不依赖 session 字段, 由 doAuth 内的兜底分支处理, 保持原行为
+        if (session == null && !isAlipayAuth(param.getAuthType())) {
+            // 授权链接已失效, 请重新生成
+            throw new BizInfoException(DaxPayErrorCode.OPERATION_FAIL,
+                    "pay.error.assist.authSessionExpired");
+        }
         AuthResult result = doAuth(param, session);
         // 平台级 auth 方法未回填 returnPath 时, 从会话补齐
         if (session != null && StrUtil.isNotBlank(session.getReturnPath())

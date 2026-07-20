@@ -113,7 +113,8 @@
     "signVerifyFailDetail": "署名の検証に失敗しました: {0}",
     "productOrChannelMchRequired": "支払い商品またはチャネル販売者番号のいずれかを指定する必要があります",
     "channelMchNotFound": "チャネル販売者 [{0}] が見つかりません",
-    "mchContextMissing": "販売者のコンテキストがロードされていません。テナント分離を適用できません"
+    "mchContextMissing": "販売者のコンテキストがロードされていません。テナント分離を適用できません",
+    "authSessionExpired": "認証リンクの有効期限が切れました。再生成してください"
   },
   "verify": {
     "methodParamRequired": "支払い方法には少なくとも 1 つのパラメータが必要で、署名付き支払いパラメータが最初の位置にある必要があります",
