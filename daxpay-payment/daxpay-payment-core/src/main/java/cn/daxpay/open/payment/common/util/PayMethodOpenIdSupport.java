@@ -16,9 +16,6 @@ import java.util.Set;
 /// ## 两个维度的区分
 /// - [needsOpenId]: 业务上是否**必须** openId（JSAPI/MINI 永远 true）
 /// - [canAcquireOpenId]: 技术上是否**能**拿到 openId（视 clientEnv 而定）
-///
-/// 当存在 openId 黑名单时, 网关层可用 `canAcquireOpenId` 决定是否对原本免 openId 的方式
-/// (主扫/H5) 触发静默 OAuth, 实现 openId 黑名单在网关内的全局拦截。
 public final class PayMethodOpenIdSupport {
 
     /// 需要买家标识的支付方式(与聚合历史白名单一致)

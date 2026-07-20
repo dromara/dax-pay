@@ -53,8 +53,6 @@ public class DefaultPayRiskChecker implements PayRiskChecker {
         // openId 名单（按通道精细匹配）
         boolean openIdBlocked = rejectIfBlocked(ctx, PayBlacklistTypeEnum.OPEN_ID.getCode(), ctx.getOpenId(),
                 ctx.getChannel(), ctx.getChannelAppId(), true);
-        // openId 缺失降级: ctx.openId 为空且本次未触发 openId 拦截时, 打 WARN 供运营识别
-        // 付款码 / APP / 外部浏览器 H5 等场景无 OAuth 时机, 依赖 IP + 事后 buyerId 补录
         if (!openIdBlocked && StrUtil.isBlank(ctx.getOpenId())) {
             log.warn("支付前 openId 缺失, openId 黑名单降级为仅 IP 校验 + 事后补录: "
                     + "tradeType={}, method={}, mchNo={}, clientIp={}",

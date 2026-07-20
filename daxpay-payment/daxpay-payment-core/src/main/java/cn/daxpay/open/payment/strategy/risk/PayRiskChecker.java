@@ -17,9 +17,6 @@ public interface PayRiskChecker {
     }
 
     /// 是否存在 openId 类型黑名单（供网关层决定是否触发强制 OAuth 取 openId）
-    ///
-    /// 默认 false：插件未安装或当前无 openId 名单时，主扫/H5 等免 openId 方式
-    /// 不强制走 OAuth，保持现有用户体验。仅当存在 openId 名单时才触发静默授权。
     default boolean hasOpenIdBlacklist() {
         return false;
     }

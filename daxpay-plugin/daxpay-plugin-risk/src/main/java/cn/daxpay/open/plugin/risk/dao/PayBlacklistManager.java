@@ -85,9 +85,6 @@ public class PayBlacklistManager extends BaseManager<PayBlacklistMapper, PayBlac
     }
 
     /// 是否存在有效的 openId 类型黑名单（enable 且未过期）
-    ///
-    /// 供网关层智能触发 OAuth 取 openId：仅当存在 openId 名单时,
-    /// 才对主扫/H5 等免 openId 方式走静默授权, 避免无黑名单时的无效开销
     public boolean hasActiveOpenIdBlacklist() {
         OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
         return lambdaQuery()
