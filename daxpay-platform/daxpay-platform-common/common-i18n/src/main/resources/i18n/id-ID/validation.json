@@ -799,7 +799,7 @@
       "notNull": "Pilihan pemeriksaan setelah pembayaran wajib diisi"
     },
     "riskOpenIdLevel": {
-      "notNull": "Level intercept openId tidak boleh kosong"
+      "notNull": "Level intersepsi identifier pengguna tidak boleh kosong"
     },
     "blockOverseasIp": {
       "notNull": "Saklar blokir IP luar negeri tidak boleh kosong"

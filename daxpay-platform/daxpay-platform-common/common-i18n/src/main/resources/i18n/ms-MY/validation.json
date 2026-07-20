@@ -799,7 +799,7 @@
       "notNull": "Pilihan semakan selepas pembayaran tidak boleh kosong"
     },
     "riskOpenIdLevel": {
-      "notNull": "Tahap sekatan openId tidak boleh kosong"
+      "notNull": "Tahap sekatan pengecam pengguna tidak boleh kosong"
     },
     "blockOverseasIp": {
       "notNull": "Suis sekatan IP luar negara tidak boleh kosong"

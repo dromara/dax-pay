@@ -24,7 +24,7 @@ public class PlatformPaySecurityConfigParam {
     @NotNull(message = "{validation.field.riskCheckAfterPay.notNull}")
     private Boolean riskCheckAfterPay;
 
-    @Schema(description = "openId 拦截级别（normal=正常拦截 / enhanced=增强拦截）")
+    @Schema(description = "用户标识拦截级别（normal=正常拦截 / enhanced=增强拦截）")
     @NotNull(message = "{validation.field.riskOpenIdLevel.notNull}")
     private String riskOpenIdLevel;
 

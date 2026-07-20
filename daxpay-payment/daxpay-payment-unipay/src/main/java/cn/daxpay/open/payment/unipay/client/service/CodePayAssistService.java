@@ -66,7 +66,7 @@ public class CodePayAssistService {
     private final NormalPayOrderManager normalPayOrderManager;
     /// 风控检查器（可选 SPI：用于判断是否存在 openId 黑名单, 决定是否触发强制 OAuth）
     private final ObjectProvider<PayRiskChecker> payRiskCheckerProvider;
-    /// 平台安全配置（读取 openId 拦截级别, 决定 NORMAL 模式下不触发强制 OAuth）
+    /// 平台安全配置（读取用户标识拦截级别, 决定 NORMAL 模式下不触发强制 OAuth）
     private final PlatformSecurityConfigService platformSecurityConfigService;
 
     /// 根据码牌编码查询支付信息(公开接口, 脱敏返回)
@@ -272,9 +272,9 @@ public class CodePayAssistService {
     /// openId 触发判定
     ///
     /// 1. JSAPI/MINI 类方式: 业务必需, 永远 true（与历史行为一致）
-    /// 2. 主扫/H5 等免 openId 方式: 仅当 openId 拦截级别为 ENHANCED,
-    ///    且存在 openId 黑名单且当前 clientEnv 可 OAuth 时 true,
-    ///    实现 openId 黑名单在码牌场景的全局拦截
+    /// 2. 主扫/H5 等免用户标识方式: 仅当用户标识拦截级别为 ENHANCED,
+    ///    且存在用户标识黑名单且当前 clientEnv 可 OAuth 时 true,
+    ///    实现用户标识黑名单在码牌场景的全局拦截
     private boolean resolveNeedOpenId(String method, ClientEnvEnum clientEnv) {
         if (PayMethodOpenIdSupport.needsOpenId(method)) {
             return true;
@@ -286,7 +286,7 @@ public class CodePayAssistService {
         return PayMethodOpenIdSupport.canAcquireOpenId(method, clientEnv);
     }
 
-    /// openId 拦截级别是否为增强模式（NORMAL 时跳过强制 OAuth, 保留用户体验）
+    /// 用户标识拦截级别是否为增强模式（NORMAL 时跳过强制 OAuth, 保留用户体验）
     private boolean isEnhancedOpenIdLevel() {
         String level = platformSecurityConfigService.getPaySecurityConfig().getRiskOpenIdLevel();
         return PayRiskOpenIdLevelEnum.ENHANCED.getCode().equals(level);

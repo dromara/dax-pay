@@ -792,7 +792,7 @@
       "notNull": "결제 후 기록 스위치는 필수입니다"
     },
     "riskOpenIdLevel": {
-      "notNull": "openId 차단 레벨은 필수입니다"
+      "notNull": "사용자 식별자 차단 레벨은 필수입니다"
     },
     "blockOverseasIp": {
       "notNull": "해외 IP 차단 스위치는 필수입니다"

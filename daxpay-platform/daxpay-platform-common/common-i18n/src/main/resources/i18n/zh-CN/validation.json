@@ -792,7 +792,7 @@
       "notNull": "事后补录开关不能为空"
     },
     "riskOpenIdLevel": {
-      "notNull": "openId 拦截级别不能为空"
+      "notNull": "用户标识拦截级别不能为空"
     },
     "blockOverseasIp": {
       "notNull": "海外 IP 拦截开关不能为空"

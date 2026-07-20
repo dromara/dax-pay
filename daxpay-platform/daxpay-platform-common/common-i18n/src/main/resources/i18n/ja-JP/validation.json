@@ -792,7 +792,7 @@
       "notNull": "決済後記録スイッチは必須です"
     },
     "riskOpenIdLevel": {
-      "notNull": "openId ブロック レベルは必須です"
+      "notNull": "ユーザー識別子ブロック レベルは必須です"
     },
     "blockOverseasIp": {
       "notNull": "海外 IP ブロック スイッチは必須です"
