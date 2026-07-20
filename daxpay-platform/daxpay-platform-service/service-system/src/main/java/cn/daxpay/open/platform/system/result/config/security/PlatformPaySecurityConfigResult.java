@@ -22,4 +22,10 @@ public class PlatformPaySecurityConfigResult extends BaseResult {
 
     @Schema(description = "支付成功后是否补录命中（用于事后分析）")
     private Boolean riskCheckAfterPay;
+
+    @Schema(description = "openId 拦截级别（normal=正常拦截 / enhanced=增强拦截）")
+    private String riskOpenIdLevel;
+
+    @Schema(description = "海外 IP 拦截（占位字段, 默认关闭, 后续接入）")
+    private Boolean blockOverseasIp;
 }

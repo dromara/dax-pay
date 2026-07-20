@@ -3,6 +3,7 @@ package cn.daxpay.open.platform.system.service.config.security;
 import cn.daxpay.open.platform.common.json.util.JacksonUtil;
 import cn.daxpay.open.platform.system.convert.config.security.PlatformSecurityConfigConvert;
 import cn.daxpay.open.platform.system.entity.config.platform.security.*;
+import cn.daxpay.open.platform.system.enums.PayRiskOpenIdLevelEnum;
 import cn.daxpay.open.platform.system.enums.PlatformConfigTypeEnum;
 import cn.daxpay.open.platform.system.param.config.security.*;
 import cn.daxpay.open.platform.system.result.config.security.*;
@@ -257,12 +258,14 @@ public class PlatformSecurityConfigService {
         return config == null ? defaultPaySecurityConfig() : config;
     }
 
-    /// 支付安全配置默认值: 默认开启风控、命中阻断、事后补录
+    /// 支付安全配置默认值: 默认开启风控、命中阻断、事后补录、增强拦截
     private PlatformPaySecurityConfig defaultPaySecurityConfig() {
         return new PlatformPaySecurityConfig()
                 .setRiskEnabled(true)
                 .setRiskBlockBeforePay(true)
-                .setRiskCheckAfterPay(true);
+                .setRiskCheckAfterPay(true)
+                .setRiskOpenIdLevel(PayRiskOpenIdLevelEnum.ENHANCED.getCode())
+                .setBlockOverseasIp(false);
     }
 
     /// 获取支付安全配置(结果)

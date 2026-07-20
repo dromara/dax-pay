@@ -15,6 +15,8 @@ import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
 import cn.daxpay.open.platform.common.spring.util.WebServletUtil;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
+import cn.daxpay.open.platform.system.enums.PayRiskOpenIdLevelEnum;
+import cn.daxpay.open.platform.system.service.config.security.PlatformSecurityConfigService;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,6 +39,8 @@ public class AggregatePayService {
     private final GatewayAggregateConfigManager aggregateConfigManager;
     /// 风控检查器（可选 SPI：用于判断是否存在 openId 黑名单, 决定是否触发强制 OAuth）
     private final ObjectProvider<PayRiskChecker> payRiskCheckerProvider;
+    /// 平台安全配置（读取 openId 拦截级别, 决定 NORMAL 模式下不触发强制 OAuth）
+    private final PlatformSecurityConfigService platformSecurityConfigService;
 
     /// H5 聚合元数据: autoLaunch / needOpenId(不下发敏感路由字段)
     public AggregatePayMetaResult getMeta(String orderNo, String clientEnvCode, String runtimeCode) {
@@ -79,16 +83,23 @@ public class AggregatePayService {
     /// openId 触发判定
     ///
     /// 1. JSAPI/MINI 类方式: 业务必需, 永远 true（与历史行为一致）
-    /// 2. 主扫/H5 等免 openId 方式: 仅当存在 openId 黑名单且当前 clientEnv 可 OAuth 时 true,
+    /// 2. 主扫/H5 等免 openId 方式: 仅当 openId 拦截级别为 ENHANCED,
+    ///    且存在 openId 黑名单, 且当前 clientEnv 可 OAuth 时 true,
     ///    实现 openId 黑名单在聚合网关内的全局拦截
     private boolean resolveNeedOpenId(String method, ClientEnvEnum clientEnv) {
         if (PayMethodOpenIdSupport.needsOpenId(method)) {
             return true;
         }
         PayRiskChecker checker = payRiskCheckerProvider.getIfAvailable();
-        if (checker == null || !checker.hasOpenIdBlacklist()) {
+        if (checker == null || !isEnhancedOpenIdLevel() || !checker.hasOpenIdBlacklist()) {
             return false;
         }
         return PayMethodOpenIdSupport.canAcquireOpenId(method, clientEnv);
+    }
+
+    /// openId 拦截级别是否为增强模式（NORMAL 时跳过强制 OAuth, 保留用户体验）
+    private boolean isEnhancedOpenIdLevel() {
+        String level = platformSecurityConfigService.getPaySecurityConfig().getRiskOpenIdLevel();
+        return PayRiskOpenIdLevelEnum.ENHANCED.getCode().equals(level);
     }
 }

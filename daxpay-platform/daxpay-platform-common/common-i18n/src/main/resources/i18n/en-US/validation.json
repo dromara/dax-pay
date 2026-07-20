@@ -791,6 +791,12 @@
     "riskCheckAfterPay": {
       "notNull": "Post-pay logging toggle cannot be empty"
     },
+    "riskOpenIdLevel": {
+      "notNull": "openId interception level cannot be empty"
+    },
+    "blockOverseasIp": {
+      "notNull": "Overseas IP block toggle cannot be empty"
+    },
     "reqId": {
       "notBlank": "Request ID is required",
       "size": "Request ID must not exceed 64 characters"

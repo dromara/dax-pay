@@ -797,6 +797,12 @@
     },
     "riskCheckAfterPay": {
       "notNull": "Tùy chọn kiểm tra sau thanh toán là bắt buộc"
+    },
+    "riskOpenIdLevel": {
+      "notNull": "Cấp độ chặn openId không được để trống"
+    },
+    "blockOverseasIp": {
+      "notNull": "Công tắc chặn IP nước ngoài không được để trống"
     }
   }
 }

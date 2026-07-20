@@ -797,6 +797,12 @@
     },
     "riskCheckAfterPay": {
       "notNull": "ตัวเลือกการตรวจสอบหลังชำระเงินต้องไม่เป็นค่าว่าง"
+    },
+    "riskOpenIdLevel": {
+      "notNull": "ระดับการบล็อก openId ต้องไม่ว่าง"
+    },
+    "blockOverseasIp": {
+      "notNull": "สวิตช์บล็อก IP ต่างประเทศต้องไม่ว่าง"
     }
   }
 }

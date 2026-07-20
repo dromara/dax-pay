@@ -23,4 +23,12 @@ public class PlatformPaySecurityConfigParam {
     @Schema(description = "支付成功后是否补录命中（用于事后分析）")
     @NotNull(message = "{validation.field.riskCheckAfterPay.notNull}")
     private Boolean riskCheckAfterPay;
+
+    @Schema(description = "openId 拦截级别（normal=正常拦截 / enhanced=增强拦截）")
+    @NotNull(message = "{validation.field.riskOpenIdLevel.notNull}")
+    private String riskOpenIdLevel;
+
+    @Schema(description = "海外 IP 拦截（占位字段, 默认关闭, 后续接入）")
+    @NotNull(message = "{validation.field.blockOverseasIp.notNull}")
+    private Boolean blockOverseasIp;
 }

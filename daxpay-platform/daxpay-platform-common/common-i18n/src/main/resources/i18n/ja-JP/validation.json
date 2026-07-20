@@ -791,6 +791,12 @@
     "riskCheckAfterPay": {
       "notNull": "決済後記録スイッチは必須です"
     },
+    "riskOpenIdLevel": {
+      "notNull": "openId ブロック レベルは必須です"
+    },
+    "blockOverseasIp": {
+      "notNull": "海外 IP ブロック スイッチは必須です"
+    },
     "reqId": {
       "notBlank": "リクエストIDは必須です",
       "size": "リクエストIDは64文字以内です"
