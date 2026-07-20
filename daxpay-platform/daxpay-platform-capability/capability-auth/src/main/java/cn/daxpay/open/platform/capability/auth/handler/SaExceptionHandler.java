@@ -13,7 +13,6 @@ import jakarta.servlet.DispatcherType;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.MDC;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -56,7 +55,7 @@ public class SaExceptionHandler {
         // 日志固定输出 messageKey 与中文翻译, 不受请求语言影响
         String key = ex.resolveMessageKey();
         log.info("鉴权异常 消息={}, key={}", I18nUtil.get(key, Locale.CHINA, ex.getArgs()), key, ex);
-        Result<Void> result = Res.response(ex.getCode(), ex.getMessage(), MDC.get(CommonCode.TRACE_ID));
+        Result<Void> result = Res.response(ex.getCode(), ex.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
     }
 
@@ -81,7 +80,7 @@ public class SaExceptionHandler {
         };
         String message = I18nUtil.get(messageKey);
         log.info("Sa-Token 未登录 type={}, key={}", type, messageKey);
-        Result<Void> result = Res.response(CommonErrorCode.AUTHENTICATION_FAIL, message, MDC.get(CommonCode.TRACE_ID));
+        Result<Void> result = Res.response(CommonErrorCode.AUTHENTICATION_FAIL, message);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
     }
 
@@ -91,7 +90,7 @@ public class SaExceptionHandler {
         // 日志固定输出 messageKey 与中文翻译, 不受请求语言影响
         String key = ex.resolveMessageKey();
         log.info("鉴权异常 消息={}, key={}", I18nUtil.get(key, Locale.CHINA, ex.getArgs()), key, ex);
-        Result<Void> result = Res.response(ex.getCode(), ex.getMessage(), MDC.get(CommonCode.TRACE_ID));
+        Result<Void> result = Res.response(ex.getCode(), ex.getMessage());
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(result);
     }
 
@@ -113,7 +112,7 @@ public class SaExceptionHandler {
                 request.getRequestURI(), ex.getMessage());
         // 认证上下文未初始化，请重新登录或刷新页面
         String message = I18nUtil.get("error.auth.contextNotInit");
-        Result<Void> result = Res.response(CommonErrorCode.AUTHENTICATION_FAIL, message, MDC.get(CommonCode.TRACE_ID));
+        Result<Void> result = Res.response(CommonErrorCode.AUTHENTICATION_FAIL, message);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(result);

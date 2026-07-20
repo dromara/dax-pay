@@ -1,7 +1,6 @@
 package cn.daxpay.open.platform.core.rest;
 
 import cn.daxpay.open.platform.core.code.CommonCode;
-import cn.daxpay.open.platform.core.rest.result.ErrorResult;
 import cn.daxpay.open.platform.core.rest.result.Result;
 
 /// # 返回工具类
@@ -34,10 +33,6 @@ public class Res {
 
     public static <T> Result<T> response(int code, String msg) {
         return new Result<>(code, msg);
-    }
-
-    public static <T> Result<T> response(int code, String msg, String traceId) {
-        return new ErrorResult<>(code, msg, traceId);
     }
 
     public static <T> Result<T> response(int code, String msg, T data) {

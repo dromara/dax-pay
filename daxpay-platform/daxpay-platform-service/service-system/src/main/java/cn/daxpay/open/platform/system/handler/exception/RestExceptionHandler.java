@@ -2,7 +2,6 @@ package cn.daxpay.open.platform.system.handler.exception;
 
 import cn.daxpay.open.platform.common.config.properties.PlatformCommonProperties;
 import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
-import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.exception.BizErrorException;
 import cn.daxpay.open.platform.core.exception.BizException;
@@ -16,7 +15,6 @@ import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.MDC;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
@@ -84,16 +82,16 @@ public class RestExceptionHandler {
             return ResponseEntity.ok().build();
         }
         logger.accept(ex);
-        return Res.response(ex.getCode(), getMessage(ex), MDC.get(CommonCode.TRACE_ID));
+        return Res.response(ex.getCode(), getMessage(ex));
     }
 
     /// 系统异常统一响应: 按配置决定是否透传原始消息(运行时异常/Throwable 兜底共用)
     private Object systemErrorResponse(Throwable ex) {
         if (properties.getException().isShowFullMessage()) {
-            return Res.response(CommonErrorCode.SYSTEM_ERROR, ex.getMessage(), MDC.get(CommonCode.TRACE_ID));
+            return Res.response(CommonErrorCode.SYSTEM_ERROR, ex.getMessage());
         }
         log.error("系统错误 {}", ex.getMessage(), ex);
-        return Res.response(CommonErrorCode.SYSTEM_ERROR, I18nUtil.get("error.common.system"), MDC.get(CommonCode.TRACE_ID));
+        return Res.response(CommonErrorCode.SYSTEM_ERROR, I18nUtil.get("error.common.system"));
     }
 
     /// 普通业务异常, 不进行堆栈跟踪(debug 级别才跟踪)
@@ -134,7 +132,7 @@ public class RestExceptionHandler {
         String message = ex.getConstraintViolations().stream()
                 .map(ConstraintViolation::getMessage)
                 .collect(Collectors.joining("; "));
-        return Res.response(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, message, MDC.get(CommonCode.TRACE_ID));
+        return Res.response(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, message);
     }
 
     /// 请求参数校验未通过
@@ -148,7 +146,7 @@ public class RestExceptionHandler {
         String message = ex.getAllErrors().stream()
                 .map(DefaultMessageSourceResolvable::getDefaultMessage)
                 .collect(Collectors.joining("; "));
-        return Res.response(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, message, MDC.get(CommonCode.TRACE_ID));
+        return Res.response(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, message);
     }
 
     /// 不支持 HTTP 请求方法异常
@@ -171,7 +169,7 @@ public class RestExceptionHandler {
             return ResponseEntity.ok().build();
         }
         log.info(ex.getMessage(), ex);
-        return Res.response(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, ex.getMessage(), MDC.get(CommonCode.TRACE_ID));
+        return Res.response(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, ex.getMessage());
     }
 
     /// 页面或资源不存在
@@ -183,7 +181,7 @@ public class RestExceptionHandler {
         }
         log.info(ex.getMessage(), ex);
         String message = I18nUtil.get("error.common.notFound");
-        Result<Void> result = Res.response(CommonErrorCode.SOURCES_NOT_EXIST, message, MDC.get(CommonCode.TRACE_ID));
+        Result<Void> result = Res.response(CommonErrorCode.SOURCES_NOT_EXIST, message);
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
     }
 
@@ -196,7 +194,7 @@ public class RestExceptionHandler {
         }
         log.info(ex.getMessage(), ex);
         String message = I18nUtil.get("error.common.parseParams");
-        return Res.response(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, message, MDC.get(CommonCode.TRACE_ID));
+        return Res.response(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, message);
     }
 
     /// 处理 HttpMessageConversionException
@@ -207,7 +205,7 @@ public class RestExceptionHandler {
             return ResponseEntity.ok().build();
         }
         log.info(ex.getMessage(), ex);
-        return Res.response(CommonErrorCode.PARSE_PARAMETERS_ERROR, ex.getMessage(), MDC.get(CommonCode.TRACE_ID));
+        return Res.response(CommonErrorCode.PARSE_PARAMETERS_ERROR, ex.getMessage());
     }
 
     /// 处理 HttpMessageConversionException
@@ -218,7 +216,7 @@ public class RestExceptionHandler {
             return ResponseEntity.ok().build();
         }
         log.info("参数绑定失败 ", ex);
-        return Res.response(CommonErrorCode.PARSE_PARAMETERS_ERROR, ex.getMessage(), MDC.get(CommonCode.TRACE_ID));
+        return Res.response(CommonErrorCode.PARSE_PARAMETERS_ERROR, ex.getMessage());
     }
 
     /// 空指针异常
@@ -230,7 +228,7 @@ public class RestExceptionHandler {
         }
         log.warn("空指针 ", ex);
         String message = I18nUtil.get("error.common.system");
-        return Res.response(CommonErrorCode.SYSTEM_ERROR, message, MDC.get(CommonCode.TRACE_ID));
+        return Res.response(CommonErrorCode.SYSTEM_ERROR, message);
     }
 
     /// 处理运行时异常
@@ -253,7 +251,7 @@ public class RestExceptionHandler {
         }
         log.error("内存不足错误 {}", ex.getMessage(), ex);
         String message = I18nUtil.get("error.common.system");
-        return Res.response(CommonErrorCode.SYSTEM_ERROR, message, MDC.get(CommonCode.TRACE_ID));
+        return Res.response(CommonErrorCode.SYSTEM_ERROR, message);
     }
 
     /// 处理 Throwable 异常

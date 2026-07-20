@@ -36,10 +36,6 @@ public class DaxResult<T>{
     @Schema(description = "请求ID")
     private String reqId;
 
-    /// 追踪ID
-    @Schema(description = "追踪ID")
-    private String traceId;
-
     public DaxResult(int successCode, T data, String msg) {
         this.code = successCode;
         this.data = data;
