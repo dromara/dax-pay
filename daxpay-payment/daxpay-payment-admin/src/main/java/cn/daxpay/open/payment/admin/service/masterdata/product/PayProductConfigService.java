@@ -99,10 +99,14 @@ public class PayProductConfigService {
     ///
     /// 注意: 通道商户的 sandbox 字段固化为创建时的快照, 此处不级联回写。
     /// 重置后若存量 sandbox=true 的商户与产品当前 prod 环境不匹配, 路由层会按环境过滤将其排除。
+    ///
+    /// 部署规范: 生产环境必须配置 daxpay.platform.config.sandbox-enabled=false;
+    ///         测试/开发环境才允许 sandbox-enabled=true 用于沙箱联调。
     @EventListener(ApplicationReadyEvent.class)
     @Transactional(rollbackFor = Exception.class)
     public void checkSandboxOnStartup() {
         if (platformConfigProperties.isSandboxEnabled()) {
+            log.warn("⚠️ 沙箱环境已全局启用 (daxpay.platform.config.sandbox-enabled=true) → 当前为测试/开发环境, 切勿用于生产部署");
             return;
         }
         List<PayProductConfig> sandboxConfigs = payProductConfigManager.lambdaQuery()
@@ -112,10 +116,8 @@ public class PayProductConfigService {
             config.setActiveEnv(PayEnvEnum.PROD.getCode());
             payProductConfigManager.updateById(config);
         }
-        if (!sandboxConfigs.isEmpty()) {
-            log.info("沙箱环境已禁用(daxpay.platform.config.sandbox-enabled=false), {} 个产品从 sandbox 重置为 prod",
-                    sandboxConfigs.size());
-        }
+        log.info("✓ 沙箱环境已全局禁用 (daxpay.platform.config.sandbox-enabled=false) → 生产模式启动, 数据保证为生产数据{}",
+                sandboxConfigs.isEmpty() ? "" : ", 已将 " + sandboxConfigs.size() + " 个产品从 sandbox 强制重置为 prod");
     }
 
     /// PayProduct + 库表 + 策略合并为配置结果
