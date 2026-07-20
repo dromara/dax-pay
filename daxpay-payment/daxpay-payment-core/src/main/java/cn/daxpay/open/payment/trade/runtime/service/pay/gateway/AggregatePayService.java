@@ -7,6 +7,7 @@ import cn.daxpay.open.payment.merchant.enums.ClientEnvEnum;
 import cn.daxpay.open.payment.merchant.enums.ClientRuntimeEnum;
 import cn.daxpay.open.payment.merchant.service.gateway.ClientEnvPayResolveService;
 import cn.daxpay.open.payment.strategy.risk.PayRiskChecker;
+import cn.daxpay.open.payment.trade.enums.GatewayOrderStatusEnum;
 import cn.daxpay.open.payment.trade.enums.GatewayPayTypeEnum;
 import cn.daxpay.open.payment.trade.order.entity.GatewayPayOrder;
 import cn.daxpay.open.payment.unipay.param.gateway.AggregateQrPayParam;
@@ -51,6 +52,15 @@ public class AggregatePayService {
         ClientEnvEnum clientEnv = ClientEnvEnum.findByCode(clientEnvCode);
         ClientRuntimeEnum runtime = ClientRuntimeEnum.ofOrDefault(runtimeCode);
         var resolved = clientEnvPayResolveService.resolveRequired(order.getAppId(), clientEnv, runtime);
+
+        // 订单已发起支付(支付中)时, 支付方式已锁定到容器: 当前环境解析出的 method 与锁定值不一致视为换端, 提前拒绝
+        // 与 GatewayPayHandleService#handle 的 method 比较语义一致(聚合 product 传 null, 实际只比 method)
+        if (Objects.equals(order.getStatus(), GatewayOrderStatusEnum.PAYING.getCode())
+                && StrUtil.isNotBlank(order.getMethod())
+                && !Objects.equals(order.getMethod(), resolved.method())) {
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "pay.error.gateway.channelLocked");
+        }
 
         GatewayAggregateConfig config = aggregateConfigManager.findByAppId(order.getAppId())
                 .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,

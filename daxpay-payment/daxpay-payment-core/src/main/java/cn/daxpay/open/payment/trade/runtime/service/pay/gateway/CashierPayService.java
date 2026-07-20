@@ -7,6 +7,7 @@ import cn.daxpay.open.payment.merchant.enums.CashierItemResolveModeEnum;
 import cn.daxpay.open.payment.merchant.enums.ClientEnvEnum;
 import cn.daxpay.open.payment.merchant.enums.GatewayCashierTypeEnum;
 import cn.daxpay.open.payment.strategy.risk.PayRiskChecker;
+import cn.daxpay.open.payment.trade.enums.GatewayOrderStatusEnum;
 import cn.daxpay.open.payment.trade.enums.GatewayPayTypeEnum;
 import cn.daxpay.open.payment.trade.order.entity.GatewayPayOrder;
 import cn.daxpay.open.payment.unipay.param.gateway.CashierPayParam;
@@ -62,10 +63,31 @@ public class CashierPayService {
         GatewayCashierTypeEnum typeEnum = GatewayCashierTypeEnum.findByCode(cashierType);
         String bucketClientEnv = normalizeClientEnvForBucket(typeEnum, clientEnv);
         ClientEnvEnum envEnum = StrUtil.isBlank(bucketClientEnv) ? null : ClientEnvEnum.findByCode(bucketClientEnv);
+        // 订单已发起支付(支付中)且 method 有值时, 支付方式已锁定, 需标记匹配的支付项供前端禁用切换
+        boolean orderLocked = Objects.equals(order.getStatus(), GatewayOrderStatusEnum.PAYING.getCode())
+                && StrUtil.isNotBlank(order.getMethod());
         return gatewayCashierItemManager.listByAppAndBucket(order.getAppId(), typeEnum.getCode(), bucketClientEnv)
                 .stream()
-                .map(item -> this.toPublicResult(item, envEnum))
+                .map(item -> this.toPublicResult(item, envEnum)
+                        // 命中锁定的支付项置 locked=true, 前端据此自动选中并禁用其他项
+                        .setLocked(orderLocked && this.isLockedItem(item, order)))
                 .toList();
+    }
+
+    /// 判断收银台支付项是否为订单已锁定的支付方式
+    ///
+    /// - METHOD 模式: 比较支付方式编码
+    /// - DIRECT 模式: 比较通道商户号 + 支付能力(均为路由回填到容器的权威值)
+    private boolean isLockedItem(GatewayCashierItem item, GatewayPayOrder order) {
+        CashierItemResolveModeEnum resolveMode = CashierItemResolveModeEnum.findByCode(item.getResolveMode());
+        if (resolveMode == CashierItemResolveModeEnum.METHOD) {
+            return Objects.equals(item.getMethod(), order.getMethod());
+        }
+        if (resolveMode == CashierItemResolveModeEnum.DIRECT) {
+            return Objects.equals(item.getChannelMchNo(), order.getChannelMchNo())
+                    && Objects.equals(item.getCapability(), order.getCapability());
+        }
+        return false;
     }
 
     /// 收银台发起支付

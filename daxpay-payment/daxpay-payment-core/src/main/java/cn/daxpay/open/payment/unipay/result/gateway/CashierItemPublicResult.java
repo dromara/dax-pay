@@ -30,4 +30,8 @@ public class CashierItemPublicResult {
 
     @Schema(description = "是否需要先走 OAuth 获取 openId（前端据此跳授权）")
     private Boolean needOpenId;
+
+    // 是否为订单已锁定的支付项（订单支付中且与已锁定的支付方式匹配）
+    @Schema(description = "是否为订单已锁定的支付项")
+    private Boolean locked;
 }

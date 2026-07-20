@@ -108,8 +108,14 @@ public class GatewayPayHandleService {
                             // 通道/方式不一致则拒绝换端(product/method 在容器上)
                             // 聚合支付 product 传 null(由路由解析填充) 是合法设计, 用容器已持久化值补位避免误判切换支付方式
                             String effectiveProduct = StrUtil.blankToDefault(product, current.getProduct());
+                            // 收银台 DIRECT 模式 item.method 可能为空(由路由反推), 容器上的 method 是首次支付时路由反推后的值;
+                            // 这里先反推对齐, 避免与容器已持久化值口径不一致而误判切换支付方式
+                            String effectiveMethod = method;
+                            if (StrUtil.isBlank(effectiveMethod) && StrUtil.isNotBlank(channelMchNo)) {
+                                effectiveMethod = payRouteService.inferMethodForCapability(channelMchNo, capability);
+                            }
                             if (!Objects.equals(current.getProduct(), effectiveProduct)
-                                    || !Objects.equals(current.getMethod(), method)) {
+                                    || !Objects.equals(current.getMethod(), effectiveMethod)) {
                                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                                         "pay.error.gateway.channelLocked");
                             }
