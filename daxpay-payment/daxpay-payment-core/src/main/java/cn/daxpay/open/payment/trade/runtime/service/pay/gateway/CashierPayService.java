@@ -66,8 +66,15 @@ public class CashierPayService {
         // 订单已发起支付(支付中)且 method 有值时, 支付方式已锁定, 需标记匹配的支付项供前端禁用切换
         boolean orderLocked = Objects.equals(order.getStatus(), GatewayOrderStatusEnum.PAYING.getCode())
                 && StrUtil.isNotBlank(order.getMethod());
-        return gatewayCashierItemManager.listByAppAndBucket(order.getAppId(), typeEnum.getCode(), bucketClientEnv)
-                .stream()
+        List<GatewayCashierItem> items = gatewayCashierItemManager.listByAppAndBucket(
+                order.getAppId(), typeEnum.getCode(), bucketClientEnv);
+        // 订单已锁定但当前收银台桶(cashierType + clientEnv)无匹配项: 跨环境打开(如 web 锁定后 h5 打开),
+        // 当前环境无法继续该锁定的支付, 提前拒绝, 避免用户进入后才在点支付时被拦截
+        if (orderLocked && items.stream().noneMatch(item -> this.isLockedItem(item, order))) {
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "pay.error.gateway.channelLocked");
+        }
+        return items.stream()
                 .map(item -> this.toPublicResult(item, envEnum)
                         // 命中锁定的支付项置 locked=true, 前端据此自动选中并禁用其他项
                         .setLocked(orderLocked && this.isLockedItem(item, order)))
