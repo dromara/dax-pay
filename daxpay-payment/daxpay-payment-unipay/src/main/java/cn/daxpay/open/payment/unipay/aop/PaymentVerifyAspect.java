@@ -3,6 +3,7 @@ package cn.daxpay.open.payment.unipay.aop;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.unipay.param.MerchantPaymentCommonParam;
+import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.daxpay.open.platform.common.json.util.JacksonUtil;
 import cn.daxpay.open.platform.common.request.context.RequestContextHolder;
 import cn.daxpay.open.platform.common.spring.util.WebServletUtil;
@@ -92,13 +93,15 @@ public class PaymentVerifyAspect {
             try {
                 proceed = pjp.proceed();
             } catch (BizException ex) {
-                DaxResult<Void> daxResult = new DaxResult<>(ex.getCode(), ex.getMessage());
+                // DaxResult.msg 按 Accept-Language 解析 messageKey 为本地化消息
+                // 否则商户和日志看到的都是 "error.channel.alipay.payFailed" 这种原始 key, 无法阅读
+                DaxResult<Void> daxResult = new DaxResult<>(ex.getCode(), resolveResponseMessage(ex));
                 enrichDaxResult(daxResult, reqId);
                 paymentSignService.sign(daxResult);
                 result = daxResult;
                 return daxResult;
             }
-            // 对返回值添加响应时间、reqId/traceId 并进行签名
+            // 对返回值添加响应时间、reqId 并进行签名(traceId 走响应头, 不进 body)
             if (proceed instanceof DaxResult<?> daxResult) {
                 daxResult.setResTime(OffsetDateTime.now(ZoneOffset.UTC));
                 enrichDaxResult(daxResult, reqId);
@@ -122,15 +125,27 @@ public class PaymentVerifyAspect {
         }
     }
 
-    /// 回写请求ID与链路追踪ID
+    /// 回写请求ID
+    ///
+    /// traceId 不再写入响应体, 由 [cn.daxpay.open.platform.common.request.context.filter.TraceIdFilter]
+    /// 统一通过 `x-trace-id` 响应头返回, 供客户端关联排障。
     private void enrichDaxResult(DaxResult<?> daxResult, String reqId) {
         if (StrUtil.isNotBlank(reqId)) {
             daxResult.setReqId(reqId);
         }
-        String traceId = resolveTraceId();
-        if (StrUtil.isNotBlank(traceId)) {
-            daxResult.setTraceId(traceId);
+    }
+
+    /// 解析异常消息用于响应(按请求 Accept-Language 国际化)
+    ///
+    /// [BizException#getMessage] 返回的是 messageKey 原文(如 "error.channel.alipay.payFailed"),
+    /// 需通过 [I18nUtil] 解析为本地化消息(如 "支付宝支付异常: 余额不足"),
+    /// 与 [cn.daxpay.open.platform.system.handler.exception.RestExceptionHandler] 的响应消息保持一致语义。
+    private String resolveResponseMessage(BizException ex) {
+        String messageKey = ex.resolveMessageKey();
+        if (messageKey != null) {
+            return I18nUtil.get(messageKey, ex.getArgs());
         }
+        return ex.getMessage();
     }
 
     /// 组装并发布审计事件
