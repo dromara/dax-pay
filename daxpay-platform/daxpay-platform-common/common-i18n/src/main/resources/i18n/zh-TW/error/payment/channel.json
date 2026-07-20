@@ -7,5 +7,9 @@
   "signVerifyFailIllegal": "簽名驗證失敗，非法請求",
   "channelMerchantNotExist": "通道商戶資訊不存在",
   "merchantInfoNotFound": "未查詢到商戶資訊",
-  "originOrderNotExist": "原訂單不存在"
+  "originOrderNotExist": "原訂單不存在",
+  "channelMerchantHasTrade": "通道商戶存在交易記錄，不允許刪除",
+  "channelMerchantHasOrder": "通道商戶存在訂單記錄，不允許刪除",
+  "channelMerchantHasGatewayOrder": "通道商戶存在網關訂單記錄，不允許刪除",
+  "channelMerchantHasRefund": "通道商戶存在退款記錄，不允許刪除"
 }

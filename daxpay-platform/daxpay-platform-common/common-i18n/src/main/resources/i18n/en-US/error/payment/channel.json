@@ -7,5 +7,9 @@
   "signVerifyFailIllegal": "Signature verification failed, illegal request",
   "channelMerchantNotExist": "Channel merchant information not found",
   "merchantInfoNotFound": "Merchant information not found",
-  "originOrderNotExist": "Original order does not exist"
+  "originOrderNotExist": "Original order does not exist",
+  "channelMerchantHasTrade": "Channel merchant has trade records and cannot be deleted",
+  "channelMerchantHasOrder": "Channel merchant has order records and cannot be deleted",
+  "channelMerchantHasGatewayOrder": "Channel merchant has gateway order records and cannot be deleted",
+  "channelMerchantHasRefund": "Channel merchant has refund records and cannot be deleted"
 }

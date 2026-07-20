@@ -35,5 +35,9 @@
   "defaultAppDisabled": "商户默认应用已停用, 请先启用或转交默认标记",
   "defaultStoreCannotDelete": "默认门店不可删除, 请先转交默认标记",
   "defaultStoreNotConfigured": "商户未配置默认门店, 请先在门店管理中配置",
-  "defaultStoreDisabled": "商户默认门店已停用, 请先启用或转交默认标记"
+  "defaultStoreDisabled": "商户默认门店已停用, 请先启用或转交默认标记",
+  "hasTrade": "商户存在交易记录，不允许删除",
+  "hasOrder": "商户存在订单记录，不允许删除",
+  "hasRefund": "商户存在退款记录，不允许删除",
+  "hasUser": "商户存在关联用户，请先在商户用户管理中解绑"
 }

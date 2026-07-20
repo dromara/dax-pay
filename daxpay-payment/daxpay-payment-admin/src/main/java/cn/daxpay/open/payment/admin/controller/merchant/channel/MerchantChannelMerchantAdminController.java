@@ -70,6 +70,14 @@ public class MerchantChannelMerchantAdminController {
         return Res.ok();
     }
 
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "删除通道商户")
+    @PostMapping("/delete")
+    public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {
+        channelMerchantService.delete(id);
+        return Res.ok();
+    }
+
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据商户和通道查询通道商户号列表")
     @GetMapping("/dropdown")

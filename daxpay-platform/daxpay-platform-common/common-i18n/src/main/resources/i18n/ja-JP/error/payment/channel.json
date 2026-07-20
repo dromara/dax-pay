@@ -7,5 +7,9 @@
   "signVerifyFailIllegal": "署名検証に失敗しました。不正なリクエストです",
   "channelMerchantNotExist": "チャネル販売者情報が見つかりません",
   "merchantInfoNotFound": "販売者情報が見つかりません",
-  "originOrderNotExist": "元の注文が存在しません"
+  "originOrderNotExist": "元の注文が存在しません",
+  "channelMerchantHasTrade": "チャネルマーチャントに取引記録が存在するため、削除できません",
+  "channelMerchantHasOrder": "チャネルマーチャントに注文記録が存在するため、削除できません",
+  "channelMerchantHasGatewayOrder": "チャネルマーチャントにゲートウェイ注文記録が存在するため、削除できません",
+  "channelMerchantHasRefund": "チャネルマーチャントに返金記録が存在するため、削除できません"
 }

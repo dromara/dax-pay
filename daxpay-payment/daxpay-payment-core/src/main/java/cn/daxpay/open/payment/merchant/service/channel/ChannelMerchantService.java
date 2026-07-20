@@ -2,19 +2,41 @@ package cn.daxpay.open.payment.merchant.service.channel;
 
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.open.platform.common.translate.service.TransService;
+import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
+import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
 import cn.daxpay.open.platform.core.rest.dto.LabelValue;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
+import cn.daxpay.open.payment.device.terminal.dao.ChannelTerminalManager;
+import cn.daxpay.open.payment.device.terminal.entity.ChannelTerminal;
+import cn.daxpay.open.payment.masterdata.dao.product.PayProductManager;
+import cn.daxpay.open.payment.masterdata.entity.product.PayProduct;
+import cn.daxpay.open.payment.masterdata.service.channel.PayChannelService;
+import cn.daxpay.open.payment.masterdata.result.channel.PayChannelResult;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
+import cn.daxpay.open.payment.merchant.dao.gateway.GatewayAggregateClientEnvManager;
+import cn.daxpay.open.payment.merchant.dao.gateway.GatewayCashierItemManager;
+import cn.daxpay.open.payment.merchant.dao.gateway.GatewayCodeClientEnvManager;
 import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
+import cn.daxpay.open.payment.merchant.entity.gateway.GatewayAggregateClientEnv;
+import cn.daxpay.open.payment.merchant.entity.gateway.GatewayCashierItem;
+import cn.daxpay.open.payment.merchant.entity.gateway.GatewayCodeClientEnv;
 import cn.daxpay.open.payment.merchant.param.channel.ChannelMerchantEditParam;
 import cn.daxpay.open.payment.merchant.param.channel.ChannelMerchantQuery;
 import cn.daxpay.open.payment.merchant.result.channel.ChannelMerchantResult;
-import cn.daxpay.open.payment.masterdata.service.channel.PayChannelService;
-import cn.daxpay.open.payment.masterdata.result.channel.PayChannelResult;
-import cn.daxpay.open.payment.masterdata.dao.product.PayProductManager;
-import cn.daxpay.open.payment.masterdata.entity.product.PayProduct;
+import cn.daxpay.open.payment.route.dao.basic.PayRouteBasicConfigManager;
+import cn.daxpay.open.payment.route.dao.scene.PayRouteSceneConfigManager;
+import cn.daxpay.open.payment.route.entity.basic.PayRouteBasicConfig;
+import cn.daxpay.open.payment.route.entity.scene.PayRouteSceneConfig;
+import cn.daxpay.open.payment.trade.order.dao.GatewayPayOrderManager;
+import cn.daxpay.open.payment.trade.order.dao.NormalPayOrderManager;
+import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
+import cn.daxpay.open.payment.trade.order.dao.RefundOrderManager;
+import cn.daxpay.open.payment.trade.order.entity.GatewayPayOrder;
+import cn.daxpay.open.payment.trade.order.entity.NormalPayOrder;
+import cn.daxpay.open.payment.trade.order.entity.PayTrade;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -36,6 +58,25 @@ public class ChannelMerchantService {
     private final TransService transService;
     private final PayChannelService payChannelService;
     private final PayProductManager payProductManager;
+
+    // === 删除通道商户所需的级联 Manager ===
+
+    // 交易/订单/退款（删除前置校验：硬阻塞）
+    private final PayTradeManager payTradeManager;
+    private final NormalPayOrderManager normalPayOrderManager;
+    private final GatewayPayOrderManager gatewayPayOrderManager;
+    private final RefundOrderManager refundOrderManager;
+    // 路由配置（按 channelMchNo 关联）
+    private final PayRouteSceneConfigManager payRouteSceneConfigManager;
+    private final PayRouteBasicConfigManager payRouteBasicConfigManager;
+    // 网关配置子表（DIRECT 模式按 channelMchNo 关联）
+    private final GatewayCodeClientEnvManager gatewayCodeClientEnvManager;
+    private final GatewayCashierItemManager gatewayCashierItemManager;
+    private final GatewayAggregateClientEnvManager gatewayAggregateClientEnvManager;
+    // 通道终端台账（按 channelMchNo 关联）
+    private final ChannelTerminalManager channelTerminalManager;
+    // 通道扩展数据清理（SPI，按 channel 反查）
+    private final ChannelMerchantCleanupSupport channelMerchantCleanupSupport;
 
     /// 分页
     public PageResult<ChannelMerchantResult> page(PageParam pageParam, ChannelMerchantQuery query){
@@ -71,12 +112,71 @@ public class ChannelMerchantService {
         channelMerchantManager.updateById(mchInfo);
     }
 
-    /// 删除
+    /// 删除通道商户（逻辑删除）
+    ///
+    /// 策略：
+    /// - **交易类数据存在则拒删**（资金交易/订单/退款硬引用，必须可追溯）
+    /// - 通过校验后，按 `channelMchNo` 级联逻辑删除所有平台配置类子表
+    /// - 各通道子模块扩展数据通过 [ChannelMerchantCleanupSupport] SPI 清理（未实现的通道跳过）
+    ///
+    /// 设计权衡：
+    /// - 路由 `pay_route_*` 与 `gateway_*` 子表均按 `channelMchNo` 强关联，主表删除后必须清理避免脏数据
+    /// - 通道扩展表（`XxxChannelMerchant` + `XxxKeyConfig`）由各通道子模块通过 SPI 自清理，
+    ///   未实现 SPI 的通道留孤儿数据（主表已删、路由不再命中，对业务无影响）
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id){
         // 通道: 通道商户不存在
-        var mchInfo = channelMerchantManager.findById(id).orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
+        var mchInfo = channelMerchantManager.findById(id)
+                .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
+        String channelMchNo = mchInfo.getChannelMchNo();
+
+        // 1. 硬阻塞校验：交易/订单/退款存在则拒删
+        if (payTradeManager.existedByField(PayTrade::getChannelMchNo, channelMchNo)) {
+            // 通道: 通道商户存在交易记录，不允许删除
+            throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.channel.channelMerchantHasTrade");
+        }
+        if (normalPayOrderManager.existedByField(NormalPayOrder::getChannelMchNo, channelMchNo)) {
+            // 通道: 通道商户存在订单记录，不允许删除
+            throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.channel.channelMerchantHasOrder");
+        }
+        if (gatewayPayOrderManager.existedByField(GatewayPayOrder::getChannelMchNo, channelMchNo)) {
+            // 通道: 通道商户存在网关订单记录，不允许删除
+            throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.channel.channelMerchantHasGatewayOrder");
+        }
+        if (refundOrderManager.existedByField(RefundOrder::getChannelMchNo, channelMchNo)) {
+            // 通道: 通道商户存在退款记录，不允许删除
+            throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.channel.channelMerchantHasRefund");
+        }
+
+        // 2. 平台配置类级联清理（按 channelMchNo）
+        payRouteSceneConfigManager.deleteByField(PayRouteSceneConfig::getChannelMchNo, channelMchNo);
+        payRouteBasicConfigManager.deleteByField(PayRouteBasicConfig::getChannelMchNo, channelMchNo);
+        gatewayCodeClientEnvManager.deleteByField(GatewayCodeClientEnv::getChannelMchNo, channelMchNo);
+        gatewayCashierItemManager.deleteByField(GatewayCashierItem::getChannelMchNo, channelMchNo);
+        gatewayAggregateClientEnvManager.deleteByField(GatewayAggregateClientEnv::getChannelMchNo, channelMchNo);
+        channelTerminalManager.deleteByField(ChannelTerminal::getChannelMchNo, channelMchNo);
+
+        // 3. 通道扩展表 + KeyConfig 清理（SPI，按 channel 反查实现）
+        String channel = resolveChannelByProduct(mchInfo.getProduct());
+        if (channel != null) {
+            channelMerchantCleanupSupport.cleanup(channel, channelMchNo);
+        }
+
+        // 4. 主表逻辑删
         channelMerchantManager.deleteById(id);
+    }
+
+    /// 通过支付产品编码反查通道编码
+    ///
+    /// 用于删除通道商户时定位通道扩展清理 SPI 实现。
+    /// 不存在则返回 null（跳过 SPI 清理，仅删主表与平台配置）。
+    private String resolveChannelByProduct(String product) {
+        if (product == null || product.isBlank()) {
+            return null;
+        }
+        return payProductManager.findByField(PayProduct::getCode, product)
+                .map(PayProduct::getChannel)
+                .orElse(null);
     }
 
     /// 根据商户和支付产品查询通道商户号列表, 多数支付通道配置使用

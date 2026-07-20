@@ -35,5 +35,9 @@
   "defaultAppDisabled": "商户預設應用已停用, 請先啟用或轉交預設標記",
   "defaultStoreCannotDelete": "預設門店不可刪除, 請先轉交預設標記",
   "defaultStoreNotConfigured": "商户未配置預設門店, 請先在門店管理中配置",
-  "defaultStoreDisabled": "商户預設門店已停用, 請先啟用或轉交預設標記"
+  "defaultStoreDisabled": "商户預設門店已停用, 請先啟用或轉交預設標記",
+  "hasTrade": "商戶存在交易記錄，不允許刪除",
+  "hasOrder": "商戶存在訂單記錄，不允許刪除",
+  "hasRefund": "商戶存在退款記錄，不允許刪除",
+  "hasUser": "商戶存在關聯用戶，請先喺商戶用戶管理中解綁"
 }

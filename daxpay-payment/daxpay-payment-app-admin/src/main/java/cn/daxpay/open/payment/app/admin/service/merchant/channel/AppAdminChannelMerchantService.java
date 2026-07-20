@@ -47,6 +47,11 @@ public class AppAdminChannelMerchantService {
         channelMerchantService.update(param);
     }
 
+    /// 删除通道商户（级联清理配置 + 通道扩展数据）
+    public void delete(Long id) {
+        channelMerchantService.delete(id);
+    }
+
     /// 通道商户下拉
     public List<LabelValue> dropdown(String mchNo, String channel) {
         return channelMerchantService.dropdown(mchNo, channel);

@@ -2,14 +2,23 @@ package cn.daxpay.open.channel.wechat.service.isv;
 
 import cn.daxpay.open.channel.wechat.code.WechatAuthAppTypeEnum;
 import cn.daxpay.open.channel.wechat.dao.isv.WechatIsvChannelMerchantManager;
+import cn.daxpay.open.channel.wechat.dao.isv.WechatIsvMchAppAuthConfigManager;
+import cn.daxpay.open.channel.wechat.dao.isv.WechatIsvMchAppCapabilityManager;
+import cn.daxpay.open.channel.wechat.dao.isv.WechatIsvMchAppManager;
 import cn.daxpay.open.channel.wechat.entity.isv.WechatIsvChannelMerchant;
+import cn.daxpay.open.channel.wechat.entity.isv.WechatIsvMchApp;
+import cn.daxpay.open.channel.wechat.entity.isv.WechatIsvMchAppAuthConfig;
+import cn.daxpay.open.channel.wechat.entity.isv.WechatIsvMchAppCapability;
 import cn.daxpay.open.channel.wechat.param.isv.WechatIsvAuthAppTypeUpdateParam;
 import cn.daxpay.open.channel.wechat.param.isv.WechatIsvChannelMerchantCreateParam;
 import cn.daxpay.open.channel.wechat.result.isv.WechatIsvChannelMerchantResult;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
+import cn.daxpay.open.payment.merchant.service.channel.ChannelMerchantCleanupService;
+import cn.daxpay.open.payment.masterdata.dao.product.PayProductConfigManager;
 import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.channel.ChannelMerchantSourceEnum;
+import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.util.ChannelMchNoGenerateUtil;
@@ -26,13 +35,38 @@ import java.util.Arrays;
 /// 微信特约商户关联到服务商本身(服务商密钥全局唯一), 不挂靠具体服务商应用。
 /// 一个商户下同一特约商户号(subMchId)只允许绑定一次。
 ///
+/// 同时作为通道商户扩展数据清理 SPI 实现（[ChannelMerchantCleanupService]），
+/// 在通道商户删除时清理微信服务商相关的扩展表。
+///
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class WechatIsvChannelMerchantService {
+public class WechatIsvChannelMerchantService implements ChannelMerchantCleanupService {
 
     private final ChannelMerchantManager channelMerchantManager;
+    private final PayProductConfigManager payProductConfigManager;
     private final WechatIsvChannelMerchantManager wechatIsvChannelMerchantManager;
+    private final WechatIsvMchAppManager wechatIsvMchAppManager;
+    private final WechatIsvMchAppCapabilityManager wechatIsvMchAppCapabilityManager;
+    private final WechatIsvMchAppAuthConfigManager wechatIsvMchAppAuthConfigManager;
+
+    /// 通道编码（对应 [ChannelEnum#WECHAT]，与直连共享同一 channel，由调度器遍历调用）
+    @Override
+    public String getChannel() {
+        return ChannelEnum.WECHAT.getCode();
+    }
+
+    /// 清理指定通道商户号下微信服务商的所有扩展数据
+    ///
+    /// 包含：服务商扩展表、子商户应用、子商户应用能力、子商户应用授权配置
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteByChannelMchNo(String channelMchNo) {
+        wechatIsvChannelMerchantManager.deleteByField(WechatIsvChannelMerchant::getChannelMchNo, channelMchNo);
+        wechatIsvMchAppManager.deleteByField(WechatIsvMchApp::getChannelMchNo, channelMchNo);
+        wechatIsvMchAppCapabilityManager.deleteByField(WechatIsvMchAppCapability::getChannelMchNo, channelMchNo);
+        wechatIsvMchAppAuthConfigManager.deleteByField(WechatIsvMchAppAuthConfig::getChannelMchNo, channelMchNo);
+    }
 
     /// 创建微信服务商通道商户
     @Transactional(rollbackFor = Exception.class)
@@ -53,6 +87,9 @@ public class WechatIsvChannelMerchantService {
         channelMerchant.setProduct(param.getProduct());
         channelMerchant.setSource(ChannelMerchantSourceEnum.MANUAL.getCode());
         channelMerchant.setEnable(true);
+        // 沙箱标记从支付产品生效环境同步写入, 禁止商户/表单设置
+        boolean sandbox = payProductConfigManager.isSandboxActive(param.getProduct());
+        channelMerchant.setSandbox(sandbox);
         channelMerchantManager.save(channelMerchant);
         // 写服务商绑定表
         var entity = new WechatIsvChannelMerchant();

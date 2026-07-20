@@ -18,7 +18,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 /// 通道商户管理(运营平台-综合管理)
-/// 全局查看和管理所有通道商户，仅支持查看和编辑
+/// 全局查看和管理所有通道商户，支持查看、编辑和删除
 @PermCode(menuCode = PermCodes.Channel.Merchant.MENU)
 @Validated
 @Tag(name = "通道商户管理(运营平台-综合管理)")
@@ -33,6 +33,14 @@ public class ChannelMerchantAdminController {
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated ChannelMerchantEditParam param) {
         channelMerchantService.update(param);
+        return Res.ok();
+    }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "删除通道商户")
+    @PostMapping("/delete")
+    public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {
+        channelMerchantService.delete(id);
         return Res.ok();
     }
 

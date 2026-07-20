@@ -7,5 +7,9 @@
   "signVerifyFailIllegal": "签名验证失败，非法请求",
   "channelMerchantNotExist": "通道商户信息不存在",
   "merchantInfoNotFound": "未查询到商户信息",
-  "originOrderNotExist": "原订单不存在"
+  "originOrderNotExist": "原订单不存在",
+  "channelMerchantHasTrade": "通道商户存在交易记录，不允许删除",
+  "channelMerchantHasOrder": "通道商户存在订单记录，不允许删除",
+  "channelMerchantHasGatewayOrder": "通道商户存在网关订单记录，不允许删除",
+  "channelMerchantHasRefund": "通道商户存在退款记录，不允许删除"
 }

@@ -23,10 +23,28 @@ import cn.daxpay.open.platform.iam.service.user.UserAdminService;
 import cn.daxpay.open.platform.core.exception.config.ConfigNotExistException;
 import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
 import cn.daxpay.open.payment.merchant.convert.info.MerchantInfoConvert;
+import cn.daxpay.open.payment.merchant.dao.appinfo.MchAppInfoManager;
+import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
+import cn.daxpay.open.payment.merchant.dao.config.MchAppNotifyConfigManager;
+import cn.daxpay.open.payment.merchant.dao.config.MerchantCredentialManager;
+import cn.daxpay.open.payment.merchant.dao.gateway.GatewayAggregateConfigManager;
+import cn.daxpay.open.payment.merchant.dao.gateway.GatewayCashierItemManager;
+import cn.daxpay.open.payment.merchant.dao.gateway.GatewayCodeConfigManager;
 import cn.daxpay.open.payment.merchant.dao.info.MerchantInfoManager;
 import cn.daxpay.open.payment.merchant.dao.info.MerchantUserManager;
+import cn.daxpay.open.payment.merchant.dao.store.MchStoreInfoManager;
+import cn.daxpay.open.payment.merchant.dao.wxverify.WxDomainVerifyManager;
+import cn.daxpay.open.payment.merchant.entity.appinfo.MchAppInfo;
+import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
+import cn.daxpay.open.payment.merchant.entity.config.MchAppNotifyConfig;
+import cn.daxpay.open.payment.merchant.entity.config.MerchantCredential;
+import cn.daxpay.open.payment.merchant.entity.gateway.GatewayAggregateConfig;
+import cn.daxpay.open.payment.merchant.entity.gateway.GatewayCashierItem;
+import cn.daxpay.open.payment.merchant.entity.gateway.GatewayCodeConfig;
 import cn.daxpay.open.payment.merchant.entity.info.MerchantInfo;
 import cn.daxpay.open.payment.merchant.entity.info.MerchantUser;
+import cn.daxpay.open.payment.merchant.entity.store.MchStoreInfo;
+import cn.daxpay.open.payment.merchant.entity.wxverify.WxDomainVerify;
 import cn.daxpay.open.platform.core.enums.merchant.MerchantStatusEnum;
 import cn.daxpay.open.payment.merchant.param.info.MerchantInfoParam;
 import cn.daxpay.open.payment.merchant.param.info.MerchantInfoQuery;
@@ -34,6 +52,14 @@ import cn.daxpay.open.payment.merchant.param.info.MerchantRegisterParam;
 import cn.daxpay.open.payment.merchant.result.info.MerchantInfoResult;
 import cn.daxpay.open.payment.merchant.service.appinfo.MchAppInfoService;
 import cn.daxpay.open.payment.merchant.service.store.MchStoreInfoService;
+import cn.daxpay.open.payment.route.dao.strategy.PayRouteStrategyManager;
+import cn.daxpay.open.payment.route.entity.strategy.PayRouteStrategy;
+import cn.daxpay.open.payment.trade.order.dao.NormalPayOrderManager;
+import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
+import cn.daxpay.open.payment.trade.order.dao.RefundOrderManager;
+import cn.daxpay.open.payment.trade.order.entity.NormalPayOrder;
+import cn.daxpay.open.payment.trade.order.entity.PayTrade;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import cn.daxpay.open.platform.common.translate.service.TransService;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -63,6 +89,26 @@ public class MerchantAdminService {
     private final TransService transService;
     private final MchAppInfoService mchAppInfoService;
     private final MchStoreInfoService mchStoreInfoService;
+
+    // === 删除商户所需的级联 Manager（按 mchNo 关联的子表）===
+
+    // 应用 / 门店 / 通道商户主表 / 凭证 / 通知配置
+    private final MchAppInfoManager mchAppInfoManager;
+    private final MchStoreInfoManager mchStoreInfoManager;
+    private final ChannelMerchantManager channelMerchantManager;
+    private final MerchantCredentialManager merchantCredentialManager;
+    private final MchAppNotifyConfigManager mchAppNotifyConfigManager;
+    // 网关与路由配置
+    private final GatewayCodeConfigManager gatewayCodeConfigManager;
+    private final GatewayAggregateConfigManager gatewayAggregateConfigManager;
+    private final GatewayCashierItemManager gatewayCashierItemManager;
+    private final PayRouteStrategyManager payRouteStrategyManager;
+    // 杂项
+    private final WxDomainVerifyManager wxDomainVerifyManager;
+    // 交易/订单/退款（删除前置校验：硬阻塞）
+    private final PayTradeManager payTradeManager;
+    private final NormalPayOrderManager normalPayOrderManager;
+    private final RefundOrderManager refundOrderManager;
 
     /// 添加商户
     @Transactional(rollbackFor = Exception.class)
@@ -141,10 +187,65 @@ public class MerchantAdminService {
                 .orElseThrow(DataNotExistException::new);
     }
 
-    /// 删除
+    /// 删除商户（逻辑删除 + 禁用）
+    ///
+    /// 策略：
+    /// - **交易类数据存在则拒删**（合规/对账要求，历史数据必须可追溯）
+    /// - **启用态关联用户存在则拒删**（请先在商户用户管理中解绑或禁用）
+    /// - 通过校验后，按 `mchNo` 级联逻辑删除所有配置类子表，主表置禁用 + 逻辑删
+    ///
+    /// 注意：
+    /// - 通道扩展表（各通道 `XxxChannelMerchant` + `XxxKeyConfig`）**不在本次级联范围**，
+    ///   避免事务过深与跨模块循环依赖；主表 `mch_channel_merchant` 删除后路由不再命中，
+    ///   扩展表孤儿数据对业务无影响。
+    /// - 通道商户主表删除仅清主表，不触发 [cn.daxpay.open.payment.merchant.service.channel.ChannelMerchantCleanupSupport]。
+    @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
-        // 商户: 商户不允许删除
-        throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.merchant.mchNotAllowDelete");
+        MerchantInfo merchant = merchantInfoManager.findById(id)
+                .orElseThrow(DataNotExistException::new);
+        String mchNo = merchant.getMchNo();
+
+        // 1. 硬阻塞校验：交易/订单/退款存在则拒删
+        if (payTradeManager.existedByField(PayTrade::getMchNo, mchNo)) {
+            // 商户: 商户存在交易记录，不允许删除
+            throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.merchant.hasTrade");
+        }
+        if (normalPayOrderManager.existedByField(NormalPayOrder::getMchNo, mchNo)) {
+            // 商户: 商户存在订单记录，不允许删除
+            throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.merchant.hasOrder");
+        }
+        if (refundOrderManager.existedByField(RefundOrder::getMchNo, mchNo)) {
+            // 商户: 商户存在退款记录，不允许删除
+            throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.merchant.hasRefund");
+        }
+
+        // 2. 硬阻塞校验：关联用户存在则拒删（提示先到商户用户管理中解绑或删除）
+        // 关联用户表非空即阻塞，避免删除后用户登录查不到商户报错；启用/禁用用户均要求先解绑
+        if (merchantUserManager.existedByField(MerchantUser::getMchNo, mchNo)) {
+            // 商户: 商户存在关联用户，请先在商户用户管理中解绑
+            throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.merchant.hasUser");
+        }
+
+        // 3. 级联逻辑删除（按 mchNo 批量更新 deleted=true）
+        // 配置类子表（强关联，业务上属于商户私有数据）
+        mchAppInfoManager.deleteByField(MchAppInfo::getMchNo, mchNo);
+        mchStoreInfoManager.deleteByField(MchStoreInfo::getMchNo, mchNo);
+        channelMerchantManager.deleteByField(ChannelMerchant::getMchNo, mchNo);
+        merchantCredentialManager.deleteByField(MerchantCredential::getMchNo, mchNo);
+        mchAppNotifyConfigManager.deleteByField(MchAppNotifyConfig::getMchNo, mchNo);
+        // 网关与路由配置（按 mchNo 隔离的主表，其子表如 GatewayCodeClientEnv 留孤儿不影响业务）
+        gatewayCodeConfigManager.deleteByField(GatewayCodeConfig::getMchNo, mchNo);
+        gatewayAggregateConfigManager.deleteByField(GatewayAggregateConfig::getMchNo, mchNo);
+        gatewayCashierItemManager.deleteByField(GatewayCashierItem::getMchNo, mchNo);
+        payRouteStrategyManager.deleteByField(PayRouteStrategy::getMchNo, mchNo);
+        // 杂项
+        wxDomainVerifyManager.deleteByField(WxDomainVerify::getMchNo, mchNo);
+
+        // 4. 主表：置禁用 + 逻辑删
+        // 注意：MchBaseEntity#setMchNo 链式返回父类型，单独赋值；此处仅更新状态不涉及 mchNo
+        merchant.setStatus(MerchantStatusEnum.DISABLED.getCode());
+        merchantInfoManager.updateById(merchant);
+        merchantInfoManager.deleteById(id);
     }
 
     /// 生成商户号
