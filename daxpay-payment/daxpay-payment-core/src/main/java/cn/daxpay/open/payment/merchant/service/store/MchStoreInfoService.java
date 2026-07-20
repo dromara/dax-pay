@@ -73,12 +73,12 @@ public class MchStoreInfoService {
     /// 为商户创建默认门店（启用 + defaultStore=true；名称按当前请求语言生成）
     ///
     /// @param mchNo         商户号
-    /// @param mchName       商户名称（用于生成默认门店名）
+    /// @param mchShortName  商户简称（用于生成默认门店名）
     /// @param contactPhone  联系电话（可空）
-    public void createDefaultStore(String mchNo, String mchName, String contactPhone) {
+    public void createDefaultStore(String mchNo, String mchShortName, String contactPhone) {
         MchStoreInfo store = new MchStoreInfo();
-        // 默认门店名称（payment.merchant.defaultStoreName，{0}=商户名）
-        store.setStoreName(I18nUtil.get("payment.merchant.defaultStoreName", mchName));
+        // 默认门店名称（payment.merchant.defaultStoreName，{0}=商户简称）
+        store.setStoreName(I18nUtil.get("payment.merchant.defaultStoreName", mchShortName));
         store.setContactPhone(contactPhone);
         store.setStatus(StoreStatusEnum.ENABLE.getCode());
         store.setDefaultStore(true);

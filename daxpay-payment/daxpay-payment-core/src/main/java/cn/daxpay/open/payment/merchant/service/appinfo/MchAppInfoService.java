@@ -85,12 +85,12 @@ public class MchAppInfoService {
 
     /// 为商户创建默认应用（启用 + defaultApp=true；名称按当前请求语言生成）
     ///
-    /// @param mchNo   商户号
-    /// @param mchName 商户名称（用于生成默认应用名）
-    public void createDefaultApp(String mchNo, String mchName) {
+    /// @param mchNo         商户号
+    /// @param mchShortName  商户简称（用于生成默认应用名）
+    public void createDefaultApp(String mchNo, String mchShortName) {
         MchAppInfo mchApp = new MchAppInfo();
-        // 默认应用名称（payment.merchant.defaultAppName，{0}=商户名）
-        mchApp.setAppName(I18nUtil.get("payment.merchant.defaultAppName", mchName));
+        // 默认应用名称（payment.merchant.defaultAppName，{0}=商户简称）
+        mchApp.setAppName(I18nUtil.get("payment.merchant.defaultAppName", mchShortName));
         mchApp.setDefaultApp(true);
         mchApp.setStatus(MchAppStatusEnum.ENABLE.getCode());
         mchApp.setAppId(this.generateAppId());

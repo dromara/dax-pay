@@ -77,9 +77,9 @@ public class MerchantUserService {
         this.createMerchantAdmin(param, merchant);
         merchantInfoManager.save(merchant);
         // 创建默认应用（名称按请求语言）
-        mchAppInfoService.createDefaultApp(merchant.getMchNo(), merchant.getMchName());
+        mchAppInfoService.createDefaultApp(merchant.getMchNo(), merchant.getMchShortName());
         // 创建默认门店（名称按请求语言）
-        mchStoreInfoService.createDefaultStore(merchant.getMchNo(), merchant.getMchName(), param.getPhone());
+        mchStoreInfoService.createDefaultStore(merchant.getMchNo(), merchant.getMchShortName(), param.getPhone());
     }
 
     /// 创建商户管理员
