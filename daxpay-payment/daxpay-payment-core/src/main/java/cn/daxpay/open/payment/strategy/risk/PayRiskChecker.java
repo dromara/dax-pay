@@ -7,8 +7,6 @@ package cn.daxpay.open.payment.strategy.risk;
 ///
 /// **注意**：与 [cn.daxpay.open.payment.strategy.plugin.AbsPayPluginStrategy] 不同——
 /// 后者为协议侧事后广播且吞异常；本接口异常须向上抛出以拒绝交易。
-///
-/// 本期支付主链路尚未调用本接口，仅预留契约与插件实现。
 public interface PayRiskChecker {
 
     /// 支付前检查。命中应抛业务异常（如 BizInfoException）以拒绝下单。
@@ -16,5 +14,13 @@ public interface PayRiskChecker {
 
     /// 支付成功后检查（主扫等事后 buyerId 补洞）。默认只记命中，不抛错。
     default void checkAfterPay(PayRiskCheckContext ctx) {
+    }
+
+    /// 是否存在 openId 类型黑名单（供网关层决定是否触发强制 OAuth 取 openId）
+    ///
+    /// 默认 false：插件未安装或当前无 openId 名单时，主扫/H5 等免 openId 方式
+    /// 不强制走 OAuth，保持现有用户体验。仅当存在 openId 名单时才触发静默授权。
+    default boolean hasOpenIdBlacklist() {
+        return false;
     }
 }

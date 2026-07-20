@@ -228,10 +228,14 @@ public class PlatformSecurityConfigService {
         systemConfigService.updateConfig(PlatformConfigTypeEnum.IAM_REPLAY_PROTECT, data);
     }
 
-    // ========== 支付安全配置（风控开关，支付主链路按此决定是否调用风控检查器） ==========
+    // ========== 支付安全配置（风控开关，支付主链路高频读取，走多级缓存） ==========
 
-    /// 获取支付安全配置实体
-    public PlatformPaySecurityConfig getPaySecurityConfig() {
+    /// 支付安全配置缓存名（L1 Caffeine + L2 Redis）
+    public static final String PAY_SECURITY_CACHE_NAME = "system:pay-security-config";
+
+    /// 缓存配置 JSON（L2 安全类型: String；key 带 :json 避免命中旧版 POJO 缓存）
+    @Cacheable(value = PAY_SECURITY_CACHE_NAME, key = "'current:json'")
+    public String getPaySecurityConfigJson() {
         PlatformPaySecurityConfig config = systemConfigService.getOrCreateConfig(
                 PlatformConfigTypeEnum.PAY_SECURITY,
                 PlatformPaySecurityConfig.class,
@@ -239,7 +243,18 @@ public class PlatformSecurityConfigService {
         if (config == null) {
             config = defaultPaySecurityConfig();
         }
-        return config;
+        return JacksonUtil.toJson(config);
+    }
+
+    /// 获取支付安全配置实体（从缓存 JSON 显式还原类型）
+    public PlatformPaySecurityConfig getPaySecurityConfig() {
+        // 走 self 代理以命中缓存
+        String json = self.getPaySecurityConfigJson();
+        if (StrUtil.isBlank(json)) {
+            return defaultPaySecurityConfig();
+        }
+        PlatformPaySecurityConfig config = JacksonUtil.toBean(json, PlatformPaySecurityConfig.class);
+        return config == null ? defaultPaySecurityConfig() : config;
     }
 
     /// 支付安全配置默认值: 默认开启风控、命中阻断、事后补录
@@ -252,12 +267,16 @@ public class PlatformSecurityConfigService {
 
     /// 获取支付安全配置(结果)
     public PlatformPaySecurityConfigResult findPaySecurityConfig() {
-        return PlatformSecurityConfigConvert.CONVERT.toPaySecurityResult(this.getPaySecurityConfig());
+        return PlatformSecurityConfigConvert.CONVERT.toPaySecurityResult(self.getPaySecurityConfig());
     }
 
     /// 更新支付安全配置
+    @CacheEvict(value = PAY_SECURITY_CACHE_NAME, allEntries = true)
     public void updatePaySecurityConfig(PlatformPaySecurityConfigParam param) {
-        PlatformPaySecurityConfig data = this.getPaySecurityConfig();
+        PlatformPaySecurityConfig data = systemConfigService.getOrCreateConfig(
+                PlatformConfigTypeEnum.PAY_SECURITY,
+                PlatformPaySecurityConfig.class,
+                defaultPaySecurityConfig());
         PlatformSecurityConfigConvert.CONVERT.copy(param, data);
         systemConfigService.updateConfig(PlatformConfigTypeEnum.PAY_SECURITY, data);
     }

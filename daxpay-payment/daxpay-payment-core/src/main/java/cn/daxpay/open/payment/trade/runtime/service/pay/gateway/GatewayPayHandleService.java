@@ -8,6 +8,8 @@ import cn.daxpay.open.payment.route.service.runtime.PayRouteService;
 import cn.daxpay.open.payment.strategy.PaymentStrategyFactory;
 import cn.daxpay.open.payment.strategy.pay.AbsNormalPayStrategy;
 import cn.daxpay.open.payment.strategy.pay.PayStrategyContext;
+import cn.daxpay.open.payment.strategy.risk.PayRiskCheckContext;
+import cn.daxpay.open.payment.strategy.risk.PayRiskChecker;
 import cn.daxpay.open.payment.trade.runtime.bo.PayTradeResultBo;
 import cn.daxpay.open.payment.trade.runtime.service.pay.common.PayUniHandleService;
 import cn.daxpay.open.payment.trade.order.dao.GatewayPayOrderManager;
@@ -16,15 +18,18 @@ import cn.daxpay.open.payment.trade.order.entity.GatewayPayOrder;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
+import cn.daxpay.open.platform.common.redis.lock.LockExecutor;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.PayFailureException;
 import cn.daxpay.open.platform.core.util.TradeNoGenerateUtil;
+import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformPaySecurityConfig;
+import cn.daxpay.open.platform.system.service.config.security.PlatformSecurityConfigService;
 import cn.daxpay.open.payment.trade.util.PayTradeInitUtil;
-import cn.daxpay.open.platform.common.redis.lock.LockExecutor;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,6 +50,9 @@ public class GatewayPayHandleService {
     private final PayUniHandleService payUniHandleService;
     private final GatewayPayAssistService gatewayPayAssistService;
     private final LockExecutor lockExecutor;
+    /// 风控检查器（可选 SPI：插件 daxpay-plugin-risk 在 classpath 时生效，无 Bean 视为放行）
+    private final ObjectProvider<PayRiskChecker> payRiskCheckerProvider;
+    private final PlatformSecurityConfigService platformSecurityConfigService;
 
     /// 自注入，保证 [GatewayPayHandleService#createTrade] / [GatewayPayHandleService#paySuccess] 走 Spring 事务代理
     private final GatewayPayHandleService self;
@@ -56,6 +64,8 @@ public class GatewayPayHandleService {
                                    PayUniHandleService payUniHandleService,
                                    GatewayPayAssistService gatewayPayAssistService,
                                    LockExecutor lockExecutor,
+                                   ObjectProvider<PayRiskChecker> payRiskCheckerProvider,
+                                   PlatformSecurityConfigService platformSecurityConfigService,
                                    @Lazy GatewayPayHandleService self) {
         this.gatewayPayOrderManager = gatewayPayOrderManager;
         this.payTradeManager = payTradeManager;
@@ -64,6 +74,8 @@ public class GatewayPayHandleService {
         this.payUniHandleService = payUniHandleService;
         this.gatewayPayAssistService = gatewayPayAssistService;
         this.lockExecutor = lockExecutor;
+        this.payRiskCheckerProvider = payRiskCheckerProvider;
+        this.platformSecurityConfigService = platformSecurityConfigService;
         this.self = self;
     }
 
@@ -112,6 +124,8 @@ public class GatewayPayHandleService {
                     // 组装路由用参数
                     NormalPayParam payParam = this.buildPayParam(current, product, method, channelMchNo, capability, openId, clientIp);
                     payRouteService.resolve(payParam);
+                    // 风控前置检查: 命中黑名单(IP/openId)抛异常拒绝下单; openId 缺失时降级为仅 IP 校验 + 事后补录
+                    this.runRiskBeforePay(current, payParam);
                     var payStrategy = PaymentStrategyFactory.createByProduct(payParam.getProduct(), AbsNormalPayStrategy.class);
                     var context = new PayStrategyContext().setPayParam(payParam);
                     payStrategy.doBeforePay(context);
@@ -139,7 +153,10 @@ public class GatewayPayHandleService {
                         }
                         throw new PayFailureException(errMsg);
                     }
-                    return self.paySuccess(current, existing, result);
+                    NormalPayResult payResult = self.paySuccess(current, existing, result);
+                    // 风控事后补录: 用通道回写 buyerId 补充命中检查, 仅记录不阻断资金态
+                    this.runRiskAfterPay(current, payParam, existing, result);
+                    return payResult;
                 },
                 () -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.processing")
         );
@@ -257,6 +274,73 @@ public class GatewayPayHandleService {
                 .setStatus(trade.getStatus())
                 .setPayBody(order.getPayBody())
                 .setPayBodyType(order.getPayBodyType());
+    }
+
+    /// 支付前风控检查：命中黑名单抛异常拒绝下单；插件缺失或开关关闭视为放行
+    private void runRiskBeforePay(GatewayPayOrder order, NormalPayParam payParam) {
+        PayRiskChecker checker = payRiskCheckerProvider.getIfAvailable();
+        if (checker == null) {
+            return;
+        }
+        PlatformPaySecurityConfig config = platformSecurityConfigService.getPaySecurityConfig();
+        if (!Boolean.TRUE.equals(config.getRiskEnabled())
+                || !Boolean.TRUE.equals(config.getRiskBlockBeforePay())) {
+            return;
+        }
+        PayRiskCheckContext ctx = this.buildRiskContext(order, payParam);
+        checker.checkBeforePay(ctx);
+    }
+
+    /// 支付成功后风控补录：用通道回写 buyerId 补充命中检查，仅记录不阻断资金态
+    private void runRiskAfterPay(GatewayPayOrder order, NormalPayParam payParam, PayTrade trade, PayTradeResultBo result) {
+        PayRiskChecker checker = payRiskCheckerProvider.getIfAvailable();
+        if (checker == null) {
+            return;
+        }
+        PlatformPaySecurityConfig config = platformSecurityConfigService.getPaySecurityConfig();
+        if (!Boolean.TRUE.equals(config.getRiskEnabled())
+                || !Boolean.TRUE.equals(config.getRiskCheckAfterPay())) {
+            return;
+        }
+        PayRiskCheckContext ctx = this.buildRiskContext(order, payParam);
+        ctx.setTradeNo(trade.getTradeNo());
+        ctx.setTradeType(PayTradeTypeEnum.GATEWAY.getCode());
+        if (result != null) {
+            ctx.setBuyerId(result.getBuyerId());
+            if (StrUtil.isBlank(ctx.getOpenId())) {
+                ctx.setOpenId(result.getUserId());
+            }
+        }
+        try {
+            checker.checkAfterPay(ctx);
+        } catch (Exception e) {
+            log.warn("网关支付后风控补录失败 tradeNo={}: {}", trade.getTradeNo(), e.getMessage());
+        }
+    }
+
+    /// 构建风控上下文（路由解析后调用, 此时 product/method/channelAppId 已回填）
+    private PayRiskCheckContext buildRiskContext(GatewayPayOrder order, NormalPayParam payParam) {
+        PayRiskCheckContext ctx = new PayRiskCheckContext()
+                // 网关统一标 gateway, 命中记录可按场景筛选运营处置
+                .setScene("gateway")
+                .setMchNo(payParam.getMchNo())
+                .setAppId(payParam.getAppId())
+                .setClientIp(payParam.getClientIp())
+                .setOpenId(payParam.getOpenId())
+                .setMethod(payParam.getMethod())
+                .setProduct(payParam.getProduct())
+                .setChannelAppId(payParam.getChannelAppId())
+                .setOrderNo(order.getOrderNo())
+                .setBizOrderNo(payParam.getBizOrderNo());
+        // 由支付产品反推通道族, 供 openId 名单精确匹配
+        if (StrUtil.isNotBlank(payParam.getProduct())) {
+            try {
+                ctx.setChannel(ProductEnum.findByCode(payParam.getProduct()).getChannel());
+            } catch (Exception e) {
+                // 反推失败忽略, channel 留空走宽匹配
+            }
+        }
+        return ctx;
     }
 
 }

@@ -6,7 +6,14 @@ import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.PayFailureException;
 import cn.daxpay.open.platform.common.spring.util.WebServletUtil;
+import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformPaySecurityConfig;
+import cn.daxpay.open.platform.system.service.config.security.PlatformSecurityConfigService;
+import cn.daxpay.open.payment.strategy.risk.PayRiskCheckContext;
+import cn.daxpay.open.payment.strategy.risk.PayRiskChecker;
+import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
+import cn.daxpay.open.platform.core.enums.pay.trade.TradeSourceEnum;
 import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
+import cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import cn.daxpay.open.payment.common.util.PayBarCodeUtil;
 import cn.daxpay.open.payment.strategy.PaymentStrategyFactory;
@@ -23,6 +30,7 @@ import cn.daxpay.open.platform.common.redis.lock.LockExecutor;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +49,9 @@ public class NormalPayService {
     private final PayRouteService payRouteService;
     private final MerchantContextLoader merchantContextLoader;
     private final SensitiveWordCheckService sensitiveWordCheckService;
+    /// 风控检查器（可选 SPI：插件 daxpay-plugin-risk 在 classpath 时生效，无 Bean 视为放行）
+    private final ObjectProvider<PayRiskChecker> payRiskCheckerProvider;
+    private final PlatformSecurityConfigService platformSecurityConfigService;
 
     /// 自注入，保证 [NormalPayService#paySuccess] 走 Spring 事务代理
     private final NormalPayService self;
@@ -51,6 +62,8 @@ public class NormalPayService {
                             PayRouteService payRouteService,
                             MerchantContextLoader merchantContextLoader,
                             SensitiveWordCheckService sensitiveWordCheckService,
+                            ObjectProvider<PayRiskChecker> payRiskCheckerProvider,
+                            PlatformSecurityConfigService platformSecurityConfigService,
                             @Lazy NormalPayService self) {
         this.payAssistService = payAssistService;
         this.payUniHandleService = payUniHandleService;
@@ -58,6 +71,8 @@ public class NormalPayService {
         this.payRouteService = payRouteService;
         this.merchantContextLoader = merchantContextLoader;
         this.sensitiveWordCheckService = sensitiveWordCheckService;
+        this.payRiskCheckerProvider = payRiskCheckerProvider;
+        this.platformSecurityConfigService = platformSecurityConfigService;
         this.self = self;
     }
 
@@ -107,6 +122,8 @@ public class NormalPayService {
         this.resolveBarcodeMethodIfNeeded(payParam);
         // 路由解析：直接指定(已传 channelMchNo)优先，否则按 appId+method 跟随通道路由匹配
         payRouteService.resolve(payParam);
+        // 风控前置检查: 命中黑名单(IP/openId)抛异常拒绝下单; openId 缺失时降级为仅 IP 校验 + 事后补录
+        this.runRiskBeforePay(payParam);
         var payStrategy = PaymentStrategyFactory.createByProduct(payParam.getProduct(), AbsNormalPayStrategy.class);
         // 支付前处理: 校验与通道配置组装(只依赖请求参数), 失败直接抛出不持久化(订单尚未创建)
         var context = new PayStrategyContext().setPayParam(payParam);
@@ -136,7 +153,10 @@ public class NormalPayService {
             payUniHandleService.payFail(trade, errMsg);
             throw e;
         }
-        return self.paySuccess(trade, result);
+        NormalPayResult payResult = self.paySuccess(trade, result);
+        // 风控事后补录: 用通道回写 buyerId 补充命中检查, 仅记录不阻断资金态
+        this.runRiskAfterPay(payParam, trade, result);
+        return payResult;
     }
 
     /// 付款码 method 回填: 仅 authCode 时识别; 已传分钱包条码 method 时校验前缀一致
@@ -164,5 +184,82 @@ public class NormalPayService {
         // 回执与 payBody 写容器, 由 payAfterHandel 统一处理
         payUniHandleService.payAfterHandel(trade, result);
         return payAssistService.buildResult(trade);
+    }
+
+    /// 支付前风控检查：命中黑名单抛异常拒绝下单；插件缺失或开关关闭视为放行
+    private void runRiskBeforePay(NormalPayParam payParam) {
+        PayRiskChecker checker = payRiskCheckerProvider.getIfAvailable();
+        if (checker == null) {
+            return;
+        }
+        PlatformPaySecurityConfig config = platformSecurityConfigService.getPaySecurityConfig();
+        if (!Boolean.TRUE.equals(config.getRiskEnabled())
+                || !Boolean.TRUE.equals(config.getRiskBlockBeforePay())) {
+            return;
+        }
+        PayRiskCheckContext ctx = this.buildRiskContext(payParam);
+        checker.checkBeforePay(ctx);
+    }
+
+    /// 支付成功后风控补录：用通道回写 buyerId 补充命中检查，仅记录不阻断资金态
+    private void runRiskAfterPay(NormalPayParam payParam, PayTrade trade, PayTradeResultBo result) {
+        PayRiskChecker checker = payRiskCheckerProvider.getIfAvailable();
+        if (checker == null) {
+            return;
+        }
+        PlatformPaySecurityConfig config = platformSecurityConfigService.getPaySecurityConfig();
+        if (!Boolean.TRUE.equals(config.getRiskEnabled())
+                || !Boolean.TRUE.equals(config.getRiskCheckAfterPay())) {
+            return;
+        }
+        PayRiskCheckContext ctx = this.buildRiskContext(payParam);
+        ctx.setTradeNo(trade.getTradeNo());
+        ctx.setTradeType(PayTradeTypeEnum.NORMAL.getCode());
+        if (result != null) {
+            ctx.setBuyerId(result.getBuyerId());
+            // 优先用下单 openId, 空则用通道回写的 userId 兜底
+            if (StrUtil.isBlank(ctx.getOpenId())) {
+                ctx.setOpenId(result.getUserId());
+            }
+        }
+        try {
+            checker.checkAfterPay(ctx);
+        } catch (Exception e) {
+            // 事后补录失败不影响交易, 仅告警
+            log.warn("支付后风控补录失败 tradeNo={}: {}", trade.getTradeNo(), e.getMessage());
+        }
+    }
+
+    /// 构建风控上下文（路由解析后调用, 此时 product/method/channelAppId 已回填）
+    private PayRiskCheckContext buildRiskContext(NormalPayParam payParam) {
+        PayRiskCheckContext ctx = new PayRiskCheckContext()
+                .setScene(this.resolveRiskScene(payParam))
+                .setMchNo(payParam.getMchNo())
+                .setAppId(payParam.getAppId())
+                .setClientIp(payParam.getClientIp())
+                .setOpenId(payParam.getOpenId())
+                .setMethod(payParam.getMethod())
+                .setProduct(payParam.getProduct())
+                .setChannelAppId(payParam.getChannelAppId())
+                .setBizOrderNo(payParam.getBizOrderNo());
+        // 由支付产品反推通道族, 供 openId 名单精确匹配
+        if (StrUtil.isNotBlank(payParam.getProduct())) {
+            try {
+                ctx.setChannel(ProductEnum.findByCode(payParam.getProduct()).getChannel());
+            } catch (Exception e) {
+                // 反推失败忽略, channel 留空走宽匹配
+            }
+        }
+        return ctx;
+    }
+
+    /// 按交易来源派生风控场景（与 PayRiskHitSceneEnum 编码对齐）：
+    /// 码牌(cashier_code)→code；其余 API 直连→api
+    private String resolveRiskScene(NormalPayParam payParam) {
+        String source = payParam.getSource();
+        if (StrUtil.isNotBlank(source) && TradeSourceEnum.CASHIER_CODE.getCode().equals(source)) {
+            return "code";
+        }
+        return "api";
     }
 }

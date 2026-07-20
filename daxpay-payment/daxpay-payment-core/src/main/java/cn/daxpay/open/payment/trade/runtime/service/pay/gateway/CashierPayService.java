@@ -1,10 +1,12 @@
 package cn.daxpay.open.payment.trade.runtime.service.pay.gateway;
 
+import cn.daxpay.open.payment.common.util.PayMethodOpenIdSupport;
 import cn.daxpay.open.payment.merchant.dao.gateway.GatewayCashierItemManager;
 import cn.daxpay.open.payment.merchant.entity.gateway.GatewayCashierItem;
 import cn.daxpay.open.payment.merchant.enums.CashierItemResolveModeEnum;
 import cn.daxpay.open.payment.merchant.enums.ClientEnvEnum;
 import cn.daxpay.open.payment.merchant.enums.GatewayCashierTypeEnum;
+import cn.daxpay.open.payment.strategy.risk.PayRiskChecker;
 import cn.daxpay.open.payment.trade.enums.GatewayPayTypeEnum;
 import cn.daxpay.open.payment.trade.order.entity.GatewayPayOrder;
 import cn.daxpay.open.payment.unipay.param.gateway.CashierPayParam;
@@ -17,6 +19,7 @@ import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,6 +46,8 @@ public class CashierPayService {
     private final GatewayPayAssistService gatewayPayAssistService;
     private final GatewayPayHandleService gatewayPayHandleService;
     private final GatewayCashierItemManager gatewayCashierItemManager;
+    /// 风控检查器（可选 SPI：用于判断是否存在 openId 黑名单, 决定是否触发强制 OAuth）
+    private final ObjectProvider<PayRiskChecker> payRiskCheckerProvider;
 
     /// 公开支付项列表(落地页展示)
     public List<CashierItemPublicResult> listPublicItems(String orderNo, String cashierType, String clientEnv) {
@@ -52,9 +57,10 @@ public class CashierPayService {
         }
         GatewayCashierTypeEnum typeEnum = GatewayCashierTypeEnum.findByCode(cashierType);
         String bucketClientEnv = normalizeClientEnvForBucket(typeEnum, clientEnv);
+        ClientEnvEnum envEnum = StrUtil.isBlank(bucketClientEnv) ? null : ClientEnvEnum.findByCode(bucketClientEnv);
         return gatewayCashierItemManager.listByAppAndBucket(order.getAppId(), typeEnum.getCode(), bucketClientEnv)
                 .stream()
-                .map(this::toPublicResult)
+                .map(item -> this.toPublicResult(item, envEnum))
                 .toList();
     }
 
@@ -148,12 +154,29 @@ public class CashierPayService {
         return env.getCode();
     }
 
-    private CashierItemPublicResult toPublicResult(GatewayCashierItem item) {
+    private CashierItemPublicResult toPublicResult(GatewayCashierItem item, ClientEnvEnum clientEnv) {
         return new CashierItemPublicResult()
                 .setId(item.getId())
                 .setName(item.getName())
                 .setIcon(item.getIcon())
                 .setRecommend(item.getRecommend())
-                .setSortNo(item.getSortNo());
+                .setSortNo(item.getSortNo())
+                // openId 触发判定: JSAPI/MINI 业务必需, 或存在 openId 黑名单且环境可 OAuth
+                .setNeedOpenId(this.resolveItemNeedOpenId(item.getMethod(), clientEnv));
+    }
+
+    /// openId 触发判定（与聚合/码牌同源逻辑）
+    ///
+    /// 1. JSAPI/MINI 类方式: 业务必需, 永远 true
+    /// 2. 主扫/H5 等免 openId 方式: 仅当存在 openId 黑名单且当前 clientEnv 可 OAuth 时 true
+    private boolean resolveItemNeedOpenId(String method, ClientEnvEnum clientEnv) {
+        if (PayMethodOpenIdSupport.needsOpenId(method)) {
+            return true;
+        }
+        PayRiskChecker checker = payRiskCheckerProvider.getIfAvailable();
+        if (checker == null || !checker.hasOpenIdBlacklist()) {
+            return false;
+        }
+        return PayMethodOpenIdSupport.canAcquireOpenId(method, clientEnv);
     }
 }

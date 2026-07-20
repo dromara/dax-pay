@@ -6,6 +6,7 @@ import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.plugin.risk.entity.PayBlacklist;
 import cn.daxpay.open.plugin.risk.enums.PayBlacklistStatusEnum;
+import cn.daxpay.open.plugin.risk.enums.PayBlacklistTypeEnum;
 import cn.daxpay.open.plugin.risk.param.PayBlacklistQuery;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -81,6 +82,19 @@ public class PayBlacklistManager extends BaseManager<PayBlacklistMapper, PayBlac
         return list.stream()
                 .filter(e -> StrUtil.isBlank(e.getChannel()) && StrUtil.isBlank(e.getChannelAppId()))
                 .findFirst();
+    }
+
+    /// 是否存在有效的 openId 类型黑名单（enable 且未过期）
+    ///
+    /// 供网关层智能触发 OAuth 取 openId：仅当存在 openId 名单时,
+    /// 才对主扫/H5 等免 openId 方式走静默授权, 避免无黑名单时的无效开销
+    public boolean hasActiveOpenIdBlacklist() {
+        OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
+        return lambdaQuery()
+                .eq(PayBlacklist::getType, PayBlacklistTypeEnum.OPEN_ID.getCode())
+                .eq(PayBlacklist::getStatus, PayBlacklistStatusEnum.ENABLE.getCode())
+                .and(w -> w.isNull(PayBlacklist::getExpireTime).or().gt(PayBlacklist::getExpireTime, now))
+                .exists();
     }
 
     private static boolean matchNullable(String rule, String actual) {

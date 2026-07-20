@@ -7,6 +7,7 @@ import lombok.experimental.Accessors;
 /// # 收银台支付项公开结果
 ///
 /// 落地页列表展示用, 不下发 method/channelMchNo/capability/resolveMode 等路由敏感字段。
+/// `needOpenId` 由后端按 item.method + clientEnv 综合判定, 控制前端是否跳 OAuth。
 @Data
 @Accessors(chain = true)
 @Schema(title = "收银台支付项(公开)")
@@ -26,4 +27,7 @@ public class CashierItemPublicResult {
 
     @Schema(description = "排序号")
     private Integer sortNo;
+
+    @Schema(description = "是否需要先走 OAuth 获取 openId（前端据此跳授权）")
+    private Boolean needOpenId;
 }

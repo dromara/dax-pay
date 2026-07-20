@@ -92,6 +92,11 @@ public class PayBlacklistService {
         return findActive(type, value, channel, channelAppId).isPresent();
     }
 
+    /// 是否存在有效的 openId 类型黑名单（供网关层智能触发 OAuth）
+    public boolean hasActiveOpenIdBlacklist() {
+        return payBlacklistManager.hasActiveOpenIdBlacklist();
+    }
+
     /// 查找有效名单行
     public Optional<PayBlacklist> findActive(String type, String value, String channel, String channelAppId) {
         return payBlacklistManager.findActiveHit(type, value, channel, channelAppId);

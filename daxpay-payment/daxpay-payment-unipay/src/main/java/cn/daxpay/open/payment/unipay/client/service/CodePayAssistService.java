@@ -14,6 +14,7 @@ import cn.daxpay.open.payment.merchant.enums.ClientRuntimeEnum;
 import cn.daxpay.open.payment.merchant.enums.CodePayFormEnum;
 import cn.daxpay.open.payment.merchant.service.gateway.CodePayResolveService;
 import cn.daxpay.open.payment.route.service.runtime.PayRouteService;
+import cn.daxpay.open.payment.strategy.risk.PayRiskChecker;
 import cn.daxpay.open.payment.trade.order.dao.NormalPayOrderManager;
 import cn.daxpay.open.payment.trade.order.entity.NormalPayOrder;
 import cn.daxpay.open.payment.trade.runtime.service.pay.normal.NormalPayService;
@@ -39,6 +40,7 @@ import cn.daxpay.open.platform.core.util.TradeNoGenerateUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Service;
 
 /// # 码牌支付编排(公开/H5/小程序侧)
@@ -60,6 +62,8 @@ public class CodePayAssistService {
     private final PayRouteService payRouteService;
     private final ChannelAuthFacade channelAuthFacade;
     private final NormalPayOrderManager normalPayOrderManager;
+    /// 风控检查器（可选 SPI：用于判断是否存在 openId 黑名单, 决定是否触发强制 OAuth）
+    private final ObjectProvider<PayRiskChecker> payRiskCheckerProvider;
 
     /// 根据码牌编码查询支付信息(公开接口, 脱敏返回)
     ///
@@ -80,9 +84,10 @@ public class CodePayAssistService {
                 .setProgramType(entity.getProgramType());
         if (StrUtil.isNotBlank(clientEnv)) {
             try {
+                ClientEnvEnum env = ClientEnvEnum.findByCode(clientEnv);
                 String method = this.resolveMethod(entity, clientEnv);
-                // 严格按 method 判定；非 JSAPI/MINI 不强制 OAuth
-                result.setNeedOpenId(PayMethodOpenIdSupport.needsOpenId(method));
+                // openId 触发判定: 业务必需(JSAPI/MINI) 或 存在 openId 黑名单且当前环境可 OAuth
+                result.setNeedOpenId(this.resolveNeedOpenId(method, env));
             } catch (Exception e) {
                 // 策略未配置等: 不误强制授权(false)；支付时会因策略失败再报错
                 log.warn("码牌 needOpenId 解析失败 code={} clientEnv={}: {}", code, clientEnv, e.getMessage());
@@ -154,8 +159,8 @@ public class CodePayAssistService {
         }
         CodePayFormEnum payForm = CodePayFormEnum.fromProgramType(entity.getProgramType());
         var resolved = codePayResolveService.resolveRequired(mchApp.getAppId(), clientEnv, payForm);
-        if (!PayMethodOpenIdSupport.needsOpenId(resolved.method())) {
-            // 当前支付方式无需授权(H5/主扫等)
+        if (!PayMethodOpenIdSupport.canAcquireOpenId(resolved.method(), clientEnv)) {
+            // 当前支付方式/环境无法走 OAuth（付款码/APP/PC/外部浏览器/union_pay 一期）
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.qrcode.authNotRequired");
         }
 
@@ -258,6 +263,22 @@ public class CodePayAssistService {
         var mchApp = merchantContextLoader.resolveApp(entity.getMchNo(), entity.getAppId());
         CodePayFormEnum payForm = CodePayFormEnum.fromProgramType(entity.getProgramType());
         return codePayResolveService.resolveRequired(mchApp.getAppId(), clientEnv, payForm).method();
+    }
+
+    /// openId 触发判定
+    ///
+    /// 1. JSAPI/MINI 类方式: 业务必需, 永远 true（与历史行为一致）
+    /// 2. 主扫/H5 等免 openId 方式: 仅当存在 openId 黑名单且当前 clientEnv 可 OAuth 时 true,
+    ///    实现 openId 黑名单在码牌场景的全局拦截
+    private boolean resolveNeedOpenId(String method, ClientEnvEnum clientEnv) {
+        if (PayMethodOpenIdSupport.needsOpenId(method)) {
+            return true;
+        }
+        PayRiskChecker checker = payRiskCheckerProvider.getIfAvailable();
+        if (checker == null || !checker.hasOpenIdBlacklist()) {
+            return false;
+        }
+        return PayMethodOpenIdSupport.canAcquireOpenId(method, clientEnv);
     }
 
     /// 分端页 returnPath: /h/wechat|{alipay}/:code?authed=1

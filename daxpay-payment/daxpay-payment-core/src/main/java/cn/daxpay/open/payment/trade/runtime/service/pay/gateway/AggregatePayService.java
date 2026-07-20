@@ -6,6 +6,7 @@ import cn.daxpay.open.payment.merchant.entity.gateway.GatewayAggregateConfig;
 import cn.daxpay.open.payment.merchant.enums.ClientEnvEnum;
 import cn.daxpay.open.payment.merchant.enums.ClientRuntimeEnum;
 import cn.daxpay.open.payment.merchant.service.gateway.ClientEnvPayResolveService;
+import cn.daxpay.open.payment.strategy.risk.PayRiskChecker;
 import cn.daxpay.open.payment.trade.enums.GatewayPayTypeEnum;
 import cn.daxpay.open.payment.trade.order.entity.GatewayPayOrder;
 import cn.daxpay.open.payment.unipay.param.gateway.AggregateQrPayParam;
@@ -17,6 +18,7 @@ import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
@@ -33,6 +35,8 @@ public class AggregatePayService {
     private final ClientEnvPayResolveService clientEnvPayResolveService;
     private final GatewayPayHandleService gatewayPayHandleService;
     private final GatewayAggregateConfigManager aggregateConfigManager;
+    /// 风控检查器（可选 SPI：用于判断是否存在 openId 黑名单, 决定是否触发强制 OAuth）
+    private final ObjectProvider<PayRiskChecker> payRiskCheckerProvider;
 
     /// H5 聚合元数据: autoLaunch / needOpenId(不下发敏感路由字段)
     public AggregatePayMetaResult getMeta(String orderNo, String clientEnvCode, String runtimeCode) {
@@ -50,8 +54,8 @@ public class AggregatePayService {
 
         return new AggregatePayMetaResult()
                 .setAutoLaunch(Boolean.TRUE.equals(config.getAutoLaunch()))
-                // 与码牌同源: 按 method 判定是否需 OAuth 取 openId
-                .setNeedOpenId(PayMethodOpenIdSupport.needsOpenId(resolved.method()));
+                // openId 触发判定: 业务必需(JSAPI/MINI) 或 存在 openId 黑名单且当前环境可 OAuth
+                .setNeedOpenId(this.resolveNeedOpenId(resolved.method(), clientEnv));
     }
 
     /// 聚合扫码发起支付
@@ -70,5 +74,21 @@ public class AggregatePayService {
         return gatewayPayHandleService.handle(order, null, resolved.method(),
                 resolved.channelMchNo(), resolved.capability(),
                 param.getOpenId(), clientEnv.getCode(), param.getDevice(), clientIp);
+    }
+
+    /// openId 触发判定
+    ///
+    /// 1. JSAPI/MINI 类方式: 业务必需, 永远 true（与历史行为一致）
+    /// 2. 主扫/H5 等免 openId 方式: 仅当存在 openId 黑名单且当前 clientEnv 可 OAuth 时 true,
+    ///    实现 openId 黑名单在聚合网关内的全局拦截
+    private boolean resolveNeedOpenId(String method, ClientEnvEnum clientEnv) {
+        if (PayMethodOpenIdSupport.needsOpenId(method)) {
+            return true;
+        }
+        PayRiskChecker checker = payRiskCheckerProvider.getIfAvailable();
+        if (checker == null || !checker.hasOpenIdBlacklist()) {
+            return false;
+        }
+        return PayMethodOpenIdSupport.canAcquireOpenId(method, clientEnv);
     }
 }
