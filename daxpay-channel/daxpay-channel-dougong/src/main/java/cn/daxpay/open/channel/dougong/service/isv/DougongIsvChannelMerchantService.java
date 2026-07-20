@@ -5,12 +5,10 @@ import cn.daxpay.open.channel.dougong.entity.isv.DougongIsvChannelMerchant;
 import cn.daxpay.open.channel.dougong.param.isv.DougongIsvChannelMerchantCreateParam;
 import cn.daxpay.open.channel.dougong.result.isv.DougongIsvChannelMerchantResult;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
-import cn.daxpay.open.payment.merchant.service.channel.ChannelMerchantCleanupService;
 import cn.daxpay.open.payment.masterdata.dao.product.PayProductConfigManager;
 import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.channel.ChannelMerchantSourceEnum;
-import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.util.ChannelMchNoGenerateUtil;
@@ -24,32 +22,19 @@ import org.springframework.transaction.annotation.Transactional;
 /// 斗拱服务商模式下, 子商户关联到服务商本身(密钥全局唯一), 不挂靠具体应用。
 /// 一个商户下同一汇付商户号(merchantNo)只允许绑定一次。
 ///
-/// 同时作为通道商户扩展数据清理 SPI 实现（[ChannelMerchantCleanupService]）。
-///
+/// 通道商户删除时的扩展数据清理由独立的策略类
+/// [cn.daxpay.open.channel.dougong.cleanup.isv.DougongIsvChannelMerchantCleanupStrategy] 承担。
 /// 注意：斗拱与 Adapay 共享同一通道编码 [ChannelEnum#HUIFU]，
-/// 由 [ChannelMerchantCleanupSupport] 按 channel 分组遍历调用各自实现，互不影响。
-///
+/// 由 [cn.daxpay.open.payment.merchant.service.channel.ChannelMerchantCleanupStrategyFactory] 按 channel
+/// 过滤后遍历调用各自实现，互不影响。
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class DougongIsvChannelMerchantService implements ChannelMerchantCleanupService {
+public class DougongIsvChannelMerchantService {
 
     private final ChannelMerchantManager channelMerchantManager;
     private final PayProductConfigManager payProductConfigManager;
     private final DougongIsvChannelMerchantManager dougongIsvChannelMerchantManager;
-
-    /// 通道编码（对应 [ChannelEnum#HUIFU]，与 Adapay 共享）
-    @Override
-    public String getChannel() {
-        return ChannelEnum.HUIFU.getCode();
-    }
-
-    /// 清理指定通道商户号下斗拱的所有扩展数据
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void deleteByChannelMchNo(String channelMchNo) {
-        dougongIsvChannelMerchantManager.deleteByField(DougongIsvChannelMerchant::getChannelMchNo, channelMchNo);
-    }
 
     /// 创建斗拱通道商户
     @Transactional(rollbackFor = Exception.class)

@@ -5,12 +5,10 @@ import cn.daxpay.open.channel.fuyou.entity.isv.FuyouIsvChannelMerchant;
 import cn.daxpay.open.channel.fuyou.param.isv.FuyouIsvChannelMerchantCreateParam;
 import cn.daxpay.open.channel.fuyou.result.isv.FuyouIsvChannelMerchantResult;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
-import cn.daxpay.open.payment.merchant.service.channel.ChannelMerchantCleanupService;
 import cn.daxpay.open.payment.masterdata.dao.product.PayProductConfigManager;
 import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.channel.ChannelMerchantSourceEnum;
-import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.util.ChannelMchNoGenerateUtil;
@@ -24,29 +22,16 @@ import org.springframework.transaction.annotation.Transactional;
 /// 富友服务商模式下, 子商户关联到服务商(密钥全局唯一)。
 /// 一个商户号下同一富友商户号(fuyouMchNo)只允许绑定一次。
 ///
-/// 同时作为通道商户扩展数据清理 SPI 实现（[ChannelMerchantCleanupService]）。
-///
+/// 通道商户删除时的扩展数据清理由独立的策略类
+/// [cn.daxpay.open.channel.fuyou.cleanup.isv.FuyouIsvChannelMerchantCleanupStrategy] 承担。
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class FuyouIsvChannelMerchantService implements ChannelMerchantCleanupService {
+public class FuyouIsvChannelMerchantService {
 
     private final ChannelMerchantManager channelMerchantManager;
     private final PayProductConfigManager payProductConfigManager;
     private final FuyouIsvChannelMerchantManager fuyouIsvChannelMerchantManager;
-
-    /// 通道编码（对应 [ChannelEnum#FUYOU_PAY]）
-    @Override
-    public String getChannel() {
-        return ChannelEnum.FUYOU_PAY.getCode();
-    }
-
-    /// 清理指定通道商户号下富友的所有扩展数据
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void deleteByChannelMchNo(String channelMchNo) {
-        fuyouIsvChannelMerchantManager.deleteByField(FuyouIsvChannelMerchant::getChannelMchNo, channelMchNo);
-    }
 
     /// 创建富友通道商户
     @Transactional(rollbackFor = Exception.class)

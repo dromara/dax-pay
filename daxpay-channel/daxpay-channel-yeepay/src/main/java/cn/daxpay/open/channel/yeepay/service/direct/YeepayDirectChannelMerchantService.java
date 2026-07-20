@@ -5,11 +5,9 @@ import cn.daxpay.open.channel.yeepay.dao.direct.YeepayDirectKeyConfigManager;
 import cn.daxpay.open.channel.yeepay.entity.direct.YeepayDirectKeyConfig;
 import cn.daxpay.open.channel.yeepay.param.direct.YeepayDirectChannelMerchantCreateParam;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
-import cn.daxpay.open.payment.merchant.service.channel.ChannelMerchantCleanupService;
 import cn.daxpay.open.payment.masterdata.dao.product.PayProductConfigManager;
 import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
 import cn.daxpay.open.platform.core.enums.channel.ChannelMerchantSourceEnum;
-import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.util.ChannelMchNoGenerateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,29 +21,16 @@ import org.springframework.transaction.annotation.Transactional;
 /// 密钥(appKey/privateKey/yopPublicKey/wxAppId/wxAppSecret)由密钥配置单独维护,
 /// 沙箱环境运行时读取支付产品配置(pay_md_product_config.activeEnv)。
 ///
-/// 同时作为通道商户扩展数据清理 SPI 实现（[ChannelMerchantCleanupService]）。
-///
+/// 通道商户删除时的扩展数据清理由独立的策略类
+/// [cn.daxpay.open.channel.yeepay.cleanup.direct.YeepayDirectChannelMerchantCleanupStrategy] 承担。
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class YeepayDirectChannelMerchantService implements ChannelMerchantCleanupService {
+public class YeepayDirectChannelMerchantService {
 
     private final ChannelMerchantManager channelMerchantManager;
     private final PayProductConfigManager payProductConfigManager;
     private final YeepayDirectKeyConfigManager yeepayDirectKeyConfigManager;
-
-    /// 通道编码（对应 [ChannelEnum#YEE_PAY]）
-    @Override
-    public String getChannel() {
-        return ChannelEnum.YEE_PAY.getCode();
-    }
-
-    /// 清理指定通道商户号下易宝直连的所有扩展数据（直连配置表）
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void deleteByChannelMchNo(String channelMchNo) {
-        yeepayDirectKeyConfigManager.deleteByChannelMchNo(channelMchNo);
-    }
 
     /// 创建通道商户绑定
     ///

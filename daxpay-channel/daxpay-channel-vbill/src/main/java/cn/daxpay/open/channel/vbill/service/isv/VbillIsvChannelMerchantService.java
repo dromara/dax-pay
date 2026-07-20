@@ -5,12 +5,10 @@ import cn.daxpay.open.channel.vbill.entity.isv.VbillIsvChannelMerchant;
 import cn.daxpay.open.channel.vbill.param.isv.VbillIsvChannelMerchantCreateParam;
 import cn.daxpay.open.channel.vbill.result.isv.VbillIsvChannelMerchantResult;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
-import cn.daxpay.open.payment.merchant.service.channel.ChannelMerchantCleanupService;
 import cn.daxpay.open.payment.masterdata.dao.product.PayProductConfigManager;
 import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.channel.ChannelMerchantSourceEnum;
-import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.util.ChannelMchNoGenerateUtil;
@@ -24,29 +22,16 @@ import org.springframework.transaction.annotation.Transactional;
 /// 随行付(天阙科技)服务商模式下, 子商户关联到服务商(密钥全局唯一)。
 /// 一个商户号下同一天阙商户号(vbillMchNo/mno)只允许绑定一次。
 ///
-/// 同时作为通道商户扩展数据清理 SPI 实现（[ChannelMerchantCleanupService]）。
-///
+/// 通道商户删除时的扩展数据清理由独立的策略类
+/// [cn.daxpay.open.channel.vbill.cleanup.isv.VbillIsvChannelMerchantCleanupStrategy] 承担。
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class VbillIsvChannelMerchantService implements ChannelMerchantCleanupService {
+public class VbillIsvChannelMerchantService {
 
     private final ChannelMerchantManager channelMerchantManager;
     private final PayProductConfigManager payProductConfigManager;
     private final VbillIsvChannelMerchantManager vbillIsvChannelMerchantManager;
-
-    /// 通道编码（对应 [ChannelEnum#VBILL_PAY]）
-    @Override
-    public String getChannel() {
-        return ChannelEnum.VBILL_PAY.getCode();
-    }
-
-    /// 清理指定通道商户号下随行付的所有扩展数据
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void deleteByChannelMchNo(String channelMchNo) {
-        vbillIsvChannelMerchantManager.deleteByField(VbillIsvChannelMerchant::getChannelMchNo, channelMchNo);
-    }
 
     /// 创建随行付通道商户
     @Transactional(rollbackFor = Exception.class)

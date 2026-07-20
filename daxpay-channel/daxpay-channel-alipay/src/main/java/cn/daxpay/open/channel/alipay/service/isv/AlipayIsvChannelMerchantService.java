@@ -2,18 +2,15 @@ package cn.daxpay.open.channel.alipay.service.isv;
 
 import cn.daxpay.open.channel.alipay.dao.isv.AlipayIsvAppManager;
 import cn.daxpay.open.channel.alipay.dao.isv.AlipayIsvChannelMerchantManager;
-import cn.daxpay.open.channel.alipay.entity.isv.AlipayIsvApp;
 import cn.daxpay.open.channel.alipay.entity.isv.AlipayIsvChannelMerchant;
 import cn.daxpay.open.channel.alipay.param.isv.AlipayIsvAppAuthTokenUpdateParam;
 import cn.daxpay.open.channel.alipay.param.isv.AlipayIsvChannelMerchantCreateParam;
 import cn.daxpay.open.channel.alipay.result.isv.AlipayIsvChannelMerchantResult;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
-import cn.daxpay.open.payment.merchant.service.channel.ChannelMerchantCleanupService;
 import cn.daxpay.open.payment.masterdata.dao.product.PayProductConfigManager;
 import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.channel.ChannelMerchantSourceEnum;
-import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.util.ChannelMchNoGenerateUtil;
@@ -26,31 +23,17 @@ import org.springframework.transaction.annotation.Transactional;
 ///
 /// 一条记录代表"子商户挂靠在某个服务商应用下"的授权关系。
 ///
-/// 同时作为通道商户扩展数据清理 SPI 实现（[ChannelMerchantCleanupService]），
-/// 在通道商户删除时清理支付宝服务商相关的扩展表（子商户授权关系）。
-///
+/// 通道商户删除时的扩展数据清理由独立的策略类
+/// [cn.daxpay.open.channel.alipay.cleanup.isv.AlipayIsvChannelMerchantCleanupStrategy] 承担。
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class AlipayIsvChannelMerchantService implements ChannelMerchantCleanupService {
+public class AlipayIsvChannelMerchantService {
 
     private final ChannelMerchantManager channelMerchantManager;
     private final PayProductConfigManager payProductConfigManager;
     private final AlipayIsvChannelMerchantManager alipayIsvChannelMerchantManager;
     private final AlipayIsvAppManager alipayIsvAppManager;
-
-    /// 通道编码（对应 [ChannelEnum#ALIPAY]，与直连共享同一 channel，由调度器遍历调用）
-    @Override
-    public String getChannel() {
-        return ChannelEnum.ALIPAY.getCode();
-    }
-
-    /// 清理指定通道商户号下支付宝服务商的扩展数据（子商户授权关系）
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void deleteByChannelMchNo(String channelMchNo) {
-        alipayIsvChannelMerchantManager.deleteByField(AlipayIsvChannelMerchant::getChannelMchNo, channelMchNo);
-    }
 
     /// 创建支付宝服务商通道商户
     @Transactional(rollbackFor = Exception.class)

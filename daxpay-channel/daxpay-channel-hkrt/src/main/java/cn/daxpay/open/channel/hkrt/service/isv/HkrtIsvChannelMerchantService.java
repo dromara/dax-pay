@@ -5,12 +5,10 @@ import cn.daxpay.open.channel.hkrt.entity.isv.HkrtIsvChannelMerchant;
 import cn.daxpay.open.channel.hkrt.param.isv.HkrtIsvChannelMerchantCreateParam;
 import cn.daxpay.open.channel.hkrt.result.isv.HkrtIsvChannelMerchantResult;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
-import cn.daxpay.open.payment.merchant.service.channel.ChannelMerchantCleanupService;
 import cn.daxpay.open.payment.masterdata.dao.product.PayProductConfigManager;
 import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.channel.ChannelMerchantSourceEnum;
-import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.util.ChannelMchNoGenerateUtil;
@@ -24,29 +22,16 @@ import org.springframework.transaction.annotation.Transactional;
 /// 海科融通服务商模式下, 子商户关联到服务商本身(密钥全局唯一), 不挂靠具体应用。
 /// 一个商户下同一海科商户号(merchNo)只允许绑定一次。
 ///
-/// 同时作为通道商户扩展数据清理 SPI 实现（[ChannelMerchantCleanupService]）。
-///
+/// 通道商户删除时的扩展数据清理由独立的策略类
+/// [cn.daxpay.open.channel.hkrt.cleanup.isv.HkrtIsvChannelMerchantCleanupStrategy] 承担。
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class HkrtIsvChannelMerchantService implements ChannelMerchantCleanupService {
+public class HkrtIsvChannelMerchantService {
 
     private final ChannelMerchantManager channelMerchantManager;
     private final PayProductConfigManager payProductConfigManager;
     private final HkrtIsvChannelMerchantManager hkrtIsvChannelMerchantManager;
-
-    /// 通道编码（对应 [ChannelEnum#HKRT_PAY]）
-    @Override
-    public String getChannel() {
-        return ChannelEnum.HKRT_PAY.getCode();
-    }
-
-    /// 清理指定通道商户号下海科融通的所有扩展数据
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void deleteByChannelMchNo(String channelMchNo) {
-        hkrtIsvChannelMerchantManager.deleteByField(HkrtIsvChannelMerchant::getChannelMchNo, channelMchNo);
-    }
 
     /// 创建海科融通通道商户
     @Transactional(rollbackFor = Exception.class)

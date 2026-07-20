@@ -6,12 +6,10 @@ import cn.daxpay.open.channel.hmpay.param.isv.HmpayIsvChannelMerchantCreateParam
 import cn.daxpay.open.channel.hmpay.param.isv.HmpayIsvChannelMerchantUpdateParam;
 import cn.daxpay.open.channel.hmpay.result.isv.HmpayIsvChannelMerchantResult;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
-import cn.daxpay.open.payment.merchant.service.channel.ChannelMerchantCleanupService;
 import cn.daxpay.open.payment.masterdata.dao.product.PayProductConfigManager;
 import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.channel.ChannelMerchantSourceEnum;
-import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.util.ChannelMchNoGenerateUtil;
@@ -25,31 +23,17 @@ import org.springframework.transaction.annotation.Transactional;
 /// 河马付服务商模式下, 子商户关联到服务商本身(密钥全局唯一), 不挂靠具体应用。
 /// 一个商户下同一杉德商户号只允许绑定一次。
 ///
-/// 同时作为通道商户扩展数据清理 SPI 实现（[ChannelMerchantCleanupService]）。
-///
-/// 注意：河马付底层走杉德通道，[getChannel] 返回 [ChannelEnum#SAND_PAY]。
-///
+/// 通道商户删除时的扩展数据清理由独立的策略类
+/// [cn.daxpay.open.channel.hmpay.cleanup.isv.HmpayIsvChannelMerchantCleanupStrategy] 承担。
+/// 注意：河马付底层走杉德通道，[ChannelEnum#SAND_PAY] 由策略类返回。
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class HmpayIsvChannelMerchantService implements ChannelMerchantCleanupService {
+public class HmpayIsvChannelMerchantService {
 
     private final ChannelMerchantManager channelMerchantManager;
     private final PayProductConfigManager payProductConfigManager;
     private final HmpayIsvChannelMerchantManager hmpayIsvChannelMerchantManager;
-
-    /// 通道编码（对应 [ChannelEnum#SAND_PAY]，河马付底层走杉德通道）
-    @Override
-    public String getChannel() {
-        return ChannelEnum.SAND_PAY.getCode();
-    }
-
-    /// 清理指定通道商户号下河马付的所有扩展数据
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void deleteByChannelMchNo(String channelMchNo) {
-        hmpayIsvChannelMerchantManager.deleteByField(HmpayIsvChannelMerchant::getChannelMchNo, channelMchNo);
-    }
 
     /// 创建河马付通道商户
     @Transactional(rollbackFor = Exception.class)

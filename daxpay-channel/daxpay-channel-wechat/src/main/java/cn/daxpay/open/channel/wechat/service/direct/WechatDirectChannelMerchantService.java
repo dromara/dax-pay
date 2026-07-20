@@ -1,24 +1,14 @@
 package cn.daxpay.open.channel.wechat.service.direct;
 
-import cn.daxpay.open.channel.wechat.dao.direct.WechatDirectAppAuthConfigManager;
-import cn.daxpay.open.channel.wechat.dao.direct.WechatDirectAppCapabilityManager;
-import cn.daxpay.open.channel.wechat.dao.direct.WechatDirectAppManager;
 import cn.daxpay.open.channel.wechat.dao.direct.WechatDirectChannelMerchantManager;
-import cn.daxpay.open.channel.wechat.dao.direct.WechatDirectKeyConfigManager;
-import cn.daxpay.open.channel.wechat.entity.direct.WechatDirectApp;
-import cn.daxpay.open.channel.wechat.entity.direct.WechatDirectAppAuthConfig;
-import cn.daxpay.open.channel.wechat.entity.direct.WechatDirectAppCapability;
 import cn.daxpay.open.channel.wechat.entity.direct.WechatDirectChannelMerchant;
-import cn.daxpay.open.channel.wechat.entity.direct.WechatDirectKeyConfig;
 import cn.daxpay.open.channel.wechat.param.direct.WechatDirectChannelMerchantCreateParam;
 import cn.daxpay.open.channel.wechat.result.direct.WechatDirectChannelMerchantResult;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
-import cn.daxpay.open.payment.merchant.service.channel.ChannelMerchantCleanupService;
 import cn.daxpay.open.payment.masterdata.dao.product.PayProductConfigManager;
 import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.channel.ChannelMerchantSourceEnum;
-import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.util.ChannelMchNoGenerateUtil;
@@ -31,40 +21,16 @@ import org.springframework.transaction.annotation.Transactional;
 ///
 /// 一个微信商户号(wxMchId)对应一个 channelMchNo, 商户的多个应用共享此绑定。
 ///
-/// 同时作为通道商户扩展数据清理 SPI 实现（[ChannelMerchantCleanupService]），
-/// 在通道商户删除时清理微信直连相关的所有扩展表。
-///
+/// 通道商户删除时的扩展数据清理由独立的策略类
+/// [cn.daxpay.open.channel.wechat.cleanup.direct.WechatDirectChannelMerchantCleanupStrategy] 承担。
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class WechatDirectChannelMerchantService implements ChannelMerchantCleanupService {
+public class WechatDirectChannelMerchantService {
 
     private final ChannelMerchantManager channelMerchantManager;
     private final PayProductConfigManager payProductConfigManager;
     private final WechatDirectChannelMerchantManager wechatDirectChannelMerchantManager;
-    private final WechatDirectKeyConfigManager wechatDirectAppKeyConfigManager;
-    private final WechatDirectAppCapabilityManager wechatDirectAppCapabilityManager;
-    private final WechatDirectAppManager wechatDirectAppManager;
-    private final WechatDirectAppAuthConfigManager wechatDirectAppAuthConfigManager;
-
-    /// 通道编码（对应 [ChannelEnum#WECHAT]）
-    @Override
-    public String getChannel() {
-        return ChannelEnum.WECHAT.getCode();
-    }
-
-    /// 清理指定通道商户号下微信直连的所有扩展数据
-    ///
-    /// 包含：直连扩展表、应用、应用密钥、应用能力、应用授权配置
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void deleteByChannelMchNo(String channelMchNo) {
-        wechatDirectChannelMerchantManager.deleteByField(WechatDirectChannelMerchant::getChannelMchNo, channelMchNo);
-        wechatDirectAppManager.deleteByField(WechatDirectApp::getChannelMchNo, channelMchNo);
-        wechatDirectAppKeyConfigManager.deleteByField(WechatDirectKeyConfig::getChannelMchNo, channelMchNo);
-        wechatDirectAppCapabilityManager.deleteByField(WechatDirectAppCapability::getChannelMchNo, channelMchNo);
-        wechatDirectAppAuthConfigManager.deleteByField(WechatDirectAppAuthConfig::getChannelMchNo, channelMchNo);
-    }
 
     /// 创建微信直连通道商户
     @Transactional(rollbackFor = Exception.class)

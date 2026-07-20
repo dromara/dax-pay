@@ -75,8 +75,6 @@ public class ChannelMerchantService {
     private final GatewayAggregateClientEnvManager gatewayAggregateClientEnvManager;
     // 通道终端台账（按 channelMchNo 关联）
     private final ChannelTerminalManager channelTerminalManager;
-    // 通道扩展数据清理（SPI，按 channel 反查）
-    private final ChannelMerchantCleanupSupport channelMerchantCleanupSupport;
 
     /// 分页
     public PageResult<ChannelMerchantResult> page(PageParam pageParam, ChannelMerchantQuery query){
@@ -117,7 +115,7 @@ public class ChannelMerchantService {
     /// 策略：
     /// - **交易类数据存在则拒删**（资金交易/订单/退款硬引用，必须可追溯）
     /// - 通过校验后，按 `channelMchNo` 级联逻辑删除所有平台配置类子表
-    /// - 各通道子模块扩展数据通过 [ChannelMerchantCleanupSupport] SPI 清理（未实现的通道跳过）
+    /// - 各通道子模块扩展数据通过 [ChannelMerchantCleanupStrategyFactory] 策略清理（未实现的通道跳过）
     ///
     /// 设计权衡：
     /// - 路由 `pay_route_*` 与 `gateway_*` 子表均按 `channelMchNo` 强关联，主表删除后必须清理避免脏数据
@@ -156,10 +154,10 @@ public class ChannelMerchantService {
         gatewayAggregateClientEnvManager.deleteByField(GatewayAggregateClientEnv::getChannelMchNo, channelMchNo);
         channelTerminalManager.deleteByField(ChannelTerminal::getChannelMchNo, channelMchNo);
 
-        // 3. 通道扩展表 + KeyConfig 清理（SPI，按 channel 反查实现）
+        // 3. 通道扩展表 + KeyConfig 清理（策略工厂按 channel 反查实现）
         String channel = resolveChannelByProduct(mchInfo.getProduct());
         if (channel != null) {
-            channelMerchantCleanupSupport.cleanup(channel, channelMchNo);
+            ChannelMerchantCleanupStrategyFactory.cleanup(channel, channelMchNo);
         }
 
         // 4. 主表逻辑删

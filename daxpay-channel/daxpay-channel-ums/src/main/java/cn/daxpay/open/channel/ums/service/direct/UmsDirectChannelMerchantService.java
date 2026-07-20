@@ -4,11 +4,9 @@ import cn.daxpay.open.channel.ums.dao.direct.UmsDirectKeyConfigManager;
 import cn.daxpay.open.channel.ums.entity.direct.UmsDirectKeyConfig;
 import cn.daxpay.open.channel.ums.param.direct.UmsDirectChannelMerchantCreateParam;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
-import cn.daxpay.open.payment.merchant.service.channel.ChannelMerchantCleanupService;
 import cn.daxpay.open.payment.masterdata.dao.product.PayProductConfigManager;
 import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
 import cn.daxpay.open.platform.core.enums.channel.ChannelMerchantSourceEnum;
-import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.util.ChannelMchNoGenerateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,29 +20,16 @@ import org.springframework.transaction.annotation.Transactional;
 /// 应用ID(umsAppId)/终端号(tid)/应用密钥(appKey)/通讯密钥(secretKey)由密钥配置单独维护,
 /// 沙箱环境运行时读取支付产品配置(pay_md_product_config.activeEnv)。
 ///
-/// 同时作为通道商户扩展数据清理 SPI 实现（[ChannelMerchantCleanupService]）。
-///
+/// 通道商户删除时的扩展数据清理由独立的策略类
+/// [cn.daxpay.open.channel.ums.cleanup.direct.UmsDirectChannelMerchantCleanupStrategy] 承担。
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UmsDirectChannelMerchantService implements ChannelMerchantCleanupService {
+public class UmsDirectChannelMerchantService {
 
     private final ChannelMerchantManager channelMerchantManager;
     private final PayProductConfigManager payProductConfigManager;
     private final UmsDirectKeyConfigManager umsDirectKeyConfigManager;
-
-    /// 通道编码（对应 [ChannelEnum#UMS_PAY]）
-    @Override
-    public String getChannel() {
-        return ChannelEnum.UMS_PAY.getCode();
-    }
-
-    /// 清理指定通道商户号下银联商务直连的所有扩展数据（直连配置表）
-    @Override
-    @Transactional(rollbackFor = Exception.class)
-    public void deleteByChannelMchNo(String channelMchNo) {
-        umsDirectKeyConfigManager.deleteByChannelMchNo(channelMchNo);
-    }
 
     /// 创建通道商户绑定
     ///
