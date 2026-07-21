@@ -6,9 +6,8 @@ import cn.daxpay.open.channel.alipay.dao.isv.AlipayIsvChannelMerchantManager;
 import cn.daxpay.open.channel.alipay.entity.isv.AlipayIsvApp;
 import cn.daxpay.open.channel.alipay.entity.isv.AlipayIsvAppKeyConfig;
 import cn.daxpay.open.channel.alipay.entity.isv.AlipayIsvChannelMerchant;
-import cn.daxpay.open.payment.masterdata.dao.product.PayProductConfigManager;
-import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
-import cn.daxpay.open.platform.core.enums.pay.config.PayEnvEnum;
+import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
+import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +21,10 @@ import org.springframework.stereotype.Service;
 /// 服务商代调用模式: appId / 私钥 / 证书取自服务商应用, 应用授权令牌(appAuthToken)取自子商户授权绑定,
 /// 子应用据此以服务商身份代子商户发起支付宝请求。
 ///
+/// 沙箱标识读通用通道商户主表 [ChannelMerchant#isSandbox] (创建时按当时产品 activeEnv 固化, 不随产品切换改变),
+/// 据此选择对应环境的网关地址, 与 Direct 通道(Yeepay/Ums/Adapay)及
+/// [cn.daxpay.open.payment.route.service.runtime.PayRouteService#validateChannelMchEnvMatch] 单一事实源对齐。
+///
 /// 供服务商支付/同步/关闭策略组装通道调用凭证。
 @Slf4j
 @Service
@@ -31,7 +34,7 @@ public class AlipayIsvConfigAssembler {
     private final AlipayIsvChannelMerchantManager alipayIsvChannelMerchantManager;
     private final AlipayIsvAppManager alipayIsvAppManager;
     private final AlipayIsvAppKeyConfigService alipayIsvAppKeyConfigService;
-    private final PayProductConfigManager payProductConfigManager;
+    private final ChannelMerchantManager channelMerchantManager;
 
     /// 组装服务商模式的通道调用凭证(下发给子应用)
     ///
@@ -57,9 +60,10 @@ public class AlipayIsvConfigAssembler {
         credential.setAlipayRootCert(keyConfig.getAlipayRootCert());
         // 应用授权令牌(服务商代子商户调用接口的凭据)
         credential.setAppAuthToken(isvMerchant.getAppAuthToken());
-        // 读取服务商支付产品当前生效环境, 判断是否沙箱
-        boolean sandbox = payProductConfigManager.findByProduct(ProductEnum.ALIPAY_ISV.getCode())
-                .map(c -> PayEnvEnum.SANDBOX.getCode().equals(c.getActiveEnv()))
+        // 沙箱标识读通用通道商户主表的固化快照(创建时按当时产品 activeEnv 写入, 不随产品切换改变)
+        // 单一事实源, 与 Direct 通道 + PayRouteService.validateChannelMchEnvMatch 完全一致
+        boolean sandbox = channelMerchantManager.findByChannelMchNo(isvMerchant.getChannelMchNo())
+                .map(ChannelMerchant::isSandbox)
                 .orElse(false);
         credential.setSandbox(sandbox);
         return credential;

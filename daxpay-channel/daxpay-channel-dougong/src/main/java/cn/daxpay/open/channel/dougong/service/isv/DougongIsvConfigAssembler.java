@@ -4,11 +4,10 @@ import cn.daxpay.open.channel.dougong.client.credential.DougongSdkCredential;
 import cn.daxpay.open.channel.dougong.dao.isv.DougongIsvChannelMerchantManager;
 import cn.daxpay.open.channel.dougong.entity.isv.DougongIsvChannelMerchant;
 import cn.daxpay.open.channel.dougong.entity.isv.DougongIsvKeyConfig;
-import cn.daxpay.open.payment.masterdata.dao.product.PayProductConfigManager;
-import cn.daxpay.open.payment.masterdata.entity.product.PayProductConfig;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
-import cn.daxpay.open.platform.core.enums.pay.config.PayEnvEnum;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
+import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
+import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,6 +20,10 @@ import org.springframework.stereotype.Service;
 /// 字段映射:
 /// - sysId/productId/privateKey/dgPublicKey ← [DougongIsvKeyConfig](服务商级, 全局唯一)
 /// - merchantNo/appId ← [DougongIsvChannelMerchant](商户级)
+/// - sandbox ← [ChannelMerchant#isSandbox] (通用通道商户主表, 创建时按当时产品 activeEnv 固化, 不随产品切换改变)
+///
+/// 沙箱来源与 Direct 通道(Yeepay/Ums/Adapay)及
+/// [cn.daxpay.open.payment.route.service.runtime.PayRouteService#validateChannelMchEnvMatch] 单一事实源对齐。
 ///
 /// 供支付策略([cn.daxpay.open.channel.dougong.strategy.*])组装通道调用凭证。
 @Slf4j
@@ -30,7 +33,7 @@ public class DougongIsvConfigAssembler {
 
     private final DougongIsvChannelMerchantManager dougongIsvChannelMerchantManager;
     private final DougongIsvKeyConfigService dougongIsvKeyConfigService;
-    private final PayProductConfigManager payProductConfigManager;
+    private final ChannelMerchantManager channelMerchantManager;
 
     /// 组装斗拱通道调用凭证(下发给子应用)
     ///
@@ -52,10 +55,10 @@ public class DougongIsvConfigAssembler {
         credential.setProductId(keyConfig.getProductId());
         credential.setPrivateKey(keyConfig.getPrivateKey());
         credential.setDgPublicKey(keyConfig.getDgPublicKey());
-        // 沙箱状态读取支付产品配置的生效环境
-        boolean sandbox = payProductConfigManager.findByProduct(ProductEnum.DOUGONG_PAY.getCode())
-                .map(PayProductConfig::getActiveEnv)
-                .map(PayEnvEnum.SANDBOX.getCode()::equals)
+        // 沙箱标识读通用通道商户主表的固化快照(创建时按当时产品 activeEnv 写入, 不随产品切换改变)
+        // 单一事实源, 与 Direct 通道 + PayRouteService.validateChannelMchEnvMatch 完全一致
+        boolean sandbox = channelMerchantManager.findByChannelMchNo(channelMchNo)
+                .map(ChannelMerchant::isSandbox)
                 .orElse(false);
         credential.setSandbox(sandbox);
         // 子商户身份

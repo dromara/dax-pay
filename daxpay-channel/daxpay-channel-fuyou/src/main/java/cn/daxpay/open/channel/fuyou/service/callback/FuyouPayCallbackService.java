@@ -7,9 +7,7 @@ import cn.daxpay.open.channel.fuyou.client.resp.FuyouCallbackParseResp;
 import cn.daxpay.open.channel.fuyou.dao.isv.FuyouIsvKeyConfigManager;
 import cn.daxpay.open.channel.fuyou.entity.isv.FuyouIsvKeyConfig;
 import cn.daxpay.open.payment.trade.runtime.bo.CallbackData;
-import cn.daxpay.open.payment.trade.order.dao.NormalPayOrderManager;
 import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
-import cn.daxpay.open.payment.trade.order.entity.NormalPayOrder;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.trade.runtime.service.callback.PayCallbackService;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
@@ -42,7 +40,6 @@ public class FuyouPayCallbackService {
     private final FuyouChannelClient fuyouChannelClient;
     private final FuyouIsvKeyConfigManager fuyouIsvKeyConfigManager;
     private final PayTradeManager payTradeManager;
-    private final NormalPayOrderManager normalPayOrderManager;
     private final PayCallbackService payCallbackService;
 
     /// 支付回调处理
@@ -67,16 +64,11 @@ public class FuyouPayCallbackService {
             return RESP_FAIL;
         }
 
-        // 3. 凭关联订单号(mchnt_order_no)反查容器, 再查关联交易
+        // 3. 凭关联订单号(mchnt_order_no)直接反查 PayTrade
+        // relationOrderNo 是 PayTrade 上的字段(回调/关退同步反查权威), 跨 tradeType(normal/gateway)统一,
+        // 避免硬编码查 NormalPayOrder 导致 tradeType=gateway 时跨表查不到容器(与支付宝回调同源 bug)
         String relationOrderNo = resp.getOutTradeNo();
-        NormalPayOrder normalOrder = normalPayOrderManager.lambdaQuery()
-                .eq(NormalPayOrder::getRelationOrderNo, relationOrderNo)
-                .oneOpt()
-                .orElse(null);
-        PayTrade trade = null;
-        if (normalOrder != null) {
-            trade = payTradeManager.findByContainerId(normalOrder.getId()).orElse(null);
-        }
+        PayTrade trade = payTradeManager.findByRelationOrderNo(relationOrderNo).orElse(null);
         if (trade == null) {
             log.error("富友支付回调: 未找到关联订单 relationOrderNo={}", relationOrderNo);
             return RESP_FAIL;

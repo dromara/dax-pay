@@ -8,12 +8,11 @@ import cn.daxpay.open.channel.alipay.service.direct.AlipayDirectConfigAssembler;
 import cn.daxpay.open.channel.alipay.service.isv.AlipayIsvConfigAssembler;
 import cn.daxpay.open.payment.trade.runtime.bo.CallbackData;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundCallbackData;
-import cn.daxpay.open.payment.trade.order.dao.NormalPayOrderManager;
 import cn.daxpay.open.payment.trade.order.dao.RefundOrderManager;
 import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
-import cn.daxpay.open.payment.trade.order.entity.NormalPayOrder;
 import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
+import cn.daxpay.open.payment.trade.runtime.service.PayTradeContainerFields;
 import cn.daxpay.open.payment.trade.runtime.service.callback.PayCallbackService;
 import cn.daxpay.open.payment.trade.runtime.service.callback.RefundCallbackService;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
@@ -50,7 +49,7 @@ public class AlipayCallbackService {
     private final AlipayDirectConfigAssembler alipayDirectConfigAssembler;
     private final AlipayIsvConfigAssembler alipayIsvConfigAssembler;
     private final PayTradeManager payTradeManager;
-    private final NormalPayOrderManager normalPayOrderManager;
+    private final PayTradeContainerFields payTradeContainerFields;
     private final RefundOrderManager payRefundOrderManager;
     private final PayCallbackService payCallbackService;
     private final RefundCallbackService refundCallbackService;
@@ -166,18 +165,23 @@ public class AlipayCallbackService {
         if (trade == null) {
             return null;
         }
-        // 从容器获取 product/channelMchNo/capability
-        NormalPayOrder order = normalPayOrderManager.findById(trade.getContainerId()).orElse(null);
-        if (order == null) {
+        // 按 tradeType 分发到对应容器(normal/gateway)读取通道路由字段
+        // 与 PayCallbackService.resolveProduct / PayTradeContainerFields.resolve 同范式,
+        // 避免硬编码 normalPayOrder 导致 tradeType=gateway 时跨表查不到容器
+        PayTradeContainerFields.CredentialFields fields = payTradeContainerFields.resolveCredentialFields(trade);
+        if (fields == null) {
+            // 容器记录不存在(含跨容器误查), 附 tradeType 便于排查
+            log.warn("支付宝回调: 容器记录不存在, tradeNo={}, tradeType={}, containerId={}",
+                    tradeNo, trade.getTradeType(), trade.getContainerId());
             return null;
         }
         // 按支付产品分发: 服务商 / 直连
-        if (ProductEnum.ALIPAY_ISV.getCode().equals(order.getProduct())) {
+        if (ProductEnum.ALIPAY_ISV.getCode().equals(fields.product())) {
             return alipayIsvConfigAssembler.buildConfig(trade.getMchNo());
         }
-        String channelMchNo = StrUtil.blankToDefault(order.getChannelMchNo(), pathChannelMchNo);
+        String channelMchNo = StrUtil.blankToDefault(fields.channelMchNo(), pathChannelMchNo);
         return alipayDirectConfigAssembler.buildConfig(
-                trade.getMchNo(), channelMchNo, order.getCapability());
+                trade.getMchNo(), channelMchNo, fields.capability());
     }
 
     /// 提取 request 全部表单参数为 Map<String,String>(多值取首项)
