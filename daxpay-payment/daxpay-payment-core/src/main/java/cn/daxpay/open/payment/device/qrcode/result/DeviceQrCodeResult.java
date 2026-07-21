@@ -1,6 +1,7 @@
 package cn.daxpay.open.payment.device.qrcode.result;
 
 import cn.daxpay.open.payment.common.result.MchBaseResult;
+import cn.daxpay.open.payment.merchant.entity.appinfo.MchAppInfo;
 import cn.daxpay.open.payment.merchant.entity.info.MerchantInfo;
 import cn.daxpay.open.payment.merchant.entity.store.MchStoreInfo;
 import cn.daxpay.open.platform.core.annotation.Trans;
@@ -41,6 +42,14 @@ public class DeviceQrCodeResult extends BaseResult {
 
     @Schema(description = "关联应用号(空表示使用商户默认应用)")
     private String appId;
+
+    /// 应用名称(由 appId 翻译, 未绑定或默认应用为空)
+    @Trans(
+            entity = MchAppInfo.class,
+            source = Fields.appId,
+            result = MchAppInfo.Fields.appName)
+    @Schema(description = "应用名称")
+    private String appName;
 
     /// 绑定门店号(可空; 对应 [MchStoreInfo#storeNo])
     @Schema(description = "绑定门店号(空表示未绑定门店)")
