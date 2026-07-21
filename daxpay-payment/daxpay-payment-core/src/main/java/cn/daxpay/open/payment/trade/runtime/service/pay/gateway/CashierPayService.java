@@ -188,6 +188,10 @@ public class CashierPayService {
     }
 
     private CashierItemPublicResult toPublicResult(GatewayCashierItem item, ClientEnvEnum clientEnv) {
+        // DIRECT 模式下 method 被强制清空(见 GatewayCashierConfigService#normalizeAndValidate),
+        // 此时用 capability 兜底判断 needOpenId; capability 与 PayMethodEnum 同码(如 wechat_jsapi),
+        // 可直接喂给 PayMethodOpenIdSupport.needsOpenId 判定 JSAPI/MINI 类需求
+        String methodOrCapability = StrUtil.blankToDefault(item.getMethod(), item.getCapability());
         return new CashierItemPublicResult()
                 .setId(item.getId())
                 .setName(item.getName())
@@ -195,7 +199,7 @@ public class CashierPayService {
                 .setRecommend(item.getRecommend())
                 .setSortNo(item.getSortNo())
                 // openId 触发判定: JSAPI/MINI 业务必需, 或存在 openId 黑名单且环境可 OAuth
-                .setNeedOpenId(this.resolveItemNeedOpenId(item.getMethod(), clientEnv));
+                .setNeedOpenId(this.resolveItemNeedOpenId(methodOrCapability, clientEnv));
     }
 
     /// openId 触发判定（与聚合/码牌同源逻辑）
