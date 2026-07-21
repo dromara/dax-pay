@@ -28,8 +28,8 @@ public class AlipayCallbackController {
     /// 支付宝回调(支付/退款统一入口, 由服务层按表单参数区分)
     @Operation(summary = "支付宝支付/退款回调")
     @PostMapping
-    public String notify(@PathVariable("mchNo") String mchNo,
-                         @PathVariable("channelMchNo") String channelMchNo,
+    public String notify(@PathVariable String mchNo,
+                         @PathVariable String channelMchNo,
                          HttpServletRequest request) {
         // 显式装载商户租户上下文(不校验启用, 保证禁用商户历史单可回调)
         merchantContextLoader.bindMchNoForCallback(mchNo);
