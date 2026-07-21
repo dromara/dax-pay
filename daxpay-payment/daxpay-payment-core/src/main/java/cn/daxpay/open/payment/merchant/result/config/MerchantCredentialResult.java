@@ -15,9 +15,8 @@ import lombok.experimental.Accessors;
 @Schema(title = "商户API配置结果")
 public class MerchantCredentialResult extends BaseResult {
 
-    /// 商户公钥
+    /// 商户公钥（可公开，不脱敏）
     @Schema(description = "商户公钥")
-    @SensitiveInfo(front = 12, end = 12)
     private String publicKey;
 
     /// 平台公钥
