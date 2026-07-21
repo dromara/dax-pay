@@ -33,7 +33,7 @@ public class HmpayCallbackController {
                             @PathVariable("channelMchNo") String channelMchNo,
                             HttpServletRequest request) {
         merchantContextLoader.bindMchNoForCallback(mchNo);
-        return hmpayPayCallbackService.payHandle(request);
+        return hmpayPayCallbackService.payHandle(channelMchNo, request);
     }
 
     /// 河马付退款回调
@@ -43,6 +43,6 @@ public class HmpayCallbackController {
                                @PathVariable("channelMchNo") String channelMchNo,
                                HttpServletRequest request) {
         merchantContextLoader.bindMchNoForCallback(mchNo);
-        return hmpayRefundCallbackService.refundHandle(request);
+        return hmpayRefundCallbackService.refundHandle(channelMchNo, request);
     }
 }

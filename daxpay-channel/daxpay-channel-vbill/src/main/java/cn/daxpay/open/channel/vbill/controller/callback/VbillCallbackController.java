@@ -37,7 +37,7 @@ public class VbillCallbackController {
                                          @PathVariable("channelMchNo") String channelMchNo,
                                          HttpServletRequest request) {
         merchantContextLoader.bindMchNoForCallback(mchNo);
-        return vbillPayCallbackService.payHandle(request);
+        return vbillPayCallbackService.payHandle(channelMchNo, request);
     }
 
     /// 随行付退款回调
@@ -47,6 +47,6 @@ public class VbillCallbackController {
                                             @PathVariable("channelMchNo") String channelMchNo,
                                             HttpServletRequest request) {
         merchantContextLoader.bindMchNoForCallback(mchNo);
-        return vbillRefundCallbackService.refundHandle(request);
+        return vbillRefundCallbackService.refundHandle(channelMchNo, request);
     }
 }

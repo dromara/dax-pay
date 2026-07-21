@@ -8,5 +8,6 @@
   "refundPayOrderNotExist": "ไม่พบคำสั่งการชำระเงินที่เชื่อมโยงกับคำสั่งคืนเงิน",
   "tradeFlowNotExist": "ไม่พบบันทึกกระแสการค้า",
   "callbackTaskNotExist": "ไม่พบงานการแจ้งเตือนการโทรกลับของผู้ขาย",
-  "subscribeRecordNotExist": "ไม่พบบันทึกการแจ้งเตือนการสมัครสมาชิกผู้ขาย"
+  "subscribeRecordNotExist": "ไม่พบบันทึกการแจ้งเตือนการสมัครสมาชิกผู้ขาย",
+  "callbackRecordNotExist": "ไม่พบบันทึกการเรียกกลับของช่องทาง"
 }

@@ -4,7 +4,9 @@ import cn.daxpay.open.channel.vbill.client.resp.VbillCallbackParseResp;
 import cn.daxpay.open.channel.vbill.dao.isv.VbillIsvKeyConfigManager;
 import cn.daxpay.open.channel.vbill.entity.isv.VbillIsvKeyConfig;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundCallbackData;
+import cn.daxpay.open.payment.trade.record.service.PayCallbackRecordService;
 import cn.daxpay.open.payment.trade.runtime.service.callback.RefundCallbackService;
+import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.hutool.core.util.StrUtil;
@@ -30,12 +32,20 @@ public class VbillRefundCallbackService {
     private final VbillPayCallbackService vbillPayCallbackService;
     private final VbillIsvKeyConfigManager vbillIsvKeyConfigManager;
     private final RefundCallbackService refundCallbackService;
+    private final PayCallbackRecordService payCallbackRecordService;
 
     /// 退款回调处理
-    public Map<String, String> refundHandle(HttpServletRequest request) {
+    public Map<String, String> refundHandle(String channelMchNo, HttpServletRequest request) {
         Map<String, String> resp = new HashMap<>(4);
         String body = JakartaServletUtil.getBody(request);
+        Map<String, Object> notify = new HashMap<>();
+        notify.put("body", body);
         if (StrUtil.isBlank(body)) {
+            RefundCallbackData failData = new RefundCallbackData();
+            failData.setCallbackData(notify);
+            failData.setCallbackStatus(CallbackStatusEnum.FAIL);
+            failData.setCallbackErrorMsg("随行付退款回调: body 为空");
+            payCallbackRecordService.saveRefund(ChannelEnum.VBILL_PAY.getCode(), channelMchNo, failData);
             resp.put("code", VbillPayCallbackService.RESP_CODE_FAIL);
             resp.put("msg", "body 为空");
             return resp;
@@ -44,6 +54,11 @@ public class VbillRefundCallbackService {
                 .orElse(null);
         if (keyConfig == null || keyConfig.getPublicKey() == null) {
             log.error("随行付退款回调: 服务商密钥未配置, 无法验签");
+            RefundCallbackData failData = new RefundCallbackData();
+            failData.setCallbackData(notify);
+            failData.setCallbackStatus(CallbackStatusEnum.FAIL);
+            failData.setCallbackErrorMsg("随行付退款回调: 服务商密钥未配置");
+            payCallbackRecordService.saveRefund(ChannelEnum.VBILL_PAY.getCode(), channelMchNo, failData);
             resp.put("code", VbillPayCallbackService.RESP_CODE_FAIL);
             resp.put("msg", "密钥未配置");
             return resp;
@@ -52,6 +67,11 @@ public class VbillRefundCallbackService {
         VbillCallbackParseResp parseResp = vbillPayCallbackService.parse(body, keyConfig.getPublicKey(), true);
         if (parseResp == null || !Boolean.TRUE.equals(parseResp.getSuccess())) {
             log.error("随行付退款回调验签失败");
+            RefundCallbackData failData = new RefundCallbackData();
+            failData.setCallbackData(notify);
+            failData.setCallbackStatus(CallbackStatusEnum.FAIL);
+            failData.setCallbackErrorMsg("随行付退款回调验签失败");
+            payCallbackRecordService.saveRefund(ChannelEnum.VBILL_PAY.getCode(), channelMchNo, failData);
             resp.put("code", VbillPayCallbackService.RESP_CODE_FAIL);
             resp.put("msg", "验签失败");
             return resp;
@@ -67,9 +87,22 @@ public class VbillRefundCallbackService {
             callbackData.setTradeErrorMsg("随行付退款状态非成功: " + parseResp.getTradeStatus());
         }
         callbackData.setFinishTime(parseResp.getFinishTime());
-        refundCallbackService.refundCallback(callbackData);
-        resp.put("code", VbillPayCallbackService.RESP_CODE_SUCCESS);
-        resp.put("msg", "成功");
+        notify.put("outTradeNo", parseResp.getOutTradeNo());
+        notify.put("outRefundNo", parseResp.getOutRefundNo());
+        notify.put("tradeStatus", parseResp.getTradeStatus());
+        callbackData.setCallbackData(notify);
+        try {
+            refundCallbackService.refundCallback(callbackData);
+            payCallbackRecordService.saveRefund(ChannelEnum.VBILL_PAY.getCode(), channelMchNo, callbackData);
+            resp.put("code", VbillPayCallbackService.RESP_CODE_SUCCESS);
+            resp.put("msg", "成功");
+        } catch (Exception e) {
+            log.error("随行付退款回调业务处理失败: refundNo={}", callbackData.getRefundNo(), e);
+            callbackData.setCallbackStatus(CallbackStatusEnum.EXCEPTION).setCallbackErrorMsg(e.getMessage());
+            payCallbackRecordService.saveRefund(ChannelEnum.VBILL_PAY.getCode(), channelMchNo, callbackData);
+            resp.put("code", VbillPayCallbackService.RESP_CODE_FAIL);
+            resp.put("msg", "业务处理失败");
+        }
         return resp;
     }
 }

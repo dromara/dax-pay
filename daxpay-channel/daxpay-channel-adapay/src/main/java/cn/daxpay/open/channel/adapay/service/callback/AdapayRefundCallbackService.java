@@ -6,7 +6,9 @@ import cn.daxpay.open.channel.adapay.client.req.AdapayCallbackParseReq;
 import cn.daxpay.open.channel.adapay.client.resp.AdapayCallbackParseResp;
 import cn.daxpay.open.channel.adapay.code.AdapayCode;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundCallbackData;
+import cn.daxpay.open.payment.trade.record.service.PayCallbackRecordService;
 import cn.daxpay.open.payment.trade.runtime.service.callback.RefundCallbackService;
+import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.JakartaServletUtil;
@@ -15,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /// # Adapay 退款回调处理服务
@@ -30,12 +34,20 @@ public class AdapayRefundCallbackService {
 
     private final AdapayChannelClient adapayChannelClient;
     private final RefundCallbackService refundCallbackService;
+    private final PayCallbackRecordService payCallbackRecordService;
 
     /// 退款回调处理
-    public String refundHandle(HttpServletRequest request) {
+    public String refundHandle(String channelMchNo, HttpServletRequest request) {
         String body = JakartaServletUtil.getBody(request);
+        Map<String, Object> notify = new HashMap<>();
+        notify.put("body", body);
         if (StrUtil.isBlank(body)) {
             log.error("Adapay 退款回调: body 为空");
+            RefundCallbackData failData = new RefundCallbackData();
+            failData.setCallbackData(notify);
+            failData.setCallbackStatus(CallbackStatusEnum.FAIL);
+            failData.setCallbackErrorMsg("Adapay 退款回调: body 为空");
+            payCallbackRecordService.saveRefund(ChannelEnum.HUIFU.getCode(), channelMchNo, failData);
             return AdapayCode.NOTIFY_FAIL;
         }
 
@@ -47,11 +59,21 @@ public class AdapayRefundCallbackService {
         var result = adapayChannelClient.parseRefundCallback(req);
         if (result.getCode() != 0) {
             log.error("Adapay 退款回调: 子应用解析失败: {}", result.getMsg());
+            RefundCallbackData failData = new RefundCallbackData();
+            failData.setCallbackData(notify);
+            failData.setCallbackStatus(CallbackStatusEnum.FAIL);
+            failData.setCallbackErrorMsg("Adapay 退款回调: 子应用解析失败");
+            payCallbackRecordService.saveRefund(ChannelEnum.HUIFU.getCode(), channelMchNo, failData);
             return AdapayCode.NOTIFY_FAIL;
         }
         AdapayCallbackParseResp resp = result.getData();
         if (resp == null || !Boolean.TRUE.equals(resp.getSuccess())) {
             log.error("Adapay 退款回调验签失败");
+            RefundCallbackData failData = new RefundCallbackData();
+            failData.setCallbackData(notify);
+            failData.setCallbackStatus(CallbackStatusEnum.FAIL);
+            failData.setCallbackErrorMsg("Adapay 退款回调验签失败");
+            payCallbackRecordService.saveRefund(ChannelEnum.HUIFU.getCode(), channelMchNo, failData);
             return AdapayCode.NOTIFY_FAIL;
         }
 
@@ -66,7 +88,19 @@ public class AdapayRefundCallbackService {
             callbackData.setTradeErrorMsg("Adapay 退款状态非成功: " + resp.getTradeStatus());
         }
         callbackData.setFinishTime(resp.getFinishTime());
-        refundCallbackService.refundCallback(callbackData);
+        notify.put("outTradeNo", resp.getOutTradeNo());
+        notify.put("outRefundNo", resp.getOutRefundNo());
+        notify.put("tradeStatus", resp.getTradeStatus());
+        callbackData.setCallbackData(notify);
+        try {
+            refundCallbackService.refundCallback(callbackData);
+        } catch (Exception e) {
+            log.error("Adapay 退款回调业务处理失败: refundNo={}", callbackData.getRefundNo(), e);
+            callbackData.setCallbackStatus(CallbackStatusEnum.EXCEPTION).setCallbackErrorMsg(e.getMessage());
+            payCallbackRecordService.saveRefund(ChannelEnum.HUIFU.getCode(), channelMchNo, callbackData);
+            return AdapayCode.NOTIFY_FAIL;
+        }
+        payCallbackRecordService.saveRefund(ChannelEnum.HUIFU.getCode(), channelMchNo, callbackData);
         return AdapayCode.NOTIFY_SUCCESS;
     }
 }

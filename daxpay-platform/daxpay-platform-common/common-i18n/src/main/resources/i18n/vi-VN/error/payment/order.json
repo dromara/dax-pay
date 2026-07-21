@@ -8,5 +8,6 @@
   "refundPayOrderNotExist": "Không tìm thấy lệnh thanh toán được liên kết với lệnh hoàn tiền",
   "tradeFlowNotExist": "Không tìm thấy bản ghi luồng giao dịch",
   "callbackTaskNotExist": "Không tìm thấy tác vụ thông báo gọi lại của người bán",
-  "subscribeRecordNotExist": "Không tìm thấy bản ghi thông báo đăng ký của người bán"
+  "subscribeRecordNotExist": "Không tìm thấy bản ghi thông báo đăng ký của người bán",
+  "callbackRecordNotExist": "Không tìm thấy bản ghi callback kênh"
 }

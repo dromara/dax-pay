@@ -8,5 +8,6 @@
   "refundPayOrderNotExist": "退款訂單關聯支付訂單不存在",
   "tradeFlowNotExist": "交易流水記錄不存在",
   "callbackTaskNotExist": "商戶回撥通知任務不存在",
-  "subscribeRecordNotExist": "商戶訂閱通知記錄不存在"
+  "subscribeRecordNotExist": "商戶訂閱通知記錄不存在",
+  "callbackRecordNotExist": "通道回調記錄不存在"
 }

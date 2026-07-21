@@ -8,7 +8,9 @@ import cn.daxpay.open.channel.ums.code.UmsCode;
 import cn.daxpay.open.channel.ums.service.direct.UmsDirectConfigAssembler;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundCallbackData;
 import cn.daxpay.open.payment.common.result.DaxResult;
+import cn.daxpay.open.payment.trade.record.service.PayCallbackRecordService;
 import cn.daxpay.open.payment.trade.runtime.service.callback.RefundCallbackService;
+import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.JakartaServletUtil;
@@ -37,11 +39,13 @@ public class UmsRefundCallbackService {
     private final UmsChannelClient umsChannelClient;
     private final UmsDirectConfigAssembler configAssembler;
     private final RefundCallbackService refundCallbackService;
+    private final PayCallbackRecordService payCallbackRecordService;
 
     /// 退款回调处理
     public String refundHandle(String mchNo, String channelMchNo, HttpServletRequest request) {
         // 1. 提取回调参数
         Map<String, String> params = this.extractParams(request);
+        Map<String, Object> notify = new HashMap<>(params);
 
         // 2. 组装凭证
         UmsSdkCredential credential = configAssembler.buildConfig(mchNo, channelMchNo, null);
@@ -53,6 +57,11 @@ public class UmsRefundCallbackService {
         DaxResult<UmsCallbackParseResp> result = umsChannelClient.parseRefundCallback(req);
         if (result.getCode() != 0 || result.getData() == null || !result.getData().isVerified()) {
             log.error("银联商务退款回调验签失败: channelMchNo={}", channelMchNo);
+            RefundCallbackData failData = new RefundCallbackData();
+            failData.setCallbackData(notify);
+            failData.setCallbackStatus(CallbackStatusEnum.FAIL);
+            failData.setCallbackErrorMsg("银联商务退款回调验签失败");
+            payCallbackRecordService.saveRefund(ChannelEnum.UMS_PAY.getCode(), channelMchNo, failData);
             return UmsCode.NOTIFY_FAIL;
         }
 
@@ -65,7 +74,18 @@ public class UmsRefundCallbackService {
         } else {
             callbackData.setTradeErrorMsg("银联商务退款状态非成功: " + resp.getTradeStatus());
         }
-        refundCallbackService.refundCallback(callbackData);
+        notify.put("outRefundNo", resp.getOutRefundNo());
+        notify.put("tradeStatus", resp.getTradeStatus());
+        callbackData.setCallbackData(notify);
+        try {
+            refundCallbackService.refundCallback(callbackData);
+        } catch (Exception e) {
+            log.error("银联商务退款回调业务处理失败: refundNo={}", callbackData.getRefundNo(), e);
+            callbackData.setCallbackStatus(CallbackStatusEnum.EXCEPTION).setCallbackErrorMsg(e.getMessage());
+            payCallbackRecordService.saveRefund(ChannelEnum.UMS_PAY.getCode(), channelMchNo, callbackData);
+            return UmsCode.NOTIFY_FAIL;
+        }
+        payCallbackRecordService.saveRefund(ChannelEnum.UMS_PAY.getCode(), channelMchNo, callbackData);
         return UmsCode.NOTIFY_SUCCESS;
     }
 

@@ -8,12 +8,17 @@ import cn.daxpay.open.channel.yeepay.code.YeepayCode;
 import cn.daxpay.open.channel.yeepay.service.direct.YeepayDirectConfigAssembler;
 import cn.daxpay.open.payment.trade.runtime.bo.CallbackData;
 import cn.daxpay.open.payment.common.result.DaxResult;
+import cn.daxpay.open.payment.trade.record.service.PayCallbackRecordService;
 import cn.daxpay.open.payment.trade.runtime.service.callback.PayCallbackService;
+import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /// # 易宝支付回调处理服务
 ///
@@ -30,12 +35,16 @@ public class YeepayPayCallbackService {
     private final YeepayChannelClient yeepayChannelClient;
     private final YeepayDirectConfigAssembler configAssembler;
     private final PayCallbackService payCallbackService;
+    private final PayCallbackRecordService payCallbackRecordService;
 
     /// 支付回调处理
     public String payHandle(String mchNo, String channelMchNo, HttpServletRequest request) {
         // 1. 提取易宝通知参数(form 表单: response 密文 + customerIdentification appKey)
         String response = request.getParameter("response");
         String customerIdentification = request.getParameter("customerIdentification");
+        Map<String, Object> notify = new HashMap<>();
+        notify.put("response", response);
+        notify.put("customerIdentification", customerIdentification);
 
         // 2. 组装凭证
         YeepaySdkCredential credential = configAssembler.buildConfig(mchNo, channelMchNo, null);
@@ -48,18 +57,30 @@ public class YeepayPayCallbackService {
         DaxResult<YeepayCallbackParseResp> result = yeepayChannelClient.parsePayCallback(req);
         if (result.getCode() != 0 || result.getData() == null || !result.getData().isVerified()) {
             log.error("易宝支付回调验签失败: channelMchNo={}", channelMchNo);
+            CallbackData failData = new CallbackData();
+            failData.setCallbackData(notify);
+            failData.setCallbackStatus(CallbackStatusEnum.FAIL);
+            failData.setCallbackErrorMsg("易宝支付回调验签失败");
+            payCallbackRecordService.savePay(ChannelEnum.YEE_PAY.getCode(), channelMchNo, failData);
             return YeepayCode.NOTIFY_FAIL;
         }
 
         // 4. 构建回调数据交由框架处理
         YeepayCallbackParseResp resp = result.getData();
         CallbackData callbackData = this.buildCallbackData(resp);
+        notify.put("outTradeNo", resp.getOutTradeNo());
+        notify.put("targetOrderId", resp.getTargetOrderId());
+        notify.put("tradeStatus", resp.getTradeStatus());
+        callbackData.setCallbackData(notify);
         try {
             payCallbackService.payCallback(callbackData);
         } catch (Exception e) {
             log.error("易宝支付回调业务处理失败: tradeNo={}", callbackData.getTradeNo(), e);
+            callbackData.setCallbackStatus(CallbackStatusEnum.EXCEPTION).setCallbackErrorMsg(e.getMessage());
+            payCallbackRecordService.savePay(ChannelEnum.YEE_PAY.getCode(), channelMchNo, callbackData);
             return YeepayCode.NOTIFY_FAIL;
         }
+        payCallbackRecordService.savePay(ChannelEnum.YEE_PAY.getCode(), channelMchNo, callbackData);
         return YeepayCode.NOTIFY_SUCCESS;
     }
 

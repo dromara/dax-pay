@@ -8,5 +8,6 @@
   "refundPayOrderNotExist": "Pesanan pembayaran yang dipautkan kepada pesanan bayaran balik tidak ditemui",
   "tradeFlowNotExist": "Rekod aliran perdagangan tidak ditemui",
   "callbackTaskNotExist": "Tugas pemberitahuan panggilan balik pedagang tidak ditemui",
-  "subscribeRecordNotExist": "Rekod pemberitahuan langganan pedagang tidak ditemui"
+  "subscribeRecordNotExist": "Rekod pemberitahuan langganan pedagang tidak ditemui",
+  "callbackRecordNotExist": "Rekod callback saluran tidak dijumpai"
 }

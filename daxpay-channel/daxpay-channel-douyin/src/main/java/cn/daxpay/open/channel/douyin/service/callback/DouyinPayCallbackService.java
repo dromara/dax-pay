@@ -11,7 +11,9 @@ import cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectKeyConfig;
 import cn.daxpay.open.channel.douyin.service.direct.DouyinDirectKeyConfigService;
 import cn.daxpay.open.payment.trade.runtime.bo.CallbackData;
 import cn.daxpay.open.payment.common.result.DaxResult;
+import cn.daxpay.open.payment.trade.record.service.PayCallbackRecordService;
 import cn.daxpay.open.payment.trade.runtime.service.callback.PayCallbackService;
+import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.hutool.extra.servlet.JakartaServletUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -39,6 +42,7 @@ public class DouyinPayCallbackService {
     private final DouyinDirectKeyConfigService keyConfigService;
     private final DouyinDirectChannelMerchantManager channelMerchantManager;
     private final PayCallbackService payCallbackService;
+    private final PayCallbackRecordService payCallbackRecordService;
 
     /// 支付回调处理
     public String payHandle(String mchNo, String channelMchNo, HttpServletRequest request) {
@@ -53,17 +57,34 @@ public class DouyinPayCallbackService {
         DouyinCallbackParseResp resp = this.parsePayCallback(credential, body, headerMap);
         if (resp == null || !resp.isVerified()) {
             log.error("抖音支付回调验签失败: channelMchNo={}", channelMchNo);
+            CallbackData failData = new CallbackData();
+            Map<String, Object> notify = new HashMap<>();
+            notify.put("body", body);
+            notify.put("headers", headerMap);
+            failData.setCallbackData(notify);
+            failData.setCallbackStatus(CallbackStatusEnum.FAIL);
+            failData.setCallbackErrorMsg("抖音支付回调验签失败");
+            payCallbackRecordService.savePay(ChannelEnum.DOUYIN.getCode(), channelMchNo, failData);
             return DouyinPayCode.NOTIFY_FAIL;
         }
 
         // 4. 构建回调数据交由框架处理
         CallbackData callbackData = this.buildCallbackData(resp);
+        Map<String, Object> notify = new HashMap<>();
+        notify.put("body", body);
+        notify.put("outTradeNo", resp.getOutTradeNo());
+        notify.put("transactionId", resp.getTransactionId());
+        notify.put("tradeState", resp.getTradeState());
+        callbackData.setCallbackData(notify);
         try {
             payCallbackService.payCallback(callbackData);
         } catch (Exception e) {
             log.error("抖音支付回调业务处理失败: tradeNo={}", callbackData.getTradeNo(), e);
+            callbackData.setCallbackStatus(CallbackStatusEnum.EXCEPTION).setCallbackErrorMsg(e.getMessage());
+            payCallbackRecordService.savePay(ChannelEnum.DOUYIN.getCode(), channelMchNo, callbackData);
             return DouyinPayCode.NOTIFY_FAIL;
         }
+        payCallbackRecordService.savePay(ChannelEnum.DOUYIN.getCode(), channelMchNo, callbackData);
         return DouyinPayCode.NOTIFY_SUCCESS;
     }
 

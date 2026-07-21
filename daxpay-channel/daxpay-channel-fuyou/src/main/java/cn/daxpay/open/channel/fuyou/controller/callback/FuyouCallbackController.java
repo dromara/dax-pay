@@ -36,7 +36,7 @@ public class FuyouCallbackController {
                             @PathVariable("channelMchNo") String channelMchNo,
                             @RequestParam("req") String req) {
         merchantContextLoader.bindMchNoForCallback(mchNo);
-        return fuyouPayCallbackService.payHandle(req);
+        return fuyouPayCallbackService.payHandle(channelMchNo, req);
     }
 
     /// 富友退款回调
@@ -46,6 +46,6 @@ public class FuyouCallbackController {
                                @PathVariable("channelMchNo") String channelMchNo,
                                @RequestParam("req") String req) {
         merchantContextLoader.bindMchNoForCallback(mchNo);
-        return fuyouRefundCallbackService.refundHandle(req);
+        return fuyouRefundCallbackService.refundHandle(channelMchNo, req);
     }
 }

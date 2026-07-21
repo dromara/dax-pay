@@ -7,7 +7,9 @@ import cn.daxpay.open.channel.hkrt.client.resp.HkrtCallbackParseResp;
 import cn.daxpay.open.channel.hkrt.dao.isv.HkrtIsvKeyConfigManager;
 import cn.daxpay.open.channel.hkrt.entity.isv.HkrtIsvKeyConfig;
 import cn.daxpay.open.payment.trade.runtime.bo.CallbackData;
+import cn.daxpay.open.payment.trade.record.service.PayCallbackRecordService;
 import cn.daxpay.open.payment.trade.runtime.service.callback.PayCallbackService;
+import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.hutool.extra.servlet.JakartaServletUtil;
@@ -16,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /// # 海科融通支付回调处理服务
@@ -37,33 +41,53 @@ public class HkrtPayCallbackService {
     private final HkrtIsvKeyConfigManager hkrtIsvKeyConfigManager;
     private final PayCallbackService payCallbackService;
     private final HkrtChannelClient hkrtChannelClient;
+    private final PayCallbackRecordService payCallbackRecordService;
 
     /// 支付回调处理
-    public String payHandle(HttpServletRequest request) {
+    public String payHandle(String channelMchNo, HttpServletRequest request) {
         // 1. 提取回调原始数据(JSON body)
         String body = JakartaServletUtil.getBody(request);
+        Map<String, Object> notify = new HashMap<>();
+        notify.put("body", body);
 
         // 2. 获取全局服务商 accessKey(只读查询, 不创建记录)
         HkrtIsvKeyConfig keyConfig = hkrtIsvKeyConfigManager.findByProduct(ProductEnum.HKRT_PAY.getCode())
                 .orElse(null);
         if (keyConfig == null || keyConfig.getAccessKey() == null) {
             log.error("海科融通支付回调: 服务商密钥未配置, 无法验签");
+            CallbackData failData = new CallbackData();
+            failData.setCallbackData(notify);
+            failData.setCallbackStatus(CallbackStatusEnum.FAIL);
+            failData.setCallbackErrorMsg("海科融通支付回调: 服务商密钥未配置");
+            payCallbackRecordService.savePay(ChannelEnum.HKRT_PAY.getCode(), channelMchNo, failData);
             return NOTIFY_FAIL;
         }
 
         // 3. 转发子应用验签与解析
         HkrtCallbackParseResp resp = parseCallback(body, keyConfig.getAccessKey(), false);
         if (resp == null) {
+            CallbackData failData = new CallbackData();
+            failData.setCallbackData(notify);
+            failData.setCallbackStatus(CallbackStatusEnum.FAIL);
+            failData.setCallbackErrorMsg("海科融通支付回调验签/解析失败");
+            payCallbackRecordService.savePay(ChannelEnum.HKRT_PAY.getCode(), channelMchNo, failData);
             return NOTIFY_FAIL;
         }
+        CallbackData callbackData = toCallbackData(resp);
+        notify.put("outTradeNo", resp.getOutTradeNo());
+        notify.put("tradeNo", resp.getTradeNo());
+        notify.put("tradeStatus", resp.getTradeStatus());
+        callbackData.setCallbackData(notify);
         try {
             // 4. 构建 CallbackData 交框架更新订单状态
-            CallbackData callbackData = toCallbackData(resp);
             payCallbackService.payCallback(callbackData);
         } catch (Exception e) {
             log.error("海科融通支付回调业务处理失败: tradeNo={}", resp.getOutTradeNo(), e);
+            callbackData.setCallbackStatus(CallbackStatusEnum.EXCEPTION).setCallbackErrorMsg(e.getMessage());
+            payCallbackRecordService.savePay(ChannelEnum.HKRT_PAY.getCode(), channelMchNo, callbackData);
             return NOTIFY_FAIL;
         }
+        payCallbackRecordService.savePay(ChannelEnum.HKRT_PAY.getCode(), channelMchNo, callbackData);
         return NOTIFY_SUCCESS;
     }
 

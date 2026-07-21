@@ -6,15 +6,17 @@ import cn.daxpay.open.channel.alipay.client.req.AlipayCallbackParseReq;
 import cn.daxpay.open.channel.alipay.client.resp.AlipayCallbackParseResp;
 import cn.daxpay.open.channel.alipay.service.direct.AlipayDirectConfigAssembler;
 import cn.daxpay.open.channel.alipay.service.isv.AlipayIsvConfigAssembler;
+import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
+import cn.daxpay.open.payment.trade.order.dao.RefundOrderManager;
+import cn.daxpay.open.payment.trade.order.entity.PayTrade;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
+import cn.daxpay.open.payment.trade.record.service.PayCallbackRecordService;
 import cn.daxpay.open.payment.trade.runtime.bo.CallbackData;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundCallbackData;
-import cn.daxpay.open.payment.trade.order.dao.RefundOrderManager;
-import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
-import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
-import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.trade.runtime.service.PayTradeContainerFields;
 import cn.daxpay.open.payment.trade.runtime.service.callback.PayCallbackService;
 import cn.daxpay.open.payment.trade.runtime.service.callback.RefundCallbackService;
+import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.hutool.core.util.StrUtil;
@@ -53,6 +55,7 @@ public class AlipayCallbackService {
     private final RefundOrderManager payRefundOrderManager;
     private final PayCallbackService payCallbackService;
     private final RefundCallbackService refundCallbackService;
+    private final PayCallbackRecordService payCallbackRecordService;
 
     /// 回调统一处理(自动区分支付/退款)
     ///
@@ -62,6 +65,11 @@ public class AlipayCallbackService {
         Map<String, String> params = extractFormParams(request);
         if (params.isEmpty()) {
             log.error("支付宝回调: 表单参数为空");
+            CallbackData failData = new CallbackData();
+            failData.setCallbackData(params);
+            failData.setCallbackStatus(CallbackStatusEnum.FAIL);
+            failData.setCallbackErrorMsg("支付宝回调: 表单参数为空");
+            payCallbackRecordService.savePay(ChannelEnum.ALIPAY.getCode(), channelMchNo, failData);
             return NOTIFY_FAIL;
         }
 
@@ -74,6 +82,21 @@ public class AlipayCallbackService {
             return handlePay(channelMchNo, params);
         } catch (Exception e) {
             log.error("支付宝回调业务处理失败", e);
+            if (refund) {
+                RefundCallbackData failData = new RefundCallbackData();
+                failData.setCallbackData(params);
+                failData.setRefundNo(params.get("out_request_no"));
+                failData.setCallbackStatus(CallbackStatusEnum.EXCEPTION);
+                failData.setCallbackErrorMsg(e.getMessage());
+                payCallbackRecordService.saveRefund(ChannelEnum.ALIPAY.getCode(), channelMchNo, failData);
+            } else {
+                CallbackData failData = new CallbackData();
+                failData.setCallbackData(params);
+                failData.setTradeNo(params.get("out_trade_no"));
+                failData.setCallbackStatus(CallbackStatusEnum.EXCEPTION);
+                failData.setCallbackErrorMsg(e.getMessage());
+                payCallbackRecordService.savePay(ChannelEnum.ALIPAY.getCode(), channelMchNo, failData);
+            }
             return NOTIFY_FAIL;
         }
     }
@@ -85,11 +108,23 @@ public class AlipayCallbackService {
         AlipaySdkCredential credential = resolveCredentialByTradeNo(tradeNo, channelMchNo);
         if (credential == null) {
             log.error("支付宝支付回调: 无法解析通道凭证, tradeNo={}, channelMchNo={}", tradeNo, channelMchNo);
+            CallbackData failData = new CallbackData();
+            failData.setCallbackData(params);
+            failData.setTradeNo(tradeNo);
+            failData.setCallbackStatus(CallbackStatusEnum.FAIL);
+            failData.setCallbackErrorMsg("支付宝支付回调: 无法解析通道凭证");
+            payCallbackRecordService.savePay(ChannelEnum.ALIPAY.getCode(), channelMchNo, failData);
             return NOTIFY_FAIL;
         }
         AlipayCallbackParseResp resp = parse(params, credential, false);
         if (resp == null || !Boolean.TRUE.equals(resp.getSuccess())) {
             log.error("支付宝支付回调验签失败: tradeNo={}", tradeNo);
+            CallbackData failData = new CallbackData();
+            failData.setCallbackData(params);
+            failData.setTradeNo(tradeNo);
+            failData.setCallbackStatus(CallbackStatusEnum.FAIL);
+            failData.setCallbackErrorMsg("支付宝支付回调验签失败");
+            payCallbackRecordService.savePay(ChannelEnum.ALIPAY.getCode(), channelMchNo, failData);
             return NOTIFY_FAIL;
         }
         CallbackData callbackData = new CallbackData();
@@ -103,6 +138,7 @@ public class AlipayCallbackService {
         }
         callbackData.setFinishTime(resp.getFinishTime());
         payCallbackService.payCallback(callbackData);
+        payCallbackRecordService.savePay(ChannelEnum.ALIPAY.getCode(), channelMchNo, callbackData);
         return NOTIFY_SUCCESS;
     }
 
@@ -113,16 +149,34 @@ public class AlipayCallbackService {
         RefundOrder refundOrder = payRefundOrderManager.findByRefundNo(refundNo).orElse(null);
         if (refundOrder == null) {
             log.error("支付宝退款回调: 退款单不存在 refundNo={}", refundNo);
+            RefundCallbackData failData = new RefundCallbackData();
+            failData.setCallbackData(params);
+            failData.setRefundNo(refundNo);
+            failData.setCallbackStatus(CallbackStatusEnum.FAIL);
+            failData.setCallbackErrorMsg("支付宝退款回调: 退款单不存在");
+            payCallbackRecordService.saveRefund(ChannelEnum.ALIPAY.getCode(), channelMchNo, failData);
             return NOTIFY_FAIL;
         }
         AlipaySdkCredential credential = resolveCredentialByTradeNo(refundOrder.getTradeNo(), channelMchNo);
         if (credential == null) {
             log.error("支付宝退款回调: 无法解析通道凭证, refundNo={}, channelMchNo={}", refundNo, channelMchNo);
+            RefundCallbackData failData = new RefundCallbackData();
+            failData.setCallbackData(params);
+            failData.setRefundNo(refundNo);
+            failData.setCallbackStatus(CallbackStatusEnum.FAIL);
+            failData.setCallbackErrorMsg("支付宝退款回调: 无法解析通道凭证");
+            payCallbackRecordService.saveRefund(ChannelEnum.ALIPAY.getCode(), channelMchNo, failData);
             return NOTIFY_FAIL;
         }
         AlipayCallbackParseResp resp = parse(params, credential, true);
         if (resp == null || !Boolean.TRUE.equals(resp.getSuccess())) {
             log.error("支付宝退款回调验签失败: refundNo={}", refundNo);
+            RefundCallbackData failData = new RefundCallbackData();
+            failData.setCallbackData(params);
+            failData.setRefundNo(refundNo);
+            failData.setCallbackStatus(CallbackStatusEnum.FAIL);
+            failData.setCallbackErrorMsg("支付宝退款回调验签失败");
+            payCallbackRecordService.saveRefund(ChannelEnum.ALIPAY.getCode(), channelMchNo, failData);
             return NOTIFY_FAIL;
         }
         RefundCallbackData callbackData = new RefundCallbackData();
@@ -136,6 +190,7 @@ public class AlipayCallbackService {
         }
         callbackData.setFinishTime(resp.getFinishTime());
         refundCallbackService.refundCallback(callbackData);
+        payCallbackRecordService.saveRefund(ChannelEnum.ALIPAY.getCode(), channelMchNo, callbackData);
         return NOTIFY_SUCCESS;
     }
 

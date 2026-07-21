@@ -11,7 +11,9 @@ import cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectKeyConfig;
 import cn.daxpay.open.channel.douyin.service.direct.DouyinDirectKeyConfigService;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundCallbackData;
 import cn.daxpay.open.payment.common.result.DaxResult;
+import cn.daxpay.open.payment.trade.record.service.PayCallbackRecordService;
 import cn.daxpay.open.payment.trade.runtime.service.callback.RefundCallbackService;
+import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.hutool.extra.servlet.JakartaServletUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,6 +21,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -38,12 +41,16 @@ public class DouyinRefundCallbackService {
     private final DouyinDirectKeyConfigService keyConfigService;
     private final DouyinDirectChannelMerchantManager channelMerchantManager;
     private final RefundCallbackService refundCallbackService;
+    private final PayCallbackRecordService payCallbackRecordService;
 
     /// 退款回调处理
     public String refundHandle(String mchNo, String channelMchNo, HttpServletRequest request) {
         // 1. 提取回调原始数据
         String body = JakartaServletUtil.getBody(request);
         Map<String, String> headerMap = JakartaServletUtil.getHeaderMap(request);
+        Map<String, Object> notify = new HashMap<>();
+        notify.put("body", body);
+        notify.put("headers", headerMap);
 
         // 2. 组装凭证
         DouyinSdkCredential credential = this.buildCredential(channelMchNo);
@@ -60,12 +67,22 @@ public class DouyinRefundCallbackService {
         DaxResult<DouyinCallbackParseResp> result = douyinChannelClient.parseRefundCallback(req);
         if (result.getCode() != 0) {
             log.error("抖音退款回调验签通道调用失败: {}", result.getMsg());
+            RefundCallbackData failData = new RefundCallbackData();
+            failData.setCallbackData(notify);
+            failData.setCallbackStatus(CallbackStatusEnum.FAIL);
+            failData.setCallbackErrorMsg("抖音退款回调验签通道调用失败");
+            payCallbackRecordService.saveRefund(ChannelEnum.DOUYIN.getCode(), channelMchNo, failData);
             return DouyinPayCode.NOTIFY_FAIL;
         }
 
         DouyinCallbackParseResp resp = result.getData();
         if (resp == null || !resp.isVerified()) {
             log.error("抖音退款回调验签失败: channelMchNo={}", channelMchNo);
+            RefundCallbackData failData = new RefundCallbackData();
+            failData.setCallbackData(notify);
+            failData.setCallbackStatus(CallbackStatusEnum.FAIL);
+            failData.setCallbackErrorMsg("抖音退款回调验签失败");
+            payCallbackRecordService.saveRefund(ChannelEnum.DOUYIN.getCode(), channelMchNo, failData);
             return DouyinPayCode.NOTIFY_FAIL;
         }
 
@@ -78,7 +95,19 @@ public class DouyinRefundCallbackService {
         } else {
             callbackData.setTradeErrorMsg("抖音退款状态非成功: " + resp.getRefundStatus());
         }
-        refundCallbackService.refundCallback(callbackData);
+        notify.put("outRefundNo", resp.getOutRefundNo());
+        notify.put("refundId", resp.getRefundId());
+        notify.put("refundStatus", resp.getRefundStatus());
+        callbackData.setCallbackData(notify);
+        try {
+            refundCallbackService.refundCallback(callbackData);
+        } catch (Exception e) {
+            log.error("抖音退款回调业务处理失败: refundNo={}", callbackData.getRefundNo(), e);
+            callbackData.setCallbackStatus(CallbackStatusEnum.EXCEPTION).setCallbackErrorMsg(e.getMessage());
+            payCallbackRecordService.saveRefund(ChannelEnum.DOUYIN.getCode(), channelMchNo, callbackData);
+            return DouyinPayCode.NOTIFY_FAIL;
+        }
+        payCallbackRecordService.saveRefund(ChannelEnum.DOUYIN.getCode(), channelMchNo, callbackData);
         return DouyinPayCode.NOTIFY_SUCCESS;
     }
 

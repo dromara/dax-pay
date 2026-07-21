@@ -6,7 +6,9 @@ import cn.daxpay.open.channel.adapay.client.req.AdapayCallbackParseReq;
 import cn.daxpay.open.channel.adapay.client.resp.AdapayCallbackParseResp;
 import cn.daxpay.open.channel.adapay.code.AdapayCode;
 import cn.daxpay.open.payment.trade.runtime.bo.CallbackData;
+import cn.daxpay.open.payment.trade.record.service.PayCallbackRecordService;
 import cn.daxpay.open.payment.trade.runtime.service.callback.PayCallbackService;
+import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.JakartaServletUtil;
@@ -15,6 +17,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /// # Adapay 支付回调处理服务
@@ -31,13 +35,21 @@ public class AdapayPayCallbackService {
 
     private final AdapayChannelClient adapayChannelClient;
     private final PayCallbackService payCallbackService;
+    private final PayCallbackRecordService payCallbackRecordService;
 
     /// 支付回调处理
-    public String payHandle(HttpServletRequest request) {
+    public String payHandle(String channelMchNo, HttpServletRequest request) {
         // 1. 提取回调原始 body
         String body = JakartaServletUtil.getBody(request);
+        Map<String, Object> notify = new HashMap<>();
+        notify.put("body", body);
         if (StrUtil.isBlank(body)) {
             log.error("Adapay 支付回调: body 为空");
+            CallbackData failData = new CallbackData();
+            failData.setCallbackData(notify);
+            failData.setCallbackStatus(CallbackStatusEnum.FAIL);
+            failData.setCallbackErrorMsg("Adapay 支付回调: body 为空");
+            payCallbackRecordService.savePay(ChannelEnum.HUIFU.getCode(), channelMchNo, failData);
             return AdapayCode.NOTIFY_FAIL;
         }
 
@@ -45,6 +57,11 @@ public class AdapayPayCallbackService {
         AdapayCallbackParseResp resp = parse(body, false);
         if (resp == null || !Boolean.TRUE.equals(resp.getSuccess())) {
             log.error("Adapay 支付回调验签失败");
+            CallbackData failData = new CallbackData();
+            failData.setCallbackData(notify);
+            failData.setCallbackStatus(CallbackStatusEnum.FAIL);
+            failData.setCallbackErrorMsg("Adapay 支付回调验签失败");
+            payCallbackRecordService.savePay(ChannelEnum.HUIFU.getCode(), channelMchNo, failData);
             return AdapayCode.NOTIFY_FAIL;
         }
 
@@ -60,12 +77,19 @@ public class AdapayPayCallbackService {
             callbackData.setCallbackErrorMsg("Adapay 回调状态非成功: " + resp.getTradeStatus());
         }
         callbackData.setFinishTime(resp.getFinishTime());
+        notify.put("outTradeNo", resp.getOutTradeNo());
+        notify.put("tradeNo", resp.getTradeNo());
+        notify.put("tradeStatus", resp.getTradeStatus());
+        callbackData.setCallbackData(notify);
         try {
             payCallbackService.payCallback(callbackData);
         } catch (Exception e) {
             log.error("Adapay 支付回调业务处理失败: tradeNo={}", callbackData.getTradeNo(), e);
+            callbackData.setCallbackStatus(CallbackStatusEnum.EXCEPTION).setCallbackErrorMsg(e.getMessage());
+            payCallbackRecordService.savePay(ChannelEnum.HUIFU.getCode(), channelMchNo, callbackData);
             return AdapayCode.NOTIFY_FAIL;
         }
+        payCallbackRecordService.savePay(ChannelEnum.HUIFU.getCode(), channelMchNo, callbackData);
         return AdapayCode.NOTIFY_SUCCESS;
     }
 

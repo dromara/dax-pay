@@ -33,7 +33,7 @@ public class DougongCallbackController {
                             @PathVariable("channelMchNo") String channelMchNo,
                             HttpServletRequest request) {
         merchantContextLoader.bindMchNoForCallback(mchNo);
-        return dougongPayCallbackService.payHandle(request);
+        return dougongPayCallbackService.payHandle(channelMchNo, request);
     }
 
     /// 斗拱退款回调
@@ -43,6 +43,6 @@ public class DougongCallbackController {
                                @PathVariable("channelMchNo") String channelMchNo,
                                HttpServletRequest request) {
         merchantContextLoader.bindMchNoForCallback(mchNo);
-        return dougongRefundCallbackService.refundHandle(request);
+        return dougongRefundCallbackService.refundHandle(channelMchNo, request);
     }
 }

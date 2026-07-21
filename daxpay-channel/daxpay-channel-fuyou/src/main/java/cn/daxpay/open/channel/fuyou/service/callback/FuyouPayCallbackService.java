@@ -9,7 +9,9 @@ import cn.daxpay.open.channel.fuyou.entity.isv.FuyouIsvKeyConfig;
 import cn.daxpay.open.payment.trade.runtime.bo.CallbackData;
 import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
+import cn.daxpay.open.payment.trade.record.service.PayCallbackRecordService;
 import cn.daxpay.open.payment.trade.runtime.service.callback.PayCallbackService;
+import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.hutool.core.util.StrUtil;
@@ -17,6 +19,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /// # 富友支付回调处理服务
@@ -41,11 +45,19 @@ public class FuyouPayCallbackService {
     private final FuyouIsvKeyConfigManager fuyouIsvKeyConfigManager;
     private final PayTradeManager payTradeManager;
     private final PayCallbackService payCallbackService;
+    private final PayCallbackRecordService payCallbackRecordService;
 
     /// 支付回调处理
-    public String payHandle(String reqParam) {
+    public String payHandle(String channelMchNo, String reqParam) {
+        Map<String, Object> notify = new HashMap<>();
+        notify.put("req", reqParam);
         if (StrUtil.isBlank(reqParam)) {
             log.error("富友支付回调: req 参数为空");
+            CallbackData failData = new CallbackData();
+            failData.setCallbackData(notify);
+            failData.setCallbackStatus(CallbackStatusEnum.FAIL);
+            failData.setCallbackErrorMsg("富友支付回调: req 参数为空");
+            payCallbackRecordService.savePay(ChannelEnum.FUYOU_PAY.getCode(), channelMchNo, failData);
             return RESP_FAIL;
         }
 
@@ -54,6 +66,11 @@ public class FuyouPayCallbackService {
                 .orElse(null);
         if (keyConfig == null || StrUtil.isBlank(keyConfig.getPublicKey())) {
             log.error("富友支付回调: 服务商密钥未配置, 无法验签");
+            CallbackData failData = new CallbackData();
+            failData.setCallbackData(notify);
+            failData.setCallbackStatus(CallbackStatusEnum.FAIL);
+            failData.setCallbackErrorMsg("富友支付回调: 服务商密钥未配置");
+            payCallbackRecordService.savePay(ChannelEnum.FUYOU_PAY.getCode(), channelMchNo, failData);
             return RESP_FAIL;
         }
 
@@ -61,6 +78,11 @@ public class FuyouPayCallbackService {
         FuyouCallbackParseResp resp = parse(reqParam, keyConfig.getPublicKey(), false);
         if (resp == null || !Boolean.TRUE.equals(resp.getSuccess())) {
             log.error("富友支付回调验签失败");
+            CallbackData failData = new CallbackData();
+            failData.setCallbackData(notify);
+            failData.setCallbackStatus(CallbackStatusEnum.FAIL);
+            failData.setCallbackErrorMsg("富友支付回调验签失败");
+            payCallbackRecordService.savePay(ChannelEnum.FUYOU_PAY.getCode(), channelMchNo, failData);
             return RESP_FAIL;
         }
 
@@ -71,6 +93,12 @@ public class FuyouPayCallbackService {
         PayTrade trade = payTradeManager.findByRelationOrderNo(relationOrderNo).orElse(null);
         if (trade == null) {
             log.error("富友支付回调: 未找到关联订单 relationOrderNo={}", relationOrderNo);
+            CallbackData failData = new CallbackData();
+            notify.put("relationOrderNo", relationOrderNo);
+            failData.setCallbackData(notify);
+            failData.setCallbackStatus(CallbackStatusEnum.FAIL);
+            failData.setCallbackErrorMsg("富友支付回调: 未找到关联订单");
+            payCallbackRecordService.savePay(ChannelEnum.FUYOU_PAY.getCode(), channelMchNo, failData);
             return RESP_FAIL;
         }
 
@@ -85,11 +113,17 @@ public class FuyouPayCallbackService {
             callbackData.setCallbackErrorMsg("富友回调状态非成功: " + resp.getTradeStatus());
         }
         callbackData.setFinishTime(resp.getFinishTime());
+        notify.put("tradeNo", resp.getTradeNo());
+        notify.put("tradeStatus", resp.getTradeStatus());
+        callbackData.setCallbackData(notify);
         try {
             payCallbackService.payCallback(callbackData);
+            payCallbackRecordService.savePay(ChannelEnum.FUYOU_PAY.getCode(), channelMchNo, callbackData);
             return RESP_SUCCESS;
         } catch (Exception e) {
             log.error("富友支付回调业务处理失败: tradeNo={}", trade.getTradeNo(), e);
+            callbackData.setCallbackStatus(CallbackStatusEnum.EXCEPTION).setCallbackErrorMsg(e.getMessage());
+            payCallbackRecordService.savePay(ChannelEnum.FUYOU_PAY.getCode(), channelMchNo, callbackData);
             return RESP_FAIL;
         }
     }

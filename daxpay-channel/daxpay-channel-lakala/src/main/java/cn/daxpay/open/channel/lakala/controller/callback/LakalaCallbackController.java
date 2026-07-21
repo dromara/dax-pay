@@ -33,7 +33,7 @@ public class LakalaCallbackController {
                             @PathVariable("channelMchNo") String channelMchNo,
                             HttpServletRequest request) {
         merchantContextLoader.bindMchNoForCallback(mchNo);
-        return lakalaPayCallbackService.payHandle(request);
+        return lakalaPayCallbackService.payHandle(channelMchNo, request);
     }
 
     /// 拉卡拉退款回调
@@ -43,6 +43,6 @@ public class LakalaCallbackController {
                                @PathVariable("channelMchNo") String channelMchNo,
                                HttpServletRequest request) {
         merchantContextLoader.bindMchNoForCallback(mchNo);
-        return lakalaRefundCallbackService.refundHandle(request);
+        return lakalaRefundCallbackService.refundHandle(channelMchNo, request);
     }
 }

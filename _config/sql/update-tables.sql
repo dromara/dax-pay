@@ -240,3 +240,63 @@ COMMENT ON TABLE "public"."mch_notice_record" IS '商户出站通知发送记录
 ALTER TABLE "public"."mch_notice_record" ADD CONSTRAINT "mch_notice_record_pkey" PRIMARY KEY ("id");
 CREATE INDEX "idx_mch_notice_record_task_id" ON "public"."mch_notice_record" USING btree ("task_id");
 CREATE INDEX "idx_mch_notice_record_create_time" ON "public"."mch_notice_record" USING btree ("create_time" DESC);
+
+-- ----------------------------
+-- Table structure for pay_callback_record
+-- 通道入站回调记录(只审计不重放)
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."pay_callback_record";
+CREATE TABLE "public"."pay_callback_record" (
+  "id" int8 NOT NULL,
+  "creator" int8,
+  "create_time" timestamptz(6),
+  "last_modifier" int8,
+  "last_modified_time" timestamptz(6),
+  "version" int4 NOT NULL DEFAULT 0,
+  "deleted" bool NOT NULL DEFAULT false,
+  "mch_no" varchar(32) NOT NULL,
+  "app_id" varchar(64),
+  "channel_mch_no" varchar(64),
+  "trade_no" varchar(100),
+  "out_trade_no" varchar(150),
+  "channel" varchar(32) NOT NULL,
+  "callback_type" varchar(20) NOT NULL,
+  "notify_info" text NOT NULL,
+  "status" varchar(20) NOT NULL,
+  "error_msg" varchar(500)
+)
+;
+COMMENT ON COLUMN "public"."pay_callback_record"."id" IS '主键';
+COMMENT ON COLUMN "public"."pay_callback_record"."creator" IS '创建者ID';
+COMMENT ON COLUMN "public"."pay_callback_record"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."pay_callback_record"."last_modifier" IS '最后修改ID';
+COMMENT ON COLUMN "public"."pay_callback_record"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."pay_callback_record"."version" IS '版本号';
+COMMENT ON COLUMN "public"."pay_callback_record"."deleted" IS '删除标志';
+COMMENT ON COLUMN "public"."pay_callback_record"."mch_no" IS '商户号';
+COMMENT ON COLUMN "public"."pay_callback_record"."app_id" IS '应用号';
+COMMENT ON COLUMN "public"."pay_callback_record"."channel_mch_no" IS '通道商户号';
+COMMENT ON COLUMN "public"."pay_callback_record"."trade_no" IS '平台交易号(支付回调为 trade_no, 退款回调为 refund_no)';
+COMMENT ON COLUMN "public"."pay_callback_record"."out_trade_no" IS '通道交易号';
+COMMENT ON COLUMN "public"."pay_callback_record"."channel" IS '支付通道';
+COMMENT ON COLUMN "public"."pay_callback_record"."callback_type" IS '回调类型: pay / refund';
+COMMENT ON COLUMN "public"."pay_callback_record"."notify_info" IS '通知消息内容(JSON)';
+COMMENT ON COLUMN "public"."pay_callback_record"."status" IS '回调处理状态';
+COMMENT ON COLUMN "public"."pay_callback_record"."error_msg" IS '错误信息';
+COMMENT ON TABLE "public"."pay_callback_record" IS '通道入站回调记录';
+
+ALTER TABLE "public"."pay_callback_record" ADD CONSTRAINT "pay_callback_record_pkey" PRIMARY KEY ("id");
+CREATE INDEX "idx_pay_callback_record_trade_no" ON "public"."pay_callback_record" USING btree ("trade_no");
+CREATE INDEX "idx_pay_callback_record_out_trade_no" ON "public"."pay_callback_record" USING btree ("out_trade_no");
+CREATE INDEX "idx_pay_callback_record_channel" ON "public"."pay_callback_record" USING btree ("channel");
+CREATE INDEX "idx_pay_callback_record_mch_no" ON "public"."pay_callback_record" USING btree ("mch_no");
+CREATE INDEX "idx_pay_callback_record_channel_mch_no" ON "public"."pay_callback_record" USING btree ("channel_mch_no");
+CREATE INDEX "idx_pay_callback_record_create_time" ON "public"."pay_callback_record" USING btree ("create_time" DESC);
+
+-- 已建表环境增量: 回调记录补充通道商户号(勿与上方 DROP/CREATE 同时重复执行于全新建表之外)
+ALTER TABLE "public"."pay_callback_record" ADD COLUMN IF NOT EXISTS "channel_mch_no" varchar(64);
+COMMENT ON COLUMN "public"."pay_callback_record"."channel_mch_no" IS '通道商户号';
+CREATE INDEX IF NOT EXISTS "idx_pay_callback_record_channel_mch_no" ON "public"."pay_callback_record" USING btree ("channel_mch_no");
+-- 已建表环境增量: 去掉未使用的错误码列
+ALTER TABLE "public"."pay_callback_record" DROP COLUMN IF EXISTS "error_code";
+

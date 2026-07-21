@@ -33,7 +33,7 @@ public class LeshuaCallbackController {
                             @PathVariable("channelMchNo") String channelMchNo,
                             HttpServletRequest request) {
         merchantContextLoader.bindMchNoForCallback(mchNo);
-        return leshuaPayCallbackService.payHandle(request);
+        return leshuaPayCallbackService.payHandle(channelMchNo, request);
     }
 
     /// 乐刷退款回调
@@ -43,6 +43,6 @@ public class LeshuaCallbackController {
                                @PathVariable("channelMchNo") String channelMchNo,
                                HttpServletRequest request) {
         merchantContextLoader.bindMchNoForCallback(mchNo);
-        return leshuaRefundCallbackService.refundHandle(request);
+        return leshuaRefundCallbackService.refundHandle(channelMchNo, request);
     }
 }

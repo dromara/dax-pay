@@ -8,5 +8,6 @@
   "refundPayOrderNotExist": "Payment order linked to refund order not found",
   "tradeFlowNotExist": "Trade flow record not found",
   "callbackTaskNotExist": "Merchant callback notification task not found",
-  "subscribeRecordNotExist": "Merchant subscription notification record not found"
+  "subscribeRecordNotExist": "Merchant subscription notification record not found",
+  "callbackRecordNotExist": "Channel callback record not found"
 }

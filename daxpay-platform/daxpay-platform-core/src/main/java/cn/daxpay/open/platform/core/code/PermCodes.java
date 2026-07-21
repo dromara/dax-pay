@@ -244,6 +244,12 @@ public interface PermCodes {
             /// 菜单编码
             String MENU = "trade:mch-notice";
         }
+
+        /// 通道入站回调记录 menuCode=trade:callback-record
+        interface CallbackRecord {
+            /// 菜单编码
+            String MENU = "trade:callback-record";
+        }
     }
 
     /// IAM 身份与访问（导航挂系统下，码域独立）

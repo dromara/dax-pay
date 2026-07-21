@@ -8,5 +8,6 @@
   "refundPayOrderNotExist": "返金注文にリンクされた支払い注文が見つかりません",
   "tradeFlowNotExist": "トレードフローレコードが見つかりません",
   "callbackTaskNotExist": "販売者コールバック通知タスクが見つかりません",
-  "subscribeRecordNotExist": "販売者のサブスクリプション通知レコードが見つかりません"
+  "subscribeRecordNotExist": "販売者のサブスクリプション通知レコードが見つかりません",
+  "callbackRecordNotExist": "チャネルコールバック記録が存在しません"
 }

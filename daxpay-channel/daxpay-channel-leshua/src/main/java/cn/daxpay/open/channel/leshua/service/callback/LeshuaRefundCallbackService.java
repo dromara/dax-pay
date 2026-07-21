@@ -9,7 +9,9 @@ import cn.daxpay.open.channel.leshua.dao.isv.LeshuaIsvKeyConfigManager;
 import cn.daxpay.open.channel.leshua.entity.isv.LeshuaIsvKeyConfig;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundCallbackData;
 import cn.daxpay.open.payment.common.result.DaxResult;
+import cn.daxpay.open.payment.trade.record.service.PayCallbackRecordService;
 import cn.daxpay.open.payment.trade.runtime.service.callback.RefundCallbackService;
+import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.hutool.core.util.StrUtil;
@@ -19,6 +21,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 
 /// # 乐刷退款回调处理服务
@@ -37,11 +41,14 @@ public class LeshuaRefundCallbackService {
     private final LeshuaChannelClient leshuaChannelClient;
     private final LeshuaIsvKeyConfigManager leshuaIsvKeyConfigManager;
     private final RefundCallbackService refundCallbackService;
+    private final PayCallbackRecordService payCallbackRecordService;
 
     /// 退款回调处理
-    public String refundHandle(HttpServletRequest request) {
+    public String refundHandle(String channelMchNo, HttpServletRequest request) {
         // 1. 提取回调原始报文(XML)
         String body = JakartaServletUtil.getBody(request);
+        Map<String, Object> notify = new HashMap<>();
+        notify.put("body", body);
 
         // 2. 获取服务商密钥(用于子应用验签)
         LeshuaIsvKeyConfig keyConfig = leshuaIsvKeyConfigManager
@@ -49,6 +56,11 @@ public class LeshuaRefundCallbackService {
                 .orElse(null);
         if (keyConfig == null || StrUtil.isBlank(keyConfig.getTradeKey())) {
             log.error("乐刷退款回调: 服务商密钥未配置, 无法验签");
+            RefundCallbackData failData = new RefundCallbackData();
+            failData.setCallbackData(notify);
+            failData.setCallbackStatus(CallbackStatusEnum.FAIL);
+            failData.setCallbackErrorMsg("乐刷退款回调: 服务商密钥未配置");
+            payCallbackRecordService.saveRefund(ChannelEnum.LESHUA_PAY.getCode(), channelMchNo, failData);
             return NOTIFY_FAIL;
         }
 
@@ -65,6 +77,11 @@ public class LeshuaRefundCallbackService {
         if (result.getCode() != 0 || result.getData() == null
                 || !Boolean.TRUE.equals(result.getData().getSuccess())) {
             log.error("乐刷退款回调验签/解析失败");
+            RefundCallbackData failData = new RefundCallbackData();
+            failData.setCallbackData(notify);
+            failData.setCallbackStatus(CallbackStatusEnum.FAIL);
+            failData.setCallbackErrorMsg("乐刷退款回调验签/解析失败");
+            payCallbackRecordService.saveRefund(ChannelEnum.LESHUA_PAY.getCode(), channelMchNo, failData);
             return NOTIFY_FAIL;
         }
         LeshuaCallbackParseResp resp = result.getData();
@@ -79,7 +96,19 @@ public class LeshuaRefundCallbackService {
             callbackData.setTradeErrorMsg("乐刷退款状态非成功: " + resp.getTradeStatus());
         }
         callbackData.setFinishTime(resp.getFinishTime());
-        refundCallbackService.refundCallback(callbackData);
+        notify.put("outTradeNo", resp.getOutTradeNo());
+        notify.put("leshuaOrderId", resp.getLeshuaOrderId());
+        notify.put("tradeStatus", resp.getTradeStatus());
+        callbackData.setCallbackData(notify);
+        try {
+            refundCallbackService.refundCallback(callbackData);
+        } catch (Exception e) {
+            log.error("乐刷退款回调业务处理失败: refundNo={}", callbackData.getRefundNo(), e);
+            callbackData.setCallbackStatus(CallbackStatusEnum.EXCEPTION).setCallbackErrorMsg(e.getMessage());
+            payCallbackRecordService.saveRefund(ChannelEnum.LESHUA_PAY.getCode(), channelMchNo, callbackData);
+            return NOTIFY_FAIL;
+        }
+        payCallbackRecordService.saveRefund(ChannelEnum.LESHUA_PAY.getCode(), channelMchNo, callbackData);
         return NOTIFY_SUCCESS;
     }
 }

@@ -7,7 +7,9 @@ import cn.daxpay.open.channel.lakala.client.resp.LakalaCallbackParseResp;
 import cn.daxpay.open.channel.lakala.dao.isv.LakalaIsvKeyConfigManager;
 import cn.daxpay.open.channel.lakala.entity.isv.LakalaIsvKeyConfig;
 import cn.daxpay.open.payment.trade.runtime.bo.CallbackData;
+import cn.daxpay.open.payment.trade.record.service.PayCallbackRecordService;
 import cn.daxpay.open.payment.trade.runtime.service.callback.PayCallbackService;
+import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.hutool.core.util.StrUtil;
@@ -17,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -39,18 +42,27 @@ public class LakalaPayCallbackService {
     private final LakalaChannelClient lakalaChannelClient;
     private final LakalaIsvKeyConfigManager lakalaIsvKeyConfigManager;
     private final PayCallbackService payCallbackService;
+    private final PayCallbackRecordService payCallbackRecordService;
 
     /// 支付回调处理
-    public String payHandle(HttpServletRequest request) {
+    public String payHandle(String channelMchNo, HttpServletRequest request) {
         // 1. 提取回调原始数据
         String body = JakartaServletUtil.getBody(request);
         Map<String, String> headerMap = JakartaServletUtil.getHeaderMap(request);
+        Map<String, Object> notify = new HashMap<>();
+        notify.put("body", body);
+        notify.put("headers", headerMap);
 
         // 2. 获取全局服务商公钥(只读查询)
         LakalaIsvKeyConfig keyConfig = lakalaIsvKeyConfigManager.findByProduct(ProductEnum.LAKALA_PAY.getCode())
                 .orElse(null);
         if (keyConfig == null || keyConfig.getPublicKey() == null) {
             log.error("拉卡拉支付回调: 服务商密钥未配置, 无法验签");
+            CallbackData failData = new CallbackData();
+            failData.setCallbackData(notify);
+            failData.setCallbackStatus(CallbackStatusEnum.FAIL);
+            failData.setCallbackErrorMsg("拉卡拉支付回调: 服务商密钥未配置");
+            payCallbackRecordService.savePay(ChannelEnum.LAKALA_PAY.getCode(), channelMchNo, failData);
             return NOTIFY_FAIL;
         }
 
@@ -58,6 +70,11 @@ public class LakalaPayCallbackService {
         LakalaCallbackParseResp resp = parse(body, headerMap, keyConfig.getPublicKey(), false);
         if (resp == null || !Boolean.TRUE.equals(resp.getSuccess())) {
             log.error("拉卡拉支付回调验签失败");
+            CallbackData failData = new CallbackData();
+            failData.setCallbackData(notify);
+            failData.setCallbackStatus(CallbackStatusEnum.FAIL);
+            failData.setCallbackErrorMsg("拉卡拉支付回调验签失败");
+            payCallbackRecordService.savePay(ChannelEnum.LAKALA_PAY.getCode(), channelMchNo, failData);
             return NOTIFY_FAIL;
         }
 
@@ -71,12 +88,19 @@ public class LakalaPayCallbackService {
             callbackData.setCallbackErrorMsg("拉卡拉回调状态非成功: " + resp.getTradeStatus());
         }
         callbackData.setFinishTime(resp.getFinishTime());
+        notify.put("outTradeNo", resp.getOutTradeNo());
+        notify.put("tradeNo", resp.getTradeNo());
+        notify.put("tradeStatus", resp.getTradeStatus());
+        callbackData.setCallbackData(notify);
         try {
             payCallbackService.payCallback(callbackData);
         } catch (Exception e) {
             log.error("拉卡拉支付回调业务处理失败: tradeNo={}", callbackData.getTradeNo(), e);
+            callbackData.setCallbackStatus(CallbackStatusEnum.EXCEPTION).setCallbackErrorMsg(e.getMessage());
+            payCallbackRecordService.savePay(ChannelEnum.LAKALA_PAY.getCode(), channelMchNo, callbackData);
             return NOTIFY_FAIL;
         }
+        payCallbackRecordService.savePay(ChannelEnum.LAKALA_PAY.getCode(), channelMchNo, callbackData);
         return NOTIFY_SUCCESS;
     }
 

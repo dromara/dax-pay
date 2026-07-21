@@ -8,7 +8,9 @@ import cn.daxpay.open.channel.hmpay.dao.isv.HmpayIsvKeyConfigManager;
 import cn.daxpay.open.channel.hmpay.entity.isv.HmpayIsvKeyConfig;
 import cn.daxpay.open.payment.trade.runtime.bo.CallbackData;
 import cn.daxpay.open.payment.common.result.DaxResult;
+import cn.daxpay.open.payment.trade.record.service.PayCallbackRecordService;
 import cn.daxpay.open.payment.trade.runtime.service.callback.PayCallbackService;
+import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.hutool.core.util.StrUtil;
@@ -17,6 +19,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /// # 河马付支付回调处理服务
 ///
@@ -36,11 +41,14 @@ public class HmpayPayCallbackService {
     private final HmpayChannelClient hmpayChannelClient;
     private final HmpayIsvKeyConfigManager hmpayIsvKeyConfigManager;
     private final PayCallbackService payCallbackService;
+    private final PayCallbackRecordService payCallbackRecordService;
 
     /// 支付回调处理
-    public String payHandle(HttpServletRequest request) {
+    public String payHandle(String channelMchNo, HttpServletRequest request) {
         // 1. 提取回调原始报文(杉德回调为 form 表单)
         String body = JakartaServletUtil.getBody(request);
+        Map<String, Object> notify = new HashMap<>();
+        notify.put("body", body);
 
         // 2. 获取服务商公钥(用于子应用验签, 只读查询)
         HmpayIsvKeyConfig keyConfig = hmpayIsvKeyConfigManager
@@ -48,6 +56,11 @@ public class HmpayPayCallbackService {
                 .orElse(null);
         if (keyConfig == null || StrUtil.isBlank(keyConfig.getPublicKey())) {
             log.error("河马付支付回调: 服务商公钥未配置, 无法验签");
+            CallbackData failData = new CallbackData();
+            failData.setCallbackData(notify);
+            failData.setCallbackStatus(CallbackStatusEnum.FAIL);
+            failData.setCallbackErrorMsg("河马付支付回调: 服务商公钥未配置");
+            payCallbackRecordService.savePay(ChannelEnum.SAND_PAY.getCode(), channelMchNo, failData);
             return NOTIFY_FAIL;
         }
 
@@ -62,6 +75,11 @@ public class HmpayPayCallbackService {
         if (result.getCode() != 0 || result.getData() == null
                 || !Boolean.TRUE.equals(result.getData().getSuccess())) {
             log.error("河马付支付回调验签/解析失败");
+            CallbackData failData = new CallbackData();
+            failData.setCallbackData(notify);
+            failData.setCallbackStatus(CallbackStatusEnum.FAIL);
+            failData.setCallbackErrorMsg("河马付支付回调验签/解析失败");
+            payCallbackRecordService.savePay(ChannelEnum.SAND_PAY.getCode(), channelMchNo, failData);
             return NOTIFY_FAIL;
         }
         HmpayCallbackParseResp resp = result.getData();
@@ -75,13 +93,19 @@ public class HmpayPayCallbackService {
         // 杉德仅推送成功通知
         callbackData.setTradeStatus(CallbackStatusEnum.SUCCESS.getCode());
         callbackData.setFinishTime(resp.getFinishTime());
+        notify.put("outTradeNo", resp.getOutTradeNo());
+        notify.put("tradeNo", resp.getTradeNo());
+        callbackData.setCallbackData(notify);
 
         try {
             payCallbackService.payCallback(callbackData);
         } catch (Exception e) {
             log.error("河马付支付回调业务处理失败: tradeNo={}", callbackData.getTradeNo(), e);
+            callbackData.setCallbackStatus(CallbackStatusEnum.EXCEPTION).setCallbackErrorMsg(e.getMessage());
+            payCallbackRecordService.savePay(ChannelEnum.SAND_PAY.getCode(), channelMchNo, callbackData);
             return NOTIFY_FAIL;
         }
+        payCallbackRecordService.savePay(ChannelEnum.SAND_PAY.getCode(), channelMchNo, callbackData);
         // 5. 杉德要求返回 success 表示接收成功
         return NOTIFY_SUCCESS;
     }

@@ -33,7 +33,7 @@ public class AdapayCallbackController {
                             @PathVariable("channelMchNo") String channelMchNo,
                             HttpServletRequest request) {
         merchantContextLoader.bindMchNoForCallback(mchNo);
-        return adapayPayCallbackService.payHandle(request);
+        return adapayPayCallbackService.payHandle(channelMchNo, request);
     }
 
     /// Adapay 退款回调
@@ -43,6 +43,6 @@ public class AdapayCallbackController {
                                @PathVariable("channelMchNo") String channelMchNo,
                                HttpServletRequest request) {
         merchantContextLoader.bindMchNoForCallback(mchNo);
-        return adapayRefundCallbackService.refundHandle(request);
+        return adapayRefundCallbackService.refundHandle(channelMchNo, request);
     }
 }
