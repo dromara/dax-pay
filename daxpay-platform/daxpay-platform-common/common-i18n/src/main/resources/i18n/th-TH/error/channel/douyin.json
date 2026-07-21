@@ -6,5 +6,10 @@
   "capabilityDuplicate": "ความสามารถในการชำระเงิน [{0}] ซ้ำกันภายใต้ผู้ขายช่องทางนี้",
   "payFailed": "ข้อผิดพลาดในการชำระเงิน Douyin: {0}",
   "closeFailed": "ข้อผิดพลาดในการสั่งซื้อปิด Douyin: {0}",
-  "notSupportMethod": "วิธีการชำระเงิน Douyin ที่ไม่รองรับ: {0}"
+  "notSupportMethod": "วิธีการชำระเงิน Douyin ที่ไม่รองรับ: {0}",
+  "openApiFailed": "การเรียก API แพลตฟอร์มเปิด Douyin ล้มเหลว: {0}",
+  "tokenLockFailed": "ไม่สามารถรับล็อกการรีเฟรช client_access_token ของ Douyin ได้ โปรดลองอีกครั้งในภายหลัง",
+  "ticketLockFailed": "ไม่สามารถรับล็อกการรีเฟรช jsapi_ticket ของ Douyin ได้ โปรดลองอีกครั้งในภายหลัง",
+  "jsapiConfigParamBlank": "พารามิเตอร์ลายเซ็น sdk.config ของ Douyin (clientKey/clientSecret/url) ว่างเปล่า",
+  "h5AuthNotConfigured": "การกำหนดค่าการตรวจสอบสิทธิ์แอป H5 Douyin ไม่สมบูรณ์ โปรดกำหนดค่า clientKey/clientSecret ในการกำหนดค่าแพลตฟอร์มก่อน"
 }

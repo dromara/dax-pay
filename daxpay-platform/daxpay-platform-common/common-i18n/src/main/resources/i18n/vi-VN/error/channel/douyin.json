@@ -6,5 +6,10 @@
   "capabilityDuplicate": "Khả năng thanh toán [{0}] bị trùng lặp trong kênh này của người bán",
   "payFailed": "Lỗi thanh toán Douyin: {0}",
   "closeFailed": "Lỗi đóng lệnh Douyin: {0}",
-  "notSupportMethod": "Phương thức thanh toán Douyin không được hỗ trợ: {0}"
+  "notSupportMethod": "Phương thức thanh toán Douyin không được hỗ trợ: {0}",
+  "openApiFailed": "Gọi API Nền tảng mở Douyin không thành công: {0}",
+  "tokenLockFailed": "Không thể lấy khóa làm mới client_access_token Douyin, vui lòng thử lại sau",
+  "ticketLockFailed": "Không thể lấy khóa làm mới jsapi_ticket Douyin, vui lòng thử lại sau",
+  "jsapiConfigParamBlank": "Tham số ký sdk.config Douyin (clientKey/clientSecret/url) bị trống",
+  "h5AuthNotConfigured": "Cấu hình xác thực ứng dụng H5 Douyin không đầy đủ, vui lòng cấu hình clientKey/clientSecret trong Cấu hình nền tảng trước"
 }

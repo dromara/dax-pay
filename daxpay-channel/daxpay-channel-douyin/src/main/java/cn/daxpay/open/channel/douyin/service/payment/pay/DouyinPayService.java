@@ -96,6 +96,7 @@ public class DouyinPayService {
             switch (bodyType) {
                 case QR_CODE -> bo.setPayBodyType(PayBodyTypeEnum.QR_CODE);
                 case LINK -> bo.setPayBodyType(PayBodyTypeEnum.LINK);
+                case JSAPI -> bo.setPayBodyType(PayBodyTypeEnum.JSAPI);
                 case IDENTIFIER -> bo.setPayBodyType(PayBodyTypeEnum.IDENTIFIER);
             }
         }

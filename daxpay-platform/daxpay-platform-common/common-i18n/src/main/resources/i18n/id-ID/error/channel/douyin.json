@@ -6,5 +6,10 @@
   "capabilityDuplicate": "Kemampuan pembayaran [{0}] diduplikasi di bawah saluran pedagang ini",
   "payFailed": "Kesalahan pembayaran Douyin: {0}",
   "closeFailed": "Kesalahan penutupan pesanan Douyin: {0}",
-  "notSupportMethod": "Metode pembayaran Douyin yang tidak didukung: {0}"
+  "notSupportMethod": "Metode pembayaran Douyin yang tidak didukung: {0}",
+  "openApiFailed": "Panggilan API Douyin OpenPlatform gagal: {0}",
+  "tokenLockFailed": "Gagal mendapatkan kunci pembaruan client_access_token Douyin, coba lagi nanti",
+  "ticketLockFailed": "Gagal mendapatkan kunci pembaruan jsapi_ticket Douyin, coba lagi nanti",
+  "jsapiConfigParamBlank": "Parameter tanda tangan sdk.config Douyin (clientKey/clientSecret/url) kosong",
+  "h5AuthNotConfigured": "Konfigurasi autentikasi aplikasi H5 Douyin tidak lengkap, mohon konfigurasikan clientKey/clientSecret di Konfigurasi Platform terlebih dahulu"
 }

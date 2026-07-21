@@ -6,5 +6,10 @@
   "capabilityDuplicate": "이 채널 판매자에 결제 기능 [{0}]이(가) 중복되었습니다.",
   "payFailed": "Douyin 결제 오류: {0}",
   "closeFailed": "Douyin 마감 주문 오류: {0}",
-  "notSupportMethod": "지원되지 않는 Douyin 결제 수단: {0}"
+  "notSupportMethod": "지원되지 않는 Douyin 결제 수단: {0}",
+  "openApiFailed": "Douyin 오픈플랫폼 API 호출 실패: {0}",
+  "tokenLockFailed": "Douyin client_access_token 갱신 잠금 획득에 실패했습니다, 나중에 다시 시도해 주세요",
+  "ticketLockFailed": "Douyin jsapi_ticket 갱신 잠금 획득에 실패했습니다, 나중에 다시 시도해 주세요",
+  "jsapiConfigParamBlank": "Douyin sdk.config 서명 매개변수(clientKey/clientSecret/url)가 비어 있습니다",
+  "h5AuthNotConfigured": "Douyin H5 앱 인증 구성이 불완전합니다. 먼저 '플랫폼 구성'에서 clientKey/clientSecret을 구성해 주세요"
 }

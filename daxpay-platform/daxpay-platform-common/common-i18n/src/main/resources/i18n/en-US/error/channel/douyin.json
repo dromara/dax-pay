@@ -6,5 +6,10 @@
   "capabilityDuplicate": "Payment capability [{0}] is duplicated under this channel merchant",
   "payFailed": "Douyin payment error: {0}",
   "closeFailed": "Douyin close order error: {0}",
-  "notSupportMethod": "Unsupported Douyin payment method: {0}"
+  "notSupportMethod": "Unsupported Douyin payment method: {0}",
+  "openApiFailed": "Douyin OpenPlatform API call failed: {0}",
+  "tokenLockFailed": "Failed to acquire Douyin client_access_token refresh lock, please retry later",
+  "ticketLockFailed": "Failed to acquire Douyin jsapi_ticket refresh lock, please retry later",
+  "jsapiConfigParamBlank": "Douyin sdk.config signing parameter (clientKey/clientSecret/url) is blank",
+  "h5AuthNotConfigured": "Douyin H5 app auth config is incomplete, please configure clientKey/clientSecret in Platform Config first"
 }

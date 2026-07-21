@@ -36,5 +36,11 @@
             <artifactId>hutool-json</artifactId>
             <version>${hutool.version}</version>
         </dependency>
+        <!-- Redis + 分布式锁封装(JSAPI 验签所需的 client_token / jsapi_ticket 缓存) -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>common-redis</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

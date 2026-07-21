@@ -6,5 +6,10 @@
   "capabilityDuplicate": "同一通道商户下支付能力[{0}]重复配置",
   "payFailed": "抖音支付异常: {0}",
   "closeFailed": "抖音关闭订单异常: {0}",
-  "notSupportMethod": "暂不支持的抖音支付方式: {0}"
+  "notSupportMethod": "暂不支持的抖音支付方式: {0}",
+  "openApiFailed": "抖音开放平台接口调用失败: {0}",
+  "tokenLockFailed": "获取抖音 client_access_token 刷新锁失败, 请稍后重试",
+  "ticketLockFailed": "获取抖音 jsapi_ticket 刷新锁失败, 请稍后重试",
+  "jsapiConfigParamBlank": "抖音 sdk.config 验签参数(clientKey/clientSecret/url)存在空值",
+  "h5AuthNotConfigured": "抖音 H5 应用认证配置不完整, 请先在「平台配置」中配置 clientKey/clientSecret"
 }

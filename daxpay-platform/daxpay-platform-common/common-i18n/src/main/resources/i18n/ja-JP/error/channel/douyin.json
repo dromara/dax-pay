@@ -6,5 +6,10 @@
   "capabilityDuplicate": "支払い機能 [{0}] はこのチャネル販売者の下で複製されています",
   "payFailed": "Douyin 支払いエラー: {0}",
   "closeFailed": "Douyin 成約注文エラー: {0}",
-  "notSupportMethod": "サポートされていない Douyin 支払い方法: {0}"
+  "notSupportMethod": "サポートされていない Douyin 支払い方法: {0}",
+  "openApiFailed": "Douyin オープンプラットフォーム API 呼び出し失敗: {0}",
+  "tokenLockFailed": "Douyin client_access_token 更新ロックの取得に失敗しました、後でもう一度お試しください",
+  "ticketLockFailed": "Douyin jsapi_ticket 更新ロックの取得に失敗しました、後でもう一度お試しください",
+  "jsapiConfigParamBlank": "Douyin sdk.config 署名パラメータ(clientKey/clientSecret/url)が空です",
+  "h5AuthNotConfigured": "Douyin H5 アプリ認証設定が不完全です。先に「プラットフォーム設定」で clientKey/clientSecret を設定してください"
 }
