@@ -5,10 +5,12 @@ import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
 import cn.daxpay.open.payment.trade.order.dao.RefundOrderManager;
 import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
+import cn.daxpay.open.payment.trade.notice.service.TradeNoticeBridge;
 import cn.daxpay.open.payment.trade.runtime.service.plugin.PayPluginAssistService;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.common.redis.lock.LockExecutor;
+import cn.daxpay.open.platform.core.enums.pay.notice.NoticeEventEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -40,6 +42,7 @@ public class RefundSettleService {
     private final PayTradeManager payTradeManager;
     private final LockExecutor lockExecutor;
     private final PayPluginAssistService payPluginAssistService;
+    private final TradeNoticeBridge tradeNoticeBridge;
 
     /// 构建退款结算锁键
     public static String lockKey(String tradeNo) {
@@ -92,6 +95,8 @@ public class RefundSettleService {
         refundOrder.setStatus(RefundOrderStatusEnum.SUCCESS.getCode());
         refundOrder.setErrorMsg(null);
         refundOrderManager.updateById(refundOrder);
+        // 商户出站通知(系统协议)
+        tradeNoticeBridge.dispatchRefund(refundOrder, NoticeEventEnum.REFUND_SUCCESS);
         // 插件: 按原支付 tradeNo 回查资金单后广播退款成功
         payTradeManager.findByTradeNo(refundOrder.getTradeNo()).ifPresent(trade ->
                 payPluginAssistService.refundSuccess(trade, refundOrder));
@@ -156,6 +161,10 @@ public class RefundSettleService {
             refundOrder.setErrorMsg(StrUtil.maxLength(errorMsg, 500));
         }
         refundOrderManager.updateById(refundOrder);
+        // 商户出站通知: 关闭终态发 refund.close（失败暂不推，避免与关闭语义混淆）
+        if (close) {
+            tradeNoticeBridge.dispatchRefund(refundOrder, NoticeEventEnum.REFUND_CLOSE);
+        }
         // 插件: 失败/关闭广播
         payTradeManager.findByTradeNo(refundOrder.getTradeNo()).ifPresent(trade ->
                 payPluginAssistService.refundClose(trade, refundOrder));

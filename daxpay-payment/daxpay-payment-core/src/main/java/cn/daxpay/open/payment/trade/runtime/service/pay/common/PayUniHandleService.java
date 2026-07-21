@@ -12,8 +12,10 @@ import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
 import cn.daxpay.open.payment.trade.order.entity.GatewayPayOrder;
 import cn.daxpay.open.payment.trade.order.entity.NormalPayOrder;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
+import cn.daxpay.open.payment.trade.notice.service.TradeNoticeBridge;
 import cn.daxpay.open.payment.trade.runtime.service.plugin.PayPluginAssistService;
 import cn.daxpay.open.payment.trade.util.PayTradeAmountUtil;
+import cn.daxpay.open.platform.core.enums.pay.notice.NoticeEventEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -35,6 +37,7 @@ public class PayUniHandleService {
     private final NormalPayOrderManager payNormalOrderManager;
     private final GatewayPayOrderManager gatewayPayOrderManager;
     private final PayPluginAssistService payPluginAssistService;
+    private final TradeNoticeBridge tradeNoticeBridge;
 
     /// 支付发起后处理
     /// 不论是否完成都更新交易单; 仅资金状态为 SUCCESS 时同步容器为 PAID。
@@ -67,8 +70,10 @@ public class PayUniHandleService {
                 payNormalOrderManager.updateById(order);
             }
         }
-        // 插件: 仅支付成功时广播
+        // 出站通知 + 插件: 仅支付成功时
         if (Objects.equals(trade.getStatus(), PayFundStatusEnum.SUCCESS.getCode())) {
+            // 商户出站通知(系统协议)
+            tradeNoticeBridge.dispatchPay(trade, NoticeEventEnum.PAY_SUCCESS);
             payPluginAssistService.paySuccess(trade);
         }
     }
@@ -84,6 +89,8 @@ public class PayUniHandleService {
                 applyGatewaySyncReceipts(trade, order, syncResult);
                 gatewayPayOrderManager.updateById(order);
             }
+            // 商户出站通知(系统协议)
+            tradeNoticeBridge.dispatchPay(trade, NoticeEventEnum.PAY_SUCCESS);
             payPluginAssistService.paySuccess(trade);
             return;
         }
@@ -94,6 +101,8 @@ public class PayUniHandleService {
             applyNormalSyncReceipts(trade, order, syncResult);
             payNormalOrderManager.updateById(order);
         }
+        // 商户出站通知(系统协议)
+        tradeNoticeBridge.dispatchPay(trade, NoticeEventEnum.PAY_SUCCESS);
         payPluginAssistService.paySuccess(trade);
     }
 
@@ -101,6 +110,8 @@ public class PayUniHandleService {
     public void paySuccess(PayTrade trade) {
         updateTradeWithPosted(trade);
         markContainerPaid(trade);
+        // 商户出站通知(系统协议)
+        tradeNoticeBridge.dispatchPay(trade, NoticeEventEnum.PAY_SUCCESS);
         payPluginAssistService.paySuccess(trade);
     }
 
@@ -111,6 +122,8 @@ public class PayUniHandleService {
         trade.setCloseTime(now);
         updateTradeWithPosted(trade);
         this.markContainerFailed(trade, now, errMsg);
+        // 商户出站通知(系统协议)
+        tradeNoticeBridge.dispatchPay(trade, NoticeEventEnum.PAY_FAIL);
         payPluginAssistService.payFail(trade);
     }
 
@@ -124,6 +137,8 @@ public class PayUniHandleService {
         trade.setCloseTime(now);
         updateTradeWithPosted(trade);
         this.markContainerClosed(trade, now, false, null);
+        // 商户出站通知(系统协议)
+        tradeNoticeBridge.dispatchPay(trade, NoticeEventEnum.PAY_CLOSE);
         payPluginAssistService.payClose(trade);
     }
 
@@ -134,6 +149,8 @@ public class PayUniHandleService {
         trade.setCloseTime(now);
         updateTradeWithPosted(trade);
         this.markContainerClosed(trade, now, true, null);
+        // 商户出站通知(系统协议)
+        tradeNoticeBridge.dispatchPay(trade, NoticeEventEnum.PAY_CLOSE);
         payPluginAssistService.payClose(trade);
     }
 

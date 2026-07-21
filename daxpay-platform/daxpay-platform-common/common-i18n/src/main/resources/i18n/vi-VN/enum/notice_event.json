@@ -1,0 +1,7 @@
+{
+  "pay.success": "Pay Success",
+  "pay.fail": "Pay Fail",
+  "pay.close": "Pay Close",
+  "refund.success": "Refund Success",
+  "refund.close": "Refund Close"
+}

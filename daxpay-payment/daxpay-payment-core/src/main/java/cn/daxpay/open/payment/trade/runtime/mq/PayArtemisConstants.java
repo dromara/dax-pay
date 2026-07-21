@@ -19,4 +19,8 @@ public interface PayArtemisConstants {
     /// 网关支付超时关单队列 address
     /// 预下单时按容器过期时间投递，到期后由 [GatewayTimeoutConsumer] 消费。
     String GATEWAY_TIMEOUT_QUEUE = "pay.gateway.timeout";
+
+    /// 商户出站通知发送队列 address
+    /// 任务落库后 afterCommit 投递（含失败延时重试），由 [cn.daxpay.open.payment.trade.notice.consumer.MchNoticeSendConsumer] 消费。
+    String MCH_NOTICE_SEND = "mch.notice.send";
 }

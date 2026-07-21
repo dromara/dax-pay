@@ -238,6 +238,12 @@ public interface PermCodes {
             /// 菜单编码
             String MENU = "trade:fund";
         }
+
+        /// 商户出站通知 menuCode=trade:mch-notice
+        interface Notice {
+            /// 菜单编码
+            String MENU = "trade:mch-notice";
+        }
     }
 
     /// IAM 身份与访问（导航挂系统下，码域独立）

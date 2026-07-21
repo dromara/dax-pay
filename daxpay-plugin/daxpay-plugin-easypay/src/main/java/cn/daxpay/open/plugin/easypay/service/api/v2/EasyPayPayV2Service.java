@@ -176,7 +176,7 @@ public class EasyPayPayV2Service {
         payParam.setOpenId(openId);
         payParam.setAuthCode(authCode);
         payParam.setClientIp(order.getClientIp());
-        payParam.setNotifyUrl(order.getNotifyUrl());
+        // 易支付 notifyUrl 仅落在协议单，不写内核订单，避免与 system 协议双发
         payParam.setReturnUrl(order.getReturnUrl());
         payParam.setAttach(order.getParam());
         payParam.setSource(easyPayAssistService.sourceCode());

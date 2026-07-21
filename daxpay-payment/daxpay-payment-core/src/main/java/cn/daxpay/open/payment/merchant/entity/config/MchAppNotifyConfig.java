@@ -27,7 +27,7 @@ public class MchAppNotifyConfig extends MchBaseEntity implements ToResult<MchApp
     /// 通知方式 (http-HTTP异步回调)
     private String notifyWay = "http";
 
-    /// 订阅事件类型 (逗号分隔, TradeTypeEnum的code: pay/cashouts/settle)
+    /// 订阅事件类型 (逗号分隔; 支持前缀匹配: pay 匹配 pay.*, refund 匹配 refund.*)
     private String subscribedEvents;
 
     /// 启用状态

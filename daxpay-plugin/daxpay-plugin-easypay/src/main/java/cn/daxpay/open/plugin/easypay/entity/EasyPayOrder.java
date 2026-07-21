@@ -62,7 +62,7 @@ public class EasyPayOrder extends MchBaseEntity implements ToResult<EasyPayOrder
     /// 已退款金额（元）
     private BigDecimal refundMoney;
 
-    /// 异步通知地址（本期仅落库不发送）
+    /// 异步通知地址（由 EasyPayNoticeSender 出站推送，不写内核订单 notifyUrl）
     private String notifyUrl;
 
     /// 同步跳转

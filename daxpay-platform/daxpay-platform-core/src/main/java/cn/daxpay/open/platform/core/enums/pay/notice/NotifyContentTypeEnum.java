@@ -4,9 +4,11 @@ import cn.daxpay.open.platform.core.i18n.I18nSupport;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-/// # 客户通知内容类型
+/// # 客户通知内容类型（已演进为 [NoticeEventEnum]）
 ///
 /// 字典: notify_content_type
+/// @deprecated 使用 [NoticeEventEnum]；应用订阅可用前缀 pay/refund 匹配事件
+@Deprecated
 @Getter
 @RequiredArgsConstructor
 public enum NotifyContentTypeEnum implements I18nSupport {

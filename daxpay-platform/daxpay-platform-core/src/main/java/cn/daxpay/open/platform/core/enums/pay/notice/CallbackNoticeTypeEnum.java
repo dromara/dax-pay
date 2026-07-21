@@ -4,8 +4,10 @@ import cn.daxpay.open.platform.core.i18n.I18nSupport;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-/// # 回调通知类型
+/// # 回调通知类型（已演进为 [NoticeProtocolEnum]）
 ///
+/// @deprecated 使用 [NoticeProtocolEnum]
+@Deprecated
 @Getter
 @RequiredArgsConstructor
 public enum CallbackNoticeTypeEnum implements I18nSupport {

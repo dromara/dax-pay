@@ -1,0 +1,7 @@
+{
+  "pay.success": "支付成功",
+  "pay.fail": "支付失败",
+  "pay.close": "支付关闭",
+  "refund.success": "退款成功",
+  "refund.close": "退款关闭"
+}
