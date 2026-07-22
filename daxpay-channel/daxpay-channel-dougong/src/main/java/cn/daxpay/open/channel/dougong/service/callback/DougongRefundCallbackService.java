@@ -10,7 +10,6 @@ import cn.daxpay.open.payment.trade.runtime.bo.RefundCallbackData;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.record.service.PayCallbackRecordService;
 import cn.daxpay.open.payment.trade.runtime.service.callback.RefundCallbackService;
-import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.hutool.core.util.StrUtil;
@@ -59,7 +58,7 @@ public class DougongRefundCallbackService {
             failData.setCallbackData(notify);
             failData.setCallbackStatus(CallbackStatusEnum.FAIL);
             failData.setCallbackErrorMsg("斗拱退款回调: 服务商公钥未配置");
-            payCallbackRecordService.saveRefund(ChannelEnum.HUIFU.getCode(), channelMchNo, failData);
+            payCallbackRecordService.saveRefund(channelMchNo, failData);
             return NOTIFY_FAIL;
         }
 
@@ -78,7 +77,7 @@ public class DougongRefundCallbackService {
             failData.setCallbackData(notify);
             failData.setCallbackStatus(CallbackStatusEnum.FAIL);
             failData.setCallbackErrorMsg("斗拱退款回调验签/解析失败");
-            payCallbackRecordService.saveRefund(ChannelEnum.HUIFU.getCode(), channelMchNo, failData);
+            payCallbackRecordService.saveRefund(channelMchNo, failData);
             return NOTIFY_FAIL;
         }
         DougongCallbackParseResp resp = result.getData();
@@ -103,10 +102,10 @@ public class DougongRefundCallbackService {
         } catch (Exception e) {
             log.error("斗拱退款回调业务处理失败: refundNo={}", callbackData.getRefundNo(), e);
             callbackData.setCallbackStatus(CallbackStatusEnum.EXCEPTION).setCallbackErrorMsg(e.getMessage());
-            payCallbackRecordService.saveRefund(ChannelEnum.HUIFU.getCode(), channelMchNo, callbackData);
+            payCallbackRecordService.saveRefund(channelMchNo, callbackData);
             return NOTIFY_FAIL;
         }
-        payCallbackRecordService.saveRefund(ChannelEnum.HUIFU.getCode(), channelMchNo, callbackData);
+        payCallbackRecordService.saveRefund(channelMchNo, callbackData);
         // 汇付要求返回 RECV_ORD_ID_{hfSeqId} 表示接收成功
         return "RECV_ORD_ID_" + resp.getTradeNo();
     }

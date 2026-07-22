@@ -11,7 +11,6 @@ import cn.daxpay.open.payment.trade.runtime.bo.CallbackData;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.record.service.PayCallbackRecordService;
 import cn.daxpay.open.payment.trade.runtime.service.callback.PayCallbackService;
-import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.JakartaServletUtil;
@@ -62,7 +61,7 @@ public class UmsPayCallbackService {
             failData.setCallbackData(notify);
             failData.setCallbackStatus(CallbackStatusEnum.FAIL);
             failData.setCallbackErrorMsg("银联商务支付回调验签失败");
-            payCallbackRecordService.savePay(ChannelEnum.UMS_PAY.getCode(), channelMchNo, failData);
+            payCallbackRecordService.savePay(channelMchNo, failData);
             return UmsCode.NOTIFY_FAIL;
         }
 
@@ -78,10 +77,10 @@ public class UmsPayCallbackService {
         } catch (Exception e) {
             log.error("银联商务支付回调业务处理失败: tradeNo={}", callbackData.getTradeNo(), e);
             callbackData.setCallbackStatus(CallbackStatusEnum.EXCEPTION).setCallbackErrorMsg(e.getMessage());
-            payCallbackRecordService.savePay(ChannelEnum.UMS_PAY.getCode(), channelMchNo, callbackData);
+            payCallbackRecordService.savePay(channelMchNo, callbackData);
             return UmsCode.NOTIFY_FAIL;
         }
-        payCallbackRecordService.savePay(ChannelEnum.UMS_PAY.getCode(), channelMchNo, callbackData);
+        payCallbackRecordService.savePay(channelMchNo, callbackData);
         return UmsCode.NOTIFY_SUCCESS;
     }
 

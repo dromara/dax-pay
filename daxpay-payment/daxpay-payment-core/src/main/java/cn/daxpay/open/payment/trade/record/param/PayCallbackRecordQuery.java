@@ -1,7 +1,7 @@
 package cn.daxpay.open.payment.trade.record.param;
 
 import cn.daxpay.open.platform.core.annotation.QueryParam;
-import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
+import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.daxpay.open.platform.core.enums.pay.trade.TradeFlowTypeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -35,10 +35,10 @@ public class PayCallbackRecordQuery {
     @Schema(description = "通道交易号")
     private String outTradeNo;
 
-    /// @see ChannelEnum
+    /// @see ProductEnum
     @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
-    @Schema(description = "支付通道")
-    private String channel;
+    @Schema(description = "支付产品")
+    private String product;
 
     /// @see TradeFlowTypeEnum
     @QueryParam(type = QueryParam.CompareTypeEnum.EQ)

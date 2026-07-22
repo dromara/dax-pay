@@ -4,7 +4,7 @@ import cn.daxpay.open.payment.common.entity.MchBaseEntity;
 import cn.daxpay.open.payment.trade.record.convert.PayCallbackRecordConvert;
 import cn.daxpay.open.payment.trade.record.result.PayCallbackRecordResult;
 import cn.daxpay.open.platform.common.mybatisplus.function.ToResult;
-import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
+import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.daxpay.open.platform.core.enums.pay.trade.TradeFlowTypeEnum;
 import cn.hutool.core.util.StrUtil;
@@ -38,9 +38,9 @@ public class PayCallbackRecord extends MchBaseEntity implements ToResult<PayCall
     /// 通道交易号
     private String outTradeNo;
 
-    /// 支付通道
-    /// @see ChannelEnum
-    private String channel;
+    /// 支付产品
+    /// @see ProductEnum
+    private String product;
 
     /// 回调类型: pay / refund
     /// @see TradeFlowTypeEnum

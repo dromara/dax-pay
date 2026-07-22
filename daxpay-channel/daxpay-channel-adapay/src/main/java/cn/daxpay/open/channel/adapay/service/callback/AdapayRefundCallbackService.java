@@ -8,7 +8,6 @@ import cn.daxpay.open.channel.adapay.code.AdapayCode;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundCallbackData;
 import cn.daxpay.open.payment.trade.record.service.PayCallbackRecordService;
 import cn.daxpay.open.payment.trade.runtime.service.callback.RefundCallbackService;
-import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.JakartaServletUtil;
@@ -47,7 +46,7 @@ public class AdapayRefundCallbackService {
             failData.setCallbackData(notify);
             failData.setCallbackStatus(CallbackStatusEnum.FAIL);
             failData.setCallbackErrorMsg("Adapay 退款回调: body 为空");
-            payCallbackRecordService.saveRefund(ChannelEnum.HUIFU.getCode(), channelMchNo, failData);
+            payCallbackRecordService.saveRefund(channelMchNo, failData);
             return AdapayCode.NOTIFY_FAIL;
         }
 
@@ -63,7 +62,7 @@ public class AdapayRefundCallbackService {
             failData.setCallbackData(notify);
             failData.setCallbackStatus(CallbackStatusEnum.FAIL);
             failData.setCallbackErrorMsg("Adapay 退款回调: 子应用解析失败");
-            payCallbackRecordService.saveRefund(ChannelEnum.HUIFU.getCode(), channelMchNo, failData);
+            payCallbackRecordService.saveRefund(channelMchNo, failData);
             return AdapayCode.NOTIFY_FAIL;
         }
         AdapayCallbackParseResp resp = result.getData();
@@ -73,7 +72,7 @@ public class AdapayRefundCallbackService {
             failData.setCallbackData(notify);
             failData.setCallbackStatus(CallbackStatusEnum.FAIL);
             failData.setCallbackErrorMsg("Adapay 退款回调验签失败");
-            payCallbackRecordService.saveRefund(ChannelEnum.HUIFU.getCode(), channelMchNo, failData);
+            payCallbackRecordService.saveRefund(channelMchNo, failData);
             return AdapayCode.NOTIFY_FAIL;
         }
 
@@ -97,10 +96,10 @@ public class AdapayRefundCallbackService {
         } catch (Exception e) {
             log.error("Adapay 退款回调业务处理失败: refundNo={}", callbackData.getRefundNo(), e);
             callbackData.setCallbackStatus(CallbackStatusEnum.EXCEPTION).setCallbackErrorMsg(e.getMessage());
-            payCallbackRecordService.saveRefund(ChannelEnum.HUIFU.getCode(), channelMchNo, callbackData);
+            payCallbackRecordService.saveRefund(channelMchNo, callbackData);
             return AdapayCode.NOTIFY_FAIL;
         }
-        payCallbackRecordService.saveRefund(ChannelEnum.HUIFU.getCode(), channelMchNo, callbackData);
+        payCallbackRecordService.saveRefund(channelMchNo, callbackData);
         return AdapayCode.NOTIFY_SUCCESS;
     }
 }

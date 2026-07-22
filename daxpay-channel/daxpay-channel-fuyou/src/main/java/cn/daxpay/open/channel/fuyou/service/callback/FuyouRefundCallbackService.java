@@ -6,7 +6,6 @@ import cn.daxpay.open.channel.fuyou.entity.isv.FuyouIsvKeyConfig;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundCallbackData;
 import cn.daxpay.open.payment.trade.record.service.PayCallbackRecordService;
 import cn.daxpay.open.payment.trade.runtime.service.callback.RefundCallbackService;
-import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.hutool.core.util.StrUtil;
@@ -44,7 +43,7 @@ public class FuyouRefundCallbackService {
             failData.setCallbackData(notify);
             failData.setCallbackStatus(CallbackStatusEnum.FAIL);
             failData.setCallbackErrorMsg("富友退款回调: req 参数为空");
-            payCallbackRecordService.saveRefund(ChannelEnum.FUYOU_PAY.getCode(), channelMchNo, failData);
+            payCallbackRecordService.saveRefund(channelMchNo, failData);
             return FuyouPayCallbackService.RESP_FAIL;
         }
         FuyouIsvKeyConfig keyConfig = fuyouIsvKeyConfigManager.findByProduct(ProductEnum.FUYOU_PAY.getCode())
@@ -55,7 +54,7 @@ public class FuyouRefundCallbackService {
             failData.setCallbackData(notify);
             failData.setCallbackStatus(CallbackStatusEnum.FAIL);
             failData.setCallbackErrorMsg("富友退款回调: 服务商密钥未配置");
-            payCallbackRecordService.saveRefund(ChannelEnum.FUYOU_PAY.getCode(), channelMchNo, failData);
+            payCallbackRecordService.saveRefund(channelMchNo, failData);
             return FuyouPayCallbackService.RESP_FAIL;
         }
 
@@ -66,7 +65,7 @@ public class FuyouRefundCallbackService {
             failData.setCallbackData(notify);
             failData.setCallbackStatus(CallbackStatusEnum.FAIL);
             failData.setCallbackErrorMsg("富友退款回调验签失败");
-            payCallbackRecordService.saveRefund(ChannelEnum.FUYOU_PAY.getCode(), channelMchNo, failData);
+            payCallbackRecordService.saveRefund(channelMchNo, failData);
             return FuyouPayCallbackService.RESP_FAIL;
         }
 
@@ -89,10 +88,10 @@ public class FuyouRefundCallbackService {
         } catch (Exception e) {
             log.error("富友退款回调业务处理失败: refundNo={}", callbackData.getRefundNo(), e);
             callbackData.setCallbackStatus(CallbackStatusEnum.EXCEPTION).setCallbackErrorMsg(e.getMessage());
-            payCallbackRecordService.saveRefund(ChannelEnum.FUYOU_PAY.getCode(), channelMchNo, callbackData);
+            payCallbackRecordService.saveRefund(channelMchNo, callbackData);
             return FuyouPayCallbackService.RESP_FAIL;
         }
-        payCallbackRecordService.saveRefund(ChannelEnum.FUYOU_PAY.getCode(), channelMchNo, callbackData);
+        payCallbackRecordService.saveRefund(channelMchNo, callbackData);
         return FuyouPayCallbackService.RESP_SUCCESS;
     }
 }

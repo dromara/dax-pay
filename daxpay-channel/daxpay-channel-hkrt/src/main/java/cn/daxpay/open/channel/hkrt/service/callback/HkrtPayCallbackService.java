@@ -9,7 +9,6 @@ import cn.daxpay.open.channel.hkrt.entity.isv.HkrtIsvKeyConfig;
 import cn.daxpay.open.payment.trade.runtime.bo.CallbackData;
 import cn.daxpay.open.payment.trade.record.service.PayCallbackRecordService;
 import cn.daxpay.open.payment.trade.runtime.service.callback.PayCallbackService;
-import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.hutool.extra.servlet.JakartaServletUtil;
@@ -59,7 +58,7 @@ public class HkrtPayCallbackService {
             failData.setCallbackData(notify);
             failData.setCallbackStatus(CallbackStatusEnum.FAIL);
             failData.setCallbackErrorMsg("海科融通支付回调: 服务商密钥未配置");
-            payCallbackRecordService.savePay(ChannelEnum.HKRT_PAY.getCode(), channelMchNo, failData);
+            payCallbackRecordService.savePay(channelMchNo, failData);
             return NOTIFY_FAIL;
         }
 
@@ -70,7 +69,7 @@ public class HkrtPayCallbackService {
             failData.setCallbackData(notify);
             failData.setCallbackStatus(CallbackStatusEnum.FAIL);
             failData.setCallbackErrorMsg("海科融通支付回调验签/解析失败");
-            payCallbackRecordService.savePay(ChannelEnum.HKRT_PAY.getCode(), channelMchNo, failData);
+            payCallbackRecordService.savePay(channelMchNo, failData);
             return NOTIFY_FAIL;
         }
         CallbackData callbackData = toCallbackData(resp);
@@ -84,10 +83,10 @@ public class HkrtPayCallbackService {
         } catch (Exception e) {
             log.error("海科融通支付回调业务处理失败: tradeNo={}", resp.getOutTradeNo(), e);
             callbackData.setCallbackStatus(CallbackStatusEnum.EXCEPTION).setCallbackErrorMsg(e.getMessage());
-            payCallbackRecordService.savePay(ChannelEnum.HKRT_PAY.getCode(), channelMchNo, callbackData);
+            payCallbackRecordService.savePay(channelMchNo, callbackData);
             return NOTIFY_FAIL;
         }
-        payCallbackRecordService.savePay(ChannelEnum.HKRT_PAY.getCode(), channelMchNo, callbackData);
+        payCallbackRecordService.savePay(channelMchNo, callbackData);
         return NOTIFY_SUCCESS;
     }
 

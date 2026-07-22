@@ -1,6 +1,7 @@
 package cn.daxpay.open.payment.trade.record.service;
 
 import cn.daxpay.open.payment.common.context.PaymentContext;
+import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
 import cn.daxpay.open.payment.trade.record.dao.PayCallbackRecordManager;
 import cn.daxpay.open.payment.trade.record.entity.PayCallbackRecord;
 import cn.daxpay.open.payment.trade.runtime.bo.CallbackData;
@@ -28,21 +29,21 @@ import java.util.Optional;
 public class PayCallbackRecordService {
 
     private final PayCallbackRecordManager callbackRecordManager;
+    private final ChannelMerchantManager channelMerchantManager;
     private final PaymentContext paymentContext;
 
     /// 保存支付回调记录
-    /// @param channel 支付通道
     /// @param channelMchNo 通道商户号(回调 path 入站身份)
     /// @param data 回调解析数据
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
-    public void savePay(String channel, String channelMchNo, CallbackData data) {
+    public void savePay(String channelMchNo, CallbackData data) {
         if (data == null) {
             return;
         }
         PayCallbackRecord record = new PayCallbackRecord()
                 .setTradeNo(data.getTradeNo())
                 .setOutTradeNo(data.getOutTradeNo())
-                .setChannel(channel)
+                .setProduct(channelMerchantManager.findProductByChannelMchNo(channelMchNo))
                 .setChannelMchNo(channelMchNo)
                 .setCallbackType(TradeFlowTypeEnum.PAY.getCode())
                 .setNotifyInfo(toNotifyInfo(data.getCallbackData()))
@@ -54,18 +55,17 @@ public class PayCallbackRecordService {
     }
 
     /// 保存退款回调记录(trade_no 存 refundNo, out_trade_no 存 outRefundNo)
-    /// @param channel 支付通道
     /// @param channelMchNo 通道商户号(回调 path 入站身份)
     /// @param data 退款回调解析数据
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
-    public void saveRefund(String channel, String channelMchNo, RefundCallbackData data) {
+    public void saveRefund(String channelMchNo, RefundCallbackData data) {
         if (data == null) {
             return;
         }
         PayCallbackRecord record = new PayCallbackRecord()
                 .setTradeNo(data.getRefundNo())
                 .setOutTradeNo(data.getOutRefundNo())
-                .setChannel(channel)
+                .setProduct(channelMerchantManager.findProductByChannelMchNo(channelMchNo))
                 .setChannelMchNo(channelMchNo)
                 .setCallbackType(TradeFlowTypeEnum.REFUND.getCode())
                 .setNotifyInfo(toNotifyInfo(data.getCallbackData()))

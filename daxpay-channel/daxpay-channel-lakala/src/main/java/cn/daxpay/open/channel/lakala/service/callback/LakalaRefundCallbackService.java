@@ -6,7 +6,6 @@ import cn.daxpay.open.channel.lakala.entity.isv.LakalaIsvKeyConfig;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundCallbackData;
 import cn.daxpay.open.payment.trade.record.service.PayCallbackRecordService;
 import cn.daxpay.open.payment.trade.runtime.service.callback.RefundCallbackService;
-import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.hutool.extra.servlet.JakartaServletUtil;
@@ -52,7 +51,7 @@ public class LakalaRefundCallbackService {
             failData.setCallbackData(notify);
             failData.setCallbackStatus(CallbackStatusEnum.FAIL);
             failData.setCallbackErrorMsg("拉卡拉退款回调: 服务商密钥未配置");
-            payCallbackRecordService.saveRefund(ChannelEnum.LAKALA_PAY.getCode(), channelMchNo, failData);
+            payCallbackRecordService.saveRefund(channelMchNo, failData);
             return NOTIFY_FAIL;
         }
 
@@ -63,7 +62,7 @@ public class LakalaRefundCallbackService {
             failData.setCallbackData(notify);
             failData.setCallbackStatus(CallbackStatusEnum.FAIL);
             failData.setCallbackErrorMsg("拉卡拉退款回调验签失败");
-            payCallbackRecordService.saveRefund(ChannelEnum.LAKALA_PAY.getCode(), channelMchNo, failData);
+            payCallbackRecordService.saveRefund(channelMchNo, failData);
             return NOTIFY_FAIL;
         }
 
@@ -86,10 +85,10 @@ public class LakalaRefundCallbackService {
         } catch (Exception e) {
             log.error("拉卡拉退款回调业务处理失败: refundNo={}", callbackData.getRefundNo(), e);
             callbackData.setCallbackStatus(CallbackStatusEnum.EXCEPTION).setCallbackErrorMsg(e.getMessage());
-            payCallbackRecordService.saveRefund(ChannelEnum.LAKALA_PAY.getCode(), channelMchNo, callbackData);
+            payCallbackRecordService.saveRefund(channelMchNo, callbackData);
             return NOTIFY_FAIL;
         }
-        payCallbackRecordService.saveRefund(ChannelEnum.LAKALA_PAY.getCode(), channelMchNo, callbackData);
+        payCallbackRecordService.saveRefund(channelMchNo, callbackData);
         return NOTIFY_SUCCESS;
     }
 }

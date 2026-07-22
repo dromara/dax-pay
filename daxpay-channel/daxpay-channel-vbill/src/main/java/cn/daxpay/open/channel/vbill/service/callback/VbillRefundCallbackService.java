@@ -6,7 +6,6 @@ import cn.daxpay.open.channel.vbill.entity.isv.VbillIsvKeyConfig;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundCallbackData;
 import cn.daxpay.open.payment.trade.record.service.PayCallbackRecordService;
 import cn.daxpay.open.payment.trade.runtime.service.callback.RefundCallbackService;
-import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.hutool.core.util.StrUtil;
@@ -45,7 +44,7 @@ public class VbillRefundCallbackService {
             failData.setCallbackData(notify);
             failData.setCallbackStatus(CallbackStatusEnum.FAIL);
             failData.setCallbackErrorMsg("随行付退款回调: body 为空");
-            payCallbackRecordService.saveRefund(ChannelEnum.VBILL_PAY.getCode(), channelMchNo, failData);
+            payCallbackRecordService.saveRefund(channelMchNo, failData);
             resp.put("code", VbillPayCallbackService.RESP_CODE_FAIL);
             resp.put("msg", "body 为空");
             return resp;
@@ -58,7 +57,7 @@ public class VbillRefundCallbackService {
             failData.setCallbackData(notify);
             failData.setCallbackStatus(CallbackStatusEnum.FAIL);
             failData.setCallbackErrorMsg("随行付退款回调: 服务商密钥未配置");
-            payCallbackRecordService.saveRefund(ChannelEnum.VBILL_PAY.getCode(), channelMchNo, failData);
+            payCallbackRecordService.saveRefund(channelMchNo, failData);
             resp.put("code", VbillPayCallbackService.RESP_CODE_FAIL);
             resp.put("msg", "密钥未配置");
             return resp;
@@ -71,7 +70,7 @@ public class VbillRefundCallbackService {
             failData.setCallbackData(notify);
             failData.setCallbackStatus(CallbackStatusEnum.FAIL);
             failData.setCallbackErrorMsg("随行付退款回调验签失败");
-            payCallbackRecordService.saveRefund(ChannelEnum.VBILL_PAY.getCode(), channelMchNo, failData);
+            payCallbackRecordService.saveRefund(channelMchNo, failData);
             resp.put("code", VbillPayCallbackService.RESP_CODE_FAIL);
             resp.put("msg", "验签失败");
             return resp;
@@ -93,13 +92,13 @@ public class VbillRefundCallbackService {
         callbackData.setCallbackData(notify);
         try {
             refundCallbackService.refundCallback(callbackData);
-            payCallbackRecordService.saveRefund(ChannelEnum.VBILL_PAY.getCode(), channelMchNo, callbackData);
+            payCallbackRecordService.saveRefund(channelMchNo, callbackData);
             resp.put("code", VbillPayCallbackService.RESP_CODE_SUCCESS);
             resp.put("msg", "成功");
         } catch (Exception e) {
             log.error("随行付退款回调业务处理失败: refundNo={}", callbackData.getRefundNo(), e);
             callbackData.setCallbackStatus(CallbackStatusEnum.EXCEPTION).setCallbackErrorMsg(e.getMessage());
-            payCallbackRecordService.saveRefund(ChannelEnum.VBILL_PAY.getCode(), channelMchNo, callbackData);
+            payCallbackRecordService.saveRefund(channelMchNo, callbackData);
             resp.put("code", VbillPayCallbackService.RESP_CODE_FAIL);
             resp.put("msg", "业务处理失败");
         }

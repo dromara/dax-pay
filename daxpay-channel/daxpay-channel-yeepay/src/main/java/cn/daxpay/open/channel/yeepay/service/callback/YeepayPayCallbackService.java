@@ -10,7 +10,6 @@ import cn.daxpay.open.payment.trade.runtime.bo.CallbackData;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.record.service.PayCallbackRecordService;
 import cn.daxpay.open.payment.trade.runtime.service.callback.PayCallbackService;
-import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -61,7 +60,7 @@ public class YeepayPayCallbackService {
             failData.setCallbackData(notify);
             failData.setCallbackStatus(CallbackStatusEnum.FAIL);
             failData.setCallbackErrorMsg("易宝支付回调验签失败");
-            payCallbackRecordService.savePay(ChannelEnum.YEE_PAY.getCode(), channelMchNo, failData);
+            payCallbackRecordService.savePay(channelMchNo, failData);
             return YeepayCode.NOTIFY_FAIL;
         }
 
@@ -77,10 +76,10 @@ public class YeepayPayCallbackService {
         } catch (Exception e) {
             log.error("易宝支付回调业务处理失败: tradeNo={}", callbackData.getTradeNo(), e);
             callbackData.setCallbackStatus(CallbackStatusEnum.EXCEPTION).setCallbackErrorMsg(e.getMessage());
-            payCallbackRecordService.savePay(ChannelEnum.YEE_PAY.getCode(), channelMchNo, callbackData);
+            payCallbackRecordService.savePay(channelMchNo, callbackData);
             return YeepayCode.NOTIFY_FAIL;
         }
-        payCallbackRecordService.savePay(ChannelEnum.YEE_PAY.getCode(), channelMchNo, callbackData);
+        payCallbackRecordService.savePay(channelMchNo, callbackData);
         return YeepayCode.NOTIFY_SUCCESS;
     }
 

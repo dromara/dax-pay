@@ -13,7 +13,6 @@ import cn.daxpay.open.payment.trade.runtime.bo.RefundCallbackData;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.record.service.PayCallbackRecordService;
 import cn.daxpay.open.payment.trade.runtime.service.callback.RefundCallbackService;
-import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.hutool.extra.servlet.JakartaServletUtil;
 import jakarta.servlet.http.HttpServletRequest;
@@ -71,7 +70,7 @@ public class DouyinRefundCallbackService {
             failData.setCallbackData(notify);
             failData.setCallbackStatus(CallbackStatusEnum.FAIL);
             failData.setCallbackErrorMsg("抖音退款回调验签通道调用失败");
-            payCallbackRecordService.saveRefund(ChannelEnum.DOUYIN.getCode(), channelMchNo, failData);
+            payCallbackRecordService.saveRefund(channelMchNo, failData);
             return DouyinPayCode.NOTIFY_FAIL;
         }
 
@@ -82,7 +81,7 @@ public class DouyinRefundCallbackService {
             failData.setCallbackData(notify);
             failData.setCallbackStatus(CallbackStatusEnum.FAIL);
             failData.setCallbackErrorMsg("抖音退款回调验签失败");
-            payCallbackRecordService.saveRefund(ChannelEnum.DOUYIN.getCode(), channelMchNo, failData);
+            payCallbackRecordService.saveRefund(channelMchNo, failData);
             return DouyinPayCode.NOTIFY_FAIL;
         }
 
@@ -104,10 +103,10 @@ public class DouyinRefundCallbackService {
         } catch (Exception e) {
             log.error("抖音退款回调业务处理失败: refundNo={}", callbackData.getRefundNo(), e);
             callbackData.setCallbackStatus(CallbackStatusEnum.EXCEPTION).setCallbackErrorMsg(e.getMessage());
-            payCallbackRecordService.saveRefund(ChannelEnum.DOUYIN.getCode(), channelMchNo, callbackData);
+            payCallbackRecordService.saveRefund(channelMchNo, callbackData);
             return DouyinPayCode.NOTIFY_FAIL;
         }
-        payCallbackRecordService.saveRefund(ChannelEnum.DOUYIN.getCode(), channelMchNo, callbackData);
+        payCallbackRecordService.saveRefund(channelMchNo, callbackData);
         return DouyinPayCode.NOTIFY_SUCCESS;
     }
 

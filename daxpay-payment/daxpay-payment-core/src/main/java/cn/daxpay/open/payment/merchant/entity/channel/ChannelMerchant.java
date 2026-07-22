@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import lombok.experimental.FieldNameConstants;
 
 import java.util.Objects;
 
@@ -19,6 +20,7 @@ import java.util.Objects;
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
+@FieldNameConstants
 @TableName("mch_channel_merchant")
 public class ChannelMerchant extends MchBaseEntity implements ToResult<ChannelMerchantResult> {
 

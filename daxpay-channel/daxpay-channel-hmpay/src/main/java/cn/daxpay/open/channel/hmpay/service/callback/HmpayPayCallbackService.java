@@ -10,7 +10,6 @@ import cn.daxpay.open.payment.trade.runtime.bo.CallbackData;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.record.service.PayCallbackRecordService;
 import cn.daxpay.open.payment.trade.runtime.service.callback.PayCallbackService;
-import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.hutool.core.util.StrUtil;
@@ -60,7 +59,7 @@ public class HmpayPayCallbackService {
             failData.setCallbackData(notify);
             failData.setCallbackStatus(CallbackStatusEnum.FAIL);
             failData.setCallbackErrorMsg("河马付支付回调: 服务商公钥未配置");
-            payCallbackRecordService.savePay(ChannelEnum.SAND_PAY.getCode(), channelMchNo, failData);
+            payCallbackRecordService.savePay(channelMchNo, failData);
             return NOTIFY_FAIL;
         }
 
@@ -79,7 +78,7 @@ public class HmpayPayCallbackService {
             failData.setCallbackData(notify);
             failData.setCallbackStatus(CallbackStatusEnum.FAIL);
             failData.setCallbackErrorMsg("河马付支付回调验签/解析失败");
-            payCallbackRecordService.savePay(ChannelEnum.SAND_PAY.getCode(), channelMchNo, failData);
+            payCallbackRecordService.savePay(channelMchNo, failData);
             return NOTIFY_FAIL;
         }
         HmpayCallbackParseResp resp = result.getData();
@@ -102,10 +101,10 @@ public class HmpayPayCallbackService {
         } catch (Exception e) {
             log.error("河马付支付回调业务处理失败: tradeNo={}", callbackData.getTradeNo(), e);
             callbackData.setCallbackStatus(CallbackStatusEnum.EXCEPTION).setCallbackErrorMsg(e.getMessage());
-            payCallbackRecordService.savePay(ChannelEnum.SAND_PAY.getCode(), channelMchNo, callbackData);
+            payCallbackRecordService.savePay(channelMchNo, callbackData);
             return NOTIFY_FAIL;
         }
-        payCallbackRecordService.savePay(ChannelEnum.SAND_PAY.getCode(), channelMchNo, callbackData);
+        payCallbackRecordService.savePay(channelMchNo, callbackData);
         // 5. 杉德要求返回 success 表示接收成功
         return NOTIFY_SUCCESS;
     }

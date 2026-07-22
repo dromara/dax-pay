@@ -8,7 +8,6 @@ import cn.daxpay.open.channel.adapay.code.AdapayCode;
 import cn.daxpay.open.payment.trade.runtime.bo.CallbackData;
 import cn.daxpay.open.payment.trade.record.service.PayCallbackRecordService;
 import cn.daxpay.open.payment.trade.runtime.service.callback.PayCallbackService;
-import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.JakartaServletUtil;
@@ -49,7 +48,7 @@ public class AdapayPayCallbackService {
             failData.setCallbackData(notify);
             failData.setCallbackStatus(CallbackStatusEnum.FAIL);
             failData.setCallbackErrorMsg("Adapay 支付回调: body 为空");
-            payCallbackRecordService.savePay(ChannelEnum.HUIFU.getCode(), channelMchNo, failData);
+            payCallbackRecordService.savePay(channelMchNo, failData);
             return AdapayCode.NOTIFY_FAIL;
         }
 
@@ -61,7 +60,7 @@ public class AdapayPayCallbackService {
             failData.setCallbackData(notify);
             failData.setCallbackStatus(CallbackStatusEnum.FAIL);
             failData.setCallbackErrorMsg("Adapay 支付回调验签失败");
-            payCallbackRecordService.savePay(ChannelEnum.HUIFU.getCode(), channelMchNo, failData);
+            payCallbackRecordService.savePay(channelMchNo, failData);
             return AdapayCode.NOTIFY_FAIL;
         }
 
@@ -86,10 +85,10 @@ public class AdapayPayCallbackService {
         } catch (Exception e) {
             log.error("Adapay 支付回调业务处理失败: tradeNo={}", callbackData.getTradeNo(), e);
             callbackData.setCallbackStatus(CallbackStatusEnum.EXCEPTION).setCallbackErrorMsg(e.getMessage());
-            payCallbackRecordService.savePay(ChannelEnum.HUIFU.getCode(), channelMchNo, callbackData);
+            payCallbackRecordService.savePay(channelMchNo, callbackData);
             return AdapayCode.NOTIFY_FAIL;
         }
-        payCallbackRecordService.savePay(ChannelEnum.HUIFU.getCode(), channelMchNo, callbackData);
+        payCallbackRecordService.savePay(channelMchNo, callbackData);
         return AdapayCode.NOTIFY_SUCCESS;
     }
 

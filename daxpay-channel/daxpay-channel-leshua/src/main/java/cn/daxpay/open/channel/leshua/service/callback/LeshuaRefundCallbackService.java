@@ -11,7 +11,6 @@ import cn.daxpay.open.payment.trade.runtime.bo.RefundCallbackData;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.record.service.PayCallbackRecordService;
 import cn.daxpay.open.payment.trade.runtime.service.callback.RefundCallbackService;
-import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.hutool.core.util.StrUtil;
@@ -60,7 +59,7 @@ public class LeshuaRefundCallbackService {
             failData.setCallbackData(notify);
             failData.setCallbackStatus(CallbackStatusEnum.FAIL);
             failData.setCallbackErrorMsg("乐刷退款回调: 服务商密钥未配置");
-            payCallbackRecordService.saveRefund(ChannelEnum.LESHUA_PAY.getCode(), channelMchNo, failData);
+            payCallbackRecordService.saveRefund(channelMchNo, failData);
             return NOTIFY_FAIL;
         }
 
@@ -81,7 +80,7 @@ public class LeshuaRefundCallbackService {
             failData.setCallbackData(notify);
             failData.setCallbackStatus(CallbackStatusEnum.FAIL);
             failData.setCallbackErrorMsg("乐刷退款回调验签/解析失败");
-            payCallbackRecordService.saveRefund(ChannelEnum.LESHUA_PAY.getCode(), channelMchNo, failData);
+            payCallbackRecordService.saveRefund(channelMchNo, failData);
             return NOTIFY_FAIL;
         }
         LeshuaCallbackParseResp resp = result.getData();
@@ -105,10 +104,10 @@ public class LeshuaRefundCallbackService {
         } catch (Exception e) {
             log.error("乐刷退款回调业务处理失败: refundNo={}", callbackData.getRefundNo(), e);
             callbackData.setCallbackStatus(CallbackStatusEnum.EXCEPTION).setCallbackErrorMsg(e.getMessage());
-            payCallbackRecordService.saveRefund(ChannelEnum.LESHUA_PAY.getCode(), channelMchNo, callbackData);
+            payCallbackRecordService.saveRefund(channelMchNo, callbackData);
             return NOTIFY_FAIL;
         }
-        payCallbackRecordService.saveRefund(ChannelEnum.LESHUA_PAY.getCode(), channelMchNo, callbackData);
+        payCallbackRecordService.saveRefund(channelMchNo, callbackData);
         return NOTIFY_SUCCESS;
     }
 }

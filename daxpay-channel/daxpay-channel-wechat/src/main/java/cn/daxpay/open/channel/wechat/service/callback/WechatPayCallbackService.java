@@ -11,7 +11,6 @@ import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.record.service.PayCallbackRecordService;
 import cn.daxpay.open.payment.trade.runtime.bo.CallbackData;
 import cn.daxpay.open.payment.trade.runtime.service.callback.PayCallbackService;
-import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.JakartaServletUtil;
@@ -80,7 +79,7 @@ public class WechatPayCallbackService {
             failData.setCallbackData(notify);
             failData.setCallbackStatus(CallbackStatusEnum.FAIL);
             failData.setCallbackErrorMsg("微信支付回调验签失败");
-            payCallbackRecordService.savePay(ChannelEnum.WECHAT.getCode(), channelMchNo, failData);
+            payCallbackRecordService.savePay(channelMchNo, failData);
             return WechatCode.NOTIFY_FAIL;
         }
 
@@ -99,10 +98,10 @@ public class WechatPayCallbackService {
         } catch (Exception e) {
             log.error("微信支付回调业务处理失败: tradeNo={}", callbackData.getTradeNo(), e);
             callbackData.setCallbackStatus(CallbackStatusEnum.EXCEPTION).setCallbackErrorMsg(e.getMessage());
-            payCallbackRecordService.savePay(ChannelEnum.WECHAT.getCode(), channelMchNo, callbackData);
+            payCallbackRecordService.savePay(channelMchNo, callbackData);
             return WechatCode.NOTIFY_FAIL;
         }
-        payCallbackRecordService.savePay(ChannelEnum.WECHAT.getCode(), channelMchNo, callbackData);
+        payCallbackRecordService.savePay(channelMchNo, callbackData);
         return WechatCode.NOTIFY_SUCCESS;
     }
 

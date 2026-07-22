@@ -259,7 +259,7 @@ CREATE TABLE "public"."pay_callback_record" (
   "channel_mch_no" varchar(64),
   "trade_no" varchar(100),
   "out_trade_no" varchar(150),
-  "channel" varchar(32) NOT NULL,
+  "product" varchar(32),
   "callback_type" varchar(20) NOT NULL,
   "notify_info" text NOT NULL,
   "status" varchar(20) NOT NULL,
@@ -278,7 +278,7 @@ COMMENT ON COLUMN "public"."pay_callback_record"."app_id" IS '应用号';
 COMMENT ON COLUMN "public"."pay_callback_record"."channel_mch_no" IS '通道商户号';
 COMMENT ON COLUMN "public"."pay_callback_record"."trade_no" IS '平台交易号(支付回调为 trade_no, 退款回调为 refund_no)';
 COMMENT ON COLUMN "public"."pay_callback_record"."out_trade_no" IS '通道交易号';
-COMMENT ON COLUMN "public"."pay_callback_record"."channel" IS '支付通道';
+COMMENT ON COLUMN "public"."pay_callback_record"."product" IS '支付产品';
 COMMENT ON COLUMN "public"."pay_callback_record"."callback_type" IS '回调类型: pay / refund';
 COMMENT ON COLUMN "public"."pay_callback_record"."notify_info" IS '通知消息内容(JSON)';
 COMMENT ON COLUMN "public"."pay_callback_record"."status" IS '回调处理状态';
@@ -288,7 +288,7 @@ COMMENT ON TABLE "public"."pay_callback_record" IS '通道入站回调记录';
 ALTER TABLE "public"."pay_callback_record" ADD CONSTRAINT "pay_callback_record_pkey" PRIMARY KEY ("id");
 CREATE INDEX "idx_pay_callback_record_trade_no" ON "public"."pay_callback_record" USING btree ("trade_no");
 CREATE INDEX "idx_pay_callback_record_out_trade_no" ON "public"."pay_callback_record" USING btree ("out_trade_no");
-CREATE INDEX "idx_pay_callback_record_channel" ON "public"."pay_callback_record" USING btree ("channel");
+CREATE INDEX "idx_pay_callback_record_product" ON "public"."pay_callback_record" USING btree ("product");
 CREATE INDEX "idx_pay_callback_record_mch_no" ON "public"."pay_callback_record" USING btree ("mch_no");
 CREATE INDEX "idx_pay_callback_record_channel_mch_no" ON "public"."pay_callback_record" USING btree ("channel_mch_no");
 CREATE INDEX "idx_pay_callback_record_create_time" ON "public"."pay_callback_record" USING btree ("create_time" DESC);
@@ -299,4 +299,17 @@ COMMENT ON COLUMN "public"."pay_callback_record"."channel_mch_no" IS '通道商�
 CREATE INDEX IF NOT EXISTS "idx_pay_callback_record_channel_mch_no" ON "public"."pay_callback_record" USING btree ("channel_mch_no");
 -- 已建表环境增量: 去掉未使用的错误码列
 ALTER TABLE "public"."pay_callback_record" DROP COLUMN IF EXISTS "error_code";
+-- 已建表环境增量: channel → product(支付产品)
+ALTER TABLE "public"."pay_callback_record" ADD COLUMN IF NOT EXISTS "product" varchar(32);
+COMMENT ON COLUMN "public"."pay_callback_record"."product" IS '支付产品';
+UPDATE "public"."pay_callback_record" r
+SET "product" = m."product"
+FROM "public"."mch_channel_merchant" m
+WHERE r."product" IS NULL
+  AND r."channel_mch_no" IS NOT NULL
+  AND r."channel_mch_no" = m."channel_mch_no"
+  AND m."deleted" = false;
+DROP INDEX IF EXISTS "idx_pay_callback_record_channel";
+ALTER TABLE "public"."pay_callback_record" DROP COLUMN IF EXISTS "channel";
+CREATE INDEX IF NOT EXISTS "idx_pay_callback_record_product" ON "public"."pay_callback_record" USING btree ("product");
 
