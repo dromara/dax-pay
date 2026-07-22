@@ -84,8 +84,7 @@ public class PermCodeScanService {
                                 .setCode(definition.getCode())
                                 .setI18nKey(definition.getI18nKey())
                                 .setMenuCode(definition.getMenuCode())
-                                .setInternal(true)
-                                .setRemark("由 @PermCode 扫描同步生成");
+                                .setInternal(true);
                         addList.add(entity);
                         result.getAddedCodes().add(definition.getCode());
                         result.setAddedCount(result.getAddedCount() + 1);
@@ -98,9 +97,6 @@ public class PermCodeScanService {
                         existed.setI18nKey(definition.getI18nKey());
                         existed.setMenuCode(definition.getMenuCode());
                         existed.setInternal(true);
-                        if (StrUtil.isBlank(existed.getRemark())) {
-                            existed.setRemark("由 @PermCode 扫描同步生成");
-                        }
                         updateList.add(existed);
                         result.getUpdatedCodes().add(definition.getCode());
                         result.setUpdatedCount(result.getUpdatedCount() + 1);
