@@ -1,6 +1,6 @@
 package cn.daxpay.open.payment.unipay.client.service;
 
-import cn.daxpay.open.payment.auth.ChannelAuthFacade;
+import cn.daxpay.open.payment.auth.ChannelAuthService;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import cn.daxpay.open.payment.common.util.PayMethodOpenIdSupport;
 import cn.daxpay.open.payment.device.enums.QrCodeAmountTypeEnum;
@@ -30,7 +30,6 @@ import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
 import cn.daxpay.open.platform.common.spring.util.WebServletUtil;
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
-import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.trade.TradeSourceEnum;
 import cn.daxpay.open.platform.core.enums.unipay.ChannelAuthTypeEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
@@ -62,7 +61,7 @@ public class CodePayAssistService {
     private final CodePayResolveService codePayResolveService;
     private final NormalPayService normalPayService;
     private final PayRouteService payRouteService;
-    private final ChannelAuthFacade channelAuthFacade;
+    private final ChannelAuthService channelAuthService;
     private final NormalPayOrderManager normalPayOrderManager;
     /// 风控检查器（可选 SPI：用于判断是否存在 openId 黑名单, 决定是否触发强制 OAuth）
     private final ObjectProvider<PayRiskChecker> payRiskCheckerProvider;
@@ -186,11 +185,7 @@ public class CodePayAssistService {
         authParam.setCapability(routeParam.getCapability());
         authParam.setReturnPath(returnPath);
         authParam.setAuthType(this.mapAuthType(clientEnv));
-        // channel: 由产品反推
-        if (StrUtil.isNotBlank(routeParam.getProduct())) {
-            authParam.setChannel(ProductEnum.findByCode(routeParam.getProduct()).getChannel());
-        }
-        return channelAuthFacade.generateAuthUrl(authParam);
+        return channelAuthService.generateAuthUrl(authParam);
     }
 
     /// 查询码牌订单状态(忽略租户; 仅 cashier_code 来源)
@@ -308,6 +303,7 @@ public class CodePayAssistService {
         return switch (clientEnv) {
             case ALIPAY -> ChannelAuthTypeEnum.ALIPAY.getCode();
             case WECHAT -> ChannelAuthTypeEnum.WECHAT.getCode();
+            case DOUYIN -> ChannelAuthTypeEnum.DOUYIN.getCode();
             default -> ChannelAuthTypeEnum.WECHAT.getCode();
         };
     }

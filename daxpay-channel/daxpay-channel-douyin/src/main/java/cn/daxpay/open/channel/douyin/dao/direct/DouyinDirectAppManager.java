@@ -2,6 +2,7 @@ package cn.daxpay.open.channel.douyin.dao.direct;
 
 import cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectApp;
 import cn.daxpay.open.platform.common.mybatisplus.impl.BaseManager;
+import cn.daxpay.open.platform.core.annotation.IgnoreTenant;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.Optional;
 ///
 /// - 配置态 CRUD: [#listByMchNoAndChannelMchNo]、[#existsByChannelMchNoAndDouyinAppId]
 /// - 支付/回调（已装载 mchNo）: 租户内 [#findFirstByChannelMchNo]、[#findFirstByChannelMchNoAndAppType]
+/// - 认证引导（无上下文）: 方法名带 NotTenant
 ///
 @Repository
 public class DouyinDirectAppManager extends BaseManager<DouyinDirectAppMapper, DouyinDirectApp> {
@@ -54,6 +56,26 @@ public class DouyinDirectAppManager extends BaseManager<DouyinDirectAppMapper, D
                 .orderByAsc(DouyinDirectApp::getId)
                 .last("limit 1")
                 .oneOpt();
+    }
+
+    /// 按通道商户号与 douyinAppId 查询应用（支付/回调，租户内）
+    public Optional<DouyinDirectApp> findByChannelMchNoAndDouyinAppId(String channelMchNo, String douyinAppId) {
+        return lambdaQuery()
+                .eq(DouyinDirectApp::getChannelMchNo, channelMchNo)
+                .eq(DouyinDirectApp::getDouyinAppId, douyinAppId)
+                .oneOpt();
+    }
+
+    /// 按通道商户号与 douyinAppId 查询应用（认证引导，忽略租户）
+    @IgnoreTenant
+    public Optional<DouyinDirectApp> findByChannelMchNoAndDouyinAppIdNotTenant(String channelMchNo, String douyinAppId) {
+        return findByChannelMchNoAndDouyinAppId(channelMchNo, douyinAppId);
+    }
+
+    /// 按通道商户号与应用类型取首个应用（认证引导，忽略租户）
+    @IgnoreTenant
+    public Optional<DouyinDirectApp> findFirstByChannelMchNoAndAppTypeNotTenant(String channelMchNo, String appType) {
+        return findFirstByChannelMchNoAndAppType(channelMchNo, appType);
     }
 
 }

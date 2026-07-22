@@ -1,5 +1,8 @@
 package cn.daxpay.open.payment.trade.runtime.mq;
 
+import cn.daxpay.open.payment.trade.runtime.consumer.GatewayTimeoutConsumer;
+import cn.daxpay.open.payment.trade.runtime.consumer.NormalPayTimeoutConsumer;
+
 /// # 支付业务 Artemis 消息地址常量
 ///
 /// 支付核心业务使用的 Artemis address 常量，地址命名遵循 kebab-case 约定。

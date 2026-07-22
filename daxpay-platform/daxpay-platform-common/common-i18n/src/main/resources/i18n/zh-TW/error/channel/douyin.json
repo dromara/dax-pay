@@ -11,5 +11,10 @@
   "tokenLockFailed": "取得抖音 client_access_token 更新鎖失敗, 請稍後重試",
   "ticketLockFailed": "取得抖音 jsapi_ticket 更新鎖失敗, 請稍後重試",
   "jsapiConfigParamBlank": "抖音 sdk.config 驗簽參數(clientKey/clientSecret/url)存在空值",
-  "h5AuthNotConfigured": "抖音 H5 應用認證配置不完整, 請先在「平台配置」中配置 clientKey/clientSecret"
+  "h5AuthNotConfigured": "抖音 H5 應用認證配置不完整, 請先在「平台配置」中配置 clientKey/clientSecret",
+  "authFailed": "取得使用者標識(openId)失敗: {0}",
+  "channelAppIdNotFound": "指定的抖音應用AppId[{0}]未在系統中配置",
+  "webAppNotFound": "通道商戶未配置抖音網站應用, 無法完成 H5 授權/驗簽",
+  "appAuthSecretMissing": "抖音直連應用授權密鑰未配置, 請先在通道商戶應用中配置 appSecret",
+  "jsapiContextRequired": "抖音 JSAPI 驗簽須傳入 orderNo、code 或 channelMchNo 之一"
 }

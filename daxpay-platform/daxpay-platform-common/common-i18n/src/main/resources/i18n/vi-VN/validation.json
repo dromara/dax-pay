@@ -420,6 +420,9 @@
     "privateBucket": {
       "notBlank": "Nhóm riêng tư không được để trống"
     },
+    "url": {
+      "notBlank": "URL không được để trống"
+    },
     "urlType": {
       "notBlank": "Loại URL không được để trống"
     },
@@ -803,6 +806,12 @@
     },
     "blockOverseasIp": {
       "notNull": "Công tắc chặn IP nước ngoài không được để trống"
+    },
+    "itemId": {
+      "notBlank": "ID mục thanh toán quầy không được để trống"
+    },
+    "runtime": {
+      "size": "Mã runtime không được vượt quá 16 ký tự"
     }
   }
 }

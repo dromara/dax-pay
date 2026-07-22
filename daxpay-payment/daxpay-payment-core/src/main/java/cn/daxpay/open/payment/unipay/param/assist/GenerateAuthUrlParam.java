@@ -1,10 +1,8 @@
 package cn.daxpay.open.payment.unipay.param.assist;
 
 import cn.daxpay.open.platform.core.enums.unipay.ChannelAuthTypeEnum;
-import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.payment.unipay.param.MerchantPaymentCommonParam;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,19 +16,13 @@ import lombok.experimental.Accessors;
 @Schema(title = "生成授权链接参数")
 public class GenerateAuthUrlParam extends MerchantPaymentCommonParam {
 
-    /// 通道
-    /// @see ChannelEnum
-    @NotBlank(message = "{validation.field.channel.notBlank}")
-    @Schema(description = "通道")
-    private String channel;
-
     /// 认证类型, 如果通道支持多种类型的情况下, 不传默认为微信场景
     /// @see ChannelAuthTypeEnum
     @Schema(description = "认证类型")
     private String authType = ChannelAuthTypeEnum.WECHAT.getCode();
 
     /// 支付产品编码, 决定走哪个通道产品的认证策略
-    /// 可选: 缺失时由 [cn.daxpay.open.payment.auth.ChannelAuthService] 从通道商户号(channelMchNo)反查
+    /// 可选: 缺失时由 [cn.daxpay.open.payment.auth.ChannelProductAuthService] 从通道商户号(channelMchNo)反查
     /// @see cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum
     @Size(max = 32, message = "{validation.field.product.size}")
     @Schema(description = "支付产品编码")

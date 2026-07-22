@@ -420,6 +420,9 @@
     "privateBucket": {
       "notBlank": "私有存储桶不能为空"
     },
+    "url": {
+      "notBlank": "URL不能为空"
+    },
     "urlType": {
       "notBlank": "端点类型不能为空"
     },
@@ -803,6 +806,12 @@
     },
     "yopIsvNo": {
       "notBlank": "易宝服务商号不能为空"
+    },
+    "itemId": {
+      "notBlank": "收银台支付项ID不可为空"
+    },
+    "runtime": {
+      "size": "运行形态编码不可超过16位"
     }
   }
 }

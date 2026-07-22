@@ -15,6 +15,7 @@ import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.enums.unipay.ChannelAuthStatusEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
+import cn.daxpay.open.platform.system.entity.config.platform.auth.PlatformAlipayAuthConfig;
 import cn.daxpay.open.platform.system.entity.config.platform.auth.PlatformDouyinH5AuthConfig;
 import cn.daxpay.open.platform.system.entity.config.platform.auth.PlatformWechatMpAuthConfig;
 import cn.daxpay.open.platform.system.service.config.auth.PlatformAlipayAuthConfigService;
@@ -33,12 +34,13 @@ import org.springframework.stereotype.Service;
 /// 承载不依赖商户上下文、由平台级配置驱动的认证场景:
 /// - **支付宝**: 平台级支付宝配置, OAuth 重定向, 调试/支付共用; URL 拼装见 [#buildAlipayAuthUrl],
 ///   通道策略 [cn.daxpay.open.payment.strategy.auth.AlipayAuthStrategy] 亦委托本服务, 避免双轨实现
-/// - **微信系统公众号配置**: 平台级微信公众号配置([PlatformWechatMpAuthConfig]), OAuth 重定向, 仅调试场景
-/// - **抖音 H5 应用**: 平台级抖音 H5 配置([PlatformDouyinH5AuthConfig]), silent_auth 静默授权, 仅调试场景
+/// - **微信系统公众号配置**: 平台级微信公众号配置([PlatformWechatMpAuthConfig]), OAuth 重定向, **仅调试场景**
+///   (网关聚合/收银台/码牌支付走通道应用策略, 不再消费本配置)
+/// - **抖音 H5 应用**: 平台级抖音 H5 配置([PlatformDouyinH5AuthConfig]), silent_auth 静默授权, **仅调试场景**
 ///
-/// 与按支付产品路由策略的 [ChannelAuthService] 解耦: 本服务不读取商户级通道配置,
+/// 与按支付产品路由策略的 [ChannelProductAuthService] 解耦: 本服务不读取商户级通道配置,
 /// 只消费平台级配置并调用 capability(alipay/wechat/douyin) 用授权码换 token/openId; 会话与结果缓存委托 [AuthSessionStore]。
-/// 对外分发入口见 [ChannelAuthFacade]。
+/// 对外分发入口见 [ChannelAuthService]。
 ///
 /// 三通道统一模式: 固定 redirect_uri + OAuth state 透传 authToken, 回调后从 state 恢复会话。
 @Slf4j
@@ -105,7 +107,7 @@ public class PlatformAuthService {
     /// 仅拼装支付宝 OAuth 授权 URL(不创建会话)
     ///
     /// 供 [cn.daxpay.open.payment.strategy.auth.AlipayAuthStrategy] 复用: 通道侧已由
-    /// [ChannelAuthService] 创建 session/queryCode, 策略层只负责拼 URL, 避免与平台路径双份实现。
+    /// [ChannelProductAuthService] 创建 session/queryCode, 策略层只负责拼 URL, 避免与平台路径双份实现。
     public String buildAlipayAuthUrl(String authToken) {
         AlipayAuthConfig config = platformAlipayAuthConfigService.toCapabilityConfig();
         if (!alipayAuthCapability.isConfigured(config)) {

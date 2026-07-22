@@ -18,11 +18,11 @@ import org.springframework.stereotype.Service;
 ///
 /// ## 适用场景
 /// - 支付场景获取支付宝 userId(如 ALIPAY_JSAPI 需要)
-/// - 经 [ChannelAuthService] 按 product=ALIPAY 路由时的 H5 OAuth / 小程序直连
+/// - 经 [ChannelProductAuthService] 按 product=ALIPAY 路由时的 H5 OAuth / 小程序直连
 ///
 /// ## 回调机制
 /// 与微信/抖音策略同构: 回调地址固定为 `{paymentGatewayBaseUrl}/auth/alipay`,
-/// 会话标识 authToken 通过 OAuth state 参数透传(会话由 [ChannelAuthService] 管理)。
+/// 会话标识 authToken 通过 OAuth state 参数透传(会话由 [ChannelProductAuthService] 管理)。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -35,7 +35,7 @@ public class AlipayAuthStrategy extends AbsChannelAuthStrategy {
         return ProductEnum.ALIPAY;
     }
 
-    /// 生成支付宝授权链接(委托平台服务拼 URL; session/queryCode 已由 ChannelAuthService 创建)
+    /// 生成支付宝授权链接(委托平台服务拼 URL; session/queryCode 已由 ChannelProductAuthService 创建)
     @Override
     public AuthUrlResult generateAuthUrl(GenerateAuthUrlParam param, String authToken) {
         return new AuthUrlResult().setAuthUrl(platformAuthService.buildAlipayAuthUrl(authToken));

@@ -136,6 +136,29 @@ public class DouyinDirectAppCapabilityService {
         return resolveApp(channelMchNo, capability);
     }
 
+    /// H5 silent_auth / JS-SDK 验签用网站应用解析（忽略租户）
+    ///
+    /// 优先级: channelAppId 显式 > capability 命中且为 web_app > 通道商户首个 web_app。
+    /// 勿盲跟 DOUYIN_JSAPI→mini_program 推导。
+    @IgnoreTenant
+    public DouyinDirectApp resolveWebAppForH5Auth(String channelMchNo, String capability, String channelAppId) {
+        if (StrUtil.isNotBlank(channelAppId)) {
+            return douyinDirectAppManager.findByChannelMchNoAndDouyinAppIdNotTenant(channelMchNo, channelAppId)
+                    .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                            "error.channel.douyin.channelAppIdNotFound", channelAppId));
+        }
+        if (StrUtil.isNotBlank(capability)) {
+            var byCap = resolveAppNotTenant(channelMchNo, capability);
+            if (byCap.isPresent() && DouyinAppTypeCode.WEB_APP.equals(byCap.get().getAppType())) {
+                return byCap.get();
+            }
+        }
+        return douyinDirectAppManager.findFirstByChannelMchNoAndAppTypeNotTenant(
+                        channelMchNo, DouyinAppTypeCode.WEB_APP)
+                .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                        "error.channel.douyin.webAppNotFound"));
+    }
+
     /// 查询抖音直连产品支持的支付能力候选列表(含国际化名称)
     public List<DouyinCapabilityOption> listSupportedCapabilities() {
         AbsProductStrategy strategy = PaymentStrategyFactory.createByProduct(

@@ -11,5 +11,10 @@
   "tokenLockFailed": "Gagal mendapatkan kunci pembaruan client_access_token Douyin, coba lagi nanti",
   "ticketLockFailed": "Gagal mendapatkan kunci pembaruan jsapi_ticket Douyin, coba lagi nanti",
   "jsapiConfigParamBlank": "Parameter tanda tangan sdk.config Douyin (clientKey/clientSecret/url) kosong",
-  "h5AuthNotConfigured": "Konfigurasi autentikasi aplikasi H5 Douyin tidak lengkap, mohon konfigurasikan clientKey/clientSecret di Konfigurasi Platform terlebih dahulu"
+  "h5AuthNotConfigured": "Konfigurasi autentikasi aplikasi H5 Douyin tidak lengkap, mohon konfigurasikan clientKey/clientSecret di Konfigurasi Platform terlebih dahulu",
+  "authFailed": "Gagal mendapatkan id pengguna (openId): {0}",
+  "channelAppIdNotFound": "Douyin AppId [{0}] tidak dikonfigurasi di sistem",
+  "webAppNotFound": "Tidak ada aplikasi web Douyin pada merchant saluran; tidak dapat menyelesaikan auth/signing H5",
+  "appAuthSecretMissing": "Rahasia auth aplikasi langsung Douyin hilang; konfigurasikan appSecret pada aplikasi merchant saluran",
+  "jsapiContextRequired": "Penandatanganan JSAPI Douyin memerlukan salah satu dari orderNo, code, atau channelMchNo"
 }

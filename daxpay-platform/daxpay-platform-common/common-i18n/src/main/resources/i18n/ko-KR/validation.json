@@ -420,6 +420,9 @@
     "privateBucket": {
       "notBlank": "비공개 버킷은 비워둘 수 없습니다."
     },
+    "url": {
+      "notBlank": "URL은 비워둘 수 없습니다"
+    },
     "urlType": {
       "notBlank": "URL 유형은 비워둘 수 없습니다."
     },
@@ -803,6 +806,12 @@
     },
     "yopIsvNo": {
       "notBlank": "YeePay ISV 번호는 필수입니다"
+    },
+    "itemId": {
+      "notBlank": "계산대 결제 항목 ID는 필수입니다"
+    },
+    "runtime": {
+      "size": "런타임 코드는 16자를 초과할 수 없습니다"
     }
   }
 }

@@ -7,7 +7,7 @@ import lombok.experimental.Accessors;
 ///
 /// H5授权重定向场景下, 生成授权链接时将认证所需上下文序列化保存到Redis(以 authToken 为key),
 /// 授权回调后凭 authToken 恢复, 供认证策略定位通道应用并完成 code 换 openId/userId。
-/// 与 [ChannelAuthService] 的 queryCode 机制(付款码/道通场景)解耦, 独立 key 前缀管理。
+/// 与 [ChannelProductAuthService] 的 queryCode 机制(付款码/道通场景)解耦, 独立 key 前缀管理。
 @Data
 @Accessors(chain = true)
 public class AuthSession {

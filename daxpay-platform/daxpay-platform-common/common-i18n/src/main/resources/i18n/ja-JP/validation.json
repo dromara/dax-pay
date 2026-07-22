@@ -420,6 +420,9 @@
     "privateBucket": {
       "notBlank": "プライベートバケットを空白にすることはできません"
     },
+    "url": {
+      "notBlank": "URLを空白にすることはできません"
+    },
     "urlType": {
       "notBlank": "URL タイプを空白にすることはできません"
     },
@@ -803,6 +806,12 @@
     },
     "yopIsvNo": {
       "notBlank": "YeePay ISV番号は必須です"
+    },
+    "itemId": {
+      "notBlank": "キャッシャー支払項目IDは必須です"
+    },
+    "runtime": {
+      "size": "実行形態コードは16文字以内です"
     }
   }
 }

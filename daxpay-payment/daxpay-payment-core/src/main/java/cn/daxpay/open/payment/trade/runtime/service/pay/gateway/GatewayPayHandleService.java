@@ -28,6 +28,7 @@ import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformPa
 import cn.daxpay.open.platform.system.service.config.security.PlatformSecurityConfigService;
 import cn.daxpay.open.payment.trade.util.PayTradeInitUtil;
 import cn.hutool.core.util.StrUtil;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.context.annotation.Lazy;
@@ -41,6 +42,7 @@ import java.util.Objects;
 /// 在 product/method 已解析后: 懒创建 Trade → 调通道策略 → 回写容器。
 @Slf4j
 @Service
+@AllArgsConstructor
 public class GatewayPayHandleService {
 
     private final GatewayPayOrderManager gatewayPayOrderManager;
@@ -56,28 +58,6 @@ public class GatewayPayHandleService {
 
     /// 自注入，保证 [GatewayPayHandleService#createTrade] / [GatewayPayHandleService#paySuccess] 走 Spring 事务代理
     private final GatewayPayHandleService self;
-
-    public GatewayPayHandleService(GatewayPayOrderManager gatewayPayOrderManager,
-                                   PayTradeManager payTradeManager,
-                                   PayRouteService payRouteService,
-                                   MerchantContextLoader merchantContextLoader,
-                                   PayUniHandleService payUniHandleService,
-                                   GatewayPayAssistService gatewayPayAssistService,
-                                   LockExecutor lockExecutor,
-                                   ObjectProvider<PayRiskChecker> payRiskCheckerProvider,
-                                   PlatformSecurityConfigService platformSecurityConfigService,
-                                   @Lazy GatewayPayHandleService self) {
-        this.gatewayPayOrderManager = gatewayPayOrderManager;
-        this.payTradeManager = payTradeManager;
-        this.payRouteService = payRouteService;
-        this.merchantContextLoader = merchantContextLoader;
-        this.payUniHandleService = payUniHandleService;
-        this.gatewayPayAssistService = gatewayPayAssistService;
-        this.lockExecutor = lockExecutor;
-        this.payRiskCheckerProvider = payRiskCheckerProvider;
-        this.platformSecurityConfigService = platformSecurityConfigService;
-        this.self = self;
-    }
 
     /// 发起网关支付
     ///
@@ -156,10 +136,7 @@ public class GatewayPayHandleService {
                         String errMsg = (e instanceof PayFailureException)
                                 ? e.getMessage() : "支付出现异常: " + e.getMessage();
                         payUniHandleService.payFail(existing, errMsg);
-                        if (e instanceof RuntimeException re) {
-                            throw re;
-                        }
-                        throw new PayFailureException(errMsg);
+                        throw (RuntimeException) e;
                     }
                     NormalPayResult payResult = self.paySuccess(current, existing, result);
                     // 风控事后补录: 用通道回写 buyerId 补充命中检查, 仅记录不阻断资金态

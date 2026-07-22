@@ -1,6 +1,7 @@
 package cn.daxpay.open.payment.strategy.auth;
 
 import cn.daxpay.open.payment.auth.AuthSession;
+import cn.daxpay.open.payment.auth.ChannelProductAuthService;
 import cn.daxpay.open.payment.strategy.PaymentStrategy;
 import cn.daxpay.open.payment.unipay.param.assist.AuthCodeParam;
 import cn.daxpay.open.payment.unipay.param.assist.GenerateAuthUrlParam;
@@ -15,7 +16,7 @@ public abstract class AbsChannelAuthStrategy implements PaymentStrategy {
 
     /// 获取授权链接
     ///
-    /// @param authToken 认证会话码, 由上层 [ChannelAuthService] 生成注入,
+    /// @param authToken 认证会话码, 由上层 [ChannelProductAuthService] 生成注入,
     ///                  策略负责将其拼入回调地址; 授权回跳时凭此恢复上下文。
     public abstract AuthUrlResult generateAuthUrl(GenerateAuthUrlParam param, String authToken);
 

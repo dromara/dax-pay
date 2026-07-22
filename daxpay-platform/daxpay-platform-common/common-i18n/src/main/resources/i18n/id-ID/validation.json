@@ -420,6 +420,9 @@
     "privateBucket": {
       "notBlank": "Keranjang pribadi tidak boleh kosong"
     },
+    "url": {
+      "notBlank": "URL tidak boleh kosong"
+    },
     "urlType": {
       "notBlank": "Jenis URL tidak boleh kosong"
     },
@@ -803,6 +806,12 @@
     },
     "blockOverseasIp": {
       "notNull": "Saklar blokir IP luar negeri tidak boleh kosong"
+    },
+    "itemId": {
+      "notBlank": "ID item kasir tidak boleh kosong"
+    },
+    "runtime": {
+      "size": "Kode runtime tidak boleh lebih dari 16 karakter"
     }
   }
 }

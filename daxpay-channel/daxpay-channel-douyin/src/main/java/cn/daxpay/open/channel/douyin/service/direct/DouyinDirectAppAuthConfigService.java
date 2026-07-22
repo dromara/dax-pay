@@ -5,6 +5,7 @@ import cn.daxpay.open.channel.douyin.dao.direct.DouyinDirectAppManager;
 import cn.daxpay.open.channel.douyin.dao.direct.DouyinDirectAppAuthConfigManager;
 import cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectAppAuthConfig;
 import cn.daxpay.open.channel.douyin.param.direct.DouyinDirectAppAuthConfigParam;
+import cn.daxpay.open.platform.core.annotation.IgnoreTenant;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
@@ -33,6 +34,28 @@ public class DouyinDirectAppAuthConfigService {
             return existing.get();
         }
         var app = douyinDirectAppManager.findById(douyinDirectAppId)
+                // 抖音: 直连商户应用不存在
+                .orElseThrow(() -> new DataNotExistException("error.channel.douyin.mchAppNotFound"));
+        var config = new DouyinDirectAppAuthConfig()
+                .setChannelMchNo(app.getChannelMchNo())
+                .setDouyinDirectAppId(douyinDirectAppId);
+        config.setMchNo(app.getMchNo());
+        douyinDirectAppAuthConfigManager.save(config);
+        return config;
+    }
+
+    /// 根据应用ID查询授权认证配置(运行态认证使用, 忽略租户隔离)
+    ///
+    /// 与 [#findByDouyinDirectAppId] 的区别: 走 NotTenant 查询路径, 供认证策略(网关端无登录态)调用;
+    /// [#save] 等配置态仍调原方法(保留租户隔离)。
+    @IgnoreTenant
+    @Transactional(rollbackFor = Exception.class)
+    public DouyinDirectAppAuthConfig findByDouyinDirectAppIdForAuth(Long douyinDirectAppId) {
+        var existing = douyinDirectAppAuthConfigManager.findByDouyinDirectAppIdNotTenant(douyinDirectAppId);
+        if (existing.isPresent()) {
+            return existing.get();
+        }
+        var app = douyinDirectAppManager.findByIdNotTenant(douyinDirectAppId)
                 // 抖音: 直连商户应用不存在
                 .orElseThrow(() -> new DataNotExistException("error.channel.douyin.mchAppNotFound"));
         var config = new DouyinDirectAppAuthConfig()

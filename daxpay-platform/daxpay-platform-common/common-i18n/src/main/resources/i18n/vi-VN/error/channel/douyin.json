@@ -11,5 +11,10 @@
   "tokenLockFailed": "Không thể lấy khóa làm mới client_access_token Douyin, vui lòng thử lại sau",
   "ticketLockFailed": "Không thể lấy khóa làm mới jsapi_ticket Douyin, vui lòng thử lại sau",
   "jsapiConfigParamBlank": "Tham số ký sdk.config Douyin (clientKey/clientSecret/url) bị trống",
-  "h5AuthNotConfigured": "Cấu hình xác thực ứng dụng H5 Douyin không đầy đủ, vui lòng cấu hình clientKey/clientSecret trong Cấu hình nền tảng trước"
+  "h5AuthNotConfigured": "Cấu hình xác thực ứng dụng H5 Douyin không đầy đủ, vui lòng cấu hình clientKey/clientSecret trong Cấu hình nền tảng trước",
+  "authFailed": "Không lấy được định danh người dùng (openId): {0}",
+  "channelAppIdNotFound": "Douyin AppId [{0}] chưa được cấu hình trong hệ thống",
+  "webAppNotFound": "Merchant kênh chưa cấu hình ứng dụng web Douyin; không thể hoàn tất xác thực/ký H5",
+  "appAuthSecretMissing": "Thiếu appSecret xác thực ứng dụng Douyin trực tiếp; hãy cấu hình trên ứng dụng merchant kênh",
+  "jsapiContextRequired": "Ký JSAPI Douyin cần một trong orderNo, code hoặc channelMchNo"
 }

@@ -420,6 +420,9 @@
     "privateBucket": {
       "notBlank": "Private bucket cannot be blank"
     },
+    "url": {
+      "notBlank": "URL cannot be blank"
+    },
     "urlType": {
       "notBlank": "URL type cannot be blank"
     },
@@ -803,6 +806,12 @@
     },
     "yopIsvNo": {
       "notBlank": "YeePay ISV number cannot be blank"
+    },
+    "itemId": {
+      "notBlank": "Cashier item ID cannot be blank"
+    },
+    "runtime": {
+      "size": "Runtime code cannot exceed 16 characters"
     }
   }
 }

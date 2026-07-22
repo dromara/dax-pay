@@ -17,10 +17,6 @@ import lombok.experimental.Accessors;
 @Schema(title = "通道认证参数")
 public class AuthCodeParam extends MerchantPaymentCommonParam {
 
-    /// 通道(支付宝平台级认证可不传)
-    @Schema(description = "通道")
-    private String channel;
-
     /// 认证类型, 如果通道支持多种类型的情况下, 参数必传
     /// @see ChannelAuthTypeEnum
     @Schema(description = "认证类型")
