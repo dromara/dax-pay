@@ -46,3 +46,83 @@ SET "deleted" = true,
 WHERE "id" = 9;
 
 DELETE FROM "public"."iam_role_menu" WHERE "menu_id" = 9;
+
+-- ============================================================
+-- Admin 前端路径结构治理：同步 iam_perm_menu.component / path
+-- （views 迁至 device/terminal/system、payment/route、payment/global/*、
+--  system/config/mobile-app；已装库执行本段即可对齐菜单）
+-- ============================================================
+
+-- 系统终端
+UPDATE "public"."iam_perm_menu"
+SET "component" = '/payment/device/terminal/system/SystemTerminalList',
+    "path" = '/payment/device/terminal/system',
+    "last_modified_time" = CURRENT_TIMESTAMP
+WHERE "id" = 905;
+
+-- 支付路由
+UPDATE "public"."iam_perm_menu"
+SET "component" = '/payment/route/PayRouteConfig',
+    "path" = '/payment/route',
+    "last_modified_time" = CURRENT_TIMESTAMP
+WHERE "id" = 4040111;
+
+-- 通道商户列表（商户入口）
+UPDATE "public"."iam_perm_menu"
+SET "component" = '/payment/global/channel-merchant/ChannelMerchantList',
+    "path" = '/payment/global/channel-merchant',
+    "last_modified_time" = CURRENT_TIMESTAMP
+WHERE "id" = 4040106;
+
+-- 通道商户创建
+UPDATE "public"."iam_perm_menu"
+SET "component" = '/payment/global/channel-merchant/ChannelMerchantCreate',
+    "path" = '/payment/global/channel-merchant/create',
+    "last_modified_time" = CURRENT_TIMESTAMP
+WHERE "id" = 4040109;
+
+-- 通道商户详情分发
+UPDATE "public"."iam_perm_menu"
+SET "component" = '/payment/global/channel-merchant/detail/ChannelMerchantDetailDispatch',
+    "path" = '/payment/global/channel-merchant/detail',
+    "last_modified_time" = CURRENT_TIMESTAMP
+WHERE "id" = 4040112;
+
+-- 通道商户全局列表
+UPDATE "public"."iam_perm_menu"
+SET "component" = '/payment/global/channel-merchant-global/ChannelMerchantGlobalList',
+    "path" = '/payment/global/channel-merchants',
+    "last_modified_time" = CURRENT_TIMESTAMP
+WHERE "id" = 40402;
+
+-- 通道应用子页：仅统一浏览器 path 前缀（component 仍指向 channel/{provider}）
+UPDATE "public"."iam_perm_menu"
+SET "path" = '/payment/global/channel-merchant/alipay-app-manage',
+    "last_modified_time" = CURRENT_TIMESTAMP
+WHERE "id" = 4040114;
+
+UPDATE "public"."iam_perm_menu"
+SET "path" = '/payment/global/channel-merchant/wechat-app-manage',
+    "last_modified_time" = CURRENT_TIMESTAMP
+WHERE "id" = 4040113;
+
+UPDATE "public"."iam_perm_menu"
+SET "path" = '/payment/global/channel-merchant/douyin-app-manage',
+    "last_modified_time" = CURRENT_TIMESTAMP
+WHERE "id" = 4040115;
+
+UPDATE "public"."iam_perm_menu"
+SET "path" = '/payment/global/channel-merchant/wechat-isv-mch-app-manage',
+    "last_modified_time" = CURRENT_TIMESTAMP
+WHERE "id" = 4040119;
+
+-- 移动端应用配置（目录 camelCase → kebab-case）
+UPDATE "public"."iam_perm_menu"
+SET "component" = '/system/config/mobile-app/MobileAppConfig',
+    "last_modified_time" = CURRENT_TIMESTAMP
+WHERE "id" = 40504;
+
+UPDATE "public"."iam_perm_menu"
+SET "component" = '/system/config/mobile-app/detail/MobileAppDetail',
+    "last_modified_time" = CURRENT_TIMESTAMP
+WHERE "id" = 40505;
