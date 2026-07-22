@@ -7,7 +7,7 @@ import cn.daxpay.open.platform.core.enums.pay.channel.CurrencyEnum;
 /// # 资金交易初始化工具
 ///
 /// PROCESSING 态资金凭证公共字段的单一事实源。
-/// 调用方负责 tradeType / container / source / channelMchNo / storeNo 等业务差异，本工具只填
+/// 调用方负责 tradeType / container / source / channelMchNo / storeNo / provider 等业务差异，本工具只填
 /// 「待处理结算类交易」公共规则：
 /// - currency = CNY
 /// - postedAmount = 0（成功后由 [cn.daxpay.open.payment.trade.runtime.service.pay.common.PayUniHandleService]
@@ -31,6 +31,7 @@ public final class PayTradeInitUtil {
     /// @param channelMchNo    通道商户号（冗余自容器/路由结果，可空仅当路由未定时）
     /// @param storeNo         门店号（冗余自容器，可空）
     /// @param title           订单标题（冗余自容器，资金列表/工作台免JOIN）
+    /// @param provider        支付渠道（由 method 派生，可空；权威亦可在容器 provider）
     public static PayTrade initProcessing(
             String appId,
             String tradeNo,
@@ -41,7 +42,8 @@ public final class PayTradeInitUtil {
             String source,
             String channelMchNo,
             String storeNo,
-            String title) {
+            String title,
+            String provider) {
         return new PayTrade()
                 .setAppId(appId)
                 .setTradeNo(tradeNo)
@@ -58,6 +60,8 @@ public final class PayTradeInitUtil {
                 .setSource(source)
                 // 轻量组织冗余: 权威在业务容器
                 .setChannelMchNo(channelMchNo)
-                .setStoreNo(storeNo);
+                .setStoreNo(storeNo)
+                // 支付渠道: 下单时由 method 派生, 渠道分布报表免 JOIN
+                .setProvider(provider);
     }
 }

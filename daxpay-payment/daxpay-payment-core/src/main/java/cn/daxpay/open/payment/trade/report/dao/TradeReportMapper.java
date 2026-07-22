@@ -136,8 +136,8 @@ public interface TradeReportMapper extends MPJBaseMapper<PayTrade> {
 
     // ===== 时段分布 =====
 
-    /// 24 小时时段分布: 按 CST 小时(0-23)分组, 返回各时段成交金额(分)与笔数
-    /// 仅含有成交的小时(Service 补齐 0-23 缺失时段)
+    /// 24 小时时段分布: 按 CST 小时(0-23)分组, 返回各时段成交金额(分)与笔数(区间合计)
+    /// 仅含有成交的小时(Service 补齐 0-23 缺失时段后, 再除以区间天数得到日均)
     @Select("SELECT EXTRACT(HOUR FROM pay_time AT TIME ZONE 'Asia/Shanghai')::int AS hour, "
             + "COALESCE(SUM(posted_amount), 0)::bigint AS amount, "
             + "COUNT(*)::bigint AS count "

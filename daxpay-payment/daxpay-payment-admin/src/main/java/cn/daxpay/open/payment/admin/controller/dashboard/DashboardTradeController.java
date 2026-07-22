@@ -113,7 +113,7 @@ public class DashboardTradeController {
 
     // ===== 时段 =====
 
-    @Operation(summary = "24小时时段分布(指定天数或自定义区间)")
+    @Operation(summary = "时段分布(日均): 区间内按小时汇总后除以天数, 补齐 0-23")
     @GetMapping("/hourly-dist")
     public Result<List<HourlyDistItemResult>> hourlyDist(
             @RequestParam(defaultValue = "7") int days,

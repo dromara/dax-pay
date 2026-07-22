@@ -74,7 +74,7 @@ public class PayTrade extends MchBaseEntity {
     /// 通道商户号(冗余自业务容器, 路由确定后写入; 权威在容器 channelMchNo)
     private String channelMchNo;
 
-    /// 支付渠道(冗余自业务容器, 支付成功sync后回填; 权威在容器 provider)
+    /// 支付渠道(冗余自业务容器; 下单时由 method→[PayProviderEnum] 写入, 成功路径兜底补齐)
     /// @see cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum
     private String provider;
 

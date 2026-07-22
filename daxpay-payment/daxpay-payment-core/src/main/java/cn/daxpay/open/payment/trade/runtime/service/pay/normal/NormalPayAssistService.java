@@ -23,6 +23,7 @@ import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.trade.runtime.mq.NormalPayTimeoutMessage;
 import cn.daxpay.open.payment.trade.runtime.mq.PayArtemisConstants;
 import cn.daxpay.open.payment.trade.util.PayTradeInitUtil;
+import cn.daxpay.open.payment.trade.util.PayTradeProviderUtil;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
 import cn.hutool.core.util.StrUtil;
@@ -109,6 +110,8 @@ public class NormalPayAssistService {
         // --- 支付路由 ---
         normalOrder.setChannel(channel);
         normalOrder.setMethod(payParam.getMethod());
+        // 支付渠道: 由 method 派生, 渠道分布报表/详情展示用
+        normalOrder.setProvider(PayTradeProviderUtil.resolveProviderByMethod(payParam.getMethod()));
         normalOrder.setLimitPay(payParam.getLimitPay() != null
                 ? String.join(",", payParam.getLimitPay()) : null);
         normalOrder.setOpenid(payParam.getOpenId());
@@ -136,7 +139,7 @@ public class NormalPayAssistService {
     }
 
     /// 组装资金交易（未落库）; relationOrderNo 默认=orderNo, 特殊通道支付返回后可覆盖
-    /// channelMchNo / storeNo 冗余自容器，资金列表免 JOIN
+    /// channelMchNo / storeNo / provider 冗余自容器，资金列表与渠道报表免 JOIN
     private PayTrade buildPayTrade(NormalPayParam payParam, NormalPayOrder normalOrder,
                                    String tradeNo, String orderNo, String source) {
         return PayTradeInitUtil.initProcessing(
@@ -149,7 +152,8 @@ public class NormalPayAssistService {
                 source,
                 normalOrder.getChannelMchNo(),
                 normalOrder.getStoreNo(),
-                normalOrder.getTitle());
+                normalOrder.getTitle(),
+                normalOrder.getProvider());
     }
 
     /// 注册超时关单延时消息

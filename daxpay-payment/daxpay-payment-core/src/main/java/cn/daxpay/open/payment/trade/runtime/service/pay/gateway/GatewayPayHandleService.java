@@ -27,6 +27,7 @@ import cn.daxpay.open.platform.core.util.TradeNoGenerateUtil;
 import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformPaySecurityConfig;
 import cn.daxpay.open.platform.system.service.config.security.PlatformSecurityConfigService;
 import cn.daxpay.open.payment.trade.util.PayTradeInitUtil;
+import cn.daxpay.open.payment.trade.util.PayTradeProviderUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -57,6 +58,7 @@ public class GatewayPayHandleService {
     private final PlatformSecurityConfigService platformSecurityConfigService;
 
     /// 自注入，保证 [GatewayPayHandleService#createTrade] / [GatewayPayHandleService#paySuccess] 走 Spring 事务代理
+    @Lazy
     private final GatewayPayHandleService self;
 
     /// 发起网关支付
@@ -163,7 +165,8 @@ public class GatewayPayHandleService {
         }
 
         // 默认上送网关业务单号; 特殊通道返回后可覆盖
-        // channelMchNo 取自路由后的 payParam; storeNo 冗余自预下单容器
+        // channelMchNo 取自路由后的 payParam; storeNo 冗余自预下单容器; provider 由 method 派生
+        String provider = PayTradeProviderUtil.resolveProviderByMethod(payParam.getMethod());
         PayTrade trade = PayTradeInitUtil.initProcessing(
                 order.getAppId(),
                 TradeNoGenerateUtil.pay(),
@@ -174,13 +177,16 @@ public class GatewayPayHandleService {
                 source,
                 payParam.getChannelMchNo(),
                 order.getStoreNo(),
-                order.getTitle());
+                order.getTitle(),
+                provider);
         payTradeManager.save(trade);
 
         this.fillRouteOnOrder(order, payParam, clientEnv, device);
         order.setStatus(GatewayOrderStatusEnum.PAYING.getCode());
         order.setChannel(channel);
         order.setMethod(payParam.getMethod());
+        // 支付渠道: 与 trade 同步, 渠道分布报表免 JOIN
+        order.setProvider(provider);
         order.setLimitPay(payParam.getLimitPay() != null
                 ? String.join(",", payParam.getLimitPay()) : null);
         order.setOpenid(payParam.getOpenId());

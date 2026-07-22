@@ -184,15 +184,19 @@ public class DashboardTradeService {
 
     // ===== 时段分布 =====
 
-    /// 24 小时时段分布(指定天数), 补齐 0-23 缺失小时
+    /// 时段分布(日均, 指定天数): 区间内按小时汇总后 ÷ 天数, 补齐 0-23
     public List<HourlyDistItemResult> hourlyDist(int days) {
         OffsetDateTime[] range = daysRange(days);
-        return fillHourlyDist(tradeReportMapper.hourlyDist(range[0], range[1]));
+        int daysSpan = clampDays(days);
+        return toDailyAverage(fillHourlyDist(tradeReportMapper.hourlyDist(range[0], range[1])), daysSpan);
     }
 
-    /// 24 小时时段分布(自定义区间)
+    /// 时段分布(日均, 自定义区间): 区间内按小时汇总后 ÷ 天数, 补齐 0-23
     public List<HourlyDistItemResult> hourlyDist(String startStr, String endStr) {
-        return fillHourlyDist(tradeReportMapper.hourlyDist(parseDateStart(startStr), parseDateEndExclusive(endStr)));
+        OffsetDateTime start = parseDateStart(startStr);
+        OffsetDateTime end = parseDateEndExclusive(endStr);
+        long daysSpan = Math.max(1L, java.time.Duration.between(start, end).toDays());
+        return toDailyAverage(fillHourlyDist(tradeReportMapper.hourlyDist(start, end)), daysSpan);
     }
 
     // ===== 金额区间分桶 =====
@@ -303,7 +307,7 @@ public class DashboardTradeService {
         return result;
     }
 
-    /// 时段分布补齐 0-23 缺失小时
+    /// 时段分布补齐 0-23 缺失小时(此时仍为区间合计, 日均见 [toDailyAverage])
     private List<HourlyDistItemResult> fillHourlyDist(List<HourlyDistItemResult> rows) {
         Map<Integer, HourlyDistItemResult> indexed = new HashMap<>(rows.size());
         for (HourlyDistItemResult row : rows) {
@@ -313,12 +317,31 @@ public class DashboardTradeService {
         for (int h = 0; h < 24; h++) {
             HourlyDistItemResult row = indexed.get(h);
             if (row != null) {
+                if (row.getCount() == null) {
+                    row.setCount(0D);
+                }
+                if (row.getAmount() == null) {
+                    row.setAmount(0L);
+                }
                 result.add(row);
             } else {
-                result.add(new HourlyDistItemResult().setHour(h).setAmount(0L).setCount(0L));
+                result.add(new HourlyDistItemResult().setHour(h).setAmount(0L).setCount(0D));
             }
         }
         return result;
+    }
+
+    /// 将区间内按小时汇总的金额/笔数转为日均(天数至少为 1)
+    /// 笔数保留 1 位小数; 金额(分)四舍五入为 Long
+    private List<HourlyDistItemResult> toDailyAverage(List<HourlyDistItemResult> rows, long daysSpan) {
+        long days = Math.max(1L, daysSpan);
+        for (HourlyDistItemResult row : rows) {
+            long amount = row.getAmount() == null ? 0L : row.getAmount();
+            double count = row.getCount() == null ? 0D : row.getCount();
+            row.setAmount(Math.round((double) amount / days));
+            row.setCount(Math.round(count * 10.0 / days) / 10.0);
+        }
+        return rows;
     }
 
     /// 金额区间补齐 5 个缺失桶(保持固定顺序)

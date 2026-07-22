@@ -313,3 +313,83 @@ DROP INDEX IF EXISTS "idx_pay_callback_record_channel";
 ALTER TABLE "public"."pay_callback_record" DROP COLUMN IF EXISTS "channel";
 CREATE INDEX IF NOT EXISTS "idx_pay_callback_record_product" ON "public"."pay_callback_record" USING btree ("product");
 
+-- ----------------------------
+-- 数据修复: 成功结算类资金凭证补齐 posted_amount
+-- 报表成交口径为 status=success AND posted_amount>0；若历史成功单未走
+-- PayUniHandleService 回写导致 posted_amount 仍为 0，工作台/分析页金额会全 0。
+-- 预授权冻结(trade_type=authorize) 入账金额恒为 0，故意排除。
+-- 可重复执行(幂等)。
+-- ----------------------------
+UPDATE "public"."pay_trade"
+SET "posted_amount" = "amount"
+WHERE "status" = 'success'
+  AND "trade_type" <> 'authorize'
+  AND COALESCE("posted_amount", 0) = 0
+  AND COALESCE("amount", 0) > 0;
+
+-- ----------------------------
+-- 数据修复: 补齐支付渠道 provider(渠道分布/成功率报表依赖)
+-- 报表 SQL 强制 provider IS NOT NULL；历史单创建时未写 provider 会导致四张渠道图全空。
+-- 优先用目录表 pay_md_provider_method(method→provider) 回填容器, 再同步到 pay_trade。
+-- 可重复执行(幂等)。
+-- ----------------------------
+
+-- 1) 普通支付容器: method → provider
+UPDATE "public"."pay_normal_order" o
+SET "provider" = m."provider"
+FROM "public"."pay_md_provider_method" m
+WHERE o."provider" IS NULL
+  AND o."method" IS NOT NULL
+  AND o."method" = m."method"
+  AND m."deleted" = false
+  AND m."provider" IS NOT NULL;
+
+-- 2) 网关支付容器: method → provider
+UPDATE "public"."pay_gateway_order" o
+SET "provider" = m."provider"
+FROM "public"."pay_md_provider_method" m
+WHERE o."provider" IS NULL
+  AND o."method" IS NOT NULL
+  AND o."method" = m."method"
+  AND m."deleted" = false
+  AND m."provider" IS NOT NULL;
+
+-- 3) 资金凭证: 从普通支付容器同步
+UPDATE "public"."pay_trade" t
+SET "provider" = o."provider"
+FROM "public"."pay_normal_order" o
+WHERE t."trade_type" = 'normal'
+  AND t."container_id" = o."id"
+  AND t."provider" IS NULL
+  AND o."provider" IS NOT NULL;
+
+-- 4) 资金凭证: 从网关支付容器同步
+UPDATE "public"."pay_trade" t
+SET "provider" = o."provider"
+FROM "public"."pay_gateway_order" o
+WHERE t."trade_type" = 'gateway'
+  AND t."container_id" = o."id"
+  AND t."provider" IS NULL
+  AND o."provider" IS NOT NULL;
+
+-- 5) 资金凭证兜底: 容器仍无 provider 时直接 JOIN 目录表(按容器 method)
+UPDATE "public"."pay_trade" t
+SET "provider" = m."provider"
+FROM "public"."pay_normal_order" o
+JOIN "public"."pay_md_provider_method" m
+  ON m."method" = o."method" AND m."deleted" = false AND m."provider" IS NOT NULL
+WHERE t."trade_type" = 'normal'
+  AND t."container_id" = o."id"
+  AND t."provider" IS NULL
+  AND o."method" IS NOT NULL;
+
+UPDATE "public"."pay_trade" t
+SET "provider" = m."provider"
+FROM "public"."pay_gateway_order" o
+JOIN "public"."pay_md_provider_method" m
+  ON m."method" = o."method" AND m."deleted" = false AND m."provider" IS NOT NULL
+WHERE t."trade_type" = 'gateway'
+  AND t."container_id" = o."id"
+  AND t."provider" IS NULL
+  AND o."method" IS NOT NULL;
+

@@ -15,7 +15,9 @@ import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.trade.notice.service.TradeNoticeBridge;
 import cn.daxpay.open.payment.trade.runtime.service.plugin.PayPluginAssistService;
 import cn.daxpay.open.payment.trade.util.PayTradeAmountUtil;
+import cn.daxpay.open.payment.trade.util.PayTradeProviderUtil;
 import cn.daxpay.open.platform.core.enums.pay.notice.NoticeEventEnum;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -47,10 +49,11 @@ public class PayUniHandleService {
         if (result.getRelationOrderNo() != null) {
             trade.setRelationOrderNo(result.getRelationOrderNo());
         }
-        // 按 status/tradeType 回写入账金额后再落库
-        updateTradeWithPosted(trade);
         if (isGateway(trade)) {
             GatewayPayOrder order = gatewayPayOrderManager.findById(trade.getContainerId()).orElse(null);
+            // 渠道分布报表依赖 trade.provider: 空则从容器/method 兜底
+            applyProviderFallback(trade, order);
+            updateTradeWithPosted(trade);
             if (order != null) {
                 applyGatewayReceipts(order, result);
                 if (Objects.equals(trade.getStatus(), PayFundStatusEnum.SUCCESS.getCode())) {
@@ -61,6 +64,8 @@ public class PayUniHandleService {
             }
         } else {
             NormalPayOrder order = payNormalOrderManager.findById(trade.getContainerId()).orElse(null);
+            applyProviderFallback(trade, order);
+            updateTradeWithPosted(trade);
             if (order != null) {
                 applyNormalReceipts(order, result);
                 if (Objects.equals(trade.getStatus(), PayFundStatusEnum.SUCCESS.getCode())) {
@@ -80,13 +85,14 @@ public class PayUniHandleService {
 
     /// 支付成功后续处理(同步/回调路径), 含通道回执写容器
     public void paySuccess(PayTrade trade, PaySyncResultBo syncResult) {
-        updateTradeWithPosted(trade);
         if (isGateway(trade)) {
             GatewayPayOrder order = gatewayPayOrderManager.findById(trade.getContainerId()).orElse(null);
+            applyGatewaySyncReceipts(trade, order, syncResult);
+            applyProviderFallback(trade, order);
+            updateTradeWithPosted(trade);
             if (order != null) {
                 order.setStatus(GatewayOrderStatusEnum.PAID.getCode());
                 order.setPayTime(trade.getPayTime());
-                applyGatewaySyncReceipts(trade, order, syncResult);
                 gatewayPayOrderManager.updateById(order);
             }
             // 商户出站通知(系统协议)
@@ -95,10 +101,12 @@ public class PayUniHandleService {
             return;
         }
         NormalPayOrder order = payNormalOrderManager.findById(trade.getContainerId()).orElse(null);
+        applyNormalSyncReceipts(trade, order, syncResult);
+        applyProviderFallback(trade, order);
+        updateTradeWithPosted(trade);
         if (order != null) {
             order.setStatus(NormalPayOrderStatusEnum.PAID.getCode());
             order.setPayTime(trade.getPayTime());
-            applyNormalSyncReceipts(trade, order, syncResult);
             payNormalOrderManager.updateById(order);
         }
         // 商户出站通知(系统协议)
@@ -108,8 +116,17 @@ public class PayUniHandleService {
 
     /// 支付成功后续处理(回调路径, 无回执详情)
     public void paySuccess(PayTrade trade) {
-        updateTradeWithPosted(trade);
-        markContainerPaid(trade);
+        if (isGateway(trade)) {
+            GatewayPayOrder order = gatewayPayOrderManager.findById(trade.getContainerId()).orElse(null);
+            applyProviderFallback(trade, order);
+            updateTradeWithPosted(trade);
+            markContainerPaid(trade, order);
+        } else {
+            NormalPayOrder order = payNormalOrderManager.findById(trade.getContainerId()).orElse(null);
+            applyProviderFallback(trade, order);
+            updateTradeWithPosted(trade);
+            markContainerPaid(trade, order);
+        }
         // 商户出站通知(系统协议)
         tradeNoticeBridge.dispatchPay(trade, NoticeEventEnum.PAY_SUCCESS);
         payPluginAssistService.paySuccess(trade);
@@ -176,22 +193,29 @@ public class PayUniHandleService {
         gatewayPayOrderManager.updateById(order);
     }
 
-    private void markContainerPaid(PayTrade trade) {
-        if (isGateway(trade)) {
-            GatewayPayOrder order = gatewayPayOrderManager.findById(trade.getContainerId()).orElse(null);
-            if (order != null) {
-                order.setStatus(GatewayOrderStatusEnum.PAID.getCode());
-                order.setPayTime(trade.getPayTime());
-                gatewayPayOrderManager.updateById(order);
-            }
+    /// 容器置已支付; 若已加载实体则复用, 避免重复查询, 并同步 provider
+    private void markContainerPaid(PayTrade trade, GatewayPayOrder order) {
+        if (order == null) {
             return;
         }
-        NormalPayOrder normalOrder = payNormalOrderManager.findById(trade.getContainerId()).orElse(null);
-        if (normalOrder != null) {
-            normalOrder.setStatus(NormalPayOrderStatusEnum.PAID.getCode());
-            normalOrder.setPayTime(trade.getPayTime());
-            payNormalOrderManager.updateById(normalOrder);
+        order.setStatus(GatewayOrderStatusEnum.PAID.getCode());
+        order.setPayTime(trade.getPayTime());
+        if (StrUtil.isBlank(order.getProvider()) && StrUtil.isNotBlank(trade.getProvider())) {
+            order.setProvider(trade.getProvider());
         }
+        gatewayPayOrderManager.updateById(order);
+    }
+
+    private void markContainerPaid(PayTrade trade, NormalPayOrder order) {
+        if (order == null) {
+            return;
+        }
+        order.setStatus(NormalPayOrderStatusEnum.PAID.getCode());
+        order.setPayTime(trade.getPayTime());
+        if (StrUtil.isBlank(order.getProvider()) && StrUtil.isNotBlank(trade.getProvider())) {
+            order.setProvider(trade.getProvider());
+        }
+        payNormalOrderManager.updateById(order);
     }
 
     /// 支付失败: 容器 FAILED
@@ -292,9 +316,15 @@ public class PayUniHandleService {
             return;
         }
         if (Objects.nonNull(syncResult.getProvider())) {
-            order.setProvider(syncResult.getProvider().getCode());
+            String providerCode = syncResult.getProvider().getCode();
+            if (order != null) {
+                order.setProvider(providerCode);
+            }
             // 冗余至资金凭证, 渠道分布报表/资金列表免 JOIN 容器
-            trade.setProvider(syncResult.getProvider().getCode());
+            trade.setProvider(providerCode);
+        }
+        if (order == null) {
+            return;
         }
         order.setBuyerId(syncResult.getBuyerId());
         order.setTradeProduct(syncResult.getTradeProduct());
@@ -309,9 +339,15 @@ public class PayUniHandleService {
             return;
         }
         if (Objects.nonNull(syncResult.getProvider())) {
-            order.setProvider(syncResult.getProvider().getCode());
+            String providerCode = syncResult.getProvider().getCode();
+            if (order != null) {
+                order.setProvider(providerCode);
+            }
             // 冗余至资金凭证, 渠道分布报表/资金列表免 JOIN 容器
-            trade.setProvider(syncResult.getProvider().getCode());
+            trade.setProvider(providerCode);
+        }
+        if (order == null) {
+            return;
         }
         order.setBuyerId(syncResult.getBuyerId());
         order.setTradeProduct(syncResult.getTradeProduct());
@@ -319,6 +355,33 @@ public class PayUniHandleService {
         order.setBankType(syncResult.getBankType());
         order.setPromotionType(syncResult.getPromotionType());
         order.setErrorMsg(null);
+    }
+
+    /// trade.provider 为空时从容器 provider / method 兜底, 并回写容器空 provider
+    private void applyProviderFallback(PayTrade trade, NormalPayOrder order) {
+        String containerProvider = order != null ? order.getProvider() : null;
+        String method = order != null ? order.getMethod() : null;
+        String provider = PayTradeProviderUtil.coalesceProvider(trade.getProvider(), containerProvider, method);
+        if (StrUtil.isBlank(provider)) {
+            return;
+        }
+        trade.setProvider(provider);
+        if (order != null && StrUtil.isBlank(order.getProvider())) {
+            order.setProvider(provider);
+        }
+    }
+
+    private void applyProviderFallback(PayTrade trade, GatewayPayOrder order) {
+        String containerProvider = order != null ? order.getProvider() : null;
+        String method = order != null ? order.getMethod() : null;
+        String provider = PayTradeProviderUtil.coalesceProvider(trade.getProvider(), containerProvider, method);
+        if (StrUtil.isBlank(provider)) {
+            return;
+        }
+        trade.setProvider(provider);
+        if (order != null && StrUtil.isBlank(order.getProvider())) {
+            order.setProvider(provider);
+        }
     }
 
     private boolean isGateway(PayTrade trade) {
