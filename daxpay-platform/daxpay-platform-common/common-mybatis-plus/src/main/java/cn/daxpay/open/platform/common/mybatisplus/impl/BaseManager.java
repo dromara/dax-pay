@@ -108,6 +108,21 @@ public class BaseManager<M extends MPJBaseMapper<T>, T> {
         return new DaxLambdaQueryChainWrapper<>(getBaseMapper(), getEntityClass());
     }
 
+    /// 按条件取有限条(方言无关，由分页插件按当前数据库方言生成 limit，不查总数)
+    ///
+    /// 用于超时扫描等「最多 N 条」场景，替代 `.last("limit N")` 写死方言片段。
+    ///
+    /// @param size 最大条数
+    /// @param customizer 查询条件定制(eq/orderBy 等)
+    /// @return 最多 size 条记录
+    public List<T> listLimit(int size, Consumer<LambdaQueryChainWrapper<T>> customizer) {
+        var query = lambdaQuery();
+        customizer.accept(query);
+        Page<T> page = new Page<>(1, size);
+        page.setSearchCount(false);
+        return query.page(page).getRecords();
+    }
+
     /// 取排序后第一条(方言无关，由分页插件按当前数据库方言生成 limit，只查 1 条)
     ///
     /// 适用于 findFirst* 场景(明确取首条，不校验唯一)，区别于期望唯一的 [#lambdaQuery]...one()。
@@ -115,11 +130,7 @@ public class BaseManager<M extends MPJBaseMapper<T>, T> {
     /// @param customizer 查询条件定制(eq/orderBy 等)
     /// @return 第一条的 Optional 包装，无数据返回 empty
     public Optional<T> firstOpt(Consumer<LambdaQueryChainWrapper<T>> customizer) {
-        var query = lambdaQuery();
-        customizer.accept(query);
-        Page<T> page = new Page<>(1, 1);
-        page.setSearchCount(false);
-        List<T> records = query.page(page).getRecords();
+        List<T> records = listLimit(1, customizer);
         return records.isEmpty() ? Optional.empty() : Optional.of(records.getFirst());
     }
 

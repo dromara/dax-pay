@@ -39,23 +39,19 @@ public class DouyinDirectAppManager extends BaseManager<DouyinDirectAppMapper, D
 
     /// 根据通道商户号取首个应用（支付/回调，租户内）
     public Optional<DouyinDirectApp> findFirstByChannelMchNo(String channelMchNo) {
-        return lambdaQuery()
+        return firstOpt(q -> q
                 .eq(DouyinDirectApp::getChannelMchNo, channelMchNo)
                 .orderByAsc(DouyinDirectApp::getCreateTime)
-                .orderByAsc(DouyinDirectApp::getId)
-                .last("limit 1")
-                .oneOpt();
+                .orderByAsc(DouyinDirectApp::getId));
     }
 
     /// 根据通道商户号与应用类型取首个应用（支付/回调，租户内）
     public Optional<DouyinDirectApp> findFirstByChannelMchNoAndAppType(String channelMchNo, String appType) {
-        return lambdaQuery()
+        return firstOpt(q -> q
                 .eq(DouyinDirectApp::getChannelMchNo, channelMchNo)
                 .eq(DouyinDirectApp::getAppType, appType)
                 .orderByAsc(DouyinDirectApp::getCreateTime)
-                .orderByAsc(DouyinDirectApp::getId)
-                .last("limit 1")
-                .oneOpt();
+                .orderByAsc(DouyinDirectApp::getId));
     }
 
     /// 按通道商户号与 douyinAppId 查询应用（支付/回调，租户内）

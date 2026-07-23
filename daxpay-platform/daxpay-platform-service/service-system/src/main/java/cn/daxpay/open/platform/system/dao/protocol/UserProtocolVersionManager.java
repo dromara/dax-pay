@@ -46,13 +46,11 @@ public class UserProtocolVersionManager extends BaseManager<UserProtocolVersionM
         if (published.isPresent()) {
             return published;
         }
-        return this.lambdaQuery()
+        return firstOpt(q -> q
                 .eq(UserProtocolVersion::getProtocolId, protocolId)
                 .eq(UserProtocolVersion::getLanguage, language)
                 .eq(UserProtocolVersion::getStatus, "ARCHIVED")
-                .orderByDesc(UserProtocolVersion::getVersionNo)
-                .last("LIMIT 1")
-                .oneOpt();
+                .orderByDesc(UserProtocolVersion::getVersionNo));
     }
 
     /// 查询某协议下所有版本(级联删除/复制用)

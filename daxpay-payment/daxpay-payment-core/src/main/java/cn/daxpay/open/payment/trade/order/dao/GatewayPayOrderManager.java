@@ -61,13 +61,11 @@ public class GatewayPayOrderManager extends BaseManager<GatewayPayOrderMapper, G
     /// 已过期仍待支付/支付中的网关单(超时兜底)
     @IgnoreTenant
     public List<GatewayPayOrder> findTimeoutOrders(OffsetDateTime now) {
-        return lambdaQuery()
+        return listLimit(500, q -> q
                 .in(GatewayPayOrder::getStatus,
                         GatewayOrderStatusEnum.WAIT_PAY.getCode(),
                         GatewayOrderStatusEnum.PAYING.getCode())
                 .lt(GatewayPayOrder::getExpiredTime, now)
-                .orderByAsc(GatewayPayOrder::getExpiredTime)
-                .last("limit 500")
-                .list();
+                .orderByAsc(GatewayPayOrder::getExpiredTime));
     }
 }

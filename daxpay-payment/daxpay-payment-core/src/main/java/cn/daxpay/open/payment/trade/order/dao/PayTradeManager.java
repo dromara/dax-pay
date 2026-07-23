@@ -7,8 +7,6 @@ import cn.daxpay.open.platform.core.annotation.IgnoreTenant;
 import cn.daxpay.open.platform.core.exception.DangerSqlException;
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
-import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
-import cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.trade.order.param.PayTradeQuery;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -65,16 +63,14 @@ public class PayTradeManager extends BaseManager<PayTradeMapper, PayTrade> {
     }
 
     /// 查询网关支付已超时但仍处理中的资金交易(兜底)
-    /// expiredTime 在容器(pay_gateway_order)上, 用子查询关联
+    ///
+    /// expiredTime 在容器(pay_gateway_order)上, SQL 见 [PayTradeMapper#findGatewayTimeoutTrades]。
+    /// 跨租户扫描(定时任务无 HTTP 上下文), 单次上限 500 防积压爆量(分页插件生成方言 limit)。
     @IgnoreTenant
     public List<PayTrade> findGatewayTimeoutTrades(OffsetDateTime now) {
-        return lambdaQuery()
-                .eq(PayTrade::getTradeType, PayTradeTypeEnum.GATEWAY.getCode())
-                .eq(PayTrade::getStatus, PayFundStatusEnum.PROCESSING.getCode())
-                .apply("container_id IN (SELECT id FROM pay_gateway_order WHERE expired_time < {0})", now)
-                .orderByAsc(PayTrade::getCreateTime)
-                .last("limit 500")
-                .list();
+        Page<PayTrade> page = new Page<>(1, 500);
+        page.setSearchCount(false);
+        return getBaseMapper().findGatewayTimeoutTrades(page, now).getRecords();
     }
 
     /// 分页查询(管理端), 默认按创建时间倒序
@@ -88,18 +84,14 @@ public class PayTradeManager extends BaseManager<PayTradeMapper, PayTrade> {
 
     /// 查询普通支付已超时但仍处理中的资金交易(兜底定时任务用)
     ///
-    /// 条件: tradeType=NORMAL 且 status=PROCESSING 且容器 expiredTime < now
-    /// expiredTime 在容器(pay_normal_order)上, 用子查询关联。
-    /// 跨租户扫描(定时任务无 HTTP 上下文), 单次上限 500 防积压爆量。
+    /// 条件: tradeType=NORMAL 且 status=PROCESSING 且容器 expiredTime < now。
+    /// expiredTime 在容器(pay_normal_order)上, SQL 见 [PayTradeMapper#findNormalTimeoutTrades]。
+    /// 跨租户扫描(定时任务无 HTTP 上下文), 单次上限 500 防积压爆量(分页插件生成方言 limit)。
     @IgnoreTenant
     public List<PayTrade> findNormalTimeoutTrades(OffsetDateTime now) {
-        return lambdaQuery()
-                .eq(PayTrade::getTradeType, PayTradeTypeEnum.NORMAL.getCode())
-                .eq(PayTrade::getStatus, PayFundStatusEnum.PROCESSING.getCode())
-                .apply("container_id IN (SELECT id FROM pay_normal_order WHERE expired_time < {0})", now)
-                .orderByAsc(PayTrade::getCreateTime)
-                .last("limit 500")
-                .list();
+        Page<PayTrade> page = new Page<>(1, 500);
+        page.setSearchCount(false);
+        return getBaseMapper().findNormalTimeoutTrades(page, now).getRecords();
     }
 
     /// 根据id进行更新，失败时抛出异常

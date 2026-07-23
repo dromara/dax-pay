@@ -14,17 +14,26 @@ import cn.hutool.core.util.ClassUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.experimental.UtilityClass;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.function.Function;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /// # 注解参数查询生成器
 ///
 @UtilityClass
 public class AnnotationQueryGenerator {
+
+    private final Logger log = LoggerFactory.getLogger(AnnotationQueryGenerator.class);
+
+    /// 排序字段标识符白名单: column 或 table.column（禁止空格/分号等注入片段）
+    private final Pattern SAFE_SORT_FIELD = Pattern.compile(
+            "^[A-Za-z_][A-Za-z0-9_]*(\\.[A-Za-z_][A-Za-z0-9_]*)?$");
 
     /// 生成查询条件 (根据实体对象生成), 生成的多个查询条件之间用And连接
     /// @param queryParams 参数
@@ -205,12 +214,18 @@ public class AnnotationQueryGenerator {
             return;
         }
         for (SortParam queryOrder : queryOrders) {
-            if (queryOrder.isUnderLine()) {
-                queryWrapper.orderBy(StrUtil.isNotBlank(queryOrder.getSortField()), queryOrder.isAsc(), StrUtil.toUnderlineCase(queryOrder.getSortField()));
+            String sortField = queryOrder.getSortField();
+            if (StrUtil.isBlank(sortField)) {
+                continue;
             }
-            else {
-                queryWrapper.orderBy(StrUtil.isNotBlank(queryOrder.getSortField()), queryOrder.isAsc(), queryOrder.getSortField());
+            // 先做命名转换, 再校验最终落入 ORDER BY 的标识符
+            String column = queryOrder.isUnderLine() ? StrUtil.toUnderlineCase(sortField) : sortField;
+            if (!SAFE_SORT_FIELD.matcher(column).matches()) {
+                // 非法排序字段跳过, 避免 ORDER BY 注入导致列表页直接 500
+                log.warn("忽略非法排序字段: {}", sortField);
+                continue;
             }
+            queryWrapper.orderBy(true, queryOrder.isAsc(), column);
         }
     }
 
