@@ -34,7 +34,7 @@
             <artifactId>service-notify</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <!-- 管理端 MapStruct Convert（PayTradeAdminConvert 等） -->
+        <!-- 管理端 MapStruct Convert -->
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>

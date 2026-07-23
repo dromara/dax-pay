@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.admin.service.trade;
+package cn.daxpay.open.payment.trade.order.service;
 
 import cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum;
 import cn.daxpay.open.payment.trade.order.dao.GatewayPayOrderManager;
@@ -17,9 +17,11 @@ import java.util.Objects;
 
 /// # 交易订单详情组装器
 ///
-/// 列表场景仅单表 Convert；详情场景在此按 tradeType 补对侧字段，避免 AdminService 重复手写 setter。
+/// 列表场景仅单表 Convert；详情场景在此按 tradeType 补对侧字段。
 /// - 容器详情 → 补资金凭证字段
 /// - 资金详情 → 按 [PayTrade#getTradeType] 加载容器补业务字段
+///
+/// 供运营端 / 商户端共享（下沉自 payment-admin）
 @Component
 @RequiredArgsConstructor
 public class TradeOrderDetailAssembler {

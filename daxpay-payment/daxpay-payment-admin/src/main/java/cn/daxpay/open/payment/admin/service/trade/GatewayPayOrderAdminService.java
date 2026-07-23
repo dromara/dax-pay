@@ -9,6 +9,7 @@ import cn.daxpay.open.payment.trade.order.entity.GatewayPayOrder;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.trade.order.param.GatewayPayOrderQuery;
 import cn.daxpay.open.payment.trade.order.result.GatewayPayOrderResult;
+import cn.daxpay.open.payment.trade.order.service.TradeOrderDetailAssembler;
 import cn.daxpay.open.payment.trade.runtime.service.close.PayCloseService;
 import cn.daxpay.open.payment.trade.runtime.service.sync.PaySyncService;
 import cn.daxpay.open.payment.trade.runtime.service.pay.common.PayUniHandleService;

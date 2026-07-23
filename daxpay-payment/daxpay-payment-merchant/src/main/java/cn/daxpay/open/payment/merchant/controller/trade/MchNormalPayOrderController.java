@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.admin.controller.trade;
+package cn.daxpay.open.payment.merchant.controller.trade;
 
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
@@ -6,9 +6,9 @@ import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.platform.core.rest.result.Result;
-import cn.daxpay.open.payment.trade.order.param.PayTradeQuery;
-import cn.daxpay.open.payment.trade.order.result.PayTradeResult;
-import cn.daxpay.open.payment.trade.order.service.PayTradeService;
+import cn.daxpay.open.payment.trade.order.param.NormalPayOrderQuery;
+import cn.daxpay.open.payment.trade.order.result.NormalPayOrderResult;
+import cn.daxpay.open.payment.trade.order.service.NormalPayOrderService;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPaySyncResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -21,33 +21,32 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-/// # 资金交易凭证(管理)
+/// # 普通支付业务单(商户端)
 ///
-/// 面向运营后台的资金交易(凭证)管理: 分页查询、详情、状态同步、关闭/撤销。
-/// 业务编排委托 core [PayTradeService]。
-@PermCode(menuCode = PermCodes.Trade.Fund.MENU)
+/// 业务编排委托 core [NormalPayOrderService]。
+@PermCode(menuCode = PermCodes.Trade.Order.MENU)
 @Validated
-@Tag(name = "资金交易凭证(管理)")
+@Tag(name = "普通支付业务单(商户端)")
 @RestController
-@RequestMapping("/admin/order/pay-trade")
+@RequestMapping("/mch/order/normal-pay")
 @RequiredArgsConstructor
-public class PayTradeAdminController {
+public class MchNormalPayOrderController {
 
-    private final PayTradeService payTradeService;
+    private final NormalPayOrderService normalPayOrderService;
 
     @PermCode(code = PermCodes.Action.VIEW)
-    @Operation(summary = "资金交易凭证分页")
+    @Operation(summary = "普通支付业务单分页")
     @GetMapping("/page")
-    public Result<PageResult<PayTradeResult>> page(PageParam pageParam, PayTradeQuery query) {
-        return Res.ok(payTradeService.page(pageParam, query));
+    public Result<PageResult<NormalPayOrderResult>> page(PageParam pageParam, NormalPayOrderQuery query) {
+        return Res.ok(normalPayOrderService.page(pageParam, query));
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
-    @Operation(summary = "根据ID查询资金交易凭证详情")
+    @Operation(summary = "根据ID查询普通支付业务单详情")
     @GetMapping("/get-by-id")
-    public Result<PayTradeResult> findById(
+    public Result<NormalPayOrderResult> findById(
             @NotNull(message = "{validation.field.id.notNull}") Long id) {
-        return Res.ok(payTradeService.findById(id));
+        return Res.ok(normalPayOrderService.findById(id));
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
@@ -55,7 +54,7 @@ public class PayTradeAdminController {
     @PostMapping("/sync")
     public Result<NormalPaySyncResult> sync(
             @NotNull(message = "{validation.field.id.notNull}") Long id) {
-        return Res.ok(payTradeService.sync(id));
+        return Res.ok(normalPayOrderService.sync(id));
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
@@ -64,7 +63,7 @@ public class PayTradeAdminController {
     public Result<Void> close(
             @NotNull(message = "{validation.field.id.notNull}") Long id,
             @RequestParam(defaultValue = "false") boolean useCancel) {
-        payTradeService.close(id, useCancel);
+        normalPayOrderService.close(id, useCancel);
         return Res.ok();
     }
 }

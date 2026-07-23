@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.admin.controller.trade;
+package cn.daxpay.open.payment.merchant.controller.trade;
 
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
@@ -22,16 +22,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/// # 退款订单(管理)
+/// # 退款订单(商户端)
 ///
-/// 面向运营后台的退款订单管理。业务编排委托 core [RefundOrderService]。
+/// 业务编排委托 core [RefundOrderService]。
 @PermCode(menuCode = PermCodes.Trade.Refund.MENU)
 @Validated
-@Tag(name = "退款订单(管理)")
+@Tag(name = "退款订单(商户端)")
 @RestController
-@RequestMapping("/admin/order/refund")
+@RequestMapping("/mch/order/refund")
 @RequiredArgsConstructor
-public class RefundOrderAdminController {
+public class MchRefundOrderController {
 
     private final RefundOrderService refundOrderService;
 
