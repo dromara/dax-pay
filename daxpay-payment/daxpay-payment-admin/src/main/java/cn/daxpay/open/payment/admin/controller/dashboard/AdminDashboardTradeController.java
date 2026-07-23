@@ -2,7 +2,7 @@ package cn.daxpay.open.payment.admin.controller.dashboard;
 
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
-import cn.daxpay.open.payment.admin.service.dashboard.DashboardTradeService;
+import cn.daxpay.open.payment.admin.service.dashboard.AdminDashboardTradeService;
 import cn.daxpay.open.payment.trade.report.result.AmountRangeItemResult;
 import cn.daxpay.open.payment.trade.report.result.HourlyDistItemResult;
 import cn.daxpay.open.payment.trade.report.result.MerchantRankItemResult;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-/// # 工作台/分析页交易统计(管理端)
+/// # 工作台/分析页交易统计(运营端)
 ///
 /// 面向运营端工作台仪表盘与分析页的聚合统计:
 /// 概览(含环比)、交易趋势、退款趋势、支付渠道分布、渠道成功率、时段分布、金额区间、商户排名。
@@ -39,9 +39,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/admin/dashboard/trade")
 @RequiredArgsConstructor
-public class DashboardTradeController {
+public class AdminDashboardTradeController {
 
-    private final DashboardTradeService dashboardTradeService;
+    private final AdminDashboardTradeService adminDashboardTradeService;
 
     // ===== 概览 =====
 
@@ -54,9 +54,9 @@ public class DashboardTradeController {
             @RequestParam(required = false) String start,
             @RequestParam(required = false) String end) {
         if (start != null && end != null) {
-            return Res.ok(dashboardTradeService.overview(start, end));
+            return Res.ok(adminDashboardTradeService.overview(start, end));
         }
-        return Res.ok(dashboardTradeService.overview(date != null ? date : "today"));
+        return Res.ok(adminDashboardTradeService.overview(date != null ? date : "today"));
     }
 
     // ===== 趋势 =====
@@ -68,9 +68,9 @@ public class DashboardTradeController {
             @RequestParam(required = false) String start,
             @RequestParam(required = false) String end) {
         if (start != null && end != null) {
-            return Res.ok(dashboardTradeService.trend(start, end));
+            return Res.ok(adminDashboardTradeService.trend(start, end));
         }
-        return Res.ok(dashboardTradeService.trend(days));
+        return Res.ok(adminDashboardTradeService.trend(days));
     }
 
     @Operation(summary = "退款趋势(指定天数或自定义区间)")
@@ -80,9 +80,9 @@ public class DashboardTradeController {
             @RequestParam(required = false) String start,
             @RequestParam(required = false) String end) {
         if (start != null && end != null) {
-            return Res.ok(dashboardTradeService.refundTrend(start, end));
+            return Res.ok(adminDashboardTradeService.refundTrend(start, end));
         }
-        return Res.ok(dashboardTradeService.refundTrend(days));
+        return Res.ok(adminDashboardTradeService.refundTrend(days));
     }
 
     // ===== 渠道 =====
@@ -94,9 +94,9 @@ public class DashboardTradeController {
             @RequestParam(required = false) String start,
             @RequestParam(required = false) String end) {
         if (start != null && end != null) {
-            return Res.ok(dashboardTradeService.providerDist(start, end));
+            return Res.ok(adminDashboardTradeService.providerDist(start, end));
         }
-        return Res.ok(dashboardTradeService.providerDist(days));
+        return Res.ok(adminDashboardTradeService.providerDist(days));
     }
 
     @Operation(summary = "支付渠道成功率(指定天数或自定义区间)")
@@ -106,9 +106,9 @@ public class DashboardTradeController {
             @RequestParam(required = false) String start,
             @RequestParam(required = false) String end) {
         if (start != null && end != null) {
-            return Res.ok(dashboardTradeService.providerSuccess(start, end));
+            return Res.ok(adminDashboardTradeService.providerSuccess(start, end));
         }
-        return Res.ok(dashboardTradeService.providerSuccess(days));
+        return Res.ok(adminDashboardTradeService.providerSuccess(days));
     }
 
     // ===== 时段 =====
@@ -120,9 +120,9 @@ public class DashboardTradeController {
             @RequestParam(required = false) String start,
             @RequestParam(required = false) String end) {
         if (start != null && end != null) {
-            return Res.ok(dashboardTradeService.hourlyDist(start, end));
+            return Res.ok(adminDashboardTradeService.hourlyDist(start, end));
         }
-        return Res.ok(dashboardTradeService.hourlyDist(days));
+        return Res.ok(adminDashboardTradeService.hourlyDist(days));
     }
 
     // ===== 金额区间 =====
@@ -134,9 +134,9 @@ public class DashboardTradeController {
             @RequestParam(required = false) String start,
             @RequestParam(required = false) String end) {
         if (start != null && end != null) {
-            return Res.ok(dashboardTradeService.amountRange(start, end));
+            return Res.ok(adminDashboardTradeService.amountRange(start, end));
         }
-        return Res.ok(dashboardTradeService.amountRange(days));
+        return Res.ok(adminDashboardTradeService.amountRange(days));
     }
 
     // ===== 商户排名 =====
@@ -149,8 +149,8 @@ public class DashboardTradeController {
             @RequestParam(required = false) String start,
             @RequestParam(required = false) String end) {
         if (start != null && end != null) {
-            return Res.ok(dashboardTradeService.merchantRank(start, end, limit));
+            return Res.ok(adminDashboardTradeService.merchantRank(start, end, limit));
         }
-        return Res.ok(dashboardTradeService.merchantRank(days, limit));
+        return Res.ok(adminDashboardTradeService.merchantRank(days, limit));
     }
 }

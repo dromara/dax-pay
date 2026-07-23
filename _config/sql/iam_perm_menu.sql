@@ -186,3 +186,8 @@ INSERT INTO "public"."iam_perm_menu" VALUES (606, 607, 'trade:callback-record', 
 -- Primary Key structure for table iam_perm_menu
 -- ----------------------------
 ALTER TABLE "public"."iam_perm_menu" ADD CONSTRAINT "iam_perm_menu_pkey" PRIMARY KEY ("id");
+
+-- 商户端仪表板（client_code=merchant）
+INSERT INTO "public"."iam_perm_menu" VALUES (91001, NULL, NULL, 'merchant', 'Dashboard', 'menu.dashboard', 'lucide:layout-dashboard', 'f', 'f', NULL, '/dashboard', '/workspace', -1, 'f', 'f', 'f', 0, NULL, 0, 'f', 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO "public"."iam_perm_menu" VALUES (91002, 91001, 'dashboard:workspace', 'merchant', 'Workspace', 'menu.dashboard.workspace', 'lucide:panels-top-left', 'f', 'f', '/dashboard/workspace/index', '/workspace', NULL, 1, 'f', 'f', 't', 0, 1, 1, 'f', 'menu', NULL, NULL, NULL, NULL, '', '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO "public"."iam_perm_menu" VALUES (91003, 91001, 'dashboard:analytics', 'merchant', 'Analytics', 'menu.dashboard.analytics', 'lucide:area-chart', 'f', 'f', '/dashboard/analytics/index', '/analytics', NULL, 2, 'f', 'f', 'f', 0, 1, 1, 'f', 'menu', NULL, NULL, NULL, NULL, '', '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);

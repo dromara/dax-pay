@@ -14,8 +14,8 @@ import lombok.experimental.Accessors;
 /// - **上期字段**(`prev*`): 由与本区间等长的前一区间聚合, 前端用
 ///   `(curr - prev) / prev * 100` 计算环比百分比; 上期无数据(prevCount=0)时前端不应展示环比
 ///
-/// 由 [cn.daxpay.open.payment.trade.report.dao.TradeReportMapper] 的成交/退款两个查询分别填充
-/// 各自一半字段, Service 合并.
+/// 由运营/商户端各自 TradeReportMapper 的成交/退款/总笔数查询分别填充
+/// 各自一半字段, 再由对应 DashboardTradeService 合并.
 @Data
 @Accessors(chain = true)
 @Schema(title = "交易概览统计")

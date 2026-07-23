@@ -126,3 +126,24 @@ UPDATE "public"."iam_perm_menu"
 SET "component" = '/system/config/mobile-app/detail/MobileAppDetail',
     "last_modified_time" = CURRENT_TIMESTAMP
 WHERE "id" = 40505;
+
+-- ========== 商户端仪表板菜单（client_code=merchant） ==========
+INSERT INTO "public"."iam_perm_menu" VALUES (91001, NULL, NULL, 'merchant', 'Dashboard', 'menu.dashboard', 'lucide:layout-dashboard', 'f', 'f', NULL, '/dashboard', '/workspace', -1, 'f', 'f', 'f', 0, NULL, 0, 'f', 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+ON CONFLICT ("id") DO NOTHING;
+INSERT INTO "public"."iam_perm_menu" VALUES (91002, 91001, 'dashboard:workspace', 'merchant', 'Workspace', 'menu.dashboard.workspace', 'lucide:panels-top-left', 'f', 'f', '/dashboard/workspace/index', '/workspace', NULL, 1, 'f', 'f', 't', 0, 1, 1, 'f', 'menu', NULL, NULL, NULL, NULL, '', '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+ON CONFLICT ("id") DO NOTHING;
+INSERT INTO "public"."iam_perm_menu" VALUES (91003, 91001, 'dashboard:analytics', 'merchant', 'Analytics', 'menu.dashboard.analytics', 'lucide:area-chart', 'f', 'f', '/dashboard/analytics/index', '/analytics', NULL, 2, 'f', 'f', 'f', 0, 1, 1, 'f', 'menu', NULL, NULL, NULL, NULL, '', '', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+ON CONFLICT ("id") DO NOTHING;
+
+-- 挂到所有 client_code=merchant 的角色（若尚无商户角色则无行；新建商户管理员角色时需勾选仪表板）
+INSERT INTO "public"."iam_role_menu" ("id", "role_id", "menu_id")
+SELECT ((EXTRACT(EPOCH FROM clock_timestamp()) * 1000)::bigint * 1000 + (row_number() OVER ())::bigint),
+       r."id",
+       m.menu_id
+FROM "public"."iam_role" r
+CROSS JOIN (VALUES (91001::bigint), (91002::bigint), (91003::bigint)) AS m(menu_id)
+WHERE r."client_code" = 'merchant'
+  AND NOT EXISTS (
+    SELECT 1 FROM "public"."iam_role_menu" rm
+    WHERE rm."role_id" = r."id" AND rm."menu_id" = m.menu_id
+  );
