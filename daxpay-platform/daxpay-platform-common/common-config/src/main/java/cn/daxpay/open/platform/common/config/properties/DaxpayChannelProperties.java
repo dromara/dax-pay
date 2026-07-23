@@ -6,8 +6,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /// # 通道适配子应用配置
 ///
-/// 统一管理各通道适配子应用(dax-pay-channel-one/two/...)的连接地址。
-/// 各通道模块通过注入本类获取对应子应用的 baseUrl。
+/// 统一管理各通道适配子应用(dax-pay-channel-one/two/...)的连接地址与传输加密密钥。
+/// 各通道模块通过注入本类获取对应子应用的 baseUrl 与 transportEncrypt。
 @Data
 @Accessors(chain = true)
 @ConfigurationProperties(prefix = "daxpay.channel")
@@ -29,5 +29,19 @@ public class DaxpayChannelProperties {
 
         /// 基础地址
         private String baseUrl = "http://127.0.0.1:20100";
+
+        /// 传输加密（强制常开，key 必填）
+        private TransportEncrypt transportEncrypt = new TransportEncrypt();
+    }
+
+    /// # 通道 HTTP 报文传输加密配置
+    ///
+    /// 与 `daxpay.platform.config.encrypt`（DB/缓存存储加密）密钥隔离。
+    @Data
+    @Accessors(chain = true)
+    public static class TransportEncrypt {
+
+        /// AES-256 密钥，恰好 32 个 UTF-8 字符；创建通道 Client 时强校验
+        private String key;
     }
 }

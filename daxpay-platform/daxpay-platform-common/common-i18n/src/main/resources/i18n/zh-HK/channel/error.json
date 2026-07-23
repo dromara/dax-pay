@@ -8,5 +8,15 @@
   "callbackVerifyFailed": "回調驗籤失敗",
   "cacheConcurrentConflict": "併發衝突",
   "systemError": "系統內部錯誤",
-  "validateParams": "參數校驗失敗"
+  "validateParams": "參數校驗失敗",
+  "transportEncrypt": {
+    "appConfigMissing": "通道子應用配置不能為空: {0}",
+    "configMissing": "缺少通道傳輸加密配置: {0}",
+    "keyInvalid": "通道傳輸加密密鑰長度須為 {0} 個字元",
+    "encryptFailed": "通道傳輸加密失敗",
+    "ciphertextInvalid": "通道傳輸密文長度非法",
+    "decryptFailed": "通道傳輸解密失敗",
+    "responseHeaderMissing": "通道子應用回應未攜帶傳輸加密頭 {0}",
+    "requestHeaderMissing": "通道傳輸加密：請求未攜帶加密頭"
+  }
 }

@@ -22,4 +22,7 @@ public interface WebHeaderCode {
     /// 国际化语言
     String ACCEPT_LANGUAGE = "accept-language";
 
+    /// 通道传输报文已 AES-GCM 加密标记（主应用 ↔ 通道子应用）
+    String X_DAX_PAYLOAD_ENCRYPTED = "X-Dax-Payload-Encrypted";
+
 }

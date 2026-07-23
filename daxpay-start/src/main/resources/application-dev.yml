@@ -171,12 +171,19 @@ daxpay:
   # 拆分目的: 通道 SDK 依赖隔离(避免冲突) + 独立升级 + 弹性伸缩
   # 子应用编号(one/two/three)固定且不可改名, 与路由策略中的通道分配一一对应。
   channel:
-    # 子应用1: 支付宝 + 微信支付(已启用, 本机启动的 dax-pay-channel-one 服务)
+    # 子应用1: 支付宝/微信支付/银联商务/(已启用, 本机启动的 dax-pay-channel-one 服务)
     one:
       base-url: http://127.0.0.1:20100
-    # 子应用2: 其他支付通道(channel-two 已搭建架子, 通道待对接)
+      # 通道传输 AES 密钥（强制常开，恰好 32 字符；仅本地占位，勿用于生产）
+      transport-encrypt:
+        key: z0Vd8jDKB80pA6OOptGLO+qDVvWboEko
+    # 子应用2: 其他支付通道
     two:
       base-url: http://127.0.0.1:20200
-    # 子应用3: 抖音 + 其他通道(未来扩展, 暂未启用)
+      transport-encrypt:
+        key: z0Vd8jDKB80pA6OOptGLO+qDVvWboEko
+    # 子应用3: 其他通道(未来扩展, 暂未启用)
     # three:
     #   base-url: http://127.0.0.1:20300
+    #   transport-encrypt:
+    #     key: ${CHANNEL_THREE_TRANSPORT_KEY}

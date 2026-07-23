@@ -8,5 +8,15 @@
   "callbackVerifyFailed": "Pengesahan tandatangan panggilan balik gagal",
   "cacheConcurrentConflict": "Konflik serentak",
   "systemError": "Ralat sistem dalaman",
-  "validateParams": "Pengesahan parameter gagal"
+  "validateParams": "Pengesahan parameter gagal",
+  "transportEncrypt": {
+    "appConfigMissing": "Konfigurasi aplikasi saluran kosong: {0}",
+    "configMissing": "Konfigurasi penyulitan pengangkutan saluran tiada: {0}",
+    "keyInvalid": "Kunci penyulitan pengangkutan saluran mestilah {0} aksara",
+    "encryptFailed": "Penyulitan pengangkutan saluran gagal",
+    "ciphertextInvalid": "Panjang ciphertext pengangkutan saluran tidak sah",
+    "decryptFailed": "Penyahsulitan pengangkutan saluran gagal",
+    "responseHeaderMissing": "Respons saluran tiada pengepala penyulitan pengangkutan {0}",
+    "requestHeaderMissing": "Penyulitan pengangkutan saluran: permintaan tiada pengepala penyulitan"
+  }
 }

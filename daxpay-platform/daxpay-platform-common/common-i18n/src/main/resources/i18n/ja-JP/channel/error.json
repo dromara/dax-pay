@@ -8,5 +8,15 @@
   "callbackVerifyFailed": "コールバック署名の検証に失敗しました",
   "cacheConcurrentConflict": "同時競合",
   "systemError": "内部システムエラー",
-  "validateParams": "パラメータの検証に失敗しました"
+  "validateParams": "パラメータの検証に失敗しました",
+  "transportEncrypt": {
+    "appConfigMissing": "チャネルサブアプリ設定が空です: {0}",
+    "configMissing": "チャネル転送暗号化設定がありません: {0}",
+    "keyInvalid": "チャネル転送暗号化キーは {0} 文字である必要があります",
+    "encryptFailed": "チャネル転送の暗号化に失敗しました",
+    "ciphertextInvalid": "チャネル転送の暗号文の長さが不正です",
+    "decryptFailed": "チャネル転送の復号に失敗しました",
+    "responseHeaderMissing": "チャネル応答に転送暗号化ヘッダー {0} がありません",
+    "requestHeaderMissing": "チャネル転送暗号化: リクエストに暗号化ヘッダーがありません"
+  }
 }

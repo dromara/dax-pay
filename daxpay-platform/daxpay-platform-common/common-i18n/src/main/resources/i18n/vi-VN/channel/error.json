@@ -8,5 +8,15 @@
   "callbackVerifyFailed": "Xác minh chữ ký gọi lại không thành công",
   "cacheConcurrentConflict": "Xung đột đồng thời",
   "systemError": "Lỗi hệ thống nội bộ",
-  "validateParams": "Xác thực tham số không thành công"
+  "validateParams": "Xác thực tham số không thành công",
+  "transportEncrypt": {
+    "appConfigMissing": "Cấu hình ứng dụng kênh trống: {0}",
+    "configMissing": "Thiếu cấu hình mã hóa truyền tải kênh: {0}",
+    "keyInvalid": "Khóa mã hóa truyền tải kênh phải có {0} ký tự",
+    "encryptFailed": "Mã hóa truyền tải kênh thất bại",
+    "ciphertextInvalid": "Độ dài bản mã truyền tải kênh không hợp lệ",
+    "decryptFailed": "Giải mã truyền tải kênh thất bại",
+    "responseHeaderMissing": "Phản hồi kênh thiếu header mã hóa truyền tải {0}",
+    "requestHeaderMissing": "Mã hóa truyền tải kênh: yêu cầu thiếu header mã hóa"
+  }
 }

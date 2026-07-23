@@ -8,5 +8,15 @@
   "callbackVerifyFailed": "Verifikasi tanda tangan panggilan balik gagal",
   "cacheConcurrentConflict": "Konflik yang terjadi bersamaan",
   "systemError": "Kesalahan sistem internal",
-  "validateParams": "Validasi parameter gagal"
+  "validateParams": "Validasi parameter gagal",
+  "transportEncrypt": {
+    "appConfigMissing": "Konfigurasi aplikasi saluran kosong: {0}",
+    "configMissing": "Konfigurasi enkripsi transport saluran hilang: {0}",
+    "keyInvalid": "Kunci enkripsi transport saluran harus {0} karakter",
+    "encryptFailed": "Enkripsi transport saluran gagal",
+    "ciphertextInvalid": "Panjang ciphertext transport saluran tidak valid",
+    "decryptFailed": "Dekripsi transport saluran gagal",
+    "responseHeaderMissing": "Respons saluran tidak memiliki header enkripsi transport {0}",
+    "requestHeaderMissing": "Enkripsi transport saluran: permintaan tanpa header enkripsi"
+  }
 }

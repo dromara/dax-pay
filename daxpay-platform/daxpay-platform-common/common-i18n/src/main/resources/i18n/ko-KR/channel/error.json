@@ -8,5 +8,15 @@
   "callbackVerifyFailed": "콜백 서명 확인에 실패했습니다.",
   "cacheConcurrentConflict": "동시 충돌",
   "systemError": "내부 시스템 오류",
-  "validateParams": "매개변수 검증 실패"
+  "validateParams": "매개변수 검증 실패",
+  "transportEncrypt": {
+    "appConfigMissing": "채널 서브앱 설정이 비어 있습니다: {0}",
+    "configMissing": "채널 전송 암호화 설정이 없습니다: {0}",
+    "keyInvalid": "채널 전송 암호화 키 길이는 {0}자여야 합니다",
+    "encryptFailed": "채널 전송 암호화에 실패했습니다",
+    "ciphertextInvalid": "채널 전송 암호문 길이가 잘못되었습니다",
+    "decryptFailed": "채널 전송 복호화에 실패했습니다",
+    "responseHeaderMissing": "채널 응답에 전송 암호화 헤더 {0}가 없습니다",
+    "requestHeaderMissing": "채널 전송 암호화: 요청에 암호화 헤더가 없습니다"
+  }
 }

@@ -8,5 +8,15 @@
   "callbackVerifyFailed": "Callback signature verification failed",
   "cacheConcurrentConflict": "Concurrent conflict",
   "systemError": "Internal system error",
-  "validateParams": "Parameter validation failed"
+  "validateParams": "Parameter validation failed",
+  "transportEncrypt": {
+    "appConfigMissing": "Channel app config is missing: {0}",
+    "configMissing": "Channel transport encrypt config is missing: {0}",
+    "keyInvalid": "Channel transport encrypt key must be {0} characters",
+    "encryptFailed": "Channel transport encrypt failed",
+    "ciphertextInvalid": "Channel transport ciphertext length is invalid",
+    "decryptFailed": "Channel transport decrypt failed",
+    "responseHeaderMissing": "Channel response missing transport encrypt header {0}",
+    "requestHeaderMissing": "Channel transport encrypt: request missing encrypt header"
+  }
 }
