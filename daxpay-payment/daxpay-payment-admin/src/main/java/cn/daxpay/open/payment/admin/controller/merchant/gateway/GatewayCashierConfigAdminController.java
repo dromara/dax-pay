@@ -24,7 +24,9 @@ import java.util.List;
 @Validated
 @Tag(name = "网关收银台配置")
 @RestController
-@RequestMapping("/admin/gateway/cashier-config")
+/// 双路径: 运营端 /admin/... 与商户端 /mch/... 共用同一 Service；
+/// 客户端隔离由网关 ClientCode + @PermCode 菜单权限保证；商户端 TenantLine 按 mchNo 行级隔离。
+@RequestMapping({"/admin/gateway/cashier-config", "/mch/gateway/cashier-config"})
 @RequiredArgsConstructor
 public class GatewayCashierConfigAdminController {
 

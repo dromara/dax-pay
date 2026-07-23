@@ -20,7 +20,9 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @Tag(name = "商户应用事件通知配置管理")
 @RestController
-@RequestMapping("/admin/merchant/app-notify-config")
+/// 双路径: 运营端 /admin/... 与商户端 /mch/... 共用同一 Service；
+/// 客户端隔离由网关 ClientCode + @PermCode 菜单权限保证；商户端 TenantLine 按 mchNo 行级隔离。
+@RequestMapping({"/admin/merchant/app-notify-config", "/mch/merchant/app-notify-config"})
 @RequiredArgsConstructor
 public class MchAppNotifyConfigAdminController {
 
