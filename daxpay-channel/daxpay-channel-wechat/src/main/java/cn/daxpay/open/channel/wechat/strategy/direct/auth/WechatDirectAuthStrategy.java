@@ -1,16 +1,15 @@
 package cn.daxpay.open.channel.wechat.strategy.direct.auth;
 
-import cn.daxpay.open.channel.wechat.dao.direct.WechatDirectAppManager;
-import cn.daxpay.open.channel.wechat.entity.direct.WechatDirectApp;
-import cn.daxpay.open.channel.wechat.entity.direct.WechatDirectAppAuthConfig;
-import cn.daxpay.open.channel.wechat.service.direct.WechatDirectAppAuthConfigService;
-import cn.daxpay.open.channel.wechat.service.direct.WechatDirectAppCapabilityService;
 import cn.daxpay.open.payment.auth.AuthSession;
+import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
+import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
 import cn.daxpay.open.payment.strategy.auth.AbsChannelAuthStrategy;
 import cn.daxpay.open.payment.unipay.param.assist.AuthCodeParam;
 import cn.daxpay.open.payment.unipay.param.assist.GenerateAuthUrlParam;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
 import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
+import cn.daxpay.open.payment.wx.facade.WxAppFacade;
+import cn.daxpay.open.payment.wx.facade.WxAppView;
 import cn.daxpay.open.platform.capability.wechat.auth.result.WechatAuthResult;
 import cn.daxpay.open.platform.capability.wechat.auth.result.WechatAuthUrlResult;
 import cn.daxpay.open.platform.capability.wechat.auth.service.WechatMpAuthService;
@@ -26,21 +25,19 @@ import org.springframework.stereotype.Service;
 
 /// # 微信直连认证策略
 ///
-/// 微信直连模式(WECHAT_PAY)下获取用户标识(openId)。复用支付的商户配置体系定位直连应用
-/// (WechatDirectApp + WechatDirectAppAuthConfig), 调用 capability-wechat 完成 OAuth。
+/// 微信直连模式(WECHAT_PAY)下获取用户标识(openId)。通过 [WxAppFacade#resolve]
+/// 从主数据解析 wxAppId + appSecret, 调用 capability-wechat 完成 OAuth。
 ///
-/// ## appId 解析优先级
-/// 1. channelAppId 显式指定 → 校验该 appId 在系统预配过(按 channelMchNo + wxAppId 查), 命中即用
-/// 2. 否则按 capability 自动解析(显式能力配置 > appType 推导 > 首个兜底)
+/// ## appId 解析
+/// 委托 facade: channelAppId 显式指定 → 通道能力绑 → 平台默认(直连期望商户档)。
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class WechatDirectAuthStrategy extends AbsChannelAuthStrategy {
 
     private final WechatMpAuthService wechatMpAuthService;
-    private final WechatDirectAppCapabilityService wechatDirectAppCapabilityService;
-    private final WechatDirectAppAuthConfigService wechatDirectAppAuthConfigService;
-    private final WechatDirectAppManager wechatDirectAppManager;
+    private final WxAppFacade wxAppFacade;
+    private final ChannelMerchantManager channelMerchantManager;
     private final PlatformUrlConfigService platformUrlConfigService;
 
     @Override
@@ -54,11 +51,11 @@ public class WechatDirectAuthStrategy extends AbsChannelAuthStrategy {
     /// 会话标识 authToken 通过 OAuth state 参数透传。
     @Override
     public AuthUrlResult generateAuthUrl(GenerateAuthUrlParam param, String authToken) {
-        WechatDirectApp app = resolveApp(param.getChannelMchNo(), param.getCapability(), param.getChannelAppId());
-        WechatDirectAppAuthConfig authConfig = wechatDirectAppAuthConfigService.findByWechatDirectAppIdForAuth(app.getId());
+        WxAppView app = resolveApp(param.getMchNo(), param.getChannelMchNo(),
+                param.getCapability(), param.getChannelAppId());
         String redirectUri = buildRedirectUri();
         WechatAuthUrlResult result = wechatMpAuthService.generateAuthUrl(
-                redirectUri, app.getWxAppId(), authConfig.getAppSecret(), authToken);
+                redirectUri, app.wxAppId(), app.appSecret(), authToken);
         return new AuthUrlResult().setAuthUrl(result.getAuthUrl());
     }
 
@@ -73,10 +70,9 @@ public class WechatDirectAuthStrategy extends AbsChannelAuthStrategy {
                 ? session.getCapability() : param.getCapability();
         String channelAppId = session != null && StrUtil.isNotBlank(session.getChannelAppId())
                 ? session.getChannelAppId() : param.getChannelAppId();
-        WechatDirectApp app = resolveApp(channelMchNo, capability, channelAppId);
-        WechatDirectAppAuthConfig authConfig = wechatDirectAppAuthConfigService.findByWechatDirectAppIdForAuth(app.getId());
+        WxAppView app = resolveApp(param.getMchNo(), channelMchNo, capability, channelAppId);
         WechatAuthResult data = wechatMpAuthService.getTokenAndOpenId(
-                param.getAuthCode(), app.getWxAppId(), authConfig.getAppSecret());
+                param.getAuthCode(), app.wxAppId(), app.appSecret());
         if (StrUtil.isBlank(data.getOpenId())) {
             // 微信: 获取openId失败
             throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR, "error.channel.wechat.authFailed", "openId is blank");
@@ -86,20 +82,23 @@ public class WechatDirectAuthStrategy extends AbsChannelAuthStrategy {
                 .setAccessToken(data.getAccessToken());
     }
 
-    /// 解析认证应用: channelAppId 显式指定(校验预配) > capability 自动解析
-    ///
-    /// 认证场景处于网关端(无登录态), 全部走 NotTenant 查询路径避免被租户拦截器误加 mch_no='' 条件。
-    private WechatDirectApp resolveApp(String channelMchNo, String capability, String channelAppId) {
-        if (StrUtil.isNotBlank(channelAppId)) {
-            // channelAppId 必须在系统预配过(硬约束, 防任意 appId 滥用)
-            return wechatDirectAppManager.findByChannelMchNoAndWxAppIdNotTenant(channelMchNo, channelAppId)
-                    .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                            "error.channel.wechat.channelAppIdNotFound", channelAppId));
+    /// 解析认证应用: 主数据 facade.resolve(wxAppId + 明文 appSecret)
+    private WxAppView resolveApp(String mchNo, String channelMchNo, String capability, String channelAppId) {
+        String resolvedMchNo = resolveMchNo(mchNo, channelMchNo);
+        return wxAppFacade.resolve(resolvedMchNo, channelMchNo, capability, channelAppId,
+                ProductEnum.WECHAT_PAY.getCode());
+    }
+
+    /// 解析商户号: param 优先, 否则按通道商户号反查
+    private String resolveMchNo(String mchNo, String channelMchNo) {
+        if (StrUtil.isNotBlank(mchNo)) {
+            return mchNo;
         }
-        return wechatDirectAppCapabilityService.resolveAppNotTenant(channelMchNo, capability)
-                // 微信: 直连商户应用不存在
+        return channelMerchantManager.findByChannelMchNo(channelMchNo)
+                .map(ChannelMerchant::getMchNo)
+                // 微信: 通道商户不存在
                 .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                        "error.channel.wechat.mchAppNotFound"));
+                        "pay.error.assist.channelMchNotFound", channelMchNo));
     }
 
     /// 拼接认证回调地址: {paymentGatewayBaseUrl}/auth/wechat

@@ -43,5 +43,6 @@
   "subMerchantNoRequired": "请先配置子商户号(2088)后再发起代运营授权",
   "authCodeInvalid": "支付宝授权码无效或已过期",
   "authTokenExchangeFailed": "换取应用授权令牌失败: {0}",
-  "paymentGatewayUrlRequired": "平台支付网关地址(paymentGatewayBaseUrl)未配置，无法生成授权回调地址"
+  "paymentGatewayUrlRequired": "平台支付网关地址(paymentGatewayBaseUrl)未配置，无法生成授权回调地址",
+  "appTypeCapabilityMismatch": "支付宝应用类型与支付能力不匹配"
 }

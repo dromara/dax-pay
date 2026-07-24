@@ -23,7 +23,7 @@ import java.util.Objects;
 /// ## 分发优先级(auth)
 /// 1. session.source = platform_alipay / platform_mp / platform_douyin → 平台服务对应方法
 /// 2. authType=alipay 且无 session → 平台支付宝(小程序等直连兜底)
-/// 3. 其余 → 通道产品策略
+/// 3. 其余 → 支付产品策略
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -63,7 +63,7 @@ public class ChannelAuthService {
         return result;
     }
 
-    /// 按会话来源把授权码回调分到平台或通道产品处理
+    /// 按会话来源把授权码回调分到平台或支付产品处理
     private AuthResult doAuth(AuthCodeParam param, AuthSession session) {
         if (isPlatformAlipay(session)) {
             return platformAuthService.authAlipay(param, session);

@@ -43,5 +43,6 @@
   "subMerchantNoRequired": "에이전트 승인 전에 하위 판매자 ID(2088)를 구성하세요.",
   "authCodeInvalid": "Alipay 인증 코드가 유효하지 않거나 만료되었습니다.",
   "authTokenExchangeFailed": "앱 인증 토큰 교환 실패: {0}",
-  "paymentGatewayUrlRequired": "결제 대행사 기본 URL이 구성되지 않았습니다. 인증 리디렉션 URI를 작성할 수 없습니다."
+  "paymentGatewayUrlRequired": "결제 대행사 기본 URL이 구성되지 않았습니다. 인증 리디렉션 URI를 작성할 수 없습니다.",
+  "appTypeCapabilityMismatch": "알리페이 앱 유형과 결제 능력이 일치하지 않습니다"
 }

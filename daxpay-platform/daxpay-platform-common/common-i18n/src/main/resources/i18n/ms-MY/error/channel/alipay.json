@@ -43,5 +43,6 @@
   "subMerchantNoRequired": "Sila konfigurasikan ID sub-pedagang (2088) sebelum kebenaran ejen",
   "authCodeInvalid": "Kod kebenaran Alipay tidak sah atau tamat tempoh",
   "authTokenExchangeFailed": "Gagal menukar token pengesahan apl: {0}",
-  "paymentGatewayUrlRequired": "URL asas gerbang pembayaran tidak dikonfigurasikan; tidak boleh membina URI ubah hala auth"
+  "paymentGatewayUrlRequired": "URL asas gerbang pembayaran tidak dikonfigurasikan; tidak boleh membina URI ubah hala auth",
+  "appTypeCapabilityMismatch": "Jenis aplikasi Alipay tidak sepadan dengan keupayaan pembayaran"
 }

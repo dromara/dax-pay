@@ -16,5 +16,6 @@
   "channelAppIdNotFound": "指定的抖音應用AppId[{0}]未在系統中配置",
   "webAppNotFound": "通道商戶未配置抖音網站應用, 無法完成 H5 授權/驗簽",
   "appAuthSecretMissing": "抖音直連應用授權密鑰未配置, 請先在通道商戶應用中配置 appSecret",
-  "jsapiContextRequired": "抖音 JSAPI 驗簽須傳入 orderNo、code 或 channelMchNo 之一"
+  "jsapiContextRequired": "抖音 JSAPI 驗簽須傳入 orderNo、code 或 channelMchNo 之一",
+  "appTypeCapabilityMismatch": "抖音應用類型與支付能力不匹配"
 }

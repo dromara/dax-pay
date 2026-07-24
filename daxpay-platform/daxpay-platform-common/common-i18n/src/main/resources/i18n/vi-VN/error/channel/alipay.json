@@ -43,5 +43,6 @@
   "subMerchantNoRequired": "Vui lòng định cấu hình ID người bán phụ (2088) trước khi ủy quyền cho đại lý",
   "authCodeInvalid": "Mã ủy quyền Alipay không hợp lệ hoặc đã hết hạn",
   "authTokenExchangeFailed": "Không thể trao đổi mã thông báo xác thực ứng dụng: {0}",
-  "paymentGatewayUrlRequired": "URL cơ sở của cổng thanh toán không được định cấu hình; không thể xây dựng URI chuyển hướng xác thực"
+  "paymentGatewayUrlRequired": "URL cơ sở của cổng thanh toán không được định cấu hình; không thể xây dựng URI chuyển hướng xác thực",
+  "appTypeCapabilityMismatch": "Loại ứng dụng Alipay không tương thích với khả năng thanh toán"
 }

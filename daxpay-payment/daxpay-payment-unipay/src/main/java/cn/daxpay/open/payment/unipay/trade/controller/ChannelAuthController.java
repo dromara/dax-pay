@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 /// 统一支付网关对外的通道 OAuth 入口(取 openId/userId, **非登录**)。
 /// 业务分发委托 [ChannelAuthService]:
 /// - **生成授权链接**: authType=ALIPAY 走平台级支付宝 OAuth; 其余按支付产品走通道策略
-/// - **授权码回调**: 按 session.source 走平台分支, 否则走通道产品策略
+/// - **授权码回调**: 按 session.source 走平台分支, 否则走支付产品策略
 @IgnoreAuth
 @Tag(name = "通道认证服务")
 @RestController

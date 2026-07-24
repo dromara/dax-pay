@@ -197,6 +197,21 @@ public interface PermCodes {
             }
         }
 
+        /// 微信开放应用主数据 menuCode=payment:wx:*
+        interface Wx {
+            /// 平台微信应用 menuCode=payment:wx:platform-app
+            interface PlatformApp {
+                /// 菜单编码
+                String MENU = "payment:wx:platform-app";
+            }
+
+            /// 商户微信应用 menuCode=payment:wx:mch-app
+            interface MchApp {
+                /// 菜单编码
+                String MENU = "payment:wx:mch-app";
+            }
+        }
+
         /// 支付风控 menuCode=payment:risk:*
         interface Risk {
             /// 黑名单管理 menuCode=payment:risk:blacklist

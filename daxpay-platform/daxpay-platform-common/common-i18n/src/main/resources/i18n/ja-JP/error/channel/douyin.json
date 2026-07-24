@@ -16,5 +16,6 @@
   "channelAppIdNotFound": "指定の Douyin AppId [{0}] はシステムに未設定です",
   "webAppNotFound": "チャネル販売者に Douyin Web アプリが未設定のため、H5 認証/署名できません",
   "appAuthSecretMissing": "Douyin 直連アプリの認証シークレット未設定。チャネル販売者アプリで appSecret を設定してください",
-  "jsapiContextRequired": "Douyin JSAPI 署名には orderNo / code / channelMchNo のいずれかが必要です"
+  "jsapiContextRequired": "Douyin JSAPI 署名には orderNo / code / channelMchNo のいずれかが必要です",
+  "appTypeCapabilityMismatch": "抖音アプリ種別と支払い能力が一致しません"
 }

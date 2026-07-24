@@ -44,4 +44,13 @@ public final class DouyinAppTypeCode {
         }
         return CAPABILITY_APP_TYPE_MAP.get(capabilityCode);
     }
+
+    /// 校验应用类型与支付能力是否兼容；未知能力不做强制约束
+    public static boolean isCompatible(String appType, String capability) {
+        String expected = resolveAppType(capability);
+        if (expected == null) {
+            return true;
+        }
+        return expected.equals(appType);
+    }
 }

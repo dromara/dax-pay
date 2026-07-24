@@ -1,0 +1,12 @@
+{
+  "appNotFound": "플랫폼 위챗 앱이 존재하지 않습니다",
+  "mchAppNotFound": "가맹점 위챗 앱이 존재하지 않습니다",
+  "appIdDuplicate": "위챗 AppId가 이미 존재합니다",
+  "appTypeInvalid": "위챗 앱 유형이 유효하지 않습니다",
+  "appInUse": "위챗 앱이 능력 바인딩에서 참조 중이므로 삭제할 수 없습니다",
+  "appTypeCapabilityMismatch": "위챗 앱 유형과 결제 능력이 일치하지 않습니다",
+  "scopeNotExist": "위챗 앱 범위가 없거나 참조가 유효하지 않습니다",
+  "channelAppIdNotFound": "지정한 위챗 AppId[{0}]가 시스템에 구성되어 있지 않습니다",
+  "appNotBound": "사용 가능한 위챗 앱이 바인딩되지 않았습니다",
+  "channelMerchantMismatch": "채널 가맹점이 없거나 가맹점 번호와 일치하지 않습니다"
+}

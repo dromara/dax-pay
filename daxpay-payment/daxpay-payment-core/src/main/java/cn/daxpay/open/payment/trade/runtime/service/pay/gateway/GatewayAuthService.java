@@ -33,7 +33,7 @@ import java.util.Set;
 /// 公开端(无商户签名)根据网关订单生成 OAuth 链接, 用于收银台/聚合页取 openId。
 /// 统一委托 [ChannelAuthService]:
 /// - **支付宝**: 服务内走平台级 OAuth(本服务跳过通道路由)
-/// - **微信/抖音**: 先解析支付路由再交 ChannelAuthService → 通道产品策略
+/// - **微信/抖音**: 先解析支付路由再交 ChannelAuthService → 支付产品策略
 ///
 /// 安全约束:
 /// - 订单必须存在且可支付([GatewayPayAssistService#getOrderAndCheck])

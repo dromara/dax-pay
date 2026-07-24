@@ -1,0 +1,12 @@
+{
+  "appNotFound": "プラットフォームの微信アプリが存在しません",
+  "mchAppNotFound": "加盟店の微信アプリが存在しません",
+  "appIdDuplicate": "微信 AppId は既に存在します",
+  "appTypeInvalid": "微信アプリ種別が無効です",
+  "appInUse": "微信アプリは能力バインドで参照中のため削除できません",
+  "appTypeCapabilityMismatch": "微信アプリ種別と支払い能力が一致しません",
+  "scopeNotExist": "微信アプリのスコープが存在しないか参照が無効です",
+  "channelAppIdNotFound": "指定された微信 AppId[{0}]はシステムに設定されていません",
+  "appNotBound": "利用可能な微信アプリがバインドされていません",
+  "channelMerchantMismatch": "チャネル加盟店が存在しないか加盟店番号と一致しません"
+}

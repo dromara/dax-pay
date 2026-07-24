@@ -19,7 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-/// # 通道产品认证服务(商户级)
+/// # 支付产品认证服务(商户级)
 ///
 /// 负责按支付产品路由认证策略(继承 [AbsChannelAuthStrategy]), 依赖商户上下文定位通道应用,
 /// 获取支付所需的用户标识(微信 openId / 支付宝 userId)。H5 授权重定向场景生成 authToken 保存会话。

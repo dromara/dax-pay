@@ -84,10 +84,17 @@ public class AlipayDirectAppCapabilityService {
                         "error.channel.alipay.capabilityDuplicate", item.getCapability());
             }
             // 应用归属校验
-            if (!appMap.containsKey(item.getAlipayDirectAppId())) {
+            AlipayDirectApp app = appMap.get(item.getAlipayDirectAppId());
+            if (app == null) {
                 // 支付宝: 直连商户应用不存在
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "error.channel.alipay.mchAppNotFound");
+            }
+            // 应用类型与支付能力强校验
+            if (!AlipayDirectAppTypeCode.isCompatible(app.getAppType(), item.getCapability())) {
+                // 支付宝: 应用类型与支付能力不匹配
+                throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                        "error.channel.alipay.appTypeCapabilityMismatch");
             }
             var entity = new AlipayDirectAppCapability()
                     .setChannelMchNo(channelMchNo)

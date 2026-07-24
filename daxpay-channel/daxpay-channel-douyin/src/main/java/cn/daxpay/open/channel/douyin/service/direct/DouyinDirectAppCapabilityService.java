@@ -83,10 +83,17 @@ public class DouyinDirectAppCapabilityService {
                         "error.channel.douyin.capabilityDuplicate", item.getCapability());
             }
             // 应用归属校验
-            if (!appMap.containsKey(item.getDouyinDirectAppId())) {
+            DouyinDirectApp app = appMap.get(item.getDouyinDirectAppId());
+            if (app == null) {
                 // 抖音: 直连商户应用不存在
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "error.channel.douyin.mchAppNotFound");
+            }
+            // 应用类型与支付能力强校验
+            if (!DouyinAppTypeCode.isCompatible(app.getAppType(), item.getCapability())) {
+                // 抖音: 应用类型与支付能力不匹配
+                throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                        "error.channel.douyin.appTypeCapabilityMismatch");
             }
             var entity = new DouyinDirectAppCapability()
                     .setChannelMchNo(channelMchNo)

@@ -43,5 +43,6 @@
   "subMerchantNoRequired": "請先配置子商戶號(2088)後再發起代運營授權",
   "authCodeInvalid": "支付寶授權碼無效或已過期",
   "authTokenExchangeFailed": "換取應用授權令牌失敗: {0}",
-  "paymentGatewayUrlRequired": "平臺支付閘道器地址(paymentGatewayBaseUrl)未配置，無法生成授權回撥地址"
+  "paymentGatewayUrlRequired": "平臺支付閘道器地址(paymentGatewayBaseUrl)未配置，無法生成授權回撥地址",
+  "appTypeCapabilityMismatch": "支付寶應用類型與支付能力不匹配"
 }

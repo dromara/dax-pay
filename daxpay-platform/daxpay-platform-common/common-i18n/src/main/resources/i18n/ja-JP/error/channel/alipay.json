@@ -43,5 +43,6 @@
   "subMerchantNoRequired": "エージェント認証の前にサブマーチャント ID (2088) を設定してください",
   "authCodeInvalid": "Alipay 認証コードが無効か期限切れです",
   "authTokenExchangeFailed": "アプリ認証トークンの交換に失敗しました: {0}",
-  "paymentGatewayUrlRequired": "支払いゲートウェイのベース URL が構成されていません。認証リダイレクト URI を構築できません"
+  "paymentGatewayUrlRequired": "支払いゲートウェイのベース URL が構成されていません。認証リダイレクト URI を構築できません",
+  "appTypeCapabilityMismatch": "支付宝アプリ種別と支払い能力が一致しません"
 }

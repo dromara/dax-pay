@@ -16,5 +16,6 @@
   "channelAppIdNotFound": "Douyin AppId [{0}] tidak dikonfigurasi dalam sistem",
   "webAppNotFound": "Tiada apl web Douyin di bawah peniaga saluran; tidak dapat melengkapkan auth/tandatangan H5",
   "appAuthSecretMissing": "Rahsia auth apl terus Douyin tiada; konfigurasikan appSecret pada apl peniaga saluran dahulu",
-  "jsapiContextRequired": "Tandatangan JSAPI Douyin memerlukan salah satu daripada orderNo, code atau channelMchNo"
+  "jsapiContextRequired": "Tandatangan JSAPI Douyin memerlukan salah satu daripada orderNo, code atau channelMchNo",
+  "appTypeCapabilityMismatch": "Jenis aplikasi Douyin tidak sepadan dengan keupayaan pembayaran"
 }

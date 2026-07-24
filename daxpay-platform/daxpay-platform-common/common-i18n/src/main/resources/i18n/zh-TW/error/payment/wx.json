@@ -1,0 +1,12 @@
+{
+  "appNotFound": "平台微信應用不存在",
+  "mchAppNotFound": "商戶微信應用不存在",
+  "appIdDuplicate": "微信應用AppId已存在",
+  "appTypeInvalid": "微信應用類型無效",
+  "appInUse": "微信應用仍被能力綁定引用，不可刪除",
+  "appTypeCapabilityMismatch": "微信應用類型與支付能力不匹配",
+  "scopeNotExist": "微信應用檔位不存在或引用無效",
+  "channelAppIdNotFound": "指定的微信應用AppId[{0}]未在系統中配置",
+  "appNotBound": "未綁定可用的微信應用",
+  "channelMerchantMismatch": "通道商戶不存在或與商戶號不匹配"
+}

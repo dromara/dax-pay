@@ -43,5 +43,6 @@
   "subMerchantNoRequired": "Harap konfigurasikan ID sub-pedagang (2088) sebelum otorisasi agen",
   "authCodeInvalid": "Kode otorisasi Alipay tidak valid atau kedaluwarsa",
   "authTokenExchangeFailed": "Gagal menukar token autentikasi aplikasi: {0}",
-  "paymentGatewayUrlRequired": "URL dasar gateway pembayaran tidak dikonfigurasi; tidak dapat membuat URI pengalihan auth"
+  "paymentGatewayUrlRequired": "URL dasar gateway pembayaran tidak dikonfigurasi; tidak dapat membuat URI pengalihan auth",
+  "appTypeCapabilityMismatch": "Jenis aplikasi Alipay tidak cocok dengan kemampuan pembayaran"
 }
