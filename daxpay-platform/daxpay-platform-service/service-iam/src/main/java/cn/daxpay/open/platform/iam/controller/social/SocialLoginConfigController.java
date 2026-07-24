@@ -3,12 +3,15 @@ package cn.daxpay.open.platform.iam.controller.social;
 import cn.daxpay.open.platform.iam.param.social.SocialLoginConfigParam;
 import cn.daxpay.open.platform.iam.result.social.SocialCallbackUrlResult;
 import cn.daxpay.open.platform.iam.result.social.SocialLoginConfigResult;
+import cn.daxpay.open.platform.iam.service.social.SocialAutoLoginConfigService;
 import cn.daxpay.open.platform.iam.service.social.SocialLoginConfigService;
 import cn.daxpay.open.platform.iam.service.social.SocialLoginService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
+import cn.daxpay.open.platform.system.param.config.security.PlatformSocialAutoLoginConfigParam;
+import cn.daxpay.open.platform.system.result.config.security.PlatformSocialAutoLoginConfigResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
@@ -36,6 +39,8 @@ public class SocialLoginConfigController {
     private final SocialLoginConfigService socialLoginConfigService;
 
     private final SocialLoginService socialLoginService;
+
+    private final SocialAutoLoginConfigService socialAutoLoginConfigService;
 
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "全量查询平台配置(枚举驱动, 读时初始化缺失平台)")
@@ -74,6 +79,22 @@ public class SocialLoginConfigController {
         @NotBlank(message = "{validation.field.source.notBlank}") String source,
         @RequestParam Boolean enabled) {
         socialLoginConfigService.updateEnabled(source, enabled);
+        return Res.ok();
+    }
+
+    /// 应用内自动登录策略(按 admin/merchant 分端)
+    @PermCode(code = PermCodes.Action.VIEW)
+    @Operation(summary = "获取应用内社交自动登录配置")
+    @GetMapping("/auto-login/get")
+    public Result<PlatformSocialAutoLoginConfigResult> getAutoLoginConfig() {
+        return Res.ok(socialAutoLoginConfigService.findConfig());
+    }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "更新应用内社交自动登录配置")
+    @PostMapping("/auto-login/update")
+    public Result<Void> updateAutoLoginConfig(@RequestBody @Validated PlatformSocialAutoLoginConfigParam param) {
+        socialAutoLoginConfigService.updateConfig(param);
         return Res.ok();
     }
 }

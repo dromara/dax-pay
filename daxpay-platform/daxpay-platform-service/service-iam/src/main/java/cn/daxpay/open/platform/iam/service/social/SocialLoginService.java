@@ -29,7 +29,9 @@ import cn.daxpay.open.platform.iam.result.user.UserInfoResult;
 import cn.daxpay.open.platform.iam.service.social.other.AlipaySocialAuthRequest;
 import cn.daxpay.open.platform.iam.service.social.other.AlipaySocialAuthRequestFactory;
 import cn.daxpay.open.platform.iam.service.user.UserQueryService;
+import cn.daxpay.open.platform.system.entity.config.platform.auth.PlatformWechatMpAuthConfig;
 import cn.daxpay.open.platform.system.entity.config.platform.infra.PlatformUrlConfig;
+import cn.daxpay.open.platform.system.service.config.auth.PlatformWechatMpAuthConfigService;
 import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.StrUtil;
@@ -70,6 +72,8 @@ public class SocialLoginService {
     private final SocialLoginConfigService socialLoginConfigService;
 
     private final PlatformUrlConfigService platformUrlConfigService;
+
+    private final PlatformWechatMpAuthConfigService platformWechatMpAuthConfigService;
 
     private final UserQueryService userQueryService;
 
@@ -119,6 +123,12 @@ public class SocialLoginService {
     /// @param client 终端编码(admin/merchant), 用于解析端点配置中的 baseUrl
     /// @param mode 授权场景(不传则按登录态判断: 已登录=绑定, 未登录=登录)
     public String generateAuthorizeUrl(String source, String client, String mode) {
+        return this.generateAuthorizeUrl(source, client, mode, null);
+    }
+
+    /// 生成授权地址
+    /// @param silent true=应用内静默/网页授权(企微 oauth / 微信 snsapi_base)
+    public String generateAuthorizeUrl(String source, String client, String mode, Boolean silent) {
         // 仅 admin/merchant
         SocialClientEnum socialClient = this.requireSocialClient(client);
         // 加载平台配置(全局唯一)
@@ -138,6 +148,12 @@ public class SocialLoginService {
         String redirectUri = this.buildRedirectUri(baseUrl, authMode);
         // 构建授权请求
         SocialAuthConfig authConfig = socialLoginConfigService.buildAuthConfig(config, redirectUri);
+        // 公众号: 凭据来自平台级配置, 不写在 iam_social_login_config
+        this.fillPlatformRedirectCredentials(socialSource, authConfig);
+        // 应用内自动登录: 企微走网页授权、公众号走 snsapi_base
+        if (Boolean.TRUE.equals(silent)) {
+            authConfig.setSilent(true);
+        }
         SocialAuthRequest request = this.createAuthRequest(socialSource, authConfig);
         // state 仅用于 OAuth2 合规, 不缓存业务上下文
         String state = IdUtil.fastSimpleUUID();
@@ -256,8 +272,23 @@ public class SocialLoginService {
         if (socialSource == null) {
             throw new OperationFailException("error.social.unsupportedSource");
         }
+        // 公众号: 凭据来自平台级配置
+        this.fillPlatformRedirectCredentials(socialSource, authConfig);
         SocialAuthRequest authRequest = this.createAuthRequest(socialSource, authConfig);
         return authRequest.login(AuthCallback.of(code, state));
+    }
+
+    /// 平台级跳转型凭据回填(公众号 AppId/Secret 等)
+    private void fillPlatformRedirectCredentials(SocialSourceEnum socialSource, SocialAuthConfig authConfig) {
+        if (socialSource != SocialSourceEnum.WECHAT_MP) {
+            return;
+        }
+        PlatformWechatMpAuthConfig mp = platformWechatMpAuthConfigService.getWechatMpAuthConfig();
+        if (mp == null || StrUtil.isBlank(mp.getAppId()) || StrUtil.isBlank(mp.getAppSecret())) {
+            throw new OperationFailException("error.social.wechatMpNotConfigured");
+        }
+        authConfig.setClientId(mp.getAppId());
+        authConfig.setClientSecret(mp.getAppSecret());
     }
 
     /// 按平台创建授权请求: 支付宝走 iam 侧 [AlipaySocialAuthRequest], 其余走 JustAuth 工厂

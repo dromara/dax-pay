@@ -9,5 +9,6 @@
   "sensitive_word": "敏感词策略配置",
   "api_security": "API安全配置",
   "pay_security": "支付安全配置",
-  "iam_replay_protect": "IAM域防重放配置"
+  "iam_replay_protect": "IAM域防重放配置",
+  "security_social_auto": "应用内社交自动登录配置"
 }

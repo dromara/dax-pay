@@ -1,5 +1,5 @@
 {
-  "weChat": "微信开放平台",
+  "weChat": "微信公众号",
   "weCom": "企业微信",
   "qq": "QQ",
   "github": "GitHub",
@@ -8,5 +8,6 @@
   "feishu": "飞书",
   "dingTalk": "钉钉",
   "douyin": "抖音",
-  "alipay": "支付宝"
+  "alipay": "支付宝",
+  "weChatOpen": "微信开放平台"
 }

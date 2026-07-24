@@ -1,0 +1,28 @@
+{
+  "configNotExist": "플랫폼 구성이 없거나 비활성화되어 있습니다",
+  "unsupportedSource": "지원하지 않는 플랫폼입니다",
+  "unsupportedClient": "소셜 로그인은 운영단(admin)과 가맹점단(merchant)만 지원합니다",
+  "configDuplicated": "해당 플랫폼 구성이 이미 존재합니다",
+  "notConfigured": "플랫폼이 구성되지 않아 활성/비활성할 수 없습니다",
+  "authCodeBlank": "인가 코드는 비울 수 없습니다",
+  "endpointNotConfigured": "엔드포인트 구성에 프론트 접속 URL이 없어 콜백 URL을 생성할 수 없습니다",
+  "adminEndpointNotConfigured": "먼저 엔드포인트 구성에서 「운영단 접속 주소」(adminBaseUrl)를 설정하세요",
+  "merchantEndpointNotConfigured": "먼저 엔드포인트 구성에서 「가맹점단 접속 주소」(merchantBaseUrl)를 설정하세요",
+  "alipayNotConfigured": "플랫폼급 Alipay 구성이 불완전합니다. 「삼자 플랫폼 관리」에서 설정하세요",
+  "wechatMpNotConfigured": "플랫폼급 WeChat 공식계정 구성이 불완전합니다. 「삼자 플랫폼 관리」에서 설정하세요",
+  "douyinH5NotConfigured": "플랫폼급 Douyin H5 앱 구성이 불완전합니다. 「삼자 플랫폼 관리」에서 설정하세요",
+  "weCom": {
+    "notCorpMember": "본 기업 구성원이 아니어서 로그인할 수 없습니다"
+  },
+  "bind": {
+    "alreadyBoundByOther": "해당 소셜 계정이 다른 사용자에게 연결되어 있습니다",
+    "alreadyBoundPlatform": "이미 이 플랫폼을 연결했습니다. 먼저 연결을 해제하세요",
+    "clientMismatch": "현재 사용자는 해당 단말에 속하지 않아 연결할 수 없습니다"
+  },
+  "oauthFailed": "소셜 인가에 실패했습니다",
+  "autoLogin": {
+    "sourceRequired": "자동 로그인 사용 시 플랫폼을 하나 이상 선택하세요",
+    "sourceNotEnabled": "선택한 자동 로그인 플랫폼이 미구성이거나 비활성입니다: {0}",
+    "sourceNotAllowed": "해당 플랫폼은 인앱 자동 로그인을 지원하지 않습니다: {0}"
+  }
+}

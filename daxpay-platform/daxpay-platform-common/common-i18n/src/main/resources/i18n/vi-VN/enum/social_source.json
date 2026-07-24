@@ -1,5 +1,5 @@
 {
-  "weChat": "Tài khoản chính thức của WeChat",
+  "weChat": "Tài khoản chính thức WeChat",
   "weCom": "WeCom",
   "qq": "QQ",
   "github": "GitHub",
@@ -8,5 +8,6 @@
   "feishu": "Feishu",
   "dingTalk": "DingTalk",
   "douyin": "Douyin",
-  "alipay": "Alipay"
+  "alipay": "Alipay",
+  "weChatOpen": "Nền tảng mở WeChat"
 }

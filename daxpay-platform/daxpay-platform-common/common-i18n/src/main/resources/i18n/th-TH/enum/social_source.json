@@ -1,5 +1,5 @@
 {
-  "weChat": "บัญชีอย่างเป็นทางการของ WeChat",
+  "weChat": "บัญชีทางการ WeChat",
   "weCom": "วีคอม",
   "qq": "คิวคิว",
   "github": "GitHub",
@@ -8,5 +8,6 @@
   "feishu": "เฟยซู",
   "dingTalk": "ติงทอล์ค",
   "douyin": "โต่วอิน",
-  "alipay": "อาลีเพย์"
+  "alipay": "อาลีเพย์",
+  "weChatOpen": "แพลตฟอร์มเปิด WeChat"
 }

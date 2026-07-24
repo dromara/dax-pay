@@ -25,4 +25,9 @@ public class SocialAuthConfig {
 
     /// QQ: 是否申请 unionId
     private boolean unionId;
+
+    /// 静默/应用内授权模式
+    /// 企业微信: true 走网页授权(oauth2/authorize), false 走扫码(qrConnect)
+    /// 微信公众号: true 使用 snsapi_base, false 使用 snsapi_userinfo
+    private boolean silent;
 }

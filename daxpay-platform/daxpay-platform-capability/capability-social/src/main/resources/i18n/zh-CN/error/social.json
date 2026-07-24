@@ -19,5 +19,10 @@
     "alreadyBoundPlatform": "您已绑定该平台，请先解绑后再绑定新账号",
     "clientMismatch": "当前登录用户不属于该终端，无法完成绑定"
   },
-  "oauthFailed": "三方授权失败"
+  "oauthFailed": "三方授权失败",
+  "autoLogin": {
+    "sourceRequired": "开启自动登录时必须至少选择一个平台",
+    "sourceNotEnabled": "所选自动登录平台未配置或未启用: {0}",
+    "sourceNotAllowed": "该平台不支持应用内自动登录: {0}"
+  }
 }

@@ -17,6 +17,8 @@ public enum PlatformConfigTypeEnum implements I18nSupport {
     SECURITY_PASSWORD_POLICY("security_password_policy"),
     /// 登录安全配置
     SECURITY_LOGIN("security_login"),
+    /// 应用内社交自动登录配置(按 admin/merchant 分端)
+    SECURITY_SOCIAL_AUTO("security_social_auto"),
     /// 会话管理配置
     SECURITY_SESSION("security_session"),
     /// 双因素认证配置

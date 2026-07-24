@@ -19,5 +19,10 @@
     "alreadyBoundPlatform": "Anda telah mengikat platform ini, sila buka ikatan dahulu",
     "clientMismatch": "Pengguna semasa bukan milik klien ini, pengikatan tidak dibenarkan"
   },
-  "oauthFailed": "Kebenaran pihak ketiga gagal"
+  "oauthFailed": "Kebenaran pihak ketiga gagal",
+  "autoLogin": {
+    "sourceRequired": "Pilih sekurang-kurangnya satu platform apabila log masuk auto diaktifkan",
+    "sourceNotEnabled": "Platform log masuk auto belum dikonfigurasi atau dilumpuhkan: {0}",
+    "sourceNotAllowed": "Platform tidak menyokong log masuk auto dalam aplikasi: {0}"
+  }
 }

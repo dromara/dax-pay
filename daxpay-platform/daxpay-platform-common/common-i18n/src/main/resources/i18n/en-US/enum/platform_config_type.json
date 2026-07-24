@@ -9,5 +9,6 @@
   "sensitive_word": "Sensitive word policy",
   "api_security": "API Security Config",
   "pay_security": "Pay Security Config",
-  "iam_replay_protect": "IAM Anti-Replay Config"
+  "iam_replay_protect": "IAM Anti-Replay Config",
+  "security_social_auto": "In-app social auto login"
 }

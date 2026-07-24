@@ -15,7 +15,7 @@ import java.util.Arrays;
 @AllArgsConstructor
 public enum SocialSourceEnum implements I18nSupport {
 
-    /// 微信开放平台
+    /// 微信公众号(网页授权, 凭据在平台级 wechat_mp_auth, 本枚举仅作登录启停占位)
     WECHAT_MP(
             "weChat",
             "https://open.weixin.qq.com/connect/oauth2/authorize",
@@ -23,7 +23,15 @@ public enum SocialSourceEnum implements I18nSupport {
             "https://api.weixin.qq.com/sns/userinfo"
     ),
 
-    /// 企业微信(企业自建应用扫码)
+    /// 微信开放平台(网站应用扫码登录, 凭据在 iam_social_login_config)
+    WECHAT_OPEN(
+            "weChatOpen",
+            "https://open.weixin.qq.com/connect/qrconnect",
+            "https://api.weixin.qq.com/sns/oauth2/access_token",
+            "https://api.weixin.qq.com/sns/userinfo"
+    ),
+
+    /// 企业微信(企业自建应用: 扫码 + 网页授权)
     WE_COM(
             "weCom",
             "https://open.work.weixin.qq.com/wwopen/sso/qrConnect",
@@ -142,13 +150,13 @@ public enum SocialSourceEnum implements I18nSupport {
 
     /// 是否"平台级跳转型"配置
     ///
-    /// 此类平台(支付宝)非标准 OAuth2 或配置较重,
+    /// 此类平台非标准 OAuth2 或配置较重,
     /// 不在 iam_social_login_config 表内存 clientId/clientSecret,
     /// 而是使用独立的平台级配置(EncryptPlatformConfigTypeEnum / 独立表)。
     /// 前端登录配置抽屉据此隐藏 clientId/clientSecret, 仅保留启用开关与「前往配置凭据」入口。
     ///
     /// 新增此类平台时在此方法追加判断。
     public boolean isPlatformRedirect() {
-        return this == ALIPAY;
+        return this == ALIPAY || this == WECHAT_MP;
     }
 }

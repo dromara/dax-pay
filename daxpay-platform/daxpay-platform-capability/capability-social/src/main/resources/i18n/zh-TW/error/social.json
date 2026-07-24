@@ -19,5 +19,10 @@
     "alreadyBoundPlatform": "您已繫結該平臺，請先解綁後再繫結新賬號",
     "clientMismatch": "當前登入使用者不屬於該終端，無法完成繫結"
   },
-  "oauthFailed": "三方授權失敗"
+  "oauthFailed": "三方授權失敗",
+  "autoLogin": {
+    "sourceRequired": "開啟自動登入時必須至少選擇一個平台",
+    "sourceNotEnabled": "所選自動登入平台未配置或未啟用: {0}",
+    "sourceNotAllowed": "該平台不支援應用內自動登入: {0}"
+  }
 }

@@ -19,5 +19,10 @@
     "alreadyBoundPlatform": "Anda sudah mengikat platform ini, silakan unbind terlebih dahulu",
     "clientMismatch": "Pengguna saat ini bukan milik klien ini, pengikatan tidak diperbolehkan"
   },
-  "oauthFailed": "Otorisasi pihak ketiga gagal"
+  "oauthFailed": "Otorisasi pihak ketiga gagal",
+  "autoLogin": {
+    "sourceRequired": "Pilih setidaknya satu platform saat auto-login diaktifkan",
+    "sourceNotEnabled": "Platform auto-login belum dikonfigurasi atau dinonaktifkan: {0}",
+    "sourceNotAllowed": "Platform tidak mendukung auto-login dalam aplikasi: {0}"
+  }
 }

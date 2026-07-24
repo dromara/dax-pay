@@ -19,5 +19,10 @@
     "alreadyBoundPlatform": "You have already bound this platform, please unbind first",
     "clientMismatch": "Current user does not belong to this client, binding is not allowed"
   },
-  "oauthFailed": "Third-party authorization failed"
+  "oauthFailed": "Third-party authorization failed",
+  "autoLogin": {
+    "sourceRequired": "Select at least one platform when auto-login is enabled",
+    "sourceNotEnabled": "Auto-login platform is not configured or disabled: {0}",
+    "sourceNotAllowed": "Platform does not support in-app auto-login: {0}"
+  }
 }

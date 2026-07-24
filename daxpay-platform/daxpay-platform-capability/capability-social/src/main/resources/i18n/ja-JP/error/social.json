@@ -1,0 +1,28 @@
+{
+  "configNotExist": "プラットフォーム設定が存在しないか無効です",
+  "unsupportedSource": "未対応のプラットフォームです",
+  "unsupportedClient": "ソーシャルログインは管理端(admin)と加盟店端(merchant)のみ対応しています",
+  "configDuplicated": "このプラットフォーム設定は既に存在します",
+  "notConfigured": "プラットフォーム未設定のため有効/無効を切り替えできません",
+  "authCodeBlank": "認可コードは空にできません",
+  "endpointNotConfigured": "エンドポイント設定にフロントのアクセスURLがなく、コールバックURLを生成できません",
+  "adminEndpointNotConfigured": "先にエンドポイント設定で「管理端アクセスURL」(adminBaseUrl)を設定してください",
+  "merchantEndpointNotConfigured": "先にエンドポイント設定で「加盟店端アクセスURL」(merchantBaseUrl)を設定してください",
+  "alipayNotConfigured": "プラットフォーム級のAlipay設定が不完全です。「三方平台管理」で設定してください",
+  "wechatMpNotConfigured": "プラットフォーム級のWeChat公式アカウント設定が不完全です。「三方平台管理」で設定してください",
+  "douyinH5NotConfigured": "プラットフォーム級のDouyin H5アプリ設定が不完全です。「三方平台管理」で設定してください",
+  "weCom": {
+    "notCorpMember": "本企業のメンバーではないためログインできません"
+  },
+  "bind": {
+    "alreadyBoundByOther": "この外部アカウントは他のユーザーに紐付け済みです",
+    "alreadyBoundPlatform": "既にこのプラットフォームを紐付けています。先に解除してください",
+    "clientMismatch": "現在のユーザーはこの端末に属していないため紐付けできません"
+  },
+  "oauthFailed": "外部認可に失敗しました",
+  "autoLogin": {
+    "sourceRequired": "自動ログインを有効にする場合はプラットフォームを1つ以上選択してください",
+    "sourceNotEnabled": "選択した自動ログインプラットフォームが未設定または無効です: {0}",
+    "sourceNotAllowed": "このプラットフォームはアプリ内自動ログインに対応していません: {0}"
+  }
+}

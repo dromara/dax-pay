@@ -9,5 +9,6 @@
   "api_security": "Konfigurasi Keselamatan API",
   "iam_replay_protect": "Konfigurasi Anti-Main Semula IAM",
   "sensitive_word": "Konfigurasi perkataan sensitif",
-  "pay_security": "Konfigurasi keselamatan pembayaran"
+  "pay_security": "Konfigurasi keselamatan pembayaran",
+  "security_social_auto": "Konfigurasi log masuk sosial auto dalam app"
 }

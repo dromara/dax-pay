@@ -53,8 +53,9 @@ public class SocialEndpoint {
     @GetMapping("/render/{source}")
     public Result<String> render(@PathVariable String source,
                                  @RequestParam String client,
-                                 @RequestParam(required = false) String mode) {
-        return Res.ok(socialLoginService.generateAuthorizeUrl(source, client, mode));
+                                 @RequestParam(required = false) String mode,
+                                 @RequestParam(required = false) Boolean silent) {
+        return Res.ok(socialLoginService.generateAuthorizeUrl(source, client, mode, silent));
     }
 
     /// OAuth 授权码兑换 - 登录(公开, 无需认证)

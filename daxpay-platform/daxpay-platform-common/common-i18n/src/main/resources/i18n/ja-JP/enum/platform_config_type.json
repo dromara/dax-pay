@@ -9,5 +9,6 @@
   "sensitive_word": "センシティブワード設定",
   "api_security": "APIセキュリティ設定",
   "pay_security": "決済セキュリティ設定",
-  "iam_replay_protect": "IAMドメインリプレイ防止設定"
+  "iam_replay_protect": "IAMドメインリプレイ防止設定",
+  "security_social_auto": "アプリ内ソーシャル自動ログイン設定"
 }

@@ -9,5 +9,6 @@
   "sensitive_word": "민감어 정책 설정",
   "api_security": "API 보안 설정",
   "pay_security": "결제 보안 설정",
-  "iam_replay_protect": "IAM 도메인 재생 방지 설정"
+  "iam_replay_protect": "IAM 도메인 재생 방지 설정",
+  "security_social_auto": "인앱 소셜 자동 로그인 설정"
 }

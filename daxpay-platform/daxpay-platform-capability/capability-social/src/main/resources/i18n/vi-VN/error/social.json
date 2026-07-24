@@ -19,5 +19,10 @@
     "alreadyBoundPlatform": "Bạn đã ràng buộc nền tảng này, vui lòng hủy liên kết trước",
     "clientMismatch": "Người dùng hiện tại không thuộc về khách hàng này, không được phép ràng buộc"
   },
-  "oauthFailed": "Ủy quyền bên thứ ba thất bại"
+  "oauthFailed": "Ủy quyền bên thứ ba thất bại",
+  "autoLogin": {
+    "sourceRequired": "Khi bật tự động đăng nhập phải chọn ít nhất một nền tảng",
+    "sourceNotEnabled": "Nền tảng tự động đăng nhập chưa cấu hình hoặc đã tắt: {0}",
+    "sourceNotAllowed": "Nền tảng không hỗ trợ tự động đăng nhập trong ứng dụng: {0}"
+  }
 }

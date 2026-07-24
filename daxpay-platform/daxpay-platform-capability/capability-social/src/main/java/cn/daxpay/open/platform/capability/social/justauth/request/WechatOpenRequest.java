@@ -7,32 +7,31 @@ import cn.daxpay.open.platform.capability.social.justauth.model.AuthCallback;
 import cn.daxpay.open.platform.capability.social.justauth.model.AuthToken;
 import cn.daxpay.open.platform.capability.social.justauth.model.AuthUser;
 import cn.daxpay.open.platform.capability.social.justauth.util.SocialUrlBuilder;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONObject;
 
-/// # 微信公众号授权登录
+/// # 微信开放平台(网站应用)扫码登录
 ///
-public class WechatMpRequest extends AbstractSocialAuthRequest {
+/// 使用 qrconnect + snsapi_login, 与公众号网页授权([WechatMpRequest])分离。
+///
+public class WechatOpenRequest extends AbstractSocialAuthRequest {
 
-    public WechatMpRequest(SocialAuthConfig config) {
-        super(config, SocialSourceEnum.WECHAT_MP);
+    public WechatOpenRequest(SocialAuthConfig config) {
+        super(config, SocialSourceEnum.WECHAT_OPEN);
     }
 
-    /// 微信授权地址使用 appid 参数, 且 state 末尾需追加 #wechat_redirect
-    /// silent 时使用 snsapi_base(静默仅 openId), 否则 snsapi_userinfo
+    /// 开放平台网站应用扫码授权
     @Override
     public String authorize(String state) {
-        String scope = this.getConfig().isSilent() ? "snsapi_base" : "snsapi_userinfo";
         return SocialUrlBuilder.ofBaseUrl(this.getSource().authorize())
             .queryParam("appid", this.getConfig().getClientId())
             .queryParam("redirect_uri", this.encode(this.buildRedirectUri()))
             .queryParam("response_type", "code")
-            .queryParam("scope", scope)
-            .queryParam("state", state.concat("#wechat_redirect"))
-            .build();
+            .queryParam("scope", "snsapi_login")
+            .queryParam("state", state)
+            .build() + "#wechat_redirect";
     }
 
-    /// 微信 accessToken 同时返回 openid
+    /// 用 code 换 accessToken, 同时拿到 openid
     @Override
     public AuthToken getAccessToken(AuthCallback callback) {
         String url = SocialUrlBuilder.ofBaseUrl(this.getSource().accessToken())
@@ -48,18 +47,12 @@ public class WechatMpRequest extends AbstractSocialAuthRequest {
             .setRefreshToken(object.getStr("refresh_token"))
             .setExpireIn(object.getInt("expires_in", 0))
             .setOpenId(object.getStr("openid"))
+            .setUnionId(object.getStr("unionid"))
             .setScope(object.getStr("scope"));
     }
 
     @Override
     public AuthUser getUserInfo(AuthToken token) {
-        // 静默授权(scope 不含 snsapi_userinfo)时无详细信息
-        if (StrUtil.isNotBlank(token.getScope()) && !token.getScope().contains("snsapi_userinfo")) {
-            return new AuthUser()
-                .setUuid(token.getOpenId())
-                .setSource(this.getSourceName())
-                .setToken(token);
-        }
         String url = SocialUrlBuilder.ofBaseUrl(this.getSource().userInfo())
             .queryParam("access_token", token.getAccessToken())
             .queryParam("openid", token.getOpenId())
@@ -82,7 +75,7 @@ public class WechatMpRequest extends AbstractSocialAuthRequest {
     /// 校验微信响应(errcode 不为 0 表示错误)
     private void checkResponse(JSONObject object) {
         if (object.containsKey("errcode") && object.getInt("errcode", 0) != 0) {
-            throw new SocialException(object.getInt("errcode"), object.getStr("errmsg"));
+            throw new SocialException(object.getStr("errmsg"));
         }
     }
 }

@@ -10,6 +10,7 @@ import cn.daxpay.open.platform.capability.social.justauth.request.QqRequest;
 import cn.daxpay.open.platform.capability.social.justauth.request.SocialAuthRequest;
 import cn.daxpay.open.platform.capability.social.justauth.request.WeComRequest;
 import cn.daxpay.open.platform.capability.social.justauth.request.WechatMpRequest;
+import cn.daxpay.open.platform.capability.social.justauth.request.WechatOpenRequest;
 import cn.daxpay.open.platform.capability.social.justauth.SocialAuthConfig;
 import cn.daxpay.open.platform.capability.social.justauth.SocialSourceEnum;
 import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
@@ -31,6 +32,7 @@ public class SocialAuthRequestFactory {
             case GOOGLE -> new GoogleRequest(config);
             case QQ -> new QqRequest(config);
             case WECHAT_MP -> new WechatMpRequest(config);
+            case WECHAT_OPEN -> new WechatOpenRequest(config);
             case WE_COM -> new WeComRequest(config);
             case FEISHU -> new FeishuRequest(config);
             case DINGTALK -> new DingTalkRequest(config);

@@ -9,5 +9,6 @@
   "api_security": "Cấu hình bảo mật API",
   "iam_replay_protect": "Cấu hình chống phát lại IAM",
   "sensitive_word": "Cấu hình từ nhạy cảm",
-  "pay_security": "Cấu hình bảo mật thanh toán"
+  "pay_security": "Cấu hình bảo mật thanh toán",
+  "security_social_auto": "Cấu hình đăng nhập xã hội tự động trong app"
 }
