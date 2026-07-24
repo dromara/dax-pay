@@ -15,7 +15,6 @@ import org.springframework.stereotype.Repository;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import java.util.List;
 import java.util.Optional;
 
 /// # 黑名单 Manager
@@ -31,25 +30,17 @@ public class PayBlacklistManager extends BaseManager<PayBlacklistMapper, PayBlac
         return this.page(mpPage, wrapper);
     }
 
-    /// 查重：同 type+value+channel+channelAppId（空按空串）
-    public boolean existsDuplicate(String type, String value, String channel, String channelAppId, Long excludeId) {
-        String ch = StrUtil.nullToEmpty(channel);
-        String app = StrUtil.nullToEmpty(channelAppId);
+    /// 查重：同 type+value+wxAppId（空按空串）
+    public boolean existsDuplicate(String type, String value, String wxAppId, Long excludeId) {
+        String app = StrUtil.nullToEmpty(wxAppId);
         return lambdaQuery()
                 .eq(PayBlacklist::getType, type)
                 .eq(PayBlacklist::getValue, value)
                 .and(w -> {
-                    if (StrUtil.isBlank(ch)) {
-                        w.and(x -> x.isNull(PayBlacklist::getChannel).or().eq(PayBlacklist::getChannel, ""));
-                    } else {
-                        w.eq(PayBlacklist::getChannel, ch);
-                    }
-                })
-                .and(w -> {
                     if (StrUtil.isBlank(app)) {
-                        w.and(x -> x.isNull(PayBlacklist::getChannelAppId).or().eq(PayBlacklist::getChannelAppId, ""));
+                        w.and(x -> x.isNull(PayBlacklist::getWxAppId).or().eq(PayBlacklist::getWxAppId, ""));
                     } else {
-                        w.eq(PayBlacklist::getChannelAppId, app);
+                        w.eq(PayBlacklist::getWxAppId, app);
                     }
                 })
                 .ne(excludeId != null, PayBlacklist::getId, excludeId)
@@ -57,47 +48,40 @@ public class PayBlacklistManager extends BaseManager<PayBlacklistMapper, PayBlac
     }
 
     /// 查找有效命中行（enable 且未过期）
-    public Optional<PayBlacklist> findActiveHit(String type, String value, String channel, String channelAppId) {
+    ///
+    /// - ip / alipay_user：按 type+value，忽略 wxAppId
+    /// - wechat_openid：按 type+value+wxAppId 精确匹配（wxAppId 为空则不命中）
+    public Optional<PayBlacklist> findActiveHit(String type, String value, String wxAppId) {
         if (StrUtil.isBlank(type) || StrUtil.isBlank(value)) {
             return Optional.empty();
         }
         OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
-        List<PayBlacklist> list = lambdaQuery()
+        var query = lambdaQuery()
                 .eq(PayBlacklist::getType, type)
                 .eq(PayBlacklist::getValue, value)
                 .eq(PayBlacklist::getStatus, PayBlacklistStatusEnum.ENABLE.getCode())
-                .and(w -> w.isNull(PayBlacklist::getExpireTime).or().gt(PayBlacklist::getExpireTime, now))
-                .list();
-        if (list.isEmpty()) {
-            return Optional.empty();
+                .and(w -> w.isNull(PayBlacklist::getExpireTime).or().gt(PayBlacklist::getExpireTime, now));
+        if (PayBlacklistTypeEnum.WECHAT_OPENID.getCode().equals(type)) {
+            if (StrUtil.isBlank(wxAppId)) {
+                return Optional.empty();
+            }
+            query.eq(PayBlacklist::getWxAppId, wxAppId);
+        } else {
+            // ip / alipay_user：wx_app_id 必须为空
+            query.and(w -> w.isNull(PayBlacklist::getWxAppId).or().eq(PayBlacklist::getWxAppId, ""));
         }
-        // 优先精确 channel + channelAppId；再宽匹配 channel 空
-        Optional<PayBlacklist> exact = list.stream()
-                .filter(e -> matchNullable(e.getChannel(), channel) && matchNullable(e.getChannelAppId(), channelAppId))
-                .findFirst();
-        if (exact.isPresent()) {
-            return exact;
-        }
-        // 名单 channel 为空视为对该 value 全局生效
-        return list.stream()
-                .filter(e -> StrUtil.isBlank(e.getChannel()) && StrUtil.isBlank(e.getChannelAppId()))
-                .findFirst();
+        return query.oneOpt();
     }
 
-    /// 是否存在有效的 openId 类型黑名单（enable 且未过期）
-    public boolean hasActiveOpenIdBlacklist() {
+    /// 是否存在有效的用户标识类黑名单（支付宝 / 微信）
+    public boolean hasActiveUserIdentityBlacklist() {
         OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
         return lambdaQuery()
-                .eq(PayBlacklist::getType, PayBlacklistTypeEnum.OPEN_ID.getCode())
+                .in(PayBlacklist::getType,
+                        PayBlacklistTypeEnum.ALIPAY_USER.getCode(),
+                        PayBlacklistTypeEnum.WECHAT_OPENID.getCode())
                 .eq(PayBlacklist::getStatus, PayBlacklistStatusEnum.ENABLE.getCode())
                 .and(w -> w.isNull(PayBlacklist::getExpireTime).or().gt(PayBlacklist::getExpireTime, now))
                 .exists();
-    }
-
-    private static boolean matchNullable(String rule, String actual) {
-        if (StrUtil.isBlank(rule)) {
-            return StrUtil.isBlank(actual);
-        }
-        return rule.equals(actual);
     }
 }

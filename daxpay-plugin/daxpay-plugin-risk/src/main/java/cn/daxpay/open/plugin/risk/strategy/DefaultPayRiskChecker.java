@@ -3,6 +3,7 @@ package cn.daxpay.open.plugin.risk.strategy;
 import cn.daxpay.open.payment.strategy.risk.PayRiskCheckContext;
 import cn.daxpay.open.payment.strategy.risk.PayRiskChecker;
 import cn.daxpay.open.platform.core.code.PayErrorCode;
+import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.plugin.risk.entity.PayBlacklist;
 import cn.daxpay.open.plugin.risk.enums.PayBlacklistTypeEnum;
@@ -31,7 +32,7 @@ public class DefaultPayRiskChecker implements PayRiskChecker {
     private final PayBlacklistService payBlacklistService;
     private final PayRiskHitService payRiskHitService;
 
-    /// openId 黑名单存在性缓存（短 TTL 30s）
+    /// 用户标识黑名单存在性缓存（短 TTL 30s）
     ///
     /// 仅供网关层判断是否触发强制 OAuth 取 openId, 非关键路径,
     /// 30s 延迟可接受（黑名单 CRUD 不会立刻反映到 OAuth 触发判定）
@@ -49,12 +50,11 @@ public class DefaultPayRiskChecker implements PayRiskChecker {
         }
         ctx.setPhase(PayRiskHitPhaseEnum.BEFORE_PAY.getCode());
         // IP 名单（全局生效）
-        rejectIfBlocked(ctx, PayBlacklistTypeEnum.IP.getCode(), ctx.getClientIp(), null, null, true);
-        // openId 名单（按通道精细匹配）
-        boolean openIdBlocked = rejectIfBlocked(ctx, PayBlacklistTypeEnum.OPEN_ID.getCode(), ctx.getOpenId(),
-                ctx.getChannel(), ctx.getChannelAppId(), true);
-        if (!openIdBlocked && StrUtil.isBlank(ctx.getOpenId())) {
-            log.warn("支付前 openId 缺失, openId 黑名单降级为仅 IP 校验 + 事后补录: "
+        rejectIfBlocked(ctx, PayBlacklistTypeEnum.IP.getCode(), ctx.getClientIp(), null, true);
+        // 用户标识：按通道映射名单类型
+        boolean identityBlocked = checkUserIdentity(ctx, ctx.getOpenId(), true);
+        if (!identityBlocked && StrUtil.isBlank(ctx.getOpenId())) {
+            log.warn("支付前 openId 缺失, 用户标识黑名单降级为仅 IP 校验 + 事后补录: "
                     + "tradeType={}, method={}, mchNo={}, clientIp={}",
                     ctx.getTradeType(), ctx.getMethod(), ctx.getMchNo(), ctx.getClientIp());
         }
@@ -67,13 +67,11 @@ public class DefaultPayRiskChecker implements PayRiskChecker {
         }
         ctx.setPhase(PayRiskHitPhaseEnum.AFTER_PAY.getCode());
         // 事后只记命中，不抛错
-        rejectIfBlocked(ctx, PayBlacklistTypeEnum.IP.getCode(), ctx.getClientIp(), null, null, false);
-        rejectIfBlocked(ctx, PayBlacklistTypeEnum.OPEN_ID.getCode(), ctx.getOpenId(),
-                ctx.getChannel(), ctx.getChannelAppId(), false);
-        // buyerId 按 open_id 维度比对（主扫补洞）
+        rejectIfBlocked(ctx, PayBlacklistTypeEnum.IP.getCode(), ctx.getClientIp(), null, false);
+        checkUserIdentity(ctx, ctx.getOpenId(), false);
+        // buyerId 按用户标识维度比对（主扫补洞）
         if (StrUtil.isNotBlank(ctx.getBuyerId()) && !StrUtil.equals(ctx.getBuyerId(), ctx.getOpenId())) {
-            rejectIfBlocked(ctx, PayBlacklistTypeEnum.OPEN_ID.getCode(), ctx.getBuyerId(),
-                    ctx.getChannel(), ctx.getChannelAppId(), false);
+            checkUserIdentity(ctx, ctx.getBuyerId(), false);
         }
     }
 
@@ -88,13 +86,30 @@ public class DefaultPayRiskChecker implements PayRiskChecker {
         return exists;
     }
 
+    /// 按请求通道检查支付宝 / 微信用户标识名单
+    private boolean checkUserIdentity(PayRiskCheckContext ctx, String identity, boolean throwOnHit) {
+        if (StrUtil.isBlank(identity)) {
+            return false;
+        }
+        String channel = ctx.getChannel();
+        if (ChannelEnum.ALIPAY.getCode().equals(channel)) {
+            return rejectIfBlocked(ctx, PayBlacklistTypeEnum.ALIPAY_USER.getCode(), identity, null, throwOnHit);
+        }
+        if (ChannelEnum.WECHAT.getCode().equals(channel)) {
+            return rejectIfBlocked(ctx, PayBlacklistTypeEnum.WECHAT_OPENID.getCode(), identity,
+                    ctx.getChannelAppId(), throwOnHit);
+        }
+        // 其它通道本期不查用户标识名单
+        return false;
+    }
+
     /// 返回是否命中（用于外层判断是否需要打降级日志）
     private boolean rejectIfBlocked(PayRiskCheckContext ctx, String type, String value,
-                                     String channel, String channelAppId, boolean throwOnHit) {
+                                     String wxAppId, boolean throwOnHit) {
         if (StrUtil.isBlank(value)) {
             return false;
         }
-        Optional<PayBlacklist> hit = payBlacklistService.findActive(type, value, channel, channelAppId);
+        Optional<PayBlacklist> hit = payBlacklistService.findActive(type, value, wxAppId);
         if (hit.isEmpty()) {
             return false;
         }

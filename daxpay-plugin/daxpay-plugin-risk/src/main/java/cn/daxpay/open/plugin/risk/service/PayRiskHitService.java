@@ -62,10 +62,12 @@ public class PayRiskHitService {
                         "pay.error.risk.handleStatusInvalid"));
         PayRiskHit entity = getEntity(param.getId());
         if (status == PayRiskHitHandleStatusEnum.ADDED_BLACKLIST) {
+            // 微信名单需 wxAppId；命中快照无该字段时无法自动写入
             PayBlacklist bl = payBlacklistService.ensureBlacklist(
                     entity.getHitType(),
                     entity.getHitValue(),
                     entity.getChannel(),
+                    null,
                     param.getHandleRemark());
             entity.setBlacklistId(bl.getId());
         }

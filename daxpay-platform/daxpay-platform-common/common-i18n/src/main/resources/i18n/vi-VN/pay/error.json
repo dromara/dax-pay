@@ -131,6 +131,8 @@
     "blacklistNotFound": "Không tìm thấy mục danh sách đen",
     "blacklistTypeInvalid": "Loại danh sách đen không hợp lệ",
     "blacklistStatusInvalid": "Trạng thái danh sách đen không hợp lệ",
+    "blacklistWechatAppRequired": "Danh sách đen OpenId WeChat phải chọn ứng dụng thanh toán",
+    "blacklistChannelInvalid": "Kênh danh sách đen không hợp lệ",
     "hitNotFound": "Không tìm thấy bản ghi trúng rủi ro",
     "handleStatusInvalid": "Trạng thái xử lý không hợp lệ"
   }

@@ -16,7 +16,10 @@ import java.time.OffsetDateTime;
 
 /// # 支付黑名单配置
 ///
-/// 平台级名单，维度为 IP / openId，不含商户号事前拉黑。
+/// 平台级名单，不含商户号事前拉黑。
+/// - [PayBlacklistTypeEnum#IP]：全局 IP
+/// - [PayBlacklistTypeEnum#ALIPAY_USER]：支付宝 userId（不区分应用）
+/// - [PayBlacklistTypeEnum#WECHAT_OPENID]：微信 openId，必须绑定 [wxAppId]
 @EqualsAndHashCode(callSuper = true)
 @Data
 @FieldNameConstants
@@ -28,14 +31,11 @@ public class PayBlacklist extends MpBaseEntity implements ToResult<PayBlacklistR
     /// @see PayBlacklistTypeEnum
     private String type;
 
-    /// 名单值（IP 或 openId）
+    /// 名单值（IP / 支付宝 userId / 微信 openId）
     private String value;
 
-    /// 通道族（openId 建议 wechat/alipay；IP 可空）
-    private String channel;
-
-    /// 通道应用 AppId（可选，防 openId 跨应用误杀）
-    private String channelAppId;
+    /// 微信平台支付应用 AppId（仅 wechat_openid 使用）
+    private String wxAppId;
 
     /// 状态
     /// @see PayBlacklistStatusEnum

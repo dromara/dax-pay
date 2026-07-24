@@ -132,6 +132,8 @@
     "blacklistNotFound": "블랙리스트가 존재하지 않습니다",
     "blacklistTypeInvalid": "블랙리스트 유형이 유효하지 않습니다",
     "blacklistStatusInvalid": "블랙리스트 상태가 유효하지 않습니다",
+    "blacklistWechatAppRequired": "위챗 OpenId 블랙리스트에는 결제 앱을 지정해야 합니다",
+    "blacklistChannelInvalid": "블랙리스트 채널이 유효하지 않습니다",
     "hitNotFound": "리스크 적중 기록이 존재하지 않습니다",
     "handleStatusInvalid": "처리 상태가 유효하지 않습니다"
   }

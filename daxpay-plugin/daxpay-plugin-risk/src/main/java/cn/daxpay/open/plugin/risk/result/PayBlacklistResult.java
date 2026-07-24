@@ -22,11 +22,8 @@ public class PayBlacklistResult extends BaseResult {
     @Schema(description = "名单值")
     private String value;
 
-    @Schema(description = "通道族")
-    private String channel;
-
-    @Schema(description = "通道应用AppId")
-    private String channelAppId;
+    @Schema(description = "微信平台支付应用 AppId")
+    private String wxAppId;
 
     @Schema(description = "状态")
     private String status;

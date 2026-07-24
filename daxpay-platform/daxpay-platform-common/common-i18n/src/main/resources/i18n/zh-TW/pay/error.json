@@ -132,6 +132,8 @@
     "blacklistNotFound": "黑名單不存在",
     "blacklistTypeInvalid": "黑名單類型無效",
     "blacklistStatusInvalid": "黑名單狀態無效",
+    "blacklistWechatAppRequired": "微信 OpenId 黑名單必須指定支付應用",
+    "blacklistChannelInvalid": "黑名單通道無效",
     "hitNotFound": "風險命中記錄不存在",
     "handleStatusInvalid": "處理狀態無效"
   }

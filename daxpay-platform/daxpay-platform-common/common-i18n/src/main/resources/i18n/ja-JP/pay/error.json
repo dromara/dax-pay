@@ -132,6 +132,8 @@
     "blacklistNotFound": "ブラックリストが存在しません",
     "blacklistTypeInvalid": "ブラックリスト種別が無効です",
     "blacklistStatusInvalid": "ブラックリスト状態が無効です",
+    "blacklistWechatAppRequired": "WeChat OpenId ブラックリストには決済アプリの指定が必要です",
+    "blacklistChannelInvalid": "ブラックリストのチャネルが無効です",
     "hitNotFound": "リスクヒット記録が存在しません",
     "handleStatusInvalid": "処理状態が無効です"
   }

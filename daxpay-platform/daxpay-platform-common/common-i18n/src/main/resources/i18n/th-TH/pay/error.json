@@ -131,6 +131,8 @@
     "blacklistNotFound": "ไม่พบรายการบัญชีดำ",
     "blacklistTypeInvalid": "ประเภทบัญชีดำไม่ถูกต้อง",
     "blacklistStatusInvalid": "สถานะบัญชีดำไม่ถูกต้อง",
+    "blacklistWechatAppRequired": "บัญชีดำ OpenId WeChat ต้องระบุแอปชำระเงิน",
+    "blacklistChannelInvalid": "ช่องทางบัญชีดำไม่ถูกต้อง",
     "hitNotFound": "ไม่พบบันทึกการตรวจพบความเสี่ยง",
     "handleStatusInvalid": "สถานะการจัดการไม่ถูกต้อง"
   }

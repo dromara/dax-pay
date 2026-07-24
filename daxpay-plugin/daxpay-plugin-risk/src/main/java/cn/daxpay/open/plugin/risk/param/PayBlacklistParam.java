@@ -22,7 +22,7 @@ public class PayBlacklistParam {
     @NotNull(message = "{validation.field.id.notNull}", groups = ValidationGroup.edit.class)
     private Long id;
 
-    /// 类型：ip / open_id
+    /// 类型：ip / alipay_user / wechat_openid
     @Schema(description = "类型")
     @NotBlank(message = "{validation.field.type.notBlank}", groups = ValidationGroup.add.class)
     @Size(max = 32, message = "{validation.field.product.size}")
@@ -34,13 +34,10 @@ public class PayBlacklistParam {
     @Size(max = 128, message = "{validation.field.openId.size}")
     private String value;
 
-    @Schema(description = "通道族")
-    @Size(max = 32, message = "{validation.field.channel.size}")
-    private String channel;
-
-    @Schema(description = "通道应用AppId")
+    /// 微信平台支付应用 AppId（仅 wechat_openid 必填）
+    @Schema(description = "微信平台支付应用 AppId")
     @Size(max = 64, message = "{validation.field.channelAppId.size}")
-    private String channelAppId;
+    private String wxAppId;
 
     /// 状态：enable / disable
     @Schema(description = "状态")

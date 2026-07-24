@@ -23,6 +23,6 @@ public class PayBlacklistQuery {
     @Schema(description = "状态")
     private String status;
 
-    @Schema(description = "通道族")
-    private String channel;
+    @Schema(description = "微信平台支付应用 AppId")
+    private String wxAppId;
 }
