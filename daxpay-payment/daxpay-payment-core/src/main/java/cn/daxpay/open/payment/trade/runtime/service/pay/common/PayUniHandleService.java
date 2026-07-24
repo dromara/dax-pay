@@ -40,6 +40,7 @@ public class PayUniHandleService {
     private final GatewayPayOrderManager gatewayPayOrderManager;
     private final PayPluginAssistService payPluginAssistService;
     private final TradeNoticeBridge tradeNoticeBridge;
+    private final PayRiskAssistService payRiskAssistService;
 
     /// 支付发起后处理
     /// 不论是否完成都更新交易单; 仅资金状态为 SUCCESS 时同步容器为 PAID。
@@ -75,11 +76,13 @@ public class PayUniHandleService {
                 payNormalOrderManager.updateById(order);
             }
         }
-        // 出站通知 + 插件: 仅支付成功时
+        // 出站通知 + 插件 + 事后风控: 仅支付成功时
         if (Objects.equals(trade.getStatus(), PayFundStatusEnum.SUCCESS.getCode())) {
             // 商户出站通知(系统协议)
             tradeNoticeBridge.dispatchPay(trade, NoticeEventEnum.PAY_SUCCESS);
             payPluginAssistService.paySuccess(trade);
+            // 事后风控补录（仅用付款用户 buyerId，不用通道内部 userId）
+            payRiskAssistService.checkAfterPay(trade, result.getBuyerId());
         }
     }
 
@@ -98,6 +101,8 @@ public class PayUniHandleService {
             // 商户出站通知(系统协议)
             tradeNoticeBridge.dispatchPay(trade, NoticeEventEnum.PAY_SUCCESS);
             payPluginAssistService.paySuccess(trade);
+            payRiskAssistService.checkAfterPay(trade,
+                    syncResult != null ? syncResult.getBuyerId() : null);
             return;
         }
         NormalPayOrder order = payNormalOrderManager.findById(trade.getContainerId()).orElse(null);
@@ -112,17 +117,25 @@ public class PayUniHandleService {
         // 商户出站通知(系统协议)
         tradeNoticeBridge.dispatchPay(trade, NoticeEventEnum.PAY_SUCCESS);
         payPluginAssistService.paySuccess(trade);
+        payRiskAssistService.checkAfterPay(trade,
+                syncResult != null ? syncResult.getBuyerId() : null);
     }
 
-    /// 支付成功后续处理(回调路径, 无回执详情)
-    public void paySuccess(PayTrade trade) {
+    /// 支付成功后续处理(回调路径)；可选回写 buyerId 后补录风控
+    public void paySuccess(PayTrade trade, String buyerId) {
         if (isGateway(trade)) {
             GatewayPayOrder order = gatewayPayOrderManager.findById(trade.getContainerId()).orElse(null);
+            if (order != null && StrUtil.isNotBlank(buyerId)) {
+                order.setBuyerId(buyerId);
+            }
             applyProviderFallback(trade, order);
             updateTradeWithPosted(trade);
             markContainerPaid(trade, order);
         } else {
             NormalPayOrder order = payNormalOrderManager.findById(trade.getContainerId()).orElse(null);
+            if (order != null && StrUtil.isNotBlank(buyerId)) {
+                order.setBuyerId(buyerId);
+            }
             applyProviderFallback(trade, order);
             updateTradeWithPosted(trade);
             markContainerPaid(trade, order);
@@ -130,6 +143,12 @@ public class PayUniHandleService {
         // 商户出站通知(系统协议)
         tradeNoticeBridge.dispatchPay(trade, NoticeEventEnum.PAY_SUCCESS);
         payPluginAssistService.paySuccess(trade);
+        payRiskAssistService.checkAfterPay(trade, buyerId);
+    }
+
+    /// 支付成功后续处理(回调路径, 无回执详情)
+    public void paySuccess(PayTrade trade) {
+        paySuccess(trade, (String) null);
     }
 
     /// 支付失败处理: 资金态 FAIL, 容器态 FAILED（与主动关单 closed 区分）

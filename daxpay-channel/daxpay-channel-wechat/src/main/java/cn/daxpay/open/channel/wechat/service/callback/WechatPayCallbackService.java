@@ -121,6 +121,8 @@ public class WechatPayCallbackService {
             data.setTradeStatus(resp.getTradeState());
             data.setCallbackErrorMsg("微信回调状态非成功: " + resp.getTradeState());
         }
+        // 买家 openid 写入 buyerId，供事后风控补录（不用通道内部 userId）
+        data.setBuyerId(resp.getOpenid());
         return data;
     }
 

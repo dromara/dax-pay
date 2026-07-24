@@ -136,6 +136,12 @@ public class AlipayCallbackService {
             callbackData.setCallbackErrorMsg("支付宝回调状态非成功: " + resp.getTradeStatus());
         }
         callbackData.setFinishTime(resp.getFinishTime());
+        // 支付宝异步通知 buyer_id 供事后风控补录（不用通道内部 userId）
+        String buyerId = params.get("buyer_id");
+        if (StrUtil.isBlank(buyerId)) {
+            buyerId = params.get("buyer_open_id");
+        }
+        callbackData.setBuyerId(buyerId);
         payCallbackService.payCallback(callbackData);
         payCallbackRecordService.savePay(channelMchNo, callbackData);
         return NOTIFY_SUCCESS;

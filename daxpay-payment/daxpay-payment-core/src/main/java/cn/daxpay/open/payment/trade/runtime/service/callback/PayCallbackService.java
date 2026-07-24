@@ -106,7 +106,8 @@ public class PayCallbackService {
         if (Objects.nonNull(callbackData.getOutTradeNo())) {
             trade.setOutOrderNo(callbackData.getOutTradeNo());
         }
-        payUniHandleService.paySuccess(trade);
+        // 回写 buyerId 并事后风控补录（统一由 paySuccess 重载处理）
+        payUniHandleService.paySuccess(trade, callbackData.getBuyerId());
     }
 
     /// 支付失败: 仅 PROCESSING 可关失败; 与同步路径一致走 payFail(资金态 FAIL)

@@ -54,4 +54,7 @@ public class PayRiskCheckContext {
 
     /// 通道应用 AppId（openId 精细匹配可选）
     private String channelAppId;
+
+    /// 事前命中是否阻断下单（null/true=阻断；false=仅落命中记录）
+    private Boolean blockOnHit;
 }

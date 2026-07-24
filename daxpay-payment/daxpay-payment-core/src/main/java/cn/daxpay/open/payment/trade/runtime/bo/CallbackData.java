@@ -36,6 +36,9 @@ public class CallbackData {
     /// 完成时间(UTC)
     private OffsetDateTime finishTime;
 
+    /// 付款用户标识（支付宝 user_id、微信 openid 等；事后风控补录）
+    private String buyerId;
+
     /// 回调信息错误信息
     private String callbackErrorMsg;
 

@@ -49,10 +49,12 @@ public class DefaultPayRiskChecker implements PayRiskChecker {
             return;
         }
         ctx.setPhase(PayRiskHitPhaseEnum.BEFORE_PAY.getCode());
+        // null/true=阻断下单；false=仅落命中（对齐 riskBlockBeforePay）
+        boolean throwOnHit = !Boolean.FALSE.equals(ctx.getBlockOnHit());
         // IP 名单（全局生效）
-        rejectIfBlocked(ctx, PayBlacklistTypeEnum.IP.getCode(), ctx.getClientIp(), null, true);
+        rejectIfBlocked(ctx, PayBlacklistTypeEnum.IP.getCode(), ctx.getClientIp(), null, throwOnHit);
         // 用户标识：按通道映射名单类型
-        boolean identityBlocked = checkUserIdentity(ctx, ctx.getOpenId(), true);
+        boolean identityBlocked = checkUserIdentity(ctx, ctx.getOpenId(), throwOnHit);
         if (!identityBlocked && StrUtil.isBlank(ctx.getOpenId())) {
             log.warn("支付前 openId 缺失, 用户标识黑名单降级为仅 IP 校验 + 事后补录: "
                     + "tradeType={}, method={}, mchNo={}, clientIp={}",
