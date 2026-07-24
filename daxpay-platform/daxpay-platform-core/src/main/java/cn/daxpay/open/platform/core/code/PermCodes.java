@@ -122,6 +122,12 @@ public interface PermCodes {
             String MENU = "merchant:easypay";
         }
 
+        /// 支付宝服务商代运营授权 menuCode=merchant:alipay-isv-auth
+        interface AlipayIsvAuth {
+            /// 菜单编码
+            String MENU = "merchant:alipay-isv-auth";
+        }
+
         /// 门店 menuCode=merchant:store
         interface Store {
             /// 菜单编码

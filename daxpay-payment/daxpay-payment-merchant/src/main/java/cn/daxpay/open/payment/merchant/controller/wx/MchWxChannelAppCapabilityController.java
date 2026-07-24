@@ -4,8 +4,10 @@ import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
 import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
 import cn.daxpay.open.payment.wx.param.WxChannelAppCapabilityBatchParam;
+import cn.daxpay.open.payment.wx.result.WxCapabilityOption;
 import cn.daxpay.open.payment.wx.result.WxChannelAppCapabilityResult;
 import cn.daxpay.open.payment.wx.service.WxChannelAppCapabilityService;
+import cn.daxpay.open.payment.wx.service.WxPlatformAppCapabilityService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
@@ -14,6 +16,7 @@ import cn.daxpay.open.platform.core.exception.config.ConfigErrorException;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +39,7 @@ import java.util.Objects;
 public class MchWxChannelAppCapabilityController {
 
     private final WxChannelAppCapabilityService wxChannelAppCapabilityService;
+    private final WxPlatformAppCapabilityService wxPlatformAppCapabilityService;
     private final ChannelMerchantManager channelMerchantManager;
     private final PaymentContext paymentContext;
 
@@ -67,6 +71,16 @@ public class MchWxChannelAppCapabilityController {
             @NotBlank(message = "{validation.field.channelMchNo.notBlank}") String channelMchNo) {
         this.assertChannelMchOwned(channelMchNo);
         return Res.ok(wxChannelAppCapabilityService.listByChannelMchNo(channelMchNo));
+    }
+
+    @PermCode(code = PermCodes.Action.VIEW)
+    @Operation(summary = "按产品查询可绑定能力候选")
+    @GetMapping("/list-supported-capabilities")
+    public Result<List<WxCapabilityOption>> listSupportedCapabilities(
+            @NotBlank(message = "{validation.field.product.notBlank}")
+            @Parameter(description = "支付产品编码") @RequestParam String product) {
+        // 只读产品元数据，无需通道商户归属校验
+        return Res.ok(wxPlatformAppCapabilityService.listSupportedCapabilities(product));
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
