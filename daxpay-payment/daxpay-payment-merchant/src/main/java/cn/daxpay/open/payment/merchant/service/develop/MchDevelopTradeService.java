@@ -1,11 +1,11 @@
-package cn.daxpay.open.payment.admin.service.develop;
+package cn.daxpay.open.payment.merchant.service.develop;
 
-import cn.daxpay.open.payment.admin.param.develop.DevelopParam;
-import cn.daxpay.open.payment.admin.result.develop.DevelopSignResult;
-import cn.daxpay.open.payment.common.util.ObjectSignStrUtil;
-import cn.daxpay.open.payment.common.util.PaySignUtil;
 import cn.daxpay.open.payment.masterdata.result.provider.PayProviderMethodResult;
 import cn.daxpay.open.payment.masterdata.service.provider.PayProviderMethodService;
+import cn.daxpay.open.payment.merchant.param.develop.DevelopParam;
+import cn.daxpay.open.payment.merchant.result.develop.DevelopSignResult;
+import cn.daxpay.open.payment.common.util.ObjectSignStrUtil;
+import cn.daxpay.open.payment.common.util.PaySignUtil;
 import cn.daxpay.open.payment.route.service.support.PayRouteStrategyCapabilitySupport;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.platform.core.rest.dto.ChannelMchOption;
@@ -19,12 +19,12 @@ import java.util.List;
 /// # 交易开发调试服务
 ///
 /// 仅提供组参辅助与签名能力, **不发起真实交易**。
-/// 真实支付由管理端调试页模拟商户 HTTP 请求调用 `/unipay/pay` 完成,
-/// 与正式对接走同一入口, 避免 admin 内部直调支付核心形成后门。
+/// 真实支付由商户端调试页模拟商户 HTTP 请求调用 `/unipay/pay` 完成,
+/// 与正式对接走同一入口, 避免内部直调支付核心形成后门。
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class DevelopTradeService {
+public class MchDevelopTradeService {
 
     private final PayProviderMethodService payProviderMethodService;
     private final PayRouteStrategyCapabilitySupport payRouteStrategyCapabilitySupport;

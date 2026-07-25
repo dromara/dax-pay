@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.merchant.service.develop;
+package cn.daxpay.open.payment.admin.service.develop;
 
 import cn.daxpay.open.payment.auth.AuthSessionStore;
 import cn.daxpay.open.payment.auth.ChannelProductAuthService;
@@ -25,7 +25,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class DevelopAuthService {
+public class DevelopAuthAdminService {
 
     private final PlatformAuthService platformAuthService;
     private final ChannelProductAuthService channelProductAuthService;

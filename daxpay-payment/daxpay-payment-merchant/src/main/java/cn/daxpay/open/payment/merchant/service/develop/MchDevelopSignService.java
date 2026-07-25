@@ -1,9 +1,9 @@
-package cn.daxpay.open.payment.admin.service.develop;
+package cn.daxpay.open.payment.merchant.service.develop;
 
-import cn.daxpay.open.payment.admin.param.develop.DevelopSignParam;
-import cn.daxpay.open.payment.admin.param.develop.DevelopVerifyParam;
-import cn.daxpay.open.payment.admin.result.develop.DevelopSignResult;
 import cn.daxpay.open.payment.common.util.JsonSignStrUtil;
+import cn.daxpay.open.payment.merchant.param.develop.DevelopSignParam;
+import cn.daxpay.open.payment.merchant.param.develop.DevelopVerifyParam;
+import cn.daxpay.open.payment.merchant.result.develop.DevelopSignResult;
 import cn.daxpay.open.platform.core.util.RsaSignUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class DevelopSignService {
+public class MchDevelopSignService {
 
     /// 生成签名
     public DevelopSignResult sign(DevelopSignParam param) {

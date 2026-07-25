@@ -1,8 +1,8 @@
-package cn.daxpay.open.payment.admin.controller.develop;
+package cn.daxpay.open.payment.merchant.controller.develop;
 
-import cn.daxpay.open.payment.admin.param.develop.DevelopParam;
-import cn.daxpay.open.payment.admin.result.develop.DevelopSignResult;
-import cn.daxpay.open.payment.admin.service.develop.DevelopTradeService;
+import cn.daxpay.open.payment.merchant.param.develop.DevelopParam;
+import cn.daxpay.open.payment.merchant.result.develop.DevelopSignResult;
+import cn.daxpay.open.payment.merchant.service.develop.MchDevelopTradeService;
 import cn.daxpay.open.payment.masterdata.result.provider.PayProviderMethodResult;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.platform.core.annotation.PermCode;
@@ -24,30 +24,30 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-/// 交易开发调试(管理)
+/// 交易开发调试(商户端)
 ///
 /// 仅提供签名与元数据辅助, 真实支付由前端模拟商户请求调用 `/unipay/pay`。
 @PermCode(menuCode = PermCodes.Develop.Trade.MENU)
-@Tag(name = "交易开发调试服务")
+@Tag(name = "交易开发调试服务(商户端)")
 @RestController
-@RequestMapping("/admin/develop/trade")
+@RequestMapping("/mch/develop/trade")
 @RequiredArgsConstructor
-public class DevelopTradeController {
+public class MchDevelopTradeController {
 
-    private final DevelopTradeService developTradeService;
+    private final MchDevelopTradeService mchDevelopTradeService;
 
     @PermCode(code = PermCodes.Action.SIGN)
     @Operation(summary = "支付参数签名")
     @PostMapping("/sign")
     public Result<DevelopSignResult> sign(@RequestBody DevelopParam<NormalPayParam> param) {
-        return Res.ok(developTradeService.sign(param));
+        return Res.ok(mchDevelopTradeService.sign(param));
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "已启用渠道支付方式目录")
     @GetMapping("/method-directory")
     public Result<List<PayProviderMethodResult>> methodDirectory() {
-        return Res.ok(developTradeService.listMethodDirectory());
+        return Res.ok(mchDevelopTradeService.listMethodDirectory());
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
@@ -56,7 +56,7 @@ public class DevelopTradeController {
     public Result<List<ChannelMchOption>> channelMchCandidates(
             @NotBlank(message = "{validation.field.mchNo.notBlank}") String mchNo,
             @RequestParam(required = false) String provider) {
-        return Res.ok(developTradeService.listChannelMchCandidates(mchNo, provider));
+        return Res.ok(mchDevelopTradeService.listChannelMchCandidates(mchNo, provider));
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
@@ -64,6 +64,6 @@ public class DevelopTradeController {
     @GetMapping("/capability-candidates")
     public Result<List<LabelValue>> capabilityCandidates(
             @NotBlank(message = "{validation.field.channelMchNo.notBlank}") String channelMchNo) {
-        return Res.ok(developTradeService.listCapabilityCandidates(channelMchNo));
+        return Res.ok(mchDevelopTradeService.listCapabilityCandidates(channelMchNo));
     }
 }

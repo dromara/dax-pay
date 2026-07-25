@@ -1,10 +1,10 @@
-package cn.daxpay.open.payment.admin.controller.develop;
+package cn.daxpay.open.payment.merchant.controller.develop;
 
 import cn.daxpay.open.platform.core.code.PermCodes;
-import cn.daxpay.open.payment.admin.param.develop.DevelopSignParam;
-import cn.daxpay.open.payment.admin.param.develop.DevelopVerifyParam;
-import cn.daxpay.open.payment.admin.result.develop.DevelopSignResult;
-import cn.daxpay.open.payment.admin.service.develop.DevelopSignService;
+import cn.daxpay.open.payment.merchant.param.develop.DevelopSignParam;
+import cn.daxpay.open.payment.merchant.param.develop.DevelopVerifyParam;
+import cn.daxpay.open.payment.merchant.result.develop.DevelopSignResult;
+import cn.daxpay.open.payment.merchant.service.develop.MchDevelopSignService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
@@ -16,27 +16,27 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/// 签名调试(管理)
+/// 签名调试(商户端)
 @PermCode(menuCode = PermCodes.Develop.Sign.MENU)
-@Tag(name = "签名调试服务")
+@Tag(name = "签名调试服务(商户端)")
 @RestController
-@RequestMapping("/admin/develop/sign")
+@RequestMapping("/mch/develop/sign")
 @RequiredArgsConstructor
-public class DevelopSignController {
+public class MchDevelopSignController {
 
-    private final DevelopSignService developSignService;
+    private final MchDevelopSignService mchDevelopSignService;
 
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "生成签名")
     @PostMapping("/gen")
     public Result<DevelopSignResult> sign(@RequestBody DevelopSignParam param) {
-        return Res.ok(developSignService.sign(param));
+        return Res.ok(mchDevelopSignService.sign(param));
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "验签")
     @PostMapping("/verify")
     public Result<Boolean> verify(@RequestBody DevelopVerifyParam param) {
-        return Res.ok(developSignService.verify(param));
+        return Res.ok(mchDevelopSignService.verify(param));
     }
 }

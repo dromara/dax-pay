@@ -2,7 +2,7 @@ package cn.daxpay.open.payment.admin.controller.develop;
 
 import cn.daxpay.open.payment.admin.param.develop.DevelopParam;
 import cn.daxpay.open.payment.admin.result.develop.DevelopSignResult;
-import cn.daxpay.open.payment.admin.service.develop.DevelopGatewayService;
+import cn.daxpay.open.payment.admin.service.develop.DevelopGatewayAdminService;
 import cn.daxpay.open.payment.unipay.param.gateway.GatewayPrePayParam;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
@@ -24,14 +24,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/admin/develop/gateway")
 @RequiredArgsConstructor
-public class DevelopGatewayController {
+public class DevelopGatewayAdminController {
 
-    private final DevelopGatewayService developGatewayService;
+    private final DevelopGatewayAdminService developGatewayAdminService;
 
     @PermCode(code = PermCodes.Action.SIGN)
     @Operation(summary = "网关预下单参数签名")
     @PostMapping("/sign")
     public Result<DevelopSignResult> sign(@RequestBody DevelopParam<GatewayPrePayParam> param) {
-        return Res.ok(developGatewayService.sign(param));
+        return Res.ok(developGatewayAdminService.sign(param));
     }
 }

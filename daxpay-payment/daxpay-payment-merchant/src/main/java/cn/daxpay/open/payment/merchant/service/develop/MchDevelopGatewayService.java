@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class DevelopGatewayService {
+public class MchDevelopGatewayService {
 
     /// 生成网关预下单参数签名(与正式签名逻辑一致)
     ///
