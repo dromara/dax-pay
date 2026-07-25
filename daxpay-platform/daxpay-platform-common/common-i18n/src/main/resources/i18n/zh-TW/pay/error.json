@@ -97,7 +97,8 @@
     "refundNotFound": "退款單不存在,記錄回撥記錄",
     "refundAlreadyProcessed": "退款單狀態已處理,記錄回撥記錄",
     "transferNotFound": "轉賬單不存在,記錄回撥記錄",
-    "transferAlreadyProcessed": "轉賬單狀態已處理,記錄回撥記錄"
+    "transferAlreadyProcessed": "轉賬單狀態已處理,記錄回撥記錄",
+    "abnormal": "回撥處理異常，請聯繫平台客服"
   },
   "assist": {
     "mchPublicKeyEmpty": "商戶公鑰為空",

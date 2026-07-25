@@ -97,7 +97,8 @@
     "refundNotFound": "환불 주문을 찾을 수 없습니다. 콜백을 녹음 중입니다.",
     "refundAlreadyProcessed": "환불 주문이 이미 처리되었으며 콜백을 녹음 중입니다.",
     "transferNotFound": "이체 주문을 찾을 수 없습니다. 콜백을 녹음 중입니다.",
-    "transferAlreadyProcessed": "이전 주문이 이미 처리되었으며 콜백을 녹음하고 있습니다."
+    "transferAlreadyProcessed": "이전 주문이 이미 처리되었으며 콜백을 녹음하고 있습니다.",
+    "abnormal": "콜백 처리 중 예외가 발생했습니다. 플랫폼 지원에 문의하세요"
   },
   "assist": {
     "mchPublicKeyEmpty": "판매자 공개 키가 비어 있습니다.",

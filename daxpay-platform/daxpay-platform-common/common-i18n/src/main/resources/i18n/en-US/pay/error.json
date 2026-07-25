@@ -97,7 +97,8 @@
     "refundNotFound": "Refund order not found, recording callback",
     "refundAlreadyProcessed": "Refund order already processed, recording callback",
     "transferNotFound": "Transfer order not found, recording callback",
-    "transferAlreadyProcessed": "Transfer order already processed, recording callback"
+    "transferAlreadyProcessed": "Transfer order already processed, recording callback",
+    "abnormal": "Callback processing exception, please contact platform support"
   },
   "assist": {
     "mchPublicKeyEmpty": "Merchant public key is empty",

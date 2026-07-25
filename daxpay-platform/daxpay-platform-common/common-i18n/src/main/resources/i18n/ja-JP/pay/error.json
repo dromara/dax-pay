@@ -97,7 +97,8 @@
     "refundNotFound": "払い戻し注文が見つかりません。コールバックを記録しています",
     "refundAlreadyProcessed": "払い戻し注文はすでに処理されており、コールバックを記録しています",
     "transferNotFound": "転送オーダーが見つかりません。コールバックを記録しています",
-    "transferAlreadyProcessed": "転送オーダーはすでに処理されており、コールバックを記録しています"
+    "transferAlreadyProcessed": "転送オーダーはすでに処理されており、コールバックを記録しています",
+    "abnormal": "コールバック処理で例外が発生しました。プラットフォームサポートにお問い合わせください"
   },
   "assist": {
     "mchPublicKeyEmpty": "販売者の公開キーが空です",
