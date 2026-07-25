@@ -65,14 +65,30 @@ public class RoleUnifiedAssignService {
         List<RoleMenu> roleMenus = roleMenuManager.findAllByRole(roleId);
         List<RoleCode> roleCodes = roleCodeManager.findAllByRole(roleId);
 
-        Set<Long> checkedMenuIds = roleMenus.stream().map(RoleMenu::getMenuId).collect(Collectors.toCollection(HashSet::new));
-        Set<Long> checkedCodeIds = roleCodes.stream().map(RoleCode::getCodeId).collect(Collectors.toCollection(HashSet::new));
-
         // 权限码主数据不区分终端，查询时需要按 menuCode 挂载到当前终端下的菜单实例。
         Map<String, List<PermCodeData>> codeMapByMenuCode = allCodes.stream()
                 .filter(item -> item.getId() != null)
                 .filter(item -> item.getMenuCode() != null && !item.getMenuCode().isBlank())
                 .collect(Collectors.groupingBy(PermCodeData::getMenuCode));
+
+        // 角色菜单/权限码分配跨终端共用一张关系表，需以当前终端为白名单过滤勾选态，
+        // 否则其他终端的分配会被计入，前端出现"已选数 > 总数"（如菜单 34/33）
+        Set<Long> menuIdInClient = menus.stream().map(PermMenu::getId).collect(Collectors.toCollection(HashSet::new));
+        // 当前终端树中实际出现的权限码：当前终端菜单的 menuCode 对应的全部权限码
+        Set<Long> codeIdInTree = menus.stream()
+                .map(PermMenu::getMenuCode)
+                .filter(mc -> mc != null && !mc.isBlank())
+                .flatMap(mc -> codeMapByMenuCode.getOrDefault(mc, List.of()).stream())
+                .map(PermCodeData::getId)
+                .collect(Collectors.toCollection(HashSet::new));
+        Set<Long> checkedMenuIds = roleMenus.stream()
+                .map(RoleMenu::getMenuId)
+                .filter(menuIdInClient::contains)
+                .collect(Collectors.toCollection(HashSet::new));
+        Set<Long> checkedCodeIds = roleCodes.stream()
+                .map(RoleCode::getCodeId)
+                .filter(codeIdInTree::contains)
+                .collect(Collectors.toCollection(HashSet::new));
 
         // 构建统一扁平节点列表：菜单节点 + 权限码节点
         List<RoleUnifiedAssignTreeResult> allNodes = new ArrayList<>();
