@@ -234,7 +234,7 @@ public interface PermCodes {
         }
     }
 
-    /// 交易单据域（从 payment 拆出，对齐侧栏「交易管理」）
+    /// 交易单据域（从 payment 拆出，对齐侧栏「交易订单」）
     interface Trade {
         /// 普通支付业务订单 menuCode=trade:order
         interface Order {
