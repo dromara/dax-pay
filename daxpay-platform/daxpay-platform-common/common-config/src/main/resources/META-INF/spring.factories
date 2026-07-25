@@ -1,0 +1,5 @@
+# Spring Boot SPI: 注册 EnvironmentPostProcessor
+# 注意: Spring Boot 4.x 中 EnvironmentPostProcessor 仍通过 spring.factories 注册
+# (AutoConfiguration 才走 META-INF/spring/*.imports), 接口已迁移到顶层包 org.springframework.boot
+org.springframework.boot.EnvironmentPostProcessor=\
+  cn.daxpay.open.platform.common.config.DeploymentModeEnforcer

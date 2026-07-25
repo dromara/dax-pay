@@ -100,6 +100,10 @@ management:
 # 基础脚手架配置
 daxpay:
   platform:
+    # 部署模式: PROD 触发启动期 fail-fast 校验, 杜绝开发态功能(沙箱/超管/Swagger 等)误开
+    # 不显式配置时 DeploymentModeEnforcer 会按 spring.profiles.active 自动推断(prod profile → PROD)
+    deployment:
+      mode: PROD
     common:
       # 异常信息(生产不返回完整堆栈)
       exception:
@@ -123,6 +127,8 @@ daxpay:
           file-path: ${IP2REGION_FILE_PATH:/data/ip/ip2region_v4.xdb}
           search-type: VECTOR_INDEX
     config:
+      # 沙箱环境(必须关闭; 不写时 Java 默认 true 会被 DeploymentModeEnforcer 拦截)
+      sandbox-enabled: false
       # RSA 密钥(PEM 文本通过环境变量注入)
       key-config:
         private-key: ${RSA_PRIVATE_KEY:?missing RSA_PRIVATE_KEY}
