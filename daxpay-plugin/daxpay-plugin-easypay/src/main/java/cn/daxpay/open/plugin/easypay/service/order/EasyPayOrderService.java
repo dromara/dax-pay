@@ -13,8 +13,14 @@ import java.math.RoundingMode;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 
-/// # 易支付订单服务
+/// # 易支付订单生命周期回写服务
 ///
+/// 仅承担支付/退款/关单钩子的协议单回写; 由 [cn.daxpay.open.plugin.easypay.strategy.EasyPayPluginStrategy]
+/// 经插件分发链调用。
+/// 管理端入口(分页/详情/同步/关单) 见 [EasyPayOrderQueryService], 与本类解耦以避免循环依赖:
+/// 钩子链位于 [cn.daxpay.open.payment.trade.runtime.service.pay.common.PayUniHandleService] 的下游,
+/// 若本类同时持有 [cn.daxpay.open.payment.trade.order.service.NormalPayOrderService] 用于同步/关单透传,
+/// 会经 NormalPayOrderService -> PaySyncService -> PayUniHandleService -> 插件链 -> 本类 形成构造期循环依赖。
 @Slf4j
 @Service
 @RequiredArgsConstructor

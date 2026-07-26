@@ -1,8 +1,14 @@
 package cn.daxpay.open.plugin.easypay.dao;
 
 import cn.daxpay.open.platform.common.mybatisplus.impl.BaseManager;
+import cn.daxpay.open.platform.common.mybatisplus.query.generator.QueryGenerator;
+import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.open.platform.core.annotation.IgnoreTenant;
+import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.plugin.easypay.entity.EasyPayOrder;
+import cn.daxpay.open.plugin.easypay.param.order.EasyPayOrderQuery;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
@@ -39,5 +45,14 @@ public class EasyPayOrderManager extends BaseManager<EasyPayOrderMapper, EasyPay
     @IgnoreTenant
     public Optional<EasyPayOrder> findByOrderIdNotTenant(Long orderId) {
         return findByField(EasyPayOrder::getOrderId, orderId);
+    }
+
+    /// 分页查询(管理端), 默认按创建时间倒序
+    public Page<EasyPayOrder> page(PageParam pageParam, EasyPayOrderQuery query) {
+        Page<EasyPayOrder> mpPage = MpUtil.getMpPage(pageParam);
+        QueryWrapper<EasyPayOrder> wrapper = QueryGenerator.generator(query);
+        // 默认按创建时间倒序
+        wrapper.orderByDesc("create_time");
+        return this.page(mpPage, wrapper);
     }
 }

@@ -12,6 +12,7 @@ import cn.daxpay.open.platform.core.enums.pay.notice.NoticeProtocolEnum;
 import cn.daxpay.open.platform.core.enums.pay.trade.TradeSourceEnum;
 import cn.daxpay.open.plugin.easypay.entity.EasyPayOrder;
 import cn.daxpay.open.plugin.easypay.service.order.EasyPayOrderService;
+import cn.daxpay.open.plugin.easypay.service.order.EasyPayRefundOrderService;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,7 @@ import java.util.Objects;
 public class EasyPayPluginStrategy implements AbsPayPluginStrategy {
 
     private final EasyPayOrderService easyPayOrderService;
+    private final EasyPayRefundOrderService easyPayRefundOrderService;
     private final NoticeDispatcher noticeDispatcher;
 
     /// 支付成功：回写协议单状态并注册易支付出站通知
@@ -50,7 +52,7 @@ public class EasyPayPluginStrategy implements AbsPayPluginStrategy {
         easyPayOrderService.payClose(trade);
     }
 
-    /// 退款成功：累加协议单已退金额
+    /// 退款成功：累加协议单已退金额并回写独立退款记录状态
     @Override
     public void refundSuccess(PayTrade trade, RefundOrder refundOrder) {
         if (!Objects.equals(TradeSourceEnum.EASY_PAY.getCode(), trade.getSource())) {
@@ -58,6 +60,8 @@ public class EasyPayPluginStrategy implements AbsPayPluginStrategy {
         }
         long amount = refundOrder.getAmount() == null ? 0L : refundOrder.getAmount();
         easyPayOrderService.refundSuccess(trade, amount);
+        // 回写独立退款记录状态（异步退款最终成功时生效；同步退款记录已直接建为成功，幂等跳过）
+        easyPayRefundOrderService.markSuccess(refundOrder);
     }
 
     /// 注册易支付协议出站（content 仅存 id 指针）

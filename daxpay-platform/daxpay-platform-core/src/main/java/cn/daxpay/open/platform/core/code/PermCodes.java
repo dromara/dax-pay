@@ -431,5 +431,20 @@ public interface PermCodes {
             String MENU = "device:qrcode";
         }
     }
+
+    /// 扩展插件域（协议适配层的订单/退款，与内核交易单据隔离）
+    interface Plugin {
+        /// 易支付协议订单 menuCode=plugin:easypay-order
+        interface EasyPayOrder {
+            /// 菜单编码
+            String MENU = "plugin:easypay-order";
+        }
+
+        /// 易支付协议退款订单 menuCode=plugin:easypay-refund
+        interface EasyPayRefund {
+            /// 菜单编码
+            String MENU = "plugin:easypay-refund";
+        }
+    }
 }
 

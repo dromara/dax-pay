@@ -11,6 +11,7 @@ import cn.daxpay.open.plugin.easypay.result.api.v2.EasyPayRefundOrderV2Result;
 import cn.daxpay.open.plugin.easypay.result.api.v2.EasyPayRefundV2Result;
 import cn.daxpay.open.plugin.easypay.service.api.EasyPayAssistService;
 import cn.daxpay.open.plugin.easypay.service.config.EasyPayCredentialService;
+import cn.daxpay.open.plugin.easypay.service.order.EasyPayRefundOrderService;
 import cn.daxpay.open.plugin.easypay.util.EasyPayUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,7 @@ public class EasyPayRefundV2Service {
     private final EasyPayAssistService easyPayAssistService;
     private final RefundService payRefundService;
     private final RefundOrderManager payRefundOrderManager;
+    private final EasyPayRefundOrderService easyPayRefundOrderService;
 
     /// 退款
     public EasyPayRefundV2Result refund(EasyPayRefundV2Param param) {
@@ -53,6 +55,8 @@ public class EasyPayRefundV2Service {
             refundParam.setAmount(EasyPayUtil.yuanToFen(param.getMoney()));
             refundParam.setReason("easypay refund");
             RefundOrder refundOrder = payRefundService.refund(refundParam);
+            // 双写：内核退款单返回后创建/更新易支付协议退款记录
+            easyPayRefundOrderService.createFromKernelRefund(refundOrder, credential);
             if (Objects.equals(refundOrder.getStatus(), RefundOrderStatusEnum.SUCCESS.getCode())) {
                 result.setCode(0).setMsg("success");
             } else if (Objects.equals(refundOrder.getStatus(), RefundOrderStatusEnum.PROGRESS.getCode())) {
