@@ -1,0 +1,48 @@
+package cn.daxpay.open.payment.app.merchant.controller.trade;
+
+import cn.daxpay.open.payment.app.merchant.service.trade.AppMerchantMchNoticeService;
+import cn.daxpay.open.payment.trade.notice.param.MchNoticeTaskQuery;
+import cn.daxpay.open.payment.trade.notice.result.MchNoticeTaskResult;
+import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
+import cn.daxpay.open.platform.core.rest.Res;
+import cn.daxpay.open.platform.core.rest.param.PageParam;
+import cn.daxpay.open.platform.core.rest.result.PageResult;
+import cn.daxpay.open.platform.core.rest.result.Result;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+/// # 商户出站通知(商户移动端)
+///
+/// 面向商户移动端的出站通知查询。业务编排委托 [AppMerchantMchNoticeService]。
+@PermCode(menuCode = PermCodes.Trade.Notice.MENU)
+@Validated
+@Tag(name = "商户出站通知(商户移动端)")
+@RestController
+@RequestMapping("/app-merchant/mch-notice")
+@RequiredArgsConstructor
+public class AppMerchantMchNoticeController {
+
+    private final AppMerchantMchNoticeService mchNoticeService;
+
+    @PermCode(code = PermCodes.Action.VIEW)
+    @Operation(summary = "通知任务分页")
+    @GetMapping("/task/page")
+    public Result<PageResult<MchNoticeTaskResult>> pageTask(PageParam pageParam, MchNoticeTaskQuery query) {
+        return Res.ok(mchNoticeService.pageTask(pageParam, query));
+    }
+
+    @PermCode(code = PermCodes.Action.VIEW)
+    @Operation(summary = "通知任务详情")
+    @GetMapping("/task/get-by-id")
+    public Result<MchNoticeTaskResult> getTaskById(
+            @NotNull(message = "{validation.field.id.notNull}") Long id) {
+        return Res.ok(mchNoticeService.findTaskById(id));
+    }
+}

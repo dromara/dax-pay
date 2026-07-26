@@ -18,6 +18,7 @@
         <module>daxpay-payment-core</module>
         <module>daxpay-payment-admin</module>
         <module>daxpay-payment-app-admin</module>
+        <module>daxpay-payment-app-merchant</module>
         <module>daxpay-payment-unipay</module>
         <module>daxpay-payment-merchant</module>
     </modules>

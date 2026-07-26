@@ -58,6 +58,13 @@
             <version>${project.version}</version>
         </dependency>
 
+        <!-- 商户移动端 APP/小程序（/app-merchant/**，转发 merchant/admin/core Service） -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-payment-app-merchant</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- 开放支付端（统一收单/网关产品/公开 H5） -->
         <dependency>
             <groupId>cn.daxpay.open</groupId>
