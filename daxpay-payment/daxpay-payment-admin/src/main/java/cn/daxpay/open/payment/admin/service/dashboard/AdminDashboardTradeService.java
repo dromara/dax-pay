@@ -1,6 +1,9 @@
 package cn.daxpay.open.payment.admin.service.dashboard;
 
 import cn.daxpay.open.payment.admin.dao.dashboard.AdminTradeReportMapper;
+import cn.daxpay.open.payment.admin.result.dashboard.AdminDashboardHeaderCountResult;
+import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
+import cn.daxpay.open.payment.merchant.dao.info.MerchantInfoManager;
 import cn.daxpay.open.payment.trade.report.result.AmountRangeItemResult;
 import cn.daxpay.open.payment.trade.report.result.HourlyDistItemResult;
 import cn.daxpay.open.payment.trade.report.result.MerchantRankItemResult;
@@ -10,6 +13,9 @@ import cn.daxpay.open.payment.trade.report.result.RefundTrendItemResult;
 import cn.daxpay.open.payment.trade.report.result.TradeOverviewResult;
 import cn.daxpay.open.payment.trade.report.result.TradeTrendItemResult;
 import cn.daxpay.open.payment.trade.report.support.TradeReportSupport;
+import cn.daxpay.open.platform.core.enums.client.ClientEnum;
+import cn.daxpay.open.platform.iam.dao.user.UserInfoManager;
+import cn.daxpay.open.platform.iam.entity.user.UserInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +32,26 @@ public class AdminDashboardTradeService {
 
     private final AdminTradeReportMapper adminTradeReportMapper;
     private final TradeReportSupport tradeReportSupport;
+    private final MerchantInfoManager merchantInfoManager;
+    private final ChannelMerchantManager channelMerchantManager;
+    private final UserInfoManager userInfoManager;
+
+    // ===== 头部计数 =====
+
+    /// 工作台头部: 商户 / 通道商户 / 运营用户 全量计数
+    public AdminDashboardHeaderCountResult headerCounts() {
+        long merchantCount = merchantInfoManager.lambdaQuery().count();
+        long channelMerchantCount = channelMerchantManager.lambdaQuery().count();
+        // 运营端用户: 仅 admin 终端, 排除内置超管(与 UserAdminService 列表口径一致)
+        long userCount = userInfoManager.lambdaQuery()
+                .eq(UserInfo::getClientCode, ClientEnum.ADMIN.getCode())
+                .eq(UserInfo::isAdministrator, false)
+                .count();
+        return new AdminDashboardHeaderCountResult()
+                .setMerchantCount(merchantCount)
+                .setChannelMerchantCount(channelMerchantCount)
+                .setUserCount(userCount);
+    }
 
     // ===== 概览 =====
 

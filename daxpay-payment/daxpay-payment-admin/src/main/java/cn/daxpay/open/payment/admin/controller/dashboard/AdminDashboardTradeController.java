@@ -2,6 +2,7 @@ package cn.daxpay.open.payment.admin.controller.dashboard;
 
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
+import cn.daxpay.open.payment.admin.result.dashboard.AdminDashboardHeaderCountResult;
 import cn.daxpay.open.payment.admin.service.dashboard.AdminDashboardTradeService;
 import cn.daxpay.open.payment.trade.report.result.AmountRangeItemResult;
 import cn.daxpay.open.payment.trade.report.result.HourlyDistItemResult;
@@ -42,6 +43,15 @@ import java.util.List;
 public class AdminDashboardTradeController {
 
     private final AdminDashboardTradeService adminDashboardTradeService;
+
+    // ===== 头部计数 =====
+
+    /// 工作台头部计数: 商户 / 通道商户 / 运营用户总量
+    @Operation(summary = "工作台头部计数(商户/通道商户/用户)")
+    @GetMapping("/header-counts")
+    public Result<AdminDashboardHeaderCountResult> headerCounts() {
+        return Res.ok(adminDashboardTradeService.headerCounts());
+    }
 
     // ===== 概览 =====
 
