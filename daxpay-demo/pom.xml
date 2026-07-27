@@ -35,6 +35,13 @@
             <artifactId>common-artemis</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <!-- 审计日志模块（提供 IpToRegionService，用于 IP 归属地查询演示） -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>capability-audit-log</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

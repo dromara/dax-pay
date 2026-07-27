@@ -105,7 +105,7 @@ daxpay:
       audit-log:
         ip2region:
           # ip2region.xdb 文件路径
-          file-path: D:/data/ip/ip2region_v4.xdb
+          file-path: E:/data/ip2region/ip2region_v4.xdb
           # 查询模式: VECTOR_INDEX(推荐) 或 CACHE
           search-type: VECTOR_INDEX
     config:
