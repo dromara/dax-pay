@@ -44,4 +44,13 @@ public class WxPlatformAppManager extends BaseManager<WxPlatformAppMapper, WxPla
                 .orderByAsc(WxPlatformApp::getCreateTime)
                 .orderByAsc(WxPlatformApp::getId));
     }
+
+    /// 按应用类型查询全部应用（按创建时间升序），供应用解析做唯一性判断
+    public List<WxPlatformApp> listByAppType(String appType) {
+        return lambdaQuery()
+                .eq(WxPlatformApp::getAppType, appType)
+                .orderByAsc(WxPlatformApp::getCreateTime)
+                .orderByAsc(WxPlatformApp::getId)
+                .list();
+    }
 }

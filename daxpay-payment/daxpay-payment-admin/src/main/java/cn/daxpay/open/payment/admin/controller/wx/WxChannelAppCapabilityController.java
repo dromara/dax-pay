@@ -39,11 +39,8 @@ public class WxChannelAppCapabilityController {
     @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "全量保存能力绑定")
     @PostMapping("/save-batch")
-    public Result<Void> saveBatch(
-            @NotBlank(message = "{validation.field.mchNo.notBlank}") String mchNo,
-            @NotBlank(message = "{validation.field.channelMchNo.notBlank}") String channelMchNo,
-            @RequestBody @Validated WxChannelAppCapabilityBatchParam param) {
-        wxChannelAppCapabilityService.saveBatch(mchNo, channelMchNo, param.getItems());
+    public Result<Void> saveBatch(@RequestBody @Validated WxChannelAppCapabilityBatchParam param) {
+        wxChannelAppCapabilityService.saveBatch(param.getMchNo(), param.getChannelMchNo(), param.getItems());
         return Res.ok();
     }
 }

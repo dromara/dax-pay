@@ -2,7 +2,6 @@ package cn.daxpay.open.payment.wx.service;
 
 import cn.daxpay.open.payment.wx.dao.WxChannelAppCapabilityManager;
 import cn.daxpay.open.payment.wx.dao.WxMchAppManager;
-import cn.daxpay.open.payment.wx.dao.WxPlatformAppCapabilityManager;
 import cn.daxpay.open.payment.wx.dao.WxPlatformAppManager;
 import cn.daxpay.open.payment.wx.entity.WxMchApp;
 import cn.daxpay.open.payment.wx.entity.WxPlatformApp;
@@ -19,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /// # 微信开放应用解析服务
 ///
 /// 实现 [WxAppFacade]，供通道组装器统一解析 wxAppId + Secret。
@@ -33,7 +34,6 @@ public class WxAppResolveService implements WxAppFacade {
     private final WxPlatformAppAuthConfigService wxPlatformAppAuthConfigService;
     private final WxMchAppAuthConfigService wxMchAppAuthConfigService;
     private final WxChannelAppCapabilityManager wxChannelAppCapabilityManager;
-    private final WxPlatformAppCapabilityManager wxPlatformAppCapabilityManager;
 
     /// 按档位与主键加载应用视图（含 Auth）
     @Override
@@ -60,7 +60,7 @@ public class WxAppResolveService implements WxAppFacade {
         throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.payment.wx.scopeNotExist");
     }
 
-    /// 解析单应用：显式 channelAppId → 通道能力绑 → 产品级平台默认能力绑 → appType 推导
+    /// 解析单应用：显式 channelAppId → 通道能力绑 → appType 推导（平台应用唯一命中）
     @Override
     public WxAppView resolve(String mchNo, String channelMchNo, String capability, String channelAppId, String product) {
         // 1. 显式 channelAppId
@@ -80,13 +80,14 @@ public class WxAppResolveService implements WxAppFacade {
                 return this.getById(WxAppScopeEnum.PLATFORM, platformBind.get().getWxAppRefId());
             }
         }
-        // 3. 产品级平台默认能力绑 + appType 推导可选
-        WxAppView platformFallback = this.resolvePlatformFallback(product, capability);
+        // 3. appType 推导：要求该类型平台应用唯一命中
+        WxAppView platformFallback = this.resolvePlatformFallback(capability);
         if (platformFallback != null) {
             return platformFallback;
         }
-        // 微信: 未绑定应用
-        throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE, "error.payment.wx.appNotBound");
+        // 微信: 未配置该能力对应的应用
+        throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
+                "error.payment.wx.appNotConfigured", capability);
     }
 
     /// 解析 ISV 双应用：platform(sp) 必填 + merchant(sub) 可选
@@ -108,9 +109,9 @@ public class WxAppResolveService implements WxAppFacade {
                 merchant = this.getById(WxAppScopeEnum.MERCHANT, merchantBind.get().getWxAppRefId());
             }
         }
-        // 平台侧回退：产品级平台默认能力绑 / appType 推导
+        // 平台侧回退：appType 推导（平台应用唯一命中）
         if (platform == null) {
-            platform = this.resolvePlatformFallback(product, capability);
+            platform = this.resolvePlatformFallback(capability);
         }
         // channelAppId 命中某侧时按命中侧覆盖
         if (StrUtil.isNotBlank(channelAppId)) {
@@ -130,8 +131,9 @@ public class WxAppResolveService implements WxAppFacade {
             }
         }
         if (platform == null) {
-            // 微信: 未绑定平台应用
-            throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE, "error.payment.wx.appNotBound");
+            // 微信: 未配置该能力对应的平台应用（sp 必填）
+            throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
+                    "error.payment.wx.appNotConfigured", capability);
         }
         return new WxIsvAppPair(platform, merchant);
     }
@@ -150,23 +152,26 @@ public class WxAppResolveService implements WxAppFacade {
         throw new DataNotExistException("error.payment.wx.channelAppIdNotFound", channelAppId);
     }
 
-    /// 产品级平台默认能力绑 → appType 推导（可选）
-    private WxAppView resolvePlatformFallback(String product, String capability) {
+    /// appType 推导兜底：要求该类型平台应用唯一命中
+    ///
+    /// - 唯一命中：返回该应用
+    /// - 该类型存在多个平台应用：抛 notUnique，要求显式配置通道能力绑
+    /// - 该类型无平台应用：返回 null，由调用方走最终报错
+    private WxAppView resolvePlatformFallback(String capability) {
         if (StrUtil.isBlank(capability)) {
             return null;
         }
-        if (StrUtil.isNotBlank(product)) {
-            var rel = wxPlatformAppCapabilityManager.findByProductAndCapability(product, capability);
-            if (rel.isPresent()) {
-                return this.getById(WxAppScopeEnum.PLATFORM, rel.get().getWxPlatformAppId());
-            }
-        }
-        // appType 推导可选
+        // appType 推导：要求该类型平台应用唯一命中，>1 拒绝猜测
         String appType = WxAppTypeEnum.resolveAppType(capability);
         if (appType != null) {
-            var byType = wxPlatformAppManager.findFirstByAppType(appType);
-            if (byType.isPresent()) {
-                return this.toPlatformView(byType.get());
+            List<WxPlatformApp> apps = wxPlatformAppManager.listByAppType(appType);
+            if (apps.size() > 1) {
+                // 存在多个同类型平台应用，请显式配置通道能力绑定以明确选择
+                throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
+                        "error.payment.wx.appNotUnique", appType);
+            }
+            if (apps.size() == 1) {
+                return this.toPlatformView(apps.getFirst());
             }
         }
         return null;

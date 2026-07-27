@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.OffsetDateTime;
 
@@ -41,9 +42,13 @@ public abstract class PaymentCommonParam {
     private String sign;
 
     /// 请求时间（北京时间，格式 yyyy-MM-dd HH:mm:ss）
+    ///
+    /// 双注解支撑两条绑定路径：`@JsonFormat` 供 POST JSON body（Jackson）使用，
+    /// `@DateTimeFormat` 供 GET query / form（Spring ConversionService）使用。
     @Schema(description = "请求时间(北京时间，yyyy-MM-dd HH:mm:ss)")
     @NotNull(message = "{validation.field.reqTime.notNull}")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private OffsetDateTime reqTime;
 
 }
