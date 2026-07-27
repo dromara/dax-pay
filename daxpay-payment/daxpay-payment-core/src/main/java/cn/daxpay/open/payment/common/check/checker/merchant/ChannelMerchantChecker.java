@@ -1,8 +1,8 @@
-package cn.daxpay.open.payment.check.checker.merchant;
+package cn.daxpay.open.payment.common.check.checker.merchant;
 
-import cn.daxpay.open.payment.check.checker.MerchantConfigChecker;
-import cn.daxpay.open.payment.check.enums.ConfigCheckCategoryEnum;
-import cn.daxpay.open.payment.check.model.ConfigCheckItem;
+import cn.daxpay.open.payment.common.check.checker.MerchantConfigChecker;
+import cn.daxpay.open.payment.common.check.enums.ConfigCheckCategoryEnum;
+import cn.daxpay.open.payment.common.check.model.ConfigCheckItem;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
 import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
 import lombok.RequiredArgsConstructor;

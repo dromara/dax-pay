@@ -1,6 +1,5 @@
-package cn.daxpay.open.payment.check.model;
+package cn.daxpay.open.payment.common.check.model;
 
-import cn.daxpay.open.payment.check.enums.ConfigCheckCategoryEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

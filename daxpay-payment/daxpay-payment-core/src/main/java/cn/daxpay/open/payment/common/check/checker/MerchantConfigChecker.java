@@ -1,7 +1,8 @@
-package cn.daxpay.open.payment.check.checker;
+package cn.daxpay.open.payment.common.check.checker;
 
-import cn.daxpay.open.payment.check.enums.ConfigCheckCategoryEnum;
-import cn.daxpay.open.payment.check.model.ConfigCheckItem;
+import cn.daxpay.open.payment.common.check.enums.ConfigCheckCategoryEnum;
+import cn.daxpay.open.payment.common.check.model.ConfigCheckItem;
+import cn.daxpay.open.payment.common.check.service.MerchantConfigCheckService;
 
 /// # 商户端配置检查器接口
 ///

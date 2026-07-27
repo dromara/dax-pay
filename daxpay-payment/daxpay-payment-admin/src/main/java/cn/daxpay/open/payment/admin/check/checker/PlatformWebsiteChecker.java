@@ -1,8 +1,8 @@
 package cn.daxpay.open.payment.admin.check.checker;
 
-import cn.daxpay.open.payment.check.checker.AdminConfigChecker;
-import cn.daxpay.open.payment.check.enums.ConfigCheckCategoryEnum;
-import cn.daxpay.open.payment.check.model.ConfigCheckItem;
+import cn.daxpay.open.payment.common.check.checker.AdminConfigChecker;
+import cn.daxpay.open.payment.common.check.enums.ConfigCheckCategoryEnum;
+import cn.daxpay.open.payment.common.check.model.ConfigCheckItem;
 import cn.daxpay.open.platform.system.entity.config.platform.infra.PlatformWebsiteConfig;
 import cn.daxpay.open.platform.system.enums.PlatformConfigTypeEnum;
 import cn.daxpay.open.platform.system.service.config.SystemPlatformConfigService;

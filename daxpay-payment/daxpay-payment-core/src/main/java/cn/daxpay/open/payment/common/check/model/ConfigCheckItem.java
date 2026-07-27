@@ -1,5 +1,7 @@
-package cn.daxpay.open.payment.check.model;
+package cn.daxpay.open.payment.common.check.model;
 
+import cn.daxpay.open.payment.common.check.enums.ConfigCheckCategoryEnum;
+import cn.daxpay.open.payment.common.check.enums.ConfigCheckSeverityEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -12,7 +14,7 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class ConfigCheckItem {
 
-    /// 所属分类 code(对应 [cn.daxpay.open.payment.check.enums.ConfigCheckCategoryEnum#getCode])
+    /// 所属分类 code(对应 [ConfigCheckCategoryEnum#getCode])
     private String category;
 
     /// 唯一键(用于前端去重/定位, 如 `pay_product:alipay`、`mch_app`)
@@ -24,7 +26,7 @@ public class ConfigCheckItem {
     /// 描述 i18n key(前端 `$t(descriptionKey)` 解析)
     private String descriptionKey;
 
-    /// 严重程度 code(对应 [cn.daxpay.open.payment.check.enums.ConfigCheckSeverityEnum#getCode])
+    /// 严重程度 code(对应 [ConfigCheckSeverityEnum#getCode])
     private String severity;
 
     /// 前端路由 name, 点击该项时跳转
@@ -37,7 +39,7 @@ public class ConfigCheckItem {
     /// 前端用于显示"N 项待配置", 并在跳转列表后聚焦这些条目
     private Integer count;
 
-    public static ConfigCheckItem of(cn.daxpay.open.payment.check.enums.ConfigCheckCategoryEnum category,
+    public static ConfigCheckItem of(ConfigCheckCategoryEnum category,
                                      String itemKey, String titleKey, String descriptionKey, String routeName) {
         return new ConfigCheckItem()
                 .setCategory(category.getCode())
@@ -45,6 +47,6 @@ public class ConfigCheckItem {
                 .setTitleKey(titleKey)
                 .setDescriptionKey(descriptionKey)
                 .setRouteName(routeName)
-                .setSeverity(cn.daxpay.open.payment.check.enums.ConfigCheckSeverityEnum.SUGGEST.getCode());
+                .setSeverity(ConfigCheckSeverityEnum.SUGGEST.getCode());
     }
 }

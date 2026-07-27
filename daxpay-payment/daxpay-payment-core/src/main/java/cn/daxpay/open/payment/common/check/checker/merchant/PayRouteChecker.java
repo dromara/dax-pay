@@ -1,12 +1,11 @@
-package cn.daxpay.open.payment.check.checker.merchant;
+package cn.daxpay.open.payment.common.check.checker.merchant;
 
-import cn.daxpay.open.payment.check.checker.MerchantConfigChecker;
-import cn.daxpay.open.payment.check.enums.ConfigCheckCategoryEnum;
-import cn.daxpay.open.payment.check.model.ConfigCheckItem;
+import cn.daxpay.open.payment.common.check.checker.MerchantConfigChecker;
+import cn.daxpay.open.payment.common.check.enums.ConfigCheckCategoryEnum;
+import cn.daxpay.open.payment.common.check.model.ConfigCheckItem;
 import cn.daxpay.open.payment.merchant.dao.appinfo.MchAppInfoManager;
 import cn.daxpay.open.payment.merchant.entity.appinfo.MchAppInfo;
 import cn.daxpay.open.payment.route.dao.strategy.PayRouteStrategyManager;
-import cn.daxpay.open.payment.route.entity.strategy.PayRouteStrategy;
 import cn.daxpay.open.platform.core.enums.merchant.MchAppStatusEnum;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

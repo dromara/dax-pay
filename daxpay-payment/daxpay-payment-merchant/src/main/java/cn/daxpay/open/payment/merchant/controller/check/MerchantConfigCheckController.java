@@ -2,8 +2,8 @@ package cn.daxpay.open.payment.merchant.controller.check;
 
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
-import cn.daxpay.open.payment.check.model.ConfigCheckResult;
-import cn.daxpay.open.payment.check.service.MerchantConfigCheckService;
+import cn.daxpay.open.payment.common.check.model.ConfigCheckResult;
+import cn.daxpay.open.payment.common.check.service.MerchantConfigCheckService;
 import cn.daxpay.open.payment.common.context.PaymentContext;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;

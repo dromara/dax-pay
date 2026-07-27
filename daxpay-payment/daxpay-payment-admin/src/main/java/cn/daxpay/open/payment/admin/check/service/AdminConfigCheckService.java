@@ -1,8 +1,8 @@
 package cn.daxpay.open.payment.admin.check.service;
 
-import cn.daxpay.open.payment.check.checker.AdminConfigChecker;
-import cn.daxpay.open.payment.check.model.ConfigCheckItem;
-import cn.daxpay.open.payment.check.model.ConfigCheckResult;
+import cn.daxpay.open.payment.common.check.checker.AdminConfigChecker;
+import cn.daxpay.open.payment.common.check.model.ConfigCheckItem;
+import cn.daxpay.open.payment.common.check.model.ConfigCheckResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

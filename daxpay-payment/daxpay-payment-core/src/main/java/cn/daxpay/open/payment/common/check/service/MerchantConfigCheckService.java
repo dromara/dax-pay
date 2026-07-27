@@ -1,9 +1,9 @@
-package cn.daxpay.open.payment.check.service;
+package cn.daxpay.open.payment.common.check.service;
 
-import cn.daxpay.open.payment.check.checker.MerchantConfigChecker;
-import cn.daxpay.open.payment.check.enums.ConfigCheckCategoryEnum;
-import cn.daxpay.open.payment.check.model.ConfigCheckItem;
-import cn.daxpay.open.payment.check.model.ConfigCheckResult;
+import cn.daxpay.open.payment.common.check.checker.MerchantConfigChecker;
+import cn.daxpay.open.payment.common.check.enums.ConfigCheckCategoryEnum;
+import cn.daxpay.open.payment.common.check.model.ConfigCheckItem;
+import cn.daxpay.open.payment.common.check.model.ConfigCheckResult;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

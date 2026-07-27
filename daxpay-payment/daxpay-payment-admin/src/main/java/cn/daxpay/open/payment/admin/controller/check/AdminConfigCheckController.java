@@ -3,7 +3,7 @@ package cn.daxpay.open.payment.admin.controller.check;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.payment.admin.check.service.AdminConfigCheckService;
-import cn.daxpay.open.payment.check.model.ConfigCheckResult;
+import cn.daxpay.open.payment.common.check.model.ConfigCheckResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;

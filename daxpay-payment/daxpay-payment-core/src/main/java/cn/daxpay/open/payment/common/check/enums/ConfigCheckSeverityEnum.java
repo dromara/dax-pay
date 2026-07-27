@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.check.enums;
+package cn.daxpay.open.payment.common.check.enums;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
