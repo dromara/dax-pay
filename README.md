@@ -175,7 +175,7 @@ dax-pay-open/                       # 主后端应用
   <img src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/20260727/ScreenShot_2026-07-27_152700_495.8dxkou9kkt.webp" width="800" alt="">
   <img src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/20260727/ScreenShot_2026-07-27_145448_013.64ek5ckpxk.webp" width="800" alt="">
 </p>
-<table align="center">
+<table align="left">
   <tr>
     <td align="center"><img src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/20260727/微信图片_20260727141720_489_69.92qu8tkfkw.webp" width="240" alt=""></td>
     <td align="center"><img src="https://cdn.jsdmirror.com/gh/xxm1995/picx-images-hosting@master/20260727/微信图片_20260727151707_493_69.3yf5jkkngh.webp" width="240" alt=""></td>
