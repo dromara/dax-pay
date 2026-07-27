@@ -15,6 +15,8 @@ import cn.daxpay.open.platform.common.redis.lock.TryLockResult;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,6 +26,9 @@ import java.util.Objects;
 ///
 /// 回调数据通过函数参数显式传递([CallbackData]),不依赖线程上下文。
 /// 成功/失败均做终态守卫: 已 SUCCESS 幂等忽略; 非 PROCESSING 不可再流转。
+///
+/// 锁包事务模式: [payCallback] 持锁(无事务) → [doPayCallback] 走代理(@Transactional)。
+/// self 调用返回时事务已提交, 然后才释放锁, 消除"锁释放早于事务提交"窗口。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -35,35 +40,32 @@ public class PayCallbackService {
     private final PayUniHandleService payUniHandleService;
     private final LockExecutor lockExecutor;
 
-    /// 支付统一回调处理，返回支付产品编码
-    @Transactional(rollbackFor = Exception.class)
+    /// 自注入: 保证 [doPayCallback] 走 Spring 事务代理
+    @Lazy
+    @Autowired
+    private PayCallbackService self;
+
+    /// 支付统一回调处理（锁外层，无事务），返回支付产品编码
+    ///
+    /// 先查 trade 获取 tradeId 作为统一锁键, 与同步/关单路径互斥。
     public String payCallback(CallbackData callbackData) {
+        // 锁外层: 先查 trade 获取 tradeId 作为锁键维度
+        PayTrade trade = payTradeManager.findByTradeNo(callbackData.getTradeNo())
+                .orElse(null);
+        if (Objects.isNull(trade)) {
+            trade = payTradeManager.findByOutOrderNo(callbackData.getOutTradeNo())
+                    .orElse(null);
+        }
+        if (Objects.isNull(trade)) {
+            callbackData.setCallbackStatus(CallbackStatusEnum.NOT_FOUND)
+                    .setCallbackErrorMsg("支付订单不存在");
+            return null;
+        }
+        // 统一锁键: payment:trade:{tradeId}, 与同步/关单路径互斥
+        Long tradeId = trade.getId();
         TryLockResult<String> result = lockExecutor.tryExecute(
-                "callback:payment:" + callbackData.getTradeNo(),
-                () -> {
-                    PayTrade trade = payTradeManager.findByTradeNo(callbackData.getTradeNo())
-                            .orElse(null);
-                    if (Objects.isNull(trade)) {
-                        trade = payTradeManager.findByOutOrderNo(callbackData.getOutTradeNo())
-                                .orElse(null);
-                    }
-                    if (Objects.isNull(trade)) {
-                        callbackData.setCallbackStatus(CallbackStatusEnum.NOT_FOUND)
-                                .setCallbackErrorMsg("支付订单不存在");
-                        return null;
-                    }
-                    // 持锁后二次读取, 避免与关单/同步竞态使用过期状态
-                    trade = payTradeManager.findById(trade.getId()).orElse(trade);
-                    if (Objects.nonNull(callbackData.getOutTradeNo())) {
-                        trade.setOutOrderNo(callbackData.getOutTradeNo());
-                    }
-                    if (Objects.equals(CallbackStatusEnum.SUCCESS.getCode(), callbackData.getTradeStatus())) {
-                        this.success(trade, callbackData);
-                    } else {
-                        this.fail(trade, callbackData);
-                    }
-                    return resolveProduct(trade);
-                }
+                "payment:trade:" + tradeId,
+                () -> self.doPayCallback(callbackData, tradeId)
         );
         if (!result.acquired()) {
             callbackData.setCallbackStatus(CallbackStatusEnum.IGNORE)
@@ -72,6 +74,27 @@ public class PayCallbackService {
             return null;
         }
         return result.value();
+    }
+
+    /// 回调核心处理（锁内层，事务边界），通过 self 走代理保证 @Transactional 生效
+    @Transactional(rollbackFor = Exception.class)
+    public String doPayCallback(CallbackData callbackData, Long tradeId) {
+        // 持锁后二次读取最新状态
+        PayTrade trade = payTradeManager.findById(tradeId).orElse(null);
+        if (Objects.isNull(trade)) {
+            callbackData.setCallbackStatus(CallbackStatusEnum.NOT_FOUND)
+                    .setCallbackErrorMsg("支付订单不存在");
+            return null;
+        }
+        if (Objects.nonNull(callbackData.getOutTradeNo())) {
+            trade.setOutOrderNo(callbackData.getOutTradeNo());
+        }
+        if (Objects.equals(CallbackStatusEnum.SUCCESS.getCode(), callbackData.getTradeStatus())) {
+            this.success(trade, callbackData);
+        } else {
+            this.fail(trade, callbackData);
+        }
+        return resolveProduct(trade);
     }
 
     /// 从容器获取 product(回调返回供通道策略识别来源)

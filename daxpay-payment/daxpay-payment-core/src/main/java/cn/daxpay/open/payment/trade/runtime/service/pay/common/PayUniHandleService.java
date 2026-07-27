@@ -21,10 +21,12 @@ import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Objects;
+import java.util.Set;
 
 /// # 交易统一处理服务
 ///
@@ -45,16 +47,24 @@ public class PayUniHandleService {
     /// 支付发起后处理
     /// 不论是否完成都更新交易单; 仅资金状态为 SUCCESS 时同步容器为 PAID。
     /// 回执字段(transOrderNo/buyerId/payBody 等)写容器; 特殊 relation 同步写 trade。
+    @Transactional(rollbackFor = Exception.class)
     public void payAfterHandel(PayTrade trade, PayTradeResultBo result) {
         // 特殊通道返回的上送变形号写 trade 反查权威
         if (result.getRelationOrderNo() != null) {
             trade.setRelationOrderNo(result.getRelationOrderNo());
         }
+        // CAS 前置态: 支付发起后仅 INIT/PROCESSING 可流转
+        Set<String> expectFrom = Set.of(
+                PayFundStatusEnum.INIT.getCode(),
+                PayFundStatusEnum.PROCESSING.getCode());
         if (isGateway(trade)) {
             GatewayPayOrder order = gatewayPayOrderManager.findById(trade.getContainerId()).orElse(null);
             // 渠道分布报表依赖 trade.provider: 空则从容器/method 兜底
             applyProviderFallback(trade, order);
-            updateTradeWithPosted(trade);
+            if (!updateTradeWithPosted(trade, expectFrom)) {
+                log.warn("payAfterHandel CAS 失败, 状态已被其他线程改变, tradeNo={}", trade.getTradeNo());
+                return;
+            }
             if (order != null) {
                 applyGatewayReceipts(order, result);
                 if (Objects.equals(trade.getStatus(), PayFundStatusEnum.SUCCESS.getCode())) {
@@ -66,7 +76,10 @@ public class PayUniHandleService {
         } else {
             NormalPayOrder order = payNormalOrderManager.findById(trade.getContainerId()).orElse(null);
             applyProviderFallback(trade, order);
-            updateTradeWithPosted(trade);
+            if (!updateTradeWithPosted(trade, expectFrom)) {
+                log.warn("payAfterHandel CAS 失败, 状态已被其他线程改变, tradeNo={}", trade.getTradeNo());
+                return;
+            }
             if (order != null) {
                 applyNormalReceipts(order, result);
                 if (Objects.equals(trade.getStatus(), PayFundStatusEnum.SUCCESS.getCode())) {
@@ -87,12 +100,21 @@ public class PayUniHandleService {
     }
 
     /// 支付成功后续处理(同步/回调路径), 含通道回执写容器
+    @Transactional(rollbackFor = Exception.class)
     public void paySuccess(PayTrade trade, PaySyncResultBo syncResult) {
+        // CAS 前置态: 同步路径允许从 PROCESSING/FAIL/CLOSE 翻转为 SUCCESS（含同步纠正场景）
+        Set<String> expectFrom = Set.of(
+                PayFundStatusEnum.PROCESSING.getCode(),
+                PayFundStatusEnum.FAIL.getCode(),
+                PayFundStatusEnum.CLOSE.getCode());
         if (isGateway(trade)) {
             GatewayPayOrder order = gatewayPayOrderManager.findById(trade.getContainerId()).orElse(null);
             applyGatewaySyncReceipts(trade, order, syncResult);
             applyProviderFallback(trade, order);
-            updateTradeWithPosted(trade);
+            if (!updateTradeWithPosted(trade, expectFrom)) {
+                log.warn("paySuccess(sync) CAS 失败, 状态已被其他线程改变, tradeNo={}", trade.getTradeNo());
+                return;
+            }
             if (order != null) {
                 order.setStatus(GatewayOrderStatusEnum.PAID.getCode());
                 order.setPayTime(trade.getPayTime());
@@ -108,7 +130,10 @@ public class PayUniHandleService {
         NormalPayOrder order = payNormalOrderManager.findById(trade.getContainerId()).orElse(null);
         applyNormalSyncReceipts(trade, order, syncResult);
         applyProviderFallback(trade, order);
-        updateTradeWithPosted(trade);
+        if (!updateTradeWithPosted(trade, expectFrom)) {
+            log.warn("paySuccess(sync) CAS 失败, 状态已被其他线程改变, tradeNo={}", trade.getTradeNo());
+            return;
+        }
         if (order != null) {
             order.setStatus(NormalPayOrderStatusEnum.PAID.getCode());
             order.setPayTime(trade.getPayTime());
@@ -122,14 +147,22 @@ public class PayUniHandleService {
     }
 
     /// 支付成功后续处理(回调路径)；可选回写 buyerId 后补录风控
+    @Transactional(rollbackFor = Exception.class)
     public void paySuccess(PayTrade trade, String buyerId) {
+        // CAS 前置态: 回调路径仅 PROCESSING/INIT 可流转为 SUCCESS
+        Set<String> expectFrom = Set.of(
+                PayFundStatusEnum.PROCESSING.getCode(),
+                PayFundStatusEnum.INIT.getCode());
         if (isGateway(trade)) {
             GatewayPayOrder order = gatewayPayOrderManager.findById(trade.getContainerId()).orElse(null);
             if (order != null && StrUtil.isNotBlank(buyerId)) {
                 order.setBuyerId(buyerId);
             }
             applyProviderFallback(trade, order);
-            updateTradeWithPosted(trade);
+            if (!updateTradeWithPosted(trade, expectFrom)) {
+                log.warn("paySuccess(callback) CAS 失败, 状态已被其他线程改变, tradeNo={}", trade.getTradeNo());
+                return;
+            }
             markContainerPaid(trade, order);
         } else {
             NormalPayOrder order = payNormalOrderManager.findById(trade.getContainerId()).orElse(null);
@@ -137,7 +170,10 @@ public class PayUniHandleService {
                 order.setBuyerId(buyerId);
             }
             applyProviderFallback(trade, order);
-            updateTradeWithPosted(trade);
+            if (!updateTradeWithPosted(trade, expectFrom)) {
+                log.warn("paySuccess(callback) CAS 失败, 状态已被其他线程改变, tradeNo={}", trade.getTradeNo());
+                return;
+            }
             markContainerPaid(trade, order);
         }
         // 商户出站通知(系统协议)
@@ -152,11 +188,16 @@ public class PayUniHandleService {
     }
 
     /// 支付失败处理: 资金态 FAIL, 容器态 FAILED（与主动关单 closed 区分）
+    @Transactional(rollbackFor = Exception.class)
     public void payFail(PayTrade trade, String errMsg) {
         OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
         trade.setStatus(PayFundStatusEnum.FAIL.getCode());
         trade.setCloseTime(now);
-        updateTradeWithPosted(trade);
+        // CAS 前置态: 仅 PROCESSING 可转为 FAIL
+        if (!updateTradeWithPosted(trade, Set.of(PayFundStatusEnum.PROCESSING.getCode()))) {
+            log.warn("payFail CAS 失败, 状态已被其他线程改变, tradeNo={}", trade.getTradeNo());
+            return;
+        }
         this.markContainerFailed(trade, now, errMsg);
         // 商户出站通知(系统协议)
         tradeNoticeBridge.dispatchPay(trade, NoticeEventEnum.PAY_FAIL);
@@ -165,13 +206,20 @@ public class PayUniHandleService {
 
     /// 支付关闭处理
     /// @param useCancel true=撤销(资金态置 CANCEL), false=关闭(资金态置 CLOSE)
+    @Transactional(rollbackFor = Exception.class)
     public void payClose(PayTrade trade, boolean useCancel) {
         OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
         trade.setStatus(useCancel
                 ? PayFundStatusEnum.CANCEL.getCode()
                 : PayFundStatusEnum.CLOSE.getCode());
         trade.setCloseTime(now);
-        updateTradeWithPosted(trade);
+        // CAS 前置态: INIT/PROCESSING 可关闭
+        if (!updateTradeWithPosted(trade, Set.of(
+                PayFundStatusEnum.INIT.getCode(),
+                PayFundStatusEnum.PROCESSING.getCode()))) {
+            log.warn("payClose CAS 失败, 状态已被其他线程改变, tradeNo={}", trade.getTradeNo());
+            return;
+        }
         this.markContainerClosed(trade, now, false, null);
         // 商户出站通知(系统协议)
         tradeNoticeBridge.dispatchPay(trade, NoticeEventEnum.PAY_CLOSE);
@@ -179,21 +227,30 @@ public class PayUniHandleService {
     }
 
     /// 支付超时关闭: 资金态 CLOSE, 容器态 EXPIRED
+    @Transactional(rollbackFor = Exception.class)
     public void payTimeout(PayTrade trade) {
         OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
         trade.setStatus(PayFundStatusEnum.CLOSE.getCode());
         trade.setCloseTime(now);
-        updateTradeWithPosted(trade);
+        // CAS 前置态: 仅 PROCESSING 可超时关闭
+        if (!updateTradeWithPosted(trade, Set.of(PayFundStatusEnum.PROCESSING.getCode()))) {
+            log.warn("payTimeout CAS 失败, 状态已被其他线程改变, tradeNo={}", trade.getTradeNo());
+            return;
+        }
         this.markContainerClosed(trade, now, true, null);
         // 商户出站通知(系统协议)
         tradeNoticeBridge.dispatchPay(trade, NoticeEventEnum.PAY_CLOSE);
         payPluginAssistService.payClose(trade);
     }
 
-    /// 回写入账金额后更新资金凭证
-    private void updateTradeWithPosted(PayTrade trade) {
+    /// 回写入账金额后更新资金凭证（CAS 式，保证状态变更原子性）
+    ///
+    /// @param trade      已设置目标状态的实体
+    /// @param expectFrom 合法的前置状态集合，仅当 DB 当前状态在此集合内时才更新
+    /// @return true=更新成功；false=状态已被其他线程改变（调用方应幂等退出）
+    private boolean updateTradeWithPosted(PayTrade trade, Set<String> expectFrom) {
         PayTradeAmountUtil.applyPostedAmount(trade);
-        payTradeManager.updateById(trade);
+        return payTradeManager.casUpdateStatus(trade, expectFrom);
     }
 
     /// 仅关闭网关容器(尚未创建 Trade 的预下单超时)

@@ -87,7 +87,7 @@ public class PaySyncService {
             throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.pay.syncNotStarted");
         }
         return lockExecutor.execute(
-                "sync:pay:" + trade.getId(),
+                "payment:trade:" + trade.getId(),
                 () -> {
                     ContainerInfo info = loadContainerInfo(trade);
                     var context = new PayStrategyContext()
@@ -140,6 +140,11 @@ public class PaySyncService {
                 return true;
             }
         } else {
+            // CLOSE 状态: 通道返回 SUCCESS 时需纠正（超时关单但实际已付款的场景）
+            if (orderStatus.equals(PayFundStatusEnum.CLOSE.getCode())
+                    && Objects.equals(PayFundStatusEnum.SUCCESS, payStatus)) {
+                return false;
+            }
             return true;
         }
         return false;

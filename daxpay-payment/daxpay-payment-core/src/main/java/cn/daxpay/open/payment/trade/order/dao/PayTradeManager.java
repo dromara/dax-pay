@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 /// # 资金交易凭证管理器
 ///
@@ -102,5 +103,28 @@ public class PayTradeManager extends BaseManager<PayTradeMapper, PayTrade> {
             throw new DangerSqlException(CommonCode.DANGER_SQL, "pay.error.pay.updateTradeFailed", entity.getTradeNo());
         }
         return i;
+    }
+
+    /// CAS 式状态更新：仅当当前状态在 expectFrom 集合内时才更新，保证原子性
+    ///
+    /// 用途：替代回调/同步/关单路径中"先读后盲写"的 [updateById]，消除并发竞态。
+    /// SQL 语义：`UPDATE pay_trade SET status=?, pay_time=?, ... WHERE id=? AND status IN (...)`。
+    ///
+    /// @param trade      已设置目标状态与关联字段的实体（从数据库加载后修改）
+    /// @param expectFrom 合法的前置状态编码集合（由调用方根据业务路径决定子集）
+    /// @return true=更新成功；false=状态已被其他线程改变，调用方应幂等退出或重试
+    public boolean casUpdateStatus(PayTrade trade, Set<String> expectFrom) {
+        return lambdaUpdate()
+                .eq(PayTrade::getId, trade.getId())
+                .in(PayTrade::getStatus, expectFrom)
+                .set(PayTrade::getStatus, trade.getStatus())
+                .set(PayTrade::getPayTime, trade.getPayTime())
+                .set(PayTrade::getCloseTime, trade.getCloseTime())
+                .set(PayTrade::getOutOrderNo, trade.getOutOrderNo())
+                .set(PayTrade::getPostedAmount, trade.getPostedAmount())
+                .set(PayTrade::getRefundableBalance, trade.getRefundableBalance())
+                .set(PayTrade::getRelationOrderNo, trade.getRelationOrderNo())
+                .set(PayTrade::getProvider, trade.getProvider())
+                .update();
     }
 }

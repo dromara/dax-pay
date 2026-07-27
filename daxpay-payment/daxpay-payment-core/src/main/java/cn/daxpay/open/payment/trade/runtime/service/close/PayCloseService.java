@@ -84,7 +84,7 @@ public class PayCloseService {
             throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.pay.closeNotPaying");
         }
         lockExecutor.run(
-                "payment:close:" + trade.getId(),
+                "payment:trade:" + trade.getId(),
                 10000,
                 50,
                 () -> {
@@ -151,7 +151,7 @@ public class PayCloseService {
             log.error("超时关单交易缺少 mchNo, tradeNo={}", tradeNo);
             return;
         }
-        if (!lockExecutor.tryRun("payment:close:" + boot.getId(), 10000, 50, () ->
+        if (!lockExecutor.tryRun("payment:trade:" + boot.getId(), 10000, 50, () ->
                 paymentContext.runAs(() -> {
                     paymentContext.setMchNo(boot.getMchNo());
                     PayTrade trade = payTradeManager.findByTradeNo(tradeNo).orElse(null);
@@ -174,10 +174,14 @@ public class PayCloseService {
                         strategy.doClose(context, false);
                     } catch (Exception e) {
                         errMsg = e.getMessage();
-                        log.warn("超时关单调用通道关闭失败, 仅本地关闭, tradeNo={}", tradeNo, e);
+                        log.error("超时关单调用通道关闭失败, 保持PROCESSING待同步确认, tradeNo={}", tradeNo, e);
+                        // 通道关闭失败时不强关, 保持 PROCESSING 状态, 交由下一轮 PaySyncService 纠正
+                        this.saveRecord(trade, CloseTypeEnum.TIMEOUT, errMsg);
+                        return;
                     }
+                    // 通道关闭成功才本地关单
                     payUniHandleService.payTimeout(trade);
-                    this.saveRecord(trade, CloseTypeEnum.TIMEOUT, errMsg);
+                    this.saveRecord(trade, CloseTypeEnum.TIMEOUT, null);
                 }))) {
             log.warn("超时关单获取锁失败(并发关单进行中), 交由兜底任务处理, tradeNo={}", tradeNo);
         }
