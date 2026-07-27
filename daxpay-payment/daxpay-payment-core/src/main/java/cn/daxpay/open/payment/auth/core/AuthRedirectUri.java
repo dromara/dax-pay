@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.auth;
+package cn.daxpay.open.payment.auth.core;
 
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
@@ -9,10 +9,7 @@ import lombok.Getter;
 
 /// # 通道认证 OAuth 回调路径
 ///
-/// 收敛三通道(支付宝 / 微信公众号 / 抖音 H5)的固定回调路径常量与 redirect_uri 拼装逻辑,
-/// 消除原 [PlatformAuthService] 三个常量(ALIPAY_AUTH_PATH/WECHAT_AUTH_PATH/DOUYIN_AUTH_PATH)与
-/// 各通道策略(WechatIsvAuthStrategy / WechatDirectAuthStrategy / DouyinDirectAuthStrategy)中
-/// 重复的 gatewayBase 空检查 + `removeSuffix("/") + 字面量路径` 拼装。
+/// 收敛三通道(支付宝 / 微信公众号 / 抖音 H5)的固定回调路径常量与 redirect_uri 拼装逻辑。
 ///
 /// ## 约定
 /// - 回调路径固定(不含动态段),会话标识 authToken 通过 OAuth state 参数透传,回调后从 state 恢复

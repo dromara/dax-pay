@@ -80,7 +80,7 @@ public class GatewayClientController {
         return Res.ok(cashierPayService.pay(param));
     }
 
-    @Operation(summary = "网关 H5 生成授权链接(取 openId, 无商户签名)")
+    @Operation(summary = "网关H5生成授权链接")
     @PostMapping("/auth/generate-url")
     public Result<AuthUrlResult> generateAuthUrl(@RequestBody @Validated GatewayAuthUrlParam param) {
         return Res.ok(gatewayAuthService.generateAuthUrl(param));

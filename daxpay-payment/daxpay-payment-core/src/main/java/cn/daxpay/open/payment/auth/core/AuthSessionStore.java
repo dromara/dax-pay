@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.auth;
+package cn.daxpay.open.payment.auth.core;
 
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
 import cn.daxpay.open.platform.common.json.util.JacksonUtil;
@@ -11,12 +11,19 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.util.Objects;
+import cn.daxpay.open.payment.auth.platform.AlipayAuthProvider;
+import cn.daxpay.open.payment.auth.platform.WechatMpAuthProvider;
+import cn.daxpay.open.payment.auth.platform.DouyinH5AuthProvider;
+import cn.daxpay.open.payment.auth.merchant.ChannelAuthService;
+import cn.daxpay.open.payment.auth.merchant.ProductAuthService;
+import cn.daxpay.open.payment.auth.develop.DevelopAuthService;
 
 /// # 认证会话与结果缓存
 ///
 /// 统一管理通道认证/平台级认证共用的会话上下文(authToken)与轮询结果(queryCode)的 Redis 读写,
-/// 与具体认证来源(通道商户策略 / 平台级配置)解耦, 供 [ChannelAuthService]、[ChannelProductAuthService]、
-/// [PlatformAuthService] 及各端调试入口(admin DevelopAuthAdminService / merchant MchDevelopAuthService)复用。
+/// 与具体认证来源(通道商户策略 / 平台级配置)解耦, 供 [ChannelAuthService]、[ProductAuthService]、
+/// 各 PlatformAuthProvider([AlipayAuthProvider]/[WechatMpAuthProvider]/[DouyinH5AuthProvider])
+/// 及调试入口([DevelopAuthService])复用。
 /// 授权成功后由 Facade 调用 [#deleteSession] 使 authToken 一次使用失效。
 @Slf4j
 @Service

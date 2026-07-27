@@ -1,6 +1,6 @@
 package cn.daxpay.open.payment.trade.runtime.service.pay.gateway;
 
-import cn.daxpay.open.payment.auth.ChannelAuthService;
+import cn.daxpay.open.payment.auth.merchant.ChannelAuthService;
 import cn.daxpay.open.payment.merchant.dao.gateway.GatewayCashierItemManager;
 import cn.daxpay.open.payment.merchant.entity.gateway.GatewayCashierItem;
 import cn.daxpay.open.payment.merchant.enums.CashierItemResolveModeEnum;

@@ -1,6 +1,6 @@
 package cn.daxpay.open.payment.admin.controller.develop;
 
-import cn.daxpay.open.payment.auth.DevelopAuthService;
+import cn.daxpay.open.payment.auth.develop.DevelopAuthService;
 import cn.daxpay.open.payment.unipay.param.assist.GenerateAuthUrlParam;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
 import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
@@ -66,7 +66,7 @@ public class DevelopAuthAdminController {
     @PostMapping("/generate-channel-auth-url")
     public Result<AuthUrlResult> generateChannelAuthUrl(@RequestBody GenerateAuthUrlParam param) {
         // 不加 @Valid: GenerateAuthUrlParam 继承 PaymentCommonParam.reqTime(@NotNull), 但认证不走签名/防重放, 无需 reqTime;
-        // channel/mchNo 由 ChannelProductAuthService 业务层兜底校验, 与 unipay ChannelAuthController 同类接口保持一致
+        // channel/mchNo 由 ProductAuthService 业务层兜底校验, 与 unipay ChannelAuthController 同类接口保持一致
         return Res.ok(developAuthService.generateChannelAuthUrl(param));
     }
 

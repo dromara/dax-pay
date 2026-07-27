@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.auth;
+package cn.daxpay.open.payment.auth.core;
 
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
 import cn.daxpay.open.platform.common.json.util.JacksonUtil;

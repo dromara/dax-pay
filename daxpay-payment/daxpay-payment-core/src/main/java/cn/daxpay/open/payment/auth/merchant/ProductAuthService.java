@@ -1,15 +1,18 @@
-package cn.daxpay.open.payment.auth;
+package cn.daxpay.open.payment.auth.merchant;
 
+import cn.daxpay.open.payment.auth.core.AuthScene;
+import cn.daxpay.open.payment.auth.core.AuthSession;
+import cn.daxpay.open.payment.auth.core.AuthSessionStore;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
 import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import cn.daxpay.open.payment.strategy.PaymentStrategyFactory;
-import cn.daxpay.open.payment.strategy.auth.AbsChannelAuthStrategy;
 import cn.daxpay.open.payment.unipay.param.assist.AuthCodeParam;
 import cn.daxpay.open.payment.unipay.param.assist.GenerateAuthUrlParam;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
 import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
+import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.unipay.ChannelAuthStatusEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.hutool.core.util.IdUtil;
@@ -18,19 +21,20 @@ import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import cn.daxpay.open.payment.auth.platform.PlatformAuthProvider;
 
 /// # 支付产品认证服务(商户级)
 ///
-/// 负责按支付产品路由认证策略(继承 [AbsChannelAuthStrategy]), 依赖商户上下文定位通道应用,
+/// 负责按支付产品路由认证策略(继承 [AbsProductAuthStrategy]), 依赖商户上下文定位通道应用,
 /// 获取支付所需的用户标识(微信 openId / 支付宝 userId)。H5 授权重定向场景生成 authToken 保存会话。
 ///
 /// **职责边界**: 本服务仅处理商户级通道认证; 平台级认证(平台支付宝配置 / 系统公众号配置)
-/// 由 [PlatformAuthService] 承担, 会话与结果缓存由 [AuthSessionStore] 统一管理。
+/// 由各 [PlatformAuthProvider] 承担, 会话与结果缓存由 [AuthSessionStore] 统一管理。
 /// 平台级 vs 通道级 的来源分发由 [ChannelAuthService] 完成, 请勿在 Controller 再写分流。
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ChannelProductAuthService {
+public class ProductAuthService {
 
     private final AuthSessionStore authSessionStore;
     private final MerchantContextLoader merchantContextLoader;
@@ -38,14 +42,15 @@ public class ChannelProductAuthService {
 
     /// 获取通道授权链接
     ///
-    /// 生成 authToken 并委托产品策略([AbsChannelAuthStrategy])生成授权 URL, 会话随 authToken 保存,
+    /// 生成 authToken 并委托产品策略([AbsProductAuthStrategy])生成授权 URL, 会话随 authToken 保存,
     /// 授权回调后凭此恢复上下文。同时生成 queryCode 供调试轮询(微信等 OAuth 重定向通道回调 URL
     /// 不含 queryCode, 需随会话保存)。
     public AuthUrlResult generateAuthUrl(GenerateAuthUrlParam param) {
         initMchContext(param.getAppId(), param.getMchNo(), null);
         // 支付产品: 显式传入优先, 否则从通道商户号反查(调试工具/直接指定通道商户场景)
         String product = resolveProduct(param);
-        var strategy = PaymentStrategyFactory.createByProduct(product, AbsChannelAuthStrategy.class);
+        assertNotAlipayProduct(product);
+        var strategy = PaymentStrategyFactory.createByProduct(product, AbsProductAuthStrategy.class);
         // 生成认证会话码并保存上下文, 授权回调后凭此恢复
         String authToken = IdUtil.fastSimpleUUID();
         // 生成 queryCode 供调试轮询(微信等 OAuth 重定向通道回调 URL 不含 queryCode, 需随会话保存)
@@ -56,11 +61,13 @@ public class ChannelProductAuthService {
                 .setCapability(param.getCapability())
                 .setChannelAppId(param.getChannelAppId())
                 .setReturnPath(param.getReturnPath())
-                .setQueryCode(queryCode);
+                .setQueryCode(queryCode)
+                .setScene(AuthScene.PAYMENT.getCode());
         authSessionStore.saveSession(authToken, session);
         AuthUrlResult authUrlResult = strategy.generateAuthUrl(param, authToken);
         // 回填 queryCode 并写入 WAITING 状态供前端轮询
         authUrlResult.setQueryCode(queryCode);
+        authUrlResult.setAuthToken(authToken);
         authSessionStore.saveWaitingResult(queryCode);
         return authUrlResult;
     }
@@ -74,7 +81,8 @@ public class ChannelProductAuthService {
         // product 优先从会话恢复, 其次取参数(小程序直连场景)
         String product = (session != null && StrUtil.isNotBlank(session.getProduct()))
                 ? session.getProduct() : param.getProduct();
-        var strategy = PaymentStrategyFactory.createByProduct(product, AbsChannelAuthStrategy.class);
+        assertNotAlipayProduct(product);
+        var strategy = PaymentStrategyFactory.createByProduct(product, AbsProductAuthStrategy.class);
         AuthResult authResult = strategy.doAuth(param, session);
         authResult.setStatus(ChannelAuthStatusEnum.SUCCESS.getCode());
         // 会话恢复场景: 回填来源回跳路径, 供前端跳回业务页面
@@ -120,5 +128,12 @@ public class ChannelProductAuthService {
                 .map(ChannelMerchant::getProduct)
                 .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "pay.error.assist.channelMchNotFound", param.getChannelMchNo()));
+    }
+
+    /// 支付宝认证统一走平台级 PlatformAuthProvider, 不应进入产品策略; 触发即编程错误。
+    private void assertNotAlipayProduct(String product) {
+        if (ProductEnum.ALIPAY.getCode().equals(product) || ProductEnum.ALIPAY_ISV.getCode().equals(product)) {
+            throw new IllegalStateException("支付宝认证应走平台级 Provider, 不应进入产品策略: " + product);
+        }
     }
 }
