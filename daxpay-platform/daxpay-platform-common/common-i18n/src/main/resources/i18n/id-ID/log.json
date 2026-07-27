@@ -9,5 +9,9 @@
     "create": "Buat pengembalian dana, nomor pesanan: {0}, jumlah pengembalian dana: {1}",
     "success": "Pengembalian dana berhasil, no pesanan: {0}",
     "fail": "Pengembalian dana gagal, nomor pesanan: {0}, alasan: {1}"
+  },
+  "region": {
+    "unknown": "Tidak diketahui",
+    "innerIp": "Jaringan Internal"
   }
 }

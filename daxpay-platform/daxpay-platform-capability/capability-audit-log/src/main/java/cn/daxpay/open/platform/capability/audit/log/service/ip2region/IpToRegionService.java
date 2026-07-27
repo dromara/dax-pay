@@ -1,6 +1,7 @@
 package cn.daxpay.open.platform.capability.audit.log.service.ip2region;
 
 import cn.daxpay.open.platform.common.config.properties.PlatformStarterProperties;
+import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.hutool.core.lang.PatternPool;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -123,7 +124,8 @@ public class IpToRegionService {
         IpRegion region = this.getRegionByIp(ip);
         // 未查询到
         if (Objects.isNull(region)) {
-            return "未知";
+            // 未知归属地
+            return I18nUtil.get("log.region.unknown");
         }
         // 中国 港澳台
         if (region.isBigChina()) {
@@ -139,7 +141,8 @@ public class IpToRegionService {
         }
         // 内网
         else if (region.isInnerIp()) {
-            return "内网地址";
+            // 内网地址
+            return I18nUtil.get("log.region.innerIp");
         }
         // 国外
         else {

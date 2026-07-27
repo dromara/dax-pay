@@ -9,5 +9,9 @@
     "create": "Create refund, order no: {0}, refund amount: {1}",
     "success": "Refund success, order no: {0}",
     "fail": "Refund failed, order no: {0}, reason: {1}"
+  },
+  "region": {
+    "unknown": "Unknown",
+    "innerIp": "Internal Network"
   }
 }

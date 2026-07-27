@@ -9,5 +9,9 @@
     "create": "Tạo khoản tiền hoàn lại, số đơn hàng: {0}, số tiền hoàn lại: {1}",
     "success": "Hoàn tiền thành công, số đơn hàng: {0}",
     "fail": "Hoàn tiền không thành công, số đơn hàng: {0}, lý do: {1}"
+  },
+  "region": {
+    "unknown": "Không xác định",
+    "innerIp": "Mạng nội bộ"
   }
 }

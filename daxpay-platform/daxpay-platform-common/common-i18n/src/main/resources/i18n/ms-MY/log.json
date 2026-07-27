@@ -9,5 +9,9 @@
     "create": "Buat bayaran balik, no pesanan: {0}, jumlah bayaran balik: {1}",
     "success": "Bayaran balik kejayaan, no pesanan: {0}",
     "fail": "Bayaran balik gagal, no pesanan: {0}, sebab: {1}"
+  },
+  "region": {
+    "unknown": "Tidak diketahui",
+    "innerIp": "Rangkaian Dalaman"
   }
 }
