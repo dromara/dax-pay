@@ -42,7 +42,7 @@ public class ChannelProductAuthService {
     /// 授权回调后凭此恢复上下文。同时生成 queryCode 供调试轮询(微信等 OAuth 重定向通道回调 URL
     /// 不含 queryCode, 需随会话保存)。
     public AuthUrlResult generateAuthUrl(GenerateAuthUrlParam param) {
-        initMchContext(param.getAppId(), param.getMchNo());
+        initMchContext(param.getAppId(), param.getMchNo(), null);
         // 支付产品: 显式传入优先, 否则从通道商户号反查(调试工具/直接指定通道商户场景)
         String product = resolveProduct(param);
         var strategy = PaymentStrategyFactory.createByProduct(product, AbsChannelAuthStrategy.class);
@@ -70,7 +70,7 @@ public class ChannelProductAuthService {
     /// @param session 认证会话上下文(H5场景从 authToken 恢复; 小程序直连场景可为空, 此时从 param 取上下文)。
     ///                由认证分发层在调用前通过 [AuthSessionStore#loadSession] 加载后注入。
     public AuthResult auth(AuthCodeParam param, AuthSession session) {
-        initMchContext(param.getAppId(), param.getMchNo());
+        initMchContext(param.getAppId(), param.getMchNo(), session);
         // product 优先从会话恢复, 其次取参数(小程序直连场景)
         String product = (session != null && StrUtil.isNotBlank(session.getProduct()))
                 ? session.getProduct() : param.getProduct();
@@ -87,12 +87,21 @@ public class ChannelProductAuthService {
     }
 
     /// 商户上下文初始化: appId 优先(渠道配置/小程序直连), appId 为空则用 mchNo(调试/直接指定通道商户场景),
-    /// 两者均空时跳过(微信 OAuth 重定向回调仅含 authToken, 商户上下文由 session.channelMchNo 维度定位, 无需线程级 mchNo)。
-    private void initMchContext(String appId, String mchNo) {
+    /// 两者均空时从 session.channelMchNo 反查(OAuth 重定向回调场景, param 仅含 authToken)。
+    /// 反查后调 initMch 把 mchNo 装载到 PaymentContext: 下游对 MchBaseEntity 表(如 wx_channel_app_capability)
+    /// 的查询依赖线程级 mchNo, 否则 MchNoTenantLineHandler fail-closed 抛 mchContextMissing。
+    private void initMchContext(String appId, String mchNo, AuthSession session) {
         if (StrUtil.isNotBlank(appId)) {
             merchantContextLoader.initMchByApp(appId);
         } else if (StrUtil.isNotBlank(mchNo)) {
             merchantContextLoader.initMch(mchNo);
+        } else if (session != null && StrUtil.isNotBlank(session.getChannelMchNo())) {
+            String resolvedMchNo = channelMerchantManager
+                    .findByChannelMchNoNotTenant(session.getChannelMchNo())
+                    .map(ChannelMerchant::getMchNo)
+                    .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                            "pay.error.assist.channelMchNotFound", session.getChannelMchNo()));
+            merchantContextLoader.initMch(resolvedMchNo);
         }
     }
 
