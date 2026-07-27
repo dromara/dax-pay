@@ -42,7 +42,8 @@
     "syncNotStarted": "Pembayaran pesanan belum bermula, sila sahkan status pembayaran",
     "syncProcessing": "Penyegerakan pembayaran sedang dijalankan, jangan ulangi",
     "processing": "Pemprosesan pembayaran, jangan ulangi",
-    "updateTradeFailed": "Gagal mengemas kini transaksi pembayaran: {0}"
+    "updateTradeFailed": "Gagal mengemas kini transaksi pembayaran: {0}",
+    "illegalTransition": "Peralihan status tidak sah: {0} → {1}"
   },
   "gateway": {
     "cashierNotReady": "Bayaran juruwang belum tersedia",

@@ -524,6 +524,10 @@
     "returnPath": {
       "size": "来源回跳路径不可超过200位"
     },
+    "redirectUrl": {
+      "notBlank": "回调地址不可为空",
+      "size": "回调地址不可超过500位"
+    },
     "taskId": {
       "notNull": "消息ID不可为空"
     },

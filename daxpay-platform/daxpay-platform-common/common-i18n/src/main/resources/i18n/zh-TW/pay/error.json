@@ -42,7 +42,8 @@
     "syncNotStarted": "訂單未開始支付, 請重新確認支付狀態",
     "syncProcessing": "支付同步處理中，請勿重複操作",
     "processing": "支付處理中，請勿重複操作",
-    "updateTradeFailed": "更新支付交易失敗: {0}"
+    "updateTradeFailed": "更新支付交易失敗: {0}",
+    "illegalTransition": "非法狀態轉換: {0} → {1}"
   },
   "gateway": {
     "cashierNotReady": "收銀臺支付尚未開放",

@@ -17,5 +17,7 @@
   "webAppNotFound": "채널 판매자에 Douyin 웹 앱이 없어 H5 인증/서명을 완료할 수 없습니다",
   "appAuthSecretMissing": "Douyin 직연동 앱 인증 시크릿이 없습니다. 채널 판매자 앱에서 appSecret을 구성하세요",
   "jsapiContextRequired": "Douyin JSAPI 서명에는 orderNo, code 또는 channelMchNo 중 하나가 필요합니다",
-  "appTypeCapabilityMismatch": "더우인 앱 유형과 결제 능력이 일치하지 않습니다"
+  "appTypeCapabilityMismatch": "더우인 앱 유형과 결제 능력이 일치하지 않습니다",
+  "appNotConfigured": "{0}에 해당하는 앱이 구성되지 않았습니다. 채널 가맹점 앱 구성 페이지에서 바인딩하세요",
+  "appNotUnique": "{0} 유형의 앱이 여러 개 존재합니다. 명시적으로 역량 바인딩을 구성하여 선택하세요"
 }

@@ -42,7 +42,8 @@
     "syncNotStarted": "주문 결제가 시작되지 않았습니다. 결제 상태를 확인하세요.",
     "syncProcessing": "결제 동기화가 진행 중입니다. 반복하지 마세요.",
     "processing": "결제 처리 중, 반복하지 마세요",
-    "updateTradeFailed": "결제 거래 업데이트 실패: {0}"
+    "updateTradeFailed": "결제 거래 업데이트 실패: {0}",
+    "illegalTransition": "잘못된 상태 전환: {0} → {1}"
   },
   "gateway": {
     "cashierNotReady": "아직 캐셔 결제를 사용할 수 없습니다.",

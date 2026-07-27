@@ -42,7 +42,8 @@
     "syncNotStarted": "Pembayaran pesanan belum dimulai, harap konfirmasi status pembayaran",
     "syncProcessing": "Sinkronisasi pembayaran sedang berlangsung, jangan ulangi",
     "processing": "Proses pembayaran, jangan ulangi",
-    "updateTradeFailed": "Gagal memperbarui transaksi pembayaran: {0}"
+    "updateTradeFailed": "Gagal memperbarui transaksi pembayaran: {0}",
+    "illegalTransition": "Transisi status ilegal: {0} → {1}"
   },
   "gateway": {
     "cashierNotReady": "Pembayaran kasir belum tersedia",

@@ -55,5 +55,7 @@
   "isvKeyNotConfigured": "WeChat ISV key is not configured or incomplete, please configure the ISV key first",
   "authUrlFailed": "Failed to get auth url: {0}",
   "authFailed": "Failed to get user identifier (openId): {0}",
-  "channelAppIdNotFound": "The specified AppId [{0}] is not configured in the system"
+  "channelAppIdNotFound": "The specified AppId [{0}] is not configured in the system",
+  "appNotConfigured": "No application configured for {0}, please bind one on the channel merchant app configuration page",
+  "appNotUnique": "Multiple applications of type {0} exist, please explicitly configure the capability binding to select one"
 }

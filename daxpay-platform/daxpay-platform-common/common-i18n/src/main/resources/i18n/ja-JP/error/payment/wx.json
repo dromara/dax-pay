@@ -8,5 +8,7 @@
   "scopeNotExist": "微信アプリのスコープが存在しないか参照が無効です",
   "channelAppIdNotFound": "指定された微信 AppId[{0}]はシステムに設定されていません",
   "appNotBound": "利用可能な微信アプリがバインドされていません",
-  "channelMerchantMismatch": "チャネル加盟店が存在しないか加盟店番号と一致しません"
+  "channelMerchantMismatch": "チャネル加盟店が存在しないか加盟店番号と一致しません",
+  "appNotConfigured": "{0} に対応するアプリが未設定です。チャネル加盟店アプリ設定ページでバインドしてください",
+  "appNotUnique": "タイプ {0} のアプリが複数存在します。能力バインディングを明示的に設定して選択してください"
 }

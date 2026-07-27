@@ -55,5 +55,7 @@
   "isvKeyNotConfigured": "微信服务商密钥未配置或不完整，请先完成服务商密钥配置",
   "authUrlFailed": "获取授权链接失败: {0}",
   "authFailed": "获取用户标识(openId)失败: {0}",
-  "channelAppIdNotFound": "指定的应用AppId[{0}]未在系统中配置"
+  "channelAppIdNotFound": "指定的应用AppId[{0}]未在系统中配置",
+  "appNotConfigured": "未配置 {0} 对应的应用，请前往通道商户应用配置页绑定",
+  "appNotUnique": "存在多个 {0} 类型的应用，请显式配置能力绑定以明确选择"
 }

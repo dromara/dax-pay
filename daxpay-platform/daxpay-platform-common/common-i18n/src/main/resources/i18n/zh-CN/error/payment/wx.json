@@ -8,5 +8,7 @@
   "scopeNotExist": "微信应用档位不存在或引用无效",
   "channelAppIdNotFound": "指定的微信应用AppId[{0}]未在系统中配置",
   "appNotBound": "未绑定可用的微信应用",
-  "channelMerchantMismatch": "通道商户不存在或与商户号不匹配"
+  "channelMerchantMismatch": "通道商户不存在或与商户号不匹配",
+  "appNotConfigured": "未配置 {0} 对应的应用，请前往通道商户应用配置页绑定",
+  "appNotUnique": "存在多个 {0} 类型的应用，请显式配置能力绑定以明确选择"
 }

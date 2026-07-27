@@ -8,5 +8,7 @@
   "scopeNotExist": "WeChat app scope does not exist or reference is invalid",
   "channelAppIdNotFound": "Specified WeChat AppId [{0}] is not configured in the system",
   "appNotBound": "No WeChat app is bound",
-  "channelMerchantMismatch": "Channel merchant does not exist or does not match the merchant number"
+  "channelMerchantMismatch": "Channel merchant does not exist or does not match the merchant number",
+  "appNotConfigured": "No application configured for {0}, please bind one on the channel merchant app configuration page",
+  "appNotUnique": "Multiple applications of type {0} exist, please explicitly configure the capability binding to select one"
 }

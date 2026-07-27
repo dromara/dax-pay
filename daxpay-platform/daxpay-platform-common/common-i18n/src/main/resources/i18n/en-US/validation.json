@@ -524,6 +524,10 @@
     "returnPath": {
       "size": "Return path cannot exceed 200 characters"
     },
+    "redirectUrl": {
+      "notBlank": "Redirect URL cannot be blank",
+      "size": "Redirect URL cannot exceed 500 characters"
+    },
     "taskId": {
       "notNull": "Message ID cannot be blank"
     },

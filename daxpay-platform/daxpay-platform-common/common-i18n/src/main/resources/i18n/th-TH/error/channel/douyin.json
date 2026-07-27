@@ -17,5 +17,7 @@
   "webAppNotFound": "ไม่มีแอปเว็บ Douyin ภายใต้ผู้ค้าช่องทาง ไม่สามารถยืนยันตัวตน/ลงนาม H5 ได้",
   "appAuthSecretMissing": "ไม่มี appSecret การยืนยันตัวตนของแอป Douyin ตรง; ตั้งค่าในแอปผู้ค้าช่องทางก่อน",
   "jsapiContextRequired": "การลงนาม JSAPI Douyin ต้องระบุ orderNo หรือ code หรือ channelMchNo",
-  "appTypeCapabilityMismatch": "ประเภทแอป Douyin ไม่เข้ากันกับความสามารถการชำระเงิน"
+  "appTypeCapabilityMismatch": "ประเภทแอป Douyin ไม่เข้ากันกับความสามารถการชำระเงิน",
+  "appNotConfigured": "ยังไม่ได้กำหนดค่าแอปสำหรับ {0} กรุณาผูกที่หน้ากำหนดค่าแอปร้านค้าช่องทาง",
+  "appNotUnique": "มีแอปประเภท {0} หลายรายการ กรุณากำหนดค่าการผูกความสามารถอย่างชัดเจนเพื่อเลือก"
 }

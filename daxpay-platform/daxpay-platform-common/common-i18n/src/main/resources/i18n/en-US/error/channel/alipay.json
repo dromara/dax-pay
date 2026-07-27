@@ -44,5 +44,7 @@
   "authCodeInvalid": "Alipay authorization code is invalid or expired",
   "authTokenExchangeFailed": "Failed to exchange app auth token: {0}",
   "paymentGatewayUrlRequired": "Payment gateway base URL is not configured; cannot build auth redirect URI",
-  "appTypeCapabilityMismatch": "Alipay app type is incompatible with the payment capability"
+  "appTypeCapabilityMismatch": "Alipay app type is incompatible with the payment capability",
+  "appNotConfigured": "No application configured for {0}, please bind one on the channel merchant app configuration page",
+  "appNotUnique": "Multiple applications of type {0} exist, please explicitly configure the capability binding to select one"
 }

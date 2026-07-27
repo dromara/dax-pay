@@ -42,7 +42,8 @@
     "syncNotStarted": "Order payment not started, please confirm payment status",
     "syncProcessing": "Payment sync in progress, do not repeat",
     "processing": "Payment processing, do not repeat",
-    "updateTradeFailed": "Failed to update payment trade: {0}"
+    "updateTradeFailed": "Failed to update payment trade: {0}",
+    "illegalTransition": "Illegal status transition: {0} → {1}"
   },
   "gateway": {
     "cashierNotReady": "Cashier payment is not available yet",

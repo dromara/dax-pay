@@ -17,5 +17,7 @@
   "webAppNotFound": "Tidak ada aplikasi web Douyin pada merchant saluran; tidak dapat menyelesaikan auth/signing H5",
   "appAuthSecretMissing": "Rahasia auth aplikasi langsung Douyin hilang; konfigurasikan appSecret pada aplikasi merchant saluran",
   "jsapiContextRequired": "Penandatanganan JSAPI Douyin memerlukan salah satu dari orderNo, code, atau channelMchNo",
-  "appTypeCapabilityMismatch": "Jenis aplikasi Douyin tidak cocok dengan kemampuan pembayaran"
+  "appTypeCapabilityMismatch": "Jenis aplikasi Douyin tidak cocok dengan kemampuan pembayaran",
+  "appNotConfigured": "Aplikasi untuk {0} belum dikonfigurasi, silakan ikat di halaman konfigurasi aplikasi merchant channel",
+  "appNotUnique": "Ada beberapa aplikasi tipe {0}, silakan konfigurasi binding kapabilitas secara eksplisit untuk memilih"
 }

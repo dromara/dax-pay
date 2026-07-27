@@ -42,7 +42,8 @@
     "syncNotStarted": "Thanh toán đơn hàng chưa bắt đầu, vui lòng xác nhận trạng thái thanh toán",
     "syncProcessing": "Đang đồng bộ hóa thanh toán, không lặp lại",
     "processing": "Xử lý thanh toán, không lặp lại",
-    "updateTradeFailed": "Cập nhật giao dịch thanh toán thất bại: {0}"
+    "updateTradeFailed": "Cập nhật giao dịch thanh toán thất bại: {0}",
+    "illegalTransition": "Chuyển đổi trạng thái không hợp lệ: {0} → {1}"
   },
   "gateway": {
     "cashierNotReady": "Thanh toán bằng tiền mặt vẫn chưa có sẵn",

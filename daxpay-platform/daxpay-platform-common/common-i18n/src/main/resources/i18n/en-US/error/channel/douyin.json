@@ -17,5 +17,7 @@
   "webAppNotFound": "No Douyin web app under this channel merchant; cannot complete H5 auth/signing",
   "appAuthSecretMissing": "Douyin direct app auth secret is missing; configure appSecret on the channel merchant app first",
   "jsapiContextRequired": "Douyin JSAPI signing requires one of orderNo, code, or channelMchNo",
-  "appTypeCapabilityMismatch": "Douyin app type is incompatible with the payment capability"
+  "appTypeCapabilityMismatch": "Douyin app type is incompatible with the payment capability",
+  "appNotConfigured": "No application configured for {0}, please bind one on the channel merchant app configuration page",
+  "appNotUnique": "Multiple applications of type {0} exist, please explicitly configure the capability binding to select one"
 }

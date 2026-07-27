@@ -17,5 +17,7 @@
   "webAppNotFound": "Merchant kênh chưa cấu hình ứng dụng web Douyin; không thể hoàn tất xác thực/ký H5",
   "appAuthSecretMissing": "Thiếu appSecret xác thực ứng dụng Douyin trực tiếp; hãy cấu hình trên ứng dụng merchant kênh",
   "jsapiContextRequired": "Ký JSAPI Douyin cần một trong orderNo, code hoặc channelMchNo",
-  "appTypeCapabilityMismatch": "Loại ứng dụng Douyin không tương thích với khả năng thanh toán"
+  "appTypeCapabilityMismatch": "Loại ứng dụng Douyin không tương thích với khả năng thanh toán",
+  "appNotConfigured": "Chưa cấu hình ứng dụng cho {0}, vui lòng liên kết tại trang cấu hình ứng dụng merchant kênh",
+  "appNotUnique": "Tồn tại nhiều ứng dụng loại {0}, vui lòng cấu hình liên kết năng lực rõ ràng để chọn"
 }
