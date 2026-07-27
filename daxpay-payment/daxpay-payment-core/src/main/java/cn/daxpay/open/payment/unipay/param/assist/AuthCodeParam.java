@@ -52,11 +52,11 @@ public class AuthCodeParam extends MerchantPaymentCommonParam {
     @Schema(description = "支付产品编码")
     private String product;
 
-    /// 支付能力编码, 用于解析具体应用, 小程序场景需要; 会话码场景从会话恢复
-    /// @see cn.daxpay.open.platform.core.enums.pay.channel.PayCapabilityEnum
-    @Size(max = 32, message = "{validation.field.capability.size}")
-    @Schema(description = "支付能力编码")
-    private String capability;
+    /// 支付方式编码, 用于解析具体应用, 小程序场景需要; 会话码场景从会话恢复
+    /// @see cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum
+    @Size(max = 32, message = "{validation.field.method.size}")
+    @Schema(description = "支付方式编码")
+    private String method;
 
     /// 指定认证使用的应用AppId, 会话码恢复上下文时可不传, 优先级高于配置自动解析
     @Size(max = 128, message = "{validation.field.channelAppId.size}")

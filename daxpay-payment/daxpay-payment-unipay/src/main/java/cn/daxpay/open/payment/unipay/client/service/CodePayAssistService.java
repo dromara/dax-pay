@@ -182,7 +182,7 @@ public class CodePayAssistService {
         authParam.setAppId(mchApp.getAppId());
         authParam.setProduct(routeParam.getProduct());
         authParam.setChannelMchNo(routeParam.getChannelMchNo());
-        authParam.setCapability(routeParam.getCapability());
+        authParam.setMethod(routeParam.getCapability());
         authParam.setReturnPath(returnPath);
         authParam.setAuthType(this.mapAuthType(clientEnv));
         return channelAuthService.generateAuthUrl(authParam);

@@ -13,7 +13,9 @@ import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
 import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
+import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
 import cn.daxpay.open.platform.core.enums.unipay.ChannelAuthStatusEnum;
+import cn.daxpay.open.platform.core.enums.unipay.ChannelAuthTypeEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
@@ -47,6 +49,8 @@ public class ProductAuthService {
     /// 不含 queryCode, 需随会话保存)。
     public AuthUrlResult generateAuthUrl(GenerateAuthUrlParam param) {
         initMchContext(param.getAppId(), param.getMchNo(), null);
+        // 支付方式缺失时按认证类型推导默认值(OAuth 重定向天然只适用于公众号场景)
+        param.setMethod(resolveDefaultMethod(param.getAuthType(), param.getMethod()));
         // 支付产品: 显式传入优先, 否则从通道商户号反查(调试工具/直接指定通道商户场景)
         String product = resolveProduct(param);
         assertNotAlipayProduct(product);
@@ -58,7 +62,7 @@ public class ProductAuthService {
         AuthSession session = new AuthSession()
                 .setProduct(product)
                 .setChannelMchNo(param.getChannelMchNo())
-                .setCapability(param.getCapability())
+                .setMethod(param.getMethod())
                 .setChannelAppId(param.getChannelAppId())
                 .setReturnPath(param.getReturnPath())
                 .setQueryCode(queryCode)
@@ -78,6 +82,8 @@ public class ProductAuthService {
     ///                由认证分发层在调用前通过 [AuthSessionStore#loadSession] 加载后注入。
     public AuthResult auth(AuthCodeParam param, AuthSession session) {
         initMchContext(param.getAppId(), param.getMchNo(), session);
+        // 支付方式缺失时按认证类型推导(session 恢复场景已有 method, 小程序直连场景需补)
+        param.setMethod(resolveDefaultMethod(param.getAuthType(), param.getMethod()));
         // product 优先从会话恢复, 其次取参数(小程序直连场景)
         String product = (session != null && StrUtil.isNotBlank(session.getProduct()))
                 ? session.getProduct() : param.getProduct();
@@ -135,5 +141,22 @@ public class ProductAuthService {
         if (ProductEnum.ALIPAY.getCode().equals(product) || ProductEnum.ALIPAY_ISV.getCode().equals(product)) {
             throw new IllegalStateException("支付宝认证应走平台级 Provider, 不应进入产品策略: " + product);
         }
+    }
+
+    /// 支付方式缺失时按认证类型推导默认值
+    ///
+    /// OAuth 重定向认证天然只适用于公众号(H5网页授权)场景, 微信默认补 jsapi, 抖音默认补 h5。
+    /// 已显式传入 method 的场景(网关/码牌)不受影响。
+    private static String resolveDefaultMethod(String authType, String method) {
+        if (StrUtil.isNotBlank(method)) {
+            return method;
+        }
+        if (ChannelAuthTypeEnum.WECHAT.getCode().equals(authType)) {
+            return PayMethodEnum.WECHAT_JSAPI.getCode();
+        }
+        if (ChannelAuthTypeEnum.DOUYIN.getCode().equals(authType)) {
+            return PayMethodEnum.DOUYIN_H5.getCode();
+        }
+        return method;
     }
 }

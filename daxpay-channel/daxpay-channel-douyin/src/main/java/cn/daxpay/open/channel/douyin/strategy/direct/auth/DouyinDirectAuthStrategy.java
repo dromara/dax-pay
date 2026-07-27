@@ -47,7 +47,7 @@ public class DouyinDirectAuthStrategy extends AbsProductAuthStrategy {
     @Override
     public AuthUrlResult generateAuthUrl(GenerateAuthUrlParam param, String authToken) {
         DouyinDirectApp app = douyinDirectAppCapabilityService.resolveWebAppForH5Auth(
-                param.getChannelMchNo(), param.getCapability(), param.getChannelAppId());
+                param.getChannelMchNo(), param.getMethod(), param.getChannelAppId());
         DouyinDirectAppAuthConfig authConfig = douyinDirectAppAuthConfigService.findByDouyinDirectAppIdForAuth(app.getId());
         if (StrUtil.isBlank(authConfig.getAppSecret())) {
             // 抖音: 直连应用授权密钥未配置
@@ -64,7 +64,7 @@ public class DouyinDirectAuthStrategy extends AbsProductAuthStrategy {
     public AuthResult doAuth(AuthCodeParam param, AuthSession session) {
         var ctx = resolveContext(param, session);
         DouyinDirectApp app = douyinDirectAppCapabilityService.resolveWebAppForH5Auth(
-                ctx.channelMchNo(), ctx.capability(), ctx.channelAppId());
+                ctx.channelMchNo(), ctx.method(), ctx.channelAppId());
         DouyinDirectAppAuthConfig authConfig = douyinDirectAppAuthConfigService.findByDouyinDirectAppIdForAuth(app.getId());
         if (StrUtil.isBlank(authConfig.getAppSecret())) {
             // 抖音: 直连应用授权密钥未配置

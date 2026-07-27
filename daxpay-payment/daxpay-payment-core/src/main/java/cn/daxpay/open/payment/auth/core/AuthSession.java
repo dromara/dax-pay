@@ -53,9 +53,9 @@ public class AuthSession {
     /// 通道商户号
     private String channelMchNo;
 
-    /// 支付能力编码(用于解析具体应用)
-    /// @see cn.daxpay.open.platform.core.enums.pay.channel.PayCapabilityEnum
-    private String capability;
+    /// 支付方式编码(用于解析具体应用)
+    /// @see cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum
+    private String method;
 
     /// 指定认证应用AppId(可选, 优先级高于配置自动解析)
     private String channelAppId;

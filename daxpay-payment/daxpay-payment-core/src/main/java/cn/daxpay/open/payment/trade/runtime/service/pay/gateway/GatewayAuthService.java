@@ -85,7 +85,7 @@ public class GatewayAuthService {
             RouteSnapshot route = resolveRoute(order, param);
             authParam.setProduct(route.product());
             authParam.setChannelMchNo(route.channelMchNo());
-            authParam.setCapability(route.capability());
+            authParam.setMethod(route.method());
             authParam.setChannelAppId(route.channelAppId());
         }
         return channelAuthService.generateAuthUrl(authParam);
@@ -261,6 +261,6 @@ public class GatewayAuthService {
     }
 
     /// 路由快照(供组装 GenerateAuthUrlParam)
-    private record RouteSnapshot(String product, String channelMchNo, String capability, String channelAppId) {
+    private record RouteSnapshot(String product, String channelMchNo, String method, String channelAppId) {
     }
 }

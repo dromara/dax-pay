@@ -38,10 +38,10 @@ public class GenerateAuthUrlParam extends MerchantPaymentCommonParam {
     @Schema(description = "来源回跳路径")
     private String returnPath;
 
-    /// 支付能力编码, 用于解析具体应用(公众号/小程序), 不同能力对应不同应用维度的openId
-    /// @see cn.daxpay.open.platform.core.enums.pay.channel.PayCapabilityEnum
-    @Size(max = 32, message = "{validation.field.capability.size}")
-    @Schema(description = "支付能力编码")
-    private String capability;
+    /// 支付方式编码, 决定解析哪个应用(公众号/小程序等), 不同方式对应不同应用维度的 openId
+    /// @see cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum
+    @Size(max = 32, message = "{validation.field.method.size}")
+    @Schema(description = "支付方式编码")
+    private String method;
 }
 

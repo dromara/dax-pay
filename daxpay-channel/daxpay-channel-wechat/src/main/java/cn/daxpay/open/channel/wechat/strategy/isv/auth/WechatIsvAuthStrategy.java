@@ -57,7 +57,7 @@ public class WechatIsvAuthStrategy extends AbsProductAuthStrategy {
     @Override
     public AuthUrlResult generateAuthUrl(GenerateAuthUrlParam param, String authToken) {
         ResolvedAuthApp app = resolveAuthApp(param.getMchNo(), param.getChannelMchNo(),
-                param.getCapability(), param.getChannelAppId());
+                param.getMethod(), param.getChannelAppId());
         String redirectUri = AuthRedirectUri.WECHAT.buildRedirectUri(platformUrlConfigService);
         WechatAuthUrlResult result = wechatMpAuthService.generateAuthUrl(
                 redirectUri, app.wxAppId(), app.appSecret(), authToken);
@@ -68,7 +68,7 @@ public class WechatIsvAuthStrategy extends AbsProductAuthStrategy {
     @Override
     public AuthResult doAuth(AuthCodeParam param, AuthSession session) {
         var ctx = resolveContext(param, session);
-        ResolvedAuthApp app = resolveAuthApp(param.getMchNo(), ctx.channelMchNo(), ctx.capability(), ctx.channelAppId());
+        ResolvedAuthApp app = resolveAuthApp(param.getMchNo(), ctx.channelMchNo(), ctx.method(), ctx.channelAppId());
         WechatAuthResult data = wechatMpAuthService.getTokenAndOpenId(
                 param.getAuthCode(), app.wxAppId(), app.appSecret());
         if (StrUtil.isBlank(data.getOpenId())) {

@@ -23,22 +23,22 @@ public abstract class AbsProductAuthStrategy implements PaymentStrategy {
     /// 通过AuthCode获取认证结果
     ///
     /// @param session 认证会话上下文(H5场景从 authToken 恢复; 小程序直连场景可为空, 此时从 param 取上下文)。
-    ///                策略需兼容 session 为 null 的情况(优先用 param 的 channelMchNo/capability/channelAppId)。
+    ///                策略需兼容 session 为 null 的情况(优先用 param 的 channelMchNo/method/channelAppId)。
     public abstract AuthResult doAuth(AuthCodeParam param, AuthSession session);
 
     /// 解析认证上下文: session 字段优先, param 兜底
     ///
     /// H5 OAuth 重定向场景从 session 恢复(param 仅含 authToken);
     /// 小程序直连场景 session 为空, 从 param 取上下文。
-    /// 返回 [ProductAuthContext](channelMchNo / capability / channelAppId)。
+    /// 返回 [ProductAuthContext](channelMchNo / method / channelAppId)。
     protected ProductAuthContext resolveContext(AuthCodeParam param, AuthSession session) {
         String channelMchNo = session != null && StrUtil.isNotBlank(session.getChannelMchNo())
                 ? session.getChannelMchNo() : param.getChannelMchNo();
-        String capability = session != null && StrUtil.isNotBlank(session.getCapability())
-                ? session.getCapability() : param.getCapability();
+        String method = session != null && StrUtil.isNotBlank(session.getMethod())
+                ? session.getMethod() : param.getMethod();
         String channelAppId = session != null && StrUtil.isNotBlank(session.getChannelAppId())
                 ? session.getChannelAppId() : param.getChannelAppId();
-        return new ProductAuthContext(channelMchNo, capability, channelAppId);
+        return new ProductAuthContext(channelMchNo, method, channelAppId);
     }
 
 }
