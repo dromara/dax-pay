@@ -7,6 +7,7 @@ import cn.daxpay.open.payment.unipay.param.assist.AuthCodeParam;
 import cn.daxpay.open.payment.unipay.param.assist.GenerateAuthUrlParam;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
 import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
+import cn.hutool.core.util.StrUtil;
 
 /// # 通道抽象认证策略
 ///
@@ -25,5 +26,20 @@ public abstract class AbsChannelAuthStrategy implements PaymentStrategy {
     /// @param session 认证会话上下文(H5场景从 authToken 恢复; 小程序直连场景可为空, 此时从 param 取上下文)。
     ///                策略需兼容 session 为 null 的情况(优先用 param 的 channelMchNo/capability/channelAppId)。
     public abstract AuthResult doAuth(AuthCodeParam param, AuthSession session);
+
+    /// 解析认证上下文: session 字段优先, param 兜底
+    ///
+    /// 抽取各通道策略 doAuth 开头重复的「session 非空判断 + param 回退」逻辑, 返回
+    /// [AuthContext](channelMchNo / capability / channelAppId)。H5 OAuth 重定向场景从 session
+    /// 恢复(param 仅含 authToken); 小程序直连场景 session 为空, 从 param 取上下文。
+    protected AuthContext resolveContext(AuthCodeParam param, AuthSession session) {
+        String channelMchNo = session != null && StrUtil.isNotBlank(session.getChannelMchNo())
+                ? session.getChannelMchNo() : param.getChannelMchNo();
+        String capability = session != null && StrUtil.isNotBlank(session.getCapability())
+                ? session.getCapability() : param.getCapability();
+        String channelAppId = session != null && StrUtil.isNotBlank(session.getChannelAppId())
+                ? session.getChannelAppId() : param.getChannelAppId();
+        return new AuthContext(channelMchNo, capability, channelAppId);
+    }
 
 }

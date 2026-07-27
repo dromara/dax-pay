@@ -3,6 +3,7 @@ package cn.daxpay.open.payment.merchant.dao.channel;
 import cn.daxpay.open.platform.common.mybatisplus.impl.BaseManager;
 import cn.daxpay.open.platform.common.mybatisplus.query.generator.QueryGenerator;
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
+import cn.daxpay.open.platform.core.annotation.IgnoreTenant;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
@@ -69,6 +70,16 @@ public class ChannelMerchantManager extends BaseManager<ChannelMerchantMapper, C
         return this.lambdaQuery()
                 .eq(ChannelMerchant::getChannelMchNo, channelMchNo)
                 .oneOpt();
+    }
+
+    /// 根据通道商户号查询唯一通道商户(认证引导场景, 忽略租户隔离)
+    ///
+    /// 用于 OAuth 回调等无 mchNo 上下文的引导阶段(微信直连/服务商扫码认证),
+    /// channelMchNo 为系统生成全局唯一号, 可独立定位行。须经 Spring 注入的 Bean 外部调用
+    /// (同类 this 自调用不走 AOP)。配置态/已装载上下文的场景请用 [#findByChannelMchNo]。
+    @IgnoreTenant
+    public Optional<ChannelMerchant> findByChannelMchNoNotTenant(String channelMchNo) {
+        return findByChannelMchNo(channelMchNo);
     }
 
     /// 通道商户号 → 产品编码；不存在返回 null（配置单条候选/反推用，仅单次路径）

@@ -5,6 +5,7 @@ import cn.daxpay.open.payment.unipay.param.assist.GenerateAuthUrlParam;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
 import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
+import cn.daxpay.open.platform.core.enums.unipay.ChannelAuthStatusEnum;
 import cn.daxpay.open.platform.core.enums.unipay.ChannelAuthTypeEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.hutool.core.util.StrUtil;
@@ -52,7 +53,15 @@ public class ChannelAuthService {
             throw new BizInfoException(DaxPayErrorCode.OPERATION_FAIL,
                     "pay.error.assist.authSessionExpired");
         }
-        AuthResult result = doAuth(param, session);
+        AuthResult result;
+        try {
+            result = doAuth(param, session);
+        } catch (RuntimeException e) {
+            // 认证失败: 写回 FAIL 状态供前端轮询及时退出(避免死等 TTL), 再抛原异常由调用方处理
+            authSessionStore.writeResultByQueryCode(param.getQueryCode(), session,
+                    new AuthResult().setStatus(ChannelAuthStatusEnum.FAIL.getCode()));
+            throw e;
+        }
         // 平台级 auth 方法未回填 returnPath 时, 从会话补齐
         if (session != null && StrUtil.isNotBlank(session.getReturnPath())
                 && StrUtil.isBlank(result.getReturnPath())) {

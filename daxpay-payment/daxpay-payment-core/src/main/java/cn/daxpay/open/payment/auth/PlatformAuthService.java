@@ -12,7 +12,6 @@ import cn.daxpay.open.platform.capability.wechat.auth.result.WechatAuthResult;
 import cn.daxpay.open.platform.capability.wechat.auth.result.WechatAuthUrlResult;
 import cn.daxpay.open.platform.capability.wechat.auth.service.WechatMpAuthService;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
-import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.enums.unipay.ChannelAuthStatusEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.system.entity.config.platform.auth.PlatformAlipayAuthConfig;
@@ -47,25 +46,6 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class PlatformAuthService {
-
-    /// 支付宝 OAuth 认证回调路径: /auth/alipay
-    ///
-    /// 固定路径, 需在支付宝开放平台登记为授权回调地址。
-    /// 会话标识 authToken 通过 OAuth state 参数透传, 回调后从 state 恢复。
-    private static final String ALIPAY_AUTH_PATH = "/auth/alipay";
-
-    /// 微信 OAuth 认证回调路径: /auth/wechat
-    ///
-    /// 微信公众号 OAuth 的 redirect_uri 只校验域名(不要求精确匹配), 但为统一三通道模式
-    /// (微信/抖音/支付宝均用固定 redirect_uri + state 透传会话标识), 这里也改为固定路径。
-    /// 会话标识 authToken 通过 OAuth state 参数透传, 回调后从 state 恢复。
-    private static final String WECHAT_AUTH_PATH = "/auth/wechat";
-
-    /// 抖音 H5 认证回调路径: /auth/douyin
-    ///
-    /// 抖音 silent_auth 要求 redirect_uri 与平台配置完全一致(不支持 path 段或 query 参数),
-    /// 故为固定路径。会话标识(authToken)通过 state 参数透传, 回调后从 state 中恢复。
-    private static final String DOUYIN_AUTH_PATH = "/auth/douyin";
 
     /// 支付宝授权范围: auth_base(静默授权, 仅取 userId, 不弹确认页)
     private static final String ALIPAY_SCOPE = "auth_base";
@@ -114,13 +94,8 @@ public class PlatformAuthService {
             // 支付宝: 平台级支付宝配置不完整, 请先在「三方平台管理」中配置
             throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR, "error.social.alipayNotConfigured");
         }
-        String gatewayBase = platformUrlConfigService.getUrlConfig().getPaymentGatewayBaseUrl();
-        if (StrUtil.isBlank(gatewayBase)) {
-            // 支付网关前端地址未配置
-            throw new BizInfoException(DaxPayErrorCode.CONFIG_ERROR, "error.common.gatewayUrlNotConfigured");
-        }
-        // redirect_uri 为固定路径(需在支付宝开放平台登记), authToken 通过 OAuth state 透传
-        String redirectUri = StrUtil.removeSuffix(gatewayBase, "/") + ALIPAY_AUTH_PATH;
+        // redirect_uri 为固定路径(见 [AuthRedirectUri]), authToken 通过 OAuth state 透传
+        String redirectUri = AuthRedirectUri.ALIPAY.buildRedirectUri(platformUrlConfigService);
         return alipayAuthCapability.generateAuthUrl(config, redirectUri, ALIPAY_SCOPE, authToken, false);
     }
 
@@ -142,11 +117,6 @@ public class PlatformAuthService {
             // 微信: 平台级微信公众号配置不完整, 请先在「平台配置」中配置
             throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR, "error.social.wechatMpNotConfigured");
         }
-        String gatewayBase = platformUrlConfigService.getUrlConfig().getPaymentGatewayBaseUrl();
-        if (StrUtil.isBlank(gatewayBase)) {
-            // 支付网关前端地址未配置
-            throw new BizInfoException(DaxPayErrorCode.CONFIG_ERROR, "error.common.gatewayUrlNotConfigured");
-        }
         String authToken = IdUtil.fastSimpleUUID();
         String queryCode = RandomUtil.randomString(10);
         AuthSession session = new AuthSession()
@@ -154,8 +124,8 @@ public class PlatformAuthService {
                 .setQueryCode(queryCode)
                 .setReturnPath(returnPath);
         authSessionStore.saveSession(authToken, session);
-        // redirect_uri 为固定路径, authToken 通过 OAuth state 透传
-        String redirectUri = StrUtil.removeSuffix(gatewayBase, "/") + WECHAT_AUTH_PATH;
+        // redirect_uri 为固定路径(见 [AuthRedirectUri]), authToken 通过 OAuth state 透传
+        String redirectUri = AuthRedirectUri.WECHAT.buildRedirectUri(platformUrlConfigService);
         WechatAuthUrlResult result = wechatMpAuthService.generateAuthUrl(redirectUri, config.getAppId(), config.getAppSecret(), authToken);
         authSessionStore.saveWaitingResult(queryCode);
         return new AuthUrlResult().setAuthUrl(result.getAuthUrl()).setQueryCode(queryCode);
@@ -180,11 +150,6 @@ public class PlatformAuthService {
             // 抖音: 平台级抖音 H5 应用配置不完整, 请先在「三方平台管理」中配置
             throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR, "error.social.douyinH5NotConfigured");
         }
-        String gatewayBase = platformUrlConfigService.getUrlConfig().getPaymentGatewayBaseUrl();
-        if (StrUtil.isBlank(gatewayBase)) {
-            // 支付网关前端地址未配置
-            throw new BizInfoException(DaxPayErrorCode.CONFIG_ERROR, "error.common.gatewayUrlNotConfigured");
-        }
         String authToken = IdUtil.fastSimpleUUID();
         String queryCode = RandomUtil.randomString(10);
         AuthSession session = new AuthSession()
@@ -192,8 +157,8 @@ public class PlatformAuthService {
                 .setQueryCode(queryCode)
                 .setReturnPath(returnPath);
         authSessionStore.saveSession(authToken, session);
-        // redirect_uri 为固定路径(需与抖音开放平台配置完全一致), authToken 通过 state 透传
-        String redirectUri = StrUtil.removeSuffix(gatewayBase, "/") + DOUYIN_AUTH_PATH;
+        // redirect_uri 为固定路径(见 [AuthRedirectUri], 抖音要求与平台配置完全一致), authToken 通过 state 透传
+        String redirectUri = AuthRedirectUri.DOUYIN.buildRedirectUri(platformUrlConfigService);
         String authUrl = douyinH5AuthService.buildSilentAuthUrl(config.getClientKey(), redirectUri, authToken);
         authSessionStore.saveWaitingResult(queryCode);
         return new AuthUrlResult().setAuthUrl(authUrl).setQueryCode(queryCode);

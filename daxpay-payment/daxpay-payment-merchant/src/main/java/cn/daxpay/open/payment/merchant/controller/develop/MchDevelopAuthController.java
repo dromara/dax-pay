@@ -1,6 +1,6 @@
 package cn.daxpay.open.payment.merchant.controller.develop;
 
-import cn.daxpay.open.payment.merchant.service.develop.MchDevelopAuthService;
+import cn.daxpay.open.payment.auth.DevelopAuthService;
 import cn.daxpay.open.payment.unipay.param.assist.GenerateAuthUrlParam;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
 import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
@@ -38,27 +38,27 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class MchDevelopAuthController {
 
-    private final MchDevelopAuthService mchDevelopAuthService;
+    private final DevelopAuthService developAuthService;
 
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "生成支付宝H5授权链接")
     @PostMapping("/generate-alipay-auth-url")
     public Result<AuthUrlResult> generateAlipayAuthUrl() {
-        return Res.ok(mchDevelopAuthService.generateAlipayAuthUrl());
+        return Res.ok(developAuthService.generateAlipayAuthUrl());
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "生成微信公众号配置授权链接")
     @PostMapping("/generate-wechat-mp-auth-url")
     public Result<AuthUrlResult> generateWechatMpAuthUrl() {
-        return Res.ok(mchDevelopAuthService.generateWechatMpAuthUrl());
+        return Res.ok(developAuthService.generateWechatMpAuthUrl());
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "生成抖音H5授权链接")
     @PostMapping("/generate-douyin-auth-url")
     public Result<AuthUrlResult> generateDouyinAuthUrl() {
-        return Res.ok(mchDevelopAuthService.generateDouyinAuthUrl());
+        return Res.ok(developAuthService.generateDouyinAuthUrl());
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
@@ -67,7 +67,7 @@ public class MchDevelopAuthController {
     public Result<AuthUrlResult> generateChannelAuthUrl(@RequestBody GenerateAuthUrlParam param) {
         // 不加 @Valid: GenerateAuthUrlParam 继承 PaymentCommonParam.reqTime(@NotNull), 但认证不走签名/防重放, 无需 reqTime;
         // channel/mchNo 由 ChannelProductAuthService 业务层兜底校验, 与 unipay ChannelAuthController 同类接口保持一致
-        return Res.ok(mchDevelopAuthService.generateChannelAuthUrl(param));
+        return Res.ok(developAuthService.generateChannelAuthUrl(param));
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
@@ -75,6 +75,6 @@ public class MchDevelopAuthController {
     @GetMapping("/query-auth-result")
     public Result<AuthResult> queryAuthResult(
             @NotBlank(message = "{validation.field.queryCode.notBlank}") String queryCode) {
-        return Res.ok(mchDevelopAuthService.queryAuthResult(queryCode));
+        return Res.ok(developAuthService.queryAuthResult(queryCode));
     }
 }

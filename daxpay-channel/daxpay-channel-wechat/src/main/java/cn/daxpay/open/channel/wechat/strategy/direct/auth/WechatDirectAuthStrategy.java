@@ -1,9 +1,11 @@
 package cn.daxpay.open.channel.wechat.strategy.direct.auth;
 
+import cn.daxpay.open.payment.auth.AuthRedirectUri;
 import cn.daxpay.open.payment.auth.AuthSession;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
 import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
 import cn.daxpay.open.payment.strategy.auth.AbsChannelAuthStrategy;
+import cn.daxpay.open.payment.strategy.auth.AuthContext;
 import cn.daxpay.open.payment.unipay.param.assist.AuthCodeParam;
 import cn.daxpay.open.payment.unipay.param.assist.GenerateAuthUrlParam;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
@@ -14,7 +16,6 @@ import cn.daxpay.open.platform.capability.wechat.auth.result.WechatAuthResult;
 import cn.daxpay.open.platform.capability.wechat.auth.result.WechatAuthUrlResult;
 import cn.daxpay.open.platform.capability.wechat.auth.service.WechatMpAuthService;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
-import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
@@ -53,7 +54,7 @@ public class WechatDirectAuthStrategy extends AbsChannelAuthStrategy {
     public AuthUrlResult generateAuthUrl(GenerateAuthUrlParam param, String authToken) {
         WxAppView app = resolveApp(param.getMchNo(), param.getChannelMchNo(),
                 param.getCapability(), param.getChannelAppId());
-        String redirectUri = buildRedirectUri();
+        String redirectUri = AuthRedirectUri.WECHAT.buildRedirectUri(platformUrlConfigService);
         WechatAuthUrlResult result = wechatMpAuthService.generateAuthUrl(
                 redirectUri, app.wxAppId(), app.appSecret(), authToken);
         return new AuthUrlResult().setAuthUrl(result.getAuthUrl());
@@ -64,13 +65,8 @@ public class WechatDirectAuthStrategy extends AbsChannelAuthStrategy {
     /// 应用上下文优先从 session(H5 会话码场景)恢复, 否则取 param(小程序直连场景)。
     @Override
     public AuthResult doAuth(AuthCodeParam param, AuthSession session) {
-        String channelMchNo = session != null && StrUtil.isNotBlank(session.getChannelMchNo())
-                ? session.getChannelMchNo() : param.getChannelMchNo();
-        String capability = session != null && StrUtil.isNotBlank(session.getCapability())
-                ? session.getCapability() : param.getCapability();
-        String channelAppId = session != null && StrUtil.isNotBlank(session.getChannelAppId())
-                ? session.getChannelAppId() : param.getChannelAppId();
-        WxAppView app = resolveApp(param.getMchNo(), channelMchNo, capability, channelAppId);
+        AuthContext ctx = resolveContext(param, session);
+        WxAppView app = resolveApp(param.getMchNo(), ctx.channelMchNo(), ctx.capability(), ctx.channelAppId());
         WechatAuthResult data = wechatMpAuthService.getTokenAndOpenId(
                 param.getAuthCode(), app.wxAppId(), app.appSecret());
         if (StrUtil.isBlank(data.getOpenId())) {
@@ -90,26 +86,18 @@ public class WechatDirectAuthStrategy extends AbsChannelAuthStrategy {
     }
 
     /// 解析商户号: param 优先, 否则按通道商户号反查
+    ///
+    /// 反查走 NotTenant 版本: OAuth 回调(auth)场景无 mchNo 上下文,
+    /// channelMchNo 为系统生成全局唯一号, 可独立定位行。
     private String resolveMchNo(String mchNo, String channelMchNo) {
         if (StrUtil.isNotBlank(mchNo)) {
             return mchNo;
         }
-        return channelMerchantManager.findByChannelMchNo(channelMchNo)
+        return channelMerchantManager.findByChannelMchNoNotTenant(channelMchNo)
                 .map(ChannelMerchant::getMchNo)
                 // 微信: 通道商户不存在
                 .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "pay.error.assist.channelMchNotFound", channelMchNo));
     }
 
-    /// 拼接认证回调地址: {paymentGatewayBaseUrl}/auth/wechat
-    ///
-    /// 固定路径(不含动态段), 会话标识 authToken 通过 OAuth state 参数透传。
-    private String buildRedirectUri() {
-        String base = platformUrlConfigService.getUrlConfig().getPaymentGatewayBaseUrl();
-        if (StrUtil.isBlank(base)) {
-            // 支付网关前端地址未配置
-            throw new BizInfoException(DaxPayErrorCode.CONFIG_ERROR, "error.common.gatewayUrlNotConfigured");
-        }
-        return StrUtil.removeSuffix(base, "/") + "/auth/wechat";
-    }
 }

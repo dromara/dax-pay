@@ -14,7 +14,9 @@ public enum ChannelAuthStatusEnum {
     /// 获取成功
     SUCCESS("success"),
     /// 数据不存在
-    NOT_EXIST("not_exist");
+    NOT_EXIST("not_exist"),
+    /// 获取失败(认证异常, 供前端轮询及时退出, 避免死等 TTL)
+    FAIL("fail");
 
     private final String code;
 

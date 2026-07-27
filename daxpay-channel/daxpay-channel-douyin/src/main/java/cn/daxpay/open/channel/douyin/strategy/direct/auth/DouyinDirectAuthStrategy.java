@@ -4,8 +4,10 @@ import cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectApp;
 import cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectAppAuthConfig;
 import cn.daxpay.open.channel.douyin.service.direct.DouyinDirectAppAuthConfigService;
 import cn.daxpay.open.channel.douyin.service.direct.DouyinDirectAppCapabilityService;
+import cn.daxpay.open.payment.auth.AuthRedirectUri;
 import cn.daxpay.open.payment.auth.AuthSession;
 import cn.daxpay.open.payment.strategy.auth.AbsChannelAuthStrategy;
+import cn.daxpay.open.payment.strategy.auth.AuthContext;
 import cn.daxpay.open.payment.unipay.param.assist.AuthCodeParam;
 import cn.daxpay.open.payment.unipay.param.assist.GenerateAuthUrlParam;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
@@ -13,7 +15,6 @@ import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
 import cn.daxpay.open.platform.capability.douyin.auth.result.DouyinAuthResult;
 import cn.daxpay.open.platform.capability.douyin.auth.service.DouyinH5AuthService;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
-import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
@@ -53,7 +54,7 @@ public class DouyinDirectAuthStrategy extends AbsChannelAuthStrategy {
             // 抖音: 直连应用授权密钥未配置
             throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR, "error.channel.douyin.appAuthSecretMissing");
         }
-        String redirectUri = buildRedirectUri();
+        String redirectUri = AuthRedirectUri.DOUYIN.buildRedirectUri(platformUrlConfigService);
         String authUrl = douyinH5AuthService.buildSilentAuthUrl(
                 app.getDouyinAppId(), redirectUri, authToken);
         return new AuthUrlResult().setAuthUrl(authUrl);
@@ -62,14 +63,9 @@ public class DouyinDirectAuthStrategy extends AbsChannelAuthStrategy {
     /// 通过授权 code 换取 openId
     @Override
     public AuthResult doAuth(AuthCodeParam param, AuthSession session) {
-        String channelMchNo = session != null && StrUtil.isNotBlank(session.getChannelMchNo())
-                ? session.getChannelMchNo() : param.getChannelMchNo();
-        String capability = session != null && StrUtil.isNotBlank(session.getCapability())
-                ? session.getCapability() : param.getCapability();
-        String channelAppId = session != null && StrUtil.isNotBlank(session.getChannelAppId())
-                ? session.getChannelAppId() : param.getChannelAppId();
+        AuthContext ctx = resolveContext(param, session);
         DouyinDirectApp app = douyinDirectAppCapabilityService.resolveWebAppForH5Auth(
-                channelMchNo, capability, channelAppId);
+                ctx.channelMchNo(), ctx.capability(), ctx.channelAppId());
         DouyinDirectAppAuthConfig authConfig = douyinDirectAppAuthConfigService.findByDouyinDirectAppIdForAuth(app.getId());
         if (StrUtil.isBlank(authConfig.getAppSecret())) {
             // 抖音: 直连应用授权密钥未配置
@@ -86,13 +82,4 @@ public class DouyinDirectAuthStrategy extends AbsChannelAuthStrategy {
                 .setAccessToken(data.getAccessToken());
     }
 
-    /// 拼接认证回调地址: {paymentGatewayBaseUrl}/auth/douyin
-    private String buildRedirectUri() {
-        String base = platformUrlConfigService.getUrlConfig().getPaymentGatewayBaseUrl();
-        if (StrUtil.isBlank(base)) {
-            // 支付网关前端地址未配置
-            throw new BizInfoException(DaxPayErrorCode.CONFIG_ERROR, "error.common.gatewayUrlNotConfigured");
-        }
-        return StrUtil.removeSuffix(base, "/") + "/auth/douyin";
-    }
 }

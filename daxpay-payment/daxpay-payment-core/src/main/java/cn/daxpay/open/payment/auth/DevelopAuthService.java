@@ -1,8 +1,5 @@
-package cn.daxpay.open.payment.admin.service.develop;
+package cn.daxpay.open.payment.auth;
 
-import cn.daxpay.open.payment.auth.AuthSessionStore;
-import cn.daxpay.open.payment.auth.ChannelProductAuthService;
-import cn.daxpay.open.payment.auth.PlatformAuthService;
 import cn.daxpay.open.payment.unipay.param.assist.GenerateAuthUrlParam;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
 import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
@@ -10,7 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-/// # 认证调试服务
+/// # 认证调试服务(运营端 / 商户端共用)
 ///
 /// 调试入口, 按认证来源分别委托:
 /// - **支付宝(平台级)**: 委托 [PlatformAuthService] 生成 OAuth 授权链接, 轮询 queryCode 取结果
@@ -22,10 +19,14 @@ import org.springframework.stereotype.Service;
 /// - **微信小程序(商户端/运营端)**: 暂未实现
 ///
 /// 已实现项共用 queryCode 轮询机制(由 [AuthSessionStore#queryAuthResult] 统一查询)。
+///
+/// ## 重构说明
+/// 原 `DevelopAuthAdminService` 与 `MchDevelopAuthService` 逐行相同, 已合并到 payment-core 本类,
+/// 运营端/商户端 Controller 直接注入, 消除冗余中间层。
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class DevelopAuthAdminService {
+public class DevelopAuthService {
 
     private final PlatformAuthService platformAuthService;
     private final ChannelProductAuthService channelProductAuthService;
