@@ -102,14 +102,15 @@ public class WechatDirectAppCapabilityService {
         capabilityManager.deleteByWechatDirectAppId(wechatDirectAppId);
     }
 
-    /// 支付/回调解析应用：显式配置 > appType 自动推导 > 通道商户首个兜底
+    /// 支付/回调解析应用：显式配置 > appType 自动推导（须已装载 mchNo，租户内）
     ///
-    /// **须已装载 mchNo**（[PaymentVerify] 的 initMch / 回调 bindMchNoForCallback），走租户过滤。
+    /// appType 推导要求该通道商户下该类型应用唯一命中：
+    /// - 唯一命中：返回该应用
+    /// - 该类型存在多个应用：抛 appNotUnique，要求显式配置能力绑
+    /// - 该类型无应用：返回 empty，由调用方走最终报错
+    /// 不再"通道商户首个"兜底。
+    ///
     /// 认证无上下文请用 [#resolveAppNotTenant]。
-    ///
-    /// @param channelMchNo 通道商户号
-    /// @param capability    支付能力编码
-    /// @return 命中的应用；三者均未命中返回 empty，由调用方兜底回退
     public Optional<WechatDirectApp> resolveApp(String channelMchNo, String capability) {
         if (StrUtil.hasBlank(channelMchNo, capability)) {
             return Optional.empty();
@@ -119,16 +120,21 @@ public class WechatDirectAppCapabilityService {
         if (rel.isPresent()) {
             return wechatDirectAppManager.findById(rel.get().getWechatDirectAppId());
         }
-        // 2. 未配置则按能力 → appType 自动推导
+        // 2. appType 推导：要求该通道商户下该类型应用唯一命中，>1 拒绝猜测
         String appType = WechatAppTypeCode.resolveAppType(capability);
         if (appType != null) {
-            Optional<WechatDirectApp> byType = wechatDirectAppManager.findFirstByChannelMchNoAndAppType(channelMchNo, appType);
-            if (byType.isPresent()) {
-                return byType;
+            List<WechatDirectApp> apps = wechatDirectAppManager.listByChannelMchNoAndAppType(channelMchNo, appType);
+            if (apps.size() > 1) {
+                // 存在多个同类型应用，请显式配置能力绑定以明确选择
+                throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                        "error.channel.wechat.appNotUnique", appType);
+            }
+            if (apps.size() == 1) {
+                return Optional.of(apps.getFirst());
             }
         }
-        // 3. 最终兜底：按通道商户号取首个应用
-        return wechatDirectAppManager.findFirstByChannelMchNo(channelMchNo);
+        // 3. 不再首个兜底，返回 empty
+        return Optional.empty();
     }
 
     /// 认证等无租户上下文时解析应用（忽略租户，内部复用 [#resolveApp] 逻辑）

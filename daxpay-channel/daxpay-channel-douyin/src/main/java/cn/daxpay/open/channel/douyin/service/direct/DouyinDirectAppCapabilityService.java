@@ -109,13 +109,15 @@ public class DouyinDirectAppCapabilityService {
         capabilityManager.deleteByDouyinDirectAppId(douyinDirectAppId);
     }
 
-    /// 支付/回调解析应用：显式配置 > appType 自动推导 > 通道商户首个兜底（须已装载 mchNo，租户内）
+    /// 支付/回调解析应用：显式配置 > appType 自动推导（须已装载 mchNo，租户内）
+    ///
+    /// appType 推导要求该通道商户下该类型应用唯一命中：
+    /// - 唯一命中：返回该应用
+    /// - 该类型存在多个应用：抛 appNotUnique，要求显式配置能力绑
+    /// - 该类型无应用：返回 empty，由调用方走最终报错
+    /// 不再"通道商户首个"兜底。
     ///
     /// 认证无上下文请用 [#resolveAppNotTenant]。
-    ///
-    /// @param channelMchNo 通道商户号
-    /// @param capability    支付能力编码
-    /// @return 命中的应用；三者均未命中返回 empty，由调用方兜底回退
     public Optional<DouyinDirectApp> resolveApp(String channelMchNo, String capability) {
         if (StrUtil.hasBlank(channelMchNo, capability)) {
             return Optional.empty();
@@ -125,16 +127,21 @@ public class DouyinDirectAppCapabilityService {
         if (rel.isPresent()) {
             return douyinDirectAppManager.findById(rel.get().getDouyinDirectAppId());
         }
-        // 2. 未配置则按能力 → appType 自动推导
+        // 2. appType 推导：要求该通道商户下该类型应用唯一命中，>1 拒绝猜测
         String appType = DouyinAppTypeCode.resolveAppType(capability);
         if (appType != null) {
-            Optional<DouyinDirectApp> byType = douyinDirectAppManager.findFirstByChannelMchNoAndAppType(channelMchNo, appType);
-            if (byType.isPresent()) {
-                return byType;
+            List<DouyinDirectApp> apps = douyinDirectAppManager.listByChannelMchNoAndAppType(channelMchNo, appType);
+            if (apps.size() > 1) {
+                // 存在多个同类型应用，请显式配置能力绑定以明确选择
+                throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                        "error.channel.douyin.appNotUnique", appType);
+            }
+            if (apps.size() == 1) {
+                return Optional.of(apps.getFirst());
             }
         }
-        // 3. 最终兜底：按通道商户号取首个应用
-        return douyinDirectAppManager.findFirstByChannelMchNo(channelMchNo);
+        // 3. 不再首个兜底，返回 empty 由调用方报错
+        return Optional.empty();
     }
 
     /// 认证等无租户上下文时解析应用（忽略租户）
@@ -145,8 +152,8 @@ public class DouyinDirectAppCapabilityService {
 
     /// H5 silent_auth / JS-SDK 验签用网站应用解析（忽略租户）
     ///
-    /// 优先级: channelAppId 显式 > capability 命中且为 web_app > 通道商户首个 web_app。
-    /// 勿盲跟 DOUYIN_JSAPI→mini_program 推导。
+    /// 优先级: channelAppId 显式 > capability 命中且为 web_app > 该通道商户唯一 web_app。
+    /// 不再"首个 web_app"兜底；web_app 不唯一或不存在均直接报错。
     @IgnoreTenant
     public DouyinDirectApp resolveWebAppForH5Auth(String channelMchNo, String capability, String channelAppId) {
         if (StrUtil.isNotBlank(channelAppId)) {
@@ -160,10 +167,19 @@ public class DouyinDirectAppCapabilityService {
                 return byCap.get();
             }
         }
-        return douyinDirectAppManager.findFirstByChannelMchNoAndAppTypeNotTenant(
-                        channelMchNo, DouyinAppTypeCode.WEB_APP)
-                .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                        "error.channel.douyin.webAppNotFound"));
+        // H5 验签需 web_app：要求该类型唯一命中，>1 抛 notUnique，==0 抛 notConfigured
+        List<DouyinDirectApp> webApps = douyinDirectAppManager.listByChannelMchNoAndAppType(
+                channelMchNo, DouyinAppTypeCode.WEB_APP);
+        if (webApps.size() > 1) {
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "error.channel.douyin.appNotUnique", DouyinAppTypeCode.WEB_APP);
+        }
+        if (webApps.size() == 1) {
+            return webApps.getFirst();
+        }
+        // 抖音: 未配置 H5 验签所需的 web_app 类型应用
+        throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                "error.channel.douyin.appNotConfigured", DouyinAppTypeCode.WEB_APP);
     }
 
     /// 查询抖音直连产品支持的支付能力候选列表(含国际化名称)

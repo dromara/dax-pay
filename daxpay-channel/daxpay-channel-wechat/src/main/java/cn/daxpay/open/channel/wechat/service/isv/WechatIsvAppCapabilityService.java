@@ -95,10 +95,13 @@ public class WechatIsvAppCapabilityService {
         capabilityManager.deleteByWechatIsvAppId(wechatIsvAppId);
     }
 
-    /// 支付时解析当前支付能力对应的应用：显式配置 > appType自动推导 > 取首个兜底
+    /// 支付时解析当前支付能力对应的应用：显式配置 > appType自动推导（要求唯一命中）
     ///
-    /// @param capability 支付能力编码
-    /// @return 命中的应用；三者均未命中返回 empty，由调用方兜底回退
+    /// appType 推导要求该类型服务商应用全局唯一命中：
+    /// - 唯一命中：返回该应用
+    /// - 该类型存在多个应用：抛 appNotUnique，要求显式配置能力绑
+    /// - 该类型无应用：返回 empty，由调用方走最终报错
+    /// 不再"首个服务商应用"兜底。
     public Optional<WechatIsvApp> resolveApp(String capability) {
         if (StrUtil.isBlank(capability)) {
             return Optional.empty();
@@ -108,16 +111,21 @@ public class WechatIsvAppCapabilityService {
         if (rel.isPresent()) {
             return wechatIsvAppManager.findById(rel.get().getWechatIsvAppId());
         }
-        // 2. 未配置则按能力 → appType 自动推导
+        // 2. appType 推导：要求该类型服务商应用唯一命中，>1 拒绝猜测
         String appType = WechatAppTypeCode.resolveAppType(capability);
         if (appType != null) {
-            Optional<WechatIsvApp> byType = wechatIsvAppManager.findFirstByAppType(appType);
-            if (byType.isPresent()) {
-                return byType;
+            List<WechatIsvApp> apps = wechatIsvAppManager.listByAppType(appType);
+            if (apps.size() > 1) {
+                // 存在多个同类型服务商应用，请显式配置能力绑定以明确选择
+                throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                        "error.channel.wechat.appNotUnique", appType);
+            }
+            if (apps.size() == 1) {
+                return Optional.of(apps.getFirst());
             }
         }
-        // 3. 最终兜底：取首个服务商应用
-        return wechatIsvAppManager.findFirst();
+        // 3. 不再首个兜底，返回 empty
+        return Optional.empty();
     }
 
     /// 查询微信服务商产品支持的支付能力候选列表(含国际化名称)

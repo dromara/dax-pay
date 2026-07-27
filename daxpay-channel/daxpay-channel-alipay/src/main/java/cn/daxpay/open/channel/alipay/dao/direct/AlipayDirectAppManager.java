@@ -56,6 +56,16 @@ public class AlipayDirectAppManager extends BaseManager<AlipayDirectAppMapper, A
                 .orderByAsc(AlipayDirectApp::getId));
     }
 
+    /// 根据通道商户号与应用类型查询全部应用，供应用解析做唯一性判断
+    public List<AlipayDirectApp> listByChannelMchNoAndAppType(String channelMchNo, String appType) {
+        return lambdaQuery()
+                .eq(AlipayDirectApp::getChannelMchNo, channelMchNo)
+                .eq(AlipayDirectApp::getAppType, appType)
+                .orderByAsc(AlipayDirectApp::getCreateTime)
+                .orderByAsc(AlipayDirectApp::getId)
+                .list();
+    }
+
     /// 根据通道商户号查询首个应用（支付/回调，租户内）
     public Optional<AlipayDirectApp> findFirstByChannelMchNo(String channelMchNo) {
         return firstOpt(q -> q

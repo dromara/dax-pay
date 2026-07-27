@@ -4,10 +4,9 @@ import cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectApp;
 import cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectAppAuthConfig;
 import cn.daxpay.open.channel.douyin.service.direct.DouyinDirectAppAuthConfigService;
 import cn.daxpay.open.channel.douyin.service.direct.DouyinDirectAppCapabilityService;
-import cn.daxpay.open.payment.auth.AuthRedirectUri;
-import cn.daxpay.open.payment.auth.AuthSession;
-import cn.daxpay.open.payment.strategy.auth.AbsChannelAuthStrategy;
-import cn.daxpay.open.payment.strategy.auth.AuthContext;
+import cn.daxpay.open.payment.auth.core.AuthRedirectUri;
+import cn.daxpay.open.payment.auth.core.AuthSession;
+import cn.daxpay.open.payment.auth.merchant.AbsProductAuthStrategy;
 import cn.daxpay.open.payment.unipay.param.assist.AuthCodeParam;
 import cn.daxpay.open.payment.unipay.param.assist.GenerateAuthUrlParam;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
@@ -32,7 +31,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class DouyinDirectAuthStrategy extends AbsChannelAuthStrategy {
+public class DouyinDirectAuthStrategy extends AbsProductAuthStrategy {
 
     private final DouyinH5AuthService douyinH5AuthService;
     private final DouyinDirectAppCapabilityService douyinDirectAppCapabilityService;
@@ -63,7 +62,7 @@ public class DouyinDirectAuthStrategy extends AbsChannelAuthStrategy {
     /// 通过授权 code 换取 openId
     @Override
     public AuthResult doAuth(AuthCodeParam param, AuthSession session) {
-        AuthContext ctx = resolveContext(param, session);
+        var ctx = resolveContext(param, session);
         DouyinDirectApp app = douyinDirectAppCapabilityService.resolveWebAppForH5Auth(
                 ctx.channelMchNo(), ctx.capability(), ctx.channelAppId());
         DouyinDirectAppAuthConfig authConfig = douyinDirectAppAuthConfigService.findByDouyinDirectAppIdForAuth(app.getId());

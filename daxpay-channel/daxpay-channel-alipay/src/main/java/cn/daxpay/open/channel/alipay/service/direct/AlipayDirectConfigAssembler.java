@@ -1,11 +1,12 @@
 package cn.daxpay.open.channel.alipay.service.direct;
 
-import cn.daxpay.open.channel.alipay.dao.direct.AlipayDirectAppManager;
 import cn.daxpay.open.channel.alipay.dao.direct.AlipayDirectChannelMerchantManager;
 import cn.daxpay.open.channel.alipay.client.credential.AlipaySdkCredential;
 import cn.daxpay.open.channel.alipay.entity.direct.AlipayDirectApp;
 import cn.daxpay.open.channel.alipay.entity.direct.AlipayDirectAppKeyConfig;
 import cn.daxpay.open.channel.alipay.entity.direct.AlipayDirectChannelMerchant;
+import cn.daxpay.open.platform.core.code.CommonErrorCode;
+import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +22,7 @@ import java.util.Optional;
 /// 沙箱标识直接读通道商户固化的 [AlipayDirectChannelMerchant#isSandbox]
 /// (创建时按当时产品 activeEnv 写入, 不随产品切换改变), 据此选择对应环境的密钥与网关地址。
 ///
-/// 应用解析优先级：能力关联(显式配置 > appType自动推导) > 通道商户首个应用 > 商户号首个应用(兜底)。
+/// 应用解析优先级：能力关联(显式配置 > appType 唯一推导) > 未命中报错(拒绝首个兜底)。
 ///
 /// 供支付策略([cn.daxpay.open.channel.alipay.strategy.direct.AlipayDirectPayStrategy])组装通道调用凭证。
 @Slf4j
@@ -29,7 +30,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class AlipayDirectConfigAssembler {
 
-    private final AlipayDirectAppManager alipayDirectAppManager;
     private final AlipayDirectChannelMerchantManager alipayDirectChannelMerchantManager;
     private final AlipayDirectAppKeyConfigService alipayDirectAppKeyConfigService;
     private final AlipayDirectAppCapabilityService alipayDirectAppCapabilityService;
@@ -64,21 +64,16 @@ public class AlipayDirectConfigAssembler {
     }
 
     /// 解析支付使用的应用（须已装载 mchNo，租户内）
-    /// 优先级：能力关联 > 通道商户首个 > 商户号首个兜底
+    /// 优先级：能力关联（显式配置 > appType 唯一推导）> 未命中报错（不再首个兜底）
     private AlipayDirectApp resolveApp(String mchNo, String channelMchNo, String capability) {
-        // 1. 能力关联解析(显式配置 > appType自动推导)
+        // 能力关联解析(显式配置 > appType 唯一推导)
         Optional<AlipayDirectApp> resolved = alipayDirectAppCapabilityService.resolveApp(channelMchNo, capability);
         if (resolved.isPresent()) {
             return resolved.get();
         }
-        // 2. 兜底:按通道商户号取首个应用
-        Optional<AlipayDirectApp> byChannel = alipayDirectAppManager.findFirstByChannelMchNo(channelMchNo);
-        if (byChannel.isPresent()) {
-            return byChannel.get();
-        }
-        // 3. 最终兜底:按商户号取首个应用(兼容单应用旧场景)
-        // 支付宝: 直连商户应用不存在
-        return alipayDirectAppManager.findFirstByMchNo(mchNo)
-                .orElseThrow(() -> new DataNotExistException("error.channel.alipay.mchAppNotFound"));
+        // 未命中：不再做通道商户首个/商户号首个兜底，直接报错
+        // 支付宝: 未配置该能力对应的应用
+        throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                "error.channel.alipay.appNotConfigured", capability);
     }
 }

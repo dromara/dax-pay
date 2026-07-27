@@ -3,12 +3,11 @@ package cn.daxpay.open.channel.wechat.strategy.isv.auth;
 import cn.daxpay.open.channel.wechat.code.WechatAuthAppTypeEnum;
 import cn.daxpay.open.channel.wechat.dao.isv.WechatIsvChannelMerchantManager;
 import cn.daxpay.open.channel.wechat.entity.isv.WechatIsvChannelMerchant;
-import cn.daxpay.open.payment.auth.AuthRedirectUri;
-import cn.daxpay.open.payment.auth.AuthSession;
+import cn.daxpay.open.payment.auth.core.AuthRedirectUri;
+import cn.daxpay.open.payment.auth.core.AuthSession;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
 import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
-import cn.daxpay.open.payment.strategy.auth.AbsChannelAuthStrategy;
-import cn.daxpay.open.payment.strategy.auth.AuthContext;
+import cn.daxpay.open.payment.auth.merchant.AbsProductAuthStrategy;
 import cn.daxpay.open.payment.unipay.param.assist.AuthCodeParam;
 import cn.daxpay.open.payment.unipay.param.assist.GenerateAuthUrlParam;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
@@ -41,7 +40,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class WechatIsvAuthStrategy extends AbsChannelAuthStrategy {
+public class WechatIsvAuthStrategy extends AbsProductAuthStrategy {
 
     private final WechatMpAuthService wechatMpAuthService;
     private final WxAppFacade wxAppFacade;
@@ -68,7 +67,7 @@ public class WechatIsvAuthStrategy extends AbsChannelAuthStrategy {
     /// 通过授权 code 换取 openId
     @Override
     public AuthResult doAuth(AuthCodeParam param, AuthSession session) {
-        AuthContext ctx = resolveContext(param, session);
+        var ctx = resolveContext(param, session);
         ResolvedAuthApp app = resolveAuthApp(param.getMchNo(), ctx.channelMchNo(), ctx.capability(), ctx.channelAppId());
         WechatAuthResult data = wechatMpAuthService.getTokenAndOpenId(
                 param.getAuthCode(), app.wxAppId(), app.appSecret());

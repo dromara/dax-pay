@@ -45,6 +45,16 @@ public class WechatDirectAppManager extends BaseManager<WechatDirectAppMapper, W
                 .orderByAsc(WechatDirectApp::getId));
     }
 
+    /// 按通道商户号与应用类型查询全部应用，供应用解析做唯一性判断
+    public List<WechatDirectApp> listByChannelMchNoAndAppType(String channelMchNo, String appType) {
+        return lambdaQuery()
+                .eq(WechatDirectApp::getChannelMchNo, channelMchNo)
+                .eq(WechatDirectApp::getAppType, appType)
+                .orderByAsc(WechatDirectApp::getCreateTime)
+                .orderByAsc(WechatDirectApp::getId)
+                .list();
+    }
+
     /// 按通道商户号与wxAppId查询应用（支付/回调，租户内）
     public Optional<WechatDirectApp> findByChannelMchNoAndWxAppId(String channelMchNo, String wxAppId) {
         return firstOpt(q -> q

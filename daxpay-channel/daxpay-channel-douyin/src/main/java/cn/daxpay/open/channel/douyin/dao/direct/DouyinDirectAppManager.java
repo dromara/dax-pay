@@ -54,6 +54,16 @@ public class DouyinDirectAppManager extends BaseManager<DouyinDirectAppMapper, D
                 .orderByAsc(DouyinDirectApp::getId));
     }
 
+    /// 根据通道商户号与应用类型取全部应用，供应用解析做唯一性判断
+    public List<DouyinDirectApp> listByChannelMchNoAndAppType(String channelMchNo, String appType) {
+        return lambdaQuery()
+                .eq(DouyinDirectApp::getChannelMchNo, channelMchNo)
+                .eq(DouyinDirectApp::getAppType, appType)
+                .orderByAsc(DouyinDirectApp::getCreateTime)
+                .orderByAsc(DouyinDirectApp::getId)
+                .list();
+    }
+
     /// 按通道商户号与 douyinAppId 查询应用（支付/回调，租户内）
     public Optional<DouyinDirectApp> findByChannelMchNoAndDouyinAppId(String channelMchNo, String douyinAppId) {
         return lambdaQuery()

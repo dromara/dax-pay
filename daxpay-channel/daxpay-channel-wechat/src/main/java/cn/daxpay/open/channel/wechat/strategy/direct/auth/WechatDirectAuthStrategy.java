@@ -1,11 +1,10 @@
 package cn.daxpay.open.channel.wechat.strategy.direct.auth;
 
-import cn.daxpay.open.payment.auth.AuthRedirectUri;
-import cn.daxpay.open.payment.auth.AuthSession;
+import cn.daxpay.open.payment.auth.core.AuthRedirectUri;
+import cn.daxpay.open.payment.auth.core.AuthSession;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
 import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
-import cn.daxpay.open.payment.strategy.auth.AbsChannelAuthStrategy;
-import cn.daxpay.open.payment.strategy.auth.AuthContext;
+import cn.daxpay.open.payment.auth.merchant.AbsProductAuthStrategy;
 import cn.daxpay.open.payment.unipay.param.assist.AuthCodeParam;
 import cn.daxpay.open.payment.unipay.param.assist.GenerateAuthUrlParam;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
@@ -34,7 +33,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class WechatDirectAuthStrategy extends AbsChannelAuthStrategy {
+public class WechatDirectAuthStrategy extends AbsProductAuthStrategy {
 
     private final WechatMpAuthService wechatMpAuthService;
     private final WxAppFacade wxAppFacade;
@@ -65,7 +64,7 @@ public class WechatDirectAuthStrategy extends AbsChannelAuthStrategy {
     /// 应用上下文优先从 session(H5 会话码场景)恢复, 否则取 param(小程序直连场景)。
     @Override
     public AuthResult doAuth(AuthCodeParam param, AuthSession session) {
-        AuthContext ctx = resolveContext(param, session);
+        var ctx = resolveContext(param, session);
         WxAppView app = resolveApp(param.getMchNo(), ctx.channelMchNo(), ctx.capability(), ctx.channelAppId());
         WechatAuthResult data = wechatMpAuthService.getTokenAndOpenId(
                 param.getAuthCode(), app.wxAppId(), app.appSecret());
