@@ -34,6 +34,14 @@ public class OpenAuthParam extends MerchantPaymentCommonParam {
     @Size(max = 32, message = "{validation.field.authType.size}")
     private String authType;
 
+    /// 微信 AppId(真实值, 非复合格式)
+    ///
+    /// authType=wechat 时必填, 系统按 mchNo+wxAppId 定位对应微信应用。
+    /// authType=alipay/douyin 时无需传递(走平台级配置)。
+    @Schema(description = "微信 AppId")
+    @Size(max = 64, message = "{validation.field.wxAppId.size}")
+    private String wxAppId;
+
     /// 回调地址(获取到用户标识后重定向的目标地址)
     ///
     /// RESTful 风格, 不要在地址后面拼接 query 参数(系统会在后面追加 code/openid/sign 等参数)。

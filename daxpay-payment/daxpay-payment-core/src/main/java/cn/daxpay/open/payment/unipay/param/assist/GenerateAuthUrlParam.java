@@ -1,47 +1,51 @@
 package cn.daxpay.open.payment.unipay.param.assist;
 
 import cn.daxpay.open.platform.core.enums.unipay.ChannelAuthTypeEnum;
-import cn.daxpay.open.payment.unipay.param.MerchantPaymentCommonParam;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-/// # 生成授权链接参数
+/// # 生成授权链接参数（内部传递，不参与签名/反序列化）
 ///
-@EqualsAndHashCode(callSuper = true)
+/// 认证域统一参数: 由各入口层(调试/网关/开放接口/码牌)解析通道路由后组装传入认证域。
+/// 微信应用由入口层 resolve 选定后, 通过 wxAppScope(档位) + wxAppRefId(主键) 标识,
+/// 策略层据此调 WxAppFacade.getById 查密钥; 抖音等非微信通道不填。
+/// 不继承 PaymentCommonParam — 本类仅用于内部服务间传递, 不对外暴露签名/时间戳等字段。
 @Data
 @Accessors(chain = true)
 @Schema(title = "生成授权链接参数")
-public class GenerateAuthUrlParam extends MerchantPaymentCommonParam {
+public class GenerateAuthUrlParam {
 
-    /// 认证类型, 如果通道支持多种类型的情况下, 不传默认为微信场景
+    /// 商户号
+    @Schema(description = "商户号")
+    private String mchNo;
+
+    /// 应用号(可选)
+    @Schema(description = "应用号")
+    private String appId;
+
+    /// 通道商户号(抖音等策略用)
+    @Schema(description = "通道商户号")
+    private String channelMchNo;
+
+    /// 微信应用档位标识(PLATFORM/MERCHANT)
+    ///
+    /// 入口层 resolve 选定后填入, 策略层据此调 WxAppFacade.getById 查对应密钥。
+    /// 抖音等非微信通道不填。
+    /// @see cn.daxpay.open.payment.wx.enums.WxAppScopeEnum
+    @Schema(description = "微信应用档位标识")
+    private String wxAppScope;
+
+    /// 微信应用主键(与 wxAppScope 配对), 策略层凭此定位具体应用查密钥
+    @Schema(description = "微信应用主键")
+    private Long wxAppRefId;
+
+    /// 认证类型
     /// @see ChannelAuthTypeEnum
     @Schema(description = "认证类型")
-    private String authType = ChannelAuthTypeEnum.WECHAT.getCode();
-
-    /// 支付产品编码, 决定走哪个支付产品的认证策略
-    /// 可选: 缺失时由 [cn.daxpay.open.payment.auth.merchant.ProductAuthService] 从通道商户号(channelMchNo)反查
-    /// @see cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum
-    @Size(max = 32, message = "{validation.field.product.size}")
-    @Schema(description = "支付产品编码")
-    private String product;
-
-    /// 指定认证使用的应用AppId, 优先级高于配置自动解析, 必须在系统中预先配置过
-    @Size(max = 128, message = "{validation.field.channelAppId.size}")
-    @Schema(description = "指定认证应用AppId")
-    private String channelAppId;
+    private String authType;
 
     /// 来源回跳路径, 授权完成后前端回跳的目标路径, 会随会话码一起保存
-    @Size(max = 200, message = "{validation.field.returnPath.size}")
     @Schema(description = "来源回跳路径")
     private String returnPath;
-
-    /// 支付方式编码, 决定解析哪个应用(公众号/小程序等), 不同方式对应不同应用维度的 openId
-    /// @see cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum
-    @Size(max = 32, message = "{validation.field.method.size}")
-    @Schema(description = "支付方式编码")
-    private String method;
 }
-

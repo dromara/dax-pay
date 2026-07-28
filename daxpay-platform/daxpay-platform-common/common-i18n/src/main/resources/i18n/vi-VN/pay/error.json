@@ -72,8 +72,7 @@
     "codeClientEnvBlank": "Mã môi trường máy khách không được để trống",
     "codeClientEnvNotConfigured": "Môi trường và hình thức này chưa cấu hình phương thức thanh toán",
     "codeRuntimeMismatch": "Loại landing mã QR không khớp với runtime",
-    "codeClientEnvChannelMchRequired": "Chế độ DIRECT: bắt buộc có số thương nhân kênh cho mỗi dòng đã điền",
-    "returnPathInvalid": "Đường dẫn quay lại sau ủy quyền không hợp lệ"
+    "codeClientEnvChannelMchRequired": "Chế độ DIRECT: bắt buộc có số thương nhân kênh cho mỗi dòng đã điền"
   },
   "refund": {
     "processing": "Xử lý hoàn tiền, không lặp lại",

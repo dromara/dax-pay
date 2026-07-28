@@ -58,14 +58,16 @@ public class DevelopAuthService {
     ///
     /// 防腐层: 调试专用参数 → [GenerateAuthUrlParam], 再委托 [ProductAuthService#generateAuthUrl]。
     /// authType 固定补 wechat(调试仅支持微信支付, 抖音走 generateDouyinAuthUrl)。
-    /// 应用解析: 显式 scope + appId → [WxAppFacade#getById] 精确加载, 解析出的真实 wxAppId 填入
-    /// channelAppId 走正常覆盖路径, 不再依赖认证策略的 scopedId 补丁。
+    /// 应用解析: 显式 scope + appId → [WxAppFacade#getById] 精确加载,
+    /// 把档位(wxAppScope)+主键(wxAppRefId)塞入 param 供策略查密钥, 不再做路由推断。
     public AuthUrlResult generateChannelAuthUrl(DevelopChannelAuthParam param) {
         WxAppView app = wxAppFacade.getById(param.getScope(), param.getAppId());
         GenerateAuthUrlParam inner = new GenerateAuthUrlParam();
         inner.setAuthType(ChannelAuthTypeEnum.WECHAT.getCode());
         inner.setMchNo(param.getMchNo());
-        inner.setChannelAppId(app.wxAppId());
+        // 调试入口已显式指定 scope+appId, 精确加载后把档位+主键塞入 param 供策略查密钥
+        inner.setWxAppScope(app.scope().getCode());
+        inner.setWxAppRefId(app.id());
         return channelProductAuthService.generateAuthUrl(inner);
     }
 

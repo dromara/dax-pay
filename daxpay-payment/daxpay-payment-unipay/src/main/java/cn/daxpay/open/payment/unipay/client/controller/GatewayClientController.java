@@ -4,9 +4,12 @@ import cn.daxpay.open.payment.trade.runtime.service.pay.gateway.AggregatePayServ
 import cn.daxpay.open.payment.trade.runtime.service.pay.gateway.CashierPayService;
 import cn.daxpay.open.payment.trade.runtime.service.pay.gateway.GatewayAuthService;
 import cn.daxpay.open.payment.trade.runtime.service.pay.gateway.GatewayOrderQueryService;
+import cn.daxpay.open.payment.auth.merchant.ChannelAuthService;
+import cn.daxpay.open.payment.unipay.param.assist.AuthCodeParam;
 import cn.daxpay.open.payment.unipay.param.gateway.AggregateQrPayParam;
 import cn.daxpay.open.payment.unipay.param.gateway.CashierPayParam;
 import cn.daxpay.open.payment.unipay.param.gateway.GatewayAuthUrlParam;
+import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
 import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
 import cn.daxpay.open.payment.unipay.result.gateway.AggregatePayMetaResult;
 import cn.daxpay.open.payment.unipay.result.gateway.CashierItemPublicResult;
@@ -42,6 +45,7 @@ public class GatewayClientController {
     private final AggregatePayService aggregatePayService;
     private final CashierPayService cashierPayService;
     private final GatewayAuthService gatewayAuthService;
+    private final ChannelAuthService channelAuthService;
 
     @Operation(summary = "查询网关订单摘要")
     @GetMapping("/order")
@@ -84,5 +88,15 @@ public class GatewayClientController {
     @PostMapping("/auth/generate-url")
     public Result<AuthUrlResult> generateAuthUrl(@RequestBody @Validated GatewayAuthUrlParam param) {
         return Res.ok(gatewayAuthService.generateAuthUrl(param));
+    }
+
+    /// OAuth 回调: 用 authCode 换取 openId/userId
+    ///
+    /// H5 授权重定向落地页(如 AuthCallback.vue)回调此端点, 用第三方 OAuth code 换取用户标识,
+    /// 成功后返回 AuthResult(含 openId + returnPath), 前端据此跳回业务页。
+    @Operation(summary = "OAuth认证回调")
+    @PostMapping("/auth/callback")
+    public Result<AuthResult> authCallback(@RequestBody AuthCodeParam param) {
+        return Res.ok(channelAuthService.auth(param));
     }
 }

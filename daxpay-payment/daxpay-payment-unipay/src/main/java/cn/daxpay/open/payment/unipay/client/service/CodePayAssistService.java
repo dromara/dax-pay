@@ -27,6 +27,8 @@ import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.payment.unipay.param.trade.pay.TerminalInfo;
 import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
+import cn.daxpay.open.payment.wx.facade.WxAppFacade;
+import cn.daxpay.open.payment.wx.facade.WxAppView;
 import cn.daxpay.open.platform.common.spring.util.WebServletUtil;
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
@@ -67,6 +69,7 @@ public class CodePayAssistService {
     private final ObjectProvider<PayRiskChecker> payRiskCheckerProvider;
     /// 平台安全配置（读取用户标识拦截级别, 决定 NORMAL 模式下不触发强制 OAuth）
     private final PlatformSecurityConfigService platformSecurityConfigService;
+    private final WxAppFacade wxAppFacade;
 
     /// 根据码牌编码查询支付信息(公开接口, 脱敏返回)
     ///
@@ -182,14 +185,21 @@ public class CodePayAssistService {
         payRouteService.resolve(routeParam);
 
         String returnPath = this.buildReturnPath(clientEnv, entity.getCode());
+        String authType = this.mapAuthType(clientEnv);
         GenerateAuthUrlParam authParam = new GenerateAuthUrlParam();
         authParam.setMchNo(entity.getMchNo());
         authParam.setAppId(mchApp.getAppId());
-        authParam.setProduct(routeParam.getProduct());
         authParam.setChannelMchNo(routeParam.getChannelMchNo());
-        authParam.setMethod(routeParam.getCapability());
+        authParam.setAuthType(authType);
+        // 微信认证: 入口层 resolve 选定应用, 把档位+主键塞入 param 供策略查密钥; 抖音策略自行解析
+        if (ChannelAuthTypeEnum.WECHAT.getCode().equals(authType)) {
+            WxAppView app = wxAppFacade.resolve(
+                    entity.getMchNo(), routeParam.getChannelMchNo(),
+                    routeParam.getCapability(), routeParam.getChannelAppId(), routeParam.getProduct());
+            authParam.setWxAppScope(app.scope().getCode());
+            authParam.setWxAppRefId(app.id());
+        }
         authParam.setReturnPath(returnPath);
-        authParam.setAuthType(this.mapAuthType(clientEnv));
         return channelAuthService.generateAuthUrl(authParam);
     }
 

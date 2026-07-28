@@ -20,4 +20,11 @@ public interface WxAppFacade {
     ///
     /// @param product 支付产品编码（PayProduct.code）
     WxIsvAppPair resolveIsvPair(String mchNo, String channelMchNo, String capability, String channelAppId, String product);
+
+    /// 按真实 wxAppId 解析：商户档优先, 平台档兜底
+    ///
+    /// 供开放接口认证场景使用: 对接方传入真实微信 AppId, 系统自行定位到对应应用。
+    /// @param mchNo 商户号(商户档查询条件)
+    /// @param wxAppId 微信 AppId(真实值, 非复合格式)
+    WxAppView resolveByWxAppId(String mchNo, String wxAppId);
 }

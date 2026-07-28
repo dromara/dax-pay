@@ -5,7 +5,6 @@ import cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectAppAuthConfig;
 import cn.daxpay.open.channel.douyin.param.assist.DouyinJsapiConfigParam;
 import cn.daxpay.open.channel.douyin.service.direct.DouyinDirectAppAuthConfigService;
 import cn.daxpay.open.channel.douyin.service.direct.DouyinDirectAppCapabilityService;
-import cn.daxpay.open.channel.douyin.strategy.direct.auth.DouyinDirectAuthStrategy;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import cn.daxpay.open.payment.device.qrcode.dao.DeviceQrCodeManager;
 import cn.daxpay.open.payment.device.qrcode.entity.DeviceQrCode;
@@ -42,7 +41,7 @@ import java.util.Objects;
 /// # 抖音 H5 JSAPI 调起前置 - sdk.config 验签接口
 ///
 /// 签名基于**通道商户网站应用**的 clientKey/appSecret 换取的 jsapi_ticket,
-/// 与 H5 OAuth([DouyinDirectAuthStrategy]) 同源。
+/// 与 H5 OAuth([DouyinAuthStrategy]) 同源。
 ///
 /// 上下文三选一: orderNo(网关单) / code(码牌) / channelMchNo(+可选 capability)。
 @IgnoreAuth

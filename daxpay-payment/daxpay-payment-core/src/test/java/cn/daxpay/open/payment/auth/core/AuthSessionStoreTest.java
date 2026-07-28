@@ -101,7 +101,7 @@ class AuthSessionStoreTest {
     void loadSession_present_shouldRoundTripFields() {
         AuthSession session = new AuthSession()
                 .setSource(AuthSession.SOURCE_PLATFORM_ALIPAY)
-                .setProduct("ALIPAY")
+                .setAuthType("alipay")
                 .setChannelMchNo("cm-no")
                 .setReturnPath("/cashier/ORD/alipay")
                 .setQueryCode("qc-1");
@@ -111,7 +111,7 @@ class AuthSessionStoreTest {
 
         assertNotNull(loaded);
         assertEquals(AuthSession.SOURCE_PLATFORM_ALIPAY, loaded.getSource());
-        assertEquals("ALIPAY", loaded.getProduct());
+        assertEquals("alipay", loaded.getAuthType());
         assertEquals("cm-no", loaded.getChannelMchNo());
         assertEquals("/cashier/ORD/alipay", loaded.getReturnPath());
         assertEquals("qc-1", loaded.getQueryCode());

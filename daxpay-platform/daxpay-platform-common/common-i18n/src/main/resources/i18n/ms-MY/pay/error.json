@@ -72,8 +72,7 @@
     "codeClientEnvBlank": "Kod persekitaran klien tidak boleh kosong",
     "codeClientEnvNotConfigured": "Kaedah pembayaran belum dikonfigurasi untuk persekitaran dan bentuk ini",
     "codeRuntimeMismatch": "Jenis pendaratan kod QR tidak sepadan dengan runtime",
-    "codeClientEnvChannelMchRequired": "Dalam mod DIRECT, nombor peniaga saluran baris yang diisi wajib",
-    "returnPathInvalid": "Laluan kembali kebenaran tidak sah"
+    "codeClientEnvChannelMchRequired": "Dalam mod DIRECT, nombor peniaga saluran baris yang diisi wajib"
   },
   "refund": {
     "processing": "Pemprosesan bayaran balik, jangan ulangi",

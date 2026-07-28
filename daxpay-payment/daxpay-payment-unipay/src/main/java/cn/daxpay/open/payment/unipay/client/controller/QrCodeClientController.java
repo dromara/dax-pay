@@ -57,8 +57,7 @@ public class QrCodeClientController {
 
     @Operation(summary = "查询码牌订单状态")
     @GetMapping("/order-status")
-    public Result<CodePayOrderStatusResult> orderStatus(
-            @NotBlank(message = "{validation.field.orderNo.notBlank}") String orderNo) {
+    public Result<CodePayOrderStatusResult> orderStatus(@NotBlank(message = "{validation.field.orderNo.notBlank}") String orderNo) {
         return Res.ok(codePayAssistService.orderStatus(orderNo));
     }
 }

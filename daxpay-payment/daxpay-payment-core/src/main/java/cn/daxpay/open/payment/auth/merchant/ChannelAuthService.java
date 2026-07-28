@@ -58,6 +58,8 @@ public class ChannelAuthService {
     }
 
     /// 生成授权链接: 支付宝走平台级 Provider, 其余按支付产品走通道策略
+    ///
+    /// 微信应用档位标识(wxAppScope/wxAppRefId)随 param 透传, 由商户级策略消费; 支付宝分支不使用。
     public AuthUrlResult generateAuthUrl(GenerateAuthUrlParam param) {
         // 获取认证来源: 目前只有支付宝直接获取来源
         String source = mapAuthTypeToSource(param.getAuthType());

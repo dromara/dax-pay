@@ -73,7 +73,7 @@ class ChannelAuthServiceTest {
         AuthUrlResult result = channelAuthService.generateAuthUrl(param);
 
         assertSame(expected, result);
-        verify(channelProductAuthService, never()).generateAuthUrl(param);
+        verify(channelProductAuthService, never()).generateAuthUrl(any());
     }
 
     @Test
@@ -82,7 +82,7 @@ class ChannelAuthServiceTest {
         GenerateAuthUrlParam param = new GenerateAuthUrlParam();
         param.setAuthType(ChannelAuthTypeEnum.WECHAT.getCode());
         AuthUrlResult expected = new AuthUrlResult().setAuthUrl("https://open.weixin.qq.com/...");
-        when(channelProductAuthService.generateAuthUrl(param)).thenReturn(expected);
+        when(channelProductAuthService.generateAuthUrl(eq(param))).thenReturn(expected);
 
         AuthUrlResult result = channelAuthService.generateAuthUrl(param);
 
@@ -172,7 +172,7 @@ class ChannelAuthServiceTest {
     @DisplayName("auth: 产品级 session(无 source 标记)走支付产品策略")
     void auth_productSession_shouldCallProductService() {
         AuthCodeParam param = newAuthCodeParam("tok-5", ChannelAuthTypeEnum.WECHAT.getCode());
-        AuthSession session = new AuthSession().setProduct("WECHAT_PAY");
+        AuthSession session = new AuthSession().setAuthType(ChannelAuthTypeEnum.WECHAT.getCode());
         AuthResult expected = new AuthResult().setOpenId("openid-5");
         when(authSessionStore.loadSession("tok-5")).thenReturn(session);
         when(channelProductAuthService.auth(param, session)).thenReturn(expected);

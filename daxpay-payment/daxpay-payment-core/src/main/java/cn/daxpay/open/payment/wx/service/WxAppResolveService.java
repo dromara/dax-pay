@@ -190,4 +190,22 @@ public class WxAppResolveService implements WxAppFacade {
         return new WxAppView(WxAppScopeEnum.MERCHANT, app.getId(), app.getWxAppId(),
                 app.getAppType(), secret, app.getAppName());
     }
+
+    /// 按真实 wxAppId 解析：商户档优先, 平台档兜底
+    ///
+    /// 供开放接口认证场景: 对接方传入真实微信 AppId, 系统自行定位到对应应用。
+    /// 与 [resolveByChannelAppId] 的平台优先不同, 此方法商户优先(更严格安全边界)。
+    @Override
+    public WxAppView resolveByWxAppId(String mchNo, String wxAppId) {
+        var mchApp = wxMchAppManager.findByMchNoAndWxAppId(mchNo, wxAppId);
+        if (mchApp.isPresent()) {
+            return this.toMerchantView(mchApp.get());
+        }
+        var platform = wxPlatformAppManager.findByWxAppId(wxAppId);
+        if (platform.isPresent()) {
+            return this.toPlatformView(platform.get());
+        }
+        // 微信: 指定 AppId 未配置
+        throw new DataNotExistException("error.payment.wx.channelAppIdNotFound", wxAppId);
+    }
 }

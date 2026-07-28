@@ -72,8 +72,7 @@
     "codeClientEnvBlank": "รหัสสภาพแวดล้อมไคลเอนต์ต้องไม่ว่าง",
     "codeClientEnvNotConfigured": "สภาพแวดล้อมและรูปแบบนี้ยังไม่ได้กำหนดวิธีการชำระเงิน",
     "codeRuntimeMismatch": "ประเภทการลงจอดของรหัส QR ไม่ตรงกับรันไทม์",
-    "codeClientEnvChannelMchRequired": "โหมด DIRECT: ต้องระบุหมายเลขร้านค้าช่องทางของแถวที่กรอก",
-    "returnPathInvalid": "เส้นทางกลับหลังการอนุญาตไม่ถูกต้อง"
+    "codeClientEnvChannelMchRequired": "โหมด DIRECT: ต้องระบุหมายเลขร้านค้าช่องทางของแถวที่กรอก"
   },
   "refund": {
     "processing": "ดำเนินการคืนเงินอย่าทำซ้ำ",

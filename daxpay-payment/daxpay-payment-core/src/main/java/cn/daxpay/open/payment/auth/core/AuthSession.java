@@ -12,6 +12,10 @@ import cn.daxpay.open.payment.auth.merchant.ProductAuthService;
 /// H5授权重定向场景下, 生成授权链接时将认证所需上下文序列化保存到Redis(以 authToken 为key),
 /// 授权回调后凭 authToken 恢复, 供认证策略定位通道应用并完成 code 换 openId/userId。
 /// 与 [ProductAuthService] 的 queryCode 机制(付款码/道通场景)解耦, 独立 key 前缀管理。
+///
+    /// ## 应用引用
+    /// session 只存微信应用的主键引用(wxAppScope + wxAppRefId), 不存明文密钥。
+    /// 由 WechatAuthStrategy 在 generateAuthUrl 时写入, doAuth 时据其 getById 反查密钥。
 @Data
 @Accessors(chain = true)
 public class AuthSession {
@@ -46,19 +50,22 @@ public class AuthSession {
     /// - null/空: 走商户级支付产品策略(直连/服务商)
     private String source;
 
-    /// 支付产品编码
-    /// @see cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum
-    private String product;
+    /// 商户号(doAuth 时恢复租户上下文)
+    private String mchNo;
 
-    /// 通道商户号
+    /// 通道商户号(非微信通道如抖音的回调场景恢复用)
     private String channelMchNo;
 
-    /// 支付方式编码(用于解析具体应用)
-    /// @see cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum
-    private String method;
+    /// 认证类型(回调时恢复策略路由)
+    /// @see cn.daxpay.open.platform.core.enums.unipay.ChannelAuthTypeEnum
+    private String authType;
 
-    /// 指定认证应用AppId(可选, 优先级高于配置自动解析)
-    private String channelAppId;
+    /// 微信应用档位(PLATFORM/MERCHANT), 与 wxAppRefId 配对, 回调时策略据其 getById 反查密钥
+    /// @see cn.daxpay.open.payment.wx.enums.WxAppScopeEnum
+    private String wxAppScope;
+
+    /// 微信应用主键, 与 wxAppScope 配对, 回调时策略据其 getById 反查密钥
+    private Long wxAppRefId;
 
     /// 来源回跳路径(授权完成后前端回跳的目标路径)
     private String returnPath;

@@ -16,6 +16,8 @@ import cn.daxpay.open.payment.unipay.param.assist.GenerateAuthUrlParam;
 import cn.daxpay.open.payment.unipay.param.gateway.GatewayAuthUrlParam;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
+import cn.daxpay.open.payment.wx.facade.WxAppFacade;
+import cn.daxpay.open.payment.wx.facade.WxAppView;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.unipay.ChannelAuthTypeEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
@@ -34,10 +36,6 @@ import java.util.Set;
 /// 统一委托 [ChannelAuthService]:
 /// - **支付宝**: 服务内走平台级 OAuth(本服务跳过通道路由)
 /// - **微信/抖音**: 先解析支付路由再交 ChannelAuthService → 支付产品策略
-///
-/// 安全约束:
-/// - 订单必须存在且可支付([GatewayPayAssistService#getOrderAndCheck])
-/// - returnPath 仅允许站内业务相对路径, 防止开放重定向
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -62,11 +60,11 @@ public class GatewayAuthService {
     private final ClientEnvPayResolveService clientEnvPayResolveService;
     private final PayRouteService payRouteService;
     private final GatewayCashierItemManager gatewayCashierItemManager;
+    private final WxAppFacade wxAppFacade;
 
     /// 生成授权链接
     public AuthUrlResult generateAuthUrl(GatewayAuthUrlParam param) {
         GatewayPayOrder order = gatewayPayAssistService.getOrderAndCheck(param.getOrderNo());
-        String returnPath = sanitizeReturnPath(param.getReturnPath(), order.getOrderNo());
         ChannelAuthTypeEnum authType = ChannelAuthTypeEnum.findByCode(param.getAuthType());
 
         if (!SUPPORTED_AUTH_TYPES.contains(authType)) {
@@ -78,16 +76,15 @@ public class GatewayAuthService {
         GenerateAuthUrlParam authParam = new GenerateAuthUrlParam();
         authParam.setMchNo(order.getMchNo());
         authParam.setAppId(order.getAppId());
-        authParam.setReturnPath(returnPath);
+        authParam.setReturnPath(param.getReturnPath());
         authParam.setAuthType(authType.getCode());
 
         // 支付宝由 ChannelAuthService 走平台 OAuth, 无需通道应用路由; 微信/抖音须同源 resolve
         if (authType != ChannelAuthTypeEnum.ALIPAY) {
             RouteSnapshot route = resolveRoute(order, param);
-            authParam.setProduct(route.product());
             authParam.setChannelMchNo(route.channelMchNo());
-            authParam.setMethod(route.method());
-            authParam.setChannelAppId(route.channelAppId());
+            // 微信认证: 入口层 resolve 选定应用, 把档位+主键塞入 param 供策略查密钥; 抖音: 策略自行解析
+            resolveWxAppRef(order.getMchNo(), route, authParam, authType);
         }
         return channelAuthService.generateAuthUrl(authParam);
     }
@@ -250,39 +247,22 @@ public class GatewayAuthService {
         return env.getCode();
     }
 
-    /// 校验并规范化 returnPath: 必须是以 / 开头的相对路径, 禁止协议/外链/反斜杠
-    private String sanitizeReturnPath(String returnPath, String orderNo) {
-        if (StrUtil.isBlank(returnPath)) {
-            // 参数校验: 回跳路径不能为空
-            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                    "validation.field.returnPath.notBlank");
+    /// 微信认证: 入口层 resolve 选定应用, 把档位(wxAppScope)+主键(wxAppRefId)塞入 param
+    ///
+    /// 认证只取一个应用做 OAuth, 直连/服务商/聚合通道统一走单应用 resolve
+    /// (通道档优先、平台档兜底, 遵循"先查通道后查平台"原则), 不感知 sp/sub。
+    /// 抖音等非微信认证策略自行解析, 此处不填。
+    private void resolveWxAppRef(String mchNo, RouteSnapshot route,
+                                 GenerateAuthUrlParam authParam, ChannelAuthTypeEnum authType) {
+        if (authType == ChannelAuthTypeEnum.WECHAT) {
+            WxAppView app = wxAppFacade.resolve(
+                    mchNo, route.channelMchNo(), route.capability(), route.channelAppId(), route.product());
+            authParam.setWxAppScope(app.scope().getCode());
+            authParam.setWxAppRefId(app.id());
         }
-        String path = returnPath.trim();
-        if (!path.startsWith("/")
-                || path.startsWith("//")
-                || path.contains("://")
-                || path.contains("\\")
-                || path.contains("@")) {
-            // 网关: 授权回跳路径不合法
-            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                    "pay.error.gateway.returnPathInvalid");
-        }
-        boolean allowedPrefix = path.startsWith("/cashier/")
-                || path.startsWith("/aggregate/")
-                || path.startsWith("/h/");
-        if (!allowedPrefix || !path.contains(orderNo)) {
-            // 网关: 授权回跳路径不合法
-            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                    "pay.error.gateway.returnPathInvalid");
-        }
-        int hash = path.indexOf('#');
-        if (hash >= 0) {
-            path = path.substring(0, hash);
-        }
-        return path;
     }
 
     /// 路由快照(供组装 GenerateAuthUrlParam)
-    private record RouteSnapshot(String product, String channelMchNo, String method, String channelAppId) {
+    private record RouteSnapshot(String product, String channelMchNo, String capability, String channelAppId) {
     }
 }

@@ -13,9 +13,13 @@ import cn.daxpay.open.payment.unipay.param.open.OpenAuthParam;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
 import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
 import cn.daxpay.open.payment.unipay.result.open.OpenAuthRedirectResult;
+import cn.daxpay.open.payment.wx.facade.WxAppFacade;
+import cn.daxpay.open.payment.wx.facade.WxAppView;
 import cn.daxpay.open.platform.common.config.properties.PlatformConfigProperties;
 import cn.daxpay.open.platform.core.code.CommonCode;
+import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
+import cn.daxpay.open.platform.core.enums.unipay.ChannelAuthTypeEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.util.ValidationUtil;
 import cn.hutool.core.util.StrUtil;
@@ -48,6 +52,7 @@ public class OpenAuthService {
     private final ChannelAuthService channelAuthService;
     private final AuthSessionStore authSessionStore;
     private final PlatformConfigProperties platformConfigProperties;
+    private final WxAppFacade wxAppFacade;
 
     /// 生成 OAuth 重定向链接
     ///
@@ -66,9 +71,20 @@ public class OpenAuthService {
         authParam.setMchNo(param.getMchNo());
         authParam.setAppId(param.getAppId());
         authParam.setAuthType(param.getAuthType());
-        authParam.setChannelMchNo(param.getChannelMchNo());
         // redirect_url 存入 session.returnPath, 回调时取出构建重定向
         authParam.setReturnPath(param.getRedirectUrl());
+        // 微信认证: 按 wxAppId 解析应用(resolveByWxAppId: 商户档优先平台档兜底),
+        // 把档位+主键塞入 param 供策略查密钥
+        if (ChannelAuthTypeEnum.WECHAT.getCode().equals(param.getAuthType())) {
+            if (StrUtil.isBlank(param.getWxAppId())) {
+                // 开放认证: 微信认证必须指定 wxAppId
+                throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                        "validation.field.wxAppId.notBlank");
+            }
+            WxAppView app = wxAppFacade.resolveByWxAppId(param.getMchNo(), param.getWxAppId());
+            authParam.setWxAppScope(app.scope().getCode());
+            authParam.setWxAppRefId(app.id());
+        }
         AuthUrlResult urlResult = channelAuthService.generateAuthUrl(authParam);
 
         // 更新 session: 标记 scene=OPEN(回调时据此做重定向而非 JSON 返回)
