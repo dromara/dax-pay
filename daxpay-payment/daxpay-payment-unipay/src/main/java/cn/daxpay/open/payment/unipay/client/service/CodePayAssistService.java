@@ -1,6 +1,6 @@
 package cn.daxpay.open.payment.unipay.client.service;
 
-import cn.daxpay.open.payment.auth.ChannelAuthService;
+import cn.daxpay.open.payment.auth.UnifiedAuthService;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import cn.daxpay.open.payment.common.util.PayMethodOpenIdSupport;
 import cn.daxpay.open.payment.device.enums.QrCodeAmountTypeEnum;
@@ -63,7 +63,7 @@ public class CodePayAssistService {
     private final CodePayResolveService codePayResolveService;
     private final NormalPayService normalPayService;
     private final PayRouteService payRouteService;
-    private final ChannelAuthService channelAuthService;
+    private final UnifiedAuthService unifiedAuthService;
     private final NormalPayOrderManager normalPayOrderManager;
     /// 风控检查器（可选 SPI：用于判断是否存在 openId 黑名单, 决定是否触发强制 OAuth）
     private final ObjectProvider<PayRiskChecker> payRiskCheckerProvider;
@@ -200,7 +200,7 @@ public class CodePayAssistService {
             authParam.setWxAppRefId(app.id());
         }
         authParam.setReturnPath(returnPath);
-        return channelAuthService.generateAuthUrl(authParam);
+        return unifiedAuthService.generateAuthUrl(authParam);
     }
 
     /// 查询码牌订单状态(忽略租户; 仅 cashier_code 来源)

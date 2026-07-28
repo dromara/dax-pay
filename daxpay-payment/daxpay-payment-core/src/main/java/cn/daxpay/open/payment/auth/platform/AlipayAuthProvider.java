@@ -22,11 +22,11 @@ import cn.daxpay.open.payment.auth.core.AuthSourceEnum;
 import cn.daxpay.open.payment.auth.core.AuthSession;
 import cn.daxpay.open.payment.auth.core.AuthSessionStore;
 import cn.daxpay.open.payment.auth.core.AuthRedirectUri;
-import cn.daxpay.open.payment.auth.ChannelAuthService;
+import cn.daxpay.open.payment.auth.UnifiedAuthService;
 
 /// # 支付宝平台级认证 Provider
 ///
-/// 会话标记 `source=platform_alipay`, 认证分发层 [ChannelAuthService] 据 source 查找本 Provider。
+/// 会话标记 `source=platform_alipay`, 认证分发层 [UnifiedAuthService] 据 source 查找本 Provider。
 @Slf4j
 @Component
 @RequiredArgsConstructor

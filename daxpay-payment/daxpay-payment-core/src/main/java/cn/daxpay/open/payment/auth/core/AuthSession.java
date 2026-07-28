@@ -2,13 +2,13 @@ package cn.daxpay.open.payment.auth.core;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import cn.daxpay.open.payment.auth.channel.ProductAuthService;
+import cn.daxpay.open.payment.auth.channel.MerchantChannelAuthService;
 
 /// # 认证会话上下文
 ///
 /// H5授权重定向场景下, 生成授权链接时将认证所需上下文序列化保存到Redis(以 authToken 为key),
 /// 授权回调后凭 authToken 恢复, 供认证策略定位通道应用并完成 code 换 openId/userId。
-/// 与 [ProductAuthService] 的 queryCode 机制(付款码/道通场景)解耦, 独立 key 前缀管理。
+/// 与 [MerchantChannelAuthService] 的 queryCode 机制(付款码/道通场景)解耦, 独立 key 前缀管理。
 ///
     /// ## 应用引用
     /// session 只存微信应用的主键引用(wxAppScope + wxAppRefId), 不存明文密钥。

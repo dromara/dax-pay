@@ -1,6 +1,6 @@
 package cn.daxpay.open.payment.trade.runtime.service.pay.gateway;
 
-import cn.daxpay.open.payment.auth.ChannelAuthService;
+import cn.daxpay.open.payment.auth.UnifiedAuthService;
 import cn.daxpay.open.payment.merchant.dao.gateway.GatewayCashierItemManager;
 import cn.daxpay.open.payment.merchant.entity.gateway.GatewayCashierItem;
 import cn.daxpay.open.payment.merchant.enums.CashierItemResolveModeEnum;
@@ -33,9 +33,9 @@ import java.util.Set;
 /// # 网关 H5 授权服务
 ///
 /// 公开端(无商户签名)根据网关订单生成 OAuth 链接, 用于收银台/聚合页取 openId。
-/// 统一委托 [ChannelAuthService]:
+/// 统一委托 [UnifiedAuthService]:
 /// - **支付宝**: 服务内走平台级 OAuth(本服务跳过通道路由)
-/// - **微信/抖音**: 先解析支付路由再交 ChannelAuthService → 支付产品策略
+/// - **微信/抖音**: 先解析支付路由再交 UnifiedAuthService → 支付产品策略
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -56,7 +56,7 @@ public class GatewayAuthService {
     );
 
     private final GatewayPayAssistService gatewayPayAssistService;
-    private final ChannelAuthService channelAuthService;
+    private final UnifiedAuthService unifiedAuthService;
     private final ClientEnvPayResolveService clientEnvPayResolveService;
     private final PayRouteService payRouteService;
     private final GatewayCashierItemManager gatewayCashierItemManager;
@@ -79,14 +79,14 @@ public class GatewayAuthService {
         authParam.setReturnPath(param.getReturnPath());
         authParam.setAuthType(authType.getCode());
 
-        // 支付宝由 ChannelAuthService 走平台 OAuth, 无需通道应用路由; 微信/抖音须同源 resolve
+        // 支付宝由 UnifiedAuthService 走平台 OAuth, 无需通道应用路由; 微信/抖音须同源 resolve
         if (authType != ChannelAuthTypeEnum.ALIPAY) {
             RouteSnapshot route = resolveRoute(order, param);
             authParam.setChannelMchNo(route.channelMchNo());
             // 微信认证: 入口层 resolve 选定应用, 把档位+主键塞入 param 供策略查密钥; 抖音: 策略自行解析
             resolveWxAppRef(order.getMchNo(), route, authParam, authType);
         }
-        return channelAuthService.generateAuthUrl(authParam);
+        return unifiedAuthService.generateAuthUrl(authParam);
     }
 
     /// 解析通道路由: 订单已锁定优先用快照; 否则按聚合/收银台与支付同源解析

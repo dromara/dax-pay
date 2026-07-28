@@ -1,6 +1,6 @@
 package cn.daxpay.open.payment.auth;
 
-import cn.daxpay.open.payment.auth.channel.ProductAuthService;
+import cn.daxpay.open.payment.auth.channel.MerchantChannelAuthService;
 import cn.daxpay.open.payment.auth.core.AuthSession;
 import cn.daxpay.open.payment.auth.core.AuthSourceEnum;
 import cn.daxpay.open.payment.auth.core.AuthSessionStore;
@@ -33,23 +33,23 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-/// # 通道认证服务 Facade 测试(Provider 注册表版本)
+/// # 统一认证服务 Facade 测试(Provider 注册表版本)
 ///
-/// 锁定 [ChannelAuthService] 的 Provider 注册表分发行为。覆盖:
-/// - generateAuthUrl: authType=alipay 走平台级支付宝 Provider; 其余走支付产品策略
-/// - auth: session.source 命中 Provider; 无 session 兜底(alipay); 产品 session 走策略; 失效异常
+/// 锁定 [UnifiedAuthService] 的 Provider 注册表分发行为。覆盖:
+/// - generateAuthUrl: authType=alipay 走平台级支付宝 Provider; 其余走商户级服务
+/// - auth: session.source 命中 Provider; 无 session 兜底(alipay); 商户级 session 走策略; 失效异常
 /// - returnPath 回填 + deleteSession 一次失效
 @ExtendWith(MockitoExtension.class)
 @MockitoSettings(strictness = Strictness.LENIENT)
-class ChannelAuthServiceTest {
+class UnifiedAuthServiceTest {
 
     @Mock private AuthSessionStore authSessionStore;
-    @Mock private ProductAuthService channelProductAuthService;
+    @Mock private MerchantChannelAuthService merchantChannelAuthService;
     @Mock private AlipayAuthProvider alipayAuthProvider;
     @Mock private WechatMpAuthProvider wechatMpAuthProvider;
     @Mock private DouyinH5AuthProvider douyinH5AuthProvider;
 
-    private ChannelAuthService channelAuthService;
+    private UnifiedAuthService unifiedAuthService;
 
     @BeforeEach
     void setUp() {
@@ -57,7 +57,7 @@ class ChannelAuthServiceTest {
         when(alipayAuthProvider.sourceCode()).thenReturn(AuthSourceEnum.PLATFORM_ALIPAY);
         when(wechatMpAuthProvider.sourceCode()).thenReturn(AuthSourceEnum.PLATFORM_MP);
         when(douyinH5AuthProvider.sourceCode()).thenReturn(AuthSourceEnum.PLATFORM_DOUYIN);
-        channelAuthService = new ChannelAuthService(authSessionStore, channelProductAuthService,
+        unifiedAuthService = new UnifiedAuthService(authSessionStore, merchantChannelAuthService,
                 List.of(alipayAuthProvider, wechatMpAuthProvider, douyinH5AuthProvider));
     }
 
@@ -72,21 +72,21 @@ class ChannelAuthServiceTest {
         AuthUrlResult expected = new AuthUrlResult().setAuthUrl("https://openauth.alipay.com/...");
         when(alipayAuthProvider.generateAuthUrl("/cashier/ORD/alipay")).thenReturn(expected);
 
-        AuthUrlResult result = channelAuthService.generateAuthUrl(param);
+        AuthUrlResult result = unifiedAuthService.generateAuthUrl(param);
 
         assertSame(expected, result);
-        verify(channelProductAuthService, never()).generateAuthUrl(any());
+        verify(merchantChannelAuthService, never()).generateAuthUrl(any());
     }
 
     @Test
-    @DisplayName("generateAuthUrl: authType=wechat 委托支付产品策略")
-    void generateAuthUrl_wechat_shouldDelegateToProductService() {
+    @DisplayName("generateAuthUrl: authType=wechat 委托商户级通道策略")
+    void generateAuthUrl_wechat_shouldDelegateToMerchantService() {
         GenerateAuthUrlParam param = new GenerateAuthUrlParam();
         param.setAuthType(ChannelAuthTypeEnum.WECHAT.getCode());
         AuthUrlResult expected = new AuthUrlResult().setAuthUrl("https://open.weixin.qq.com/...");
-        when(channelProductAuthService.generateAuthUrl(eq(param))).thenReturn(expected);
+        when(merchantChannelAuthService.generateAuthUrl(eq(param))).thenReturn(expected);
 
-        AuthUrlResult result = channelAuthService.generateAuthUrl(param);
+        AuthUrlResult result = unifiedAuthService.generateAuthUrl(param);
 
         assertSame(expected, result);
         verify(alipayAuthProvider, never()).generateAuthUrl(any());
@@ -100,11 +100,11 @@ class ChannelAuthServiceTest {
         AuthCodeParam param = newAuthCodeParam("tok-x", ChannelAuthTypeEnum.WECHAT.getCode());
         when(authSessionStore.loadSession("tok-x")).thenReturn(null);
 
-        BizInfoException ex = assertThrows(BizInfoException.class, () -> channelAuthService.auth(param));
+        BizInfoException ex = assertThrows(BizInfoException.class, () -> unifiedAuthService.auth(param));
 
         assertEquals("pay.error.assist.authSessionExpired", ex.getMessageKey());
         verify(authSessionStore, never()).deleteSession(any());
-        verify(channelProductAuthService, never()).auth(any(), any());
+        verify(merchantChannelAuthService, never()).auth(any(), any());
     }
 
     // ==================== auth: source 分支(Provider 注册表查找) ====================
@@ -118,11 +118,11 @@ class ChannelAuthServiceTest {
         when(authSessionStore.loadSession("tok-1")).thenReturn(session);
         when(alipayAuthProvider.auth(param, session)).thenReturn(expected);
 
-        AuthResult result = channelAuthService.auth(param);
+        AuthResult result = unifiedAuthService.auth(param);
 
         assertSame(expected, result);
         verify(authSessionStore).deleteSession("tok-1");
-        verify(channelProductAuthService, never()).auth(any(), any());
+        verify(merchantChannelAuthService, never()).auth(any(), any());
     }
 
     @Test
@@ -134,7 +134,7 @@ class ChannelAuthServiceTest {
         when(authSessionStore.loadSession("tok-2")).thenReturn(session);
         when(wechatMpAuthProvider.auth(param, session)).thenReturn(expected);
 
-        AuthResult result = channelAuthService.auth(param);
+        AuthResult result = unifiedAuthService.auth(param);
 
         assertSame(expected, result);
         verify(authSessionStore).deleteSession("tok-2");
@@ -149,7 +149,7 @@ class ChannelAuthServiceTest {
         when(authSessionStore.loadSession("tok-3")).thenReturn(session);
         when(douyinH5AuthProvider.auth(param, session)).thenReturn(expected);
 
-        AuthResult result = channelAuthService.auth(param);
+        AuthResult result = unifiedAuthService.auth(param);
 
         assertSame(expected, result);
         verify(authSessionStore).deleteSession("tok-3");
@@ -163,23 +163,23 @@ class ChannelAuthServiceTest {
         AuthResult expected = new AuthResult().setOpenId("uid-4");
         when(alipayAuthProvider.auth(eq(param), eq(null))).thenReturn(expected);
 
-        AuthResult result = channelAuthService.auth(param);
+        AuthResult result = unifiedAuthService.auth(param);
 
         assertSame(expected, result);
         verify(authSessionStore).deleteSession("tok-4");
-        verify(channelProductAuthService, never()).auth(any(), any());
+        verify(merchantChannelAuthService, never()).auth(any(), any());
     }
 
     @Test
-    @DisplayName("auth: 产品级 session(无 source 标记)走支付产品策略")
-    void auth_productSession_shouldCallProductService() {
+    @DisplayName("auth: 商户级 session(无 source 标记)走商户级服务")
+    void auth_merchantSession_shouldCallMerchantService() {
         AuthCodeParam param = newAuthCodeParam("tok-5", ChannelAuthTypeEnum.WECHAT.getCode());
         AuthSession session = new AuthSession().setAuthType(ChannelAuthTypeEnum.WECHAT.getCode());
         AuthResult expected = new AuthResult().setOpenId("openid-5");
         when(authSessionStore.loadSession("tok-5")).thenReturn(session);
-        when(channelProductAuthService.auth(param, session)).thenReturn(expected);
+        when(merchantChannelAuthService.auth(param, session)).thenReturn(expected);
 
-        AuthResult result = channelAuthService.auth(param);
+        AuthResult result = unifiedAuthService.auth(param);
 
         assertSame(expected, result);
         verify(authSessionStore).deleteSession("tok-5");
@@ -199,7 +199,7 @@ class ChannelAuthServiceTest {
         when(authSessionStore.loadSession("tok-6")).thenReturn(session);
         when(wechatMpAuthProvider.auth(param, session)).thenReturn(expected);
 
-        AuthResult result = channelAuthService.auth(param);
+        AuthResult result = unifiedAuthService.auth(param);
 
         assertEquals("/aggregate/wechat/ORD", result.getReturnPath());
     }
@@ -217,7 +217,7 @@ class ChannelAuthServiceTest {
         when(authSessionStore.loadSession("tok-7")).thenReturn(session);
         when(alipayAuthProvider.auth(param, session)).thenReturn(expected);
 
-        AuthResult result = channelAuthService.auth(param);
+        AuthResult result = unifiedAuthService.auth(param);
 
         assertEquals("/from-provider", result.getReturnPath());
     }

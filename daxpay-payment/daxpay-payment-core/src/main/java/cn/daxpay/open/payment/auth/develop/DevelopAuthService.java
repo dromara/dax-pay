@@ -13,7 +13,7 @@ import cn.daxpay.open.payment.auth.core.AuthSessionStore;
 import cn.daxpay.open.payment.auth.platform.AlipayAuthProvider;
 import cn.daxpay.open.payment.auth.platform.DouyinH5AuthProvider;
 import cn.daxpay.open.payment.auth.platform.WechatMpAuthProvider;
-import cn.daxpay.open.payment.auth.channel.ProductAuthService;
+import cn.daxpay.open.payment.auth.channel.MerchantChannelAuthService;
 
 /// # 认证调试服务(运营端 / 商户端共用)
 ///
@@ -21,7 +21,7 @@ import cn.daxpay.open.payment.auth.channel.ProductAuthService;
 /// - **支付宝(平台级)**: 委托 [AlipayAuthProvider] 生成 OAuth 授权链接, 轮询 queryCode 取结果
 /// - **微信公众号配置(平台级)**: 委托 [WechatMpAuthProvider], OAuth 重定向取 openId, 仅验证配置是否正确
 /// - **抖音H5(平台级)**: 委托 [DouyinH5AuthProvider], silent_auth 静默授权取 openId, 仅验证配置是否正确
-/// - **微信支付(直连/服务商)**: 委托 [ProductAuthService] 按支付产品路由认证策略,
+/// - **微信支付(直连/服务商)**: 委托 [MerchantChannelAuthService] 按支付产品路由认证策略,
 ///   依赖商户上下文(channelMchNo/产品/能力)
 /// - **支付宝小程序**: 暂未实现
 /// - **微信小程序(商户端/运营端)**: 暂未实现
@@ -35,7 +35,7 @@ public class DevelopAuthService {
     private final AlipayAuthProvider alipayAuthProvider;
     private final WechatMpAuthProvider wechatMpAuthProvider;
     private final DouyinH5AuthProvider douyinH5AuthProvider;
-    private final ProductAuthService channelProductAuthService;
+    private final MerchantChannelAuthService merchantChannelAuthService;
     private final AuthSessionStore authSessionStore;
     private final WxAppFacade wxAppFacade;
 
@@ -56,7 +56,7 @@ public class DevelopAuthService {
 
     /// 生成微信支付(直连/服务商)授权链接
     ///
-    /// 防腐层: 调试专用参数 → [GenerateAuthUrlParam], 再委托 [ProductAuthService#generateAuthUrl]。
+    /// 防腐层: 调试专用参数 → [GenerateAuthUrlParam], 再委托 [MerchantChannelAuthService#generateAuthUrl]。
     /// authType 固定补 wechat(调试仅支持微信支付, 抖音走 generateDouyinAuthUrl)。
     /// 应用解析: 显式 scope + appId → [WxAppFacade#getById] 精确加载,
     /// 把档位(wxAppScope)+主键(wxAppRefId)塞入 param 供策略查密钥, 不再做路由推断。
@@ -68,7 +68,7 @@ public class DevelopAuthService {
         // 调试入口已显式指定 scope+appId, 精确加载后把档位+主键塞入 param 供策略查密钥
         inner.setWxAppScope(app.scope().getCode());
         inner.setWxAppRefId(app.id());
-        return channelProductAuthService.generateAuthUrl(inner);
+        return merchantChannelAuthService.generateAuthUrl(inner);
     }
 
     /// 通过查询码获取认证结果

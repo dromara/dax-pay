@@ -4,7 +4,7 @@ import cn.daxpay.open.payment.trade.runtime.service.pay.gateway.AggregatePayServ
 import cn.daxpay.open.payment.trade.runtime.service.pay.gateway.CashierPayService;
 import cn.daxpay.open.payment.trade.runtime.service.pay.gateway.GatewayAuthService;
 import cn.daxpay.open.payment.trade.runtime.service.pay.gateway.GatewayOrderQueryService;
-import cn.daxpay.open.payment.auth.ChannelAuthService;
+import cn.daxpay.open.payment.auth.UnifiedAuthService;
 import cn.daxpay.open.payment.unipay.param.assist.AuthCodeParam;
 import cn.daxpay.open.payment.unipay.param.gateway.AggregateQrPayParam;
 import cn.daxpay.open.payment.unipay.param.gateway.CashierPayParam;
@@ -45,7 +45,7 @@ public class GatewayClientController {
     private final AggregatePayService aggregatePayService;
     private final CashierPayService cashierPayService;
     private final GatewayAuthService gatewayAuthService;
-    private final ChannelAuthService channelAuthService;
+    private final UnifiedAuthService unifiedAuthService;
 
     @Operation(summary = "查询网关订单摘要")
     @GetMapping("/order")
@@ -97,6 +97,6 @@ public class GatewayClientController {
     @Operation(summary = "OAuth认证回调")
     @PostMapping("/auth/callback")
     public Result<AuthResult> authCallback(@RequestBody AuthCodeParam param) {
-        return Res.ok(channelAuthService.auth(param));
+        return Res.ok(unifiedAuthService.auth(param));
     }
 }

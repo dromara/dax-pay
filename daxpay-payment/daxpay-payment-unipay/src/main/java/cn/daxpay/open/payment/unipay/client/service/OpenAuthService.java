@@ -3,7 +3,7 @@ package cn.daxpay.open.payment.unipay.client.service;
 import cn.daxpay.open.payment.auth.core.AuthScene;
 import cn.daxpay.open.payment.auth.core.AuthSession;
 import cn.daxpay.open.payment.auth.core.AuthSessionStore;
-import cn.daxpay.open.payment.auth.ChannelAuthService;
+import cn.daxpay.open.payment.auth.UnifiedAuthService;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import cn.daxpay.open.payment.common.util.PaySignUtil;
 import cn.daxpay.open.payment.unipay.aop.PaymentSignService;
@@ -32,11 +32,11 @@ import org.springframework.stereotype.Service;
 ///
 /// 对外开放认证的场景适配层, 供 [OpenAuthController] 使用。核心职责:
 ///
-/// 1. **入口验签**: 验证商户签名后生成 OAuth 重定向链接(委托 [ChannelAuthService])
+/// 1. **入口验签**: 验证商户签名后生成 OAuth 重定向链接(委托 [UnifiedAuthService])
 /// 2. **回调处理**: OAuth 回调后用 code 换 openId/userId, 构建带签名的重定向 URL 回给对接方
 ///
-/// ## 与 ChannelAuthService 的关系
-/// 复用 [ChannelAuthService] 的分发能力(source/product 路由), 但在生成授权链接后更新 session
+/// ## 与 UnifiedAuthService 的关系
+/// 复用 [UnifiedAuthService] 的分发能力(source/product 路由), 但在生成授权链接后更新 session
 /// 标记 `scene=OPEN`, 以便回调时做重定向式结果返回(而非 JSON)。
 ///
 /// ## 安全约束
@@ -49,14 +49,14 @@ public class OpenAuthService {
 
     private final PaymentSignService paymentSignService;
     private final MerchantContextLoader merchantContextLoader;
-    private final ChannelAuthService channelAuthService;
+    private final UnifiedAuthService unifiedAuthService;
     private final AuthSessionStore authSessionStore;
     private final PlatformConfigProperties platformConfigProperties;
     private final WxAppFacade wxAppFacade;
 
     /// 生成 OAuth 重定向链接
     ///
-    /// 流程: 参数校验 → 加载商户上下文 → 验签 → 委托 ChannelAuthService 生成 authUrl →
+    /// 流程: 参数校验 → 加载商户上下文 → 验签 → 委托 UnifiedAuthService 生成 authUrl →
     /// 更新 session(scene=OPEN, redirect_url) → 返回 authUrl 供 Controller 302 重定向
     public String generateOpenAuthRedirect(OpenAuthParam param) {
         // 参数校验
@@ -66,7 +66,7 @@ public class OpenAuthService {
         // 参数签名校验
         paymentSignService.signVerify(param);
 
-        // 组装认证参数, 委托 ChannelAuthService 按 authType 分发
+        // 组装认证参数, 委托 UnifiedAuthService 按 authType 分发
         GenerateAuthUrlParam authParam = new GenerateAuthUrlParam();
         authParam.setMchNo(param.getMchNo());
         authParam.setAppId(param.getAppId());
@@ -85,7 +85,7 @@ public class OpenAuthService {
             authParam.setWxAppScope(app.scope().getCode());
             authParam.setWxAppRefId(app.id());
         }
-        AuthUrlResult urlResult = channelAuthService.generateAuthUrl(authParam);
+        AuthUrlResult urlResult = unifiedAuthService.generateAuthUrl(authParam);
 
         // 更新 session: 标记 scene=OPEN(回调时据此做重定向而非 JSON 返回)
         String authToken = urlResult.getAuthToken();
@@ -101,7 +101,7 @@ public class OpenAuthService {
 
     /// OAuth 回调处理
     ///
-    /// 流程: 恢复 session → 委托 ChannelAuthService.auth 获取 openId/userId →
+    /// 流程: 恢复 session → 委托 UnifiedAuthService.auth 获取 openId/userId →
     /// 构建带签名的重定向 URL 回给对接方
     ///
     /// @param code 第三方 OAuth 授权码
@@ -115,7 +115,7 @@ public class OpenAuthService {
             throw new BizInfoException(DaxPayErrorCode.OPERATION_FAIL,
                     "pay.error.assist.authSessionExpired");
         }
-        // 先保存 redirect_url(ChannelAuthService.auth 成功后会销毁 session)
+        // 先保存 redirect_url(UnifiedAuthService.auth 成功后会销毁 session)
         String redirectUrl = session.getReturnPath();
 
         // 构建 AuthCodeParam 并委托获取 openId/userId
@@ -124,7 +124,7 @@ public class OpenAuthService {
         authCodeParam.setAuthToken(state);
         authCodeParam.setQueryCode(session.getQueryCode());
         try {
-            AuthResult authResult = channelAuthService.auth(authCodeParam);
+            AuthResult authResult = unifiedAuthService.auth(authCodeParam);
             return buildSuccessRedirectUrl(redirectUrl, authResult);
         } catch (RuntimeException e) {
             log.warn("OPEN 认证回调失败, redirectUrl={}, error={}", redirectUrl, e.getMessage());

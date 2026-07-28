@@ -21,7 +21,7 @@ public class AuthUrlResult {
 
     /// 认证会话码(OPEN 场景需据此更新 session 中的 scene/redirect_url)
     ///
-    /// 由 ProductAuthService / PlatformAuthProvider 在创建 session 后回填,
+    /// 由 MerchantChannelAuthService / PlatformAuthProvider 在创建 session 后回填,
     /// 供 OPEN 场景(OpenAuthService)加载并更新会话上下文。
     @Schema(description = "认证会话码")
     private String authToken;

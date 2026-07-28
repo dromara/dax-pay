@@ -1,5 +1,7 @@
 package cn.daxpay.open.payment.auth.develop;
 
+import cn.daxpay.open.payment.auth.channel.MerchantChannelAuthService;
+import cn.daxpay.open.payment.unipay.param.assist.GenerateAuthUrlParam;
 import cn.daxpay.open.payment.wx.enums.WxAppScopeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -12,7 +14,7 @@ import lombok.experimental.Accessors;
 ///
 /// 调试专用, 不继承支付公共参数(无 reqTime/sign 等字段)。
 /// 直接选择应用模式: 显式传 scope + appId, 由 [DevelopAuthService] 精确加载后转换为
-/// [GenerateAuthUrlParam] 传给 [ProductAuthService]。
+/// [GenerateAuthUrlParam] 传给 [MerchantChannelAuthService]。
 @Data
 @Accessors(chain = true)
 @Schema(title = "认证调试微信支付授权参数")

@@ -19,13 +19,13 @@ import java.util.stream.Collectors;
 import cn.daxpay.open.payment.auth.core.AuthSession;
 import cn.daxpay.open.payment.auth.core.AuthSessionStore;
 import cn.daxpay.open.payment.auth.core.AuthSourceEnum;
-import cn.daxpay.open.payment.auth.channel.ProductAuthService;
+import cn.daxpay.open.payment.auth.channel.MerchantChannelAuthService;
 import cn.daxpay.open.payment.auth.platform.PlatformAuthProvider;
 
-/// # 通道认证服务
+/// # 统一认证服务(分发器)
 ///
 /// 统一对外的「生成授权链接 / 授权码换用户标识」入口, 按会话来源([AuthSession#getSource])与
-/// authType 分流到平台级 [PlatformAuthProvider](按 source 注册)或商户级产品策略([ProductAuthService])。
+/// authType 分流到平台级 [PlatformAuthProvider](按 source 注册)或商户级服务([MerchantChannelAuthService])。
 /// Controller / 调试入口只做协议适配, 不在 Web 层写业务分支。
 ///
 /// ## 分发机制
@@ -35,31 +35,31 @@ import cn.daxpay.open.payment.auth.platform.PlatformAuthProvider;
 /// ## 分发优先级(auth)
 /// 1. `session.source` 命中 `providers` → 平台级 Provider 对应方法
 /// 2. 无 session 且 `authType` 映射到平台级 source(支付宝小程序直连兜底)→ Provider
-/// 3. 其余 → 商户级产品策略
+/// 3. 其余 → 商户级服务
 ///
 /// ## 分发优先级(generateAuthUrl)
 /// - `authType=alipay` → 平台级支付宝 Provider(无商户上下文)
-/// - 其余 → 商户级产品策略(微信/抖音需商户上下文定位应用)
+/// - 其余 → 商户级服务(微信/抖音需商户上下文定位应用)
 @Slf4j
 @Service
-public class ChannelAuthService {
+public class UnifiedAuthService {
 
     private final AuthSessionStore authSessionStore;
-    private final ProductAuthService channelProductAuthService;
+    private final MerchantChannelAuthService merchantChannelAuthService;
     /// 平台级认证 Provider 按 [PlatformAuthProvider#sourceCode] 索引
     private final Map<String, PlatformAuthProvider> providers;
 
-    public ChannelAuthService(AuthSessionStore authSessionStore,
-                              ProductAuthService channelProductAuthService,
+    public UnifiedAuthService(AuthSessionStore authSessionStore,
+                              MerchantChannelAuthService merchantChannelAuthService,
                               List<PlatformAuthProvider> providerList) {
         this.authSessionStore = authSessionStore;
-        this.channelProductAuthService = channelProductAuthService;
+        this.merchantChannelAuthService = merchantChannelAuthService;
         // 按 sourceCode 索引, doAuth 据会话来源 O(1) 查找
         this.providers = providerList.stream()
                 .collect(Collectors.toMap(p -> p.sourceCode().getCode(), Function.identity()));
     }
 
-    /// 生成授权链接: 支付宝走平台级 Provider, 其余按支付产品走通道策略
+    /// 生成授权链接: 支付宝走平台级 Provider, 其余走商户级通道策略
     ///
     /// 微信应用档位标识(wxAppScope/wxAppRefId)随 param 透传, 由商户级策略消费; 支付宝分支不使用。
     public AuthUrlResult generateAuthUrl(GenerateAuthUrlParam param) {
@@ -70,7 +70,7 @@ public class ChannelAuthService {
             return providers.get(source.getCode()).generateAuthUrl(param.getReturnPath());
         }
         // 获取通道授权链接
-        return channelProductAuthService.generateAuthUrl(param);
+        return merchantChannelAuthService.generateAuthUrl(param);
     }
 
     /// 通过 AuthCode 换取认证结果, 成功后销毁会话(一次使用)
@@ -102,7 +102,7 @@ public class ChannelAuthService {
         return result;
     }
 
-    /// 按会话来源把授权码回调分到平台 Provider 或支付产品处理
+    /// 按会话来源把授权码回调分到平台 Provider 或商户级服务处理
     private AuthResult doAuth(AuthCodeParam param, AuthSession session) {
         // session.source 标记的平台级认证, 按 source 查 Provider
         if (session != null && StrUtil.isNotBlank(session.getSource())) {
@@ -118,14 +118,14 @@ public class ChannelAuthService {
                 return providers.get(source.getCode()).auth(param, null);
             }
         }
-        // 其余: 商户级产品策略
-        return channelProductAuthService.auth(param, session);
+        // 其余: 商户级服务
+        return merchantChannelAuthService.auth(param, session);
     }
 
     /// authType → 平台级 Provider source 映射
     ///
     /// 仅支付宝走平台级 generate/auth(不依赖商户上下文); 微信/抖音 generate/auth 需商户上下文定位应用,
-    /// 走 [ProductAuthService] 按支付产品路由。
+    /// 走 [MerchantChannelAuthService]。
     private static AuthSourceEnum mapAuthTypeToSource(String authType) {
         if (ChannelAuthTypeEnum.ALIPAY.getCode().equals(authType)) {
             return AuthSourceEnum.PLATFORM_ALIPAY;

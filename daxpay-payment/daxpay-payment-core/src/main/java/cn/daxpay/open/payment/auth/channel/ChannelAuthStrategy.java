@@ -19,7 +19,7 @@ public interface ChannelAuthStrategy {
 
     /// 获取授权链接
     ///
-    /// @param authToken 认证会话码, 由上层 [ProductAuthService] 生成注入,
+    /// @param authToken 认证会话码, 由上层 [MerchantChannelAuthService] 生成注入,
     ///                  策略负责将其拼入回调地址; 授权回跳时凭此恢复上下文。
     /// @param session 认证会话(可变对象), 策略负责写入回调恢复所需的应用引用
     ///                (微信写 wxAppScope/wxAppRefId; 抖音不写, 用 channelMchNo)
@@ -27,7 +27,7 @@ public interface ChannelAuthStrategy {
 
     /// 通过AuthCode获取认证结果
     ///
-    /// @param session 认证会话(由 ProductAuthService.auth 从 Redis 加载后注入),
+    /// @param session 认证会话(由 MerchantChannelAuthService.auth 从 Redis 加载后注入),
     ///                策略据此恢复应用凭证; 小程序直连场景可为 null。
     AuthResult doAuth(AuthCodeParam param, AuthSession session);
 }

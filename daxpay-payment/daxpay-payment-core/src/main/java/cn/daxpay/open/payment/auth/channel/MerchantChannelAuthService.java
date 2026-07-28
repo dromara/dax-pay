@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.auth.channel;
 
+import cn.daxpay.open.payment.auth.UnifiedAuthService;
 import cn.daxpay.open.payment.auth.core.AuthScene;
 import cn.daxpay.open.payment.auth.core.AuthSession;
 import cn.daxpay.open.payment.auth.core.AuthSessionStore;
@@ -23,7 +24,7 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-/// # 通道认证服务(商户级)
+/// # 商户级通道认证服务
 ///
 /// 按 authType 路由认证策略([ChannelAuthStrategy])。应用解析的职责归入口层与策略层:
 /// 入口层 resolve 选定微信应用后, 通过 GenerateAuthUrlParam.wxAppScope/wxAppRefId 标识;
@@ -32,11 +33,11 @@ import java.util.stream.Collectors;
 ///
 /// **职责边界**: 本服务仅处理商户级通道认证; 平台级认证(平台支付宝配置 / 系统公众号配置)
 /// 由各 PlatformAuthProvider 承担, 会话与结果缓存由 [AuthSessionStore] 统一管理。
-/// 平台级 vs 通道级 的来源分发由 [cn.daxpay.open.payment.auth.ChannelAuthService] 完成, 请勿在 Controller 再写分流。
+/// 平台级 vs 通道级 的来源分发由 [UnifiedAuthService] 完成, 请勿在 Controller 再写分流。
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class ProductAuthService {
+public class MerchantChannelAuthService {
 
     private final AuthSessionStore authSessionStore;
     private final MerchantContextLoader merchantContextLoader;
