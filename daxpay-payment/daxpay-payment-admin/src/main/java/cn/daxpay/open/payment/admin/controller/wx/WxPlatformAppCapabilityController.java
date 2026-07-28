@@ -1,9 +1,9 @@
 package cn.daxpay.open.payment.admin.controller.wx;
 
-import cn.daxpay.open.payment.wx.param.WxPlatformAppCapabilityBatchParam;
+import cn.daxpay.open.payment.wx.param.platform.WxPlatformAppCapabilityBatchParam;
 import cn.daxpay.open.payment.wx.result.WxCapabilityOption;
-import cn.daxpay.open.payment.wx.result.WxPlatformAppCapabilityResult;
-import cn.daxpay.open.payment.wx.service.WxPlatformAppCapabilityService;
+import cn.daxpay.open.payment.wx.result.platform.WxPlatformAppCapabilityResult;
+import cn.daxpay.open.payment.wx.service.platform.WxPlatformAppCapabilityService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;

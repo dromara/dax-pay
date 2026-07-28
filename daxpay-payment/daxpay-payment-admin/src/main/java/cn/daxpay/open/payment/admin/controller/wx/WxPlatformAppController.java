@@ -1,12 +1,12 @@
 package cn.daxpay.open.payment.admin.controller.wx;
 
-import cn.daxpay.open.payment.wx.convert.WxPlatformAppAuthConfigConvert;
-import cn.daxpay.open.payment.wx.param.WxPlatformAppAuthConfigParam;
-import cn.daxpay.open.payment.wx.param.WxPlatformAppParam;
-import cn.daxpay.open.payment.wx.result.WxPlatformAppAuthConfigResult;
-import cn.daxpay.open.payment.wx.result.WxPlatformAppResult;
-import cn.daxpay.open.payment.wx.service.WxPlatformAppAuthConfigService;
-import cn.daxpay.open.payment.wx.service.WxPlatformAppService;
+import cn.daxpay.open.payment.wx.convert.platform.WxPlatformAppAuthConfigConvert;
+import cn.daxpay.open.payment.wx.param.platform.WxPlatformAppAuthConfigParam;
+import cn.daxpay.open.payment.wx.param.platform.WxPlatformAppParam;
+import cn.daxpay.open.payment.wx.result.platform.WxPlatformAppAuthConfigResult;
+import cn.daxpay.open.payment.wx.result.platform.WxPlatformAppResult;
+import cn.daxpay.open.payment.wx.service.platform.WxPlatformAppAuthConfigService;
+import cn.daxpay.open.payment.wx.service.platform.WxPlatformAppService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;

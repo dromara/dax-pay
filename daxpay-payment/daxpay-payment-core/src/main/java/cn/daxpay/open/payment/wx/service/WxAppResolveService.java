@@ -1,15 +1,17 @@
 package cn.daxpay.open.payment.wx.service;
 
-import cn.daxpay.open.payment.wx.dao.WxChannelAppCapabilityManager;
-import cn.daxpay.open.payment.wx.dao.WxMchAppManager;
-import cn.daxpay.open.payment.wx.dao.WxPlatformAppManager;
-import cn.daxpay.open.payment.wx.entity.WxMchApp;
-import cn.daxpay.open.payment.wx.entity.WxPlatformApp;
+import cn.daxpay.open.payment.wx.dao.channel.WxChannelAppCapabilityManager;
+import cn.daxpay.open.payment.wx.dao.merchant.WxMchAppManager;
+import cn.daxpay.open.payment.wx.dao.platform.WxPlatformAppManager;
+import cn.daxpay.open.payment.wx.entity.merchant.WxMchApp;
+import cn.daxpay.open.payment.wx.entity.platform.WxPlatformApp;
 import cn.daxpay.open.payment.wx.enums.WxAppScopeEnum;
 import cn.daxpay.open.payment.wx.enums.WxAppTypeEnum;
 import cn.daxpay.open.payment.wx.facade.WxAppFacade;
 import cn.daxpay.open.payment.wx.facade.WxAppView;
 import cn.daxpay.open.payment.wx.facade.WxIsvAppPair;
+import cn.daxpay.open.payment.wx.service.merchant.WxMchAppAuthConfigService;
+import cn.daxpay.open.payment.wx.service.platform.WxPlatformAppAuthConfigService;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;

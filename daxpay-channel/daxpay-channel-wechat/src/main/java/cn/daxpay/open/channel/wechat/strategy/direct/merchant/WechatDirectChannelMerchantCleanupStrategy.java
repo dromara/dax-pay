@@ -10,7 +10,7 @@ import cn.daxpay.open.channel.wechat.entity.direct.WechatDirectAppAuthConfig;
 import cn.daxpay.open.channel.wechat.entity.direct.WechatDirectAppCapability;
 import cn.daxpay.open.channel.wechat.entity.direct.WechatDirectChannelMerchant;
 import cn.daxpay.open.channel.wechat.entity.direct.WechatDirectKeyConfig;
-import cn.daxpay.open.payment.wx.service.WxChannelAppCapabilityService;
+import cn.daxpay.open.payment.wx.service.channel.WxChannelAppCapabilityService;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.payment.strategy.merchant.ChannelMerchantCleanupStrategy;
 import lombok.RequiredArgsConstructor;
