@@ -142,9 +142,11 @@ public class MchTerminalDeviceService {
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.channelNotFound"));
         if (!Objects.equals(system.getMchNo(), channel.getMchNo())
                 || !Objects.equals(channel.getMchNo(), requireMchNo())) {
+            // 终端: 系统终端与通道终端须属于同一商户
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.terminal.mchMismatch");
         }
         if (terminalChannelBindManager.existsBind(param.getSystemTerminalNo(), param.getChannelTerminalId())) {
+            // 终端: 绑定关系已存在
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.terminal.bindExists");
         }
         TerminalChannelBind bind = new TerminalChannelBind();
@@ -161,6 +163,7 @@ public class MchTerminalDeviceService {
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.systemNotFound"));
         this.checkTerminal(system);
         if (!terminalChannelBindManager.existsBind(param.getSystemTerminalNo(), param.getChannelTerminalId())) {
+            // 终端: 绑定关系不存在
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.terminal.bindNotFound");
         }
         terminalChannelBindManager.deleteBind(param.getSystemTerminalNo(), param.getChannelTerminalId());
@@ -212,6 +215,7 @@ public class MchTerminalDeviceService {
         MchStoreInfo store = mchStoreInfoManager.findByStoreNo(storeNo)
                 .orElseThrow(() -> new DataNotExistException("error.payment.merchant.storeNotFound"));
         if (!Objects.equals(store.getMchNo(), mchNo)) {
+            // 商户: 门店不属于当前商户
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.merchant.storeNoMatch");
         }
         return storeNo;

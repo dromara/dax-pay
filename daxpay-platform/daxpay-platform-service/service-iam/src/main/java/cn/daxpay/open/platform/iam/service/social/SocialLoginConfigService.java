@@ -91,6 +91,7 @@ public class SocialLoginConfigService {
     public void update(SocialLoginConfigParam param) {
         SocialSourceEnum socialSource = SocialSourceEnum.of(param.getSource());
         if (socialSource == null) {
+            // 社交登录: 不支持的平台
             throw new OperationFailException("error.social.unsupportedSource");
         }
         // 跳转型(SocialSourceEnum.isPlatformRedirect, 如 ALIPAY): 不校验/不写入 clientId, 只启停
@@ -100,6 +101,7 @@ public class SocialLoginConfigService {
         }
         // 标准 OAuth 平台: clientId 必填
         if (StrUtil.isBlank(param.getClientId())) {
+            // 社交登录: 平台未配置, 请先填写 clientId
             throw new OperationFailException("error.social.notConfigured");
         }
         SocialLoginConfig entity = socialLoginConfigManager.findBySource(param.getSource())
@@ -116,6 +118,7 @@ public class SocialLoginConfigService {
     public void updateEnabled(String source, Boolean enabled) {
         SocialSourceEnum socialSource = SocialSourceEnum.of(source);
         if (socialSource == null) {
+            // 社交登录: 不支持的平台
             throw new OperationFailException("error.social.unsupportedSource");
         }
         if (this.isPlatformRedirectSource(socialSource)) {
@@ -130,6 +133,7 @@ public class SocialLoginConfigService {
             .orElseThrow(() -> new OperationFailException("error.social.configNotExist"));
         // 社交登录: 未配置平台不允许启停
         if (!entity.isConfigured()) {
+            // 社交登录: 平台未配置, 请先填写 clientId
             throw new OperationFailException("error.social.notConfigured");
         }
         entity.setEnabled(enabled);

@@ -81,13 +81,18 @@ public class WechatMessageRecordService {
     /// 重发(仅公众号模板消息, 只允许重发失败的记录)
     public void resend(Long recordId) {
         WechatMessageRecord record = recordManager.findById(recordId)
-                .orElseThrow(() -> new OperationFailException("error.channel.wechat.messageRecordNotExist"));
+                .orElseThrow(() -> {
+                    // 微信: 消息记录不存在
+                    throw new OperationFailException("error.channel.wechat.messageRecordNotExist");
+                });
         if (!STATUS_FAILED.equals(record.getStatus())) {
+            // 微信: 只允许重发失败的记录
             throw new OperationFailException("error.channel.wechat.onlyFailedCanResend");
         }
         // 从三方平台取 AppId/AppSecret
         PlatformWechatMpAuthConfig auth = mpAuthConfigService.getWechatMpAuthConfig();
         if (StrUtil.isBlank(auth.getAppId()) || StrUtil.isBlank(auth.getAppSecret())) {
+            // 微信: 公众号授权配置不完整
             throw new OperationFailException("error.channel.wechat.mpAuthConfigIncomplete");
         }
         // 构造发送参数

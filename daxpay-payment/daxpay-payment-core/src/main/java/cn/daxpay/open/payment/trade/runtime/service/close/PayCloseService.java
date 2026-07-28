@@ -128,6 +128,7 @@ public class PayCloseService {
                                 throw re;
                             }
                         }
+                        // 支付: 关闭订单失败
                         throw new OperationFailException(CommonCode.FAIL_CODE, "pay.error.pay.closeFailed");
                     }
                 },

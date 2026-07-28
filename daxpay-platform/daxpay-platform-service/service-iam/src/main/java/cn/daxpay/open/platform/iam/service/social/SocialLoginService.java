@@ -141,6 +141,7 @@ public class SocialLoginService {
         // 按 client 解析前端 baseUrl
         String baseUrl = this.resolveBaseUrl(socialClient);
         if (StrUtil.isBlank(baseUrl)) {
+            // 社交登录: 运营/商户端前端地址未配置
             throw new OperationFailException(this.endpointMissingKey(socialClient));
         }
         SocialAuthMode authMode = this.resolveMode(mode);
@@ -231,6 +232,7 @@ public class SocialLoginService {
             // 当前用户必须属于该身份域, 防止跨端绑定
             UserInfoResult userInfo = userQueryService.findById(userId);
             if (!Objects.equals(clientCode, userInfo.getClientCode())) {
+                // 社交登录: 绑定用户不属于当前终端
                 throw new OperationFailException("error.social.bind.clientMismatch");
             }
             String baseUrl = this.requireBaseUrl(socialClient);
@@ -270,6 +272,7 @@ public class SocialLoginService {
         SocialAuthConfig authConfig = socialLoginConfigService.buildAuthConfig(config, redirectUri);
         SocialSourceEnum socialSource = SocialSourceEnum.of(source);
         if (socialSource == null) {
+            // 社交登录: 不支持的平台
             throw new OperationFailException("error.social.unsupportedSource");
         }
         // 公众号: 凭据来自平台级配置
@@ -285,6 +288,7 @@ public class SocialLoginService {
         }
         PlatformWechatMpAuthConfig mp = platformWechatMpAuthConfigService.getWechatMpAuthConfig();
         if (mp == null || StrUtil.isBlank(mp.getAppId()) || StrUtil.isBlank(mp.getAppSecret())) {
+            // 社交登录: 微信公众号配置不完整
             throw new OperationFailException("error.social.wechatMpNotConfigured");
         }
         authConfig.setClientId(mp.getAppId());
@@ -315,7 +319,10 @@ public class SocialLoginService {
     /// 校验并解析社交登录终端(仅 admin/merchant)
     private SocialClientEnum requireSocialClient(String clientCode) {
         return SocialClientEnum.findByCode(clientCode)
-                .orElseThrow(() -> new OperationFailException("error.social.unsupportedClient"));
+                .orElseThrow(() -> {
+                    // 社交登录: 不支持的终端编码(仅 admin/merchant)
+                    throw new OperationFailException("error.social.unsupportedClient");
+                });
     }
 
     /// 解析并校验 baseUrl 非空

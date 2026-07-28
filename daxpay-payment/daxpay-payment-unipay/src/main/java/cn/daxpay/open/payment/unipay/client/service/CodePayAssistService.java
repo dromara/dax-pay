@@ -102,13 +102,14 @@ public class CodePayAssistService {
 
     /// 码牌发起支付: 普通订单 + source=cashier_code; 策略仅读码牌配置
     public NormalPayResult pay(CodePayParam param) {
-        DeviceQrCode entity = this.loadEnabledAssigned(param.getCode());
+        var entity = this.loadEnabledAssigned(param.getCode());
         merchantContextLoader.initMch(entity.getMchNo());
         var mchApp = merchantContextLoader.resolveApp(entity.getMchNo(), entity.getAppId());
-
+        // 获取金额
         long amount = this.resolveAmount(entity, param.getAmount());
         ClientEnvEnum clientEnv = ClientEnvEnum.findByCode(param.getClientEnv());
         if (clientEnv == ClientEnvEnum.BROWSER) {
+            // 码牌: 当前打开环境不支持码牌支付, 请使用微信/支付宝等扫码
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.qrcode.clientEnvNotSupport");
         }
 
@@ -119,6 +120,7 @@ public class CodePayAssistService {
         var resolved = codePayResolveService.resolveRequired(mchApp.getAppId(), clientEnv, payForm);
         // JSAPI/MINI 必须已在授权回跳页换好 openId，支付只带 openId、禁止支付时再换 code
         if (PayMethodOpenIdSupport.needsOpenId(resolved.method()) && StrUtil.isBlank(param.getOpenId())) {
+            // 码牌: 当前支付方式需要 openId, 请先完成授权
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.qrcode.openIdRequired");
         }
 
@@ -158,12 +160,14 @@ public class CodePayAssistService {
 
         ClientEnvEnum clientEnv = ClientEnvEnum.findByCode(param.getClientEnv());
         if (clientEnv == ClientEnvEnum.BROWSER) {
+            // 码牌: 当前打开环境不支持码牌支付, 请使用微信/支付宝等扫码
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.qrcode.clientEnvNotSupport");
         }
         CodePayFormEnum payForm = CodePayFormEnum.fromProgramType(entity.getProgramType());
         var resolved = codePayResolveService.resolveRequired(mchApp.getAppId(), clientEnv, payForm);
         if (!PayMethodOpenIdSupport.canAcquireOpenId(resolved.method(), clientEnv)) {
             // 当前支付方式/环境无法走 OAuth（付款码/APP/PC/外部浏览器/union_pay 一期）
+            // 码牌: 当前支付方式/环境不需要授权
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.qrcode.authNotRequired");
         }
 
@@ -230,9 +234,11 @@ public class CodePayAssistService {
         DeviceQrCode entity = deviceQrCodeManager.findByCode(code)
                 .orElseThrow(() -> new DataNotExistException("error.device.qrcode.notFound"));
         if (!QrCodeStatusEnum.ENABLED.getCode().equals(entity.getStatus())) {
+            // 码牌: 码牌未启用
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.qrcode.disabled");
         }
         if (StrUtil.isBlank(entity.getMchNo())) {
+            // 码牌: 码牌未分配商户
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.qrcode.notAssigned");
         }
         return entity;
@@ -242,11 +248,13 @@ public class CodePayAssistService {
         QrCodeAmountTypeEnum amountType = QrCodeAmountTypeEnum.findByCode(entity.getAmountType());
         if (amountType == QrCodeAmountTypeEnum.FIXED) {
             if (entity.getFixedAmount() == null || entity.getFixedAmount() <= 0) {
+                // 码牌: 固定金额必须大于0
                 throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.qrcode.fixedAmountInvalid");
             }
             return entity.getFixedAmount();
         }
         if (requestAmount == null || requestAmount <= 0) {
+            // 码牌: 金额必须大于0
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.qrcode.amountRequired");
         }
         return requestAmount;
@@ -256,6 +264,7 @@ public class CodePayAssistService {
     private String resolveMethod(DeviceQrCode entity, String clientEnvCode) {
         ClientEnvEnum clientEnv = ClientEnvEnum.findByCode(clientEnvCode);
         if (clientEnv == ClientEnvEnum.BROWSER) {
+            // 码牌: 当前打开环境不支持码牌支付, 请使用微信/支付宝等扫码
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.qrcode.clientEnvNotSupport");
         }
         merchantContextLoader.initMch(entity.getMchNo());
@@ -294,7 +303,10 @@ public class CodePayAssistService {
             case ALIPAY -> "alipay";
             case UNION_PAY -> "union-pay";
             case DOUYIN -> "douyin";
-            default -> throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.qrcode.clientEnvNotSupport");
+            default -> {
+                // 码牌: 不支持的客户端环境, 无法确定分端页
+                throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.qrcode.clientEnvNotSupport");
+            }
         };
         return "/h/" + segment + "/" + code + "?authed=1";
     }

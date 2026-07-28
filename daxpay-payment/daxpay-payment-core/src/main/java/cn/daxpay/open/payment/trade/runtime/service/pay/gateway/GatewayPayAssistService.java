@@ -177,6 +177,7 @@ public class GatewayPayAssistService {
         PlatformUrlConfig urlConfig = platformUrlConfigService.getUrlConfig();
         String gatewayBase = urlConfig.getPaymentGatewayBaseUrl();
         if (StrUtil.isBlank(gatewayBase)) {
+            // 网关: 支付网关前端地址未配置
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.common.gatewayUrlNotConfigured");
         }
         gatewayBase = StrUtil.removeSuffix(gatewayBase, "/");

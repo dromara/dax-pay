@@ -85,21 +85,22 @@ public class SocialAutoLoginConfigService {
         }
         List<String> sources = this.resolveParamSources(item);
         if (CollUtil.isEmpty(sources)) {
-            // 开启自动登录时必须至少选择一个平台
+            // 社交登录: 开启自动登录时必须至少选择一个平台
             throw new OperationFailException("error.social.autoLogin.sourceRequired", clientCode);
         }
         for (String code : sources) {
             if (!AUTO_LOGIN_ALLOWED_SOURCES.contains(code)) {
-                // 所选平台不支持应用内自动登录(如微信开放平台扫码)
+                // 社交登录: 所选平台不支持应用内自动登录(如微信开放平台扫码)
                 throw new OperationFailException("error.social.autoLogin.sourceNotAllowed", code);
             }
             SocialSourceEnum source = SocialSourceEnum.of(code);
             if (source == null) {
+                // 社交登录: 不支持的平台
                 throw new OperationFailException("error.social.unsupportedSource");
             }
             SocialLoginConfig enabled = socialLoginConfigService.findEnabledBySource(code);
             if (enabled == null) {
-                // 所选平台未配置或未启用
+                // 社交登录: 所选平台未配置或未启用
                 throw new OperationFailException("error.social.autoLogin.sourceNotEnabled", code);
             }
         }
