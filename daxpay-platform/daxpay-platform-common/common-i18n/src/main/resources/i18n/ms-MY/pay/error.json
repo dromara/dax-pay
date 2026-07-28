@@ -82,6 +82,7 @@
     "refundStatusNotAllow": "Status bayaran balik semasa [{0}] tidak membenarkan bayaran balik",
     "noDuplicate": "Nombor bayaran balik sudah wujud",
     "amountExceed": "Jumlah bayaran balik tidak boleh melebihi jumlah bayaran",
+    "amountInvalid": "Jumlah bayaran balik mesti lebih besar daripada sifar",
     "orderNotFound": "Pesanan bayaran balik tidak ditemui",
     "syncProcessing": "Penyegerakan bayaran balik sedang dijalankan, jangan ulangi",
     "noPermission": "Pedagang tidak mempunyai kebenaran bayaran balik",

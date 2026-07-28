@@ -26,7 +26,10 @@ import cn.daxpay.open.platform.common.redis.lock.LockExecutor;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Objects;
 
@@ -47,6 +50,11 @@ public class RefundService {
     private final RefundOrderManager refundOrderManager;
     private final RefundSettleService refundSettleService;
     private final LockExecutor lockExecutor;
+
+    /// 自身注入: 使 @Transactional 方法经代理调用生效（锁内层事务模式）
+    @Lazy
+    @Autowired
+    private RefundService self;
 
     /// 发起退款
     public RefundOrder refund(RefundParam param) {
@@ -74,13 +82,11 @@ public class RefundService {
                         // 按 tradeType 加载原支付容器快照(非二次路由)
                         RefundOrderSnapshot snapshot = loadContainerSnapshot(lockedTrade);
 
-                        // 预占可退余额 + 创建退款单(progress)
-                        refundSettleService.reserveBalanceUnderLock(lockedTrade, param.getAmount());
-                        RefundOrder refundOrder = buildRefundOrder(lockedTrade, snapshot, param);
-                        refundOrder.setStatus(RefundOrderStatusEnum.PROGRESS.getCode());
-                        refundOrderManager.save(refundOrder);
+                        // 预占余额 + 创建退款单（原子事务，经自身注入调用使代理生效）
+                        RefundOrder refundOrder = self.reserveAndCreateRefundOrder(
+                                lockedTrade, param.getAmount(), snapshot, param);
 
-                        // 调用通道退款策略(product 继承自原支付单)
+                        // 调用通道退款策略(事务外，避免长事务持有数据库连接)
                         AbsRefundStrategy strategy = PaymentStrategyFactory.createByProduct(
                                 snapshot.getProduct(), AbsRefundStrategy.class);
                         RefundResultBo result;
@@ -89,7 +95,7 @@ public class RefundService {
                             result = strategy.doRefund(refundOrder);
                         } catch (Exception e) {
                             log.error("通道退款失败, refundNo={}", refundOrder.getRefundNo(), e);
-                            // 预占回滚 + 退款单 FAIL
+                            // 预占回滚 + 退款单 FAIL（独立补偿事务）
                             refundSettleService.settleFailOrCloseUnderLock(
                                     refundOrder.getId(), false, null, null, null, e.getMessage());
                             throw e;
@@ -105,6 +111,7 @@ public class RefundService {
             throw e;
         } catch (Exception e) {
             log.error("退款处理失败, tradeNo={}", param.getTradeNo(), e);
+            // 退款: 退款处理失败
             throw new OperationFailException(CommonCode.FAIL_CODE, "pay.error.operateFailed");
         }
     }
@@ -185,15 +192,34 @@ public class RefundService {
                 .setStoreNo(order.getStoreNo());
     }
 
-    /// 校验交易可退: 状态须为 SUCCESS, 退款金额不能超过可退余额
+    /// 校验交易可退: 状态须为 SUCCESS, 退款金额必须大于零且不能超过可退余额
     private void validateRefundable(PayTrade trade, Long refundAmount) {
         if (!Objects.equals(PayFundStatusEnum.SUCCESS.getCode(), trade.getStatus())) {
             throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.refund.statusNotAllow", trade.getStatus());
+        }
+        // 退款金额必须大于零（防止零值/负值放行导致 refundableBalance 反增）
+        if (refundAmount == null || refundAmount <= 0) {
+            throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.refund.amountInvalid");
         }
         long refundable = trade.getRefundableBalance() == null ? 0 : trade.getRefundableBalance();
         if (refundAmount > refundable) {
             throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.refund.amountExceed");
         }
+    }
+
+    /// 预占余额 + 创建退款单（原子事务）
+    ///
+    /// 独立事务包裹预占与建单，防止 JVM 崩溃留孤儿预占（余额已扣但无退款单）。
+    /// 通道调用须在事务外执行，失败时由调用方触发补偿回滚。
+    /// 经 self 调用使事务代理生效（与 PayCallbackService 锁内层事务模式对齐）。
+    @Transactional(rollbackFor = Exception.class)
+    public RefundOrder reserveAndCreateRefundOrder(PayTrade trade, long amount,
+                                                   RefundOrderSnapshot snapshot, RefundParam param) {
+        refundSettleService.reserveBalanceUnderLock(trade, amount);
+        RefundOrder refundOrder = buildRefundOrder(trade, snapshot, param);
+        refundOrder.setStatus(RefundOrderStatusEnum.PROGRESS.getCode());
+        refundOrderManager.save(refundOrder);
+        return refundOrder;
     }
 
     /// 构建退款订单(通道/产品/通知字段来自原支付容器快照)

@@ -20,6 +20,8 @@ public enum NoticeEventEnum implements I18nSupport {
     PAY_CLOSE("pay.close"),
     /// 退款成功
     REFUND_SUCCESS("refund.success"),
+    /// 退款失败
+    REFUND_FAIL("refund.fail"),
     /// 退款关闭
     REFUND_CLOSE("refund.close"),
     ;

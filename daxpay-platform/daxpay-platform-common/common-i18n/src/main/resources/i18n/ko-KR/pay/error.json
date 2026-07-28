@@ -82,6 +82,7 @@
     "refundStatusNotAllow": "현재 환불 상태 [{0}]에서는 환불을 허용하지 않습니다.",
     "noDuplicate": "환불 번호가 이미 존재합니다.",
     "amountExceed": "환불 금액은 결제 금액을 초과할 수 없습니다.",
+    "amountInvalid": "환불 금액은 0보다 커야 합니다",
     "orderNotFound": "환불 주문을 찾을 수 없습니다.",
     "syncProcessing": "환불 동기화가 진행 중입니다. 반복하지 마세요.",
     "noPermission": "판매자에게 환불 권한이 없습니다.",

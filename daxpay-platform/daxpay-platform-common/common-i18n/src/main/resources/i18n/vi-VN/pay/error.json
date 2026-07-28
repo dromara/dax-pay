@@ -82,6 +82,7 @@
     "refundStatusNotAllow": "Trạng thái hoàn tiền hiện tại [{0}] không cho phép hoàn tiền",
     "noDuplicate": "Số tiền hoàn lại đã tồn tại",
     "amountExceed": "Số tiền hoàn lại không thể vượt quá số tiền thanh toán",
+    "amountInvalid": "Số tiền hoàn lại phải lớn hơn không",
     "orderNotFound": "Không tìm thấy lệnh hoàn tiền",
     "syncProcessing": "Đang đồng bộ hóa hoàn tiền, không lặp lại",
     "noPermission": "Người bán không có quyền hoàn tiền",

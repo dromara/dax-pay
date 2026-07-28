@@ -31,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/client/device/qrcode")
 @RequiredArgsConstructor
-public class DeviceQrCodeClientController {
+public class QrCodeClientController {
 
     private final CodePayAssistService codePayAssistService;
 

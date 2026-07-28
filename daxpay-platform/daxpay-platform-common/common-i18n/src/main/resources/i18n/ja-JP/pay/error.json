@@ -82,6 +82,7 @@
     "refundStatusNotAllow": "現在の払い戻しステータス [{0}] では払い戻しができません",
     "noDuplicate": "払い戻し番号はすでに存在します",
     "amountExceed": "払い戻し額はお支払い額を超えることはできません",
+    "amountInvalid": "払い戻し額はゼロより大きくなければなりません",
     "orderNotFound": "返金注文が見つかりません",
     "syncProcessing": "返金同期が進行中です。繰り返さないでください",
     "noPermission": "販売者には返金の許可がありません",

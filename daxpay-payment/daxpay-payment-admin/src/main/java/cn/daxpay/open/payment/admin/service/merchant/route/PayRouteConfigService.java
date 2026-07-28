@@ -18,6 +18,7 @@ import cn.daxpay.open.payment.route.service.scene.PayRouteSceneConfigService;
 import cn.daxpay.open.platform.core.enums.pay.route.PayRouteModeEnum;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,6 +60,7 @@ public class PayRouteConfigService {
 
     /// 更新应用路由策略（模式、支付渠道、启用状态、名称）
     @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(value = "payment:route-bundle", key = "#param.appId")
     public PayRouteStrategyResult updateStrategy(PayRouteStrategyParam param) {
         mchAppInfoManager.requireByAppId(param.getAppId());
         PayRouteStrategy strategy = strategyManager.findByAppId(param.getAppId())

@@ -11,6 +11,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
+import java.util.Set;
 
 /// # 退款订单管理器
 ///
@@ -39,5 +40,25 @@ public class RefundOrderManager extends BaseManager<RefundOrderMapper, RefundOrd
         // 默认按创建时间倒序
         wrapper.orderByDesc("create_time");
         return this.page(mpPage, wrapper);
+    }
+
+    /// CAS 式状态更新：仅当当前状态在 expectFrom 集合内时才更新，保证原子性
+    ///
+    /// 用途：替代结算路径中"先读后盲写"的 updateById，消除并发竞态。
+    /// SQL 语义：`UPDATE refund_order SET status=?, ... WHERE id=? AND status IN (...)`。
+    ///
+    /// @param refundOrder 已设置目标状态与关联字段的实体（从数据库加载后修改）
+    /// @param expectFrom  合法的前置状态编码集合
+    /// @return true=更新成功；false=状态已被其他线程改变，调用方应幂等退出
+    public boolean casUpdateStatus(RefundOrder refundOrder, Set<String> expectFrom) {
+        return lambdaUpdate()
+                .eq(RefundOrder::getId, refundOrder.getId())
+                .in(RefundOrder::getStatus, expectFrom)
+                .set(RefundOrder::getStatus, refundOrder.getStatus())
+                .set(RefundOrder::getFinishTime, refundOrder.getFinishTime())
+                .set(RefundOrder::getOutRefundNo, refundOrder.getOutRefundNo())
+                .set(RefundOrder::getRelationOrderNo, refundOrder.getRelationOrderNo())
+                .set(RefundOrder::getErrorMsg, refundOrder.getErrorMsg())
+                .update();
     }
 }

@@ -5,6 +5,7 @@ import cn.daxpay.open.payment.masterdata.entity.product.PayProductConfig;
 import cn.daxpay.open.platform.core.enums.pay.config.PayEnvEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
@@ -40,6 +41,9 @@ public class PayProductConfigManager extends BaseManager<PayProductConfigMapper,
     }
 
     /// 读取产品当前是否沙箱(无配置视为生产)
+    ///
+    /// 缓存说明: 路由环境一致性校验高频调用, 配置低频修改。写侧通过 @CacheEvict 失效。
+    @Cacheable(value = "payment:product-sandbox", key = "#product")
     public boolean isSandboxActive(String product) {
         return findByProduct(product)
                 .map(PayProductConfig::getActiveEnv)

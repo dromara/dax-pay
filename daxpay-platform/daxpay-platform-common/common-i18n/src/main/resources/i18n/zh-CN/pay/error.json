@@ -82,6 +82,7 @@
     "refundStatusNotAllow": "当前支付单退款状态[{0}]不允许发起退款操作",
     "noDuplicate": "退款单号已存在",
     "amountExceed": "退款金额不能大于支付金额",
+    "amountInvalid": "退款金额必须大于零",
     "orderNotFound": "未查询到退款订单",
     "syncProcessing": "退款同步处理中，请勿重复操作",
     "noPermission": "该商户没有退款权限",

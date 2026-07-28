@@ -82,6 +82,7 @@
     "refundStatusNotAllow": "Current refund status [{0}] does not allow refund",
     "noDuplicate": "Refund number already exists",
     "amountExceed": "Refund amount cannot exceed payment amount",
+    "amountInvalid": "Refund amount must be greater than zero",
     "orderNotFound": "Refund order not found",
     "syncProcessing": "Refund sync in progress, do not repeat",
     "noPermission": "Merchant does not have refund permission",

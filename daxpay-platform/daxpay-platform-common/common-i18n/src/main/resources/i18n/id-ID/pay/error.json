@@ -82,6 +82,7 @@
     "refundStatusNotAllow": "Status pengembalian dana saat ini [{0}] tidak mengizinkan pengembalian dana",
     "noDuplicate": "Nomor pengembalian dana sudah ada",
     "amountExceed": "Jumlah pengembalian dana tidak boleh melebihi jumlah pembayaran",
+    "amountInvalid": "Jumlah pengembalian dana harus lebih besar dari nol",
     "orderNotFound": "Perintah pengembalian dana tidak ditemukan",
     "syncProcessing": "Sinkronisasi pengembalian dana sedang berlangsung, jangan ulangi",
     "noPermission": "Penjual tidak memiliki izin pengembalian dana",
