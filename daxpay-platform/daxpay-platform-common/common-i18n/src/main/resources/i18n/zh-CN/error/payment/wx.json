@@ -10,5 +10,6 @@
   "appNotBound": "未绑定可用的微信应用",
   "channelMerchantMismatch": "通道商户不存在或与商户号不匹配",
   "appNotConfigured": "未配置 {0} 对应的应用，请前往通道商户应用配置页绑定",
-  "appNotUnique": "存在多个 {0} 类型的应用，请显式配置能力绑定以明确选择"
+  "appNotUnique": "存在多个 {0} 类型的应用，请显式配置能力绑定以明确选择",
+  "mpAuthNotConfigured": "微信公众号认证配置未填写，请在「三方平台管理 → 微信公众号认证配置」中配置 AppId 和 AppSecret"
 }
