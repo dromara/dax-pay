@@ -47,6 +47,7 @@ public class AggregatePayService {
     public AggregatePayMetaResult getMeta(String orderNo, String clientEnvCode, String runtimeCode) {
         GatewayPayOrder order = gatewayPayAssistService.getOrderAndCheck(orderNo);
         if (!Objects.equals(order.getGatewayType(), GatewayPayTypeEnum.AGGREGATE.getCode())) {
+            // 聚合: 网关订单类型不匹配
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.gateway.typeMismatch");
         }
         ClientEnvEnum clientEnv = ClientEnvEnum.findByCode(clientEnvCode);
@@ -58,11 +59,13 @@ public class AggregatePayService {
         if (Objects.equals(order.getStatus(), GatewayOrderStatusEnum.PAYING.getCode())
                 && StrUtil.isNotBlank(order.getMethod())
                 && !Objects.equals(order.getMethod(), resolved.method())) {
+            // 聚合: 订单已锁定支付方式请勿切换
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.gateway.channelLocked");
         }
 
         GatewayAggregateConfig config = aggregateConfigManager.findByAppId(order.getAppId())
+                // 聚合: 应用未配置聚合扫码支付
                 .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "pay.error.gateway.aggregateConfigMissing"));
 
@@ -76,6 +79,7 @@ public class AggregatePayService {
     public NormalPayResult aggregateQrPay(AggregateQrPayParam param) {
         GatewayPayOrder order = gatewayPayAssistService.getOrderAndCheck(param.getOrderNo());
         if (!Objects.equals(order.getGatewayType(), GatewayPayTypeEnum.AGGREGATE.getCode())) {
+            // 聚合: 网关订单类型不匹配
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.gateway.typeMismatch");
         }
         ClientEnvEnum clientEnv = ClientEnvEnum.findByCode(param.getClientEnv());

@@ -37,6 +37,7 @@ public class CodePayResolveService {
     /// 必须已有码牌配置; 按 clientEnv + payForm 解析
     public Resolved resolveRequired(String appId, ClientEnvEnum clientEnv, CodePayFormEnum payForm) {
         GatewayCodeConfig config = configManager.findByAppId(appId)
+                // 码牌: 应用未配置码牌支付策略
                 .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "pay.error.gateway.codeConfigMissing"));
         AggregateConfigLevelEnum level = AggregateConfigLevelEnum.findByCode(config.getLevel());
@@ -47,6 +48,7 @@ public class CodePayResolveService {
             case METHOD -> {
                 GatewayCodeClientEnv envConfig = requireEnvConfig(config, clientEnv, form);
                 if (StrUtil.isBlank(envConfig.getMethod())) {
+                    // 码牌: 该客户端环境与支付形态未配置支付方式
                     throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                             "pay.error.gateway.codeClientEnvNotConfigured");
                 }
@@ -55,6 +57,7 @@ public class CodePayResolveService {
             case DIRECT -> {
                 GatewayCodeClientEnv envConfig = requireEnvConfig(config, clientEnv, form);
                 if (StrUtil.isBlank(envConfig.getChannelMchNo()) || StrUtil.isBlank(envConfig.getCapability())) {
+                    // 码牌: 该客户端环境与支付形态未配置支付方式
                     throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                             "pay.error.gateway.codeClientEnvNotConfigured");
                 }
@@ -74,7 +77,7 @@ public class CodePayResolveService {
         if (StrUtil.isBlank(inferred)) {
             PayCapabilityEnum capEnum = PayCapabilityEnum.findByCode(capability);
             String capLabel = capEnum != null ? I18nUtil.getEnumName(capEnum) : capability;
-            // 支付能力与通道商户不匹配（无法反推 method）
+            // 路由: 支付能力与通道商户不匹配
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.route.error.directCapabilityChannelMchMismatch", capLabel, channelMchNo);
         }
@@ -87,6 +90,7 @@ public class CodePayResolveService {
         GatewayCodeClientEnv envConfig = clientEnvManager.findByConfigIdAndClientEnvAndPayForm(
                 config.getId(), clientEnv.getCode(), payForm.getCode());
         if (envConfig == null) {
+            // 码牌: 该客户端环境与支付形态未配置支付方式
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.gateway.codeClientEnvNotConfigured");
         }

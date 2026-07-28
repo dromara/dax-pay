@@ -75,6 +75,7 @@ public class CodePayAssistService {
         DeviceQrCode entity = this.loadEnabledAssigned(code);
         // 忽略租户查商户: 公开 H5 无商户上下文; 仅取展示名, 不回 mchNo
         MerchantInfo merchant = merchantInfoManager.findByMchNoNotTenant(entity.getMchNo())
+                // 码牌: 码牌关联的商户不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.qrcode.mchNotFound"));
         // 展示优先简称, 空则回退全称
         String mchShortName = StrUtil.blankToDefault(merchant.getMchShortName(), merchant.getMchName());
@@ -195,9 +196,11 @@ public class CodePayAssistService {
     /// 查询码牌订单状态(忽略租户; 仅 cashier_code 来源)
     public CodePayOrderStatusResult orderStatus(String orderNo) {
         if (StrUtil.isBlank(orderNo)) {
+            // 参数校验: 订单号不能为空
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "validation.field.orderNo.notBlank");
         }
         NormalPayOrder order = normalPayOrderManager.findByOrderNoNotTenant(orderNo)
+                // 支付: 支付订单不存在
                 .orElseThrow(() -> new DataNotExistException("pay.error.payOrderNotExist"));
         if (!TradeSourceEnum.CASHIER_CODE.getCode().equals(order.getSource())) {
             // 非码牌订单, 视为不存在防越权探测
@@ -219,12 +222,14 @@ public class CodePayAssistService {
         try {
             reqRuntime = ClientRuntimeEnum.findByCode(runtime);
         } catch (Exception e) {
+            // 码牌: 码牌落地类型与运行形态不匹配
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.gateway.codeRuntimeMismatch");
         }
         boolean expectMini = payForm == CodePayFormEnum.MINI;
         boolean reqMini = reqRuntime == ClientRuntimeEnum.MINI;
         if (expectMini != reqMini) {
+            // 码牌: 码牌落地类型与运行形态不匹配
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.gateway.codeRuntimeMismatch");
         }
@@ -237,6 +242,7 @@ public class CodePayAssistService {
     /// - mchNo 为空 → 码牌未分配商户
     private DeviceQrCode loadEnabledAssigned(String code) {
         DeviceQrCode entity = deviceQrCodeManager.findByCode(code)
+                // 码牌: 码牌不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.qrcode.notFound"));
         if (!QrCodeStatusEnum.ENABLED.getCode().equals(entity.getStatus())) {
             // 码牌: 码牌未启用

@@ -72,6 +72,7 @@ public class PayCloseService {
             }
         }
         if (Objects.isNull(trade)) {
+            // 支付: 支付订单不存在
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.payOrderNotExist");
         }
         this.closeOrder(trade, param.isUseCancel());
@@ -81,6 +82,7 @@ public class PayCloseService {
     public void closeOrder(PayTrade trade, boolean useCancel) {
         if (!List.of(PayFundStatusEnum.INIT.getCode(), PayFundStatusEnum.PROCESSING.getCode())
                 .contains(trade.getStatus())) {
+            // 支付: 订单不是支付中, 无法进行关闭订单
             throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.pay.closeNotPaying");
         }
         lockExecutor.run(
@@ -91,11 +93,13 @@ public class PayCloseService {
                     // 持锁后二次读取状态, 避免与回调成功竞态把已成功单关掉
                     PayTrade locked = payTradeManager.findById(trade.getId()).orElse(null);
                     if (Objects.isNull(locked)) {
+                        // 支付: 支付订单不存在
                         throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.payOrderNotExist");
                     }
                     if (!List.of(PayFundStatusEnum.INIT.getCode(), PayFundStatusEnum.PROCESSING.getCode())
                             .contains(locked.getStatus())) {
                         // 状态已变(如回调已成功), 不写失败关单记录
+                        // 支付: 订单不是支付中, 无法进行关闭订单
                         throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.pay.closeNotPaying");
                     }
                     PayTrade current = locked;

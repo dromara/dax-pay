@@ -30,6 +30,7 @@ public class PayBarCodeUtil {
     /// 根据付款码解析平台支付方式枚举
     public PayMethodEnum resolveMethod(String authCode) {
         if (StrUtil.isBlank(authCode) || authCode.length() < 2) {
+            // 支付: 付款码无效
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.barcode.invalid");
         }
         String prefix = authCode.substring(0, 2);
@@ -42,6 +43,7 @@ public class PayBarCodeUtil {
         if (UNION_PREFIX.equals(prefix)) {
             return PayMethodEnum.UNION_BARCODE;
         }
+        // 支付: 不支持的付款码类型
         throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.barcode.unsupportedType");
     }
 
@@ -55,6 +57,7 @@ public class PayBarCodeUtil {
         }
         PayMethodEnum resolved = resolveMethod(authCode);
         if (!resolved.getCode().equals(methodCode)) {
+            // 支付: 付款码与支付方式不匹配
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.barcode.methodMismatch");
         }

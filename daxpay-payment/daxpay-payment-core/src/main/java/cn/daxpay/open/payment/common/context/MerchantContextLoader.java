@@ -46,6 +46,7 @@ public class MerchantContextLoader {
     /// 由各 `*CallbackController` 入口显式调用,替代已删除的 CallbackMchContextFilter。
     public void bindMchNoForCallback(String mchNo) {
         if (StrUtil.isBlank(mchNo)) {
+            // 商户: 商户上下文未装载
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.assist.mchContextMissing");
         }
         paymentContext.setMchNo(mchNo);

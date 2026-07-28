@@ -80,10 +80,12 @@ public class WechatTokenService {
                 newToken = wxMpService.getAccessToken();
             } catch (WxErrorException e) {
                 log.error("调用微信API获取AccessToken失败，wxAppId: {}, 错误: {}", wxAppId, e.getMessage());
+                // 微信: 刷新AccessToken失败
                 throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR, "error.channel.wechat.refreshAccessTokenFailed", e.getMessage());
             }
 
             if (StrUtil.isBlank(newToken)) {
+                // 微信: AccessToken为空
                 throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR, "error.channel.wechat.refreshAccessTokenEmpty");
             }
 
@@ -104,6 +106,7 @@ public class WechatTokenService {
             if (StrUtil.isNotBlank(token)) {
                 return token;
             }
+            // 微信: 获取AccessToken刷新锁失败
             throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR, "error.channel.wechat.accessTokenLockFailed");
         }
         return result.value();

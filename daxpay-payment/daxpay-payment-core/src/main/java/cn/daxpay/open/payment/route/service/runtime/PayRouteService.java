@@ -5,9 +5,6 @@ import cn.daxpay.open.payment.masterdata.dao.capability.PayProductCapabilityMana
 import cn.daxpay.open.payment.masterdata.dao.product.PayProductConfigManager;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
 import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
-import cn.daxpay.open.payment.route.dao.basic.PayRouteBasicConfigManager;
-import cn.daxpay.open.payment.route.dao.scene.PayRouteSceneConfigManager;
-import cn.daxpay.open.payment.route.dao.strategy.PayRouteStrategyManager;
 import cn.daxpay.open.payment.route.entity.basic.PayRouteBasicConfig;
 import cn.daxpay.open.payment.route.entity.scene.PayRouteSceneConfig;
 import cn.daxpay.open.payment.route.entity.strategy.PayRouteStrategy;
@@ -46,9 +43,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class PayRouteService {
 
-    private final PayRouteStrategyManager strategyManager;
-    private final PayRouteSceneConfigManager sceneConfigManager;
-    private final PayRouteBasicConfigManager basicConfigManager;
+    private final PayRouteBundleService routeBundleService;
     private final ChannelMerchantManager channelMerchantManager;
     private final PayProductCapabilityManager payProductCapabilityManager;
     private final PayCapabilityManager payCapabilityManager;
@@ -65,16 +60,19 @@ public class PayRouteService {
         }
         // 跟随通道路由: 支付方式必填(Bean Validation 已放宽以兼容直接指定可空, 此处显式校验)
         if (StrUtil.isBlank(payParam.getMethod())) {
+            // 路由: 通道路由下支付方式不能为空
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.route.error.methodRequired");
         }
         String appId = payParam.getAppId();
-        var bundle = loadBundle(appId);
+        var bundle = routeBundleService.loadBundle(appId);
         if (bundle == null || bundle.getStrategy() == null) {
+            // 路由: 应用未配置通道路由策略
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.route.error.strategyNotFound");
         }
         PayRouteStrategy strategy = bundle.getStrategy();
         RouteHit hit = matchByMode(bundle, payParam, strategy.getMode());
         if (hit == null) {
+            // 路由: 未匹配到可用支付产品
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.route.error.noMatch");
         }
         fillPayParam(payParam, hit);
@@ -98,6 +96,7 @@ public class PayRouteService {
         if (mchSandbox != prodSandbox) {
             log.info("通道商户[{}]固化环境(sandbox={})与产品[{}]当前生效环境(sandbox={})不匹配, 路由拒绝",
                     channelMchNo, mchSandbox, product, prodSandbox);
+            // 路由: 未匹配到可用支付产品(沙箱/生产环境不匹配)
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.route.error.noMatch");
         }
     }
@@ -110,12 +109,13 @@ public class PayRouteService {
         String capability = payParam.getCapability();
         // 直接指定: 支付能力必填
         if (StrUtil.isBlank(capability)) {
+            // 路由: 按支付方式配置时须选择支付能力
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.route.error.sceneCapabilityRequired");
         }
         String product = channelMerchantManager.requireProductByChannelMchNo(channelMchNo);
         if (!PaymentStrategyFactory.existsByProduct(product, AbsProductStrategy.class)) {
-            // 支付产品策略不存在
+            // 路由: 支付产品策略不存在
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.route.error.productStrategyMissing");
         }
@@ -127,6 +127,7 @@ public class PayRouteService {
                 // 支付能力[{0}]与通道商户[{1}]不匹配
                 PayCapabilityEnum capEnum = PayCapabilityEnum.findByCode(capability);
                 String capLabel = capEnum != null ? I18nUtil.getEnumName(capEnum) : capability;
+                // 路由: 支付能力与通道商户不匹配
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "pay.route.error.directCapabilityChannelMchMismatch", capLabel, channelMchNo);
             }
@@ -166,19 +167,6 @@ public class PayRouteService {
 
     // --- 路由模式 ---
 
-    /// 按应用号从库加载路由数据包（无 Redis 缓存）
-    private PayRouteBundle loadBundle(String appId) {
-        var strategyOpt = strategyManager.findByAppId(appId);
-        if (strategyOpt.isEmpty()) {
-            return null;
-        }
-        var strategy = strategyOpt.get();
-        return new PayRouteBundle()
-                .setStrategy(strategy)
-                .setBasicConfigs(basicConfigManager.findByStrategyId(strategy.getId()))
-                .setSceneConfigs(sceneConfigManager.findByStrategyId(strategy.getId()));
-    }
-
     /// 按路由模式匹配；未识别模式按场景模式处理
     private RouteHit matchByMode(PayRouteBundle bundle, NormalPayParam payParam, String mode) {
         if (Objects.equals(mode, PayRouteModeEnum.BASIC.getCode())) {
@@ -190,30 +178,30 @@ public class PayRouteService {
     /// 基础模式：按「支付渠道 → 通道商户」配置，结合支付方式解析通道商户、产品与能力
     private RouteHit matchBasic(List<PayRouteBasicConfig> basicConfigs, NormalPayParam payParam) {
         if (StrUtil.isBlank(payParam.getMethod())) {
-            // 场景模式下须选择支付方式
+            // 路由: 按支付方式配置时须选择支付方式
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.route.error.sceneMethodRequired");
         }
         PayMethodEnum methodEnum = PayMethodEnum.findByCode(payParam.getMethod());
         // 支付方式自带渠道属性(OTHER 等无归属时报错)
         PayProviderEnum provider = methodEnum.getProvider();
         if (provider == null) {
-            // 未指定支付产品时，支付渠道不能为空
+            // 路由: 未指定支付产品时支付渠道不能为空
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.route.error.providerRequired");
         }
         String channelMchNo = findConfiguredChannelMchNo(basicConfigs, provider.getCode());
         if (StrUtil.isBlank(channelMchNo)) {
-            // 支付渠道[{0}]未配置通道商户，请在通道路由基础模式中完成配置
+            // 路由: 支付渠道未配置通道商户
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.route.error.basicChannelMchNotConfigured", PayRouteI18nHelper.provider(provider.getCode()));
         }
         String product = channelMerchantManager.requireProductByChannelMchNo(channelMchNo);
         if (!PaymentStrategyFactory.existsByProduct(product, AbsProductStrategy.class)) {
-            // 支付产品策略不存在
+            // 路由: 支付产品策略不存在
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.route.error.productStrategyMissing");
         }
         if (!PaymentStrategyFactory.productSupportsProvider(product, provider)) {
-            // 支付渠道[{0}]下无可用支付产品
+            // 路由: 支付渠道下无可用支付产品
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.route.error.basicProductNotAvailable", PayRouteI18nHelper.provider(provider.getCode()));
         }
@@ -248,7 +236,7 @@ public class PayRouteService {
             return null;
         }
         if (StrUtil.isBlank(payParam.getMethod())) {
-            // 场景模式下须选择支付方式
+            // 路由: 按支付方式配置时须选择支付方式
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.route.error.sceneMethodRequired");
         }
         String method = payParam.getMethod();
@@ -259,7 +247,7 @@ public class PayRouteService {
             return null;
         }
         if (candidates.size() > 1) {
-            // 场景模式下同一支付方式存在多条配置
+            // 路由: 按支付方式配置下同一支付方式存在多条配置
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.route.error.duplicateSceneMethod",
                     method);
         }
@@ -287,7 +275,7 @@ public class PayRouteService {
         boolean matched = capabilityEnum != null
                 && ProductStrategySupport.capabilitiesForMethod(strategy, method).contains(capabilityEnum);
         if (!matched) {
-            // 支付能力[{0}]与产品[{1}]、支付方式[{2}]不匹配
+            // 路由: 支付能力与产品、支付方式不匹配
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.route.error.sceneCapabilityProductMismatch", capability, product, method.getCode());
         }

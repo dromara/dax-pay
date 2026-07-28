@@ -72,6 +72,7 @@ public class GatewayCashierConfigService {
         GatewayCashierItem entity = getRequired(param.getId());
         // 应用号不可变更
         if (!Objects.equals(entity.getAppId(), param.getAppId())) {
+            // 网关: 收银台支付项应用号不可修改
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.gateway.cashierItemAppIdImmutable");
         }
@@ -89,6 +90,7 @@ public class GatewayCashierConfigService {
 
     private GatewayCashierItem getRequired(Long id) {
         return itemManager.findById(id)
+                // 网关: 收银台支付项不存在
                 .orElseThrow(() -> new DataNotExistException("pay.error.gateway.cashierItemNotFound"));
     }
 
@@ -98,6 +100,7 @@ public class GatewayCashierConfigService {
             return null;
         }
         if (StrUtil.isBlank(clientEnv)) {
+            // 网关: H5收银台必须指定客户端环境
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.gateway.clientEnvRequired");
         }
@@ -115,6 +118,7 @@ public class GatewayCashierConfigService {
             clientEnv = null;
         } else {
             if (StrUtil.isBlank(clientEnv)) {
+                // 网关: H5收银台必须指定客户端环境
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "pay.error.gateway.clientEnvRequired");
             }
@@ -127,6 +131,7 @@ public class GatewayCashierConfigService {
 
         if (resolveMode == CashierItemResolveModeEnum.METHOD) {
             if (StrUtil.isBlank(method)) {
+                // 网关: 指定支付方式时支付方式必填
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "pay.error.gateway.cashierItemMethodRequired");
             }
@@ -135,10 +140,12 @@ public class GatewayCashierConfigService {
             capability = null;
         } else {
             if (StrUtil.isBlank(channelMchNo)) {
+                // 网关: 直接指定时通道商户号必填
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "pay.error.gateway.cashierItemChannelMchRequired");
             }
             if (StrUtil.isBlank(capability)) {
+                // 网关: 直接指定时支付能力必填
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "pay.error.gateway.cashierItemCapabilityRequired");
             }
@@ -148,6 +155,7 @@ public class GatewayCashierConfigService {
 
         String name = StrUtil.trim(param.getName());
         if (StrUtil.isBlank(name)) {
+            // 网关: 支付项名称不能为空
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.gateway.cashierItemNameRequired");
         }
@@ -164,6 +172,7 @@ public class GatewayCashierConfigService {
     private String validateClientEnvForType(GatewayCashierTypeEnum typeEnum, String clientEnv) {
         ClientEnvEnum env = ClientEnvEnum.findByCode(clientEnv);
         if (typeEnum == GatewayCashierTypeEnum.MINI && !MINI_CLIENT_ENVS.contains(env.getCode())) {
+            // 网关: 不支持的客户端环境
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.gateway.clientEnvNotSupport");
         }

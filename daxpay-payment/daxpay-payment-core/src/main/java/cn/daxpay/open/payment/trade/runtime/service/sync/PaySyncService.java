@@ -56,6 +56,7 @@ public class PaySyncService {
     public NormalPaySyncResult sync(NormalPaySyncParam param) {
         if (StrUtil.isBlank(param.getOrderNo()) && Objects.isNull(param.getBizOrderNo())
                 && Objects.isNull(param.getOutOrderNo())) {
+            // 支付: 支付订单号不能都为空
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.orderNoRequired");
         }
         PayTrade trade = null;
@@ -75,6 +76,7 @@ public class PaySyncService {
                     .orElse(null);
         }
         if (Objects.isNull(trade)) {
+            // 支付: 支付订单不存在
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.payOrderNotExist");
         }
         return this.syncPayOrder(trade);
@@ -84,6 +86,7 @@ public class PaySyncService {
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public NormalPaySyncResult syncPayOrder(PayTrade trade) {
         if (Objects.equals(trade.getStatus(), PayFundStatusEnum.INIT.getCode())) {
+            // 支付: 订单未开始支付请重新确认支付状态
             throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.pay.syncNotStarted");
         }
         return lockExecutor.execute(
@@ -238,6 +241,7 @@ public class PaySyncService {
                         order.getCapability(), order.getChannelAppId(), order.getClientIp());
             }
         }
+        // 支付: 支付订单不存在
         throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.payOrderNotExist");
     }
 

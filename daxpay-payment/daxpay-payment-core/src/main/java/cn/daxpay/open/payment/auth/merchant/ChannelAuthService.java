@@ -72,7 +72,7 @@ public class ChannelAuthService {
         // 会话已失效(且非平台级认证的无 session 兜底场景): 提示重新生成, 避免下游抛"不支持的能力: null"
         // 平台级 authType(如 alipay)不依赖 session 字段, 由 doAuth 内的兜底分支处理
         if (session == null && mapAuthTypeToSource(param.getAuthType()) == null) {
-            // 授权链接已失效, 请重新生成
+            // 认证: 授权链接已失效请重新生成
             throw new BizInfoException(DaxPayErrorCode.OPERATION_FAIL,
                     "pay.error.assist.authSessionExpired");
         }

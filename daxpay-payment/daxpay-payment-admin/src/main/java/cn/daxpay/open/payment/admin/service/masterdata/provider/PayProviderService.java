@@ -54,6 +54,7 @@ public class PayProviderService {
     /// 按支付渠道编码与支付方式编码查一条配置详情（含支持的产品列表）
     public PayProviderMethodResult get(String providerCode, String methodCode) {
         if (PayProviderEnum.findByCode(providerCode) == null) {
+            // 通道: 支付渠道无效
             throw new DataNotExistException("error.payment.capability.invalidProvider");
         }
         AdminDirectoryContext adminContext = loadAdminDirectoryContext();
@@ -61,6 +62,7 @@ public class PayProviderService {
                 .getOrDefault(providerCode, List.of()).stream()
                 .filter(r -> Objects.equals(r.methodEnum().getCode(), methodCode))
                 .findFirst()
+                // 通道: 支付方式不在目录中
                 .orElseThrow(() -> new DataNotExistException("error.payment.capability.methodNotInDirectory"));
         return toAdminMethod(providerCode, row, adminContext);
     }

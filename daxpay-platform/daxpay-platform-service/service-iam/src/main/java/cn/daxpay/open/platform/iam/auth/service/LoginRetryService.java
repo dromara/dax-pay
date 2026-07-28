@@ -32,6 +32,7 @@ public class LoginRetryService {
     /// 登录前检查
     public void checkBeforeLogin(UserDetail userDetail) {
         if (!UserStatusEnum.NORMAL.getCode().equals(userDetail.getStatus())) {
+            // 认证: 用户状态异常
             throw new LoginFailureException(userDetail.getAccount(), "error.auth.userStatusError");
         }
 
@@ -62,6 +63,7 @@ public class LoginRetryService {
         }
 
         long remainingMinutes = Math.max(1, java.time.Duration.between(now, lockTime).toMinutes() + 1);
+        // 认证: 登录重试次数过多已锁定
         throw new LoginFailureException(userDetail.getAccount(), "error.auth.loginRetryLock", remainingMinutes);
     }
 

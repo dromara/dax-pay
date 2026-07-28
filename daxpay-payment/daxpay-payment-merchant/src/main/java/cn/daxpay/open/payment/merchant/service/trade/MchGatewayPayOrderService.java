@@ -75,9 +75,11 @@ public class MchGatewayPayOrderService {
     /// 关闭/撤销订单
     public void close(Long id, boolean useCancel) {
         GatewayPayOrder order = gatewayPayOrderManager.findById(id)
+                // 支付: 支付订单不存在
                 .orElseThrow(() -> new DataNotExistException("pay.error.payOrderNotExist"));
         if (!List.of(GatewayOrderStatusEnum.WAIT_PAY.getCode(), GatewayOrderStatusEnum.PAYING.getCode())
                 .contains(order.getStatus())) {
+            // 支付: 订单不是支付中无法进行关闭订单
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.closeNotPaying");
         }
         PayTrade trade = payTradeManager.findByContainerId(id, PayTradeTypeEnum.GATEWAY.getCode()).orElse(null);
@@ -100,6 +102,7 @@ public class MchGatewayPayOrderService {
     private String requireMchNo() {
         String mchNo = paymentContext.getMchNo();
         if (mchNo == null || mchNo.isBlank()) {
+            // 商户: 数据错误未发现商户号
             throw new BizInfoException(CommonCode.FAIL_CODE, "error.payment.merchant.dataErrorNoMchNo");
         }
         return mchNo;

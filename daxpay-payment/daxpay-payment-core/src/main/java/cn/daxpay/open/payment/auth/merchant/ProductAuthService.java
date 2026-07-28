@@ -113,6 +113,7 @@ public class ProductAuthService {
             String resolvedMchNo = channelMerchantManager
                     .findByChannelMchNoNotTenant(session.getChannelMchNo())
                     .map(ChannelMerchant::getMchNo)
+                    // 认证: 通道商户不存在
                     .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                             "pay.error.assist.channelMchNotFound", session.getChannelMchNo()));
             merchantContextLoader.initMch(resolvedMchNo);
@@ -126,12 +127,13 @@ public class ProductAuthService {
         }
         // 缺失 product 时必须提供 channelMchNo 才能反查
         if (StrUtil.isBlank(param.getChannelMchNo())) {
-            // 支付产品与通道商户号至少传其一
+            // 认证: 支付产品与通道商户号至少传其一
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.assist.productOrChannelMchRequired");
         }
         return channelMerchantManager.findByChannelMchNo(param.getChannelMchNo())
                 .map(ChannelMerchant::getProduct)
+                // 认证: 通道商户不存在
                 .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "pay.error.assist.channelMchNotFound", param.getChannelMchNo()));
     }

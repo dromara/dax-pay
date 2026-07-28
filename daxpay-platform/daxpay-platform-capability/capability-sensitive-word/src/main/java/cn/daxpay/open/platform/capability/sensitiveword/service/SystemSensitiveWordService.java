@@ -54,6 +54,7 @@ public class SystemSensitiveWordService {
     public SystemSensitiveWordResult add(SystemSensitiveWordParam param) {
         String word = StrUtil.trim(param.getWord());
         if (systemSensitiveWordManager.existsByWord(word, null)) {
+            // 敏感词: 敏感词已存在
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.common.sensitiveWordDuplicate");
         }
@@ -92,6 +93,7 @@ public class SystemSensitiveWordService {
         if (StrUtil.isNotBlank(param.getWord())) {
             String word = StrUtil.trim(param.getWord());
             if (systemSensitiveWordManager.existsByWord(word, entity.getId())) {
+                // 敏感词: 敏感词已存在
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "error.common.sensitiveWordDuplicate");
             }
@@ -175,6 +177,7 @@ public class SystemSensitiveWordService {
 
     private void validateStatus(String status) {
         if (SensitiveWordStatusEnum.findByCode(status).isEmpty()) {
+            // 敏感词: 状态无效
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.common.sensitiveWordStatusInvalid");
         }
@@ -182,6 +185,7 @@ public class SystemSensitiveWordService {
 
     private void validateMatchMode(String mode) {
         if (SensitiveWordMatchModeEnum.findByCode(mode).isEmpty()) {
+            // 敏感词: 匹配模式无效
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.common.sensitiveWordMatchModeInvalid");
         }
@@ -189,6 +193,7 @@ public class SystemSensitiveWordService {
 
     private void validateCategory(String category) {
         if (SensitiveWordCategoryEnum.findByCode(category).isEmpty()) {
+            // 敏感词: 分类无效
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.common.sensitiveWordCategoryInvalid");
         }

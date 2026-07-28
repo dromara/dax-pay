@@ -20,6 +20,7 @@ import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.rest.dto.LabelValue;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -54,6 +55,7 @@ public class PayRouteBasicConfigService {
 
     /// 批量保存基础模式配置（先删后插）
     @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(value = "payment:route-bundle", key = "#param.appId")
     public void saveBasicBatch(PayRouteBasicConfigBatchParam param) {
         String mchNo = mchAppInfoManager.requireMchNoByAppId(param.getAppId());
         PayRouteStrategy strategy = requireStrategy(param.getAppId());
@@ -66,20 +68,21 @@ public class PayRouteBasicConfigService {
             // 校验通道商户属本商户且启用
             ChannelMerchant mch = channelMerchantManager
                     .findByMchNoAndChannelMchNo(mchNo, item.getChannelMchNo())
+                    // 路由: 通道商户不存在
                     .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                             "pay.route.error.channelMchNotExist", item.getChannelMchNo()));
             if (!Boolean.TRUE.equals(mch.getEnable())) {
-                // 通道商户[{0}]未启用
+                // 路由: 通道商户未启用
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "pay.route.error.channelMchDisabled", item.getChannelMchNo());
             }
             if (!PaymentStrategyFactory.productSupportsProvider(mch.getProduct(), provider)) {
-                // 支付渠道[{0}]下无可用支付产品
+                // 路由: 支付渠道下无可用支付产品
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "pay.route.error.basicProductNotAvailable", provider.getCode());
             }
             if (!PaymentStrategyFactory.existsByProduct(mch.getProduct(), AbsProductStrategy.class)) {
-                // 支付产品策略不存在
+                // 路由: 支付产品策略不存在
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "pay.route.error.productStrategyMissing");
             }
@@ -95,7 +98,7 @@ public class PayRouteBasicConfigService {
     private PayProviderEnum validateBasicPayProviderCode(String providerCode) {
         PayProviderEnum provider = PayProviderEnum.findByCode(providerCode);
         if (provider == null || !PayRouteConfigProviders.contains(providerCode)) {
-            // 支付渠道无效
+            // 路由: 支付渠道无效
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.route.error.basicProviderInvalid");
         }
         return provider;
@@ -120,6 +123,7 @@ public class PayRouteBasicConfigService {
     /// 按应用号加载路由策略，不存在则抛业务异常
     private PayRouteStrategy requireStrategy(String appId) {
         return strategyManager.findByAppId(appId)
+                // 路由: 通道路由策略不存在
                 .orElseThrow(() -> new DataNotExistException("pay.route.error.routeStrategyNotExist"));
     }
 }

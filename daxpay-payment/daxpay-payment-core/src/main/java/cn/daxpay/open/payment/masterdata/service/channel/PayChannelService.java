@@ -54,6 +54,7 @@ public class PayChannelService {
     private PayChannelResult resolveFromEnum(String code) {
         ChannelEnum enumVal = ChannelEnum.findByCode(code);
         if (enumVal == null) {
+            // 通道: 支付通道不存在
             throw new DataNotExistException("error.payment.channel.notExist");
         }
         return fillChannelName(toChannelResult(enumVal, Map.of()));

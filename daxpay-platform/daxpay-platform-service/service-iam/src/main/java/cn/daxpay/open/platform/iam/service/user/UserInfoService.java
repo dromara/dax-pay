@@ -103,10 +103,12 @@ public class UserInfoService {
             .orElseThrow(UserInfoNotExistsException::new);
         // 邮箱唯一性校验（排除自身）
         if (userQueryService.existsEmail(param.getEmail(), userId)) {
+            // 权限: 邮箱已被其他用户使用
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.emailUsedByOther");
         }
         // 手机号唯一性校验（排除自身）
         if (userQueryService.existsPhone(param.getPhone(), userId)) {
+            // 权限: 手机号已被其他用户使用
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.phoneUsedByOther");
         }
         UserConvert.CONVERT.copy(param, userExpandInfo);

@@ -87,20 +87,24 @@ public class WxPlatformAppCapabilityService {
         for (WxPlatformAppCapabilityParam item : items) {
             // 能力须属于该产品白名单
             if (!allowedCapabilities.contains(item.getCapability())) {
+                // 微信: 能力不在产品白名单内
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "error.payment.wx.appTypeCapabilityMismatch");
             }
             // 同产品内能力不可重复
             if (!capabilitySet.add(item.getCapability())) {
+                // 微信: 同产品内能力不可重复
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "error.payment.wx.appTypeCapabilityMismatch");
             }
             WxPlatformApp app = appMap.get(item.getWxPlatformAppId());
             if (app == null) {
+                // 微信: 平台应用不存在
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "error.payment.wx.appNotFound");
             }
             if (!WxAppTypeEnum.isCompatible(app.getAppType(), item.getCapability())) {
+                // 微信: 应用类型与支付能力不匹配
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "error.payment.wx.appTypeCapabilityMismatch");
             }

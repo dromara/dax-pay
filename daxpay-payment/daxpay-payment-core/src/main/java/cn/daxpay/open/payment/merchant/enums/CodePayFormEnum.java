@@ -59,6 +59,7 @@ public enum CodePayFormEnum implements I18nSupport {
                 case ALIPAY -> PayMethodEnum.ALIPAY_JSAPI.getCode();
                 case UNION_PAY -> PayMethodEnum.UNION_JSAPI.getCode();
                 case DOUYIN -> PayMethodEnum.DOUYIN_JSAPI.getCode();
+                // 码牌: 不支持的客户端环境
                 default -> throw new DataNotExistException("error.common.clientEnvNotExist", clientEnv.getCode());
             };
         }
@@ -68,6 +69,7 @@ public enum CodePayFormEnum implements I18nSupport {
             case ALIPAY -> PayMethodEnum.ALIPAY_QR.getCode();
             case UNION_PAY -> PayMethodEnum.UNION_JSAPI.getCode();
             case DOUYIN -> PayMethodEnum.DOUYIN_JSAPI.getCode();
+            // 码牌: 不支持的客户端环境
             default -> throw new DataNotExistException("error.common.clientEnvNotExist", clientEnv.getCode());
         };
     }

@@ -26,6 +26,7 @@ public class GatewayOrderQueryService {
     /// 按 orderNo 或 bizOrderNo 查询网关订单
     public GatewayOrderResult query(GatewayOrderQueryParam param) {
         if (StrUtil.isBlank(param.getOrderNo()) && StrUtil.isBlank(param.getBizOrderNo())) {
+            // 支付: 支付订单号不能都为空
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.orderNoRequired");
         }
         GatewayPayOrder order = null;
@@ -34,11 +35,13 @@ public class GatewayOrderQueryService {
         }
         if (order == null && StrUtil.isNotBlank(param.getBizOrderNo())) {
             if (StrUtil.isBlank(param.getAppId())) {
+                // 参数校验: 应用号不能为空
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "validation.field.appId.notBlank");
             }
             order = gatewayPayOrderManager.findByBizOrderNo(param.getBizOrderNo(), param.getAppId()).orElse(null);
         }
         if (order == null) {
+            // 支付: 支付订单不存在
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.payOrderNotExist");
         }
         return this.toResult(order);

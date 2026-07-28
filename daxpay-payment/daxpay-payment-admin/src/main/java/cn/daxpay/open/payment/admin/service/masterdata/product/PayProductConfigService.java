@@ -18,6 +18,7 @@ import cn.daxpay.open.platform.core.exception.BizInfoException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,9 +60,11 @@ public class PayProductConfigService {
     /// 仅更新 pay_md_product_config.activeEnv, 不级联回写通道商户 sandbox。
     /// 切换后: 已存在的通道商户保持各自固化环境; 新建商户的默认环境与路由目标环境随之变更。
     @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(value = "payment:product-sandbox", key = "#product")
     public void switchEnv(String product, boolean sandbox) {
         // 全局沙箱开关校验
         if (sandbox && !platformConfigProperties.isSandboxEnabled()) {
+            // 产品: 沙箱环境未开启
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.env.sandboxDisabled");
         }
 
@@ -78,10 +81,12 @@ public class PayProductConfigService {
 
     /// 保存或更新配置
     @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(value = "payment:product-sandbox", key = "#param.product")
     public void saveOrUpdate(PayProductConfigParam param) {
         // 全局沙箱开关校验
         if (PayEnvEnum.SANDBOX.getCode().equals(param.getActiveEnv())
                 && !platformConfigProperties.isSandboxEnabled()) {
+            // 产品: 沙箱环境未开启
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.env.sandboxDisabled");
         }
 

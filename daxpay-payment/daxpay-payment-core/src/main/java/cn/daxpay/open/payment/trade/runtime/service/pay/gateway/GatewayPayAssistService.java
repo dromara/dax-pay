@@ -103,11 +103,13 @@ public class GatewayPayAssistService {
             GatewayPayOrder order = existing.get();
             String status = order.getStatus();
             if (Objects.equals(status, GatewayOrderStatusEnum.PAID.getCode())) {
+                // 支付: 已经支付成功, 请勿重新支付
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.alreadySuccess");
             }
             // failed 与 closed/expired 同为终态, 不允许再返回原 URL 假装可付
             if (List.of(GatewayOrderStatusEnum.CLOSED.getCode(), GatewayOrderStatusEnum.EXPIRED.getCode(),
                     GatewayOrderStatusEnum.FAILED.getCode()).contains(status)) {
+                // 支付: 该订单支付失败或已经被关闭
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.failedOrClosed");
             }
             return this.buildPrePayResult(order);
@@ -151,6 +153,7 @@ public class GatewayPayAssistService {
     /// 引导读用 NotTenant 定位订单后 **立即** initMch，后续聚合配置/交易均走租户过滤。
     public GatewayPayOrder getOrderAndCheck(String orderNo) {
         GatewayPayOrder order = gatewayPayOrderManager.findByOrderNoNotTenant(orderNo)
+                // 支付: 支付订单不存在
                 .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "pay.error.payOrderNotExist"));
         // 立即装载商户上下文，防止后续 MchBaseEntity 查询无 mchNo
@@ -163,15 +166,18 @@ public class GatewayPayAssistService {
     public void checkPayable(GatewayPayOrder order) {
         String status = order.getStatus();
         if (Objects.equals(status, GatewayOrderStatusEnum.PAID.getCode())) {
+            // 支付: 已经支付成功, 请勿重新支付
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.alreadySuccess");
         }
         // 与 NormalPayOrder 终态校验对齐: failed / closed / expired 均不可继续支付
         if (List.of(GatewayOrderStatusEnum.CLOSED.getCode(), GatewayOrderStatusEnum.EXPIRED.getCode(),
                 GatewayOrderStatusEnum.FAILED.getCode()).contains(status)) {
+            // 支付: 该订单支付失败或已经被关闭
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.failedOrClosed");
         }
         if (Objects.nonNull(order.getExpiredTime())
                 && DateTimeUtil.ge(OffsetDateTime.now(ZoneOffset.UTC), order.getExpiredTime())) {
+            // 支付: 支付已超时, 请重新确认支付状态
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.timeoutRetry");
         }
     }

@@ -62,6 +62,7 @@ public class PermMenuService {
 
         // 菜单类型创建后不可修改
         if (!Objects.equals(permMenu.getMenuType(), param.getMenuType())) {
+            // 权限: 菜单类型不可变更
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.menu.typeImmutable");
         }
         // 校验父级菜单类型
@@ -225,6 +226,7 @@ public class PermMenuService {
     /// @return 父级菜单实体
     private PermMenu validateAndGetParent(Long pid, String needParentKey) {
         if (pid == null) {
+            // 权限: 菜单内嵌页面外链须选择上级目录
             throw new BizException(CommonCode.FAIL_CODE, needParentKey);
         }
         PermMenu parent = permMenuManager.findById(pid).orElse(null);

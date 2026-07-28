@@ -72,6 +72,7 @@ public final class PayTradeTransition {
     public static void assertLegal(String from, String to) {
         Set<String> allowed = FORWARD.get(from);
         if (allowed == null || !allowed.contains(to)) {
+            // 支付: 非法状态转换
             throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR,
                     "pay.error.pay.illegalTransition", from, to);
         }

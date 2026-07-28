@@ -67,6 +67,7 @@ public class GatewayPayHandleService {
                 () -> {
                     // 重新加载最新状态
                     GatewayPayOrder current = gatewayPayOrderManager.findById(order.getId())
+                            // 支付: 支付订单不存在
                             .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                                     "pay.error.payOrderNotExist"));
                     gatewayPayAssistService.checkPayable(current);
@@ -77,6 +78,7 @@ public class GatewayPayHandleService {
                             .orElse(null);
                     if (existing != null) {
                         if (Objects.equals(existing.getStatus(), PayFundStatusEnum.SUCCESS.getCode())) {
+                            // 支付: 已经支付成功请勿重新支付
                             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.alreadySuccess");
                         }
                         if (Objects.equals(existing.getStatus(), PayFundStatusEnum.PROCESSING.getCode())
@@ -92,6 +94,7 @@ public class GatewayPayHandleService {
                             }
                             if (!Objects.equals(current.getProduct(), effectiveProduct)
                                     || !Objects.equals(current.getMethod(), effectiveMethod)) {
+                                // 网关: 订单已锁定支付方式请勿切换
                                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                                         "pay.error.gateway.channelLocked");
                             }
@@ -101,6 +104,7 @@ public class GatewayPayHandleService {
                             }
                         } else {
                             // fail/close 等终态: 首期不允许换方式重试
+                            // 支付: 该订单支付失败或已经被关闭
                             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.failedOrClosed");
                         }
                     }
@@ -137,7 +141,10 @@ public class GatewayPayHandleService {
                     // 事后风控在 payAfterHandel(SUCCESS) 内统一补录
                     return self.paySuccess(current, existing, result);
                 },
-                () -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.processing")
+                () -> {
+                    // 支付: 支付处理中请勿重复操作
+                    return new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.processing");
+                }
         );
     }
 

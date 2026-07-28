@@ -118,11 +118,13 @@ public class PlatformFileService {
                 .orElseThrow(() -> new DataNotExistException("error.file.recordNotExist"));
 
         if (!FileUploadStatusEnum.PENDING.getCode().equals(platformFileRecord.getStatus())) {
+            // 文件: 文件状态不允许确认上传
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.file.statusInvalidForConfirm");
         }
 
         String objectKey = buildObjectKey(platformFileRecord.getPath(), platformFileRecord.getFilename());
         if (!objectKey.equals(param.getObjectKey())) {
+            // 文件: 对象Key不匹配
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.file.objectKeyMismatch");
         }
 
@@ -134,6 +136,7 @@ public class PlatformFileService {
 
         boolean exists = s3FileStorageService.exists(bucket, param.getObjectKey());
         if (!exists) {
+            // 文件: 文件未上传到存储
             throw new BizInfoException(DaxPayErrorCode.OPERATION_FAIL, "error.file.notUploadedToStorage");
         }
 
@@ -166,6 +169,7 @@ public class PlatformFileService {
                 .orElseThrow(() -> new DataNotExistException("error.file.recordNotExist"));
 
         if (!FileUploadStatusEnum.UPLOADED.getCode().equals(platformFileRecord.getStatus())) {
+            // 文件: 文件未上传无法访问
             throw new BizInfoException(DaxPayErrorCode.OPERATION_FAIL, "error.file.notUploadedForAccess");
         }
 
@@ -198,6 +202,7 @@ public class PlatformFileService {
                 .orElseThrow(() -> new DataNotExistException("error.file.recordNotExist"));
 
         if (!FileUploadStatusEnum.UPLOADED.getCode().equals(platformFileRecord.getStatus())) {
+            // 文件: 文件未上传无法下载
             throw new BizInfoException(DaxPayErrorCode.OPERATION_FAIL, "error.file.notUploadedForDownload");
         }
 
@@ -230,6 +235,7 @@ public class PlatformFileService {
                 .orElseThrow(() -> new DataNotExistException("error.file.recordNotExist"));
 
         if (!FileUploadStatusEnum.UPLOADED.getCode().equals(platformFileRecord.getStatus())) {
+            // 文件: 文件未上传无法下载
             throw new BizInfoException(DaxPayErrorCode.OPERATION_FAIL, "error.file.notUploadedForDownload");
         }
 

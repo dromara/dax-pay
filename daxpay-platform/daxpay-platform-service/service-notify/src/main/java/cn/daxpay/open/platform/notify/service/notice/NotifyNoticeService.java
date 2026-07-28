@@ -57,6 +57,7 @@ public class NotifyNoticeService {
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
         if (!noticeManager.existedById(id)) {
+            // 通知: 通知不存在
             throw new DataNotExistException("error.notify.notice.notExist");
         }
         noticeManager.deleteById(id);

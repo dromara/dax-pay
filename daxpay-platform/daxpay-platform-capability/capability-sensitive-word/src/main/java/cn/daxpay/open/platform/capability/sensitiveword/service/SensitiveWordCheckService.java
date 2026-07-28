@@ -94,9 +94,11 @@ public class SensitiveWordCheckService {
             }
         }
         if (sensitiveWordPolicy.isRevealWord()) {
+            // 敏感词: 命中敏感词
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.common.sensitiveWordHit", hitWord);
         }
+        // 敏感词: 命中敏感词
         throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                 "error.common.sensitiveWord");
     }

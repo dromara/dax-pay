@@ -138,6 +138,7 @@ public class MobileAppService {
 
         Set<MobilePlatformEnum> allowed = ALLOWED_PLATFORMS.get(appType);
         if (allowed == null || !allowed.contains(platform)) {
+            // 移动应用: 不支持的平台
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.mobile_app.platformNotAllowed",
                     appType.getCode(), platform.getCode());
@@ -155,6 +156,7 @@ public class MobileAppService {
             nestedCount++;
         }
         if (nestedCount != 1) {
+            // 移动应用: 配置解析异常
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.mobile_app.configRequired", platform.getCode());
         }
@@ -166,6 +168,7 @@ public class MobileAppService {
             default -> false;
         };
         if (!match) {
+            // 移动应用: 配置格式不匹配
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.mobile_app.configPlatformMismatch", platform.getCode());
         }
@@ -246,6 +249,7 @@ public class MobileAppService {
             return;
         }
         if (StrUtil.isBlank(config.getAppSecret())) {
+            // 移动应用: AppSecret不能为空
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "validation.field.appSecret.notBlank");
         }
@@ -256,6 +260,7 @@ public class MobileAppService {
             return;
         }
         if (StrUtil.isBlank(config.getAppSecret())) {
+            // 移动应用: AppSecret不能为空
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "validation.field.appSecret.notBlank");
         }
@@ -266,6 +271,7 @@ public class MobileAppService {
             return;
         }
         if (StrUtil.isBlank(config.getPrivateKey())) {
+            // 移动应用: 私钥不能为空
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "validation.field.privateKey.notBlank");
         }
@@ -274,10 +280,12 @@ public class MobileAppService {
             if (StrUtil.isBlank(config.getAppCert())
                     || StrUtil.isBlank(config.getAlipayCert())
                     || StrUtil.isBlank(config.getAlipayRootCert())) {
+                // 移动应用: 支付宝根证书不能为空
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "error.mobile_app.alipayCertRequired");
             }
         } else if (StrUtil.isBlank(config.getAlipayPublicKey())) {
+            // 移动应用: 支付宝公钥不能为空
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "validation.field.alipayPublicKey.notBlank");
         }
@@ -315,10 +323,12 @@ public class MobileAppService {
 
     private <T> T parseConfig(String json, Class<T> type) {
         if (StrUtil.isBlank(json)) {
+            // 移动应用: 移动应用配置不存在
             throw new DataNotExistException("error.mobile_app.notExist");
         }
         T config = JacksonUtil.toBean(json, type);
         if (config == null) {
+            // 移动应用: 移动应用配置不存在
             throw new DataNotExistException("error.mobile_app.notExist");
         }
         return config;

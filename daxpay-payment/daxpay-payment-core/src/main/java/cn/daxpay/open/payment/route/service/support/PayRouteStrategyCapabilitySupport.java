@@ -261,7 +261,7 @@ public class PayRouteStrategyCapabilitySupport {
     /// 校验场景配置项所选能力在候选集合内
     public void validateSceneCapability(String provider, String method, String channelMchNo, String capability) {
         if (StrUtil.isBlank(capability)) {
-            // 场景模式下须选择支付能力
+            // 路由: 按支付方式配置时须选择支付能力
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.route.error.sceneCapabilityRequired");
         }
@@ -270,7 +270,7 @@ public class PayRouteStrategyCapabilitySupport {
         if (!matched) {
             PayCapabilityEnum capabilityEnum = PayCapabilityEnum.findByCode(capability);
             String capabilityLabel = capabilityEnum != null ? I18nUtil.getEnumName(capabilityEnum) : capability;
-            // 支付能力[{0}]与通道商户[{1}]、支付方式[{2}]不匹配
+            // 路由: 支付能力与通道商户、支付方式不匹配
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.route.error.sceneCapabilityChannelMchMismatch",
                     capabilityLabel, channelMchNo, method);

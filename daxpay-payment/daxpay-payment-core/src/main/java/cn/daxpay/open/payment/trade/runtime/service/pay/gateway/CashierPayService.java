@@ -58,6 +58,7 @@ public class CashierPayService {
     public List<CashierItemPublicResult> listPublicItems(String orderNo, String cashierType, String clientEnv) {
         GatewayPayOrder order = gatewayPayAssistService.getOrderAndCheck(orderNo);
         if (!Objects.equals(order.getGatewayType(), GatewayPayTypeEnum.CASHIER.getCode())) {
+            // 网关: 网关订单类型不匹配
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.gateway.typeMismatch");
         }
         GatewayCashierTypeEnum typeEnum = GatewayCashierTypeEnum.findByCode(cashierType);
@@ -71,6 +72,7 @@ public class CashierPayService {
         // 订单已锁定但当前收银台桶(cashierType + clientEnv)无匹配项: 跨环境打开(如 web 锁定后 h5 打开),
         // 当前环境无法继续该锁定的支付, 提前拒绝, 避免用户进入后才在点支付时被拦截
         if (orderLocked && items.stream().noneMatch(item -> this.isLockedItem(item, order))) {
+            // 网关: 订单已锁定支付方式，请勿切换
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.gateway.channelLocked");
         }
@@ -101,6 +103,7 @@ public class CashierPayService {
     public NormalPayResult pay(CashierPayParam param) {
         GatewayPayOrder order = gatewayPayAssistService.getOrderAndCheck(param.getOrderNo());
         if (!Objects.equals(order.getGatewayType(), GatewayPayTypeEnum.CASHIER.getCode())) {
+            // 网关: 网关订单类型不匹配
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.gateway.typeMismatch");
         }
 
@@ -116,6 +119,7 @@ public class CashierPayService {
             case METHOD -> {
                 // 跟随通道路由: 仅 method
                 if (StrUtil.isBlank(item.getMethod())) {
+                    // 网关: 指定支付方式时支付方式必填
                     throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                             "pay.error.gateway.cashierItemMethodRequired");
                 }
@@ -124,6 +128,7 @@ public class CashierPayService {
             case DIRECT -> {
                 // 直接指定: channelMchNo + capability; method 可空由路由反推
                 if (StrUtil.isBlank(item.getChannelMchNo()) || StrUtil.isBlank(item.getCapability())) {
+                    // 网关: 直接指定时通道商户号必填
                     throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                             "pay.error.gateway.cashierItemChannelMchRequired");
                 }
@@ -131,8 +136,11 @@ public class CashierPayService {
                 capability = item.getCapability();
                 method = item.getMethod();
             }
-            default -> throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+            default -> {
+                // 网关: 不支持的客户端环境
+                throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.gateway.clientEnvNotSupport");
+            }
         }
 
         String clientIp = StrUtil.blankToDefault(param.getClientIp(), WebServletUtil.getClientIp());
@@ -148,22 +156,27 @@ public class CashierPayService {
     private GatewayCashierItem loadAndCheckItem(Long itemId, String appId,
                                                 GatewayCashierTypeEnum typeEnum, String bucketClientEnv) {
         GatewayCashierItem item = gatewayCashierItemManager.findById(itemId)
+                // 网关: 收银台支付项不存在
                 .orElseThrow(() -> new DataNotExistException("pay.error.gateway.cashierItemNotFound"));
         if (!Objects.equals(item.getAppId(), appId)) {
+            // 网关: 收银台支付项不存在(应用号不匹配)
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.gateway.cashierItemNotFound");
         }
         if (!Objects.equals(item.getCashierType(), typeEnum.getCode())) {
+            // 网关: 收银台支付项不存在(收银台类型不匹配)
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.gateway.cashierItemNotFound");
         }
         // H5/MINI: clientEnv 必须一致; WEB: 项上 clientEnv 为空
         if (!typeEnum.requiresClientEnv()) {
             if (StrUtil.isNotBlank(item.getClientEnv())) {
+                // 网关: 收银台支付项不存在(环境不一致)
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "pay.error.gateway.cashierItemNotFound");
             }
         } else if (!Objects.equals(item.getClientEnv(), bucketClientEnv)) {
+            // 网关: 收银台支付项不存在(环境不一致)
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.gateway.cashierItemNotFound");
         }
@@ -176,11 +189,13 @@ public class CashierPayService {
             return null;
         }
         if (StrUtil.isBlank(clientEnv)) {
+            // 网关: H5收银台必须指定客户端环境
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.gateway.clientEnvRequired");
         }
         ClientEnvEnum env = ClientEnvEnum.findByCode(clientEnv);
         if (typeEnum == GatewayCashierTypeEnum.MINI && !MINI_CLIENT_ENVS.contains(env.getCode())) {
+            // 网关: 不支持的客户端环境
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.gateway.clientEnvNotSupport");
         }

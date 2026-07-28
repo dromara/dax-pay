@@ -70,6 +70,7 @@ public class GatewayAuthService {
         ChannelAuthTypeEnum authType = ChannelAuthTypeEnum.findByCode(param.getAuthType());
 
         if (!SUPPORTED_AUTH_TYPES.contains(authType)) {
+            // 网关: 不支持的客户端环境
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.gateway.clientEnvNotSupport");
         }
@@ -111,12 +112,14 @@ public class GatewayAuthService {
         if (Objects.equals(gatewayType, GatewayPayTypeEnum.CASHIER.getCode())) {
             return resolveCashierRoute(order, param);
         }
+        // 网关: 网关订单类型不匹配
         throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.gateway.typeMismatch");
     }
 
     /// 聚合: ClientEnvPayResolve + PayRouteService(与 AggregatePayService 同源)
     private RouteSnapshot resolveAggregateRoute(GatewayPayOrder order, GatewayAuthUrlParam param) {
         if (StrUtil.isBlank(param.getClientEnv())) {
+            // 参数校验: 客户端环境不能为空
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "validation.field.clientEnv.notBlank");
         }
@@ -141,10 +144,12 @@ public class GatewayAuthService {
     /// 收银台: 按 itemId 解析 METHOD/DIRECT 后再路由(与 CashierPayService 同源)
     private RouteSnapshot resolveCashierRoute(GatewayPayOrder order, GatewayAuthUrlParam param) {
         if (param.getItemId() == null) {
+            // 参数校验: 收银台支付项 ID 不能为空
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "validation.field.itemId.notBlank");
         }
         if (StrUtil.isBlank(param.getCashierType())) {
+            // 参数校验: 收银台类型不能为空
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "validation.field.cashierType.notBlank");
         }
@@ -159,6 +164,7 @@ public class GatewayAuthService {
         switch (resolveMode) {
             case METHOD -> {
                 if (StrUtil.isBlank(item.getMethod())) {
+                    // 网关: 指定支付方式时支付方式必填
                     throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                             "pay.error.gateway.cashierItemMethodRequired");
                 }
@@ -166,6 +172,7 @@ public class GatewayAuthService {
             }
             case DIRECT -> {
                 if (StrUtil.isBlank(item.getChannelMchNo()) || StrUtil.isBlank(item.getCapability())) {
+                    // 网关: 直接指定时通道商户号必填
                     throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                             "pay.error.gateway.cashierItemChannelMchRequired");
                 }
@@ -173,8 +180,11 @@ public class GatewayAuthService {
                 capability = item.getCapability();
                 method = item.getMethod();
             }
-            default -> throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                    "pay.error.gateway.clientEnvNotSupport");
+            default -> {
+                // 网关: 不支持的客户端环境
+                throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                        "pay.error.gateway.clientEnvNotSupport");
+            }
         }
 
         NormalPayParam routeParam = new NormalPayParam();
@@ -195,21 +205,26 @@ public class GatewayAuthService {
     private GatewayCashierItem loadAndCheckItem(Long itemId, String appId,
                                                 GatewayCashierTypeEnum typeEnum, String bucketClientEnv) {
         GatewayCashierItem item = gatewayCashierItemManager.findById(itemId)
+                // 网关: 收银台支付项不存在
                 .orElseThrow(() -> new DataNotExistException("pay.error.gateway.cashierItemNotFound"));
         if (!Objects.equals(item.getAppId(), appId)) {
+            // 网关: 收银台支付项不存在（应用号不匹配）
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.gateway.cashierItemNotFound");
         }
         if (!Objects.equals(item.getCashierType(), typeEnum.getCode())) {
+            // 网关: 收银台支付项不存在（类型不匹配）
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.gateway.cashierItemNotFound");
         }
         if (!typeEnum.requiresClientEnv()) {
             if (StrUtil.isNotBlank(item.getClientEnv())) {
+                // 网关: 收银台支付项不存在（类型与环境不匹配）
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "pay.error.gateway.cashierItemNotFound");
             }
         } else if (!Objects.equals(item.getClientEnv(), bucketClientEnv)) {
+            // 网关: 收银台支付项不存在（环境不匹配）
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.gateway.cashierItemNotFound");
         }
@@ -222,11 +237,13 @@ public class GatewayAuthService {
             return null;
         }
         if (StrUtil.isBlank(clientEnv)) {
+            // 网关: H5收银台必须指定客户端环境
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.gateway.clientEnvRequired");
         }
         ClientEnvEnum env = ClientEnvEnum.findByCode(clientEnv);
         if (typeEnum == GatewayCashierTypeEnum.MINI && !MINI_CLIENT_ENVS.contains(env.getCode())) {
+            // 网关: 不支持的客户端环境
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.gateway.clientEnvNotSupport");
         }
@@ -236,6 +253,7 @@ public class GatewayAuthService {
     /// 校验并规范化 returnPath: 必须是以 / 开头的相对路径, 禁止协议/外链/反斜杠
     private String sanitizeReturnPath(String returnPath, String orderNo) {
         if (StrUtil.isBlank(returnPath)) {
+            // 参数校验: 回跳路径不能为空
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "validation.field.returnPath.notBlank");
         }
@@ -245,6 +263,7 @@ public class GatewayAuthService {
                 || path.contains("://")
                 || path.contains("\\")
                 || path.contains("@")) {
+            // 网关: 授权回跳路径不合法
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.gateway.returnPathInvalid");
         }
@@ -252,6 +271,7 @@ public class GatewayAuthService {
                 || path.startsWith("/aggregate/")
                 || path.startsWith("/h/");
         if (!allowedPrefix || !path.contains(orderNo)) {
+            // 网关: 授权回跳路径不合法
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.gateway.returnPathInvalid");
         }

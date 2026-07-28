@@ -24,6 +24,7 @@ import cn.daxpay.open.platform.core.rest.dto.ChannelMchOption;
 import cn.daxpay.open.platform.core.rest.dto.LabelValue;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,6 +60,7 @@ public class PayRouteSceneConfigService {
 
     /// 批量保存场景模式配置（全量覆盖：method 唯一、通道商户/能力校验）
     @Transactional(rollbackFor = Exception.class)
+    @CacheEvict(value = "payment:route-bundle", key = "#param.appId")
     public void saveSceneBatch(PayRouteSceneConfigBatchParam param) {
         String mchNo = mchAppInfoManager.requireMchNoByAppId(param.getAppId());
         PayRouteStrategy strategy = requireStrategy(param.getAppId());
@@ -83,10 +85,11 @@ public class PayRouteSceneConfigService {
             // 校验通道商户属本商户且启用
             ChannelMerchant mch = channelMerchantManager
                     .findByMchNoAndChannelMchNo(mchNo, item.getChannelMchNo())
+                    // 路由: 通道商户不存在
                     .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                             "pay.route.error.channelMchNotExist", item.getChannelMchNo()));
             if (!Boolean.TRUE.equals(mch.getEnable())) {
-                // 通道商户[{0}]未启用
+                // 路由: 通道商户未启用
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "pay.route.error.channelMchDisabled", item.getChannelMchNo());
             }
@@ -94,6 +97,7 @@ public class PayRouteSceneConfigService {
             // 校验产品支持该(provider, method)
             if (!payRouteStrategyCapabilitySupport.routeProductSupportsMethod(
                     product, providerCode, item.getMethod())) {
+                // 路由: 支付方式与产品不匹配
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "pay.route.error.sceneMethodProductMismatch",
                         PayRouteI18nHelper.payMethod(item.getMethod()), PayRouteI18nHelper.product(product));
@@ -151,7 +155,7 @@ public class PayRouteSceneConfigService {
                 continue;
             }
             if (!methodKeys.add(item.getMethod())) {
-                // 场景模式下同一支付方式存在多条配置
+                // 路由: 按支付方式配置下同一支付方式存在多条配置
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "pay.route.error.duplicateSceneMethod", PayRouteI18nHelper.payMethod(item.getMethod()));
             }
@@ -169,7 +173,7 @@ public class PayRouteSceneConfigService {
             if (hasMch == hasCap) {
                 continue;
             }
-            // 支付方式[{0}]须同时选择通道商户与支付能力，或同时留空
+            // 路由: 须同时选择通道商户与支付能力或同时留空
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.route.error.sceneChannelMchCapabilityPair", PayRouteI18nHelper.payMethod(item.getMethod()));
         }
@@ -189,6 +193,7 @@ public class PayRouteSceneConfigService {
         if (StrUtil.isBlank(providerCode)) {
             // 非品牌绑定行：只能是跨支付渠道通用支付方式
             if (!genericMethod) {
+                // 路由: 非通用支付方式须指定支付渠道
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "pay.route.error.scenePayProviderRequiredForMethod", PayRouteI18nHelper.payMethod(method));
             }
@@ -196,12 +201,13 @@ public class PayRouteSceneConfigService {
         }
         PayProviderEnum provider = PayProviderEnum.findByCode(providerCode);
         if (provider == null) {
+            // 路由: 支付渠道无效
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.route.error.basicProviderInvalid");
         }
         // 品牌绑定行：须在合并且启用的渠道支付方式目录内
         if (!payProviderMethodService.contains(providerCode, method)) {
-            // 能力: 支付方式不在渠道目录中
+            // 路由: 支付方式不在渠道目录中
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.payment.capability.methodNotInDirectory",
                     PayRouteI18nHelper.payMethod(method), PayRouteI18nHelper.provider(providerCode));
@@ -211,6 +217,7 @@ public class PayRouteSceneConfigService {
     /// 按应用号加载路由策略，不存在则抛业务异常
     private PayRouteStrategy requireStrategy(String appId) {
         return strategyManager.findByAppId(appId)
+                // 路由: 通道路由策略不存在
                 .orElseThrow(() -> new DataNotExistException("pay.route.error.routeStrategyNotExist"));
     }
 }

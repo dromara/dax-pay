@@ -91,6 +91,7 @@ public class DouyinOpenTokenService {
             if (StrUtil.isNotBlank(cached)) {
                 return cached;
             }
+            // 抖音: 获取client_access_token刷新锁失败
             throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR,
                     "error.channel.douyin.tokenLockFailed");
         }
@@ -132,6 +133,7 @@ public class DouyinOpenTokenService {
             if (StrUtil.isNotBlank(cached)) {
                 return cached;
             }
+            // 抖音: 获取jsapi_ticket刷新锁失败
             throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR,
                     "error.channel.douyin.ticketLockFailed");
         }
@@ -144,6 +146,7 @@ public class DouyinOpenTokenService {
     /// 详情参考: https://developer.open-douyin.com/docs/resource/zh-CN/dop/develop/sdk/web-app/js/signature
     public DouyinJsapiConfigResult buildJsapiConfig(String clientKey, String clientSecret, String url) {
         if (StrUtil.hasBlank(clientKey, clientSecret, url)) {
+            // 抖音: JS-SDK配置参数不能为空
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.channel.douyin.jsapiConfigParamBlank");
         }
@@ -197,18 +200,21 @@ public class DouyinOpenTokenService {
         JSONObject obj = JSONUtil.parseObj(respBody);
         JSONObject data = obj.getJSONObject("data");
         if (data == null) {
+            // 抖音: 开放平台接口调用失败
             throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR,
                     "error.channel.douyin.openApiFailed", obj.getStr("message", respBody));
         }
         // 抖音错误码: data.error_code 非 0 视为失败
         int errorCode = data.getInt("error_code", -1);
         if (errorCode != 0) {
+            // 抖音: 开放平台接口返回错误
             throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR,
                     "error.channel.douyin.openApiFailed",
                     data.getStr("description", "error_code=" + errorCode));
         }
         String value = data.getStr(field);
         if (StrUtil.isBlank(value)) {
+            // 抖音: 开放平台接口返回字段为空
             throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR,
                     "error.channel.douyin.openApiFailed", field + " is blank");
         }

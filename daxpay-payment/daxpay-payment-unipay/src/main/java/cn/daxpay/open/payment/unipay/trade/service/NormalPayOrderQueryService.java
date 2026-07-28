@@ -33,14 +33,17 @@ public class NormalPayOrderQueryService {
     public NormalPayOrderResult queryPayOrder(NormalPayQueryParam param) {
         // 校验参数, 支付订单号和商户订单号不能都为空
         if (StrUtil.isBlank(param.getOrderNo()) && Objects.isNull(param.getBizOrderNo())) {
+            // 支付: 支付订单号不能都为空
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.orderNoRequired");
         }
         NormalPayOrder order;
         // 优先按平台交易号(orderNo = tradeNo)查询
         if (StrUtil.isNotBlank(param.getOrderNo())) {
             PayTrade trade = payTradeManager.findByTradeNo(param.getOrderNo())
+                    // 支付: 支付订单不存在
                     .orElseThrow(() -> new DataNotExistException("pay.error.payOrderNotExist"));
             order = normalPayOrderManager.findById(trade.getContainerId())
+                    // 支付: 支付订单不存在
                     .orElseThrow(() -> new DataNotExistException("pay.error.payOrderNotExist"));
         } else {
             // 按商户业务单号查询

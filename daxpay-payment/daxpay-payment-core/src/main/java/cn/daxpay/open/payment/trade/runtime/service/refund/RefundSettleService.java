@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.util.Objects;
+import java.util.Set;
 
 /// # 退款结算服务
 ///
@@ -52,8 +53,14 @@ public class RefundSettleService {
     /// 预占可退余额(调用方须已持有 [lockKey] 对应锁)
     @Transactional(rollbackFor = Exception.class)
     public void reserveBalanceUnderLock(PayTrade trade, long amount) {
+        // 退款金额必须大于零（防止零值/负值放行导致 refundableBalance 反增）
+        if (amount <= 0) {
+            // 退款: 退款金额必须大于零
+            throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.refund.amountInvalid");
+        }
         long balance = trade.getRefundableBalance() == null ? 0 : trade.getRefundableBalance();
         if (amount > balance) {
+            // 退款: 退款金额不能大于支付金额
             throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.refund.amountExceed");
         }
         trade.setRefundableBalance(balance - amount);
@@ -94,7 +101,14 @@ public class RefundSettleService {
         applyChannelRefs(refundOrder, finishTime, outRefundNo, relationOrderNo);
         refundOrder.setStatus(RefundOrderStatusEnum.SUCCESS.getCode());
         refundOrder.setErrorMsg(null);
-        refundOrderManager.updateById(refundOrder);
+        // CAS: 仅 PROGRESS 可转 SUCCESS（锁内防御性兜底，与支付侧对称）
+        boolean updated = refundOrderManager.casUpdateStatus(
+                refundOrder, Set.of(RefundOrderStatusEnum.PROGRESS.getCode()));
+        if (!updated) {
+            log.info("退款成功结算CAS竞争失败: refundNo={} 状态已被其他线程改变",
+                    refundOrder.getRefundNo());
+            return false;
+        }
         // 商户出站通知(系统协议)
         tradeNoticeBridge.dispatchRefund(refundOrder, NoticeEventEnum.REFUND_SUCCESS);
         // 插件: 按原支付 tradeNo 回查资金单后广播退款成功
@@ -160,10 +174,19 @@ public class RefundSettleService {
         if (errorMsg != null) {
             refundOrder.setErrorMsg(StrUtil.maxLength(errorMsg, 500));
         }
-        refundOrderManager.updateById(refundOrder);
-        // 商户出站通知: 关闭终态发 refund.close（失败暂不推，避免与关闭语义混淆）
+        // CAS: 仅 PROGRESS 可转 FAIL/CLOSE（锁内防御性兜底）
+        boolean updated = refundOrderManager.casUpdateStatus(
+                refundOrder, Set.of(RefundOrderStatusEnum.PROGRESS.getCode()));
+        if (!updated) {
+            log.info("退款失败/关闭结算CAS竞争失败: refundNo={} 状态已被其他线程改变",
+                    refundOrder.getRefundNo());
+            return false;
+        }
+        // 商户出站通知: 关闭终态发 refund.close；失败终态发 refund.fail
         if (close) {
             tradeNoticeBridge.dispatchRefund(refundOrder, NoticeEventEnum.REFUND_CLOSE);
+        } else {
+            tradeNoticeBridge.dispatchRefund(refundOrder, NoticeEventEnum.REFUND_FAIL);
         }
         // 插件: 失败/关闭广播
         payTradeManager.findByTradeNo(refundOrder.getTradeNo()).ifPresent(trade ->
@@ -189,7 +212,9 @@ public class RefundSettleService {
         } else {
             refundOrder.setErrorMsg(null);
         }
-        refundOrderManager.updateById(refundOrder);
+        // CAS: 仅非终态(PROGRESS)可回写（防御性兜底）
+        refundOrderManager.casUpdateStatus(
+                refundOrder, Set.of(RefundOrderStatusEnum.PROGRESS.getCode()));
     }
 
     /// 回写通道关联号/完成时间

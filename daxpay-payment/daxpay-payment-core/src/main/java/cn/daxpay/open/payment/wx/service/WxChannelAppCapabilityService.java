@@ -63,6 +63,7 @@ public class WxChannelAppCapabilityService {
     public void saveBatch(String mchNo, String channelMchNo, List<WxChannelAppCapabilityParam> items) {
         // mchNo 缺失直接归入"通道商户与商户号不匹配"，避免下方 equals 触发 NPE
         if (mchNo == null || mchNo.isBlank()) {
+            // 微信: 通道商户与商户号不匹配
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.payment.wx.channelMerchantMismatch");
         }

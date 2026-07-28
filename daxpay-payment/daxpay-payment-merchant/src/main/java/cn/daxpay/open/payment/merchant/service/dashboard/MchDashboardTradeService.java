@@ -53,6 +53,7 @@ public class MchDashboardTradeService {
     private String requireMchNo() {
         String mchNo = paymentContext.getMchNo();
         if (mchNo == null || mchNo.isBlank()) {
+            // 商户: 数据错误未发现商户号
             throw new BizInfoException(CommonCode.FAIL_CODE, "error.payment.merchant.dataErrorNoMchNo");
         }
         return mchNo;

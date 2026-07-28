@@ -118,6 +118,7 @@ public class MerchantUserService {
     @Transactional(rollbackFor = Exception.class)
     public void forgot(MerchantForgotParam param) {
         if (StrUtil.isBlank(param.getPhone())) {
+            // 商户: 账号或手机号不匹配
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.payment.merchant.accountOrPhoneError");
         }
         // 按商户终端 + 账号查找用户
@@ -128,6 +129,7 @@ public class MerchantUserService {
         // 绑定手机号核验: 未绑定或与请求不一致均拒绝
         if (StrUtil.isBlank(userInfo.getPhone())
                 || !Objects.equals(userInfo.getPhone(), param.getPhone())) {
+            // 商户: 账号或手机号不匹配
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.payment.merchant.accountOrPhoneError");
         }

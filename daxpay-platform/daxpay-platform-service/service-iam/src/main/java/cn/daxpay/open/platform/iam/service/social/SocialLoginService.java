@@ -200,6 +200,7 @@ public class SocialLoginService {
         UserInfoResult userInfo = userQueryService.findById(userId);
         // 绑定用户必须属于当前登录终端, 防止运营/商户串号
         if (!Objects.equals(clientCode, userInfo.getClientCode())) {
+            // 社交登录: 绑定用户不属于当前终端
             throw new LoginFailureException(userId, userInfo.getAccount(), "error.auth.clientMismatch");
         }
         UserDetail userDetail = userInfo.toUserDetail();

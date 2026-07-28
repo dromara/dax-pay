@@ -194,26 +194,31 @@ public class NormalPayAssistService {
         // 容器状态检查
         String bizStatus = normalOrder.getStatus();
         if (Objects.equals(bizStatus, NormalPayOrderStatusEnum.PAID.getCode())) {
+            // 支付: 已经支付成功, 请勿重新支付
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.alreadySuccess");
         }
         if (Objects.equals(bizStatus, NormalPayOrderStatusEnum.CLOSED.getCode())
                 || Objects.equals(bizStatus, NormalPayOrderStatusEnum.EXPIRED.getCode())
                 || Objects.equals(bizStatus, NormalPayOrderStatusEnum.FAILED.getCode())) {
+            // 支付: 该订单支付失败或已经被关闭
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.failedOrClosed");
         }
         // 资金状态检查
         String fundStatus = trade.getStatus();
         if (Objects.equals(fundStatus, PayFundStatusEnum.SUCCESS.getCode())) {
+            // 支付: 已经支付成功, 请勿重新支付
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.alreadySuccess");
         }
         if (Objects.equals(fundStatus, PayFundStatusEnum.CLOSE.getCode())
                 || Objects.equals(fundStatus, PayFundStatusEnum.FAIL.getCode())
                 || Objects.equals(fundStatus, PayFundStatusEnum.CANCEL.getCode())) {
+            // 支付: 该订单支付失败或已经被关闭
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.failedOrClosed");
         }
         // 超时检查
         if (Objects.nonNull(normalOrder.getExpiredTime())
                 && DateTimeUtil.ge(OffsetDateTime.now(ZoneOffset.UTC), normalOrder.getExpiredTime())) {
+            // 支付: 支付已超时, 请重新确认支付状态
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.timeoutRetry");
         }
     }
@@ -255,6 +260,7 @@ public class NormalPayAssistService {
     public void validationExpiredTime(OffsetDateTime expiredTime) {
         if (Objects.nonNull(expiredTime)
                 && DateTimeUtil.lt(expiredTime, OffsetDateTime.now(ZoneOffset.UTC))) {
+            // 支付: 支付超时时间设置有误, 请检查
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.expiredTimeError");
         }
     }

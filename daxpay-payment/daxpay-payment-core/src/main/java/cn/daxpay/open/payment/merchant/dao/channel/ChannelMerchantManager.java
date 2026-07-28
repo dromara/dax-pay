@@ -14,6 +14,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -66,6 +67,11 @@ public class ChannelMerchantManager extends BaseManager<ChannelMerchantMapper, C
     }
 
     /// 根据通道商户号查询唯一通道商户(通道商户号为系统生成号, 全局唯一, 不存在返回 empty)
+    ///
+    /// 缓存说明: 运行时路由高频调用, 配置态低频修改。写侧通过 @CacheEvict 失效。
+    /// @Cacheable 不缓存 null(由 RedisCacheConfiguration.disableCachingNullValues 保证),
+    /// 但 Optional.empty() 非 null 可正常缓存。
+    @Cacheable(value = "payment:channel-mch", key = "#channelMchNo")
     public Optional<ChannelMerchant> findByChannelMchNo(String channelMchNo){
         return this.lambdaQuery()
                 .eq(ChannelMerchant::getChannelMchNo, channelMchNo)
@@ -95,11 +101,13 @@ public class ChannelMerchantManager extends BaseManager<ChannelMerchantMapper, C
     /// 通道商户号 → 产品编码；空白或不存在抛业务异常（运行时路由用，仅单次路径）
     public String requireProductByChannelMchNo(String channelMchNo) {
         if (StrUtil.isBlank(channelMchNo)) {
+            // 路由: 通道商户号不能为空
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.route.error.channelMchNoRequired");
         }
         return findByChannelMchNo(channelMchNo)
                 .map(ChannelMerchant::getProduct)
+                // 路由: 通道商户不存在
                 .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "pay.route.error.channelMchNotExist", channelMchNo));
     }

@@ -82,6 +82,7 @@ public enum ClientEnvEnum implements I18nSupport {
             };
         }
         if (method == null) {
+            // 网关: 不支持的客户端环境
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.gateway.clientEnvNotSupport");
         }
         return method.getCode();

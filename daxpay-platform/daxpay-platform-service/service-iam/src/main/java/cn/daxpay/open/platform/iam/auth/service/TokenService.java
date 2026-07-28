@@ -108,6 +108,7 @@ public class TokenService {
         TwoFactorPreAuthService.PreAuthContext context = twoFactorPreAuthService.get(preAuthToken);
         // 临时凭证无效或已过期
         if (context == null) {
+            // 认证: 双因素预认证已过期
             throw new LoginFailureException("error.auth.twoFactorPreAuthExpired");
         }
         Long userId = context.userId();
@@ -287,6 +288,7 @@ public class TokenService {
                     ? StpUtil.getTokenValueListByLoginId(userId, clientCode)
                     : StpUtil.getTokenValueListByLoginId(userId);
             if (tokens.size() >= max) {
+                // 认证: 超出并发登录限制
                 throw new LoginFailureException("error.auth.concurrentLimitExceeded");
             }
             model.setIsConcurrent(true);

@@ -124,12 +124,14 @@ public class NotifyUserNoticeService {
             return detailMessage(id, userId);
         }
         // 未知类型
+        // 通知: 通知不存在
         throw new DataNotExistException("error.common.dataNotExist");
     }
 
     /// 公告详情(校验已发布且在生效期内, 渲染 Markdown 为 HTML, 填充当前用户阅读状态)
     private NotifyNoticeBriefResult detailNotice(Long id, Long userId) {
         NotifyNotice notice = noticeManager.findById(id)
+            // 通知: 通知不存在
             .orElseThrow(() -> new DataNotExistException("error.notify.notice.notExist"));
         // 可见性校验: 与 list 的 findVisibleNotices 保持一致
         OffsetDateTime now = OffsetDateTime.now();
@@ -151,6 +153,7 @@ public class NotifyUserNoticeService {
         NotifyMessage message = messageManager.findById(id)
             .orElseThrow(() -> new DataNotExistException("error.common.dataNotExist"));
         if (!userId.equals(message.getUserId())) {
+            // 通知: 通知不存在
             throw new DataNotExistException("error.common.dataNotExist");
         }
         return NotifyNoticeConvert.CONVERT.convert(message);

@@ -54,6 +54,7 @@ public class MchTerminalDeviceService {
     private String requireMchNo() {
         String mchNo = paymentContext.getMchNo();
         if (StrUtil.isBlank(mchNo)) {
+            // 终端: 商户上下文未装载, 无法进行数据隔离操作
             throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.assist.mchContextMissing");
         }
         return mchNo;
@@ -87,6 +88,7 @@ public class MchTerminalDeviceService {
     @Transactional(rollbackFor = Exception.class)
     public void update(TerminalDeviceParam param) {
         TerminalDevice entity = terminalDeviceManager.findById(param.getId())
+                // 终端: 系统终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.systemNotFound"));
         this.checkTerminal(entity);
         String storeNo = resolveStoreNo(param.getStoreNo(), entity.getMchNo());
@@ -108,6 +110,7 @@ public class MchTerminalDeviceService {
     /// 详情
     public TerminalDeviceResult findById(Long id) {
         TerminalDevice entity = terminalDeviceManager.findById(id)
+                // 终端: 系统终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.systemNotFound"));
         this.checkTerminal(entity);
         TerminalDeviceResult result = entity.toResult();
@@ -126,6 +129,7 @@ public class MchTerminalDeviceService {
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
         TerminalDevice entity = terminalDeviceManager.findById(id)
+                // 终端: 系统终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.systemNotFound"));
         this.checkTerminal(entity);
         terminalChannelBindManager.deleteBySystemTerminalNo(entity.getTerminalNo());
@@ -136,9 +140,11 @@ public class MchTerminalDeviceService {
     @Transactional(rollbackFor = Exception.class)
     public void bind(TerminalChannelBindParam param) {
         TerminalDevice system = terminalDeviceManager.findByTerminalNo(param.getSystemTerminalNo())
+                // 终端: 系统终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.systemNotFound"));
         this.checkTerminal(system);
         ChannelTerminal channel = channelTerminalManager.findById(param.getChannelTerminalId())
+                // 终端: 通道终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.channelNotFound"));
         if (!Objects.equals(system.getMchNo(), channel.getMchNo())
                 || !Objects.equals(channel.getMchNo(), requireMchNo())) {
@@ -160,6 +166,7 @@ public class MchTerminalDeviceService {
     @Transactional(rollbackFor = Exception.class)
     public void unbind(TerminalChannelBindParam param) {
         TerminalDevice system = terminalDeviceManager.findByTerminalNo(param.getSystemTerminalNo())
+                // 终端: 系统终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.systemNotFound"));
         this.checkTerminal(system);
         if (!terminalChannelBindManager.existsBind(param.getSystemTerminalNo(), param.getChannelTerminalId())) {
@@ -172,6 +179,7 @@ public class MchTerminalDeviceService {
     /// 已绑定的通道终端列表
     public List<ChannelTerminalResult> listBoundChannel(String terminalNo) {
         TerminalDevice system = terminalDeviceManager.findByTerminalNo(terminalNo)
+                // 终端: 系统终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.systemNotFound"));
         this.checkTerminal(system);
         List<Long> channelIds = terminalChannelBindManager.findBySystemTerminalNo(system.getTerminalNo()).stream()
@@ -205,6 +213,7 @@ public class MchTerminalDeviceService {
             }
             terminalNo = "D" + RandomUtil.randomNumbers(16);
         }
+        // 终端: 终端号生成失败（重试 10 次仍冲突）
         throw new BizException(CommonCode.FAIL_CODE, "error.device.terminal.terminalNoGenFailed");
     }
 
@@ -213,6 +222,7 @@ public class MchTerminalDeviceService {
             return null;
         }
         MchStoreInfo store = mchStoreInfoManager.findByStoreNo(storeNo)
+                // 商户: 门店不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.merchant.storeNotFound"));
         if (!Objects.equals(store.getMchNo(), mchNo)) {
             // 商户: 门店不属于当前商户

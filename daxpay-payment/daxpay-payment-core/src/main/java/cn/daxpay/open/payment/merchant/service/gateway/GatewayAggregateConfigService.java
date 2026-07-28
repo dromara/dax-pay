@@ -48,6 +48,7 @@ public class GatewayAggregateConfigService {
     /// 支付时必须已配置
     public GatewayAggregateConfig getRequiredByAppId(String appId) {
         return configManager.findByAppId(appId)
+                // 聚合: 应用未配置聚合扫码支付
                 .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "pay.error.gateway.aggregateConfigMissing"));
     }
@@ -74,6 +75,7 @@ public class GatewayAggregateConfigService {
             config.setMchNo(param.getMchNo());
         }
         if (StrUtil.isBlank(config.getMchNo())) {
+            // 聚合: 商户上下文未装载
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.assist.mchContextMissing");
         }
@@ -128,20 +130,24 @@ public class GatewayAggregateConfigService {
         }
         // METHOD/DIRECT 至少配置一个打开环境
         if (CollUtil.isEmpty(filledEnvs)) {
+            // 聚合: 请至少配置一个打开环境
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.gateway.aggregateClientEnvsRequired");
         }
         for (GatewayAggregateClientEnvParam env : filledEnvs) {
             if (level == AggregateConfigLevelEnum.METHOD && StrUtil.isBlank(env.getMethod())) {
+                // 聚合: 已填写的打开环境须选择支付方式
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "pay.error.gateway.aggregateClientEnvMethodRequired");
             }
             if (level == AggregateConfigLevelEnum.DIRECT) {
                 if (StrUtil.isBlank(env.getChannelMchNo())) {
+                    // 聚合: 直接指定时已填写环境的通道商户号必填
                     throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                             "pay.error.gateway.aggregateClientEnvChannelMchRequired");
                 }
                 if (StrUtil.isBlank(env.getCapability())) {
+                    // 聚合: 直接指定时已填写环境的支付能力必填
                     throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                             "pay.error.gateway.aggregateClientEnvCapabilityRequired");
                 }

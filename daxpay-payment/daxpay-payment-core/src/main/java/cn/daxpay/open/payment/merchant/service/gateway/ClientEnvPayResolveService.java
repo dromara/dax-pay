@@ -52,6 +52,7 @@ public class ClientEnvPayResolveService {
             case METHOD -> {
                 GatewayAggregateClientEnv envConfig = requireEnvConfig(config, clientEnv);
                 if (StrUtil.isBlank(envConfig.getMethod())) {
+                    // 聚合: 该客户端环境未配置支付方式
                     throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                             "pay.error.gateway.clientEnvNotConfigured");
                 }
@@ -61,6 +62,7 @@ public class ClientEnvPayResolveService {
             case DIRECT -> {
                 GatewayAggregateClientEnv envConfig = requireEnvConfig(config, clientEnv);
                 if (StrUtil.isBlank(envConfig.getChannelMchNo()) || StrUtil.isBlank(envConfig.getCapability())) {
+                    // 聚合: 该客户端环境未配置支付方式
                     throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                             "pay.error.gateway.clientEnvNotConfigured");
                 }
@@ -75,6 +77,7 @@ public class ClientEnvPayResolveService {
                     if (StrUtil.isBlank(inferred)) {
                         PayCapabilityEnum capEnum = PayCapabilityEnum.findByCode(envConfig.getCapability());
                         String capLabel = capEnum != null ? I18nUtil.getEnumName(capEnum) : envConfig.getCapability();
+                        // 路由: 支付能力与通道商户不匹配
                         throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                                 "pay.route.error.directCapabilityChannelMchMismatch",
                                 capLabel, envConfig.getChannelMchNo());
@@ -89,6 +92,7 @@ public class ClientEnvPayResolveService {
     /// 聚合支付: 必须已有聚合配置
     public Resolved resolveRequired(String appId, ClientEnvEnum clientEnv, ClientRuntimeEnum runtime) {
         if (configManager.findByAppId(appId).isEmpty()) {
+            // 聚合: 应用未配置聚合扫码支付
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.gateway.aggregateConfigMissing");
         }
@@ -98,12 +102,14 @@ public class ClientEnvPayResolveService {
     /// 获取聚合配置的客户端环境配置, 不存在则抛异常
     private GatewayAggregateClientEnv requireEnvConfig(GatewayAggregateConfig config, ClientEnvEnum clientEnv) {
         if (config == null) {
+            // 聚合: 应用未配置聚合扫码支付
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.gateway.aggregateConfigMissing");
         }
         GatewayAggregateClientEnv envConfig = clientEnvManager
                 .findByConfigIdAndClientEnv(config.getId(), clientEnv.getCode());
         if (envConfig == null) {
+            // 聚合: 该客户端环境未配置支付方式
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.gateway.clientEnvNotConfigured");
         }

@@ -73,7 +73,7 @@ public class UserProtocolService {
                 // 系统: 协议不存在
                 .orElseThrow(() -> new DataNotExistException("error.system.protocol.notExist"));
         if (userProtocol.getDefaultProtocol()){
-            // 默认协议不可删除
+            // 系统: 默认协议不可删除
             throw new BizException(CommonCode.FAIL_CODE, "error.system.protocol.defaultCannotDelete");
         }
         // 级联删除版本

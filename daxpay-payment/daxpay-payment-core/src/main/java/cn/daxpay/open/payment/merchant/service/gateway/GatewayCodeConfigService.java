@@ -61,6 +61,7 @@ public class GatewayCodeConfigService {
             config.setMchNo(param.getMchNo());
         }
         if (StrUtil.isBlank(config.getMchNo())) {
+            // 码牌: 商户上下文未装载
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.assist.mchContextMissing");
         }
@@ -117,6 +118,7 @@ public class GatewayCodeConfigService {
         }
         // METHOD/DIRECT 至少配置一行
         if (CollUtil.isEmpty(filledEnvs)) {
+            // 码牌: 请至少配置一项环境与形态
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.gateway.codeClientEnvsRequired");
         }
@@ -124,15 +126,18 @@ public class GatewayCodeConfigService {
             // 校验 payForm 合法
             CodePayFormEnum.findByCode(env.getPayForm());
             if (level == AggregateConfigLevelEnum.METHOD && StrUtil.isBlank(env.getMethod())) {
+                // 码牌: 已填写的环境与形态须选择支付方式
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "pay.error.gateway.codeClientEnvMethodRequired");
             }
             if (level == AggregateConfigLevelEnum.DIRECT) {
                 if (StrUtil.isBlank(env.getChannelMchNo())) {
+                    // 码牌: 直接指定时已填写行的通道商户号必填
                     throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                             "pay.error.gateway.codeClientEnvChannelMchRequired");
                 }
                 if (StrUtil.isBlank(env.getCapability())) {
+                    // 码牌: 直接指定时已填写行的支付能力必填
                     throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                             "pay.error.gateway.codeClientEnvCapabilityRequired");
                 }
