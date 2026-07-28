@@ -13,7 +13,7 @@ import cn.daxpay.open.payment.auth.core.AuthSessionStore;
 import cn.daxpay.open.payment.auth.platform.AlipayAuthProvider;
 import cn.daxpay.open.payment.auth.platform.DouyinH5AuthProvider;
 import cn.daxpay.open.payment.auth.platform.WechatMpAuthProvider;
-import cn.daxpay.open.payment.auth.merchant.ProductAuthService;
+import cn.daxpay.open.payment.auth.channel.ProductAuthService;
 
 /// # 认证调试服务(运营端 / 商户端共用)
 ///

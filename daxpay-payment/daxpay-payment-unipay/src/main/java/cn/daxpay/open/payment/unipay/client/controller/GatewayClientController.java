@@ -4,7 +4,7 @@ import cn.daxpay.open.payment.trade.runtime.service.pay.gateway.AggregatePayServ
 import cn.daxpay.open.payment.trade.runtime.service.pay.gateway.CashierPayService;
 import cn.daxpay.open.payment.trade.runtime.service.pay.gateway.GatewayAuthService;
 import cn.daxpay.open.payment.trade.runtime.service.pay.gateway.GatewayOrderQueryService;
-import cn.daxpay.open.payment.auth.merchant.ChannelAuthService;
+import cn.daxpay.open.payment.auth.ChannelAuthService;
 import cn.daxpay.open.payment.unipay.param.assist.AuthCodeParam;
 import cn.daxpay.open.payment.unipay.param.gateway.AggregateQrPayParam;
 import cn.daxpay.open.payment.unipay.param.gateway.CashierPayParam;

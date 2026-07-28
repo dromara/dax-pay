@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import cn.daxpay.open.payment.auth.core.AuthScene;
+import cn.daxpay.open.payment.auth.core.AuthSourceEnum;
 import cn.daxpay.open.payment.auth.core.AuthSession;
 import cn.daxpay.open.payment.auth.core.AuthSessionStore;
 import cn.daxpay.open.payment.auth.core.AuthRedirectUri;
@@ -37,8 +38,8 @@ public class DouyinH5AuthProvider implements PlatformAuthProvider {
     private final DouyinH5AuthService douyinH5AuthService;
 
     @Override
-    public String sourceCode() {
-        return AuthSession.SOURCE_PLATFORM_DOUYIN;
+    public AuthSourceEnum sourceCode() {
+        return AuthSourceEnum.PLATFORM_DOUYIN;
     }
 
     @Override
@@ -47,7 +48,7 @@ public class DouyinH5AuthProvider implements PlatformAuthProvider {
         String authToken = IdUtil.fastSimpleUUID();
         String queryCode = RandomUtil.randomString(10);
         AuthSession session = new AuthSession()
-                .setSource(AuthSession.SOURCE_PLATFORM_DOUYIN)
+                .setSource(AuthSourceEnum.PLATFORM_DOUYIN.getCode())
                 .setQueryCode(queryCode)
                 .setReturnPath(returnPath)
                 .setScene(AuthScene.PLATFORM.getCode());

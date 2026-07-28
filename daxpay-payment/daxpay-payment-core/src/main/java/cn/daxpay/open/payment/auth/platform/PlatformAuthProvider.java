@@ -1,12 +1,17 @@
 package cn.daxpay.open.payment.auth.platform;
 
-import cn.daxpay.open.payment.auth.merchant.ChannelAuthService;
+import cn.daxpay.open.payment.auth.core.AuthSourceEnum;
+import cn.daxpay.open.payment.auth.core.AuthSession;
+import cn.daxpay.open.payment.auth.develop.DevelopAuthService;
+import cn.daxpay.open.payment.auth.ChannelAuthService;
 import cn.daxpay.open.payment.unipay.param.assist.AuthCodeParam;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
 import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
 import cn.hutool.core.util.StrUtil;
-import cn.daxpay.open.payment.auth.core.AuthSession;
-import cn.daxpay.open.payment.auth.develop.DevelopAuthService;
+import cn.daxpay.open.payment.unipay.param.assist.AuthCodeParam;
+import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
+import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
+import cn.hutool.core.util.StrUtil;
 
 /// # 平台级认证 Provider(策略)
 ///
@@ -20,8 +25,8 @@ public interface PlatformAuthProvider {
 
     /// 认证来源标识
     ///
-    /// 对应 [AuthSession#SOURCE_PLATFORM_ALIPAY] / [AuthSession#SOURCE_PLATFORM_MP] / [AuthSession#SOURCE_PLATFORM_DOUYIN]。
-    String sourceCode();
+    /// 返回 [AuthSourceEnum] 枚举项, 由 [ChannelAuthService] 按 [.getCode] 索引 Provider。
+    AuthSourceEnum sourceCode();
 
     /// 生成授权链接(平台级, 无商户上下文)
     ///

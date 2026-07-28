@@ -2,10 +2,7 @@ package cn.daxpay.open.payment.auth.core;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
-import cn.daxpay.open.payment.auth.platform.AlipayAuthProvider;
-import cn.daxpay.open.payment.auth.platform.WechatMpAuthProvider;
-import cn.daxpay.open.payment.auth.platform.DouyinH5AuthProvider;
-import cn.daxpay.open.payment.auth.merchant.ProductAuthService;
+import cn.daxpay.open.payment.auth.channel.ProductAuthService;
 
 /// # 认证会话上下文
 ///
@@ -20,33 +17,10 @@ import cn.daxpay.open.payment.auth.merchant.ProductAuthService;
 @Accessors(chain = true)
 public class AuthSession {
 
-    /// 认证来源: 平台级支付宝配置(系统支付宝配置调试场景)
-    ///
-    /// 该标记表示本次认证使用平台级 `PlatformAlipayAuthConfig` 用授权码换 openId,
-    /// 而非商户级支付产品策略。由 [AlipayAuthProvider] 在 generateAuthUrl 时写入,
-    /// 认证分发层据此走平台级支付宝授权回调分支([AlipayAuthProvider#auth])。
-    public static final String SOURCE_PLATFORM_ALIPAY = "platform_alipay";
-
-    /// 认证来源: 平台级微信公众号配置(系统公众号配置调试场景)
-    ///
-    /// 该标记表示本次认证使用平台级 `PlatformWechatMpAuthConfig`(appId/appSecret) 用授权码换 openId,
-    /// 而非商户级支付产品策略。由 [WechatMpAuthProvider] 在 generateAuthUrl 时写入,
-    /// 认证分发层据此走平台级微信授权回调分支([WechatMpAuthProvider#auth])。
-    public static final String SOURCE_PLATFORM_MP = "platform_mp";
-
-    /// 认证来源: 平台级抖音 H5 应用配置(抖音支付调试场景)
-    ///
-    /// 该标记表示本次认证使用平台级 `PlatformDouyinH5AuthConfig`(clientKey/clientSecret) 用授权码换 openId,
-    /// 通过抖音开放平台 silent_auth 静默授权获取 openId。由 [DouyinH5AuthProvider] 在
-    /// generateAuthUrl 时写入, 认证分发层据此走平台级抖音授权回调分支([DouyinH5AuthProvider#auth])。
-    public static final String SOURCE_PLATFORM_DOUYIN = "platform_douyin";
-
     /// 认证来源
     ///
-    /// 标识本次认证的配置来源:
-    /// - [#SOURCE_PLATFORM_ALIPAY]: 平台级支付宝配置(调试场景)
-    /// - [#SOURCE_PLATFORM_MP]: 平台级微信公众号配置(调试场景)
-    /// - [#SOURCE_PLATFORM_DOUYIN]: 平台级抖音 H5 应用配置(调试场景)
+    /// 标识本次认证的配置来源, 值为 [AuthSourceEnum#getCode]:
+    /// - 平台级配置(调试场景): 见 [AuthSourceEnum] 各枚举项
     /// - null/空: 走商户级支付产品策略(直连/服务商)
     private String source;
 

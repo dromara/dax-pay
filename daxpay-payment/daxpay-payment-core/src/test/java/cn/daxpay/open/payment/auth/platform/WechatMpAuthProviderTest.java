@@ -2,6 +2,7 @@ package cn.daxpay.open.payment.auth.platform;
 
 import cn.daxpay.open.payment.auth.core.AuthScene;
 import cn.daxpay.open.payment.auth.core.AuthSession;
+import cn.daxpay.open.payment.auth.core.AuthSourceEnum;
 import cn.daxpay.open.payment.auth.core.AuthSessionStore;
 import cn.daxpay.open.payment.unipay.param.assist.AuthCodeParam;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
@@ -57,7 +58,7 @@ class WechatMpAuthProviderTest {
     @Test
     @DisplayName("sourceCode 返回 SOURCE_PLATFORM_MP")
     void sourceCode_isPlatformMp() {
-        assertEquals(AuthSession.SOURCE_PLATFORM_MP, wechatMpAuthProvider.sourceCode());
+        assertEquals(AuthSourceEnum.PLATFORM_MP, wechatMpAuthProvider.sourceCode());
     }
 
     @Test
@@ -90,7 +91,7 @@ class WechatMpAuthProviderTest {
         ArgumentCaptor<AuthSession> captor = ArgumentCaptor.forClass(AuthSession.class);
         verify(authSessionStore).saveSession(anyString(), captor.capture());
         AuthSession session = captor.getValue();
-        assertEquals(AuthSession.SOURCE_PLATFORM_MP, session.getSource());
+        assertEquals(AuthSourceEnum.PLATFORM_MP.getCode(), session.getSource());
         assertEquals(AuthScene.PLATFORM.getCode(), session.getScene());
     }
 

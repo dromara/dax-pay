@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.auth.merchant;
+package cn.daxpay.open.payment.auth;
 
 import cn.daxpay.open.payment.unipay.param.assist.AuthCodeParam;
 import cn.daxpay.open.payment.unipay.param.assist.GenerateAuthUrlParam;
@@ -18,6 +18,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import cn.daxpay.open.payment.auth.core.AuthSession;
 import cn.daxpay.open.payment.auth.core.AuthSessionStore;
+import cn.daxpay.open.payment.auth.core.AuthSourceEnum;
+import cn.daxpay.open.payment.auth.channel.ProductAuthService;
 import cn.daxpay.open.payment.auth.platform.PlatformAuthProvider;
 
 /// # 通道认证服务
@@ -54,7 +56,7 @@ public class ChannelAuthService {
         this.channelProductAuthService = channelProductAuthService;
         // 按 sourceCode 索引, doAuth 据会话来源 O(1) 查找
         this.providers = providerList.stream()
-                .collect(Collectors.toMap(PlatformAuthProvider::sourceCode, Function.identity()));
+                .collect(Collectors.toMap(p -> p.sourceCode().getCode(), Function.identity()));
     }
 
     /// 生成授权链接: 支付宝走平台级 Provider, 其余按支付产品走通道策略
@@ -62,10 +64,10 @@ public class ChannelAuthService {
     /// 微信应用档位标识(wxAppScope/wxAppRefId)随 param 透传, 由商户级策略消费; 支付宝分支不使用。
     public AuthUrlResult generateAuthUrl(GenerateAuthUrlParam param) {
         // 获取认证来源: 目前只有支付宝直接获取来源
-        String source = mapAuthTypeToSource(param.getAuthType());
+        AuthSourceEnum source = mapAuthTypeToSource(param.getAuthType());
         if (source != null) {
             // 通常会是支付宝, 支付宝走平台级获取userId
-            return providers.get(source).generateAuthUrl(param.getReturnPath());
+            return providers.get(source.getCode()).generateAuthUrl(param.getReturnPath());
         }
         // 获取通道授权链接
         return channelProductAuthService.generateAuthUrl(param);
@@ -111,9 +113,9 @@ public class ChannelAuthService {
         }
         // 无 session 且 authType 对应平台级 Provider(如支付宝小程序直连): 兜底走 Provider
         if (session == null) {
-            String source = mapAuthTypeToSource(param.getAuthType());
+            AuthSourceEnum source = mapAuthTypeToSource(param.getAuthType());
             if (source != null) {
-                return providers.get(source).auth(param, null);
+                return providers.get(source.getCode()).auth(param, null);
             }
         }
         // 其余: 商户级产品策略
@@ -124,9 +126,9 @@ public class ChannelAuthService {
     ///
     /// 仅支付宝走平台级 generate/auth(不依赖商户上下文); 微信/抖音 generate/auth 需商户上下文定位应用,
     /// 走 [ProductAuthService] 按支付产品路由。
-    private static String mapAuthTypeToSource(String authType) {
+    private static AuthSourceEnum mapAuthTypeToSource(String authType) {
         if (ChannelAuthTypeEnum.ALIPAY.getCode().equals(authType)) {
-            return AuthSession.SOURCE_PLATFORM_ALIPAY;
+            return AuthSourceEnum.PLATFORM_ALIPAY;
         }
         return null;
     }

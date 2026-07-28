@@ -1,6 +1,7 @@
 package cn.daxpay.open.payment.auth.platform;
 
 import cn.daxpay.open.payment.auth.core.AuthSession;
+import cn.daxpay.open.payment.auth.core.AuthSourceEnum;
 import cn.daxpay.open.payment.auth.core.AuthSessionStore;
 import cn.daxpay.open.payment.unipay.param.assist.AuthCodeParam;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
@@ -49,7 +50,7 @@ class DouyinH5AuthProviderTest {
     @Test
     @DisplayName("sourceCode 返回 SOURCE_PLATFORM_DOUYIN")
     void sourceCode_isPlatformDouyin() {
-        assertEquals(AuthSession.SOURCE_PLATFORM_DOUYIN, douyinH5AuthProvider.sourceCode());
+        assertEquals(AuthSourceEnum.PLATFORM_DOUYIN, douyinH5AuthProvider.sourceCode());
     }
 
     @Test
@@ -80,7 +81,7 @@ class DouyinH5AuthProviderTest {
         assertNotNull(result.getQueryCode());
         ArgumentCaptor<AuthSession> captor = ArgumentCaptor.forClass(AuthSession.class);
         verify(authSessionStore).saveSession(anyString(), captor.capture());
-        assertEquals(AuthSession.SOURCE_PLATFORM_DOUYIN, captor.getValue().getSource());
+        assertEquals(AuthSourceEnum.PLATFORM_DOUYIN.getCode(), captor.getValue().getSource());
     }
 
     @Test

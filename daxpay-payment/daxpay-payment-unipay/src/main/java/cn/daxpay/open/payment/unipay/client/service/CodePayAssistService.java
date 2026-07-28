@@ -1,6 +1,6 @@
 package cn.daxpay.open.payment.unipay.client.service;
 
-import cn.daxpay.open.payment.auth.merchant.ChannelAuthService;
+import cn.daxpay.open.payment.auth.ChannelAuthService;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import cn.daxpay.open.payment.common.util.PayMethodOpenIdSupport;
 import cn.daxpay.open.payment.device.enums.QrCodeAmountTypeEnum;

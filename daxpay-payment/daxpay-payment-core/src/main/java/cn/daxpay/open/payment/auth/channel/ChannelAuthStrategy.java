@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.auth.merchant;
+package cn.daxpay.open.payment.auth.channel;
 
 import cn.daxpay.open.payment.auth.core.AuthSession;
 import cn.daxpay.open.payment.unipay.param.assist.AuthCodeParam;

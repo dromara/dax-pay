@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.auth.merchant;
+package cn.daxpay.open.payment.auth.channel;
 
 import cn.daxpay.open.payment.auth.core.AuthScene;
 import cn.daxpay.open.payment.auth.core.AuthSession;
@@ -9,12 +9,19 @@ import cn.daxpay.open.payment.unipay.param.assist.GenerateAuthUrlParam;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
 import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
 import cn.daxpay.open.platform.core.enums.unipay.ChannelAuthStatusEnum;
+import cn.daxpay.open.platform.core.exception.business.UnsupportedAbilityException;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 /// # 通道认证服务(商户级)
 ///
@@ -25,7 +32,7 @@ import org.springframework.stereotype.Service;
 ///
 /// **职责边界**: 本服务仅处理商户级通道认证; 平台级认证(平台支付宝配置 / 系统公众号配置)
 /// 由各 PlatformAuthProvider 承担, 会话与结果缓存由 [AuthSessionStore] 统一管理。
-/// 平台级 vs 通道级 的来源分发由 [ChannelAuthService] 完成, 请勿在 Controller 再写分流。
+/// 平台级 vs 通道级 的来源分发由 [cn.daxpay.open.payment.auth.ChannelAuthService] 完成, 请勿在 Controller 再写分流。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -33,7 +40,15 @@ public class ProductAuthService {
 
     private final AuthSessionStore authSessionStore;
     private final MerchantContextLoader merchantContextLoader;
-    private final ChannelAuthStrategyRegistry channelAuthStrategyRegistry;
+    private final List<ChannelAuthStrategy> strategies;
+    private Map<String, ChannelAuthStrategy> strategyMap;
+
+    /// 启动时按 authType 构建索引
+    @PostConstruct
+    void init() {
+        strategyMap = strategies.stream()
+                .collect(Collectors.toMap(s -> s.getAuthType().getCode(), Function.identity()));
+    }
 
     /// 获取通道授权链接
     ///
@@ -44,7 +59,7 @@ public class ProductAuthService {
         // 商户上下文初始化(mchNo 必填, appId 非必填传了则校验归属)
         initMchContext(param.getAppId(), param.getMchNo());
         // 按 authType 路由策略
-        ChannelAuthStrategy strategy = channelAuthStrategyRegistry.findByAuthType(param.getAuthType());
+        ChannelAuthStrategy strategy = findStrategy(param.getAuthType());
         // 生成认证会话码, 授权回调后凭此恢复
         String authToken = IdUtil.fastSimpleUUID();
         // 生成 queryCode 供调试轮询(微信等 OAuth 重定向通道回调 URL 不含 queryCode, 需随会话保存)
@@ -77,7 +92,7 @@ public class ProductAuthService {
         // authType 优先从会话恢复, 其次取参数(小程序直连场景)
         String authType = (session != null && StrUtil.isNotBlank(session.getAuthType()))
                 ? session.getAuthType() : param.getAuthType();
-        ChannelAuthStrategy strategy = channelAuthStrategyRegistry.findByAuthType(authType);
+        ChannelAuthStrategy strategy = findStrategy(authType);
         // 策略自行从 session 恢复应用凭证(微信读 wxAppScope/wxAppRefId 查密钥; 抖音读 channelMchNo)
         AuthResult authResult = strategy.doAuth(param, session);
         authResult.setStatus(ChannelAuthStatusEnum.SUCCESS.getCode());
@@ -88,6 +103,16 @@ public class ProductAuthService {
         // 写回轮询结果(微信等 OAuth 重定向通道从 session 恢复 queryCode)
         authSessionStore.writeResultByQueryCode(param.getQueryCode(), session, authResult);
         return authResult;
+    }
+
+    /// 按 authType 查找认证策略
+    private ChannelAuthStrategy findStrategy(String authType) {
+        ChannelAuthStrategy strategy = strategyMap.get(authType);
+        if (strategy == null) {
+            // 不支持的能力: {0}
+            throw new UnsupportedAbilityException("pay.error.unsupportedAbilityWithDetail", authType);
+        }
+        return strategy;
     }
 
     /// 从 param 构建通用会话(只通用字段; 微信应用引用由 WechatAuthStrategy 在 generateAuthUrl 时写入)

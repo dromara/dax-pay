@@ -14,8 +14,8 @@ import java.util.Objects;
 import cn.daxpay.open.payment.auth.platform.AlipayAuthProvider;
 import cn.daxpay.open.payment.auth.platform.WechatMpAuthProvider;
 import cn.daxpay.open.payment.auth.platform.DouyinH5AuthProvider;
-import cn.daxpay.open.payment.auth.merchant.ChannelAuthService;
-import cn.daxpay.open.payment.auth.merchant.ProductAuthService;
+import cn.daxpay.open.payment.auth.ChannelAuthService;
+import cn.daxpay.open.payment.auth.channel.ProductAuthService;
 import cn.daxpay.open.payment.auth.develop.DevelopAuthService;
 
 /// # 认证会话与结果缓存

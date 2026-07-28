@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import cn.daxpay.open.payment.auth.core.AuthScene;
+import cn.daxpay.open.payment.auth.core.AuthSourceEnum;
 import cn.daxpay.open.payment.auth.core.AuthSession;
 import cn.daxpay.open.payment.auth.core.AuthSessionStore;
 import cn.daxpay.open.payment.auth.core.AuthRedirectUri;
@@ -42,8 +43,8 @@ public class WechatMpAuthProvider implements PlatformAuthProvider {
     private final WechatMpAuthService wechatMpAuthService;
 
     @Override
-    public String sourceCode() {
-        return AuthSession.SOURCE_PLATFORM_MP;
+    public AuthSourceEnum sourceCode() {
+        return AuthSourceEnum.PLATFORM_MP;
     }
 
     @Override
@@ -52,7 +53,7 @@ public class WechatMpAuthProvider implements PlatformAuthProvider {
         String authToken = IdUtil.fastSimpleUUID();
         String queryCode = RandomUtil.randomString(10);
         AuthSession session = new AuthSession()
-                .setSource(AuthSession.SOURCE_PLATFORM_MP)
+                .setSource(AuthSourceEnum.PLATFORM_MP.getCode())
                 .setQueryCode(queryCode)
                 .setReturnPath(returnPath)
                 .setScene(AuthScene.PLATFORM.getCode());

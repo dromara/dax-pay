@@ -1,6 +1,7 @@
 package cn.daxpay.open.payment.auth.platform;
 
 import cn.daxpay.open.payment.auth.core.AuthSession;
+import cn.daxpay.open.payment.auth.core.AuthSourceEnum;
 import cn.daxpay.open.payment.auth.core.AuthSessionStore;
 import cn.daxpay.open.payment.unipay.param.assist.AuthCodeParam;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
@@ -52,7 +53,7 @@ class AlipayAuthProviderTest {
     @Test
     @DisplayName("sourceCode 返回 SOURCE_PLATFORM_ALIPAY")
     void sourceCode_isPlatformAlipay() {
-        assertEquals(AuthSession.SOURCE_PLATFORM_ALIPAY, alipayAuthProvider.sourceCode());
+        assertEquals(AuthSourceEnum.PLATFORM_ALIPAY, alipayAuthProvider.sourceCode());
     }
 
     @Test
@@ -98,7 +99,7 @@ class AlipayAuthProviderTest {
         assertNotNull(result.getQueryCode());
         ArgumentCaptor<AuthSession> sessionCaptor = ArgumentCaptor.forClass(AuthSession.class);
         verify(authSessionStore).saveSession(anyString(), sessionCaptor.capture());
-        assertEquals(AuthSession.SOURCE_PLATFORM_ALIPAY, sessionCaptor.getValue().getSource());
+        assertEquals(AuthSourceEnum.PLATFORM_ALIPAY.getCode(), sessionCaptor.getValue().getSource());
         assertEquals("/cashier/ORD/alipay", sessionCaptor.getValue().getReturnPath());
         verify(authSessionStore).saveWaitingResult(result.getQueryCode());
     }

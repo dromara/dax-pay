@@ -1,6 +1,8 @@
-package cn.daxpay.open.payment.auth.merchant;
+package cn.daxpay.open.payment.auth;
 
+import cn.daxpay.open.payment.auth.channel.ProductAuthService;
 import cn.daxpay.open.payment.auth.core.AuthSession;
+import cn.daxpay.open.payment.auth.core.AuthSourceEnum;
 import cn.daxpay.open.payment.auth.core.AuthSessionStore;
 import cn.daxpay.open.payment.auth.platform.AlipayAuthProvider;
 import cn.daxpay.open.payment.auth.platform.DouyinH5AuthProvider;
@@ -52,9 +54,9 @@ class ChannelAuthServiceTest {
     @BeforeEach
     void setUp() {
         // Provider 注册表索引: 构造时调 sourceCode() 建 Map
-        when(alipayAuthProvider.sourceCode()).thenReturn(AuthSession.SOURCE_PLATFORM_ALIPAY);
-        when(wechatMpAuthProvider.sourceCode()).thenReturn(AuthSession.SOURCE_PLATFORM_MP);
-        when(douyinH5AuthProvider.sourceCode()).thenReturn(AuthSession.SOURCE_PLATFORM_DOUYIN);
+        when(alipayAuthProvider.sourceCode()).thenReturn(AuthSourceEnum.PLATFORM_ALIPAY);
+        when(wechatMpAuthProvider.sourceCode()).thenReturn(AuthSourceEnum.PLATFORM_MP);
+        when(douyinH5AuthProvider.sourceCode()).thenReturn(AuthSourceEnum.PLATFORM_DOUYIN);
         channelAuthService = new ChannelAuthService(authSessionStore, channelProductAuthService,
                 List.of(alipayAuthProvider, wechatMpAuthProvider, douyinH5AuthProvider));
     }
@@ -111,7 +113,7 @@ class ChannelAuthServiceTest {
     @DisplayName("auth: source=platform_alipay 命中 AlipayProvider")
     void auth_sourceAlipay_shouldCallAlipayProvider() {
         AuthCodeParam param = newAuthCodeParam("tok-1", ChannelAuthTypeEnum.ALIPAY.getCode());
-        AuthSession session = new AuthSession().setSource(AuthSession.SOURCE_PLATFORM_ALIPAY);
+        AuthSession session = new AuthSession().setSource(AuthSourceEnum.PLATFORM_ALIPAY.getCode());
         AuthResult expected = new AuthResult().setOpenId("uid-1");
         when(authSessionStore.loadSession("tok-1")).thenReturn(session);
         when(alipayAuthProvider.auth(param, session)).thenReturn(expected);
@@ -127,7 +129,7 @@ class ChannelAuthServiceTest {
     @DisplayName("auth: source=platform_mp 命中 WechatMpProvider")
     void auth_sourceMp_shouldCallWechatMpProvider() {
         AuthCodeParam param = newAuthCodeParam("tok-2", ChannelAuthTypeEnum.WECHAT.getCode());
-        AuthSession session = new AuthSession().setSource(AuthSession.SOURCE_PLATFORM_MP);
+        AuthSession session = new AuthSession().setSource(AuthSourceEnum.PLATFORM_MP.getCode());
         AuthResult expected = new AuthResult().setOpenId("openid-2");
         when(authSessionStore.loadSession("tok-2")).thenReturn(session);
         when(wechatMpAuthProvider.auth(param, session)).thenReturn(expected);
@@ -142,7 +144,7 @@ class ChannelAuthServiceTest {
     @DisplayName("auth: source=platform_douyin 命中 DouyinH5Provider")
     void auth_sourceDouyin_shouldCallDouyinProvider() {
         AuthCodeParam param = newAuthCodeParam("tok-3", ChannelAuthTypeEnum.DOUYIN.getCode());
-        AuthSession session = new AuthSession().setSource(AuthSession.SOURCE_PLATFORM_DOUYIN);
+        AuthSession session = new AuthSession().setSource(AuthSourceEnum.PLATFORM_DOUYIN.getCode());
         AuthResult expected = new AuthResult().setOpenId("openid-3");
         when(authSessionStore.loadSession("tok-3")).thenReturn(session);
         when(douyinH5AuthProvider.auth(param, session)).thenReturn(expected);
@@ -191,7 +193,7 @@ class ChannelAuthServiceTest {
     void auth_shouldFillReturnPathFromSessionWhenBlank() {
         AuthCodeParam param = newAuthCodeParam("tok-6", ChannelAuthTypeEnum.WECHAT.getCode());
         AuthSession session = new AuthSession()
-                .setSource(AuthSession.SOURCE_PLATFORM_MP)
+                .setSource(AuthSourceEnum.PLATFORM_MP.getCode())
                 .setReturnPath("/aggregate/wechat/ORD");
         AuthResult expected = new AuthResult().setOpenId("openid-6");
         when(authSessionStore.loadSession("tok-6")).thenReturn(session);
@@ -207,7 +209,7 @@ class ChannelAuthServiceTest {
     void auth_shouldNotOverrideReturnPathWhenAlreadySet() {
         AuthCodeParam param = newAuthCodeParam("tok-7", ChannelAuthTypeEnum.ALIPAY.getCode());
         AuthSession session = new AuthSession()
-                .setSource(AuthSession.SOURCE_PLATFORM_ALIPAY)
+                .setSource(AuthSourceEnum.PLATFORM_ALIPAY.getCode())
                 .setReturnPath("/from-session");
         AuthResult expected = new AuthResult()
                 .setOpenId("uid-7")

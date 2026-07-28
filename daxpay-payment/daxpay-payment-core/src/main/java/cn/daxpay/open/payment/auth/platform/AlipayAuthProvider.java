@@ -18,10 +18,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import cn.daxpay.open.payment.auth.core.AuthScene;
+import cn.daxpay.open.payment.auth.core.AuthSourceEnum;
 import cn.daxpay.open.payment.auth.core.AuthSession;
 import cn.daxpay.open.payment.auth.core.AuthSessionStore;
 import cn.daxpay.open.payment.auth.core.AuthRedirectUri;
-import cn.daxpay.open.payment.auth.merchant.ChannelAuthService;
+import cn.daxpay.open.payment.auth.ChannelAuthService;
 
 /// # 支付宝平台级认证 Provider
 ///
@@ -40,8 +41,8 @@ public class AlipayAuthProvider implements PlatformAuthProvider {
     private final AlipayAuthCapability alipayAuthCapability;
 
     @Override
-    public String sourceCode() {
-        return AuthSession.SOURCE_PLATFORM_ALIPAY;
+    public AuthSourceEnum sourceCode() {
+        return AuthSourceEnum.PLATFORM_ALIPAY;
     }
 
     /// 生成支付宝授权链接
@@ -54,7 +55,7 @@ public class AlipayAuthProvider implements PlatformAuthProvider {
         String authToken = IdUtil.fastSimpleUUID();
         String queryCode = RandomUtil.randomString(10);
         AuthSession session = new AuthSession()
-                .setSource(AuthSession.SOURCE_PLATFORM_ALIPAY)
+                .setSource(AuthSourceEnum.PLATFORM_ALIPAY.getCode())
                 .setQueryCode(queryCode)
                 .setReturnPath(returnPath)
                 .setScene(AuthScene.PLATFORM.getCode());

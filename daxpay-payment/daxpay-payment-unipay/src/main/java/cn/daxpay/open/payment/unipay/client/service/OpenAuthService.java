@@ -3,7 +3,7 @@ package cn.daxpay.open.payment.unipay.client.service;
 import cn.daxpay.open.payment.auth.core.AuthScene;
 import cn.daxpay.open.payment.auth.core.AuthSession;
 import cn.daxpay.open.payment.auth.core.AuthSessionStore;
-import cn.daxpay.open.payment.auth.merchant.ChannelAuthService;
+import cn.daxpay.open.payment.auth.ChannelAuthService;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import cn.daxpay.open.payment.common.util.PaySignUtil;
 import cn.daxpay.open.payment.unipay.aop.PaymentSignService;

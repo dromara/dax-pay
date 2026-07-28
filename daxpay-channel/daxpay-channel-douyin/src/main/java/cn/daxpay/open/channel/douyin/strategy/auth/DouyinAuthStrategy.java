@@ -6,7 +6,7 @@ import cn.daxpay.open.channel.douyin.service.direct.DouyinDirectAppAuthConfigSer
 import cn.daxpay.open.channel.douyin.service.direct.DouyinDirectAppCapabilityService;
 import cn.daxpay.open.payment.auth.core.AuthRedirectUri;
 import cn.daxpay.open.payment.auth.core.AuthSession;
-import cn.daxpay.open.payment.auth.merchant.ChannelAuthStrategy;
+import cn.daxpay.open.payment.auth.channel.ChannelAuthStrategy;
 import cn.daxpay.open.payment.unipay.param.assist.AuthCodeParam;
 import cn.daxpay.open.payment.unipay.param.assist.GenerateAuthUrlParam;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;

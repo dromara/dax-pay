@@ -2,7 +2,7 @@ package cn.daxpay.open.payment.auth.core;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import cn.daxpay.open.payment.auth.merchant.ChannelAuthService;
+import cn.daxpay.open.payment.auth.ChannelAuthService;
 
 /// # 认证场景
 ///

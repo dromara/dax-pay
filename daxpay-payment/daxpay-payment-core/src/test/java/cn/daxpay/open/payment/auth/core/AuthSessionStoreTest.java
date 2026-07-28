@@ -70,7 +70,7 @@ class AuthSessionStoreTest {
     @Test
     @DisplayName("saveSession: 以 AUTH_SESSION_KEY_PREFIX 为前缀、AUTH_TIMEOUT 为 TTL 写入")
     void saveSession_shouldUsePrefixAndTimeout() {
-        AuthSession session = new AuthSession().setSource(AuthSession.SOURCE_PLATFORM_ALIPAY);
+        AuthSession session = new AuthSession().setSource(AuthSourceEnum.PLATFORM_ALIPAY.getCode());
 
         authSessionStore.saveSession("tok-1", session);
 
@@ -100,7 +100,7 @@ class AuthSessionStoreTest {
     @DisplayName("loadSession: Redis 有值经 JacksonUtil.convert 还原字段(序列化往返)")
     void loadSession_present_shouldRoundTripFields() {
         AuthSession session = new AuthSession()
-                .setSource(AuthSession.SOURCE_PLATFORM_ALIPAY)
+                .setSource(AuthSourceEnum.PLATFORM_ALIPAY.getCode())
                 .setAuthType("alipay")
                 .setChannelMchNo("cm-no")
                 .setReturnPath("/cashier/ORD/alipay")
@@ -110,7 +110,7 @@ class AuthSessionStoreTest {
         AuthSession loaded = authSessionStore.loadSession("tok");
 
         assertNotNull(loaded);
-        assertEquals(AuthSession.SOURCE_PLATFORM_ALIPAY, loaded.getSource());
+        assertEquals(AuthSourceEnum.PLATFORM_ALIPAY.getCode(), loaded.getSource());
         assertEquals("alipay", loaded.getAuthType());
         assertEquals("cm-no", loaded.getChannelMchNo());
         assertEquals("/cashier/ORD/alipay", loaded.getReturnPath());
