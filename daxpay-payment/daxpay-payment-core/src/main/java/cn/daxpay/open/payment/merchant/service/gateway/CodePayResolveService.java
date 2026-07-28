@@ -81,6 +81,7 @@ public class CodePayResolveService {
         return inferred;
     }
 
+    /// 获取码牌配置的客户端环境与支付形态子表, 不存在则抛异常
     private GatewayCodeClientEnv requireEnvConfig(
             GatewayCodeConfig config, ClientEnvEnum clientEnv, CodePayFormEnum payForm) {
         GatewayCodeClientEnv envConfig = clientEnvManager.findByConfigIdAndClientEnvAndPayForm(

@@ -191,6 +191,7 @@ public class GatewayAuthService {
                 null);
     }
 
+    /// 加载收银台支付项并校验归属与类型分桶
     private GatewayCashierItem loadAndCheckItem(Long itemId, String appId,
                                                 GatewayCashierTypeEnum typeEnum, String bucketClientEnv) {
         GatewayCashierItem item = gatewayCashierItemManager.findById(itemId)
@@ -215,6 +216,7 @@ public class GatewayAuthService {
         return item;
     }
 
+    /// 规范化分桶用 clientEnv: WEB 固定 null; H5 五档; MINI 四档(无 browser)
     private String normalizeClientEnvForBucket(GatewayCashierTypeEnum typeEnum, String clientEnv) {
         if (!typeEnum.requiresClientEnv()) {
             return null;

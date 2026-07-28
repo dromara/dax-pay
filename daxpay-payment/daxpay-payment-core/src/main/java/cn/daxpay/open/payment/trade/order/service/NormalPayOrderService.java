@@ -78,6 +78,7 @@ public class NormalPayOrderService {
         payCloseService.closeOrder(trade, useCancel);
     }
 
+    /// 商户端清空入参 mchNo, 避免越权查询他商户数据
     private void sanitizeQuery(NormalPayOrderQuery query) {
         if (query == null) {
             return;
@@ -87,6 +88,7 @@ public class NormalPayOrderService {
         }
     }
 
+    /// 运营端翻译商户名称(mchNo → mchName)
     private void translateIfAdmin(Object target) {
         if (ClientEnum.ADMIN.getCode().equals(clientCodeService.getClientCode())) {
             // 翻译商户名称(mchNo -> mchName)

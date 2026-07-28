@@ -203,6 +203,7 @@ public class GatewayPayHandleService {
         return this.buildResult(latest, trade);
     }
 
+    /// 回填路由结果到网关容器(channelMchNo/capability/channelAppId/clientEnv/device 等)
     private void fillRouteOnOrder(GatewayPayOrder order, NormalPayParam payParam, String clientEnv, String device) {
         order.setChannelMchNo(payParam.getChannelMchNo());
         order.setCapability(payParam.getCapability());
@@ -219,6 +220,7 @@ public class GatewayPayHandleService {
         }
     }
 
+    /// 组装路由与支付用请求参数(从网关容器拷贝业务字段)
     private NormalPayParam buildPayParam(GatewayPayOrder order, String product, String method,
                                          String channelMchNo, String capability,
                                          String openId, String clientIp) {
@@ -247,6 +249,7 @@ public class GatewayPayHandleService {
         return payParam;
     }
 
+    /// 构建网关支付返回结果(含 payBody 供前端拉起)
     private NormalPayResult buildResult(GatewayPayOrder order, PayTrade trade) {
         return new NormalPayResult()
                 .setOrderId(order.getId())

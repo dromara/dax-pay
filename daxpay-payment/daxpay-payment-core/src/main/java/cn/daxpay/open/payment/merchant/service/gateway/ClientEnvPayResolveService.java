@@ -95,6 +95,7 @@ public class ClientEnvPayResolveService {
         return resolve(appId, clientEnv, runtime);
     }
 
+    /// 获取聚合配置的客户端环境配置, 不存在则抛异常
     private GatewayAggregateClientEnv requireEnvConfig(GatewayAggregateConfig config, ClientEnvEnum clientEnv) {
         if (config == null) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,

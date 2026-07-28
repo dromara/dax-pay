@@ -122,6 +122,10 @@ public class PaySyncService {
         );
     }
 
+    /// 校验同步结果是否需要调整
+    ///
+    /// - PROCESSING 且未超时则无需调整
+    /// - 已超时或通道返回 SUCCESS 但本地已 CLOSE 时触发调整
     private boolean checkAndAdjust(PaySyncResultBo syncResult, PayTrade trade, ContainerInfo info) {
         var payStatus = Optional.ofNullable(syncResult.getPayStatus())
                 .orElse(PayFundStatusEnum.PROCESSING);
@@ -150,6 +154,7 @@ public class PaySyncService {
         return false;
     }
 
+    /// 根据同步结果执行状态调整: SUCCESS→回写成功; CLOSE→远程或本地关单; FAIL→标记失败
     private void adjustHandler(PaySyncResultBo syncResult, PayTrade trade, ContainerInfo info) {
         var payStatus = syncResult.getPayStatus();
         if (Objects.isNull(payStatus)) {
@@ -170,6 +175,7 @@ public class PaySyncService {
         }
     }
 
+    /// 将交易置为成功并回写支付时间, 通道回执交由 payUniHandleService 统一处理
     private void success(PayTrade trade, PaySyncResultBo syncResult) {
         trade.setStatus(PayFundStatusEnum.SUCCESS.getCode());
         trade.setPayTime(syncResult.getFinishTime());
@@ -178,6 +184,7 @@ public class PaySyncService {
         payUniHandleService.paySuccess(trade, syncResult);
     }
 
+    /// 远程关单: 调用通道关闭策略后本地超时关闭
     private void closeRemote(PayTrade trade, ContainerInfo info) {
         var context = new PayStrategyContext()
                 .setTrade(trade)
@@ -192,6 +199,7 @@ public class PaySyncService {
         payUniHandleService.payTimeout(trade);
     }
 
+    /// 记录支付同步流水(含通道同步快照与是否调整标记)
     private void saveRecord(PayTrade trade, PaySyncResultBo syncResult, boolean adjust, ContainerInfo info) {
         PaySyncRecord record = new PaySyncRecord()
                 .setAppId(trade.getAppId())

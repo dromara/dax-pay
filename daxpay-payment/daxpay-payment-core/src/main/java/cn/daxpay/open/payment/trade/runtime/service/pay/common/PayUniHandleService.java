@@ -282,6 +282,7 @@ public class PayUniHandleService {
         gatewayPayOrderManager.updateById(order);
     }
 
+    /// 普通容器置已支付, 同步 provider 回填
     private void markContainerPaid(PayTrade trade, NormalPayOrder order) {
         if (order == null) {
             return;
@@ -316,6 +317,7 @@ public class PayUniHandleService {
         }
     }
 
+    /// 容器置关闭(CLOSED)或超时(EXPIRED)
     private void markContainerClosed(PayTrade trade, OffsetDateTime now, boolean expired, String errMsg) {
         if (isGateway(trade)) {
             GatewayPayOrder order = gatewayPayOrderManager.findById(trade.getContainerId()).orElse(null);
@@ -352,6 +354,7 @@ public class PayUniHandleService {
         return errMsg.length() <= 500 ? errMsg : errMsg.substring(0, 500);
     }
 
+    /// 普通容器写入支付回执字段(transOrderNo/buyerId/payBody 等)
     private void applyNormalReceipts(NormalPayOrder order, PayTradeResultBo result) {
         order.setTransOrderNo(result.getTransOrderNo());
         // 特殊通道返回变形上送号时回写容器展示; 空则保留创建时的 orderNo 副本
@@ -370,6 +373,7 @@ public class PayUniHandleService {
         order.setErrorMsg(null);
     }
 
+    /// 网关容器写入支付回执字段(transOrderNo/buyerId/payBody 等)
     private void applyGatewayReceipts(GatewayPayOrder order, PayTradeResultBo result) {
         order.setTransOrderNo(result.getTransOrderNo());
         if (result.getRelationOrderNo() != null) {
@@ -387,6 +391,7 @@ public class PayUniHandleService {
         order.setErrorMsg(null);
     }
 
+    /// 普通容器写入同步查单回执字段(含 provider 回填)
     private void applyNormalSyncReceipts(PayTrade trade, NormalPayOrder order, PaySyncResultBo syncResult) {
         if (syncResult == null) {
             return;
@@ -410,6 +415,7 @@ public class PayUniHandleService {
         order.setErrorMsg(null);
     }
 
+    /// 网关容器写入同步查单回执字段(含 provider 回填)
     private void applyGatewaySyncReceipts(PayTrade trade, GatewayPayOrder order, PaySyncResultBo syncResult) {
         if (syncResult == null) {
             return;
@@ -447,6 +453,7 @@ public class PayUniHandleService {
         }
     }
 
+    /// provider 兜底填充: trade 空则从网关容器 provider/method 派生
     private void applyProviderFallback(PayTrade trade, GatewayPayOrder order) {
         String containerProvider = order != null ? order.getProvider() : null;
         String method = order != null ? order.getMethod() : null;
@@ -460,6 +467,7 @@ public class PayUniHandleService {
         }
     }
 
+    /// 判断资金凭证是否为网关支付类型
     private boolean isGateway(PayTrade trade) {
         return Objects.equals(trade.getTradeType(), PayTradeTypeEnum.GATEWAY.getCode());
     }

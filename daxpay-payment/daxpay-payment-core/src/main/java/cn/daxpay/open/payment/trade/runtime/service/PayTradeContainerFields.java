@@ -58,6 +58,7 @@ public class PayTradeContainerFields {
                 .orElse(null);
     }
 
+    /// 判断资金凭证是否为网关支付类型
     private boolean isGateway(PayTrade trade) {
         return Objects.equals(trade.getTradeType(), PayTradeTypeEnum.GATEWAY.getCode());
     }

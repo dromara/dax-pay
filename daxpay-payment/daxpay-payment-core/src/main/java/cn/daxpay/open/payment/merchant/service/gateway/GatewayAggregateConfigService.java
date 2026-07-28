@@ -150,6 +150,7 @@ public class GatewayAggregateConfigService {
     }
 
     /// 组装主表 + 客户端环境子表为 Result
+    /// 将聚合配置主表与子表组装为带客户端环境列表的结果对象
     private GatewayAggregateConfigResult toResultWithClientEnvs(GatewayAggregateConfig entity) {
         GatewayAggregateConfigResult result = new GatewayAggregateConfigResult();
         BeanUtil.copyProperties(entity, result);

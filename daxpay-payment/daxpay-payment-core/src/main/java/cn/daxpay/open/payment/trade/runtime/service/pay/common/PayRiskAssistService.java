@@ -82,6 +82,7 @@ public class PayRiskAssistService {
         }
     }
 
+    /// 从支付参数构建风控检查上下文
     private PayRiskCheckContext buildContextFromParam(NormalPayParam payParam, String scene) {
         PayRiskCheckContext ctx = new PayRiskCheckContext()
                 .setScene(StrUtil.blankToDefault(scene, resolveSceneFromSource(payParam.getSource())))
@@ -97,6 +98,7 @@ public class PayRiskAssistService {
         return ctx;
     }
 
+    /// 从资金凭证构建风控检查上下文(含容器回查)
     private PayRiskCheckContext buildContextFromTrade(PayTrade trade) {
         PayRiskCheckContext ctx = new PayRiskCheckContext()
                 .setTradeNo(trade.getTradeNo())
@@ -138,6 +140,7 @@ public class PayRiskAssistService {
         return ctx;
     }
 
+    /// 从产品编码反推通道编码填入风控上下文
     private static void fillChannelByProduct(PayRiskCheckContext ctx, String product) {
         if (StrUtil.isBlank(product)) {
             return;
@@ -149,6 +152,7 @@ public class PayRiskAssistService {
         }
     }
 
+    /// 交易来源 → 风控场景编码: 码牌→code, 其余→api
     private static String resolveSceneFromSource(String source) {
         if (StrUtil.isNotBlank(source) && TradeSourceEnum.CASHIER_CODE.getCode().equals(source)) {
             return "code";

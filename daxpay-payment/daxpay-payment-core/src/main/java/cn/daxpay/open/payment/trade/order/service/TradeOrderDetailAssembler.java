@@ -70,6 +70,7 @@ public class TradeOrderDetailAssembler {
         }
     }
 
+    /// 普通支付容器详情补充资金凭证字段(tradeNo/outOrderNo/资金状态/可退余额)
     private void fillFundOnContainerResult(NormalPayOrderResult result, PayTrade trade) {
         if (trade == null) {
             return;
@@ -80,6 +81,7 @@ public class TradeOrderDetailAssembler {
         result.setRefundableBalance(trade.getRefundableBalance());
     }
 
+    /// 网关支付容器详情补充资金凭证字段(含关联订单号)
     private void fillFundOnGatewayResult(GatewayPayOrderResult result, PayTrade trade) {
         if (trade == null) {
             return;
@@ -91,6 +93,7 @@ public class TradeOrderDetailAssembler {
         result.setRelationOrderNo(trade.getRelationOrderNo());
     }
 
+    /// 资金交易详情补充普通支付容器业务字段(产品/通道/买家/过期时间等)
     private void fillFromNormal(PayTradeResult result, NormalPayOrder order) {
         result.setContainerOrderNo(order.getOrderNo());
         result.setBizOrderNo(order.getBizOrderNo());
@@ -116,6 +119,7 @@ public class TradeOrderDetailAssembler {
         result.setExpiredTime(order.getExpiredTime());
     }
 
+    /// 资金交易详情补充网关支付容器业务字段(产品/通道/买家/过期时间等)
     private void fillFromGateway(PayTradeResult result, GatewayPayOrder order) {
         result.setContainerOrderNo(order.getOrderNo());
         result.setBizOrderNo(order.getBizOrderNo());

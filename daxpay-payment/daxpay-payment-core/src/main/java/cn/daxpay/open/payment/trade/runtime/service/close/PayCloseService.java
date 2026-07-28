@@ -188,6 +188,7 @@ public class PayCloseService {
         }
     }
 
+    /// 记录关单流水(含成功/失败标记)
     private void saveRecord(PayTrade trade, CloseTypeEnum closeType, String errMsg) {
         ContainerInfo info = loadContainerInfo(trade);
         PayCloseRecord record = new PayCloseRecord()

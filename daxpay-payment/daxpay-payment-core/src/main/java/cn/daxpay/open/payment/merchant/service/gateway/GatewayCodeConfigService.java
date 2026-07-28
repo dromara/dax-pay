@@ -140,6 +140,7 @@ public class GatewayCodeConfigService {
         }
     }
 
+    /// 将码牌配置主表与子表组装为带客户端环境列表的结果对象
     private GatewayCodeConfigResult toResultWithClientEnvs(GatewayCodeConfig entity) {
         GatewayCodeConfigResult result = new GatewayCodeConfigResult();
         BeanUtil.copyProperties(entity, result);

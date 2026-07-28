@@ -187,6 +187,7 @@ public class CashierPayService {
         return env.getCode();
     }
 
+    /// 映射公开支付项(脱敏路由敏感字段, 注入 needOpenId 判定)
     private CashierItemPublicResult toPublicResult(GatewayCashierItem item, ClientEnvEnum clientEnv) {
         // DIRECT 模式下 method 被强制清空(见 GatewayCashierConfigService#normalizeAndValidate),
         // 此时用 capability 兜底判断 needOpenId; capability 与 PayMethodEnum 同码(如 wechat_jsapi),

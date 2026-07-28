@@ -85,6 +85,7 @@ public class PayTradeService {
         }
     }
 
+    /// 运营端翻译商户名称(mchNo → mchName)
     private void translateIfAdmin(Object target) {
         if (ClientEnum.ADMIN.getCode().equals(clientCodeService.getClientCode())) {
             // 翻译商户名称(mchNo -> mchName)

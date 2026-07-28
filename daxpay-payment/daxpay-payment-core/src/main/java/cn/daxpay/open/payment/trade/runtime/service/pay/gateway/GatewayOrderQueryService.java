@@ -23,6 +23,7 @@ public class GatewayOrderQueryService {
     private final PayTradeManager payTradeManager;
     private final MerchantContextLoader merchantContextLoader;
 
+    /// 按 orderNo 或 bizOrderNo 查询网关订单
     public GatewayOrderResult query(GatewayOrderQueryParam param) {
         if (StrUtil.isBlank(param.getOrderNo()) && StrUtil.isBlank(param.getBizOrderNo())) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.orderNoRequired");
@@ -54,6 +55,7 @@ public class GatewayOrderQueryService {
         return this.toResult(order);
     }
 
+    /// 网关订单实体 → 查询结果 DTO(含关联资金交易号)
     public GatewayOrderResult toResult(GatewayPayOrder order) {
         GatewayOrderResult result = new GatewayOrderResult()
                 .setOrderNo(order.getOrderNo())

@@ -91,6 +91,10 @@ public class GatewayPayAssistService {
         );
     }
 
+    /// 预下单事务体: 幂等校验 → 新建容器订单 → 返回落地页 URL
+    ///
+    /// - 已有未终态单则直接返回原 URL
+    /// - PAID/failed/closed/expired 视为终态拒绝重入
     @Transactional(rollbackFor = Exception.class)
     public GatewayPrePayResult doPrePay(GatewayPrePayParam param, GatewayPayTypeEnum typeEnum) {
         // 幂等: 已有未终态单则返回原 URL
@@ -187,6 +191,7 @@ public class GatewayPayAssistService {
         return gatewayBase + "/cashier/" + order.getOrderNo();
     }
 
+    /// 构建预下单返回结果(含落地页 URL)
     public GatewayPrePayResult buildPrePayResult(GatewayPayOrder order) {
         return new GatewayPrePayResult()
                 .setOrderNo(order.getOrderNo())
@@ -196,6 +201,7 @@ public class GatewayPayAssistService {
                 .setExpiredTime(order.getExpiredTime());
     }
 
+    /// 注册网关超时关单延时消息(失败由定时任务兜底)
     private void registerTimeout(String orderNo, String bizOrderNo, OffsetDateTime expiredTime) {
         GatewayTimeoutMessage message = new GatewayTimeoutMessage()
                 .setOrderNo(orderNo)

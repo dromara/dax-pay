@@ -230,6 +230,11 @@ public class CodePayAssistService {
         }
     }
 
+    /// 加载已启用且已分配商户的码牌实体
+    ///
+    /// - 查无记录 → DataNotExistException
+    /// - 状态非 ENABLED → 码牌未启用
+    /// - mchNo 为空 → 码牌未分配商户
     private DeviceQrCode loadEnabledAssigned(String code) {
         DeviceQrCode entity = deviceQrCodeManager.findByCode(code)
                 .orElseThrow(() -> new DataNotExistException("error.device.qrcode.notFound"));
@@ -244,6 +249,10 @@ public class CodePayAssistService {
         return entity;
     }
 
+    /// 按码牌金额类型解析实际支付金额(分)
+    ///
+    /// - FIXED: 返回码牌固定金额(须 > 0)
+    /// - 其他: 返回请求金额(须 > 0)
     private long resolveAmount(DeviceQrCode entity, Long requestAmount) {
         QrCodeAmountTypeEnum amountType = QrCodeAmountTypeEnum.findByCode(entity.getAmountType());
         if (amountType == QrCodeAmountTypeEnum.FIXED) {
@@ -311,6 +320,9 @@ public class CodePayAssistService {
         return "/h/" + segment + "/" + code + "?authed=1";
     }
 
+    /// 客户端环境映射为通道授权类型
+    ///
+    /// 支付宝/微信/抖音各对应其授权类型; 其他环境默认回退微信
     private String mapAuthType(ClientEnvEnum clientEnv) {
         return switch (clientEnv) {
             case ALIPAY -> ChannelAuthTypeEnum.ALIPAY.getCode();
