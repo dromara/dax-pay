@@ -222,7 +222,8 @@
       "size": "限制用户支付类型不能超过128位"
     },
     "channelAppId": {
-      "size": "channelAppId不可超过128位"
+      "size": "channelAppId不可超过128位",
+      "notBlank": "请选择应用"
     },
     "openId": {
       "size": "用户标识不可超过128位"

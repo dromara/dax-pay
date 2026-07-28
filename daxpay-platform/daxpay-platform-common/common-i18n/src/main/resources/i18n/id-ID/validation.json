@@ -222,7 +222,8 @@
       "size": "Jenis pembayaran batas tidak boleh melebihi 128 karakter"
     },
     "channelAppId": {
-      "size": "ID aplikasi op tidak boleh melebihi 128 karakter"
+      "size": "ID aplikasi op tidak boleh melebihi 128 karakter",
+      "notBlank": "Please select an app"
     },
     "openId": {
       "size": "ID Terbuka tidak boleh melebihi 128 karakter"

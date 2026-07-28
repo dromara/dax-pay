@@ -222,7 +222,8 @@
       "size": "Jenis bayaran had tidak boleh melebihi 128 aksara"
     },
     "channelAppId": {
-      "size": "ID apl Op tidak boleh melebihi 128 aksara"
+      "size": "ID apl Op tidak boleh melebihi 128 aksara",
+      "notBlank": "Please select an app"
     },
     "openId": {
       "size": "ID terbuka tidak boleh melebihi 128 aksara"

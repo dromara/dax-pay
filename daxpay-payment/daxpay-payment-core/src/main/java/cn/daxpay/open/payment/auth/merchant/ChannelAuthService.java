@@ -59,10 +59,13 @@ public class ChannelAuthService {
 
     /// 生成授权链接: 支付宝走平台级 Provider, 其余按支付产品走通道策略
     public AuthUrlResult generateAuthUrl(GenerateAuthUrlParam param) {
+        // 获取认证来源: 目前只有支付宝直接获取来源
         String source = mapAuthTypeToSource(param.getAuthType());
         if (source != null) {
+            // 通常会是支付宝, 支付宝走平台级获取userId
             return providers.get(source).generateAuthUrl(param.getReturnPath());
         }
+        // 获取通道授权链接
         return channelProductAuthService.generateAuthUrl(param);
     }
 

@@ -1,8 +1,11 @@
 package cn.daxpay.open.payment.auth.develop;
 
+import cn.daxpay.open.payment.wx.facade.WxAppFacade;
+import cn.daxpay.open.payment.wx.facade.WxAppView;
 import cn.daxpay.open.payment.unipay.param.assist.GenerateAuthUrlParam;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
 import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
+import cn.daxpay.open.platform.core.enums.unipay.ChannelAuthTypeEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,6 +37,7 @@ public class DevelopAuthService {
     private final DouyinH5AuthProvider douyinH5AuthProvider;
     private final ProductAuthService channelProductAuthService;
     private final AuthSessionStore authSessionStore;
+    private final WxAppFacade wxAppFacade;
 
     /// 生成支付宝授权链接(平台级 OAuth + queryCode 轮询)
     public AuthUrlResult generateAlipayAuthUrl() {
@@ -52,10 +56,17 @@ public class DevelopAuthService {
 
     /// 生成微信支付(直连/服务商)授权链接
     ///
-    /// 委托 [ProductAuthService#generateAuthUrl], 按支付产品路由对应认证策略:
-    /// 直连(WECHAT_PAY) → WechatDirectAuthStrategy; 服务商(WECHAT_ISV) → WechatIsvAuthStrategy。
-    public AuthUrlResult generateChannelAuthUrl(GenerateAuthUrlParam param) {
-        return channelProductAuthService.generateAuthUrl(param);
+    /// 防腐层: 调试专用参数 → [GenerateAuthUrlParam], 再委托 [ProductAuthService#generateAuthUrl]。
+    /// authType 固定补 wechat(调试仅支持微信支付, 抖音走 generateDouyinAuthUrl)。
+    /// 应用解析: 显式 scope + appId → [WxAppFacade#getById] 精确加载, 解析出的真实 wxAppId 填入
+    /// channelAppId 走正常覆盖路径, 不再依赖认证策略的 scopedId 补丁。
+    public AuthUrlResult generateChannelAuthUrl(DevelopChannelAuthParam param) {
+        WxAppView app = wxAppFacade.getById(param.getScope(), param.getAppId());
+        GenerateAuthUrlParam inner = new GenerateAuthUrlParam();
+        inner.setAuthType(ChannelAuthTypeEnum.WECHAT.getCode());
+        inner.setMchNo(param.getMchNo());
+        inner.setChannelAppId(app.wxAppId());
+        return channelProductAuthService.generateAuthUrl(inner);
     }
 
     /// 通过查询码获取认证结果

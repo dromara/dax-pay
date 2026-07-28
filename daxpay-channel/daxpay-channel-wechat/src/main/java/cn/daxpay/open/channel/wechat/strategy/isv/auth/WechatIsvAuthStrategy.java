@@ -83,6 +83,8 @@ public class WechatIsvAuthStrategy extends AbsProductAuthStrategy {
     /// 解析认证应用(返回 wxAppId + appSecret)
     ///
     /// SP_APP → pair.platform；SUB_APP → pair.merchant(必填)
+    /// channelAppId 承载真实 wxAppId 覆盖语义: 非空时走 resolveIsvPair 内部显式 appId 命中逻辑。
+    /// 调试场景由 DevelopAuthService 已精确解析出真实 wxAppId 并填入, 此处走正常覆盖路径。
     private ResolvedAuthApp resolveAuthApp(String mchNo, String channelMchNo, String capability, String channelAppId) {
         String resolvedMchNo = resolveMchNo(mchNo, channelMchNo);
         WechatAuthAppTypeEnum authAppType = loadAuthAppType(channelMchNo);

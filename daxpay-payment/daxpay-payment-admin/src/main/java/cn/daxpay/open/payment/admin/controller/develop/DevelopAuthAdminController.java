@@ -1,7 +1,7 @@
 package cn.daxpay.open.payment.admin.controller.develop;
 
 import cn.daxpay.open.payment.auth.develop.DevelopAuthService;
-import cn.daxpay.open.payment.unipay.param.assist.GenerateAuthUrlParam;
+import cn.daxpay.open.payment.auth.develop.DevelopChannelAuthParam;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
 import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
 import cn.daxpay.open.platform.core.annotation.PermCode;
@@ -64,9 +64,7 @@ public class DevelopAuthAdminController {
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "生成微信支付授权链接")
     @PostMapping("/generate-channel-auth-url")
-    public Result<AuthUrlResult> generateChannelAuthUrl(@RequestBody GenerateAuthUrlParam param) {
-        // 不加 @Valid: GenerateAuthUrlParam 继承 PaymentCommonParam.reqTime(@NotNull), 但认证不走签名/防重放, 无需 reqTime;
-        // channel/mchNo 由 ProductAuthService 业务层兜底校验, 与 unipay ChannelAuthController 同类接口保持一致
+    public Result<AuthUrlResult> generateChannelAuthUrl(@Validated @RequestBody DevelopChannelAuthParam param) {
         return Res.ok(developAuthService.generateChannelAuthUrl(param));
     }
 

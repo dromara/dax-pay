@@ -147,7 +147,7 @@ public class ProductAuthService {
 
     /// 支付方式缺失时按认证类型推导默认值
     ///
-    /// OAuth 重定向认证天然只适用于公众号(H5网页授权)场景, 微信默认补 jsapi, 抖音默认补 h5。
+    /// OAuth 重定向认证天然只适用于公众号(H5网页授权)场景, 微信默认补 jsapi, 抖音默认补 jsapi。
     /// 已显式传入 method 的场景(网关/码牌)不受影响。
     private static String resolveDefaultMethod(String authType, String method) {
         if (StrUtil.isNotBlank(method)) {
@@ -157,7 +157,7 @@ public class ProductAuthService {
             return PayMethodEnum.WECHAT_JSAPI.getCode();
         }
         if (ChannelAuthTypeEnum.DOUYIN.getCode().equals(authType)) {
-            return PayMethodEnum.DOUYIN_H5.getCode();
+            return PayMethodEnum.DOUYIN_JSAPI.getCode();
         }
         return method;
     }

@@ -222,7 +222,8 @@
       "size": "限制使用者支付型別不能超過128位"
     },
     "channelAppId": {
-      "size": "channelAppId不可超過128位"
+      "size": "channelAppId不可超過128位",
+      "notBlank": "請選擇應用"
     },
     "openId": {
       "size": "使用者標識不可超過128位"

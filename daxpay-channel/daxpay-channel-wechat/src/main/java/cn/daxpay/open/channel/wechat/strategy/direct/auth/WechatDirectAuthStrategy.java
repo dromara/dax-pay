@@ -78,6 +78,9 @@ public class WechatDirectAuthStrategy extends AbsProductAuthStrategy {
     }
 
     /// 解析认证应用: 主数据 facade.resolve(wxAppId + 明文 appSecret)
+    ///
+    /// channelAppId 承载真实 wxAppId 覆盖语义: 非空时走 resolve 第1步精确命中, 不进入推断链路。
+    /// 调试场景由 DevelopAuthService 已精确解析出真实 wxAppId 并填入, 此处走正常覆盖路径。
     private WxAppView resolveApp(String mchNo, String channelMchNo, String capability, String channelAppId) {
         String resolvedMchNo = resolveMchNo(mchNo, channelMchNo);
         return wxAppFacade.resolve(resolvedMchNo, channelMchNo, capability, channelAppId,

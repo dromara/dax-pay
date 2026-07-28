@@ -222,7 +222,8 @@
       "size": "Limit pay type cannot exceed 128 characters"
     },
     "channelAppId": {
-      "size": "Op app ID cannot exceed 128 characters"
+      "size": "Op app ID cannot exceed 128 characters",
+      "notBlank": "Please select an app"
     },
     "openId": {
       "size": "Open ID cannot exceed 128 characters"
