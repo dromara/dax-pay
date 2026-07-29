@@ -24,7 +24,7 @@ public class DyPlatformAppResult extends BaseResult {
     @Schema(description = "抖音应用AppId")
     private String douyinAppId;
 
-    @SensitiveInfo(front = 12, end = 12)
+    @SensitiveInfo(front = 6, end = 6)
     @Schema(description = "应用密钥(已脱敏)")
     private String appSecret;
 }

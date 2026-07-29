@@ -24,7 +24,7 @@ public class WxMchAppResult extends MchBaseResult {
     @Schema(description = "微信应用AppId")
     private String wxAppId;
 
-    @SensitiveInfo(front = 12, end = 12)
+    @SensitiveInfo(front = 6, end = 6)
     @Schema(description = "应用密钥(已脱敏)")
     private String appSecret;
 }
