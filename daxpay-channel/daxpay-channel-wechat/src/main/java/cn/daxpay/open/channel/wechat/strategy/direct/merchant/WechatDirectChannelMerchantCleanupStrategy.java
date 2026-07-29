@@ -1,13 +1,7 @@
 package cn.daxpay.open.channel.wechat.strategy.direct.merchant;
 
-import cn.daxpay.open.channel.wechat.dao.direct.WechatDirectAppAuthConfigManager;
-import cn.daxpay.open.channel.wechat.dao.direct.WechatDirectAppCapabilityManager;
-import cn.daxpay.open.channel.wechat.dao.direct.WechatDirectAppManager;
 import cn.daxpay.open.channel.wechat.dao.direct.WechatDirectChannelMerchantManager;
 import cn.daxpay.open.channel.wechat.dao.direct.WechatDirectKeyConfigManager;
-import cn.daxpay.open.channel.wechat.entity.direct.WechatDirectApp;
-import cn.daxpay.open.channel.wechat.entity.direct.WechatDirectAppAuthConfig;
-import cn.daxpay.open.channel.wechat.entity.direct.WechatDirectAppCapability;
 import cn.daxpay.open.channel.wechat.entity.direct.WechatDirectChannelMerchant;
 import cn.daxpay.open.channel.wechat.entity.direct.WechatDirectKeyConfig;
 import cn.daxpay.open.payment.wx.service.channel.WxChannelAppCapabilityService;
@@ -23,7 +17,6 @@ import org.springframework.transaction.annotation.Transactional;
 /// 在通道商户删除时清理:
 /// - 直连扩展表 + 密钥配置
 /// - 主数据通道能力绑([WxChannelAppCapabilityService#deleteByChannelMchNo])
-/// - 旧 wechat_direct_app* 表(兼容未迁数据的历史清理)
 ///
 /// 与 [cn.daxpay.open.channel.wechat.strategy.isv.merchant.WechatIsvChannelMerchantCleanupStrategy]
 /// 分属不同 product(`WECHAT_PAY` vs `WECHAT_ISV`), 通过 [cn.daxpay.open.payment.strategy.PaymentStrategyFactory#findOptionallyByProduct]
@@ -34,10 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class WechatDirectChannelMerchantCleanupStrategy implements ChannelMerchantCleanupStrategy {
 
     private final WechatDirectChannelMerchantManager wechatDirectChannelMerchantManager;
-    private final WechatDirectAppManager wechatDirectAppManager;
     private final WechatDirectKeyConfigManager wechatDirectAppKeyConfigManager;
-    private final WechatDirectAppCapabilityManager wechatDirectAppCapabilityManager;
-    private final WechatDirectAppAuthConfigManager wechatDirectAppAuthConfigManager;
     private final WxChannelAppCapabilityService wxChannelAppCapabilityService;
 
     /// 对应产品: 微信支付直连
@@ -54,9 +44,5 @@ public class WechatDirectChannelMerchantCleanupStrategy implements ChannelMercha
         wechatDirectAppKeyConfigManager.deleteByField(WechatDirectKeyConfig::getChannelMchNo, channelMchNo);
         // 主数据: 通道商户 × 能力绑
         wxChannelAppCapabilityService.deleteByChannelMchNo(channelMchNo);
-        // 兼容未迁数据: 清理旧直连应用表
-        wechatDirectAppManager.deleteByField(WechatDirectApp::getChannelMchNo, channelMchNo);
-        wechatDirectAppCapabilityManager.deleteByField(WechatDirectAppCapability::getChannelMchNo, channelMchNo);
-        wechatDirectAppAuthConfigManager.deleteByField(WechatDirectAppAuthConfig::getChannelMchNo, channelMchNo);
     }
 }

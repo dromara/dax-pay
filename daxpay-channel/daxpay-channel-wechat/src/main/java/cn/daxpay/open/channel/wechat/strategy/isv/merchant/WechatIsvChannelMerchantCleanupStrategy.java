@@ -1,13 +1,7 @@
 package cn.daxpay.open.channel.wechat.strategy.isv.merchant;
 
 import cn.daxpay.open.channel.wechat.dao.isv.WechatIsvChannelMerchantManager;
-import cn.daxpay.open.channel.wechat.dao.isv.WechatIsvMchAppAuthConfigManager;
-import cn.daxpay.open.channel.wechat.dao.isv.WechatIsvMchAppCapabilityManager;
-import cn.daxpay.open.channel.wechat.dao.isv.WechatIsvMchAppManager;
 import cn.daxpay.open.channel.wechat.entity.isv.WechatIsvChannelMerchant;
-import cn.daxpay.open.channel.wechat.entity.isv.WechatIsvMchApp;
-import cn.daxpay.open.channel.wechat.entity.isv.WechatIsvMchAppAuthConfig;
-import cn.daxpay.open.channel.wechat.entity.isv.WechatIsvMchAppCapability;
 import cn.daxpay.open.payment.wx.service.channel.WxChannelAppCapabilityService;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.payment.strategy.merchant.ChannelMerchantCleanupStrategy;
@@ -21,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 /// 在通道商户删除时清理:
 /// - 服务商特约商户扩展表
 /// - 主数据通道能力绑([WxChannelAppCapabilityService#deleteByChannelMchNo])
-/// - 旧 wechat_isv_mch_app* 表(兼容未迁数据的历史清理)
 ///
 /// 与 [cn.daxpay.open.channel.wechat.strategy.direct.merchant.WechatDirectChannelMerchantCleanupStrategy]
 /// 分属不同 product(`WECHAT_ISV` vs `WECHAT_PAY`), 通过 [cn.daxpay.open.payment.strategy.PaymentStrategyFactory#findOptionallyByProduct]
@@ -32,9 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class WechatIsvChannelMerchantCleanupStrategy implements ChannelMerchantCleanupStrategy {
 
     private final WechatIsvChannelMerchantManager wechatIsvChannelMerchantManager;
-    private final WechatIsvMchAppManager wechatIsvMchAppManager;
-    private final WechatIsvMchAppCapabilityManager wechatIsvMchAppCapabilityManager;
-    private final WechatIsvMchAppAuthConfigManager wechatIsvMchAppAuthConfigManager;
     private final WxChannelAppCapabilityService wxChannelAppCapabilityService;
 
     /// 对应产品: 微信支付服务商
@@ -50,9 +40,5 @@ public class WechatIsvChannelMerchantCleanupStrategy implements ChannelMerchantC
         wechatIsvChannelMerchantManager.deleteByField(WechatIsvChannelMerchant::getChannelMchNo, channelMchNo);
         // 主数据: 通道商户 × 能力绑
         wxChannelAppCapabilityService.deleteByChannelMchNo(channelMchNo);
-        // 兼容未迁数据: 清理旧子商户应用表
-        wechatIsvMchAppManager.deleteByField(WechatIsvMchApp::getChannelMchNo, channelMchNo);
-        wechatIsvMchAppCapabilityManager.deleteByField(WechatIsvMchAppCapability::getChannelMchNo, channelMchNo);
-        wechatIsvMchAppAuthConfigManager.deleteByField(WechatIsvMchAppAuthConfig::getChannelMchNo, channelMchNo);
     }
 }

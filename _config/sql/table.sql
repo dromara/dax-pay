@@ -2167,68 +2167,10 @@ COMMENT ON COLUMN "public"."wechat_direct_channel_merchant"."deleted" IS '逻辑
 COMMENT ON TABLE "public"."wechat_direct_channel_merchant" IS '微信直连通道商户绑定';
 
 -- ----------------------------
--- Table structure for wechat_direct_app_auth_config
--- ----------------------------
-DROP TABLE IF EXISTS "public"."wechat_direct_app_auth_config";
-CREATE TABLE "public"."wechat_direct_app_auth_config" (
-  "id" int8 NOT NULL,
-  "mch_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "channel_mch_no" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
-  "wechat_direct_app_id" int8,
-  "app_secret" text COLLATE "pg_catalog"."default",
-  "creator" int8,
-  "create_time" timestamptz(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamptz(6),
-  "version" int4 NOT NULL DEFAULT 0,
-  "deleted" bool NOT NULL DEFAULT false
-)
-;
-COMMENT ON COLUMN "public"."wechat_direct_app_auth_config"."id" IS '主键';
-COMMENT ON COLUMN "public"."wechat_direct_app_auth_config"."mch_no" IS '商户号';
-COMMENT ON COLUMN "public"."wechat_direct_app_auth_config"."channel_mch_no" IS '通道商户号';
-COMMENT ON COLUMN "public"."wechat_direct_app_auth_config"."wechat_direct_app_id" IS '关联应用 ID';
-COMMENT ON COLUMN "public"."wechat_direct_app_auth_config"."app_secret" IS '应用密钥(加密存储)';
-COMMENT ON COLUMN "public"."wechat_direct_app_auth_config"."creator" IS '创建人';
-COMMENT ON COLUMN "public"."wechat_direct_app_auth_config"."create_time" IS '创建时间';
-COMMENT ON COLUMN "public"."wechat_direct_app_auth_config"."last_modifier" IS '最后修改人';
-COMMENT ON COLUMN "public"."wechat_direct_app_auth_config"."last_modified_time" IS '最后修改时间';
-COMMENT ON COLUMN "public"."wechat_direct_app_auth_config"."version" IS '乐观锁版本号';
-COMMENT ON COLUMN "public"."wechat_direct_app_auth_config"."deleted" IS '逻辑删除标志';
-COMMENT ON TABLE "public"."wechat_direct_app_auth_config" IS '微信直连商户应用授权配置';
+
 
 -- ----------------------------
--- Table structure for wechat_direct_app
--- ----------------------------
-DROP TABLE IF EXISTS "public"."wechat_direct_app";
-CREATE TABLE "public"."wechat_direct_app" (
-  "id" int8 NOT NULL,
-  "mch_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "channel_mch_no" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
-  "app_name" varchar(64) COLLATE "pg_catalog"."default",
-  "wx_app_id" varchar(64) COLLATE "pg_catalog"."default",
-  "creator" int8,
-  "create_time" timestamptz(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamptz(6),
-  "version" int4 NOT NULL DEFAULT 0,
-  "deleted" bool NOT NULL DEFAULT false,
-  "app_type" varchar(32) COLLATE "pg_catalog"."default"
-)
-;
-COMMENT ON COLUMN "public"."wechat_direct_app"."id" IS '主键';
-COMMENT ON COLUMN "public"."wechat_direct_app"."mch_no" IS '商户号';
-COMMENT ON COLUMN "public"."wechat_direct_app"."channel_mch_no" IS '通道商户号';
-COMMENT ON COLUMN "public"."wechat_direct_app"."app_name" IS '应用名称';
-COMMENT ON COLUMN "public"."wechat_direct_app"."wx_app_id" IS '微信应用AppId';
-COMMENT ON COLUMN "public"."wechat_direct_app"."creator" IS '创建人';
-COMMENT ON COLUMN "public"."wechat_direct_app"."create_time" IS '创建时间';
-COMMENT ON COLUMN "public"."wechat_direct_app"."last_modifier" IS '最后修改人';
-COMMENT ON COLUMN "public"."wechat_direct_app"."last_modified_time" IS '最后修改时间';
-COMMENT ON COLUMN "public"."wechat_direct_app"."version" IS '乐观锁版本号';
-COMMENT ON COLUMN "public"."wechat_direct_app"."deleted" IS '逻辑删除标志';
-COMMENT ON COLUMN "public"."wechat_direct_app"."app_type" IS '应用类型: official_account-公众号 mini_program-小程序 mobile_app-移动应用';
-COMMENT ON TABLE "public"."wechat_direct_app" IS '微信直连商户应用';
+
 
 -- ----------------------------
 -- Table structure for system_sensitive_word
@@ -2869,99 +2811,13 @@ COMMENT ON COLUMN "public"."wx_channel_app_capability"."wx_app_ref_id" IS '微�
 COMMENT ON TABLE "public"."wx_channel_app_capability" IS '通道商户微信应用能力绑定（同能力可按档位双绑 platform+merchant）';
 
 -- ----------------------------
--- Table structure for wechat_isv_mch_app_capability
--- ----------------------------
-DROP TABLE IF EXISTS "public"."wechat_isv_mch_app_capability";
-CREATE TABLE "public"."wechat_isv_mch_app_capability" (
-  "id" int8 NOT NULL,
-  "mch_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "channel_mch_no" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
-  "capability" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
-  "wechat_isv_mch_app_id" int8 NOT NULL,
-  "creator" int8,
-  "create_time" timestamptz(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamptz(6),
-  "version" int4 NOT NULL DEFAULT 0,
-  "deleted" bool NOT NULL DEFAULT false
-)
-;
-COMMENT ON COLUMN "public"."wechat_isv_mch_app_capability"."id" IS '主键';
-COMMENT ON COLUMN "public"."wechat_isv_mch_app_capability"."mch_no" IS '商户号';
-COMMENT ON COLUMN "public"."wechat_isv_mch_app_capability"."channel_mch_no" IS '通道商户号(服务商特约商户)';
-COMMENT ON COLUMN "public"."wechat_isv_mch_app_capability"."capability" IS '支付能力编码';
-COMMENT ON COLUMN "public"."wechat_isv_mch_app_capability"."wechat_isv_mch_app_id" IS '关联服务商通道商户应用ID(指向wechat_isv_mch_app.id)';
-COMMENT ON COLUMN "public"."wechat_isv_mch_app_capability"."creator" IS '创建人ID';
-COMMENT ON COLUMN "public"."wechat_isv_mch_app_capability"."create_time" IS '创建时间';
-COMMENT ON COLUMN "public"."wechat_isv_mch_app_capability"."last_modifier" IS '最后修改人ID';
-COMMENT ON COLUMN "public"."wechat_isv_mch_app_capability"."last_modified_time" IS '最后修改时间';
-COMMENT ON COLUMN "public"."wechat_isv_mch_app_capability"."version" IS '乐观锁版本号';
-COMMENT ON COLUMN "public"."wechat_isv_mch_app_capability"."deleted" IS '逻辑删除标志';
-COMMENT ON TABLE "public"."wechat_isv_mch_app_capability" IS '微信服务商通道商户应用支付能力关联';
+
 
 -- ----------------------------
--- Table structure for wechat_isv_mch_app_auth_config
--- ----------------------------
-DROP TABLE IF EXISTS "public"."wechat_isv_mch_app_auth_config";
-CREATE TABLE "public"."wechat_isv_mch_app_auth_config" (
-  "id" int8 NOT NULL,
-  "channel_mch_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "wechat_isv_mch_app_id" int8 NOT NULL,
-  "app_secret" varchar(255) COLLATE "pg_catalog"."default",
-  "mch_no" varchar(32) COLLATE "pg_catalog"."default",
-  "creator" int8,
-  "create_time" timestamptz(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamptz(6),
-  "version" int4 NOT NULL DEFAULT 0,
-  "deleted" bool NOT NULL DEFAULT false
-)
-;
-COMMENT ON COLUMN "public"."wechat_isv_mch_app_auth_config"."id" IS '主键';
-COMMENT ON COLUMN "public"."wechat_isv_mch_app_auth_config"."channel_mch_no" IS '通道商户号(服务商特约商户)';
-COMMENT ON COLUMN "public"."wechat_isv_mch_app_auth_config"."wechat_isv_mch_app_id" IS '关联服务商通道商户应用ID';
-COMMENT ON COLUMN "public"."wechat_isv_mch_app_auth_config"."app_secret" IS '应用密钥(加密存储)';
-COMMENT ON COLUMN "public"."wechat_isv_mch_app_auth_config"."mch_no" IS '商户号';
-COMMENT ON COLUMN "public"."wechat_isv_mch_app_auth_config"."creator" IS '创建者ID';
-COMMENT ON COLUMN "public"."wechat_isv_mch_app_auth_config"."create_time" IS '创建时间';
-COMMENT ON COLUMN "public"."wechat_isv_mch_app_auth_config"."last_modifier" IS '最后修改者ID';
-COMMENT ON COLUMN "public"."wechat_isv_mch_app_auth_config"."last_modified_time" IS '最后修改时间';
-COMMENT ON COLUMN "public"."wechat_isv_mch_app_auth_config"."version" IS '版本号(乐观锁)';
-COMMENT ON COLUMN "public"."wechat_isv_mch_app_auth_config"."deleted" IS '逻辑删除标记';
-COMMENT ON TABLE "public"."wechat_isv_mch_app_auth_config" IS '微信服务商通道商户应用授权认证配置';
+
 
 -- ----------------------------
--- Table structure for wechat_isv_mch_app
--- ----------------------------
-DROP TABLE IF EXISTS "public"."wechat_isv_mch_app";
-CREATE TABLE "public"."wechat_isv_mch_app" (
-  "id" int8 NOT NULL,
-  "mch_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "channel_mch_no" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
-  "app_name" varchar(128) COLLATE "pg_catalog"."default" NOT NULL,
-  "app_type" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "wx_app_id" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
-  "creator" int8,
-  "create_time" timestamptz(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamptz(6),
-  "version" int4 NOT NULL DEFAULT 0,
-  "deleted" bool NOT NULL DEFAULT false
-)
-;
-COMMENT ON COLUMN "public"."wechat_isv_mch_app"."id" IS '主键';
-COMMENT ON COLUMN "public"."wechat_isv_mch_app"."mch_no" IS '商户号';
-COMMENT ON COLUMN "public"."wechat_isv_mch_app"."channel_mch_no" IS '通道商户号(服务商特约商户)';
-COMMENT ON COLUMN "public"."wechat_isv_mch_app"."app_name" IS '应用名称';
-COMMENT ON COLUMN "public"."wechat_isv_mch_app"."app_type" IS '应用类型(official_account/mini_program/mobile_app)';
-COMMENT ON COLUMN "public"."wechat_isv_mch_app"."wx_app_id" IS '微信应用AppId(对应微信支付sub_appid)';
-COMMENT ON COLUMN "public"."wechat_isv_mch_app"."creator" IS '创建人ID';
-COMMENT ON COLUMN "public"."wechat_isv_mch_app"."create_time" IS '创建时间';
-COMMENT ON COLUMN "public"."wechat_isv_mch_app"."last_modifier" IS '最后修改人ID';
-COMMENT ON COLUMN "public"."wechat_isv_mch_app"."last_modified_time" IS '最后修改时间';
-COMMENT ON COLUMN "public"."wechat_isv_mch_app"."version" IS '乐观锁版本号';
-COMMENT ON COLUMN "public"."wechat_isv_mch_app"."deleted" IS '逻辑删除标志';
-COMMENT ON TABLE "public"."wechat_isv_mch_app" IS '微信服务商通道商户应用(子商户自己的微信应用)';
+
 
 -- ----------------------------
 -- Table structure for wechat_isv_key_config
@@ -3036,104 +2892,16 @@ COMMENT ON COLUMN "public"."wechat_isv_channel_merchant"."auth_app_type" IS '认
 COMMENT ON TABLE "public"."wechat_isv_channel_merchant" IS '微信服务商通道商户绑定';
 
 -- ----------------------------
--- Table structure for wechat_isv_app_capability
--- ----------------------------
-DROP TABLE IF EXISTS "public"."wechat_isv_app_capability";
-CREATE TABLE "public"."wechat_isv_app_capability" (
-  "id" int8 NOT NULL DEFAULT nextval('wechat_isv_app_capability_id_seq'::regclass),
-  "capability" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
-  "wechat_isv_app_id" int8 NOT NULL,
-  "creator" int8,
-  "create_time" timestamptz(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamptz(6),
-  "version" int4 DEFAULT 0,
-  "deleted" bool NOT NULL DEFAULT false
-)
-;
-COMMENT ON COLUMN "public"."wechat_isv_app_capability"."capability" IS '支付能力编码';
-COMMENT ON COLUMN "public"."wechat_isv_app_capability"."wechat_isv_app_id" IS '关联微信服务商应用ID(指向wechat_isv_app.id)';
-COMMENT ON TABLE "public"."wechat_isv_app_capability" IS '微信服务商应用支付能力关联(全局维度,支付能力→服务商应用)';
+
 
 -- ----------------------------
--- Table structure for wechat_isv_app_auth_config
--- ----------------------------
-DROP TABLE IF EXISTS "public"."wechat_isv_app_auth_config";
-CREATE TABLE "public"."wechat_isv_app_auth_config" (
-  "id" int8 NOT NULL,
-  "wechat_isv_app_id" int8,
-  "app_secret" text COLLATE "pg_catalog"."default",
-  "creator" int8,
-  "create_time" timestamptz(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamptz(6),
-  "version" int4 NOT NULL DEFAULT 0,
-  "deleted" bool NOT NULL DEFAULT false
-)
-;
-COMMENT ON COLUMN "public"."wechat_isv_app_auth_config"."id" IS '主键';
-COMMENT ON COLUMN "public"."wechat_isv_app_auth_config"."wechat_isv_app_id" IS '关联服务商应用 ID';
-COMMENT ON COLUMN "public"."wechat_isv_app_auth_config"."app_secret" IS '应用密钥(加密存储)';
-COMMENT ON COLUMN "public"."wechat_isv_app_auth_config"."creator" IS '创建人';
-COMMENT ON COLUMN "public"."wechat_isv_app_auth_config"."create_time" IS '创建时间';
-COMMENT ON COLUMN "public"."wechat_isv_app_auth_config"."last_modifier" IS '最后修改人';
-COMMENT ON COLUMN "public"."wechat_isv_app_auth_config"."last_modified_time" IS '最后修改时间';
-COMMENT ON COLUMN "public"."wechat_isv_app_auth_config"."version" IS '乐观锁版本号';
-COMMENT ON COLUMN "public"."wechat_isv_app_auth_config"."deleted" IS '逻辑删除标志';
-COMMENT ON TABLE "public"."wechat_isv_app_auth_config" IS '微信服务商应用授权配置';
+
 
 -- ----------------------------
--- Table structure for wechat_isv_app
--- ----------------------------
-DROP TABLE IF EXISTS "public"."wechat_isv_app";
-CREATE TABLE "public"."wechat_isv_app" (
-  "id" int8 NOT NULL,
-  "app_name" varchar(64) COLLATE "pg_catalog"."default",
-  "app_type" varchar(32) COLLATE "pg_catalog"."default",
-  "wx_app_id" varchar(64) COLLATE "pg_catalog"."default",
-  "creator" int8,
-  "create_time" timestamptz(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamptz(6),
-  "version" int4 NOT NULL DEFAULT 0,
-  "deleted" bool NOT NULL DEFAULT false
-)
-;
-COMMENT ON COLUMN "public"."wechat_isv_app"."id" IS '主键';
-COMMENT ON COLUMN "public"."wechat_isv_app"."app_name" IS '应用名称';
-COMMENT ON COLUMN "public"."wechat_isv_app"."app_type" IS '应用类型';
-COMMENT ON COLUMN "public"."wechat_isv_app"."wx_app_id" IS '微信应用AppId';
-COMMENT ON COLUMN "public"."wechat_isv_app"."creator" IS '创建人';
-COMMENT ON COLUMN "public"."wechat_isv_app"."create_time" IS '创建时间';
-COMMENT ON COLUMN "public"."wechat_isv_app"."last_modifier" IS '最后修改人';
-COMMENT ON COLUMN "public"."wechat_isv_app"."last_modified_time" IS '最后修改时间';
-COMMENT ON COLUMN "public"."wechat_isv_app"."version" IS '乐观锁版本号';
-COMMENT ON COLUMN "public"."wechat_isv_app"."deleted" IS '逻辑删除标志';
-COMMENT ON TABLE "public"."wechat_isv_app" IS '微信服务商应用';
+
 
 -- ----------------------------
--- Table structure for wechat_direct_app_capability
--- ----------------------------
-DROP TABLE IF EXISTS "public"."wechat_direct_app_capability";
-CREATE TABLE "public"."wechat_direct_app_capability" (
-  "id" int8 NOT NULL DEFAULT nextval('wechat_direct_app_capability_id_seq'::regclass),
-  "mch_no" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
-  "channel_mch_no" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
-  "capability" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
-  "wechat_direct_app_id" int8 NOT NULL,
-  "creator" int8,
-  "create_time" timestamptz(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamptz(6),
-  "version" int4 DEFAULT 0,
-  "deleted" bool NOT NULL DEFAULT false
-)
-;
-COMMENT ON COLUMN "public"."wechat_direct_app_capability"."mch_no" IS '商户号';
-COMMENT ON COLUMN "public"."wechat_direct_app_capability"."channel_mch_no" IS '通道商户号';
-COMMENT ON COLUMN "public"."wechat_direct_app_capability"."capability" IS '支付能力编码';
-COMMENT ON COLUMN "public"."wechat_direct_app_capability"."wechat_direct_app_id" IS '关联微信直连应用ID(指向wechat_direct_app.id)';
-COMMENT ON TABLE "public"."wechat_direct_app_capability" IS '微信直连商户应用支付能力关联(通道商户维度,支付能力→直连应用)';
+
 
 -- ----------------------------
 -- Table structure for vbill_isv_key_config
@@ -5043,14 +4811,10 @@ ALTER TABLE "public"."wechat_direct_key_config" ADD CONSTRAINT "pk_wechat_direct
 ALTER TABLE "public"."wechat_direct_channel_merchant" ADD CONSTRAINT "pk_mch_wechat_direct_channel_merchant" PRIMARY KEY ("id");
 
 -- ----------------------------
--- Primary Key structure for table wechat_direct_app_auth_config
--- ----------------------------
-ALTER TABLE "public"."wechat_direct_app_auth_config" ADD CONSTRAINT "pk_wechat_direct_app_auth_config" PRIMARY KEY ("id");
+
 
 -- ----------------------------
--- Primary Key structure for table wechat_direct_app
--- ----------------------------
-ALTER TABLE "public"."wechat_direct_app" ADD CONSTRAINT "pk_wechat_direct_app" PRIMARY KEY ("id");
+
 
 -- ----------------------------
 -- Indexes structure for table system_sensitive_word
@@ -5323,50 +5087,16 @@ COMMENT ON INDEX "public"."uk_wx_channel_app_cap" IS '通道商户+能力+应用
 ALTER TABLE "public"."wx_channel_app_capability" ADD CONSTRAINT "wx_channel_app_capability_pkey" PRIMARY KEY ("id");
 
 -- ----------------------------
--- Indexes structure for table wechat_isv_mch_app_capability
 -- ----------------------------
-CREATE UNIQUE INDEX "uk_wechat_isv_mch_app_cap_channel_cap" ON "public"."wechat_isv_mch_app_capability" USING btree (
-  "channel_mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
-  "capability" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-) WHERE deleted = false;
-COMMENT ON INDEX "public"."uk_wechat_isv_mch_app_cap_channel_cap" IS '同一通道商户下支付能力唯一';
+
 
 -- ----------------------------
--- Primary Key structure for table wechat_isv_mch_app_capability
 -- ----------------------------
-ALTER TABLE "public"."wechat_isv_mch_app_capability" ADD CONSTRAINT "wechat_isv_mch_app_capability_pkey" PRIMARY KEY ("id");
+
 
 -- ----------------------------
--- Indexes structure for table wechat_isv_mch_app_auth_config
 -- ----------------------------
-CREATE INDEX "idx_wechat_isv_mch_app_auth_config_mch_app_id" ON "public"."wechat_isv_mch_app_auth_config" USING btree (
-  "wechat_isv_mch_app_id" "pg_catalog"."int8_ops" ASC NULLS LAST
-);
-COMMENT ON INDEX "public"."idx_wechat_isv_mch_app_auth_config_mch_app_id" IS '按商户应用 ID 查询授权配置';
-CREATE UNIQUE INDEX "uk_wechat_isv_mch_app_auth_config" ON "public"."wechat_isv_mch_app_auth_config" USING btree (
-  "channel_mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
-  "wechat_isv_mch_app_id" "pg_catalog"."int8_ops" ASC NULLS LAST
-) WHERE deleted = false;
-COMMENT ON INDEX "public"."uk_wechat_isv_mch_app_auth_config" IS '通道商户+商户应用授权唯一';
 
--- ----------------------------
--- Primary Key structure for table wechat_isv_mch_app_auth_config
--- ----------------------------
-ALTER TABLE "public"."wechat_isv_mch_app_auth_config" ADD CONSTRAINT "pk_wechat_isv_mch_app_auth_config" PRIMARY KEY ("id");
-
--- ----------------------------
--- Indexes structure for table wechat_isv_mch_app
--- ----------------------------
-CREATE UNIQUE INDEX "uk_wechat_isv_mch_app_channel_wxappid" ON "public"."wechat_isv_mch_app" USING btree (
-  "channel_mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
-  "wx_app_id" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-) WHERE deleted = false;
-COMMENT ON INDEX "public"."uk_wechat_isv_mch_app_channel_wxappid" IS '同一通道商户下微信 AppID 唯一';
-
--- ----------------------------
--- Primary Key structure for table wechat_isv_mch_app
--- ----------------------------
-ALTER TABLE "public"."wechat_isv_mch_app" ADD CONSTRAINT "wechat_isv_mch_app_pkey" PRIMARY KEY ("id");
 
 -- ----------------------------
 -- Primary Key structure for table wechat_isv_key_config
@@ -5379,41 +5109,18 @@ ALTER TABLE "public"."wechat_isv_key_config" ADD CONSTRAINT "pk_wechat_isv_key_c
 ALTER TABLE "public"."wechat_isv_channel_merchant" ADD CONSTRAINT "pk_mch_wechat_isv_channel_merchant" PRIMARY KEY ("id");
 
 -- ----------------------------
--- Indexes structure for table wechat_isv_app_capability
 -- ----------------------------
-CREATE UNIQUE INDEX "uk_wechat_isv_app_capability" ON "public"."wechat_isv_app_capability" USING btree (
-  "capability" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-) WHERE deleted = false;
-COMMENT ON INDEX "public"."uk_wechat_isv_app_capability" IS '支付能力唯一';
+
 
 -- ----------------------------
--- Primary Key structure for table wechat_isv_app_capability
--- ----------------------------
-ALTER TABLE "public"."wechat_isv_app_capability" ADD CONSTRAINT "pk_wechat_isv_app_capability" PRIMARY KEY ("id");
+
 
 -- ----------------------------
--- Primary Key structure for table wechat_isv_app_auth_config
--- ----------------------------
-ALTER TABLE "public"."wechat_isv_app_auth_config" ADD CONSTRAINT "pk_wechat_isv_app_auth_config" PRIMARY KEY ("id");
+
 
 -- ----------------------------
--- Primary Key structure for table wechat_isv_app
 -- ----------------------------
-ALTER TABLE "public"."wechat_isv_app" ADD CONSTRAINT "pk_wechat_isv_app" PRIMARY KEY ("id");
 
--- ----------------------------
--- Indexes structure for table wechat_direct_app_capability
--- ----------------------------
-CREATE UNIQUE INDEX "uk_wechat_direct_app_capability" ON "public"."wechat_direct_app_capability" USING btree (
-  "channel_mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
-  "capability" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-) WHERE deleted = false;
-COMMENT ON INDEX "public"."uk_wechat_direct_app_capability" IS '同一通道商户下支付能力唯一';
-
--- ----------------------------
--- Primary Key structure for table wechat_direct_app_capability
--- ----------------------------
-ALTER TABLE "public"."wechat_direct_app_capability" ADD CONSTRAINT "pk_wechat_direct_app_capability" PRIMARY KEY ("id");
 
 -- ----------------------------
 -- Indexes structure for table vbill_isv_key_config
