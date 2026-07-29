@@ -21,7 +21,7 @@ import java.util.List;
 ///
 /// 平台级移动端应用(商户端/管理端/收银台小程序)的密钥、通知、用户绑定配置管理。
 /// 按端类型(appType)+移动平台(platform)维度, 每组合一条配置记录。
-@PermCode(menuCode = PermCodes.System.MobileApp.MENU)
+@PermCode(menuCode = PermCodes.Payment.Config.MobileApp.MENU)
 @Validated
 @Tag(name = "移动端应用配置管理")
 @RestController

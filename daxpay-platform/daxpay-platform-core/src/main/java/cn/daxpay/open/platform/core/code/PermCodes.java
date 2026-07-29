@@ -201,6 +201,12 @@ public interface PermCodes {
                 /// 菜单编码
                 String MENU = "payment:config:wx-verify";
             }
+
+            /// 移动端应用管理 menuCode=payment:config:mobile-app
+            interface MobileApp {
+                /// 菜单编码
+                String MENU = "payment:config:mobile-app";
+            }
         }
 
         /// 微信开放应用主数据 menuCode=payment:wx:*
@@ -390,12 +396,6 @@ public interface PermCodes {
         interface Protocol {
             /// 菜单编码
             String MENU = "system:protocol";
-        }
-
-        /// 移动端应用管理 menuCode=system:config:mobile-app
-        interface MobileApp {
-            /// 菜单编码
-            String MENU = "system:config:mobile-app";
         }
 
         /// 敏感词词库 menuCode=system:sensitive-word
