@@ -32,7 +32,7 @@ public class MobileAppParam {
     /// 移动平台
     /// @see cn.daxpay.open.platform.system.enums.MobilePlatformEnum
     @NotBlank(message = "{validation.field.platform.notBlank}")
-    @Schema(description = "移动平台: wx_h5/wx_mini/alipay_mini/dy_mini/android/ios")
+    @Schema(description = "移动平台: wx_mini/alipay_mini/dy_mini/android/ios")
     private String platform;
 
     @Valid

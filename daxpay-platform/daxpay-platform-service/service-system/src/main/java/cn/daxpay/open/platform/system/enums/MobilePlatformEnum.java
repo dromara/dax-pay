@@ -15,8 +15,6 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public enum MobilePlatformEnum implements I18nSupport {
 
-    /// 微信公众号(H5)
-    WX_H5("wx_h5"),
     /// 微信小程序
     WX_MINI("wx_mini"),
     /// 支付宝小程序

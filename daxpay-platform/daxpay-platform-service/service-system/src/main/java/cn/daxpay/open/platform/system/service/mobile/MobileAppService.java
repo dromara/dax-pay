@@ -37,7 +37,7 @@ import java.util.Set;
 /// - API 层: wxMini / alipayMini / dyMini 嵌套对象; notify_config 仍为明文 jsonb 字符串
 ///
 /// ## 端类型与平台白名单
-/// - merchant: wx_h5 / wx_mini / alipay_mini / dy_mini
+/// - merchant: wx_mini / alipay_mini / dy_mini
 /// - admin: wx_mini / alipay_mini / dy_mini
 /// - cashier: wx_mini / alipay_mini / dy_mini
 @Slf4j
@@ -48,7 +48,6 @@ public class MobileAppService {
     /// 各端类型允许配置的移动平台(本期开放范围)
     private static final Map<MobileAppTypeEnum, Set<MobilePlatformEnum>> ALLOWED_PLATFORMS = Map.of(
             MobileAppTypeEnum.MERCHANT, Set.of(
-                    MobilePlatformEnum.WX_H5,
                     MobilePlatformEnum.WX_MINI,
                     MobilePlatformEnum.ALIPAY_MINI,
                     MobilePlatformEnum.DY_MINI),

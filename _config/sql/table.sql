@@ -1620,7 +1620,7 @@ CREATE TABLE "public"."pay_platform_mobile_app" (
 ;
 COMMENT ON COLUMN "public"."pay_platform_mobile_app"."id" IS '主键';
 COMMENT ON COLUMN "public"."pay_platform_mobile_app"."app_type" IS '端类型: merchant-商户端 / admin-管理端 / cashier-收银台';
-COMMENT ON COLUMN "public"."pay_platform_mobile_app"."platform" IS '移动平台: wx_h5/wx_mini/alipay_mini/dy_mini/android/ios';
+COMMENT ON COLUMN "public"."pay_platform_mobile_app"."platform" IS '移动平台: wx_mini/alipay_mini/dy_mini/android/ios';
 COMMENT ON COLUMN "public"."pay_platform_mobile_app"."app_config" IS '平台特有密钥配置(JSON文本, AES-256-GCM加密存储)';
 COMMENT ON COLUMN "public"."pay_platform_mobile_app"."notify_config" IS '消息通知配置(jsonb, 明文, 非敏感)';
 COMMENT ON COLUMN "public"."pay_platform_mobile_app"."binding_enabled" IS '是否启用第三方账号用户绑定';
