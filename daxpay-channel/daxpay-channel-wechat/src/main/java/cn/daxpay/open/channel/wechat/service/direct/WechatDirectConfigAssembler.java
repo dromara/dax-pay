@@ -18,7 +18,7 @@ import org.springframework.stereotype.Service;
 /// + 主数据应用([WxAppFacade#resolve]) 组装为下发给子应用的通道调用凭证 [WechatSdkCredential]。
 ///
 /// 应用解析由 facade 统一完成(显式 channelAppId → 通道能力绑 → 平台默认),
-/// 直连场景期望解析到商户档([cn.daxpay.open.payment.wx.enums.WxAppScopeEnum#MERCHANT])。
+/// 直连场景期望解析到商户档([cn.daxpay.open.payment.auth.core.AppScopeEnum#MERCHANT])。
 /// 密钥配置按通道商户号维度查询(一个商户号共享一套密钥/证书)。
 ///
 /// 供支付策略([cn.daxpay.open.channel.wechat.strategy.direct.WechatDirectPayStrategy])组装通道调用凭证。

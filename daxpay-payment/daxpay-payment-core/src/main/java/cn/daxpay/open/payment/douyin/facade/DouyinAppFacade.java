@@ -1,6 +1,6 @@
 package cn.daxpay.open.payment.douyin.facade;
 
-import cn.daxpay.open.payment.douyin.enums.DyAppScopeEnum;
+import cn.daxpay.open.payment.auth.core.AppScopeEnum;
 
 /// # 抖音开放应用解析门面
 ///
@@ -9,7 +9,7 @@ import cn.daxpay.open.payment.douyin.enums.DyAppScopeEnum;
 public interface DouyinAppFacade {
 
     /// 按档位与主键加载应用视图(含 Auth)
-    DyAppView getById(DyAppScopeEnum scope, Long id);
+    DyAppView getById(AppScopeEnum scope, Long id);
 
     /// 解析单应用：显式 channelAppId → 通道能力绑 → 产品级平台默认能力绑
     ///

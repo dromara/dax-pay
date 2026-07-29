@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 /// - 微信公众号配置(平台级 OAuth)
 /// - 抖音 H5 应用配置(平台级 silent_auth 静默授权)
 /// - 微信支付(直连/服务商, 需商户参数)
+/// - 抖音支付(直连/服务商, 需商户参数)
 /// - 支付宝小程序(暂未实现)
 /// - 微信小程序(商户端/运营端, 暂未实现)
 ///
@@ -66,6 +67,13 @@ public class DevelopAuthAdminController {
     @PostMapping("/generate-channel-auth-url")
     public Result<AuthUrlResult> generateChannelAuthUrl(@Validated @RequestBody DevelopChannelAuthParam param) {
         return Res.ok(developAuthService.generateChannelAuthUrl(param));
+    }
+
+    @PermCode(code = PermCodes.Action.VIEW)
+    @Operation(summary = "生成抖音支付授权链接")
+    @PostMapping("/generate-douyin-channel-auth-url")
+    public Result<AuthUrlResult> generateDouyinChannelAuthUrl(@Validated @RequestBody DevelopChannelAuthParam param) {
+        return Res.ok(developAuthService.generateDouyinChannelAuthUrl(param));
     }
 
     @PermCode(code = PermCodes.Action.VIEW)

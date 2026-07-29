@@ -1,8 +1,10 @@
 package cn.daxpay.open.payment.auth.develop;
 
-import cn.daxpay.open.payment.wx.enums.WxAppScopeEnum;
+import cn.daxpay.open.payment.auth.core.AppScopeEnum;
 import cn.daxpay.open.payment.wx.facade.WxAppFacade;
 import cn.daxpay.open.payment.wx.facade.WxAppView;
+import cn.daxpay.open.payment.douyin.facade.DouyinAppFacade;
+import cn.daxpay.open.payment.douyin.facade.DyAppView;
 import cn.daxpay.open.payment.unipay.param.assist.GenerateAuthUrlParam;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
 import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
@@ -24,6 +26,7 @@ import cn.daxpay.open.payment.auth.channel.MerchantChannelAuthService;
 /// - **抖音H5(平台级)**: 委托 [DouyinH5AuthProvider], silent_auth 静默授权取 openId, 仅验证配置是否正确
 /// - **微信支付(直连/服务商)**: 委托 [MerchantChannelAuthService] 按支付产品路由认证策略,
 ///   依赖商户上下文(channelMchNo/产品/能力)
+/// - **抖音支付(直连/服务商)**: 同微信支付, 显式选抖音网站应用 → [MerchantChannelAuthService]
 /// - **支付宝小程序**: 暂未实现
 /// - **微信小程序(商户端/运营端)**: 暂未实现
 ///
@@ -39,6 +42,7 @@ public class DevelopAuthService {
     private final MerchantChannelAuthService merchantChannelAuthService;
     private final AuthSessionStore authSessionStore;
     private final WxAppFacade wxAppFacade;
+    private final DouyinAppFacade douyinAppFacade;
 
     /// 生成支付宝授权链接(平台级 OAuth + queryCode 轮询)
     public AuthUrlResult generateAlipayAuthUrl() {
@@ -60,17 +64,36 @@ public class DevelopAuthService {
     /// 防腐层: 调试专用参数 → [GenerateAuthUrlParam], 再委托 [MerchantChannelAuthService#generateAuthUrl]。
     /// authType 固定补 wechat(调试仅支持微信支付, 抖音走 generateDouyinAuthUrl)。
     /// 应用解析: 显式 scope + appId → [WxAppFacade#getById] 精确加载,
-    /// 把档位(wxAppScope)+主键(wxAppRefId)塞入 param 供策略查密钥, 不再做路由推断。
+    /// 把档位(appScope)+主键(appRefId)塞入 param 供策略查密钥, 不再做路由推断。
     public AuthUrlResult generateChannelAuthUrl(DevelopChannelAuthParam param) {
         // String code → 枚举, 非法值返回 null 由 getById 兜底抛 error.payment.wx.scopeNotExist
-        WxAppScopeEnum scope = WxAppScopeEnum.findByCode(param.getScope());
+        AppScopeEnum scope = AppScopeEnum.findByCode(param.getScope());
         WxAppView app = wxAppFacade.getById(scope, param.getAppId());
         GenerateAuthUrlParam inner = new GenerateAuthUrlParam();
         inner.setAuthType(ChannelAuthTypeEnum.WECHAT.getCode());
         inner.setMchNo(param.getMchNo());
         // 调试入口已显式指定 scope+appId, 精确加载后把档位+主键塞入 param 供策略查密钥
-        inner.setWxAppScope(app.scope().getCode());
-        inner.setWxAppRefId(app.id());
+        inner.setAppScope(app.scope().getCode());
+        inner.setAppRefId(app.id());
+        return merchantChannelAuthService.generateAuthUrl(inner);
+    }
+
+    /// 生成抖音支付(直连/服务商)授权链接
+    ///
+    /// 防腐层: 调试专用参数 → [GenerateAuthUrlParam], 再委托 [MerchantChannelAuthService#generateAuthUrl]。
+    /// authType 固定补 douyin(平台级 H5 调试走 generateDouyinAuthUrl)。
+    /// 应用解析: 显式 scope + appId → [DouyinAppFacade#getById] 精确加载,
+    /// 把档位(appScope)+主键(appRefId)塞入 param 供策略查密钥, 不再做路由推断。
+    public AuthUrlResult generateDouyinChannelAuthUrl(DevelopChannelAuthParam param) {
+        // String code → 枚举, 非法值返回 null 由 getById 兜底抛 error.payment.douyin.scopeNotExist
+        AppScopeEnum scope = AppScopeEnum.findByCode(param.getScope());
+        DyAppView app = douyinAppFacade.getById(scope, param.getAppId());
+        GenerateAuthUrlParam inner = new GenerateAuthUrlParam();
+        inner.setAuthType(ChannelAuthTypeEnum.DOUYIN.getCode());
+        inner.setMchNo(param.getMchNo());
+        // 调试入口已显式指定 scope+appId, 精确加载后把档位+主键塞入 param 供策略查密钥
+        inner.setAppScope(app.scope().getCode());
+        inner.setAppRefId(app.id());
         return merchantChannelAuthService.generateAuthUrl(inner);
     }
 

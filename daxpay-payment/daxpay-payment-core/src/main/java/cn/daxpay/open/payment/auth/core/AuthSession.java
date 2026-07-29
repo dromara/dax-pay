@@ -11,10 +11,11 @@ import cn.daxpay.open.payment.auth.channel.MerchantChannelAuthService;
 /// 与 [MerchantChannelAuthService] 的 queryCode 机制(付款码/道通场景)解耦, 独立 key 前缀管理。
 ///
     /// ## 应用引用
-    /// session 只存通道应用的主键引用, 不存明文密钥:
-    /// - 微信: wxAppScope + wxAppRefId, 由 [cn.daxpay.open.payment.auth.channel.WechatAuthStrategy] 写入
-    /// - 抖音: dyAppScope + dyAppRefId, 由 [cn.daxpay.open.payment.auth.channel.DouyinAuthStrategy] 写入
-    /// doAuth 时策略据 scope + refId 调 Facade.getById 反查密钥。
+    /// session 只存通道应用的主键引用, 不存明文密钥。各通道策略在 generateAuthUrl 时写入
+    /// appScope(档位) + appRefId(主键), doAuth 时据其调所属通道 Facade.getById 反查密钥:
+    /// - 微信: [cn.daxpay.open.channel.wechat.strategy.auth.WechatAuthStrategy]
+    /// - 抖音: [cn.daxpay.open.channel.douyin.strategy.auth.DouyinAuthStrategy]
+    /// 档位语义通道无关(平台档/商户档), 见 [AppScopeEnum]。
 @Data
 @Accessors(chain = true)
 public class AuthSession {
@@ -36,19 +37,12 @@ public class AuthSession {
     /// @see cn.daxpay.open.platform.core.enums.unipay.ChannelAuthTypeEnum
     private String authType;
 
-    /// 微信应用档位(PLATFORM/MERCHANT), 与 wxAppRefId 配对, 回调时策略据其 getById 反查密钥
-    /// @see cn.daxpay.open.payment.wx.enums.WxAppScopeEnum
-    private String wxAppScope;
+    /// 通道应用档位(PLATFORM/MERCHANT), 与 appRefId 配对, 回调时策略据其 getById 反查密钥
+    /// @see AppScopeEnum
+    private String appScope;
 
-    /// 微信应用主键, 与 wxAppScope 配对, 回调时策略据其 getById 反查密钥
-    private Long wxAppRefId;
-
-    /// 抖音应用档位(PLATFORM/MERCHANT), 与 dyAppRefId 配对, 回调时策略据其 getById 反查密钥
-    /// @see cn.daxpay.open.payment.douyin.enums.DyAppScopeEnum
-    private String dyAppScope;
-
-    /// 抖音应用主键, 与 dyAppScope 配对, 回调时策略据其 getById 反查密钥
-    private Long dyAppRefId;
+    /// 通道应用主键, 与 appScope 配对, 回调时策略据其 getById 反查密钥
+    private Long appRefId;
 
     /// 来源回跳路径(授权完成后前端回跳的目标路径)
     private String returnPath;

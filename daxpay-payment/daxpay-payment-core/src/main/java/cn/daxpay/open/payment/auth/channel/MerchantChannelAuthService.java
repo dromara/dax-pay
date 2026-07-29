@@ -27,8 +27,8 @@ import java.util.stream.Collectors;
 /// # 商户级通道认证服务
 ///
 /// 按 authType 路由认证策略([ChannelAuthStrategy])。应用解析的职责归入口层与策略层:
-/// 入口层 resolve 选定微信应用后, 通过 GenerateAuthUrlParam.wxAppScope/wxAppRefId 标识;
-/// 策略层(微信)据此查密钥, 抖音策略则自行解析。本服务不感知任何微信应用细节,
+/// 入口层 resolve 选定通道应用后, 通过 GenerateAuthUrlParam.appScope/appRefId 标识;
+/// 策略层据此查密钥。本服务不感知任何通道应用细节,
 /// 仅负责会话生命周期与策略分发。
 ///
 /// **职责边界**: 本服务仅处理商户级通道认证; 平台级认证(平台支付宝配置 / 系统公众号配置)
@@ -66,7 +66,7 @@ public class MerchantChannelAuthService {
         // 生成 queryCode 供调试轮询(微信等 OAuth 重定向通道回调 URL 不含 queryCode, 需随会话保存)
         String queryCode = RandomUtil.randomString(10);
         AuthSession session = buildSession(param, queryCode);
-        // 策略往 session 写入回调恢复所需的应用引用(微信写 wxAppScope/wxAppRefId), 执行后统一持久化
+        // 策略往 session 写入回调恢复所需的应用引用(各通道写 appScope/appRefId), 执行后统一持久化
         AuthUrlResult authUrlResult = strategy.generateAuthUrl(param, authToken, session);
         authSessionStore.saveSession(authToken, session);
         // 回填 queryCode 并写入 WAITING 状态供前端轮询
@@ -78,8 +78,7 @@ public class MerchantChannelAuthService {
 
     /// 通过AuthCode获取通道认证结果
     ///
-    /// 策略自行从 session 恢复应用凭证: 微信读 wxAppScope/wxAppRefId 调 getById 查密钥,
-    /// 抖音读 channelMchNo 自行解析。
+    /// 策略自行从 session 恢复应用凭证: 各通道读 appScope/appRefId 调所属 Facade.getById 查密钥。
     ///
     /// @param session 认证会话上下文(H5场景从 authToken 恢复; 小程序直连场景可为空, 此时从 param 取上下文)。
     ///                由认证分发层在调用前通过 [AuthSessionStore#loadSession] 加载后注入。
@@ -94,7 +93,7 @@ public class MerchantChannelAuthService {
         String authType = (session != null && StrUtil.isNotBlank(session.getAuthType()))
                 ? session.getAuthType() : param.getAuthType();
         ChannelAuthStrategy strategy = findStrategy(authType);
-        // 策略自行从 session 恢复应用凭证(微信读 wxAppScope/wxAppRefId 查密钥; 抖音读 channelMchNo)
+        // 策略自行从 session 恢复应用凭证(各通道读 appScope/appRefId 查密钥)
         AuthResult authResult = strategy.doAuth(param, session);
         authResult.setStatus(ChannelAuthStatusEnum.SUCCESS.getCode());
         // 会话恢复场景: 回填来源回跳路径, 供前端跳回业务页面

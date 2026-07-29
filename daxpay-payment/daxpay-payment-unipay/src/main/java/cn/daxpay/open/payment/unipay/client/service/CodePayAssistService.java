@@ -29,6 +29,8 @@ import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
 import cn.daxpay.open.payment.wx.facade.WxAppFacade;
 import cn.daxpay.open.payment.wx.facade.WxAppView;
+import cn.daxpay.open.payment.douyin.facade.DouyinAppFacade;
+import cn.daxpay.open.payment.douyin.facade.DyAppView;
 import cn.daxpay.open.platform.common.spring.util.WebServletUtil;
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
@@ -70,6 +72,7 @@ public class CodePayAssistService {
     /// 平台安全配置（读取用户标识拦截级别, 决定 NORMAL 模式下不触发强制 OAuth）
     private final PlatformSecurityConfigService platformSecurityConfigService;
     private final WxAppFacade wxAppFacade;
+    private final DouyinAppFacade douyinAppFacade;
 
     /// 根据码牌编码查询支付信息(公开接口, 脱敏返回)
     ///
@@ -191,13 +194,20 @@ public class CodePayAssistService {
         authParam.setAppId(mchApp.getAppId());
         authParam.setChannelMchNo(routeParam.getChannelMchNo());
         authParam.setAuthType(authType);
-        // 微信认证: 入口层 resolve 选定应用, 把档位+主键塞入 param 供策略查密钥; 抖音策略自行解析
+        // 通道认证: 入口层 resolve 选定应用, 把档位+主键塞入 param 供策略查密钥
         if (ChannelAuthTypeEnum.WECHAT.getCode().equals(authType)) {
             WxAppView app = wxAppFacade.resolve(
                     entity.getMchNo(), routeParam.getChannelMchNo(),
                     routeParam.getCapability(), routeParam.getChannelAppId(), routeParam.getProduct());
-            authParam.setWxAppScope(app.scope().getCode());
-            authParam.setWxAppRefId(app.id());
+            authParam.setAppScope(app.scope().getCode());
+            authParam.setAppRefId(app.id());
+        }
+        else if (ChannelAuthTypeEnum.DOUYIN.getCode().equals(authType)) {
+            // 抖音 H5 silent_auth 固定使用网站应用(web_app)
+            DyAppView app = douyinAppFacade.resolveWebAppForH5Auth(
+                    entity.getMchNo(), routeParam.getChannelMchNo(), routeParam.getChannelAppId());
+            authParam.setAppScope(app.scope().getCode());
+            authParam.setAppRefId(app.id());
         }
         authParam.setReturnPath(returnPath);
         return unifiedAuthService.generateAuthUrl(authParam);

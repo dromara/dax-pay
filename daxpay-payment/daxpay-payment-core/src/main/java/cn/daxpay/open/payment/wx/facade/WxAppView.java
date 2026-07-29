@@ -1,6 +1,6 @@
 package cn.daxpay.open.payment.wx.facade;
 
-import cn.daxpay.open.payment.wx.enums.WxAppScopeEnum;
+import cn.daxpay.open.payment.auth.core.AppScopeEnum;
 
 /// # 微信应用只读视图
 ///
@@ -14,7 +14,7 @@ import cn.daxpay.open.payment.wx.enums.WxAppScopeEnum;
 /// @param appName   应用名称(可选展示)
 ///
 public record WxAppView(
-        WxAppScopeEnum scope,
+        AppScopeEnum scope,
         Long id,
         String wxAppId,
         String appType,

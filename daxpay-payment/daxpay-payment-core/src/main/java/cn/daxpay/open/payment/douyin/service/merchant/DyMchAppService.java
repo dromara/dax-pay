@@ -4,7 +4,7 @@ import cn.daxpay.open.payment.douyin.convert.merchant.DyMchAppConvert;
 import cn.daxpay.open.payment.douyin.dao.channel.DyChannelAppCapabilityManager;
 import cn.daxpay.open.payment.douyin.dao.merchant.DyMchAppManager;
 import cn.daxpay.open.payment.douyin.entity.merchant.DyMchApp;
-import cn.daxpay.open.payment.douyin.enums.DyAppScopeEnum;
+import cn.daxpay.open.payment.auth.core.AppScopeEnum;
 import cn.daxpay.open.payment.douyin.enums.DyAppTypeEnum;
 import cn.daxpay.open.payment.douyin.param.merchant.DyMchAppParam;
 import cn.daxpay.open.payment.douyin.result.merchant.DyMchAppResult;
@@ -87,7 +87,7 @@ public class DyMchAppService {
                 // 抖音: 商户应用不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.douyin.mchAppNotFound"));
         // 通道绑定仍引用时拒删
-        if (dyChannelAppCapabilityManager.existsByScopeAndRefId(DyAppScopeEnum.MERCHANT.getCode(), id)) {
+        if (dyChannelAppCapabilityManager.existsByScopeAndRefId(AppScopeEnum.MERCHANT.getCode(), id)) {
             // 抖音: 应用仍被引用，不可删除
             throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE, "error.payment.douyin.appInUse");
         }

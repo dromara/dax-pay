@@ -8,8 +8,8 @@ import cn.daxpay.open.payment.douyin.dao.merchant.DyMchAppManager;
 import cn.daxpay.open.payment.douyin.dao.platform.DyPlatformAppManager;
 import cn.daxpay.open.payment.douyin.entity.channel.DyChannelAppCapability;
 import cn.daxpay.open.payment.douyin.entity.merchant.DyMchApp;
+import cn.daxpay.open.payment.auth.core.AppScopeEnum;
 import cn.daxpay.open.payment.douyin.entity.platform.DyPlatformApp;
-import cn.daxpay.open.payment.douyin.enums.DyAppScopeEnum;
 import cn.daxpay.open.payment.douyin.enums.DyAppTypeEnum;
 import cn.daxpay.open.payment.douyin.param.channel.DyChannelAppCapabilityParam;
 import cn.daxpay.open.payment.douyin.result.channel.DyChannelAppCapabilityResult;
@@ -89,14 +89,14 @@ public class DyChannelAppCapabilityService {
         // capability + scope 唯一
         HashSet<String> uniq = new HashSet<>();
         for (DyChannelAppCapabilityParam item : items) {
-            DyAppScopeEnum scope = DyAppScopeEnum.findByCode(item.getAppScope());
+            AppScopeEnum scope = AppScopeEnum.findByCode(item.getAppScope());
             if (scope == null) {
                 // 抖音: 档位不存在
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "error.payment.douyin.scopeNotExist");
             }
             // 通道能力绑仅允许商户档；服务商应用走产品级默认绑
-            if (scope != DyAppScopeEnum.MERCHANT) {
+            if (scope != AppScopeEnum.MERCHANT) {
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "error.payment.douyin.scopeNotExist");
             }
@@ -130,9 +130,9 @@ public class DyChannelAppCapabilityService {
     }
 
     /// 校验档位引用存在，返回应用类型
-    private String resolveAndValidateRef(DyAppScopeEnum scope, Long refId, String mchNo,
+    private String resolveAndValidateRef(AppScopeEnum scope, Long refId, String mchNo,
                                          Map<Long, DyPlatformApp> platformMap, Map<Long, DyMchApp> mchAppMap) {
-        if (scope == DyAppScopeEnum.PLATFORM) {
+        if (scope == AppScopeEnum.PLATFORM) {
             DyPlatformApp app = platformMap.get(refId);
             if (app == null) {
                 // 抖音: 平台应用不存在
@@ -155,7 +155,7 @@ public class DyChannelAppCapabilityService {
                                                     Map<Long, DyPlatformApp> platformMap,
                                                     Map<Long, DyMchApp> mchAppMap) {
         DyChannelAppCapabilityResult result = DyChannelAppCapabilityConvert.CONVERT.toResult(rel);
-        if (DyAppScopeEnum.PLATFORM.getCode().equals(rel.getAppScope())) {
+        if (AppScopeEnum.PLATFORM.getCode().equals(rel.getAppScope())) {
             DyPlatformApp app = platformMap.get(rel.getDyAppRefId());
             if (app != null) {
                 result.setAppName(app.getAppName())

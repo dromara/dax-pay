@@ -1,6 +1,6 @@
 package cn.daxpay.open.payment.douyin.facade;
 
-import cn.daxpay.open.payment.douyin.enums.DyAppScopeEnum;
+import cn.daxpay.open.payment.auth.core.AppScopeEnum;
 
 /// # 抖音应用只读视图
 ///
@@ -14,7 +14,7 @@ import cn.daxpay.open.payment.douyin.enums.DyAppScopeEnum;
 /// @param appName      应用名称(可选展示)
 ///
 public record DyAppView(
-        DyAppScopeEnum scope,
+        AppScopeEnum scope,
         Long id,
         String douyinAppId,
         String appType,

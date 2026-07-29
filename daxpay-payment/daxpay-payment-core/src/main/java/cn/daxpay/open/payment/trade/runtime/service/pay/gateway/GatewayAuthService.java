@@ -18,6 +18,8 @@ import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
 import cn.daxpay.open.payment.wx.facade.WxAppFacade;
 import cn.daxpay.open.payment.wx.facade.WxAppView;
+import cn.daxpay.open.payment.douyin.facade.DouyinAppFacade;
+import cn.daxpay.open.payment.douyin.facade.DyAppView;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.unipay.ChannelAuthTypeEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
@@ -61,6 +63,7 @@ public class GatewayAuthService {
     private final PayRouteService payRouteService;
     private final GatewayCashierItemManager gatewayCashierItemManager;
     private final WxAppFacade wxAppFacade;
+    private final DouyinAppFacade douyinAppFacade;
 
     /// 生成授权链接
     public AuthUrlResult generateAuthUrl(GatewayAuthUrlParam param) {
@@ -83,8 +86,8 @@ public class GatewayAuthService {
         if (authType != ChannelAuthTypeEnum.ALIPAY) {
             RouteSnapshot route = resolveRoute(order, param);
             authParam.setChannelMchNo(route.channelMchNo());
-            // 微信认证: 入口层 resolve 选定应用, 把档位+主键塞入 param 供策略查密钥; 抖音: 策略自行解析
-            resolveWxAppRef(order.getMchNo(), route, authParam, authType);
+            // 微信/抖音认证: 入口层 resolve 选定应用, 把档位+主键塞入 param 供策略查密钥
+            resolveChannelAppRef(order.getMchNo(), route, authParam, authType);
         }
         return unifiedAuthService.generateAuthUrl(authParam);
     }
@@ -247,18 +250,27 @@ public class GatewayAuthService {
         return env.getCode();
     }
 
-    /// 微信认证: 入口层 resolve 选定应用, 把档位(wxAppScope)+主键(wxAppRefId)塞入 param
+    /// 通道认证: 入口层 resolve 选定应用, 把档位 + 主键塞入 param
     ///
     /// 认证只取一个应用做 OAuth, 直连/服务商/聚合通道统一走单应用 resolve
     /// (通道档优先、平台档兜底, 遵循"先查通道后查平台"原则), 不感知 sp/sub。
-    /// 抖音等非微信认证策略自行解析, 此处不填。
-    private void resolveWxAppRef(String mchNo, RouteSnapshot route,
-                                 GenerateAuthUrlParam authParam, ChannelAuthTypeEnum authType) {
+    /// 档位语义通道无关, 统一写入 appScope/appRefId:
+    /// - **微信**: [WxAppFacade#resolve] 按 capability 选应用
+    /// - **抖音**: [DouyinAppFacade#resolveWebAppForH5Auth] 固定选网站应用(web_app)
+    private void resolveChannelAppRef(String mchNo, RouteSnapshot route,
+                                      GenerateAuthUrlParam authParam, ChannelAuthTypeEnum authType) {
         if (authType == ChannelAuthTypeEnum.WECHAT) {
             WxAppView app = wxAppFacade.resolve(
                     mchNo, route.channelMchNo(), route.capability(), route.channelAppId(), route.product());
-            authParam.setWxAppScope(app.scope().getCode());
-            authParam.setWxAppRefId(app.id());
+            authParam.setAppScope(app.scope().getCode());
+            authParam.setAppRefId(app.id());
+        }
+        else if (authType == ChannelAuthTypeEnum.DOUYIN) {
+            // 抖音 H5 silent_auth 固定使用网站应用(web_app)
+            DyAppView app = douyinAppFacade.resolveWebAppForH5Auth(
+                    mchNo, route.channelMchNo(), route.channelAppId());
+            authParam.setAppScope(app.scope().getCode());
+            authParam.setAppRefId(app.id());
         }
     }
 

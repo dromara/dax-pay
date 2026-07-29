@@ -15,6 +15,8 @@ import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
 import cn.daxpay.open.payment.unipay.result.open.OpenAuthRedirectResult;
 import cn.daxpay.open.payment.wx.facade.WxAppFacade;
 import cn.daxpay.open.payment.wx.facade.WxAppView;
+import cn.daxpay.open.payment.douyin.facade.DouyinAppFacade;
+import cn.daxpay.open.payment.douyin.facade.DyAppView;
 import cn.daxpay.open.platform.common.config.properties.PlatformConfigProperties;
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
@@ -53,6 +55,7 @@ public class OpenAuthService {
     private final AuthSessionStore authSessionStore;
     private final PlatformConfigProperties platformConfigProperties;
     private final WxAppFacade wxAppFacade;
+    private final DouyinAppFacade douyinAppFacade;
 
     /// 生成 OAuth 重定向链接
     ///
@@ -73,8 +76,7 @@ public class OpenAuthService {
         authParam.setAuthType(param.getAuthType());
         // redirect_url 存入 session.returnPath, 回调时取出构建重定向
         authParam.setReturnPath(param.getRedirectUrl());
-        // 微信认证: 按 wxAppId 解析应用(resolveByWxAppId: 商户档优先平台档兜底),
-        // 把档位+主键塞入 param 供策略查密钥
+        // 通道认证: 入口层 resolve 选定应用, 把档位+主键塞入 param 供策略查密钥
         if (ChannelAuthTypeEnum.WECHAT.getCode().equals(param.getAuthType())) {
             if (StrUtil.isBlank(param.getWxAppId())) {
                 // 开放认证: 微信认证必须指定 wxAppId
@@ -82,8 +84,14 @@ public class OpenAuthService {
                         "validation.field.wxAppId.notBlank");
             }
             WxAppView app = wxAppFacade.resolveByWxAppId(param.getMchNo(), param.getWxAppId());
-            authParam.setWxAppScope(app.scope().getCode());
-            authParam.setWxAppRefId(app.id());
+            authParam.setAppScope(app.scope().getCode());
+            authParam.setAppRefId(app.id());
+        }
+        else if (ChannelAuthTypeEnum.DOUYIN.getCode().equals(param.getAuthType())) {
+            // 抖音 H5 silent_auth 固定使用网站应用(web_app), 开放接口按商户号解析
+            DyAppView app = douyinAppFacade.resolveWebAppForH5Auth(param.getMchNo(), null, null);
+            authParam.setAppScope(app.scope().getCode());
+            authParam.setAppRefId(app.id());
         }
         AuthUrlResult urlResult = unifiedAuthService.generateAuthUrl(authParam);
 

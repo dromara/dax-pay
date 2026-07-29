@@ -3,9 +3,10 @@ package cn.daxpay.open.payment.wx.service;
 import cn.daxpay.open.payment.wx.dao.channel.WxChannelAppCapabilityManager;
 import cn.daxpay.open.payment.wx.dao.merchant.WxMchAppManager;
 import cn.daxpay.open.payment.wx.dao.platform.WxPlatformAppManager;
+import cn.daxpay.open.payment.auth.core.AppScopeEnum;
 import cn.daxpay.open.payment.wx.entity.merchant.WxMchApp;
 import cn.daxpay.open.payment.wx.entity.platform.WxPlatformApp;
-import cn.daxpay.open.payment.wx.enums.WxAppScopeEnum;
+
 import cn.daxpay.open.payment.wx.enums.WxAppTypeEnum;
 import cn.daxpay.open.payment.wx.facade.WxAppFacade;
 import cn.daxpay.open.payment.wx.facade.WxAppView;
@@ -39,19 +40,19 @@ public class WxAppResolveService implements WxAppFacade {
 
     /// 按档位与主键加载应用视图（含 Auth）
     @Override
-    public WxAppView getById(WxAppScopeEnum scope, Long id) {
+    public WxAppView getById(AppScopeEnum scope, Long id) {
         if (scope == null || id == null) {
             // 微信: 档位不存在
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.payment.wx.scopeNotExist");
         }
-        if (scope == WxAppScopeEnum.PLATFORM) {
+        if (scope == AppScopeEnum.PLATFORM) {
             WxPlatformApp app = wxPlatformAppManager.findById(id)
                     // 微信: 平台应用不存在
                     .orElseThrow(() -> new DataNotExistException("error.payment.wx.appNotFound"));
             String secret = wxPlatformAppAuthConfigService.findByWxPlatformAppId(id).getAppSecret();
             return new WxAppView(scope, app.getId(), app.getWxAppId(), app.getAppType(), secret, app.getAppName());
         }
-        if (scope == WxAppScopeEnum.MERCHANT) {
+        if (scope == AppScopeEnum.MERCHANT) {
             WxMchApp app = wxMchAppManager.findById(id)
                     // 微信: 商户应用不存在
                     .orElseThrow(() -> new DataNotExistException("error.payment.wx.mchAppNotFound"));
@@ -72,14 +73,14 @@ public class WxAppResolveService implements WxAppFacade {
         // 2. 通道能力绑定（同能力优先 merchant，其次 platform）
         if (StrUtil.isNotBlank(channelMchNo) && StrUtil.isNotBlank(capability)) {
             var merchantBind = wxChannelAppCapabilityManager.findByChannelMchNoAndCapabilityAndScope(
-                    channelMchNo, capability, WxAppScopeEnum.MERCHANT.getCode());
+                    channelMchNo, capability, AppScopeEnum.MERCHANT.getCode());
             if (merchantBind.isPresent()) {
-                return this.getById(WxAppScopeEnum.MERCHANT, merchantBind.get().getWxAppRefId());
+                return this.getById(AppScopeEnum.MERCHANT, merchantBind.get().getWxAppRefId());
             }
             var platformBind = wxChannelAppCapabilityManager.findByChannelMchNoAndCapabilityAndScope(
-                    channelMchNo, capability, WxAppScopeEnum.PLATFORM.getCode());
+                    channelMchNo, capability, AppScopeEnum.PLATFORM.getCode());
             if (platformBind.isPresent()) {
-                return this.getById(WxAppScopeEnum.PLATFORM, platformBind.get().getWxAppRefId());
+                return this.getById(AppScopeEnum.PLATFORM, platformBind.get().getWxAppRefId());
             }
         }
         // 3. appType 推导：要求该类型平台应用唯一命中
@@ -101,14 +102,14 @@ public class WxAppResolveService implements WxAppFacade {
         // 通道绑定：platform / merchant 各取一行
         if (StrUtil.isNotBlank(channelMchNo) && StrUtil.isNotBlank(capability)) {
             var platformBind = wxChannelAppCapabilityManager.findByChannelMchNoAndCapabilityAndScope(
-                    channelMchNo, capability, WxAppScopeEnum.PLATFORM.getCode());
+                    channelMchNo, capability, AppScopeEnum.PLATFORM.getCode());
             if (platformBind.isPresent()) {
-                platform = this.getById(WxAppScopeEnum.PLATFORM, platformBind.get().getWxAppRefId());
+                platform = this.getById(AppScopeEnum.PLATFORM, platformBind.get().getWxAppRefId());
             }
             var merchantBind = wxChannelAppCapabilityManager.findByChannelMchNoAndCapabilityAndScope(
-                    channelMchNo, capability, WxAppScopeEnum.MERCHANT.getCode());
+                    channelMchNo, capability, AppScopeEnum.MERCHANT.getCode());
             if (merchantBind.isPresent()) {
-                merchant = this.getById(WxAppScopeEnum.MERCHANT, merchantBind.get().getWxAppRefId());
+                merchant = this.getById(AppScopeEnum.MERCHANT, merchantBind.get().getWxAppRefId());
             }
         }
         // 平台侧回退：appType 推导（平台应用唯一命中）
@@ -182,14 +183,14 @@ public class WxAppResolveService implements WxAppFacade {
     /// 平台应用 → View
     private WxAppView toPlatformView(WxPlatformApp app) {
         String secret = wxPlatformAppAuthConfigService.findByWxPlatformAppId(app.getId()).getAppSecret();
-        return new WxAppView(WxAppScopeEnum.PLATFORM, app.getId(), app.getWxAppId(),
+        return new WxAppView(AppScopeEnum.PLATFORM, app.getId(), app.getWxAppId(),
                 app.getAppType(), secret, app.getAppName());
     }
 
     /// 商户应用 → View
     private WxAppView toMerchantView(WxMchApp app) {
         String secret = wxMchAppAuthConfigService.findByWxMchAppId(app.getId()).getAppSecret();
-        return new WxAppView(WxAppScopeEnum.MERCHANT, app.getId(), app.getWxAppId(),
+        return new WxAppView(AppScopeEnum.MERCHANT, app.getId(), app.getWxAppId(),
                 app.getAppType(), secret, app.getAppName());
     }
 

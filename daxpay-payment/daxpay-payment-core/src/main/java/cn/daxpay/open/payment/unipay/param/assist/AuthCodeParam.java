@@ -12,7 +12,7 @@ import lombok.experimental.Accessors;
 /// # 通道认证参数
 ///
 /// 认证回调场景(通过 /auth 端点对外暴露): 前端 OAuth 落地页用 authCode 换 openId/userId。
-/// 应用凭证不挂在此类上, 由策略层自行从 session 恢复(微信读 wxAppScope/wxAppRefId 查密钥)。
+/// 应用凭证不挂在此类上, 由策略层自行从 session 恢复(各通道读 appScope/appRefId 查密钥)。
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)

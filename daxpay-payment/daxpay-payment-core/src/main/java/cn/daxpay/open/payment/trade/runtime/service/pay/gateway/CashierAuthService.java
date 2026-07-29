@@ -9,7 +9,9 @@ import cn.daxpay.open.platform.capability.wechat.auth.result.WechatAuthResult;
 import cn.daxpay.open.platform.capability.wechat.auth.service.WechatMaAuthService;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.unipay.ChannelAuthStatusEnum;
+import cn.daxpay.open.platform.core.enums.unipay.ChannelAuthTypeEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
+import cn.daxpay.open.platform.system.enums.MobileAppTypeEnum;
 import cn.daxpay.open.platform.system.enums.MobilePlatformEnum;
 import cn.daxpay.open.platform.system.mobile.config.AlipayMiniAppConfig;
 import cn.daxpay.open.platform.system.mobile.config.DyMiniAppConfig;
@@ -38,9 +40,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CashierAuthService {
 
-    /// 收银台端类型(对齐 MobileAppTypeEnum.CASHIER)
-    private static final String APP_TYPE_CASHIER = "cashier";
-
     private final MobileAppService mobileAppService;
     private final WechatMaAuthService wechatMaAuthService;
     private final AlipayAuthCapability alipayAuthCapability;
@@ -48,25 +47,24 @@ public class CashierAuthService {
 
     /// 收银台小程序认证: 用 authCode 换 openId/userId
     ///
-    /// 按 channel 映射到 mobile-app 平台编码, 读取对应配置后分发到 capability 层。
+    /// 按 [ChannelAuthTypeEnum] 分发到对应通道, 与 H5 认证([GatewayAuthService])共用同一套通道枚举。
     /// 微信/抖音返回 openId, 支付宝返回 userId(同时回填 openId)。
     public AuthResult auth(CashierAuthParam param) {
-        String channel = param.getChannel();
+        // channel 字符串 → 枚举(非法值由 findByCode 抛 ConfigNotExistException)
+        ChannelAuthTypeEnum authType = ChannelAuthTypeEnum.findByCode(param.getChannel());
         String authCode = param.getAuthCode();
-        return switch (channel) {
-            case "wechat" -> authWechat(authCode);
-            case "alipay" -> authAlipay(authCode);
-            case "douyin" -> authDouyin(authCode);
+        return switch (authType) {
+            case WECHAT -> authWechat(authType, authCode);
+            case ALIPAY -> authAlipay(authType, authCode);
+            case DOUYIN -> authDouyin(authType, authCode);
             default -> throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                    "error.mobile_app.platformNotFound", channel);
+                    "error.mobile_app.platformNotFound", authType.getCode());
         };
     }
 
     /// 微信小程序: jscode2session 换 openId
-    private AuthResult authWechat(String authCode) {
-        // 读取收银台微信小程序配置
-        WxMiniAppConfig config = mobileAppService.findAppConfig(
-                APP_TYPE_CASHIER, MobilePlatformEnum.WX_MINI.getCode(), WxMiniAppConfig.class);
+    private AuthResult authWechat(ChannelAuthTypeEnum authType, String authCode) {
+        WxMiniAppConfig config = loadConfig(authType, WxMiniAppConfig.class);
         WechatAuthResult data = wechatMaAuthService.getOpenId(authCode, config.getAppId(), config.getAppSecret());
         if (StrUtil.isBlank(data.getOpenId())) {
             // 微信: 获取openId失败
@@ -79,10 +77,8 @@ public class CashierAuthService {
     }
 
     /// 支付宝小程序: alipay.system.oauth.token 换 userId
-    private AuthResult authAlipay(String authCode) {
-        // 读取收银台支付宝小程序配置
-        AlipayMiniAppConfig config = mobileAppService.findAppConfig(
-                APP_TYPE_CASHIER, MobilePlatformEnum.ALIPAY_MINI.getCode(), AlipayMiniAppConfig.class);
+    private AuthResult authAlipay(ChannelAuthTypeEnum authType, String authCode) {
+        AlipayMiniAppConfig config = loadConfig(authType, AlipayMiniAppConfig.class);
         AlipayAuthConfig authConfig = toAlipayAuthConfig(config);
         AlipayAuthResult alipayResult = alipayAuthCapability.getUserId(authConfig, authCode);
         // 优先 userId(传统), 其次 openId(新标准)
@@ -99,10 +95,8 @@ public class CashierAuthService {
     }
 
     /// 抖音小程序: jscode2session 换 openId
-    private AuthResult authDouyin(String authCode) {
-        // 读取收银台抖音小程序配置
-        DyMiniAppConfig config = mobileAppService.findAppConfig(
-                APP_TYPE_CASHIER, MobilePlatformEnum.DY_MINI.getCode(), DyMiniAppConfig.class);
+    private AuthResult authDouyin(ChannelAuthTypeEnum authType, String authCode) {
+        DyMiniAppConfig config = loadConfig(authType, DyMiniAppConfig.class);
         DouyinAuthResult data = douyinMaAuthService.getOpenId(
                 config.getAppId(), config.getAppSecret(), authCode);
         if (StrUtil.isBlank(data.getOpenId())) {
@@ -112,6 +106,23 @@ public class CashierAuthService {
         return new AuthResult()
                 .setOpenId(data.getOpenId())
                 .setStatus(ChannelAuthStatusEnum.SUCCESS.getCode());
+    }
+
+    /// 加载收银台小程序配置(统一入口, 内部完成 channel→platform 映射)
+    private <T> T loadConfig(ChannelAuthTypeEnum authType, Class<T> configType) {
+        return mobileAppService.findAppConfig(
+                MobileAppTypeEnum.CASHIER.getCode(), toMiniPlatform(authType).getCode(), configType);
+    }
+
+    /// 认证类型 → 收银台小程序平台编码映射
+    private MobilePlatformEnum toMiniPlatform(ChannelAuthTypeEnum authType) {
+        return switch (authType) {
+            case WECHAT -> MobilePlatformEnum.WX_MINI;
+            case ALIPAY -> MobilePlatformEnum.ALIPAY_MINI;
+            case DOUYIN -> MobilePlatformEnum.DY_MINI;
+            default -> throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "error.mobile_app.platformNotFound", authType.getCode());
+        };
     }
 
     /// AlipayMiniAppConfig → capability 层 AlipayAuthConfig(字段一一对应)

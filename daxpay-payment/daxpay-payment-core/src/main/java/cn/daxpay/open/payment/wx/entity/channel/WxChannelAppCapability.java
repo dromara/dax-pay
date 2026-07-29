@@ -31,7 +31,7 @@ public class WxChannelAppCapability extends MchBaseEntity implements ToResult<Wx
     private String capability;
 
     /// 应用档位
-    /// @see cn.daxpay.open.payment.wx.enums.WxAppScopeEnum
+    /// @see cn.daxpay.open.payment.auth.core.AppScopeEnum
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private String appScope;
 

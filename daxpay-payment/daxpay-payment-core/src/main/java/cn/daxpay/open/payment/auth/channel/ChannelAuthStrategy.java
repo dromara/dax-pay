@@ -22,7 +22,7 @@ public interface ChannelAuthStrategy {
     /// @param authToken 认证会话码, 由上层 [MerchantChannelAuthService] 生成注入,
     ///                  策略负责将其拼入回调地址; 授权回跳时凭此恢复上下文。
     /// @param session 认证会话(可变对象), 策略负责写入回调恢复所需的应用引用
-    ///                (微信写 wxAppScope/wxAppRefId; 抖音不写, 用 channelMchNo)
+    ///                (各通道策略统一写 appScope/appRefId)
     AuthUrlResult generateAuthUrl(GenerateAuthUrlParam param, String authToken, AuthSession session);
 
     /// 通过AuthCode获取认证结果

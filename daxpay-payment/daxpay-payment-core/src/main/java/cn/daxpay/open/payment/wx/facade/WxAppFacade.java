@@ -1,6 +1,6 @@
 package cn.daxpay.open.payment.wx.facade;
 
-import cn.daxpay.open.payment.wx.enums.WxAppScopeEnum;
+import cn.daxpay.open.payment.auth.core.AppScopeEnum;
 
 /// # 微信开放应用解析门面
 ///
@@ -9,7 +9,7 @@ import cn.daxpay.open.payment.wx.enums.WxAppScopeEnum;
 public interface WxAppFacade {
 
     /// 按档位与主键加载应用视图(含 Auth)
-    WxAppView getById(WxAppScopeEnum scope, Long id);
+    WxAppView getById(AppScopeEnum scope, Long id);
 
     /// 解析单应用：显式 channelAppId → 通道能力绑 → 产品级平台默认能力绑
     ///

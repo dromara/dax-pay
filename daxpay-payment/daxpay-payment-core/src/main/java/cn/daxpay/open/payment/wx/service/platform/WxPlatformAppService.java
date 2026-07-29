@@ -5,7 +5,7 @@ import cn.daxpay.open.payment.wx.dao.channel.WxChannelAppCapabilityManager;
 import cn.daxpay.open.payment.wx.dao.platform.WxPlatformAppCapabilityManager;
 import cn.daxpay.open.payment.wx.dao.platform.WxPlatformAppManager;
 import cn.daxpay.open.payment.wx.entity.platform.WxPlatformApp;
-import cn.daxpay.open.payment.wx.enums.WxAppScopeEnum;
+import cn.daxpay.open.payment.auth.core.AppScopeEnum;
 import cn.daxpay.open.payment.wx.enums.WxAppTypeEnum;
 import cn.daxpay.open.payment.wx.param.platform.WxPlatformAppParam;
 import cn.daxpay.open.payment.wx.result.platform.WxPlatformAppResult;
@@ -80,7 +80,7 @@ public class WxPlatformAppService {
                 // 微信: 平台应用不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.wx.appNotFound"));
         // 通道绑定或平台默认能力绑定仍引用时拒删
-        if (wxChannelAppCapabilityManager.existsByScopeAndRefId(WxAppScopeEnum.PLATFORM.getCode(), id)
+        if (wxChannelAppCapabilityManager.existsByScopeAndRefId(AppScopeEnum.PLATFORM.getCode(), id)
                 || wxPlatformAppCapabilityManager.existsByWxPlatformAppId(id)) {
             // 微信: 应用仍被引用，不可删除
             throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE, "error.payment.wx.appInUse");

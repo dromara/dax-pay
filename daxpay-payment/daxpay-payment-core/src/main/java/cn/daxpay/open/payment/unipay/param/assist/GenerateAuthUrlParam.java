@@ -8,8 +8,8 @@ import lombok.experimental.Accessors;
 /// # 生成授权链接参数（内部传递，不参与签名/反序列化）
 ///
 /// 认证域统一参数: 由各入口层(调试/网关/开放接口/码牌)解析通道路由后组装传入认证域。
-/// 微信应用由入口层 resolve 选定后, 通过 wxAppScope(档位) + wxAppRefId(主键) 标识,
-/// 策略层据此调 WxAppFacade.getById 查密钥; 抖音等非微信通道不填。
+/// 通道应用由入口层 resolve 选定后, 通过档位 + 主键标识, 策略层据此调所属通道 Facade.getById 查密钥。
+/// 档位语义通道无关(微信/抖音共用 appScope + appRefId), 见 [cn.daxpay.open.payment.auth.core.AppScopeEnum]。
 /// 不继承 PaymentCommonParam — 本类仅用于内部服务间传递, 不对外暴露签名/时间戳等字段。
 @Data
 @Accessors(chain = true)
@@ -28,17 +28,16 @@ public class GenerateAuthUrlParam {
     @Schema(description = "通道商户号")
     private String channelMchNo;
 
-    /// 微信应用档位标识(PLATFORM/MERCHANT)
+    /// 通道应用档位标识(PLATFORM/MERCHANT)
     ///
-    /// 入口层 resolve 选定后填入, 策略层据此调 WxAppFacade.getById 查对应密钥。
-    /// 抖音等非微信通道不填。
-    /// @see cn.daxpay.open.payment.wx.enums.WxAppScopeEnum
-    @Schema(description = "微信应用档位标识")
-    private String wxAppScope;
+    /// 入口层 resolve 选定后填入, 策略层据此调所属通道 Facade.getById 查对应密钥(通道无关档位)。
+    /// @see cn.daxpay.open.payment.auth.core.AppScopeEnum
+    @Schema(description = "通道应用档位标识")
+    private String appScope;
 
-    /// 微信应用主键(与 wxAppScope 配对), 策略层凭此定位具体应用查密钥
-    @Schema(description = "微信应用主键")
-    private Long wxAppRefId;
+    /// 通道应用主键(与 appScope 配对), 策略层凭此定位具体应用查密钥
+    @Schema(description = "通道应用主键")
+    private Long appRefId;
 
     /// 认证类型
     /// @see ChannelAuthTypeEnum

@@ -1,11 +1,11 @@
 package cn.daxpay.open.payment.douyin.service;
 
+import cn.daxpay.open.payment.auth.core.AppScopeEnum;
 import cn.daxpay.open.payment.douyin.dao.channel.DyChannelAppCapabilityManager;
 import cn.daxpay.open.payment.douyin.dao.merchant.DyMchAppManager;
 import cn.daxpay.open.payment.douyin.dao.platform.DyPlatformAppManager;
 import cn.daxpay.open.payment.douyin.entity.merchant.DyMchApp;
 import cn.daxpay.open.payment.douyin.entity.platform.DyPlatformApp;
-import cn.daxpay.open.payment.douyin.enums.DyAppScopeEnum;
 import cn.daxpay.open.payment.douyin.enums.DyAppTypeEnum;
 import cn.daxpay.open.payment.douyin.facade.DouyinAppFacade;
 import cn.daxpay.open.payment.douyin.facade.DyAppView;
@@ -39,19 +39,19 @@ public class DyAppResolveService implements DouyinAppFacade {
 
     /// 按档位与主键加载应用视图（含 Auth）
     @Override
-    public DyAppView getById(DyAppScopeEnum scope, Long id) {
+    public DyAppView getById(AppScopeEnum scope, Long id) {
         if (scope == null || id == null) {
             // 抖音: 档位不存在
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.payment.douyin.scopeNotExist");
         }
-        if (scope == DyAppScopeEnum.PLATFORM) {
+        if (scope == AppScopeEnum.PLATFORM) {
             DyPlatformApp app = dyPlatformAppManager.findById(id)
                     // 抖音: 平台应用不存在
                     .orElseThrow(() -> new DataNotExistException("error.payment.douyin.appNotFound"));
             String secret = dyPlatformAppAuthConfigService.findByDyPlatformAppId(id).getAppSecret();
             return new DyAppView(scope, app.getId(), app.getDouyinAppId(), app.getAppType(), secret, app.getAppName());
         }
-        if (scope == DyAppScopeEnum.MERCHANT) {
+        if (scope == AppScopeEnum.MERCHANT) {
             DyMchApp app = dyMchAppManager.findById(id)
                     // 抖音: 商户应用不存在
                     .orElseThrow(() -> new DataNotExistException("error.payment.douyin.mchAppNotFound"));
@@ -72,14 +72,14 @@ public class DyAppResolveService implements DouyinAppFacade {
         // 2. 通道能力绑定（同能力优先 merchant，其次 platform）
         if (StrUtil.isNotBlank(channelMchNo) && StrUtil.isNotBlank(capability)) {
             var merchantBind = dyChannelAppCapabilityManager.findByChannelMchNoAndCapabilityAndScope(
-                    channelMchNo, capability, DyAppScopeEnum.MERCHANT.getCode());
+                    channelMchNo, capability, AppScopeEnum.MERCHANT.getCode());
             if (merchantBind.isPresent()) {
-                return this.getById(DyAppScopeEnum.MERCHANT, merchantBind.get().getDyAppRefId());
+                return this.getById(AppScopeEnum.MERCHANT, merchantBind.get().getDyAppRefId());
             }
             var platformBind = dyChannelAppCapabilityManager.findByChannelMchNoAndCapabilityAndScope(
-                    channelMchNo, capability, DyAppScopeEnum.PLATFORM.getCode());
+                    channelMchNo, capability, AppScopeEnum.PLATFORM.getCode());
             if (platformBind.isPresent()) {
-                return this.getById(DyAppScopeEnum.PLATFORM, platformBind.get().getDyAppRefId());
+                return this.getById(AppScopeEnum.PLATFORM, platformBind.get().getDyAppRefId());
             }
         }
         // 3. appType 推导：要求该类型平台应用唯一命中
@@ -101,14 +101,14 @@ public class DyAppResolveService implements DouyinAppFacade {
         // 通道绑定：platform / merchant 各取一行
         if (StrUtil.isNotBlank(channelMchNo) && StrUtil.isNotBlank(capability)) {
             var platformBind = dyChannelAppCapabilityManager.findByChannelMchNoAndCapabilityAndScope(
-                    channelMchNo, capability, DyAppScopeEnum.PLATFORM.getCode());
+                    channelMchNo, capability, AppScopeEnum.PLATFORM.getCode());
             if (platformBind.isPresent()) {
-                platform = this.getById(DyAppScopeEnum.PLATFORM, platformBind.get().getDyAppRefId());
+                platform = this.getById(AppScopeEnum.PLATFORM, platformBind.get().getDyAppRefId());
             }
             var merchantBind = dyChannelAppCapabilityManager.findByChannelMchNoAndCapabilityAndScope(
-                    channelMchNo, capability, DyAppScopeEnum.MERCHANT.getCode());
+                    channelMchNo, capability, AppScopeEnum.MERCHANT.getCode());
             if (merchantBind.isPresent()) {
-                merchant = this.getById(DyAppScopeEnum.MERCHANT, merchantBind.get().getDyAppRefId());
+                merchant = this.getById(AppScopeEnum.MERCHANT, merchantBind.get().getDyAppRefId());
             }
         }
         // 平台侧回退：appType 推导（平台应用唯一命中）
@@ -182,14 +182,14 @@ public class DyAppResolveService implements DouyinAppFacade {
     /// 平台应用 → View
     private DyAppView toPlatformView(DyPlatformApp app) {
         String secret = dyPlatformAppAuthConfigService.findByDyPlatformAppId(app.getId()).getAppSecret();
-        return new DyAppView(DyAppScopeEnum.PLATFORM, app.getId(), app.getDouyinAppId(),
+        return new DyAppView(AppScopeEnum.PLATFORM, app.getId(), app.getDouyinAppId(),
                 app.getAppType(), secret, app.getAppName());
     }
 
     /// 商户应用 → View
     private DyAppView toMerchantView(DyMchApp app) {
         String secret = dyMchAppAuthConfigService.findByDyMchAppId(app.getId()).getAppSecret();
-        return new DyAppView(DyAppScopeEnum.MERCHANT, app.getId(), app.getDouyinAppId(),
+        return new DyAppView(AppScopeEnum.MERCHANT, app.getId(), app.getDouyinAppId(),
                 app.getAppType(), secret, app.getAppName());
     }
 

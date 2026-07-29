@@ -1,12 +1,12 @@
 package cn.daxpay.open.payment.auth.channel;
 
+import cn.daxpay.open.payment.auth.core.AppScopeEnum;
 import cn.daxpay.open.payment.auth.core.AuthRedirectUri;
 import cn.daxpay.open.payment.auth.core.AuthSession;
 import cn.daxpay.open.payment.unipay.param.assist.AuthCodeParam;
 import cn.daxpay.open.payment.unipay.param.assist.GenerateAuthUrlParam;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
 import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
-import cn.daxpay.open.payment.wx.enums.WxAppScopeEnum;
 import cn.daxpay.open.payment.wx.facade.WxAppFacade;
 import cn.daxpay.open.payment.wx.facade.WxAppView;
 import cn.daxpay.open.platform.capability.wechat.auth.result.WechatAuthResult;
@@ -24,10 +24,10 @@ import org.springframework.stereotype.Service;
 /// # 微信认证策略
 ///
 /// 微信公众号 OAuth 取 openId。应用凭证(wxAppId + appSecret)由策略内部据
-/// wxAppScope(档位) + wxAppRefId(主键)调 [WxAppFacade#getById] 查得。
+/// appScope(档位) + appRefId(主键)调 [WxAppFacade#getById] 查得。
 /// 入口层已按"先查通道、通道不存在查平台"原则 resolve 选定应用, 此处只做凭证加载。
 ///
-/// generateAuthUrl 时把 wxAppScope/wxAppRefId 写入 session, 供回调 doAuth 恢复凭证。
+/// generateAuthUrl 时把 appScope/appRefId 写入 session, 供回调 doAuth 恢复凭证。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -46,13 +46,13 @@ public class WechatAuthStrategy implements ChannelAuthStrategy {
     ///
     /// 据 param 的档位标识加载应用凭证, 拼接固定回调地址({paymentGatewayBaseUrl}/auth/wechat),
     /// 委托 capability-wechat 生成微信 OAuth URL。会话标识 authToken 通过 OAuth state 参数透传。
-    /// 同时把 wxAppScope/wxAppRefId 写入 session, 供回调恢复凭证。
+    /// 同时把 appScope/appRefId 写入 session, 供回调恢复凭证。
     @Override
     public AuthUrlResult generateAuthUrl(GenerateAuthUrlParam param, String authToken, AuthSession session) {
-        WxAppView app = loadApp(param.getWxAppScope(), param.getWxAppRefId());
+        WxAppView app = loadApp(param.getAppScope(), param.getAppRefId());
         // 写入应用引用供回调 doAuth 恢复凭证
-        session.setWxAppScope(app.scope().getCode());
-        session.setWxAppRefId(app.id());
+        session.setAppScope(app.scope().getCode());
+        session.setAppRefId(app.id());
         String redirectUri = AuthRedirectUri.WECHAT.buildRedirectUri(platformUrlConfigService);
         WechatAuthUrlResult result = wechatMpAuthService.generateAuthUrl(
                 redirectUri, app.wxAppId(), app.appSecret(), authToken);
@@ -64,7 +64,7 @@ public class WechatAuthStrategy implements ChannelAuthStrategy {
     /// 据 session 的档位标识加载应用凭证, 用 code 换 openId。
     @Override
     public AuthResult doAuth(AuthCodeParam param, AuthSession session) {
-        WxAppView app = loadApp(session.getWxAppScope(), session.getWxAppRefId());
+        WxAppView app = loadApp(session.getAppScope(), session.getAppRefId());
         WechatAuthResult data = wechatMpAuthService.getTokenAndOpenId(
                 param.getAuthCode(), app.wxAppId(), app.appSecret());
         if (StrUtil.isBlank(data.getOpenId())) {
@@ -77,13 +77,13 @@ public class WechatAuthStrategy implements ChannelAuthStrategy {
     }
 
     /// 按档位 + 主键加载微信应用凭证(含解密后的 appSecret)
-    private WxAppView loadApp(String wxAppScope, Long wxAppRefId) {
-        if (StrUtil.isBlank(wxAppScope) || wxAppRefId == null) {
-            // 微信: 认证应用引用缺失(wxAppScope/wxAppRefId 未传入)
+    private WxAppView loadApp(String appScope, Long appRefId) {
+        if (StrUtil.isBlank(appScope) || appRefId == null) {
+            // 微信: 认证应用引用缺失(appScope/appRefId 未传入)
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.payment.wx.appNotConfigured", "auth");
         }
-        WxAppScopeEnum scope = WxAppScopeEnum.findByCode(wxAppScope);
-        return wxAppFacade.getById(scope, wxAppRefId);
+        AppScopeEnum scope = AppScopeEnum.findByCode(appScope);
+        return wxAppFacade.getById(scope, appRefId);
     }
 }

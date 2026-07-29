@@ -31,7 +31,7 @@ public class DyChannelAppCapability extends MchBaseEntity implements ToResult<Dy
     private String capability;
 
     /// 应用档位
-    /// @see cn.daxpay.open.payment.douyin.enums.DyAppScopeEnum
+    /// @see cn.daxpay.open.payment.auth.core.AppScopeEnum
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private String appScope;
 

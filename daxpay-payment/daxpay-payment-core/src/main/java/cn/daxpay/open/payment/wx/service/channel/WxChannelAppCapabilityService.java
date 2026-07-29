@@ -8,8 +8,8 @@ import cn.daxpay.open.payment.wx.dao.merchant.WxMchAppManager;
 import cn.daxpay.open.payment.wx.dao.platform.WxPlatformAppManager;
 import cn.daxpay.open.payment.wx.entity.channel.WxChannelAppCapability;
 import cn.daxpay.open.payment.wx.entity.merchant.WxMchApp;
+import cn.daxpay.open.payment.auth.core.AppScopeEnum;
 import cn.daxpay.open.payment.wx.entity.platform.WxPlatformApp;
-import cn.daxpay.open.payment.wx.enums.WxAppScopeEnum;
 import cn.daxpay.open.payment.wx.enums.WxAppTypeEnum;
 import cn.daxpay.open.payment.wx.param.channel.WxChannelAppCapabilityParam;
 import cn.daxpay.open.payment.wx.result.channel.WxChannelAppCapabilityResult;
@@ -89,14 +89,14 @@ public class WxChannelAppCapabilityService {
         // capability + scope 唯一
         HashSet<String> uniq = new HashSet<>();
         for (WxChannelAppCapabilityParam item : items) {
-            WxAppScopeEnum scope = WxAppScopeEnum.findByCode(item.getAppScope());
+            AppScopeEnum scope = AppScopeEnum.findByCode(item.getAppScope());
             if (scope == null) {
                 // 微信: 档位不存在
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "error.payment.wx.scopeNotExist");
             }
             // 通道能力绑仅允许商户档；服务商应用走产品级默认绑
-            if (scope != WxAppScopeEnum.MERCHANT) {
+            if (scope != AppScopeEnum.MERCHANT) {
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "error.payment.wx.scopeNotExist");
             }
@@ -130,9 +130,9 @@ public class WxChannelAppCapabilityService {
     }
 
     /// 校验档位引用存在，返回应用类型
-    private String resolveAndValidateRef(WxAppScopeEnum scope, Long refId, String mchNo,
+    private String resolveAndValidateRef(AppScopeEnum scope, Long refId, String mchNo,
                                          Map<Long, WxPlatformApp> platformMap, Map<Long, WxMchApp> mchAppMap) {
-        if (scope == WxAppScopeEnum.PLATFORM) {
+        if (scope == AppScopeEnum.PLATFORM) {
             WxPlatformApp app = platformMap.get(refId);
             if (app == null) {
                 // 微信: 平台应用不存在
@@ -155,7 +155,7 @@ public class WxChannelAppCapabilityService {
                                                     Map<Long, WxPlatformApp> platformMap,
                                                     Map<Long, WxMchApp> mchAppMap) {
         WxChannelAppCapabilityResult result = WxChannelAppCapabilityConvert.CONVERT.toResult(rel);
-        if (WxAppScopeEnum.PLATFORM.getCode().equals(rel.getAppScope())) {
+        if (AppScopeEnum.PLATFORM.getCode().equals(rel.getAppScope())) {
             WxPlatformApp app = platformMap.get(rel.getWxAppRefId());
             if (app != null) {
                 result.setAppName(app.getAppName())
