@@ -29,7 +29,6 @@ import java.util.List;
 public class DyPlatformAppService {
 
     private final DyPlatformAppManager dyPlatformAppManager;
-    private final DyPlatformAppAuthConfigService dyPlatformAppAuthConfigService;
     private final DyChannelAppCapabilityManager dyChannelAppCapabilityManager;
     private final DyPlatformAppCapabilityManager dyPlatformAppCapabilityManager;
 
@@ -55,6 +54,7 @@ public class DyPlatformAppService {
     }
 
     /// 新增平台抖音应用
+    @Transactional(rollbackFor = Exception.class)
     public void add(DyPlatformAppParam param) {
         this.assertDouyinAppIdUnique(param.getDouyinAppId(), null);
         this.validateAppType(param.getAppType());
@@ -63,6 +63,7 @@ public class DyPlatformAppService {
     }
 
     /// 更新平台抖音应用
+    @Transactional(rollbackFor = Exception.class)
     public void update(DyPlatformAppParam param) {
         DyPlatformApp entity = dyPlatformAppManager.findById(param.getId())
                 // 抖音: 平台应用不存在
@@ -85,7 +86,6 @@ public class DyPlatformAppService {
             // 抖音: 应用仍被引用，不可删除
             throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE, "error.payment.douyin.appInUse");
         }
-        dyPlatformAppAuthConfigService.deleteByDyPlatformAppId(id);
         dyPlatformAppManager.deleteById(id);
     }
 

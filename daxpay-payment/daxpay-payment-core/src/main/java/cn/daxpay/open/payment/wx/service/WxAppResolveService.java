@@ -11,8 +11,6 @@ import cn.daxpay.open.payment.wx.enums.WxAppTypeEnum;
 import cn.daxpay.open.payment.wx.facade.WxAppFacade;
 import cn.daxpay.open.payment.wx.facade.WxAppView;
 import cn.daxpay.open.payment.wx.facade.WxIsvAppPair;
-import cn.daxpay.open.payment.wx.service.merchant.WxMchAppAuthConfigService;
-import cn.daxpay.open.payment.wx.service.platform.WxPlatformAppAuthConfigService;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
@@ -34,8 +32,6 @@ public class WxAppResolveService implements WxAppFacade {
 
     private final WxPlatformAppManager wxPlatformAppManager;
     private final WxMchAppManager wxMchAppManager;
-    private final WxPlatformAppAuthConfigService wxPlatformAppAuthConfigService;
-    private final WxMchAppAuthConfigService wxMchAppAuthConfigService;
     private final WxChannelAppCapabilityManager wxChannelAppCapabilityManager;
 
     /// 按档位与主键加载应用视图（含 Auth）
@@ -49,15 +45,13 @@ public class WxAppResolveService implements WxAppFacade {
             WxPlatformApp app = wxPlatformAppManager.findById(id)
                     // 微信: 平台应用不存在
                     .orElseThrow(() -> new DataNotExistException("error.payment.wx.appNotFound"));
-            String secret = wxPlatformAppAuthConfigService.findByWxPlatformAppId(id).getAppSecret();
-            return new WxAppView(scope, app.getId(), app.getWxAppId(), app.getAppType(), secret, app.getAppName());
+            return new WxAppView(scope, app.getId(), app.getWxAppId(), app.getAppType(), app.getAppSecret(), app.getAppName());
         }
         if (scope == AppScopeEnum.MERCHANT) {
             WxMchApp app = wxMchAppManager.findById(id)
                     // 微信: 商户应用不存在
                     .orElseThrow(() -> new DataNotExistException("error.payment.wx.mchAppNotFound"));
-            String secret = wxMchAppAuthConfigService.findByWxMchAppId(id).getAppSecret();
-            return new WxAppView(scope, app.getId(), app.getWxAppId(), app.getAppType(), secret, app.getAppName());
+            return new WxAppView(scope, app.getId(), app.getWxAppId(), app.getAppType(), app.getAppSecret(), app.getAppName());
         }
         // 微信: 档位不存在
         throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.payment.wx.scopeNotExist");
@@ -182,16 +176,14 @@ public class WxAppResolveService implements WxAppFacade {
 
     /// 平台应用 → View
     private WxAppView toPlatformView(WxPlatformApp app) {
-        String secret = wxPlatformAppAuthConfigService.findByWxPlatformAppId(app.getId()).getAppSecret();
         return new WxAppView(AppScopeEnum.PLATFORM, app.getId(), app.getWxAppId(),
-                app.getAppType(), secret, app.getAppName());
+                app.getAppType(), app.getAppSecret(), app.getAppName());
     }
 
     /// 商户应用 → View
     private WxAppView toMerchantView(WxMchApp app) {
-        String secret = wxMchAppAuthConfigService.findByWxMchAppId(app.getId()).getAppSecret();
         return new WxAppView(AppScopeEnum.MERCHANT, app.getId(), app.getWxAppId(),
-                app.getAppType(), secret, app.getAppName());
+                app.getAppType(), app.getAppSecret(), app.getAppName());
     }
 
     /// 按真实 wxAppId 解析：商户档优先, 平台档兜底

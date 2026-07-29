@@ -4,6 +4,7 @@ import cn.daxpay.open.payment.common.entity.MchBaseEntity;
 import cn.daxpay.open.payment.wx.convert.merchant.WxMchAppConvert;
 import cn.daxpay.open.payment.wx.result.merchant.WxMchAppResult;
 import cn.daxpay.open.platform.common.mybatisplus.function.ToResult;
+import cn.daxpay.open.platform.common.mybatisplus.handler.encrypt.DataEncryptTypeHandler;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -31,6 +32,10 @@ public class WxMchApp extends MchBaseEntity implements ToResult<WxMchAppResult> 
 
     /// 微信应用AppId
     private String wxAppId;
+
+    /// 应用密钥(加密存储)
+    @TableField(typeHandler = DataEncryptTypeHandler.class)
+    private String appSecret;
 
     /// 转换
     @Override

@@ -10,8 +10,6 @@ import cn.daxpay.open.payment.douyin.enums.DyAppTypeEnum;
 import cn.daxpay.open.payment.douyin.facade.DouyinAppFacade;
 import cn.daxpay.open.payment.douyin.facade.DyAppView;
 import cn.daxpay.open.payment.douyin.facade.DyIsvAppPair;
-import cn.daxpay.open.payment.douyin.service.merchant.DyMchAppAuthConfigService;
-import cn.daxpay.open.payment.douyin.service.platform.DyPlatformAppAuthConfigService;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
@@ -33,8 +31,6 @@ public class DyAppResolveService implements DouyinAppFacade {
 
     private final DyPlatformAppManager dyPlatformAppManager;
     private final DyMchAppManager dyMchAppManager;
-    private final DyPlatformAppAuthConfigService dyPlatformAppAuthConfigService;
-    private final DyMchAppAuthConfigService dyMchAppAuthConfigService;
     private final DyChannelAppCapabilityManager dyChannelAppCapabilityManager;
 
     /// 按档位与主键加载应用视图（含 Auth）
@@ -48,15 +44,13 @@ public class DyAppResolveService implements DouyinAppFacade {
             DyPlatformApp app = dyPlatformAppManager.findById(id)
                     // 抖音: 平台应用不存在
                     .orElseThrow(() -> new DataNotExistException("error.payment.douyin.appNotFound"));
-            String secret = dyPlatformAppAuthConfigService.findByDyPlatformAppId(id).getAppSecret();
-            return new DyAppView(scope, app.getId(), app.getDouyinAppId(), app.getAppType(), secret, app.getAppName());
+            return new DyAppView(scope, app.getId(), app.getDouyinAppId(), app.getAppType(), app.getAppSecret(), app.getAppName());
         }
         if (scope == AppScopeEnum.MERCHANT) {
             DyMchApp app = dyMchAppManager.findById(id)
                     // 抖音: 商户应用不存在
                     .orElseThrow(() -> new DataNotExistException("error.payment.douyin.mchAppNotFound"));
-            String secret = dyMchAppAuthConfigService.findByDyMchAppId(id).getAppSecret();
-            return new DyAppView(scope, app.getId(), app.getDouyinAppId(), app.getAppType(), secret, app.getAppName());
+            return new DyAppView(scope, app.getId(), app.getDouyinAppId(), app.getAppType(), app.getAppSecret(), app.getAppName());
         }
         // 抖音: 档位不存在
         throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.payment.douyin.scopeNotExist");
@@ -181,16 +175,14 @@ public class DyAppResolveService implements DouyinAppFacade {
 
     /// 平台应用 → View
     private DyAppView toPlatformView(DyPlatformApp app) {
-        String secret = dyPlatformAppAuthConfigService.findByDyPlatformAppId(app.getId()).getAppSecret();
         return new DyAppView(AppScopeEnum.PLATFORM, app.getId(), app.getDouyinAppId(),
-                app.getAppType(), secret, app.getAppName());
+                app.getAppType(), app.getAppSecret(), app.getAppName());
     }
 
     /// 商户应用 → View
     private DyAppView toMerchantView(DyMchApp app) {
-        String secret = dyMchAppAuthConfigService.findByDyMchAppId(app.getId()).getAppSecret();
         return new DyAppView(AppScopeEnum.MERCHANT, app.getId(), app.getDouyinAppId(),
-                app.getAppType(), secret, app.getAppName());
+                app.getAppType(), app.getAppSecret(), app.getAppName());
     }
 
     /// H5 silent_auth / JS-SDK 验签用网站应用解析(抖音特有)

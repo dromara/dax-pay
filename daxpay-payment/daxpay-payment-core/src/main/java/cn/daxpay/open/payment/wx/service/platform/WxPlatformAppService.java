@@ -29,7 +29,6 @@ import java.util.List;
 public class WxPlatformAppService {
 
     private final WxPlatformAppManager wxPlatformAppManager;
-    private final WxPlatformAppAuthConfigService wxPlatformAppAuthConfigService;
     private final WxChannelAppCapabilityManager wxChannelAppCapabilityManager;
     private final WxPlatformAppCapabilityManager wxPlatformAppCapabilityManager;
 
@@ -55,6 +54,7 @@ public class WxPlatformAppService {
     }
 
     /// 新增平台微信应用
+    @Transactional(rollbackFor = Exception.class)
     public void add(WxPlatformAppParam param) {
         this.assertWxAppIdUnique(param.getWxAppId(), null);
         this.validateAppType(param.getAppType());
@@ -63,6 +63,7 @@ public class WxPlatformAppService {
     }
 
     /// 更新平台微信应用
+    @Transactional(rollbackFor = Exception.class)
     public void update(WxPlatformAppParam param) {
         WxPlatformApp entity = wxPlatformAppManager.findById(param.getId())
                 // 微信: 平台应用不存在
@@ -85,7 +86,6 @@ public class WxPlatformAppService {
             // 微信: 应用仍被引用，不可删除
             throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE, "error.payment.wx.appInUse");
         }
-        wxPlatformAppAuthConfigService.deleteByWxPlatformAppId(id);
         wxPlatformAppManager.deleteById(id);
     }
 

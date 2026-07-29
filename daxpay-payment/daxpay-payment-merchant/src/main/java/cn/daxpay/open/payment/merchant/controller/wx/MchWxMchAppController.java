@@ -1,12 +1,8 @@
 package cn.daxpay.open.payment.merchant.controller.wx;
 
 import cn.daxpay.open.payment.common.context.PaymentContext;
-import cn.daxpay.open.payment.wx.convert.merchant.WxMchAppAuthConfigConvert;
-import cn.daxpay.open.payment.wx.param.merchant.WxMchAppAuthConfigParam;
 import cn.daxpay.open.payment.wx.param.merchant.WxMchAppParam;
-import cn.daxpay.open.payment.wx.result.merchant.WxMchAppAuthConfigResult;
 import cn.daxpay.open.payment.wx.result.merchant.WxMchAppResult;
-import cn.daxpay.open.payment.wx.service.merchant.WxMchAppAuthConfigService;
 import cn.daxpay.open.payment.wx.service.merchant.WxMchAppService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.CommonCode;
@@ -41,7 +37,6 @@ import java.util.Objects;
 public class MchWxMchAppController {
 
     private final WxMchAppService wxMchAppService;
-    private final WxMchAppAuthConfigService wxMchAppAuthConfigService;
     private final PaymentContext paymentContext;
 
     /// 当前登录商户号
@@ -128,22 +123,4 @@ public class MchWxMchAppController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.VIEW)
-    @Operation(summary = "查询应用授权认证配置")
-    @GetMapping("/find-auth-config-by-app-id")
-    public Result<WxMchAppAuthConfigResult> findAuthConfigByAppId(
-            @NotNull(message = "{validation.field.wxMchAppId.notNull}") Long wxMchAppId) {
-        this.assertOwned(wxMchAppService.findById(wxMchAppId));
-        var config = wxMchAppAuthConfigService.findByWxMchAppId(wxMchAppId);
-        return Res.ok(WxMchAppAuthConfigConvert.CONVERT.toResult(config));
-    }
-
-    @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "保存应用授权认证配置")
-    @PostMapping("/save-auth-config")
-    public Result<Void> saveAuthConfig(@RequestBody @Validated WxMchAppAuthConfigParam param) {
-        this.assertOwned(wxMchAppService.findById(param.getWxMchAppId()));
-        wxMchAppAuthConfigService.save(param);
-        return Res.ok();
-    }
 }

@@ -4,6 +4,7 @@ import cn.daxpay.open.payment.common.entity.MchBaseEntity;
 import cn.daxpay.open.payment.douyin.convert.merchant.DyMchAppConvert;
 import cn.daxpay.open.payment.douyin.result.merchant.DyMchAppResult;
 import cn.daxpay.open.platform.common.mybatisplus.function.ToResult;
+import cn.daxpay.open.platform.common.mybatisplus.handler.encrypt.DataEncryptTypeHandler;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -31,6 +32,10 @@ public class DyMchApp extends MchBaseEntity implements ToResult<DyMchAppResult> 
 
     /// 抖音应用AppId
     private String douyinAppId;
+
+    /// 应用密钥(加密存储)
+    @TableField(typeHandler = DataEncryptTypeHandler.class)
+    private String appSecret;
 
     /// 转换
     @Override

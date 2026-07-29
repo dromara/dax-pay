@@ -1,11 +1,7 @@
 package cn.daxpay.open.payment.admin.controller.douyin;
 
-import cn.daxpay.open.payment.douyin.convert.platform.DyPlatformAppAuthConfigConvert;
-import cn.daxpay.open.payment.douyin.param.platform.DyPlatformAppAuthConfigParam;
 import cn.daxpay.open.payment.douyin.param.platform.DyPlatformAppParam;
-import cn.daxpay.open.payment.douyin.result.platform.DyPlatformAppAuthConfigResult;
 import cn.daxpay.open.payment.douyin.result.platform.DyPlatformAppResult;
-import cn.daxpay.open.payment.douyin.service.platform.DyPlatformAppAuthConfigService;
 import cn.daxpay.open.payment.douyin.service.platform.DyPlatformAppService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
@@ -34,7 +30,6 @@ import java.util.List;
 public class DyPlatformAppController {
 
     private final DyPlatformAppService dyPlatformAppService;
-    private final DyPlatformAppAuthConfigService dyPlatformAppAuthConfigService;
 
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "查询平台抖音应用列表")
@@ -94,20 +89,4 @@ public class DyPlatformAppController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.VIEW)
-    @Operation(summary = "查询应用授权认证配置")
-    @GetMapping("/find-auth-config-by-app-id")
-    public Result<DyPlatformAppAuthConfigResult> findAuthConfigByAppId(
-            @NotNull(message = "{validation.field.dyPlatformAppId.notNull}") Long dyPlatformAppId) {
-        var config = dyPlatformAppAuthConfigService.findByDyPlatformAppId(dyPlatformAppId);
-        return Res.ok(DyPlatformAppAuthConfigConvert.CONVERT.toResult(config));
-    }
-
-    @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "保存应用授权认证配置")
-    @PostMapping("/save-auth-config")
-    public Result<Void> saveAuthConfig(@RequestBody @Validated DyPlatformAppAuthConfigParam param) {
-        dyPlatformAppAuthConfigService.save(param);
-        return Res.ok();
-    }
 }

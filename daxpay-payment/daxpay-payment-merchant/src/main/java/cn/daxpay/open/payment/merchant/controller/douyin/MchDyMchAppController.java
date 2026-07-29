@@ -1,12 +1,8 @@
 package cn.daxpay.open.payment.merchant.controller.douyin;
 
 import cn.daxpay.open.payment.common.context.PaymentContext;
-import cn.daxpay.open.payment.douyin.convert.merchant.DyMchAppAuthConfigConvert;
-import cn.daxpay.open.payment.douyin.param.merchant.DyMchAppAuthConfigParam;
 import cn.daxpay.open.payment.douyin.param.merchant.DyMchAppParam;
-import cn.daxpay.open.payment.douyin.result.merchant.DyMchAppAuthConfigResult;
 import cn.daxpay.open.payment.douyin.result.merchant.DyMchAppResult;
-import cn.daxpay.open.payment.douyin.service.merchant.DyMchAppAuthConfigService;
 import cn.daxpay.open.payment.douyin.service.merchant.DyMchAppService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.CommonCode;
@@ -41,7 +37,6 @@ import java.util.Objects;
 public class MchDyMchAppController {
 
     private final DyMchAppService dyMchAppService;
-    private final DyMchAppAuthConfigService dyMchAppAuthConfigService;
     private final PaymentContext paymentContext;
 
     /// 当前登录商户号
@@ -128,22 +123,4 @@ public class MchDyMchAppController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.VIEW)
-    @Operation(summary = "查询应用授权认证配置")
-    @GetMapping("/find-auth-config-by-app-id")
-    public Result<DyMchAppAuthConfigResult> findAuthConfigByAppId(
-            @NotNull(message = "{validation.field.dyMchAppId.notNull}") Long dyMchAppId) {
-        this.assertOwned(dyMchAppService.findById(dyMchAppId));
-        var config = dyMchAppAuthConfigService.findByDyMchAppId(dyMchAppId);
-        return Res.ok(DyMchAppAuthConfigConvert.CONVERT.toResult(config));
-    }
-
-    @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "保存应用授权认证配置")
-    @PostMapping("/save-auth-config")
-    public Result<Void> saveAuthConfig(@RequestBody @Validated DyMchAppAuthConfigParam param) {
-        this.assertOwned(dyMchAppService.findById(param.getDyMchAppId()));
-        dyMchAppAuthConfigService.save(param);
-        return Res.ok();
-    }
 }

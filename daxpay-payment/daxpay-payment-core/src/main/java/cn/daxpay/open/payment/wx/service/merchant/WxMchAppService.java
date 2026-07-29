@@ -28,7 +28,6 @@ import java.util.List;
 public class WxMchAppService {
 
     private final WxMchAppManager wxMchAppManager;
-    private final WxMchAppAuthConfigService wxMchAppAuthConfigService;
     private final WxChannelAppCapabilityManager wxChannelAppCapabilityManager;
 
     /// 按商户号查询应用列表
@@ -53,6 +52,7 @@ public class WxMchAppService {
     }
 
     /// 新增商户微信应用（运营端必须显式带 mchNo）
+    @Transactional(rollbackFor = Exception.class)
     public void add(WxMchAppParam param) {
         if (StrUtil.isBlank(param.getMchNo())) {
             // 微信: 商户号必填
@@ -67,6 +67,7 @@ public class WxMchAppService {
     }
 
     /// 更新商户微信应用
+    @Transactional(rollbackFor = Exception.class)
     public void update(WxMchAppParam param) {
         WxMchApp entity = wxMchAppManager.findById(param.getId())
                 // 微信: 商户应用不存在
@@ -91,7 +92,6 @@ public class WxMchAppService {
             // 微信: 应用仍被引用，不可删除
             throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE, "error.payment.wx.appInUse");
         }
-        wxMchAppAuthConfigService.deleteByWxMchAppId(id);
         wxMchAppManager.deleteById(id);
     }
 

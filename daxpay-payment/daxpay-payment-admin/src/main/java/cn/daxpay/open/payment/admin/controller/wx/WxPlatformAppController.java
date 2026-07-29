@@ -1,11 +1,7 @@
 package cn.daxpay.open.payment.admin.controller.wx;
 
-import cn.daxpay.open.payment.wx.convert.platform.WxPlatformAppAuthConfigConvert;
-import cn.daxpay.open.payment.wx.param.platform.WxPlatformAppAuthConfigParam;
 import cn.daxpay.open.payment.wx.param.platform.WxPlatformAppParam;
-import cn.daxpay.open.payment.wx.result.platform.WxPlatformAppAuthConfigResult;
 import cn.daxpay.open.payment.wx.result.platform.WxPlatformAppResult;
-import cn.daxpay.open.payment.wx.service.platform.WxPlatformAppAuthConfigService;
 import cn.daxpay.open.payment.wx.service.platform.WxPlatformAppService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
@@ -34,7 +30,6 @@ import java.util.List;
 public class WxPlatformAppController {
 
     private final WxPlatformAppService wxPlatformAppService;
-    private final WxPlatformAppAuthConfigService wxPlatformAppAuthConfigService;
 
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "查询平台微信应用列表")
@@ -94,20 +89,4 @@ public class WxPlatformAppController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.VIEW)
-    @Operation(summary = "查询应用授权认证配置")
-    @GetMapping("/find-auth-config-by-app-id")
-    public Result<WxPlatformAppAuthConfigResult> findAuthConfigByAppId(
-            @NotNull(message = "{validation.field.wxPlatformAppId.notNull}") Long wxPlatformAppId) {
-        var config = wxPlatformAppAuthConfigService.findByWxPlatformAppId(wxPlatformAppId);
-        return Res.ok(WxPlatformAppAuthConfigConvert.CONVERT.toResult(config));
-    }
-
-    @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "保存应用授权认证配置")
-    @PostMapping("/save-auth-config")
-    public Result<Void> saveAuthConfig(@RequestBody @Validated WxPlatformAppAuthConfigParam param) {
-        wxPlatformAppAuthConfigService.save(param);
-        return Res.ok();
-    }
 }

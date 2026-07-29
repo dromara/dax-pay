@@ -28,7 +28,6 @@ import java.util.List;
 public class DyMchAppService {
 
     private final DyMchAppManager dyMchAppManager;
-    private final DyMchAppAuthConfigService dyMchAppAuthConfigService;
     private final DyChannelAppCapabilityManager dyChannelAppCapabilityManager;
 
     /// 按商户号查询应用列表
@@ -53,6 +52,7 @@ public class DyMchAppService {
     }
 
     /// 新增商户抖音应用（运营端必须显式带 mchNo）
+    @Transactional(rollbackFor = Exception.class)
     public void add(DyMchAppParam param) {
         if (StrUtil.isBlank(param.getMchNo())) {
             // 抖音: 商户号必填
@@ -67,6 +67,7 @@ public class DyMchAppService {
     }
 
     /// 更新商户抖音应用
+    @Transactional(rollbackFor = Exception.class)
     public void update(DyMchAppParam param) {
         DyMchApp entity = dyMchAppManager.findById(param.getId())
                 // 抖音: 商户应用不存在
@@ -91,7 +92,6 @@ public class DyMchAppService {
             // 抖音: 应用仍被引用，不可删除
             throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE, "error.payment.douyin.appInUse");
         }
-        dyMchAppAuthConfigService.deleteByDyMchAppId(id);
         dyMchAppManager.deleteById(id);
     }
 

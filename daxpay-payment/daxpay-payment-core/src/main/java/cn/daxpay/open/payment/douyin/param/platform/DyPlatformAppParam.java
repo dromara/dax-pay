@@ -29,4 +29,8 @@ public class DyPlatformAppParam {
     @NotBlank(message = "{validation.field.douyinAppId.notBlank}")
     @Schema(description = "抖音应用AppId")
     private String douyinAppId;
+
+    @NotBlank(message = "{validation.field.appSecret.notBlank}", groups = ValidationGroup.add.class)
+    @Schema(description = "应用密钥，编辑时为空表示不更新")
+    private String appSecret;
 }

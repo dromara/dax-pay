@@ -29,4 +29,8 @@ public class WxPlatformAppParam {
     @NotBlank(message = "{validation.field.wxAppId.notBlank}")
     @Schema(description = "微信应用AppId")
     private String wxAppId;
+
+    @NotBlank(message = "{validation.field.appSecret.notBlank}", groups = ValidationGroup.add.class)
+    @Schema(description = "应用密钥，编辑时为空表示不更新")
+    private String appSecret;
 }
