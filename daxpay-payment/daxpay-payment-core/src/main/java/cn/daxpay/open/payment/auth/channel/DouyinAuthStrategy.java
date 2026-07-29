@@ -1,10 +1,10 @@
-package cn.daxpay.open.channel.douyin.strategy.auth;
+package cn.daxpay.open.payment.auth.channel;
 
 import cn.daxpay.open.payment.auth.core.AuthRedirectUri;
 import cn.daxpay.open.payment.auth.core.AuthSession;
-import cn.daxpay.open.payment.auth.channel.ChannelAuthStrategy;
 import cn.daxpay.open.payment.douyin.facade.DouyinAppFacade;
 import cn.daxpay.open.payment.douyin.facade.DyAppView;
+import cn.daxpay.open.payment.douyin.enums.DyAppScopeEnum;
 import cn.daxpay.open.payment.unipay.param.assist.AuthCodeParam;
 import cn.daxpay.open.payment.unipay.param.assist.GenerateAuthUrlParam;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
@@ -22,11 +22,13 @@ import org.springframework.stereotype.Service;
 
 /// # 抖音认证策略
 ///
-/// 抖音 H5 silent_auth 取 openId。通过 [DouyinAppFacade#resolveWebAppForH5Auth] 解析商户/平台档
-/// 网站应用(web_app), 调用 capability-douyin 完成静默授权。应用主数据已上移至商户/平台级,
-/// 通道商户下不再持有抖音应用。
+/// 抖音 H5 silent_auth 取 openId。应用凭证(douyinAppId + appSecret)由策略内部据
+/// dyAppScope(档位) + dyAppRefId(主键)调 [DouyinAppFacade#getById] 查得。
+/// 入口层已选定网站应用(web_app), 此处只做凭证加载。
 ///
-/// H5 silent_auth 固定解析网站应用(web_app), 与支付能力(按 capability 解析的小程序/移动应用)不同。
+/// generateAuthUrl 时把 dyAppScope/dyAppRefId 写入 session, 供回调 doAuth 恢复凭证。
+///
+/// H5 silent_auth 固定使用网站应用(web_app), 与支付能力(按 capability 解析的小程序/移动应用)不同。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -43,15 +45,15 @@ public class DouyinAuthStrategy implements ChannelAuthStrategy {
 
     /// 生成抖音 H5 静默授权链接
     ///
-    /// 据商户/通道商户定位网站应用, 拼接回调地址, 委托 capability-douyin 生成授权 URL。
-    /// 同时把 mchNo/channelMchNo 写入 session, 供回调 doAuth 恢复应用解析上下文。
+    /// 据 param 的档位标识加载网站应用凭证, 拼接回调地址, 委托 capability-douyin 生成授权 URL。
+    /// 会话标识 authToken 通过 OAuth state 参数透传。
+    /// 同时把 dyAppScope/dyAppRefId 写入 session, 供回调 doAuth 恢复凭证。
     @Override
     public AuthUrlResult generateAuthUrl(GenerateAuthUrlParam param, String authToken, AuthSession session) {
-        DyAppView app = douyinAppFacade.resolveWebAppForH5Auth(
-                param.getMchNo(), param.getChannelMchNo(), null);
-        // 写入上下文供回调 doAuth 恢复
-        session.setMchNo(param.getMchNo());
-        session.setChannelMchNo(param.getChannelMchNo());
+        DyAppView app = loadApp(param.getDyAppScope(), param.getDyAppRefId());
+        // 写入应用引用供回调 doAuth 恢复凭证
+        session.setDyAppScope(app.scope().getCode());
+        session.setDyAppRefId(app.id());
         String redirectUri = AuthRedirectUri.DOUYIN.buildRedirectUri(platformUrlConfigService);
         String authUrl = douyinH5AuthService.buildSilentAuthUrl(
                 app.douyinAppId(), redirectUri, authToken);
@@ -60,19 +62,10 @@ public class DouyinAuthStrategy implements ChannelAuthStrategy {
 
     /// 通过授权 code 换取 openId
     ///
-    /// 据 session 恢复的 mchNo/channelMchNo 重新解析网站应用, 用 code 换 openId。
+    /// 据 session 的档位标识加载网站应用凭证, 用 code 换 openId。
     @Override
     public AuthResult doAuth(AuthCodeParam param, AuthSession session) {
-        // mchNo/channelMchNo 优先从 session 恢复(H5 回调场景), 否则取 param
-        String mchNo = session != null && StrUtil.isNotBlank(session.getMchNo())
-                ? session.getMchNo() : param.getMchNo();
-        String channelMchNo = session != null && StrUtil.isNotBlank(session.getChannelMchNo())
-                ? session.getChannelMchNo() : param.getChannelMchNo();
-        DyAppView app = douyinAppFacade.resolveWebAppForH5Auth(mchNo, channelMchNo, null);
-        if (StrUtil.isBlank(app.appSecret())) {
-            // 抖音: 直连应用授权密钥未配置
-            throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR, "error.channel.douyin.appAuthSecretMissing");
-        }
+        DyAppView app = loadApp(session.getDyAppScope(), session.getDyAppRefId());
         DouyinAuthResult data = douyinH5AuthService.getOpenIdByCode(
                 app.douyinAppId(), app.appSecret(), param.getAuthCode());
         if (StrUtil.isBlank(data.getOpenId())) {
@@ -82,5 +75,21 @@ public class DouyinAuthStrategy implements ChannelAuthStrategy {
         return new AuthResult()
                 .setOpenId(data.getOpenId())
                 .setAccessToken(data.getAccessToken());
+    }
+
+    /// 按档位 + 主键加载抖音网站应用凭证(含解密后的 appSecret)
+    private DyAppView loadApp(String dyAppScope, Long dyAppRefId) {
+        if (StrUtil.isBlank(dyAppScope) || dyAppRefId == null) {
+            // 抖音: 认证应用引用缺失(dyAppScope/dyAppRefId 未传入)
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "error.payment.douyin.appNotConfigured", "auth");
+        }
+        DyAppScopeEnum scope = DyAppScopeEnum.findByCode(dyAppScope);
+        DyAppView app = douyinAppFacade.getById(scope, dyAppRefId);
+        if (StrUtil.isBlank(app.appSecret())) {
+            // 抖音: 直连应用授权密钥未配置
+            throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR, "error.channel.douyin.appAuthSecretMissing");
+        }
+        return app;
     }
 }

@@ -1,8 +1,7 @@
-package cn.daxpay.open.channel.wechat.strategy.auth;
+package cn.daxpay.open.payment.auth.channel;
 
 import cn.daxpay.open.payment.auth.core.AuthRedirectUri;
 import cn.daxpay.open.payment.auth.core.AuthSession;
-import cn.daxpay.open.payment.auth.channel.ChannelAuthStrategy;
 import cn.daxpay.open.payment.unipay.param.assist.AuthCodeParam;
 import cn.daxpay.open.payment.unipay.param.assist.GenerateAuthUrlParam;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;

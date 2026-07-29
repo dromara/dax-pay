@@ -41,7 +41,7 @@ import java.util.Objects;
 /// # 抖音 H5 JSAPI 调起前置 - sdk.config 验签接口
 ///
 /// 签名基于**商户/平台网站应用**的 clientKey/appSecret 换取的 jsapi_ticket,
-/// 与 H5 OAuth([cn.daxpay.open.channel.douyin.strategy.auth.DouyinAuthStrategy]) 同源,
+/// 与 H5 OAuth([cn.daxpay.open.payment.auth.channel.DouyinAuthStrategy]) 同源,
 /// 均通过 [DouyinAppFacade#resolveWebAppForH5Auth] 解析 web_app 应用。
 ///
 /// 上下文三选一: orderNo(网关单) / code(码牌) / channelMchNo(+可选 capability)。
