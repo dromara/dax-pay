@@ -123,10 +123,10 @@ dax-pay-open/                       # 主后端应用
 | 项目 | GITEE | GITHUB |
 | -------------- | ------------------------------------------- | ----------------------------------------------- |
 | 后端地址 | [GITEE](https://gitee.com/dromara/dax-pay) | [GITHUB](https://github.com/dromara/dax-pay) |
-| Web 前端地址 |                                            |                                              |
-| 通道子应用（Java） |                                            |                                              |
-| 通道子应用（Go） |                                            |                                              |
-| 网关前端地址 |                                            |                                              |
+| Web 前端地址 | [GITEE](https://gitee.com/opendaxpay/dax-pay-ui) | [GITHUB](https://github.com/opendaxpay/dax-pay-ui) |
+| 通道子应用（Java） | [GITEE](https://gitee.com/opendaxpay/dax-pay-channel-one) | [GITHUB](https://github.com/opendaxpay/dax-pay-channel-one) |
+| 通道子应用（Go） | [GITEE](https://gitee.com/opendaxpay/dax-pay-channel-one-go) | [GITHUB](https://github.com/opendaxpay/dax-pay-channel-one-go) |
+| 网关前端地址 | [GITEE](https://gitee.com/opendaxpay/dax-pay-h5) | [GITHUB](https://github.com/opendaxpay/dax-pay-h5) |
 
 ### 关联子项目
 
@@ -134,12 +134,12 @@ dax-pay-open/                       # 主后端应用
 
 #### 核心组件(开源版直接交付)
 
-| 子项目 | 说明 | 端口 |
-|--------|------|------|
-| `dax-pay-channel-one` | 通道适配子应用(Java),承载支付宝/微信/抖音/银联商务等直连通道,SDK 依赖隔离 / 独立升级 / 弹性伸缩 | 20100 |
-| `dax-pay-channel-one-go` | 通道适配子应用(Go 对等实现),更高吞吐与更低内存占用,**勿与 Java 版同时启动** | 20100 |
-| `dax-pay-ui` | Web 管理端 monorepo(运营端 + 商户端同源编译,Vben Admin 5 + antdv-next) | 6999 / 7999 |
-| `dax-pay-h5` | 移动 H5 网关端(单应用承载 PC + 移动两套页面,Vant 4 + UnoCSS) | 9500 |
+| 子项目 | 说明 |
+|--------|------|
+| `dax-pay-channel-one` | 通道适配子应用(Java),承载支付宝/微信/抖音/银联商务等直连通道,SDK 依赖隔离 / 独立升级 / 弹性伸缩 |
+| `dax-pay-channel-one-go` | 通道适配子应用(Go 对等实现),更高吞吐与更低内存占用,**勿与 Java 版同时启动** |
+| `dax-pay-ui` | Web 管理端 monorepo(运营端 + 商户端同源编译,Vben Admin 5 + antdv-next) |
+| `dax-pay-h5` | 移动 H5 网关端(单应用承载 PC + 移动两套页面,Vant 4 + UnoCSS) |
 
 #### 扩展包(商业增强版组件)
 
