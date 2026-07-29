@@ -21,16 +21,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 /// 认证调试(商户端)
 ///
-/// 调试入口:
-/// - 支付宝H5平台级配置(中间页授权链接)
+/// 调试入口(均为 OAuth 链接 + queryCode 轮询):
+/// - 支付宝H5平台级配置
 /// - 微信公众号配置(平台级 OAuth)
-/// - 抖音 H5 应用配置(平台级 silent_auth 静默授权)
+/// - 抖音 H5 应用配置(平台级 silent_auth)
 /// - 微信支付(直连/服务商, 需商户参数)
 /// - 抖音支付(直连/服务商, 需商户参数)
-/// - 支付宝小程序(暂未实现)
-/// - 微信小程序(商户端/运营端, 暂未实现)
 ///
-/// 已实现项均通过查询码轮询认证结果。
+/// 小程序获取 openId 已迁至收银台小程序运行时, Web 不再提供小程序调试入口。
 @Validated
 @PermCode(menuCode = PermCodes.Develop.Auth.MENU)
 @Tag(name = "认证调试服务(商户端)")

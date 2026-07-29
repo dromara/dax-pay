@@ -27,8 +27,10 @@ import cn.daxpay.open.payment.auth.channel.MerchantChannelAuthService;
 /// - **微信支付(直连/服务商)**: 委托 [MerchantChannelAuthService] 按支付产品路由认证策略,
 ///   依赖商户上下文(channelMchNo/产品/能力)
 /// - **抖音支付(直连/服务商)**: 同微信支付, 显式选抖音网站应用 → [MerchantChannelAuthService]
-/// - **支付宝小程序**: 暂未实现
-/// - **微信小程序(商户端/运营端)**: 暂未实现
+///
+/// 小程序(微信/支付宝/抖音)获取 openId 已迁至收银台小程序运行时
+/// ([cn.daxpay.open.payment.trade.runtime.service.pay.gateway.CashierAuthService]),
+/// Web 认证调试不再提供小程序 code 直换入口。
 ///
 /// 已实现项共用 queryCode 轮询机制(由 [AuthSessionStore#queryAuthResult] 统一查询)。
 @Slf4j

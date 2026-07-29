@@ -52,11 +52,10 @@ public class CashierAuthService {
     public AuthResult auth(CashierAuthParam param) {
         // channel 字符串 → 枚举(非法值由 findByCode 抛 ConfigNotExistException)
         ChannelAuthTypeEnum authType = ChannelAuthTypeEnum.findByCode(param.getChannel());
-        String authCode = param.getAuthCode();
         return switch (authType) {
-            case WECHAT -> authWechat(authType, authCode);
-            case ALIPAY -> authAlipay(authType, authCode);
-            case DOUYIN -> authDouyin(authType, authCode);
+            case WECHAT -> authWechat(authType, param.getAuthCode());
+            case ALIPAY -> authAlipay(authType, param.getAuthCode());
+            case DOUYIN -> authDouyin(authType, param.getAuthCode(), param.getAnonymousCode());
             default -> throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.mobile_app.platformNotFound", authType.getCode());
         };
@@ -64,6 +63,7 @@ public class CashierAuthService {
 
     /// 微信小程序: jscode2session 换 openId
     private AuthResult authWechat(ChannelAuthTypeEnum authType, String authCode) {
+        requireAuthCode(authCode);
         WxMiniAppConfig config = loadConfig(authType, WxMiniAppConfig.class);
         WechatAuthResult data = wechatMaAuthService.getOpenId(authCode, config.getAppId(), config.getAppSecret());
         if (StrUtil.isBlank(data.getOpenId())) {
@@ -78,6 +78,7 @@ public class CashierAuthService {
 
     /// 支付宝小程序: alipay.system.oauth.token 换 userId
     private AuthResult authAlipay(ChannelAuthTypeEnum authType, String authCode) {
+        requireAuthCode(authCode);
         AlipayMiniAppConfig config = loadConfig(authType, AlipayMiniAppConfig.class);
         AlipayAuthConfig authConfig = toAlipayAuthConfig(config);
         AlipayAuthResult alipayResult = alipayAuthCapability.getUserId(authConfig, authCode);
@@ -94,11 +95,16 @@ public class CashierAuthService {
                 .setStatus(ChannelAuthStatusEnum.SUCCESS.getCode());
     }
 
-    /// 抖音小程序: jscode2session 换 openId
-    private AuthResult authDouyin(ChannelAuthTypeEnum authType, String authCode) {
+    /// 抖音小程序: jscode2session 换 openId(code / anonymous_code 分字段)
+    private AuthResult authDouyin(ChannelAuthTypeEnum authType, String authCode, String anonymousCode) {
+        if (StrUtil.isAllBlank(authCode, anonymousCode)) {
+            // 授权码不可为空
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "validation.field.oauthCode.notBlank");
+        }
         DyMiniAppConfig config = loadConfig(authType, DyMiniAppConfig.class);
         DouyinAuthResult data = douyinMaAuthService.getOpenId(
-                config.getAppId(), config.getAppSecret(), authCode);
+                config.getAppId(), config.getAppSecret(), authCode, anonymousCode);
         if (StrUtil.isBlank(data.getOpenId())) {
             // 抖音: 获取用户标识失败
             throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR, "error.douyin.authFailed", "openId is blank");
@@ -106,6 +112,15 @@ public class CashierAuthService {
         return new AuthResult()
                 .setOpenId(data.getOpenId())
                 .setStatus(ChannelAuthStatusEnum.SUCCESS.getCode());
+    }
+
+    /// 微信/支付宝: authCode 必填
+    private void requireAuthCode(String authCode) {
+        if (StrUtil.isBlank(authCode)) {
+            // 授权码不可为空
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "validation.field.oauthCode.notBlank");
+        }
     }
 
     /// 加载收银台小程序配置(统一入口, 内部完成 channel→platform 映射)

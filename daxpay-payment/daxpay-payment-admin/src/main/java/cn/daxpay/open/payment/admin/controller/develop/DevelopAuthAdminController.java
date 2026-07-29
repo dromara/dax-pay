@@ -1,7 +1,7 @@
 package cn.daxpay.open.payment.admin.controller.develop;
 
-import cn.daxpay.open.payment.auth.develop.DevelopAuthService;
 import cn.daxpay.open.payment.auth.develop.DevelopChannelAuthParam;
+import cn.daxpay.open.payment.auth.develop.DevelopAuthService;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
 import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
 import cn.daxpay.open.platform.core.annotation.PermCode;
@@ -21,16 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 /// 认证调试(管理)
 ///
-/// 调试入口:
-/// - 支付宝H5平台级配置(中间页授权链接)
+/// 调试入口(均为 OAuth 链接 + queryCode 轮询):
+/// - 支付宝H5平台级配置
 /// - 微信公众号配置(平台级 OAuth)
-/// - 抖音 H5 应用配置(平台级 silent_auth 静默授权)
+/// - 抖音 H5 应用配置(平台级 silent_auth)
 /// - 微信支付(直连/服务商, 需商户参数)
 /// - 抖音支付(直连/服务商, 需商户参数)
-/// - 支付宝小程序(暂未实现)
-/// - 微信小程序(商户端/运营端, 暂未实现)
 ///
-/// 已实现项均通过查询码轮询认证结果。
 @Validated
 @PermCode(menuCode = PermCodes.Develop.Auth.MENU)
 @Tag(name = "认证调试服务")
