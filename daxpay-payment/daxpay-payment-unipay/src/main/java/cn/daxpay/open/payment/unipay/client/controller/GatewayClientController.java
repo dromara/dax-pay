@@ -1,12 +1,14 @@
 package cn.daxpay.open.payment.unipay.client.controller;
 
 import cn.daxpay.open.payment.trade.runtime.service.pay.gateway.AggregatePayService;
+import cn.daxpay.open.payment.trade.runtime.service.pay.gateway.CashierAuthService;
 import cn.daxpay.open.payment.trade.runtime.service.pay.gateway.CashierPayService;
 import cn.daxpay.open.payment.trade.runtime.service.pay.gateway.GatewayAuthService;
 import cn.daxpay.open.payment.trade.runtime.service.pay.gateway.GatewayOrderQueryService;
 import cn.daxpay.open.payment.auth.UnifiedAuthService;
 import cn.daxpay.open.payment.unipay.param.assist.AuthCodeParam;
 import cn.daxpay.open.payment.unipay.param.gateway.AggregateQrPayParam;
+import cn.daxpay.open.payment.unipay.param.gateway.CashierAuthParam;
 import cn.daxpay.open.payment.unipay.param.gateway.CashierPayParam;
 import cn.daxpay.open.payment.unipay.param.gateway.GatewayAuthUrlParam;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
@@ -44,6 +46,7 @@ public class GatewayClientController {
     private final GatewayOrderQueryService gatewayOrderQueryService;
     private final AggregatePayService aggregatePayService;
     private final CashierPayService cashierPayService;
+    private final CashierAuthService cashierAuthService;
     private final GatewayAuthService gatewayAuthService;
     private final UnifiedAuthService unifiedAuthService;
 
@@ -82,6 +85,16 @@ public class GatewayClientController {
     @PostMapping("/cashier/pay")
     public Result<NormalPayResult> cashierPay(@RequestBody @Validated CashierPayParam param) {
         return Res.ok(cashierPayService.pay(param));
+    }
+
+    /// 收银台小程序认证: 用 authCode 换 openId/userId
+    ///
+    /// 微信/抖音/支付宝小程序前端通过 uni.login / tt.login / my.getAuthCode 获取授权码后,
+    /// 同步调用此端点换取用户标识。无需 H5 OAuth 跳转, 无商户签名。
+    @Operation(summary = "收银台小程序认证(换openId/userId)")
+    @PostMapping("/cashier/auth")
+    public Result<AuthResult> cashierAuth(@RequestBody @Validated CashierAuthParam param) {
+        return Res.ok(cashierAuthService.auth(param));
     }
 
     @Operation(summary = "网关H5生成授权链接")

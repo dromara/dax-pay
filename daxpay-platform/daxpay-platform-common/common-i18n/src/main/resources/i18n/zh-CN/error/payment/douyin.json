@@ -1,0 +1,15 @@
+{
+  "appNotFound": "平台抖音应用不存在",
+  "mchAppNotFound": "商户抖音应用不存在",
+  "appIdDuplicate": "抖音应用AppId已存在",
+  "appTypeInvalid": "抖音应用类型无效",
+  "appInUse": "抖音应用仍被能力绑定引用，不可删除",
+  "appTypeCapabilityMismatch": "抖音应用类型与支付能力不匹配",
+  "scopeNotExist": "抖音应用档位不存在或引用无效",
+  "channelAppIdNotFound": "指定的抖音应用AppId[{0}]未在系统中配置",
+  "appNotBound": "未绑定可用的抖音应用",
+  "channelMerchantMismatch": "通道商户不存在或与商户号不匹配",
+  "appNotConfigured": "未配置 {0} 对应的应用，请前往通道商户应用配置页绑定",
+  "appNotUnique": "存在多个 {0} 类型的应用，请显式配置能力绑定以明确选择",
+  "mpAuthNotConfigured": "抖音应用认证配置未填写，请在「应用管理」中配置 AppId 和 AppSecret"
+}

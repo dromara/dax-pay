@@ -39,7 +39,7 @@ import java.util.Set;
 /// ## 端类型与平台白名单
 /// - merchant: wx_h5 / wx_mini / alipay_mini / dy_mini
 /// - admin: wx_mini / alipay_mini / dy_mini
-/// - cashier: wx_mini / alipay_mini(抖音本期未开放)
+/// - cashier: wx_mini / alipay_mini / dy_mini
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -58,7 +58,8 @@ public class MobileAppService {
                     MobilePlatformEnum.DY_MINI),
             MobileAppTypeEnum.CASHIER, Set.of(
                     MobilePlatformEnum.WX_MINI,
-                    MobilePlatformEnum.ALIPAY_MINI));
+                    MobilePlatformEnum.ALIPAY_MINI,
+                    MobilePlatformEnum.DY_MINI));
 
     private final MobileAppManager manager;
 
@@ -90,6 +91,29 @@ public class MobileAppService {
         MobilePlatformEnum.findByCode(platform);
         return manager.findByAppTypeAndPlatform(appType, platform)
                 .map(this::toMaskedResult);
+    }
+
+    /// 按端类型+平台查询原始应用配置(后端内部调用, 未脱敏)
+    ///
+    /// 与 [findByAppTypeAndPlatform] 不同, 本方法返回解密后的原始强类型配置对象,
+    /// 供 payment 模块(收银台认证等)直接读取 appId/appSecret 等真实凭据。
+    /// 配置不存在、未启用或格式异常时抛异常。
+    ///
+    /// @param appType    端类型
+    /// @param platform   移动平台
+    /// @param configType 配置类型([WxMiniAppConfig] / [AlipayMiniAppConfig] / [DyMiniAppConfig])
+    /// @return 未脱敏的原始配置
+    public <T> T findAppConfig(String appType, String platform, Class<T> configType) {
+        MobileAppTypeEnum.findByCode(appType);
+        MobilePlatformEnum.findByCode(platform);
+        MobileApp entity = manager.findByAppTypeAndPlatform(appType, platform)
+                .orElseThrow(() -> new DataNotExistException("error.mobile_app.notExist"));
+        if (!Boolean.TRUE.equals(entity.getEnabled())) {
+            // 移动应用: 配置未启用: {0}/{1}
+            throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR,
+                    "error.mobile_app.notEnabled", appType, platform);
+        }
+        return parseConfig(entity.getAppConfig(), configType);
     }
 
     /// 保存(按端类型+平台组合 upsert)

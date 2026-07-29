@@ -1,0 +1,15 @@
+{
+  "appNotFound": "Không tìm thấy ứng dụng Douyin nền tảng",
+  "mchAppNotFound": "Không tìm thấy ứng dụng Douyin thương gia",
+  "appIdDuplicate": "Douyin AppId đã tồn tại",
+  "appTypeInvalid": "Loại ứng dụng Douyin không hợp lệ",
+  "appInUse": "Ứng dụng Douyin vẫn được tham chiếu bởi liên kết năng lực, không thể xóa",
+  "appTypeCapabilityMismatch": "Loại ứng dụng Douyin không tương thích với khả năng thanh toán",
+  "scopeNotExist": "Phạm vi ứng dụng Douyin không tồn tại hoặc tham chiếu không hợp lệ",
+  "channelAppIdNotFound": "Douyin AppId [{0}] chưa được cấu hình trong hệ thống",
+  "appNotBound": "Chưa liên kết ứng dụng Douyin khả dụng",
+  "channelMerchantMismatch": "Không tìm thấy merchant kênh hoặc không khớp với mã merchant",
+  "appNotConfigured": "Chưa cấu hình ứng dụng cho {0}, vui lòng liên kết tại trang cấu hình ứng dụng merchant kênh",
+  "appNotUnique": "Tồn tại nhiều ứng dụng loại {0}, vui lòng cấu hình liên kết năng lực rõ ràng để chọn",
+  "mpAuthNotConfigured": "Cấu hình xác thực ứng dụng Douyin chưa được điền, vui lòng cấu hình AppId và AppSecret trong Quản lý ứng dụng"
+}

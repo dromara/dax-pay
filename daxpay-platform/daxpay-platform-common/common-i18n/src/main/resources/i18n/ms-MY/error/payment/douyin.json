@@ -1,0 +1,15 @@
+{
+  "appNotFound": "Aplikasi Douyin platform tidak ditemui",
+  "mchAppNotFound": "Aplikasi Douyin pedagang tidak ditemui",
+  "appIdDuplicate": "Douyin AppId sudah wujud",
+  "appTypeInvalid": "Jenis aplikasi Douyin tidak sah",
+  "appInUse": "Aplikasi Douyin masih dirujuk oleh pengikatan keupayaan dan tidak boleh dipadam",
+  "appTypeCapabilityMismatch": "Jenis aplikasi Douyin tidak sepadan dengan keupayaan pembayaran",
+  "scopeNotExist": "Skop aplikasi Douyin tidak wujud atau rujukan tidak sah",
+  "channelAppIdNotFound": "Douyin AppId [{0}] tidak dikonfigurasi dalam sistem",
+  "appNotBound": "Tiada aplikasi Douyin yang diikat",
+  "channelMerchantMismatch": "Pedagang saluran tidak wujud atau tidak sepadan dengan nombor pedagang",
+  "appNotConfigured": "Aplikasi untuk {0} belum dikonfigurasi, silakan ikat di halaman konfigurasi aplikasi merchant saluran",
+  "appNotUnique": "Terdapat beberapa aplikasi jenis {0}, silakan konfigurasi pengikatan keupayaan secara eksplisit untuk memilih",
+  "mpAuthNotConfigured": "Konfigurasi pengesahan aplikasi Douyin tidak lengkap, sila konfigurasikan AppId dan AppSecret dalam Pengurusan Aplikasi"
+}

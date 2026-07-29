@@ -1,0 +1,15 @@
+{
+  "appNotFound": "플랫폼 Douyin 앱이 존재하지 않습니다",
+  "mchAppNotFound": "가맹점 Douyin 앱이 존재하지 않습니다",
+  "appIdDuplicate": "Douyin AppId가 이미 존재합니다",
+  "appTypeInvalid": "Douyin 앱 유형이 유효하지 않습니다",
+  "appInUse": "Douyin 앱이 능력 바인딩에서 참조 중이므로 삭제할 수 없습니다",
+  "appTypeCapabilityMismatch": "Douyin 앱 유형과 결제 능력이 일치하지 않습니다",
+  "scopeNotExist": "Douyin 앱 범위가 없거나 참조가 유효하지 않습니다",
+  "channelAppIdNotFound": "지정한 Douyin AppId[{0}]가 시스템에 구성되어 있지 않습니다",
+  "appNotBound": "사용 가능한 Douyin 앱이 바인딩되지 않았습니다",
+  "channelMerchantMismatch": "채널 가맹점이 없거나 가맹점 번호와 일치하지 않습니다",
+  "appNotConfigured": "{0}에 해당하는 앱이 구성되지 않았습니다. 채널 가맹점 앱 구성 페이지에서 바인딩하세요",
+  "appNotUnique": "{0} 유형의 앱이 여러 개 존재합니다. 명시적으로 역량 바인딩을 구성하여 선택하세요",
+  "mpAuthNotConfigured": "Douyin 앱 인증 설정이 누락되었습니다. 「앱 관리」에서 AppId와 AppSecret을 설정해 주세요"
+}

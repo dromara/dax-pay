@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.auth.develop;
 
+import cn.daxpay.open.payment.wx.enums.WxAppScopeEnum;
 import cn.daxpay.open.payment.wx.facade.WxAppFacade;
 import cn.daxpay.open.payment.wx.facade.WxAppView;
 import cn.daxpay.open.payment.unipay.param.assist.GenerateAuthUrlParam;
@@ -61,7 +62,9 @@ public class DevelopAuthService {
     /// 应用解析: 显式 scope + appId → [WxAppFacade#getById] 精确加载,
     /// 把档位(wxAppScope)+主键(wxAppRefId)塞入 param 供策略查密钥, 不再做路由推断。
     public AuthUrlResult generateChannelAuthUrl(DevelopChannelAuthParam param) {
-        WxAppView app = wxAppFacade.getById(param.getScope(), param.getAppId());
+        // String code → 枚举, 非法值返回 null 由 getById 兜底抛 error.payment.wx.scopeNotExist
+        WxAppScopeEnum scope = WxAppScopeEnum.findByCode(param.getScope());
+        WxAppView app = wxAppFacade.getById(scope, param.getAppId());
         GenerateAuthUrlParam inner = new GenerateAuthUrlParam();
         inner.setAuthType(ChannelAuthTypeEnum.WECHAT.getCode());
         inner.setMchNo(param.getMchNo());

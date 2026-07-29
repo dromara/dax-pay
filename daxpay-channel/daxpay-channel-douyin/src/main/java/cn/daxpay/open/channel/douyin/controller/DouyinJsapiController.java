@@ -1,13 +1,13 @@
 package cn.daxpay.open.channel.douyin.controller;
 
-import cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectApp;
-import cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectAppAuthConfig;
 import cn.daxpay.open.channel.douyin.param.assist.DouyinJsapiConfigParam;
-import cn.daxpay.open.channel.douyin.service.direct.DouyinDirectAppAuthConfigService;
-import cn.daxpay.open.channel.douyin.service.direct.DouyinDirectAppCapabilityService;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import cn.daxpay.open.payment.device.qrcode.dao.DeviceQrCodeManager;
 import cn.daxpay.open.payment.device.qrcode.entity.DeviceQrCode;
+import cn.daxpay.open.payment.douyin.facade.DouyinAppFacade;
+import cn.daxpay.open.payment.douyin.facade.DyAppView;
+import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
+import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
 import cn.daxpay.open.payment.merchant.enums.ClientEnvEnum;
 import cn.daxpay.open.payment.merchant.enums.ClientRuntimeEnum;
 import cn.daxpay.open.payment.merchant.enums.CodePayFormEnum;
@@ -40,8 +40,9 @@ import java.util.Objects;
 
 /// # 抖音 H5 JSAPI 调起前置 - sdk.config 验签接口
 ///
-/// 签名基于**通道商户网站应用**的 clientKey/appSecret 换取的 jsapi_ticket,
-/// 与 H5 OAuth([DouyinAuthStrategy]) 同源。
+/// 签名基于**商户/平台网站应用**的 clientKey/appSecret 换取的 jsapi_ticket,
+/// 与 H5 OAuth([cn.daxpay.open.channel.douyin.strategy.auth.DouyinAuthStrategy]) 同源,
+/// 均通过 [DouyinAppFacade#resolveWebAppForH5Auth] 解析 web_app 应用。
 ///
 /// 上下文三选一: orderNo(网关单) / code(码牌) / channelMchNo(+可选 capability)。
 @IgnoreAuth
@@ -53,8 +54,8 @@ import java.util.Objects;
 public class DouyinJsapiController {
 
     private final DouyinOpenTokenService douyinOpenTokenService;
-    private final DouyinDirectAppCapabilityService douyinDirectAppCapabilityService;
-    private final DouyinDirectAppAuthConfigService douyinDirectAppAuthConfigService;
+    private final DouyinAppFacade douyinAppFacade;
+    private final ChannelMerchantManager channelMerchantManager;
     private final GatewayPayAssistService gatewayPayAssistService;
     private final DeviceQrCodeManager deviceQrCodeManager;
     private final MerchantContextLoader merchantContextLoader;
@@ -68,23 +69,24 @@ public class DouyinJsapiController {
         ResolvedChannel ctx = resolveChannelContext(
                 param.getOrderNo(), param.getCode(),
                 param.getChannelMchNo(), param.getCapability(), param.getChannelAppId());
-        DouyinDirectApp app = douyinDirectAppCapabilityService.resolveWebAppForH5Auth(
-                ctx.channelMchNo(), ctx.capability(), ctx.channelAppId());
-        DouyinDirectAppAuthConfig authConfig =
-                douyinDirectAppAuthConfigService.findByDouyinDirectAppIdForAuth(app.getId());
-        if (StrUtil.isBlank(authConfig.getAppSecret())) {
+        DyAppView app = douyinAppFacade.resolveWebAppForH5Auth(
+                ctx.mchNo(), ctx.channelMchNo(), ctx.channelAppId());
+        if (StrUtil.isBlank(app.appSecret())) {
             // 抖音: 直连应用授权密钥未配置
             throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR, "error.channel.douyin.appAuthSecretMissing");
         }
         DouyinJsapiConfigResult result = douyinOpenTokenService.buildJsapiConfig(
-                app.getDouyinAppId(), authConfig.getAppSecret(), param.getUrl());
+                app.douyinAppId(), app.appSecret(), param.getUrl());
         return Res.ok(result);
     }
 
     private ResolvedChannel resolveChannelContext(String orderNo, String code, String channelMchNo,
                                                   String capability, String channelAppId) {
         if (StrUtil.isNotBlank(channelMchNo)) {
-            return new ResolvedChannel(channelMchNo, capability, channelAppId);
+            String mchNo = channelMerchantManager.findByChannelMchNo(channelMchNo)
+                    .map(ChannelMerchant::getMchNo)
+                    .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
+            return new ResolvedChannel(mchNo, channelMchNo, capability, channelAppId);
         }
         if (StrUtil.isNotBlank(orderNo)) {
             return resolveFromGatewayOrder(orderNo);
@@ -100,7 +102,7 @@ public class DouyinJsapiController {
         GatewayPayOrder order = gatewayPayAssistService.getOrderAndCheck(orderNo);
         if (Objects.equals(order.getStatus(), GatewayOrderStatusEnum.PAYING.getCode())
                 && StrUtil.isNotBlank(order.getChannelMchNo())) {
-            return new ResolvedChannel(order.getChannelMchNo(), order.getCapability(), order.getChannelAppId());
+            return new ResolvedChannel(order.getMchNo(), order.getChannelMchNo(), order.getCapability(), order.getChannelAppId());
         }
         var resolved = clientEnvPayResolveService.resolveRequired(
                 order.getAppId(), ClientEnvEnum.DOUYIN, ClientRuntimeEnum.H5);
@@ -111,7 +113,7 @@ public class DouyinJsapiController {
         routeParam.setChannelMchNo(resolved.channelMchNo());
         routeParam.setCapability(resolved.capability());
         payRouteService.resolve(routeParam);
-        return new ResolvedChannel(routeParam.getChannelMchNo(), routeParam.getCapability(), null);
+        return new ResolvedChannel(order.getMchNo(), routeParam.getChannelMchNo(), routeParam.getCapability(), null);
     }
 
     private ResolvedChannel resolveFromCodePay(String code) {
@@ -131,9 +133,9 @@ public class DouyinJsapiController {
         routeParam.setChannelMchNo(resolved.channelMchNo());
         routeParam.setCapability(resolved.capability());
         payRouteService.resolve(routeParam);
-        return new ResolvedChannel(routeParam.getChannelMchNo(), routeParam.getCapability(), null);
+        return new ResolvedChannel(entity.getMchNo(), routeParam.getChannelMchNo(), routeParam.getCapability(), null);
     }
 
-    private record ResolvedChannel(String channelMchNo, String capability, String channelAppId) {
+    private record ResolvedChannel(String mchNo, String channelMchNo, String capability, String channelAppId) {
     }
 }

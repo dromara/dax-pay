@@ -10,6 +10,8 @@ import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.PayTradeResultBo;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
+import cn.daxpay.open.payment.wx.facade.WxAppFacade;
+import cn.daxpay.open.payment.wx.facade.WxAppView;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
@@ -32,6 +34,7 @@ public class UmsPayService {
 
     private final UmsChannelClient umsChannelClient;
     private final PlatformUrlConfigService platformUrlConfigService;
+    private final WxAppFacade wxAppFacade;
 
     /// 执行银联商务支付
     public PayTradeResultBo pay(PayTrade order, NormalPayParam payParam, UmsSdkCredential credential) {
@@ -46,6 +49,13 @@ public class UmsPayService {
         // 通道通知地址(银联商务→平台)
         req.setNotifyUrl(this.buildNotifyUrl(order, payParam.getChannelMchNo()));
         req.setCredential(credential);
+        // 微信小程序收银台支付需 subAppId, 通过微信开放应用门面复用商户/平台级微信应用解析 wxAppId
+        if (req.getMethod() == UmsPayMethod.WECHAT_CASHIER) {
+            WxAppView wxApp = wxAppFacade.resolve(
+                    order.getMchNo(), payParam.getChannelMchNo(),
+                    payParam.getCapability(), payParam.getChannelAppId(), null);
+            req.setWxAppId(wxApp.wxAppId());
+        }
 
         // 调用子应用
         DaxResult<UmsPayResp> result = umsChannelClient.pay(req);

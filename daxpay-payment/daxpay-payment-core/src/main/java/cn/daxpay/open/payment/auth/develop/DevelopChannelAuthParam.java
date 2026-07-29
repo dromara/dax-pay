@@ -2,7 +2,6 @@ package cn.daxpay.open.payment.auth.develop;
 
 import cn.daxpay.open.payment.auth.channel.MerchantChannelAuthService;
 import cn.daxpay.open.payment.unipay.param.assist.GenerateAuthUrlParam;
-import cn.daxpay.open.payment.wx.enums.WxAppScopeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -27,9 +26,9 @@ public class DevelopChannelAuthParam {
     private String mchNo;
 
     /// 应用档位(必填, platform 平台档 / merchant 商户档)
-    @NotNull(message = "{validation.field.scope.notBlank}")
+    @NotBlank(message = "{validation.field.scope.notBlank}")
     @Schema(description = "应用档位(platform/merchant)")
-    private WxAppScopeEnum scope;
+    private String scope;
 
     /// 应用主键(必填, 对应 wx_platform_app.id 或 wx_mch_app.id)
     @NotNull(message = "{validation.field.appId.notBlank}")

@@ -218,6 +218,21 @@ public interface PermCodes {
             }
         }
 
+        /// 抖音开放应用主数据 menuCode=payment:douyin:*
+        interface Douyin {
+            /// 平台抖音应用 menuCode=payment:douyin:platform-app
+            interface PlatformApp {
+                /// 菜单编码
+                String MENU = "payment:douyin:platform-app";
+            }
+
+            /// 商户抖音应用 menuCode=payment:douyin:mch-app
+            interface MchApp {
+                /// 菜单编码
+                String MENU = "payment:douyin:mch-app";
+            }
+        }
+
         /// 支付风控 menuCode=payment:risk:*
         interface Risk {
             /// 黑名单管理 menuCode=payment:risk:blacklist
