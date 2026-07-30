@@ -11,5 +11,6 @@
   "channelMerchantMismatch": "通道商户不存在或与商户号不匹配",
   "appNotConfigured": "未配置 {0} 对应的应用，请前往通道商户应用配置页绑定",
   "appNotUnique": "存在多个 {0} 类型的应用，请显式配置能力绑定以明确选择",
+  "directMchAppNotConfigured": "直连商户未配置 {0} 对应的商户档应用，请前往通道商户应用配置页绑定商户档应用（直连商户不可使用平台档应用）",
   "mpAuthNotConfigured": "抖音应用认证配置未填写，请在「应用管理」中配置 AppId 和 AppSecret"
 }

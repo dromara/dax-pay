@@ -11,6 +11,7 @@ import cn.daxpay.open.payment.wx.enums.WxAppTypeEnum;
 import cn.daxpay.open.payment.wx.facade.WxAppFacade;
 import cn.daxpay.open.payment.wx.facade.WxAppView;
 import cn.daxpay.open.payment.wx.facade.WxIsvAppPair;
+import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
@@ -176,20 +177,28 @@ public class WxAppResolveService implements WxAppFacade {
         throw new DataNotExistException("error.payment.wx.channelAppIdNotFound", channelAppId);
     }
 
-    /// appType 推导兜底：按兼容类型优先级遍历, 首个唯一命中的平台应用返回
+    /// 平台档 appType 推导兜底：按兼容类型优先级遍历, 首个唯一命中的平台应用返回
     ///
     /// - 某类型恰好 1 个：返回该应用
-    /// - 某类型多个/无：跳过, 继续下一个兼容类型
+    /// - 某类型多个：直接报错(不猜测, 要求显式配置能力绑定)
+    /// - 某类型无：跳过, 继续下一个兼容类型
     /// - 全部兼容类型均未唯一命中：返回 null, 由调用方走最终报错
     private WxAppView resolvePlatformFallback(String capability) {
         if (StrUtil.isBlank(capability)) {
             return null;
         }
-        // 遍历兼容 appType(按优先级), 首个唯一命中即返回; 某类型存在多个则跳过, 避免猜测
+        // 遍历兼容 appType(按优先级), 首个唯一命中即返回; 某类型存在多个则报错, 避免猜测
         for (String appType : WxAppTypeEnum.resolveCompatibleAppTypes(capability)) {
             List<WxPlatformApp> apps = wxPlatformAppManager.listByAppType(appType);
             if (apps.size() == 1) {
                 return this.toPlatformView(apps.getFirst());
+            }
+            if (apps.size() > 1) {
+                // 该类型存在多个平台应用, 要求显式配置能力绑定
+                WxAppTypeEnum typeEnum = WxAppTypeEnum.findByCode(appType);
+                String appTypeLabel = typeEnum != null ? I18nUtil.getEnumName(typeEnum) : appType;
+                throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
+                        "error.payment.wx.appNotUnique", appTypeLabel);
             }
         }
         return null;

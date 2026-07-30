@@ -6,6 +6,7 @@ import cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectChannelMerchant;
 import cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectKeyConfig;
 import cn.daxpay.open.payment.douyin.facade.DouyinAppFacade;
 import cn.daxpay.open.payment.douyin.facade.DyAppView;
+import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,8 +37,9 @@ public class DouyinDirectConfigAssembler {
     /// @param capability   支付能力编码(用于选择匹配的应用)
     /// @return 抖音 SDK 凭证, 字段对齐子应用 DouyinSdkCredential
     public DouyinSdkCredential buildConfig(String mchNo, String channelMchNo, String capability) {
-        // 1. 解析支付使用的应用(显式 channelAppId → 通道能力绑 → appType 推导；未命中 facade 自行报错)
-        DyAppView app = douyinAppFacade.resolve(mchNo, channelMchNo, capability, null, null);
+        // 1. 解析支付使用的应用(传直连产品标识, 激活 resolve 内商户档隔离: 仅商户表/能力绑 merchant 档/商户档 appType 推导)
+        DyAppView app = douyinAppFacade.resolve(mchNo, channelMchNo, capability, null,
+                ProductEnum.DOUYIN_PAY.getCode());
 
         // 2. 读取通道商户绑定(获取抖音商户号 dyMchId 作为 mchId)
         DouyinDirectChannelMerchant merchant = channelMerchantManager.lambdaQuery()

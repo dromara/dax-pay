@@ -49,4 +49,15 @@ public class DyMchAppManager extends BaseManager<DyMchAppMapper, DyMchApp> {
                 .orderByAsc(DyMchApp::getCreateTime)
                 .orderByAsc(DyMchApp::getId));
     }
+
+    /// 按商户号与应用类型查询全部应用(按创建时间升序)
+    // 供商户档 appType 推导判断唯一命中: 多个时由调用方决定跳过或报错
+    public List<DyMchApp> listByMchNoAndAppType(String mchNo, String appType) {
+        return lambdaQuery()
+                .eq(DyMchApp::getMchNo, mchNo)
+                .eq(DyMchApp::getAppType, appType)
+                .orderByAsc(DyMchApp::getCreateTime)
+                .orderByAsc(DyMchApp::getId)
+                .list();
+    }
 }

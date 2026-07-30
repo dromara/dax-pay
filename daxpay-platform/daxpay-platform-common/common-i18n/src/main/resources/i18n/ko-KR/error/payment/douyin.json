@@ -11,5 +11,6 @@
   "channelMerchantMismatch": "채널 가맹점이 없거나 가맹점 번호와 일치하지 않습니다",
   "appNotConfigured": "{0}에 해당하는 앱이 구성되지 않았습니다. 채널 가맹점 앱 구성 페이지에서 바인딩하세요",
   "appNotUnique": "{0} 유형의 앱이 여러 개 존재합니다. 명시적으로 역량 바인딩을 구성하여 선택하세요",
+  "directMchAppNotConfigured": "직연 가맹점은 {0}에 해당하는 가맹점 티어 앱이 미구성되었습니다. 채널 가맹점 앱 구성 페이지에서 가맹점 티어 앱을 바인딩하세요（직연 가맹점은 플랫폼 티어 앱 사용 불가）",
   "mpAuthNotConfigured": "Douyin 앱 인증 설정이 누락되었습니다. 「앱 관리」에서 AppId와 AppSecret을 설정해 주세요"
 }
