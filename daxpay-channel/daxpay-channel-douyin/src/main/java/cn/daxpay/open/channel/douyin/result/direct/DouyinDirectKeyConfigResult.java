@@ -18,14 +18,14 @@ public class DouyinDirectKeyConfigResult extends MchBaseResult {
     @Schema(description = "通道商户号")
     private String channelMchNo;
 
-    @SensitiveInfo(front = 12, end = 12)
+    @SensitiveInfo(front = 24, end = 24)
     @Schema(description = "商户私钥(已脱敏)")
     private String merchantPrivateKey;
 
     @Schema(description = "商家公钥证书序列号")
     private String merchantSerialNumber;
 
-    @SensitiveInfo
+    @SensitiveInfo(front = 6, end = 6)
     @Schema(description = "接口加密密钥(已脱敏)")
     private String encryptKey;
 

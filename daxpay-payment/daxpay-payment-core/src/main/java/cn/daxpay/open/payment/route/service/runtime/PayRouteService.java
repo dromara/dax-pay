@@ -8,12 +8,16 @@ import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
 import cn.daxpay.open.payment.route.entity.basic.PayRouteBasicConfig;
 import cn.daxpay.open.payment.route.entity.scene.PayRouteSceneConfig;
 import cn.daxpay.open.payment.route.entity.strategy.PayRouteStrategy;
+import cn.daxpay.open.payment.route.service.basic.PayRouteBasicConfigService;
 import cn.daxpay.open.payment.route.service.model.PayRouteBundle;
 import cn.daxpay.open.payment.route.service.model.RouteHit;
+import cn.daxpay.open.payment.route.service.scene.PayRouteSceneConfigService;
 import cn.daxpay.open.payment.route.service.support.PayRouteI18nHelper;
 import cn.daxpay.open.payment.strategy.PaymentStrategyFactory;
 import cn.daxpay.open.payment.strategy.ProductStrategySupport;
 import cn.daxpay.open.payment.strategy.product.AbsProductStrategy;
+import cn.daxpay.open.payment.trade.runtime.service.pay.gateway.GatewayPayHandleService;
+import cn.daxpay.open.payment.trade.runtime.service.pay.normal.NormalPayService;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
@@ -30,6 +34,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 /// # 支付通道路由服务
 ///
@@ -80,18 +85,27 @@ public class PayRouteService {
         validateChannelMchEnvMatch(payParam.getChannelMchNo(), payParam.getProduct());
     }
 
-    /// 环境一致性校验: 通道商户固化的 sandbox 标识必须与产品当前生效环境(activeEnv)匹配
+    /// 通道商户可用性校验(运行时)
     ///
-    /// 沙箱产品 → 只能路由到 sandbox 通道商户; 生产产品 → 只能路由到 prod 通道商户。
-    /// 不匹配抛 noMatch(等价"无可用的支付产品", 实现沙箱/生产路由层隔离)。
-    /// 注意: 通道商户 sandbox 在创建时固化, 不随产品环境切换改变; 一个产品下可同时存在两种商户。
+    /// 1. 启停用校验: 禁用的通道商户不允许被路由命中, 与配置保存时([PayRouteBasicConfigService]/[PayRouteSceneConfigService])保持一致
+    /// 2. 环境一致性校验: 通道商户固化的 sandbox 标识必须与产品当前生效环境(activeEnv)匹配。
+    ///    沙箱产品 → 只能路由到 sandbox 通道商户; 生产产品 → 只能路由到 prod 通道商户。
+    ///    不匹配抛 noMatch(等价"无可用的支付产品", 实现沙箱/生产路由层隔离)。
+    ///    注意: 通道商户 sandbox 在创建时固化, 不随产品环境切换改变; 一个产品下可同时存在两种商户。
     private void validateChannelMchEnvMatch(String channelMchNo, String product) {
         if (StrUtil.isBlank(channelMchNo) || StrUtil.isBlank(product)) {
             return;
         }
-        boolean mchSandbox = channelMerchantManager.findByChannelMchNo(channelMchNo)
-                .map(ChannelMerchant::isSandbox)
-                .orElse(false);
+        Optional<ChannelMerchant> mchOpt = channelMerchantManager.findByChannelMchNo(channelMchNo);
+        // 启停用校验(运行时): 禁用的商户不允许被路由命中
+        if (mchOpt.isPresent() && !Boolean.TRUE.equals(mchOpt.get().getEnable())) {
+            log.info("通道商户[{}]已被禁用, 路由拒绝", channelMchNo);
+            // 路由: 通道商户未启用
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "pay.route.error.channelMchDisabled", channelMchNo);
+        }
+        // 沙箱/生产环境一致性校验
+        boolean mchSandbox = mchOpt.map(ChannelMerchant::isSandbox).orElse(false);
         boolean prodSandbox = payProductConfigManager.isSandboxActive(product);
         if (mchSandbox != prodSandbox) {
             log.info("通道商户[{}]固化环境(sandbox={})与产品[{}]当前生效环境(sandbox={})不匹配, 路由拒绝",

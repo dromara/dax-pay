@@ -1,6 +1,7 @@
 package cn.daxpay.open.channel.alipay.result.isv;
 
 import cn.daxpay.open.payment.common.result.MchBaseResult;
+import cn.daxpay.open.platform.common.json.sensitive.SensitiveInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -28,6 +29,7 @@ public class AlipayIsvChannelMerchantResult extends MchBaseResult {
     @Schema(description = "子商户支付宝识别码(2088开头)")
     private String alipayUserId;
 
+    @SensitiveInfo(front = 6, end = 6)
     @Schema(description = "应用授权令牌")
     private String appAuthToken;
 }

@@ -50,7 +50,7 @@ public class MchUserAdminController {
 
     @Operation(summary = "添加商户用户")
     @PostMapping("/add")
-    @OperateLog(title = "新增商户用户", businessType = OperateLogType.ADD, saveParam = true)
+    @OperateLog(title = "新增商户用户", businessType = OperateLogType.ADD, saveParam = true, maskParam = true)
     public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) MerchantUserParam param) {
         merchantUserAdminService.add(param);
         return Res.ok();
@@ -58,7 +58,7 @@ public class MchUserAdminController {
 
     @Operation(summary = "修改商户用户")
     @PostMapping("/update")
-    @OperateLog(title = "修改商户用户", businessType = OperateLogType.UPDATE, saveParam = true)
+    @OperateLog(title = "修改商户用户", businessType = OperateLogType.UPDATE, saveParam = true, maskParam = true)
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) MerchantUserParam param) {
         merchantUserAdminService.update(param);
         return Res.ok();
@@ -66,7 +66,7 @@ public class MchUserAdminController {
 
     @Operation(summary = "分配角色")
     @PostMapping("/assign-role")
-    @OperateLog(title = "分配商户用户角色", businessType = OperateLogType.GRANT, saveParam = true)
+    @OperateLog(title = "分配商户用户角色", businessType = OperateLogType.GRANT, saveParam = true, maskParam = true)
     public Result<Void> assignRole(@NotNull(message = "{validation.field.userId.notNull}") Long userId,
                                     @NotNull(message = "{validation.field.roleId.notNull}") Long roleId) {
         merchantUserAdminService.assignRole(userId, roleId);
@@ -75,7 +75,7 @@ public class MchUserAdminController {
 
     @Operation(summary = "封禁商户用户")
     @PostMapping("/ban")
-    @OperateLog(title = "封禁商户用户", businessType = OperateLogType.UPDATE, saveParam = true)
+    @OperateLog(title = "封禁商户用户", businessType = OperateLogType.UPDATE, saveParam = true, maskParam = true)
     public Result<Void> ban(@NotNull(message = "{validation.field.userId.notNull}") Long userId) {
         merchantUserAdminService.ban(userId);
         return Res.ok();
@@ -83,7 +83,7 @@ public class MchUserAdminController {
 
     @Operation(summary = "批量封禁商户用户")
     @PostMapping("/ban-batch")
-    @OperateLog(title = "批量封禁商户用户", businessType = OperateLogType.UPDATE, saveParam = true)
+    @OperateLog(title = "批量封禁商户用户", businessType = OperateLogType.UPDATE, saveParam = true, maskParam = true)
     public Result<Void> banBatch(@RequestBody @NotEmpty(message = "{validation.field.userIds.notEmpty}") List<Long> userIds) {
         merchantUserAdminService.banBatch(userIds);
         return Res.ok();
@@ -91,7 +91,7 @@ public class MchUserAdminController {
 
     @Operation(summary = "解锁商户用户")
     @PostMapping("/unlock")
-    @OperateLog(title = "解锁商户用户", businessType = OperateLogType.UPDATE, saveParam = true)
+    @OperateLog(title = "解锁商户用户", businessType = OperateLogType.UPDATE, saveParam = true, maskParam = true)
     public Result<Void> unlock(@NotNull(message = "{validation.field.userId.notNull}") Long userId) {
         merchantUserAdminService.unlock(userId);
         return Res.ok();
@@ -99,7 +99,7 @@ public class MchUserAdminController {
 
     @Operation(summary = "批量解锁商户用户")
     @PostMapping("/unlock-batch")
-    @OperateLog(title = "批量解锁商户用户", businessType = OperateLogType.UPDATE, saveParam = true)
+    @OperateLog(title = "批量解锁商户用户", businessType = OperateLogType.UPDATE, saveParam = true, maskParam = true)
     public Result<Void> unlockBatch(@RequestBody @NotEmpty(message = "{validation.field.userIds.notEmpty}") List<Long> userIds) {
         merchantUserAdminService.unlockBatch(userIds);
         return Res.ok();
@@ -107,7 +107,7 @@ public class MchUserAdminController {
 
     @Operation(summary = "重置密码")
     @PostMapping("/restart-password")
-    @OperateLog(title = "重置商户用户密码", businessType = OperateLogType.UPDATE, saveParam = true)
+    @OperateLog(title = "重置商户用户密码", businessType = OperateLogType.UPDATE, saveParam = true, maskParam = true)
     public Result<Void> restartPassword(@RequestBody @Validated MerchantUserResetPwdParam param) {
         merchantUserAdminService.restartPassword(param.getUserId(), param.getNewPassword());
         return Res.ok();
@@ -115,7 +115,7 @@ public class MchUserAdminController {
 
     @Operation(summary = "批量重置密码")
     @PostMapping("/restart-password-batch")
-    @OperateLog(title = "批量重置商户用户密码", businessType = OperateLogType.UPDATE, saveParam = true)
+    @OperateLog(title = "批量重置商户用户密码", businessType = OperateLogType.UPDATE, saveParam = true, maskParam = true)
     public Result<Void> restartPasswordBatch(@RequestBody @Validated MerchantUserResetPwdBatchParam param) {
         merchantUserAdminService.restartPasswordBatch(param.getUserIds(), param.getNewPassword());
         return Res.ok();

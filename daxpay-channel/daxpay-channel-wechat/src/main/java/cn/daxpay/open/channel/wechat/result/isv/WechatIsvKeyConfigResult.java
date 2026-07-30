@@ -21,22 +21,22 @@ public class WechatIsvKeyConfigResult extends BaseResult {
     @Schema(description = "微信服务商商户号")
     private String wxMchId;
 
-    @SensitiveInfo(front = 12, end = 12)
+    @SensitiveInfo(front = 6, end = 6)
     @Schema(description = "API V3密钥(加密存储)")
     private String apiKeyV3;
 
-    @SensitiveInfo(front = 12, end = 12)
+    @SensitiveInfo(front = 24, end = 24)
     @Schema(description = "支付公钥(加密存储)")
     private String publicKey;
 
     @Schema(description = "支付公钥ID")
     private String publicKeyId;
 
-    @SensitiveInfo(front = 12, end = 12)
+    @SensitiveInfo(front = 24, end = 24)
     @Schema(description = "apiclient_key证书(加密存储)")
     private String privateKey;
 
-    @SensitiveInfo(front = 12, end = 12)
+    @SensitiveInfo(front = 24, end = 24)
     @Schema(description = "apiclient_cert证书(加密存储)")
     private String privateCert;
 

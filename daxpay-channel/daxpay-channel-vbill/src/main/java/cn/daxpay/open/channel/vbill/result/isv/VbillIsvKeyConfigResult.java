@@ -20,11 +20,11 @@ public class VbillIsvKeyConfigResult extends BaseResult {
     @Schema(description = "天阙合作机构ID(orgId)")
     private String orgId;
 
-    @SensitiveInfo(front = 12, end = 12)
+    @SensitiveInfo(front = 24, end = 24)
     @Schema(description = "天阙RSA公钥(加密存储)")
     private String publicKey;
 
-    @SensitiveInfo(front = 12, end = 12)
+    @SensitiveInfo(front = 24, end = 24)
     @Schema(description = "商户RSA私钥(加密存储)")
     private String privateKey;
 

@@ -84,6 +84,10 @@ public class SensitiveInfoSerialize extends ValueSerializer<String> {
         if (front < 0 || end < 0) {
             return StrUtil.EMPTY;
         }
+        // 保留位数之和超过原长度时, hide 区间为空或反转可能导致明文暴露, 统一全量脱敏
+        if (front + end >= str.length()) {
+            return StrUtil.repeat('*', 4);
+        }
         return StrUtil.hide(str, front, str.length() - end);
     }
 

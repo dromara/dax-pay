@@ -23,27 +23,27 @@ public class PlatformAlipayAuthConfigResult {
     private String authType;
 
     /// 应用私钥(脱敏返回)
-    @SensitiveInfo
+    @SensitiveInfo(front = 24, end = 24)
     @Schema(description = "应用私钥")
     private String privateKey;
 
     /// 支付宝公钥(脱敏返回)
-    @SensitiveInfo
+    @SensitiveInfo(front = 24, end = 24)
     @Schema(description = "支付宝公钥(公钥模式)")
     private String alipayPublicKey;
 
     /// 应用公钥证书内容(脱敏返回)
-    @SensitiveInfo
+    @SensitiveInfo(front = 24, end = 24)
     @Schema(description = "应用公钥证书内容(证书模式)")
     private String appCert;
 
     /// 支付宝公钥证书内容(脱敏返回)
-    @SensitiveInfo
+    @SensitiveInfo(front = 24, end = 24)
     @Schema(description = "支付宝公钥证书内容(证书模式)")
     private String alipayCert;
 
     /// 支付宝根证书内容(脱敏返回)
-    @SensitiveInfo
+    @SensitiveInfo(front = 24, end = 24)
     @Schema(description = "支付宝根证书内容(证书模式)")
     private String alipayRootCert;
 

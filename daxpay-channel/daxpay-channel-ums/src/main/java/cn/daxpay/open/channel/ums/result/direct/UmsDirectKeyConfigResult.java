@@ -22,12 +22,12 @@ public class UmsDirectKeyConfigResult {
     /// 银联商务应用 AppId
     private String umsAppId;
 
-    /// 应用密钥(脱敏返回, 保留前后各4位)
-    @SensitiveInfo(front = 4, end = 4)
+    /// 应用密钥(脱敏返回, 保留前后各6位)
+    @SensitiveInfo(front = 6, end = 6)
     private String appKey;
 
-    /// 通讯密钥(脱敏返回, 保留前后各4位)
-    @SensitiveInfo(front = 4, end = 4)
+    /// 通讯密钥(脱敏返回, 保留前后各6位)
+    @SensitiveInfo(front = 6, end = 6)
     private String secretKey;
 
     /// 是否沙箱环境

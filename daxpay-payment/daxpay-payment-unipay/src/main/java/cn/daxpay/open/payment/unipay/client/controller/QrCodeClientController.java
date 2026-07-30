@@ -4,7 +4,9 @@ import cn.daxpay.open.payment.unipay.client.result.CodePayInfoResult;
 import cn.daxpay.open.payment.unipay.client.result.CodePayOrderStatusResult;
 import cn.daxpay.open.payment.unipay.client.service.CodePayAssistService;
 import cn.daxpay.open.payment.unipay.param.device.CodePayAuthUrlParam;
+import cn.daxpay.open.payment.unipay.param.device.CodePayMiniAuthParam;
 import cn.daxpay.open.payment.unipay.param.device.CodePayParam;
+import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
 import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
 import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
@@ -53,6 +55,16 @@ public class QrCodeClientController {
     @PostMapping("/generate-auth-url")
     public Result<AuthUrlResult> generateAuthUrl(@RequestBody @Validated CodePayAuthUrlParam param) {
         return Res.ok(codePayAssistService.generateAuthUrl(param));
+    }
+
+    /// 码牌小程序认证(换openId/userId, 同步返回)
+    ///
+    /// 微信/支付宝/抖音小程序前端通过 uni.login / my.getAuthCode / tt.login 获取授权码后,
+    /// 同步调用此端点换取用户标识。无需 H5 OAuth 跳转, 无商户签名。
+    @Operation(summary = "码牌小程序认证(换openId/userId, 同步返回)")
+    @PostMapping("/mini-auth")
+    public Result<AuthResult> miniAuth(@RequestBody @Validated CodePayMiniAuthParam param) {
+        return Res.ok(codePayAssistService.miniAuth(param));
     }
 
     @Operation(summary = "查询码牌订单状态")

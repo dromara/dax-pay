@@ -24,7 +24,7 @@ public class HkrtIsvKeyConfigResult extends BaseResult {
     @Schema(description = "接入机构标识")
     private String accessId;
 
-    @SensitiveInfo(front = 4, end = 4)
+    @SensitiveInfo(front = 6, end = 6)
     @Schema(description = "签名密钥(加密存储)")
     private String accessKey;
 

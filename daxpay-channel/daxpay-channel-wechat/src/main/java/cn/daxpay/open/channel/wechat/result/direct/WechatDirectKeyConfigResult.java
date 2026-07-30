@@ -23,22 +23,22 @@ public class WechatDirectKeyConfigResult extends BaseResult {
     @Schema(description = "通道商户号")
     private String channelMchNo;
 
-    @SensitiveInfo(front = 12, end = 12)
+    @SensitiveInfo(front = 6, end = 6)
     @Schema(description = "API V3密钥")
     private String apiKeyV3;
 
-    @SensitiveInfo(front = 12, end = 12)
+    @SensitiveInfo(front = 24, end = 24)
     @Schema(description = "支付公钥")
     private String publicKey;
 
     @Schema(description = "支付公钥ID")
     private String publicKeyId;
 
-    @SensitiveInfo(front = 12, end = 12)
+    @SensitiveInfo(front = 24, end = 24)
     @Schema(description = "商户私钥")
     private String privateKey;
 
-    @SensitiveInfo(front = 12, end = 12)
+    @SensitiveInfo(front = 24, end = 24)
     @Schema(description = "商户证书")
     private String privateCert;
 

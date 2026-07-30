@@ -23,8 +23,8 @@ public class SocialLoginConfigResult {
     @Schema(description = "客户端ID")
     private String clientId;
 
-    /// 客户端密钥(脱敏返回, 保留前后各4位)
-    @SensitiveInfo(front = 4, end = 4)
+    /// 客户端密钥(脱敏返回, 保留前后各6位)
+    @SensitiveInfo(front = 6, end = 6)
     @Schema(description = "客户端密钥(脱敏)")
     private String clientSecret;
 

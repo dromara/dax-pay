@@ -17,14 +17,18 @@ import cn.daxpay.open.payment.route.service.runtime.PayRouteService;
 import cn.daxpay.open.payment.strategy.risk.PayRiskChecker;
 import cn.daxpay.open.payment.trade.order.dao.NormalPayOrderManager;
 import cn.daxpay.open.payment.trade.order.entity.NormalPayOrder;
+import cn.daxpay.open.payment.trade.runtime.service.pay.gateway.CashierAuthService;
 import cn.daxpay.open.payment.trade.runtime.service.pay.normal.NormalPayService;
 import cn.daxpay.open.payment.unipay.client.result.CodePayInfoResult;
 import cn.daxpay.open.payment.unipay.client.result.CodePayOrderStatusResult;
 import cn.daxpay.open.payment.unipay.param.assist.GenerateAuthUrlParam;
 import cn.daxpay.open.payment.unipay.param.device.CodePayAuthUrlParam;
+import cn.daxpay.open.payment.unipay.param.device.CodePayMiniAuthParam;
 import cn.daxpay.open.payment.unipay.param.device.CodePayParam;
+import cn.daxpay.open.payment.unipay.param.gateway.CashierAuthParam;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.payment.unipay.param.trade.pay.TerminalInfo;
+import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
 import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
 import cn.daxpay.open.payment.wx.facade.WxAppFacade;
@@ -63,6 +67,8 @@ public class CodePayAssistService {
     private final MerchantInfoManager merchantInfoManager;
     private final MerchantContextLoader merchantContextLoader;
     private final CodePayResolveService codePayResolveService;
+    /// 收银台小程序认证服务(码牌小程序同步换 openId 复用此能力层)
+    private final CashierAuthService cashierAuthService;
     private final NormalPayService normalPayService;
     private final PayRouteService payRouteService;
     private final UnifiedAuthService unifiedAuthService;
@@ -105,6 +111,24 @@ public class CodePayAssistService {
             }
         }
         return result;
+    }
+
+    /// 码牌小程序认证: 用 authCode 同步换 openId/userId
+    ///
+    /// 先按 `code` 校验码牌(启用且已分配商户, 防越权探测), 再委托 [CashierAuthService#auth]
+    /// 按通道换取用户标识。配置来源为平台级收银台小程序(pay_platform_mobile_app, appType=cashier),
+    /// 与码牌商户解耦, 与收银台小程序共用同一套 jscode2session 能力层。
+    ///
+    /// 区别于 H5 码牌授权([#generateAuthUrl]): H5 走 OAuth 异步跳转, 小程序走同步直返。
+    public AuthResult miniAuth(CodePayMiniAuthParam param) {
+        // 校验码牌启用且已分配商户(防越权探测, 不解析策略)
+        this.loadEnabledAssigned(param.getCode());
+        // 委托收银台小程序认证服务按通道换 openId/userId
+        CashierAuthParam authParam = new CashierAuthParam();
+        authParam.setChannel(param.getChannel());
+        authParam.setAuthCode(param.getAuthCode());
+        authParam.setAnonymousCode(param.getAnonymousCode());
+        return cashierAuthService.auth(authParam);
     }
 
     /// 码牌发起支付: 普通订单 + source=cashier_code; 策略仅读码牌配置

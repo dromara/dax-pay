@@ -14,7 +14,7 @@ public class WxMiniAppConfigResult {
     @Schema(description = "小程序 AppId")
     private String appId;
 
-    @SensitiveInfo
+    @SensitiveInfo(front = 6, end = 6)
     @Schema(description = "小程序 AppSecret")
     private String appSecret;
 

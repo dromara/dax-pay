@@ -24,15 +24,15 @@ public class LakalaIsvKeyConfigResult extends BaseResult {
     @Schema(description = "商户证书序列号")
     private String mchSerialNo;
 
-    @SensitiveInfo(front = 12, end = 12)
+    @SensitiveInfo(front = 24, end = 24)
     @Schema(description = "商户RSA私钥(加密存储)")
     private String privateKey;
 
-    @SensitiveInfo(front = 12, end = 12)
+    @SensitiveInfo(front = 24, end = 24)
     @Schema(description = "拉卡拉RSA公钥(加密存储)")
     private String publicKey;
 
-    @SensitiveInfo(front = 12, end = 12)
+    @SensitiveInfo(front = 6, end = 6)
     @Schema(description = "SM4密钥(加密存储)")
     private String sm4Key;
 

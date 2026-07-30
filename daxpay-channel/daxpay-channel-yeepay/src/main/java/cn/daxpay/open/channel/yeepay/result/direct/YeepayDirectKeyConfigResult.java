@@ -22,22 +22,22 @@ public class YeepayDirectKeyConfigResult {
     private String yopIsvNo;
 
     /// 通道应用 AppKey(脱敏返回)
-    @SensitiveInfo(front = 4, end = 4)
+    @SensitiveInfo(front = 6, end = 6)
     private String appKey;
 
     /// 商户 RSA 私钥(脱敏返回)
-    @SensitiveInfo(front = 4, end = 4)
+    @SensitiveInfo(front = 24, end = 24)
     private String privateKey;
 
     /// 易宝平台 RSA 公钥(脱敏返回)
-    @SensitiveInfo(front = 4, end = 4)
+    @SensitiveInfo(front = 24, end = 24)
     private String yopPublicKey;
 
     /// 微信 AppId
     private String wxAppId;
 
     /// 微信 AppSecret(脱敏返回)
-    @SensitiveInfo(front = 4, end = 4)
+    @SensitiveInfo(front = 6, end = 6)
     private String wxAppSecret;
 
     /// AppKey 是否已配置

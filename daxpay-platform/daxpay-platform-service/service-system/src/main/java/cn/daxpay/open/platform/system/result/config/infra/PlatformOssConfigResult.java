@@ -37,12 +37,12 @@ public class PlatformOssConfigResult {
     private String privateBaseUrl;
 
     /// 访问密钥（AccessKey），通常由云服务商提供
-    @SensitiveInfo
+    @SensitiveInfo(front = 6, end = 6)
     @Schema(description = "访问密钥（AccessKey），通常由云服务商提供")
     private String accessKey;
 
     /// 私有密钥（SecretKey），请妥善保管
-    @SensitiveInfo
+    @SensitiveInfo(front = 6, end = 6)
     @Schema(description = "私有密钥（SecretKey），请妥善保管")
     private String secretKey;
 

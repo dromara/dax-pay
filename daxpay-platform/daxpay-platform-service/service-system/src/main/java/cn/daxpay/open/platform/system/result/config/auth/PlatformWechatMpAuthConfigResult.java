@@ -19,7 +19,7 @@ public class PlatformWechatMpAuthConfigResult {
     private String appId;
 
     /// 微信公众号 AppSecret(脱敏返回)
-    @SensitiveInfo
+    @SensitiveInfo(front = 6, end = 6)
     @Schema(description = "微信公众号 AppSecret")
     private String appSecret;
 }

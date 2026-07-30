@@ -19,7 +19,7 @@ public class PlatformDouyinH5AuthConfigResult {
     private String clientKey;
 
     /// 抖音开放平台 Client Secret(脱敏返回)
-    @SensitiveInfo
+    @SensitiveInfo(front = 6, end = 6)
     @Schema(description = "抖音开放平台 Client Secret")
     private String clientSecret;
 }

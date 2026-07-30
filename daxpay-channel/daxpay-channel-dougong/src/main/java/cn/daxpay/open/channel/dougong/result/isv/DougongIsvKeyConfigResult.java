@@ -23,11 +23,11 @@ public class DougongIsvKeyConfigResult extends BaseResult {
     @Schema(description = "产品号(productId)")
     private String productId;
 
-    @SensitiveInfo(front = 12, end = 12)
+    @SensitiveInfo(front = 24, end = 24)
     @Schema(description = "商户RSA私钥(加密存储)")
     private String privateKey;
 
-    @SensitiveInfo(front = 12, end = 12)
+    @SensitiveInfo(front = 24, end = 24)
     @Schema(description = "斗拱RSA公钥(加密存储)")
     private String dgPublicKey;
 }

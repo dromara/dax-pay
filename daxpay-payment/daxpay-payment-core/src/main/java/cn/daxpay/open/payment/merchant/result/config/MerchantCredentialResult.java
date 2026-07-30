@@ -25,6 +25,6 @@ public class MerchantCredentialResult extends BaseResult {
 
     /// 通信密钥
     @Schema(description = "通信密钥")
-    @SensitiveInfo
+    @SensitiveInfo(front = 6, end = 6)
     private String secretKey;
 }

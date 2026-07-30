@@ -24,7 +24,6 @@ public class PayRouteBundleService {
     private final PayRouteSceneConfigManager sceneConfigManager;
 
     /// 按应用号加载路由数据包（命中缓存时不查库）
-    @Cacheable(value = "payment:route-bundle", key = "#appId")
     public PayRouteBundle loadBundle(String appId) {
         var strategyOpt = strategyManager.findByAppId(appId);
         if (strategyOpt.isEmpty()) {

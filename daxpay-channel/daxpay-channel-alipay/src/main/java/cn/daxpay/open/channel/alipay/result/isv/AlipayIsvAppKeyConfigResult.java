@@ -26,32 +26,32 @@ public class AlipayIsvAppKeyConfigResult extends BaseResult {
     private String authType;
 
     /// 支付宝公钥
-    @SensitiveInfo(front = 12, end = 12)
+    @SensitiveInfo(front = 24, end = 24)
     @Schema(description = "支付宝公钥")
     private String alipayPublicKey;
 
     /// 应用私钥
-    @SensitiveInfo(front = 12, end = 12)
+    @SensitiveInfo(front = 24, end = 24)
     @Schema(description = "应用私钥")
     private String privateKey;
 
     /// 应用公钥证书
-    @SensitiveInfo(front = 12, end = 12)
+    @SensitiveInfo(front = 24, end = 24)
     @Schema(description = "应用公钥证书")
     private String appCert;
 
     /// 支付宝公钥证书
-    @SensitiveInfo(front = 12, end = 12)
+    @SensitiveInfo(front = 24, end = 24)
     @Schema(description = "支付宝公钥证书")
     private String alipayCert;
 
     /// 支付宝CA根证书
-    @SensitiveInfo(front = 12, end = 12)
+    @SensitiveInfo(front = 24, end = 24)
     @Schema(description = "支付宝CA根证书")
     private String alipayRootCert;
 
     /// AES通信密钥
-    @SensitiveInfo
+    @SensitiveInfo(front = 6, end = 6)
     @Schema(description = "AES通信密钥")
     private String secretKey;
 }

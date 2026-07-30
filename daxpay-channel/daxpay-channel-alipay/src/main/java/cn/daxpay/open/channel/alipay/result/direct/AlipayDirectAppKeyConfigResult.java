@@ -29,27 +29,27 @@ public class AlipayDirectAppKeyConfigResult extends BaseResult {
     @Schema(description = "认证类型")
     private String authType;
 
-    @SensitiveInfo(front = 12, end = 12)
+    @SensitiveInfo(front = 24, end = 24)
     @Schema(description = "支付宝公钥")
     private String alipayPublicKey;
 
-    @SensitiveInfo(front = 12, end = 12)
+    @SensitiveInfo(front = 24, end = 24)
     @Schema(description = "应用私钥")
     private String privateKey;
 
-    @SensitiveInfo(front = 12, end = 12)
+    @SensitiveInfo(front = 24, end = 24)
     @Schema(description = "应用公钥证书")
     private String appCert;
 
-    @SensitiveInfo(front = 12, end = 12)
+    @SensitiveInfo(front = 24, end = 24)
     @Schema(description = "支付宝公钥证书")
     private String alipayCert;
 
-    @SensitiveInfo(front = 12, end = 12)
+    @SensitiveInfo(front = 24, end = 24)
     @Schema(description = "支付宝CA根证书")
     private String alipayRootCert;
 
-    @SensitiveInfo
+    @SensitiveInfo(front = 6, end = 6)
     @Schema(description = "AES通信密钥")
     private String secretKey;
 
