@@ -85,7 +85,8 @@ public class GatewayPayAssistService {
         merchantContextLoader.initMch(param.getMchNo());
 
         return lockExecutor.execute(
-                "payment:gateway:pre:" + param.getAppId() + ":" + param.getBizOrderNo(),
+                "payment:gateway:pre:" + param.getAppId() + ":" + param.getBizOrderNo()
+                        + ":" + StrUtil.blankToDefault(param.getLinkForm(), "h5"),
                 () -> self.doPrePay(param, typeEnum),
                 () -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.processing")
         );
@@ -97,8 +98,10 @@ public class GatewayPayAssistService {
     /// - PAID/failed/closed/expired 视为终态拒绝重入
     @Transactional(rollbackFor = Exception.class)
     public GatewayPrePayResult doPrePay(GatewayPrePayParam param, GatewayPayTypeEnum typeEnum) {
-        // 幂等: 已有未终态单则返回原 URL
-        var existing = gatewayPayOrderManager.findByBizOrderNo(param.getBizOrderNo(), param.getAppId());
+        // 幂等: 已有未终态单则返回原 URL(形态绑定: linkForm 不匹配视为不同订单)
+        String reqLinkForm = StrUtil.blankToDefault(param.getLinkForm(), "h5");
+        var existing = gatewayPayOrderManager.findByBizOrderNo(param.getBizOrderNo(), param.getAppId())
+                .filter(o -> Objects.equals(reqLinkForm, StrUtil.blankToDefault(o.getLinkForm(), "h5")));
         if (existing.isPresent()) {
             GatewayPayOrder order = existing.get();
             String status = order.getStatus();
@@ -126,6 +129,8 @@ public class GatewayPayAssistService {
         order.setOrderNo(TradeNoGenerateUtil.order());
         order.setBizOrderNo(param.getBizOrderNo());
         order.setGatewayType(typeEnum.getCode());
+        // 链接形态: 聚合小程序(mini)用 /am/ 前缀, 缺省 h5
+        order.setLinkForm(reqLinkForm);
         // 来源: 容器权威, 预下单即写入(trade 创建时再冗余拷贝)
         order.setSource(resolveSourceByGatewayType(typeEnum));
         order.setTitle(param.getTitle());
@@ -192,6 +197,10 @@ public class GatewayPayAssistService {
         }
         gatewayBase = StrUtil.removeSuffix(gatewayBase, "/");
         if (Objects.equals(order.getGatewayType(), GatewayPayTypeEnum.AGGREGATE.getCode())) {
+            // 小程序形态用 /am/ 前缀(扫码拉起小程序), H5 用 /aggregate/
+            if ("mini".equals(order.getLinkForm())) {
+                return gatewayBase + "/am/" + order.getOrderNo();
+            }
             return gatewayBase + "/aggregate/" + order.getOrderNo();
         }
         return gatewayBase + "/cashier/" + order.getOrderNo();

@@ -1,8 +1,8 @@
 package cn.daxpay.open.payment.admin.controller.merchant.gateway;
 
-import cn.daxpay.open.payment.merchant.param.gateway.GatewayCodeConfigParam;
-import cn.daxpay.open.payment.merchant.result.gateway.GatewayCodeConfigResult;
-import cn.daxpay.open.payment.merchant.service.gateway.GatewayCodeConfigService;
+import cn.daxpay.open.payment.merchant.param.gateway.GatewayPayConfigParam;
+import cn.daxpay.open.payment.merchant.result.gateway.GatewayPayConfigResult;
+import cn.daxpay.open.payment.merchant.service.gateway.GatewayPayConfigService;
 import cn.daxpay.open.payment.route.service.support.PayRouteStrategyCapabilitySupport;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
@@ -19,31 +19,31 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/// # 码牌支付策略配置(管理)
-@PermCode(menuCode = PermCodes.Merchant.GatewayCode.MENU)
+/// # 网关支付配置(管理, 码牌/聚合共用)
+@PermCode(menuCode = PermCodes.Merchant.GatewayPayConfig.MENU)
 @Validated
-@Tag(name = "码牌支付策略配置")
+@Tag(name = "网关支付配置")
 @RestController
-@RequestMapping("/admin/gateway/code-config")
+@RequestMapping("/admin/gateway/pay-config")
 @RequiredArgsConstructor
-public class GatewayCodeConfigAdminController {
+public class GatewayPayConfigAdminController {
 
-    private final GatewayCodeConfigService gatewayCodeConfigService;
+    private final GatewayPayConfigService gatewayPayConfigService;
     private final PayRouteStrategyCapabilitySupport payRouteStrategyCapabilitySupport;
 
     @PermCode(code = PermCodes.Action.VIEW)
-    @Operation(summary = "按应用查询码牌支付配置")
+    @Operation(summary = "按应用查询网关支付配置")
     @GetMapping("/get-by-app-id")
-    public Result<GatewayCodeConfigResult> getByAppId(
+    public Result<GatewayPayConfigResult> getByAppId(
             @NotBlank(message = "{validation.field.appId.notBlank}") String appId) {
-        return Res.ok(gatewayCodeConfigService.findByAppId(appId));
+        return Res.ok(gatewayPayConfigService.findByAppId(appId));
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "保存或更新码牌支付配置")
+    @Operation(summary = "保存或更新网关支付配置")
     @PostMapping("/save-or-update")
-    public Result<Void> saveOrUpdate(@RequestBody @Validated GatewayCodeConfigParam param) {
-        gatewayCodeConfigService.saveOrUpdate(param);
+    public Result<Void> saveOrUpdate(@RequestBody @Validated GatewayPayConfigParam param) {
+        gatewayPayConfigService.saveOrUpdate(param);
         return Res.ok();
     }
 

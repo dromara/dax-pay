@@ -44,6 +44,9 @@ public class GatewayPayOrder extends MchBaseEntity {
     /// @see GatewayPayTypeEnum
     private String gatewayType;
 
+    /// 链接形态: h5/mini(聚合小程序扫码前缀分流, 缺省 h5; 收银台不使用)
+    private String linkForm;
+
     /// 订单来源(业务入口权威；预下单即写入，与 gatewayType 对应 cashier/aggress_pay)
     /// @see cn.daxpay.open.platform.core.enums.pay.trade.TradeSourceEnum
     private String source;

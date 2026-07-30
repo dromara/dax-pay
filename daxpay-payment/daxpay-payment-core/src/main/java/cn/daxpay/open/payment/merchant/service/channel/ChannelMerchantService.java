@@ -15,13 +15,11 @@ import cn.daxpay.open.payment.masterdata.entity.product.PayProduct;
 import cn.daxpay.open.payment.masterdata.service.channel.PayChannelService;
 import cn.daxpay.open.payment.masterdata.result.channel.PayChannelResult;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
-import cn.daxpay.open.payment.merchant.dao.gateway.GatewayAggregateClientEnvManager;
 import cn.daxpay.open.payment.merchant.dao.gateway.GatewayCashierItemManager;
-import cn.daxpay.open.payment.merchant.dao.gateway.GatewayCodeClientEnvManager;
+import cn.daxpay.open.payment.merchant.dao.gateway.GatewayPayClientEnvManager;
 import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
-import cn.daxpay.open.payment.merchant.entity.gateway.GatewayAggregateClientEnv;
 import cn.daxpay.open.payment.merchant.entity.gateway.GatewayCashierItem;
-import cn.daxpay.open.payment.merchant.entity.gateway.GatewayCodeClientEnv;
+import cn.daxpay.open.payment.merchant.entity.gateway.GatewayPayClientEnv;
 import cn.daxpay.open.payment.merchant.param.channel.ChannelMerchantEditParam;
 import cn.daxpay.open.payment.merchant.param.channel.ChannelMerchantQuery;
 import cn.daxpay.open.payment.merchant.result.channel.ChannelMerchantResult;
@@ -72,9 +70,8 @@ public class ChannelMerchantService {
     private final PayRouteSceneConfigManager payRouteSceneConfigManager;
     private final PayRouteBasicConfigManager payRouteBasicConfigManager;
     // 网关配置子表（DIRECT 模式按 channelMchNo 关联）
-    private final GatewayCodeClientEnvManager gatewayCodeClientEnvManager;
+    private final GatewayPayClientEnvManager gatewayPayClientEnvManager;
     private final GatewayCashierItemManager gatewayCashierItemManager;
-    private final GatewayAggregateClientEnvManager gatewayAggregateClientEnvManager;
     // 通道终端台账（按 channelMchNo 关联）
     private final ChannelTerminalManager channelTerminalManager;
 
@@ -152,9 +149,8 @@ public class ChannelMerchantService {
         // 2. 平台配置类级联清理（按 channelMchNo）
         payRouteSceneConfigManager.deleteByField(PayRouteSceneConfig::getChannelMchNo, channelMchNo);
         payRouteBasicConfigManager.deleteByField(PayRouteBasicConfig::getChannelMchNo, channelMchNo);
-        gatewayCodeClientEnvManager.deleteByField(GatewayCodeClientEnv::getChannelMchNo, channelMchNo);
+        gatewayPayClientEnvManager.deleteByField(GatewayPayClientEnv::getChannelMchNo, channelMchNo);
         gatewayCashierItemManager.deleteByField(GatewayCashierItem::getChannelMchNo, channelMchNo);
-        gatewayAggregateClientEnvManager.deleteByField(GatewayAggregateClientEnv::getChannelMchNo, channelMchNo);
         channelTerminalManager.deleteByField(ChannelTerminal::getChannelMchNo, channelMchNo);
 
         // 3. 通道扩展表 + KeyConfig 清理（按 product 一对一,未实现策略的通道静默跳过）

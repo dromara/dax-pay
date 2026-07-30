@@ -9,17 +9,18 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-/// # 网关聚合扫码配置(应用级)
+/// # 网关支付配置(应用级, 码牌/聚合共用)
 ///
-/// 按配置深度(level)控制客户端环境解析支付方式的自由度, 明细存储在 [GatewayAggregateClientEnv] 子表。
-/// - AUTO: 子表无需配置, 系统按扫码环境推导支付方式
-/// - METHOD: 子表每客户端环境配置支付方式(method)
-/// - DIRECT: 子表每客户端环境配置通道商户号(channelMchNo)+支付能力(capability)
+/// 一个应用一份配置, 码牌支付与聚合扫码共用同一份策略。
+/// 按配置深度(level)控制客户端环境解析支付方式的自由度, 明细存储在 [GatewayPayClientEnv] 子表。
+/// - AUTO: 子表无需配置, 系统按环境+形态推导支付方式
+/// - METHOD: 子表每环境×形态配置支付方式(method)
+/// - DIRECT: 子表每环境×形态配置通道商户号(channelMchNo)+支付能力(capability)
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("pay_gateway_aggregate_config")
-public class GatewayAggregateConfig extends MchBaseEntity {
+@TableName("pay_gateway_pay_config")
+public class GatewayPayConfig extends MchBaseEntity {
 
     /// 应用号
     @TableField(updateStrategy = FieldStrategy.NEVER)
@@ -29,6 +30,6 @@ public class GatewayAggregateConfig extends MchBaseEntity {
     /// @see AggregateConfigLevelEnum
     private String level;
 
-    /// 是否自动拉起支付
+    /// 是否自动拉起支付(码牌仅对固定金额生效)
     private Boolean autoLaunch;
 }

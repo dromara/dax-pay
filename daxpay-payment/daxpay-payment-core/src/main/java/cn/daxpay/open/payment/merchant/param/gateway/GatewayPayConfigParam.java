@@ -9,15 +9,15 @@ import lombok.Data;
 
 import java.util.List;
 
-/// # 码牌支付策略配置参数
+/// # 网关支付配置参数(码牌/聚合共用)
 ///
 /// level 控制子表填充:
 /// - AUTO: clientEnvs 可为空
 /// - METHOD: 每 (clientEnv, payForm) 填 method
 /// - DIRECT: 每 (clientEnv, payForm) 填 channelMchNo + capability
 @Data
-@Schema(title = "码牌支付策略配置参数")
-public class GatewayCodeConfigParam {
+@Schema(title = "网关支付配置参数")
+public class GatewayPayConfigParam {
 
     @Schema(description = "商户号")
     @NotBlank(message = "{validation.field.mchNo.notBlank}")
@@ -35,7 +35,10 @@ public class GatewayCodeConfigParam {
     @Size(max = 32, message = "{validation.field.level.size}")
     private String level;
 
+    @Schema(description = "是否自动拉起支付(码牌仅对固定金额生效)")
+    private Boolean autoLaunch;
+
     @Valid
     @Schema(description = "客户端环境×形态配置列表")
-    private List<GatewayCodeClientEnvParam> clientEnvs;
+    private List<GatewayPayClientEnvParam> clientEnvs;
 }

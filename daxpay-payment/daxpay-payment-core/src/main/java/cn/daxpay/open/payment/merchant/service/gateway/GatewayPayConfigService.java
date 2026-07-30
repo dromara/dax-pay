@@ -1,15 +1,15 @@
 package cn.daxpay.open.payment.merchant.service.gateway;
 
-import cn.daxpay.open.payment.merchant.dao.gateway.GatewayCodeClientEnvManager;
-import cn.daxpay.open.payment.merchant.dao.gateway.GatewayCodeConfigManager;
-import cn.daxpay.open.payment.merchant.entity.gateway.GatewayCodeClientEnv;
-import cn.daxpay.open.payment.merchant.entity.gateway.GatewayCodeConfig;
+import cn.daxpay.open.payment.merchant.dao.gateway.GatewayPayClientEnvManager;
+import cn.daxpay.open.payment.merchant.dao.gateway.GatewayPayConfigManager;
+import cn.daxpay.open.payment.merchant.entity.gateway.GatewayPayClientEnv;
+import cn.daxpay.open.payment.merchant.entity.gateway.GatewayPayConfig;
 import cn.daxpay.open.payment.merchant.enums.AggregateConfigLevelEnum;
 import cn.daxpay.open.payment.merchant.enums.CodePayFormEnum;
-import cn.daxpay.open.payment.merchant.param.gateway.GatewayCodeClientEnvParam;
-import cn.daxpay.open.payment.merchant.param.gateway.GatewayCodeConfigParam;
-import cn.daxpay.open.payment.merchant.result.gateway.GatewayCodeClientEnvResult;
-import cn.daxpay.open.payment.merchant.result.gateway.GatewayCodeConfigResult;
+import cn.daxpay.open.payment.merchant.param.gateway.GatewayPayClientEnvParam;
+import cn.daxpay.open.payment.merchant.param.gateway.GatewayPayConfigParam;
+import cn.daxpay.open.payment.merchant.result.gateway.GatewayPayClientEnvResult;
+import cn.daxpay.open.payment.merchant.result.gateway.GatewayPayConfigResult;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.hutool.core.bean.BeanUtil;
@@ -23,24 +23,26 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-/// # 码牌支付策略配置服务
+/// # 网关支付配置服务(码牌/聚合共用)
 ///
-/// 管理主表(level)与子表(clientEnv × payForm), 与聚合配置独立。
+/// 管理主表(level + autoLaunch)与子表(clientEnv × payForm)。
+/// 一个应用一份配置, 码牌支付与聚合扫码共用。
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class GatewayCodeConfigService {
+public class GatewayPayConfigService {
 
-    private final GatewayCodeConfigManager configManager;
-    private final GatewayCodeClientEnvManager clientEnvManager;
+    private final GatewayPayConfigManager configManager;
+    private final GatewayPayClientEnvManager clientEnvManager;
 
     /// 按应用查询, 不存在返回空对象(level 默认 AUTO)
-    public GatewayCodeConfigResult findByAppId(String appId) {
+    public GatewayPayConfigResult findByAppId(String appId) {
         return configManager.findByAppId(appId)
                 .map(this::toResultWithClientEnvs)
-                .orElseGet(() -> new GatewayCodeConfigResult()
+                .orElseGet(() -> new GatewayPayConfigResult()
                         .setAppId(appId)
                         .setLevel(AggregateConfigLevelEnum.AUTO.getCode())
+                        .setAutoLaunch(false)
                         .setClientEnvs(List.of()));
     }
 
@@ -48,31 +50,37 @@ public class GatewayCodeConfigService {
     ///
     /// METHOD/DIRECT 支持**部分配置**: 只落库已填写的环境×形态, 未配组合支付时再报错。
     @Transactional(rollbackFor = Exception.class)
-    public void saveOrUpdate(GatewayCodeConfigParam param) {
+    public void saveOrUpdate(GatewayPayConfigParam param) {
         AggregateConfigLevelEnum level = AggregateConfigLevelEnum.findByCode(param.getLevel());
-        List<GatewayCodeClientEnvParam> filledEnvs = filterFilledClientEnvs(level, param.getClientEnvs());
+        List<GatewayPayClientEnvParam> filledEnvs = filterFilledClientEnvs(level, param.getClientEnvs());
         validateClientEnvs(level, filledEnvs);
 
-        GatewayCodeConfig config = configManager.findByAppId(param.getAppId())
-                .orElseGet(() -> new GatewayCodeConfig().setAppId(param.getAppId()));
+        // 主表保存或更新
+        GatewayPayConfig config = configManager.findByAppId(param.getAppId())
+                .orElseGet(() -> new GatewayPayConfig().setAppId(param.getAppId()));
         config.setLevel(level.getCode());
+        config.setAutoLaunch(param.getAutoLaunch());
+        if (config.getAutoLaunch() == null) {
+            config.setAutoLaunch(false);
+        }
         // 运营端无商户上下文, 主表/子表均需显式 mchNo(MchBaseEntity insert 填充依赖上下文会失败)
         if (StrUtil.isBlank(config.getMchNo())) {
             config.setMchNo(param.getMchNo());
         }
         if (StrUtil.isBlank(config.getMchNo())) {
-            // 码牌: 商户上下文未装载
+            // 网关: 商户上下文未装载
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.assist.mchContextMissing");
         }
         configManager.saveOrUpdate(config);
 
+        // 子表替换: 先删后插(仅写入已填环境×形态)
         clientEnvManager.deleteByConfigId(config.getId());
         if (CollUtil.isNotEmpty(filledEnvs)) {
             String mchNo = config.getMchNo();
-            List<GatewayCodeClientEnv> rows = new ArrayList<>();
-            for (GatewayCodeClientEnvParam envParam : filledEnvs) {
-                GatewayCodeClientEnv env = new GatewayCodeClientEnv()
+            List<GatewayPayClientEnv> rows = new ArrayList<>();
+            for (GatewayPayClientEnvParam envParam : filledEnvs) {
+                GatewayPayClientEnv env = new GatewayPayClientEnv()
                         .setConfigId(config.getId())
                         .setClientEnv(envParam.getClientEnv())
                         .setPayForm(envParam.getPayForm())
@@ -88,13 +96,13 @@ public class GatewayCodeConfigService {
     }
 
     /// 过滤出已填写的环境×形态行(配多少存多少)
-    private List<GatewayCodeClientEnvParam> filterFilledClientEnvs(
-            AggregateConfigLevelEnum level, List<GatewayCodeClientEnvParam> clientEnvs) {
+    private List<GatewayPayClientEnvParam> filterFilledClientEnvs(
+            AggregateConfigLevelEnum level, List<GatewayPayClientEnvParam> clientEnvs) {
         if (level == AggregateConfigLevelEnum.AUTO || CollUtil.isEmpty(clientEnvs)) {
             return List.of();
         }
-        List<GatewayCodeClientEnvParam> filled = new ArrayList<>();
-        for (GatewayCodeClientEnvParam env : clientEnvs) {
+        List<GatewayPayClientEnvParam> filled = new ArrayList<>();
+        for (GatewayPayClientEnvParam env : clientEnvs) {
             if (env == null || StrUtil.isBlank(env.getClientEnv()) || StrUtil.isBlank(env.getPayForm())) {
                 continue;
             }
@@ -112,46 +120,46 @@ public class GatewayCodeConfigService {
     }
 
     /// 按 level 校验已填行(不要求四环境×两形态齐)
-    private void validateClientEnvs(AggregateConfigLevelEnum level, List<GatewayCodeClientEnvParam> filledEnvs) {
+    private void validateClientEnvs(AggregateConfigLevelEnum level, List<GatewayPayClientEnvParam> filledEnvs) {
         if (level == AggregateConfigLevelEnum.AUTO) {
             return;
         }
         // METHOD/DIRECT 至少配置一行
         if (CollUtil.isEmpty(filledEnvs)) {
-            // 码牌: 请至少配置一项环境与形态
+            // 网关: 请至少配置一项环境与形态
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                    "pay.error.gateway.codeClientEnvsRequired");
+                    "pay.error.gateway.clientEnvsRequired");
         }
-        for (GatewayCodeClientEnvParam env : filledEnvs) {
+        for (GatewayPayClientEnvParam env : filledEnvs) {
             // 校验 payForm 合法
             CodePayFormEnum.findByCode(env.getPayForm());
             if (level == AggregateConfigLevelEnum.METHOD && StrUtil.isBlank(env.getMethod())) {
-                // 码牌: 已填写的环境与形态须选择支付方式
+                // 网关: 已填写的环境与形态须选择支付方式
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                        "pay.error.gateway.codeClientEnvMethodRequired");
+                        "pay.error.gateway.clientEnvMethodRequired");
             }
             if (level == AggregateConfigLevelEnum.DIRECT) {
                 if (StrUtil.isBlank(env.getChannelMchNo())) {
-                    // 码牌: 直接指定时已填写行的通道商户号必填
+                    // 网关: 直接指定时已填写行的通道商户号必填
                     throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                            "pay.error.gateway.codeClientEnvChannelMchRequired");
+                            "pay.error.gateway.clientEnvChannelMchRequired");
                 }
                 if (StrUtil.isBlank(env.getCapability())) {
-                    // 码牌: 直接指定时已填写行的支付能力必填
+                    // 网关: 直接指定时已填写行的支付能力必填
                     throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                            "pay.error.gateway.codeClientEnvCapabilityRequired");
+                            "pay.error.gateway.clientEnvCapabilityRequired");
                 }
             }
         }
     }
 
-    /// 将码牌配置主表与子表组装为带客户端环境列表的结果对象
-    private GatewayCodeConfigResult toResultWithClientEnvs(GatewayCodeConfig entity) {
-        GatewayCodeConfigResult result = new GatewayCodeConfigResult();
+    /// 组装主表 + 客户端环境子表为 Result
+    private GatewayPayConfigResult toResultWithClientEnvs(GatewayPayConfig entity) {
+        GatewayPayConfigResult result = new GatewayPayConfigResult();
         BeanUtil.copyProperties(entity, result);
-        List<GatewayCodeClientEnv> clientEnvs = clientEnvManager.findByConfigId(entity.getId());
-        List<GatewayCodeClientEnvResult> envResults = clientEnvs.stream()
-                .map(s -> new GatewayCodeClientEnvResult()
+        List<GatewayPayClientEnv> clientEnvs = clientEnvManager.findByConfigId(entity.getId());
+        List<GatewayPayClientEnvResult> envResults = clientEnvs.stream()
+                .map(s -> new GatewayPayClientEnvResult()
                         .setClientEnv(s.getClientEnv())
                         .setPayForm(s.getPayForm())
                         .setMethod(s.getMethod())

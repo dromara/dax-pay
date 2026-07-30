@@ -10,10 +10,11 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
 
-/// # 码牌支付策略形态
+/// # 网关支付配置形态(码牌/聚合共用)
 ///
-/// 与码牌落地 [QrCodeProgramTypeEnum] 对应: h5 码读 h5 策略行, mini_app 码读 mini 策略行。
 /// 字典: code_pay_form
+/// - 码牌: 由 [QrCodeProgramTypeEnum] 映射(h5 码读 h5 策略行, mini_app 码读 mini 策略行)
+/// - 聚合: 由运行形态 [ClientRuntimeEnum] 映射(runtime=h5→H5, runtime=mini→MINI)
 @Getter
 @RequiredArgsConstructor
 public enum CodePayFormEnum implements I18nSupport {
@@ -45,6 +46,11 @@ public enum CodePayFormEnum implements I18nSupport {
             return MINI;
         }
         return H5;
+    }
+
+    /// 由聚合运行形态映射策略形态; 空或 H5 按 H5
+    public static CodePayFormEnum fromRuntime(ClientRuntimeEnum runtime) {
+        return runtime == ClientRuntimeEnum.MINI ? MINI : H5;
     }
 
     /// AUTO 模式默认支付方式(所见即所得)

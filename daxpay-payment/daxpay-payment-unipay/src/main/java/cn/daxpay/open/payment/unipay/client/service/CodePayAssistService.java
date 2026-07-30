@@ -12,7 +12,7 @@ import cn.daxpay.open.payment.merchant.entity.info.MerchantInfo;
 import cn.daxpay.open.payment.merchant.enums.ClientEnvEnum;
 import cn.daxpay.open.payment.merchant.enums.ClientRuntimeEnum;
 import cn.daxpay.open.payment.merchant.enums.CodePayFormEnum;
-import cn.daxpay.open.payment.merchant.service.gateway.CodePayResolveService;
+import cn.daxpay.open.payment.merchant.service.gateway.GatewayPayConfigResolveService;
 import cn.daxpay.open.payment.route.service.runtime.PayRouteService;
 import cn.daxpay.open.payment.strategy.risk.PayRiskChecker;
 import cn.daxpay.open.payment.trade.order.dao.NormalPayOrderManager;
@@ -66,7 +66,7 @@ public class CodePayAssistService {
     private final DeviceQrCodeManager deviceQrCodeManager;
     private final MerchantInfoManager merchantInfoManager;
     private final MerchantContextLoader merchantContextLoader;
-    private final CodePayResolveService codePayResolveService;
+    private final GatewayPayConfigResolveService gatewayPayConfigResolveService;
     /// 收银台小程序认证服务(码牌小程序同步换 openId 复用此能力层)
     private final CashierAuthService cashierAuthService;
     private final NormalPayService normalPayService;
@@ -148,7 +148,7 @@ public class CodePayAssistService {
         CodePayFormEnum payForm = CodePayFormEnum.fromProgramType(entity.getProgramType());
         validateRuntimeMatchesPayForm(param.getRuntime(), payForm);
 
-        var resolved = codePayResolveService.resolveRequired(mchApp.getAppId(), clientEnv, payForm);
+        var resolved = gatewayPayConfigResolveService.resolveRequired(mchApp.getAppId(), clientEnv, payForm);
         // JSAPI/MINI 必须已在授权回跳页换好 openId，支付只带 openId、禁止支付时再换 code
         if (PayMethodOpenIdSupport.needsOpenId(resolved.method()) && StrUtil.isBlank(param.getOpenId())) {
             // 码牌: 当前支付方式需要 openId, 请先完成授权
@@ -195,7 +195,7 @@ public class CodePayAssistService {
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.qrcode.clientEnvNotSupport");
         }
         CodePayFormEnum payForm = CodePayFormEnum.fromProgramType(entity.getProgramType());
-        var resolved = codePayResolveService.resolveRequired(mchApp.getAppId(), clientEnv, payForm);
+        var resolved = gatewayPayConfigResolveService.resolveRequired(mchApp.getAppId(), clientEnv, payForm);
         if (!PayMethodOpenIdSupport.canAcquireOpenId(resolved.method(), clientEnv)) {
             // 当前支付方式/环境无法走 OAuth（付款码/APP/PC/外部浏览器/union_pay 一期）
             // 码牌: 当前支付方式/环境不需要授权
@@ -329,7 +329,7 @@ public class CodePayAssistService {
         merchantContextLoader.initMch(entity.getMchNo());
         var mchApp = merchantContextLoader.resolveApp(entity.getMchNo(), entity.getAppId());
         CodePayFormEnum payForm = CodePayFormEnum.fromProgramType(entity.getProgramType());
-        return codePayResolveService.resolveRequired(mchApp.getAppId(), clientEnv, payForm).method();
+        return gatewayPayConfigResolveService.resolveRequired(mchApp.getAppId(), clientEnv, payForm).method();
     }
 
     /// openId 触发判定

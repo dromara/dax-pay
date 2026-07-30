@@ -110,6 +110,12 @@ public interface PermCodes {
             String MENU = "merchant:gateway-code";
         }
 
+        /// 网关支付配置(码牌/聚合共用) menuCode=merchant:gateway-pay-config
+        interface GatewayPayConfig {
+            /// 菜单编码
+            String MENU = "merchant:gateway-pay-config";
+        }
+
         /// 收银台配置 menuCode=merchant:gateway-cashier
         interface GatewayCashier {
             /// 菜单编码

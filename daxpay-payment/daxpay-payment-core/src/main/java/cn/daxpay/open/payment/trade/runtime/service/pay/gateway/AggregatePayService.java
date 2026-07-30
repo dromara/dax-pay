@@ -1,11 +1,12 @@
 package cn.daxpay.open.payment.trade.runtime.service.pay.gateway;
 
 import cn.daxpay.open.payment.common.util.PayMethodOpenIdSupport;
-import cn.daxpay.open.payment.merchant.dao.gateway.GatewayAggregateConfigManager;
-import cn.daxpay.open.payment.merchant.entity.gateway.GatewayAggregateConfig;
+import cn.daxpay.open.payment.merchant.dao.gateway.GatewayPayConfigManager;
+import cn.daxpay.open.payment.merchant.entity.gateway.GatewayPayConfig;
 import cn.daxpay.open.payment.merchant.enums.ClientEnvEnum;
 import cn.daxpay.open.payment.merchant.enums.ClientRuntimeEnum;
-import cn.daxpay.open.payment.merchant.service.gateway.ClientEnvPayResolveService;
+import cn.daxpay.open.payment.merchant.enums.CodePayFormEnum;
+import cn.daxpay.open.payment.merchant.service.gateway.GatewayPayConfigResolveService;
 import cn.daxpay.open.payment.strategy.risk.PayRiskChecker;
 import cn.daxpay.open.payment.trade.enums.GatewayOrderStatusEnum;
 import cn.daxpay.open.payment.trade.enums.GatewayPayTypeEnum;
@@ -28,16 +29,16 @@ import java.util.Objects;
 
 /// # 聚合扫码支付服务
 ///
-/// 按应用聚合配置的深度(level)解析支付方式, 委托 [ClientEnvPayResolveService]。
+/// 按应用网关支付配置的深度(level)解析支付方式, 委托 [GatewayPayConfigResolveService]。
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class AggregatePayService {
 
     private final GatewayPayAssistService gatewayPayAssistService;
-    private final ClientEnvPayResolveService clientEnvPayResolveService;
+    private final GatewayPayConfigResolveService gatewayPayConfigResolveService;
     private final GatewayPayHandleService gatewayPayHandleService;
-    private final GatewayAggregateConfigManager aggregateConfigManager;
+    private final GatewayPayConfigManager gatewayPayConfigManager;
     /// 风控检查器（可选 SPI：用于判断是否存在 openId 黑名单, 决定是否触发强制 OAuth）
     private final ObjectProvider<PayRiskChecker> payRiskCheckerProvider;
     /// 平台安全配置（读取用户标识拦截级别, 决定 NORMAL 模式下不触发强制 OAuth）
@@ -52,7 +53,9 @@ public class AggregatePayService {
         }
         ClientEnvEnum clientEnv = ClientEnvEnum.findByCode(clientEnvCode);
         ClientRuntimeEnum runtime = ClientRuntimeEnum.ofOrDefault(runtimeCode);
-        var resolved = clientEnvPayResolveService.resolveRequired(order.getAppId(), clientEnv, runtime);
+        // 运行形态映射为配置形态(统一配置按 payForm 查表)
+        CodePayFormEnum payForm = CodePayFormEnum.fromRuntime(runtime);
+        var resolved = gatewayPayConfigResolveService.resolveRequired(order.getAppId(), clientEnv, payForm);
 
         // 订单已发起支付(支付中)时, 支付方式已锁定到容器: 当前环境解析出的 method 与锁定值不一致视为换端, 提前拒绝
         // 与 GatewayPayHandleService#handle 的 method 比较语义一致(聚合 product 传 null, 实际只比 method)
@@ -64,10 +67,10 @@ public class AggregatePayService {
                     "pay.error.gateway.channelLocked");
         }
 
-        GatewayAggregateConfig config = aggregateConfigManager.findByAppId(order.getAppId())
-                // 聚合: 应用未配置聚合扫码支付
+        GatewayPayConfig config = gatewayPayConfigManager.findByAppId(order.getAppId())
+                // 网关: 应用未配置网关支付策略
                 .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                        "pay.error.gateway.aggregateConfigMissing"));
+                        "pay.error.gateway.payConfigMissing"));
 
         return new AggregatePayMetaResult()
                 .setAutoLaunch(Boolean.TRUE.equals(config.getAutoLaunch()))
@@ -83,9 +86,17 @@ public class AggregatePayService {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.gateway.typeMismatch");
         }
         ClientEnvEnum clientEnv = ClientEnvEnum.findByCode(param.getClientEnv());
-        // 一期 H5; 小程序接入口时传 runtime=mini
         ClientRuntimeEnum runtime = ClientRuntimeEnum.ofOrDefault(param.getRuntime());
-        var resolved = clientEnvPayResolveService.resolveRequired(order.getAppId(), clientEnv, runtime);
+        // 运行形态映射为配置形态(统一配置按 payForm 查表)
+        CodePayFormEnum payForm = CodePayFormEnum.fromRuntime(runtime);
+        var resolved = gatewayPayConfigResolveService.resolveRequired(order.getAppId(), clientEnv, payForm);
+
+        // JSAPI/MINI 必须已完成授权获取 openId
+        if (PayMethodOpenIdSupport.needsOpenId(resolved.method()) && StrUtil.isBlank(param.getOpenId())) {
+            // 网关: 当前支付方式需要 openId, 请先完成授权
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "pay.error.gateway.openIdRequired");
+        }
 
         String clientIp = StrUtil.blankToDefault(param.getClientIp(), WebServletUtil.getClientIp());
         // product 传 null: AUTO/METHOD 由路由解析, DIRECT 由 channelMchNo 派生

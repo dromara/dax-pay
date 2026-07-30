@@ -1,8 +1,8 @@
 package cn.daxpay.open.payment.app.merchant.controller.gateway;
 
-import cn.daxpay.open.payment.app.merchant.service.gateway.AppMerchantGatewayCodeConfigService;
-import cn.daxpay.open.payment.merchant.param.gateway.GatewayCodeConfigParam;
-import cn.daxpay.open.payment.merchant.result.gateway.GatewayCodeConfigResult;
+import cn.daxpay.open.payment.app.merchant.service.gateway.AppMerchantGatewayPayConfigService;
+import cn.daxpay.open.payment.merchant.param.gateway.GatewayPayConfigParam;
+import cn.daxpay.open.payment.merchant.result.gateway.GatewayPayConfigResult;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
@@ -22,33 +22,33 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-/// # 码牌支付策略配置(商户移动端)
+/// # 网关支付配置(商户移动端, 码牌/聚合共用)
 ///
-/// 面向商户移动端的码牌支付配置。业务编排委托 [AppMerchantGatewayCodeConfigService]；
+/// 面向商户移动端的网关支付配置。业务编排委托 [AppMerchantGatewayPayConfigService]；
 /// 写操作强制当前上下文 mchNo，并通过 MchAppInfoService 校验应用归属。
-@PermCode(menuCode = PermCodes.Merchant.GatewayCode.MENU)
+@PermCode(menuCode = PermCodes.Merchant.GatewayPayConfig.MENU)
 @Validated
-@Tag(name = "码牌支付策略配置(商户移动端)")
+@Tag(name = "网关支付配置(商户移动端)")
 @RestController
-@RequestMapping("/app-merchant/gateway/code-config")
+@RequestMapping("/app-merchant/gateway/pay-config")
 @RequiredArgsConstructor
-public class AppMerchantGatewayCodeConfigController {
+public class AppMerchantGatewayPayConfigController {
 
-    private final AppMerchantGatewayCodeConfigService gatewayCodeConfigService;
+    private final AppMerchantGatewayPayConfigService gatewayPayConfigService;
 
     @PermCode(code = PermCodes.Action.VIEW)
-    @Operation(summary = "按应用查询码牌支付配置")
+    @Operation(summary = "按应用查询网关支付配置")
     @GetMapping("/get-by-app-id")
-    public Result<GatewayCodeConfigResult> getByAppId(
+    public Result<GatewayPayConfigResult> getByAppId(
             @NotBlank(message = "{validation.field.appId.notBlank}") String appId) {
-        return Res.ok(gatewayCodeConfigService.findByAppId(appId));
+        return Res.ok(gatewayPayConfigService.findByAppId(appId));
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "保存或更新码牌支付配置")
+    @Operation(summary = "保存或更新网关支付配置")
     @PostMapping("/save-or-update")
-    public Result<Void> saveOrUpdate(@RequestBody @Validated GatewayCodeConfigParam param) {
-        gatewayCodeConfigService.saveOrUpdate(param);
+    public Result<Void> saveOrUpdate(@RequestBody @Validated GatewayPayConfigParam param) {
+        gatewayPayConfigService.saveOrUpdate(param);
         return Res.ok();
     }
 
@@ -58,7 +58,7 @@ public class AppMerchantGatewayCodeConfigController {
     @GetMapping("/direct-channel-mch-candidates")
     public Result<List<ChannelMchOption>> listDirectChannelMchCandidates(
             @NotBlank(message = "{validation.field.provider.notBlank}") String provider) {
-        return Res.ok(gatewayCodeConfigService.listDirectChannelMchCandidates(provider));
+        return Res.ok(gatewayPayConfigService.listDirectChannelMchCandidates(provider));
     }
 
     /// DIRECT 模式: 按通道商户列全部已挂载支付能力
@@ -67,6 +67,6 @@ public class AppMerchantGatewayCodeConfigController {
     @GetMapping("/direct-capability-candidates")
     public Result<List<LabelValue>> listDirectCapabilityCandidates(
             @NotBlank(message = "{validation.field.channelMchNo.notBlank}") String channelMchNo) {
-        return Res.ok(gatewayCodeConfigService.listDirectCapabilityCandidates(channelMchNo));
+        return Res.ok(gatewayPayConfigService.listDirectCapabilityCandidates(channelMchNo));
     }
 }

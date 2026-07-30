@@ -11,8 +11,7 @@ import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
 import cn.daxpay.open.payment.merchant.enums.ClientEnvEnum;
 import cn.daxpay.open.payment.merchant.enums.ClientRuntimeEnum;
 import cn.daxpay.open.payment.merchant.enums.CodePayFormEnum;
-import cn.daxpay.open.payment.merchant.service.gateway.ClientEnvPayResolveService;
-import cn.daxpay.open.payment.merchant.service.gateway.CodePayResolveService;
+import cn.daxpay.open.payment.merchant.service.gateway.GatewayPayConfigResolveService;
 import cn.daxpay.open.payment.route.service.runtime.PayRouteService;
 import cn.daxpay.open.payment.trade.enums.GatewayOrderStatusEnum;
 import cn.daxpay.open.payment.trade.order.entity.GatewayPayOrder;
@@ -59,8 +58,7 @@ public class DouyinJsapiController {
     private final GatewayPayAssistService gatewayPayAssistService;
     private final DeviceQrCodeManager deviceQrCodeManager;
     private final MerchantContextLoader merchantContextLoader;
-    private final ClientEnvPayResolveService clientEnvPayResolveService;
-    private final CodePayResolveService codePayResolveService;
+    private final GatewayPayConfigResolveService gatewayPayConfigResolveService;
     private final PayRouteService payRouteService;
 
     @Operation(summary = "获取抖音 JS-SDK sdk.config 验签包")
@@ -104,8 +102,8 @@ public class DouyinJsapiController {
                 && StrUtil.isNotBlank(order.getChannelMchNo())) {
             return new ResolvedChannel(order.getMchNo(), order.getChannelMchNo(), order.getCapability(), order.getChannelAppId());
         }
-        var resolved = clientEnvPayResolveService.resolveRequired(
-                order.getAppId(), ClientEnvEnum.DOUYIN, ClientRuntimeEnum.H5);
+        var resolved = gatewayPayConfigResolveService.resolveRequired(
+                order.getAppId(), ClientEnvEnum.DOUYIN, CodePayFormEnum.H5);
         NormalPayParam routeParam = new NormalPayParam();
         routeParam.setMchNo(order.getMchNo());
         routeParam.setAppId(order.getAppId());
@@ -125,7 +123,7 @@ public class DouyinJsapiController {
         merchantContextLoader.initMch(entity.getMchNo());
         var mchApp = merchantContextLoader.resolveApp(entity.getMchNo(), entity.getAppId());
         CodePayFormEnum payForm = CodePayFormEnum.fromProgramType(entity.getProgramType());
-        var resolved = codePayResolveService.resolveRequired(mchApp.getAppId(), ClientEnvEnum.DOUYIN, payForm);
+        var resolved = gatewayPayConfigResolveService.resolveRequired(mchApp.getAppId(), ClientEnvEnum.DOUYIN, payForm);
         NormalPayParam routeParam = new NormalPayParam();
         routeParam.setMchNo(entity.getMchNo());
         routeParam.setAppId(mchApp.getAppId());

@@ -6,8 +6,9 @@ import cn.daxpay.open.payment.merchant.entity.gateway.GatewayCashierItem;
 import cn.daxpay.open.payment.merchant.enums.CashierItemResolveModeEnum;
 import cn.daxpay.open.payment.merchant.enums.ClientEnvEnum;
 import cn.daxpay.open.payment.merchant.enums.ClientRuntimeEnum;
+import cn.daxpay.open.payment.merchant.enums.CodePayFormEnum;
 import cn.daxpay.open.payment.merchant.enums.GatewayCashierTypeEnum;
-import cn.daxpay.open.payment.merchant.service.gateway.ClientEnvPayResolveService;
+import cn.daxpay.open.payment.merchant.service.gateway.GatewayPayConfigResolveService;
 import cn.daxpay.open.payment.route.service.runtime.PayRouteService;
 import cn.daxpay.open.payment.trade.enums.GatewayOrderStatusEnum;
 import cn.daxpay.open.payment.trade.enums.GatewayPayTypeEnum;
@@ -59,7 +60,7 @@ public class GatewayAuthService {
 
     private final GatewayPayAssistService gatewayPayAssistService;
     private final UnifiedAuthService unifiedAuthService;
-    private final ClientEnvPayResolveService clientEnvPayResolveService;
+    private final GatewayPayConfigResolveService gatewayPayConfigResolveService;
     private final PayRouteService payRouteService;
     private final GatewayCashierItemManager gatewayCashierItemManager;
     private final WxAppFacade wxAppFacade;
@@ -125,7 +126,9 @@ public class GatewayAuthService {
         }
         ClientEnvEnum clientEnv = ClientEnvEnum.findByCode(param.getClientEnv());
         ClientRuntimeEnum runtime = ClientRuntimeEnum.ofOrDefault(param.getRuntime());
-        var resolved = clientEnvPayResolveService.resolveRequired(order.getAppId(), clientEnv, runtime);
+        // 运行形态映射为配置形态(统一配置按 payForm 查表)
+        CodePayFormEnum payForm = CodePayFormEnum.fromRuntime(runtime);
+        var resolved = gatewayPayConfigResolveService.resolveRequired(order.getAppId(), clientEnv, payForm);
 
         NormalPayParam routeParam = new NormalPayParam();
         routeParam.setMchNo(order.getMchNo());

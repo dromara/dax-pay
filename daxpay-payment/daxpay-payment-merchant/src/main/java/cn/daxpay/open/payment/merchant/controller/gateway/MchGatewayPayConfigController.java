@@ -1,11 +1,11 @@
 package cn.daxpay.open.payment.merchant.controller.gateway;
 
 import cn.daxpay.open.payment.common.context.PaymentContext;
-import cn.daxpay.open.payment.merchant.param.gateway.GatewayCodeConfigParam;
+import cn.daxpay.open.payment.merchant.param.gateway.GatewayPayConfigParam;
 import cn.daxpay.open.payment.merchant.result.appinfo.MchAppInfoResult;
-import cn.daxpay.open.payment.merchant.result.gateway.GatewayCodeConfigResult;
+import cn.daxpay.open.payment.merchant.result.gateway.GatewayPayConfigResult;
 import cn.daxpay.open.payment.merchant.service.appinfo.MchAppInfoService;
-import cn.daxpay.open.payment.merchant.service.gateway.GatewayCodeConfigService;
+import cn.daxpay.open.payment.merchant.service.gateway.GatewayPayConfigService;
 import cn.daxpay.open.payment.route.service.support.PayRouteStrategyCapabilitySupport;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.CommonCode;
@@ -24,19 +24,19 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-/// # 码牌支付策略配置（商户端）
+/// # 网关支付配置（商户端, 码牌/聚合共用）
 ///
-/// 对照运营端 [GatewayCodeConfigAdminController]，路径 `/mch/gateway/code-config`。
-/// 委托 [GatewayCodeConfigService]；写操作强制当前上下文 mchNo，并通过 [MchAppInfoService#findByAppId] 校验应用归属。
-@PermCode(menuCode = PermCodes.Merchant.GatewayCode.MENU)
+/// 对照运营端 [cn.daxpay.open.payment.admin.controller.merchant.gateway.GatewayPayConfigAdminController]，路径 `/mch/gateway/pay-config`。
+/// 委托 [GatewayPayConfigService]；写操作强制当前上下文 mchNo，并通过 [MchAppInfoService#findByAppId] 校验应用归属。
+@PermCode(menuCode = PermCodes.Merchant.GatewayPayConfig.MENU)
 @Validated
-@Tag(name = "码牌支付策略配置(商户端)")
+@Tag(name = "网关支付配置(商户端)")
 @RestController
-@RequestMapping("/mch/gateway/code-config")
+@RequestMapping("/mch/gateway/pay-config")
 @RequiredArgsConstructor
-public class MchGatewayCodeConfigController {
+public class MchGatewayPayConfigController {
 
-    private final GatewayCodeConfigService gatewayCodeConfigService;
+    private final GatewayPayConfigService gatewayPayConfigService;
     private final PayRouteStrategyCapabilitySupport payRouteStrategyCapabilitySupport;
     private final MchAppInfoService mchAppInfoService;
     private final PaymentContext paymentContext;
@@ -57,22 +57,22 @@ public class MchGatewayCodeConfigController {
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
-    @Operation(summary = "按应用查询码牌支付配置")
+    @Operation(summary = "按应用查询网关支付配置")
     @GetMapping("/get-by-app-id")
-    public Result<GatewayCodeConfigResult> getByAppId(
+    public Result<GatewayPayConfigResult> getByAppId(
             @NotBlank(message = "{validation.field.appId.notBlank}") String appId) {
         this.assertAppOwned(appId);
-        return Res.ok(gatewayCodeConfigService.findByAppId(appId));
+        return Res.ok(gatewayPayConfigService.findByAppId(appId));
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "保存或更新码牌支付配置")
+    @Operation(summary = "保存或更新网关支付配置")
     @PostMapping("/save-or-update")
-    public Result<Void> saveOrUpdate(@RequestBody @Validated GatewayCodeConfigParam param) {
+    public Result<Void> saveOrUpdate(@RequestBody @Validated GatewayPayConfigParam param) {
         MchAppInfoResult app = this.assertAppOwned(param.getAppId());
         // 强制当前商户号，忽略客户端传入（防越权）
         param.setMchNo(app.getMchNo() != null ? app.getMchNo() : this.requireMchNo());
-        gatewayCodeConfigService.saveOrUpdate(param);
+        gatewayPayConfigService.saveOrUpdate(param);
         return Res.ok();
     }
 

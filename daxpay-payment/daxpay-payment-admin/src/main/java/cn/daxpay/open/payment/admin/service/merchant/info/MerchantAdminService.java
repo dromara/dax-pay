@@ -27,9 +27,8 @@ import cn.daxpay.open.payment.merchant.dao.appinfo.MchAppInfoManager;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
 import cn.daxpay.open.payment.merchant.dao.config.MchAppNotifyConfigManager;
 import cn.daxpay.open.payment.merchant.dao.config.MerchantCredentialManager;
-import cn.daxpay.open.payment.merchant.dao.gateway.GatewayAggregateConfigManager;
 import cn.daxpay.open.payment.merchant.dao.gateway.GatewayCashierItemManager;
-import cn.daxpay.open.payment.merchant.dao.gateway.GatewayCodeConfigManager;
+import cn.daxpay.open.payment.merchant.dao.gateway.GatewayPayConfigManager;
 import cn.daxpay.open.payment.merchant.dao.info.MerchantInfoManager;
 import cn.daxpay.open.payment.merchant.dao.info.MerchantUserManager;
 import cn.daxpay.open.payment.merchant.dao.store.MchStoreInfoManager;
@@ -38,9 +37,8 @@ import cn.daxpay.open.payment.merchant.entity.appinfo.MchAppInfo;
 import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
 import cn.daxpay.open.payment.merchant.entity.config.MchAppNotifyConfig;
 import cn.daxpay.open.payment.merchant.entity.config.MerchantCredential;
-import cn.daxpay.open.payment.merchant.entity.gateway.GatewayAggregateConfig;
 import cn.daxpay.open.payment.merchant.entity.gateway.GatewayCashierItem;
-import cn.daxpay.open.payment.merchant.entity.gateway.GatewayCodeConfig;
+import cn.daxpay.open.payment.merchant.entity.gateway.GatewayPayConfig;
 import cn.daxpay.open.payment.merchant.entity.info.MerchantInfo;
 import cn.daxpay.open.payment.merchant.entity.info.MerchantUser;
 import cn.daxpay.open.payment.merchant.entity.store.MchStoreInfo;
@@ -99,8 +97,7 @@ public class MerchantAdminService {
     private final MerchantCredentialManager merchantCredentialManager;
     private final MchAppNotifyConfigManager mchAppNotifyConfigManager;
     // 网关与路由配置
-    private final GatewayCodeConfigManager gatewayCodeConfigManager;
-    private final GatewayAggregateConfigManager gatewayAggregateConfigManager;
+    private final GatewayPayConfigManager gatewayPayConfigManager;
     private final GatewayCashierItemManager gatewayCashierItemManager;
     private final PayRouteStrategyManager payRouteStrategyManager;
     // 杂项
@@ -233,9 +230,8 @@ public class MerchantAdminService {
         channelMerchantManager.deleteByField(ChannelMerchant::getMchNo, mchNo);
         merchantCredentialManager.deleteByField(MerchantCredential::getMchNo, mchNo);
         mchAppNotifyConfigManager.deleteByField(MchAppNotifyConfig::getMchNo, mchNo);
-        // 网关与路由配置（按 mchNo 隔离的主表，其子表如 GatewayCodeClientEnv 留孤儿不影响业务）
-        gatewayCodeConfigManager.deleteByField(GatewayCodeConfig::getMchNo, mchNo);
-        gatewayAggregateConfigManager.deleteByField(GatewayAggregateConfig::getMchNo, mchNo);
+        // 网关与路由配置（按 mchNo 隔离的主表，其子表留孤儿不影响业务）
+        gatewayPayConfigManager.deleteByField(GatewayPayConfig::getMchNo, mchNo);
         gatewayCashierItemManager.deleteByField(GatewayCashierItem::getMchNo, mchNo);
         payRouteStrategyManager.deleteByField(PayRouteStrategy::getMchNo, mchNo);
         // 杂项

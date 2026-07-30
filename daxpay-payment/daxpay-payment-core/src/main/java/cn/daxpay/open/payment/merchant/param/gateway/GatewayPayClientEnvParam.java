@@ -4,10 +4,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
-/// # 码牌支付策略客户端环境配置参数(子表)
+/// # 网关支付客户端环境配置参数(子表)
 @Data
-@Schema(title = "码牌支付策略客户端环境配置参数")
-public class GatewayCodeClientEnvParam {
+@Schema(title = "网关支付客户端环境配置参数")
+public class GatewayPayClientEnvParam {
 
     /// @see cn.daxpay.open.payment.merchant.enums.ClientEnvEnum
     @Schema(description = "客户端环境编码: wechat/alipay/union_pay/douyin")

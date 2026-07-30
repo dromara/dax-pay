@@ -4,11 +4,11 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-/// # 码牌支付策略客户端环境配置结果
+/// # 网关支付客户端环境配置结果(子表)
 @Data
 @Accessors(chain = true)
-@Schema(title = "码牌支付策略客户端环境配置结果")
-public class GatewayCodeClientEnvResult {
+@Schema(title = "网关支付客户端环境配置结果")
+public class GatewayPayClientEnvResult {
 
     /// @see cn.daxpay.open.payment.merchant.enums.ClientEnvEnum
     @Schema(description = "客户端环境编码")

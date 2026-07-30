@@ -6,11 +6,11 @@ import lombok.experimental.Accessors;
 
 import java.util.List;
 
-/// # 码牌支付策略配置结果
+/// # 网关支付配置结果(码牌/聚合共用)
 @Data
 @Accessors(chain = true)
-@Schema(title = "码牌支付策略配置结果")
-public class GatewayCodeConfigResult {
+@Schema(title = "网关支付配置结果")
+public class GatewayPayConfigResult {
 
     @Schema(description = "主键")
     private Long id;
@@ -25,6 +25,9 @@ public class GatewayCodeConfigResult {
     @Schema(description = "配置深度: auto/method/direct")
     private String level;
 
+    @Schema(description = "是否自动拉起支付(码牌仅对固定金额生效)")
+    private Boolean autoLaunch;
+
     @Schema(description = "客户端环境×形态配置列表")
-    private List<GatewayCodeClientEnvResult> clientEnvs;
+    private List<GatewayPayClientEnvResult> clientEnvs;
 }
