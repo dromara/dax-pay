@@ -175,13 +175,15 @@ daxpay:
     one:
       base-url: http://127.0.0.1:20100
       # 通道传输 AES 密钥（强制常开，恰好 32 字符；仅本地占位，勿用于生产）
+      # 须与子应用一致: dax-pay-channel-one application.yml / dax-pay-channel-one-go config.yaml 的 channel.transport-encrypt.key
       transport-encrypt:
-        key: z0Vd8jDKB80pA6OOptGLO+qDVvWboEko
+        key: 0123456789abcdef0123456789abcdef
     # 子应用2: 其他支付通道
     two:
       base-url: http://127.0.0.1:20200
+      # 须与子应用一致: dax-pay-channel-two application.yml 的 channel.transport-encrypt.key
       transport-encrypt:
-        key: z0Vd8jDKB80pA6OOptGLO+qDVvWboEko
+        key: fedcba9876543210fedcba9876543210
     # 子应用3: 其他通道(未来扩展, 暂未启用)
     # three:
     #   base-url: http://127.0.0.1:20300

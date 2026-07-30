@@ -17,6 +17,7 @@
     "ciphertextInvalid": "Panjang ciphertext transport saluran tidak valid",
     "decryptFailed": "Dekripsi transport saluran gagal",
     "responseHeaderMissing": "Respons saluran tidak memiliki header enkripsi transport {0}",
-    "requestHeaderMissing": "Enkripsi transport saluran: permintaan tanpa header enkripsi"
+    "requestHeaderMissing": "Enkripsi transport saluran: permintaan tanpa header enkripsi",
+    "plainErrorResponse": "Sub-aplikasi saluran mengembalikan respons kesalahan teks polos [{0}]: {1}"
   }
 }

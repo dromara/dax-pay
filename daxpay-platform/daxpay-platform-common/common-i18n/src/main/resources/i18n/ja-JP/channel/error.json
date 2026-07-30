@@ -17,6 +17,7 @@
     "ciphertextInvalid": "チャネル転送の暗号文の長さが不正です",
     "decryptFailed": "チャネル転送の復号に失敗しました",
     "responseHeaderMissing": "チャネル応答に転送暗号化ヘッダー {0} がありません",
-    "requestHeaderMissing": "チャネル転送暗号化: リクエストに暗号化ヘッダーがありません"
+    "requestHeaderMissing": "チャネル転送暗号化: リクエストに暗号化ヘッダーがありません",
+    "plainErrorResponse": "チャネル子アプリから平文エラーレスポンス[{0}]が返されました: {1}"
   }
 }

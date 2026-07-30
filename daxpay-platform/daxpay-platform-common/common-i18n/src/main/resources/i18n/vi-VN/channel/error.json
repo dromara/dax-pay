@@ -17,6 +17,7 @@
     "ciphertextInvalid": "Độ dài bản mã truyền tải kênh không hợp lệ",
     "decryptFailed": "Giải mã truyền tải kênh thất bại",
     "responseHeaderMissing": "Phản hồi kênh thiếu header mã hóa truyền tải {0}",
-    "requestHeaderMissing": "Mã hóa truyền tải kênh: yêu cầu thiếu header mã hóa"
+    "requestHeaderMissing": "Mã hóa truyền tải kênh: yêu cầu thiếu header mã hóa",
+    "plainErrorResponse": "Ứng dụng con kênh trả về phản hồi lỗi văn bản thuần [{0}]: {1}"
   }
 }

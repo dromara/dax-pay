@@ -17,6 +17,7 @@
     "ciphertextInvalid": "通道傳輸密文長度非法",
     "decryptFailed": "通道傳輸解密失敗",
     "responseHeaderMissing": "通道子應用回應未攜帶傳輸加密頭 {0}",
-    "requestHeaderMissing": "通道傳輸加密：請求未攜帶加密頭"
+    "requestHeaderMissing": "通道傳輸加密：請求未攜帶加密頭",
+    "plainErrorResponse": "通道子應用傳回明文錯誤回應[{0}]: {1}"
   }
 }

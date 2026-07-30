@@ -17,6 +17,7 @@
     "ciphertextInvalid": "Channel transport ciphertext length is invalid",
     "decryptFailed": "Channel transport decrypt failed",
     "responseHeaderMissing": "Channel response missing transport encrypt header {0}",
-    "requestHeaderMissing": "Channel transport encrypt: request missing encrypt header"
+    "requestHeaderMissing": "Channel transport encrypt: request missing encrypt header",
+    "plainErrorResponse": "Channel sub-app returned plaintext error response [{0}]: {1}"
   }
 }

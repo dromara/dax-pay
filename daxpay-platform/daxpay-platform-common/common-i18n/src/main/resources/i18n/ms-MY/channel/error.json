@@ -17,6 +17,7 @@
     "ciphertextInvalid": "Panjang ciphertext pengangkutan saluran tidak sah",
     "decryptFailed": "Penyahsulitan pengangkutan saluran gagal",
     "responseHeaderMissing": "Respons saluran tiada pengepala penyulitan pengangkutan {0}",
-    "requestHeaderMissing": "Penyulitan pengangkutan saluran: permintaan tiada pengepala penyulitan"
+    "requestHeaderMissing": "Penyulitan pengangkutan saluran: permintaan tiada pengepala penyulitan",
+    "plainErrorResponse": "Sub-aplikasi saluran memulangkan respons ralat teks biasa [{0}]: {1}"
   }
 }
