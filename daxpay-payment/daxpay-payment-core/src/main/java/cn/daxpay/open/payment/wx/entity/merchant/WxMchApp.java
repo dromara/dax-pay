@@ -5,7 +5,6 @@ import cn.daxpay.open.payment.wx.convert.merchant.WxMchAppConvert;
 import cn.daxpay.open.payment.wx.result.merchant.WxMchAppResult;
 import cn.daxpay.open.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.open.platform.common.mybatisplus.handler.encrypt.DataEncryptTypeHandler;
-import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
@@ -27,7 +26,6 @@ public class WxMchApp extends MchBaseEntity implements ToResult<WxMchAppResult> 
 
     /// 应用类型
     /// @see cn.daxpay.open.payment.wx.enums.WxAppTypeEnum
-    @TableField(updateStrategy = FieldStrategy.NEVER)
     private String appType;
 
     /// 微信应用AppId

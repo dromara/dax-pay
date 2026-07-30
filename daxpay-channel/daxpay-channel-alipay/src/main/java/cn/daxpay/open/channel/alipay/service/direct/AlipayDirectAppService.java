@@ -15,8 +15,10 @@ import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 /// # 支付宝直连商户应用管理
 ///
@@ -62,14 +64,23 @@ public class AlipayDirectAppService {
     }
 
     /// 更新支付宝直连商户应用
+    @Transactional(rollbackFor = Exception.class)
     public void update(AlipayDirectAppParam param) {
         var entity = alipayDirectAppManager.findById(param.getId())
                 // 支付宝: 直连商户应用不存在
                 .orElseThrow(() -> new DataNotExistException("error.channel.alipay.mchAppNotFound"));
         this.assertScopeMatch(entity, param.getMchNo(), param.getChannelMchNo());
         this.assertAliAppIdUnique(entity.getMchNo(), entity.getChannelMchNo(), param.getAliAppId(), param.getId());
+        // 记录原始应用类型, 用于判断是否需要联动清理支付能力绑定
+        String oldAppType = entity.getAppType();
         AlipayDirectAppConvert.CONVERT.copy(param, entity);
         alipayDirectAppManager.updateById(entity);
+        // 应用类型变更: 旧 appType 下的能力绑定对新类型不再兼容, 清理后由用户重新配置
+        if (!Objects.equals(oldAppType, param.getAppType())) {
+            alipayDirectAppCapabilityService.deleteByAlipayDirectAppId(entity.getId());
+            log.warn("支付宝直连商户应用[{}] appType 从[{}]变更为[{}], 已清理能力绑定",
+                    entity.getId(), oldAppType, param.getAppType());
+        }
     }
 
     /// 删除应用（级联删除密钥配置、授权认证配置与能力关联）

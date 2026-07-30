@@ -167,21 +167,17 @@ daxpay:
       # 关闭后不可切换到沙箱; 若启动时已有产品处于沙箱, 将自动重置为生产环境
       sandbox-enabled: true
   # 通道适配子应用配置
-  # 按支付通道拆分的独立部署子服务, 主服务通过 HTTP 调用对应子服务完成通道对接。
-  # 拆分目的: 通道 SDK 依赖隔离(避免冲突) + 独立升级 + 弹性伸缩
-  # 子应用编号(one/two/three)固定且不可改名, 与路由策略中的通道分配一一对应。
   channel:
     # 子应用1: 支付宝/微信支付/银联商务/(已启用, 本机启动的 dax-pay-channel-one 服务)
     one:
       base-url: http://127.0.0.1:20100
-      # 通道传输 AES 密钥（强制常开，恰好 32 字符；仅本地占位，勿用于生产）
-      # 须与子应用一致: dax-pay-channel-one application.yml / dax-pay-channel-one-go config.yaml 的 channel.transport-encrypt.key
+      # 通道传输 AES 密钥（强制常开）
       transport-encrypt:
         key: 0123456789abcdef0123456789abcdef
     # 子应用2: 其他支付通道
     two:
       base-url: http://127.0.0.1:20200
-      # 须与子应用一致: dax-pay-channel-two application.yml 的 channel.transport-encrypt.key
+      # 须与子应用一致
       transport-encrypt:
         key: fedcba9876543210fedcba9876543210
     # 子应用3: 其他通道(未来扩展, 暂未启用)

@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 /// # 平台微信应用管理
 ///
@@ -70,8 +71,17 @@ public class WxPlatformAppService {
                 .orElseThrow(() -> new DataNotExistException("error.payment.wx.appNotFound"));
         this.assertWxAppIdUnique(param.getWxAppId(), param.getId());
         this.validateAppType(param.getAppType());
+        // 记录原始应用类型, 用于判断是否需要联动清理支付能力绑定
+        String oldAppType = entity.getAppType();
         WxPlatformAppConvert.CONVERT.copy(param, entity);
         wxPlatformAppManager.updateById(entity);
+        // 应用类型变更: 旧 appType 下的能力绑定对新类型不再兼容, 清理后由用户重新配置
+        if (!Objects.equals(oldAppType, param.getAppType())) {
+            wxPlatformAppCapabilityManager.deleteByWxPlatformAppId(entity.getId());
+            wxChannelAppCapabilityManager.deleteByScopeAndRefId(AppScopeEnum.PLATFORM.getCode(), entity.getId());
+            log.warn("平台微信应用[{}] appType 从[{}]变更为[{}], 已清理平台默认能力绑定与通道能力绑定",
+                    entity.getId(), oldAppType, param.getAppType());
+        }
     }
 
     /// 删除应用（被能力绑定引用时拒删；级联删除授权认证配置）

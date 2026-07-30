@@ -2605,69 +2605,7 @@ COMMENT ON COLUMN "public"."douyin_direct_channel_merchant"."version" IS '乐观
 COMMENT ON COLUMN "public"."douyin_direct_channel_merchant"."deleted" IS '逻辑删除标志';
 COMMENT ON TABLE "public"."douyin_direct_channel_merchant" IS '抖音直连通道商户绑定';
 
--- ----------------------------
--- Table structure for douyin_direct_app_auth_config
--- ----------------------------
-DROP TABLE IF EXISTS "public"."douyin_direct_app_auth_config";
-CREATE TABLE "public"."douyin_direct_app_auth_config" (
-  "id" int8 NOT NULL,
-  "mch_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "channel_mch_no" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
-  "douyin_direct_app_id" int8,
-  "creator" int8,
-  "create_time" timestamptz(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamptz(6),
-  "version" int4 NOT NULL DEFAULT 0,
-  "deleted" bool NOT NULL DEFAULT false,
-  "app_secret" varchar(512) COLLATE "pg_catalog"."default"
-)
-;
-COMMENT ON COLUMN "public"."douyin_direct_app_auth_config"."id" IS '主键';
-COMMENT ON COLUMN "public"."douyin_direct_app_auth_config"."mch_no" IS '商户号';
-COMMENT ON COLUMN "public"."douyin_direct_app_auth_config"."channel_mch_no" IS '通道商户号';
-COMMENT ON COLUMN "public"."douyin_direct_app_auth_config"."douyin_direct_app_id" IS '关联抖音直连应用 ID';
-COMMENT ON COLUMN "public"."douyin_direct_app_auth_config"."creator" IS '创建人ID';
-COMMENT ON COLUMN "public"."douyin_direct_app_auth_config"."create_time" IS '创建时间';
-COMMENT ON COLUMN "public"."douyin_direct_app_auth_config"."last_modifier" IS '最后修改人ID';
-COMMENT ON COLUMN "public"."douyin_direct_app_auth_config"."last_modified_time" IS '最后修改时间';
-COMMENT ON COLUMN "public"."douyin_direct_app_auth_config"."version" IS '乐观锁版本号';
-COMMENT ON COLUMN "public"."douyin_direct_app_auth_config"."deleted" IS '逻辑删除标志';
-COMMENT ON COLUMN "public"."douyin_direct_app_auth_config"."app_secret" IS '应用密钥(加密存储)';
-COMMENT ON TABLE "public"."douyin_direct_app_auth_config" IS '抖音直连商户应用授权认证配置';
-
--- ----------------------------
--- Table structure for douyin_direct_app
--- ----------------------------
-DROP TABLE IF EXISTS "public"."douyin_direct_app";
-CREATE TABLE "public"."douyin_direct_app" (
-  "id" int8 NOT NULL,
-  "mch_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "channel_mch_no" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
-  "app_name" varchar(64) COLLATE "pg_catalog"."default",
-  "douyin_app_id" varchar(64) COLLATE "pg_catalog"."default",
-  "creator" int8,
-  "create_time" timestamptz(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamptz(6),
-  "version" int4 NOT NULL DEFAULT 0,
-  "deleted" bool NOT NULL DEFAULT false,
-  "app_type" varchar(32) COLLATE "pg_catalog"."default"
-)
-;
-COMMENT ON COLUMN "public"."douyin_direct_app"."id" IS '主键';
-COMMENT ON COLUMN "public"."douyin_direct_app"."mch_no" IS '商户号';
-COMMENT ON COLUMN "public"."douyin_direct_app"."channel_mch_no" IS '通道商户号';
-COMMENT ON COLUMN "public"."douyin_direct_app"."app_name" IS '应用名称';
-COMMENT ON COLUMN "public"."douyin_direct_app"."douyin_app_id" IS '抖音应用AppId(APPID)';
-COMMENT ON COLUMN "public"."douyin_direct_app"."creator" IS '创建人ID';
-COMMENT ON COLUMN "public"."douyin_direct_app"."create_time" IS '创建时间';
-COMMENT ON COLUMN "public"."douyin_direct_app"."last_modifier" IS '最后修改人ID';
-COMMENT ON COLUMN "public"."douyin_direct_app"."last_modified_time" IS '最后修改时间';
-COMMENT ON COLUMN "public"."douyin_direct_app"."version" IS '乐观锁版本号';
-COMMENT ON COLUMN "public"."douyin_direct_app"."deleted" IS '逻辑删除标志';
-COMMENT ON COLUMN "public"."douyin_direct_app"."app_type" IS '应用类型(mini_program小程序/mobile_app移动应用/web_app网站应用)';
-COMMENT ON TABLE "public"."douyin_direct_app" IS '抖音直连商户应用';
+-- (douyin_direct_app / douyin_direct_app_auth_config 表已废弃, 改用 payment-core 跨通道通用应用模式, 详见 update-tables.sql)
 
 -- ----------------------------
 -- Table structure for device_qr_code
@@ -3856,36 +3794,7 @@ COMMENT ON COLUMN "public"."hkrt_isv_channel_merchant"."create_time" IS '创建�
 COMMENT ON COLUMN "public"."hkrt_isv_channel_merchant"."sandbox" IS '是否沙箱环境商户';
 COMMENT ON TABLE "public"."hkrt_isv_channel_merchant" IS '海科融通通道商户绑定';
 
--- ----------------------------
--- Table structure for douyin_direct_app_capability
--- ----------------------------
-DROP TABLE IF EXISTS "public"."douyin_direct_app_capability";
-CREATE TABLE "public"."douyin_direct_app_capability" (
-  "id" int8 NOT NULL DEFAULT nextval('douyin_direct_app_capability_id_seq'::regclass),
-  "mch_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "channel_mch_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "capability" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
-  "douyin_direct_app_id" int8 NOT NULL,
-  "creator" int8,
-  "create_time" timestamptz(6) DEFAULT now(),
-  "last_modifier" int8,
-  "last_modified_time" timestamptz(6),
-  "version" int4 NOT NULL DEFAULT 0,
-  "deleted" bool NOT NULL DEFAULT false
-)
-;
-COMMENT ON COLUMN "public"."douyin_direct_app_capability"."id" IS '主键';
-COMMENT ON COLUMN "public"."douyin_direct_app_capability"."mch_no" IS '商户号';
-COMMENT ON COLUMN "public"."douyin_direct_app_capability"."channel_mch_no" IS '通道商户号';
-COMMENT ON COLUMN "public"."douyin_direct_app_capability"."capability" IS '支付能力编码(如 DOUYIN_QR/DOUYIN_JSAPI 等)';
-COMMENT ON COLUMN "public"."douyin_direct_app_capability"."douyin_direct_app_id" IS '关联抖音直连应用 ID';
-COMMENT ON COLUMN "public"."douyin_direct_app_capability"."creator" IS '创建人ID';
-COMMENT ON COLUMN "public"."douyin_direct_app_capability"."create_time" IS '创建时间';
-COMMENT ON COLUMN "public"."douyin_direct_app_capability"."last_modifier" IS '最后修改人ID';
-COMMENT ON COLUMN "public"."douyin_direct_app_capability"."last_modified_time" IS '最后修改时间';
-COMMENT ON COLUMN "public"."douyin_direct_app_capability"."version" IS '乐观锁版本号';
-COMMENT ON COLUMN "public"."douyin_direct_app_capability"."deleted" IS '逻辑删除标志';
-COMMENT ON TABLE "public"."douyin_direct_app_capability" IS '抖音直连商户应用支付能力关联';
+-- (douyin_direct_app_capability 表已废弃, 改用 payment-core 跨通道通用应用模式, 详见 update-tables.sql)
 
 -- ----------------------------
 -- Table structure for base_street
@@ -5015,25 +4924,6 @@ COMMENT ON INDEX "public"."uk_douyin_direct_mch_dyid" IS '同一商户下抖音�
 ALTER TABLE "public"."douyin_direct_channel_merchant" ADD CONSTRAINT "pk_douyin_direct_channel_merchant" PRIMARY KEY ("id");
 
 -- ----------------------------
--- Primary Key structure for table douyin_direct_app_auth_config
--- ----------------------------
-ALTER TABLE "public"."douyin_direct_app_auth_config" ADD CONSTRAINT "pk_douyin_direct_app_auth_config" PRIMARY KEY ("id");
-
--- ----------------------------
--- Indexes structure for table douyin_direct_app
--- ----------------------------
-CREATE UNIQUE INDEX "uk_douyin_direct_app_appid" ON "public"."douyin_direct_app" USING btree (
-  "channel_mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
-  "douyin_app_id" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-) WHERE deleted = false;
-COMMENT ON INDEX "public"."uk_douyin_direct_app_appid" IS '同一通道商户下抖音应用 ID 唯一';
-
--- ----------------------------
--- Primary Key structure for table douyin_direct_app
--- ----------------------------
-ALTER TABLE "public"."douyin_direct_app" ADD CONSTRAINT "pk_douyin_direct_app" PRIMARY KEY ("id");
-
--- ----------------------------
 -- Indexes structure for table device_qr_code
 -- ----------------------------
 CREATE INDEX "idx_device_qr_code_store_no" ON "public"."device_qr_code" USING btree (
@@ -5527,25 +5417,6 @@ CREATE UNIQUE INDEX "uk_hkrt_isv_key_prod_sandbox" ON "public"."hkrt_isv_key_con
   "sandbox" "pg_catalog"."bool_ops" ASC NULLS LAST
 ) WHERE deleted = false;
 COMMENT ON INDEX "public"."uk_hkrt_isv_key_prod_sandbox" IS '同一产品同一环境密钥唯一';
-
--- ----------------------------
--- Indexes structure for table douyin_direct_app_capability
--- ----------------------------
-CREATE UNIQUE INDEX "uk_douyin_direct_cap_cmchno_cap" ON "public"."douyin_direct_app_capability" USING btree (
-  "channel_mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
-  "capability" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-) WHERE deleted = false;
-COMMENT ON INDEX "public"."uk_douyin_direct_cap_cmchno_cap" IS '同一通道商户下支付能力唯一';
-
--- ----------------------------
--- Uniques structure for table douyin_direct_app_capability
--- ----------------------------
-ALTER TABLE "public"."douyin_direct_app_capability" ADD CONSTRAINT "uk_douyin_direct_app_capability" UNIQUE ("channel_mch_no", "capability");
-
--- ----------------------------
--- Primary Key structure for table douyin_direct_app_capability
--- ----------------------------
-ALTER TABLE "public"."douyin_direct_app_capability" ADD CONSTRAINT "douyin_direct_app_capability_pkey" PRIMARY KEY ("id");
 
 -- ----------------------------
 -- Indexes structure for table base_street

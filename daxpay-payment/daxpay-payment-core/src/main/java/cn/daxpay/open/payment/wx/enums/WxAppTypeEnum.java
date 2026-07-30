@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -26,19 +27,21 @@ public enum WxAppTypeEnum implements I18nSupport {
 
     private final String code;
 
-    /// 支付能力 → 应用类型的默认推导映射
+    /// 支付能力 → 兼容应用类型集合(有序, 首个为兜底推导优先级)
     ///
-    /// - JSAPI/扫码/H5/付款码/收银台 → 公众号
+    /// - JSAPI/收银台 → 公众号(场景强绑 openId)
+    /// - 扫码/付款码 → 公众号优先, 兼容小程序/移动应用(不依赖 openId)
+    /// - H5 → 公众号优先, 兼容移动应用(微信 H5 不支持小程序 appid)
     /// - 小程序支付 → 小程序
     /// - APP支付 → 移动应用
-    private static final Map<String, String> CAPABILITY_APP_TYPE_MAP = Map.of(
-            PayCapabilityEnum.WECHAT_JSAPI.getCode(), OFFICIAL_ACCOUNT.code,
-            PayCapabilityEnum.WECHAT_QR.getCode(), OFFICIAL_ACCOUNT.code,
-            PayCapabilityEnum.WECHAT_H5.getCode(), OFFICIAL_ACCOUNT.code,
-            PayCapabilityEnum.WECHAT_BARCODE.getCode(), OFFICIAL_ACCOUNT.code,
-            PayCapabilityEnum.WECHAT_CASHIER.getCode(), OFFICIAL_ACCOUNT.code,
-            PayCapabilityEnum.WECHAT_MINI.getCode(), MINI_PROGRAM.code,
-            PayCapabilityEnum.WECHAT_APP.getCode(), MOBILE_APP.code);
+    private static final Map<String, List<String>> CAPABILITY_APP_TYPE_MAP = Map.of(
+            PayCapabilityEnum.WECHAT_JSAPI.getCode(), List.of(OFFICIAL_ACCOUNT.code),
+            PayCapabilityEnum.WECHAT_QR.getCode(), List.of(OFFICIAL_ACCOUNT.code, MINI_PROGRAM.code, MOBILE_APP.code),
+            PayCapabilityEnum.WECHAT_H5.getCode(), List.of(OFFICIAL_ACCOUNT.code, MOBILE_APP.code),
+            PayCapabilityEnum.WECHAT_BARCODE.getCode(), List.of(OFFICIAL_ACCOUNT.code, MINI_PROGRAM.code, MOBILE_APP.code),
+            PayCapabilityEnum.WECHAT_CASHIER.getCode(), List.of(OFFICIAL_ACCOUNT.code),
+            PayCapabilityEnum.WECHAT_MINI.getCode(), List.of(MINI_PROGRAM.code),
+            PayCapabilityEnum.WECHAT_APP.getCode(), List.of(MOBILE_APP.code));
 
     /// 翻译 key 前缀
     @Override
@@ -57,20 +60,26 @@ public enum WxAppTypeEnum implements I18nSupport {
                 .orElse(null);
     }
 
-    /// 根据支付能力编码推导默认应用类型；未知能力返回 null
-    public static String resolveAppType(String capabilityCode) {
+    /// 根据支付能力推导全部兼容应用类型(有序, 首个为兜底优先级)；未知能力返回空列表
+    public static List<String> resolveCompatibleAppTypes(String capabilityCode) {
         if (capabilityCode == null) {
-            return null;
+            return List.of();
         }
-        return CAPABILITY_APP_TYPE_MAP.get(capabilityCode);
+        return CAPABILITY_APP_TYPE_MAP.getOrDefault(capabilityCode, List.of());
+    }
+
+    /// 根据支付能力编码推导默认(优先级最高)应用类型；未知能力返回 null
+    public static String resolveAppType(String capabilityCode) {
+        List<String> types = resolveCompatibleAppTypes(capabilityCode);
+        return types.isEmpty() ? null : types.getFirst();
     }
 
     /// 校验应用类型与支付能力是否兼容；未知能力不做强制约束
     public static boolean isCompatible(String appType, String capability) {
-        String expected = resolveAppType(capability);
-        if (expected == null) {
+        List<String> types = resolveCompatibleAppTypes(capability);
+        if (types.isEmpty()) {
             return true;
         }
-        return expected.equals(appType);
+        return types.contains(appType);
     }
 }

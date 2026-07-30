@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 /// # 商户微信应用管理
 ///
@@ -75,10 +76,18 @@ public class WxMchAppService {
         String mchNo = entity.getMchNo();
         this.assertWxAppIdUnique(mchNo, param.getWxAppId(), param.getId());
         this.validateAppType(param.getAppType());
+        // 记录原始应用类型, 用于判断是否需要联动清理支付能力绑定
+        String oldAppType = entity.getAppType();
         WxMchAppConvert.CONVERT.copy(param, entity);
         // 保持主表商户号不变
         entity.setMchNo(mchNo);
         wxMchAppManager.updateById(entity);
+        // 应用类型变更: 旧 appType 下的能力绑定对新类型不再兼容, 清理后由用户重新配置
+        if (!Objects.equals(oldAppType, param.getAppType())) {
+            wxChannelAppCapabilityManager.deleteByScopeAndRefId(AppScopeEnum.MERCHANT.getCode(), entity.getId());
+            log.warn("商户微信应用[{}] appType 从[{}]变更为[{}], 已清理通道能力绑定",
+                    entity.getId(), oldAppType, param.getAppType());
+        }
     }
 
     /// 删除应用（被通道能力绑定引用时拒删；级联删除授权认证配置）

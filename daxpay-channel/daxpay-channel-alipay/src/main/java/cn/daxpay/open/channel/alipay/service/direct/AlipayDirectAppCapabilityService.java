@@ -112,10 +112,10 @@ public class AlipayDirectAppCapabilityService {
 
     /// 支付/回调解析应用：显式配置 > appType 自动推导（须已装载 mchNo，租户内）
     ///
-    /// appType 推导要求该通道商户下该类型应用唯一命中：
-    /// - 唯一命中：返回该应用
-    /// - 该类型存在多个应用：抛 appNotUnique，要求显式配置能力绑
-    /// - 该类型无应用：返回 empty，由调用方走最终报错
+    /// appType 推导：遍历兼容类型(按优先级), 该通道商户下首个唯一命中即返回：
+    /// - 某类型恰好 1 个：返回该应用
+    /// - 某类型多个/无：跳过, 继续下一个兼容类型
+    /// - 全部兼容类型均未唯一命中：返回 empty, 由调用方走最终报错
     ///
     /// 认证无上下文请用 [#resolveAppNotTenant]。
     public Optional<AlipayDirectApp> resolveApp(String channelMchNo, String capability) {
@@ -127,15 +127,9 @@ public class AlipayDirectAppCapabilityService {
         if (rel.isPresent()) {
             return alipayDirectAppManager.findById(rel.get().getAlipayDirectAppId());
         }
-        // 2. appType 推导：要求该通道商户下该类型应用唯一命中，>1 拒绝猜测
-        String appType = AlipayDirectAppTypeCode.resolveAppType(capability);
-        if (appType != null) {
+        // 2. appType 推导：遍历兼容类型(按优先级), 该通道商户下首个唯一命中即返回; 多个则跳过
+        for (String appType : AlipayDirectAppTypeCode.resolveCompatibleAppTypes(capability)) {
             List<AlipayDirectApp> apps = alipayDirectAppManager.listByChannelMchNoAndAppType(channelMchNo, appType);
-            if (apps.size() > 1) {
-                // 存在多个同类型应用，请显式配置能力绑定以明确选择
-                throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                        "error.channel.alipay.appNotUnique", appType);
-            }
             if (apps.size() == 1) {
                 return Optional.of(apps.getFirst());
             }

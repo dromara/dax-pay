@@ -26,12 +26,15 @@ public final class WechatAppTypeCode {
     /// 应用类型: 移动应用
     public static final String MOBILE_APP = "mobile_app";
 
-    /// 支付能力 → 应用类型的默认推导映射
+    /// 支付能力 → 默认应用类型映射
+    ///
+    /// 注意: 本类已废弃(运行时无调用), 完整多值兼容规则(扫码/付款码/H5 的兼容类型)统一以
+    /// payment-core 的 [cn.daxpay.open.payment.wx.enums.WxAppTypeEnum#resolveCompatibleAppTypes] 为准。
     ///
     /// - JSAPI支付 → 公众号
     /// - 小程序支付 → 小程序
     /// - APP支付 → 移动应用
-    /// - 扫码/H5/付款码 → 公众号(微信扫码/H5/付款码通常使用公众号应用)
+    /// - 扫码/H5/付款码 → 公众号(默认, 实际兼容类型见 WxAppTypeEnum)
     private static final Map<String, String> CAPABILITY_APP_TYPE_MAP = Map.of(
             PayCapabilityEnum.WECHAT_JSAPI.getCode(), OFFICIAL_ACCOUNT,
             PayCapabilityEnum.WECHAT_QR.getCode(), OFFICIAL_ACCOUNT,
