@@ -41,7 +41,6 @@ import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -106,7 +105,6 @@ public class ChannelMerchantService {
     }
 
     /// 编辑
-    @CacheEvict(value = "payment:channel-mch", allEntries = true)
     public void update(ChannelMerchantEditParam param){
         // 通道: 通道商户不存在
         var mchInfo = channelMerchantManager.findById(param.getId()).orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
@@ -127,7 +125,6 @@ public class ChannelMerchantService {
     /// - 通道扩展表（`XxxChannelMerchant` + `XxxKeyConfig`）由各通道子模块通过 SPI 自清理，
     ///   未实现 SPI 的通道留孤儿数据（主表已删、路由不再命中，对业务无影响）
     @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(value = "payment:channel-mch", allEntries = true)
     public void delete(Long id){
         // 通道: 通道商户不存在
         var mchInfo = channelMerchantManager.findById(id)
@@ -213,7 +210,6 @@ public class ChannelMerchantService {
     }
 
     /// 更新启用状态
-    @CacheEvict(value = "payment:channel-mch", allEntries = true)
     public void updateEnable(Long id, Boolean enable){
         // 通道: 通道商户不存在
         var mchInfo = channelMerchantManager.findById(id).orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));

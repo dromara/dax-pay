@@ -15,8 +15,6 @@ import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.AllArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -92,7 +90,6 @@ public class DictItemService {
     /// 查询指定字典编码下所有启用的字典项完整列表（含多语言字段）
     /// 供 DictTranslatorImpl 使用
     /// @return 字典项完整实体列表
-    @Cacheable(value = "system:dict", key = "#dictCode + ':list'")
     public List<DictItem> findAllEnableByDictCode(String dictCode) {
         return dictItemManager.findByDictCodeAndEnable(dictCode, true);
     }
