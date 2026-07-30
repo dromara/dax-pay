@@ -39,7 +39,6 @@
   "mchAppWxAppIdDuplicate": "該通道商户下微信應用AppId已存在",
   "appIdDuplicate": "該服務商下微信應用AppId已存在",
   "appTypeInvalid": "微信應用類型無效",
-  "authAppTypeInvalid": "微信認證應用類型無效",
   "appSecretRequired": "應用密鑰不可為空",
   "publicKeyRequired": "支付公鑰未配置",
   "privateCertRequired": "API證書未配置",

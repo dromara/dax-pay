@@ -357,9 +357,6 @@
     "platform": {
       "notBlank": "Mobile platform cannot be blank"
     },
-    "authAppType": {
-      "notBlank": "Auth application type cannot be blank"
-    },
     "mchName": {
       "notBlank": "Merchant name cannot be blank"
     },

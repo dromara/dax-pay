@@ -357,9 +357,6 @@
     "platform": {
       "notBlank": "Platform mudah alih tidak boleh kosong"
     },
-    "authAppType": {
-      "notBlank": "Jenis aplikasi pengesahan tidak boleh kosong"
-    },
     "mchName": {
       "notBlank": "Nama pedagang tidak boleh kosong"
     },

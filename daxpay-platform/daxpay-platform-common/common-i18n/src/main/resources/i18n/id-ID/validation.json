@@ -357,9 +357,6 @@
     "platform": {
       "notBlank": "Platform seluler wajib diisi"
     },
-    "authAppType": {
-      "notBlank": "Jenis aplikasi autentikasi tidak boleh kosong"
-    },
     "mchName": {
       "notBlank": "Nama pedagang tidak boleh kosong"
     },

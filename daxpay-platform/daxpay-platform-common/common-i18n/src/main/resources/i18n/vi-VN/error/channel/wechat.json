@@ -39,7 +39,6 @@
   "mchAppWxAppIdDuplicate": "WeChat AppId đã tồn tại dưới kênh người bán này",
   "appIdDuplicate": "WeChat AppId đã tồn tại theo ISV này",
   "appTypeInvalid": "Loại ứng dụng WeChat không hợp lệ",
-  "authAppTypeInvalid": "Loại ứng dụng xác thực WeChat không hợp lệ",
   "appSecretRequired": "Bí mật ứng dụng là bắt buộc",
   "publicKeyRequired": "Cần có khóa công khai thanh toán",
   "privateCertRequired": "Cần có chứng chỉ API",

@@ -39,7 +39,6 @@
   "mchAppWxAppIdDuplicate": "WeChat AppId already exists under this channel merchant",
   "appIdDuplicate": "WeChat AppId already exists under this ISV",
   "appTypeInvalid": "Invalid WeChat application type",
-  "authAppTypeInvalid": "Invalid WeChat auth application type",
   "appSecretRequired": "App secret is required",
   "publicKeyRequired": "Payment public key is required",
   "privateCertRequired": "API certificate is required",

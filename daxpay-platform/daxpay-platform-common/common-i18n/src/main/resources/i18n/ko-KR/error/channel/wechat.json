@@ -39,7 +39,6 @@
   "mchAppWxAppIdDuplicate": "WeChat AppId가 이미 이 채널 판매자에 존재합니다.",
   "appIdDuplicate": "WeChat AppId가 이미 이 ISV에 존재합니다.",
   "appTypeInvalid": "잘못된 WeChat 애플리케이션 유형",
-  "authAppTypeInvalid": "잘못된 WeChat 인증 신청 유형",
   "appSecretRequired": "앱 비밀번호가 필요합니다",
   "publicKeyRequired": "결제 공개 키가 필요합니다",
   "privateCertRequired": "API 인증서가 필요합니다",

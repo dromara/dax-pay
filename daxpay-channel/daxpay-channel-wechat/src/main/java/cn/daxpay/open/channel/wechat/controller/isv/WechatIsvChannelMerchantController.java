@@ -4,7 +4,6 @@ import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
-import cn.daxpay.open.channel.wechat.param.isv.WechatIsvAuthAppTypeUpdateParam;
 import cn.daxpay.open.channel.wechat.param.isv.WechatIsvChannelMerchantCreateParam;
 import cn.daxpay.open.channel.wechat.result.isv.WechatIsvChannelMerchantResult;
 import cn.daxpay.open.channel.wechat.service.isv.WechatIsvChannelMerchantService;
@@ -44,14 +43,6 @@ public class WechatIsvChannelMerchantController {
     @PostMapping("/create")
     public Result<Void> create(@RequestBody @Validated WechatIsvChannelMerchantCreateParam param) {
         wechatIsvChannelMerchantService.create(param);
-        return Res.ok();
-    }
-
-    @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "更新认证应用类型")
-    @PostMapping("/update-auth-app-type")
-    public Result<Void> updateAuthAppType(@RequestBody @Validated WechatIsvAuthAppTypeUpdateParam param) {
-        wechatIsvChannelMerchantService.updateAuthAppType(param);
         return Res.ok();
     }
 }

@@ -39,7 +39,6 @@
   "mchAppWxAppIdDuplicate": "WeChat AppId มีอยู่แล้วภายใต้ผู้ขายช่องทางนี้",
   "appIdDuplicate": "WeChat AppId มีอยู่แล้วภายใต้ ISV นี้",
   "appTypeInvalid": "ประเภทแอปพลิเคชัน WeChat ไม่ถูกต้อง",
-  "authAppTypeInvalid": "ประเภทแอปพลิเคชันรับรองความถูกต้อง WeChat ไม่ถูกต้อง",
   "appSecretRequired": "ต้องมีความลับของแอป",
   "publicKeyRequired": "ต้องใช้รหัสสาธารณะในการชำระเงิน",
   "privateCertRequired": "ต้องมีใบรับรอง API",

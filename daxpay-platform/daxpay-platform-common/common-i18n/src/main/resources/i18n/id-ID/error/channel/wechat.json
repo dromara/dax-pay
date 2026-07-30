@@ -39,7 +39,6 @@
   "mchAppWxAppIdDuplicate": "WeChat AppId sudah ada pada pedagang saluran ini",
   "appIdDuplicate": "WeChat AppId sudah ada di bawah ISV ini",
   "appTypeInvalid": "Jenis aplikasi WeChat tidak valid",
-  "authAppTypeInvalid": "Jenis aplikasi autentikasi WeChat tidak valid",
   "appSecretRequired": "Rahasia aplikasi diperlukan",
   "publicKeyRequired": "Kunci publik pembayaran diperlukan",
   "privateCertRequired": "Sertifikat API diperlukan",

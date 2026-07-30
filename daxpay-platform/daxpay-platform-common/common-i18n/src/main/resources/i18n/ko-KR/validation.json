@@ -357,9 +357,6 @@
     "platform": {
       "notBlank": "모바일 플랫폼은 비워둘 수 없습니다."
     },
-    "authAppType": {
-      "notBlank": "인증 신청 유형은 비워둘 수 없습니다."
-    },
     "mchName": {
       "notBlank": "판매자 이름은 비워둘 수 없습니다."
     },

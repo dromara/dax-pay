@@ -39,7 +39,6 @@
   "mchAppWxAppIdDuplicate": "WeChat AppId はこのチャネル販売者の下にすでに存在します",
   "appIdDuplicate": "WeChat AppId はこの ISV にすでに存在します",
   "appTypeInvalid": "無効な WeChat アプリケーションの種類です",
-  "authAppTypeInvalid": "無効な WeChat 認証アプリケーション タイプです",
   "appSecretRequired": "アプリのシークレットは必須です",
   "publicKeyRequired": "支払いの公開キーが必要です",
   "privateCertRequired": "API証明書が必要です",

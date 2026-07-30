@@ -357,9 +357,6 @@
     "platform": {
       "notBlank": "移動平臺不可為空"
     },
-    "authAppType": {
-      "notBlank": "認證應用型別不可為空"
-    },
     "mchName": {
       "notBlank": "商戶名稱不可為空"
     },

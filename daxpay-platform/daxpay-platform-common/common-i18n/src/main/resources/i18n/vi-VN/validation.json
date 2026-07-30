@@ -357,9 +357,6 @@
     "platform": {
       "notBlank": "Nền tảng di động không được để trống"
     },
-    "authAppType": {
-      "notBlank": "Loại ứng dụng xác thực không được để trống"
-    },
     "mchName": {
       "notBlank": "Tên người bán không được để trống"
     },

@@ -2873,8 +2873,7 @@ CREATE TABLE "public"."wechat_isv_channel_merchant" (
   "last_modifier" int8,
   "last_modified_time" timestamptz(6),
   "version" int4 NOT NULL DEFAULT 0,
-  "deleted" bool NOT NULL DEFAULT false,
-  "auth_app_type" varchar(32) COLLATE "pg_catalog"."default"
+  "deleted" bool NOT NULL DEFAULT false
 )
 ;
 COMMENT ON COLUMN "public"."wechat_isv_channel_merchant"."id" IS '主键';
@@ -2888,7 +2887,6 @@ COMMENT ON COLUMN "public"."wechat_isv_channel_merchant"."last_modifier" IS '最
 COMMENT ON COLUMN "public"."wechat_isv_channel_merchant"."last_modified_time" IS '最后修改时间';
 COMMENT ON COLUMN "public"."wechat_isv_channel_merchant"."version" IS '乐观锁版本号';
 COMMENT ON COLUMN "public"."wechat_isv_channel_merchant"."deleted" IS '逻辑删除标志';
-COMMENT ON COLUMN "public"."wechat_isv_channel_merchant"."auth_app_type" IS '认证应用类型: SP_APP=服务商应用(sp_appid), SUB_APP=子商户应用(sub_appid), 默认 SP_APP';
 COMMENT ON TABLE "public"."wechat_isv_channel_merchant" IS '微信服务商通道商户绑定';
 
 -- ----------------------------
