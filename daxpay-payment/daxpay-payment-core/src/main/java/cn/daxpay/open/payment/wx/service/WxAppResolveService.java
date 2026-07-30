@@ -12,6 +12,7 @@ import cn.daxpay.open.payment.wx.facade.WxAppFacade;
 import cn.daxpay.open.payment.wx.facade.WxAppView;
 import cn.daxpay.open.payment.wx.facade.WxIsvAppPair;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
+import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.hutool.core.util.StrUtil;
@@ -58,11 +59,16 @@ public class WxAppResolveService implements WxAppFacade {
     }
 
     /// 解析单应用：显式 channelAppId → 通道能力绑 → appType 推导（平台应用唯一命中）
+    ///
+    /// 直连产品(WECHAT_PAY)禁止回退到平台档应用: OAuth 拿到的 openId 必须与
+    /// 直连商户号同主体, 使用平台应用会导致 appid 与 mchid 主体不一致。
+    /// 仅服务商(WECHAT_ISV)及其他产品允许平台档兜底。
     @Override
     public WxAppView resolve(String mchNo, String channelMchNo, String capability, String channelAppId, String product) {
+        boolean direct = ProductEnum.WECHAT_PAY.getCode().equals(product);
         // 1. 显式 channelAppId
         if (StrUtil.isNotBlank(channelAppId)) {
-            return this.resolveByChannelAppId(mchNo, channelAppId);
+            return this.resolveByChannelAppId(mchNo, channelAppId, direct);
         }
         // 2. 通道能力绑定（同能力优先 merchant，其次 platform）
         if (StrUtil.isNotBlank(channelMchNo) && StrUtil.isNotBlank(capability)) {
@@ -71,18 +77,27 @@ public class WxAppResolveService implements WxAppFacade {
             if (merchantBind.isPresent()) {
                 return this.getById(AppScopeEnum.MERCHANT, merchantBind.get().getWxAppRefId());
             }
-            var platformBind = wxChannelAppCapabilityManager.findByChannelMchNoAndCapabilityAndScope(
-                    channelMchNo, capability, AppScopeEnum.PLATFORM.getCode());
-            if (platformBind.isPresent()) {
-                return this.getById(AppScopeEnum.PLATFORM, platformBind.get().getWxAppRefId());
+            // 直连商户不使用平台档应用, 跳过平台能力绑定
+            if (!direct) {
+                var platformBind = wxChannelAppCapabilityManager.findByChannelMchNoAndCapabilityAndScope(
+                        channelMchNo, capability, AppScopeEnum.PLATFORM.getCode());
+                if (platformBind.isPresent()) {
+                    return this.getById(AppScopeEnum.PLATFORM, platformBind.get().getWxAppRefId());
+                }
             }
         }
-        // 3. appType 推导：要求该类型平台应用唯一命中
-        WxAppView platformFallback = this.resolvePlatformFallback(capability);
-        if (platformFallback != null) {
-            return platformFallback;
+        // 3. appType 推导：要求该类型平台应用唯一命中（仅非直连）
+        if (!direct) {
+            WxAppView platformFallback = this.resolvePlatformFallback(capability);
+            if (platformFallback != null) {
+                return platformFallback;
+            }
         }
-        // 微信: 未配置该能力对应的应用
+        // 微信: 直连商户未配置商户档应用 / 未配置该能力对应的应用
+        if (direct) {
+            throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
+                    "error.payment.wx.directMchAppNotConfigured", capability);
+        }
         throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
                 "error.payment.wx.appNotConfigured", capability);
     }
@@ -136,7 +151,19 @@ public class WxAppResolveService implements WxAppFacade {
     }
 
     /// 按 channelAppId 解析单应用
-    private WxAppView resolveByChannelAppId(String mchNo, String channelAppId) {
+    ///
+    /// @param direct 是否直连产品(直连时商户表优先且不回退平台表)
+    private WxAppView resolveByChannelAppId(String mchNo, String channelAppId, boolean direct) {
+        // 直连商户优先查商户表, 且不回退到平台表
+        if (direct) {
+            var mchApp = wxMchAppManager.findByMchNoAndWxAppId(mchNo, channelAppId);
+            if (mchApp.isPresent()) {
+                return this.toMerchantView(mchApp.get());
+            }
+            // 直连商户未配置商户档应用
+            throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
+                    "error.payment.wx.directMchAppNotConfigured", channelAppId);
+        }
         var platform = wxPlatformAppManager.findByWxAppId(channelAppId);
         if (platform.isPresent()) {
             return this.toPlatformView(platform.get());
