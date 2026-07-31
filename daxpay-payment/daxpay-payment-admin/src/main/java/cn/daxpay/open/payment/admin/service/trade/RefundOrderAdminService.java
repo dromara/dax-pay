@@ -1,11 +1,5 @@
-package cn.daxpay.open.payment.trade.order.service;
+package cn.daxpay.open.payment.admin.service.trade;
 
-import cn.daxpay.open.platform.common.translate.service.TransService;
-import cn.daxpay.open.platform.core.enums.client.ClientEnum;
-import cn.daxpay.open.platform.core.exception.DataNotExistException;
-import cn.daxpay.open.platform.core.rest.param.PageParam;
-import cn.daxpay.open.platform.core.rest.result.PageResult;
-import cn.daxpay.open.platform.iam.service.client.ClientCodeService;
 import cn.daxpay.open.payment.trade.order.convert.RefundOrderConvert;
 import cn.daxpay.open.payment.trade.order.dao.RefundOrderManager;
 import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
@@ -14,28 +8,28 @@ import cn.daxpay.open.payment.trade.order.result.RefundOrderResult;
 import cn.daxpay.open.payment.trade.runtime.param.RefundParam;
 import cn.daxpay.open.payment.trade.runtime.service.refund.RefundService;
 import cn.daxpay.open.payment.trade.runtime.service.refund.RefundSyncService;
+import cn.daxpay.open.platform.common.translate.service.TransService;
+import cn.daxpay.open.platform.core.exception.DataNotExistException;
+import cn.daxpay.open.platform.core.rest.param.PageParam;
+import cn.daxpay.open.platform.core.rest.result.PageResult;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-/// # 退款订单共享服务（管理端查询/编排）
+/// # 退款订单管理服务
 ///
-/// 运营端 / 商户端共用。与 runtime [RefundService]（退款引擎）职责不同。
-@Slf4j
+/// 运营端专属。跨商户查询，按 mchNo 翻译商户名称。
 @Service
 @RequiredArgsConstructor
-public class RefundOrderService {
+public class RefundOrderAdminService {
 
     private final RefundOrderManager refundOrderManager;
     private final RefundService refundService;
     private final RefundSyncService refundSyncService;
     private final TransService transService;
-    private final ClientCodeService clientCodeService;
 
     /// 分页查询
     public PageResult<RefundOrderResult> page(PageParam pageParam, RefundOrderQuery query) {
-        sanitizeQuery(query);
         Page<RefundOrder> page = refundOrderManager.page(pageParam, query);
         var records = page.getRecords().stream()
                 .map(RefundOrderConvert.CONVERT::toResult)
@@ -45,7 +39,8 @@ public class RefundOrderService {
                 .setTotal(page.getTotal())
                 .setSize(page.getSize())
                 .setCurrent(page.getCurrent());
-        translateIfAdmin(pageResult);
+        // 翻译商户名称
+        transService.translate(pageResult);
         return pageResult;
     }
 
@@ -54,7 +49,8 @@ public class RefundOrderService {
         RefundOrder entity = refundOrderManager.findById(id)
                 .orElseThrow(() -> new DataNotExistException("pay.error.refund.orderNotFound"));
         RefundOrderResult result = RefundOrderConvert.CONVERT.toResult(entity);
-        translateIfAdmin(result);
+        // 翻译商户名称
+        transService.translate(result);
         return result;
     }
 
@@ -62,7 +58,8 @@ public class RefundOrderService {
     public RefundOrderResult refund(RefundParam param) {
         RefundOrder refundOrder = refundService.refund(param);
         RefundOrderResult result = RefundOrderConvert.CONVERT.toResult(refundOrder);
-        translateIfAdmin(result);
+        // 翻译商户名称
+        transService.translate(result);
         return result;
     }
 
@@ -70,25 +67,8 @@ public class RefundOrderService {
     public RefundOrderResult sync(Long id) {
         RefundOrder refundOrder = refundSyncService.syncById(id);
         RefundOrderResult result = RefundOrderConvert.CONVERT.toResult(refundOrder);
-        translateIfAdmin(result);
+        // 翻译商户名称
+        transService.translate(result);
         return result;
-    }
-
-    /// 商户端清空入参 mchNo, 避免越权查询他商户数据
-    private void sanitizeQuery(RefundOrderQuery query) {
-        if (query == null) {
-            return;
-        }
-        if (ClientEnum.MERCHANT.getCode().equals(clientCodeService.getClientCode())) {
-            query.setMchNo(null);
-        }
-    }
-
-    /// 运营端翻译商户名称(mchNo → mchName)
-    private void translateIfAdmin(Object target) {
-        if (ClientEnum.ADMIN.getCode().equals(clientCodeService.getClientCode())) {
-            // 翻译商户名称(mchNo -> mchName)
-            transService.translate(target);
-        }
     }
 }

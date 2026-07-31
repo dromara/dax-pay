@@ -9,7 +9,7 @@ import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.plugin.easypay.param.order.EasyPayOrderQuery;
 import cn.daxpay.open.plugin.easypay.result.order.EasyPayOrderResult;
-import cn.daxpay.open.plugin.easypay.service.order.EasyPayOrderQueryService;
+import cn.daxpay.open.plugin.easypay.service.order.EasyPayOrderAdminQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
@@ -21,25 +21,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-/// # 易支付协议订单（管理）
+/// # 易支付协议订单(运营端)
 ///
-/// 运营端 / 商户端共用。同步/关单透传内核 [cn.daxpay.open.payment.trade.order.service.NormalPayOrderService];
+/// 业务编排委托 [EasyPayOrderAdminQueryService]；跨商户查询并翻译商户名称。
 /// 生命周期回写钩子位于 [cn.daxpay.open.plugin.easypay.service.order.EasyPayOrderService], 与本控制器分离。
 @PermCode(menuCode = PermCodes.Plugin.EasyPayOrder.MENU)
 @Validated
-@Tag(name = "易支付协议订单")
+@Tag(name = "易支付协议订单(运营端)")
 @RestController
-@RequestMapping({"/admin/easypay/order", "/merchant/easypay/order"})
+@RequestMapping("/admin/easypay/order")
 @RequiredArgsConstructor
-public class EasyPayOrderController {
+public class EasyPayOrderAdminController {
 
-    private final EasyPayOrderQueryService easyPayOrderQueryService;
+    private final EasyPayOrderAdminQueryService easyPayOrderAdminQueryService;
 
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "易支付订单分页")
     @GetMapping("/page")
     public Result<PageResult<EasyPayOrderResult>> page(PageParam pageParam, EasyPayOrderQuery query) {
-        return Res.ok(easyPayOrderQueryService.page(pageParam, query));
+        return Res.ok(easyPayOrderAdminQueryService.page(pageParam, query));
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
@@ -47,7 +47,7 @@ public class EasyPayOrderController {
     @GetMapping("/get-by-id")
     public Result<EasyPayOrderResult> findById(
             @NotNull(message = "{validation.field.id.notNull}") Long id) {
-        return Res.ok(easyPayOrderQueryService.findById(id));
+        return Res.ok(easyPayOrderAdminQueryService.findById(id));
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
@@ -55,7 +55,7 @@ public class EasyPayOrderController {
     @PostMapping("/sync")
     public Result<NormalPaySyncResult> sync(
             @NotNull(message = "{validation.field.id.notNull}") Long id) {
-        return Res.ok(easyPayOrderQueryService.sync(id));
+        return Res.ok(easyPayOrderAdminQueryService.sync(id));
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
@@ -64,7 +64,7 @@ public class EasyPayOrderController {
     public Result<Void> close(
             @NotNull(message = "{validation.field.id.notNull}") Long id,
             @RequestParam(defaultValue = "false") boolean useCancel) {
-        easyPayOrderQueryService.close(id, useCancel);
+        easyPayOrderAdminQueryService.close(id, useCancel);
         return Res.ok();
     }
 }

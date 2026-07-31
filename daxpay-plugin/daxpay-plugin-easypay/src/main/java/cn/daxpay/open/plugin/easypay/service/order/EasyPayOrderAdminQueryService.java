@@ -1,13 +1,15 @@
 package cn.daxpay.open.plugin.easypay.service.order;
 
-import cn.daxpay.open.payment.trade.order.service.NormalPayOrderService;
+import cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum;
+import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
+import cn.daxpay.open.payment.trade.order.entity.PayTrade;
+import cn.daxpay.open.payment.trade.runtime.service.close.PayCloseService;
+import cn.daxpay.open.payment.trade.runtime.service.sync.PaySyncService;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPaySyncResult;
 import cn.daxpay.open.platform.common.translate.service.TransService;
-import cn.daxpay.open.platform.core.enums.client.ClientEnum;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
-import cn.daxpay.open.platform.iam.service.client.ClientCodeService;
 import cn.daxpay.open.plugin.easypay.dao.EasyPayOrderManager;
 import cn.daxpay.open.plugin.easypay.entity.EasyPayOrder;
 import cn.daxpay.open.plugin.easypay.param.order.EasyPayOrderQuery;
@@ -17,24 +19,24 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-/// # 易支付订单管理端查询服务
+/// # 易支付协议订单管理端查询服务(运营端)
 ///
-/// 承接运营端/商户端管理后台的易支付订单管理入口：分页、详情、同步、关单。
-/// 同步/关单透传内核 [cn.daxpay.open.payment.trade.order.service.NormalPayOrderService]。
+/// 承接运营后台的易支付订单管理入口：分页、详情、同步、关单。跨商户查询，按 mchNo 翻译商户名称。
+/// 同步/关单直达内核 [PaySyncService]/[PayCloseService]（等价原共享查询服务的透传行为）。
 /// 生命周期回写(支付成功/退款/关单钩子) 见 [EasyPayOrderService], 与本类解耦以避免循环依赖。
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class EasyPayOrderQueryService {
+public class EasyPayOrderAdminQueryService {
 
     private final EasyPayOrderManager easyPayOrderManager;
-    private final NormalPayOrderService normalPayOrderService;
+    private final PayTradeManager payTradeManager;
+    private final PaySyncService paySyncService;
+    private final PayCloseService payCloseService;
     private final TransService transService;
-    private final ClientCodeService clientCodeService;
 
     /// 分页查询
     public PageResult<EasyPayOrderResult> page(PageParam pageParam, EasyPayOrderQuery query) {
-        sanitizeQuery(query);
         Page<EasyPayOrder> page = easyPayOrderManager.page(pageParam, query);
         var records = page.getRecords().stream()
                 .map(EasyPayOrder::toResult)
@@ -44,7 +46,8 @@ public class EasyPayOrderQueryService {
                 .setTotal(page.getTotal())
                 .setSize(page.getSize())
                 .setCurrent(page.getCurrent());
-        translateIfAdmin(pageResult);
+        // 翻译商户名称
+        transService.translate(pageResult);
         return pageResult;
     }
 
@@ -53,44 +56,32 @@ public class EasyPayOrderQueryService {
         EasyPayOrder entity = easyPayOrderManager.findById(id)
                 .orElseThrow(() -> new DataNotExistException("pay.error.payOrderNotExist"));
         EasyPayOrderResult result = entity.toResult();
-        translateIfAdmin(result);
+        // 翻译商户名称
+        transService.translate(result);
         return result;
     }
 
-    /// 同步支付状态(透传内核普通支付订单同步)
+    /// 同步支付状态(直达内核资金凭证同步)
     public NormalPaySyncResult sync(Long id) {
         EasyPayOrder entity = easyPayOrderManager.findById(id)
                 .orElseThrow(() -> new DataNotExistException("pay.error.payOrderNotExist"));
         if (entity.getOrderId() == null) {
             throw new DataNotExistException("pay.error.payOrderNotExist");
         }
-        return normalPayOrderService.sync(entity.getOrderId());
+        PayTrade trade = payTradeManager.findByContainerId(entity.getOrderId(), PayTradeTypeEnum.NORMAL.getCode())
+                .orElseThrow(() -> new DataNotExistException("pay.error.payOrderNotExist"));
+        return paySyncService.syncPayOrder(trade);
     }
 
-    /// 关闭/撤销订单(透传内核普通支付订单关单)
+    /// 关闭/撤销订单(直达内核资金凭证关单)
     public void close(Long id, boolean useCancel) {
         EasyPayOrder entity = easyPayOrderManager.findById(id)
                 .orElseThrow(() -> new DataNotExistException("pay.error.payOrderNotExist"));
         if (entity.getOrderId() == null) {
             throw new DataNotExistException("pay.error.payOrderNotExist");
         }
-        normalPayOrderService.close(entity.getOrderId(), useCancel);
-    }
-
-    private void sanitizeQuery(EasyPayOrderQuery query) {
-        if (query == null) {
-            return;
-        }
-        if (ClientEnum.MERCHANT.getCode().equals(clientCodeService.getClientCode())) {
-            // 商户端强制按当前商户过滤
-            query.setMchNo(null);
-        }
-    }
-
-    private void translateIfAdmin(Object target) {
-        if (ClientEnum.ADMIN.getCode().equals(clientCodeService.getClientCode())) {
-            // 翻译商户名称(mchNo -> mchName)
-            transService.translate(target);
-        }
+        PayTrade trade = payTradeManager.findByContainerId(entity.getOrderId(), PayTradeTypeEnum.NORMAL.getCode())
+                .orElseThrow(() -> new DataNotExistException("pay.error.payOrderNotExist"));
+        payCloseService.closeOrder(trade, useCancel);
     }
 }

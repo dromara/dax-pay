@@ -6,9 +6,9 @@ import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.platform.core.rest.result.Result;
+import cn.daxpay.open.payment.merchant.service.trade.MchNormalPayOrderService;
 import cn.daxpay.open.payment.trade.order.param.NormalPayOrderQuery;
 import cn.daxpay.open.payment.trade.order.result.NormalPayOrderResult;
-import cn.daxpay.open.payment.trade.order.service.NormalPayOrderService;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPaySyncResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /// # 普通支付业务单(商户端)
 ///
-/// 业务编排委托 core [NormalPayOrderService]。
+/// 业务编排委托 [MchNormalPayOrderService]；强制当前商户过滤。
 @PermCode(menuCode = PermCodes.Trade.Order.MENU)
 @Validated
 @Tag(name = "普通支付业务单(商户端)")
@@ -32,13 +32,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class MchNormalPayOrderController {
 
-    private final NormalPayOrderService normalPayOrderService;
+    private final MchNormalPayOrderService mchNormalPayOrderService;
 
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "普通支付业务单分页")
     @GetMapping("/page")
     public Result<PageResult<NormalPayOrderResult>> page(PageParam pageParam, NormalPayOrderQuery query) {
-        return Res.ok(normalPayOrderService.page(pageParam, query));
+        return Res.ok(mchNormalPayOrderService.page(pageParam, query));
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
@@ -46,7 +46,7 @@ public class MchNormalPayOrderController {
     @GetMapping("/get-by-id")
     public Result<NormalPayOrderResult> findById(
             @NotNull(message = "{validation.field.id.notNull}") Long id) {
-        return Res.ok(normalPayOrderService.findById(id));
+        return Res.ok(mchNormalPayOrderService.findById(id));
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
@@ -54,7 +54,7 @@ public class MchNormalPayOrderController {
     @PostMapping("/sync")
     public Result<NormalPaySyncResult> sync(
             @NotNull(message = "{validation.field.id.notNull}") Long id) {
-        return Res.ok(normalPayOrderService.sync(id));
+        return Res.ok(mchNormalPayOrderService.sync(id));
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
@@ -63,7 +63,7 @@ public class MchNormalPayOrderController {
     public Result<Void> close(
             @NotNull(message = "{validation.field.id.notNull}") Long id,
             @RequestParam(defaultValue = "false") boolean useCancel) {
-        normalPayOrderService.close(id, useCancel);
+        mchNormalPayOrderService.close(id, useCancel);
         return Res.ok();
     }
 }

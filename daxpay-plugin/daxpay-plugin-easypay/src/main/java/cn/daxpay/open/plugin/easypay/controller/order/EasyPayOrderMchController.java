@@ -1,15 +1,15 @@
-package cn.daxpay.open.payment.admin.controller.trade;
+package cn.daxpay.open.plugin.easypay.controller.order;
 
+import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPaySyncResult;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.platform.core.rest.result.Result;
-import cn.daxpay.open.payment.admin.service.trade.NormalPayOrderAdminService;
-import cn.daxpay.open.payment.trade.order.param.NormalPayOrderQuery;
-import cn.daxpay.open.payment.trade.order.result.NormalPayOrderResult;
-import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPaySyncResult;
+import cn.daxpay.open.plugin.easypay.param.order.EasyPayOrderQuery;
+import cn.daxpay.open.plugin.easypay.result.order.EasyPayOrderResult;
+import cn.daxpay.open.plugin.easypay.service.order.EasyPayOrderMchQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
@@ -21,49 +21,50 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-/// # 普通支付业务单(管理)
+/// # 易支付协议订单(商户端)
 ///
-/// 面向运营后台的业务订单(容器)管理。业务编排委托 [NormalPayOrderAdminService]。
-@PermCode(menuCode = PermCodes.Trade.Order.MENU)
+/// 业务编排委托 [EasyPayOrderMchQueryService]；强制当前商户过滤。
+/// 生命周期回写钩子位于 [cn.daxpay.open.plugin.easypay.service.order.EasyPayOrderService], 与本控制器分离。
+@PermCode(menuCode = PermCodes.Plugin.EasyPayOrder.MENU)
 @Validated
-@Tag(name = "普通支付业务单(管理)")
+@Tag(name = "易支付协议订单(商户端)")
 @RestController
-@RequestMapping("/admin/order/normal-pay")
+@RequestMapping("/merchant/easypay/order")
 @RequiredArgsConstructor
-public class NormalPayOrderAdminController {
+public class EasyPayOrderMchController {
 
-    private final NormalPayOrderAdminService normalPayOrderAdminService;
+    private final EasyPayOrderMchQueryService easyPayOrderMchQueryService;
 
     @PermCode(code = PermCodes.Action.VIEW)
-    @Operation(summary = "普通支付业务单分页")
+    @Operation(summary = "易支付订单分页")
     @GetMapping("/page")
-    public Result<PageResult<NormalPayOrderResult>> page(PageParam pageParam, NormalPayOrderQuery query) {
-        return Res.ok(normalPayOrderAdminService.page(pageParam, query));
+    public Result<PageResult<EasyPayOrderResult>> page(PageParam pageParam, EasyPayOrderQuery query) {
+        return Res.ok(easyPayOrderMchQueryService.page(pageParam, query));
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
-    @Operation(summary = "根据ID查询普通支付业务单详情")
+    @Operation(summary = "根据ID查询易支付订单详情")
     @GetMapping("/get-by-id")
-    public Result<NormalPayOrderResult> findById(
+    public Result<EasyPayOrderResult> findById(
             @NotNull(message = "{validation.field.id.notNull}") Long id) {
-        return Res.ok(normalPayOrderAdminService.findById(id));
+        return Res.ok(easyPayOrderMchQueryService.findById(id));
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "同步支付状态")
+    @Operation(summary = "同步易支付订单状态")
     @PostMapping("/sync")
     public Result<NormalPaySyncResult> sync(
             @NotNull(message = "{validation.field.id.notNull}") Long id) {
-        return Res.ok(normalPayOrderAdminService.sync(id));
+        return Res.ok(easyPayOrderMchQueryService.sync(id));
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "关闭/撤销订单")
+    @Operation(summary = "关闭/撤销易支付订单")
     @PostMapping("/close")
     public Result<Void> close(
             @NotNull(message = "{validation.field.id.notNull}") Long id,
             @RequestParam(defaultValue = "false") boolean useCancel) {
-        normalPayOrderAdminService.close(id, useCancel);
+        easyPayOrderMchQueryService.close(id, useCancel);
         return Res.ok();
     }
 }
