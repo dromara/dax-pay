@@ -4,6 +4,7 @@ import cn.daxpay.open.platform.common.mybatisplus.impl.BaseManager;
 import cn.daxpay.open.platform.common.mybatisplus.query.generator.QueryGenerator;
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.open.platform.core.annotation.IgnoreTenant;
+import cn.daxpay.open.platform.core.enums.merchant.MchAppStatusEnum;
 import cn.daxpay.open.platform.core.exception.config.ConfigNotExistException;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.payment.merchant.entity.appinfo.MchAppInfo;
@@ -75,6 +76,14 @@ public class MchAppInfoManager extends BaseManager<MchAppInfoMapper, MchAppInfo>
     public List<MchAppInfo> findAllByMchNo(String mchNo) {
         return lambdaQuery()
                 .eq(MchAppInfo::getMchNo, mchNo)
+                .list();
+    }
+
+    /// 根据商户号查询启用状态的应用(下拉选择器用)
+    public List<MchAppInfo> findEnableByMchNo(String mchNo) {
+        return lambdaQuery()
+                .eq(MchAppInfo::getMchNo, mchNo)
+                .eq(MchAppInfo::getStatus, MchAppStatusEnum.ENABLE.getCode())
                 .list();
     }
 

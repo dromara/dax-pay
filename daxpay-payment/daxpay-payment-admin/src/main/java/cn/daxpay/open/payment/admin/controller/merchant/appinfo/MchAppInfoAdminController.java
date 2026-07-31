@@ -14,10 +14,13 @@ import cn.daxpay.open.payment.merchant.result.appinfo.MchAppInfoResult;
 import cn.daxpay.open.payment.merchant.service.appinfo.MchAppInfoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /// 商户应用配置(管理)
 @PermCode(menuCode = PermCodes.Merchant.App.MENU)
@@ -52,6 +55,13 @@ public class MchAppInfoAdminController {
     @GetMapping("/page")
     public Result<PageResult<MchAppInfoResult>> page(PageParam pageParam, MchAppInfoQuery query){
         return Res.ok(mchAppInfoService.page(pageParam, query));
+    }
+
+    @PermCode(code = PermCodes.Action.VIEW)
+    @Operation(summary = "启用商户应用列表(下拉选择器用)")
+    @GetMapping("/enable-list")
+    public Result<List<MchAppInfoResult>> enableList(@NotBlank(message = "{validation.field.mchNo.notBlank}") String mchNo){
+        return Res.ok(mchAppInfoService.enableList(mchNo));
     }
 
     @PermCode(code = PermCodes.Action.VIEW)

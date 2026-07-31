@@ -54,6 +54,12 @@ public class MchAppInfoController {
         return Res.ok(mchAppInfoService.list());
     }
 
+    @Operation(summary = "启用商户应用列表(下拉选择器用)")
+    @GetMapping("/enable-list")
+    public Result<List<MchAppInfoResult>> enableList(){
+        return Res.ok(mchAppInfoService.enableList(null));
+    }
+
     @Operation(summary = "根据id查询商户应用")
     @GetMapping("/get")
     public Result<MchAppInfoResult> findById(@NotNull(message = "{validation.field.id.notNull}")Long id){

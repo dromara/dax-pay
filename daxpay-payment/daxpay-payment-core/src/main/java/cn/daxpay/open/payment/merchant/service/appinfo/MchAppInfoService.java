@@ -175,12 +175,24 @@ public class MchAppInfoService {
         return mchApp.toResult();
     }
 
-    /// 下拉列表, 不判断应用和商户的状态
+    /// 启用应用列表(仅返回启用状态, 下拉选择器用)
+    ///
+    /// 运营端需显式传 mchNo, 商户端由登录态绑定。
+    public List<MchAppInfoResult> enableList(String mchNo) {
+        if (clientCodeService.getClientCode().equals(ClientEnum.MERCHANT.getCode())) {
+            mchNo = paymentContext.getMchNo();
+        }
+        return mchAppInfoManager.findEnableByMchNo(mchNo).stream()
+                .map(MchAppInfo::toResult)
+                .collect(Collectors.toList());
+    }
+
+    /// 下拉列表, 仅返回启用状态的应用
     public List<LabelValue> dropdown(String mchNo) {
         if (clientCodeService.getClientCode().equals(ClientEnum.MERCHANT.getCode())) {
             mchNo = paymentContext.getMchNo();
         }
-        return mchAppInfoManager.findAllByMchNo(mchNo).stream()
+        return mchAppInfoManager.findEnableByMchNo(mchNo).stream()
                 .map(o -> new LabelValue(o.getAppName(), o.getAppId()))
                 .collect(Collectors.toList());
     }
