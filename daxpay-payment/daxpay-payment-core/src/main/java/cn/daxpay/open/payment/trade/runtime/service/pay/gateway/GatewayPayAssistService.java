@@ -72,7 +72,7 @@ public class GatewayPayAssistService {
         this.self = self;
     }
 
-    /// 预下单: 仅创建容器, 返回落地页 URL
+    /// 预下单: 仅创建容器, 返回 H5 与小程序映射链接
     public GatewayPrePayResult prePay(GatewayPrePayParam param) {
         if (StrUtil.isBlank(param.getClientIp())) {
             param.setClientIp(WebServletUtil.getClientIp());
@@ -85,23 +85,20 @@ public class GatewayPayAssistService {
         merchantContextLoader.initMch(param.getMchNo());
 
         return lockExecutor.execute(
-                "payment:gateway:pre:" + param.getAppId() + ":" + param.getBizOrderNo()
-                        + ":" + StrUtil.blankToDefault(param.getLinkForm(), "h5"),
+                "payment:gateway:pre:" + param.getAppId() + ":" + param.getBizOrderNo(),
                 () -> self.doPrePay(param, typeEnum),
                 () -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.processing")
         );
     }
 
-    /// 预下单事务体: 幂等校验 → 新建容器订单 → 返回落地页 URL
+    /// 预下单事务体: 幂等校验 → 新建容器订单 → 返回 H5 与小程序映射链接
     ///
-    /// - 已有未终态单则直接返回原 URL
+    /// - 已有未终态单则直接返回原 H5 与小程序映射链接
     /// - PAID/failed/closed/expired 视为终态拒绝重入
     @Transactional(rollbackFor = Exception.class)
     public GatewayPrePayResult doPrePay(GatewayPrePayParam param, GatewayPayTypeEnum typeEnum) {
-        // 幂等: 已有未终态单则返回原 URL(形态绑定: linkForm 不匹配视为不同订单)
-        String reqLinkForm = StrUtil.blankToDefault(param.getLinkForm(), "h5");
-        var existing = gatewayPayOrderManager.findByBizOrderNo(param.getBizOrderNo(), param.getAppId())
-                .filter(o -> Objects.equals(reqLinkForm, StrUtil.blankToDefault(o.getLinkForm(), "h5")));
+        // 幂等: 已有未终态单则返回原双链接
+        var existing = gatewayPayOrderManager.findByBizOrderNo(param.getBizOrderNo(), param.getAppId());
         if (existing.isPresent()) {
             GatewayPayOrder order = existing.get();
             String status = order.getStatus();
@@ -109,11 +106,17 @@ public class GatewayPayAssistService {
                 // 支付: 已经支付成功, 请勿重新支付
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.alreadySuccess");
             }
-            // failed 与 closed/expired 同为终态, 不允许再返回原 URL 假装可付
+            // failed 与 closed/expired 同为终态, 不允许再返回原双链接假装可付
             if (List.of(GatewayOrderStatusEnum.CLOSED.getCode(), GatewayOrderStatusEnum.EXPIRED.getCode(),
                     GatewayOrderStatusEnum.FAILED.getCode()).contains(status)) {
                 // 支付: 该订单支付失败或已经被关闭
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.failedOrClosed");
+            }
+            // 类型校验: 订单号已被占用, 订单类型不可中途变更, 防止同号换类型静默复用旧链接
+            if (!Objects.equals(order.getGatewayType(), typeEnum.getCode())) {
+                // 网关: 该订单号已使用, 订单类型不可中途变更, 请更换订单号
+                throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                        "pay.error.gateway.bizOrderTypeImmutable");
             }
             return this.buildPrePayResult(order);
         }
@@ -129,8 +132,6 @@ public class GatewayPayAssistService {
         order.setOrderNo(TradeNoGenerateUtil.order());
         order.setBizOrderNo(param.getBizOrderNo());
         order.setGatewayType(typeEnum.getCode());
-        // 链接形态: 聚合小程序(mini)用 /am/ 前缀, 缺省 h5
-        order.setLinkForm(reqLinkForm);
         // 来源: 容器权威, 预下单即写入(trade 创建时再冗余拷贝)
         order.setSource(resolveSourceByGatewayType(typeEnum));
         order.setTitle(param.getTitle());
@@ -187,8 +188,11 @@ public class GatewayPayAssistService {
         }
     }
 
-    /// 生成落地页 URL
-    public String buildGatewayUrl(GatewayPayOrder order) {
+    /// 构建预下单返回结果(同时返回 H5 链接 + 小程序映射链接)
+    ///
+    /// - cashier: h5Url = /cashier/{orderNo}, miniUrl = /cm/{orderNo}
+    /// - aggregate: h5Url = /aggregate/{orderNo}, miniUrl = /am/{orderNo}
+    public GatewayPrePayResult buildPrePayResult(GatewayPayOrder order) {
         PlatformUrlConfig urlConfig = platformUrlConfigService.getUrlConfig();
         String gatewayBase = urlConfig.getPaymentGatewayBaseUrl();
         if (StrUtil.isBlank(gatewayBase)) {
@@ -196,23 +200,18 @@ public class GatewayPayAssistService {
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.common.gatewayUrlNotConfigured");
         }
         gatewayBase = StrUtil.removeSuffix(gatewayBase, "/");
-        if (Objects.equals(order.getGatewayType(), GatewayPayTypeEnum.AGGREGATE.getCode())) {
-            // 小程序形态用 /am/ 前缀(扫码拉起小程序), H5 用 /aggregate/
-            if ("mini".equals(order.getLinkForm())) {
-                return gatewayBase + "/am/" + order.getOrderNo();
-            }
-            return gatewayBase + "/aggregate/" + order.getOrderNo();
-        }
-        return gatewayBase + "/cashier/" + order.getOrderNo();
-    }
-
-    /// 构建预下单返回结果(含落地页 URL)
-    public GatewayPrePayResult buildPrePayResult(GatewayPayOrder order) {
+        boolean isAggregate = Objects.equals(order.getGatewayType(), GatewayPayTypeEnum.AGGREGATE.getCode());
+        String h5Url = gatewayBase + (isAggregate ? "/aggregate/" : "/cashier/") + order.getOrderNo();
+        // 小程序映射链接按网关业务类型分流, 靠各平台「普通链接二维码」规则拉起小程序
+        String miniUrl = gatewayBase + (isAggregate ? "/am/" : "/cm/") + order.getOrderNo();
         return new GatewayPrePayResult()
                 .setOrderNo(order.getOrderNo())
                 .setBizOrderNo(order.getBizOrderNo())
                 .setStatus(order.getStatus())
-                .setUrl(this.buildGatewayUrl(order))
+                // 回传实际生效类型(幂等命中时为已有订单的类型, 与链接前缀一致)
+                .setGatewayType(order.getGatewayType())
+                .setH5Url(h5Url)
+                .setMiniUrl(miniUrl)
                 .setExpiredTime(order.getExpiredTime());
     }
 

@@ -43,11 +43,6 @@ public class GatewayPrePayParam extends MerchantPaymentCommonParam {
     @Size(max = 32, message = "{validation.field.gatewayPayType.size}")
     private String gatewayPayType;
 
-    /// 链接形态: h5/mini(聚合小程序扫码前缀分流, 缺省 h5; 仅 aggregate 类型有效)
-    @Schema(description = "链接形态: h5/mini(聚合小程序, 缺省 h5)")
-    @Size(max = 16, message = "{validation.field.linkForm.size}")
-    private String linkForm;
-
     @Schema(description = "异步通知地址")
     @Size(max = 256, message = "{validation.field.notifyUrl.size}")
     private String notifyUrl;

@@ -76,11 +76,7 @@ DROP TABLE IF EXISTS "public"."pay_gateway_aggregate_config";
 DROP TABLE IF EXISTS "public"."pay_gateway_code_client_env";
 DROP TABLE IF EXISTS "public"."pay_gateway_code_config";
 
--- 4. 聚合订单表加 link_form 字段(聚合小程序链接前缀分流)
-ALTER TABLE "public"."pay_gateway_order" ADD COLUMN IF NOT EXISTS "link_form" varchar(16) COLLATE "pg_catalog"."default" DEFAULT 'h5';
-COMMENT ON COLUMN "public"."pay_gateway_order"."link_form" IS '链接形态: h5/mini(聚合小程序扫码), 缺省 h5';
-
--- 5. 菜单: 删除旧的码牌配置 + 聚合配置菜单, 新增统一网关支付配置菜单
+-- 4. 菜单: 删除旧的码牌配置 + 聚合配置菜单, 新增统一网关支付配置菜单
 DELETE FROM "public"."iam_perm_menu" WHERE menu_code IN ('merchant:gateway-aggregate', 'merchant:gateway-code');
 
 -- admin 端(4040121 原聚合位 → 统一配置)

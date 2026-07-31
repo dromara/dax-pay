@@ -78,7 +78,8 @@
     "codeClientEnvBlank": "Kode lingkungan klien tidak boleh kosong",
     "codeClientEnvNotConfigured": "Metode pembayaran belum dikonfigurasi untuk lingkungan dan bentuk ini",
     "codeRuntimeMismatch": "Jenis landing kode QR tidak cocok dengan runtime",
-    "codeClientEnvChannelMchRequired": "Pada mode DIRECT, nomor merchant saluran baris yang diisi wajib"
+    "codeClientEnvChannelMchRequired": "Pada mode DIRECT, nomor merchant saluran baris yang diisi wajib",
+    "bizOrderTypeImmutable": "Nomor pesanan sudah digunakan dan jenis pesanan tidak dapat diubah, silakan ganti nomor pesanan"
   },
   "refund": {
     "processing": "Proses pengembalian dana, jangan ulangi",

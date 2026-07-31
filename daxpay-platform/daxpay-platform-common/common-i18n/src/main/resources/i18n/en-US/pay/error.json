@@ -78,7 +78,8 @@
     "codeClientEnvBlank": "Client environment code cannot be blank",
     "codeClientEnvNotConfigured": "Payment method not configured for this client env and form",
     "codeRuntimeMismatch": "QR program type does not match runtime",
-    "codeClientEnvChannelMchRequired": "Channel merchant required for each env and form in DIRECT mode"
+    "codeClientEnvChannelMchRequired": "Channel merchant required for each env and form in DIRECT mode",
+    "bizOrderTypeImmutable": "This order no. is already in use and its type cannot be changed midway, please use a new one"
   },
   "refund": {
     "processing": "Refund processing, do not repeat",
