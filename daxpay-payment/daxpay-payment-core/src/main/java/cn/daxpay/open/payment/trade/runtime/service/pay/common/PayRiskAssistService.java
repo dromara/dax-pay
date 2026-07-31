@@ -51,6 +51,8 @@ public class PayRiskAssistService {
         PayRiskCheckContext ctx = buildContextFromParam(payParam, scene);
         // false=仅记录不拦截；缺省/true=命中拒绝下单
         ctx.setBlockOnHit(!Boolean.FALSE.equals(config.getRiskBlockBeforePay()));
+        // 海外 IP 拦截开关（地域策略）
+        ctx.setBlockOverseasIp(config.getBlockOverseasIp());
         checker.checkBeforePay(ctx);
     }
 
@@ -68,6 +70,8 @@ public class PayRiskAssistService {
             return;
         }
         PayRiskCheckContext ctx = buildContextFromTrade(trade);
+        // 海外 IP 拦截开关（地域策略, 事后仅记录海外访问）
+        ctx.setBlockOverseasIp(config.getBlockOverseasIp());
         if (StrUtil.isNotBlank(buyerId)) {
             ctx.setBuyerId(buyerId);
         }

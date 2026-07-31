@@ -11,4 +11,13 @@
     <artifactId>daxpay-plugin-risk</artifactId>
     <packaging>jar</packaging>
     <description>支付风控插件（黑名单配置 + 命中记录）</description>
+
+    <dependencies>
+        <!-- 审计日志模块（IP 归属地查询服务, 海外 IP 拦截依赖） -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>capability-audit-log</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 </project>

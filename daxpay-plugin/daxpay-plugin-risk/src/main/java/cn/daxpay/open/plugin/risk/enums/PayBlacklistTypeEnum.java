@@ -18,7 +18,9 @@ public enum PayBlacklistTypeEnum implements I18nSupport {
     /// 支付宝用户（userId，通道内全局）
     ALIPAY_USER("alipay_user"),
     /// 微信 OpenId（绑定平台支付应用）
-    WECHAT_OPENID("wechat_openid");
+    WECHAT_OPENID("wechat_openid"),
+    /// 海外 IP（地域策略命中, 非黑名单来源）
+    OVERSEAS_IP("overseas_ip");
 
     private final String code;
 

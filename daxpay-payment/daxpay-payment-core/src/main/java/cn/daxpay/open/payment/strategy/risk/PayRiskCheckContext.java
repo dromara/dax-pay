@@ -57,4 +57,10 @@ public class PayRiskCheckContext {
 
     /// 事前命中是否阻断下单（null/true=阻断；false=仅落命中记录）
     private Boolean blockOnHit;
+
+    /// 是否拦截海外 IP（null/false=不拦截；true=拦截）
+    ///
+    /// 地域策略开关快照, 由 [cn.daxpay.open.payment.trade.runtime.service.pay.common.PayRiskAssistService]
+    /// 读取平台配置后注入, 供检查器按 IP 归属地判定是否命中。
+    private Boolean blockOverseasIp;
 }

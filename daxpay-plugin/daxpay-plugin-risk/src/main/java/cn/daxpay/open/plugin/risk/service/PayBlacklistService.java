@@ -166,6 +166,10 @@ public class PayBlacklistService {
 
     /// 将命中快照映射为名单 type + wxAppId；微信缺 AppId 则返回 null
     private ResolvedIdentity resolveIdentity(String hitType, String channel, String wxAppId) {
+        // 海外 IP 命中加黑: 映射为普通 IP 黑名单（持续拉黑该具体 IP）
+        if (PayBlacklistTypeEnum.OVERSEAS_IP.getCode().equals(hitType)) {
+            return new ResolvedIdentity(PayBlacklistTypeEnum.IP.getCode(), null);
+        }
         if (PayBlacklistTypeEnum.IP.getCode().equals(hitType)) {
             return new ResolvedIdentity(PayBlacklistTypeEnum.IP.getCode(), null);
         }

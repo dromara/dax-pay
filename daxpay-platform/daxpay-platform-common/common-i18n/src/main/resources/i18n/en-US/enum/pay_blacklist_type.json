@@ -1,5 +1,6 @@
 {
   "ip": "IP",
   "alipay_user": "Alipay user",
-  "wechat_openid": "WeChat OpenId"
+  "wechat_openid": "WeChat OpenId",
+  "overseas_ip": "Overseas IP"
 }

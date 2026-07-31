@@ -4,6 +4,8 @@ import cn.daxpay.open.payment.strategy.risk.PayRiskCheckContext;
 import cn.daxpay.open.payment.strategy.risk.PayRiskChecker;
 import cn.daxpay.open.platform.core.code.PayErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum;
+import cn.daxpay.open.platform.capability.audit.log.service.ip2region.IpRegion;
+import cn.daxpay.open.platform.capability.audit.log.service.ip2region.IpToRegionService;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.plugin.risk.entity.PayBlacklist;
 import cn.daxpay.open.plugin.risk.enums.PayBlacklistTypeEnum;
@@ -31,6 +33,7 @@ public class DefaultPayRiskChecker implements PayRiskChecker {
 
     private final PayBlacklistService payBlacklistService;
     private final PayRiskHitService payRiskHitService;
+    private final IpToRegionService ipToRegionService;
 
     /// 用户标识黑名单存在性缓存（短 TTL 30s）
     ///
@@ -60,6 +63,10 @@ public class DefaultPayRiskChecker implements PayRiskChecker {
                     + "tradeType={}, method={}, mchNo={}, clientIp={}",
                     ctx.getTradeType(), ctx.getMethod(), ctx.getMchNo(), ctx.getClientIp());
         }
+        // 海外 IP 拦截（地域策略, 非黑名单）
+        if (Boolean.TRUE.equals(ctx.getBlockOverseasIp())) {
+            checkOverseasIp(ctx, throwOnHit);
+        }
     }
 
     @Override
@@ -74,6 +81,10 @@ public class DefaultPayRiskChecker implements PayRiskChecker {
         // buyerId 按用户标识维度比对（主扫补洞）
         if (StrUtil.isNotBlank(ctx.getBuyerId()) && !StrUtil.equals(ctx.getBuyerId(), ctx.getOpenId())) {
             checkUserIdentity(ctx, ctx.getBuyerId(), false);
+        }
+        // 海外 IP 访问记录（事后仅记录, 不阻断）
+        if (Boolean.TRUE.equals(ctx.getBlockOverseasIp())) {
+            checkOverseasIp(ctx, false);
         }
     }
 
@@ -126,5 +137,30 @@ public class DefaultPayRiskChecker implements PayRiskChecker {
             throw new BizInfoException(PayErrorCode.OPERATION_FAIL, "pay.error.risk.blacklist");
         }
         return true;
+    }
+
+    /// 海外 IP 地域拦截（country≠中国, 港澳台放行; 未知/内网 fail-open）
+    ///
+    /// 与黑名单不同, 海外命中不关联名单行（blacklistId=null）, 命中类型为 [PayBlacklistTypeEnum#OVERSEAS_IP]。
+    private void checkOverseasIp(PayRiskCheckContext ctx, boolean throwOnHit) {
+        String ip = ctx.getClientIp();
+        if (StrUtil.isBlank(ip)) {
+            return;
+        }
+        IpRegion region = ipToRegionService.getRegionByIp(ip);
+        // 未知（IPv6/查询失败）/ 内网 / 国内（含港澳台） → 放行
+        if (region == null || region.isInnerIp() || region.isChinaIp()) {
+            return;
+        }
+        // 海外 → 命中记录（blacklistId=null, 非黑名单来源）
+        try {
+            payRiskHitService.recordHit(ctx, PayBlacklistTypeEnum.OVERSEAS_IP.getCode(), ip, null);
+        } catch (Exception e) {
+            log.warn("记录海外IP命中失败 ip={}: {}", ip, e.getMessage());
+        }
+        if (throwOnHit) {
+            // 交易被限制（模糊文案，防探测）
+            throw new BizInfoException(PayErrorCode.OPERATION_FAIL, "pay.error.risk.blacklist");
+        }
     }
 }
