@@ -21,7 +21,7 @@ import org.springframework.stereotype.Service;
 /// # 银联商务退款业务服务
 ///
 /// 通过 [UmsChannelClient] 调用子应用发起银联商务退款。
-/// 首期默认按扫码模式退款(QRCODE)。
+/// 支付方式(method)由产品执行策略按所属产品决定: 扫码类走 bills 退款, H5 类走 netpay 退款。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -32,15 +32,15 @@ public class UmsRefundService {
     private final PayTradeManager payTradeManager;
 
     /// 执行银联商务退款
-    public RefundResultBo refund(RefundOrder refundOrder, UmsSdkCredential credential) {
+    public RefundResultBo refund(RefundOrder refundOrder, UmsSdkCredential credential, UmsPayMethod method) {
         UmsRefundReq req = new UmsRefundReq();
         req.setOutTradeNo(refundOrder.getTradeNo());
         req.setOutRefundNo(refundOrder.getRelationOrderNo());
         req.setRefundAmount(refundOrder.getAmount());
         req.setReason(refundOrder.getReason());
         req.setNotifyUrl(this.buildRefundNotifyUrl(refundOrder));
-        // 首期默认扫码退款
-        req.setMethod(UmsPayMethod.QRCODE);
+        // 支付方式由产品策略决定(扫码类走 bills 退款, H5 类走 netpay 退款)
+        req.setMethod(method);
         req.setCredential(credential);
 
         // 银联商务扫码退款需要 billDate(原订单创建日, 子应用按通道时区转换)

@@ -5,18 +5,18 @@ import cn.daxpay.open.channel.ums.service.payment.refund.UmsRefundSyncService;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import org.springframework.stereotype.Service;
 
-/// # 银联商务(C扫B/聚合扫码)退款同步策略
+/// # 银联商务(公众号)退款同步策略
 ///
-/// 对应 [ProductEnum#UMS_QRCODE], 共享 [AbsUmsSyncRefundStrategy] 的退款查询执行逻辑。
+/// 对应 [ProductEnum#UMS_JSAPI], 共享 [AbsUmsSyncRefundStrategy] 的退款查询执行逻辑。
 @Service
-public class UmsDirectSyncRefundStrategy extends AbsUmsSyncRefundStrategy {
+public class UmsJsapiSyncRefundStrategy extends AbsUmsSyncRefundStrategy {
 
-    public UmsDirectSyncRefundStrategy(UmsRefundSyncService umsRefundSyncService, UmsDirectConfigAssembler umsDirectConfigAssembler) {
+    public UmsJsapiSyncRefundStrategy(UmsRefundSyncService umsRefundSyncService, UmsDirectConfigAssembler umsDirectConfigAssembler) {
         super(umsRefundSyncService, umsDirectConfigAssembler);
     }
 
     @Override
     public ProductEnum getProduct() {
-        return ProductEnum.UMS_QRCODE;
+        return ProductEnum.UMS_JSAPI;
     }
 }

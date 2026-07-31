@@ -87,8 +87,8 @@ public class UmsPayService {
         return switch (m) {
             // 聚合扫码(支付宝/微信/银联扫码统一走银联商务聚合扫码)
             case AGGREGATE_PAY_QRCODE, ALIPAY_QR, WECHAT_QR, UNION_QR -> UmsPayMethod.QRCODE;
-            // 支付宝 H5 / PC
-            case ALIPAY_H5, ALIPAY_PC -> UmsPayMethod.ALIPAY_H5;
+            // 支付宝 H5 / PC / 公众号与小程序(银联商务支付宝公众号/小程序统一走 alipayH5 接口)
+            case ALIPAY_H5, ALIPAY_PC, ALIPAY_JSAPI -> UmsPayMethod.ALIPAY_H5;
             // 微信 H5
             case WECHAT_H5 -> UmsPayMethod.WECHAT_H5;
             // 微信小程序 / JSAPI / 收银台

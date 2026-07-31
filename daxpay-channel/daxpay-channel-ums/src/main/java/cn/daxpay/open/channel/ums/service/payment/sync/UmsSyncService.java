@@ -28,13 +28,13 @@ public class UmsSyncService {
     private final UmsChannelClient umsChannelClient;
 
     /// 执行银联商务支付同步
-    public PaySyncResultBo sync(PayTrade trade, UmsSdkCredential credential) {
+    public PaySyncResultBo sync(PayTrade trade, UmsSdkCredential credential, UmsPayMethod method) {
         UmsSyncReq req = new UmsSyncReq();
         req.setOutTradeNo(trade.getTradeNo());
         // 原订单创建时间(UTC), 子应用按通道时区转换为银联商务 billDate(yyyy-MM-dd)
         req.setBillDate(trade.getCreateTime());
-        // 首期默认扫码查询
-        req.setMethod(UmsPayMethod.QRCODE);
+        // 支付方式由产品策略决定(扫码类走 bills 查询, H5 类走 netpay 查询)
+        req.setMethod(method);
         req.setCredential(credential);
 
         DaxResult<UmsSyncResp> result = umsChannelClient.sync(req);

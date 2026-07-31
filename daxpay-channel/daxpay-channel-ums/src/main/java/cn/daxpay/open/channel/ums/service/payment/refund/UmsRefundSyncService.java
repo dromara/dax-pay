@@ -28,12 +28,12 @@ public class UmsRefundSyncService {
     private final PayTradeManager payTradeManager;
 
     /// 执行银联商务退款同步查询
-    public RefundResultBo sync(RefundOrder refundOrder, UmsSdkCredential credential) {
+    public RefundResultBo sync(RefundOrder refundOrder, UmsSdkCredential credential, UmsPayMethod method) {
         UmsRefundSyncReq req = new UmsRefundSyncReq();
         req.setOutRefundNo(refundOrder.getRelationOrderNo());
         req.setOutTradeNo(refundOrder.getTradeNo());
-        // 首期默认扫码退款查询
-        req.setMethod(UmsPayMethod.QRCODE);
+        // 支付方式由产品策略决定(扫码类走 bills 退款查询, H5 类走 netpay 退款查询)
+        req.setMethod(method);
         req.setCredential(credential);
 
         // 银联商务扫码退款查询需要 billDate(原订单创建日, 子应用按通道时区转换)

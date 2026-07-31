@@ -5,18 +5,18 @@ import cn.daxpay.open.channel.ums.service.payment.close.UmsCloseService;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import org.springframework.stereotype.Service;
 
-/// # 银联商务(C扫B/聚合扫码)支付关闭策略
+/// # 银联商务(小程序)支付关闭策略
 ///
-/// 对应 [ProductEnum#UMS_QRCODE], 共享 [AbsUmsCloseStrategy] 的关单执行逻辑。
+/// 对应 [ProductEnum#UMS_MINI], 共享 [AbsUmsCloseStrategy] 的关单执行逻辑。
 @Service
-public class UmsDirectCloseStrategy extends AbsUmsCloseStrategy {
+public class UmsMiniCloseStrategy extends AbsUmsCloseStrategy {
 
-    public UmsDirectCloseStrategy(UmsCloseService umsCloseService, UmsDirectConfigAssembler umsDirectConfigAssembler) {
+    public UmsMiniCloseStrategy(UmsCloseService umsCloseService, UmsDirectConfigAssembler umsDirectConfigAssembler) {
         super(umsCloseService, umsDirectConfigAssembler);
     }
 
     @Override
     public ProductEnum getProduct() {
-        return ProductEnum.UMS_QRCODE;
+        return ProductEnum.UMS_MINI;
     }
 }

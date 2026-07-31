@@ -5,18 +5,18 @@ import cn.daxpay.open.channel.ums.service.payment.pay.UmsPayService;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import org.springframework.stereotype.Service;
 
-/// # 银联商务(C扫B/聚合扫码)支付策略
+/// # 银联商务(H5)支付策略
 ///
-/// 对应 [ProductEnum#UMS_QRCODE], 共享 [AbsUmsPayStrategy] 的支付执行逻辑。
+/// 对应 [ProductEnum#UMS_H5], 共享 [AbsUmsPayStrategy] 的支付执行逻辑。
 @Service
-public class UmsDirectPayStrategy extends AbsUmsPayStrategy {
+public class UmsH5PayStrategy extends AbsUmsPayStrategy {
 
-    public UmsDirectPayStrategy(UmsPayService umsPayService, UmsDirectConfigAssembler umsDirectConfigAssembler) {
+    public UmsH5PayStrategy(UmsPayService umsPayService, UmsDirectConfigAssembler umsDirectConfigAssembler) {
         super(umsPayService, umsDirectConfigAssembler);
     }
 
     @Override
     public ProductEnum getProduct() {
-        return ProductEnum.UMS_QRCODE;
+        return ProductEnum.UMS_H5;
     }
 }
