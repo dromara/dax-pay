@@ -4,13 +4,18 @@ import cn.daxpay.open.channel.wechat.client.credential.WechatSdkCredential;
 import cn.daxpay.open.channel.wechat.dao.direct.WechatDirectChannelMerchantManager;
 import cn.daxpay.open.channel.wechat.entity.direct.WechatDirectChannelMerchant;
 import cn.daxpay.open.channel.wechat.entity.direct.WechatDirectKeyConfig;
+import cn.daxpay.open.channel.wechat.strategy.direct.pay.WechatDirectPayStrategy;
 import cn.daxpay.open.payment.wx.facade.WxAppFacade;
 import cn.daxpay.open.payment.wx.facade.WxAppView;
+import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
+import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 /// # 微信直连通道凭证组装器
 ///
@@ -21,7 +26,7 @@ import org.springframework.stereotype.Service;
 /// 直连场景期望解析到商户档([cn.daxpay.open.payment.auth.core.AppScopeEnum#MERCHANT])。
 /// 密钥配置按通道商户号维度查询(一个商户号共享一套密钥/证书)。
 ///
-/// 供支付策略([cn.daxpay.open.channel.wechat.strategy.direct.WechatDirectPayStrategy])组装通道调用凭证。
+/// 供支付策略([WechatDirectPayStrategy])组装通道调用凭证。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -42,16 +47,46 @@ public class WechatDirectConfigAssembler {
         // 主数据应用(直连期望 merchant 档；产品级平台默认绑兜底)
         WxAppView app = wxAppFacade.resolve(mchNo, channelMchNo, capability, channelAppId,
                 ProductEnum.WECHAT_PAY.getCode());
-        WechatDirectKeyConfig keyConfig = wechatDirectKeyConfigService.findByChannelMchNo(channelMchNo);
+        // 下单路径已认证(initMch/MchContextLocalFilter), mchNo 归属由认证+拦截器保证, 无需显式断言
+        WechatDirectChannelMerchant channelMerchant = this.loadChannelMerchant(channelMchNo);
+        return this.assemble(app.wxAppId(), channelMchNo, channelMerchant);
+    }
 
-        // 从通道商户绑定表取真实微信商户号(channelMchNo 是系统生成号, 不等于 wxMchId)
-        WechatDirectChannelMerchant channelMerchant = wechatDirectChannelMerchantManager.findByChannelMchNo(channelMchNo)
+    /// 回调专用凭证组装(不解析应用)
+    ///
+    /// 回调验签+解密仅需 apiKeyV3 与平台证书, 不依赖 wxAppId(子应用 buildCallbackService 不校验 appId)。
+    /// 故不查应用主数据, 凭证 appId 留空, 只装载密钥与商户号。
+    /// 回调为 @IgnoreAuth, mchNo 来自 URL, 故显式校验通道商户归属(拦截器已 fail-closed, 此为防御性双保险)。
+    public WechatSdkCredential buildCallbackConfig(String mchNo, String channelMchNo) {
+        WechatDirectChannelMerchant channelMerchant = this.loadChannelMerchant(channelMchNo);
+        this.assertOwnsMchNo(channelMerchant, mchNo);
+        return this.assemble(null, channelMchNo, channelMerchant);
+    }
+
+    /// 加载通道商户绑定(channelMchNo 是系统生成号, 不等于 wxMchId)
+    private WechatDirectChannelMerchant loadChannelMerchant(String channelMchNo) {
+        return wechatDirectChannelMerchantManager.findByChannelMchNo(channelMchNo)
                 // 微信: 通道商户配置不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
+    }
+
+    /// 校验通道商户归属(回调无认证场景的防御性双保险)
+    private void assertOwnsMchNo(WechatDirectChannelMerchant channelMerchant, String mchNo) {
+        if (!Objects.equals(channelMerchant.getMchNo(), mchNo)) {
+            // 微信: 通道商户不存在或与商户号不匹配
+            throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
+                    "error.payment.wx.channelMerchantMismatch");
+        }
+    }
+
+    /// 组装通道调用凭证(wxAppId + 密钥 + 通道商户号)
+    private WechatSdkCredential assemble(String wxAppId, String channelMchNo,
+                                         WechatDirectChannelMerchant channelMerchant) {
+        WechatDirectKeyConfig keyConfig = wechatDirectKeyConfigService.findByChannelMchNo(channelMchNo);
 
         WechatSdkCredential credential = new WechatSdkCredential();
         credential.setWxMchId(channelMerchant.getWxMchId());
-        credential.setWxAppId(app.wxAppId());
+        credential.setWxAppId(wxAppId);
         // 密钥与证书
         credential.setApiKeyV3(keyConfig.getApiKeyV3());
         credential.setPrivateKey(keyConfig.getPrivateKey());
@@ -61,10 +96,5 @@ public class WechatDirectConfigAssembler {
         credential.setPublicKey(keyConfig.getPublicKey());
         credential.setPublicKeyId(keyConfig.getPublicKeyId());
         return credential;
-    }
-
-    /// 兼容无 channelAppId 的调用(回调等)
-    public WechatSdkCredential buildConfig(String mchNo, String channelMchNo, String capability) {
-        return buildConfig(mchNo, channelMchNo, capability, null);
     }
 }

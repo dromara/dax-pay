@@ -55,10 +55,10 @@ public class WechatPayCallbackService {
         String body = JakartaServletUtil.getBody(request);
         Map<String, String> headerMap = JakartaServletUtil.getHeaderMap(request);
 
-        // 2. 组装凭证(直连/服务商分发)
+        // 2. 组装凭证(直连/服务商分发); 回调不解析应用, 只装载密钥与证书并校验通道商户归属
         WechatSdkCredential credential = isv
-                ? wechatIsvConfigAssembler.buildConfig(mchNo, channelMchNo, null)
-                : wechatDirectConfigAssembler.buildConfig(mchNo, channelMchNo, null);
+                ? wechatIsvConfigAssembler.buildCallbackConfig(mchNo, channelMchNo)
+                : wechatDirectConfigAssembler.buildCallbackConfig(mchNo, channelMchNo);
 
         // 3. 转发到子应用验签
         WechatCallbackParseReq req = new WechatCallbackParseReq();
