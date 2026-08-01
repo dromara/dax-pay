@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Tag(name = "易支付协议订单(商户端)")
 @RestController
-@RequestMapping("/merchant/easypay/order")
+@RequestMapping("/mch/easypay/order")
 @RequiredArgsConstructor
 public class EasyPayOrderMchController {
 

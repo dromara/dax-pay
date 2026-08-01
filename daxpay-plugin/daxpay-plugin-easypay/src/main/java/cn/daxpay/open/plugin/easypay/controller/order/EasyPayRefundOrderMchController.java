@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Tag(name = "易支付协议退款订单(商户端)")
 @RestController
-@RequestMapping("/merchant/easypay/refund")
+@RequestMapping("/mch/easypay/refund")
 @RequiredArgsConstructor
 public class EasyPayRefundOrderMchController {
 

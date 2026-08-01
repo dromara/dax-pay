@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Tag(name = "通道商户管理(商户移动端)")
 @RestController
-@RequestMapping("/app-merchant/channel-merchant")
+@RequestMapping("/app-mch/channel-merchant")
 @RequiredArgsConstructor
 public class AppMerchantChannelMerchantController {
 

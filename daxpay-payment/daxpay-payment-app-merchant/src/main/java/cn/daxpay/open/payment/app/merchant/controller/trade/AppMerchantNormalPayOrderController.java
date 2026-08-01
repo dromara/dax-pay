@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Tag(name = "普通支付业务单(商户移动端)")
 @RestController
-@RequestMapping("/app-merchant/order/normal-pay")
+@RequestMapping("/app-mch/order/normal-pay")
 @RequiredArgsConstructor
 public class AppMerchantNormalPayOrderController {
 

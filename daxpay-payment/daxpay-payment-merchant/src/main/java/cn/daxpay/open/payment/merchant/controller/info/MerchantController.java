@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Tag(name = "商户信息")
 @RestController
-@RequestMapping("/merchant")
+@RequestMapping("/mch/merchant")
 @RequiredArgsConstructor
 public class MerchantController {
     private final MerchantInfoService merchantInfoService;

@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @Tag(name = "易支付凭证配置")
 @RestController
-@RequestMapping({"/admin/easypay/credential", "/merchant/easypay/credential"})
+@RequestMapping({"/admin/easypay/credential", "/mch/easypay/credential"})
 @RequiredArgsConstructor
 public class EasyPayCredentialController {
 

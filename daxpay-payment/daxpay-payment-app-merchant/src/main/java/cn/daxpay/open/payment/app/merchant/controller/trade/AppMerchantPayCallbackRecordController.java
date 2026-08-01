@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Tag(name = "通道入站回调记录(商户移动端)")
 @RestController
-@RequestMapping("/app-merchant/callback-record")
+@RequestMapping("/app-mch/callback-record")
 @RequiredArgsConstructor
 public class AppMerchantPayCallbackRecordController {
 

@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @Tag(name = "商户API对接配置")
 @RestController
-@RequestMapping("/merchant/credential")
+@RequestMapping("/mch/credential")
 @RequiredArgsConstructor
 public class MerchantCredentialController {
     private final MerchantCredentialService credentialService;

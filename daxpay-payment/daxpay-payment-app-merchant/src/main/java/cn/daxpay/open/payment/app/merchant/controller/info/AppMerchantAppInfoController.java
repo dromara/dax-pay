@@ -28,7 +28,7 @@ import java.util.List;
 @Validated
 @Tag(name = "商户应用配置(商户移动端)")
 @RestController
-@RequestMapping("/app-merchant/app-info")
+@RequestMapping("/app-mch/app-info")
 @RequiredArgsConstructor
 public class AppMerchantAppInfoController {
 

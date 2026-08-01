@@ -167,7 +167,8 @@ public class SensitiveWordCheckService {
             if (path.startsWith("/admin/")) {
                 return SensitiveWordSourceEnum.ADMIN.getCode();
             }
-            if (path.startsWith("/merchant/")) {
+            // 商户端: /mch/ (Web) 与 /app-mch/ (小程序) 均归 MERCHANT 来源
+            if (path.startsWith("/mch/") || path.startsWith("/app-mch/")) {
                 return SensitiveWordSourceEnum.MERCHANT.getCode();
             }
             if (path.startsWith("/app-admin/")) {

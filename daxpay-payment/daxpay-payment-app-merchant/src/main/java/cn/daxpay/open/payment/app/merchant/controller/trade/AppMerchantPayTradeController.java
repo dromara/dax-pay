@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Tag(name = "资金交易凭证(商户移动端)")
 @RestController
-@RequestMapping("/app-merchant/order/pay-trade")
+@RequestMapping("/app-mch/order/pay-trade")
 @RequiredArgsConstructor
 public class AppMerchantPayTradeController {
 

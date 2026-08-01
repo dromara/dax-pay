@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @Tag(name = "商户微信域名验证文件(管理)")
 @RestController
-@RequestMapping("/admin/mch/wx-verify")
+@RequestMapping("/admin/merchant/wx-verify")
 @RequiredArgsConstructor
 public class WxDomainVerifyAdminController {
     private final WxDomainVerifyService wxDomainVerifyService;

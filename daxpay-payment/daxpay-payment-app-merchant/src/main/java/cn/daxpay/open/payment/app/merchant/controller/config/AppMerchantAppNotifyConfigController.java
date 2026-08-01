@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Tag(name = "商户应用事件通知配置(商户移动端)")
 @RestController
-@RequestMapping("/app-merchant/merchant/app-notify-config")
+@RequestMapping("/app-mch/app-notify-config")
 @RequiredArgsConstructor
 public class AppMerchantAppNotifyConfigController {
 

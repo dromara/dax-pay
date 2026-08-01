@@ -30,7 +30,7 @@ import java.util.List;
 @Validated
 @Tag(name = "网关收银台配置(商户移动端)")
 @RestController
-@RequestMapping("/app-merchant/gateway/cashier-config")
+@RequestMapping("/app-mch/gateway/cashier-config")
 @RequiredArgsConstructor
 public class AppMerchantGatewayCashierController {
 

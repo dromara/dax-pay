@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @Tag(name = "门店信息管理(管理端)")
 @RestController
-@RequestMapping("/admin/mch/store")
+@RequestMapping("/admin/merchant/store")
 @RequiredArgsConstructor
 public class MchStoreInfoAdminController {
     private final MchStoreInfoService mchStoreInfoService;

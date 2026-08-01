@@ -30,7 +30,7 @@ import java.util.List;
 @Tag(name = "工作台交易统计(商户移动端)")
 @Validated
 @RestController
-@RequestMapping("/app-merchant/dashboard/trade")
+@RequestMapping("/app-mch/dashboard/trade")
 @RequiredArgsConstructor
 public class AppMerchantDashboardTradeController {
 

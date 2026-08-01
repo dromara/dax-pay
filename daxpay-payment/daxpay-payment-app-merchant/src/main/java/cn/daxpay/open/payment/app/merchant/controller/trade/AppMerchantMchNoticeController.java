@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Tag(name = "商户出站通知(商户移动端)")
 @RestController
-@RequestMapping("/app-merchant/mch-notice")
+@RequestMapping("/app-mch/notice")
 @RequiredArgsConstructor
 public class AppMerchantMchNoticeController {
 

@@ -37,7 +37,7 @@ import java.util.Map;
 @Validated
 @Tag(name = "应用通道路由管理(商户移动端)")
 @RestController
-@RequestMapping("/app-merchant/pay-route")
+@RequestMapping("/app-mch/pay-route")
 @RequiredArgsConstructor
 public class AppMerchantPayRouteController {
 

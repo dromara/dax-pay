@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @IgnoreAuth
 @Tag(name = "商户管理")
 @RestController
-@RequestMapping("/merchant/user")
+@RequestMapping("/mch/user")
 @RequiredArgsConstructor
 public class MerchantUserController {
     private final MerchantUserService merchantUserService;

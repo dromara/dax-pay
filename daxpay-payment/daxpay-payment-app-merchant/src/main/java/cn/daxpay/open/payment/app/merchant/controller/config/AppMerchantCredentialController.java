@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Tag(name = "商户API对接配置(商户移动端)")
 @RestController
-@RequestMapping("/app-merchant/merchant/credential")
+@RequestMapping("/app-mch/credential")
 @RequiredArgsConstructor
 public class AppMerchantCredentialController {
 

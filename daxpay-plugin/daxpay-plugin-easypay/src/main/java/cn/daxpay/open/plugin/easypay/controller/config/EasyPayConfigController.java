@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 @Tag(name = "易支付场景配置")
 @RestController
-@RequestMapping({"/admin/easypay/config", "/merchant/easypay/config"})
+@RequestMapping({"/admin/easypay/config", "/mch/easypay/config"})
 @RequiredArgsConstructor
 public class EasyPayConfigController {
 

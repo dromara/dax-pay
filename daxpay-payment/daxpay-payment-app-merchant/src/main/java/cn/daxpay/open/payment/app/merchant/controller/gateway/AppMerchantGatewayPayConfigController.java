@@ -30,7 +30,7 @@ import java.util.List;
 @Validated
 @Tag(name = "网关支付配置(商户移动端)")
 @RestController
-@RequestMapping("/app-merchant/gateway/pay-config")
+@RequestMapping("/app-mch/gateway/pay-config")
 @RequiredArgsConstructor
 public class AppMerchantGatewayPayConfigController {
 

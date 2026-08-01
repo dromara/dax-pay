@@ -30,7 +30,9 @@ import java.util.List;
 @Validated
 @Tag(name = "商户用户管理")
 @RestController
-@RequestMapping("/merchant/user")
+/// 双路径: 运营端 /admin/merchant/user 与商户端 /mch/user 共用同一 Service；
+    /// 客户端隔离由 ClientCode + @PermCode 保证；商户端 TenantLine 按 mchNo 行级隔离。
+    @RequestMapping({"/admin/merchant/user", "/mch/user"})
 @RequiredArgsConstructor
 public class MchUserAdminController {
 

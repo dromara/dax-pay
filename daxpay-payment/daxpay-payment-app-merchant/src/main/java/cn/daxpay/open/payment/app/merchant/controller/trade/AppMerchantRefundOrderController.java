@@ -25,7 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 @Validated
 @Tag(name = "退款订单(商户移动端)")
 @RestController
-@RequestMapping("/app-merchant/order/refund")
+@RequestMapping("/app-mch/order/refund")
 @RequiredArgsConstructor
 public class AppMerchantRefundOrderController {
 

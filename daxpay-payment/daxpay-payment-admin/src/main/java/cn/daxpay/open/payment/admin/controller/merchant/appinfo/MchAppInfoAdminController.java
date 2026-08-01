@@ -27,7 +27,7 @@ import java.util.List;
 @Validated
 @Tag(name = "商户应用配置(管理)")
 @RestController
-@RequestMapping("/admin/mch/app-info")
+@RequestMapping("/admin/merchant/app-info")
 @RequiredArgsConstructor
 public class MchAppInfoAdminController {
     private final MchAppInfoService mchAppInfoService;
