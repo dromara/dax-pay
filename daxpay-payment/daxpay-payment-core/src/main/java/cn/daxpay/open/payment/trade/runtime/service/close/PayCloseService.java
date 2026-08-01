@@ -1,6 +1,7 @@
 package cn.daxpay.open.payment.trade.runtime.service.close;
 
 import cn.daxpay.open.payment.common.context.PaymentContext;
+import cn.daxpay.open.payment.trade.enums.GatewayOrderStatusEnum;
 import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum;
 import cn.daxpay.open.payment.strategy.PaymentStrategyFactory;
@@ -54,28 +55,71 @@ public class PayCloseService {
     private final LockExecutor lockExecutor;
     private final PaymentContext paymentContext;
 
+    /// 按容器ID关闭/撤销订单(含网关预下单未生成 Trade 的兜底)
+    ///
+    /// 供容器视角的对外 Service(Admin/Merchant)调用, 消除两端重复的容器状态校验与预下单分支。
+    public void closeByContainer(Long containerId, String tradeType, boolean useCancel) {
+        // 网关: 预下单后可能尚未生成 Trade
+        if (Objects.equals(tradeType, PayTradeTypeEnum.GATEWAY.getCode())) {
+            GatewayPayOrder order = gatewayPayOrderManager.findById(containerId)
+                    .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.payOrderNotExist"));
+            if (!List.of(GatewayOrderStatusEnum.WAIT_PAY.getCode(), GatewayOrderStatusEnum.PAYING.getCode())
+                    .contains(order.getStatus())) {
+                // 支付: 订单不是支付中, 无法进行关闭订单
+                throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.pay.closeNotPaying");
+            }
+            PayTrade trade = payTradeManager.findByContainerId(containerId, tradeType).orElse(null);
+            if (Objects.nonNull(trade)) {
+                this.closeOrder(trade, useCancel);
+            } else {
+                payUniHandleService.gatewayOrderClose(order);
+            }
+            return;
+        }
+        // 普通支付等其他形态: 直接反查 Trade 关单
+        PayTrade trade = payTradeManager.findByContainerId(containerId, tradeType)
+                .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.payOrderNotExist"));
+        this.closeOrder(trade, useCancel);
+    }
+
     /// 关闭支付(商户 API)
+    ///
+    /// 同时支持普通支付与网关支付两种容器:
+    /// - orderNo 优先按 tradeNo(平台支付订单号)查资金交易; 未命中再按网关容器 orderNo 反查(运营友好, 与退款服务对齐)
+    /// - bizOrderNo 回退: 先普通容器再网关容器, 委托 [closeByContainer] 复用网关预下单无 Trade 的兜底关单
     public void close(NormalPayCloseParam param) {
         if (StrUtil.isBlank(param.getOrderNo()) && Objects.isNull(param.getBizOrderNo())) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.orderNoRequired");
         }
-        PayTrade trade = null;
+        // orderNo 优先: 先按 tradeNo 查资金交易(实体自带 tradeType, 直接 closeOrder)
         if (StrUtil.isNotBlank(param.getOrderNo())) {
-            trade = payTradeManager.findByTradeNo(param.getOrderNo()).orElse(null);
-        }
-        if (Objects.isNull(trade) && Objects.nonNull(param.getBizOrderNo())) {
-            NormalPayOrder normalOrder = payNormalOrderManager.findByBizOrderNo(param.getBizOrderNo())
-                    .orElse(null);
-            if (Objects.nonNull(normalOrder)) {
-                trade = payTradeManager.findByContainerId(normalOrder.getId(), PayTradeTypeEnum.NORMAL.getCode())
-                        .orElse(null);
+            PayTrade trade = payTradeManager.findByTradeNo(param.getOrderNo()).orElse(null);
+            if (Objects.nonNull(trade)) {
+                this.closeOrder(trade, param.isUseCancel());
+                return;
+            }
+            // tradeNo 未命中: 尝试用网关容器 orderNo 反查
+            GatewayPayOrder gateway = gatewayPayOrderManager.findByOrderNo(param.getOrderNo()).orElse(null);
+            if (Objects.nonNull(gateway)) {
+                this.closeByContainer(gateway.getId(), PayTradeTypeEnum.GATEWAY.getCode(), param.isUseCancel());
+                return;
             }
         }
-        if (Objects.isNull(trade)) {
-            // 支付: 支付订单不存在
-            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.payOrderNotExist");
+        // bizOrderNo 回退: 先普通再网关, 委托 closeByContainer(含网关无 Trade 兜底)
+        if (Objects.nonNull(param.getBizOrderNo())) {
+            NormalPayOrder normalOrder = payNormalOrderManager.findByBizOrderNo(param.getBizOrderNo()).orElse(null);
+            if (Objects.nonNull(normalOrder)) {
+                this.closeByContainer(normalOrder.getId(), PayTradeTypeEnum.NORMAL.getCode(), param.isUseCancel());
+                return;
+            }
+            GatewayPayOrder gatewayOrder = gatewayPayOrderManager.findByBizOrderNo(param.getBizOrderNo()).orElse(null);
+            if (Objects.nonNull(gatewayOrder)) {
+                this.closeByContainer(gatewayOrder.getId(), PayTradeTypeEnum.GATEWAY.getCode(), param.isUseCancel());
+                return;
+            }
         }
-        this.closeOrder(trade, param.isUseCancel());
+        // 支付: 支付订单不存在
+        throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.payOrderNotExist");
     }
 
     /// 关闭支付记录

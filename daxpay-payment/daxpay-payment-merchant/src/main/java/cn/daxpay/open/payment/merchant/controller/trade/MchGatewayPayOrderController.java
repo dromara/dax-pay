@@ -56,14 +56,4 @@ public class MchGatewayPayOrderController {
             @NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(mchGatewayPayOrderService.sync(id));
     }
-
-    @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "关闭订单")
-    @PostMapping("/close")
-    public Result<Void> close(
-            @NotNull(message = "{validation.field.id.notNull}") Long id,
-            @RequestParam(defaultValue = "false") boolean useCancel) {
-        mchGatewayPayOrderService.close(id, useCancel);
-        return Res.ok();
-    }
 }

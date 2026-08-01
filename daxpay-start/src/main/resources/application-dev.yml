@@ -100,7 +100,6 @@ daxpay:
           - '/test/**'
           - '/error'
           - '/favicon.ico'
-          - '/**'
       # 审计日志配置
       audit-log:
         ip2region:
@@ -109,6 +108,8 @@ daxpay:
           # 查询模式: VECTOR_INDEX(推荐) 或 CACHE
           search-type: VECTOR_INDEX
     config:
+      # 交易定时同步开关(dev 环境开启)
+      trade-sync-enabled: true
       # 平台公私钥(证书)配置, 用于接口请求/回调的 RSA 签名与验签
       key-config:
             # 私钥配置

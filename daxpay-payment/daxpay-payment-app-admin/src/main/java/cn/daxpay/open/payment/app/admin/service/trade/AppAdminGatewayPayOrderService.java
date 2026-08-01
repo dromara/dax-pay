@@ -32,9 +32,4 @@ public class AppAdminGatewayPayOrderService {
     public NormalPaySyncResult sync(Long id) {
         return gatewayPayOrderAdminService.sync(id);
     }
-
-    /// 关闭订单
-    public void close(Long id, boolean useCancel) {
-        gatewayPayOrderAdminService.close(id, useCancel);
-    }
 }

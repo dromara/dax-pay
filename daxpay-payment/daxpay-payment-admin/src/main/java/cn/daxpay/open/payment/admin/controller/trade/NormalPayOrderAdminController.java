@@ -56,14 +56,4 @@ public class NormalPayOrderAdminController {
             @NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(normalPayOrderAdminService.sync(id));
     }
-
-    @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "关闭/撤销订单")
-    @PostMapping("/close")
-    public Result<Void> close(
-            @NotNull(message = "{validation.field.id.notNull}") Long id,
-            @RequestParam(defaultValue = "false") boolean useCancel) {
-        normalPayOrderAdminService.close(id, useCancel);
-        return Res.ok();
-    }
 }

@@ -4,13 +4,10 @@ import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum;
 import cn.daxpay.open.payment.trade.order.convert.NormalPayOrderConvert;
 import cn.daxpay.open.payment.trade.order.dao.NormalPayOrderManager;
-import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
 import cn.daxpay.open.payment.trade.order.entity.NormalPayOrder;
-import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.trade.order.param.NormalPayOrderQuery;
 import cn.daxpay.open.payment.trade.order.result.NormalPayOrderResult;
 import cn.daxpay.open.payment.trade.order.service.TradeOrderDetailAssembler;
-import cn.daxpay.open.payment.trade.runtime.service.close.PayCloseService;
 import cn.daxpay.open.payment.trade.runtime.service.sync.PaySyncService;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPaySyncResult;
 import cn.daxpay.open.platform.core.code.CommonCode;
@@ -31,9 +28,7 @@ public class MchNormalPayOrderService {
 
     private final PaymentContext paymentContext;
     private final NormalPayOrderManager normalPayOrderManager;
-    private final PayTradeManager payTradeManager;
     private final PaySyncService paySyncService;
-    private final PayCloseService payCloseService;
     private final TradeOrderDetailAssembler tradeOrderDetailAssembler;
 
     /// 分页查询(强制当前商户)
@@ -61,16 +56,7 @@ public class MchNormalPayOrderService {
 
     /// 同步支付状态(传入业务订单ID)
     public NormalPaySyncResult sync(Long id) {
-        PayTrade trade = payTradeManager.findByContainerId(id, PayTradeTypeEnum.NORMAL.getCode())
-                .orElseThrow(() -> new DataNotExistException("pay.error.payOrderNotExist"));
-        return paySyncService.syncPayOrder(trade);
-    }
-
-    /// 关闭/撤销订单(传入业务订单ID)
-    public void close(Long id, boolean useCancel) {
-        PayTrade trade = payTradeManager.findByContainerId(id, PayTradeTypeEnum.NORMAL.getCode())
-                .orElseThrow(() -> new DataNotExistException("pay.error.payOrderNotExist"));
-        payCloseService.closeOrder(trade, useCancel);
+        return paySyncService.syncByContainer(id, PayTradeTypeEnum.NORMAL.getCode());
     }
 
     /// 解析并强制写入当前商户号

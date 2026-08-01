@@ -32,9 +32,4 @@ public class AppAdminNormalPayOrderService {
     public NormalPaySyncResult sync(Long id) {
         return normalPayOrderAdminService.sync(id);
     }
-
-    /// 关闭/撤销订单
-    public void close(Long id, boolean useCancel) {
-        normalPayOrderAdminService.close(id, useCancel);
-    }
 }

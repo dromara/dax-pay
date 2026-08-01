@@ -13,12 +13,12 @@ import lombok.EqualsAndHashCode;
 @Schema(title = "支付关闭参数")
 public class NormalPayCloseParam extends MerchantPaymentCommonParam {
 
-    /// 支付订单号/商户订单号/通道订单号至少要传输一个，支付订单号 > 商户订单号 > 通道订单号
+    /// 平台支付订单号(tradeNo)或网关订单号(orderNo), 优先按 tradeNo 查, 未命中按网关 orderNo 反查
     @Schema(description = "订单号")
     @Size(max = 100, message = "{validation.field.orderNo.size}")
     private String orderNo;
 
-    /// 支付订单号/商户订单号/通道订单号至少要传输一个，支付订单号 > 商户订单号 > 通道订单号
+    /// 商户订单号, 支持普通支付与网关支付两种容器, 先普通容器再网关容器查询
     @Schema(description = "商户订单号")
     @Size(max = 100, message = "{validation.field.bizOrderNo.size}")
     private String bizOrderNo;

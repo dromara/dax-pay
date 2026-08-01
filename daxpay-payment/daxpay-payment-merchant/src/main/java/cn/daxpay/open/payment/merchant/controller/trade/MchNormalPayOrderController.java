@@ -56,14 +56,4 @@ public class MchNormalPayOrderController {
             @NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(mchNormalPayOrderService.sync(id));
     }
-
-    @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "关闭/撤销订单")
-    @PostMapping("/close")
-    public Result<Void> close(
-            @NotNull(message = "{validation.field.id.notNull}") Long id,
-            @RequestParam(defaultValue = "false") boolean useCancel) {
-        mchNormalPayOrderService.close(id, useCancel);
-        return Res.ok();
-    }
 }
