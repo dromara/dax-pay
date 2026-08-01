@@ -33,6 +33,9 @@ public class PlatformConfigProperties {
     /// 沙箱环境全局开关(关闭后不可切换到沙箱, 已在沙箱的产品启动时自动重置为生产)
     private boolean sandboxEnabled = true;
 
+    /// 交易订单定时同步任务全局开关(关闭后交易状态纠正定时任务不生效, 默认开启)
+    private boolean tradeSyncEnabled = true;
+
     /// # 平台公私钥配置
     ///
     @Slf4j
