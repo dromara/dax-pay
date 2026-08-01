@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.trade.notice.service;
 
+import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.trade.notice.dao.MchNoticeRecordManager;
 import cn.daxpay.open.payment.trade.notice.dao.MchNoticeTaskManager;
 import cn.daxpay.open.payment.trade.notice.entity.MchNoticeRecord;
@@ -28,24 +29,43 @@ public class NoticeSendEngine {
     private final MchNoticeRecordManager recordManager;
     private final NoticeRetryPolicy retryPolicy;
     private final NoticeTaskScheduleService scheduleService;
+    private final PaymentContext paymentContext;
     private final Map<String, NoticeProtocolSender> senderMap;
 
     public NoticeSendEngine(MchNoticeTaskManager taskManager,
                             MchNoticeRecordManager recordManager,
                             NoticeRetryPolicy retryPolicy,
                             NoticeTaskScheduleService scheduleService,
+                            PaymentContext paymentContext,
                             List<NoticeProtocolSender> senders) {
         this.taskManager = taskManager;
         this.recordManager = recordManager;
         this.retryPolicy = retryPolicy;
         this.scheduleService = scheduleService;
+        this.paymentContext = paymentContext;
         this.senderMap = senders.stream()
                 .collect(Collectors.toMap(NoticeProtocolSender::protocol, Function.identity(), (a, b) -> a));
     }
 
     /// 自动发送（消费端入口）
+    ///
+    /// MQ 线程无商户登录上下文，需先用 NotTenant 引导读任务获取 mchNo，
+    /// 再装载 PaymentContext 后走租户内发送（与 PayCloseService#closeForTimeout 范式一致）。
     public void sendAuto(Long taskId) {
-        send(taskId, true);
+        MchNoticeTask boot = taskManager.findByIdNotTenant(taskId).orElse(null);
+        if (boot == null) {
+            log.warn("出站通知任务不存在: taskId={}", taskId);
+            return;
+        }
+        if (StrUtil.isBlank(boot.getMchNo())) {
+            log.error("出站通知任务缺少 mchNo, 跳过: taskId={}", taskId);
+            return;
+        }
+        // 仅 setMchNo，不校验商户启用（与超时关单一致）
+        paymentContext.runAs(() -> {
+            paymentContext.setMchNo(boot.getMchNo());
+            send(taskId, true);
+        });
     }
 
     /// 手动重发
@@ -61,8 +81,13 @@ public class NoticeSendEngine {
             return;
         }
         if (task.isSuccess()) {
-            log.info("出站通知任务已成功, 跳过: taskId={}", taskId);
-            return;
+            // autoSend(MQ重投)幂等保护: 已成功任务自动消费时跳过;
+            // 手动重发(autoSend=false)不跳过, 允许重发已成功任务
+            if (autoSend) {
+                log.info("出站通知任务已成功, 自动消费跳过: taskId={}", taskId);
+                return;
+            }
+            log.info("手动重发已成功任务: taskId={}", taskId);
         }
         NoticeProtocolSender sender = senderMap.get(task.getProtocol());
         OffsetDateTime sendTime = OffsetDateTime.now(ZoneOffset.UTC);
@@ -99,10 +124,6 @@ public class NoticeSendEngine {
                     .setSuccess(true)
                     .setErrorMsg(null)
                     .setNextTime(null);
-            if (autoSend && task.getDelayCount() != null) {
-                // 自动路径成功时同步累计 delay 计数（与商业版一致，便于观测）
-                task.setDelayCount(task.getDelayCount());
-            }
             record.setSuccess(true);
             taskManager.updateById(task);
             recordManager.save(record);
@@ -119,6 +140,10 @@ public class NoticeSendEngine {
         task.setSendCount(reqCount).setLatestTime(sendTime);
         if (StrUtil.isNotBlank(record.getErrorMsg())) {
             task.setErrorMsg(record.getErrorMsg());
+        }
+        // 手动重发失败时(含重发已成功任务)需将 success 置回 false, 与实际发送结果一致
+        if (!autoSend) {
+            task.setSuccess(false);
         }
         if (autoSend && !task.isSuccess()) {
             int delayCount = task.getDelayCount() == null ? 0 : task.getDelayCount();
