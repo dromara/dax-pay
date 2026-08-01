@@ -35,7 +35,7 @@ public class WxPlatformAppCapabilityController {
     @GetMapping("/list-by-product")
     public Result<List<WxPlatformAppCapabilityResult>> listByProduct(
             @NotBlank(message = "{validation.field.product.notBlank}")
-            @Parameter(description = "支付产品编码") @RequestParam String product) {
+            @Parameter(description = "支付产品编码") String product) {
         return Res.ok(wxPlatformAppCapabilityService.listByProduct(product));
     }
 
@@ -52,7 +52,7 @@ public class WxPlatformAppCapabilityController {
     @GetMapping("/list-supported-capabilities")
     public Result<List<WxCapabilityOption>> listSupportedCapabilities(
             @NotBlank(message = "{validation.field.product.notBlank}")
-            @Parameter(description = "支付产品编码") @RequestParam String product) {
+            @Parameter(description = "支付产品编码") String product) {
         return Res.ok(wxPlatformAppCapabilityService.listSupportedCapabilities(product));
     }
 }

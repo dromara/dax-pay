@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.trade.report.support;
 
+import cn.daxpay.open.payment.trade.report.param.TradeRangeQuery;
 import cn.daxpay.open.payment.trade.report.result.AmountRangeItemResult;
 import cn.daxpay.open.payment.trade.report.result.DimRankItemResult;
 import cn.daxpay.open.payment.trade.report.result.HourlyDistItemResult;
@@ -29,6 +30,9 @@ public class TradeReportSupport {
     private static final int TREND_DAYS_MIN = 1;
     private static final int TREND_DAYS_MAX = 365;
 
+    /// 天数模式默认值(未传 days 时兜底)
+    private static final int DEFAULT_RANGE_DAYS = 7;
+
     private static final int RANK_LIMIT_MAX = 50;
     private static final int RANK_LIMIT_DEFAULT = 10;
 
@@ -54,6 +58,21 @@ public class TradeReportSupport {
         OffsetDateTime start = today.minusDays(safeDays - 1L).atStartOfDay(ZONE_CST).toOffsetDateTime();
         OffsetDateTime end = today.plusDays(1).atStartOfDay(ZONE_CST).toOffsetDateTime();
         return new OffsetDateTime[]{start, end};
+    }
+
+    /// 统一解析查询条件为半开区间 `[start, end)`
+    ///
+    /// 区间模式优先(start + end 都非空), 否则按 days 天数模式(days 为空时按 [DEFAULT_RANGE_DAYS] 兜底)。
+    /// 供运营端/商户端/移动端 Dashboard 各统计接口共用, 消除 Controller 层的 if 分支。
+    public OffsetDateTime[] resolveRange(TradeRangeQuery query) {
+        if (query.getStart() != null && query.getEnd() != null) {
+            return new OffsetDateTime[]{
+                    parseDateStart(query.getStart()),
+                    parseDateEndExclusive(query.getEnd())
+            };
+        }
+        int days = query.getDays() != null ? query.getDays() : DEFAULT_RANGE_DAYS;
+        return daysRange(days);
     }
 
     /// 解析 yyyy-MM-dd 为当日 00:00 CST

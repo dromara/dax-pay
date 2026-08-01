@@ -11,7 +11,7 @@ import cn.daxpay.open.platform.core.rest.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -42,14 +42,7 @@ public class PlatformFileController {
 
     @Operation(summary = "确认上传")
     @PostMapping("/upload/confirm")
-    public Result<Void> confirmUpload(
-            @NotNull(message = "{validation.field.fileId.notNull}") @RequestParam Long fileId,
-            @NotNull(message = "{validation.field.objectKey.notBlank}") @RequestParam String objectKey,
-            @RequestParam(required = false) String etag) {
-        var param = new FileUploadConfirmParam();
-        param.setFileId(fileId);
-        param.setObjectKey(objectKey);
-        param.setEtag(etag);
+    public Result<Void> confirmUpload(@RequestBody @Valid FileUploadConfirmParam param) {
         platformFileService.confirmUpload(param);
         return Res.ok();
     }

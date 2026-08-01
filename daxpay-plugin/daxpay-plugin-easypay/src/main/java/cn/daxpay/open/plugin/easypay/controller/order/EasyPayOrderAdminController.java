@@ -18,7 +18,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /// # 易支付协议订单(运营端)
@@ -59,12 +58,11 @@ public class EasyPayOrderAdminController {
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "关闭/撤销易支付订单")
+    @Operation(summary = "关闭易支付订单")
     @PostMapping("/close")
     public Result<Void> close(
-            @NotNull(message = "{validation.field.id.notNull}") Long id,
-            @RequestParam(defaultValue = "false") boolean useCancel) {
-        easyPayOrderAdminQueryService.close(id, useCancel);
+            @NotNull(message = "{validation.field.id.notNull}") Long id) {
+        easyPayOrderAdminQueryService.close(id);
         return Res.ok();
     }
 }

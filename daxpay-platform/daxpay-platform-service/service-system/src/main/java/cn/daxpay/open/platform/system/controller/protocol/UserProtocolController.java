@@ -2,6 +2,7 @@ package cn.daxpay.open.platform.system.controller.protocol;
 
 import cn.daxpay.open.platform.system.enums.UserProtocolClientTypeEnum;
 import cn.daxpay.open.platform.system.enums.UserProtocolTypeEnum;
+import cn.daxpay.open.platform.system.param.protocol.UserProtocolCopyParam;
 import cn.daxpay.open.platform.system.param.protocol.UserProtocolParam;
 import cn.daxpay.open.platform.system.param.protocol.UserProtocolQuery;
 import cn.daxpay.open.platform.system.result.protocol.UserProtocolContentResult;
@@ -19,6 +20,7 @@ import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.platform.core.validation.ValidationGroup;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -162,9 +164,8 @@ public class UserProtocolController {
     @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "复制到其他端")
     @PostMapping("/copy-to-client")
-    public Result<Long> copyToClient(@NotNull(message = "{validation.field.id.notNull}") Long id,
-        @NotNull(message = "{validation.field.clientType.notBlank}") String clientType){
-        return Res.ok(userProtocolService.copyToClient(id, clientType));
+    public Result<Long> copyToClient(@RequestBody @Valid UserProtocolCopyParam param){
+        return Res.ok(userProtocolService.copyToClient(param.getId(), param.getClientType()));
     }
 
 }

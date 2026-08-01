@@ -11,6 +11,7 @@ import cn.daxpay.open.payment.merchant.entity.appinfo.MchAppInfo;
 import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
 import cn.daxpay.open.payment.merchant.entity.store.MchStoreInfo;
 import cn.daxpay.open.payment.merchant.result.dashboard.MchDashboardHeaderCountResult;
+import cn.daxpay.open.payment.trade.report.param.TradeRangeQuery;
 import cn.daxpay.open.payment.trade.report.result.AmountRangeItemResult;
 import cn.daxpay.open.payment.trade.report.result.DimRankItemResult;
 import cn.daxpay.open.payment.trade.report.result.HourlyDistItemResult;
@@ -79,25 +80,32 @@ public class MchDashboardTradeService {
 
     // ===== 概览 =====
 
-    public TradeOverviewResult overview(String date) {
+    /// 交易概览(含上期环比)
+    ///
+    /// 区间模式(query 同时传 start + end)优先; 否则按 date 快捷模式(today/yesterday)。
+    public TradeOverviewResult overview(TradeRangeQuery query) {
         String mchNo = requireMchNo();
-        LocalDate today = LocalDate.now(TradeReportSupport.ZONE_CST);
-        LocalDate target = "yesterday".equalsIgnoreCase(date) ? today.minusDays(1) : today;
-        OffsetDateTime start = target.atStartOfDay(TradeReportSupport.ZONE_CST).toOffsetDateTime();
-        OffsetDateTime end = target.plusDays(1).atStartOfDay(TradeReportSupport.ZONE_CST).toOffsetDateTime();
-        OffsetDateTime prevStart = start.minusDays(1);
-        OffsetDateTime prevEnd = start;
+        OffsetDateTime start;
+        OffsetDateTime end;
+        OffsetDateTime prevStart;
+        OffsetDateTime prevEnd;
+        if (query.getStart() != null && query.getEnd() != null) {
+            // 区间模式: 上期为等长前移
+            start = tradeReportSupport.parseDateStart(query.getStart());
+            end = tradeReportSupport.parseDateEndExclusive(query.getEnd());
+            long daysSpan = java.time.Duration.between(start, end).toDays();
+            prevStart = start.minusDays(daysSpan);
+            prevEnd = start;
+        } else {
+            // 快捷模式: today / yesterday, 上期为前一天
+            LocalDate today = LocalDate.now(TradeReportSupport.ZONE_CST);
+            LocalDate target = "yesterday".equalsIgnoreCase(query.getDate()) ? today.minusDays(1) : today;
+            start = target.atStartOfDay(TradeReportSupport.ZONE_CST).toOffsetDateTime();
+            end = target.plusDays(1).atStartOfDay(TradeReportSupport.ZONE_CST).toOffsetDateTime();
+            prevStart = start.minusDays(1);
+            prevEnd = start;
+        }
         return aggregateOverview(mchNo, start, end, prevStart, prevEnd);
-    }
-
-    public TradeOverviewResult overview(String start, String end) {
-        String mchNo = requireMchNo();
-        OffsetDateTime startUtc = tradeReportSupport.parseDateStart(start);
-        OffsetDateTime endUtc = tradeReportSupport.parseDateEndExclusive(end);
-        long daysSpan = java.time.Duration.between(startUtc, endUtc).toDays();
-        OffsetDateTime prevStart = startUtc.minusDays(daysSpan);
-        OffsetDateTime prevEnd = startUtc;
-        return aggregateOverview(mchNo, startUtc, endUtc, prevStart, prevEnd);
     }
 
     private TradeOverviewResult aggregateOverview(
@@ -126,130 +134,62 @@ public class MchDashboardTradeService {
 
     // ===== 趋势 =====
 
-    public List<TradeTrendItemResult> trend(int days) {
+    public List<TradeTrendItemResult> trend(TradeRangeQuery query) {
         String mchNo = requireMchNo();
-        int safeDays = tradeReportSupport.clampDays(days);
-        LocalDate today = LocalDate.now(TradeReportSupport.ZONE_CST);
-        LocalDate startDate = today.minusDays(safeDays - 1L);
-        OffsetDateTime start = startDate.atStartOfDay(TradeReportSupport.ZONE_CST).toOffsetDateTime();
-        OffsetDateTime end = today.plusDays(1).atStartOfDay(TradeReportSupport.ZONE_CST).toOffsetDateTime();
+        OffsetDateTime[] range = tradeReportSupport.resolveRange(query);
+        int safeDays = tradeReportSupport.clampDays((int) java.time.Duration.between(range[0], range[1]).toDays());
+        LocalDate startDate = range[0].atZoneSameInstant(TradeReportSupport.ZONE_CST).toLocalDate();
         return tradeReportSupport.fillTrendDays(
-                startDate, safeDays, mchTradeReportMapper.trend(start, end, mchNo));
+                startDate, safeDays, mchTradeReportMapper.trend(range[0], range[1], mchNo));
     }
 
-    public List<TradeTrendItemResult> trend(String startStr, String endStr) {
+    public List<RefundTrendItemResult> refundTrend(TradeRangeQuery query) {
         String mchNo = requireMchNo();
-        OffsetDateTime start = tradeReportSupport.parseDateStart(startStr);
-        OffsetDateTime end = tradeReportSupport.parseDateEndExclusive(endStr);
-        long days = java.time.Duration.between(start, end).toDays();
-        int safeDays = tradeReportSupport.clampDays((int) days);
-        LocalDate startDate = start.atZoneSameInstant(TradeReportSupport.ZONE_CST).toLocalDate();
-        return tradeReportSupport.fillTrendDays(
-                startDate, safeDays, mchTradeReportMapper.trend(start, end, mchNo));
-    }
-
-    public List<RefundTrendItemResult> refundTrend(int days) {
-        String mchNo = requireMchNo();
-        int safeDays = tradeReportSupport.clampDays(days);
-        LocalDate today = LocalDate.now(TradeReportSupport.ZONE_CST);
-        LocalDate startDate = today.minusDays(safeDays - 1L);
-        OffsetDateTime start = startDate.atStartOfDay(TradeReportSupport.ZONE_CST).toOffsetDateTime();
-        OffsetDateTime end = today.plusDays(1).atStartOfDay(TradeReportSupport.ZONE_CST).toOffsetDateTime();
+        OffsetDateTime[] range = tradeReportSupport.resolveRange(query);
+        int safeDays = tradeReportSupport.clampDays((int) java.time.Duration.between(range[0], range[1]).toDays());
+        LocalDate startDate = range[0].atZoneSameInstant(TradeReportSupport.ZONE_CST).toLocalDate();
         return tradeReportSupport.fillRefundTrendDays(
-                startDate, safeDays, mchTradeReportMapper.refundTrend(start, end, mchNo));
-    }
-
-    public List<RefundTrendItemResult> refundTrend(String startStr, String endStr) {
-        String mchNo = requireMchNo();
-        OffsetDateTime start = tradeReportSupport.parseDateStart(startStr);
-        OffsetDateTime end = tradeReportSupport.parseDateEndExclusive(endStr);
-        long days = java.time.Duration.between(start, end).toDays();
-        int safeDays = tradeReportSupport.clampDays((int) days);
-        LocalDate startDate = start.atZoneSameInstant(TradeReportSupport.ZONE_CST).toLocalDate();
-        return tradeReportSupport.fillRefundTrendDays(
-                startDate, safeDays, mchTradeReportMapper.refundTrend(start, end, mchNo));
+                startDate, safeDays, mchTradeReportMapper.refundTrend(range[0], range[1], mchNo));
     }
 
     // ===== 渠道 =====
 
-    public List<ProviderDistItemResult> providerDist(int days) {
+    public List<ProviderDistItemResult> providerDist(TradeRangeQuery query) {
         String mchNo = requireMchNo();
-        OffsetDateTime[] range = tradeReportSupport.daysRange(days);
+        OffsetDateTime[] range = tradeReportSupport.resolveRange(query);
         return mchTradeReportMapper.providerDist(range[0], range[1], mchNo);
     }
 
-    public List<ProviderDistItemResult> providerDist(String startStr, String endStr) {
+    public List<ProviderSuccessItemResult> providerSuccess(TradeRangeQuery query) {
         String mchNo = requireMchNo();
-        return mchTradeReportMapper.providerDist(
-                tradeReportSupport.parseDateStart(startStr),
-                tradeReportSupport.parseDateEndExclusive(endStr),
-                mchNo);
-    }
-
-    public List<ProviderSuccessItemResult> providerSuccess(int days) {
-        String mchNo = requireMchNo();
-        OffsetDateTime[] range = tradeReportSupport.daysRange(days);
+        OffsetDateTime[] range = tradeReportSupport.resolveRange(query);
         return mchTradeReportMapper.providerSuccess(range[0], range[1], mchNo);
-    }
-
-    public List<ProviderSuccessItemResult> providerSuccess(String startStr, String endStr) {
-        String mchNo = requireMchNo();
-        return mchTradeReportMapper.providerSuccess(
-                tradeReportSupport.parseDateStart(startStr),
-                tradeReportSupport.parseDateEndExclusive(endStr),
-                mchNo);
     }
 
     // ===== 时段 / 金额 =====
 
-    public List<HourlyDistItemResult> hourlyDist(int days) {
+    public List<HourlyDistItemResult> hourlyDist(TradeRangeQuery query) {
         String mchNo = requireMchNo();
-        OffsetDateTime[] range = tradeReportSupport.daysRange(days);
-        int daysSpan = tradeReportSupport.clampDays(days);
+        OffsetDateTime[] range = tradeReportSupport.resolveRange(query);
+        long daysSpan = Math.max(1L, java.time.Duration.between(range[0], range[1]).toDays());
         return tradeReportSupport.toDailyAverage(
                 tradeReportSupport.fillHourlyDist(mchTradeReportMapper.hourlyDist(range[0], range[1], mchNo)),
                 daysSpan);
     }
 
-    public List<HourlyDistItemResult> hourlyDist(String startStr, String endStr) {
+    public List<AmountRangeItemResult> amountRange(TradeRangeQuery query) {
         String mchNo = requireMchNo();
-        OffsetDateTime start = tradeReportSupport.parseDateStart(startStr);
-        OffsetDateTime end = tradeReportSupport.parseDateEndExclusive(endStr);
-        long daysSpan = Math.max(1L, java.time.Duration.between(start, end).toDays());
-        return tradeReportSupport.toDailyAverage(
-                tradeReportSupport.fillHourlyDist(mchTradeReportMapper.hourlyDist(start, end, mchNo)),
-                daysSpan);
-    }
-
-    public List<AmountRangeItemResult> amountRange(int days) {
-        String mchNo = requireMchNo();
-        OffsetDateTime[] range = tradeReportSupport.daysRange(days);
+        OffsetDateTime[] range = tradeReportSupport.resolveRange(query);
         return tradeReportSupport.fillAmountRange(mchTradeReportMapper.amountRange(range[0], range[1], mchNo));
-    }
-
-    public List<AmountRangeItemResult> amountRange(String startStr, String endStr) {
-        String mchNo = requireMchNo();
-        return tradeReportSupport.fillAmountRange(mchTradeReportMapper.amountRange(
-                tradeReportSupport.parseDateStart(startStr),
-                tradeReportSupport.parseDateEndExclusive(endStr),
-                mchNo));
     }
 
     // ===== 维度排名 =====
 
-    /// @param dim channelMch | app | store
-    public List<DimRankItemResult> dimRank(String dim, int days, int limit) {
-        OffsetDateTime[] range = tradeReportSupport.daysRange(days);
-        return dimRank(requireMchNo(), dim, range[0], range[1], limit);
-    }
-
-    public List<DimRankItemResult> dimRank(String dim, String startStr, String endStr, int limit) {
-        return dimRank(
-                requireMchNo(),
-                dim,
-                tradeReportSupport.parseDateStart(startStr),
-                tradeReportSupport.parseDateEndExclusive(endStr),
-                limit);
+    /// dim = channelMch | app | store(为空时按 app 兜底)
+    public List<DimRankItemResult> dimRank(TradeRangeQuery query) {
+        OffsetDateTime[] range = tradeReportSupport.resolveRange(query);
+        int limit = query.getLimit() == null ? 0 : query.getLimit();
+        return dimRank(requireMchNo(), query.getDim(), range[0], range[1], limit);
     }
 
     private List<DimRankItemResult> dimRank(

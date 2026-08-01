@@ -18,7 +18,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /// # 易支付协议订单(商户端)
@@ -62,9 +61,8 @@ public class EasyPayOrderMchController {
     @Operation(summary = "关闭/撤销易支付订单")
     @PostMapping("/close")
     public Result<Void> close(
-            @NotNull(message = "{validation.field.id.notNull}") Long id,
-            @RequestParam(defaultValue = "false") boolean useCancel) {
-        easyPayOrderMchQueryService.close(id, useCancel);
+            @NotNull(message = "{validation.field.id.notNull}") Long id) {
+        easyPayOrderMchQueryService.close(id);
         return Res.ok();
     }
 }

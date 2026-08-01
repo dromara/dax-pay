@@ -2,6 +2,7 @@ package cn.daxpay.open.payment.app.admin.service.dashboard;
 
 import cn.daxpay.open.payment.admin.result.dashboard.AdminDashboardHeaderCountResult;
 import cn.daxpay.open.payment.admin.service.dashboard.AdminDashboardTradeService;
+import cn.daxpay.open.payment.trade.report.param.TradeRangeQuery;
 import cn.daxpay.open.payment.trade.report.result.TradeOverviewResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,13 +21,8 @@ public class AppAdminDashboardTradeService {
         return adminDashboardTradeService.headerCounts();
     }
 
-    /// 交易概览（快捷模式：today / yesterday）
-    public TradeOverviewResult overview(String date) {
-        return adminDashboardTradeService.overview(date);
-    }
-
-    /// 交易概览（区间模式：start + end，yyyy-MM-dd）
-    public TradeOverviewResult overview(String start, String end) {
-        return adminDashboardTradeService.overview(start, end);
+    /// 交易概览(区间模式优先, 否则按 date 快捷模式)
+    public TradeOverviewResult overview(TradeRangeQuery query) {
+        return adminDashboardTradeService.overview(query);
     }
 }

@@ -35,7 +35,7 @@ public class DyPlatformAppCapabilityController {
     @GetMapping("/list-by-product")
     public Result<List<DyPlatformAppCapabilityResult>> listByProduct(
             @NotBlank(message = "{validation.field.product.notBlank}")
-            @Parameter(description = "支付产品编码") @RequestParam String product) {
+            @Parameter(description = "支付产品编码") String product) {
         return Res.ok(dyPlatformAppCapabilityService.listByProduct(product));
     }
 
@@ -52,7 +52,7 @@ public class DyPlatformAppCapabilityController {
     @GetMapping("/list-supported-capabilities")
     public Result<List<DyCapabilityOption>> listSupportedCapabilities(
             @NotBlank(message = "{validation.field.product.notBlank}")
-            @Parameter(description = "支付产品编码") @RequestParam String product) {
+            @Parameter(description = "支付产品编码") String product) {
         return Res.ok(dyPlatformAppCapabilityService.listSupportedCapabilities(product));
     }
 }

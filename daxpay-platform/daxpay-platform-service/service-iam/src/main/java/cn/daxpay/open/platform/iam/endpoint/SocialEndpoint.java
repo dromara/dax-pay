@@ -52,7 +52,7 @@ public class SocialEndpoint {
     @Operation(summary = "生成授权地址")
     @GetMapping("/render/{source}")
     public Result<String> render(@PathVariable String source,
-                                 @RequestParam String client,
+                                 String client,
                                  @RequestParam(required = false) String mode,
                                  @RequestParam(required = false) Boolean silent) {
         return Res.ok(socialLoginService.generateAuthorizeUrl(source, client, mode, silent));
@@ -97,7 +97,7 @@ public class SocialEndpoint {
     @IgnoreAuth(login = true)
     @Operation(summary = "解除第三方账号绑定")
     @PostMapping("/unbind")
-    public Result<Void> unbind(@RequestParam String source) {
+    public Result<Void> unbind(String source) {
         socialLoginService.unbind(SecurityUtil.getUserId(), source);
         return Res.ok();
     }

@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -77,7 +76,7 @@ public class SocialLoginConfigController {
     @PostMapping("/update-enabled")
     public Result<Void> updateEnabled(
         @NotBlank(message = "{validation.field.source.notBlank}") String source,
-        @RequestParam Boolean enabled) {
+        Boolean enabled) {
         socialLoginConfigService.updateEnabled(source, enabled);
         return Res.ok();
     }

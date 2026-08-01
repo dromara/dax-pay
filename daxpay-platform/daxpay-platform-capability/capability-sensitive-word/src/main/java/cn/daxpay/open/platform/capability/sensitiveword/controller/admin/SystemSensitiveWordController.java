@@ -79,7 +79,7 @@ public class SystemSensitiveWordController {
     @Operation(summary = "词面是否存在")
     @GetMapping("/exists-by-word")
     public Result<Boolean> existsByWord(
-            @RequestParam String word,
+            String word,
             @RequestParam(required = false) Long id) {
         return Res.ok(systemSensitiveWordService.existsByWord(word, id));
     }

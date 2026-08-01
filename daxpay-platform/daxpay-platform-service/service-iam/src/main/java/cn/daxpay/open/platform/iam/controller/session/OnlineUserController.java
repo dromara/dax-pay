@@ -40,7 +40,7 @@ public class OnlineUserController {
     @PermCode(code = PermCodes.Action.KICKOUT)
     @Operation(summary = "强制用户下线")
     @PostMapping("/kickout")
-    public Result<Void> kickout(@RequestParam String sessionId) {
+    public Result<Void> kickout(String sessionId) {
         onlineUserService.kickout(sessionId);
         return Res.ok();
     }

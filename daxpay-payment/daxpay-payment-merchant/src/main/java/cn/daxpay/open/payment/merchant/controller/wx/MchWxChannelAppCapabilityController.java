@@ -78,7 +78,7 @@ public class MchWxChannelAppCapabilityController {
     @GetMapping("/list-supported-capabilities")
     public Result<List<WxCapabilityOption>> listSupportedCapabilities(
             @NotBlank(message = "{validation.field.product.notBlank}")
-            @Parameter(description = "支付产品编码") @RequestParam String product) {
+            @Parameter(description = "支付产品编码") String product) {
         // 只读产品元数据，无需通道商户归属校验
         return Res.ok(wxPlatformAppCapabilityService.listSupportedCapabilities(product));
     }

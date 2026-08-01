@@ -71,8 +71,8 @@ public class EasyPayOrderMchQueryService {
         return paySyncService.syncPayOrder(trade);
     }
 
-    /// 关闭/撤销订单(直达内核资金凭证关单)
-    public void close(Long id, boolean useCancel) {
+    /// 关闭订单(直达内核资金凭证关单)
+    public void close(Long id) {
         EasyPayOrder entity = easyPayOrderManager.findById(id)
                 .orElseThrow(() -> new DataNotExistException("pay.error.payOrderNotExist"));
         if (entity.getOrderId() == null) {
@@ -80,7 +80,7 @@ public class EasyPayOrderMchQueryService {
         }
         PayTrade trade = payTradeManager.findByContainerId(entity.getOrderId(), PayTradeTypeEnum.NORMAL.getCode())
                 .orElseThrow(() -> new DataNotExistException("pay.error.payOrderNotExist"));
-        payCloseService.closeOrder(trade, useCancel);
+        payCloseService.closeOrder(trade, false);
     }
 
     /// 解析并强制写入当前商户号

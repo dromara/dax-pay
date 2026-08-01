@@ -2,6 +2,7 @@ package cn.daxpay.open.payment.app.admin.controller.dashboard;
 
 import cn.daxpay.open.payment.app.admin.service.dashboard.AppAdminDashboardTradeService;
 import cn.daxpay.open.payment.admin.result.dashboard.AdminDashboardHeaderCountResult;
+import cn.daxpay.open.payment.trade.report.param.TradeRangeQuery;
 import cn.daxpay.open.payment.trade.report.result.TradeOverviewResult;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
@@ -11,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /// # 工作台交易统计(运营移动端)
@@ -35,15 +35,10 @@ public class AppAdminDashboardTradeController {
     }
 
     /// 交易概览: 支持 today/yesterday 快捷模式 + 自定义区间模式(含环比)
+    /// 同时传 start/end 时按区间模式; 否则按 date 快捷模式
     @Operation(summary = "交易概览(今日/昨日或自定义区间)")
     @GetMapping("/overview")
-    public Result<TradeOverviewResult> overview(
-            @RequestParam(required = false) String date,
-            @RequestParam(required = false) String start,
-            @RequestParam(required = false) String end) {
-        if (start != null && end != null) {
-            return Res.ok(dashboardTradeService.overview(start, end));
-        }
-        return Res.ok(dashboardTradeService.overview(date != null ? date : "today"));
+    public Result<TradeOverviewResult> overview(TradeRangeQuery query) {
+        return Res.ok(dashboardTradeService.overview(query));
     }
 }

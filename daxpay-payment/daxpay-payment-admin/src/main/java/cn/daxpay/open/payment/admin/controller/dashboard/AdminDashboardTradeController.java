@@ -4,6 +4,7 @@ import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.payment.admin.result.dashboard.AdminDashboardHeaderCountResult;
 import cn.daxpay.open.payment.admin.service.dashboard.AdminDashboardTradeService;
+import cn.daxpay.open.payment.trade.report.param.TradeRangeQuery;
 import cn.daxpay.open.payment.trade.report.result.AmountRangeItemResult;
 import cn.daxpay.open.payment.trade.report.result.HourlyDistItemResult;
 import cn.daxpay.open.payment.trade.report.result.MerchantRankItemResult;
@@ -18,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -59,108 +59,59 @@ public class AdminDashboardTradeController {
     /// 同时传 start/end 时按区间模式; 否则按 date 快捷模式
     @Operation(summary = "交易概览(今日/昨日或自定义区间)")
     @GetMapping("/overview")
-    public Result<TradeOverviewResult> overview(
-            @RequestParam(required = false) String date,
-            @RequestParam(required = false) String start,
-            @RequestParam(required = false) String end) {
-        if (start != null && end != null) {
-            return Res.ok(adminDashboardTradeService.overview(start, end));
-        }
-        return Res.ok(adminDashboardTradeService.overview(date != null ? date : "today"));
+    public Result<TradeOverviewResult> overview(TradeRangeQuery query) {
+        return Res.ok(adminDashboardTradeService.overview(query));
     }
 
     // ===== 趋势 =====
 
     @Operation(summary = "交易趋势(指定天数或自定义区间)")
     @GetMapping("/trend")
-    public Result<List<TradeTrendItemResult>> trend(
-            @RequestParam(defaultValue = "7") int days,
-            @RequestParam(required = false) String start,
-            @RequestParam(required = false) String end) {
-        if (start != null && end != null) {
-            return Res.ok(adminDashboardTradeService.trend(start, end));
-        }
-        return Res.ok(adminDashboardTradeService.trend(days));
+    public Result<List<TradeTrendItemResult>> trend(TradeRangeQuery query) {
+        return Res.ok(adminDashboardTradeService.trend(query));
     }
 
     @Operation(summary = "退款趋势(指定天数或自定义区间)")
     @GetMapping("/refund-trend")
-    public Result<List<RefundTrendItemResult>> refundTrend(
-            @RequestParam(defaultValue = "7") int days,
-            @RequestParam(required = false) String start,
-            @RequestParam(required = false) String end) {
-        if (start != null && end != null) {
-            return Res.ok(adminDashboardTradeService.refundTrend(start, end));
-        }
-        return Res.ok(adminDashboardTradeService.refundTrend(days));
+    public Result<List<RefundTrendItemResult>> refundTrend(TradeRangeQuery query) {
+        return Res.ok(adminDashboardTradeService.refundTrend(query));
     }
 
     // ===== 渠道 =====
 
     @Operation(summary = "支付渠道分布(指定天数或自定义区间)")
     @GetMapping("/provider-dist")
-    public Result<List<ProviderDistItemResult>> providerDist(
-            @RequestParam(defaultValue = "30") int days,
-            @RequestParam(required = false) String start,
-            @RequestParam(required = false) String end) {
-        if (start != null && end != null) {
-            return Res.ok(adminDashboardTradeService.providerDist(start, end));
-        }
-        return Res.ok(adminDashboardTradeService.providerDist(days));
+    public Result<List<ProviderDistItemResult>> providerDist(TradeRangeQuery query) {
+        return Res.ok(adminDashboardTradeService.providerDist(query));
     }
 
     @Operation(summary = "支付渠道成功率(指定天数或自定义区间)")
     @GetMapping("/provider-success")
-    public Result<List<ProviderSuccessItemResult>> providerSuccess(
-            @RequestParam(defaultValue = "30") int days,
-            @RequestParam(required = false) String start,
-            @RequestParam(required = false) String end) {
-        if (start != null && end != null) {
-            return Res.ok(adminDashboardTradeService.providerSuccess(start, end));
-        }
-        return Res.ok(adminDashboardTradeService.providerSuccess(days));
+    public Result<List<ProviderSuccessItemResult>> providerSuccess(TradeRangeQuery query) {
+        return Res.ok(adminDashboardTradeService.providerSuccess(query));
     }
 
     // ===== 时段 =====
 
     @Operation(summary = "时段分布(日均): 区间内按小时汇总后除以天数, 补齐 0-23")
     @GetMapping("/hourly-dist")
-    public Result<List<HourlyDistItemResult>> hourlyDist(
-            @RequestParam(defaultValue = "7") int days,
-            @RequestParam(required = false) String start,
-            @RequestParam(required = false) String end) {
-        if (start != null && end != null) {
-            return Res.ok(adminDashboardTradeService.hourlyDist(start, end));
-        }
-        return Res.ok(adminDashboardTradeService.hourlyDist(days));
+    public Result<List<HourlyDistItemResult>> hourlyDist(TradeRangeQuery query) {
+        return Res.ok(adminDashboardTradeService.hourlyDist(query));
     }
 
     // ===== 金额区间 =====
 
     @Operation(summary = "金额区间分桶(指定天数或自定义区间)")
     @GetMapping("/amount-range")
-    public Result<List<AmountRangeItemResult>> amountRange(
-            @RequestParam(defaultValue = "7") int days,
-            @RequestParam(required = false) String start,
-            @RequestParam(required = false) String end) {
-        if (start != null && end != null) {
-            return Res.ok(adminDashboardTradeService.amountRange(start, end));
-        }
-        return Res.ok(adminDashboardTradeService.amountRange(days));
+    public Result<List<AmountRangeItemResult>> amountRange(TradeRangeQuery query) {
+        return Res.ok(adminDashboardTradeService.amountRange(query));
     }
 
     // ===== 商户排名 =====
 
     @Operation(summary = "商户交易额排名(指定天数或自定义区间)")
     @GetMapping("/merchant-rank")
-    public Result<List<MerchantRankItemResult>> merchantRank(
-            @RequestParam(defaultValue = "7") int days,
-            @RequestParam(defaultValue = "10") int limit,
-            @RequestParam(required = false) String start,
-            @RequestParam(required = false) String end) {
-        if (start != null && end != null) {
-            return Res.ok(adminDashboardTradeService.merchantRank(start, end, limit));
-        }
-        return Res.ok(adminDashboardTradeService.merchantRank(days, limit));
+    public Result<List<MerchantRankItemResult>> merchantRank(TradeRangeQuery query) {
+        return Res.ok(adminDashboardTradeService.merchantRank(query));
     }
 }

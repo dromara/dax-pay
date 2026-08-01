@@ -1,8 +1,8 @@
 package cn.daxpay.open.platform.capability.file.param;
 
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.experimental.Accessors;
-import java.io.Serializable;
 
 /// # 文件上传确认请求参数
 ///
@@ -11,9 +11,11 @@ import java.io.Serializable;
 public class FileUploadConfirmParam {
 
     /// 文件ID
+    @NotNull(message = "{validation.field.fileId.notNull}")
     private Long fileId;
 
     /// 对象Key
+    @NotNull(message = "{validation.field.objectKey.notBlank}")
     private String objectKey;
 
     /// 对象ETag

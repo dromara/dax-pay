@@ -73,13 +73,13 @@ public class EasyPayApiV2Controller {
 
     @Operation(summary = "查询订单状态(内部)")
     @GetMapping("/order/status")
-    public Result<EasyPayOrderStatusResult> queryOrderStatus(@RequestParam @NotNull Long orderId) {
+    public Result<EasyPayOrderStatusResult> queryOrderStatus(@NotNull Long orderId) {
         return Res.ok(easyPayAssistService.queryOrderStatus(orderId));
     }
 
     @Operation(summary = "收银台订单信息(内部)")
     @GetMapping("/order/info")
-    public Result<EasyPaySubmitInfoResult> orderInfo(@RequestParam @NotNull Long id) {
+    public Result<EasyPaySubmitInfoResult> orderInfo(@NotNull Long id) {
         return Res.ok(easyPayAssistService.findSubmitInfo(id));
     }
 
