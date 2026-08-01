@@ -6,7 +6,6 @@ import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.trade.order.param.PayTradeQuery;
 import cn.daxpay.open.payment.trade.order.result.PayTradeResult;
 import cn.daxpay.open.payment.trade.order.service.TradeOrderDetailAssembler;
-import cn.daxpay.open.payment.trade.runtime.service.close.PayCloseService;
 import cn.daxpay.open.payment.trade.runtime.service.sync.PaySyncService;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPaySyncResult;
 import cn.daxpay.open.platform.common.translate.service.TransService;
@@ -26,7 +25,6 @@ public class PayTradeAdminService {
 
     private final PayTradeManager payTradeManager;
     private final PaySyncService paySyncService;
-    private final PayCloseService payCloseService;
     private final TransService transService;
     private final TradeOrderDetailAssembler tradeOrderDetailAssembler;
 
@@ -62,12 +60,5 @@ public class PayTradeAdminService {
         PayTrade trade = payTradeManager.findById(id)
                 .orElseThrow(() -> new DataNotExistException("pay.error.payOrderNotExist"));
         return paySyncService.syncPayOrder(trade);
-    }
-
-    /// 关闭/撤销订单(传入资金交易ID)
-    public void close(Long id, boolean useCancel) {
-        PayTrade trade = payTradeManager.findById(id)
-                .orElseThrow(() -> new DataNotExistException("pay.error.payOrderNotExist"));
-        payCloseService.closeOrder(trade, useCancel);
     }
 }

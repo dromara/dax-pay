@@ -13,8 +13,8 @@ public class AppAdminOrderCloseService {
 
     private final OrderCloseAdminService orderCloseAdminService;
 
-    /// 关闭/撤销订单(统一入口)
-    public void close(Long id, String type, boolean useCancel) {
-        orderCloseAdminService.close(id, type, useCancel);
+    /// 关闭订单(统一入口)
+    public void close(Long containerId, String tradeType) {
+        orderCloseAdminService.close(containerId, tradeType);
     }
 }

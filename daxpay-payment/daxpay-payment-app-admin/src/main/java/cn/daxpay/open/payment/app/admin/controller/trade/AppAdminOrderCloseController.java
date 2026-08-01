@@ -26,13 +26,12 @@ public class AppAdminOrderCloseController {
     private final AppAdminOrderCloseService appAdminOrderCloseService;
 
     @PermCode(menuCode = PermCodes.Trade.Order.MENU, code = PermCodes.Action.MANAGE)
-    @Operation(summary = "关闭/撤销订单(网关/普通统一入口)")
+    @Operation(summary = "关闭订单(网关/普通统一入口)")
     @PostMapping("/close")
     public Result<Void> close(
-            @NotNull(message = "{validation.field.id.notNull}") Long id,
-            @NotBlank String type,
-            @RequestParam(defaultValue = "false") boolean useCancel) {
-        appAdminOrderCloseService.close(id, type, useCancel);
+            @NotNull(message = "{validation.field.id.notNull}") Long containerId,
+            @NotBlank String tradeType) {
+        appAdminOrderCloseService.close(containerId, tradeType);
         return Res.ok();
     }
 }

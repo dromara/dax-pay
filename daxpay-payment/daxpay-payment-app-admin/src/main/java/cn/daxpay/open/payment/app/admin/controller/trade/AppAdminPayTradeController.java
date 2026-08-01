@@ -18,7 +18,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /// # 资金交易凭证(运营移动端)
@@ -55,15 +54,5 @@ public class AppAdminPayTradeController {
     public Result<NormalPaySyncResult> sync(
             @NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(payTradeService.sync(id));
-    }
-
-    @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "关闭/撤销订单")
-    @PostMapping("/close")
-    public Result<Void> close(
-            @NotNull(message = "{validation.field.id.notNull}") Long id,
-            @RequestParam(defaultValue = "false") boolean useCancel) {
-        payTradeService.close(id, useCancel);
-        return Res.ok();
     }
 }
