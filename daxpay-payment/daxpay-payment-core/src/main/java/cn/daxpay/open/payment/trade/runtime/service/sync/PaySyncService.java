@@ -51,6 +51,15 @@ public class PaySyncService {
     private final PaySyncRecordService paySyncRecordService;
     private final LockExecutor lockExecutor;
 
+    /// 按容器ID同步支付状态
+    ///
+    /// 供容器视角的对外 Service(Admin/Merchant)调用, 内部反查资金凭证后委托 [syncPayOrder]。
+    public NormalPaySyncResult syncByContainer(Long containerId, String tradeType) {
+        PayTrade trade = payTradeManager.findByContainerId(containerId, tradeType)
+                .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.payOrderNotExist"));
+        return this.syncPayOrder(trade);
+    }
+
     /// 支付同步
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public NormalPaySyncResult sync(NormalPaySyncParam param) {

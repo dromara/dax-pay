@@ -50,6 +50,7 @@
         <mybatis-plus.version>3.5.16</mybatis-plus.version>
         <mybatis-plus-join.version>1.5.7</mybatis-plus-join.version>
         <lock4j.version>2.2.7</lock4j.version>
+        <shedlock.version>6.3.1</shedlock.version>
         <aws-sdk.version>2.46.15</aws-sdk.version>
         <sa-token.version>1.45.0</sa-token.version>
         <caffeine.version>3.2.4</caffeine.version>

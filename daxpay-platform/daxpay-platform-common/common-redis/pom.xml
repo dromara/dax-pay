@@ -35,6 +35,17 @@
             <artifactId>lock4j-redis-template-spring-boot-starter</artifactId>
             <version>${lock4j.version}</version>
         </dependency>
+        <!-- 定时任务分布式锁（@SchedulerLock，防止多节点重复执行） -->
+        <dependency>
+            <groupId>net.javacrumbs.shedlock</groupId>
+            <artifactId>shedlock-spring</artifactId>
+            <version>${shedlock.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>net.javacrumbs.shedlock</groupId>
+            <artifactId>shedlock-provider-redis-spring</artifactId>
+            <version>${shedlock.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

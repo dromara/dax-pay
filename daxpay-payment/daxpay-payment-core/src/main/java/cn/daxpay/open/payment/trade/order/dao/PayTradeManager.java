@@ -83,6 +83,20 @@ public class PayTradeManager extends BaseManager<PayTradeMapper, PayTrade> {
         return this.page(mpPage, wrapper);
     }
 
+    /// 按状态 + 创建时间窗口扫描(定时同步任务用)
+    ///
+    /// 跨租户扫描(定时任务无 HTTP 上下文), 单次上限 500 防积压爆量。
+    /// 支持 processing(常规同步)和 close(CLOSE→SUCCESS 纠正)两种状态扫描。
+    /// 命中索引 idx_pay_trade_status_create_time。
+    @IgnoreTenant
+    public List<PayTrade> findSyncTrades(String status, OffsetDateTime start, OffsetDateTime end) {
+        return listLimit(500, q -> q
+                .eq(PayTrade::getStatus, status)
+                .ge(PayTrade::getCreateTime, start)
+                .le(PayTrade::getCreateTime, end)
+                .orderByAsc(PayTrade::getCreateTime));
+    }
+
     /// 查询普通支付已超时但仍处理中的资金交易(兜底定时任务用)
     ///
     /// 条件: tradeType=NORMAL 且 status=PROCESSING 且容器 expiredTime < now。

@@ -3,6 +3,7 @@ package cn.daxpay.open.payment.trade.order.dao;
 import cn.daxpay.open.platform.common.mybatisplus.impl.BaseManager;
 import cn.daxpay.open.platform.common.mybatisplus.query.generator.QueryGenerator;
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
+import cn.daxpay.open.platform.core.annotation.IgnoreTenant;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import cn.daxpay.open.payment.trade.order.param.RefundOrderQuery;
@@ -10,6 +11,8 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.stereotype.Repository;
 
+import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -36,6 +39,25 @@ public class RefundOrderManager extends BaseManager<RefundOrderMapper, RefundOrd
                 .eq(RefundOrder::getBizRefundNo, bizRefundNo)
                 .eq(RefundOrder::getAppId, appId)
                 .oneOpt();
+    }
+
+    /// 根据退款号查询(忽略租户, 定时任务引导读用)
+    @IgnoreTenant
+    public Optional<RefundOrder> findByRefundNoNotTenant(String refundNo) {
+        return findByField(RefundOrder::getRefundNo, refundNo);
+    }
+
+    /// 按创建时间窗口扫描退款中订单(定时同步任务用)
+    ///
+    /// 跨租户扫描(定时任务无 HTTP 上下文), 单次上限 500 防积压爆量。
+    /// 固定 status=progress, 命中索引 idx_refund_order_status_create_time。
+    @IgnoreTenant
+    public List<RefundOrder> findProgressRefunds(OffsetDateTime start, OffsetDateTime end) {
+        return listLimit(500, q -> q
+                .eq(RefundOrder::getStatus, "progress")
+                .ge(RefundOrder::getCreateTime, start)
+                .le(RefundOrder::getCreateTime, end)
+                .orderByAsc(RefundOrder::getCreateTime));
     }
 
     /// 根据实际上送串查询(回调容错: 特殊通道仅回传变形号)

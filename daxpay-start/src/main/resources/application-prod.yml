@@ -129,6 +129,8 @@ daxpay:
     config:
       # 沙箱环境(必须关闭; 不写时 Java 默认 true 会被 DeploymentModeEnforcer 拦截)
       sandbox-enabled: false
+      # 交易定时同步开关(生产环境开启)
+      trade-sync-enabled: true
       # RSA 密钥(PEM 文本通过环境变量注入)
       key-config:
         private-key: ${RSA_PRIVATE_KEY:?missing RSA_PRIVATE_KEY}
