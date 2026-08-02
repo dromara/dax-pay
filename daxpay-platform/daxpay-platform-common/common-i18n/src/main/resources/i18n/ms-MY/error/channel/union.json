@@ -1,0 +1,5 @@
+{
+  "payFailed": "Ralat pembayaran UnionPay: {0}",
+  "closeFailed": "Ralat pesanan tutup UnionPay: {0}",
+  "notSupportMethod": "Kaedah pembayaran UnionPay tidak disokong: {0}"
+}

@@ -1,0 +1,5 @@
+{
+  "payFailed": "雲閃付支付異常: {0}",
+  "closeFailed": "雲閃付關閉訂單異常: {0}",
+  "notSupportMethod": "暫不支援的雲閃付支付方式: {0}"
+}

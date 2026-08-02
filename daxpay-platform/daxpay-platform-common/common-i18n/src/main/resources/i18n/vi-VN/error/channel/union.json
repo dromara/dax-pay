@@ -1,0 +1,5 @@
+{
+  "payFailed": "Lỗi thanh toán UnionPay: {0}",
+  "closeFailed": "Lỗi đóng lệnh UnionPay: {0}",
+  "notSupportMethod": "Phương thức thanh toán UnionPay không được hỗ trợ: {0}"
+}

@@ -1,0 +1,5 @@
+{
+  "payFailed": "云闪付支付异常: {0}",
+  "closeFailed": "云闪付关闭订单异常: {0}",
+  "notSupportMethod": "暂不支持的云闪付支付方式: {0}"
+}

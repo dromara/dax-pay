@@ -1,0 +1,5 @@
+{
+  "payFailed": "UnionPay payment error: {0}",
+  "closeFailed": "UnionPay close order error: {0}",
+  "notSupportMethod": "Unsupported UnionPay payment method: {0}"
+}

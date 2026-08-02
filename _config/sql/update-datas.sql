@@ -95,3 +95,83 @@ DELETE FROM iam_perm_menu WHERE id = 9;
 --   91104/91102/91105  trade:pay-order 旧目录及其子(已被 91110/91111/91112 取代)
 --   91106/91107/91108  trade:record 旧目录及其子(已被 91200/91201/91202 取代)
 -- ============================================================
+
+
+-- ============================================================
+-- 云闪付(union_pay) 支付主数据种子
+--
+-- 目标: 补全 pay_md_* 主数据表中的 union 相关行, 使云闪付在
+--      支付渠道Tab/支付方式目录/支付能力页/支付产品页正常展示
+--
+-- 说明:
+--   1. union 复用通用 channel:merchant 菜单族, 无需新增菜单/权限种子
+--   2. 展示名走枚举 i18n (common-i18n enum/*.json 已全 10 语种就绪),
+--      DB 行 description/name 仅作维护参考, 不直接驱动前端文案
+--   3. 幂等: 有部分唯一索引(WHERE deleted=false)的表用 ON CONFLICT ... DO NOTHING,
+--      pay_md_channel 无唯一索引用 WHERE NOT EXISTS 兜底
+--   4. ID 段位 9xxxx 自成一段, 避开既有雪花ID与商业版数据
+--   5. pay_md_product_config 不补, active_env 由 PayProductConfigService 启动时兜底
+-- ============================================================
+
+-- 1. 支付通道 (pay_md_channel) — 无唯一索引, 用 WHERE NOT EXISTS
+INSERT INTO public.pay_md_channel
+  (id, code, sort_no, description, icon, creator, create_time, last_modifier, last_modified_time, version, deleted)
+SELECT 91001, 'union_pay', 3, '云闪付', NULL, 1, now(), 1, now(), 0, false
+WHERE NOT EXISTS (
+  SELECT 1 FROM public.pay_md_channel WHERE code = 'union_pay' AND deleted = false
+);
+
+-- 2. 支付渠道 (pay_md_provider)
+INSERT INTO public.pay_md_provider
+  (id, code, icon, sort_no, deleted, last_modifier, last_modified_time, version, creator, create_time, enabled, description)
+VALUES
+  (92001, 'union_pay', NULL, 3, false, 1, now(), 0, 1, now(), true, '银联')
+ON CONFLICT (code) WHERE deleted = false DO NOTHING;
+
+-- 3. 支付方式 (pay_md_method) — 4 种方式
+INSERT INTO public.pay_md_method
+  (id, code, sort_no, description, deleted, last_modifier, last_modified_time, version, creator, create_time)
+VALUES
+  (93001, 'union_qr',      30, '银联扫码',   false, 1, now(), 0, 1, now()),
+  (93002, 'union_jsapi',   31, '银联JSAPI',  false, 1, now(), 0, 1, now()),
+  (93003, 'union_h5',      32, '银联H5',     false, 1, now(), 0, 1, now()),
+  (93004, 'union_barcode', 33, '银联付款码', false, 1, now(), 0, 1, now())
+ON CONFLICT (code) WHERE deleted = false DO NOTHING;
+
+-- 4. 支付能力 (pay_md_capability) — 与支付方式同码
+INSERT INTO public.pay_md_capability
+  (id, code, sort_no, enabled, description, deleted, last_modifier, last_modified_time, version, creator, create_time)
+VALUES
+  (94001, 'union_qr',      30, true, '银联扫码',   false, 1, now(), 0, 1, now()),
+  (94002, 'union_jsapi',   31, true, '银联JSAPI',  false, 1, now(), 0, 1, now()),
+  (94003, 'union_h5',      32, true, '银联H5',     false, 1, now(), 0, 1, now()),
+  (94004, 'union_barcode', 33, true, '银联付款码', false, 1, now(), 0, 1, now())
+ON CONFLICT (code) WHERE deleted = false DO NOTHING;
+
+-- 5. 渠道-方式关联 (pay_md_provider_method) — union_pay 下 4 种方式
+INSERT INTO public.pay_md_provider_method
+  (id, provider, method, sort_no, deleted, last_modifier, last_modified_time, version, creator, create_time, description)
+VALUES
+  (95001, 'union_pay', 'union_qr',      1, false, 1, now(), 0, 1, now(), NULL),
+  (95002, 'union_pay', 'union_jsapi',   2, false, 1, now(), 0, 1, now(), NULL),
+  (95003, 'union_pay', 'union_h5',      3, false, 1, now(), 0, 1, now(), NULL),
+  (95004, 'union_pay', 'union_barcode', 4, false, 1, now(), 0, 1, now(), NULL)
+ON CONFLICT (provider, method) WHERE deleted = false DO NOTHING;
+
+-- 6. 支付产品 (pay_md_product) — 3 个产品, 均支持沙箱(sandbox=true)
+INSERT INTO public.pay_md_product
+  (id, code, name, channel, description, sort_no, creator, create_time, last_modifier, last_modified_time, version, deleted, sandbox, enabled)
+VALUES
+  (96001, 'union_qrcode',  '云闪付(C扫B)', 'union_pay', '云闪付主扫(二维码)',  1, 1, now(), 1, now(), 0, false, true, true),
+  (96002, 'union_h5',      '云闪付(H5)',   'union_pay', '云闪付H5',            2, 1, now(), 1, now(), 0, false, true, true),
+  (96003, 'union_barcode', '云闪付(B扫C)', 'union_pay', '云闪付被扫(付款码)', 3, 1, now(), 1, now(), 0, false, true, true)
+ON CONFLICT (code) WHERE deleted = false DO NOTHING;
+
+-- 7. 产品-能力关联 (pay_md_product_capability) — 对齐各 ProductStrategy 的 methodCapabilityMapping
+INSERT INTO public.pay_md_product_capability
+  (id, product_code, capability_code, sort_no, enabled, remark, deleted, last_modifier, last_modified_time, version, creator, create_time)
+VALUES
+  (97001, 'union_qrcode',  'union_qr',      1, true, NULL, false, 1, now(), 0, 1, now()),
+  (97002, 'union_h5',      'union_h5',      1, true, NULL, false, 1, now(), 0, 1, now()),
+  (97003, 'union_barcode', 'union_barcode', 1, true, NULL, false, 1, now(), 0, 1, now())
+ON CONFLICT (product_code, capability_code) WHERE deleted = false DO NOTHING;
