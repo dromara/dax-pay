@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,6 +34,17 @@ public class MerchantInfoManager extends BaseManager<MerchantInfoMapper, Merchan
     @IgnoreTenant
     public Optional<MerchantInfo> findByMchNoNotTenant(String mchNo) {
         return this.findByField(MerchantInfo::getMchNo, mchNo);
+    }
+
+    /// 根据商户号集合批量查询, 忽略租户(运营端跨租户翻译商户名称用)
+    @IgnoreTenant
+    public List<MerchantInfo> findAllByMchNosNotTenant(Collection<String> mchNos) {
+        if (mchNos == null || mchNos.isEmpty()) {
+            return List.of();
+        }
+        return this.lambdaQuery()
+                .in(MerchantInfo::getMchNo, mchNos)
+                .list();
     }
 
     /// 分页

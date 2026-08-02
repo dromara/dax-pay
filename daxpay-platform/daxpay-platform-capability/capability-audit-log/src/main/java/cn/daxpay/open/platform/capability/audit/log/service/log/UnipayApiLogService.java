@@ -11,10 +11,12 @@ import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
+import cn.daxpay.open.platform.core.spi.MerchantNameResolver;
 import cn.hutool.core.util.StrUtil;
 import jakarta.annotation.PreDestroy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +24,11 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.stream.Collectors;
 
 /// # 统一支付接口审计日志服务
 ///
@@ -52,6 +57,9 @@ public class UnipayApiLogService {
 
     private final UnipayApiLogDbManager unipayApiLogManager;
     private final AuditLogMaskService maskService;
+
+    // 商户名称解析器(可选, 无 payment 模块时为 null)
+    private final ObjectProvider<MerchantNameResolver> merchantNameResolverProvider;
 
     /// 内存缓冲队列
     private final BlockingQueue<UnipayApiLogParam> bufferQueue = new LinkedBlockingQueue<>(DEFAULT_QUEUE_CAPACITY);
@@ -149,14 +157,35 @@ public class UnipayApiLogService {
 
     /// 详情
     public UnipayApiLogResult findById(Long id) {
-        return unipayApiLogManager.findById(id)
+        UnipayApiLogResult result = unipayApiLogManager.findById(id)
                 .map(UnipayApiLogDb::toResult)
                 .orElseThrow(DataNotExistException::new);
+        fillMchName(List.of(result));
+        return result;
     }
 
     /// 分页
     public PageResult<UnipayApiLogResult> page(PageParam pageParam, UnipayApiLogQuery query) {
-        return MpUtil.toPageResult(unipayApiLogManager.page(pageParam, query));
+        PageResult<UnipayApiLogResult> pageResult = MpUtil.toPageResult(unipayApiLogManager.page(pageParam, query));
+        fillMchName(pageResult.getRecords());
+        return pageResult;
+    }
+
+    /// 批量回填商户名称(platform 模块通过 SPI 翻译 mchNo, 无 payment 模块时跳过)
+    private void fillMchName(List<UnipayApiLogResult> list) {
+        MerchantNameResolver resolver = merchantNameResolverProvider.getIfAvailable();
+        if (resolver == null) {
+            return;
+        }
+        Set<String> mchNos = list.stream()
+                .map(UnipayApiLogResult::getMchNo)
+                .filter(StrUtil::isNotBlank)
+                .collect(Collectors.toSet());
+        if (mchNos.isEmpty()) {
+            return;
+        }
+        Map<String, String> nameMap = resolver.resolveNames(mchNos);
+        list.forEach(item -> item.setMchName(nameMap.get(item.getMchNo())));
     }
 
     /// 按天数清理

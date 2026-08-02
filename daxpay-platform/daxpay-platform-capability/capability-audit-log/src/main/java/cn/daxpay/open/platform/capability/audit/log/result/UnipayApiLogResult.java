@@ -19,6 +19,10 @@ public class UnipayApiLogResult {
     @Schema(description = "商户号")
     private String mchNo;
 
+    /// 商户名称(platform 模块不依赖 payment, 通过 MerchantNameResolver SPI 翻译)
+    @Schema(description = "商户名称")
+    private String mchName;
+
     @Schema(description = "请求ID")
     private String reqId;
 
