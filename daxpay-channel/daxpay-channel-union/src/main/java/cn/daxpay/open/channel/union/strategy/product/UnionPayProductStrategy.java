@@ -12,18 +12,23 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 
-/// # 云闪付(C扫B 主扫)产品策略
+/// # 云闪付产品策略
+///
+/// 云闪付为单一产品(直连银联 ACP), 含主扫([PayMethodEnum#UNION_QR]) / H5([PayMethodEnum#UNION_H5])
+/// / 被扫([PayMethodEnum#UNION_BARCODE]) 三种支付方式, 方式→能力一对一同码。
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UnionQrcodeProductStrategy extends AbsProductStrategy {
+public class UnionPayProductStrategy extends AbsProductStrategy {
 
     private static final Map<PayMethodEnum, List<PayCapabilityEnum>> METHOD_CAP_MAP = Map.of(
-            PayMethodEnum.UNION_QR, List.of(PayCapabilityEnum.UNION_QR));
+            PayMethodEnum.UNION_QR, List.of(PayCapabilityEnum.UNION_QR),
+            PayMethodEnum.UNION_H5, List.of(PayCapabilityEnum.UNION_H5),
+            PayMethodEnum.UNION_BARCODE, List.of(PayCapabilityEnum.UNION_BARCODE));
 
     @Override
     public ProductEnum getProduct() {
-        return ProductEnum.UNION_QRCODE;
+        return ProductEnum.UNION_PAY;
     }
 
     @Override

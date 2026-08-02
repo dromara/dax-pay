@@ -45,12 +45,8 @@ public enum ProductEnum implements I18nSupport {
     UMS_BARCODE("ums_barcode"),
 
     // ===== 云闪付(直连银联 ACP) =====
-    /// 云闪付(C扫B, 主扫)
-    UNION_QRCODE("union_qrcode"),
-    /// 云闪付(H5)
-    UNION_H5("union_h5"),
-    /// 云闪付(B扫C, 被扫)
-    UNION_BARCODE("union_barcode"),
+    /// 云闪付(单一产品, 含主扫 UNION_QR / H5 / 被扫 UNION_BARCODE 三种支付方式)
+    UNION_PAY("union_pay"),
 
     // ===== 拉卡拉 =====
     /// 拉卡拉支付
@@ -100,8 +96,8 @@ public enum ProductEnum implements I18nSupport {
             case WECHAT_ISV, WECHAT_PAY -> ChannelEnum.WECHAT.getCode();
             // 银联商务系列
             case UMS_QRCODE, UMS_JSAPI, UMS_APP, UMS_MINI, UMS_H5, UMS_BARCODE -> ChannelEnum.UMS_PAY.getCode();
-            // 云闪付(直连银联 ACP)系列
-            case UNION_QRCODE, UNION_H5, UNION_BARCODE -> ChannelEnum.UNION_PAY.getCode();
+            // 云闪付(直连银联 ACP)
+            case UNION_PAY -> ChannelEnum.UNION_PAY.getCode();
             // 拉卡拉
             case LAKALA_PAY -> ChannelEnum.LAKALA_PAY.getCode();
             // 乐刷

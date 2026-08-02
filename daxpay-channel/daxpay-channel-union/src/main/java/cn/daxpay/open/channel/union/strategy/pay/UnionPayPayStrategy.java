@@ -3,26 +3,26 @@ package cn.daxpay.open.channel.union.strategy.pay;
 import cn.daxpay.open.channel.union.client.credential.UnionSdkCredential;
 import cn.daxpay.open.channel.union.service.direct.UnionDirectConfigAssembler;
 import cn.daxpay.open.channel.union.service.payment.pay.UnionPayService;
+import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.payment.strategy.pay.AbsNormalPayStrategy;
 import cn.daxpay.open.payment.strategy.pay.PayStrategyContext;
 import cn.daxpay.open.payment.trade.runtime.bo.PayTradeResultBo;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
-/// # 云闪付支付策略基类
+/// # 云闪付支付策略
 ///
-/// 云闪付三个产品(UNION_QRCODE/H5/BARCODE)支付执行逻辑相同:
-/// 统一委托 [UnionPayService#pay], 内部按请求 method 映射分发。
-///
-/// 子类只需实现 [cn.daxpay.open.payment.strategy.PaymentStrategy#getProduct] 返回对应产品,
-/// 注册为独立 Spring Bean 即可被 [cn.daxpay.open.payment.strategy.PaymentStrategyFactory] 按 productCode 路由。
+/// 单一产品(UNION_PAY), 委托 [UnionPayService#pay] 执行, 内部按请求 method 映射分发
+/// (主扫 UNION_QR / H5 / 被扫 UNION_BARCODE)。
 @Slf4j
+@Service
 @RequiredArgsConstructor
-public abstract class AbsUnionPayStrategy extends AbsNormalPayStrategy {
+public class UnionPayPayStrategy extends AbsNormalPayStrategy {
 
-    protected final UnionPayService unionPayService;
-    protected final UnionDirectConfigAssembler unionDirectConfigAssembler;
+    private final UnionPayService unionPayService;
+    private final UnionDirectConfigAssembler unionDirectConfigAssembler;
 
     /// 支付前预处理: 组装通道凭证写入上下文
     @Override
@@ -37,5 +37,10 @@ public abstract class AbsUnionPayStrategy extends AbsNormalPayStrategy {
     public PayTradeResultBo doPay(PayStrategyContext context) {
         UnionSdkCredential credential = context.getChannelConfig(UnionSdkCredential.class);
         return unionPayService.pay(context.getTrade(), context.getPayParam(), credential);
+    }
+
+    @Override
+    public ProductEnum getProduct() {
+        return ProductEnum.UNION_PAY;
     }
 }
