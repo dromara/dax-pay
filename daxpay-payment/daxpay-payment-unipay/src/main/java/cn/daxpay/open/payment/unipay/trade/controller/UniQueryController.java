@@ -2,12 +2,15 @@ package cn.daxpay.open.payment.unipay.trade.controller;
 
 import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayQueryParam;
+import cn.daxpay.open.payment.unipay.param.trade.refund.RefundOrderQueryParam;
 
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayOrderResult;
+import cn.daxpay.open.payment.unipay.result.trade.refund.RefundOrderResult;
 import cn.daxpay.open.payment.common.util.DaxRes;
 import cn.daxpay.open.payment.unipay.aop.PaymentVerify;
 import cn.daxpay.open.payment.unipay.trade.service.NormalPayOrderQueryService;
+import cn.daxpay.open.payment.unipay.trade.service.RefundOrderQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -27,11 +30,18 @@ import org.springframework.web.bind.annotation.RestController;
 public class UniQueryController {
 
     private final NormalPayOrderQueryService normalPayOrderQueryService;
+    private final RefundOrderQueryService refundOrderQueryService;
 
     @Operation(summary = "支付订单查询接口")
     @PostMapping("/pay-order")
     public DaxResult<NormalPayOrderResult> queryPayOrder(@RequestBody NormalPayQueryParam param){
         return DaxRes.ok(normalPayOrderQueryService.queryPayOrder(param));
+    }
+
+    @Operation(summary = "退款订单查询接口")
+    @PostMapping("/refund-order")
+    public DaxResult<RefundOrderResult> queryRefundOrder(@RequestBody RefundOrderQueryParam param){
+        return DaxRes.ok(refundOrderQueryService.queryRefundOrder(param));
     }
 
 }

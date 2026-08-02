@@ -23,6 +23,21 @@ public class RefundOrderManager extends BaseManager<RefundOrderMapper, RefundOrd
         return findByField(RefundOrder::getRefundNo, refundNo);
     }
 
+    /// 根据商户退款号查询(按商户号自动租户隔离)
+    public Optional<RefundOrder> findByBizRefundNo(String bizRefundNo) {
+        return lambdaQuery()
+                .eq(RefundOrder::getBizRefundNo, bizRefundNo)
+                .oneOpt();
+    }
+
+    /// 根据商户退款号和应用号查询(统一接口主路径, 避免同商户多应用串单)
+    public Optional<RefundOrder> findByBizRefundNo(String bizRefundNo, String appId) {
+        return lambdaQuery()
+                .eq(RefundOrder::getBizRefundNo, bizRefundNo)
+                .eq(RefundOrder::getAppId, appId)
+                .oneOpt();
+    }
+
     /// 根据实际上送串查询(回调容错: 特殊通道仅回传变形号)
     public Optional<RefundOrder> findByRelationOrderNo(String relationOrderNo) {
         return findByField(RefundOrder::getRelationOrderNo, relationOrderNo);

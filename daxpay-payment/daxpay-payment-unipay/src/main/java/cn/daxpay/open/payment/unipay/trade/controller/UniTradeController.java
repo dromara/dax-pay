@@ -3,12 +3,15 @@ package cn.daxpay.open.payment.unipay.trade.controller;
 import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.common.util.DaxRes;
-import cn.daxpay.open.payment.unipay.aop.PaymentVerify;
 import cn.daxpay.open.payment.trade.runtime.service.close.PayCloseService;
 import cn.daxpay.open.payment.trade.runtime.service.pay.normal.NormalPayService;
+import cn.daxpay.open.payment.unipay.aop.PaymentVerify;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayCloseParam;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
+import cn.daxpay.open.payment.unipay.param.trade.refund.RefundParam;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
+import cn.daxpay.open.payment.unipay.result.trade.refund.RefundResult;
+import cn.daxpay.open.payment.unipay.trade.service.RefundOrderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class UniTradeController {
     private final NormalPayService normalPayService;
     private final PayCloseService payCloseService;
+    private final RefundOrderService refundOrderService;
 
     @Operation(summary = "支付接口")
     @PostMapping("/pay")
@@ -40,6 +44,12 @@ public class UniTradeController {
     public DaxResult<Void> close(@RequestBody NormalPayCloseParam param){
         payCloseService.close(param);
         return DaxRes.ok();
+    }
+
+    @Operation(summary = "退款接口")
+    @PostMapping("/refund")
+    public DaxResult<RefundResult> refund(@RequestBody RefundParam param){
+        return DaxRes.ok(refundOrderService.refund(param));
     }
 
 }
