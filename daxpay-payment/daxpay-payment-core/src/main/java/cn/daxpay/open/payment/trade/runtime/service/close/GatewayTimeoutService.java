@@ -49,22 +49,21 @@ public class GatewayTimeoutService {
                     .contains(current.getStatus())) {
                 return;
             }
-            GatewayPayOrder finalOrder = current;
             // 定时/MQ 无登录上下文：按订单 mchNo 开启作用域后走租户过滤
             paymentContext.runAs(() -> {
-                if (StrUtil.isBlank(finalOrder.getMchNo())) {
+                if (StrUtil.isBlank(current.getMchNo())) {
                     log.error("网关超时关单订单缺少 mchNo, orderNo={}", orderNo);
                     return;
                 }
-                paymentContext.setMchNo(finalOrder.getMchNo());
-                PayTrade trade = payTradeManager.findByContainerId(finalOrder.getId(), PayTradeTypeEnum.GATEWAY.getCode())
+                paymentContext.setMchNo(current.getMchNo());
+                PayTrade trade = payTradeManager.findByContainerId(current.getId(), PayTradeTypeEnum.GATEWAY.getCode())
                         .orElse(null);
                 if (trade != null) {
                     // 有资金凭证: 走统一超时关单(含通道关闭)
                     payCloseService.closeForTimeout(trade.getTradeNo());
                 } else {
                     // 仅容器: 直接过期
-                    payUniHandleService.gatewayOrderTimeout(finalOrder);
+                    payUniHandleService.gatewayOrderTimeout(current);
                 }
             });
         })) {

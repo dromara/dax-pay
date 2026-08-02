@@ -22,7 +22,6 @@ public class EasyPayCloseV2Service {
 
     private final EasyPayCredentialService easyPayCredentialService;
     private final EasyPayAssistService easyPayAssistService;
-    private final EasyPayOrderManager easyPayOrderManager;
     private final PayCloseService payCloseService;
 
     /// 关单

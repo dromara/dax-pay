@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.trade.runtime.service.refund;
 
+import cn.daxpay.open.payment.route.service.runtime.PayRouteService;
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
@@ -53,8 +54,7 @@ public class RefundService {
 
     /// 自身注入: 使 @Transactional 方法经代理调用生效（锁内层事务模式）
     @Lazy
-    @Autowired
-    private RefundService self;
+    private final RefundService self;
 
     /// 发起退款
     public RefundOrder refund(RefundParam param) {

@@ -42,8 +42,7 @@ public class PayCallbackService {
 
     /// 自注入: 保证 [doPayCallback] 走 Spring 事务代理
     @Lazy
-    @Autowired
-    private PayCallbackService self;
+    private final PayCallbackService self;
 
     /// 支付统一回调处理（锁外层，无事务），返回支付产品编码
     ///
@@ -65,6 +64,7 @@ public class PayCallbackService {
         Long tradeId = trade.getId();
         TryLockResult<String> result = lockExecutor.tryExecute(
                 "payment:trade:" + tradeId,
+                // 执行具体逻辑
                 () -> self.doPayCallback(callbackData, tradeId)
         );
         if (!result.acquired()) {
@@ -90,8 +90,10 @@ public class PayCallbackService {
             trade.setOutOrderNo(callbackData.getOutTradeNo());
         }
         if (Objects.equals(CallbackStatusEnum.SUCCESS.getCode(), callbackData.getTradeStatus())) {
+            // 成功处理
             this.success(trade, callbackData);
         } else {
+            // 失败处理
             this.fail(trade, callbackData);
         }
         return resolveProduct(trade);
