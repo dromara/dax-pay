@@ -42,6 +42,13 @@
             <artifactId>capability-audit-log</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <!-- 支付域内核（提供 PaySignUtil，用于测试回调验签演示；传递 common-config 含 PlatformConfigProperties） -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-payment-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>
