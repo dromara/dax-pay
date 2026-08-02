@@ -1,7 +1,7 @@
 {
   "alipay": "支付宝",
   "wechat": "微信支付",
-  "union_pay": "云闪付",
+  "union_pay": "银联支付",
   "leshua_pay": "乐刷",
   "vbill_pay": "随行付",
   "hkrt_pay": "海科融通",
