@@ -2,7 +2,6 @@ package cn.daxpay.open.payment.trade.record.result;
 
 import cn.daxpay.open.payment.common.result.MchBaseResult;
 import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
-import cn.daxpay.open.payment.merchant.entity.info.MerchantInfo;
 import cn.daxpay.open.platform.core.annotation.Trans;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
@@ -21,14 +20,6 @@ import lombok.experimental.FieldNameConstants;
 @FieldNameConstants
 @Schema(title = "通道入站回调记录")
 public class PayCallbackRecordResult extends MchBaseResult {
-
-    /// 商户名称(由 mchNo 翻译)
-    @Trans(
-            entity = MerchantInfo.class,
-            source = MchBaseResult.Fields.mchNo,
-            result = MerchantInfo.Fields.mchName)
-    @Schema(description = "商户名称")
-    private String mchName;
 
     @Schema(description = "应用号")
     private String appId;

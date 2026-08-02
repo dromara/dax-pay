@@ -1,7 +1,6 @@
 package cn.daxpay.open.payment.device.terminal.result;
 
 import cn.daxpay.open.payment.common.result.MchBaseResult;
-import cn.daxpay.open.payment.merchant.entity.info.MerchantInfo;
 import cn.daxpay.open.payment.merchant.entity.store.MchStoreInfo;
 import cn.daxpay.open.platform.core.annotation.Trans;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -17,14 +16,6 @@ import lombok.experimental.FieldNameConstants;
 @Accessors(chain = true)
 @Schema(title = "系统终端")
 public class TerminalDeviceResult extends MchBaseResult {
-
-    /// 商户名称
-    @Trans(
-            entity = MerchantInfo.class,
-            source = MchBaseResult.Fields.mchNo,
-            result = MerchantInfo.Fields.mchName)
-    @Schema(description = "商户名称")
-    private String mchName;
 
     @Schema(description = "系统终端编码")
     private String terminalNo;

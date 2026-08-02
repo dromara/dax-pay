@@ -2,8 +2,6 @@ package cn.daxpay.open.payment.device.terminal.result;
 
 import cn.daxpay.open.payment.common.result.MchBaseResult;
 import cn.daxpay.open.payment.device.enums.TerminalTypeEnum;
-import cn.daxpay.open.payment.merchant.entity.info.MerchantInfo;
-import cn.daxpay.open.platform.core.annotation.Trans;
 import cn.daxpay.open.platform.core.enums.pay.channel.ChannelTerminalStatusEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
@@ -18,14 +16,6 @@ import lombok.experimental.FieldNameConstants;
 @Accessors(chain = true)
 @Schema(title = "通道终端台账")
 public class ChannelTerminalResult extends MchBaseResult {
-
-    /// 商户名称
-    @Trans(
-            entity = MerchantInfo.class,
-            source = MchBaseResult.Fields.mchNo,
-            result = MerchantInfo.Fields.mchName)
-    @Schema(description = "商户名称")
-    private String mchName;
 
     @Schema(description = "通道商户号")
     private String channelMchNo;

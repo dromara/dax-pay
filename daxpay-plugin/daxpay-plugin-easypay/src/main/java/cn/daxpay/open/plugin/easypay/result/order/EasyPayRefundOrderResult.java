@@ -1,8 +1,6 @@
 package cn.daxpay.open.plugin.easypay.result.order;
 
 import cn.daxpay.open.payment.common.result.MchBaseResult;
-import cn.daxpay.open.payment.merchant.entity.info.MerchantInfo;
-import cn.daxpay.open.platform.core.annotation.Trans;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -18,14 +16,6 @@ import java.time.OffsetDateTime;
 @Accessors(chain = true)
 @Schema(title = "易支付退款订单结果")
 public class EasyPayRefundOrderResult extends MchBaseResult {
-
-    /// 商户名称(由 mchNo 翻译, 走系统 @Trans 机制)
-    @Trans(
-            entity = MerchantInfo.class,
-            source = MchBaseResult.Fields.mchNo,
-            result = MerchantInfo.Fields.mchName)
-    @Schema(description = "商户名称")
-    private String mchName;
 
     /// 关联内核退款单 ID（RefundOrder.id）
     @Schema(description = "关联内核退款单ID")
