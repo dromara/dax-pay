@@ -3,6 +3,7 @@ package cn.daxpay.open.channel.hmpay.controller.callback;
 import cn.daxpay.open.channel.hmpay.service.callback.HmpayPayCallbackService;
 import cn.daxpay.open.channel.hmpay.service.callback.HmpayRefundCallbackService;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
+import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,12 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 /// # 河马付支付回调通知控制器
 ///
-/// 杉德异步通知入口(支付/退款), 不走 Sa-Token 认证(由安全配置放行 `/unipay/callback/**`)。
+/// 杉德异步通知入口(支付/退款), 不走 Sa-Token 认证(由 @IgnoreAuth 注解放行)。
 /// 验签转发子应用(杉德 RSA 验签在子应用侧), 凭 out_order_no 反查 PayTrade/RefundOrder。
 @Tag(name = "河马付支付回调通知控制器")
 @RestController
 @RequestMapping("/unipay/callback/{mchNo}/{channelMchNo}/hmpay")
 @RequiredArgsConstructor
+@IgnoreAuth
 public class HmpayCallbackController {
 
     private final MerchantContextLoader merchantContextLoader;

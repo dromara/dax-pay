@@ -3,6 +3,7 @@ package cn.daxpay.open.channel.ums.controller.callback;
 import cn.daxpay.open.channel.ums.service.callback.UmsPayCallbackService;
 import cn.daxpay.open.channel.ums.service.callback.UmsRefundCallbackService;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
+import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,12 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 /// # 银联商务支付回调通知控制器
 ///
-/// 银联商务异步通知入口(支付/退款), 不走 Sa-Token 认证(由安全配置放行 `/unipay/callback/**`)。
+/// 银联商务异步通知入口(支付/退款), 不走 Sa-Token 认证(由 @IgnoreAuth 注解放行)。
 /// URL 中的 channelMchNo 用于回调时组装凭证验签。
 @Tag(name = "银联商务支付回调通知控制器")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/unipay/callback/{mchNo}/{channelMchNo}/ums")
+@IgnoreAuth
 public class UmsCallbackController {
 
     private final MerchantContextLoader merchantContextLoader;

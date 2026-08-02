@@ -3,6 +3,7 @@ package cn.daxpay.open.channel.leshua.controller.callback;
 import cn.daxpay.open.channel.leshua.service.callback.LeshuaPayCallbackService;
 import cn.daxpay.open.channel.leshua.service.callback.LeshuaRefundCallbackService;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
+import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,12 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 /// # 乐刷支付回调通知控制器
 ///
-/// 乐刷异步通知入口(支付/退款), 不走 Sa-Token 认证(由安全配置放行 `/unipay/callback/**`)。
+/// 乐刷异步通知入口(支付/退款), 不走 Sa-Token 认证(由 @IgnoreAuth 注解放行)。
 /// 验签转发子应用(MD5/SM3 签名工具在子应用侧), 凭 third_order_id 反查 PayTrade。
 @Tag(name = "乐刷支付回调通知控制器")
 @RestController
 @RequestMapping("/unipay/callback/{mchNo}/{channelMchNo}/leshua")
 @RequiredArgsConstructor
+@IgnoreAuth
 public class LeshuaCallbackController {
 
     private final MerchantContextLoader merchantContextLoader;

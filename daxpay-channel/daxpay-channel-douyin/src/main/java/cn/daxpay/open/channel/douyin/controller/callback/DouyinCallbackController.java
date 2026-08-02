@@ -3,6 +3,7 @@ package cn.daxpay.open.channel.douyin.controller.callback;
 import cn.daxpay.open.channel.douyin.service.callback.DouyinPayCallbackService;
 import cn.daxpay.open.channel.douyin.service.callback.DouyinRefundCallbackService;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
+import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,12 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 /// # 抖音支付回调通知控制器
 ///
-/// 抖音异步通知入口(支付/退款), 不走 Sa-Token 认证(由安全配置放行 `/unipay/callback/**`)。
+/// 抖音异步通知入口(支付/退款), 不走 Sa-Token 认证(由 @IgnoreAuth 注解放行)。
 /// URL 中的 channelMchNo 用于回调时组装凭证验签(抖音 body 加密, 验签前无法解析)。
 @Tag(name = "抖音支付回调通知控制器")
 @RestController
 @RequestMapping("/unipay/callback/{mchNo}/{channelMchNo}/douyin")
 @RequiredArgsConstructor
+@IgnoreAuth
 public class DouyinCallbackController {
 
     private final MerchantContextLoader merchantContextLoader;

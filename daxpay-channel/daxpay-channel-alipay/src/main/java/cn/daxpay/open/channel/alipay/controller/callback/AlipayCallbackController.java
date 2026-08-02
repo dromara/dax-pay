@@ -2,6 +2,7 @@ package cn.daxpay.open.channel.alipay.controller.callback;
 
 import cn.daxpay.open.channel.alipay.service.callback.AlipayCallbackService;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
+import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,12 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 /// # 支付宝支付回调通知控制器
 ///
 /// 支付宝异步通知入口(支付/退款共用同一端点, 无 /pay 后缀, 见 AlipayPayService.buildNotifyUrl),
-/// 不走 Sa-Token 认证(由安全配置放行 `/unipay/callback/**`)。
+/// 不走 Sa-Token 认证(由 @IgnoreAuth 注解放行)。
 /// 路径 `{mchNo}/{channelMchNo}`: mchNo 装载租户上下文; channelMchNo 供直连凭证组装(亦可凭 out_trade_no 反查)。
 @Tag(name = "支付宝支付回调通知控制器")
 @RestController
 @RequestMapping("/unipay/callback/{mchNo}/{channelMchNo}/alipay")
 @RequiredArgsConstructor
+@IgnoreAuth
 public class AlipayCallbackController {
 
     private final MerchantContextLoader merchantContextLoader;

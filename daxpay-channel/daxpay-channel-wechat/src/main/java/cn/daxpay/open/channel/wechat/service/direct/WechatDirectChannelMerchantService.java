@@ -4,6 +4,7 @@ import cn.daxpay.open.channel.wechat.dao.direct.WechatDirectChannelMerchantManag
 import cn.daxpay.open.channel.wechat.entity.direct.WechatDirectChannelMerchant;
 import cn.daxpay.open.channel.wechat.param.direct.WechatDirectChannelMerchantCreateParam;
 import cn.daxpay.open.channel.wechat.result.direct.WechatDirectChannelMerchantResult;
+import cn.daxpay.open.channel.wechat.strategy.direct.merchant.WechatDirectChannelMerchantCleanupStrategy;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
 import cn.daxpay.open.payment.masterdata.dao.product.PayProductConfigManager;
 import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
@@ -22,7 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 /// 一个微信商户号(wxMchId)对应一个 channelMchNo, 商户的多个应用共享此绑定。
 ///
 /// 通道商户删除时的扩展数据清理由独立的策略类
-/// [cn.daxpay.open.channel.wechat.cleanup.direct.WechatDirectChannelMerchantCleanupStrategy] 承担。
+/// [WechatDirectChannelMerchantCleanupStrategy] 承担。
 @Slf4j
 @Service
 @RequiredArgsConstructor

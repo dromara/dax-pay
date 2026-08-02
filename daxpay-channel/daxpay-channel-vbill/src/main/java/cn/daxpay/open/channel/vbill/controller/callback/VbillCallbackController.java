@@ -3,6 +3,7 @@ package cn.daxpay.open.channel.vbill.controller.callback;
 import cn.daxpay.open.channel.vbill.service.callback.VbillPayCallbackService;
 import cn.daxpay.open.channel.vbill.service.callback.VbillRefundCallbackService;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
+import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -16,12 +17,13 @@ import java.util.Map;
 
 /// # 随行付支付回调通知控制器
 ///
-/// 随行付(天阙科技)异步通知入口(支付), 不走 Sa-Token 认证(由安全配置放行 `/unipay/callback/**`)。
+/// 随行付(天阙科技)异步通知入口(支付), 不走 Sa-Token 认证(由 @IgnoreAuth 注解放行)。
 /// 验签只需全局服务商公钥; path 仍带 channelMchNo 统一约定, 凭 ordNo 反查 PayTrade。
 @Tag(name = "随行付支付回调通知控制器")
 @RestController
 @RequestMapping("/unipay/callback/{mchNo}/{channelMchNo}/vbill")
 @RequiredArgsConstructor
+@IgnoreAuth
 public class VbillCallbackController {
 
     private final MerchantContextLoader merchantContextLoader;

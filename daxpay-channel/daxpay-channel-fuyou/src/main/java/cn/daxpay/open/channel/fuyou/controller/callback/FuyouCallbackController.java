@@ -3,6 +3,7 @@ package cn.daxpay.open.channel.fuyou.controller.callback;
 import cn.daxpay.open.channel.fuyou.service.callback.FuyouPayCallbackService;
 import cn.daxpay.open.channel.fuyou.service.callback.FuyouRefundCallbackService;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
+import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -14,13 +15,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 /// # 富友支付回调通知控制器
 ///
-/// 富友异步通知入口(支付), 不走 Sa-Token 认证(由安全配置放行 `/unipay/callback/**`)。
+/// 富友异步通知入口(支付), 不走 Sa-Token 认证(由 @IgnoreAuth 注解放行)。
 /// 富友回调为 form-urlencoded 的 `req` 参数(URL编码的XML), 验签只需全局服务商公钥,
 /// 凭 mchnt_order_no(关联订单号) 反查 PayTrade。
 @Tag(name = "富友支付回调通知控制器")
 @RestController
 @RequestMapping("/unipay/callback/{mchNo}/{channelMchNo}/fuyou")
 @RequiredArgsConstructor
+@IgnoreAuth
 public class FuyouCallbackController {
 
     private final MerchantContextLoader merchantContextLoader;

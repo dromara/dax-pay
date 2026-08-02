@@ -3,6 +3,7 @@ package cn.daxpay.open.channel.wechat.controller.callback;
 import cn.daxpay.open.channel.wechat.service.callback.WechatPayCallbackService;
 import cn.daxpay.open.channel.wechat.service.callback.WechatRefundCallbackService;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
+import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,12 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 /// # 微信支付回调通知控制器
 ///
-/// 微信异步通知入口(支付/退款), 不走 Sa-Token 认证(由安全配置放行 `/unipay/callback/**`)。
+/// 微信异步通知入口(支付/退款), 不走 Sa-Token 认证(由 @IgnoreAuth 注解放行)。
 /// URL 中的 channelMchNo 用于回调时组装凭证验签(微信 body 加密, 验签前无法解析)。
 @Tag(name = "微信支付回调通知控制器")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/unipay/callback/{mchNo}/{channelMchNo}/wechat")
+@IgnoreAuth
 public class WechatCallbackController {
 
     private final MerchantContextLoader merchantContextLoader;
@@ -29,8 +31,7 @@ public class WechatCallbackController {
     /// 微信支付回调(直连)
     @Operation(summary = "微信支付回调")
     @PostMapping("/pay")
-    public String payNotify(@PathVariable("mchNo") String mchNo,
-                            @PathVariable("channelMchNo") String channelMchNo,
+    public String payNotify(@PathVariable("mchNo") String mchNo, @PathVariable("channelMchNo") String channelMchNo,
                             HttpServletRequest request) {
         merchantContextLoader.bindMchNoForCallback(mchNo);
         return wechatPayCallbackService.payHandle(mchNo, channelMchNo, request);

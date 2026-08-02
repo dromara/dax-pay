@@ -3,6 +3,7 @@ package cn.daxpay.open.channel.yeepay.controller.callback;
 import cn.daxpay.open.channel.yeepay.service.callback.YeepayPayCallbackService;
 import cn.daxpay.open.channel.yeepay.service.callback.YeepayRefundCallbackService;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
+import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,12 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 /// # 易宝支付回调通知控制器
 ///
-/// 易宝异步通知入口(支付/退款), 不走 Sa-Token 认证(由安全配置放行 `/unipay/callback/**`)。
+/// 易宝异步通知入口(支付/退款), 不走 Sa-Token 认证(由 @IgnoreAuth 注解放行)。
 /// URL 中的 channelMchNo 用于回调时组装凭证(RSA2048 数字信封解密需 appKey/私钥)。
 @Tag(name = "易宝支付回调通知控制器")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/unipay/callback/{mchNo}/{channelMchNo}/yeepay")
+@IgnoreAuth
 public class YeepayCallbackController {
 
     private final MerchantContextLoader merchantContextLoader;
