@@ -29,9 +29,6 @@ public class PayRiskHitQuery {
     @Schema(description = "商户号")
     private String mchNo;
 
-    @Schema(description = "处理状态")
-    private String handleStatus;
-
     @Schema(description = "来源场景")
     private String scene;
 

@@ -6,7 +6,6 @@ import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.platform.core.rest.result.Result;
-import cn.daxpay.open.plugin.risk.param.PayRiskHitHandleParam;
 import cn.daxpay.open.plugin.risk.param.PayRiskHitQuery;
 import cn.daxpay.open.plugin.risk.result.PayRiskHitResult;
 import cn.daxpay.open.plugin.risk.service.PayRiskHitService;
@@ -41,13 +40,5 @@ public class PayRiskHitAdminController {
     @GetMapping("/get")
     public Result<PayRiskHitResult> get(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(payRiskHitService.findById(id));
-    }
-
-    @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "处理命中")
-    @PostMapping("/handle")
-    public Result<Void> handle(@RequestBody @Validated PayRiskHitHandleParam param) {
-        payRiskHitService.handle(param);
-        return Res.ok();
     }
 }

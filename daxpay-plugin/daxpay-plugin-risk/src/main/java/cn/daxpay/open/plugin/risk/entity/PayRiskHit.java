@@ -3,7 +3,6 @@ package cn.daxpay.open.plugin.risk.entity;
 import cn.daxpay.open.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.daxpay.open.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.open.plugin.risk.convert.PayRiskHitConvert;
-import cn.daxpay.open.plugin.risk.enums.PayRiskHitHandleStatusEnum;
 import cn.daxpay.open.plugin.risk.enums.PayRiskHitPhaseEnum;
 import cn.daxpay.open.plugin.risk.enums.PayRiskHitSceneEnum;
 import cn.daxpay.open.plugin.risk.result.PayRiskHitResult;
@@ -12,8 +11,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldNameConstants;
-
-import java.time.OffsetDateTime;
 
 /// # 支付风险命中记录
 ///
@@ -77,19 +74,6 @@ public class PayRiskHit extends MpBaseEntity implements ToResult<PayRiskHitResul
     /// 来源场景
     /// @see PayRiskHitSceneEnum
     private String scene;
-
-    /// 处理状态
-    /// @see PayRiskHitHandleStatusEnum
-    private String handleStatus;
-
-    /// 处理说明
-    private String handleRemark;
-
-    /// 处理人
-    private Long handleUserId;
-
-    /// 处理时间
-    private OffsetDateTime handleTime;
 
     /// 备注
     private String remark;

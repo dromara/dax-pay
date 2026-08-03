@@ -9,8 +9,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.time.OffsetDateTime;
-
 /// # 风险命中结果
 ///
 @EqualsAndHashCode(callSuper = true)
@@ -77,18 +75,6 @@ public class PayRiskHitResult extends BaseResult {
 
     @Schema(description = "来源场景")
     private String scene;
-
-    @Schema(description = "处理状态")
-    private String handleStatus;
-
-    @Schema(description = "处理说明")
-    private String handleRemark;
-
-    @Schema(description = "处理人")
-    private Long handleUserId;
-
-    @Schema(description = "处理时间")
-    private OffsetDateTime handleTime;
 
     @Schema(description = "备注")
     private String remark;
