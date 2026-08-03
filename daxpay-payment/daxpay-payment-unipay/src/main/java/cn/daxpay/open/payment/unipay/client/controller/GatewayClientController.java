@@ -5,6 +5,7 @@ import cn.daxpay.open.payment.trade.runtime.service.pay.gateway.CashierAuthServi
 import cn.daxpay.open.payment.trade.runtime.service.pay.gateway.CashierPayService;
 import cn.daxpay.open.payment.trade.runtime.service.pay.gateway.GatewayAuthService;
 import cn.daxpay.open.payment.trade.runtime.service.pay.gateway.GatewayOrderQueryService;
+import cn.daxpay.open.payment.trade.runtime.service.query.PayResultQueryService;
 import cn.daxpay.open.payment.auth.UnifiedAuthService;
 import cn.daxpay.open.payment.unipay.param.assist.AuthCodeParam;
 import cn.daxpay.open.payment.unipay.param.gateway.AggregateQrPayParam;
@@ -16,6 +17,7 @@ import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
 import cn.daxpay.open.payment.unipay.result.gateway.AggregatePayMetaResult;
 import cn.daxpay.open.payment.unipay.result.gateway.CashierItemPublicResult;
 import cn.daxpay.open.payment.unipay.result.gateway.GatewayOrderResult;
+import cn.daxpay.open.payment.unipay.result.trade.PayResultResult;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
 import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.open.platform.core.rest.Res;
@@ -44,6 +46,7 @@ import java.util.List;
 public class GatewayClientController {
 
     private final GatewayOrderQueryService gatewayOrderQueryService;
+    private final PayResultQueryService payResultQueryService;
     private final AggregatePayService aggregatePayService;
     private final CashierPayService cashierPayService;
     private final CashierAuthService cashierAuthService;
@@ -55,6 +58,13 @@ public class GatewayClientController {
     public Result<GatewayOrderResult> getOrder(
             @NotBlank(message = "{validation.field.orderNo.notBlank}") String orderNo) {
         return Res.ok(gatewayOrderQueryService.queryByOrderNoNotTenant(orderNo));
+    }
+
+    @Operation(summary = "查询支付结果")
+    @GetMapping("/pay-result")
+    public Result<PayResultResult> getPayResult(
+            @NotBlank(message = "{validation.field.tradeNo.notBlank}") String tradeNo) {
+        return Res.ok(payResultQueryService.queryByTradeNo(tradeNo));
     }
 
     @Operation(summary = "聚合扫码元数据(autoLaunch/needOpenId)")

@@ -15,6 +15,7 @@ import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
 import cn.daxpay.open.platform.core.enums.unipay.PayBodyTypeEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
+import cn.daxpay.open.platform.core.exception.ChannelResultUnknownException;
 import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -48,18 +49,29 @@ public class AlipayPayService {
         req.setSubject(payParam.getTitle());
         req.setBody(payParam.getDescription());
         // 将平台支付方式(PayMethodEnum code)映射为支付宝通道支付方式
-        req.setMethod(mapMethod(payParam.getMethod()));
+        AlipayPayMethod alipayMethod = mapMethod(payParam.getMethod());
+        req.setMethod(alipayMethod);
         // 付款码(BARCODE) / 买家标识(JSAPI) 通道专属参数透传
         req.setAuthCode(payParam.getAuthCode());
         req.setOpenId(payParam.getOpenId());
         // 通道通知地址: 始终使用平台生成的回调地址(支付宝→平台), 不使用 payParam.notifyUrl(语义为平台→商户)
         req.setNotifyUrl(this.buildNotifyUrl(order, payParam.getChannelMchNo()));
+        // 同步跳转地址(仅 PC/WAP 网页支付生效): 支付完成后浏览器带回平台 H5 结果页, 触发查单 + 跳商户 returnUrl
+        if (alipayMethod == AlipayPayMethod.PC || alipayMethod == AlipayPayMethod.WAP) {
+            req.setReturnUrl(this.buildPayResultUrl(order.getTradeNo()));
+        }
         // 关单时间取自订单(createOrder 已对 null 兜底默认30分钟), 子应用据此向支付宝设置 time_expire
         req.setExpireTime(payParam.getExpiredTime());
         req.setCredential(credential);
 
         // 调用子应用
         DaxResult<AlipayPayResp> result = alipayChannelClient.pay(req);
+        // 子应用返回"结果未知"(付款码已使用/交易已支付): 保持 PROCESSING 交由同步纠正,
+        // 避免误判 FAIL 导致"资金已动但订单失败"悬挂
+        if (result.getCode() == ChannelResultUnknownException.RESULT_UNKNOWN_CODE) {
+            throw new ChannelResultUnknownException("pay.error.channelResultUnknown",
+                    new RuntimeException(result.getMsg()));
+        }
         if (result.getCode() != 0) {
             throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "error.channel.alipay.payFailed", result.getMsg());
         }
@@ -80,6 +92,20 @@ public class AlipayPayService {
         }
         return StrUtil.format("{}/unipay/callback/{}/{}/alipay",
                 base, order.getMchNo(), channelMchNo);
+    }
+
+    /// 生成支付完成后同步跳转地址(平台 H5 结果页)
+    ///
+    /// 路径约定: `{paymentGatewayBaseUrl}/pay-result/{tradeNo}`
+    /// 仅 PC/WAP 网页支付生效, 支付完成后用户浏览器被带回此地址;
+    /// 该地址仅作"用户回来了"的触发信号, 真实状态由结果页查后端订单为准。
+    private String buildPayResultUrl(String tradeNo) {
+        String base = platformUrlConfigService.getUrlConfig().getPaymentGatewayBaseUrl();
+        if (StrUtil.isBlank(base)) {
+            // paymentGatewayBaseUrl 未配置时抛清晰异常, 避免 null 透传到支付宝导致回跳失效
+            throw new IllegalStateException("平台支付网关地址(paymentGatewayBaseUrl)未配置, 无法生成支付结果跳转地址");
+        }
+        return StrUtil.format("{}/pay-result/{}", base, tradeNo);
     }
 
     /// 平台支付方式([PayMethodEnum] code) -> 支付宝通道支付方式

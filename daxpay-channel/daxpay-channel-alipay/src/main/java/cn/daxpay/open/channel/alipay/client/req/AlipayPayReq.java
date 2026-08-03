@@ -25,6 +25,10 @@ public class AlipayPayReq {
     private OffsetDateTime expireTime;
     /// 异步通知地址
     private String notifyUrl;
+    /// 同步跳转地址(仅 PC/WAP 网页支付生效)
+    /// 支付完成后用户浏览器被带回此地址, 由主应用拼为平台 H5 结果页
+    /// {paymentGatewayBaseUrl}/pay-result/{tradeNo}, 透传给子应用
+    private String returnUrl;
     /// 付款码(BARCODE 付款码支付必填)
     private String authCode;
     /// 买家标识(JSAPI 小程序支付必填; 2088 开头为支付宝用户ID, 否则视为小程序 openid)
