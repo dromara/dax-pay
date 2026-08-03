@@ -6,8 +6,9 @@ import cn.daxpay.open.payment.trade.notice.result.MchNoticeTaskResult;
 import cn.daxpay.open.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.open.platform.core.enums.pay.notice.NoticeContentModeEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.NoticeEventEnum;
-import cn.daxpay.open.platform.core.enums.pay.notice.NoticeProtocolEnum;
+import cn.daxpay.open.platform.core.enums.pay.notice.NoticeFormatEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.NoticeSourceEnum;
+import cn.daxpay.open.platform.core.enums.pay.notice.NoticeTransportEnum;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
@@ -41,9 +42,13 @@ public class MchNoticeTask extends MchBaseEntity implements ToResult<MchNoticeTa
     /// @see NoticeEventEnum
     private String event;
 
-    /// 通知协议
-    /// @see NoticeProtocolEnum
-    private String protocol;
+    /// 传输通道 (http/mq)
+    /// @see NoticeTransportEnum
+    private String transport;
+
+    /// 报文格式 (system/easy_pay)
+    /// @see NoticeFormatEnum
+    private String format;
 
     /// URL 来源
     /// @see NoticeSourceEnum
@@ -56,7 +61,7 @@ public class MchNoticeTask extends MchBaseEntity implements ToResult<MchNoticeTa
     /// 通知内容(快照或引用指针)
     private String content;
 
-    /// 商户接收地址
+    /// 目标地址 (HTTP 时为回调 URL, MQ 时为 Topic 名)
     private String url;
 
     /// 是否发送成功

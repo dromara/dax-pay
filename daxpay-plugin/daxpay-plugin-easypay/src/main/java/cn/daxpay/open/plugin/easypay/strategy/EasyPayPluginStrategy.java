@@ -8,7 +8,8 @@ import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.platform.common.json.util.JacksonUtil;
 import cn.daxpay.open.platform.core.enums.pay.notice.NoticeContentModeEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.NoticeEventEnum;
-import cn.daxpay.open.platform.core.enums.pay.notice.NoticeProtocolEnum;
+import cn.daxpay.open.platform.core.enums.pay.notice.NoticeFormatEnum;
+import cn.daxpay.open.platform.core.enums.pay.notice.NoticeTransportEnum;
 import cn.daxpay.open.platform.core.enums.pay.trade.TradeSourceEnum;
 import cn.daxpay.open.plugin.easypay.entity.EasyPayOrder;
 import cn.daxpay.open.plugin.easypay.service.order.EasyPayOrderService;
@@ -82,7 +83,8 @@ public class EasyPayPluginStrategy implements AbsPayPluginStrategy {
                 .setEvent(NoticeEventEnum.PAY_SUCCESS.getCode())
                 .setBizId(easyPayOrder.getId())
                 .setBizNo(easyPayOrder.getTradeNo() != null ? easyPayOrder.getTradeNo() : easyPayOrder.getOutTradeNo())
-                .setProtocol(NoticeProtocolEnum.EASY_PAY)
+                .setTransport(NoticeTransportEnum.HTTP)
+                .setFormat(NoticeFormatEnum.EASY_PAY)
                 .setContentMode(NoticeContentModeEnum.REF)
                 .setContentOrRef(content)
                 .setProtocolNotifyUrl(easyPayOrder.getNotifyUrl()));

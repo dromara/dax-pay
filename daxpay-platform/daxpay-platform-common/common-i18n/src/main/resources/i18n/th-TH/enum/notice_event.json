@@ -3,5 +3,9 @@
   "pay.fail": "Pay Fail",
   "pay.close": "Pay Close",
   "refund.success": "Refund Success",
-  "refund.close": "Refund Close"
+  "refund.close": "Refund Close",
+  "pay.timeout": "ปิดการชำระหมดเวลา",
+  "pay.cancel": "ยกเลิกการชำระ",
+  "refund.fail": "คืนเงินล้มเหลว",
+  "risk.hit": "ตรวจพบความเสี่ยง"
 }

@@ -1,7 +1,8 @@
 package cn.daxpay.open.payment.trade.notice.command;
 
 import cn.daxpay.open.platform.core.enums.pay.notice.NoticeContentModeEnum;
-import cn.daxpay.open.platform.core.enums.pay.notice.NoticeProtocolEnum;
+import cn.daxpay.open.platform.core.enums.pay.notice.NoticeFormatEnum;
+import cn.daxpay.open.platform.core.enums.pay.notice.NoticeTransportEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -30,8 +31,11 @@ public class NoticeDispatchCommand {
     /// 订单级 notifyUrl（可空）
     private String orderNotifyUrl;
 
-    /// 通知协议，默认 SYSTEM
-    private NoticeProtocolEnum protocol = NoticeProtocolEnum.SYSTEM;
+    /// 传输通道，默认 HTTP
+    private NoticeTransportEnum transport = NoticeTransportEnum.HTTP;
+
+    /// 报文格式，默认 SYSTEM
+    private NoticeFormatEnum format = NoticeFormatEnum.SYSTEM;
 
     /// 内容策略
     private NoticeContentModeEnum contentMode = NoticeContentModeEnum.SNAPSHOT;
@@ -39,6 +43,6 @@ public class NoticeDispatchCommand {
     /// 快照 JSON 或引用指针 JSON
     private String contentOrRef;
 
-    /// 协议适配层自带 URL（protocol 非 SYSTEM 时使用）
+    /// 协议适配层自带 URL（format 非 SYSTEM 时使用，如易支付）
     private String protocolNotifyUrl;
 }

@@ -3,5 +3,9 @@
   "pay.fail": "支付失败",
   "pay.close": "支付关闭",
   "refund.success": "退款成功",
-  "refund.close": "退款关闭"
+  "refund.close": "退款关闭",
+  "pay.timeout": "支付超时关闭",
+  "pay.cancel": "支付撤销",
+  "refund.fail": "退款失败",
+  "risk.hit": "风控命中"
 }

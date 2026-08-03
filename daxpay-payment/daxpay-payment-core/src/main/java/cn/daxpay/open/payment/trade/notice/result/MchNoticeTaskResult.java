@@ -18,14 +18,6 @@ import java.time.OffsetDateTime;
 @Schema(title = "商户出站通知任务")
 public class MchNoticeTaskResult extends MchBaseResult {
 
-    /// 商户名称(由 mchNo 翻译)
-    @Trans(
-            entity = MerchantInfo.class,
-            source = MchBaseResult.Fields.mchNo,
-            result = MerchantInfo.Fields.mchName)
-    @Schema(description = "商户名称")
-    private String mchName;
-
     @Schema(description = "应用号")
     private String appId;
 
@@ -38,8 +30,11 @@ public class MchNoticeTaskResult extends MchBaseResult {
     @Schema(description = "通知事件码")
     private String event;
 
-    @Schema(description = "通知协议")
-    private String protocol;
+    @Schema(description = "传输通道 (http/mq)")
+    private String transport;
+
+    @Schema(description = "报文格式 (system/easy_pay)")
+    private String format;
 
     @Schema(description = "URL来源")
     private String source;
@@ -50,7 +45,7 @@ public class MchNoticeTaskResult extends MchBaseResult {
     @Schema(description = "通知内容")
     private String content;
 
-    @Schema(description = "商户接收地址")
+    @Schema(description = "目标地址 (HTTP回调URL或MQ Topic名)")
     private String url;
 
     @Schema(description = "是否发送成功")

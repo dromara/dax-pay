@@ -1,9 +1,10 @@
 package cn.daxpay.open.plugin.easypay.notice;
 
 import cn.daxpay.open.payment.trade.notice.entity.MchNoticeTask;
-import cn.daxpay.open.payment.trade.notice.protocol.NoticeProtocolSender;
+import cn.daxpay.open.payment.trade.notice.payload.NoticeEnvelope;
+import cn.daxpay.open.payment.trade.notice.payload.NoticePayloadBuilder;
 import cn.daxpay.open.platform.common.json.util.JacksonUtil;
-import cn.daxpay.open.platform.core.enums.pay.notice.NoticeProtocolEnum;
+import cn.daxpay.open.platform.core.enums.pay.notice.NoticeFormatEnum;
 import cn.daxpay.open.plugin.easypay.dao.EasyPayOrderManager;
 import cn.daxpay.open.plugin.easypay.entity.EasyPayOrder;
 import cn.daxpay.open.plugin.easypay.enums.EasyPayApiVersionEnum;
@@ -13,8 +14,6 @@ import cn.daxpay.open.plugin.easypay.service.config.EasyPayCredentialService;
 import cn.daxpay.open.plugin.easypay.util.EasyPayUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
-import cn.hutool.http.HttpResponse;
-import cn.hutool.http.HttpUtil;
 import cn.hutool.json.JSONUtil;
 import tools.jackson.core.type.TypeReference;
 import lombok.RequiredArgsConstructor;
@@ -27,14 +26,14 @@ import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 import java.util.TreeMap;
 
-/// # 易支付协议出站发送器
+/// # 易支付协议报文构建器
 ///
-/// content_mode=ref：content 存 EasyPayOrder.id；发送时实时组装 V1/V2 GET 回调
-/// Ack：HTTP 2xx 且 body=SUCCESS（忽略大小写）
+/// content_mode=ref: content 存 EasyPayOrder.id; 构建时实时组装 V1/V2 GET 回调信封 (含签名)。
+/// HTTP 投递与 ACK 判定由 [cn.daxpay.open.payment.trade.notice.transport.HttpTransportSender] 统一处理
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class EasyPayNoticeSender implements NoticeProtocolSender {
+public class EasyPayPayloadBuilder implements NoticePayloadBuilder {
 
     private static final DateTimeFormatter NORM =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").withZone(ZoneId.of("Asia/Shanghai"));
@@ -43,28 +42,35 @@ public class EasyPayNoticeSender implements NoticeProtocolSender {
     private final EasyPayCredentialService easyPayCredentialService;
 
     @Override
-    public String protocol() {
-        return NoticeProtocolEnum.EASY_PAY.getCode();
+    public String format() {
+        return NoticeFormatEnum.EASY_PAY.getCode();
     }
 
     @Override
-    public NoticeSendResult send(MchNoticeTask task) {
-        NoticeSendResult result = new NoticeSendResult();
+    public NoticeEnvelope build(MchNoticeTask task) {
         Long easyPayOrderId = JSONUtil.parseObj(task.getContent()).getLong("id");
         if (easyPayOrderId == null) {
-            return result.setSuccess(false).setErrorMsg("easy pay ref missing id");
+            throw new IllegalStateException("easy pay ref missing id");
         }
         EasyPayOrder order = easyPayOrderManager.findByIdNotTenant(easyPayOrderId).orElse(null);
         if (order == null) {
-            return result.setSuccess(false).setErrorMsg("easy pay order not found: " + easyPayOrderId);
+            throw new IllegalStateException("easy pay order not found: " + easyPayOrderId);
         }
-        if (Objects.equals(order.getApiVersion(), EasyPayApiVersionEnum.V1.getCode())) {
-            return sendV1(task, order, result);
-        }
-        return sendV2(task, order, result);
+        Object callback = Objects.equals(order.getApiVersion(), EasyPayApiVersionEnum.V1.getCode())
+                ? buildV1(order) : buildV2(order);
+        // 转 TreeMap 拼接 query (按 key 排序)
+        TreeMap<String, String> map = JacksonUtil.toBean(JacksonUtil.toJson(callback),
+                new TypeReference<TreeMap<String, String>>() {});
+        String query = URLUtil.buildQuery(map, StandardCharsets.UTF_8);
+        String baseUrl = task.getUrl();
+        String fullUrl = baseUrl.contains("?") ? baseUrl + "&" + query : baseUrl + "?" + query;
+        return new NoticeEnvelope()
+                .setMethod("GET")
+                .setUrl(fullUrl)
+                .setRequestDigest(StrUtil.sub(fullUrl, 0, 500));
     }
 
-    private NoticeSendResult sendV1(MchNoticeTask task, EasyPayOrder order, NoticeSendResult result) {
+    private EasyPayCallbackV1Result buildV1(EasyPayOrder order) {
         var credential = easyPayCredentialService.getAndCheck(order.getPid());
         var callback = new EasyPayCallbackV1Result()
                 .setPid(order.getPid())
@@ -78,10 +84,10 @@ public class EasyPayNoticeSender implements NoticeProtocolSender {
                 .setSignType("MD5");
         // 仅一次 MD5 签名（修复商业版重复 setSign）
         callback.setSign(EasyPayUtil.signByMd5(callback, credential.getMd5Key()));
-        return doGet(task.getUrl(), callback, result);
+        return callback;
     }
 
-    private NoticeSendResult sendV2(MchNoticeTask task, EasyPayOrder order, NoticeSendResult result) {
+    private EasyPayCallbackV2Result buildV2(EasyPayOrder order) {
         var credential = easyPayCredentialService.getAndCheck(order.getPid());
         var callback = new EasyPayCallbackV2Result()
                 .setPid(order.getPid())
@@ -99,32 +105,6 @@ public class EasyPayNoticeSender implements NoticeProtocolSender {
                 .setTimestamp(String.valueOf(System.currentTimeMillis() / 1000))
                 .setSignType("RSA");
         callback.setSign(EasyPayUtil.signByRsa(callback, credential.getPlatformPrivateKey()));
-        return doGet(task.getUrl(), callback, result);
-    }
-
-    private NoticeSendResult doGet(String baseUrl, Object callback, NoticeSendResult result) {
-        String body = null;
-        Integer httpStatus = null;
-        try {
-            TreeMap<String, String> map = JacksonUtil.toBean(JacksonUtil.toJson(callback),
-                    new TypeReference<TreeMap<String, String>>() {});
-            String query = URLUtil.buildQuery(map, StandardCharsets.UTF_8);
-            String fullUrl = baseUrl.contains("?") ? baseUrl + "&" + query : baseUrl + "?" + query;
-            result.setRequestDigest(StrUtil.sub(fullUrl, 0, 500));
-            HttpResponse response = HttpUtil.createGet(fullUrl).timeout(15000).execute();
-            httpStatus = response.getStatus();
-            body = response.body();
-        } catch (Exception e) {
-            log.error("易支付通知发送失败, url={}", baseUrl, e);
-            return result.setSuccess(false).setHttpStatus(httpStatus).setErrorMsg(e.getMessage());
-        }
-        result.setHttpStatus(httpStatus);
-        boolean ack = httpStatus != null && httpStatus >= 200 && httpStatus < 300
-                && StrUtil.equalsIgnoreCase(StrUtil.trim(body), "SUCCESS");
-        result.setSuccess(ack);
-        if (!ack) {
-            result.setErrorMsg(StrUtil.blankToDefault(StrUtil.sub(body, 0, 300), "httpStatus=" + httpStatus));
-        }
-        return result;
+        return callback;
     }
 }

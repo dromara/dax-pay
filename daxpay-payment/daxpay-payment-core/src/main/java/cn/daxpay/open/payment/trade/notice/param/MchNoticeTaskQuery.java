@@ -29,8 +29,12 @@ public class MchNoticeTaskQuery {
     private String event;
 
     @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
-    @Schema(description = "通知协议")
-    private String protocol;
+    @Schema(description = "传输通道 (http/mq)")
+    private String transport;
+
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
+    @Schema(description = "报文格式 (system/easy_pay)")
+    private String format;
 
     @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "URL来源")

@@ -5,7 +5,10 @@ import cn.daxpay.open.payment.trade.notice.dao.MchNoticeRecordManager;
 import cn.daxpay.open.payment.trade.notice.dao.MchNoticeTaskManager;
 import cn.daxpay.open.payment.trade.notice.entity.MchNoticeRecord;
 import cn.daxpay.open.payment.trade.notice.entity.MchNoticeTask;
-import cn.daxpay.open.payment.trade.notice.protocol.NoticeProtocolSender;
+import cn.daxpay.open.payment.trade.notice.payload.NoticeEnvelope;
+import cn.daxpay.open.payment.trade.notice.payload.NoticePayloadBuilder;
+import cn.daxpay.open.payment.trade.notice.transport.NoticeSendResult;
+import cn.daxpay.open.payment.trade.notice.transport.NoticeTransportSender;
 import cn.daxpay.open.platform.core.enums.pay.notice.NoticeSendTypeEnum;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -20,7 +23,7 @@ import java.util.stream.Collectors;
 
 /// # 商户出站通知发送引擎
 ///
-/// 唯一负责：选 Sender、写流水、更新任务、排期重试
+/// 唯一负责: 选 PayloadBuilder(按 format) 组装信封 → 选 TransportSender(按 transport) 投递 → 写流水 → 更新任务 → 排期重试
 @Slf4j
 @Service
 public class NoticeSendEngine {
@@ -30,21 +33,31 @@ public class NoticeSendEngine {
     private final NoticeRetryPolicy retryPolicy;
     private final NoticeTaskScheduleService scheduleService;
     private final PaymentContext paymentContext;
-    private final Map<String, NoticeProtocolSender> senderMap;
+    private final Map<String, NoticePayloadBuilder> payloadBuilderMap;
+    private final Map<String, NoticeTransportSender> transportSenderMap;
 
     public NoticeSendEngine(MchNoticeTaskManager taskManager,
                             MchNoticeRecordManager recordManager,
                             NoticeRetryPolicy retryPolicy,
                             NoticeTaskScheduleService scheduleService,
                             PaymentContext paymentContext,
-                            List<NoticeProtocolSender> senders) {
+                            List<NoticePayloadBuilder> payloadBuilders,
+                            List<NoticeTransportSender> transportSenders) {
         this.taskManager = taskManager;
         this.recordManager = recordManager;
         this.retryPolicy = retryPolicy;
         this.scheduleService = scheduleService;
         this.paymentContext = paymentContext;
-        this.senderMap = senders.stream()
-                .collect(Collectors.toMap(NoticeProtocolSender::protocol, Function.identity(), (a, b) -> a));
+        this.payloadBuilderMap = payloadBuilders.stream()
+                .collect(Collectors.toMap(NoticePayloadBuilder::format, Function.identity(), (a, b) -> {
+                    log.warn("NoticePayloadBuilder format 冲突, 保留前者: {}", a.format());
+                    return a;
+                }));
+        this.transportSenderMap = transportSenders.stream()
+                .collect(Collectors.toMap(NoticeTransportSender::transport, Function.identity(), (a, b) -> {
+                    log.warn("NoticeTransportSender transport 冲突, 保留前者: {}", a.transport());
+                    return a;
+                }));
     }
 
     /// 自动发送（消费端入口）
@@ -89,7 +102,6 @@ public class NoticeSendEngine {
             }
             log.info("手动重发已成功任务: taskId={}", taskId);
         }
-        NoticeProtocolSender sender = senderMap.get(task.getProtocol());
         OffsetDateTime sendTime = OffsetDateTime.now(ZoneOffset.UTC);
         int reqCount = (task.getSendCount() == null ? 0 : task.getSendCount()) + 1;
         MchNoticeRecord record = new MchNoticeRecord();
@@ -99,18 +111,37 @@ public class NoticeSendEngine {
                 .setReqCount(reqCount)
                 .setSendType(autoSend ? NoticeSendTypeEnum.AUTO.getCode() : NoticeSendTypeEnum.MANUAL.getCode());
 
-        if (sender == null) {
-            log.error("未找到通知协议 Sender: protocol={}, taskId={}", task.getProtocol(), taskId);
-            record.setSuccess(false).setErrorMsg("protocol sender not found: " + task.getProtocol());
+        NoticePayloadBuilder payloadBuilder = payloadBuilderMap.get(task.getFormat());
+        if (payloadBuilder == null) {
+            log.error("未找到通知报文构建器: format={}, taskId={}", task.getFormat(), taskId);
+            record.setSuccess(false).setErrorMsg("payload builder not found: " + task.getFormat());
+            failUpdate(task, sendTime, autoSend, record);
+            return;
+        }
+        NoticeTransportSender transportSender = transportSenderMap.get(task.getTransport());
+        if (transportSender == null) {
+            log.error("未找到通知传输发送器: transport={}, taskId={}", task.getTransport(), taskId);
+            record.setSuccess(false).setErrorMsg("transport sender not found: " + task.getTransport());
             failUpdate(task, sendTime, autoSend, record);
             return;
         }
 
-        NoticeProtocolSender.NoticeSendResult sendResult;
+        // 先组装信封, 再投递 (format 与 transport 正交)
+        NoticeEnvelope envelope;
         try {
-            sendResult = sender.send(task);
+            envelope = payloadBuilder.build(task);
         } catch (Exception e) {
-            log.error("出站通知 Sender 异常: taskId={}", taskId, e);
+            log.error("出站通知报文组装异常: taskId={}", taskId, e);
+            record.setSuccess(false).setErrorMsg(e.getMessage());
+            failUpdate(task, sendTime, autoSend, record);
+            return;
+        }
+
+        NoticeSendResult sendResult;
+        try {
+            sendResult = transportSender.send(task, envelope);
+        } catch (Exception e) {
+            log.error("出站通知投递异常: taskId={}", taskId, e);
             record.setSuccess(false).setErrorMsg(e.getMessage());
             failUpdate(task, sendTime, autoSend, record);
             return;
@@ -134,7 +165,7 @@ public class NoticeSendEngine {
         failUpdate(task, sendTime, autoSend, record);
     }
 
-    /// 失败：更新任务并按需排期重试
+    /// 失败：更新任务并按需排期重试 (重试节奏按 transport 区分)
     private void failUpdate(MchNoticeTask task, OffsetDateTime sendTime, boolean autoSend, MchNoticeRecord record) {
         int reqCount = record.getReqCount() == null ? 1 : record.getReqCount();
         task.setSendCount(reqCount).setLatestTime(sendTime);
@@ -145,12 +176,13 @@ public class NoticeSendEngine {
         if (!autoSend) {
             task.setSuccess(false);
         }
+        String transport = task.getTransport();
         if (autoSend && !task.isSuccess()) {
             int delayCount = task.getDelayCount() == null ? 0 : task.getDelayCount();
-            if (retryPolicy.canRetry(delayCount)) {
+            if (retryPolicy.canRetry(transport, delayCount)) {
                 int next = delayCount + 1;
                 task.setDelayCount(next);
-                int delaySeconds = retryPolicy.nextDelaySeconds(next);
+                int delaySeconds = retryPolicy.nextDelaySeconds(transport, next);
                 task.setNextTime(sendTime.plusSeconds(delaySeconds));
                 taskManager.updateById(task);
                 recordManager.save(record);

@@ -3,5 +3,9 @@
   "pay.fail": "Pay Fail",
   "pay.close": "Pay Close",
   "refund.success": "Refund Success",
-  "refund.close": "Refund Close"
+  "refund.close": "Refund Close",
+  "pay.timeout": "결제 시간 초과 종료",
+  "pay.cancel": "결제 취소",
+  "refund.fail": "환불 실패",
+  "risk.hit": "리스크 적중"
 }

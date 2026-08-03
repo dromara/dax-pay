@@ -16,14 +16,20 @@ public enum NoticeEventEnum implements I18nSupport {
     PAY_SUCCESS("pay.success"),
     /// 支付失败
     PAY_FAIL("pay.fail"),
-    /// 支付关闭
+    /// 支付关闭(主动关单, 业务单容器态 CLOSED)
     PAY_CLOSE("pay.close"),
+    /// 支付超时关闭(业务单容器态 EXPIRED, 区别于主动关单)
+    PAY_TIMEOUT("pay.timeout"),
+    /// 支付撤销(资金态 CANCEL 终态)
+    PAY_CANCEL("pay.cancel"),
     /// 退款成功
     REFUND_SUCCESS("refund.success"),
     /// 退款失败
     REFUND_FAIL("refund.fail"),
     /// 退款关闭
     REFUND_CLOSE("refund.close"),
+    /// 风控命中(黑名单/海外 IP 等规则触发)
+    RISK_HIT("risk.hit"),
     ;
 
     /// 编码

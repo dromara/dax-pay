@@ -4,9 +4,9 @@ import cn.daxpay.open.platform.core.i18n.I18nSupport;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-/// # 回调通知类型（已演进为 [NoticeProtocolEnum]）
+/// # 回调通知类型（已演进为 [NoticeFormatEnum]）
 ///
-/// @deprecated 使用 [NoticeProtocolEnum]
+/// @deprecated 使用 [NoticeFormatEnum]
 @Deprecated
 @Getter
 @RequiredArgsConstructor

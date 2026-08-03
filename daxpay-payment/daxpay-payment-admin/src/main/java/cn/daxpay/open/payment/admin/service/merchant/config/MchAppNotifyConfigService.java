@@ -14,8 +14,10 @@ import org.springframework.stereotype.Service;
 
 /// # 商户应用事件通知配置服务
 ///
-/// 应用级通用事件通知配置, 与支付订单级回调并行, 当前版本仅维护配置数据,
-/// 发送链路(任务/重试/记录)后续阶段实现
+/// 应用级通用事件通知配置, 与支付订单级回调并行。
+/// 配置由 [cn.daxpay.open.payment.trade.notice.service.NoticeDispatcher] 读取:
+/// notifyWay=http 走 HTTP 回调(notifyUrl), notifyWay=mq 走 MQ 推送(发布到 daxpay.notice.<appId> Topic),
+/// 按订阅事件(subscribedEvents)前缀匹配触发, 发送/重试/记录由 NoticeSendEngine 统一负责
 @Slf4j
 @Service
 @RequiredArgsConstructor

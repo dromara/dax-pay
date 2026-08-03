@@ -14,7 +14,8 @@ import cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum;
 import cn.daxpay.open.platform.common.json.util.JacksonUtil;
 import cn.daxpay.open.platform.core.enums.pay.notice.NoticeContentModeEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.NoticeEventEnum;
-import cn.daxpay.open.platform.core.enums.pay.notice.NoticeProtocolEnum;
+import cn.daxpay.open.platform.core.enums.pay.notice.NoticeFormatEnum;
+import cn.daxpay.open.platform.core.enums.pay.notice.NoticeTransportEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -52,7 +53,7 @@ public class TradeNoticeBridge {
                     .setBizId(order.getId())
                     .setBizNo(order.getOrderNo())
                     .setOrderNotifyUrl(order.getNotifyUrl())
-                    .setProtocol(NoticeProtocolEnum.SYSTEM)
+                    .setTransport(NoticeTransportEnum.HTTP).setFormat(NoticeFormatEnum.SYSTEM)
                     .setContentMode(NoticeContentModeEnum.SNAPSHOT)
                     .setContentOrRef(content));
             return;
@@ -70,7 +71,7 @@ public class TradeNoticeBridge {
                 .setBizId(order.getId())
                 .setBizNo(order.getOrderNo())
                 .setOrderNotifyUrl(order.getNotifyUrl())
-                .setProtocol(NoticeProtocolEnum.SYSTEM)
+                .setTransport(NoticeTransportEnum.HTTP).setFormat(NoticeFormatEnum.SYSTEM)
                 .setContentMode(NoticeContentModeEnum.SNAPSHOT)
                 .setContentOrRef(content));
     }
@@ -88,7 +89,7 @@ public class TradeNoticeBridge {
                 .setBizId(refundOrder.getId())
                 .setBizNo(refundOrder.getRefundNo())
                 .setOrderNotifyUrl(refundOrder.getNotifyUrl())
-                .setProtocol(NoticeProtocolEnum.SYSTEM)
+                .setTransport(NoticeTransportEnum.HTTP).setFormat(NoticeFormatEnum.SYSTEM)
                 .setContentMode(NoticeContentModeEnum.SNAPSHOT)
                 .setContentOrRef(content));
     }

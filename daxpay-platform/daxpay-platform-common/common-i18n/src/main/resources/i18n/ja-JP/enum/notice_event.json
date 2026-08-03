@@ -3,5 +3,9 @@
   "pay.fail": "Pay Fail",
   "pay.close": "Pay Close",
   "refund.success": "Refund Success",
-  "refund.close": "Refund Close"
+  "refund.close": "Refund Close",
+  "pay.timeout": "支払タイムアウト終了",
+  "pay.cancel": "支払取消",
+  "refund.fail": "返金失敗",
+  "risk.hit": "リスク検知"
 }
