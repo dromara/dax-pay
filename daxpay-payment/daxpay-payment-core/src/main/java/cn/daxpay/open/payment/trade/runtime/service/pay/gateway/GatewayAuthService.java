@@ -80,7 +80,8 @@ public class GatewayAuthService {
         GenerateAuthUrlParam authParam = new GenerateAuthUrlParam();
         authParam.setMchNo(order.getMchNo());
         authParam.setAppId(order.getAppId());
-        authParam.setReturnPath(param.getReturnPath());
+        // returnPath 校验: 仅允许站内相对路径, 禁止外链防开放重定向(本接口为公开无签名端点)
+        authParam.setReturnPath(validateReturnPath(param.getReturnPath()));
         authParam.setAuthType(authType.getCode());
 
         // 支付宝由 UnifiedAuthService 走平台 OAuth, 无需通道应用路由; 微信/抖音须同源 resolve
@@ -279,5 +280,26 @@ public class GatewayAuthService {
 
     /// 路由快照(供组装 GenerateAuthUrlParam)
     private record RouteSnapshot(String product, String channelMchNo, String capability, String channelAppId) {
+    }
+
+    /// 校验授权回跳 returnPath: 仅允许站内相对路径(以 / 开头), 禁止 // 与协议外链
+    ///
+    /// 本接口经 [cn.daxpay.open.payment.unipay.client.controller.GatewayClientController] 对外公开(无商户签名),
+    /// 若允许任意 URL 会被构造用于开放重定向。网关 H5 的 returnPath 原本是前端落地页跳回业务页的站内路径,
+    /// 限制为相对路径不影响正常业务。
+    private String validateReturnPath(String returnPath) {
+        if (StrUtil.isBlank(returnPath)) {
+            return null;
+        }
+        // // 与 协议(http://、https://、//evil) 视为外链, 拒绝
+        if (returnPath.startsWith("//") || returnPath.contains("://")) {
+            // 网关: 授权回跳地址不允许外链
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "pay.error.gateway.returnPathExternalDenied");
+        }
+        if (!returnPath.startsWith("/")) {
+            returnPath = "/" + returnPath;
+        }
+        return returnPath;
     }
 }

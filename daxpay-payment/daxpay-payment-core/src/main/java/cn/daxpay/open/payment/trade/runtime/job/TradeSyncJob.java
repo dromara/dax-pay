@@ -77,14 +77,39 @@ public class TradeSyncJob {
 
     // ==================== 支付 CLOSE 纠正(CLOSE→SUCCESS) ====================
 
-    /// 超时关单后通道实际已付款的纠正窗口: 创建 1~30 分钟的 CLOSE 订单, 每 5 分钟同步一次
+    /// FAIL 纠正窗口: 创建 1~60 分钟的 FAIL 订单, 每 10 分钟同步一次
     ///
-    /// 超过 30 分钟的 CLOSE 基本确定是真关闭(通道侧也确认未付), 不再浪费通道查询。
+    /// 通道瞬时失败后实际已付款的纠正。FAIL 单既不被回调成功纠正(回调 CAS 守卫仅 PROCESSING/INIT),
+    /// 也不在 PROCESSING 同步窗口, 需独立窗口覆盖; 否则资金已收但订单永久 FAIL。
+    /// cron 偏移 20s 避免与 syncPayProcessing10M(0s)同瞬触发。
+    @Scheduled(cron = "20 */10 * * * ?")
+    @SchedulerLock(name = "lock:tradeSync:payFailFix", lockAtMostFor = "8m", lockAtLeastFor = "30s")
+    public void syncPayFailFix() {
+        OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
+        syncPayBatch(PayFundStatusEnum.FAIL.getCode(), now.minusMinutes(60), now.minusMinutes(1));
+    }
+
+    /// 超时关单后通道实际已付款的纠正窗口: close_time 在 1~60 分钟内的 CLOSE 订单, 每 5 分钟同步一次
+    ///
+    /// 按 close_time(非 create_time)扫描: 默认 30min 到期的订单超时关单时 create_time 已超 30min,
+    /// 若按 create_time 扫描会永久漏扫(原 bug); 改按 close_time + 放宽到 60min 覆盖默认到期单。
     @Scheduled(cron = "0 */5 * * * ?")
     @SchedulerLock(name = "lock:tradeSync:payCloseFix", lockAtMostFor = "4m", lockAtLeastFor = "30s")
     public void syncPayCloseFix() {
         OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
-        syncPayBatch(PayFundStatusEnum.CLOSE.getCode(), now.minusMinutes(30), now.minusMinutes(1));
+        List<PayTrade> trades = payTradeManager.findSyncTradesByCloseTime(
+                PayFundStatusEnum.CLOSE.getCode(), now.minusMinutes(60), now.minusMinutes(1));
+        if (trades.isEmpty()) {
+            return;
+        }
+        log.info("定时同步扫描支付 CLOSE 纠正(close_time) 命中 {} 笔, 开始处理", trades.size());
+        for (PayTrade trade : trades) {
+            try {
+                tradeSyncService.syncPayTrade(trade.getTradeNo());
+            } catch (Exception e) {
+                log.warn("支付同步跳过 tradeNo={}", trade.getTradeNo(), e);
+            }
+        }
     }
 
     // ==================== 退款 PROGRESS 同步(分层窗口) ====================

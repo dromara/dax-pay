@@ -30,9 +30,13 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class TradeSyncService {
 
-    /// 需要同步的支付资金态: 处理中(回调丢失纠正) + 已关闭(CLOSE→SUCCESS 纠正)
+    /// 需要同步的支付资金态: 处理中(回调丢失纠正) + 已失败(FAIL→SUCCESS 纠正) + 已关闭(CLOSE→SUCCESS 纠正)
+    /// - PROCESSING: 回调丢失/超时关单失败后, 查通道真实状态纠正
+    /// - FAIL: 通道瞬时失败后实际已付款的纠正(配合 ChannelResultUnknownException 后新 FAIL 单大幅减少)
+    /// - CLOSE: 超时关单后通道实际已付款的场景, 触发 CLOSE→SUCCESS 纠正
     private static final Set<String> SYNC_PAY_STATUSES = Set.of(
             PayFundStatusEnum.PROCESSING.getCode(),
+            PayFundStatusEnum.FAIL.getCode(),
             PayFundStatusEnum.CLOSE.getCode());
 
     private final PayTradeManager payTradeManager;

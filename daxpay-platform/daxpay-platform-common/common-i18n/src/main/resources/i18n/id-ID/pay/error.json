@@ -141,7 +141,8 @@
     "blacklistStatusInvalid": "Status daftar hitam tidak valid",
     "blacklistWechatAppRequired": "Blacklist OpenId WeChat wajib memilih aplikasi pembayaran",
     "blacklistChannelInvalid": "Kanal daftar hitam tidak valid",
-    "hitNotFound": "Catatan hit risiko tidak ditemukan",
-    "handleStatusInvalid": "Status penanganan tidak valid"
-  }
+    "hitNotFound": "Catatan hit risiko tidak ditemukan"
+  },
+  "channelResultUnknown": "Hasil saluran tidak diketahui, sedang mengonfirmasi status akhir",
+  "channelUnavailable": "Layanan saluran tidak tersedia, coba lagi nanti"
 }

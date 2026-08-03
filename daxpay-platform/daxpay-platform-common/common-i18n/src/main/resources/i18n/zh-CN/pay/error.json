@@ -79,7 +79,8 @@
     "codeClientEnvNotConfigured": "该客户端环境与支付形态未配置支付方式",
     "codeRuntimeMismatch": "码牌落地类型与运行形态不匹配",
     "codeClientEnvChannelMchRequired": "直接指定时，已填写行的通道商户号必填",
-    "bizOrderTypeImmutable": "该订单号已使用，订单类型不可中途变更，请更换订单号"
+    "bizOrderTypeImmutable": "该订单号已使用，订单类型不可中途变更，请更换订单号",
+    "returnPathExternalDenied": "授权回跳地址不允许外链"
   },
   "refund": {
     "processing": "退款处理中，请勿重复操作",
@@ -92,7 +93,14 @@
     "orderNotFound": "未查询到退款订单",
     "syncProcessing": "退款同步处理中，请勿重复操作",
     "noPermission": "该商户没有退款权限",
-    "gatewayNotSupported": "网关支付订单暂不支持退款"
+    "gatewayNotSupported": "网关支付订单暂不支持退款",
+    "tradeNoRequired": "该业务订单号存在多笔交易，请指定资金交易号(tradeNo)精确定位",
+    "manualCloseStatus": "仅退款中的订单可手动关闭",
+    "manualCloseTooEarly": "退款单创建未满7天，暂不支持手动关闭",
+    "duplicate": "该商户退款号已存在，请勿重复退款",
+    "casConflict": "退款单 {0} 结算并发冲突，已自动回滚",
+    "closeChannelQueryFailed": "通道查单失败，无法确认退款状态，请稍后重试",
+    "alreadySuccessOnClose": "通道确认该退款已成功，已自动纠正为成功，无需关闭"
   },
   "callback": {
     "processing": "回调正在处理中，忽略本次回调请求",
@@ -123,7 +131,8 @@
     "productOrChannelMchRequired": "支付产品与通道商户号至少传入其一",
     "channelMchNotFound": "通道商户[{0}]不存在",
     "mchContextMissing": "商户上下文未装载，无法进行数据隔离操作",
-    "authSessionExpired": "授权链接已失效，请重新生成"
+    "authSessionExpired": "授权链接已失效，请重新生成",
+    "authSceneMismatch": "授权回调场景不匹配，拒绝重定向"
   },
   "verify": {
     "methodParamRequired": "支付方法至少有一个参数，并且需要签名的支付参数放在第一位",
@@ -143,7 +152,8 @@
     "blacklistStatusInvalid": "黑名单状态无效",
     "blacklistWechatAppRequired": "微信 OpenId 黑名单必须指定支付应用",
     "blacklistChannelInvalid": "黑名单通道无效",
-    "hitNotFound": "风险命中记录不存在",
-    "handleStatusInvalid": "处理状态无效"
-  }
+    "hitNotFound": "风险命中记录不存在"
+  },
+  "channelResultUnknown": "通道处理结果未知，正在确认最终状态",
+  "channelUnavailable": "通道服务不可用，请稍后重试"
 }

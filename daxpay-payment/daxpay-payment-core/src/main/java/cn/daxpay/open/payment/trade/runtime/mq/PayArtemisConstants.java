@@ -26,4 +26,9 @@ public interface PayArtemisConstants {
     /// 商户出站通知发送队列 address
     /// 任务落库后 afterCommit 投递（含失败延时重试），由 [cn.daxpay.open.payment.trade.notice.consumer.MchNoticeSendConsumer] 消费。
     String MCH_NOTICE_SEND = "mch.notice.send";
+
+    /// 商户出站 MQ 通知 Topic 前缀
+    /// MQ 投递方式(notifyWay=mq)下, 按应用隔离的 Topic: `<前缀>.<appId>`, 商户侧用 JMS 持久订阅消费。
+    /// broker 端该 address 需配为 multicast 路由类型。
+    String MCH_NOTICE_TOPIC_PREFIX = "daxpay.notice";
 }

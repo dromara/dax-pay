@@ -62,8 +62,10 @@ public class GatewayPayHandleService {
     public NormalPayResult handle(GatewayPayOrder order, String product, String method,
                                   String channelMchNo, String capability,
                                   String openId, String clientEnv, String device, String clientIp) {
+        // 锁租期 60s 覆盖通道 HTTP 超时(40s), 等待 3s 让并发同号请求排队而非立即失败
         return lockExecutor.execute(
                 "payment:gateway:pay:" + order.getOrderNo(),
+                60000, 3000,
                 () -> {
                     // 重新加载最新状态
                     GatewayPayOrder current = gatewayPayOrderManager.findById(order.getId())
@@ -172,6 +174,7 @@ public class GatewayPayHandleService {
                 PayTradeTypeEnum.GATEWAY.getCode(),
                 order.getId(),
                 order.getAmount(),
+                order.getCurrency(),
                 order.getOrderNo(),
                 source,
                 payParam.getChannelMchNo(),

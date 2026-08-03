@@ -4,6 +4,7 @@ import cn.daxpay.open.platform.capability.sensitiveword.enums.SensitiveWordScene
 import cn.daxpay.open.platform.capability.sensitiveword.service.SensitiveWordCheckService;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
+import cn.daxpay.open.platform.core.exception.ChannelResultUnknownException;
 import cn.daxpay.open.platform.core.exception.PayFailureException;
 import cn.daxpay.open.platform.common.spring.util.WebServletUtil;
 import cn.daxpay.open.platform.core.enums.pay.trade.TradeSourceEnum;
@@ -76,8 +77,11 @@ public class NormalPayService {
         this.assertSensitiveWordClean(payParam);
         payAssistService.validationExpiredTime(payParam.getExpiredTime());
         String bizOrderNo = payParam.getBizOrderNo();
+        // 锁租期 60s 覆盖通道 HTTP 超时(40s), 等待 3s 让并发同号请求排队而非立即失败;
+        // 原 10s 默认值在慢通道下会提前释放, 导致同号请求重入并发调通道
         return lockExecutor.execute(
                 "payment:pay:" + bizOrderNo,
+                60000, 3000,
                 () -> this.payHandle(payParam),
                 () -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.processing")
         );
@@ -135,6 +139,12 @@ public class NormalPayService {
         PayTradeResultBo result;
         try {
             result = payStrategy.doPay(context);
+        } catch (ChannelResultUnknownException e) {
+            // 通道结果未知(网络超时/USER_PAYING/authCode 已使用等): 保持 PROCESSING, 交由定时同步纠正,
+            // 避免误判 FAIL 导致"资金已动但订单失败"悬挂; 仅记录错误信息到容器, 不改资金态/不通知
+            log.warn("通道结果未知, 保持处理中交由同步纠正: tradeNo={}", trade.getTradeNo(), e);
+            payAssistService.recordPayError(context, e.getMessage());
+            throw e;
         } catch (Exception e) {
             log.error("支付出现异常", e);
             trade.setStatus(PayFundStatusEnum.FAIL.getCode());

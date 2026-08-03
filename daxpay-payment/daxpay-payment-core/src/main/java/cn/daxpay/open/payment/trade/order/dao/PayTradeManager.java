@@ -97,6 +97,20 @@ public class PayTradeManager extends BaseManager<PayTradeMapper, PayTrade> {
                 .orderByAsc(PayTrade::getCreateTime));
     }
 
+    /// 按状态 + close_time 窗口扫描(CLOSE→SUCCESS 纠正专用)
+    ///
+    /// 与 [findSyncTrades](按 create_time)的区别: 默认 30min 到期的订单超时关单时,
+    /// create_time 已落在 30min 窗口下限之外会被永久漏扫; 改按 close_time 扫描可覆盖默认到期单。
+    /// 跨租户扫描(定时任务无 HTTP 上下文), 单次上限 500 防积压爆量。
+    @IgnoreTenant
+    public List<PayTrade> findSyncTradesByCloseTime(String status, OffsetDateTime start, OffsetDateTime end) {
+        return listLimit(500, q -> q
+                .eq(PayTrade::getStatus, status)
+                .ge(PayTrade::getCloseTime, start)
+                .le(PayTrade::getCloseTime, end)
+                .orderByAsc(PayTrade::getCloseTime));
+    }
+
     /// 查询普通支付已超时但仍处理中的资金交易(兜底定时任务用)
     ///
     /// 条件: tradeType=NORMAL 且 status=PROCESSING 且容器 expiredTime < now。

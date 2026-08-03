@@ -79,7 +79,8 @@
     "codeClientEnvNotConfigured": "この環境と形態には支払方法が設定されていません",
     "codeRuntimeMismatch": "QRのプログラム種別とランタイムが一致しません",
     "codeClientEnvChannelMchRequired": "DIRECT モードでは各環境・形態のチャネル加盟店番号が必須です",
-    "bizOrderTypeImmutable": "この注文番号は使用済みで、注文タイプは途中変更できません。新しい注文番号をご使用ください"
+    "bizOrderTypeImmutable": "この注文番号は使用済みで、注文タイプは途中変更できません。新しい注文番号をご使用ください",
+    "returnPathExternalDenied": "認証リダイレクトアドレスに外部リンクは許可されていません"
   },
   "refund": {
     "processing": "返金処理、繰り返さない",
@@ -92,7 +93,14 @@
     "orderNotFound": "返金注文が見つかりません",
     "syncProcessing": "返金同期が進行中です。繰り返さないでください",
     "noPermission": "販売者には返金の許可がありません",
-    "gatewayNotSupported": "ゲートウェイ決済注文は現在返金に対応していません"
+    "gatewayNotSupported": "ゲートウェイ決済注文は現在返金に対応していません",
+    "tradeNoRequired": "この業務注文番号に複数の取引が存在します。資金取引番号(tradeNo)を指定して正確に特定してください",
+    "manualCloseStatus": "返金中の注文のみ手動クローズ可能です",
+    "manualCloseTooEarly": "返金注文の作成から7日未満のため、手動クローズは利用できません",
+    "duplicate": "このマーチャント払い戻し番号は既に存在します。重複して払い戻さないでください。",
+    "casConflict": "払い戻し単 {0} の精算並行衝突、自動的にロールバックされました",
+    "closeChannelQueryFailed": "チャネル照会に失敗し、払い戻し状況を確認できません。後でもう一度お試しください。",
+    "alreadySuccessOnClose": "チャネルが当該払い戻しの成功を確認しました。自動的に成功に修正されました。閉じる必要はありません。"
   },
   "callback": {
     "processing": "コールバック処理。このコールバック要求は無視されます。",
@@ -123,7 +131,8 @@
     "productOrChannelMchRequired": "支払い商品またはチャネル販売者番号のいずれかを指定する必要があります",
     "channelMchNotFound": "チャネル販売者 [{0}] が見つかりません",
     "mchContextMissing": "販売者のコンテキストがロードされていません。テナント分離を適用できません",
-    "authSessionExpired": "認証リンクの有効期限が切れました。再生成してください"
+    "authSessionExpired": "認証リンクの有効期限が切れました。再生成してください",
+    "authSceneMismatch": "認証コールバックシーンが一致しません。リダイレクトを拒否しました。"
   },
   "verify": {
     "methodParamRequired": "支払い方法には少なくとも 1 つのパラメータが必要で、署名付き支払いパラメータが最初の位置にある必要があります",
@@ -143,7 +152,8 @@
     "blacklistStatusInvalid": "ブラックリスト状態が無効です",
     "blacklistWechatAppRequired": "WeChat OpenId ブラックリストには決済アプリの指定が必要です",
     "blacklistChannelInvalid": "ブラックリストのチャネルが無効です",
-    "hitNotFound": "リスクヒット記録が存在しません",
-    "handleStatusInvalid": "処理状態が無効です"
-  }
+    "hitNotFound": "リスクヒット記録が存在しません"
+  },
+  "channelResultUnknown": "チャネル処理結果が不明です。最終状態を確認中です",
+  "channelUnavailable": "チャネルサービスは利用できません。後でもう一度お試しください"
 }

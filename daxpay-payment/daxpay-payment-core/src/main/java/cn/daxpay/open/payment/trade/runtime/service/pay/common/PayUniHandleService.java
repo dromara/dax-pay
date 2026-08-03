@@ -221,8 +221,8 @@ public class PayUniHandleService {
             return;
         }
         this.markContainerClosed(trade, now, false, null);
-        // 商户出站通知(系统协议)
-        tradeNoticeBridge.dispatchPay(trade, NoticeEventEnum.PAY_CLOSE);
+        // 商户出站通知: 撤销(资金态 CANCEL)发 PAY_CANCEL, 普通关闭发 PAY_CLOSE
+        tradeNoticeBridge.dispatchPay(trade, useCancel ? NoticeEventEnum.PAY_CANCEL : NoticeEventEnum.PAY_CLOSE);
         payPluginAssistService.payClose(trade);
     }
 
@@ -238,8 +238,8 @@ public class PayUniHandleService {
             return;
         }
         this.markContainerClosed(trade, now, true, null);
-        // 商户出站通知(系统协议)
-        tradeNoticeBridge.dispatchPay(trade, NoticeEventEnum.PAY_CLOSE);
+        // 商户出站通知: 超时关闭(容器态 EXPIRED)发 PAY_TIMEOUT, 区别于主动关单
+        tradeNoticeBridge.dispatchPay(trade, NoticeEventEnum.PAY_TIMEOUT);
         payPluginAssistService.payClose(trade);
     }
 

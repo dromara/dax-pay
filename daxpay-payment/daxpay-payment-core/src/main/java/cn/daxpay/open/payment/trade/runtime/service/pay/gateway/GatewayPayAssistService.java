@@ -143,7 +143,10 @@ public class GatewayPayAssistService {
         order.setExtraParam(param.getExtraParam());
         order.setExpiredTime(expiredTime);
         order.setAmount(param.getAmount());
-        order.setCurrency(CurrencyEnum.CNY.getCode());
+        // 币种: 显式透传优先, 缺省 cny(向后兼容国内通道)
+        order.setCurrency(StrUtil.isNotBlank(param.getCurrency())
+                ? CurrencyEnum.findByCode(param.getCurrency()).getCode()
+                : CurrencyEnum.CNY.getCode());
         order.setClientIp(param.getClientIp());
         order.setGoodsDetail(param.getGoodsDetail());
         // 门店号: 预下单写入(已 resolve 默认), 支付回填路由时不改

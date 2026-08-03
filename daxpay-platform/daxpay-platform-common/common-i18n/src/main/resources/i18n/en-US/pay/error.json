@@ -79,7 +79,8 @@
     "codeClientEnvNotConfigured": "Payment method not configured for this client env and form",
     "codeRuntimeMismatch": "QR program type does not match runtime",
     "codeClientEnvChannelMchRequired": "Channel merchant required for each env and form in DIRECT mode",
-    "bizOrderTypeImmutable": "This order no. is already in use and its type cannot be changed midway, please use a new one"
+    "bizOrderTypeImmutable": "This order no. is already in use and its type cannot be changed midway, please use a new one",
+    "returnPathExternalDenied": "Authorization redirect URL does not allow external links"
   },
   "refund": {
     "processing": "Refund processing, do not repeat",
@@ -92,7 +93,14 @@
     "orderNotFound": "Refund order not found",
     "syncProcessing": "Refund sync in progress, do not repeat",
     "noPermission": "Merchant does not have refund permission",
-    "gatewayNotSupported": "Gateway payment orders do not support refund yet"
+    "gatewayNotSupported": "Gateway payment orders do not support refund yet",
+    "tradeNoRequired": "Multiple transactions found for this business order number, please specify tradeNo for precise lookup",
+    "manualCloseStatus": "Only refund orders in progress can be manually closed",
+    "manualCloseTooEarly": "Refund order was created less than 7 days ago, manual close is not yet available",
+    "duplicate": "The merchant refund number already exists. Please do not repeat the refund.",
+    "casConflict": "Refund order {0} settlement concurrency conflict, automatically rolled back",
+    "closeChannelQueryFailed": "Channel query failed, cannot confirm refund status. Please try again later.",
+    "alreadySuccessOnClose": "Channel confirmed this refund has succeeded. Automatically corrected to success, no need to close."
   },
   "callback": {
     "processing": "Callback processing, ignoring this callback request",
@@ -123,7 +131,8 @@
     "productOrChannelMchRequired": "Either payment product or channel merchant number must be provided",
     "channelMchNotFound": "Channel merchant [{0}] not found",
     "mchContextMissing": "Merchant context is not loaded; cannot apply tenant isolation",
-    "authSessionExpired": "Authorization link expired. Please regenerate it."
+    "authSessionExpired": "Authorization link expired. Please regenerate it.",
+    "authSceneMismatch": "Authorization callback scene mismatch, redirect rejected"
   },
   "verify": {
     "methodParamRequired": "Payment method must have at least one parameter, and the signed payment parameter must be in the first position",
@@ -143,7 +152,8 @@
     "blacklistStatusInvalid": "Invalid blacklist status",
     "blacklistWechatAppRequired": "WeChat OpenId blacklist requires a payment app",
     "blacklistChannelInvalid": "Invalid blacklist channel",
-    "hitNotFound": "Risk hit record not found",
-    "handleStatusInvalid": "Invalid handle status"
-  }
+    "hitNotFound": "Risk hit record not found"
+  },
+  "channelResultUnknown": "Channel result unknown, confirming final status",
+  "channelUnavailable": "Channel service unavailable, please try again later"
 }

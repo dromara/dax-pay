@@ -79,7 +79,8 @@
     "codeClientEnvNotConfigured": "該用戶端環境與支付形態未配置支付方式",
     "codeRuntimeMismatch": "碼牌落地類型與運行形態不匹配",
     "codeClientEnvChannelMchRequired": "直接指定時，每個環境與形態的通道商戶號必填",
-    "bizOrderTypeImmutable": "該訂單號已使用，訂單類型不可中途變更，請更換訂單號"
+    "bizOrderTypeImmutable": "該訂單號已使用，訂單類型不可中途變更，請更換訂單號",
+    "returnPathExternalDenied": "授權回跳位址不允許外部連結"
   },
   "refund": {
     "processing": "退款處理中，請勿重複操作",
@@ -92,7 +93,14 @@
     "orderNotFound": "未查詢到退款訂單",
     "syncProcessing": "退款同步處理中，請勿重複操作",
     "noPermission": "該商户沒有退款權限",
-    "gatewayNotSupported": "網關支付訂單暫不支援退款"
+    "gatewayNotSupported": "網關支付訂單暫不支援退款",
+    "tradeNoRequired": "該業務訂單號存在多筆交易，請指定資金交易號(tradeNo)精確定位",
+    "manualCloseStatus": "僅退款中的訂單可手動關閉",
+    "manualCloseTooEarly": "退款單建立未滿7天，暫不支援手動關閉",
+    "duplicate": "該商戶退款號已存在，請勿重複退款",
+    "casConflict": "退款單 {0} 結算併發衝突，已自動回復",
+    "closeChannelQueryFailed": "通道查單失敗，無法確認退款狀態，請稍後重試",
+    "alreadySuccessOnClose": "通道確認該退款已成功，已自動糾正為成功，無需關閉"
   },
   "callback": {
     "processing": "回調正在處理中，忽略本次回調請求",
@@ -123,7 +131,8 @@
     "productOrChannelMchRequired": "支付產品與通道商户號至少傳入其一",
     "channelMchNotFound": "通道商户[{0}]不存在",
     "mchContextMissing": "商户上下文未裝載，無法進行數據隔離操作",
-    "authSessionExpired": "授權連結已失效，請重新產生"
+    "authSessionExpired": "授權連結已失效，請重新產生",
+    "authSceneMismatch": "授權回調場景不匹配，拒絕重新導向"
   },
   "verify": {
     "methodParamRequired": "支付方法至少有一個參數，並且需要簽名的支付參數放在第一位",
@@ -143,7 +152,8 @@
     "blacklistStatusInvalid": "黑名單狀態無效",
     "blacklistWechatAppRequired": "微信 OpenId 黑名單必須指定支付應用",
     "blacklistChannelInvalid": "黑名單通道無效",
-    "hitNotFound": "風險命中記錄不存在",
-    "handleStatusInvalid": "處理狀態無效"
-  }
+    "hitNotFound": "風險命中記錄不存在"
+  },
+  "channelResultUnknown": "通道處理結果未知，正在確認最終狀態",
+  "channelUnavailable": "通道服務不可用，請稍後重試"
 }

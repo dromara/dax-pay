@@ -64,4 +64,12 @@ public class RefundOrderAdminController {
             @NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(refundOrderAdminService.sync(id));
     }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "手动关闭异常退款单(仅PROGRESS且创建超7天)")
+    @PostMapping("/manual-close")
+    public Result<RefundOrderResult> manualClose(
+            @NotNull(message = "{validation.field.id.notNull}") Long id) {
+        return Res.ok(refundOrderAdminService.manualClose(id));
+    }
 }

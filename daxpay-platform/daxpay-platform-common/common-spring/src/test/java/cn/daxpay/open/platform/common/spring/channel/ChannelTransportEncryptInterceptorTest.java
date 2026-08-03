@@ -1,7 +1,8 @@
 package cn.daxpay.open.platform.common.spring.channel;
 
 import cn.daxpay.open.platform.common.config.encrypt.ChannelAesGcmEncryptor;
-import cn.daxpay.open.platform.core.exception.BizInfoException;
+import cn.daxpay.open.platform.core.exception.ChannelResultUnknownException;
+import cn.daxpay.open.platform.core.exception.ChannelUnavailableException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,8 @@ import org.springframework.http.client.ClientHttpResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
@@ -64,7 +67,7 @@ class ChannelTransportEncryptInterceptorTest {
         // 2xx 成功响应却未加密，属于真正的协议违规
         ClientHttpResponse response = mockResponse(200, "{\"code\":0,\"data\":\"ok\"}", false);
 
-        BizInfoException ex = assertThrows(BizInfoException.class,
+        ChannelResultUnknownException ex = assertThrows(ChannelResultUnknownException.class,
                 () -> interceptor.intercept(mockRequest(), new byte[0], executionReturning(response)));
 
         assertEquals(ChannelTransportEncryptInterceptor.MSG_RESPONSE_HEADER_MISSING, ex.getMessageKey());
@@ -77,14 +80,12 @@ class ChannelTransportEncryptInterceptorTest {
         String plainErrorBody = "{\"code\":400,\"msg\":\"通道传输解密失败\"}";
         ClientHttpResponse response = mockResponse(400, plainErrorBody, false);
 
-        BizInfoException ex = assertThrows(BizInfoException.class,
+        ChannelResultUnknownException ex = assertThrows(ChannelResultUnknownException.class,
                 () -> interceptor.intercept(mockRequest(), new byte[0], executionReturning(response)));
 
-        // 应抛「明文错误响应」而非「响应未携带加密头」，并携带状态码与真实错误 msg
+        // 应抛「明文错误响应」而非「响应未携带加密头」，状态码与真实错误 msg 透传在 cause message 中
         assertEquals(ChannelTransportEncryptInterceptor.MSG_PLAIN_ERROR_RESPONSE, ex.getMessageKey());
-        Object[] args = ex.getArgs();
-        assertEquals(400, args[0]);
-        assertEquals("通道传输解密失败", args[1]);
+        assertEquals("status=400, detail=通道传输解密失败", ex.getCause().getMessage());
     }
 
     @Test
@@ -93,13 +94,12 @@ class ChannelTransportEncryptInterceptorTest {
         // 子应用返回非 JSON 明文（如网关/代理介入）
         ClientHttpResponse response = mockResponse(502, "Bad Gateway", false);
 
-        BizInfoException ex = assertThrows(BizInfoException.class,
+        ChannelResultUnknownException ex = assertThrows(ChannelResultUnknownException.class,
                 () -> interceptor.intercept(mockRequest(), new byte[0], executionReturning(response)));
 
         assertEquals(ChannelTransportEncryptInterceptor.MSG_PLAIN_ERROR_RESPONSE, ex.getMessageKey());
-        assertEquals(502, ex.getArgs()[0]);
-        // 回退为原始 body 片段
-        assertEquals("Bad Gateway", ex.getArgs()[1]);
+        // 回退为原始 body 片段, 透传在 cause message 中
+        assertEquals("status=502, detail=Bad Gateway", ex.getCause().getMessage());
     }
 
     @Test
@@ -130,9 +130,42 @@ class ChannelTransportEncryptInterceptorTest {
         assertEquals("true", request.getHeaders().getFirst(ChannelTransportEncryptInterceptor.HEADER_X_DAX_PAYLOAD_ENCRYPTED));
     }
 
+    @Test
+    @DisplayName("连接被拒绝(子应用未启动)应抛通道不可用硬错误")
+    void shouldThrowChannelUnavailableWhenConnectionRefused() {
+        // 模拟连接拒绝: execution.execute 抛包装 ConnectException 的 IOException
+        IOException connectRefused = new IOException(new ConnectException("Connection refused: getsockopt"));
+        ClientHttpRequestExecution execution = executionThrowing(connectRefused);
+
+        ChannelUnavailableException ex = assertThrows(ChannelUnavailableException.class,
+                () -> interceptor.intercept(mockRequest(), new byte[0], execution));
+
+        assertEquals(ChannelTransportEncryptInterceptor.MSG_CHANNEL_UNAVAILABLE, ex.getMessageKey());
+    }
+
+    @Test
+    @DisplayName("读超时应保留通道结果未知(请求可能已到达通道)")
+    void shouldThrowResultUnknownOnReadTimeout() {
+        // 模拟读超时: execution.execute 抛包装 SocketTimeoutException 的 IOException
+        IOException readTimeout = new IOException(new SocketTimeoutException("Read timed out"));
+        ClientHttpRequestExecution execution = executionThrowing(readTimeout);
+
+        ChannelResultUnknownException ex = assertThrows(ChannelResultUnknownException.class,
+                () -> interceptor.intercept(mockRequest(), new byte[0], execution));
+
+        assertEquals(ChannelTransportEncryptInterceptor.MSG_CHANNEL_RESULT_UNKNOWN, ex.getMessageKey());
+    }
+
     /// 构造返回固定响应的 execution
     private static ClientHttpRequestExecution executionReturning(ClientHttpResponse response) {
         return (request, body) -> response;
+    }
+
+    /// 构造执行时抛指定 IOException 的 execution(模拟网络异常)
+    private static ClientHttpRequestExecution executionThrowing(IOException ex) {
+        return (request, body) -> {
+            throw ex;
+        };
     }
 
     /// 构造最简 HttpRequest（带可写 headers）

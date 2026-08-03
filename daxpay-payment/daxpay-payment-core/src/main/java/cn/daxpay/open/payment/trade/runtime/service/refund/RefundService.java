@@ -5,6 +5,7 @@ import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
+import cn.daxpay.open.platform.core.exception.ChannelResultUnknownException;
 import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
 import cn.daxpay.open.platform.common.spring.util.WebServletUtil;
 import cn.daxpay.open.platform.core.util.TradeNoGenerateUtil;
@@ -29,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +38,7 @@ import java.util.Objects;
 
 /// # 退款服务
 ///
-/// 退款编排: 查找原支付交易 → 加载原支付容器快照 → 预占可退余额 → 创建退款单 → 调通道 → 终态结算。
+/// 退款编排: 查找原支付交易 → 加载原支付容器快照 → 创建退款策略 → 预占可退余额 → 创建退款单 → 调通道 → 终态结算。
 /// 资金预占/成功/失败回滚委托 [RefundSettleService], 与同步/回调共用 trade 级锁。
 /// 支持 [PayTradeTypeEnum#NORMAL] 与 [PayTradeTypeEnum#GATEWAY] 两种容器。
 /// 通道/产品继承自原支付容器快照，不调用 [PayRouteService] 二次选路。
@@ -62,6 +64,22 @@ public class RefundService {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.orderNoRequired");
         }
 
+        // 商户退款幂等: 同 bizRefundNo 已有处理中单则直接返回(幂等), 已终态则拒绝重复退款
+        // 维度 (mch_no, biz_refund_no): 单参查询已按商户号自动租户隔离
+        if (StrUtil.isNotBlank(param.getBizRefundNo())) {
+            RefundOrder exist = refundOrderManager.findByBizRefundNo(param.getBizRefundNo()).orElse(null);
+            if (exist != null) {
+                if (Objects.equals(exist.getStatus(), RefundOrderStatusEnum.PROGRESS.getCode())) {
+                    log.info("退款幂等命中: bizRefundNo={} 已有处理中退款单 {}",
+                            param.getBizRefundNo(), exist.getRefundNo());
+                    return exist;
+                }
+                // 退款: 该商户退款号已存在, 请勿重复退款
+                throw new BizInfoException(CommonErrorCode.REPETITIVE_OPERATION_ERROR,
+                        "pay.error.refund.duplicate");
+            }
+        }
+
         // 查找原支付交易(支持 normal / gateway)
         PayTrade trade = resolveTrade(param.getTradeNo(), param.getBizOrderNo());
 
@@ -69,11 +87,12 @@ public class RefundService {
         validateRefundable(trade, param.getAmount());
 
         // 分布式锁: 预占与结算共用, 防止并发超退
+        // 锁租期 60s 覆盖通道 HTTP 超时(40s), 等待 3s(并发退款排队而非立即失败)
         try {
             return lockExecutor.execute(
                     RefundSettleService.lockKey(trade.getTradeNo()),
-                    10000,
-                    50,
+                    60000,
+                    3000,
                     () -> {
                         // 二次校验可退余额(持锁后)
                         PayTrade lockedTrade = payTradeManager.findById(trade.getId()).orElseThrow();
@@ -82,17 +101,36 @@ public class RefundService {
                         // 按 tradeType 加载原支付容器快照(非二次路由)
                         RefundOrderSnapshot snapshot = loadContainerSnapshot(lockedTrade);
 
-                        // 预占余额 + 创建退款单（原子事务，经自身注入调用使代理生效）
-                        RefundOrder refundOrder = self.reserveAndCreateRefundOrder(
-                                lockedTrade, param.getAmount(), snapshot, param);
-
-                        // 调用通道退款策略(事务外，避免长事务持有数据库连接)
+                        // 策略创建提到预占前: product 无退款策略时 fail-fast, 避免余额预扣后泄漏
                         AbsRefundStrategy strategy = PaymentStrategyFactory.createByProduct(
                                 snapshot.getProduct(), AbsRefundStrategy.class);
+
+                        // 预占余额 + 创建退款单（原子事务，经自身注入调用使代理生效）
+                        RefundOrder refundOrder;
+                        try {
+                            refundOrder = self.reserveAndCreateRefundOrder(
+                                    lockedTrade, param.getAmount(), snapshot, param);
+                        } catch (DuplicateKeyException e) {
+                            // DB 唯一约束兜底: 并发情况下锁外查重未命中, 子事务已回滚本次预占,
+                            // 返回已存在的处理中退款单(幂等)
+                            log.info("退款单唯一约束冲突, 返回已存在单: bizRefundNo={}", param.getBizRefundNo());
+                            return refundOrderManager.findByBizRefundNo(param.getBizRefundNo())
+                                    .orElseThrow(() -> e);
+                        }
+
+                        // 调用通道退款策略(事务外，避免长事务持有数据库连接)
                         RefundResultBo result;
                         try {
                             strategy.doBeforeRefund(refundOrder);
                             result = strategy.doRefund(refundOrder);
+                        } catch (ChannelResultUnknownException e) {
+                            // 通道结果未知(网络超时/连接异常等): 保持 PROGRESS(预占不回滚),
+                            // 交由定时同步查单纠正, 避免误判 FAIL 后商户重试导致双扣
+                            log.warn("通道退款结果未知, 保持处理中交由同步纠正: refundNo={}",
+                                    refundOrder.getRefundNo(), e);
+                            refundSettleService.applyProgressResult(
+                                    refundOrder, null, null, null, e.getMessage());
+                            throw e;
                         } catch (Exception e) {
                             log.error("通道退款失败, refundNo={}", refundOrder.getRefundNo(), e);
                             // 预占回滚 + 退款单 FAIL（独立补偿事务）
@@ -137,11 +175,15 @@ public class RefundService {
 
         // 按 bizOrderNo: Normal 优先, 再 Gateway
         NormalPayOrder normalOrder = payNormalOrderManager.findByBizOrderNo(bizOrderNo).orElse(null);
+        GatewayPayOrder gatewayOrder = gatewayPayOrderManager.findByBizOrderNo(bizOrderNo).orElse(null);
+        // 二义性防御: 同一 bizOrderNo 在 normal 和 gateway 容器各有一单时, 要求传 tradeNo 精确定位
+        if (normalOrder != null && gatewayOrder != null) {
+            throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.refund.tradeNoRequired");
+        }
         if (normalOrder != null) {
             return payTradeManager.findByContainerId(normalOrder.getId(), PayTradeTypeEnum.NORMAL.getCode())
                     .orElseThrow(() -> new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.notExists"));
         }
-        GatewayPayOrder gatewayOrder = gatewayPayOrderManager.findByBizOrderNo(bizOrderNo).orElse(null);
         if (gatewayOrder != null) {
             return payTradeManager.findByContainerId(gatewayOrder.getId(), PayTradeTypeEnum.GATEWAY.getCode())
                     .orElseThrow(() -> new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.notExists"));
@@ -218,6 +260,8 @@ public class RefundService {
         refundSettleService.reserveBalanceUnderLock(trade, amount);
         RefundOrder refundOrder = buildRefundOrder(trade, snapshot, param);
         refundOrder.setStatus(RefundOrderStatusEnum.PROGRESS.getCode());
+        // 并发情况下由 DB 唯一约束 (mch_no, biz_refund_no) 兜底: save 抛 DuplicateKeyException,
+        // 子事务回滚本次预占, 由调用方 refund() 锁内 catch 后查询已存在单幂等返回
         refundOrderManager.save(refundOrder);
         return refundOrder;
     }

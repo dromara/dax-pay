@@ -79,7 +79,8 @@
     "codeClientEnvNotConfigured": "해당 환경과 형태에 결제 수단이 구성되지 않았습니다",
     "codeRuntimeMismatch": "코드 프로그램 유형과 런타임이 일치하지 않습니다",
     "codeClientEnvChannelMchRequired": "DIRECT 모드에서 각 환경·형태의 채널 가맹점이 필요합니다",
-    "bizOrderTypeImmutable": "이 주문번호는 이미 사용되었으며 주문 유형은 중간에 변경할 수 없습니다. 주문번호를 변경해 주세요"
+    "bizOrderTypeImmutable": "이 주문번호는 이미 사용되었으며 주문 유형은 중간에 변경할 수 없습니다. 주문번호를 변경해 주세요",
+    "returnPathExternalDenied": "인증 리다이렉트 주소는 외부 링크를 허용하지 않습니다."
   },
   "refund": {
     "processing": "환불 처리 중입니다. 반복하지 마세요.",
@@ -92,7 +93,14 @@
     "orderNotFound": "환불 주문을 찾을 수 없습니다.",
     "syncProcessing": "환불 동기화가 진행 중입니다. 반복하지 마세요.",
     "noPermission": "판매자에게 환불 권한이 없습니다.",
-    "gatewayNotSupported": "게이트웨이 결제 주문은 아직 환불을 지원하지 않습니다"
+    "gatewayNotSupported": "게이트웨이 결제 주문은 아직 환불을 지원하지 않습니다",
+    "tradeNoRequired": "이 비즈니스 주문 번호에 여러 거래가 존재합니다. 자금 거래 번호(tradeNo)를 지정하여 정확하게 조회해 주세요",
+    "manualCloseStatus": "환불 진행 중인 주문만 수동 종료할 수 있습니다",
+    "manualCloseTooEarly": "환불 주문 생성 후 7일이 지나지 않아 수동 종료를 사용할 수 없습니다",
+    "duplicate": "해당 상점 환불 번호가 이미 존재합니다. 중복 환불하지 마세요.",
+    "casConflict": "환불 주문 {0} 정산 동시성 충돌, 자동 롤백됨",
+    "closeChannelQueryFailed": "채널 조회 실패, 환불 상태를 확인할 수 없습니다. 나중에 다시 시도해 주세요.",
+    "alreadySuccessOnClose": "채널에서 이 환불의 성공을 확인했습니다. 자동으로 성공으로 정정되었으며, 닫을 필요가 없습니다."
   },
   "callback": {
     "processing": "콜백 처리, 이 콜백 요청 무시",
@@ -123,7 +131,8 @@
     "productOrChannelMchRequired": "결제 상품 또는 채널 판매자 번호를 제공해야 합니다.",
     "channelMchNotFound": "채널 판매자 [{0}]을(를) 찾을 수 없습니다.",
     "mchContextMissing": "판매자 컨텍스트가 로드되지 않았습니다. 테넌트 격리를 적용할 수 없습니다.",
-    "authSessionExpired": "인증 링크가 만료되었습니다. 다시 생성해 주세요."
+    "authSessionExpired": "인증 링크가 만료되었습니다. 다시 생성해 주세요.",
+    "authSceneMismatch": "인증 콜백 장면이 일치하지 않아 리다이렉트가 거부되었습니다."
   },
   "verify": {
     "methodParamRequired": "결제 방법에는 매개변수가 하나 이상 있어야 하며 서명된 결제 매개변수가 첫 번째 위치에 있어야 합니다.",
@@ -143,7 +152,8 @@
     "blacklistStatusInvalid": "블랙리스트 상태가 유효하지 않습니다",
     "blacklistWechatAppRequired": "위챗 OpenId 블랙리스트에는 결제 앱을 지정해야 합니다",
     "blacklistChannelInvalid": "블랙리스트 채널이 유효하지 않습니다",
-    "hitNotFound": "리스크 적중 기록이 존재하지 않습니다",
-    "handleStatusInvalid": "처리 상태가 유효하지 않습니다"
-  }
+    "hitNotFound": "리스크 적중 기록이 존재하지 않습니다"
+  },
+  "channelResultUnknown": "채널 처리 결과를 알 수 없습니다. 최종 상태를 확인 중입니다",
+  "channelUnavailable": "채널 서비스를 사용할 수 없습니다. 잠시 후 다시 시도해 주세요"
 }

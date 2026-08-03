@@ -13,6 +13,8 @@ public enum CallbackStatusEnum {
     SUCCESS("success"),
     /// 失败
     FAIL("fail"),
+    /// 关闭(退款关闭, 与失败区分: 资金均回滚, 但状态语义不同)
+    CLOSE("close"),
     /// 忽略
     IGNORE("ignore"),
     /// 异常

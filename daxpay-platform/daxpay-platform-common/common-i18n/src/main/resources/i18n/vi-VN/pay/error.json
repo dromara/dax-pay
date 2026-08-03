@@ -141,7 +141,8 @@
     "blacklistStatusInvalid": "Trạng thái danh sách đen không hợp lệ",
     "blacklistWechatAppRequired": "Danh sách đen OpenId WeChat phải chọn ứng dụng thanh toán",
     "blacklistChannelInvalid": "Kênh danh sách đen không hợp lệ",
-    "hitNotFound": "Không tìm thấy bản ghi trúng rủi ro",
-    "handleStatusInvalid": "Trạng thái xử lý không hợp lệ"
-  }
+    "hitNotFound": "Không tìm thấy bản ghi trúng rủi ro"
+  },
+  "channelResultUnknown": "Kết quả kênh không xác định, đang xác nhận trạng thái cuối cùng",
+  "channelUnavailable": "Dịch vụ kênh không khả dụng, vui lòng thử lại sau"
 }

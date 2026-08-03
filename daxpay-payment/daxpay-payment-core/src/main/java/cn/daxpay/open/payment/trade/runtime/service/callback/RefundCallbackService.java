@@ -55,8 +55,18 @@ public class RefundCallbackService {
                 log.warn("退款回调: 退款单 {} 已处于终态 {}，忽略", refundOrder.getRefundNo(), oldStatus);
                 return;
             }
+            // 非终态回调(如通道返回 PROCESSING): 不触发结算, 保持 PROGRESS
+            if (StrUtil.isBlank(callbackData.getTradeStatus())) {
+                callbackData.setCallbackStatus(CallbackStatusEnum.IGNORE)
+                        .setCallbackErrorMsg("退款回调非终态，忽略: " + callbackData.getTradeErrorMsg());
+                log.warn("退款回调非终态，忽略: refundNo={} tradeStatus为空",
+                        callbackData.getRefundNo());
+                return;
+            }
             if (Objects.equals(CallbackStatusEnum.SUCCESS.getCode(), callbackData.getTradeStatus())) {
                 this.success(refundOrder, callbackData);
+            } else if (Objects.equals(CallbackStatusEnum.CLOSE.getCode(), callbackData.getTradeStatus())) {
+                this.close(refundOrder, callbackData);
             } else {
                 this.fail(refundOrder, callbackData);
             }
@@ -105,6 +115,20 @@ public class RefundCallbackService {
     /// 退款失败: 改态 + 回滚预占
     private void fail(RefundOrder refundOrder, RefundCallbackData callbackData) {
         boolean settled = refundSettleService.settleFail(
+                refundOrder.getId(),
+                callbackData.getFinishTime(),
+                callbackData.getOutRefundNo(),
+                callbackData.getRelationOrderNo(),
+                callbackData.getTradeErrorMsg());
+        if (!settled) {
+            callbackData.setCallbackStatus(CallbackStatusEnum.IGNORE)
+                    .setCallbackErrorMsg("退款单已处理，忽略回调");
+        }
+    }
+
+    /// 退款关闭: 改态 + 回滚预占(与失败的资金结果一致, 但状态语义不同, 商户通知事件为 refund.close)
+    private void close(RefundOrder refundOrder, RefundCallbackData callbackData) {
+        boolean settled = refundSettleService.settleClose(
                 refundOrder.getId(),
                 callbackData.getFinishTime(),
                 callbackData.getOutRefundNo(),

@@ -106,7 +106,10 @@ public class NormalPayAssistService {
         normalOrder.setStatus(NormalPayOrderStatusEnum.WAIT_PAY.getCode());
         normalOrder.setExpiredTime(expiredTime);
         normalOrder.setAmount(payParam.getAmount());
-        normalOrder.setCurrency(CurrencyEnum.CNY.getCode());
+        // 币种: 显式透传优先, 缺省 cny(向后兼容国内通道)
+        normalOrder.setCurrency(StrUtil.isNotBlank(payParam.getCurrency())
+                ? CurrencyEnum.findByCode(payParam.getCurrency()).getCode()
+                : CurrencyEnum.CNY.getCode());
         // --- 支付路由 ---
         normalOrder.setChannel(channel);
         normalOrder.setMethod(payParam.getMethod());
@@ -148,6 +151,7 @@ public class NormalPayAssistService {
                 PayTradeTypeEnum.NORMAL.getCode(),
                 normalOrder.getId(),
                 payParam.getAmount(),
+                normalOrder.getCurrency(),
                 orderNo,
                 source,
                 normalOrder.getChannelMchNo(),
@@ -170,6 +174,19 @@ public class NormalPayAssistService {
             // broker 不可用等情况, 不阻断下单, 由定时任务兜底
             log.warn("注册超时关单延时消息失败, 由定时任务兜底, tradeNo={}", tradeNo, e);
         }
+    }
+
+    /// 记录通道错误信息到容器(不改状态/不通知), 用于通道结果未知等需后续同步纠正的场景
+    ///
+    /// 与 [NormalPayService] 的 FAIL 路径不同: 本方法保持资金态 PROCESSING, 仅把错误摘要写入容器
+    /// 供商户查询/排查, 订单由定时同步任务查通道真实状态后纠正。
+    public void recordPayError(PayStrategyContext context, String errMsg) {
+        if (context.getNormalOrder() == null) {
+            return;
+        }
+        NormalPayOrder order = context.getNormalOrder();
+        order.setErrorMsg(StrUtil.maxLength(errMsg, 500));
+        payNormalOrderManager.updateById(order);
     }
 
     /// 查询已有订单并校验，结果填充到 context

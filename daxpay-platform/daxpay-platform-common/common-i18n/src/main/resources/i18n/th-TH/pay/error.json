@@ -141,7 +141,8 @@
     "blacklistStatusInvalid": "สถานะบัญชีดำไม่ถูกต้อง",
     "blacklistWechatAppRequired": "บัญชีดำ OpenId WeChat ต้องระบุแอปชำระเงิน",
     "blacklistChannelInvalid": "ช่องทางบัญชีดำไม่ถูกต้อง",
-    "hitNotFound": "ไม่พบบันทึกการตรวจพบความเสี่ยง",
-    "handleStatusInvalid": "สถานะการจัดการไม่ถูกต้อง"
-  }
+    "hitNotFound": "ไม่พบบันทึกการตรวจพบความเสี่ยง"
+  },
+  "channelResultUnknown": "ผลช่องทางไม่ทราบ กำลังยืนยันสถานะสุดท้าย",
+  "channelUnavailable": "บริการช่องทางไม่พร้อมใช้งาน โปรดลองอีกครั้งในภายหลัง"
 }

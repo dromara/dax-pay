@@ -1,8 +1,8 @@
 package cn.daxpay.open.platform.common.spring.channel;
 
 import cn.daxpay.open.platform.common.config.encrypt.ChannelAesGcmEncryptor;
-import cn.daxpay.open.platform.core.code.CommonErrorCode;
-import cn.daxpay.open.platform.core.exception.BizInfoException;
+import cn.daxpay.open.platform.core.exception.ChannelResultUnknownException;
+import cn.daxpay.open.platform.core.exception.ChannelUnavailableException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -13,6 +13,7 @@ import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.util.StreamUtils;
+import org.springframework.web.client.RestClientException;
 import tools.jackson.databind.JsonNode;
 import tools.jackson.databind.ObjectMapper;
 import tools.jackson.databind.json.JsonMapper;
@@ -20,6 +21,9 @@ import tools.jackson.databind.json.JsonMapper;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.ConnectException;
+import java.net.NoRouteToHostException;
+import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
 
 /// # 通道传输报文加解密拦截器
@@ -44,6 +48,12 @@ public class ChannelTransportEncryptInterceptor implements ClientHttpRequestInte
     public static final String MSG_PLAIN_ERROR_RESPONSE =
             "channel.error.transportEncrypt.plainErrorResponse";
 
+    /// 通道结果未知 messageKey(网络超时/响应中断等, 请求是否到达通道无法确认)
+    public static final String MSG_CHANNEL_RESULT_UNKNOWN = "pay.error.channelResultUnknown";
+
+    /// 通道服务不可用 messageKey(连接被拒绝/主机不可达, 请求未到达通道子应用)
+    public static final String MSG_CHANNEL_UNAVAILABLE = "pay.error.channelUnavailable";
+
     private static final MediaType TEXT_PLAIN_UTF8 =
             new MediaType(MediaType.TEXT_PLAIN, StandardCharsets.UTF_8);
 
@@ -67,8 +77,40 @@ public class ChannelTransportEncryptInterceptor implements ClientHttpRequestInte
             request.getHeaders().setContentLength(requestBody.length);
         }
 
-        ClientHttpResponse response = execution.execute(request, requestBody);
-        return decryptResponse(response);
+        try {
+            ClientHttpResponse response = execution.execute(request, requestBody);
+            return decryptResponse(response);
+        } catch (ChannelResultUnknownException e) {
+            // 协议违规/明文错误已由 decryptResponse 归入结果未知, 直接上抛
+            throw e;
+        } catch (IOException | RestClientException e) {
+            if (isConnectionRefused(e)) {
+                // 连接未建立(子应用宕机/不可达): 请求未到达通道, 结果确定(未受理), 抛硬错误
+                // 订单将被置 FAIL(资金确定未动), 不再归入结果未知触发不必要的同步查单
+                log.error("通道子应用不可用, 连接未建立: {}", e.getMessage());
+                throw new ChannelUnavailableException(MSG_CHANNEL_UNAVAILABLE, e);
+            }
+            // 网络超时/响应读取中断: 请求可能已到达通道(可能已扣款), 归入结果未知,
+            // 由主流程保持 PROCESSING/PROGRESS 并交由定时同步查通道真实状态纠正
+            throw new ChannelResultUnknownException(MSG_CHANNEL_RESULT_UNKNOWN, e);
+        }
+    }
+
+    /// 判断异常链是否为连接未建立类异常(连接被拒绝/主机不可达/DNS 解析失败)
+    ///
+    /// 这类异常表示请求根本未发出, 通道结果确定(未受理), 应抛硬错误([ChannelUnavailableException]);
+    /// 读超时([java.net.SocketTimeoutException])不在其列——读超时意味着请求已发出, 资金后果未知。
+    private static boolean isConnectionRefused(Throwable e) {
+        Throwable cur = e;
+        while (cur != null) {
+            if (cur instanceof ConnectException
+                    || cur instanceof UnknownHostException
+                    || cur instanceof NoRouteToHostException) {
+                return true;
+            }
+            cur = cur.getCause();
+        }
+        return false;
     }
 
     /// 解密响应体；无 body 原样返回；有加密头则解密；无加密头按状态码区分协议违规与明文错误响应
@@ -91,17 +133,15 @@ public class ChannelTransportEncryptInterceptor implements ClientHttpRequestInte
         HttpStatusCode statusCode = response.getStatusCode();
         response.close();
         if (statusCode.is2xxSuccessful()) {
-            // 2xx 成功响应却未加密：真正的协议违规（子应用未加密或被劫持），按安全约束报错
-            // 通道子应用响应未携带传输加密头
-            throw new BizInfoException(
-                    CommonErrorCode.SYSTEM_ERROR, MSG_RESPONSE_HEADER_MISSING, HEADER_X_DAX_PAYLOAD_ENCRYPTED);
+            // 2xx 成功响应却未加密：真正的协议违规(子应用未加密或被劫持), 无法确认通道真实结果, 归入结果未知
+            throw new ChannelResultUnknownException(MSG_RESPONSE_HEADER_MISSING,
+                    new RuntimeException(HEADER_X_DAX_PAYLOAD_ENCRYPTED));
         }
         // 非 2xx 明文错误响应：子应用入站解密失败/加密失败等主动返回的明文错误（如 400 解密失败）
-        // 透传子应用返回的真实错误详情，避免被「响应未携带加密头」掩盖
-        // 通道子应用返回明文错误响应
+        // 通道真实结果未知, 归入结果未知交由同步纠正; 透传子应用返回的真实错误详情便于排查
         String detail = extractPlainErrorDetail(responseBytes);
-        throw new BizInfoException(
-                CommonErrorCode.SYSTEM_ERROR, MSG_PLAIN_ERROR_RESPONSE, statusCode.value(), detail);
+        throw new ChannelResultUnknownException(MSG_PLAIN_ERROR_RESPONSE,
+                new RuntimeException("status=" + statusCode.value() + ", detail=" + detail));
     }
 
     /// 从子应用明文错误响应体提取错误详情

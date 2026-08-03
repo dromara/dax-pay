@@ -73,4 +73,15 @@ public class RefundSyncService {
         }
         return refundOrderManager.findById(refundOrder.getId()).orElse(refundOrder);
     }
+
+    /// 仅查询通道退款状态, 不结算/不落流水
+    ///
+    /// 供 manualClose 等场景在关闭前确认通道真实状态, 避免误关已成功的退款导致平台双重支出
+    /// (通道已退款 + 本地关闭回滚余额 → 商户可再次退款 → 平台双重支出)。
+    /// 调用方须自行判断 [RefundResultBo#isSyncSuccess] 与 [RefundResultBo#getStatus]。
+    public RefundResultBo queryChannel(RefundOrder refundOrder) {
+        AbsSyncRefundStrategy strategy = PaymentStrategyFactory.createByProduct(
+                refundOrder.getProduct(), AbsSyncRefundStrategy.class);
+        return strategy.doSync(refundOrder);
+    }
 }

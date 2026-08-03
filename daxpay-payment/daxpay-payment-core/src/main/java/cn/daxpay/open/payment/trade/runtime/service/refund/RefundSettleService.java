@@ -10,11 +10,14 @@ import cn.daxpay.open.payment.trade.runtime.service.plugin.PayPluginAssistServic
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.common.redis.lock.LockExecutor;
+import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.notice.NoticeEventEnum;
+import cn.daxpay.open.platform.core.exception.BizErrorException;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,6 +48,11 @@ public class RefundSettleService {
     private final PayPluginAssistService payPluginAssistService;
     private final TradeNoticeBridge tradeNoticeBridge;
 
+    /// 自身注入: 使 UnderLock 的 @Transactional 方法经代理调用生效(锁外层 + 事务内层),
+    /// 消除"自行加锁路径下 this 调用导致事务失效"的隐患(同步路径无外层事务时尤为关键)
+    @Lazy
+    private final RefundSettleService self;
+
     /// 构建退款结算锁键
     public static String lockKey(String tradeNo) {
         return LOCK_PREFIX + tradeNo;
@@ -74,7 +82,7 @@ public class RefundSettleService {
                 .orElseThrow(() -> new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.refund.orderNotFound"));
         return lockExecutor.execute(
                 lockKey(boot.getTradeNo()),
-                () -> settleSuccessUnderLock(refundOrderId, finishTime, outRefundNo, relationOrderNo),
+                () -> self.settleSuccessUnderLock(refundOrderId, finishTime, outRefundNo, relationOrderNo),
                 () -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.refund.processing")
         );
     }
@@ -137,7 +145,7 @@ public class RefundSettleService {
                 .orElseThrow(() -> new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.refund.orderNotFound"));
         return lockExecutor.execute(
                 lockKey(boot.getTradeNo()),
-                () -> settleFailOrCloseUnderLock(refundOrderId, close, finishTime, outRefundNo, relationOrderNo, errorMsg),
+                () -> self.settleFailOrCloseUnderLock(refundOrderId, close, finishTime, outRefundNo, relationOrderNo, errorMsg),
                 () -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.refund.processing")
         );
     }
@@ -164,11 +172,9 @@ public class RefundSettleService {
             return false;
         }
 
-        // progress → 回滚预占
-        if (Objects.equals(oldStatus, RefundOrderStatusEnum.PROGRESS.getCode())) {
-            restoreBalance(refundOrder);
-        }
-
+        // 先 CAS 改退款单状态, 成功后才回滚预占余额;
+        // 若先回滚余额再 CAS, 一旦 CAS 失败(CAS 前事务未回滚)会导致"余额已回滚但状态仍 PROGRESS",
+        // 定时同步再次进入将重复回滚余额造成超发
         applyChannelRefs(refundOrder, finishTime, outRefundNo, relationOrderNo);
         refundOrder.setStatus(target);
         if (errorMsg != null) {
@@ -178,9 +184,14 @@ public class RefundSettleService {
         boolean updated = refundOrderManager.casUpdateStatus(
                 refundOrder, Set.of(RefundOrderStatusEnum.PROGRESS.getCode()));
         if (!updated) {
-            log.info("退款失败/关闭结算CAS竞争失败: refundNo={} 状态已被其他线程改变",
-                    refundOrder.getRefundNo());
-            return false;
+            // CAS 失败: 状态已被其他线程改为终态, 抛异常回滚事务(含 applyChannelRefs 的内存改动),
+            // restoreBalance 尚未执行, 无超发风险; 不抛异常会导致事务正常提交留下不一致
+            throw new BizErrorException(CommonErrorCode.SYSTEM_ERROR,
+                    "pay.error.refund.casConflict", refundOrder.getRefundNo());
+        }
+        // CAS 成功后才回滚预占金额(progress → 终态)
+        if (Objects.equals(oldStatus, RefundOrderStatusEnum.PROGRESS.getCode())) {
+            restoreBalance(refundOrder);
         }
         // 商户出站通知: 关闭终态发 refund.close；失败终态发 refund.fail
         if (close) {

@@ -123,6 +123,14 @@ public class OpenAuthService {
             throw new BizInfoException(DaxPayErrorCode.OPERATION_FAIL,
                     "pay.error.assist.authSessionExpired");
         }
+        // 场景校验: 仅 OPEN 场景的 session 可走开放重定向回调。
+        // 防止公开网关接口(GatewayClientController#generateAuthUrl, 无签名)创建的 PAYMENT 场景 session
+        // 被旁路用于把用户 openid 302 到任意 URL(开放重定向 + 用户标识泄漏)
+        if (!AuthScene.OPEN.getCode().equals(session.getScene())) {
+            log.warn("OPEN 回调场景不匹配, 拒绝重定向: state={}, scene={}", state, session.getScene());
+            throw new BizInfoException(DaxPayErrorCode.OPERATION_FAIL,
+                    "pay.error.assist.authSceneMismatch");
+        }
         // 先保存 redirect_url(UnifiedAuthService.auth 成功后会销毁 session)
         String redirectUrl = session.getReturnPath();
 
@@ -167,6 +175,10 @@ public class OpenAuthService {
 
     /// 将回调参数拼接为 query string 追加到 baseUrl
     private String appendQueryParams(String baseUrl, OpenAuthRedirectResult result) {
+        // returnPath 为空(异常 session)时回退到平台首页, 避免 baseUrl.contains NPE
+        if (StrUtil.isBlank(baseUrl)) {
+            baseUrl = "/";
+        }
         StringBuilder sb = new StringBuilder(baseUrl);
         sb.append(baseUrl.contains("?") ? "&" : "?");
         sb.append("code=").append(result.getCode());
