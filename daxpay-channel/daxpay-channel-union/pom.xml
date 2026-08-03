@@ -12,5 +12,5 @@
 
     <artifactId>daxpay-channel-union</artifactId>
     <packaging>jar</packaging>
-    <description>云闪付(直连银联 ACP)支付通道</description>
+    <description>云闪付(银联 ACP)支付通道</description>
 </project>

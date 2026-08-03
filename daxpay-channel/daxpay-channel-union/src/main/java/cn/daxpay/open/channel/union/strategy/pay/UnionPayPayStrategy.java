@@ -1,7 +1,7 @@
 package cn.daxpay.open.channel.union.strategy.pay;
 
 import cn.daxpay.open.channel.union.client.credential.UnionSdkCredential;
-import cn.daxpay.open.channel.union.service.direct.UnionDirectConfigAssembler;
+import cn.daxpay.open.channel.union.service.UnionConfigAssembler;
 import cn.daxpay.open.channel.union.service.payment.pay.UnionPayService;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.payment.strategy.pay.AbsNormalPayStrategy;
@@ -22,13 +22,13 @@ import org.springframework.stereotype.Service;
 public class UnionPayPayStrategy extends AbsNormalPayStrategy {
 
     private final UnionPayService unionPayService;
-    private final UnionDirectConfigAssembler unionDirectConfigAssembler;
+    private final UnionConfigAssembler unionConfigAssembler;
 
     /// 支付前预处理: 组装通道凭证写入上下文
     @Override
     public void doBeforePay(PayStrategyContext context) {
         NormalPayParam payParam = context.getPayParam();
-        UnionSdkCredential credential = unionDirectConfigAssembler.buildConfig(
+        UnionSdkCredential credential = unionConfigAssembler.buildConfig(
                 payParam.getMchNo(), payParam.getChannelMchNo(), payParam.getCapability());
         context.setChannelConfig(credential);
     }

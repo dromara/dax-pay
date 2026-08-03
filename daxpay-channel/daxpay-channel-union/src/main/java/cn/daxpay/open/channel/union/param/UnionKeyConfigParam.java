@@ -1,4 +1,4 @@
-package cn.daxpay.open.channel.union.param.direct;
+package cn.daxpay.open.channel.union.param;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -6,14 +6,14 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-/// # 云闪付直连密钥配置保存参数
+/// # 云闪付密钥配置保存参数
 ///
 /// 以 channelMchNo(通道商户号) 作为唯一标识定位记录,
 /// mchNo/merId(银联商户号) 为不可变身份字段, 创建时写入后永不可改, 不参与保存。
 @Data
 @Accessors(chain = true)
-@Schema(title = "云闪付直连密钥配置保存参数")
-public class UnionDirectKeyConfigParam {
+@Schema(title = "云闪付密钥配置保存参数")
+public class UnionKeyConfigParam {
 
     @NotBlank(message = "{validation.field.channelMerchantNo.notBlank}")
     @Schema(description = "通道商户号")

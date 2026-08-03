@@ -2,7 +2,7 @@ package cn.daxpay.open.channel.union.strategy.pay;
 
 import cn.daxpay.open.channel.union.client.credential.UnionSdkCredential;
 import cn.daxpay.open.channel.union.client.enums.UnionPayMethod;
-import cn.daxpay.open.channel.union.service.direct.UnionDirectConfigAssembler;
+import cn.daxpay.open.channel.union.service.UnionConfigAssembler;
 import cn.daxpay.open.channel.union.service.payment.close.UnionCloseService;
 import cn.daxpay.open.channel.union.strategy.UnionStrategySupport;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
@@ -23,12 +23,12 @@ import org.springframework.stereotype.Service;
 public class UnionPayCloseStrategy extends AbsPayCloseStrategy {
 
     private final UnionCloseService unionCloseService;
-    private final UnionDirectConfigAssembler unionDirectConfigAssembler;
+    private final UnionConfigAssembler unionConfigAssembler;
 
     @Override
     public CloseTypeEnum doClose(PayStrategyContext context, boolean useCancel) {
         PayTrade trade = context.getTrade();
-        UnionSdkCredential credential = unionDirectConfigAssembler.buildConfig(
+        UnionSdkCredential credential = unionConfigAssembler.buildConfig(
                 trade.getMchNo(), context.getChannelMchNo(), context.getCapability());
         UnionPayMethod method = UnionStrategySupport.resolveMethod(context.getCapability());
         return unionCloseService.close(trade, credential, useCancel, method);

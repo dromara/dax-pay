@@ -14,7 +14,7 @@ import java.util.Map;
 
 /// # 云闪付产品策略
 ///
-/// 云闪付为单一产品(直连银联 ACP), 含主扫([PayMethodEnum#UNION_QR]) / H5([PayMethodEnum#UNION_H5])
+/// 云闪付为单一产品(银联 ACP), 含主扫([PayMethodEnum#UNION_QR]) / H5([PayMethodEnum#UNION_H5])
 /// / 被扫([PayMethodEnum#UNION_BARCODE]) 三种支付方式, 方式→能力一对一同码。
 @Slf4j
 @Service

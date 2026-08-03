@@ -2,7 +2,7 @@ package cn.daxpay.open.channel.union.strategy.refund;
 
 import cn.daxpay.open.channel.union.client.credential.UnionSdkCredential;
 import cn.daxpay.open.channel.union.client.enums.UnionPayMethod;
-import cn.daxpay.open.channel.union.service.direct.UnionDirectConfigAssembler;
+import cn.daxpay.open.channel.union.service.UnionConfigAssembler;
 import cn.daxpay.open.channel.union.service.payment.refund.UnionRefundSyncService;
 import cn.daxpay.open.channel.union.strategy.UnionStrategySupport;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
@@ -22,11 +22,11 @@ import org.springframework.stereotype.Service;
 public class UnionPaySyncRefundStrategy extends AbsSyncRefundStrategy {
 
     private final UnionRefundSyncService unionRefundSyncService;
-    private final UnionDirectConfigAssembler unionDirectConfigAssembler;
+    private final UnionConfigAssembler unionConfigAssembler;
 
     @Override
     public RefundResultBo doSync(RefundOrder refundOrder) {
-        UnionSdkCredential credential = unionDirectConfigAssembler.buildConfig(
+        UnionSdkCredential credential = unionConfigAssembler.buildConfig(
                 refundOrder.getMchNo(), refundOrder.getChannelMchNo(), refundOrder.getCapability());
         UnionPayMethod method = UnionStrategySupport.resolveMethod(refundOrder.getCapability());
         return unionRefundSyncService.sync(refundOrder, credential, method);

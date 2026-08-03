@@ -5,7 +5,7 @@ import cn.daxpay.open.channel.union.client.credential.UnionSdkCredential;
 import cn.daxpay.open.channel.union.client.req.UnionCallbackParseReq;
 import cn.daxpay.open.channel.union.client.resp.UnionCallbackParseResp;
 import cn.daxpay.open.channel.union.code.UnionCode;
-import cn.daxpay.open.channel.union.service.direct.UnionDirectConfigAssembler;
+import cn.daxpay.open.channel.union.service.UnionConfigAssembler;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.record.service.PayCallbackRecordService;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundCallbackData;
@@ -31,7 +31,7 @@ import java.util.Objects;
 public class UnionRefundCallbackService {
 
     private final UnionChannelClient unionChannelClient;
-    private final UnionDirectConfigAssembler configAssembler;
+    private final UnionConfigAssembler configAssembler;
     private final RefundCallbackService refundCallbackService;
     private final PayCallbackRecordService payCallbackRecordService;
 

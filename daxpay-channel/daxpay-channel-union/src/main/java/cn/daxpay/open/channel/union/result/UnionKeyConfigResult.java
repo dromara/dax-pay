@@ -1,14 +1,14 @@
-package cn.daxpay.open.channel.union.result.direct;
+package cn.daxpay.open.channel.union.result;
 
 import cn.daxpay.open.platform.common.json.sensitive.SensitiveInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-/// # 云闪付直连密钥配置返回结果
+/// # 云闪付密钥配置返回结果
 @Data
 @Accessors(chain = true)
-public class UnionDirectKeyConfigResult {
+public class UnionKeyConfigResult {
 
     /// 通道商户号
     private String channelMchNo;
