@@ -12,6 +12,7 @@ import cn.daxpay.open.plugin.risk.enums.PayBlacklistTypeEnum;
 import cn.daxpay.open.plugin.risk.enums.PayRiskHitPhaseEnum;
 import cn.daxpay.open.plugin.risk.service.PayBlacklistService;
 import cn.daxpay.open.plugin.risk.service.PayRiskHitService;
+import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.util.StrUtil;
 import com.github.benmanes.caffeine.cache.Cache;
 import com.github.benmanes.caffeine.cache.Caffeine;
@@ -142,14 +143,24 @@ public class DefaultPayRiskChecker implements PayRiskChecker {
     /// 海外 IP 地域拦截（country≠中国, 港澳台放行; 未知/内网 fail-open）
     ///
     /// 与黑名单不同, 海外命中不关联名单行（blacklistId=null）, 命中类型为 [PayBlacklistTypeEnum#OVERSEAS_IP]。
+    /// 内网/回环地址由网段判定直通, 不依赖 xdb 文本标注:
+    /// 新版 xdb 对保留地址段返回 country=Reserved/isp=0, 老版标注 isp=内网IP, 文本格式不可靠。
     private void checkOverseasIp(PayRiskCheckContext ctx, boolean throwOnHit) {
         String ip = ctx.getClientIp();
         if (StrUtil.isBlank(ip)) {
             return;
         }
+        // 内网/回环地址直通放行(网络层判定, 不查库)
+        if (NetUtil.isInnerIP(ip)) {
+            return;
+        }
         IpRegion region = ipToRegionService.getRegionByIp(ip);
-        // 未知（IPv6/查询失败）/ 内网 / 国内（含港澳台） → 放行
-        if (region == null || region.isInnerIp() || region.isChinaIp()) {
+        // 未知(IPv6/查询失败)/国内(含港澳台) → 放行
+        if (region == null || region.isChinaIp()) {
+            return;
+        }
+        // 兼容 xdb 文本标注的双保险: 老版 isp=内网IP / 新版 country=Reserved
+        if (region.isInnerIp() || "Reserved".equals(region.getCountry())) {
             return;
         }
         // 海外 → 命中记录（blacklistId=null, 非黑名单来源）
