@@ -12,6 +12,7 @@ import cn.daxpay.open.plugin.risk.enums.PayBlacklistTypeEnum;
 import cn.daxpay.open.plugin.risk.enums.PayRiskHitPhaseEnum;
 import cn.daxpay.open.plugin.risk.service.PayBlacklistService;
 import cn.daxpay.open.plugin.risk.service.PayRiskHitService;
+import cn.hutool.core.lang.Validator;
 import cn.hutool.core.net.NetUtil;
 import cn.hutool.core.util.StrUtil;
 import com.github.benmanes.caffeine.cache.Cache;
@@ -148,6 +149,10 @@ public class DefaultPayRiskChecker implements PayRiskChecker {
     private void checkOverseasIp(PayRiskCheckContext ctx, boolean throwOnHit) {
         String ip = ctx.getClientIp();
         if (StrUtil.isBlank(ip)) {
+            return;
+        }
+        // IPv6 暂不参与网段判定, 直接放行(NetUtil.isInnerIP 仅支持 IPv4, 传入 IPv6 会抛异常)
+        if (Validator.isIpv6(ip)) {
             return;
         }
         // 内网/回环地址直通放行(网络层判定, 不查库)

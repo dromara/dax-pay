@@ -129,6 +129,24 @@ class DefaultPayRiskCheckerTest {
     }
 
     @Test
+    @DisplayName("海外检查: IPv6 回环直通放行(NetUtil.isInnerIP 仅支持 IPv4, 传入 IPv6 会抛异常)")
+    void overseasIp_ipv6Loopback_shouldPassThroughWithoutLookup() {
+        assertDoesNotThrow(() -> checker.checkBeforePay(overseasCtx("::1")));
+
+        verify(ipToRegionService, never()).getRegionByIp(anyString());
+        verifyNoInteractions(payRiskHitService);
+    }
+
+    @Test
+    @DisplayName("海外检查: IPv6 公网地址直通放行")
+    void overseasIp_ipv6Public_shouldPassThroughWithoutLookup() {
+        assertDoesNotThrow(() -> checker.checkBeforePay(overseasCtx("2409:8a20:210:0:0:0:0:1")));
+
+        verify(ipToRegionService, never()).getRegionByIp(anyString());
+        verifyNoInteractions(payRiskHitService);
+    }
+
+    @Test
     @DisplayName("海外检查: xdb 查询失败(region=null)放行不记录")
     void overseasIp_lookupReturnsNull_shouldPass() {
         when(ipToRegionService.getRegionByIp("8.8.8.8")).thenReturn(null);
