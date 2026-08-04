@@ -6,13 +6,18 @@ import cn.daxpay.open.channel.leshua.client.enums.LeshuaPayBodyType;
 import cn.daxpay.open.channel.leshua.client.enums.LeshuaPayMethod;
 import cn.daxpay.open.channel.leshua.client.req.LeshuaPayReq;
 import cn.daxpay.open.channel.leshua.client.resp.LeshuaPayResp;
+import cn.daxpay.open.channel.leshua.strategy.product.LeshuaProductStrategy;
 import cn.daxpay.open.payment.common.result.DaxResult;
+import cn.daxpay.open.payment.strategy.ProductStrategySupport;
 import cn.daxpay.open.payment.trade.runtime.bo.PayTradeResultBo;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
+import cn.daxpay.open.payment.wx.facade.WxAppFacade;
+import cn.daxpay.open.payment.wx.facade.WxAppView;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
+import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.unipay.PayBodyTypeEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
@@ -33,6 +38,8 @@ public class LeshuaPayService {
 
     private final LeshuaChannelClient leshuaChannelClient;
     private final PlatformUrlConfigService platformUrlConfigService;
+    private final WxAppFacade wxAppFacade;
+    private final LeshuaProductStrategy productStrategy;
 
     /// 执行乐刷支付
     public PayTradeResultBo pay(PayTrade order, NormalPayParam payParam, LeshuaSdkCredential credential) {
@@ -56,6 +63,15 @@ public class LeshuaPayService {
         req.setClientIp(payParam.getClientIp());
         req.setNotifyUrl(this.buildNotifyUrl(order, payParam.getChannelMchNo()));
         req.setCredential(credential);
+        // 微信 JSAPI/小程序支付需 appid(乐刷 get_tdcode WXZF 场景, 拉起微信收银台);
+        // 通过微信开放应用门面解析商户/平台级微信应用(通道能力绑 → 产品级默认绑 → 平台应用推导),
+        // 付款码支付据 authCode 自动识别底层渠道, 无需 appid
+        if (isWechatJsapiOrMini(payParam.getMethod())) {
+            WxAppView wxApp = wxAppFacade.resolve(
+                    order.getMchNo(), payParam.getChannelMchNo(),
+                    payParam.getCapability(), payParam.getChannelAppId(), ProductEnum.LESHUA_PAY.getCode());
+            req.setWxAppId(wxApp.wxAppId());
+        }
 
         // 调用子应用
         DaxResult<LeshuaPayResp> result = leshuaChannelClient.pay(req);
@@ -76,6 +92,14 @@ public class LeshuaPayService {
         }
         return StrUtil.format("{}/unipay/callback/{}/{}/leshua/pay",
                 base, order.getMchNo(), channelMchNo);
+    }
+
+    /// 是否微信 JSAPI/小程序支付(乐刷 get_tdcode WXZF, 需要 appid 拉起微信收银台;
+    /// 判定范围由产品策略 [LeshuaProductStrategy#wxAppRequiredCapabilities] 声明)
+    private boolean isWechatJsapiOrMini(String methodCode) {
+        PayMethodEnum method = PayMethodEnum.findByCode(methodCode);
+        return ProductStrategySupport.capabilitiesForMethod(productStrategy, method).stream()
+                .anyMatch(productStrategy.wxAppRequiredCapabilities()::contains);
     }
 
     /// 平台支付方式([PayMethodEnum] code) → 乐刷三要素

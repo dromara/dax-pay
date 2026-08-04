@@ -675,6 +675,9 @@
     "dougongAppId": {
       "notBlank": "Merchant AppId ไม่สามารถเว้นว่างได้"
     },
+    "isvNo": {
+      "notBlank": "ต้องระบุหมายเลข ISV"
+    },
     "sandAppId": {
       "notBlank": "Sand appId ต้องไม่ว่าง"
     },

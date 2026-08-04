@@ -1,5 +1,6 @@
 {
   "payFailed": "匯付支付異常: {0}",
   "closeFailed": "匯付關閉訂單異常: {0}",
+  "isvKeyNotConfigured": "匯付服務商密鑰未設定",
   "unsupportedPayMethod": "匯付不支援的支付方式: {0}"
 }

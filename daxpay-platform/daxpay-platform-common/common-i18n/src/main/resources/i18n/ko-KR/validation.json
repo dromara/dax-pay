@@ -675,6 +675,9 @@
     "dougongAppId": {
       "notBlank": "판매자 앱 ID는 비워둘 수 없습니다."
     },
+    "isvNo": {
+      "notBlank": "ISV 번호는 필수입니다"
+    },
     "sandAppId": {
       "notBlank": "Sand appId는 필수입니다"
     },

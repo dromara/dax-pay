@@ -679,6 +679,9 @@
     "dougongAppId": {
       "notBlank": "Merchant AppId cannot be blank"
     },
+    "isvNo": {
+      "notBlank": "ISV number cannot be blank"
+    },
     "sandAppId": {
       "notBlank": "Sand appId cannot be blank"
     },

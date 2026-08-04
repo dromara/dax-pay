@@ -675,6 +675,9 @@
     "dougongAppId": {
       "notBlank": "AppId Penjual tidak boleh kosong"
     },
+    "isvNo": {
+      "notBlank": "Nomor ISV wajib diisi"
+    },
     "sandAppId": {
       "notBlank": "Sand appId tidak boleh kosong"
     },

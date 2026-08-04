@@ -28,6 +28,17 @@ START 1
 CACHE 1;
 
 -- ----------------------------
+-- Sequence structure for adapay_isv_key_config_id_seq
+-- ----------------------------
+DROP SEQUENCE IF EXISTS "public"."adapay_isv_key_config_id_seq";
+CREATE SEQUENCE "public"."adapay_isv_key_config_id_seq" 
+INCREMENT 1
+MINVALUE  1
+MAXVALUE 9223372036854775807
+START 1
+CACHE 1;
+
+-- ----------------------------
 -- Sequence structure for alipay_direct_app_capability_id_seq
 -- ----------------------------
 DROP SEQUENCE IF EXISTS "public"."alipay_direct_app_capability_id_seq";
@@ -122,12 +133,12 @@ CREATE TABLE "public"."adapay_direct_key_config" (
   "last_modifier" int8,
   "last_modified_time" timestamptz(6),
   "version" int4 DEFAULT 0,
-  "deleted" bool DEFAULT false
+  "deleted" bool DEFAULT false,
+  "sandbox" bool DEFAULT false
 )
 ;
 COMMENT ON COLUMN "public"."adapay_direct_key_config"."mch_no" IS '商户号';
 COMMENT ON COLUMN "public"."adapay_direct_key_config"."channel_mch_no" IS '通道商户号(创建时录入不可修改)';
-COMMENT ON COLUMN "public"."adapay_direct_key_config"."merchant_no" IS 'Adapay 商户号(创建时录入不可修改)';
 COMMENT ON COLUMN "public"."adapay_direct_key_config"."adapay_app_id" IS 'Adapay 应用ID(app_id)';
 COMMENT ON COLUMN "public"."adapay_direct_key_config"."api_key" IS 'Adapay API Key(请求头Authorization, 加密存储)';
 COMMENT ON COLUMN "public"."adapay_direct_key_config"."private_key" IS '商户RSA私钥(PKCS#8 Base64, 请求签名, 加密存储)';
@@ -138,7 +149,41 @@ COMMENT ON COLUMN "public"."adapay_direct_key_config"."last_modifier" IS '最后
 COMMENT ON COLUMN "public"."adapay_direct_key_config"."last_modified_time" IS '最后修改时间';
 COMMENT ON COLUMN "public"."adapay_direct_key_config"."version" IS '版本号(乐观锁)';
 COMMENT ON COLUMN "public"."adapay_direct_key_config"."deleted" IS '删除标志';
+COMMENT ON COLUMN "public"."adapay_direct_key_config"."sandbox" IS '是否沙箱环境';
 COMMENT ON TABLE "public"."adapay_direct_key_config" IS 'Adapay 直连密钥配置';
+
+-- ----------------------------
+-- Table structure for adapay_isv_key_config
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."adapay_isv_key_config";
+CREATE TABLE "public"."adapay_isv_key_config" (
+  "id" int8 NOT NULL DEFAULT nextval('adapay_isv_key_config_id_seq'::regclass),
+  "isv_no" varchar(64) COLLATE "pg_catalog"."default",
+  "api_key" text COLLATE "pg_catalog"."default",
+  "private_key" text COLLATE "pg_catalog"."default",
+  "public_key" text COLLATE "pg_catalog"."default",
+  "creator" int8,
+  "create_time" timestamptz(6),
+  "last_modifier" int8,
+  "last_modified_time" timestamptz(6),
+  "version" int4 DEFAULT 0,
+  "deleted" bool DEFAULT false,
+  "sandbox" bool DEFAULT false
+)
+;
+COMMENT ON COLUMN "public"."adapay_isv_key_config"."id" IS '主键';
+COMMENT ON COLUMN "public"."adapay_isv_key_config"."isv_no" IS '服务商号(平台在汇付的服务商/主体编号)';
+COMMENT ON COLUMN "public"."adapay_isv_key_config"."api_key" IS 'Adapay 交易密钥(请求头Authorization, 加密存储)';
+COMMENT ON COLUMN "public"."adapay_isv_key_config"."private_key" IS '商户RSA私钥(PKCS#8 Base64, 请求签名, 加密存储)';
+COMMENT ON COLUMN "public"."adapay_isv_key_config"."public_key" IS 'Adapay 平台公钥(X509 Base64, 响应验签, 加密存储; 为空使用全局默认)';
+COMMENT ON COLUMN "public"."adapay_isv_key_config"."creator" IS '创建者ID';
+COMMENT ON COLUMN "public"."adapay_isv_key_config"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."adapay_isv_key_config"."last_modifier" IS '最后修改者ID';
+COMMENT ON COLUMN "public"."adapay_isv_key_config"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."adapay_isv_key_config"."version" IS '版本号(乐观锁)';
+COMMENT ON COLUMN "public"."adapay_isv_key_config"."deleted" IS '删除标志';
+COMMENT ON COLUMN "public"."adapay_isv_key_config"."sandbox" IS '是否沙箱环境';
+COMMENT ON TABLE "public"."adapay_isv_key_config" IS 'Adapay 服务商密钥配置';
 
 -- ----------------------------
 -- Table structure for alipay_direct_app
@@ -4121,6 +4166,13 @@ SELECT setval('"public"."adapay_direct_key_config_id_seq"', 1, false);
 -- ----------------------------
 -- Alter sequences owned by
 -- ----------------------------
+ALTER SEQUENCE "public"."adapay_isv_key_config_id_seq"
+OWNED BY "public"."adapay_isv_key_config"."id";
+SELECT setval('"public"."adapay_isv_key_config_id_seq"', 1, false);
+
+-- ----------------------------
+-- Alter sequences owned by
+-- ----------------------------
 ALTER SEQUENCE "public"."alipay_direct_app_capability_id_seq"
 OWNED BY "public"."alipay_direct_app_capability"."id";
 SELECT setval('"public"."alipay_direct_app_capability_id_seq"', 1, false);
@@ -4168,9 +4220,31 @@ OWNED BY "public"."pay_sync_record"."id";
 SELECT setval('"public"."pay_sync_record_id_seq"', 1, false);
 
 -- ----------------------------
+-- Indexes structure for table adapay_direct_key_config
+-- ----------------------------
+CREATE UNIQUE INDEX "uk_adapay_direct_key_config_sandbox" ON "public"."adapay_direct_key_config" USING btree (
+  "channel_mch_no" "pg_catalog"."text_ops" ASC NULLS LAST,
+  "sandbox" "pg_catalog"."bool_ops" ASC NULLS LAST
+) WHERE deleted = false;
+COMMENT ON INDEX "public"."uk_adapay_direct_key_config_sandbox" IS '同一通道商户同一环境密钥唯一';
+
+-- ----------------------------
+-- Indexes structure for table adapay_isv_key_config
+-- ----------------------------
+CREATE UNIQUE INDEX "uk_adapay_isv_key_config_sandbox" ON "public"."adapay_isv_key_config" USING btree (
+  "sandbox" "pg_catalog"."bool_ops" ASC NULLS LAST
+) WHERE deleted = false;
+COMMENT ON INDEX "public"."uk_adapay_isv_key_config_sandbox" IS '同一环境服务商配置唯一(平台为唯一服务商)';
+
+-- ----------------------------
 -- Primary Key structure for table adapay_direct_key_config
 -- ----------------------------
 ALTER TABLE "public"."adapay_direct_key_config" ADD CONSTRAINT "adapay_direct_key_config_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Primary Key structure for table adapay_isv_key_config
+-- ----------------------------
+ALTER TABLE "public"."adapay_isv_key_config" ADD CONSTRAINT "adapay_isv_key_config_pkey" PRIMARY KEY ("id");
 
 -- ----------------------------
 -- Primary Key structure for table alipay_direct_app

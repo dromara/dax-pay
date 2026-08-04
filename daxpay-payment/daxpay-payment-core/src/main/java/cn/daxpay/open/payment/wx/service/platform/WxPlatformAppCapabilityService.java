@@ -2,6 +2,8 @@ package cn.daxpay.open.payment.wx.service.platform;
 
 import cn.daxpay.open.payment.masterdata.dao.capability.PayProductCapabilityManager;
 import cn.daxpay.open.payment.masterdata.entity.product.PayProductCapability;
+import cn.daxpay.open.payment.strategy.PaymentStrategyFactory;
+import cn.daxpay.open.payment.strategy.product.AbsProductStrategy;
 import cn.daxpay.open.payment.wx.convert.platform.WxPlatformAppCapabilityConvert;
 import cn.daxpay.open.payment.wx.dao.platform.WxPlatformAppCapabilityManager;
 import cn.daxpay.open.payment.wx.dao.platform.WxPlatformAppManager;
@@ -35,7 +37,7 @@ import java.util.stream.Collectors;
 /// # 平台微信应用默认能力绑定
 ///
 /// 按支付产品管理「支付能力 → 平台微信应用」绑定。
-/// 支付时通过 [WxAppResolveService] 解析：通道绑 > 本产品默认绑 > appType 推导。
+/// 支付时通过 [WxAppResolveService] 解析：通道绑 > 本产品默认绑。
 ///
 @Slf4j
 @Service
@@ -117,13 +119,26 @@ public class WxPlatformAppCapabilityService {
     }
 
     /// 按支付产品查询可绑定的能力候选（pay_md_product_capability 白名单）
+    ///
+    /// 仅返回「微信相关能力」(WxAppTypeEnum 有应用类型映射的能力), 避免聚合类产品
+    /// (如乐刷)把支付宝/云闪付等非微信能力带入微信应用绑定弹窗渲染空下拉;
+    /// 是否进一步收窄由产品策略声明决定([AbsProductStrategy#wxAppRequiredCapabilities]):
+    /// 返回 null 表示全部微信能力可绑定, 返回子集则仅子集可绑定(如乐刷/Adapay 聚合产品
+    /// 微信侧仅 JSAPI/小程序支付需要 appid)。
     public List<WxCapabilityOption> listSupportedCapabilities(String product) {
         if (StrUtil.isBlank(product)) {
             return List.of();
         }
+        // 产品策略声明: 需要绑定微信应用的能力子集(null 表示不限制, 全部微信能力可绑定)
+        Set<PayCapabilityEnum> wxAppRequired = PaymentStrategyFactory
+                .findOptionallyByProduct(product, AbsProductStrategy.class)
+                .map(AbsProductStrategy::wxAppRequiredCapabilities)
+                .orElse(null);
         return payProductCapabilityManager.listByProduct(product).stream()
                 .map(PayProductCapability::getCapabilityCode)
                 .filter(StrUtil::isNotBlank)
+                .filter(this::isWechatCapability)
+                .filter(code -> wxAppRequired == null || wxAppRequired.contains(PayCapabilityEnum.findByCode(code)))
                 .distinct()
                 .map(code -> {
                     PayCapabilityEnum cap = PayCapabilityEnum.findByCode(code);
@@ -131,6 +146,11 @@ public class WxPlatformAppCapabilityService {
                     return new WxCapabilityOption(code, name);
                 })
                 .toList();
+    }
+
+    /// 是否为微信相关能力(有微信应用类型映射的能力)
+    private boolean isWechatCapability(String capability) {
+        return !WxAppTypeEnum.resolveCompatibleAppTypes(capability).isEmpty();
     }
 
     /// 填充关联结果的应用展示字段

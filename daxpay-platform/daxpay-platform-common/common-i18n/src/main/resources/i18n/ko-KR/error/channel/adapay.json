@@ -1,5 +1,6 @@
 {
   "payFailed": "Adapay 결제 오류: {0}",
   "closeFailed": "Adapay 주문 종료 오류: {0}",
+  "isvKeyNotConfigured": "Adapay ISV 키가 설정되지 않았습니다",
   "unsupportedPayMethod": "Adapay에서 지원하지 않는 결제 방식: {0}"
 }

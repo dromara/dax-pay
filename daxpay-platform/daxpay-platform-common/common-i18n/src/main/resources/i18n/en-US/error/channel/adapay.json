@@ -1,5 +1,6 @@
 {
   "payFailed": "Adapay payment error: {0}",
   "closeFailed": "Adapay close order error: {0}",
+  "isvKeyNotConfigured": "Adapay ISV key not configured",
   "unsupportedPayMethod": "Unsupported payment method for Adapay: {0}"
 }

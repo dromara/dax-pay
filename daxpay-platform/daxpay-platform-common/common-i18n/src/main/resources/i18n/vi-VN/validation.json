@@ -675,6 +675,9 @@
     "dougongAppId": {
       "notBlank": "AppId người bán không được để trống"
     },
+    "isvNo": {
+      "notBlank": "Số ISV không được để trống"
+    },
     "sandAppId": {
       "notBlank": "Sand appId không được để trống"
     },

@@ -17,6 +17,7 @@ import lombok.experimental.Accessors;
 /// 直连商户维度的通道配置, 含Adapay 支付应用 ID 与签名密钥, 敏感字段(apiKey/privateKey/publicKey)加密存储。
 /// channelMchNo(通道商户号) 创建时录入不可修改, adapayAppId/apiKey/privateKey/publicKey 由密钥配置维护。
 /// Adapay 签名算法: SHA1withRSA, 私钥签名 / 平台公钥验签, 无需证书。
+/// Adapay 商户身份由 app_id + apiKey(Authorization) + RSA 私钥签名承载, 无需单独的商户号字段。
 @EqualsAndHashCode(callSuper = true)
 @Data
 @Accessors(chain = true)
@@ -26,10 +27,6 @@ public class AdapayDirectKeyConfig extends MchBaseEntity implements ToResult<Ada
     /// 通道商户号
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private String channelMchNo;
-
-    /// Adapay 商户号(创建时录入不可修改)
-    @TableField(updateStrategy = FieldStrategy.NEVER)
-    private String merchantNo;
 
     /// Adapay 支付应用 ID(app_id)
     private String adapayAppId;

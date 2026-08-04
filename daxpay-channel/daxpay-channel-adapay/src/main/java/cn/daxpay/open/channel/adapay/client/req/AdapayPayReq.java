@@ -26,6 +26,9 @@ public class AdapayPayReq {
     /// 用户标识(微信 openId / 支付宝 buyerId, JSAPI/小程序必填)
     private String openId;
 
+    /// 微信应用 AppId(微信 JSAPI/APP/小程序支付上送 wx_app_id)
+    private String wxAppId;
+
     /// 付款码(条码支付必填)
     private String authCode;
 

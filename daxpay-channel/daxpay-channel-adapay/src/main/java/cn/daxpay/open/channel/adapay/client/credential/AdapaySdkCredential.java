@@ -22,6 +22,9 @@ public class AdapaySdkCredential {
     /// Adapay 平台公钥(X509 Base64, 响应验签; 为空时子应用用全局默认公钥)
     private String publicKey;
 
+    /// 微信应用 AppId(微信 JSAPI/APP/小程序支付上送 wx_app_id, 其余场景为空)
+    private String wxAppId;
+
     /// 是否沙箱环境
     private Boolean sandbox;
 }

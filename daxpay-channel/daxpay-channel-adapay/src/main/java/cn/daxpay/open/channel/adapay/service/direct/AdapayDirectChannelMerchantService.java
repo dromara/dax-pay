@@ -53,10 +53,10 @@ public class AdapayDirectChannelMerchantService {
         boolean sandbox = payProductConfigManager.isSandboxActive(param.getProduct());
         channelMerchant.setSandbox(sandbox);
         channelMerchantManager.save(channelMerchant);
-        // 写Adapay 直连配置(merchantNo 创建时录入不可修改, adapayAppId/apiKey/privateKey/publicKey 由密钥配置单独维护)
+        // 写Adapay 直连配置(adapayAppId/apiKey/privateKey/publicKey 由密钥配置单独维护)
         var keyConfig = new AdapayDirectKeyConfig()
                 .setChannelMchNo(channelMchNo)
-                .setMerchantNo(param.getMerchantNo());
+                .setSandbox(sandbox);
         keyConfig.setMchNo(param.getMchNo());
         adapayDirectKeyConfigManager.save(keyConfig);
     }

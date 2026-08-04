@@ -679,6 +679,9 @@
     "dougongAppId": {
       "notBlank": "商户AppId不可为空"
     },
+    "isvNo": {
+      "notBlank": "服务商号不可为空"
+    },
     "sandAppId": {
       "notBlank": "杉德 appId 不能为空"
     },

@@ -25,8 +25,4 @@ public class AdapayDirectChannelMerchantCreateParam {
     @NotBlank(message = "{validation.field.product.notBlank}")
     @Schema(description = "所属支付产品")
     private String product;
-
-    @NotBlank(message = "{validation.field.merchantNo.notBlank}")
-    @Schema(description = "Adapay 商户号")
-    private String merchantNo;
 }

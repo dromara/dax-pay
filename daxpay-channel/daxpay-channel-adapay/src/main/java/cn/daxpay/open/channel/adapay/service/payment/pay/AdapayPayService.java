@@ -49,6 +49,8 @@ public class AdapayPayService {
         req.setAuthCode(payParam.getAuthCode());
         req.setClientIp(payParam.getClientIp());
         req.setNotifyUrl(this.buildNotifyUrl(order, payParam.getChannelMchNo()));
+        // 微信 JSAPI/APP/小程序支付上送 wx_app_id(由配置组装阶段解析, 其余场景为空)
+        req.setWxAppId(credential.getWxAppId());
         req.setCredential(credential);
 
         // 调用子应用

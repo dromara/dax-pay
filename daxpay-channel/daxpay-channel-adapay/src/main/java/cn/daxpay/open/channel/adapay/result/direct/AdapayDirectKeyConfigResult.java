@@ -15,9 +15,6 @@ public class AdapayDirectKeyConfigResult {
     /// 是否沙箱环境
     private Boolean sandbox;
 
-    /// Adapay 商户号
-    private String merchantNo;
-
     /// Adapay 支付应用 ID
     private String adapayAppId;
 
