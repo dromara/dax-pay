@@ -2,9 +2,9 @@ package cn.daxpay.open.channel.adapay.code;
 
 /// # Adapay 通道常量(主应用侧)
 ///
-/// 定义回调应答、统一状态码与Adapay 平台公钥(回调验签用)。
-/// Adapay 回调验签与请求响应一致: data + signature, 用平台公钥 SHA1withRSA 验签,
-/// 因平台公钥全局唯一, 主应用直接验签(不需转发子应用, 不需 channelMchNo 定位凭证)。
+/// 定义回调应答与统一状态码。
+/// 验签/加签全部转发子应用 dax-pay-channel-two 处理(主应用零加密代码),
+/// 平台公钥 SHA1withRSA 验签所需公钥由子应用 [cn.daxpay.open.channel.adapay.code.AdapayCode#PLATFORM_PUBLIC_KEY] 内置兜底。
 public interface AdapayCode {
 
     /// 回调成功应答(Adapay 要求返回 success)
@@ -30,9 +30,4 @@ public interface AdapayCode {
 
     /// 退款状态-失败
     String REFUND_STATUS_FAIL = "FAIL";
-
-    /// Adapay 平台公钥(控制台可见, 用于回调响应验签, RSA X509 Base64 字符串)
-    /// 与子应用 [cn.daxpay.open.channel.adapay.code.AdapayCode#PLATFORM_PUBLIC_KEY] 一致
-    String PLATFORM_PUBLIC_KEY =
-            "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCwN6xgd6Ad8v2hIIsQVnbt8a3JituR8o4Tc3B5WlcFR55bz4OMqrG/356Ur3cPbc2Fe8ArNd/0gZbC9q56Eb16JTkVNA/fye4SXznWxdyBPR7+guuJZHc/VW2fKH2lfZ2P3Tt0QkKZZoawYOGSMdIvO+WqK44updyax0ikK6JlNQIDAQAB";
 }
