@@ -10,8 +10,6 @@ import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.payment.device.terminal.dao.ChannelTerminalManager;
 import cn.daxpay.open.payment.device.terminal.entity.ChannelTerminal;
-import cn.daxpay.open.payment.masterdata.dao.product.PayProductManager;
-import cn.daxpay.open.payment.masterdata.entity.product.PayProduct;
 import cn.daxpay.open.payment.masterdata.service.channel.PayChannelService;
 import cn.daxpay.open.payment.masterdata.result.channel.PayChannelResult;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
@@ -29,6 +27,7 @@ import cn.daxpay.open.payment.route.entity.basic.PayRouteBasicConfig;
 import cn.daxpay.open.payment.route.entity.scene.PayRouteSceneConfig;
 import cn.daxpay.open.payment.strategy.PaymentStrategyFactory;
 import cn.daxpay.open.payment.strategy.merchant.ChannelMerchantCleanupStrategy;
+import cn.daxpay.open.payment.strategy.product.AbsProductStrategy;
 import cn.daxpay.open.payment.trade.order.dao.GatewayPayOrderManager;
 import cn.daxpay.open.payment.trade.order.dao.NormalPayOrderManager;
 import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
@@ -57,7 +56,6 @@ public class ChannelMerchantService {
     private final ChannelMerchantManager channelMerchantManager;
     private final TransService transService;
     private final PayChannelService payChannelService;
-    private final PayProductManager payProductManager;
 
     // === 删除通道商户所需的级联 Manager ===
 
@@ -196,13 +194,26 @@ public class ChannelMerchantService {
         if (products.isEmpty()) {
             return;
         }
-        // 沙箱支持标志(来自支付产品表, 决定前端是否显示环境标签)
-        Map<String, Boolean> sandboxMap = payProductManager.lambdaQuery()
-                .in(PayProduct::getCode, products)
-                .list()
-                .stream()
-                .collect(Collectors.toMap(PayProduct::getCode, p -> Boolean.TRUE.equals(p.getSandbox()), (a, b) -> a));
+        // 沙箱支持标志(来自产品策略声明, 与产品配置页/产品列表页同源, 决定前端是否显示环境标签)
+        // 不再读 DB pay_md_product.sandbox 列, 避免种子数据与策略声明不一致导致前端环境标签丢失
+        Map<String, Boolean> sandboxMap = products.stream()
+                .collect(Collectors.toMap(
+                        code -> code,
+                        code -> {
+                            AbsProductStrategy strategy = resolveStrategy(code);
+                            return strategy != null && strategy.isSandbox();
+                        },
+                        (a, b) -> a));
         results.forEach(r -> r.setSandboxSupport(sandboxMap.getOrDefault(r.getProduct(), false)));
+    }
+
+    /// 按产品编码获取产品策略, 不存在则返回 null
+    /// 与 [PayProductService#resolveStrategy] / [PayProductConfigService#resolveStrategy] 同源
+    private AbsProductStrategy resolveStrategy(String productCode) {
+        if (!PaymentStrategyFactory.existsByProduct(productCode, AbsProductStrategy.class)) {
+            return null;
+        }
+        return PaymentStrategyFactory.createByProduct(productCode, AbsProductStrategy.class);
     }
 
     /// 更新启用状态
