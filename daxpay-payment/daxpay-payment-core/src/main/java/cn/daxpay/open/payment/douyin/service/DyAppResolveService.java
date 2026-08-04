@@ -58,11 +58,11 @@ public class DyAppResolveService implements DouyinAppFacade {
         throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.payment.douyin.scopeNotExist");
     }
 
-    /// 解析单应用：显式 channelAppId → 通道能力绑 → appType 推导
+    /// 解析单应用：显式 channelAppId → 通道能力绑 →（直连）商户档 appType 推导
     ///
     /// 直连产品(DOUYIN_PAY)禁止回退到平台档应用: 抖音用户标识(openId)必须与
     /// 直连商户号同主体, 使用平台应用会导致 appid 与 dyMchId 主体不一致。
-    /// 直连场景兜底改为商户档 appType 推导(查 dy_mch_app), 非直连保留平台档兜底。
+    /// 直连场景兜底改为商户档 appType 推导(查 dy_mch_app), 非直连未配置则直接报错。
     @Override
     public DyAppView resolve(String mchNo, String channelMchNo, String capability, String channelAppId, String product) {
         boolean direct = ProductEnum.DOUYIN_PAY.getCode().equals(product);
@@ -86,16 +86,11 @@ public class DyAppResolveService implements DouyinAppFacade {
                 }
             }
         }
-        // 3. appType 推导：直连走商户档, 非直连走平台档(均要求唯一命中, 多个直接报错)
+        // 3. 直连场景商户档 appType 推导(要求唯一命中, 多个直接报错); 非直连未配置则直接报错
         if (direct) {
             DyAppView merchantFallback = this.resolveMerchantFallback(mchNo, capability);
             if (merchantFallback != null) {
                 return merchantFallback;
-            }
-        } else {
-            DyAppView platformFallback = this.resolvePlatformFallback(capability);
-            if (platformFallback != null) {
-                return platformFallback;
             }
         }
         // 抖音: 直连商户未配置商户档应用 / 未配置该能力对应的应用
@@ -125,10 +120,6 @@ public class DyAppResolveService implements DouyinAppFacade {
             if (merchantBind.isPresent()) {
                 merchant = this.getById(AppScopeEnum.MERCHANT, merchantBind.get().getDyAppRefId());
             }
-        }
-        // 平台侧回退：appType 推导（平台应用唯一命中）
-        if (platform == null) {
-            platform = this.resolvePlatformFallback(capability);
         }
         // channelAppId 命中某侧时按命中侧覆盖
         if (StrUtil.isNotBlank(channelAppId)) {
@@ -179,33 +170,6 @@ public class DyAppResolveService implements DouyinAppFacade {
         }
         // 抖音: 指定 AppId 未配置
         throw new DataNotExistException("error.payment.douyin.channelAppIdNotFound", channelAppId);
-    }
-
-    /// 平台档 appType 推导兜底：按兼容类型优先级遍历, 首个唯一命中的平台应用返回
-    ///
-    /// - 某类型恰好 1 个：返回该应用
-    /// - 某类型多个：直接报错(不猜测, 要求显式配置能力绑定)
-    /// - 某类型无：跳过, 继续下一个兼容类型
-    /// - 全部兼容类型均未唯一命中：返回 null, 由调用方走最终报错
-    private DyAppView resolvePlatformFallback(String capability) {
-        if (StrUtil.isBlank(capability)) {
-            return null;
-        }
-        // 遍历兼容 appType(按优先级), 首个唯一命中即返回; 某类型存在多个则报错, 避免猜测
-        for (String appType : DyAppTypeEnum.resolveCompatibleAppTypes(capability)) {
-            List<DyPlatformApp> apps = dyPlatformAppManager.listByAppType(appType);
-            if (apps.size() == 1) {
-                return this.toPlatformView(apps.getFirst());
-            }
-            if (apps.size() > 1) {
-                // 该类型存在多个平台应用, 要求显式配置能力绑定
-                DyAppTypeEnum typeEnum = DyAppTypeEnum.findByCode(appType);
-                String appTypeLabel = typeEnum != null ? I18nUtil.getEnumName(typeEnum) : appType;
-                throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
-                        "error.payment.douyin.appNotUnique", appTypeLabel);
-            }
-        }
-        return null;
     }
 
     /// 商户档 appType 推导兜底：按兼容类型优先级遍历, 首个该商户下唯一命中的应用返回

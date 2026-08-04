@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 ///
 /// 从进件对象读取 appId / mchId / 私钥 / 证书序列号 / 加密密钥, 组装为下发给子应用的通道调用凭证 [DouyinSdkCredential]。
 ///
-/// 应用解析(获取 douyinAppId)委托 [DouyinAppFacade#resolve]:显式 channelAppId → 通道能力绑 → appType 推导,
+/// 应用解析(获取 douyinAppId)委托 [DouyinAppFacade#resolve]:显式 channelAppId → 通道能力绑 →(直连)商户档 appType 推导,
 /// 应用主数据已上移至商户/平台级(dy_mch_app / dy_platform_app), 通道商户下不再持有抖音应用。
 /// 密钥/证书(douyin_direct_key_config)与通道商户绑定(dyMchId)仍保留在通道商户维度。
 ///

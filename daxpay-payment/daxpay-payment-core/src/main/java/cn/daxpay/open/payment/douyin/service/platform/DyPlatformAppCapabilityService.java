@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
 /// # 平台抖音应用默认能力绑定
 ///
 /// 按支付产品管理「支付能力 → 平台抖音应用」绑定。
-/// 支付时通过 [DyAppResolveService] 解析：通道绑 > 本产品默认绑 > appType 推导。
+/// 支付时通过 [DyAppResolveService] 解析：通道绑 > 本产品默认绑。
 ///
 @Slf4j
 @Service
