@@ -21,5 +21,6 @@
   "sceneChannelMchCapabilityPair": "Untuk metode pembayaran [{0}], pilih pedagang saluran dan kemampuan, atau biarkan keduanya kosong",
   "basicChannelMchNotConfigured": "Tidak ada pedagang saluran yang dikonfigurasi untuk merek pembayaran [{0}]; konfigurasikan di bawah perutean saluran Berdasarkan Default Merek",
   "sceneCapabilityChannelMchMismatch": "Kemampuan [{0}] tidak cocok dengan saluran pedagang [{1}] dan metode [{2}]",
-  "directCapabilityChannelMchMismatch": "Kemampuan [{0}] tidak cocok dengan pedagang saluran [{1}]"
+  "directCapabilityChannelMchMismatch": "Kemampuan [{0}] tidak cocok dengan pedagang saluran [{1}]",
+  "channelMchEnvMismatch": "Flag sandbox pedagang saluran [{0}] tidak cocok dengan lingkungan aktif produk [{1}]. Silakan periksa konfigurasi pedagang saluran"
 }

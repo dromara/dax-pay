@@ -21,5 +21,6 @@
   "sceneChannelMchCapabilityPair": "支払い方法 [{0}] については、チャネル販売者と機能の両方を選択するか、両方を空のままにしてください",
   "basicChannelMchNotConfigured": "有料ブランド [{0}] に対してチャネル販売者が設定されていません。ブランドデフォルトによるチャネルルーティングの下で​​設定します",
   "sceneCapabilityChannelMchMismatch": "機能 [{0}] がチャネル販売者 [{1}] およびメソッド [{2}] と一致しません",
-  "directCapabilityChannelMchMismatch": "能力 [{0}] がチャネル販売者 [{1}] と一致しません"
+  "directCapabilityChannelMchMismatch": "能力 [{0}] がチャネル販売者 [{1}] と一致しません",
+  "channelMchEnvMismatch": "チャネル販売者[{0}]のサンドボックス環境フラグが製品[{1}]の現在の有効環境と一致しません。チャネル販売者設定を確認してください"
 }

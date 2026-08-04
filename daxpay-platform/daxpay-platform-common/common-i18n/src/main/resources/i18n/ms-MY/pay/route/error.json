@@ -21,5 +21,6 @@
   "sceneChannelMchCapabilityPair": "Untuk kaedah bayar [{0}], pilih kedua-dua pedagang saluran dan keupayaan, atau biarkan kedua-duanya kosong",
   "basicChannelMchNotConfigured": "Tiada pedagang saluran dikonfigurasikan untuk jenama berbayar [{0}]; konfigurasikannya di bawah penghalaan saluran Mengikut Lalai Jenama",
   "sceneCapabilityChannelMchMismatch": "Keupayaan [{0}] tidak sepadan dengan pedagang saluran [{1}] dan kaedah [{2}]",
-  "directCapabilityChannelMchMismatch": "Keupayaan [{0}] tidak sepadan dengan pedagang saluran [{1}]"
+  "directCapabilityChannelMchMismatch": "Keupayaan [{0}] tidak sepadan dengan pedagang saluran [{1}]",
+  "channelMchEnvMismatch": "Bendera persekitaran sandbox pedagang saluran [{0}] tidak sepadan dengan persekitaran aktif produk [{1}]. Sila semak konfigurasi pedagang saluran"
 }

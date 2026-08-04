@@ -90,7 +90,7 @@ public class PayRouteService {
     /// 1. 启停用校验: 禁用的通道商户不允许被路由命中, 与配置保存时([PayRouteBasicConfigService]/[PayRouteSceneConfigService])保持一致
     /// 2. 环境一致性校验: 通道商户固化的 sandbox 标识必须与产品当前生效环境(activeEnv)匹配。
     ///    沙箱产品 → 只能路由到 sandbox 通道商户; 生产产品 → 只能路由到 prod 通道商户。
-    ///    不匹配抛 noMatch(等价"无可用的支付产品", 实现沙箱/生产路由层隔离)。
+    ///    不匹配抛 channelMchEnvMismatch(明确告知调用方通道商户与产品环境不一致, 便于排查配置问题)。
     ///    注意: 通道商户 sandbox 在创建时固化, 不随产品环境切换改变; 一个产品下可同时存在两种商户。
     private void validateChannelMchEnvMatch(String channelMchNo, String product) {
         if (StrUtil.isBlank(channelMchNo) || StrUtil.isBlank(product)) {
@@ -110,8 +110,9 @@ public class PayRouteService {
         if (mchSandbox != prodSandbox) {
             log.info("通道商户[{}]固化环境(sandbox={})与产品[{}]当前生效环境(sandbox={})不匹配, 路由拒绝",
                     channelMchNo, mchSandbox, product, prodSandbox);
-            // 路由: 未匹配到可用支付产品(沙箱/生产环境不匹配)
-            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.route.error.noMatch");
+            // 路由: 通道商户环境与产品当前生效环境不一致(明确告知调用方, 便于排查配置问题)
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "pay.route.error.channelMchEnvMismatch", channelMchNo, product);
         }
     }
 

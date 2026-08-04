@@ -21,5 +21,6 @@
   "sceneChannelMchCapabilityPair": "支付方式[{0}]须同时选择通道商户与支付能力，或同时留空",
   "basicChannelMchNotConfigured": "支付渠道[{0}]未配置通道商户，请在通道路由「按渠道默认」中完成配置",
   "sceneCapabilityChannelMchMismatch": "支付能力[{0}]与通道商户[{1}]、支付方式[{2}]不匹配",
-  "directCapabilityChannelMchMismatch": "支付能力[{0}]与通道商户[{1}]不匹配"
+  "directCapabilityChannelMchMismatch": "支付能力[{0}]与通道商户[{1}]不匹配",
+  "channelMchEnvMismatch": "通道商户[{0}]的沙箱环境标识与产品[{1}]当前生效环境不一致，请检查通道商户配置"
 }

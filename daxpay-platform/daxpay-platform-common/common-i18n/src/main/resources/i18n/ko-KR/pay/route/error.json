@@ -21,5 +21,6 @@
   "sceneChannelMchCapabilityPair": "결제 방법 [{0}]의 경우 채널 판매자와 기능을 모두 선택하거나 둘 다 비워 두세요.",
   "basicChannelMchNotConfigured": "유료 브랜드 [{0}]에 구성된 채널 판매자가 없습니다. 브랜드 기본값으로 채널 라우팅에서 구성",
   "sceneCapabilityChannelMchMismatch": "기능 [{0}]이 채널 판매자 [{1}] 및 방법 [{2}]과 일치하지 않습니다.",
-  "directCapabilityChannelMchMismatch": "기능 [{0}]이 채널 판매자 [{1}]와 일치하지 않습니다."
+  "directCapabilityChannelMchMismatch": "기능 [{0}]이 채널 판매자 [{1}]와 일치하지 않습니다.",
+  "channelMchEnvMismatch": "채널 판매자[{0}]의 샌드박스 환경 플래그가 상품[{1}]의 현재 활성 환경과 일치하지 않습니다. 채널 판매자 설정을 확인해 주세요."
 }
