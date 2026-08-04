@@ -4,6 +4,8 @@
   "wechat_isv": "WeChat Pay (ISV)",
   "wechat_pay": "WeChat Pay (Terus)",
   "douyin_pay": "Douyin Pay (Terus)",
+  "stripe_pay": "Stripe",
+  "stripe_pay_desc": "Pemerolehan gerbang kad antarabangsa Stripe (Visa/MasterCard, dsb.)",
   "ums_qrcode": "UMS (C Scan B)",
   "ums_jsapi": "UMS (JSAPI)",
   "ums_app": "UMS (APP)",

@@ -45,6 +45,9 @@
     "douyinMchId": {
       "notBlank": "Douyin merchant ID cannot be blank"
     },
+    "accountId": {
+      "notBlank": "Stripe Account ID cannot be blank"
+    },
     "userIdType": {
       "notBlank": "User ID type cannot be blank"
     },

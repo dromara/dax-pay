@@ -4,5 +4,7 @@
   "from": "ข้อมูลแบบฟอร์ม",
   "identifier": "ตัวระบุ",
   "qr_code": "คิวอาร์โค้ด",
-  "json": "วัตถุ JSON"
+  "json": "วัตถุ JSON",
+  "stripe_checkout": "Stripe Checkout เปลี่ยนเส้นทาง",
+  "stripe_intent": "ข้อมูล Stripe PaymentIntent"
 }

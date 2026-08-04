@@ -161,7 +161,6 @@ public class PayProductService {
             result.setId(dbRow.getId());
             result.setEnabled(dbRow.isEnabled());
             result.setSortNo(dbRow.getSortNo());
-            result.setDescription(dbRow.getDescription());
             if (dbRow.getSandbox() != null) {
                 result.setSandbox(dbRow.getSandbox());
             }
@@ -173,6 +172,8 @@ public class PayProductService {
         if (strategy != null) {
             applyStrategyFields(strategy, result);
         }
+        // 介绍由后端多语言提供
+        result.setDescription(resolveProductDesc(product.getCode()));
         return result;
     }
 
@@ -182,16 +183,23 @@ public class PayProductService {
         return fillProductFeatures(result);
     }
 
-    /// 补全名称、通道名与策略特性
+    /// 补全名称、通道名、介绍与策略特性
     private PayProductResult fillProductFeatures(PayProductResult result) {
         String code = result.getCode();
         result.setName(I18nUtil.getEnumName(ProductEnum.findByCode(code)));
         result.setChannelName(I18nUtil.getEnumName(ChannelEnum.findByCode(result.getChannel())));
+        result.setDescription(resolveProductDesc(code));
         AbsProductStrategy strategy = resolveStrategy(code);
         if (strategy != null) {
             applyStrategyFields(strategy, result);
         }
         return result;
+    }
+
+    /// 按产品编码取产品介绍(后端多语言), 无词条返回 null
+    private String resolveProductDesc(String code) {
+        String key = "enum.product." + code + "_desc";
+        return I18nUtil.exists(key) ? I18nUtil.get(key) : null;
     }
 
     /// 按产品编码获取策略，不存在则返回 null

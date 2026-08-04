@@ -157,8 +157,8 @@ daxpay:
       base-url: ${CHANNEL_TWO_BASE_URL:http://channel-two:20200}
       transport-encrypt:
         key: ${CHANNEL_TWO_TRANSPORT_KEY}
-    # 子应用3: 抖音 + 其他通道(未来扩展, 暂未启用)
-    # three:
-    #   base-url: ${CHANNEL_THREE_BASE_URL:http://channel-three:20300}
-    #   transport-encrypt:
-    #     key: ${CHANNEL_THREE_TRANSPORT_KEY}
+    # 子应用3: 国际支付通道(Stripe 等, channel-three 容器)
+    three:
+      base-url: ${CHANNEL_THREE_BASE_URL:http://channel-three:20300}
+      transport-encrypt:
+        key: ${CHANNEL_THREE_TRANSPORT_KEY}

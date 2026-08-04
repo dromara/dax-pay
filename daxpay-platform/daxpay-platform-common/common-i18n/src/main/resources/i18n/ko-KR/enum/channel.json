@@ -15,5 +15,10 @@
   "ums_pay": "UMS페이",
   "jee_pay": "지페이",
   "huifu": "후이푸",
-  "douyin": "두인페이"
+  "douyin": "두인페이",
+  "stripe": "Stripe",
+  "stripe_desc": "Stripe 국제 카드 결제 채널(Visa/MasterCard 등)",
+  "union_pay_desc": "UnionPay QuickPass (UnionPay ACP)",
+  "douyin_desc": "Douyin 결제 채널",
+  "huifu_desc": "Huifu (Adapay/Dougong)"
 }

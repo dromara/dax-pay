@@ -37,6 +37,13 @@ public class GatewayPrePayParam extends MerchantPaymentCommonParam {
     @Max(value = 9999999999L, message = "{validation.field.amount.max}")
     private Long amount;
 
+    /// 币种(ISO 4217 三位字母代码, 如 cny/usd/jpy/eur/hkd/gbp)
+    /// 可空, 缺省 cny(人民币); 国际通道(Stripe 等)按商户配置或订单参数透传
+    /// @see cn.daxpay.open.platform.core.enums.pay.channel.CurrencyEnum
+    @Schema(description = "币种(ISO 4217, 缺省 cny)")
+    @Size(max = 8, message = "{validation.field.currency.size}")
+    private String currency;
+
     /// @see GatewayPayTypeEnum
     @Schema(description = "网关支付类型 cashier/aggregate")
     @NotBlank(message = "{validation.field.gatewayPayType.notBlank}")

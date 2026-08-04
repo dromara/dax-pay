@@ -15,5 +15,10 @@
   "ums_pay": "銀聯商務",
   "jee_pay": "jeepay",
   "huifu": "匯付天下",
-  "douyin": "抖音支付"
+  "douyin": "抖音支付",
+  "stripe": "Stripe",
+  "stripe_desc": "Stripe 國際信用卡收單通道(Visa/MasterCard 等)",
+  "union_pay_desc": "雲閃付(銀聯 ACP)",
+  "douyin_desc": "抖音支付通道",
+  "huifu_desc": "匯付天下(Adapay/鬥拱)"
 }

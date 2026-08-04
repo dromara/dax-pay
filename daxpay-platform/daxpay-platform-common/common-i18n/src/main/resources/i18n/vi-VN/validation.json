@@ -45,6 +45,9 @@
     "douyinMchId": {
       "notBlank": "ID người bán Douyin không được để trống"
     },
+    "accountId": {
+      "notBlank": "ID Tài khoản Stripe không được để trống"
+    },
     "userIdType": {
       "notBlank": "Loại ID người dùng không được để trống"
     },

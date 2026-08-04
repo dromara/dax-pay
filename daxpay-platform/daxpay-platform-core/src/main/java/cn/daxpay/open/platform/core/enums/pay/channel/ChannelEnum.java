@@ -45,6 +45,8 @@ public enum ChannelEnum implements I18nSupport {
     UMS_PAY("ums_pay"),
     /// 抖音支付
     DOUYIN("douyin"),
+    /// Stripe
+    STRIPE("stripe"),
     /// jeepay
     JEE_PAY("jee_pay"),
     ;

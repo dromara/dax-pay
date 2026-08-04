@@ -4,6 +4,8 @@
   "wechat_isv": "วีแชทเพย์ (ISV)",
   "wechat_pay": "WeChat Pay (โดยตรง)",
   "douyin_pay": "Douyin Pay (โดยตรง)",
+  "stripe_pay": "Stripe",
+  "stripe_pay_desc": "การรับชำระผ่านเกตเวย์บัตรระหว่างประเทศ Stripe (Visa/MasterCard ฯลฯ)",
   "ums_qrcode": "UMS (C สแกน B)",
   "ums_jsapi": "UMS (JSAPI)",
   "ums_app": "ยูเอ็มเอส (แอป)",

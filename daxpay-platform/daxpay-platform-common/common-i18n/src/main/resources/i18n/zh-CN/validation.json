@@ -45,6 +45,9 @@
     "douyinMchId": {
       "notBlank": "抖音商户号不可为空"
     },
+    "accountId": {
+      "notBlank": "Stripe 账户 ID 不可为空"
+    },
     "userIdType": {
       "notBlank": "用户标识类型不可为空"
     },

@@ -181,8 +181,9 @@ daxpay:
       # 须与子应用一致
       transport-encrypt:
         key: fedcba9876543210fedcba9876543210
-    # 子应用3: 其他通道(未来扩展, 暂未启用)
-    # three:
-    #   base-url: http://127.0.0.1:20300
-    #   transport-encrypt:
-    #     key: ${CHANNEL_THREE_TRANSPORT_KEY}
+    # 子应用3: 国际支付通道(Stripe 等, dax-pay-channel-three 服务)
+    three:
+      base-url: http://127.0.0.1:20300
+      # 须与子应用一致(dev 复用 channel-two key, 生产须独立注入)
+      transport-encrypt:
+        key: fedcba9876543210fedcba9876543210

@@ -20,7 +20,10 @@ public class PayRouteConfigProviders {
             PayProviderEnum.WECHAT.getCode(),
             PayProviderEnum.ALIPAY.getCode(),
             PayProviderEnum.UNION_PAY.getCode(),
-            PayProviderEnum.DOUYIN.getCode()
+            PayProviderEnum.DOUYIN.getCode(),
+            // 国际信用卡(Stripe 通道, 路由配置页可配置 Visa / MasterCard)
+            PayProviderEnum.VISA.getCode(),
+            PayProviderEnum.MASTERCARD.getCode()
     );
 
     /// 是否属于通道路由配置白名单支付渠道

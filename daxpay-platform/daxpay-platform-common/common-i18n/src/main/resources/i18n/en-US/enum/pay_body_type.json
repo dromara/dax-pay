@@ -4,5 +4,7 @@
   "from": "Form Data",
   "identifier": "Identifier",
   "qr_code": "QR Code",
-  "json": "JSON Object"
+  "json": "JSON Object",
+  "stripe_checkout": "Stripe Checkout Redirect",
+  "stripe_intent": "Stripe PaymentIntent Secret"
 }

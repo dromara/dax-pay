@@ -30,6 +30,10 @@ public enum ProductEnum implements I18nSupport {
     /// 抖音支付(直连)
     DOUYIN_PAY("douyin_pay"),
 
+    // ===== Stripe =====
+    /// Stripe 支付(Visa/MasterCard 等国际卡)
+    STRIPE_PAY("stripe_pay"),
+
     // ===== 银联商务 =====
     /// 银联商务(C扫B)
     UMS_QRCODE("ums_qrcode"),
@@ -44,7 +48,7 @@ public enum ProductEnum implements I18nSupport {
     /// 银联商务(B扫C)
     UMS_BARCODE("ums_barcode"),
 
-    // ===== 云闪付(直连银联 ACP) =====
+    // ===== 云闪付(银联 ACP) =====
     /// 云闪付(单一产品, 含主扫 UNION_QR / H5 / 被扫 UNION_BARCODE 三种支付方式)
     UNION_PAY("union_pay"),
 
@@ -96,7 +100,7 @@ public enum ProductEnum implements I18nSupport {
             case WECHAT_ISV, WECHAT_PAY -> ChannelEnum.WECHAT.getCode();
             // 银联商务系列
             case UMS_QRCODE, UMS_JSAPI, UMS_APP, UMS_MINI, UMS_H5, UMS_BARCODE -> ChannelEnum.UMS_PAY.getCode();
-            // 云闪付(直连银联 ACP)
+            // 云闪付(银联 ACP)
             case UNION_PAY -> ChannelEnum.UNION_PAY.getCode();
             // 拉卡拉
             case LAKALA_PAY -> ChannelEnum.LAKALA_PAY.getCode();
@@ -104,6 +108,8 @@ public enum ProductEnum implements I18nSupport {
             case LESHUA_PAY -> ChannelEnum.LESHUA_PAY.getCode();
             // 抖音支付(通道 code 为 douyin，产品为 douyin_pay)
             case DOUYIN_PAY -> ChannelEnum.DOUYIN.getCode();
+            // Stripe(通道 code 为 stripe，产品为 stripe_pay)
+            case STRIPE_PAY -> ChannelEnum.STRIPE.getCode();
             // 汇付天下: Adapay / 斗拱 两产品共用通道 huifu
             case ADA_PAY, DOUGONG_PAY -> ChannelEnum.HUIFU.getCode();
             case HKRT_PAY -> ChannelEnum.HKRT_PAY.getCode();

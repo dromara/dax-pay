@@ -4,5 +4,7 @@
   "from": "Data Formulir",
   "identifier": "Pengidentifikasi",
   "qr_code": "Kode QR",
-  "json": "Objek JSON"
+  "json": "Objek JSON",
+  "stripe_checkout": "Pengalihan Stripe Checkout",
+  "stripe_intent": "Kredensial Stripe PaymentIntent"
 }

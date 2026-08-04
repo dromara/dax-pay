@@ -15,5 +15,10 @@
   "ums_pay": "ยูเอ็มเอส เพย์",
   "jee_pay": "รถจี๊ป",
   "huifu": "เอด้า เพย์",
-  "douyin": "โต่วยินเพย์"
+  "douyin": "โต่วยินเพย์",
+  "stripe": "Stripe",
+  "stripe_desc": "ช่องทางรับชำระบัตรระหว่างประเทศ Stripe (Visa/MasterCard ฯลฯ)",
+  "union_pay_desc": "UnionPay QuickPass (UnionPay ACP)",
+  "douyin_desc": "ช่องทางชำระเงิน Douyin",
+  "huifu_desc": "Huifu (Adapay/Dougong)"
 }

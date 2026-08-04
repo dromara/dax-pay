@@ -4,5 +4,7 @@
   "from": "表單數據",
   "identifier": "標識碼",
   "qr_code": "二維碼",
-  "json": "JSON對象"
+  "json": "JSON對象",
+  "stripe_checkout": "Stripe Checkout 跳轉",
+  "stripe_intent": "Stripe PaymentIntent 憑證"
 }

@@ -45,6 +45,9 @@
     "douyinMchId": {
       "notBlank": "ID pedagang Douyin tidak boleh kosong"
     },
+    "accountId": {
+      "notBlank": "ID Akaun Stripe tidak boleh kosong"
+    },
     "userIdType": {
       "notBlank": "Jenis ID pengguna tidak boleh kosong"
     },

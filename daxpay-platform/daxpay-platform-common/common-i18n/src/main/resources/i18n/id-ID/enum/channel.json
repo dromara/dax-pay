@@ -15,5 +15,10 @@
   "ums_pay": "UMS Membayar",
   "jee_pay": "Jeepay",
   "huifu": "Ada Bayar",
-  "douyin": "Pembayaran Douyin"
+  "douyin": "Pembayaran Douyin",
+  "stripe": "Stripe",
+  "stripe_desc": "Saluran akuisisi kartu internasional Stripe (Visa/MasterCard, dll.)",
+  "union_pay_desc": "UnionPay QuickPass (UnionPay ACP)",
+  "douyin_desc": "Saluran pembayaran Douyin",
+  "huifu_desc": "Huifu (Adapay/Dougong)"
 }

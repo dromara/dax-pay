@@ -166,6 +166,24 @@
             <artifactId>daxpay-channel-adapay</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- 云闪付通道 -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-channel-union</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 易宝支付通道 -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-channel-yeepay</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- Stripe 国际卡组通道 -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-channel-stripe</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- 易支付协议插件 -->
         <dependency>
             <groupId>cn.daxpay.open</groupId>

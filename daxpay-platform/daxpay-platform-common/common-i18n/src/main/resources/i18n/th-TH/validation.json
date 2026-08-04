@@ -45,6 +45,9 @@
     "douyinMchId": {
       "notBlank": "รหัสผู้ขาย Douyin ต้องไม่เว้นว่าง"
     },
+    "accountId": {
+      "notBlank": "รหัสบัญชี Stripe ต้องไม่เว้นว่าง"
+    },
     "userIdType": {
       "notBlank": "ประเภทรหัสผู้ใช้ต้องไม่เว้นว่าง"
     },

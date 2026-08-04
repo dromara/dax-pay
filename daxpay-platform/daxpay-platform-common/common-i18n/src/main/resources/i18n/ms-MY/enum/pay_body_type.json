@@ -4,5 +4,7 @@
   "from": "Data Borang",
   "identifier": "Pengecam",
   "qr_code": "Kod QR",
-  "json": "Objek JSON"
+  "json": "Objek JSON",
+  "stripe_checkout": "Lencongan Stripe Checkout",
+  "stripe_intent": "Kredensial Stripe PaymentIntent"
 }

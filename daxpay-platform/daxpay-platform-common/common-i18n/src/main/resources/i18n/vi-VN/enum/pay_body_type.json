@@ -4,5 +4,7 @@
   "from": "Dữ liệu biểu mẫu",
   "identifier": "Mã định danh",
   "qr_code": "Mã QR",
-  "json": "Đối tượng JSON"
+  "json": "Đối tượng JSON",
+  "stripe_checkout": "Chuyển hướng Stripe Checkout",
+  "stripe_intent": "Thông tin Stripe PaymentIntent"
 }

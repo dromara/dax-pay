@@ -30,6 +30,7 @@
         <module>daxpay-channel-hmpay</module>
         <module>daxpay-channel-fuyou</module>
         <module>daxpay-channel-yeepay</module>
+        <module>daxpay-channel-stripe</module>
     </modules>
 
     <dependencies>

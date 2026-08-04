@@ -96,7 +96,6 @@ public class PayChannelService {
         if (dbRow != null) {
             result.setId(dbRow.getId());
             result.setSortNo(dbRow.getSortNo());
-            result.setDescription(dbRow.getDescription());
             result.setIcon(dbRow.getIcon());
         } else {
             result.setId(null);
@@ -105,18 +104,25 @@ public class PayChannelService {
         return result;
     }
 
-    /// 补全通道 i18n 展示名
+    /// 补全通道 i18n 展示名与介绍
     private PayChannelResult fillChannelName(PayChannelResult result) {
         if (result == null || result.getCode() == null) {
             return result;
         }
-        return result.setName(resolveChannelName(result.getCode()));
+        return result.setName(resolveChannelName(result.getCode()))
+                .setDescription(resolveChannelDesc(result.getCode()));
     }
 
     /// 按编码取通道展示名
     private String resolveChannelName(String code) {
         ChannelEnum channelEnum = ChannelEnum.findByCode(code);
         return channelEnum != null ? I18nUtil.getEnumName(channelEnum) : code;
+    }
+
+    /// 按编码取通道介绍(后端多语言), 无词条返回 null
+    private String resolveChannelDesc(String code) {
+        String key = "enum.channel." + code + "_desc";
+        return I18nUtil.exists(key) ? I18nUtil.get(key) : null;
     }
 
     /// 分页后在内存中按展示名过滤

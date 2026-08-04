@@ -4,6 +4,8 @@
   "wechat_isv": "Thanh toán WeChat (ISV)",
   "wechat_pay": "WeChat Pay (Trực tiếp)",
   "douyin_pay": "Douyin Pay (Trực tiếp)",
+  "stripe_pay": "Stripe",
+  "stripe_pay_desc": "Thu hộ qua cổng thanh toán thẻ quốc tế Stripe (Visa/MasterCard, v.v.)",
   "ums_qrcode": "UMS (Quét C B)",
   "ums_jsapi": "UMS (JSAPI)",
   "ums_app": "UMS (ỨNG DỤNG)",

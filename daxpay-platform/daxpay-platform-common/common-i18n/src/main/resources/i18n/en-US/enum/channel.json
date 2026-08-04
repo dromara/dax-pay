@@ -15,5 +15,10 @@
   "ums_pay": "UMS Pay",
   "jee_pay": "Jeepay",
   "huifu": "Huifu",
-  "douyin": "Douyin Pay"
+  "douyin": "Douyin Pay",
+  "stripe": "Stripe",
+  "stripe_desc": "Stripe international card acquiring channel (Visa/MasterCard, etc.)",
+  "union_pay_desc": "UnionPay QuickPass (UnionPay ACP)",
+  "douyin_desc": "Douyin Pay channel",
+  "huifu_desc": "Huifu (Adapay/Dougong)"
 }

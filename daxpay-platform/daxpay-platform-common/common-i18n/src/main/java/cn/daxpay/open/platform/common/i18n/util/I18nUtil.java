@@ -3,6 +3,7 @@ package cn.daxpay.open.platform.common.i18n.util;
 import cn.daxpay.open.platform.core.i18n.I18nSupport;
 import lombok.experimental.UtilityClass;
 import org.springframework.context.MessageSource;
+import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.util.Locale;
@@ -59,5 +60,20 @@ public class I18nUtil {
             return null;
         }
         return get(i18nSupport.getI18nPrefix() + "." + i18nSupport.getCode());
+    }
+
+    /// 判断当前请求语言下是否存在翻译(含回退链, 如非默认语种缺 key 回退 zh-CN 后命中也算存在)
+    /// @param code 消息 key
+    public boolean exists(String code) {
+        if (messageSource == null) {
+            return false;
+        }
+        try {
+            messageSource.getMessage(code, null, LocaleContextHolder.getLocale());
+            return true;
+        }
+        catch (NoSuchMessageException e) {
+            return false;
+        }
     }
 }

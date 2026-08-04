@@ -4,6 +4,8 @@
   "wechat_isv": "Pembayaran WeChat (ISV)",
   "wechat_pay": "Pembayaran WeChat (Langsung)",
   "douyin_pay": "Douyin Bayar (Langsung)",
+  "stripe_pay": "Stripe",
+  "stripe_pay_desc": "Pemerolehan gateway kartu internasional Stripe (Visa/MasterCard, dll.)",
   "ums_qrcode": "UMS (C Pindai B)",
   "ums_jsapi": "UMS (JSAPI)",
   "ums_app": "UMS (aplikasi)",

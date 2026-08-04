@@ -21,7 +21,11 @@ public enum PayBodyTypeEnum implements I18nSupport {
     /// 二维码内容(前端渲染成二维码图片)
     QR_CODE("qr_code"),
     /// JSON对象
-    JSON("json");
+    JSON("json"),
+    /// Stripe Checkout Session 跳转 URL(国际信用卡)
+    STRIPE_CHECKOUT("stripe_checkout"),
+    /// Stripe PaymentIntent client_secret(前端 Stripe.js Elements 调 confirmCardPayment)
+    STRIPE_INTENT("stripe_intent");
 
     /// 编码
     private final String code;

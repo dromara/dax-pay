@@ -4,5 +4,7 @@
   "from": "フォームデータ",
   "identifier": "識別子",
   "qr_code": "QRコード",
-  "json": "JSONオブジェクト"
+  "json": "JSONオブジェクト",
+  "stripe_checkout": "Stripe Checkout リダイレクト",
+  "stripe_intent": "Stripe PaymentIntent クレデンシャル"
 }

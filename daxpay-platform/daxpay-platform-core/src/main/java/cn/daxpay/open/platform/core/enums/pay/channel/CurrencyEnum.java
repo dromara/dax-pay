@@ -15,21 +15,24 @@ import java.util.Arrays;
 @RequiredArgsConstructor
 public enum CurrencyEnum implements I18nSupport {
 
-    /// 人民币
-    CNY("cny"),
-    /// 美元
-    USD("usd"),
-    /// 日元
-    JPY("jpy"),
-    /// 欧元
-    EUR("eur"),
-    /// 港元
-    HKD("hkd"),
-    /// 英镑
-    GBP("gbp"),
+    /// 人民币(2 位小数)
+    CNY("cny", 2),
+    /// 美元(2 位小数)
+    USD("usd", 2),
+    /// 日元(零小数位, 最小单位即元)
+    JPY("jpy", 0),
+    /// 欧元(2 位小数)
+    EUR("eur", 2),
+    /// 港元(2 位小数)
+    HKD("hkd", 2),
+    /// 英镑(2 位小数)
+    GBP("gbp", 2),
     ;
 
     private final String code;
+
+    /// 小数位数(ISO 4217): 用于金额「元 ↔ 最小货币单位」换算
+    private final int minorUnit;
 
     @Override
     public String getI18nPrefix() {

@@ -25,9 +25,6 @@ public class PayChannel extends MpBaseEntity implements ToResult<PayChannelResul
     /// 排序
     private Integer sortNo;
 
-    /// 通道介绍
-    private String description;
-
     /// 图标
     private String icon;
 

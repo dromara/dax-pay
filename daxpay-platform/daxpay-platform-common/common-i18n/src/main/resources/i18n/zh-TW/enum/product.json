@@ -4,6 +4,8 @@
   "wechat_isv": "微信支付(服務商)",
   "wechat_pay": "微信支付(直連)",
   "douyin_pay": "抖音支付(直連)",
+  "stripe_pay": "Stripe",
+  "stripe_pay_desc": "Stripe 國際信用卡閘道收單(Visa/MasterCard 等)",
   "ums_qrcode": "銀聯商務(C掃B)",
   "ums_jsapi": "銀聯商務(公眾號)",
   "ums_app": "銀聯商務(APP)",

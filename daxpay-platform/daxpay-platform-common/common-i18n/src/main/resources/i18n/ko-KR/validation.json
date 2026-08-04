@@ -45,6 +45,9 @@
     "douyinMchId": {
       "notBlank": "Douyin 판매자 ID는 비워둘 수 없습니다."
     },
+    "accountId": {
+      "notBlank": "Stripe 계정 ID를 입력하세요"
+    },
     "userIdType": {
       "notBlank": "사용자 ID 유형은 비워둘 수 없습니다."
     },

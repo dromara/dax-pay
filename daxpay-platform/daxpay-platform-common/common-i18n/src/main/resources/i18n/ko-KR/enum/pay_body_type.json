@@ -4,5 +4,7 @@
   "from": "양식 데이터",
   "identifier": "식별자",
   "qr_code": "QR코드",
-  "json": "JSON 객체"
+  "json": "JSON 객체",
+  "stripe_checkout": "Stripe Checkout 리다이렉트",
+  "stripe_intent": "Stripe PaymentIntent 시크릿"
 }

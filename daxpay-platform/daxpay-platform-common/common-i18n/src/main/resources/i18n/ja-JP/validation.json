@@ -45,6 +45,9 @@
     "douyinMchId": {
       "notBlank": "Douyin 販売者 ID を空白にすることはできません"
     },
+    "accountId": {
+      "notBlank": "Stripe アカウントIDを入力してください"
+    },
     "userIdType": {
       "notBlank": "ユーザー ID タイプを空白にすることはできません"
     },

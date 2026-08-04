@@ -15,5 +15,10 @@
   "ums_pay": "UMS trả tiền",
   "jee_pay": "Jeepay",
   "huifu": "Ada trả tiền",
-  "douyin": "Douyin Pay"
+  "douyin": "Douyin Pay",
+  "stripe": "Stripe",
+  "stripe_desc": "Kênh thu hộ thẻ quốc tế Stripe (Visa/MasterCard, v.v.)",
+  "union_pay_desc": "UnionPay QuickPass (UnionPay ACP)",
+  "douyin_desc": "Kênh thanh toán Douyin",
+  "huifu_desc": "Huifu (Adapay/Dougong)"
 }
