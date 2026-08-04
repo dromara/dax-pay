@@ -2,5 +2,7 @@
   "payFailed": "Lỗi thanh toán Leshua: {0}",
   "refundFailed": "Lỗi hoàn tiền Leshua: {0}",
   "closeFailed": "Lỗi đóng đơn hàng Leshua: {0}",
-  "unsupportedPayMethod": "Phương thức thanh toán không được hỗ trợ cho Leshua: {0}"
+  "unsupportedPayMethod": "Phương thức thanh toán không được hỗ trợ cho Leshua: {0}",
+  "isvKeyNotConfigured": "Khóa nhà cung cấp dịch vụ Leshua chưa được cấu hình",
+  "merchantDuplicate": "Số merchant Leshua đã tồn tại dưới merchant này"
 }

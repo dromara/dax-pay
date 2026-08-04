@@ -2,5 +2,7 @@
   "payFailed": "ข้อผิดพลาดการชำระเงิน Leshua: {0}",
   "refundFailed": "ข้อผิดพลาดการคืนเงิน Leshua: {0}",
   "closeFailed": "ข้อผิดพลาดการปิดคำสั่ง Leshua: {0}",
-  "unsupportedPayMethod": "วิธีการชำระเงินไม่ได้รับการสนับสนุนสำหรับ Leshua: {0}"
+  "unsupportedPayMethod": "วิธีการชำระเงินไม่ได้รับการสนับสนุนสำหรับ Leshua: {0}",
+  "isvKeyNotConfigured": "ไม่ได้กำหนดค่าคีย์ผู้ให้บริการ Leshua",
+  "merchantDuplicate": "หมายเลขผู้ค้า Leshua มีอยู่แล้วภายใต้ผู้ค้ารายนี้"
 }

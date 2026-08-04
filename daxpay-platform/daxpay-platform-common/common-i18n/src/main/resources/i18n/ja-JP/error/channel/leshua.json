@@ -2,5 +2,7 @@
   "payFailed": "Leshua支払エラー: {0}",
   "refundFailed": "Leshua返金エラー: {0}",
   "closeFailed": "Leshua注文クローズエラー: {0}",
-  "unsupportedPayMethod": "Leshuaでサポートされていない支払方法: {0}"
+  "unsupportedPayMethod": "Leshuaでサポートされていない支払方法: {0}",
+  "isvKeyNotConfigured": "Leshuaサービスプロバイダキーが設定されていません",
+  "merchantDuplicate": "このマーチャントの下にLeshuaマーチャント番号がすでに存在します"
 }

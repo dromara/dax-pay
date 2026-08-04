@@ -2,5 +2,7 @@
   "payFailed": "Ralat pembayaran Leshua: {0}",
   "refundFailed": "Ralat bayaran balik Leshua: {0}",
   "closeFailed": "Ralat tutup pesanan Leshua: {0}",
-  "unsupportedPayMethod": "Kaedah pembayaran tidak disokong untuk Leshua: {0}"
+  "unsupportedPayMethod": "Kaedah pembayaran tidak disokong untuk Leshua: {0}",
+  "isvKeyNotConfigured": "Kunci penyedia perkhidmatan Leshua tidak dikonfigurasi",
+  "merchantDuplicate": "Nombor merchant Leshua sudah wujud di bawah merchant ini"
 }
