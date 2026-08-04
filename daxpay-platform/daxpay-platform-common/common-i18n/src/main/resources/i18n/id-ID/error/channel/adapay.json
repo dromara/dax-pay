@@ -1,6 +1,5 @@
 {
   "payFailed": "Kesalahan pembayaran Adapay: {0}",
   "closeFailed": "Kesalahan menutup pesanan Adapay: {0}",
-  "isvKeyNotConfigured": "Kunci ISV Adapay belum dikonfigurasi",
   "unsupportedPayMethod": "Metode pembayaran tidak didukung untuk Adapay: {0}"
 }

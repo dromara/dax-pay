@@ -28,17 +28,6 @@ START 1
 CACHE 1;
 
 -- ----------------------------
--- Sequence structure for adapay_isv_key_config_id_seq
--- ----------------------------
-DROP SEQUENCE IF EXISTS "public"."adapay_isv_key_config_id_seq";
-CREATE SEQUENCE "public"."adapay_isv_key_config_id_seq" 
-INCREMENT 1
-MINVALUE  1
-MAXVALUE 9223372036854775807
-START 1
-CACHE 1;
-
--- ----------------------------
 -- Sequence structure for alipay_direct_app_capability_id_seq
 -- ----------------------------
 DROP SEQUENCE IF EXISTS "public"."alipay_direct_app_capability_id_seq";
@@ -123,7 +112,6 @@ CREATE TABLE "public"."adapay_direct_key_config" (
   "id" int8 NOT NULL DEFAULT nextval('adapay_direct_key_config_id_seq'::regclass),
   "mch_no" varchar(32) COLLATE "pg_catalog"."default",
   "channel_mch_no" varchar(64) COLLATE "pg_catalog"."default",
-  "merchant_no" varchar(64) COLLATE "pg_catalog"."default",
   "adapay_app_id" varchar(64) COLLATE "pg_catalog"."default",
   "api_key" text COLLATE "pg_catalog"."default",
   "private_key" text COLLATE "pg_catalog"."default",
@@ -151,39 +139,6 @@ COMMENT ON COLUMN "public"."adapay_direct_key_config"."version" IS '版本号(�
 COMMENT ON COLUMN "public"."adapay_direct_key_config"."deleted" IS '删除标志';
 COMMENT ON COLUMN "public"."adapay_direct_key_config"."sandbox" IS '是否沙箱环境';
 COMMENT ON TABLE "public"."adapay_direct_key_config" IS 'Adapay 直连密钥配置';
-
--- ----------------------------
--- Table structure for adapay_isv_key_config
--- ----------------------------
-DROP TABLE IF EXISTS "public"."adapay_isv_key_config";
-CREATE TABLE "public"."adapay_isv_key_config" (
-  "id" int8 NOT NULL DEFAULT nextval('adapay_isv_key_config_id_seq'::regclass),
-  "isv_no" varchar(64) COLLATE "pg_catalog"."default",
-  "api_key" text COLLATE "pg_catalog"."default",
-  "private_key" text COLLATE "pg_catalog"."default",
-  "public_key" text COLLATE "pg_catalog"."default",
-  "creator" int8,
-  "create_time" timestamptz(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamptz(6),
-  "version" int4 DEFAULT 0,
-  "deleted" bool DEFAULT false,
-  "sandbox" bool DEFAULT false
-)
-;
-COMMENT ON COLUMN "public"."adapay_isv_key_config"."id" IS '主键';
-COMMENT ON COLUMN "public"."adapay_isv_key_config"."isv_no" IS '服务商号(平台在汇付的服务商/主体编号)';
-COMMENT ON COLUMN "public"."adapay_isv_key_config"."api_key" IS 'Adapay 交易密钥(请求头Authorization, 加密存储)';
-COMMENT ON COLUMN "public"."adapay_isv_key_config"."private_key" IS '商户RSA私钥(PKCS#8 Base64, 请求签名, 加密存储)';
-COMMENT ON COLUMN "public"."adapay_isv_key_config"."public_key" IS 'Adapay 平台公钥(X509 Base64, 响应验签, 加密存储; 为空使用全局默认)';
-COMMENT ON COLUMN "public"."adapay_isv_key_config"."creator" IS '创建者ID';
-COMMENT ON COLUMN "public"."adapay_isv_key_config"."create_time" IS '创建时间';
-COMMENT ON COLUMN "public"."adapay_isv_key_config"."last_modifier" IS '最后修改者ID';
-COMMENT ON COLUMN "public"."adapay_isv_key_config"."last_modified_time" IS '最后修改时间';
-COMMENT ON COLUMN "public"."adapay_isv_key_config"."version" IS '版本号(乐观锁)';
-COMMENT ON COLUMN "public"."adapay_isv_key_config"."deleted" IS '删除标志';
-COMMENT ON COLUMN "public"."adapay_isv_key_config"."sandbox" IS '是否沙箱环境';
-COMMENT ON TABLE "public"."adapay_isv_key_config" IS 'Adapay 服务商密钥配置';
 
 -- ----------------------------
 -- Table structure for alipay_direct_app
@@ -675,6 +630,7 @@ CREATE TABLE "public"."douyin_direct_channel_merchant" (
   "channel_mch_no" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
   "product" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
   "dy_mch_id" varchar(64) COLLATE "pg_catalog"."default",
+  "transfer_scene" varchar(50) COLLATE "pg_catalog"."default",
   "creator" int8,
   "create_time" timestamptz(6),
   "last_modifier" int8,
@@ -688,6 +644,7 @@ COMMENT ON COLUMN "public"."douyin_direct_channel_merchant"."mch_no" IS '商户�
 COMMENT ON COLUMN "public"."douyin_direct_channel_merchant"."channel_mch_no" IS '通道商户号(系统生成雪花号)';
 COMMENT ON COLUMN "public"."douyin_direct_channel_merchant"."product" IS '所属支付产品(如 douyin_pay)';
 COMMENT ON COLUMN "public"."douyin_direct_channel_merchant"."dy_mch_id" IS '抖音商户号(MCHID)';
+COMMENT ON COLUMN "public"."douyin_direct_channel_merchant"."transfer_scene" IS '转账场景ID(商家转账, 未配置时发起转账报错)';
 COMMENT ON COLUMN "public"."douyin_direct_channel_merchant"."creator" IS '创建人ID';
 COMMENT ON COLUMN "public"."douyin_direct_channel_merchant"."create_time" IS '创建时间';
 COMMENT ON COLUMN "public"."douyin_direct_channel_merchant"."last_modifier" IS '最后修改人ID';
@@ -3341,6 +3298,241 @@ COMMENT ON COLUMN "public"."pay_trade"."title" IS '订单标题';
 COMMENT ON TABLE "public"."pay_trade" IS '资金交易凭证';
 
 -- ----------------------------
+-- Table structure for pay_transfer_order_wechat
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."pay_transfer_order_wechat";
+CREATE TABLE "public"."pay_transfer_order_wechat" (
+  "id" int8 NOT NULL,
+  "transfer_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "biz_transfer_no" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
+  "out_transfer_no" varchar(150) COLLATE "pg_catalog"."default",
+  "mch_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "app_id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "amount" int8 NOT NULL,
+  "currency" varchar(8) COLLATE "pg_catalog"."default" NOT NULL DEFAULT 'CNY'::character varying,
+  "title" varchar(100) COLLATE "pg_catalog"."default",
+  "reason" varchar(200) COLLATE "pg_catalog"."default",
+  "status" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "finish_time" timestamptz(6),
+  "notify_url" varchar(200) COLLATE "pg_catalog"."default",
+  "attach" varchar(500) COLLATE "pg_catalog"."default",
+  "req_time" timestamptz(6),
+  "error_msg" varchar(2048) COLLATE "pg_catalog"."default",
+  "payee_openid" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
+  "transfer_scene" varchar(50) COLLATE "pg_catalog"."default",
+  "transfer_body" varchar(2000) COLLATE "pg_catalog"."default",
+  "user_name" varchar(100) COLLATE "pg_catalog"."default",
+  "creator" int8,
+  "create_time" timestamptz(6),
+  "last_modifier" int8,
+  "last_modified_time" timestamptz(6),
+  "version" int4 NOT NULL DEFAULT 0,
+  "deleted" bool NOT NULL DEFAULT false
+)
+;
+COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."id" IS '主键';
+COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."transfer_no" IS '平台转账单号';
+COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."biz_transfer_no" IS '商户转账号(幂等键, 同一商户下唯一)';
+COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."channel_mch_no" IS '通道商户号(路由确定后写入, 凭证组装用)';
+COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."out_transfer_no" IS '通道转账单号(微信 paymentNo)';
+COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."mch_no" IS '商户号';
+COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."app_id" IS '应用号';
+COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."amount" IS '转账金额(最小货币单位/分)';
+COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."currency" IS '币种';
+COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."title" IS '转账标题';
+COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."reason" IS '转账原因/备注';
+COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."status" IS '转账状态(processing/success/fail/close)';
+COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."finish_time" IS '转账完成时间';
+COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."notify_url" IS '商户异步通知地址';
+COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."attach" IS '商户扩展参数(回调原样返回)';
+COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."req_time" IS '请求时间';
+COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."error_msg" IS '错误信息';
+COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."payee_openid" IS '收款人微信 openid';
+COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."transfer_scene" IS '转账场景(冗余自通道商户配置)';
+COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."transfer_body" IS '拉起转账确认参数(微信二次确认)';
+COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."user_name" IS '收款人姓名(金额档位校验用)';
+COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."creator" IS '创建人';
+COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."last_modifier" IS '最后修改人';
+COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."version" IS '乐观锁版本';
+COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."deleted" IS '逻辑删除';
+COMMENT ON TABLE "public"."pay_transfer_order_wechat" IS '微信转账单';
+
+-- ----------------------------
+-- Table structure for pay_transfer_order_alipay
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."pay_transfer_order_alipay";
+CREATE TABLE "public"."pay_transfer_order_alipay" (
+  "id" int8 NOT NULL,
+  "transfer_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "biz_transfer_no" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
+  "out_transfer_no" varchar(150) COLLATE "pg_catalog"."default",
+  "mch_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "app_id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "amount" int8 NOT NULL,
+  "currency" varchar(8) COLLATE "pg_catalog"."default" NOT NULL DEFAULT 'CNY'::character varying,
+  "title" varchar(100) COLLATE "pg_catalog"."default",
+  "reason" varchar(200) COLLATE "pg_catalog"."default",
+  "status" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "finish_time" timestamptz(6),
+  "notify_url" varchar(200) COLLATE "pg_catalog"."default",
+  "attach" varchar(500) COLLATE "pg_catalog"."default",
+  "req_time" timestamptz(6),
+  "error_msg" varchar(2048) COLLATE "pg_catalog"."default",
+  "payee_type" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "payee_account" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
+  "payee_name" varchar(100) COLLATE "pg_catalog"."default",
+  "creator" int8,
+  "create_time" timestamptz(6),
+  "last_modifier" int8,
+  "last_modified_time" timestamptz(6),
+  "version" int4 NOT NULL DEFAULT 0,
+  "deleted" bool NOT NULL DEFAULT false
+)
+;
+COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."id" IS '主键';
+COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."transfer_no" IS '平台转账单号';
+COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."biz_transfer_no" IS '商户转账号(幂等键, 同一商户下唯一)';
+COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."channel_mch_no" IS '通道商户号(路由确定后写入, 凭证组装用)';
+COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."out_transfer_no" IS '通道转账单号(支付宝 order_id)';
+COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."mch_no" IS '商户号';
+COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."app_id" IS '应用号';
+COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."amount" IS '转账金额(最小货币单位/分)';
+COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."currency" IS '币种';
+COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."title" IS '转账标题';
+COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."reason" IS '转账原因/备注';
+COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."status" IS '转账状态(processing/success/fail/close)';
+COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."finish_time" IS '转账完成时间';
+COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."notify_url" IS '商户异步通知地址';
+COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."attach" IS '商户扩展参数(回调原样返回)';
+COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."req_time" IS '请求时间';
+COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."error_msg" IS '错误信息';
+COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."payee_type" IS '收款人账号类型(user_id/open_id/login_name)';
+COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."payee_account" IS '收款人账号';
+COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."payee_name" IS '收款人姓名';
+COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."creator" IS '创建人';
+COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."last_modifier" IS '最后修改人';
+COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."version" IS '乐观锁版本';
+COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."deleted" IS '逻辑删除';
+COMMENT ON TABLE "public"."pay_transfer_order_alipay" IS '支付宝转账单';
+
+-- ----------------------------
+-- Table structure for pay_transfer_order_douyin
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."pay_transfer_order_douyin";
+CREATE TABLE "public"."pay_transfer_order_douyin" (
+  "id" int8 NOT NULL,
+  "transfer_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "biz_transfer_no" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
+  "out_transfer_no" varchar(150) COLLATE "pg_catalog"."default",
+  "mch_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "app_id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "amount" int8 NOT NULL,
+  "currency" varchar(8) COLLATE "pg_catalog"."default" NOT NULL DEFAULT 'CNY'::character varying,
+  "title" varchar(100) COLLATE "pg_catalog"."default",
+  "reason" varchar(200) COLLATE "pg_catalog"."default",
+  "status" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "finish_time" timestamptz(6),
+  "notify_url" varchar(200) COLLATE "pg_catalog"."default",
+  "attach" varchar(500) COLLATE "pg_catalog"."default",
+  "req_time" timestamptz(6),
+  "error_msg" varchar(2048) COLLATE "pg_catalog"."default",
+  "payee_type" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "payee_account" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
+  "payee_name" varchar(100) COLLATE "pg_catalog"."default",
+  "transfer_scene" varchar(50) COLLATE "pg_catalog"."default",
+  "creator" int8,
+  "create_time" timestamptz(6),
+  "last_modifier" int8,
+  "last_modified_time" timestamptz(6),
+  "version" int4 NOT NULL DEFAULT 0,
+  "deleted" bool NOT NULL DEFAULT false
+)
+;
+COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."id" IS '主键';
+COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."transfer_no" IS '平台转账单号';
+COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."biz_transfer_no" IS '商户转账号(幂等键, 同一商户下唯一)';
+COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."channel_mch_no" IS '通道商户号(路由确定后写入, 凭证组装用)';
+COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."out_transfer_no" IS '通道转账单号(抖音 orderId)';
+COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."mch_no" IS '商户号';
+COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."app_id" IS '应用号';
+COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."amount" IS '转账金额(最小货币单位/分)';
+COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."currency" IS '币种';
+COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."title" IS '转账标题';
+COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."reason" IS '转账原因/备注';
+COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."status" IS '转账状态(processing/success/fail/close)';
+COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."finish_time" IS '转账完成时间';
+COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."notify_url" IS '商户异步通知地址';
+COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."attach" IS '商户扩展参数(回调原样返回)';
+COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."req_time" IS '请求时间';
+COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."error_msg" IS '错误信息';
+COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."payee_type" IS '收款人账号类型';
+COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."payee_account" IS '收款人账号';
+COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."payee_name" IS '收款人姓名';
+COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."transfer_scene" IS '转账场景ID(冗余自通道商户配置)';
+COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."creator" IS '创建人';
+COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."last_modifier" IS '最后修改人';
+COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."version" IS '乐观锁版本';
+COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."deleted" IS '逻辑删除';
+COMMENT ON TABLE "public"."pay_transfer_order_douyin" IS '抖音转账单';
+
+-- ----------------------------
+-- Table structure for pay_transfer_trade
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."pay_transfer_trade";
+CREATE TABLE "public"."pay_transfer_trade" (
+  "id" int8 NOT NULL,
+  "trade_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "container_id" int8 NOT NULL,
+  "container_channel" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "channel" varchar(32) COLLATE "pg_catalog"."default",
+  "provider" varchar(32) COLLATE "pg_catalog"."default",
+  "amount" int8 NOT NULL,
+  "currency" varchar(8) COLLATE "pg_catalog"."default" NOT NULL DEFAULT 'CNY'::character varying,
+  "status" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "out_transfer_no" varchar(150) COLLATE "pg_catalog"."default",
+  "relation_no" varchar(150) COLLATE "pg_catalog"."default",
+  "finish_time" timestamptz(6),
+  "title" varchar(100) COLLATE "pg_catalog"."default",
+  "app_id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "mch_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "creator" int8,
+  "create_time" timestamptz(6),
+  "last_modifier" int8,
+  "last_modified_time" timestamptz(6),
+  "version" int4 NOT NULL DEFAULT 0,
+  "deleted" bool NOT NULL DEFAULT false
+)
+;
+COMMENT ON COLUMN "public"."pay_transfer_trade"."id" IS '主键';
+COMMENT ON COLUMN "public"."pay_transfer_trade"."trade_no" IS '平台转账交易号';
+COMMENT ON COLUMN "public"."pay_transfer_trade"."container_id" IS '关联通道转账单ID';
+COMMENT ON COLUMN "public"."pay_transfer_trade"."container_channel" IS '所属通道(wechat/alipay/douyin)';
+COMMENT ON COLUMN "public"."pay_transfer_trade"."channel" IS '通道编码(冗余, 跨通道统计)';
+COMMENT ON COLUMN "public"."pay_transfer_trade"."provider" IS '钱包渠道(wechat/alipay/douyin)';
+COMMENT ON COLUMN "public"."pay_transfer_trade"."amount" IS '转账金额(最小货币单位/分)';
+COMMENT ON COLUMN "public"."pay_transfer_trade"."currency" IS '币种';
+COMMENT ON COLUMN "public"."pay_transfer_trade"."status" IS '转账状态(processing/success/fail/close)';
+COMMENT ON COLUMN "public"."pay_transfer_trade"."out_transfer_no" IS '通道转账单号';
+COMMENT ON COLUMN "public"."pay_transfer_trade"."relation_no" IS '实际上送通道的商户转账号(反查权威)';
+COMMENT ON COLUMN "public"."pay_transfer_trade"."finish_time" IS '转账完成时间';
+COMMENT ON COLUMN "public"."pay_transfer_trade"."title" IS '转账标题';
+COMMENT ON COLUMN "public"."pay_transfer_trade"."app_id" IS '应用号';
+COMMENT ON COLUMN "public"."pay_transfer_trade"."mch_no" IS '商户号';
+COMMENT ON COLUMN "public"."pay_transfer_trade"."creator" IS '创建人';
+COMMENT ON COLUMN "public"."pay_transfer_trade"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."pay_transfer_trade"."last_modifier" IS '最后修改人';
+COMMENT ON COLUMN "public"."pay_transfer_trade"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."pay_transfer_trade"."version" IS '乐观锁版本';
+COMMENT ON COLUMN "public"."pay_transfer_trade"."deleted" IS '逻辑删除';
+COMMENT ON TABLE "public"."pay_transfer_trade" IS '转账资金凭证';
+
+-- ----------------------------
 -- Table structure for starter_audit_login_log
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."starter_audit_login_log";
@@ -3901,6 +4093,7 @@ CREATE TABLE "public"."wechat_direct_channel_merchant" (
   "channel_mch_no" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
   "product" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
   "wx_mch_id" varchar(32) COLLATE "pg_catalog"."default",
+  "transfer_scene" varchar(50) COLLATE "pg_catalog"."default",
   "creator" int8,
   "create_time" timestamptz(6),
   "last_modifier" int8,
@@ -3914,6 +4107,7 @@ COMMENT ON COLUMN "public"."wechat_direct_channel_merchant"."mch_no" IS '商户�
 COMMENT ON COLUMN "public"."wechat_direct_channel_merchant"."channel_mch_no" IS '通道商户号(系统生成雪花号)';
 COMMENT ON COLUMN "public"."wechat_direct_channel_merchant"."product" IS '所属支付产品';
 COMMENT ON COLUMN "public"."wechat_direct_channel_merchant"."wx_mch_id" IS '微信直连商户号';
+COMMENT ON COLUMN "public"."wechat_direct_channel_merchant"."transfer_scene" IS '转账场景ID(商家转账到零钱, 未配置时发起转账报错)';
 COMMENT ON COLUMN "public"."wechat_direct_channel_merchant"."creator" IS '创建人';
 COMMENT ON COLUMN "public"."wechat_direct_channel_merchant"."create_time" IS '创建时间';
 COMMENT ON COLUMN "public"."wechat_direct_channel_merchant"."last_modifier" IS '最后修改人';
@@ -4157,18 +4351,194 @@ COMMENT ON COLUMN "public"."wx_platform_app_capability"."wx_platform_app_id" IS 
 COMMENT ON TABLE "public"."wx_platform_app_capability" IS '平台微信应用默认能力绑定（全局一能力一应用）';
 
 -- ----------------------------
+-- Table structure for fuyou_isv_channel_merchant
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."fuyou_isv_channel_merchant";
+CREATE TABLE "public"."fuyou_isv_channel_merchant" (
+  "id" int8 NOT NULL,
+  "mch_no" varchar(32) COLLATE "pg_catalog"."default",
+  "channel_mch_no" varchar(64) COLLATE "pg_catalog"."default",
+  "product" varchar(32) COLLATE "pg_catalog"."default",
+  "sandbox" bool DEFAULT false,
+  "fuyou_mch_no" varchar(64) COLLATE "pg_catalog"."default",
+  "term_no" varchar(64) COLLATE "pg_catalog"."default",
+  "creator" int8,
+  "create_time" timestamptz(6),
+  "last_modifier" int8,
+  "last_modified_time" timestamptz(6),
+  "version" int4 NOT NULL DEFAULT 0,
+  "deleted" bool NOT NULL DEFAULT false
+)
+;
+COMMENT ON COLUMN "public"."fuyou_isv_channel_merchant"."id" IS '主键';
+COMMENT ON COLUMN "public"."fuyou_isv_channel_merchant"."mch_no" IS '商户号';
+COMMENT ON COLUMN "public"."fuyou_isv_channel_merchant"."channel_mch_no" IS '通道商户号(FUYOU+雪花)';
+COMMENT ON COLUMN "public"."fuyou_isv_channel_merchant"."product" IS '所属支付产品(对应 ProductEnum.code)';
+COMMENT ON COLUMN "public"."fuyou_isv_channel_merchant"."sandbox" IS '是否沙箱环境商户';
+COMMENT ON COLUMN "public"."fuyou_isv_channel_merchant"."fuyou_mch_no" IS '富友商户号(mchnt_cd)';
+COMMENT ON COLUMN "public"."fuyou_isv_channel_merchant"."term_no" IS '终端号(term_id)';
+COMMENT ON COLUMN "public"."fuyou_isv_channel_merchant"."creator" IS '创建者ID';
+COMMENT ON COLUMN "public"."fuyou_isv_channel_merchant"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."fuyou_isv_channel_merchant"."last_modifier" IS '最后修改者ID';
+COMMENT ON COLUMN "public"."fuyou_isv_channel_merchant"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."fuyou_isv_channel_merchant"."version" IS '版本号(乐观锁)';
+COMMENT ON COLUMN "public"."fuyou_isv_channel_merchant"."deleted" IS '删除标志';
+COMMENT ON TABLE "public"."fuyou_isv_channel_merchant" IS '富友通道商户绑定';
+
+-- ----------------------------
+-- Table structure for fuyou_isv_key_config
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."fuyou_isv_key_config";
+CREATE TABLE "public"."fuyou_isv_key_config" (
+  "id" int8 NOT NULL,
+  "product" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "fy_app_id" varchar(64) COLLATE "pg_catalog"."default",
+  "order_prefix" varchar(64) COLLATE "pg_catalog"."default",
+  "private_key" text COLLATE "pg_catalog"."default",
+  "public_key" text COLLATE "pg_catalog"."default",
+  "sandbox" bool DEFAULT false,
+  "creator" int8,
+  "create_time" timestamptz(6),
+  "last_modifier" int8,
+  "last_modified_time" timestamptz(6),
+  "version" int4 NOT NULL DEFAULT 0,
+  "deleted" bool NOT NULL DEFAULT false
+)
+;
+COMMENT ON COLUMN "public"."fuyou_isv_key_config"."id" IS '主键';
+COMMENT ON COLUMN "public"."fuyou_isv_key_config"."product" IS '产品编码(对应 ProductEnum.code, 如 fuyou_pay)';
+COMMENT ON COLUMN "public"."fuyou_isv_key_config"."fy_app_id" IS '富友应用编号(机构号 ins_cd)';
+COMMENT ON COLUMN "public"."fuyou_isv_key_config"."order_prefix" IS '富友订单前缀(关联订单号前缀, 富友回调凭 mchnt_order_no 反查平台订单)';
+COMMENT ON COLUMN "public"."fuyou_isv_key_config"."private_key" IS '商户RSA私钥(PKCS8 Base64, MD5withRSA 签名, 加密存储)';
+COMMENT ON COLUMN "public"."fuyou_isv_key_config"."public_key" IS '富友RSA公钥(X509 Base64, 响应/回调验签, 加密存储)';
+COMMENT ON COLUMN "public"."fuyou_isv_key_config"."sandbox" IS '是否沙箱环境';
+COMMENT ON COLUMN "public"."fuyou_isv_key_config"."creator" IS '创建者ID';
+COMMENT ON COLUMN "public"."fuyou_isv_key_config"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."fuyou_isv_key_config"."last_modifier" IS '最后修改者ID';
+COMMENT ON COLUMN "public"."fuyou_isv_key_config"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."fuyou_isv_key_config"."version" IS '版本号(乐观锁)';
+COMMENT ON COLUMN "public"."fuyou_isv_key_config"."deleted" IS '删除标志';
+COMMENT ON TABLE "public"."fuyou_isv_key_config" IS '富友服务商密钥配置';
+
+-- ----------------------------
+-- Table structure for leshua_isv_channel_merchant
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."leshua_isv_channel_merchant";
+CREATE TABLE "public"."leshua_isv_channel_merchant" (
+  "id" int8 NOT NULL,
+  "mch_no" varchar(32) COLLATE "pg_catalog"."default",
+  "channel_mch_no" varchar(64) COLLATE "pg_catalog"."default",
+  "product" varchar(32) COLLATE "pg_catalog"."default",
+  "sandbox" bool DEFAULT false,
+  "ls_mch_no" varchar(64) COLLATE "pg_catalog"."default",
+  "creator" int8,
+  "create_time" timestamptz(6),
+  "last_modifier" int8,
+  "last_modified_time" timestamptz(6),
+  "version" int4 NOT NULL DEFAULT 0,
+  "deleted" bool NOT NULL DEFAULT false
+)
+;
+COMMENT ON COLUMN "public"."leshua_isv_channel_merchant"."id" IS '主键';
+COMMENT ON COLUMN "public"."leshua_isv_channel_merchant"."mch_no" IS '商户号';
+COMMENT ON COLUMN "public"."leshua_isv_channel_merchant"."channel_mch_no" IS '通道商户号(LESHUA+雪花)';
+COMMENT ON COLUMN "public"."leshua_isv_channel_merchant"."product" IS '所属支付产品(对应 ProductEnum.code)';
+COMMENT ON COLUMN "public"."leshua_isv_channel_merchant"."sandbox" IS '是否沙箱环境商户';
+COMMENT ON COLUMN "public"."leshua_isv_channel_merchant"."ls_mch_no" IS '乐刷商户编号(merchant_id)';
+COMMENT ON COLUMN "public"."leshua_isv_channel_merchant"."creator" IS '创建者ID';
+COMMENT ON COLUMN "public"."leshua_isv_channel_merchant"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."leshua_isv_channel_merchant"."last_modifier" IS '最后修改者ID';
+COMMENT ON COLUMN "public"."leshua_isv_channel_merchant"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."leshua_isv_channel_merchant"."version" IS '版本号(乐观锁)';
+COMMENT ON COLUMN "public"."leshua_isv_channel_merchant"."deleted" IS '删除标志';
+COMMENT ON TABLE "public"."leshua_isv_channel_merchant" IS '乐刷通道商户绑定';
+
+-- ----------------------------
+-- Table structure for leshua_isv_key_config
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."leshua_isv_key_config";
+CREATE TABLE "public"."leshua_isv_key_config" (
+  "id" int8 NOT NULL,
+  "product" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "ls_mch_no" varchar(64) COLLATE "pg_catalog"."default",
+  "trade_key" text COLLATE "pg_catalog"."default",
+  "notify_key" text COLLATE "pg_catalog"."default",
+  "sign_type" varchar(16) COLLATE "pg_catalog"."default",
+  "ls_isv_no" varchar(64) COLLATE "pg_catalog"."default",
+  "sandbox" bool DEFAULT false,
+  "creator" int8,
+  "create_time" timestamptz(6),
+  "last_modifier" int8,
+  "last_modified_time" timestamptz(6),
+  "version" int4 NOT NULL DEFAULT 0,
+  "deleted" bool NOT NULL DEFAULT false
+)
+;
+COMMENT ON COLUMN "public"."leshua_isv_key_config"."id" IS '主键';
+COMMENT ON COLUMN "public"."leshua_isv_key_config"."product" IS '产品编码(对应 ProductEnum.code, 如 leshua_pay)';
+COMMENT ON COLUMN "public"."leshua_isv_key_config"."ls_mch_no" IS '乐刷商户号(merchant_id, 服务商级或商户级, 全局唯一)';
+COMMENT ON COLUMN "public"."leshua_isv_key_config"."trade_key" IS '交易密钥(tradeKey, 请求签名与响应/回调验签, 加密存储)';
+COMMENT ON COLUMN "public"."leshua_isv_key_config"."notify_key" IS '异步通知密钥(notifyKey, 部分场景回调验签, 加密存储)';
+COMMENT ON COLUMN "public"."leshua_isv_key_config"."sign_type" IS '签名类型(MD5 / SM3)';
+COMMENT ON COLUMN "public"."leshua_isv_key_config"."ls_isv_no" IS '乐刷服务商号(lsIsvNo, 进件场景使用, 可选)';
+COMMENT ON COLUMN "public"."leshua_isv_key_config"."sandbox" IS '是否沙箱环境';
+COMMENT ON COLUMN "public"."leshua_isv_key_config"."creator" IS '创建者ID';
+COMMENT ON COLUMN "public"."leshua_isv_key_config"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."leshua_isv_key_config"."last_modifier" IS '最后修改者ID';
+COMMENT ON COLUMN "public"."leshua_isv_key_config"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."leshua_isv_key_config"."version" IS '版本号(乐观锁)';
+COMMENT ON COLUMN "public"."leshua_isv_key_config"."deleted" IS '删除标志';
+COMMENT ON TABLE "public"."leshua_isv_key_config" IS '乐刷服务商密钥配置';
+
+-- ----------------------------
+-- Table structure for yeepay_direct_key_config
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."yeepay_direct_key_config";
+CREATE TABLE "public"."yeepay_direct_key_config" (
+  "id" int8 NOT NULL,
+  "mch_no" varchar(32) COLLATE "pg_catalog"."default",
+  "channel_mch_no" varchar(64) COLLATE "pg_catalog"."default",
+  "merchant_no" varchar(64) COLLATE "pg_catalog"."default",
+  "yop_isv_no" varchar(64) COLLATE "pg_catalog"."default",
+  "app_key" text COLLATE "pg_catalog"."default",
+  "private_key" text COLLATE "pg_catalog"."default",
+  "yop_public_key" text COLLATE "pg_catalog"."default",
+  "wx_app_id" varchar(64) COLLATE "pg_catalog"."default",
+  "wx_app_secret" text COLLATE "pg_catalog"."default",
+  "sandbox" bool DEFAULT false,
+  "creator" int8,
+  "create_time" timestamptz(6),
+  "last_modifier" int8,
+  "last_modified_time" timestamptz(6),
+  "version" int4 NOT NULL DEFAULT 0,
+  "deleted" bool NOT NULL DEFAULT false
+)
+;
+COMMENT ON COLUMN "public"."yeepay_direct_key_config"."id" IS '主键';
+COMMENT ON COLUMN "public"."yeepay_direct_key_config"."mch_no" IS '商户号';
+COMMENT ON COLUMN "public"."yeepay_direct_key_config"."channel_mch_no" IS '通道商户号(创建时录入不可修改)';
+COMMENT ON COLUMN "public"."yeepay_direct_key_config"."merchant_no" IS '易宝商户号(merchantNo, 创建时录入不可修改)';
+COMMENT ON COLUMN "public"."yeepay_direct_key_config"."yop_isv_no" IS '易宝服务商商编(parentMerchantNo / yopIsvNo, 创建时录入不可修改)';
+COMMENT ON COLUMN "public"."yeepay_direct_key_config"."app_key" IS '通道应用 AppKey(YOP 应用标识, 加密存储)';
+COMMENT ON COLUMN "public"."yeepay_direct_key_config"."private_key" IS '商户 RSA 私钥(PEM PKCS#8, SDK 签名用, 加密存储)';
+COMMENT ON COLUMN "public"."yeepay_direct_key_config"."yop_public_key" IS '易宝平台 RSA 公钥(PEM, SDK 验签用, 加密存储)';
+COMMENT ON COLUMN "public"."yeepay_direct_key_config"."wx_app_id" IS '微信 AppId(微信 H5/JSAPI 场景用, 可空)';
+COMMENT ON COLUMN "public"."yeepay_direct_key_config"."wx_app_secret" IS '微信 AppSecret(微信场景用, 可空, 加密存储)';
+COMMENT ON COLUMN "public"."yeepay_direct_key_config"."sandbox" IS '是否沙箱环境';
+COMMENT ON COLUMN "public"."yeepay_direct_key_config"."creator" IS '创建者ID';
+COMMENT ON COLUMN "public"."yeepay_direct_key_config"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."yeepay_direct_key_config"."last_modifier" IS '最后修改者ID';
+COMMENT ON COLUMN "public"."yeepay_direct_key_config"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."yeepay_direct_key_config"."version" IS '版本号(乐观锁)';
+COMMENT ON COLUMN "public"."yeepay_direct_key_config"."deleted" IS '删除标志';
+COMMENT ON TABLE "public"."yeepay_direct_key_config" IS '易宝直连配置';
+
+-- ----------------------------
 -- Alter sequences owned by
 -- ----------------------------
 ALTER SEQUENCE "public"."adapay_direct_key_config_id_seq"
 OWNED BY "public"."adapay_direct_key_config"."id";
 SELECT setval('"public"."adapay_direct_key_config_id_seq"', 1, false);
-
--- ----------------------------
--- Alter sequences owned by
--- ----------------------------
-ALTER SEQUENCE "public"."adapay_isv_key_config_id_seq"
-OWNED BY "public"."adapay_isv_key_config"."id";
-SELECT setval('"public"."adapay_isv_key_config_id_seq"', 1, false);
 
 -- ----------------------------
 -- Alter sequences owned by
@@ -4229,22 +4599,9 @@ CREATE UNIQUE INDEX "uk_adapay_direct_key_config_sandbox" ON "public"."adapay_di
 COMMENT ON INDEX "public"."uk_adapay_direct_key_config_sandbox" IS '同一通道商户同一环境密钥唯一';
 
 -- ----------------------------
--- Indexes structure for table adapay_isv_key_config
--- ----------------------------
-CREATE UNIQUE INDEX "uk_adapay_isv_key_config_sandbox" ON "public"."adapay_isv_key_config" USING btree (
-  "sandbox" "pg_catalog"."bool_ops" ASC NULLS LAST
-) WHERE deleted = false;
-COMMENT ON INDEX "public"."uk_adapay_isv_key_config_sandbox" IS '同一环境服务商配置唯一(平台为唯一服务商)';
-
--- ----------------------------
 -- Primary Key structure for table adapay_direct_key_config
 -- ----------------------------
 ALTER TABLE "public"."adapay_direct_key_config" ADD CONSTRAINT "adapay_direct_key_config_pkey" PRIMARY KEY ("id");
-
--- ----------------------------
--- Primary Key structure for table adapay_isv_key_config
--- ----------------------------
-ALTER TABLE "public"."adapay_isv_key_config" ADD CONSTRAINT "adapay_isv_key_config_pkey" PRIMARY KEY ("id");
 
 -- ----------------------------
 -- Primary Key structure for table alipay_direct_app
@@ -4509,6 +4866,15 @@ ALTER TABLE "public"."hmpay_isv_channel_merchant" ADD CONSTRAINT "hmpay_isv_chan
 -- Primary Key structure for table hmpay_isv_key_config
 -- ----------------------------
 ALTER TABLE "public"."hmpay_isv_key_config" ADD CONSTRAINT "hmpay_isv_key_config_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Indexes structure for table hmpay_isv_key_config
+-- ----------------------------
+CREATE UNIQUE INDEX "uk_hmpay_isv_key_prod_sandbox" ON "public"."hmpay_isv_key_config" USING btree (
+  "product" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
+  "sandbox" "pg_catalog"."bool_ops" ASC NULLS LAST
+) WHERE deleted = false;
+COMMENT ON INDEX "public"."uk_hmpay_isv_key_prod_sandbox" IS '同一产品同一环境密钥唯一';
 
 -- ----------------------------
 -- Indexes structure for table iam_perm_code
@@ -5495,6 +5861,118 @@ COMMENT ON INDEX "public"."uk_pay_trade_trade_no" IS '平台交易号唯一';
 ALTER TABLE "public"."pay_trade" ADD CONSTRAINT "pk_pay_trade" PRIMARY KEY ("id");
 
 -- ----------------------------
+-- Indexes structure for table pay_transfer_order_wechat
+-- ----------------------------
+CREATE UNIQUE INDEX "uk_pay_transfer_order_wechat_no" ON "public"."pay_transfer_order_wechat" USING btree (
+  "transfer_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+) WHERE deleted = false;
+COMMENT ON INDEX "public"."uk_pay_transfer_order_wechat_no" IS '平台转账单号唯一';
+CREATE UNIQUE INDEX "uk_pay_transfer_order_wechat_biz" ON "public"."pay_transfer_order_wechat" USING btree (
+  "biz_transfer_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
+  "app_id" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+) WHERE deleted = false;
+COMMENT ON INDEX "public"."uk_pay_transfer_order_wechat_biz" IS '同一应用同一商户转账号唯一(幂等约束)';
+CREATE INDEX "idx_pay_transfer_order_wechat_mch" ON "public"."pay_transfer_order_wechat" USING btree (
+  "mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
+  "create_time" "pg_catalog"."timestamptz_ops" ASC NULLS LAST
+) WHERE deleted = false;
+COMMENT ON INDEX "public"."idx_pay_transfer_order_wechat_mch" IS '按商户号+创建时间查询';
+CREATE INDEX "idx_pay_transfer_order_wechat_status_time" ON "public"."pay_transfer_order_wechat" USING btree (
+  "status" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
+  "create_time" "pg_catalog"."timestamptz_ops" ASC NULLS LAST
+) WHERE deleted = false;
+COMMENT ON INDEX "public"."idx_pay_transfer_order_wechat_status_time" IS '按状态+创建时间窗口扫描(定时同步)';
+
+-- ----------------------------
+-- Primary Key structure for table pay_transfer_order_wechat
+-- ----------------------------
+ALTER TABLE "public"."pay_transfer_order_wechat" ADD CONSTRAINT "pk_pay_transfer_order_wechat" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Indexes structure for table pay_transfer_order_alipay
+-- ----------------------------
+CREATE UNIQUE INDEX "uk_pay_transfer_order_alipay_no" ON "public"."pay_transfer_order_alipay" USING btree (
+  "transfer_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+) WHERE deleted = false;
+COMMENT ON INDEX "public"."uk_pay_transfer_order_alipay_no" IS '平台转账单号唯一';
+CREATE UNIQUE INDEX "uk_pay_transfer_order_alipay_biz" ON "public"."pay_transfer_order_alipay" USING btree (
+  "biz_transfer_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
+  "app_id" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+) WHERE deleted = false;
+COMMENT ON INDEX "public"."uk_pay_transfer_order_alipay_biz" IS '同一应用同一商户转账号唯一(幂等约束)';
+CREATE INDEX "idx_pay_transfer_order_alipay_mch" ON "public"."pay_transfer_order_alipay" USING btree (
+  "mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
+  "create_time" "pg_catalog"."timestamptz_ops" ASC NULLS LAST
+) WHERE deleted = false;
+COMMENT ON INDEX "public"."idx_pay_transfer_order_alipay_mch" IS '按商户号+创建时间查询';
+CREATE INDEX "idx_pay_transfer_order_alipay_status_time" ON "public"."pay_transfer_order_alipay" USING btree (
+  "status" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
+  "create_time" "pg_catalog"."timestamptz_ops" ASC NULLS LAST
+) WHERE deleted = false;
+COMMENT ON INDEX "public"."idx_pay_transfer_order_alipay_status_time" IS '按状态+创建时间窗口扫描(定时同步)';
+
+-- ----------------------------
+-- Primary Key structure for table pay_transfer_order_alipay
+-- ----------------------------
+ALTER TABLE "public"."pay_transfer_order_alipay" ADD CONSTRAINT "pk_pay_transfer_order_alipay" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Indexes structure for table pay_transfer_order_douyin
+-- ----------------------------
+CREATE UNIQUE INDEX "uk_pay_transfer_order_douyin_no" ON "public"."pay_transfer_order_douyin" USING btree (
+  "transfer_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+) WHERE deleted = false;
+COMMENT ON INDEX "public"."uk_pay_transfer_order_douyin_no" IS '平台转账单号唯一';
+CREATE UNIQUE INDEX "uk_pay_transfer_order_douyin_biz" ON "public"."pay_transfer_order_douyin" USING btree (
+  "biz_transfer_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
+  "app_id" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+) WHERE deleted = false;
+COMMENT ON INDEX "public"."uk_pay_transfer_order_douyin_biz" IS '同一应用同一商户转账号唯一(幂等约束)';
+CREATE INDEX "idx_pay_transfer_order_douyin_mch" ON "public"."pay_transfer_order_douyin" USING btree (
+  "mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
+  "create_time" "pg_catalog"."timestamptz_ops" ASC NULLS LAST
+) WHERE deleted = false;
+COMMENT ON INDEX "public"."idx_pay_transfer_order_douyin_mch" IS '按商户号+创建时间查询';
+CREATE INDEX "idx_pay_transfer_order_douyin_status_time" ON "public"."pay_transfer_order_douyin" USING btree (
+  "status" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
+  "create_time" "pg_catalog"."timestamptz_ops" ASC NULLS LAST
+) WHERE deleted = false;
+COMMENT ON INDEX "public"."idx_pay_transfer_order_douyin_status_time" IS '按状态+创建时间窗口扫描(定时同步)';
+
+-- ----------------------------
+-- Primary Key structure for table pay_transfer_order_douyin
+-- ----------------------------
+ALTER TABLE "public"."pay_transfer_order_douyin" ADD CONSTRAINT "pk_pay_transfer_order_douyin" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Indexes structure for table pay_transfer_trade
+-- ----------------------------
+CREATE UNIQUE INDEX "uk_pay_transfer_trade_no" ON "public"."pay_transfer_trade" USING btree (
+  "trade_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+) WHERE deleted = false;
+COMMENT ON INDEX "public"."uk_pay_transfer_trade_no" IS '平台转账交易号唯一';
+CREATE INDEX "idx_pay_transfer_trade_container" ON "public"."pay_transfer_trade" USING btree (
+  "container_id" "pg_catalog"."int8_ops" ASC NULLS LAST,
+  "container_channel" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+);
+COMMENT ON INDEX "public"."idx_pay_transfer_trade_container" IS '按所属转账单+通道查询';
+CREATE INDEX "idx_pay_transfer_trade_mch" ON "public"."pay_transfer_trade" USING btree (
+  "mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
+  "create_time" "pg_catalog"."timestamptz_ops" ASC NULLS LAST
+) WHERE deleted = false;
+COMMENT ON INDEX "public"."idx_pay_transfer_trade_mch" IS '按商户号+创建时间查询';
+CREATE INDEX "idx_pay_transfer_trade_status_time" ON "public"."pay_transfer_trade" USING btree (
+  "status" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
+  "create_time" "pg_catalog"."timestamptz_ops" ASC NULLS LAST
+) WHERE deleted = false;
+COMMENT ON INDEX "public"."idx_pay_transfer_trade_status_time" IS '按状态+创建时间窗口扫描(定时同步)';
+
+-- ----------------------------
+-- Primary Key structure for table pay_transfer_trade
+-- ----------------------------
+ALTER TABLE "public"."pay_transfer_trade" ADD CONSTRAINT "pk_pay_transfer_trade" PRIMARY KEY ("id");
+
+-- ----------------------------
 -- Indexes structure for table starter_audit_unipay_log
 -- ----------------------------
 CREATE INDEX "idx_starter_audit_unipay_log_mch_time" ON "public"."starter_audit_unipay_log" USING btree (
@@ -5717,3 +6195,83 @@ COMMENT ON INDEX "public"."uk_wx_platform_app_cap_product" IS '产品+能力唯�
 -- Primary Key structure for table wx_platform_app_capability
 -- ----------------------------
 ALTER TABLE "public"."wx_platform_app_capability" ADD CONSTRAINT "wx_platform_app_capability_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Indexes structure for table fuyou_isv_channel_merchant
+-- ----------------------------
+CREATE UNIQUE INDEX "uk_fuyou_isv_channel_mch_no" ON "public"."fuyou_isv_channel_merchant" USING btree (
+  "channel_mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+) WHERE deleted = false;
+COMMENT ON INDEX "public"."uk_fuyou_isv_channel_mch_no" IS '通道商户号唯一';
+CREATE UNIQUE INDEX "uk_fuyou_isv_mch_fuyou_no" ON "public"."fuyou_isv_channel_merchant" USING btree (
+  "mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
+  "fuyou_mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+) WHERE deleted = false;
+COMMENT ON INDEX "public"."uk_fuyou_isv_mch_fuyou_no" IS '同一商户下富友商户号唯一';
+
+-- ----------------------------
+-- Primary Key structure for table fuyou_isv_channel_merchant
+-- ----------------------------
+ALTER TABLE "public"."fuyou_isv_channel_merchant" ADD CONSTRAINT "pk_fuyou_isv_channel_merchant" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Indexes structure for table fuyou_isv_key_config
+-- ----------------------------
+CREATE UNIQUE INDEX "uk_fuyou_isv_key_prod_sandbox" ON "public"."fuyou_isv_key_config" USING btree (
+  "product" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
+  "sandbox" "pg_catalog"."bool_ops" ASC NULLS LAST
+) WHERE deleted = false;
+COMMENT ON INDEX "public"."uk_fuyou_isv_key_prod_sandbox" IS '同一产品同一环境密钥唯一';
+
+-- ----------------------------
+-- Primary Key structure for table fuyou_isv_key_config
+-- ----------------------------
+ALTER TABLE "public"."fuyou_isv_key_config" ADD CONSTRAINT "pk_fuyou_isv_key_config" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Indexes structure for table leshua_isv_channel_merchant
+-- ----------------------------
+CREATE UNIQUE INDEX "uk_leshua_isv_channel_mch_no" ON "public"."leshua_isv_channel_merchant" USING btree (
+  "channel_mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+) WHERE deleted = false;
+COMMENT ON INDEX "public"."uk_leshua_isv_channel_mch_no" IS '通道商户号唯一';
+CREATE UNIQUE INDEX "uk_leshua_isv_mch_ls_no" ON "public"."leshua_isv_channel_merchant" USING btree (
+  "mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
+  "ls_mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+) WHERE deleted = false;
+COMMENT ON INDEX "public"."uk_leshua_isv_mch_ls_no" IS '同一商户下乐刷商户号唯一';
+
+-- ----------------------------
+-- Primary Key structure for table leshua_isv_channel_merchant
+-- ----------------------------
+ALTER TABLE "public"."leshua_isv_channel_merchant" ADD CONSTRAINT "pk_leshua_isv_channel_merchant" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Indexes structure for table leshua_isv_key_config
+-- ----------------------------
+CREATE UNIQUE INDEX "uk_leshua_isv_key_prod_sandbox" ON "public"."leshua_isv_key_config" USING btree (
+  "product" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
+  "sandbox" "pg_catalog"."bool_ops" ASC NULLS LAST
+) WHERE deleted = false;
+COMMENT ON INDEX "public"."uk_leshua_isv_key_prod_sandbox" IS '同一产品同一环境密钥唯一';
+
+-- ----------------------------
+-- Primary Key structure for table leshua_isv_key_config
+-- ----------------------------
+ALTER TABLE "public"."leshua_isv_key_config" ADD CONSTRAINT "pk_leshua_isv_key_config" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Indexes structure for table yeepay_direct_key_config
+-- ----------------------------
+CREATE UNIQUE INDEX "uk_yeepay_direct_key_cmchno_sandbox" ON "public"."yeepay_direct_key_config" USING btree (
+  "channel_mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
+  "sandbox" "pg_catalog"."bool_ops" ASC NULLS LAST
+) WHERE deleted = false;
+COMMENT ON INDEX "public"."uk_yeepay_direct_key_cmchno_sandbox" IS '同一通道商户同一环境密钥唯一';
+
+-- ----------------------------
+-- Primary Key structure for table yeepay_direct_key_config
+-- ----------------------------
+ALTER TABLE "public"."yeepay_direct_key_config" ADD CONSTRAINT "pk_yeepay_direct_key_config" PRIMARY KEY ("id");
+
+

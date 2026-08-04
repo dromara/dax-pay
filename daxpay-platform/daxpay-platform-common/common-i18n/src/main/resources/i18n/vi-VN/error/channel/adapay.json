@@ -1,6 +1,5 @@
 {
   "payFailed": "Lỗi thanh toán Adapay: {0}",
   "closeFailed": "Lỗi đóng đơn hàng Adapay: {0}",
-  "isvKeyNotConfigured": "Chưa cấu hình khóa ISV Adapay",
   "unsupportedPayMethod": "Phương thức thanh toán không được hỗ trợ cho Adapay: {0}"
 }
