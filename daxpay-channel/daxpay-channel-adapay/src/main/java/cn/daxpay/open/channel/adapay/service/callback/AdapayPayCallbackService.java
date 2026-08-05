@@ -10,7 +10,6 @@ import cn.daxpay.open.payment.trade.record.service.PayCallbackRecordService;
 import cn.daxpay.open.payment.trade.runtime.service.callback.PayCallbackService;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.hutool.core.util.StrUtil;
-import cn.hutool.extra.servlet.JakartaServletUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,22 +37,24 @@ public class AdapayPayCallbackService {
 
     /// 支付回调处理
     public String payHandle(String channelMchNo, HttpServletRequest request) {
-        // 1. 提取回调原始 body
-        String body = JakartaServletUtil.getBody(request);
+        // 1. 提取回调表单参数(Adapay 异步通知为 application/x-www-form-urlencoded, 含 data + sign)
+        String data = request.getParameter("data");
+        String sign = request.getParameter("sign");
         Map<String, Object> notify = new HashMap<>();
-        notify.put("body", body);
-        if (StrUtil.isBlank(body)) {
-            log.error("Adapay 支付回调: body 为空");
+        notify.put("data", data);
+        notify.put("sign", sign);
+        if (StrUtil.isBlank(data) || StrUtil.isBlank(sign)) {
+            log.error("Adapay 支付回调: data 或 sign 为空");
             CallbackData failData = new CallbackData();
             failData.setCallbackData(notify);
             failData.setCallbackStatus(CallbackStatusEnum.FAIL);
-            failData.setCallbackErrorMsg("Adapay 支付回调: body 为空");
+            failData.setCallbackErrorMsg("Adapay 支付回调: data 或 sign 为空");
             payCallbackRecordService.savePay(channelMchNo, failData);
             return AdapayCode.NOTIFY_FAIL;
         }
 
         // 2. 转发子应用验签解析(publicKey 为空, 子应用用全局默认平台公钥)
-        AdapayCallbackParseResp resp = parse(body, false);
+        AdapayCallbackParseResp resp = parse(data, sign, false);
         if (resp == null || !Boolean.TRUE.equals(resp.getSuccess())) {
             log.error("Adapay 支付回调验签失败");
             CallbackData failData = new CallbackData();
@@ -93,11 +94,12 @@ public class AdapayPayCallbackService {
     }
 
     /// 转发子应用验签解析
-    private AdapayCallbackParseResp parse(String body, boolean refund) {
+    private AdapayCallbackParseResp parse(String data, String sign, boolean refund) {
         AdapaySdkCredential credential = new AdapaySdkCredential();
         AdapayCallbackParseReq req = new AdapayCallbackParseReq();
         req.setCredential(credential);
-        req.setBody(body);
+        req.setData(data);
+        req.setSign(sign);
         var result = refund
                 ? adapayChannelClient.parseRefundCallback(req)
                 : adapayChannelClient.parsePayCallback(req);
