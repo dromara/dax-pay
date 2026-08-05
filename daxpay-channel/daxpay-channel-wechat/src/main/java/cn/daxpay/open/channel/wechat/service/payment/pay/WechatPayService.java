@@ -15,6 +15,7 @@ import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
 import cn.daxpay.open.platform.core.enums.unipay.PayBodyTypeEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
+import cn.daxpay.open.platform.core.exception.ChannelResultUnknownException;
 import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -66,6 +67,12 @@ public class WechatPayService {
 
         // 调用子应用
         DaxResult<WechatPayResp> result = wechatChannelClient.pay(req);
+        // 子应用返回"结果未知"(用户支付中/付款码已使用/订单已支付): 保持 PROCESSING 交由同步纠正,
+        // 避免误判 FAIL 导致"资金已动但订单失败"悬挂
+        if (result.getCode() == ChannelResultUnknownException.RESULT_UNKNOWN_CODE) {
+            throw new ChannelResultUnknownException("pay.error.channelResultUnknown",
+                    new RuntimeException(result.getMsg()));
+        }
         if (result.getCode() != 0) {
             throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "error.channel.wechat.payFailed", result.getMsg());
         }

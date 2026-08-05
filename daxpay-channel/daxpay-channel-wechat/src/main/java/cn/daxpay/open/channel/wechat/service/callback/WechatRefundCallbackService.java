@@ -84,10 +84,20 @@ public class WechatRefundCallbackService {
         RefundCallbackData callbackData = new RefundCallbackData();
         callbackData.setRefundNo(resp.getOutRefundNo());
         callbackData.setOutRefundNo(resp.getRefundId());
+        // 状态映射与同步路径(WechatRefundSyncService)对齐
         if (Objects.equals(WechatCode.REFUND_STATUS_SUCCESS, resp.getRefundStatus())) {
+            // 退款成功
             callbackData.setTradeStatus(CallbackStatusEnum.SUCCESS.getCode());
+        } else if (Objects.equals(WechatCode.REFUND_STATUS_CLOSED, resp.getRefundStatus())) {
+            // 退款关闭: 映射为平台 CLOSE(资金回滚, 与同步路径一致)
+            callbackData.setTradeStatus(CallbackStatusEnum.CLOSE.getCode());
+        } else if (Objects.equals(WechatCode.REFUND_STATUS_ABNORMAL, resp.getRefundStatus())) {
+            // 退款异常: 映射为平台 FAIL(资金回滚)
+            callbackData.setTradeStatus(CallbackStatusEnum.FAIL.getCode());
+            callbackData.setTradeErrorMsg("微信退款状态异常: " + resp.getRefundStatus());
         } else {
-            callbackData.setTradeErrorMsg("微信退款状态非成功: " + resp.getRefundStatus());
+            // PROCESSING 或其他中间态: 不设 tradeStatus, 框架层忽略不触发结算
+            callbackData.setTradeErrorMsg("微信退款状态未终态: " + resp.getRefundStatus());
         }
         Map<String, Object> notify = new HashMap<>();
         notify.put("body", body);
