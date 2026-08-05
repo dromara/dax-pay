@@ -50,9 +50,14 @@ public class AdapaySyncService {
     /// 解析子应用响应
     private PaySyncResultBo toSyncResult(AdapaySyncResp resp) {
         PaySyncResultBo bo = new PaySyncResultBo();
-        bo.setRealAmount(resp.getTotalAmount());
+        // 通道订单号: Adapay 支付对象 ID, 核心层据此回写 PayTrade.outOrderNo
+        bo.setOutOrderNo(resp.getPaymentId());
+        bo.setAmount(resp.getTotalAmount());
+        bo.setRealAmount(resp.getRealAmount());
         bo.setBuyerId(resp.getBuyerId());
+        bo.setTransOrderNo(resp.getTransOrderNo());
         bo.setFinishTime(AdapayDateUtil.parse(resp.getPayTime()));
+        bo.setSyncData(resp.getSyncData());
 
         String tradeStatus = resp.getTradeStatus();
         if (StrUtil.isBlank(tradeStatus)) {
