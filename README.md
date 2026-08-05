@@ -3,7 +3,7 @@
 <p align="left">
  <img src="https://img.shields.io/github/stars/dromara/dax-pay?style=flat&label=Github">
  <img src='https://gitee.com/bootx/dax-pay/badge/star.svg?theme=dark' alt='star'/>
- <img src="https://img.shields.io/badge/Dax%20Pay-4.0.0--beta1-success.svg" alt="Build Status"/>
+ <img src="https://img.shields.io/badge/Dax%20Pay-4.0.0--beta2-success.svg" alt="Build Status"/>
  <img src="https://img.shields.io/badge/Author-Daxpay-orange.svg" alt="Build Status"/>
  <img src="https://img.shields.io/badge/Spring%20Boot-4.1.0-blue.svg" alt="Downloads"/>
  <img src="https://img.shields.io/badge/license-LGPL--3.0--or--later-green.svg"/>
