@@ -56,5 +56,9 @@
   "authFailed": "獲取使用者標識(openId)失敗: {0}",
   "channelAppIdNotFound": "指定的應用AppId[{0}]未在系統中配置",
   "appNotConfigured": "未設定 {0} 對應的應用，請前往通道商戶應用設定頁綁定",
-  "appNotUnique": "存在多個 {0} 類型的應用，請顯式設定能力綁定以明確選擇"
+  "appNotUnique": "存在多個 {0} 類型的應用，請顯式設定能力綁定以明確選擇",
+  "transferFailed": "微信轉帳異常: {0}",
+  "transferOnlyOpenid": "微信僅支持 openid 收款人",
+  "transferNameForbidden": "微信: 小於0.3元不允許填收款人姓名",
+  "transferNameRequired": "微信: 大於等於2000元必須填收款人姓名"
 }

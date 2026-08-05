@@ -19,5 +19,11 @@
   "jsapiContextRequired": "Douyin JSAPI signing requires one of orderNo, code, or channelMchNo",
   "appTypeCapabilityMismatch": "Douyin app type is incompatible with the payment capability",
   "appNotConfigured": "No application configured for {0}, please bind one on the channel merchant app configuration page",
-  "appNotUnique": "Multiple applications of type {0} exist, please explicitly configure the capability binding to select one"
+  "appNotUnique": "Multiple applications of type {0} exist, please explicitly configure the capability binding to select one",
+  "transferFailed": "Douyin transfer failed: {0}",
+  "transferQueryFailed": "Douyin transfer query failed: {0}",
+  "transferEncryptFailed": "Douyin transfer name encryption failed: {0}",
+  "transferOnlyOpenid": "Douyin only supports openid payee",
+  "transferNameRequired": "Douyin: payee name required for amount >= 2000 CNY",
+  "transferSceneNotConfigured": "Douyin: transfer scene not configured"
 }

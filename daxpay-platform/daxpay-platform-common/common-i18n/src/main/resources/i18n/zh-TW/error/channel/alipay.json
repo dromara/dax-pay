@@ -46,5 +46,9 @@
   "paymentGatewayUrlRequired": "平臺支付閘道器地址(paymentGatewayBaseUrl)未配置，無法生成授權回撥地址",
   "appTypeCapabilityMismatch": "支付寶應用類型與支付能力不匹配",
   "appNotConfigured": "未設定 {0} 對應的應用，請前往通道商戶應用設定頁綁定",
-  "appNotUnique": "存在多個 {0} 類型的應用，請顯式設定能力綁定以明確選擇"
+  "appNotUnique": "存在多個 {0} 類型的應用，請顯式設定能力綁定以明確選擇",
+  "transferFailed": "支付寶轉帳失敗: {0}",
+  "transferQueryFailed": "支付寶轉帳查詢失敗: {0}",
+  "transferPayeeTypeInvalid": "支付寶: 不支持的收款人賬號類型: {0}",
+  "transferPayeeAccountRequired": "支付寶: 收款人賬號必填"
 }

@@ -6,12 +6,14 @@ import cn.daxpay.open.channel.douyin.client.req.DouyinPayReq;
 import cn.daxpay.open.channel.douyin.client.req.DouyinRefundReq;
 import cn.daxpay.open.channel.douyin.client.req.DouyinRefundSyncReq;
 import cn.daxpay.open.channel.douyin.client.req.DouyinSyncReq;
+import cn.daxpay.open.channel.douyin.client.req.DouyinTransferReq;
 import cn.daxpay.open.channel.douyin.client.resp.DouyinCallbackParseResp;
 import cn.daxpay.open.channel.douyin.client.resp.DouyinCloseResp;
 import cn.daxpay.open.channel.douyin.client.resp.DouyinPayResp;
 import cn.daxpay.open.channel.douyin.client.resp.DouyinRefundResp;
 import cn.daxpay.open.channel.douyin.client.resp.DouyinRefundSyncResp;
 import cn.daxpay.open.channel.douyin.client.resp.DouyinSyncResp;
+import cn.daxpay.open.channel.douyin.client.resp.DouyinTransferResp;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,6 +46,14 @@ public interface DouyinChannelClient {
     /// 退款同步(查询退款状态)
     @PostExchange("/channel/douyin/refund-sync")
     DaxResult<DouyinRefundSyncResp> refundSync(@RequestBody DouyinRefundSyncReq req);
+
+    /// 转账(商家转账)
+    @PostExchange("/channel/douyin/transfer")
+    DaxResult<DouyinTransferResp> transfer(@RequestBody DouyinTransferReq req);
+
+    /// 转账同步(查询转账状态)
+    @PostExchange("/channel/douyin/transfer-sync")
+    DaxResult<DouyinTransferResp> transferSync(@RequestBody DouyinTransferReq req);
 
     /// 支付回调验签解析(转发到子应用验签)
     @PostExchange("/channel/douyin/callback/parse-pay")

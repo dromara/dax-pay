@@ -56,5 +56,9 @@
   "authFailed": "Gagal mendapatkan pengecam pengguna (openId): {0}",
   "channelAppIdNotFound": "AppId [{0}] yang ditentukan tidak dikonfigurasikan dalam sistem",
   "appNotConfigured": "Aplikasi untuk {0} belum dikonfigurasi, silakan ikat di halaman konfigurasi aplikasi merchant saluran",
-  "appNotUnique": "Terdapat beberapa aplikasi jenis {0}, silakan konfigurasi pengikatan keupayaan secara eksplisit untuk memilih"
+  "appNotUnique": "Terdapat beberapa aplikasi jenis {0}, silakan konfigurasi pengikatan keupayaan secara eksplisit untuk memilih",
+  "transferFailed": "Pindahan WeChat gagal: {0}",
+  "transferOnlyOpenid": "WeChat hanya menyokong penerima openid",
+  "transferNameForbidden": "WeChat: nama penerima tidak dibenarkan untuk jumlah di bawah 0.3 CNY",
+  "transferNameRequired": "WeChat: nama penerima wajib untuk jumlah >= 2000 CNY"
 }

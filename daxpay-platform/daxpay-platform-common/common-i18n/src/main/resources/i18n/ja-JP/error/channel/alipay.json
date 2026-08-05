@@ -46,5 +46,9 @@
   "paymentGatewayUrlRequired": "支払いゲートウェイのベース URL が構成されていません。認証リダイレクト URI を構築できません",
   "appTypeCapabilityMismatch": "支付宝アプリ種別と支払い能力が一致しません",
   "appNotConfigured": "{0} に対応するアプリが未設定です。チャネル加盟店アプリ設定ページでバインドしてください",
-  "appNotUnique": "タイプ {0} のアプリが複数存在します。能力バインディングを明示的に設定して選択してください"
+  "appNotUnique": "タイプ {0} のアプリが複数存在します。能力バインディングを明示的に設定して選択してください",
+  "transferFailed": "Alipay送金エラー: {0}",
+  "transferQueryFailed": "Alipay送金照会エラー: {0}",
+  "transferPayeeTypeInvalid": "Alipay: 未対応の受取人アカウントタイプ: {0}",
+  "transferPayeeAccountRequired": "Alipay: 受取人アカウントは必須です"
 }

@@ -19,5 +19,11 @@
   "jsapiContextRequired": "Tandatangan JSAPI Douyin memerlukan salah satu daripada orderNo, code atau channelMchNo",
   "appTypeCapabilityMismatch": "Jenis aplikasi Douyin tidak sepadan dengan keupayaan pembayaran",
   "appNotConfigured": "Aplikasi untuk {0} belum dikonfigurasi, silakan ikat di halaman konfigurasi aplikasi merchant saluran",
-  "appNotUnique": "Terdapat beberapa aplikasi jenis {0}, silakan konfigurasi pengikatan keupayaan secara eksplisit untuk memilih"
+  "appNotUnique": "Terdapat beberapa aplikasi jenis {0}, silakan konfigurasi pengikatan keupayaan secara eksplisit untuk memilih",
+  "transferFailed": "Pindahan Douyin gagal: {0}",
+  "transferQueryFailed": "Pertanyaan pindahan Douyin gagal: {0}",
+  "transferEncryptFailed": "Penyulitan nama pindahan Douyin gagal: {0}",
+  "transferOnlyOpenid": "Douyin hanya menyokong penerima openid",
+  "transferNameRequired": "Douyin: nama penerima wajib untuk jumlah >= 2000 CNY",
+  "transferSceneNotConfigured": "Douyin: senario pindahan belum dikonfigurasi"
 }

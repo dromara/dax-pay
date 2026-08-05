@@ -19,5 +19,11 @@
   "jsapiContextRequired": "Ký JSAPI Douyin cần một trong orderNo, code hoặc channelMchNo",
   "appTypeCapabilityMismatch": "Loại ứng dụng Douyin không tương thích với khả năng thanh toán",
   "appNotConfigured": "Chưa cấu hình ứng dụng cho {0}, vui lòng liên kết tại trang cấu hình ứng dụng merchant kênh",
-  "appNotUnique": "Tồn tại nhiều ứng dụng loại {0}, vui lòng cấu hình liên kết năng lực rõ ràng để chọn"
+  "appNotUnique": "Tồn tại nhiều ứng dụng loại {0}, vui lòng cấu hình liên kết năng lực rõ ràng để chọn",
+  "transferFailed": "Chuyển khoản Douyin thất bại: {0}",
+  "transferQueryFailed": "Truy vấn chuyển khoản Douyin thất bại: {0}",
+  "transferEncryptFailed": "Mã hóa tên chuyển khoản Douyin thất bại: {0}",
+  "transferOnlyOpenid": "Douyin chỉ hỗ trợ người nhận openid",
+  "transferNameRequired": "Douyin: bắt buộc nhập tên người nhận khi >= 2000 CNY",
+  "transferSceneNotConfigured": "Douyin: chưa cấu hình kịch bản chuyển khoản"
 }

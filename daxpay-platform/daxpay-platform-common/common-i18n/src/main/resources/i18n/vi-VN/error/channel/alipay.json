@@ -46,5 +46,9 @@
   "paymentGatewayUrlRequired": "URL cơ sở của cổng thanh toán không được định cấu hình; không thể xây dựng URI chuyển hướng xác thực",
   "appTypeCapabilityMismatch": "Loại ứng dụng Alipay không tương thích với khả năng thanh toán",
   "appNotConfigured": "Chưa cấu hình ứng dụng cho {0}, vui lòng liên kết tại trang cấu hình ứng dụng merchant kênh",
-  "appNotUnique": "Tồn tại nhiều ứng dụng loại {0}, vui lòng cấu hình liên kết năng lực rõ ràng để chọn"
+  "appNotUnique": "Tồn tại nhiều ứng dụng loại {0}, vui lòng cấu hình liên kết năng lực rõ ràng để chọn",
+  "transferFailed": "Chuyển khoản Alipay thất bại: {0}",
+  "transferQueryFailed": "Truy vấn chuyển khoản Alipay thất bại: {0}",
+  "transferPayeeTypeInvalid": "Alipay: loại tài khoản người nhận không được hỗ trợ: {0}",
+  "transferPayeeAccountRequired": "Alipay: bắt buộc nhập tài khoản người nhận"
 }

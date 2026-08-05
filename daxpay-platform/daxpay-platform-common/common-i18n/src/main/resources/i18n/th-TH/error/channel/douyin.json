@@ -19,5 +19,11 @@
   "jsapiContextRequired": "การลงนาม JSAPI Douyin ต้องระบุ orderNo หรือ code หรือ channelMchNo",
   "appTypeCapabilityMismatch": "ประเภทแอป Douyin ไม่เข้ากันกับความสามารถการชำระเงิน",
   "appNotConfigured": "ยังไม่ได้กำหนดค่าแอปสำหรับ {0} กรุณาผูกที่หน้ากำหนดค่าแอปร้านค้าช่องทาง",
-  "appNotUnique": "มีแอปประเภท {0} หลายรายการ กรุณากำหนดค่าการผูกความสามารถอย่างชัดเจนเพื่อเลือก"
+  "appNotUnique": "มีแอปประเภท {0} หลายรายการ กรุณากำหนดค่าการผูกความสามารถอย่างชัดเจนเพื่อเลือก",
+  "transferFailed": "การโอนเงิน Douyin ล้มเหลว: {0}",
+  "transferQueryFailed": "การสอบถามการโอนเงิน Douyin ล้มเหลว: {0}",
+  "transferEncryptFailed": "การเข้ารหัสชื่อการโอน Douyin ล้มเหลว: {0}",
+  "transferOnlyOpenid": "Douyin รองรับผู้รับ openid เท่านั้น",
+  "transferNameRequired": "Douyin: ต้องใส่ชื่อผู้รับเมื่อมากกว่าหรือเท่ากับ 2000 หยวน",
+  "transferSceneNotConfigured": "Douyin: ยังไม่ได้กำหนดค่าสถานการณ์การโอน"
 }

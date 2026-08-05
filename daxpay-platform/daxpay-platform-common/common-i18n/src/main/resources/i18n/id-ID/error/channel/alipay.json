@@ -46,5 +46,9 @@
   "paymentGatewayUrlRequired": "URL dasar gateway pembayaran tidak dikonfigurasi; tidak dapat membuat URI pengalihan auth",
   "appTypeCapabilityMismatch": "Jenis aplikasi Alipay tidak cocok dengan kemampuan pembayaran",
   "appNotConfigured": "Aplikasi untuk {0} belum dikonfigurasi, silakan ikat di halaman konfigurasi aplikasi merchant channel",
-  "appNotUnique": "Ada beberapa aplikasi tipe {0}, silakan konfigurasi binding kapabilitas secara eksplisit untuk memilih"
+  "appNotUnique": "Ada beberapa aplikasi tipe {0}, silakan konfigurasi binding kapabilitas secara eksplisit untuk memilih",
+  "transferFailed": "Transfer Alipay gagal: {0}",
+  "transferQueryFailed": "Kueri transfer Alipay gagal: {0}",
+  "transferPayeeTypeInvalid": "Alipay: jenis akun penerima tidak didukung: {0}",
+  "transferPayeeAccountRequired": "Alipay: akun penerima wajib"
 }

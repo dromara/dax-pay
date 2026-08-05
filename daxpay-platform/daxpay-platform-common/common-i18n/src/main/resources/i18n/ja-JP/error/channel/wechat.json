@@ -56,5 +56,9 @@
   "authFailed": "ユーザー識別子 (openId) の取得に失敗しました: {0}",
   "channelAppIdNotFound": "指定された AppId [{0}] はシステムに構成されていません",
   "appNotConfigured": "{0} に対応するアプリが未設定です。チャネル加盟店アプリ設定ページでバインドしてください",
-  "appNotUnique": "タイプ {0} のアプリが複数存在します。能力バインディングを明示的に設定して選択してください"
+  "appNotUnique": "タイプ {0} のアプリが複数存在します。能力バインディングを明示的に設定して選択してください",
+  "transferFailed": "WeChat送金エラー: {0}",
+  "transferOnlyOpenid": "WeChatはopenid受取人のみサポートしています",
+  "transferNameForbidden": "WeChat: 0.3元未満は受取人氏名を入力できません",
+  "transferNameRequired": "WeChat: 2000元以上は受取人氏名が必須です"
 }

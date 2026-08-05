@@ -46,5 +46,9 @@
   "paymentGatewayUrlRequired": "Payment gateway base URL is not configured; cannot build auth redirect URI",
   "appTypeCapabilityMismatch": "Alipay app type is incompatible with the payment capability",
   "appNotConfigured": "No application configured for {0}, please bind one on the channel merchant app configuration page",
-  "appNotUnique": "Multiple applications of type {0} exist, please explicitly configure the capability binding to select one"
+  "appNotUnique": "Multiple applications of type {0} exist, please explicitly configure the capability binding to select one",
+  "transferFailed": "Alipay transfer failed: {0}",
+  "transferQueryFailed": "Alipay transfer query failed: {0}",
+  "transferPayeeTypeInvalid": "Alipay: unsupported payee account type: {0}",
+  "transferPayeeAccountRequired": "Alipay: payee account required"
 }

@@ -19,5 +19,11 @@
   "jsapiContextRequired": "抖音 JSAPI 驗簽須傳入 orderNo、code 或 channelMchNo 之一",
   "appTypeCapabilityMismatch": "抖音應用類型與支付能力不匹配",
   "appNotConfigured": "未設定 {0} 對應的應用，請前往通道商戶應用設定頁綁定",
-  "appNotUnique": "存在多個 {0} 類型的應用，請顯式設定能力綁定以明確選擇"
+  "appNotUnique": "存在多個 {0} 類型的應用，請顯式設定能力綁定以明確選擇",
+  "transferFailed": "抖音轉賬失敗: {0}",
+  "transferQueryFailed": "抖音轉賬查詢失敗: {0}",
+  "transferEncryptFailed": "抖音轉賬姓名加密失敗: {0}",
+  "transferOnlyOpenid": "抖音僅支持 openid 收款人",
+  "transferNameRequired": "抖音: 大於等於2000元必須填收款人姓名",
+  "transferSceneNotConfigured": "抖音: 轉賬場景未配置"
 }

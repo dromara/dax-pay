@@ -7,6 +7,7 @@ import cn.daxpay.open.channel.alipay.client.req.AlipayPayReq;
 import cn.daxpay.open.channel.alipay.client.req.AlipayRefundReq;
 import cn.daxpay.open.channel.alipay.client.req.AlipayRefundSyncReq;
 import cn.daxpay.open.channel.alipay.client.req.AlipaySyncReq;
+import cn.daxpay.open.channel.alipay.client.req.AlipayTransferReq;
 import cn.daxpay.open.channel.alipay.client.resp.AlipayAppAuthTokenResp;
 import cn.daxpay.open.channel.alipay.client.resp.AlipayCallbackParseResp;
 import cn.daxpay.open.channel.alipay.client.resp.AlipayCloseResp;
@@ -14,6 +15,7 @@ import cn.daxpay.open.channel.alipay.client.resp.AlipayPayResp;
 import cn.daxpay.open.channel.alipay.client.resp.AlipayRefundResp;
 import cn.daxpay.open.channel.alipay.client.resp.AlipayRefundSyncResp;
 import cn.daxpay.open.channel.alipay.client.resp.AlipaySyncResp;
+import cn.daxpay.open.channel.alipay.client.resp.AlipayTransferResp;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -45,6 +47,14 @@ public interface AlipayChannelClient {
     /// 退款同步(查询退款状态)
     @PostExchange("/channel/alipay/refund-sync")
     DaxResult<AlipayRefundSyncResp> refundSync(@RequestBody AlipayRefundSyncReq req);
+
+    /// 转账(单笔转账 alipay.fund.trans.uni.transfer)
+    @PostExchange("/channel/alipay/transfer")
+    DaxResult<AlipayTransferResp> transfer(@RequestBody AlipayTransferReq req);
+
+    /// 转账同步(查询转账状态)
+    @PostExchange("/channel/alipay/transfer-sync")
+    DaxResult<AlipayTransferResp> transferSync(@RequestBody AlipayTransferReq req);
 
     /// 支付回调验签解析(转发子应用)
     @PostExchange("/channel/alipay/callback/parse-pay")

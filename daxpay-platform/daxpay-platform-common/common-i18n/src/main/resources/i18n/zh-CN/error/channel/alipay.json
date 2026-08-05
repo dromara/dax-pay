@@ -46,5 +46,9 @@
   "paymentGatewayUrlRequired": "平台支付网关地址(paymentGatewayBaseUrl)未配置，无法生成授权回调地址",
   "appTypeCapabilityMismatch": "支付宝应用类型与支付能力不匹配",
   "appNotConfigured": "未配置 {0} 对应的应用，请前往通道商户应用配置页绑定",
-  "appNotUnique": "存在多个 {0} 类型的应用，请显式配置能力绑定以明确选择"
+  "appNotUnique": "存在多个 {0} 类型的应用，请显式配置能力绑定以明确选择",
+  "transferFailed": "支付宝转账失败: {0}",
+  "transferQueryFailed": "支付宝转账查询失败: {0}",
+  "transferPayeeTypeInvalid": "支付宝: 不支持的收款人账号类型: {0}",
+  "transferPayeeAccountRequired": "支付宝: 收款人账号必填"
 }
