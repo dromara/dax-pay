@@ -10,6 +10,8 @@ import cn.daxpay.open.payment.trade.order.entity.GatewayPayOrder;
 import cn.daxpay.open.payment.trade.order.entity.NormalPayOrder;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
+import cn.daxpay.open.payment.trade.transfer.convert.TransferTradeConvert;
+import cn.daxpay.open.payment.trade.transfer.entity.TransferTrade;
 import cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum;
 import cn.daxpay.open.platform.common.json.util.JacksonUtil;
 import cn.daxpay.open.platform.core.enums.pay.notice.NoticeContentModeEnum;
@@ -89,6 +91,24 @@ public class TradeNoticeBridge {
                 .setBizId(refundOrder.getId())
                 .setBizNo(refundOrder.getRefundNo())
                 .setOrderNotifyUrl(refundOrder.getNotifyUrl())
+                .setTransport(NoticeTransportEnum.HTTP).setFormat(NoticeFormatEnum.SYSTEM)
+                .setContentMode(NoticeContentModeEnum.SNAPSHOT)
+                .setContentOrRef(content));
+    }
+
+    /// 转账终态通知(通知快照取公共资金凭证, 通知地址取容器)
+    public void dispatchTransfer(TransferTrade trade, String notifyUrl, NoticeEventEnum event) {
+        if (trade == null || event == null) {
+            return;
+        }
+        String content = JacksonUtil.toJson(TransferTradeConvert.CONVERT.toResult(trade));
+        noticeDispatcher.dispatch(new NoticeDispatchCommand()
+                .setMchNo(trade.getMchNo())
+                .setAppId(trade.getAppId())
+                .setEvent(event.getCode())
+                .setBizId(trade.getId())
+                .setBizNo(trade.getTradeNo())
+                .setOrderNotifyUrl(notifyUrl)
                 .setTransport(NoticeTransportEnum.HTTP).setFormat(NoticeFormatEnum.SYSTEM)
                 .setContentMode(NoticeContentModeEnum.SNAPSHOT)
                 .setContentOrRef(content));

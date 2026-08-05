@@ -6,6 +6,9 @@ import cn.daxpay.open.payment.trade.order.dao.RefundOrderManager;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import cn.daxpay.open.payment.trade.runtime.service.sync.TradeSyncService;
+import cn.daxpay.open.payment.trade.transfer.dao.TransferTradeManager;
+import cn.daxpay.open.payment.trade.transfer.entity.TransferTrade;
+import cn.daxpay.open.payment.trade.transfer.runtime.service.TransferSyncService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.javacrumbs.shedlock.spring.annotation.SchedulerLock;
@@ -39,6 +42,8 @@ public class TradeSyncJob {
 
     private final PayTradeManager payTradeManager;
     private final RefundOrderManager refundOrderManager;
+    private final TransferTradeManager transferTradeManager;
+    private final TransferSyncService transferSyncService;
     private final TradeSyncService tradeSyncService;
 
     // ==================== 支付 PROCESSING 同步(分层窗口) ====================
@@ -146,6 +151,43 @@ public class TradeSyncJob {
         syncRefundBatch(now.minusDays(7), now.minusHours(24));
     }
 
+    // ==================== 转账 PROCESSING 同步(分层窗口) ====================
+    ///
+    /// 转账回调丢失/延迟消息失败后, 查通道真实状态纠正为 SUCCESS/CLOSE。
+    /// 与支付/退款同步共享转账凭证级 Redis 锁(payment:transfer-trade:{id}), 天然互斥。
+
+    /// 最新窗口: 创建 1~10 分钟的 PROCESSING 转账, 每分钟同步一次
+    @Scheduled(cron = "0 */1 * * * ?")
+    @SchedulerLock(name = "lock:tradeSync:transfer10M", lockAtMostFor = "50s", lockAtLeastFor = "5s")
+    public void syncTransfer10M() {
+        OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
+        syncTransferBatch(now.minusMinutes(10), now.minusMinutes(1));
+    }
+
+    /// 次新窗口: 创建 10 分钟~1 小时的 PROCESSING 转账, 每 10 分钟同步一次
+    @Scheduled(cron = "0 */10 * * * ?")
+    @SchedulerLock(name = "lock:tradeSync:transfer1H", lockAtMostFor = "8m", lockAtLeastFor = "30s")
+    public void syncTransfer1H() {
+        OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
+        syncTransferBatch(now.minusHours(1), now.minusMinutes(10));
+    }
+
+    /// 陈旧窗口: 创建 1~24 小时的 PROCESSING 转账, 每小时同步一次
+    @Scheduled(cron = "0 0 */1 * * ?")
+    @SchedulerLock(name = "lock:tradeSync:transfer1D", lockAtMostFor = "50m", lockAtLeastFor = "1m")
+    public void syncTransfer1D() {
+        OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
+        syncTransferBatch(now.minusHours(24), now.minusHours(1));
+    }
+
+    /// 死单兜底: 创建 1~7 天的 PROCESSING 转账, 每天凌晨同步一次
+    @Scheduled(cron = "0 30 1 * * ?")
+    @SchedulerLock(name = "lock:tradeSync:transfer7D", lockAtMostFor = "30m", lockAtLeastFor = "5m")
+    public void syncTransfer7D() {
+        OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
+        syncTransferBatch(now.minusDays(7), now.minusHours(24));
+    }
+
     // ==================== 批量处理 ====================
 
     /// 支付同步批量处理(逐笔容错, 单笔锁冲突/异常不阻断整批)
@@ -177,6 +219,23 @@ public class TradeSyncJob {
                 tradeSyncService.syncRefundOrder(refund.getRefundNo());
             } catch (Exception e) {
                 log.warn("退款同步跳过 refundNo={}", refund.getRefundNo(), e);
+            }
+        }
+    }
+
+    /// 转账同步批量处理(逐笔容错)
+    private void syncTransferBatch(OffsetDateTime start, OffsetDateTime end) {
+        List<TransferTrade> trades = transferTradeManager.findSyncTransfers(
+                PayFundStatusEnum.PROCESSING.getCode(), start, end);
+        if (trades.isEmpty()) {
+            return;
+        }
+        log.info("定时同步扫描转账命中 {} 笔, 开始处理", trades.size());
+        for (TransferTrade trade : trades) {
+            try {
+                transferSyncService.autoSync(trade.getTradeNo());
+            } catch (Exception e) {
+                log.warn("转账同步跳过 tradeNo={}", trade.getTradeNo(), e);
             }
         }
     }

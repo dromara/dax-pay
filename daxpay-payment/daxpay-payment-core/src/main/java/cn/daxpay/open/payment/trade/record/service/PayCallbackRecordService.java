@@ -75,6 +75,28 @@ public class PayCallbackRecordService {
         callbackRecordManager.save(record);
     }
 
+    /// 保存转账回调记录(trade_no 存 transferNo, out_trade_no 存 outTransferNo)
+    /// @param channelMchNo 通道商户号(回调 path 入站身份)
+    /// @param data 转账回调解析数据
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
+    public void saveTransfer(String channelMchNo, CallbackData data) {
+        if (data == null) {
+            return;
+        }
+        PayCallbackRecord record = new PayCallbackRecord()
+                .setTradeNo(data.getTradeNo())
+                .setOutTradeNo(data.getOutTradeNo())
+                .setProduct(null)
+                .setChannelMchNo(channelMchNo)
+                .setCallbackType(TradeFlowTypeEnum.TRANSFER.getCode())
+                .setNotifyInfo(toNotifyInfo(data.getCallbackData()))
+                .setStatus(resolveStatus(data.getCallbackStatus()))
+                .setErrorMsg(StrUtil.blankToDefault(data.getCallbackErrorMsg(), data.getTradeErrorMsg()));
+        // 显式写入商户号, 避免无上下文场景踩 Fill
+        record.setMchNo(paymentContext.getMchNo());
+        callbackRecordManager.save(record);
+    }
+
     /// 序列化回调报文; 空 Map 落 {}
     private String toNotifyInfo(Map<String, ?> callbackData) {
         Map<String, ?> map = Optional.ofNullable(callbackData).orElse(Collections.emptyMap());
