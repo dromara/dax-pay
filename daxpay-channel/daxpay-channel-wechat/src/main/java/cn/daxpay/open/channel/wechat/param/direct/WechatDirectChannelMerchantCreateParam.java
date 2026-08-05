@@ -31,4 +31,8 @@ public class WechatDirectChannelMerchantCreateParam {
     @Schema(description = "微信直连商户号")
     @NotBlank(message = "{validation.field.wxMchId.notBlank}")
     private String wxMchId;
+
+    /// 转账场景ID(商家转账到零钱, 微信转账时必填)
+    @Schema(description = "转账场景ID")
+    private String transferScene;
 }

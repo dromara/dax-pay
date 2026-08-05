@@ -24,4 +24,7 @@ public class WechatDirectChannelMerchantResult extends MchBaseResult {
 
     @Schema(description = "微信直连商户号")
     private String wxMchId;
+
+    @Schema(description = "转账场景ID(商家转账到零钱)")
+    private String transferScene;
 }

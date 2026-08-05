@@ -29,6 +29,9 @@ public class WechatDirectChannelMerchant extends MchBaseEntity implements ToResu
     /// 微信直连商户号
     private String wxMchId;
 
+    /// 转账场景ID(商家转账到零钱 transfer_scene, 未配置时发起转账报错)
+    private String transferScene;
+
     /// 转换
     @Override
     public WechatDirectChannelMerchantResult toResult() {

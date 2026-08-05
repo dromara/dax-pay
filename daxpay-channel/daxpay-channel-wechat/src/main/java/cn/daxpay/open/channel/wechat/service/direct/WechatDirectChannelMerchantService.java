@@ -62,6 +62,7 @@ public class WechatDirectChannelMerchantService {
         entity.setChannelMchNo(channelMchNo);
         entity.setProduct(param.getProduct());
         entity.setWxMchId(param.getWxMchId());
+        entity.setTransferScene(param.getTransferScene());
         wechatDirectChannelMerchantManager.save(entity);
     }
 

@@ -19,11 +19,6 @@ import lombok.experimental.FieldNameConstants;
 @Schema(title = "通道商户信息")
 public class ChannelMerchantResult extends MchBaseResult {
 
-    /// 商户名称(由 mchNo 翻译, 走系统 @Trans 机制)
-    @Trans(entity = MerchantInfo.class, source = MchBaseResult.Fields.mchNo, result = MerchantInfo.Fields.mchName)
-    @Schema(description = "商户名称")
-    private String mchName;
-
     /// 申请单ID
     @Schema(description = "申请单ID")
     private Long applyId;

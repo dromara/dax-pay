@@ -61,6 +61,7 @@ public class DouyinDirectChannelMerchantService {
         entity.setChannelMchNo(channelMchNo);
         entity.setProduct(param.getProduct());
         entity.setDyMchId(param.getDyMchId());
+        entity.setTransferScene(param.getTransferScene());
         douyinDirectChannelMerchantManager.save(entity);
     }
 
@@ -74,3 +75,4 @@ public class DouyinDirectChannelMerchantService {
                 .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
     }
 }
+

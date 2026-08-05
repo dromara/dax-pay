@@ -31,4 +31,9 @@ public class DouyinDirectChannelMerchantCreateParam {
     @Schema(description = "抖音商户号(MCHID)")
     @NotBlank(message = "{validation.field.dyMchId.notBlank}")
     private String dyMchId;
+
+    /// 转账场景ID(商家转账, 抖音转账时必填)
+    @Schema(description = "转账场景ID")
+    private String transferScene;
 }
+
