@@ -67,24 +67,64 @@ public class WxAppResolveService implements WxAppFacade {
     /// 仅服务商(WECHAT_ISV)及其他产品允许平台档兜底。
     @Override
     public WxAppView resolve(String mchNo, String channelMchNo, String capability, String channelAppId, String product) {
+        Optional<WxAppView> resolved = this.tryResolve(mchNo, channelMchNo, capability, channelAppId, product);
+        if (resolved.isPresent()) {
+            return resolved.get();
+        }
+        // 解析失败, 按场景抛对应异常(语义与重构前完全一致)
+        boolean direct = ProductEnum.WECHAT_PAY.getCode().equals(product);
+        // 显式指定了 channelAppId 但未命中
+        if (StrUtil.isNotBlank(channelAppId)) {
+            if (direct) {
+                // 直连商户未配置商户档应用
+                throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
+                        "error.payment.wx.directMchAppNotConfigured", channelAppId);
+            }
+            // 微信: 指定 AppId 未配置
+            throw new DataNotExistException("error.payment.wx.channelAppIdNotFound", channelAppId);
+        }
+        // 未指定 channelAppId, 能力绑定/默认绑均未命中
+        if (direct) {
+            // 微信: 直连商户未配置商户档应用
+            throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
+                    "error.payment.wx.directMchAppNotConfigured", capability);
+        }
+        // 微信: 未配置该能力对应的应用
+        throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
+                "error.payment.wx.appNotConfigured", capability);
+    }
+
+    /// 尽力解析单应用，解析不到返回 [Optional.empty] 而非抛异常
+    ///
+    /// 解析顺序与 [resolve] 完全一致, 供聚合通道(如 Adapay)在 wxAppId 可选场景使用。
+    @Override
+    public Optional<WxAppView> resolveOptional(String mchNo, String channelMchNo, String capability, String channelAppId, String product) {
+        return this.tryResolve(mchNo, channelMchNo, capability, channelAppId, product);
+    }
+
+    /// 尝试解析单应用, 解析失败返回 empty(不抛异常)
+    ///
+    /// 解析顺序: 显式 channelAppId → 通道能力绑 → 产品级平台默认绑。
+    /// [resolve] 与 [resolveOptional] 的共享内核, 区别仅在上层是否对 empty 抛异常。
+    private Optional<WxAppView> tryResolve(String mchNo, String channelMchNo, String capability, String channelAppId, String product) {
         boolean direct = ProductEnum.WECHAT_PAY.getCode().equals(product);
         // 1. 显式 channelAppId
         if (StrUtil.isNotBlank(channelAppId)) {
-            return this.resolveByChannelAppId(mchNo, channelAppId, direct);
+            return this.tryResolveByChannelAppId(mchNo, channelAppId, direct);
         }
         // 2. 通道能力绑定（同能力优先 merchant，其次 platform）
         if (StrUtil.isNotBlank(channelMchNo) && StrUtil.isNotBlank(capability)) {
             var merchantBind = wxChannelAppCapabilityManager.findByChannelMchNoAndCapabilityAndScope(
                     channelMchNo, capability, AppScopeEnum.MERCHANT.getCode());
             if (merchantBind.isPresent()) {
-                return this.getById(AppScopeEnum.MERCHANT, merchantBind.get().getWxAppRefId());
+                return Optional.of(this.getById(AppScopeEnum.MERCHANT, merchantBind.get().getWxAppRefId()));
             }
             // 直连商户不使用平台档应用, 跳过平台能力绑定
             if (!direct) {
                 var platformBind = wxChannelAppCapabilityManager.findByChannelMchNoAndCapabilityAndScope(
                         channelMchNo, capability, AppScopeEnum.PLATFORM.getCode());
                 if (platformBind.isPresent()) {
-                    return this.getById(AppScopeEnum.PLATFORM, platformBind.get().getWxAppRefId());
+                    return Optional.of(this.getById(AppScopeEnum.PLATFORM, platformBind.get().getWxAppRefId()));
                 }
             }
         }
@@ -92,16 +132,10 @@ public class WxAppResolveService implements WxAppFacade {
         if (!direct) {
             WxAppView productDefault = this.resolveProductDefault(product, capability);
             if (productDefault != null) {
-                return productDefault;
+                return Optional.of(productDefault);
             }
         }
-        // 微信: 直连商户未配置商户档应用 / 未配置该能力对应的应用
-        if (direct) {
-            throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
-                    "error.payment.wx.directMchAppNotConfigured", capability);
-        }
-        throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
-                "error.payment.wx.appNotConfigured", capability);
+        return Optional.empty();
     }
 
     /// 解析 ISV 双应用：platform(sp) 必填 + merchant(sub) 可选
@@ -152,30 +186,21 @@ public class WxAppResolveService implements WxAppFacade {
         return new WxIsvAppPair(platform, merchant);
     }
 
-    /// 按 channelAppId 解析单应用
+    /// 按 channelAppId 尝试解析, 未命中返回 empty(不抛异常)
     ///
     /// @param direct 是否直连产品(直连时商户表优先且不回退平台表)
-    private WxAppView resolveByChannelAppId(String mchNo, String channelAppId, boolean direct) {
+    private Optional<WxAppView> tryResolveByChannelAppId(String mchNo, String channelAppId, boolean direct) {
         // 直连商户优先查商户表, 且不回退到平台表
         if (direct) {
-            var mchApp = wxMchAppManager.findByMchNoAndWxAppId(mchNo, channelAppId);
-            if (mchApp.isPresent()) {
-                return this.toMerchantView(mchApp.get());
-            }
-            // 直连商户未配置商户档应用
-            throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
-                    "error.payment.wx.directMchAppNotConfigured", channelAppId);
+            return wxMchAppManager.findByMchNoAndWxAppId(mchNo, channelAppId)
+                    .map(this::toMerchantView);
         }
         var platform = wxPlatformAppManager.findByWxAppId(channelAppId);
         if (platform.isPresent()) {
-            return this.toPlatformView(platform.get());
+            return Optional.of(this.toPlatformView(platform.get()));
         }
-        var mchApp = wxMchAppManager.findByMchNoAndWxAppId(mchNo, channelAppId);
-        if (mchApp.isPresent()) {
-            return this.toMerchantView(mchApp.get());
-        }
-        // 微信: 指定 AppId 未配置
-        throw new DataNotExistException("error.payment.wx.channelAppIdNotFound", channelAppId);
+        return wxMchAppManager.findByMchNoAndWxAppId(mchNo, channelAppId)
+                .map(this::toMerchantView);
     }
 
     /// 产品级平台默认能力绑兜底：按 (product, capability) 查 wx_platform_app_capability
@@ -211,7 +236,7 @@ public class WxAppResolveService implements WxAppFacade {
     /// 按真实 wxAppId 解析：商户档优先, 平台档兜底
     ///
     /// 供开放接口认证场景: 对接方传入真实微信 AppId, 系统自行定位到对应应用。
-    /// 与 [resolveByChannelAppId] 的平台优先不同, 此方法商户优先(更严格安全边界)。
+    /// 与 [tryResolveByChannelAppId] 的平台优先不同, 此方法商户优先(更严格安全边界)。
     @Override
     public WxAppView resolveByWxAppId(String mchNo, String wxAppId) {
         var mchApp = wxMchAppManager.findByMchNoAndWxAppId(mchNo, wxAppId);

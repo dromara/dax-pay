@@ -14,6 +14,7 @@ import cn.daxpay.open.payment.wx.param.platform.WxPlatformAppCapabilityBatchPara
 import cn.daxpay.open.payment.wx.param.platform.WxPlatformAppCapabilityParam;
 import cn.daxpay.open.payment.wx.result.WxCapabilityOption;
 import cn.daxpay.open.payment.wx.result.platform.WxPlatformAppCapabilityResult;
+import cn.daxpay.open.payment.wx.service.WxAppResolveService;
 import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayCapabilityEnum;
@@ -29,7 +30,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -53,13 +53,13 @@ public class WxPlatformAppCapabilityService {
         if (StrUtil.isBlank(product)) {
             return List.of();
         }
-        List<WxPlatformAppCapability> rels = capabilityManager.listByProduct(product);
-        if (rels.isEmpty()) {
+        List<WxPlatformAppCapability> reals = capabilityManager.listByProduct(product);
+        if (reals.isEmpty()) {
             return List.of();
         }
         Map<Long, WxPlatformApp> appMap = wxPlatformAppManager.listAll().stream()
                 .collect(Collectors.toMap(WxPlatformApp::getId, Function.identity()));
-        return rels.stream()
+        return reals.stream()
                 .map(rel -> fillResult(rel, appMap.get(rel.getWxPlatformAppId())))
                 .toList();
     }

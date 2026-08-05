@@ -2,6 +2,8 @@ package cn.daxpay.open.payment.wx.facade;
 
 import cn.daxpay.open.payment.auth.core.AppScopeEnum;
 
+import java.util.Optional;
+
 /// # 微信开放应用解析门面
 ///
 /// 供微信/拉卡拉/易宝等通道统一解析 wxAppId + Secret，避免依赖通道私有应用表。
@@ -15,6 +17,15 @@ public interface WxAppFacade {
     ///
     /// @param product 支付产品编码（PayProduct.code），平台默认绑按产品隔离
     WxAppView resolve(String mchNo, String channelMchNo, String capability, String channelAppId, String product);
+
+    /// 尽力解析单应用，解析不到返回 [Optional.empty] 而非抛异常
+    ///
+    /// 解析顺序与 [resolve] 一致，区别仅在于未命中时不抛异常。
+    /// 供聚合通道(如 Adapay)在 wxAppId 可选场景使用: 通道商户未绑定微信应用时,
+    /// 凭证 wxAppId 留空, 由通道层决定是否上送。
+    ///
+    /// @param product 支付产品编码（PayProduct.code），平台默认绑按产品隔离
+    Optional<WxAppView> resolveOptional(String mchNo, String channelMchNo, String capability, String channelAppId, String product);
 
     /// 解析 ISV 双应用：platform(sp) + optional merchant(sub)
     ///
