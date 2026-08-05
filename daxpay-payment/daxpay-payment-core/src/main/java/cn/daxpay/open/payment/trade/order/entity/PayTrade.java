@@ -17,11 +17,12 @@ import java.time.OffsetDateTime;
 /// 统一资金交易表，记录每一笔资金动作（普通支付/预授权冻结/预授权捕获/周期代扣/合单子单）
 /// 与容器层（业务单/协议）分离，通过 trade_type + 容器关联字段建立联系。
 /// 保留资金动作固有属性、通道反查命脉字段，以及 **轻量组织冗余**
-///（source / channelMchNo / storeNo / provider），便于资金列表与汇总免 JOIN 容器；
+///（source / channel / channelMchNo / storeNo / provider），便于资金列表与汇总免 JOIN 容器；
 /// 完整业务上下文/路由细节/payBody/回执仍以容器为准。
 /// 过期时间只在容器，本表不存 expiredTime。
-/// 注意: 本表不冗余 channel(支付通道), 通道反查用 channelMchNo;
-/// 渠道分布报表/资金列表筛选走 provider(支付渠道)。
+/// channel(接入通道, B端机构维度) 与 provider(支付渠道, C端钱包维度) 是正交两个维度:
+/// channel 用于按接入通道(拉卡拉/银联商务等聚合)维度看资金, provider 用于按付款钱包(微信/支付宝等)维度看资金;
+/// 与 [cn.daxpay.open.payment.trade.transfer.entity.TransferTrade] 的 channel+provider 双冗余口径对齐。
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
@@ -77,6 +78,10 @@ public class PayTrade extends MchBaseEntity {
     /// 支付渠道(冗余自业务容器; 下单时由 method→[PayProviderEnum] 写入, 成功路径兜底补齐)
     /// @see cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum
     private String provider;
+
+    /// 支付通道(冗余自容器 product→[ChannelEnum]; 创建即终值, 与 provider 不同无需成功路径兜底)
+    /// @see cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum
+    private String channel;
 
     /// 门店号(冗余自业务容器, 可空; 权威在容器 storeNo)
     private String storeNo;

@@ -142,7 +142,7 @@ public class NormalPayAssistService {
     }
 
     /// 组装资金交易（未落库）; relationOrderNo 默认=orderNo, 特殊通道支付返回后可覆盖
-    /// channelMchNo / storeNo / provider 冗余自容器，资金列表与渠道报表免 JOIN
+    /// channel / channelMchNo / storeNo / provider 冗余自容器，资金列表与通道/渠道报表免 JOIN
     private PayTrade buildPayTrade(NormalPayParam payParam, NormalPayOrder normalOrder,
                                    String tradeNo, String orderNo, String source) {
         return PayTradeInitUtil.initProcessing(
@@ -157,7 +157,8 @@ public class NormalPayAssistService {
                 normalOrder.getChannelMchNo(),
                 normalOrder.getStoreNo(),
                 normalOrder.getTitle(),
-                normalOrder.getProvider());
+                normalOrder.getProvider(),
+                normalOrder.getChannel());
     }
 
     /// 注册超时关单延时消息

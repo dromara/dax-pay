@@ -166,7 +166,7 @@ public class GatewayPayHandleService {
         }
 
         // 默认上送网关业务单号; 特殊通道返回后可覆盖
-        // channelMchNo 取自路由后的 payParam; storeNo 冗余自预下单容器; provider 由 method 派生
+        // channelMchNo 取自路由后的 payParam; storeNo 冗余自预下单容器; provider 由 method 派生; channel 由 product 派生
         String provider = PayTradeProviderUtil.resolveProviderByMethod(payParam.getMethod());
         PayTrade trade = PayTradeInitUtil.initProcessing(
                 order.getAppId(),
@@ -180,7 +180,8 @@ public class GatewayPayHandleService {
                 payParam.getChannelMchNo(),
                 order.getStoreNo(),
                 order.getTitle(),
-                provider);
+                provider,
+                channel);
         payTradeManager.save(trade);
 
         this.fillRouteOnOrder(order, payParam, clientEnv, device);

@@ -17,3 +17,25 @@ CREATE UNIQUE INDEX IF NOT EXISTS "uk_adapay_direct_key_config_sandbox" ON "publ
   "sandbox" "pg_catalog"."bool_ops" ASC NULLS LAST
 ) WHERE deleted = false;
 COMMENT ON INDEX "public"."uk_adapay_direct_key_config_sandbox" IS '同一通道商户同一环境密钥唯一';
+
+-- ===== pay_trade 增加支付通道冗余字段 =====
+-- 冗余自容器 product→channel, 用于按接入通道维度看资金/报表免 JOIN; 与 pay_transfer_trade 口径对齐
+ALTER TABLE "public"."pay_trade" ADD COLUMN "channel" varchar(32) COLLATE "pg_catalog"."default";
+COMMENT ON COLUMN "public"."pay_trade"."channel" IS '支付通道(冗余自容器 product→channel; 创建即终值; 权威在容器 channel)';
+
+-- 存量数据回填: 从业务容器反向填充 channel
+-- 普通支付容器(normal)
+UPDATE "public"."pay_trade" t
+SET "channel" = c."channel"
+FROM "public"."pay_normal_order" c
+WHERE t."container_id" = c."id"
+  AND t."trade_type" = 'normal'
+  AND t."channel" IS NULL;
+
+-- 网关支付容器(gateway)
+UPDATE "public"."pay_trade" t
+SET "channel" = c."channel"
+FROM "public"."pay_gateway_order" c
+WHERE t."container_id" = c."id"
+  AND t."trade_type" = 'gateway'
+  AND t."channel" IS NULL;

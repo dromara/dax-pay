@@ -3266,6 +3266,7 @@ CREATE TABLE "public"."pay_trade" (
   "version" int4 NOT NULL DEFAULT 0,
   "deleted" bool NOT NULL DEFAULT false,
   "provider" varchar(32) COLLATE "pg_catalog"."default",
+  "channel" varchar(32) COLLATE "pg_catalog"."default",
   "title" varchar(255) COLLATE "pg_catalog"."default"
 )
 ;
@@ -3294,6 +3295,7 @@ COMMENT ON COLUMN "public"."pay_trade"."last_modified_time" IS '最后修改时�
 COMMENT ON COLUMN "public"."pay_trade"."version" IS '乐观锁版本';
 COMMENT ON COLUMN "public"."pay_trade"."deleted" IS '逻辑删除';
 COMMENT ON COLUMN "public"."pay_trade"."provider" IS '支付渠道(冗余自容器, 支付成功sync后回填; 权威在容器 provider)';
+COMMENT ON COLUMN "public"."pay_trade"."channel" IS '支付通道(冗余自容器 product→channel; 创建即终值; 权威在容器 channel)';
 COMMENT ON COLUMN "public"."pay_trade"."title" IS '订单标题';
 COMMENT ON TABLE "public"."pay_trade" IS '资金交易凭证';
 
