@@ -7,5 +7,8 @@
   "pay.timeout": "Tutup Pembayaran Tamat Masa",
   "pay.cancel": "Pembayaran Dibatalkan",
   "refund.fail": "Bayaran Balik Gagal",
-  "risk.hit": "Risiko Dikesan"
+  "risk.hit": "Risiko Dikesan",
+  "transfer.success": "Pindahan Berjaya",
+  "transfer.fail": "Pindahan Gagal",
+  "transfer.close": "Pindahan Ditutup"
 }

@@ -116,6 +116,16 @@
     "transferAlreadyProcessed": "转账单状态已处理,记录回调记录",
     "abnormal": "回调处理异常，请联系平台客服"
   },
+  "transfer": {
+    "processing": "转账处理中，请勿重复操作",
+    "onlyFailRetry": "只有失败状态的才可以重新发起转账",
+    "noDuplicate": "该商户转账号已存在，请勿重复转账",
+    "notFound": "转账单不存在",
+    "syncProcessing": "转账同步处理中，请勿重复操作",
+    "closeNotProcessing": "仅转账中的订单可手动关闭",
+    "channelNotSupport": "该通道暂不支持关闭转账",
+    "illegalTransition": "非法状态转换: {0} → {1}"
+  },
   "assist": {
     "mchPublicKeyEmpty": "商户公钥为空",
     "privateKeyEmpty": "商户私钥为空",

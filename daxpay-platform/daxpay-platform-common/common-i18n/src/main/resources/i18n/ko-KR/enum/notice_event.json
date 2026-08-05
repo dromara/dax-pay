@@ -7,5 +7,8 @@
   "pay.timeout": "결제 시간 초과 종료",
   "pay.cancel": "결제 취소",
   "refund.fail": "환불 실패",
-  "risk.hit": "리스크 적중"
+  "risk.hit": "리스크 적중",
+  "transfer.success": "송금 성공",
+  "transfer.fail": "송금 실패",
+  "transfer.close": "송금 닫기"
 }

@@ -116,6 +116,16 @@
     "transferAlreadyProcessed": "Transfer order already processed, recording callback",
     "abnormal": "Callback processing exception, please contact platform support"
   },
+  "transfer": {
+    "processing": "Transfer processing, please do not repeat",
+    "onlyFailRetry": "Only failed transfers can be initiated again",
+    "noDuplicate": "The merchant transfer no already exists, please do not repeat",
+    "notFound": "Transfer order does not exist",
+    "syncProcessing": "Transfer sync processing, please do not repeat",
+    "closeNotProcessing": "Only transfers in progress can be manually closed",
+    "channelNotSupport": "The channel does not support closing transfers",
+    "illegalTransition": "Illegal state transition: {0} → {1}"
+  },
   "assist": {
     "mchPublicKeyEmpty": "Merchant public key is empty",
     "privateKeyEmpty": "Merchant private key is empty",

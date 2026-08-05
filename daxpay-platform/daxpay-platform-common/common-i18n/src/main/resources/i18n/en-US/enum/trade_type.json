@@ -2,5 +2,6 @@
   "pay": "Payment",
   "refund": "Refund",
   "cashouts": "Withdrawal",
-  "settle": "Settlement"
+  "settle": "Settlement",
+  "transfer": "Transfer"
 }

@@ -107,6 +107,16 @@
     "transferNotFound": "Perintah pemindahan tidak ditemui, merakam panggilan balik",
     "transferAlreadyProcessed": "Pindahkan pesanan sudah diproses, merekodkan panggilan balik"
   },
+  "transfer": {
+    "processing": "Pindahan sedang diproses, jangan ulangi",
+    "onlyFailRetry": "Hanya pindahan yang gagal boleh dimulakan semula",
+    "noDuplicate": "Nombor pindahan peniaga sudah wujud, jangan ulangi",
+    "notFound": "Pesanan pindahan tidak wujud",
+    "syncProcessing": "Sinkronisasi pindahan sedang diproses, jangan ulangi",
+    "closeNotProcessing": "Hanya pindahan yang sedang berjalan boleh ditutup secara manual",
+    "channelNotSupport": "Saluran ini tidak menyokong penutupan pindahan",
+    "illegalTransition": "Peralihan status tidak sah: {0} → {1}"
+  },
   "assist": {
     "mchPublicKeyEmpty": "Kunci awam pedagang kosong",
     "privateKeyEmpty": "Kunci persendirian pedagang kosong",

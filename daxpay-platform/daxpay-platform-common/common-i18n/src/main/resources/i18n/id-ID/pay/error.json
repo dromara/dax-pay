@@ -107,6 +107,16 @@
     "transferNotFound": "Perintah transfer tidak ditemukan, merekam panggilan balik",
     "transferAlreadyProcessed": "Pesanan transfer sudah diproses, rekaman panggilan balik"
   },
+  "transfer": {
+    "processing": "Transfer sedang diproses, jangan ulangi",
+    "onlyFailRetry": "Hanya transfer dengan status gagal yang dapat dimulai ulang",
+    "noDuplicate": "Nomor transfer merchant sudah ada, jangan ulangi",
+    "notFound": "Pesanan transfer tidak ada",
+    "syncProcessing": "Sinkronisasi transfer sedang diproses, jangan ulangi",
+    "closeNotProcessing": "Hanya transfer yang sedang berjalan yang dapat ditutup manual",
+    "channelNotSupport": "Saluran ini tidak mendukung penutupan transfer",
+    "illegalTransition": "Transisi status tidak valid: {0} → {1}"
+  },
   "assist": {
     "mchPublicKeyEmpty": "Kunci publik pedagang kosong",
     "privateKeyEmpty": "Kunci pribadi pedagang kosong",

@@ -7,5 +7,8 @@
   "pay.timeout": "支付逾時關閉",
   "pay.cancel": "支付撤銷",
   "refund.fail": "退款失敗",
-  "risk.hit": "風控命中"
+  "risk.hit": "風控命中",
+  "transfer.success": "轉帳成功",
+  "transfer.fail": "轉帳失敗",
+  "transfer.close": "轉帳關閉"
 }

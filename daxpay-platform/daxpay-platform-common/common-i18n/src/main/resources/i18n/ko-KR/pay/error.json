@@ -116,6 +116,16 @@
     "transferAlreadyProcessed": "이전 주문이 이미 처리되었으며 콜백을 녹음하고 있습니다.",
     "abnormal": "콜백 처리 중 예외가 발생했습니다. 플랫폼 지원에 문의하세요"
   },
+  "transfer": {
+    "processing": "송금 처리 중입니다. 반복 작업하지 마세요",
+    "onlyFailRetry": "실패 상태만 다시 송금할 수 있습니다",
+    "noDuplicate": "이 상점 송금 번호가 이미 존재합니다. 반복 송금하지 마세요",
+    "notFound": "송금 주문이 존재하지 않습니다",
+    "syncProcessing": "송금 동기화 처리 중입니다. 반복 작업하지 마세요",
+    "closeNotProcessing": "송금 중인 주문만 수동으로 닫을 수 있습니다",
+    "channelNotSupport": "이 채널은 송금 닫기를 지원하지 않습니다",
+    "illegalTransition": "잘못된 상태 전환: {0} → {1}"
+  },
   "assist": {
     "mchPublicKeyEmpty": "판매자 공개 키가 비어 있습니다.",
     "privateKeyEmpty": "판매자 개인 키가 비어 있습니다.",

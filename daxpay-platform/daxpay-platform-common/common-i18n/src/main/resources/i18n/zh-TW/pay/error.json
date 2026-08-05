@@ -116,6 +116,16 @@
     "transferAlreadyProcessed": "轉賬單狀態已處理,記錄回撥記錄",
     "abnormal": "回撥處理異常，請聯繫平台客服"
   },
+  "transfer": {
+    "processing": "轉帳處理中，請勿重複操作",
+    "onlyFailRetry": "只有失敗狀態的才可以重新發起轉帳",
+    "noDuplicate": "該商户轉帳號已存在，請勿重複轉帳",
+    "notFound": "轉帳單不存在",
+    "syncProcessing": "轉帳同步處理中，請勿重複操作",
+    "closeNotProcessing": "僅轉帳中的訂單可手動關閉",
+    "channelNotSupport": "該通道暫不支持關閉轉帳",
+    "illegalTransition": "非法狀態轉換: {0} → {1}"
+  },
   "assist": {
     "mchPublicKeyEmpty": "商戶公鑰為空",
     "privateKeyEmpty": "商戶私鑰為空",

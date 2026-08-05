@@ -28,6 +28,12 @@ public enum NoticeEventEnum implements I18nSupport {
     REFUND_FAIL("refund.fail"),
     /// 退款关闭
     REFUND_CLOSE("refund.close"),
+    /// 转账成功
+    TRANSFER_SUCCESS("transfer.success"),
+    /// 转账失败
+    TRANSFER_FAIL("transfer.fail"),
+    /// 转账关闭
+    TRANSFER_CLOSE("transfer.close"),
     /// 风控命中(黑名单/海外 IP 等规则触发)
     RISK_HIT("risk.hit"),
     ;

@@ -281,6 +281,12 @@ public interface PermCodes {
             String MENU = "trade:refund";
         }
 
+        /// 转账单(微信/支付宝/抖音) menuCode=trade:transfer
+        interface Transfer {
+            /// 菜单编码
+            String MENU = "trade:transfer";
+        }
+
         /// 资金交易凭证 menuCode=trade:fund
         interface Fund {
             /// 菜单编码

@@ -2,5 +2,6 @@
   "pay": "支払い",
   "refund": "返金",
   "cashouts": "出金",
-  "settle": "決済"
+  "settle": "決済",
+  "transfer": "送金"
 }

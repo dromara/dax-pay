@@ -20,6 +20,8 @@ public enum TradeTypeEnum implements I18nSupport {
     CASHOUTS("cashouts"),
     /// 结算
     SETTLE("settle"),
+    /// 转账
+    TRANSFER("transfer"),
     ;
 
     private final String code;

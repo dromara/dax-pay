@@ -7,5 +7,8 @@
   "pay.timeout": "Đóng thanh toán hết hạn",
   "pay.cancel": "Hủy thanh toán",
   "refund.fail": "Hoàn tiền thất bại",
-  "risk.hit": "Rủi ro phát hiện"
+  "risk.hit": "Rủi ro phát hiện",
+  "transfer.success": "Chuyển khoản thành công",
+  "transfer.fail": "Chuyển khoản thất bại",
+  "transfer.close": "Chuyển khoản đóng"
 }

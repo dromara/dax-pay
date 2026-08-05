@@ -107,6 +107,16 @@
     "transferNotFound": "Không tìm thấy lệnh chuyển, đang ghi lại cuộc gọi lại",
     "transferAlreadyProcessed": "Lệnh chuyển đã được xử lý, đang ghi lại cuộc gọi lại"
   },
+  "transfer": {
+    "processing": "Chuyển khoản đang xử lý, vui lòng không lặp lại",
+    "onlyFailRetry": "Chỉ chuyển khoản thất bại mới có thể khởi động lại",
+    "noDuplicate": "Số chuyển khoản thương gia đã tồn tại, vui lòng không lặp lại",
+    "notFound": "Đơn chuyển khoản không tồn tại",
+    "syncProcessing": "Đồng bộ chuyển khoản đang xử lý, vui lòng không lặp lại",
+    "closeNotProcessing": "Chỉ đơn chuyển khoản đang xử lý mới có thể đóng thủ công",
+    "channelNotSupport": "Kênh này không hỗ trợ đóng chuyển khoản",
+    "illegalTransition": "Chuyển trạng thái không hợp lệ: {0} → {1}"
+  },
   "assist": {
     "mchPublicKeyEmpty": "Khóa công khai của người bán trống",
     "privateKeyEmpty": "Khóa riêng của người bán trống",

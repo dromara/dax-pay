@@ -2,5 +2,6 @@
   "pay": "支付",
   "refund": "退款",
   "cashouts": "提現",
-  "settle": "結算"
+  "settle": "結算",
+  "transfer": "轉賬"
 }
