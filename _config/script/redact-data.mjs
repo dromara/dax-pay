@@ -57,10 +57,10 @@ const KEEP_TABLES = new Set([
 
 // ---------- 行级保留：iam_user_info 的 bootx 超管（id=1） ----------
 const BOOTX_ADMIN_TABLE = 'iam_user_info'
-const BOOTX_ADMIN_RE = /^INSERT INTO public\.iam_user_info\s+VALUES\s*\(\s*1\s*,/
+const BOOTX_ADMIN_RE = /^INSERT INTO (?:public\.)?iam_user_info\s+VALUES\s*\(\s*1\s*,/
 
 // ---------- 解析规则 ----------
-const INSERT_RE = /^INSERT INTO public\.(\w+)\s+VALUES\b/i
+const INSERT_RE = /^INSERT INTO (?:public\.)?(\w+)\s+VALUES\b/i
 const STMT_END_RE = /\);\s*$/
 
 // ---------- 统计 ----------
