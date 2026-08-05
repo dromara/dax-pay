@@ -22,17 +22,14 @@ public class AdapayDirectKeyConfigService {
     private final ChannelMerchantManager channelMerchantManager;
 
     /// 根据通道商户号查询密钥配置, 不存在则创建默认记录
-    ///
-    /// @param sandbox 沙箱标志(生产/沙箱双环境并存, 按环境分别存一份密钥)
     @Transactional(rollbackFor = Exception.class)
-    public AdapayDirectKeyConfig findByChannelMchNo(String channelMchNo, boolean sandbox) {
-        var existing = adapayDirectKeyConfigManager.findByChannelMchNoAndSandbox(channelMchNo, sandbox);
+    public AdapayDirectKeyConfig findByChannelMchNo(String channelMchNo) {
+        var existing = adapayDirectKeyConfigManager.findByChannelMchNo(channelMchNo);
         if (existing.isPresent()) {
             return existing.get();
         }
         var config = new AdapayDirectKeyConfig()
-                .setChannelMchNo(channelMchNo)
-                .setSandbox(sandbox);
+                .setChannelMchNo(channelMchNo);
         // 查询通用通道商户主表填充商户号
         channelMerchantManager.findByChannelMchNo(channelMchNo)
                 .ifPresent(mch -> config.setMchNo(mch.getMchNo()));
@@ -46,8 +43,7 @@ public class AdapayDirectKeyConfigService {
     /// mchNo/channelMchNo 为不可变身份字段(实体 FieldStrategy.NEVER)。
     @Transactional(rollbackFor = Exception.class)
     public void save(AdapayDirectKeyConfigParam param) {
-        boolean sandbox = Boolean.TRUE.equals(param.getSandbox());
-        var config = this.findByChannelMchNo(param.getChannelMchNo(), sandbox);
+        var config = this.findByChannelMchNo(param.getChannelMchNo());
         AdapayDirectKeyConfigConvert.CONVERT.copy(param, config);
         adapayDirectKeyConfigManager.updateById(config);
     }

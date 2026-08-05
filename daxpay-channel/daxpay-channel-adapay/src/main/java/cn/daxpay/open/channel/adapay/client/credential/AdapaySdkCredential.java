@@ -24,7 +24,4 @@ public class AdapaySdkCredential {
 
     /// 微信应用 AppId(微信 JSAPI/APP/小程序支付上送 wx_app_id, 其余场景为空)
     private String wxAppId;
-
-    /// 是否沙箱环境
-    private Boolean sandbox;
 }

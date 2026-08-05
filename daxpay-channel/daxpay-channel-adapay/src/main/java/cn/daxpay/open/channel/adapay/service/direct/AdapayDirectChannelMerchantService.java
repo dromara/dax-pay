@@ -55,8 +55,7 @@ public class AdapayDirectChannelMerchantService {
         channelMerchantManager.save(channelMerchant);
         // 写Adapay 直连配置(adapayAppId/apiKey/privateKey/publicKey 由密钥配置单独维护)
         var keyConfig = new AdapayDirectKeyConfig()
-                .setChannelMchNo(channelMchNo)
-                .setSandbox(sandbox);
+                .setChannelMchNo(channelMchNo);
         keyConfig.setMchNo(param.getMchNo());
         adapayDirectKeyConfigManager.save(keyConfig);
     }

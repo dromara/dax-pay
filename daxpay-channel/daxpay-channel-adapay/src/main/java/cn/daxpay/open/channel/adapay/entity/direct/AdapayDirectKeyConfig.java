@@ -43,9 +43,6 @@ public class AdapayDirectKeyConfig extends MchBaseEntity implements ToResult<Ada
     @TableField(typeHandler = DataEncryptTypeHandler.class)
     private String publicKey;
 
-    /// 是否沙箱环境
-    private Boolean sandbox;
-
     @Override
     public AdapayDirectKeyConfigResult toResult() {
         return AdapayDirectKeyConfigConvert.CONVERT.toResult(this);

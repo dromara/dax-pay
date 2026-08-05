@@ -2,7 +2,6 @@ package cn.daxpay.open.channel.adapay.param.direct;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -18,10 +17,6 @@ public class AdapayDirectKeyConfigParam {
     @NotBlank(message = "{validation.field.channelMerchantNo.notBlank}")
     @Schema(description = "通道商户号")
     private String channelMchNo;
-
-    @NotNull(message = "{validation.field.sandbox.notNull}")
-    @Schema(description = "是否沙箱环境")
-    private Boolean sandbox;
 
     @Schema(description = "Adapay 支付应用 ID")
     private String adapayAppId;

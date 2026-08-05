@@ -12,7 +12,6 @@ import cn.daxpay.open.platform.core.rest.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -48,9 +47,8 @@ public class AdapayDirectChannelMerchantController {
     @Operation(summary = "根据通道商户号查询密钥配置")
     @GetMapping("/find-key-config")
     public Result<AdapayDirectKeyConfigResult> findKeyConfig(
-            @NotBlank(message = "{validation.field.channelMerchantNo.notBlank}") String channelMchNo,
-            @NotNull(message = "{validation.field.sandbox.notNull}") Boolean sandbox) {
-        var config = adapayDirectKeyConfigService.findByChannelMchNo(channelMchNo, sandbox);
+            @NotBlank(message = "{validation.field.channelMerchantNo.notBlank}") String channelMchNo) {
+        var config = adapayDirectKeyConfigService.findByChannelMchNo(channelMchNo);
         var result = config.toResult();
         result.setApiKeyConfigured(config.getApiKey() != null);
         result.setPrivateKeyConfigured(config.getPrivateKey() != null);

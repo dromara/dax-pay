@@ -17,14 +17,6 @@ public class AdapayDirectKeyConfigManager extends BaseManager<AdapayDirectKeyCon
                 .oneOpt();
     }
 
-    /// 根据通道商户号和沙箱标志查询(双环境并存)
-    public Optional<AdapayDirectKeyConfig> findByChannelMchNoAndSandbox(String channelMchNo, boolean sandbox) {
-        return lambdaQuery()
-                .eq(AdapayDirectKeyConfig::getChannelMchNo, channelMchNo)
-                .eq(AdapayDirectKeyConfig::getSandbox, sandbox)
-                .oneOpt();
-    }
-
     /// 根据通道商户号删除
     public void deleteByChannelMchNo(String channelMchNo) {
         lambdaUpdate()

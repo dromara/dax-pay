@@ -63,10 +63,10 @@ public class AdapayDirectProductStrategy extends AbsProductStrategy {
         return false;
     }
 
-    /// Adapay Adapay 提供测试环境(test_api_key)与生产环境(live_api_key)
+    /// Adapay 沙箱不可用, 不支持环境切换
     @Override
     public boolean isSandbox() {
-        return true;
+        return false;
     }
 
     /// 标准商户调用: 直连商户持有全部调用配置
