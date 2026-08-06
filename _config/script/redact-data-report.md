@@ -86,8 +86,10 @@
 | 表 | 保留行 | 标识 |
 |----|--------|------|
 | `iam_user_info` | 1 行 | `id=1`（username=`bootx`，name=`超级管理员`，client_code=`admin`）—— 系统内置超级管理员 |
+| `iam_user_expand_info` | 1 行 | `id=1`——内置超管的扩展信息。**必须与 `iam_user_info` 同 id 保留**：登录后 `getLoginAfterUserInfo` 按 id 查此表，缺行则抛 `UserInfoNotExistsException`，token 签发成功也无法进入系统 |
 
 > 该账号在 `iam_user_role` 中无角色绑定记录，推断为代码层面识别的内置超管（拥有全部权限），故 `iam_user_role` 可整表清除。
+> `iam_user_password_security` 虽也属超管关联表，但 `getPasswordStatus` 用 `.orElse(null)` 优雅降级（返回 `initialPassword=true`），缺行不卡登录，故**不**纳入行级保留，保持整表清除。
 
 ### 5.2 清除清单（约 63 张表，整表跳过）
 
@@ -101,7 +103,7 @@
 `mch_credential`、`pay_easy_pay_credential`。
 
 #### D. 用户认证与隐私
-`iam_user_info`（仅留 id=1）、`iam_user_password_history`、`iam_user_two_factor`、`iam_user_social`、`iam_user_role`、`iam_user_expand_info`、`iam_user_password_security`、`iam_user_dashboard_preference`、`mch_user`。
+`iam_user_info`（仅留 id=1）、`iam_user_password_history`、`iam_user_two_factor`、`iam_user_social`、`iam_user_role`、`iam_user_password_security`、`iam_user_dashboard_preference`、`mch_user`。（注：`iam_user_expand_info` 已改为行级保留 id=1，见 §5.1）
 
 #### E. 平台配置
 `system_platform_config`（含明文 OSS 密钥，整表清）、`system_platform_encrypt_config`（加密平台认证配置）。
@@ -143,12 +145,13 @@ const KEEP_TABLES = new Set([
   'system_sensitive_word',
 ])
 
-// iam_user_info 行级保留：id=1 (bootx 超管)
-const BOOTX_ADMIN_RE = /^INSERT INTO public\.iam_user_info\s+VALUES\s*\(\s*1\s*,/
+// 内置超管关联表行级保留：id=1 (bootx) —— iam_user_info + iam_user_expand_info
+const BOOTX_ADMIN_TABLES = new Set(['iam_user_info', 'iam_user_expand_info'])
+const BOOTX_ADMIN_RE = /^INSERT INTO public\.(?:iam_user_info|iam_user_expand_info)\s+VALUES\s*\(\s*1\s*,/
 
 function handleInsert(table, lines) {
-  if (KEEP_TABLES.has(table)) return output(lines)        // ① 种子表保留
-  if (BOOTX_ADMIN_RE.test(lines[0])) return output(lines) // ② bootx 行保留
+  if (KEEP_TABLES.has(table)) return output(lines)                       // ① 种子表保留
+  if (BOOTX_ADMIN_TABLES.has(table) && BOOTX_ADMIN_RE.test(lines[0])) return output(lines) // ② bootx 行保留
   // ③ 其余清除
   writeRedactedMark(table)
 }

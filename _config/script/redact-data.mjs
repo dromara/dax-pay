@@ -6,8 +6,10 @@
  * 策略：保留 18 张系统种子表 + bootx 内置超管(id=1)，其余整表清除。
  *
  * 三原则决策：
- *   ① 表 ∈ KEEP_TABLES（系统种子）          → 整表原样保留
- *   ② iam_user_info 且 id=1 (bootx 超管)     → 该行保留，同表其余行清除
+ *   ① 表 ∈ KEEP_TABLES（系统种子）              → 整表原样保留
+ *   ② 内置超管关联表且 id=1 (bootx)              → 该行保留，同表其余行清除
+ *      （iam_user_info 账号主表 + iam_user_expand_info 扩展信息，
+ *       后者登录后拉用户信息必需，缺则抛 UserInfoNotExistsException）
  *   ③ 其余                                   → 整表跳过（写审计注释）
  *
  * 格式假设：pg_dump --inserts（INSERT INTO public.表名 VALUES (...)，无列名）。
@@ -55,9 +57,11 @@ const KEEP_TABLES = new Set([
   'system_sensitive_word',
 ])
 
-// ---------- 行级保留：iam_user_info 的 bootx 超管（id=1） ----------
-const BOOTX_ADMIN_TABLE = 'iam_user_info'
-const BOOTX_ADMIN_RE = /^INSERT INTO (?:public\.)?iam_user_info\s+VALUES\s*\(\s*1\s*,/
+// ---------- 行级保留：内置超管 bootx(id=1) 的关联表 ----------
+// iam_user_info: 账号主表
+// iam_user_expand_info: 用户扩展信息（登录后拉用户信息必需，缺则 getLoginAfterUserInfo 抛 UserInfoNotExistsException）
+const BOOTX_ADMIN_TABLES = new Set(['iam_user_info', 'iam_user_expand_info'])
+const BOOTX_ADMIN_RE = /^INSERT INTO (?:public\.)?(?:iam_user_info|iam_user_expand_info)\s+VALUES\s*\(\s*1\s*,/
 
 // ---------- 解析规则 ----------
 const INSERT_RE = /^INSERT INTO (?:public\.)?(\w+)\s+VALUES\b/i
@@ -102,8 +106,8 @@ function handleInsert(table, lines) {
     for (const ln of lines) output.write(ln + '\n')
     return
   }
-  // ② iam_user_info 行级保留：bootx 超管 (id=1)
-  if (table === BOOTX_ADMIN_TABLE && BOOTX_ADMIN_RE.test(lines[0])) {
+  // ② 内置超管关联表行级保留：bootx (id=1)
+  if (BOOTX_ADMIN_TABLES.has(table) && BOOTX_ADMIN_RE.test(lines[0])) {
     bump(table, true)
     for (const ln of lines) output.write(ln + '\n')
     return
@@ -149,11 +153,11 @@ rl.on('close', () => {
 
 function printReport() {
   const keptSeedTables = []
-  const partialTables = [] // 行级保留表（iam_user_info）
+  const partialTables = [] // 行级保留表（内置超管关联表）
   const clearedTables = []
   for (const [t, s] of stats) {
     if (KEEP_TABLES.has(t)) keptSeedTables.push([t, s])
-    else if (t === BOOTX_ADMIN_TABLE) partialTables.push([t, s])
+    else if (BOOTX_ADMIN_TABLES.has(t)) partialTables.push([t, s])
     else clearedTables.push([t, s])
   }
 
@@ -165,7 +169,8 @@ function printReport() {
   lines.push('')
   lines.push('========== 脱敏统计（白名单模式） ==========')
   lines.push(`[保留·种子表] ${keptSeedTables.length} 张表，INSERT ${sumKept} 条（全保留）`)
-  lines.push(`[保留·行级] iam_user_info：INSERT ${partialTables[0]?.[1].total ?? 0} → 保留 ${partialTables[0]?.[1].kept ?? 0} (bootx id=1)，清除 ${sumPartialCleared}`)
+  const partialDetail = partialTables.map(([t, s]) => `${t}(${s.total}→${s.kept})`).join(', ') || '无'
+  lines.push(`[保留·行级] 内置超管(id=1)关联表：${partialDetail}，清除 ${sumPartialCleared}`)
   lines.push(`[清除] ${clearedTables.length} 张表，丢弃 INSERT ${sumCleared} 条`)
   lines.push('---- 清除明细 ----')
   for (const [t, s] of clearedTables.sort((a, b) => a[0].localeCompare(b[0]))) {

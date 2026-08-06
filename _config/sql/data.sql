@@ -3705,6 +3705,8 @@ INSERT INTO iam_perm_code VALUES (2072377871723388928, 'trade:order:view', 'trad
 INSERT INTO iam_perm_code VALUES (2072990657130180608, 'trade:refund:manage', 'trade:refund', true, '', 1, 1, 1, false, '2026-07-03 10:27:41.620782+00', '2026-07-15 03:59:23.715999+00', 'perm.trade:refund:manage');
 INSERT INTO iam_perm_code VALUES (2072990657130180609, 'trade:refund:view', 'trade:refund', true, '', 1, 1, 1, false, '2026-07-03 10:27:41.620782+00', '2026-07-15 03:59:23.717505+00', 'perm.trade:refund:view');
 INSERT INTO iam_perm_code VALUES (2079866295577419776, 'trade:callback-record:view', 'trade:callback-record', true, '', 1, 1, 0, false, '2026-07-22 09:49:01.56951+00', '2026-07-22 09:49:01.575017+00', 'perm.trade:callback-record:view');
+INSERT INTO iam_perm_code VALUES (2083000000000000001, 'trade:transfer:view', 'trade:transfer', true, '', 1, 1, 0, false, '2026-08-05 16:00:00+00', '2026-08-05 16:00:00+00', 'perm.trade:transfer:view');
+INSERT INTO iam_perm_code VALUES (2083000000000000002, 'trade:transfer:manage', 'trade:transfer', true, '', 1, 1, 0, false, '2026-08-05 16:00:00+00', '2026-08-05 16:00:00+00', 'perm.trade:transfer:manage');
 INSERT INTO iam_perm_code VALUES (2079866295615168512, 'trade:mch-notice:manage', 'trade:mch-notice', true, '', 1, 1, 0, false, '2026-07-22 09:49:01.578524+00', '2026-07-22 09:49:01.578524+00', 'perm.trade:mch-notice:manage');
 INSERT INTO iam_perm_code VALUES (2079866295619362816, 'trade:mch-notice:view', 'trade:mch-notice', true, '', 1, 1, 0, false, '2026-07-22 09:49:01.579524+00', '2026-07-22 09:49:01.579524+00', 'perm.trade:mch-notice:view');
 INSERT INTO iam_perm_code VALUES (2082811057154473984, 'merchant:gateway-pay-config:manage', 'merchant:gateway-pay-config', true, NULL, 1, 1, 0, false, '2026-07-30 12:50:27.440009+00', '2026-07-30 12:50:27.44601+00', 'perm.merchant:gateway-pay-config:manage');
@@ -4165,6 +4167,7 @@ INSERT INTO iam_role_menu VALUES (2083360959857102849, 2, NULL, 91112);
 --
 
 -- REDACTED: iam_user_expand_info (整表清除)
+INSERT INTO iam_user_expand_info VALUES (1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, false, NULL, NULL, NULL, '2026-03-28 14:26:08+00', NULL);
 
 
 --
