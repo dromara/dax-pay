@@ -796,6 +796,9 @@
     "riskEnabled": {
       "notNull": "Risk control master toggle cannot be empty"
     },
+    "blacklistEnabled": {
+      "notNull": "Blacklist blocking toggle cannot be empty"
+    },
     "riskBlockBeforePay": {
       "notNull": "Block-on-hit toggle cannot be empty"
     },
@@ -807,6 +810,15 @@
     },
     "blockOverseasIp": {
       "notNull": "Overseas IP block toggle cannot be empty"
+    },
+    "provinceBlacklistEnabled": {
+      "notNull": "Province-level blocking toggle cannot be empty"
+    },
+    "geoFenceEnabled": {
+      "notNull": "Geo-fence toggle cannot be empty"
+    },
+    "geoFenceStrategy": {
+      "notNull": "Geo-fence strategy cannot be empty"
     },
     "reqId": {
       "notBlank": "Request ID is required",

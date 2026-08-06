@@ -258,6 +258,18 @@ public interface PermCodes {
                 /// 菜单编码
                 String MENU = "payment:risk:hit";
             }
+
+            /// 支付安全配置（接口防重放 + 风控开关） menuCode=payment:risk:security
+            interface Security {
+                /// 菜单编码
+                String MENU = "payment:risk:security";
+            }
+
+            /// 商户风控配置（地理围栏等商户级风控） menuCode=payment:risk:mch-config
+            interface MchConfig {
+                /// 菜单编码
+                String MENU = "payment:risk:mch-config";
+            }
         }
     }
 

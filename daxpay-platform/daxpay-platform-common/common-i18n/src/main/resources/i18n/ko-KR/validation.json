@@ -792,6 +792,9 @@
     "riskEnabled": {
       "notNull": "리스크 관리 마스터 스위치는 필수입니다"
     },
+    "blacklistEnabled": {
+      "notNull": "블랙리스트 차단 스위치는 필수입니다"
+    },
     "riskBlockBeforePay": {
       "notNull": "히트 시 차단 스위치는 필수입니다"
     },
@@ -803,6 +806,15 @@
     },
     "blockOverseasIp": {
       "notNull": "해외 IP 차단 스위치는 필수입니다"
+    },
+    "provinceBlacklistEnabled": {
+      "notNull": "지역별 차단 스위치는 필수입니다"
+    },
+    "geoFenceEnabled": {
+      "notNull": "지오펜스 스위치는 필수입니다"
+    },
+    "geoFenceStrategy": {
+      "notNull": "지오펜스 전략은 필수입니다"
     },
     "reqId": {
       "notBlank": "요청 ID는 필수입니다",

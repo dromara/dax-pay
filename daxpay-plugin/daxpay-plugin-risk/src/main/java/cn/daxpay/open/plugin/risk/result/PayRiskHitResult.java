@@ -87,4 +87,7 @@ public class PayRiskHitResult extends BaseResult {
 
     @Schema(description = "门店号")
     private String storeNo;
+
+    @Schema(description = "地理围栏命中时生效的策略")
+    private String geoFenceStrategy;
 }

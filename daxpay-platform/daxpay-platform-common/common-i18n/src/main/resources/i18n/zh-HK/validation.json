@@ -792,6 +792,9 @@
     "riskEnabled": {
       "notNull": "風控總開關不能為空"
     },
+    "blacklistEnabled": {
+      "notNull": "黑名單攔截開關不能為空"
+    },
     "riskBlockBeforePay": {
       "notNull": "命中阻斷開關不能為空"
     },
@@ -803,6 +806,15 @@
     },
     "blockOverseasIp": {
       "notNull": "海外 IP 攔截開關不能為空"
+    },
+    "provinceBlacklistEnabled": {
+      "notNull": "省級地區攔截開關不能為空"
+    },
+    "geoFenceEnabled": {
+      "notNull": "地理圍欄開關不能為空"
+    },
+    "geoFenceStrategy": {
+      "notNull": "地理圍欄策略不能為空"
     },
     "reqId": {
       "notBlank": "請求ID不可為空",

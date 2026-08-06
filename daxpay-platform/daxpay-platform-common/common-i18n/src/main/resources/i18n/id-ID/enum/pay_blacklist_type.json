@@ -2,5 +2,6 @@
   "ip": "IP",
   "alipay_user": "Pengguna Alipay",
   "wechat_openid": "OpenId WeChat",
-  "overseas_ip": "IP Luar Negeri"
+  "overseas_ip": "IP Luar Negeri",
+  "province": "Provinsi"
 }

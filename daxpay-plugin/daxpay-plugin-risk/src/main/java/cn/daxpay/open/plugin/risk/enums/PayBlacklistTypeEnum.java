@@ -20,7 +20,11 @@ public enum PayBlacklistTypeEnum implements I18nSupport {
     /// 微信 OpenId（绑定平台支付应用）
     WECHAT_OPENID("wechat_openid"),
     /// 海外 IP（地域策略命中, 非黑名单来源）
-    OVERSEAS_IP("overseas_ip");
+    OVERSEAS_IP("overseas_ip"),
+    /// IP 归属省份（省级地区名单，value 存省行政区划编码，如"44"）
+    PROVINCE("province"),
+    /// IP 归属城市（市级地区名单，value 存市行政区划编码，如"4403"；直辖市城市名单存省编码）
+    CITY("city");
 
     private final String code;
 

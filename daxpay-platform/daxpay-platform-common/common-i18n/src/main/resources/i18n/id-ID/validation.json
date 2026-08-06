@@ -799,6 +799,9 @@
     "riskEnabled": {
       "notNull": "Status aktivasi pengelolaan risiko wajib diisi"
     },
+    "blacklistEnabled": {
+      "notNull": "Saklar pemblokiran daftar hitam tidak boleh kosong"
+    },
     "riskBlockBeforePay": {
       "notNull": "Pilihan blokir sebelum pembayaran wajib diisi"
     },
@@ -810,6 +813,15 @@
     },
     "blockOverseasIp": {
       "notNull": "Saklar blokir IP luar negeri tidak boleh kosong"
+    },
+    "provinceBlacklistEnabled": {
+      "notNull": "Saklar pemblokiran tingkat provinsi tidak boleh kosong"
+    },
+    "geoFenceEnabled": {
+      "notNull": "Saklar geo-pagar tidak boleh kosong"
+    },
+    "geoFenceStrategy": {
+      "notNull": "Strategi geo-pagar tidak boleh kosong"
     },
     "itemId": {
       "notBlank": "ID item kasir tidak boleh kosong"

@@ -87,6 +87,9 @@ public class PayRiskHit extends MpBaseEntity implements ToResult<PayRiskHitResul
     /// 门店号（围栏命中快照）
     private String storeNo;
 
+    /// 地理围栏命中时生效的策略（strict/balanced/loose, 围栏命中快照）
+    private String geoFenceStrategy;
+
     @Override
     public PayRiskHitResult toResult() {
         return PayRiskHitConvert.CONVERT.toResult(this);

@@ -1738,7 +1738,6 @@ CREATE TABLE "public"."mch_info" (
   "admin_user_id" int8,
   "status" varchar(32) COLLATE "pg_catalog"."default",
   "subject_type" varchar(32) COLLATE "pg_catalog"."default",
-  "geo_fence_enabled" bool NOT NULL DEFAULT false,
   "deleted" bool NOT NULL DEFAULT false,
   "creator" int8,
   "create_time" timestamp(6),
@@ -1754,7 +1753,6 @@ COMMENT ON COLUMN "public"."mch_info"."mch_short_name" IS '商户简称';
 COMMENT ON COLUMN "public"."mch_info"."admin_user_id" IS '关联管理员用户ID';
 COMMENT ON COLUMN "public"."mch_info"."status" IS '状态';
 COMMENT ON COLUMN "public"."mch_info"."subject_type" IS '主体类型';
-COMMENT ON COLUMN "public"."mch_info"."geo_fence_enabled" IS '是否启用地理围栏';
 COMMENT ON COLUMN "public"."mch_info"."deleted" IS '删除标志';
 COMMENT ON COLUMN "public"."mch_info"."creator" IS '创建者ID';
 COMMENT ON COLUMN "public"."mch_info"."create_time" IS '创建时间';
@@ -1762,6 +1760,48 @@ COMMENT ON COLUMN "public"."mch_info"."last_modifier" IS '最后修改者ID';
 COMMENT ON COLUMN "public"."mch_info"."last_modified_time" IS '最后修改时间';
 COMMENT ON COLUMN "public"."mch_info"."version" IS '版本号(乐观锁)';
 COMMENT ON TABLE "public"."mch_info" IS '商户信息表';
+
+-- ----------------------------
+-- Table structure for mch_risk_config
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."mch_risk_config";
+CREATE TABLE "public"."mch_risk_config" (
+  "id" int8 NOT NULL,
+  "mch_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "geo_fence_enabled" bool NOT NULL DEFAULT false,
+  "deleted" bool NOT NULL DEFAULT false,
+  "creator" int8,
+  "create_time" timestamp(6),
+  "last_modifier" int8,
+  "last_modified_time" timestamp(6),
+  "version" int4 NOT NULL DEFAULT 0
+)
+;
+COMMENT ON COLUMN "public"."mch_risk_config"."id" IS '主键';
+COMMENT ON COLUMN "public"."mch_risk_config"."mch_no" IS '商户号';
+COMMENT ON COLUMN "public"."mch_risk_config"."geo_fence_enabled" IS '是否启用地理围栏（商户级 opt-in）';
+COMMENT ON COLUMN "public"."mch_risk_config"."deleted" IS '删除标志';
+COMMENT ON COLUMN "public"."mch_risk_config"."creator" IS '创建者ID';
+COMMENT ON COLUMN "public"."mch_risk_config"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."mch_risk_config"."last_modifier" IS '最后修改者ID';
+COMMENT ON COLUMN "public"."mch_risk_config"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."mch_risk_config"."version" IS '版本号(乐观锁)';
+COMMENT ON TABLE "public"."mch_risk_config" IS '商户风控配置表';
+
+-- ----------------------------
+-- Table structure for base_city_adjacent
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."base_city_adjacent";
+CREATE TABLE "public"."base_city_adjacent" (
+  "id" bigserial NOT NULL,
+  "city_code" varchar(4) COLLATE "pg_catalog"."default" NOT NULL,
+  "adjacent_city_code" varchar(4) COLLATE "pg_catalog"."default" NOT NULL
+)
+;
+COMMENT ON COLUMN "public"."base_city_adjacent"."id" IS '主键ID（DB 自增, 纯关系表数据导入专用）';
+COMMENT ON COLUMN "public"."base_city_adjacent"."city_code" IS '城市编码（base_city.code）';
+COMMENT ON COLUMN "public"."base_city_adjacent"."adjacent_city_code" IS '相邻城市编码（base_city.code）';
+COMMENT ON TABLE "public"."base_city_adjacent" IS '城市接壤关系表（双向存储，围栏 balanced 邻市容错用）';
 
 -- ----------------------------
 -- Table structure for mch_notice_record
@@ -3141,7 +3181,8 @@ CREATE TABLE "public"."pay_risk_hit" (
   "remark" varchar(255) COLLATE "pg_catalog"."default",
   "client_city" varchar(64) COLLATE "pg_catalog"."default",
   "store_city" varchar(64) COLLATE "pg_catalog"."default",
-  "store_no" varchar(64) COLLATE "pg_catalog"."default"
+  "store_no" varchar(64) COLLATE "pg_catalog"."default",
+  "geo_fence_strategy" varchar(16) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."pay_risk_hit"."id" IS '主键';
@@ -3172,6 +3213,7 @@ COMMENT ON COLUMN "public"."pay_risk_hit"."remark" IS '备注';
 COMMENT ON COLUMN "public"."pay_risk_hit"."client_city" IS '客户端 IP 归属城市（ip2region 解析快照）';
 COMMENT ON COLUMN "public"."pay_risk_hit"."store_city" IS '门店所在城市（围栏命中快照）';
 COMMENT ON COLUMN "public"."pay_risk_hit"."store_no" IS '门店号（围栏命中快照）';
+COMMENT ON COLUMN "public"."pay_risk_hit"."geo_fence_strategy" IS '地理围栏命中时生效的策略（strict/balanced/loose）';
 COMMENT ON TABLE "public"."pay_risk_hit" IS '支付风险命中记录（事前拦截与事后命中，供运营预警与处置）';
 
 -- ----------------------------
@@ -5278,6 +5320,24 @@ COMMENT ON INDEX "public"."idx_mch_info_status" IS '状态筛选';
 -- Primary Key structure for table mch_info
 -- ----------------------------
 ALTER TABLE "public"."mch_info" ADD CONSTRAINT "mch_info_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Primary Key / Indexes structure for table mch_risk_config
+-- ----------------------------
+ALTER TABLE "public"."mch_risk_config" ADD CONSTRAINT "mch_risk_config_pkey" PRIMARY KEY ("id");
+CREATE UNIQUE INDEX "uk_mch_risk_config_mch_no" ON "public"."mch_risk_config" USING btree ("mch_no");
+COMMENT ON INDEX "uk_mch_risk_config_mch_no" IS '同一商户风控配置唯一（1:1 商户）';
+
+-- ----------------------------
+-- Primary Key structure for table base_city_adjacent
+-- ----------------------------
+ALTER TABLE "public"."base_city_adjacent" ADD CONSTRAINT "base_city_adjacent_pkey" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- Indexes structure for table base_city_adjacent
+-- ----------------------------
+CREATE UNIQUE INDEX "uk_base_city_adjacent" ON "public"."base_city_adjacent" USING btree ("city_code", "adjacent_city_code");
+COMMENT ON INDEX "uk_base_city_adjacent" IS '同一城市与其相邻城市关系唯一（防重复灌入）';
 
 -- ----------------------------
 -- Indexes structure for table mch_notice_record

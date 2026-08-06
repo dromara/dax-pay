@@ -792,6 +792,9 @@
     "riskEnabled": {
       "notNull": "リスク管理のメインスイッチは必須です"
     },
+    "blacklistEnabled": {
+      "notNull": "ブラックリストブロックスイッチは必須です"
+    },
     "riskBlockBeforePay": {
       "notNull": "ヒット時ブロックスイッチは必須です"
     },
@@ -803,6 +806,15 @@
     },
     "blockOverseasIp": {
       "notNull": "海外 IP ブロック スイッチは必須です"
+    },
+    "provinceBlacklistEnabled": {
+      "notNull": "都道府県別ブロックスイッチは必須です"
+    },
+    "geoFenceEnabled": {
+      "notNull": "ジオフェンススイッチは必須です"
+    },
+    "geoFenceStrategy": {
+      "notNull": "ジオフェンス戦略は必須です"
     },
     "reqId": {
       "notBlank": "リクエストIDは必須です",

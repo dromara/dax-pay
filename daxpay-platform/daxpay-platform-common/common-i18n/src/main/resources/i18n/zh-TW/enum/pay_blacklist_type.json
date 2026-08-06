@@ -2,5 +2,6 @@
   "ip": "IP",
   "alipay_user": "支付寶用戶",
   "wechat_openid": "微信 OpenId",
-  "overseas_ip": "海外IP"
+  "overseas_ip": "海外IP",
+  "province": "省份"
 }

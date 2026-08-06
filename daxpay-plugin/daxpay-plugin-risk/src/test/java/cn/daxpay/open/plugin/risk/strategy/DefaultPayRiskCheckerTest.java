@@ -57,6 +57,7 @@ class DefaultPayRiskCheckerTest {
     private static final String ALIPAY_USER_TYPE = PayBlacklistTypeEnum.ALIPAY_USER.getCode();
     private static final String WECHAT_OPENID_TYPE = PayBlacklistTypeEnum.WECHAT_OPENID.getCode();
     private static final String OVERSEAS_IP_TYPE = PayBlacklistTypeEnum.OVERSEAS_IP.getCode();
+    private static final String PROVINCE_TYPE = PayBlacklistTypeEnum.PROVINCE.getCode();
     private static final String BLACKLIST_MSG_KEY = "pay.error.risk.blacklist";
 
     @Mock
@@ -253,8 +254,8 @@ class DefaultPayRiskCheckerTest {
     }
 
     @Test
-    @DisplayName("海外检查: blockOverseasIp=null 时不触发地域检查")
-    void overseasIp_switchNull_shouldNotInvokeLookup() {
+    @DisplayName("海外检查: blockOverseasIp=null 时不触发海外命中")
+    void overseasIp_switchNull_shouldNotTriggerOverseasCheck() {
         PayRiskCheckContext ctx = new PayRiskCheckContext()
                 .setClientIp("8.8.8.8")
                 .setBlockOverseasIp(null)
@@ -262,8 +263,30 @@ class DefaultPayRiskCheckerTest {
 
         assertDoesNotThrow(() -> checker.checkBeforePay(ctx));
 
-        verify(ipToRegionService, never()).getRegionByIp(anyString());
-        verify(payRiskHitService, never()).recordHit(any(), anyString(), anyString(), any());
+        // 海外 IP 开关 null → 不产生 overseas_ip 命中
+        verify(payRiskHitService, never()).recordHit(any(), eq(OVERSEAS_IP_TYPE), anyString(), any());
+    }
+
+    // ==================== 黑名单开关 ====================
+
+    @Test
+    @DisplayName("黑名单开关: blacklistEnabled 关闭(null)时不触发 IP/用户标识检查")
+    void blacklist_switchOff_shouldNotCheck() {
+        PayRiskCheckContext ctx = new PayRiskCheckContext()
+                .setClientIp("1.2.3.4")
+                .setChannel(ChannelEnum.ALIPAY.getCode())
+                .setOpenId("uid-1")
+                .setBlockOverseasIp(false)
+                .setBlacklistEnabled(null)
+                .setProvinceBlacklistEnabled(false)
+                .setBlockOnHit(true);
+
+        assertDoesNotThrow(() -> checker.checkBeforePay(ctx));
+
+        // 黑名单开关关闭 → 不查 IP/用户标识名单
+        verify(payBlacklistService, never()).findActive(eq(IP_TYPE), anyString(), any());
+        verify(payBlacklistService, never()).findActive(eq(ALIPAY_USER_TYPE), anyString(), any());
+        verify(payBlacklistService, never()).findActive(eq(WECHAT_OPENID_TYPE), anyString(), any());
     }
 
     // ==================== 黑名单 - IP ====================
@@ -418,6 +441,92 @@ class DefaultPayRiskCheckerTest {
         verify(payRiskHitService, never()).recordHit(any(), eq(ALIPAY_USER_TYPE), eq("uid-a"), any());
     }
 
+    // ==================== 省级地区黑名单 ====================
+
+    @Test
+    @DisplayName("省级名单: provinceBlacklistEnabled 关闭(null/false)时不触发检查")
+    void provinceBlacklist_switchOff_shouldNotCheck() {
+        when(ipToRegionService.getRegionByIp("114.114.114.114"))
+                .thenReturn(regionWithProvince("中国", "广东省", "电信"));
+        PayRiskCheckContext ctx = new PayRiskCheckContext()
+                .setClientIp("114.114.114.114")
+                .setBlockOverseasIp(false)
+                .setProvinceBlacklistEnabled(null)
+                .setBlockOnHit(true);
+
+        assertDoesNotThrow(() -> checker.checkBeforePay(ctx));
+
+        // 开关关闭 → 不调 ip2region, 不查省级名单
+        verify(ipToRegionService, never()).getRegionByIp(anyString());
+        verify(payBlacklistService, never()).findActive(eq(PROVINCE_TYPE), anyString(), any());
+    }
+
+    @Test
+    @DisplayName("省级名单: IP 归属省在黑名单中命中阻断")
+    void provinceBlacklist_hit_shouldThrow() {
+        when(ipToRegionService.getRegionByIp("114.114.114.114"))
+                .thenReturn(regionWithProvince("中国", "广东省", "电信"));
+        when(payBlacklistService.findActive(eq(PROVINCE_TYPE), eq("广东省"), eq(null)))
+                .thenReturn(Optional.of(bl(55L)));
+        PayRiskCheckContext ctx = noOverseasCtx().setClientIp("114.114.114.114");
+
+        BizInfoException ex = assertThrows(BizInfoException.class,
+                () -> checker.checkBeforePay(ctx));
+
+        assertEquals(BLACKLIST_MSG_KEY, ex.getMessageKey());
+        verify(payRiskHitService).recordHit(any(), eq(PROVINCE_TYPE), eq("广东省"), eq(55L));
+    }
+
+    @Test
+    @DisplayName("省级名单: IP 归属省不在黑名单中放行")
+    void provinceBlacklist_miss_shouldPass() {
+        when(ipToRegionService.getRegionByIp("114.114.114.114"))
+                .thenReturn(regionWithProvince("中国", "广东省", "电信"));
+        PayRiskCheckContext ctx = noOverseasCtx().setClientIp("114.114.114.114");
+
+        assertDoesNotThrow(() -> checker.checkBeforePay(ctx));
+
+        verify(payBlacklistService).findActive(eq(PROVINCE_TYPE), eq("广东省"), eq(null));
+        verify(payRiskHitService, never()).recordHit(any(), eq(PROVINCE_TYPE), anyString(), any());
+    }
+
+    @Test
+    @DisplayName("省级名单: 内网 IP 不查省份")
+    void provinceBlacklist_innerIp_shouldSkip() {
+        PayRiskCheckContext ctx = noOverseasCtx().setClientIp("192.168.1.1");
+
+        assertDoesNotThrow(() -> checker.checkBeforePay(ctx));
+
+        verify(ipToRegionService, never()).getRegionByIp(anyString());
+        verify(payBlacklistService, never()).findActive(eq(PROVINCE_TYPE), anyString(), any());
+    }
+
+    @Test
+    @DisplayName("省级名单: ip2region 返回 null fail-open")
+    void provinceBlacklist_nullRegion_shouldFailOpen() {
+        when(ipToRegionService.getRegionByIp("114.114.114.114")).thenReturn(null);
+        PayRiskCheckContext ctx = noOverseasCtx().setClientIp("114.114.114.114");
+
+        assertDoesNotThrow(() -> checker.checkBeforePay(ctx));
+
+        verify(payBlacklistService, never()).findActive(eq(PROVINCE_TYPE), anyString(), any());
+        verify(payRiskHitService, never()).recordHit(any(), eq(PROVINCE_TYPE), anyString(), any());
+    }
+
+    @Test
+    @DisplayName("省级名单: checkAfterPay 事后补录仅记录不阻断")
+    void provinceBlacklist_afterPay_shouldRecordOnly() {
+        when(ipToRegionService.getRegionByIp("114.114.114.114"))
+                .thenReturn(regionWithProvince("中国", "广东省", "电信"));
+        when(payBlacklistService.findActive(eq(PROVINCE_TYPE), eq("广东省"), eq(null)))
+                .thenReturn(Optional.of(bl(55L)));
+        PayRiskCheckContext ctx = noOverseasCtx().setClientIp("114.114.114.114");
+
+        assertDoesNotThrow(() -> checker.checkAfterPay(ctx));
+
+        verify(payRiskHitService).recordHit(any(), eq(PROVINCE_TYPE), eq("广东省"), eq(55L));
+    }
+
     // ==================== hasOpenIdBlacklist 缓存 ====================
 
     @Test
@@ -457,6 +566,8 @@ class DefaultPayRiskCheckerTest {
     private static PayRiskCheckContext noOverseasCtx() {
         return new PayRiskCheckContext()
                 .setBlockOverseasIp(false)
+                .setBlacklistEnabled(true)
+                .setProvinceBlacklistEnabled(true)
                 .setBlockOnHit(true);
     }
 
@@ -471,5 +582,10 @@ class DefaultPayRiskCheckerTest {
     /** 构造仅含 country/isp 的 IpRegion */
     private static IpRegion region(String country, String isp) {
         return new IpRegion().setCountry(country).setIsp(isp);
+    }
+
+    /** 构造含 province 的 IpRegion（省级名单测试用） */
+    private static IpRegion regionWithProvince(String country, String province, String isp) {
+        return new IpRegion().setCountry(country).setProvince(province).setIsp(isp);
     }
 }

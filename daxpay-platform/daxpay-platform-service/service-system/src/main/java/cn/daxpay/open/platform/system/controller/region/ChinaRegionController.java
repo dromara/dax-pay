@@ -1,5 +1,6 @@
 package cn.daxpay.open.platform.system.controller.region;
 
+import cn.daxpay.open.platform.system.result.region.GeoFencePreviewResult;
 import cn.daxpay.open.platform.system.result.region.RegionResult;
 import cn.daxpay.open.platform.system.service.region.ChinaRegionService;
 import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
@@ -61,6 +62,16 @@ public class ChinaRegionController {
     @GetMapping("/all-region-by-parent-code")
     public Result<List<RegionResult>> findAllRegionByParentCode(@NotBlank(message = "{validation.field.regionCode.notBlank}") String code) {
         return Res.ok(chinaRegionService.findAllRegionByParentCode(code));
+    }
+
+    /// 地理围栏策略预览: 查询指定城市的交界邻市与同省全部城市, 用于演示页面模拟三级地理围栏策略放行范围
+    ///
+    /// @param cityCode 城市编码(base_city.code, 4位)
+    /// @return 预览结果
+    @Operation(summary = "地理围栏策略预览")
+    @GetMapping("/geo-fence-preview")
+    public Result<GeoFencePreviewResult> previewGeoFence(@NotBlank(message = "{validation.field.regionCode.notBlank}") String cityCode) {
+        return Res.ok(chinaRegionService.previewGeoFence(cityCode));
     }
 }
 

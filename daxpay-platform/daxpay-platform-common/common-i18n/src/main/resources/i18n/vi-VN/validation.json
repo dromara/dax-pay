@@ -799,6 +799,9 @@
     "riskEnabled": {
       "notNull": "Trạng thái kích hoạt quản lý rủi ro là bắt buộc"
     },
+    "blacklistEnabled": {
+      "notNull": "Công tắc chặn danh sách đen không được để trống"
+    },
     "riskBlockBeforePay": {
       "notNull": "Tùy chọn chặn trước thanh toán là bắt buộc"
     },
@@ -810,6 +813,15 @@
     },
     "blockOverseasIp": {
       "notNull": "Công tắc chặn IP nước ngoài không được để trống"
+    },
+    "provinceBlacklistEnabled": {
+      "notNull": "Công tắc chặn cấp tỉnh không được để trống"
+    },
+    "geoFenceEnabled": {
+      "notNull": "Công tắc hàng rào địa lý không được để trống"
+    },
+    "geoFenceStrategy": {
+      "notNull": "Chiến lược hàng rào địa lý không được để trống"
     },
     "itemId": {
       "notBlank": "ID mục thanh toán quầy không được để trống"

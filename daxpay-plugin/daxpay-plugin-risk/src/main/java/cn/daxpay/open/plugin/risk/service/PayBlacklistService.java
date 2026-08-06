@@ -157,7 +157,8 @@ public class PayBlacklistService {
             return;
         }
         if (PayBlacklistTypeEnum.IP.getCode().equals(type)
-                || PayBlacklistTypeEnum.ALIPAY_USER.getCode().equals(type)) {
+                || PayBlacklistTypeEnum.ALIPAY_USER.getCode().equals(type)
+                || PayBlacklistTypeEnum.PROVINCE.getCode().equals(type)) {
             param.setWxAppId(null);
             return;
         }
