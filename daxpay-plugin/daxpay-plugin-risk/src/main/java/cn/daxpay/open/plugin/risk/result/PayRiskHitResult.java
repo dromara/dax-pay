@@ -78,4 +78,13 @@ public class PayRiskHitResult extends BaseResult {
 
     @Schema(description = "备注")
     private String remark;
+
+    @Schema(description = "客户端IP归属城市")
+    private String clientCity;
+
+    @Schema(description = "门店所在城市")
+    private String storeCity;
+
+    @Schema(description = "门店号")
+    private String storeNo;
 }

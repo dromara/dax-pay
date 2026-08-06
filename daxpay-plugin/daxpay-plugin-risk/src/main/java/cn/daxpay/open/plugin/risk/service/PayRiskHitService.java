@@ -67,7 +67,11 @@ public class PayRiskHitService {
                 .setClientIp(ctx.getClientIp())
                 .setOpenid(ctx.getOpenId())
                 .setBuyerId(ctx.getBuyerId())
-                .setScene(StrUtil.blankToDefault(ctx.getScene(), PayRiskHitSceneEnum.UNKNOWN.getCode()));
+                .setScene(StrUtil.blankToDefault(ctx.getScene(), PayRiskHitSceneEnum.UNKNOWN.getCode()))
+                // 围栏命中位置快照（IP 城市 / 门店城市 / 门店号）
+                .setClientCity(ctx.getClientCity())
+                .setStoreCity(ctx.getStoreCity())
+                .setStoreNo(ctx.getStoreNo());
         payRiskHitManager.save(hit);
     }
 

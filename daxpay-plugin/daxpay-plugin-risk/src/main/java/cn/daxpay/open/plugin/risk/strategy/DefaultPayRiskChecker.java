@@ -48,6 +48,9 @@ public class DefaultPayRiskChecker implements PayRiskChecker {
 
     private static final String OPEN_ID_BLACKLIST_CACHE_KEY = "hasOpenId";
 
+    /// 地理围栏命中类型（非黑名单来源, 记录 IP 城市与门店城市不一致）
+    private static final String HIT_TYPE_GEO_FENCE = "geo_fence";
+
     @Override
     public void checkBeforePay(PayRiskCheckContext ctx) {
         if (ctx == null) {
@@ -56,18 +59,27 @@ public class DefaultPayRiskChecker implements PayRiskChecker {
         ctx.setPhase(PayRiskHitPhaseEnum.BEFORE_PAY.getCode());
         // null/true=阻断下单；false=仅落命中（对齐 riskBlockBeforePay）
         boolean throwOnHit = !Boolean.FALSE.equals(ctx.getBlockOnHit());
-        // IP 名单（全局生效）
-        rejectIfBlocked(ctx, PayBlacklistTypeEnum.IP.getCode(), ctx.getClientIp(), null, throwOnHit);
-        // 用户标识：按通道映射名单类型
-        boolean identityBlocked = checkUserIdentity(ctx, ctx.getOpenId(), throwOnHit);
-        if (!identityBlocked && StrUtil.isBlank(ctx.getOpenId())) {
-            log.warn("支付前 openId 缺失, 用户标识黑名单降级为仅 IP 校验 + 事后补录: "
-                    + "tradeType={}, method={}, mchNo={}, clientIp={}",
-                    ctx.getTradeType(), ctx.getMethod(), ctx.getMchNo(), ctx.getClientIp());
+        // L1 黑名单（IP / 用户标识, 受 blacklistEnabled 开关控制）
+        if (Boolean.TRUE.equals(ctx.getBlacklistEnabled())) {
+            // IP 名单
+            rejectIfBlocked(ctx, PayBlacklistTypeEnum.IP.getCode(), ctx.getClientIp(), null, throwOnHit);
+            // 用户标识：按通道映射名单类型
+            boolean identityBlocked = checkUserIdentity(ctx, ctx.getOpenId(), throwOnHit);
+            if (!identityBlocked && StrUtil.isBlank(ctx.getOpenId())) {
+                log.warn("支付前 openId 缺失, 用户标识黑名单降级为仅 IP 校验 + 事后补录: "
+                        + "tradeType={}, method={}, mchNo={}, clientIp={}",
+                        ctx.getTradeType(), ctx.getMethod(), ctx.getMchNo(), ctx.getClientIp());
+            }
         }
         // 海外 IP 拦截（地域策略, 非黑名单）
         if (Boolean.TRUE.equals(ctx.getBlockOverseasIp())) {
             checkOverseasIp(ctx, throwOnHit);
+        }
+        // IP 省级地区黑名单（第二层全局地区名单, 受 provinceBlacklistEnabled 开关控制）
+        checkProvinceBlacklist(ctx, throwOnHit);
+        // L3 地理围栏（门店市级: IP 归属城市与门店城市比对）
+        if (Boolean.TRUE.equals(ctx.getGeoFenceEnabled())) {
+            checkStoreGeoFence(ctx, throwOnHit);
         }
     }
 
@@ -78,15 +90,24 @@ public class DefaultPayRiskChecker implements PayRiskChecker {
         }
         ctx.setPhase(PayRiskHitPhaseEnum.AFTER_PAY.getCode());
         // 事后只记命中，不抛错
-        rejectIfBlocked(ctx, PayBlacklistTypeEnum.IP.getCode(), ctx.getClientIp(), null, false);
-        checkUserIdentity(ctx, ctx.getOpenId(), false);
-        // buyerId 按用户标识维度比对（主扫补洞）
-        if (StrUtil.isNotBlank(ctx.getBuyerId()) && !StrUtil.equals(ctx.getBuyerId(), ctx.getOpenId())) {
-            checkUserIdentity(ctx, ctx.getBuyerId(), false);
+        // L1 黑名单（IP / 用户标识, 受 blacklistEnabled 开关控制）
+        if (Boolean.TRUE.equals(ctx.getBlacklistEnabled())) {
+            rejectIfBlocked(ctx, PayBlacklistTypeEnum.IP.getCode(), ctx.getClientIp(), null, false);
+            checkUserIdentity(ctx, ctx.getOpenId(), false);
+            // buyerId 按用户标识维度比对（主扫补洞）
+            if (StrUtil.isNotBlank(ctx.getBuyerId()) && !StrUtil.equals(ctx.getBuyerId(), ctx.getOpenId())) {
+                checkUserIdentity(ctx, ctx.getBuyerId(), false);
+            }
         }
         // 海外 IP 访问记录（事后仅记录, 不阻断）
         if (Boolean.TRUE.equals(ctx.getBlockOverseasIp())) {
             checkOverseasIp(ctx, false);
+        }
+        // IP 省级地区黑名单（事后补录, 受 provinceBlacklistEnabled 开关控制）
+        checkProvinceBlacklist(ctx, false);
+        // L3 地理围栏（事后补录: IP 归属城市与门店城市比对）
+        if (Boolean.TRUE.equals(ctx.getGeoFenceEnabled())) {
+            checkStoreGeoFence(ctx, false);
         }
     }
 
@@ -141,6 +162,35 @@ public class DefaultPayRiskChecker implements PayRiskChecker {
         return true;
     }
 
+    /// IP 省级地区黑名单（第二层全局地区名单）
+    ///
+    /// IP 归属省份在省级黑名单中则命中, value 存省名（与 ip2region 返回格式对齐）。
+    /// 需平台配置 provinceBlacklistEnabled=true 才执行; IPv6 / 内网 / 解析失败 → fail-open 放行。
+    private void checkProvinceBlacklist(PayRiskCheckContext ctx, boolean throwOnHit) {
+        // 省级拦截开关关闭时跳过
+        if (!Boolean.TRUE.equals(ctx.getProvinceBlacklistEnabled())) {
+            return;
+        }
+        String ip = ctx.getClientIp();
+        if (StrUtil.isBlank(ip)) {
+            return;
+        }
+        // IPv6 暂不参与地区判定
+        if (Validator.isIpv6(ip)) {
+            return;
+        }
+        // 内网/回环地址直通放行
+        if (NetUtil.isInnerIP(ip)) {
+            return;
+        }
+        IpRegion region = ipToRegionService.getRegionByIp(ip);
+        // 解析失败或无省份信息 → fail-open
+        if (region == null || StrUtil.isBlank(region.getProvince())) {
+            return;
+        }
+        rejectIfBlocked(ctx, PayBlacklistTypeEnum.PROVINCE.getCode(), region.getProvince(), null, throwOnHit);
+    }
+
     /// 海外 IP 地域拦截（country≠中国, 港澳台放行; 未知/内网 fail-open）
     ///
     /// 与黑名单不同, 海外命中不关联名单行（blacklistId=null）, 命中类型为 [PayBlacklistTypeEnum#OVERSEAS_IP]。
@@ -178,5 +228,77 @@ public class DefaultPayRiskChecker implements PayRiskChecker {
             // 交易被限制（模糊文案，防探测）
             throw new BizInfoException(PayErrorCode.OPERATION_FAIL, "pay.error.risk.blacklist");
         }
+    }
+
+    /// 门店市级地理围栏
+    ///
+    /// IP 归属城市与门店所在城市不一致则命中; 城市名比对前做后缀归一化(去"市/省")。
+    /// 直辖市用 [IpRegion#isProvinceLevel] 归一(省份即城市)。
+    /// 门店无地址(storeCity 为空)时 fail-open + 告警; IPv6/内网/解析失败 fail-open。
+    private void checkStoreGeoFence(PayRiskCheckContext ctx, boolean throwOnHit) {
+        // 门店无地址: fail-open + 告警(提示补录门店行政区划地址)
+        if (StrUtil.isBlank(ctx.getStoreCity())) {
+            if (ctx.getStoreNo() != null) {
+                log.warn("围栏开启但门店城市为空, storeNo={}, mchNo={}, 跳过围栏校验, 请补录门店行政区划地址",
+                        ctx.getStoreNo(), ctx.getMchNo());
+            }
+            return;
+        }
+        String ip = ctx.getClientIp();
+        if (StrUtil.isBlank(ip)) {
+            return;
+        }
+        // IPv6 暂不参与地区判定
+        if (Validator.isIpv6(ip)) {
+            return;
+        }
+        // 内网/回环地址直通放行
+        if (NetUtil.isInnerIP(ip)) {
+            return;
+        }
+        IpRegion region = ipToRegionService.getRegionByIp(ip);
+        if (region == null) {
+            return;
+        }
+        // 解析出城市或为直辖市才继续, 否则 fail-open
+        boolean hasCity = StrUtil.isNotBlank(region.getCity());
+        boolean isDirect = region.isProvinceLevel();
+        if (!hasCity && !isDirect) {
+            return;
+        }
+        // 直辖市: 城市即省份; 普通市: 城市为 city
+        String clientCity = isDirect ? region.getProvince() : region.getCity();
+        // 回填 ctx 供命中落库
+        ctx.setClientCity(clientCity);
+        // 后缀归一化后比对(去"市/省"等后缀, 提升门店城市与 IP 城市对齐率)
+        String clientNorm = normalizeRegionName(clientCity);
+        String storeNorm = normalizeRegionName(ctx.getStoreCity());
+        if (!clientNorm.equals(storeNorm)) {
+            // 记录围栏命中(非黑名单来源, blacklistId=null)
+            try {
+                payRiskHitService.recordHit(ctx, HIT_TYPE_GEO_FENCE, clientCity, null);
+            } catch (Exception e) {
+                log.warn("记录地理围栏命中失败 clientCity={}, storeCity={}: {}",
+                        clientCity, ctx.getStoreCity(), e.getMessage());
+            }
+            if (throwOnHit) {
+                // 交易被限制（模糊文案，防探测）
+                throw new BizInfoException(PayErrorCode.OPERATION_FAIL, "pay.error.risk.blacklist");
+            }
+        }
+    }
+
+    /// 行政区划名称归一化: 去掉省/市等常见后缀, 用于门店城市与 IP 归属城市对齐比对
+    ///
+    /// 覆盖: 直辖市(北京市→北京)、普通地级市(深圳市→深圳)。自治州/盟保留全名(已知限制)。
+    private static String normalizeRegionName(String name) {
+        if (StrUtil.isBlank(name)) {
+            return "";
+        }
+        String result = name.trim();
+        if (result.endsWith("市") || result.endsWith("省")) {
+            result = result.substring(0, result.length() - 1);
+        }
+        return result;
     }
 }

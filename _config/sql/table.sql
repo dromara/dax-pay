@@ -1738,6 +1738,7 @@ CREATE TABLE "public"."mch_info" (
   "admin_user_id" int8,
   "status" varchar(32) COLLATE "pg_catalog"."default",
   "subject_type" varchar(32) COLLATE "pg_catalog"."default",
+  "geo_fence_enabled" bool NOT NULL DEFAULT false,
   "deleted" bool NOT NULL DEFAULT false,
   "creator" int8,
   "create_time" timestamp(6),
@@ -1753,6 +1754,7 @@ COMMENT ON COLUMN "public"."mch_info"."mch_short_name" IS '商户简称';
 COMMENT ON COLUMN "public"."mch_info"."admin_user_id" IS '关联管理员用户ID';
 COMMENT ON COLUMN "public"."mch_info"."status" IS '状态';
 COMMENT ON COLUMN "public"."mch_info"."subject_type" IS '主体类型';
+COMMENT ON COLUMN "public"."mch_info"."geo_fence_enabled" IS '是否启用地理围栏';
 COMMENT ON COLUMN "public"."mch_info"."deleted" IS '删除标志';
 COMMENT ON COLUMN "public"."mch_info"."creator" IS '创建者ID';
 COMMENT ON COLUMN "public"."mch_info"."create_time" IS '创建时间';
@@ -3136,7 +3138,10 @@ CREATE TABLE "public"."pay_risk_hit" (
   "openid" varchar(128) COLLATE "pg_catalog"."default",
   "buyer_id" varchar(128) COLLATE "pg_catalog"."default",
   "scene" varchar(16) COLLATE "pg_catalog"."default" NOT NULL DEFAULT 'unknown'::character varying,
-  "remark" varchar(255) COLLATE "pg_catalog"."default"
+  "remark" varchar(255) COLLATE "pg_catalog"."default",
+  "client_city" varchar(64) COLLATE "pg_catalog"."default",
+  "store_city" varchar(64) COLLATE "pg_catalog"."default",
+  "store_no" varchar(64) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."pay_risk_hit"."id" IS '主键';
@@ -3147,7 +3152,7 @@ COMMENT ON COLUMN "public"."pay_risk_hit"."last_modified_time" IS '最后修改�
 COMMENT ON COLUMN "public"."pay_risk_hit"."version" IS '版本号';
 COMMENT ON COLUMN "public"."pay_risk_hit"."deleted" IS '删除标志';
 COMMENT ON COLUMN "public"."pay_risk_hit"."phase" IS '命中阶段: before_pay-事前拦截, after_pay-事后命中';
-COMMENT ON COLUMN "public"."pay_risk_hit"."hit_type" IS '命中类型（与黑名单 type 一致: ip / open_id）';
+COMMENT ON COLUMN "public"."pay_risk_hit"."hit_type" IS '命中类型（与黑名单 type 一致: ip / alipay_user / wechat_openid / overseas_ip / province; 围栏命中: geo_fence）';
 COMMENT ON COLUMN "public"."pay_risk_hit"."hit_value" IS '命中值快照（IP 或 openId）';
 COMMENT ON COLUMN "public"."pay_risk_hit"."blacklist_id" IS '关联名单 ID（可空）';
 COMMENT ON COLUMN "public"."pay_risk_hit"."mch_no" IS '商户号（业务字段，非租户行级隔离）';
@@ -3164,6 +3169,9 @@ COMMENT ON COLUMN "public"."pay_risk_hit"."openid" IS '下单 openId 快照';
 COMMENT ON COLUMN "public"."pay_risk_hit"."buyer_id" IS '通道回写付款人标识（buyerId / openId）';
 COMMENT ON COLUMN "public"."pay_risk_hit"."scene" IS '来源场景: api/gateway/code/manual/unknown';
 COMMENT ON COLUMN "public"."pay_risk_hit"."remark" IS '备注';
+COMMENT ON COLUMN "public"."pay_risk_hit"."client_city" IS '客户端 IP 归属城市（ip2region 解析快照）';
+COMMENT ON COLUMN "public"."pay_risk_hit"."store_city" IS '门店所在城市（围栏命中快照）';
+COMMENT ON COLUMN "public"."pay_risk_hit"."store_no" IS '门店号（围栏命中快照）';
 COMMENT ON TABLE "public"."pay_risk_hit" IS '支付风险命中记录（事前拦截与事后命中，供运营预警与处置）';
 
 -- ----------------------------

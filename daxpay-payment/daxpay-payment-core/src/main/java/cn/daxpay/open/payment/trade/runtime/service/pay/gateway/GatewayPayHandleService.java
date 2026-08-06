@@ -16,6 +16,7 @@ import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
 import cn.daxpay.open.payment.trade.order.entity.GatewayPayOrder;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
+import cn.daxpay.open.payment.unipay.param.trade.pay.TerminalInfo;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
 import cn.daxpay.open.platform.common.redis.lock.LockExecutor;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
@@ -257,6 +258,10 @@ public class GatewayPayHandleService {
         payParam.setExpiredTime(order.getExpiredTime());
         payParam.setClientIp(StrUtil.blankToDefault(clientIp, order.getClientIp()));
         payParam.setGoodsDetail(order.getGoodsDetail());
+        // 终端信息: 网关容器冗余的 storeNo 注入 terminal, 供风控上下文取用(与码牌路径对齐)
+        TerminalInfo terminal = new TerminalInfo();
+        terminal.setStoreNo(order.getStoreNo());
+        payParam.setTerminal(terminal);
         return payParam;
     }
 
