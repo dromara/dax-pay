@@ -72,6 +72,34 @@ class IpRegionTest {
     }
 
     @Test
+    @DisplayName("直辖市(省名短名): isProvinceLevel 归一化后识别")
+    void isProvinceLevel_directCityShortName_shouldDetect() {
+        // v4 数据直辖市省段主流格式为短名(实证: 北京219条 vs 北京市2条)
+        IpRegion region = IpRegion.init(List.of("中国", "北京", "北京市", "电信", "CN"));
+
+        assertTrue(region.isProvinceLevel());
+    }
+
+    @Test
+    @DisplayName("自治区(全称后缀): 归一化后可识别为普通中国省份")
+    void isChinaIp_autonomousRegion_shouldNotBeProvinceLevel() {
+        // v4 数据自治区省段为短名, 归一化补丁支持全称形态兜底
+        IpRegion region = IpRegion.init(List.of("中国", "内蒙古自治区", "呼和浩特市", "联通", "CN"));
+
+        assertTrue(region.isChinaIp());
+        assertFalse(region.isProvinceLevel());
+    }
+
+    @Test
+    @DisplayName("港澳台(全称后缀): isBigChina 归一化后识别")
+    void isBigChina_hkFullName_shouldDetect() {
+        // v4 数据港澳台省段为全称(实证: 香港特别行政区), 迭代去后缀后与短名列表对齐
+        IpRegion region = IpRegion.init(List.of("中国", "香港特别行政区", "0", "HKT", "HK"));
+
+        assertTrue(region.isBigChina());
+    }
+
+    @Test
     @DisplayName("港澳台: isBigChina 识别")
     void isBigChina_hk_shouldDetect() {
         IpRegion region = IpRegion.init(List.of("中国", "香港", "香港", "HKT", "HK"));

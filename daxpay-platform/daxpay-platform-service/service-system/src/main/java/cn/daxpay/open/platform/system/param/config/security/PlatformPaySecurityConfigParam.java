@@ -16,6 +16,10 @@ public class PlatformPaySecurityConfigParam {
     @NotNull(message = "{validation.field.riskEnabled.notNull}")
     private Boolean riskEnabled;
 
+    @Schema(description = "黑名单拦截开关（IP / 用户标识）")
+    @NotNull(message = "{validation.field.blacklistEnabled.notNull}")
+    private Boolean blacklistEnabled;
+
     @Schema(description = "命中黑名单后是否阻断下单（false=仅记录不拦截）")
     @NotNull(message = "{validation.field.riskBlockBeforePay.notNull}")
     private Boolean riskBlockBeforePay;
@@ -28,7 +32,23 @@ public class PlatformPaySecurityConfigParam {
     @NotNull(message = "{validation.field.riskOpenIdLevel.notNull}")
     private String riskOpenIdLevel;
 
-    @Schema(description = "海外 IP 拦截（占位字段, 默认关闭, 后续接入）")
+    @Schema(description = "海外 IP 拦截（默认关闭, 拦截境外 IP 支付请求）")
     @NotNull(message = "{validation.field.blockOverseasIp.notNull}")
     private Boolean blockOverseasIp;
+
+    @Schema(description = "省级地区拦截（默认关闭, 开启后根据 IP 归属省份匹配省级黑名单）")
+    @NotNull(message = "{validation.field.provinceBlacklistEnabled.notNull}")
+    private Boolean provinceBlacklistEnabled;
+
+    @Schema(description = "市级地区拦截（默认关闭, 开启后根据 IP 归属城市匹配市级黑名单; 与省级开关独立）")
+    @NotNull(message = "{validation.field.cityBlacklistEnabled.notNull}")
+    private Boolean cityBlacklistEnabled;
+
+    @Schema(description = "地理围栏全局开关（默认关闭, 开启后各商户围栏 opt-in 才生效）")
+    @NotNull(message = "{validation.field.geoFenceEnabled.notNull}")
+    private Boolean geoFenceEnabled;
+
+    @Schema(description = "地理围栏全局策略（strict 严格 / balanced 平衡 / loose 宽松）")
+    @NotNull(message = "{validation.field.geoFenceStrategy.notNull}")
+    private String geoFenceStrategy;
 }

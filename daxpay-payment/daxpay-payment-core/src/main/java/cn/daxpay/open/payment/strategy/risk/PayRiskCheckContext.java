@@ -75,8 +75,14 @@ public class PayRiskCheckContext {
     /// 是否启用省级地区拦截（null/false=不检查；true=按 IP 省份匹配省级黑名单）
     ///
     /// 地域策略开关快照, 由 [cn.daxpay.open.payment.trade.runtime.service.pay.common.PayRiskAssistService]
-    /// 读取平台配置后注入。
+    /// 读取平台配置后注入。省级命中后不再执行市级检查。
     private Boolean provinceBlacklistEnabled;
+
+    /// 是否启用市级地区拦截（null/false=不检查；true=按 IP 城市匹配市级黑名单）
+    ///
+    /// 地域策略开关快照, 由 [cn.daxpay.open.payment.trade.runtime.service.pay.common.PayRiskAssistService]
+    /// 读取平台配置后注入。与省级开关独立, 省级未命中时执行。
+    private Boolean cityBlacklistEnabled;
 
     /// 是否启用地理围栏（null/false=不检查；true=启用门店市级围栏检测）
     ///

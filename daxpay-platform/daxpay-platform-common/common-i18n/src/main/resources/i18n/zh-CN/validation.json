@@ -814,6 +814,9 @@
     "provinceBlacklistEnabled": {
       "notNull": "省级地区拦截开关不能为空"
     },
+    "cityBlacklistEnabled": {
+      "notNull": "市级地区拦截开关不能为空"
+    },
     "geoFenceEnabled": {
       "notNull": "地理围栏开关不能为空"
     },

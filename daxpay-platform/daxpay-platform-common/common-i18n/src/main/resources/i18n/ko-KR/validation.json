@@ -808,7 +808,10 @@
       "notNull": "해외 IP 차단 스위치는 필수입니다"
     },
     "provinceBlacklistEnabled": {
-      "notNull": "지역별 차단 스위치는 필수입니다"
+      "notNull": "성 지역 차단 스위치는 필수입니다"
+    },
+    "cityBlacklistEnabled": {
+      "notNull": "시 지역 차단 스위치는 필수입니다"
     },
     "geoFenceEnabled": {
       "notNull": "지오펜스 스위치는 필수입니다"

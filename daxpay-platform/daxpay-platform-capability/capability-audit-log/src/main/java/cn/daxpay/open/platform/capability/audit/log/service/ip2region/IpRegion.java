@@ -9,6 +9,9 @@ import java.util.List;
 /// # IP对应地址区域信息
 ///
 /// 官方 ip2region v4.xdb 数据格式: `国家|省份|城市|ISP|国家码(iso-alpha2)`, 五段定长。
+///
+/// v4 名称格式规律(实证): 普通省/市返回全称(广东省/深圳市); 直辖市与自治区返回短名(北京/内蒙古);
+/// 港澳台返回全称(香港特别行政区/台湾省); 无归属地返回 "0"。
 @Data
 @Accessors(chain = true)
 public class IpRegion {
@@ -77,14 +80,27 @@ public class IpRegion {
         return index < ipInfo.size() ? ipInfo.get(index) : null;
     }
 
-    /// 归一化地区名: 去首尾空格, 去掉结尾一个"市"或"省"
+    /// 归一化地区名: 去首尾空格, 迭代去掉行政区划常见后缀
+    ///
+    /// 后缀由长到短迭代去除, 覆盖 省/市/自治区/特别行政区 等, 与 GeoFenceUtil.normalizeRegionName 口径一致。
+    /// 例: "北京市"→"北京", "内蒙古自治区"→"内蒙古", "香港特别行政区"→"香港"; 自治州/盟保留全名(已知限制)。
     private static String normalizeName(String name) {
         if (name == null) {
             return "";
         }
         String result = name.trim();
-        if (result.endsWith("市") || result.endsWith("省")) {
-            result = result.substring(0, result.length() - 1);
+        // 后缀由长到短, 保证 "新疆维吾尔自治区"→"新疆"、"香港特别行政区"→"香港"
+        String[] suffixes = {"特别行政区", "维吾尔自治区", "回族自治区", "壮族自治区", "自治区", "省", "市"};
+        boolean changed = true;
+        while (changed) {
+            changed = false;
+            for (String suffix : suffixes) {
+                if (result.endsWith(suffix)) {
+                    result = result.substring(0, result.length() - suffix.length());
+                    changed = true;
+                    break;
+                }
+            }
         }
         return result;
     }

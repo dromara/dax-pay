@@ -817,6 +817,9 @@
     "provinceBlacklistEnabled": {
       "notNull": "Công tắc chặn cấp tỉnh không được để trống"
     },
+    "cityBlacklistEnabled": {
+      "notNull": "Công tắc chặn cấp thành phố không được để trống"
+    },
     "geoFenceEnabled": {
       "notNull": "Công tắc hàng rào địa lý không được để trống"
     },

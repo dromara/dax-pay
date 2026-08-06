@@ -810,6 +810,9 @@
     "provinceBlacklistEnabled": {
       "notNull": "省級地區攔截開關不能為空"
     },
+    "cityBlacklistEnabled": {
+      "notNull": "市級地區攔截開關不能為空"
+    },
     "geoFenceEnabled": {
       "notNull": "地理圍欄開關不能為空"
     },

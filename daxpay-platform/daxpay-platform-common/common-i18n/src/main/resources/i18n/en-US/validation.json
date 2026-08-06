@@ -814,6 +814,9 @@
     "provinceBlacklistEnabled": {
       "notNull": "Province-level blocking toggle cannot be empty"
     },
+    "cityBlacklistEnabled": {
+      "notNull": "City-level blocking toggle cannot be empty"
+    },
     "geoFenceEnabled": {
       "notNull": "Geo-fence toggle cannot be empty"
     },

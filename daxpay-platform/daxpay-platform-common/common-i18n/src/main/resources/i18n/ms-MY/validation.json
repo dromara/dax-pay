@@ -817,6 +817,9 @@
     "provinceBlacklistEnabled": {
       "notNull": "Saklar sekatan tahap wilayah tidak boleh kosong"
     },
+    "cityBlacklistEnabled": {
+      "notNull": "Saklar sekatan tahap bandar tidak boleh kosong"
+    },
     "geoFenceEnabled": {
       "notNull": "Saklar pagar geo tidak boleh kosong"
     },

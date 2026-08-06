@@ -2131,14 +2131,14 @@ COMMENT ON COLUMN "public"."pay_blacklist"."last_modifier" IS '最后修改ID';
 COMMENT ON COLUMN "public"."pay_blacklist"."last_modified_time" IS '最后修改时间';
 COMMENT ON COLUMN "public"."pay_blacklist"."version" IS '版本号';
 COMMENT ON COLUMN "public"."pay_blacklist"."deleted" IS '删除标志';
-COMMENT ON COLUMN "public"."pay_blacklist"."type" IS '名单类型: ip / alipay_user / wechat_openid';
-COMMENT ON COLUMN "public"."pay_blacklist"."value" IS '名单值（IP、支付宝userId或微信openId）';
+COMMENT ON COLUMN "public"."pay_blacklist"."type" IS '名单类型: ip / alipay_user / wechat_openid / province(省行政区划编码) / city(市行政区划编码, 直辖市存省编码)';
+COMMENT ON COLUMN "public"."pay_blacklist"."value" IS '名单值（IP、支付宝userId、微信openId或省/市行政区划编码）';
 COMMENT ON COLUMN "public"."pay_blacklist"."wx_app_id" IS '微信平台支付应用 AppId；仅 wechat_openid 使用';
 COMMENT ON COLUMN "public"."pay_blacklist"."status" IS '状态: enable-启用, disable-禁用';
 COMMENT ON COLUMN "public"."pay_blacklist"."reason" IS '拉黑原因';
 COMMENT ON COLUMN "public"."pay_blacklist"."expire_time" IS '过期时间（空表示永久有效）';
 COMMENT ON COLUMN "public"."pay_blacklist"."remark" IS '备注';
-COMMENT ON TABLE "public"."pay_blacklist" IS '支付黑名单（平台级；IP全局 / 支付宝userId全局 / 微信按平台应用）';
+COMMENT ON TABLE "public"."pay_blacklist" IS '支付黑名单（平台级；IP全局 / 支付宝userId全局 / 微信按平台应用 / 省市地区按行政区划编码）';
 
 -- ----------------------------
 -- Table structure for pay_callback_record
@@ -3193,8 +3193,8 @@ COMMENT ON COLUMN "public"."pay_risk_hit"."last_modified_time" IS '最后修改�
 COMMENT ON COLUMN "public"."pay_risk_hit"."version" IS '版本号';
 COMMENT ON COLUMN "public"."pay_risk_hit"."deleted" IS '删除标志';
 COMMENT ON COLUMN "public"."pay_risk_hit"."phase" IS '命中阶段: before_pay-事前拦截, after_pay-事后命中';
-COMMENT ON COLUMN "public"."pay_risk_hit"."hit_type" IS '命中类型（与黑名单 type 一致: ip / alipay_user / wechat_openid / overseas_ip / province; 围栏命中: geo_fence）';
-COMMENT ON COLUMN "public"."pay_risk_hit"."hit_value" IS '命中值快照（IP 或 openId）';
+COMMENT ON COLUMN "public"."pay_risk_hit"."hit_type" IS '命中类型（与黑名单 type 一致: ip / alipay_user / wechat_openid / overseas_ip / province / city; 围栏命中: geo_fence）';
+COMMENT ON COLUMN "public"."pay_risk_hit"."hit_value" IS '命中值快照（IP、openId 或省/市行政区划编码）';
 COMMENT ON COLUMN "public"."pay_risk_hit"."blacklist_id" IS '关联名单 ID（可空）';
 COMMENT ON COLUMN "public"."pay_risk_hit"."mch_no" IS '商户号（业务字段，非租户行级隔离）';
 COMMENT ON COLUMN "public"."pay_risk_hit"."app_id" IS '应用号';

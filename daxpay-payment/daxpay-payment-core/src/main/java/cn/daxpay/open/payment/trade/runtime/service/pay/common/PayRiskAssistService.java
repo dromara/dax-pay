@@ -74,6 +74,8 @@ public class PayRiskAssistService {
         ctx.setBlockOverseasIp(config.getBlockOverseasIp());
         // 省级地区拦截开关（地域策略）
         ctx.setProvinceBlacklistEnabled(config.getProvinceBlacklistEnabled());
+        // 市级地区拦截开关（地域策略, 独立于省级）
+        ctx.setCityBlacklistEnabled(config.getCityBlacklistEnabled());
         // 地理围栏两级门控 + 策略 + 放行城市集合（第三层）
         applyGeoFence(ctx, config, payParam.getMchNo());
         checker.checkBeforePay(ctx);
@@ -97,6 +99,8 @@ public class PayRiskAssistService {
         ctx.setBlockOverseasIp(config.getBlockOverseasIp());
         // 省级地区拦截开关（地域策略, 事后补录）
         ctx.setProvinceBlacklistEnabled(config.getProvinceBlacklistEnabled());
+        // 市级地区拦截开关（地域策略, 事后补录, 独立于省级）
+        ctx.setCityBlacklistEnabled(config.getCityBlacklistEnabled());
         // 地理围栏两级门控 + 策略 + 放行城市集合（第三层, 事后补录）
         applyGeoFence(ctx, config, trade.getMchNo());
         // 黑名单拦截开关（第一层, 事后补录）

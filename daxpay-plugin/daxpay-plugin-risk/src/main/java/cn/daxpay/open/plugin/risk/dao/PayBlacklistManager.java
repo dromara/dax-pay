@@ -49,7 +49,7 @@ public class PayBlacklistManager extends BaseManager<PayBlacklistMapper, PayBlac
 
     /// 查找有效命中行（enable 且未过期）
     ///
-    /// - ip / alipay_user：按 type+value，忽略 wxAppId
+    /// - ip / alipay_user / province / city：按 type+value，忽略 wxAppId
     /// - wechat_openid：按 type+value+wxAppId 精确匹配（wxAppId 为空则不命中）
     public Optional<PayBlacklist> findActiveHit(String type, String value, String wxAppId) {
         if (StrUtil.isBlank(type) || StrUtil.isBlank(value)) {

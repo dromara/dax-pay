@@ -3,5 +3,6 @@
   "alipay_user": "Alipay user",
   "wechat_openid": "WeChat OpenId",
   "overseas_ip": "Overseas IP",
-  "province": "Province"
+  "province": "Province",
+  "city": "City"
 }
