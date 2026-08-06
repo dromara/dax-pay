@@ -6,7 +6,7 @@ import lombok.experimental.Accessors;
 /// # 微信回调验签解析响应
 ///
 /// 子应用使用微信 SDK 验签并解密回调后, 返回结构化业务数据。
-/// 兼容支付与退款两种回调: 通过 tradeType 区分。
+/// 仅承载支付/退款回调; 转账回调见 [WechatTransferCallbackParseResp]。通过 tradeType 区分支付与退款。
 @Data
 @Accessors(chain = true)
 public class WechatCallbackParseResp {

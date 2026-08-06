@@ -60,5 +60,7 @@
   "transferFailed": "WeChat transfer failed: {0}",
   "transferOnlyOpenid": "WeChat only supports openid payee",
   "transferNameForbidden": "WeChat: payee name not allowed for amount below 0.3 CNY",
-  "transferNameRequired": "WeChat: payee name required for amount >= 2000 CNY"
+  "transferNameRequired": "WeChat: payee name required for amount >= 2000 CNY",
+
+  "transferSceneNotConfigured": "WeChat: transfer scene not configured"
 }

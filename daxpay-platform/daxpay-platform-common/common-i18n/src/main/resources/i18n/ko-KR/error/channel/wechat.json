@@ -60,5 +60,7 @@
   "transferFailed": "위챗 송금 실패: {0}",
   "transferOnlyOpenid": "위챗은 openid 수취인만 지원합니다",
   "transferNameForbidden": "위챗: 0.3원 미만은 수취인 이름을 입력할 수 없습니다",
-  "transferNameRequired": "위챗: 2000원 이상은 수취인 이름이 필수입니다"
+  "transferNameRequired": "위챗: 2000원 이상은 수취인 이름이 필수입니다",
+
+  "transferSceneNotConfigured": "WeChat: 송금 장면이 구성되지 않았습니다"
 }

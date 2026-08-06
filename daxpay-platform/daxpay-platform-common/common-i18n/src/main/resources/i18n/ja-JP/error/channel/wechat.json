@@ -60,5 +60,7 @@
   "transferFailed": "WeChat送金エラー: {0}",
   "transferOnlyOpenid": "WeChatはopenid受取人のみサポートしています",
   "transferNameForbidden": "WeChat: 0.3元未満は受取人氏名を入力できません",
-  "transferNameRequired": "WeChat: 2000元以上は受取人氏名が必須です"
+  "transferNameRequired": "WeChat: 2000元以上は受取人氏名が必須です",
+
+  "transferSceneNotConfigured": "WeChat: 送金シーンが設定されていません"
 }

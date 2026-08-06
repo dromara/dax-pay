@@ -8,6 +8,7 @@ import cn.daxpay.open.channel.douyin.client.req.DouyinRefundSyncReq;
 import cn.daxpay.open.channel.douyin.client.req.DouyinSyncReq;
 import cn.daxpay.open.channel.douyin.client.req.DouyinTransferReq;
 import cn.daxpay.open.channel.douyin.client.resp.DouyinCallbackParseResp;
+import cn.daxpay.open.channel.douyin.client.resp.DouyinTransferCallbackParseResp;
 import cn.daxpay.open.channel.douyin.client.resp.DouyinCloseResp;
 import cn.daxpay.open.channel.douyin.client.resp.DouyinPayResp;
 import cn.daxpay.open.channel.douyin.client.resp.DouyinRefundResp;
@@ -62,4 +63,8 @@ public interface DouyinChannelClient {
     /// 退款回调验签解析(转发到子应用验签)
     @PostExchange("/channel/douyin/callback/parse-refund")
     DaxResult<DouyinCallbackParseResp> parseRefundCallback(@RequestBody DouyinCallbackParseReq req);
+
+    /// 转账回调验签解析(转发到子应用验签)
+    @PostExchange("/channel/douyin/callback/parse-transfer")
+    DaxResult<DouyinTransferCallbackParseResp> parseTransferCallback(@RequestBody DouyinCallbackParseReq req);
 }

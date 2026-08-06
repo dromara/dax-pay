@@ -30,6 +30,9 @@ public class AlipayTransferReq {
     /// 收款人姓名
     private String payeeName;
 
+    /// 异步通知地址(支付宝→平台)
+    private String notifyUrl;
+
     /// 通道调用凭证
     private AlipaySdkCredential credential;
 }

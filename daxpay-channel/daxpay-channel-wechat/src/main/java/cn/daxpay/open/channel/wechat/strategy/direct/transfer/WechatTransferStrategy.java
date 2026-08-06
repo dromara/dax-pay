@@ -1,6 +1,8 @@
 package cn.daxpay.open.channel.wechat.strategy.direct.transfer;
 
 import cn.daxpay.open.channel.wechat.client.credential.WechatSdkCredential;
+import cn.daxpay.open.channel.wechat.dao.direct.WechatDirectChannelMerchantManager;
+import cn.daxpay.open.channel.wechat.entity.direct.WechatDirectChannelMerchant;
 import cn.daxpay.open.channel.wechat.service.direct.WechatDirectConfigAssembler;
 import cn.daxpay.open.channel.wechat.service.payment.transfer.WechatTransferService;
 import cn.daxpay.open.payment.strategy.transfer.AbsTransferStrategy;
@@ -9,6 +11,7 @@ import cn.daxpay.open.payment.trade.transfer.bo.TransferResultBo;
 import cn.daxpay.open.payment.trade.transfer.enums.TransferPayeeTypeEnum;
 import cn.daxpay.open.payment.trade.transfer.param.TransferParam;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
+import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +37,7 @@ public class WechatTransferStrategy extends AbsTransferStrategy {
 
     private final WechatTransferService wechatTransferService;
     private final WechatDirectConfigAssembler wechatDirectConfigAssembler;
+    private final WechatDirectChannelMerchantManager wechatDirectChannelMerchantManager;
 
     @Override
     public String getChannel() {
@@ -77,8 +81,21 @@ public class WechatTransferStrategy extends AbsTransferStrategy {
         return wechatTransferService.sync(context, credential);
     }
 
-    /// 组装通道调用凭证(转账无 capability/appId 维度, 走平台默认应用绑定)
+    /// 组装通道调用凭证并注入转账场景
+    ///
+    /// 转账场景(transfer_scene)从通道商户配置读取, 经上下文回写, 由编排层在"处理中"镜像落库。
     private WechatSdkCredential buildCredential(TransferStrategyContext context) {
+        WechatDirectChannelMerchant channelMerchant = wechatDirectChannelMerchantManager.lambdaQuery()
+                .eq(WechatDirectChannelMerchant::getChannelMchNo, context.getChannelMchNo())
+                .oneOpt()
+                .orElseThrow(() -> new BizInfoException(DaxPayErrorCode.CONFIG_NOT_EXIST,
+                        "error.payment.channel.channelMerchantNotExist"));
+        if (StrUtil.isBlank(channelMerchant.getTransferScene())) {
+            // 微信: 转账场景未配置
+            throw new BizInfoException(DaxPayErrorCode.CONFIG_NOT_EXIST,
+                    "error.channel.wechat.transferSceneNotConfigured");
+        }
+        context.setTransferScene(channelMerchant.getTransferScene());
         return wechatDirectConfigAssembler.buildConfig(
                 context.getMchNo(), context.getChannelMchNo(), null, null);
     }

@@ -8,7 +8,7 @@ import java.time.OffsetDateTime;
 /// # 支付宝回调验签解析响应(子应用 → 主应用)
 ///
 /// 与子应用 dax-pay-channel-one 的 `AlipayCallbackParseResp` 镜像。
-/// 兼容支付与退款两种回调: 通过 tradeType 区分。
+/// 仅承载支付/退款回调; 转账回调见 [AlipayTransferCallbackParseResp]。通过 tradeType 区分。
 @Data
 @Accessors(chain = true)
 public class AlipayCallbackParseResp {

@@ -2,6 +2,7 @@ package cn.daxpay.open.channel.wechat.controller.callback;
 
 import cn.daxpay.open.channel.wechat.service.callback.WechatPayCallbackService;
 import cn.daxpay.open.channel.wechat.service.callback.WechatRefundCallbackService;
+import cn.daxpay.open.channel.wechat.service.callback.WechatTransferCallbackService;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,6 +28,7 @@ public class WechatCallbackController {
     private final MerchantContextLoader merchantContextLoader;
     private final WechatPayCallbackService wechatPayCallbackService;
     private final WechatRefundCallbackService wechatRefundCallbackService;
+    private final WechatTransferCallbackService wechatTransferCallbackService;
 
     /// 微信支付回调(直连)
     @Operation(summary = "微信支付回调")
@@ -65,5 +67,15 @@ public class WechatCallbackController {
                                   HttpServletRequest request) {
         merchantContextLoader.bindMchNoForCallback(mchNo);
         return wechatRefundCallbackService.isvRefundHandle(mchNo, channelMchNo, request);
+    }
+
+    /// 微信转账回调(直连, 转账无服务商模式)
+    @Operation(summary = "微信转账回调")
+    @PostMapping("/transfer")
+    public String transferNotify(@PathVariable("mchNo") String mchNo,
+                                 @PathVariable("channelMchNo") String channelMchNo,
+                                 HttpServletRequest request) {
+        merchantContextLoader.bindMchNoForCallback(mchNo);
+        return wechatTransferCallbackService.transferHandle(mchNo, channelMchNo, request);
     }
 }

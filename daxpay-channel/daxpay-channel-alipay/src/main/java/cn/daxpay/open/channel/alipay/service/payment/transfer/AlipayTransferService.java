@@ -10,6 +10,8 @@ import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.trade.transfer.bo.TransferResultBo;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
+import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,7 @@ import java.util.Objects;
 public class AlipayTransferService {
 
     private final AlipayChannelClient alipayChannelClient;
+    private final PlatformUrlConfigService platformUrlConfigService;
 
     /// 执行支付宝转账
     ///
@@ -41,6 +44,7 @@ public class AlipayTransferService {
         req.setPayeeType(context.getPayeeType());
         req.setPayeeAccount(context.getPayeeAccount());
         req.setPayeeName(context.getPayeeName());
+        req.setNotifyUrl(this.buildNotifyUrl(context));
         req.setCredential(credential);
 
         DaxResult<AlipayTransferResp> result = alipayChannelClient.transfer(req);
@@ -96,5 +100,20 @@ public class AlipayTransferService {
             bo.setStatus(PayFundStatusEnum.PROCESSING);
         }
         return bo;
+    }
+
+    /// 生成支付宝转账异步通知地址(支付宝→平台)
+    ///
+    /// 路径约定: `{backendBaseUrl}/unipay/callback/{mchNo}/{channelMchNo}/alipay`
+    /// (与支付/退款共用统一回调端点, 由 [cn.daxpay.open.channel.alipay.service.callback.AlipayCallbackService]
+    /// 按表单参数区分: 含 out_biz_no 且无 out_request_no/out_trade_no → 转账回调)
+    private String buildNotifyUrl(TransferStrategyContext context) {
+        String base = platformUrlConfigService.getUrlConfig().getBackendBaseUrl();
+        if (StrUtil.isBlank(base)) {
+            // backendBaseUrl 未配置时抛清晰异常
+            throw new BizInfoException(DaxPayErrorCode.CONFIG_ERROR, "error.common.backendBaseUrlNotConfigured");
+        }
+        return StrUtil.format("{}/unipay/callback/{}/{}/alipay",
+                base, context.getMchNo(), context.getChannelMchNo());
     }
 }

@@ -27,14 +27,14 @@ public class AlipayCallbackController {
     private final MerchantContextLoader merchantContextLoader;
     private final AlipayCallbackService alipayCallbackService;
 
-    /// 支付宝回调(支付/退款统一入口, 由服务层按表单参数区分)
-    @Operation(summary = "支付宝支付/退款回调")
+    /// 支付宝回调(支付/退款/转账统一入口, 由服务层按表单参数区分)
+    @Operation(summary = "支付宝支付/退款/转账回调")
     @PostMapping
     public String notify(@PathVariable String mchNo,
                          @PathVariable String channelMchNo,
                          HttpServletRequest request) {
         // 显式装载商户租户上下文(不校验启用, 保证禁用商户历史单可回调)
         merchantContextLoader.bindMchNoForCallback(mchNo);
-        return alipayCallbackService.handle(channelMchNo, request);
+        return alipayCallbackService.handle(mchNo, channelMchNo, request);
     }
 }

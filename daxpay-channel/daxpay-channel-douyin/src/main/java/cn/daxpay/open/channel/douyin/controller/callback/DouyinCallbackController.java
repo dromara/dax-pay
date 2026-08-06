@@ -2,6 +2,7 @@ package cn.daxpay.open.channel.douyin.controller.callback;
 
 import cn.daxpay.open.channel.douyin.service.callback.DouyinPayCallbackService;
 import cn.daxpay.open.channel.douyin.service.callback.DouyinRefundCallbackService;
+import cn.daxpay.open.channel.douyin.service.callback.DouyinTransferCallbackService;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,6 +28,7 @@ public class DouyinCallbackController {
     private final MerchantContextLoader merchantContextLoader;
     private final DouyinPayCallbackService payCallbackService;
     private final DouyinRefundCallbackService refundCallbackService;
+    private final DouyinTransferCallbackService transferCallbackService;
 
     /// 抖音支付回调
     @Operation(summary = "抖音支付回调")
@@ -46,5 +48,15 @@ public class DouyinCallbackController {
                                HttpServletRequest request) {
         merchantContextLoader.bindMchNoForCallback(mchNo);
         return refundCallbackService.refundHandle(mchNo, channelMchNo, request);
+    }
+
+    /// 抖音转账回调
+    @Operation(summary = "抖音转账回调")
+    @PostMapping("/transfer")
+    public String transferNotify(@PathVariable("mchNo") String mchNo,
+                                 @PathVariable("channelMchNo") String channelMchNo,
+                                 HttpServletRequest request) {
+        merchantContextLoader.bindMchNoForCallback(mchNo);
+        return transferCallbackService.transferHandle(mchNo, channelMchNo, request);
     }
 }

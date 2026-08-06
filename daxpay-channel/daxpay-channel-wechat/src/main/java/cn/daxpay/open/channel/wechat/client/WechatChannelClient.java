@@ -8,6 +8,7 @@ import cn.daxpay.open.channel.wechat.client.req.WechatRefundSyncReq;
 import cn.daxpay.open.channel.wechat.client.req.WechatSyncReq;
 import cn.daxpay.open.channel.wechat.client.req.WechatTransferReq;
 import cn.daxpay.open.channel.wechat.client.resp.WechatCallbackParseResp;
+import cn.daxpay.open.channel.wechat.client.resp.WechatTransferCallbackParseResp;
 import cn.daxpay.open.channel.wechat.client.resp.WechatCloseResp;
 import cn.daxpay.open.channel.wechat.client.resp.WechatPayResp;
 import cn.daxpay.open.channel.wechat.client.resp.WechatRefundResp;
@@ -84,4 +85,8 @@ public interface WechatChannelClient {
     /// 退款回调验签解析(转发到子应用验签)
     @PostExchange("/channel/wechat/callback/parse-refund")
     DaxResult<WechatCallbackParseResp> parseRefundCallback(@RequestBody WechatCallbackParseReq req);
+
+    /// 转账回调验签解析(转发到子应用验签)
+    @PostExchange("/channel/wechat/callback/parse-transfer")
+    DaxResult<WechatTransferCallbackParseResp> parseTransferCallback(@RequestBody WechatCallbackParseReq req);
 }

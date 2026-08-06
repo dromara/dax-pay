@@ -60,5 +60,7 @@
   "transferFailed": "Transfer WeChat gagal: {0}",
   "transferOnlyOpenid": "WeChat hanya mendukung penerima openid",
   "transferNameForbidden": "WeChat: nama penerima tidak diizinkan untuk jumlah di bawah 0.3 CNY",
-  "transferNameRequired": "WeChat: nama penerima wajib untuk jumlah >= 2000 CNY"
+  "transferNameRequired": "WeChat: nama penerima wajib untuk jumlah >= 2000 CNY",
+
+  "transferSceneNotConfigured": "WeChat: skenario transfer belum dikonfigurasi"
 }

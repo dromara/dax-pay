@@ -60,5 +60,7 @@
   "transferFailed": "微信转账异常: {0}",
   "transferOnlyOpenid": "微信仅支持 openid 收款人",
   "transferNameForbidden": "微信: 小于0.3元不允许填收款人姓名",
-  "transferNameRequired": "微信: 大于等于2000元必须填收款人姓名"
+  "transferNameRequired": "微信: 大于等于2000元必须填收款人姓名",
+
+  "transferSceneNotConfigured": "微信: 转账场景未配置"
 }

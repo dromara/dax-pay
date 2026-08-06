@@ -60,5 +60,7 @@
   "transferFailed": "Chuyển khoản WeChat thất bại: {0}",
   "transferOnlyOpenid": "WeChat chỉ hỗ trợ người nhận openid",
   "transferNameForbidden": "WeChat: không được nhập tên người nhận khi dưới 0.3 CNY",
-  "transferNameRequired": "WeChat: bắt buộc nhập tên người nhận khi >= 2000 CNY"
+  "transferNameRequired": "WeChat: bắt buộc nhập tên người nhận khi >= 2000 CNY",
+
+  "transferSceneNotConfigured": "WeChat: chưa cấu hình kịch bản chuyển khoản"
 }
