@@ -100,7 +100,7 @@ public class IpToRegionService {
         }
 
         try {
-            // 城市Id|国家|区域|省份|城市|ISP
+            // 官方 v4.xdb 格式: 国家|省份|城市|ISP|国家码(iso-alpha2)
             String search = searcher.search(ip);
             List<String> ipInfo = StrUtil.split(search, "|");
             return IpRegion.init(ipInfo);

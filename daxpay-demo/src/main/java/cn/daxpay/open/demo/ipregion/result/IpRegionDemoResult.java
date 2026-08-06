@@ -17,9 +17,6 @@ public class IpRegionDemoResult {
     /// 国家
     private String country;
 
-    /// 区域
-    private String region;
-
     /// 省份
     private String province;
 
@@ -28,6 +25,9 @@ public class IpRegionDemoResult {
 
     /// ISP 运营商
     private String isp;
+
+    /// 国家码(iso-alpha2, 如 CN/HK/US)
+    private String countryCode;
 
     /// 格式化后的归属地文本（与审计日志 location 字段同源）
     private String regionStr;

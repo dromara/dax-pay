@@ -64,10 +64,10 @@ public class IpRegionDemoController {
         IpRegion region = ipToRegionService.getRegionByIp(ip);
         if (Objects.nonNull(region)) {
             result.setCountry(region.getCountry())
-                    .setRegion(region.getRegion())
                     .setProvince(region.getProvince())
                     .setCity(region.getCity())
                     .setIsp(region.getIsp())
+                    .setCountryCode(region.getCountryCode())
                     .setInnerIp(region.isInnerIp())
                     .setChinaIp(region.isChinaIp());
         }

@@ -71,6 +71,13 @@
             <artifactId>common-translate</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <!-- 测试包 -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 
