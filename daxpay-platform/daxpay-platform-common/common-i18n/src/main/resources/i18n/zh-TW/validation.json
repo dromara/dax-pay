@@ -831,6 +831,20 @@
     },
     "runtime": {
       "size": "執行形態編碼不可超過16位"
+    },
+    "transferSceneName": {
+      "notBlank": "轉帳場景名稱不可為空",
+      "size": "轉帳場景名稱不可超過64位"
+    },
+    "transferSceneReportInfoType": {
+      "size": "轉帳場景上報資訊類型不可超過64位"
+    },
+    "transferSceneReportInfoContent": {
+      "size": "轉帳場景上報資訊內容不可超過200位"
+    },
+    "transferSceneId": {
+      "notBlank": "轉帳場景ID不可為空",
+      "size": "轉帳場景ID不可超過16位"
     }
   }
 }

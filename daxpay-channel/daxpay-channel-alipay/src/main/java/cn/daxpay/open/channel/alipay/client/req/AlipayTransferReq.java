@@ -1,7 +1,10 @@
 package cn.daxpay.open.channel.alipay.client.req;
 
 import cn.daxpay.open.channel.alipay.client.credential.AlipaySdkCredential;
+import cn.daxpay.open.payment.trade.transfer.param.TransferReportInfo;
 import lombok.Data;
+
+import java.util.List;
 
 /// # 支付宝通道转账请求(发起/同步共用)
 ///
@@ -32,6 +35,12 @@ public class AlipayTransferReq {
 
     /// 异步通知地址(支付宝→平台)
     private String notifyUrl;
+
+    /// 转账场景名称(2026新商户必填,由通道商户转账场景配置注入)
+    private String transferSceneName;
+
+    /// 转账场景上报信息列表(对应支付宝 transfer_scene_report_infos,多条)
+    private List<TransferReportInfo> reportInfos;
 
     /// 通道调用凭证
     private AlipaySdkCredential credential;

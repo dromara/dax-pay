@@ -1,6 +1,8 @@
 package cn.daxpay.open.channel.alipay.strategy.direct.transfer;
 
 import cn.daxpay.open.channel.alipay.client.credential.AlipaySdkCredential;
+import cn.daxpay.open.channel.alipay.dao.direct.AlipayTransferConfigManager;
+import cn.daxpay.open.channel.alipay.entity.direct.AlipayTransferConfig;
 import cn.daxpay.open.channel.alipay.service.direct.AlipayDirectConfigAssembler;
 import cn.daxpay.open.channel.alipay.service.payment.transfer.AlipayTransferService;
 import cn.daxpay.open.payment.strategy.transfer.AbsTransferStrategy;
@@ -36,6 +38,7 @@ public class AlipayTransferStrategy extends AbsTransferStrategy {
 
     private final AlipayTransferService alipayTransferService;
     private final AlipayDirectConfigAssembler alipayDirectConfigAssembler;
+    private final AlipayTransferConfigManager alipayTransferConfigManager;
 
     @Override
     public String getChannel() {
@@ -55,6 +58,11 @@ public class AlipayTransferStrategy extends AbsTransferStrategy {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.channel.alipay.transferPayeeAccountRequired");
         }
+        if (StrUtil.isBlank(param.getTitle())) {
+            // 支付宝: 转账标题必填(order_title 支付宝要求必选)
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "error.channel.alipay.transferTitleRequired");
+        }
     }
 
     /// 发起转账
@@ -71,9 +79,18 @@ public class AlipayTransferStrategy extends AbsTransferStrategy {
         return alipayTransferService.sync(context, credential);
     }
 
-    /// 组装通道调用凭证(转账无能力维度, 走直连密钥配置)
+    /// 组装通道调用凭证(转账无能力维度, 按转账配置显式绑定应用解析)
     private AlipaySdkCredential buildCredential(TransferStrategyContext context) {
-        return alipayDirectConfigAssembler.buildConfig(
-                context.getMchNo(), context.getChannelMchNo(), null);
+        // 读取转账配置(一对一绑定转出应用, 未绑定不允许发起)
+        AlipayTransferConfig transferConfig = alipayTransferConfigManager
+                .findByChannelMchNo(context.getChannelMchNo())
+                .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                        "error.channel.alipay.transferAppNotConfigured"));
+        if (transferConfig.getTransferAppRefId() == null) {
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "error.channel.alipay.transferAppNotConfigured");
+        }
+        return alipayDirectConfigAssembler.buildTransferConfig(
+                context.getMchNo(), context.getChannelMchNo(), transferConfig.getTransferAppRefId());
     }
 }

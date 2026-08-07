@@ -835,6 +835,20 @@
     },
     "runtime": {
       "size": "Runtime code cannot exceed 16 characters"
+    },
+    "transferSceneName": {
+      "notBlank": "Transfer scene name cannot be empty",
+      "size": "Transfer scene name cannot exceed 64 characters"
+    },
+    "transferSceneReportInfoType": {
+      "size": "Transfer scene report info type cannot exceed 64 characters"
+    },
+    "transferSceneReportInfoContent": {
+      "size": "Transfer scene report info content cannot exceed 200 characters"
+    },
+    "transferSceneId": {
+      "notBlank": "Transfer scene ID cannot be empty",
+      "size": "Transfer scene ID cannot exceed 16 characters"
     }
   }
 }

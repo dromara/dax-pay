@@ -831,6 +831,10 @@
     },
     "runtime": {
       "size": "Kod runtime tidak boleh melebihi 16 aksara"
+    },
+    "transferSceneId": {
+      "notBlank": "ID senario pindahan tidak boleh kosong",
+      "size": "ID senario pindahan tidak boleh melebihi 16 aksara"
     }
   }
 }

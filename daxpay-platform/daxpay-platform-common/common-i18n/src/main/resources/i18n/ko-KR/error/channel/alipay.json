@@ -50,5 +50,18 @@
   "transferFailed": "알리페이 송금 실패: {0}",
   "transferQueryFailed": "알리페이 송금 조회 실패: {0}",
   "transferPayeeTypeInvalid": "알리페이: 지원하지 않는 수취인 계정 유형: {0}",
-  "transferPayeeAccountRequired": "알리페이: 수취인 계정 필수"
+  "transferPayeeAccountRequired": "알리페이: 수취인 계정 필수",
+  "transferTitleRequired": "Alipay: 이체 제목은 필수입니다",
+  "transferSceneNotFound": "Alipay: 이체 시나리오 설정이 존재하지 않습니다",
+  "transferSceneNameInvalid": "Alipay: 지원되지 않는 이체 시나리오: {0}",
+  "transferSceneNotConfigured": "Alipay: 이 채널 가맹점에 이체 시나리오가 설정되지 않았습니다. 채널 가맹점 상세의 '이체 시나리오'에서 설정해 주세요",
+  "transferSceneNotBelong": "Alipay: 이체 시나리오 설정이 현재 가맹점에 속하지 않습니다",
+  "transferSceneIdRequired": "Alipay: 이체 시나리오 설정 ID는 필수입니다",
+  "transferSceneIdInvalid": "Alipay: 이체 시나리오 설정 ID 형식 오류: {0}",
+  "transferSceneEnabledLimit": "Alipay: 활성화된 이체 장면은 {0}개를 초과할 수 없습니다",
+  "transferSceneCannotDisableDefault": "Alipay: 기본 장면은 비활성화할 수 없습니다, 먼저 기본을 다른 장면으로 전환하세요",
+  "transferAppNotConfigured": "Alipay: 이 채널 가맹점에 이체 앱이 바인딩되지 않았습니다. 채널 가맹점 상세의 '이체 앱'에서 설정해 주세요",
+  "transferAppNotExist": "Alipay: 이체 앱이 존재하지 않습니다",
+  "transferAppNotBelong": "Alipay: 이체 앱이 현재 가맹점에 속하지 않습니다",
+  "channelMerchantMismatch": "Alipay: 채널 가맹점이 현재 가맹점에 속하지 않습니다"
 }

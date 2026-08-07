@@ -19,4 +19,13 @@ public class AlipayTransferResp {
 
     /// 转账完成时间(支付宝 gmt_finish)
     private String finishTime;
+
+    /// 支付宝资金流水号(pay_fund_order_id,财务对账用)
+    private String payFundOrderId;
+
+    /// 订单支付时间(发起响应 trans_date; 同步响应 pay_date)
+    private String transDate;
+
+    /// 错误码(同步查询 FAIL/REFUND 时返回,用于精准报错)
+    private String errorCode;
 }

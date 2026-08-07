@@ -5,6 +5,7 @@ import cn.daxpay.open.channel.alipay.dao.direct.AlipayDirectAppCapabilityManager
 import cn.daxpay.open.channel.alipay.dao.direct.AlipayDirectAppKeyConfigManager;
 import cn.daxpay.open.channel.alipay.dao.direct.AlipayDirectAppManager;
 import cn.daxpay.open.channel.alipay.dao.direct.AlipayDirectChannelMerchantManager;
+import cn.daxpay.open.channel.alipay.dao.direct.AlipayTransferConfigManager;
 import cn.daxpay.open.channel.alipay.entity.direct.AlipayDirectApp;
 import cn.daxpay.open.channel.alipay.entity.direct.AlipayDirectAppAuthConfig;
 import cn.daxpay.open.channel.alipay.entity.direct.AlipayDirectAppCapability;
@@ -34,6 +35,7 @@ public class AlipayDirectChannelMerchantCleanupStrategy implements ChannelMercha
     private final AlipayDirectAppKeyConfigManager alipayDirectAppKeyConfigManager;
     private final AlipayDirectAppCapabilityManager alipayDirectAppCapabilityManager;
     private final AlipayDirectAppAuthConfigManager alipayDirectAppAuthConfigManager;
+    private final AlipayTransferConfigManager alipayTransferConfigManager;
 
     /// 对应产品: 支付宝直连
     @Override
@@ -50,5 +52,7 @@ public class AlipayDirectChannelMerchantCleanupStrategy implements ChannelMercha
         alipayDirectAppKeyConfigManager.deleteByField(AlipayDirectAppKeyConfig::getChannelMchNo, channelMchNo);
         alipayDirectAppCapabilityManager.deleteByField(AlipayDirectAppCapability::getChannelMchNo, channelMchNo);
         alipayDirectAppAuthConfigManager.deleteByField(AlipayDirectAppAuthConfig::getChannelMchNo, channelMchNo);
+        // 转账配置(转账应用绑定)
+        alipayTransferConfigManager.deleteByChannelMchNo(channelMchNo);
     }
 }

@@ -835,6 +835,20 @@
     },
     "runtime": {
       "size": "运行形态编码不可超过16位"
+    },
+    "transferSceneName": {
+      "notBlank": "转账场景名称不可为空",
+      "size": "转账场景名称不可超过64位"
+    },
+    "transferSceneReportInfoType": {
+      "size": "转账场景上报信息类型不可超过64位"
+    },
+    "transferSceneReportInfoContent": {
+      "size": "转账场景上报信息内容不可超过200位"
+    },
+    "transferSceneId": {
+      "notBlank": "转账场景ID不可为空",
+      "size": "转账场景ID不可超过16位"
     }
   }
 }

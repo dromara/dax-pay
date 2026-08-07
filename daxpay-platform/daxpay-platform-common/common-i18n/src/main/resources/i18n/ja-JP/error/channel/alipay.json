@@ -50,5 +50,18 @@
   "transferFailed": "Alipay送金エラー: {0}",
   "transferQueryFailed": "Alipay送金照会エラー: {0}",
   "transferPayeeTypeInvalid": "Alipay: 未対応の受取人アカウントタイプ: {0}",
-  "transferPayeeAccountRequired": "Alipay: 受取人アカウントは必須です"
+  "transferPayeeAccountRequired": "Alipay: 受取人アカウントは必須です",
+  "transferTitleRequired": "Alipay: 振込タイトルは必須です",
+  "transferSceneNotFound": "Alipay: 振込シーン設定が存在しません",
+  "transferSceneNameInvalid": "Alipay: サポートされていない振込シーン: {0}",
+  "transferSceneNotConfigured": "Alipay: 当該チャネル加盟店に振込シーンが設定されていません。チャネル加盟店詳細の「振込シーン」で設定してください",
+  "transferSceneNotBelong": "Alipay: 振込シーン設定は現在の加盟店に属していません",
+  "transferSceneIdRequired": "Alipay: 振込シーン設定IDは必須です",
+  "transferSceneIdInvalid": "Alipay: 振込シーン設定IDの形式エラー: {0}",
+  "transferSceneEnabledLimit": "Alipay: 有効化する送金シーンは{0}個までです",
+  "transferSceneCannotDisableDefault": "Alipay: デフォルトシーンは無効化できません, 先にデフォルトを他のシーンに切り替えてください",
+  "transferAppNotConfigured": "Alipay: 当該チャネル加盟店に振込アプリがバインドされていません。チャネル加盟店詳細の「振込アプリ」で設定してください",
+  "transferAppNotExist": "Alipay: 振込アプリが存在しません",
+  "transferAppNotBelong": "Alipay: 振込アプリは現在の加盟店に属していません",
+  "channelMerchantMismatch": "Alipay: チャネル加盟店は現在の加盟店に属していません"
 }

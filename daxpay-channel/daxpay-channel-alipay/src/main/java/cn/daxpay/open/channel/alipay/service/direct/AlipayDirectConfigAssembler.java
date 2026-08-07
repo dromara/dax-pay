@@ -1,5 +1,6 @@
 package cn.daxpay.open.channel.alipay.service.direct;
 
+import cn.daxpay.open.channel.alipay.dao.direct.AlipayDirectAppManager;
 import cn.daxpay.open.channel.alipay.dao.direct.AlipayDirectChannelMerchantManager;
 import cn.daxpay.open.channel.alipay.client.credential.AlipaySdkCredential;
 import cn.daxpay.open.channel.alipay.entity.direct.AlipayDirectApp;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /// # 支付宝直连通道凭证组装器
@@ -22,7 +24,9 @@ import java.util.Optional;
 /// 沙箱标识直接读通道商户固化的 [AlipayDirectChannelMerchant#isSandbox]
 /// (创建时按当时产品 activeEnv 写入, 不随产品切换改变), 据此选择对应环境的密钥与网关地址。
 ///
-/// 应用解析优先级：能力关联(显式配置 > appType 唯一推导) > 未命中报错(拒绝首个兜底)。
+/// 支付应用解析优先级：能力关联(显式配置 > appType 唯一推导) > 未命中报错(拒绝首个兜底);
+/// 转账不走能力关联, 由转账配置([cn.daxpay.open.channel.alipay.entity.direct.AlipayTransferConfig])
+/// 显式指定转出应用, 见 [#buildTransferConfig]。
 ///
 /// 供支付策略([cn.daxpay.open.channel.alipay.strategy.direct.AlipayDirectPayStrategy])组装通道调用凭证。
 @Slf4j
@@ -33,6 +37,7 @@ public class AlipayDirectConfigAssembler {
     private final AlipayDirectChannelMerchantManager alipayDirectChannelMerchantManager;
     private final AlipayDirectAppKeyConfigService alipayDirectAppKeyConfigService;
     private final AlipayDirectAppCapabilityService alipayDirectAppCapabilityService;
+    private final AlipayDirectAppManager alipayDirectAppManager;
 
     /// 组装直连商户的通道调用凭证(下发给子应用)
     ///
@@ -42,6 +47,29 @@ public class AlipayDirectConfigAssembler {
     /// @return 支付宝 SDK 凭证, 字段对齐子应用 AlipaySdkCredential
     public AlipaySdkCredential buildConfig(String mchNo, String channelMchNo, String capability) {
         AlipayDirectApp app = resolveApp(mchNo, channelMchNo, capability);
+        return assembleCredential(channelMchNo, app);
+    }
+
+    /// 组装转账通道调用凭证(转账无能力维度, 按转账配置显式指定的应用)
+    ///
+    /// @param mchNo        商户号(归属校验)
+    /// @param channelMchNo 通道商户号
+    /// @param appRefId     转账转出应用引用(alipay_direct_app 主键, 由转账配置绑定)
+    /// @return 支付宝 SDK 凭证
+    public AlipaySdkCredential buildTransferConfig(String mchNo, String channelMchNo, Long appRefId) {
+        AlipayDirectApp app = alipayDirectAppManager.lambdaQuery()
+                .eq(AlipayDirectApp::getId, appRefId)
+                .oneOpt()
+                .orElseThrow(() -> new DataNotExistException("error.channel.alipay.transferAppNotExist"));
+        if (!Objects.equals(app.getMchNo(), mchNo)) {
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "error.channel.alipay.transferAppNotBelong");
+        }
+        return assembleCredential(channelMchNo, app);
+    }
+
+    /// 按通道商户与应用组装凭证(通道商户沙箱快照 + 应用级密钥)
+    private AlipaySdkCredential assembleCredential(String channelMchNo, AlipayDirectApp app) {
         AlipayDirectChannelMerchant channelMerchant = alipayDirectChannelMerchantManager.lambdaQuery()
                 .eq(AlipayDirectChannelMerchant::getChannelMchNo, channelMchNo)
                 .oneOpt()

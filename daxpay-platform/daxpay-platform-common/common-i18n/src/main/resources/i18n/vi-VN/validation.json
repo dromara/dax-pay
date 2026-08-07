@@ -831,6 +831,10 @@
     },
     "runtime": {
       "size": "Mã runtime không được vượt quá 16 ký tự"
+    },
+    "transferSceneId": {
+      "notBlank": "ID kịch bản chuyển khoản không được để trống",
+      "size": "ID kịch bản chuyển khoản không được vượt quá 16 ký tự"
     }
   }
 }

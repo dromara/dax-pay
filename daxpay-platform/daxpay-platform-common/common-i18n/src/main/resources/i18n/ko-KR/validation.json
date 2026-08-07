@@ -831,6 +831,20 @@
     },
     "runtime": {
       "size": "런타임 코드는 16자를 초과할 수 없습니다"
+    },
+    "transferSceneName": {
+      "notBlank": "이체 시나리오 이름은 비워둘 수 없습니다",
+      "size": "이체 시나리오 이름은 64자를 초과할 수 없습니다"
+    },
+    "transferSceneReportInfoType": {
+      "size": "이체 시나리오 보고 정보 유형은 64자를 초과할 수 없습니다"
+    },
+    "transferSceneReportInfoContent": {
+      "size": "이체 시나리오 보고 정보 내용은 200자를 초과할 수 없습니다"
+    },
+    "transferSceneId": {
+      "notBlank": "송금 시나리오 ID는 필수입니다",
+      "size": "송금 시나리오 ID는 16자 이내여야 합니다"
     }
   }
 }

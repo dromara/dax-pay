@@ -50,5 +50,18 @@
   "transferFailed": "Alipay transfer failed: {0}",
   "transferQueryFailed": "Alipay transfer query failed: {0}",
   "transferPayeeTypeInvalid": "Alipay: unsupported payee account type: {0}",
-  "transferPayeeAccountRequired": "Alipay: payee account required"
+  "transferPayeeAccountRequired": "Alipay: payee account required",
+  "transferTitleRequired": "Alipay: transfer title required",
+  "transferSceneNotFound": "Alipay: transfer scene config not found",
+  "transferSceneNameInvalid": "Alipay: unsupported transfer scene: {0}",
+  "transferSceneNotConfigured": "Alipay: no transfer scene configured for this channel merchant, please configure one in 'Transfer Scene' tab of channel merchant detail",
+  "transferSceneNotBelong": "Alipay: transfer scene config does not belong to the current merchant",
+  "transferSceneIdRequired": "Alipay: transfer scene config id required",
+  "transferSceneIdInvalid": "Alipay: invalid transfer scene config id: {0}",
+  "transferSceneEnabledLimit": "Alipay: Cannot enable more than {0} transfer scenes",
+  "transferSceneCannotDisableDefault": "Alipay: Default scene cannot be disabled, please switch default to another scene first",
+  "transferAppNotConfigured": "Alipay: no transfer app bound for this channel merchant, please bind one in 'Transfer App' of channel merchant detail",
+  "transferAppNotExist": "Alipay: transfer app not found",
+  "transferAppNotBelong": "Alipay: transfer app does not belong to the current merchant",
+  "channelMerchantMismatch": "Alipay: channel merchant does not belong to the current merchant"
 }

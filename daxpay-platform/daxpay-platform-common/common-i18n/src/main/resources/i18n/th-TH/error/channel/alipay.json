@@ -50,5 +50,7 @@
   "transferFailed": "การโอนเงิน Alipay ล้มเหลว: {0}",
   "transferQueryFailed": "การสอบถามการโอนเงิน Alipay ล้มเหลว: {0}",
   "transferPayeeTypeInvalid": "Alipay: ไม่รองรับประเภทบัญชีผู้รับ: {0}",
-  "transferPayeeAccountRequired": "Alipay: ต้องระบุบัญชีผู้รับ"
+  "transferPayeeAccountRequired": "Alipay: ต้องระบุบัญชีผู้รับ",
+  "transferSceneEnabledLimit": "Alipay: ไม่สามารถเปิดใช้งานเกิน {0} สถานการณ์การโอน",
+  "transferSceneCannotDisableDefault": "Alipay: ไม่สามารถปิดใช้งานสถานการณ์เริ่มต้น โปรดสลับเริ่มต้นไปยังสถานการณ์อื่นก่อน"
 }

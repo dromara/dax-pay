@@ -50,5 +50,7 @@
   "transferFailed": "Chuyển khoản Alipay thất bại: {0}",
   "transferQueryFailed": "Truy vấn chuyển khoản Alipay thất bại: {0}",
   "transferPayeeTypeInvalid": "Alipay: loại tài khoản người nhận không được hỗ trợ: {0}",
-  "transferPayeeAccountRequired": "Alipay: bắt buộc nhập tài khoản người nhận"
+  "transferPayeeAccountRequired": "Alipay: bắt buộc nhập tài khoản người nhận",
+  "transferSceneEnabledLimit": "Alipay: Không thể kích hoạt quá {0} cảnh chuyển khoản",
+  "transferSceneCannotDisableDefault": "Alipay: Cảnh mặc định không thể vô hiệu hóa, vui lòng chuyển mặc định sang cảnh khác trước"
 }

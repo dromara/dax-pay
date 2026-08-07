@@ -831,6 +831,20 @@
     },
     "runtime": {
       "size": "実行形態コードは16文字以内です"
+    },
+    "transferSceneName": {
+      "notBlank": "振込シーン名は空にできません",
+      "size": "振込シーン名は64文字を超えることはできません"
+    },
+    "transferSceneReportInfoType": {
+      "size": "振込シーン報告情報タイプは64文字を超えることはできません"
+    },
+    "transferSceneReportInfoContent": {
+      "size": "振込シーン報告情報内容は200文字を超えることはできません"
+    },
+    "transferSceneId": {
+      "notBlank": "送金シーンIDは必須です",
+      "size": "送金シーンIDは16文字以内で入力してください"
     }
   }
 }

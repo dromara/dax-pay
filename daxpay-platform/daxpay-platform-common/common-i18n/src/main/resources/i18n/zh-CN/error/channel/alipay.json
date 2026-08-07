@@ -50,5 +50,18 @@
   "transferFailed": "支付宝转账失败: {0}",
   "transferQueryFailed": "支付宝转账查询失败: {0}",
   "transferPayeeTypeInvalid": "支付宝: 不支持的收款人账号类型: {0}",
-  "transferPayeeAccountRequired": "支付宝: 收款人账号必填"
+  "transferPayeeAccountRequired": "支付宝: 收款人账号必填",
+  "transferTitleRequired": "支付宝: 转账标题必填",
+  "transferSceneNotFound": "支付宝: 转账场景配置不存在",
+  "transferSceneNameInvalid": "支付宝: 不支持的转账场景: {0}",
+  "transferSceneNotConfigured": "支付宝: 该通道商户尚未配置转账场景, 请先在通道商户详情的「转账场景」中配置",
+  "transferSceneNotBelong": "支付宝: 转账场景配置不属于当前商户",
+  "transferSceneIdRequired": "支付宝: 转账场景配置主键必填",
+  "transferSceneIdInvalid": "支付宝: 转账场景配置ID格式错误: {0}",
+  "transferSceneEnabledLimit": "支付宝: 启用的转账场景不能超过{0}个",
+  "transferSceneCannotDisableDefault": "支付宝: 默认场景不能禁用, 请先切换默认到其他场景",
+  "transferAppNotConfigured": "支付宝: 该通道商户尚未绑定转账应用, 请先在通道商户详情的「转账应用」中配置",
+  "transferAppNotExist": "支付宝: 转账应用不存在",
+  "transferAppNotBelong": "支付宝: 转账应用不属于当前商户",
+  "channelMerchantMismatch": "支付宝: 通道商户不属于当前商户"
 }

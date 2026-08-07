@@ -50,5 +50,18 @@
   "transferFailed": "支付寶轉帳失敗: {0}",
   "transferQueryFailed": "支付寶轉帳查詢失敗: {0}",
   "transferPayeeTypeInvalid": "支付寶: 不支持的收款人賬號類型: {0}",
-  "transferPayeeAccountRequired": "支付寶: 收款人賬號必填"
+  "transferPayeeAccountRequired": "支付寶: 收款人賬號必填",
+  "transferTitleRequired": "支付寶: 轉帳標題必填",
+  "transferSceneNotFound": "支付寶: 轉帳場景設定不存在",
+  "transferSceneNameInvalid": "支付寶: 不支援的轉帳場景: {0}",
+  "transferSceneNotConfigured": "支付寶: 該通道商戶尚未設定轉帳場景, 請先在通道商戶詳情的「轉帳場景」中設定",
+  "transferSceneNotBelong": "支付寶: 轉帳場景設定不屬於當前商戶",
+  "transferSceneIdRequired": "支付寶: 轉帳場景設定主鍵必填",
+  "transferSceneIdInvalid": "支付寶: 轉帳場景設定ID格式錯誤: {0}",
+  "transferSceneEnabledLimit": "支付寶: 啟用的轉賬場景不能超過{0}個",
+  "transferSceneCannotDisableDefault": "支付寶: 預設場景不能停用, 請先切換預設到其他場景",
+  "transferAppNotConfigured": "支付寶: 該通道商戶尚未綁定轉帳應用, 請先在通道商戶詳情的「轉帳應用」中設定",
+  "transferAppNotExist": "支付寶: 轉帳應用不存在",
+  "transferAppNotBelong": "支付寶: 轉帳應用不屬於當前商戶",
+  "channelMerchantMismatch": "支付寶: 通道商戶不屬於當前商戶"
 }

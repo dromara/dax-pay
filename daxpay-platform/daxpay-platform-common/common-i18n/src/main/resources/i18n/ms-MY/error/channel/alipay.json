@@ -50,5 +50,7 @@
   "transferFailed": "Pindahan Alipay gagal: {0}",
   "transferQueryFailed": "Pertanyaan pindahan Alipay gagal: {0}",
   "transferPayeeTypeInvalid": "Alipay: jenis akaun penerima tidak disokong: {0}",
-  "transferPayeeAccountRequired": "Alipay: akaun penerima wajib"
+  "transferPayeeAccountRequired": "Alipay: akaun penerima wajib",
+  "transferSceneEnabledLimit": "Alipay: Tidak boleh mengaktifkan lebih daripada {0} babak pemindahan",
+  "transferSceneCannotDisableDefault": "Alipay: Babak lalai tidak boleh dilumpuhkan, sila tukar lalai ke babak lain dahulu"
 }
