@@ -5,9 +5,11 @@ import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.channel.wechat.param.direct.WechatDirectChannelMerchantCreateParam;
+import cn.daxpay.open.channel.wechat.param.direct.WechatDirectChannelMerchantUpdateParam;
 import cn.daxpay.open.channel.wechat.param.direct.WechatDirectKeyConfigParam;
 import cn.daxpay.open.channel.wechat.result.direct.WechatDirectChannelMerchantResult;
 import cn.daxpay.open.channel.wechat.result.direct.WechatDirectKeyConfigResult;
+import cn.daxpay.open.channel.wechat.result.direct.WechatTransferSceneOptionResult;
 import cn.daxpay.open.channel.wechat.service.direct.WechatDirectChannelMerchantService;
 import cn.daxpay.open.channel.wechat.service.direct.WechatDirectKeyConfigService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,6 +22,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /// # 微信直连通道商户管理
 ///
@@ -48,6 +52,21 @@ public class WechatDirectChannelMerchantController {
     public Result<Void> create(@RequestBody @Validated WechatDirectChannelMerchantCreateParam param) {
         wechatDirectChannelMerchantService.create(param);
         return Res.ok();
+    }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "更新微信直连通道商户(转账场景/微信商户号)")
+    @PostMapping("/update")
+    public Result<Void> update(@RequestBody @Validated WechatDirectChannelMerchantUpdateParam param) {
+        wechatDirectChannelMerchantService.update(param);
+        return Res.ok();
+    }
+
+    @PermCode(code = PermCodes.Action.VIEW)
+    @Operation(summary = "查询微信转账场景选项列表")
+    @GetMapping("/scene-options")
+    public Result<List<WechatTransferSceneOptionResult>> sceneOptions() {
+        return Res.ok(wechatDirectChannelMerchantService.findSceneOptions());
     }
 
     @PermCode(code = PermCodes.Action.VIEW)

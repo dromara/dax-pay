@@ -66,5 +66,7 @@
   "transferAppNotConfigured": "WeChat: ยังไม่ได้กำหนดค่าแอปเริ่มการโอน",
   "transferAppNotExist": "WeChat: ไม่พบแอปเริ่มการโอน",
   "transferAppNotBelong": "WeChat: แอปเริ่มการโอนไม่ได้เป็นของร้านค้าปัจจุบัน",
-  "transferAppTypeNotOfficialAccount": "WeChat: แอปเริ่มการโอนต้องเป็นประเภท Official Account"
+  "transferAppTypeNotOfficialAccount": "WeChat: แอปเริ่มการโอนต้องเป็นประเภท Official Account",
+  "transferRemarkRequired": "WeChat: หมายเหตุการโอน (หัวข้อ) จำเป็นต้องระบุ",
+  "transferReportInfoRequired": "WeChat: ข้อมูลรายงานสถานการณ์การโอนเงินจำเป็นต้องระบุ กรุณากรอกข้อมูลรายงานทั้งหมด"
 }

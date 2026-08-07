@@ -1,7 +1,10 @@
 package cn.daxpay.open.channel.wechat.client.req;
 
 import cn.daxpay.open.channel.wechat.client.credential.WechatSdkCredential;
+import cn.daxpay.open.payment.trade.transfer.param.TransferReportInfo;
 import lombok.Data;
+
+import java.util.List;
 
 /// # 微信通道转账请求(发起/同步共用)
 ///
@@ -33,6 +36,9 @@ public class WechatTransferReq {
 
     /// 异步通知地址(微信→平台)
     private String notifyUrl;
+
+    /// 转账场景报备信息(发起时必填, 同步可空)
+    private List<TransferReportInfo> reportInfos;
 
     /// 通道调用凭证
     private WechatSdkCredential credential;

@@ -66,5 +66,7 @@
   "transferAppNotConfigured": "微信: 转账发起应用未配置",
   "transferAppNotExist": "微信: 转账发起应用不存在",
   "transferAppNotBelong": "微信: 转账发起应用不属于当前商户",
-  "transferAppTypeNotOfficialAccount": "微信: 转账发起应用必须是公众号类型"
+  "transferAppTypeNotOfficialAccount": "微信: 转账发起应用必须是公众号类型",
+  "transferRemarkRequired": "微信: 转账备注(标题)必填",
+  "transferReportInfoRequired": "微信: 转账场景报备信息必填, 请填写全部报备字段"
 }

@@ -66,5 +66,7 @@
   "transferAppNotConfigured": "WeChat: Aplikasi pemula pemindahan belum dikonfigurasi",
   "transferAppNotExist": "WeChat: Aplikasi pemula pemindahan tidak dijumpai",
   "transferAppNotBelong": "WeChat: Aplikasi pemula pemindahan tidak milik merchant semasa",
-  "transferAppTypeNotOfficialAccount": "WeChat: Aplikasi pemula pemindahan mesti jenis Official Account"
+  "transferAppTypeNotOfficialAccount": "WeChat: Aplikasi pemula pemindahan mesti jenis Official Account",
+  "transferRemarkRequired": "WeChat: catatan pindah wang (tajuk) wajib diisi",
+  "transferReportInfoRequired": "WeChat: maklumat laporan senario pindah wang wajib diisi, sila isi semua medan laporan"
 }

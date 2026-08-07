@@ -4,10 +4,12 @@ import cn.daxpay.open.channel.wechat.client.WechatChannelClient;
 import cn.daxpay.open.channel.wechat.client.credential.WechatSdkCredential;
 import cn.daxpay.open.channel.wechat.client.req.WechatTransferReq;
 import cn.daxpay.open.channel.wechat.client.resp.WechatTransferResp;
+import cn.daxpay.open.channel.wechat.enums.WechatTransferSceneEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.strategy.transfer.TransferStrategyContext;
 import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.trade.transfer.bo.TransferResultBo;
+import cn.daxpay.open.payment.trade.transfer.param.TransferReportInfo;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
@@ -16,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -54,6 +57,7 @@ public class WechatTransferService {
         req.setUserName(context.getUserName());
         req.setRemark(StrUtil.sub(context.getTitle(), 0, 32));
         req.setNotifyUrl(this.buildNotifyUrl(context));
+        req.setReportInfos(this.ensureReportInfos(context));
         req.setCredential(credential);
 
         DaxResult<WechatTransferResp> result = wechatChannelClient.transfer(req);
@@ -120,5 +124,27 @@ public class WechatTransferService {
         }
         return StrUtil.format("{}/unipay/callback/{}/{}/wechat/transfer",
                 base, context.getMchNo(), context.getChannelMchNo());
+    }
+
+    /// 确保报备信息非空
+    ///
+    /// 微信 `/transfer-bills` 的 `transfer_scene_report_infos` 为必填。
+    /// 商户传入的 [TransferStrategyContext#getReportInfos] 非空时直接透传;
+    /// 为空时按场景枚举 [WechatTransferSceneEnum] 的报备字段模板构建默认值(`-`)。
+    private List<TransferReportInfo> ensureReportInfos(TransferStrategyContext context) {
+        List<TransferReportInfo> reportInfos = context.getReportInfos();
+        if (reportInfos != null && !reportInfos.isEmpty()) {
+            return reportInfos;
+        }
+        // 兜底: 按场景枚举构建默认报备信息
+        WechatTransferSceneEnum scene = WechatTransferSceneEnum.findByCode(context.getTransferScene());
+        if (scene == null) {
+            return reportInfos;
+        }
+        List<TransferReportInfo> defaults = new ArrayList<>();
+        for (String infoType : scene.getReportInfoTypes()) {
+            defaults.add(new TransferReportInfo().setInfoType(infoType).setInfoContent("-"));
+        }
+        return defaults;
     }
 }

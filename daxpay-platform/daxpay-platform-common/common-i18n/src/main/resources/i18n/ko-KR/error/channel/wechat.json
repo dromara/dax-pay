@@ -66,5 +66,7 @@
   "transferAppNotConfigured": "WeChat: 이체 발신 앱이 구성되지 않았습니다",
   "transferAppNotExist": "WeChat: 이체 발신 앱을 찾을 수 없습니다",
   "transferAppNotBelong": "WeChat: 이체 발신 앱이 현재 가맹점에 속하지 않습니다",
-  "transferAppTypeNotOfficialAccount": "WeChat: 이체 발신 앱은 공식계정 유형이어야 합니다"
+  "transferAppTypeNotOfficialAccount": "WeChat: 이체 발신 앱은 공식계정 유형이어야 합니다",
+  "transferRemarkRequired": "WeChat: 이체 메모(제목)는 필수입니다",
+  "transferReportInfoRequired": "WeChat: 이체 시나리오 보고 정보는 필수입니다. 모든 보고 항목을 입력해 주세요"
 }

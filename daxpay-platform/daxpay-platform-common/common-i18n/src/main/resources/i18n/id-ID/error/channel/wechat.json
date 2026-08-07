@@ -66,5 +66,7 @@
   "transferAppNotConfigured": "WeChat: Aplikasi inisiator transfer belum dikonfigurasi",
   "transferAppNotExist": "WeChat: Aplikasi inisiator transfer tidak ditemukan",
   "transferAppNotBelong": "WeChat: Aplikasi inisiator transfer bukan milik merchant saat ini",
-  "transferAppTypeNotOfficialAccount": "WeChat: Aplikasi inisiator transfer harus berjenis Official Account"
+  "transferAppTypeNotOfficialAccount": "WeChat: Aplikasi inisiator transfer harus berjenis Official Account",
+  "transferRemarkRequired": "WeChat: catatan transfer (judul) wajib diisi",
+  "transferReportInfoRequired": "WeChat: informasi pelaporan skema transfer wajib diisi, silakan isi semua bidang pelaporan"
 }

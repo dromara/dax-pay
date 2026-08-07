@@ -2,8 +2,11 @@ package cn.daxpay.open.channel.wechat.service.direct;
 
 import cn.daxpay.open.channel.wechat.dao.direct.WechatDirectChannelMerchantManager;
 import cn.daxpay.open.channel.wechat.entity.direct.WechatDirectChannelMerchant;
+import cn.daxpay.open.channel.wechat.enums.WechatTransferSceneEnum;
 import cn.daxpay.open.channel.wechat.param.direct.WechatDirectChannelMerchantCreateParam;
+import cn.daxpay.open.channel.wechat.param.direct.WechatDirectChannelMerchantUpdateParam;
 import cn.daxpay.open.channel.wechat.result.direct.WechatDirectChannelMerchantResult;
+import cn.daxpay.open.channel.wechat.result.direct.WechatTransferSceneOptionResult;
 import cn.daxpay.open.channel.wechat.strategy.direct.merchant.WechatDirectChannelMerchantCleanupStrategy;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
 import cn.daxpay.open.payment.masterdata.dao.product.PayProductConfigManager;
@@ -17,6 +20,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Arrays;
+import java.util.List;
 
 /// # 微信直连通道商户管理
 ///
@@ -74,5 +80,41 @@ public class WechatDirectChannelMerchantService {
                 .map(WechatDirectChannelMerchant::toResult)
                 // 微信: 通道商户配置不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
+    }
+
+    /// 更新微信直连通道商户(转账场景/微信商户号)
+    @Transactional(rollbackFor = Exception.class)
+    public void update(WechatDirectChannelMerchantUpdateParam param) {
+        WechatDirectChannelMerchant entity = wechatDirectChannelMerchantManager.lambdaQuery()
+                .eq(WechatDirectChannelMerchant::getChannelMchNo, param.getChannelMchNo())
+                .oneOpt()
+                // 微信: 通道商户配置不存在
+                .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
+        // 微信商户号变更时校验同一商户下不重复
+        if (param.getWxMchId() != null && !param.getWxMchId().equals(entity.getWxMchId())) {
+            if (wechatDirectChannelMerchantManager.existsByMchNoAndWxMchId(
+                    entity.getMchNo(), param.getWxMchId())) {
+                // 微信: 同一商户下该微信商户已存在
+                throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.wechat.directMchDuplicate");
+            }
+            entity.setWxMchId(param.getWxMchId());
+        }
+        // 转账场景(允许清空, 清空后发起转账会报"场景未配置")
+        if (param.getTransferScene() != null) {
+            entity.setTransferScene(param.getTransferScene());
+        }
+        wechatDirectChannelMerchantManager.updateById(entity);
+    }
+
+    /// 查询微信转账场景选项列表(供前端下拉与报备字段动态渲染)
+    public List<WechatTransferSceneOptionResult> findSceneOptions() {
+        return Arrays.stream(WechatTransferSceneEnum.values())
+                .map(scene -> new WechatTransferSceneOptionResult()
+                        .setCode(scene.getCode())
+                        .setName(scene.getName())
+                        .setReportInfoTypes(scene.getReportInfoTypes())
+                        .setReportInfoDescriptions(scene.getReportInfoDescriptions())
+                        .setUserRecvPerceptionOptions(scene.getUserRecvPerceptionOptions()))
+                .toList();
     }
 }

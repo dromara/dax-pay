@@ -3,6 +3,7 @@ package cn.daxpay.open.payment.trade.transfer.dao;
 import cn.daxpay.open.platform.common.mybatisplus.impl.BaseManager;
 import cn.daxpay.open.platform.common.mybatisplus.query.generator.QueryGenerator;
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
+import cn.daxpay.open.platform.core.annotation.IgnoreTenant;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.payment.trade.transfer.entity.WechatTransferOrder;
 import cn.daxpay.open.payment.trade.transfer.param.WechatTransferOrderQuery;
@@ -21,6 +22,12 @@ public class WechatTransferOrderManager
 
     /// 根据平台转账单号查询
     public Optional<WechatTransferOrder> findByTransferNo(String transferNo) {
+        return findByField(WechatTransferOrder::getTransferNo, transferNo);
+    }
+
+    /// 根据平台转账单号查询(忽略租户, 确认收款页引导读用)
+    @IgnoreTenant
+    public Optional<WechatTransferOrder> findByTransferNoNotTenant(String transferNo) {
         return findByField(WechatTransferOrder::getTransferNo, transferNo);
     }
 

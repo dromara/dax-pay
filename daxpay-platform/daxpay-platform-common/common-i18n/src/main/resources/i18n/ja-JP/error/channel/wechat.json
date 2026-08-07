@@ -66,5 +66,7 @@
   "transferAppNotConfigured": "WeChat: 振込发起アプリが未設定です",
   "transferAppNotExist": "WeChat: 振込发起アプリが見つかりません",
   "transferAppNotBelong": "WeChat: 振込发起アプリは現在のマーチャントに属していません",
-  "transferAppTypeNotOfficialAccount": "WeChat: 振込发起アプリは公式アカウントタイプである必要があります"
+  "transferAppTypeNotOfficialAccount": "WeChat: 振込发起アプリは公式アカウントタイプである必要があります",
+  "transferRemarkRequired": "WeChat: 振込備考(タイトル)は必須です",
+  "transferReportInfoRequired": "WeChat: 振込シーン報備情報は必須です。すべての報備項目を入力してください"
 }

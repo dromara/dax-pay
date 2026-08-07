@@ -10,6 +10,7 @@ import cn.daxpay.open.payment.strategy.transfer.TransferStrategyContext;
 import cn.daxpay.open.payment.trade.transfer.bo.TransferResultBo;
 import cn.daxpay.open.payment.trade.transfer.enums.TransferPayeeTypeEnum;
 import cn.daxpay.open.payment.trade.transfer.param.TransferParam;
+import cn.daxpay.open.payment.trade.transfer.param.TransferReportInfo;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
@@ -18,12 +19,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /// # 微信直连转账策略
 ///
 /// 微信商家转账到零钱(V3)的通道策略。
 /// 通道差异:
 /// - 仅支持 openid 收款人([TransferPayeeTypeEnum#OPENID])
 /// - 金额档位姓名校验: 小于 0.3 元禁填姓名, 大于等于 2000 元必填姓名
+/// - 转账备注(标题)与场景报备信息必填(微信接口 transfer_remark / transfer_scene_report_infos)
 /// - transfer_scene 取自「微信转账配置」([WechatTransferConfig]), 发起应用由配置指定(公众号)
 @Slf4j
 @Service
@@ -52,6 +56,18 @@ public class WechatTransferStrategy extends AbsTransferStrategy {
             // 微信: 仅支持 openid 收款人
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.channel.wechat.transferOnlyOpenid");
+        }
+        // 微信: 转账备注(标题)必填, 对应接口 transfer_remark
+        if (StrUtil.isBlank(param.getTitle())) {
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "error.channel.wechat.transferRemarkRequired");
+        }
+        // 微信: 转账场景报备信息必填(接口 transfer_scene_report_infos 必填, 且 info_content 不可为空)
+        List<TransferReportInfo> reportInfos = param.getReportInfos();
+        if (reportInfos == null || reportInfos.isEmpty()
+                || reportInfos.stream().anyMatch(info -> StrUtil.isBlank(info.getInfoContent()))) {
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "error.channel.wechat.transferReportInfoRequired");
         }
         long amountFen = param.getAmount().movePointRight(2).longValue();
         String payeeName = param.getPayeeName();

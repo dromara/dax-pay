@@ -66,5 +66,7 @@
   "transferAppNotConfigured": "WeChat: Ứng dụng khởi tạo chuyển khoản chưa được thiết lập",
   "transferAppNotExist": "WeChat: Không tìm thấy ứng dụng khởi tạo chuyển khoản",
   "transferAppNotBelong": "WeChat: Ứng dụng khởi tạo chuyển khoản không thuộc merchant hiện tại",
-  "transferAppTypeNotOfficialAccount": "WeChat: Ứng dụng khởi tạo chuyển khoản phải là loại Official Account"
+  "transferAppTypeNotOfficialAccount": "WeChat: Ứng dụng khởi tạo chuyển khoản phải là loại Official Account",
+  "transferRemarkRequired": "WeChat: ghi chú chuyển khoản (tiêu đề) là bắt buộc",
+  "transferReportInfoRequired": "WeChat: thông tin báo cáo kịch bản chuyển khoản là bắt buộc, vui lòng điền đầy đủ các trường báo cáo"
 }
