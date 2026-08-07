@@ -1,11 +1,8 @@
 package cn.daxpay.open.channel.douyin.controller.merchant;
 
-import cn.daxpay.open.channel.douyin.param.direct.DouyinDirectKeyConfigParam;
-import cn.daxpay.open.channel.douyin.result.direct.DouyinDirectChannelMerchantResult;
-import cn.daxpay.open.channel.douyin.result.direct.DouyinDirectKeyConfigResult;
-import cn.daxpay.open.channel.douyin.result.direct.DouyinTransferSceneOptionResult;
-import cn.daxpay.open.channel.douyin.service.direct.DouyinDirectChannelMerchantService;
-import cn.daxpay.open.channel.douyin.service.direct.DouyinDirectKeyConfigService;
+import cn.daxpay.open.channel.douyin.param.direct.DouyinTransferConfigParam;
+import cn.daxpay.open.channel.douyin.result.direct.DouyinTransferConfigResult;
+import cn.daxpay.open.channel.douyin.service.direct.DouyinTransferConfigService;
 import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
 import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
@@ -28,23 +25,22 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 import java.util.Objects;
 
-/// # 抖音直连通道商户配置（商户端）
+/// # 抖音转账配置管理(商户端)
 ///
-/// 对照运营端 [cn.daxpay.open.channel.douyin.controller.direct.DouyinDirectChannelMerchantController]，路径前缀 `/mch/douyin/direct-channel-merchant`。
-/// 提供抖音直连通道商户的基础信息查看与密钥配置，商户号一律取自 [PaymentContext]，防越权。
+/// 对照运营端 [cn.daxpay.open.channel.douyin.controller.direct.DouyinTransferConfigController]，
+/// 路径前缀 `/mch/douyin/transfer-config`。
+/// 商户号一律取自 [PaymentContext]，防越权。
 @PermCode(menuCode = PermCodes.Channel.Merchant.MENU)
 @Validated
-@Tag(name = "抖音直连通道商户配置(商户端)")
+@Tag(name = "抖音转账配置管理(商户端)")
 @RestController
-@RequestMapping("/mch/douyin/direct-channel-merchant")
+@RequestMapping("/mch/douyin/transfer-config")
 @RequiredArgsConstructor
-public class MchDouyinDirectChannelMerchantController {
+public class MchDouyinTransferConfigController {
 
-    private final DouyinDirectChannelMerchantService douyinDirectChannelMerchantService;
-    private final DouyinDirectKeyConfigService douyinDirectKeyConfigService;
+    private final DouyinTransferConfigService douyinTransferConfigService;
     private final ChannelMerchantManager channelMerchantManager;
     private final PaymentContext paymentContext;
 
@@ -62,50 +58,31 @@ public class MchDouyinDirectChannelMerchantController {
     private void assertChannelMchOwned(String channelMchNo) {
         ChannelMerchant channelMerchant = channelMerchantManager.findByChannelMchNo(channelMchNo)
                 // 抖音: 通道商户不存在或商户号不匹配
-                .orElseThrow(() -> new ConfigErrorException("error.channel.douyin.mchAppNotFound"));
+                .orElseThrow(() -> new ConfigErrorException("error.payment.douyin.channelMerchantMismatch"));
         if (!Objects.equals(channelMerchant.getMchNo(), this.requireMchNo())) {
             // 抖音: 通道商户与商户号不匹配
-            throw new ConfigErrorException("error.channel.douyin.mchAppNotFound");
+            throw new ConfigErrorException("error.payment.douyin.channelMerchantMismatch");
         }
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
-    @Operation(summary = "根据通道商户号查询抖音直连通道商户配置")
+    @Operation(summary = "查询通道商户的转账配置")
     @GetMapping("/find-by-channel-mch-no")
-    public Result<DouyinDirectChannelMerchantResult> findByChannelMchNo(
+    public Result<DouyinTransferConfigResult> findByChannelMchNo(
             @NotBlank(message = "{validation.field.channelMerchantNo.notBlank}") String channelMchNo) {
         this.assertChannelMchOwned(channelMchNo);
-        return Res.ok(douyinDirectChannelMerchantService.findByChannelMchNo(channelMchNo));
-    }
-
-    @PermCode(code = PermCodes.Action.VIEW)
-    @Operation(summary = "根据通道商户号查询密钥配置")
-    @GetMapping("/find-key-config")
-    public Result<DouyinDirectKeyConfigResult> findKeyConfig(
-            @NotBlank(message = "{validation.field.channelMerchantNo.notBlank}") String channelMchNo) {
-        this.assertChannelMchOwned(channelMchNo);
-        var config = douyinDirectKeyConfigService.findByChannelMchNo(channelMchNo);
-        var result = config.toResult();
-        result.setPrivateKeyConfigured(config.getMerchantPrivateKey() != null);
-        result.setEncryptKeyConfigured(config.getEncryptKey() != null);
-        return Res.ok(result);
+        return Res.ok(douyinTransferConfigService.findByChannelMchNo(this.requireMchNo(), channelMchNo));
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "保存密钥配置")
-    @PostMapping("/save-key-config")
-    public Result<Void> saveKeyConfig(@RequestBody DouyinDirectKeyConfigParam param) {
+    @Operation(summary = "保存或更新转账配置(一对一)")
+    @PostMapping("/save")
+    public Result<Void> save(@RequestBody DouyinTransferConfigParam param) {
         this.assertChannelMchOwned(param.getChannelMchNo());
         // 强制当前商户号，忽略客户端传入（防越权）
         param.setMchNo(this.requireMchNo());
         ValidationUtil.validateParam(param);
-        douyinDirectKeyConfigService.save(param);
+        douyinTransferConfigService.saveOrUpdate(param);
         return Res.ok();
-    }
-
-    @Operation(summary = "查询抖音转账场景选项列表(主数据枚举)")
-    @GetMapping("/scene-options")
-    public Result<List<DouyinTransferSceneOptionResult>> sceneOptions() {
-        return Res.ok(douyinDirectChannelMerchantService.findSceneOptions());
     }
 }

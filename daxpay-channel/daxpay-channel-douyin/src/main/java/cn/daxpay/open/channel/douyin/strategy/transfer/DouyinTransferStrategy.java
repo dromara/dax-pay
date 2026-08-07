@@ -1,8 +1,9 @@
 package cn.daxpay.open.channel.douyin.strategy.transfer;
 
 import cn.daxpay.open.channel.douyin.client.credential.DouyinSdkCredential;
-import cn.daxpay.open.channel.douyin.dao.direct.DouyinDirectChannelMerchantManager;
-import cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectChannelMerchant;
+import cn.daxpay.open.channel.douyin.dao.direct.DouyinTransferConfigManager;
+import cn.daxpay.open.channel.douyin.entity.direct.DouyinTransferConfig;
+import cn.daxpay.open.channel.douyin.enums.DouyinTransferSceneEnum;
 import cn.daxpay.open.channel.douyin.service.direct.DouyinDirectConfigAssembler;
 import cn.daxpay.open.channel.douyin.service.payment.transfer.DouyinTransferService;
 import cn.daxpay.open.payment.strategy.transfer.AbsTransferStrategy;
@@ -11,8 +12,8 @@ import cn.daxpay.open.payment.trade.transfer.bo.TransferResultBo;
 import cn.daxpay.open.payment.trade.transfer.enums.TransferPayeeTypeEnum;
 import cn.daxpay.open.payment.trade.transfer.param.TransferParam;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
-import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
+import cn.daxpay.open.platform.core.exception.config.ConfigErrorException;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,8 +23,9 @@ import org.springframework.stereotype.Service;
 ///
 /// 抖音商家转账的通道策略。
 /// 通道差异:
-/// - openid 收款人([TransferPayeeTypeEnum#OPENID])
-/// - transfer_scene_id 取自通道商户配置, 未配置时报错
+/// - openid 收款人([TransferPayeeTypeEnum#OPENID]), 收款人 openId 由「转账发起应用」(网站应用)承接 H5 授权
+/// - transfer_scene_id 为主数据枚举(1001-1007), 发起转账时由前端选择传入, 无需预配置
+/// - 转账发起应用由通道商户的转账配置([DouyinTransferConfig])显式指定
 /// - 金额大于等于 2000 元必填收款人姓名(子应用加密上送)
 @Slf4j
 @Service
@@ -35,7 +37,7 @@ public class DouyinTransferStrategy extends AbsTransferStrategy {
 
     private final DouyinTransferService douyinTransferService;
     private final DouyinDirectConfigAssembler douyinDirectConfigAssembler;
-    private final DouyinDirectChannelMerchantManager douyinDirectChannelMerchantManager;
+    private final DouyinTransferConfigManager douyinTransferConfigManager;
 
     @Override
     public String getChannel() {
@@ -57,6 +59,17 @@ public class DouyinTransferStrategy extends AbsTransferStrategy {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.channel.douyin.transferNameRequired");
         }
+        // 转账场景ID必填且必须为合法枚举
+        if (StrUtil.isBlank(param.getTransferScene())) {
+            // 抖音: 转账场景ID必填
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "error.channel.douyin.transferSceneIdRequired");
+        }
+        if (DouyinTransferSceneEnum.findByCode(param.getTransferScene()) == null) {
+            // 抖音: 不支持的转账场景ID[{0}]
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "error.channel.douyin.transferSceneNameInvalid", param.getTransferScene());
+        }
     }
 
     /// 发起转账
@@ -73,23 +86,20 @@ public class DouyinTransferStrategy extends AbsTransferStrategy {
         return douyinTransferService.sync(context, credential);
     }
 
-    /// 组装通道调用凭证并注入转账场景
+    /// 组装通道调用凭证
     ///
-    /// 转账场景(transfer_scene_id)从通道商户配置读取, 经上下文回写, 由编排层在"处理中"镜像落库。
+    /// 转账场景(transfer_scene_id)来自请求参数(前端选择的主数据枚举), 已在 [#doValidateParam] 校验合法性。
+    /// 转账发起应用(决定转出主体与收款人 openId 来源)由通道商户的转账配置显式指定,
+    /// 读取 [DouyinTransferConfig#getTransferAppRefId] 组装凭证。
     private DouyinSdkCredential buildCredential(TransferStrategyContext context) {
-        DouyinDirectChannelMerchant channelMerchant = douyinDirectChannelMerchantManager.lambdaQuery()
-                .eq(DouyinDirectChannelMerchant::getChannelMchNo, context.getChannelMchNo())
-                .oneOpt()
-                .orElseThrow(() -> new BizInfoException(DaxPayErrorCode.CONFIG_NOT_EXIST,
-                        "error.payment.channel.channelMerchantNotExist"));
-        if (StrUtil.isBlank(channelMerchant.getTransferScene())) {
-            // 抖音: 转账场景未配置
-            throw new BizInfoException(DaxPayErrorCode.CONFIG_NOT_EXIST,
-                    "error.channel.douyin.transferSceneNotConfigured");
+        DouyinTransferConfig transferConfig = douyinTransferConfigManager
+                .findByChannelMchNo(context.getChannelMchNo())
+                .orElseThrow(() -> new ConfigErrorException("error.channel.douyin.transferAppNotConfigured"));
+        if (transferConfig.getTransferAppRefId() == null) {
+            // 抖音: 转账发起应用未配置
+            throw new ConfigErrorException("error.channel.douyin.transferAppNotConfigured");
         }
-        context.setTransferScene(channelMerchant.getTransferScene());
-        return douyinDirectConfigAssembler.buildConfig(
-                context.getMchNo(), context.getChannelMchNo(), null);
+        return douyinDirectConfigAssembler.buildTransferConfig(
+                context.getMchNo(), context.getChannelMchNo(), transferConfig.getTransferAppRefId());
     }
 }
-

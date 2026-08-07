@@ -29,9 +29,6 @@ public class DouyinDirectChannelMerchant extends MchBaseEntity implements ToResu
     /// 抖音商户号(MCHID)
     private String dyMchId;
 
-    /// 转账场景ID(商家转账 transfer_scene_id, 未配置时发起转账报错)
-    private String transferScene;
-
     /// 转换
     @Override
     public DouyinDirectChannelMerchantResult toResult() {

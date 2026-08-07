@@ -22,8 +22,5 @@ public class DouyinDirectChannelMerchantResult extends MchBaseResult {
 
     @Schema(description = "抖音商户号(MCHID)")
     private String dyMchId;
-
-    @Schema(description = "转账场景ID(商家转账)")
-    private String transferScene;
 }
 

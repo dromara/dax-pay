@@ -25,5 +25,14 @@
   "transferEncryptFailed": "Penyulitan nama pindahan Douyin gagal: {0}",
   "transferOnlyOpenid": "Douyin hanya menyokong penerima openid",
   "transferNameRequired": "Douyin: nama penerima wajib untuk jumlah >= 2000 CNY",
-  "transferSceneNotConfigured": "Douyin: senario pindahan belum dikonfigurasi"
+  "transferSceneNotConfigured": "Douyin: senario pindahan belum dikonfigurasi",
+  "transferSceneNotFound": "Douyin: konfigurasi senario pindahan tidak dijumpai",
+  "transferSceneNameInvalid": "Douyin: ID senario pindahan tidak disokong: {0}",
+  "transferSceneNotBelong": "Douyin: konfigurasi senario pindahan bukan milik merchant semasa",
+  "transferSceneIdRequired": "Douyin: ID babak pemindahan diperlukan",
+  "transferSceneIdInvalid": "Douyin: format id konfigurasi senario pindahan tidak sah: {0}",
+  "transferAppNotExist": "Douyin: Aplikasi pemula pemindahan tidak dijumpai",
+  "transferAppNotBelong": "Douyin: Aplikasi pemula pemindahan tidak milik merchant semasa",
+  "transferAppTypeNotWebApp": "Douyin: Aplikasi pemula pemindahan mesti jenis Web App",
+  "transferAppNotConfigured": "Douyin: Aplikasi pemula pemindahan belum dikonfigurasi"
 }

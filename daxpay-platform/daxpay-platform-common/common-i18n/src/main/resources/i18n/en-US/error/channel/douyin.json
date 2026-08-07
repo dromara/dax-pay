@@ -25,5 +25,14 @@
   "transferEncryptFailed": "Douyin transfer name encryption failed: {0}",
   "transferOnlyOpenid": "Douyin only supports openid payee",
   "transferNameRequired": "Douyin: payee name required for amount >= 2000 CNY",
-  "transferSceneNotConfigured": "Douyin: transfer scene not configured"
+  "transferSceneNotConfigured": "Douyin: transfer scene not configured",
+  "transferSceneNotFound": "Douyin: transfer scene config not found",
+  "transferSceneNameInvalid": "Douyin: unsupported transfer scene ID: {0}",
+  "transferSceneNotBelong": "Douyin: transfer scene config does not belong to the current merchant",
+  "transferSceneIdRequired": "Douyin: Transfer scene ID is required",
+  "transferSceneIdInvalid": "Douyin: invalid transfer scene config id: {0}",
+  "transferAppNotExist": "Douyin: Transfer initiator app not found",
+  "transferAppNotBelong": "Douyin: Transfer initiator app does not belong to the current merchant",
+  "transferAppTypeNotWebApp": "Douyin: Transfer initiator app must be a Web App",
+  "transferAppNotConfigured": "Douyin: Transfer initiator app not configured"
 }

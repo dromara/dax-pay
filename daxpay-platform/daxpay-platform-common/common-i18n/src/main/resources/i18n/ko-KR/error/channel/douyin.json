@@ -25,5 +25,14 @@
   "transferEncryptFailed": "더우인 송금 이름 암호화 실패: {0}",
   "transferOnlyOpenid": "더우인은 openid 수취인만 지원합니다",
   "transferNameRequired": "더우인: 2000원 이상은 수취인 이름 필수",
-  "transferSceneNotConfigured": "더우인: 송금 시나리오 미설정"
+  "transferSceneNotConfigured": "더우인: 송금 시나리오 미설정",
+  "transferSceneNotFound": "더우인: 송금 시나리오 설정이 존재하지 않습니다",
+  "transferSceneNameInvalid": "더우인: 지원되지 않는 송금 시나리오 ID: {0}",
+  "transferSceneNotBelong": "더우인: 송금 시나리오 설정이 현재 가맹점에 속하지 않습니다",
+  "transferSceneIdRequired": "Douyin: 이체 장면 ID는 필수입니다",
+  "transferSceneIdInvalid": "더우인: 송금 시나리오 설정 ID 형식 오류: {0}",
+  "transferAppNotExist": "Douyin: 이체 발신 앱을 찾을 수 없습니다",
+  "transferAppNotBelong": "Douyin: 이체 발신 앱이 현재 가맹점에 속하지 않습니다",
+  "transferAppTypeNotWebApp": "Douyin: 이체 발신 앱은 웹 앱(Web App) 유형이어야 합니다",
+  "transferAppNotConfigured": "Douyin: 이체 발신 앱이 구성되지 않았습니다"
 }

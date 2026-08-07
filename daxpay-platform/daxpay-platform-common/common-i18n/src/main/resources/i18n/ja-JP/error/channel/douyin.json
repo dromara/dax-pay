@@ -25,5 +25,14 @@
   "transferEncryptFailed": "抖音送金氏名暗号化エラー: {0}",
   "transferOnlyOpenid": "抖音はopenid受取人のみサポートしています",
   "transferNameRequired": "抖音: 2000元以上は受取人氏名が必須です",
-  "transferSceneNotConfigured": "抖音: 送金シーンが未設定です"
+  "transferSceneNotConfigured": "抖音: 送金シーンが未設定です",
+  "transferSceneNotFound": "抖音: 送金シーン設定が存在しません",
+  "transferSceneNameInvalid": "抖音: サポートされていない送金シーンID: {0}",
+  "transferSceneNotBelong": "抖音: 送金シーン設定は現在の加盟店に属していません",
+  "transferSceneIdRequired": "Douyin: 送金シーンIDは必須です",
+  "transferSceneIdInvalid": "抖音: 送金シーン設定IDの形式エラー: {0}",
+  "transferAppNotExist": "Douyin: 振込发起アプリが見つかりません",
+  "transferAppNotBelong": "Douyin: 振込发起アプリは現在のマーチャントに属していません",
+  "transferAppTypeNotWebApp": "Douyin: 振込发起アプリはサイトアプリ(Webアプリ)タイプである必要があります",
+  "transferAppNotConfigured": "Douyin: 振込发起アプリが未設定です"
 }

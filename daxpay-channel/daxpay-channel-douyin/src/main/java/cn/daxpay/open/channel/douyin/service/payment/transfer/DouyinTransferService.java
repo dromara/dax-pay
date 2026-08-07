@@ -48,7 +48,10 @@ public class DouyinTransferService {
         req.setScene(context.getTransferScene());
         req.setUserName(context.getPayeeName());
         req.setRemark(StrUtil.sub(context.getTitle(), 0, 32));
-        req.setPerception(context.getReason());
+        // 收款感知使用请求参数(按场景枚举选项), 不再用转账原因顶替
+        req.setPerception(context.getUserRecvPerception());
+        // 转账场景报备信息(按场景要求填写)
+        req.setReportInfos(context.getReportInfos());
         req.setNotifyUrl(this.buildNotifyUrl(context));
         req.setCredential(credential);
 

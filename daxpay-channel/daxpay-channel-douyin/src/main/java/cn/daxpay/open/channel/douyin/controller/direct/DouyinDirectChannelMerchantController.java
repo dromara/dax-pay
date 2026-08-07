@@ -8,6 +8,7 @@ import cn.daxpay.open.channel.douyin.param.direct.DouyinDirectChannelMerchantCre
 import cn.daxpay.open.channel.douyin.param.direct.DouyinDirectKeyConfigParam;
 import cn.daxpay.open.channel.douyin.result.direct.DouyinDirectChannelMerchantResult;
 import cn.daxpay.open.channel.douyin.result.direct.DouyinDirectKeyConfigResult;
+import cn.daxpay.open.channel.douyin.result.direct.DouyinTransferSceneOptionResult;
 import cn.daxpay.open.channel.douyin.service.direct.DouyinDirectChannelMerchantService;
 import cn.daxpay.open.channel.douyin.service.direct.DouyinDirectKeyConfigService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /// # 抖音直连通道商户管理
 ///
@@ -68,5 +71,12 @@ public class DouyinDirectChannelMerchantController {
     public Result<Void> saveKeyConfig(@RequestBody @Validated DouyinDirectKeyConfigParam param) {
         douyinDirectKeyConfigService.save(param);
         return Res.ok();
+    }
+
+    @PermCode(code = PermCodes.Action.VIEW)
+    @Operation(summary = "查询抖音转账场景选项列表(主数据枚举)")
+    @GetMapping("/scene-options")
+    public Result<List<DouyinTransferSceneOptionResult>> sceneOptions() {
+        return Res.ok(douyinDirectChannelMerchantService.findSceneOptions());
     }
 }

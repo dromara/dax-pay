@@ -25,5 +25,14 @@
   "transferEncryptFailed": "Mã hóa tên chuyển khoản Douyin thất bại: {0}",
   "transferOnlyOpenid": "Douyin chỉ hỗ trợ người nhận openid",
   "transferNameRequired": "Douyin: bắt buộc nhập tên người nhận khi >= 2000 CNY",
-  "transferSceneNotConfigured": "Douyin: chưa cấu hình kịch bản chuyển khoản"
+  "transferSceneNotConfigured": "Douyin: chưa cấu hình kịch bản chuyển khoản",
+  "transferSceneNotFound": "Douyin: cấu hình kịch bản chuyển khoản không tồn tại",
+  "transferSceneNameInvalid": "Douyin: ID kịch bản chuyển khoản không được hỗ trợ: {0}",
+  "transferSceneNotBelong": "Douyin: cấu hình kịch bản chuyển khoản không thuộc merchant hiện tại",
+  "transferSceneIdRequired": "Douyin: ID cảnh chuyển khoản là bắt buộc",
+  "transferSceneIdInvalid": "Douyin: định dạng id cấu hình kịch bản chuyển khoản không hợp lệ: {0}",
+  "transferAppNotExist": "Douyin: Không tìm thấy ứng dụng khởi tạo chuyển khoản",
+  "transferAppNotBelong": "Douyin: Ứng dụng khởi tạo chuyển khoản không thuộc merchant hiện tại",
+  "transferAppTypeNotWebApp": "Douyin: Ứng dụng khởi tạo chuyển khoản phải là loại Web App",
+  "transferAppNotConfigured": "Douyin: Ứng dụng khởi tạo chuyển khoản chưa được thiết lập"
 }

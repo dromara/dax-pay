@@ -2,6 +2,7 @@ package cn.daxpay.open.channel.douyin.strategy.merchant;
 
 import cn.daxpay.open.channel.douyin.dao.direct.DouyinDirectChannelMerchantManager;
 import cn.daxpay.open.channel.douyin.dao.direct.DouyinDirectKeyConfigManager;
+import cn.daxpay.open.channel.douyin.dao.direct.DouyinTransferConfigManager;
 import cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectChannelMerchant;
 import cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectKeyConfig;
 import cn.daxpay.open.payment.douyin.dao.channel.DyChannelAppCapabilityManager;
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 /// 在通道商户删除时清理抖音直连相关的扩展数据：
 /// - 通道商户绑定(douyin_direct_channel_merchant)、密钥配置(douyin_direct_key_config)
 /// - 通道能力绑定(dy_channel_app_capability, 释放对商户/平台应用的引用)
+/// - 转账配置(douyin_transfer_config, 释放转账发起应用引用)
 ///
 /// 注意：商户/平台级应用主数据(dy_mch_app / dy_platform_app)不在此清理 —— 它们可被多个通道商户引用，
 /// 归属商户/平台级生命周期管理。
@@ -28,6 +30,7 @@ public class DouyinDirectChannelMerchantCleanupStrategy implements ChannelMercha
     private final DouyinDirectChannelMerchantManager douyinDirectChannelMerchantManager;
     private final DouyinDirectKeyConfigManager douyinDirectAppKeyConfigManager;
     private final DyChannelAppCapabilityManager dyChannelAppCapabilityManager;
+    private final DouyinTransferConfigManager douyinTransferConfigManager;
 
     /// 对应产品: 抖音支付直连
     @Override
@@ -43,5 +46,7 @@ public class DouyinDirectChannelMerchantCleanupStrategy implements ChannelMercha
         douyinDirectAppKeyConfigManager.deleteByField(DouyinDirectKeyConfig::getChannelMchNo, channelMchNo);
         // 清理通道能力绑定(释放对商户/平台抖音应用的引用)
         dyChannelAppCapabilityManager.deleteByChannelMchNo(channelMchNo);
+        // 清理转账配置(释放转账发起应用引用)
+        douyinTransferConfigManager.deleteByChannelMchNo(channelMchNo);
     }
 }

@@ -25,5 +25,14 @@
   "transferEncryptFailed": "การเข้ารหัสชื่อการโอน Douyin ล้มเหลว: {0}",
   "transferOnlyOpenid": "Douyin รองรับผู้รับ openid เท่านั้น",
   "transferNameRequired": "Douyin: ต้องใส่ชื่อผู้รับเมื่อมากกว่าหรือเท่ากับ 2000 หยวน",
-  "transferSceneNotConfigured": "Douyin: ยังไม่ได้กำหนดค่าสถานการณ์การโอน"
+  "transferSceneNotConfigured": "Douyin: ยังไม่ได้กำหนดค่าสถานการณ์การโอน",
+  "transferSceneNotFound": "Douyin: ไม่พบการกำหนดค่าสถานการณ์การโอน",
+  "transferSceneNameInvalid": "Douyin: ไม่รองรับรหัสสถานการณ์การโอน: {0}",
+  "transferSceneNotBelong": "Douyin: การกำหนดค่าสถานการณ์การโอนไม่ใช่ของผู้ค้าปัจจุบัน",
+  "transferSceneIdRequired": "Douyin: ต้องระบุรหัสสถานการณ์การโอน",
+  "transferSceneIdInvalid": "Douyin: รูปแบบรหัสการกำหนดค่าสถานการณ์การโอนไม่ถูกต้อง: {0}",
+  "transferAppNotExist": "Douyin: ไม่พบแอปเริ่มการโอน",
+  "transferAppNotBelong": "Douyin: แอปเริ่มการโอนไม่ได้เป็นของร้านค้าปัจจุบัน",
+  "transferAppTypeNotWebApp": "Douyin: แอปเริ่มการโอนต้องเป็นประเภทเว็บแอป (Web App)",
+  "transferAppNotConfigured": "Douyin: ยังไม่ได้กำหนดค่าแอปเริ่มการโอน"
 }

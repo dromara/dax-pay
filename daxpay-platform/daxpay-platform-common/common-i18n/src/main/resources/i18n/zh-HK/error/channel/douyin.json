@@ -25,5 +25,14 @@
   "transferEncryptFailed": "抖音轉賬姓名加密失敗: {0}",
   "transferOnlyOpenid": "抖音僅支持 openid 收款人",
   "transferNameRequired": "抖音: 大於等於2000元必須填收款人姓名",
-  "transferSceneNotConfigured": "抖音: 轉賬場景未配置"
+  "transferSceneNotConfigured": "抖音: 轉賬場景未配置",
+  "transferSceneNotFound": "抖音: 轉賬場景設定不存在",
+  "transferSceneNameInvalid": "抖音: 不支援的轉賬場景ID: {0}",
+  "transferSceneNotBelong": "抖音: 轉賬場景設定不屬於目前商戶",
+  "transferSceneIdRequired": "抖音: 轉賬場景ID必填",
+  "transferSceneIdInvalid": "抖音: 轉賬場景設定ID格式錯誤: {0}",
+  "transferAppNotExist": "抖音: 轉帳發起應用不存在",
+  "transferAppNotBelong": "抖音: 轉帳發起應用不屬於目前商戶",
+  "transferAppTypeNotWebApp": "抖音: 轉賬發起應用必須是網站應用類型",
+  "transferAppNotConfigured": "抖音: 轉帳發起應用未設定"
 }

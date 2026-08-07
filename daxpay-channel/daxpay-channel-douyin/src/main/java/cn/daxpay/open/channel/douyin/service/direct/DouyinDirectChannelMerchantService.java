@@ -2,8 +2,10 @@ package cn.daxpay.open.channel.douyin.service.direct;
 
 import cn.daxpay.open.channel.douyin.dao.direct.DouyinDirectChannelMerchantManager;
 import cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectChannelMerchant;
+import cn.daxpay.open.channel.douyin.enums.DouyinTransferSceneEnum;
 import cn.daxpay.open.channel.douyin.param.direct.DouyinDirectChannelMerchantCreateParam;
 import cn.daxpay.open.channel.douyin.result.direct.DouyinDirectChannelMerchantResult;
+import cn.daxpay.open.channel.douyin.result.direct.DouyinTransferSceneOptionResult;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
 import cn.daxpay.open.payment.masterdata.dao.product.PayProductConfigManager;
 import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
@@ -16,6 +18,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Arrays;
+import java.util.List;
 
 /// # 抖音直连通道商户管理
 ///
@@ -61,7 +66,6 @@ public class DouyinDirectChannelMerchantService {
         entity.setChannelMchNo(channelMchNo);
         entity.setProduct(param.getProduct());
         entity.setDyMchId(param.getDyMchId());
-        entity.setTransferScene(param.getTransferScene());
         douyinDirectChannelMerchantManager.save(entity);
     }
 
@@ -73,6 +77,18 @@ public class DouyinDirectChannelMerchantService {
                 .map(DouyinDirectChannelMerchant::toResult)
                 // 通道: 通道商户配置不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
+    }
+
+    /// 查询抖音转账场景选项列表(主数据枚举投影, 不查库, 供前端下拉与报备字段动态渲染)
+    public List<DouyinTransferSceneOptionResult> findSceneOptions() {
+        return Arrays.stream(DouyinTransferSceneEnum.values())
+                .map(scene -> new DouyinTransferSceneOptionResult()
+                        .setCode(scene.getCode())
+                        .setName(scene.getName())
+                        .setReportInfoTypes(scene.getReportInfoTypes())
+                        .setReportInfoDescriptions(scene.getReportInfoDescriptions())
+                        .setUserRecvPerceptionOptions(scene.getUserRecvPerceptionOptions()))
+                .toList();
     }
 }
 

@@ -4,6 +4,7 @@ import cn.daxpay.open.channel.douyin.client.credential.DouyinSdkCredential;
 import cn.daxpay.open.channel.douyin.dao.direct.DouyinDirectChannelMerchantManager;
 import cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectChannelMerchant;
 import cn.daxpay.open.channel.douyin.entity.direct.DouyinDirectKeyConfig;
+import cn.daxpay.open.payment.auth.core.AppScopeEnum;
 import cn.daxpay.open.payment.douyin.facade.DouyinAppFacade;
 import cn.daxpay.open.payment.douyin.facade.DyAppView;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
@@ -41,6 +42,28 @@ public class DouyinDirectConfigAssembler {
         DyAppView app = douyinAppFacade.resolve(mchNo, channelMchNo, capability, null,
                 ProductEnum.DOUYIN_PAY.getCode());
 
+        // 2-4. 组装凭证
+        return assembleCredential(app, channelMchNo);
+    }
+
+    /// 组装转账使用的通道调用凭证(下发给子应用)
+    ///
+    /// 转账发起应用由「抖音转账配置」显式指定(网站应用, 支持手机H5获取OpenId), 不走支付能力绑定解析,
+    /// 与支付链路([#buildConfig])的应用解析相互独立。
+    ///
+    /// @param mchNo            商户号(应用归属校验)
+    /// @param channelMchNo     通道商户号(定位密钥/商户绑定)
+    /// @param transferAppRefId 转账发起应用引用(dy_mch_app 主键)
+    /// @return 抖音 SDK 凭证, 字段对齐子应用 DouyinSdkCredential
+    public DouyinSdkCredential buildTransferConfig(String mchNo, String channelMchNo, Long transferAppRefId) {
+        // 1. 按引用加载转账发起应用(仅商户档, 直连商户不使用平台应用)
+        DyAppView app = douyinAppFacade.getById(AppScopeEnum.MERCHANT, transferAppRefId);
+        // 2-4. 组装凭证
+        return assembleCredential(app, channelMchNo);
+    }
+
+    /// 读取通道商户绑定与密钥配置, 组装凭证(第 2-4 步公共部分)
+    private DouyinSdkCredential assembleCredential(DyAppView app, String channelMchNo) {
         // 2. 读取通道商户绑定(获取抖音商户号 dyMchId 作为 mchId)
         DouyinDirectChannelMerchant merchant = channelMerchantManager.lambdaQuery()
                 .eq(DouyinDirectChannelMerchant::getChannelMchNo, channelMchNo)
