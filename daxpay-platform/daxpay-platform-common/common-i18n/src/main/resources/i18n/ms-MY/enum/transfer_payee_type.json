@@ -2,5 +2,6 @@
   "openid": "OpenID WeChat",
   "user_id": "ID Pengguna Alipay",
   "open_id": "ID Terbuka Alipay",
-  "login_name": "Akaun Log Masuk Alipay"
+  "login_name": "Akaun Log Masuk Alipay",
+  "phone": "Nombor telefon penerima Douyin"
 }

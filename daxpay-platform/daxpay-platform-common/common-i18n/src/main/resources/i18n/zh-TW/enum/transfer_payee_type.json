@@ -2,5 +2,6 @@
   "openid": "微信openid",
   "user_id": "支付寶用戶ID",
   "open_id": "支付寶開放ID",
-  "login_name": "支付寶登錄賬號"
+  "login_name": "支付寶登錄賬號",
+  "phone": "抖音收款手機號"
 }

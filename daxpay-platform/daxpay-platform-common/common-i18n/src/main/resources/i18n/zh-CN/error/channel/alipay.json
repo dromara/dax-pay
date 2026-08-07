@@ -63,5 +63,8 @@
   "transferAppNotConfigured": "支付宝: 该通道商户尚未绑定转账应用, 请先在通道商户详情的「转账应用」中配置",
   "transferAppNotExist": "支付宝: 转账应用不存在",
   "transferAppNotBelong": "支付宝: 转账应用不属于当前商户",
-  "channelMerchantMismatch": "支付宝: 通道商户不属于当前商户"
+  "channelMerchantMismatch": "支付宝: 通道商户不属于当前商户",
+  "transferLogonNameRequired": "支付宝: 登录号收款时必须填写收款人姓名",
+  "transferAmountMin": "支付宝: 转账金额不可低于0.1元",
+  "transferRemarkRequired": "支付宝: 转账金额达到50000元时, 必须填写付款理由"
 }

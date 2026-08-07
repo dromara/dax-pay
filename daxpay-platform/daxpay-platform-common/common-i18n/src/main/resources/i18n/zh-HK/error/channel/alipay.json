@@ -63,5 +63,8 @@
   "transferAppNotConfigured": "支付寶: 該通道商戶尚未綁定轉賬應用, 請先在通道商戶詳情的「轉賬應用」中設定",
   "transferAppNotExist": "支付寶: 轉賬應用不存在",
   "transferAppNotBelong": "支付寶: 轉賬應用不屬於目前商戶",
-  "channelMerchantMismatch": "支付寶: 通道商戶不屬於目前商戶"
+  "channelMerchantMismatch": "支付寶: 通道商戶不屬於目前商戶",
+  "transferLogonNameRequired": "支付寶: 使用登入號收款時必須填寫收款人姓名",
+  "transferAmountMin": "支付寶: 轉帳金額不可低於0.1元",
+  "transferRemarkRequired": "支付寶: 轉帳金額達到50000元時, 必須填寫付款理由"
 }

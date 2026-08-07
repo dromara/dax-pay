@@ -52,5 +52,8 @@
   "transferPayeeTypeInvalid": "Alipay: jenis akun penerima tidak didukung: {0}",
   "transferPayeeAccountRequired": "Alipay: akun penerima wajib",
   "transferSceneEnabledLimit": "Alipay: Tidak dapat mengaktifkan lebih dari {0} adegan transfer",
-  "transferSceneCannotDisableDefault": "Alipay: Adegan default tidak dapat dinonaktifkan, alihkan default ke adegan lain terlebih dahulu"
+  "transferSceneCannotDisableDefault": "Alipay: Adegan default tidak dapat dinonaktifkan, alihkan default ke adegan lain terlebih dahulu",
+  "transferLogonNameRequired": "Alipay: Nama penerima wajib diisi saat menggunakan login ID",
+  "transferAmountMin": "Alipay: Jumlah transfer minimal 0,1 yuan",
+  "transferRemarkRequired": "Alipay: Alasan pembayaran wajib diisi saat jumlah transfer mencapai 50.000 yuan"
 }

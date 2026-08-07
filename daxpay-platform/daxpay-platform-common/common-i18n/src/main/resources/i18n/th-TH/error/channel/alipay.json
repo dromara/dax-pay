@@ -52,5 +52,8 @@
   "transferPayeeTypeInvalid": "Alipay: ไม่รองรับประเภทบัญชีผู้รับ: {0}",
   "transferPayeeAccountRequired": "Alipay: ต้องระบุบัญชีผู้รับ",
   "transferSceneEnabledLimit": "Alipay: ไม่สามารถเปิดใช้งานเกิน {0} สถานการณ์การโอน",
-  "transferSceneCannotDisableDefault": "Alipay: ไม่สามารถปิดใช้งานสถานการณ์เริ่มต้น โปรดสลับเริ่มต้นไปยังสถานการณ์อื่นก่อน"
+  "transferSceneCannotDisableDefault": "Alipay: ไม่สามารถปิดใช้งานสถานการณ์เริ่มต้น โปรดสลับเริ่มต้นไปยังสถานการณ์อื่นก่อน",
+  "transferLogonNameRequired": "Alipay: ต้องระบุชื่อผู้รับเมื่อใช้ login ID",
+  "transferAmountMin": "Alipay: จำนวนเงินโอนต้องไม่ต่ำกว่า 0.1 หยวน",
+  "transferRemarkRequired": "Alipay: ต้องระบุเหตุผลการชำระเงินเมื่อจำนวนเงินโอนถึง 50,000 หยวน"
 }

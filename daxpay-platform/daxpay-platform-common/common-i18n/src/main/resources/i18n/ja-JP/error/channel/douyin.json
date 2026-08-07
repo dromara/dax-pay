@@ -34,5 +34,8 @@
   "transferAppNotExist": "Douyin: 振込发起アプリが見つかりません",
   "transferAppNotBelong": "Douyin: 振込发起アプリは現在のマーチャントに属していません",
   "transferAppTypeNotWebApp": "Douyin: 振込发起アプリはサイトアプリ(Webアプリ)タイプである必要があります",
-  "transferAppNotConfigured": "Douyin: 振込发起アプリが未設定です"
+  "transferAppNotConfigured": "Douyin: 振込发起アプリが未設定です",
+  "transferPayeeTypeInvalid": "抖音: サポートされていない受取人アカウントタイプ: {0}",
+  "transferPhoneInvalid": "抖音: 受取人の電話番号の形式が正しくありません(11桁の数字が必要です)",
+  "transferOutBillNoInvalid": "抖音: 加盟店振込番号の形式が正しくありません(6〜32文字、数字/英字/_/-/*のみ)"
 }

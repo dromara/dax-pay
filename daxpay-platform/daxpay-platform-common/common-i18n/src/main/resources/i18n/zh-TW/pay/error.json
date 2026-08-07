@@ -117,6 +117,7 @@
     "abnormal": "回撥處理異常，請聯繫平台客服"
   },
   "transfer": {
+    "createFailed": "轉帳發起失敗: {0}",
     "processing": "轉帳處理中，請勿重複操作",
     "onlyFailRetry": "只有失敗狀態的才可以重新發起轉帳",
     "noDuplicate": "該商户轉帳號已存在，請勿重複轉帳",

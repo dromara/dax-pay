@@ -63,5 +63,8 @@
   "transferAppNotConfigured": "Alipay: 当該チャネル加盟店に振込アプリがバインドされていません。チャネル加盟店詳細の「振込アプリ」で設定してください",
   "transferAppNotExist": "Alipay: 振込アプリが存在しません",
   "transferAppNotBelong": "Alipay: 振込アプリは現在の加盟店に属していません",
-  "channelMerchantMismatch": "Alipay: チャネル加盟店は現在の加盟店に属していません"
+  "channelMerchantMismatch": "Alipay: チャネル加盟店は現在の加盟店に属していません",
+  "transferLogonNameRequired": "支付宝: ログインIDで受取る場合、受取人の氏名が必須です",
+  "transferAmountMin": "支付宝: 振込金額は0.1元以上である必要があります",
+  "transferRemarkRequired": "支付宝: 振込金額が50,000元に達した場合、支払い理由の記入が必須です"
 }

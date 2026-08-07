@@ -2,5 +2,6 @@
   "openid": "WeChat openid",
   "user_id": "Alipay ユーザーID",
   "open_id": "Alipay オープンID",
-  "login_name": "Alipay ログインアカウント"
+  "login_name": "Alipay ログインアカウント",
+  "phone": "抖音受取人電話番号"
 }

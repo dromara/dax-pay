@@ -108,6 +108,7 @@
     "transferAlreadyProcessed": "Pesanan transfer sudah diproses, rekaman panggilan balik"
   },
   "transfer": {
+    "createFailed": "Gagal membuat transfer: {0}",
     "processing": "Transfer sedang diproses, jangan ulangi",
     "onlyFailRetry": "Hanya transfer dengan status gagal yang dapat dimulai ulang",
     "noDuplicate": "Nomor transfer merchant sudah ada, jangan ulangi",

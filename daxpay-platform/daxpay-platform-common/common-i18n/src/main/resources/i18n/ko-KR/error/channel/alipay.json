@@ -63,5 +63,8 @@
   "transferAppNotConfigured": "Alipay: 이 채널 가맹점에 이체 앱이 바인딩되지 않았습니다. 채널 가맹점 상세의 '이체 앱'에서 설정해 주세요",
   "transferAppNotExist": "Alipay: 이체 앱이 존재하지 않습니다",
   "transferAppNotBelong": "Alipay: 이체 앱이 현재 가맹점에 속하지 않습니다",
-  "channelMerchantMismatch": "Alipay: 채널 가맹점이 현재 가맹점에 속하지 않습니다"
+  "channelMerchantMismatch": "Alipay: 채널 가맹점이 현재 가맹점에 속하지 않습니다",
+  "transferLogonNameRequired": "알리페이: 로그인 ID로 수취할 때 수취인 이름이 필수입니다",
+  "transferAmountMin": "알리페이: 이체 금액은 0.1위안 이상이어야 합니다",
+  "transferRemarkRequired": "알리페이: 이체 금액이 50,000위안에 도달하면 결제 사유를 반드시 입력해야 합니다"
 }

@@ -34,5 +34,8 @@
   "transferAppNotExist": "Douyin: ไม่พบแอปเริ่มการโอน",
   "transferAppNotBelong": "Douyin: แอปเริ่มการโอนไม่ได้เป็นของร้านค้าปัจจุบัน",
   "transferAppTypeNotWebApp": "Douyin: แอปเริ่มการโอนต้องเป็นประเภทเว็บแอป (Web App)",
-  "transferAppNotConfigured": "Douyin: ยังไม่ได้กำหนดค่าแอปเริ่มการโอน"
+  "transferAppNotConfigured": "Douyin: ยังไม่ได้กำหนดค่าแอปเริ่มการโอน",
+  "transferPayeeTypeInvalid": "Douyin: ประเภทบัญชีผู้รับไม่ได้รับการสนับสนุน: {0}",
+  "transferPhoneInvalid": "Douyin: รูปแบบหมายเลขโทรศัพท์ผู้รับไม่ถูกต้อง (ต้องเป็นตัวเลข 11 หลัก)",
+  "transferOutBillNoInvalid": "Douyin: รูปแบบหมายเลขโอนของร้านค้าไม่ถูกต้อง (6-32 ตัวอักษร เฉพาะตัวเลข/ตัวอักษร/_/-/*)"
 }

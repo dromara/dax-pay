@@ -108,6 +108,7 @@
     "transferAlreadyProcessed": "Pindahkan pesanan sudah diproses, merekodkan panggilan balik"
   },
   "transfer": {
+    "createFailed": "Gagal mencipta pindahan: {0}",
     "processing": "Pindahan sedang diproses, jangan ulangi",
     "onlyFailRetry": "Hanya pindahan yang gagal boleh dimulakan semula",
     "noDuplicate": "Nombor pindahan peniaga sudah wujud, jangan ulangi",

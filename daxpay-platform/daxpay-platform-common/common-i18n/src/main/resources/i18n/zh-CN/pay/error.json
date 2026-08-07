@@ -117,6 +117,7 @@
     "abnormal": "回调处理异常，请联系平台客服"
   },
   "transfer": {
+    "createFailed": "转账发起失败: {0}",
     "processing": "转账处理中，请勿重复操作",
     "onlyFailRetry": "只有失败状态的才可以重新发起转账",
     "noDuplicate": "该商户转账号已存在，请勿重复转账",

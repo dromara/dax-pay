@@ -34,5 +34,8 @@
   "transferAppNotExist": "Douyin: Không tìm thấy ứng dụng khởi tạo chuyển khoản",
   "transferAppNotBelong": "Douyin: Ứng dụng khởi tạo chuyển khoản không thuộc merchant hiện tại",
   "transferAppTypeNotWebApp": "Douyin: Ứng dụng khởi tạo chuyển khoản phải là loại Web App",
-  "transferAppNotConfigured": "Douyin: Ứng dụng khởi tạo chuyển khoản chưa được thiết lập"
+  "transferAppNotConfigured": "Douyin: Ứng dụng khởi tạo chuyển khoản chưa được thiết lập",
+  "transferPayeeTypeInvalid": "Douyin: Loại tài khoản người nhận không được hỗ trợ: {0}",
+  "transferPhoneInvalid": "Douyin: Định dạng số điện thoại người nhận không hợp lệ (phải là 11 chữ số)",
+  "transferOutBillNoInvalid": "Douyin: Định dạng số chuyển khoản thương gia không hợp lệ (6-32 ký tự, chỉ chữ số/chữ cái/_/-/*)"
 }

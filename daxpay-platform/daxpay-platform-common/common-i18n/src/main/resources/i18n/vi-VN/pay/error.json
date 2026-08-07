@@ -108,6 +108,7 @@
     "transferAlreadyProcessed": "Lệnh chuyển đã được xử lý, đang ghi lại cuộc gọi lại"
   },
   "transfer": {
+    "createFailed": "Khởi tạo chuyển khoản thất bại: {0}",
     "processing": "Chuyển khoản đang xử lý, vui lòng không lặp lại",
     "onlyFailRetry": "Chỉ chuyển khoản thất bại mới có thể khởi động lại",
     "noDuplicate": "Số chuyển khoản thương gia đã tồn tại, vui lòng không lặp lại",

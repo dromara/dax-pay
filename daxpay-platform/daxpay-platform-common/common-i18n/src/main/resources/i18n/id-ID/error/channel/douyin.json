@@ -34,5 +34,8 @@
   "transferAppNotExist": "Douyin: Aplikasi inisiator transfer tidak ditemukan",
   "transferAppNotBelong": "Douyin: Aplikasi inisiator transfer bukan milik merchant saat ini",
   "transferAppTypeNotWebApp": "Douyin: Aplikasi inisiator transfer harus berjenis Web App",
-  "transferAppNotConfigured": "Douyin: Aplikasi inisiator transfer belum dikonfigurasi"
+  "transferAppNotConfigured": "Douyin: Aplikasi inisiator transfer belum dikonfigurasi",
+  "transferPayeeTypeInvalid": "Douyin: Jenis akun penerima tidak didukung: {0}",
+  "transferPhoneInvalid": "Douyin: Format nomor telepon penerima tidak valid (harus 11 digit)",
+  "transferOutBillNoInvalid": "Douyin: Format nomor transfer merchant tidak valid (6-32 karakter, hanya angka/huruf/_/-/*)"
 }

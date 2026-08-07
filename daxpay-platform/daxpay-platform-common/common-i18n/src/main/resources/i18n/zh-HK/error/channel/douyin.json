@@ -34,5 +34,8 @@
   "transferAppNotExist": "抖音: 轉帳發起應用不存在",
   "transferAppNotBelong": "抖音: 轉帳發起應用不屬於目前商戶",
   "transferAppTypeNotWebApp": "抖音: 轉賬發起應用必須是網站應用類型",
-  "transferAppNotConfigured": "抖音: 轉帳發起應用未設定"
+  "transferAppNotConfigured": "抖音: 轉帳發起應用未設定",
+  "transferPayeeTypeInvalid": "抖音: 不支援的收款人帳號類型: {0}",
+  "transferPhoneInvalid": "抖音: 收款手機號格式不正確(需為11位數字)",
+  "transferOutBillNoInvalid": "抖音: 商戶轉帳號格式不正確(6-32位, 僅數字/大小寫字母/_/-/*)"
 }

@@ -63,5 +63,8 @@
   "transferAppNotConfigured": "Alipay: no transfer app bound for this channel merchant, please bind one in 'Transfer App' of channel merchant detail",
   "transferAppNotExist": "Alipay: transfer app not found",
   "transferAppNotBelong": "Alipay: transfer app does not belong to the current merchant",
-  "channelMerchantMismatch": "Alipay: channel merchant does not belong to the current merchant"
+  "channelMerchantMismatch": "Alipay: channel merchant does not belong to the current merchant",
+  "transferLogonNameRequired": "Alipay: Payee name is required when using login ID",
+  "transferAmountMin": "Alipay: Transfer amount must be at least 0.1 yuan",
+  "transferRemarkRequired": "Alipay: Payment reason is required when transfer amount reaches 50,000 yuan"
 }

@@ -117,6 +117,7 @@
     "abnormal": "Callback processing exception, please contact platform support"
   },
   "transfer": {
+    "createFailed": "Transfer initiation failed: {0}",
     "processing": "Transfer processing, please do not repeat",
     "onlyFailRetry": "Only failed transfers can be initiated again",
     "noDuplicate": "The merchant transfer no already exists, please do not repeat",

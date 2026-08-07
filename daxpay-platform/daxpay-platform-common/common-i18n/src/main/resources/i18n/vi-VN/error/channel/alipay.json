@@ -52,5 +52,8 @@
   "transferPayeeTypeInvalid": "Alipay: loại tài khoản người nhận không được hỗ trợ: {0}",
   "transferPayeeAccountRequired": "Alipay: bắt buộc nhập tài khoản người nhận",
   "transferSceneEnabledLimit": "Alipay: Không thể kích hoạt quá {0} cảnh chuyển khoản",
-  "transferSceneCannotDisableDefault": "Alipay: Cảnh mặc định không thể vô hiệu hóa, vui lòng chuyển mặc định sang cảnh khác trước"
+  "transferSceneCannotDisableDefault": "Alipay: Cảnh mặc định không thể vô hiệu hóa, vui lòng chuyển mặc định sang cảnh khác trước",
+  "transferLogonNameRequired": "Alipay: Bắt buộc nhập tên người nhận khi sử dụng login ID",
+  "transferAmountMin": "Alipay: Số tiền chuyển không được thấp hơn 0,1 tệ",
+  "transferRemarkRequired": "Alipay: Bắt buộc nhập lý do thanh toán khi số tiền chuyển đạt 50.000 tệ"
 }

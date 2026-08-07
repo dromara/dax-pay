@@ -34,5 +34,8 @@
   "transferAppNotExist": "Douyin: Aplikasi pemula pemindahan tidak dijumpai",
   "transferAppNotBelong": "Douyin: Aplikasi pemula pemindahan tidak milik merchant semasa",
   "transferAppTypeNotWebApp": "Douyin: Aplikasi pemula pemindahan mesti jenis Web App",
-  "transferAppNotConfigured": "Douyin: Aplikasi pemula pemindahan belum dikonfigurasi"
+  "transferAppNotConfigured": "Douyin: Aplikasi pemula pemindahan belum dikonfigurasi",
+  "transferPayeeTypeInvalid": "Douyin: Jenis akaun penerima tidak disokong: {0}",
+  "transferPhoneInvalid": "Douyin: Format nombor telefon penerima tidak sah (mesti 11 digit)",
+  "transferOutBillNoInvalid": "Douyin: Format nombor pindahan pedagang tidak sah (6-32 aksara, hanya digit/huruf/_/-/*)"
 }
