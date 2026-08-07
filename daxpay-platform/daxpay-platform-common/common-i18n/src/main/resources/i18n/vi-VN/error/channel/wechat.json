@@ -61,6 +61,10 @@
   "transferOnlyOpenid": "WeChat chỉ hỗ trợ người nhận openid",
   "transferNameForbidden": "WeChat: không được nhập tên người nhận khi dưới 0.3 CNY",
   "transferNameRequired": "WeChat: bắt buộc nhập tên người nhận khi >= 2000 CNY",
-
-  "transferSceneNotConfigured": "WeChat: chưa cấu hình kịch bản chuyển khoản"
+  "transferSceneNotConfigured": "WeChat: chưa cấu hình kịch bản chuyển khoản",
+  "transferConfigNotConfigured": "WeChat: Cấu hình chuyển khoản chưa được thiết lập",
+  "transferAppNotConfigured": "WeChat: Ứng dụng khởi tạo chuyển khoản chưa được thiết lập",
+  "transferAppNotExist": "WeChat: Không tìm thấy ứng dụng khởi tạo chuyển khoản",
+  "transferAppNotBelong": "WeChat: Ứng dụng khởi tạo chuyển khoản không thuộc merchant hiện tại",
+  "transferAppTypeNotOfficialAccount": "WeChat: Ứng dụng khởi tạo chuyển khoản phải là loại Official Account"
 }

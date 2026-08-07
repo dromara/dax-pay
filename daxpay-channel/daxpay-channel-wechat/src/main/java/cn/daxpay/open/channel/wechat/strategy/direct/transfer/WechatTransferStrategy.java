@@ -1,8 +1,8 @@
 package cn.daxpay.open.channel.wechat.strategy.direct.transfer;
 
 import cn.daxpay.open.channel.wechat.client.credential.WechatSdkCredential;
-import cn.daxpay.open.channel.wechat.dao.direct.WechatDirectChannelMerchantManager;
-import cn.daxpay.open.channel.wechat.entity.direct.WechatDirectChannelMerchant;
+import cn.daxpay.open.channel.wechat.dao.direct.WechatTransferConfigManager;
+import cn.daxpay.open.channel.wechat.entity.direct.WechatTransferConfig;
 import cn.daxpay.open.channel.wechat.service.direct.WechatDirectConfigAssembler;
 import cn.daxpay.open.channel.wechat.service.payment.transfer.WechatTransferService;
 import cn.daxpay.open.payment.strategy.transfer.AbsTransferStrategy;
@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 /// 通道差异:
 /// - 仅支持 openid 收款人([TransferPayeeTypeEnum#OPENID])
 /// - 金额档位姓名校验: 小于 0.3 元禁填姓名, 大于等于 2000 元必填姓名
-/// - transfer_scene 取自通道商户配置, 未配置时报错
+/// - transfer_scene 取自「微信转账配置」([WechatTransferConfig]), 发起应用由配置指定(公众号)
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -37,7 +37,7 @@ public class WechatTransferStrategy extends AbsTransferStrategy {
 
     private final WechatTransferService wechatTransferService;
     private final WechatDirectConfigAssembler wechatDirectConfigAssembler;
-    private final WechatDirectChannelMerchantManager wechatDirectChannelMerchantManager;
+    private final WechatTransferConfigManager wechatTransferConfigManager;
 
     @Override
     public String getChannel() {
@@ -83,20 +83,25 @@ public class WechatTransferStrategy extends AbsTransferStrategy {
 
     /// 组装通道调用凭证并注入转账场景
     ///
-    /// 转账场景(transfer_scene)从通道商户配置读取, 经上下文回写, 由编排层在"处理中"镜像落库。
+    /// 转账场景(transfer_scene)与发起应用均取自「微信转账配置」([WechatTransferConfig]),
+    /// 经上下文回写场景, 由编排层在"处理中"镜像落库; 发起应用由凭证组装器按引用解析 wxAppId。
     private WechatSdkCredential buildCredential(TransferStrategyContext context) {
-        WechatDirectChannelMerchant channelMerchant = wechatDirectChannelMerchantManager.lambdaQuery()
-                .eq(WechatDirectChannelMerchant::getChannelMchNo, context.getChannelMchNo())
-                .oneOpt()
+        WechatTransferConfig transferConfig = wechatTransferConfigManager
+                .findByChannelMchNo(context.getChannelMchNo())
                 .orElseThrow(() -> new BizInfoException(DaxPayErrorCode.CONFIG_NOT_EXIST,
-                        "error.payment.channel.channelMerchantNotExist"));
-        if (StrUtil.isBlank(channelMerchant.getTransferScene())) {
+                        "error.channel.wechat.transferConfigNotConfigured"));
+        if (StrUtil.isBlank(transferConfig.getTransferScene())) {
             // 微信: 转账场景未配置
             throw new BizInfoException(DaxPayErrorCode.CONFIG_NOT_EXIST,
                     "error.channel.wechat.transferSceneNotConfigured");
         }
-        context.setTransferScene(channelMerchant.getTransferScene());
-        return wechatDirectConfigAssembler.buildConfig(
-                context.getMchNo(), context.getChannelMchNo(), null, null);
+        if (transferConfig.getTransferAppRefId() == null) {
+            // 微信: 转账发起应用未配置
+            throw new BizInfoException(DaxPayErrorCode.CONFIG_NOT_EXIST,
+                    "error.channel.wechat.transferAppNotConfigured");
+        }
+        context.setTransferScene(transferConfig.getTransferScene());
+        return wechatDirectConfigAssembler.buildTransferConfig(
+                context.getChannelMchNo(), transferConfig.getTransferAppRefId());
     }
 }

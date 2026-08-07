@@ -61,6 +61,10 @@
   "transferOnlyOpenid": "WeChat รองรับผู้รับ openid เท่านั้น",
   "transferNameForbidden": "WeChat: ไม่อนุญาตให้ใส่ชื่อผู้รับเมื่อต่ำกว่า 0.3 หยวน",
   "transferNameRequired": "WeChat: ต้องใส่ชื่อผู้รับเมื่อมากกว่าหรือเท่ากับ 2000 หยวน",
-
-  "transferSceneNotConfigured": "WeChat: ยังไม่ได้กำหนดสถานการณ์การโอนเงิน"
+  "transferSceneNotConfigured": "WeChat: ยังไม่ได้กำหนดสถานการณ์การโอนเงิน",
+  "transferConfigNotConfigured": "WeChat: ยังไม่ได้กำหนดค่าการโอนเงิน",
+  "transferAppNotConfigured": "WeChat: ยังไม่ได้กำหนดค่าแอปเริ่มการโอน",
+  "transferAppNotExist": "WeChat: ไม่พบแอปเริ่มการโอน",
+  "transferAppNotBelong": "WeChat: แอปเริ่มการโอนไม่ได้เป็นของร้านค้าปัจจุบัน",
+  "transferAppTypeNotOfficialAccount": "WeChat: แอปเริ่มการโอนต้องเป็นประเภท Official Account"
 }

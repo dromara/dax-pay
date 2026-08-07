@@ -61,6 +61,10 @@
   "transferOnlyOpenid": "WeChatはopenid受取人のみサポートしています",
   "transferNameForbidden": "WeChat: 0.3元未満は受取人氏名を入力できません",
   "transferNameRequired": "WeChat: 2000元以上は受取人氏名が必須です",
-
-  "transferSceneNotConfigured": "WeChat: 送金シーンが設定されていません"
+  "transferSceneNotConfigured": "WeChat: 送金シーンが設定されていません",
+  "transferConfigNotConfigured": "WeChat: 振込設定が未設定です",
+  "transferAppNotConfigured": "WeChat: 振込发起アプリが未設定です",
+  "transferAppNotExist": "WeChat: 振込发起アプリが見つかりません",
+  "transferAppNotBelong": "WeChat: 振込发起アプリは現在のマーチャントに属していません",
+  "transferAppTypeNotOfficialAccount": "WeChat: 振込发起アプリは公式アカウントタイプである必要があります"
 }

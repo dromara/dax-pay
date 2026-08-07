@@ -61,6 +61,10 @@
   "transferOnlyOpenid": "微信僅支持 openid 收款人",
   "transferNameForbidden": "微信: 少於0.3元不允許填收款人姓名",
   "transferNameRequired": "微信: 大於等於2000元必須填收款人姓名",
-
-  "transferSceneNotConfigured": "微信: 轉賬場景未設定"
+  "transferSceneNotConfigured": "微信: 轉賬場景未設定",
+  "transferConfigNotConfigured": "微信: 轉帳設定未設定",
+  "transferAppNotConfigured": "微信: 轉帳發起應用未設定",
+  "transferAppNotExist": "微信: 轉帳發起應用不存在",
+  "transferAppNotBelong": "微信: 轉帳發起應用不屬於目前商戶",
+  "transferAppTypeNotOfficialAccount": "微信: 轉帳發起應用必須是公眾號類型"
 }

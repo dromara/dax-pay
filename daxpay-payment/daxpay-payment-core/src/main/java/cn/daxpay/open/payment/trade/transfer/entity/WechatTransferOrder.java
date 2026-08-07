@@ -73,8 +73,11 @@ public class WechatTransferOrder extends MchBaseEntity {
     /// 收款人微信 openid
     private String payeeOpenid;
 
-    /// 转账场景(冗余自通道商户配置)
+    /// 转账场景(冗余自转账配置)
     private String transferScene;
+
+    /// 转账发起应用AppId(从转账配置解析, openid归属校验/对账回查用)
+    private String wxAppId;
 
     /// 拉起转账确认参数(微信二次确认)
     private String transferBody;

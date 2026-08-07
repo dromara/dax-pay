@@ -61,6 +61,10 @@
   "transferOnlyOpenid": "WeChat only supports openid payee",
   "transferNameForbidden": "WeChat: payee name not allowed for amount below 0.3 CNY",
   "transferNameRequired": "WeChat: payee name required for amount >= 2000 CNY",
-
-  "transferSceneNotConfigured": "WeChat: transfer scene not configured"
+  "transferSceneNotConfigured": "WeChat: transfer scene not configured",
+  "transferConfigNotConfigured": "WeChat: Transfer config not configured",
+  "transferAppNotConfigured": "WeChat: Transfer initiator app not configured",
+  "transferAppNotExist": "WeChat: Transfer initiator app not found",
+  "transferAppNotBelong": "WeChat: Transfer initiator app does not belong to the current merchant",
+  "transferAppTypeNotOfficialAccount": "WeChat: Transfer initiator app must be an Official Account"
 }

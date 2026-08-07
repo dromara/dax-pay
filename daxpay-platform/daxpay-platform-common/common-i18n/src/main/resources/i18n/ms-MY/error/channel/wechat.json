@@ -61,6 +61,10 @@
   "transferOnlyOpenid": "WeChat hanya menyokong penerima openid",
   "transferNameForbidden": "WeChat: nama penerima tidak dibenarkan untuk jumlah di bawah 0.3 CNY",
   "transferNameRequired": "WeChat: nama penerima wajib untuk jumlah >= 2000 CNY",
-
-  "transferSceneNotConfigured": "WeChat: senario pindahan belum dikonfigurasi"
+  "transferSceneNotConfigured": "WeChat: senario pindahan belum dikonfigurasi",
+  "transferConfigNotConfigured": "WeChat: Konfigurasi pemindahan belum dikonfigurasi",
+  "transferAppNotConfigured": "WeChat: Aplikasi pemula pemindahan belum dikonfigurasi",
+  "transferAppNotExist": "WeChat: Aplikasi pemula pemindahan tidak dijumpai",
+  "transferAppNotBelong": "WeChat: Aplikasi pemula pemindahan tidak milik merchant semasa",
+  "transferAppTypeNotOfficialAccount": "WeChat: Aplikasi pemula pemindahan mesti jenis Official Account"
 }

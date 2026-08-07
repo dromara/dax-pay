@@ -5,9 +5,11 @@ import cn.daxpay.open.channel.wechat.dao.direct.WechatDirectChannelMerchantManag
 import cn.daxpay.open.channel.wechat.entity.direct.WechatDirectChannelMerchant;
 import cn.daxpay.open.channel.wechat.entity.direct.WechatDirectKeyConfig;
 import cn.daxpay.open.channel.wechat.strategy.direct.pay.WechatDirectPayStrategy;
+import cn.daxpay.open.payment.auth.core.AppScopeEnum;
 import cn.daxpay.open.payment.wx.facade.WxAppFacade;
 import cn.daxpay.open.payment.wx.facade.WxAppView;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
+import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
@@ -61,6 +63,25 @@ public class WechatDirectConfigAssembler {
         WechatDirectChannelMerchant channelMerchant = this.loadChannelMerchant(channelMchNo);
         this.assertOwnsMchNo(channelMerchant, mchNo);
         return this.assemble(null, channelMchNo, channelMerchant);
+    }
+
+    /// 转账专用凭证组装(按发起应用引用解析, 不经 capability)
+    ///
+    /// 转账场景的应用由「微信转账配置」显式指定(公众号), 不走支付能力绑定解析。
+    /// 直接按 [transferAppRefId] 加载商户档应用取 wxAppId, 装载密钥。
+    ///
+    /// @param channelMchNo    通道商户号(密钥查询)
+    /// @param transferAppRefId 转账发起应用引用(wx_mch_app 主键)
+    /// @return 微信 SDK 凭证, wxAppId 来自转账配置指定的公众号应用
+    public WechatSdkCredential buildTransferConfig(String channelMchNo, Long transferAppRefId) {
+        WxAppView app = wxAppFacade.getById(AppScopeEnum.MERCHANT, transferAppRefId);
+        if (app == null) {
+            // 微信: 转账发起应用未配置或已删除
+            throw new BizInfoException(DaxPayErrorCode.CONFIG_NOT_EXIST,
+                    "error.channel.wechat.transferAppNotConfigured");
+        }
+        WechatDirectChannelMerchant channelMerchant = this.loadChannelMerchant(channelMchNo);
+        return this.assemble(app.wxAppId(), channelMchNo, channelMerchant);
     }
 
     /// 加载通道商户绑定(channelMchNo 是系统生成号, 不等于 wxMchId)

@@ -61,6 +61,10 @@
   "transferOnlyOpenid": "위챗은 openid 수취인만 지원합니다",
   "transferNameForbidden": "위챗: 0.3원 미만은 수취인 이름을 입력할 수 없습니다",
   "transferNameRequired": "위챗: 2000원 이상은 수취인 이름이 필수입니다",
-
-  "transferSceneNotConfigured": "WeChat: 송금 장면이 구성되지 않았습니다"
+  "transferSceneNotConfigured": "WeChat: 송금 장면이 구성되지 않았습니다",
+  "transferConfigNotConfigured": "WeChat: 이체 설정이 구성되지 않았습니다",
+  "transferAppNotConfigured": "WeChat: 이체 발신 앱이 구성되지 않았습니다",
+  "transferAppNotExist": "WeChat: 이체 발신 앱을 찾을 수 없습니다",
+  "transferAppNotBelong": "WeChat: 이체 발신 앱이 현재 가맹점에 속하지 않습니다",
+  "transferAppTypeNotOfficialAccount": "WeChat: 이체 발신 앱은 공식계정 유형이어야 합니다"
 }
