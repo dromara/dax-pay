@@ -309,6 +309,44 @@ COMMENT ON COLUMN "public"."alipay_direct_channel_merchant"."sandbox" IS '是否
 COMMENT ON TABLE "public"."alipay_direct_channel_merchant" IS '支付宝直连通道商户绑定';
 
 -- ----------------------------
+-- Table structure for alipay_transfer_scene_config
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."alipay_transfer_scene_config";
+CREATE TABLE "public"."alipay_transfer_scene_config" (
+  "id" int8 NOT NULL,
+  "mch_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "channel_mch_no" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
+  "scene_name" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
+  "is_default" bool NOT NULL DEFAULT false,
+  "remark" varchar(200) COLLATE "pg_catalog"."default",
+  "creator" int8,
+  "create_time" timestamptz(6),
+  "last_modifier" int8,
+  "last_modified_time" timestamptz(6),
+  "version" int4 NOT NULL DEFAULT 0,
+  "deleted" bool NOT NULL DEFAULT false
+)
+;
+COMMENT ON COLUMN "public"."alipay_transfer_scene_config"."id" IS '主键';
+COMMENT ON COLUMN "public"."alipay_transfer_scene_config"."mch_no" IS '商户号';
+COMMENT ON COLUMN "public"."alipay_transfer_scene_config"."channel_mch_no" IS '通道商户号';
+COMMENT ON COLUMN "public"."alipay_transfer_scene_config"."scene_name" IS '转账场景名称(2026新商户必填,枚举:现金营销/企业退款/佣金报酬/业务结算/二手回收/公益补助/行政补贴和退款/保险理赔)';
+COMMENT ON COLUMN "public"."alipay_transfer_scene_config"."is_default" IS '是否默认场景(一个通道商户最多一个默认)';
+COMMENT ON COLUMN "public"."alipay_transfer_scene_config"."remark" IS '备注';
+COMMENT ON COLUMN "public"."alipay_transfer_scene_config"."creator" IS '创建人';
+COMMENT ON COLUMN "public"."alipay_transfer_scene_config"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."alipay_transfer_scene_config"."last_modifier" IS '最后修改人';
+COMMENT ON COLUMN "public"."alipay_transfer_scene_config"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."alipay_transfer_scene_config"."version" IS '乐观锁版本号';
+COMMENT ON COLUMN "public"."alipay_transfer_scene_config"."deleted" IS '逻辑删除标志';
+COMMENT ON TABLE "public"."alipay_transfer_scene_config" IS '支付宝转账场景配置(一对多,按通道商户维度管理,2026新商户转账必配)';
+CREATE INDEX "idx_alipay_transfer_scene_config_mch" ON "public"."alipay_transfer_scene_config" USING btree ("channel_mch_no", "deleted");
+COMMENT ON INDEX "public"."idx_alipay_transfer_scene_config_mch" IS '按通道商户号查询转账场景列表';
+CREATE UNIQUE INDEX "uk_alipay_transfer_scene_config_default" ON "public"."alipay_transfer_scene_config" ("channel_mch_no") WHERE is_default = true AND deleted = false;
+COMMENT ON INDEX "public"."uk_alipay_transfer_scene_config_default" IS '同一通道商户最多一个默认转账场景(部分唯一索引)';
+ALTER TABLE "public"."alipay_transfer_scene_config" ADD CONSTRAINT "pk_alipay_transfer_scene_config" PRIMARY KEY ("id");
+
+-- ----------------------------
 -- Table structure for alipay_isv_app
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."alipay_isv_app";
@@ -650,6 +688,46 @@ COMMENT ON COLUMN "public"."douyin_direct_channel_merchant"."version" IS '乐观
 COMMENT ON COLUMN "public"."douyin_direct_channel_merchant"."deleted" IS '逻辑删除标志';
 COMMENT ON COLUMN "public"."douyin_direct_channel_merchant"."transfer_scene" IS '转账场景ID(商家转账, 未配置时发起转账报错)';
 COMMENT ON TABLE "public"."douyin_direct_channel_merchant" IS '抖音直连通道商户绑定';
+
+-- ----------------------------
+-- Table structure for douyin_transfer_scene_config
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."douyin_transfer_scene_config";
+CREATE TABLE "public"."douyin_transfer_scene_config" (
+  "id" int8 NOT NULL,
+  "mch_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "channel_mch_no" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
+  "scene_id" varchar(16) COLLATE "pg_catalog"."default" NOT NULL,
+  "is_default" bool NOT NULL DEFAULT false,
+  "remark" varchar(200) COLLATE "pg_catalog"."default",
+  "creator" int8,
+  "create_time" timestamptz(6),
+  "last_modifier" int8,
+  "last_modified_time" timestamptz(6),
+  "version" int4 NOT NULL DEFAULT 0,
+  "deleted" bool NOT NULL DEFAULT false
+)
+;
+COMMENT ON COLUMN "public"."douyin_transfer_scene_config"."id" IS '主键';
+COMMENT ON COLUMN "public"."douyin_transfer_scene_config"."mch_no" IS '商户号';
+COMMENT ON COLUMN "public"."douyin_transfer_scene_config"."channel_mch_no" IS '通道商户号';
+COMMENT ON COLUMN "public"."douyin_transfer_scene_config"."scene_id" IS '转账场景ID(固定枚举:1001现金营销/1002企业赔付/1003佣金报酬/1004采购货款/1005二手回收/1006公益补助/1007行政补贴)';
+COMMENT ON COLUMN "public"."douyin_transfer_scene_config"."is_default" IS '是否默认场景(一个通道商户最多一个默认)';
+COMMENT ON COLUMN "public"."douyin_transfer_scene_config"."remark" IS '备注';
+COMMENT ON COLUMN "public"."douyin_transfer_scene_config"."creator" IS '创建人ID';
+COMMENT ON COLUMN "public"."douyin_transfer_scene_config"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."douyin_transfer_scene_config"."last_modifier" IS '最后修改人ID';
+COMMENT ON COLUMN "public"."douyin_transfer_scene_config"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."douyin_transfer_scene_config"."version" IS '乐观锁版本号';
+COMMENT ON COLUMN "public"."douyin_transfer_scene_config"."deleted" IS '逻辑删除标志';
+COMMENT ON TABLE "public"."douyin_transfer_scene_config" IS '抖音转账场景配置(一对多, 按通道商户维度管理, 场景ID为固定枚举1001-1007)';
+CREATE INDEX "idx_douyin_transfer_scene_config_mch" ON "public"."douyin_transfer_scene_config" USING btree ("channel_mch_no", "deleted");
+COMMENT ON INDEX "public"."idx_douyin_transfer_scene_config_mch" IS '按通道商户号查询转账场景列表';
+CREATE UNIQUE INDEX "uk_douyin_transfer_scene_config_default" ON "public"."douyin_transfer_scene_config" ("channel_mch_no") WHERE is_default = true AND deleted = false;
+COMMENT ON INDEX "public"."uk_douyin_transfer_scene_config_default" IS '同一通道商户最多一个默认转账场景(部分唯一索引)';
+CREATE UNIQUE INDEX "uk_douyin_transfer_scene_config_scene" ON "public"."douyin_transfer_scene_config" ("channel_mch_no", "scene_id") WHERE deleted = false;
+COMMENT ON INDEX "public"."uk_douyin_transfer_scene_config_scene" IS '同一通道商户同一转账场景不可重复(部分唯一索引)';
+ALTER TABLE "public"."douyin_transfer_scene_config" ADD CONSTRAINT "pk_douyin_transfer_scene_config" PRIMARY KEY ("id");
 
 -- ----------------------------
 -- Table structure for douyin_direct_key_config
@@ -3548,6 +3626,7 @@ CREATE TABLE "public"."pay_transfer_order_alipay" (
   "payee_type" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
   "payee_account" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
   "payee_name" varchar(100) COLLATE "pg_catalog"."default",
+  "pay_fund_order_id" varchar(64) COLLATE "pg_catalog"."default",
   "creator" int8,
   "create_time" timestamptz(6),
   "last_modifier" int8,
@@ -3575,6 +3654,7 @@ COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."error_msg" IS '错误信
 COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."payee_type" IS '收款人账号类型(user_id/open_id/login_name)';
 COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."payee_account" IS '收款人账号';
 COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."payee_name" IS '收款人姓名';
+COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."pay_fund_order_id" IS '支付宝资金流水号(财务对账,区别于 out_transfer_no)';
 COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."creator" IS '创建人';
 COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."create_time" IS '创建时间';
 COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."last_modifier" IS '最后修改人';

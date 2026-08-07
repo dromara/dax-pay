@@ -54,9 +54,10 @@ public class TransferStartService {
     ///
     /// @param channel 通道编码(wechat/alipay/douyin)
     /// @param param   转账参数
-    public void start(String channel, TransferParam param) {
+    /// @return 平台转账单号(transferNo)
+    public String start(String channel, TransferParam param) {
         // 锁租期 60s 覆盖通道 HTTP 超时(40s), 等待 3s 让并发同号请求排队而非立即失败
-        lockExecutor.run(
+        return lockExecutor.execute(
                 "payment:transfer:" + param.getBizTransferNo(),
                 60000, 3000,
                 () -> this.startHandle(channel, param),
@@ -65,7 +66,9 @@ public class TransferStartService {
     }
 
     /// 发起转账编排（锁内, 无事务）
-    public void startHandle(String channel, TransferParam param) {
+    ///
+    /// @return 平台转账单号(transferNo)
+    public String startHandle(String channel, TransferParam param) {
         // 商户身份装载: 商户端强制当前登录商户, 运营端按传入 mchNo 代发
         merchantContextLoader.initMch(param.getMchNo());
         // 应用解析: 空则取商户默认应用, 校验启用与归属
@@ -83,7 +86,7 @@ public class TransferStartService {
                 TransferStrategyContext context = assistService.loadContext(channel, containerId)
                         .orElseThrow(() -> new BizInfoException(CommonCode.FAIL_CODE, "pay.error.transfer.notFound"));
                 this.transfer(channel, context);
-                return;
+                return context.getTransferNo();
             }
             // 该商户转账号已存在，请勿重复转账
             throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.transfer.noDuplicate");
@@ -91,6 +94,7 @@ public class TransferStartService {
         // 新单: 建单(独立事务)后发起
         TransferStrategyContext context = self.createOrder(channel, param, mchApp.getAppId());
         this.transfer(channel, context);
+        return context.getTransferNo();
     }
 
     /// 建单（事务内: 通道参数校验 + 容器/凭证双写）

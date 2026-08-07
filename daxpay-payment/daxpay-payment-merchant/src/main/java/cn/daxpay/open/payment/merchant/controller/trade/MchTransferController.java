@@ -14,8 +14,11 @@ import cn.daxpay.open.payment.trade.transfer.param.TransferTradeQuery;
 import cn.daxpay.open.payment.trade.transfer.param.WechatTransferOrderQuery;
 import cn.daxpay.open.payment.trade.transfer.result.AlipayTransferOrderResult;
 import cn.daxpay.open.payment.trade.transfer.result.DouyinTransferOrderResult;
+import cn.daxpay.open.payment.trade.transfer.result.TransferCreateResult;
 import cn.daxpay.open.payment.trade.transfer.result.TransferTradeResult;
 import cn.daxpay.open.payment.trade.transfer.result.WechatTransferOrderResult;
+import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
+import cn.hutool.core.util.StrUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -40,6 +43,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MchTransferController {
 
     private final MchTransferService mchTransferService;
+    private final PlatformUrlConfigService platformUrlConfigService;
 
     // ===== 微信转账 =====
 
@@ -61,9 +65,20 @@ public class MchTransferController {
     @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "发起微信转账(FAIL 单复用原单号即重试)")
     @PostMapping("/wechat/create")
-    public Result<Void> wechatCreate(@Valid @RequestBody TransferParam param) {
-        mchTransferService.create("wechat", param);
-        return Res.ok();
+    public Result<TransferCreateResult> wechatCreate(@Valid @RequestBody TransferParam param) {
+        String transferNo = mchTransferService.create("wechat", param);
+        // 生成确认收款链接(供商户发给收款人在微信内打开)
+        String confirmUrl = buildConfirmUrl(transferNo);
+        return Res.ok(new TransferCreateResult().setTransferNo(transferNo).setConfirmUrl(confirmUrl));
+    }
+
+    /// 生成微信转账确认收款链接
+    private String buildConfirmUrl(String transferNo) {
+        String base = platformUrlConfigService.getUrlConfig().getPaymentGatewayBaseUrl();
+        if (StrUtil.isBlank(base)) {
+            return null;
+        }
+        return StrUtil.format("{}/transfer-confirm/{}", base, transferNo);
     }
 
     // ===== 支付宝转账 =====

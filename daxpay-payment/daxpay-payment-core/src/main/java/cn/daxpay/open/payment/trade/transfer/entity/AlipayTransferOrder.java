@@ -43,6 +43,9 @@ public class AlipayTransferOrder extends MchBaseEntity {
     /// 通道转账单号(支付宝 order_id)
     private String outTransferNo;
 
+    /// 支付宝资金流水号(pay_fund_order_id, 财务对账, 区别于 outTransferNo)
+    private String payFundOrderId;
+
     // ===== 转账要素 =====
 
     /// 转账金额(最小货币单位, 分)
@@ -79,6 +82,12 @@ public class AlipayTransferOrder extends MchBaseEntity {
 
     /// 收款人姓名
     private String payeeName;
+
+    /// 转账场景配置ID(支付宝专用, FAIL重试时恢复场景用)
+    private String transferSceneConfigId;
+
+    /// 转账场景报备信息(JSON序列化, FAIL重试时恢复报备用)
+    private String reportInfos;
 
     // ===== 商户出站 / 审计 =====
 

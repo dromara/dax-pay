@@ -100,8 +100,10 @@ public class MchTransferService {
     }
 
     /// 发起转账(商户号由登录上下文强制)
-    public void create(String channel, TransferParam param) {
-        transferStartService.start(channel, param);
+    ///
+    /// @return 平台转账单号
+    public String create(String channel, TransferParam param) {
+        return transferStartService.start(channel, param);
     }
 
     /// 同步转账状态

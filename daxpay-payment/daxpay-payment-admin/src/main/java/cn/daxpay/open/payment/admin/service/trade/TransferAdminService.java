@@ -109,8 +109,10 @@ public class TransferAdminService {
     // ===== 公共操作 =====
 
     /// 发起转账(运营端代发, mchNo 必传; FAIL 单复用原单号即重试)
-    public void create(String channel, TransferParam param) {
-        transferStartService.start(channel, param);
+    ///
+    /// @return 平台转账单号
+    public String create(String channel, TransferParam param) {
+        return transferStartService.start(channel, param);
     }
 
     /// 同步转账状态

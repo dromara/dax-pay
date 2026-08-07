@@ -25,6 +25,9 @@ public class TransferResultBo {
     /// 通道转账单号(微信 paymentNo / 支付宝 order_id / 抖音 orderId)
     private String outTransferNo;
 
+    /// 支付宝资金流水号(支付宝特有 pay_fund_order_id, 财务对账用; 其余通道空)
+    private String payFundOrderId;
+
     /// 实际上送通道的商户转账号(特殊通道变形后回写; 普通通道可空, 结算沿用建单默认值)
     private String relationNo;
 

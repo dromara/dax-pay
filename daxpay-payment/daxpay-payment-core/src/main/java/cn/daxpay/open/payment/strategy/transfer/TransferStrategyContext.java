@@ -1,11 +1,13 @@
 package cn.daxpay.open.payment.strategy.transfer;
 
 import cn.daxpay.open.payment.trade.transfer.entity.TransferTrade;
+import cn.daxpay.open.payment.trade.transfer.param.TransferReportInfo;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 
 /// # 转账策略执行上下文(请求级,显式传参)
 ///
@@ -86,4 +88,13 @@ public class TransferStrategyContext {
 
     /// 收款人姓名(支付宝/抖音)
     private String payeeName;
+
+    /// 转账场景配置ID(支付宝专用,发起时指定用哪个场景; 空则用通道商户默认)
+    private String transferSceneConfigId;
+
+    /// 转账场景报备信息(微信/抖音转账必填, 各场景要求不同)
+    private List<TransferReportInfo> reportInfos;
+
+    /// 用户收款感知(抖音专用, 收款人在抖音中看到的文案)
+    private String userRecvPerception;
 }

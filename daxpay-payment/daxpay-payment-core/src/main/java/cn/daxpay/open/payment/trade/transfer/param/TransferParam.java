@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /// # 转账发起参数(管理端/商户端共用)
 ///
@@ -86,4 +87,23 @@ public class TransferParam {
     @Size(max = 200, message = "回调通知地址不可超过200位")
     @Schema(description = "回调通知地址")
     private String notifyUrl;
+
+    /// 转账场景报备信息(微信转账必填, 各场景要求不同, 留空由通道兜底)
+    @Schema(description = "转账场景报备信息")
+    private List<TransferReportInfo> reportInfos;
+
+    /// 转账场景配置ID(支付宝专用,可选; 不传则用通道商户的默认转账场景配置)
+    @Size(max = 32, message = "转账场景配置ID不可超过32位")
+    @Schema(description = "转账场景配置ID(支付宝专用,不传用默认)")
+    private String transferSceneConfigId;
+
+    /// 转账场景ID(抖音专用, 主数据枚举如1001-1007, 发起转账时由前端选择传入)
+    @Size(max = 16, message = "转账场景ID不可超过16位")
+    @Schema(description = "转账场景ID(抖音专用,主数据枚举)")
+    private String transferScene;
+
+    /// 用户收款感知(抖音专用, 收款人在抖音中看到的文案, 按场景枚举选项)
+    @Size(max = 64, message = "用户收款感知不可超过64位")
+    @Schema(description = "用户收款感知(抖音专用)")
+    private String userRecvPerception;
 }

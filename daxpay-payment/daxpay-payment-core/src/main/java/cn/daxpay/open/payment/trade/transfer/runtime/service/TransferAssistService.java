@@ -11,16 +11,20 @@ import cn.daxpay.open.payment.trade.transfer.entity.DouyinTransferOrder;
 import cn.daxpay.open.payment.trade.transfer.entity.TransferTrade;
 import cn.daxpay.open.payment.trade.transfer.entity.WechatTransferOrder;
 import cn.daxpay.open.payment.trade.transfer.param.TransferParam;
+import cn.daxpay.open.payment.trade.transfer.param.TransferReportInfo;
 import cn.daxpay.open.payment.trade.util.CurrencyAmountUtil;
 import cn.daxpay.open.platform.core.enums.pay.channel.CurrencyEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.NoticeEventEnum;
 import cn.daxpay.open.platform.core.util.TradeNoGenerateUtil;
+import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
@@ -133,7 +137,8 @@ public class TransferAssistService {
                 wechatTransferOrderManager.save(order);
                 TransferTrade trade = this.buildTrade(order, channel, transferNo);
                 transferTradeManager.save(trade);
-                return buildWechatContext(order).setChannel(channel).setTrade(trade);
+                return buildWechatContext(order).setChannel(channel).setTrade(trade)
+                        .setReportInfos(param.getReportInfos());
             }
             case "alipay" -> {
                 AlipayTransferOrder order = new AlipayTransferOrder()
@@ -154,16 +159,22 @@ public class TransferAssistService {
                         .setReqTime(OffsetDateTime.now());
                 // 商户号独立赋值(父类 setter 返回 MchBaseEntity, 禁止链式)
                 order.setMchNo(mchNo);
+                // 持久化场景配置ID与报备信息(FAIL重试时恢复)
+                order.setTransferSceneConfigId(param.getTransferSceneConfigId());
+                order.setReportInfos(serializeReportInfos(param.getReportInfos()));
                 alipayTransferOrderManager.save(order);
                 TransferTrade trade = this.buildTrade(order, channel, transferNo);
                 transferTradeManager.save(trade);
-                return buildAlipayContext(order).setChannel(channel).setTrade(trade);
+                return buildAlipayContext(order).setChannel(channel).setTrade(trade)
+                        .setTransferSceneConfigId(param.getTransferSceneConfigId())
+                        .setReportInfos(param.getReportInfos());
             }
             case "douyin" -> {
                 DouyinTransferOrder order = new DouyinTransferOrder()
                         .setPayeeType(param.getPayeeType())
                         .setPayeeAccount(param.getPayeeAccount())
                         .setPayeeName(param.getPayeeName())
+                        .setTransferScene(param.getTransferScene())
                         .setTransferNo(transferNo)
                         .setBizTransferNo(param.getBizTransferNo())
                         .setChannelMchNo(param.getChannelMchNo())
@@ -178,10 +189,16 @@ public class TransferAssistService {
                         .setReqTime(OffsetDateTime.now());
                 // 商户号独立赋值(父类 setter 返回 MchBaseEntity, 禁止链式)
                 order.setMchNo(mchNo);
+                // 持久化收款感知与报备信息(FAIL重试时恢复)
+                order.setUserRecvPerception(param.getUserRecvPerception());
+                order.setReportInfos(serializeReportInfos(param.getReportInfos()));
                 douyinTransferOrderManager.save(order);
                 TransferTrade trade = this.buildTrade(order, channel, transferNo);
                 transferTradeManager.save(trade);
-                return buildDouyinContext(order).setChannel(channel).setTrade(trade);
+                return buildDouyinContext(order).setChannel(channel).setTrade(trade)
+                        .setTransferScene(param.getTransferScene())
+                        .setUserRecvPerception(param.getUserRecvPerception())
+                        .setReportInfos(param.getReportInfos());
             }
             default -> throw new IllegalArgumentException("未知转账通道: " + channel);
         }
@@ -465,7 +482,10 @@ public class TransferAssistService {
                 .setFinishTime(order.getFinishTime())
                 .setPayeeType(order.getPayeeType())
                 .setPayeeAccount(order.getPayeeAccount())
-                .setPayeeName(order.getPayeeName());
+                .setPayeeName(order.getPayeeName())
+                // 恢复场景配置ID与报备信息(FAIL重试时使用)
+                .setTransferSceneConfigId(order.getTransferSceneConfigId())
+                .setReportInfos(deserializeReportInfos(order.getReportInfos()));
     }
 
     private TransferStrategyContext buildDouyinContext(DouyinTransferOrder order) {
@@ -485,6 +505,27 @@ public class TransferAssistService {
                 .setPayeeType(order.getPayeeType())
                 .setPayeeAccount(order.getPayeeAccount())
                 .setPayeeName(order.getPayeeName())
-                .setTransferScene(order.getTransferScene());
+                .setTransferScene(order.getTransferScene())
+                // 恢复收款感知与报备信息(FAIL重试时使用)
+                .setUserRecvPerception(order.getUserRecvPerception())
+                .setReportInfos(deserializeReportInfos(order.getReportInfos()));
+    }
+
+    // ===== 报备信息序列化(容器持久化/重试恢复) =====
+
+    /// 序列化报备信息为JSON字符串(支付宝容器持久化, FAIL重试时恢复)
+    private String serializeReportInfos(List<TransferReportInfo> reportInfos) {
+        if (reportInfos == null || reportInfos.isEmpty()) {
+            return null;
+        }
+        return JSONUtil.toJsonStr(reportInfos);
+    }
+
+    /// 反序列化报备信息(从容器恢复)
+    private List<TransferReportInfo> deserializeReportInfos(String json) {
+        if (StrUtil.isBlank(json)) {
+            return null;
+        }
+        return JSONUtil.toList(json, TransferReportInfo.class);
     }
 }
