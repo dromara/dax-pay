@@ -83,8 +83,8 @@ public class AlipayTransferOrder extends MchBaseEntity {
     /// 收款人姓名
     private String payeeName;
 
-    /// 转账场景配置ID(支付宝专用, FAIL重试时恢复场景用)
-    private String transferSceneConfigId;
+    /// 转账场景标识(支付宝=转账场景配置ID, FAIL重试时恢复场景用)
+    private String transferScene;
 
     /// 转账场景报备信息(JSON序列化, FAIL重试时恢复报备用)
     private String reportInfos;

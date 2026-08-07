@@ -74,7 +74,8 @@ public class TransferStrategyContext {
     /// 收款人微信 openid
     private String payeeOpenid;
 
-    /// 转账场景(微信/抖音, 抖音发起时可经本字段回写)
+    /// 转账场景标识(三通道通用: 支付宝=场景配置ID/抖音=场景枚举码, 由请求传入;
+    /// 微信=通道商户配置场景, 发起时经本字段回写)
     private String transferScene;
 
     /// 收款人姓名(微信金额档位校验用)
@@ -89,12 +90,6 @@ public class TransferStrategyContext {
     /// 收款人姓名(支付宝/抖音)
     private String payeeName;
 
-    /// 转账场景配置ID(支付宝专用,发起时指定用哪个场景; 空则用通道商户默认)
-    private String transferSceneConfigId;
-
     /// 转账场景报备信息(微信/抖音转账必填, 各场景要求不同)
     private List<TransferReportInfo> reportInfos;
-
-    /// 用户收款感知(抖音专用, 收款人在抖音中看到的文案)
-    private String userRecvPerception;
 }

@@ -62,6 +62,7 @@ public class TransferParam {
 
     /// 收款人账号类型
     /// @see cn.daxpay.open.payment.trade.transfer.enums.TransferPayeeTypeEnum
+    /// 抖音支持 openid/phone 两种(手机号复用收款人账号字段, 子应用证书加密上送)
     @NotBlank(message = "收款人账号类型必填")
     @Size(max = 32, message = "收款人账号类型不可超过32位")
     @Schema(description = "收款人账号类型")
@@ -92,18 +93,8 @@ public class TransferParam {
     @Schema(description = "转账场景报备信息")
     private List<TransferReportInfo> reportInfos;
 
-    /// 转账场景配置ID(支付宝专用,可选; 不传则用通道商户的默认转账场景配置)
-    @Size(max = 32, message = "转账场景配置ID不可超过32位")
-    @Schema(description = "转账场景配置ID(支付宝专用,不传用默认)")
-    private String transferSceneConfigId;
-
-    /// 转账场景ID(抖音专用, 主数据枚举如1001-1007, 发起转账时由前端选择传入)
-    @Size(max = 16, message = "转账场景ID不可超过16位")
-    @Schema(description = "转账场景ID(抖音专用,主数据枚举)")
+    /// 转账场景标识(三通道通用: 支付宝=转账场景配置ID, 抖音=主数据枚举码如1001, 发起时由前端选择传入; 微信不传, 用通道商户配置场景)
+    @Size(max = 32, message = "转账场景不可超过32位")
+    @Schema(description = "转账场景标识(支付宝=场景配置ID/抖音=场景枚举码, 微信不传用配置)")
     private String transferScene;
-
-    /// 用户收款感知(抖音专用, 收款人在抖音中看到的文案, 按场景枚举选项)
-    @Size(max = 64, message = "用户收款感知不可超过64位")
-    @Schema(description = "用户收款感知(抖音专用)")
-    private String userRecvPerception;
 }

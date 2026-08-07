@@ -159,14 +159,14 @@ public class TransferAssistService {
                         .setReqTime(OffsetDateTime.now());
                 // 商户号独立赋值(父类 setter 返回 MchBaseEntity, 禁止链式)
                 order.setMchNo(mchNo);
-                // 持久化场景配置ID与报备信息(FAIL重试时恢复)
-                order.setTransferSceneConfigId(param.getTransferSceneConfigId());
+                // 持久化场景标识与报备信息(FAIL重试时恢复)
+                order.setTransferScene(param.getTransferScene());
                 order.setReportInfos(serializeReportInfos(param.getReportInfos()));
                 alipayTransferOrderManager.save(order);
                 TransferTrade trade = this.buildTrade(order, channel, transferNo);
                 transferTradeManager.save(trade);
                 return buildAlipayContext(order).setChannel(channel).setTrade(trade)
-                        .setTransferSceneConfigId(param.getTransferSceneConfigId())
+                        .setTransferScene(param.getTransferScene())
                         .setReportInfos(param.getReportInfos());
             }
             case "douyin" -> {
@@ -189,15 +189,13 @@ public class TransferAssistService {
                         .setReqTime(OffsetDateTime.now());
                 // 商户号独立赋值(父类 setter 返回 MchBaseEntity, 禁止链式)
                 order.setMchNo(mchNo);
-                // 持久化收款感知与报备信息(FAIL重试时恢复)
-                order.setUserRecvPerception(param.getUserRecvPerception());
+                // 持久化场景与报备信息(FAIL重试时恢复)
                 order.setReportInfos(serializeReportInfos(param.getReportInfos()));
                 douyinTransferOrderManager.save(order);
                 TransferTrade trade = this.buildTrade(order, channel, transferNo);
                 transferTradeManager.save(trade);
                 return buildDouyinContext(order).setChannel(channel).setTrade(trade)
                         .setTransferScene(param.getTransferScene())
-                        .setUserRecvPerception(param.getUserRecvPerception())
                         .setReportInfos(param.getReportInfos());
             }
             default -> throw new IllegalArgumentException("未知转账通道: " + channel);
@@ -483,8 +481,8 @@ public class TransferAssistService {
                 .setPayeeType(order.getPayeeType())
                 .setPayeeAccount(order.getPayeeAccount())
                 .setPayeeName(order.getPayeeName())
-                // 恢复场景配置ID与报备信息(FAIL重试时使用)
-                .setTransferSceneConfigId(order.getTransferSceneConfigId())
+                // 恢复场景标识与报备信息(FAIL重试时使用)
+                .setTransferScene(order.getTransferScene())
                 .setReportInfos(deserializeReportInfos(order.getReportInfos()));
     }
 
@@ -506,8 +504,7 @@ public class TransferAssistService {
                 .setPayeeAccount(order.getPayeeAccount())
                 .setPayeeName(order.getPayeeName())
                 .setTransferScene(order.getTransferScene())
-                // 恢复收款感知与报备信息(FAIL重试时使用)
-                .setUserRecvPerception(order.getUserRecvPerception())
+                // 恢复报备信息(FAIL重试时使用)
                 .setReportInfos(deserializeReportInfos(order.getReportInfos()));
     }
 

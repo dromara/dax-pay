@@ -82,9 +82,6 @@ public class DouyinTransferOrder extends MchBaseEntity {
     /// 转账场景ID(发起转账时由前端选择的主数据枚举, 如1001-1007)
     private String transferScene;
 
-    /// 用户收款感知(收款人在抖音中看到的文案)
-    private String userRecvPerception;
-
     /// 转账场景报备信息(JSON序列化, FAIL重试时恢复报备用)
     private String reportInfos;
 

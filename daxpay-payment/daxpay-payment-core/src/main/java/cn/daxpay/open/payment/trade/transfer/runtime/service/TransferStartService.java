@@ -17,6 +17,7 @@ import cn.daxpay.open.platform.common.json.util.JacksonUtil;
 import cn.daxpay.open.platform.common.redis.lock.LockExecutor;
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
+import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -130,9 +131,10 @@ public class TransferStartService {
                 this.registerDelaySync(trade.getTradeNo());
             }
         } catch (Exception e) {
-            // 发起异常: 置 FAIL 并记录错误
+            // 发起异常: 置 FAIL 并记录错误, 然后向上抛出, 避免接口返回"假成功"误导调用方
             log.error("转账发起失败: tradeNo={}, channel={}", trade.getTradeNo(), channel, e);
             assistService.fail(channel, trade, e.getMessage());
+            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "pay.error.transfer.createFailed", e.getMessage());
         }
     }
 

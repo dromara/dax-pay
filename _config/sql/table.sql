@@ -3626,6 +3626,7 @@ CREATE TABLE "public"."pay_transfer_order_alipay" (
   "payee_type" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
   "payee_account" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
   "payee_name" varchar(100) COLLATE "pg_catalog"."default",
+  "transfer_scene" varchar(50) COLLATE "pg_catalog"."default",
   "pay_fund_order_id" varchar(64) COLLATE "pg_catalog"."default",
   "creator" int8,
   "create_time" timestamptz(6),
@@ -3654,6 +3655,7 @@ COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."error_msg" IS '错误信
 COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."payee_type" IS '收款人账号类型(user_id/open_id/login_name)';
 COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."payee_account" IS '收款人账号';
 COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."payee_name" IS '收款人姓名';
+COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."transfer_scene" IS '转账场景标识(支付宝=转账场景配置ID, FAIL重试时恢复场景用)';
 COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."pay_fund_order_id" IS '支付宝资金流水号(财务对账,区别于 out_transfer_no)';
 COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."creator" IS '创建人';
 COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."create_time" IS '创建时间';
