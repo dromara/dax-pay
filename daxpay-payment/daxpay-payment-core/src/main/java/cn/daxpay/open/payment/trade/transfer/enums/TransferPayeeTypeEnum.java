@@ -11,8 +11,8 @@ import java.util.Arrays;
 ///
 /// 转账收款人账号类型，按通道差异化使用：
 /// - 微信: 仅支持 openid
-/// - 支付宝: 支持 user_id / open_id / login_name
-/// - 抖音: 按通道能力选取
+/// - 支付宝: 支持 user_id / login_name
+/// - 抖音: 支持 openid / phone(手机号, 复用收款人账号字段)
 /// 字典: transfer_payee_type
 @Getter
 @RequiredArgsConstructor
@@ -26,6 +26,8 @@ public enum TransferPayeeTypeEnum implements I18nSupport {
     OPEN_ID("open_id"),
     /// 支付宝登录账号(手机号/邮箱)
     LOGIN_NAME("login_name"),
+    /// 抖音收款手机号(需抖音支付实名一致, 子应用证书加密上送)
+    PHONE("phone"),
     ;
 
     private final String code;

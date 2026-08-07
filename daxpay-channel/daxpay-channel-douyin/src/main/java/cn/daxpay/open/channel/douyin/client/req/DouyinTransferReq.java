@@ -21,8 +21,11 @@ public class DouyinTransferReq {
     /// 转账金额(分, 同步可空)
     private Long amount;
 
-    /// 收款人 openid
+    /// 收款人 openid(与手机号二选一, 不可同时填入)
     private String openid;
+
+    /// 收款人手机号(phone 模式, 子应用证书加密上送; 与 openid 二选一, 不可同时填入)
+    private String phoneNumber;
 
     /// 转账场景ID(transfer_scene_id, 主数据枚举1001-1007)
     private String scene;

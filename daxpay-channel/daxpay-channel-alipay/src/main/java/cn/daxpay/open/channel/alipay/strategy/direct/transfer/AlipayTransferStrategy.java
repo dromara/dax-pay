@@ -17,24 +17,32 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Set;
 
 /// # 支付宝直连转账策略
 ///
 /// 支付宝单笔转账(uni.transfer)的通道策略。
 /// 通道差异:
-/// - 支持三种收款人类型([TransferPayeeTypeEnum]: user_id/open_id/login_name)
-/// - 收款人姓名非必填, 但部分场景(转账到他人账号)支付宝要求姓名校验
+/// - 支持两种收款人类型([TransferPayeeTypeEnum]: user_id/login_name)
+/// - 收款人姓名: 登录号(login_name)转账必填, 其余场景可选(填了则校验姓名一致性)
+/// - 转账金额最低 0.1 元(文档 trans_amount 取值范围)
+/// - 转账金额达到 50000 元时, 付款理由(remark)必填(监管要求)
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class AlipayTransferStrategy extends AbsTransferStrategy {
 
-    /// 支付宝支持的收款人类型
+    /// 支付宝支持的收款人类型(仅会员ID/登录号, 不支持开放ID)
     private static final Set<String> SUPPORTED_PAYEE_TYPES = Set.of(
             TransferPayeeTypeEnum.USER_ID.getCode(),
-            TransferPayeeTypeEnum.OPEN_ID.getCode(),
             TransferPayeeTypeEnum.LOGIN_NAME.getCode());
+
+    /// 转账金额下限(元, 文档 trans_amount 取值范围 [0.1, 100000000])
+    private static final BigDecimal AMOUNT_MIN = new BigDecimal("0.1");
+
+    /// 大额档位(元): 达到该金额后付款理由必填(错误码 MEMO_REQUIRED_IN_TRANSFER_ERROR)
+    private static final BigDecimal LARGE_AMOUNT_LIMIT = new BigDecimal("50000");
 
     private final AlipayTransferService alipayTransferService;
     private final AlipayDirectConfigAssembler alipayDirectConfigAssembler;
@@ -62,6 +70,25 @@ public class AlipayTransferStrategy extends AbsTransferStrategy {
             // 支付宝: 转账标题必填(order_title 支付宝要求必选)
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.channel.alipay.transferTitleRequired");
+        }
+        // 登录号(login_name)转账时姓名必填(文档 payee_info.name 条件必填)
+        if (TransferPayeeTypeEnum.LOGIN_NAME.getCode().equals(param.getPayeeType())
+                && StrUtil.isBlank(param.getPayeeName())) {
+            // 支付宝: 登录号收款时必须填写收款人姓名
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "error.channel.alipay.transferLogonNameRequired");
+        }
+        // 转账金额不可低于 0.1 元
+        if (param.getAmount().compareTo(AMOUNT_MIN) < 0) {
+            // 支付宝: 转账金额不可低于0.1元
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "error.channel.alipay.transferAmountMin");
+        }
+        // 转账金额达到 50000 元时, 付款理由必填(监管要求, 错误码 MEMO_REQUIRED_IN_TRANSFER_ERROR)
+        if (param.getAmount().compareTo(LARGE_AMOUNT_LIMIT) >= 0 && StrUtil.isBlank(param.getReason())) {
+            // 支付宝: 转账金额达到50000元时, 必须填写付款理由
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "error.channel.alipay.transferRemarkRequired");
         }
     }
 

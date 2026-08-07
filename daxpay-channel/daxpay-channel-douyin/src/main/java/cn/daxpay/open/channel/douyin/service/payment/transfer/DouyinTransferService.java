@@ -8,6 +8,7 @@ import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.strategy.transfer.TransferStrategyContext;
 import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.trade.transfer.bo.TransferResultBo;
+import cn.daxpay.open.payment.trade.transfer.enums.TransferPayeeTypeEnum;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
@@ -37,19 +38,23 @@ public class DouyinTransferService {
 
     /// 执行抖音转账
     ///
-    /// @param context    转账策略上下文(通道特有字段: payeeAccount/payeeName/transferScene)
+    /// @param context    转账策略上下文(通道特有字段: payeeType/payeeAccount/payeeName/transferScene)
     /// @param credential 通道调用凭证
     /// @return 转账结果
     public TransferResultBo transfer(TransferStrategyContext context, DouyinSdkCredential credential) {
         DouyinTransferReq req = new DouyinTransferReq();
         req.setOutBillNo(context.getTransferNo());
         req.setAmount(context.getAmount());
-        req.setOpenid(context.getPayeeAccount());
+        // 收款人: openid 或手机号(phone 模式, 子应用证书加密上送)
+        if (TransferPayeeTypeEnum.PHONE.getCode().equals(context.getPayeeType())) {
+            req.setPhoneNumber(context.getPayeeAccount());
+        } else {
+            req.setOpenid(context.getPayeeAccount());
+        }
         req.setScene(context.getTransferScene());
         req.setUserName(context.getPayeeName());
         req.setRemark(StrUtil.sub(context.getTitle(), 0, 32));
-        // 收款感知使用请求参数(按场景枚举选项), 不再用转账原因顶替
-        req.setPerception(context.getUserRecvPerception());
+        // 用户收款感知不传, 抖音按场景取默认(第一个)
         // 转账场景报备信息(按场景要求填写)
         req.setReportInfos(context.getReportInfos());
         req.setNotifyUrl(this.buildNotifyUrl(context));

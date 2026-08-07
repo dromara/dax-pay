@@ -51,13 +51,13 @@ public class AlipayTransferService {
 
     /// 执行支付宝转账
     ///
-    /// @param context    转账策略上下文(通道特有字段: payeeType/payeeAccount/payeeName/transferSceneConfigId)
+    /// @param context    转账策略上下文(通道特有字段: payeeType/payeeAccount/payeeName/transferScene)
     /// @param credential 通道调用凭证
     /// @return 转账结果
     public TransferResultBo transfer(TransferStrategyContext context, AlipaySdkCredential credential) {
-        // 转账场景配置(2026 新商户必填): 显式 configId 优先, 否则用通道商户默认
+        // 转账场景配置(2026 新商户必填): 显式场景配置ID优先, 否则用通道商户默认
         AlipayTransferSceneConfig scene = alipayTransferSceneConfigService.findEffective(
-                context.getChannelMchNo(), context.getTransferSceneConfigId());
+                context.getChannelMchNo(), context.getTransferScene());
 
         AlipayTransferReq req = new AlipayTransferReq();
         req.setOutBizNo(context.getTransferNo());
