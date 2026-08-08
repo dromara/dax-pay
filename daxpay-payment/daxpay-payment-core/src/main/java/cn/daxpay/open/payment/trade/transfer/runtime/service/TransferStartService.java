@@ -124,7 +124,8 @@ public class TransferStartService {
             } else {
                 // 处理中: 回写通道单号(含特有字段: 微信拉起确认参数/抖音转账场景)并注册延迟同步
                 assistService.processing(channel, trade,
-                        result.getOutTransferNo(), result.getTransferBody(), context.getTransferScene());
+                        result.getOutTransferNo(), result.getTransferBody(),
+                        context.getTransferScene(), context.getWxAppId());
                 this.registerDelaySync(trade.getTradeNo());
             }
         } catch (Exception e) {

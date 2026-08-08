@@ -333,11 +333,11 @@ public class TransferAssistService {
     /// 转账处理中回写(非终态): 补通道转账单号/特有字段(微信拉起确认参数/抖音转账场景), 不改变状态
     @Transactional(rollbackFor = Exception.class)
     public void processing(String channel, TransferTrade trade, String outTransferNo,
-                           String transferBody, String transferScene) {
+                           String transferBody, String transferScene, String wxAppId) {
         trade.setOutTransferNo(outTransferNo);
         transferTradeManager.updateById(trade);
         // 容器回写: 通道单号 + 特有字段
-        mirrorProcessing(channel, trade.getContainerId(), outTransferNo, transferBody, transferScene);
+        mirrorProcessing(channel, trade.getContainerId(), outTransferNo, transferBody, transferScene, wxAppId);
     }
 
     /// 重试重置: 容器+凭证双表回 PROCESSING, 清空通道单号/完成时间/错误信息
@@ -412,12 +412,15 @@ public class TransferAssistService {
 
     /// 处理中回写: 按通道装载容器补通道单号/特有字段(非 CAS, 不改变状态)
     private void mirrorProcessing(String channel, Long containerId, String outTransferNo,
-                                  String transferBody, String transferScene) {
+                                  String transferBody, String transferScene, String wxAppId) {
         switch (channel) {
             case "wechat" -> wechatTransferOrderManager.findById(containerId).ifPresent(order -> {
                 order.setOutTransferNo(outTransferNo);
                 if (transferBody != null) {
                     order.setTransferBody(transferBody);
+                }
+                if (wxAppId != null) {
+                    order.setWxAppId(wxAppId);
                 }
                 wechatTransferOrderManager.updateById(order);
             });
@@ -454,7 +457,8 @@ public class TransferAssistService {
                 .setFinishTime(order.getFinishTime())
                 .setPayeeOpenid(order.getPayeeOpenid())
                 .setTransferScene(order.getTransferScene())
-                .setUserName(order.getUserName());
+                .setUserName(order.getUserName())
+                .setWxAppId(order.getWxAppId());
     }
 
     private TransferStrategyContext buildAlipayContext(AlipayTransferOrder order) {

@@ -117,7 +117,10 @@ public class WechatTransferStrategy extends AbsTransferStrategy {
                     "error.channel.wechat.transferAppNotConfigured");
         }
         context.setTransferScene(transferConfig.getTransferScene());
-        return wechatDirectConfigAssembler.buildTransferConfig(
+        WechatSdkCredential credential = wechatDirectConfigAssembler.buildTransferConfig(
                 context.getChannelMchNo(), transferConfig.getTransferAppRefId());
+        // 回写发起应用 AppId, 编排层"处理中"镜像落库
+        context.setWxAppId(credential.getWxAppId());
+        return credential;
     }
 }

@@ -81,6 +81,9 @@ public class TransferStrategyContext {
     /// 收款人姓名(微信金额档位校验用)
     private String userName;
 
+    /// 转账发起应用 AppId(微信, 策略层凭证组装后回写, 编排层"处理中"镜像落库)
+    private String wxAppId;
+
     /// 收款人账号类型(支付宝/抖音)
     private String payeeType;
 
