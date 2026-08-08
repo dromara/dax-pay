@@ -22,6 +22,7 @@ import cn.daxpay.open.payment.trade.transfer.result.DouyinTransferOrderResult;
 import cn.daxpay.open.payment.trade.transfer.result.TransferTradeResult;
 import cn.daxpay.open.payment.trade.transfer.result.WechatTransferOrderResult;
 import cn.daxpay.open.payment.trade.transfer.runtime.service.TransferCloseService;
+import cn.daxpay.open.payment.trade.transfer.runtime.service.TransferConfirmUrlService;
 import cn.daxpay.open.payment.trade.transfer.runtime.service.TransferStartService;
 import cn.daxpay.open.payment.trade.transfer.runtime.service.TransferSyncService;
 import cn.daxpay.open.payment.trade.transfer.util.PayeeDesensitizeUtil;
@@ -47,6 +48,7 @@ public class MchTransferService {
     private final TransferStartService transferStartService;
     private final TransferSyncService transferSyncService;
     private final TransferCloseService transferCloseService;
+    private final TransferConfirmUrlService transferConfirmUrlService;
     private final TransService transService;
 
     /// 微信转账单分页
@@ -64,6 +66,10 @@ public class MchTransferService {
         WechatTransferOrder entity = wechatTransferOrderManager.findById(id)
                 .orElseThrow(() -> new DataNotExistException("pay.error.transfer.notFound"));
         WechatTransferOrderResult result = WechatTransferOrderConvert.CONVERT.toResult(entity);
+        // 待领取状态填充确认收款链接
+        if ("processing".equals(entity.getStatus())) {
+            result.setConfirmUrl(transferConfirmUrlService.buildConfirmUrl(entity.getTransferNo()));
+        }
         transService.translate(result);
         // 收款人信息脱敏
         PayeeDesensitizeUtil.desensitize(result);

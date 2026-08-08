@@ -84,6 +84,10 @@ public class WechatTransferOrderResult extends BaseResult {
     @Schema(description = "拉起转账确认参数")
     private String transferBody;
 
+    /// 确认收款链接(仅待领取 processing 状态返回, 供商户发给收款人在微信内打开)
+    @Schema(description = "确认收款链接(微信转账待领取)")
+    private String confirmUrl;
+
     /// 收款人姓名
     @Schema(description = "收款人姓名")
     private String userName;

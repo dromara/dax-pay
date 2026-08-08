@@ -17,8 +17,7 @@ import cn.daxpay.open.payment.trade.transfer.result.DouyinTransferOrderResult;
 import cn.daxpay.open.payment.trade.transfer.result.TransferCreateResult;
 import cn.daxpay.open.payment.trade.transfer.result.TransferTradeResult;
 import cn.daxpay.open.payment.trade.transfer.result.WechatTransferOrderResult;
-import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
-import cn.hutool.core.util.StrUtil;
+import cn.daxpay.open.payment.trade.transfer.runtime.service.TransferConfirmUrlService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -43,7 +42,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MchTransferController {
 
     private final MchTransferService mchTransferService;
-    private final PlatformUrlConfigService platformUrlConfigService;
+    private final TransferConfirmUrlService transferConfirmUrlService;
 
     // ===== 微信转账 =====
 
@@ -68,17 +67,8 @@ public class MchTransferController {
     public Result<TransferCreateResult> wechatCreate(@Valid @RequestBody TransferParam param) {
         String transferNo = mchTransferService.create("wechat", param);
         // 生成确认收款链接(供商户发给收款人在微信内打开)
-        String confirmUrl = buildConfirmUrl(transferNo);
+        String confirmUrl = transferConfirmUrlService.buildConfirmUrl(transferNo);
         return Res.ok(new TransferCreateResult().setTransferNo(transferNo).setConfirmUrl(confirmUrl));
-    }
-
-    /// 生成微信转账确认收款链接
-    private String buildConfirmUrl(String transferNo) {
-        String base = platformUrlConfigService.getUrlConfig().getPaymentGatewayBaseUrl();
-        if (StrUtil.isBlank(base)) {
-            return null;
-        }
-        return StrUtil.format("{}/transfer-confirm/{}", base, transferNo);
     }
 
     // ===== 支付宝转账 =====
