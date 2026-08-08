@@ -86,7 +86,7 @@ public class PayCallbackRecordService {
         PayCallbackRecord record = new PayCallbackRecord()
                 .setTradeNo(data.getTradeNo())
                 .setOutTradeNo(data.getOutTradeNo())
-                .setProduct(null)
+                .setProduct(channelMerchantManager.findProductByChannelMchNo(channelMchNo))
                 .setChannelMchNo(channelMchNo)
                 .setCallbackType(TradeFlowTypeEnum.TRANSFER.getCode())
                 .setNotifyInfo(toNotifyInfo(data.getCallbackData()))
