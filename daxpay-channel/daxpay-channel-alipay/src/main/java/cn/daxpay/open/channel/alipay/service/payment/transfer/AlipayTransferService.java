@@ -42,6 +42,9 @@ public class AlipayTransferService {
     private static final DateTimeFormatter ALIPAY_DATE_FMT =
             DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
+    /// 支付宝业务码: 转账订单不存在
+    private static final String ORDER_NOT_EXIST = "ORDER_NOT_EXIST";
+
     private final AlipayChannelClient alipayChannelClient;
     private final PlatformUrlConfigService platformUrlConfigService;
     // 转账场景配置(2026 新商户必填)
@@ -78,6 +81,11 @@ public class AlipayTransferService {
             throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "error.channel.alipay.transferFailed", result.getMsg());
         }
         AlipayTransferResp resp = result.getData();
+        // 支付宝业务失败(如收款人信息错误) → 直接失败, 不进入 PROCESSING
+        if (StrUtil.isNotBlank(resp.getSubCode())) {
+            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "error.channel.alipay.transferFailed",
+                    StrUtil.blankToDefault(resp.getSubMsg(), resp.getSubCode()));
+        }
         TransferResultBo bo = new TransferResultBo()
                 .setOutTransferNo(resp.getOrderId())
                 .setPayFundOrderId(resp.getPayFundOrderId())
@@ -113,6 +121,10 @@ public class AlipayTransferService {
         AlipayTransferResp resp = result.getData();
         // 回写资金流水号(同步查询可能补获)
         this.writeBackPayFundOrderId(context, resp.getPayFundOrderId());
+        // 支付宝业务失败(code != 10000): 按 subCode 决策资金态
+        if (StrUtil.isNotBlank(resp.getSubCode())) {
+            return mapBusinessError(resp);
+        }
         return mapSyncResult(resp);
     }
 
@@ -140,6 +152,29 @@ public class AlipayTransferService {
             bo.setStatus(PayFundStatusEnum.PROCESSING);
         }
         return bo;
+    }
+
+    /// 映射支付宝业务失败响应(网关返回 code != 10000, 非 SDK 异常)
+    ///
+    /// - ORDER_NOT_EXIST → FAIL(转账订单不存在 = 发起未成功, 商户可凭原 out_biz_no 重试)
+    /// - 其他 subCode → syncSuccess=false + PROCESSING(同步失败, 等待定时轮询重试)
+    private TransferResultBo mapBusinessError(AlipayTransferResp resp) {
+        // 转账订单不存在 → 终态失败
+        if (ORDER_NOT_EXIST.equals(resp.getSubCode())) {
+            log.warn("支付宝转账订单不存在, 置为终态失败: subCode={}, subMsg={}",
+                    resp.getSubCode(), resp.getSubMsg());
+            return new TransferResultBo()
+                    .setStatus(PayFundStatusEnum.FAIL)
+                    .setSyncErrorCode(resp.getSubCode())
+                    .setSyncErrorMsg(StrUtil.blankToDefault(resp.getSubMsg(), "转账订单不存在"));
+        }
+        // 其他业务错误 → 同步失败, 保持 PROCESSING 等待重试
+        log.warn("支付宝转账查询业务失败: subCode={}, subMsg={}", resp.getSubCode(), resp.getSubMsg());
+        return new TransferResultBo()
+                .setStatus(PayFundStatusEnum.PROCESSING)
+                .setSyncSuccess(false)
+                .setSyncErrorCode(resp.getSubCode())
+                .setSyncErrorMsg(StrUtil.blankToDefault(resp.getSubMsg(), "支付宝转账查询失败"));
     }
 
     /// 回写支付宝资金流水号到容器(支付宝特有, 非状态流转, 直接更新)

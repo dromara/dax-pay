@@ -28,4 +28,13 @@ public class AlipayTransferResp {
 
     /// 错误码(同步查询 FAIL/REFUND 时返回,用于精准报错)
     private String errorCode;
+
+    /// 支付宝网关返回码(10000=成功, 40004=业务失败)
+    private String code;
+
+    /// 业务失败子错误码(如 ORDER_NOT_EXIST)
+    private String subCode;
+
+    /// 业务失败子描述(如 "转账订单不存在")
+    private String subMsg;
 }
