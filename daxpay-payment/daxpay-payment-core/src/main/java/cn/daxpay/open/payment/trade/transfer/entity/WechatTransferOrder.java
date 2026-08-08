@@ -1,6 +1,7 @@
 package cn.daxpay.open.payment.trade.transfer.entity;
 
 import cn.daxpay.open.payment.common.entity.MchBaseEntity;
+import cn.daxpay.open.platform.common.mybatisplus.handler.encrypt.DataEncryptTypeHandler;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -22,7 +23,7 @@ import java.time.OffsetDateTime;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("pay_transfer_order_wechat")
+@TableName(value = "pay_transfer_order_wechat", autoResultMap = true)
 public class WechatTransferOrder extends MchBaseEntity {
 
     // ===== 身份 =====
@@ -70,7 +71,8 @@ public class WechatTransferOrder extends MchBaseEntity {
 
     // ===== 微信特有 =====
 
-    /// 收款人微信 openid
+    /// 收款人微信 openid(敏感字段, AES-256-GCM 加密存储)
+    @TableField(typeHandler = DataEncryptTypeHandler.class)
     private String payeeOpenid;
 
     /// 转账场景(冗余自转账配置)
@@ -82,7 +84,8 @@ public class WechatTransferOrder extends MchBaseEntity {
     /// 拉起转账确认参数(微信二次确认)
     private String transferBody;
 
-    /// 收款人姓名(金额档位校验用: 小于0.3元禁填, 大于等于2000元必填)
+    /// 收款人姓名(金额档位校验用: 小于0.3元禁填, 大于等于2000元必填; 敏感字段, AES-256-GCM 加密存储)
+    @TableField(typeHandler = DataEncryptTypeHandler.class)
     private String userName;
 
     // ===== 商户出站 / 审计 =====

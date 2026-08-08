@@ -24,6 +24,7 @@ import cn.daxpay.open.payment.trade.transfer.result.WechatTransferOrderResult;
 import cn.daxpay.open.payment.trade.transfer.runtime.service.TransferCloseService;
 import cn.daxpay.open.payment.trade.transfer.runtime.service.TransferStartService;
 import cn.daxpay.open.payment.trade.transfer.runtime.service.TransferSyncService;
+import cn.daxpay.open.payment.trade.transfer.util.PayeeDesensitizeUtil;
 import cn.daxpay.open.platform.common.translate.service.TransService;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
@@ -56,6 +57,8 @@ public class TransferAdminService {
         Page<WechatTransferOrder> page = wechatTransferOrderManager.page(pageParam, query);
         PageResult<WechatTransferOrderResult> pageResult = toPageResult(page, WechatTransferOrderConvert.CONVERT::toResult);
         transService.translate(pageResult);
+        // 收款人信息脱敏
+        pageResult.getRecords().forEach(PayeeDesensitizeUtil::desensitize);
         return pageResult;
     }
 
@@ -65,6 +68,8 @@ public class TransferAdminService {
                 .orElseThrow(() -> new DataNotExistException("pay.error.transfer.notFound"));
         WechatTransferOrderResult result = WechatTransferOrderConvert.CONVERT.toResult(entity);
         transService.translate(result);
+        // 收款人信息脱敏
+        PayeeDesensitizeUtil.desensitize(result);
         return result;
     }
 
@@ -75,6 +80,8 @@ public class TransferAdminService {
         Page<AlipayTransferOrder> page = alipayTransferOrderManager.page(pageParam, query);
         PageResult<AlipayTransferOrderResult> pageResult = toPageResult(page, AlipayTransferOrderConvert.CONVERT::toResult);
         transService.translate(pageResult);
+        // 收款人信息脱敏
+        pageResult.getRecords().forEach(PayeeDesensitizeUtil::desensitize);
         return pageResult;
     }
 
@@ -84,6 +91,8 @@ public class TransferAdminService {
                 .orElseThrow(() -> new DataNotExistException("pay.error.transfer.notFound"));
         AlipayTransferOrderResult result = AlipayTransferOrderConvert.CONVERT.toResult(entity);
         transService.translate(result);
+        // 收款人信息脱敏
+        PayeeDesensitizeUtil.desensitize(result);
         return result;
     }
 
@@ -94,6 +103,8 @@ public class TransferAdminService {
         Page<DouyinTransferOrder> page = douyinTransferOrderManager.page(pageParam, query);
         PageResult<DouyinTransferOrderResult> pageResult = toPageResult(page, DouyinTransferOrderConvert.CONVERT::toResult);
         transService.translate(pageResult);
+        // 收款人信息脱敏
+        pageResult.getRecords().forEach(PayeeDesensitizeUtil::desensitize);
         return pageResult;
     }
 
@@ -103,6 +114,8 @@ public class TransferAdminService {
                 .orElseThrow(() -> new DataNotExistException("pay.error.transfer.notFound"));
         DouyinTransferOrderResult result = DouyinTransferOrderConvert.CONVERT.toResult(entity);
         transService.translate(result);
+        // 收款人信息脱敏
+        PayeeDesensitizeUtil.desensitize(result);
         return result;
     }
 

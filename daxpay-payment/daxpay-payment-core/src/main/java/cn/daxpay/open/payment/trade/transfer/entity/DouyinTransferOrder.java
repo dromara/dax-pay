@@ -1,6 +1,7 @@
 package cn.daxpay.open.payment.trade.transfer.entity;
 
 import cn.daxpay.open.payment.common.entity.MchBaseEntity;
+import cn.daxpay.open.platform.common.mybatisplus.handler.encrypt.DataEncryptTypeHandler;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -22,7 +23,7 @@ import java.time.OffsetDateTime;
 @Data
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
-@TableName("pay_transfer_order_douyin")
+@TableName(value = "pay_transfer_order_douyin", autoResultMap = true)
 public class DouyinTransferOrder extends MchBaseEntity {
 
     // ===== 身份 =====
@@ -73,10 +74,12 @@ public class DouyinTransferOrder extends MchBaseEntity {
     /// 收款人账号类型
     private String payeeType;
 
-    /// 收款人账号
+    /// 收款人账号(敏感字段, AES-256-GCM 加密存储)
+    @TableField(typeHandler = DataEncryptTypeHandler.class)
     private String payeeAccount;
 
-    /// 收款人姓名
+    /// 收款人姓名(敏感字段, AES-256-GCM 加密存储)
+    @TableField(typeHandler = DataEncryptTypeHandler.class)
     private String payeeName;
 
     /// 转账场景ID(发起转账时由前端选择的主数据枚举, 如1001-1007)

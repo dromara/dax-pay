@@ -134,8 +134,13 @@ public class SecureAesGcmEncryptor {
     }
 
     /// 解密（根据版本前缀选择密钥）
-    /// @param ciphertext 密文，格式：v{version}:{encrypted}
-    /// @return 明文，如果找不到对应密钥则返回null
+    ///
+    /// 容错策略: 遇到非密文格式(如历史明文)或解密失败时, 原样返回输入值而非 null,
+    /// 保证新增加密字段的上线零风险(历史明文自动透传, 新数据正常加密), 支持渐进式迁移。
+    /// 对已加密字段无影响(其 DB 值均为 v 前缀密文, 走正常解密路径)。
+    ///
+    /// @param ciphertext 密文，格式：v{version}:{encrypted}；或历史明文(原样返回)
+    /// @return 明文；若无法解密则原样返回输入值
     public String decrypt(String ciphertext) {
         if (ciphertext == null) {
             return null;
@@ -143,22 +148,22 @@ public class SecureAesGcmEncryptor {
         try {
             // 解析版本前缀
             if (!ciphertext.startsWith(VERSION_PREFIX)) {
-                log.warn("密文格式错误，缺少版本前缀");
-                return null;
+                // 非密文格式(历史明文或加密未启用时的明文), 原样透传
+                return ciphertext;
             }
 
             int separatorIndex = ciphertext.indexOf(VERSION_SEPARATOR);
             if (separatorIndex == -1) {
-                log.warn("密文格式错误，缺少版本分隔符");
-                return null;
+                log.warn("密文格式错误，缺少版本分隔符, 原样返回");
+                return ciphertext;
             }
 
             int version;
             try {
                 version = Integer.parseInt(ciphertext.substring(1, separatorIndex));
             } catch (NumberFormatException e) {
-                log.warn("密文版本号格式错误");
-                return null;
+                log.warn("密文版本号格式错误, 原样返回");
+                return ciphertext;
             }
 
             String encryptedBase64 = ciphertext.substring(separatorIndex + 1);
@@ -166,8 +171,8 @@ public class SecureAesGcmEncryptor {
             // 获取对应版本的密钥
             SecretKey secretKey = secretKeyCache.get(version);
             if (secretKey == null) {
-                log.warn("找不到版本 v{} 对应的密钥", version);
-                return null;
+                log.warn("找不到版本 v{} 对应的密钥, 原样返回", version);
+                return ciphertext;
             }
 
             // 解密
@@ -185,8 +190,8 @@ public class SecureAesGcmEncryptor {
             byte[] decrypted = cipher.doFinal(encrypted);
             return new String(decrypted, StandardCharsets.UTF_8);
         } catch (Exception e) {
-            log.error("解密失败", e);
-            return null;
+            log.error("解密失败, 原样返回", e);
+            return ciphertext;
         }
     }
 
