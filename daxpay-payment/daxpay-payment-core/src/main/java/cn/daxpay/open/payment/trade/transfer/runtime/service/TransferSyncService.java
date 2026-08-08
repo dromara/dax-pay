@@ -97,7 +97,6 @@ public class TransferSyncService {
     private void saveSyncRecord(String channel, TransferTrade trade, TransferResultBo result,
                                 boolean adjust, String errorMsg) {
         PaySyncRecord record = new PaySyncRecord()
-                .setAppId(trade.getAppId())
                 .setTradeNo(trade.getTradeNo())
                 .setBizTradeNo(trade.getBizTransferNo())
                 .setOutTradeNo(trade.getOutTransferNo())

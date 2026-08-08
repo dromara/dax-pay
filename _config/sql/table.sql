@@ -3612,7 +3612,6 @@ CREATE TABLE "public"."pay_transfer_order_alipay" (
   "channel_mch_no" varchar(64) COLLATE "pg_catalog"."default",
   "out_transfer_no" varchar(150) COLLATE "pg_catalog"."default",
   "mch_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "app_id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
   "amount" int8 NOT NULL,
   "currency" varchar(8) COLLATE "pg_catalog"."default" NOT NULL DEFAULT 'CNY'::character varying,
   "title" varchar(100) COLLATE "pg_catalog"."default",
@@ -3627,6 +3626,7 @@ CREATE TABLE "public"."pay_transfer_order_alipay" (
   "payee_account" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
   "payee_name" varchar(100) COLLATE "pg_catalog"."default",
   "transfer_scene" varchar(50) COLLATE "pg_catalog"."default",
+  "report_infos" varchar(4000) COLLATE "pg_catalog"."default",
   "pay_fund_order_id" varchar(64) COLLATE "pg_catalog"."default",
   "creator" int8,
   "create_time" timestamptz(6),
@@ -3641,7 +3641,6 @@ COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."biz_transfer_no" IS '商
 COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."channel_mch_no" IS '通道商户号(路由确定后写入, 凭证组装用)';
 COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."out_transfer_no" IS '通道转账单号(支付宝 order_id)';
 COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."mch_no" IS '商户号';
-COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."app_id" IS '应用号';
 COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."amount" IS '转账金额(最小货币单位/分)';
 COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."currency" IS '币种';
 COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."title" IS '转账标题';
@@ -3656,6 +3655,7 @@ COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."payee_type" IS '收款�
 COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."payee_account" IS '收款人账号';
 COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."payee_name" IS '收款人姓名';
 COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."transfer_scene" IS '转账场景标识(支付宝=转账场景配置ID, FAIL重试时恢复场景用)';
+COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."report_infos" IS '转账场景报备信息(JSON序列化, FAIL重试时恢复报备用)';
 COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."pay_fund_order_id" IS '支付宝资金流水号(财务对账,区别于 out_transfer_no)';
 COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."creator" IS '创建人';
 COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."create_time" IS '创建时间';
@@ -3676,7 +3676,6 @@ CREATE TABLE "public"."pay_transfer_order_douyin" (
   "channel_mch_no" varchar(64) COLLATE "pg_catalog"."default",
   "out_transfer_no" varchar(150) COLLATE "pg_catalog"."default",
   "mch_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "app_id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
   "amount" int8 NOT NULL,
   "currency" varchar(8) COLLATE "pg_catalog"."default" NOT NULL DEFAULT 'CNY'::character varying,
   "title" varchar(100) COLLATE "pg_catalog"."default",
@@ -3691,6 +3690,7 @@ CREATE TABLE "public"."pay_transfer_order_douyin" (
   "payee_account" varchar(100) COLLATE "pg_catalog"."default" NOT NULL,
   "payee_name" varchar(100) COLLATE "pg_catalog"."default",
   "transfer_scene" varchar(50) COLLATE "pg_catalog"."default",
+  "report_infos" varchar(4000) COLLATE "pg_catalog"."default",
   "creator" int8,
   "create_time" timestamptz(6),
   "last_modifier" int8,
@@ -3704,7 +3704,6 @@ COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."biz_transfer_no" IS '商
 COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."channel_mch_no" IS '通道商户号(路由确定后写入, 凭证组装用)';
 COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."out_transfer_no" IS '通道转账单号(抖音 orderId)';
 COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."mch_no" IS '商户号';
-COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."app_id" IS '应用号';
 COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."amount" IS '转账金额(最小货币单位/分)';
 COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."currency" IS '币种';
 COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."title" IS '转账标题';
@@ -3718,6 +3717,8 @@ COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."error_msg" IS '错误信
 COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."payee_type" IS '收款人账号类型';
 COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."payee_account" IS '收款人账号';
 COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."payee_name" IS '收款人姓名';
+COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."transfer_scene" IS '转账场景标识(抖音=转账场景配置ID, FAIL重试时恢复场景用)';
+COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."report_infos" IS '转账场景报备信息(JSON序列化, FAIL重试时恢复报备用)';
 COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."creator" IS '创建人';
 COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."create_time" IS '创建时间';
 COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."last_modifier" IS '最后修改人';
@@ -3737,7 +3738,6 @@ CREATE TABLE "public"."pay_transfer_order_wechat" (
   "channel_mch_no" varchar(64) COLLATE "pg_catalog"."default",
   "out_transfer_no" varchar(150) COLLATE "pg_catalog"."default",
   "mch_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "app_id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
   "amount" int8 NOT NULL,
   "currency" varchar(8) COLLATE "pg_catalog"."default" NOT NULL DEFAULT 'CNY'::character varying,
   "title" varchar(100) COLLATE "pg_catalog"."default",
@@ -3765,7 +3765,6 @@ COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."biz_transfer_no" IS '商
 COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."channel_mch_no" IS '通道商户号(路由确定后写入, 凭证组装用)';
 COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."out_transfer_no" IS '通道转账单号(微信 paymentNo)';
 COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."mch_no" IS '商户号';
-COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."app_id" IS '应用号';
 COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."amount" IS '转账金额(最小货币单位/分)';
 COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."currency" IS '币种';
 COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."title" IS '转账标题';
@@ -3807,7 +3806,6 @@ CREATE TABLE "public"."pay_transfer_trade" (
   "relation_no" varchar(150) COLLATE "pg_catalog"."default",
   "finish_time" timestamptz(6),
   "title" varchar(100) COLLATE "pg_catalog"."default",
-  "app_id" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
   "mch_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
   "creator" int8,
   "create_time" timestamptz(6),
@@ -3830,7 +3828,6 @@ COMMENT ON COLUMN "public"."pay_transfer_trade"."out_transfer_no" IS '通道转�
 COMMENT ON COLUMN "public"."pay_transfer_trade"."relation_no" IS '实际上送通道的商户转账号(反查权威)';
 COMMENT ON COLUMN "public"."pay_transfer_trade"."finish_time" IS '转账完成时间';
 COMMENT ON COLUMN "public"."pay_transfer_trade"."title" IS '转账标题';
-COMMENT ON COLUMN "public"."pay_transfer_trade"."app_id" IS '应用号';
 COMMENT ON COLUMN "public"."pay_transfer_trade"."mch_no" IS '商户号';
 COMMENT ON COLUMN "public"."pay_transfer_trade"."creator" IS '创建人';
 COMMENT ON COLUMN "public"."pay_transfer_trade"."create_time" IS '创建时间';

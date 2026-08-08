@@ -31,10 +31,6 @@ public class TransferTradeResult extends BaseResult {
     @Schema(description = "商户名称")
     private String mchName;
 
-    /// 应用号
-    @Schema(description = "应用号")
-    private String appId;
-
     /// 平台转账交易号
     @Schema(description = "平台转账交易号")
     private String tradeNo;

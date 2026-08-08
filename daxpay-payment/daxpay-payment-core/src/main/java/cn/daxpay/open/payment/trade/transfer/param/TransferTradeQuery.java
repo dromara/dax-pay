@@ -19,11 +19,6 @@ public class TransferTradeQuery {
     @Schema(description = "商户号")
     private String mchNo;
 
-    /// 应用号
-    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
-    @Schema(description = "应用号")
-    private String appId;
-
     /// 平台转账交易号
     @QueryParam(type = QueryParam.CompareTypeEnum.LIKE)
     @Schema(description = "平台转账交易号")

@@ -28,10 +28,6 @@ public class AlipayTransferOrder extends MchBaseEntity {
 
     // ===== 身份 =====
 
-    /// 应用号
-    @TableField(updateStrategy = FieldStrategy.NEVER)
-    private String appId;
-
     /// 平台转账单号
     private String transferNo;
 

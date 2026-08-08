@@ -31,10 +31,6 @@ public class AlipayTransferOrderResult extends BaseResult {
     @Schema(description = "商户名称")
     private String mchName;
 
-    /// 应用号
-    @Schema(description = "应用号")
-    private String appId;
-
     /// 通道商户号
     @Schema(description = "通道商户号")
     private String channelMchNo;

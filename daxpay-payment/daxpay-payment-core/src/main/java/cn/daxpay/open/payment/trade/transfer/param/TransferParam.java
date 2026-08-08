@@ -26,11 +26,6 @@ public class TransferParam {
     @Schema(description = "商户号")
     private String mchNo;
 
-    /// 应用号(可空, 默认取商户默认应用)
-    @Size(max = 32, message = "应用号不可超过32位")
-    @Schema(description = "应用号")
-    private String appId;
-
     /// 通道商户号(凭证组装与通道路由用)
     @NotBlank(message = "通道商户号必填")
     @Size(max = 64, message = "通道商户号不可超过64位")

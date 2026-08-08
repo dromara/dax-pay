@@ -61,17 +61,17 @@ public class TransferAssistService {
         return transferTradeManager.findByContainerId(containerId, channel);
     }
 
-    /// 幂等查重: 按商户转账号+应用号查容器主键（同一通道内唯一）
+    /// 幂等查重: 按商户转账号+商户号查容器主键（同一商户下唯一）
     ///
     /// 容器存在即视为该商户转账号已发起过; 凭证缺失属数据异常, 由调用方按失败重试兜底。
-    public Optional<Long> findExist(String channel, String bizTransferNo, String appId) {
+    public Optional<Long> findExist(String channel, String bizTransferNo, String mchNo) {
         return switch (channel) {
             case "wechat" -> wechatTransferOrderManager
-                    .findByBizTransferNo(bizTransferNo, appId).map(WechatTransferOrder::getId);
+                    .findByBizTransferNo(bizTransferNo, mchNo).map(WechatTransferOrder::getId);
             case "alipay" -> alipayTransferOrderManager
-                    .findByBizTransferNo(bizTransferNo, appId).map(AlipayTransferOrder::getId);
+                    .findByBizTransferNo(bizTransferNo, mchNo).map(AlipayTransferOrder::getId);
             case "douyin" -> douyinTransferOrderManager
-                    .findByBizTransferNo(bizTransferNo, appId).map(DouyinTransferOrder::getId);
+                    .findByBizTransferNo(bizTransferNo, mchNo).map(DouyinTransferOrder::getId);
             default -> throw new IllegalArgumentException("未知转账通道: " + channel);
         };
     }
@@ -109,10 +109,9 @@ public class TransferAssistService {
     ///
     /// @param channel 通道编码
     /// @param param   转账参数(公共字段 + 通道特有收款人字段)
-    /// @param appId   解析后的应用号
     /// @param mchNo   商户号(上下文已装载, 显式传入避免依赖线程上下文)
     @Transactional(rollbackFor = Exception.class)
-    public TransferStrategyContext createOrder(String channel, TransferParam param, String appId, String mchNo) {
+    public TransferStrategyContext createOrder(String channel, TransferParam param, String mchNo) {
         String transferNo = TradeNoGenerateUtil.transfer();
         long amount = CurrencyAmountUtil.majorToMinor(param.getAmount(), CurrencyEnum.CNY);
         switch (channel) {
@@ -129,7 +128,6 @@ public class TransferAssistService {
                         .setReason(param.getReason())
                         .setNotifyUrl(param.getNotifyUrl())
                         .setAttach(param.getAttach())
-                        .setAppId(appId)
                         .setStatus("processing")
                         .setReqTime(OffsetDateTime.now());
                 // 商户号独立赋值(父类 setter 返回 MchBaseEntity, 禁止链式)
@@ -154,7 +152,6 @@ public class TransferAssistService {
                         .setReason(param.getReason())
                         .setNotifyUrl(param.getNotifyUrl())
                         .setAttach(param.getAttach())
-                        .setAppId(appId)
                         .setStatus("processing")
                         .setReqTime(OffsetDateTime.now());
                 // 商户号独立赋值(父类 setter 返回 MchBaseEntity, 禁止链式)
@@ -184,7 +181,6 @@ public class TransferAssistService {
                         .setReason(param.getReason())
                         .setNotifyUrl(param.getNotifyUrl())
                         .setAttach(param.getAttach())
-                        .setAppId(appId)
                         .setStatus("processing")
                         .setReqTime(OffsetDateTime.now());
                 // 商户号独立赋值(父类 setter 返回 MchBaseEntity, 禁止链式)
@@ -215,8 +211,7 @@ public class TransferAssistService {
                 .setCurrency(order.getCurrency())
                 .setStatus("processing")
                 .setRelationNo(transferNo)
-                .setTitle(order.getTitle())
-                .setAppId(order.getAppId());
+                .setTitle(order.getTitle());
         // 商户号独立赋值(父类 setter 返回 MchBaseEntity, 禁止链式)
         trade.setMchNo(order.getMchNo());
         return trade;
@@ -235,8 +230,7 @@ public class TransferAssistService {
                 .setCurrency(order.getCurrency())
                 .setStatus("processing")
                 .setRelationNo(transferNo)
-                .setTitle(order.getTitle())
-                .setAppId(order.getAppId());
+                .setTitle(order.getTitle());
         // 商户号独立赋值(父类 setter 返回 MchBaseEntity, 禁止链式)
         trade.setMchNo(order.getMchNo());
         return trade;
@@ -255,8 +249,7 @@ public class TransferAssistService {
                 .setCurrency(order.getCurrency())
                 .setStatus("processing")
                 .setRelationNo(transferNo)
-                .setTitle(order.getTitle())
-                .setAppId(order.getAppId());
+                .setTitle(order.getTitle());
         // 商户号独立赋值(父类 setter 返回 MchBaseEntity, 禁止链式)
         trade.setMchNo(order.getMchNo());
         return trade;

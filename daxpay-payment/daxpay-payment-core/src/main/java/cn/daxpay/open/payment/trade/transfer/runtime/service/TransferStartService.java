@@ -1,6 +1,5 @@
 package cn.daxpay.open.payment.trade.transfer.runtime.service;
 
-import cn.daxpay.open.payment.common.access.MchAppInfoAccessInfo;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.strategy.transfer.AbsTransferStrategy;
@@ -30,7 +29,7 @@ import java.util.Optional;
 
 /// # 转账发起编排服务
 ///
-/// 锁内编排：商户身份装载 → 应用解析 → 幂等查重（仅 FAIL 可复用原单重试）
+/// 锁内编排：商户身份装载 → 幂等查重（仅 FAIL 可复用原单重试）
 /// → 通道参数校验 → 建单（容器+凭证双写, 独立事务）→ 通道发起（事务外, 远程调用）
 /// → 结果处理（成功/处理中/失败, 独立事务 CAS 双写 + 通知）。
 /// 容器读写全部收敛在 [TransferAssistService]，本服务只面向凭证与策略上下文。
@@ -72,10 +71,8 @@ public class TransferStartService {
     public String startHandle(String channel, TransferParam param) {
         // 商户身份装载: 商户端强制当前登录商户, 运营端按传入 mchNo 代发
         merchantContextLoader.initMch(param.getMchNo());
-        // 应用解析: 空则取商户默认应用, 校验启用与归属
-        MchAppInfoAccessInfo mchApp = merchantContextLoader.resolveApp(param.getMchNo(), param.getAppId());
-        // 幂等查重: bizTransferNo + appId
-        Optional<Long> existOpt = assistService.findExist(channel, param.getBizTransferNo(), mchApp.getAppId());
+        // 幂等查重: bizTransferNo + mchNo(同一商户下唯一)
+        Optional<Long> existOpt = assistService.findExist(channel, param.getBizTransferNo(), paymentContext.getMchNo());
         if (existOpt.isPresent()) {
             Long containerId = existOpt.get();
             TransferTrade existTrade = assistService.findTradeByContainer(channel, containerId)
@@ -93,19 +90,19 @@ public class TransferStartService {
             throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.transfer.noDuplicate");
         }
         // 新单: 建单(独立事务)后发起
-        TransferStrategyContext context = self.createOrder(channel, param, mchApp.getAppId());
+        TransferStrategyContext context = self.createOrder(channel, param);
         this.transfer(channel, context);
         return context.getTransferNo();
     }
 
     /// 建单（事务内: 通道参数校验 + 容器/凭证双写）
     @Transactional(rollbackFor = Exception.class)
-    public TransferStrategyContext createOrder(String channel, TransferParam param, String appId) {
+    public TransferStrategyContext createOrder(String channel, TransferParam param) {
         // 通道特有参数校验(微信金额档位/收款人类型等)
         AbsTransferStrategy strategy = TransferStrategyFactory.create(channel);
         strategy.doValidateParam(param);
         // 商户号取上下文(initMch 已装载), 显式传给辅助服务避免依赖线程上下文
-        return assistService.createOrder(channel, param, appId, paymentContext.getMchNo());
+        return assistService.createOrder(channel, param, paymentContext.getMchNo());
     }
 
     /// 重试重置（事务内: 原单回 PROCESSING, 清空通道单号/完成时间/错误信息）

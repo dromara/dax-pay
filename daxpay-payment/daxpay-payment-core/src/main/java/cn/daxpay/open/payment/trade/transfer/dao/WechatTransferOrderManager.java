@@ -31,11 +31,11 @@ public class WechatTransferOrderManager
         return findByField(WechatTransferOrder::getTransferNo, transferNo);
     }
 
-    /// 根据商户转账号和应用号查询(幂等查重主路径)
-    public Optional<WechatTransferOrder> findByBizTransferNo(String bizTransferNo, String appId) {
+    /// 根据商户转账号和商户号查询(幂等查重主路径, 同一商户下唯一)
+    public Optional<WechatTransferOrder> findByBizTransferNo(String bizTransferNo, String mchNo) {
         return lambdaQuery()
                 .eq(WechatTransferOrder::getBizTransferNo, bizTransferNo)
-                .eq(WechatTransferOrder::getAppId, appId)
+                .eq(WechatTransferOrder::getMchNo, mchNo)
                 .oneOpt();
     }
 
