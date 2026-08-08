@@ -9,14 +9,17 @@ import cn.daxpay.open.payment.trade.record.entity.PaySyncRecord;
 import cn.daxpay.open.payment.trade.transfer.bo.TransferResultBo;
 import cn.daxpay.open.payment.trade.transfer.dao.TransferTradeManager;
 import cn.daxpay.open.payment.trade.transfer.entity.TransferTrade;
+import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.daxpay.open.platform.common.redis.lock.LockExecutor;
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.enums.pay.trade.TradeTypeEnum;
+import cn.daxpay.open.platform.core.exception.BizException;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Locale;
 import java.util.Objects;
 
 /// # 转账同步服务
@@ -76,7 +79,7 @@ public class TransferSyncService {
             } catch (Exception e) {
                 // 通道查单失败: 保持处理中, 落同步记录, 由定时任务兜底重试
                 log.warn("转账同步查单失败: tradeNo={}, 保持处理中", latestTrade.getTradeNo(), e);
-                this.saveSyncRecord(channel, latestTrade, null, false, e.getMessage());
+                this.saveSyncRecord(channel, latestTrade, null, false, resolveErrorMsg(e));
                 return;
             }
             // 按通道结果调整状态
@@ -109,5 +112,20 @@ public class TransferSyncService {
         // 商户号独立赋值(父类 setter 返回 MchBaseEntity, 禁止链式)
         record.setMchNo(trade.getMchNo());
         paySyncRecordManager.save(record);
+    }
+
+    /// 解析异常为本地化错误消息
+    ///
+    /// [BizException] 的 getMessage() 返回 i18n messageKey(未经 I18nUtil 解析), 直接记录会导致同步记录
+    /// errorMsg 存 key 字符串。本方法按固定中文(Locale.CHINA)解析, 保证落库文案不随请求语言变化。
+    /// 非 BizException 的 getMessage() 已是真实文案, 直接使用。
+    private String resolveErrorMsg(Throwable e) {
+        if (e instanceof BizException biz) {
+            String key = biz.resolveMessageKey();
+            if (key != null) {
+                return I18nUtil.get(key, Locale.CHINA, biz.getArgs());
+            }
+        }
+        return e.getMessage();
     }
 }
