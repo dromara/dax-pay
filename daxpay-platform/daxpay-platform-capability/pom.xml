@@ -6,7 +6,7 @@
     <parent>
         <groupId>cn.daxpay.open</groupId>
         <artifactId>daxpay-platform</artifactId>
-        <version>4.0.0-beta2</version>
+        <version>4.0.0-beta3</version>
     </parent>
     <modules>
         <module>capability-auth</module>
@@ -30,7 +30,7 @@
         <dependency>
             <groupId>cn.daxpay.open</groupId>
             <artifactId>daxpay-platform-core</artifactId>
-            <version>4.0.0-beta2</version>
+            <version>4.0.0-beta3</version>
         </dependency>
         <!-- lombok -->
         <dependency>

@@ -274,7 +274,7 @@ mvnd clean install
 
 ## 版本信息
 
-- 模块版本：4.0.0-beta2
+- 模块版本：4.0.0-beta3
 - weixin-java-mp：4.8.1.B
 - weixin-java-miniapp：4.8.1.B
 - lock4j：2.2.7
