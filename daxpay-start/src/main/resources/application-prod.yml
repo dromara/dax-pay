@@ -58,9 +58,10 @@ spring:
     listener:
       auto-startup: true
 # 日志(生产只输出 INFO 及以上, 业务包不切 DEBUG, 第三方框架噪音压制到 WARN)
+# 日志级别可由 installer 表单注入（LOG_ROOT_LEVEL），生产不建议 DEBUG
 logging:
   level:
-    root: INFO
+    root: ${LOG_ROOT_LEVEL:INFO}
     cn.daxpay.open.**: INFO
     # 第三方框架噪音统一降级(组名对应下方 group 定义)
     framework: WARN
@@ -102,16 +103,17 @@ daxpay:
   platform:
     # 部署模式: PROD 触发启动期 fail-fast 校验, 杜绝开发态功能(沙箱/超管/Swagger 等)误开
     # 不显式配置时 DeploymentModeEnforcer 会按 spring.profiles.active 自动推断(prod profile → PROD)
+    # 可由 installer 表单注入（DEPLOY_MODE），DEV 仅供本机联调（放开沙箱/超管等开发态功能）
     deployment:
-      mode: PROD
+      mode: ${DEPLOY_MODE:PROD}
     common:
       # 异常信息(生产不返回完整堆栈)
       exception:
         show-full-message: false
     starter:
       auth:
-        # 关闭超级管理员(生产不应有超管后门)
-        enable-admin: false
+        # 关闭超级管理员(生产不应有超管后门; 仅 DEV 联调可由 installer 表单开启)
+        enable-admin: ${ENABLE_ADMIN:false}
         admin-in-list: false
         # ignore-urls 严格收紧: 仅放行 health 探针和静态资源
         # 警告: 绝不能加 /** (dev 中那条会完全关闭认证)
@@ -131,10 +133,10 @@ daxpay:
           ipv6-data-version: ${IP2REGION_V6_DATA_VERSION:open_source}
           search-type: VECTOR_INDEX
     config:
-      # 沙箱环境(必须关闭; 不写时 Java 默认 true 会被 DeploymentModeEnforcer 拦截)
-      sandbox-enabled: false
-      # 交易定时同步开关(生产环境开启)
-      trade-sync-enabled: true
+      # 沙箱环境(生产必须关闭; 仅 DEV 联调可由 installer 表单开启, PROD 下开启会被 DeploymentModeEnforcer 拦截)
+      sandbox-enabled: ${SANDBOX_ENABLED:false}
+      # 交易定时同步开关(生产环境开启; installer 表单可管理)
+      trade-sync-enabled: ${TRADE_SYNC_ENABLED:true}
       # RSA 密钥(PEM 文本通过环境变量注入)
       key-config:
         private-key: ${RSA_PRIVATE_KEY:?missing RSA_PRIVATE_KEY}
@@ -153,16 +155,17 @@ daxpay:
     # 子应用1: 支付宝 + 微信支付(已启用, Docker Compose 中 channel-one 容器)
     one:
       base-url: ${CHANNEL_ONE_BASE_URL:http://channel-one:20100}
-      # 通道传输 AES 密钥（强制常开，恰好 32 字符；生产必须由环境变量注入，无默认值）
+      # 通道传输 AES 密钥（强制常开，恰好 32 字符；生产必须由环境变量注入）
+      # :?missing 语法: 缺失时启动直接报明确错误, 避免占位符字面量绑定导致密钥长度非法
       transport-encrypt:
-        key: ${CHANNEL_ONE_TRANSPORT_KEY}
+        key: ${CHANNEL_ONE_TRANSPORT_KEY:?missing CHANNEL_ONE_TRANSPORT_KEY}
     # 子应用2: 其他支付通道(channel-two 已搭建架子, 通道待对接)
     two:
       base-url: ${CHANNEL_TWO_BASE_URL:http://channel-two:20200}
       transport-encrypt:
-        key: ${CHANNEL_TWO_TRANSPORT_KEY}
+        key: ${CHANNEL_TWO_TRANSPORT_KEY:?missing CHANNEL_TWO_TRANSPORT_KEY}
     # 子应用3: 国际支付通道(Stripe 等, channel-three 容器)
     three:
       base-url: ${CHANNEL_THREE_BASE_URL:http://channel-three:20300}
       transport-encrypt:
-        key: ${CHANNEL_THREE_TRANSPORT_KEY}
+        key: ${CHANNEL_THREE_TRANSPORT_KEY:?missing CHANNEL_THREE_TRANSPORT_KEY}
