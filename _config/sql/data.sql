@@ -1,5 +1,5 @@
 -- ============================================================
--- 敏感数据已清除(白名单模式) | 工具 redact-data.mjs | 时间 2026-08-05T05:57:46.361Z
+-- 敏感数据已清除(白名单模式) | 工具 redact-data.mjs | 时间 2026-08-10T02:41:01.112Z
 -- 策略：保留 18 张系统种子表 + bootx 超管(id=1)，其余整表清除
 -- 用途：干净安装包/演示数据
 -- ============================================================
@@ -64,6 +64,20 @@
 -- Data for Name: alipay_isv_channel_merchant; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+
+
+--
+-- Data for Name: alipay_transfer_config; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+-- REDACTED: alipay_transfer_config (整表清除)
+
+
+--
+-- Data for Name: alipay_transfer_scene_config; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+-- REDACTED: alipay_transfer_scene_config (整表清除)
 
 
 --
@@ -3405,6 +3419,13 @@ INSERT INTO base_city VALUES ('6590', '自治区直辖县级行政区划', '65')
 
 
 --
+-- Data for Name: base_city_adjacent; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+-- REDACTED: base_city_adjacent (整表清除)
+
+
+--
 -- Data for Name: base_province; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -3483,6 +3504,13 @@ INSERT INTO base_province VALUES ('65', '新疆维吾尔自治区');
 
 
 --
+-- Data for Name: douyin_transfer_config; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+-- REDACTED: douyin_transfer_config (整表清除)
+
+
+--
 -- Data for Name: dy_channel_app_capability; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -3551,177 +3579,183 @@ INSERT INTO iam_perm_code VALUES (2080304418086137856, 'payment:wx:mch-app:manag
 INSERT INTO iam_perm_code VALUES (2080304418371350528, 'payment:wx:mch-app:view', 'payment:wx:mch-app', true, NULL, 1, 1, 0, false, '2026-07-23 14:49:58.183146+00', '2026-07-23 14:49:58.183146+00', 'perm.payment:wx:mch-app:view');
 INSERT INTO iam_perm_code VALUES (2080304418371350529, 'payment:wx:platform-app:manage', 'payment:wx:platform-app', true, NULL, 1, 1, 0, false, '2026-07-23 14:49:58.183662+00', '2026-07-23 14:49:58.183662+00', 'perm.payment:wx:platform-app:manage');
 INSERT INTO iam_perm_code VALUES (2080304418371350530, 'payment:wx:platform-app:view', 'payment:wx:platform-app', true, NULL, 1, 1, 0, false, '2026-07-23 14:49:58.184182+00', '2026-07-23 14:49:58.184182+00', 'perm.payment:wx:platform-app:view');
-INSERT INTO iam_perm_code VALUES (2077318634845425664, 'merchant:gateway-code:manage', 'merchant:gateway-code', true, '', 1, 1, 0, true, '2026-07-15 09:05:31.921705+00', '2026-07-30 12:50:27.497015+00', 'perm.merchant:gateway-code:manage');
-INSERT INTO iam_perm_code VALUES (2077318635004809216, 'merchant:gateway-code:view', 'merchant:gateway-code', true, '', 1, 1, 0, true, '2026-07-15 09:05:31.956291+00', '2026-07-30 12:50:27.497015+00', 'perm.merchant:gateway-code:view');
-INSERT INTO iam_perm_code VALUES (2076548114998755328, 'channel:app:manage', 'channel:app', true, '', 1, 1, 1, false, '2026-07-13 06:03:45.674956+00', '2026-07-15 03:59:23.658548+00', 'perm.channel:app:manage');
-INSERT INTO iam_perm_code VALUES (2076548115791478784, 'channel:app:view', 'channel:app', true, '', 1, 1, 1, false, '2026-07-13 06:03:45.8603+00', '2026-07-15 03:59:23.675708+00', 'perm.channel:app:view');
-INSERT INTO iam_perm_code VALUES (2070862264909631489, 'channel:merchant:manage', 'channel:merchant', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.37159+00', '2026-07-15 03:59:23.675708+00', 'perm.channel:merchant:manage');
-INSERT INTO iam_perm_code VALUES (2070862264913825792, 'channel:merchant:view', 'channel:merchant', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.372587+00', '2026-07-15 03:59:23.675708+00', 'perm.channel:merchant:view');
-INSERT INTO iam_perm_code VALUES (2070862264922214401, 'develop:sign:view', 'develop:sign', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.374587+00', '2026-07-15 03:59:23.677216+00', 'perm.develop:sign:view');
-INSERT INTO iam_perm_code VALUES (2070862264930603008, 'develop:trade:sign', 'develop:trade', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.37609+00', '2026-07-15 03:59:23.678223+00', 'perm.develop:trade:sign');
-INSERT INTO iam_perm_code VALUES (2070862264934797312, 'develop:trade:view', 'develop:trade', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.377094+00', '2026-07-15 03:59:23.678223+00', 'perm.develop:trade:view');
-INSERT INTO iam_perm_code VALUES (2070862264964157440, 'iam:menu:manage', 'iam:menu', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.384096+00', '2026-07-15 03:59:23.680223+00', 'perm.iam:menu:manage');
-INSERT INTO iam_perm_code VALUES (2070862264964157441, 'iam:menu:view', 'iam:menu', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.384096+00', '2026-07-15 03:59:23.680223+00', 'perm.iam:menu:view');
-INSERT INTO iam_perm_code VALUES (2070862264955768832, 'iam:online:kickout', 'iam:online', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.382096+00', '2026-07-15 03:59:23.680223+00', 'perm.iam:online:kickout');
-INSERT INTO iam_perm_code VALUES (2070862264955768833, 'iam:online:view', 'iam:online', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.383096+00', '2026-07-15 03:59:23.681729+00', 'perm.iam:online:view');
-INSERT INTO iam_perm_code VALUES (2070862264934797313, 'device:printer:manage', 'device:printer', true, '', 1, 1, 0, true, '2026-06-27 13:30:13.377094+00', '2026-07-11 02:29:03.161539+00', NULL);
-INSERT INTO iam_perm_code VALUES (2070862264938991616, 'device:printer:view', 'device:printer', true, '', 1, 1, 0, true, '2026-06-27 13:30:13.378094+00', '2026-07-11 02:29:03.172051+00', NULL);
-INSERT INTO iam_perm_code VALUES (2070862264968351744, 'iam:role:manage', 'iam:role', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.385095+00', '2026-07-15 03:59:23.681729+00', 'perm.iam:role:manage');
-INSERT INTO iam_perm_code VALUES (2077568466990313472, 'payment:risk:blacklist:manage', 'payment:risk:blacklist', true, '', 1, 1, 0, false, '2026-07-16 01:38:16.546135+00', '2026-07-16 01:38:16.553159+00', 'perm.payment:risk:blacklist:manage');
-INSERT INTO iam_perm_code VALUES (2077568467208417280, 'payment:risk:blacklist:view', 'payment:risk:blacklist', true, '', 1, 1, 0, false, '2026-07-16 01:38:16.59627+00', '2026-07-16 01:38:16.59627+00', 'perm.payment:risk:blacklist:view');
-INSERT INTO iam_perm_code VALUES (2070862264360177664, 'channel:alipay:app:manage', 'channel:app', true, '', 1, 1, 0, true, '2026-06-27 13:30:13.243473+00', '2026-07-13 06:03:45.951387+00', NULL);
-INSERT INTO iam_perm_code VALUES (2077568467212611584, 'payment:risk:hit:manage', 'payment:risk:hit', true, '', 1, 1, 0, false, '2026-07-16 01:38:16.59627+00', '2026-07-16 01:38:16.59627+00', 'perm.payment:risk:hit:manage');
-INSERT INTO iam_perm_code VALUES (2070862264897048576, 'channel:alipay:app:view', 'channel:app', true, '', 1, 1, 0, true, '2026-06-27 13:30:13.36959+00', '2026-07-13 06:03:45.955388+00', NULL);
-INSERT INTO iam_perm_code VALUES (2077568467216805888, 'payment:risk:hit:view', 'payment:risk:hit', true, '', 1, 1, 0, false, '2026-07-16 01:38:16.597278+00', '2026-07-16 01:38:16.597278+00', 'perm.payment:risk:hit:view');
-INSERT INTO iam_perm_code VALUES (2077568467221000192, 'system:sensitive-word-hit:view', 'system:sensitive-word-hit', true, '', 1, 1, 0, false, '2026-07-16 01:38:16.598278+00', '2026-07-16 01:38:16.598278+00', 'perm.system:sensitive-word-hit:view');
-INSERT INTO iam_perm_code VALUES (2077568467221000193, 'system:sensitive-word:manage', 'system:sensitive-word', true, '', 1, 1, 0, false, '2026-07-16 01:38:16.598278+00', '2026-07-16 01:38:16.598278+00', 'perm.system:sensitive-word:manage');
-INSERT INTO iam_perm_code VALUES (2077568467225194496, 'system:sensitive-word:view', 'system:sensitive-word', true, '', 1, 1, 0, false, '2026-07-16 01:38:16.599276+00', '2026-07-16 01:38:16.599276+00', 'perm.system:sensitive-word:view');
+INSERT INTO iam_perm_code VALUES (2077318634845425664, 'merchant:gateway-code:manage', 'merchant:gateway-code', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-15 09:05:31.921705+00', '2026-07-30 12:50:27.497015+00', 'perm.merchant:gateway-code:manage');
+INSERT INTO iam_perm_code VALUES (2077318635004809216, 'merchant:gateway-code:view', 'merchant:gateway-code', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-15 09:05:31.956291+00', '2026-07-30 12:50:27.497015+00', 'perm.merchant:gateway-code:view');
+INSERT INTO iam_perm_code VALUES (2083000000000000001, 'trade:transfer:view', 'trade:transfer', true, NULL, 1, 1, 0, false, '2026-08-05 12:13:20.611224+00', '2026-08-05 12:13:20.611224+00', 'perm.trade:transfer:view');
+INSERT INTO iam_perm_code VALUES (2083000000000000002, 'trade:transfer:manage', 'trade:transfer', true, NULL, 1, 1, 0, false, '2026-08-05 12:13:20.613805+00', '2026-08-05 12:13:20.613805+00', 'perm.trade:transfer:manage');
+INSERT INTO iam_perm_code VALUES (2076548114998755328, 'channel:app:manage', 'channel:app', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-13 06:03:45.674956+00', '2026-07-15 03:59:23.658548+00', 'perm.channel:app:manage');
+INSERT INTO iam_perm_code VALUES (2076548115791478784, 'channel:app:view', 'channel:app', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-13 06:03:45.8603+00', '2026-07-15 03:59:23.675708+00', 'perm.channel:app:view');
+INSERT INTO iam_perm_code VALUES (2070862264909631489, 'channel:merchant:manage', 'channel:merchant', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.37159+00', '2026-07-15 03:59:23.675708+00', 'perm.channel:merchant:manage');
+INSERT INTO iam_perm_code VALUES (2070862264913825792, 'channel:merchant:view', 'channel:merchant', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.372587+00', '2026-07-15 03:59:23.675708+00', 'perm.channel:merchant:view');
+INSERT INTO iam_perm_code VALUES (2070862264922214401, 'develop:sign:view', 'develop:sign', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.374587+00', '2026-07-15 03:59:23.677216+00', 'perm.develop:sign:view');
+INSERT INTO iam_perm_code VALUES (2070862264930603008, 'develop:trade:sign', 'develop:trade', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.37609+00', '2026-07-15 03:59:23.678223+00', 'perm.develop:trade:sign');
+INSERT INTO iam_perm_code VALUES (2070862264934797312, 'develop:trade:view', 'develop:trade', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.377094+00', '2026-07-15 03:59:23.678223+00', 'perm.develop:trade:view');
+INSERT INTO iam_perm_code VALUES (2070862264964157440, 'iam:menu:manage', 'iam:menu', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.384096+00', '2026-07-15 03:59:23.680223+00', 'perm.iam:menu:manage');
+INSERT INTO iam_perm_code VALUES (2070862264964157441, 'iam:menu:view', 'iam:menu', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.384096+00', '2026-07-15 03:59:23.680223+00', 'perm.iam:menu:view');
+INSERT INTO iam_perm_code VALUES (2070862264955768832, 'iam:online:kickout', 'iam:online', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.382096+00', '2026-07-15 03:59:23.680223+00', 'perm.iam:online:kickout');
+INSERT INTO iam_perm_code VALUES (2070862264955768833, 'iam:online:view', 'iam:online', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.383096+00', '2026-07-15 03:59:23.681729+00', 'perm.iam:online:view');
+INSERT INTO iam_perm_code VALUES (2070862264934797313, 'device:printer:manage', 'device:printer', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.377094+00', '2026-07-11 02:29:03.161539+00', NULL);
+INSERT INTO iam_perm_code VALUES (2070862264938991616, 'device:printer:view', 'device:printer', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.378094+00', '2026-07-11 02:29:03.172051+00', NULL);
+INSERT INTO iam_perm_code VALUES (2070862264968351744, 'iam:role:manage', 'iam:role', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.385095+00', '2026-07-15 03:59:23.681729+00', 'perm.iam:role:manage');
+INSERT INTO iam_perm_code VALUES (2077568466990313472, 'payment:risk:blacklist:manage', 'payment:risk:blacklist', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-16 01:38:16.546135+00', '2026-07-16 01:38:16.553159+00', 'perm.payment:risk:blacklist:manage');
+INSERT INTO iam_perm_code VALUES (2077568467208417280, 'payment:risk:blacklist:view', 'payment:risk:blacklist', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-16 01:38:16.59627+00', '2026-07-16 01:38:16.59627+00', 'perm.payment:risk:blacklist:view');
+INSERT INTO iam_perm_code VALUES (2070862264360177664, 'channel:alipay:app:manage', 'channel:app', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.243473+00', '2026-07-13 06:03:45.951387+00', NULL);
+INSERT INTO iam_perm_code VALUES (2070862264897048576, 'channel:alipay:app:view', 'channel:app', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.36959+00', '2026-07-13 06:03:45.955388+00', NULL);
+INSERT INTO iam_perm_code VALUES (2077568467216805888, 'payment:risk:hit:view', 'payment:risk:hit', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-16 01:38:16.597278+00', '2026-07-16 01:38:16.597278+00', 'perm.payment:risk:hit:view');
+INSERT INTO iam_perm_code VALUES (2077568467221000192, 'system:sensitive-word-hit:view', 'system:sensitive-word-hit', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-16 01:38:16.598278+00', '2026-07-16 01:38:16.598278+00', 'perm.system:sensitive-word-hit:view');
+INSERT INTO iam_perm_code VALUES (2077568467221000193, 'system:sensitive-word:manage', 'system:sensitive-word', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-16 01:38:16.598278+00', '2026-07-16 01:38:16.598278+00', 'perm.system:sensitive-word:manage');
+INSERT INTO iam_perm_code VALUES (2077568467225194496, 'system:sensitive-word:view', 'system:sensitive-word', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-16 01:38:16.599276+00', '2026-07-16 01:38:16.599276+00', 'perm.system:sensitive-word:view');
 INSERT INTO iam_perm_code VALUES (2080921585542385664, 'merchant:alipay-isv-auth:manage', 'merchant:alipay-isv-auth', true, NULL, 1, 1, 0, false, '2026-07-25 07:42:22.305327+00', '2026-07-25 07:42:22.309867+00', 'perm.merchant:alipay-isv-auth:manage');
 INSERT INTO iam_perm_code VALUES (2080921585609494528, 'merchant:alipay-isv-auth:view', 'merchant:alipay-isv-auth', true, NULL, 1, 1, 0, false, '2026-07-25 07:42:22.31989+00', '2026-07-25 07:42:22.31989+00', 'perm.merchant:alipay-isv-auth:view');
-INSERT INTO iam_perm_code VALUES (2072990657125986304, 'merchant:notify-config:view', 'merchant:notify-config', true, '', 1, 1, 2, false, '2026-07-03 10:27:41.619775+00', '2026-07-15 03:59:23.693424+00', 'perm.merchant:notify-config:view');
-INSERT INTO iam_perm_code VALUES (2070862265018683392, 'payment:config:product-config:manage', 'payment:config:product-config', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.397109+00', '2026-07-15 03:59:23.695427+00', 'perm.payment:config:product-config:manage');
-INSERT INTO iam_perm_code VALUES (2070862265022877696, 'payment:config:product-config:view', 'payment:config:product-config', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.398114+00', '2026-07-15 03:59:23.696424+00', 'perm.payment:config:product-config:view');
-INSERT INTO iam_perm_code VALUES (2070862265052237825, 'system:notify:manage', 'system:notify', true, '', 1, 1, 0, true, '2026-06-27 13:30:13.405113+00', '2026-07-01 08:16:00.452177+00', NULL);
-INSERT INTO iam_perm_code VALUES (2070862265052237826, 'system:notify:publish', 'system:notify', true, '', 1, 1, 0, true, '2026-06-27 13:30:13.405113+00', '2026-07-01 08:16:00.454692+00', NULL);
-INSERT INTO iam_perm_code VALUES (2070862265056432128, 'system:notify:view', 'system:notify', true, '', 1, 1, 0, true, '2026-06-27 13:30:13.406113+00', '2026-07-01 08:16:00.454692+00', NULL);
-INSERT INTO iam_perm_code VALUES (2078479091642855424, 'develop:gateway:sign', 'develop:gateway', true, '', 1, 1, 0, false, '2026-07-18 13:56:46.379702+00', '2026-07-18 13:56:46.383702+00', 'perm.develop:gateway:sign');
-INSERT INTO iam_perm_code VALUES (2078479091684798466, 'system:log:unipay:manage', 'system:log:unipay', true, '', 1, 1, 0, false, '2026-07-18 13:56:46.388212+00', '2026-07-18 13:56:46.388212+00', 'perm.system:log:unipay:manage');
-INSERT INTO iam_perm_code VALUES (2078479091688992768, 'system:log:unipay:view', 'system:log:unipay', true, '', 1, 1, 0, false, '2026-07-18 13:56:46.389213+00', '2026-07-18 13:56:46.389213+00', 'perm.system:log:unipay:view');
-INSERT INTO iam_perm_code VALUES (2078479091684798464, 'device:terminal:system:manage', 'device:terminal:system', true, '', 1, 1, 0, true, '2026-07-18 13:56:46.388212+00', '2026-07-18 14:25:05.471025+00', 'perm.device:terminal:system:manage');
-INSERT INTO iam_perm_code VALUES (2070862264905437184, 'channel:douyin:app:manage', 'channel:app', true, '', 1, 1, 0, true, '2026-06-27 13:30:13.37059+00', '2026-07-13 06:03:45.955388+00', NULL);
-INSERT INTO iam_perm_code VALUES (2070862264909631488, 'channel:douyin:app:view', 'channel:app', true, '', 1, 1, 0, true, '2026-06-27 13:30:13.37159+00', '2026-07-13 06:03:45.956891+00', NULL);
-INSERT INTO iam_perm_code VALUES (2070862264918020096, 'channel:wechat:app:manage', 'channel:app', true, '', 1, 1, 0, true, '2026-06-27 13:30:13.373587+00', '2026-07-13 06:03:45.957537+00', NULL);
-INSERT INTO iam_perm_code VALUES (2070862264922214402, 'develop:trade:pay', 'develop:trade', true, '', 1, 1, 0, true, '2026-06-27 13:30:13.37609+00', '2026-07-13 06:03:45.958216+00', NULL);
-INSERT INTO iam_perm_code VALUES (2070862265006100480, 'payment:alipay:isv:manage', 'payment:isv', true, '', 1, 1, 0, true, '2026-06-27 13:30:13.394603+00', '2026-07-13 06:03:45.958737+00', NULL);
-INSERT INTO iam_perm_code VALUES (2070862265010294784, 'payment:alipay:isv:view', 'payment:isv', true, '', 1, 1, 0, true, '2026-06-27 13:30:13.395603+00', '2026-07-13 06:03:45.959252+00', NULL);
-INSERT INTO iam_perm_code VALUES (2073937965846073344, 'payment:lakala:isv:manage', 'payment:isv', true, '', 1, 1, 0, true, '2026-07-06 01:11:57.618659+00', '2026-07-13 06:03:45.962885+00', NULL);
-INSERT INTO iam_perm_code VALUES (2073937965846073345, 'payment:lakala:isv:view', 'payment:isv', true, '', 1, 1, 0, true, '2026-07-06 01:11:57.618659+00', '2026-07-13 06:03:45.962885+00', NULL);
-INSERT INTO iam_perm_code VALUES (2070862265035460609, 'payment:wechat:isv:manage', 'payment:isv', true, '', 1, 1, 0, true, '2026-06-27 13:30:13.401117+00', '2026-07-13 06:03:45.964989+00', NULL);
-INSERT INTO iam_perm_code VALUES (2070862265039654912, 'payment:wechat:isv:view', 'payment:isv', true, '', 1, 1, 0, true, '2026-06-27 13:30:13.402115+00', '2026-07-13 06:03:45.965517+00', NULL);
-INSERT INTO iam_perm_code VALUES (2075452237802512384, 'develop:auth:view', 'develop:auth', true, '', 1, 1, 1, false, '2026-07-10 05:29:08.191101+00', '2026-07-15 03:59:23.677216+00', 'perm.develop:auth:view');
-INSERT INTO iam_perm_code VALUES (2075452238549098496, 'device:qrcode:manage', 'device:qrcode', true, '', 1, 1, 1, false, '2026-07-10 05:29:08.365787+00', '2026-07-15 03:59:23.679227+00', 'perm.device:qrcode:manage');
-INSERT INTO iam_perm_code VALUES (2075452238553292800, 'device:qrcode:view', 'device:qrcode', true, '', 1, 1, 1, false, '2026-07-10 05:29:08.367792+00', '2026-07-15 03:59:23.679227+00', 'perm.device:qrcode:view');
-INSERT INTO iam_perm_code VALUES (2075452238557487104, 'iam:social:manage', 'iam:social', true, '', 1, 1, 1, false, '2026-07-10 05:29:08.367792+00', '2026-07-15 03:59:23.682738+00', 'perm.iam:social:manage');
-INSERT INTO iam_perm_code VALUES (2075452238561681408, 'iam:social:view', 'iam:social', true, '', 1, 1, 1, false, '2026-07-10 05:29:08.368793+00', '2026-07-15 03:59:23.683738+00', 'perm.iam:social:view');
-INSERT INTO iam_perm_code VALUES (2078479091684798465, 'device:terminal:system:view', 'device:terminal:system', true, '', 1, 1, 0, true, '2026-07-18 13:56:46.388212+00', '2026-07-18 14:25:05.488041+00', 'perm.device:terminal:system:view');
+INSERT INTO iam_perm_code VALUES (2077568468000000001, 'payment:risk:security:manage', 'payment:risk:security', true, '', 1, 1, 0, false, '2026-08-06 01:05:45.386753+00', '2026-08-06 01:05:45.386753+00', 'perm.payment:risk:security:manage');
+INSERT INTO iam_perm_code VALUES (2077568468000000002, 'payment:risk:security:view', 'payment:risk:security', true, '', 1, 1, 0, false, '2026-08-06 01:05:45.389564+00', '2026-08-06 01:05:45.389564+00', 'perm.payment:risk:security:view');
+INSERT INTO iam_perm_code VALUES (2072990657125986304, 'merchant:notify-config:view', 'merchant:notify-config', true, '由 @PermCode 扫描同步生成', 1, 1, 2, false, '2026-07-03 10:27:41.619775+00', '2026-07-15 03:59:23.693424+00', 'perm.merchant:notify-config:view');
+INSERT INTO iam_perm_code VALUES (2077568467212611584, 'payment:risk:hit:manage', 'payment:risk:hit', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-16 01:38:16.59627+00', '2026-08-06 06:39:54.33246+00', 'perm.payment:risk:hit:manage');
+INSERT INTO iam_perm_code VALUES (2070862265018683392, 'payment:config:product-config:manage', 'payment:config:product-config', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.397109+00', '2026-07-15 03:59:23.695427+00', 'perm.payment:config:product-config:manage');
+INSERT INTO iam_perm_code VALUES (2070862265022877696, 'payment:config:product-config:view', 'payment:config:product-config', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.398114+00', '2026-07-15 03:59:23.696424+00', 'perm.payment:config:product-config:view');
+INSERT INTO iam_perm_code VALUES (2070862265052237825, 'system:notify:manage', 'system:notify', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.405113+00', '2026-07-01 08:16:00.452177+00', NULL);
+INSERT INTO iam_perm_code VALUES (2070862265052237826, 'system:notify:publish', 'system:notify', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.405113+00', '2026-07-01 08:16:00.454692+00', NULL);
+INSERT INTO iam_perm_code VALUES (2070862265056432128, 'system:notify:view', 'system:notify', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.406113+00', '2026-07-01 08:16:00.454692+00', NULL);
+INSERT INTO iam_perm_code VALUES (2078479091642855424, 'develop:gateway:sign', 'develop:gateway', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-18 13:56:46.379702+00', '2026-07-18 13:56:46.383702+00', 'perm.develop:gateway:sign');
+INSERT INTO iam_perm_code VALUES (2078479091684798466, 'system:log:unipay:manage', 'system:log:unipay', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-18 13:56:46.388212+00', '2026-07-18 13:56:46.388212+00', 'perm.system:log:unipay:manage');
+INSERT INTO iam_perm_code VALUES (2078479091688992768, 'system:log:unipay:view', 'system:log:unipay', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-18 13:56:46.389213+00', '2026-07-18 13:56:46.389213+00', 'perm.system:log:unipay:view');
+INSERT INTO iam_perm_code VALUES (2078479091684798464, 'device:terminal:system:manage', 'device:terminal:system', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-18 13:56:46.388212+00', '2026-07-18 14:25:05.471025+00', 'perm.device:terminal:system:manage');
+INSERT INTO iam_perm_code VALUES (2070862264905437184, 'channel:douyin:app:manage', 'channel:app', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.37059+00', '2026-07-13 06:03:45.955388+00', NULL);
+INSERT INTO iam_perm_code VALUES (2070862264909631488, 'channel:douyin:app:view', 'channel:app', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.37159+00', '2026-07-13 06:03:45.956891+00', NULL);
+INSERT INTO iam_perm_code VALUES (2070862264918020096, 'channel:wechat:app:manage', 'channel:app', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.373587+00', '2026-07-13 06:03:45.957537+00', NULL);
+INSERT INTO iam_perm_code VALUES (2070862264922214402, 'develop:trade:pay', 'develop:trade', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.37609+00', '2026-07-13 06:03:45.958216+00', NULL);
+INSERT INTO iam_perm_code VALUES (2070862265006100480, 'payment:alipay:isv:manage', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.394603+00', '2026-07-13 06:03:45.958737+00', NULL);
+INSERT INTO iam_perm_code VALUES (2070862265010294784, 'payment:alipay:isv:view', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.395603+00', '2026-07-13 06:03:45.959252+00', NULL);
+INSERT INTO iam_perm_code VALUES (2073937965846073344, 'payment:lakala:isv:manage', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-06 01:11:57.618659+00', '2026-07-13 06:03:45.962885+00', NULL);
+INSERT INTO iam_perm_code VALUES (2073937965846073345, 'payment:lakala:isv:view', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-06 01:11:57.618659+00', '2026-07-13 06:03:45.962885+00', NULL);
+INSERT INTO iam_perm_code VALUES (2070862265035460609, 'payment:wechat:isv:manage', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.401117+00', '2026-07-13 06:03:45.964989+00', NULL);
+INSERT INTO iam_perm_code VALUES (2070862265039654912, 'payment:wechat:isv:view', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.402115+00', '2026-07-13 06:03:45.965517+00', NULL);
+INSERT INTO iam_perm_code VALUES (2075452237802512384, 'develop:auth:view', 'develop:auth', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-10 05:29:08.191101+00', '2026-07-15 03:59:23.677216+00', 'perm.develop:auth:view');
+INSERT INTO iam_perm_code VALUES (2075452238549098496, 'device:qrcode:manage', 'device:qrcode', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-10 05:29:08.365787+00', '2026-07-15 03:59:23.679227+00', 'perm.device:qrcode:manage');
+INSERT INTO iam_perm_code VALUES (2075452238553292800, 'device:qrcode:view', 'device:qrcode', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-10 05:29:08.367792+00', '2026-07-15 03:59:23.679227+00', 'perm.device:qrcode:view');
+INSERT INTO iam_perm_code VALUES (2075452238557487104, 'iam:social:manage', 'iam:social', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-10 05:29:08.367792+00', '2026-07-15 03:59:23.682738+00', 'perm.iam:social:manage');
+INSERT INTO iam_perm_code VALUES (2075452238561681408, 'iam:social:view', 'iam:social', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-10 05:29:08.368793+00', '2026-07-15 03:59:23.683738+00', 'perm.iam:social:view');
+INSERT INTO iam_perm_code VALUES (2078479091684798465, 'device:terminal:system:view', 'device:terminal:system', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-18 13:56:46.388212+00', '2026-07-18 14:25:05.488041+00', 'perm.device:terminal:system:view');
 INSERT INTO iam_perm_code VALUES (2082124980798255104, 'payment:douyin:mch-app:manage', 'payment:douyin:mch-app', true, NULL, 1, 1, 0, false, '2026-07-28 15:24:14.093134+00', '2026-07-28 15:24:14.099644+00', 'perm.payment:douyin:mch-app:manage');
 INSERT INTO iam_perm_code VALUES (2082124981007970304, 'payment:douyin:mch-app:view', 'payment:douyin:mch-app', true, NULL, 1, 1, 0, false, '2026-07-28 15:24:14.140188+00', '2026-07-28 15:24:14.140188+00', 'perm.payment:douyin:mch-app:view');
 INSERT INTO iam_perm_code VALUES (2082124981007970305, 'payment:douyin:platform-app:manage', 'payment:douyin:platform-app', true, NULL, 1, 1, 0, false, '2026-07-28 15:24:14.140188+00', '2026-07-28 15:24:14.140188+00', 'perm.payment:douyin:platform-app:manage');
-INSERT INTO iam_perm_code VALUES (2070862264972546048, 'iam:social:config:manage', 'iam:social:config', true, '', 1, 1, 0, true, '2026-06-27 13:30:13.386599+00', '2026-07-10 05:29:08.422169+00', NULL);
-INSERT INTO iam_perm_code VALUES (2070862264972546049, 'iam:social:config:view', 'iam:social:config', true, '', 1, 1, 0, true, '2026-06-27 13:30:13.386599+00', '2026-07-10 05:29:08.434696+00', NULL);
-INSERT INTO iam_perm_code VALUES (2075051483223699456, 'merchant:wx-verify:manage', 'merchant:wx-verify', true, '', 1, 1, 2, false, '2026-07-09 02:56:40.852181+00', '2026-07-15 03:59:23.694425+00', 'perm.merchant:wx-verify:manage');
+INSERT INTO iam_perm_code VALUES (2070862264972546048, 'iam:social:config:manage', 'iam:social:config', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.386599+00', '2026-07-10 05:29:08.422169+00', NULL);
+INSERT INTO iam_perm_code VALUES (2070862264972546049, 'iam:social:config:view', 'iam:social:config', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.386599+00', '2026-07-10 05:29:08.434696+00', NULL);
+INSERT INTO iam_perm_code VALUES (2075051483223699456, 'merchant:wx-verify:manage', 'merchant:wx-verify', true, '由 @PermCode 扫描同步生成', 1, 1, 2, false, '2026-07-09 02:56:40.852181+00', '2026-07-15 03:59:23.694425+00', 'perm.merchant:wx-verify:manage');
 INSERT INTO iam_perm_code VALUES (2082124981012164608, 'payment:douyin:platform-app:view', 'payment:douyin:platform-app', true, NULL, 1, 1, 0, false, '2026-07-28 15:24:14.141188+00', '2026-07-28 15:24:14.141188+00', 'perm.payment:douyin:platform-app:view');
 INSERT INTO iam_perm_code VALUES (2082124981012164609, 'plugin:easypay-order:manage', 'plugin:easypay-order', true, NULL, 1, 1, 0, false, '2026-07-28 15:24:14.141188+00', '2026-07-28 15:24:14.141188+00', 'perm.plugin:easypay-order:manage');
 INSERT INTO iam_perm_code VALUES (2082124981012164610, 'plugin:easypay-order:view', 'plugin:easypay-order', true, NULL, 1, 1, 0, false, '2026-07-28 15:24:14.141188+00', '2026-07-28 15:24:14.141188+00', 'perm.plugin:easypay-order:view');
 INSERT INTO iam_perm_code VALUES (2082124981016358912, 'plugin:easypay-refund:manage', 'plugin:easypay-refund', true, NULL, 1, 1, 0, false, '2026-07-28 15:24:14.142188+00', '2026-07-28 15:24:14.142188+00', 'perm.plugin:easypay-refund:manage');
 INSERT INTO iam_perm_code VALUES (2082124981016358913, 'plugin:easypay-refund:view', 'plugin:easypay-refund', true, NULL, 1, 1, 0, false, '2026-07-28 15:24:14.142188+00', '2026-07-28 15:24:14.142188+00', 'perm.plugin:easypay-refund:view');
-INSERT INTO iam_perm_code VALUES (2070862264943185920, 'device:speaker:manage', 'device:speaker', true, '', 1, 1, 0, true, '2026-06-27 13:30:13.379096+00', '2026-07-11 02:29:03.172051+00', NULL);
-INSERT INTO iam_perm_code VALUES (2070862264947380224, 'device:speaker:view', 'device:speaker', true, '', 1, 1, 0, true, '2026-06-27 13:30:13.380094+00', '2026-07-11 02:29:03.173556+00', NULL);
-INSERT INTO iam_perm_code VALUES (2070862264947380225, 'device:vendor_config:manage', 'device:vendor_config', true, '', 1, 1, 0, true, '2026-06-27 13:30:13.380094+00', '2026-07-11 02:29:03.174074+00', NULL);
-INSERT INTO iam_perm_code VALUES (2075769305710125056, 'merchant:gateway-aggregate:manage', 'merchant:gateway-aggregate', true, '', 1, 1, 2, true, '2026-07-11 02:29:03.071291+00', '2026-07-30 12:50:27.493013+00', 'perm.merchant:gateway-aggregate:manage');
-INSERT INTO iam_perm_code VALUES (2070862264951574528, 'device:vendor_config:view', 'device:vendor_config', true, '', 1, 1, 0, true, '2026-06-27 13:30:13.381094+00', '2026-07-11 02:29:03.174589+00', NULL);
-INSERT INTO iam_perm_code VALUES (2073937965686689792, 'payment:config:mobile_app:manage', 'payment:config:mobile_app', true, '', 1, 1, 0, true, '2026-07-06 01:11:57.582592+00', '2026-07-11 02:29:03.1751+00', NULL);
-INSERT INTO iam_perm_code VALUES (2073937965841879040, 'payment:config:mobile_app:view', 'payment:config:mobile_app', true, '', 1, 1, 0, true, '2026-07-06 01:11:57.617659+00', '2026-07-11 02:29:03.1751+00', NULL);
-INSERT INTO iam_perm_code VALUES (2078486217727614976, 'merchant:terminal:manage', 'merchant:terminal', true, '', 1, 1, 0, false, '2026-07-18 14:25:05.372949+00', '2026-07-18 14:25:05.380456+00', 'perm.merchant:terminal:manage');
-INSERT INTO iam_perm_code VALUES (2078486217954107392, 'merchant:terminal:view', 'merchant:terminal', true, '', 1, 1, 0, false, '2026-07-18 14:25:05.423491+00', '2026-07-18 14:25:05.423491+00', 'perm.merchant:terminal:view');
+INSERT INTO iam_perm_code VALUES (2070862264943185920, 'device:speaker:manage', 'device:speaker', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.379096+00', '2026-07-11 02:29:03.172051+00', NULL);
+INSERT INTO iam_perm_code VALUES (2070862264947380224, 'device:speaker:view', 'device:speaker', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.380094+00', '2026-07-11 02:29:03.173556+00', NULL);
+INSERT INTO iam_perm_code VALUES (2070862264947380225, 'device:vendor_config:manage', 'device:vendor_config', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.380094+00', '2026-07-11 02:29:03.174074+00', NULL);
+INSERT INTO iam_perm_code VALUES (2075769305710125056, 'merchant:gateway-aggregate:manage', 'merchant:gateway-aggregate', true, '由 @PermCode 扫描同步生成', 1, 1, 2, true, '2026-07-11 02:29:03.071291+00', '2026-07-30 12:50:27.493013+00', 'perm.merchant:gateway-aggregate:manage');
+INSERT INTO iam_perm_code VALUES (2085254519598546944, 'payment:risk:mch-config:manage', 'payment:risk:mch-config', true, NULL, 1, 1, 0, false, '2026-08-06 06:39:54.28434+00', '2026-08-06 06:39:54.28434+00', 'perm.payment:risk:mch-config:manage');
+INSERT INTO iam_perm_code VALUES (2085254519619518464, 'payment:risk:mch-config:view', 'payment:risk:mch-config', true, NULL, 1, 1, 0, false, '2026-08-06 06:39:54.289335+00', '2026-08-06 06:39:54.289335+00', 'perm.payment:risk:mch-config:view');
+INSERT INTO iam_perm_code VALUES (2070862264951574528, 'device:vendor_config:view', 'device:vendor_config', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.381094+00', '2026-07-11 02:29:03.174589+00', NULL);
+INSERT INTO iam_perm_code VALUES (2073937965686689792, 'payment:config:mobile_app:manage', 'payment:config:mobile_app', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-06 01:11:57.582592+00', '2026-07-11 02:29:03.1751+00', NULL);
+INSERT INTO iam_perm_code VALUES (2073937965841879040, 'payment:config:mobile_app:view', 'payment:config:mobile_app', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-06 01:11:57.617659+00', '2026-07-11 02:29:03.1751+00', NULL);
+INSERT INTO iam_perm_code VALUES (2078486217727614976, 'merchant:terminal:manage', 'merchant:terminal', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-18 14:25:05.372949+00', '2026-07-18 14:25:05.380456+00', 'perm.merchant:terminal:manage');
+INSERT INTO iam_perm_code VALUES (2078486217954107392, 'merchant:terminal:view', 'merchant:terminal', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-18 14:25:05.423491+00', '2026-07-18 14:25:05.423491+00', 'perm.merchant:terminal:view');
 INSERT INTO iam_perm_code VALUES (2082636699320639488, 'payment:config:mobile-app:manage', 'payment:config:mobile-app', true, NULL, 1, 1, 0, false, '2026-07-30 01:17:37.296213+00', '2026-07-30 01:17:37.304726+00', 'perm.payment:config:mobile-app:manage');
-INSERT INTO iam_perm_code VALUES (2070862264922214400, 'channel:wechat:app:view', 'channel:app', true, '', 1, 1, 0, true, '2026-06-27 13:30:13.374587+00', '2026-07-13 06:03:45.957537+00', NULL);
-INSERT INTO iam_perm_code VALUES (2074377765266870272, 'payment:dougong:isv:manage', 'payment:isv', true, '', 1, 1, 0, true, '2026-07-07 06:19:33.971198+00', '2026-07-13 06:03:45.959777+00', NULL);
+INSERT INTO iam_perm_code VALUES (2070862264922214400, 'channel:wechat:app:view', 'channel:app', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.374587+00', '2026-07-13 06:03:45.957537+00', NULL);
+INSERT INTO iam_perm_code VALUES (2074377765266870272, 'payment:dougong:isv:manage', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-07 06:19:33.971198+00', '2026-07-13 06:03:45.959777+00', NULL);
 INSERT INTO iam_perm_code VALUES (2082636699480023040, 'payment:config:mobile-app:view', 'payment:config:mobile-app', true, NULL, 1, 1, 0, false, '2026-07-30 01:17:37.331264+00', '2026-07-30 01:17:37.331264+00', 'perm.payment:config:mobile-app:view');
-INSERT INTO iam_perm_code VALUES (2075769305903063042, 'system:config:mobile-app:manage', 'system:config:mobile-app', true, '', 1, 1, 1, true, '2026-07-11 02:29:03.113565+00', '2026-07-30 01:17:37.358804+00', 'perm.system:config:mobile-app:manage');
-INSERT INTO iam_perm_code VALUES (2075769305907257344, 'system:config:mobile-app:view', 'system:config:mobile-app', true, '', 1, 1, 1, true, '2026-07-11 02:29:03.114572+00', '2026-07-30 01:17:37.360802+00', 'perm.system:config:mobile-app:view');
-INSERT INTO iam_perm_code VALUES (2074377765317201920, 'payment:dougong:isv:view', 'payment:isv', true, '', 1, 1, 0, true, '2026-07-07 06:19:33.983709+00', '2026-07-13 06:03:45.960301+00', NULL);
-INSERT INTO iam_perm_code VALUES (2074377765317201921, 'payment:fuyou:isv:manage', 'payment:isv', true, '', 1, 1, 0, true, '2026-07-07 06:19:33.983709+00', '2026-07-13 06:03:45.960301+00', NULL);
-INSERT INTO iam_perm_code VALUES (2074377765317201922, 'payment:fuyou:isv:view', 'payment:isv', true, '', 1, 1, 0, true, '2026-07-07 06:19:33.983709+00', '2026-07-13 06:03:45.96082+00', NULL);
-INSERT INTO iam_perm_code VALUES (2074377765325590528, 'payment:hkrt:isv:manage', 'payment:isv', true, '', 1, 1, 0, true, '2026-07-07 06:19:33.985213+00', '2026-07-13 06:03:45.961333+00', NULL);
-INSERT INTO iam_perm_code VALUES (2074377765325590529, 'payment:hkrt:isv:view', 'payment:isv', true, '', 1, 1, 0, true, '2026-07-07 06:19:33.985213+00', '2026-07-13 06:03:45.96185+00', NULL);
-INSERT INTO iam_perm_code VALUES (2074377765325590530, 'payment:hmpay:isv:manage', 'payment:isv', true, '', 1, 1, 0, true, '2026-07-07 06:19:33.985213+00', '2026-07-13 06:03:45.962364+00', NULL);
-INSERT INTO iam_perm_code VALUES (2074377765329784832, 'payment:hmpay:isv:view', 'payment:isv', true, '', 1, 1, 0, true, '2026-07-07 06:19:33.986218+00', '2026-07-13 06:03:45.962364+00', NULL);
-INSERT INTO iam_perm_code VALUES (2074377765329784833, 'payment:leshua:isv:manage', 'payment:isv', true, '', 1, 1, 0, true, '2026-07-07 06:19:33.986218+00', '2026-07-13 06:03:45.963399+00', NULL);
-INSERT INTO iam_perm_code VALUES (2074377765329784834, 'payment:leshua:isv:view', 'payment:isv', true, '', 1, 1, 0, true, '2026-07-07 06:19:33.987218+00', '2026-07-13 06:03:45.96392+00', NULL);
-INSERT INTO iam_perm_code VALUES (2074377765333979136, 'payment:vbill:isv:manage', 'payment:isv', true, '', 1, 1, 0, true, '2026-07-07 06:19:33.987218+00', '2026-07-13 06:03:45.964434+00', NULL);
-INSERT INTO iam_perm_code VALUES (2074377765333979137, 'payment:vbill:isv:view', 'payment:isv', true, '', 1, 1, 0, true, '2026-07-07 06:19:33.987218+00', '2026-07-13 06:03:45.964434+00', NULL);
-INSERT INTO iam_perm_code VALUES (2077241592518934528, 'merchant:easypay:manage', 'merchant:easypay', true, '', 1, 1, 0, false, '2026-07-15 03:59:23.599356+00', '2026-07-15 03:59:23.604361+00', 'perm.merchant:easypay:manage');
-INSERT INTO iam_perm_code VALUES (2077241592707678208, 'merchant:easypay:view', 'merchant:easypay', true, '', 1, 1, 0, false, '2026-07-15 03:59:23.641499+00', '2026-07-15 03:59:23.6425+00', 'perm.merchant:easypay:view');
-INSERT INTO iam_perm_code VALUES (2070862264968351745, 'iam:role:view', 'iam:role', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.385095+00', '2026-07-15 03:59:23.682738+00', 'perm.iam:role:view');
-INSERT INTO iam_perm_code VALUES (2070862264976740352, 'iam:user:assign-role', 'iam:user', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.387603+00', '2026-07-15 03:59:23.683738+00', 'perm.iam:user:assign-role');
-INSERT INTO iam_perm_code VALUES (2070862264976740353, 'iam:user:manage', 'iam:user', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.387603+00', '2026-07-15 03:59:23.684738+00', 'perm.iam:user:manage');
-INSERT INTO iam_perm_code VALUES (2070862264980934656, 'iam:user:reset-password', 'iam:user', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.388603+00', '2026-07-15 03:59:23.684738+00', 'perm.iam:user:reset-password');
-INSERT INTO iam_perm_code VALUES (2070862264980934657, 'iam:user:status', 'iam:user', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.388603+00', '2026-07-15 03:59:23.684738+00', 'perm.iam:user:status');
-INSERT INTO iam_perm_code VALUES (2070862264985128960, 'iam:user:view', 'iam:user', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.389603+00', '2026-07-15 03:59:23.686245+00', 'perm.iam:user:view');
-INSERT INTO iam_perm_code VALUES (2070862264985128961, 'merchant:app:manage', 'merchant:app', true, '', 1, 1, 2, false, '2026-06-27 13:30:13.389603+00', '2026-07-15 03:59:23.686883+00', 'perm.merchant:app:manage');
-INSERT INTO iam_perm_code VALUES (2070862264989323264, 'merchant:app:route:manage', 'merchant:app:route', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.390603+00', '2026-07-15 03:59:23.687398+00', 'perm.merchant:app:route:manage');
-INSERT INTO iam_perm_code VALUES (2070862264989323265, 'merchant:app:route:view', 'merchant:app:route', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.390603+00', '2026-07-15 03:59:23.687398+00', 'perm.merchant:app:route:view');
-INSERT INTO iam_perm_code VALUES (2070862264993517568, 'merchant:app:view', 'merchant:app', true, '', 1, 1, 2, false, '2026-06-27 13:30:13.391603+00', '2026-07-15 03:59:23.687398+00', 'perm.merchant:app:view');
-INSERT INTO iam_perm_code VALUES (2070862264993517569, 'merchant:credential:manage', 'merchant:credential', true, '', 1, 1, 2, false, '2026-06-27 13:30:13.391603+00', '2026-07-15 03:59:23.688908+00', 'perm.merchant:credential:manage');
-INSERT INTO iam_perm_code VALUES (2070862264997711872, 'merchant:credential:view', 'merchant:credential', true, '', 1, 1, 2, false, '2026-06-27 13:30:13.392603+00', '2026-07-15 03:59:23.688908+00', 'perm.merchant:credential:view');
-INSERT INTO iam_perm_code VALUES (2075845892346347520, 'merchant:gateway-cashier:manage', 'merchant:gateway-cashier', true, '', 1, 1, 2, false, '2026-07-11 07:33:22.747963+00', '2026-07-15 03:59:23.690915+00', 'perm.merchant:gateway-cashier:manage');
-INSERT INTO iam_perm_code VALUES (2075845892476370944, 'merchant:gateway-cashier:view', 'merchant:gateway-cashier', true, '', 1, 1, 2, false, '2026-07-11 07:33:22.775546+00', '2026-07-15 03:59:23.690915+00', 'perm.merchant:gateway-cashier:view');
-INSERT INTO iam_perm_code VALUES (2070862264997711873, 'merchant:info:manage', 'merchant:info', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.392603+00', '2026-07-15 03:59:23.691914+00', 'perm.merchant:info:manage');
-INSERT INTO iam_perm_code VALUES (2070862265001906176, 'merchant:info:view', 'merchant:info', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.393603+00', '2026-07-15 03:59:23.692419+00', 'perm.merchant:info:view');
-INSERT INTO iam_perm_code VALUES (2072990657067266048, 'merchant:notify-config:manage', 'merchant:notify-config', true, '', 1, 1, 2, false, '2026-07-03 10:27:41.608254+00', '2026-07-15 03:59:23.692419+00', 'perm.merchant:notify-config:manage');
-INSERT INTO iam_perm_code VALUES (2070862265001906177, 'merchant:store:manage', 'merchant:store', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.393603+00', '2026-07-15 03:59:23.693424+00', 'perm.merchant:store:manage');
-INSERT INTO iam_perm_code VALUES (2070862265001906178, 'merchant:store:view', 'merchant:store', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.393603+00', '2026-07-15 03:59:23.694425+00', 'perm.merchant:store:view');
-INSERT INTO iam_perm_code VALUES (2075051483370500096, 'merchant:wx-verify:view', 'merchant:wx-verify', true, '', 1, 1, 2, false, '2026-07-09 02:56:40.884332+00', '2026-07-15 03:59:23.695427+00', 'perm.merchant:wx-verify:view');
-INSERT INTO iam_perm_code VALUES (2075051483374694400, 'payment:config:wx-verify:manage', 'payment:config:wx-verify', true, '', 1, 1, 1, false, '2026-07-09 02:56:40.885336+00', '2026-07-15 03:59:23.696424+00', 'perm.payment:config:wx-verify:manage');
-INSERT INTO iam_perm_code VALUES (2075051483374694401, 'payment:config:wx-verify:view', 'payment:config:wx-verify', true, '', 1, 1, 1, false, '2026-07-09 02:56:40.885839+00', '2026-07-15 03:59:23.697425+00', 'perm.payment:config:wx-verify:view');
-INSERT INTO iam_perm_code VALUES (2076548115795673088, 'payment:isv:manage', 'payment:isv', true, '', 1, 1, 1, false, '2026-07-13 06:03:45.8613+00', '2026-07-15 03:59:23.697931+00', 'perm.payment:isv:manage');
-INSERT INTO iam_perm_code VALUES (2076548115795673089, 'payment:isv:view', 'payment:isv', true, '', 1, 1, 1, false, '2026-07-13 06:03:45.8613+00', '2026-07-15 03:59:23.697931+00', 'perm.payment:isv:view');
-INSERT INTO iam_perm_code VALUES (2070862265022877697, 'payment:platform:capability:view', 'payment:platform:capability', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.398114+00', '2026-07-15 03:59:23.698937+00', 'perm.payment:platform:capability:view');
-INSERT INTO iam_perm_code VALUES (2070862265027072000, 'payment:platform:pay-channel:view', 'payment:platform:pay-channel', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.399113+00', '2026-07-15 03:59:23.698937+00', 'perm.payment:platform:pay-channel:view');
-INSERT INTO iam_perm_code VALUES (2070862265027072001, 'payment:platform:product:manage', 'payment:platform:product', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.399113+00', '2026-07-15 03:59:23.698937+00', 'perm.payment:platform:product:manage');
-INSERT INTO iam_perm_code VALUES (2070862265031266304, 'payment:platform:product:view', 'payment:platform:product', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.400113+00', '2026-07-15 03:59:23.699945+00', 'perm.payment:platform:product:view');
-INSERT INTO iam_perm_code VALUES (2070862265031266305, 'payment:platform:provider:manage', 'payment:platform:provider', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.400113+00', '2026-07-15 03:59:23.699945+00', 'perm.payment:platform:provider:manage');
-INSERT INTO iam_perm_code VALUES (2070862265035460608, 'payment:platform:provider:view', 'payment:platform:provider', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.401117+00', '2026-07-15 03:59:23.700944+00', 'perm.payment:platform:provider:view');
-INSERT INTO iam_perm_code VALUES (2070862265039654913, 'system:dict:manage', 'system:dict', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.402115+00', '2026-07-15 03:59:23.702448+00', 'perm.system:dict:manage');
-INSERT INTO iam_perm_code VALUES (2070862265043849216, 'system:dict:view', 'system:dict', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.403114+00', '2026-07-15 03:59:23.702448+00', 'perm.system:dict:view');
-INSERT INTO iam_perm_code VALUES (2070862265043849217, 'system:file:view', 'system:file', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.403114+00', '2026-07-15 03:59:23.703455+00', 'perm.system:file:view');
-INSERT INTO iam_perm_code VALUES (2070862265048043520, 'system:log:login:manage', 'system:log:login', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.404113+00', '2026-07-15 03:59:23.703455+00', 'perm.system:log:login:manage');
-INSERT INTO iam_perm_code VALUES (2070862265048043521, 'system:log:login:view', 'system:log:login', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.404113+00', '2026-07-15 03:59:23.704455+00', 'perm.system:log:login:view');
-INSERT INTO iam_perm_code VALUES (2070862265048043522, 'system:log:operate:manage', 'system:log:operate', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.404113+00', '2026-07-15 03:59:23.704455+00', 'perm.system:log:operate:manage');
-INSERT INTO iam_perm_code VALUES (2070862265052237824, 'system:log:operate:view', 'system:log:operate', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.405113+00', '2026-07-15 03:59:23.706454+00', 'perm.system:log:operate:view');
-INSERT INTO iam_perm_code VALUES (2072232741347454976, 'system:notify:notice:manage', 'system:notify:notice', true, '', 1, 1, 1, false, '2026-07-01 08:16:00.41608+00', '2026-07-15 03:59:23.706454+00', 'perm.system:notify:notice:manage');
-INSERT INTO iam_perm_code VALUES (2072232741381009408, 'system:notify:notice:publish', 'system:notify:notice', true, '', 1, 1, 1, false, '2026-07-01 08:16:00.424595+00', '2026-07-15 03:59:23.707963+00', 'perm.system:notify:notice:publish');
-INSERT INTO iam_perm_code VALUES (2072232741385203712, 'system:notify:notice:view', 'system:notify:notice', true, '', 1, 1, 1, false, '2026-07-01 08:16:00.425103+00', '2026-07-15 03:59:23.707963+00', 'perm.system:notify:notice:view');
-INSERT INTO iam_perm_code VALUES (2075452238565875712, 'system:notify:wechat-config:manage', 'system:notify:wechat-config', true, '', 1, 1, 1, false, '2026-07-10 05:29:08.369792+00', '2026-07-15 03:59:23.708973+00', 'perm.system:notify:wechat-config:manage');
-INSERT INTO iam_perm_code VALUES (2075452238565875713, 'system:notify:wechat-config:resend', 'system:notify:wechat-config', true, '', 1, 1, 1, false, '2026-07-10 05:29:08.369792+00', '2026-07-15 03:59:23.708973+00', 'perm.system:notify:wechat-config:resend');
-INSERT INTO iam_perm_code VALUES (2075452238570070016, 'system:notify:wechat-config:test', 'system:notify:wechat-config', true, '', 1, 1, 1, false, '2026-07-10 05:29:08.370793+00', '2026-07-15 03:59:23.708973+00', 'perm.system:notify:wechat-config:test');
-INSERT INTO iam_perm_code VALUES (2075452238574264320, 'system:notify:wechat-config:view', 'system:notify:wechat-config', true, '', 1, 1, 1, false, '2026-07-10 05:29:08.371793+00', '2026-07-15 03:59:23.70998+00', 'perm.system:notify:wechat-config:view');
-INSERT INTO iam_perm_code VALUES (2070862265056432129, 'system:oss-config:manage', 'system:oss-config', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.406113+00', '2026-07-15 03:59:23.70998+00', 'perm.system:oss-config:manage');
-INSERT INTO iam_perm_code VALUES (2070862265064820736, 'system:oss-config:view', 'system:oss-config', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.408624+00', '2026-07-15 03:59:23.710979+00', 'perm.system:oss-config:view');
-INSERT INTO iam_perm_code VALUES (2070862265069015040, 'system:platform-config:manage', 'system:platform-config', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.409623+00', '2026-07-15 03:59:23.710979+00', 'perm.system:platform-config:manage');
-INSERT INTO iam_perm_code VALUES (2070862265069015041, 'system:platform-config:view', 'system:platform-config', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.409623+00', '2026-07-15 03:59:23.71198+00', 'perm.system:platform-config:view');
-INSERT INTO iam_perm_code VALUES (2072232741389398016, 'system:protocol:manage', 'system:protocol', true, '', 1, 1, 1, false, '2026-07-01 08:16:00.42611+00', '2026-07-15 03:59:23.71198+00', 'perm.system:protocol:manage');
-INSERT INTO iam_perm_code VALUES (2072232741389398017, 'system:protocol:publish', 'system:protocol', true, '', 1, 1, 1, false, '2026-07-01 08:16:00.42611+00', '2026-07-15 03:59:23.71298+00', 'perm.system:protocol:publish');
-INSERT INTO iam_perm_code VALUES (2072232741389398018, 'system:protocol:view', 'system:protocol', true, '', 1, 1, 1, false, '2026-07-01 08:16:00.42611+00', '2026-07-15 03:59:23.713487+00', 'perm.system:protocol:view');
-INSERT INTO iam_perm_code VALUES (2070862265073209344, 'system:security-config:manage', 'system:security-config', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.410622+00', '2026-07-15 03:59:23.713487+00', 'perm.system:security-config:manage');
-INSERT INTO iam_perm_code VALUES (2070862265073209345, 'system:security-config:view', 'system:security-config', true, '', 1, 1, 1, false, '2026-06-27 13:30:13.410622+00', '2026-07-15 03:59:23.713992+00', 'perm.system:security-config:view');
-INSERT INTO iam_perm_code VALUES (2072377871723388929, 'trade:fund:manage', 'trade:fund', true, '', 1, 1, 1, false, '2026-07-01 17:52:42.194097+00', '2026-07-15 03:59:23.713992+00', 'perm.trade:fund:manage');
-INSERT INTO iam_perm_code VALUES (2072377871727583232, 'trade:fund:view', 'trade:fund', true, '', 1, 1, 1, false, '2026-07-01 17:52:42.195094+00', '2026-07-15 03:59:23.715001+00', 'perm.trade:fund:view');
-INSERT INTO iam_perm_code VALUES (2075769305903063040, 'trade:gateway-order:manage', 'trade:gateway-order', true, '', 1, 1, 1, false, '2026-07-11 02:29:03.113055+00', '2026-07-15 03:59:23.715001+00', 'perm.trade:gateway-order:manage');
-INSERT INTO iam_perm_code VALUES (2075769305903063041, 'trade:gateway-order:view', 'trade:gateway-order', true, '', 1, 1, 1, false, '2026-07-11 02:29:03.113565+00', '2026-07-15 03:59:23.715001+00', 'perm.trade:gateway-order:view');
-INSERT INTO iam_perm_code VALUES (2072377871668862976, 'trade:order:manage', 'trade:order', true, '', 1, 1, 1, false, '2026-07-01 17:52:42.183588+00', '2026-07-15 03:59:23.715999+00', 'perm.trade:order:manage');
-INSERT INTO iam_perm_code VALUES (2072377871723388928, 'trade:order:view', 'trade:order', true, '', 1, 1, 1, false, '2026-07-01 17:52:42.194097+00', '2026-07-15 03:59:23.715999+00', 'perm.trade:order:view');
-INSERT INTO iam_perm_code VALUES (2072990657130180608, 'trade:refund:manage', 'trade:refund', true, '', 1, 1, 1, false, '2026-07-03 10:27:41.620782+00', '2026-07-15 03:59:23.715999+00', 'perm.trade:refund:manage');
-INSERT INTO iam_perm_code VALUES (2072990657130180609, 'trade:refund:view', 'trade:refund', true, '', 1, 1, 1, false, '2026-07-03 10:27:41.620782+00', '2026-07-15 03:59:23.717505+00', 'perm.trade:refund:view');
-INSERT INTO iam_perm_code VALUES (2079866295577419776, 'trade:callback-record:view', 'trade:callback-record', true, '', 1, 1, 0, false, '2026-07-22 09:49:01.56951+00', '2026-07-22 09:49:01.575017+00', 'perm.trade:callback-record:view');
-INSERT INTO iam_perm_code VALUES (2083000000000000001, 'trade:transfer:view', 'trade:transfer', true, '', 1, 1, 0, false, '2026-08-05 16:00:00+00', '2026-08-05 16:00:00+00', 'perm.trade:transfer:view');
-INSERT INTO iam_perm_code VALUES (2083000000000000002, 'trade:transfer:manage', 'trade:transfer', true, '', 1, 1, 0, false, '2026-08-05 16:00:00+00', '2026-08-05 16:00:00+00', 'perm.trade:transfer:manage');
-INSERT INTO iam_perm_code VALUES (2079866295615168512, 'trade:mch-notice:manage', 'trade:mch-notice', true, '', 1, 1, 0, false, '2026-07-22 09:49:01.578524+00', '2026-07-22 09:49:01.578524+00', 'perm.trade:mch-notice:manage');
-INSERT INTO iam_perm_code VALUES (2079866295619362816, 'trade:mch-notice:view', 'trade:mch-notice', true, '', 1, 1, 0, false, '2026-07-22 09:49:01.579524+00', '2026-07-22 09:49:01.579524+00', 'perm.trade:mch-notice:view');
+INSERT INTO iam_perm_code VALUES (2075769305903063042, 'system:config:mobile-app:manage', 'system:config:mobile-app', true, '由 @PermCode 扫描同步生成', 1, 1, 1, true, '2026-07-11 02:29:03.113565+00', '2026-07-30 01:17:37.358804+00', 'perm.system:config:mobile-app:manage');
+INSERT INTO iam_perm_code VALUES (2075769305907257344, 'system:config:mobile-app:view', 'system:config:mobile-app', true, '由 @PermCode 扫描同步生成', 1, 1, 1, true, '2026-07-11 02:29:03.114572+00', '2026-07-30 01:17:37.360802+00', 'perm.system:config:mobile-app:view');
+INSERT INTO iam_perm_code VALUES (2074377765317201920, 'payment:dougong:isv:view', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-07 06:19:33.983709+00', '2026-07-13 06:03:45.960301+00', NULL);
+INSERT INTO iam_perm_code VALUES (2074377765317201921, 'payment:fuyou:isv:manage', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-07 06:19:33.983709+00', '2026-07-13 06:03:45.960301+00', NULL);
+INSERT INTO iam_perm_code VALUES (2074377765317201922, 'payment:fuyou:isv:view', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-07 06:19:33.983709+00', '2026-07-13 06:03:45.96082+00', NULL);
+INSERT INTO iam_perm_code VALUES (2074377765325590528, 'payment:hkrt:isv:manage', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-07 06:19:33.985213+00', '2026-07-13 06:03:45.961333+00', NULL);
+INSERT INTO iam_perm_code VALUES (2074377765325590529, 'payment:hkrt:isv:view', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-07 06:19:33.985213+00', '2026-07-13 06:03:45.96185+00', NULL);
+INSERT INTO iam_perm_code VALUES (2074377765325590530, 'payment:hmpay:isv:manage', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-07 06:19:33.985213+00', '2026-07-13 06:03:45.962364+00', NULL);
+INSERT INTO iam_perm_code VALUES (2074377765329784832, 'payment:hmpay:isv:view', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-07 06:19:33.986218+00', '2026-07-13 06:03:45.962364+00', NULL);
+INSERT INTO iam_perm_code VALUES (2074377765329784833, 'payment:leshua:isv:manage', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-07 06:19:33.986218+00', '2026-07-13 06:03:45.963399+00', NULL);
+INSERT INTO iam_perm_code VALUES (2074377765329784834, 'payment:leshua:isv:view', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-07 06:19:33.987218+00', '2026-07-13 06:03:45.96392+00', NULL);
+INSERT INTO iam_perm_code VALUES (2074377765333979136, 'payment:vbill:isv:manage', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-07 06:19:33.987218+00', '2026-07-13 06:03:45.964434+00', NULL);
+INSERT INTO iam_perm_code VALUES (2074377765333979137, 'payment:vbill:isv:view', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-07 06:19:33.987218+00', '2026-07-13 06:03:45.964434+00', NULL);
+INSERT INTO iam_perm_code VALUES (2077241592518934528, 'merchant:easypay:manage', 'merchant:easypay', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-15 03:59:23.599356+00', '2026-07-15 03:59:23.604361+00', 'perm.merchant:easypay:manage');
+INSERT INTO iam_perm_code VALUES (2077241592707678208, 'merchant:easypay:view', 'merchant:easypay', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-15 03:59:23.641499+00', '2026-07-15 03:59:23.6425+00', 'perm.merchant:easypay:view');
+INSERT INTO iam_perm_code VALUES (2070862264968351745, 'iam:role:view', 'iam:role', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.385095+00', '2026-07-15 03:59:23.682738+00', 'perm.iam:role:view');
+INSERT INTO iam_perm_code VALUES (2070862264976740352, 'iam:user:assign-role', 'iam:user', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.387603+00', '2026-07-15 03:59:23.683738+00', 'perm.iam:user:assign-role');
+INSERT INTO iam_perm_code VALUES (2070862264976740353, 'iam:user:manage', 'iam:user', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.387603+00', '2026-07-15 03:59:23.684738+00', 'perm.iam:user:manage');
+INSERT INTO iam_perm_code VALUES (2070862264980934656, 'iam:user:reset-password', 'iam:user', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.388603+00', '2026-07-15 03:59:23.684738+00', 'perm.iam:user:reset-password');
+INSERT INTO iam_perm_code VALUES (2070862264980934657, 'iam:user:status', 'iam:user', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.388603+00', '2026-07-15 03:59:23.684738+00', 'perm.iam:user:status');
+INSERT INTO iam_perm_code VALUES (2070862264985128960, 'iam:user:view', 'iam:user', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.389603+00', '2026-07-15 03:59:23.686245+00', 'perm.iam:user:view');
+INSERT INTO iam_perm_code VALUES (2070862264985128961, 'merchant:app:manage', 'merchant:app', true, '由 @PermCode 扫描同步生成', 1, 1, 2, false, '2026-06-27 13:30:13.389603+00', '2026-07-15 03:59:23.686883+00', 'perm.merchant:app:manage');
+INSERT INTO iam_perm_code VALUES (2070862264989323264, 'merchant:app:route:manage', 'merchant:app:route', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.390603+00', '2026-07-15 03:59:23.687398+00', 'perm.merchant:app:route:manage');
+INSERT INTO iam_perm_code VALUES (2070862264989323265, 'merchant:app:route:view', 'merchant:app:route', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.390603+00', '2026-07-15 03:59:23.687398+00', 'perm.merchant:app:route:view');
+INSERT INTO iam_perm_code VALUES (2070862264993517568, 'merchant:app:view', 'merchant:app', true, '由 @PermCode 扫描同步生成', 1, 1, 2, false, '2026-06-27 13:30:13.391603+00', '2026-07-15 03:59:23.687398+00', 'perm.merchant:app:view');
+INSERT INTO iam_perm_code VALUES (2070862264993517569, 'merchant:credential:manage', 'merchant:credential', true, '由 @PermCode 扫描同步生成', 1, 1, 2, false, '2026-06-27 13:30:13.391603+00', '2026-07-15 03:59:23.688908+00', 'perm.merchant:credential:manage');
+INSERT INTO iam_perm_code VALUES (2070862264997711872, 'merchant:credential:view', 'merchant:credential', true, '由 @PermCode 扫描同步生成', 1, 1, 2, false, '2026-06-27 13:30:13.392603+00', '2026-07-15 03:59:23.688908+00', 'perm.merchant:credential:view');
+INSERT INTO iam_perm_code VALUES (2075845892346347520, 'merchant:gateway-cashier:manage', 'merchant:gateway-cashier', true, '由 @PermCode 扫描同步生成', 1, 1, 2, false, '2026-07-11 07:33:22.747963+00', '2026-07-15 03:59:23.690915+00', 'perm.merchant:gateway-cashier:manage');
+INSERT INTO iam_perm_code VALUES (2075845892476370944, 'merchant:gateway-cashier:view', 'merchant:gateway-cashier', true, '由 @PermCode 扫描同步生成', 1, 1, 2, false, '2026-07-11 07:33:22.775546+00', '2026-07-15 03:59:23.690915+00', 'perm.merchant:gateway-cashier:view');
+INSERT INTO iam_perm_code VALUES (2070862264997711873, 'merchant:info:manage', 'merchant:info', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.392603+00', '2026-07-15 03:59:23.691914+00', 'perm.merchant:info:manage');
+INSERT INTO iam_perm_code VALUES (2070862265001906176, 'merchant:info:view', 'merchant:info', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.393603+00', '2026-07-15 03:59:23.692419+00', 'perm.merchant:info:view');
+INSERT INTO iam_perm_code VALUES (2072990657067266048, 'merchant:notify-config:manage', 'merchant:notify-config', true, '由 @PermCode 扫描同步生成', 1, 1, 2, false, '2026-07-03 10:27:41.608254+00', '2026-07-15 03:59:23.692419+00', 'perm.merchant:notify-config:manage');
+INSERT INTO iam_perm_code VALUES (2070862265001906177, 'merchant:store:manage', 'merchant:store', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.393603+00', '2026-07-15 03:59:23.693424+00', 'perm.merchant:store:manage');
+INSERT INTO iam_perm_code VALUES (2070862265001906178, 'merchant:store:view', 'merchant:store', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.393603+00', '2026-07-15 03:59:23.694425+00', 'perm.merchant:store:view');
+INSERT INTO iam_perm_code VALUES (2075051483370500096, 'merchant:wx-verify:view', 'merchant:wx-verify', true, '由 @PermCode 扫描同步生成', 1, 1, 2, false, '2026-07-09 02:56:40.884332+00', '2026-07-15 03:59:23.695427+00', 'perm.merchant:wx-verify:view');
+INSERT INTO iam_perm_code VALUES (2075051483374694400, 'payment:config:wx-verify:manage', 'payment:config:wx-verify', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-09 02:56:40.885336+00', '2026-07-15 03:59:23.696424+00', 'perm.payment:config:wx-verify:manage');
+INSERT INTO iam_perm_code VALUES (2075051483374694401, 'payment:config:wx-verify:view', 'payment:config:wx-verify', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-09 02:56:40.885839+00', '2026-07-15 03:59:23.697425+00', 'perm.payment:config:wx-verify:view');
+INSERT INTO iam_perm_code VALUES (2076548115795673088, 'payment:isv:manage', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-13 06:03:45.8613+00', '2026-07-15 03:59:23.697931+00', 'perm.payment:isv:manage');
+INSERT INTO iam_perm_code VALUES (2076548115795673089, 'payment:isv:view', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-13 06:03:45.8613+00', '2026-07-15 03:59:23.697931+00', 'perm.payment:isv:view');
+INSERT INTO iam_perm_code VALUES (2070862265022877697, 'payment:platform:capability:view', 'payment:platform:capability', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.398114+00', '2026-07-15 03:59:23.698937+00', 'perm.payment:platform:capability:view');
+INSERT INTO iam_perm_code VALUES (2070862265027072000, 'payment:platform:pay-channel:view', 'payment:platform:pay-channel', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.399113+00', '2026-07-15 03:59:23.698937+00', 'perm.payment:platform:pay-channel:view');
+INSERT INTO iam_perm_code VALUES (2070862265027072001, 'payment:platform:product:manage', 'payment:platform:product', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.399113+00', '2026-07-15 03:59:23.698937+00', 'perm.payment:platform:product:manage');
+INSERT INTO iam_perm_code VALUES (2070862265031266304, 'payment:platform:product:view', 'payment:platform:product', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.400113+00', '2026-07-15 03:59:23.699945+00', 'perm.payment:platform:product:view');
+INSERT INTO iam_perm_code VALUES (2070862265031266305, 'payment:platform:provider:manage', 'payment:platform:provider', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.400113+00', '2026-07-15 03:59:23.699945+00', 'perm.payment:platform:provider:manage');
+INSERT INTO iam_perm_code VALUES (2070862265035460608, 'payment:platform:provider:view', 'payment:platform:provider', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.401117+00', '2026-07-15 03:59:23.700944+00', 'perm.payment:platform:provider:view');
+INSERT INTO iam_perm_code VALUES (2070862265039654913, 'system:dict:manage', 'system:dict', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.402115+00', '2026-07-15 03:59:23.702448+00', 'perm.system:dict:manage');
+INSERT INTO iam_perm_code VALUES (2070862265043849216, 'system:dict:view', 'system:dict', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.403114+00', '2026-07-15 03:59:23.702448+00', 'perm.system:dict:view');
+INSERT INTO iam_perm_code VALUES (2070862265043849217, 'system:file:view', 'system:file', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.403114+00', '2026-07-15 03:59:23.703455+00', 'perm.system:file:view');
+INSERT INTO iam_perm_code VALUES (2070862265048043520, 'system:log:login:manage', 'system:log:login', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.404113+00', '2026-07-15 03:59:23.703455+00', 'perm.system:log:login:manage');
+INSERT INTO iam_perm_code VALUES (2070862265048043521, 'system:log:login:view', 'system:log:login', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.404113+00', '2026-07-15 03:59:23.704455+00', 'perm.system:log:login:view');
+INSERT INTO iam_perm_code VALUES (2070862265048043522, 'system:log:operate:manage', 'system:log:operate', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.404113+00', '2026-07-15 03:59:23.704455+00', 'perm.system:log:operate:manage');
+INSERT INTO iam_perm_code VALUES (2070862265052237824, 'system:log:operate:view', 'system:log:operate', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.405113+00', '2026-07-15 03:59:23.706454+00', 'perm.system:log:operate:view');
+INSERT INTO iam_perm_code VALUES (2072232741347454976, 'system:notify:notice:manage', 'system:notify:notice', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-01 08:16:00.41608+00', '2026-07-15 03:59:23.706454+00', 'perm.system:notify:notice:manage');
+INSERT INTO iam_perm_code VALUES (2072232741381009408, 'system:notify:notice:publish', 'system:notify:notice', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-01 08:16:00.424595+00', '2026-07-15 03:59:23.707963+00', 'perm.system:notify:notice:publish');
+INSERT INTO iam_perm_code VALUES (2072232741385203712, 'system:notify:notice:view', 'system:notify:notice', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-01 08:16:00.425103+00', '2026-07-15 03:59:23.707963+00', 'perm.system:notify:notice:view');
+INSERT INTO iam_perm_code VALUES (2075452238565875712, 'system:notify:wechat-config:manage', 'system:notify:wechat-config', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-10 05:29:08.369792+00', '2026-07-15 03:59:23.708973+00', 'perm.system:notify:wechat-config:manage');
+INSERT INTO iam_perm_code VALUES (2075452238565875713, 'system:notify:wechat-config:resend', 'system:notify:wechat-config', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-10 05:29:08.369792+00', '2026-07-15 03:59:23.708973+00', 'perm.system:notify:wechat-config:resend');
+INSERT INTO iam_perm_code VALUES (2075452238570070016, 'system:notify:wechat-config:test', 'system:notify:wechat-config', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-10 05:29:08.370793+00', '2026-07-15 03:59:23.708973+00', 'perm.system:notify:wechat-config:test');
+INSERT INTO iam_perm_code VALUES (2075452238574264320, 'system:notify:wechat-config:view', 'system:notify:wechat-config', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-10 05:29:08.371793+00', '2026-07-15 03:59:23.70998+00', 'perm.system:notify:wechat-config:view');
+INSERT INTO iam_perm_code VALUES (2070862265056432129, 'system:oss-config:manage', 'system:oss-config', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.406113+00', '2026-07-15 03:59:23.70998+00', 'perm.system:oss-config:manage');
+INSERT INTO iam_perm_code VALUES (2070862265064820736, 'system:oss-config:view', 'system:oss-config', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.408624+00', '2026-07-15 03:59:23.710979+00', 'perm.system:oss-config:view');
+INSERT INTO iam_perm_code VALUES (2070862265069015040, 'system:platform-config:manage', 'system:platform-config', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.409623+00', '2026-07-15 03:59:23.710979+00', 'perm.system:platform-config:manage');
+INSERT INTO iam_perm_code VALUES (2070862265069015041, 'system:platform-config:view', 'system:platform-config', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.409623+00', '2026-07-15 03:59:23.71198+00', 'perm.system:platform-config:view');
+INSERT INTO iam_perm_code VALUES (2072232741389398016, 'system:protocol:manage', 'system:protocol', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-01 08:16:00.42611+00', '2026-07-15 03:59:23.71198+00', 'perm.system:protocol:manage');
+INSERT INTO iam_perm_code VALUES (2072232741389398017, 'system:protocol:publish', 'system:protocol', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-01 08:16:00.42611+00', '2026-07-15 03:59:23.71298+00', 'perm.system:protocol:publish');
+INSERT INTO iam_perm_code VALUES (2072232741389398018, 'system:protocol:view', 'system:protocol', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-01 08:16:00.42611+00', '2026-07-15 03:59:23.713487+00', 'perm.system:protocol:view');
+INSERT INTO iam_perm_code VALUES (2070862265073209344, 'system:security-config:manage', 'system:security-config', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.410622+00', '2026-07-15 03:59:23.713487+00', 'perm.system:security-config:manage');
+INSERT INTO iam_perm_code VALUES (2070862265073209345, 'system:security-config:view', 'system:security-config', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.410622+00', '2026-07-15 03:59:23.713992+00', 'perm.system:security-config:view');
+INSERT INTO iam_perm_code VALUES (2072377871723388929, 'trade:fund:manage', 'trade:fund', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-01 17:52:42.194097+00', '2026-07-15 03:59:23.713992+00', 'perm.trade:fund:manage');
+INSERT INTO iam_perm_code VALUES (2072377871727583232, 'trade:fund:view', 'trade:fund', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-01 17:52:42.195094+00', '2026-07-15 03:59:23.715001+00', 'perm.trade:fund:view');
+INSERT INTO iam_perm_code VALUES (2075769305903063040, 'trade:gateway-order:manage', 'trade:gateway-order', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-11 02:29:03.113055+00', '2026-07-15 03:59:23.715001+00', 'perm.trade:gateway-order:manage');
+INSERT INTO iam_perm_code VALUES (2075769305903063041, 'trade:gateway-order:view', 'trade:gateway-order', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-11 02:29:03.113565+00', '2026-07-15 03:59:23.715001+00', 'perm.trade:gateway-order:view');
+INSERT INTO iam_perm_code VALUES (2072377871668862976, 'trade:order:manage', 'trade:order', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-01 17:52:42.183588+00', '2026-07-15 03:59:23.715999+00', 'perm.trade:order:manage');
+INSERT INTO iam_perm_code VALUES (2072377871723388928, 'trade:order:view', 'trade:order', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-01 17:52:42.194097+00', '2026-07-15 03:59:23.715999+00', 'perm.trade:order:view');
+INSERT INTO iam_perm_code VALUES (2072990657130180608, 'trade:refund:manage', 'trade:refund', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-03 10:27:41.620782+00', '2026-07-15 03:59:23.715999+00', 'perm.trade:refund:manage');
+INSERT INTO iam_perm_code VALUES (2072990657130180609, 'trade:refund:view', 'trade:refund', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-03 10:27:41.620782+00', '2026-07-15 03:59:23.717505+00', 'perm.trade:refund:view');
+INSERT INTO iam_perm_code VALUES (2079866295577419776, 'trade:callback-record:view', 'trade:callback-record', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-22 09:49:01.56951+00', '2026-07-22 09:49:01.575017+00', 'perm.trade:callback-record:view');
+INSERT INTO iam_perm_code VALUES (2079866295615168512, 'trade:mch-notice:manage', 'trade:mch-notice', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-22 09:49:01.578524+00', '2026-07-22 09:49:01.578524+00', 'perm.trade:mch-notice:manage');
+INSERT INTO iam_perm_code VALUES (2079866295619362816, 'trade:mch-notice:view', 'trade:mch-notice', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-22 09:49:01.579524+00', '2026-07-22 09:49:01.579524+00', 'perm.trade:mch-notice:view');
 INSERT INTO iam_perm_code VALUES (2082811057154473984, 'merchant:gateway-pay-config:manage', 'merchant:gateway-pay-config', true, NULL, 1, 1, 0, false, '2026-07-30 12:50:27.440009+00', '2026-07-30 12:50:27.44601+00', 'perm.merchant:gateway-pay-config:manage');
 INSERT INTO iam_perm_code VALUES (2082811057204805632, 'merchant:gateway-pay-config:view', 'merchant:gateway-pay-config', true, NULL, 1, 1, 0, false, '2026-07-30 12:50:27.452008+00', '2026-07-30 12:50:27.452008+00', 'perm.merchant:gateway-pay-config:view');
-INSERT INTO iam_perm_code VALUES (2075769305894674432, 'merchant:gateway-aggregate:view', 'merchant:gateway-aggregate', true, '', 1, 1, 2, true, '2026-07-11 02:29:03.111672+00', '2026-07-30 12:50:27.496016+00', 'perm.merchant:gateway-aggregate:view');
+INSERT INTO iam_perm_code VALUES (2075769305894674432, 'merchant:gateway-aggregate:view', 'merchant:gateway-aggregate', true, '由 @PermCode 扫描同步生成', 1, 1, 2, true, '2026-07-11 02:29:03.111672+00', '2026-07-30 12:50:27.496016+00', 'perm.merchant:gateway-aggregate:view');
 
 
 --
 -- Data for Name: iam_perm_menu; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+INSERT INTO iam_perm_menu VALUES (40603, 406, 'payment:risk:security-api', 'admin', 'ApiSecurityConfig', 'menu.payment.security.api', 'lucide:lock-keyhole', false, false, '/payment/risk/security/ApiSecurityConfig', '/payment/risk/api-security', NULL, 0, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-06 01:05:45.367566+00', '2026-08-06 01:05:45.367566+00');
 INSERT INTO iam_perm_menu VALUES (202, 2, NULL, 'admin', 'FileUploadDemo', 'menu.demos.fileUpload', 'lucide:upload', false, false, '/demos/file-upload/FileUploadDemo', '/demos/file-upload', NULL, 2, false, true, false, 0, NULL, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-04-09 16:00:00+00', '2026-04-09 16:00:00+00');
 INSERT INTO iam_perm_menu VALUES (307, 3, 'system:monitor', 'admin', 'SystemMonitor', 'menu.system.monitor', 'lucide:monitor', false, false, NULL, '/system/monitor', NULL, 50, false, true, false, 1, 1, 1, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-04-10 16:00:00+00', '2026-04-12 12:53:45.790453+00');
 INSERT INTO iam_perm_menu VALUES (305, 3, 'iam:perm', 'admin', 'SystemPerm', 'menu.system.perm', 'lucide:shield', false, false, NULL, '/system/perm', NULL, 2, false, true, false, 1, 1, 1, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-04-08 16:00:00+00', '2026-04-09 15:10:44.651238+00');
 INSERT INTO iam_perm_menu VALUES (302, 3, NULL, 'admin', 'SystemLog', 'menu.system.log', 'lucide:file-text', false, false, NULL, '/system/log', NULL, 99, false, true, false, 0, 1, 1, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-03-20 03:11:13.134079+00', '2026-04-05 08:56:11.97756+00');
+INSERT INTO iam_perm_menu VALUES (40604, 406, 'payment:risk:security-strategy', 'admin', 'RiskStrategy', 'menu.payment.security.riskStrategy', 'lucide:shield-alert', false, false, '/payment/risk/security/RiskStrategy', '/payment/risk/strategy', NULL, 0.5, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-06 01:05:45.376446+00', '2026-08-06 01:05:45.376446+00');
 INSERT INTO iam_perm_menu VALUES (304, 3, 'system:config', 'admin', 'SystemConfig', 'menu.system.config', 'lucide:settings-2', false, false, NULL, '/system/config', NULL, 10, false, true, false, 0, 1, 1, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-04-04 16:00:00+00', '2026-04-09 15:11:00.840153+00');
 INSERT INTO iam_perm_menu VALUES (203, 2, 'demos:region', 'admin', 'RegionCascaderDemo', 'menu.demos.region', 'lucide:map-pin', false, false, '/demos/region/RegionCascaderDemo', '/demos/region', NULL, 3, false, true, false, 0, NULL, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-04-24 16:00:00+00', '2026-04-24 16:00:00+00');
 INSERT INTO iam_perm_menu VALUES (401, 4, 'payment:platform', 'admin', 'PaymentPlatform', 'menu.payment.platform', 'lucide:building', false, false, NULL, '/payment/platform', NULL, 10, false, true, false, 0, 1, 3, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-04-05 16:00:00+00', '2026-07-31 03:18:17.020454+00');
@@ -3735,7 +3769,6 @@ INSERT INTO iam_perm_menu VALUES (2, NULL, NULL, 'admin', 'Demos', 'menu.demos',
 INSERT INTO iam_perm_menu VALUES (1, NULL, NULL, 'admin', 'Dashboard', 'menu.dashboard', 'lucide:layout-dashboard', false, false, NULL, '/dashboard', '/workspace', -1, false, false, false, 0, NULL, 0, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-03-20 03:11:13.134079+00', '2026-06-27 13:46:52.151771+00');
 INSERT INTO iam_perm_menu VALUES (30202, 302, 'system:log:operate', 'admin', 'SystemOperateLog', 'menu.system.log.operate', 'lucide:activity', false, false, '/system/log/operate/OperateLogList', '/system/log/operate', NULL, 2, false, true, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-03-20 03:11:13.134079+00', '2026-03-30 15:24:57.076166+00');
 INSERT INTO iam_perm_menu VALUES (4, NULL, 'payment', 'admin', 'PaymentSystem', 'menu.platform', 'lucide:credit-card', false, false, NULL, '/payment', NULL, 3, false, true, false, 0, 1, 1, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-04-05 16:00:00+00', '2026-07-13 13:02:20.694464+00');
-INSERT INTO iam_perm_menu VALUES (30401, 304, 'system:security-config', 'admin', 'SecurityManage', 'menu.system.security', 'lucide:shield-check', false, false, NULL, '/system/config/security', NULL, 2, false, true, false, 1, 1, 1, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-04-05 02:00:00+00', '2026-07-16 07:31:19.436479+00');
 INSERT INTO iam_perm_menu VALUES (30201, 302, 'system:log:login', 'admin', 'SystemLoginLog', 'menu.system.log.login', 'lucide:log-in', false, false, '/system/log/login/LoginLogList', '/system/log/login', NULL, 1, false, true, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-03-20 03:11:13.134079+00', '2026-03-30 15:25:09.855555+00');
 INSERT INTO iam_perm_menu VALUES (102, 1, 'dashboard:workspace', 'admin', 'Workspace', 'menu.dashboard.workspace', 'lucide:panels-top-left', false, false, '/dashboard/workspace/index', '/workspace', NULL, 1, false, false, true, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-03-20 03:11:13.134079+00', '2026-06-28 02:50:37.055128+00');
 INSERT INTO iam_perm_menu VALUES (101, 1, 'dashboard:analytics', 'admin', 'Analytics', 'menu.dashboard.analytics', 'lucide:area-chart', false, false, '/dashboard/analytics/index', '/analytics', NULL, 2, false, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-03-20 03:11:13.134079+00', '2026-06-28 02:50:43.072618+00');
@@ -3744,6 +3777,8 @@ INSERT INTO iam_perm_menu VALUES (30701, 307, 'iam:online', 'admin', 'OnlineUser
 INSERT INTO iam_perm_menu VALUES (6, NULL, 'trade', 'admin', 'TransactionManagement', 'menu.trade', 'lucide:arrow-left-right', false, false, NULL, '/trade', '/trade/pay-trade', 4, false, true, false, 1, 1, 0, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-05-24 16:00:00+00', '2026-07-17 06:18:15.479497+00');
 INSERT INTO iam_perm_menu VALUES (40401, 404, 'merchant:info', 'admin', 'MerchantInfo', 'menu.payment.merchant.list', 'lucide:shopping-bag', false, false, '/payment/merchant/info/MerchantList', '/payment/merchant/info', NULL, 1, false, true, false, 1, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-04-13 16:00:00+00', '2026-06-25 02:00:30.290399+00');
 INSERT INTO iam_perm_menu VALUES (30402, 304, 'system:platform-config', 'admin', 'PlatformConfig', 'menu.system.config.platform', 'lucide:settings', false, false, '/system/config/platform/PlatformConfig', '/system/config/platform', NULL, 1, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-04-07 16:00:00+00', '2026-07-13 13:17:21.921261+00');
+INSERT INTO iam_perm_menu VALUES (4040125, 4040130, 'merchant:risk-config', 'admin', 'MchRiskConfigManage', 'menu.payment.merchant.riskConfig', NULL, true, false, '/payment/merchant/manage/risk-config/MchRiskConfigManage', '/payment/merchant/manage/risk-config', NULL, 25, false, true, false, 1, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-06 00:00:00+00', '2026-08-06 00:00:00+00');
+INSERT INTO iam_perm_menu VALUES (207, 2, 'demos:city-adjacent', 'admin', 'CityAdjacentDemo', 'menu.demos.cityAdjacent', 'lucide:map-pinned', false, false, '/demos/city-adjacent/CityAdjacentDemo', '/demos/city-adjacent', NULL, 6, false, true, false, 0, NULL, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-06 16:00:00+00', '2026-08-06 16:00:00+00');
 INSERT INTO iam_perm_menu VALUES (40104, 401, 'payment:platform:capability', 'admin', 'PayCapabilityList', 'menu.payment.platform.capability', 'lucide:zap', false, false, '/payment/masterdata/capability/PayCapabilityList', '/payment/platform/pay-capability', NULL, 3, false, true, false, 1, 1, 4, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-05-26 16:00:00+00', '2026-05-28 06:43:27.505831+00');
 INSERT INTO iam_perm_menu VALUES (4040102, 4040130, 'merchant:credential', 'admin', 'MerchantCredentialConfig', 'menu.payment.merchant.credential', NULL, true, false, '/payment/merchant/manage/credential/MerchantCredentialConfig', '/payment/merchant/manage/credential', NULL, 3, false, true, false, 1, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-05-01 16:00:00+00', '2026-07-13 10:13:20.809377+00');
 INSERT INTO iam_perm_menu VALUES (404, NULL, 'merchant', 'admin', 'PaymentMerchant', 'menu.merchant', 'lucide:store', false, false, NULL, '/payment/merchant', NULL, 3.5, true, true, false, 0, NULL, 0, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-04-05 16:00:00+00', '2026-07-13 13:12:49.514288+00');
@@ -3776,14 +3811,16 @@ INSERT INTO iam_perm_menu VALUES (40502, 40508, 'payment:isv', 'admin', 'AlipayI
 INSERT INTO iam_perm_menu VALUES (4040106, 4040131, 'channel:merchant', 'admin', 'ChannelMerchant', 'menu.payment.merchant.channelMerchant', NULL, true, false, '/payment/global/channel-merchant/ChannelMerchantList', '/payment/global/channel-merchant', NULL, 6, false, true, false, 1, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-05-03 16:00:00+00', '2026-07-22 13:50:46.61698+00');
 INSERT INTO iam_perm_menu VALUES (30403, 301, 'system:protocol', 'admin', 'UserProtocol', 'menu.system.basic.protocol', 'lucide:file-text', false, false, '/system/basic/protocol/UserProtocolList', '/system/basic/protocol', NULL, 2, false, true, false, 1, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-24 10:32:13.183371+00', '2026-07-16 08:43:35.038937+00');
 INSERT INTO iam_perm_menu VALUES (802, 8, 'develop:sign', 'admin', 'DevelopSign', 'menu.develop.sign', 'lucide:pen-tool', false, false, '/payment/develop/sign/DevelopSign', '/develop/sign', NULL, 3, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-23 16:00:00+00', '2026-06-23 16:00:00+00');
+INSERT INTO iam_perm_menu VALUES (3040101, 304, 'system:security-config:system', 'admin', 'SystemSecurityConfig', 'menu.system.security.system', 'lucide:lock', false, false, '/system/config/security/SystemSecurityConfig', '/system/config/security/system', NULL, 2, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-16 07:31:19.446929+00', '2026-07-16 07:31:19.446929+00');
+INSERT INTO iam_perm_menu VALUES (406, 4, 'payment:risk', 'admin', 'PaymentSecurity', 'menu.payment.security', 'lucide:shield-alert', false, false, NULL, '/payment/risk', NULL, 60, false, true, false, 0, 1, 0, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-15 00:00:00+00', '2026-07-31 03:18:17.027286+00');
+INSERT INTO iam_perm_menu VALUES (40601, 406, 'payment:risk:blacklist', 'admin', 'PayBlacklistList', 'menu.payment.security.blacklist', 'lucide:ban', false, false, '/payment/risk/blacklist/PayBlacklistList', '/payment/risk/blacklist', NULL, 1, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-15 00:00:00+00', '2026-07-15 00:00:00+00');
+INSERT INTO iam_perm_menu VALUES (40602, 406, 'payment:risk:hit', 'admin', 'PayRiskHitList', 'menu.payment.security.hit', 'lucide:triangle-alert', false, false, '/payment/risk/hit/PayRiskHitList', '/payment/risk/hit', NULL, 2, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-15 00:00:00+00', '2026-07-15 00:00:00+00');
 INSERT INTO iam_perm_menu VALUES (310, 308, 'system:notify:wechat-config', 'admin', 'WechatNotify', 'menu.system.notify.wechatConfig', 'lucide:message-circle', false, false, '/system/notify/wechat/index', '/system/notify/wechat', NULL, 30, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-09 00:00:00+00', '2026-07-09 00:00:00+00');
 INSERT INTO iam_perm_menu VALUES (40504, 405, 'payment:config:mobile-app', 'admin', 'MobileAppConfig', 'menu.payment.config.mobileApp', 'lucide:smartphone', false, false, '/payment/config/mobile-app/MobileAppConfig', '/payment/config/mobile-app', NULL, 10, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-05 00:00:00+00', '2026-07-31 03:18:17.013352+00');
 INSERT INTO iam_perm_menu VALUES (4040130, 40401, NULL, 'admin', 'MchManageGroup', 'menu.payment.merchant.group.manage', 'lucide:settings-2', true, false, NULL, NULL, NULL, 1, false, false, false, 1, 1, 0, false, 'subpage_group', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-11 03:37:15.421585+00', '2026-07-11 03:37:15.421585+00');
 INSERT INTO iam_perm_menu VALUES (4040131, 40401, NULL, 'admin', 'ChannelMerchantGroup', 'menu.payment.merchant.group.channelMerchant', 'lucide:repeat', true, false, NULL, NULL, NULL, 2, false, false, false, 1, 1, 0, false, 'subpage_group', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-11 03:37:15.421585+00', '2026-07-11 03:37:15.421585+00');
-INSERT INTO iam_perm_menu VALUES (3040101, 30401, 'system:security-config:system', 'admin', 'SystemSecurityConfig', 'menu.system.security.system', 'lucide:lock', false, false, '/system/config/security/SystemSecurityConfig', '/system/config/security/system', NULL, 1, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-16 07:31:19.446929+00', '2026-07-16 07:31:19.446929+00');
 INSERT INTO iam_perm_menu VALUES (4040120, 4040130, 'merchant:wx-verify', 'admin', 'MchWxDomainVerifyList', 'menu.payment.merchant.wxVerify', NULL, true, false, '/payment/merchant/manage/wx-verify/MchWxDomainVerifyList', '/payment/merchant/manage/wx-verify', NULL, 20, false, true, false, 1, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-09 16:00:00+00', '2026-07-11 03:37:15.424776+00');
 INSERT INTO iam_perm_menu VALUES (40501, 40105, 'payment:config:product-detail', 'admin', 'ProductDetailDispatch', 'menu.payment.config.detail', NULL, true, false, '/payment/config/product/detail/ProductDetailDispatch', '/payment/product-detail', NULL, 2, false, true, false, 1, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-14 00:00:00+00', '2026-06-27 13:01:24.321883+00');
-INSERT INTO iam_perm_menu VALUES (3040102, 30401, 'system:security-config:pay', 'admin', 'PaySecurityConfig', 'menu.system.security.pay', 'lucide:shield-alert', false, false, '/system/config/security/PaySecurityConfig', '/system/config/security/pay', NULL, 2, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-16 07:31:19.449836+00', '2026-07-16 07:31:19.449836+00');
 INSERT INTO iam_perm_menu VALUES (40507, 405, 'payment:config:wx-verify', 'admin', 'PlatformWxDomainVerifyList', 'menu.payment.config.wxVerify', 'lucide:shield-check', false, false, '/payment/config/wx-verify/PlatformWxDomainVerifyList', '/payment/config/wx-verify', NULL, 20, false, true, false, 1, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-09 16:00:00+00', '2026-07-31 03:18:17.018417+00');
 INSERT INTO iam_perm_menu VALUES (803, 8, 'develop:auth', 'admin', 'ChannelAuth', 'menu.develop.auth', 'lucide:shield-check', false, false, '/payment/develop/auth/ChannelAuth', '/develop/auth', NULL, 4, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-09 16:00:00+00', '2026-07-09 16:00:00+00');
 INSERT INTO iam_perm_menu VALUES (4040123, 4040130, 'merchant:app:workbench', 'admin', 'MchAppWorkbench', 'menu.payment.merchant.appWorkbench', NULL, true, false, '/payment/merchant/app/MchAppWorkbench', '/payment/merchant/app/manage', NULL, 11, false, true, false, 1, 1, 1, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-11 08:00:00+00', '2026-07-11 08:00:00+00');
@@ -3792,12 +3829,9 @@ INSERT INTO iam_perm_menu VALUES (4040132, 40401, NULL, 'admin', 'ChannelAppGrou
 INSERT INTO iam_perm_menu VALUES (40508, 40105, NULL, 'admin', 'ChannelIsvConfigGroup', 'menu.payment.config.group.channelIsv', 'lucide:server', true, false, NULL, NULL, NULL, 1, false, false, false, 1, 1, 0, false, 'subpage_group', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-11 03:37:15.421585+00', '2026-07-13 10:13:20.806797+00');
 INSERT INTO iam_perm_menu VALUES (4040122, 4040130, 'merchant:gateway-cashier', 'admin', 'CashierConfig', 'menu.payment.merchant.cashierConfig', NULL, true, false, '/payment/merchant/cashier/CashierConfig', '/payment/merchant/cashier', NULL, 5, false, true, false, 1, 1, 1, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-11 03:00:13.374496+00', '2026-07-15 09:03:23.614722+00');
 INSERT INTO iam_perm_menu VALUES (4040124, 4040130, 'merchant:easypay', 'admin', 'EasyPayConfig', 'menu.payment.merchant.easypay', NULL, true, false, '/payment/merchant/easypay/EasyPayConfig', '/payment/merchant/easypay', NULL, 6, false, true, false, 1, 1, 1, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-15 00:00:00+00', '2026-07-15 09:03:23.618+00');
-INSERT INTO iam_perm_menu VALUES (40601, 406, 'payment:risk:blacklist', 'admin', 'PayBlacklistList', 'menu.payment.risk.blacklist', 'lucide:ban', false, false, '/payment/risk/blacklist/PayBlacklistList', '/payment/risk/blacklist', NULL, 1, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-15 00:00:00+00', '2026-07-15 00:00:00+00');
-INSERT INTO iam_perm_menu VALUES (40602, 406, 'payment:risk:hit', 'admin', 'PayRiskHitList', 'menu.payment.risk.hit', 'lucide:triangle-alert', false, false, '/payment/risk/hit/PayRiskHitList', '/payment/risk/hit', NULL, 2, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-15 00:00:00+00', '2026-07-15 00:00:00+00');
 INSERT INTO iam_perm_menu VALUES (311, 3, 'system:sensitive', 'admin', 'SensitiveWord', 'menu.system.sensitive', 'lucide:shield-ban', false, false, NULL, '/system/sensitive', NULL, 15, false, true, false, 1, 1, 0, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-16 00:40:06.501938+00', '2026-07-16 00:40:06.501938+00');
 INSERT INTO iam_perm_menu VALUES (31101, 311, 'system:sensitive-word', 'admin', 'SensitiveWordList', 'menu.system.sensitive.word', 'lucide:book-x', false, false, '/system/sensitive-word/SensitiveWordList', '/system/sensitive/word', NULL, 1, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-16 00:40:06.511319+00', '2026-07-16 00:40:06.511319+00');
 INSERT INTO iam_perm_menu VALUES (31102, 311, 'system:sensitive-word-hit', 'admin', 'SensitiveWordHitList', 'menu.system.sensitive.hit', 'lucide:scan-search', false, false, '/system/sensitive-word/SensitiveWordHitList', '/system/sensitive/hit', NULL, 2, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-16 00:40:06.51532+00', '2026-07-16 00:40:06.51532+00');
-INSERT INTO iam_perm_menu VALUES (406, 4, 'payment:risk', 'admin', 'PaymentRisk', 'menu.payment.risk', 'lucide:shield-alert', false, false, NULL, '/payment/risk', NULL, 60, false, true, false, 0, 1, 0, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-15 00:00:00+00', '2026-07-31 03:18:17.027286+00');
 INSERT INTO iam_perm_menu VALUES (40505, 40504, 'payment:config:mobile-app-detail', 'admin', 'MobileAppDetail', 'menu.payment.config.mobileAppDetail', NULL, true, false, '/payment/config/mobile-app/detail/MobileAppDetail', '/payment/config/mobile-app/detail/:appType', NULL, 1, false, true, false, 1, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-05 00:00:00+00', '2026-07-22 13:50:46.655058+00');
 INSERT INTO iam_perm_menu VALUES (804, 8, 'develop:gateway', 'admin', 'DevelopGateway', 'menu.develop.gateway', 'lucide:globe', false, false, '/payment/develop/gateway/DevelopGateway', '/develop/gateway', NULL, 2, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-16 16:00:00+00', '2026-07-16 16:00:00+00');
 INSERT INTO iam_perm_menu VALUES (610, 6, 'trade:pay-order', 'admin', 'PayOrderCatalog', 'menu.trade.payOrder', 'lucide:receipt', false, false, NULL, '/trade/pay-order', '/trade/pay-order/normal', 3, false, true, false, 1, 1, 0, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-17 06:18:15.454191+00', '2026-07-17 06:18:15.463823+00');
@@ -3863,21 +3897,24 @@ INSERT INTO iam_perm_menu VALUES (40109, 40108, 'payment:douyin:mch-app', 'admin
 INSERT INTO iam_perm_menu VALUES (4040121, 4040130, 'merchant:gateway-pay-config', 'admin', 'GatewayPayConfig', 'menu.payment.merchant.gatewayPayConfig', NULL, true, false, '/payment/merchant/gateway-config/GatewayPayConfig', '/payment/merchant/gateway-config', NULL, 3, false, true, false, 1, 1, 1, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-30 12:24:51.675237+00', '2026-07-30 12:24:51.675237+00');
 INSERT INTO iam_perm_menu VALUES (91405, 91403, 'merchant:gateway-pay-config', 'merchant', 'GatewayPayConfig', 'menu.payment.merchant.gatewayPayConfig', 'lucide:qr-code', true, false, '/payment/merchant/gateway-config/GatewayPayConfig', '/mch/gateway-config', NULL, 2, false, false, false, 0, 1, 1, false, 'subpage', NULL, NULL, NULL, NULL, '', '', '2026-07-30 12:24:51.676811+00', '2026-07-30 12:24:51.676811+00');
 INSERT INTO iam_perm_menu VALUES (409, 4, 'payment:app', 'admin', 'PaymentApp', 'menu.payment.app', 'lucide:layout-grid', false, false, NULL, '/payment/app', NULL, 30, false, true, false, 1, 1, 0, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-31 03:18:16.99898+00', '2026-07-31 03:18:16.99898+00');
+INSERT INTO iam_perm_menu VALUES (611, NULL, 'trade:transfer', 'admin', 'TransferCatalog', 'menu.trade.transfer', 'lucide:send', false, false, NULL, '/trade/transfer', '/trade/transfer/wechat', 4.3, false, true, false, 1, 1, 0, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-04 16:00:00+00', '2026-08-04 16:00:00+00');
 INSERT INTO iam_perm_menu VALUES (91110, 91100, 'trade:pay-order', 'merchant', 'PayOrderCatalog', 'menu.trade.payOrder', 'lucide:receipt', false, false, NULL, '/trade/pay-order', '/trade/pay-order/normal', 3, false, true, false, 0, NULL, 0, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-01 01:15:14.072785+00', '2026-08-01 01:15:14.072785+00');
 INSERT INTO iam_perm_menu VALUES (206, 2, 'demos:callback', 'admin', 'CallbackDemo', 'menu.demos.callback', 'lucide:webhook', false, false, '/demos/callback/CallbackDemo', '/demos/callback', NULL, 5, false, true, false, 0, NULL, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-01 16:00:00+00', '2026-08-01 16:00:00+00');
-INSERT INTO iam_perm_menu VALUES (207, 2, 'demos:city-adjacent', 'admin', 'CityAdjacentDemo', 'menu.demos.cityAdjacent', 'lucide:map-pinned', false, false, '/demos/city-adjacent/CityAdjacentDemo', '/demos/city-adjacent', NULL, 6, false, true, false, 0, NULL, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-06 16:00:00+00', '2026-08-06 16:00:00+00');
 INSERT INTO iam_perm_menu VALUES (40108, 409, 'payment:douyin:platform-app', 'admin', 'DyAppHub', 'menu.payment.douyin.app', 'lucide:music-2', false, false, '/payment/douyin/DyAppHub', '/payment/douyin/app', NULL, 20, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-28 14:00:00+00', '2026-07-31 03:18:17.0111+00');
 INSERT INTO iam_perm_menu VALUES (91420, 91400, 'payment:douyin:mch-app', 'merchant', 'MchDyAppList', 'menu.payment.douyin.mchApp', 'lucide:music-2', false, false, '/payment/douyin/mch/MchDyAppList', '/mch/douyin-app', NULL, 4, false, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-07-28 14:00:00+00', '2026-07-28 14:00:00+00');
-INSERT INTO iam_perm_menu VALUES (611, 6, 'trade:transfer', 'admin', 'TransferCatalog', 'menu.trade.transfer', 'lucide:send', false, true, NULL, '/trade/transfer', '/trade/transfer/wechat', 4, false, true, false, 1, 1, 0, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-04 16:00:00+00', '2026-08-04 16:00:00+00');
-INSERT INTO iam_perm_menu VALUES (61101, 611, 'trade:transfer:wechat', 'admin', 'WechatTransferList', 'menu.trade.transfer.wechat', 'lucide:message-circle', false, true, '/payment/transfer/WechatTransferList', '/trade/transfer/wechat', NULL, 1, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-04 16:00:00+00', '2026-08-04 16:00:00+00');
-INSERT INTO iam_perm_menu VALUES (61102, 611, 'trade:transfer:alipay', 'admin', 'AlipayTransferList', 'menu.trade.transfer.alipay', 'lucide:credit-card', false, true, '/payment/transfer/AlipayTransferList', '/trade/transfer/alipay', NULL, 2, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-04 16:00:00+00', '2026-08-04 16:00:00+00');
-INSERT INTO iam_perm_menu VALUES (61103, 611, 'trade:transfer:douyin', 'admin', 'DouyinTransferList', 'menu.trade.transfer.douyin', 'lucide:clapperboard', false, true, '/payment/transfer/DouyinTransferList', '/trade/transfer/douyin', NULL, 3, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-04 16:00:00+00', '2026-08-04 16:00:00+00');
-INSERT INTO iam_perm_menu VALUES (61104, 611, 'trade:transfer:trade', 'admin', 'TransferTradeList', 'menu.trade.transfer.trade', 'lucide:list-ordered', false, true, '/payment/transfer/TransferTradeList', '/trade/transfer/trade', NULL, 4, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-04 16:00:00+00', '2026-08-04 16:00:00+00');
-INSERT INTO iam_perm_menu VALUES (91120, 91100, 'trade:transfer', 'merchant', 'TransferCatalog', 'menu.trade.transfer', 'lucide:send', false, true, NULL, '/trade/transfer', '/trade/transfer/wechat', 4, false, true, false, 1, 1, 0, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-04 16:00:00+00', '2026-08-04 16:00:00+00');
-INSERT INTO iam_perm_menu VALUES (91121, 91120, 'trade:transfer:wechat', 'merchant', 'WechatTransferList', 'menu.trade.transfer.wechat', 'lucide:message-circle', false, true, '/payment/transfer/WechatTransferList', '/trade/transfer/wechat', NULL, 1, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-04 16:00:00+00', '2026-08-04 16:00:00+00');
-INSERT INTO iam_perm_menu VALUES (91122, 91120, 'trade:transfer:alipay', 'merchant', 'AlipayTransferList', 'menu.trade.transfer.alipay', 'lucide:credit-card', false, true, '/payment/transfer/AlipayTransferList', '/trade/transfer/alipay', NULL, 2, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-04 16:00:00+00', '2026-08-04 16:00:00+00');
-INSERT INTO iam_perm_menu VALUES (91123, 91120, 'trade:transfer:douyin', 'merchant', 'DouyinTransferList', 'menu.trade.transfer.douyin', 'lucide:clapperboard', false, true, '/payment/transfer/DouyinTransferList', '/trade/transfer/douyin', NULL, 3, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-04 16:00:00+00', '2026-08-04 16:00:00+00');
-INSERT INTO iam_perm_menu VALUES (91124, 91120, 'trade:transfer:trade', 'merchant', 'TransferTradeList', 'menu.trade.transfer.trade', 'lucide:list-ordered', false, true, '/payment/transfer/TransferTradeList', '/trade/transfer/trade', NULL, 4, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-04 16:00:00+00', '2026-08-04 16:00:00+00');
+INSERT INTO iam_perm_menu VALUES (61101, 61106, 'trade:transfer:wechat', 'admin', 'WechatTransferList', 'menu.trade.transfer.wechat', 'lucide:message-circle', false, true, '/payment/transfer/WechatTransferList', '/trade/transfer/wechat', NULL, 1, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-04 16:00:00+00', '2026-08-04 16:00:00+00');
+INSERT INTO iam_perm_menu VALUES (61102, 61106, 'trade:transfer:alipay', 'admin', 'AlipayTransferList', 'menu.trade.transfer.alipay', 'lucide:credit-card', false, true, '/payment/transfer/AlipayTransferList', '/trade/transfer/alipay', NULL, 2, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-04 16:00:00+00', '2026-08-04 16:00:00+00');
+INSERT INTO iam_perm_menu VALUES (91120, NULL, 'trade:transfer', 'merchant', 'TransferCatalog', 'menu.trade.transfer', 'lucide:send', false, false, NULL, '/trade/transfer', '/trade/transfer/wechat', 3.5, false, true, false, 1, 1, 0, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-04 16:00:00+00', '2026-08-04 16:00:00+00');
+INSERT INTO iam_perm_menu VALUES (61106, 611, 'trade:transfer:channel', 'admin', 'TransferChannelCatalog', 'menu.trade.transfer.channel', 'lucide:layers', false, false, NULL, '/trade/transfer/channel', '/trade/transfer/channel/wechat', 3, false, true, false, 1, 1, 0, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-05 12:50:41.670351+00', '2026-08-05 12:50:41.670351+00');
+INSERT INTO iam_perm_menu VALUES (91126, 91120, 'trade:transfer:channel', 'merchant', 'TransferChannelCatalog', 'menu.trade.transfer.channel', 'lucide:layers', false, false, NULL, '/trade/transfer/channel', '/trade/transfer/channel/wechat', 3, false, true, false, 1, 1, 0, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-05 12:50:41.679227+00', '2026-08-05 12:50:41.679227+00');
+INSERT INTO iam_perm_menu VALUES (61103, 61106, 'trade:transfer:douyin', 'admin', 'DouyinTransferList', 'menu.trade.transfer.douyin', 'lucide:clapperboard', false, true, '/payment/transfer/DouyinTransferList', '/trade/transfer/douyin', NULL, 3, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-04 16:00:00+00', '2026-08-04 16:00:00+00');
+INSERT INTO iam_perm_menu VALUES (91121, 91126, 'trade:transfer:wechat', 'merchant', 'WechatTransferList', 'menu.trade.transfer.wechat', 'lucide:message-circle', false, true, '/payment/transfer/WechatTransferList', '/trade/transfer/wechat', NULL, 1, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-04 16:00:00+00', '2026-08-04 16:00:00+00');
+INSERT INTO iam_perm_menu VALUES (91122, 91126, 'trade:transfer:alipay', 'merchant', 'AlipayTransferList', 'menu.trade.transfer.alipay', 'lucide:credit-card', false, true, '/payment/transfer/AlipayTransferList', '/trade/transfer/alipay', NULL, 2, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-04 16:00:00+00', '2026-08-04 16:00:00+00');
+INSERT INTO iam_perm_menu VALUES (91123, 91126, 'trade:transfer:douyin', 'merchant', 'DouyinTransferList', 'menu.trade.transfer.douyin', 'lucide:clapperboard', false, true, '/payment/transfer/DouyinTransferList', '/trade/transfer/douyin', NULL, 3, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-04 16:00:00+00', '2026-08-04 16:00:00+00');
+INSERT INTO iam_perm_menu VALUES (61105, 611, 'trade:transfer:create', 'admin', 'TransferCreate', 'menu.trade.transfer.create', 'lucide:plus-circle', false, false, '/payment/transfer/TransferCreate', '/trade/transfer/create', NULL, 1, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-05 12:13:20.606538+00', '2026-08-05 12:13:20.606538+00');
+INSERT INTO iam_perm_menu VALUES (91125, 91120, 'trade:transfer:create', 'merchant', 'TransferCreate', 'menu.trade.transfer.create', 'lucide:plus-circle', false, false, '/payment/transfer/TransferCreate', '/trade/transfer/create', NULL, 1, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-05 12:13:20.608919+00', '2026-08-05 12:13:20.608919+00');
+INSERT INTO iam_perm_menu VALUES (61104, 611, 'trade:transfer:trade', 'admin', 'TransferTradeList', 'menu.trade.transfer.trade', 'lucide:list-ordered', false, true, '/payment/transfer/TransferTradeList', '/trade/transfer/trade', NULL, 2, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-04 16:00:00+00', '2026-08-04 16:00:00+00');
+INSERT INTO iam_perm_menu VALUES (91124, 91120, 'trade:transfer:trade', 'merchant', 'TransferTradeList', 'menu.trade.transfer.trade', 'lucide:list-ordered', false, true, '/payment/transfer/TransferTradeList', '/trade/transfer/trade', NULL, 2, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-04 16:00:00+00', '2026-08-04 16:00:00+00');
 
 
 --
@@ -4020,6 +4057,8 @@ INSERT INTO iam_role_code VALUES (2083360959911628801, 2, 2082124981012164610);
 INSERT INTO iam_role_code VALUES (2083360959911628802, 2, 2082124981012164609);
 INSERT INTO iam_role_code VALUES (2083360959911628803, 2, 2082124981016358913);
 INSERT INTO iam_role_code VALUES (2083360959915823104, 2, 2082124981016358912);
+INSERT INTO iam_role_code VALUES (2077568468000000101, 1, 2077568468000000001);
+INSERT INTO iam_role_code VALUES (2077568468000000102, 1, 2077568468000000002);
 
 
 --
@@ -4033,7 +4072,6 @@ INSERT INTO iam_role_menu VALUES (1000000000302, 1, NULL, 302);
 INSERT INTO iam_role_menu VALUES (1000000000304, 1, NULL, 304);
 INSERT INTO iam_role_menu VALUES (1000000000401, 1, NULL, 401);
 INSERT INTO iam_role_menu VALUES (1000000000203, 1, NULL, 203);
-INSERT INTO iam_role_menu VALUES (1000000030401, 1, NULL, 30401);
 INSERT INTO iam_role_menu VALUES (1000000000003, 1, NULL, 3);
 INSERT INTO iam_role_menu VALUES (1000000030102, 1, NULL, 30102);
 INSERT INTO iam_role_menu VALUES (1000000000301, 1, NULL, 301);
@@ -4147,6 +4185,8 @@ INSERT INTO iam_role_menu VALUES (2083360959840325632, 2, NULL, 91420);
 INSERT INTO iam_role_menu VALUES (2083360959848714240, 2, NULL, 91110);
 INSERT INTO iam_role_menu VALUES (2083360959857102848, 2, NULL, 91111);
 INSERT INTO iam_role_menu VALUES (2083360959857102849, 2, NULL, 91112);
+INSERT INTO iam_role_menu VALUES (1000000040603, 1, NULL, 40603);
+INSERT INTO iam_role_menu VALUES (1000000040604, 1, NULL, 40604);
 
 
 --
@@ -4168,7 +4208,7 @@ INSERT INTO iam_role_menu VALUES (2083360959857102849, 2, NULL, 91112);
 --
 
 -- REDACTED: iam_user_expand_info (整表清除)
-INSERT INTO iam_user_expand_info VALUES (1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, false, NULL, NULL, NULL, '2026-03-28 14:26:08+00', NULL);
+INSERT INTO iam_user_expand_info VALUES (1, 'female', NULL, NULL, NULL, NULL, NULL, NULL, 0, 1, 12, false, '2026-03-28 14:26:08+00', '2026-07-16 05:09:46.145161+00', NULL, NULL, NULL);
 
 
 --
@@ -4284,6 +4324,13 @@ INSERT INTO iam_user_info VALUES (1, '超级管理员', 'admin', 'bootx', '$2a$1
 --
 
 -- REDACTED: mch_notice_task (整表清除)
+
+
+--
+-- Data for Name: mch_risk_config; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+-- REDACTED: mch_risk_config (整表清除)
 
 
 --
@@ -4886,24 +4933,28 @@ INSERT INTO pay_md_provider_method VALUES (502002015, 'union_pay', 'union_barcod
 -- Data for Name: pay_transfer_order_alipay; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+-- REDACTED: pay_transfer_order_alipay (整表清除)
 
 
 --
 -- Data for Name: pay_transfer_order_douyin; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+-- REDACTED: pay_transfer_order_douyin (整表清除)
 
 
 --
 -- Data for Name: pay_transfer_order_wechat; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+-- REDACTED: pay_transfer_order_wechat (整表清除)
 
 
 --
 -- Data for Name: pay_transfer_trade; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+-- REDACTED: pay_transfer_trade (整表清除)
 
 
 --
@@ -5046,6 +5097,13 @@ INSERT INTO system_sensitive_word VALUES (2077569027575820288, '测试敏感词'
 
 
 --
+-- Data for Name: wechat_transfer_config; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+-- REDACTED: wechat_transfer_config (整表清除)
+
+
+--
 -- Data for Name: wx_channel_app_capability; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -5091,6 +5149,13 @@ SELECT pg_catalog.setval('adapay_direct_key_config_id_seq', 1, false);
 --
 
 SELECT pg_catalog.setval('alipay_direct_app_capability_id_seq', 1, false);
+
+
+--
+-- Name: base_city_adjacent_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('base_city_adjacent_id_seq', 1808, true);
 
 
 --
