@@ -155,12 +155,12 @@ dax-pay-open/                       # 主后端应用
 
 ### 演示环境
 
-> 演示账号部分功能权限未开放,完整功能请参考本地部署。启动后默认的本地账号密码为 `bootx / 123123`。
+> 演示账号部分功能权限未开放,完整功能请参考本地部署。启动后默认的本地账号密码为 `bootx / 121212`。
 
-| 站点类型 | 地址 | 演示账号 |
-|---------|------|---------|
-| 运营端 | [https://admin.open.daxpay.cn/](https://admin.open.daxpay.cn/) | csadmin / 123123 |
-| 商户端 | [https://merchant.open.daxpay.cn/](https://merchant.open.daxpay.cn/) | cssh / 123123 |
+| 站点类型 | 地址 | 演示账号         |
+|---------|------|------------------|
+| 运营端 | [https://admin.open.daxpay.cn/](https://admin.open.daxpay.cn/) | csadmin / 121212 |
+| 商户端 | [https://merchant.open.daxpay.cn/](https://merchant.open.daxpay.cn/) | cssh / 121212    |
 
 ## 系统截图
 
