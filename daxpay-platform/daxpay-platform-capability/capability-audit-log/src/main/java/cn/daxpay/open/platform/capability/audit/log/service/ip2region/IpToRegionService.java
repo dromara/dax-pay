@@ -7,6 +7,7 @@ import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.lionsoul.ip2region.xdb.IPv4;
+import org.lionsoul.ip2region.xdb.IPv6;
 import org.lionsoul.ip2region.xdb.LongByteArray;
 import org.lionsoul.ip2region.xdb.Searcher;
 import org.springframework.stereotype.Service;
@@ -17,58 +18,111 @@ import java.util.regex.Matcher;
 
 /// # IP归属地查询服务
 ///
+/// 同时支持 IPv4 与 IPv6 查询。v4/v6 各自独立的 xdb 数据文件与 Searcher 缓存,
+/// 根据 IP 格式分发到对应版本。v4/v6 xdb 字段格式完全一致（国家|省份|城市|ISP|国家码）,
+/// 解析结果统一由 [IpRegion] 承载。
+///
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class IpToRegionService {
 
-    /// VectorIndex 缓存
-    private static byte[] XDB_INDEX;
-    /// 整个 xdb 文件缓存
-    private static LongByteArray XDB_BUFF;
+    // ---- IPv4 缓存 ----
+    /// IPv4 VectorIndex 缓存
+    private static byte[] XDB_V4_INDEX;
+    /// IPv4 整个 xdb 文件缓存
+    private static LongByteArray XDB_V4_BUFF;
+
+    // ---- IPv6 缓存 ----
+    /// IPv6 VectorIndex 缓存
+    private static byte[] XDB_V6_INDEX;
+    /// IPv6 整个 xdb 文件缓存
+    private static LongByteArray XDB_V6_BUFF;
+
     /// 参数配置
     private final PlatformStarterProperties platformStarterProperties;
 
-    /// VectorIndex 索引
-    private Searcher getSearcherByIndex() {
+    // ==================== IPv4 Searcher ====================
+
+    /// IPv4 VectorIndex 索引
+    private Searcher getV4SearcherByIndex() {
+        String filePath = getV4FilePath();
+        if (StrUtil.isBlank(filePath)) {
+            return null;
+        }
         try {
-            String filePath = platformStarterProperties.getAuditLog().getIp2region().getFilePath();
-            if (StrUtil.isBlank(filePath)) {
-                log.warn("IP归属地查询: 文件路径未配置");
-                return null;
+            if (Objects.isNull(XDB_V4_INDEX)) {
+                XDB_V4_INDEX = Searcher.loadVectorIndexFromFile(filePath);
+                log.info("IP归属地查询: IPv4 VectorIndex 缓存加载成功");
             }
-            if (Objects.isNull(XDB_INDEX)) {
-                XDB_INDEX = Searcher.loadVectorIndexFromFile(filePath);
-                log.info("IP归属地查询: VectorIndex 缓存加载成功");
-            }
-            return Searcher.newWithVectorIndex(new IPv4(), filePath, XDB_INDEX);
+            return Searcher.newWithVectorIndex(new IPv4(), filePath, XDB_V4_INDEX);
         } catch (Exception e) {
-            log.warn("IP归属地查询: 创建VectorIndex Searcher失败, error={}", e.getMessage());
+            log.debug("IP归属地查询: 创建IPv4 VectorIndex Searcher失败, error={}", e.getMessage());
             return null;
         }
     }
 
-    /// 缓存整个 xdb 数据
-    private Searcher getSearcherByCache() {
+    /// IPv4 缓存整个 xdb 数据
+    private Searcher getV4SearcherByCache() {
+        String filePath = getV4FilePath();
+        if (StrUtil.isBlank(filePath)) {
+            return null;
+        }
         try {
-            String filePath = platformStarterProperties.getAuditLog().getIp2region().getFilePath();
-            if (StrUtil.isBlank(filePath)) {
-                log.warn("IP归属地查询: 文件路径未配置");
-                return null;
+            if (Objects.isNull(XDB_V4_BUFF)) {
+                XDB_V4_BUFF = Searcher.loadContentFromFile(filePath);
+                log.info("IP归属地查询: IPv4 xdb数据缓存加载成功");
             }
-            if (Objects.isNull(XDB_BUFF)) {
-                XDB_BUFF = Searcher.loadContentFromFile(filePath);
-                log.info("IP归属地查询: xdb数据缓存加载成功");
-            }
-            return Searcher.newWithBuffer(new IPv4(), XDB_BUFF);
+            return Searcher.newWithBuffer(new IPv4(), XDB_V4_BUFF);
         } catch (Exception e) {
-            log.warn("IP归属地查询: 创建缓存Searcher失败, error={}", e.getMessage());
+            log.debug("IP归属地查询: 创建IPv4缓存Searcher失败, error={}", e.getMessage());
             return null;
         }
     }
+
+    // ==================== IPv6 Searcher ====================
+
+    /// IPv6 VectorIndex 索引
+    private Searcher getV6SearcherByIndex() {
+        String filePath = getV6FilePath();
+        if (StrUtil.isBlank(filePath)) {
+            return null;
+        }
+        try {
+            if (Objects.isNull(XDB_V6_INDEX)) {
+                XDB_V6_INDEX = Searcher.loadVectorIndexFromFile(filePath);
+                log.info("IP归属地查询: IPv6 VectorIndex 缓存加载成功");
+            }
+            return Searcher.newWithVectorIndex(new IPv6(), filePath, XDB_V6_INDEX);
+        } catch (Exception e) {
+            log.debug("IP归属地查询: 创建IPv6 VectorIndex Searcher失败, error={}", e.getMessage());
+            return null;
+        }
+    }
+
+    /// IPv6 缓存整个 xdb 数据
+    private Searcher getV6SearcherByCache() {
+        String filePath = getV6FilePath();
+        if (StrUtil.isBlank(filePath)) {
+            return null;
+        }
+        try {
+            if (Objects.isNull(XDB_V6_BUFF)) {
+                XDB_V6_BUFF = Searcher.loadContentFromFile(filePath);
+                log.info("IP归属地查询: IPv6 xdb数据缓存加载成功");
+            }
+            return Searcher.newWithBuffer(new IPv6(), XDB_V6_BUFF);
+        } catch (Exception e) {
+            log.debug("IP归属地查询: 创建IPv6缓存Searcher失败, error={}", e.getMessage());
+            return null;
+        }
+    }
+
+    // ==================== 查询入口 ====================
 
     /// 根据IP获得地址信息
-    /// 查询失败时返回 null，不抛出异常，保证主流程继续
+    /// 查询失败时返回 null，不抛出异常，保证主流程继续。
+    /// IPv6 文件未配置或加载失败时静默返回 null（与旧版 IPv6 跳过行为一致）。
     public IpRegion getRegionByIp(String ip) {
         // 判断IP是否合法
         if (StrUtil.isBlank(ip)) {
@@ -76,34 +130,47 @@ public class IpToRegionService {
             return null;
         }
 
-        Matcher matcher = PatternPool.IPV4.matcher(ip);
-        Matcher ipV6Matcher = PatternPool.IPV6.matcher(ip);
-        if (!matcher.matches()) {
-            if (ipV6Matcher.matches()) {
-                log.debug("IP归属地查询: IPv6地址跳过, ip={}", ip);
-            } else {
-                log.debug("IP归属地查询: 非法IPv4地址, ip={}", ip);
-            }
+        // 按 IP 格式分发到对应版本 Searcher
+        Matcher ipv4Matcher = PatternPool.IPV4.matcher(ip);
+        Matcher ipv6Matcher = PatternPool.IPV6.matcher(ip);
+        boolean isV4 = ipv4Matcher.matches();
+        boolean isV6 = ipv6Matcher.matches();
+        if (!isV4 && !isV6) {
+            log.debug("IP归属地查询: 非法IP地址, ip={}", ip);
             return null;
         }
 
-        // 根据类型获取 Searcher 对象
-        Searcher searcher = switch (platformStarterProperties.getAuditLog().getIp2region().getSearchType()) {
-            case VECTOR_INDEX -> getSearcherByIndex();
-            case CACHE -> getSearcherByCache();
-        };
+        // 根据类型获取对应版本的 Searcher 对象
+        Searcher searcher;
+        String label;
+        if (isV4) {
+            label = "IPv4";
+            searcher = switch (platformStarterProperties.getAuditLog().getIp2region().getSearchType()) {
+                case VECTOR_INDEX -> getV4SearcherByIndex();
+                case CACHE -> getV4SearcherByCache();
+            };
+        } else {
+            label = "IPv6";
+            searcher = switch (platformStarterProperties.getAuditLog().getIp2region().getSearchType()) {
+                case VECTOR_INDEX -> getV6SearcherByIndex();
+                case CACHE -> getV6SearcherByCache();
+            };
+        }
 
-        // 无法进行查询
+        // 无法进行查询（文件未配置或加载失败）
         if (Objects.isNull(searcher)) {
-            log.warn("IP归属地查询: Searcher创建失败，无法进行查询, ip={}", ip);
+            log.debug("IP归属地查询: {} Searcher创建失败，无法进行查询, ip={}", label, ip);
             return null;
         }
 
         try {
-            // 官方 v4.xdb 格式: 国家|省份|城市|ISP|国家码(iso-alpha2)
+            // xdb 定位信息字段格式由数据版本决定（开源版5段 / 商业版16-18段）
             String search = searcher.search(ip);
             List<String> ipInfo = StrUtil.split(search, "|");
-            return IpRegion.init(ipInfo);
+            // v4/v6 可各自配置不同数据版本档次
+            var ip2regionConfig = platformStarterProperties.getAuditLog().getIp2region();
+            var dataVersion = isV4 ? ip2regionConfig.getDataVersion() : ip2regionConfig.getIpv6DataVersion();
+            return IpRegion.init(ipInfo, dataVersion);
         } catch (Exception e) {
             // 查询异常不抛出不阻塞主流程，仅记录日志
             log.warn("IP归属地查询异常: ip={}, error={}", ip, e.getMessage());
@@ -149,5 +216,14 @@ public class IpToRegionService {
             return StrUtil.format("{}/{}", region.getCountry(), region.getIsp());
         }
     }
-}
 
+    /// 获取 IPv4 xdb 文件路径
+    private String getV4FilePath() {
+        return platformStarterProperties.getAuditLog().getIp2region().getFilePath();
+    }
+
+    /// 获取 IPv6 xdb 文件路径
+    private String getV6FilePath() {
+        return platformStarterProperties.getAuditLog().getIp2region().getIpv6FilePath();
+    }
+}

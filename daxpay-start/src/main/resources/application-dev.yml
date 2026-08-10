@@ -103,8 +103,14 @@ daxpay:
       # 审计日志配置
       audit-log:
         ip2region:
-          # ip2region.xdb 文件路径
+          # IPv4 xdb 文件路径
           file-path: E:/data/ip2region/ip2region_v4.xdb
+          # IPv6 xdb 文件路径（可选, 未配置时 IPv6 查询返回 null）
+          ipv6-file-path: E:/data/ip2region/ip2region_v6.xdb
+          # IPv4 数据版本: OPEN_SOURCE(开源5段) | BASE(商业基础版) | HIGH(高级版) | PRO(专业版)
+          data-version: open_source
+          # IPv6 数据版本（可与 v4 不同）
+          ipv6-data-version: open_source
           # 查询模式: VECTOR_INDEX(推荐) 或 CACHE
           search-type: VECTOR_INDEX
     config:

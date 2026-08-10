@@ -38,7 +38,7 @@ public class IpRegionDemoController {
     @Operation(summary = "根据 IP 查询归属地")
     @GetMapping("/query")
     public Result<IpRegionDemoResult> query(
-            @Parameter(description = "IPv4 地址") @RequestParam("ip") String ip) {
+            @Parameter(description = "IP 地址（支持 IPv4 / IPv6）") @RequestParam("ip") String ip) {
         return Res.ok(buildResult(ip));
     }
 

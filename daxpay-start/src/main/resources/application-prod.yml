@@ -125,6 +125,10 @@ daxpay:
       audit-log:
         ip2region:
           file-path: ${IP2REGION_FILE_PATH:/data/ip/ip2region_v4.xdb}
+          ipv6-file-path: ${IP2REGION_V6_FILE_PATH:/data/ip/ip2region_v6.xdb}
+          # 数据版本: open_source | base | high | pro（须与实际 xdb 文件档次一致）
+          data-version: ${IP2REGION_DATA_VERSION:open_source}
+          ipv6-data-version: ${IP2REGION_V6_DATA_VERSION:open_source}
           search-type: VECTOR_INDEX
     config:
       # 沙箱环境(必须关闭; 不写时 Java 默认 true 会被 DeploymentModeEnforcer 拦截)
