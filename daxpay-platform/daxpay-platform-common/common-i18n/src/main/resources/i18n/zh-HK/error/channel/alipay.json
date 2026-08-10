@@ -66,5 +66,8 @@
   "channelMerchantMismatch": "支付寶: 通道商戶不屬於目前商戶",
   "transferLogonNameRequired": "支付寶: 使用登入號收款時必須填寫收款人姓名",
   "transferAmountMin": "支付寶: 轉帳金額不可低於0.1元",
-  "transferRemarkRequired": "支付寶: 轉帳金額達到50000元時, 必須填寫付款理由"
+  "transferRemarkRequired": "支付寶: 轉帳金額達到50000元時, 必須填寫付款理由",
+  "allocFailed": "支付寶分帳失敗: {0}",
+  "allocReceiverTypeInvalid": "支付寶: 不支援的分帳接收方類型: {0}",
+  "allocReceiverAccountRequired": "支付寶: 分帳接收方帳號必填"
 }

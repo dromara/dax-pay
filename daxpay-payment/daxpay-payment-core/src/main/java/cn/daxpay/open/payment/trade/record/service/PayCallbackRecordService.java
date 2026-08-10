@@ -97,6 +97,28 @@ public class PayCallbackRecordService {
         callbackRecordManager.save(record);
     }
 
+    /// 保存分账回调记录(trade_no 存 allocNo, out_trade_no 存 outAllocNo)
+    /// @param channelMchNo 通道商户号(回调 path 入站身份)
+    /// @param data 分账回调解析数据(复用通用 CallbackData)
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
+    public void saveAlloc(String channelMchNo, CallbackData data) {
+        if (data == null) {
+            return;
+        }
+        PayCallbackRecord record = new PayCallbackRecord()
+                .setTradeNo(data.getTradeNo())
+                .setOutTradeNo(data.getOutTradeNo())
+                .setProduct(channelMerchantManager.findProductByChannelMchNo(channelMchNo))
+                .setChannelMchNo(channelMchNo)
+                .setCallbackType(TradeFlowTypeEnum.ALLOC.getCode())
+                .setNotifyInfo(toNotifyInfo(data.getCallbackData()))
+                .setStatus(resolveStatus(data.getCallbackStatus()))
+                .setErrorMsg(StrUtil.blankToDefault(data.getCallbackErrorMsg(), data.getTradeErrorMsg()));
+        // 显式写入商户号, 避免无上下文场景踩 Fill
+        record.setMchNo(paymentContext.getMchNo());
+        callbackRecordManager.save(record);
+    }
+
     /// 序列化回调报文; 空 Map 落 {}
     private String toNotifyInfo(Map<String, ?> callbackData) {
         Map<String, ?> map = Optional.ofNullable(callbackData).orElse(Collections.emptyMap());

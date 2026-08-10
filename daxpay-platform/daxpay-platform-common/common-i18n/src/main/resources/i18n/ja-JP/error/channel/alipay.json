@@ -66,5 +66,8 @@
   "channelMerchantMismatch": "Alipay: チャネル加盟店は現在の加盟店に属していません",
   "transferLogonNameRequired": "支付宝: ログインIDで受取る場合、受取人の氏名が必須です",
   "transferAmountMin": "支付宝: 振込金額は0.1元以上である必要があります",
-  "transferRemarkRequired": "支付宝: 振込金額が50,000元に達した場合、支払い理由の記入が必須です"
+  "transferRemarkRequired": "支付宝: 振込金額が50,000元に達した場合、支払い理由の記入が必須です",
+  "allocFailed": "Alipay精算失敗: {0}",
+  "allocReceiverTypeInvalid": "Alipay: サポートされていない精算受取人タイプ: {0}",
+  "allocReceiverAccountRequired": "Alipay: 精算受取人アカウントは必須です"
 }

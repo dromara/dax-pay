@@ -3,5 +3,6 @@
   "refund": "환불하다",
   "cashouts": "철수",
   "settle": "합의",
-  "transfer": "송금"
+  "transfer": "송금",
+  "alloc": "분할"
 }

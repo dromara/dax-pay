@@ -10,5 +10,7 @@
   "risk.hit": "Rủi ro phát hiện",
   "transfer.success": "Chuyển khoản thành công",
   "transfer.fail": "Chuyển khoản thất bại",
-  "transfer.close": "Chuyển khoản đóng"
+  "transfer.close": "Chuyển khoản đóng",
+  "alloc.success": "Phân bổ thành công",
+  "alloc.fail": "Phân bổ thất bại"
 }

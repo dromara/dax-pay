@@ -179,4 +179,7 @@ public class NormalPayOrder extends MchBaseEntity {
     /// 错误信息
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String errorMsg;
+
+    /// 是否分账订单(下单时透传通道分账标识用, 如微信 profit_sharing / 支付宝 royalty_freeze)
+    private Boolean allocation;
 }

@@ -1,5 +1,6 @@
 {
   "pay": "支付",
   "refund": "退款",
-  "transfer": "轉賬"
+  "transfer": "轉賬",
+  "alloc": "分帳"
 }

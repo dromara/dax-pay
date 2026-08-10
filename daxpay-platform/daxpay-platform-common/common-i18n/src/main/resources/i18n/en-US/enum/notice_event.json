@@ -10,5 +10,7 @@
   "risk.hit": "Risk Hit",
   "transfer.success": "Transfer Success",
   "transfer.fail": "Transfer Fail",
-  "transfer.close": "Transfer Close"
+  "transfer.close": "Transfer Close",
+  "alloc.success": "Allocation Success",
+  "alloc.fail": "Allocation Failed"
 }

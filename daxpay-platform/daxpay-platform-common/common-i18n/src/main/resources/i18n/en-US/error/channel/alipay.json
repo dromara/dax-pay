@@ -66,5 +66,8 @@
   "channelMerchantMismatch": "Alipay: channel merchant does not belong to the current merchant",
   "transferLogonNameRequired": "Alipay: Payee name is required when using login ID",
   "transferAmountMin": "Alipay: Transfer amount must be at least 0.1 yuan",
-  "transferRemarkRequired": "Alipay: Payment reason is required when transfer amount reaches 50,000 yuan"
+  "transferRemarkRequired": "Alipay: Payment reason is required when transfer amount reaches 50,000 yuan",
+  "allocFailed": "Alipay allocation failed: {0}",
+  "allocReceiverTypeInvalid": "Alipay: unsupported allocation receiver type: {0}",
+  "allocReceiverAccountRequired": "Alipay: allocation receiver account required"
 }

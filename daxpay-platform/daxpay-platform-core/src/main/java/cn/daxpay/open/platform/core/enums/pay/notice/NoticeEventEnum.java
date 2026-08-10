@@ -34,6 +34,10 @@ public enum NoticeEventEnum implements I18nSupport {
     TRANSFER_FAIL("transfer.fail"),
     /// 转账关闭
     TRANSFER_CLOSE("transfer.close"),
+    /// 分账成功
+    ALLOC_SUCCESS("alloc.success"),
+    /// 分账失败
+    ALLOC_FAIL("alloc.fail"),
     /// 风控命中(黑名单/海外 IP 等规则触发)
     RISK_HIT("risk.hit"),
     ;

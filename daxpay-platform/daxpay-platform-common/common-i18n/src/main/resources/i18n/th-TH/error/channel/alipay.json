@@ -55,5 +55,8 @@
   "transferSceneCannotDisableDefault": "Alipay: ไม่สามารถปิดใช้งานสถานการณ์เริ่มต้น โปรดสลับเริ่มต้นไปยังสถานการณ์อื่นก่อน",
   "transferLogonNameRequired": "Alipay: ต้องระบุชื่อผู้รับเมื่อใช้ login ID",
   "transferAmountMin": "Alipay: จำนวนเงินโอนต้องไม่ต่ำกว่า 0.1 หยวน",
-  "transferRemarkRequired": "Alipay: ต้องระบุเหตุผลการชำระเงินเมื่อจำนวนเงินโอนถึง 50,000 หยวน"
+  "transferRemarkRequired": "Alipay: ต้องระบุเหตุผลการชำระเงินเมื่อจำนวนเงินโอนถึง 50,000 หยวน",
+  "allocFailed": "การแบ่ง Alipay ล้มเหลว: {0}",
+  "allocReceiverTypeInvalid": "Alipay: ประเภทผู้รับการแบ่งไม่ได้รับการสนับสนุน: {0}",
+  "allocReceiverAccountRequired": "Alipay: จำเป็นต้องระบุบัญชีผู้รับการแบ่ง"
 }

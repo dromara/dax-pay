@@ -118,6 +118,23 @@
     "channelNotSupport": "Saluran ini tidak mendukung penutupan transfer",
     "illegalTransition": "Transisi status tidak valid: {0} → {1}"
   },
+  "alloc": {
+    "illegalTransition": "Transisi status ilegal: {0} → {1}",
+    "orderNotFound": "Pesanan pembayaran asli tidak ada",
+    "orderNotSuccess": "Pesanan pembayaran asli belum dibayar, tidak dapat dialokasikan",
+    "notAllocOrder": "Pesanan pembayaran asli tidak dideklarasikan sebagai pesanan alokasi",
+    "alreadyAllocated": "Pesanan ini sudah dialokasikan",
+    "allocNotFound": "Pesanan alokasi tidak ada",
+    "allocProcessing": "Alokasi sedang diproses, jangan diulangi",
+    "noDuplicate": "Nomor alokasi merchant ini sudah ada",
+    "createFailed": "Alokasi gagal: {0}",
+    "receiverEmpty": "Daftar penerima tidak boleh kosong",
+    "amountExceed": "Total alokasi melebihi jumlah yang dapat dialokasikan",
+    "amountInvalid": "Jumlah alokasi tidak valid",
+    "channelNotSupport": "Saluran ini tidak mendukung alokasi",
+    "syncProcessing": "Sinkronisasi alokasi sedang diproses",
+    "tradeNoRequired": "Nomor transaksi dan nomor pesanan tidak boleh keduanya kosong"
+  },
   "assist": {
     "mchPublicKeyEmpty": "Kunci publik pedagang kosong",
     "privateKeyEmpty": "Kunci pribadi pedagang kosong",

@@ -10,5 +10,7 @@
   "risk.hit": "Risiko Terdeteksi",
   "transfer.success": "Transfer Berhasil",
   "transfer.fail": "Transfer Gagal",
-  "transfer.close": "Transfer Ditutup"
+  "transfer.close": "Transfer Ditutup",
+  "alloc.success": "Alokasi Berhasil",
+  "alloc.fail": "Alokasi Gagal"
 }

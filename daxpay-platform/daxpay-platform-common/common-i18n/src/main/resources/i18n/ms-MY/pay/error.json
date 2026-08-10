@@ -118,6 +118,23 @@
     "channelNotSupport": "Saluran ini tidak menyokong penutupan pindahan",
     "illegalTransition": "Peralihan status tidak sah: {0} → {1}"
   },
+  "alloc": {
+    "illegalTransition": "Peralihan status tidak sah: {0} → {1}",
+    "orderNotFound": "Pesanan pembayaran asal tidak wujud",
+    "orderNotSuccess": "Pesanan pembayaran asal belum dibayar, tidak boleh diperuntukkan",
+    "notAllocOrder": "Pesanan pembayaran asal tidak diisytiharkan sebagai pesanan peruntukan",
+    "alreadyAllocated": "Pesanan ini telah diperuntukkan",
+    "allocNotFound": "Pesanan peruntukan tidak wujud",
+    "allocProcessing": "Peruntukan sedang diproses, sila jangan ulang",
+    "noDuplicate": "Nombor peruntukan merchant ini sudah wujud",
+    "createFailed": "Peruntukan gagal: {0}",
+    "receiverEmpty": "Senarai penerima tidak boleh kosong",
+    "amountExceed": "Jumlah peruntukan melebihi jumlah yang boleh diperuntukkan",
+    "amountInvalid": "Jumlah peruntukan tidak sah",
+    "channelNotSupport": "Saluran ini tidak menyokong peruntukan",
+    "syncProcessing": "Penyegerakan peruntukan sedang diproses",
+    "tradeNoRequired": "Nombor transaksi dan nombor pesanan tidak boleh kedua-duanya kosong"
+  },
   "assist": {
     "mchPublicKeyEmpty": "Kunci awam pedagang kosong",
     "privateKeyEmpty": "Kunci persendirian pedagang kosong",

@@ -33,6 +33,8 @@ public class AlipayPayReq {
     private String authCode;
     /// 买家标识(JSAPI 小程序支付必填; 2088 开头为支付宝用户ID, 否则视为小程序 openid)
     private String openId;
+    /// 是否分账订单(透传支付宝 royalty_freeze=true 冻结分账资金)
+    private Boolean allocation;
     /// 通道调用凭证
     private AlipaySdkCredential credential;
 }

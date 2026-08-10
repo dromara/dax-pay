@@ -127,6 +127,23 @@
     "channelNotSupport": "このチャネルは送金クローズをサポートしていません",
     "illegalTransition": "不正な状態遷移: {0} → {1}"
   },
+  "alloc": {
+    "illegalTransition": "不正な状態遷移: {0} → {1}",
+    "orderNotFound": "元の支払い注文が存在しません",
+    "orderNotSuccess": "元の支払い注文が未決済のため精算できません",
+    "notAllocOrder": "元の支払い注文は精算注文として宣言されていません",
+    "alreadyAllocated": "この注文は既に精算済みです",
+    "allocNotFound": "精算注文が存在しません",
+    "allocProcessing": "精算処理中です。重複操作しないでください",
+    "noDuplicate": "このマーチャント精算番号は既に存在します",
+    "createFailed": "精算の開始に失敗: {0}",
+    "receiverEmpty": "受取人リストは空にできません",
+    "amountExceed": "精算合計額が注文の精算可能額を超えています",
+    "amountInvalid": "精算金額が無効です",
+    "channelNotSupport": "このチャネルは精算をサポートしていません",
+    "syncProcessing": "精算同期処理中",
+    "tradeNoRequired": "取引番号と業務注文番号の両方が空欄です"
+  },
   "assist": {
     "mchPublicKeyEmpty": "販売者の公開キーが空です",
     "privateKeyEmpty": "販売者の秘密キーが空です",

@@ -1,0 +1,6 @@
+{
+  "MERCHANT_ID": "รหัสผู้ค้า",
+  "PERSONAL_OPENID": "OpenID ส่วนบุคคล",
+  "USER_ID": "รหัสผู้ใช้ Alipay",
+  "LOGIN_NAME": "ชื่อเข้าสู่ระบบ Alipay"
+}

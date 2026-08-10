@@ -55,5 +55,8 @@
   "transferSceneCannotDisableDefault": "Alipay: Cảnh mặc định không thể vô hiệu hóa, vui lòng chuyển mặc định sang cảnh khác trước",
   "transferLogonNameRequired": "Alipay: Bắt buộc nhập tên người nhận khi sử dụng login ID",
   "transferAmountMin": "Alipay: Số tiền chuyển không được thấp hơn 0,1 tệ",
-  "transferRemarkRequired": "Alipay: Bắt buộc nhập lý do thanh toán khi số tiền chuyển đạt 50.000 tệ"
+  "transferRemarkRequired": "Alipay: Bắt buộc nhập lý do thanh toán khi số tiền chuyển đạt 50.000 tệ",
+  "allocFailed": "Phân bổ Alipay thất bại: {0}",
+  "allocReceiverTypeInvalid": "Alipay: loại người nhận phân bổ không được hỗ trợ: {0}",
+  "allocReceiverAccountRequired": "Alipay: tài khoản người nhận phân bổ là bắt buộc"
 }

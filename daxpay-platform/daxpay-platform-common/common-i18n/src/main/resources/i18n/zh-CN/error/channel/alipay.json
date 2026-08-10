@@ -66,5 +66,8 @@
   "channelMerchantMismatch": "支付宝: 通道商户不属于当前商户",
   "transferLogonNameRequired": "支付宝: 登录号收款时必须填写收款人姓名",
   "transferAmountMin": "支付宝: 转账金额不可低于0.1元",
-  "transferRemarkRequired": "支付宝: 转账金额达到50000元时, 必须填写付款理由"
+  "transferRemarkRequired": "支付宝: 转账金额达到50000元时, 必须填写付款理由",
+  "allocFailed": "支付宝分账失败: {0}",
+  "allocReceiverTypeInvalid": "支付宝: 不支持的分账接收方类型: {0}",
+  "allocReceiverAccountRequired": "支付宝: 分账接收方账号必填"
 }

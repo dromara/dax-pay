@@ -55,5 +55,8 @@
   "transferSceneCannotDisableDefault": "Alipay: Babak lalai tidak boleh dilumpuhkan, sila tukar lalai ke babak lain dahulu",
   "transferLogonNameRequired": "Alipay: Nama penerima wajib diisi apabila menggunakan ID log masuk",
   "transferAmountMin": "Alipay: Jumlah pindahan tidak boleh kurang daripada 0.1 yuan",
-  "transferRemarkRequired": "Alipay: Sebab pembayaran wajib diisi apabila jumlah pindahan mencecah 50,000 yuan"
+  "transferRemarkRequired": "Alipay: Sebab pembayaran wajib diisi apabila jumlah pindahan mencecah 50,000 yuan",
+  "allocFailed": "Peruntukan Alipay gagal: {0}",
+  "allocReceiverTypeInvalid": "Alipay: jenis penerima peruntukan tidak disokong: {0}",
+  "allocReceiverAccountRequired": "Alipay: akaun penerima peruntukan diperlukan"
 }

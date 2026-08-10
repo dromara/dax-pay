@@ -127,6 +127,23 @@
     "channelNotSupport": "该通道暂不支持关闭转账",
     "illegalTransition": "非法状态转换: {0} → {1}"
   },
+  "alloc": {
+    "illegalTransition": "非法状态转换: {0} → {1}",
+    "orderNotFound": "原支付订单不存在",
+    "orderNotSuccess": "原支付订单未支付成功，无法分账",
+    "notAllocOrder": "原支付订单未声明为分账订单，无法分账",
+    "alreadyAllocated": "该订单已分账，请勿重复分账",
+    "allocNotFound": "分账单不存在",
+    "allocProcessing": "分账处理中，请勿重复操作",
+    "noDuplicate": "该商户分账单号已存在，请勿重复分账",
+    "createFailed": "分账发起失败: {0}",
+    "receiverEmpty": "接收方列表不可为空",
+    "amountExceed": "分账总金额超过订单可分账金额",
+    "amountInvalid": "分账金额无效",
+    "channelNotSupport": "该通道暂不支持分账",
+    "syncProcessing": "分账同步处理中",
+    "tradeNoRequired": "原支付交易号和商户业务订单号不可同时为空"
+  },
   "assist": {
     "mchPublicKeyEmpty": "商户公钥为空",
     "privateKeyEmpty": "商户私钥为空",

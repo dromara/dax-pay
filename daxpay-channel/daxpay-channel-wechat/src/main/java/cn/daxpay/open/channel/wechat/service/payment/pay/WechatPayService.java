@@ -63,6 +63,8 @@ public class WechatPayService {
             req.setWapUrl(payParam.getReturnUrl());
             req.setWapName(payParam.getTitle());
         }
+        // 分账订单标识: 透传微信 profit_sharing=true
+        req.setAllocation(Boolean.TRUE.equals(payParam.getAllocation()));
         req.setCredential(credential);
 
         // 调用子应用

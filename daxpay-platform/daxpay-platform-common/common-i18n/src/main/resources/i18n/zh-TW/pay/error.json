@@ -127,6 +127,23 @@
     "channelNotSupport": "該通道暫不支持關閉轉帳",
     "illegalTransition": "非法狀態轉換: {0} → {1}"
   },
+  "alloc": {
+    "illegalTransition": "非法狀態轉換: {0} → {1}",
+    "orderNotFound": "原支付訂單不存在",
+    "orderNotSuccess": "原支付訂單未支付成功，無法分帳",
+    "notAllocOrder": "原支付訂單未聲明為分帳訂單",
+    "alreadyAllocated": "該訂單已分帳，請勿重複分帳",
+    "allocNotFound": "分帳單不存在",
+    "allocProcessing": "分帳處理中，請勿重複操作",
+    "noDuplicate": "該商戶分帳單號已存在",
+    "createFailed": "分帳發起失敗: {0}",
+    "receiverEmpty": "接收方列表不可為空",
+    "amountExceed": "分帳總金額超過訂單可分帳金額",
+    "amountInvalid": "分帳金額無效",
+    "channelNotSupport": "該通道暫不支援分帳",
+    "syncProcessing": "分帳同步處理中",
+    "tradeNoRequired": "原支付交易號和商戶業務訂單號不可同時為空"
+  },
   "assist": {
     "mchPublicKeyEmpty": "商戶公鑰為空",
     "privateKeyEmpty": "商戶私鑰為空",

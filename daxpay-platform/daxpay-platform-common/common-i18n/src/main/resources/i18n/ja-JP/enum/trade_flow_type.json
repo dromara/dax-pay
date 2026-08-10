@@ -1,5 +1,6 @@
 {
   "pay": "支払う",
   "refund": "返金",
-  "transfer": "移行"
+  "transfer": "移行",
+  "alloc": "精算"
 }

@@ -36,6 +36,8 @@ public class WechatPayReq {
     private String wapUrl;
     /// H5 场景 wap_name
     private String wapName;
+    /// 是否分账订单(透传微信 profit_sharing=true)
+    private Boolean allocation;
     /// 通道调用凭证
     private WechatSdkCredential credential;
 }

@@ -10,5 +10,7 @@
   "risk.hit": "風控命中",
   "transfer.success": "轉賬成功",
   "transfer.fail": "轉賬失敗",
-  "transfer.close": "轉賬關閉"
+  "transfer.close": "轉賬關閉",
+  "alloc.success": "分帳成功",
+  "alloc.fail": "分帳失敗"
 }

@@ -127,6 +127,23 @@
     "channelNotSupport": "The channel does not support closing transfers",
     "illegalTransition": "Illegal state transition: {0} → {1}"
   },
+  "alloc": {
+    "illegalTransition": "Illegal status transition: {0} → {1}",
+    "orderNotFound": "Original payment order does not exist",
+    "orderNotSuccess": "Original payment order is not paid, cannot allocate",
+    "notAllocOrder": "Original payment order is not declared as allocation order",
+    "alreadyAllocated": "This order has been allocated",
+    "allocNotFound": "Allocation order does not exist",
+    "allocProcessing": "Allocation is processing, please do not repeat",
+    "noDuplicate": "This merchant allocation number already exists",
+    "createFailed": "Allocation failed: {0}",
+    "receiverEmpty": "Receiver list cannot be empty",
+    "amountExceed": "Total allocation amount exceeds order allocatable amount",
+    "amountInvalid": "Invalid allocation amount",
+    "channelNotSupport": "This channel does not support allocation",
+    "syncProcessing": "Allocation sync processing",
+    "tradeNoRequired": "Trade number and biz order number cannot both be empty"
+  },
   "assist": {
     "mchPublicKeyEmpty": "Merchant public key is empty",
     "privateKeyEmpty": "Merchant private key is empty",

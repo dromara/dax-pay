@@ -48,6 +48,8 @@ public class DouyinPayService {
         req.setClientIp(payParam.getClientIp());
         // 通道通知地址: 始终使用平台生成的回调地址(抖音→平台), 带 channelMchNo 供回调组装凭证验签
         req.setNotifyUrl(this.buildNotifyUrl(order, payParam.getChannelMchNo()));
+        // 分账订单标识透传
+        req.setAllocation(Boolean.TRUE.equals(payParam.getAllocation()));
         req.setCredential(credential);
 
         // 调用子应用

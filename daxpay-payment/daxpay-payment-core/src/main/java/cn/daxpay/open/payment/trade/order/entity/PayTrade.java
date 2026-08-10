@@ -96,4 +96,8 @@ public class PayTrade extends MchBaseEntity {
     /// 应用号
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private String appId;
+
+    /// 分账状态(none-未分账 / processing-分账中 / done-已分账)
+    /// 防止重复分账, 分账发起前置校验
+    private String allocStatus;
 }

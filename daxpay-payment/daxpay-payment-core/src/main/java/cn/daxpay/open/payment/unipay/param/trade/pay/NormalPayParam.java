@@ -152,4 +152,9 @@ public class NormalPayParam extends MerchantPaymentCommonParam {
     @Size(max = 32, message = "{validation.field.source.size}")
     private String source;
 
+    /// 是否分账订单(下单时透传通道分账标识, 如支付宝 royalty_freeze / 微信 profit_sharing / 抖音 split_info)
+    /// 传 true 后该笔订单资金将被冻结, 仅可通过发起分账进行拆分。
+    @Schema(description = "是否分账订单")
+    private Boolean allocation;
+
 }

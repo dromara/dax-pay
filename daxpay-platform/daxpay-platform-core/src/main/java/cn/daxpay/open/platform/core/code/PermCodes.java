@@ -293,6 +293,12 @@ public interface PermCodes {
             String MENU = "trade:refund";
         }
 
+        /// 分账订单 menuCode=trade:alloc
+        interface Alloc {
+            /// 菜单编码
+            String MENU = "trade:alloc";
+        }
+
         /// 转账单(微信/支付宝/抖音) menuCode=trade:transfer
         interface Transfer {
             /// 菜单编码

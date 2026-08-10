@@ -1,0 +1,6 @@
+{
+  "processing": "精算処理中",
+  "success": "精算成功",
+  "partial": "一部成功",
+  "fail": "精算失敗"
+}

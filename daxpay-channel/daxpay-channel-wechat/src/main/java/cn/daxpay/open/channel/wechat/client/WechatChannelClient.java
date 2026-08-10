@@ -7,6 +7,7 @@ import cn.daxpay.open.channel.wechat.client.req.WechatRefundReq;
 import cn.daxpay.open.channel.wechat.client.req.WechatRefundSyncReq;
 import cn.daxpay.open.channel.wechat.client.req.WechatSyncReq;
 import cn.daxpay.open.channel.wechat.client.req.WechatTransferReq;
+import cn.daxpay.open.channel.wechat.client.req.WechatAllocReq;
 import cn.daxpay.open.channel.wechat.client.resp.WechatCallbackParseResp;
 import cn.daxpay.open.channel.wechat.client.resp.WechatTransferCallbackParseResp;
 import cn.daxpay.open.channel.wechat.client.resp.WechatCloseResp;
@@ -15,6 +16,7 @@ import cn.daxpay.open.channel.wechat.client.resp.WechatRefundResp;
 import cn.daxpay.open.channel.wechat.client.resp.WechatRefundSyncResp;
 import cn.daxpay.open.channel.wechat.client.resp.WechatSyncResp;
 import cn.daxpay.open.channel.wechat.client.resp.WechatTransferResp;
+import cn.daxpay.open.channel.wechat.client.resp.WechatAllocResp;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -55,6 +57,14 @@ public interface WechatChannelClient {
     /// 转账同步(查询转账状态)
     @PostExchange("/channel/wechat/transfer-sync")
     DaxResult<WechatTransferResp> transferSync(@RequestBody WechatTransferReq req);
+
+    /// 发起分账(微信 V3 profitsharing/orders)
+    @PostExchange("/channel/wechat/alloc")
+    DaxResult<WechatAllocResp> alloc(@RequestBody WechatAllocReq req);
+
+    /// 分账同步(查询分账状态)
+    @PostExchange("/channel/wechat/alloc-sync")
+    DaxResult<WechatAllocResp> allocSync(@RequestBody WechatAllocReq req);
 
     // ===== 服务商模式(isv), 对应子应用 /channel/wechat/isv/* 端点 =====
 

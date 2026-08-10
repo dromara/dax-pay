@@ -1,0 +1,6 @@
+{
+  "processing": "분할 처리중",
+  "success": "분할 성공",
+  "partial": "일부 성공",
+  "fail": "분할 실패"
+}

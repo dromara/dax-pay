@@ -3,14 +3,17 @@ package cn.daxpay.open.payment.unipay.trade.controller;
 import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPaySyncParam;
 import cn.daxpay.open.payment.unipay.param.trade.refund.RefundSyncParam;
+import cn.daxpay.open.payment.unipay.param.trade.alloc.AllocSyncParam;
 
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPaySyncResult;
 import cn.daxpay.open.payment.unipay.result.trade.refund.RefundSyncResult;
+import cn.daxpay.open.payment.unipay.result.trade.alloc.AllocSyncResult;
 import cn.daxpay.open.payment.common.util.DaxRes;
 import cn.daxpay.open.payment.unipay.aop.PaymentVerify;
 import cn.daxpay.open.payment.trade.runtime.service.sync.PaySyncService;
 import cn.daxpay.open.payment.unipay.trade.service.RefundOrderSyncService;
+import cn.daxpay.open.payment.unipay.trade.service.AllocOrderSyncService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -32,6 +35,7 @@ public class UniSyncController {
 
     private final PaySyncService paySyncService;
     private final RefundOrderSyncService refundOrderSyncService;
+    private final AllocOrderSyncService allocOrderSyncService;
 
     @Operation(summary = "支付订单同步接口")
     @PostMapping("/pay")
@@ -43,6 +47,12 @@ public class UniSyncController {
     @PostMapping("/refund")
     public DaxResult<RefundSyncResult> refund(@RequestBody RefundSyncParam param){
         return DaxRes.ok(refundOrderSyncService.sync(param));
+    }
+
+    @Operation(summary = "分账订单同步接口")
+    @PostMapping("/alloc")
+    public DaxResult<AllocSyncResult> alloc(@RequestBody AllocSyncParam param){
+        return DaxRes.ok(allocOrderSyncService.sync(param));
     }
 
 }

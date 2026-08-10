@@ -66,5 +66,8 @@
   "channelMerchantMismatch": "Alipay: 채널 가맹점이 현재 가맹점에 속하지 않습니다",
   "transferLogonNameRequired": "알리페이: 로그인 ID로 수취할 때 수취인 이름이 필수입니다",
   "transferAmountMin": "알리페이: 이체 금액은 0.1위안 이상이어야 합니다",
-  "transferRemarkRequired": "알리페이: 이체 금액이 50,000위안에 도달하면 결제 사유를 반드시 입력해야 합니다"
+  "transferRemarkRequired": "알리페이: 이체 금액이 50,000위안에 도달하면 결제 사유를 반드시 입력해야 합니다",
+  "allocFailed": "Alipay 분할 실패: {0}",
+  "allocReceiverTypeInvalid": "Alipay: 지원되지 않는 분할 수신자 유형: {0}",
+  "allocReceiverAccountRequired": "Alipay: 분할 수신자 계정은 필수입니다"
 }

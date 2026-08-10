@@ -27,6 +27,8 @@ public class DouyinPayReq {
     private OffsetDateTime expiredTime;
     /// 异步通知地址
     private String notifyUrl;
+    /// 是否分账订单(透传抖音分账标识)
+    private Boolean allocation;
     /// 通道调用凭证
     private DouyinSdkCredential credential;
 }

@@ -22,6 +22,8 @@ public enum TradeTypeEnum implements I18nSupport {
     SETTLE("settle"),
     /// 转账
     TRANSFER("transfer"),
+    /// 分账
+    ALLOC("alloc"),
     ;
 
     private final String code;

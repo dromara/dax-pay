@@ -3,5 +3,6 @@
   "refund": "退款",
   "cashouts": "提现",
   "settle": "结算",
-  "transfer": "转账"
+  "transfer": "转账",
+  "alloc": "分账"
 }

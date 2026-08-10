@@ -3,5 +3,6 @@
   "refund": "返金",
   "cashouts": "出金",
   "settle": "決済",
-  "transfer": "送金"
+  "transfer": "送金",
+  "alloc": "精算"
 }

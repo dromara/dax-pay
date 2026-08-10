@@ -10,5 +10,7 @@
   "risk.hit": "リスク検知",
   "transfer.success": "送金成功",
   "transfer.fail": "送金失敗",
-  "transfer.close": "送金クローズ"
+  "transfer.close": "送金クローズ",
+  "alloc.success": "精算成功",
+  "alloc.fail": "精算失敗"
 }

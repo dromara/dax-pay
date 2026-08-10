@@ -10,5 +10,7 @@
   "risk.hit": "리스크 적중",
   "transfer.success": "송금 성공",
   "transfer.fail": "송금 실패",
-  "transfer.close": "송금 닫기"
+  "transfer.close": "송금 닫기",
+  "alloc.success": "분할 성공",
+  "alloc.fail": "분할 실패"
 }

@@ -10,5 +10,7 @@
   "risk.hit": "ตรวจพบความเสี่ยง",
   "transfer.success": "การโอนเงินสำเร็จ",
   "transfer.fail": "การโอนเงินล้มเหลว",
-  "transfer.close": "ปิดการโอนเงิน"
+  "transfer.close": "ปิดการโอนเงิน",
+  "alloc.success": "การแบ่งสำเร็จ",
+  "alloc.fail": "การแบ่งล้มเหลว"
 }

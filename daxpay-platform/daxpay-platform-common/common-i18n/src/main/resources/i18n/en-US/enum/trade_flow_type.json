@@ -1,5 +1,6 @@
 {
   "pay": "Pay",
   "refund": "Refund",
-  "transfer": "Transfer"
+  "transfer": "Transfer",
+  "alloc": "Allocation"
 }

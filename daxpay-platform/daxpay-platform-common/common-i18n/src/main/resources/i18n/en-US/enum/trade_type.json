@@ -3,5 +3,6 @@
   "refund": "Refund",
   "cashouts": "Withdrawal",
   "settle": "Settlement",
-  "transfer": "Transfer"
+  "transfer": "Transfer",
+  "alloc": "Allocation"
 }

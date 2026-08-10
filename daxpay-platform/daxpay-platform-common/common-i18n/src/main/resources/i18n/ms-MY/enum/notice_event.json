@@ -10,5 +10,7 @@
   "risk.hit": "Risiko Dikesan",
   "transfer.success": "Pindahan Berjaya",
   "transfer.fail": "Pindahan Gagal",
-  "transfer.close": "Pindahan Ditutup"
+  "transfer.close": "Pindahan Ditutup",
+  "alloc.success": "Peruntukan Berjaya",
+  "alloc.fail": "Peruntukan Gagal"
 }
