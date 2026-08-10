@@ -72,10 +72,10 @@ public class PayRiskAssistService {
         ctx.setBlacklistEnabled(config.getBlacklistEnabled());
         // 海外 IP 拦截开关（地域策略）
         ctx.setBlockOverseasIp(config.getBlockOverseasIp());
-        // 省级地区拦截开关（地域策略）
-        ctx.setProvinceBlacklistEnabled(config.getProvinceBlacklistEnabled());
-        // 市级地区拦截开关（地域策略, 独立于省级）
-        ctx.setCityBlacklistEnabled(config.getCityBlacklistEnabled());
+        // 地区拦截开关（地域策略, 含省级+市级, 省级命中后不执行市级检查）
+        ctx.setRegionBlacklistEnabled(config.getRegionBlacklistEnabled());
+        // IPv6 地区匹配开关（地域策略, 默认关闭, 关闭时 IPv6 直通放行）
+        ctx.setIpv6MatchEnabled(config.getIpv6MatchEnabled());
         // 地理围栏两级门控 + 策略 + 放行城市集合（第三层）
         applyGeoFence(ctx, config, payParam.getMchNo());
         checker.checkBeforePay(ctx);
@@ -97,10 +97,10 @@ public class PayRiskAssistService {
         PayRiskCheckContext ctx = buildContextFromTrade(trade);
         // 海外 IP 拦截开关（地域策略, 事后仅记录海外访问）
         ctx.setBlockOverseasIp(config.getBlockOverseasIp());
-        // 省级地区拦截开关（地域策略, 事后补录）
-        ctx.setProvinceBlacklistEnabled(config.getProvinceBlacklistEnabled());
-        // 市级地区拦截开关（地域策略, 事后补录, 独立于省级）
-        ctx.setCityBlacklistEnabled(config.getCityBlacklistEnabled());
+        // 地区拦截开关（地域策略, 事后补录, 含省级+市级）
+        ctx.setRegionBlacklistEnabled(config.getRegionBlacklistEnabled());
+        // IPv6 地区匹配开关（地域策略, 事后补录, 默认关闭）
+        ctx.setIpv6MatchEnabled(config.getIpv6MatchEnabled());
         // 地理围栏两级门控 + 策略 + 放行城市集合（第三层, 事后补录）
         applyGeoFence(ctx, config, trade.getMchNo());
         // 黑名单拦截开关（第一层, 事后补录）

@@ -807,11 +807,11 @@
     "blockOverseasIp": {
       "notNull": "海外 IP 攔截開關不能為空"
     },
-    "provinceBlacklistEnabled": {
-      "notNull": "省級地區攔截開關不能為空"
+    "regionBlacklistEnabled": {
+      "notNull": "地區攔截開關不能為空"
     },
-    "cityBlacklistEnabled": {
-      "notNull": "市級地區攔截開關不能為空"
+    "ipv6MatchEnabled": {
+      "notNull": "IPv6 地區匹配開關不能為空"
     },
     "geoFenceEnabled": {
       "notNull": "地理圍欄開關不能為空"

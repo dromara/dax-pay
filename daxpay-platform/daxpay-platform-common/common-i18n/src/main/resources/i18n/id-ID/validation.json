@@ -814,11 +814,11 @@
     "blockOverseasIp": {
       "notNull": "Saklar blokir IP luar negeri tidak boleh kosong"
     },
-    "provinceBlacklistEnabled": {
-      "notNull": "Saklar pemblokiran tingkat provinsi tidak boleh kosong"
+    "regionBlacklistEnabled": {
+      "notNull": "Saklar pemblokiran wilayah tidak boleh kosong"
     },
-    "cityBlacklistEnabled": {
-      "notNull": "Saklar pemblokiran tingkat kota tidak boleh kosong"
+    "ipv6MatchEnabled": {
+      "notNull": "Saklar pencocokan region IPv6 tidak boleh kosong"
     },
     "geoFenceEnabled": {
       "notNull": "Saklar geo-pagar tidak boleh kosong"

@@ -16,8 +16,7 @@ import lombok.experimental.Accessors;
 /// - 事后补录: 支付成功后是否补充记录命中（用于事后分析，不阻断资金态）
 /// - 用户标识拦截级别: 是否对 H5 / 主扫等免用户标识方式强制 OAuth, 见 [PayRiskOpenIdLevelEnum]
 /// - 海外 IP 拦截: 拦截境外 IP 发起的支付请求（第二层）
-/// - 省级地区拦截: 根据 IP 归属省份匹配省级黑名单（第二层）
-/// - 市级地区拦截: 根据 IP 归属城市匹配市级黑名单（第二层, 与省级开关独立, 省命中后不执行）
+/// - 地区拦截: 根据 IP 归属地匹配省级与市级黑名单, 省级命中后不执行市级检查（第二层）
 /// - 地理围栏: 围栏功能全局开关 + 全局策略(strict/balanced/loose), 开启后各商户 opt-in 才生效（第三层）
 @Data
 @Accessors(chain = true)
@@ -42,11 +41,28 @@ public class PlatformPaySecurityConfig {
     /// 海外 IP 拦截（默认关闭, 拦截境外 IP 支付请求）
     private Boolean blockOverseasIp = Boolean.FALSE;
 
-    /// 省级地区拦截（默认关闭, 开启后根据 IP 归属省份匹配省级黑名单）
+    /// 地区拦截（默认关闭, 开启后根据 IP 归属地匹配省级与市级黑名单; 省级命中后不执行市级检查）
+    ///
+    /// 合并原省级/市级两个独立开关, 名单数据仍按 type=province/city 在「支付安全 → 黑名单」中区分维护。
+    private Boolean regionBlacklistEnabled = Boolean.FALSE;
+
+    /// 省级地区拦截（兼容旧版 jsonb 配置迁移, 不再参与逻辑）
+    ///
+    /// 由 [PlatformSecurityConfigService] 读取时合并进 [regionBlacklistEnabled] 后清理, 勿再使用。
+    @Deprecated
     private Boolean provinceBlacklistEnabled = Boolean.FALSE;
 
-    /// 市级地区拦截（默认关闭, 开启后根据 IP 归属城市匹配市级黑名单; 与省级开关独立, 省命中后不执行）
+    /// 市级地区拦截（兼容旧版 jsonb 配置迁移, 不再参与逻辑）
+    ///
+    /// 由 [PlatformSecurityConfigService] 读取时合并进 [regionBlacklistEnabled] 后清理, 勿再使用。
+    @Deprecated
     private Boolean cityBlacklistEnabled = Boolean.FALSE;
+
+    /// IPv6 地区匹配开关（默认关闭, IPv6 离线数据精度有限）
+    ///
+    /// 开启后省级/市级/海外/地理围栏四项地域检查会对 IPv6 地址执行地区匹配;
+    /// 关闭时 IPv6 地址在地域检查中直通放行。xdb 开源 IPv6 数据精度有限, 商用数据可提高可靠性。
+    private Boolean ipv6MatchEnabled = Boolean.FALSE;
 
     /// 地理围栏全局开关（默认关闭, 开启后各商户 mch_risk_config.geoFenceEnabled opt-in 才生效）
     private Boolean geoFenceEnabled = Boolean.FALSE;

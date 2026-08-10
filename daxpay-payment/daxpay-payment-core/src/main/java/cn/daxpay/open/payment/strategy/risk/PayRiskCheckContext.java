@@ -72,17 +72,18 @@ public class PayRiskCheckContext {
     /// 读取平台配置后注入, 供检查器按 IP 归属地判定是否命中。
     private Boolean blockOverseasIp;
 
-    /// 是否启用省级地区拦截（null/false=不检查；true=按 IP 省份匹配省级黑名单）
+    /// 是否启用地区拦截（null/false=不检查；true=按 IP 归属地匹配省级与市级黑名单）
     ///
     /// 地域策略开关快照, 由 [cn.daxpay.open.payment.trade.runtime.service.pay.common.PayRiskAssistService]
-    /// 读取平台配置后注入。省级命中后不再执行市级检查。
-    private Boolean provinceBlacklistEnabled;
+    /// 读取平台配置后注入。合并原省级/市级独立开关, 省级命中后不再执行市级检查。
+    private Boolean regionBlacklistEnabled;
 
-    /// 是否启用市级地区拦截（null/false=不检查；true=按 IP 城市匹配市级黑名单）
+    /// 是否启用 IPv6 地区匹配（null/false=IPv6 直通放行；true=对 IPv6 执行地区匹配）
     ///
     /// 地域策略开关快照, 由 [cn.daxpay.open.payment.trade.runtime.service.pay.common.PayRiskAssistService]
-    /// 读取平台配置后注入。与省级开关独立, 省级未命中时执行。
-    private Boolean cityBlacklistEnabled;
+    /// 读取平台配置后注入。关闭时省级/市级/海外/地理围栏四项检查对 IPv6 直通放行;
+    /// 开启时 IPv6 走 ip2region 查询(xdb 离线数据精度有限)。
+    private Boolean ipv6MatchEnabled;
 
     /// 是否启用地理围栏（null/false=不检查；true=启用门店市级围栏检测）
     ///

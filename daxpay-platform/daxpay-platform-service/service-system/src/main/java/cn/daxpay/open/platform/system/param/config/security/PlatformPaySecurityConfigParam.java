@@ -36,13 +36,13 @@ public class PlatformPaySecurityConfigParam {
     @NotNull(message = "{validation.field.blockOverseasIp.notNull}")
     private Boolean blockOverseasIp;
 
-    @Schema(description = "省级地区拦截（默认关闭, 开启后根据 IP 归属省份匹配省级黑名单）")
-    @NotNull(message = "{validation.field.provinceBlacklistEnabled.notNull}")
-    private Boolean provinceBlacklistEnabled;
+    @Schema(description = "地区拦截（默认关闭, 开启后根据 IP 归属地匹配省级与市级黑名单; 省级命中后不执行市级检查）")
+    @NotNull(message = "{validation.field.regionBlacklistEnabled.notNull}")
+    private Boolean regionBlacklistEnabled;
 
-    @Schema(description = "市级地区拦截（默认关闭, 开启后根据 IP 归属城市匹配市级黑名单; 与省级开关独立）")
-    @NotNull(message = "{validation.field.cityBlacklistEnabled.notNull}")
-    private Boolean cityBlacklistEnabled;
+    @Schema(description = "IPv6 地区匹配开关（默认关闭, 开启后地域检查对 IPv6 执行匹配; 离线数据精度有限）")
+    @NotNull(message = "{validation.field.ipv6MatchEnabled.notNull}")
+    private Boolean ipv6MatchEnabled;
 
     @Schema(description = "地理围栏全局开关（默认关闭, 开启后各商户围栏 opt-in 才生效）")
     @NotNull(message = "{validation.field.geoFenceEnabled.notNull}")

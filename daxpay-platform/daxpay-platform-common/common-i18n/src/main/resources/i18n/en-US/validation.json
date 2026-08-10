@@ -811,11 +811,11 @@
     "blockOverseasIp": {
       "notNull": "Overseas IP block toggle cannot be empty"
     },
-    "provinceBlacklistEnabled": {
-      "notNull": "Province-level blocking toggle cannot be empty"
+    "regionBlacklistEnabled": {
+      "notNull": "Region blocking toggle cannot be empty"
     },
-    "cityBlacklistEnabled": {
-      "notNull": "City-level blocking toggle cannot be empty"
+    "ipv6MatchEnabled": {
+      "notNull": "IPv6 region matching toggle cannot be empty"
     },
     "geoFenceEnabled": {
       "notNull": "Geo-fence toggle cannot be empty"

@@ -79,12 +79,8 @@ public class DefaultPayRiskChecker implements PayRiskChecker {
         if (Boolean.TRUE.equals(ctx.getBlockOverseasIp())) {
             checkOverseasIp(ctx, throwOnHit);
         }
-        // IP 省级地区黑名单（第二层全局地区名单, 受 provinceBlacklistEnabled 开关控制; 省命中后不再执行市级检查）
-        boolean provinceHit = checkProvinceBlacklist(ctx, throwOnHit);
-        // IP 市级地区黑名单（第二层, 受 cityBlacklistEnabled 开关控制, 与省级开关独立）
-        if (!provinceHit && Boolean.TRUE.equals(ctx.getCityBlacklistEnabled())) {
-            checkCityBlacklist(ctx, throwOnHit);
-        }
+        // IP 地区黑名单（第二层全局地区名单, 受 regionBlacklistEnabled 开关控制; 省级命中后不执行市级检查）
+        checkRegionBlacklist(ctx, throwOnHit);
         // L3 地理围栏（门店市级: IP 归属城市与门店城市比对）
         if (Boolean.TRUE.equals(ctx.getGeoFenceEnabled())) {
             checkStoreGeoFence(ctx, throwOnHit);
@@ -111,11 +107,8 @@ public class DefaultPayRiskChecker implements PayRiskChecker {
         if (Boolean.TRUE.equals(ctx.getBlockOverseasIp())) {
             checkOverseasIp(ctx, false);
         }
-        // IP 地区黑名单（事后补录, 受 provinceBlacklistEnabled 开关控制; 省命中后不再补录市级）
-        boolean provinceHit = checkProvinceBlacklist(ctx, false);
-        if (!provinceHit && Boolean.TRUE.equals(ctx.getCityBlacklistEnabled())) {
-            checkCityBlacklist(ctx, false);
-        }
+        // IP 地区黑名单（事后补录, 受 regionBlacklistEnabled 开关控制; 省级命中后不补录市级）
+        checkRegionBlacklist(ctx, false);
         // L3 地理围栏（事后补录: IP 归属城市与门店城市比对）
         if (Boolean.TRUE.equals(ctx.getGeoFenceEnabled())) {
             checkStoreGeoFence(ctx, false);
@@ -173,70 +166,53 @@ public class DefaultPayRiskChecker implements PayRiskChecker {
         return true;
     }
 
-    /// IP 省级地区黑名单（第二层全局地区名单）
+    /// IP 地区黑名单（第二层全局地区名单, 含省级 + 市级）
     ///
-    /// IP 归属省份在省级黑名单中则命中, value 存省行政区划编码(2位, 如"44")。
-    /// 需平台配置 provinceBlacklistEnabled=true 才执行; IPv6 / 内网 / 解析失败 / 无法映射编码 → fail-open 放行。
-    /// @return 是否命中（用于外层短路市级检查）
-    private boolean checkProvinceBlacklist(PayRiskCheckContext ctx, boolean throwOnHit) {
-        // 省级拦截开关关闭时跳过
-        if (!Boolean.TRUE.equals(ctx.getProvinceBlacklistEnabled())) {
+    /// 受 regionBlacklistEnabled 开关控制。先按 IP 归属省份匹配省级黑名单(value 存省行政区划编码, 如"44"),
+    /// 命中即拦截不再执行市级检查; 未命中再按 IP 归属城市匹配市级黑名单(value 存市行政区划编码, 如"4403";
+    /// 直辖市无独立市级, 城市名单存省编码, 由 [RegionCodeResolver#resolveCityCode] 回落为省编码)。
+    /// 省/市名单数据在「支付安全 → 黑名单」中按 type 区分维护。
+    /// IPv6(受 ipv6MatchEnabled 控制) / 内网 / 解析失败 / 无法映射编码 → fail-open 放行。
+    /// @return 是否命中（省级或市级）
+    private boolean checkRegionBlacklist(PayRiskCheckContext ctx, boolean throwOnHit) {
+        // 地区拦截开关关闭时跳过
+        if (!Boolean.TRUE.equals(ctx.getRegionBlacklistEnabled())) {
             return false;
         }
         String ip = ctx.getClientIp();
         if (StrUtil.isBlank(ip)) {
             return false;
         }
-        // IPv6 暂不参与地区判定
+        // IPv6 受 ipv6MatchEnabled 开关控制（默认关闭, 离线数据精度有限）
         if (Validator.isIpv6(ip)) {
-            return false;
-        }
-        // 内网/回环地址直通放行
-        if (NetUtil.isInnerIP(ip)) {
-            return false;
+            if (!Boolean.TRUE.equals(ctx.getIpv6MatchEnabled())) {
+                return false;
+            }
+            // 开关开启: 跳过 NetUtil.isInnerIP（仅支持 IPv4）, IPv6 内网由 xdb 查询 fail-open 兜底
+        } else {
+            // IPv4 内网/回环地址直通放行
+            if (NetUtil.isInnerIP(ip)) {
+                return false;
+            }
         }
         IpRegion region = ipToRegionService.getRegionByIp(ip);
         // 解析失败 → fail-open
         if (region == null) {
             return false;
         }
-        // IP 归属省份 → 行政区划编码(港澳台/"0"段/未知无法映射 → fail-open)
+        // 省级名单: IP 归属省份 → 行政区划编码(港澳台/"0"段/未知无法映射 → 跳过省级, 继续市级)
         String provinceCode = regionCodeResolver.resolveProvinceCode(region.getProvince());
-        if (StrUtil.isBlank(provinceCode)) {
-            return false;
+        if (StrUtil.isNotBlank(provinceCode)
+                && rejectIfBlocked(ctx, PayBlacklistTypeEnum.PROVINCE.getCode(), provinceCode, null, throwOnHit)) {
+            // 省命中即拦截, 不再执行市级检查
+            return true;
         }
-        return rejectIfBlocked(ctx, PayBlacklistTypeEnum.PROVINCE.getCode(), provinceCode, null, throwOnHit);
-    }
-
-    /// IP 市级地区黑名单（第二层全局地区名单）
-    ///
-    /// IP 归属城市在市级黑名单中则命中, value 存市行政区划编码(4位, 如"4403")。
-    /// 直辖市无独立市级(城市名单存省编码), 由 [RegionCodeResolver#resolveCityCode] 回落为省编码。
-    /// 需平台配置 cityBlacklistEnabled=true 才执行; IPv6 / 内网 / 解析失败 / 无法映射编码 → fail-open 放行。
-    private void checkCityBlacklist(PayRiskCheckContext ctx, boolean throwOnHit) {
-        String ip = ctx.getClientIp();
-        if (StrUtil.isBlank(ip)) {
-            return;
-        }
-        // IPv6 暂不参与地区判定
-        if (Validator.isIpv6(ip)) {
-            return;
-        }
-        // 内网/回环地址直通放行
-        if (NetUtil.isInnerIP(ip)) {
-            return;
-        }
-        IpRegion region = ipToRegionService.getRegionByIp(ip);
-        // 解析失败 → fail-open
-        if (region == null) {
-            return;
-        }
-        // IP 归属城市 → 行政区划编码(直辖市回落省编码; "0"段/未知无法映射 → fail-open)
+        // 市级名单: IP 归属城市 → 行政区划编码(直辖市回落省编码; "0"段/未知无法映射 → fail-open)
         String cityCode = regionCodeResolver.resolveCityCode(region.getProvince(), region.getCity());
         if (StrUtil.isBlank(cityCode)) {
-            return;
+            return false;
         }
-        rejectIfBlocked(ctx, PayBlacklistTypeEnum.CITY.getCode(), cityCode, null, throwOnHit);
+        return rejectIfBlocked(ctx, PayBlacklistTypeEnum.CITY.getCode(), cityCode, null, throwOnHit);
     }
 
     /// 海外 IP 地域拦截（country≠中国, 港澳台放行; 未知/内网 fail-open）
@@ -249,13 +225,17 @@ public class DefaultPayRiskChecker implements PayRiskChecker {
         if (StrUtil.isBlank(ip)) {
             return;
         }
-        // IPv6 暂不参与网段判定, 直接放行(NetUtil.isInnerIP 仅支持 IPv4, 传入 IPv6 会抛异常)
+        // IPv6 受 ipv6MatchEnabled 开关控制（默认关闭, 离线数据精度有限）
         if (Validator.isIpv6(ip)) {
-            return;
-        }
-        // 内网/回环地址直通放行(网络层判定, 不查库)
-        if (NetUtil.isInnerIP(ip)) {
-            return;
+            if (!Boolean.TRUE.equals(ctx.getIpv6MatchEnabled())) {
+                return;
+            }
+            // 开关开启: 跳过 NetUtil.isInnerIP（仅支持 IPv4, 传 IPv6 会抛异常）, IPv6 内网由 xdb fail-open 兜底
+        } else {
+            // IPv4 内网/回环地址直通放行(网络层判定, 不查库)
+            if (NetUtil.isInnerIP(ip)) {
+                return;
+            }
         }
         IpRegion region = ipToRegionService.getRegionByIp(ip);
         // 未知(IPv6/查询失败)/国内(含港澳台) → 放行
@@ -298,13 +278,17 @@ public class DefaultPayRiskChecker implements PayRiskChecker {
         if (StrUtil.isBlank(ip)) {
             return;
         }
-        // IPv6 暂不参与地区判定
+        // IPv6 受 ipv6MatchEnabled 开关控制（默认关闭, 离线数据精度有限）
         if (Validator.isIpv6(ip)) {
-            return;
-        }
-        // 内网/回环地址直通放行
-        if (NetUtil.isInnerIP(ip)) {
-            return;
+            if (!Boolean.TRUE.equals(ctx.getIpv6MatchEnabled())) {
+                return;
+            }
+            // 开关开启: 跳过 NetUtil.isInnerIP（仅支持 IPv4）, IPv6 内网由 xdb 查询 fail-open 兜底
+        } else {
+            // IPv4 内网/回环地址直通放行
+            if (NetUtil.isInnerIP(ip)) {
+                return;
+            }
         }
         IpRegion region = ipToRegionService.getRegionByIp(ip);
         if (region == null) {

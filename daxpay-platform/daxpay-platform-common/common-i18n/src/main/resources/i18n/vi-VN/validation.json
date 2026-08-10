@@ -814,11 +814,11 @@
     "blockOverseasIp": {
       "notNull": "Công tắc chặn IP nước ngoài không được để trống"
     },
-    "provinceBlacklistEnabled": {
-      "notNull": "Công tắc chặn cấp tỉnh không được để trống"
+    "regionBlacklistEnabled": {
+      "notNull": "Công tắc chặn khu vực không được để trống"
     },
-    "cityBlacklistEnabled": {
-      "notNull": "Công tắc chặn cấp thành phố không được để trống"
+    "ipv6MatchEnabled": {
+      "notNull": "Công tắc khớp vùng IPv6 không được để trống"
     },
     "geoFenceEnabled": {
       "notNull": "Công tắc hàng rào địa lý không được để trống"

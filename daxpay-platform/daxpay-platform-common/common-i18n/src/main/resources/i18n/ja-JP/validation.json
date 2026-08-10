@@ -807,11 +807,11 @@
     "blockOverseasIp": {
       "notNull": "海外 IP ブロック スイッチは必須です"
     },
-    "provinceBlacklistEnabled": {
-      "notNull": "省レベルの地域遮断スイッチは必須です"
+    "regionBlacklistEnabled": {
+      "notNull": "地域遮断スイッチは必須です"
     },
-    "cityBlacklistEnabled": {
-      "notNull": "市レベルの地域遮断スイッチは必須です"
+    "ipv6MatchEnabled": {
+      "notNull": "IPv6 地域マッチングスイッチは必須です"
     },
     "geoFenceEnabled": {
       "notNull": "ジオフェンススイッチは必須です"

@@ -814,11 +814,11 @@
     "blockOverseasIp": {
       "notNull": "สวิตช์บล็อก IP ต่างประเทศต้องไม่ว่าง"
     },
-    "provinceBlacklistEnabled": {
-      "notNull": "สวิตช์บล็อกภูมิภาคระดับจังหวัดต้องไม่ว่าง"
+    "regionBlacklistEnabled": {
+      "notNull": "สวิตช์บล็อกภูมิภาคต้องไม่ว่าง"
     },
-    "cityBlacklistEnabled": {
-      "notNull": "สวิตช์บล็อกภูมิภาคระดับเมืองต้องไม่ว่าง"
+    "ipv6MatchEnabled": {
+      "notNull": "สวิตช์จับคู่ภูมิภาค IPv6 ต้องไม่ว่าง"
     },
     "geoFenceEnabled": {
       "notNull": "สวิตช์รั้วภูมิศาสตร์ต้องไม่ว่าง"

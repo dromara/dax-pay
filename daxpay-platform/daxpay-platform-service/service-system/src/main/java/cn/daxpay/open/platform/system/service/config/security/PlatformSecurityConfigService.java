@@ -262,7 +262,16 @@ public class PlatformSecurityConfigService {
             return defaultPaySecurityConfig();
         }
         PlatformPaySecurityConfig config = JacksonUtil.toBean(json, PlatformPaySecurityConfig.class);
-        return config == null ? defaultPaySecurityConfig() : config;
+        if (config == null) {
+            return defaultPaySecurityConfig();
+        }
+        // 兼容旧版: 原省级/市级开关已合并为地区拦截, 旧字段任一开启则迁移为地区拦截开启
+        if (config.getRegionBlacklistEnabled() == null) {
+            boolean legacyOn = Boolean.TRUE.equals(config.getProvinceBlacklistEnabled())
+                    || Boolean.TRUE.equals(config.getCityBlacklistEnabled());
+            config.setRegionBlacklistEnabled(legacyOn);
+        }
+        return config;
     }
 
     /// 支付安全配置默认值: 默认开启风控、命中阻断、事后补录、增强拦截
@@ -273,6 +282,7 @@ public class PlatformSecurityConfigService {
                 .setRiskCheckAfterPay(true)
                 .setRiskOpenIdLevel(PayRiskOpenIdLevelEnum.ENHANCED.getCode())
                 .setBlockOverseasIp(false)
+                .setIpv6MatchEnabled(false)
                 .setGeoFenceStrategy(GEO_FENCE_STRATEGY_BALANCED);
     }
 
@@ -293,6 +303,9 @@ public class PlatformSecurityConfigService {
                 PlatformPaySecurityConfig.class,
                 defaultPaySecurityConfig());
         PlatformSecurityConfigConvert.CONVERT.copy(param, data);
+        // 清理旧版省级/市级开关字段（已合并进 regionBlacklistEnabled, jsonb 不再保留）
+        data.setProvinceBlacklistEnabled(null);
+        data.setCityBlacklistEnabled(null);
         systemConfigService.updateConfig(PlatformConfigTypeEnum.PAY_SECURITY, data);
     }
 }
