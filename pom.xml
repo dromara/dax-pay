@@ -57,15 +57,13 @@
         <ip2region.version>3.3.7</ip2region.version>
         <wxjava.version>4.8.4.B</wxjava.version>
         <commonmark.version>0.24.0</commonmark.version>
-        <!-- Netty 版本覆盖（JDK 25 兼容修复）：
-             Boot 4.1 BOM 默认 netty 4.2.15，其 CleanerJava25 对"任意 direct ByteBuffer"无法手动清理，
-             直接抛 UnsupportedOperationException: Cannot clean arbitrary ByteBuffer instances；
-             Artemis 内嵌 broker（embedded 模式）加载 NIO journal 时调用
-             NIOSequentialFileFactory.releaseDirectBuffer 未捕获该异常 → 启动失败（AMQ224000）。
-             4.1.135 与 Artemis 2.53 官方声明的 4.1.x 同系，CleanerJava9 在 JDK 25 上可正常清理
-             （invokeCleaner 仍存在，仅 deprecated），且降级链优雅（不支持时 NOOP，不会抛异常）。
-             注意：JDK 26 移除 invokeCleaner 后需再随 Artemis 官方升级同步处理。 -->
-        <netty.version>4.1.135.Final</netty.version>
+        <!-- Netty：用 Boot 4.1 BOM 默认（4.2.x），不覆盖。
+             曾为 embedded Artemis 降到 4.1.135（netty 4.2 的 CleanerJava25 在 JDK25 上对 NIO journal
+             direct ByteBuffer 抛 UnsupportedOperationException → AMQ224000），但 4.1 缺少
+             io.netty.channel.MultiThreadIoEventLoopGroup（netty 4.2 重构后的新基类），导致 Lettuce 7.x
+             （Boot 4.1 自带 Redis 客户端）运行时 NoClassDefFoundError —— 走 Redis 的路径（如 shedlock
+             定时任务抢锁）全炸。embedded 模式与 Lettuce 在 JDK25 不可共存，已弃用回 native 独立容器。
+             若未来重启 embedded，须先确认 Artemis 兼容 netty 4.2。 -->
     </properties>
 
     <build>

@@ -24,13 +24,6 @@
             <groupId>org.messaginghub</groupId>
             <artifactId>pooled-jms</artifactId>
         </dependency>
-        <!-- 嵌入式 Artemis server（提供 EmbeddedActiveMQ + Configuration）
-             常驻 fat jar，使 spring.artemis.mode=embedded 可用；mode=native 时本依赖不被装配路径触发。
-             版本由 Spring Boot BOM 管理。 -->
-        <dependency>
-            <groupId>org.apache.activemq</groupId>
-            <artifactId>artemis-jms-server</artifactId>
-        </dependency>
         <!-- JSON 序列化 -->
         <dependency>
             <groupId>cn.daxpay.open</groupId>
