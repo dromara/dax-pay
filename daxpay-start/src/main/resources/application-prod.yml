@@ -40,16 +40,25 @@ spring:
       lettuce:
         pool:
           max-wait: 1000ms
-  # Artemis 消息队列(凭证环境变量注入)
+  # Artemis 消息队列（双模式：native=外置容器 / embedded=内嵌 JVM）
+  # 切换：环境变量 ARTEMIS_MODE=native|embedded（默认 native），无需改代码、不重打包
+  # - native：连接独立 artemis 容器（标准部署），需 ARTEMIS_USER/PASSWORD（installer 注入）
+  # - embedded：broker 内嵌后端 JVM（内存紧张场景省独立 JVM），无需凭证，journal 落 ARTEMIS_DATA_DIR
   artemis:
-    mode: native
+    mode: ${ARTEMIS_MODE:native}
     broker-url: ${ARTEMIS_BROKER_URL:tcp://artemis:61616}
-    user: ${ARTEMIS_USER:?missing ARTEMIS_USER}
-    password: ${ARTEMIS_PASSWORD:?missing ARTEMIS_PASSWORD}
+    # 凭证空串兜底：embedded 模式不传也不报错；native 模式由 installer 注入真实值
+    user: ${ARTEMIS_USER:}
+    password: ${ARTEMIS_PASSWORD:}
     pool:
       enabled: true
       max-connections: 20
       idle-timeout: 30s
+    embedded:
+      enabled: true
+      # 持久化：支付超时 / 通知消息重启不丢（journal 落盘）
+      persistent: true
+      data-directory: ${ARTEMIS_DATA_DIR:./data/artemis}
   jms:
     cache:
       enabled: true

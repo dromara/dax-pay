@@ -18,3 +18,6 @@ rebel.xml
 .trae
 
 nul
+
+# Artemis 嵌入式 broker 运行时持久化目录（journal/分页/绑定）
+data/

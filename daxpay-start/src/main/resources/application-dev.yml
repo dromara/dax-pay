@@ -34,21 +34,23 @@ spring:
       lettuce:
         pool:
           max-wait: 1000ms
-  # Artemis 消息队列配置（独立容器部署，JMS 协议）
-  # 本地开发启动 broker：
+  # Artemis 消息队列（双模式：native=外置容器 / embedded=内嵌 JVM）
+  # 本地开发默认 embedded：无需启动独立 artemis 容器，broker 内嵌后端 JVM
+  # 如需连外部 broker（联调 docker artemis）：设环境变量
+  #   ARTEMIS_MODE=native + ARTEMIS_BROKER_URL/USER/PASSWORD
   artemis:
-    # 连接模式：native 表示连接外部独立 broker（非嵌入式）
-    mode: native
-    # Broker 连接地址
-    broker-url: tcp://192.168.1.229:61616
-    # broker 账号（与容器启动环境变量一致）
-    user: admin
-    password: admin
-    # 连接池
+    mode: ${ARTEMIS_MODE:embedded}
+    broker-url: ${ARTEMIS_BROKER_URL:tcp://192.168.1.229:61616}
+    user: ${ARTEMIS_USER:admin}
+    password: ${ARTEMIS_PASSWORD:admin}
     pool:
       enabled: true
       max-connections: 10
       idle-timeout: 30s
+    embedded:
+      enabled: true
+      persistent: true
+      data-directory: ${ARTEMIS_DATA_DIR:./data/artemis}
   jms:
     # 会话缓存，提升发送性能
     cache:
