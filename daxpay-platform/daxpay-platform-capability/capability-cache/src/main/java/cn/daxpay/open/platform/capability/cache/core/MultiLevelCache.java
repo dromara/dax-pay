@@ -17,6 +17,7 @@ import java.util.concurrent.Callable;
 /// - 缓存失效通过 Artemis 广播通知其他节点删除本地 L1
 /// - 本地缓存 key 必须统一使用字符串形式，保证跨节点广播删除一致性
 /// - 敏感缓存（secure:）在数据加密未启用时仅使用 L1，禁止明文写 Redis
+/// - 两层开关：[#cacheEnabled] 总开关关 L1+L2 一并 NoOp；[#l1Enabled] 在总开关开启时可单独关 L1 留 L2
 @Slf4j
 public class MultiLevelCache implements Cache {
 
@@ -34,19 +35,35 @@ public class MultiLevelCache implements Cache {
     /// 敏感缓存是否允许写/读 L2（依赖数据加密已启用）
     private final boolean secureL2Enabled;
 
+    /// 缓存总开关，false 时 L1+L2 一并 NoOp（直接穿透到方法）
+    ///
+    /// 由 [cn.daxpay.open.platform.common.config.properties.PlatformCommonProperties.Cache#isEnabled] 控制。
+    private final boolean cacheEnabled;
+
+    /// L1 本地缓存单独开关，false 时跳过 L1 读写删，仅保留 L2 Redis（纯 Redis 模式）
+    ///
+    /// 由 [cn.daxpay.open.platform.common.config.properties.PlatformCommonProperties.Cache.L1#isEnabled] 控制。
+    /// 仅在 [#cacheEnabled] 为 true 时有意义；总开关关闭时 L1 随之关闭。
+    private final boolean l1Enabled;
+
     public MultiLevelCache(String name,
                            LocalCacheRegistry localCacheRegistry,
                            Cache redisCache,
                            CacheInvalidationPublisher publisher,
                            boolean secureCache,
-                           boolean secureL2Enabled) {
+                           boolean secureL2Enabled,
+                           boolean cacheEnabled,
+                           boolean l1Enabled) {
         this.name = name;
         this.localCache = localCacheRegistry.getOrCreate(name);
         this.redisCache = redisCache;
         this.publisher = publisher;
         this.secureCache = secureCache;
         this.secureL2Enabled = secureL2Enabled;
-        if (secureCache && !secureL2Enabled) {
+        this.cacheEnabled = cacheEnabled;
+        this.l1Enabled = l1Enabled;
+        // 仅在缓存启用时才提示敏感缓存降级，关闭态不打扰日志
+        if (cacheEnabled && secureCache && !secureL2Enabled) {
             log.warn("敏感缓存 [{}] 因未启用数据加密，仅使用 L1 本地缓存，不写 Redis", name);
         }
     }
@@ -69,29 +86,40 @@ public class MultiLevelCache implements Cache {
     /// 读取缓存，优先从 L1 本地缓存读取，未命中则从 L2 Redis 读取并回填 L1
     ///
     /// 读取流程：
-    /// - 查 L1 本地缓存
-    /// - L1 未命中则查 L2 Redis
-    /// - L2 命中则回填 L1
+    /// - 总开关关闭时直接返回 null（穿透到方法）
+    /// - L1 开启时查本地缓存，命中直接返回
+    /// - L1 关闭或未命中则查 L2 Redis
+    /// - L2 命中且 L1 开启则回填 L1
     /// - 全未命中返回 null
     ///
-    /// 敏感缓存且未启用加密时跳过 L2，仅查 L1
+    /// 敏感缓存且未启用加密时跳过 L2，仅查 L1（L1 也关则穿透）
     @Override
     public ValueWrapper get(Object key) {
+        // 缓存总开关关闭：直接穿透，不查任何一层
+        if (!this.cacheEnabled) {
+            return null;
+        }
         String localKey = this.toLocalKey(key);
-        Object localValue = this.localCache.getIfPresent(localKey);
-        if (localValue != null) {
-            return () -> localValue;
+        // L1 单独开关：开启时先查本地缓存
+        if (this.l1Enabled) {
+            Object localValue = this.localCache.getIfPresent(localKey);
+            if (localValue != null) {
+                return () -> localValue;
+            }
         }
 
         // 敏感缓存未开加密：禁止读 Redis，避免历史明文或无法解密的脏数据
         if (this.isL1Only()) {
-            log.debug("敏感缓存 L1-only 未命中: cacheName={}, key={}", this.name, key);
+            log.debug("敏感缓存 L1-only 未命中: cacheName={}, key={}, l1Enabled={}", this.name, key, this.l1Enabled);
             return null;
         }
 
         ValueWrapper redisValue = this.redisCache.get(key);
         if (redisValue != null) {
-            this.localCache.put(localKey, Objects.requireNonNull(redisValue.get()));
+            // L1 开启才回填本地，关闭时仅返回 L2 值
+            if (this.l1Enabled) {
+                this.localCache.put(localKey, Objects.requireNonNull(redisValue.get()));
+            }
             return redisValue;
         }
 
@@ -127,51 +155,77 @@ public class MultiLevelCache implements Cache {
         }
     }
 
-    /// 写入缓存，同时写入 L2 Redis 和 L1 本地缓存
+    /// 写入缓存
     ///
-    /// 注意：写入操作不广播通知其他节点，其他节点在读取时会从 L2 加载最新值
-    ///
-    /// 敏感缓存且未启用加密时仅写 L1，禁止明文写 Redis
+    /// - L1 开启：写 L2 Redis + L1 本地
+    /// - L1 关闭：仅写 L2 Redis（纯 Redis 模式）
+    /// - 敏感缓存且未启用加密时仅写 L1（L1 也关则不缓存）
     @Override
     public void put(Object key, Object value) {
+        // 缓存总开关关闭：直接穿透，不写任何一层
+        if (!this.cacheEnabled) {
+            return;
+        }
         if (value == null) {
             log.debug("缓存值为空，跳过写入: cacheName={}, key={}", this.name, key);
             return;
         }
         String localKey = this.toLocalKey(key);
         if (this.isL1Only()) {
-            this.localCache.put(localKey, value);
-            log.debug("写入 L1-only 敏感缓存: cacheName={}, key={}", this.name, key);
+            // 敏感缓存禁 Redis：仅写 L1；L1 也关则该缓存实质不缓存
+            if (this.l1Enabled) {
+                this.localCache.put(localKey, value);
+                log.debug("写入 L1-only 敏感缓存: cacheName={}, key={}", this.name, key);
+            } else {
+                log.debug("敏感缓存 L1 已关闭且禁写 Redis，跳过写入: cacheName={}, key={}", this.name, key);
+            }
             return;
         }
         this.redisCache.put(key, value);
-        this.localCache.put(localKey, value);
-        log.debug("写入二级缓存: cacheName={}, key={}", this.name, key);
+        if (this.l1Enabled) {
+            this.localCache.put(localKey, value);
+        }
+        log.debug("写入缓存: cacheName={}, key={}, l1Enabled={}", this.name, key, this.l1Enabled);
     }
 
-    /// 删除缓存，同时删除 L2 Redis 和 L1 本地缓存，并广播通知其他节点删除 L1
+    /// 删除缓存
     ///
     /// 删除流程：
-    /// - 删除 L2 Redis
-    /// - 删除本机 L1
-    /// - 发布 Artemis 广播消息
-    /// - 其他节点收到消息后删除各自 L1
+    /// - 删除 L2 Redis（共享层）
+    /// - L1 开启时删除本机 L1
+    /// - 发布 Artemis 广播消息（始终发，其他节点可能 L1 开启）
+    ///
+    /// 注意：广播不因本机 L1 关闭而跳过——集群中其他节点可能 L1 开启，仍需通知其删除本地缓存
     @Override
     public void evict(Object key) {
+        // 缓存总开关关闭：无缓存可删，直接返回
+        if (!this.cacheEnabled) {
+            return;
+        }
         String localKey = this.toLocalKey(key);
         // 仍尝试删 Redis，清理可能存在的历史数据
         this.redisCache.evict(key);
-        this.localCache.invalidate(localKey);
-        log.debug("删除二级缓存: cacheName={}, key={}", this.name, key);
+        if (this.l1Enabled) {
+            this.localCache.invalidate(localKey);
+        }
+        log.debug("删除缓存: cacheName={}, key={}, l1Enabled={}", this.name, key, this.l1Enabled);
         this.publisher.publishEvict(this.name, localKey);
     }
 
-    /// 清空缓存，同时清空 L2 Redis 和 L1 本地缓存，并广播通知其他节点清空 L1
+    /// 清空缓存
+    ///
+    /// 清空 L2 Redis；L1 开启时清空本机 L1；始终广播（其他节点可能 L1 开启）
     @Override
     public void clear() {
+        // 缓存总开关关闭：无缓存可清，直接返回
+        if (!this.cacheEnabled) {
+            return;
+        }
         this.redisCache.clear();
-        this.localCache.invalidateAll();
-        log.debug("清空二级缓存: cacheName={}", this.name);
+        if (this.l1Enabled) {
+            this.localCache.invalidateAll();
+        }
+        log.debug("清空缓存: cacheName={}, l1Enabled={}", this.name, this.l1Enabled);
         this.publisher.publishClear(this.name);
     }
 

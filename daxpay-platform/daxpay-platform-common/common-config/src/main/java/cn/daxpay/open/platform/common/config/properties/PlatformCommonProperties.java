@@ -27,6 +27,12 @@ public class PlatformCommonProperties {
     ///
     @Data
     public static class Cache {
+        /// 缓存总开关，关闭后 L1 本地缓存 + L2 Redis 缓存全部退化成 NoOp（直接穿透到方法）
+        ///
+        /// 设计要点：
+        /// - L1 与 L2 是强绑定的整体（L1 加速 + L2 共享），不单独开关
+        /// - true（默认）= 启用整套二级缓存；false = 彻底禁用，排查/诊断时使用
+        private boolean enabled = true;
         /// L1 本地缓存配置
         private L1 l1 = new L1();
         /// L2 Redis 缓存配置
@@ -40,6 +46,13 @@ public class PlatformCommonProperties {
         ///
         @Data
         public static class L1 {
+            /// L1 本地缓存单独开关，false 时关闭 L1 仅保留 L2 Redis（纯 Redis 模式）
+            ///
+            /// 设计要点：
+            /// - 仅在 [Cache#isEnabled] 总开关开启时生效；总开关关闭时 L1/L2 一并 NoOp
+            /// - L2 无单独开关：关 L2 等同于关 [Cache#isEnabled] 总开关（全关）
+            /// - 关闭 L1 适用场景：强一致性要求 / 排查本地脏读 / 单机无本地加速诉求
+            private boolean enabled = true;
             /// 默认超时时间 60秒
             private Long defaultTtl = 60L;
             /// 默认最大容量

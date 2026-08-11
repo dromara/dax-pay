@@ -144,13 +144,23 @@ public class CachingConfiguration implements CachingConfigurer {
                                      CacheInvalidationPublisher publisher,
                                      SecureCacheNameMatcher secureCacheNameMatcher,
                                      ObjectProvider<SecureAesGcmEncryptor> encryptorProvider) {
+        // 缓存总开关：关闭后 L1+L2 一并退化成 NoOp（直接穿透到方法），用于排查/诊断
+        boolean cacheEnabled = platformCommonProperties.getCache().isEnabled();
+        // L1 单独开关：总开关开启时，可单独关闭 L1 仅保留 L2 Redis（纯 Redis 模式）
+        boolean l1Enabled = platformCommonProperties.getCache().getL1().isEnabled();
         boolean secureL2Enabled = encryptorProvider.getIfAvailable() != null;
+        log.info("缓存模式: enabled={}, l1={} -> {}",
+                cacheEnabled, l1Enabled,
+                !cacheEnabled ? "DISABLED (NoOp, 直接穿透)"
+                        : (l1Enabled ? "L1(Caffeine)+L2(Redis) 二级缓存" : "L2(Redis) only (L1 已关闭)"));
         return new MultiLevelCacheManager(
                 redisCacheManager,
                 localCacheRegistry,
                 publisher,
                 secureCacheNameMatcher,
-                secureL2Enabled
+                secureL2Enabled,
+                cacheEnabled,
+                l1Enabled
         );
     }
 
