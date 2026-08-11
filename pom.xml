@@ -57,6 +57,15 @@
         <ip2region.version>3.3.7</ip2region.version>
         <wxjava.version>4.8.4.B</wxjava.version>
         <commonmark.version>0.24.0</commonmark.version>
+        <!-- Netty 版本覆盖（JDK 25 兼容修复）：
+             Boot 4.1 BOM 默认 netty 4.2.15，其 CleanerJava25 对"任意 direct ByteBuffer"无法手动清理，
+             直接抛 UnsupportedOperationException: Cannot clean arbitrary ByteBuffer instances；
+             Artemis 内嵌 broker（embedded 模式）加载 NIO journal 时调用
+             NIOSequentialFileFactory.releaseDirectBuffer 未捕获该异常 → 启动失败（AMQ224000）。
+             4.1.135 与 Artemis 2.53 官方声明的 4.1.x 同系，CleanerJava9 在 JDK 25 上可正常清理
+             （invokeCleaner 仍存在，仅 deprecated），且降级链优雅（不支持时 NOOP，不会抛异常）。
+             注意：JDK 26 移除 invokeCleaner 后需再随 Artemis 官方升级同步处理。 -->
+        <netty.version>4.1.135.Final</netty.version>
     </properties>
 
     <build>
