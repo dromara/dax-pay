@@ -71,13 +71,6 @@ public class UserInfoService {
             .setPasswordStatus(passwordStatus);
     }
 
-    /// 获取用户安全信息
-    public UserInfoResult getUserSecurityInfo() {
-        return userInfoManager.findById(SecurityUtil.getUserId())
-            .map(UserInfo::toResult)
-            .orElseThrow(UserInfoNotExistsException::new);
-    }
-
     /// 获取用户基本信息
     public UserBaseInfoResult getUserBaseInfo() {
         UserInfo userInfo = userInfoManager.findById(SecurityUtil.getUserId())
