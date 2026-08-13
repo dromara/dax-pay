@@ -67,10 +67,11 @@
             </encoder>
             <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
                 <!-- 按天 + 按大小滚动, gz 压缩归档; 启动时清理超期历史 -->
+                <!-- 容器化部署配额: 单文件 50MB, 保留 7 天, 总上限 600MB(配合 Docker stdout 轮转双层控量) -->
                 <fileNamePattern>${LOG_PATH}/${APP_NAME}.log.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
-                <maxFileSize>200MB</maxFileSize>
-                <maxHistory>30</maxHistory>
-                <totalSizeCap>10GB</totalSizeCap>
+                <maxFileSize>50MB</maxFileSize>
+                <maxHistory>7</maxHistory>
+                <totalSizeCap>600MB</totalSizeCap>
                 <cleanHistoryOnStart>true</cleanHistoryOnStart>
             </rollingPolicy>
         </appender>
@@ -95,11 +96,11 @@
                 <charset>UTF-8</charset>
             </encoder>
             <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
-                <!-- ERROR 日志保留更久(90 天), 总容量单独限制 5GB -->
+                <!-- ERROR 日志保留更久(30 天), 总容量单独限制 150MB(关键故障优先留存) -->
                 <fileNamePattern>${LOG_PATH}/${APP_NAME}-error.log.%d{yyyy-MM-dd}.%i.gz</fileNamePattern>
-                <maxFileSize>200MB</maxFileSize>
-                <maxHistory>90</maxHistory>
-                <totalSizeCap>5GB</totalSizeCap>
+                <maxFileSize>50MB</maxFileSize>
+                <maxHistory>30</maxHistory>
+                <totalSizeCap>150MB</totalSizeCap>
                 <cleanHistoryOnStart>true</cleanHistoryOnStart>
             </rollingPolicy>
         </appender>
