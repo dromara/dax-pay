@@ -4,6 +4,7 @@ import cn.daxpay.open.platform.core.exception.BizException;
 import cn.daxpay.open.platform.iam.dao.user.UserPasswordHistoryManager;
 import cn.daxpay.open.platform.iam.entity.user.UserPasswordHistory;
 import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformPasswordPolicyConfig;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.BCrypt;
 import lombok.RequiredArgsConstructor;
@@ -92,16 +93,17 @@ public class PasswordPolicyService {
 
     private PasswordPolicy getPolicyConfig() {
         PlatformPasswordPolicyConfig config = iamSecurityConfigService.getPasswordPolicy();
+        // 数值字段兜底: 早期版本默认值为裸 new, 存量库可能已落全 null JSON, 拆箱前先补默认防止 NPE
         return new PasswordPolicy(
                 Boolean.TRUE.equals(config.getEnabled()),
-                config.getMinLength(),
-                config.getMaxLength(),
+                ObjectUtil.defaultIfNull(config.getMinLength(), PlatformPasswordPolicyConfig.DEFAULT_MIN_LENGTH),
+                ObjectUtil.defaultIfNull(config.getMaxLength(), PlatformPasswordPolicyConfig.DEFAULT_MAX_LENGTH),
                 Boolean.TRUE.equals(config.getRequireUppercase()),
                 Boolean.TRUE.equals(config.getRequireLowercase()),
                 Boolean.TRUE.equals(config.getRequireDigit()),
                 Boolean.TRUE.equals(config.getRequireSpecialChar()),
-                config.getSpecialChars(),
-                config.getHistoryCount()
+                StrUtil.blankToDefault(config.getSpecialChars(), PlatformPasswordPolicyConfig.DEFAULT_SPECIAL_CHARS),
+                ObjectUtil.defaultIfNull(config.getHistoryCount(), PlatformPasswordPolicyConfig.DEFAULT_HISTORY_COUNT)
         );
     }
 

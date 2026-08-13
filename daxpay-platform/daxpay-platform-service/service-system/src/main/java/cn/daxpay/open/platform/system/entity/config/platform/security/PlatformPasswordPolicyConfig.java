@@ -9,6 +9,15 @@ import lombok.experimental.Accessors;
 @Accessors(chain = true)
 public class PlatformPasswordPolicyConfig {
 
+    /// 默认最小长度
+    public static final int DEFAULT_MIN_LENGTH = 8;
+    /// 默认最大长度
+    public static final int DEFAULT_MAX_LENGTH = 32;
+    /// 默认密码历史记录数量(0 表示不限制)
+    public static final int DEFAULT_HISTORY_COUNT = 0;
+    /// 默认特殊字符集合(策略未配置时的兜底值)
+    public static final String DEFAULT_SPECIAL_CHARS = "!@#$%^&*()_+-=[]{}|;:,.<>?";
+
     /// 是否启用密码强度验证
     private Boolean enabled;
     /// 最小长度

@@ -50,7 +50,22 @@ public class PlatformSecurityConfigService {
     public PlatformPasswordPolicyConfig getPasswordPolicyConfig() {
         return systemConfigService.getOrCreateConfig(PlatformConfigTypeEnum.SECURITY_PASSWORD_POLICY,
                 PlatformPasswordPolicyConfig.class,
-                new PlatformPasswordPolicyConfig());
+                defaultPasswordPolicyConfig());
+    }
+
+    /// 密码策略默认值: 向后兼容档, 默认不启用强度校验(与配置缺失时的行为一致), 数值字段填充避免消费端拆箱空指针
+    private PlatformPasswordPolicyConfig defaultPasswordPolicyConfig() {
+        return new PlatformPasswordPolicyConfig()
+                .setEnabled(false)
+                .setMinLength(PlatformPasswordPolicyConfig.DEFAULT_MIN_LENGTH)
+                .setMaxLength(PlatformPasswordPolicyConfig.DEFAULT_MAX_LENGTH)
+                .setRequireUppercase(false)
+                .setRequireLowercase(false)
+                .setRequireDigit(false)
+                .setRequireSpecialChar(false)
+                .setSpecialChars(PlatformPasswordPolicyConfig.DEFAULT_SPECIAL_CHARS)
+                .setRotationDays(0)
+                .setHistoryCount(PlatformPasswordPolicyConfig.DEFAULT_HISTORY_COUNT);
     }
 
     /// 获取密码策略配置
