@@ -13,7 +13,7 @@
 
 业务系统对接多种支付方式(支付宝、微信、银联等)通常面临:各通道接口规范、签名算法、回调机制各不相同,通道 SDK 依赖冲突、版本锁定与主业务耦合严重,多渠道资金对账、风控、终端设备管理分散。DaxPay 将各通道封装为**统一的 HTTP 接口**,业务系统只需对接一套标准协议即可接入多种支付方式;同时把第三方 SDK 隔离到**独立部署的通道子应用**中,显著降低对接、运维与升级的复杂度。
 
-> 📌 **快捷导航**: [官方文档站](https://doc.open.daxpay.cn) · [部署指南](https://doc.open.daxpay.cn/deployment/run) · [交流群](#关于我们)
+> 📌 **快捷导航**: [官方文档站](https://doc.open.daxpay.cn) · [一键部署](https://doc.open.daxpay.cn/deployment/installer) · [部署指南](https://doc.open.daxpay.cn/deployment/run) · [交流群](#关于我们)
 
 ## 使用须知
 
@@ -155,12 +155,13 @@ dax-pay-open/                       # 主后端应用
 
 ### 演示环境
 
-> 演示账号部分功能权限未开放,完整功能请参考本地部署。启动后默认的本地账号密码为 `bootx / 121212`。
+> 演示账号暂未公布,完整功能请参考本地部署。启动后默认的本地账号密码为 `bootx / 121212`。
 
-| 站点类型 | 地址 | 演示账号         |
-|---------|------|------------------|
-| 运营端 | [https://admin.open.daxpay.cn/](https://admin.open.daxpay.cn/) | csadmin / 121212 |
-| 商户端 | [https://merchant.open.daxpay.cn/](https://merchant.open.daxpay.cn/) | cssh / 121212    |
+| 站点类型 | 地址 | 演示账号 |
+|---------|------|---------|
+| 运营端 | https://admin.open.daxpay.cn | 待公布 |
+| 商户端 | https://merchant.open.daxpay.cn | 待公布 |
+| H5 端 | https://h5.open.daxpay.cn | — |
 
 ## 系统截图
 
