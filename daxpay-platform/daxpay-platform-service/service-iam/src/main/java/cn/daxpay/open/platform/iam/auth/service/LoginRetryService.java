@@ -7,6 +7,7 @@ import cn.daxpay.open.platform.iam.entity.user.UserPasswordSecurity;
 import cn.daxpay.open.platform.iam.result.user.PasswordStatusResult;
 import cn.daxpay.open.platform.capability.auth.exception.LoginFailureException;
 import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformLoginSecurityConfig;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -188,9 +189,9 @@ public class LoginRetryService {
         PlatformLoginSecurityConfig config = iamSecurityConfigService.getLoginSecurity();
         return new LoginRetryPolicyConfig(
                 Boolean.TRUE.equals(config.getLockoutEnabled()),
-                config.getFailureResetMinutes() == null ? 0 : config.getFailureResetMinutes(),
-                config.getMaxFailedAttempts() == null ? 5 : config.getMaxFailedAttempts(),
-                config.getLockoutDurationMinutes() == null ? 30 : config.getLockoutDurationMinutes()
+                ObjectUtil.defaultIfNull(config.getFailureResetMinutes(), PlatformLoginSecurityConfig.DEFAULT_FAILURE_RESET_MINUTES),
+                ObjectUtil.defaultIfNull(config.getMaxFailedAttempts(), PlatformLoginSecurityConfig.DEFAULT_MAX_FAILED_ATTEMPTS),
+                ObjectUtil.defaultIfNull(config.getLockoutDurationMinutes(), PlatformLoginSecurityConfig.DEFAULT_LOCKOUT_DURATION_MINUTES)
         );
     }
 

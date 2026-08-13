@@ -14,6 +14,7 @@ import cn.daxpay.open.platform.iam.exception.auth.UserNotFoundException;
 import cn.daxpay.open.platform.iam.result.user.UserInfoResult;
 import cn.daxpay.open.platform.iam.service.user.UserQueryService;
 import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformLoginSecurityConfig;
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.crypto.digest.BCrypt;
 import jakarta.annotation.Nullable;
 import jakarta.annotation.Resource;
@@ -97,7 +98,8 @@ public abstract class AbstractPasswordLoginHandler implements Authenticator {
         if (!Boolean.TRUE.equals(config.getCaptchaEnabled())) {
             return;
         }
-        int triggerAttempts = config.getCaptchaTriggerAttempts() == null ? 3 : config.getCaptchaTriggerAttempts();
+        int triggerAttempts = ObjectUtil.defaultIfNull(config.getCaptchaTriggerAttempts(),
+                PlatformLoginSecurityConfig.DEFAULT_CAPTCHA_TRIGGER_ATTEMPTS);
         int errorCount = loginRetryService.getErrorCount(userId);
         captchaService.checkOrValidateCaptcha(errorCount, triggerAttempts, captchaKey, captchaCode);
     }

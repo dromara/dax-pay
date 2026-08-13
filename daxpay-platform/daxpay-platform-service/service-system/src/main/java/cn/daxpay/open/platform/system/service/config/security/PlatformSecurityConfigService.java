@@ -84,7 +84,18 @@ public class PlatformSecurityConfigService {
     public PlatformLoginSecurityConfig getLoginSecurityConfig() {
         return systemConfigService.getOrCreateConfig(PlatformConfigTypeEnum.SECURITY_LOGIN,
                 PlatformLoginSecurityConfig.class,
-                new PlatformLoginSecurityConfig());
+                defaultLoginSecurityConfig());
+    }
+
+    /// 登录安全配置默认值: 向后兼容档, 锁定默认不启用(与配置缺失时行为一致), 数值与消费端兜底值对齐
+    private PlatformLoginSecurityConfig defaultLoginSecurityConfig() {
+        return new PlatformLoginSecurityConfig()
+                .setLockoutEnabled(false)
+                .setMaxFailedAttempts(PlatformLoginSecurityConfig.DEFAULT_MAX_FAILED_ATTEMPTS)
+                .setLockoutDurationMinutes(PlatformLoginSecurityConfig.DEFAULT_LOCKOUT_DURATION_MINUTES)
+                .setFailureResetMinutes(PlatformLoginSecurityConfig.DEFAULT_FAILURE_RESET_MINUTES)
+                .setCaptchaEnabled(true)
+                .setCaptchaTriggerAttempts(PlatformLoginSecurityConfig.DEFAULT_CAPTCHA_TRIGGER_ATTEMPTS);
     }
 
     /// 获取登录安全配置
@@ -133,7 +144,15 @@ public class PlatformSecurityConfigService {
     public PlatformTwoFactorAuthConfig getTwoFactorAuthConfig() {
         return systemConfigService.getOrCreateConfig(PlatformConfigTypeEnum.SECURITY_TWO_FACTOR_AUTH,
                 PlatformTwoFactorAuthConfig.class,
-                new PlatformTwoFactorAuthConfig());
+                defaultTwoFactorAuthConfig());
+    }
+
+    /// 双因素认证配置默认值: 向后兼容档, 默认不启用(与配置缺失时行为一致), issuer/备用码数量与消费端兜底值对齐
+    private PlatformTwoFactorAuthConfig defaultTwoFactorAuthConfig() {
+        return new PlatformTwoFactorAuthConfig()
+                .setEnabled(false)
+                .setIssuer(PlatformTwoFactorAuthConfig.DEFAULT_ISSUER)
+                .setBackupCodesCount(PlatformTwoFactorAuthConfig.DEFAULT_BACKUP_CODES_COUNT);
     }
 
     /// 获取双因素认证配置

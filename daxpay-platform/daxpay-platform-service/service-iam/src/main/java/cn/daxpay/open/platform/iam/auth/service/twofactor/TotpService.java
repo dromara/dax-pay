@@ -4,6 +4,7 @@ import cn.daxpay.open.platform.iam.auth.service.IamSecurityConfigService;
 import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformTwoFactorAuthConfig;
 import cn.hutool.core.codec.Base32;
 import cn.hutool.core.util.RandomUtil;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.URLUtil;
 import cn.hutool.crypto.digest.HMac;
 import cn.hutool.crypto.digest.HmacAlgorithm;
@@ -54,7 +55,8 @@ public class TotpService {
     /// @param account 账号(作为 label, 区分不同用户)
     public String buildOtpAuthUri(String secret, String account) {
         PlatformTwoFactorAuthConfig config = getConfig();
-        String issuer = (config.getIssuer() == null || config.getIssuer().isBlank()) ? "DaxPay" : config.getIssuer();
+        // 发行者兜底: 未配置时使用默认值
+        String issuer = StrUtil.blankToDefault(config.getIssuer(), PlatformTwoFactorAuthConfig.DEFAULT_ISSUER);
         // otpauth://totp/Issuer:account?secret=...&issuer=...&algorithm=SHA1&digits=6&period=30
         String label = URLUtil.encodeAll(issuer) + ":" + URLUtil.encodeAll(account == null ? "" : account);
         return String.format(

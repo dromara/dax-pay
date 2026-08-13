@@ -223,10 +223,10 @@ public class UserTwoFactorService {
                 .orElseThrow(() -> new OperationFailException("error.iam.twoFactor.notBound"));
     }
 
-    /// 默认备用码数量(从平台配置读取, 兜底 10)
+    /// 默认备用码数量(从平台配置读取, 兜底默认值)
     private int defaultBackupCodesCount() {
         Integer count = getConfig().getBackupCodesCount();
-        return count == null || count <= 0 ? 10 : count;
+        return count == null || count <= 0 ? PlatformTwoFactorAuthConfig.DEFAULT_BACKUP_CODES_COUNT : count;
     }
 
     private PlatformTwoFactorAuthConfig getConfig() {
