@@ -2,6 +2,7 @@ package cn.daxpay.open.payment.trade.order.entity;
 
 import cn.daxpay.open.payment.common.entity.MchBaseEntity;
 import cn.daxpay.open.payment.merchant.enums.ClientEnvEnum;
+import cn.daxpay.open.payment.trade.alloc.runtime.bo.AllocatableContainer;
 import cn.daxpay.open.payment.trade.enums.GatewayOrderStatusEnum;
 import cn.daxpay.open.payment.trade.enums.GatewayPayTypeEnum;
 import cn.daxpay.open.payment.unipay.param.trade.pay.GoodsDetail;
@@ -32,7 +33,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName(value = "pay_gateway_order", autoResultMap = true)
-public class GatewayPayOrder extends MchBaseEntity {
+public class GatewayPayOrder extends MchBaseEntity implements AllocatableContainer {
 
     /// 平台业务单号（容器身份，与 tradeNo 独立生成；预下单即生成、可无 trade；普通通道默认作为上送号 / URL 落地号）
     private String orderNo;
@@ -187,4 +188,7 @@ public class GatewayPayOrder extends MchBaseEntity {
     /// 错误信息
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String errorMsg;
+
+    /// 是否分账订单(预下单透传通道分账标识, 同 NormalPayOrder.allocation)
+    private Boolean allocation;
 }

@@ -69,6 +69,10 @@ public class NormalPayAssistService {
         payNormalOrderManager.save(normalOrder);
 
         PayTrade trade = buildPayTrade(payParam, normalOrder, tradeNo, orderNo, source);
+        // 分账订单: 初始化分账状态为 none, 供前端识别可发起分账(普通订单保持 null)
+        if (Boolean.TRUE.equals(normalOrder.getAllocation())) {
+            trade.setAllocStatus("none");
+        }
         payTradeManager.save(trade);
 
         context.setTrade(trade);
@@ -138,6 +142,8 @@ public class NormalPayAssistService {
         normalOrder.setExtraParam(payParam.getExtraParam());
         normalOrder.setGoodsDetail(payParam.getGoodsDetail());
         normalOrder.setAppId(payParam.getAppId());
+        // 是否分账订单(透传通道冻结资金标识, 分账发起前置校验依据)
+        normalOrder.setAllocation(payParam.getAllocation());
         return normalOrder;
     }
 

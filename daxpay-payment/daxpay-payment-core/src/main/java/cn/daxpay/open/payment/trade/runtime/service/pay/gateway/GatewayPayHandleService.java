@@ -183,6 +183,10 @@ public class GatewayPayHandleService {
                 order.getTitle(),
                 provider,
                 channel);
+        // 分账订单: 初始化分账状态为 none, 供前端识别可发起分账(普通订单保持 null)
+        if (Boolean.TRUE.equals(order.getAllocation())) {
+            trade.setAllocStatus("none");
+        }
         payTradeManager.save(trade);
 
         this.fillRouteOnOrder(order, payParam, clientEnv, device);
@@ -262,6 +266,8 @@ public class GatewayPayHandleService {
         TerminalInfo terminal = new TerminalInfo();
         terminal.setStoreNo(order.getStoreNo());
         payParam.setTerminal(terminal);
+        // 分账标识透传通道(微信 profit_sharing / 支付宝 royalty_freeze / 抖音 split_info)
+        payParam.setAllocation(order.getAllocation());
         return payParam;
     }
 

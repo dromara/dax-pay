@@ -151,6 +151,8 @@ public class GatewayPayAssistService {
         order.setGoodsDetail(param.getGoodsDetail());
         // 门店号: 预下单写入(已 resolve 默认), 支付回填路由时不改
         order.setStoreNo(storeNo);
+        // 是否分账订单(预下单声明并落库, 支付时透传通道冻结资金)
+        order.setAllocation(param.getAllocation());
         gatewayPayOrderManager.save(order);
 
         this.registerTimeout(order.getOrderNo(), order.getBizOrderNo(), expiredTime);

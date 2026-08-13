@@ -77,4 +77,8 @@ public class GatewayPrePayParam extends MerchantPaymentCommonParam {
 
     @Schema(description = "商品明细")
     private List<GoodsDetail> goodsDetail;
+
+    /// 是否分账订单(传 true 后资金冻结, 仅可通过发起分账拆分)
+    @Schema(description = "是否分账订单")
+    private Boolean allocation;
 }

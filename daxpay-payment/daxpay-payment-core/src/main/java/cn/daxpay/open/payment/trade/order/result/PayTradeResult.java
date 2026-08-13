@@ -191,4 +191,8 @@ public class PayTradeResult extends BaseResult {
     /// 容器业务状态
     @Schema(description = "容器业务状态")
     private String containerStatus;
+
+    /// 分账状态(null-非分账订单 / none-未分账 / processing-分账中 / done-已分账)
+    @Schema(description = "分账状态")
+    private String allocStatus;
 }

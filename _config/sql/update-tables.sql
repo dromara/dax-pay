@@ -131,3 +131,14 @@ CREATE INDEX IF NOT EXISTS idx_pay_alloc_order_trade_no ON pay_alloc_order USING
 COMMENT ON INDEX idx_pay_alloc_order_trade_no IS '原支付交易号反查分账单';
 CREATE UNIQUE INDEX IF NOT EXISTS uk_pay_alloc_order_alloc_no ON pay_alloc_order USING btree (alloc_no);
 COMMENT ON INDEX uk_pay_alloc_order_alloc_no IS '平台分账单号唯一约束';
+
+-- ------------------------------------------------------------
+-- 分账容器标记(增量, 幂等)
+-- 2026-08-11 网关支付接入分账: 网关容器保存是否分账标记(与普通支付容器对齐)
+-- ------------------------------------------------------------
+-- 网关支付容器增加分账标记(预下单声明, 支付时透传通道冻结资金)
+ALTER TABLE pay_gateway_order ADD COLUMN IF NOT EXISTS allocation boolean;
+COMMENT ON COLUMN pay_gateway_order.allocation IS '是否分账订单(预下单透传通道分账标识, true 表示资金冻结仅可分账拆分)';
+-- 普通支付容器分账标记(存量库补列, 幂等)
+ALTER TABLE pay_normal_order ADD COLUMN IF NOT EXISTS allocation boolean;
+COMMENT ON COLUMN pay_normal_order.allocation IS '是否分账订单(下单时透传通道分账标识, true 表示资金冻结仅可分账拆分)';

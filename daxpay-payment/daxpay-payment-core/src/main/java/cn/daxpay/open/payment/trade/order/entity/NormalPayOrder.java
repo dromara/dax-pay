@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
+import cn.daxpay.open.payment.trade.alloc.runtime.bo.AllocatableContainer;
 import cn.daxpay.open.payment.trade.enums.NormalPayOrderStatusEnum;
 import cn.daxpay.open.payment.unipay.param.trade.pay.GoodsDetail;
 import cn.daxpay.open.platform.core.enums.pay.channel.CurrencyEnum;
@@ -29,7 +30,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName(value = "pay_normal_order", autoResultMap = true)
-public class NormalPayOrder extends MchBaseEntity {
+public class NormalPayOrder extends MchBaseEntity implements AllocatableContainer {
 
     /// 平台业务单号（容器身份，与 tradeNo 独立生成；普通通道默认作为上送号）
     private String orderNo;

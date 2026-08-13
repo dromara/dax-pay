@@ -8,9 +8,13 @@ import cn.daxpay.open.payment.trade.alloc.entity.AllocDetail;
 import cn.daxpay.open.payment.trade.alloc.entity.AllocOrder;
 import cn.daxpay.open.payment.trade.alloc.enums.AllocDetailResultEnum;
 import cn.daxpay.open.payment.trade.alloc.param.AllocParam;
+import cn.daxpay.open.payment.trade.alloc.runtime.bo.AllocatableContainer;
 import cn.daxpay.open.payment.trade.alloc.runtime.mq.AllocSyncMessage;
+import cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum;
+import cn.daxpay.open.payment.trade.order.dao.GatewayPayOrderManager;
 import cn.daxpay.open.payment.trade.order.dao.NormalPayOrderManager;
 import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
+import cn.daxpay.open.payment.trade.order.entity.GatewayPayOrder;
 import cn.daxpay.open.payment.trade.order.entity.NormalPayOrder;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.trade.runtime.mq.PayArtemisConstants;
@@ -58,6 +62,7 @@ public class AllocStartService {
     private final AllocDetailManager allocDetailManager;
     private final PayTradeManager payTradeManager;
     private final NormalPayOrderManager normalPayOrderManager;
+    private final GatewayPayOrderManager gatewayPayOrderManager;
     private final MerchantContextLoader merchantContextLoader;
     private final PaymentContext paymentContext;
     private final LockExecutor lockExecutor;
@@ -119,9 +124,11 @@ public class AllocStartService {
         PayTrade trade = resolveTrade(param);
         // 校验可分账
         validateAllocatable(trade, param);
-        // 装配通道凭证快照
-        NormalPayOrder container = normalPayOrderManager.findById(trade.getContainerId())
-                .orElseThrow(() -> new BizInfoException(CommonCode.FAIL_CODE, "pay.error.alloc.orderNotFound"));
+        // 装配通道凭证快照(按交易形态分发容器)
+        AllocatableContainer container = this.resolveContainer(trade);
+        if (container == null) {
+            throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.alloc.orderNotFound");
+        }
         // 通道策略校验
         AbsAllocStrategy strategy = AllocStrategyFactory.create(trade.getChannel());
         // 生成分账单号
@@ -201,6 +208,14 @@ public class AllocStartService {
         }
     }
 
+    /// 按 tradeType 解析分账源容器(normal / gateway)
+    private AllocatableContainer resolveContainer(PayTrade trade) {
+        if (Objects.equals(trade.getTradeType(), PayTradeTypeEnum.GATEWAY.getCode())) {
+            return gatewayPayOrderManager.findById(trade.getContainerId()).orElse(null);
+        }
+        return normalPayOrderManager.findById(trade.getContainerId()).orElse(null);
+    }
+
     /// 定位原支付资金凭证(锁内二次读, 保证读到最新 alloc_status 状态)
     private PayTrade resolveTrade(AllocParam param) {
         String tradeNo = this.resolveTradeNo(param);
@@ -214,10 +229,17 @@ public class AllocStartService {
             return param.getTradeNo();
         }
         if (param.getBizOrderNo() != null && !param.getBizOrderNo().isBlank()) {
-            // bizOrderNo → 容器 → trade
-            NormalPayOrder container = normalPayOrderManager.findByBizOrderNo(param.getBizOrderNo(), param.getAppId())
-                    .orElseThrow(() -> new BizInfoException(CommonCode.FAIL_CODE, "pay.error.alloc.orderNotFound"));
-            return payTradeManager.findByContainerId(container.getId())
+            String bizOrderNo = param.getBizOrderNo();
+            String appId = param.getAppId();
+            // bizOrderNo → 容器 → trade: 先查普通支付容器, 再查网关容器
+            Optional<NormalPayOrder> normalOpt = normalPayOrderManager.findByBizOrderNo(bizOrderNo, appId);
+            if (normalOpt.isPresent()) {
+                return payTradeManager.findByContainerId(normalOpt.get().getId(), PayTradeTypeEnum.NORMAL.getCode())
+                        .map(PayTrade::getTradeNo)
+                        .orElseThrow(() -> new BizInfoException(CommonCode.FAIL_CODE, "pay.error.alloc.orderNotFound"));
+            }
+            return gatewayPayOrderManager.findByBizOrderNo(bizOrderNo, appId)
+                    .flatMap(gateway -> payTradeManager.findByContainerId(gateway.getId(), PayTradeTypeEnum.GATEWAY.getCode()))
                     .map(PayTrade::getTradeNo)
                     .orElseThrow(() -> new BizInfoException(CommonCode.FAIL_CODE, "pay.error.alloc.orderNotFound"));
         }
@@ -237,14 +259,14 @@ public class AllocStartService {
             throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.alloc.alreadyAllocated");
         }
         // 原支付容器须声明为分账订单
-        NormalPayOrder container = normalPayOrderManager.findById(trade.getContainerId()).orElse(null);
+        AllocatableContainer container = this.resolveContainer(trade);
         if (container == null || !Boolean.TRUE.equals(container.getAllocation())) {
             throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.alloc.notAllocOrder");
         }
     }
 
     /// 构建分账主单(继承原支付通道快照)
-    private AllocOrder buildAllocOrder(AllocParam param, PayTrade trade, NormalPayOrder container,
+    private AllocOrder buildAllocOrder(AllocParam param, PayTrade trade, AllocatableContainer container,
                                        String allocNo, String mchNo) {
         AllocOrder order = new AllocOrder()
                 .setAllocNo(allocNo)
