@@ -43,10 +43,11 @@ public class UserPasswordSecurityManager extends BaseManager<UserPasswordSecurit
     }
 
     /// 增加密码错误次数
+    ///
+    /// 原子自增: 避免并发下读-改-写丢失计数(多个并发失败请求各读旧值后写, 计数停留在 1, 锁定永不触发)。
     public int incrementPasswordErrorCount(Long userId) {
-        UserPasswordSecurity security = findById(userId).orElse(null);
-        if (security == null) {
-            security = new UserPasswordSecurity();
+        if (findById(userId).isEmpty()) {
+            UserPasswordSecurity security = new UserPasswordSecurity();
             security.setId(userId);
             security.setPasswordErrorCount(1);
             security.setInitialPassword(true);
@@ -54,13 +55,16 @@ public class UserPasswordSecurityManager extends BaseManager<UserPasswordSecurit
             save(security);
             return 1;
         }
-        int newCount = (security.getPasswordErrorCount() == null ? 0 : security.getPasswordErrorCount()) + 1;
+        // DB 级原子自增, 杜绝并发计数丢失
         lambdaUpdate()
                 .eq(UserPasswordSecurity::getId, userId)
-                .set(UserPasswordSecurity::getPasswordErrorCount, newCount)
+                .setSql("password_error_count = COALESCE(password_error_count, 0) + 1")
                 .set(UserPasswordSecurity::getLastFailureTime, OffsetDateTime.now(ZoneOffset.UTC))
                 .update();
-        return newCount;
+        // setSql 不返回新值, 重新读取拿 DB 权威值(残余竞态最多偏小 1, 对锁定判断可接受)
+        return findById(userId)
+                .map(s -> s.getPasswordErrorCount() == null ? 0 : s.getPasswordErrorCount())
+                .orElse(0);
     }
 
     /// 锁定账号

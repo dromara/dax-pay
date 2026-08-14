@@ -123,7 +123,12 @@ public class TokenService {
         }
         if (!valid) {
             // 双因素认证: 动态码或备用码错误
-            throw new LoginFailureException(userId, userInfoResult.getAccount(), "error.auth.twoFactorCodeError");
+            // 接入登录失败处理(失败计数 + 锁定 + 失败日志), 避免凭证 5 分钟有效期内无限穷举动态码/备用码。
+            // preAuthExpired(context==null) 无 userId, 由 LoginRetryService 守卫跳过, 故仅此处接入。
+            LoginFailureException ex = new LoginFailureException(userId, userInfoResult.getAccount(),
+                    "error.auth.twoFactorCodeError");
+            this.loginFailureHandler(request, response, ex);
+            throw ex;
         }
         // 验证通过, 删除临时凭证(单次有效)
         twoFactorPreAuthService.delete(preAuthToken);
