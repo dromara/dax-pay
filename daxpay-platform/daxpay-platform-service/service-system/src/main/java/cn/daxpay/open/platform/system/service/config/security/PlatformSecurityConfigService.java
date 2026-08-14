@@ -300,10 +300,14 @@ public class PlatformSecurityConfigService {
             return defaultPaySecurityConfig();
         }
         // 兼容旧版: 原省级/市级开关已合并为地区拦截, 旧字段任一开启则迁移为地区拦截开启
-        if (config.getRegionBlacklistEnabled() == null) {
-            boolean legacyOn = Boolean.TRUE.equals(config.getProvinceBlacklistEnabled())
-                    || Boolean.TRUE.equals(config.getCityBlacklistEnabled());
-            config.setRegionBlacklistEnabled(legacyOn);
+        // 注意: regionBlacklistEnabled 字段初始值为 FALSE(Jackson 反序列化缺字段时保留初始值而非 null),
+        // 不可用 == null 判断, 否则迁移永不执行, 历史开启的地区拦截会静默失效(fail-open 安全降级)。
+        // 旧字段 provinceBlacklistEnabled/cityBlacklistEnabled 在新版保存时已被清 null,
+        // 用户若在新版显式关闭 region 后保存, legacyOn 必为 false, 不会误开启。
+        boolean legacyOn = Boolean.TRUE.equals(config.getProvinceBlacklistEnabled())
+                || Boolean.TRUE.equals(config.getCityBlacklistEnabled());
+        if (legacyOn) {
+            config.setRegionBlacklistEnabled(true);
         }
         return config;
     }

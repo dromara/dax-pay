@@ -300,6 +300,17 @@ class DefaultPayRiskCheckerTest {
         verify(payRiskHitService, never()).recordHit(any(), eq(OVERSEAS_IP_TYPE), anyString(), any());
     }
 
+    @Test
+    @DisplayName("海外检查: 非法 IP 格式(\"abc\")不抛异常, fail-open 放行(本次修复回归核心)")
+    void overseasIp_invalidFormat_shouldFailOpenWithoutThrow() {
+        // 非法字符串原先触发 NetUtil.isInnerIP 抛 IllegalArgumentException, 击穿支付前风控链路致下单 500
+        assertDoesNotThrow(() -> checker.checkBeforePay(overseasCtx("abc")));
+
+        // 非法格式非 IPv4 内网 → 落到 getRegionByIp, 默认返回 null → fail-open 放行
+        verify(ipToRegionService).getRegionByIp("abc");
+        verify(payRiskHitService, never()).recordHit(any(), anyString(), anyString(), any());
+    }
+
     // ==================== 黑名单开关 ====================
 
     @Test
@@ -602,6 +613,18 @@ class DefaultPayRiskCheckerTest {
         assertDoesNotThrow(() -> checker.checkAfterPay(ctx));
 
         verify(payRiskHitService).recordHit(any(), eq(PROVINCE_TYPE), eq("44"), eq(55L));
+    }
+
+    @Test
+    @DisplayName("地区拦截: 非法 IP 格式(\"999.1.1.1\")不抛异常, fail-open 放行(本次修复回归)")
+    void regionBlacklist_invalidFormat_shouldFailOpenWithoutThrow() {
+        // 段超界的非法 IPv4 字面量原先触发 NetUtil.isInnerIP 抛异常击穿支付链路
+        assertDoesNotThrow(() -> checker.checkBeforePay(noOverseasCtx().setClientIp("999.1.1.1")));
+
+        // 非法格式落到 getRegionByIp, 默认返回 null → fail-open, 不查省/市级名单
+        verify(ipToRegionService).getRegionByIp("999.1.1.1");
+        verify(payBlacklistService, never()).findActive(eq(PROVINCE_TYPE), anyString(), any());
+        verify(payBlacklistService, never()).findActive(eq(CITY_TYPE), anyString(), any());
     }
 
     // ==================== hasOpenIdBlacklist 缓存 ====================

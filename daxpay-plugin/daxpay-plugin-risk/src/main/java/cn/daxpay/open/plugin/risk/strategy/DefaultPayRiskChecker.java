@@ -189,11 +189,9 @@ public class DefaultPayRiskChecker implements PayRiskChecker {
                 return false;
             }
             // 开关开启: 跳过 NetUtil.isInnerIP（仅支持 IPv4）, IPv6 内网由 xdb 查询 fail-open 兜底
-        } else {
-            // IPv4 内网/回环地址直通放行
-            if (NetUtil.isInnerIP(ip)) {
-                return false;
-            }
+        } else if (isInnerIpv4(ip)) {
+            // IPv4 内网/回环地址直通放行(非法/非 IPv4 格式落到后续 getRegionByIp→null fail-open)
+            return false;
         }
         IpRegion region = ipToRegionService.getRegionByIp(ip);
         // 解析失败 → fail-open
@@ -231,11 +229,9 @@ public class DefaultPayRiskChecker implements PayRiskChecker {
                 return;
             }
             // 开关开启: 跳过 NetUtil.isInnerIP（仅支持 IPv4, 传 IPv6 会抛异常）, IPv6 内网由 xdb fail-open 兜底
-        } else {
-            // IPv4 内网/回环地址直通放行(网络层判定, 不查库)
-            if (NetUtil.isInnerIP(ip)) {
-                return;
-            }
+        } else if (isInnerIpv4(ip)) {
+            // IPv4 内网/回环地址直通放行(网络层判定, 不查库; 非法格式落到后续 region null 放行)
+            return;
         }
         IpRegion region = ipToRegionService.getRegionByIp(ip);
         // 未知(IPv6/查询失败)/国内(含港澳台) → 放行
@@ -284,11 +280,9 @@ public class DefaultPayRiskChecker implements PayRiskChecker {
                 return;
             }
             // 开关开启: 跳过 NetUtil.isInnerIP（仅支持 IPv4）, IPv6 内网由 xdb 查询 fail-open 兜底
-        } else {
-            // IPv4 内网/回环地址直通放行
-            if (NetUtil.isInnerIP(ip)) {
-                return;
-            }
+        } else if (isInnerIpv4(ip)) {
+            // IPv4 内网/回环地址直通放行(非法/非 IPv4 格式落到后续 region null fail-open)
+            return;
         }
         IpRegion region = ipToRegionService.getRegionByIp(ip);
         if (region == null) {
@@ -318,6 +312,22 @@ public class DefaultPayRiskChecker implements PayRiskChecker {
                 // 交易被限制（模糊文案，防探测）
                 throw new BizInfoException(PayErrorCode.OPERATION_FAIL, "pay.error.risk.blacklist");
             }
+        }
+    }
+
+    /// 判定 IPv4 内网/回环地址
+    ///
+    /// 先校验 IPv4 格式再调 [NetUtil#isInnerIP]: hutool 的 NetUtil.isInnerIP 对非法字符串(非 IPv4 非 IPv6,
+    /// 如 "abc"/"999.1.1.1"/XFF 多值)会直接抛 IllegalArgumentException, 击穿支付前风控链路导致下单 500。
+    /// 非法或非 IPv4 格式一律返回 false(fail-open), 由调用方后续 getRegionByIp 解析失败兜底放行。
+    private boolean isInnerIpv4(String ip) {
+        if (!Validator.isIpv4(ip)) {
+            return false;
+        }
+        try {
+            return NetUtil.isInnerIP(ip);
+        } catch (Exception e) {
+            return false;
         }
     }
 }
