@@ -1,5 +1,7 @@
 package cn.daxpay.open.payment.trade.alloc.runtime.service;
 
+import cn.hutool.core.util.StrUtil;
+import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.trade.alloc.bo.AllocResultBo;
 import cn.daxpay.open.payment.trade.alloc.dao.AllocOrderManager;
 import cn.daxpay.open.payment.trade.alloc.entity.AllocOrder;
@@ -36,6 +38,7 @@ public class AllocSyncService {
     private final AllocOrderManager allocOrderManager;
     private final PaySyncRecordManager paySyncRecordManager;
     private final LockExecutor lockExecutor;
+    private final PaymentContext paymentContext;
 
     /// 手动同步(管理端/开放API, 有 HTTP 上下文)
     public void sync(String allocNo) {
@@ -48,6 +51,10 @@ public class AllocSyncService {
     }
 
     /// 自动同步(延迟消息/定时任务入口, 无 HTTP 上下文)
+    ///
+    /// MQ 消费线程与定时任务线程无商户登录上下文, 须显式装载租户身份, 否则锁内 [syncWithLock]
+    /// 的 MyBatis 查询会被租户拦截器 fail-closed 抛 mchContextMissing。
+    /// 参照 [cn.daxpay.open.payment.trade.runtime.service.sync.TradeSyncService#syncPayTrade]。
     public void autoSync(String allocNo) {
         // 跨租户查询(定时任务无 HTTP 上下文)
         AllocOrder allocOrder = allocOrderManager.findByAllocNoNotTenant(allocNo).orElse(null);
@@ -55,7 +62,19 @@ public class AllocSyncService {
             log.warn("分账同步: 分账单不存在, allocNo={}", allocNo);
             return;
         }
-        this.syncWithLock(allocOrder);
+        // 非处理中直接跳过(终态幂等)
+        if (!Objects.equals(allocOrder.getStatus(), AllocOrderStatusEnum.PROCESSING.getCode())) {
+            return;
+        }
+        if (StrUtil.isBlank(allocOrder.getMchNo())) {
+            log.error("分账同步: 分账单缺少商户号, 无法装载租户上下文, allocNo={}", allocNo);
+            return;
+        }
+        // 装载租户身份后执行同步(syncWithLock 自带 Redis 锁 + 独立事务)
+        paymentContext.runAs(() -> {
+            paymentContext.setMchNo(allocOrder.getMchNo());
+            this.syncWithLock(allocOrder);
+        });
     }
 
     /// 锁内同步编排(无事务, 状态变更由 Assist 各方法独立事务提交)

@@ -138,6 +138,7 @@
     "noDuplicate": "该商户分账单号已存在，请勿重复分账",
     "createFailed": "分账发起失败: {0}",
     "receiverEmpty": "接收方列表不可为空",
+    "duplicateReceiver": "接收方账号不可重复",
     "amountExceed": "分账总金额超过订单可分账金额",
     "amountInvalid": "分账金额无效",
     "channelNotSupport": "该通道暂不支持分账",

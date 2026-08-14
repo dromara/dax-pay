@@ -143,7 +143,7 @@ public class AllocStartService {
         // 持久化
         assistService.createOrder(allocOrder, details);
         // 装配策略上下文
-        return new AllocStrategyContext()
+        AllocStrategyContext strategyContext = new AllocStrategyContext()
                 .setAllocOrder(allocOrder)
                 .setDetails(details)
                 .setChannel(trade.getChannel())
@@ -152,6 +152,9 @@ public class AllocStartService {
                 .setChannelAppId(allocOrder.getChannelAppId())
                 .setOutOrderNo(allocOrder.getOutOrderNo())
                 .setNotifyUrl(allocOrder.getNotifyUrl());
+        // 通道策略发起前校验(接收方类型/姓名等通道差异约束, 校验失败回滚建单事务)
+        strategy.doValidateParam(strategyContext);
+        return strategyContext;
     }
 
     /// 通道发起(事务外, 远程调用不占事务)
@@ -169,18 +172,27 @@ public class AllocStartService {
             aggregateResult(allocOrder, result.getDetails());
         } catch (Exception e) {
             log.error("分账发起失败: allocNo={}, channel={}", allocOrder.getAllocNo(), channel, e);
-            String errorMsg = resolveErrorMsg(e);
-            assistService.fail(allocOrder, null, errorMsg);
             if (e instanceof BizException biz) {
+                // 通道明确拒绝(参数/接收方等业务异常): 置 fail, 回退原支付 alloc_status=none 允许重新发起
+                assistService.fail(allocOrder, null, resolveErrorMsg(e));
                 throw biz;
             }
-            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "pay.error.alloc.createFailed", errorMsg);
+            // 结果未知(网络/超时等非业务异常): 通道可能已受理, 保留 processing 由延迟同步/定时任务纠正。
+            // 不置 fail 以免解锁原支付(alloc_status=none)导致商户换号重发引发重复分账。
+            this.registerDelaySync(allocOrder.getAllocNo());
+            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "pay.error.alloc.syncProcessing");
         }
     }
 
     /// 按逐明细结果聚合订单状态
+    ///
+    /// 三通道分账均为异步: 发起成功时明细一律返回 pending, 此时须保持 processing 并注册延迟同步,
+    /// 由 [registerDelaySync] 与定时任务兜底推进, 切勿误判为 partial 终态(会导致明细永久 pending 且锁死原支付)。
+    /// 参照 [cn.daxpay.open.payment.trade.alloc.runtime.service.AllocSyncService#aggregateResult] 的守卫写法。
     private void aggregateResult(AllocOrder allocOrder, List<AllocResultBo.DetailResult> detailResults) {
         if (detailResults == null || detailResults.isEmpty()) {
+            // 无明细结果(通道异常前或未返回明细): 保持 processing, 注册延迟同步兜底
+            this.registerDelaySync(allocOrder.getAllocNo());
             return;
         }
         long successCount = detailResults.stream()
@@ -202,9 +214,12 @@ public class AllocStartService {
                     .findFirst()
                     .orElse(null);
             assistService.fail(allocOrder, detailResults, errorMsg);
-        } else {
-            // 部分成功
+        } else if (successCount + failCount == total) {
+            // 全部明细已有终态结果(部分成功): 终态, 不可再追加
             assistService.partial(allocOrder, detailResults);
+        } else {
+            // 仍有 pending 明细(异步分账尚未完成): 保持 processing, 注册延迟同步兜底推进
+            this.registerDelaySync(allocOrder.getAllocNo());
         }
     }
 
@@ -263,6 +278,20 @@ public class AllocStartService {
         if (container == null || !Boolean.TRUE.equals(container.getAllocation())) {
             throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.alloc.notAllocOrder");
         }
+        // 接收方账号去重(同账号不可重复, 否则明细重复且通道侧可能重复打款)
+        long distinctAccounts = param.getReceivers().stream()
+                .map(AllocParam.AllocReceiverParam::getReceiverAccount)
+                .distinct().count();
+        if (distinctAccounts < param.getReceivers().size()) {
+            throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.alloc.duplicateReceiver");
+        }
+        // 分账总金额不可超过原支付金额(简化校验, 未扣减退款金额, 后续可增强为可分账余额)
+        long totalAmount = param.getReceivers().stream()
+                .mapToLong(r -> CurrencyAmountUtil.majorToMinor(r.getAmount(), CurrencyEnum.CNY))
+                .sum();
+        if (trade.getAmount() == null || totalAmount > trade.getAmount()) {
+            throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.alloc.amountExceed");
+        }
     }
 
     /// 构建分账主单(继承原支付通道快照)
@@ -311,7 +340,10 @@ public class AllocStartService {
     }
 
     /// 注册延迟同步(发起返回处理中后, 2 分钟投递 MQ)
-    public void registerDelaySync(String allocNo) {
+    ///
+    /// 参照 [cn.daxpay.open.payment.trade.transfer.runtime.service.TransferStartService#registerDelaySync]:
+    /// 异步分账发起成功且仍有 pending 明细时调用, 失败仅告警由定时任务兜底。
+    private void registerDelaySync(String allocNo) {
         try {
             AllocSyncMessage message = new AllocSyncMessage().setAllocNo(allocNo);
             artemisTemplateService.sendDelay(PayArtemisConstants.ALLOC_SYNC_QUEUE,

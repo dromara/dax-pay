@@ -142,3 +142,10 @@ COMMENT ON COLUMN pay_gateway_order.allocation IS '是否分账订单(预下单�
 -- 普通支付容器分账标记(存量库补列, 幂等)
 ALTER TABLE pay_normal_order ADD COLUMN IF NOT EXISTS allocation boolean;
 COMMENT ON COLUMN pay_normal_order.allocation IS '是否分账订单(下单时透传通道分账标识, true 表示资金冻结仅可分账拆分)';
+
+-- ------------------------------------------------------------
+-- 资金交易表分账状态(增量, 幂等)
+-- 2026-08-14 分账功能: pay_trade 记录分账状态, 控制同一订单不可重复分账(原全量 table.sql 已有, 存量库升级补列)
+-- ------------------------------------------------------------
+ALTER TABLE pay_trade ADD COLUMN IF NOT EXISTS alloc_status varchar(32) DEFAULT 'none';
+COMMENT ON COLUMN pay_trade.alloc_status IS '分账状态(none-未分账/processing-分账中/done-已分账)';

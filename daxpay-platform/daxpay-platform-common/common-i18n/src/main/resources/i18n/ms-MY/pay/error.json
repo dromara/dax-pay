@@ -129,6 +129,7 @@
     "noDuplicate": "Nombor peruntukan merchant ini sudah wujud",
     "createFailed": "Peruntukan gagal: {0}",
     "receiverEmpty": "Senarai penerima tidak boleh kosong",
+    "duplicateReceiver": "Akaun penerima tidak boleh berulang",
     "amountExceed": "Jumlah peruntukan melebihi jumlah yang boleh diperuntukkan",
     "amountInvalid": "Jumlah peruntukan tidak sah",
     "channelNotSupport": "Saluran ini tidak menyokong peruntukan",

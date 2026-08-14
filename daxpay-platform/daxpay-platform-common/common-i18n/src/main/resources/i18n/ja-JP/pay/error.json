@@ -138,6 +138,7 @@
     "noDuplicate": "このマーチャント精算番号は既に存在します",
     "createFailed": "精算の開始に失敗: {0}",
     "receiverEmpty": "受取人リストは空にできません",
+    "duplicateReceiver": "受取人アカウントの重複は許可されません",
     "amountExceed": "精算合計額が注文の精算可能額を超えています",
     "amountInvalid": "精算金額が無効です",
     "channelNotSupport": "このチャネルは精算をサポートしていません",

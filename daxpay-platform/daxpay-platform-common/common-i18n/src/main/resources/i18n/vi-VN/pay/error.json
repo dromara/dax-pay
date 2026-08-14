@@ -129,6 +129,7 @@
     "noDuplicate": "Số phân bổ merchant này đã tồn tại",
     "createFailed": "Khởi tạo phân bổ thất bại: {0}",
     "receiverEmpty": "Danh sách người nhận không được để trống",
+    "duplicateReceiver": "Tài khoản người nhận không được trùng lặp",
     "amountExceed": "Tổng phân bổ vượt quá số tiền có thể phân bổ",
     "amountInvalid": "Số tiền phân bổ không hợp lệ",
     "channelNotSupport": "Kênh này không hỗ trợ phân bổ",

@@ -138,6 +138,7 @@
     "noDuplicate": "This merchant allocation number already exists",
     "createFailed": "Allocation failed: {0}",
     "receiverEmpty": "Receiver list cannot be empty",
+    "duplicateReceiver": "Duplicate receiver account is not allowed",
     "amountExceed": "Total allocation amount exceeds order allocatable amount",
     "amountInvalid": "Invalid allocation amount",
     "channelNotSupport": "This channel does not support allocation",

@@ -138,6 +138,7 @@
     "noDuplicate": "이 가맹점 분할 번호가 이미 존재합니다",
     "createFailed": "분할 시작 실패: {0}",
     "receiverEmpty": "수신자 목록은 비어있을 수 없습니다",
+    "duplicateReceiver": "수취인 계정은 중복될 수 없습니다",
     "amountExceed": "분할 총액이 주문 분할 가능액을 초과합니다",
     "amountInvalid": "분할 금액이 유효하지 않습니다",
     "channelNotSupport": "이 채널은 분할을 지원하지 않습니다",

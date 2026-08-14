@@ -1,5 +1,9 @@
 package cn.daxpay.open.payment.trade.runtime.job;
 
+import cn.daxpay.open.payment.trade.alloc.dao.AllocOrderManager;
+import cn.daxpay.open.payment.trade.alloc.entity.AllocOrder;
+import cn.daxpay.open.payment.trade.alloc.enums.AllocOrderStatusEnum;
+import cn.daxpay.open.payment.trade.alloc.runtime.service.AllocSyncService;
 import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
 import cn.daxpay.open.payment.trade.order.dao.RefundOrderManager;
@@ -45,6 +49,8 @@ public class TradeSyncJob {
     private final TransferTradeManager transferTradeManager;
     private final TransferSyncService transferSyncService;
     private final TradeSyncService tradeSyncService;
+    private final AllocOrderManager allocOrderManager;
+    private final AllocSyncService allocSyncService;
 
     // ==================== 支付 PROCESSING 同步(分层窗口) ====================
 
@@ -188,6 +194,44 @@ public class TradeSyncJob {
         syncTransferBatch(now.minusDays(7), now.minusHours(24));
     }
 
+    // ==================== 分账 PROCESSING 同步(分层窗口) ====================
+    ///
+    /// 分账异步回调丢失/延迟消息失败后, 查通道真实状态纠正为 SUCCESS/PARTIAL/FAIL。
+    /// 与分账发起/同步共享分账单维度 Redis 锁(payment:alloc-trade:{id}), 天然互斥。
+    /// cron 秒偏移 10s, 与支付/退款/转账(0s)窗口错峰避免同时大批触发。
+
+    /// 最新窗口: 创建 1~10 分钟的 PROCESSING 分账, 每分钟同步一次
+    @Scheduled(cron = "10 */1 * * * ?")
+    @SchedulerLock(name = "lock:tradeSync:alloc10M", lockAtMostFor = "50s", lockAtLeastFor = "5s")
+    public void syncAlloc10M() {
+        OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
+        syncAllocBatch(now.minusMinutes(10), now.minusMinutes(1));
+    }
+
+    /// 次新窗口: 创建 10 分钟~1 小时的 PROCESSING 分账, 每 10 分钟同步一次
+    @Scheduled(cron = "10 */10 * * * ?")
+    @SchedulerLock(name = "lock:tradeSync:alloc1H", lockAtMostFor = "8m", lockAtLeastFor = "30s")
+    public void syncAlloc1H() {
+        OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
+        syncAllocBatch(now.minusHours(1), now.minusMinutes(10));
+    }
+
+    /// 陈旧窗口: 创建 1~24 小时的 PROCESSING 分账, 每小时同步一次
+    @Scheduled(cron = "10 0 */1 * * ?")
+    @SchedulerLock(name = "lock:tradeSync:alloc1D", lockAtMostFor = "50m", lockAtLeastFor = "1m")
+    public void syncAlloc1D() {
+        OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
+        syncAllocBatch(now.minusHours(24), now.minusHours(1));
+    }
+
+    /// 死单兜底: 创建 1~7 天的 PROCESSING 分账, 每天凌晨同步一次
+    @Scheduled(cron = "0 40 1 * * ?")
+    @SchedulerLock(name = "lock:tradeSync:alloc7D", lockAtMostFor = "30m", lockAtLeastFor = "5m")
+    public void syncAlloc7D() {
+        OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
+        syncAllocBatch(now.minusDays(7), now.minusHours(24));
+    }
+
     // ==================== 批量处理 ====================
 
     /// 支付同步批量处理(逐笔容错, 单笔锁冲突/异常不阻断整批)
@@ -236,6 +280,23 @@ public class TradeSyncJob {
                 transferSyncService.autoSync(trade.getTradeNo());
             } catch (Exception e) {
                 log.warn("转账同步跳过 tradeNo={}", trade.getTradeNo(), e);
+            }
+        }
+    }
+
+    /// 分账同步批量处理(逐笔容错)
+    private void syncAllocBatch(OffsetDateTime start, OffsetDateTime end) {
+        List<AllocOrder> allocs = allocOrderManager.findSyncAllocs(
+                AllocOrderStatusEnum.PROCESSING.getCode(), start, end);
+        if (allocs.isEmpty()) {
+            return;
+        }
+        log.info("定时同步扫描分账命中 {} 笔, 开始处理", allocs.size());
+        for (AllocOrder alloc : allocs) {
+            try {
+                allocSyncService.autoSync(alloc.getAllocNo());
+            } catch (Exception e) {
+                log.warn("分账同步跳过 allocNo={}", alloc.getAllocNo(), e);
             }
         }
     }

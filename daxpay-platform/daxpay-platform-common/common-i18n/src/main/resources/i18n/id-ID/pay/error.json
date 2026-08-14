@@ -129,6 +129,7 @@
     "noDuplicate": "Nomor alokasi merchant ini sudah ada",
     "createFailed": "Alokasi gagal: {0}",
     "receiverEmpty": "Daftar penerima tidak boleh kosong",
+    "duplicateReceiver": "Akun penerima tidak boleh duplikat",
     "amountExceed": "Total alokasi melebihi jumlah yang dapat dialokasikan",
     "amountInvalid": "Jumlah alokasi tidak valid",
     "channelNotSupport": "Saluran ini tidak mendukung alokasi",

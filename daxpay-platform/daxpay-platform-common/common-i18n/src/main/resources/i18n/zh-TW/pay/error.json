@@ -138,6 +138,7 @@
     "noDuplicate": "該商戶分帳單號已存在",
     "createFailed": "分帳發起失敗: {0}",
     "receiverEmpty": "接收方列表不可為空",
+    "duplicateReceiver": "接收方帳號不可重複",
     "amountExceed": "分帳總金額超過訂單可分帳金額",
     "amountInvalid": "分帳金額無效",
     "channelNotSupport": "該通道暫不支援分帳",

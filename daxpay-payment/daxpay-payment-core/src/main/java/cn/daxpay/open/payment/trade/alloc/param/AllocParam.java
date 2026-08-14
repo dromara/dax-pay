@@ -59,8 +59,9 @@ public class AllocParam {
     @Schema(description = "分账描述")
     private String description;
 
-    /// 接收方列表(至少一个)
+    /// 接收方列表(至少一个, 上限50, 避免超大请求并匹配通道侧单次分账接收方上限)
     @NotEmpty(message = "接收方列表不可为空")
+    @Size(max = 50, message = "接收方列表不可超过50个")
     @Valid
     @Schema(description = "接收方列表")
     private List<AllocReceiverParam> receivers;
