@@ -198,10 +198,8 @@ public class MultiLevelCache implements Cache {
     /// 注意：广播不因本机 L1 关闭而跳过——集群中其他节点可能 L1 开启，仍需通知其删除本地缓存
     @Override
     public void evict(Object key) {
-        // 缓存总开关关闭：无缓存可删，直接返回
-        if (!this.cacheEnabled) {
-            return;
-        }
+        // 总开关仅控制本机读写穿透, 失效操作(L2 删除 + 集群广播)始终执行:
+        // 避免总开关关闭期间写侧改配置后, Redis 残留旧值 + 其他节点 L1 未失效, 重新开启后读到脏数据。
         String localKey = this.toLocalKey(key);
         // 仍尝试删 Redis，清理可能存在的历史数据
         this.redisCache.evict(key);
@@ -217,10 +215,7 @@ public class MultiLevelCache implements Cache {
     /// 清空 L2 Redis；L1 开启时清空本机 L1；始终广播（其他节点可能 L1 开启）
     @Override
     public void clear() {
-        // 缓存总开关关闭：无缓存可清，直接返回
-        if (!this.cacheEnabled) {
-            return;
-        }
+        // 总开关仅控制本机读写穿透, 失效操作(L2 清空 + 集群广播)始终执行(理由同 evict)
         this.redisCache.clear();
         if (this.l1Enabled) {
             this.localCache.invalidateAll();
