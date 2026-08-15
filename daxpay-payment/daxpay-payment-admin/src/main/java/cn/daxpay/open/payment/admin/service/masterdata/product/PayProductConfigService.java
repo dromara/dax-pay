@@ -18,6 +18,7 @@ import cn.daxpay.open.platform.core.exception.BizInfoException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
@@ -42,6 +43,8 @@ public class PayProductConfigService {
     private final PayProductService payProductService;
 
     private final PlatformConfigProperties platformConfigProperties;
+
+    private final CacheManager cacheManager;
 
     /// 查询全部产品配置列表（卡片页使用）
     /// 融合 PayProduct + pay_md_product_config 表 + 策略信息
@@ -121,6 +124,10 @@ public class PayProductConfigService {
             config.setActiveEnv(PayEnvEnum.PROD.getCode());
             payProductConfigManager.updateById(config);
         }
+        // 失效产品沙箱缓存: L2 Redis 跨重启存活, 上次运行写入的 sandbox=true 若不清除,
+        // 路由环境一致性校验在 L2 TTL 窗口内仍按沙箱环境匹配(启用方判定与强置后的 DB 不一致)。
+        // 本方法被事件监听自调用不走代理, 无法依赖 @CacheEvict, 故编程式 clear。
+        cacheManager.getCache("payment:product-sandbox").clear();
         log.info("✓ 沙箱环境已全局禁用 (daxpay.platform.config.sandbox-enabled=false) → 生产模式启动, 数据保证为生产数据{}",
                 sandboxConfigs.isEmpty() ? "" : ", 已将 " + sandboxConfigs.size() + " 个产品从 sandbox 强制重置为 prod");
     }

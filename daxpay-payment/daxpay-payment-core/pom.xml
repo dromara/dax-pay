@@ -133,6 +133,12 @@
             <artifactId>capability-sensitive-word</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- 缓存能力（CacheValueTypeContributor 声明 POJO 缓存值类型，L2 定型序列化） -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>capability-cache</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- 翻译模块 -->
         <dependency>
             <groupId>cn.daxpay.open</groupId>

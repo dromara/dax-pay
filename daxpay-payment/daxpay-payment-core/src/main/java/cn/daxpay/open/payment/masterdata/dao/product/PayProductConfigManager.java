@@ -42,7 +42,11 @@ public class PayProductConfigManager extends BaseManager<PayProductConfigMapper,
 
     /// 读取产品当前是否沙箱(无配置视为生产)
     ///
-    /// 缓存说明: 路由环境一致性校验高频调用, 配置低频修改。写侧通过 @CacheEvict 失效。
+    /// 缓存说明: 路由环境一致性校验高频调用, 配置低频修改。写侧通过 @CacheEvict 失效
+    /// ([PayProductConfigService#switchEnv]/[PayProductConfigService#saveOrUpdate]),
+    /// 启动重置路径 [PayProductConfigService#checkSandboxOnStartup] 编程式 clear。
+    /// 值为 Boolean 简单类型, 无需注册定型序列化。
+    @Cacheable(value = "payment:product-sandbox", key = "#product")
     public boolean isSandboxActive(String product) {
         return findByProduct(product)
                 .map(PayProductConfig::getActiveEnv)

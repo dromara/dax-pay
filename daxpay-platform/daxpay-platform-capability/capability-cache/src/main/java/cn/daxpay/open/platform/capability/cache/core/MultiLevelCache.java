@@ -16,7 +16,7 @@ import java.util.concurrent.Callable;
 /// - L1 Caffeine 是性能加速层，仅在本节点生效
 /// - 缓存失效通过 Artemis 广播通知其他节点删除本地 L1
 /// - 本地缓存 key 必须统一使用字符串形式，保证跨节点广播删除一致性
-/// - 敏感缓存（secure:）在数据加密未启用时仅使用 L1，禁止明文写 Redis
+/// - 敏感缓存（secure:）在数据加密未启用时仅使用 L1，禁止明文写 Redis；读侧同样跳过 L2（防历史明文/密文脏数据），见 [#isL1Only]
 /// - 两层开关：[#cacheEnabled] 总开关关 L1+L2 一并 NoOp；[#l1Enabled] 在总开关开启时可单独关 L1 留 L2
 @Slf4j
 public class MultiLevelCache implements Cache {
@@ -79,6 +79,13 @@ public class MultiLevelCache implements Cache {
     }
 
     /// 是否跳过 L2（敏感且未开加密）
+    ///
+    /// 注意这不是普通缓存的常规形态, 而是**敏感缓存的安全降级保护**:
+    /// 缓存名命中敏感名单(secure: 前缀或 secureNames)且平台数据加密未启用时,
+    /// 敏感数据被禁止明文写 Redis —— 写侧仅写 L1 本机内存([put] 内分支),
+    /// 读侧连 L2 也不查([get] 内短路)。一旦启用数据加密即恢复 L1+L2 双层(仅 L2 value 为整包密文)。
+    ///
+    /// 普通缓存永远不进入本分支, 其读路径只有两种: L1+L2 双层 / 仅 L2(纯 Redis 模式, l1.enabled=false)。
     private boolean isL1Only() {
         return this.secureCache && !this.secureL2Enabled;
     }
@@ -108,7 +115,9 @@ public class MultiLevelCache implements Cache {
             }
         }
 
-        // 敏感缓存未开加密：禁止读 Redis，避免历史明文或无法解密的脏数据
+        // 敏感缓存未开加密：禁止读 Redis —— L2 里可能是三类脏数据:
+        // ① 曾启用加密后关闭残留的密文(当前无法解密) ② 加密启用前明文写入的历史数据(无保护) ③ 多节点密钥版本不一致的密文(解密失败)。
+        // 宁可穿透到方法重查, 也不能把不对的数据当缓存值返回(fail-safe)
         if (this.isL1Only()) {
             log.debug("敏感缓存 L1-only 未命中: cacheName={}, key={}, l1Enabled={}", this.name, key, this.l1Enabled);
             return null;
@@ -172,7 +181,7 @@ public class MultiLevelCache implements Cache {
         }
         String localKey = this.toLocalKey(key);
         if (this.isL1Only()) {
-            // 敏感缓存禁 Redis：仅写 L1；L1 也关则该缓存实质不缓存
+            // 敏感缓存禁 Redis(加密未启用, 禁止敏感数据明文落盘): 仅写 L1 本机内存; L1 也关则该缓存实质不缓存(每次全穿透)
             if (this.l1Enabled) {
                 this.localCache.put(localKey, value);
                 log.debug("写入 L1-only 敏感缓存: cacheName={}, key={}", this.name, key);

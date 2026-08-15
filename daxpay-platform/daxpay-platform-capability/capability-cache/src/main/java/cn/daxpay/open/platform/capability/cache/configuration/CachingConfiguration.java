@@ -1,6 +1,7 @@
 package cn.daxpay.open.platform.capability.cache.configuration;
 
 import cn.daxpay.open.platform.capability.cache.core.MultiLevelCacheManager;
+import cn.daxpay.open.platform.capability.cache.core.CacheValueTypeContributor;
 import cn.daxpay.open.platform.capability.cache.core.DaxpayRedisCacheManager;
 import cn.daxpay.open.platform.capability.cache.core.LocalCacheRegistry;
 import cn.daxpay.open.platform.capability.cache.notify.publisher.CacheInvalidationPublisher;
@@ -25,10 +26,15 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheWriter;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.serializer.JacksonJsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.ObjectMapper;
 
 import java.time.Duration;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /// # 缓存自动配置
@@ -84,11 +90,14 @@ public class CachingConfiguration implements CachingConfigurer {
     ///
     /// 作为二级缓存的 L2 层，负责跨节点数据共享
     ///
-    /// 普通 cacheName 使用明文 JSON；敏感 cacheName 在 encryptor 可用时使用整包加密序列化。
+    /// 普通 cacheName 使用明文 JSON；敏感 cacheName 在 encryptor 可用时使用整包加密序列化；
+    /// 通过 [CacheValueTypeContributor] 注册值类型的 cacheName 使用定型 JSON 序列化（还原真实类型）。
     @Bean
     @ConditionalOnMissingBean(DaxpayRedisCacheManager.class)
     public DaxpayRedisCacheManager redisCacheManager(RedisConnectionFactory redisConnectionFactory,
                                                      SecureCacheNameMatcher secureCacheNameMatcher,
+                                                     ObjectMapper objectMapper,
+                                                     ObjectProvider<CacheValueTypeContributor> valueTypeContributors,
                                                      ObjectProvider<SecureAesGcmEncryptor> encryptorProvider) {
         var l2Config = platformCommonProperties.getCache().getL2();
         Duration ttl = Duration.ofSeconds(l2Config.getDefaultTtl());
@@ -105,11 +114,37 @@ public class CachingConfiguration implements CachingConfigurer {
                     secureCacheNameMatcher.getSecurePrefix());
         }
 
+        Map<String, RedisCacheConfiguration> typedConfigs = this.collectTypedCacheConfigs(ttl, objectMapper, valueTypeContributors);
+
         return new DaxpayRedisCacheManager(
                 RedisCacheWriter.nonLockingRedisCacheWriter(redisConnectionFactory),
                 plainConfig,
                 secureConfig,
-                secureCacheNameMatcher);
+                secureCacheNameMatcher,
+                typedConfigs);
+    }
+
+    /// 收集各模块注册的 POJO 缓存值类型, 生成按缓存名预置的定型配置
+    ///
+    /// 同一 cacheName 重复注册时启动即失败(快速暴露冲突, 避免静默覆盖)
+    private Map<String, RedisCacheConfiguration> collectTypedCacheConfigs(Duration ttl,
+                                                                          ObjectMapper objectMapper,
+                                                                          ObjectProvider<CacheValueTypeContributor> valueTypeContributors) {
+        Map<String, RedisCacheConfiguration> typedConfigs = new LinkedHashMap<>();
+        for (CacheValueTypeContributor contributor : valueTypeContributors.orderedStream().toList()) {
+            // TypeFactory 从运行时 mapper 取, 保证与序列化器同源
+            contributor.getValueTypes(objectMapper.getTypeFactory()).forEach((cacheName, valueType) -> {
+                RedisCacheConfiguration previous = typedConfigs.put(cacheName, this.typedValueConfig(ttl, objectMapper, valueType));
+                if (previous != null) {
+                    throw new IllegalStateException("缓存值类型重复注册: cacheName=" + cacheName
+                            + ", type=" + valueType.toCanonical() + ", 请检查各 CacheValueTypeContributor 实现");
+                }
+            });
+        }
+        if (!typedConfigs.isEmpty()) {
+            log.info("POJO 缓存定型序列化已注册: {}", typedConfigs.keySet());
+        }
+        return typedConfigs;
     }
 
     /// 本地缓存注册表
@@ -172,6 +207,29 @@ public class CachingConfiguration implements CachingConfigurer {
             .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
             // 设置value 序列化方式为 JSON，与 RedisTemplate 保持一致
             .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(JacksonRedisSerializer.INSTANCE))
+            // 不缓存null
+            .disableCachingNullValues()
+            // 覆盖默认的构造key，否则会多出一个冒号
+            .computePrefixWith(name -> name + ":")
+            // 过期时间
+            .entryTtl(duration);
+    }
+
+    /// 缓存管理器策略过期时间配置（POJO 缓存：定型 JSON value）
+    ///
+    /// 与 plainValueConfig 行为一致, 仅把 value 序列化器换成 JacksonJsonRedisSerializer:
+    /// 反序列化按注册的 [JavaType] 还原真实对象, 避免 Object.class 还原成 LinkedHashMap
+    /// (POJO 缓存经 Spring 代理按方法返回类型使用时会 ClassCastException)。
+    ///
+    /// ObjectMapper 从 bean 参数注入(Boot 自动配置的 JsonMapper, 与 [JacksonUtil] 持有的是同一实例),
+    /// 不经静态取值——装配期静态字段可能尚未初始化。
+    private RedisCacheConfiguration typedValueConfig(Duration duration, ObjectMapper objectMapper, JavaType valueType) {
+        return RedisCacheConfiguration.defaultCacheConfig()
+            // 设置key为String
+            .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
+            // 设置value 序列化方式为定型 JSON, 反序列化还原注册的真实类型(含泛型容器元素类型)
+            .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(
+                    new JacksonJsonRedisSerializer<>(objectMapper, valueType)))
             // 不缓存null
             .disableCachingNullValues()
             // 覆盖默认的构造key，否则会多出一个冒号
