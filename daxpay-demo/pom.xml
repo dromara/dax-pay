@@ -49,6 +49,12 @@
             <artifactId>daxpay-payment-core</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- 缓存能力（缓存读写演示: CacheValueTypeContributor 注册 POJO 缓存值类型） -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>capability-cache</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>
