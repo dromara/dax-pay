@@ -69,5 +69,7 @@
   "transferRemarkRequired": "알리페이: 이체 금액이 50,000위안에 도달하면 결제 사유를 반드시 입력해야 합니다",
   "allocFailed": "Alipay 분할 실패: {0}",
   "allocReceiverTypeInvalid": "Alipay: 지원되지 않는 분할 수신자 유형: {0}",
-  "allocReceiverAccountRequired": "Alipay: 분할 수신자 계정은 필수입니다"
+  "allocReceiverAccountRequired": "Alipay: 분할 수신자 계정은 필수입니다",
+  "allocReceiverBindFailed": "알리페이 분배 수신자 바인딩 실패: {0}",
+  "allocReceiverUnbindFailed": "알리페이 분배 수신자 해제 실패: {0}"
 }

@@ -1,0 +1,13 @@
+{
+  "service_provider": "ผู้ให้บริการ",
+  "store": "ร้านค้า",
+  "staff": "พนักงาน",
+  "store_owner": "เจ้าของร้าน",
+  "partner": "คู่ค้า",
+  "headquarter": "สำนักงานใหญ่",
+  "brand": "แบรนด์",
+  "distributor": "ผู้จัดจำหน่าย",
+  "user": "ผู้ใช้",
+  "supplier": "ผู้ขาย",
+  "custom": "กำหนดเอง"
+}

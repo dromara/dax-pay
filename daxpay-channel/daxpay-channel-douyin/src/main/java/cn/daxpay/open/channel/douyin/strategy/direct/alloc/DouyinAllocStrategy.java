@@ -1,6 +1,7 @@
 package cn.daxpay.open.channel.douyin.strategy.direct.alloc;
 
 import cn.daxpay.open.channel.douyin.client.credential.DouyinSdkCredential;
+import cn.daxpay.open.channel.douyin.dao.direct.DouyinDirectAllocReceiverManager;
 import cn.daxpay.open.channel.douyin.service.direct.DouyinDirectConfigAssembler;
 import cn.daxpay.open.channel.douyin.service.payment.alloc.DouyinAllocService;
 import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
@@ -13,12 +14,14 @@ import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.SecureUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 /// # 抖音分账策略
@@ -37,6 +40,7 @@ public class DouyinAllocStrategy extends AbsAllocStrategy {
 
     private final DouyinAllocService douyinAllocService;
     private final DouyinDirectConfigAssembler douyinDirectConfigAssembler;
+    private final DouyinDirectAllocReceiverManager douyinDirectAllocReceiverManager;
     private final PlatformUrlConfigService platformUrlConfigService;
 
     @Override
@@ -61,7 +65,30 @@ public class DouyinAllocStrategy extends AbsAllocStrategy {
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "error.channel.douyin.allocPersonalNameRequired");
             }
+            // openid 与发起应用一致性: openid 是 appid 维度账号, 绑定应用与分账发起应用不一致会被抖音拒绝
+            if (AllocReceiverTypeEnum.PERSONAL_OPENID.getCode().equals(detail.getReceiverType())) {
+                this.validateReceiverAppMatch(context, detail);
+            }
         }
+    }
+
+    /// 校验 openid 接收方绑定时所用应用与分账发起应用(capability 路由解析)一致
+    ///
+    /// 仅对系统内已绑定(bound)档案校验; 查不到档案(调用方自行在通道侧绑定)或非 bound 状态放行。
+    /// 抖音发起应用按 capability 路由解析, 与 context.channelAppId 无关, 故此处重新组装一次凭证取 appid。
+    private void validateReceiverAppMatch(AllocStrategyContext context, AllocDetail detail) {
+        DouyinSdkCredential credential = douyinDirectConfigAssembler.buildConfig(
+                context.getMchNo(), context.getChannelMchNo(), context.getAllocOrder().getCapability());
+        String accountHash = SecureUtil.sha256(detail.getReceiverAccount());
+        douyinDirectAllocReceiverManager.findBoundByChannelMchNoAndTypeAndHash(
+                        context.getChannelMchNo(), detail.getReceiverType(), accountHash)
+                .ifPresent(receiver -> {
+                    if (!Objects.equals(receiver.getChannelAppId(), credential.getDouyinAppId())) {
+                        // openid 接收方绑定于其他应用, 与分账发起应用不一致
+                        throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
+                                "error.channel.douyin.allocReceiverAppMismatch", receiver.getChannelAppId());
+                    }
+                });
     }
 
     @Override

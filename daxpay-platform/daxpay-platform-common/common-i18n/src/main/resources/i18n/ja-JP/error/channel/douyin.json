@@ -37,5 +37,11 @@
   "transferAppNotConfigured": "Douyin: 振込发起アプリが未設定です",
   "transferPayeeTypeInvalid": "抖音: サポートされていない受取人アカウントタイプ: {0}",
   "transferPhoneInvalid": "抖音: 受取人の電話番号の形式が正しくありません(11桁の数字が必要です)",
-  "transferOutBillNoInvalid": "抖音: 加盟店振込番号の形式が正しくありません(6〜32文字、数字/英字/_/-/*のみ)"
+  "transferOutBillNoInvalid": "抖音: 加盟店振込番号の形式が正しくありません(6〜32文字、数字/英字/_/-/*のみ)",
+  "allocReceiverBindFailed": "Douyin分配受取方のバインドに失敗: {0}",
+  "allocReceiverUnbindFailed": "Douyin分配受取方の解除に失敗: {0}",
+  "allocReceiverUnsupportedType": "Douyin: サポートされていない分配受取方タイプ: {0}",
+  "allocReceiverMchNameRequired": "Douyin: 商户番号タイプの受取方は商户正式名称が必要です",
+  "allocReceiverAppMismatch": "Douyin: openid受取側は他のアプリ({0})に紐づいており、分配開始アプリと一致しません",
+  "channelMerchantMismatch": "Douyin: チャネル加盟店は現在の加盟店のものではありません"
 }

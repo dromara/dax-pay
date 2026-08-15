@@ -1,0 +1,13 @@
+{
+  "service_provider": "Service Provider",
+  "store": "Store",
+  "staff": "Staff",
+  "store_owner": "Store Owner",
+  "partner": "Partner",
+  "headquarter": "Headquarters",
+  "brand": "Brand",
+  "distributor": "Distributor",
+  "user": "User",
+  "supplier": "Supplier",
+  "custom": "Custom"
+}

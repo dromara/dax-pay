@@ -25,6 +25,8 @@ public enum AllocReceiverTypeEnum implements I18nSupport {
     MERCHANT_ID("MERCHANT_ID"),
     /// 个人 openid(微信/抖音)
     PERSONAL_OPENID("PERSONAL_OPENID"),
+    /// 子商户应用个人 openid(仅微信服务商接收方绑定使用, openid 为 sub_app_id 维度)
+    PERSONAL_SUB_OPENID("PERSONAL_SUB_OPENID"),
     /// 支付宝用户ID(2088开头, 对应支付宝原生 userId)
     USER_ID("USER_ID"),
     /// 支付宝登录账号(手机号/邮箱, 对应支付宝原生 loginName)

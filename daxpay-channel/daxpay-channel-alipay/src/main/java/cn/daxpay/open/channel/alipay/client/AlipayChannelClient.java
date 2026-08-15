@@ -9,6 +9,7 @@ import cn.daxpay.open.channel.alipay.client.req.AlipayRefundSyncReq;
 import cn.daxpay.open.channel.alipay.client.req.AlipaySyncReq;
 import cn.daxpay.open.channel.alipay.client.req.AlipayTransferReq;
 import cn.daxpay.open.channel.alipay.client.req.AlipayAllocReq;
+import cn.daxpay.open.channel.alipay.client.req.AlipayAllocReceiverReq;
 import cn.daxpay.open.channel.alipay.client.resp.AlipayAppAuthTokenResp;
 import cn.daxpay.open.channel.alipay.client.resp.AlipayCallbackParseResp;
 import cn.daxpay.open.channel.alipay.client.resp.AlipayTransferCallbackParseResp;
@@ -19,6 +20,7 @@ import cn.daxpay.open.channel.alipay.client.resp.AlipayRefundSyncResp;
 import cn.daxpay.open.channel.alipay.client.resp.AlipaySyncResp;
 import cn.daxpay.open.channel.alipay.client.resp.AlipayTransferResp;
 import cn.daxpay.open.channel.alipay.client.resp.AlipayAllocResp;
+import cn.daxpay.open.channel.alipay.client.resp.AlipayAllocReceiverResp;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -66,6 +68,14 @@ public interface AlipayChannelClient {
     /// 分账同步(alipay.trade.order.settle.query)
     @PostExchange("/channel/alipay/alloc-sync")
     DaxResult<AlipayAllocResp> allocSync(@RequestBody AlipayAllocReq req);
+
+    /// 绑定分账接收方(alipay.trade.royalty.relation.bind, 直连/服务商共用端点)
+    @PostExchange("/channel/alipay/alloc-receiver/bind")
+    DaxResult<AlipayAllocReceiverResp> allocReceiverBind(@RequestBody AlipayAllocReceiverReq req);
+
+    /// 解绑分账接收方(alipay.trade.royalty.relation.unbind, 直连/服务商共用端点)
+    @PostExchange("/channel/alipay/alloc-receiver/unbind")
+    DaxResult<AlipayAllocReceiverResp> allocReceiverUnbind(@RequestBody AlipayAllocReceiverReq req);
 
     /// 支付回调验签解析(转发子应用)
     @PostExchange("/channel/alipay/callback/parse-pay")

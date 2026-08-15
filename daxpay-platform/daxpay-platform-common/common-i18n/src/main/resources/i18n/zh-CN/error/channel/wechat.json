@@ -68,5 +68,11 @@
   "transferAppNotBelong": "微信: 转账发起应用不属于当前商户",
   "transferAppTypeNotOfficialAccount": "微信: 转账发起应用必须是公众号类型",
   "transferRemarkRequired": "微信: 转账备注(标题)必填",
-  "transferReportInfoRequired": "微信: 转账场景报备信息必填, 请填写全部报备字段"
+  "transferReportInfoRequired": "微信: 转账场景报备信息必填, 请填写全部报备字段",
+  "allocReceiverBindFailed": "微信分账接收方绑定失败: {0}",
+  "allocReceiverUnbindFailed": "微信分账接收方解绑失败: {0}",
+  "allocReceiverUnsupportedType": "微信: 不支持的分账接收方类型: {0}",
+  "allocReceiverMchNameRequired": "微信: 商户号类型接收方必须填写商户全称",
+  "allocReceiverSubAppIdRequired": "微信: 子商户应用openid类型必须指定子商户应用",
+  "allocReceiverAppMismatch": "微信: openid接收方绑定于其他应用({0}), 与分账发起应用不一致"
 }

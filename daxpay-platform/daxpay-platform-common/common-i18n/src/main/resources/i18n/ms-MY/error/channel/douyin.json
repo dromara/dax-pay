@@ -37,5 +37,11 @@
   "transferAppNotConfigured": "Douyin: Aplikasi pemula pemindahan belum dikonfigurasi",
   "transferPayeeTypeInvalid": "Douyin: Jenis akaun penerima tidak disokong: {0}",
   "transferPhoneInvalid": "Douyin: Format nombor telefon penerima tidak sah (mesti 11 digit)",
-  "transferOutBillNoInvalid": "Douyin: Format nombor pindahan pedagang tidak sah (6-32 aksara, hanya digit/huruf/_/-/*)"
+  "transferOutBillNoInvalid": "Douyin: Format nombor pindahan pedagang tidak sah (6-32 aksara, hanya digit/huruf/_/-/*)",
+  "allocReceiverBindFailed": "Gagal mengikat penerima agihan Douyin: {0}",
+  "allocReceiverUnbindFailed": "Gagal melepas penerima agihan Douyin: {0}",
+  "allocReceiverUnsupportedType": "Douyin: jenis penerima agihan tidak disokong: {0}",
+  "allocReceiverMchNameRequired": "Douyin: nama penuh merchant wajib untuk penerima MERCHANT_ID",
+  "allocReceiverAppMismatch": "Douyin: penerima openid terikat pada aplikasi lain ({0}), tidak sepadan dengan aplikasi permulaan pembahagian",
+  "channelMerchantMismatch": "Douyin: merchant saluran bukan milik merchant semasa"
 }

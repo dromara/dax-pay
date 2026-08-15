@@ -37,5 +37,11 @@
   "transferAppNotConfigured": "Douyin: 이체 발신 앱이 구성되지 않았습니다",
   "transferPayeeTypeInvalid": "더우인: 지원하지 않는 수취인 계정 유형: {0}",
   "transferPhoneInvalid": "더우인: 수취인 전화번호 형식이 올바르지 않습니다(11자리 숫자 필요)",
-  "transferOutBillNoInvalid": "더우인: 가맹점 이체번호 형식이 올바르지 않습니다(6-32자, 숫자/대소문자/_/-/*만 허용)"
+  "transferOutBillNoInvalid": "더우인: 가맹점 이체번호 형식이 올바르지 않습니다(6-32자, 숫자/대소문자/_/-/*만 허용)",
+  "allocReceiverBindFailed": "더우인 분배 수신자 바인딩 실패: {0}",
+  "allocReceiverUnbindFailed": "더우인 분배 수신자 해제 실패: {0}",
+  "allocReceiverUnsupportedType": "더우인: 지원하지 않는 분배 수신자 유형: {0}",
+  "allocReceiverMchNameRequired": "더우인:商户号 유형 수신자는 상호 전체 명칭을 입력해야 합니다",
+  "allocReceiverAppMismatch": "더우인: openid 수신자가 다른 앱({0})에 바인딩되어 있어 분배 시작 앱과 일치하지 않습니다",
+  "channelMerchantMismatch": "더우인: 채널 가맹점이 현재 가맹점 소속이 아닙니다"
 }

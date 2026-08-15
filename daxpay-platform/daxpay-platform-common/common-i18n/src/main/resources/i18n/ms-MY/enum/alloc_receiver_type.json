@@ -1,6 +1,7 @@
 {
   "MERCHANT_ID": "ID Merchant",
   "PERSONAL_OPENID": "OpenID Peribadi",
+  "PERSONAL_SUB_OPENID": "OpenId aplikasi sub-merchant",
   "USER_ID": "ID Pengguna Alipay",
   "LOGIN_NAME": "Nama Log Masuk Alipay"
 }

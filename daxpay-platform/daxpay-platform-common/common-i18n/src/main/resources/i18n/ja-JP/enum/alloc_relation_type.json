@@ -1,0 +1,13 @@
+{
+  "service_provider": "サービスプロバイダー",
+  "store": "店舗",
+  "staff": "スタッフ",
+  "store_owner": "店主",
+  "partner": "パートナー",
+  "headquarter": "本社",
+  "brand": "ブランド",
+  "distributor": "販売代理店",
+  "user": "ユーザー",
+  "supplier": "サプライヤー",
+  "custom": "カスタム"
+}

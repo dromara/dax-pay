@@ -5,11 +5,13 @@ import cn.daxpay.open.channel.wechat.dao.isv.WechatIsvChannelMerchantManager;
 import cn.daxpay.open.channel.wechat.entity.isv.WechatIsvChannelMerchant;
 import cn.daxpay.open.channel.wechat.entity.isv.WechatIsvKeyConfig;
 import cn.daxpay.open.payment.wx.facade.WxAppFacade;
+import cn.daxpay.open.payment.wx.facade.WxAppView;
 import cn.daxpay.open.payment.wx.facade.WxIsvAppPair;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -76,6 +78,39 @@ public class WechatIsvConfigAssembler {
                 .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
         this.assertOwnsMchNo(channelMerchant, mchNo);
         return this.assemble(null, null, keyConfig, channelMerchant);
+    }
+
+    /// 分账接收方绑定专用凭证组装(不经 capability, 显式指定 sp/sub 应用)
+    ///
+    /// 接收方绑定无支付能力维度, 微信 V3 服务商 receivers/add 要求 sp_appid(必填)
+    /// 与 sub_appid(可选), 故由绑定记录显式指定:
+    /// - spAppId: 经 [WxAppFacade#resolveIsvPair] 显式解析, 须命中平台档(服务商应用)
+    /// - subAppId: 可选, 借直连产品语义 [WxAppFacade#resolve] 严格商户档解析(PERSONAL_SUB_OPENID 必填)
+    ///
+    /// @param mchNo        商户号(商户档应用隔离条件)
+    /// @param channelMchNo 通道商户号(特约商户绑定定位)
+    /// @param spAppId      服务商(平台档)应用 appid
+    /// @param subAppId     子商户(商户档)应用 appid, 可空
+    /// @return 微信 SDK 凭证(服务商模式, sp/sub 应用已填充)
+    public WechatSdkCredential buildAllocReceiverConfig(String mchNo, String channelMchNo, String spAppId,
+                                                        String subAppId) {
+        // 服务商密钥(全局唯一, 含 sp_mchid 与证书; 缺失或关键字段为空时 fail-fast)
+        WechatIsvKeyConfig keyConfig = wechatIsvKeyConfigService.getByProductForPay(ProductEnum.WECHAT_ISV.getCode());
+        // 特约商户绑定(取 sub_mchid)
+        WechatIsvChannelMerchant channelMerchant = wechatIsvChannelMerchantManager.findByChannelMchNo(channelMchNo)
+                // 微信: 通道商户配置不存在
+                .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
+        // sp 应用: 显式解析, 须命中平台档(命中商户档时 platform 为空将报「未配置平台应用」)
+        WxIsvAppPair pair = wxAppFacade.resolveIsvPair(mchNo, channelMchNo, null, spAppId,
+                ProductEnum.WECHAT_ISV.getCode());
+        // sub 应用: 可选, 借直连产品语义严格走商户档
+        String resolvedSubAppId = null;
+        if (StrUtil.isNotBlank(subAppId)) {
+            WxAppView subApp = wxAppFacade.resolve(mchNo, channelMchNo, null, subAppId,
+                    ProductEnum.WECHAT_PAY.getCode());
+            resolvedSubAppId = subApp.wxAppId();
+        }
+        return this.assemble(pair.platform().wxAppId(), resolvedSubAppId, keyConfig, channelMerchant);
     }
 
     /// 校验通道商户归属(回调无认证场景的防御性双保险)

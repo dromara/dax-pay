@@ -84,6 +84,22 @@ public class WechatDirectConfigAssembler {
         return this.assemble(app.wxAppId(), channelMchNo, channelMerchant);
     }
 
+    /// 分账接收方绑定专用凭证组装(不经 capability, 显式指定应用)
+    ///
+    /// 接收方绑定无支付能力维度, 微信 V3 receivers/add 要求 appid,
+    /// 且 openid 类型账号为 appid 维度, 故由绑定记录显式指定商户档应用 appid。
+    ///
+    /// @param mchNo        商户号(商户档应用隔离条件)
+    /// @param channelMchNo 通道商户号(密钥与商户绑定定位)
+    /// @param channelAppId 绑定所用商户档微信应用 appid
+    /// @return 微信 SDK 凭证, wxAppId 来自显式指定的商户档应用
+    public WechatSdkCredential buildAllocReceiverConfig(String mchNo, String channelMchNo, String channelAppId) {
+        WxAppView app = wxAppFacade.resolve(mchNo, channelMchNo, null, channelAppId,
+                ProductEnum.WECHAT_PAY.getCode());
+        WechatDirectChannelMerchant channelMerchant = this.loadChannelMerchant(channelMchNo);
+        return this.assemble(app.wxAppId(), channelMchNo, channelMerchant);
+    }
+
     /// 加载通道商户绑定(channelMchNo 是系统生成号, 不等于 wxMchId)
     private WechatDirectChannelMerchant loadChannelMerchant(String channelMchNo) {
         return wechatDirectChannelMerchantManager.findByChannelMchNo(channelMchNo)

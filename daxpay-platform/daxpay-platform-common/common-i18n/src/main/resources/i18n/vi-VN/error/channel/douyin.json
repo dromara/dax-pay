@@ -37,5 +37,11 @@
   "transferAppNotConfigured": "Douyin: Ứng dụng khởi tạo chuyển khoản chưa được thiết lập",
   "transferPayeeTypeInvalid": "Douyin: Loại tài khoản người nhận không được hỗ trợ: {0}",
   "transferPhoneInvalid": "Douyin: Định dạng số điện thoại người nhận không hợp lệ (phải là 11 chữ số)",
-  "transferOutBillNoInvalid": "Douyin: Định dạng số chuyển khoản thương gia không hợp lệ (6-32 ký tự, chỉ chữ số/chữ cái/_/-/*)"
+  "transferOutBillNoInvalid": "Douyin: Định dạng số chuyển khoản thương gia không hợp lệ (6-32 ký tự, chỉ chữ số/chữ cái/_/-/*)",
+  "allocReceiverBindFailed": "Liên kết người nhận phân chia Douyin thất bại: {0}",
+  "allocReceiverUnbindFailed": "Hủy liên kết người nhận phân chia Douyin thất bại: {0}",
+  "allocReceiverUnsupportedType": "Douyin: loại người nhận phân chia không được hỗ trợ: {0}",
+  "allocReceiverMchNameRequired": "Douyin: phải nhập tên đầy đủ của merchant cho người nhận MERCHANT_ID",
+  "allocReceiverAppMismatch": "Douyin: người nhận openid liên kết với ứng dụng khác ({0}), không khớp ứng dụng khởi tạo chia tiền",
+  "channelMerchantMismatch": "Douyin: merchant kênh không thuộc merchant hiện tại"
 }

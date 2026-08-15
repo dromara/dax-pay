@@ -1,3 +1,8 @@
 {
-  "envMismatch": "Lingkungan pedagang saluran tidak cocok dengan lingkungan aktif produk"
+  "envMismatch": "Lingkungan pedagang saluran tidak cocok dengan lingkungan aktif produk",
+  "allocReceiverDuplicate": "Penerima alokasi sudah ada (merchant channel, tipe, dan akun yang sama)",
+  "allocReceiverAlreadyBound": "Penerima sudah terikat",
+  "allocReceiverNotBound": "Hanya penerima terikat yang dapat dilepaskan",
+  "allocReceiverBoundCannotDelete": "Penerima terikat tidak dapat dihapus, lepaskan terlebih dahulu",
+  "allocReceiverCustomRelationRequired": "Nama relasi khusus wajib diisi untuk tipe relasi khusus"
 }

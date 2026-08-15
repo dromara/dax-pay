@@ -69,5 +69,7 @@
   "transferRemarkRequired": "Alipay: Payment reason is required when transfer amount reaches 50,000 yuan",
   "allocFailed": "Alipay allocation failed: {0}",
   "allocReceiverTypeInvalid": "Alipay: unsupported allocation receiver type: {0}",
-  "allocReceiverAccountRequired": "Alipay: allocation receiver account required"
+  "allocReceiverAccountRequired": "Alipay: allocation receiver account required",
+  "allocReceiverBindFailed": "Alipay alloc receiver bind failed: {0}",
+  "allocReceiverUnbindFailed": "Alipay alloc receiver unbind failed: {0}"
 }

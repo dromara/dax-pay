@@ -68,5 +68,11 @@
   "transferAppNotBelong": "WeChat: แอปเริ่มการโอนไม่ได้เป็นของร้านค้าปัจจุบัน",
   "transferAppTypeNotOfficialAccount": "WeChat: แอปเริ่มการโอนต้องเป็นประเภท Official Account",
   "transferRemarkRequired": "WeChat: หมายเหตุการโอน (หัวข้อ) จำเป็นต้องระบุ",
-  "transferReportInfoRequired": "WeChat: ข้อมูลรายงานสถานการณ์การโอนเงินจำเป็นต้องระบุ กรุณากรอกข้อมูลรายงานทั้งหมด"
+  "transferReportInfoRequired": "WeChat: ข้อมูลรายงานสถานการณ์การโอนเงินจำเป็นต้องระบุ กรุณากรอกข้อมูลรายงานทั้งหมด",
+  "allocReceiverBindFailed": "ผูกผู้รับเงินแบ่ง WeChat ไม่สำเร็จ: {0}",
+  "allocReceiverUnbindFailed": "ยกเลิกการผูกผู้รับเงินแบ่ง WeChat ไม่สำเร็จ: {0}",
+  "allocReceiverUnsupportedType": "WeChat: ไม่รองรับประเภทผู้รับเงินแบ่งนี้: {0}",
+  "allocReceiverMchNameRequired": "WeChat: ต้องกรอกชื่อเต็มร้านค้าสำหรับผู้รับประเภท MERCHANT_ID",
+  "allocReceiverSubAppIdRequired": "WeChat: ต้องระบุแอปร้านค้าย่อยสำหรับผู้รับประเภท PERSONAL_SUB_OPENID",
+  "allocReceiverAppMismatch": "WeChat: ผู้รับ openid ถูกผูกกับแอปอื่น ({0}) ไม่ตรงกับแอปที่เริ่มแบ่งเงิน"
 }

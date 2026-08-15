@@ -1,3 +1,8 @@
 {
-  "envMismatch": "チャネル販売者の環境が製品のアクティブな環境と一致しません"
+  "envMismatch": "チャネル販売者の環境が製品のアクティブな環境と一致しません",
+  "allocReceiverDuplicate": "分配受取方が既に存在します(同一チャネル加盟店・同タイプ・同アカウント)",
+  "allocReceiverAlreadyBound": "受取方は既にバインド済みです",
+  "allocReceiverNotBound": "バインド済みの受取方のみ解除できます",
+  "allocReceiverBoundCannotDelete": "バインド済みの受取方は削除できません、先に解除してください",
+  "allocReceiverCustomRelationRequired": "カスタム関係タイプにはカスタム関係名が必要です"
 }

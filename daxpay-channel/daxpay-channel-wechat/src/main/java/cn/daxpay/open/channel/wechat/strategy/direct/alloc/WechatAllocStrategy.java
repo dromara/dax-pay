@@ -1,6 +1,7 @@
 package cn.daxpay.open.channel.wechat.strategy.direct.alloc;
 
 import cn.daxpay.open.channel.wechat.client.credential.WechatSdkCredential;
+import cn.daxpay.open.channel.wechat.dao.direct.WechatDirectAllocReceiverManager;
 import cn.daxpay.open.channel.wechat.service.direct.WechatDirectConfigAssembler;
 import cn.daxpay.open.channel.wechat.service.payment.alloc.WechatAllocService;
 import cn.daxpay.open.payment.strategy.alloc.AbsAllocStrategy;
@@ -11,12 +12,14 @@ import cn.daxpay.open.payment.trade.alloc.enums.AllocReceiverTypeEnum;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.crypto.SecureUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 
 /// # 微信分账策略
@@ -39,6 +42,7 @@ public class WechatAllocStrategy extends AbsAllocStrategy {
 
     private final WechatAllocService wechatAllocService;
     private final WechatDirectConfigAssembler wechatDirectConfigAssembler;
+    private final WechatDirectAllocReceiverManager wechatDirectAllocReceiverManager;
 
     @Override
     public String getChannel() {
@@ -62,7 +66,27 @@ public class WechatAllocStrategy extends AbsAllocStrategy {
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "error.channel.wechat.allocPersonalNameRequired");
             }
+            // openid 与发起应用一致性: openid 是 appid 维度账号, 绑定应用与分账发起应用不一致会被微信拒绝
+            if (AllocReceiverTypeEnum.PERSONAL_OPENID.getCode().equals(detail.getReceiverType())) {
+                this.validateReceiverAppMatch(context, detail);
+            }
         }
+    }
+
+    /// 校验 openid 接收方绑定时所用应用与分账发起应用一致
+    ///
+    /// 仅对系统内已绑定(bound)档案校验; 查不到档案(调用方自行在通道侧绑定)或非 bound 状态放行。
+    private void validateReceiverAppMatch(AllocStrategyContext context, AllocDetail detail) {
+        String accountHash = SecureUtil.sha256(detail.getReceiverAccount());
+        wechatDirectAllocReceiverManager.findBoundByChannelMchNoAndTypeAndHash(
+                        context.getChannelMchNo(), detail.getReceiverType(), accountHash)
+                .ifPresent(receiver -> {
+                    if (!Objects.equals(receiver.getChannelAppId(), context.getChannelAppId())) {
+                        // openid 接收方绑定于其他应用, 与分账发起应用不一致
+                        throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
+                                "error.channel.wechat.allocReceiverAppMismatch", receiver.getChannelAppId());
+                    }
+                });
     }
 
     @Override

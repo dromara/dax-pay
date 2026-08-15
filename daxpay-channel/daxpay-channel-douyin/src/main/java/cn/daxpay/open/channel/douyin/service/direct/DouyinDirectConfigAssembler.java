@@ -46,6 +46,23 @@ public class DouyinDirectConfigAssembler {
         return assembleCredential(app, channelMchNo);
     }
 
+    /// 分账接收方绑定专用凭证组装(不经 capability, 显式指定应用)
+    ///
+    /// 接收方绑定无支付能力维度, 抖音 addSplitReceiver 要求 app_id,
+    /// 且 openid 类型账号为 app_id 维度, 故由绑定记录显式指定商户档应用 appid。
+    ///
+    /// @param mchNo        商户号(应用解析的商户档隔离条件)
+    /// @param channelMchNo 通道商户号(定位密钥/商户绑定)
+    /// @param channelAppId 绑定所用商户档抖音应用 appid
+    /// @return 抖音 SDK 凭证, douyinAppId 来自显式指定的商户档应用
+    public DouyinSdkCredential buildAllocReceiverConfig(String mchNo, String channelMchNo, String channelAppId) {
+        // 显式 appid 解析商户档应用(直连产品语义: 仅商户表, 优先于能力绑)
+        DyAppView app = douyinAppFacade.resolve(mchNo, channelMchNo, null, channelAppId,
+                ProductEnum.DOUYIN_PAY.getCode());
+        // 2-4. 组装凭证
+        return assembleCredential(app, channelMchNo);
+    }
+
     /// 组装转账使用的通道调用凭证(下发给子应用)
     ///
     /// 转账发起应用由「抖音转账配置」显式指定(网站应用, 支持手机H5获取OpenId), 不走支付能力绑定解析,

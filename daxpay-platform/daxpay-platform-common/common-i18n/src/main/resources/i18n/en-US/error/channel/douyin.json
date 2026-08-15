@@ -37,5 +37,11 @@
   "transferAppNotConfigured": "Douyin: Transfer initiator app not configured",
   "transferPayeeTypeInvalid": "Douyin: Unsupported payee account type: {0}",
   "transferPhoneInvalid": "Douyin: Invalid payee phone number (must be 11 digits)",
-  "transferOutBillNoInvalid": "Douyin: Invalid merchant transfer number (6-32 chars, digits/letters/_/-/* only)"
+  "transferOutBillNoInvalid": "Douyin: Invalid merchant transfer number (6-32 chars, digits/letters/_/-/* only)",
+  "allocReceiverBindFailed": "Douyin alloc receiver bind failed: {0}",
+  "allocReceiverUnbindFailed": "Douyin alloc receiver unbind failed: {0}",
+  "allocReceiverUnsupportedType": "Douyin: unsupported alloc receiver type: {0}",
+  "allocReceiverMchNameRequired": "Douyin: merchant full name is required for MERCHANT_ID receiver",
+  "allocReceiverAppMismatch": "Douyin: the openid receiver is bound to another app ({0}), which does not match the app used to start the allocation",
+  "channelMerchantMismatch": "Douyin: channel merchant does not belong to current merchant"
 }

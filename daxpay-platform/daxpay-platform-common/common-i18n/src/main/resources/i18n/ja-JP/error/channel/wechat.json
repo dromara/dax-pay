@@ -68,5 +68,11 @@
   "transferAppNotBelong": "WeChat: 振込发起アプリは現在のマーチャントに属していません",
   "transferAppTypeNotOfficialAccount": "WeChat: 振込发起アプリは公式アカウントタイプである必要があります",
   "transferRemarkRequired": "WeChat: 振込備考(タイトル)は必須です",
-  "transferReportInfoRequired": "WeChat: 振込シーン報備情報は必須です。すべての報備項目を入力してください"
+  "transferReportInfoRequired": "WeChat: 振込シーン報備情報は必須です。すべての報備項目を入力してください",
+  "allocReceiverBindFailed": "WeChat分配受取方のバインドに失敗: {0}",
+  "allocReceiverUnbindFailed": "WeChat分配受取方の解除に失敗: {0}",
+  "allocReceiverUnsupportedType": "WeChat: サポートされていない分配受取方タイプ: {0}",
+  "allocReceiverMchNameRequired": "WeChat: 商户番号タイプの受取方は商户正式名称が必要です",
+  "allocReceiverSubAppIdRequired": "WeChat: サブマーチャントアプリopenidタイプにはサブアプリの指定が必要です",
+  "allocReceiverAppMismatch": "WeChat: openid受取側は他のアプリ({0})に紐づいており、分配開始アプリと一致しません"
 }

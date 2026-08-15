@@ -1,0 +1,260 @@
+-- ----------------------------
+-- 分账接收方绑定(通道侧注册) 5 张表
+-- 微信直连/服务商、支付宝直连/服务商、抖音直连, 各通道字段流程不一致故独立建表
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."alipay_direct_alloc_receiver";
+CREATE TABLE "public"."alipay_direct_alloc_receiver" (
+  "id" int8 NOT NULL,
+  "mch_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "channel_mch_no" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
+  "receiver_type" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "receiver_account" varchar(256) COLLATE "pg_catalog"."default" NOT NULL,
+  "account_hash" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
+  "receiver_name" varchar(256) COLLATE "pg_catalog"."default",
+  "direct_app_ref_id" int8,
+  "status" varchar(16) COLLATE "pg_catalog"."default" NOT NULL,
+  "error_msg" text COLLATE "pg_catalog"."default",
+  "bind_time" timestamptz(6),
+  "unbind_time" timestamptz(6),
+  "creator" int8,
+  "create_time" timestamptz(6),
+  "last_modifier" int8,
+  "last_modified_time" timestamptz(6),
+  "version" int4 NOT NULL DEFAULT 0,
+  "deleted" bool NOT NULL DEFAULT false
+)
+;
+COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."id" IS '主键';
+COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."mch_no" IS '商户号';
+COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."channel_mch_no" IS '通道商户号(关联通用通道商户主表)';
+COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."receiver_type" IS '接收方类型(USER_ID用户号/LOGIN_NAME登录账号)';
+COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."receiver_account" IS '接收方账号(AES-256-GCM加密存储)';
+COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."account_hash" IS '接收方账号SHA-256哈希(密文不确定, 查重与等值定位用)';
+COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."receiver_name" IS '接收方名称(AES-256-GCM加密存储, 可空)';
+COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."direct_app_ref_id" IS '发起绑定的支付宝应用引用(alipay_direct_app主键, 重新绑定复用)';
+COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."status" IS '绑定状态(bound已绑定/unbound已解绑/fail绑定失败)';
+COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."error_msg" IS '最近一次绑定/解绑失败原因';
+COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."bind_time" IS '绑定成功时间';
+COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."unbind_time" IS '解绑成功时间';
+COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."creator" IS '创建人';
+COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."last_modifier" IS '最后修改人';
+COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."version" IS '乐观锁版本号';
+COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."deleted" IS '逻辑删除标志';
+COMMENT ON TABLE "public"."alipay_direct_alloc_receiver" IS '支付宝直连分账接收方(通道侧绑定档案)';
+CREATE UNIQUE INDEX "uk_alipay_direct_alloc_receiver" ON "public"."alipay_direct_alloc_receiver" USING btree (
+  "channel_mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
+  "receiver_type" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
+  "account_hash" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+) WHERE deleted = false;
+COMMENT ON INDEX "public"."uk_alipay_direct_alloc_receiver" IS '同一通道商户下同类型同账号接收方唯一(部分唯一索引)';
+ALTER TABLE "public"."alipay_direct_alloc_receiver" ADD CONSTRAINT "pk_alipay_direct_alloc_receiver" PRIMARY KEY ("id");
+
+DROP TABLE IF EXISTS "public"."alipay_isv_alloc_receiver";
+CREATE TABLE "public"."alipay_isv_alloc_receiver" (
+  "id" int8 NOT NULL,
+  "mch_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "channel_mch_no" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
+  "receiver_type" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "receiver_account" varchar(256) COLLATE "pg_catalog"."default" NOT NULL,
+  "account_hash" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
+  "receiver_name" varchar(256) COLLATE "pg_catalog"."default",
+  "status" varchar(16) COLLATE "pg_catalog"."default" NOT NULL,
+  "error_msg" text COLLATE "pg_catalog"."default",
+  "bind_time" timestamptz(6),
+  "unbind_time" timestamptz(6),
+  "creator" int8,
+  "create_time" timestamptz(6),
+  "last_modifier" int8,
+  "last_modified_time" timestamptz(6),
+  "version" int4 NOT NULL DEFAULT 0,
+  "deleted" bool NOT NULL DEFAULT false
+)
+;
+COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."id" IS '主键';
+COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."mch_no" IS '商户号';
+COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."channel_mch_no" IS '通道商户号(关联通用通道商户主表)';
+COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."receiver_type" IS '接收方类型(USER_ID用户号/LOGIN_NAME登录账号)';
+COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."receiver_account" IS '接收方账号(AES-256-GCM加密存储)';
+COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."account_hash" IS '接收方账号SHA-256哈希(密文不确定, 查重与等值定位用)';
+COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."receiver_name" IS '接收方名称(AES-256-GCM加密存储, 可空)';
+COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."status" IS '绑定状态(bound已绑定/unbound已解绑/fail绑定失败)';
+COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."error_msg" IS '最近一次绑定/解绑失败原因';
+COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."bind_time" IS '绑定成功时间';
+COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."unbind_time" IS '解绑成功时间';
+COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."creator" IS '创建人';
+COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."last_modifier" IS '最后修改人';
+COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."version" IS '乐观锁版本号';
+COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."deleted" IS '逻辑删除标志';
+COMMENT ON TABLE "public"."alipay_isv_alloc_receiver" IS '支付宝服务商分账接收方(通道侧绑定档案, 凭证由子商户授权绑定自动决定)';
+CREATE UNIQUE INDEX "uk_alipay_isv_alloc_receiver" ON "public"."alipay_isv_alloc_receiver" USING btree (
+  "channel_mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
+  "receiver_type" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
+  "account_hash" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+) WHERE deleted = false;
+COMMENT ON INDEX "public"."uk_alipay_isv_alloc_receiver" IS '同一通道商户下同类型同账号接收方唯一(部分唯一索引)';
+ALTER TABLE "public"."alipay_isv_alloc_receiver" ADD CONSTRAINT "pk_alipay_isv_alloc_receiver" PRIMARY KEY ("id");
+
+DROP TABLE IF EXISTS "public"."douyin_direct_alloc_receiver";
+CREATE TABLE "public"."douyin_direct_alloc_receiver" (
+  "id" int8 NOT NULL,
+  "mch_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "channel_mch_no" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
+  "receiver_type" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "receiver_account" varchar(256) COLLATE "pg_catalog"."default" NOT NULL,
+  "account_hash" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
+  "receiver_name" varchar(256) COLLATE "pg_catalog"."default",
+  "relation_type" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "custom_relation" varchar(64) COLLATE "pg_catalog"."default",
+  "channel_app_id" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
+  "status" varchar(16) COLLATE "pg_catalog"."default" NOT NULL,
+  "error_msg" text COLLATE "pg_catalog"."default",
+  "bind_time" timestamptz(6),
+  "unbind_time" timestamptz(6),
+  "creator" int8,
+  "create_time" timestamptz(6),
+  "last_modifier" int8,
+  "last_modified_time" timestamptz(6),
+  "version" int4 NOT NULL DEFAULT 0,
+  "deleted" bool NOT NULL DEFAULT false
+)
+;
+COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."id" IS '主键';
+COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."mch_no" IS '商户号';
+COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."channel_mch_no" IS '通道商户号(关联通用通道商户主表)';
+COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."receiver_type" IS '接收方类型(MERCHANT_ID商户号/PERSONAL_OPENID个人openid)';
+COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."receiver_account" IS '接收方账号(AES-256-GCM加密存储)';
+COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."account_hash" IS '接收方账号SHA-256哈希(密文不确定, 查重与等值定位用)';
+COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."receiver_name" IS '接收方名称(AES-256-GCM加密存储, MERCHANT_ID时必填商户全称)';
+COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."relation_type" IS '分账关系类型(抖音原生大写, CUSTOM时需custom_relation)';
+COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."custom_relation" IS '自定义分账关系名(relation_type=CUSTOM时必填)';
+COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."channel_app_id" IS '绑定时所用商户档抖音应用appid(重新绑定复用)';
+COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."status" IS '绑定状态(bound已绑定/unbound已解绑/fail绑定失败)';
+COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."error_msg" IS '最近一次绑定/解绑失败原因';
+COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."bind_time" IS '绑定成功时间';
+COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."unbind_time" IS '解绑成功时间';
+COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."creator" IS '创建人';
+COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."last_modifier" IS '最后修改人';
+COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."version" IS '乐观锁版本号';
+COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."deleted" IS '逻辑删除标志';
+COMMENT ON TABLE "public"."douyin_direct_alloc_receiver" IS '抖音直连分账接收方(通道侧绑定档案)';
+CREATE UNIQUE INDEX "uk_douyin_direct_alloc_receiver" ON "public"."douyin_direct_alloc_receiver" USING btree (
+  "channel_mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
+  "receiver_type" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
+  "account_hash" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+) WHERE deleted = false;
+COMMENT ON INDEX "public"."uk_douyin_direct_alloc_receiver" IS '同一通道商户下同类型同账号接收方唯一(部分唯一索引)';
+ALTER TABLE "public"."douyin_direct_alloc_receiver" ADD CONSTRAINT "pk_douyin_direct_alloc_receiver" PRIMARY KEY ("id");
+
+DROP TABLE IF EXISTS "public"."wechat_direct_alloc_receiver";
+CREATE TABLE "public"."wechat_direct_alloc_receiver" (
+  "id" int8 NOT NULL,
+  "mch_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "channel_mch_no" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
+  "receiver_type" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "receiver_account" varchar(256) COLLATE "pg_catalog"."default" NOT NULL,
+  "account_hash" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
+  "receiver_name" varchar(256) COLLATE "pg_catalog"."default",
+  "relation_type" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "custom_relation" varchar(64) COLLATE "pg_catalog"."default",
+  "channel_app_id" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
+  "status" varchar(16) COLLATE "pg_catalog"."default" NOT NULL,
+  "error_msg" text COLLATE "pg_catalog"."default",
+  "bind_time" timestamptz(6),
+  "unbind_time" timestamptz(6),
+  "creator" int8,
+  "create_time" timestamptz(6),
+  "last_modifier" int8,
+  "last_modified_time" timestamptz(6),
+  "version" int4 NOT NULL DEFAULT 0,
+  "deleted" bool NOT NULL DEFAULT false
+)
+;
+COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."id" IS '主键';
+COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."mch_no" IS '商户号';
+COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."channel_mch_no" IS '通道商户号(关联通用通道商户主表)';
+COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."receiver_type" IS '接收方类型(MERCHANT_ID商户号/PERSONAL_OPENID个人openid)';
+COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."receiver_account" IS '接收方账号(AES-256-GCM加密存储, openid为channel_app_id维度)';
+COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."account_hash" IS '接收方账号SHA-256哈希(密文不确定, 查重与等值定位用)';
+COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."receiver_name" IS '接收方名称(AES-256-GCM加密存储, MERCHANT_ID时必填商户全称)';
+COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."relation_type" IS '分账关系类型(微信原生小写映射, CUSTOM时需custom_relation)';
+COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."custom_relation" IS '自定义分账关系名(relation_type=CUSTOM时必填)';
+COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."channel_app_id" IS '绑定时所用商户档微信应用appid(重新绑定复用)';
+COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."status" IS '绑定状态(bound已绑定/unbound已解绑/fail绑定失败)';
+COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."error_msg" IS '最近一次绑定/解绑失败原因';
+COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."bind_time" IS '绑定成功时间';
+COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."unbind_time" IS '解绑成功时间';
+COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."creator" IS '创建人';
+COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."last_modifier" IS '最后修改人';
+COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."version" IS '乐观锁版本号';
+COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."deleted" IS '逻辑删除标志';
+COMMENT ON TABLE "public"."wechat_direct_alloc_receiver" IS '微信直连分账接收方(通道侧绑定档案)';
+CREATE UNIQUE INDEX "uk_wechat_direct_alloc_receiver" ON "public"."wechat_direct_alloc_receiver" USING btree (
+  "channel_mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
+  "receiver_type" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
+  "account_hash" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+) WHERE deleted = false;
+COMMENT ON INDEX "public"."uk_wechat_direct_alloc_receiver" IS '同一通道商户下同类型同账号接收方唯一(部分唯一索引)';
+ALTER TABLE "public"."wechat_direct_alloc_receiver" ADD CONSTRAINT "pk_wechat_direct_alloc_receiver" PRIMARY KEY ("id");
+
+DROP TABLE IF EXISTS "public"."wechat_isv_alloc_receiver";
+CREATE TABLE "public"."wechat_isv_alloc_receiver" (
+  "id" int8 NOT NULL,
+  "mch_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "channel_mch_no" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
+  "receiver_type" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "receiver_account" varchar(256) COLLATE "pg_catalog"."default" NOT NULL,
+  "account_hash" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
+  "receiver_name" varchar(256) COLLATE "pg_catalog"."default",
+  "relation_type" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "custom_relation" varchar(64) COLLATE "pg_catalog"."default",
+  "sp_app_id" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
+  "sub_app_id" varchar(64) COLLATE "pg_catalog"."default",
+  "status" varchar(16) COLLATE "pg_catalog"."default" NOT NULL,
+  "error_msg" text COLLATE "pg_catalog"."default",
+  "bind_time" timestamptz(6),
+  "unbind_time" timestamptz(6),
+  "creator" int8,
+  "create_time" timestamptz(6),
+  "last_modifier" int8,
+  "last_modified_time" timestamptz(6),
+  "version" int4 NOT NULL DEFAULT 0,
+  "deleted" bool NOT NULL DEFAULT false
+)
+;
+COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."id" IS '主键';
+COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."mch_no" IS '商户号';
+COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."channel_mch_no" IS '通道商户号(关联通用通道商户主表)';
+COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."receiver_type" IS '接收方类型(MERCHANT_ID商户号/PERSONAL_OPENID个人openid/PERSONAL_SUB_OPENID子商户应用openid)';
+COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."receiver_account" IS '接收方账号(AES-256-GCM加密存储, openid为对应appid维度)';
+COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."account_hash" IS '接收方账号SHA-256哈希(密文不确定, 查重与等值定位用)';
+COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."receiver_name" IS '接收方名称(AES-256-GCM加密存储, MERCHANT_ID时必填商户全称)';
+COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."relation_type" IS '分账关系类型(微信原生小写映射, CUSTOM时需custom_relation)';
+COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."custom_relation" IS '自定义分账关系名(relation_type=CUSTOM时必填)';
+COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."sp_app_id" IS '绑定时所用平台档(服务商)应用appid(重新绑定复用)';
+COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."sub_app_id" IS '子商户应用appid(可空, PERSONAL_SUB_OPENID时必填)';
+COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."status" IS '绑定状态(bound已绑定/unbound已解绑/fail绑定失败)';
+COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."error_msg" IS '最近一次绑定/解绑失败原因';
+COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."bind_time" IS '绑定成功时间';
+COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."unbind_time" IS '解绑成功时间';
+COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."creator" IS '创建人';
+COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."last_modifier" IS '最后修改人';
+COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."version" IS '乐观锁版本号';
+COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."deleted" IS '逻辑删除标志';
+COMMENT ON TABLE "public"."wechat_isv_alloc_receiver" IS '微信服务商分账接收方(通道侧绑定档案, 挂特约商户sub_mchid维度)';
+CREATE UNIQUE INDEX "uk_wechat_isv_alloc_receiver" ON "public"."wechat_isv_alloc_receiver" USING btree (
+  "channel_mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
+  "receiver_type" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
+  "account_hash" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+) WHERE deleted = false;
+COMMENT ON INDEX "public"."uk_wechat_isv_alloc_receiver" IS '同一通道商户下同类型同账号接收方唯一(部分唯一索引)';
+ALTER TABLE "public"."wechat_isv_alloc_receiver" ADD CONSTRAINT "pk_wechat_isv_alloc_receiver" PRIMARY KEY ("id");

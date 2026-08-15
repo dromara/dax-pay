@@ -8,6 +8,7 @@ import cn.daxpay.open.channel.douyin.client.req.DouyinRefundSyncReq;
 import cn.daxpay.open.channel.douyin.client.req.DouyinSyncReq;
 import cn.daxpay.open.channel.douyin.client.req.DouyinTransferReq;
 import cn.daxpay.open.channel.douyin.client.req.DouyinAllocReq;
+import cn.daxpay.open.channel.douyin.client.req.DouyinAllocReceiverReq;
 import cn.daxpay.open.channel.douyin.client.resp.DouyinCallbackParseResp;
 import cn.daxpay.open.channel.douyin.client.resp.DouyinTransferCallbackParseResp;
 import cn.daxpay.open.channel.douyin.client.resp.DouyinCloseResp;
@@ -17,6 +18,7 @@ import cn.daxpay.open.channel.douyin.client.resp.DouyinRefundSyncResp;
 import cn.daxpay.open.channel.douyin.client.resp.DouyinSyncResp;
 import cn.daxpay.open.channel.douyin.client.resp.DouyinTransferResp;
 import cn.daxpay.open.channel.douyin.client.resp.DouyinAllocResp;
+import cn.daxpay.open.channel.douyin.client.resp.DouyinAllocReceiverResp;
 import cn.daxpay.open.channel.douyin.client.resp.DouyinAllocCallbackParseResp;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import org.springframework.http.MediaType;
@@ -78,6 +80,14 @@ public interface DouyinChannelClient {
     /// 分账同步(查询分账状态 querySplitFund)
     @PostExchange("/channel/douyin/alloc-sync")
     DaxResult<DouyinAllocResp> allocSync(@RequestBody DouyinAllocReq req);
+
+    /// 绑定分账接收方(addSplitReceiver)
+    @PostExchange("/channel/douyin/alloc-receiver/bind")
+    DaxResult<DouyinAllocReceiverResp> allocReceiverBind(@RequestBody DouyinAllocReceiverReq req);
+
+    /// 解绑分账接收方(deleteSplitReceiver)
+    @PostExchange("/channel/douyin/alloc-receiver/unbind")
+    DaxResult<DouyinAllocReceiverResp> allocReceiverUnbind(@RequestBody DouyinAllocReceiverReq req);
 
     /// 分账回调验签解析(转发到子应用验签)
     @PostExchange("/channel/douyin/callback/parse-alloc")

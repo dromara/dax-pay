@@ -1,6 +1,7 @@
 {
   "MERCHANT_ID": "머천트 ID",
   "PERSONAL_OPENID": "개인 OpenID",
+  "PERSONAL_SUB_OPENID": "하위가맹점 앱 openid",
   "USER_ID": "Alipay 사용자 ID",
   "LOGIN_NAME": "Alipay 로그인명"
 }

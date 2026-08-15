@@ -1,0 +1,13 @@
+{
+  "service_provider": "서비스 제공자",
+  "store": "매장",
+  "staff": "직원",
+  "store_owner": "점주",
+  "partner": "파트너",
+  "headquarter": "본사",
+  "brand": "브랜드",
+  "distributor": "유통업체",
+  "user": "사용자",
+  "supplier": "공급업체",
+  "custom": "사용자 정의"
+}

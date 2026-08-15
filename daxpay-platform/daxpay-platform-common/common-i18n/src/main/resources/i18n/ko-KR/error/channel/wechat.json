@@ -68,5 +68,11 @@
   "transferAppNotBelong": "WeChat: 이체 발신 앱이 현재 가맹점에 속하지 않습니다",
   "transferAppTypeNotOfficialAccount": "WeChat: 이체 발신 앱은 공식계정 유형이어야 합니다",
   "transferRemarkRequired": "WeChat: 이체 메모(제목)는 필수입니다",
-  "transferReportInfoRequired": "WeChat: 이체 시나리오 보고 정보는 필수입니다. 모든 보고 항목을 입력해 주세요"
+  "transferReportInfoRequired": "WeChat: 이체 시나리오 보고 정보는 필수입니다. 모든 보고 항목을 입력해 주세요",
+  "allocReceiverBindFailed": "위챗 분배 수신자 바인딩 실패: {0}",
+  "allocReceiverUnbindFailed": "위챗 분배 수신자 해제 실패: {0}",
+  "allocReceiverUnsupportedType": "위챗: 지원하지 않는 분배 수신자 유형: {0}",
+  "allocReceiverMchNameRequired": "위챗:商户号 유형 수신자는 상호 전체 명칭을 입력해야 합니다",
+  "allocReceiverSubAppIdRequired": "위챗: 하위가맹점 앱 openid 유형은 하위 앱을 지정해야 합니다",
+  "allocReceiverAppMismatch": "위챗: openid 수신자가 다른 앱({0})에 바인딩되어 있어 분배 시작 앱과 일치하지 않습니다"
 }

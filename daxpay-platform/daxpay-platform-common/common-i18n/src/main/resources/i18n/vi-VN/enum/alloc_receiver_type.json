@@ -1,6 +1,7 @@
 {
   "MERCHANT_ID": "ID Merchant",
   "PERSONAL_OPENID": "OpenID Cá nhân",
+  "PERSONAL_SUB_OPENID": "OpenId ứng dụng merchant con",
   "USER_ID": "ID người dùng Alipay",
   "LOGIN_NAME": "Tên đăng nhập Alipay"
 }

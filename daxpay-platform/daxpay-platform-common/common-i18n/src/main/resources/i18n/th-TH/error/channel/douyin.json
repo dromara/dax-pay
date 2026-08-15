@@ -37,5 +37,11 @@
   "transferAppNotConfigured": "Douyin: ยังไม่ได้กำหนดค่าแอปเริ่มการโอน",
   "transferPayeeTypeInvalid": "Douyin: ประเภทบัญชีผู้รับไม่ได้รับการสนับสนุน: {0}",
   "transferPhoneInvalid": "Douyin: รูปแบบหมายเลขโทรศัพท์ผู้รับไม่ถูกต้อง (ต้องเป็นตัวเลข 11 หลัก)",
-  "transferOutBillNoInvalid": "Douyin: รูปแบบหมายเลขโอนของร้านค้าไม่ถูกต้อง (6-32 ตัวอักษร เฉพาะตัวเลข/ตัวอักษร/_/-/*)"
+  "transferOutBillNoInvalid": "Douyin: รูปแบบหมายเลขโอนของร้านค้าไม่ถูกต้อง (6-32 ตัวอักษร เฉพาะตัวเลข/ตัวอักษร/_/-/*)",
+  "allocReceiverBindFailed": "ผูกผู้รับเงินแบ่ง Douyin ไม่สำเร็จ: {0}",
+  "allocReceiverUnbindFailed": "ยกเลิกการผูกผู้รับเงินแบ่ง Douyin ไม่สำเร็จ: {0}",
+  "allocReceiverUnsupportedType": "Douyin: ไม่รองรับประเภทผู้รับเงินแบ่งนี้: {0}",
+  "allocReceiverMchNameRequired": "Douyin: ต้องกรอกชื่อเต็มร้านค้าสำหรับผู้รับประเภท MERCHANT_ID",
+  "allocReceiverAppMismatch": "Douyin: ผู้รับ openid ถูกผูกกับแอปอื่น ({0}) ไม่ตรงกับแอปที่เริ่มแบ่งเงิน",
+  "channelMerchantMismatch": "Douyin: ร้านค้าช่องทางไม่ได้เป็นของร้านค้าปัจจุบัน"
 }

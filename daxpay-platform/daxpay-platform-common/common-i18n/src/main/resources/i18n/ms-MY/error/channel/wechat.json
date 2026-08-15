@@ -68,5 +68,11 @@
   "transferAppNotBelong": "WeChat: Aplikasi pemula pemindahan tidak milik merchant semasa",
   "transferAppTypeNotOfficialAccount": "WeChat: Aplikasi pemula pemindahan mesti jenis Official Account",
   "transferRemarkRequired": "WeChat: catatan pindah wang (tajuk) wajib diisi",
-  "transferReportInfoRequired": "WeChat: maklumat laporan senario pindah wang wajib diisi, sila isi semua medan laporan"
+  "transferReportInfoRequired": "WeChat: maklumat laporan senario pindah wang wajib diisi, sila isi semua medan laporan",
+  "allocReceiverBindFailed": "Gagal mengikat penerima agihan WeChat: {0}",
+  "allocReceiverUnbindFailed": "Gagal melepas penerima agihan WeChat: {0}",
+  "allocReceiverUnsupportedType": "WeChat: jenis penerima agihan tidak disokong: {0}",
+  "allocReceiverMchNameRequired": "WeChat: nama penuh merchant wajib untuk penerima MERCHANT_ID",
+  "allocReceiverSubAppIdRequired": "WeChat: aplikasi sub-merchant wajib untuk penerima PERSONAL_SUB_OPENID",
+  "allocReceiverAppMismatch": "WeChat: penerima openid terikat pada aplikasi lain ({0}), tidak sepadan dengan aplikasi permulaan pembahagian"
 }

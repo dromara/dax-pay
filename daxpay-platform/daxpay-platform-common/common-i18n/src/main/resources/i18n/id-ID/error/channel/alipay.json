@@ -58,5 +58,7 @@
   "transferRemarkRequired": "Alipay: Alasan pembayaran wajib diisi saat jumlah transfer mencapai 50.000 yuan",
   "allocFailed": "Alokasi Alipay gagal: {0}",
   "allocReceiverTypeInvalid": "Alipay: tipe penerima alokasi tidak didukung: {0}",
-  "allocReceiverAccountRequired": "Alipay: akun penerima alokasi wajib diisi"
+  "allocReceiverAccountRequired": "Alipay: akun penerima alokasi wajib diisi",
+  "allocReceiverBindFailed": "Gagal mengikat penerima alokasi Alipay: {0}",
+  "allocReceiverUnbindFailed": "Gagal melepas penerima alokasi Alipay: {0}"
 }

@@ -1,3 +1,8 @@
 {
-  "envMismatch": "Channel merchant environment does not match the product's active environment"
+  "envMismatch": "Channel merchant environment does not match the product's active environment",
+  "allocReceiverDuplicate": "Alloc receiver already exists (same channel merchant, type and account)",
+  "allocReceiverAlreadyBound": "Receiver is already bound",
+  "allocReceiverNotBound": "Only a bound receiver can be unbound",
+  "allocReceiverBoundCannotDelete": "A bound receiver cannot be deleted, unbind it first",
+  "allocReceiverCustomRelationRequired": "Custom relation name is required for custom relation type"
 }

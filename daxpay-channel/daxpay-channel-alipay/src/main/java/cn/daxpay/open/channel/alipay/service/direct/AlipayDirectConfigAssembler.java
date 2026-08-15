@@ -68,6 +68,27 @@ public class AlipayDirectConfigAssembler {
         return assembleCredential(channelMchNo, app);
     }
 
+    /// 分账接收方绑定专用凭证组装(无能力维度, 按绑定记录显式指定的应用)
+    ///
+    /// 支付宝 royalty.relation.bind 不上送 appid, 应用仅作为 API 调用方(签名身份),
+    /// 由绑定记录显式指定应用引用, 重新绑定时复用。
+    ///
+    /// @param mchNo        商户号(归属校验)
+    /// @param channelMchNo 通道商户号
+    /// @param appRefId     发起绑定的支付宝应用引用(alipay_direct_app 主键)
+    /// @return 支付宝 SDK 凭证
+    public AlipaySdkCredential buildAllocReceiverConfig(String mchNo, String channelMchNo, Long appRefId) {
+        AlipayDirectApp app = alipayDirectAppManager.lambdaQuery()
+                .eq(AlipayDirectApp::getId, appRefId)
+                .oneOpt()
+                .orElseThrow(() -> new DataNotExistException("error.channel.alipay.transferAppNotExist"));
+        if (!Objects.equals(app.getMchNo(), mchNo)) {
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "error.channel.alipay.transferAppNotBelong");
+        }
+        return assembleCredential(channelMchNo, app);
+    }
+
     /// 按通道商户与应用组装凭证(通道商户沙箱快照 + 应用级密钥)
     private AlipaySdkCredential assembleCredential(String channelMchNo, AlipayDirectApp app) {
         AlipayDirectChannelMerchant channelMerchant = alipayDirectChannelMerchantManager.lambdaQuery()

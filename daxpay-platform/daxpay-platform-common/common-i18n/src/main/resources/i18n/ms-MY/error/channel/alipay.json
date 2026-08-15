@@ -58,5 +58,7 @@
   "transferRemarkRequired": "Alipay: Sebab pembayaran wajib diisi apabila jumlah pindahan mencecah 50,000 yuan",
   "allocFailed": "Peruntukan Alipay gagal: {0}",
   "allocReceiverTypeInvalid": "Alipay: jenis penerima peruntukan tidak disokong: {0}",
-  "allocReceiverAccountRequired": "Alipay: akaun penerima peruntukan diperlukan"
+  "allocReceiverAccountRequired": "Alipay: akaun penerima peruntukan diperlukan",
+  "allocReceiverBindFailed": "Gagal mengikat penerima agihan Alipay: {0}",
+  "allocReceiverUnbindFailed": "Gagal melepas penerima agihan Alipay: {0}"
 }

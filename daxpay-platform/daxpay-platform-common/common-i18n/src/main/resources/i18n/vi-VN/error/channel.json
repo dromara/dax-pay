@@ -1,3 +1,8 @@
 {
-  "envMismatch": "Môi trường người bán kênh không khớp với môi trường hoạt động của sản phẩm"
+  "envMismatch": "Môi trường người bán kênh không khớp với môi trường hoạt động của sản phẩm",
+  "allocReceiverDuplicate": "Người nhận phân账款 đã tồn tại (cùng merchant kênh, cùng loại và tài khoản)",
+  "allocReceiverAlreadyBound": "Người nhận đã được liên kết",
+  "allocReceiverNotBound": "Chỉ người nhận đã liên kết mới được hủy liên kết",
+  "allocReceiverBoundCannotDelete": "Người nhận đã liên kết không thể xóa, hãy hủy liên kết trước",
+  "allocReceiverCustomRelationRequired": "Loại quan hệ tùy chỉnh phải điền tên quan hệ tùy chỉnh"
 }

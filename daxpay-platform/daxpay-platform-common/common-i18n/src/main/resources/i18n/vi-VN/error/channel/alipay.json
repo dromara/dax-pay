@@ -58,5 +58,7 @@
   "transferRemarkRequired": "Alipay: Bắt buộc nhập lý do thanh toán khi số tiền chuyển đạt 50.000 tệ",
   "allocFailed": "Phân bổ Alipay thất bại: {0}",
   "allocReceiverTypeInvalid": "Alipay: loại người nhận phân bổ không được hỗ trợ: {0}",
-  "allocReceiverAccountRequired": "Alipay: tài khoản người nhận phân bổ là bắt buộc"
+  "allocReceiverAccountRequired": "Alipay: tài khoản người nhận phân bổ là bắt buộc",
+  "allocReceiverBindFailed": "Liên kết người nhận phân chia Alipay thất bại: {0}",
+  "allocReceiverUnbindFailed": "Hủy liên kết người nhận phân chia Alipay thất bại: {0}"
 }

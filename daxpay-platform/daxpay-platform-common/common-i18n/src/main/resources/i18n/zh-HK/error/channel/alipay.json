@@ -69,5 +69,7 @@
   "transferRemarkRequired": "支付寶: 轉帳金額達到50000元時, 必須填寫付款理由",
   "allocFailed": "支付寶分帳失敗: {0}",
   "allocReceiverTypeInvalid": "支付寶: 不支援的分帳接收方類型: {0}",
-  "allocReceiverAccountRequired": "支付寶: 分帳接收方帳號必填"
+  "allocReceiverAccountRequired": "支付寶: 分帳接收方帳號必填",
+  "allocReceiverBindFailed": "支付寶分賬接收方綁定失敗: {0}",
+  "allocReceiverUnbindFailed": "支付寶分賬接收方解綁失敗: {0}"
 }

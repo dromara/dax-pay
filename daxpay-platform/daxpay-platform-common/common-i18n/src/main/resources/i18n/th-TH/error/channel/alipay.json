@@ -58,5 +58,7 @@
   "transferRemarkRequired": "Alipay: ต้องระบุเหตุผลการชำระเงินเมื่อจำนวนเงินโอนถึง 50,000 หยวน",
   "allocFailed": "การแบ่ง Alipay ล้มเหลว: {0}",
   "allocReceiverTypeInvalid": "Alipay: ประเภทผู้รับการแบ่งไม่ได้รับการสนับสนุน: {0}",
-  "allocReceiverAccountRequired": "Alipay: จำเป็นต้องระบุบัญชีผู้รับการแบ่ง"
+  "allocReceiverAccountRequired": "Alipay: จำเป็นต้องระบุบัญชีผู้รับการแบ่ง",
+  "allocReceiverBindFailed": "ผูกผู้รับเงินแบ่ง Alipay ไม่สำเร็จ: {0}",
+  "allocReceiverUnbindFailed": "ยกเลิกการผูกผู้รับเงินแบ่ง Alipay ไม่สำเร็จ: {0}"
 }

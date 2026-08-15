@@ -37,5 +37,11 @@
   "transferAppNotConfigured": "抖音: 转账发起应用未配置",
   "transferPayeeTypeInvalid": "抖音: 不支持的收款人账号类型: {0}",
   "transferPhoneInvalid": "抖音: 收款手机号格式不正确(需为11位数字)",
-  "transferOutBillNoInvalid": "抖音: 商户转账号格式不正确(6-32位, 仅数字/大小写字母/_/-/*)"
+  "transferOutBillNoInvalid": "抖音: 商户转账号格式不正确(6-32位, 仅数字/大小写字母/_/-/*)",
+  "allocReceiverBindFailed": "抖音分账接收方绑定失败: {0}",
+  "allocReceiverUnbindFailed": "抖音分账接收方解绑失败: {0}",
+  "allocReceiverUnsupportedType": "抖音: 不支持的分账接收方类型: {0}",
+  "allocReceiverMchNameRequired": "抖音: 商户号类型接收方必须填写商户全称",
+  "allocReceiverAppMismatch": "抖音: openid接收方绑定于其他应用({0}), 与分账发起应用不一致",
+  "channelMerchantMismatch": "抖音: 通道商户不属于当前商户"
 }

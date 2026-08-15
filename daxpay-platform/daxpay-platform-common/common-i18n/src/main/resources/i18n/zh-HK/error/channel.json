@@ -1,3 +1,8 @@
 {
-  "envMismatch": "通道商户環境與支付產品當前生效環境不一致"
+  "envMismatch": "通道商户環境與支付產品當前生效環境不一致",
+  "allocReceiverDuplicate": "分賬接收方已存在(同通道商戶同類型同帳號)",
+  "allocReceiverAlreadyBound": "已綁定的接收方無需重複綁定",
+  "allocReceiverNotBound": "僅已綁定的接收方可解綁",
+  "allocReceiverBoundCannotDelete": "已綁定的接收方不可刪除, 請先解綁",
+  "allocReceiverCustomRelationRequired": "自訂關係類型必須填寫自訂關係名"
 }

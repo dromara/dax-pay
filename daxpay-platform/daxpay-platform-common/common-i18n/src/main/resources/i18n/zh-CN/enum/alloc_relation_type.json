@@ -1,0 +1,13 @@
+{
+  "service_provider": "服务商",
+  "store": "门店",
+  "staff": "员工",
+  "store_owner": "店主",
+  "partner": "合作伙伴",
+  "headquarter": "总部",
+  "brand": "品牌方",
+  "distributor": "分销商",
+  "user": "用户",
+  "supplier": "供应商",
+  "custom": "自定义"
+}

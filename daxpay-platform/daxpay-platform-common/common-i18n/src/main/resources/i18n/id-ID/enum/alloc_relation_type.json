@@ -1,0 +1,13 @@
+{
+  "service_provider": "Penyedia layanan",
+  "store": "Toko",
+  "staff": "Staf",
+  "store_owner": "Pemilik toko",
+  "partner": "Mitra",
+  "headquarter": "Kantor pusat",
+  "brand": "Merek",
+  "distributor": "Distributor",
+  "user": "Pengguna",
+  "supplier": "Pemasok",
+  "custom": "Khusus"
+}

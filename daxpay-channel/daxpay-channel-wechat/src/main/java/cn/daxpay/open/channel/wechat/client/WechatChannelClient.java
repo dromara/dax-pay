@@ -8,6 +8,7 @@ import cn.daxpay.open.channel.wechat.client.req.WechatRefundSyncReq;
 import cn.daxpay.open.channel.wechat.client.req.WechatSyncReq;
 import cn.daxpay.open.channel.wechat.client.req.WechatTransferReq;
 import cn.daxpay.open.channel.wechat.client.req.WechatAllocReq;
+import cn.daxpay.open.channel.wechat.client.req.WechatAllocReceiverReq;
 import cn.daxpay.open.channel.wechat.client.resp.WechatCallbackParseResp;
 import cn.daxpay.open.channel.wechat.client.resp.WechatTransferCallbackParseResp;
 import cn.daxpay.open.channel.wechat.client.resp.WechatCloseResp;
@@ -17,6 +18,7 @@ import cn.daxpay.open.channel.wechat.client.resp.WechatRefundSyncResp;
 import cn.daxpay.open.channel.wechat.client.resp.WechatSyncResp;
 import cn.daxpay.open.channel.wechat.client.resp.WechatTransferResp;
 import cn.daxpay.open.channel.wechat.client.resp.WechatAllocResp;
+import cn.daxpay.open.channel.wechat.client.resp.WechatAllocReceiverResp;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -66,6 +68,14 @@ public interface WechatChannelClient {
     @PostExchange("/channel/wechat/alloc-sync")
     DaxResult<WechatAllocResp> allocSync(@RequestBody WechatAllocReq req);
 
+    /// 绑定分账接收方(V3 profitsharing/receivers/add)
+    @PostExchange("/channel/wechat/alloc-receiver/bind")
+    DaxResult<WechatAllocReceiverResp> allocReceiverBind(@RequestBody WechatAllocReceiverReq req);
+
+    /// 解绑分账接收方(V3 profitsharing/receivers/delete)
+    @PostExchange("/channel/wechat/alloc-receiver/unbind")
+    DaxResult<WechatAllocReceiverResp> allocReceiverUnbind(@RequestBody WechatAllocReceiverReq req);
+
     // ===== 服务商模式(isv), 对应子应用 /channel/wechat/isv/* 端点 =====
 
     /// 服务商支付下单
@@ -87,6 +97,14 @@ public interface WechatChannelClient {
     /// 服务商退款同步(查询退款状态)
     @PostExchange("/channel/wechat/isv/refund-sync")
     DaxResult<WechatRefundSyncResp> isvRefundSync(@RequestBody WechatRefundSyncReq req);
+
+    /// 服务商绑定分账接收方(V3 profitsharing/receivers/add, sub_mchid 维度)
+    @PostExchange("/channel/wechat/isv/alloc-receiver/bind")
+    DaxResult<WechatAllocReceiverResp> isvAllocReceiverBind(@RequestBody WechatAllocReceiverReq req);
+
+    /// 服务商解绑分账接收方(V3 profitsharing/receivers/delete, sub_mchid 维度)
+    @PostExchange("/channel/wechat/isv/alloc-receiver/unbind")
+    DaxResult<WechatAllocReceiverResp> isvAllocReceiverUnbind(@RequestBody WechatAllocReceiverReq req);
 
     /// 支付回调验签解析(转发到子应用验签)
     @PostExchange("/channel/wechat/callback/parse-pay")

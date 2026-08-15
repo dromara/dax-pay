@@ -68,5 +68,11 @@
   "transferAppNotBelong": "WeChat: Transfer initiator app does not belong to the current merchant",
   "transferAppTypeNotOfficialAccount": "WeChat: Transfer initiator app must be an Official Account",
   "transferRemarkRequired": "WeChat: transfer remark (title) is required",
-  "transferReportInfoRequired": "WeChat: transfer scene report info is required, please fill in all report fields"
+  "transferReportInfoRequired": "WeChat: transfer scene report info is required, please fill in all report fields",
+  "allocReceiverBindFailed": "WeChat alloc receiver bind failed: {0}",
+  "allocReceiverUnbindFailed": "WeChat alloc receiver unbind failed: {0}",
+  "allocReceiverUnsupportedType": "WeChat: unsupported alloc receiver type: {0}",
+  "allocReceiverMchNameRequired": "WeChat: merchant full name is required for MERCHANT_ID receiver",
+  "allocReceiverSubAppIdRequired": "WeChat: sub-merchant app is required for PERSONAL_SUB_OPENID receiver",
+  "allocReceiverAppMismatch": "WeChat: the openid receiver is bound to another app ({0}), which does not match the app used to start the allocation"
 }

@@ -1,6 +1,7 @@
 {
   "MERCHANT_ID": "商戶號",
   "PERSONAL_OPENID": "個人openid",
+  "PERSONAL_SUB_OPENID": "子商戶應用openid",
   "USER_ID": "支付寶用戶ID",
   "LOGIN_NAME": "支付寶登入帳號"
 }
