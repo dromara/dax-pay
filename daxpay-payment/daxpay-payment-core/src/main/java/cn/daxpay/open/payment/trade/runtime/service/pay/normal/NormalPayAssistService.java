@@ -13,6 +13,8 @@ import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.common.util.PayUtil;
 import cn.daxpay.open.payment.merchant.service.store.MchStoreInfoService;
 import cn.daxpay.open.payment.strategy.pay.PayStrategyContext;
+import cn.daxpay.open.payment.trade.alloc.enums.TradeAllocStatusEnum;
+import cn.daxpay.open.payment.trade.alloc.runtime.service.AllocCapabilityService;
 import cn.daxpay.open.payment.trade.enums.NormalPayOrderStatusEnum;
 import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum;
@@ -49,6 +51,7 @@ public class NormalPayAssistService {
     private final ArtemisTemplateService artemisTemplateService;
     private final MchStoreInfoService mchStoreInfoService;
     private final PaymentContext paymentContext;
+    private final AllocCapabilityService allocCapabilityService;
 
     /// 创建支付订单（容器 + 资金交易），填充到 context
     /// 调用方需保证 appId 和 product 已解析完毕
@@ -69,9 +72,15 @@ public class NormalPayAssistService {
         payNormalOrderManager.save(normalOrder);
 
         PayTrade trade = buildPayTrade(payParam, normalOrder, tradeNo, orderNo, source);
-        // 分账订单: 初始化分账状态为 none, 供前端识别可发起分账(普通订单保持 null)
+        // 分账订单: 按产品能力初始化分账状态(支持→none 可发起; 不支持→unsupported 降级普通收款; 普通订单保持 null)
         if (Boolean.TRUE.equals(normalOrder.getAllocation())) {
-            trade.setAllocStatus("none");
+            if (allocCapabilityService.supports(normalOrder.getChannel())) {
+                trade.setAllocStatus(TradeAllocStatusEnum.NONE.getCode());
+            } else {
+                trade.setAllocStatus(TradeAllocStatusEnum.UNSUPPORTED.getCode());
+                // 降级: 容器已保存意图 true, 仅出站参数降级, 通道调用发生在 createOrder 之后
+                payParam.setAllocation(false);
+            }
         }
         payTradeManager.save(trade);
 

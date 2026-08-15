@@ -11,15 +11,23 @@ import cn.daxpay.open.payment.admin.param.device.DeviceQrCodeBindAppParam;
 import cn.daxpay.open.payment.admin.param.device.DeviceQrCodeBindMerchantParam;
 import cn.daxpay.open.payment.admin.param.device.DeviceQrCodeBindStoreParam;
 import cn.daxpay.open.payment.admin.param.device.DeviceQrCodeParam;
+import cn.daxpay.open.payment.admin.result.device.DeviceQrCodeAllocWarningResult;
 import cn.daxpay.open.payment.device.qrcode.param.DeviceQrCodeQuery;
 import cn.daxpay.open.payment.device.qrcode.result.DeviceQrCodeResult;
 import cn.daxpay.open.payment.common.access.MchAppInfoAccessInfo;
 import cn.daxpay.open.payment.merchant.dao.store.MchStoreInfoManager;
 import cn.daxpay.open.payment.merchant.entity.store.MchStoreInfo;
+import cn.daxpay.open.payment.merchant.enums.ClientEnvEnum;
+import cn.daxpay.open.payment.merchant.enums.CodePayFormEnum;
+import cn.daxpay.open.payment.merchant.service.gateway.GatewayPayConfigResolveService;
+import cn.daxpay.open.payment.route.service.runtime.PayRouteService;
+import cn.daxpay.open.payment.trade.alloc.runtime.service.AllocCapabilityService;
+import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.open.platform.common.translate.service.TransService;
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
+import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
@@ -33,6 +41,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.IntStream;
@@ -57,6 +66,9 @@ public class DeviceQrCodeAdminService {
     private final MerchantContextLoader merchantContextLoader;
     private final TransService transService;
     private final PlatformUrlConfigService platformUrlConfigService;
+    private final GatewayPayConfigResolveService gatewayPayConfigResolveService;
+    private final PayRouteService payRouteService;
+    private final AllocCapabilityService allocCapabilityService;
 
     /// 批量创建空白码牌(不绑商户, 进入平台库存)
     @Transactional(rollbackFor = Exception.class)
@@ -86,6 +98,8 @@ public class DeviceQrCodeAdminService {
                         .setAmountType(amountType.getCode())
                         .setFixedAmount(fixedAmount)
                         .setStatus(status)
+                        // 空白码默认非分账, 划拨后由商户/运营按需开启
+                        .setAllocation(false)
                         .setRemark(param.getRemark()))
                 .toList();
         deviceQrCodeManager.saveAll(list);
@@ -94,6 +108,50 @@ public class DeviceQrCodeAdminService {
     /// 判断批次号是否已存在
     public boolean existsByBatchNo(String batchNo) {
         return deviceQrCodeManager.existedByBatchNo(batchNo);
+    }
+
+    /// 分账能力预警: 按当前网关支付配置解析各扫码场景路由出的产品, 返回不支持分账的场景清单
+    ///
+    /// 码牌开启分账开关前的预检提示(不阻断保存); 与支付侧同路径解析, 网关配置未覆盖的场景跳过。
+    /// 支付时降级不依赖此预检(下单链路实时判定), 结果仅供前端提示。
+    public List<DeviceQrCodeAllocWarningResult> allocCapabilityWarning(String mchNo, String appId) {
+        // 与支付侧一致: appId 空取商户默认应用
+        String resolvedAppId = this.resolveAppId(mchNo, appId);
+        List<DeviceQrCodeAllocWarningResult> warnings = new ArrayList<>();
+        for (CodePayFormEnum payForm : CodePayFormEnum.values()) {
+            for (ClientEnvEnum clientEnv : ClientEnvEnum.values()) {
+                if (clientEnv == ClientEnvEnum.BROWSER) {
+                    continue;
+                }
+                GatewayPayConfigResolveService.Resolved resolved;
+                try {
+                    resolved = gatewayPayConfigResolveService.resolve(resolvedAppId, clientEnv, payForm);
+                } catch (Exception e) {
+                    // 该场景未配置支付方式: 支付时会明确报错, 不属于分账预警范畴
+                    continue;
+                }
+                // 跟随支付同路径路由出产品(路由失败同样跳过)
+                NormalPayParam routeParam = new NormalPayParam();
+                routeParam.setAppId(resolvedAppId);
+                routeParam.setMethod(resolved.method());
+                routeParam.setChannelMchNo(resolved.channelMchNo());
+                routeParam.setCapability(resolved.capability());
+                try {
+                    payRouteService.resolve(routeParam);
+                } catch (Exception e) {
+                    continue;
+                }
+                String channel = ProductEnum.findByCode(routeParam.getProduct()).getChannel();
+                if (!allocCapabilityService.supports(channel)) {
+                    warnings.add(new DeviceQrCodeAllocWarningResult()
+                            .setClientEnv(clientEnv.getCode())
+                            .setPayForm(payForm.getCode())
+                            .setProduct(routeParam.getProduct())
+                            .setChannel(channel));
+                }
+            }
+        }
+        return warnings;
     }
 
     /// 批量绑定商户(可覆盖已绑定归属; appId/storeNo 均可空, 空写 null 支付时再 resolve)
@@ -167,6 +225,7 @@ public class DeviceQrCodeAdminService {
         entity.setName(param.getName())
                 .setAmountType(amountType.getCode())
                 .setFixedAmount(amountType == QrCodeAmountTypeEnum.FIXED ? param.getFixedAmount() : null)
+                .setAllocation(Boolean.TRUE.equals(param.getAllocation()))
                 .setRemark(param.getRemark());
         deviceQrCodeManager.updateById(entity);
     }

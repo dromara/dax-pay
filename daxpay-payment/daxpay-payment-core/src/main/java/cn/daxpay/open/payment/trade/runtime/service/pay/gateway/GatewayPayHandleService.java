@@ -5,6 +5,8 @@ import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import cn.daxpay.open.payment.route.service.runtime.PayRouteService;
+import cn.daxpay.open.payment.trade.alloc.enums.TradeAllocStatusEnum;
+import cn.daxpay.open.payment.trade.alloc.runtime.service.AllocCapabilityService;
 import cn.daxpay.open.payment.strategy.PaymentStrategyFactory;
 import cn.daxpay.open.payment.strategy.pay.AbsNormalPayStrategy;
 import cn.daxpay.open.payment.strategy.pay.PayStrategyContext;
@@ -51,6 +53,7 @@ public class GatewayPayHandleService {
     private final GatewayPayAssistService gatewayPayAssistService;
     private final LockExecutor lockExecutor;
     private final PayRiskAssistService payRiskAssistService;
+    private final AllocCapabilityService allocCapabilityService;
 
     /// 自注入，保证 [GatewayPayHandleService#createTrade] / [GatewayPayHandleService#paySuccess] 走 Spring 事务代理
     @Lazy
@@ -115,6 +118,8 @@ public class GatewayPayHandleService {
                     // 组装路由用参数
                     NormalPayParam payParam = this.buildPayParam(current, product, method, channelMchNo, capability, openId, clientIp);
                     payRouteService.resolve(payParam);
+                    // 分账能力降级: 意图在容器, 出站与交易状态以产品能力为准(不支持时降级普通收款, 不阻断支付)
+                    this.applyAllocCapability(current, payParam);
                     var payStrategy = PaymentStrategyFactory.createByProduct(payParam.getProduct(), AbsNormalPayStrategy.class);
                     var context = new PayStrategyContext().setPayParam(payParam);
                     // 通道预处理先回填 channelAppId, 再做风控, 保证微信 openId 名单可精确匹配
@@ -183,9 +188,12 @@ public class GatewayPayHandleService {
                 order.getTitle(),
                 provider,
                 channel);
-        // 分账订单: 初始化分账状态为 none, 供前端识别可发起分账(普通订单保持 null)
+        // 分账订单: 按产品能力初始化分账状态(支持→none 可发起; 不支持→unsupported 降级; 普通订单保持 null)
+        // 出站参数已由 handle 的分账能力判定同步降级, 此处按降级后的 payParam 区分
         if (Boolean.TRUE.equals(order.getAllocation())) {
-            trade.setAllocStatus("none");
+            trade.setAllocStatus(Boolean.TRUE.equals(payParam.getAllocation())
+                    ? TradeAllocStatusEnum.NONE.getCode()
+                    : TradeAllocStatusEnum.UNSUPPORTED.getCode());
         }
         payTradeManager.save(trade);
 
@@ -266,9 +274,25 @@ public class GatewayPayHandleService {
         TerminalInfo terminal = new TerminalInfo();
         terminal.setStoreNo(order.getStoreNo());
         payParam.setTerminal(terminal);
-        // 分账标识透传通道(微信 profit_sharing / 支付宝 royalty_freeze / 抖音 split_info)
+        // 分账标识透传通道(微信 profit_sharing / 支付宝 royalty_freeze / 抖音 split_info);
+        // 此处拷贝容器意图, 产品不支持时由 handle 的分账能力判定降级为 false
         payParam.setAllocation(order.getAllocation());
         return payParam;
+    }
+
+    /// 分账能力降级: 产品不支持分账时不阻断支付, 出站参数降级为普通收款
+    ///
+    /// 首次支付由 [GatewayPayHandleService#createTrade] 按降级后的 payParam 初始化交易分账状态;
+    /// 重试路径(交易已建)沿用首次判定, 此处仅兜底出站参数。
+    /// 容器 allocation 保留 true 作为下单意图, 降级结果只落在 pay_trade.alloc_status。
+    private void applyAllocCapability(GatewayPayOrder order, NormalPayParam payParam) {
+        if (!Boolean.TRUE.equals(order.getAllocation())) {
+            return;
+        }
+        String channel = ProductEnum.findByCode(payParam.getProduct()).getChannel();
+        if (!allocCapabilityService.supports(channel)) {
+            payParam.setAllocation(false);
+        }
     }
 
     /// 构建网关支付返回结果(含 payBody 供前端拉起)

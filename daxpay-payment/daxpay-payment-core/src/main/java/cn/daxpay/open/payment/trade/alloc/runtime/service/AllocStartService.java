@@ -7,6 +7,7 @@ import cn.daxpay.open.payment.trade.alloc.dao.AllocDetailManager;
 import cn.daxpay.open.payment.trade.alloc.entity.AllocDetail;
 import cn.daxpay.open.payment.trade.alloc.entity.AllocOrder;
 import cn.daxpay.open.payment.trade.alloc.enums.AllocDetailResultEnum;
+import cn.daxpay.open.payment.trade.alloc.enums.TradeAllocStatusEnum;
 import cn.daxpay.open.payment.trade.alloc.param.AllocParam;
 import cn.daxpay.open.payment.trade.alloc.runtime.bo.AllocatableContainer;
 import cn.daxpay.open.payment.trade.alloc.runtime.mq.AllocSyncMessage;
@@ -269,9 +270,13 @@ public class AllocStartService {
         }
         // 原支付未分账: 处理中或已分账都拒绝
         // (processing 拦截: 配合订单维度锁, 保证同一订单同时最多一笔分账; done 拦截: 已分账终态)
-        if (Objects.equals(trade.getAllocStatus(), "processing")
-                || Objects.equals(trade.getAllocStatus(), "done")) {
+        if (Objects.equals(trade.getAllocStatus(), TradeAllocStatusEnum.PROCESSING.getCode())
+                || Objects.equals(trade.getAllocStatus(), TradeAllocStatusEnum.DONE.getCode())) {
             throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.alloc.alreadyAllocated");
+        }
+        // 支付产品不支持分账(下单时已降级普通收款, 终态不可发起)
+        if (Objects.equals(trade.getAllocStatus(), TradeAllocStatusEnum.UNSUPPORTED.getCode())) {
+            throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.alloc.unsupported");
         }
         // 原支付容器须声明为分账订单
         AllocatableContainer container = this.resolveContainer(trade);

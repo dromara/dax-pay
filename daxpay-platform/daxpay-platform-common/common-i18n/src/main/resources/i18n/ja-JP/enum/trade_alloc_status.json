@@ -1,0 +1,6 @@
+{
+  "none": "精算待ち",
+  "unsupported": "精算非対応",
+  "processing": "精算中",
+  "done": "精算済み"
+}

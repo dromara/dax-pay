@@ -143,7 +143,8 @@
     "amountInvalid": "分帳金額無效",
     "channelNotSupport": "該通道暫不支援分帳",
     "syncProcessing": "分帳同步處理中",
-    "tradeNoRequired": "原支付交易號和商戶業務訂單號不可同時為空"
+    "tradeNoRequired": "原支付交易號和商戶業務訂單號不可同時為空",
+    "unsupported": "該訂單支付產品不支援分帳，已降級為普通收款"
   },
   "assist": {
     "mchPublicKeyEmpty": "商戶公鑰為空",

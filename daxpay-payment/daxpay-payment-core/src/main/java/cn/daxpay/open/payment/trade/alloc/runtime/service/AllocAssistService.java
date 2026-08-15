@@ -8,6 +8,7 @@ import cn.daxpay.open.payment.trade.alloc.entity.AllocDetail;
 import cn.daxpay.open.payment.trade.alloc.entity.AllocOrder;
 import cn.daxpay.open.payment.trade.alloc.enums.AllocDetailResultEnum;
 import cn.daxpay.open.payment.trade.alloc.enums.AllocOrderStatusEnum;
+import cn.daxpay.open.payment.trade.alloc.enums.TradeAllocStatusEnum;
 import cn.daxpay.open.payment.trade.notice.service.TradeNoticeBridge;
 import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
@@ -85,7 +86,7 @@ public class AllocAssistService {
             allocDetailManager.save(detail);
         }
         // 标记原支付交易分账中
-        markTradeAllocStatus(allocOrder.getTradeNo(), "processing");
+        markTradeAllocStatus(allocOrder.getTradeNo(), TradeAllocStatusEnum.PROCESSING.getCode());
         return allocOrder;
     }
 
@@ -109,7 +110,7 @@ public class AllocAssistService {
             return false;
         }
         // 标记原支付交易已分账
-        markTradeAllocStatus(allocOrder.getTradeNo(), "done");
+        markTradeAllocStatus(allocOrder.getTradeNo(), TradeAllocStatusEnum.DONE.getCode());
         // 注册商户通知
         tradeNoticeBridge.dispatchAlloc(allocOrder, NoticeEventEnum.ALLOC_SUCCESS);
         return true;
@@ -133,7 +134,7 @@ public class AllocAssistService {
             return false;
         }
         // 部分成功也标记原支付交易已分账(单次分账语义)
-        markTradeAllocStatus(allocOrder.getTradeNo(), "done");
+        markTradeAllocStatus(allocOrder.getTradeNo(), TradeAllocStatusEnum.DONE.getCode());
         tradeNoticeBridge.dispatchAlloc(allocOrder, NoticeEventEnum.ALLOC_SUCCESS);
         return true;
     }
@@ -157,7 +158,7 @@ public class AllocAssistService {
             return false;
         }
         // 失败回退原支付交易分账状态为 none(允许重新发起分账)
-        markTradeAllocStatus(allocOrder.getTradeNo(), "none");
+        markTradeAllocStatus(allocOrder.getTradeNo(), TradeAllocStatusEnum.NONE.getCode());
         tradeNoticeBridge.dispatchAlloc(allocOrder, NoticeEventEnum.ALLOC_FAIL);
         return true;
     }

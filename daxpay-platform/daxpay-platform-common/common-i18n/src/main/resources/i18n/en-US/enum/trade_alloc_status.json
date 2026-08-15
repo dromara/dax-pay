@@ -1,0 +1,6 @@
+{
+  "none": "Pending allocation",
+  "unsupported": "Allocation unsupported",
+  "processing": "Allocating",
+  "done": "Allocated"
+}

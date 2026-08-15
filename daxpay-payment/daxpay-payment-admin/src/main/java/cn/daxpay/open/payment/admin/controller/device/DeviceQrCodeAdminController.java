@@ -5,6 +5,7 @@ import cn.daxpay.open.payment.admin.param.device.DeviceQrCodeBindAppParam;
 import cn.daxpay.open.payment.admin.param.device.DeviceQrCodeBindMerchantParam;
 import cn.daxpay.open.payment.admin.param.device.DeviceQrCodeBindStoreParam;
 import cn.daxpay.open.payment.admin.param.device.DeviceQrCodeParam;
+import cn.daxpay.open.payment.admin.result.device.DeviceQrCodeAllocWarningResult;
 import cn.daxpay.open.payment.device.qrcode.param.DeviceQrCodeQuery;
 import cn.daxpay.open.payment.device.qrcode.result.DeviceQrCodeResult;
 import cn.daxpay.open.payment.admin.service.device.DeviceQrCodeAdminService;
@@ -55,6 +56,14 @@ public class DeviceQrCodeAdminController {
     @GetMapping("/exists-by-batch-no")
     public Result<Boolean> existsByBatchNo(@NotBlank(message = "{validation.field.batchNo.notBlank}") String batchNo) {
         return Res.ok(deviceQrCodeAdminService.existsByBatchNo(batchNo));
+    }
+
+    @PermCode(code = PermCodes.Action.VIEW)
+    @Operation(summary = "分账能力预警(码牌开启分账前预检, 不阻断)")
+    @GetMapping("/alloc-capability-warning")
+    public Result<List<DeviceQrCodeAllocWarningResult>> allocCapabilityWarning(
+            @NotBlank(message = "{validation.field.mchNo.notBlank}") String mchNo, String appId) {
+        return Res.ok(deviceQrCodeAdminService.allocCapabilityWarning(mchNo, appId));
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)

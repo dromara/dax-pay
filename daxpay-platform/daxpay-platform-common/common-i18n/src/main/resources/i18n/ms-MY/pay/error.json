@@ -134,7 +134,8 @@
     "amountInvalid": "Jumlah peruntukan tidak sah",
     "channelNotSupport": "Saluran ini tidak menyokong peruntukan",
     "syncProcessing": "Penyegerakan peruntukan sedang diproses",
-    "tradeNoRequired": "Nombor transaksi dan nombor pesanan tidak boleh kedua-duanya kosong"
+    "tradeNoRequired": "Nombor transaksi dan nombor pesanan tidak boleh kedua-duanya kosong",
+    "unsupported": "Produk pembayaran tidak menyokong peruntukan bagi pesanan ini; telah diturunkan kepada pembayaran biasa"
   },
   "assist": {
     "mchPublicKeyEmpty": "Kunci awam pedagang kosong",

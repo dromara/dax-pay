@@ -81,6 +81,9 @@ public class DeviceQrCodeResult extends BaseResult {
     @Schema(description = "状态(enabled-启用/disabled-停用)")
     private String status;
 
+    @Schema(description = "是否分账码牌(产品不支持分账时扫码支付自动降级普通收款)")
+    private Boolean allocation;
+
     @Schema(description = "备注")
     private String remark;
 }

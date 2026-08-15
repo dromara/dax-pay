@@ -97,7 +97,7 @@ public class PayTrade extends MchBaseEntity {
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private String appId;
 
-    /// 分账状态(none-未分账 / processing-分账中 / done-已分账)
-    /// 防止重复分账, 分账发起前置校验
+    /// 分账状态(null-非分账单 / none-待分账 / unsupported-请求分账但产品不支持已降级 / processing-分账中 / done-已分账)
+    /// 防止重复分账, 分账发起前置校验; 取值见 [cn.daxpay.open.payment.trade.alloc.enums.TradeAllocStatusEnum]
     private String allocStatus;
 }

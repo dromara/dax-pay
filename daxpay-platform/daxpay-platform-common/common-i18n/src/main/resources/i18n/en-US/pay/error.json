@@ -143,7 +143,8 @@
     "amountInvalid": "Invalid allocation amount",
     "channelNotSupport": "This channel does not support allocation",
     "syncProcessing": "Allocation sync processing",
-    "tradeNoRequired": "Trade number and biz order number cannot both be empty"
+    "tradeNoRequired": "Trade number and biz order number cannot both be empty",
+    "unsupported": "The payment product does not support allocation for this order; it has been downgraded to a normal payment"
   },
   "assist": {
     "mchPublicKeyEmpty": "Merchant public key is empty",

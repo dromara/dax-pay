@@ -57,6 +57,10 @@ public class DeviceQrCode extends MpBaseEntity implements ToResult<DeviceQrCodeR
     /// @see cn.daxpay.open.payment.device.enums.QrCodeStatusEnum
     private String status;
 
+    /// 是否分账码牌(开启后扫码支付向下单链路透传分账标识; 产品不支持分账时自动降级普通收款,
+    /// 交易分账状态记为 unsupported, 见 [cn.daxpay.open.payment.trade.alloc.enums.TradeAllocStatusEnum])
+    private Boolean allocation;
+
     /// 备注
     private String remark;
 

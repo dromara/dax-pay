@@ -172,6 +172,8 @@ public class CodePayAssistService {
         payParam.setOpenId(param.getOpenId());
         payParam.setClientIp(StrUtil.blankToDefault(param.getClientIp(), WebServletUtil.getClientIp()));
         payParam.setSource(TradeSourceEnum.CASHIER_CODE.getCode());
+        // 码牌分账开关: 透传分账标识(产品不支持分账时由下单链路降级普通收款, 不阻断支付)
+        payParam.setAllocation(entity.getAllocation());
         // 门店: 码牌显式 storeNo 优先; 空则由下单侧 resolve 默认门店, 仍注入 terminal 便于统一路径
         // 此处只传码牌上的显式值(可空), NormalPayAssistService 再 resolveStoreNo
         TerminalInfo terminal = new TerminalInfo();

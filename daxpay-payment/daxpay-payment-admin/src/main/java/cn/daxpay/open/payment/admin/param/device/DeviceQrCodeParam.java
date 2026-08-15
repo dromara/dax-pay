@@ -42,6 +42,10 @@ public class DeviceQrCodeParam {
     @Schema(description = "状态")
     private String status;
 
+    /// 是否分账码牌(开启后扫码支付透传分账标识; 产品不支持分账时下单自动降级普通收款)
+    @Schema(description = "是否分账码牌")
+    private Boolean allocation;
+
     /// 备注
     @Schema(description = "备注")
     @Size(max = 500, message = "{validation.field.remark.size}")

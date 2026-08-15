@@ -143,7 +143,8 @@
     "amountInvalid": "분할 금액이 유효하지 않습니다",
     "channelNotSupport": "이 채널은 분할을 지원하지 않습니다",
     "syncProcessing": "분할 동기화 처리 중",
-    "tradeNoRequired": "거래 번호와 업무 주문 번호가 모두 비어있습니다"
+    "tradeNoRequired": "거래 번호와 업무 주문 번호가 모두 비어있습니다",
+    "unsupported": "이 주문의 결제 상품은 분할을 지원하지 않아 일반 결제로 전환되었습니다"
   },
   "assist": {
     "mchPublicKeyEmpty": "판매자 공개 키가 비어 있습니다.",

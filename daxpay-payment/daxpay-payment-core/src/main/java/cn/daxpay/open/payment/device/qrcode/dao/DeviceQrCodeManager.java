@@ -46,16 +46,19 @@ public class DeviceQrCodeManager extends BaseManager<DeviceQrCodeMapper, DeviceQ
                 .set(DeviceQrCode::getMchNo, mchNo)
                 .set(DeviceQrCode::getAppId, appId)
                 .set(DeviceQrCode::getStoreNo, storeNo)
+                // 分账开关跨商户边界重置(原商户的分账意图不随码牌带给新商户)
+                .set(DeviceQrCode::getAllocation, false)
                 .in(DeviceQrCode::getId, ids)
                 .update();
     }
 
-    /// 批量解绑商户与应用(回空白库存, 同步清空门店)
+    /// 批量解绑商户与应用(回空白库存, 同步清空门店与分账开关)
     public void unbindMerchant(Collection<Long> ids) {
         lambdaUpdate()
                 .set(DeviceQrCode::getMchNo, null)
                 .set(DeviceQrCode::getAppId, null)
                 .set(DeviceQrCode::getStoreNo, null)
+                .set(DeviceQrCode::getAllocation, false)
                 .in(DeviceQrCode::getId, ids)
                 .update();
     }

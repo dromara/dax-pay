@@ -1,0 +1,6 @@
+{
+  "none": "분할 대기",
+  "unsupported": "분할 미지원",
+  "processing": "분할 중",
+  "done": "분할 완료"
+}

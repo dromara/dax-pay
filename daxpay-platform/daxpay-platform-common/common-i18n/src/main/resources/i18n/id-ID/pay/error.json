@@ -134,7 +134,8 @@
     "amountInvalid": "Jumlah alokasi tidak valid",
     "channelNotSupport": "Saluran ini tidak mendukung alokasi",
     "syncProcessing": "Sinkronisasi alokasi sedang diproses",
-    "tradeNoRequired": "Nomor transaksi dan nomor pesanan tidak boleh keduanya kosong"
+    "tradeNoRequired": "Nomor transaksi dan nomor pesanan tidak boleh keduanya kosong",
+    "unsupported": "Produk pembayaran tidak mendukung alokasi untuk pesanan ini; telah diturunkan menjadi pembayaran biasa"
   },
   "assist": {
     "mchPublicKeyEmpty": "Kunci publik pedagang kosong",

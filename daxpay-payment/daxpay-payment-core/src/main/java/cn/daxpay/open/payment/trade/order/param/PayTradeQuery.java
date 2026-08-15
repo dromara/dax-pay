@@ -46,6 +46,12 @@ public class PayTradeQuery {
     @Schema(description = "交易形态")
     private String tradeType;
 
+    /// 分账状态(null-非分账单/none-待分账/unsupported-请求分账但产品不支持已降级/processing-分账中/done-已分账)
+    /// @see cn.daxpay.open.payment.trade.alloc.enums.TradeAllocStatusEnum
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
+    @Schema(description = "分账状态")
+    private String allocStatus;
+
     /// 支付通道
     /// @see cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum
     @QueryParam(type = QueryParam.CompareTypeEnum.EQ)

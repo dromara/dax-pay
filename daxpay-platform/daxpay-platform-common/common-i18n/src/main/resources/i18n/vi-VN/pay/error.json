@@ -134,7 +134,8 @@
     "amountInvalid": "Số tiền phân bổ không hợp lệ",
     "channelNotSupport": "Kênh này không hỗ trợ phân bổ",
     "syncProcessing": "Đồng bộ phân bổ đang xử lý",
-    "tradeNoRequired": "Số giao dịch và số đơn hàng không thể cùng để trống"
+    "tradeNoRequired": "Số giao dịch và số đơn hàng không thể cùng để trống",
+    "unsupported": "Sản phẩm thanh toán không hỗ trợ phân bổ cho đơn hàng này; đã hạ cấp thành thanh toán thường"
   },
   "assist": {
     "mchPublicKeyEmpty": "Khóa công khai của người bán trống",
