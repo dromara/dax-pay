@@ -258,3 +258,26 @@ CREATE UNIQUE INDEX "uk_wechat_isv_alloc_receiver" ON "public"."wechat_isv_alloc
 ) WHERE deleted = false;
 COMMENT ON INDEX "public"."uk_wechat_isv_alloc_receiver" IS '同一通道商户下同类型同账号接收方唯一(部分唯一索引)';
 ALTER TABLE "public"."wechat_isv_alloc_receiver" ADD CONSTRAINT "pk_wechat_isv_alloc_receiver" PRIMARY KEY ("id");
+
+-- ----------------------------
+-- 支付码牌新增分账标识
+-- ----------------------------
+ALTER TABLE "public"."device_qr_code" ADD COLUMN "allocation" bool NOT NULL DEFAULT false;
+COMMENT ON COLUMN "public"."device_qr_code"."allocation" IS '是否分账码牌(开启后扫码支付向下单链路透传分账标识; 产品不支持分账时自动降级普通收款, 交易分账状态记为 unsupported)';
+
+-- ------------------------------------------------------------
+-- 修复 pay_trade.alloc_status 默认值污染(幂等)
+-- 2026-08-18: 历史增量脚本曾以 DEFAULT 'none' 加列, 导致普通(非分账)订单也落 'none'(待分账);
+-- 语义修正: null=非分账订单, 仅下单声明 allocation=true 的交易才初始化 none/unsupported, 不设列默认值
+-- ------------------------------------------------------------
+ALTER TABLE "public"."pay_trade" ALTER COLUMN "alloc_status" DROP DEFAULT;
+COMMENT ON COLUMN "public"."pay_trade"."alloc_status" IS '分账状态(null-非分账订单/none-待分账/unsupported-不支持分账/processing-分账中/done-已分账)';
+-- 存量回填: 容器未声明分账的 trade 置回 null(真实分账单保留, 按 trade_type 关联对应容器判定)
+UPDATE "public"."pay_trade" t SET alloc_status = NULL
+WHERE t.alloc_status = 'none'
+  AND NOT (
+    (t.trade_type = 'gateway' AND EXISTS (SELECT 1 FROM pay_gateway_order g
+        WHERE g.id = t.container_id AND g.allocation = true))
+    OR (t.trade_type = 'normal' AND EXISTS (SELECT 1 FROM pay_normal_order n
+        WHERE n.id = t.container_id AND n.allocation = true))
+  );

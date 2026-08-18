@@ -771,7 +771,8 @@ CREATE TABLE "public"."device_qr_code" (
   "last_modified_time" timestamptz(6),
   "version" int4 NOT NULL DEFAULT 0,
   "deleted" bool NOT NULL DEFAULT false,
-  "store_no" varchar(64) COLLATE "pg_catalog"."default"
+  "store_no" varchar(64) COLLATE "pg_catalog"."default",
+  "allocation" bool NOT NULL DEFAULT false
 )
 ;
 COMMENT ON COLUMN "public"."device_qr_code"."id" IS '主键';
@@ -792,6 +793,7 @@ COMMENT ON COLUMN "public"."device_qr_code"."last_modified_time" IS '最后修�
 COMMENT ON COLUMN "public"."device_qr_code"."version" IS '版本号';
 COMMENT ON COLUMN "public"."device_qr_code"."deleted" IS '逻辑删除标识';
 COMMENT ON COLUMN "public"."device_qr_code"."store_no" IS '绑定门店号(可空; 对应 mch_store_info.store_no)';
+COMMENT ON COLUMN "public"."device_qr_code"."allocation" IS '是否分账码牌(开启后扫码支付向下单链路透传分账标识; 产品不支持分账时自动降级普通收款, 交易分账状态记为 unsupported)';
 COMMENT ON TABLE "public"."device_qr_code" IS '支付码牌';
 
 -- ----------------------------
@@ -3815,7 +3817,7 @@ CREATE TABLE "public"."pay_trade" (
   "provider" varchar(32) COLLATE "pg_catalog"."default",
   "title" varchar(255) COLLATE "pg_catalog"."default",
   "channel" varchar(32) COLLATE "pg_catalog"."default",
-  "alloc_status" varchar(32) COLLATE "pg_catalog"."default" DEFAULT 'none'::character varying
+  "alloc_status" varchar(32) COLLATE "pg_catalog"."default"
 )
 ;
 COMMENT ON COLUMN "public"."pay_trade"."id" IS '主键';
@@ -3845,7 +3847,7 @@ COMMENT ON COLUMN "public"."pay_trade"."deleted" IS '逻辑删除';
 COMMENT ON COLUMN "public"."pay_trade"."provider" IS '支付渠道(冗余自容器, 支付成功sync后回填; 权威在容器 provider)';
 COMMENT ON COLUMN "public"."pay_trade"."title" IS '订单标题';
 COMMENT ON COLUMN "public"."pay_trade"."channel" IS '支付通道';
-COMMENT ON COLUMN "public"."pay_trade"."alloc_status" IS '分账状态(none-未分账/processing-分账中/done-已分账)';
+COMMENT ON COLUMN "public"."pay_trade"."alloc_status" IS '分账状态(null-非分账订单/none-待分账/unsupported-不支持分账/processing-分账中/done-已分账)';
 COMMENT ON TABLE "public"."pay_trade" IS '资金交易凭证';
 
 -- ----------------------------
