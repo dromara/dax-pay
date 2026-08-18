@@ -10,7 +10,7 @@ import java.net.UnknownHostException;
 
 /// # 开源版
 @Slf4j
-@SpringBootApplication()
+@SpringBootApplication
 public class DaxpayOpenStart {
 
     static void main(String[] args) throws UnknownHostException {

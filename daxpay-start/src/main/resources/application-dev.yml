@@ -15,6 +15,7 @@ spring:
   datasource:
     # Postgresql连接
     driver-class-name: org.postgresql.Driver
+    # 数据库主机名 postgresql, 由本机 hosts 映射到 192.168.188.1
     url: jdbc:postgresql://postgresql:5432/daxpay-dev?autoReconnect=true&reWriteBatchedInserts=true
     username: bootx
     password: bootx123
@@ -27,6 +28,7 @@ spring:
       max-lifetime: 1800000     # 连接最大存活时间（毫秒）
   data:
     redis:
+      # 主机名 redis, 由本机 hosts 映射到 192.168.188.1
       host: redis
       port: 6379
       database: 0
@@ -38,7 +40,8 @@ spring:
   artemis:
     mode: native
     # Broker 连接地址
-    broker-url: tcp://192.168.1.229:61616
+    # 主机名 mq, 由本机 hosts 映射到 192.168.188.1
+    broker-url: tcp://mq:61616
     # broker 账号（与容器启动环境变量一致）
     user: admin
     password: admin
@@ -101,9 +104,9 @@ daxpay:
       audit-log:
         ip2region:
           # IPv4 xdb 文件路径
-          file-path: E:/data/ip2region/ip2region_v4.xdb
+          file-path: D:/data/ip2region/ip2region_v4.xdb
           # IPv6 xdb 文件路径（可选, 未配置时 IPv6 查询返回 null）
-          ipv6-file-path: E:/data/ip2region/ip2region_v6.xdb
+          ipv6-file-path: D:/data/ip2region/ip2region_v6.xdb
           # IPv4 数据版本: OPEN_SOURCE(开源5段) | BASE(商业基础版) | HIGH(高级版) | PRO(专业版)
           data-version: open_source
           # IPv6 数据版本（可与 v4 不同）
