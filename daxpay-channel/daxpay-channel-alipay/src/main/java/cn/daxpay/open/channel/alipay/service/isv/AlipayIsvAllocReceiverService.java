@@ -11,6 +11,7 @@ import cn.daxpay.open.channel.alipay.param.isv.AlipayIsvAllocReceiverCreateParam
 import cn.daxpay.open.channel.alipay.param.isv.AlipayIsvAllocReceiverQuery;
 import cn.daxpay.open.channel.alipay.result.isv.AlipayIsvAllocReceiverResult;
 import cn.daxpay.open.channel.alipay.service.payment.alloc.AlipayAllocReceiverChannelService;
+import cn.daxpay.open.payment.trade.alloc.AllocReceiverFailSupport;
 import cn.daxpay.open.payment.trade.alloc.enums.AllocReceiverStatusEnum;
 import cn.daxpay.open.payment.trade.alloc.enums.AllocReceiverTypeEnum;
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
@@ -22,7 +23,6 @@ import cn.hutool.crypto.SecureUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.util.Objects;
@@ -35,6 +35,9 @@ import java.util.Objects;
 ///
 /// 凭证组装全自动(子商户授权绑定决定服务商用哪个应用), 无需存应用字段;
 /// 支付宝 out_request_no 用记录 id(重试同 id 幂等)。
+///
+/// 事务边界: 各写方法不开事务, 落库与状态回写独立提交——失败留痕优先于原子性
+/// (一步绑定模型无跨记录一致性需求, 事务包裹通道 HTTP 调用反而会把失败留痕整体回滚掉)。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -53,7 +56,6 @@ public class AlipayIsvAllocReceiverService {
     /// 新增并绑定接收方
     ///
     /// 绑定失败时记录保留(状态 fail + 失败原因), 并向调用方抛出失败异常以便即时提示。
-    @Transactional(rollbackFor = Exception.class)
     public void create(AlipayIsvAllocReceiverCreateParam param) {
         // 子商户授权绑定存在性与通道商户一致性校验(ISV 绑定按 mchNo 定位)
         AlipayIsvChannelMerchant isvMerchant = alipayIsvChannelMerchantManager.findByMchNo(param.getMchNo())
@@ -93,7 +95,6 @@ public class AlipayIsvAllocReceiverService {
     }
 
     /// 重新绑定(fail/unbound 状态)
-    @Transactional(rollbackFor = Exception.class)
     public void bind(AlipayIsvAllocReceiverBindParam param) {
         AlipayIsvAllocReceiver entity = this.loadAndCheck(param.getId());
         if (Objects.equals(entity.getStatus(), AllocReceiverStatusEnum.BOUND.getCode())) {
@@ -105,7 +106,6 @@ public class AlipayIsvAllocReceiverService {
     }
 
     /// 解绑(bound 状态), 成功后保留记录置 unbound
-    @Transactional(rollbackFor = Exception.class)
     public void unbind(Long id) {
         AlipayIsvAllocReceiver entity = this.loadAndCheck(id);
         if (!Objects.equals(entity.getStatus(), AllocReceiverStatusEnum.BOUND.getCode())) {
@@ -113,14 +113,15 @@ public class AlipayIsvAllocReceiverService {
             throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
                     "error.channel.allocReceiverNotBound");
         }
-        AlipaySdkCredential credential = alipayIsvConfigAssembler.buildConfig(entity.getMchNo());
         try {
+            AlipaySdkCredential credential = alipayIsvConfigAssembler.buildConfig(entity.getMchNo());
             alipayAllocReceiverChannelService.unbind(this.buildReq(entity, credential));
         } catch (Exception e) {
-            // 失败原因落库(保持 bound), 异常上抛提示
-            entity.setErrorMsg(e.getMessage());
+            // 失败原因落库(保持 bound), HTTP 网络类异常标注"通道结果未知", 异常上抛提示
+            log.warn("支付宝服务商接收方解绑失败: id={}, account={}", entity.getId(), entity.getReceiverAccount(), e);
+            entity.setErrorMsg(AllocReceiverFailSupport.recordMessage(e));
             allocReceiverManager.updateById(entity);
-            throw e;
+            throw AllocReceiverFailSupport.toUserException(e, AllocReceiverFailSupport.KEY_UNBIND_UNKNOWN);
         }
         entity.setStatus(AllocReceiverStatusEnum.UNBOUND.getCode())
                 .setUnbindTime(OffsetDateTime.now())
@@ -141,14 +142,16 @@ public class AlipayIsvAllocReceiverService {
 
     /// 执行通道侧绑定并回写状态
     private void doBind(AlipayIsvAllocReceiver entity) {
-        AlipaySdkCredential credential = alipayIsvConfigAssembler.buildConfig(entity.getMchNo());
         try {
+            AlipaySdkCredential credential = alipayIsvConfigAssembler.buildConfig(entity.getMchNo());
             alipayAllocReceiverChannelService.bind(this.buildReq(entity, credential));
         } catch (Exception e) {
+            // 失败留痕(fail + 可读原因), HTTP 网络类异常标注"通道结果未知"
+            log.warn("支付宝服务商接收方绑定失败: id={}, account={}", entity.getId(), entity.getReceiverAccount(), e);
             entity.setStatus(AllocReceiverStatusEnum.FAIL.getCode())
-                    .setErrorMsg(e.getMessage());
+                    .setErrorMsg(AllocReceiverFailSupport.recordMessage(e));
             allocReceiverManager.updateById(entity);
-            throw e;
+            throw AllocReceiverFailSupport.toUserException(e, AllocReceiverFailSupport.KEY_BIND_UNKNOWN);
         }
         entity.setStatus(AllocReceiverStatusEnum.BOUND.getCode())
                 .setBindTime(OffsetDateTime.now())

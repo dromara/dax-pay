@@ -11,6 +11,7 @@ import cn.daxpay.open.channel.alipay.param.direct.AlipayDirectAllocReceiverCreat
 import cn.daxpay.open.channel.alipay.param.direct.AlipayDirectAllocReceiverQuery;
 import cn.daxpay.open.channel.alipay.result.direct.AlipayDirectAllocReceiverResult;
 import cn.daxpay.open.channel.alipay.service.payment.alloc.AlipayAllocReceiverChannelService;
+import cn.daxpay.open.payment.trade.alloc.AllocReceiverFailSupport;
 import cn.daxpay.open.payment.trade.alloc.enums.AllocReceiverStatusEnum;
 import cn.daxpay.open.payment.trade.alloc.enums.AllocReceiverTypeEnum;
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
@@ -23,7 +24,6 @@ import cn.hutool.crypto.SecureUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.util.Objects;
@@ -36,6 +36,9 @@ import java.util.Objects;
 ///
 /// 绑定所用应用引用([directAppRefId])落库, 重新绑定时复用组装凭证;
 /// 支付宝 out_request_no 用记录 id(重试同 id 幂等)。
+///
+/// 事务边界: 各写方法不开事务, 落库与状态回写独立提交——失败留痕优先于原子性
+/// (一步绑定模型无跨记录一致性需求, 事务包裹通道 HTTP 调用反而会把失败留痕整体回滚掉)。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -54,7 +57,6 @@ public class AlipayDirectAllocReceiverService {
     /// 新增并绑定接收方
     ///
     /// 绑定失败时记录保留(状态 fail + 失败原因), 并向调用方抛出失败异常以便即时提示。
-    @Transactional(rollbackFor = Exception.class)
     public void create(AlipayDirectAllocReceiverCreateParam param) {
         // 通道商户存在性与归属校验
         AlipayDirectChannelMerchant channelMerchant = channelMerchantManager.lambdaQuery()
@@ -97,7 +99,6 @@ public class AlipayDirectAllocReceiverService {
     }
 
     /// 重新绑定(fail/unbound 状态), 可更换绑定所用应用引用(留空沿用落库值)
-    @Transactional(rollbackFor = Exception.class)
     public void bind(AlipayDirectAllocReceiverBindParam param) {
         AlipayDirectAllocReceiver entity = this.loadAndCheck(param.getId());
         if (Objects.equals(entity.getStatus(), AllocReceiverStatusEnum.BOUND.getCode())) {
@@ -106,14 +107,13 @@ public class AlipayDirectAllocReceiverService {
                     "error.channel.allocReceiverAlreadyBound");
         }
         if (param.getAppRefId() != null) {
-            // 新应用合法性由 doBind 凭证组装(应用存在性+归属)校验, 失败整体回滚
+            // 新应用合法性由 doBind 凭证组装(应用存在性+归属)校验, 失败留痕(fail + 原因)
             entity.setDirectAppRefId(param.getAppRefId());
         }
         this.doBind(entity);
     }
 
     /// 解绑(bound 状态), 成功后保留记录置 unbound
-    @Transactional(rollbackFor = Exception.class)
     public void unbind(Long id) {
         AlipayDirectAllocReceiver entity = this.loadAndCheck(id);
         if (!Objects.equals(entity.getStatus(), AllocReceiverStatusEnum.BOUND.getCode())) {
@@ -121,15 +121,16 @@ public class AlipayDirectAllocReceiverService {
             throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
                     "error.channel.allocReceiverNotBound");
         }
-        AlipaySdkCredential credential = alipayDirectConfigAssembler.buildAllocReceiverConfig(
-                entity.getMchNo(), entity.getChannelMchNo(), entity.getDirectAppRefId());
         try {
+            AlipaySdkCredential credential = alipayDirectConfigAssembler.buildAllocReceiverConfig(
+                    entity.getMchNo(), entity.getChannelMchNo(), entity.getDirectAppRefId());
             alipayAllocReceiverChannelService.unbind(this.buildReq(entity, credential));
         } catch (Exception e) {
-            // 失败原因落库(保持 bound), 异常上抛提示
-            entity.setErrorMsg(e.getMessage());
+            // 失败原因落库(保持 bound), HTTP 网络类异常标注"通道结果未知", 异常上抛提示
+            log.warn("支付宝直连接收方解绑失败: id={}, account={}", entity.getId(), entity.getReceiverAccount(), e);
+            entity.setErrorMsg(AllocReceiverFailSupport.recordMessage(e));
             allocReceiverManager.updateById(entity);
-            throw e;
+            throw AllocReceiverFailSupport.toUserException(e, AllocReceiverFailSupport.KEY_UNBIND_UNKNOWN);
         }
         entity.setStatus(AllocReceiverStatusEnum.UNBOUND.getCode())
                 .setUnbindTime(OffsetDateTime.now())
@@ -150,15 +151,17 @@ public class AlipayDirectAllocReceiverService {
 
     /// 执行通道侧绑定并回写状态
     private void doBind(AlipayDirectAllocReceiver entity) {
-        AlipaySdkCredential credential = alipayDirectConfigAssembler.buildAllocReceiverConfig(
-                entity.getMchNo(), entity.getChannelMchNo(), entity.getDirectAppRefId());
         try {
+            AlipaySdkCredential credential = alipayDirectConfigAssembler.buildAllocReceiverConfig(
+                    entity.getMchNo(), entity.getChannelMchNo(), entity.getDirectAppRefId());
             alipayAllocReceiverChannelService.bind(this.buildReq(entity, credential));
         } catch (Exception e) {
+            // 失败留痕(fail + 可读原因), HTTP 网络类异常标注"通道结果未知"
+            log.warn("支付宝直连接收方绑定失败: id={}, account={}", entity.getId(), entity.getReceiverAccount(), e);
             entity.setStatus(AllocReceiverStatusEnum.FAIL.getCode())
-                    .setErrorMsg(e.getMessage());
+                    .setErrorMsg(AllocReceiverFailSupport.recordMessage(e));
             allocReceiverManager.updateById(entity);
-            throw e;
+            throw AllocReceiverFailSupport.toUserException(e, AllocReceiverFailSupport.KEY_BIND_UNKNOWN);
         }
         entity.setStatus(AllocReceiverStatusEnum.BOUND.getCode())
                 .setBindTime(OffsetDateTime.now())

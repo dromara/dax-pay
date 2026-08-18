@@ -4,5 +4,7 @@
   "allocReceiverAlreadyBound": "已綁定的接收方無需重複綁定",
   "allocReceiverNotBound": "僅已綁定的接收方可解綁",
   "allocReceiverBoundCannotDelete": "已綁定的接收方不可刪除, 請先解綁",
-  "allocReceiverCustomRelationRequired": "自訂關係類型必須填寫自訂關係名"
+  "allocReceiverCustomRelationRequired": "自訂關係類型必須填寫自訂關係名",
+  "allocReceiverBindUnknownResult": "網路異常, 綁定執行結果未知, 請核實通道側狀態後重試",
+  "allocReceiverUnbindUnknownResult": "網路異常, 解綁執行結果未知, 請核實通道側狀態後重試"
 }

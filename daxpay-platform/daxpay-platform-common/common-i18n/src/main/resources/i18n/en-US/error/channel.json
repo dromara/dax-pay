@@ -4,5 +4,7 @@
   "allocReceiverAlreadyBound": "Receiver is already bound",
   "allocReceiverNotBound": "Only a bound receiver can be unbound",
   "allocReceiverBoundCannotDelete": "A bound receiver cannot be deleted, unbind it first",
-  "allocReceiverCustomRelationRequired": "Custom relation name is required for custom relation type"
+  "allocReceiverCustomRelationRequired": "Custom relation name is required for custom relation type",
+  "allocReceiverBindUnknownResult": "Network error, the bind result is unknown. Verify the channel-side state and retry",
+  "allocReceiverUnbindUnknownResult": "Network error, the unbind result is unknown. Verify the channel-side state and retry"
 }

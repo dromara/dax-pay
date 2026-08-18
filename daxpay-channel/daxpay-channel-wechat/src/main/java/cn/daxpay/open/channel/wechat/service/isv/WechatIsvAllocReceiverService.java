@@ -11,6 +11,7 @@ import cn.daxpay.open.channel.wechat.param.isv.WechatIsvAllocReceiverCreateParam
 import cn.daxpay.open.channel.wechat.param.isv.WechatIsvAllocReceiverQuery;
 import cn.daxpay.open.channel.wechat.result.isv.WechatIsvAllocReceiverResult;
 import cn.daxpay.open.channel.wechat.service.payment.alloc.WechatAllocReceiverChannelService;
+import cn.daxpay.open.payment.trade.alloc.AllocReceiverFailSupport;
 import cn.daxpay.open.payment.trade.alloc.enums.AllocReceiverStatusEnum;
 import cn.daxpay.open.payment.trade.alloc.enums.AllocReceiverTypeEnum;
 import cn.daxpay.open.payment.trade.alloc.enums.AllocRelationTypeEnum;
@@ -25,7 +26,6 @@ import cn.hutool.crypto.SecureUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.util.Objects;
@@ -37,6 +37,9 @@ import java.util.Objects;
 /// 绑定失败记录保留(fail)可修正后重新绑定; 解绑保留记录(unbound)。
 ///
 /// 绑定所用 sp/sub 应用落库, 重新绑定时复用组装凭证。
+///
+/// 事务边界: 各写方法不开事务, 落库与状态回写独立提交——失败留痕优先于原子性
+/// (一步绑定模型无跨记录一致性需求, 事务包裹通道 HTTP 调用反而会把失败留痕整体回滚掉)。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -55,7 +58,6 @@ public class WechatIsvAllocReceiverService {
     /// 新增并绑定接收方
     ///
     /// 绑定失败时记录保留(状态 fail + 失败原因), 并向调用方抛出失败异常以便即时提示。
-    @Transactional(rollbackFor = Exception.class)
     public void create(WechatIsvAllocReceiverCreateParam param) {
         // 通道商户存在性与归属校验
         WechatIsvChannelMerchant channelMerchant = wechatIsvChannelMerchantManager
@@ -96,7 +98,6 @@ public class WechatIsvAllocReceiverService {
     }
 
     /// 重新绑定(fail/unbound 状态), 可更换绑定所用 sp/sub 应用(留空沿用落库值)
-    @Transactional(rollbackFor = Exception.class)
     public void bind(WechatIsvAllocReceiverBindParam param) {
         WechatIsvAllocReceiver entity = this.loadAndCheck(param.getId());
         if (Objects.equals(entity.getStatus(), AllocReceiverStatusEnum.BOUND.getCode())) {
@@ -105,7 +106,7 @@ public class WechatIsvAllocReceiverService {
                     "error.channel.allocReceiverAlreadyBound");
         }
         if (StrUtil.isNotBlank(param.getSpAppId())) {
-            // 新应用合法性由 doBind 凭证组装校验, 失败整体回滚
+            // 新应用合法性由 doBind 凭证组装校验, 失败留痕(fail + 原因)
             entity.setSpAppId(param.getSpAppId());
         }
         if (StrUtil.isNotBlank(param.getSubAppId())) {
@@ -115,7 +116,6 @@ public class WechatIsvAllocReceiverService {
     }
 
     /// 解绑(bound 状态), 成功后保留记录置 unbound
-    @Transactional(rollbackFor = Exception.class)
     public void unbind(Long id) {
         WechatIsvAllocReceiver entity = this.loadAndCheck(id);
         if (!Objects.equals(entity.getStatus(), AllocReceiverStatusEnum.BOUND.getCode())) {
@@ -123,15 +123,16 @@ public class WechatIsvAllocReceiverService {
             throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
                     "error.channel.allocReceiverNotBound");
         }
-        WechatSdkCredential credential = wechatIsvConfigAssembler.buildAllocReceiverConfig(
-                entity.getMchNo(), entity.getChannelMchNo(), entity.getSpAppId(), entity.getSubAppId());
         try {
+            WechatSdkCredential credential = wechatIsvConfigAssembler.buildAllocReceiverConfig(
+                    entity.getMchNo(), entity.getChannelMchNo(), entity.getSpAppId(), entity.getSubAppId());
             wechatAllocReceiverChannelService.isvUnbind(this.buildReq(entity, credential));
         } catch (Exception e) {
-            // 失败原因落库(保持 bound), 异常上抛提示
-            entity.setErrorMsg(e.getMessage());
+            // 失败原因落库(保持 bound), HTTP 网络类异常标注"通道结果未知", 异常上抛提示
+            log.warn("微信服务商接收方解绑失败: id={}, account={}", entity.getId(), entity.getReceiverAccount(), e);
+            entity.setErrorMsg(AllocReceiverFailSupport.recordMessage(e));
             allocReceiverManager.updateById(entity);
-            throw e;
+            throw AllocReceiverFailSupport.toUserException(e, AllocReceiverFailSupport.KEY_UNBIND_UNKNOWN);
         }
         entity.setStatus(AllocReceiverStatusEnum.UNBOUND.getCode())
                 .setUnbindTime(OffsetDateTime.now())
@@ -152,15 +153,17 @@ public class WechatIsvAllocReceiverService {
 
     /// 执行通道侧绑定并回写状态
     private void doBind(WechatIsvAllocReceiver entity) {
-        WechatSdkCredential credential = wechatIsvConfigAssembler.buildAllocReceiverConfig(
-                entity.getMchNo(), entity.getChannelMchNo(), entity.getSpAppId(), entity.getSubAppId());
         try {
+            WechatSdkCredential credential = wechatIsvConfigAssembler.buildAllocReceiverConfig(
+                    entity.getMchNo(), entity.getChannelMchNo(), entity.getSpAppId(), entity.getSubAppId());
             wechatAllocReceiverChannelService.isvBind(this.buildReq(entity, credential));
         } catch (Exception e) {
+            // 失败留痕(fail + 可读原因), HTTP 网络类异常标注"通道结果未知"
+            log.warn("微信服务商接收方绑定失败: id={}, account={}", entity.getId(), entity.getReceiverAccount(), e);
             entity.setStatus(AllocReceiverStatusEnum.FAIL.getCode())
-                    .setErrorMsg(e.getMessage());
+                    .setErrorMsg(AllocReceiverFailSupport.recordMessage(e));
             allocReceiverManager.updateById(entity);
-            throw e;
+            throw AllocReceiverFailSupport.toUserException(e, AllocReceiverFailSupport.KEY_BIND_UNKNOWN);
         }
         entity.setStatus(AllocReceiverStatusEnum.BOUND.getCode())
                 .setBindTime(OffsetDateTime.now())

@@ -4,5 +4,7 @@
   "allocReceiverAlreadyBound": "受取方は既にバインド済みです",
   "allocReceiverNotBound": "バインド済みの受取方のみ解除できます",
   "allocReceiverBoundCannotDelete": "バインド済みの受取方は削除できません、先に解除してください",
-  "allocReceiverCustomRelationRequired": "カスタム関係タイプにはカスタム関係名が必要です"
+  "allocReceiverCustomRelationRequired": "カスタム関係タイプにはカスタム関係名が必要です",
+  "allocReceiverBindUnknownResult": "ネットワークエラーのためバインド結果は不明です。チャネル側の状態を確認してから再試行してください",
+  "allocReceiverUnbindUnknownResult": "ネットワークエラーのため解除結果は不明です。チャネル側の状態を確認してから再試行してください"
 }
