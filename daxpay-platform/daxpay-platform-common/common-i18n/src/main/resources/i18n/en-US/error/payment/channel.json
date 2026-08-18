@@ -11,5 +11,8 @@
   "channelMerchantHasTrade": "Channel merchant has trade records and cannot be deleted",
   "channelMerchantHasOrder": "Channel merchant has order records and cannot be deleted",
   "channelMerchantHasGatewayOrder": "Channel merchant has gateway order records and cannot be deleted",
-  "channelMerchantHasRefund": "Channel merchant has refund records and cannot be deleted"
+  "channelMerchantHasRefund": "Channel merchant has refund records and cannot be deleted",
+  "scanTypeNotSupported": "This receiver type does not support obtaining the account via QR code scan",
+  "scanWechatAppTypeNotSupported": "WeChat QR authorization only supports official account apps (current app type: {0}); please select another app or enter the openid manually",
+  "scanDouyinAppTypeNotSupported": "Douyin QR authorization only supports web apps (current app type: {0}); please select another app or enter the openid manually"
 }

@@ -11,5 +11,8 @@
   "channelMerchantHasTrade": "通道商戶存在交易記錄，不允許刪除",
   "channelMerchantHasOrder": "通道商戶存在訂單記錄，不允許刪除",
   "channelMerchantHasGatewayOrder": "通道商戶存在網關訂單記錄，不允許刪除",
-  "channelMerchantHasRefund": "通道商戶存在退款記錄，不允許刪除"
+  "channelMerchantHasRefund": "通道商戶存在退款記錄，不允許刪除",
+  "scanTypeNotSupported": "該接收方類型不支援掃碼獲取帳號",
+  "scanWechatAppTypeNotSupported": "微信掃碼授權僅支援公眾號應用(目前應用類型: {0})，請更換應用或手動填寫 openid",
+  "scanDouyinAppTypeNotSupported": "抖音掃碼授權僅支援網站應用(目前應用類型: {0})，請更換應用或手動填寫 openid"
 }

@@ -7,5 +7,8 @@
   "signVerifyFailIllegal": "Pengesahan tandatangan gagal, permintaan tidak sah",
   "channelMerchantNotExist": "Maklumat pedagang saluran tidak ditemui",
   "merchantInfoNotFound": "Maklumat pedagang tidak ditemui",
-  "originOrderNotExist": "Pesanan asal tidak wujud"
+  "originOrderNotExist": "Pesanan asal tidak wujud",
+  "scanTypeNotSupported": "Jenis penerima ini tidak menyokong pengambilan akaun melalui imbasan kod QR",
+  "scanWechatAppTypeNotSupported": "Pendaftaran QR WeChat hanya menyokong aplikasi official account (jenis aplikasi semasa: {0}); sila pilih aplikasi lain atau masukkan openid secara manual",
+  "scanDouyinAppTypeNotSupported": "Pendaftaran QR Douyin hanya menyokong aplikasi web (jenis aplikasi semasa: {0}); sila pilih aplikasi lain atau masukkan openid secara manual"
 }

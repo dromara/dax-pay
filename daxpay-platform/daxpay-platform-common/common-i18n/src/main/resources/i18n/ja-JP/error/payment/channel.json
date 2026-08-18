@@ -11,5 +11,8 @@
   "channelMerchantHasTrade": "チャネルマーチャントに取引記録が存在するため、削除できません",
   "channelMerchantHasOrder": "チャネルマーチャントに注文記録が存在するため、削除できません",
   "channelMerchantHasGatewayOrder": "チャネルマーチャントにゲートウェイ注文記録が存在するため、削除できません",
-  "channelMerchantHasRefund": "チャネルマーチャントに返金記録が存在するため、削除できません"
+  "channelMerchantHasRefund": "チャネルマーチャントに返金記録が存在するため、削除できません",
+  "scanTypeNotSupported": "この受取人タイプはQRコードスキャンによるアカウント取得に対応していません",
+  "scanWechatAppTypeNotSupported": "WeChatのQR認証は公式アカウントアプリのみ対応しています(現在のアプリタイプ: {0})。アプリを変更するか、openidを手動入力してください",
+  "scanDouyinAppTypeNotSupported": "DouyinのQR認証はウェブアプリのみ対応しています(現在のアプリタイプ: {0})。アプリを変更するか、openidを手動入力してください"
 }

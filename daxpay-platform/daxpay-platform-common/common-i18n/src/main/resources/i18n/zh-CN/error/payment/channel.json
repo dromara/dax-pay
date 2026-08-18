@@ -11,5 +11,8 @@
   "channelMerchantHasTrade": "通道商户存在交易记录，不允许删除",
   "channelMerchantHasOrder": "通道商户存在订单记录，不允许删除",
   "channelMerchantHasGatewayOrder": "通道商户存在网关订单记录，不允许删除",
-  "channelMerchantHasRefund": "通道商户存在退款记录，不允许删除"
+  "channelMerchantHasRefund": "通道商户存在退款记录，不允许删除",
+  "scanTypeNotSupported": "该接收方类型不支持扫码获取账号",
+  "scanWechatAppTypeNotSupported": "微信扫码授权仅支持公众号应用(当前应用类型: {0}), 请更换应用或手动填写 openid",
+  "scanDouyinAppTypeNotSupported": "抖音扫码授权仅支持网站应用(当前应用类型: {0}), 请更换应用或手动填写 openid"
 }

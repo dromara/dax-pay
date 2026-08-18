@@ -11,5 +11,8 @@
   "channelMerchantHasTrade": "채널 가맹점에 거래 기록이 있어 삭제할 수 없습니다",
   "channelMerchantHasOrder": "채널 가맹점에 주문 기록이 있어 삭제할 수 없습니다",
   "channelMerchantHasGatewayOrder": "채널 가맹점에 게이트웨이 주문 기록이 있어 삭제할 수 없습니다",
-  "channelMerchantHasRefund": "채널 가맹점에 환불 기록이 있어 삭제할 수 없습니다"
+  "channelMerchantHasRefund": "채널 가맹점에 환불 기록이 있어 삭제할 수 없습니다",
+  "scanTypeNotSupported": "이 수취인 유형은 QR 코드 스캔을 통한 계정 조회를 지원하지 않습니다",
+  "scanWechatAppTypeNotSupported": "위챗 QR 인증은 공식 계정 앱만 지원합니다(현재 앱 유형: {0}). 다른 앱을 선택하거나 openid를 직접 입력해 주세요",
+  "scanDouyinAppTypeNotSupported": "더우인 QR 인증은 웹 앱만 지원합니다(현재 앱 유형: {0}). 다른 앱을 선택하거나 openid를 직접 입력해 주세요"
 }
