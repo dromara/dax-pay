@@ -71,5 +71,8 @@
   "allocReceiverTypeInvalid": "Alipay: 지원되지 않는 분할 수신자 유형: {0}",
   "allocReceiverAccountRequired": "Alipay: 분할 수신자 계정은 필수입니다",
   "allocReceiverBindFailed": "알리페이 분배 수신자 바인딩 실패: {0}",
-  "allocReceiverUnbindFailed": "알리페이 분배 수신자 해제 실패: {0}"
+  "allocReceiverUnbindFailed": "알리페이 분배 수신자 해제 실패: {0}",
+  "appRefByAllocReceiver": "이 알리페이 앱은 분배 수신자 기록에서 참조 중이므로 삭제할 수 없습니다",
+  "allocReceiverAppNotExist": "분배 수신자가 참조하는 알리페이 앱이 존재하지 않습니다",
+  "allocReceiverAppNotBelong": "분배 수신자가 참조하는 알리페이 앱이 현재 가맹점 소속이 아닙니다"
 }

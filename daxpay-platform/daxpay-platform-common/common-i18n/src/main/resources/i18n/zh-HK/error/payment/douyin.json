@@ -12,5 +12,6 @@
   "appNotConfigured": "未設定 {0} 對應的應用，請前往通道商戶應用設定頁綁定",
   "appNotUnique": "存在多個 {0} 類型的應用，請顯式設定能力綁定以明確選擇",
   "directMchAppNotConfigured": "直連商戶未設定 {0} 對應的商戶檔應用，請前往通道商戶應用設定頁綁定商戶檔應用（直連商戶不可使用平台檔應用）",
-  "mpAuthNotConfigured": "抖音應用認證配置未填寫，請在「應用管理」中配置 AppId 和 AppSecret"
+  "mpAuthNotConfigured": "抖音應用認證配置未填寫，請在「應用管理」中配置 AppId 和 AppSecret",
+  "appRefByAllocReceiver": "抖音應用被分賬接收方記錄引用, 無法刪除"
 }

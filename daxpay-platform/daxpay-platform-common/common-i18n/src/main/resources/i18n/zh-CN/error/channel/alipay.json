@@ -71,5 +71,8 @@
   "allocReceiverTypeInvalid": "支付宝: 不支持的分账接收方类型: {0}",
   "allocReceiverAccountRequired": "支付宝: 分账接收方账号必填",
   "allocReceiverBindFailed": "支付宝分账接收方绑定失败: {0}",
-  "allocReceiverUnbindFailed": "支付宝分账接收方解绑失败: {0}"
+  "allocReceiverUnbindFailed": "支付宝分账接收方解绑失败: {0}",
+  "appRefByAllocReceiver": "支付宝应用被分账接收方记录引用, 无法删除",
+  "allocReceiverAppNotExist": "分账接收方绑定的支付宝应用不存在",
+  "allocReceiverAppNotBelong": "分账接收方绑定的支付宝应用不属于当前商户"
 }

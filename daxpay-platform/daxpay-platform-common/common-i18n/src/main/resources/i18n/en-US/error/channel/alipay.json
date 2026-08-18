@@ -71,5 +71,8 @@
   "allocReceiverTypeInvalid": "Alipay: unsupported allocation receiver type: {0}",
   "allocReceiverAccountRequired": "Alipay: allocation receiver account required",
   "allocReceiverBindFailed": "Alipay alloc receiver bind failed: {0}",
-  "allocReceiverUnbindFailed": "Alipay alloc receiver unbind failed: {0}"
+  "allocReceiverUnbindFailed": "Alipay alloc receiver unbind failed: {0}",
+  "appRefByAllocReceiver": "This Alipay app is referenced by an allocation receiver record and cannot be deleted",
+  "allocReceiverAppNotExist": "The Alipay app referenced by the allocation receiver does not exist",
+  "allocReceiverAppNotBelong": "The Alipay app referenced by the allocation receiver does not belong to the current merchant"
 }

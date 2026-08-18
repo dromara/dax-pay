@@ -4,6 +4,7 @@ import cn.daxpay.open.payment.douyin.convert.merchant.DyMchAppConvert;
 import cn.daxpay.open.payment.douyin.dao.channel.DyChannelAppCapabilityManager;
 import cn.daxpay.open.payment.douyin.dao.merchant.DyMchAppManager;
 import cn.daxpay.open.payment.douyin.entity.merchant.DyMchApp;
+import cn.daxpay.open.payment.douyin.facade.DouyinAllocReceiverFacade;
 import cn.daxpay.open.payment.auth.core.AppScopeEnum;
 import cn.daxpay.open.payment.douyin.enums.DyAppTypeEnum;
 import cn.daxpay.open.payment.douyin.param.merchant.DyMchAppParam;
@@ -30,6 +31,7 @@ public class DyMchAppService {
 
     private final DyMchAppManager dyMchAppManager;
     private final DyChannelAppCapabilityManager dyChannelAppCapabilityManager;
+    private final DouyinAllocReceiverFacade douyinAllocReceiverFacade;
 
     /// 按商户号查询应用列表
     public List<DyMchAppResult> listByMchNo(String mchNo) {
@@ -90,16 +92,22 @@ public class DyMchAppService {
         }
     }
 
-    /// 删除应用（被通道能力绑定引用时拒删；级联删除授权认证配置）
+    /// 删除应用（被通道能力绑定或分账接收方引用时拒删；级联删除授权认证配置）
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
-        dyMchAppManager.findById(id)
+        DyMchApp entity = dyMchAppManager.findById(id)
                 // 抖音: 商户应用不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.douyin.mchAppNotFound"));
         // 通道绑定仍引用时拒删
         if (dyChannelAppCapabilityManager.existsByScopeAndRefId(AppScopeEnum.MERCHANT.getCode(), id)) {
             // 抖音: 应用仍被引用，不可删除
             throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE, "error.payment.douyin.appInUse");
+        }
+        // 分账接收方记录仍引用(channelAppId)时拒删, 避免接收方重绑时应用悬空
+        if (douyinAllocReceiverFacade.existsReceiverByMchApp(entity.getMchNo(), entity.getDouyinAppId())) {
+            // 抖音: 应用被分账接收方记录引用, 不可删除
+            throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
+                    "error.payment.douyin.appRefByAllocReceiver");
         }
         dyMchAppManager.deleteById(id);
     }

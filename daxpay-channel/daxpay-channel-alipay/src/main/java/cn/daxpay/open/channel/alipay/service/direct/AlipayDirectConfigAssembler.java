@@ -81,10 +81,12 @@ public class AlipayDirectConfigAssembler {
         AlipayDirectApp app = alipayDirectAppManager.lambdaQuery()
                 .eq(AlipayDirectApp::getId, appRefId)
                 .oneOpt()
-                .orElseThrow(() -> new DataNotExistException("error.channel.alipay.transferAppNotExist"));
+                // 支付宝: 分账接收方绑定的应用不存在
+                .orElseThrow(() -> new DataNotExistException("error.channel.alipay.allocReceiverAppNotExist"));
         if (!Objects.equals(app.getMchNo(), mchNo)) {
+            // 支付宝: 分账接收方绑定的应用不属于当前商户
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                    "error.channel.alipay.transferAppNotBelong");
+                    "error.channel.alipay.allocReceiverAppNotBelong");
         }
         return assembleCredential(channelMchNo, app);
     }

@@ -1,6 +1,7 @@
 package cn.daxpay.open.channel.alipay.service.direct;
 
 import cn.daxpay.open.channel.alipay.convert.direct.AlipayDirectAppConvert;
+import cn.daxpay.open.channel.alipay.dao.direct.AlipayDirectAllocReceiverManager;
 import cn.daxpay.open.channel.alipay.dao.direct.AlipayDirectAppManager;
 import cn.daxpay.open.channel.alipay.entity.direct.AlipayDirectApp;
 import cn.daxpay.open.channel.alipay.param.direct.AlipayDirectAppParam;
@@ -33,6 +34,7 @@ public class AlipayDirectAppService {
     private final AlipayDirectAppKeyConfigService alipayDirectAppKeyConfigService;
     private final AlipayDirectAppAuthConfigService alipayDirectAppAuthConfigService;
     private final AlipayDirectAppCapabilityService alipayDirectAppCapabilityService;
+    private final AlipayDirectAllocReceiverManager alipayDirectAllocReceiverManager;
 
     /// 根据商户号和通道商户号查询应用列表
     public List<AlipayDirectAppResult> listByMchNoAndChannelMchNo(String mchNo, String channelMchNo) {
@@ -83,11 +85,17 @@ public class AlipayDirectAppService {
         }
     }
 
-    /// 删除应用（级联删除密钥配置、授权认证配置与能力关联）
+    /// 删除应用（被分账接收方引用时拒删；级联删除密钥配置、授权认证配置与能力关联）
     public void delete(Long id) {
         alipayDirectAppManager.findById(id)
                 // 支付宝: 直连商户应用不存在
                 .orElseThrow(() -> new DataNotExistException("error.channel.alipay.mchAppNotFound"));
+        // 分账接收方记录仍引用(directAppRefId)时拒删, 避免接收方重绑时应用悬空
+        if (alipayDirectAllocReceiverManager.existsByDirectAppRefId(id)) {
+            // 支付宝: 应用被分账接收方记录引用, 不可删除
+            throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
+                    "error.channel.alipay.appRefByAllocReceiver");
+        }
         alipayDirectAppKeyConfigService.deleteByAlipayDirectAppId(id);
         alipayDirectAppAuthConfigService.deleteByAlipayDirectAppId(id);
         // 级联清理能力关联，避免悬空引用

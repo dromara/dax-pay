@@ -12,5 +12,6 @@
   "appNotConfigured": "No application configured for {0}, please bind one on the channel merchant app configuration page",
   "appNotUnique": "Multiple applications of type {0} exist, please explicitly configure the capability binding to select one",
   "directMchAppNotConfigured": "Direct merchant has no merchant-tier app configured for {0}. Please bind one (merchant scope) on the channel merchant app configuration page. Platform-tier apps are not allowed for direct merchants.",
-  "mpAuthNotConfigured": "Douyin app auth config is missing, please configure AppId and AppSecret in App Management"
+  "mpAuthNotConfigured": "Douyin app auth config is missing, please configure AppId and AppSecret in App Management",
+  "appRefByAllocReceiver": "This Douyin app is referenced by an allocation receiver record and cannot be deleted"
 }

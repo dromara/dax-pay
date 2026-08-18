@@ -4,6 +4,7 @@ import cn.daxpay.open.payment.wx.convert.merchant.WxMchAppConvert;
 import cn.daxpay.open.payment.wx.dao.channel.WxChannelAppCapabilityManager;
 import cn.daxpay.open.payment.wx.dao.merchant.WxMchAppManager;
 import cn.daxpay.open.payment.wx.entity.merchant.WxMchApp;
+import cn.daxpay.open.payment.wx.facade.WxAllocReceiverFacade;
 import cn.daxpay.open.payment.auth.core.AppScopeEnum;
 import cn.daxpay.open.payment.wx.enums.WxAppTypeEnum;
 import cn.daxpay.open.payment.wx.param.merchant.WxMchAppParam;
@@ -30,6 +31,7 @@ public class WxMchAppService {
 
     private final WxMchAppManager wxMchAppManager;
     private final WxChannelAppCapabilityManager wxChannelAppCapabilityManager;
+    private final WxAllocReceiverFacade wxAllocReceiverFacade;
 
     /// 按商户号查询应用列表
     public List<WxMchAppResult> listByMchNo(String mchNo) {
@@ -90,16 +92,22 @@ public class WxMchAppService {
         }
     }
 
-    /// 删除应用（被通道能力绑定引用时拒删；级联删除授权认证配置）
+    /// 删除应用（被通道能力绑定或分账接收方引用时拒删；级联删除授权认证配置）
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
-        wxMchAppManager.findById(id)
+        WxMchApp entity = wxMchAppManager.findById(id)
                 // 微信: 商户应用不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.wx.mchAppNotFound"));
         // 通道绑定仍引用时拒删
         if (wxChannelAppCapabilityManager.existsByScopeAndRefId(AppScopeEnum.MERCHANT.getCode(), id)) {
             // 微信: 应用仍被引用，不可删除
             throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE, "error.payment.wx.appInUse");
+        }
+        // 分账接收方记录仍引用(channelAppId/subAppId)时拒删, 避免接收方重绑时应用悬空
+        if (wxAllocReceiverFacade.existsReceiverByMchApp(entity.getMchNo(), entity.getWxAppId())) {
+            // 微信: 应用被分账接收方记录引用, 不可删除
+            throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
+                    "error.payment.wx.appRefByAllocReceiver");
         }
         wxMchAppManager.deleteById(id);
     }

@@ -71,5 +71,8 @@
   "allocReceiverTypeInvalid": "Alipay: サポートされていない精算受取人タイプ: {0}",
   "allocReceiverAccountRequired": "Alipay: 精算受取人アカウントは必須です",
   "allocReceiverBindFailed": "Alipay分配受取方のバインドに失敗: {0}",
-  "allocReceiverUnbindFailed": "Alipay分配受取方の解除に失敗: {0}"
+  "allocReceiverUnbindFailed": "Alipay分配受取方の解除に失敗: {0}",
+  "appRefByAllocReceiver": "このAlipayアプリは分配受取方レコードから参照されているため削除できません",
+  "allocReceiverAppNotExist": "分配受取方が参照するAlipayアプリが存在しません",
+  "allocReceiverAppNotBelong": "分配受取方が参照するAlipayアプリは現在の加盟店のものではありません"
 }

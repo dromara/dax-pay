@@ -12,5 +12,6 @@
   "appNotConfigured": "{0} に対応するアプリが未設定です。チャネル加盟店アプリ設定ページでバインドしてください",
   "appNotUnique": "タイプ {0} のアプリが複数存在します。能力バインディングを明示的に設定して選択してください",
   "directMchAppNotConfigured": "直連加盟店は {0} に対応する加盟店ティアアプリが未設定です。チャネル加盟店アプリ設定ページで加盟店ティアアプリをバインドしてください（直連加盟店はプラットフォームティアアプリを使用できません）",
-  "mpAuthNotConfigured": "Douyinアプリの認証設定が未入力です。「アプリ管理」で AppId と AppSecret を設定してください"
+  "mpAuthNotConfigured": "Douyinアプリの認証設定が未入力です。「アプリ管理」で AppId と AppSecret を設定してください",
+  "appRefByAllocReceiver": "このDouyinアプリは分配受取方レコードから参照されているため削除できません"
 }

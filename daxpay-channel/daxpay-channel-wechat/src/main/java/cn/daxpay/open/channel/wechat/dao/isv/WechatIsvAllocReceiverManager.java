@@ -30,4 +30,19 @@ public class WechatIsvAllocReceiverManager extends BaseManager<WechatIsvAllocRec
                 .eq(WechatIsvAllocReceiver::getAccountHash, accountHash)
                 .exists();
     }
+
+    /// 同商户下指定应用(wxAppId)是否被接收方记录引用(subAppId, 应用删除前校验)
+    public boolean existsByMchNoAndSubAppId(String mchNo, String subAppId) {
+        return lambdaQuery()
+                .eq(WechatIsvAllocReceiver::getMchNo, mchNo)
+                .eq(WechatIsvAllocReceiver::getSubAppId, subAppId)
+                .exists();
+    }
+
+    /// 指定平台应用(wxAppId)是否被接收方记录引用(spAppId 全局, 平台应用删除前校验)
+    public boolean existsBySpAppId(String spAppId) {
+        return lambdaQuery()
+                .eq(WechatIsvAllocReceiver::getSpAppId, spAppId)
+                .exists();
+    }
 }

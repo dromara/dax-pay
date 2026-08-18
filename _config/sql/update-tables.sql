@@ -281,3 +281,22 @@ WHERE t.alloc_status = 'none'
     OR (t.trade_type = 'normal' AND EXISTS (SELECT 1 FROM pay_normal_order n
         WHERE n.id = t.container_id AND n.allocation = true))
   );
+
+-- ------------------------------------------------------------
+-- 支付宝应用表补唯一索引(2026-08-18)
+-- 此前 alipay_direct_app.ali_app_id 与 alipay_isv_app.ali_app_id 均无唯一约束,
+-- 同一应用可重复建档, 接收方绑定记录 directAppRefId 指向歧义; 现补唯一索引与业务层查重对齐,
+-- 并对齐微信/抖音应用表的唯一约束设计(商户档 per 商户唯一 / 平台档全局唯一)。
+-- 前置条件: 存量数据无重复(按索引列分组 count>1 需先人工清理)。
+-- ------------------------------------------------------------
+CREATE UNIQUE INDEX "uk_alipay_direct_app_mch_channel_appid" ON "public"."alipay_direct_app" USING btree (
+  "mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
+  "channel_mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
+  "ali_app_id" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+) WHERE deleted = false;
+COMMENT ON INDEX "public"."uk_alipay_direct_app_mch_channel_appid" IS '同一商户同一通道商户下支付宝应用ID唯一(与业务层查重作用域对齐, 对齐微信/抖音商户应用唯一约束)';
+
+CREATE UNIQUE INDEX "uk_alipay_isv_app_appid" ON "public"."alipay_isv_app" USING btree (
+  "ali_app_id" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+) WHERE deleted = false;
+COMMENT ON INDEX "public"."uk_alipay_isv_app_appid" IS '支付宝服务商应用ID全局唯一(与业务层查重作用域对齐, 对齐微信/抖音平台应用唯一约束)';

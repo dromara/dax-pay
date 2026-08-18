@@ -34,6 +34,14 @@ public class WechatDirectAllocReceiverManager extends BaseManager<WechatDirectAl
                 .exists();
     }
 
+    /// 同商户下指定应用(wxAppId)是否被接收方记录引用(channelAppId, 应用删除前校验)
+    public boolean existsByMchNoAndChannelAppId(String mchNo, String channelAppId) {
+        return lambdaQuery()
+                .eq(WechatDirectAllocReceiver::getMchNo, mchNo)
+                .eq(WechatDirectAllocReceiver::getChannelAppId, channelAppId)
+                .exists();
+    }
+
     /// 查询已绑定状态的接收方档案(分账发起时校验 openid 与发起应用一致性)
     public Optional<WechatDirectAllocReceiver> findBoundByChannelMchNoAndTypeAndHash(
             String channelMchNo, String receiverType, String accountHash) {

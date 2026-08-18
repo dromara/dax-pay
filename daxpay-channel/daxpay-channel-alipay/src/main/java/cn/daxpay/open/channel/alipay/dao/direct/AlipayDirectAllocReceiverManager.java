@@ -30,4 +30,11 @@ public class AlipayDirectAllocReceiverManager extends BaseManager<AlipayDirectAl
                 .eq(AlipayDirectAllocReceiver::getAccountHash, accountHash)
                 .exists();
     }
+
+    /// 指定应用(alipay_direct_app 主键)是否被接收方记录引用(directAppRefId, 应用删除前校验)
+    public boolean existsByDirectAppRefId(Long directAppRefId) {
+        return lambdaQuery()
+                .eq(AlipayDirectAllocReceiver::getDirectAppRefId, directAppRefId)
+                .exists();
+    }
 }
