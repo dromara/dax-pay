@@ -168,6 +168,9 @@
       "notBlank": "Pesanan pembayaran no. tidak boleh kosong",
       "size": "Pesanan pembayaran no. tidak boleh melebihi 100 aksara"
     },
+    "allocTitle": {
+      "notBlank": "Tajuk pembahagian tidak boleh kosong"
+    },
     "amount": {
       "notNull": "Jumlah bayaran tidak boleh kosong",
       "min": "Jumlah bayaran tidak boleh kurang daripada 1 sen",

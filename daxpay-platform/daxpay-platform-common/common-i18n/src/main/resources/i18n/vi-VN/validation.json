@@ -168,6 +168,9 @@
       "notBlank": "Lệnh thanh toán số không thể để trống",
       "size": "Lệnh thanh toán số không thể vượt quá 100 ký tự"
     },
+    "allocTitle": {
+      "notBlank": "Tiêu đề phân chia không được để trống"
+    },
     "amount": {
       "notNull": "Số tiền thanh toán không được để trống",
       "min": "Số tiền thanh toán không thể nhỏ hơn 1 xu",

@@ -168,6 +168,9 @@
       "notBlank": "Nomor pesanan pembayaran. tidak boleh kosong",
       "size": "Nomor pesanan pembayaran. tidak boleh melebihi 100 karakter"
     },
+    "allocTitle": {
+      "notBlank": "Judul alokasi tidak boleh kosong"
+    },
     "amount": {
       "notNull": "Jumlah pembayaran tidak boleh kosong",
       "min": "Jumlah pembayaran tidak boleh kurang dari 1 sen",

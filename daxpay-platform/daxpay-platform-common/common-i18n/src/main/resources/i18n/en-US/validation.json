@@ -168,6 +168,9 @@
       "notBlank": "Payment order no. cannot be blank",
       "size": "Payment order no. cannot exceed 100 characters"
     },
+    "allocTitle": {
+      "notBlank": "Allocation title cannot be empty"
+    },
     "amount": {
       "notNull": "Payment amount cannot be blank",
       "min": "Payment amount cannot be less than 1 cent",
