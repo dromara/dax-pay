@@ -12,9 +12,12 @@ import cn.daxpay.open.payment.trade.alloc.runtime.service.AllocStartService;
 import cn.daxpay.open.payment.trade.alloc.runtime.service.AllocSyncService;
 import cn.daxpay.open.payment.trade.alloc.param.AllocParam;
 import cn.daxpay.open.platform.common.translate.service.TransService;
+import cn.daxpay.open.platform.core.code.CommonErrorCode;
+import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -65,6 +68,10 @@ public class AllocAdminService {
     ///
     /// @return 平台分账单号
     public AllocCreateResult create(AllocParam param) {
+        // 运营端无商户上下文, 代发必须显式指定商户号, 提前拦截避免误报"未找到商户配置"
+        if (StrUtil.isBlank(param.getMchNo())) {
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "validation.field.mchNo.notBlank");
+        }
         String allocNo = allocStartService.start(param);
         return new AllocCreateResult()
                 .setAllocNo(allocNo)
