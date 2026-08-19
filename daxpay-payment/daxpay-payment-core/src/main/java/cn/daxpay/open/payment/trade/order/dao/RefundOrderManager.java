@@ -33,11 +33,12 @@ public class RefundOrderManager extends BaseManager<RefundOrderMapper, RefundOrd
                 .oneOpt();
     }
 
-    /// 根据商户退款号和应用号查询(统一接口主路径, 避免同商户多应用串单)
-    public Optional<RefundOrder> findByBizRefundNo(String bizRefundNo, String appId) {
+    /// 根据商户退款号+商户号查询(显式商户维度, 运营端主路径: 运营端忽略租户, 须显式条件防跨商户同退款号串单;
+    /// 商户端租户已自动隔离, 双条件等值冗余无害)
+    public Optional<RefundOrder> findByBizRefundNoAndMch(String bizRefundNo, String mchNo) {
         return lambdaQuery()
                 .eq(RefundOrder::getBizRefundNo, bizRefundNo)
-                .eq(RefundOrder::getAppId, appId)
+                .eq(RefundOrder::getMchNo, mchNo)
                 .oneOpt();
     }
 

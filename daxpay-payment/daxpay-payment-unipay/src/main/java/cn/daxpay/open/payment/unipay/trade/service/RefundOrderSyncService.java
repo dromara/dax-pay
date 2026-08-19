@@ -41,8 +41,13 @@ public class RefundOrderSyncService {
         if (StrUtil.isNotBlank(param.getRefundNo())) {
             refundOrder = refundOrderManager.findByRefundNo(param.getRefundNo())
                     .orElseThrow(() -> new DataNotExistException("pay.error.refund.orderNotFound"));
+            // 归属校验: refundNo 为全局唯一编号, 防跨商户触发同步
+            if (!Objects.equals(refundOrder.getMchNo(), param.getMchNo())) {
+                throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.orderNotBelong");
+            }
         } else {
-            refundOrder = refundOrderManager.findByBizRefundNo(param.getBizRefundNo(), param.getAppId())
+            // 按商户退款号 + 商户号查询(商户维度定位, 与唯一约束维度一致)
+            refundOrder = refundOrderManager.findByBizRefundNoAndMch(param.getBizRefundNo(), param.getMchNo())
                     .orElseThrow(() -> new DataNotExistException("pay.error.refund.orderNotFound"));
         }
 

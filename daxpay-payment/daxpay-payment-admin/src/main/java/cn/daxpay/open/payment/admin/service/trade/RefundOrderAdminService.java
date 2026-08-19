@@ -12,11 +12,13 @@ import cn.daxpay.open.payment.trade.runtime.service.refund.RefundService;
 import cn.daxpay.open.payment.trade.runtime.service.refund.RefundSettleService;
 import cn.daxpay.open.payment.trade.runtime.service.refund.RefundSyncService;
 import cn.daxpay.open.platform.common.translate.service.TransService;
+import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
+import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -64,8 +66,11 @@ public class RefundOrderAdminService {
         return result;
     }
 
-    /// 发起退款
+    /// 发起退款(运营端代发, mchNo 必传: 订单定位与幂等查重均按商户维度)
     public RefundOrderResult refund(RefundParam param) {
+        if (StrUtil.isBlank(param.getMchNo())) {
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "validation.field.mchNo.notBlank");
+        }
         RefundOrder refundOrder = refundService.refund(param);
         RefundOrderResult result = RefundOrderConvert.CONVERT.toResult(refundOrder);
         // 翻译商户名称

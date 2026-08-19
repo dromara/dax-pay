@@ -1,5 +1,7 @@
 package cn.daxpay.open.payment.trade.runtime.service.refund;
 
+import cn.daxpay.open.payment.common.context.MerchantContextLoader;
+import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.route.service.runtime.PayRouteService;
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
@@ -53,6 +55,8 @@ public class RefundService {
     private final RefundOrderManager refundOrderManager;
     private final RefundSettleService refundSettleService;
     private final LockExecutor lockExecutor;
+    private final MerchantContextLoader merchantContextLoader;
+    private final PaymentContext paymentContext;
 
     /// 自身注入: 使 @Transactional 方法经代理调用生效（锁内层事务模式）
     @Lazy
@@ -64,10 +68,15 @@ public class RefundService {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.orderNoRequired");
         }
 
+        // 商户身份装载(运营端代发用 param.mchNo; 商户端/开放API已装载, MERCHANT 端忽略参数强制登录上下文)
+        merchantContextLoader.initMch(param.getMchNo());
+        String mchNo = paymentContext.getMchNo();
+
         // 商户退款幂等: 同 bizRefundNo 已有处理中单则直接返回(幂等), 已终态则拒绝重复退款
-        // 维度 (mch_no, biz_refund_no): 单参查询已按商户号自动租户隔离
+        // 维度 (mch_no, biz_refund_no): 与唯一约束 uk_refund_order_mch_biz 一致;
+        // 运营端忽略租户, 须显式商户条件防跨商户同退款号串单
         if (StrUtil.isNotBlank(param.getBizRefundNo())) {
-            RefundOrder exist = refundOrderManager.findByBizRefundNo(param.getBizRefundNo()).orElse(null);
+            RefundOrder exist = refundOrderManager.findByBizRefundNoAndMch(param.getBizRefundNo(), mchNo).orElse(null);
             if (exist != null) {
                 if (Objects.equals(exist.getStatus(), RefundOrderStatusEnum.PROGRESS.getCode())) {
                     log.info("退款幂等命中: bizRefundNo={} 已有处理中退款单 {}",
@@ -81,7 +90,7 @@ public class RefundService {
         }
 
         // 查找原支付交易(支持 normal / gateway)
-        PayTrade trade = resolveTrade(param.getTradeNo(), param.getBizOrderNo());
+        PayTrade trade = resolveTrade(param.getTradeNo(), param.getBizOrderNo(), mchNo);
 
         // 校验可退状态
         validateRefundable(trade, param.getAmount());
@@ -114,7 +123,7 @@ public class RefundService {
                             // DB 唯一约束兜底: 并发情况下锁外查重未命中, 子事务已回滚本次预占,
                             // 返回已存在的处理中退款单(幂等)
                             log.info("退款单唯一约束冲突, 返回已存在单: bizRefundNo={}", param.getBizRefundNo());
-                            return refundOrderManager.findByBizRefundNo(param.getBizRefundNo())
+                            return refundOrderManager.findByBizRefundNoAndMch(param.getBizRefundNo(), mchNo)
                                     .orElseThrow(() -> e);
                         }
 
@@ -157,25 +166,33 @@ public class RefundService {
     /// 解析原支付交易
     ///
     /// 优先 tradeNo(= PayTrade.tradeNo); 若无 Trade 再尝试网关容器 orderNo。
-    /// 仅 bizOrderNo 时: 先 Normal 再 Gateway。
-    private PayTrade resolveTrade(String tradeNo, String bizOrderNo) {
+    /// 仅 bizOrderNo 时: 先 Normal 再 Gateway(商户维度定位, 见 [findByBizOrderNoAndMch])。
+    /// tradeNo 为全局唯一编号但不归属受限, 定位后按容器商户号校验归属。
+    private PayTrade resolveTrade(String tradeNo, String bizOrderNo, String mchNo) {
         if (StrUtil.isNotBlank(tradeNo)) {
             var byTradeNo = payTradeManager.findByTradeNo(tradeNo);
             if (byTradeNo.isPresent()) {
-                return byTradeNo.get();
+                PayTrade trade = byTradeNo.get();
+                // 归属校验: 防跨商户订单发起退款(资金操作)
+                this.validateTradeOwner(trade, mchNo);
+                return trade;
             }
             // 运营友好: 支持用网关 URL 单号反查
             GatewayPayOrder gateway = gatewayPayOrderManager.findByOrderNo(tradeNo).orElse(null);
             if (gateway != null) {
+                // 归属校验(网关单号路径)
+                if (!Objects.equals(gateway.getMchNo(), mchNo)) {
+                    throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.orderNotBelong");
+                }
                 return payTradeManager.findByContainerId(gateway.getId(), PayTradeTypeEnum.GATEWAY.getCode())
                         .orElseThrow(() -> new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.notExists"));
             }
             throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.notExists");
         }
 
-        // 按 bizOrderNo: Normal 优先, 再 Gateway
-        NormalPayOrder normalOrder = payNormalOrderManager.findByBizOrderNo(bizOrderNo).orElse(null);
-        GatewayPayOrder gatewayOrder = gatewayPayOrderManager.findByBizOrderNo(bizOrderNo).orElse(null);
+        // 按 bizOrderNo: 商户维度定位(bizOrderNo 幂等唯一维度为商户, 跨商户同单号天然隔离)
+        NormalPayOrder normalOrder = payNormalOrderManager.findByBizOrderNoAndMch(bizOrderNo, mchNo).orElse(null);
+        GatewayPayOrder gatewayOrder = gatewayPayOrderManager.findByBizOrderNoAndMch(bizOrderNo, mchNo).orElse(null);
         // 二义性防御: 同一 bizOrderNo 在 normal 和 gateway 容器各有一单时, 要求传 tradeNo 精确定位
         if (normalOrder != null && gatewayOrder != null) {
             throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.refund.tradeNoRequired");
@@ -189,6 +206,21 @@ public class RefundService {
                     .orElseThrow(() -> new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.notExists"));
         }
         throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.notExists");
+    }
+
+    /// 校验原支付归属(按交易形态从容器读商户号, 防跨商户订单操作)
+    private void validateTradeOwner(PayTrade trade, String mchNo) {
+        String owner;
+        if (Objects.equals(trade.getTradeType(), PayTradeTypeEnum.GATEWAY.getCode())) {
+            owner = gatewayPayOrderManager.findById(trade.getContainerId())
+                    .map(GatewayPayOrder::getMchNo).orElse(null);
+        } else {
+            owner = payNormalOrderManager.findById(trade.getContainerId())
+                    .map(NormalPayOrder::getMchNo).orElse(null);
+        }
+        if (!Objects.equals(owner, mchNo)) {
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.orderNotBelong");
+        }
     }
 
     /// 按 tradeType 从原支付容器加载退款建单快照(继承通道/产品, 不二次路由)

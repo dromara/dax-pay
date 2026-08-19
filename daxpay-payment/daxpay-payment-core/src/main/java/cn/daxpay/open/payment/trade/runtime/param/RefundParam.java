@@ -3,6 +3,7 @@ package cn.daxpay.open.payment.trade.runtime.param;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 /// # 退款发起参数
@@ -13,6 +14,11 @@ import lombok.Data;
 @Data
 @Schema(title = "退款发起参数")
 public class RefundParam {
+
+    /// 商户号(运营端代发必填; 商户端/开放API由上下文强制)
+    @Size(max = 32, message = "商户号不可超过32位")
+    @Schema(description = "商户号")
+    private String mchNo;
 
     /// 原支付资金交易号(平台 tradeNo)
     @Schema(description = "原支付资金交易号")

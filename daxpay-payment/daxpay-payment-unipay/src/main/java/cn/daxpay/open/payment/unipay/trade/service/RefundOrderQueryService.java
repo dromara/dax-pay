@@ -13,11 +13,13 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 /// # 退款订单查询服务(对外)
 ///
 /// 纯查本地退款单, 不调用通道; 需要实时通道状态请走退款同步接口。
 /// 支持按平台退款号(refundNo)或商户退款号(bizRefundNo)查询, 优先使用平台退款号。
-/// 按商户退款号查询时绑定 appId, 避免同商户多应用串单。
+/// bizRefundNo 幂等唯一维度为商户(uk_refund_order_mch_biz), 定位须绑定商户号。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -39,9 +41,13 @@ public class RefundOrderQueryService {
             order = refundOrderManager.findByRefundNo(param.getRefundNo())
                     // 退款: 退款订单不存在
                     .orElseThrow(() -> new DataNotExistException("pay.error.refund.orderNotFound"));
+            // 归属校验: refundNo 为全局唯一编号, 防跨商户查单
+            if (!Objects.equals(order.getMchNo(), param.getMchNo())) {
+                throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.orderNotBelong");
+            }
         } else {
-            // 按商户退款号 + 应用号查询(避免串单)
-            order = refundOrderManager.findByBizRefundNo(param.getBizRefundNo(), param.getAppId())
+            // 按商户退款号 + 商户号查询(商户维度定位, 与唯一约束维度一致)
+            order = refundOrderManager.findByBizRefundNoAndMch(param.getBizRefundNo(), param.getMchNo())
                     .orElseThrow(() -> new DataNotExistException("pay.error.refund.orderNotFound"));
         }
         return UnipayRefundOrderConvert.CONVERT.toResult(order);
