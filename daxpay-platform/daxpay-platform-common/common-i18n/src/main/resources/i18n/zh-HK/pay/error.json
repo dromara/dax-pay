@@ -2,6 +2,7 @@
   "payFailure": "支付失敗",
   "timeout": "支付超時，訂單號：{0}",
   "notExists": "交易不存在",
+  "orderNotBelong": "訂單不屬於當前商戶，請檢查商戶號與訂單歸屬",
   "closed": "交易已關閉",
   "processing": "交易處理中，請勿重複操作",
   "statusError": "交易狀態錯誤",

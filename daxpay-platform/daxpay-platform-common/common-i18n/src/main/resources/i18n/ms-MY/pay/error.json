@@ -2,6 +2,7 @@
   "payFailure": "Pembayaran Gagal",
   "timeout": "Tamat masa pembayaran, no pesanan: {0}",
   "notExists": "Transaksi Tidak Ditemui",
+  "orderNotBelong": "Pesanan tidak dimiliki oleh merchant semasa. Sila semak nomor merchant dan pemilikan pesanan",
   "closed": "Transaksi Ditutup",
   "processing": "Pemprosesan Transaksi, Sila Jangan Ulangi",
   "statusError": "Ralat Status Transaksi",

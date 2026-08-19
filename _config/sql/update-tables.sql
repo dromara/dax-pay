@@ -300,3 +300,25 @@ CREATE UNIQUE INDEX "uk_alipay_isv_app_appid" ON "public"."alipay_isv_app" USING
   "ali_app_id" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
 ) WHERE deleted = false;
 COMMENT ON INDEX "public"."uk_alipay_isv_app_appid" IS '支付宝服务商应用ID全局唯一(与业务层查重作用域对齐, 对齐微信/抖音平台应用唯一约束)';
+
+-- ------------------------------------------------------------
+-- 业务单号唯一维度统一为商户(2026-08-19)
+-- pay_gateway_order 此前无 biz_order_no 唯一约束(幂等全靠 Redis 锁), pay_alloc_order 仅有普通索引;
+-- 与 pay_normal_order.uk_normal_order_mch_biz / pay_refund_order.uk_refund_order_mch_biz 的商户维度对齐,
+-- 业务单号是商户侧订单系统编号, 唯一性按商户维度成立(同商户多应用复用同一单号视为重复建单)。
+-- 前置条件: 存量数据无重复(按 mch_no+biz_order_no / mch_no+biz_alloc_no 分组 count>1 需先人工清理)。
+-- ------------------------------------------------------------
+CREATE UNIQUE INDEX "uk_gateway_order_mch_biz" ON "public"."pay_gateway_order" USING btree (
+  "mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
+  "biz_order_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+) WHERE deleted = false;
+COMMENT ON INDEX "public"."uk_gateway_order_mch_biz" IS '网关支付商户业务单号唯一约束: 同商户同 biz_order_no 仅允许一单, 防重复建单(与 pay_normal_order.uk_normal_order_mch_biz 维度一致)';
+
+CREATE UNIQUE INDEX "uk_pay_alloc_order_mch_biz" ON "public"."pay_alloc_order" USING btree (
+  "mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
+  "biz_alloc_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+) WHERE deleted = false;
+COMMENT ON INDEX "public"."uk_pay_alloc_order_mch_biz" IS '分账单商户分账单号唯一约束: 同商户同 biz_alloc_no 仅允许一单, 商户幂等键(升级原普通索引 idx_pay_alloc_order_mch_biz)';
+
+-- 被唯一索引完全替代的普通索引, 删除
+DROP INDEX IF EXISTS "idx_pay_alloc_order_mch_biz";

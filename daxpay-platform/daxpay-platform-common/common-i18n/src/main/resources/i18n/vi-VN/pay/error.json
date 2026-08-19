@@ -2,6 +2,7 @@
   "payFailure": "Thanh toán không thành công",
   "timeout": "Hết thời gian thanh toán, số đơn hàng: {0}",
   "notExists": "Không tìm thấy giao dịch",
+  "orderNotBelong": "Đơn hàng không thuộc về merchant hiện tại. Vui lòng kiểm tra số merchant và quyền sở hữu đơn hàng",
   "closed": "Giao dịch đã đóng",
   "processing": "Đang xử lý giao dịch, vui lòng không lặp lại",
   "statusError": "Lỗi trạng thái giao dịch",

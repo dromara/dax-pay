@@ -2,6 +2,7 @@
   "payFailure": "결제 실패",
   "timeout": "결제 시간 초과, 주문 번호: {0}",
   "notExists": "거래를 찾을 수 없음",
+  "orderNotBelong": "주문이 현재 가맹점에 속하지 않습니다. 가맹점 번호와 주문 귀속을 확인해 주세요",
   "closed": "거래가 종료되었습니다",
   "processing": "거래 처리 중입니다. 반복하지 마세요.",
   "statusError": "거래 상태 오류",

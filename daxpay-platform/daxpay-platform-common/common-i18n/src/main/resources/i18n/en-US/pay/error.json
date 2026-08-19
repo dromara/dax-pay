@@ -2,6 +2,7 @@
   "payFailure": "Payment Failed",
   "timeout": "Payment timeout, order no: {0}",
   "notExists": "Transaction Not Found",
+  "orderNotBelong": "Order does not belong to the current merchant. Please check the merchant No. and order ownership",
   "closed": "Transaction Closed",
   "processing": "Transaction Processing, Please Do Not Repeat",
   "statusError": "Transaction Status Error",
