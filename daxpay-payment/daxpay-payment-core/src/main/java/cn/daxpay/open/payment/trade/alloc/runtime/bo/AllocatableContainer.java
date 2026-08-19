@@ -7,6 +7,9 @@ package cn.daxpay.open.payment.trade.alloc.runtime.bo;
 /// 解除 [cn.daxpay.open.payment.trade.alloc.runtime.service.AllocStartService] 对具体容器的写死依赖。
 public interface AllocatableContainer {
 
+    /// 商户号(归属校验用)
+    String getMchNo();
+
     /// 商户业务单号
     String getBizOrderNo();
 

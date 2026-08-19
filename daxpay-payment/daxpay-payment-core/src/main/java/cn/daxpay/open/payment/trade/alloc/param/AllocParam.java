@@ -28,12 +28,7 @@ public class AllocParam {
     @Schema(description = "商户号")
     private String mchNo;
 
-    /// 应用号
-    @Size(max = 32, message = "应用号不可超过32位")
-    @Schema(description = "应用号")
-    private String appId;
-
-    /// 商户分账单号(幂等键, 同一应用下唯一)
+    /// 商户分账单号(幂等键, 同一商户下唯一, 与唯一约束 uk_pay_alloc_order_mch_biz 维度一致)
     @NotBlank(message = "商户分账单号必填")
     @Size(max = 100, message = "商户分账单号不可超过100位")
     @Schema(description = "商户分账单号")
@@ -49,7 +44,8 @@ public class AllocParam {
     @Schema(description = "原支付商户业务订单号")
     private String bizOrderNo;
 
-    /// 分账标题
+    /// 分账标题(必填, 不再回退原支付标题)
+    @NotBlank(message = "{validation.field.allocTitle.notBlank}")
     @Size(max = 100, message = "分账标题不可超过100位")
     @Schema(description = "分账标题")
     private String title;

@@ -28,6 +28,7 @@ import cn.daxpay.open.platform.common.redis.lock.LockExecutor;
 import cn.hutool.core.util.StrUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -84,11 +85,19 @@ public class GatewayPayAssistService {
         param.setAppId(mchApp.getAppId());
         merchantContextLoader.initMch(param.getMchNo());
 
-        return lockExecutor.execute(
-                "payment:gateway:pre:" + param.getAppId() + ":" + param.getBizOrderNo(),
-                () -> self.doPrePay(param, typeEnum),
-                () -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.processing")
-        );
+        // 幂等维度为商户(bizOrderNo 同商户唯一), 发起锁按商户隔离, 不同商户同单号不互相争锁
+        try {
+            return lockExecutor.execute(
+                    "payment:gateway:pre:" + param.getMchNo() + ":" + param.getBizOrderNo(),
+                    () -> self.doPrePay(param, typeEnum),
+                    () -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.processing")
+            );
+        } catch (DuplicateKeyException e) {
+            // DB 唯一约束兜底(uk_gateway_order_mch_biz): 锁失效时并发建单, 重查返回已建单的链接
+            return gatewayPayOrderManager.findByBizOrderNoAndMch(param.getBizOrderNo(), param.getMchNo())
+                    .map(this::buildPrePayResult)
+                    .orElseThrow(() -> e);
+        }
     }
 
     /// 预下单事务体: 幂等校验 → 新建容器订单 → 返回 H5 与小程序映射链接
@@ -97,8 +106,8 @@ public class GatewayPayAssistService {
     /// - PAID/failed/closed/expired 视为终态拒绝重入
     @Transactional(rollbackFor = Exception.class)
     public GatewayPrePayResult doPrePay(GatewayPrePayParam param, GatewayPayTypeEnum typeEnum) {
-        // 幂等: 已有未终态单则返回原双链接
-        var existing = gatewayPayOrderManager.findByBizOrderNo(param.getBizOrderNo(), param.getAppId());
+        // 幂等: 商户维度查重(bizOrderNo 同商户唯一, 见 uk_gateway_order_mch_biz)
+        var existing = gatewayPayOrderManager.findByBizOrderNoAndMch(param.getBizOrderNo(), param.getMchNo());
         if (existing.isPresent()) {
             GatewayPayOrder order = existing.get();
             String status = order.getStatus();

@@ -45,9 +45,13 @@ public class NormalPayOrderQueryService {
             order = normalPayOrderManager.findById(trade.getContainerId())
                     // 支付: 支付订单不存在
                     .orElseThrow(() -> new DataNotExistException("pay.error.payOrderNotExist"));
+            // 归属校验: tradeNo 为全局唯一编号, 防跨商户查单
+            if (!Objects.equals(order.getMchNo(), param.getMchNo())) {
+                throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.orderNotBelong");
+            }
         } else {
-            // 按商户业务单号查询
-            order = normalPayOrderManager.findByBizOrderNo(param.getBizOrderNo(), param.getAppId())
+            // 按商户业务单号查询(商户维度定位, bizOrderNo 同商户唯一)
+            order = normalPayOrderManager.findByBizOrderNoAndMch(param.getBizOrderNo(), param.getMchNo())
                     .orElseThrow(() -> new DataNotExistException("pay.error.payOrderNotExist"));
         }
         // 同名映射业务容器，再联表资金凭证补充/覆盖交易字段

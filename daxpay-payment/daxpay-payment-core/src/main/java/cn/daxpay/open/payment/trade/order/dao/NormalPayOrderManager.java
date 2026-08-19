@@ -40,11 +40,12 @@ public class NormalPayOrderManager extends BaseManager<NormalPayOrderMapper, Nor
                 .oneOpt();
     }
 
-    /// 根据业务单号和应用号查询（主路径, 避免同商户多应用串单）
-    public Optional<NormalPayOrder> findByBizOrderNo(String bizOrderNo, String appId) {
+    /// 根据业务单号+商户号查询（显式商户维度, 运营端主路径: 运营端忽略租户, 须显式条件防跨商户同单号串单;
+    /// 商户端租户已自动隔离, 双条件等值冗余无害）
+    public Optional<NormalPayOrder> findByBizOrderNoAndMch(String bizOrderNo, String mchNo) {
         return lambdaQuery()
                 .eq(NormalPayOrder::getBizOrderNo, bizOrderNo)
-                .eq(NormalPayOrder::getAppId, appId)
+                .eq(NormalPayOrder::getMchNo, mchNo)
                 .oneOpt();
     }
 

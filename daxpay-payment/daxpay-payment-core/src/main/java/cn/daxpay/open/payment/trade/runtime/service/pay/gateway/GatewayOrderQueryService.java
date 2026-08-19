@@ -14,6 +14,8 @@ import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 /// # 网关订单查询服务
 @Service
 @RequiredArgsConstructor
@@ -34,15 +36,16 @@ public class GatewayOrderQueryService {
             order = gatewayPayOrderManager.findByOrderNo(param.getOrderNo()).orElse(null);
         }
         if (order == null && StrUtil.isNotBlank(param.getBizOrderNo())) {
-            if (StrUtil.isBlank(param.getAppId())) {
-                // 参数校验: 应用号不能为空
-                throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "validation.field.appId.notBlank");
-            }
-            order = gatewayPayOrderManager.findByBizOrderNo(param.getBizOrderNo(), param.getAppId()).orElse(null);
+            // 商户维度定位(bizOrderNo 同商户唯一), mchNo 必传由参数校验保证
+            order = gatewayPayOrderManager.findByBizOrderNoAndMch(param.getBizOrderNo(), param.getMchNo()).orElse(null);
         }
         if (order == null) {
             // 支付: 支付订单不存在
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.payOrderNotExist");
+        }
+        // 归属校验: orderNo 为全局唯一编号, 防跨商户查单
+        if (!Objects.equals(order.getMchNo(), param.getMchNo())) {
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.orderNotBelong");
         }
         return this.toResult(order);
     }

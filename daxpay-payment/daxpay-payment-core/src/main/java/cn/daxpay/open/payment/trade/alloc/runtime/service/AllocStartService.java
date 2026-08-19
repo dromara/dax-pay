@@ -77,9 +77,11 @@ public class AllocStartService {
     public String start(AllocParam param) {
         // 商户身份装载
         merchantContextLoader.initMch(param.getMchNo());
+        // 发起锁按商户维度隔离: bizAllocNo 幂等键为商户维度(同商户同单号唯一), 不同商户同单号不应互相争锁
+        String mchNo = paymentContext.getMchNo();
         // 锁租期 60s 覆盖通道 HTTP 超时, 等待 3s 让并发同号请求排队
         return lockExecutor.execute(
-                "payment:alloc:" + param.getBizAllocNo(),
+                "payment:alloc:" + mchNo + ":" + param.getBizAllocNo(),
                 60000, 3000,
                 () -> this.startHandle(param),
                 () -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.alloc.allocProcessing")
@@ -129,6 +131,10 @@ public class AllocStartService {
         AllocatableContainer container = this.resolveContainer(trade);
         if (container == null) {
             throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.alloc.orderNotFound");
+        }
+        // 归属校验: tradeNo/bizOrderNo 为可枚举编号, 防跨商户订单发起分账(资金操作)
+        if (!Objects.equals(container.getMchNo(), mchNo)) {
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.orderNotBelong");
         }
         // 通道策略校验
         AbsAllocStrategy strategy = AllocStrategyFactory.create(trade.getChannel());
@@ -246,15 +252,17 @@ public class AllocStartService {
         }
         if (param.getBizOrderNo() != null && !param.getBizOrderNo().isBlank()) {
             String bizOrderNo = param.getBizOrderNo();
-            String appId = param.getAppId();
+            // bizOrderNo 幂等唯一维度为商户(uk_normal_order_mch_biz), 定位必须带商户号:
+            // 运营端忽略租户, 缺商户条件会跨商户同单号串单
+            String mchNo = paymentContext.getMchNo();
             // bizOrderNo → 容器 → trade: 先查普通支付容器, 再查网关容器
-            Optional<NormalPayOrder> normalOpt = normalPayOrderManager.findByBizOrderNo(bizOrderNo, appId);
+            Optional<NormalPayOrder> normalOpt = normalPayOrderManager.findByBizOrderNoAndMch(bizOrderNo, mchNo);
             if (normalOpt.isPresent()) {
                 return payTradeManager.findByContainerId(normalOpt.get().getId(), PayTradeTypeEnum.NORMAL.getCode())
                         .map(PayTrade::getTradeNo)
                         .orElseThrow(() -> new BizInfoException(CommonCode.FAIL_CODE, "pay.error.alloc.orderNotFound"));
             }
-            return gatewayPayOrderManager.findByBizOrderNo(bizOrderNo, appId)
+            return gatewayPayOrderManager.findByBizOrderNoAndMch(bizOrderNo, mchNo)
                     .flatMap(gateway -> payTradeManager.findByContainerId(gateway.getId(), PayTradeTypeEnum.GATEWAY.getCode()))
                     .map(PayTrade::getTradeNo)
                     .orElseThrow(() -> new BizInfoException(CommonCode.FAIL_CODE, "pay.error.alloc.orderNotFound"));
@@ -309,7 +317,7 @@ public class AllocStartService {
                 .setTradeType(trade.getTradeType())
                 .setBizOrderNo(container.getBizOrderNo())
                 .setOutOrderNo(trade.getOutOrderNo())
-                .setTitle(param.getTitle() != null ? param.getTitle() : container.getTitle())
+                .setTitle(param.getTitle())
                 .setDescription(param.getDescription())
                 .setOrderAmount(trade.getAmount())
                 .setCurrency(CurrencyEnum.CNY.getCode())

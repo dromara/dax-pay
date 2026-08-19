@@ -59,11 +59,4 @@ public class MiniMchOrderQueryService {
                 .orElseThrow(() -> new DataNotExistException("error.payment.order.payOrderNotExist"));
     }
 
-    /// 根据业务单号查询支付订单信息
-    public NormalPayOrderResult findPayOrderByNo(String orderNo, String appId) {
-        return normalPayOrderManager.findByBizOrderNo(orderNo, appId)
-                .map(NormalPayOrderConvert.CONVERT::toResult)
-                .orElseThrow(() -> new DataNotExistException("error.payment.order.payOrderNotExist"));
-    }
-
 }
