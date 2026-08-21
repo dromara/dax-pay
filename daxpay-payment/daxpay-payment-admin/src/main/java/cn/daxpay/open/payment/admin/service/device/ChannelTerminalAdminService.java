@@ -33,13 +33,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 /// # 通道终端台账管理(运营端)
 ///
 /// 挂在通道商户下人工登记通道侧终端号与状态; 不调用通道报备 API。
-/// 与系统终端多对多绑定。
+/// 新增/编辑时必须绑定系统终端(创建即绑定, 同一系统终端在同一通道商户下仅一条记录);
+/// 存量记录与多绑场景通过 [TerminalChannelBind] 维护。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -53,7 +55,7 @@ public class ChannelTerminalAdminService {
     private final MerchantInfoManager merchantInfoManager;
     private final TransService transService;
 
-    /// 新增通道终端台账
+    /// 新增通道终端台账(创建即绑定系统终端)
     @Transactional(rollbackFor = Exception.class)
     public void add(ChannelTerminalParam param) {
         merchantInfoManager.findByMchNo(param.getMchNo())
@@ -71,6 +73,9 @@ public class ChannelTerminalAdminService {
         PayProduct payProduct = payProductManager.findByCode(product)
                 // 产品: 支付产品不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.product.notExist", product));
+        // 校验系统终端并建立绑定(同一系统终端在同一通道商户下仅允许一条记录)
+        TerminalDevice systemTerminal = checkSystemTerminalForBind(
+                param.getSystemTerminalNo(), param.getMchNo(), channelMerchant.getChannelMchNo(), null);
         String status = StrUtil.isBlank(param.getStatus())
                 ? ChannelTerminalStatusEnum.INIT.getCode()
                 : ChannelTerminalStatusEnum.findByCode(param.getStatus()).getCode();
@@ -88,9 +93,17 @@ public class ChannelTerminalAdminService {
         entity.setErrorMsg(param.getErrorMsg());
         entity.setRemark(param.getRemark());
         channelTerminalManager.save(entity);
+
+        // 创建即绑定系统终端
+        TerminalChannelBind bind = new TerminalChannelBind();
+        // 运营端写 MchBaseEntity 必须显式 setMchNo
+        bind.setMchNo(entity.getMchNo());
+        bind.setSystemTerminalNo(systemTerminal.getTerminalNo());
+        bind.setChannelTerminalId(entity.getId());
+        terminalChannelBindManager.save(bind);
     }
 
-    /// 修改通道终端(名称/通道号/状态/备注; 不改通道商户与 type)
+    /// 修改通道终端(名称/通道号/状态/备注; 不改通道商户与 type; 传入系统终端编码则补绑)
     @Transactional(rollbackFor = Exception.class)
     public void update(ChannelTerminalParam param) {
         ChannelTerminal entity = channelTerminalManager.findById(param.getId())
@@ -104,11 +117,24 @@ public class ChannelTerminalAdminService {
         entity.setErrorMsg(param.getErrorMsg());
         entity.setRemark(param.getRemark());
         channelTerminalManager.updateById(entity);
+
+        // 存量记录补绑系统终端(不传则不处理)
+        if (StrUtil.isNotBlank(param.getSystemTerminalNo())) {
+            TerminalDevice systemTerminal = checkSystemTerminalForBind(param.getSystemTerminalNo(),
+                    entity.getMchNo(), entity.getChannelMchNo(), entity.getId());
+            TerminalChannelBind bind = new TerminalChannelBind();
+            // 运营端写 MchBaseEntity 必须显式 setMchNo
+            bind.setMchNo(entity.getMchNo());
+            bind.setSystemTerminalNo(systemTerminal.getTerminalNo());
+            bind.setChannelTerminalId(entity.getId());
+            terminalChannelBindManager.save(bind);
+        }
     }
 
     /// 分页
     public PageResult<ChannelTerminalResult> page(PageParam pageParam, ChannelTerminalQuery query) {
         PageResult<ChannelTerminalResult> pageResult = MpUtil.toPageResult(channelTerminalManager.page(pageParam, query));
+        fillSystemTerminals(pageResult.getRecords());
         transService.translate(pageResult);
         return pageResult;
     }
@@ -119,6 +145,7 @@ public class ChannelTerminalAdminService {
                 .map(ChannelTerminal::toResult)
                 // 终端: 通道终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.channelNotFound"));
+        fillSystemTerminals(List.of(result));
         transService.translate(result);
         return result;
     }
@@ -194,5 +221,79 @@ public class ChannelTerminalAdminService {
                 .collect(Collectors.toList());
         transService.translate(results);
         return results;
+    }
+
+    /// 校验待绑定的系统终端(存在性/同商户/同通道商户下不重复), 返回系统终端实体
+    ///
+    /// @param excludeChannelTerminalId 唯一性校验排除的通道终端主键(编辑补绑时排除自身)
+    private TerminalDevice checkSystemTerminalForBind(String systemTerminalNo, String mchNo,
+                                                      String channelMchNo, Long excludeChannelTerminalId) {
+        TerminalDevice systemTerminal = terminalDeviceManager.findByTerminalNo(systemTerminalNo)
+                // 终端: 系统终端不存在
+                .orElseThrow(() -> new DataNotExistException("error.device.terminal.systemNotFound"));
+        if (!Objects.equals(systemTerminal.getMchNo(), mchNo)) {
+            // 终端: 系统终端与通道终端须属于同一商户
+            throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.terminal.mchMismatch");
+        }
+        // 同一系统终端在同一通道商户下仅允许一条通道终端记录
+        List<Long> boundIds = terminalChannelBindManager.findBySystemTerminalNo(systemTerminalNo).stream()
+                .map(TerminalChannelBind::getChannelTerminalId)
+                .filter(id -> !Objects.equals(id, excludeChannelTerminalId))
+                .toList();
+        if (!boundIds.isEmpty()) {
+            boolean exists = channelTerminalManager.lambdaQuery()
+                    .in(ChannelTerminal::getId, boundIds)
+                    .eq(ChannelTerminal::getChannelMchNo, channelMchNo)
+                    .exists();
+            if (exists) {
+                // 终端: 该系统终端在此通道商户下已有终端记录
+                throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.terminal.channelMchTerminalExists");
+            }
+        }
+        return systemTerminal;
+    }
+
+    /// 批量填充通道终端已绑定的系统终端列表
+    private void fillSystemTerminals(List<ChannelTerminalResult> results) {
+        if (results == null || results.isEmpty()) {
+            return;
+        }
+        List<Long> ids = results.stream()
+                .map(ChannelTerminalResult::getId)
+                .filter(Objects::nonNull)
+                .toList();
+        if (ids.isEmpty()) {
+            return;
+        }
+        // 按通道终端分组绑定关系
+        Map<Long, List<TerminalChannelBind>> bindGroup = terminalChannelBindManager.findByChannelTerminalIds(ids).stream()
+                .collect(Collectors.groupingBy(TerminalChannelBind::getChannelTerminalId));
+        if (bindGroup.isEmpty()) {
+            return;
+        }
+        // 批量查系统终端并按编码索引
+        List<String> terminalNos = bindGroup.values().stream()
+                .flatMap(List::stream)
+                .map(TerminalChannelBind::getSystemTerminalNo)
+                .distinct()
+                .toList();
+        Map<String, TerminalDeviceResult> deviceMap = terminalDeviceManager.lambdaQuery()
+                .in(TerminalDevice::getTerminalNo, terminalNos)
+                .list()
+                .stream()
+                .map(TerminalDevice::toResult)
+                .collect(Collectors.toMap(TerminalDeviceResult::getTerminalNo, r -> r, (a, b) -> a));
+        for (ChannelTerminalResult result : results) {
+            List<TerminalChannelBind> binds = bindGroup.get(result.getId());
+            if (binds == null) {
+                continue;
+            }
+            List<TerminalDeviceResult> systemTerminals = binds.stream()
+                    .map(TerminalChannelBind::getSystemTerminalNo)
+                    .map(deviceMap::get)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
+            result.setSystemTerminals(systemTerminals);
+        }
     }
 }

@@ -838,6 +838,9 @@
     "transferSceneId": {
       "notBlank": "ID skenario transfer tidak boleh kosong",
       "size": "ID skenario transfer tidak boleh melebihi 16 karakter"
+    },
+    "systemTerminalNo": {
+      "notBlank": "Terminal sistem tidak boleh kosong"
     }
   }
 }

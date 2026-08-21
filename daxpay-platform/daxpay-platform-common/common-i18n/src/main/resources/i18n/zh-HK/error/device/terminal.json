@@ -6,5 +6,6 @@
   "terminalNoGenFailed": "系統終端號生成失敗",
   "mchMismatch": "系統終端與通道終端須屬於同一商戶",
   "bindExists": "綁定關係已存在",
-  "bindNotFound": "綁定關係不存在"
+  "bindNotFound": "綁定關係不存在",
+  "channelMchTerminalExists": "該系統終端在此通道商戶下已有終端記錄"
 }

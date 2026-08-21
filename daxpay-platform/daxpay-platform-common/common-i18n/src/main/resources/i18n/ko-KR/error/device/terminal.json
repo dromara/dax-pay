@@ -6,5 +6,6 @@
   "terminalNoGenFailed": "시스템 단말 번호 생성에 실패했습니다",
   "mchMismatch": "시스템 단말과 채널 단말은 동일 가맹점에 속해야 합니다",
   "bindExists": "바인딩이 이미 존재합니다",
-  "bindNotFound": "바인딩이 존재하지 않습니다"
+  "bindNotFound": "바인딩이 존재하지 않습니다",
+  "channelMchTerminalExists": "이 시스템 단말은 이 채널 가맹점에 이미 단말 기록이 있습니다"
 }

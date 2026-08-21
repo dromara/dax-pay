@@ -6,5 +6,6 @@
   "terminalNoGenFailed": "Tạo mã thiết bị đầu cuối hệ thống thất bại",
   "mchMismatch": "Thiết bị hệ thống và kênh phải thuộc cùng một thương gia",
   "bindExists": "Liên kết đã tồn tại",
-  "bindNotFound": "Không tìm thấy liên kết"
+  "bindNotFound": "Không tìm thấy liên kết",
+  "channelMchTerminalExists": "Đầu cuối hệ thống này đã có bản ghi đầu cuối dưới merchant kênh này"
 }

@@ -848,6 +848,9 @@
     "transferSceneId": {
       "notBlank": "轉帳場景ID不可為空",
       "size": "轉帳場景ID不可超過16位"
+    },
+    "systemTerminalNo": {
+      "notBlank": "系統終端不可為空"
     }
   }
 }

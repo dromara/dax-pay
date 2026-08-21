@@ -6,5 +6,6 @@
   "terminalNoGenFailed": "システム端末番号の生成に失敗しました",
   "mchMismatch": "システム端末とチャネル端末は同一加盟店である必要があります",
   "bindExists": "紐付けは既に存在します",
-  "bindNotFound": "紐付けが存在しません"
+  "bindNotFound": "紐付けが存在しません",
+  "channelMchTerminalExists": "このシステム端末はこのチャネル加盟店に既に端末記録が存在します"
 }

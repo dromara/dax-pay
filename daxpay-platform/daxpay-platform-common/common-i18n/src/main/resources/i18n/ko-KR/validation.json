@@ -848,6 +848,9 @@
     "transferSceneId": {
       "notBlank": "송금 시나리오 ID는 필수입니다",
       "size": "송금 시나리오 ID는 16자 이내여야 합니다"
+    },
+    "systemTerminalNo": {
+      "notBlank": "시스템 단말은 필수입니다"
     }
   }
 }

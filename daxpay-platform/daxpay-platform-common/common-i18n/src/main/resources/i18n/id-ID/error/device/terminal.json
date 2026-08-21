@@ -6,5 +6,6 @@
   "terminalNoGenFailed": "Gagal membuat nomor terminal sistem",
   "mchMismatch": "Terminal sistem dan saluran harus milik merchant yang sama",
   "bindExists": "Ikatan sudah ada",
-  "bindNotFound": "Ikatan tidak ditemukan"
+  "bindNotFound": "Ikatan tidak ditemukan",
+  "channelMchTerminalExists": "Terminal sistem ini sudah memiliki catatan terminal di bawah merchant channel ini"
 }

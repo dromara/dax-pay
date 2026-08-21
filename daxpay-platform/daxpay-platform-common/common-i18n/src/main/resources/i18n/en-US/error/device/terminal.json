@@ -6,5 +6,6 @@
   "terminalNoGenFailed": "Failed to generate system terminal number",
   "mchMismatch": "System and channel terminals must belong to the same merchant",
   "bindExists": "Binding already exists",
-  "bindNotFound": "Binding not found"
+  "bindNotFound": "Binding not found",
+  "channelMchTerminalExists": "This system terminal already has a record under this channel merchant"
 }

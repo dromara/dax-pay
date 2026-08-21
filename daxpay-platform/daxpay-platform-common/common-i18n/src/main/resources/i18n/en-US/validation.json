@@ -852,6 +852,9 @@
     "transferSceneId": {
       "notBlank": "Transfer scene ID cannot be empty",
       "size": "Transfer scene ID cannot exceed 16 characters"
+    },
+    "systemTerminalNo": {
+      "notBlank": "System terminal cannot be empty"
     }
   }
 }

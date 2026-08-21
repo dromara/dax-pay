@@ -35,6 +35,11 @@ public class ChannelTerminalParam {
     @NotBlank(message = "{validation.field.type.notBlank}", groups = ValidationGroup.add.class)
     private String type;
 
+    /// 绑定的系统终端编码(新增必填, 创建通道终端时同步建立绑定; 编辑时传入则补绑)
+    @Schema(description = "绑定的系统终端编码(新增必填)")
+    @NotBlank(message = "{validation.field.systemTerminalNo.notBlank}", groups = ValidationGroup.add.class)
+    private String systemTerminalNo;
+
     @Schema(description = "终端名称")
     @NotBlank(message = "{validation.field.name.notBlank}")
     @Size(max = 100, message = "{validation.field.deviceName.size}")

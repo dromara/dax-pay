@@ -45,6 +45,13 @@ public class TerminalChannelBindManager extends BaseManager<TerminalChannelBindM
                 .list();
     }
 
+    /// 批量查询通道终端下的绑定(列表填充用)
+    public List<TerminalChannelBind> findByChannelTerminalIds(List<Long> channelTerminalIds) {
+        return lambdaQuery()
+                .in(TerminalChannelBind::getChannelTerminalId, channelTerminalIds)
+                .list();
+    }
+
     /// 删除系统终端的全部绑定
     public void deleteBySystemTerminalNo(String systemTerminalNo) {
         lambdaUpdate()

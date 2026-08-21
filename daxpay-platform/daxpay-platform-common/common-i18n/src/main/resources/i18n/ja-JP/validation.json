@@ -848,6 +848,9 @@
     "transferSceneId": {
       "notBlank": "送金シーンIDは必須です",
       "size": "送金シーンIDは16文字以内で入力してください"
+    },
+    "systemTerminalNo": {
+      "notBlank": "システム端末は必須です"
     }
   }
 }

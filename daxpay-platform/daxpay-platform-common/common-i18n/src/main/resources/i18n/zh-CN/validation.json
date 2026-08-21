@@ -852,6 +852,9 @@
     "transferSceneId": {
       "notBlank": "转账场景ID不可为空",
       "size": "转账场景ID不可超过16位"
+    },
+    "systemTerminalNo": {
+      "notBlank": "系统终端不可为空"
     }
   }
 }
