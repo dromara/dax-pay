@@ -60,6 +60,8 @@ public class TokenService {
 
     private final IamSecurityConfigService iamSecurityConfigService;
 
+    private final LoginRetryService loginRetryService;
+
     /// 登录
     public String login(HttpServletRequest request, HttpServletResponse response) {
         String clientCode = this.getClientCode(request);
@@ -134,6 +136,10 @@ public class TokenService {
         twoFactorPreAuthService.delete(preAuthToken);
         // 恢复登录流程
         UserDetail userDetail = userInfoResult.toUserDetail();
+        // 设置密码状态到 UserDetail（与密码登录路径一致, 避免二次验证用户绕过强制改密）
+        if (!userDetail.isAdmin()) {
+            loginRetryService.setPasswordStatusToUserDetail(userDetail);
+        }
         AuthInfoResult authInfoResult = new AuthInfoResult()
                 .setId(userDetail.getId())
                 .setUserDetail(userDetail);

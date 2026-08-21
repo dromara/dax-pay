@@ -4,6 +4,7 @@ import cn.daxpay.open.platform.capability.auth.service.AccessPolicy;
 import cn.daxpay.open.platform.capability.auth.util.SecurityUtil;
 import cn.daxpay.open.platform.common.spring.util.WebServletUtil;
 import cn.daxpay.open.platform.core.entity.UserDetail;
+import cn.daxpay.open.platform.iam.exception.auth.InitialPasswordAccessException;
 import cn.daxpay.open.platform.iam.exception.auth.PasswordExpiredAccessException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
@@ -22,7 +23,9 @@ public class PasswordStatusCheck implements AccessPolicy {
             "/user/auth/update-password",
             "/user/auth/get-login-after-user-info",
             "/token/logout",
-            "/captcha/"
+            "/captcha/",
+            // 改密页拉取密码策略校验配置的必需配套
+            "/platform/config/security/password-policy/validate-config"
     );
 
     @Override
@@ -40,7 +43,12 @@ public class PasswordStatusCheck implements AccessPolicy {
                 return;
             }
         }
-        // 密码已过期或为初始密码, 强制改密
+        // 区分初始密码与密码过期, 前端据此展示不同引导文案
+        if (Boolean.TRUE.equals(userDetail.getInitialPassword())) {
+            // 初始密码(管理员代设), 首次登录强制修改
+            throw new InitialPasswordAccessException();
+        }
+        // 密码已过期, 强制改密
         throw new PasswordExpiredAccessException();
     }
 }

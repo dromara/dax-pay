@@ -210,9 +210,9 @@ public class UserAdminService {
         userInfoManager.updateById(userInfo);
         // 保存密码历史记录
         passwordPolicyService.savePasswordHistory(userId, passwordHash);
-        // 更新密码过期时间和初始密码标记
+        // 更新密码过期时间, 重置后的密码视为初始密码(强制用户首次登录自行改密)
         OffsetDateTime passwordExpireTime = this.calculatePasswordExpireTime();
-        passwordSecurityManager.updatePasswordExpireTime(userId, passwordExpireTime);
+        passwordSecurityManager.updatePasswordExpireTimeOnReset(userId, passwordExpireTime);
         // 重置密码成功后, 强制该用户全部会话下线(管理员操作, 不保留任何会话)
         // 注册事务提交后回调, 避免事务回滚时误踢下线
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
@@ -237,8 +237,8 @@ public class UserAdminService {
         for (Long userId : userIds) {
             passwordPolicyService.validatePasswordHistory(userId, decryptedPassword);
             passwordPolicyService.savePasswordHistory(userId, passwordHash);
-            // 更新密码过期时间和初始密码标记
-            passwordSecurityManager.updatePasswordExpireTime(userId, passwordExpireTime);
+            // 更新密码过期时间, 重置后的密码视为初始密码(强制用户首次登录自行改密)
+            passwordSecurityManager.updatePasswordExpireTimeOnReset(userId, passwordExpireTime);
         }
         userInfoManager.restartPasswordBatch(userIds, passwordHash);
         // 批量重置密码成功后, 强制每个目标用户全部会话下线

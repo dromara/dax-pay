@@ -94,6 +94,16 @@ public class UserPasswordSecurityManager extends BaseManager<UserPasswordSecurit
                 .update();
     }
 
+    /// 管理员重置密码后更新过期时间(初始密码标记保持 true, 强制用户首次登录自行改密)
+    public void updatePasswordExpireTimeOnReset(Long userId, OffsetDateTime expireTime) {
+        lambdaUpdate()
+                .eq(UserPasswordSecurity::getId, userId)
+                .set(UserPasswordSecurity::getPasswordExpireTime, expireTime)
+                .set(UserPasswordSecurity::getLastChangePasswordTime, OffsetDateTime.now(ZoneOffset.UTC))
+                .set(UserPasswordSecurity::getInitialPassword, true)
+                .update();
+    }
+
     /// 重置失败计数和失败时间
     public void resetFailureCount(Long userId) {
         lambdaUpdate()
