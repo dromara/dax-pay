@@ -73,6 +73,13 @@ public class AllocStartService {
     @Lazy
     private final AllocStartService self;
 
+    /// 多级延迟同步投递间隔(秒)
+    ///
+    /// 15s/45s 覆盖定时任务扫不到的发起后 1 分钟盲区(定时最新窗口从创建满 1 分钟才纳入扫描,
+    /// 微信/支付宝分账实际秒级~几十秒即完成, 原单一 120s 延时恰好落在定时窗口内未补到盲区);
+    /// 120s 与 1 分钟档定时任务重叠, 作为消息队列与调度器互为冗余的保险。
+    private static final int[] DELAY_SYNC_SECONDS = {15, 45, 120};
+
     /// 发起分账入口(持发起锁)
     public String start(AllocParam param) {
         // 商户身份装载
@@ -352,17 +359,20 @@ public class AllocStartService {
         return details;
     }
 
-    /// 注册延迟同步(发起返回处理中后, 2 分钟投递 MQ)
+    /// 注册延迟同步(发起返回处理中后, 多级延时投递 MQ)
     ///
     /// 参照 [cn.daxpay.open.payment.trade.transfer.runtime.service.TransferStartService#registerDelaySync]:
     /// 异步分账发起成功且仍有 pending 明细时调用, 失败仅告警由定时任务兜底。
+    /// 各级别独立投递, 单级失败不影响后续级别。
     private void registerDelaySync(String allocNo) {
-        try {
-            AllocSyncMessage message = new AllocSyncMessage().setAllocNo(allocNo);
-            artemisTemplateService.sendDelay(PayArtemisConstants.ALLOC_SYNC_QUEUE,
-                    JacksonUtil.toJson(message), 120);
-        } catch (Exception e) {
-            log.warn("注册分账延迟同步失败, 由定时任务兜底, allocNo={}", allocNo, e);
+        for (int delaySeconds : DELAY_SYNC_SECONDS) {
+            try {
+                AllocSyncMessage message = new AllocSyncMessage().setAllocNo(allocNo);
+                artemisTemplateService.sendDelay(PayArtemisConstants.ALLOC_SYNC_QUEUE,
+                        JacksonUtil.toJson(message), delaySeconds);
+            } catch (Exception e) {
+                log.warn("注册分账延迟同步失败, 由定时任务兜底, allocNo={}, delay={}s", allocNo, delaySeconds, e);
+            }
         }
     }
 

@@ -224,12 +224,17 @@ public class TradeSyncJob {
         syncAllocBatch(now.minusHours(24), now.minusHours(1));
     }
 
-    /// 死单兜底: 创建 1~7 天的 PROCESSING 分账, 每天凌晨同步一次
+    /// 死单兜底: 创建 1~30 天的 PROCESSING 分账, 每天凌晨同步一次
+    ///
+    /// 窗口拉长到 30 天覆盖异常长尾(抖音担保支付依赖确认收货, 自动确认默认发货后 7 天,
+    /// 未收货先发起分账的极端场景可挂满 7 天以上)。资金类单据禁止超时自动置败
+    /// (分账可能实际已成功, 自动置败会诱导商户重新发起造成双倍分账), 长尾只能查询纠正或人工介入,
+    /// 故进入本档即为异常单, 逐笔 WARN 暴露以便监控发现。仍超 30 天未终态的掉出所有窗口, 属人工处理范围。
     @Scheduled(cron = "0 40 1 * * ?")
-    @SchedulerLock(name = "lock:tradeSync:alloc7D", lockAtMostFor = "30m", lockAtLeastFor = "5m")
-    public void syncAlloc7D() {
+    @SchedulerLock(name = "lock:tradeSync:alloc30D", lockAtMostFor = "30m", lockAtLeastFor = "5m")
+    public void syncAlloc30D() {
         OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
-        syncAllocBatch(now.minusDays(7), now.minusHours(24));
+        syncAllocBatch(now.minusDays(30), now.minusHours(24), true);
     }
 
     // ==================== 批量处理 ====================
@@ -286,6 +291,11 @@ public class TradeSyncJob {
 
     /// 分账同步批量处理(逐笔容错)
     private void syncAllocBatch(OffsetDateTime start, OffsetDateTime end) {
+        this.syncAllocBatch(start, end, false);
+    }
+
+    /// 分账同步批量处理(stale=true 为死单兜底档, 命中即为异常单, 逐笔 WARN 暴露)
+    private void syncAllocBatch(OffsetDateTime start, OffsetDateTime end, boolean stale) {
         List<AllocOrder> allocs = allocOrderManager.findSyncAllocs(
                 AllocOrderStatusEnum.PROCESSING.getCode(), start, end);
         if (allocs.isEmpty()) {
@@ -293,6 +303,10 @@ public class TradeSyncJob {
         }
         log.info("定时同步扫描分账命中 {} 笔, 开始处理", allocs.size());
         for (AllocOrder alloc : allocs) {
+            if (stale) {
+                log.warn("分账单长期未终态(创建于 {}), 进入死单兜底同步, 请关注, allocNo={}",
+                        alloc.getCreateTime(), alloc.getAllocNo());
+            }
             try {
                 allocSyncService.autoSync(alloc.getAllocNo());
             } catch (Exception e) {
