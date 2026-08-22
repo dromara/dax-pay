@@ -69,6 +69,7 @@
   "transferAppTypeNotOfficialAccount": "WeChat: Transfer initiator app must be an Official Account",
   "transferRemarkRequired": "WeChat: transfer remark (title) is required",
   "transferReportInfoRequired": "WeChat: transfer scene report info is required, please fill in all report fields",
+  "allocFailed": "WeChat allocation failed: {0}",
   "allocReceiverBindFailed": "WeChat alloc receiver bind failed: {0}",
   "allocReceiverUnbindFailed": "WeChat alloc receiver unbind failed: {0}",
   "allocReceiverUnsupportedType": "WeChat: unsupported alloc receiver type: {0}",

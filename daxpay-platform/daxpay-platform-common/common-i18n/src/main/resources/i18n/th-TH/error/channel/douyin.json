@@ -38,6 +38,7 @@
   "transferPayeeTypeInvalid": "Douyin: ประเภทบัญชีผู้รับไม่ได้รับการสนับสนุน: {0}",
   "transferPhoneInvalid": "Douyin: รูปแบบหมายเลขโทรศัพท์ผู้รับไม่ถูกต้อง (ต้องเป็นตัวเลข 11 หลัก)",
   "transferOutBillNoInvalid": "Douyin: รูปแบบหมายเลขโอนของร้านค้าไม่ถูกต้อง (6-32 ตัวอักษร เฉพาะตัวเลข/ตัวอักษร/_/-/*)",
+  "allocFailed": "การแบ่ง Douyin ล้มเหลว: {0}",
   "allocReceiverBindFailed": "ผูกผู้รับเงินแบ่ง Douyin ไม่สำเร็จ: {0}",
   "allocReceiverUnbindFailed": "ยกเลิกการผูกผู้รับเงินแบ่ง Douyin ไม่สำเร็จ: {0}",
   "allocReceiverUnsupportedType": "Douyin: ไม่รองรับประเภทผู้รับเงินแบ่งนี้: {0}",

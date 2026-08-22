@@ -38,6 +38,7 @@
   "transferPayeeTypeInvalid": "Douyin: Unsupported payee account type: {0}",
   "transferPhoneInvalid": "Douyin: Invalid payee phone number (must be 11 digits)",
   "transferOutBillNoInvalid": "Douyin: Invalid merchant transfer number (6-32 chars, digits/letters/_/-/* only)",
+  "allocFailed": "Douyin allocation failed: {0}",
   "allocReceiverBindFailed": "Douyin alloc receiver bind failed: {0}",
   "allocReceiverUnbindFailed": "Douyin alloc receiver unbind failed: {0}",
   "allocReceiverUnsupportedType": "Douyin: unsupported alloc receiver type: {0}",

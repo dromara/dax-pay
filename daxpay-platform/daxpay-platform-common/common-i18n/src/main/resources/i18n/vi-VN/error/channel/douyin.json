@@ -38,6 +38,7 @@
   "transferPayeeTypeInvalid": "Douyin: Loại tài khoản người nhận không được hỗ trợ: {0}",
   "transferPhoneInvalid": "Douyin: Định dạng số điện thoại người nhận không hợp lệ (phải là 11 chữ số)",
   "transferOutBillNoInvalid": "Douyin: Định dạng số chuyển khoản thương gia không hợp lệ (6-32 ký tự, chỉ chữ số/chữ cái/_/-/*)",
+  "allocFailed": "Phân chia Douyin thất bại: {0}",
   "allocReceiverBindFailed": "Liên kết người nhận phân chia Douyin thất bại: {0}",
   "allocReceiverUnbindFailed": "Hủy liên kết người nhận phân chia Douyin thất bại: {0}",
   "allocReceiverUnsupportedType": "Douyin: loại người nhận phân chia không được hỗ trợ: {0}",

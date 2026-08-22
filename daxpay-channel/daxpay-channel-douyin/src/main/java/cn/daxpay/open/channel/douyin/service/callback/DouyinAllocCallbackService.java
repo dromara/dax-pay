@@ -16,14 +16,12 @@ import cn.daxpay.open.payment.trade.alloc.runtime.service.AllocCallbackService;
 import cn.daxpay.open.payment.trade.record.service.PayCallbackRecordService;
 import cn.daxpay.open.payment.trade.runtime.bo.CallbackData;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
-import cn.hutool.core.util.StrUtil;
 import cn.hutool.extra.servlet.JakartaServletUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -104,16 +102,12 @@ public class DouyinAllocCallbackService {
         notify.put("allocState", state);
         notify.put("splitFinishTime", resp.getSplitFinishTime());
         callbackData.setCallbackData(notify);
-        // 抖音分账通知含 out_order_no(平台 allocNo), 优先回填
+        // 商户分账单号(平台 allocNo, 发起时上送的 out_trade_no)填 tradeNo, 供按 allocNo 主路径定位
+        callbackData.setTradeNo(resp.getOutTradeNo());
+        // 通道分账单号(抖音 orderId = 平台 outAllocNo)填 outTradeNo, 供容错反查
         callbackData.setOutTradeNo(resp.getOrderId());
-        // 完成时间(RFC3339)
-        if (StrUtil.isNotBlank(resp.getSplitFinishTime())) {
-            try {
-                callbackData.setFinishTime(OffsetDateTime.parse(resp.getSplitFinishTime()));
-            } catch (Exception e) {
-                log.warn("抖音分账回调时间解析失败: splitFinishTime={}", resp.getSplitFinishTime());
-            }
-        }
+        // 完成时间(子应用已解析为 OffsetDateTime)
+        callbackData.setFinishTime(resp.getSplitFinishTime());
         // 装配逐明细结果
         List<AllocResultBo.DetailResult> detailResults = new ArrayList<>();
         if (resp.getReceiverResults() != null) {
@@ -122,7 +116,7 @@ public class DouyinAllocCallbackService {
                         .setReceiverAccount(r.getAccount())
                         .setResult(mapDetailResult(r.getSplitStatus()))
                         .setErrorMsg(r.getFailReason())
-                        .setFinishTime(parseDetailTime(r.getFinishTime())));
+                        .setFinishTime(r.getFinishTime()));
             }
         }
         // 状态映射(与同步路径对齐)
@@ -174,17 +168,5 @@ public class DouyinAllocCallbackService {
             return AllocDetailResultEnum.FAIL.getCode();
         }
         return AllocDetailResultEnum.PENDING.getCode();
-    }
-
-    /// 解析明细完成时间(东八区 yyyy-MM-dd HH:mm:ss)
-    private OffsetDateTime parseDetailTime(String timeStr) {
-        if (StrUtil.isBlank(timeStr)) {
-            return null;
-        }
-        try {
-            return OffsetDateTime.parse(timeStr);
-        } catch (Exception e) {
-            return null;
-        }
     }
 }

@@ -69,6 +69,7 @@
   "transferAppTypeNotOfficialAccount": "WeChat: Aplikasi inisiator transfer harus berjenis Official Account",
   "transferRemarkRequired": "WeChat: catatan transfer (judul) wajib diisi",
   "transferReportInfoRequired": "WeChat: informasi pelaporan skema transfer wajib diisi, silakan isi semua bidang pelaporan",
+  "allocFailed": "Alokasi WeChat gagal: {0}",
   "allocReceiverBindFailed": "Gagal mengikat penerima alokasi WeChat: {0}",
   "allocReceiverUnbindFailed": "Gagal melepas penerima alokasi WeChat: {0}",
   "allocReceiverUnsupportedType": "WeChat: tipe penerima alokasi tidak didukung: {0}",

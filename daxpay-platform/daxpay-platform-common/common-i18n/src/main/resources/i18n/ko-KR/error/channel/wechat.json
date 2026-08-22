@@ -69,6 +69,7 @@
   "transferAppTypeNotOfficialAccount": "WeChat: 이체 발신 앱은 공식계정 유형이어야 합니다",
   "transferRemarkRequired": "WeChat: 이체 메모(제목)는 필수입니다",
   "transferReportInfoRequired": "WeChat: 이체 시나리오 보고 정보는 필수입니다. 모든 보고 항목을 입력해 주세요",
+  "allocFailed": "위챗 분배 실패: {0}",
   "allocReceiverBindFailed": "위챗 분배 수신자 바인딩 실패: {0}",
   "allocReceiverUnbindFailed": "위챗 분배 수신자 해제 실패: {0}",
   "allocReceiverUnsupportedType": "위챗: 지원하지 않는 분배 수신자 유형: {0}",

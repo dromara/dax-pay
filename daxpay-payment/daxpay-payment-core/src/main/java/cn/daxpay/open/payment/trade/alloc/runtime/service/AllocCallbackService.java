@@ -33,15 +33,18 @@ public class AllocCallbackService {
 
     /// 分账回调入口
     ///
-    /// @param data 回调数据(tradeNo=allocNo, outTradeNo=outAllocNo)
+    /// @param data 回调数据(tradeNo=allocNo 主定位, outTradeNo=outAllocNo 容错; 通道至少提供其一)
     /// @param detailResults 通道解析出的逐明细结果(由通道回调 Service 装配)
     public void allocCallback(CallbackData data, List<AllocResultBo.DetailResult> detailResults) {
-        if (data == null || data.getTradeNo() == null) {
-            log.warn("分账回调: 分账单号为空, 跳过");
+        // allocNo 与通道分账号须至少一项非空(通道差异容忍: 部分通道通知仅含通道侧单号)
+        if (data == null || (data.getTradeNo() == null && data.getOutTradeNo() == null)) {
+            log.warn("分账回调: 分账单号与通道分账号均为空, 跳过");
             return;
         }
         // 按 allocNo 反查(忽略租户, 回调无 HTTP 上下文)
-        AllocOrder allocOrder = allocOrderManager.findByAllocNoNotTenant(data.getTradeNo()).orElse(null);
+        AllocOrder allocOrder = data.getTradeNo() != null
+                ? allocOrderManager.findByAllocNoNotTenant(data.getTradeNo()).orElse(null)
+                : null;
         if (allocOrder == null && data.getOutTradeNo() != null) {
             // 容错: 按通道分账号反查
             allocOrder = allocOrderManager.findByOutAllocNo(data.getOutTradeNo()).orElse(null);

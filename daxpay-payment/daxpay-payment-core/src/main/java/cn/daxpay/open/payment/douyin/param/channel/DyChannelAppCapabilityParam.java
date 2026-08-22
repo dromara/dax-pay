@@ -13,14 +13,7 @@ import lombok.experimental.Accessors;
 @Schema(title = "通道商户抖音应用能力绑定单项")
 public class DyChannelAppCapabilityParam {
 
-    @NotBlank(message = "{validation.field.mchNo.notBlank}")
-    @Schema(description = "商户号")
-    private String mchNo;
-
-    @NotBlank(message = "{validation.field.channelMchNo.notBlank}")
-    @Schema(description = "通道商户号")
-    private String channelMchNo;
-
+    // mchNo/channelMchNo 由外层 DyChannelAppCapabilityBatchParam 统一携带并校验，单项不重复声明（对齐微信 WxChannelAppCapabilityParam 范式）
     @NotBlank(message = "{validation.field.capability.notBlank}")
     @Schema(description = "支付能力编码")
     private String capability;

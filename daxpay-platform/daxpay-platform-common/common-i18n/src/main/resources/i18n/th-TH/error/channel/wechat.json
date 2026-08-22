@@ -69,6 +69,7 @@
   "transferAppTypeNotOfficialAccount": "WeChat: แอปเริ่มการโอนต้องเป็นประเภท Official Account",
   "transferRemarkRequired": "WeChat: หมายเหตุการโอน (หัวข้อ) จำเป็นต้องระบุ",
   "transferReportInfoRequired": "WeChat: ข้อมูลรายงานสถานการณ์การโอนเงินจำเป็นต้องระบุ กรุณากรอกข้อมูลรายงานทั้งหมด",
+  "allocFailed": "การแบ่ง WeChat ล้มเหลว: {0}",
   "allocReceiverBindFailed": "ผูกผู้รับเงินแบ่ง WeChat ไม่สำเร็จ: {0}",
   "allocReceiverUnbindFailed": "ยกเลิกการผูกผู้รับเงินแบ่ง WeChat ไม่สำเร็จ: {0}",
   "allocReceiverUnsupportedType": "WeChat: ไม่รองรับประเภทผู้รับเงินแบ่งนี้: {0}",

@@ -3,6 +3,7 @@ package cn.daxpay.open.channel.douyin.client.resp;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 
 /// # 抖音通道分账回调验签解析响应
@@ -16,11 +17,14 @@ public class DouyinAllocCallbackParseResp {
     /// 通道分账单号(抖音 order_id, 用于回查分账单 outAllocNo)
     private String orderId;
 
+    /// 商户分账单号(平台 allocNo, 发起时上送的 out_trade_no, 回调定位分账单主路径)
+    private String outTradeNo;
+
     /// 分账状态(SUCCESS/PROCESSING/CLOSED/FAIL)
     private String state;
 
-    /// 分账完成时间(东八区)
-    private String splitFinishTime;
+    /// 分账完成时间(子应用侧已解析为 OffsetDateTime)
+    private OffsetDateTime splitFinishTime;
 
     /// 逐明细结果
     private List<ReceiverResult> receiverResults;
@@ -42,7 +46,7 @@ public class DouyinAllocCallbackParseResp {
         /// 失败原因
         private String failReason;
 
-        /// 明细完成时间(东八区 yyyy-MM-dd HH:mm:ss)
-        private String finishTime;
+        /// 明细完成时间(子应用侧已解析为 OffsetDateTime)
+        private OffsetDateTime finishTime;
     }
 }

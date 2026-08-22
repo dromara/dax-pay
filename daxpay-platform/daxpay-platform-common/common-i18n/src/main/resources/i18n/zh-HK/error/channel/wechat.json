@@ -69,6 +69,7 @@
   "transferAppTypeNotOfficialAccount": "微信: 轉帳發起應用必須是公眾號類型",
   "transferRemarkRequired": "微信: 轉賬備註(標題)必填",
   "transferReportInfoRequired": "微信: 轉賬場景報備資訊必填, 請填寫全部報備欄位",
+  "allocFailed": "微信分賬失敗: {0}",
   "allocReceiverBindFailed": "微信分賬接收方綁定失敗: {0}",
   "allocReceiverUnbindFailed": "微信分賬接收方解綁失敗: {0}",
   "allocReceiverUnsupportedType": "微信: 不支援的分賬接收方類型: {0}",

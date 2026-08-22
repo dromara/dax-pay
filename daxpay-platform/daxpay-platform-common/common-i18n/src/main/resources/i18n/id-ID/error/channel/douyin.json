@@ -38,6 +38,7 @@
   "transferPayeeTypeInvalid": "Douyin: Jenis akun penerima tidak didukung: {0}",
   "transferPhoneInvalid": "Douyin: Format nomor telepon penerima tidak valid (harus 11 digit)",
   "transferOutBillNoInvalid": "Douyin: Format nomor transfer merchant tidak valid (6-32 karakter, hanya angka/huruf/_/-/*)",
+  "allocFailed": "Alokasi Douyin gagal: {0}",
   "allocReceiverBindFailed": "Gagal mengikat penerima alokasi Douyin: {0}",
   "allocReceiverUnbindFailed": "Gagal melepas penerima alokasi Douyin: {0}",
   "allocReceiverUnsupportedType": "Douyin: tipe penerima alokasi tidak didukung: {0}",

@@ -38,6 +38,7 @@
   "transferPayeeTypeInvalid": "더우인: 지원하지 않는 수취인 계정 유형: {0}",
   "transferPhoneInvalid": "더우인: 수취인 전화번호 형식이 올바르지 않습니다(11자리 숫자 필요)",
   "transferOutBillNoInvalid": "더우인: 가맹점 이체번호 형식이 올바르지 않습니다(6-32자, 숫자/대소문자/_/-/*만 허용)",
+  "allocFailed": "더우인 분배 실패: {0}",
   "allocReceiverBindFailed": "더우인 분배 수신자 바인딩 실패: {0}",
   "allocReceiverUnbindFailed": "더우인 분배 수신자 해제 실패: {0}",
   "allocReceiverUnsupportedType": "더우인: 지원하지 않는 분배 수신자 유형: {0}",

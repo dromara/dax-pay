@@ -69,6 +69,7 @@
   "transferAppTypeNotOfficialAccount": "WeChat: Ứng dụng khởi tạo chuyển khoản phải là loại Official Account",
   "transferRemarkRequired": "WeChat: ghi chú chuyển khoản (tiêu đề) là bắt buộc",
   "transferReportInfoRequired": "WeChat: thông tin báo cáo kịch bản chuyển khoản là bắt buộc, vui lòng điền đầy đủ các trường báo cáo",
+  "allocFailed": "Phân chia WeChat thất bại: {0}",
   "allocReceiverBindFailed": "Liên kết người nhận phân chia WeChat thất bại: {0}",
   "allocReceiverUnbindFailed": "Hủy liên kết người nhận phân chia WeChat thất bại: {0}",
   "allocReceiverUnsupportedType": "WeChat: loại người nhận phân chia không được hỗ trợ: {0}",
