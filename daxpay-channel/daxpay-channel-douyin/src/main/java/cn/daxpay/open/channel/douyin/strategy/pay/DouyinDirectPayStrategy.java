@@ -34,8 +34,11 @@ public class DouyinDirectPayStrategy extends AbsNormalPayStrategy {
     public void doBeforePay(PayStrategyContext context) {
         NormalPayParam payParam = context.getPayParam();
         DouyinSdkCredential credential = douyinDirectConfigAssembler.buildConfig(
-                payParam.getMchNo(), payParam.getChannelMchNo(), payParam.getCapability());
+                payParam.getMchNo(), payParam.getChannelMchNo(), payParam.getCapability(),
+                payParam.getChannelAppId());
         context.setChannelConfig(credential);
+        // 回填实际使用的通道应用 AppId, 供建单落库为订单快照(关退同步分复用, 对齐微信范式)
+        payParam.setChannelAppId(credential.getDouyinAppId());
     }
 
     @Override

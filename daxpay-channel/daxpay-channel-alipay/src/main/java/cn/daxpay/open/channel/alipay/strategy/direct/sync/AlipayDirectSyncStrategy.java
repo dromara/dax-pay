@@ -32,9 +32,10 @@ public class AlipayDirectSyncStrategy extends AbsSyncPayOrderStrategy {
     @Override
     public PaySyncResultBo doSync(PayStrategyContext context) {
         // 直接从 trade 读取路由参数, 不再需要 container 中间层
-        // 组装通道调用凭证
+        // 组装通道调用凭证(channelAppId 为订单快照, 保证同步与下单同一应用)
         AlipaySdkCredential credential = alipayDirectConfigAssembler.buildConfig(
-                context.getTrade().getMchNo(), context.getChannelMchNo(), context.getCapability());
+                context.getTrade().getMchNo(), context.getChannelMchNo(), context.getCapability(),
+                context.getChannelAppId());
 
         return alipaySyncService.sync(context.getTrade(), credential);
     }

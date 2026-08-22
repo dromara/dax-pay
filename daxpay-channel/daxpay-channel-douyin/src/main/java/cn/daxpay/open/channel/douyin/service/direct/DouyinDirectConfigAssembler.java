@@ -33,13 +33,15 @@ public class DouyinDirectConfigAssembler {
 
     /// 组装直连商户的通道调用凭证(下发给子应用)
     ///
-    /// @param mchNo        商户号(应用解析的商户档隔离条件)
-    /// @param channelMchNo 通道商户号(定位密钥/商户绑定/能力绑)
-    /// @param capability   支付能力编码(用于选择匹配的应用)
+    /// @param mchNo         商户号(应用解析的商户档隔离条件)
+    /// @param channelMchNo  通道商户号(定位密钥/商户绑定/能力绑)
+    /// @param capability    支付能力编码(用于选择匹配的应用)
+    /// @param channelAppId  通道应用 AppId(订单快照或调用方显式指定; 非空时优先于能力绑解析,
+    ///                      保证关单/退款/同步/分账与下单使用同一应用, 不随能力绑定配置变更漂移)
     /// @return 抖音 SDK 凭证, 字段对齐子应用 DouyinSdkCredential
-    public DouyinSdkCredential buildConfig(String mchNo, String channelMchNo, String capability) {
+    public DouyinSdkCredential buildConfig(String mchNo, String channelMchNo, String capability, String channelAppId) {
         // 1. 解析支付使用的应用(传直连产品标识, 激活 resolve 内商户档隔离: 仅商户表/能力绑 merchant 档/商户档 appType 推导)
-        DyAppView app = douyinAppFacade.resolve(mchNo, channelMchNo, capability, null,
+        DyAppView app = douyinAppFacade.resolve(mchNo, channelMchNo, capability, channelAppId,
                 ProductEnum.DOUYIN_PAY.getCode());
 
         // 2-4. 组装凭证

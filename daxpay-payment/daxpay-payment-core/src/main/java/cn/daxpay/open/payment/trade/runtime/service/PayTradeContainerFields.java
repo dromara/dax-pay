@@ -27,7 +27,8 @@ public class PayTradeContainerFields {
     ///
     /// [NormalPayOrder] / [GatewayPayOrder] 同名字段集合, 按 tradeType 分发到对应容器读取,
     /// 供回调服务组装通道调用凭证(直连/服务商)。
-    public record CredentialFields(String product, String channelMchNo, String capability) {}
+    /// channelAppId 为订单快照(下单时实际使用的通道应用), 非微信通道存量订单可能为空, 调用方按需回退。
+    public record CredentialFields(String product, String channelMchNo, String capability, String channelAppId) {}
 
     /// 按 tradeType 查一次容器，同时返回关联订单号与支付厂商/产品回执
     public Fields resolve(PayTrade trade) {
@@ -49,12 +50,14 @@ public class PayTradeContainerFields {
         if (isGateway(trade)) {
             return gatewayPayOrderManager.findById(trade.getContainerId())
                     .map(order -> new CredentialFields(
-                            order.getProduct(), order.getChannelMchNo(), order.getCapability()))
+                            order.getProduct(), order.getChannelMchNo(), order.getCapability(),
+                            order.getChannelAppId()))
                     .orElse(null);
         }
         return normalPayOrderManager.findById(trade.getContainerId())
                 .map(order -> new CredentialFields(
-                        order.getProduct(), order.getChannelMchNo(), order.getCapability()))
+                        order.getProduct(), order.getChannelMchNo(), order.getCapability(),
+                        order.getChannelAppId()))
                 .orElse(null);
     }
 

@@ -37,8 +37,11 @@ public class AlipayDirectPayStrategy extends AbsNormalPayStrategy {
         // 组装直连通道凭证(只依赖请求参数, 订单尚未创建)
         NormalPayParam payParam = context.getPayParam();
         AlipaySdkCredential credential = alipayDirectConfigAssembler.buildConfig(
-                payParam.getMchNo(), payParam.getChannelMchNo(), payParam.getCapability());
+                payParam.getMchNo(), payParam.getChannelMchNo(), payParam.getCapability(),
+                payParam.getChannelAppId());
         context.setChannelConfig(credential);
+        // 回填实际使用的通道应用 AppId, 供建单落库为订单快照(关退同步分复用, 对齐微信范式)
+        payParam.setChannelAppId(credential.getAliAppId());
     }
 
     @Override

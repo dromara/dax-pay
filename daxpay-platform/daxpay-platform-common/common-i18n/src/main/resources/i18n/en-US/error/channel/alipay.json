@@ -45,6 +45,8 @@
   "authTokenExchangeFailed": "Failed to exchange app auth token: {0}",
   "paymentGatewayUrlRequired": "Payment gateway base URL is not configured; cannot build auth redirect URI",
   "appTypeCapabilityMismatch": "Alipay app type is incompatible with the payment capability",
+  "channelAppIdNotFound": "Specified Alipay app ID [{0}] is not configured in the system",
+
   "appNotConfigured": "No application configured for {0}, please bind one on the channel merchant app configuration page",
   "appNotUnique": "Multiple applications of type {0} exist, please explicitly configure the capability binding to select one",
   "transferFailed": "Alipay transfer failed: {0}",

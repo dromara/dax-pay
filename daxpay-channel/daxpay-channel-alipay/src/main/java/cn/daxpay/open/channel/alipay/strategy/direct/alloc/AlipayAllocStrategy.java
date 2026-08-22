@@ -81,11 +81,12 @@ public class AlipayAllocStrategy extends AbsAllocStrategy {
                 context.getOutOrderNo(), receiverAccounts, credential);
     }
 
-    /// 组装通道调用凭证(继承原支付 capability, 不二次路由)
+    /// 组装通道调用凭证(继承原支付 capability, 不二次路由;
+    /// channelAppId 为分账单快照(继承原支付单), 存量订单为空时回退能力关联解析)
     private AlipaySdkCredential buildCredential(AllocStrategyContext context) {
         String capability = context.getAllocOrder().getCapability();
         return alipayDirectConfigAssembler.buildConfig(
-                context.getMchNo(), context.getChannelMchNo(), capability);
+                context.getMchNo(), context.getChannelMchNo(), capability, context.getChannelAppId());
     }
 
     /// 构建分账明细信息(映射接收方类型为支付宝原生 userId / loginName)

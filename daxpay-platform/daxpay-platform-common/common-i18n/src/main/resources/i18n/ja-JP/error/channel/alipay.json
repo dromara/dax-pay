@@ -45,6 +45,8 @@
   "authTokenExchangeFailed": "アプリ認証トークンの交換に失敗しました: {0}",
   "paymentGatewayUrlRequired": "支払いゲートウェイのベース URL が構成されていません。認証リダイレクト URI を構築できません",
   "appTypeCapabilityMismatch": "支付宝アプリ種別と支払い能力が一致しません",
+  "channelAppIdNotFound": "指定されたAlipayアプリAppId[{0}]はシステムに設定されていません",
+
   "appNotConfigured": "{0} に対応するアプリが未設定です。チャネル加盟店アプリ設定ページでバインドしてください",
   "appNotUnique": "タイプ {0} のアプリが複数存在します。能力バインディングを明示的に設定して選択してください",
   "transferFailed": "Alipay送金エラー: {0}",

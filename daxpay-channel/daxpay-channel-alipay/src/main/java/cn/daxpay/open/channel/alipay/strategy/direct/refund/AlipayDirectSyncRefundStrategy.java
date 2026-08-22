@@ -30,9 +30,10 @@ public class AlipayDirectSyncRefundStrategy extends AbsSyncRefundStrategy {
 
     @Override
     public RefundResultBo doSync(RefundOrder refundOrder) {
-        // 组装直连通道调用凭证
+        // 组装直连通道调用凭证(channelAppId 为退款单快照, 继承原支付单, 保证退款同步与下单同一应用)
         AlipaySdkCredential credential = alipayDirectConfigAssembler.buildConfig(
-                refundOrder.getMchNo(), refundOrder.getChannelMchNo(), refundOrder.getCapability());
+                refundOrder.getMchNo(), refundOrder.getChannelMchNo(), refundOrder.getCapability(),
+                refundOrder.getChannelAppId());
         return alipayRefundSyncService.sync(refundOrder, credential);
     }
 }

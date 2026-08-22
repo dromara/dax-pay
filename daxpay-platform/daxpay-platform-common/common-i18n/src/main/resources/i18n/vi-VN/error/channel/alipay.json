@@ -45,6 +45,7 @@
   "authTokenExchangeFailed": "Không thể trao đổi mã thông báo xác thực ứng dụng: {0}",
   "paymentGatewayUrlRequired": "URL cơ sở của cổng thanh toán không được định cấu hình; không thể xây dựng URI chuyển hướng xác thực",
   "appTypeCapabilityMismatch": "Loại ứng dụng Alipay không tương thích với khả năng thanh toán",
+  "channelAppIdNotFound": "AppId ứng dụng Alipay được chỉ định [{0}] chưa được cấu hình trong hệ thống",
   "appNotConfigured": "Chưa cấu hình ứng dụng cho {0}, vui lòng liên kết tại trang cấu hình ứng dụng merchant kênh",
   "appNotUnique": "Tồn tại nhiều ứng dụng loại {0}, vui lòng cấu hình liên kết năng lực rõ ràng để chọn",
   "transferFailed": "Chuyển khoản Alipay thất bại: {0}",

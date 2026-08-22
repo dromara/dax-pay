@@ -33,9 +33,10 @@ public class DouyinDirectCloseStrategy extends AbsPayCloseStrategy {
     @Override
     public CloseTypeEnum doClose(PayStrategyContext context, boolean useCancel) {
         PayTrade trade = context.getTrade();
-        // 直接从 trade 读取路由参数, 不再需要 container 中间层
+        // 直接从 trade 读取路由参数, 不再需要 container 中间层; channelAppId 为订单快照(与下单同一应用)
         DouyinSdkCredential credential = douyinDirectConfigAssembler.buildConfig(
-                trade.getMchNo(), context.getChannelMchNo(), context.getCapability());
+                trade.getMchNo(), context.getChannelMchNo(), context.getCapability(),
+                context.getChannelAppId());
         return douyinCloseService.close(trade, credential, useCancel);
     }
 }

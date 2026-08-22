@@ -31,9 +31,10 @@ public class AlipayDirectRefundStrategy extends AbsRefundStrategy {
 
     @Override
     public RefundResultBo doRefund(RefundOrder refundOrder) {
-        // 组装直连通道调用凭证
+        // 组装直连通道调用凭证(channelAppId 为退款单快照, 继承原支付单, 保证退款与下单同一应用)
         AlipaySdkCredential credential = alipayDirectConfigAssembler.buildConfig(
-                refundOrder.getMchNo(), refundOrder.getChannelMchNo(), refundOrder.getCapability());
+                refundOrder.getMchNo(), refundOrder.getChannelMchNo(), refundOrder.getCapability(),
+                refundOrder.getChannelAppId());
         return alipayRefundService.refund(refundOrder, credential);
     }
 }

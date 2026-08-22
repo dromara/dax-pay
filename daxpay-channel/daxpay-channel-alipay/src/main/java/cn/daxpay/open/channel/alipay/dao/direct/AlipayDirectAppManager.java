@@ -39,6 +39,13 @@ public class AlipayDirectAppManager extends BaseManager<AlipayDirectAppMapper, A
                 .exists();
     }
 
+    /// 按通道商户号与 aliAppId 定位唯一应用(订单快照/显式指定应用时使用, 同通道商户下 aliAppId 唯一)
+    public Optional<AlipayDirectApp> findByChannelMchNoAndAliAppId(String channelMchNo, String aliAppId) {
+        return firstOpt(q -> q
+                .eq(AlipayDirectApp::getChannelMchNo, channelMchNo)
+                .eq(AlipayDirectApp::getAliAppId, aliAppId));
+    }
+
     /// 根据商户号查询首个直连应用(单应用场景, 按创建时间升序取第一条)
     public Optional<AlipayDirectApp> findFirstByMchNo(String mchNo) {
         return firstOpt(q -> q

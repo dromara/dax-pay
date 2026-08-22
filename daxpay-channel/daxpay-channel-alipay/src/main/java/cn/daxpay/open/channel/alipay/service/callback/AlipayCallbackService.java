@@ -226,8 +226,8 @@ public class AlipayCallbackService {
     /// [TransferCallbackService#transferCallback], 避免被 [TransferCallbackService#doTransferCallback]
     /// 对非 success/close 的一律 fail 处理误置失败。
     private String handleTransfer(String mchNo, String channelMchNo, Map<String, String> params) {
-        // 转账仅直连, 凭 path 通道商户号组装直连凭证(转账无能力维度)
-        AlipaySdkCredential credential = alipayDirectConfigAssembler.buildConfig(mchNo, channelMchNo, null);
+        // 转账仅直连, 凭 path 通道商户号组装直连凭证(转账无能力维度, 转账单应用由转账配置显式指定, 此处按 appType 推导验签)
+        AlipaySdkCredential credential = alipayDirectConfigAssembler.buildConfig(mchNo, channelMchNo, null, null);
         AlipayTransferCallbackParseResp resp = parseTransfer(params, credential);
         if (resp == null || !Boolean.TRUE.equals(resp.getSuccess())) {
             log.error("支付宝转账回调验签失败: outBizNo={}", params.get("out_biz_no"));
@@ -327,7 +327,7 @@ public class AlipayCallbackService {
         }
         String channelMchNo = StrUtil.blankToDefault(fields.channelMchNo(), pathChannelMchNo);
         return alipayDirectConfigAssembler.buildConfig(
-                trade.getMchNo(), channelMchNo, fields.capability());
+                trade.getMchNo(), channelMchNo, fields.capability(), fields.channelAppId());
     }
 
     /// 提取 request 全部表单参数为 Map<String,String>(多值取首项)

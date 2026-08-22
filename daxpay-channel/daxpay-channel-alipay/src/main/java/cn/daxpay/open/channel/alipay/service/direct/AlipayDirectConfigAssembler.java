@@ -9,6 +9,7 @@ import cn.daxpay.open.channel.alipay.entity.direct.AlipayDirectChannelMerchant;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -41,12 +42,14 @@ public class AlipayDirectConfigAssembler {
 
     /// 组装直连商户的通道调用凭证(下发给子应用)
     ///
-    /// @param mchNo        商户号(最终兜底定位应用)
-    /// @param channelMchNo 通道商户号(路由回填)
-    /// @param capability   支付能力编码(路由回填,用于选择匹配的应用)
+    /// @param mchNo         商户号(最终兜底定位应用)
+    /// @param channelMchNo  通道商户号(路由回填)
+    /// @param capability    支付能力编码(路由回填,用于选择匹配的应用)
+    /// @param channelAppId  通道应用 AppId(订单快照或调用方显式指定; 非空时优先于能力关联解析,
+    ///                      保证关单/退款/同步/分账与下单使用同一应用, 不随能力关联配置变更漂移)
     /// @return 支付宝 SDK 凭证, 字段对齐子应用 AlipaySdkCredential
-    public AlipaySdkCredential buildConfig(String mchNo, String channelMchNo, String capability) {
-        AlipayDirectApp app = resolveApp(mchNo, channelMchNo, capability);
+    public AlipaySdkCredential buildConfig(String mchNo, String channelMchNo, String capability, String channelAppId) {
+        AlipayDirectApp app = resolveApp(mchNo, channelMchNo, capability, channelAppId);
         return assembleCredential(channelMchNo, app);
     }
 
@@ -115,8 +118,14 @@ public class AlipayDirectConfigAssembler {
     }
 
     /// 解析支付使用的应用（须已装载 mchNo，租户内）
-    /// 优先级：能力关联（显式配置 > appType 唯一推导）> 未命中报错（不再首个兜底）
-    private AlipayDirectApp resolveApp(String mchNo, String channelMchNo, String capability) {
+    /// 优先级：显式 channelAppId（订单快照）> 能力关联（显式配置 > appType 唯一推导）> 未命中报错（不再首个兜底）
+    private AlipayDirectApp resolveApp(String mchNo, String channelMchNo, String capability, String channelAppId) {
+        // 显式 appid 定位(订单快照/调用方指定, 同通道商户下 aliAppId 唯一)
+        if (StrUtil.isNotBlank(channelAppId)) {
+            return alipayDirectAppManager.findByChannelMchNoAndAliAppId(channelMchNo, channelAppId)
+                    // 支付宝: 指定 AppId 未配置
+                    .orElseThrow(() -> new DataNotExistException("error.channel.alipay.channelAppIdNotFound", channelAppId));
+        }
         // 能力关联解析(显式配置 > appType 唯一推导)
         Optional<AlipayDirectApp> resolved = alipayDirectAppCapabilityService.resolveApp(channelMchNo, capability);
         if (resolved.isPresent()) {

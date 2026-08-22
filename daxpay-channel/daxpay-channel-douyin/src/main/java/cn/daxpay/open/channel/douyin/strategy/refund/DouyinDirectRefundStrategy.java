@@ -30,8 +30,10 @@ public class DouyinDirectRefundStrategy extends AbsRefundStrategy {
 
     @Override
     public RefundResultBo doRefund(RefundOrder refundOrder) {
+        // channelAppId 为退款单快照(继承原支付单, 保证退款与下单同一应用)
         DouyinSdkCredential credential = douyinDirectConfigAssembler.buildConfig(
-                refundOrder.getMchNo(), refundOrder.getChannelMchNo(), refundOrder.getCapability());
+                refundOrder.getMchNo(), refundOrder.getChannelMchNo(), refundOrder.getCapability(),
+                refundOrder.getChannelAppId());
         return douyinRefundService.refund(refundOrder, credential);
     }
 }

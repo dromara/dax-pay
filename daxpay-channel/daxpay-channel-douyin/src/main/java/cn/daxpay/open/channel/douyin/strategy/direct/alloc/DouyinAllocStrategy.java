@@ -72,18 +72,25 @@ public class DouyinAllocStrategy extends AbsAllocStrategy {
         }
     }
 
-    /// 校验 openid 接收方绑定时所用应用与分账发起应用(capability 路由解析)一致
+    /// 校验 openid 接收方绑定时所用应用与分账发起应用一致
     ///
     /// 仅对系统内已绑定(bound)档案校验; 查不到档案(调用方自行在通道侧绑定)或非 bound 状态放行。
-    /// 抖音发起应用按 capability 路由解析, 与 context.channelAppId 无关, 故此处重新组装一次凭证取 appid。
+    /// 发起应用优先取分账单快照(继承原支付单, 见 [AllocStrategyContext#getChannelAppId]);
+    /// 存量订单快照为空时回退按 capability 路由解析。
     private void validateReceiverAppMatch(AllocStrategyContext context, AllocDetail detail) {
-        DouyinSdkCredential credential = douyinDirectConfigAssembler.buildConfig(
-                context.getMchNo(), context.getChannelMchNo(), context.getAllocOrder().getCapability());
+        String resolved = context.getChannelAppId();
+        if (StrUtil.isBlank(resolved)) {
+            // 存量订单无快照: 回退按能力绑/推导解析
+            DouyinSdkCredential credential = douyinDirectConfigAssembler.buildConfig(
+                    context.getMchNo(), context.getChannelMchNo(), context.getAllocOrder().getCapability(), null);
+            resolved = credential.getDouyinAppId();
+        }
+        final String allocAppId = resolved;
         String accountHash = SecureUtil.sha256(detail.getReceiverAccount());
         douyinDirectAllocReceiverManager.findBoundByChannelMchNoAndTypeAndHash(
                         context.getChannelMchNo(), detail.getReceiverType(), accountHash)
                 .ifPresent(receiver -> {
-                    if (!Objects.equals(receiver.getChannelAppId(), credential.getDouyinAppId())) {
+                    if (!Objects.equals(receiver.getChannelAppId(), allocAppId)) {
                         // openid 接收方绑定于其他应用, 与分账发起应用不一致
                         throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
                                 "error.channel.douyin.allocReceiverAppMismatch", receiver.getChannelAppId());
@@ -110,9 +117,10 @@ public class DouyinAllocStrategy extends AbsAllocStrategy {
     }
 
     private DouyinSdkCredential buildCredential(AllocStrategyContext context) {
+        // channelAppId 为分账单快照(继承原支付单); 存量订单为空时回退按能力绑/推导解析
         return douyinDirectConfigAssembler.buildConfig(
                 context.getMchNo(), context.getChannelMchNo(),
-                context.getAllocOrder().getCapability());
+                context.getAllocOrder().getCapability(), context.getChannelAppId());
     }
 
     private List<DouyinAllocService.AllocDetailInfo> buildDetailInfos(AllocStrategyContext context) {

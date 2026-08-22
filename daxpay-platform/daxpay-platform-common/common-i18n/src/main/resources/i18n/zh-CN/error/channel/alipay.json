@@ -45,6 +45,8 @@
   "authTokenExchangeFailed": "换取应用授权令牌失败: {0}",
   "paymentGatewayUrlRequired": "平台支付网关地址(paymentGatewayBaseUrl)未配置，无法生成授权回调地址",
   "appTypeCapabilityMismatch": "支付宝应用类型与支付能力不匹配",
+  "channelAppIdNotFound": "指定的支付宝应用AppId[{0}]未在系统中配置",
+
   "appNotConfigured": "未配置 {0} 对应的应用，请前往通道商户应用配置页绑定",
   "appNotUnique": "存在多个 {0} 类型的应用，请显式配置能力绑定以明确选择",
   "transferFailed": "支付宝转账失败: {0}",

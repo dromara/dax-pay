@@ -35,9 +35,10 @@ public class AlipayDirectCloseStrategy extends AbsPayCloseStrategy {
         // 直接从 trade 读取路由参数, 不再需要 container 中间层
         PayTrade trade = context.getTrade();
 
-        // 组装通道调用凭证
+        // 组装通道调用凭证(channelAppId 为订单快照, 保证关单与下单同一应用)
         AlipaySdkCredential credential = alipayDirectConfigAssembler.buildConfig(
-                trade.getMchNo(), context.getChannelMchNo(), context.getCapability());
+                trade.getMchNo(), context.getChannelMchNo(), context.getCapability(),
+                context.getChannelAppId());
 
         return alipayCloseService.close(trade, credential, useCancel);
     }
