@@ -46,7 +46,7 @@ public class SwaggerAutoConfiguration {
         var info = new Info()
                 .title(defaultValue(swagger.getTitle(), "DaxPay API"))
                 .description(defaultValue(swagger.getDescription(), "DaxPay 接口文档"))
-                .version(defaultValue(swagger.getVersion(), "4.0.0-SNAPSHOT"));
+                .version(defaultValue(swagger.getVersion(), "4.0.0-beta4"));
 
         if (StringUtils.hasText(swagger.getAuthor())) {
             info.contact(new Contact().name(swagger.getAuthor()));

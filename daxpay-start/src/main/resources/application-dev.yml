@@ -82,7 +82,7 @@ daxpay:
         author: DaxPay
         title: DaxPay支付平台-开源版
         description: DaxPay支付平台-开源版
-        version: 4.0.0-beta3
+        version: 4.0.0-beta4
     starter:
       auth:
         # 开启超级管理员

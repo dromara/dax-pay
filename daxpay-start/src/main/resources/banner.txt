@@ -12,5 +12,5 @@ ${AnsiColor.MAGENTA}
 
 Service: DaxPay 开源版
 Spring Boot Version: ${spring-boot.version}
-DaxPay Version 4.0.0-SNAPSHOT
+DaxPay Version 4.0.0-beta4
 ${AnsiColor.BLACK}

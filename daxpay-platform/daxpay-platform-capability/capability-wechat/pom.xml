@@ -6,7 +6,7 @@
     <parent>
         <groupId>cn.daxpay.open</groupId>
         <artifactId>daxpay-platform-capability</artifactId>
-        <version>4.0.0-beta3</version>
+        <version>4.0.0-beta4</version>
     </parent>
 
     <artifactId>capability-wechat</artifactId>

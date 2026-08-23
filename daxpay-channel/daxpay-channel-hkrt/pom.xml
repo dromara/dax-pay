@@ -7,7 +7,7 @@
     <parent>
         <groupId>cn.daxpay.open</groupId>
         <artifactId>daxpay-channel</artifactId>
-        <version>4.0.0-beta3</version>
+        <version>4.0.0-beta4</version>
     </parent>
 
     <artifactId>daxpay-channel-hkrt</artifactId>
