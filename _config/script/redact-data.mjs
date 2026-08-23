@@ -44,6 +44,7 @@ const KEEP_TABLES = new Set([
   // 地区
   'base_area',
   'base_city',
+  'base_city_adjacent',
   'base_province',
   // 支付元数据定义
   'pay_md_provider',

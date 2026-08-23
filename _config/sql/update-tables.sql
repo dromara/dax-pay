@@ -1,324 +1,368 @@
 -- ----------------------------
--- 分账接收方绑定(通道侧注册) 5 张表
--- 微信直连/服务商、支付宝直连/服务商、抖音直连, 各通道字段流程不一致故独立建表
+-- 表结构升级脚本 (2026-08-23)
+-- 内容:
+--   一、历史遗留 timestamp without time zone 列统一转 timestamptz(6), 共 21 张表 44 列
+--       背景: 项目约定时间字段统一 timestamptz(6) + 实体 OffsetDateTime(UTC)。
+--       历史列存的是 UTC 字面量(自定义 OffsetDateTimeTypeHandler 统一按 UTC 写入),
+--       故迁移统一 USING "列" AT TIME ZONE 'UTC' 还原正确绝对时刻。
+--       每表包 DO 条件块: 列已是 timestamptz 时跳过, 重复执行无副作用(幂等)。
+--   二、补齐缺失的列注释 52 条 (COMMENT ON COLUMN)
+--   三、补齐缺失的索引注释 6 条 (COMMENT ON INDEX)
 -- ----------------------------
-DROP TABLE IF EXISTS "public"."alipay_direct_alloc_receiver";
-CREATE TABLE "public"."alipay_direct_alloc_receiver" (
-  "id" int8 NOT NULL,
-  "mch_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "channel_mch_no" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
-  "receiver_type" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "receiver_account" varchar(256) COLLATE "pg_catalog"."default" NOT NULL,
-  "account_hash" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
-  "receiver_name" varchar(256) COLLATE "pg_catalog"."default",
-  "direct_app_ref_id" int8,
-  "status" varchar(16) COLLATE "pg_catalog"."default" NOT NULL,
-  "error_msg" text COLLATE "pg_catalog"."default",
-  "bind_time" timestamptz(6),
-  "unbind_time" timestamptz(6),
-  "creator" int8,
-  "create_time" timestamptz(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamptz(6),
-  "version" int4 NOT NULL DEFAULT 0,
-  "deleted" bool NOT NULL DEFAULT false
-)
-;
-COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."id" IS '主键';
-COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."mch_no" IS '商户号';
-COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."channel_mch_no" IS '通道商户号(关联通用通道商户主表)';
-COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."receiver_type" IS '接收方类型(USER_ID用户号/LOGIN_NAME登录账号)';
-COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."receiver_account" IS '接收方账号(AES-256-GCM加密存储)';
-COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."account_hash" IS '接收方账号SHA-256哈希(密文不确定, 查重与等值定位用)';
-COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."receiver_name" IS '接收方名称(AES-256-GCM加密存储, 可空)';
-COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."direct_app_ref_id" IS '发起绑定的支付宝应用引用(alipay_direct_app主键, 重新绑定复用)';
-COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."status" IS '绑定状态(bound已绑定/unbound已解绑/fail绑定失败)';
-COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."error_msg" IS '最近一次绑定/解绑失败原因';
-COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."bind_time" IS '绑定成功时间';
-COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."unbind_time" IS '解绑成功时间';
-COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."creator" IS '创建人';
-COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."create_time" IS '创建时间';
-COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."last_modifier" IS '最后修改人';
-COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."last_modified_time" IS '最后修改时间';
-COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."version" IS '乐观锁版本号';
-COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."deleted" IS '逻辑删除标志';
-COMMENT ON TABLE "public"."alipay_direct_alloc_receiver" IS '支付宝直连分账接收方(通道侧绑定档案)';
-CREATE UNIQUE INDEX "uk_alipay_direct_alloc_receiver" ON "public"."alipay_direct_alloc_receiver" USING btree (
-  "channel_mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
-  "receiver_type" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
-  "account_hash" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-) WHERE deleted = false;
-COMMENT ON INDEX "public"."uk_alipay_direct_alloc_receiver" IS '同一通道商户下同类型同账号接收方唯一(部分唯一索引)';
-ALTER TABLE "public"."alipay_direct_alloc_receiver" ADD CONSTRAINT "pk_alipay_direct_alloc_receiver" PRIMARY KEY ("id");
-
-DROP TABLE IF EXISTS "public"."alipay_isv_alloc_receiver";
-CREATE TABLE "public"."alipay_isv_alloc_receiver" (
-  "id" int8 NOT NULL,
-  "mch_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "channel_mch_no" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
-  "receiver_type" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "receiver_account" varchar(256) COLLATE "pg_catalog"."default" NOT NULL,
-  "account_hash" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
-  "receiver_name" varchar(256) COLLATE "pg_catalog"."default",
-  "status" varchar(16) COLLATE "pg_catalog"."default" NOT NULL,
-  "error_msg" text COLLATE "pg_catalog"."default",
-  "bind_time" timestamptz(6),
-  "unbind_time" timestamptz(6),
-  "creator" int8,
-  "create_time" timestamptz(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamptz(6),
-  "version" int4 NOT NULL DEFAULT 0,
-  "deleted" bool NOT NULL DEFAULT false
-)
-;
-COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."id" IS '主键';
-COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."mch_no" IS '商户号';
-COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."channel_mch_no" IS '通道商户号(关联通用通道商户主表)';
-COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."receiver_type" IS '接收方类型(USER_ID用户号/LOGIN_NAME登录账号)';
-COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."receiver_account" IS '接收方账号(AES-256-GCM加密存储)';
-COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."account_hash" IS '接收方账号SHA-256哈希(密文不确定, 查重与等值定位用)';
-COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."receiver_name" IS '接收方名称(AES-256-GCM加密存储, 可空)';
-COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."status" IS '绑定状态(bound已绑定/unbound已解绑/fail绑定失败)';
-COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."error_msg" IS '最近一次绑定/解绑失败原因';
-COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."bind_time" IS '绑定成功时间';
-COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."unbind_time" IS '解绑成功时间';
-COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."creator" IS '创建人';
-COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."create_time" IS '创建时间';
-COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."last_modifier" IS '最后修改人';
-COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."last_modified_time" IS '最后修改时间';
-COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."version" IS '乐观锁版本号';
-COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."deleted" IS '逻辑删除标志';
-COMMENT ON TABLE "public"."alipay_isv_alloc_receiver" IS '支付宝服务商分账接收方(通道侧绑定档案, 凭证由子商户授权绑定自动决定)';
-CREATE UNIQUE INDEX "uk_alipay_isv_alloc_receiver" ON "public"."alipay_isv_alloc_receiver" USING btree (
-  "channel_mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
-  "receiver_type" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
-  "account_hash" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-) WHERE deleted = false;
-COMMENT ON INDEX "public"."uk_alipay_isv_alloc_receiver" IS '同一通道商户下同类型同账号接收方唯一(部分唯一索引)';
-ALTER TABLE "public"."alipay_isv_alloc_receiver" ADD CONSTRAINT "pk_alipay_isv_alloc_receiver" PRIMARY KEY ("id");
-
-DROP TABLE IF EXISTS "public"."douyin_direct_alloc_receiver";
-CREATE TABLE "public"."douyin_direct_alloc_receiver" (
-  "id" int8 NOT NULL,
-  "mch_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "channel_mch_no" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
-  "receiver_type" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "receiver_account" varchar(256) COLLATE "pg_catalog"."default" NOT NULL,
-  "account_hash" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
-  "receiver_name" varchar(256) COLLATE "pg_catalog"."default",
-  "relation_type" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "custom_relation" varchar(64) COLLATE "pg_catalog"."default",
-  "channel_app_id" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
-  "status" varchar(16) COLLATE "pg_catalog"."default" NOT NULL,
-  "error_msg" text COLLATE "pg_catalog"."default",
-  "bind_time" timestamptz(6),
-  "unbind_time" timestamptz(6),
-  "creator" int8,
-  "create_time" timestamptz(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamptz(6),
-  "version" int4 NOT NULL DEFAULT 0,
-  "deleted" bool NOT NULL DEFAULT false
-)
-;
-COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."id" IS '主键';
-COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."mch_no" IS '商户号';
-COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."channel_mch_no" IS '通道商户号(关联通用通道商户主表)';
-COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."receiver_type" IS '接收方类型(MERCHANT_ID商户号/PERSONAL_OPENID个人openid)';
-COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."receiver_account" IS '接收方账号(AES-256-GCM加密存储)';
-COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."account_hash" IS '接收方账号SHA-256哈希(密文不确定, 查重与等值定位用)';
-COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."receiver_name" IS '接收方名称(AES-256-GCM加密存储, MERCHANT_ID时必填商户全称)';
-COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."relation_type" IS '分账关系类型(抖音原生大写, CUSTOM时需custom_relation)';
-COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."custom_relation" IS '自定义分账关系名(relation_type=CUSTOM时必填)';
-COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."channel_app_id" IS '绑定时所用商户档抖音应用appid(重新绑定复用)';
-COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."status" IS '绑定状态(bound已绑定/unbound已解绑/fail绑定失败)';
-COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."error_msg" IS '最近一次绑定/解绑失败原因';
-COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."bind_time" IS '绑定成功时间';
-COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."unbind_time" IS '解绑成功时间';
-COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."creator" IS '创建人';
-COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."create_time" IS '创建时间';
-COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."last_modifier" IS '最后修改人';
-COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."last_modified_time" IS '最后修改时间';
-COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."version" IS '乐观锁版本号';
-COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."deleted" IS '逻辑删除标志';
-COMMENT ON TABLE "public"."douyin_direct_alloc_receiver" IS '抖音直连分账接收方(通道侧绑定档案)';
-CREATE UNIQUE INDEX "uk_douyin_direct_alloc_receiver" ON "public"."douyin_direct_alloc_receiver" USING btree (
-  "channel_mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
-  "receiver_type" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
-  "account_hash" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-) WHERE deleted = false;
-COMMENT ON INDEX "public"."uk_douyin_direct_alloc_receiver" IS '同一通道商户下同类型同账号接收方唯一(部分唯一索引)';
-ALTER TABLE "public"."douyin_direct_alloc_receiver" ADD CONSTRAINT "pk_douyin_direct_alloc_receiver" PRIMARY KEY ("id");
-
-DROP TABLE IF EXISTS "public"."wechat_direct_alloc_receiver";
-CREATE TABLE "public"."wechat_direct_alloc_receiver" (
-  "id" int8 NOT NULL,
-  "mch_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "channel_mch_no" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
-  "receiver_type" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "receiver_account" varchar(256) COLLATE "pg_catalog"."default" NOT NULL,
-  "account_hash" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
-  "receiver_name" varchar(256) COLLATE "pg_catalog"."default",
-  "relation_type" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "custom_relation" varchar(64) COLLATE "pg_catalog"."default",
-  "channel_app_id" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
-  "status" varchar(16) COLLATE "pg_catalog"."default" NOT NULL,
-  "error_msg" text COLLATE "pg_catalog"."default",
-  "bind_time" timestamptz(6),
-  "unbind_time" timestamptz(6),
-  "creator" int8,
-  "create_time" timestamptz(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamptz(6),
-  "version" int4 NOT NULL DEFAULT 0,
-  "deleted" bool NOT NULL DEFAULT false
-)
-;
-COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."id" IS '主键';
-COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."mch_no" IS '商户号';
-COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."channel_mch_no" IS '通道商户号(关联通用通道商户主表)';
-COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."receiver_type" IS '接收方类型(MERCHANT_ID商户号/PERSONAL_OPENID个人openid)';
-COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."receiver_account" IS '接收方账号(AES-256-GCM加密存储, openid为channel_app_id维度)';
-COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."account_hash" IS '接收方账号SHA-256哈希(密文不确定, 查重与等值定位用)';
-COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."receiver_name" IS '接收方名称(AES-256-GCM加密存储, MERCHANT_ID时必填商户全称)';
-COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."relation_type" IS '分账关系类型(微信原生小写映射, CUSTOM时需custom_relation)';
-COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."custom_relation" IS '自定义分账关系名(relation_type=CUSTOM时必填)';
-COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."channel_app_id" IS '绑定时所用商户档微信应用appid(重新绑定复用)';
-COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."status" IS '绑定状态(bound已绑定/unbound已解绑/fail绑定失败)';
-COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."error_msg" IS '最近一次绑定/解绑失败原因';
-COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."bind_time" IS '绑定成功时间';
-COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."unbind_time" IS '解绑成功时间';
-COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."creator" IS '创建人';
-COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."create_time" IS '创建时间';
-COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."last_modifier" IS '最后修改人';
-COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."last_modified_time" IS '最后修改时间';
-COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."version" IS '乐观锁版本号';
-COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."deleted" IS '逻辑删除标志';
-COMMENT ON TABLE "public"."wechat_direct_alloc_receiver" IS '微信直连分账接收方(通道侧绑定档案)';
-CREATE UNIQUE INDEX "uk_wechat_direct_alloc_receiver" ON "public"."wechat_direct_alloc_receiver" USING btree (
-  "channel_mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
-  "receiver_type" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
-  "account_hash" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-) WHERE deleted = false;
-COMMENT ON INDEX "public"."uk_wechat_direct_alloc_receiver" IS '同一通道商户下同类型同账号接收方唯一(部分唯一索引)';
-ALTER TABLE "public"."wechat_direct_alloc_receiver" ADD CONSTRAINT "pk_wechat_direct_alloc_receiver" PRIMARY KEY ("id");
-
-DROP TABLE IF EXISTS "public"."wechat_isv_alloc_receiver";
-CREATE TABLE "public"."wechat_isv_alloc_receiver" (
-  "id" int8 NOT NULL,
-  "mch_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "channel_mch_no" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
-  "receiver_type" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "receiver_account" varchar(256) COLLATE "pg_catalog"."default" NOT NULL,
-  "account_hash" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
-  "receiver_name" varchar(256) COLLATE "pg_catalog"."default",
-  "relation_type" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
-  "custom_relation" varchar(64) COLLATE "pg_catalog"."default",
-  "sp_app_id" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
-  "sub_app_id" varchar(64) COLLATE "pg_catalog"."default",
-  "status" varchar(16) COLLATE "pg_catalog"."default" NOT NULL,
-  "error_msg" text COLLATE "pg_catalog"."default",
-  "bind_time" timestamptz(6),
-  "unbind_time" timestamptz(6),
-  "creator" int8,
-  "create_time" timestamptz(6),
-  "last_modifier" int8,
-  "last_modified_time" timestamptz(6),
-  "version" int4 NOT NULL DEFAULT 0,
-  "deleted" bool NOT NULL DEFAULT false
-)
-;
-COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."id" IS '主键';
-COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."mch_no" IS '商户号';
-COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."channel_mch_no" IS '通道商户号(关联通用通道商户主表)';
-COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."receiver_type" IS '接收方类型(MERCHANT_ID商户号/PERSONAL_OPENID个人openid/PERSONAL_SUB_OPENID子商户应用openid)';
-COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."receiver_account" IS '接收方账号(AES-256-GCM加密存储, openid为对应appid维度)';
-COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."account_hash" IS '接收方账号SHA-256哈希(密文不确定, 查重与等值定位用)';
-COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."receiver_name" IS '接收方名称(AES-256-GCM加密存储, MERCHANT_ID时必填商户全称)';
-COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."relation_type" IS '分账关系类型(微信原生小写映射, CUSTOM时需custom_relation)';
-COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."custom_relation" IS '自定义分账关系名(relation_type=CUSTOM时必填)';
-COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."sp_app_id" IS '绑定时所用平台档(服务商)应用appid(重新绑定复用)';
-COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."sub_app_id" IS '子商户应用appid(可空, PERSONAL_SUB_OPENID时必填)';
-COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."status" IS '绑定状态(bound已绑定/unbound已解绑/fail绑定失败)';
-COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."error_msg" IS '最近一次绑定/解绑失败原因';
-COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."bind_time" IS '绑定成功时间';
-COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."unbind_time" IS '解绑成功时间';
-COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."creator" IS '创建人';
-COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."create_time" IS '创建时间';
-COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."last_modifier" IS '最后修改人';
-COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."last_modified_time" IS '最后修改时间';
-COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."version" IS '乐观锁版本号';
-COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."deleted" IS '逻辑删除标志';
-COMMENT ON TABLE "public"."wechat_isv_alloc_receiver" IS '微信服务商分账接收方(通道侧绑定档案, 挂特约商户sub_mchid维度)';
-CREATE UNIQUE INDEX "uk_wechat_isv_alloc_receiver" ON "public"."wechat_isv_alloc_receiver" USING btree (
-  "channel_mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
-  "receiver_type" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
-  "account_hash" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-) WHERE deleted = false;
-COMMENT ON INDEX "public"."uk_wechat_isv_alloc_receiver" IS '同一通道商户下同类型同账号接收方唯一(部分唯一索引)';
-ALTER TABLE "public"."wechat_isv_alloc_receiver" ADD CONSTRAINT "pk_wechat_isv_alloc_receiver" PRIMARY KEY ("id");
 
 -- ----------------------------
--- 支付码牌新增分账标识
+-- 一、timestamp without time zone → timestamptz(6)
 -- ----------------------------
-ALTER TABLE "public"."device_qr_code" ADD COLUMN "allocation" bool NOT NULL DEFAULT false;
-COMMENT ON COLUMN "public"."device_qr_code"."allocation" IS '是否分账码牌(开启后扫码支付向下单链路透传分账标识; 产品不支持分账时自动降级普通收款, 交易分账状态记为 unsupported)';
 
--- ------------------------------------------------------------
--- 修复 pay_trade.alloc_status 默认值污染(幂等)
--- 2026-08-18: 历史增量脚本曾以 DEFAULT 'none' 加列, 导致普通(非分账)订单也落 'none'(待分账);
--- 语义修正: null=非分账订单, 仅下单声明 allocation=true 的交易才初始化 none/unsupported, 不设列默认值
--- ------------------------------------------------------------
-ALTER TABLE "public"."pay_trade" ALTER COLUMN "alloc_status" DROP DEFAULT;
-COMMENT ON COLUMN "public"."pay_trade"."alloc_status" IS '分账状态(null-非分账订单/none-待分账/unsupported-不支持分账/processing-分账中/done-已分账)';
--- 存量回填: 容器未声明分账的 trade 置回 null(真实分账单保留, 按 trade_type 关联对应容器判定)
-UPDATE "public"."pay_trade" t SET alloc_status = NULL
-WHERE t.alloc_status = 'none'
-  AND NOT (
-    (t.trade_type = 'gateway' AND EXISTS (SELECT 1 FROM pay_gateway_order g
-        WHERE g.id = t.container_id AND g.allocation = true))
-    OR (t.trade_type = 'normal' AND EXISTS (SELECT 1 FROM pay_normal_order n
-        WHERE n.id = t.container_id AND n.allocation = true))
-  );
+-- 通道商户配置类
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.columns
+             WHERE table_schema = 'public' AND table_name = 'hkrt_isv_channel_merchant'
+               AND column_name = 'create_time' AND data_type = 'timestamp without time zone') THEN
+    ALTER TABLE "public"."hkrt_isv_channel_merchant"
+      ALTER COLUMN "create_time" TYPE timestamptz(6) USING "create_time" AT TIME ZONE 'UTC',
+      ALTER COLUMN "last_modified_time" TYPE timestamptz(6) USING "last_modified_time" AT TIME ZONE 'UTC';
+  END IF;
+END $$;
 
--- ------------------------------------------------------------
--- 支付宝应用表补唯一索引(2026-08-18)
--- 此前 alipay_direct_app.ali_app_id 与 alipay_isv_app.ali_app_id 均无唯一约束,
--- 同一应用可重复建档, 接收方绑定记录 directAppRefId 指向歧义; 现补唯一索引与业务层查重对齐,
--- 并对齐微信/抖音应用表的唯一约束设计(商户档 per 商户唯一 / 平台档全局唯一)。
--- 前置条件: 存量数据无重复(按索引列分组 count>1 需先人工清理)。
--- ------------------------------------------------------------
-CREATE UNIQUE INDEX "uk_alipay_direct_app_mch_channel_appid" ON "public"."alipay_direct_app" USING btree (
-  "mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
-  "channel_mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
-  "ali_app_id" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-) WHERE deleted = false;
-COMMENT ON INDEX "public"."uk_alipay_direct_app_mch_channel_appid" IS '同一商户同一通道商户下支付宝应用ID唯一(与业务层查重作用域对齐, 对齐微信/抖音商户应用唯一约束)';
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.columns
+             WHERE table_schema = 'public' AND table_name = 'hkrt_isv_key_config'
+               AND column_name = 'create_time' AND data_type = 'timestamp without time zone') THEN
+    ALTER TABLE "public"."hkrt_isv_key_config"
+      ALTER COLUMN "create_time" TYPE timestamptz(6) USING "create_time" AT TIME ZONE 'UTC',
+      ALTER COLUMN "last_modified_time" TYPE timestamptz(6) USING "last_modified_time" AT TIME ZONE 'UTC';
+  END IF;
+END $$;
 
-CREATE UNIQUE INDEX "uk_alipay_isv_app_appid" ON "public"."alipay_isv_app" USING btree (
-  "ali_app_id" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-) WHERE deleted = false;
-COMMENT ON INDEX "public"."uk_alipay_isv_app_appid" IS '支付宝服务商应用ID全局唯一(与业务层查重作用域对齐, 对齐微信/抖音平台应用唯一约束)';
+-- 账号安全
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.columns
+             WHERE table_schema = 'public' AND table_name = 'iam_user_password_security'
+               AND column_name = 'create_time' AND data_type = 'timestamp without time zone') THEN
+    ALTER TABLE "public"."iam_user_password_security"
+      ALTER COLUMN "lock_time" TYPE timestamptz(6) USING "lock_time" AT TIME ZONE 'UTC',
+      ALTER COLUMN "password_expire_time" TYPE timestamptz(6) USING "password_expire_time" AT TIME ZONE 'UTC',
+      ALTER COLUMN "last_change_password_time" TYPE timestamptz(6) USING "last_change_password_time" AT TIME ZONE 'UTC',
+      ALTER COLUMN "create_time" TYPE timestamptz(6) USING "create_time" AT TIME ZONE 'UTC',
+      ALTER COLUMN "last_modified_time" TYPE timestamptz(6) USING "last_modified_time" AT TIME ZONE 'UTC';
+  END IF;
+END $$;
 
--- ------------------------------------------------------------
--- 业务单号唯一维度统一为商户(2026-08-19)
--- pay_gateway_order 此前无 biz_order_no 唯一约束(幂等全靠 Redis 锁), pay_alloc_order 仅有普通索引;
--- 与 pay_normal_order.uk_normal_order_mch_biz / pay_refund_order.uk_refund_order_mch_biz 的商户维度对齐,
--- 业务单号是商户侧订单系统编号, 唯一性按商户维度成立(同商户多应用复用同一单号视为重复建单)。
--- 前置条件: 存量数据无重复(按 mch_no+biz_order_no / mch_no+biz_alloc_no 分组 count>1 需先人工清理)。
--- ------------------------------------------------------------
-CREATE UNIQUE INDEX "uk_gateway_order_mch_biz" ON "public"."pay_gateway_order" USING btree (
-  "mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
-  "biz_order_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-) WHERE deleted = false;
-COMMENT ON INDEX "public"."uk_gateway_order_mch_biz" IS '网关支付商户业务单号唯一约束: 同商户同 biz_order_no 仅允许一单, 防重复建单(与 pay_normal_order.uk_normal_order_mch_biz 维度一致)';
+-- 商户域
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.columns
+             WHERE table_schema = 'public' AND table_name = 'mch_app_info'
+               AND column_name = 'create_time' AND data_type = 'timestamp without time zone') THEN
+    ALTER TABLE "public"."mch_app_info"
+      ALTER COLUMN "create_time" TYPE timestamptz(6) USING "create_time" AT TIME ZONE 'UTC',
+      ALTER COLUMN "last_modified_time" TYPE timestamptz(6) USING "last_modified_time" AT TIME ZONE 'UTC';
+  END IF;
+END $$;
 
-CREATE UNIQUE INDEX "uk_pay_alloc_order_mch_biz" ON "public"."pay_alloc_order" USING btree (
-  "mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
-  "biz_alloc_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-) WHERE deleted = false;
-COMMENT ON INDEX "public"."uk_pay_alloc_order_mch_biz" IS '分账单商户分账单号唯一约束: 同商户同 biz_alloc_no 仅允许一单, 商户幂等键(升级原普通索引 idx_pay_alloc_order_mch_biz)';
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.columns
+             WHERE table_schema = 'public' AND table_name = 'mch_credential'
+               AND column_name = 'create_time' AND data_type = 'timestamp without time zone') THEN
+    ALTER TABLE "public"."mch_credential"
+      ALTER COLUMN "create_time" TYPE timestamptz(6) USING "create_time" AT TIME ZONE 'UTC',
+      ALTER COLUMN "last_modified_time" TYPE timestamptz(6) USING "last_modified_time" AT TIME ZONE 'UTC';
+  END IF;
+END $$;
 
--- 被唯一索引完全替代的普通索引, 删除
-DROP INDEX IF EXISTS "idx_pay_alloc_order_mch_biz";
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.columns
+             WHERE table_schema = 'public' AND table_name = 'mch_info'
+               AND column_name = 'create_time' AND data_type = 'timestamp without time zone') THEN
+    ALTER TABLE "public"."mch_info"
+      ALTER COLUMN "create_time" TYPE timestamptz(6) USING "create_time" AT TIME ZONE 'UTC',
+      ALTER COLUMN "last_modified_time" TYPE timestamptz(6) USING "last_modified_time" AT TIME ZONE 'UTC';
+  END IF;
+END $$;
+
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.columns
+             WHERE table_schema = 'public' AND table_name = 'mch_risk_config'
+               AND column_name = 'create_time' AND data_type = 'timestamp without time zone') THEN
+    ALTER TABLE "public"."mch_risk_config"
+      ALTER COLUMN "create_time" TYPE timestamptz(6) USING "create_time" AT TIME ZONE 'UTC',
+      ALTER COLUMN "last_modified_time" TYPE timestamptz(6) USING "last_modified_time" AT TIME ZONE 'UTC';
+  END IF;
+END $$;
+
+-- mch_user 仅 create_time 违规(last_modified_time 本就是 timestamptz), DEFAULT CURRENT_TIMESTAMP 改型后语义自动正确
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.columns
+             WHERE table_schema = 'public' AND table_name = 'mch_user'
+               AND column_name = 'create_time' AND data_type = 'timestamp without time zone') THEN
+    ALTER TABLE "public"."mch_user"
+      ALTER COLUMN "create_time" TYPE timestamptz(6) USING "create_time" AT TIME ZONE 'UTC';
+  END IF;
+END $$;
+
+-- 支付元数据 (pay_md_* 7 张表, 种子数据表)
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.columns
+             WHERE table_schema = 'public' AND table_name = 'pay_md_capability'
+               AND column_name = 'create_time' AND data_type = 'timestamp without time zone') THEN
+    ALTER TABLE "public"."pay_md_capability"
+      ALTER COLUMN "create_time" TYPE timestamptz(6) USING "create_time" AT TIME ZONE 'UTC',
+      ALTER COLUMN "last_modified_time" TYPE timestamptz(6) USING "last_modified_time" AT TIME ZONE 'UTC';
+  END IF;
+END $$;
+
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.columns
+             WHERE table_schema = 'public' AND table_name = 'pay_md_channel'
+               AND column_name = 'create_time' AND data_type = 'timestamp without time zone') THEN
+    ALTER TABLE "public"."pay_md_channel"
+      ALTER COLUMN "create_time" TYPE timestamptz(6) USING "create_time" AT TIME ZONE 'UTC',
+      ALTER COLUMN "last_modified_time" TYPE timestamptz(6) USING "last_modified_time" AT TIME ZONE 'UTC';
+  END IF;
+END $$;
+
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.columns
+             WHERE table_schema = 'public' AND table_name = 'pay_md_method'
+               AND column_name = 'create_time' AND data_type = 'timestamp without time zone') THEN
+    ALTER TABLE "public"."pay_md_method"
+      ALTER COLUMN "create_time" TYPE timestamptz(6) USING "create_time" AT TIME ZONE 'UTC',
+      ALTER COLUMN "last_modified_time" TYPE timestamptz(6) USING "last_modified_time" AT TIME ZONE 'UTC';
+  END IF;
+END $$;
+
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.columns
+             WHERE table_schema = 'public' AND table_name = 'pay_md_product'
+               AND column_name = 'create_time' AND data_type = 'timestamp without time zone') THEN
+    ALTER TABLE "public"."pay_md_product"
+      ALTER COLUMN "create_time" TYPE timestamptz(6) USING "create_time" AT TIME ZONE 'UTC',
+      ALTER COLUMN "last_modified_time" TYPE timestamptz(6) USING "last_modified_time" AT TIME ZONE 'UTC';
+  END IF;
+END $$;
+
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.columns
+             WHERE table_schema = 'public' AND table_name = 'pay_md_product_capability'
+               AND column_name = 'create_time' AND data_type = 'timestamp without time zone') THEN
+    ALTER TABLE "public"."pay_md_product_capability"
+      ALTER COLUMN "create_time" TYPE timestamptz(6) USING "create_time" AT TIME ZONE 'UTC',
+      ALTER COLUMN "last_modified_time" TYPE timestamptz(6) USING "last_modified_time" AT TIME ZONE 'UTC';
+  END IF;
+END $$;
+
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.columns
+             WHERE table_schema = 'public' AND table_name = 'pay_md_provider'
+               AND column_name = 'create_time' AND data_type = 'timestamp without time zone') THEN
+    ALTER TABLE "public"."pay_md_provider"
+      ALTER COLUMN "create_time" TYPE timestamptz(6) USING "create_time" AT TIME ZONE 'UTC',
+      ALTER COLUMN "last_modified_time" TYPE timestamptz(6) USING "last_modified_time" AT TIME ZONE 'UTC';
+  END IF;
+END $$;
+
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.columns
+             WHERE table_schema = 'public' AND table_name = 'pay_md_provider_method'
+               AND column_name = 'create_time' AND data_type = 'timestamp without time zone') THEN
+    ALTER TABLE "public"."pay_md_provider_method"
+      ALTER COLUMN "create_time" TYPE timestamptz(6) USING "create_time" AT TIME ZONE 'UTC',
+      ALTER COLUMN "last_modified_time" TYPE timestamptz(6) USING "last_modified_time" AT TIME ZONE 'UTC';
+  END IF;
+END $$;
+
+-- 审计日志
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.columns
+             WHERE table_schema = 'public' AND table_name = 'starter_audit_login_log'
+               AND column_name = 'create_time' AND data_type = 'timestamp without time zone') THEN
+    ALTER TABLE "public"."starter_audit_login_log"
+      ALTER COLUMN "create_time" TYPE timestamptz(6) USING "create_time" AT TIME ZONE 'UTC',
+      ALTER COLUMN "last_modified_time" TYPE timestamptz(6) USING "last_modified_time" AT TIME ZONE 'UTC';
+  END IF;
+END $$;
+
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.columns
+             WHERE table_schema = 'public' AND table_name = 'starter_audit_operate_log'
+               AND column_name = 'create_time' AND data_type = 'timestamp without time zone') THEN
+    ALTER TABLE "public"."starter_audit_operate_log"
+      ALTER COLUMN "create_time" TYPE timestamptz(6) USING "create_time" AT TIME ZONE 'UTC',
+      ALTER COLUMN "last_modified_time" TYPE timestamptz(6) USING "last_modified_time" AT TIME ZONE 'UTC';
+  END IF;
+END $$;
+
+-- 平台基础配置
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.columns
+             WHERE table_schema = 'public' AND table_name = 'system_dict'
+               AND column_name = 'create_time' AND data_type = 'timestamp without time zone') THEN
+    ALTER TABLE "public"."system_dict"
+      ALTER COLUMN "create_time" TYPE timestamptz(6) USING "create_time" AT TIME ZONE 'UTC',
+      ALTER COLUMN "last_modified_time" TYPE timestamptz(6) USING "last_modified_time" AT TIME ZONE 'UTC';
+  END IF;
+END $$;
+
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.columns
+             WHERE table_schema = 'public' AND table_name = 'system_dict_item'
+               AND column_name = 'create_time' AND data_type = 'timestamp without time zone') THEN
+    ALTER TABLE "public"."system_dict_item"
+      ALTER COLUMN "create_time" TYPE timestamptz(6) USING "create_time" AT TIME ZONE 'UTC',
+      ALTER COLUMN "last_modified_time" TYPE timestamptz(6) USING "last_modified_time" AT TIME ZONE 'UTC';
+  END IF;
+END $$;
+
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.columns
+             WHERE table_schema = 'public' AND table_name = 'system_platform_config'
+               AND column_name = 'create_time' AND data_type = 'timestamp without time zone') THEN
+    ALTER TABLE "public"."system_platform_config"
+      ALTER COLUMN "create_time" TYPE timestamptz(6) USING "create_time" AT TIME ZONE 'UTC',
+      ALTER COLUMN "last_modified_time" TYPE timestamptz(6) USING "last_modified_time" AT TIME ZONE 'UTC';
+  END IF;
+END $$;
+
+DO $$
+BEGIN
+  IF EXISTS (SELECT 1 FROM information_schema.columns
+             WHERE table_schema = 'public' AND table_name = 'system_platform_encrypt_config'
+               AND column_name = 'create_time' AND data_type = 'timestamp without time zone') THEN
+    ALTER TABLE "public"."system_platform_encrypt_config"
+      ALTER COLUMN "create_time" TYPE timestamptz(6) USING "create_time" AT TIME ZONE 'UTC',
+      ALTER COLUMN "last_modified_time" TYPE timestamptz(6) USING "last_modified_time" AT TIME ZONE 'UTC';
+  END IF;
+END $$;
+
+-- ----------------------------
+-- 二、补齐缺失的列注释 (52 条)
+-- 文案规范: 审计公共列沿用全库多数派范式, 业务列抄对应实体类注释
+-- ----------------------------
+
+-- 通道密钥/商户配置表主键
+COMMENT ON COLUMN "public"."adapay_direct_key_config"."id" IS '主键';
+COMMENT ON COLUMN "public"."hmpay_isv_channel_merchant"."id" IS '主键';
+COMMENT ON COLUMN "public"."hmpay_isv_key_config"."id" IS '主键';
+COMMENT ON COLUMN "public"."lakala_isv_channel_merchant"."id" IS '主键';
+COMMENT ON COLUMN "public"."lakala_isv_key_config"."id" IS '主键';
+COMMENT ON COLUMN "public"."ums_direct_key_config"."id" IS '主键';
+COMMENT ON COLUMN "public"."union_key_config"."id" IS '主键';
+
+-- 转账/分账单主键
+COMMENT ON COLUMN "public"."pay_transfer_trade"."id" IS '主键';
+COMMENT ON COLUMN "public"."pay_transfer_order_alipay"."id" IS '主键';
+COMMENT ON COLUMN "public"."pay_transfer_order_wechat"."id" IS '主键';
+COMMENT ON COLUMN "public"."pay_transfer_order_douyin"."id" IS '主键';
+
+-- 支付元数据能力表审计列
+COMMENT ON COLUMN "public"."pay_md_product_capability"."id" IS '主键';
+COMMENT ON COLUMN "public"."pay_md_product_capability"."creator" IS '创建者ID';
+COMMENT ON COLUMN "public"."pay_md_product_capability"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."pay_md_product_capability"."last_modifier" IS '最后修改者ID';
+COMMENT ON COLUMN "public"."pay_md_product_capability"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."pay_md_product_capability"."version" IS '乐观锁版本号';
+COMMENT ON COLUMN "public"."pay_md_product_capability"."deleted" IS '逻辑删除标志';
+
+-- 支付宝直连应用
+COMMENT ON COLUMN "public"."alipay_direct_app"."app_type" IS '应用类型: mini_program-小程序 mobile_app-移动应用 web_app-网站应用';
+COMMENT ON COLUMN "public"."alipay_direct_app_capability"."creator" IS '创建者ID';
+COMMENT ON COLUMN "public"."alipay_direct_app_capability"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."alipay_direct_app_capability"."last_modifier" IS '最后修改者ID';
+COMMENT ON COLUMN "public"."alipay_direct_app_capability"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."alipay_direct_app_capability"."version" IS '乐观锁版本号';
+
+-- 商户应用通知配置审计列
+COMMENT ON COLUMN "public"."mch_app_notify_config"."id" IS '主键';
+COMMENT ON COLUMN "public"."mch_app_notify_config"."creator" IS '创建者ID';
+COMMENT ON COLUMN "public"."mch_app_notify_config"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."mch_app_notify_config"."last_modifier" IS '最后修改者ID';
+COMMENT ON COLUMN "public"."mch_app_notify_config"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."mch_app_notify_config"."version" IS '乐观锁版本号';
+COMMENT ON COLUMN "public"."mch_app_notify_config"."deleted" IS '逻辑删除标志';
+
+-- 权限/账号域审计列
+COMMENT ON COLUMN "public"."iam_perm_code"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."iam_perm_code"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."iam_perm_menu"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."iam_perm_menu"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."iam_role"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."iam_role"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."iam_user_info"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."iam_user_info"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."iam_user_password_history"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."iam_user_expand_info"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."iam_user_expand_info"."last_modified_time" IS '最后修改时间';
+
+-- 账号业务时间列(文案抄实体注释)
+COMMENT ON COLUMN "public"."iam_user_expand_info"."last_login_time" IS '上次登录时间';
+COMMENT ON COLUMN "public"."iam_user_expand_info"."register_time" IS '注册时间';
+COMMENT ON COLUMN "public"."iam_user_expand_info"."current_login_time" IS '本次登录时间';
+COMMENT ON COLUMN "public"."iam_user_password_security"."last_failure_time" IS '上次登录失败时间';
+
+-- 支付元数据/微信能力/审计/地区业务列(文案抄实体注释)
+COMMENT ON COLUMN "public"."pay_md_provider"."enabled" IS '是否启用';
+COMMENT ON COLUMN "public"."pay_md_provider"."description" IS '描述';
+COMMENT ON COLUMN "public"."wx_platform_app_capability"."product" IS '支付产品编码';
+COMMENT ON COLUMN "public"."starter_audit_login_log"."login_time" IS '访问时间';
+COMMENT ON COLUMN "public"."starter_audit_operate_log"."operate_time" IS '操作时间';
+COMMENT ON COLUMN "public"."starter_audit_unipay_log"."req_id" IS '请求ID(商户传入, 审计索引)';
+COMMENT ON COLUMN "public"."base_area"."code" IS '区域编码';
+
+-- ----------------------------
+-- 三、补齐缺失的索引注释 (6 条)
+-- ----------------------------
+COMMENT ON INDEX "public"."uk_iam_social_config_source" IS '同一社交登录来源唯一';
+COMMENT ON INDEX "public"."mch_user_mch_no_user_id_key" IS '同一商户同一用户唯一';
+COMMENT ON INDEX "public"."uk_notify_notice_read" IS '同一用户同一通知已读记录唯一';
+COMMENT ON INDEX "public"."idx_pay_gateway_pay_env_config_id" IS '网关支付环境外键查询索引(关联 pay_gateway_pay_config 主键)';
+COMMENT ON INDEX "public"."uk_pay_gateway_pay_env" IS '同一支付配置同客户端环境同支付形态唯一(部分唯一索引)';
+COMMENT ON INDEX "public"."uk_pay_gateway_pay_config_app" IS '同一支付网关应用唯一(部分唯一索引)';
+
+-- ----------------------------
+-- 四、精简冗长注释 (23 条, 2026-08-23)
+-- 规范: 注释只保留主标题, 枚举取值展开(code-说明/取值域列举)不入注释,
+--       取值含义以字典/文档为准; 用途/约束类括号说明(加密存储/部分唯一索引等)不受影响
+-- ----------------------------
+COMMENT ON COLUMN "public"."alipay_direct_app"."app_type" IS '应用类型';
+COMMENT ON COLUMN "public"."iam_perm_menu"."menu_type" IS '菜单类型';
+COMMENT ON COLUMN "public"."iam_perm_menu"."badge_type" IS '徽章类型';
+COMMENT ON COLUMN "public"."mch_app_notify_config"."notify_way" IS '传输通道';
+COMMENT ON COLUMN "public"."pay_blacklist"."status" IS '状态';
+COMMENT ON COLUMN "public"."pay_platform_mobile_app"."app_type" IS '端类型';
+COMMENT ON COLUMN "public"."pay_risk_hit"."phase" IS '命中阶段';
+COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."receiver_type" IS '接收方类型';
+COMMENT ON COLUMN "public"."alipay_direct_alloc_receiver"."status" IS '绑定状态';
+COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."receiver_type" IS '接收方类型';
+COMMENT ON COLUMN "public"."alipay_isv_alloc_receiver"."status" IS '绑定状态';
+COMMENT ON COLUMN "public"."base_user_protocol_version"."status" IS '状态';
+COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."receiver_type" IS '接收方类型';
+COMMENT ON COLUMN "public"."douyin_direct_alloc_receiver"."status" IS '绑定状态';
+COMMENT ON COLUMN "public"."mch_store_info"."status" IS '状态';
+COMMENT ON COLUMN "public"."notify_notice"."severity" IS '重要程度';
+COMMENT ON COLUMN "public"."notify_notice"."status" IS '状态';
+COMMENT ON COLUMN "public"."starter_platform_file_record"."access_type" IS '访问类型';
+COMMENT ON COLUMN "public"."starter_platform_file_record"."status" IS '上传状态';
+COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."receiver_type" IS '接收方类型';
+COMMENT ON COLUMN "public"."wechat_direct_alloc_receiver"."status" IS '绑定状态';
+COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."receiver_type" IS '接收方类型';
+COMMENT ON COLUMN "public"."wechat_isv_alloc_receiver"."status" IS '绑定状态';
