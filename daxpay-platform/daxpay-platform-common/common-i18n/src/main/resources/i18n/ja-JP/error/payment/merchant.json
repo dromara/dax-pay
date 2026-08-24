@@ -1,7 +1,5 @@
 {
   "mchNoGenFailed": "販売者番号の生成に失敗しました",
-  "accountOrPhoneNotFound": "アカウントまたはバインドされた電話番号が見つかりません",
-  "accountOrPhoneError": "アカウントまたは電話番号の情報が間違っています",
   "dataErrorNoMchNo": "データエラー、販売者番号が見つかりません",
   "mchNotExist": "販売者情報が見つかりません",
   "mchAppNotFound": "販売者のアプリケーションが見つかりません",

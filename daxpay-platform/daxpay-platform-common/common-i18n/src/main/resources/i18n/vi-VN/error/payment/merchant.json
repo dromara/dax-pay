@@ -1,7 +1,5 @@
 {
   "mchNoGenFailed": "Tạo số người bán không thành công",
-  "accountOrPhoneNotFound": "Không tìm thấy tài khoản hoặc số điện thoại bị ràng buộc",
-  "accountOrPhoneError": "Thông tin tài khoản hoặc số điện thoại không chính xác",
   "dataErrorNoMchNo": "Lỗi dữ liệu, không tìm thấy số người bán",
   "mchNotExist": "Không tìm thấy thông tin người bán",
   "mchAppNotFound": "Không tìm thấy ứng dụng người bán",

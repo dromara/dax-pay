@@ -1,7 +1,5 @@
 {
   "mchNoGenFailed": "Pembuatan nomor pedagang gagal",
-  "accountOrPhoneNotFound": "Akun atau nomor telepon terikat tidak ditemukan",
-  "accountOrPhoneError": "Informasi akun atau nomor telepon salah",
   "dataErrorNoMchNo": "Kesalahan data, nomor pedagang tidak ditemukan",
   "mchNotExist": "Informasi pedagang tidak ditemukan",
   "mchAppNotFound": "Aplikasi pedagang tidak ditemukan",

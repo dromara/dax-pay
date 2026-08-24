@@ -1,7 +1,5 @@
 {
   "mchNoGenFailed": "商户號生成失敗",
-  "accountOrPhoneNotFound": "未找到該賬號或綁定手機信息",
-  "accountOrPhoneError": "賬號或手機號信息不正確",
   "dataErrorNoMchNo": "數據錯誤, 未發現商户號",
   "mchNotExist": "商户信息不存在",
   "mchAppNotFound": "商户應用未找到",

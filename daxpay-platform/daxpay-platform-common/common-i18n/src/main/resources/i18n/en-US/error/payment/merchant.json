@@ -1,7 +1,5 @@
 {
   "mchNoGenFailed": "Merchant number generation failed",
-  "accountOrPhoneNotFound": "Account or bound phone number not found",
-  "accountOrPhoneError": "Account or phone number information is incorrect",
   "dataErrorNoMchNo": "Data error, merchant number not found",
   "mchNotExist": "Merchant information not found",
   "mchAppNotFound": "Merchant application not found",
