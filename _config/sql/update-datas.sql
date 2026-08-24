@@ -1,17 +1,13 @@
--- ----------------------------
--- 补分账菜单与缓存演示菜单种子(2026-08-23)
--- 背景: 6d5395758(分账)与 8bdeb6e9d(缓存演示)提交只更新了 iam_perm_menu.sql(229 库单表文件),
---       未同步 data.sql 种子, 已装环境与全量种子均缺以下菜单; 幂等写入需先确认不存在
--- ----------------------------
-INSERT INTO public.iam_perm_menu VALUES (208, 2, 'demos:cache', 'admin', 'CacheDemo', 'menu.demos.cache', 'lucide:database-backup', false, false, '/demos/cache/CacheDemo', '/demos/cache', NULL, 7, false, true, false, 0, NULL, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-15 00:00:00+08', '2026-08-15 00:00:00+08');
-INSERT INTO public.iam_perm_menu VALUES (608, 6, 'trade:alloc', 'admin', 'AllocOrderList', 'menu.trade.allocOrder', 'lucide:split', false, false, '/payment/order/AllocOrderList', '/trade/alloc-order', NULL, 2.5, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO public.iam_perm_menu VALUES (91127, 91100, 'trade:alloc', 'merchant', 'AllocOrderList', 'menu.trade.allocOrder', 'lucide:split', false, false, '/payment/order/AllocOrderList', '/trade/alloc-order', NULL, 2.5, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO public.iam_role_menu VALUES (1000000000208, 1, NULL, 208);
-INSERT INTO public.iam_role_menu VALUES (1000000000608, 1, NULL, 608);
-INSERT INTO public.iam_role_menu VALUES (920000091127, 2, NULL, 91127);
-
--- ----------------------------
--- 分账按钮权限码(229 库 8/19 扫描同步生成, data.sql 2026-08-23 重导时纳入)
--- ----------------------------
-INSERT INTO public.iam_perm_code VALUES (2089898876290093056, 'trade:alloc:manage', 'trade:alloc', true, NULL, 1, 1, 0, false, '2026-08-19 02:14:55.208677+00', '2026-08-19 02:14:55.208677+00', 'perm.trade:alloc:manage');
-INSERT INTO public.iam_perm_code VALUES (2089898876302675968, 'trade:alloc:view', 'trade:alloc', true, NULL, 1, 1, 0, false, '2026-08-19 02:14:55.211906+00', '2026-08-19 02:14:55.211906+00', 'perm.trade:alloc:view');
+-- 升级数据脚本: 存量用户密码安全记录补齐
+-- 为缺少 iam_user_password_security 记录的存量用户补建默认记录 (initial_password=false, 密码不过期),
+-- 避免存量正常用户首次登录被误判为初始密码而强制改密;
+-- 新建用户与管理员重置密码仍由应用层写入 initial_password=true, 不受本脚本影响。
+-- 脚本幂等, 可重复执行。
+INSERT INTO "public"."iam_user_password_security"
+    (id, password_error_count, initial_password, version, deleted)
+SELECT u.id, 0, false, 0, false
+FROM "public"."iam_user_info" u
+WHERE u.deleted = false
+  AND NOT EXISTS (
+      SELECT 1 FROM "public"."iam_user_password_security" s WHERE s.id = u.id
+  );

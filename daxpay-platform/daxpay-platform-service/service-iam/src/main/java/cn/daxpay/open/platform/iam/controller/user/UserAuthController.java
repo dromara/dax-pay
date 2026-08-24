@@ -1,5 +1,6 @@
 package cn.daxpay.open.platform.iam.controller.user;
 
+import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.platform.iam.param.user.UpdatePasswordParam;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 ///
 /// 提供认证流程/登录流程中的接口，需要登录
 @Validated
+@IgnoreAuth(login = true)
 @Tag(name = "用户认证")
 @RestController
 @RequestMapping("/user/auth")

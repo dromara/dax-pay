@@ -60,7 +60,7 @@ public class PermMenuController {
         return Res.ok(permMenuService.tree(clientCode));
     }
 
-    @PermCode(code = PermCodes.Action.VIEW)
+    @IgnoreAuth(login = true)
     @Operation(summary = "获取当前用户菜单树", description = "登录用户获取个人菜单，终端编码从请求头读取")
     @GetMapping("/my")
     public Result<List<PermMenuResult>> myMenuTree() {

@@ -7,6 +7,7 @@ import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
 /// # 用户登录会话信息
 ///
@@ -45,8 +46,14 @@ public class UserDetail {
     private OffsetDateTime passwordExpireTime;
 
     /// 是否需要修改密码
+    ///
+    /// 初始密码状态来自会话，过期时间直接按当前时间计算，避免在线会话跨过过期时间后仍继续放行。
     public boolean needChangePassword() {
-        return Boolean.TRUE.equals(passwordExpired) || Boolean.TRUE.equals(initialPassword);
+        if (Boolean.TRUE.equals(initialPassword) || Boolean.TRUE.equals(passwordExpired)) {
+            return true;
+        }
+        return passwordExpireTime != null
+                && !passwordExpireTime.isAfter(OffsetDateTime.now(ZoneOffset.UTC));
     }
 
     /// 构建标准登录会话用户

@@ -4,6 +4,7 @@ import cn.daxpay.open.platform.capability.auth.entity.AuthInfoResult;
 import cn.daxpay.open.platform.capability.auth.entity.LoginAuthContext;
 import cn.daxpay.open.platform.common.config.properties.PlatformStarterProperties;
 import cn.daxpay.open.platform.core.entity.UserDetail;
+import cn.daxpay.open.platform.iam.auth.service.LoginRetryService;
 import cn.daxpay.open.platform.iam.auth.service.TokenService;
 import cn.daxpay.open.platform.iam.result.user.UserInfoResult;
 import cn.daxpay.open.platform.iam.service.user.UserQueryService;
@@ -25,6 +26,8 @@ public class IamSocialLoginHandler {
 
     private final UserQueryService userQueryService;
 
+    private final LoginRetryService loginRetryService;
+
     private final TokenService tokenService;
 
     private final PlatformStarterProperties platformStarterProperties;
@@ -38,6 +41,10 @@ public class IamSocialLoginHandler {
                         HttpServletRequest request, HttpServletResponse response) {
         UserInfoResult userInfo = userQueryService.findById(userId);
         UserDetail userDetail = userInfo.toUserDetail();
+        // 设置密码状态到 UserDetail（与密码登录/二次验证路径一致, 避免社交登录绕过强制改密）
+        if (!userDetail.isAdmin()) {
+            loginRetryService.setPasswordStatusToUserDetail(userDetail);
+        }
         AuthInfoResult authInfoResult = new AuthInfoResult()
                 .setId(userId)
                 .setClient(clientCode)

@@ -6,6 +6,8 @@ import cn.daxpay.open.platform.iam.auth.service.LoginRetryService;
 import cn.daxpay.open.platform.iam.auth.service.PasswordDecryptService;
 import cn.daxpay.open.platform.iam.auth.service.PasswordPolicyService;
 import cn.daxpay.open.platform.iam.convert.user.UserConvert;
+import cn.daxpay.open.platform.core.code.CommonCode;
+import cn.daxpay.open.platform.core.entity.UserDetail;
 import cn.daxpay.open.platform.iam.dao.user.UserExpandInfoManager;
 import cn.daxpay.open.platform.iam.dao.user.UserInfoManager;
 import cn.daxpay.open.platform.iam.dao.user.UserPasswordSecurityManager;
@@ -20,6 +22,7 @@ import cn.daxpay.open.platform.iam.result.user.UserBaseInfoResult;
 import cn.daxpay.open.platform.iam.result.user.UserInfoResult;
 import cn.daxpay.open.platform.capability.auth.util.SecurityUtil;
 import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformPasswordPolicyConfig;
+import cn.dev33.satoken.stp.StpUtil;
 import cn.hutool.crypto.digest.BCrypt;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -29,7 +32,6 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
-import cn.daxpay.open.platform.core.code.CommonCode;
 
 /// # 用户
 ///
@@ -62,7 +64,14 @@ public class UserInfoService {
             .orElseThrow(UserInfoNotExistsException::new);
         UserExpandInfo userExpandInfo = userExpandInfoManager.findById(userId)
             .orElseThrow(UserInfoNotExistsException::new);
-        PasswordStatusResult passwordStatus = loginRetryService.getPasswordStatus(userId);
+        // 超级管理员按既定策略绕过强制改密，避免前端仍根据数据库状态强制跳转。
+        PasswordStatusResult passwordStatus = userInfo.isAdministrator()
+                ? new PasswordStatusResult()
+                .setExpired(false)
+                .setExpiringSoon(false)
+                .setExpireTime(null)
+                .setInitialPassword(false)
+                : loginRetryService.getPasswordStatus(userId);
         return new LoginAfterUserInfoResult()
             .setId(userInfo.getId())
             .setAccount(userInfo.getAccount())
@@ -145,9 +154,29 @@ public class UserInfoService {
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
             @Override
             public void afterCommit() {
+                // 先刷新当前会话，避免改密后权限请求仍读取旧的初始密码状态
+                refreshCurrentSessionPasswordStatus();
                 onlineUserService.kickoutOtherSessions(userInfo.getId());
             }
         });
+    }
+
+    /// 刷新当前会话中的密码状态
+    private void refreshCurrentSessionPasswordStatus() {
+        var session = StpUtil.getSession();
+        UserDetail userDetail = session.getModel(CommonCode.USER, UserDetail.class);
+        if (userDetail == null) {
+            return;
+        }
+        if (userDetail.isAdmin()) {
+            userDetail.setPasswordExpired(false)
+                    .setInitialPassword(false)
+                    .setPasswordExpireTime(null);
+        }
+        else {
+            loginRetryService.setPasswordStatusToUserDetail(userDetail);
+        }
+        session.set(CommonCode.USER, userDetail);
     }
 
     /// 计算密码过期时间 (UTC)

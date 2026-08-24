@@ -141,7 +141,7 @@ public class LoginRetryService {
         OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
         OffsetDateTime expireTime = security.getPasswordExpireTime();
 
-        boolean expired = expireTime != null && expireTime.isBefore(now);
+        boolean expired = expireTime != null && !expireTime.isAfter(now);
         boolean expiringSoon = false;
         if (expireTime != null && !expired) {
             long daysUntilExpiry = ChronoUnit.DAYS.between(now, expireTime);
@@ -168,7 +168,7 @@ public class LoginRetryService {
 
         OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
         OffsetDateTime expireTime = security.getPasswordExpireTime();
-        boolean expired = expireTime != null && expireTime.isBefore(now);
+        boolean expired = expireTime != null && !expireTime.isAfter(now);
 
         userDetail.setPasswordExpired(expired);
         userDetail.setInitialPassword(Boolean.TRUE.equals(security.getInitialPassword()));
