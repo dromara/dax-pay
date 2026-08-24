@@ -86,6 +86,8 @@ public class UserPasswordSecurityManager extends BaseManager<UserPasswordSecurit
 
     /// 更新密码过期时间
     public void updatePasswordExpireTime(Long userId, OffsetDateTime expireTime) {
+        // 兼容历史用户缺少密码安全记录的情况
+        getOrCreateByUserId(userId);
         lambdaUpdate()
                 .eq(UserPasswordSecurity::getId, userId)
                 .set(UserPasswordSecurity::getPasswordExpireTime, expireTime)
@@ -96,6 +98,8 @@ public class UserPasswordSecurityManager extends BaseManager<UserPasswordSecurit
 
     /// 管理员重置密码后更新过期时间(初始密码标记保持 true, 强制用户首次登录自行改密)
     public void updatePasswordExpireTimeOnReset(Long userId, OffsetDateTime expireTime) {
+        // 兼容历史用户缺少密码安全记录的情况
+        getOrCreateByUserId(userId);
         lambdaUpdate()
                 .eq(UserPasswordSecurity::getId, userId)
                 .set(UserPasswordSecurity::getPasswordExpireTime, expireTime)
@@ -126,6 +130,8 @@ public class UserPasswordSecurityManager extends BaseManager<UserPasswordSecurit
 
     /// 更新初始密码标记
     public void updateInitialPassword(Long userId, boolean initialPassword) {
+        // 兼容历史用户缺少密码安全记录的情况
+        getOrCreateByUserId(userId);
         lambdaUpdate()
                 .eq(UserPasswordSecurity::getId, userId)
                 .set(UserPasswordSecurity::getInitialPassword, initialPassword)
