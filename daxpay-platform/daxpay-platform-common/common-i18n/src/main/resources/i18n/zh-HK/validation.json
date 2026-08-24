@@ -127,6 +127,12 @@
     "wechatIsvAppId": {
       "notNull": "微信服務商應用ID不可為空"
     },
+    "captchaCode": {
+      "notBlank": "圖形驗證碼不能為空"
+    },
+    "captchaKey": {
+      "notBlank": "圖形驗證碼key不能為空"
+    },
     "account": {
       "notBlank": "登錄賬號不可為空",
       "size": "賬號長度為6-20個字符",

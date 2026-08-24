@@ -126,6 +126,12 @@
     "wechatIsvAppId": {
       "notNull": "Id ứng dụng WeChat ISV không được rỗng"
     },
+    "captchaCode": {
+      "notBlank": "Mã xác nhận không được để trống"
+    },
+    "captchaKey": {
+      "notBlank": "Khóa mã xác nhận không được để trống"
+    },
     "account": {
       "notBlank": "Tài khoản không được để trống",
       "size": "Độ dài tài khoản phải từ 6 đến 20 ký tự",

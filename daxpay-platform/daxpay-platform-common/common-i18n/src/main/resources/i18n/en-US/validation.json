@@ -127,6 +127,12 @@
     "wechatIsvAppId": {
       "notNull": "WeChat ISV app id cannot be null"
     },
+    "captchaCode": {
+      "notBlank": "Captcha code cannot be empty"
+    },
+    "captchaKey": {
+      "notBlank": "Captcha key cannot be empty"
+    },
     "account": {
       "notBlank": "Account cannot be blank",
       "size": "Account length must be between 6 and 20 characters",

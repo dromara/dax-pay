@@ -126,6 +126,12 @@
     "wechatIsvAppId": {
       "notNull": "ID aplikasi WeChat ISV tidak boleh nol"
     },
+    "captchaCode": {
+      "notBlank": "Kode captcha tidak boleh kosong"
+    },
+    "captchaKey": {
+      "notBlank": "Kunci captcha tidak boleh kosong"
+    },
     "account": {
       "notBlank": "Akun tidak boleh kosong",
       "size": "Panjang akun harus antara 6 dan 20 karakter",

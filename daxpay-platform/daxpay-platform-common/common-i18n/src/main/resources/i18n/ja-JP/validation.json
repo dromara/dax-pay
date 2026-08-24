@@ -127,6 +127,12 @@
     "wechatIsvAppId": {
       "notNull": "WeChat ISV アプリ ID を null にすることはできません"
     },
+    "captchaCode": {
+      "notBlank": "画像認証コードを入力してください"
+    },
+    "captchaKey": {
+      "notBlank": "画像認証コードのキーを入力してください"
+    },
     "account": {
       "notBlank": "アカウントを空白にすることはできません",
       "size": "アカウントの長さは 6 ～ 20 文字である必要があります",
