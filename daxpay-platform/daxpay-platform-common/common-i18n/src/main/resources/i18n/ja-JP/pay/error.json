@@ -126,7 +126,8 @@
     "syncProcessing": "送金同期処理中です。重複操作しないでください",
     "closeNotProcessing": "送金中の注文のみ手動クローズできます",
     "channelNotSupport": "このチャネルは送金クローズをサポートしていません",
-    "illegalTransition": "不正な状態遷移: {0} → {1}"
+    "illegalTransition": "不正な状態遷移: {0} → {1}",
+    "locateRequired": "プラットフォーム送金番号、またはマーチャント送金番号+チャネルのいずれかが必要です"
   },
   "alloc": {
     "illegalTransition": "不正な状態遷移: {0} → {1}",

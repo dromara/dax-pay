@@ -58,7 +58,8 @@
     },
     "channel": {
       "notBlank": "Channel code cannot be blank",
-      "size": "Channel code cannot exceed 32 characters"
+      "size": "Channel code cannot exceed 32 characters",
+      "pattern": "Transfer channel only supports wechat/alipay/douyin"
     },
     "sandbox": {
       "notNull": "Sandbox environment cannot be blank"
@@ -855,6 +856,36 @@
     },
     "systemTerminalNo": {
       "notBlank": "System terminal cannot be empty"
+    },
+    "transferNo": {
+      "size": "Platform transfer number cannot exceed 100 characters"
+    },
+    "bizTransferNo": {
+      "notBlank": "Merchant transfer number cannot be empty",
+      "size": "Merchant transfer number cannot exceed 100 characters"
+    },
+    "payeeType": {
+      "notBlank": "Payee account type cannot be empty",
+      "size": "Payee account type cannot exceed 32 characters"
+    },
+    "payeeAccount": {
+      "notBlank": "Payee account cannot be empty",
+      "size": "Payee account cannot exceed 100 characters"
+    },
+    "transferPayeeName": {
+      "size": "Payee name cannot exceed 100 characters"
+    },
+    "transferReason": {
+      "size": "Transfer reason cannot exceed 200 characters"
+    },
+    "transferScene": {
+      "size": "Transfer scene cannot exceed 32 characters"
+    },
+    "infoType": {
+      "size": "Report info type cannot exceed 64 characters"
+    },
+    "infoContent": {
+      "size": "Report info content cannot exceed 200 characters"
     }
   }
 }

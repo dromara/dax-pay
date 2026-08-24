@@ -58,7 +58,8 @@
     },
     "channel": {
       "notBlank": "通道编码不可为空",
-      "size": "通道不可超过32位"
+      "size": "通道不可超过32位",
+      "pattern": "转账通道仅支持 wechat/alipay/douyin"
     },
     "sandbox": {
       "notNull": "沙箱环境不可为空"
@@ -855,6 +856,36 @@
     },
     "systemTerminalNo": {
       "notBlank": "系统终端不可为空"
+    },
+    "transferNo": {
+      "size": "平台转账单号不可超过100位"
+    },
+    "bizTransferNo": {
+      "notBlank": "商户转账号不可为空",
+      "size": "商户转账号不可超过100位"
+    },
+    "payeeType": {
+      "notBlank": "收款人账号类型不可为空",
+      "size": "收款人账号类型不可超过32位"
+    },
+    "payeeAccount": {
+      "notBlank": "收款人账号不可为空",
+      "size": "收款人账号不可超过100位"
+    },
+    "transferPayeeName": {
+      "size": "收款人姓名不可超过100位"
+    },
+    "transferReason": {
+      "size": "转账原因不可超过200位"
+    },
+    "transferScene": {
+      "size": "转账场景不可超过32位"
+    },
+    "infoType": {
+      "size": "报备信息类型不可超过64位"
+    },
+    "infoContent": {
+      "size": "报备信息内容不可超过200位"
     }
   }
 }

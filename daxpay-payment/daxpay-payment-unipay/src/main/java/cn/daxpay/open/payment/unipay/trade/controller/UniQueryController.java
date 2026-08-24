@@ -4,16 +4,19 @@ import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayQueryParam;
 import cn.daxpay.open.payment.unipay.param.trade.refund.RefundOrderQueryParam;
 import cn.daxpay.open.payment.unipay.param.trade.alloc.AllocOrderQueryParam;
+import cn.daxpay.open.payment.unipay.param.trade.transfer.TransferOrderQueryParam;
 
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayOrderResult;
 import cn.daxpay.open.payment.unipay.result.trade.refund.RefundOrderResult;
 import cn.daxpay.open.payment.unipay.result.trade.alloc.AllocOrderResult;
+import cn.daxpay.open.payment.unipay.result.trade.transfer.TransferOrderResult;
 import cn.daxpay.open.payment.common.util.DaxRes;
 import cn.daxpay.open.payment.unipay.aop.PaymentVerify;
 import cn.daxpay.open.payment.unipay.trade.service.NormalPayOrderQueryService;
 import cn.daxpay.open.payment.unipay.trade.service.RefundOrderQueryService;
 import cn.daxpay.open.payment.unipay.trade.service.AllocOrderQueryService;
+import cn.daxpay.open.payment.unipay.trade.service.TransferOrderQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -35,6 +38,7 @@ public class UniQueryController {
     private final NormalPayOrderQueryService normalPayOrderQueryService;
     private final RefundOrderQueryService refundOrderQueryService;
     private final AllocOrderQueryService allocOrderQueryService;
+    private final TransferOrderQueryService transferOrderQueryService;
 
     @Operation(summary = "支付订单查询接口")
     @PostMapping("/pay-order")
@@ -52,6 +56,12 @@ public class UniQueryController {
     @PostMapping("/alloc-order")
     public DaxResult<AllocOrderResult> queryAllocOrder(@RequestBody AllocOrderQueryParam param){
         return DaxRes.ok(allocOrderQueryService.queryAllocOrder(param));
+    }
+
+    @Operation(summary = "转账订单查询接口")
+    @PostMapping("/transfer-order")
+    public DaxResult<TransferOrderResult> queryTransferOrder(@RequestBody TransferOrderQueryParam param){
+        return DaxRes.ok(transferOrderQueryService.query(param));
     }
 
 }

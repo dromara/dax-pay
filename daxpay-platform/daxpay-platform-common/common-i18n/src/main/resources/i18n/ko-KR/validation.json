@@ -58,7 +58,8 @@
     },
     "channel": {
       "notBlank": "채널 코드는 비워둘 수 없습니다.",
-      "size": "채널 코드는 32자를 초과할 수 없습니다."
+      "size": "채널 코드는 32자를 초과할 수 없습니다.",
+      "pattern": "송금 채널은 wechat/alipay/douyin만 지원합니다"
     },
     "sandbox": {
       "notNull": "샌드박스 환경은 비워둘 수 없습니다."
@@ -851,6 +852,36 @@
     },
     "systemTerminalNo": {
       "notBlank": "시스템 단말은 필수입니다"
+    },
+    "transferNo": {
+      "size": "플랫폼 송금 번호는 100자를 초과할 수 없습니다"
+    },
+    "bizTransferNo": {
+      "notBlank": "가맹점 송금 번호는 필수입니다",
+      "size": "가맹점 송금 번호는 100자를 초과할 수 없습니다"
+    },
+    "payeeType": {
+      "notBlank": "수취인 계정 유형은 필수입니다",
+      "size": "수취인 계정 유형은 32자를 초과할 수 없습니다"
+    },
+    "payeeAccount": {
+      "notBlank": "수취인 계정은 필수입니다",
+      "size": "수취인 계정은 100자를 초과할 수 없습니다"
+    },
+    "transferPayeeName": {
+      "size": "수취인 이름은 100자를 초과할 수 없습니다"
+    },
+    "transferReason": {
+      "size": "송금 사유는 200자를 초과할 수 없습니다"
+    },
+    "transferScene": {
+      "size": "송금 시나리오는 32자를 초과할 수 없습니다"
+    },
+    "infoType": {
+      "size": "보고 정보 유형은 64자를 초과할 수 없습니다"
+    },
+    "infoContent": {
+      "size": "보고 정보 내용은 200자를 초과할 수 없습니다"
     }
   }
 }

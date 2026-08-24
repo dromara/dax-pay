@@ -126,7 +126,8 @@
     "syncProcessing": "转账同步处理中，请勿重复操作",
     "closeNotProcessing": "仅转账中的订单可手动关闭",
     "channelNotSupport": "该通道暂不支持关闭转账",
-    "illegalTransition": "非法状态转换: {0} → {1}"
+    "illegalTransition": "非法状态转换: {0} → {1}",
+    "locateRequired": "平台转账单号与商户转账号+通道不能都为空"
   },
   "alloc": {
     "illegalTransition": "非法状态转换: {0} → {1}",

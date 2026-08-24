@@ -126,7 +126,8 @@
     "syncProcessing": "轉賬同步處理中，請勿重複操作",
     "closeNotProcessing": "僅轉賬中的訂單可手動關閉",
     "channelNotSupport": "該通道暫不支持關閉轉賬",
-    "illegalTransition": "非法狀態轉換: {0} → {1}"
+    "illegalTransition": "非法狀態轉換: {0} → {1}",
+    "locateRequired": "平台轉賬單號與商戶轉賬號+通道不能都為空"
   },
   "alloc": {
     "illegalTransition": "非法狀態轉換: {0} → {1}",

@@ -126,7 +126,8 @@
     "syncProcessing": "송금 동기화 처리 중입니다. 반복 작업하지 마세요",
     "closeNotProcessing": "송금 중인 주문만 수동으로 닫을 수 있습니다",
     "channelNotSupport": "이 채널은 송금 닫기를 지원하지 않습니다",
-    "illegalTransition": "잘못된 상태 전환: {0} → {1}"
+    "illegalTransition": "잘못된 상태 전환: {0} → {1}",
+    "locateRequired": "플랫폼 송금 번호 또는 가맹점 송금 번호+채널 중 하나는 필수입니다"
   },
   "alloc": {
     "illegalTransition": "잘못된 상태 전환: {0} → {1}",

@@ -126,7 +126,8 @@
     "syncProcessing": "Transfer sync processing, please do not repeat",
     "closeNotProcessing": "Only transfers in progress can be manually closed",
     "channelNotSupport": "The channel does not support closing transfers",
-    "illegalTransition": "Illegal state transition: {0} → {1}"
+    "illegalTransition": "Illegal state transition: {0} → {1}",
+    "locateRequired": "Either platform transfer number, or merchant transfer number together with channel, is required"
   },
   "alloc": {
     "illegalTransition": "Illegal status transition: {0} → {1}",
