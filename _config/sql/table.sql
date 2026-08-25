@@ -12,7 +12,7 @@
  Target Server Version : 160014 (160014)
  File Encoding         : 65001
 
- Date: 23/08/2026 09:48:50
+ Date: 25/08/2026 11:19:22
 */
 
 
@@ -5868,14 +5868,14 @@ ALTER TABLE "public"."iam_user_info" ADD CONSTRAINT "iam_user_info_pkey" PRIMARY
 -- ----------------------------
 -- Indexes structure for table iam_user_passkey
 -- ----------------------------
-CREATE UNIQUE INDEX "uk_iam_user_passkey_credential_id" ON "public"."iam_user_passkey" USING btree (
-  "credential_id" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
-) WHERE deleted = false;
-COMMENT ON INDEX "public"."uk_iam_user_passkey_credential_id" IS '同一 WebAuthn 凭据全局唯一(只能绑定一个用户)';
 CREATE INDEX "idx_iam_user_passkey_user_id" ON "public"."iam_user_passkey" USING btree (
   "user_id" "pg_catalog"."int8_ops" ASC NULLS LAST
 );
 COMMENT ON INDEX "public"."idx_iam_user_passkey_user_id" IS '按用户 ID 查询已绑定通行密钥';
+CREATE UNIQUE INDEX "uk_iam_user_passkey_credential_id" ON "public"."iam_user_passkey" USING btree (
+  "credential_id" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+) WHERE deleted = false;
+COMMENT ON INDEX "public"."uk_iam_user_passkey_credential_id" IS '同一 WebAuthn 凭据全局唯一(只能绑定一个用户)';
 
 -- ----------------------------
 -- Primary Key structure for table iam_user_passkey
