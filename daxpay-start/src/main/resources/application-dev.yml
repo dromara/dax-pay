@@ -175,7 +175,7 @@ daxpay:
       sandbox-enabled: true
   # 通道适配子应用配置
   channel:
-    # 子应用1: 支付宝/微信支付/银联商务/(已启用, 本机启动的 dax-pay-channel-one 服务)
+    # 子应用1: 支付宝/微信/抖音/云闪付/银联商务(已启用, 本机启动的 dax-pay-channel-one 服务)
     one:
       base-url: http://127.0.0.1:20100
       # 通道传输 AES 密钥（强制常开）

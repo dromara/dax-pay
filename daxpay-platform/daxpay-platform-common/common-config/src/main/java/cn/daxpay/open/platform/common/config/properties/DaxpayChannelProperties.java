@@ -13,13 +13,13 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties(prefix = "daxpay.channel")
 public class DaxpayChannelProperties {
 
-    /// 子应用1(支付宝/微信)
+    /// 子应用1(支付宝/微信/抖音/云闪付/银联商务)
     private ChannelApp one = new ChannelApp();
 
-    /// 子应用2(其他支付通道) — channel-two 已搭建架子, 通道待对接
+    /// 子应用2(汇付斗拱/易宝/拉卡拉/乐刷/海科融通等国内通道)
     private ChannelApp two = new ChannelApp();
 
-    /// 子应用3(抖音/其他) — 未来扩展
+    /// 子应用3(国际支付通道, Stripe)
     private ChannelApp three = new ChannelApp();
 
     /// # 子应用连接配置

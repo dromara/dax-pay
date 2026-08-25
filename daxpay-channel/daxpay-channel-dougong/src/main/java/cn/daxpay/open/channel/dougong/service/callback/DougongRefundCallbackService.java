@@ -26,8 +26,7 @@ import java.util.Map;
 ///
 /// 汇付退款异步通知 → 主应用接收原始 body → 转发子应用用汇付公钥 RSA 验签 → 记录退款回调结果。
 ///
-/// TODO 退款单状态更新待接入退款回调框架(平台目前无独立 RefundCallbackService,
-///      后续可通过 RefundService 或新增退款回调入口完成状态流转)。
+/// 退款单状态流转已接入 [RefundCallbackService], 由框架完成终态守卫与状态更新。
 @Slf4j
 @Service
 @RequiredArgsConstructor

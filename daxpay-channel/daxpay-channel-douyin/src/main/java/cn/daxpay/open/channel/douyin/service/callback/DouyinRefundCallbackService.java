@@ -29,8 +29,7 @@ import java.util.Objects;
 /// 抖音退款异步通知 → 主应用接收 → 按 channelMchNo 组装凭证 →
 /// 转发到子应用验签解密 → 日志记录退款结果。
 ///
-/// TODO 退款单状态更新待接入退款回调框架(平台目前无独立 RefundCallbackService,
-///      后续可通过 RefundService 或新增退款回调入口完成状态流转)。
+/// 退款单状态流转已接入 [RefundCallbackService], 由框架完成终态守卫与状态更新。
 @Slf4j
 @Service
 @RequiredArgsConstructor

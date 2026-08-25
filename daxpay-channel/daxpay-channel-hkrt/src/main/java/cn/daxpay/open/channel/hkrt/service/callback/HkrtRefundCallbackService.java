@@ -29,8 +29,7 @@ import java.util.Objects;
 /// 验签与字段解析统一由子应用 dax-pay-channel-two 的 HkrtCallbackParseService 完成,
 /// 主应用不再自验签。子应用返回抽象态 tradeStatus(SUCCESS/FAIL)。
 ///
-/// TODO 退款单状态更新待接入退款回调框架(平台目前无独立 RefundCallbackService,
-///      后续可通过 RefundService 或新增退款回调入口完成状态流转)。本期仅记录日志。
+/// 退款单状态流转已接入 [RefundCallbackService], 由框架完成终态守卫与状态更新。
 @Slf4j
 @Service
 @RequiredArgsConstructor
