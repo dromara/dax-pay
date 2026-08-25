@@ -16,8 +16,8 @@ import lombok.experimental.Accessors;
 @Schema(title = "分账接收方扫码授权参数")
 public class AllocReceiverScanAuthParam {
 
-    /// 商户号(必填, 初始化商户上下文; 支付宝平台级授权实际不使用但统一必填)
-    @NotBlank(message = "{validation.field.mchNo.notBlank}")
+    /// 商户号(运营端必填, 初始化商户上下文; 商户端控制器以登录商户强制覆盖后校验在服务层兜底;
+    /// 支付宝平台级授权实际不使用但统一必填)
     @Size(max = 32, message = "{validation.field.mchNo.size}")
     @Schema(description = "商户号")
     private String mchNo;

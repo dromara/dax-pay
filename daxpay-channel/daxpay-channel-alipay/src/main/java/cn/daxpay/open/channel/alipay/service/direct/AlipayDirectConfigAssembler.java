@@ -113,7 +113,6 @@ public class AlipayDirectConfigAssembler {
         credential.setAlipayCert(keyConfig.getAlipayCert());
         credential.setAlipayRootCert(keyConfig.getAlipayRootCert());
         credential.setSandbox(sandbox);
-        // TODO notifyUrl 后续按业务要求手动组装(来源已迁移至进件配置, 待确认组装方式)
         return credential;
     }
 

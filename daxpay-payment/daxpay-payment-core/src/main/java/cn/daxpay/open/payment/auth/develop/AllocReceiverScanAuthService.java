@@ -49,6 +49,11 @@ public class AllocReceiverScanAuthService {
     ///
     /// 按支付产品路由授权通道, 各分支校验接收方类型与所需应用参数后生成授权链接。
     public AuthUrlResult generateScanAuthUrl(AllocReceiverScanAuthParam param) {
+        // 商户号必填兜底(参数层仅 @Size, 商户端控制器以登录商户覆盖后在此统一校验)
+        if (StrUtil.isBlank(param.getMchNo())) {
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "validation.field.mchNo.notBlank");
+        }
         ProductEnum product = ProductEnum.findByCode(param.getProduct());
         AllocReceiverTypeEnum receiverType = AllocReceiverTypeEnum.findByCode(param.getReceiverType());
         return switch (product) {

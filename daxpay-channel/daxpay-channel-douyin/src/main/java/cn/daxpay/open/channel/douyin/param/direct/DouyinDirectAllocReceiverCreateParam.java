@@ -14,9 +14,8 @@ import lombok.experimental.Accessors;
 @Schema(title = "抖音直连分账接收方新增参数")
 public class DouyinDirectAllocReceiverCreateParam {
 
-    /// 商户号
+    /// 商户号(商户端控制器以登录商户强制覆盖, 必填性由服务内归属校验兜底)
     @Schema(description = "商户号")
-    @NotBlank(message = "{validation.field.mchNo.notBlank}")
     private String mchNo;
 
     /// 通道商户号
