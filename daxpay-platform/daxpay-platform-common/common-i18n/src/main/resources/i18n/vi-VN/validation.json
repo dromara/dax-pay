@@ -575,7 +575,8 @@
       "size": "ID nhà điều hành không thể vượt quá 64 ký tự"
     },
     "deviceName": {
-      "size": "Tên thiết bị không được vượt quá 128 ký tự"
+      "size": "Tên thiết bị không được vượt quá 128 ký tự",
+      "notBlank": "Tên thiết bị không được để trống"
     },
     "deviceIp": {
       "size": "IP thiết bị không thể vượt quá 64 ký tự"
@@ -691,7 +692,8 @@
       "notBlank": "Sand appId không được để trống"
     },
     "credential": {
-      "notNull": "Thông tin xác thực kênh không được rỗng"
+      "notNull": "Thông tin xác thực kênh không được rỗng",
+      "notBlank": "Phản hồi passkey không được để trống"
     },
     "outTradeNo": {
       "notBlank": "Kênh giao dịch số. không thể để trống"
@@ -847,6 +849,15 @@
     },
     "systemTerminalNo": {
       "notBlank": "Đầu cuối hệ thống không được để trống"
+    },
+    "client": {
+      "notBlank": "Mã ứng dụng không được để trống"
+    },
+    "challengeId": {
+      "notBlank": "ID thử thách không được để trống"
+    },
+    "rpId": {
+      "pattern": "RP ID phải là tên miền thuần không kèm giao thức và cổng, ví dụ admin.example.com"
     }
   }
 }

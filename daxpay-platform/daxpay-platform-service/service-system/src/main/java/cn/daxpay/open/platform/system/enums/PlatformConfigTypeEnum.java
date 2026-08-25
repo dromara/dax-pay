@@ -23,6 +23,8 @@ public enum PlatformConfigTypeEnum implements I18nSupport {
     SECURITY_SESSION("security_session"),
     /// 双因素认证配置
     SECURITY_TWO_FACTOR_AUTH("security_two_factor_auth"),
+    /// 通行密钥(WebAuthn)配置
+    SECURITY_WEBAUTHN("security_webauthn"),
     /// API安全配置（开放支付接口防重放）
     API_SECURITY("api_security"),
     /// 支付安全配置（支付风控开关）

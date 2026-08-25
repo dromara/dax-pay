@@ -1,6 +1,7 @@
 package cn.daxpay.open.platform.iam.auth.service;
 
 import cn.daxpay.open.platform.capability.auth.authentication.Authenticator;
+import cn.daxpay.open.platform.capability.auth.code.AuthLoginTypeCode;
 import cn.daxpay.open.platform.core.enums.client.ClientEnum;
 import cn.daxpay.open.platform.iam.exception.auth.ApplicationNotFoundException;
 import cn.daxpay.open.platform.iam.param.auth.LoginContentParam;
@@ -12,6 +13,7 @@ import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /// # 登录上下文服务
@@ -34,11 +36,16 @@ public class LoginContentService {
                     .orElseThrow(ApplicationNotFoundException::new);
         }
         PlatformLoginSecurityConfig loginSecurity = iamSecurityConfigService.getLoginSecurity();
+        // 登录方式聚合: 账密等走 Authenticator SPI 自动聚合; 通行密钥为两阶段交互不走 SPI, 按平台开关手动追加
+        List<String> loginTypes = new ArrayList<>(authenticators.stream()
+                .map(Authenticator::getLoginType)
+                .distinct()
+                .toList());
+        if (Boolean.TRUE.equals(iamSecurityConfigService.getWebAuthnConfig().getEnabled())) {
+            loginTypes.add(AuthLoginTypeCode.PASSKEY);
+        }
         LoginContentResult result = new LoginContentResult()
-                .setLoginTypes(authenticators.stream()
-                        .map(Authenticator::getLoginType)
-                        .distinct()
-                        .toList())
+                .setLoginTypes(loginTypes)
                 // 是否启用验证码触发（登录失败达阈值后要求输入验证码）
                 .setEnableCaptcha(Boolean.TRUE.equals(loginSecurity.getCaptchaEnabled()))
                 .setPasswordEncrypted(false);

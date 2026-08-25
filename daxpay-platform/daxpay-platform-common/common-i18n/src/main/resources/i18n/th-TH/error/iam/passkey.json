@@ -1,0 +1,11 @@
+{
+  "platformDisabled": "ไม่ได้เปิดใช้งานการยืนยันตัวตนด้วย passkey",
+  "challengeExpired": "คำขอยืนยันหมดอายุแล้ว โปรดลองอีกครั้ง",
+  "invalidCredential": "ไม่สามารถแยกวิเคราะห์การตอบกลับ passkey ได้",
+  "assertionFailed": "การตรวจสอบ passkey ไม่สำเร็จ",
+  "registrationFailed": "ลงทะเบียน passkey ไม่สำเร็จ",
+  "credentialExists": "passkey นี้ถูกผูกกับบัญชีอื่นแล้ว",
+  "clientMismatch": "บัญชีนี้ไม่ได้เป็นของไคลเอนต์ปัจจุบัน",
+  "notExists": "ไม่พบ passkey",
+  "configIncomplete": "การกำหนดค่าแพลตฟอร์ม passkey ไม่ครบถ้วน โปรดกำหนดค่า rpId และ origins"
+}

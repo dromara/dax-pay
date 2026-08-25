@@ -580,7 +580,8 @@
       "size": "Operator ID cannot exceed 64 characters"
     },
     "deviceName": {
-      "size": "Device name cannot exceed 128 characters"
+      "size": "Device name cannot exceed 128 characters",
+      "notBlank": "Device name cannot be empty"
     },
     "deviceIp": {
       "size": "Device IP cannot exceed 64 characters"
@@ -696,7 +697,8 @@
       "notBlank": "Sand appId cannot be blank"
     },
     "credential": {
-      "notNull": "Channel credential cannot be null"
+      "notNull": "Channel credential cannot be null",
+      "notBlank": "Passkey response cannot be empty"
     },
     "outTradeNo": {
       "notBlank": "Channel trade no. cannot be blank"
@@ -892,6 +894,15 @@
     },
     "infoContent": {
       "size": "Report info content cannot exceed 200 characters"
+    },
+    "client": {
+      "notBlank": "Client code cannot be empty"
+    },
+    "challengeId": {
+      "notBlank": "Challenge context ID cannot be empty"
+    },
+    "rpId": {
+      "pattern": "RP ID must be a plain domain name without protocol or port, e.g. admin.example.com"
     }
   }
 }

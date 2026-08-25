@@ -1,0 +1,11 @@
+{
+  "platformDisabled": "패스키 인증이 활성화되어 있지 않습니다",
+  "challengeExpired": "인증 요청이 만료되었습니다. 다시 시도해 주세요",
+  "invalidCredential": "패스키 응답을 해석하지 못했습니다",
+  "assertionFailed": "패스키 검증에 실패했습니다",
+  "registrationFailed": "패스키 등록에 실패했습니다",
+  "credentialExists": "이 패스키는 이미 다른 계정에 연결되어 있습니다",
+  "clientMismatch": "이 계정은 현재 클라이언트에 속하지 않습니다",
+  "notExists": "패스키가 존재하지 않습니다",
+  "configIncomplete": "패스키 플랫폼 설정이 완전하지 않습니다. rpId와 origins를 설정해 주세요"
+}

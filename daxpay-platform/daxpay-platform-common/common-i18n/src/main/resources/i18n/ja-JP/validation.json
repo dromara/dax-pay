@@ -576,7 +576,8 @@
       "size": "オペレータ ID は 64 文字を超えることはできません"
     },
     "deviceName": {
-      "size": "デバイス名は 128 文字を超えることはできません"
+      "size": "デバイス名は 128 文字を超えることはできません",
+      "notBlank": "デバイス名は必須です"
     },
     "deviceIp": {
       "size": "デバイス IP は 64 文字を超えることはできません"
@@ -692,7 +693,8 @@
       "notBlank": "Sand appIdは必須です"
     },
     "credential": {
-      "notNull": "チャネル資格情報を null にすることはできません"
+      "notNull": "チャネル資格情報を null にすることはできません",
+      "notBlank": "パスキーレスポンスは必須です"
     },
     "outTradeNo": {
       "notBlank": "チャネルトレードNo.空白にすることはできません"
@@ -888,6 +890,15 @@
     },
     "infoContent": {
       "size": "報告情報内容は200文字を超えることはできません"
+    },
+    "client": {
+      "notBlank": "クライアントコードは必須です"
+    },
+    "challengeId": {
+      "notBlank": "チャレンジIDは必須です"
+    },
+    "rpId": {
+      "pattern": "RP ID はプロトコルやポートを含まないドメイン名である必要があります（例: admin.example.com）"
     }
   }
 }

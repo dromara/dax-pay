@@ -1,0 +1,11 @@
+{
+  "platformDisabled": "平台未啟用通行密鑰認證",
+  "challengeExpired": "驗證請求已過期, 請重新操作",
+  "invalidCredential": "通行密鑰回應解析失敗",
+  "assertionFailed": "通行密鑰驗證未通過",
+  "registrationFailed": "通行密鑰註冊失敗",
+  "credentialExists": "該通行密鑰已被其他帳號綁定",
+  "clientMismatch": "該帳號不屬於目前終端, 無法登入",
+  "notExists": "通行密鑰不存在",
+  "configIncomplete": "通行密鑰平台設定不完整, 請設定 rpId 與 origins"
+}

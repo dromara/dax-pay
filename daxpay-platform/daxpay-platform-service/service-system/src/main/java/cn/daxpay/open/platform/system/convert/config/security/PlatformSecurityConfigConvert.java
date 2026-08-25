@@ -34,6 +34,11 @@ public interface PlatformSecurityConfigConvert {
 
     void copy(PlatformTwoFactorAuthConfigParam param, @MappingTarget PlatformTwoFactorAuthConfig data);
 
+    // ========== 通行密钥(WebAuthn)配置转换 ==========
+    PlatformWebAuthnConfigResult toWebAuthnResult(PlatformWebAuthnConfig data);
+
+    void copy(PlatformWebAuthnConfigParam param, @MappingTarget PlatformWebAuthnConfig data);
+
     // ========== API安全配置转换 ==========
     PlatformApiSecurityConfigResult toApiSecurityResult(PlatformApiSecurityConfig data);
 

@@ -1,6 +1,7 @@
 package cn.daxpay.open.platform.iam.auth.service.twofactor;
 
 import cn.daxpay.open.platform.capability.auth.authentication.PostAuthenticationCheck;
+import cn.daxpay.open.platform.capability.auth.code.AuthLoginTypeCode;
 import cn.daxpay.open.platform.capability.auth.authentication.SecondaryAuthRequiredException;
 import cn.daxpay.open.platform.capability.auth.entity.AuthInfoResult;
 import cn.daxpay.open.platform.capability.auth.entity.LoginAuthContext;
@@ -26,6 +27,11 @@ public class TwoFactorAuthenticationCheck implements PostAuthenticationCheck {
 
     @Override
     public boolean required(LoginAuthContext context, AuthInfoResult authInfoResult) {
+        // 通行密钥登录豁免 TOTP 两步验证: passkey 本身即「凭据持有 + 用户验证(生物识别/PIN)」的强认证,
+        // 不再叠加动态码(业界通行做法, 2026-08-24 拍板)
+        if (AuthLoginTypeCode.PASSKEY.equals(context.getAuthLoginType())) {
+            return false;
+        }
         Long userId = toLong(authInfoResult.getId());
         // 平台开启且用户已绑定 2FA 时, 登录前需二次验证
         return userId != null && userTwoFactorService.isTwoFactorRequired(userId);

@@ -575,7 +575,8 @@
       "size": "ID Operator tidak boleh melebihi 64 aksara"
     },
     "deviceName": {
-      "size": "Nama peranti tidak boleh melebihi 128 aksara"
+      "size": "Nama peranti tidak boleh melebihi 128 aksara",
+      "notBlank": "Nama peranti tidak boleh kosong"
     },
     "deviceIp": {
       "size": "IP peranti tidak boleh melebihi 64 aksara"
@@ -691,7 +692,8 @@
       "notBlank": "Sand appId tidak boleh kosong"
     },
     "credential": {
-      "notNull": "Bukti kelayakan saluran tidak boleh batal"
+      "notNull": "Bukti kelayakan saluran tidak boleh batal",
+      "notBlank": "Respons passkey tidak boleh kosong"
     },
     "outTradeNo": {
       "notBlank": "Nombor perdagangan saluran tidak boleh kosong"
@@ -847,6 +849,15 @@
     },
     "systemTerminalNo": {
       "notBlank": "Terminal sistem tidak boleh kosong"
+    },
+    "client": {
+      "notBlank": "Kod klien tidak boleh kosong"
+    },
+    "challengeId": {
+      "notBlank": "ID cabaran tidak boleh kosong"
+    },
+    "rpId": {
+      "pattern": "RP ID mesti nama domain sahaja tanpa protokol dan port, cth. admin.example.com"
     }
   }
 }

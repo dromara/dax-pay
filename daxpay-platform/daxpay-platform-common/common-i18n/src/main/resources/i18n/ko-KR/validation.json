@@ -576,7 +576,8 @@
       "size": "운영자 ID는 64자를 초과할 수 없습니다."
     },
     "deviceName": {
-      "size": "장치 이름은 128자를 초과할 수 없습니다."
+      "size": "장치 이름은 128자를 초과할 수 없습니다.",
+      "notBlank": "기기 이름은 필수입니다"
     },
     "deviceIp": {
       "size": "장치 IP는 64자를 초과할 수 없습니다."
@@ -692,7 +693,8 @@
       "notBlank": "Sand appId는 필수입니다"
     },
     "credential": {
-      "notNull": "채널 자격 증명은 null일 수 없습니다."
+      "notNull": "채널 자격 증명은 null일 수 없습니다.",
+      "notBlank": "패스키 응답은 필수입니다"
     },
     "outTradeNo": {
       "notBlank": "채널 거래 번호 비워둘 수 없습니다."
@@ -888,6 +890,15 @@
     },
     "infoContent": {
       "size": "보고 정보 내용은 200자를 초과할 수 없습니다"
+    },
+    "client": {
+      "notBlank": "클라이언트 코드는 필수입니다"
+    },
+    "challengeId": {
+      "notBlank": "챌린지 ID는 필수입니다"
+    },
+    "rpId": {
+      "pattern": "RP ID는 프로토콜과 포트 없이 순수 도메인이어야 합니다 (예: admin.example.com)"
     }
   }
 }

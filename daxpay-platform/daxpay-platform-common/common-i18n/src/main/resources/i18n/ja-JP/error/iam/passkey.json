@@ -1,0 +1,11 @@
+{
+  "platformDisabled": "パスキー認証が有効になっていません",
+  "challengeExpired": "検証リクエストの有効期限が切れました。もう一度お試しください",
+  "invalidCredential": "パスキーレスポンスの解析に失敗しました",
+  "assertionFailed": "パスキー検証に失敗しました",
+  "registrationFailed": "パスキー登録に失敗しました",
+  "credentialExists": "このパスキーは既に他のアカウントに紐づいています",
+  "clientMismatch": "このアカウントは現在のクライアントに属していません",
+  "notExists": "パスキーが存在しません",
+  "configIncomplete": "パスキーのプラットフォーム設定が不完全です。rpId と origins を設定してください"
+}

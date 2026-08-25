@@ -1,0 +1,11 @@
+{
+  "platformDisabled": "Pengesahan passkey tidak diaktifkan",
+  "challengeExpired": "Permintaan pengesahan telah tamat tempoh, sila cuba lagi",
+  "invalidCredential": "Gagal menghuraikan respons passkey",
+  "assertionFailed": "Pengesahan passkey gagal",
+  "registrationFailed": "Pendaftaran passkey gagal",
+  "credentialExists": "Passkey ini telah dikaitkan dengan akaun lain",
+  "clientMismatch": "Akaun ini tidak tergolong dalam klien semasa",
+  "notExists": "Passkey tidak dijumpai",
+  "configIncomplete": "Konfigurasi platform passkey tidak lengkap, sila konfigurasikan rpId dan origins"
+}

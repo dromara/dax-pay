@@ -1,0 +1,11 @@
+{
+  "platformDisabled": "Xác thực passkey chưa được bật",
+  "challengeExpired": "Yêu cầu xác minh đã hết hạn, vui lòng thử lại",
+  "invalidCredential": "Không thể phân tích phản hồi passkey",
+  "assertionFailed": "Xác minh passkey không thành công",
+  "registrationFailed": "Đăng ký passkey không thành công",
+  "credentialExists": "Passkey này đã được liên kết với tài khoản khác",
+  "clientMismatch": "Tài khoản này không thuộc ứng dụng hiện tại",
+  "notExists": "Không tìm thấy passkey",
+  "configIncomplete": "Cấu hình nền tảng passkey chưa đầy đủ, vui lòng cấu hình rpId và origins"
+}

@@ -580,7 +580,8 @@
       "size": "操作员ID不可超过64位"
     },
     "deviceName": {
-      "size": "设备名称不可超过128位"
+      "size": "设备名称不可超过128位",
+      "notBlank": "设备名称不能为空"
     },
     "deviceIp": {
       "size": "设备IP不可超过64位"
@@ -696,7 +697,8 @@
       "notBlank": "杉德 appId 不能为空"
     },
     "credential": {
-      "notNull": "通道凭证不能为空"
+      "notNull": "通道凭证不能为空",
+      "notBlank": "通行密钥响应不能为空"
     },
     "outTradeNo": {
       "notBlank": "通道交易号不能为空"
@@ -892,6 +894,15 @@
     },
     "infoContent": {
       "size": "报备信息内容不可超过200位"
+    },
+    "client": {
+      "notBlank": "终端编码不能为空"
+    },
+    "challengeId": {
+      "notBlank": "挑战上下文ID不能为空"
+    },
+    "rpId": {
+      "pattern": "依赖方ID必须为纯域名（不带协议和端口），如 admin.example.com"
     }
   }
 }

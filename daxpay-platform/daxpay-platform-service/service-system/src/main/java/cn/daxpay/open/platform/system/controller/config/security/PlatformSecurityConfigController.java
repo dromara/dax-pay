@@ -94,6 +94,21 @@ public class PlatformSecurityConfigController {
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
+    @Operation(summary = "获取通行密钥配置")
+    @GetMapping("/webauthn/get")
+    public Result<PlatformWebAuthnConfigResult> getWebAuthnConfig() {
+        return Res.ok(platformSecurityConfigService.findWebAuthnConfig());
+    }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "更新通行密钥配置")
+    @PostMapping("/webauthn/update")
+    public Result<Void> updateWebAuthnConfig(@RequestBody @Validated PlatformWebAuthnConfigParam param) {
+        platformSecurityConfigService.updateWebAuthnConfig(param);
+        return Res.ok();
+    }
+
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "获取IAM域防重放配置")
     @GetMapping("/iam-replay-protect/get")
     public Result<PlatformIamReplayProtectConfigResult> getIamReplayProtectConfig() {

@@ -1,0 +1,11 @@
+{
+  "platformDisabled": "Passkey authentication is not enabled",
+  "challengeExpired": "The verification request has expired, please try again",
+  "invalidCredential": "Failed to parse the passkey response",
+  "assertionFailed": "Passkey verification failed",
+  "registrationFailed": "Passkey registration failed",
+  "credentialExists": "This passkey is already bound to another account",
+  "clientMismatch": "This account does not belong to the current client",
+  "notExists": "Passkey not found",
+  "configIncomplete": "Passkey platform configuration is incomplete, please configure rpId and origins"
+}

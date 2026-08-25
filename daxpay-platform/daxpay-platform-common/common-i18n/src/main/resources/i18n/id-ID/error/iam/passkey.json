@@ -1,0 +1,11 @@
+{
+  "platformDisabled": "Autentikasi passkey tidak diaktifkan",
+  "challengeExpired": "Permintaan verifikasi telah kedaluwarsa, silakan coba lagi",
+  "invalidCredential": "Gagal menguraikan respons passkey",
+  "assertionFailed": "Verifikasi passkey gagal",
+  "registrationFailed": "Pendaftaran passkey gagal",
+  "credentialExists": "Passkey ini sudah terikat ke akun lain",
+  "clientMismatch": "Akun ini tidak termasuk dalam klien saat ini",
+  "notExists": "Passkey tidak ditemukan",
+  "configIncomplete": "Konfigurasi platform passkey tidak lengkap, silakan konfigurasi rpId dan origins"
+}

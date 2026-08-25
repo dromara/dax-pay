@@ -18,6 +18,9 @@ public interface AuthLoginTypeCode {
     /// 账号密码登录(普通)
     String PASSWORD = "password";
 
+    /// 通行密钥登录(WebAuthn, 两阶段交互不走 Authenticator SPI, 由 PasskeyEndpoint 编排)
+    String PASSKEY = "passkey";
+
     /// 账号密码登录(GoView)
     String PASSWORD_GO_VIEW = "passwordGoView";
 

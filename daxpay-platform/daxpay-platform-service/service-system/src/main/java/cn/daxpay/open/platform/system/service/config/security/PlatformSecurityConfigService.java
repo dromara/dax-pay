@@ -15,6 +15,8 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /// # 平台安全配置服务
 ///
 /// 统一管理密码策略、登录安全、会话管理、双因素认证、API安全等安全类配置。
@@ -165,6 +167,34 @@ public class PlatformSecurityConfigService {
         PlatformTwoFactorAuthConfig data = this.getTwoFactorAuthConfig();
         PlatformSecurityConfigConvert.CONVERT.copy(param, data);
         systemConfigService.updateConfig(PlatformConfigTypeEnum.SECURITY_TWO_FACTOR_AUTH, data);
+    }
+
+    /// 获取通行密钥(WebAuthn)配置
+    public PlatformWebAuthnConfig getWebAuthnConfig() {
+        return systemConfigService.getOrCreateConfig(PlatformConfigTypeEnum.SECURITY_WEBAUTHN,
+                PlatformWebAuthnConfig.class,
+                defaultWebAuthnConfig());
+    }
+
+    /// 通行密钥配置默认值: 默认不启用, rpId 待部署域名确定后配置
+    private PlatformWebAuthnConfig defaultWebAuthnConfig() {
+        return new PlatformWebAuthnConfig()
+                .setEnabled(false)
+                .setRpId("")
+                .setRpName(PlatformWebAuthnConfig.DEFAULT_RP_NAME)
+                .setOrigins(List.of());
+    }
+
+    /// 获取通行密钥配置(结果)
+    public PlatformWebAuthnConfigResult findWebAuthnConfig() {
+        return PlatformSecurityConfigConvert.CONVERT.toWebAuthnResult(this.getWebAuthnConfig());
+    }
+
+    /// 更新通行密钥配置
+    public void updateWebAuthnConfig(PlatformWebAuthnConfigParam param) {
+        PlatformWebAuthnConfig data = this.getWebAuthnConfig();
+        PlatformSecurityConfigConvert.CONVERT.copy(param, data);
+        systemConfigService.updateConfig(PlatformConfigTypeEnum.SECURITY_WEBAUTHN, data);
     }
 
     // ========== API安全配置（防重放，高频读取，走多级缓存） ==========

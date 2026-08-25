@@ -53,6 +53,7 @@
         <shedlock.version>6.3.1</shedlock.version>
         <aws-sdk.version>2.46.15</aws-sdk.version>
         <sa-token.version>1.45.0</sa-token.version>
+        <webauthn-server.version>2.9.0</webauthn-server.version>
         <caffeine.version>3.2.4</caffeine.version>
         <ip2region.version>3.3.7</ip2region.version>
         <wxjava.version>4.8.4.B</wxjava.version>

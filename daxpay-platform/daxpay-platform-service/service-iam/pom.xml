@@ -79,6 +79,12 @@
             <artifactId>hutool-captcha</artifactId>
             <version>${hutool.version}</version>
         </dependency>
+        <!-- WebAuthn 通行密钥服务端核心(注册/断言验证, 纯 Java 无 Spring Security 绑定) -->
+        <dependency>
+            <groupId>com.yubico</groupId>
+            <artifactId>webauthn-server-core</artifactId>
+            <version>${webauthn-server.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

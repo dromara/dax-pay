@@ -5,6 +5,7 @@ import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformLo
 import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformPasswordPolicyConfig;
 import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformSessionManagementConfig;
 import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformTwoFactorAuthConfig;
+import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformWebAuthnConfig;
 import cn.daxpay.open.platform.system.service.config.security.PlatformSecurityConfigService;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,11 @@ public class IamSecurityConfigService {
     /// 获取双因素认证配置
     public PlatformTwoFactorAuthConfig getTwoFactorAuthConfig() {
         return platformSecurityConfigService.getTwoFactorAuthConfig();
+    }
+
+    /// 获取通行密钥(WebAuthn)配置
+    public PlatformWebAuthnConfig getWebAuthnConfig() {
+        return platformSecurityConfigService.getWebAuthnConfig();
     }
 
     /// 获取API安全配置（防重放），走多级缓存
