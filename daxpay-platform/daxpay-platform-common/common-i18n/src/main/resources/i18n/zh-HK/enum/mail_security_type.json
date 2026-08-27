@@ -1,0 +1,5 @@
+{
+  "none": "明文(不加密)",
+  "starttls": "STARTTLS",
+  "ssl": "SSL/TLS"
+}

@@ -899,6 +899,20 @@
     },
     "rpId": {
       "pattern": "RP ID はプロトコルやポートを含まないドメイン名である必要があります（例: admin.example.com）"
+    },
+    "host": {
+      "notBlank": "SMTPサーバーアドレスは必須です"
+    },
+    "port": {
+      "notNull": "SMTPサーバーポートは必須です",
+      "range": "SMTPサーバーポートは1〜65535の範囲で指定してください"
+    },
+    "username": {
+      "notBlank": "送信者メールアカウントは必須です"
+    },
+    "receiverEmail": {
+      "notBlank": "受信者のメールアドレスは必須です",
+      "notValid": "受信者のメールアドレスの形式が不正です"
     }
   }
 }

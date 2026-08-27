@@ -858,6 +858,20 @@
     },
     "rpId": {
       "pattern": "RP ID phải là tên miền thuần không kèm giao thức và cổng, ví dụ admin.example.com"
+    },
+    "host": {
+      "notBlank": "Địa chỉ máy chủ SMTP không được để trống"
+    },
+    "port": {
+      "notNull": "Cổng máy chủ SMTP không được để trống",
+      "range": "Cổng máy chủ SMTP phải từ 1 đến 65535"
+    },
+    "username": {
+      "notBlank": "Tài khoản email người gửi không được để trống"
+    },
+    "receiverEmail": {
+      "notBlank": "Email người nhận không được để trống",
+      "notValid": "Định dạng email người nhận không hợp lệ"
     }
   }
 }

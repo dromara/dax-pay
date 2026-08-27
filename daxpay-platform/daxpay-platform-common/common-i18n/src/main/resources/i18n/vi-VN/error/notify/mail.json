@@ -1,0 +1,6 @@
+{
+  "notExist": "Bản ghi gửi email không tồn tại",
+  "notFail": "Chỉ email thất bại mới có thể gửi lại",
+  "configMissing": "Cấu hình người gửi email chưa đầy đủ, vui lòng hoàn thiện trong cấu hình nền tảng trước",
+  "sendFailed": "Gửi email thất bại: {0}"
+}

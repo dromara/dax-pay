@@ -1,0 +1,5 @@
+{
+  "none": "None (plain)",
+  "starttls": "STARTTLS",
+  "ssl": "SSL/TLS"
+}

@@ -903,6 +903,20 @@
     },
     "rpId": {
       "pattern": "依赖方ID必须为纯域名（不带协议和端口），如 admin.example.com"
+    },
+    "host": {
+      "notBlank": "SMTP服务器地址不能为空"
+    },
+    "port": {
+      "notNull": "SMTP服务器端口不能为空",
+      "range": "SMTP服务器端口必须在1到65535之间"
+    },
+    "username": {
+      "notBlank": "发件邮箱账号不能为空"
+    },
+    "receiverEmail": {
+      "notBlank": "收件邮箱不能为空",
+      "notValid": "收件邮箱格式不正确"
     }
   }
 }

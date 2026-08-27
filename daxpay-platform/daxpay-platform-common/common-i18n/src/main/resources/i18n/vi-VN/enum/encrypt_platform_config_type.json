@@ -2,5 +2,6 @@
   "oss": "Cấu hình lưu trữ đối tượng",
   "alipay_auth": "Cấu hình xác thực nền tảng mở Alipay",
   "wechat_mp_auth": "Cấu hình xác thực tài khoản chính thức WeChat H5",
-  "douyin_h5_auth": "Cấu hình xác thực ứng dụng H5 trên nền tảng mở Douyin"
+  "douyin_h5_auth": "Cấu hình xác thực ứng dụng H5 trên nền tảng mở Douyin",
+  "mail": "Cấu hình người gửi email"
 }

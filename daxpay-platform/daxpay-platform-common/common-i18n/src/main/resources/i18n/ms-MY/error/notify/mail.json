@@ -1,0 +1,6 @@
+{
+  "notExist": "Rekod penghantaran e-mel tidak wujud",
+  "notFail": "Hanya e-mel yang gagal boleh dihantar semula",
+  "configMissing": "Konfigurasi penghantar e-mel tidak lengkap, sila lengkapkan dalam konfigurasi platform terlebih dahulu",
+  "sendFailed": "Penghantaran e-mel gagal: {0}"
+}

@@ -5,7 +5,6 @@
   "security_two_factor_auth": "Otentikasi dua faktor",
   "url": "Pengaturan URL sistem",
   "website": "Pengaturan tampilan situs web",
-  "wechat_notify": "Pesan WeChat memberitahukan konfigurasi templat",
   "api_security": "Konfigurasi Keamanan API",
   "iam_replay_protect": "Konfigurasi Anti-Replay IAM",
   "sensitive_word": "Kebijakan kata sensitif",

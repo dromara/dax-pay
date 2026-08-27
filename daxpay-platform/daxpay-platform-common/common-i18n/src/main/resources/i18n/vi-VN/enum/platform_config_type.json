@@ -5,7 +5,6 @@
   "security_two_factor_auth": "Xác thực hai yếu tố",
   "url": "Cài đặt URL hệ thống",
   "website": "Cài đặt hiển thị trang web",
-  "wechat_notify": "Cấu hình mẫu thông báo tin nhắn WeChat",
   "api_security": "Cấu hình bảo mật API",
   "iam_replay_protect": "Cấu hình chống phát lại IAM",
   "sensitive_word": "Cấu hình từ nhạy cảm",

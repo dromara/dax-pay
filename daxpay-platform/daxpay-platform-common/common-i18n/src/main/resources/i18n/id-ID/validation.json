@@ -858,6 +858,20 @@
     },
     "rpId": {
       "pattern": "RP ID harus berupa nama domain murni tanpa protokol dan port, mis. admin.example.com"
+    },
+    "host": {
+      "notBlank": "Alamat server SMTP wajib diisi"
+    },
+    "port": {
+      "notNull": "Port server SMTP wajib diisi",
+      "range": "Port server SMTP harus antara 1 hingga 65535"
+    },
+    "username": {
+      "notBlank": "Akun email pengirim wajib diisi"
+    },
+    "receiverEmail": {
+      "notBlank": "Email penerima wajib diisi",
+      "notValid": "Format email penerima tidak valid"
     }
   }
 }

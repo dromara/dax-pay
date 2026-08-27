@@ -10,9 +10,20 @@
     </parent>
 
     <artifactId>service-notify</artifactId>
-    <description>站内通知(公告 + 个人消息)</description>
+    <description>站内通知(公告 + 个人消息) + 邮件通知</description>
 
     <dependencies>
+        <!-- 系统配置(读取平台邮件发件箱配置) -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>service-system</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 邮件发送 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
         <!-- 翻译模块 -->
         <dependency>
             <groupId>cn.daxpay.open</groupId>

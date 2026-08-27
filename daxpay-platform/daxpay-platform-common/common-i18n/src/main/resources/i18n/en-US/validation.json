@@ -903,6 +903,20 @@
     },
     "rpId": {
       "pattern": "RP ID must be a plain domain name without protocol or port, e.g. admin.example.com"
+    },
+    "host": {
+      "notBlank": "SMTP server address cannot be empty"
+    },
+    "port": {
+      "notNull": "SMTP server port is required",
+      "range": "SMTP server port must be between 1 and 65535"
+    },
+    "username": {
+      "notBlank": "Sender email account cannot be empty"
+    },
+    "receiverEmail": {
+      "notBlank": "Recipient email cannot be empty",
+      "notValid": "Invalid recipient email format"
     }
   }
 }

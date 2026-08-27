@@ -392,6 +392,12 @@ public interface PermCodes {
             String MENU = "system:notify:notice";
         }
 
+        /// 邮件发送记录 menuCode=system:notify:mail-record
+        interface MailRecord {
+            /// 菜单编码
+            String MENU = "system:notify:mail-record";
+        }
+
         /// 存储文件 menuCode=system:file（原 system:file:platform）
         interface File {
             /// 菜单编码

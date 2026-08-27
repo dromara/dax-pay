@@ -2,5 +2,6 @@
   "oss": "Konfigurasi penyimpanan objek",
   "alipay_auth": "Konfigurasi Otentikasi Platform Terbuka Alipay",
   "wechat_mp_auth": "Konfigurasi Otentikasi H5 Akun Resmi WeChat",
-  "douyin_h5_auth": "Konfigurasi Otentikasi Aplikasi H5 Platform Terbuka Douyin"
+  "douyin_h5_auth": "Konfigurasi Otentikasi Aplikasi H5 Platform Terbuka Douyin",
+  "mail": "Konfigurasi pengirim email"
 }

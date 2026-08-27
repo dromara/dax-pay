@@ -1,0 +1,6 @@
+{
+  "notExist": "Mail send record does not exist",
+  "notFail": "Only failed emails can be resent",
+  "configMissing": "Mail sender config is incomplete, please complete it in platform config first",
+  "sendFailed": "Email sending failed: {0}"
+}

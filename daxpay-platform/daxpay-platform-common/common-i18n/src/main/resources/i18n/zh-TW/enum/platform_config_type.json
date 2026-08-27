@@ -5,7 +5,6 @@
   "security_two_factor_auth": "雙因素認證配置",
   "url": "系統訪問地址配置",
   "website": "站點顯示內容配置",
-  "wechat_notify": "微信訊息通知模板配置",
   "sensitive_word": "敏感詞策略配置",
   "api_security": "API安全配置",
   "pay_security": "支付安全配置",

@@ -1,0 +1,6 @@
+{
+  "notExist": "Catatan pengiriman email tidak ditemukan",
+  "notFail": "Hanya email yang gagal dapat dikirim ulang",
+  "configMissing": "Konfigurasi pengirim email belum lengkap, silakan lengkapi di konfigurasi platform terlebih dahulu",
+  "sendFailed": "Pengiriman email gagal: {0}"
+}

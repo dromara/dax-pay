@@ -899,6 +899,20 @@
     },
     "rpId": {
       "pattern": "RP ID는 프로토콜과 포트 없이 순수 도메인이어야 합니다 (예: admin.example.com)"
+    },
+    "host": {
+      "notBlank": "SMTP 서버 주소는 필수입니다"
+    },
+    "port": {
+      "notNull": "SMTP 서버 포트는 필수입니다",
+      "range": "SMTP 서버 포트는 1~65535 사이여야 합니다"
+    },
+    "username": {
+      "notBlank": "발신자 메일 계정은 필수입니다"
+    },
+    "receiverEmail": {
+      "notBlank": "수신자 메일 주소는 필수입니다",
+      "notValid": "수신자 메일 주소 형식이 올바르지 않습니다"
     }
   }
 }

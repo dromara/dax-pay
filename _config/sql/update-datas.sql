@@ -28,3 +28,35 @@ WHERE code_id IN (
 DELETE FROM "public"."iam_perm_code" WHERE code LIKE 'system:notify:wechat-config:%';
 DELETE FROM "public"."system_platform_config" WHERE config_type = 'wechat_notify';
 DROP TABLE IF EXISTS "public"."pay_platform_wechat_message_record";
+
+-- 升级数据脚本: 邮件通知功能菜单与权限码
+-- 新增 通知中心→邮件发送记录 菜单(310)与其权限码(view/manage/resend + platform-config:test),
+-- 并绑定默认管理员角色(role_id=1);
+-- 权限码亦可由 @PermCode 扫描服务手动同步生成, 本脚本保证存量环境开箱可用。
+-- 脚本幂等, 可重复执行。
+INSERT INTO "public"."iam_perm_menu"
+    (id, pid, menu_code, client_code, name, i18n_key, icon, hidden, hide_children_menu,
+     component, path, redirect, sort_no, root, keep_alive, affix_tab,
+     creator, last_modifier, version, deleted, menu_type, create_time, last_modified_time)
+SELECT 310::int8, 308::int8, 'system:notify:mail-record'::varchar, 'admin'::varchar,
+       'SystemMailRecord'::varchar, 'menu.system.notify.mailRecord'::varchar, 'lucide:mail'::varchar, false, false,
+       '/system/notify/mail/MailRecordList'::varchar, '/system/notify/mail-record'::varchar, NULL, 30::float8, false, true, false,
+       1::int8, 1::int8, 0, false, 'menu'::varchar,
+       '2026-08-27 16:00:00+00'::timestamptz, '2026-08-27 16:00:00+00'::timestamptz
+WHERE NOT EXISTS (SELECT 1 FROM "public"."iam_perm_menu" WHERE id = 310);
+
+INSERT INTO "public"."iam_perm_code"
+    (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key)
+SELECT v.id, v.code, v.menu_code, true, '由 @PermCode 扫描同步生成', 1, 1, 0, false,
+       '2026-08-27 16:00:00+00', '2026-08-27 16:00:00+00', v.i18n_key
+FROM (VALUES
+    (2079866296000000001::int8, 'system:notify:mail-record:view'::varchar, 'system:notify:mail-record'::varchar, 'perm.system:notify:mail-record:view'::varchar),
+    (2079866296000000002::int8, 'system:notify:mail-record:manage'::varchar, 'system:notify:mail-record'::varchar, 'perm.system:notify:mail-record:manage'::varchar),
+    (2079866296000000003::int8, 'system:notify:mail-record:resend'::varchar, 'system:notify:mail-record'::varchar, 'perm.system:notify:mail-record:resend'::varchar),
+    (2079866296000000004::int8, 'system:platform-config:test'::varchar, 'system:platform-config'::varchar, 'perm.system:platform-config:test'::varchar)
+) AS v(id, code, menu_code, i18n_key)
+WHERE NOT EXISTS (SELECT 1 FROM "public"."iam_perm_code" WHERE id = v.id);
+
+INSERT INTO "public"."iam_role_menu" (id, role_id, client_code, menu_id)
+SELECT 1000000000310::int8, 1::int8, NULL, 310::int8
+WHERE NOT EXISTS (SELECT 1 FROM "public"."iam_role_menu" WHERE id = 1000000000310);

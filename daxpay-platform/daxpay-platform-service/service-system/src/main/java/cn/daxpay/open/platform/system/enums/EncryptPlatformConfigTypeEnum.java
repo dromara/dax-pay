@@ -24,7 +24,10 @@ public enum EncryptPlatformConfigTypeEnum implements I18nSupport {
     WECHAT_MP_AUTH("wechat_mp_auth"),
 
     /// 抖音开放平台 H5 应用认证配置(clientKey/clientSecret, 含敏感信息加密存储)
-    DOUYIN_H5_AUTH("douyin_h5_auth");
+    DOUYIN_H5_AUTH("douyin_h5_auth"),
+
+    /// 邮件发件箱配置(SMTP 服务器与授权码, 含敏感信息加密存储)
+    MAIL("mail");
 
     /// 编码
     private final String code;

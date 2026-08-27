@@ -899,6 +899,20 @@
     },
     "rpId": {
       "pattern": "依賴方ID必須為純網域（不含協議與端口），如 admin.example.com"
+    },
+    "host": {
+      "notBlank": "SMTP伺服器地址不可為空"
+    },
+    "port": {
+      "notNull": "SMTP伺服器端口不可為空",
+      "range": "SMTP伺服器端口必須在1到65535之間"
+    },
+    "username": {
+      "notBlank": "寄件郵箱帳號不可為空"
+    },
+    "receiverEmail": {
+      "notBlank": "收件郵箱不可為空",
+      "notValid": "收件郵箱格式不正確"
     }
   }
 }

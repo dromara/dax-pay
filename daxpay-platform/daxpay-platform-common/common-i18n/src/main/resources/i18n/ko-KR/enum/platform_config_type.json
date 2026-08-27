@@ -5,7 +5,6 @@
   "security_two_factor_auth": "이중 인증",
   "url": "시스템 URL 설정",
   "website": "웹사이트 표시 설정",
-  "wechat_notify": "WeChat 메시지 알림 템플릿 구성",
   "sensitive_word": "민감어 정책 설정",
   "api_security": "API 보안 설정",
   "pay_security": "결제 보안 설정",

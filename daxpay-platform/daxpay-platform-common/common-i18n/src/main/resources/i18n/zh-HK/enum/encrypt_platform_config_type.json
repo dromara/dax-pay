@@ -2,5 +2,6 @@
   "oss": "對象存儲配置",
   "alipay_auth": "支付寶開放平台認證配置",
   "wechat_mp_auth": "微信公眾號 H5 認證配置",
-  "douyin_h5_auth": "抖音開放平台 H5 應用認證配置"
+  "douyin_h5_auth": "抖音開放平台 H5 應用認證配置",
+  "mail": "郵件寄件配置"
 }

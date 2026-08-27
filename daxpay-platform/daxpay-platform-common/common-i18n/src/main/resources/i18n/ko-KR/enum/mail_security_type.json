@@ -1,0 +1,5 @@
+{
+  "none": "평문(암호화 없음)",
+  "starttls": "STARTTLS",
+  "ssl": "SSL/TLS"
+}
