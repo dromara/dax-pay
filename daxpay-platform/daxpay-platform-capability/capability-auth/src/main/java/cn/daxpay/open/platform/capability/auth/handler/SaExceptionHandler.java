@@ -55,7 +55,8 @@ public class SaExceptionHandler {
         // 日志固定输出 messageKey 与中文翻译, 不受请求语言影响
         String key = ex.resolveMessageKey();
         log.info("鉴权异常 消息={}, key={}", I18nUtil.get(key, Locale.CHINA, ex.getArgs()), key, ex);
-        Result<Void> result = Res.response(ex.getCode(), ex.getMessage());
+        // 响应体按请求语言翻译 messageKey, 与 RestExceptionHandler 行为对齐
+        Result<Void> result = Res.response(ex.getCode(), I18nUtil.get(key, ex.getArgs()));
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
     }
 
@@ -90,7 +91,8 @@ public class SaExceptionHandler {
         // 日志固定输出 messageKey 与中文翻译, 不受请求语言影响
         String key = ex.resolveMessageKey();
         log.info("鉴权异常 消息={}, key={}", I18nUtil.get(key, Locale.CHINA, ex.getArgs()), key, ex);
-        Result<Void> result = Res.response(ex.getCode(), ex.getMessage());
+        // 响应体按请求语言翻译 messageKey, 与 RestExceptionHandler 行为对齐
+        Result<Void> result = Res.response(ex.getCode(), I18nUtil.get(key, ex.getArgs()));
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(result);
     }
 
