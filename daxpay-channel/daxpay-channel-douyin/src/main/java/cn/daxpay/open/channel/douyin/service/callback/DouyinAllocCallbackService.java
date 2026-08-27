@@ -34,7 +34,9 @@ import java.util.Objects;
 /// 链路: 收 body+headers → 组装凭证 → 转发子应用验签 → 状态分类 → 调 [AllocCallbackService] 流转。
 ///
 /// 与 [DouyinTransferCallbackService] 同模式; 差异点:
-/// - [AllocCallbackService] 不落回调记录, 本服务在成功/验签失败/业务异常三条路径自行落 [PayCallbackRecordService#saveAlloc]
+/// - [AllocCallbackService] 不落回调记录, 本服务统一落 [PayCallbackRecordService#saveAlloc]: 落库状态取
+///   callbackData.callbackStatus, [AllocCallbackService] 对分账单不存在/幂等跳过/明细为空等不流转分支会回传
+///   not_found / ignore / exception, 与成功/验签失败/业务异常路径一并覆盖
 /// - 分账为多接收方, 回调体含逐明细结果, 需装配 [AllocResultBo.DetailResult] 列表
 @Slf4j
 @Service

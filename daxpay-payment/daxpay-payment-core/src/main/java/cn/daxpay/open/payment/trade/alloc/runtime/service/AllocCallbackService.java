@@ -6,6 +6,7 @@ import cn.daxpay.open.payment.trade.alloc.entity.AllocOrder;
 import cn.daxpay.open.payment.trade.alloc.enums.AllocOrderStatusEnum;
 import cn.daxpay.open.payment.trade.runtime.bo.CallbackData;
 import cn.daxpay.open.platform.common.redis.lock.LockExecutor;
+import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -51,24 +52,30 @@ public class AllocCallbackService {
         }
         if (allocOrder == null) {
             log.warn("分账回调: 分账单不存在, allocNo={}, outAllocNo={}", data.getTradeNo(), data.getOutTradeNo());
+            // 回传处理状态, 供外层落回调记录(本服务不落记录, 只审计不重放)
+            data.setCallbackStatus(CallbackStatusEnum.NOT_FOUND).setCallbackErrorMsg("分账单不存在");
             return;
         }
-        this.doAllocCallback(allocOrder, detailResults);
+        this.doAllocCallback(allocOrder, data, detailResults);
     }
 
     /// 锁内回调处理
-    private void doAllocCallback(AllocOrder allocOrder, List<AllocResultBo.DetailResult> detailResults) {
+    private void doAllocCallback(AllocOrder allocOrder, CallbackData data, List<AllocResultBo.DetailResult> detailResults) {
         lockExecutor.run(AllocAssistService.allocLockKey(allocOrder.getId()), () -> {
             // 锁内二次读: 须仍为 processing 才继续(终态幂等忽略)
             AllocOrder latest = allocOrderManager.findById(allocOrder.getId()).orElse(null);
             if (latest == null
                     || !Objects.equals(latest.getStatus(), AllocOrderStatusEnum.PROCESSING.getCode())) {
                 log.info("分账回调幂等: 分账单 {} 非处理中, 跳过", allocOrder.getAllocNo());
+                // 回传处理状态: 非处理中不流转, 幂等忽略(供外层落回调记录)
+                data.setCallbackStatus(CallbackStatusEnum.IGNORE).setCallbackErrorMsg("分账单已非处理中状态, 幂等忽略");
                 return;
             }
             // 按逐明细结果聚合状态
             if (detailResults == null || detailResults.isEmpty()) {
                 log.warn("分账回调: 明细结果为空, allocNo={}", latest.getAllocNo());
+                // 回传处理状态: 通知数据异常, 不流转(供外层落回调记录)
+                data.setCallbackStatus(CallbackStatusEnum.EXCEPTION).setCallbackErrorMsg("分账回调明细结果为空");
                 return;
             }
             long successCount = detailResults.stream()
