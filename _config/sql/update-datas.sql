@@ -18,9 +18,9 @@ WHERE u.deleted = false
 -- 脚本幂等, 可重复执行。
 DELETE FROM "public"."iam_role_menu"
 WHERE menu_id IN (
-    SELECT id FROM "public"."iam_perm_menu" WHERE code = 'system:notify:wechat-config'
+    SELECT id FROM "public"."iam_perm_menu" WHERE menu_code = 'system:notify:wechat-config'
 );
-DELETE FROM "public"."iam_perm_menu" WHERE code = 'system:notify:wechat-config';
+DELETE FROM "public"."iam_perm_menu" WHERE menu_code = 'system:notify:wechat-config';
 DELETE FROM "public"."iam_role_code"
 WHERE code_id IN (
     SELECT id FROM "public"."iam_perm_code" WHERE code LIKE 'system:notify:wechat-config:%'
