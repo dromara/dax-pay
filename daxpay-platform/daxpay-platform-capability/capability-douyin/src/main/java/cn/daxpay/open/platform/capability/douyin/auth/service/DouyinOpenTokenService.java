@@ -27,7 +27,7 @@ import java.util.Map;
 /// - **client_access_token**: 由 client_key + client_secret 换取, 缓存 ~7200s
 /// - **jsapi_ticket**:       由 client_access_token 换取, 缓存 ~7200s
 ///
-/// 参考范式: [cn.daxpay.open.platform.capability.wechat.token.service.WechatTokenService]
+/// 实现范式: Redis 缓存 + 分布式锁双重检查刷新
 ///
 /// 参考文档:
 /// - client_token: https://developer.open-douyin.com/docs/resource/zh-CN/dop/develop/openapi/account-permission/client-token

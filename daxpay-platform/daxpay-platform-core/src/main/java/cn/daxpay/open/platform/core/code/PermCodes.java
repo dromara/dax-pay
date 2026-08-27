@@ -392,12 +392,6 @@ public interface PermCodes {
             String MENU = "system:notify:notice";
         }
 
-        /// 微信消息通知 menuCode=system:notify:wechat-config（配置 + 发送记录）
-        interface WechatNotify {
-            /// 菜单编码
-            String MENU = "system:notify:wechat-config";
-        }
-
         /// 存储文件 menuCode=system:file（原 system:file:platform）
         interface File {
             /// 菜单编码

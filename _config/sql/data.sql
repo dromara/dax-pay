@@ -5546,10 +5546,6 @@ INSERT INTO public.iam_perm_code VALUES (2070862265052237824, 'system:log:operat
 INSERT INTO public.iam_perm_code VALUES (2072232741347454976, 'system:notify:notice:manage', 'system:notify:notice', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-01 08:16:00.41608+00', '2026-07-15 03:59:23.706454+00', 'perm.system:notify:notice:manage');
 INSERT INTO public.iam_perm_code VALUES (2072232741381009408, 'system:notify:notice:publish', 'system:notify:notice', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-01 08:16:00.424595+00', '2026-07-15 03:59:23.707963+00', 'perm.system:notify:notice:publish');
 INSERT INTO public.iam_perm_code VALUES (2072232741385203712, 'system:notify:notice:view', 'system:notify:notice', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-01 08:16:00.425103+00', '2026-07-15 03:59:23.707963+00', 'perm.system:notify:notice:view');
-INSERT INTO public.iam_perm_code VALUES (2075452238565875712, 'system:notify:wechat-config:manage', 'system:notify:wechat-config', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-10 05:29:08.369792+00', '2026-07-15 03:59:23.708973+00', 'perm.system:notify:wechat-config:manage');
-INSERT INTO public.iam_perm_code VALUES (2075452238565875713, 'system:notify:wechat-config:resend', 'system:notify:wechat-config', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-10 05:29:08.369792+00', '2026-07-15 03:59:23.708973+00', 'perm.system:notify:wechat-config:resend');
-INSERT INTO public.iam_perm_code VALUES (2075452238570070016, 'system:notify:wechat-config:test', 'system:notify:wechat-config', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-10 05:29:08.370793+00', '2026-07-15 03:59:23.708973+00', 'perm.system:notify:wechat-config:test');
-INSERT INTO public.iam_perm_code VALUES (2075452238574264320, 'system:notify:wechat-config:view', 'system:notify:wechat-config', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-10 05:29:08.371793+00', '2026-07-15 03:59:23.70998+00', 'perm.system:notify:wechat-config:view');
 INSERT INTO public.iam_perm_code VALUES (2070862265056432129, 'system:oss-config:manage', 'system:oss-config', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.406113+00', '2026-07-15 03:59:23.70998+00', 'perm.system:oss-config:manage');
 INSERT INTO public.iam_perm_code VALUES (2070862265064820736, 'system:oss-config:view', 'system:oss-config', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.408624+00', '2026-07-15 03:59:23.710979+00', 'perm.system:oss-config:view');
 INSERT INTO public.iam_perm_code VALUES (2070862265069015040, 'system:platform-config:manage', 'system:platform-config', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.409623+00', '2026-07-15 03:59:23.710979+00', 'perm.system:platform-config:manage');
@@ -5647,7 +5643,6 @@ INSERT INTO public.iam_perm_menu VALUES (406, 4, 'payment:risk', 'admin', 'Payme
 INSERT INTO public.iam_perm_menu VALUES (40601, 406, 'payment:risk:blacklist', 'admin', 'PayBlacklistList', 'menu.payment.security.blacklist', 'lucide:ban', false, false, '/payment/risk/blacklist/PayBlacklistList', '/payment/risk/blacklist', NULL, 1, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-15 00:00:00+00', '2026-07-15 00:00:00+00');
 INSERT INTO public.iam_perm_menu VALUES (40602, 406, 'payment:risk:hit', 'admin', 'PayRiskHitList', 'menu.payment.security.hit', 'lucide:triangle-alert', false, false, '/payment/risk/hit/PayRiskHitList', '/payment/risk/hit', NULL, 2, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-15 00:00:00+00', '2026-07-15 00:00:00+00');
 INSERT INTO public.iam_perm_menu VALUES (608, 6, 'trade:alloc', 'admin', 'AllocOrderList', 'menu.trade.allocOrder', 'lucide:split', false, false, '/payment/order/AllocOrderList', '/trade/alloc-order', NULL, 2.5, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO public.iam_perm_menu VALUES (310, 308, 'system:notify:wechat-config', 'admin', 'WechatNotify', 'menu.system.notify.wechatConfig', 'lucide:message-circle', false, false, '/system/notify/wechat/index', '/system/notify/wechat', NULL, 30, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-09 00:00:00+00', '2026-07-09 00:00:00+00');
 INSERT INTO public.iam_perm_menu VALUES (40504, 405, 'payment:config:mobile-app', 'admin', 'MobileAppConfig', 'menu.payment.config.mobileApp', 'lucide:smartphone', false, false, '/payment/config/mobile-app/MobileAppConfig', '/payment/config/mobile-app', NULL, 10, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-05 00:00:00+00', '2026-07-31 03:18:17.013352+00');
 INSERT INTO public.iam_perm_menu VALUES (4040130, 40401, NULL, 'admin', 'MchManageGroup', 'menu.payment.merchant.group.manage', 'lucide:settings-2', true, false, NULL, NULL, NULL, 1, false, false, false, 1, 1, 0, false, 'subpage_group', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-11 03:37:15.421585+00', '2026-07-11 03:37:15.421585+00');
 INSERT INTO public.iam_perm_menu VALUES (4040131, 40401, NULL, 'admin', 'ChannelMerchantGroup', 'menu.payment.merchant.group.channelMerchant', 'lucide:repeat', true, false, NULL, NULL, NULL, 2, false, false, false, 1, 1, 0, false, 'subpage_group', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-11 03:37:15.421585+00', '2026-07-11 03:37:15.421585+00');
@@ -5825,10 +5820,6 @@ INSERT INTO public.iam_role_code VALUES (2075053483370500096, 1, 207505148337050
 INSERT INTO public.iam_role_code VALUES (2075454237802512384, 1, 2075452237802512384);
 INSERT INTO public.iam_role_code VALUES (2075454238549098496, 1, 2075452238549098496);
 INSERT INTO public.iam_role_code VALUES (2075454238553292800, 1, 2075452238553292800);
-INSERT INTO public.iam_role_code VALUES (2075454238565875712, 1, 2075452238565875712);
-INSERT INTO public.iam_role_code VALUES (2075454238565875713, 1, 2075452238565875713);
-INSERT INTO public.iam_role_code VALUES (2075454238570070016, 1, 2075452238570070016);
-INSERT INTO public.iam_role_code VALUES (2075454238574264320, 1, 2075452238574264320);
 INSERT INTO public.iam_role_code VALUES (2075053483374694400, 1, 2075051483374694400);
 INSERT INTO public.iam_role_code VALUES (2075053483374694401, 1, 2075051483374694401);
 INSERT INTO public.iam_role_code VALUES (2075454238557487104, 1, 2075452238557487104);
@@ -5951,7 +5942,6 @@ INSERT INTO public.iam_role_menu VALUES (1000000000308, 1, NULL, 308);
 INSERT INTO public.iam_role_menu VALUES (1000000040502, 1, NULL, 40502);
 INSERT INTO public.iam_role_menu VALUES (1000000000901, 1, NULL, 901);
 INSERT INTO public.iam_role_menu VALUES (1000000000803, 1, NULL, 803);
-INSERT INTO public.iam_role_menu VALUES (1000000000310, 1, NULL, 310);
 INSERT INTO public.iam_role_menu VALUES (1000004040121, 1, NULL, 4040121);
 INSERT INTO public.iam_role_menu VALUES (1000000040507, 1, NULL, 40507);
 INSERT INTO public.iam_role_menu VALUES (1000004040130, 1, NULL, 4040130);
