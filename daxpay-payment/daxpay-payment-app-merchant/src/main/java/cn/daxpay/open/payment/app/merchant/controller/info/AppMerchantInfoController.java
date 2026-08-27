@@ -3,6 +3,8 @@ package cn.daxpay.open.payment.app.merchant.controller.info;
 import cn.daxpay.open.payment.app.merchant.service.info.AppMerchantInfoService;
 import cn.daxpay.open.payment.merchant.param.info.MerchantInfoParam;
 import cn.daxpay.open.payment.merchant.result.info.MerchantInfoResult;
+import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 /// # 商户信息(商户移动端)
 ///
 /// 获取/更新当前登录商户资料。业务编排委托 [AppMerchantInfoService]。
+@PermCode(menuCode = PermCodes.Merchant.Info.MENU)
 @Validated
 @Tag(name = "商户信息(商户移动端)")
 @RestController
@@ -27,6 +30,7 @@ public class AppMerchantInfoController {
 
     private final AppMerchantInfoService merchantInfoService;
 
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "获取商户信息")
     @GetMapping("/get")
     public Result<MerchantInfoResult> getMerchant() {
@@ -34,6 +38,7 @@ public class AppMerchantInfoController {
     }
 
     /// 更新当前登录商户资料（mchNo 取自 PaymentContext，不信任入参）
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "更新商户信息")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated MerchantInfoParam param) {

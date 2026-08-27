@@ -1,5 +1,6 @@
 package cn.daxpay.open.platform.iam.controller.dashboardpreference;
 
+import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.platform.iam.param.dashboardpreference.QuickEntrySaveParam;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 ///
 /// 用户个性化工作台快捷入口(显隐 + 排序), PC 与移动端按请求终端自动区分.
 /// 每个登录用户均可管理自己的偏好, 无需额外权限码.
+@IgnoreAuth(login = true)
 @Validated
 @Tag(name = "工作台快捷入口")
 @RestController

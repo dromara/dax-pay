@@ -4,6 +4,8 @@ import cn.daxpay.open.payment.app.merchant.service.store.AppMerchantStoreInfoSer
 import cn.daxpay.open.payment.merchant.param.store.MchStoreInfoParam;
 import cn.daxpay.open.payment.merchant.param.store.MchStoreInfoQuery;
 import cn.daxpay.open.payment.merchant.result.store.MchStoreInfoResult;
+import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 /// # 门店信息管理(商户移动端)
 ///
 /// 面向商户移动端的门店管理。业务编排委托 [AppMerchantStoreInfoService]。
+@PermCode(menuCode = PermCodes.Merchant.Store.MENU)
 @Validated
 @Tag(name = "门店信息管理(商户移动端)")
 @RestController
@@ -32,18 +35,21 @@ public class AppMerchantStoreInfoController {
 
     private final AppMerchantStoreInfoService storeInfoService;
 
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "门店分页")
     @GetMapping("/page")
     public Result<PageResult<MchStoreInfoResult>> page(PageParam pageParam, MchStoreInfoQuery query) {
         return Res.ok(storeInfoService.page(pageParam, query));
     }
 
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据id查询门店")
     @GetMapping("/get")
     public Result<MchStoreInfoResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(storeInfoService.findById(id));
     }
 
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "新增门店")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) MchStoreInfoParam param) {
@@ -51,6 +57,7 @@ public class AppMerchantStoreInfoController {
         return Res.ok();
     }
 
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "修改门店")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) MchStoreInfoParam param) {
@@ -58,6 +65,7 @@ public class AppMerchantStoreInfoController {
         return Res.ok();
     }
 
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "删除门店")
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {

@@ -1,6 +1,7 @@
 package cn.daxpay.open.payment.admin.controller.masterdata.product;
 
 import cn.daxpay.open.platform.common.config.properties.PlatformConfigProperties;
+import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 ///
 /// 沙箱环境开关由配置文件控制(daxpay.platform.config.sandbox-enabled), 运行时只读。
 @Tag(name = "支付环境全局配置查询")
+@IgnoreAuth(login = true)
 @RestController
 @RequestMapping("/admin/pay-env")
 @RequiredArgsConstructor

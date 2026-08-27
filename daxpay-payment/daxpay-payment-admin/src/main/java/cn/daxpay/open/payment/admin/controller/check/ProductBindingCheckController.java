@@ -2,6 +2,7 @@ package cn.daxpay.open.payment.admin.controller.check;
 
 import cn.daxpay.open.payment.admin.check.service.ProductBindingCheckService;
 import cn.daxpay.open.payment.common.check.model.ProductBindingCheckResult;
+import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 /// 服务商产品配置页的数据源, 展示该产品各项关键配置的绑定状态。
 /// 不挂菜单权限码: 与配置检查(运营端)一致, 任何已认证运营用户均可查看产品绑定完成度。
 @Tag(name = "产品绑定检查(运营端)")
+@IgnoreAuth(login = true)
 @Validated
 @RestController
 @RequestMapping("/admin/product-binding-check")

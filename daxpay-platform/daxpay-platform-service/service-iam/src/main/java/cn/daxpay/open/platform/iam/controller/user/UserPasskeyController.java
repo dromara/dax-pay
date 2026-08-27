@@ -1,5 +1,6 @@
 package cn.daxpay.open.platform.iam.controller.user;
 
+import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import java.util.List;
 
 import cn.daxpay.open.platform.core.rest.Res;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RestController;
 /// 提供个人中心通行密钥页的注册/列表/改名/删除接口, 均需登录;
 /// 注册与删除须以登录密码二次确认。
 ///
+@IgnoreAuth(login = true)
 @Validated
 @Tag(name = "用户通行密钥")
 @RestController

@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.merchant.controller.check;
 
+import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.payment.common.check.model.ConfigCheckResult;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 /// 工作台「配置待完成」Widget 数据源。
 /// 商户号由 `MchContextLocalFilter` 从登录用户装载至 [PaymentContext], 此处读取后隔离查询。
 @Tag(name = "配置检查(商户端)")
+@IgnoreAuth(login = true)
 @Validated
 @RestController
 @RequestMapping("/mch/config-check")

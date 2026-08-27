@@ -4,7 +4,9 @@ import cn.daxpay.open.channel.alipay.result.direct.AlipayTransferSceneConfigResu
 import cn.daxpay.open.channel.alipay.result.direct.AlipayTransferSceneOptionResult;
 import cn.daxpay.open.channel.alipay.service.direct.AlipayTransferSceneConfigService;
 import cn.daxpay.open.payment.common.context.PaymentContext;
+import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.CommonCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
@@ -27,6 +29,7 @@ import java.util.List;
 /// 对照运营端 [AlipayTransferSceneConfigController],路径前缀 `/mch/alipay/transfer-scene`。
 /// 商户号一律取自 [PaymentContext],忽略请求中的 mchNo,防越权。
 ///
+@PermCode(menuCode = PermCodes.Channel.App.MENU)
 @Validated
 @Tag(name = "支付宝转账场景配置管理(商户端)")
 @RestController
@@ -47,6 +50,7 @@ public class MchAlipayTransferSceneConfigController {
         return mchNo;
     }
 
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "查询通道商户的转账场景列表")
     @GetMapping("/list")
     public Result<List<AlipayTransferSceneConfigResult>> list(
@@ -54,12 +58,14 @@ public class MchAlipayTransferSceneConfigController {
         return Res.ok(alipayTransferSceneConfigService.list(requireMchNo(), channelMchNo));
     }
 
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "查询支付宝转账场景选项列表(主数据枚举投影)")
     @GetMapping("/scene-options")
     public Result<List<AlipayTransferSceneOptionResult>> sceneOptions() {
         return Res.ok(alipayTransferSceneConfigService.findSceneOptions());
     }
 
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "设为默认转账场景(自动启用, 按场景名称按需创建)")
     @PostMapping("/set-default")
     public Result<Void> setDefault(
@@ -69,6 +75,7 @@ public class MchAlipayTransferSceneConfigController {
         return Res.ok();
     }
 
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "切换转账场景启用状态(最多启用3个, 按场景名称按需创建)")
     @PostMapping("/set-enabled")
     public Result<Void> setEnabled(

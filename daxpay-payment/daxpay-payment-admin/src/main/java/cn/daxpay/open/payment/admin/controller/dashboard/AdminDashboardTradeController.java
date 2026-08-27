@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.admin.controller.dashboard;
 
+import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.payment.admin.result.dashboard.AdminDashboardHeaderCountResult;
@@ -36,6 +37,7 @@ import java.util.List;
 /// 不挂菜单权限码: 工作台/分析页为登录即达的页面, 任何已认证运营用户均可查看聚合统计。
 /// 敏感维度(商户/金额明细)仍由对应业务单管理页与权限码控制。
 @Tag(name = "工作台/分析页交易统计")
+@IgnoreAuth(login = true)
 @Validated
 @RestController
 @RequestMapping("/admin/dashboard/trade")

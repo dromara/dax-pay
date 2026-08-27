@@ -1,5 +1,6 @@
 package cn.daxpay.open.platform.iam.controller.user;
 
+import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.platform.iam.param.twofactor.TwoFactorCodeParam;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 ///
 /// 提供个人中心安全设置页的双因素认证绑定/解绑/备用码管理接口, 均需登录。
 ///
+@IgnoreAuth(login = true)
 @Validated
 @Tag(name = "用户双因素认证")
 @RestController

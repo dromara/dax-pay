@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.admin.controller.check;
 
+import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.payment.admin.check.service.AdminConfigCheckService;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 /// 工作台「配置待完成」Widget 数据源。
 /// 不挂菜单权限码: 工作台为登录即达的页面, 任何已认证运营用户均可查看平台级配置完成度。
 @Tag(name = "配置检查(运营端)")
+@IgnoreAuth(login = true)
 @Validated
 @RestController
 @RequestMapping("/admin/config-check")

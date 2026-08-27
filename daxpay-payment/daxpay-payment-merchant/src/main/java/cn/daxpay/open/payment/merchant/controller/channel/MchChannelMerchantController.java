@@ -6,7 +6,9 @@ import cn.daxpay.open.payment.merchant.param.channel.ChannelMerchantQuery;
 import cn.daxpay.open.payment.merchant.result.channel.ChannelMerchantResult;
 import cn.daxpay.open.payment.merchant.service.channel.ChannelMerchantService;
 import cn.daxpay.open.payment.masterdata.result.channel.PayChannelResult;
+import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.CommonCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.config.ConfigErrorException;
 import cn.daxpay.open.platform.core.rest.Res;
@@ -29,6 +31,7 @@ import java.util.Objects;
 ///
 /// 对照运营端 [MerchantChannelMerchantAdminController]，路径前缀 `/mch/channel-merchant`。
 /// 商户号一律取自 [PaymentContext]，忽略请求中的 mchNo，防越权。
+@PermCode(menuCode = PermCodes.Channel.Merchant.MENU)
 @Validated
 @Tag(name = "通道商户管理(商户端)")
 @RestController
@@ -57,6 +60,7 @@ public class MchChannelMerchantController {
         }
     }
 
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "分页查询")
     @GetMapping("/page")
     public Result<PageResult<ChannelMerchantResult>> page(PageParam pageParam, ChannelMerchantQuery query) {
@@ -65,6 +69,7 @@ public class MchChannelMerchantController {
         return Res.ok(channelMerchantService.page(pageParam, query));
     }
 
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "查询详情")
     @GetMapping("/get")
     public Result<ChannelMerchantResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
@@ -73,12 +78,14 @@ public class MchChannelMerchantController {
         return Res.ok(result);
     }
 
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "当前商户下全部通道商户")
     @GetMapping("/all")
     public Result<List<ChannelMerchantResult>> findAll() {
         return Res.ok(channelMerchantService.findAllByMchNo(requireMchNo()));
     }
 
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "更新启用状态")
     @PostMapping("/update-enable")
     public Result<Void> updateEnable(@NotNull(message = "{validation.field.id.notNull}") Long id,
@@ -89,6 +96,7 @@ public class MchChannelMerchantController {
         return Res.ok();
     }
 
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "修改商户名称")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated ChannelMerchantEditParam param) {
@@ -97,6 +105,7 @@ public class MchChannelMerchantController {
         return Res.ok();
     }
 
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "删除通道商户")
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {
@@ -105,12 +114,14 @@ public class MchChannelMerchantController {
         return Res.ok();
     }
 
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "通道商户下拉（按产品）")
     @GetMapping("/dropdown")
     public Result<List<LabelValue>> dropdown(@NotBlank(message = "{validation.field.channel.notBlank}") String channel) {
         return Res.ok(channelMerchantService.dropdown(requireMchNo(), channel));
     }
 
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "当前商户已开通通道下拉")
     @GetMapping("/channel/dropdown")
     public Result<List<PayChannelResult>> dropdownChannels() {

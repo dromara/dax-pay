@@ -1,5 +1,7 @@
 package cn.daxpay.open.payment.merchant.controller.config;
 
+import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.payment.merchant.param.config.MerchantCredentialParam;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 /// # 商户API配置控制器
 ///
+@PermCode(menuCode = PermCodes.Merchant.Credential.MENU)
 @Validated
 @Tag(name = "商户API对接配置")
 @RestController
@@ -22,12 +25,14 @@ import org.springframework.web.bind.annotation.*;
 public class MerchantCredentialController {
     private final MerchantCredentialService credentialService;
 
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据商户号查询")
     @GetMapping("/get-by-mch-no")
     public Result<MerchantCredentialResult> findByMchNo(@NotBlank(message = "{validation.field.mchNo.notBlank}") String mchNo) {
         return Res.ok(credentialService.findByMchNo(mchNo));
     }
 
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "更新商户API配置")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated MerchantCredentialParam param) {

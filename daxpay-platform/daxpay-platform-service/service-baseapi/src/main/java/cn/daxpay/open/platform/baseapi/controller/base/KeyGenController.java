@@ -1,6 +1,7 @@
 package cn.daxpay.open.platform.baseapi.controller.base;
 
 import cn.daxpay.open.platform.baseapi.service.base.KeyGenService;
+import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.platform.core.rest.result.RsaKeyPairResult;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 /// # 密钥生成控制器
 ///
 @Tag(name = "密钥生成")
+@IgnoreAuth(login = true)
 @RestController
 @RequestMapping("/key-gen")
 @RequiredArgsConstructor

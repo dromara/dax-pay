@@ -1,5 +1,6 @@
 package cn.daxpay.open.platform.system.controller.protocol;
 
+import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.open.platform.system.param.protocol.UserProtocolItemParam;
 import cn.daxpay.open.platform.system.param.protocol.UserProtocolItemQuery;
 import cn.daxpay.open.platform.system.result.protocol.UserProtocolItemResult;
@@ -20,6 +21,7 @@ import java.util.List;
 
 /// # 用户协议项控制器
 ///
+@IgnoreAuth(login = true)
 @Validated
 @Tag(name = "用户协议项")
 @RestController

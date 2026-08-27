@@ -6,7 +6,9 @@ import cn.daxpay.open.payment.merchant.param.wxverify.WxDomainVerifyQuery;
 import cn.daxpay.open.payment.merchant.param.wxverify.WxDomainVerifyUploadParam;
 import cn.daxpay.open.payment.merchant.result.wxverify.WxDomainVerifyResult;
 import cn.daxpay.open.payment.merchant.service.wxverify.WxDomainVerifyService;
+import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.CommonCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.config.ConfigErrorException;
 import cn.daxpay.open.platform.core.rest.Res;
@@ -27,6 +29,7 @@ import java.util.Objects;
 ///
 /// 对照运营端 [WxDomainVerifyAdminController]，路径 `/mch/wx-verify`。
 /// 上传/分页强制使用 PaymentContext 商户号，不接受 URL mchNo。
+@PermCode(menuCode = PermCodes.Merchant.WxDomainVerify.MENU)
 @Validated
 @Tag(name = "微信域名验证文件(商户端)")
 @RestController
@@ -52,6 +55,7 @@ public class MchWxDomainVerifyController {
         }
     }
 
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "上传验证文件")
     @PostMapping("/upload")
     public Result<WxDomainVerifyResult> upload(@RequestBody @Validated WxDomainVerifyUploadParam param) {
@@ -59,6 +63,7 @@ public class MchWxDomainVerifyController {
         return Res.ok(wxDomainVerifyService.upload(param, requireMchNo()));
     }
 
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "修改验证文件元数据")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) WxDomainVerifyParam param) {
@@ -67,6 +72,7 @@ public class MchWxDomainVerifyController {
         return Res.ok();
     }
 
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "分页查询")
     @GetMapping("/page")
     public Result<PageResult<WxDomainVerifyResult>> page(PageParam pageParam, WxDomainVerifyQuery query) {
@@ -74,6 +80,7 @@ public class MchWxDomainVerifyController {
         return Res.ok(wxDomainVerifyService.page(pageParam, query));
     }
 
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "详情")
     @GetMapping("/get")
     public Result<WxDomainVerifyResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
@@ -82,6 +89,7 @@ public class MchWxDomainVerifyController {
         return Res.ok(result);
     }
 
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "删除")
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {

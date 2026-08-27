@@ -10,7 +10,9 @@ import cn.daxpay.open.channel.alipay.service.direct.AlipayDirectAppAuthConfigSer
 import cn.daxpay.open.channel.alipay.service.direct.AlipayDirectAppKeyConfigService;
 import cn.daxpay.open.channel.alipay.service.direct.AlipayDirectAppService;
 import cn.daxpay.open.payment.common.context.PaymentContext;
+import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.CommonCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
@@ -35,6 +37,7 @@ import java.util.Objects;
 ///
 /// 对照运营端 [AlipayDirectAppController]，路径前缀 `/mch/alipay/direct-app`。
 /// 商户号一律取自 [PaymentContext]，忽略请求中的 mchNo，防越权。
+@PermCode(menuCode = PermCodes.Channel.App.MENU)
 @Validated
 @Tag(name = "支付宝直连商户应用管理(商户端)")
 @RestController
@@ -65,6 +68,7 @@ public class MchAlipayDirectAppController {
         }
     }
 
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据通道商户号查询应用列表")
     @GetMapping("/list-by-channel-mch-no")
     public Result<List<AlipayDirectAppResult>> listByChannelMchNo(
@@ -72,6 +76,7 @@ public class MchAlipayDirectAppController {
         return Res.ok(alipayDirectAppService.listByMchNoAndChannelMchNo(requireMchNo(), channelMchNo));
     }
 
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "查询应用详情")
     @GetMapping("/find-by-id")
     public Result<AlipayDirectAppResult> findById(
@@ -81,6 +86,7 @@ public class MchAlipayDirectAppController {
         return Res.ok(result);
     }
 
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "同一通道商户下支付宝应用ID是否已存在")
     @GetMapping("/exists-ali-app-id-by-channel")
     public Result<Boolean> existsAliAppIdByChannel(
@@ -89,6 +95,7 @@ public class MchAlipayDirectAppController {
         return Res.ok(alipayDirectAppService.existsAliAppIdByChannel(requireMchNo(), channelMchNo, aliAppId, null));
     }
 
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "同一通道商户下支付宝应用ID是否已存在(排除自身)")
     @GetMapping("/exists-ali-app-id-by-channel-not-id")
     public Result<Boolean> existsAliAppIdByChannelNotId(
@@ -98,6 +105,7 @@ public class MchAlipayDirectAppController {
         return Res.ok(alipayDirectAppService.existsAliAppIdByChannel(requireMchNo(), channelMchNo, aliAppId, id));
     }
 
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "新增直连商户应用")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) AlipayDirectAppParam param) {
@@ -108,6 +116,7 @@ public class MchAlipayDirectAppController {
         return Res.ok();
     }
 
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "修改直连商户应用")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) AlipayDirectAppParam param) {
@@ -119,6 +128,7 @@ public class MchAlipayDirectAppController {
         return Res.ok();
     }
 
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "删除直连商户应用")
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {
@@ -127,6 +137,7 @@ public class MchAlipayDirectAppController {
         return Res.ok();
     }
 
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "查询应用密钥配置")
     @GetMapping("/find-key-config-by-app-id")
     public Result<AlipayDirectAppKeyConfigResult> findKeyConfigByAppId(
@@ -137,6 +148,7 @@ public class MchAlipayDirectAppController {
         return Res.ok(alipayDirectAppKeyConfigService.findByAlipayDirectAppId(alipayDirectAppId, sandbox).toResult());
     }
 
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "保存应用密钥配置")
     @PostMapping("/save-key-config")
     public Result<Void> saveKeyConfig(@RequestBody @Validated AlipayDirectAppKeyConfigParam param) {
@@ -146,6 +158,7 @@ public class MchAlipayDirectAppController {
         return Res.ok();
     }
 
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "查询应用授权认证配置")
     @GetMapping("/find-auth-config-by-app-id")
     public Result<AlipayDirectAppAuthConfigResult> findAuthConfigByAppId(
@@ -155,6 +168,7 @@ public class MchAlipayDirectAppController {
         return Res.ok(alipayDirectAppAuthConfigService.findByAlipayDirectAppId(alipayDirectAppId).toResult());
     }
 
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "保存应用授权认证配置")
     @PostMapping("/save-auth-config")
     public Result<Void> saveAuthConfig(@RequestBody @Validated AlipayDirectAppAuthConfigParam param) {

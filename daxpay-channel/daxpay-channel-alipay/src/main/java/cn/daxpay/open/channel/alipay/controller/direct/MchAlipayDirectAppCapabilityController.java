@@ -5,7 +5,9 @@ import cn.daxpay.open.channel.alipay.result.direct.AlipayDirectAppCapabilityResu
 import cn.daxpay.open.channel.alipay.result.direct.AlipayDirectCapabilityOption;
 import cn.daxpay.open.channel.alipay.service.direct.AlipayDirectAppCapabilityService;
 import cn.daxpay.open.payment.common.context.PaymentContext;
+import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.CommonCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
@@ -26,6 +28,7 @@ import java.util.List;
 ///
 /// 对照运营端 [AlipayDirectAppCapabilityController]，路径前缀 `/mch/alipay/direct-app/capability`。
 /// 商户号一律取自 [PaymentContext]，忽略请求中的 mchNo，防越权。
+@PermCode(menuCode = PermCodes.Channel.App.MENU)
 @Validated
 @Tag(name = "支付宝直连商户应用支付能力关联管理(商户端)")
 @RestController
@@ -46,6 +49,7 @@ public class MchAlipayDirectAppCapabilityController {
         return mchNo;
     }
 
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "查询通道商户的能力应用关联列表")
     @GetMapping("/list-by-channel-mch-no")
     public Result<List<AlipayDirectAppCapabilityResult>> listByChannelMchNo(
@@ -53,6 +57,7 @@ public class MchAlipayDirectAppCapabilityController {
         return Res.ok(alipayDirectAppCapabilityService.listByChannelMchNo(requireMchNo(), channelMchNo));
     }
 
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "全量保存能力应用关联")
     @PostMapping("/save-batch")
     public Result<Void> saveBatch(@RequestBody @Validated AlipayDirectAppCapabilityBatchParam param) {
@@ -62,6 +67,7 @@ public class MchAlipayDirectAppCapabilityController {
         return Res.ok();
     }
 
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "查询支付宝直连支持的支付能力候选")
     @GetMapping("/list-supported-capabilities")
     public Result<List<AlipayDirectCapabilityOption>> listSupportedCapabilities() {

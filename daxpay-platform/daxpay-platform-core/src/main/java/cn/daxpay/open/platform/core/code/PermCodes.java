@@ -68,6 +68,12 @@ public interface PermCodes {
             String MENU = "merchant:info";
         }
 
+        /// 商户用户(子账号) menuCode=merchant:user（运营端管理与商户端自助共用，三端同码）
+        interface User {
+            /// 菜单编码
+            String MENU = "merchant:user";
+        }
+
         /// 对接配置 menuCode=merchant:credential
         interface Credential {
             /// 菜单编码

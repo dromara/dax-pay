@@ -6,7 +6,9 @@ import cn.daxpay.open.channel.wechat.param.direct.WechatDirectKeyConfigParam;
 import cn.daxpay.open.channel.wechat.result.direct.WechatDirectKeyConfigResult;
 import cn.daxpay.open.channel.wechat.service.direct.WechatDirectKeyConfigService;
 import cn.daxpay.open.payment.common.context.PaymentContext;
+import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.CommonCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.rest.Res;
@@ -28,6 +30,7 @@ import java.util.Objects;
 ///
 /// 对照运营端 [WechatDirectChannelMerchantController]，路径前缀 `/mch/wechat/direct-key-config`。
 /// 商户号一律取自 [PaymentContext]，忽略请求中的 mchNo，防越权。
+@PermCode(menuCode = PermCodes.Channel.App.MENU)
 @Validated
 @Tag(name = "微信直连密钥配置(商户端)")
 @RestController
@@ -60,6 +63,7 @@ public class MchWechatDirectKeyConfigController {
         }
     }
 
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据通道商户号查询密钥配置")
     @GetMapping("/find-key-config")
     public Result<WechatDirectKeyConfigResult> findKeyConfig(
@@ -68,6 +72,7 @@ public class MchWechatDirectKeyConfigController {
         return Res.ok(wechatDirectKeyConfigService.findByChannelMchNo(channelMchNo).toResult());
     }
 
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "保存密钥配置")
     @PostMapping("/save-key-config")
     public Result<Void> saveKeyConfig(@RequestBody @Validated WechatDirectKeyConfigParam param) {

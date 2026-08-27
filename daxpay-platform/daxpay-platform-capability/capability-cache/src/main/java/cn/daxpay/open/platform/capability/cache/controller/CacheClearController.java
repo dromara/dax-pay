@@ -1,5 +1,6 @@
 package cn.daxpay.open.platform.capability.cache.controller;
 
+import cn.daxpay.open.platform.core.annotation.InternalPath;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.platform.capability.cache.handler.CacheClearProcessor;
@@ -14,6 +15,7 @@ import java.util.List;
 /// # 系统缓存清除
 ///
 @Tag(name = "系统缓存清除")
+@InternalPath
 @RestController
 @RequestMapping("/cache/clear")
 @RequiredArgsConstructor

@@ -1,5 +1,7 @@
 package cn.daxpay.open.payment.merchant.controller.info;
 
+import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.payment.merchant.param.info.MerchantInfoParam;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /// # 商户配置
 ///
+@PermCode(menuCode = PermCodes.Merchant.Info.MENU)
 @Validated
 @Tag(name = "商户信息")
 @RestController
@@ -25,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MerchantController {
     private final MerchantInfoService merchantInfoService;
 
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "获取商户信息")
     @GetMapping("/get")
     public Result<MerchantInfoResult> getMerchant(){
@@ -32,6 +36,7 @@ public class MerchantController {
     }
 
     /// 更新当前登录商户资料（mchNo 取自 PaymentContext，不信任入参）
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "更新商户信息")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated MerchantInfoParam param) {

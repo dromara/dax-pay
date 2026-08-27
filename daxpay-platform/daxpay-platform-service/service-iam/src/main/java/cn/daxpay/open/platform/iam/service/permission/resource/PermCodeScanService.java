@@ -4,7 +4,6 @@ import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.exception.ValidationFailedException;
 import cn.daxpay.open.platform.core.util.PermCodeUtil;
 import cn.daxpay.open.platform.iam.dao.permission.PermCodeManager;
-import cn.daxpay.open.platform.iam.dao.permission.PermMenuManager;
 import cn.daxpay.open.platform.iam.dao.upms.RoleCodeManager;
 import cn.daxpay.open.platform.iam.entity.permission.PermCodeData;
 import cn.daxpay.open.platform.iam.param.permission.resource.PermCodeScanParam;
@@ -55,8 +54,6 @@ public class PermCodeScanService {
     private final ApplicationContext applicationContext;
     /// 权限码主数据管理器。
     private final PermCodeManager permCodeManager;
-    /// 菜单主数据管理器，用于校验 menuCode 是否存在。
-    private final PermMenuManager permMenuManager;
     /// 角色与权限码关系管理器，用于删除失效权限码对应的关系数据。
     private final RoleCodeManager roleCodeManager;
 

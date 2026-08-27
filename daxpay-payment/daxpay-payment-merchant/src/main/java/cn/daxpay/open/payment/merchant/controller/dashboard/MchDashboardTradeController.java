@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.merchant.controller.dashboard;
 
+import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.payment.merchant.result.dashboard.MchDashboardHeaderCountResult;
@@ -27,6 +28,7 @@ import java.util.List;
 ///
 /// 参数约定与运营端 `/admin/dashboard/trade` 对齐; 数据强制按当前登录商户隔离。
 @Tag(name = "工作台/分析页交易统计(商户端)")
+@IgnoreAuth(login = true)
 @Validated
 @RestController
 @RequestMapping("/mch/dashboard/trade")
