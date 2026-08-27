@@ -28,6 +28,13 @@
             <artifactId>daxpay-payment-core</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <!-- 公告领域服务（工作台公告展示复用管理端公告查询能力） -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>service-notify</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

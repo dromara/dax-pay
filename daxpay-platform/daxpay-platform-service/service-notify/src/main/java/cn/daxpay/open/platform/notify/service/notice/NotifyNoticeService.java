@@ -99,4 +99,16 @@ public class NotifyNoticeService {
     public PageResult<NotifyNoticeResult> page(PageParam pageParam, NotifyNoticeQuery query) {
         return MpUtil.toPageResult(noticeManager.page(pageParam, query));
     }
+
+    /// 商户端分页查询(仅当前时间在生效/过期窗口内的已发布公告)
+    public PageResult<NotifyNoticeResult> pagePublished(PageParam pageParam) {
+        return MpUtil.toPageResult(noticeManager.pagePublished(pageParam));
+    }
+
+    /// 商户端公告详情(仅发布中且在生效时间窗内, 草稿/下线/过期视为不存在)
+    public NotifyNoticeResult findVisibleById(Long id) {
+        return noticeManager.findVisibleById(id)
+            .map(NotifyNotice::toResult)
+            .orElseThrow(() -> new DataNotExistException("error.notify.notice.notExist"));
+    }
 }
