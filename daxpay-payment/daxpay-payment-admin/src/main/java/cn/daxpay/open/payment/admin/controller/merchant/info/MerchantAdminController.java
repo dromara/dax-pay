@@ -92,6 +92,7 @@ public class MerchantAdminController {
         return Res.ok();
     }
 
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "商户下拉列表")
     @GetMapping("/dropdown")
     public Result<?> dropdown() {

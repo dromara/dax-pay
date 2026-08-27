@@ -103,6 +103,7 @@ public class MchDouyinDirectChannelMerchantController {
         return Res.ok();
     }
 
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "查询抖音转账场景选项列表(主数据枚举)")
     @GetMapping("/scene-options")
     public Result<List<DouyinTransferSceneOptionResult>> sceneOptions() {
