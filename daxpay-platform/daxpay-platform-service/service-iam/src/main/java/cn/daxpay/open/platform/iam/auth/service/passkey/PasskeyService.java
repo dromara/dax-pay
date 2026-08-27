@@ -327,7 +327,7 @@ public class PasskeyService {
     private void verifyPassword(UserInfo userInfo, String encryptedPassword) {
         String rawPassword = passwordDecryptService.decryptPassword(encryptedPassword);
         if (!BCrypt.checkpw(rawPassword, userInfo.getPassword())) {
-            throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.oldPasswordError");
+            throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.loginPasswordError");
         }
     }
 

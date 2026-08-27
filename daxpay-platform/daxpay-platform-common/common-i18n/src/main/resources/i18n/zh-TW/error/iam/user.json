@@ -3,6 +3,7 @@
   "userPhoneAlreadyExisted": "使用者手機已存在",
   "userNonePhoneAndEmail": "使用者的電話和電子郵件必須包含一個",
   "oldPasswordError": "舊密碼錯誤",
+  "loginPasswordError": "登入密碼錯誤",
   "accountExistsInClient": "該終端下賬號已存在",
   "phoneUsedInClient": "該終端下手機號已被使用",
   "emailUsedInClient": "該終端下郵箱已被使用",

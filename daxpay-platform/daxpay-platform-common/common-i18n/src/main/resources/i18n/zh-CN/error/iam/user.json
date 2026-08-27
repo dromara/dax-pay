@@ -3,6 +3,7 @@
   "userPhoneAlreadyExisted": "用户手机已存在",
   "userNonePhoneAndEmail": "用户的电话和电子邮件必须包含一个",
   "oldPasswordError": "旧密码错误",
+  "loginPasswordError": "登录密码错误",
   "accountExistsInClient": "该终端下账号已存在",
   "phoneUsedInClient": "该终端下手机号已被使用",
   "emailUsedInClient": "该终端下邮箱已被使用",

@@ -3,6 +3,7 @@
   "userPhoneAlreadyExisted": "Điện thoại người dùng đã tồn tại",
   "userNonePhoneAndEmail": "Phải cung cấp điện thoại hoặc email",
   "oldPasswordError": "Mật khẩu cũ không đúng",
+  "loginPasswordError": "Mật khẩu đăng nhập không đúng",
   "accountExistsInClient": "Tài khoản đã tồn tại dưới tên khách hàng này",
   "phoneUsedInClient": "Số điện thoại đã được sử dụng cho khách hàng này",
   "emailUsedInClient": "Email đã được sử dụng trong ứng dụng khách này",

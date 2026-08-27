@@ -3,6 +3,7 @@
   "userPhoneAlreadyExisted": "มีหมายเลขโทรศัพท์ของผู้ใช้อยู่แล้ว",
   "userNonePhoneAndEmail": "ต้องระบุโทรศัพท์หรืออีเมล",
   "oldPasswordError": "รหัสผ่านเก่าไม่ถูกต้อง",
+  "loginPasswordError": "รหัสผ่านเข้าสู่ระบบไม่ถูกต้อง",
   "accountExistsInClient": "มีบัญชีอยู่แล้วภายใต้ลูกค้ารายนี้",
   "phoneUsedInClient": "หมายเลขโทรศัพท์ที่ใช้อยู่แล้วภายใต้ลูกค้ารายนี้",
   "emailUsedInClient": "อีเมลถูกใช้แล้วภายใต้ไคลเอนต์นี้",

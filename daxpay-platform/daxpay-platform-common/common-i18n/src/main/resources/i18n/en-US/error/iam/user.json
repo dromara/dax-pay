@@ -3,6 +3,7 @@
   "userPhoneAlreadyExisted": "User phone already exists",
   "userNonePhoneAndEmail": "Either phone or email must be provided",
   "oldPasswordError": "Old password is incorrect",
+  "loginPasswordError": "Login password is incorrect",
   "accountExistsInClient": "Account already exists under this client",
   "phoneUsedInClient": "Phone number already used under this client",
   "emailUsedInClient": "Email already used under this client",

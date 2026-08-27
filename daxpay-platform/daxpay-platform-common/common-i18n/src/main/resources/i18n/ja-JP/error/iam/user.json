@@ -3,6 +3,7 @@
   "userPhoneAlreadyExisted": "ユーザーの電話はすでに存在します",
   "userNonePhoneAndEmail": "電話または電子メールのいずれかを提供する必要があります",
   "oldPasswordError": "古いパスワードが間違っています",
+  "loginPasswordError": "ログインパスワードが間違っています",
   "accountExistsInClient": "アカウントはこのクライアントの下にすでに存在します",
   "phoneUsedInClient": "このクライアントですでに使用されている電話番号",
   "emailUsedInClient": "このクライアントで電子メールがすでに使用されています",

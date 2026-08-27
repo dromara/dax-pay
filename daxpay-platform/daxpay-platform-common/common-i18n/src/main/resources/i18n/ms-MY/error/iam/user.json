@@ -3,6 +3,7 @@
   "userPhoneAlreadyExisted": "Telefon pengguna sudah wujud",
   "userNonePhoneAndEmail": "Sama ada telefon atau e-mel mesti disediakan",
   "oldPasswordError": "Kata laluan lama tidak betul",
+  "loginPasswordError": "Kata laluan log masuk tidak betul",
   "accountExistsInClient": "Akaun sudah wujud di bawah pelanggan ini",
   "phoneUsedInClient": "Nombor telefon sudah digunakan di bawah pelanggan ini",
   "emailUsedInClient": "E-mel telah digunakan di bawah pelanggan ini",
