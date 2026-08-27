@@ -7,6 +7,7 @@ import cn.daxpay.open.payment.merchant.service.user.MerchantUserAdminService;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.platform.iam.result.user.UserInfoResult;
+import cn.daxpay.open.platform.iam.result.user.UserPasswordResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -32,8 +33,8 @@ public class AppAdminMerchantUserService {
     }
 
     /// 新增
-    public void add(MerchantUserParam param) {
-        merchantUserAdminService.add(param);
+    public UserPasswordResult add(MerchantUserParam param) {
+        return merchantUserAdminService.add(param);
     }
 
     /// 修改
@@ -67,12 +68,12 @@ public class AppAdminMerchantUserService {
     }
 
     /// 重置密码
-    public void restartPassword(Long userId, String newPassword) {
-        merchantUserAdminService.restartPassword(userId, newPassword);
+    public UserPasswordResult restartPassword(Long userId, String newPassword) {
+        return merchantUserAdminService.restartPassword(userId, newPassword);
     }
 
     /// 批量重置密码
-    public void restartPasswordBatch(List<Long> userIds, String newPassword) {
-        merchantUserAdminService.restartPasswordBatch(userIds, newPassword);
+    public List<UserPasswordResult> restartPasswordBatch(List<Long> userIds, String newPassword) {
+        return merchantUserAdminService.restartPasswordBatch(userIds, newPassword);
     }
 }

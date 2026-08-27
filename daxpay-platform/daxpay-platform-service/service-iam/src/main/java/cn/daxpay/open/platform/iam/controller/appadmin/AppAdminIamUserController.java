@@ -12,6 +12,7 @@ import cn.daxpay.open.platform.iam.param.user.RestartPwdParam;
 import cn.daxpay.open.platform.iam.param.user.UserInfoParam;
 import cn.daxpay.open.platform.iam.param.user.UserInfoQuery;
 import cn.daxpay.open.platform.iam.result.user.UserInfoResult;
+import cn.daxpay.open.platform.iam.result.user.UserPasswordResult;
 import cn.daxpay.open.platform.iam.result.user.UserWholeInfoResult;
 import cn.daxpay.open.platform.iam.service.upms.UserRoleService;
 import cn.daxpay.open.platform.iam.service.user.UserAdminService;
@@ -54,9 +55,9 @@ public class AppAdminIamUserController {
     @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "添加用户")
     @PostMapping("/add")
-    public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) UserInfoParam userInfoParam) {
-        userAdminService.add(userInfoParam);
-        return Res.ok();
+    public Result<UserPasswordResult> add(@RequestBody @Validated(ValidationGroup.add.class) UserInfoParam userInfoParam) {
+        // 未指定密码时由后端生成随机初始密码, 响应中一次性返回明文供管理员转告用户
+        return Res.ok(userAdminService.add(userInfoParam));
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
@@ -70,9 +71,9 @@ public class AppAdminIamUserController {
     @PermCode(code = PermCodes.Action.RESET_PASSWORD)
     @Operation(summary = "重置密码")
     @PostMapping("/restart-password")
-    public Result<Void> restartPassword(@RequestBody @Validated RestartPwdParam param) {
-        userAdminService.restartPassword(param.getUserId(), param.getNewPassword());
-        return Res.ok();
+    public Result<UserPasswordResult> restartPassword(@RequestBody @Validated RestartPwdParam param) {
+        // 未指定密码时由后端生成随机密码, 响应中一次性返回明文供管理员转告用户
+        return Res.ok(userAdminService.restartPassword(param.getUserId(), param.getNewPassword()));
     }
 
     @PermCode(code = PermCodes.Action.STATUS)

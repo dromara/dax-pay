@@ -36,8 +36,7 @@ public class MerchantUserParam {
     @Schema(description = "登录账号")
     private String account;
 
-    @NotBlank(groups = ValidationGroup.add.class, message = "{validation.field.password.notBlank}")
-    @Schema(description = "密码")
+    @Schema(description = "密码(RSA 加密), 可选; 不传时由系统生成随机初始密码并在响应中返回明文")
     private String password;
 
     @Schema(description = "手机号")

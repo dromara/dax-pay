@@ -1,6 +1,8 @@
 package cn.daxpay.open.payment.merchant.controller.info;
 
 import cn.daxpay.open.platform.core.annotation.OperateLog;
+import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.enums.common.OperateLogType;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
@@ -13,6 +15,7 @@ import cn.daxpay.open.payment.merchant.param.info.MerchantUserQuery;
 import cn.daxpay.open.payment.merchant.param.info.MerchantUserResetPwdBatchParam;
 import cn.daxpay.open.payment.merchant.param.info.MerchantUserResetPwdParam;
 import cn.daxpay.open.platform.iam.result.user.UserInfoResult;
+import cn.daxpay.open.platform.iam.result.user.UserPasswordResult;
 import cn.daxpay.open.payment.merchant.result.info.MerchantUserResult;
 import cn.daxpay.open.payment.merchant.service.user.MerchantUserAdminService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,6 +30,7 @@ import java.util.List;
 
 /// # 商户用户管理
 ///
+@PermCode(menuCode = PermCodes.Merchant.User.MENU)
 @Validated
 @Tag(name = "商户用户管理")
 @RestController
@@ -38,26 +42,30 @@ public class MchUserAdminController {
 
     private final MerchantUserAdminService merchantUserAdminService;
 
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "商户用户分页查询")
     @GetMapping("/page")
     public Result<PageResult<MerchantUserResult>> page(PageParam pageParam, MerchantUserQuery query) {
         return Res.ok(merchantUserAdminService.page(pageParam, query));
     }
 
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据用户ID查询用户详情")
     @GetMapping("/get")
     public Result<UserInfoResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(merchantUserAdminService.findById(id));
     }
 
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "添加商户用户")
     @PostMapping("/add")
     @OperateLog(title = "新增商户用户", businessType = OperateLogType.ADD, saveParam = true, maskParam = true)
-    public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) MerchantUserParam param) {
-        merchantUserAdminService.add(param);
-        return Res.ok();
+    public Result<UserPasswordResult> add(@RequestBody @Validated(ValidationGroup.add.class) MerchantUserParam param) {
+        // 未指定密码时由后端生成随机初始密码, 响应中一次性返回明文供管理员转告用户
+        return Res.ok(merchantUserAdminService.add(param));
     }
 
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "修改商户用户")
     @PostMapping("/update")
     @OperateLog(title = "修改商户用户", businessType = OperateLogType.UPDATE, saveParam = true, maskParam = true)
@@ -66,6 +74,7 @@ public class MchUserAdminController {
         return Res.ok();
     }
 
+    @PermCode(code = PermCodes.Action.ASSIGN_ROLE)
     @Operation(summary = "分配角色")
     @PostMapping("/assign-role")
     @OperateLog(title = "分配商户用户角色", businessType = OperateLogType.GRANT, saveParam = true, maskParam = true)
@@ -75,6 +84,7 @@ public class MchUserAdminController {
         return Res.ok();
     }
 
+    @PermCode(code = PermCodes.Action.STATUS)
     @Operation(summary = "封禁商户用户")
     @PostMapping("/ban")
     @OperateLog(title = "封禁商户用户", businessType = OperateLogType.UPDATE, saveParam = true, maskParam = true)
@@ -83,6 +93,7 @@ public class MchUserAdminController {
         return Res.ok();
     }
 
+    @PermCode(code = PermCodes.Action.STATUS)
     @Operation(summary = "批量封禁商户用户")
     @PostMapping("/ban-batch")
     @OperateLog(title = "批量封禁商户用户", businessType = OperateLogType.UPDATE, saveParam = true, maskParam = true)
@@ -91,6 +102,7 @@ public class MchUserAdminController {
         return Res.ok();
     }
 
+    @PermCode(code = PermCodes.Action.STATUS)
     @Operation(summary = "解锁商户用户")
     @PostMapping("/unlock")
     @OperateLog(title = "解锁商户用户", businessType = OperateLogType.UPDATE, saveParam = true, maskParam = true)
@@ -99,6 +111,7 @@ public class MchUserAdminController {
         return Res.ok();
     }
 
+    @PermCode(code = PermCodes.Action.STATUS)
     @Operation(summary = "批量解锁商户用户")
     @PostMapping("/unlock-batch")
     @OperateLog(title = "批量解锁商户用户", businessType = OperateLogType.UPDATE, saveParam = true, maskParam = true)
@@ -107,19 +120,21 @@ public class MchUserAdminController {
         return Res.ok();
     }
 
+    @PermCode(code = PermCodes.Action.RESET_PASSWORD)
     @Operation(summary = "重置密码")
     @PostMapping("/restart-password")
     @OperateLog(title = "重置商户用户密码", businessType = OperateLogType.UPDATE, saveParam = true, maskParam = true)
-    public Result<Void> restartPassword(@RequestBody @Validated MerchantUserResetPwdParam param) {
-        merchantUserAdminService.restartPassword(param.getUserId(), param.getNewPassword());
-        return Res.ok();
+    public Result<UserPasswordResult> restartPassword(@RequestBody @Validated MerchantUserResetPwdParam param) {
+        // 未指定密码时由后端生成随机密码, 响应中一次性返回明文供管理员转告用户
+        return Res.ok(merchantUserAdminService.restartPassword(param.getUserId(), param.getNewPassword()));
     }
 
+    @PermCode(code = PermCodes.Action.RESET_PASSWORD)
     @Operation(summary = "批量重置密码")
     @PostMapping("/restart-password-batch")
     @OperateLog(title = "批量重置商户用户密码", businessType = OperateLogType.UPDATE, saveParam = true, maskParam = true)
-    public Result<Void> restartPasswordBatch(@RequestBody @Validated MerchantUserResetPwdBatchParam param) {
-        merchantUserAdminService.restartPasswordBatch(param.getUserIds(), param.getNewPassword());
-        return Res.ok();
+    public Result<List<UserPasswordResult>> restartPasswordBatch(@RequestBody @Validated MerchantUserResetPwdBatchParam param) {
+        // 每个用户独立生成随机密码, 响应中一次性返回明文列表
+        return Res.ok(merchantUserAdminService.restartPasswordBatch(param.getUserIds(), param.getNewPassword()));
     }
 }

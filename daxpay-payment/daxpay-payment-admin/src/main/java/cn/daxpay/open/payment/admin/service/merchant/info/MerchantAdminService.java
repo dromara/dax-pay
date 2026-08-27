@@ -14,8 +14,8 @@ import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.platform.iam.dao.role.RoleManager;
 import cn.daxpay.open.platform.iam.entity.role.Role;
-import cn.daxpay.open.platform.iam.entity.user.UserInfo;
 import cn.daxpay.open.platform.iam.param.user.UserInfoParam;
+import cn.daxpay.open.platform.iam.result.user.UserPasswordResult;
 import cn.daxpay.open.platform.iam.service.client.ClientCodeService;
 import cn.daxpay.open.platform.iam.service.upms.UserRoleService;
 import cn.daxpay.open.platform.iam.service.user.UserAdminService;
@@ -108,23 +108,25 @@ public class MerchantAdminService {
     private final RefundOrderManager refundOrderManager;
 
     /// 添加商户
+    /// @return 商户管理员的初始密码结果(未传密码时由系统生成随机密码)
     @Transactional(rollbackFor = Exception.class)
-    public void add(MerchantRegisterParam param) {
+    public UserPasswordResult add(MerchantRegisterParam param) {
         var merchant = MerchantInfoConvert.CONVERT.toEntity(param);
         merchant.setMchNo(this.getMchNo());
 
         merchant.setStatus(MerchantStatusEnum.ENABLE.getCode());
         // 创建商户管理员
-        this.createMerchantAdmin(param,  merchant);
+        UserPasswordResult adminResult = this.createMerchantAdmin(param,  merchant);
         merchantInfoManager.save(merchant);
         // 创建默认应用（名称按请求语言）
         mchAppInfoService.createDefaultApp(merchant.getMchNo(), merchant.getMchShortName());
         // 创建默认门店（名称按请求语言）
         mchStoreInfoService.createDefaultStore(merchant.getMchNo(), merchant.getMchShortName(), param.getPhone());
+        return adminResult;
     }
 
     /// 创建商户管理员
-    public void createMerchantAdmin(MerchantRegisterParam param, MerchantInfo merchant) {
+    public UserPasswordResult createMerchantAdmin(MerchantRegisterParam param, MerchantInfo merchant) {
         // 创建用户
         var userInfoParam = new UserInfoParam();
         MerchantInfoConvert.CONVERT.copy(param, userInfoParam);
@@ -134,18 +136,19 @@ public class MerchantAdminService {
         userInfoParam.setPhone(param.getPhone());
         // 设置终端归属为商户端
         userInfoParam.setClientCode(ClientEnum.MERCHANT.getCode());
-        UserInfo userInfo = userAdminService.add(userInfoParam, true);
+        UserPasswordResult adminResult = userAdminService.add(userInfoParam, true);
         Role role;
         // 商户: 商户管理员角色不存在
         role = roleManager.findByCode(RoleCodeEnum.MERCHANT_ADMIN.getCode())
                 .orElseThrow(ConfigNotExistException::new);
         // 分配角色
-        userRoleService.saveAssign(userInfo.getId(), role.getId(), true);
+        userRoleService.saveAssign(adminResult.getUserId(), role.getId(), true);
         // 创建商户绑定关系
-        merchantUserManager.save(new MerchantUser(userInfo.getId(), merchant.getMchNo(), true));
+        merchantUserManager.save(new MerchantUser(adminResult.getUserId(), merchant.getMchNo(), true));
         // 商户信息更新
-        merchant.setAdminUserId(userInfo.getId());
+        merchant.setAdminUserId(adminResult.getUserId());
         merchantInfoManager.updateById(merchant);
+        return adminResult;
     }
 
     /// 修改

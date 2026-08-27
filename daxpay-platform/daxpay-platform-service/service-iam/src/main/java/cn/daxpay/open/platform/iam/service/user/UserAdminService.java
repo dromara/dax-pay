@@ -17,6 +17,7 @@ import cn.daxpay.open.platform.iam.entity.user.UserInfo;
 import cn.daxpay.open.platform.iam.exception.user.UserInfoNotExistsException;
 import cn.daxpay.open.platform.iam.param.user.UserInfoParam;
 import cn.daxpay.open.platform.iam.param.user.UserInfoQuery;
+import cn.daxpay.open.platform.iam.result.user.UserPasswordResult;
 import cn.daxpay.open.platform.iam.result.user.UserWholeInfoResult;
 import cn.daxpay.open.platform.iam.service.session.OnlineUserService;
 import cn.daxpay.open.platform.common.config.properties.PlatformStarterProperties;
@@ -35,6 +36,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import cn.daxpay.open.platform.core.code.CommonCode;
@@ -130,14 +132,14 @@ public class UserAdminService {
 
     /// 添加新用户（终端维度唯一性校验）
     @Transactional(rollbackFor = Exception.class)
-    public UserInfo add(UserInfoParam userInfoParam) {
+    public UserPasswordResult add(UserInfoParam userInfoParam) {
         return add(userInfoParam, false);
     }
 
     /// 添加新用户
     /// @param skipDuplicateCheck 是否跳过重复校验（调用方已做更精确的校验时使用）
     @Transactional(rollbackFor = Exception.class)
-    public UserInfo add(UserInfoParam userInfoParam, boolean skipDuplicateCheck) {
+    public UserPasswordResult add(UserInfoParam userInfoParam, boolean skipDuplicateCheck) {
         // 使用传入的终端编码，未指定时默认为 admin
         String clientCode = StrUtil.isNotBlank(userInfoParam.getClientCode())
                 ? userInfoParam.getClientCode()
@@ -160,8 +162,10 @@ public class UserAdminService {
                 throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.emailUsedInClient");
             }
         }
-        // 解密密码
-        String password = passwordDecryptService.decryptPassword(userInfoParam.getPassword());
+        // 密码可选: 未传时生成随机密码, 传入时按 RSA 密文解密(兼容存量调用方)
+        String password = StrUtil.isBlank(userInfoParam.getPassword())
+                ? passwordPolicyService.generateSecurePassword()
+                : passwordDecryptService.decryptPassword(userInfoParam.getPassword());
         passwordPolicyService.validatePassword(password);
         UserInfo userInfo = UserInfo.init(userInfoParam);
         userInfo.setAdministrator(false)
@@ -179,7 +183,12 @@ public class UserAdminService {
                 .setRegisterTime(OffsetDateTime.now(ZoneOffset.UTC));
         userExpandInfo.setId(userInfo.getId());
         userExpandInfoManager.save(userExpandInfo);
-        return userInfo;
+        // 返回账号与初始密码明文, 供管理员一次性复制转告用户
+        return new UserPasswordResult()
+                .setUserId(userInfo.getId())
+                .setAccount(userInfo.getAccount())
+                .setName(userInfo.getName())
+                .setPassword(password);
     }
 
     /// 计算密码过期时间 (UTC)
@@ -194,18 +203,21 @@ public class UserAdminService {
 
     /// 重置密码
     /// @param userId 用户ID
-    /// @param newPassword 新密码（加密传输）
+    /// @param newPassword 新密码（RSA 加密）, 可为空; 为空时由系统生成随机密码
+    /// @return 含初始密码明文的结果, 供管理员一次性复制转告用户
     @Transactional(rollbackFor = Exception.class)
-    public void restartPassword(Long userId, String newPassword) {
-        // 解密密码
-        String decryptedPassword = passwordDecryptService.decryptPassword(newPassword);
+    public UserPasswordResult restartPassword(Long userId, String newPassword) {
+        // 密码可选: 未传时生成随机密码, 传入时按 RSA 密文解密(兼容存量调用方)
+        String plainPassword = StrUtil.isBlank(newPassword)
+                ? passwordPolicyService.generateSecurePassword()
+                : passwordDecryptService.decryptPassword(newPassword);
         // 验证密码历史
-        passwordPolicyService.validatePasswordHistory(userId, decryptedPassword);
-        passwordPolicyService.validatePassword(decryptedPassword);
+        passwordPolicyService.validatePasswordHistory(userId, plainPassword);
+        passwordPolicyService.validatePassword(plainPassword);
 
         UserInfo userInfo = userInfoManager.findById(userId).orElseThrow(UserInfoNotExistsException::new);
         // 新密码进行加密
-        String passwordHash = BCrypt.hashpw(decryptedPassword, BCrypt.gensalt());
+        String passwordHash = BCrypt.hashpw(plainPassword, BCrypt.gensalt());
         userInfo.setPassword(passwordHash);
         userInfoManager.updateById(userInfo);
         // 保存密码历史记录
@@ -221,36 +233,26 @@ public class UserAdminService {
                 onlineUserService.kickoutAllSessions(userId);
             }
         });
+        return new UserPasswordResult()
+                .setUserId(userInfo.getId())
+                .setAccount(userInfo.getAccount())
+                .setName(userInfo.getName())
+                .setPassword(plainPassword);
     }
 
     /// 批量重置密码
     /// @param userIds 用户ID列表
-    /// @param newPassword 新密码（加密传输）
+    /// @param newPassword 新密码（RSA 加密）, 可为空; 为空时为每个用户独立生成随机密码
+    /// @return 每个用户独立的初始密码结果, 避免批量共用同一密码
     @Transactional(rollbackFor = Exception.class)
-    public void restartPasswordBatch(List<Long> userIds, String newPassword){
-        // 解密密码
-        String decryptedPassword = passwordDecryptService.decryptPassword(newPassword);
-        passwordPolicyService.validatePassword(decryptedPassword);
-        String passwordHash = BCrypt.hashpw(decryptedPassword, BCrypt.gensalt());
-        OffsetDateTime passwordExpireTime = this.calculatePasswordExpireTime();
-        // 为每个用户验证密码历史并保存历史记录
+    public List<UserPasswordResult> restartPasswordBatch(List<Long> userIds, String newPassword){
+        // 逐用户复用单条重置逻辑: 每人独立密码 + 独立校验 + 独立踢会话回调
+        // 注意 BCrypt 为故意慢的哈希, 批量耗时随人数线性增长, 管理端批量重置场景可接受
+        List<UserPasswordResult> results = new ArrayList<>(userIds.size());
         for (Long userId : userIds) {
-            passwordPolicyService.validatePasswordHistory(userId, decryptedPassword);
-            passwordPolicyService.savePasswordHistory(userId, passwordHash);
-            // 更新密码过期时间, 重置后的密码视为初始密码(强制用户首次登录自行改密)
-            passwordSecurityManager.updatePasswordExpireTimeOnReset(userId, passwordExpireTime);
+            results.add(this.restartPassword(userId, newPassword));
         }
-        userInfoManager.restartPasswordBatch(userIds, passwordHash);
-        // 批量重置密码成功后, 强制每个目标用户全部会话下线
-        // 注册事务提交后回调, 避免事务回滚时误踢下线
-        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
-            @Override
-            public void afterCommit() {
-                for (Long userId : userIds) {
-                    onlineUserService.kickoutAllSessions(userId);
-                }
-            }
-        });
+        return results;
     }
 
     /// 编辑用户信息（禁止修改终端归属）

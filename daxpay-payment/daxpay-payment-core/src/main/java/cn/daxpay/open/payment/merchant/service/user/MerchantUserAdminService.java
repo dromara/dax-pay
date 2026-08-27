@@ -19,6 +19,7 @@ import cn.daxpay.open.platform.iam.entity.user.UserExpandInfo;
 import cn.daxpay.open.platform.iam.entity.user.UserInfo;
 import cn.daxpay.open.platform.iam.exception.user.UserInfoNotExistsException;
 import cn.daxpay.open.platform.iam.result.user.UserInfoResult;
+import cn.daxpay.open.platform.iam.result.user.UserPasswordResult;
 import cn.daxpay.open.platform.iam.service.upms.UserRoleService;
 import cn.daxpay.open.platform.iam.service.user.UserAdminService;
 import cn.daxpay.open.platform.iam.service.user.UserQueryService;
@@ -89,8 +90,9 @@ public class MerchantUserAdminService {
     }
 
     /// 添加商户用户
+    /// @return 含初始密码明文的结果(未传密码时由系统生成随机密码)
     @Transactional(rollbackFor = Exception.class)
-    public void add(MerchantUserParam param) {
+    public UserPasswordResult add(MerchantUserParam param) {
         String mchNo = param.getMchNo();
         MerchantInfo merchantInfo = merchantInfoManager.findByMchNo(mchNo)
                 // 商户: 商户不存在
@@ -103,8 +105,10 @@ public class MerchantUserAdminService {
             throw new BizException(CommonCode.FAIL_CODE, "error.payment.merchant.accountExists");
         }
 
-        // 解密密码
-        String password = passwordDecryptService.decryptPassword(param.getPassword());
+        // 密码可选: 未传时生成随机密码, 传入时按 RSA 密文解密(兼容存量调用方)
+        String password = StrUtil.isBlank(param.getPassword())
+                ? passwordPolicyService.generateSecurePassword()
+                : passwordDecryptService.decryptPassword(param.getPassword());
         passwordPolicyService.validatePassword(password);
 
         // 创建用户
@@ -131,6 +135,13 @@ public class MerchantUserAdminService {
         // 创建商户用户关联
         MerchantUser merchantUser = new MerchantUser(userInfo.getId(), mchNo, false);
         merchantUserManager.save(merchantUser);
+
+        // 返回账号与初始密码明文, 供管理员一次性复制转告用户
+        return new UserPasswordResult()
+                .setUserId(userInfo.getId())
+                .setAccount(userInfo.getAccount())
+                .setName(userInfo.getName())
+                .setPassword(password);
     }
 
     /// 编辑商户用户
@@ -195,17 +206,19 @@ public class MerchantUserAdminService {
     }
 
     /// 重置密码
+    /// @return 含初始密码明文的结果(未传密码时由系统生成随机密码)
     @Transactional(rollbackFor = Exception.class)
-    public void restartPassword(Long userId, String newPassword) {
+    public UserPasswordResult restartPassword(Long userId, String newPassword) {
         this.checkMerchantUser(userId);
-        userAdminService.restartPassword(userId, newPassword);
+        return userAdminService.restartPassword(userId, newPassword);
     }
 
     /// 批量重置密码
+    /// @return 每个用户独立的初始密码结果
     @Transactional(rollbackFor = Exception.class)
-    public void restartPasswordBatch(List<Long> userIds, String newPassword) {
+    public List<UserPasswordResult> restartPasswordBatch(List<Long> userIds, String newPassword) {
         this.checkMerchantUser(userIds);
-        userAdminService.restartPasswordBatch(userIds, newPassword);
+        return userAdminService.restartPasswordBatch(userIds, newPassword);
     }
 
     /// 按平台密码策略计算过期时间(UTC); 未启用轮换则 null

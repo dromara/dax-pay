@@ -8,6 +8,7 @@ import cn.daxpay.open.payment.merchant.result.info.MerchantInfoResult;
 import cn.daxpay.open.platform.core.rest.dto.LabelValue;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
+import cn.daxpay.open.platform.iam.result.user.UserPasswordResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,8 +24,8 @@ public class AppAdminMerchantService {
     private final MerchantAdminService merchantAdminService;
 
     /// 新增商户
-    public void add(MerchantRegisterParam param) {
-        merchantAdminService.add(param);
+    public UserPasswordResult add(MerchantRegisterParam param) {
+        return merchantAdminService.add(param);
     }
 
     /// 修改商户

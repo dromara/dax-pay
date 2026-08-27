@@ -11,6 +11,7 @@ import cn.daxpay.open.payment.merchant.param.info.MerchantInfoParam;
 import cn.daxpay.open.payment.merchant.param.info.MerchantInfoQuery;
 import cn.daxpay.open.payment.merchant.param.info.MerchantRegisterParam;
 import cn.daxpay.open.payment.merchant.result.info.MerchantInfoResult;
+import cn.daxpay.open.platform.iam.result.user.UserPasswordResult;
 import cn.daxpay.open.payment.admin.service.merchant.info.MerchantAdminService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,9 +34,9 @@ public class MerchantAdminController {
         @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "新增商户")
     @PostMapping("/add")
-    public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) MerchantRegisterParam param){
-        merchantService.add(param);
-        return Res.ok();
+    public Result<UserPasswordResult> add(@RequestBody @Validated(ValidationGroup.add.class) MerchantRegisterParam param){
+        // 未指定管理员密码时由后端生成随机初始密码, 响应中一次性返回明文供运营转告商户
+        return Res.ok(merchantService.add(param));
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)

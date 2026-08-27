@@ -167,15 +167,4 @@ public class UserInfoManager extends BaseManager<UserInfoMapper, UserInfo> {
                 .update();
     }
 
-    /// 批量重置用户密码
-    public void restartPasswordBatch(List<Long> userIds,String password){
-        lambdaUpdate()
-                .in(MpIdEntity::getId, userIds)
-                .set(UserInfo::getPassword, password)
-                .set(UserInfo::getLastModifiedTime, OffsetDateTime.now(ZoneOffset.UTC))
-                .set(UserInfo::getLastModifier, SecurityUtil.getUserIdOrDefaultId())
-                .setIncrBy(MpRealDelEntity::getVersion, 1)
-                .update();
-    }
-
 }
