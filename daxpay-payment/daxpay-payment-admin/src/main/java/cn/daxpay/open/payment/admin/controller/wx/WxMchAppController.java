@@ -7,7 +7,6 @@ import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
-import cn.daxpay.open.platform.core.util.ValidationUtil;
 import cn.daxpay.open.platform.core.validation.ValidationGroup;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -70,7 +69,6 @@ public class WxMchAppController {
     @Operation(summary = "新增商户微信应用")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) WxMchAppParam param) {
-        ValidationUtil.validateParam(param, ValidationGroup.add.class);
         // mchNo 必须来自 param（运营端无商户上下文）
         wxMchAppService.add(param);
         return Res.ok();
@@ -80,7 +78,6 @@ public class WxMchAppController {
     @Operation(summary = "修改商户微信应用")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) WxMchAppParam param) {
-        ValidationUtil.validateParam(param, ValidationGroup.edit.class);
         wxMchAppService.update(param);
         return Res.ok();
     }

@@ -28,6 +28,7 @@ import cn.daxpay.open.platform.common.translate.service.TransService;
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
+import cn.daxpay.open.platform.core.exception.BizException;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
@@ -126,8 +127,16 @@ public class DeviceQrCodeAdminService {
                 GatewayPayConfigResolveService.Resolved resolved;
                 try {
                     resolved = gatewayPayConfigResolveService.resolve(resolvedAppId, clientEnv, payForm);
+                } catch (BizException e) {
+                    // 该场景未配置支付方式(BizException 为预期常态, 商户通常只覆盖部分场景):
+                    // 支付时会明确报错, 不属于分账预警范畴, debug 级避免日志噪音
+                    log.debug("分账预警跳过未配置场景: appId={}, clientEnv={}, payForm={}",
+                            resolvedAppId, clientEnv.getCode(), payForm.getCode());
+                    continue;
                 } catch (Exception e) {
-                    // 该场景未配置支付方式: 支付时会明确报错, 不属于分账预警范畴
+                    // 非预期异常(DB 抖动/编程错误)会让预警清单缺项, 误导运营的分账开关决策, 须留痕
+                    log.warn("分账预警场景解析异常, 场景被跳过: appId={}, clientEnv={}, payForm={}",
+                            resolvedAppId, clientEnv.getCode(), payForm.getCode(), e);
                     continue;
                 }
                 // 跟随支付同路径路由出产品(路由失败同样跳过)
@@ -138,7 +147,15 @@ public class DeviceQrCodeAdminService {
                 routeParam.setCapability(resolved.capability());
                 try {
                     payRouteService.resolve(routeParam);
+                } catch (BizException e) {
+                    // 路由失败(未启用/未配置)同属预期常态, debug 级
+                    log.debug("分账预警跳过路由失败场景: appId={}, clientEnv={}, payForm={}",
+                            resolvedAppId, clientEnv.getCode(), payForm.getCode());
+                    continue;
                 } catch (Exception e) {
+                    // 非预期异常会让预警清单缺项, 须留痕
+                    log.warn("分账预警路由检查异常, 场景被跳过: appId={}, clientEnv={}, payForm={}",
+                            resolvedAppId, clientEnv.getCode(), payForm.getCode(), e);
                     continue;
                 }
                 String channel = ProductEnum.findByCode(routeParam.getProduct()).getChannel();

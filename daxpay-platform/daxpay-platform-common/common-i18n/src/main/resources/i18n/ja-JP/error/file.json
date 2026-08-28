@@ -6,5 +6,6 @@
   "objectKeyMismatch": "オブジェクトキーの不一致",
   "notUploadedToStorage": "ファイルがストレージにアップロードされていません",
   "notUploadedForAccess": "ファイルのアップロードが完了していないため、アクセスできません",
-  "notUploadedForDownload": "ファイルのアップロードが完了していないため、ダウンロードできません"
+  "notUploadedForDownload": "ファイルのアップロードが完了していないため、ダウンロードできません",
+  "storageServiceError": "ストレージサービスに異常があり、ファイルの状態を確認できません"
 }

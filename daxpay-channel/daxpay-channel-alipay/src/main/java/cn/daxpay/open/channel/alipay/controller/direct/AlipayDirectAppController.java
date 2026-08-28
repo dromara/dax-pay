@@ -4,7 +4,6 @@ import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
-import cn.daxpay.open.platform.core.util.ValidationUtil;
 import cn.daxpay.open.platform.core.validation.ValidationGroup;
 import cn.daxpay.open.channel.alipay.param.direct.AlipayDirectAppParam;
 import cn.daxpay.open.channel.alipay.param.direct.AlipayDirectAppAuthConfigParam;
@@ -83,7 +82,6 @@ public class AlipayDirectAppController {
     @Operation(summary = "新增直连商户应用")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) AlipayDirectAppParam param) {
-        ValidationUtil.validateParam(param, ValidationGroup.add.class);
         alipayDirectAppService.add(param);
         return Res.ok();
     }
@@ -92,7 +90,6 @@ public class AlipayDirectAppController {
     @Operation(summary = "修改直连商户应用")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) AlipayDirectAppParam param) {
-        ValidationUtil.validateParam(param, ValidationGroup.edit.class);
         alipayDirectAppService.update(param);
         return Res.ok();
     }

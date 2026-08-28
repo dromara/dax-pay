@@ -20,15 +20,13 @@ public class SensitiveWordMatcher {
     /// 按启用词列表重建（version 变化时）
     public void rebuild(List<String> words, String version) {
         String ver = StrUtil.nullToEmpty(version);
-        if (ver.equals(versionRef.get()) && treeRef.get() != null && CollUtil.isNotEmpty(words)) {
+        if (ver.equals(versionRef.get()) && CollUtil.isNotEmpty(words)) {
             return;
         }
         WordTree tree = new WordTree();
-        if (CollUtil.isNotEmpty(words)) {
-            for (String w : words) {
-                if (StrUtil.isNotBlank(w)) {
-                    tree.addWord(w.trim());
-                }
+        for (String w : words) {
+            if (StrUtil.isNotBlank(w)) {
+                tree.addWord(w.trim());
             }
         }
         treeRef.set(tree);
@@ -41,9 +39,6 @@ public class SensitiveWordMatcher {
             return Collections.emptyList();
         }
         WordTree tree = treeRef.get();
-        if (tree == null) {
-            return Collections.emptyList();
-        }
         List<String> hits = tree.matchAll(normalizedText, -1, false, false);
         return hits == null ? Collections.emptyList() : hits;
     }

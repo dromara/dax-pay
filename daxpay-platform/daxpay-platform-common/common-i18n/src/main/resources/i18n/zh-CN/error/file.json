@@ -6,5 +6,6 @@
   "objectKeyMismatch": "对象Key不匹配",
   "notUploadedToStorage": "文件尚未上传到存储",
   "notUploadedForAccess": "文件未上传完成，无法访问",
-  "notUploadedForDownload": "文件未上传完成，无法下载"
+  "notUploadedForDownload": "文件未上传完成，无法下载",
+  "storageServiceError": "存储服务异常，无法确认文件状态"
 }

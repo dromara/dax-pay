@@ -16,6 +16,7 @@
   "nonceMissing": "Anti-replay verification parameter missing",
   "nonceInvalid": "Request verification expired, please retry",
   "timestampExpired": "Request timestamp expired, please retry",
+  "timestampInvalid": "Invalid request timestamp format, please retry",
   "translateColumnNotFound": "Column mapping for property {1} not found in entity {0}",
   "enumUnknown": "Unknown type: {0}",
   "fileOperationFailed": "File operation failed: {0}",

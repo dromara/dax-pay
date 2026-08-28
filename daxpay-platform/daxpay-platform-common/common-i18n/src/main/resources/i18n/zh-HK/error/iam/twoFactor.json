@@ -2,5 +2,6 @@
   "platformDisabled": "平台未啓用雙因素認證",
   "alreadyBound": "已綁定雙因素認證, 無需重複操作",
   "notBound": "未綁定雙因素認證",
-  "codeError": "動態碼錯誤"
+  "codeError": "動態碼錯誤",
+  "secretInvalid": "動態密鑰格式非法，請聯絡管理員檢查配置"
 }

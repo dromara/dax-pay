@@ -2,5 +2,6 @@
   "platformDisabled": "Otentikasi dua faktor tidak diaktifkan pada platform",
   "alreadyBound": "Otentikasi dua faktor sudah terikat",
   "notBound": "Otentikasi dua faktor tidak terikat",
-  "codeError": "Kode verifikasi salah"
+  "codeError": "Kode verifikasi salah",
+  "secretInvalid": "Format kunci rahasia tidak valid, silakan hubungi administrator"
 }

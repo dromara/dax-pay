@@ -2,6 +2,7 @@ package cn.daxpay.open.platform.iam.auth.service.twofactor;
 
 import cn.daxpay.open.platform.iam.auth.service.IamSecurityConfigService;
 import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformTwoFactorAuthConfig;
+import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
 import cn.hutool.core.codec.Base32;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
@@ -11,6 +12,8 @@ import cn.hutool.crypto.digest.HmacAlgorithm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.regex.Pattern;
 
 /// # TOTP 双因素认证核心服务
 ///
@@ -42,6 +45,9 @@ public class TotpService {
     /// 固定时间窗口偏移(前后各 1 个时间桶, 行业标准默认值)
     private static final int DISCREPANCY = 1;
 
+    /// RFC 4648 Base32 合法字符集(A-Z / 2-7, 可选 = 补位), 长度须为 8 的倍数
+    private static final Pattern BASE32_PATTERN = Pattern.compile("^[A-Z2-7]+={0,6}$");
+
     private final IamSecurityConfigService iamSecurityConfigService;
 
     /// 生成新的 TOTP 密钥(Base32 编码)
@@ -68,13 +74,23 @@ public class TotpService {
     ///
     /// @param secret TOTP 密钥(Base32)
     /// @param code   用户输入的动态码
-    /// @return 校验通过返回 true, 失败或异常返回 false
+    /// @return 校验通过返回 true, 动态码不匹配返回 false
+    /// @throws OperationFailException 密钥格式非法(疑似配置/数据损坏), 须与"用户输错码"明确区分
     public boolean verifyCode(String secret, String code) {
         if (secret == null || secret.isBlank() || code == null || code.isBlank()) {
             return false;
         }
+        // hutool Base32 解码对非法字符是静默跳过(不抛异常), 密钥损坏会解码出错误字节,
+        // 表现为"永久动态码错误"并持续累积失败计数直至锁定账号, 且无任何日志可查;
+        // 故解码前显式做格式预检, 非法即抛配置异常(不计入失败计数)
+        String normalized = secret.trim().toUpperCase();
+        if (!BASE32_PATTERN.matcher(normalized).matches() || normalized.length() % 8 != 0) {
+            log.error("TOTP 密钥格式非法(疑似数据损坏或客户端数据错误), length={}", secret.length());
+            // 双因素认证: TOTP 密钥格式非法, 属配置/数据问题而非动态码错误
+            throw new OperationFailException("error.iam.twoFactor.secretInvalid");
+        }
         try {
-            byte[] key = Base32.decode(secret);
+            byte[] key = Base32.decode(normalized);
             // 当前时间桶(Unix 秒 / 步长)
             long currentBucket = System.currentTimeMillis() / 1000L / PERIOD;
             // 容忍时钟漂移: 前后各 DISCREPANCY 个时间桶

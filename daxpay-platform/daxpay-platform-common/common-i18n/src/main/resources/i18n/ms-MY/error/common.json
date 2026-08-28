@@ -16,6 +16,7 @@
   "nonceMissing": "Parameter pengesahan anti-main semula tiada",
   "nonceInvalid": "Permintaan pengesahan tamat tempoh, sila cuba semula",
   "timestampExpired": "Cap masa permintaan telah tamat tempoh, sila cuba semula",
+  "timestampInvalid": "Format cap masa permintaan tidak sah, sila cuba lagi",
   "translateColumnNotFound": "Pemetaan lajur untuk harta {1} tidak ditemui dalam entiti {0}",
   "enumUnknown": "Jenis tidak diketahui: {0}",
   "fileOperationFailed": "Operasi fail gagal: {0}",

@@ -6,5 +6,6 @@
   "objectKeyMismatch": "Khóa đối tượng không khớp",
   "notUploadedToStorage": "Tệp chưa được tải lên bộ nhớ",
   "notUploadedForAccess": "Tải lên tệp chưa hoàn tất, không thể truy cập",
-  "notUploadedForDownload": "Tải lên tệp không hoàn tất, không thể tải xuống"
+  "notUploadedForDownload": "Tải lên tệp không hoàn tất, không thể tải xuống",
+  "storageServiceError": "Lỗi dịch vụ lưu trữ, không thể xác nhận trạng thái tệp"
 }

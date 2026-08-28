@@ -325,6 +325,8 @@ public class MobileAppService {
         try {
             platform = MobilePlatformEnum.findByCode(entity.getPlatform());
         } catch (Exception e) {
+            // 平台码不在枚举内(脏数据), 跳过嵌套配置回填并留痕, 避免配置静默丢失无迹可查
+            log.warn("移动应用平台码非法, 跳过嵌套配置回填, platform={}: {}", entity.getPlatform(), e.getMessage());
             return result;
         }
         try {

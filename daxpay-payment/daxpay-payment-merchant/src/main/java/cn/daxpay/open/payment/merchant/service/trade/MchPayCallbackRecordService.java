@@ -70,11 +70,7 @@ public class MchPayCallbackRecordService {
     }
 
     private void forceMchNo(PayCallbackRecordQuery query) {
-        String mchNo = requireMchNo();
-        if (query == null) {
-            return;
-        }
-        query.setMchNo(mchNo);
+        query.setMchNo(requireMchNo());
     }
 
     private String requireMchNo() {

@@ -74,19 +74,11 @@ public class MchNoticeService {
     }
 
     private void forceMchNo(MchNoticeTaskQuery query) {
-        String mchNo = requireMchNo();
-        if (query == null) {
-            return;
-        }
-        query.setMchNo(mchNo);
+        query.setMchNo(requireMchNo());
     }
 
     private void forceMchNo(MchNoticeRecordQuery query) {
-        String mchNo = requireMchNo();
-        if (query == null) {
-            return;
-        }
-        query.setMchNo(mchNo);
+        query.setMchNo(requireMchNo());
     }
 
     private String requireMchNo() {

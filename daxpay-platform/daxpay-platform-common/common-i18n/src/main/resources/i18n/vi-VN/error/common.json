@@ -16,6 +16,7 @@
   "nonceMissing": "Thiếu tham số xác minh chống phát lại",
   "nonceInvalid": "Yêu cầu xác minh đã hết hạn, vui lòng thử lại",
   "timestampExpired": "Dấu thời gian yêu cầu đã hết hạn, vui lòng thử lại",
+  "timestampInvalid": "Định dạng thời gian yêu cầu không hợp lệ, vui lòng thử lại",
   "translateColumnNotFound": "Không tìm thấy ánh xạ cột cho thuộc tính {1} trong thực thể {0}",
   "enumUnknown": "Loại không xác định: {0}",
   "fileOperationFailed": "Thao tác với tệp không thành công: {0}",

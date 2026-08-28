@@ -61,11 +61,7 @@ public class MchGatewayPayOrderService {
 
     /// 解析并强制写入当前商户号
     private void forceMchNo(GatewayPayOrderQuery query) {
-        String mchNo = requireMchNo();
-        if (query == null) {
-            return;
-        }
-        query.setMchNo(mchNo);
+        query.setMchNo(requireMchNo());
     }
 
     private String requireMchNo() {

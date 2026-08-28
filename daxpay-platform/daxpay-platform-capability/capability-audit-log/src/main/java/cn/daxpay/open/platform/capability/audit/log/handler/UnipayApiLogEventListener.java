@@ -44,13 +44,9 @@ public class UnipayApiLogEventListener {
                     .setResBody(event.getResBody())
                     .setOperateTime(event.getOperateTime());
 
-            // IP 归属地
+            // IP 归属地(内部已兜底: 查询异常返回 null、查不到返回未知文案, 此处不会再抛)
             if (StrUtil.isNotBlank(param.getRequestIp())) {
-                try {
-                    param.setRequestLocation(ipToRegionService.getRegionStrByIp(param.getRequestIp()));
-                } catch (Exception e) {
-                    param.setRequestLocation("未知");
-                }
+                param.setRequestLocation(ipToRegionService.getRegionStrByIp(param.getRequestIp()));
             }
 
             unipayApiLogService.add(param);

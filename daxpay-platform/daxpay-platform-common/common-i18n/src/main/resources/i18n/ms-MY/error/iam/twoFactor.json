@@ -2,5 +2,6 @@
   "platformDisabled": "Pengesahan dua faktor tidak didayakan pada platform",
   "alreadyBound": "Pengesahan dua faktor sudah terikat",
   "notBound": "Pengesahan dua faktor tidak terikat",
-  "codeError": "Kod pengesahan yang salah"
+  "codeError": "Kod pengesahan yang salah",
+  "secretInvalid": "Format kunci rahsia tidak sah, sila hubungi pentadbir"
 }

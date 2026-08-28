@@ -7,7 +7,6 @@ import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
-import cn.daxpay.open.platform.core.util.ValidationUtil;
 import cn.daxpay.open.platform.core.validation.ValidationGroup;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -61,9 +60,7 @@ public class GatewayCashierConfigAdminController {
     @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "更新收银台支付项")
     @PostMapping("/update")
-    public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) GatewayCashierItemParam param) {
-        // 同时校验 Default 分组字段与 edit 分组主键
-        ValidationUtil.validateParam(param, jakarta.validation.groups.Default.class, ValidationGroup.edit.class);
+    public Result<Void> update(@RequestBody @Validated({jakarta.validation.groups.Default.class, ValidationGroup.edit.class}) GatewayCashierItemParam param) {
         gatewayCashierConfigService.update(param);
         return Res.ok();
     }

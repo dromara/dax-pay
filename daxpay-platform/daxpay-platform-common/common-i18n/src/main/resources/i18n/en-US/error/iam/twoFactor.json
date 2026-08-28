@@ -2,5 +2,6 @@
   "platformDisabled": "Two-factor authentication is not enabled on the platform",
   "alreadyBound": "Two-factor authentication is already bound",
   "notBound": "Two-factor authentication is not bound",
-  "codeError": "Incorrect verification code"
+  "codeError": "Incorrect verification code",
+  "secretInvalid": "Invalid secret key format, please contact the administrator"
 }

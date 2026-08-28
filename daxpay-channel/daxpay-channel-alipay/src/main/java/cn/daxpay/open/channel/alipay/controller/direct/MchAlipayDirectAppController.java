@@ -16,7 +16,6 @@ import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
-import cn.daxpay.open.platform.core.util.ValidationUtil;
 import cn.daxpay.open.platform.core.validation.ValidationGroup;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -111,7 +110,6 @@ public class MchAlipayDirectAppController {
     public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) AlipayDirectAppParam param) {
         // 强制当前商户号，忽略客户端传入（防越权）
         param.setMchNo(requireMchNo());
-        ValidationUtil.validateParam(param, ValidationGroup.add.class);
         alipayDirectAppService.add(param);
         return Res.ok();
     }
@@ -123,7 +121,6 @@ public class MchAlipayDirectAppController {
         this.assertOwned(alipayDirectAppService.findById(param.getId()));
         // 强制当前商户号，忽略客户端传入（防越权）
         param.setMchNo(requireMchNo());
-        ValidationUtil.validateParam(param, ValidationGroup.edit.class);
         alipayDirectAppService.update(param);
         return Res.ok();
     }

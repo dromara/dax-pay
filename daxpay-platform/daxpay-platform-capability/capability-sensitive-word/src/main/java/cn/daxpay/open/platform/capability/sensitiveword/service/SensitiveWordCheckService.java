@@ -127,14 +127,10 @@ public class SensitiveWordCheckService {
         int maxLen = Math.max(1, sensitiveWordPolicy.contentPreviewMaxLen());
         String preview = StrUtil.maxLength(StrUtil.nullToEmpty(originalText), maxLen);
         Long wordId = systemSensitiveWordService.findEnabledWordId(hitWord);
-        Long operatorId = null;
-        try {
-            operatorId = SecurityUtil.getUserIdOrDefaultId();
-            if (operatorId != null && operatorId <= 0) {
-                operatorId = null;
-            }
-        } catch (Exception ignored) {
-            // 开放 API 无登录态
+        // getUserIdOrDefaultId 恒不抛异常且永不返回 null, 开放 API 无登录态时返回默认 0 值, 归一为 null(不记录操作人)
+        Long operatorId = SecurityUtil.getUserIdOrDefaultId();
+        if (operatorId <= 0) {
+            operatorId = null;
         }
         String clientIp = null;
         try {

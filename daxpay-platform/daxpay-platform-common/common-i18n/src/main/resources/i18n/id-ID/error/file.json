@@ -6,5 +6,6 @@
   "objectKeyMismatch": "Ketidakcocokan kunci objek",
   "notUploadedToStorage": "File belum diunggah ke penyimpanan",
   "notUploadedForAccess": "Pengunggahan file belum selesai, tidak dapat diakses",
-  "notUploadedForDownload": "Pengunggahan file belum selesai, tidak dapat diunduh"
+  "notUploadedForDownload": "Pengunggahan file belum selesai, tidak dapat diunduh",
+  "storageServiceError": "Layanan penyimpanan bermasalah, tidak dapat mengonfirmasi status file"
 }

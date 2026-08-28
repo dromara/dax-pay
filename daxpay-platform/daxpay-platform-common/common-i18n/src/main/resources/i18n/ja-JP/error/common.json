@@ -16,6 +16,7 @@
   "nonceMissing": "アンチリプレイ検証パラメーターがありません",
   "nonceInvalid": "リクエストの検証の有効期限が切れました。再試行してください",
   "timestampExpired": "リクエストのタイムスタンプが期限切れです。再試行してください",
+  "timestampInvalid": "リクエストのタイムスタンプ形式が不正です。再試行してください",
   "translateColumnNotFound": "プロパティ {1} の列マッピングがエンティティ {0} に見つかりません",
   "enumUnknown": "不明なタイプ: {0}",
   "fileOperationFailed": "ファイル操作が失敗しました: {0}",

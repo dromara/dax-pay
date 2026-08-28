@@ -10,7 +10,6 @@ import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.platform.core.rest.result.Result;
-import cn.daxpay.open.platform.core.util.ValidationUtil;
 import cn.daxpay.open.platform.core.validation.ValidationGroup;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -34,7 +33,6 @@ public class AppAdminMchStoreInfoController {
     @Operation(summary = "新增门店")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) MchStoreInfoParam param) {
-        ValidationUtil.validateParam(param, ValidationGroup.add.class);
         mchStoreInfoService.add(param);
         return Res.ok();
     }
@@ -43,7 +41,6 @@ public class AppAdminMchStoreInfoController {
     @Operation(summary = "修改门店")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) MchStoreInfoParam param) {
-        ValidationUtil.validateParam(param, ValidationGroup.edit.class);
         mchStoreInfoService.update(param);
         return Res.ok();
     }

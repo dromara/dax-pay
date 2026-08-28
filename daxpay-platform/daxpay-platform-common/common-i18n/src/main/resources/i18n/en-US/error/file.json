@@ -6,5 +6,6 @@
   "objectKeyMismatch": "Object key mismatch",
   "notUploadedToStorage": "File has not been uploaded to storage",
   "notUploadedForAccess": "File upload not completed, cannot access",
-  "notUploadedForDownload": "File upload not completed, cannot download"
+  "notUploadedForDownload": "File upload not completed, cannot download",
+  "storageServiceError": "Storage service error, unable to confirm file status"
 }

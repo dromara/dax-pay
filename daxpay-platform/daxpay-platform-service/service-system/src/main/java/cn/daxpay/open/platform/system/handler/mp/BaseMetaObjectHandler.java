@@ -3,7 +3,6 @@ package cn.daxpay.open.platform.system.handler.mp;
 import cn.daxpay.open.platform.common.mybatisplus.function.MetaObjectFill;
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.capability.auth.util.SecurityUtil;
-import cn.hutool.core.util.DesensitizedUtil;
 import com.baomidou.mybatisplus.core.handlers.MetaObjectHandler;
 import org.apache.ibatis.reflection.MetaObject;
 import org.springframework.stereotype.Component;
@@ -33,11 +32,7 @@ public class BaseMetaObjectHandler implements MetaObjectFill {
 
     /// 获取用户Id
     public Long getUserid() {
-        try {
-            return SecurityUtil.getUserIdOrDefaultId();
-        } catch (Exception e) {
-            return DesensitizedUtil.userId();
-        }
+        return SecurityUtil.getUserIdOrDefaultId();
     }
 
 }

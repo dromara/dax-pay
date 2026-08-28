@@ -4,7 +4,6 @@ import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
-import cn.daxpay.open.platform.core.util.ValidationUtil;
 import cn.daxpay.open.platform.core.validation.ValidationGroup;
 import cn.daxpay.open.channel.alipay.param.isv.AlipayIsvAppParam;
 import cn.daxpay.open.channel.alipay.param.isv.AlipayIsvAppAuthConfigParam;
@@ -77,7 +76,6 @@ public class AlipayIsvAppController {
     @Operation(summary = "新增服务商应用")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) AlipayIsvAppParam param) {
-        ValidationUtil.validateParam(param, ValidationGroup.add.class);
         alipayIsvAppService.add(param);
         return Res.ok();
     }
@@ -86,7 +84,6 @@ public class AlipayIsvAppController {
     @Operation(summary = "修改服务商应用")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) AlipayIsvAppParam param) {
-        ValidationUtil.validateParam(param, ValidationGroup.edit.class);
         alipayIsvAppService.update(param);
         return Res.ok();
     }

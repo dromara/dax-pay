@@ -144,14 +144,14 @@ public class LoginRetryService {
     /// 默认 REQUIRED 传播与调用方操作同事务: 操作提交则清零生效, 操作回滚则清零一并回滚(计数保留)。
     @Transactional(rollbackFor = Exception.class)
     public void onSensitiveVerifySuccess(Long userId) {
-        if (userId == null) {
-            return;
-        }
         passwordSecurityManager.resetPasswordErrorCount(userId);
     }
 
     /// 失败计数公共逻辑: 计数 + 达标锁定(登录与敏感操作共用)
     private void doFailureCount(Long userId, String account) {
+        // 此处判空是必要防御而非过度设计: 登录失败路径传入的 [LoginFailureException#getUserId] 多数场景为 null
+        // (用户不存在/状态异常/已锁定等构造器不携带 userId), 无计数目标只能跳过;
+        // 契约见 [AbstractPasswordLoginHandler#attemptAuthentication] 的注释; 敏感操作路径调用方则恒传非空
         if (userId == null) {
             return;
         }
@@ -177,9 +177,6 @@ public class LoginRetryService {
     /// @param userId 用户ID
     @Transactional(rollbackFor = Exception.class)
     public void onLoginSuccess(Long userId) {
-        if (userId == null) {
-            return;
-        }
         passwordSecurityManager.resetPasswordErrorCount(userId);
     }
 

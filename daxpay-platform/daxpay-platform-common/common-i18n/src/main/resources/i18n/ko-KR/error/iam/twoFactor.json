@@ -2,5 +2,6 @@
   "platformDisabled": "플랫폼에서 이중 인증이 활성화되지 않았습니다.",
   "alreadyBound": "이중 인증이 이미 바인딩되어 있습니다.",
   "notBound": "이중 인증은 바인딩되지 않습니다.",
-  "codeError": "잘못된 인증 코드"
+  "codeError": "잘못된 인증 코드",
+  "secretInvalid": "시크릿 키 형식이 올바르지 않습니다. 관리자에게 문의해 주세요"
 }

@@ -7,7 +7,6 @@ import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
-import cn.daxpay.open.platform.core.util.ValidationUtil;
 import cn.daxpay.open.platform.core.validation.ValidationGroup;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -67,7 +66,6 @@ public class WxPlatformAppController {
     @Operation(summary = "新增平台微信应用")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) WxPlatformAppParam param) {
-        ValidationUtil.validateParam(param, ValidationGroup.add.class);
         wxPlatformAppService.add(param);
         return Res.ok();
     }
@@ -76,7 +74,6 @@ public class WxPlatformAppController {
     @Operation(summary = "修改平台微信应用")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) WxPlatformAppParam param) {
-        ValidationUtil.validateParam(param, ValidationGroup.edit.class);
         wxPlatformAppService.update(param);
         return Res.ok();
     }

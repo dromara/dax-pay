@@ -16,6 +16,7 @@
   "nonceMissing": "請求缺少防重放驗證引數",
   "nonceInvalid": "請求驗證已失效，請重試",
   "timestampExpired": "請求時間戳已過期，請重試",
+  "timestampInvalid": "請求時間戳格式非法，請重試",
   "translateColumnNotFound": "實體類 {0} 中未找到屬性 {1} 的列對映",
   "enumUnknown": "未知型別: {0}",
   "fileOperationFailed": "檔案操作失敗: {0}",

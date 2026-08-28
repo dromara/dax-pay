@@ -23,7 +23,6 @@ import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformPa
 import cn.daxpay.open.platform.system.entity.region.City;
 import cn.daxpay.open.platform.system.service.config.security.PlatformSecurityConfigService;
 import cn.daxpay.open.platform.system.service.region.ChinaRegionAdjacencyService;
-import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -289,12 +288,10 @@ public class PayRiskAssistService {
         }
         // balanced: 接壤邻市
         Set<String> adjCodes = chinaRegionAdjacencyService.findAdjacentCityCodes(info.cityCode());
-        if (CollUtil.isNotEmpty(adjCodes)) {
-            for (String adjCode : adjCodes) {
-                String name = resolveCityName(adjCode);
-                if (StrUtil.isNotBlank(name)) {
-                    allowed.add(GeoFenceUtil.normalizeRegionName(name));
-                }
+        for (String adjCode : adjCodes) {
+            String name = resolveCityName(adjCode);
+            if (StrUtil.isNotBlank(name)) {
+                allowed.add(GeoFenceUtil.normalizeRegionName(name));
             }
         }
         if (st == GeoFenceStrategyEnum.LOOSE) {

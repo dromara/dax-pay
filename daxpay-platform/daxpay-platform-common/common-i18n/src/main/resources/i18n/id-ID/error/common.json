@@ -16,6 +16,7 @@
   "nonceMissing": "Parameter verifikasi anti-pemutaran ulang tidak ada",
   "nonceInvalid": "Permintaan verifikasi sudah habis masa berlakunya, silakan coba lagi",
   "timestampExpired": "Stempel waktu permintaan sudah habis, silakan coba lagi",
+  "timestampInvalid": "Format timestamp permintaan tidak valid, silakan coba lagi",
   "translateColumnNotFound": "Pemetaan kolom untuk properti {1} tidak ditemukan di entitas {0}",
   "enumUnknown": "Jenis tidak diketahui: {0}",
   "fileOperationFailed": "Operasi file gagal: {0}",

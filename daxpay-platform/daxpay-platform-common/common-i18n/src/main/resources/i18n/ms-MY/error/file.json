@@ -6,5 +6,6 @@
   "objectKeyMismatch": "Ketidakpadanan kunci objek",
   "notUploadedToStorage": "Fail belum dimuat naik ke storan",
   "notUploadedForAccess": "Muat naik fail tidak selesai, tidak dapat diakses",
-  "notUploadedForDownload": "Muat naik fail tidak selesai, tidak boleh muat turun"
+  "notUploadedForDownload": "Muat naik fail tidak selesai, tidak boleh muat turun",
+  "storageServiceError": "Perkhidmatan storan bermasalah, tidak dapat mengesahkan status fail"
 }

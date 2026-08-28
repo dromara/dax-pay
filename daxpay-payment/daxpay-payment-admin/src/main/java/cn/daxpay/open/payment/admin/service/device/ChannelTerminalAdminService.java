@@ -255,7 +255,7 @@ public class ChannelTerminalAdminService {
 
     /// 批量填充通道终端已绑定的系统终端列表
     private void fillSystemTerminals(List<ChannelTerminalResult> results) {
-        if (results == null || results.isEmpty()) {
+        if (results.isEmpty()) {
             return;
         }
         List<Long> ids = results.stream()

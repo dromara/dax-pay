@@ -3,15 +3,20 @@ package cn.daxpay.open.platform.capability.file.service;
 import cn.daxpay.open.platform.capability.file.entity.FileStorageConfig;
 import cn.daxpay.open.platform.capability.file.provider.OssConfigProvider;
 import cn.daxpay.open.platform.capability.file.result.S3UploadResult;
+import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
+import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import software.amazon.awssdk.core.exception.SdkClientException;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.services.s3.model.DeleteObjectRequest;
 import software.amazon.awssdk.services.s3.model.GetObjectRequest;
 import software.amazon.awssdk.services.s3.model.HeadObjectRequest;
+import software.amazon.awssdk.services.s3.model.NoSuchKeyException;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.model.S3Exception;
 import software.amazon.awssdk.services.s3.presigner.model.PresignedGetObjectRequest;
 import software.amazon.awssdk.services.s3.presigner.model.PresignedPutObjectRequest;
 
@@ -210,8 +215,15 @@ public class S3FileStorageService {
 
             s3Client.headObject(request);
             return true;
-        } catch (Exception e) {
+        } catch (NoSuchKeyException e) {
+            // 对象确定不存在, 唯一合法的 false 语义
             return false;
+        } catch (S3Exception | SdkClientException e) {
+            // 凭证失效/网络故障/桶不存在等基础设施错误不能误判为"文件不存在":
+            // 用户已通过预签名 URL 上传成功, 确认阶段误报"未上传"会诱导重试并产生孤儿记录
+            log.warn("检查文件存在性失败(存储服务异常): bucket={}, objectKey={}", bucket, objectKey, e);
+            // 文件: 存储服务异常, 无法确认文件存在性
+            throw new BizInfoException(DaxPayErrorCode.OPERATION_FAIL, "error.file.storageServiceError");
         }
     }
 

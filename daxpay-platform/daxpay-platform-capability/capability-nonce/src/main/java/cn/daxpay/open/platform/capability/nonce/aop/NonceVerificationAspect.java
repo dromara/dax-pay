@@ -5,6 +5,7 @@ import cn.daxpay.open.platform.capability.nonce.service.NonceService;
 import cn.daxpay.open.platform.core.annotation.NonceVerification;
 import cn.daxpay.open.platform.core.code.WebHeaderCode;
 import cn.daxpay.open.platform.core.exception.NonceMissingException;
+import cn.daxpay.open.platform.core.exception.TimestampInvalidException;
 import cn.hutool.core.util.StrUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -63,12 +64,14 @@ public class NonceVerificationAspect {
             throw new NonceMissingException();
         }
 
-        // 解析时间戳
+        // 解析时间戳: 头缺失/非数字属客户端集成缺陷或攻击探测, 显式拒绝并留痕,
+        // 不再伪装成时间戳过期(否则排查方向被误导且服务端无任何痕迹)
         long timestamp;
         try {
             timestamp = Long.parseLong(timestampStr);
         } catch (NumberFormatException e) {
-            timestamp = 0L;
+            log.warn("时间戳头格式非法(拒绝请求): x-timestamp={}, uri={}", timestampStr, request.getRequestURI());
+            throw new TimestampInvalidException();
         }
 
         // 时间戳容差: provider 优先（全局配置），回退注解参数（方法级）

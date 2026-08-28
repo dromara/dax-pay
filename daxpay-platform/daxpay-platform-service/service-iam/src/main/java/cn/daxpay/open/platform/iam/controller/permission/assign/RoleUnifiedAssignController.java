@@ -3,7 +3,6 @@ package cn.daxpay.open.platform.iam.controller.permission.assign;
 import cn.daxpay.open.platform.core.annotation.InternalPath;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
-import cn.daxpay.open.platform.core.util.ValidationUtil;
 import cn.daxpay.open.platform.iam.param.permission.assign.RoleUnifiedAssignParam;
 import cn.daxpay.open.platform.iam.result.permission.assign.RoleUnifiedAssignResult;
 import cn.daxpay.open.platform.iam.service.permission.assign.RoleUnifiedAssignService;
@@ -44,7 +43,6 @@ public class RoleUnifiedAssignController {
     @Operation(summary = "保存角色统一授权")
     @PostMapping("/save")
     public Result<Void> save(@RequestBody @Validated RoleUnifiedAssignParam param) {
-        ValidationUtil.validateParam(param);
         roleUnifiedAssignService.save(param);
         return Res.ok();
     }

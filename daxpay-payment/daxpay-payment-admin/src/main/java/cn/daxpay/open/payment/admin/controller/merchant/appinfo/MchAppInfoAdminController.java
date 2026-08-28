@@ -6,7 +6,6 @@ import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.platform.core.rest.result.Result;
-import cn.daxpay.open.platform.core.util.ValidationUtil;
 import cn.daxpay.open.platform.core.validation.ValidationGroup;
 import cn.daxpay.open.payment.merchant.param.appinfo.MchAppInfoParam;
 import cn.daxpay.open.payment.merchant.param.appinfo.MchAppInfoQuery;
@@ -36,7 +35,6 @@ public class MchAppInfoAdminController {
     @Operation(summary = "新增商户应用")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) MchAppInfoParam param){
-        ValidationUtil.validateParam(param, ValidationGroup.add.class);
         mchAppInfoService.add(param);
         return Res.ok();
     }
@@ -45,7 +43,6 @@ public class MchAppInfoAdminController {
     @Operation(summary = "修改商户应用")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) MchAppInfoParam param){
-        ValidationUtil.validateParam(param, ValidationGroup.edit.class);
         mchAppInfoService.update(param);
         return Res.ok();
     }

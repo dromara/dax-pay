@@ -16,6 +16,7 @@
   "nonceMissing": "请求缺少防重放验证参数",
   "nonceInvalid": "请求验证已失效，请重试",
   "timestampExpired": "请求时间戳已过期，请重试",
+  "timestampInvalid": "请求时间戳格式非法，请重试",
   "translateColumnNotFound": "实体类 {0} 中未找到属性 {1} 的列映射",
   "enumUnknown": "未知类型: {0}",
   "fileOperationFailed": "文件操作失败: {0}",

@@ -40,4 +40,7 @@ public interface CommonErrorCode {
     /// 请求时间戳超出允许范围
     int TIMESTAMP_EXPIRED = 10410;
 
+    /// 请求时间戳格式非法(头缺失或非数字)
+    int TIMESTAMP_INVALID = 10411;
+
 }

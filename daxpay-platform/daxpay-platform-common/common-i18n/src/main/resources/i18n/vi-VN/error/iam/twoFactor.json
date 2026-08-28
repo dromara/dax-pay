@@ -2,5 +2,6 @@
   "platformDisabled": "Xác thực hai yếu tố không được kích hoạt trên nền tảng",
   "alreadyBound": "Xác thực hai yếu tố đã bị ràng buộc",
   "notBound": "Xác thực hai yếu tố không bị ràng buộc",
-  "codeError": "Mã xác minh không chính xác"
+  "codeError": "Mã xác minh không chính xác",
+  "secretInvalid": "Định dạng khóa bí mật không hợp lệ, vui lòng liên hệ quản trị viên"
 }
