@@ -36,6 +36,9 @@ public class UserInfoResult {
     @SensitiveInfo(SensitiveInfo.SensitiveType.EMAIL)
     private String email;
 
+    @Schema(description = "邮箱是否已验证(仅用户本人走绑定验证流程后为 true)")
+    private boolean emailVerified;
+
     @Schema(description = "是否管理员")
     private boolean administrator;
 

@@ -10,6 +10,7 @@ import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.platform.iam.auth.service.IamSecurityConfigService;
 import cn.daxpay.open.platform.iam.auth.service.PasswordDecryptService;
 import cn.daxpay.open.platform.iam.auth.service.PasswordPolicyService;
+import cn.daxpay.open.platform.iam.auth.service.email.UserEmailService;
 import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformPasswordPolicyConfig;
 import cn.daxpay.open.platform.iam.code.UserStatusEnum;
 import cn.daxpay.open.platform.iam.dao.user.UserExpandInfoManager;
@@ -43,7 +44,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
-import java.util.Objects;
 
 /// # 商户用户管理服务
 ///
@@ -63,6 +63,7 @@ public class MerchantUserAdminService {
     private final UserQueryService userQueryService;
     private final UserAdminService userAdminService;
     private final IamSecurityConfigService iamSecurityConfigService;
+    private final UserEmailService userEmailService;
 
     /// 分页查询商户用户
     public PageResult<MerchantUserResult> page(PageParam pageParam, MerchantUserQuery query) {
@@ -156,28 +157,25 @@ public class MerchantUserAdminService {
                 .orElseThrow(() -> new BizException(CommonCode.FAIL_CODE, "error.payment.merchant.mchUserRelationNotExist"));
 
         // 按终端校验手机号唯一性（排除自身）
-        if (StrUtil.isNotBlank(param.getPhone()) && 
+        if (StrUtil.isNotBlank(param.getPhone()) &&
             userQueryService.existsPhoneByClientCode(userInfo.getClientCode(), param.getPhone(), param.getId())) {
             // 商户: 该终端下手机号已被其他用户使用
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.phoneUsedByOtherInClient");
         }
 
-        // 按终端校验邮箱唯一性（排除自身）
-        if (StrUtil.isNotBlank(param.getEmail()) && 
-            userQueryService.existsEmailByClientCode(userInfo.getClientCode(), param.getEmail(), param.getId())) {
-            // 商户: 该终端下邮箱已被其他用户使用
-            throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.emailUsedByOtherInClient");
-        }
-
         param.setPassword(null);
         param.setAccount(null);
-        String oldEmail = userInfo.getEmail();
         MerchantUserConvert.CONVERT.copy(param, userInfo);
-        // 管理员变更邮箱后原验证状态不再可信, 重置为未验证(需用户重新走邮箱验证流程)
-        if (!Objects.equals(oldEmail, userInfo.getEmail())) {
-            userInfo.setEmailVerified(false);
-        }
         userInfoManager.updateById(userInfo);
+    }
+
+    /// 强制解绑商户用户邮箱
+    /// 用户邮箱本体失效、无法走本人解绑流程(密码+旧邮箱验证码)时的管理员代管通道;
+    /// 仅清空邮箱与验证状态, 不可指定新邮箱, 新邮箱只能由用户本人走绑定验证流程获得
+    @Transactional(rollbackFor = Exception.class)
+    public void unbindEmail(Long userId) {
+        this.checkMerchantUser(userId);
+        userEmailService.adminUnbind(userId);
     }
 
     /// 分配角色

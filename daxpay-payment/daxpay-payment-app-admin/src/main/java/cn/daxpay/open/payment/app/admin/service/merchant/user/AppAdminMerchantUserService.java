@@ -42,6 +42,12 @@ public class AppAdminMerchantUserService {
         merchantUserAdminService.update(param);
     }
 
+    /// 强制解绑邮箱
+    /// 仅清空邮箱与验证状态, 不可指定新邮箱(邮箱变更只能由用户本人走绑定验证流程)
+    public void unbindEmail(Long userId) {
+        merchantUserAdminService.unbindEmail(userId);
+    }
+
     /// 分配角色
     public void assignRole(Long userId, Long roleId) {
         merchantUserAdminService.assignRole(userId, roleId);

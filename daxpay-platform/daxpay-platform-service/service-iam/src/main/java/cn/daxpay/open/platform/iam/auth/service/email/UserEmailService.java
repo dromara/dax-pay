@@ -19,6 +19,7 @@ import cn.daxpay.open.platform.iam.result.user.EmailInfoResult;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.BCrypt;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -30,6 +31,7 @@ import java.util.Map;
 /// 解绑走"登录密码确认 + 旧邮箱验证码"双确认(证明账号所有权 + 旧邮箱持有性, 与绑定对称),
 /// 解绑成功后通知旧邮箱; email 字段的变更仅允许经本服务发生,
 /// 基础信息修改接口不再受理 email 变更
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserEmailService {
@@ -157,6 +159,34 @@ public class UserEmailService {
         // 解绑成功通知旧邮箱(告知找回通道已切断, 非本人操作可及时察觉)
         Map<String, Object> noticeParams = Map.of("account", userInfo.getAccount());
         emailTemplateService.send(oldEmail, userInfo.getId(), EmailTemplateEnum.unbindNotice, noticeParams);
+    }
+
+    /// 管理员强制解绑用户邮箱(用户邮箱本体失效、无法走本人解绑流程时的管理员代管通道)
+    /// 仅清空邮箱与验证状态, 不校验旧邮箱验证码; 只允许"解除绑定", 管理员不可指定新邮箱
+    public void adminUnbind(Long userId) {
+        UserInfo userInfo = userInfoManager.findById(userId)
+                .orElseThrow(UserInfoNotExistsException::new);
+        if (StrUtil.isBlank(userInfo.getEmail())) {
+            // 邮箱: 当前账号未绑定邮箱
+            throw new BizInfoException("error.iam.email.notBound");
+        }
+        String oldEmail = userInfo.getEmail();
+        // email 置空需显式 set null(updateById 忽略 null 字段)
+        userInfoManager.lambdaUpdate()
+                .eq(MpIdEntity::getId, userId)
+                .set(UserInfo::getEmail, null)
+                .set(UserInfo::isEmailVerified, false)
+                .setIncrBy(MpRealDelEntity::getVersion, 1)
+                .update();
+        // 清理可能存在的未完成绑定上下文, 防止解绑后 confirm 又绑上
+        emailCodeService.delete(EmailCodeService.BIND_SCOPE, String.valueOf(userId));
+        // 通知旧邮箱尽力而为: 邮箱本体失效正是本场景的主要成因, 发送失败仅记录日志、不阻断解绑
+        try {
+            Map<String, Object> noticeParams = Map.of("account", userInfo.getAccount());
+            emailTemplateService.send(oldEmail, userId, EmailTemplateEnum.unbindNotice, noticeParams);
+        } catch (Exception e) {
+            log.warn("管理员强制解绑邮箱后通知旧邮箱失败(不阻断解绑), userId: {}, email: {}", userId, oldEmail, e);
+        }
     }
 
     private UserInfo currentUser() {

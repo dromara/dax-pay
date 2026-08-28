@@ -68,6 +68,15 @@ public class AppAdminIamUserController {
         return Res.ok();
     }
 
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "强制解绑用户邮箱")
+    @PostMapping("/unbind-email")
+    public Result<Void> unbindEmail(@NotNull(message = "{validation.field.userId.notNull}") Long userId) {
+        // 仅清空邮箱与验证状态, 不可指定新邮箱(邮箱变更只能由用户本人走绑定验证流程)
+        userAdminService.unbindEmail(userId);
+        return Res.ok();
+    }
+
     @PermCode(code = PermCodes.Action.RESET_PASSWORD)
     @Operation(summary = "重置密码")
     @PostMapping("/restart-password")

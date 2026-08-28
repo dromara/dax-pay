@@ -3,8 +3,10 @@ package cn.daxpay.open.platform.iam.service.user;
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.open.platform.core.exception.BizException;
 import cn.daxpay.open.platform.iam.auth.service.IamSecurityConfigService;
+import cn.daxpay.open.platform.iam.auth.service.LoginRetryService;
 import cn.daxpay.open.platform.iam.auth.service.PasswordDecryptService;
 import cn.daxpay.open.platform.iam.auth.service.PasswordPolicyService;
+import cn.daxpay.open.platform.iam.auth.service.email.UserEmailService;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.platform.iam.code.UserStatusEnum;
@@ -62,9 +64,13 @@ public class UserAdminService {
 
     private final IamSecurityConfigService iamSecurityConfigService;
 
+    private final LoginRetryService loginRetryService;
+
     private final PasswordDecryptService passwordDecryptService;
 
     private final OnlineUserService onlineUserService;
+
+    private final UserEmailService userEmailService;
 
     /// 分页查询（按终端过滤）
     public PageResult<UserWholeInfoResult> page(PageParam pageParam, UserInfoQuery query) {
@@ -121,13 +127,21 @@ public class UserAdminService {
     }
 
     /// 解锁用户
+    ///
+    /// 双清: 同时清除账号状态锁([UserInfo#getStatus] 置 NORMAL)与登录重试锁定
+    /// (iam_user_password_security 的 lock_time/password_error_count, 见 [LoginRetryService#unlockAccount]),
+    /// 管理员视角"解锁=全部解锁", 无需分辨两种锁; 商户端解锁委托本方法同样受益。
+    @Transactional(rollbackFor = Exception.class)
     public void unlock(Long userId) {
         userInfoManager.setUpStatus(userId, UserStatusEnum.NORMAL.getCode());
+        loginRetryService.unlockAccount(userId);
     }
 
-    /// 批量解锁用户
+    /// 批量解锁用户: 语义同 [#unlock], 双清两种锁
     public void unlockBatch(List<Long> userIds) {
-        userInfoManager.setUpStatusBatch(userIds, UserStatusEnum.NORMAL.getCode());
+        for (Long userId : userIds) {
+            this.unlock(userId);
+        }
     }
 
     /// 添加新用户（终端维度唯一性校验）
@@ -155,11 +169,6 @@ public class UserAdminService {
             if (userQueryService.existsPhoneByClientCode(clientCode, userInfoParam.getPhone())) {
                 // 权限: 该终端下手机号已被使用
                 throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.phoneUsedInClient");
-            }
-            // 按终端校验邮箱唯一性
-            if (userQueryService.existsEmailByClientCode(clientCode, userInfoParam.getEmail())) {
-                // 权限: 该终端下邮箱已被使用
-                throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.emailUsedInClient");
             }
         }
         // 密码可选: 未传时生成随机密码, 传入时按 RSA 密文解密(兼容存量调用方)
@@ -269,19 +278,23 @@ public class UserAdminService {
             // 权限: 该终端下手机号已被其他用户使用
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.phoneUsedByOtherInClient");
         }
-        // 按终端校验邮箱唯一性（排除自身）
-        if (userQueryService.existsEmailByClientCode(userInfo.getClientCode(), userInfoParam.getEmail(), userInfoParam.getId())) {
-            // 权限: 该终端下邮箱已被其他用户使用
-            throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.emailUsedByOtherInClient");
-        }
         userInfoParam.setPassword(null);
-        String oldEmail = userInfo.getEmail();
         UserConvert.CONVERT.copy(userInfoParam, userInfo);
-        // 管理员变更邮箱后原验证状态不再可信, 重置为未验证(需用户重新走邮箱验证流程)
-        if (!Objects.equals(oldEmail, userInfo.getEmail())) {
-            userInfo.setEmailVerified(false);
-        }
         userInfoManager.updateById(userInfo);
+    }
+
+    /// 强制解绑用户邮箱
+    /// 用户邮箱本体失效、无法走本人解绑流程(密码+旧邮箱验证码)时的管理员代管通道;
+    /// 仅清空邮箱与验证状态, 不可指定新邮箱, 新邮箱只能由用户本人走绑定验证流程获得
+    public void unbindEmail(Long userId) {
+        UserInfo userInfo = userInfoManager.findById(userId)
+                .orElseThrow(UserInfoNotExistsException::new);
+        // 禁止操作非运营端用户(与编辑用户同口径)
+        if (!ClientEnum.ADMIN.getCode().equals(userInfo.getClientCode())) {
+            // 权限: 不能编辑非运营端用户
+            throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.cannotEditNonAdmin");
+        }
+        userEmailService.adminUnbind(userId);
     }
 }
 
