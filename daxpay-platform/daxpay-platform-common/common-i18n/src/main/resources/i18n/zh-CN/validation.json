@@ -917,6 +917,12 @@
     "receiverEmail": {
       "notBlank": "收件邮箱不能为空",
       "notValid": "收件邮箱格式不正确"
+    },
+    "flowId": {
+      "notBlank": "找回流程ID不能为空"
+    },
+    "emailCode": {
+      "notBlank": "邮箱验证码不能为空"
     }
   }
 }

@@ -1,0 +1,10 @@
+{
+  "codeError": "邮箱验证码错误",
+  "codeExpired": "邮箱验证码已过期或不存在, 请重新获取",
+  "codeMaxFail": "邮箱验证码错误次数过多已作废, 请重新获取",
+  "mailNotReady": "邮件服务未配置或未启用, 请联系管理员",
+  "templateError": "邮件模板加载失败, 请联系管理员",
+  "notBound": "当前账号未绑定邮箱",
+  "sameAsCurrent": "该邮箱已是当前账号的绑定邮箱",
+  "clientInvalid": "终端编码不合法"
+}

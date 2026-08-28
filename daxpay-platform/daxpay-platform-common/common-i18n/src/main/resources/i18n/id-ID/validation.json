@@ -872,6 +872,12 @@
     "receiverEmail": {
       "notBlank": "Email penerima wajib diisi",
       "notValid": "Format email penerima tidak valid"
+    },
+    "flowId": {
+      "notBlank": "ID alur pemulihan tidak boleh kosong"
+    },
+    "emailCode": {
+      "notBlank": "Kode verifikasi email tidak boleh kosong"
     }
   }
 }

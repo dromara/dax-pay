@@ -872,6 +872,12 @@
     "receiverEmail": {
       "notBlank": "E-mel penerima wajib diisi",
       "notValid": "Format e-mel penerima tidak sah"
+    },
+    "flowId": {
+      "notBlank": "ID aliran pemulihan tidak boleh kosong"
+    },
+    "emailCode": {
+      "notBlank": "Kod pengesahan e-mel tidak boleh kosong"
     }
   }
 }

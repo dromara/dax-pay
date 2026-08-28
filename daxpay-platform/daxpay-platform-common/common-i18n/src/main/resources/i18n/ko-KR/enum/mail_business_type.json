@@ -1,4 +1,10 @@
 {
   "test": "테스트 발송",
-  "manual": "수동 발송"
+  "manual": "수동 발송",
+  "password_reset": "비밀번호 재설정 코드",
+  "email_bind": "이메일 연결 코드",
+  "email_change_notice": "이메일 변경 알림",
+  "password_reset_notice": "비밀번호 재설정 알림",
+  "email_unbind": "이메일 해제 코드",
+  "email_unbind_notice": "이메일 해제 알림"
 }

@@ -323,12 +323,18 @@ public class PasskeyService {
         return StrUtil.blankToDefault(config.getRpName(), PlatformWebAuthnConfig.DEFAULT_RP_NAME);
     }
 
-    /// 登录密码确认(RSA 解密 + BCrypt 比对)
+    /// 登录密码确认(RSA 解密 + BCrypt 比对 + 失败锁定 + 成功清零)
     private void verifyPassword(UserInfo userInfo, String encryptedPassword) {
+        // 前置: 账号处于锁定状态时拒绝尝试(与登录锁定共用状态)
+        loginRetryService.checkBeforeSensitiveVerify(userInfo.getId());
         String rawPassword = passwordDecryptService.decryptPassword(encryptedPassword);
         if (!BCrypt.checkpw(rawPassword, userInfo.getPassword())) {
+            // 失败计数(REQUIRES_NEW 独立事务提交)
+            loginRetryService.onSensitiveVerifyFailure(userInfo.getId(), userInfo.getAccount());
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.loginPasswordError");
         }
+        // 验证通过, 清零失败计数(与登录成功同口径)
+        loginRetryService.onSensitiveVerifySuccess(userInfo.getId());
     }
 
     /// 解析认证器断言响应 JSON

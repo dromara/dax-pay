@@ -913,6 +913,12 @@
     "receiverEmail": {
       "notBlank": "收件信箱不可為空",
       "notValid": "收件信箱格式不正確"
+    },
+    "flowId": {
+      "notBlank": "找回流程ID不能為空"
+    },
+    "emailCode": {
+      "notBlank": "郵箱驗證碼不能為空"
     }
   }
 }

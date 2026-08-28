@@ -913,6 +913,12 @@
     "receiverEmail": {
       "notBlank": "수신자 메일 주소는 필수입니다",
       "notValid": "수신자 메일 주소 형식이 올바르지 않습니다"
+    },
+    "flowId": {
+      "notBlank": "복구 플로우 ID는 필수입니다"
+    },
+    "emailCode": {
+      "notBlank": "이메일 인증 코드는 필수입니다"
     }
   }
 }

@@ -1,4 +1,10 @@
 {
   "test": "测试发送",
-  "manual": "手动发送"
+  "manual": "手动发送",
+  "password_reset": "密码找回验证码",
+  "email_bind": "邮箱绑定验证码",
+  "email_change_notice": "绑定邮箱变更通知",
+  "password_reset_notice": "密码重置成功通知",
+  "email_unbind": "邮箱解绑验证码",
+  "email_unbind_notice": "邮箱解绑通知"
 }

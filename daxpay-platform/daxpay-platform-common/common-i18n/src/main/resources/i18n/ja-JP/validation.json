@@ -913,6 +913,12 @@
     "receiverEmail": {
       "notBlank": "受信者のメールアドレスは必須です",
       "notValid": "受信者のメールアドレスの形式が不正です"
+    },
+    "flowId": {
+      "notBlank": "復元フローIDは必須です"
+    },
+    "emailCode": {
+      "notBlank": "メール認証コードは必須です"
     }
   }
 }

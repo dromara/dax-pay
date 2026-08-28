@@ -1,0 +1,10 @@
+{
+  "codeError": "Email verification code is incorrect",
+  "codeExpired": "Email verification code has expired or does not exist, please request a new one",
+  "codeMaxFail": "Too many failed attempts, the email verification code has been invalidated, please request a new one",
+  "mailNotReady": "Email service is not configured or enabled, please contact the administrator",
+  "templateError": "Failed to load email template, please contact the administrator",
+  "notBound": "The current account has no bound email",
+  "sameAsCurrent": "This email is already bound to the current account",
+  "clientInvalid": "Invalid client code"
+}

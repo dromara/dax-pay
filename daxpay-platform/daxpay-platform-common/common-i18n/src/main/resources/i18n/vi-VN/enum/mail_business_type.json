@@ -1,4 +1,10 @@
 {
   "test": "Gửi thử",
-  "manual": "Gửi thủ công"
+  "manual": "Gửi thủ công",
+  "password_reset": "Mã đặt lại mật khẩu",
+  "email_bind": "Mã liên kết email",
+  "email_change_notice": "Thông báo thay đổi email",
+  "password_reset_notice": "Thông báo đặt lại mật khẩu",
+  "email_unbind": "Mã gỡ bỏ email",
+  "email_unbind_notice": "Thông báo gỡ bỏ email"
 }

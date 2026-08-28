@@ -1,4 +1,10 @@
 {
   "test": "Kirim uji",
-  "manual": "Kirim manual"
+  "manual": "Kirim manual",
+  "password_reset": "Kode reset kata sandi",
+  "email_bind": "Kode pengikatan email",
+  "email_change_notice": "Pemberitahuan perubahan email",
+  "password_reset_notice": "Pemberitahuan reset kata sandi",
+  "email_unbind": "Kode pelepasan email",
+  "email_unbind_notice": "Pemberitahuan pelepasan email"
 }

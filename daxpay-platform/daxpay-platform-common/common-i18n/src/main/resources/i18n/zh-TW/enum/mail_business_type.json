@@ -1,4 +1,10 @@
 {
   "test": "測試發送",
-  "manual": "手動發送"
+  "manual": "手動發送",
+  "password_reset": "密碼找回驗證碼",
+  "email_bind": "郵箱綁定驗證碼",
+  "email_change_notice": "綁定郵箱變更通知",
+  "password_reset_notice": "密碼重置成功通知",
+  "email_unbind": "郵箱解綁驗證碼",
+  "email_unbind_notice": "郵箱解綁通知"
 }

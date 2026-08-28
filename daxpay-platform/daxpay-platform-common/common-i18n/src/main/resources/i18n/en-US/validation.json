@@ -917,6 +917,12 @@
     "receiverEmail": {
       "notBlank": "Recipient email cannot be empty",
       "notValid": "Invalid recipient email format"
+    },
+    "flowId": {
+      "notBlank": "Recovery flow ID cannot be empty"
+    },
+    "emailCode": {
+      "notBlank": "Email verification code cannot be empty"
     }
   }
 }

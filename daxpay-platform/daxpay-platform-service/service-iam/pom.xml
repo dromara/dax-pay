@@ -38,6 +38,12 @@
             <artifactId>capability-wechat</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- 抖音开放平台能力(小程序快捷登录 SocialAppletAuthService 使用 DouyinMaAuthService) -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>capability-douyin</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- 防重放Nonce验证 -->
         <dependency>
             <groupId>cn.daxpay.open</groupId>
@@ -60,6 +66,12 @@
         <dependency>
             <groupId>cn.daxpay.open</groupId>
             <artifactId>service-system</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 邮件通知(邮箱绑定验证/找回密码验证码发送) -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>service-notify</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!-- 单元测试 -->

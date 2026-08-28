@@ -1,7 +1,6 @@
 package cn.daxpay.open.platform.iam.param.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -25,9 +24,8 @@ public class UserBaseInfoParam {
     @Schema(description = "生日")
     private LocalDate birthday;
 
-    @Schema(description = "邮箱")
-    @Email(message = "{validation.field.email.format}")
-    private String email;
+    /// email 不在本参数中受理: 邮箱是找回密码的安全凭证,
+    /// 变更仅允许走 /user/auth/email 绑定验证流程
 
     @Schema(description = "手机号")
     @Pattern(regexp = "^$|^1[3-9]\\d{9}$", message = "{validation.field.phone.format}")

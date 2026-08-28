@@ -43,6 +43,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Objects;
 
 /// # 商户用户管理服务
 ///
@@ -170,7 +171,12 @@ public class MerchantUserAdminService {
 
         param.setPassword(null);
         param.setAccount(null);
+        String oldEmail = userInfo.getEmail();
         MerchantUserConvert.CONVERT.copy(param, userInfo);
+        // 管理员变更邮箱后原验证状态不再可信, 重置为未验证(需用户重新走邮箱验证流程)
+        if (!Objects.equals(oldEmail, userInfo.getEmail())) {
+            userInfo.setEmailVerified(false);
+        }
         userInfoManager.updateById(userInfo);
     }
 

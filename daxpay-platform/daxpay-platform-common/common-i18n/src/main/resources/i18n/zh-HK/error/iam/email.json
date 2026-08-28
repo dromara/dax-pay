@@ -1,0 +1,10 @@
+{
+  "codeError": "郵箱驗證碼錯誤",
+  "codeExpired": "郵箱驗證碼已過期或不存在, 請重新獲取",
+  "codeMaxFail": "郵箱驗證碼錯誤次數過多已作廢, 請重新獲取",
+  "mailNotReady": "郵件服務未配置或未啟用, 請聯絡管理員",
+  "templateError": "郵件模板載入失敗, 請聯絡管理員",
+  "notBound": "目前帳號未綁定郵箱",
+  "sameAsCurrent": "該郵箱已是目前帳號的綁定郵箱",
+  "clientInvalid": "終端編碼不合法"
+}

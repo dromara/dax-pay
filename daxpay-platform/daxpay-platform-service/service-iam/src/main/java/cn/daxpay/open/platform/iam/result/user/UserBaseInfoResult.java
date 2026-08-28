@@ -29,6 +29,9 @@ public class UserBaseInfoResult {
     @Schema(description = "邮箱")
     private String email;
 
+    @Schema(description = "邮箱是否已验证(未验证邮箱不可用于找回密码)")
+    private Boolean emailVerified;
+
     @Schema(description = "手机号")
     private String phone;
 

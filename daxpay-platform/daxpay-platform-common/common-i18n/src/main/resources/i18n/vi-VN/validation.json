@@ -872,6 +872,12 @@
     "receiverEmail": {
       "notBlank": "Email người nhận không được để trống",
       "notValid": "Định dạng email người nhận không hợp lệ"
+    },
+    "flowId": {
+      "notBlank": "ID luồng khôi phục không được để trống"
+    },
+    "emailCode": {
+      "notBlank": "Mã xác minh email không được để trống"
     }
   }
 }

@@ -1,0 +1,10 @@
+{
+  "codeError": "Mã xác minh email không chính xác",
+  "codeExpired": "Mã xác minh email đã hết hạn hoặc không tồn tại, vui lòng lấy mã mới",
+  "codeMaxFail": "Mã xác minh email đã bị vô hiệu do nhập sai quá nhiều lần, vui lòng lấy mã mới",
+  "mailNotReady": "Dịch vụ email chưa được cấu hình hoặc kích hoạt, vui lòng liên hệ quản trị viên",
+  "templateError": "Không thể tải mẫu email, vui lòng liên hệ quản trị viên",
+  "notBound": "Tài khoản hiện tại chưa liên kết email",
+  "sameAsCurrent": "Email này đã được liên kết với tài khoản hiện tại",
+  "clientInvalid": "Mã máy khách không hợp lệ"
+}

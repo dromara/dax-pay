@@ -275,7 +275,12 @@ public class UserAdminService {
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.emailUsedByOtherInClient");
         }
         userInfoParam.setPassword(null);
+        String oldEmail = userInfo.getEmail();
         UserConvert.CONVERT.copy(userInfoParam, userInfo);
+        // 管理员变更邮箱后原验证状态不再可信, 重置为未验证(需用户重新走邮箱验证流程)
+        if (!Objects.equals(oldEmail, userInfo.getEmail())) {
+            userInfo.setEmailVerified(false);
+        }
         userInfoManager.updateById(userInfo);
     }
 }

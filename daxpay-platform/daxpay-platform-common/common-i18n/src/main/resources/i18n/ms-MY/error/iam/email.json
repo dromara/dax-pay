@@ -1,0 +1,10 @@
+{
+  "codeError": "Kod pengesahan e-mel tidak betul",
+  "codeExpired": "Kod pengesahan e-mel telah tamat tempoh atau tidak wujud, sila dapatkan yang baharu",
+  "codeMaxFail": "Kod pengesahan e-mel telah dibatalkan kerana terlalu banyak ralat, sila dapatkan yang baharu",
+  "mailNotReady": "Perkhidmatan e-mel belum dikonfigurasi atau diaktifkan, sila hubungi pentadbir",
+  "templateError": "Gagal memuatkan templat e-mel, sila hubungi pentadbir",
+  "notBound": "Akaun semasa belum mengikat e-mel",
+  "sameAsCurrent": "E-mel ini telah dikaitkan dengan akaun semasa",
+  "clientInvalid": "Kod klien tidak sah"
+}

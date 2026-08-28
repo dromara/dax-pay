@@ -1,4 +1,10 @@
 {
   "test": "テスト送信",
-  "manual": "手動送信"
+  "manual": "手動送信",
+  "password_reset": "パスワード再設定コード",
+  "email_bind": "メール紐付けコード",
+  "email_change_notice": "紐付けメール変更通知",
+  "password_reset_notice": "パスワード再設定完了通知",
+  "email_unbind": "メール解除コード",
+  "email_unbind_notice": "メール解除通知"
 }

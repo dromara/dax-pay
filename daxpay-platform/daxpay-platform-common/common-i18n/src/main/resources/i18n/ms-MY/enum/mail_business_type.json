@@ -1,4 +1,10 @@
 {
   "test": "Hantar ujian",
-  "manual": "Hantar manual"
+  "manual": "Hantar manual",
+  "password_reset": "Kod set semula kata laluan",
+  "email_bind": "Kod pengikatan e-mel",
+  "email_change_notice": "Notis perubahan e-mel",
+  "password_reset_notice": "Notis set semula kata laluan",
+  "email_unbind": "Kod penyahikatan e-mel",
+  "email_unbind_notice": "Pemberitahuan penyahikatan e-mel"
 }

@@ -1,0 +1,10 @@
+{
+  "codeError": "Kode verifikasi email salah",
+  "codeExpired": "Kode verifikasi email telah kedaluwarsa atau tidak ada, silakan minta yang baru",
+  "codeMaxFail": "Kode verifikasi email telah dibatalkan karena terlalu banyak kesalahan, silakan minta yang baru",
+  "mailNotReady": "Layanan email belum dikonfigurasi atau diaktifkan, silakan hubungi administrator",
+  "templateError": "Gagal memuat templat email, silakan hubungi administrator",
+  "notBound": "Akun saat ini belum mengikat email",
+  "sameAsCurrent": "Email ini sudah terikat pada akun saat ini",
+  "clientInvalid": "Kode klien tidak valid"
+}

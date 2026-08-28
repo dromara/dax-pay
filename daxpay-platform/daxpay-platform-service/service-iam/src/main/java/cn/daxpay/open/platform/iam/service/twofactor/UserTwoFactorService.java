@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
 import cn.daxpay.open.platform.iam.auth.service.IamSecurityConfigService;
+import cn.daxpay.open.platform.iam.auth.service.LoginRetryService;
 import cn.daxpay.open.platform.iam.auth.service.twofactor.BackupCodeEntry;
 import cn.daxpay.open.platform.iam.auth.service.twofactor.BackupCodeService;
 import cn.daxpay.open.platform.iam.auth.service.twofactor.TotpService;
@@ -46,6 +47,8 @@ public class UserTwoFactorService {
     private final IamSecurityConfigService iamSecurityConfigService;
 
     private final UserInfoManager userInfoManager;
+
+    private final LoginRetryService loginRetryService;
 
     /// 查询当前用户的双因素认证状态
     public TwoFactorStatusResult getStatus() {
@@ -118,9 +121,17 @@ public class UserTwoFactorService {
     public void disable(String code, String codeType) {
         Long userId = SecurityUtil.getUserId();
         UserTwoFactor entity = requireBound(userId);
+        // account 供失败锁定日志使用, 取不到时由 LoginRetryService 兜底显示 userId
+        String account = userInfoManager.findById(userId).map(UserInfo::getAccount).orElse(null);
+        // 前置: 账号处于锁定状态时拒绝尝试(与登录锁定共用状态)
+        loginRetryService.checkBeforeSensitiveVerify(userId);
         if (!verifyByCodeType(entity, code, codeType)) {
+            // 失败计数: 防止持有会话者无限穷举动态码/备用码关闭 2FA
+            loginRetryService.onSensitiveVerifyFailure(userId, account);
             throw new OperationFailException("error.iam.twoFactor.codeError");
         }
+        // 验证通过, 清零失败计数(与登录成功同口径)
+        loginRetryService.onSensitiveVerifySuccess(userId);
         userTwoFactorManager.deleteById(entity.getId());
     }
 
@@ -129,9 +140,17 @@ public class UserTwoFactorService {
     public BackupCodeResult regenerateBackupCodes(String code, String codeType) {
         Long userId = SecurityUtil.getUserId();
         UserTwoFactor entity = requireBound(userId);
+        // account 供失败锁定日志使用, 取不到时由 LoginRetryService 兜底显示 userId
+        String account = userInfoManager.findById(userId).map(UserInfo::getAccount).orElse(null);
+        // 前置: 账号处于锁定状态时拒绝尝试(与登录锁定共用状态)
+        loginRetryService.checkBeforeSensitiveVerify(userId);
         if (!verifyByCodeType(entity, code, codeType)) {
+            // 失败计数: 防止持有会话者无限穷举动态码/备用码
+            loginRetryService.onSensitiveVerifyFailure(userId, account);
             throw new OperationFailException("error.iam.twoFactor.codeError");
         }
+        // 验证通过, 清零失败计数(与登录成功同口径)
+        loginRetryService.onSensitiveVerifySuccess(userId);
         int count = defaultBackupCodesCount();
         BackupCodeService.GeneratedBackupCode generated = backupCodeService.generate(count);
         entity.setBackupCodes(JSONUtil.toJsonStr(generated.entries()))

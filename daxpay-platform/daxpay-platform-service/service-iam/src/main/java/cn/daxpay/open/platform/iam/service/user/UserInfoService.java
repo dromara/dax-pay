@@ -92,10 +92,14 @@ public class UserInfoService {
             .setBirthday(userExpandInfo.getBirthday())
             .setAvatar(userExpandInfo.getAvatar())
             .setEmail(userInfo.getEmail())
+            .setEmailVerified(userInfo.isEmailVerified())
             .setPhone(userInfo.getPhone());
     }
 
     /// 修改基本信息
+    ///
+    /// email 不在本接口受理: 邮箱是找回密码的安全凭证,
+    /// 变更仅允许走 /user/auth/email 绑定验证流程(参数中已无 email 字段, copy 自然不映射)
     @Transactional(rollbackFor = Exception.class)
     public void updateUserBaseInfo(UserBaseInfoParam param) {
         Long userId = SecurityUtil.getUserId();
@@ -103,11 +107,6 @@ public class UserInfoService {
             .orElseThrow(UserInfoNotExistsException::new);
         UserExpandInfo userExpandInfo = userExpandInfoManager.findById(userId)
             .orElseThrow(UserInfoNotExistsException::new);
-        // 邮箱唯一性校验（排除自身）
-        if (userQueryService.existsEmail(param.getEmail(), userId)) {
-            // 权限: 邮箱已被其他用户使用
-            throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.emailUsedByOther");
-        }
         // 手机号唯一性校验（排除自身）
         if (userQueryService.existsPhone(param.getPhone(), userId)) {
             // 权限: 手机号已被其他用户使用
@@ -130,11 +129,17 @@ public class UserInfoService {
 
         UserInfo userInfo = userInfoManager.findById(SecurityUtil.getUserId())
             .orElseThrow(UserInfoNotExistsException::new);
+        // 前置: 账号处于锁定状态时拒绝尝试(与登录锁定共用状态)
+        loginRetryService.checkBeforeSensitiveVerify(userInfo.getId());
         // 判断原密码是否正确
         if (!BCrypt.checkpw(decryptedPassword, userInfo.getPassword())) {
+            // 失败计数(REQUIRES_NEW 独立事务, 不随本方法事务回滚)
+            loginRetryService.onSensitiveVerifyFailure(userInfo.getId(), userInfo.getAccount());
             // 权限: 旧密码错误
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.oldPasswordError");
         }
+        // 验证通过, 清零失败计数(与登录成功同口径)
+        loginRetryService.onSensitiveVerifySuccess(userInfo.getId());
         // 验证密码历史
         passwordPolicyService.validatePasswordHistory(userInfo.getId(), decryptedNewPassword);
         passwordPolicyService.validatePassword(decryptedNewPassword);

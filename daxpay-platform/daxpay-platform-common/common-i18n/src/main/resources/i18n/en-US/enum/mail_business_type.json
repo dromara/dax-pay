@@ -1,4 +1,10 @@
 {
   "test": "Test send",
-  "manual": "Manual send"
+  "manual": "Manual send",
+  "password_reset": "Password reset code",
+  "email_bind": "Email binding code",
+  "email_change_notice": "Email change notice",
+  "password_reset_notice": "Password reset notification",
+  "email_unbind": "Email unbind code",
+  "email_unbind_notice": "Email unbind notice"
 }

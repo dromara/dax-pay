@@ -140,6 +140,14 @@ public class UserInfoManager extends BaseManager<UserInfoMapper, UserInfo> {
                 .oneOpt();
     }
 
+    /// 按终端+邮箱查询用户（找回密码用, 按端内唯一性至多一条）
+    public Optional<UserInfo> findByClientCodeAndEmail(String clientCode, String email) {
+        return lambdaQuery()
+                .eq(UserInfo::getClientCode, clientCode)
+                .eq(UserInfo::getEmail, email)
+                .oneOpt();
+    }
+
     /// 管理员用户不显示
     public Page<UserInfo> page(PageParam pageParam, UserInfoQuery query) {
         Page<UserInfo> mpPage = MpUtil.getMpPage(pageParam);
