@@ -1,0 +1,6 @@
+# Sa-Token 1.46.0 Jackson 多态反序列化类型白名单(SPI)
+# 背景: 1.46.0 修复 Jackson DefaultTyping 多态反序列化 RCE, Session 中持久化的自定义对象
+# 必须注册进白名单, 否则从 Redis 反序列化时抛 SaJsonConvertException
+# 白名单仅放行 JDK 内置类型, 以下为项目存入 SaSession 的自定义对象
+# 登录用户详情(TokenService/UserInfoService 写入, SecurityUtil/OnlineUserService 读取)
+cn.daxpay.open.platform.core.entity.UserDetail

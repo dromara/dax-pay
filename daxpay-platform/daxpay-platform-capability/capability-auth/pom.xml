@@ -24,7 +24,7 @@
             <artifactId>spring-boot-starter-data-redis</artifactId>
         </dependency>
 
-        <!-- Sa-Token 权限认证, 在线文档：https://sa-token.cc -->
+        <!-- Sa-Token 权限认证, 在线文档：https://sa-token.com -->
         <dependency>
             <groupId>cn.dev33</groupId>
             <artifactId>sa-token-spring-boot4-starter</artifactId>
@@ -34,6 +34,13 @@
             <groupId>cn.dev33</groupId>
             <artifactId>sa-token-redis-jackson</artifactId>
             <version>${sa-token.version}</version>
+        </dependency>
+
+        <!-- 单测: Sa-Token JSON 白名单回归测试 -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
         </dependency>
 
         <!--spring 配置 -->
