@@ -11,6 +11,9 @@ import cn.hutool.json.JSONObject;
 
 /// # 钉钉(新版扫码登录)授权登录
 ///
+/// 默认携带 prompt=consent 每次确认授权; 当 [SocialAuthConfig#isSilent] 为 true 时省略该参数,
+/// 供钉钉内置浏览器应用内自动登录使用(已授权用户静默回跳, 首次仍需确认一次). 两种模式换票一致.
+///
 public class DingTalkRequest extends AbstractSocialAuthRequest {
 
     public DingTalkRequest(SocialAuthConfig config) {
@@ -18,15 +21,19 @@ public class DingTalkRequest extends AbstractSocialAuthRequest {
     }
 
     /// 钉钉授权地址使用 client_id
+    /// silent=true(应用内自动登录)时不携带 prompt=consent:
+    /// 已授权用户免确认静默回跳, 首次授权仍需在钉钉内确认一次;
+    /// 钉钉内打开 challenge.htm 会自动携带当前登录身份, 无需扫码
     @Override
     public String authorize(String state) {
-        return SocialUrlBuilder.ofBaseUrl(this.getSource().authorize())
+        SocialUrlBuilder builder = SocialUrlBuilder.ofBaseUrl(this.getSource().authorize())
             .queryParam("response_type", "code")
             .queryParam("client_id", this.getConfig().getClientId())
-            .queryParam("redirect_uri", this.buildRedirectUri())
-            .queryParam("prompt", "consent")
-            .queryParam("state", state)
-            .build();
+            .queryParam("redirect_uri", this.buildRedirectUri());
+        if (!this.getConfig().isSilent()) {
+            builder.queryParam("prompt", "consent");
+        }
+        return builder.queryParam("state", state).build();
     }
 
     /// 钉钉使用 POST JSON 换取 access_token, 响应字段为驼峰命名
