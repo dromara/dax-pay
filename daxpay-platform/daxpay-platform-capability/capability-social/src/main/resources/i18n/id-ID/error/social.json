@@ -20,6 +20,10 @@
     "clientMismatch": "Pengguna saat ini bukan milik klien ini, pengikatan tidak diperbolehkan"
   },
   "oauthFailed": "Otorisasi pihak ketiga gagal",
+  "appletUnbind": "Akun platform ini belum terhubung ke akun sistem. Silakan masuk dengan akun dan kata sandi, lalu hubungkan di 'Akun & Keamanan'",
+  "codeExchangeFail": "Gagal menukar kredensial masuk dengan identitas pengguna platform: {0}",
+  "appletRenderUnsupported": "Platform mini program tidak mendukung URL otorisasi redirect. Silakan mulai login atau pengikatan di dalam mini program",
+  "appletNotConfigured": "Kredensial platform login mini program tidak lengkap. Silakan lengkapi di konfigurasi login sosial terlebih dahulu",
   "autoLogin": {
     "sourceRequired": "Pilih setidaknya satu platform saat auto-login diaktifkan",
     "sourceNotEnabled": "Platform auto-login belum dikonfigurasi atau dinonaktifkan: {0}",

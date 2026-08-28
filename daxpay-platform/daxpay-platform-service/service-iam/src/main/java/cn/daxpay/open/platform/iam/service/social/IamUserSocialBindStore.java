@@ -50,8 +50,23 @@ public class IamUserSocialBindStore {
     /// @param authUser 平台返回的用户信息
     @Transactional(rollbackFor = Exception.class)
     public void saveBind(Long userId, String clientCode, AuthUser authUser) {
-        String source = authUser.getSource();
-        String openId = authUser.getUuid();
+        this.doSaveBind(userId, clientCode, authUser.getSource(), authUser.getUuid(),
+                authUser.getNickname(), authUser.getAvatar());
+    }
+
+    /// 保存小程序快捷登录绑定关系(无昵称头像)
+    /// @param userId 本地用户ID
+    /// @param clientCode 终端编码
+    /// @param source 平台来源(weChatApplet/alipayApplet/douyinApplet)
+    /// @param openId 平台用户唯一标识
+    @Transactional(rollbackFor = Exception.class)
+    public void saveAppletBind(Long userId, String clientCode, String source, String openId) {
+        this.doSaveBind(userId, clientCode, source, openId, null, null);
+    }
+
+    /// 绑定保存核心: 该三方账号已被他人绑定则拒绝, 同用户重复绑定幂等更新, 同一用户同一平台只允许绑定一个账号
+    private void doSaveBind(Long userId, String clientCode, String source, String openId,
+                            String username, String avatar) {
         // 该三方账号已被其他用户绑定
         Optional<IamUserSocial> existed = iamUserSocialManager.lambdaQuery()
             .eq(IamUserSocial::getSource, source)
@@ -61,11 +76,11 @@ public class IamUserSocialBindStore {
             // 社交登录: 该第三方账号已被其他用户绑定
             throw new OperationFailException("error.social.bind.alreadyBoundByOther");
         }
-        // 当前用户已绑定该平台(幂等: 已存在则更新)
+        // 当前用户已绑定该平台(幂等: 已存在则更新; null 字段不参与 UPDATE)
         if (existed.isPresent()) {
             IamUserSocial entity = existed.get();
-            entity.setUsername(authUser.getNickname())
-                .setAvatar(authUser.getAvatar());
+            entity.setUsername(username)
+                .setAvatar(avatar);
             iamUserSocialManager.updateById(entity);
             return;
         }
@@ -83,8 +98,8 @@ public class IamUserSocialBindStore {
             .setClientCode(clientCode)
             .setSource(source)
             .setOpenId(openId)
-            .setUsername(authUser.getNickname())
-            .setAvatar(authUser.getAvatar());
+            .setUsername(username)
+            .setAvatar(avatar);
         iamUserSocialManager.save(entity);
     }
 

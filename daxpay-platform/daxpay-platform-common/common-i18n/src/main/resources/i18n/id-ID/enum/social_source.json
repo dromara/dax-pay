@@ -9,5 +9,8 @@
   "dingTalk": "DingTalk",
   "douyin": "Douyin",
   "alipay": "Alipay",
-  "weChatOpen": "Platform Terbuka WeChat"
+  "weChatOpen": "Platform Terbuka WeChat",
+  "weChatApplet": "Mini Program WeChat",
+  "alipayApplet": "Mini Program Alipay",
+  "douyinApplet": "Mini Program Douyin"
 }

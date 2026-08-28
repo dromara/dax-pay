@@ -20,6 +20,10 @@
     "clientMismatch": "Pengguna semasa bukan milik klien ini, pengikatan tidak dibenarkan"
   },
   "oauthFailed": "Kebenaran pihak ketiga gagal",
+  "appletUnbind": "Akaun platform ini belum dikaitkan dengan akaun sistem. Sila log masuk dengan akaun dan kata laluan, kemudian kaitkan di 'Akaun & Keselamatan'",
+  "codeExchangeFail": "Gagal menukar kredensial log masuk dengan identiti pengguna platform: {0}",
+  "appletRenderUnsupported": "Platform mini program tidak menyokong penjanaan URL kebenaran lencongan. Sila mulakan log masuk atau pengikatan dalam mini program",
+  "appletNotConfigured": "Kredensial platform log masuk mini program tidak lengkap. Sila lengkapkan dalam konfigurasi log masuk sosial terlebih dahulu",
   "autoLogin": {
     "sourceRequired": "Pilih sekurang-kurangnya satu platform apabila log masuk auto diaktifkan",
     "sourceNotEnabled": "Platform log masuk auto belum dikonfigurasi atau dilumpuhkan: {0}",

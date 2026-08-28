@@ -27,6 +27,11 @@ public class LoginContentResult {
     @Schema(description = "应用内社交自动登录")
     private AutoSocialLogin autoSocialLogin;
 
+    /// 小程序快捷登录可用平台编码列表(weChatApplet/alipayApplet/douyinApplet 中已配置且已启用的)
+    /// 小程序登录页按钮显示 = 编译期平台 ∩ 此列表; H5/Web 端忽略此字段
+    @Schema(description = "小程序快捷登录可用平台")
+    private List<String> appletSources;
+
     /// 单端自动登录下发片段
     @Data
     @Accessors(chain = true)

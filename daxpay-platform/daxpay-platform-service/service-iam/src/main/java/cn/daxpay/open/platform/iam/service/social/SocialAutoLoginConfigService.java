@@ -25,11 +25,12 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class SocialAutoLoginConfigService {
 
-    /// 支持应用内 UA 静默授权的平台(不含开放平台扫码 weChatOpen)
+    /// 支持应用内 UA 静默授权的平台(飞书/企微/钉钉; 不含微信公众号与开放平台扫码 weChatOpen)
+    /// 历史配置中的 weChat 值经 [resolveForClient] 过滤后不再下发, 微信内打开不自动跳转
     private static final Set<String> AUTO_LOGIN_ALLOWED_SOURCES = Set.of(
             SocialSourceEnum.FEISHU.getCode(),
-            SocialSourceEnum.WECHAT_MP.getCode(),
-            SocialSourceEnum.WE_COM.getCode()
+            SocialSourceEnum.WE_COM.getCode(),
+            SocialSourceEnum.DINGTALK.getCode()
     );
 
     private final PlatformSocialAutoLoginConfigService platformSocialAutoLoginConfigService;

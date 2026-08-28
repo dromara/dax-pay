@@ -9,5 +9,8 @@
   "dingTalk": "ディントーク",
   "douyin": "抖音",
   "alipay": "アリペイ",
-  "weChatOpen": "WeChatオープンプラットフォーム"
+  "weChatOpen": "WeChatオープンプラットフォーム",
+  "weChatApplet": "WeChatミニアプリ",
+  "alipayApplet": "アリペイミニアプリ",
+  "douyinApplet": "抖音ミニアプリ"
 }

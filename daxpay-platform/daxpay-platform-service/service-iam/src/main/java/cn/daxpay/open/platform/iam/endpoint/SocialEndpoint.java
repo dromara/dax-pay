@@ -6,6 +6,8 @@ import cn.daxpay.open.platform.capability.auth.util.SecurityUtil;
 import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
+import cn.daxpay.open.platform.iam.param.social.SocialAppletBindParam;
+import cn.daxpay.open.platform.iam.param.social.SocialAppletLoginParam;
 import cn.daxpay.open.platform.iam.result.social.SocialBindResult;
 import cn.daxpay.open.platform.iam.result.social.SocialEnabledPlatformResult;
 import cn.daxpay.open.platform.iam.result.social.SocialExchangeResult;
@@ -15,9 +17,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -70,6 +74,28 @@ public class SocialEndpoint {
                                                        HttpServletRequest request,
                                                        HttpServletResponse response) {
         return Res.ok(socialLoginService.exchangeForLogin(code, state, source, client, request, response));
+    }
+
+    /// 小程序快捷登录(公开, 无需认证)
+    /// 小程序端通过 uni.login / my.getAuthCode / tt.login 获取平台 login code 后直传,
+    /// 后端换取 openId 并按绑定关系登录; 未绑定时返回明确引导错误(不自动注册)。
+    /// code 具有平台侧一次性语义, 不加 @NonceVerification 防重放。
+    @Operation(summary = "小程序快捷登录")
+    @PostMapping("/applet-login")
+    public Result<SocialExchangeResult> appletLogin(@RequestBody @Validated SocialAppletLoginParam param,
+                                                     HttpServletRequest request,
+                                                     HttpServletResponse response) {
+        return Res.ok(socialLoginService.appletLogin(param, request, response));
+    }
+
+    /// 小程序快捷绑定(需登录)
+    /// 已登录用户在小程序内发起三方绑定, code 直传换取 openId 后保存绑定关系,
+    /// 终端与用户身份取自登录态。
+    @IgnoreAuth(login = true)
+    @Operation(summary = "小程序快捷绑定")
+    @PostMapping("/applet-bind")
+    public Result<SocialExchangeResult> appletBind(@RequestBody @Validated SocialAppletBindParam param) {
+        return Res.ok(socialLoginService.appletBind(param));
     }
 
     /// OAuth 授权码兑换 - 绑定(需登录)

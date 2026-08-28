@@ -9,5 +9,8 @@
   "dingTalk": "딩톡",
   "douyin": "두음",
   "alipay": "알리페이",
-  "weChatOpen": "위챗 오픈 플랫폼"
+  "weChatOpen": "위챗 오픈 플랫폼",
+  "weChatApplet": "위챗 미니프로그램",
+  "alipayApplet": "알리페이 미니프로그램",
+  "douyinApplet": "두음 미니프로그램"
 }

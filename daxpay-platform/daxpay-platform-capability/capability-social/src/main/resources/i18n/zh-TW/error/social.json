@@ -20,6 +20,10 @@
     "clientMismatch": "當前登入使用者不屬於該終端，無法完成繫結"
   },
   "oauthFailed": "三方授權失敗",
+  "appletUnbind": "該平台賬號未綁定系統賬號, 請使用賬號密碼登入後在「帳戶與安全」中綁定",
+  "codeExchangeFail": "登入憑證換取平台使用者標識失敗: {0}",
+  "appletRenderUnsupported": "小程式平台不支援產生跳轉授權位址, 請在小程式內發起登入或綁定",
+  "appletNotConfigured": "小程式登入平台憑證不完整, 請先在社群登入設定中補全",
   "autoLogin": {
     "sourceRequired": "開啟自動登入時必須至少選擇一個平台",
     "sourceNotEnabled": "所選自動登入平台未配置或未啟用: {0}",

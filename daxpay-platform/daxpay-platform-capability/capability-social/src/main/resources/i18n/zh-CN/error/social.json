@@ -20,6 +20,10 @@
     "clientMismatch": "当前登录用户不属于该终端，无法完成绑定"
   },
   "oauthFailed": "三方授权失败",
+  "appletUnbind": "该平台账号未绑定系统账号, 请使用账号密码登录后在「账户与安全」中绑定",
+  "codeExchangeFail": "登录凭证换取平台用户标识失败: {0}",
+  "appletRenderUnsupported": "小程序平台不支持生成跳转授权地址, 请在小程序内发起登录或绑定",
+  "appletNotConfigured": "小程序登录平台凭据不完整, 请先在社交登录配置中补全",
   "autoLogin": {
     "sourceRequired": "开启自动登录时必须至少选择一个平台",
     "sourceNotEnabled": "所选自动登录平台未配置或未启用: {0}",

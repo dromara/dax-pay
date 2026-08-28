@@ -39,6 +39,9 @@ public class SocialAuthRequestFactory {
             case DOUYIN -> new DouyinRequest(config);
             // 支付宝由 iam 模块 AlipaySocialAuthRequestFactory 创建, 不走本工厂
             case ALIPAY -> throw new OperationFailException("error.social.unsupportedSource");
+            // 小程序快捷登录平台无 OAuth 跳转流程, 不注册 Request 实现(code 直传换取 openId)
+            case WECHAT_APPLET, ALIPAY_APPLET, DOUYIN_APPLET ->
+                    throw new OperationFailException("error.social.appletRenderUnsupported");
         };
     }
 

@@ -20,6 +20,10 @@
     "clientMismatch": "Current user does not belong to this client, binding is not allowed"
   },
   "oauthFailed": "Third-party authorization failed",
+  "appletUnbind": "This platform account is not bound to a system account. Please log in with account and password, then bind it in Account & Security",
+  "codeExchangeFail": "Failed to exchange the login credential for platform user identity: {0}",
+  "appletRenderUnsupported": "Mini program platforms do not support redirect authorization URLs. Please initiate login or binding within the mini program",
+  "appletNotConfigured": "Mini program login platform credentials are incomplete. Please complete them in the social login configuration first",
   "autoLogin": {
     "sourceRequired": "Select at least one platform when auto-login is enabled",
     "sourceNotEnabled": "Auto-login platform is not configured or disabled: {0}",

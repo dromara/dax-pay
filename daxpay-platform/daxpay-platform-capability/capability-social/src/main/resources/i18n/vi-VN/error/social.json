@@ -20,6 +20,10 @@
     "clientMismatch": "Người dùng hiện tại không thuộc về khách hàng này, không được phép ràng buộc"
   },
   "oauthFailed": "Ủy quyền bên thứ ba thất bại",
+  "appletUnbind": "Tài khoản nền tảng này chưa được liên kết với tài khoản hệ thống. Vui lòng đăng nhập bằng tài khoản và mật khẩu, sau đó liên kết trong 'Tài khoản & Bảo mật'",
+  "codeExchangeFail": "Đổi thông tin đăng nhập lấy định danh người dùng nền tảng thất bại: {0}",
+  "appletRenderUnsupported": "Nền tảng tiểu chương trình không hỗ trợ tạo URL uỷ quyền chuyển hướng. Vui lòng đăng nhập hoặc liên kết trong tiểu chương trình",
+  "appletNotConfigured": "Thông tin xác thực nền tảng đăng nhập tiểu chương trình chưa đầy đủ. Vui lòng bổ sung trong cấu hình đăng nhập mạng xã hội trước",
   "autoLogin": {
     "sourceRequired": "Khi bật tự động đăng nhập phải chọn ít nhất một nền tảng",
     "sourceNotEnabled": "Nền tảng tự động đăng nhập chưa cấu hình hoặc đã tắt: {0}",

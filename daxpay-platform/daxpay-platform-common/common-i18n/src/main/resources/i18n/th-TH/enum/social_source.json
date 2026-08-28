@@ -9,5 +9,8 @@
   "dingTalk": "ติงทอล์ค",
   "douyin": "โต่วอิน",
   "alipay": "อาลีเพย์",
-  "weChatOpen": "แพลตฟอร์มเปิด WeChat"
+  "weChatOpen": "แพลตฟอร์มเปิด WeChat",
+  "weChatApplet": "มินิแอป WeChat",
+  "alipayApplet": "มินิแอปอาลีเพย์",
+  "douyinApplet": "มินิแอปโต่วอิน"
 }

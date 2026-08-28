@@ -100,6 +100,15 @@ public enum SocialSourceEnum implements I18nSupport {
         "https://openidconnect.googleapis.com/v1/userinfo"
     ),
 
+    /// 微信小程序(快捷登录: 前端 uni.login 拿 code 直传, 无 OAuth 跳转流程, 凭据在 iam_social_login_config)
+    WECHAT_APPLET("weChatApplet", "", "", ""),
+
+    /// 支付宝小程序(快捷登录: 前端 my.getAuthCode 拿 authCode 直传, 凭据在 iam_social_login_config)
+    ALIPAY_APPLET("alipayApplet", "", "", ""),
+
+    /// 抖音小程序(快捷登录: 前端 tt.login 拿 code 直传, 凭据在 iam_social_login_config)
+    DOUYIN_APPLET("douyinApplet", "", "", ""),
+
     ;
 
     /// 平台编码(与 AuthLoginTypeCode 对应, 作为配置和绑定的唯一标识)
@@ -158,5 +167,17 @@ public enum SocialSourceEnum implements I18nSupport {
     /// 新增此类平台时在此方法追加判断。
     public boolean isPlatformRedirect() {
         return this == ALIPAY || this == WECHAT_MP;
+    }
+
+    /// 是否"小程序快捷登录型"平台
+    ///
+    /// 此类平台无 OAuth redirect 流程: 前端在小程序内通过 uni.login / my.getAuthCode / tt.login
+    /// 获取平台登录 code 后直传后端(`/social/applet-login` 与 `/social/applet-bind`),
+    /// 由 SocialAppletAuthService 分发到 capability 能力层换取 openId。
+    /// 不注册 justauth Request 实现, 生成授权地址(render)对其无语义、应拒绝。
+    ///
+    /// 新增此类平台时在此方法追加判断。
+    public boolean isApplet() {
+        return this == WECHAT_APPLET || this == ALIPAY_APPLET || this == DOUYIN_APPLET;
     }
 }

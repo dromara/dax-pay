@@ -9,5 +9,8 @@
   "dingTalk": "釘釘",
   "douyin": "抖音",
   "alipay": "支付寶",
-  "weChatOpen": "微信開放平臺"
+  "weChatOpen": "微信開放平臺",
+  "weChatApplet": "微信小程式",
+  "alipayApplet": "支付寶小程式",
+  "douyinApplet": "抖音小程式"
 }

@@ -9,5 +9,8 @@
   "dingTalk": "DingTalk",
   "douyin": "Douyin",
   "alipay": "Alipay",
-  "weChatOpen": "WeChat Open Platform"
+  "weChatOpen": "WeChat Open Platform",
+  "weChatApplet": "WeChat Mini Program",
+  "alipayApplet": "Alipay Mini Program",
+  "douyinApplet": "Douyin Mini Program"
 }
