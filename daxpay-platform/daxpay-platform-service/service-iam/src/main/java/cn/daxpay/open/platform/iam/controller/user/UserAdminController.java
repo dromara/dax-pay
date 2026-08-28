@@ -65,8 +65,8 @@ public class UserAdminController {
     @Operation(summary = "重置密码")
     @PostMapping("/restart-password")
     public Result<UserPasswordResult> restartPassword(@RequestBody @Validated RestartPwdParam param) {
-        // 未指定密码时由后端生成随机密码, 响应中一次性返回明文供管理员转告用户
-        return Res.ok(userAdminService.restartPassword(param.getUserId(), param.getNewPassword()));
+        // 由后端生成随机密码, 响应中一次性返回明文供管理员转告用户
+        return Res.ok(userAdminService.restartPassword(param.getUserId()));
     }
 
     @PermCode(code = PermCodes.Action.RESET_PASSWORD)
@@ -74,7 +74,7 @@ public class UserAdminController {
     @PostMapping("/restart-password-batch")
     public Result<List<UserPasswordResult>> restartPasswordBatch(@RequestBody @Validated RestartPwdBatchParam param) {
         // 每个用户独立生成随机密码, 响应中一次性返回明文列表
-        return Res.ok(userAdminService.restartPasswordBatch(param.getUserIds(), param.getNewPassword()));
+        return Res.ok(userAdminService.restartPasswordBatch(param.getUserIds()));
     }
 
     @PermCode(code = PermCodes.Action.STATUS)

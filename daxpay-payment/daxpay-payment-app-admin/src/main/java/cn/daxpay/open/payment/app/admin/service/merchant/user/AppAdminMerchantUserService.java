@@ -68,12 +68,13 @@ public class AppAdminMerchantUserService {
     }
 
     /// 重置密码
-    public UserPasswordResult restartPassword(Long userId, String newPassword) {
-        return merchantUserAdminService.restartPassword(userId, newPassword);
+    /// 密码统一由系统按密码策略随机生成, 不接受调用方指定
+    public UserPasswordResult restartPassword(Long userId) {
+        return merchantUserAdminService.restartPassword(userId);
     }
 
     /// 批量重置密码
-    public List<UserPasswordResult> restartPasswordBatch(List<Long> userIds, String newPassword) {
-        return merchantUserAdminService.restartPasswordBatch(userIds, newPassword);
+    public List<UserPasswordResult> restartPasswordBatch(List<Long> userIds) {
+        return merchantUserAdminService.restartPasswordBatch(userIds);
     }
 }

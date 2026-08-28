@@ -124,8 +124,8 @@ public class AppAdminMerchantUserController {
     @PostMapping("/restart-password")
     @OperateLog(title = "重置商户用户密码", businessType = OperateLogType.UPDATE, saveParam = true, maskParam = true)
     public Result<UserPasswordResult> restartPassword(@RequestBody @Validated MerchantUserResetPwdParam param) {
-        // 未指定密码时由后端生成随机密码, 响应中一次性返回明文供管理员转告用户
-        return Res.ok(merchantUserService.restartPassword(param.getUserId(), param.getNewPassword()));
+        // 由后端生成随机密码, 响应中一次性返回明文供管理员转告用户
+        return Res.ok(merchantUserService.restartPassword(param.getUserId()));
     }
 
     @PermCode(code = PermCodes.Action.RESET_PASSWORD)
@@ -134,6 +134,6 @@ public class AppAdminMerchantUserController {
     @OperateLog(title = "批量重置商户用户密码", businessType = OperateLogType.UPDATE, saveParam = true, maskParam = true)
     public Result<List<UserPasswordResult>> restartPasswordBatch(@RequestBody @Validated MerchantUserResetPwdBatchParam param) {
         // 每个用户独立生成随机密码, 响应中一次性返回明文列表
-        return Res.ok(merchantUserService.restartPasswordBatch(param.getUserIds(), param.getNewPassword()));
+        return Res.ok(merchantUserService.restartPasswordBatch(param.getUserIds()));
     }
 }

@@ -202,15 +202,13 @@ public class UserAdminService {
     }
 
     /// 重置密码
+    /// 密码统一由系统按密码策略随机生成, 不接受调用方指定, 响应中一次性返回明文供管理员转告用户
     /// @param userId 用户ID
-    /// @param newPassword 新密码（RSA 加密）, 可为空; 为空时由系统生成随机密码
     /// @return 含初始密码明文的结果, 供管理员一次性复制转告用户
     @Transactional(rollbackFor = Exception.class)
-    public UserPasswordResult restartPassword(Long userId, String newPassword) {
-        // 密码可选: 未传时生成随机密码, 传入时按 RSA 密文解密(兼容存量调用方)
-        String plainPassword = StrUtil.isBlank(newPassword)
-                ? passwordPolicyService.generateSecurePassword()
-                : passwordDecryptService.decryptPassword(newPassword);
+    public UserPasswordResult restartPassword(Long userId) {
+        // 重置密码不支持指定, 恒走系统随机生成
+        String plainPassword = passwordPolicyService.generateSecurePassword();
         // 验证密码历史
         passwordPolicyService.validatePasswordHistory(userId, plainPassword);
         passwordPolicyService.validatePassword(plainPassword);
@@ -242,15 +240,14 @@ public class UserAdminService {
 
     /// 批量重置密码
     /// @param userIds 用户ID列表
-    /// @param newPassword 新密码（RSA 加密）, 可为空; 为空时为每个用户独立生成随机密码
     /// @return 每个用户独立的初始密码结果, 避免批量共用同一密码
     @Transactional(rollbackFor = Exception.class)
-    public List<UserPasswordResult> restartPasswordBatch(List<Long> userIds, String newPassword){
+    public List<UserPasswordResult> restartPasswordBatch(List<Long> userIds){
         // 逐用户复用单条重置逻辑: 每人独立密码 + 独立校验 + 独立踢会话回调
         // 注意 BCrypt 为故意慢的哈希, 批量耗时随人数线性增长, 管理端批量重置场景可接受
         List<UserPasswordResult> results = new ArrayList<>(userIds.size());
         for (Long userId : userIds) {
-            results.add(this.restartPassword(userId, newPassword));
+            results.add(this.restartPassword(userId));
         }
         return results;
     }

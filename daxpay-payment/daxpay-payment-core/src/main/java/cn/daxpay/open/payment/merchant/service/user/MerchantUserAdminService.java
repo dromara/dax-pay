@@ -206,19 +206,20 @@ public class MerchantUserAdminService {
     }
 
     /// 重置密码
-    /// @return 含初始密码明文的结果(未传密码时由系统生成随机密码)
+    /// 密码统一由系统按密码策略随机生成, 不接受调用方指定
+    /// @return 含初始密码明文的结果
     @Transactional(rollbackFor = Exception.class)
-    public UserPasswordResult restartPassword(Long userId, String newPassword) {
+    public UserPasswordResult restartPassword(Long userId) {
         this.checkMerchantUser(userId);
-        return userAdminService.restartPassword(userId, newPassword);
+        return userAdminService.restartPassword(userId);
     }
 
     /// 批量重置密码
     /// @return 每个用户独立的初始密码结果
     @Transactional(rollbackFor = Exception.class)
-    public List<UserPasswordResult> restartPasswordBatch(List<Long> userIds, String newPassword) {
+    public List<UserPasswordResult> restartPasswordBatch(List<Long> userIds) {
         this.checkMerchantUser(userIds);
-        return userAdminService.restartPasswordBatch(userIds, newPassword);
+        return userAdminService.restartPasswordBatch(userIds);
     }
 
     /// 按平台密码策略计算过期时间(UTC); 未启用轮换则 null
