@@ -26,6 +26,7 @@ spring:
       connection-timeout: 30000 # 获取连接超时时间（毫秒）
       idle-timeout: 600000      # 空闲连接超时时间（毫秒）
       max-lifetime: 1800000     # 连接最大存活时间（毫秒）
+      connection-init-sql: SET lock_timeout TO 30000 # 会话级锁等待超时（毫秒），防行锁无限等待挂死，超时后报错而非永久阻塞
   data:
     redis:
       # 主机名 redis, 由本机 hosts 映射到 192.168.188.1
