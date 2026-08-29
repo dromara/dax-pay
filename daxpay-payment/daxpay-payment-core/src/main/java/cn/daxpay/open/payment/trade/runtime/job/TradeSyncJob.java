@@ -30,7 +30,8 @@ import java.util.List;
 ///
 /// ## 设计要点
 /// - **支付 PROCESSING 段**(4 窗口): 回调丢失/超时关单失败后, 查通道真实状态纠正为 SUCCESS/CLOSE/FAIL
-/// - **支付 CLOSE 纠正段**(1 窗口): 超时关单后通道实际已付款, 触发 CLOSE→SUCCESS 纠正
+/// - **支付 FAIL/CLOSE 发现段**(2 窗口): 通道实际已付款的收款证据不再自动翻转(2026-08-29 决策),
+///   查证后落异常订单由运营人工确认成功或忽略
 /// - **退款 PROGRESS 段**(4 窗口): 退款回调丢失后, 查通道真实退款状态
 ///
 /// 订单越"新"查得越勤, 越久越稀疏, 超 7 天自然淘汰(不显式置 FAIL)。
@@ -86,12 +87,12 @@ public class TradeSyncJob {
         syncPayBatch(PayFundStatusEnum.PROCESSING.getCode(), now.minusDays(7), now.minusHours(24));
     }
 
-    // ==================== 支付 CLOSE 纠正(CLOSE→SUCCESS) ====================
+    // ==================== 支付 FAIL/CLOSE 发现(通道已收款转异常订单) ====================
 
-    /// FAIL 纠正窗口: 创建 1~60 分钟的 FAIL 订单, 每 10 分钟同步一次
+    /// FAIL 发现窗口: 创建 1~60 分钟的 FAIL 订单, 每 10 分钟同步一次
     ///
-    /// 通道瞬时失败后实际已付款的纠正。FAIL 单既不被回调成功纠正(回调 CAS 守卫仅 PROCESSING/INIT),
-    /// 也不在 PROCESSING 同步窗口, 需独立窗口覆盖; 否则资金已收但订单永久 FAIL。
+    /// 通道瞬时失败后实际已付款的发现。FAIL 单既不被回调成功翻转(回调守卫仅 PROCESSING/INIT),
+    /// 也不在 PROCESSING 同步窗口, 需独立窗口覆盖; 查证通道已收款后落异常订单人工处置。
     /// cron 偏移 20s 避免与 syncPayProcessing10M(0s)同瞬触发。
     @Scheduled(cron = "20 */10 * * * ?")
     @SchedulerLock(name = "lock:tradeSync:payFailFix", lockAtMostFor = "8m", lockAtLeastFor = "30s")
@@ -100,10 +101,11 @@ public class TradeSyncJob {
         syncPayBatch(PayFundStatusEnum.FAIL.getCode(), now.minusMinutes(60), now.minusMinutes(1));
     }
 
-    /// 超时关单后通道实际已付款的纠正窗口: close_time 在 1~60 分钟内的 CLOSE 订单, 每 5 分钟同步一次
+    /// 超时关单后通道实际已付款的发现窗口: close_time 在 1~60 分钟内的 CLOSE 订单, 每 5 分钟同步一次
     ///
     /// 按 close_time(非 create_time)扫描: 默认 30min 到期的订单超时关单时 create_time 已超 30min,
     /// 若按 create_time 扫描会永久漏扫(原 bug); 改按 close_time + 放宽到 60min 覆盖默认到期单。
+    /// 查证通道已收款后落异常订单人工处置(不自动翻转, 2026-08-29 决策)。
     @Scheduled(cron = "0 */5 * * * ?")
     @SchedulerLock(name = "lock:tradeSync:payCloseFix", lockAtMostFor = "4m", lockAtLeastFor = "30s")
     public void syncPayCloseFix() {

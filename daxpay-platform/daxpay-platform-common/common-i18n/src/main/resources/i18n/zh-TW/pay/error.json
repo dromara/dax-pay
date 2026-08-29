@@ -187,5 +187,12 @@
     "hitNotFound": "風險命中記錄不存在"
   },
   "channelResultUnknown": "通道處理結果未知，正在確認最終狀態",
-  "channelUnavailable": "通道服務不可用，請稍後重試"
+  "channelUnavailable": "通道服務不可用，請稍後重試",
+  "abnormal": {
+    "notFound": "異常訂單不存在",
+    "alreadyHandled": "異常訂單已處置，不可重複操作"
+  },
+  "fundFlow": {
+    "notFound": "資金流水不存在"
+  }
 }

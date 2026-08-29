@@ -13,6 +13,7 @@ import cn.daxpay.open.payment.trade.order.entity.GatewayPayOrder;
 import cn.daxpay.open.payment.trade.order.entity.NormalPayOrder;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.trade.notice.service.TradeNoticeBridge;
+import cn.daxpay.open.payment.trade.flow.service.FundFlowService;
 import cn.daxpay.open.payment.trade.runtime.service.plugin.PayPluginAssistService;
 import cn.daxpay.open.payment.trade.util.PayTradeAmountUtil;
 import cn.daxpay.open.payment.trade.util.PayTradeProviderUtil;
@@ -43,6 +44,7 @@ public class PayUniHandleService {
     private final PayPluginAssistService payPluginAssistService;
     private final TradeNoticeBridge tradeNoticeBridge;
     private final PayRiskAssistService payRiskAssistService;
+    private final FundFlowService fundFlowService;
 
     /// 支付发起后处理
     /// 不论是否完成都更新交易单; 仅资金状态为 SUCCESS 时同步容器为 PAID。
@@ -91,22 +93,16 @@ public class PayUniHandleService {
         }
         // 出站通知 + 插件 + 事后风控: 仅支付成功时
         if (Objects.equals(trade.getStatus(), PayFundStatusEnum.SUCCESS.getCode())) {
-            // 商户出站通知(系统协议)
-            tradeNoticeBridge.dispatchPay(trade, NoticeEventEnum.PAY_SUCCESS);
-            payPluginAssistService.paySuccess(trade);
-            // 事后风控补录（仅用付款用户 buyerId，不用通道内部 userId）
-            payRiskAssistService.checkAfterPay(trade, result.getBuyerId());
+            this.afterSuccess(trade, result.getBuyerId());
         }
     }
 
-    /// 支付成功后续处理(同步/回调路径), 含通道回执写容器
+    /// 支付成功后续处理(同步路径), 含通道回执写容器
     @Transactional(rollbackFor = Exception.class)
     public void paySuccess(PayTrade trade, PaySyncResultBo syncResult) {
-        // CAS 前置态: 同步路径允许从 PROCESSING/FAIL/CLOSE 翻转为 SUCCESS（含同步纠正场景）
+        // CAS 前置态: 同步路径仅 PROCESSING 可翻转(终态收款证据走异常订单人工处置, 2026-08-29 决策)
         Set<String> expectFrom = Set.of(
-                PayFundStatusEnum.PROCESSING.getCode(),
-                PayFundStatusEnum.FAIL.getCode(),
-                PayFundStatusEnum.CLOSE.getCode());
+                PayFundStatusEnum.PROCESSING.getCode());
         if (isGateway(trade)) {
             GatewayPayOrder order = gatewayPayOrderManager.findById(trade.getContainerId()).orElse(null);
             applyGatewaySyncReceipts(trade, order, syncResult);
@@ -120,11 +116,7 @@ public class PayUniHandleService {
                 order.setPayTime(trade.getPayTime());
                 gatewayPayOrderManager.updateById(order);
             }
-            // 商户出站通知(系统协议)
-            tradeNoticeBridge.dispatchPay(trade, NoticeEventEnum.PAY_SUCCESS);
-            payPluginAssistService.paySuccess(trade);
-            payRiskAssistService.checkAfterPay(trade,
-                    syncResult != null ? syncResult.getBuyerId() : null);
+            this.afterSuccess(trade, syncResult != null ? syncResult.getBuyerId() : null);
             return;
         }
         NormalPayOrder order = payNormalOrderManager.findById(trade.getContainerId()).orElse(null);
@@ -139,11 +131,7 @@ public class PayUniHandleService {
             order.setPayTime(trade.getPayTime());
             payNormalOrderManager.updateById(order);
         }
-        // 商户出站通知(系统协议)
-        tradeNoticeBridge.dispatchPay(trade, NoticeEventEnum.PAY_SUCCESS);
-        payPluginAssistService.paySuccess(trade);
-        payRiskAssistService.checkAfterPay(trade,
-                syncResult != null ? syncResult.getBuyerId() : null);
+        this.afterSuccess(trade, syncResult != null ? syncResult.getBuyerId() : null);
     }
 
     /// 支付成功后续处理(回调路径)；可选回写 buyerId 后补录风控
@@ -177,14 +165,59 @@ public class PayUniHandleService {
             markContainerPaid(trade, order);
         }
         // 商户出站通知(系统协议)
-        tradeNoticeBridge.dispatchPay(trade, NoticeEventEnum.PAY_SUCCESS);
-        payPluginAssistService.paySuccess(trade);
-        payRiskAssistService.checkAfterPay(trade, buyerId);
+        this.afterSuccess(trade, buyerId);
     }
 
     /// 支付成功后续处理(回调路径, 无回执详情)
     public void paySuccess(PayTrade trade) {
         paySuccess(trade, (String) null);
+    }
+
+    /// 人工确认支付成功(异常订单处置专用)
+    ///
+    /// 终态(FAIL/CLOSE/CANCEL)翻转为 SUCCESS: 由运营在异常订单页核实通道已收款后触发,
+    /// 入账时间取处置时刻(通道完成时间未结构化留存, 补单语义)。
+    /// 统一走 [afterSuccess] 补发商户 PAY_SUCCESS 通知/插件/事后风控/资金流水。
+    @Transactional(rollbackFor = Exception.class)
+    public void confirmPaySuccess(PayTrade trade) {
+        // CAS 前置态: 仅终态 FAIL/CLOSE/CANCEL 可人工确认翻转
+        Set<String> expectFrom = Set.of(
+                PayFundStatusEnum.FAIL.getCode(),
+                PayFundStatusEnum.CLOSE.getCode(),
+                PayFundStatusEnum.CANCEL.getCode());
+        OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
+        trade.setStatus(PayFundStatusEnum.SUCCESS.getCode());
+        trade.setPayTime(now);
+        trade.setCloseTime(null);
+        if (isGateway(trade)) {
+            GatewayPayOrder order = gatewayPayOrderManager.findById(trade.getContainerId()).orElse(null);
+            applyProviderFallback(trade, order);
+            if (!updateTradeWithPosted(trade, expectFrom)) {
+                log.warn("confirmPaySuccess CAS 失败, 状态已被其他线程改变, tradeNo={}", trade.getTradeNo());
+                return;
+            }
+            markContainerPaid(trade, order);
+        } else {
+            NormalPayOrder order = payNormalOrderManager.findById(trade.getContainerId()).orElse(null);
+            applyProviderFallback(trade, order);
+            if (!updateTradeWithPosted(trade, expectFrom)) {
+                log.warn("confirmPaySuccess CAS 失败, 状态已被其他线程改变, tradeNo={}", trade.getTradeNo());
+                return;
+            }
+            markContainerPaid(trade, order);
+        }
+        this.afterSuccess(trade, null);
+    }
+
+    /// 支付成功统一后置动作: 资金流水 + 商户出站通知 + 插件 + 事后风控
+    private void afterSuccess(PayTrade trade, String buyerId) {
+        // 资金流水(收款, 幂等)
+        fundFlowService.savePayFlow(trade);
+        // 商户出站通知(系统协议)
+        tradeNoticeBridge.dispatchPay(trade, NoticeEventEnum.PAY_SUCCESS);
+        payPluginAssistService.paySuccess(trade);
+        // 事后风控补录（仅用付款用户 buyerId，不用通道内部 userId）
+        payRiskAssistService.checkAfterPay(trade, buyerId);
     }
 
     /// 支付失败处理: 资金态 FAIL, 容器态 FAILED（与主动关单 closed 区分）

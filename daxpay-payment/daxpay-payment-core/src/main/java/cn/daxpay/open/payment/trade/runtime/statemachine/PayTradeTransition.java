@@ -16,10 +16,10 @@ import java.util.Set;
 /// <pre>
 /// INIT       → PROCESSING, CLOSE
 /// PROCESSING → SUCCESS, FAIL, CLOSE, CANCEL
-/// FAIL       → SUCCESS    （同步纠正：本地误判 FAIL 后由通道查询翻转）
-/// CLOSE      → SUCCESS    （超时关单安全化后：通道实际已付款，同步纠正）
+/// FAIL       → SUCCESS    （人工确认：终态单收到通道收款证据, 异常订单处置）
+/// CLOSE      → SUCCESS    （人工确认：终态单收到通道收款证据, 异常订单处置）
+/// CANCEL     → SUCCESS    （人工确认：终态单收到通道收款证据, 异常订单处置）
 /// SUCCESS    → （终态）
-/// CANCEL     → （终态）
 /// </pre>
 ///
 /// 使用方式：
@@ -44,8 +44,9 @@ public final class PayTradeTransition {
                     PayFundStatusEnum.SUCCESS.getCode()),
             PayFundStatusEnum.CLOSE.getCode(), Set.of(
                     PayFundStatusEnum.SUCCESS.getCode()),
-            PayFundStatusEnum.SUCCESS.getCode(), Set.of(),
-            PayFundStatusEnum.CANCEL.getCode(), Set.of()
+            PayFundStatusEnum.CANCEL.getCode(), Set.of(
+                    PayFundStatusEnum.SUCCESS.getCode()),
+            PayFundStatusEnum.SUCCESS.getCode(), Set.of()
     );
 
     // ── 反向索引：to → 合法的来源集合（供 CAS expectFrom 校验参考） ────
@@ -55,7 +56,8 @@ public final class PayTradeTransition {
             PayFundStatusEnum.SUCCESS.getCode(), Set.of(
                     PayFundStatusEnum.PROCESSING.getCode(),
                     PayFundStatusEnum.FAIL.getCode(),
-                    PayFundStatusEnum.CLOSE.getCode()),
+                    PayFundStatusEnum.CLOSE.getCode(),
+                    PayFundStatusEnum.CANCEL.getCode()),
             PayFundStatusEnum.FAIL.getCode(), Set.of(
                     PayFundStatusEnum.PROCESSING.getCode()),
             PayFundStatusEnum.CLOSE.getCode(), Set.of(

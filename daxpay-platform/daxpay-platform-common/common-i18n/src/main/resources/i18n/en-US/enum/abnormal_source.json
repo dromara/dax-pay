@@ -1,0 +1,5 @@
+{
+  "callback": "Channel callback",
+  "sync": "Sync query",
+  "job": "Scheduled job"
+}

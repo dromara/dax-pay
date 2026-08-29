@@ -187,5 +187,12 @@
     "hitNotFound": "リスクヒット記録が存在しません"
   },
   "channelResultUnknown": "チャネル処理結果が不明です。最終状態を確認中です",
-  "channelUnavailable": "チャネルサービスは利用できません。後でもう一度お試しください"
+  "channelUnavailable": "チャネルサービスは利用できません。後でもう一度お試しください",
+  "abnormal": {
+    "notFound": "異常注文が存在しません",
+    "alreadyHandled": "異常注文は処理済みのため再操作できません"
+  },
+  "fundFlow": {
+    "notFound": "資金フローが存在しません"
+  }
 }

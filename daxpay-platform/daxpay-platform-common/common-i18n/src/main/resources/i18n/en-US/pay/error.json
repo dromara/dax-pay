@@ -187,5 +187,12 @@
     "hitNotFound": "Risk hit record not found"
   },
   "channelResultUnknown": "Channel result unknown, confirming final status",
-  "channelUnavailable": "Channel service unavailable, please try again later"
+  "channelUnavailable": "Channel service unavailable, please try again later",
+  "abnormal": {
+    "notFound": "Abnormal order not found",
+    "alreadyHandled": "Abnormal order already handled"
+  },
+  "fundFlow": {
+    "notFound": "Fund flow not found"
+  }
 }

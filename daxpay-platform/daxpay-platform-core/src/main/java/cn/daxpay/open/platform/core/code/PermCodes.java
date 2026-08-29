@@ -319,6 +319,18 @@ public interface PermCodes {
             String MENU = "trade:fund";
         }
 
+        /// 异常订单(终态收款人工处置) menuCode=trade:abnormal-order
+        interface AbnormalOrder {
+            /// 菜单编码
+            String MENU = "trade:abnormal-order";
+        }
+
+        /// 资金流水 menuCode=trade:fund-flow
+        interface FundFlow {
+            /// 菜单编码
+            String MENU = "trade:fund-flow";
+        }
+
         /// 商户出站通知 menuCode=trade:mch-notice
         interface Notice {
             /// 菜单编码

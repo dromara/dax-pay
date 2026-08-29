@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.trade.runtime.service.sync;
 
+import cn.daxpay.open.payment.trade.abnormal.service.AbnormalOrderService;
 import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum;
 import cn.daxpay.open.payment.strategy.PaymentStrategyFactory;
@@ -49,6 +50,7 @@ public class PaySyncService {
     private final GatewayPayOrderManager gatewayPayOrderManager;
     private final PayUniHandleService payUniHandleService;
     private final PaySyncRecordService paySyncRecordService;
+    private final AbnormalOrderService abnormalOrderService;
     private final LockExecutor lockExecutor;
 
     /// 按容器ID同步支付状态
@@ -57,7 +59,7 @@ public class PaySyncService {
     public NormalPaySyncResult syncByContainer(Long containerId, String tradeType) {
         PayTrade trade = payTradeManager.findByContainerId(containerId, tradeType)
                 .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.payOrderNotExist"));
-        return this.syncPayOrder(trade);
+        return this.doSyncPayOrder(trade, false);
     }
 
     /// 支付同步
@@ -88,12 +90,25 @@ public class PaySyncService {
             // 支付: 支付订单不存在
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.payOrderNotExist");
         }
-        return this.syncPayOrder(trade);
+        return this.doSyncPayOrder(trade, false);
     }
 
-    /// 同步支付状态
+    /// 同步支付状态(手动同步入口, 异常订单发现来源记 sync)
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public NormalPaySyncResult syncPayOrder(PayTrade trade) {
+        return this.doSyncPayOrder(trade, false);
+    }
+
+    /// 同步支付状态(定时任务入口, 异常订单发现来源记 job)
+    ///
+    /// 与 [#syncPayOrder] 逻辑一致, 区别仅在异常订单发现来源标记。
+    @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
+    public NormalPaySyncResult syncPayOrderFromJob(PayTrade trade) {
+        return this.doSyncPayOrder(trade, true);
+    }
+
+    /// 同步执行主体(fromJob 仅影响异常订单发现来源标记, 事务语义由公开入口声明)
+    private NormalPaySyncResult doSyncPayOrder(PayTrade trade, boolean fromJob) {
         if (Objects.equals(trade.getStatus(), PayFundStatusEnum.INIT.getCode())) {
             // 支付: 订单未开始支付请重新确认支付状态
             throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.pay.syncNotStarted");
@@ -111,6 +126,7 @@ public class PaySyncService {
                     var syncStrategy = PaymentStrategyFactory.createByProduct(
                             info.product(), AbsSyncPayOrderStrategy.class);
                     PaySyncResultBo syncResult = syncStrategy.doSync(context);
+                    syncResult.setFromJob(fromJob);
                     if (!Objects.equals(syncResult.getOutOrderNo(), trade.getOutOrderNo())) {
                         trade.setOutOrderNo(syncResult.getOutOrderNo());
                         payTradeManager.updateById(trade);
@@ -137,15 +153,13 @@ public class PaySyncService {
     /// 校验同步结果是否需要调整
     ///
     /// - PROCESSING 且未超时则无需调整
-    /// - 已超时或通道返回 SUCCESS 但本地已 CLOSE 时触发调整
+    /// - 已超时触发远程关单调整
+    /// - 终态(FAIL/CLOSE/CANCEL) + 通道 SUCCESS: 不自动翻转(2026-08-29 决策), 落异常订单人工处置
     private boolean checkAndAdjust(PaySyncResultBo syncResult, PayTrade trade, ContainerInfo info) {
         var payStatus = Optional.ofNullable(syncResult.getPayStatus())
                 .orElse(PayFundStatusEnum.PROCESSING);
         String orderStatus = trade.getStatus();
-        if (orderStatus.equals(PayFundStatusEnum.FAIL.getCode())) {
-            return false;
-        }
-        if (orderStatus.equals(PayFundStatusEnum.PROCESSING.getCode())) {
+        if (Objects.equals(orderStatus, PayFundStatusEnum.PROCESSING.getCode())) {
             if (Objects.equals(PayFundStatusEnum.PROCESSING, payStatus)) {
                 if (info.expiredTime() != null
                         && DateTimeUtil.le(info.expiredTime(), OffsetDateTime.now(ZoneOffset.UTC))) {
@@ -155,15 +169,23 @@ public class PaySyncService {
                 }
                 return true;
             }
-        } else {
-            // CLOSE 状态: 通道返回 SUCCESS 时需纠正（超时关单但实际已付款的场景）
-            if (orderStatus.equals(PayFundStatusEnum.CLOSE.getCode())
-                    && Objects.equals(PayFundStatusEnum.SUCCESS, payStatus)) {
-                return false;
-            }
+            return false;
+        }
+        // 非支付中: 已 SUCCESS 或终态(FAIL/CLOSE/CANCEL)
+        if (isTerminalAbnormal(orderStatus) && Objects.equals(PayFundStatusEnum.SUCCESS, payStatus)) {
+            // 通道已收款但本地已终态: 转异常订单人工处置, 不自动翻转
+            abnormalOrderService.recordFromSync(trade, syncResult);
+            syncResult.setSyncErrorMsg("通道已收款但订单已终态(" + orderStatus + ")，已转异常订单处理");
             return true;
         }
-        return false;
+        return true;
+    }
+
+    /// 终态异常集合(FAIL/CLOSE/CANCEL): 这些终态收到通道收款证据时转异常订单
+    private static boolean isTerminalAbnormal(String status) {
+        return Objects.equals(status, PayFundStatusEnum.FAIL.getCode())
+                || Objects.equals(status, PayFundStatusEnum.CLOSE.getCode())
+                || Objects.equals(status, PayFundStatusEnum.CANCEL.getCode());
     }
 
     /// 根据同步结果执行状态调整: SUCCESS→回写成功; CLOSE→远程或本地关单; FAIL→标记失败

@@ -6,6 +6,7 @@ import cn.daxpay.open.payment.trade.order.dao.RefundOrderManager;
 import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.trade.notice.service.TradeNoticeBridge;
+import cn.daxpay.open.payment.trade.flow.service.FundFlowService;
 import cn.daxpay.open.payment.trade.runtime.service.plugin.PayPluginAssistService;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
@@ -47,6 +48,7 @@ public class RefundSettleService {
     private final LockExecutor lockExecutor;
     private final PayPluginAssistService payPluginAssistService;
     private final TradeNoticeBridge tradeNoticeBridge;
+    private final FundFlowService fundFlowService;
 
     /// 自身注入: 使 UnderLock 的 @Transactional 方法经代理调用生效(锁外层 + 事务内层),
     /// 消除"自行加锁路径下 this 调用导致事务失效"的隐患(同步路径无外层事务时尤为关键)
@@ -117,6 +119,8 @@ public class RefundSettleService {
                     refundOrder.getRefundNo());
             return false;
         }
+        // 资金流水(退款支出, 幂等)
+        fundFlowService.saveRefundFlow(refundOrder);
         // 商户出站通知(系统协议)
         tradeNoticeBridge.dispatchRefund(refundOrder, NoticeEventEnum.REFUND_SUCCESS);
         // 插件: 按原支付 tradeNo 回查资金单后广播退款成功

@@ -47,9 +47,9 @@ public class TradeSyncService {
 
     /// 定时同步支付订单(幂等)
     ///
-    /// 仅处理 PROCESSING 和 CLOSE 状态:
+    /// 仅处理 PROCESSING / FAIL / CLOSE 状态:
     /// - PROCESSING: 回调丢失/超时关单失败后, 查通道真实状态纠正
-    /// - CLOSE: 超时关单后通道实际已付款的场景, 触发 CLOSE→SUCCESS 纠正
+    /// - FAIL/CLOSE: 通道实际已付款的收款证据不再自动翻转(2026-08-29 决策), 落异常订单人工处置
     public void syncPayTrade(String tradeNo) {
         // 引导读: 跨租户定位订单
         PayTrade boot = payTradeManager.findByTradeNoNotTenant(tradeNo).orElse(null);
@@ -63,10 +63,10 @@ public class TradeSyncService {
             log.error("定时同步交易缺少 mchNo, tradeNo={}", tradeNo);
             return;
         }
-        // 装载租户身份后执行同步(syncPayOrder 自带 Redis 锁 + REQUIRES_NEW 事务)
+        // 装载租户身份后执行同步(syncPayOrderFromJob 自带 Redis 锁 + REQUIRES_NEW 事务)
         paymentContext.runAs(() -> {
             paymentContext.setMchNo(boot.getMchNo());
-            paySyncService.syncPayOrder(boot);
+            paySyncService.syncPayOrderFromJob(boot);
         });
     }
 

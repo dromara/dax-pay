@@ -187,5 +187,12 @@
     "hitNotFound": "风险命中记录不存在"
   },
   "channelResultUnknown": "通道处理结果未知，正在确认最终状态",
-  "channelUnavailable": "通道服务不可用，请稍后重试"
+  "channelUnavailable": "通道服务不可用，请稍后重试",
+  "abnormal": {
+    "notFound": "异常订单不存在",
+    "alreadyHandled": "异常订单已处置，不可重复操作"
+  },
+  "fundFlow": {
+    "notFound": "资金流水不存在"
+  }
 }

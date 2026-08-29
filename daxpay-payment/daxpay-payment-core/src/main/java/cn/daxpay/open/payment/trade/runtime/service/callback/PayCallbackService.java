@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.trade.runtime.service.callback;
 
+import cn.daxpay.open.payment.trade.abnormal.service.AbnormalOrderService;
 import cn.daxpay.open.payment.trade.runtime.bo.CallbackData;
 import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum;
@@ -25,7 +26,8 @@ import java.util.Objects;
 /// # 支付回调处理
 ///
 /// 回调数据通过函数参数显式传递([CallbackData]),不依赖线程上下文。
-/// 成功/失败均做终态守卫: 已 SUCCESS 幂等忽略; 非 PROCESSING 不可再流转。
+/// 成功/失败均做终态守卫: 已 SUCCESS 幂等忽略; INIT/PROCESSING 正常流转;
+/// FAIL/CLOSE/CANCEL 终态收到成功回调不翻转, 转异常订单人工处置。
 ///
 /// 锁包事务模式: [payCallback] 持锁(无事务) → [doPayCallback] 走代理(@Transactional)。
 /// self 调用返回时事务已提交, 然后才释放锁, 消除"锁释放早于事务提交"窗口。
@@ -38,6 +40,7 @@ public class PayCallbackService {
     private final NormalPayOrderManager payNormalOrderManager;
     private final GatewayPayOrderManager gatewayPayOrderManager;
     private final PayUniHandleService payUniHandleService;
+    private final AbnormalOrderService abnormalOrderService;
     private final LockExecutor lockExecutor;
 
     /// 自注入: 保证 [doPayCallback] 走 Spring 事务代理
@@ -109,7 +112,8 @@ public class PayCallbackService {
                 .map(NormalPayOrder::getProduct).orElse(null);
     }
 
-    /// 支付成功: 仅 PROCESSING/INIT 可转入 SUCCESS; 已 SUCCESS 幂等忽略; 其他终态忽略
+    /// 支付成功: 仅 PROCESSING/INIT 可转入 SUCCESS; 已 SUCCESS 幂等忽略;
+    /// FAIL/CLOSE/CANCEL 终态不自动翻转(2026-08-29 决策), 落异常订单人工处置
     private void success(PayTrade trade, CallbackData callbackData) {
         String status = trade.getStatus();
         if (Objects.equals(status, PayFundStatusEnum.SUCCESS.getCode())) {
@@ -118,21 +122,23 @@ public class PayCallbackService {
             log.info("支付回调: 交易 {} 已成功，幂等忽略", trade.getTradeNo());
             return;
         }
-        if (!Objects.equals(status, PayFundStatusEnum.PROCESSING.getCode())
-                && !Objects.equals(status, PayFundStatusEnum.INIT.getCode())) {
-            callbackData.setCallbackStatus(CallbackStatusEnum.IGNORE)
-                    .setCallbackErrorMsg("订单非支付中状态，忽略成功回调");
-            log.warn("支付回调: 交易 {} 状态为 {}，忽略成功回调", trade.getTradeNo(), status);
+        if (Objects.equals(status, PayFundStatusEnum.PROCESSING.getCode())
+                || Objects.equals(status, PayFundStatusEnum.INIT.getCode())) {
+            trade.setStatus(PayFundStatusEnum.SUCCESS.getCode());
+            trade.setPayTime(callbackData.getFinishTime());
+            trade.setCloseTime(null);
+            if (Objects.nonNull(callbackData.getOutTradeNo())) {
+                trade.setOutOrderNo(callbackData.getOutTradeNo());
+            }
+            // 回写 buyerId 并事后风控补录（统一由 paySuccess 重载处理）
+            payUniHandleService.paySuccess(trade, callbackData.getBuyerId());
             return;
         }
-        trade.setStatus(PayFundStatusEnum.SUCCESS.getCode());
-        trade.setPayTime(callbackData.getFinishTime());
-        trade.setCloseTime(null);
-        if (Objects.nonNull(callbackData.getOutTradeNo())) {
-            trade.setOutOrderNo(callbackData.getOutTradeNo());
-        }
-        // 回写 buyerId 并事后风控补录（统一由 paySuccess 重载处理）
-        payUniHandleService.paySuccess(trade, callbackData.getBuyerId());
+        // 终态(FAIL/CLOSE/CANCEL)收到成功回调: 通道已收款但本地已终态, 转异常订单人工处置
+        abnormalOrderService.recordFromCallback(trade, callbackData);
+        callbackData.setCallbackStatus(CallbackStatusEnum.EXCEPTION)
+                .setCallbackErrorMsg("订单已终态(" + status + ")但通道回调支付成功，已转异常订单处理");
+        log.warn("支付回调: 交易 {} 状态为 {}，通道回调成功，已转异常订单", trade.getTradeNo(), status);
     }
 
     /// 支付失败: 仅 PROCESSING 可关失败; 与同步路径一致走 payFail(资金态 FAIL)

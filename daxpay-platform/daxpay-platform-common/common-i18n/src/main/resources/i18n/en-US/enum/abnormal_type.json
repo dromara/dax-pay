@@ -1,0 +1,5 @@
+{
+  "close_paid": "Received after close",
+  "fail_paid": "Received after fail",
+  "cancel_paid": "Received after cancel"
+}

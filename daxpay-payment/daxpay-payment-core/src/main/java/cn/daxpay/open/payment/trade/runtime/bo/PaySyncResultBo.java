@@ -69,4 +69,7 @@ public class PaySyncResultBo {
     /// 是否需要远程关闭网关交易
     /// 本地超时且通道订单仍存活(PROCESSING)时由核心层置 true, 触发主动调用通道关单; 通道策略无需设置
     private boolean remoteClose;
+
+    /// 同步是否来自定时任务入口(异常订单发现来源区分: job-定时/sync-手动)
+    private boolean fromJob;
 }
