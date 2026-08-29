@@ -1573,7 +1573,6 @@ CREATE TABLE "public"."iam_user_info" (
   "password" varchar(200) COLLATE "pg_catalog"."default" NOT NULL,
   "phone" varchar(50) COLLATE "pg_catalog"."default",
   "email" varchar(100) COLLATE "pg_catalog"."default",
-  "email_verified" bool NOT NULL DEFAULT false,
   "administrator" bool DEFAULT false,
   "status" varchar(20) COLLATE "pg_catalog"."default" DEFAULT 'normal'::character varying,
   "creator" int8,
@@ -1589,9 +1588,8 @@ COMMENT ON COLUMN "public"."iam_user_info"."name" IS '名称';
 COMMENT ON COLUMN "public"."iam_user_info"."client_code" IS '身份域编码';
 COMMENT ON COLUMN "public"."iam_user_info"."account" IS '账号';
 COMMENT ON COLUMN "public"."iam_user_info"."password" IS '密码';
-COMMENT ON COLUMN "public"."iam_user_info"."phone" IS '手机号';
-COMMENT ON COLUMN "public"."iam_user_info"."email" IS '邮箱';
-COMMENT ON COLUMN "public"."iam_user_info"."email_verified" IS '邮箱是否已验证(走邮箱验证码流程后置true), 未验证邮箱不可用于找回密码';
+COMMENT ON COLUMN "public"."iam_user_info"."phone" IS '手机号(功能已冻结: 无写入通道, 待接入短信验证后启用)';
+COMMENT ON COLUMN "public"."iam_user_info"."email" IS '邮箱(经验证码确认后写入, 落库即已验证)';
 COMMENT ON COLUMN "public"."iam_user_info"."administrator" IS '是否管理员';
 COMMENT ON COLUMN "public"."iam_user_info"."status" IS '账号状态';
 COMMENT ON COLUMN "public"."iam_user_info"."creator" IS '创建者ID';

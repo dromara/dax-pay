@@ -91,15 +91,14 @@ public class UserInfoService {
             .setName(userInfo.getName())
             .setBirthday(userExpandInfo.getBirthday())
             .setAvatar(userExpandInfo.getAvatar())
-            .setEmail(userInfo.getEmail())
-            .setEmailVerified(userInfo.isEmailVerified())
-            .setPhone(userInfo.getPhone());
+            .setEmail(userInfo.getEmail());
     }
 
     /// 修改基本信息
     ///
-    /// email 不在本接口受理: 邮箱是找回密码的安全凭证,
-    /// 变更仅允许走 /user/auth/email 绑定验证流程(参数中已无 email 字段, copy 自然不映射)
+    /// email 与手机号均不在本接口受理:
+    /// email 是找回密码的安全凭证, 变更仅允许走 /user/auth/email 绑定验证流程;
+    /// 手机号功能已冻结, 待接入短信验证后启用(参数中已无对应字段, copy 自然不映射)
     @Transactional(rollbackFor = Exception.class)
     public void updateUserBaseInfo(UserBaseInfoParam param) {
         Long userId = SecurityUtil.getUserId();
@@ -107,11 +106,6 @@ public class UserInfoService {
             .orElseThrow(UserInfoNotExistsException::new);
         UserExpandInfo userExpandInfo = userExpandInfoManager.findById(userId)
             .orElseThrow(UserInfoNotExistsException::new);
-        // 手机号唯一性校验（排除自身）
-        if (userQueryService.existsPhone(param.getPhone(), userId)) {
-            // 权限: 手机号已被其他用户使用
-            throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.phoneUsedByOther");
-        }
         UserConvert.CONVERT.copy(param, userExpandInfo);
         UserConvert.CONVERT.copy(param, userInfo);
         userExpandInfoManager.updateById(userExpandInfo);

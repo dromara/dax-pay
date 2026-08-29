@@ -132,8 +132,6 @@ public class MerchantAdminService {
         MerchantInfoConvert.CONVERT.copy(param, userInfoParam);
         // 用户名称
         userInfoParam.setName(merchant.getMchName()+"管理员");
-        // 设置手机号
-        userInfoParam.setPhone(param.getPhone());
         // 设置终端归属为商户端
         userInfoParam.setClientCode(ClientEnum.MERCHANT.getCode());
         UserPasswordResult adminResult = userAdminService.add(userInfoParam, true);

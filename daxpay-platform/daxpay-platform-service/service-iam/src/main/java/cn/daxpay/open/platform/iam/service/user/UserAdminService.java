@@ -94,8 +94,6 @@ public class UserAdminService {
 
                 // 按账号模糊查询
                 .like(StrUtil.isNotBlank(query.getAccount()), UserInfo::getAccount, query.getAccount())
-                // 按手机号模糊查询
-                .like(StrUtil.isNotBlank(query.getPhone()), UserInfo::getPhone, query.getPhone())
                 // 按邮箱模糊查询
                 .like(StrUtil.isNotBlank(query.getEmail()), UserInfo::getEmail, query.getEmail());
         Page<UserWholeInfoResult> page = userInfoManager.selectJoinListPage(mpPage, UserWholeInfoResult.class, wrapper);
@@ -164,11 +162,6 @@ public class UserAdminService {
             if (userQueryService.existsAccountByClientCode(clientCode, userInfoParam.getAccount())) {
                 // 权限: 该终端下账号已存在
                 throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.accountExistsInClient");
-            }
-            // 按终端校验手机号唯一性
-            if (userQueryService.existsPhoneByClientCode(clientCode, userInfoParam.getPhone())) {
-                // 权限: 该终端下手机号已被使用
-                throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.phoneUsedInClient");
             }
         }
         // 密码可选: 未传时生成随机密码, 传入时按 RSA 密文解密(兼容存量调用方)
@@ -273,11 +266,6 @@ public class UserAdminService {
         }
         // 禁止修改终端归属
         userInfoParam.setClientCode(userInfo.getClientCode());
-        // 按终端校验手机号唯一性（排除自身）
-        if (userQueryService.existsPhoneByClientCode(userInfo.getClientCode(), userInfoParam.getPhone(), userInfoParam.getId())) {
-            // 权限: 该终端下手机号已被其他用户使用
-            throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.phoneUsedByOtherInClient");
-        }
         userInfoParam.setPassword(null);
         UserConvert.CONVERT.copy(userInfoParam, userInfo);
         userInfoManager.updateById(userInfo);
@@ -285,7 +273,7 @@ public class UserAdminService {
 
     /// 强制解绑用户邮箱
     /// 用户邮箱本体失效、无法走本人解绑流程(密码+旧邮箱验证码)时的管理员代管通道;
-    /// 仅清空邮箱与验证状态, 不可指定新邮箱, 新邮箱只能由用户本人走绑定验证流程获得
+    /// 仅清空邮箱, 不可指定新邮箱, 新邮箱只能由用户本人走绑定验证流程获得
     public void unbindEmail(Long userId) {
         UserInfo userInfo = userInfoManager.findById(userId)
                 .orElseThrow(UserInfoNotExistsException::new);

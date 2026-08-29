@@ -23,9 +23,6 @@ public class UserInfoQuery extends SortParam {
     @Schema(description = "登录账号")
     private String account;
 
-    @Schema(description = "手机号")
-    private String phone;
-
     @Schema(description = "邮箱")
     private String email;
 

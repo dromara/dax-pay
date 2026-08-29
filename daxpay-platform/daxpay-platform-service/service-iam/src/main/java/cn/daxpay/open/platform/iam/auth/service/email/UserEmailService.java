@@ -50,8 +50,7 @@ public class UserEmailService {
     public EmailInfoResult getEmailInfo() {
         UserInfo userInfo = this.currentUser();
         return new EmailInfoResult()
-                .setEmail(userInfo.getEmail())
-                .setEmailVerified(userInfo.isEmailVerified());
+                .setEmail(userInfo.getEmail());
     }
 
     /// 发送邮箱绑定/换绑验证码(登录密码确认 + 端内唯一性校验)
@@ -60,8 +59,8 @@ public class UserEmailService {
         // 登录密码确认(防会话劫持后篡改找回通道)
         this.verifyPassword(userInfo, param.getPassword());
         String newEmail = param.getEmail();
-        // 与当前已验证绑定邮箱相同时无需重复绑定
-        if (newEmail.equals(userInfo.getEmail()) && userInfo.isEmailVerified()) {
+        // 与当前绑定邮箱相同时无需重复绑定
+        if (newEmail.equals(userInfo.getEmail())) {
             // 邮箱: 该邮箱已是当前账号的绑定邮箱
             throw new BizInfoException("error.iam.email.sameAsCurrent");
         }
@@ -102,7 +101,6 @@ public class UserEmailService {
         update.setId(userInfo.getId());
         update.setVersion(userInfo.getVersion());
         update.setEmail(newEmail);
-        update.setEmailVerified(true);
         userInfoManager.updateById(update);
         // 换绑成功后通知旧邮箱(旧邮箱存在且与新邮箱不同)
         if (StrUtil.isNotBlank(oldEmail) && !oldEmail.equals(newEmail)) {
@@ -151,7 +149,6 @@ public class UserEmailService {
         userInfoManager.lambdaUpdate()
                 .eq(MpIdEntity::getId, userInfo.getId())
                 .set(UserInfo::getEmail, null)
-                .set(UserInfo::isEmailVerified, false)
                 .setIncrBy(MpRealDelEntity::getVersion, 1)
                 .update();
         // 清理可能存在的未完成绑定上下文, 防止解绑后 confirm 又绑上
@@ -175,7 +172,6 @@ public class UserEmailService {
         userInfoManager.lambdaUpdate()
                 .eq(MpIdEntity::getId, userId)
                 .set(UserInfo::getEmail, null)
-                .set(UserInfo::isEmailVerified, false)
                 .setIncrBy(MpRealDelEntity::getVersion, 1)
                 .update();
         // 清理可能存在的未完成绑定上下文, 防止解绑后 confirm 又绑上

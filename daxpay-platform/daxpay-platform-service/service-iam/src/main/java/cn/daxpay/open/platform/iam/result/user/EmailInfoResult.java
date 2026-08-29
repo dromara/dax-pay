@@ -13,7 +13,4 @@ public class EmailInfoResult {
 
     @Schema(description = "绑定邮箱(未绑定为null)")
     private String email;
-
-    @Schema(description = "邮箱是否已验证(未验证邮箱不可用于找回密码)")
-    private Boolean emailVerified;
 }

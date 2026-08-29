@@ -28,16 +28,9 @@ public class UserInfoResult {
     @SensitiveInfo(SensitiveInfo.SensitiveType.PASSWORD)
     private String password;
 
-    @Schema(description = "手机号")
-    @SensitiveInfo(SensitiveInfo.SensitiveType.MOBILE_PHONE)
-    private String phone;
-
     @Schema(description = "邮箱")
     @SensitiveInfo(SensitiveInfo.SensitiveType.EMAIL)
     private String email;
-
-    @Schema(description = "邮箱是否已验证(仅用户本人走绑定验证流程后为 true)")
-    private boolean emailVerified;
 
     @Schema(description = "是否管理员")
     private boolean administrator;

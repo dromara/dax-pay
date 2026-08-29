@@ -35,13 +35,9 @@ public class UserInfoParam {
     @Schema(description = "密码(RSA 加密), 可选; 不传时由系统生成随机初始密码并在响应中返回明文")
     private String password;
 
-    /// 手机号定位为管理员维护的联系信息(无短信验证体系), 保留管理端可编辑
-    @Schema(description = "手机号")
-    @Pattern(regexp = "^$|^1[3-9]\\d{9}$", message = "{validation.field.phone.format}")
-    private String phone;
-
-    /// email 不在本参数中受理: 邮箱是找回密码的安全凭证,
-    /// 变更仅允许用户本人走 /user/auth/email 绑定验证流程;
+    /// 手机号与 email 均不在本参数中受理:
+    /// 手机号功能已冻结(无短信验证体系, 待接入后以验证码方式启用),
+    /// email 是找回密码的安全凭证, 变更仅允许用户本人走 /user/auth/email 绑定验证流程;
     /// 管理员仅有强制解绑能力(/user/admin/unbind-email), 不可指定新邮箱
 
 }

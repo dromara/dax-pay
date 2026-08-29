@@ -64,32 +64,6 @@ public class UserQueryService {
         return userInfoManager.existsByClientCodeAndEmail(clientCode, email, excludeId);
     }
 
-    /// 手机是否存在
-    public boolean existsPhone(String phone) {
-        if (StrUtil.isBlank(phone)){
-            return false;
-        }
-        return userInfoManager.existsByPhone(phone);
-    }
-
-    /// 手机是否存在
-    public boolean existsPhone(String phone, Long id) {
-        if (StrUtil.isBlank(phone)){
-            return false;
-        }
-        return userInfoManager.existsByPhone(phone.trim(), id);
-    }
-
-    /// 按终端校验手机号是否存在（终端维度唯一性）
-    public boolean existsPhoneByClientCode(String clientCode, String phone) {
-        return userInfoManager.existsByClientCodeAndPhone(clientCode, phone);
-    }
-
-    /// 按终端校验手机号是否存在，排除当前用户（编辑时防重）
-    public boolean existsPhoneByClientCode(String clientCode, String phone, Long excludeId) {
-        return userInfoManager.existsByClientCodeAndPhone(clientCode, phone, excludeId);
-    }
-
     /// 根据用户id 获取 UserInfo
     public UserInfoResult findById(Long id) {
         return userInfoManager.findById(id).map(UserInfo::toResult).orElseThrow(UserNotFoundException::new);

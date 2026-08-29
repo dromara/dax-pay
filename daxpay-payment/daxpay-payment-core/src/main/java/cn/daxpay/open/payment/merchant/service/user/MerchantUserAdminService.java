@@ -156,13 +156,6 @@ public class MerchantUserAdminService {
                 // 商户: 商户用户关联关系不存在
                 .orElseThrow(() -> new BizException(CommonCode.FAIL_CODE, "error.payment.merchant.mchUserRelationNotExist"));
 
-        // 按终端校验手机号唯一性（排除自身）
-        if (StrUtil.isNotBlank(param.getPhone()) &&
-            userQueryService.existsPhoneByClientCode(userInfo.getClientCode(), param.getPhone(), param.getId())) {
-            // 商户: 该终端下手机号已被其他用户使用
-            throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.phoneUsedByOtherInClient");
-        }
-
         param.setPassword(null);
         param.setAccount(null);
         MerchantUserConvert.CONVERT.copy(param, userInfo);
@@ -171,7 +164,7 @@ public class MerchantUserAdminService {
 
     /// 强制解绑商户用户邮箱
     /// 用户邮箱本体失效、无法走本人解绑流程(密码+旧邮箱验证码)时的管理员代管通道;
-    /// 仅清空邮箱与验证状态, 不可指定新邮箱, 新邮箱只能由用户本人走绑定验证流程获得
+    /// 仅清空邮箱, 不可指定新邮箱, 新邮箱只能由用户本人走绑定验证流程获得
     @Transactional(rollbackFor = Exception.class)
     public void unbindEmail(Long userId) {
         this.checkMerchantUser(userId);

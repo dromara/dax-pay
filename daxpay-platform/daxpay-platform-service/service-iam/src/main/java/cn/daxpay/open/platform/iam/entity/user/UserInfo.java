@@ -36,14 +36,11 @@ public class UserInfo extends MpBaseEntity implements ToResult<UserInfoResult> {
     /// 密码
     private String password;
 
-    /// 手机号
+    /// 手机号(功能已冻结: 无写入通道, 待接入短信验证后启用)
     private String phone;
 
-    /// 邮箱
+    /// 邮箱(经验证码确认后写入, 落库即已验证)
     private String email;
-
-    /// 邮箱是否已验证(走邮箱验证码流程后置true), 未验证邮箱不可用于找回密码
-    private boolean emailVerified;
 
     /// 是否管理员, 管理员用户不在列表中显示
     @TableField(updateStrategy = FieldStrategy.NEVER)

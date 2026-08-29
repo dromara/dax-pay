@@ -59,36 +59,7 @@ public class UserCheckController {
         return Res.ok(userQueryService.existsAccountByClientCode(clientCode, account, id));
     }
 
-    @Operation(summary = "手机号是否被使用")
-    @GetMapping("/exists-phone")
-    public Result<Boolean> existsPhone(@NotBlank(message = "{validation.field.phone.notBlank}") String phone) {
-        return Res.ok(userQueryService.existsPhone(phone));
-    }
-
-    @Operation(summary = "手机号是否被使用(不包含自己)")
-    @GetMapping("/exists-phone-not-id")
-    public Result<Boolean> existsPhone(
-        @NotBlank(message = "{validation.field.phone.notBlank}") @Parameter(description = "手机号") String phone,
-        @NotNull(message = "{validation.field.userId.notNull}") @Parameter(description = "用户ID") Long id) {
-        return Res.ok(userQueryService.existsPhone(phone, id));
-    }
-
-    @Operation(summary = "按终端校验手机号是否被使用（终端维度唯一性）")
-    @GetMapping("/exists-phone-by-client")
-    public Result<Boolean> existsPhoneByClient(
-        @Parameter(description = "手机号") String phone,
-        @NotBlank(message = "{validation.field.clientCode.notBlank}") @Parameter(description = "身份域编码") String clientCode) {
-        return Res.ok(userQueryService.existsPhoneByClientCode(clientCode, phone));
-    }
-
-    @Operation(summary = "按终端校验手机号是否被使用，排除指定用户ID（终端维度编辑防重）")
-    @GetMapping("/exists-phone-by-client-not-id")
-    public Result<Boolean> existsPhoneByClient(
-        @Parameter(description = "手机号") String phone,
-        @NotBlank(message = "{validation.field.clientCode.notBlank}") @Parameter(description = "身份域编码") String clientCode,
-        @NotNull(message = "{validation.field.userId.notNull}") @Parameter(description = "用户ID") Long id) {
-        return Res.ok(userQueryService.existsPhoneByClientCode(clientCode, phone, id));
-    }
+    // 手机号校验端点已随手机号功能冻结一并移除(无短信验证体系, 待接入后恢复)
 
     @Operation(summary = "邮箱是否被使用")
     @GetMapping("/exists-email")

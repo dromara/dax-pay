@@ -81,37 +81,6 @@ public class UserInfoManager extends BaseManager<UserInfoMapper, UserInfo> {
                 .exists();
     }
 
-    public boolean existsByPhone(String phone) {
-        return existedByField(UserInfo::getPhone, phone);
-    }
-
-    public boolean existsByPhone(String phone, Long id) {
-        return existedByField(UserInfo::getPhone, phone, id);
-    }
-
-    /// 按终端+手机号校验是否存在（终端维度唯一性）
-    public boolean existsByClientCodeAndPhone(String clientCode, String phone) {
-        if (phone == null || phone.isBlank()) {
-            return false;
-        }
-        return lambdaQuery()
-                .eq(UserInfo::getClientCode, clientCode)
-                .eq(UserInfo::getPhone, phone)
-                .exists();
-    }
-
-    /// 按终端+手机号校验是否存在，排除指定用户ID（编辑时防重）
-    public boolean existsByClientCodeAndPhone(String clientCode, String phone, Long excludeId) {
-        if (phone == null || phone.isBlank()) {
-            return false;
-        }
-        return lambdaQuery()
-                .eq(UserInfo::getClientCode, clientCode)
-                .eq(UserInfo::getPhone, phone)
-                .ne(MpIdEntity::getId, excludeId)
-                .exists();
-    }
-
     public Optional<UserInfo> findByAccount(String account) {
         return findByField(UserInfo::getAccount, account);
     }
@@ -126,18 +95,6 @@ public class UserInfoManager extends BaseManager<UserInfoMapper, UserInfo> {
 
     public Optional<UserInfo> findByEmail(String email) {
         return findByField(UserInfo::getEmail, email);
-    }
-
-    public Optional<UserInfo> findByPhone(String phone) {
-        return findByField(UserInfo::getPhone, phone);
-    }
-
-    /// 按终端+手机号查询用户（商户注册/找回密码用）
-    public Optional<UserInfo> findByClientCodeAndPhone(String clientCode, String phone) {
-        return lambdaQuery()
-                .eq(UserInfo::getClientCode, clientCode)
-                .eq(UserInfo::getPhone, phone)
-                .oneOpt();
     }
 
     /// 按终端+邮箱查询用户（找回密码用, 按端内唯一性至多一条）
