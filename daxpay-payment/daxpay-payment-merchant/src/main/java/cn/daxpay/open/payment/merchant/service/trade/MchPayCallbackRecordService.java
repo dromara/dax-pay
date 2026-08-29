@@ -7,6 +7,7 @@ import cn.daxpay.open.payment.trade.record.entity.PayCallbackRecord;
 import cn.daxpay.open.payment.trade.record.param.PayCallbackRecordQuery;
 import cn.daxpay.open.payment.trade.record.result.PayCallbackRecordResult;
 import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
+import cn.daxpay.open.platform.common.translate.service.TransService;
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.enums.pay.notice.CallbackStatusEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
@@ -29,18 +30,23 @@ public class MchPayCallbackRecordService {
 
     private final PaymentContext paymentContext;
     private final PayCallbackRecordManager callbackRecordManager;
+    private final TransService transService;
 
     /// 分页查询
     public PageResult<PayCallbackRecordResult> page(PageParam pageParam, PayCallbackRecordQuery query) {
         forceMchNo(query);
         Page<PayCallbackRecord> page = callbackRecordManager.page(pageParam, query);
-        // 原始报文/冗余字段裁剪, 异常状态错误信息受控化
         var records = page.getRecords().stream()
                 .map(PayCallbackRecordConvert.CONVERT::toResult)
+                .toList();
+        // 翻译通道商户名称等 @Trans 字段(与运营端对齐), 须在裁剪前执行
+        transService.translate(records);
+        // 原始报文/冗余字段裁剪, 异常状态错误信息受控化
+        var sanitized = records.stream()
                 .map(this::sanitizeForMerchant)
                 .toList();
         return new PageResult<PayCallbackRecordResult>()
-                .setRecords(records)
+                .setRecords(sanitized)
                 .setTotal(page.getTotal())
                 .setSize(page.getSize())
                 .setCurrent(page.getCurrent());
@@ -51,7 +57,10 @@ public class MchPayCallbackRecordService {
         String mchNo = requireMchNo();
         PayCallbackRecord record = callbackRecordManager.findByIdAndMchNo(id, mchNo)
                 .orElseThrow(() -> new DataNotExistException("pay.error.order.callbackRecordNotExist"));
-        return sanitizeForMerchant(PayCallbackRecordConvert.CONVERT.toResult(record));
+        PayCallbackRecordResult result = PayCallbackRecordConvert.CONVERT.toResult(record);
+        // 翻译通道商户名称等 @Trans 字段(与运营端对齐), 须在裁剪前执行
+        transService.translate(result);
+        return sanitizeForMerchant(result);
     }
 
     /// 商户端字段裁剪: 原始报文/冗余字段不下发, 异常状态错误信息受控化
