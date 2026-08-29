@@ -6,5 +6,6 @@
   "templateError": "郵件模板載入失敗, 請聯絡管理員",
   "notBound": "目前帳號未綁定郵箱",
   "sameAsCurrent": "該郵箱已是目前帳號的綁定郵箱",
+  "notMatchAccount": "該帳號未綁定此郵箱",
   "clientInvalid": "終端編碼不合法"
 }

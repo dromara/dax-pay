@@ -6,5 +6,6 @@
   "templateError": "Gagal memuat templat email, silakan hubungi administrator",
   "notBound": "Akun saat ini belum mengikat email",
   "sameAsCurrent": "Email ini sudah terikat pada akun saat ini",
+  "notMatchAccount": "Email ini tidak terikat dengan akun ini",
   "clientInvalid": "Kode klien tidak valid"
 }

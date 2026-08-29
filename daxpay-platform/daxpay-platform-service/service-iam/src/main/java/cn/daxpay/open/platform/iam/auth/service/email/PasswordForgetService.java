@@ -32,8 +32,7 @@ import java.util.Map;
 ///
 /// 登录页自助找回: 账户+邮箱+图形验证码发送验证码 → 验证码+新密码重置;
 /// 账户与邮箱须匹配(邮箱为该账户绑定且已验证的邮箱), 单独邮箱不可发起找回;
-/// 防账号枚举: 无论账户与邮箱是否匹配已验证, 发码接口统一返回流程ID与一致的成功响应,
-/// 不存在的流程在重置环节必然失败, 不泄露账号与邮箱绑定状态;
+/// 发码环节对账号不存在/邮箱未绑定直接明确报错(操作直观性优先, 不做防账号枚举哑响应);
 /// 重置成功后踢掉该用户全部会话(无保留会话)并通知绑定邮箱
 @Service
 @RequiredArgsConstructor
@@ -59,37 +58,40 @@ public class PasswordForgetService {
 
     private final EmailTemplateService emailTemplateService;
 
-    /// 发送找回密码验证码, 返回流程ID(统一响应, 不泄露账号与邮箱绑定状态)
+    /// 发送找回密码验证码, 返回流程ID(账号不存在/邮箱未绑定均明确报错)
     public ForgetSendCodeResult sendCode(ForgetSendCodeParam param) {
-        // 图形验证码校验(防脚本批量探测), 请求防重放由 @NonceVerification 切面处理
-        captchaService.validateCaptchaOrThrow(param.getCaptchaKey(), param.getCaptchaCode(), true);
-        // 邮件通道预检(未配置时明确报错, 不静默跳过)
-        emailTemplateService.checkMailReady();
         String clientCode = ClientEnum.findByCode(param.getClientId())
                 .orElseThrow(() -> new BizInfoException("error.iam.email.clientInvalid"))
                 .getCode();
+        // 账号与邮箱校验置于图形验证码之前: 输错邮箱修正后可直接重发, 不连带烧掉图形验证码
+        // 按账户查询(仅邮箱不可定位用户), 账号不存在时明确报错便于用户核对输入
+        UserInfo user = userInfoManager.findByClientCodeAndAccount(clientCode, param.getAccount())
+                .orElseThrow(() -> new BizInfoException("error.iam.user.notExist"));
+        // 邮箱须为该账户绑定的邮箱, 否则明确报错(邮箱落库即已验证, 无需再校验验证状态)
+        if (!param.getEmail().equalsIgnoreCase(user.getEmail())) {
+            // 邮箱: 该账号未绑定此邮箱
+            throw new BizInfoException("error.iam.email.notMatchAccount");
+        }
+        // 图形验证码校验(防脚本批量发码), 请求防重放由 @NonceVerification 切面处理
+        captchaService.validateCaptchaOrThrow(param.getCaptchaKey(), param.getCaptchaCode(), true);
+        // 邮件通道预检(未配置时明确报错, 不静默跳过)
+        emailTemplateService.checkMailReady();
         String flowId = UUID.fastUUID().toString(true);
-        // 按账户查询(仅邮箱不可定位用户), 邮箱须与账户匹配且已验证才真发验证码, 否则返回哑流程(重置环节必然失败)
-        userInfoManager.findByClientCodeAndAccount(clientCode, param.getAccount())
-                .filter(user -> param.getEmail().equalsIgnoreCase(user.getEmail()))
-                .filter(UserInfo::isEmailVerified)
-                .ifPresent(user -> {
-                    String code = emailCodeService.generateCode();
-                    emailCodeService.save(EmailCodeService.RESET_SCOPE, flowId,
-                            new EmailCodeService.EmailCodeContext(code, 0, user.getId(), param.getEmail()));
-                    Map<String, Object> params = Map.of(
-                            "account", user.getAccount(),
-                            "code", code,
-                            "expireMinutes", EmailTemplateService.CODE_EXPIRE_MINUTES);
-                    emailTemplateService.send(param.getEmail(), user.getId(), EmailTemplateEnum.resetCode, params);
-                });
+        String code = emailCodeService.generateCode();
+        emailCodeService.save(EmailCodeService.RESET_SCOPE, flowId,
+                new EmailCodeService.EmailCodeContext(code, 0, user.getId(), param.getEmail()));
+        Map<String, Object> params = Map.of(
+                "account", user.getAccount(),
+                "code", code,
+                "expireMinutes", EmailTemplateService.CODE_EXPIRE_MINUTES);
+        emailTemplateService.send(param.getEmail(), user.getId(), EmailTemplateEnum.resetCode, params);
         return new ForgetSendCodeResult().setFlowId(flowId);
     }
 
     /// 重置密码(验证码校验 + 密码策略/历史校验 + 清登录锁定 + 踢全部会话 + 邮件通知)
     @Transactional(rollbackFor = Exception.class)
     public void resetPassword(ForgetResetPasswordParam param) {
-        // 哑流程(邮箱不存在/未验证)无上下文, 与过期统一按验证码失败处理;
+        // 已过期的流程无上下文, 统一按验证码失败处理;
         // 只校验不消费: 密码校验不合格(如与历史重叠)时验证码仍可换码重试, 避免连带烧码
         EmailCodeService.EmailCodeContext context = emailCodeService.verify(
                 EmailCodeService.RESET_SCOPE, param.getFlowId(), param.getCode());

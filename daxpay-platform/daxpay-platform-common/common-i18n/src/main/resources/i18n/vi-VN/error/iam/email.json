@@ -6,5 +6,6 @@
   "templateError": "Không thể tải mẫu email, vui lòng liên hệ quản trị viên",
   "notBound": "Tài khoản hiện tại chưa liên kết email",
   "sameAsCurrent": "Email này đã được liên kết với tài khoản hiện tại",
+  "notMatchAccount": "Email này chưa được liên kết với tài khoản này",
   "clientInvalid": "Mã máy khách không hợp lệ"
 }

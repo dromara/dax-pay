@@ -6,5 +6,6 @@
   "templateError": "Failed to load email template, please contact the administrator",
   "notBound": "The current account has no bound email",
   "sameAsCurrent": "This email is already bound to the current account",
+  "notMatchAccount": "This email is not bound to this account",
   "clientInvalid": "Invalid client code"
 }

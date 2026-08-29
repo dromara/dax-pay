@@ -6,5 +6,6 @@
   "templateError": "邮件模板加载失败, 请联系管理员",
   "notBound": "当前账号未绑定邮箱",
   "sameAsCurrent": "该邮箱已是当前账号的绑定邮箱",
+  "notMatchAccount": "该账号未绑定此邮箱",
   "clientInvalid": "终端编码不合法"
 }

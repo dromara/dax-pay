@@ -6,5 +6,6 @@
   "templateError": "Gagal memuatkan templat e-mel, sila hubungi pentadbir",
   "notBound": "Akaun semasa belum mengikat e-mel",
   "sameAsCurrent": "E-mel ini telah dikaitkan dengan akaun semasa",
+  "notMatchAccount": "E-mel ini tidak dikaitkan dengan akaun ini",
   "clientInvalid": "Kod klien tidak sah"
 }

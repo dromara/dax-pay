@@ -6,5 +6,6 @@
   "templateError": "이메일 템플릿을 로드하지 못했습니다. 관리자에게 문의하세요",
   "notBound": "현재 계정에 연결된 이메일이 없습니다",
   "sameAsCurrent": "이 이메일은 이미 현재 계정에 연결되어 있습니다",
+  "notMatchAccount": "이 이메일은 이 계정에 연결되어 있지 않습니다",
   "clientInvalid": "잘못된 클라이언트 코드입니다"
 }
