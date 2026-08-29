@@ -35,6 +35,8 @@ public interface PermCodes {
         String SIGN = "sign";
         /// 踢下线（在线用户）
         String KICKOUT = "kickout";
+        /// 解锁登录锁定（锁定用户）
+        String UNLOCK = "unlock";
         /// 重置密码
         String RESET_PASSWORD = "reset-password";
         /// 分配角色
@@ -354,6 +356,12 @@ public interface PermCodes {
         interface Online {
             /// 菜单编码
             String MENU = "iam:online";
+        }
+
+        /// 锁定用户 menuCode=iam:lock
+        interface Lock {
+            /// 菜单编码
+            String MENU = "iam:lock";
         }
 
         /// 三方社交登录配置 menuCode=iam:social（原 iam:social:login-config）
