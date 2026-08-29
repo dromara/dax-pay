@@ -15,8 +15,8 @@ import lombok.experimental.Accessors;
 @Schema(title = "小程序快捷登录参数")
 public class SocialAppletLoginParam {
 
-    /// 终端编码(管理端小程序恒为 admin, 预留商户端小程序扩展)
-    @Schema(description = "终端编码")
+    /// 身份域编码(管理端小程序恒为 admin, 预留商户端小程序扩展)
+    @Schema(description = "身份域编码")
     @NotBlank(message = "{validation.field.client.notBlank}")
     private String client;
 

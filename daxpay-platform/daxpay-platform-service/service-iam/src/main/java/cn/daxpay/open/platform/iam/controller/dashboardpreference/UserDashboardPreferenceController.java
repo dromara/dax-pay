@@ -11,14 +11,16 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /// # 工作台快捷入口偏好
 ///
-/// 用户个性化工作台快捷入口(显隐 + 排序), PC 与移动端按请求终端自动区分.
+/// 用户个性化工作台快捷入口(显隐 + 排序), 按身份域(clientCode) + 壳(terminal: web/app)双维度分池存储,
+/// PC Web 端与移动管理端各存一份, 互不覆盖.
+/// 分桶维度均取自请求头: x-client-code(身份域) / x-terminal(壳维度, 缺省 web), 接口无需显式传参.
 /// 每个登录用户均可管理自己的偏好, 无需额外权限码.
 @IgnoreAuth(login = true)
 @Validated
@@ -37,7 +39,7 @@ public class UserDashboardPreferenceController {
     }
 
     @Operation(summary = "保存当前用户的快捷入口序列(整体覆盖)")
-    @PutMapping
+    @PostMapping
     public Result<Void> save(@RequestBody @Validated QuickEntrySaveParam param) {
         userDashboardPreferenceService.saveCurrent(param.getEntries());
         return Res.ok();

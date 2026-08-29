@@ -54,14 +54,14 @@ public class PermMenuController {
 
     @PermCode(code = PermCodes.Action.VIEW)
     @InternalPath
-    @Operation(summary = "获取菜单树", description = "管理端接口，终端编码通过参数传递")
+    @Operation(summary = "获取菜单树", description = "管理端接口，身份域编码通过参数传递")
     @GetMapping("/tree")
-    public Result<List<PermMenuResult>> menuTree(@NotBlank(message = "{validation.field.clientCode.notBlank}") @Parameter(description = "终端编码") String clientCode) {
+    public Result<List<PermMenuResult>> menuTree(@NotBlank(message = "{validation.field.clientCode.notBlank}") @Parameter(description = "身份域编码") String clientCode) {
         return Res.ok(permMenuService.tree(clientCode));
     }
 
     @IgnoreAuth(login = true)
-    @Operation(summary = "获取当前用户菜单树", description = "登录用户获取个人菜单，终端编码从请求头读取")
+    @Operation(summary = "获取当前用户菜单树", description = "登录用户获取个人菜单，身份域编码从请求头读取")
     @GetMapping("/my")
     public Result<List<PermMenuResult>> myMenuTree() {
         return Res.ok(userRoleService.menuTreeByCurrentUser());
@@ -88,7 +88,7 @@ public class PermMenuController {
     @GetMapping("/check-menu-code-exists")
     public Result<Boolean> checkMenuCodeExists(
             @NotBlank(message = "{validation.field.menuCode.notBlank}") @Parameter(description = "菜单编码") String menuCode,
-            @NotBlank(message = "{validation.field.clientCode.notBlank}") @Parameter(description = "终端编码") String clientCode,
+            @NotBlank(message = "{validation.field.clientCode.notBlank}") @Parameter(description = "身份域编码") String clientCode,
             @Parameter(description = "排除的菜单ID") Long excludeId) {
         return Res.ok(permMenuService.checkMenuCodeExists(menuCode, clientCode, excludeId));
     }

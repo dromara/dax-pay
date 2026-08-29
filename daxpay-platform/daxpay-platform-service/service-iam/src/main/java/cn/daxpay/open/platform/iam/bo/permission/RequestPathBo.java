@@ -18,7 +18,7 @@ public class RequestPathBo {
     /// 是否归属所有终端
     private boolean allClient;
 
-    /// 终端编码
+    /// 身份域编码
     private List<String> clientCodes;
 
     /// 功能模块编码

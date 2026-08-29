@@ -11,8 +11,8 @@ import lombok.experimental.Accessors;
 @Schema(title = "登录终端主数据")
 public class ClientResult {
 
-    /// 终端编码(admin/merchant/gateway)
-    @Schema(description = "终端编码")
+    /// 身份域编码(admin/merchant/gateway)
+    @Schema(description = "身份域编码")
     private String code;
 
     /// 展示名(当前语言)

@@ -51,7 +51,7 @@ public class SocialEndpoint {
 
     /// 生成授权地址
     /// @param source 平台来源
-    /// @param client 终端编码(admin/merchant), 用于解析端点配置中的 baseUrl
+    /// @param client 身份域编码(admin/merchant), 用于解析端点配置中的 baseUrl
     /// @param mode 授权场景(不传则按登录态判断: 已登录=绑定, 未登录=登录)
     @Operation(summary = "生成授权地址")
     @GetMapping("/render/{source}")

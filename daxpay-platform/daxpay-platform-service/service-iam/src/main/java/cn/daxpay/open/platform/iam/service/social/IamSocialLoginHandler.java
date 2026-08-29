@@ -35,7 +35,7 @@ public class IamSocialLoginHandler {
     /// 使用已确认身份的 userId 完成登录, 返回 token
     ///
     /// @param userId 本地用户ID
-    /// @param clientCode 终端编码
+    /// @param clientCode 身份域编码
     /// @param source 三方平台编码(作为 loginType 记录到登录日志, 如 gitee/feishu)
     public String login(Long userId, String clientCode, String source,
                         HttpServletRequest request, HttpServletResponse response) {

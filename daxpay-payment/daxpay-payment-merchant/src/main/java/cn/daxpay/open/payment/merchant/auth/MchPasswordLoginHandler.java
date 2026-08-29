@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 /// # 商户端账号密码登录
 ///
-/// 仅声明终端编码(merchant), 通用流程继承 [AbstractPasswordLoginHandler]。
+/// 仅声明身份域编码(merchant), 通用流程继承 [AbstractPasswordLoginHandler]。
 ///
 @Slf4j
 @Component
@@ -23,7 +23,7 @@ public class MchPasswordLoginHandler extends AbstractPasswordLoginHandler {
         super(loginRetryService, captchaService, iamSecurityConfigService, passwordDecryptService);
     }
 
-    /// 商户端终端编码
+    /// 商户端身份域编码
     @Override
     public String getClientCode() {
         return ClientEnum.MERCHANT.getCode();

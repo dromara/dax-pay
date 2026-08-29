@@ -46,7 +46,7 @@ public class UserCheckController {
     @GetMapping("/exists-account-by-client")
     public Result<Boolean> existsAccountByClient(
         @NotBlank(message = "{validation.field.account.notBlank}") @Parameter(description = "账号") String account,
-        @NotBlank(message = "{validation.field.clientCode.notBlank}") @Parameter(description = "终端编码") String clientCode) {
+        @NotBlank(message = "{validation.field.clientCode.notBlank}") @Parameter(description = "身份域编码") String clientCode) {
         return Res.ok(userQueryService.existsAccountByClientCode(clientCode, account));
     }
 
@@ -54,7 +54,7 @@ public class UserCheckController {
     @GetMapping("/exists-account-by-client-not-id")
     public Result<Boolean> existsAccountByClient(
         @NotBlank(message = "{validation.field.account.notBlank}") @Parameter(description = "账号") String account,
-        @NotBlank(message = "{validation.field.clientCode.notBlank}") @Parameter(description = "终端编码") String clientCode,
+        @NotBlank(message = "{validation.field.clientCode.notBlank}") @Parameter(description = "身份域编码") String clientCode,
         @NotNull(message = "{validation.field.userId.notNull}") @Parameter(description = "用户ID") Long id) {
         return Res.ok(userQueryService.existsAccountByClientCode(clientCode, account, id));
     }
@@ -77,7 +77,7 @@ public class UserCheckController {
     @GetMapping("/exists-phone-by-client")
     public Result<Boolean> existsPhoneByClient(
         @Parameter(description = "手机号") String phone,
-        @NotBlank(message = "{validation.field.clientCode.notBlank}") @Parameter(description = "终端编码") String clientCode) {
+        @NotBlank(message = "{validation.field.clientCode.notBlank}") @Parameter(description = "身份域编码") String clientCode) {
         return Res.ok(userQueryService.existsPhoneByClientCode(clientCode, phone));
     }
 
@@ -85,7 +85,7 @@ public class UserCheckController {
     @GetMapping("/exists-phone-by-client-not-id")
     public Result<Boolean> existsPhoneByClient(
         @Parameter(description = "手机号") String phone,
-        @NotBlank(message = "{validation.field.clientCode.notBlank}") @Parameter(description = "终端编码") String clientCode,
+        @NotBlank(message = "{validation.field.clientCode.notBlank}") @Parameter(description = "身份域编码") String clientCode,
         @NotNull(message = "{validation.field.userId.notNull}") @Parameter(description = "用户ID") Long id) {
         return Res.ok(userQueryService.existsPhoneByClientCode(clientCode, phone, id));
     }
@@ -108,7 +108,7 @@ public class UserCheckController {
     @GetMapping("/exists-email-by-client")
     public Result<Boolean> existsEmailByClient(
         @Parameter(description = "邮箱") String email,
-        @NotBlank(message = "{validation.field.clientCode.notBlank}") @Parameter(description = "终端编码") String clientCode) {
+        @NotBlank(message = "{validation.field.clientCode.notBlank}") @Parameter(description = "身份域编码") String clientCode) {
         return Res.ok(userQueryService.existsEmailByClientCode(clientCode, email));
     }
 
@@ -116,7 +116,7 @@ public class UserCheckController {
     @GetMapping("/exists-email-by-client-not-id")
     public Result<Boolean> existsEmailByClient(
         @Parameter(description = "邮箱") String email,
-        @NotBlank(message = "{validation.field.clientCode.notBlank}") @Parameter(description = "终端编码") String clientCode,
+        @NotBlank(message = "{validation.field.clientCode.notBlank}") @Parameter(description = "身份域编码") String clientCode,
         @NotNull(message = "{validation.field.userId.notNull}") @Parameter(description = "用户ID") Long id) {
         return Res.ok(userQueryService.existsEmailByClientCode(clientCode, email, id));
     }

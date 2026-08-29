@@ -18,7 +18,7 @@ public class RoleUnifiedAssignResult {
     @Schema(description = "角色ID")
     private Long roleId;
 
-    @Schema(description = "终端编码")
+    @Schema(description = "身份域编码")
     private String clientCode;
 
     @Schema(description = "菜单与权限码统一授权树")

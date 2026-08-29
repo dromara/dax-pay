@@ -23,7 +23,7 @@ public class UserInfoParam {
     @Schema(description = "名称")
     private String name;
 
-    @Schema(description = "终端编码")
+    @Schema(description = "身份域编码")
     private String clientCode;
 
     @NotBlank(groups = ValidationGroup.add.class, message = "{validation.field.account.notBlank}")

@@ -19,7 +19,7 @@ public class SocialBindResult {
     @Schema(description = "本地用户ID")
     private Long userId;
 
-    @Schema(description = "终端编码")
+    @Schema(description = "身份域编码")
     private String clientCode;
 
     @Schema(description = "平台编码")

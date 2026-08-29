@@ -184,7 +184,7 @@ public class TokenService {
         }
     }
 
-    /// 获取并校验终端编码
+    /// 获取并校验身份域编码
     private String getClientCode(HttpServletRequest request) {
         String clientCode = SecurityUtil.getClient(request);
         ClientEnum.findByCode(clientCode)

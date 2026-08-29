@@ -24,7 +24,7 @@ public class LoginAuthContext {
     @NotNull
     private HttpServletResponse response;
 
-    /// 终端编码
+    /// 身份域编码
     @NotNull
     private String clientCode;
 

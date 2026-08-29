@@ -22,7 +22,7 @@ public class LoginLockResult {
     @Schema(description = "账号")
     private String account;
 
-    @Schema(description = "终端编码")
+    @Schema(description = "身份域编码")
     private String clientCode;
 
     @Schema(description = "密码错误次数")

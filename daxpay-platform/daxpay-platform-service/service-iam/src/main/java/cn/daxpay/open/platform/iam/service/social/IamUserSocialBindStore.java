@@ -46,7 +46,7 @@ public class IamUserSocialBindStore {
     }
     /// 保存绑定关系
     /// @param userId 本地用户ID
-    /// @param clientCode 终端编码
+    /// @param clientCode 身份域编码
     /// @param authUser 平台返回的用户信息
     @Transactional(rollbackFor = Exception.class)
     public void saveBind(Long userId, String clientCode, AuthUser authUser) {
@@ -56,7 +56,7 @@ public class IamUserSocialBindStore {
 
     /// 保存小程序快捷登录绑定关系(无昵称头像)
     /// @param userId 本地用户ID
-    /// @param clientCode 终端编码
+    /// @param clientCode 身份域编码
     /// @param source 平台来源(weChatApplet/alipayApplet/douyinApplet)
     /// @param openId 平台用户唯一标识
     @Transactional(rollbackFor = Exception.class)

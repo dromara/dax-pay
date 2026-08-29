@@ -19,7 +19,7 @@ public class RoleResult {
     @Schema(description = "国际化key")
     private String i18nKey;
 
-    @Schema(description = "终端编码")
+    @Schema(description = "身份域编码")
     private String clientCode;
 
     @Schema(description = "是否系统内置")

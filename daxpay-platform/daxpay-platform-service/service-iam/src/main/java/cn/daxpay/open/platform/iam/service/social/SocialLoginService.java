@@ -129,7 +129,7 @@ public class SocialLoginService {
 
     /// 生成授权地址
     /// @param source 平台来源
-    /// @param client 终端编码(admin/merchant), 用于解析端点配置中的 baseUrl
+    /// @param client 身份域编码(admin/merchant), 用于解析端点配置中的 baseUrl
     /// @param mode 授权场景(不传则按登录态判断: 已登录=绑定, 未登录=登录)
     public String generateAuthorizeUrl(String source, String client, String mode) {
         return this.generateAuthorizeUrl(source, client, mode, null);
@@ -372,7 +372,7 @@ public class SocialLoginService {
     private SocialClientEnum requireSocialClient(String clientCode) {
         return SocialClientEnum.findByCode(clientCode)
                 .orElseThrow(() -> {
-                    // 社交登录: 不支持的终端编码(仅 admin/merchant)
+                    // 社交登录: 不支持的身份域编码(仅 admin/merchant)
                     throw new OperationFailException("error.social.unsupportedClient");
                 });
     }

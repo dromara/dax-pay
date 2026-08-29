@@ -47,7 +47,7 @@ public class RoleUnifiedAssignTreeResult {
     @Schema(description = "菜单编码")
     private String menuCode;
 
-    @Schema(description = "终端编码")
+    @Schema(description = "身份域编码")
     private String clientCode;
 
     @Schema(description = "菜单类型")

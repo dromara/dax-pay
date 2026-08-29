@@ -272,7 +272,7 @@ public class PermMenuService {
 
     /// 检查菜单编码是否存在(同一终端下)
     /// @param menuCode 菜单编码
-    /// @param clientCode 终端编码
+    /// @param clientCode 身份域编码
     /// @param excludeId 排除的菜单ID(编辑时使用)
     /// @return 是否存在
     public boolean checkMenuCodeExists(String menuCode, String clientCode, Long excludeId) {

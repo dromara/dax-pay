@@ -16,8 +16,11 @@ public interface WebHeaderCode {
     /// 追踪ID
     String X_TRACE_ID = "x-trace-id";
 
-    /// 终端编码
+    /// 身份域编码
     String X_CLIENT_CODE = "x-client-code";
+
+    /// 请求终端: web=PC Web端 / app=移动管理端
+    String X_TERMINAL = "x-terminal";
 
     /// 国际化语言
     String ACCEPT_LANGUAGE = "accept-language";

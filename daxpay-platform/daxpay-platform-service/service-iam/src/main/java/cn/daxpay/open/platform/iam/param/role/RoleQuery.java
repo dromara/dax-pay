@@ -17,7 +17,7 @@ public class RoleQuery extends SortParam {
     @Schema(description = "角色编码")
     private String code;
 
-    @Schema(description = "终端编码")
+    @Schema(description = "身份域编码")
     private String clientCode;
 
 }

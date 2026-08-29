@@ -20,7 +20,7 @@ public class PasswordLoginHandler extends AbstractPasswordLoginHandler {
         super(loginRetryService, captchaService, iamSecurityConfigService, passwordDecryptService);
     }
 
-    /// 平台运营端终端编码
+    /// 平台运营端身份域编码
     @Override
     public String getClientCode() {
         return ClientEnum.ADMIN.getCode();

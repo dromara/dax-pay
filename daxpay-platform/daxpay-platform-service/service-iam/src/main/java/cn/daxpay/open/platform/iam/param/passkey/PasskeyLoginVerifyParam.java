@@ -15,7 +15,7 @@ import lombok.experimental.Accessors;
 @Schema(title = "通行密钥登录验证参数")
 public class PasskeyLoginVerifyParam {
 
-    @Schema(description = "终端编码(admin/merchant)")
+    @Schema(description = "身份域编码(admin/merchant)")
     @NotBlank(message = "{validation.field.client.notBlank}")
     private String client;
 

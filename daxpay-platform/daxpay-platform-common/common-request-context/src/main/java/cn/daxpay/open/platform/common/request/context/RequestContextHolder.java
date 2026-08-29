@@ -29,9 +29,14 @@ public class RequestContextHolder {
         return getHeader(WebHeaderCode.X_TRACE_ID);
     }
 
-    /// 获取终端编码
+    /// 获取身份域编码
     public String getClientCode() {
         return getHeader(WebHeaderCode.X_CLIENT_CODE);
+    }
+
+    /// 获取请求终端(壳维度: web/app), 与 clientCode 正交, 未携带请求头时返回 null 由调用方兜底
+    public String getTerminal() {
+        return getHeader(WebHeaderCode.X_TERMINAL);
     }
 
     /// 获取国际化语言

@@ -25,7 +25,7 @@ public class UserInfo extends MpBaseEntity implements ToResult<UserInfoResult> {
     /// 名称
     private String name;
 
-    /// 终端编码
+    /// 身份域编码
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private String clientCode;
 

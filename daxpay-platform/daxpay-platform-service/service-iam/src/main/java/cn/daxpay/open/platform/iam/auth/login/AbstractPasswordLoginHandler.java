@@ -28,7 +28,7 @@ import java.util.Objects;
 /// # 账号密码登录基类
 ///
 /// 承载密码登录的通用流程(用户定位、验证码校验、密码比对、登录重试状态注入)。
-/// 子类只需声明终端编码 [#getClientCode], 由认证框架按"终端 + 登录方式"双键路由,
+/// 子类只需声明身份域编码 [#getClientCode], 由认证框架按"身份域 + 登录方式"双键路由,
 /// 从而消除多终端同登录方式(如平台端/商户端均为 password)的 findFirst 歧义与重复代码。
 ///
 @Slf4j
@@ -68,7 +68,7 @@ public abstract class AbstractPasswordLoginHandler implements Authenticator {
         String password = this.obtainPassword(request);
         String captchaKey = this.obtainCaptchaKey(request);
         String captchaCode = this.obtainCaptchaCode(request);
-        // 从请求上下文获取终端编码，按终端+账号查询用户
+        // 从请求上下文获取身份域编码，按身份域+账号查询用户
         String clientCode = context.getClientCode();
 
         UserInfoResult userInfoResult = this.loadUserByClientCodeAndAccount(clientCode, account);
@@ -104,7 +104,7 @@ public abstract class AbstractPasswordLoginHandler implements Authenticator {
         captchaService.checkOrValidateCaptcha(errorCount, triggerAttempts, captchaKey, captchaCode);
     }
 
-    /// 根据终端编码+账号加载用户（终端维度用户定位）
+    /// 根据身份域编码+账号加载用户（身份域维度用户定位）
     protected UserInfoResult loadUserByClientCodeAndAccount(String clientCode, String account) {
         // 按终端+账号查询用户，跨终端同名账号不会命中
         UserInfoResult userInfoResult = userQueryService.findByClientCodeAndAccount(clientCode, account);

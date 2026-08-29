@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
 public class SocialCallbackUrlResult {
 
     /// 身份域终端 admin / merchant
-    @Schema(description = "终端编码")
+    @Schema(description = "身份域编码")
     private String clientCode;
 
     /// 平台编码(source)

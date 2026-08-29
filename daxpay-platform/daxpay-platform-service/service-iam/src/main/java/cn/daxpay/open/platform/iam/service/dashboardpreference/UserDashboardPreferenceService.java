@@ -1,6 +1,7 @@
 package cn.daxpay.open.platform.iam.service.dashboardpreference;
 
 import cn.daxpay.open.platform.capability.auth.util.SecurityUtil;
+import cn.daxpay.open.platform.common.request.context.RequestContextHolder;
 import cn.daxpay.open.platform.iam.dao.dashboardpreference.UserDashboardPreferenceManager;
 import cn.daxpay.open.platform.iam.entity.dashboardpreference.UserDashboardPreference;
 import cn.daxpay.open.platform.iam.result.dashboardpreference.QuickEntryResult;
@@ -14,7 +15,8 @@ import java.util.List;
 
 /// # 用户工作台快捷入口偏好
 ///
-/// PC 与移动端通过请求终端(clientCode)区分, 每用户每端一份配置, 互不影响.
+/// 按身份域(clientCode) + 壳(terminal: web/app)双维度分池, 每用户每端一份配置, PC 与移动端互不影响.
+/// clientCode 与 terminal 均取自请求上下文(请求头 x-client-code / x-terminal), 未携带 terminal 头时缺省 web.
 /// 仅存储用户已选入口的 key 有序序列, 入口元信息由前端维护.
 @Service
 @RequiredArgsConstructor
@@ -29,7 +31,7 @@ public class UserDashboardPreferenceService {
     public QuickEntryResult findCurrent() {
         Long userId = SecurityUtil.getUserId();
         String clientCode = clientCodeService.getClientCode();
-        return userDashboardPreferenceManager.findByUserAndClient(userId, clientCode)
+        return userDashboardPreferenceManager.findByUserAndClientAndTerminal(userId, clientCode, currentTerminal())
                 .map(UserDashboardPreference::toResult)
                 .orElseGet(() -> new QuickEntryResult().setEntries(null));
     }
@@ -39,20 +41,27 @@ public class UserDashboardPreferenceService {
     public void saveCurrent(List<String> entries) {
         Long userId = SecurityUtil.getUserId();
         String clientCode = clientCodeService.getClientCode();
+        String terminal = currentTerminal();
         // 入参为 null 时按空序列处理, 表示全部隐藏
         List<String> safeEntries = entries == null ? new ArrayList<>() : entries;
         UserDashboardPreference existed = userDashboardPreferenceManager
-                .findByUserAndClient(userId, clientCode).orElse(null);
+                .findByUserAndClientAndTerminal(userId, clientCode, terminal).orElse(null);
         if (existed == null) {
             // 新增
             userDashboardPreferenceManager.save(
-                    UserDashboardPreference.init(userId, clientCode, safeEntries));
+                    UserDashboardPreference.init(userId, clientCode, terminal, safeEntries));
         }
         else {
             // 整体覆盖更新
             existed.setEntries(safeEntries);
             userDashboardPreferenceManager.updateById(existed);
         }
+    }
+
+    /// 当前请求终端(壳维度), 未携带 x-terminal 请求头时缺省 web(兼容旧客户端)
+    private String currentTerminal() {
+        String terminal = RequestContextHolder.getTerminal();
+        return terminal == null ? "web" : terminal;
     }
 
 }

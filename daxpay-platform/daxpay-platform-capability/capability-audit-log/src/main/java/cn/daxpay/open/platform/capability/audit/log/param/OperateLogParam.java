@@ -23,7 +23,7 @@ public class OperateLogParam {
     @Schema(description = "操作人员账号")
     private String account;
 
-    @Schema(description = "终端编码")
+    @Schema(description = "身份域编码")
     private String client;
 
     @Schema(description = "浏览器类型")

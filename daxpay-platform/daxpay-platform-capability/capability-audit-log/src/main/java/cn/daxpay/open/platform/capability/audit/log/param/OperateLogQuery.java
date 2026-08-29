@@ -20,7 +20,7 @@ public class OperateLogQuery {
     private String account;
 
     @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
-    @Schema(description = "终端编码")
+    @Schema(description = "身份域编码")
     private String client;
 
     @Schema(description = "浏览器类型")

@@ -24,7 +24,7 @@ public class UserDetail {
     /// 用户名称
     private String name;
 
-    /// 终端编码
+    /// 身份域编码
     private String clientCode;
 
     /// 账号

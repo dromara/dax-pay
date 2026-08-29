@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import java.util.Arrays;
 import java.util.Optional;
 
-/// # 终端类型枚举
+/// # 身份域枚举
 ///
 @Getter
 @RequiredArgsConstructor

@@ -11,11 +11,12 @@ import java.util.Optional;
 @Repository
 public class UserDashboardPreferenceManager extends BaseManager<UserDashboardPreferenceMapper, UserDashboardPreference> {
 
-    /// 按用户 + 终端查询偏好
-    public Optional<UserDashboardPreference> findByUserAndClient(Long userId, String clientCode) {
+    /// 按用户 + 身份域终端 + 壳(web/app)查询偏好
+    public Optional<UserDashboardPreference> findByUserAndClientAndTerminal(Long userId, String clientCode, String terminal) {
         return lambdaQuery()
                 .eq(UserDashboardPreference::getUserId, userId)
                 .eq(UserDashboardPreference::getClientCode, clientCode)
+                .eq(UserDashboardPreference::getTerminal, terminal)
                 .oneOpt();
     }
 

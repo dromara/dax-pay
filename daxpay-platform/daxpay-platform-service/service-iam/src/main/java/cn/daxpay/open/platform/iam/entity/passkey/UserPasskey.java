@@ -26,7 +26,7 @@ public class UserPasskey extends MpBaseEntity {
     @TableField(updateStrategy = com.baomidou.mybatisplus.annotation.FieldStrategy.NEVER)
     private Long userId;
 
-    /// 终端编码(admin/merchant)
+    /// 身份域编码(admin/merchant)
     @TableField(updateStrategy = com.baomidou.mybatisplus.annotation.FieldStrategy.NEVER)
     private String clientCode;
 

@@ -7,7 +7,7 @@ import cn.daxpay.open.platform.system.entity.config.platform.infra.PlatformUrlCo
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
-/// # 社交登录终端编码
+/// # 社交登录身份域编码
 ///
 /// 用于按 client(admin/merchant) 解析端点配置中对应的前端 baseUrl.
 /// 仅支持 admin / merchant, 不识别时由业务层拒绝(不再静默回退 admin).
@@ -32,7 +32,7 @@ public enum SocialClientEnum {
         }
     };
 
-    /// 终端编码
+    /// 身份域编码
     private final String code;
 
     /// 从端点配置中解析当前终端对应的 baseUrl

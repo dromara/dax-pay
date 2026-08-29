@@ -19,7 +19,7 @@ public class IamUserSocial extends MpBaseEntity {
     /// 本地用户ID(关联 iam_user_info.id)
     private Long userId;
 
-    /// 终端编码(admin/merchant)
+    /// 身份域编码(admin/merchant)
     private String clientCode;
 
     /// 平台编码(weChat/weCom/qq/github/gitee/feishu/dingTalk)

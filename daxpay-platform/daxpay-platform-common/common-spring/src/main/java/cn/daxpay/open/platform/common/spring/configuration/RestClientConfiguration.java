@@ -30,7 +30,7 @@ import java.io.IOException;
 ///
 /// 使用 Spring Boot 自动配置的 [RestClient.Builder], 以便 OpenTelemetry 的
 /// ClientRequestObservation 拦截器自动追加(W3C traceparent 头自动透传)。
-/// 另通过 BusinessContextInterceptor 透传业务上下文(国际化语言、终端编码)。
+/// 另通过 BusinessContextInterceptor 透传业务上下文(国际化语言、身份域编码)。
 @Configuration
 @RequiredArgsConstructor
 public class RestClientConfiguration {
@@ -96,7 +96,7 @@ public class RestClientConfiguration {
 
     /// 业务上下文透传拦截器
     ///
-    /// OTel 仅自动透传 W3C traceparent, 业务上下文(国际化语言、终端编码)需手动透传。
+    /// OTel 仅自动透传 W3C traceparent, 业务上下文(国际化语言、身份域编码)需手动透传。
     /// 通过 Spring 原生 [RequestContextHolder] 获取当前请求, 避免模块循环依赖。
     static class BusinessContextInterceptor implements ClientHttpRequestInterceptor {
         @Override
@@ -110,7 +110,7 @@ public class RestClientConfiguration {
                 if (StrUtil.isNotBlank(language)) {
                     request.getHeaders().set(HttpHeaders.ACCEPT_LANGUAGE, language);
                 }
-                // 透传终端编码(运营端/H5/小程序/API)
+                // 透传身份域编码(运营端/H5/小程序/API)
                 String clientCode = currentRequest.getHeader(HEADER_X_CLIENT_CODE);
                 if (StrUtil.isNotBlank(clientCode)) {
                     request.getHeaders().set(HEADER_X_CLIENT_CODE, clientCode);

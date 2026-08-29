@@ -30,7 +30,7 @@ public class OperateLogDb extends MpIdEntity implements ToResult<OperateLogResul
     /// 操作人员账号
     private String account;
 
-    /// 终端编码
+    /// 身份域编码
     private String client;
 
     /// 浏览器类型

@@ -18,7 +18,7 @@ public class UserInfoResult {
     @Schema(description = "名称")
     private String name;
 
-    @Schema(description = "终端编码")
+    @Schema(description = "身份域编码")
     private String clientCode;
 
     @Schema(description = "账号")

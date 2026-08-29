@@ -22,7 +22,7 @@ public class RoleUnifiedAssignParam {
     private Long roleId;
 
     @NotBlank(message = "{validation.field.clientCode.notBlank}")
-    @Schema(description = "终端编码")
+    @Schema(description = "身份域编码")
     private String clientCode;
 
     @Schema(description = "菜单ID列表")

@@ -154,7 +154,7 @@ public class UserAdminService {
     /// @param skipDuplicateCheck 是否跳过重复校验（调用方已做更精确的校验时使用）
     @Transactional(rollbackFor = Exception.class)
     public UserPasswordResult add(UserInfoParam userInfoParam, boolean skipDuplicateCheck) {
-        // 使用传入的终端编码，未指定时默认为 admin
+        // 使用传入的身份域编码，未指定时默认为 admin
         String clientCode = StrUtil.isNotBlank(userInfoParam.getClientCode())
                 ? userInfoParam.getClientCode()
                 : ClientEnum.ADMIN.getCode();

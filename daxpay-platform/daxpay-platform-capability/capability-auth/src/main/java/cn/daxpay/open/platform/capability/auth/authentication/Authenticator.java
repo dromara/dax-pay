@@ -11,7 +11,7 @@ import jakarta.validation.constraints.NotNull;
 /// 由一个具体认证器承载, [AuthenticationTemplate] 据双键路由到唯一实现。
 public interface Authenticator {
 
-    /// 终端编码(对应 [cn.daxpay.open.platform.core.enums.client.ClientEnum] 的 code)
+    /// 身份域编码(对应 [cn.daxpay.open.platform.core.enums.client.ClientEnum] 的 code)
     String getClientCode();
 
     /// 获取登录类型

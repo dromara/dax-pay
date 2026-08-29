@@ -20,7 +20,7 @@ public class LoginLockQuery extends SortParam {
     @Schema(description = "账号")
     private String account;
 
-    @Schema(description = "终端编码")
+    @Schema(description = "身份域编码")
     private String clientCode;
 
     @Schema(description = "锁定状态: locked-锁定中 expired-已到期 counting-计数中")

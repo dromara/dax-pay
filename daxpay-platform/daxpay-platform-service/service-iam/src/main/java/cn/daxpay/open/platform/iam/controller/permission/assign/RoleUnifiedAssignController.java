@@ -35,7 +35,7 @@ public class RoleUnifiedAssignController {
     @GetMapping("/get-by-role")
     public Result<RoleUnifiedAssignResult> getByRole(
             @NotNull(message = "{validation.field.roleId.notNull}") @Parameter(description = "角色ID") Long roleId,
-            @NotBlank(message = "{validation.field.clientCode.notBlank}") @Parameter(description = "终端编码") String clientCode) {
+            @NotBlank(message = "{validation.field.clientCode.notBlank}") @Parameter(description = "身份域编码") String clientCode) {
         return Res.ok(roleUnifiedAssignService.getByRole(roleId, clientCode));
     }
 
