@@ -1407,7 +1407,7 @@ CREATE TABLE "public"."iam_role" (
 ;
 COMMENT ON COLUMN "public"."iam_role"."id" IS '主键';
 COMMENT ON COLUMN "public"."iam_role"."code" IS '角色编码';
-COMMENT ON COLUMN "public"."iam_role"."client_code" IS '终端编码';
+COMMENT ON COLUMN "public"."iam_role"."client_code" IS '身份域编码';
 COMMENT ON COLUMN "public"."iam_role"."data_scope" IS '数据权限范围';
 COMMENT ON COLUMN "public"."iam_role"."internal" IS '是否系统内置';
 COMMENT ON COLUMN "public"."iam_role"."remark" IS '备注';
@@ -1448,7 +1448,7 @@ CREATE TABLE "public"."iam_role_menu" (
 ;
 COMMENT ON COLUMN "public"."iam_role_menu"."id" IS '主键';
 COMMENT ON COLUMN "public"."iam_role_menu"."role_id" IS '角色ID';
-COMMENT ON COLUMN "public"."iam_role_menu"."client_code" IS '终端编码: ADMIN/ISV/AGENT/MCH';
+COMMENT ON COLUMN "public"."iam_role_menu"."client_code" IS '身份域编码: ADMIN/ISV/AGENT/MCH';
 COMMENT ON COLUMN "public"."iam_role_menu"."menu_id" IS '菜单ID';
 COMMENT ON TABLE "public"."iam_role_menu" IS '角色-菜单关联表';
 
@@ -1495,6 +1495,7 @@ CREATE TABLE "public"."iam_user_dashboard_preference" (
   "id" int8 NOT NULL,
   "user_id" int8 NOT NULL,
   "client_code" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "terminal" varchar(16) COLLATE "pg_catalog"."default" NOT NULL DEFAULT 'web',
   "entries" jsonb NOT NULL DEFAULT '[]'::jsonb,
   "creator" int8,
   "create_time" timestamptz(6),
@@ -1506,7 +1507,8 @@ CREATE TABLE "public"."iam_user_dashboard_preference" (
 ;
 COMMENT ON COLUMN "public"."iam_user_dashboard_preference"."id" IS '主键';
 COMMENT ON COLUMN "public"."iam_user_dashboard_preference"."user_id" IS '用户ID';
-COMMENT ON COLUMN "public"."iam_user_dashboard_preference"."client_code" IS '终端编码(WEB/MOBILE), PC与移动分开管理';
+COMMENT ON COLUMN "public"."iam_user_dashboard_preference"."client_code" IS '身份域编码(admin/merchant/gateway)';
+COMMENT ON COLUMN "public"."iam_user_dashboard_preference"."terminal" IS '请求终端(壳维度): web=PC Web端 / app=移动管理端, 与client_code正交, 同身份域下PC与App各存一份';
 COMMENT ON COLUMN "public"."iam_user_dashboard_preference"."entries" IS '已选快捷入口有序序列(纯key数组), 如 ["merchant","notify"]';
 COMMENT ON COLUMN "public"."iam_user_dashboard_preference"."creator" IS '创建人ID';
 COMMENT ON COLUMN "public"."iam_user_dashboard_preference"."create_time" IS '创建时间';
@@ -1584,7 +1586,7 @@ CREATE TABLE "public"."iam_user_info" (
 ;
 COMMENT ON COLUMN "public"."iam_user_info"."id" IS '主键';
 COMMENT ON COLUMN "public"."iam_user_info"."name" IS '名称';
-COMMENT ON COLUMN "public"."iam_user_info"."client_code" IS '终端编码';
+COMMENT ON COLUMN "public"."iam_user_info"."client_code" IS '身份域编码';
 COMMENT ON COLUMN "public"."iam_user_info"."account" IS '账号';
 COMMENT ON COLUMN "public"."iam_user_info"."password" IS '密码';
 COMMENT ON COLUMN "public"."iam_user_info"."phone" IS '手机号';
@@ -1626,7 +1628,7 @@ CREATE TABLE "public"."iam_user_passkey" (
 ;
 COMMENT ON COLUMN "public"."iam_user_passkey"."id" IS '主键';
 COMMENT ON COLUMN "public"."iam_user_passkey"."user_id" IS '用户ID(关联 iam_user_info.id)';
-COMMENT ON COLUMN "public"."iam_user_passkey"."client_code" IS '终端编码(admin/merchant)';
+COMMENT ON COLUMN "public"."iam_user_passkey"."client_code" IS '身份域编码(admin/merchant)';
 COMMENT ON COLUMN "public"."iam_user_passkey"."credential_id" IS 'WebAuthn 凭据ID(base64url)';
 COMMENT ON COLUMN "public"."iam_user_passkey"."public_key" IS 'COSE 公钥(base64url)';
 COMMENT ON COLUMN "public"."iam_user_passkey"."sign_count" IS '签名计数(防认证器克隆)';
@@ -1734,7 +1736,7 @@ CREATE TABLE "public"."iam_user_social" (
 ;
 COMMENT ON COLUMN "public"."iam_user_social"."id" IS '主键';
 COMMENT ON COLUMN "public"."iam_user_social"."user_id" IS '本地用户ID(关联 iam_user_info.id)';
-COMMENT ON COLUMN "public"."iam_user_social"."client_code" IS '终端编码(admin/merchant)';
+COMMENT ON COLUMN "public"."iam_user_social"."client_code" IS '身份域编码(admin/merchant)';
 COMMENT ON COLUMN "public"."iam_user_social"."source" IS '平台编码(weChat/weCom/qq/github/gitee/feishu/dingTalk)';
 COMMENT ON COLUMN "public"."iam_user_social"."open_id" IS '平台用户唯一标识(openid/uuid)';
 COMMENT ON COLUMN "public"."iam_user_social"."username" IS '平台昵称';
@@ -2479,6 +2481,84 @@ COMMENT ON INDEX "public"."idx_notify_mail_record_receiver_email" IS '收件邮�
 COMMENT ON INDEX "public"."idx_notify_mail_record_status" IS '发送状态索引: 按状态筛选(失败记录排查与重发)';
 
 -- ----------------------------
+-- Table structure for pay_abnormal_order
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."pay_abnormal_order";
+CREATE TABLE "public"."pay_abnormal_order" (
+  "id" int8 NOT NULL,
+  "mch_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "app_id" varchar(64) COLLATE "pg_catalog"."default",
+  "trade_no" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
+  "biz_order_no" varchar(100) COLLATE "pg_catalog"."default",
+  "trade_type" varchar(32) COLLATE "pg_catalog"."default",
+  "title" varchar(100) COLLATE "pg_catalog"."default",
+  "amount" int8,
+  "currency" varchar(8) COLLATE "pg_catalog"."default",
+  "trade_status" varchar(32) COLLATE "pg_catalog"."default",
+  "abnormal_type" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "source" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "channel" varchar(32) COLLATE "pg_catalog"."default",
+  "provider" varchar(32) COLLATE "pg_catalog"."default",
+  "channel_mch_no" varchar(64) COLLATE "pg_catalog"."default",
+  "out_order_no" varchar(150) COLLATE "pg_catalog"."default",
+  "channel_status" varchar(32) COLLATE "pg_catalog"."default",
+  "callback_notify_info" text COLLATE "pg_catalog"."default",
+  "handle_status" varchar(32) COLLATE "pg_catalog"."default" NOT NULL DEFAULT 'pending',
+  "handle_action" varchar(32) COLLATE "pg_catalog"."default",
+  "handler" varchar(64) COLLATE "pg_catalog"."default",
+  "handle_time" timestamptz(6),
+  "handle_remark" varchar(300) COLLATE "pg_catalog"."default",
+  "creator" int8,
+  "create_time" timestamptz(6) DEFAULT now(),
+  "last_modifier" int8,
+  "last_modified_time" timestamptz(6),
+  "version" int4 NOT NULL DEFAULT 0,
+  "deleted" bool NOT NULL DEFAULT false,
+  CONSTRAINT "pk_pay_abnormal_order" PRIMARY KEY ("id")
+)
+;
+COMMENT ON COLUMN "public"."pay_abnormal_order"."id" IS '主键';
+COMMENT ON COLUMN "public"."pay_abnormal_order"."mch_no" IS '商户号';
+COMMENT ON COLUMN "public"."pay_abnormal_order"."app_id" IS '应用号';
+COMMENT ON COLUMN "public"."pay_abnormal_order"."trade_no" IS '平台交易号(对应 pay_trade.trade_no)';
+COMMENT ON COLUMN "public"."pay_abnormal_order"."biz_order_no" IS '商户业务单号(取自关联容器, 便于商户侧核对)';
+COMMENT ON COLUMN "public"."pay_abnormal_order"."trade_type" IS '交易形态(normal/gateway)';
+COMMENT ON COLUMN "public"."pay_abnormal_order"."title" IS '订单标题(冗余自资金交易)';
+COMMENT ON COLUMN "public"."pay_abnormal_order"."amount" IS '交易金额(最小货币单位)';
+COMMENT ON COLUMN "public"."pay_abnormal_order"."currency" IS '币种 ISO 4217';
+COMMENT ON COLUMN "public"."pay_abnormal_order"."trade_status" IS '发现异常时的资金状态(close/fail/cancel)';
+COMMENT ON COLUMN "public"."pay_abnormal_order"."abnormal_type" IS '异常类型(close_paid-关单后收款/fail_paid-失败后收款/cancel_paid-撤销后收款)';
+COMMENT ON COLUMN "public"."pay_abnormal_order"."source" IS '发现来源(callback-通道回调/sync-同步查单/job-定时任务)';
+COMMENT ON COLUMN "public"."pay_abnormal_order"."channel" IS '支付通道(冗余自资金交易)';
+COMMENT ON COLUMN "public"."pay_abnormal_order"."provider" IS '支付渠道(冗余自资金交易)';
+COMMENT ON COLUMN "public"."pay_abnormal_order"."channel_mch_no" IS '通道商户号(冗余自资金交易)';
+COMMENT ON COLUMN "public"."pay_abnormal_order"."out_order_no" IS '通道交易号(回调/查单回执)';
+COMMENT ON COLUMN "public"."pay_abnormal_order"."channel_status" IS '通道侧订单状态(发现或核实时的通道查单结果)';
+COMMENT ON COLUMN "public"."pay_abnormal_order"."callback_notify_info" IS '通道回调报文快照(JSON, 回调来源时记录)';
+COMMENT ON COLUMN "public"."pay_abnormal_order"."handle_status" IS '处理状态(pending-待处理/confirmed-已确认成功/ignored-已忽略)';
+COMMENT ON COLUMN "public"."pay_abnormal_order"."handle_action" IS '处置动作(confirm_success-确认成功/ignore-忽略)';
+COMMENT ON COLUMN "public"."pay_abnormal_order"."handler" IS '处理人账号';
+COMMENT ON COLUMN "public"."pay_abnormal_order"."handle_time" IS '处置时间';
+COMMENT ON COLUMN "public"."pay_abnormal_order"."handle_remark" IS '处置备注';
+COMMENT ON COLUMN "public"."pay_abnormal_order"."creator" IS '创建人';
+COMMENT ON COLUMN "public"."pay_abnormal_order"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."pay_abnormal_order"."last_modifier" IS '最后修改人';
+COMMENT ON COLUMN "public"."pay_abnormal_order"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."pay_abnormal_order"."version" IS '乐观锁版本号';
+COMMENT ON COLUMN "public"."pay_abnormal_order"."deleted" IS '逻辑删除标志';
+COMMENT ON TABLE "public"."pay_abnormal_order" IS '异常订单(终态单收到收款证据后的人工处置台账, 终态不自动翻转, 由运营核实通道后确认)';
+
+CREATE UNIQUE INDEX "uk_pay_abnormal_order_trade_pending" ON "public"."pay_abnormal_order" USING btree (
+  "trade_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+) WHERE deleted = false AND handle_status = 'pending';
+COMMENT ON INDEX "public"."uk_pay_abnormal_order_trade_pending" IS '同一交易同时最多一条待处理异常单(防回调/同步/定时重复落单)';
+
+CREATE INDEX "idx_pay_abnormal_order_create_time" ON "public"."pay_abnormal_order" USING btree (
+  "create_time" "pg_catalog"."timestamptz_ops" ASC NULLS LAST
+);
+COMMENT ON INDEX "public"."idx_pay_abnormal_order_create_time" IS '按发现时间扫描待处理滞留单';
+
+-- ----------------------------
 -- Table structure for pay_alloc_detail
 -- ----------------------------
 DROP TABLE IF EXISTS "public"."pay_alloc_detail";
@@ -2957,6 +3037,79 @@ COMMENT ON COLUMN "public"."pay_easy_pay_refund_order"."last_modified_time" IS '
 COMMENT ON COLUMN "public"."pay_easy_pay_refund_order"."version" IS '版本号';
 COMMENT ON COLUMN "public"."pay_easy_pay_refund_order"."deleted" IS '删除标志(逻辑删除)';
 COMMENT ON TABLE "public"."pay_easy_pay_refund_order" IS '易支付协议退款订单表';
+
+-- ----------------------------
+-- Table structure for pay_fund_flow
+-- ----------------------------
+DROP TABLE IF EXISTS "public"."pay_fund_flow";
+CREATE TABLE "public"."pay_fund_flow" (
+  "id" int8 NOT NULL,
+  "mch_no" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "app_id" varchar(64) COLLATE "pg_catalog"."default",
+  "flow_type" varchar(32) COLLATE "pg_catalog"."default" NOT NULL,
+  "trade_no" varchar(64) COLLATE "pg_catalog"."default" NOT NULL,
+  "refund_no" varchar(64) COLLATE "pg_catalog"."default",
+  "biz_order_no" varchar(100) COLLATE "pg_catalog"."default",
+  "title" varchar(100) COLLATE "pg_catalog"."default",
+  "amount" int8 NOT NULL,
+  "currency" varchar(8) COLLATE "pg_catalog"."default",
+  "channel" varchar(32) COLLATE "pg_catalog"."default",
+  "provider" varchar(32) COLLATE "pg_catalog"."default",
+  "channel_mch_no" varchar(64) COLLATE "pg_catalog"."default",
+  "out_order_no" varchar(150) COLLATE "pg_catalog"."default",
+  "finish_time" timestamptz(6),
+  "creator" int8,
+  "create_time" timestamptz(6) DEFAULT now(),
+  "last_modifier" int8,
+  "last_modified_time" timestamptz(6),
+  "version" int4 NOT NULL DEFAULT 0,
+  "deleted" bool NOT NULL DEFAULT false,
+  CONSTRAINT "pk_pay_fund_flow" PRIMARY KEY ("id")
+)
+;
+COMMENT ON COLUMN "public"."pay_fund_flow"."id" IS '主键';
+COMMENT ON COLUMN "public"."pay_fund_flow"."mch_no" IS '商户号';
+COMMENT ON COLUMN "public"."pay_fund_flow"."app_id" IS '应用号';
+COMMENT ON COLUMN "public"."pay_fund_flow"."flow_type" IS '流水类型(pay-收款收入/refund-退款支出)';
+COMMENT ON COLUMN "public"."pay_fund_flow"."trade_no" IS '原支付交易号(对应 pay_trade.trade_no, 收退共用)';
+COMMENT ON COLUMN "public"."pay_fund_flow"."refund_no" IS '退款单号(仅退款流水, 对应 pay_refund_order.refund_no)';
+COMMENT ON COLUMN "public"."pay_fund_flow"."biz_order_no" IS '商户业务单号(收款=业务订单号, 退款=原业务订单号)';
+COMMENT ON COLUMN "public"."pay_fund_flow"."title" IS '订单标题(冗余自资金交易/退款单)';
+COMMENT ON COLUMN "public"."pay_fund_flow"."amount" IS '流水金额(最小货币单位, 收款为入账金额, 退款为退款金额)';
+COMMENT ON COLUMN "public"."pay_fund_flow"."currency" IS '币种 ISO 4217';
+COMMENT ON COLUMN "public"."pay_fund_flow"."channel" IS '支付通道(冗余自资金交易/退款单)';
+COMMENT ON COLUMN "public"."pay_fund_flow"."provider" IS '支付渠道(冗余自资金交易/退款单)';
+COMMENT ON COLUMN "public"."pay_fund_flow"."channel_mch_no" IS '通道商户号(冗余)';
+COMMENT ON COLUMN "public"."pay_fund_flow"."out_order_no" IS '通道交易号(收款=通道支付单号, 退款=通道退款单号)';
+COMMENT ON COLUMN "public"."pay_fund_flow"."finish_time" IS '资金完成时间(通道口径: 支付成功时间/退款完成时间)';
+COMMENT ON COLUMN "public"."pay_fund_flow"."creator" IS '创建人';
+COMMENT ON COLUMN "public"."pay_fund_flow"."create_time" IS '创建时间';
+COMMENT ON COLUMN "public"."pay_fund_flow"."last_modifier" IS '最后修改人';
+COMMENT ON COLUMN "public"."pay_fund_flow"."last_modified_time" IS '最后修改时间';
+COMMENT ON COLUMN "public"."pay_fund_flow"."version" IS '乐观锁版本号';
+COMMENT ON COLUMN "public"."pay_fund_flow"."deleted" IS '逻辑删除标志';
+COMMENT ON TABLE "public"."pay_fund_flow" IS '资金流水(收款/退款成功即落流水, 只增不改, 对账与资金报表底表)';
+
+CREATE UNIQUE INDEX "uk_pay_fund_flow_pay_trade" ON "public"."pay_fund_flow" USING btree (
+  "trade_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+) WHERE deleted = false AND flow_type = 'pay';
+COMMENT ON INDEX "public"."uk_pay_fund_flow_pay_trade" IS '一笔支付交易最多一条收款流水(幂等防重)';
+
+CREATE UNIQUE INDEX "uk_pay_fund_flow_refund" ON "public"."pay_fund_flow" USING btree (
+  "refund_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+) WHERE deleted = false AND flow_type = 'refund';
+COMMENT ON INDEX "public"."uk_pay_fund_flow_refund" IS '一张退款单最多一条退款流水(幂等防重)';
+
+CREATE INDEX "idx_pay_fund_flow_create_time" ON "public"."pay_fund_flow" USING btree (
+  "create_time" "pg_catalog"."timestamptz_ops" ASC NULLS LAST
+);
+COMMENT ON INDEX "public"."idx_pay_fund_flow_create_time" IS '按流水时间范围查询';
+
+CREATE INDEX "idx_pay_fund_flow_mch_time" ON "public"."pay_fund_flow" USING btree (
+  "mch_no" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
+  "create_time" "pg_catalog"."timestamptz_ops" ASC NULLS LAST
+);
+COMMENT ON INDEX "public"."idx_pay_fund_flow_mch_time" IS '商户维度时间段流水查询';
 
 -- ----------------------------
 -- Table structure for pay_gateway_cashier_item
@@ -4319,7 +4472,7 @@ COMMENT ON COLUMN "public"."starter_audit_operate_log"."id" IS '主键';
 COMMENT ON COLUMN "public"."starter_audit_operate_log"."title" IS '操作模块';
 COMMENT ON COLUMN "public"."starter_audit_operate_log"."operate_id" IS '操作人员ID';
 COMMENT ON COLUMN "public"."starter_audit_operate_log"."account" IS '操作人员账号';
-COMMENT ON COLUMN "public"."starter_audit_operate_log"."client" IS '终端编码';
+COMMENT ON COLUMN "public"."starter_audit_operate_log"."client" IS '身份域编码';
 COMMENT ON COLUMN "public"."starter_audit_operate_log"."browser" IS '浏览器类型';
 COMMENT ON COLUMN "public"."starter_audit_operate_log"."os" IS '操作系统';
 COMMENT ON COLUMN "public"."starter_audit_operate_log"."business_type" IS '业务类型';
@@ -5863,7 +6016,7 @@ CREATE INDEX "idx_role_menu_role_client" ON "public"."iam_role_menu" USING btree
   "role_id" "pg_catalog"."int8_ops" ASC NULLS LAST,
   "client_code" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
 );
-COMMENT ON INDEX "public"."idx_role_menu_role_client" IS '角色菜单表按角色ID和终端编码的普通索引';
+COMMENT ON INDEX "public"."idx_role_menu_role_client" IS '角色菜单表按角色ID和身份域编码的普通索引';
 
 -- ----------------------------
 -- Primary Key structure for table iam_role_menu
@@ -5885,9 +6038,10 @@ ALTER TABLE "public"."iam_social_login_config" ADD CONSTRAINT "iam_social_config
 -- ----------------------------
 CREATE UNIQUE INDEX "uk_user_das_pref_user_client" ON "public"."iam_user_dashboard_preference" USING btree (
   "user_id" "pg_catalog"."int8_ops" ASC NULLS LAST,
-  "client_code" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
+  "client_code" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST,
+  "terminal" COLLATE "pg_catalog"."default" "pg_catalog"."text_ops" ASC NULLS LAST
 ) WHERE deleted = false;
-COMMENT ON INDEX "public"."uk_user_das_pref_user_client" IS '同一用户同一终端仪表盘偏好唯一';
+COMMENT ON INDEX "public"."uk_user_das_pref_user_client" IS '同一用户同一身份域终端同一壳仪表盘偏好唯一';
 
 -- ----------------------------
 -- Primary Key structure for table iam_user_dashboard_preference
