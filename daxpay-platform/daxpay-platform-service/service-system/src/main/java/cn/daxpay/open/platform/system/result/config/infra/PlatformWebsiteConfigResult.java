@@ -59,6 +59,10 @@ public class PlatformWebsiteConfigResult {
     @Schema(description = "版权信息")
     private String copyright;
 
+    /// 找回密码入口是否可用(只读, 不入库; 按邮件发件箱配置是否就绪计算, 供登录页隐藏找回密码入口)
+    @Schema(description = "找回密码入口是否可用, 按邮件发件箱配置是否就绪计算")
+    private Boolean forgetPasswordEnabled;
+
     /// 配置内容哈希(只读, 不入库; 供客户端缓存比对, 一致则跳过 re-apply)
     @Schema(description = "配置内容哈希, 供客户端缓存比对")
     private String contentHash;
