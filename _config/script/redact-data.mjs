@@ -3,7 +3,7 @@
  * Data SQL 敏感数据清除脚本（白名单架构）
  *
  * 用途：生成干净安装包/演示数据，供他人导入。
- * 策略：保留 18 张系统种子表 + bootx 内置超管(id=1)，其余整表清除。
+ * 策略：保留 19 张系统种子表 + bootx 内置超管(id=1)，其余整表清除。
  *
  * 三原则决策：
  *   ① 表 ∈ KEEP_TABLES（系统种子）              → 整表原样保留
@@ -83,7 +83,7 @@ const output = createWriteStream(outputPath, { encoding: 'utf8' })
 
 output.write(`-- ============================================================\n`)
 output.write(`-- 敏感数据已清除(白名单模式) | 工具 redact-data.mjs | 时间 ${new Date().toISOString()}\n`)
-output.write(`-- 策略：保留 18 张系统种子表 + bootx 超管(id=1)，其余整表清除\n`)
+output.write(`-- 策略：保留 19 张系统种子表 + bootx 超管(id=1)，其余整表清除\n`)
 output.write(`-- 用途：干净安装包/演示数据\n`)
 output.write(`-- ============================================================\n\n`)
 

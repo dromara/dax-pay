@@ -1,10 +1,33 @@
 -- ============================================================
--- 敏感数据已清除(白名单模式) | 工具 redact-data.mjs | 时间 2026-08-23T01:39:47.123Z
--- 策略：保留 18 张系统种子表 + bootx 超管(id=1)，其余整表清除
+-- 敏感数据已清除(白名单模式) | 工具 redact-data.mjs | 时间 2026-08-30T02:04:31.735Z
+-- 策略：保留 19 张系统种子表 + bootx 超管(id=1)，其余整表清除
 -- 用途：干净安装包/演示数据
 -- ============================================================
 
+--
+-- PostgreSQL database dump
+--
 
+\restrict ysvHTcX9eqk9EmdmKWqiGew8SqdacbbkCd104sxNh9S0JRQwaQEhLPElcvgaGFi
+
+-- Dumped from database version 16.14
+-- Dumped by pg_dump version 18.6
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SELECT pg_catalog.set_config('search_path', '', false);
+SET check_function_bodies = false;
+SET xmloption = content;
+SET client_min_messages = warning;
+SET row_security = off;
+
+--
+-- Data for Name: adapay_direct_key_config; Type: TABLE DATA; Schema: public; Owner: -
+--
 
 -- REDACTED: adapay_direct_key_config (整表清除)
 
@@ -5407,11 +5430,16 @@ INSERT INTO public.iam_perm_code VALUES (2080304418086137856, 'payment:wx:mch-ap
 INSERT INTO public.iam_perm_code VALUES (2080304418371350528, 'payment:wx:mch-app:view', 'payment:wx:mch-app', true, NULL, 1, 1, 0, false, '2026-07-23 14:49:58.183146+00', '2026-07-23 14:49:58.183146+00', 'perm.payment:wx:mch-app:view');
 INSERT INTO public.iam_perm_code VALUES (2080304418371350529, 'payment:wx:platform-app:manage', 'payment:wx:platform-app', true, NULL, 1, 1, 0, false, '2026-07-23 14:49:58.183662+00', '2026-07-23 14:49:58.183662+00', 'perm.payment:wx:platform-app:manage');
 INSERT INTO public.iam_perm_code VALUES (2080304418371350530, 'payment:wx:platform-app:view', 'payment:wx:platform-app', true, NULL, 1, 1, 0, false, '2026-07-23 14:49:58.184182+00', '2026-07-23 14:49:58.184182+00', 'perm.payment:wx:platform-app:view');
+INSERT INTO public.iam_perm_code VALUES (2077318634845425664, 'merchant:gateway-code:manage', 'merchant:gateway-code', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-15 09:05:31.921705+00', '2026-07-30 12:50:27.497015+00', 'perm.merchant:gateway-code:manage');
+INSERT INTO public.iam_perm_code VALUES (2077318635004809216, 'merchant:gateway-code:view', 'merchant:gateway-code', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-15 09:05:31.956291+00', '2026-07-30 12:50:27.497015+00', 'perm.merchant:gateway-code:view');
 INSERT INTO public.iam_perm_code VALUES (2083000000000000001, 'trade:transfer:view', 'trade:transfer', true, NULL, 1, 1, 0, false, '2026-08-05 12:13:20.611224+00', '2026-08-05 12:13:20.611224+00', 'perm.trade:transfer:view');
 INSERT INTO public.iam_perm_code VALUES (2083000000000000002, 'trade:transfer:manage', 'trade:transfer', true, NULL, 1, 1, 0, false, '2026-08-05 12:13:20.613805+00', '2026-08-05 12:13:20.613805+00', 'perm.trade:transfer:manage');
+INSERT INTO public.iam_perm_code VALUES (2079866296000000003, 'system:notify:mail-record:resend', 'system:notify:mail-record', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-08-27 04:10:39.751763+00', '2026-08-27 04:10:39.751763+00', 'perm.system:notify:mail-record:resend');
+INSERT INTO public.iam_perm_code VALUES (2079866296000000001, 'system:notify:mail-record:view', 'system:notify:mail-record', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-08-27 04:10:39.751763+00', '2026-08-27 04:10:39.751763+00', 'perm.system:notify:mail-record:view');
 INSERT INTO public.iam_perm_code VALUES (2076548114998755328, 'channel:app:manage', 'channel:app', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-13 06:03:45.674956+00', '2026-07-15 03:59:23.658548+00', 'perm.channel:app:manage');
 INSERT INTO public.iam_perm_code VALUES (2076548115791478784, 'channel:app:view', 'channel:app', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-13 06:03:45.8603+00', '2026-07-15 03:59:23.675708+00', 'perm.channel:app:view');
 INSERT INTO public.iam_perm_code VALUES (2070862264909631489, 'channel:merchant:manage', 'channel:merchant', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.37159+00', '2026-07-15 03:59:23.675708+00', 'perm.channel:merchant:manage');
+INSERT INTO public.iam_perm_code VALUES (2079866296000000002, 'system:notify:mail-record:manage', 'system:notify:mail-record', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-08-27 04:10:39.751763+00', '2026-08-27 04:10:39.751763+00', 'perm.system:notify:mail-record:manage');
 INSERT INTO public.iam_perm_code VALUES (2070862264913825792, 'channel:merchant:view', 'channel:merchant', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.372587+00', '2026-07-15 03:59:23.675708+00', 'perm.channel:merchant:view');
 INSERT INTO public.iam_perm_code VALUES (2070862264922214401, 'develop:sign:view', 'develop:sign', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.374587+00', '2026-07-15 03:59:23.677216+00', 'perm.develop:sign:view');
 INSERT INTO public.iam_perm_code VALUES (2070862264930603008, 'develop:trade:sign', 'develop:trade', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.37609+00', '2026-07-15 03:59:23.678223+00', 'perm.develop:trade:sign');
@@ -5419,10 +5447,15 @@ INSERT INTO public.iam_perm_code VALUES (2070862264934797312, 'develop:trade:vie
 INSERT INTO public.iam_perm_code VALUES (2070862264964157440, 'iam:menu:manage', 'iam:menu', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.384096+00', '2026-07-15 03:59:23.680223+00', 'perm.iam:menu:manage');
 INSERT INTO public.iam_perm_code VALUES (2070862264964157441, 'iam:menu:view', 'iam:menu', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.384096+00', '2026-07-15 03:59:23.680223+00', 'perm.iam:menu:view');
 INSERT INTO public.iam_perm_code VALUES (2070862264955768832, 'iam:online:kickout', 'iam:online', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.382096+00', '2026-07-15 03:59:23.680223+00', 'perm.iam:online:kickout');
+INSERT INTO public.iam_perm_code VALUES (2079866296000000004, 'system:platform-config:test', 'system:platform-config', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-08-27 04:10:39.751763+00', '2026-08-27 04:10:39.751763+00', 'perm.system:platform-config:test');
 INSERT INTO public.iam_perm_code VALUES (2070862264955768833, 'iam:online:view', 'iam:online', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.383096+00', '2026-07-15 03:59:23.681729+00', 'perm.iam:online:view');
+INSERT INTO public.iam_perm_code VALUES (2070862264934797313, 'device:printer:manage', 'device:printer', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.377094+00', '2026-07-11 02:29:03.161539+00', NULL);
+INSERT INTO public.iam_perm_code VALUES (2070862264938991616, 'device:printer:view', 'device:printer', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.378094+00', '2026-07-11 02:29:03.172051+00', NULL);
 INSERT INTO public.iam_perm_code VALUES (2070862264968351744, 'iam:role:manage', 'iam:role', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.385095+00', '2026-07-15 03:59:23.681729+00', 'perm.iam:role:manage');
 INSERT INTO public.iam_perm_code VALUES (2077568466990313472, 'payment:risk:blacklist:manage', 'payment:risk:blacklist', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-16 01:38:16.546135+00', '2026-07-16 01:38:16.553159+00', 'perm.payment:risk:blacklist:manage');
 INSERT INTO public.iam_perm_code VALUES (2077568467208417280, 'payment:risk:blacklist:view', 'payment:risk:blacklist', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-16 01:38:16.59627+00', '2026-07-16 01:38:16.59627+00', 'perm.payment:risk:blacklist:view');
+INSERT INTO public.iam_perm_code VALUES (2070862264360177664, 'channel:alipay:app:manage', 'channel:app', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.243473+00', '2026-07-13 06:03:45.951387+00', NULL);
+INSERT INTO public.iam_perm_code VALUES (2070862264897048576, 'channel:alipay:app:view', 'channel:app', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.36959+00', '2026-07-13 06:03:45.955388+00', NULL);
 INSERT INTO public.iam_perm_code VALUES (2077568467216805888, 'payment:risk:hit:view', 'payment:risk:hit', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-16 01:38:16.597278+00', '2026-07-16 01:38:16.597278+00', 'perm.payment:risk:hit:view');
 INSERT INTO public.iam_perm_code VALUES (2077568467221000192, 'system:sensitive-word-hit:view', 'system:sensitive-word-hit', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-16 01:38:16.598278+00', '2026-07-16 01:38:16.598278+00', 'perm.system:sensitive-word-hit:view');
 INSERT INTO public.iam_perm_code VALUES (2077568467221000193, 'system:sensitive-word:manage', 'system:sensitive-word', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-16 01:38:16.598278+00', '2026-07-16 01:38:16.598278+00', 'perm.system:sensitive-word:manage');
@@ -5432,32 +5465,79 @@ INSERT INTO public.iam_perm_code VALUES (2080921585609494528, 'merchant:alipay-i
 INSERT INTO public.iam_perm_code VALUES (2077568468000000001, 'payment:risk:security:manage', 'payment:risk:security', true, '', 1, 1, 0, false, '2026-08-06 01:05:45.386753+00', '2026-08-06 01:05:45.386753+00', 'perm.payment:risk:security:manage');
 INSERT INTO public.iam_perm_code VALUES (2077568468000000002, 'payment:risk:security:view', 'payment:risk:security', true, '', 1, 1, 0, false, '2026-08-06 01:05:45.389564+00', '2026-08-06 01:05:45.389564+00', 'perm.payment:risk:security:view');
 INSERT INTO public.iam_perm_code VALUES (2072990657125986304, 'merchant:notify-config:view', 'merchant:notify-config', true, '由 @PermCode 扫描同步生成', 1, 1, 2, false, '2026-07-03 10:27:41.619775+00', '2026-07-15 03:59:23.693424+00', 'perm.merchant:notify-config:view');
+INSERT INTO public.iam_perm_code VALUES (2077568467212611584, 'payment:risk:hit:manage', 'payment:risk:hit', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-16 01:38:16.59627+00', '2026-08-06 06:39:54.33246+00', 'perm.payment:risk:hit:manage');
+INSERT INTO public.iam_perm_code VALUES (2092881952623484928, 'merchant:user:assign-role', 'merchant:user', true, NULL, 1, 1, 0, false, '2026-08-27 07:48:36.029839+00', '2026-08-27 07:48:36.029839+00', 'perm.merchant:user:assign-role');
+INSERT INTO public.iam_perm_code VALUES (2092881952648650752, 'merchant:user:manage', 'merchant:user', true, NULL, 1, 1, 0, false, '2026-08-27 07:48:36.034343+00', '2026-08-27 07:48:36.034343+00', 'perm.merchant:user:manage');
+INSERT INTO public.iam_perm_code VALUES (2092881952648650753, 'merchant:user:reset-password', 'merchant:user', true, NULL, 1, 1, 0, false, '2026-08-27 07:48:36.034343+00', '2026-08-27 07:48:36.034343+00', 'perm.merchant:user:reset-password');
 INSERT INTO public.iam_perm_code VALUES (2070862265018683392, 'payment:config:product-config:manage', 'payment:config:product-config', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.397109+00', '2026-07-15 03:59:23.695427+00', 'perm.payment:config:product-config:manage');
 INSERT INTO public.iam_perm_code VALUES (2070862265022877696, 'payment:config:product-config:view', 'payment:config:product-config', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.398114+00', '2026-07-15 03:59:23.696424+00', 'perm.payment:config:product-config:view');
+INSERT INTO public.iam_perm_code VALUES (2092881952648650754, 'merchant:user:status', 'merchant:user', true, NULL, 1, 1, 0, false, '2026-08-27 07:48:36.034343+00', '2026-08-27 07:48:36.034343+00', 'perm.merchant:user:status');
+INSERT INTO public.iam_perm_code VALUES (2092881952648650755, 'merchant:user:view', 'merchant:user', true, NULL, 1, 1, 0, false, '2026-08-27 07:48:36.034343+00', '2026-08-27 07:48:36.034343+00', 'perm.merchant:user:view');
+INSERT INTO public.iam_perm_code VALUES (2070862265052237825, 'system:notify:manage', 'system:notify', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.405113+00', '2026-07-01 08:16:00.452177+00', NULL);
+INSERT INTO public.iam_perm_code VALUES (2070862265052237826, 'system:notify:publish', 'system:notify', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.405113+00', '2026-07-01 08:16:00.454692+00', NULL);
+INSERT INTO public.iam_perm_code VALUES (2070862265056432128, 'system:notify:view', 'system:notify', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.406113+00', '2026-07-01 08:16:00.454692+00', NULL);
 INSERT INTO public.iam_perm_code VALUES (2078479091642855424, 'develop:gateway:sign', 'develop:gateway', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-18 13:56:46.379702+00', '2026-07-18 13:56:46.383702+00', 'perm.develop:gateway:sign');
 INSERT INTO public.iam_perm_code VALUES (2078479091684798466, 'system:log:unipay:manage', 'system:log:unipay', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-18 13:56:46.388212+00', '2026-07-18 13:56:46.388212+00', 'perm.system:log:unipay:manage');
 INSERT INTO public.iam_perm_code VALUES (2078479091688992768, 'system:log:unipay:view', 'system:log:unipay', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-18 13:56:46.389213+00', '2026-07-18 13:56:46.389213+00', 'perm.system:log:unipay:view');
+INSERT INTO public.iam_perm_code VALUES (2078479091684798464, 'device:terminal:system:manage', 'device:terminal:system', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-18 13:56:46.388212+00', '2026-07-18 14:25:05.471025+00', 'perm.device:terminal:system:manage');
+INSERT INTO public.iam_perm_code VALUES (2070862264905437184, 'channel:douyin:app:manage', 'channel:app', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.37059+00', '2026-07-13 06:03:45.955388+00', NULL);
+INSERT INTO public.iam_perm_code VALUES (2070862264909631488, 'channel:douyin:app:view', 'channel:app', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.37159+00', '2026-07-13 06:03:45.956891+00', NULL);
+INSERT INTO public.iam_perm_code VALUES (2070862264918020096, 'channel:wechat:app:manage', 'channel:app', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.373587+00', '2026-07-13 06:03:45.957537+00', NULL);
+INSERT INTO public.iam_perm_code VALUES (2070862264922214402, 'develop:trade:pay', 'develop:trade', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.37609+00', '2026-07-13 06:03:45.958216+00', NULL);
+INSERT INTO public.iam_perm_code VALUES (2070862265006100480, 'payment:alipay:isv:manage', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.394603+00', '2026-07-13 06:03:45.958737+00', NULL);
+INSERT INTO public.iam_perm_code VALUES (2070862265010294784, 'payment:alipay:isv:view', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.395603+00', '2026-07-13 06:03:45.959252+00', NULL);
+INSERT INTO public.iam_perm_code VALUES (2073937965846073344, 'payment:lakala:isv:manage', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-06 01:11:57.618659+00', '2026-07-13 06:03:45.962885+00', NULL);
+INSERT INTO public.iam_perm_code VALUES (2073937965846073345, 'payment:lakala:isv:view', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-06 01:11:57.618659+00', '2026-07-13 06:03:45.962885+00', NULL);
+INSERT INTO public.iam_perm_code VALUES (2070862265035460609, 'payment:wechat:isv:manage', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.401117+00', '2026-07-13 06:03:45.964989+00', NULL);
+INSERT INTO public.iam_perm_code VALUES (2070862265039654912, 'payment:wechat:isv:view', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.402115+00', '2026-07-13 06:03:45.965517+00', NULL);
 INSERT INTO public.iam_perm_code VALUES (2075452237802512384, 'develop:auth:view', 'develop:auth', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-10 05:29:08.191101+00', '2026-07-15 03:59:23.677216+00', 'perm.develop:auth:view');
 INSERT INTO public.iam_perm_code VALUES (2075452238549098496, 'device:qrcode:manage', 'device:qrcode', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-10 05:29:08.365787+00', '2026-07-15 03:59:23.679227+00', 'perm.device:qrcode:manage');
 INSERT INTO public.iam_perm_code VALUES (2075452238553292800, 'device:qrcode:view', 'device:qrcode', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-10 05:29:08.367792+00', '2026-07-15 03:59:23.679227+00', 'perm.device:qrcode:view');
 INSERT INTO public.iam_perm_code VALUES (2075452238557487104, 'iam:social:manage', 'iam:social', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-10 05:29:08.367792+00', '2026-07-15 03:59:23.682738+00', 'perm.iam:social:manage');
 INSERT INTO public.iam_perm_code VALUES (2075452238561681408, 'iam:social:view', 'iam:social', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-10 05:29:08.368793+00', '2026-07-15 03:59:23.683738+00', 'perm.iam:social:view');
+INSERT INTO public.iam_perm_code VALUES (2078479091684798465, 'device:terminal:system:view', 'device:terminal:system', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-18 13:56:46.388212+00', '2026-07-18 14:25:05.488041+00', 'perm.device:terminal:system:view');
 INSERT INTO public.iam_perm_code VALUES (2082124980798255104, 'payment:douyin:mch-app:manage', 'payment:douyin:mch-app', true, NULL, 1, 1, 0, false, '2026-07-28 15:24:14.093134+00', '2026-07-28 15:24:14.099644+00', 'perm.payment:douyin:mch-app:manage');
 INSERT INTO public.iam_perm_code VALUES (2082124981007970304, 'payment:douyin:mch-app:view', 'payment:douyin:mch-app', true, NULL, 1, 1, 0, false, '2026-07-28 15:24:14.140188+00', '2026-07-28 15:24:14.140188+00', 'perm.payment:douyin:mch-app:view');
 INSERT INTO public.iam_perm_code VALUES (2082124981007970305, 'payment:douyin:platform-app:manage', 'payment:douyin:platform-app', true, NULL, 1, 1, 0, false, '2026-07-28 15:24:14.140188+00', '2026-07-28 15:24:14.140188+00', 'perm.payment:douyin:platform-app:manage');
+INSERT INTO public.iam_perm_code VALUES (2070862264972546048, 'iam:social:config:manage', 'iam:social:config', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.386599+00', '2026-07-10 05:29:08.422169+00', NULL);
+INSERT INTO public.iam_perm_code VALUES (2070862264972546049, 'iam:social:config:view', 'iam:social:config', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.386599+00', '2026-07-10 05:29:08.434696+00', NULL);
 INSERT INTO public.iam_perm_code VALUES (2075051483223699456, 'merchant:wx-verify:manage', 'merchant:wx-verify', true, '由 @PermCode 扫描同步生成', 1, 1, 2, false, '2026-07-09 02:56:40.852181+00', '2026-07-15 03:59:23.694425+00', 'perm.merchant:wx-verify:manage');
 INSERT INTO public.iam_perm_code VALUES (2082124981012164608, 'payment:douyin:platform-app:view', 'payment:douyin:platform-app', true, NULL, 1, 1, 0, false, '2026-07-28 15:24:14.141188+00', '2026-07-28 15:24:14.141188+00', 'perm.payment:douyin:platform-app:view');
 INSERT INTO public.iam_perm_code VALUES (2082124981012164609, 'plugin:easypay-order:manage', 'plugin:easypay-order', true, NULL, 1, 1, 0, false, '2026-07-28 15:24:14.141188+00', '2026-07-28 15:24:14.141188+00', 'perm.plugin:easypay-order:manage');
 INSERT INTO public.iam_perm_code VALUES (2082124981012164610, 'plugin:easypay-order:view', 'plugin:easypay-order', true, NULL, 1, 1, 0, false, '2026-07-28 15:24:14.141188+00', '2026-07-28 15:24:14.141188+00', 'perm.plugin:easypay-order:view');
 INSERT INTO public.iam_perm_code VALUES (2082124981016358912, 'plugin:easypay-refund:manage', 'plugin:easypay-refund', true, NULL, 1, 1, 0, false, '2026-07-28 15:24:14.142188+00', '2026-07-28 15:24:14.142188+00', 'perm.plugin:easypay-refund:manage');
 INSERT INTO public.iam_perm_code VALUES (2082124981016358913, 'plugin:easypay-refund:view', 'plugin:easypay-refund', true, NULL, 1, 1, 0, false, '2026-07-28 15:24:14.142188+00', '2026-07-28 15:24:14.142188+00', 'perm.plugin:easypay-refund:view');
+INSERT INTO public.iam_perm_code VALUES (2070862264943185920, 'device:speaker:manage', 'device:speaker', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.379096+00', '2026-07-11 02:29:03.172051+00', NULL);
+INSERT INTO public.iam_perm_code VALUES (2070862264947380224, 'device:speaker:view', 'device:speaker', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.380094+00', '2026-07-11 02:29:03.173556+00', NULL);
+INSERT INTO public.iam_perm_code VALUES (2070862264947380225, 'device:vendor_config:manage', 'device:vendor_config', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.380094+00', '2026-07-11 02:29:03.174074+00', NULL);
+INSERT INTO public.iam_perm_code VALUES (2075769305710125056, 'merchant:gateway-aggregate:manage', 'merchant:gateway-aggregate', true, '由 @PermCode 扫描同步生成', 1, 1, 2, true, '2026-07-11 02:29:03.071291+00', '2026-07-30 12:50:27.493013+00', 'perm.merchant:gateway-aggregate:manage');
 INSERT INTO public.iam_perm_code VALUES (2085254519598546944, 'payment:risk:mch-config:manage', 'payment:risk:mch-config', true, NULL, 1, 1, 0, false, '2026-08-06 06:39:54.28434+00', '2026-08-06 06:39:54.28434+00', 'perm.payment:risk:mch-config:manage');
 INSERT INTO public.iam_perm_code VALUES (2085254519619518464, 'payment:risk:mch-config:view', 'payment:risk:mch-config', true, NULL, 1, 1, 0, false, '2026-08-06 06:39:54.289335+00', '2026-08-06 06:39:54.289335+00', 'perm.payment:risk:mch-config:view');
+INSERT INTO public.iam_perm_code VALUES (2093325653469454336, 'iam:lock:unlock', 'iam:lock', true, NULL, 1, 1, 0, false, '2026-08-28 13:11:42.554226+00', '2026-08-28 13:11:42.554226+00', 'perm.iam:lock:unlock');
+INSERT INTO public.iam_perm_code VALUES (2093325653503008768, 'iam:lock:view', 'iam:lock', true, NULL, 1, 1, 0, false, '2026-08-28 13:11:42.562766+00', '2026-08-28 13:11:42.562766+00', 'perm.iam:lock:view');
+INSERT INTO public.iam_perm_code VALUES (2070862264951574528, 'device:vendor_config:view', 'device:vendor_config', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.381094+00', '2026-07-11 02:29:03.174589+00', NULL);
+INSERT INTO public.iam_perm_code VALUES (2073937965686689792, 'payment:config:mobile_app:manage', 'payment:config:mobile_app', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-06 01:11:57.582592+00', '2026-07-11 02:29:03.1751+00', NULL);
+INSERT INTO public.iam_perm_code VALUES (2073937965841879040, 'payment:config:mobile_app:view', 'payment:config:mobile_app', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-06 01:11:57.617659+00', '2026-07-11 02:29:03.1751+00', NULL);
 INSERT INTO public.iam_perm_code VALUES (2078486217727614976, 'merchant:terminal:manage', 'merchant:terminal', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-18 14:25:05.372949+00', '2026-07-18 14:25:05.380456+00', 'perm.merchant:terminal:manage');
 INSERT INTO public.iam_perm_code VALUES (2078486217954107392, 'merchant:terminal:view', 'merchant:terminal', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-18 14:25:05.423491+00', '2026-07-18 14:25:05.423491+00', 'perm.merchant:terminal:view');
 INSERT INTO public.iam_perm_code VALUES (2082636699320639488, 'payment:config:mobile-app:manage', 'payment:config:mobile-app', true, NULL, 1, 1, 0, false, '2026-07-30 01:17:37.296213+00', '2026-07-30 01:17:37.304726+00', 'perm.payment:config:mobile-app:manage');
+INSERT INTO public.iam_perm_code VALUES (2070862264922214400, 'channel:wechat:app:view', 'channel:app', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-06-27 13:30:13.374587+00', '2026-07-13 06:03:45.957537+00', NULL);
+INSERT INTO public.iam_perm_code VALUES (2074377765266870272, 'payment:dougong:isv:manage', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-07 06:19:33.971198+00', '2026-07-13 06:03:45.959777+00', NULL);
 INSERT INTO public.iam_perm_code VALUES (2082636699480023040, 'payment:config:mobile-app:view', 'payment:config:mobile-app', true, NULL, 1, 1, 0, false, '2026-07-30 01:17:37.331264+00', '2026-07-30 01:17:37.331264+00', 'perm.payment:config:mobile-app:view');
+INSERT INTO public.iam_perm_code VALUES (2075769305903063042, 'system:config:mobile-app:manage', 'system:config:mobile-app', true, '由 @PermCode 扫描同步生成', 1, 1, 1, true, '2026-07-11 02:29:03.113565+00', '2026-07-30 01:17:37.358804+00', 'perm.system:config:mobile-app:manage');
+INSERT INTO public.iam_perm_code VALUES (2075769305907257344, 'system:config:mobile-app:view', 'system:config:mobile-app', true, '由 @PermCode 扫描同步生成', 1, 1, 1, true, '2026-07-11 02:29:03.114572+00', '2026-07-30 01:17:37.360802+00', 'perm.system:config:mobile-app:view');
 INSERT INTO public.iam_perm_code VALUES (2089898876290093056, 'trade:alloc:manage', 'trade:alloc', true, NULL, 1, 1, 0, false, '2026-08-19 02:14:55.208677+00', '2026-08-19 02:14:55.208677+00', 'perm.trade:alloc:manage');
+INSERT INTO public.iam_perm_code VALUES (2074377765317201920, 'payment:dougong:isv:view', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-07 06:19:33.983709+00', '2026-07-13 06:03:45.960301+00', NULL);
+INSERT INTO public.iam_perm_code VALUES (2074377765317201921, 'payment:fuyou:isv:manage', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-07 06:19:33.983709+00', '2026-07-13 06:03:45.960301+00', NULL);
+INSERT INTO public.iam_perm_code VALUES (2074377765317201922, 'payment:fuyou:isv:view', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-07 06:19:33.983709+00', '2026-07-13 06:03:45.96082+00', NULL);
+INSERT INTO public.iam_perm_code VALUES (2074377765325590528, 'payment:hkrt:isv:manage', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-07 06:19:33.985213+00', '2026-07-13 06:03:45.961333+00', NULL);
+INSERT INTO public.iam_perm_code VALUES (2074377765325590529, 'payment:hkrt:isv:view', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-07 06:19:33.985213+00', '2026-07-13 06:03:45.96185+00', NULL);
+INSERT INTO public.iam_perm_code VALUES (2074377765325590530, 'payment:hmpay:isv:manage', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-07 06:19:33.985213+00', '2026-07-13 06:03:45.962364+00', NULL);
+INSERT INTO public.iam_perm_code VALUES (2074377765329784832, 'payment:hmpay:isv:view', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-07 06:19:33.986218+00', '2026-07-13 06:03:45.962364+00', NULL);
+INSERT INTO public.iam_perm_code VALUES (2074377765329784833, 'payment:leshua:isv:manage', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-07 06:19:33.986218+00', '2026-07-13 06:03:45.963399+00', NULL);
+INSERT INTO public.iam_perm_code VALUES (2074377765329784834, 'payment:leshua:isv:view', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-07 06:19:33.987218+00', '2026-07-13 06:03:45.96392+00', NULL);
+INSERT INTO public.iam_perm_code VALUES (2074377765333979136, 'payment:vbill:isv:manage', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-07 06:19:33.987218+00', '2026-07-13 06:03:45.964434+00', NULL);
+INSERT INTO public.iam_perm_code VALUES (2074377765333979137, 'payment:vbill:isv:view', 'payment:isv', true, '由 @PermCode 扫描同步生成', 1, 1, 0, true, '2026-07-07 06:19:33.987218+00', '2026-07-13 06:03:45.964434+00', NULL);
 INSERT INTO public.iam_perm_code VALUES (2077241592518934528, 'merchant:easypay:manage', 'merchant:easypay', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-15 03:59:23.599356+00', '2026-07-15 03:59:23.604361+00', 'perm.merchant:easypay:manage');
 INSERT INTO public.iam_perm_code VALUES (2077241592707678208, 'merchant:easypay:view', 'merchant:easypay', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-15 03:59:23.641499+00', '2026-07-15 03:59:23.6425+00', 'perm.merchant:easypay:view');
 INSERT INTO public.iam_perm_code VALUES (2070862264968351745, 'iam:role:view', 'iam:role', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.385095+00', '2026-07-15 03:59:23.682738+00', 'perm.iam:role:view');
@@ -5500,10 +5580,6 @@ INSERT INTO public.iam_perm_code VALUES (2070862265052237824, 'system:log:operat
 INSERT INTO public.iam_perm_code VALUES (2072232741347454976, 'system:notify:notice:manage', 'system:notify:notice', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-01 08:16:00.41608+00', '2026-07-15 03:59:23.706454+00', 'perm.system:notify:notice:manage');
 INSERT INTO public.iam_perm_code VALUES (2072232741381009408, 'system:notify:notice:publish', 'system:notify:notice', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-01 08:16:00.424595+00', '2026-07-15 03:59:23.707963+00', 'perm.system:notify:notice:publish');
 INSERT INTO public.iam_perm_code VALUES (2072232741385203712, 'system:notify:notice:view', 'system:notify:notice', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-01 08:16:00.425103+00', '2026-07-15 03:59:23.707963+00', 'perm.system:notify:notice:view');
-INSERT INTO public.iam_perm_code VALUES (2079866296000000001, 'system:notify:mail-record:view', 'system:notify:mail-record', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-08-27 16:00:00+00', '2026-08-27 16:00:00+00', 'perm.system:notify:mail-record:view');
-INSERT INTO public.iam_perm_code VALUES (2079866296000000002, 'system:notify:mail-record:manage', 'system:notify:mail-record', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-08-27 16:00:00+00', '2026-08-27 16:00:00+00', 'perm.system:notify:mail-record:manage');
-INSERT INTO public.iam_perm_code VALUES (2079866296000000003, 'system:notify:mail-record:resend', 'system:notify:mail-record', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-08-27 16:00:00+00', '2026-08-27 16:00:00+00', 'perm.system:notify:mail-record:resend');
-INSERT INTO public.iam_perm_code VALUES (2079866296000000004, 'system:platform-config:test', 'system:platform-config', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-08-27 16:00:00+00', '2026-08-27 16:00:00+00', 'perm.system:platform-config:test');
 INSERT INTO public.iam_perm_code VALUES (2070862265056432129, 'system:oss-config:manage', 'system:oss-config', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.406113+00', '2026-07-15 03:59:23.70998+00', 'perm.system:oss-config:manage');
 INSERT INTO public.iam_perm_code VALUES (2070862265064820736, 'system:oss-config:view', 'system:oss-config', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.408624+00', '2026-07-15 03:59:23.710979+00', 'perm.system:oss-config:view');
 INSERT INTO public.iam_perm_code VALUES (2070862265069015040, 'system:platform-config:manage', 'system:platform-config', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.409623+00', '2026-07-15 03:59:23.710979+00', 'perm.system:platform-config:manage');
@@ -5522,33 +5598,30 @@ INSERT INTO public.iam_perm_code VALUES (2072377871723388928, 'trade:order:view'
 INSERT INTO public.iam_perm_code VALUES (2072990657130180608, 'trade:refund:manage', 'trade:refund', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-03 10:27:41.620782+00', '2026-07-15 03:59:23.715999+00', 'perm.trade:refund:manage');
 INSERT INTO public.iam_perm_code VALUES (2072990657130180609, 'trade:refund:view', 'trade:refund', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-03 10:27:41.620782+00', '2026-07-15 03:59:23.717505+00', 'perm.trade:refund:view');
 INSERT INTO public.iam_perm_code VALUES (2079866295577419776, 'trade:callback-record:view', 'trade:callback-record', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-22 09:49:01.56951+00', '2026-07-22 09:49:01.575017+00', 'perm.trade:callback-record:view');
-INSERT INTO public.iam_perm_code VALUES (2079866296000000301, 'trade:abnormal-order:view', 'trade:abnormal-order', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-08-29 16:00:00+00', '2026-08-29 16:00:00+00', 'perm.trade:abnormal-order:view');
-INSERT INTO public.iam_perm_code VALUES (2079866296000000302, 'trade:abnormal-order:manage', 'trade:abnormal-order', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-08-29 16:00:00+00', '2026-08-29 16:00:00+00', 'perm.trade:abnormal-order:manage');
-INSERT INTO public.iam_perm_code VALUES (2079866296000000303, 'trade:fund-flow:view', 'trade:fund-flow', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-08-29 16:00:00+00', '2026-08-29 16:00:00+00', 'perm.trade:fund-flow:view');
 INSERT INTO public.iam_perm_code VALUES (2079866295615168512, 'trade:mch-notice:manage', 'trade:mch-notice', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-22 09:49:01.578524+00', '2026-07-22 09:49:01.578524+00', 'perm.trade:mch-notice:manage');
 INSERT INTO public.iam_perm_code VALUES (2079866295619362816, 'trade:mch-notice:view', 'trade:mch-notice', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-22 09:49:01.579524+00', '2026-07-22 09:49:01.579524+00', 'perm.trade:mch-notice:view');
 INSERT INTO public.iam_perm_code VALUES (2082811057154473984, 'merchant:gateway-pay-config:manage', 'merchant:gateway-pay-config', true, NULL, 1, 1, 0, false, '2026-07-30 12:50:27.440009+00', '2026-07-30 12:50:27.44601+00', 'perm.merchant:gateway-pay-config:manage');
 INSERT INTO public.iam_perm_code VALUES (2082811057204805632, 'merchant:gateway-pay-config:view', 'merchant:gateway-pay-config', true, NULL, 1, 1, 0, false, '2026-07-30 12:50:27.452008+00', '2026-07-30 12:50:27.452008+00', 'perm.merchant:gateway-pay-config:view');
+INSERT INTO public.iam_perm_code VALUES (2075769305894674432, 'merchant:gateway-aggregate:view', 'merchant:gateway-aggregate', true, '由 @PermCode 扫描同步生成', 1, 1, 2, true, '2026-07-11 02:29:03.111672+00', '2026-07-30 12:50:27.496016+00', 'perm.merchant:gateway-aggregate:view');
 INSERT INTO public.iam_perm_code VALUES (2089898876302675968, 'trade:alloc:view', 'trade:alloc', true, NULL, 1, 1, 0, false, '2026-08-19 02:14:55.211906+00', '2026-08-19 02:14:55.211906+00', 'perm.trade:alloc:view');
-INSERT INTO public.iam_perm_code VALUES (2079866296000000101, 'merchant:user:view', 'merchant:user', true, NULL, 1, 1, 0, false, '2026-08-27 00:00:00+00', '2026-08-27 00:00:00+00', 'perm.merchant:user:view');
-INSERT INTO public.iam_perm_code VALUES (2079866296000000102, 'merchant:user:manage', 'merchant:user', true, NULL, 1, 1, 0, false, '2026-08-27 00:00:00+00', '2026-08-27 00:00:00+00', 'perm.merchant:user:manage');
-INSERT INTO public.iam_perm_code VALUES (2079866296000000103, 'merchant:user:assign-role', 'merchant:user', true, NULL, 1, 1, 0, false, '2026-08-27 00:00:00+00', '2026-08-27 00:00:00+00', 'perm.merchant:user:assign-role');
-INSERT INTO public.iam_perm_code VALUES (2079866296000000104, 'merchant:user:status', 'merchant:user', true, NULL, 1, 1, 0, false, '2026-08-27 00:00:00+00', '2026-08-27 00:00:00+00', 'perm.merchant:user:status');
-INSERT INTO public.iam_perm_code VALUES (2079866296000000105, 'merchant:user:reset-password', 'merchant:user', true, NULL, 1, 1, 0, false, '2026-08-27 00:00:00+00', '2026-08-27 00:00:00+00', 'perm.merchant:user:reset-password');
+INSERT INTO public.iam_perm_code VALUES (2079866296000000301, 'trade:abnormal-order:view', 'trade:abnormal-order', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-08-29 16:00:00+00', '2026-08-29 16:00:00+00', 'perm.trade:abnormal-order:view');
+INSERT INTO public.iam_perm_code VALUES (2079866296000000302, 'trade:abnormal-order:manage', 'trade:abnormal-order', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-08-29 16:00:00+00', '2026-08-29 16:00:00+00', 'perm.trade:abnormal-order:manage');
+INSERT INTO public.iam_perm_code VALUES (2079866296000000303, 'trade:fund-flow:view', 'trade:fund-flow', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-08-29 16:00:00+00', '2026-08-29 16:00:00+00', 'perm.trade:fund-flow:view');
 
 
 --
 -- Data for Name: iam_perm_menu; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.iam_perm_menu VALUES (40603, 406, 'payment:risk:security', 'admin', 'ApiSecurityConfig', 'menu.payment.security.api', 'lucide:lock-keyhole', false, false, '/payment/risk/security/ApiSecurityConfig', '/payment/risk/api-security', NULL, 0, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-06 01:05:45.367566+00', '2026-08-06 01:05:45.367566+00');
 INSERT INTO public.iam_perm_menu VALUES (202, 2, NULL, 'admin', 'FileUploadDemo', 'menu.demos.fileUpload', 'lucide:upload', false, false, '/demos/file-upload/FileUploadDemo', '/demos/file-upload', NULL, 2, false, true, false, 0, NULL, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-04-09 16:00:00+00', '2026-04-09 16:00:00+00');
 INSERT INTO public.iam_perm_menu VALUES (307, 3, 'system:monitor', 'admin', 'SystemMonitor', 'menu.system.monitor', 'lucide:monitor', false, false, NULL, '/system/monitor', NULL, 50, false, true, false, 1, 1, 1, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-04-10 16:00:00+00', '2026-04-12 12:53:45.790453+00');
 INSERT INTO public.iam_perm_menu VALUES (305, 3, 'iam:perm', 'admin', 'SystemPerm', 'menu.system.perm', 'lucide:shield', false, false, NULL, '/system/perm', NULL, 2, false, true, false, 1, 1, 1, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-04-08 16:00:00+00', '2026-04-09 15:10:44.651238+00');
 INSERT INTO public.iam_perm_menu VALUES (302, 3, NULL, 'admin', 'SystemLog', 'menu.system.log', 'lucide:file-text', false, false, NULL, '/system/log', NULL, 99, false, true, false, 0, 1, 1, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-03-20 03:11:13.134079+00', '2026-04-05 08:56:11.97756+00');
-INSERT INTO public.iam_perm_menu VALUES (40604, 406, 'payment:risk:security', 'admin', 'RiskStrategy', 'menu.payment.security.riskStrategy', 'lucide:shield-alert', false, false, '/payment/risk/security/RiskStrategy', '/payment/risk/strategy', NULL, 0.5, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-06 01:05:45.376446+00', '2026-08-06 01:05:45.376446+00');
+INSERT INTO public.iam_perm_menu VALUES (40603, 406, 'payment:risk:security', 'admin', 'ApiSecurityConfig', 'menu.payment.security.api', 'lucide:lock-keyhole', false, false, '/payment/risk/security/ApiSecurityConfig', '/payment/risk/api-security', NULL, 0, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-06 01:05:45.367566+00', '2026-08-27 09:32:24.858536+00');
 INSERT INTO public.iam_perm_menu VALUES (304, 3, 'system:config', 'admin', 'SystemConfig', 'menu.system.config', 'lucide:settings-2', false, false, NULL, '/system/config', NULL, 10, false, true, false, 0, 1, 1, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-04-04 16:00:00+00', '2026-04-09 15:11:00.840153+00');
 INSERT INTO public.iam_perm_menu VALUES (203, 2, 'demos:region', 'admin', 'RegionCascaderDemo', 'menu.demos.region', 'lucide:map-pin', false, false, '/demos/region/RegionCascaderDemo', '/demos/region', NULL, 3, false, true, false, 0, NULL, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-04-24 16:00:00+00', '2026-04-24 16:00:00+00');
+INSERT INTO public.iam_perm_menu VALUES (40604, 406, 'payment:risk:security', 'admin', 'RiskStrategy', 'menu.payment.security.riskStrategy', 'lucide:shield-alert', false, false, '/payment/risk/security/RiskStrategy', '/payment/risk/strategy', NULL, 0.5, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-06 01:05:45.376446+00', '2026-08-27 09:32:24.858536+00');
+INSERT INTO public.iam_perm_menu VALUES (30702, 307, 'iam:lock', 'admin', 'LoginLock', 'menu.system.monitor.lock', 'lucide:lock', false, false, '/system/monitor/lock/LoginLockList', '/system/monitor/lock', NULL, 1.5, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-28 16:00:00+00', '2026-08-28 16:00:00+00');
 INSERT INTO public.iam_perm_menu VALUES (401, 4, 'payment:platform', 'admin', 'PaymentPlatform', 'menu.payment.platform', 'lucide:building', false, false, NULL, '/payment/platform', NULL, 10, false, true, false, 0, 1, 3, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-04-05 16:00:00+00', '2026-07-31 03:18:17.020454+00');
 INSERT INTO public.iam_perm_menu VALUES (3, NULL, NULL, 'admin', 'System', 'menu.system', 'lucide:sliders-horizontal', false, false, NULL, '/system', NULL, 0, false, true, false, 0, 1, 2, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-03-20 03:11:13.134079+00', '2026-06-25 02:00:30.22348+00');
 INSERT INTO public.iam_perm_menu VALUES (30102, 301, 'iam:menu', 'admin', 'SystemMenu', 'menu.system.perm.menu', 'lucide:panel-top', false, false, '/iam/perm/menu/MenuList', '/system/basic/menu', NULL, 0, false, true, false, 0, 1, 3, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-03-20 03:11:13.134079+00', '2026-06-27 10:29:51.371435+00');
@@ -5568,11 +5641,12 @@ INSERT INTO public.iam_perm_menu VALUES (30701, 307, 'iam:online', 'admin', 'Onl
 INSERT INTO public.iam_perm_menu VALUES (6, NULL, 'trade', 'admin', 'TransactionManagement', 'menu.trade', 'lucide:arrow-left-right', false, false, NULL, '/trade', '/trade/pay-trade', 4, false, true, false, 1, 1, 0, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-05-24 16:00:00+00', '2026-07-17 06:18:15.479497+00');
 INSERT INTO public.iam_perm_menu VALUES (40401, 404, 'merchant:info', 'admin', 'MerchantInfo', 'menu.payment.merchant.list', 'lucide:shopping-bag', false, false, '/payment/merchant/info/MerchantList', '/payment/merchant/info', NULL, 1, false, true, false, 1, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-04-13 16:00:00+00', '2026-06-25 02:00:30.290399+00');
 INSERT INTO public.iam_perm_menu VALUES (30402, 304, 'system:platform-config', 'admin', 'PlatformConfig', 'menu.system.config.platform', 'lucide:settings', false, false, '/system/config/platform/PlatformConfig', '/system/config/platform', NULL, 1, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-04-07 16:00:00+00', '2026-07-13 13:17:21.921261+00');
-INSERT INTO public.iam_perm_menu VALUES (3040201, 30402, 'system:oss-config', 'admin', 'OssConfigPermission', 'menu.system.config.platform', NULL, true, false, NULL, NULL, NULL, 1, false, false, false, 1, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-27 09:30:00+00', '2026-08-27 09:30:00+00');
-INSERT INTO public.iam_perm_menu VALUES (4040125, 4040130, 'payment:risk:mch-config', 'admin', 'MchRiskConfigManage', 'menu.payment.merchant.riskConfig', NULL, true, false, '/payment/merchant/manage/risk-config/MchRiskConfigManage', '/payment/merchant/manage/risk-config', NULL, 25, false, true, false, 1, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-06 00:00:00+00', '2026-08-06 00:00:00+00');
 INSERT INTO public.iam_perm_menu VALUES (207, 2, 'demos:city-adjacent', 'admin', 'CityAdjacentDemo', 'menu.demos.cityAdjacent', 'lucide:map-pinned', false, false, '/demos/city-adjacent/CityAdjacentDemo', '/demos/city-adjacent', NULL, 6, false, true, false, 0, NULL, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-06 16:00:00+00', '2026-08-06 16:00:00+00');
+INSERT INTO public.iam_perm_menu VALUES (4040125, 4040130, 'payment:risk:mch-config', 'admin', 'MchRiskConfigManage', 'menu.payment.merchant.riskConfig', NULL, true, false, '/payment/merchant/manage/risk-config/MchRiskConfigManage', '/payment/merchant/manage/risk-config', NULL, 25, false, true, false, 1, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-06 00:00:00+00', '2026-08-27 09:32:24.882304+00');
 INSERT INTO public.iam_perm_menu VALUES (40104, 401, 'payment:platform:capability', 'admin', 'PayCapabilityList', 'menu.payment.platform.capability', 'lucide:zap', false, false, '/payment/masterdata/capability/PayCapabilityList', '/payment/platform/pay-capability', NULL, 3, false, true, false, 1, 1, 4, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-05-26 16:00:00+00', '2026-05-28 06:43:27.505831+00');
 INSERT INTO public.iam_perm_menu VALUES (4040102, 4040130, 'merchant:credential', 'admin', 'MerchantCredentialConfig', 'menu.payment.merchant.credential', NULL, true, false, '/payment/merchant/manage/credential/MerchantCredentialConfig', '/payment/merchant/manage/credential', NULL, 3, false, true, false, 1, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-05-01 16:00:00+00', '2026-07-13 10:13:20.809377+00');
+INSERT INTO public.iam_perm_menu VALUES (613, 6, 'trade:fund-flow', 'admin', 'FundFlowList', 'menu.trade.fundFlow', 'lucide:coins', false, false, '/payment/record/FundFlowList', '/trade/record/fund-flow', NULL, 4, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-29 16:00:00+00', '2026-08-29 16:00:00+00');
+INSERT INTO public.iam_perm_menu VALUES (612, 6, 'trade:abnormal-order', 'admin', 'AbnormalOrderList', 'menu.trade.abnormalOrder', 'lucide:triangle-alert', false, false, '/payment/order/AbnormalOrderList', '/trade/abnormal-order', NULL, 5, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-29 16:00:00+00', '2026-08-29 16:00:00+00');
 INSERT INTO public.iam_perm_menu VALUES (404, NULL, 'merchant', 'admin', 'PaymentMerchant', 'menu.merchant', 'lucide:store', false, false, NULL, '/payment/merchant', NULL, 3.5, true, true, false, 0, NULL, 0, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-04-05 16:00:00+00', '2026-07-13 13:12:49.514288+00');
 INSERT INTO public.iam_perm_menu VALUES (601, 610, 'trade:order', 'admin', 'NormalOrderList', 'menu.trade.normalPay', 'lucide:credit-card', false, false, '/payment/order/NormalOrderList', '/trade/pay-order/normal', NULL, 1, false, false, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-05-24 16:00:00+00', '2026-07-17 06:18:15.466267+00');
 INSERT INTO public.iam_perm_menu VALUES (4040111, 4040130, 'merchant:app:route', 'admin', 'PayRouteConfig', 'menu.payment.merchant.payRoute', NULL, true, false, '/payment/route/PayRouteConfig', '/payment/route', NULL, 2, false, true, false, 1, 1, 1, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-05-24 22:23:46.483985+00', '2026-07-22 13:50:46.613056+00');
@@ -5586,7 +5660,6 @@ INSERT INTO public.iam_perm_menu VALUES (4040114, 4040132, 'channel:app', 'admin
 INSERT INTO public.iam_perm_menu VALUES (4040108, 4040130, 'merchant:user', 'admin', 'MerchantUser', 'menu.payment.merchant.user', '', true, false, '/payment/merchant/user/MerchantUserList', '/payment/merchant/user', NULL, 8, false, true, false, 1, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-05-04 16:00:00+00', '2026-07-11 03:37:15.424776+00');
 INSERT INTO public.iam_perm_menu VALUES (4040110, 4040130, 'merchant:app', 'admin', 'MchAppInfoList', 'menu.payment.merchant.app', NULL, true, false, '/payment/merchant/app/MchAppInfoList', '/payment/merchant/app', NULL, 10, false, true, false, 1, 1, 1, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-05-24 16:00:00+00', '2026-07-11 03:37:15.424776+00');
 INSERT INTO public.iam_perm_menu VALUES (91127, 91100, 'trade:alloc', 'merchant', 'AllocOrderList', 'menu.trade.allocOrder', 'lucide:split', false, false, '/payment/order/AllocOrderList', '/trade/alloc-order', NULL, 2.5, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO public.iam_perm_menu VALUES (91128, 91100, 'trade:abnormal-order', 'merchant', 'AbnormalOrderList', 'menu.trade.abnormalOrder', 'lucide:triangle-alert', false, false, '/payment/order/AbnormalOrderList', '/trade/abnormal-order', NULL, 3, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-29 16:00:00+00', '2026-08-29 16:00:00+00');
 INSERT INTO public.iam_perm_menu VALUES (4040117, 4040130, 'merchant:store', 'admin', 'MchStoreInfoList', 'menu.payment.merchant.store', NULL, true, false, '/payment/merchant/store/MchStoreInfoList', '/payment/merchant/store', NULL, 15, false, true, false, 1, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-24 16:00:00+00', '2026-07-11 03:37:15.424776+00');
 INSERT INTO public.iam_perm_menu VALUES (602, 6, 'trade:fund', 'admin', 'PayTradeList', 'menu.trade.payTrade', 'lucide:arrow-left-right', false, false, '/payment/order/PayTradeList', '/trade/pay-trade', NULL, 1, false, true, false, NULL, NULL, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-01 15:09:04.769906+00', '2026-07-17 06:18:15.474015+00');
 INSERT INTO public.iam_perm_menu VALUES (8, NULL, 'develop', 'admin', 'Develop', 'menu.develop', 'lucide:wrench', false, false, NULL, '/develop', NULL, 5, false, true, false, 1, 1, 0, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-23 16:00:00+00', '2026-06-23 16:00:00+00');
@@ -5600,18 +5673,17 @@ INSERT INTO public.iam_perm_menu VALUES (40105, 4, 'payment:config:product-confi
 INSERT INTO public.iam_perm_menu VALUES (4040116, 401, 'payment:platform:provider', 'admin', 'PayProviderManage', 'menu.payment.platform.provider.manage', 'lucide:wallet', false, false, '/payment/masterdata/provider/PayProviderList', '/payment/platform/pay-provider', NULL, 0.5, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-17 10:00:31.640482+00', '2026-06-27 13:01:24.318649+00');
 INSERT INTO public.iam_perm_menu VALUES (603, 6, 'trade:refund', 'admin', 'RefundOrderList', 'menu.trade.refundOrder', 'lucide:rotate-ccw', false, false, '/payment/order/RefundOrderList', '/trade/refund-order', NULL, 2, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-03 16:00:00+00', '2026-07-17 06:18:15.476169+00');
 INSERT INTO public.iam_perm_menu VALUES (309, 308, 'system:notify:notice', 'admin', 'SystemNotify', 'menu.system.notify.notice', 'lucide:megaphone', false, false, '/system/notify/notice/NoticeList', '/system/notify/notice', NULL, 20, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, '2026-06-24 16:00:00+00', '2026-06-24 16:00:00+00', NULL);
-INSERT INTO public.iam_perm_menu VALUES (310, 308, 'system:notify:mail-record', 'admin', 'SystemMailRecord', 'menu.system.notify.mailRecord', 'lucide:mail', false, false, '/system/notify/mail/MailRecordList', '/system/notify/mail-record', NULL, 30, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-27 16:00:00+00', '2026-08-27 16:00:00+00', NULL);
 INSERT INTO public.iam_perm_menu VALUES (308, 3, 'system:notify', 'admin', 'SystemNotice', 'menu.system.notify', 'lucide:bell', false, false, NULL, '/system/notify', '/system/notify/notice', 20, false, true, false, 1, 1, 0, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-01 07:16:30.927645+00', '2026-07-01 07:16:30.927645+00');
 INSERT INTO public.iam_perm_menu VALUES (40502, 40508, 'payment:isv', 'admin', 'AlipayIsvAppManage', 'menu.payment.config.alipayApp', NULL, true, false, '/payment/channel/alipay/manage/app/AlipayIsvAppManage', '/payment/config/product/app-manage', NULL, 3, false, true, false, 1, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-14 00:00:00+00', '2026-07-11 03:37:15.43231+00');
 INSERT INTO public.iam_perm_menu VALUES (4040106, 4040131, 'channel:merchant', 'admin', 'ChannelMerchant', 'menu.payment.merchant.channelMerchant', NULL, true, false, '/payment/global/channel-merchant/ChannelMerchantList', '/payment/global/channel-merchant', NULL, 6, false, true, false, 1, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-05-03 16:00:00+00', '2026-07-22 13:50:46.61698+00');
 INSERT INTO public.iam_perm_menu VALUES (30403, 301, 'system:protocol', 'admin', 'UserProtocol', 'menu.system.basic.protocol', 'lucide:file-text', false, false, '/system/basic/protocol/UserProtocolList', '/system/basic/protocol', NULL, 2, false, true, false, 1, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-24 10:32:13.183371+00', '2026-07-16 08:43:35.038937+00');
 INSERT INTO public.iam_perm_menu VALUES (802, 8, 'develop:sign', 'admin', 'DevelopSign', 'menu.develop.sign', 'lucide:pen-tool', false, false, '/payment/develop/sign/DevelopSign', '/develop/sign', NULL, 3, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-23 16:00:00+00', '2026-06-23 16:00:00+00');
-INSERT INTO public.iam_perm_menu VALUES (3040101, 304, 'system:security-config', 'admin', 'SystemSecurityConfig', 'menu.system.security.system', 'lucide:lock', false, false, '/system/config/security/SystemSecurityConfig', '/system/config/security/system', NULL, 2, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-16 07:31:19.446929+00', '2026-07-16 07:31:19.446929+00');
 INSERT INTO public.iam_perm_menu VALUES (406, 4, 'payment:risk', 'admin', 'PaymentSecurity', 'menu.payment.security', 'lucide:shield-alert', false, false, NULL, '/payment/risk', NULL, 60, false, true, false, 0, 1, 0, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-15 00:00:00+00', '2026-07-31 03:18:17.027286+00');
 INSERT INTO public.iam_perm_menu VALUES (40601, 406, 'payment:risk:blacklist', 'admin', 'PayBlacklistList', 'menu.payment.security.blacklist', 'lucide:ban', false, false, '/payment/risk/blacklist/PayBlacklistList', '/payment/risk/blacklist', NULL, 1, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-15 00:00:00+00', '2026-07-15 00:00:00+00');
 INSERT INTO public.iam_perm_menu VALUES (40602, 406, 'payment:risk:hit', 'admin', 'PayRiskHitList', 'menu.payment.security.hit', 'lucide:triangle-alert', false, false, '/payment/risk/hit/PayRiskHitList', '/payment/risk/hit', NULL, 2, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-15 00:00:00+00', '2026-07-15 00:00:00+00');
 INSERT INTO public.iam_perm_menu VALUES (608, 6, 'trade:alloc', 'admin', 'AllocOrderList', 'menu.trade.allocOrder', 'lucide:split', false, false, '/payment/order/AllocOrderList', '/trade/alloc-order', NULL, 2.5, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL);
 INSERT INTO public.iam_perm_menu VALUES (40504, 405, 'payment:config:mobile-app', 'admin', 'MobileAppConfig', 'menu.payment.config.mobileApp', 'lucide:smartphone', false, false, '/payment/config/mobile-app/MobileAppConfig', '/payment/config/mobile-app', NULL, 10, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-05 00:00:00+00', '2026-07-31 03:18:17.013352+00');
+INSERT INTO public.iam_perm_menu VALUES (3040101, 304, 'system:security-config', 'admin', 'SystemSecurityConfig', 'menu.system.security.system', 'lucide:lock', false, false, '/system/config/security/SystemSecurityConfig', '/system/config/security/system', NULL, 2, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-16 07:31:19.446929+00', '2026-08-27 09:32:24.889475+00');
 INSERT INTO public.iam_perm_menu VALUES (4040130, 40401, NULL, 'admin', 'MchManageGroup', 'menu.payment.merchant.group.manage', 'lucide:settings-2', true, false, NULL, NULL, NULL, 1, false, false, false, 1, 1, 0, false, 'subpage_group', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-11 03:37:15.421585+00', '2026-07-11 03:37:15.421585+00');
 INSERT INTO public.iam_perm_menu VALUES (4040131, 40401, NULL, 'admin', 'ChannelMerchantGroup', 'menu.payment.merchant.group.channelMerchant', 'lucide:repeat', true, false, NULL, NULL, NULL, 2, false, false, false, 1, 1, 0, false, 'subpage_group', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-11 03:37:15.421585+00', '2026-07-11 03:37:15.421585+00');
 INSERT INTO public.iam_perm_menu VALUES (4040120, 4040130, 'merchant:wx-verify', 'admin', 'MchWxDomainVerifyList', 'menu.payment.merchant.wxVerify', NULL, true, false, '/payment/merchant/manage/wx-verify/MchWxDomainVerifyList', '/payment/merchant/manage/wx-verify', NULL, 20, false, true, false, 1, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-09 16:00:00+00', '2026-07-11 03:37:15.424776+00');
@@ -5619,7 +5691,6 @@ INSERT INTO public.iam_perm_menu VALUES (40501, 40105, 'payment:config:product-d
 INSERT INTO public.iam_perm_menu VALUES (40507, 405, 'payment:config:wx-verify', 'admin', 'PlatformWxDomainVerifyList', 'menu.payment.config.wxVerify', 'lucide:shield-check', false, false, '/payment/config/wx-verify/PlatformWxDomainVerifyList', '/payment/config/wx-verify', NULL, 20, false, true, false, 1, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-09 16:00:00+00', '2026-07-31 03:18:17.018417+00');
 INSERT INTO public.iam_perm_menu VALUES (803, 8, 'develop:auth', 'admin', 'ChannelAuth', 'menu.develop.auth', 'lucide:shield-check', false, false, '/payment/develop/auth/ChannelAuth', '/develop/auth', NULL, 4, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-09 16:00:00+00', '2026-07-09 16:00:00+00');
 INSERT INTO public.iam_perm_menu VALUES (4040123, 4040130, 'merchant:app:workbench', 'admin', 'MchAppWorkbench', 'menu.payment.merchant.appWorkbench', NULL, true, false, '/payment/merchant/app/MchAppWorkbench', '/payment/merchant/app/manage', NULL, 11, false, true, false, 1, 1, 1, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-11 08:00:00+00', '2026-07-11 08:00:00+00');
-INSERT INTO public.iam_perm_menu VALUES (4040126, 4040130, 'merchant:notify-config', 'admin', 'MchAppNotifyConfigPermission', 'menu.payment.merchant.appWorkbench', NULL, true, false, NULL, NULL, NULL, 12, false, false, false, 1, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-27 09:30:00+00', '2026-08-27 09:30:00+00');
 INSERT INTO public.iam_perm_menu VALUES (40506, 40508, 'payment:isv', 'admin', 'LakalaManage', 'menu.payment.lakala.config', NULL, true, false, '/payment/channel/lakala/manage/LakalaManage', '/payment/config/product/lakala-manage', NULL, 5, false, true, false, 1, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-05 00:00:00+00', '2026-07-11 03:37:15.43231+00');
 INSERT INTO public.iam_perm_menu VALUES (4040132, 40401, NULL, 'admin', 'ChannelAppGroup', 'menu.payment.merchant.group.channelApp', 'lucide:layout-grid', true, false, NULL, NULL, NULL, 3, false, false, false, 1, 1, 0, false, 'subpage_group', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-11 03:37:15.421585+00', '2026-07-13 10:13:20.804554+00');
 INSERT INTO public.iam_perm_menu VALUES (40508, 40105, NULL, 'admin', 'ChannelIsvConfigGroup', 'menu.payment.config.group.channelIsv', 'lucide:server', true, false, NULL, NULL, NULL, 1, false, false, false, 1, 1, 0, false, 'subpage_group', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-11 03:37:15.421585+00', '2026-07-13 10:13:20.806797+00');
@@ -5640,43 +5711,38 @@ INSERT INTO public.iam_perm_menu VALUES (91103, 91100, 'trade:refund', 'merchant
 INSERT INTO public.iam_perm_menu VALUES (607, NULL, 'trade:record', 'admin', 'TradeRecordCatalog', 'menu.trade.record', 'lucide:scroll-text', false, false, NULL, '/trade/record', '/trade/record/mch-notice', 4.5, false, true, false, 1, 1, 0, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-21 06:30:00+00', '2026-07-21 06:45:00+00');
 INSERT INTO public.iam_perm_menu VALUES (605, 607, 'trade:mch-notice', 'admin', 'MchNoticeTaskList', 'menu.trade.mchNotice', 'lucide:bell-ring', false, false, '/payment/notice/MchNoticeTaskList', '/trade/record/mch-notice', NULL, 1, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-21 03:00:00+00', '2026-07-21 06:30:00+00');
 INSERT INTO public.iam_perm_menu VALUES (606, 607, 'trade:callback-record', 'admin', 'PayCallbackRecordList', 'menu.trade.callbackRecord', 'lucide:inbox', false, false, '/payment/record/PayCallbackRecordList', '/trade/record/callback-record', NULL, 2, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-21 06:00:00+00', '2026-07-21 06:30:00+00');
-INSERT INTO public.iam_perm_menu VALUES (612, 6, 'trade:abnormal-order', 'admin', 'AbnormalOrderList', 'menu.trade.abnormalOrder', 'lucide:triangle-alert', false, false, '/payment/order/AbnormalOrderList', '/trade/abnormal-order', NULL, 5, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-29 16:00:00+00', '2026-08-29 16:00:00+00');
-INSERT INTO public.iam_perm_menu VALUES (613, 6, 'trade:fund-flow', 'admin', 'FundFlowList', 'menu.trade.fundFlow', 'lucide:coins', false, false, '/payment/record/FundFlowList', '/trade/record/fund-flow', NULL, 4, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-29 16:00:00+00', '2026-08-29 16:00:00+00');
 INSERT INTO public.iam_perm_menu VALUES (905, 4040130, 'merchant:terminal', 'admin', 'SystemTerminalList', 'menu.payment.merchant.terminal', NULL, true, false, '/payment/device/terminal/system/SystemTerminalList', '/payment/device/terminal/system', NULL, 16, false, true, false, 1, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-17 00:00:00+00', '2026-07-22 13:50:46.597022+00');
 INSERT INTO public.iam_perm_menu VALUES (40402, 404, 'channel:merchant', 'admin', 'ChannelMerchantGlobal', 'menu.payment.merchant.channelMerchant.global', 'lucide:repeat', false, false, '/payment/global/channel-merchant-global/ChannelMerchantGlobalList', '/payment/global/channel-merchants', NULL, 2, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-13 13:12:31.180398+00', '2026-07-22 13:50:46.629357+00');
 INSERT INTO public.iam_perm_menu VALUES (91001, NULL, NULL, 'merchant', 'Dashboard', 'menu.dashboard', 'lucide:layout-dashboard', false, false, NULL, '/dashboard', '/workspace', -1, false, false, false, 0, NULL, 0, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-23 02:30:21.982361+00', '2026-07-23 02:30:21.982361+00');
 INSERT INTO public.iam_perm_menu VALUES (91002, 91001, 'dashboard:workspace', 'merchant', 'Workspace', 'menu.dashboard.workspace', 'lucide:panels-top-left', false, false, '/dashboard/workspace/index', '/workspace', NULL, 1, false, false, true, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-07-23 02:30:21.991345+00', '2026-07-23 02:30:21.991345+00');
 INSERT INTO public.iam_perm_menu VALUES (91003, 91001, 'dashboard:analytics', 'merchant', 'Analytics', 'menu.dashboard.analytics', 'lucide:area-chart', false, false, '/dashboard/analytics/index', '/analytics', NULL, 2, false, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-07-23 02:30:21.994392+00', '2026-07-23 02:30:21.994392+00');
--- 商户端支付单目录旧副本(91104/91102/91105)与记录目录旧副本(91106/91107/91108)已于 2026-08-23 清理,
--- 正式树为 91110→91111/91112 与 91200→91201/91202, 旧副本从未绑定角色
 INSERT INTO public.iam_perm_menu VALUES (91111, 91110, 'trade:order', 'merchant', 'NormalOrderList', 'menu.trade.normalPay', 'lucide:file-text', false, false, '/payment/order/NormalOrderList', '/trade/pay-order/normal', NULL, 1, false, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-07-23 09:32:12.645988+00', '2026-07-23 09:32:12.645988+00');
 INSERT INTO public.iam_perm_menu VALUES (91112, 91110, 'trade:gateway-order', 'merchant', 'GatewayOrderList', 'menu.trade.gatewayOrder', 'lucide:globe', false, false, '/payment/order/GatewayOrderList', '/trade/pay-order/gateway', NULL, 2, false, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-07-23 09:32:12.648789+00', '2026-07-23 09:32:12.648789+00');
 INSERT INTO public.iam_perm_menu VALUES (91100, NULL, 'trade', 'merchant', 'TransactionManagement', 'menu.trade', 'lucide:arrow-left-right', false, false, NULL, '/trade', '/trade/pay-trade', 3, false, true, false, 1, 1, 0, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-23 03:48:14.886531+00', '2026-07-23 06:44:16.725707+00');
 INSERT INTO public.iam_perm_menu VALUES (91201, 91200, 'trade:mch-notice', 'merchant', 'MchNoticeTaskList', 'menu.trade.mchNotice', 'lucide:bell-ring', false, false, '/payment/notice/MchNoticeTaskList', '/trade/record/mch-notice', NULL, 1, false, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-07-23 09:32:12.655107+00', '2026-07-23 09:32:12.655107+00');
-INSERT INTO public.iam_perm_menu VALUES (91301, 91300, 'merchant:info', 'merchant', 'MchInfoManage', 'menu.payment.merchant.profile', 'lucide:badge-info', false, false, '/payment/merchant/info/MchInfoManage', '/mch/info', NULL, 1, false, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-07-23 09:32:12.665593+00', '2026-07-23 09:32:12.665593+00');
 INSERT INTO public.iam_perm_menu VALUES (91302, 91300, 'merchant:user', 'merchant', 'MerchantUserList', 'menu.payment.merchant.user', 'lucide:users', false, false, '/payment/merchant/user/MerchantUserList', '/mch/user', NULL, 2, false, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-07-23 09:32:12.669009+00', '2026-07-23 09:32:12.669009+00');
 INSERT INTO public.iam_perm_menu VALUES (91303, 91300, 'merchant:store', 'merchant', 'MchStoreInfoList', 'menu.payment.merchant.store', 'lucide:store', false, false, '/payment/merchant/store/MchStoreInfoList', '/mch/store', NULL, 3, false, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-07-23 09:32:12.671534+00', '2026-07-23 09:32:12.671534+00');
 INSERT INTO public.iam_perm_menu VALUES (91304, 91300, 'merchant:terminal', 'merchant', 'SystemTerminalList', 'menu.payment.merchant.terminal', 'lucide:monitor', false, false, '/payment/device/terminal/system/SystemTerminalList', '/mch/terminal', NULL, 4, false, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-07-23 09:32:12.67447+00', '2026-07-23 09:32:12.67447+00');
 INSERT INTO public.iam_perm_menu VALUES (91401, 91400, 'merchant:app', 'merchant', 'MchAppInfoList', 'menu.payment.merchant.app', 'lucide:app-window', false, false, '/payment/merchant/app/MchAppInfoList', '/mch/app', NULL, 1, false, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-07-23 09:32:12.681008+00', '2026-07-23 09:32:12.681008+00');
 INSERT INTO public.iam_perm_menu VALUES (91402, 91400, 'channel:merchant', 'merchant', 'ChannelMerchantList', 'menu.payment.merchant.channelMerchant', 'lucide:store', false, false, '/payment/channel-merchant/ChannelMerchantList', '/mch/channel-merchant', NULL, 2, false, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-07-23 09:32:12.684068+00', '2026-07-23 09:32:12.684068+00');
 INSERT INTO public.iam_perm_menu VALUES (91411, 91402, 'channel:merchant:detail', 'merchant', 'ChannelMerchantDetail', 'menu.payment.merchant.channelMerchant.detail', NULL, true, false, '/payment/channel-merchant/detail/ChannelMerchantDetailDispatch', '/mch/channel-merchant/detail', NULL, 2, false, false, false, 0, 1, 1, false, 'subpage', NULL, NULL, NULL, NULL, '', '', '2026-07-23 09:32:12.689613+00', '2026-07-23 09:32:12.689613+00');
-INSERT INTO public.iam_perm_menu VALUES (91415, 91402, 'merchant:alipay-isv-auth', 'merchant', 'AlipayIsvAuthPermission', 'menu.payment.merchant.channelMerchant.detail', NULL, true, false, NULL, NULL, NULL, 3, false, false, false, 0, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, '', '', '2026-08-27 09:30:00+00', '2026-08-27 09:30:00+00');
+INSERT INTO public.iam_perm_menu VALUES (91301, 91300, 'merchant:info', 'merchant', 'MchInfoManage', 'menu.payment.merchant.profile', 'lucide:badge-info', false, false, '/payment/merchant/info/MchInfoManage', '/mch/info', NULL, 1, false, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-07-23 09:32:12.665593+00', '2026-08-27 08:50:21.401338+00');
 INSERT INTO public.iam_perm_menu VALUES (91403, 91401, NULL, 'merchant', 'AppConfigDir', 'menu.payment.merchant.appWorkbench', NULL, true, false, NULL, '/mch/app-config', NULL, 4, false, false, false, 0, NULL, 0, false, 'subpage_group', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-23 09:32:12.692738+00', '2026-07-23 09:32:12.692738+00');
 INSERT INTO public.iam_perm_menu VALUES (40107, 40106, 'payment:wx:mch-app', 'admin', 'WxMchApp', 'menu.payment.wx.mchApp', NULL, true, false, NULL, NULL, NULL, 1, false, false, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-23 13:44:05.963399+00', '2026-07-23 14:32:14.494862+00');
 INSERT INTO public.iam_perm_menu VALUES (91412, 91400, 'payment:wx:mch-app', 'merchant', 'MchWxAppList', 'menu.payment.wx.mchApp', 'lucide:message-circle', false, false, '/payment/wx/mch/MchWxAppList', '/mch/wx-app', NULL, 3, false, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-07-24 01:58:27.304104+00', '2026-07-24 01:58:27.304104+00');
 INSERT INTO public.iam_perm_menu VALUES (91413, 91403, 'merchant:app:workbench', 'merchant', 'MchAppWorkbench', 'menu.payment.merchant.appWorkbench', NULL, true, false, '/payment/merchant/app/MchAppWorkbench', '/mch/app/manage', NULL, 0, false, false, false, 0, 1, 1, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-24 10:20:36.109679+00', '2026-07-24 13:08:44.946319+00');
-INSERT INTO public.iam_perm_menu VALUES (91414, 91403, 'merchant:notify-config', 'merchant', 'MchAppNotifyConfigPermission', 'menu.payment.merchant.appWorkbench', NULL, true, false, NULL, NULL, NULL, 5, false, false, false, 0, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, '', '', '2026-08-27 09:30:00+00', '2026-08-27 09:30:00+00');
 INSERT INTO public.iam_perm_menu VALUES (91300, NULL, NULL, 'merchant', 'MchCenter', 'menu.mch.center', 'lucide:building-2', false, false, NULL, '/mch-center', '/mch/info', 1, false, true, false, 0, NULL, 0, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-23 09:32:12.662617+00', '2026-07-23 09:32:12.662617+00');
 INSERT INTO public.iam_perm_menu VALUES (91400, NULL, NULL, 'merchant', 'PaymentConfig', 'menu.payment.config', 'lucide:settings-2', false, false, NULL, '/mch-payment', '/mch/app', 2, false, true, false, 0, NULL, 0, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-23 09:32:12.677882+00', '2026-07-23 09:32:12.677882+00');
 INSERT INTO public.iam_perm_menu VALUES (91202, 91200, 'trade:callback-record', 'merchant', 'PayCallbackRecordList', 'menu.trade.callbackRecord', 'lucide:inbox', false, false, '/payment/record/PayCallbackRecordList', '/trade/record/callback-record', NULL, 2, false, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-07-23 09:32:12.658982+00', '2026-07-23 09:32:12.658982+00');
-INSERT INTO public.iam_perm_menu VALUES (91203, 91200, 'trade:fund-flow', 'merchant', 'FundFlowList', 'menu.trade.fundFlow', 'lucide:coins', false, false, '/payment/record/FundFlowList', '/trade/record/fund-flow', NULL, 3, false, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-08-29 16:00:00+00', '2026-08-29 16:00:00+00');
 INSERT INTO public.iam_perm_menu VALUES (40106, 409, 'payment:wx:platform-app', 'admin', 'WxAppHub', 'menu.payment.wx.app', 'lucide:message-circle', false, false, '/payment/wx/WxAppHub', '/payment/wx/app', NULL, 10, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-23 13:44:05.953634+00', '2026-07-31 03:18:17.00789+00');
 INSERT INTO public.iam_perm_menu VALUES (91404, 91403, 'merchant:app:route', 'merchant', 'PayRouteConfig', 'menu.payment.merchant.payRoute', 'lucide:git-branch', true, false, '/payment/route/PayRouteConfig', '/mch/route', NULL, 1, false, false, false, 0, 1, 1, false, 'subpage', NULL, NULL, NULL, NULL, '', '', '2026-07-23 09:32:12.695589+00', '2026-07-23 09:32:12.695589+00');
 INSERT INTO public.iam_perm_menu VALUES (91407, 91403, 'merchant:gateway-cashier', 'merchant', 'CashierConfig', 'menu.payment.merchant.cashierConfig', 'lucide:monitor-smartphone', true, false, '/payment/merchant/cashier/CashierConfig', '/mch/cashier', NULL, 4, false, false, false, 0, 1, 1, false, 'subpage', NULL, NULL, NULL, NULL, '', '', '2026-07-23 09:32:12.704415+00', '2026-07-23 09:32:12.704415+00');
 INSERT INTO public.iam_perm_menu VALUES (91409, 91403, 'merchant:easypay', 'merchant', 'EasyPayConfig', 'menu.payment.merchant.easypay', 'lucide:plug', true, false, '/payment/merchant/easypay/EasyPayConfig', '/mch/easypay', NULL, 6, false, false, false, 0, 1, 1, false, 'subpage', NULL, NULL, NULL, NULL, '', '', '2026-07-23 09:32:12.710238+00', '2026-07-23 09:32:12.710238+00');
+INSERT INTO public.iam_perm_menu VALUES (310, 308, 'system:notify:mail-record', 'admin', 'SystemMailRecord', 'menu.system.notify.mailRecord', 'lucide:mail', false, false, '/system/notify/mail/MailRecordList', '/system/notify/mail-record', NULL, 30, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-27 04:10:39.742351+00', '2026-08-27 04:10:39.742351+00');
 INSERT INTO public.iam_perm_menu VALUES (91501, 91300, 'merchant:credential', 'merchant', 'MerchantCredentialConfig', 'menu.payment.merchant.credential', 'lucide:key', false, false, '/payment/merchant/credential/MerchantCredentialConfig', '/mch/credential', NULL, 5, false, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-24 13:08:44.950986+00', '2026-07-24 13:08:44.950986+00');
 INSERT INTO public.iam_perm_menu VALUES (91305, 91300, 'merchant:wx-verify', 'merchant', 'MchWxDomainVerifyList', 'menu.payment.merchant.wxVerify', 'lucide:shield-check', false, false, '/payment/merchant/wx-verify/MchWxDomainVerifyList', '/mch/wx-verify', NULL, 6, false, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-24 14:17:59.251093+00', '2026-07-24 14:17:59.251093+00');
 INSERT INTO public.iam_perm_menu VALUES (91421, 91402, 'channel:app', 'merchant', 'AlipayMchAppManage', 'menu.payment.merchant.channelMerchant.alipayApp', NULL, true, false, '/payment/channel/alipay/manage/mch/app/AlipayMchAppManage', '/mch/channel-merchant/alipay-app-manage', NULL, 4, false, false, false, 0, 1, 1, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-25 01:53:14.928869+00', '2026-07-25 01:53:14.928869+00');
+INSERT INTO public.iam_perm_menu VALUES (3040201, 30402, 'system:oss-config', 'admin', 'OssConfigPermission', 'menu.system.config.platform', NULL, true, false, NULL, NULL, NULL, 1, false, false, false, 1, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-27 09:30:00+00', '2026-08-27 09:30:00+00');
 INSERT INTO public.iam_perm_menu VALUES (91601, 91600, 'develop:trade', 'merchant', 'DevelopTrade', 'menu.develop.trade', 'lucide:credit-card', false, false, '/payment/develop/trade/DevelopTrade', '/develop/trade', NULL, 1, false, false, false, 0, NULL, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-25 15:10:00+00', '2026-07-25 15:10:00+00');
 INSERT INTO public.iam_perm_menu VALUES (91602, 91600, 'develop:gateway', 'merchant', 'DevelopGateway', 'menu.develop.gateway', 'lucide:globe', false, false, '/payment/develop/gateway/DevelopGateway', '/develop/gateway', NULL, 2, false, false, false, 0, NULL, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-25 15:10:00+00', '2026-07-25 15:10:00+00');
 INSERT INTO public.iam_perm_menu VALUES (91603, 91600, 'develop:sign', 'merchant', 'DevelopSign', 'menu.develop.sign', 'lucide:pen-tool', false, false, '/payment/develop/sign/DevelopSign', '/develop/sign', NULL, 3, false, false, false, 0, NULL, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-25 15:10:00+00', '2026-07-25 15:10:00+00');
@@ -5700,8 +5766,10 @@ INSERT INTO public.iam_perm_menu VALUES (91110, 91100, 'trade:pay-order', 'merch
 INSERT INTO public.iam_perm_menu VALUES (206, 2, 'demos:callback', 'admin', 'CallbackDemo', 'menu.demos.callback', 'lucide:webhook', false, false, '/demos/callback/CallbackDemo', '/demos/callback', NULL, 5, false, true, false, 0, NULL, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-01 16:00:00+00', '2026-08-01 16:00:00+00');
 INSERT INTO public.iam_perm_menu VALUES (40108, 409, 'payment:douyin:platform-app', 'admin', 'DyAppHub', 'menu.payment.douyin.app', 'lucide:music-2', false, false, '/payment/douyin/DyAppHub', '/payment/douyin/app', NULL, 20, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-28 14:00:00+00', '2026-07-31 03:18:17.0111+00');
 INSERT INTO public.iam_perm_menu VALUES (91420, 91400, 'payment:douyin:mch-app', 'merchant', 'MchDyAppList', 'menu.payment.douyin.mchApp', 'lucide:music-2', false, false, '/payment/douyin/mch/MchDyAppList', '/mch/douyin-app', NULL, 4, false, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-07-28 14:00:00+00', '2026-07-28 14:00:00+00');
+INSERT INTO public.iam_perm_menu VALUES (4040126, 4040130, 'merchant:notify-config', 'admin', 'MchAppNotifyConfigPermission', 'menu.payment.merchant.appWorkbench', NULL, true, false, NULL, NULL, NULL, 12, false, false, false, 1, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-27 09:30:00+00', '2026-08-27 09:30:00+00');
 INSERT INTO public.iam_perm_menu VALUES (61101, 61106, 'trade:transfer:wechat', 'admin', 'WechatTransferList', 'menu.trade.transfer.wechat', 'lucide:message-circle', false, true, '/payment/transfer/WechatTransferList', '/trade/transfer/wechat', NULL, 1, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-04 16:00:00+00', '2026-08-04 16:00:00+00');
 INSERT INTO public.iam_perm_menu VALUES (61102, 61106, 'trade:transfer:alipay', 'admin', 'AlipayTransferList', 'menu.trade.transfer.alipay', 'lucide:credit-card', false, true, '/payment/transfer/AlipayTransferList', '/trade/transfer/alipay', NULL, 2, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-04 16:00:00+00', '2026-08-04 16:00:00+00');
+INSERT INTO public.iam_perm_menu VALUES (91414, 91403, 'merchant:notify-config', 'merchant', 'MchAppNotifyConfigPermission', 'menu.payment.merchant.appWorkbench', NULL, true, false, NULL, NULL, NULL, 5, false, false, false, 0, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-27 09:30:00+00', '2026-08-27 09:30:00+00');
 INSERT INTO public.iam_perm_menu VALUES (91120, NULL, 'trade:transfer', 'merchant', 'TransferCatalog', 'menu.trade.transfer', 'lucide:send', false, false, NULL, '/trade/transfer', '/trade/transfer/wechat', 3.5, false, true, false, 1, 1, 0, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-04 16:00:00+00', '2026-08-04 16:00:00+00');
 INSERT INTO public.iam_perm_menu VALUES (61106, 611, 'trade:transfer:channel', 'admin', 'TransferChannelCatalog', 'menu.trade.transfer.channel', 'lucide:layers', false, false, NULL, '/trade/transfer/channel', '/trade/transfer/channel/wechat', 3, false, true, false, 1, 1, 0, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-05 12:50:41.670351+00', '2026-08-05 12:50:41.670351+00');
 INSERT INTO public.iam_perm_menu VALUES (91126, 91120, 'trade:transfer:channel', 'merchant', 'TransferChannelCatalog', 'menu.trade.transfer.channel', 'lucide:layers', false, false, NULL, '/trade/transfer/channel', '/trade/transfer/channel/wechat', 3, false, true, false, 1, 1, 0, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-05 12:50:41.679227+00', '2026-08-05 12:50:41.679227+00');
@@ -5713,6 +5781,8 @@ INSERT INTO public.iam_perm_menu VALUES (61105, 611, 'trade:transfer:create', 'a
 INSERT INTO public.iam_perm_menu VALUES (91125, 91120, 'trade:transfer:create', 'merchant', 'TransferCreate', 'menu.trade.transfer.create', 'lucide:plus-circle', false, false, '/payment/transfer/TransferCreate', '/trade/transfer/create', NULL, 1, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-05 12:13:20.608919+00', '2026-08-05 12:13:20.608919+00');
 INSERT INTO public.iam_perm_menu VALUES (61104, 611, 'trade:transfer:trade', 'admin', 'TransferTradeList', 'menu.trade.transfer.trade', 'lucide:list-ordered', false, true, '/payment/transfer/TransferTradeList', '/trade/transfer/trade', NULL, 2, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-04 16:00:00+00', '2026-08-04 16:00:00+00');
 INSERT INTO public.iam_perm_menu VALUES (91124, 91120, 'trade:transfer:trade', 'merchant', 'TransferTradeList', 'menu.trade.transfer.trade', 'lucide:list-ordered', false, true, '/payment/transfer/TransferTradeList', '/trade/transfer/trade', NULL, 2, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-04 16:00:00+00', '2026-08-04 16:00:00+00');
+INSERT INTO public.iam_perm_menu VALUES (91415, 91402, 'merchant:alipay-isv-auth', 'merchant', 'AlipayIsvAuthPermission', 'menu.payment.merchant.channelMerchant.detail', NULL, true, false, NULL, NULL, NULL, 3, false, false, false, 0, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-27 09:30:00+00', '2026-08-27 09:30:00+00');
+INSERT INTO public.iam_perm_menu VALUES (209, 2, 'demos:mail', 'admin', 'MailDemo', 'menu.demos.mail', 'lucide:mail', false, false, '/demos/mail/MailDemo', '/demos/mail', NULL, 8, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-27 16:00:00+00', '2026-08-27 16:00:00+00');
 
 
 --
@@ -5805,8 +5875,6 @@ INSERT INTO public.iam_role_code VALUES (2075847892476370944, 1, 207584589247637
 INSERT INTO public.iam_role_code VALUES (2072992657067266048, 1, 2072990657067266048);
 INSERT INTO public.iam_role_code VALUES (2070864265073209345, 1, 2070862265073209345);
 INSERT INTO public.iam_role_code VALUES (2070864265069015041, 1, 2070862265069015041);
-INSERT INTO public.iam_role_code VALUES (2079866296000000311, 2, 2079866296000000301);
-INSERT INTO public.iam_role_code VALUES (2079866296000000312, 2, 2079866296000000303);
 INSERT INTO public.iam_role_code VALUES (2080584149952053248, 2, 2079866295619362816);
 INSERT INTO public.iam_role_code VALUES (2080584149964636160, 2, 2079866295615168512);
 INSERT INTO public.iam_role_code VALUES (2080584149964636161, 2, 2079866295577419776);
@@ -5855,22 +5923,21 @@ INSERT INTO public.iam_role_code VALUES (2083360959911628803, 2, 208212498101635
 INSERT INTO public.iam_role_code VALUES (2083360959915823104, 2, 2082124981016358912);
 INSERT INTO public.iam_role_code VALUES (2077568468000000101, 1, 2077568468000000001);
 INSERT INTO public.iam_role_code VALUES (2077568468000000102, 1, 2077568468000000002);
-INSERT INTO public.iam_role_code VALUES (2079866296000000201, 1, 2079866296000000101);
-INSERT INTO public.iam_role_code VALUES (2079866296000000211, 2, 2079866296000000101);
-INSERT INTO public.iam_role_code VALUES (2079866296000000202, 1, 2079866296000000102);
-INSERT INTO public.iam_role_code VALUES (2079866296000000212, 2, 2079866296000000102);
-INSERT INTO public.iam_role_code VALUES (2079866296000000203, 1, 2079866296000000103);
-INSERT INTO public.iam_role_code VALUES (2079866296000000213, 2, 2079866296000000103);
-INSERT INTO public.iam_role_code VALUES (2079866296000000204, 1, 2079866296000000104);
-INSERT INTO public.iam_role_code VALUES (2079866296000000214, 2, 2079866296000000104);
-INSERT INTO public.iam_role_code VALUES (2079866296000000205, 1, 2079866296000000105);
-INSERT INTO public.iam_role_code VALUES (2079866296000000215, 2, 2079866296000000105);
-INSERT INTO public.iam_role_code VALUES (2079866296000000301, 2, 2070862264997711873);
-INSERT INTO public.iam_role_code VALUES (2079866296000000302, 2, 2070862265001906176);
-INSERT INTO public.iam_role_code VALUES (2079866296000000303, 2, 2089898876290093056);
-INSERT INTO public.iam_role_code VALUES (2079866296000000304, 2, 2089898876302675968);
-INSERT INTO public.iam_role_code VALUES (2079866296000000305, 2, 2083000000000000001);
-INSERT INTO public.iam_role_code VALUES (2079866296000000306, 2, 2083000000000000002);
+INSERT INTO public.iam_role_code VALUES (2092882051076382720, 2, 2092881952648650755);
+INSERT INTO public.iam_role_code VALUES (2092882051088965632, 2, 2092881952648650754);
+INSERT INTO public.iam_role_code VALUES (2092882051088965633, 2, 2092881952648650753);
+INSERT INTO public.iam_role_code VALUES (2092882051093159936, 2, 2092881952648650752);
+INSERT INTO public.iam_role_code VALUES (2092882051093159937, 2, 2092881952623484928);
+INSERT INTO public.iam_role_code VALUES (2092882051093159938, 2, 2089898876302675968);
+INSERT INTO public.iam_role_code VALUES (2092882051093159939, 2, 2089898876290093056);
+INSERT INTO public.iam_role_code VALUES (2092882051093159940, 2, 2083000000000000002);
+INSERT INTO public.iam_role_code VALUES (2092882051093159941, 2, 2083000000000000001);
+INSERT INTO public.iam_role_code VALUES (2092899374299574272, 2, 2070862265001906176);
+INSERT INTO public.iam_role_code VALUES (2092899374316351488, 2, 2070862264997711873);
+INSERT INTO public.iam_role_code VALUES (2092949683545796608, 2, 2072990657125986304);
+INSERT INTO public.iam_role_code VALUES (2092949683558379520, 2, 2072990657067266048);
+INSERT INTO public.iam_role_code VALUES (2092949683558379521, 2, 2080921585609494528);
+INSERT INTO public.iam_role_code VALUES (2092949683558379522, 2, 2080921585542385664);
 
 
 --
@@ -5930,9 +5997,6 @@ INSERT INTO public.iam_role_menu VALUES (1000000040105, 1, NULL, 40105);
 INSERT INTO public.iam_role_menu VALUES (1000004040116, 1, NULL, 4040116);
 INSERT INTO public.iam_role_menu VALUES (1000000000602, 1, NULL, 602);
 INSERT INTO public.iam_role_menu VALUES (1000000000309, 1, NULL, 309);
-INSERT INTO public.iam_role_menu VALUES (1000000000310, 1, NULL, 310);
-INSERT INTO public.iam_role_menu VALUES (1000000000612, 1, NULL, 612);
-INSERT INTO public.iam_role_menu VALUES (1000000000613, 1, NULL, 613);
 INSERT INTO public.iam_role_menu VALUES (1000000000308, 1, NULL, 308);
 INSERT INTO public.iam_role_menu VALUES (1000000040502, 1, NULL, 40502);
 INSERT INTO public.iam_role_menu VALUES (1000000000901, 1, NULL, 901);
@@ -5995,7 +6059,11 @@ INSERT INTO public.iam_role_menu VALUES (2083360959840325632, 2, NULL, 91420);
 INSERT INTO public.iam_role_menu VALUES (2083360959848714240, 2, NULL, 91110);
 INSERT INTO public.iam_role_menu VALUES (2083360959857102848, 2, NULL, 91111);
 INSERT INTO public.iam_role_menu VALUES (2083360959857102849, 2, NULL, 91112);
--- 商户端转账菜单树(91120~91126)补绑内置商户管理员角色(2026-08-23, 此前整棵未绑定导致内置角色不可见)
+INSERT INTO public.iam_role_menu VALUES (1000000040603, 1, NULL, 40603);
+INSERT INTO public.iam_role_menu VALUES (1000000040604, 1, NULL, 40604);
+INSERT INTO public.iam_role_menu VALUES (1000000000608, 1, NULL, 608);
+INSERT INTO public.iam_role_menu VALUES (1000000000208, 1, NULL, 208);
+INSERT INTO public.iam_role_menu VALUES (920000091127, 2, NULL, 91127);
 INSERT INTO public.iam_role_menu VALUES (920000091120, 2, NULL, 91120);
 INSERT INTO public.iam_role_menu VALUES (920000091126, 2, NULL, 91126);
 INSERT INTO public.iam_role_menu VALUES (920000091121, 2, NULL, 91121);
@@ -6003,13 +6071,12 @@ INSERT INTO public.iam_role_menu VALUES (920000091122, 2, NULL, 91122);
 INSERT INTO public.iam_role_menu VALUES (920000091123, 2, NULL, 91123);
 INSERT INTO public.iam_role_menu VALUES (920000091124, 2, NULL, 91124);
 INSERT INTO public.iam_role_menu VALUES (920000091125, 2, NULL, 91125);
-INSERT INTO public.iam_role_menu VALUES (1000000040603, 1, NULL, 40603);
-INSERT INTO public.iam_role_menu VALUES (1000000040604, 1, NULL, 40604);
-INSERT INTO public.iam_role_menu VALUES (1000000091127, 2, NULL, 91127);
-INSERT INTO public.iam_role_menu VALUES (1000000091128, 2, NULL, 91128);
-INSERT INTO public.iam_role_menu VALUES (1000000091203, 2, NULL, 91203);
-INSERT INTO public.iam_role_menu VALUES (1000000000608, 1, NULL, 608);
-INSERT INTO public.iam_role_menu VALUES (1000000000208, 1, NULL, 208);
+INSERT INTO public.iam_role_menu VALUES (2092949683495464960, 2, NULL, 91414);
+INSERT INTO public.iam_role_menu VALUES (2092949683508047872, 2, NULL, 91415);
+INSERT INTO public.iam_role_menu VALUES (1000000000209, 1, NULL, 209);
+INSERT INTO public.iam_role_menu VALUES (1000000000310, 1, NULL, 310);
+INSERT INTO public.iam_role_menu VALUES (1000000000612, 1, NULL, 612);
+INSERT INTO public.iam_role_menu VALUES (1000000000613, 1, NULL, 613);
 
 
 --
@@ -6039,7 +6106,14 @@ INSERT INTO public.iam_user_expand_info VALUES (1, 'female', NULL, NULL, NULL, N
 --
 
 -- REDACTED: iam_user_info (整表清除)
-INSERT INTO public.iam_user_info VALUES (1, '超级管理员', 'admin', 'bootx', '$2a$10$pMvjAHI8RSDrTXSLrUBueeESg5Y9XNXWA5A96z8583PKkwBF53hyq', NULL, NULL, true, 'normal', 0, 1, 16, false, '2026-03-28 14:26:08+00', '2026-07-16 05:09:46.154179+00');
+INSERT INTO public.iam_user_info VALUES (1, '超级管理员', 'admin', 'bootx', '$2a$10$jttqpatKx6R13raUG/E8KuDRvB1cStpDXNxVaKT8x8d8wPFS1kXhu', NULL, NULL, true, 'normal', 0, 1, 18, false, '2026-03-28 14:26:08+00', '2026-08-27 05:33:25.789452+00');
+
+
+--
+-- Data for Name: iam_user_passkey; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+-- REDACTED: iam_user_passkey (整表清除)
 
 
 --
@@ -6177,6 +6251,13 @@ INSERT INTO public.iam_user_info VALUES (1, '超级管理员', 'admin', 'bootx',
 
 
 --
+-- Data for Name: notify_mail_record; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+-- REDACTED: notify_mail_record (整表清除)
+
+
+--
 -- Data for Name: notify_message; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -6194,6 +6275,12 @@ INSERT INTO public.iam_user_info VALUES (1, '超级管理员', 'admin', 'bootx',
 --
 
 -- REDACTED: notify_notice_read (整表清除)
+
+
+--
+-- Data for Name: pay_abnormal_order; Type: TABLE DATA; Schema: public; Owner: -
+--
+
 
 
 --
@@ -6264,6 +6351,12 @@ INSERT INTO public.iam_user_info VALUES (1, '超级管理员', 'admin', 'bootx',
 
 
 --
+-- Data for Name: pay_fund_flow; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+
+
+--
 -- Data for Name: pay_gateway_cashier_item; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -6295,89 +6388,89 @@ INSERT INTO public.iam_user_info VALUES (1, '超级管理员', 'admin', 'bootx',
 -- Data for Name: pay_md_capability; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.pay_md_capability VALUES (5001, 'aggregate_pay_qrcode', 0, true, NULL, false, 1, '2026-05-29 04:18:20.415995', 0, 1, '2026-05-29 04:18:20.415995');
-INSERT INTO public.pay_md_capability VALUES (5003, 'wechat_cashier', 2, true, NULL, false, 1, '2026-05-29 04:18:20.415995', 0, 1, '2026-05-29 04:18:20.415995');
-INSERT INTO public.pay_md_capability VALUES (5004, 'wechat_jsapi', 3, true, NULL, false, 1, '2026-05-29 04:18:20.415995', 0, 1, '2026-05-29 04:18:20.415995');
-INSERT INTO public.pay_md_capability VALUES (5005, 'wechat_app', 4, true, NULL, false, 1, '2026-05-29 04:18:20.415995', 0, 1, '2026-05-29 04:18:20.415995');
-INSERT INTO public.pay_md_capability VALUES (5006, 'wechat_h5', 5, true, NULL, false, 1, '2026-05-29 04:18:20.415995', 0, 1, '2026-05-29 04:18:20.415995');
-INSERT INTO public.pay_md_capability VALUES (5007, 'wechat_qr', 6, true, NULL, false, 1, '2026-05-29 04:18:20.415995', 0, 1, '2026-05-29 04:18:20.415995');
-INSERT INTO public.pay_md_capability VALUES (5008, 'wechat_mini', 7, true, NULL, false, 1, '2026-05-29 04:18:20.415995', 0, 1, '2026-05-29 04:18:20.415995');
-INSERT INTO public.pay_md_capability VALUES (5009, 'wechat_barcode', 8, true, NULL, false, 1, '2026-05-29 04:18:20.415995', 0, 1, '2026-05-29 04:18:20.415995');
-INSERT INTO public.pay_md_capability VALUES (5010, 'alipay_barcode', 9, true, NULL, false, 1, '2026-05-29 04:18:20.415995', 0, 1, '2026-05-29 04:18:20.415995');
-INSERT INTO public.pay_md_capability VALUES (5012, 'alipay_app', 11, true, NULL, false, 1, '2026-05-29 04:18:20.415995', 0, 1, '2026-05-29 04:18:20.415995');
-INSERT INTO public.pay_md_capability VALUES (5013, 'alipay_h5', 12, true, NULL, false, 1, '2026-05-29 04:18:20.415995', 0, 1, '2026-05-29 04:18:20.415995');
-INSERT INTO public.pay_md_capability VALUES (5014, 'alipay_pc', 13, true, NULL, false, 1, '2026-05-29 04:18:20.415995', 0, 1, '2026-05-29 04:18:20.415995');
-INSERT INTO public.pay_md_capability VALUES (5015, 'alipay_jsapi', 14, true, NULL, false, 1, '2026-05-29 04:18:20.415995', 0, 1, '2026-05-29 04:18:20.415995');
-INSERT INTO public.pay_md_capability VALUES (5020, 'visa_card_gateway', 19, true, NULL, false, 1, '2026-05-29 04:18:20.415995', 0, 1, '2026-05-29 04:18:20.415995');
-INSERT INTO public.pay_md_capability VALUES (5021, 'visa_card_present', 20, true, NULL, false, 1, '2026-05-29 04:18:20.415995', 0, 1, '2026-05-29 04:18:20.415995');
-INSERT INTO public.pay_md_capability VALUES (5022, 'mastercard_card_gateway', 21, true, NULL, false, 1, '2026-05-29 04:18:20.415995', 0, 1, '2026-05-29 04:18:20.415995');
-INSERT INTO public.pay_md_capability VALUES (5023, 'mastercard_card_present', 22, true, NULL, false, 1, '2026-05-29 04:18:20.415995', 0, 1, '2026-05-29 04:18:20.415995');
-INSERT INTO public.pay_md_capability VALUES (7001, 'douyin_qr', 1, true, NULL, false, NULL, NULL, 0, NULL, '2026-06-15 00:00:00');
-INSERT INTO public.pay_md_capability VALUES (7002, 'douyin_jsapi', 2, true, NULL, false, NULL, NULL, 0, NULL, '2026-06-15 00:00:00');
-INSERT INTO public.pay_md_capability VALUES (7003, 'douyin_h5', 3, true, NULL, false, NULL, NULL, 0, NULL, '2026-06-15 00:00:00');
-INSERT INTO public.pay_md_capability VALUES (7004, 'douyin_app', 4, true, NULL, false, NULL, NULL, 0, NULL, '2026-06-15 00:00:00');
-INSERT INTO public.pay_md_capability VALUES (5011, 'alipay_qr', 10, true, NULL, false, 1, '2026-05-29 04:18:20.415995', 0, 1, '2026-05-29 04:18:20.415995');
-INSERT INTO public.pay_md_capability VALUES (5016, 'union_qr', 15, true, NULL, false, 1, '2026-05-29 04:18:20.415995', 0, 1, '2026-05-29 04:18:20.415995');
-INSERT INTO public.pay_md_capability VALUES (5019, 'union_jsapi', 18, true, NULL, false, 1, '2026-05-29 04:18:20.415995', 0, 1, '2026-05-29 04:18:20.415995');
-INSERT INTO public.pay_md_capability VALUES (5018, 'union_h5', 17, true, NULL, false, 1, '2026-05-29 04:18:20.415995', 0, 1, '2026-05-29 04:18:20.415995');
-INSERT INTO public.pay_md_capability VALUES (5017, 'union_barcode', 16, true, NULL, false, 1, '2026-05-29 04:18:20.415995', 0, 1, '2026-05-29 04:18:20.415995');
+INSERT INTO public.pay_md_capability VALUES (5001, 'aggregate_pay_qrcode', 0, true, NULL, false, 1, '2026-05-29 04:18:20.415995+00', 0, 1, '2026-05-29 04:18:20.415995+00');
+INSERT INTO public.pay_md_capability VALUES (5003, 'wechat_cashier', 2, true, NULL, false, 1, '2026-05-29 04:18:20.415995+00', 0, 1, '2026-05-29 04:18:20.415995+00');
+INSERT INTO public.pay_md_capability VALUES (5004, 'wechat_jsapi', 3, true, NULL, false, 1, '2026-05-29 04:18:20.415995+00', 0, 1, '2026-05-29 04:18:20.415995+00');
+INSERT INTO public.pay_md_capability VALUES (5005, 'wechat_app', 4, true, NULL, false, 1, '2026-05-29 04:18:20.415995+00', 0, 1, '2026-05-29 04:18:20.415995+00');
+INSERT INTO public.pay_md_capability VALUES (5006, 'wechat_h5', 5, true, NULL, false, 1, '2026-05-29 04:18:20.415995+00', 0, 1, '2026-05-29 04:18:20.415995+00');
+INSERT INTO public.pay_md_capability VALUES (5007, 'wechat_qr', 6, true, NULL, false, 1, '2026-05-29 04:18:20.415995+00', 0, 1, '2026-05-29 04:18:20.415995+00');
+INSERT INTO public.pay_md_capability VALUES (5008, 'wechat_mini', 7, true, NULL, false, 1, '2026-05-29 04:18:20.415995+00', 0, 1, '2026-05-29 04:18:20.415995+00');
+INSERT INTO public.pay_md_capability VALUES (5009, 'wechat_barcode', 8, true, NULL, false, 1, '2026-05-29 04:18:20.415995+00', 0, 1, '2026-05-29 04:18:20.415995+00');
+INSERT INTO public.pay_md_capability VALUES (5010, 'alipay_barcode', 9, true, NULL, false, 1, '2026-05-29 04:18:20.415995+00', 0, 1, '2026-05-29 04:18:20.415995+00');
+INSERT INTO public.pay_md_capability VALUES (5012, 'alipay_app', 11, true, NULL, false, 1, '2026-05-29 04:18:20.415995+00', 0, 1, '2026-05-29 04:18:20.415995+00');
+INSERT INTO public.pay_md_capability VALUES (5013, 'alipay_h5', 12, true, NULL, false, 1, '2026-05-29 04:18:20.415995+00', 0, 1, '2026-05-29 04:18:20.415995+00');
+INSERT INTO public.pay_md_capability VALUES (5014, 'alipay_pc', 13, true, NULL, false, 1, '2026-05-29 04:18:20.415995+00', 0, 1, '2026-05-29 04:18:20.415995+00');
+INSERT INTO public.pay_md_capability VALUES (5015, 'alipay_jsapi', 14, true, NULL, false, 1, '2026-05-29 04:18:20.415995+00', 0, 1, '2026-05-29 04:18:20.415995+00');
+INSERT INTO public.pay_md_capability VALUES (5020, 'visa_card_gateway', 19, true, NULL, false, 1, '2026-05-29 04:18:20.415995+00', 0, 1, '2026-05-29 04:18:20.415995+00');
+INSERT INTO public.pay_md_capability VALUES (5021, 'visa_card_present', 20, true, NULL, false, 1, '2026-05-29 04:18:20.415995+00', 0, 1, '2026-05-29 04:18:20.415995+00');
+INSERT INTO public.pay_md_capability VALUES (5022, 'mastercard_card_gateway', 21, true, NULL, false, 1, '2026-05-29 04:18:20.415995+00', 0, 1, '2026-05-29 04:18:20.415995+00');
+INSERT INTO public.pay_md_capability VALUES (5023, 'mastercard_card_present', 22, true, NULL, false, 1, '2026-05-29 04:18:20.415995+00', 0, 1, '2026-05-29 04:18:20.415995+00');
+INSERT INTO public.pay_md_capability VALUES (7001, 'douyin_qr', 1, true, NULL, false, NULL, NULL, 0, NULL, '2026-06-15 00:00:00+00');
+INSERT INTO public.pay_md_capability VALUES (7002, 'douyin_jsapi', 2, true, NULL, false, NULL, NULL, 0, NULL, '2026-06-15 00:00:00+00');
+INSERT INTO public.pay_md_capability VALUES (7003, 'douyin_h5', 3, true, NULL, false, NULL, NULL, 0, NULL, '2026-06-15 00:00:00+00');
+INSERT INTO public.pay_md_capability VALUES (7004, 'douyin_app', 4, true, NULL, false, NULL, NULL, 0, NULL, '2026-06-15 00:00:00+00');
+INSERT INTO public.pay_md_capability VALUES (5011, 'alipay_qr', 10, true, NULL, false, 1, '2026-05-29 04:18:20.415995+00', 0, 1, '2026-05-29 04:18:20.415995+00');
+INSERT INTO public.pay_md_capability VALUES (5016, 'union_qr', 15, true, NULL, false, 1, '2026-05-29 04:18:20.415995+00', 0, 1, '2026-05-29 04:18:20.415995+00');
+INSERT INTO public.pay_md_capability VALUES (5019, 'union_jsapi', 18, true, NULL, false, 1, '2026-05-29 04:18:20.415995+00', 0, 1, '2026-05-29 04:18:20.415995+00');
+INSERT INTO public.pay_md_capability VALUES (5018, 'union_h5', 17, true, NULL, false, 1, '2026-05-29 04:18:20.415995+00', 0, 1, '2026-05-29 04:18:20.415995+00');
+INSERT INTO public.pay_md_capability VALUES (5017, 'union_barcode', 16, true, NULL, false, 1, '2026-05-29 04:18:20.415995+00', 0, 1, '2026-05-29 04:18:20.415995+00');
 
 
 --
 -- Data for Name: pay_md_channel; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.pay_md_channel VALUES (1, 'alipay', 1, NULL, 1, '2026-05-29 00:00:00', 1, '2026-05-29 00:00:00', 0, false);
-INSERT INTO public.pay_md_channel VALUES (3, 'wechat', 2, NULL, 1, '2026-05-29 00:00:00', 1, '2026-05-29 00:00:00', 0, false);
-INSERT INTO public.pay_md_channel VALUES (13, 'hkrt_pay', 9, NULL, 1, '2026-07-05 23:19:01.965299', 1, '2026-07-05 23:19:01.965299', 0, false);
-INSERT INTO public.pay_md_channel VALUES (14, 'fuyou_pay', 13, NULL, 1, '2026-07-05 23:19:01.965299', 1, '2026-07-05 23:19:01.965299', 0, false);
-INSERT INTO public.pay_md_channel VALUES (15, 'sheng_pay', 14, NULL, 1, '2026-07-05 23:19:01.965299', 1, '2026-07-05 23:19:01.965299', 0, false);
-INSERT INTO public.pay_md_channel VALUES (16, 'ysep_pay', 15, NULL, 1, '2026-07-05 23:19:01.965299', 1, '2026-07-05 23:19:01.965299', 0, false);
-INSERT INTO public.pay_md_channel VALUES (17, 'quick_pay', 16, NULL, 1, '2026-07-05 23:19:01.965299', 1, '2026-07-05 23:19:01.965299', 0, false);
-INSERT INTO public.pay_md_channel VALUES (18, 'sand_pay', 12, NULL, 1, '2026-07-05 23:19:01.965299', 1, '2026-07-05 23:19:01.965299', 0, false);
-INSERT INTO public.pay_md_channel VALUES (19, 'yee_pay', 10, NULL, 1, '2026-07-05 23:19:01.965299', 1, '2026-07-05 23:19:01.965299', 0, false);
-INSERT INTO public.pay_md_channel VALUES (20, 'jee_pay', 17, NULL, 1, '2026-07-05 23:19:01.965299', 1, '2026-07-05 23:19:01.965299', 0, false);
-INSERT INTO public.pay_md_channel VALUES (9, 'douyin', 3, 'douyinPay', 1, '2026-06-15 00:00:00', 1, '2026-06-15 00:00:00', 0, false);
-INSERT INTO public.pay_md_channel VALUES (11, 'huifu', 11, 'huifu', 1, '2026-07-05 23:19:01.965299', 1, '2026-07-05 23:19:01.965299', 0, false);
-INSERT INTO public.pay_md_channel VALUES (92001, 'stripe', 18, 'stripe', 1, '2026-08-02 13:04:19.050804', 1, '2026-08-02 13:04:19.050804', 0, false);
-INSERT INTO public.pay_md_channel VALUES (91001, 'union_pay', 4, NULL, 1, '2026-08-02 08:38:10.079913', 1, '2026-08-02 08:38:10.079913', 0, false);
-INSERT INTO public.pay_md_channel VALUES (5, 'ums_pay', 5, NULL, 1, '2026-05-29 00:00:00', 1, '2026-05-29 00:00:00', 0, false);
-INSERT INTO public.pay_md_channel VALUES (8, 'lakala_pay', 6, NULL, 1, '2026-05-29 00:00:00', 1, '2026-05-29 00:00:00', 0, false);
-INSERT INTO public.pay_md_channel VALUES (6, 'leshua_pay', 7, NULL, 1, '2026-05-29 00:00:00', 1, '2026-05-29 00:00:00', 0, false);
-INSERT INTO public.pay_md_channel VALUES (7, 'vbill_pay', 8, NULL, 1, '2026-05-29 00:00:00', 1, '2026-05-29 00:00:00', 0, false);
+INSERT INTO public.pay_md_channel VALUES (1, 'alipay', 1, NULL, 1, '2026-05-29 00:00:00+00', 1, '2026-05-29 00:00:00+00', 0, false);
+INSERT INTO public.pay_md_channel VALUES (3, 'wechat', 2, NULL, 1, '2026-05-29 00:00:00+00', 1, '2026-05-29 00:00:00+00', 0, false);
+INSERT INTO public.pay_md_channel VALUES (13, 'hkrt_pay', 9, NULL, 1, '2026-07-05 23:19:01.965299+00', 1, '2026-07-05 23:19:01.965299+00', 0, false);
+INSERT INTO public.pay_md_channel VALUES (14, 'fuyou_pay', 13, NULL, 1, '2026-07-05 23:19:01.965299+00', 1, '2026-07-05 23:19:01.965299+00', 0, false);
+INSERT INTO public.pay_md_channel VALUES (15, 'sheng_pay', 14, NULL, 1, '2026-07-05 23:19:01.965299+00', 1, '2026-07-05 23:19:01.965299+00', 0, false);
+INSERT INTO public.pay_md_channel VALUES (16, 'ysep_pay', 15, NULL, 1, '2026-07-05 23:19:01.965299+00', 1, '2026-07-05 23:19:01.965299+00', 0, false);
+INSERT INTO public.pay_md_channel VALUES (17, 'quick_pay', 16, NULL, 1, '2026-07-05 23:19:01.965299+00', 1, '2026-07-05 23:19:01.965299+00', 0, false);
+INSERT INTO public.pay_md_channel VALUES (18, 'sand_pay', 12, NULL, 1, '2026-07-05 23:19:01.965299+00', 1, '2026-07-05 23:19:01.965299+00', 0, false);
+INSERT INTO public.pay_md_channel VALUES (19, 'yee_pay', 10, NULL, 1, '2026-07-05 23:19:01.965299+00', 1, '2026-07-05 23:19:01.965299+00', 0, false);
+INSERT INTO public.pay_md_channel VALUES (20, 'jee_pay', 17, NULL, 1, '2026-07-05 23:19:01.965299+00', 1, '2026-07-05 23:19:01.965299+00', 0, false);
+INSERT INTO public.pay_md_channel VALUES (9, 'douyin', 3, 'douyinPay', 1, '2026-06-15 00:00:00+00', 1, '2026-06-15 00:00:00+00', 0, false);
+INSERT INTO public.pay_md_channel VALUES (11, 'huifu', 11, 'huifu', 1, '2026-07-05 23:19:01.965299+00', 1, '2026-07-05 23:19:01.965299+00', 0, false);
+INSERT INTO public.pay_md_channel VALUES (92001, 'stripe', 18, 'stripe', 1, '2026-08-02 13:04:19.050804+00', 1, '2026-08-02 13:04:19.050804+00', 0, false);
+INSERT INTO public.pay_md_channel VALUES (91001, 'union_pay', 4, NULL, 1, '2026-08-02 08:38:10.079913+00', 1, '2026-08-02 08:38:10.079913+00', 0, false);
+INSERT INTO public.pay_md_channel VALUES (5, 'ums_pay', 5, NULL, 1, '2026-05-29 00:00:00+00', 1, '2026-05-29 00:00:00+00', 0, false);
+INSERT INTO public.pay_md_channel VALUES (8, 'lakala_pay', 6, NULL, 1, '2026-05-29 00:00:00+00', 1, '2026-05-29 00:00:00+00', 0, false);
+INSERT INTO public.pay_md_channel VALUES (6, 'leshua_pay', 7, NULL, 1, '2026-05-29 00:00:00+00', 1, '2026-05-29 00:00:00+00', 0, false);
+INSERT INTO public.pay_md_channel VALUES (7, 'vbill_pay', 8, NULL, 1, '2026-05-29 00:00:00+00', 1, '2026-05-29 00:00:00+00', 0, false);
 
 
 --
 -- Data for Name: pay_md_method; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.pay_md_method VALUES (502003001, 'aggregate_pay_qrcode', 1, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977');
-INSERT INTO public.pay_md_method VALUES (502003003, 'wechat_cashier', 3, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977');
-INSERT INTO public.pay_md_method VALUES (502003004, 'wechat_qr', 4, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977');
-INSERT INTO public.pay_md_method VALUES (502003005, 'wechat_jsapi', 5, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977');
-INSERT INTO public.pay_md_method VALUES (502003006, 'wechat_mini', 6, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977');
-INSERT INTO public.pay_md_method VALUES (502003007, 'wechat_h5', 7, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977');
-INSERT INTO public.pay_md_method VALUES (502003008, 'wechat_app', 8, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977');
-INSERT INTO public.pay_md_method VALUES (502003009, 'wechat_barcode', 9, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977');
-INSERT INTO public.pay_md_method VALUES (502003010, 'alipay_qr', 10, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977');
-INSERT INTO public.pay_md_method VALUES (502003012, 'alipay_jsapi', 12, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977');
-INSERT INTO public.pay_md_method VALUES (502003014, 'alipay_pc', 14, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977');
-INSERT INTO public.pay_md_method VALUES (502003015, 'alipay_h5', 15, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977');
-INSERT INTO public.pay_md_method VALUES (502003016, 'alipay_app', 16, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977');
-INSERT INTO public.pay_md_method VALUES (502003017, 'alipay_barcode', 17, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977');
-INSERT INTO public.pay_md_method VALUES (502003018, 'union_qr', 18, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977');
-INSERT INTO public.pay_md_method VALUES (502003019, 'union_jsapi', 19, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977');
-INSERT INTO public.pay_md_method VALUES (502003020, 'union_h5', 20, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977');
-INSERT INTO public.pay_md_method VALUES (502003022, 'visa_card_gateway', 22, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977');
-INSERT INTO public.pay_md_method VALUES (502003023, 'visa_card_present', 23, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977');
-INSERT INTO public.pay_md_method VALUES (502003024, 'mastercard_card_gateway', 24, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977');
-INSERT INTO public.pay_md_method VALUES (502003025, 'mastercard_card_present', 25, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977');
-INSERT INTO public.pay_md_method VALUES (502003026, 'other', 26, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977');
-INSERT INTO public.pay_md_method VALUES (502003027, 'douyin_qr', 1, NULL, false, NULL, NULL, 0, NULL, '2026-06-15 00:00:00');
-INSERT INTO public.pay_md_method VALUES (502003028, 'douyin_jsapi', 2, NULL, false, NULL, NULL, 0, NULL, '2026-06-15 00:00:00');
-INSERT INTO public.pay_md_method VALUES (502003029, 'douyin_h5', 3, NULL, false, NULL, NULL, 0, NULL, '2026-06-15 00:00:00');
-INSERT INTO public.pay_md_method VALUES (502003030, 'douyin_app', 4, NULL, false, NULL, NULL, 0, NULL, '2026-06-15 00:00:00');
-INSERT INTO public.pay_md_method VALUES (502003021, 'union_barcode', 21, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977');
+INSERT INTO public.pay_md_method VALUES (502003001, 'aggregate_pay_qrcode', 1, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00');
+INSERT INTO public.pay_md_method VALUES (502003003, 'wechat_cashier', 3, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00');
+INSERT INTO public.pay_md_method VALUES (502003004, 'wechat_qr', 4, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00');
+INSERT INTO public.pay_md_method VALUES (502003005, 'wechat_jsapi', 5, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00');
+INSERT INTO public.pay_md_method VALUES (502003006, 'wechat_mini', 6, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00');
+INSERT INTO public.pay_md_method VALUES (502003007, 'wechat_h5', 7, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00');
+INSERT INTO public.pay_md_method VALUES (502003008, 'wechat_app', 8, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00');
+INSERT INTO public.pay_md_method VALUES (502003009, 'wechat_barcode', 9, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00');
+INSERT INTO public.pay_md_method VALUES (502003010, 'alipay_qr', 10, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00');
+INSERT INTO public.pay_md_method VALUES (502003012, 'alipay_jsapi', 12, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00');
+INSERT INTO public.pay_md_method VALUES (502003014, 'alipay_pc', 14, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00');
+INSERT INTO public.pay_md_method VALUES (502003015, 'alipay_h5', 15, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00');
+INSERT INTO public.pay_md_method VALUES (502003016, 'alipay_app', 16, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00');
+INSERT INTO public.pay_md_method VALUES (502003017, 'alipay_barcode', 17, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00');
+INSERT INTO public.pay_md_method VALUES (502003018, 'union_qr', 18, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00');
+INSERT INTO public.pay_md_method VALUES (502003019, 'union_jsapi', 19, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00');
+INSERT INTO public.pay_md_method VALUES (502003020, 'union_h5', 20, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00');
+INSERT INTO public.pay_md_method VALUES (502003022, 'visa_card_gateway', 22, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00');
+INSERT INTO public.pay_md_method VALUES (502003023, 'visa_card_present', 23, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00');
+INSERT INTO public.pay_md_method VALUES (502003024, 'mastercard_card_gateway', 24, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00');
+INSERT INTO public.pay_md_method VALUES (502003025, 'mastercard_card_present', 25, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00');
+INSERT INTO public.pay_md_method VALUES (502003026, 'other', 26, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00');
+INSERT INTO public.pay_md_method VALUES (502003027, 'douyin_qr', 1, NULL, false, NULL, NULL, 0, NULL, '2026-06-15 00:00:00+00');
+INSERT INTO public.pay_md_method VALUES (502003028, 'douyin_jsapi', 2, NULL, false, NULL, NULL, 0, NULL, '2026-06-15 00:00:00+00');
+INSERT INTO public.pay_md_method VALUES (502003029, 'douyin_h5', 3, NULL, false, NULL, NULL, 0, NULL, '2026-06-15 00:00:00+00');
+INSERT INTO public.pay_md_method VALUES (502003030, 'douyin_app', 4, NULL, false, NULL, NULL, 0, NULL, '2026-06-15 00:00:00+00');
+INSERT INTO public.pay_md_method VALUES (502003021, 'union_barcode', 21, NULL, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00');
 
 
 --
@@ -6387,8 +6480,8 @@ INSERT INTO public.pay_md_method VALUES (502003021, 'union_barcode', 21, NULL, f
 INSERT INTO public.pay_md_product VALUES (1001, 'alipay_isv', '支付宝(服务商)', 'alipay', 11, NULL, NULL, NULL, NULL, 0, false, false, true);
 INSERT INTO public.pay_md_product VALUES (10009, 'wechat_pay', '微信支付(直连)', 'wechat', 20, NULL, NULL, NULL, NULL, 0, false, false, true);
 INSERT INTO public.pay_md_product VALUES (1003, 'wechat_isv', '微信支付(服务商)', 'wechat', 21, NULL, NULL, NULL, NULL, 0, false, false, true);
-INSERT INTO public.pay_md_product VALUES (10008, 'alipay', '支付宝(直连)', 'alipay', 10, NULL, NULL, 1, '2026-06-17 09:53:02.203443', 4, false, true, true);
-INSERT INTO public.pay_md_product VALUES (96001, 'union_pay', '云闪付', 'union_pay', 40, 1, '2026-08-02 09:33:13.989427', 1, '2026-08-02 09:33:13.989427', 0, false, true, true);
+INSERT INTO public.pay_md_product VALUES (10008, 'alipay', '支付宝(直连)', 'alipay', 10, NULL, NULL, 1, '2026-06-17 09:53:02.203443+00', 4, false, true, true);
+INSERT INTO public.pay_md_product VALUES (96001, 'union_pay', '云闪付', 'union_pay', 40, 1, '2026-08-02 09:33:13.989427+00', 1, '2026-08-02 09:33:13.989427+00', 0, false, true, true);
 INSERT INTO public.pay_md_product VALUES (10001, 'ums_qrcode', '银联商务(C扫B)', 'ums_pay', 50, NULL, NULL, NULL, NULL, 0, false, true, true);
 INSERT INTO public.pay_md_product VALUES (10002, 'ums_jsapi', '银联商务(公众号)', 'ums_pay', 51, NULL, NULL, NULL, NULL, 0, false, true, true);
 INSERT INTO public.pay_md_product VALUES (10003, 'ums_app', '银联商务(APP)', 'ums_pay', 52, NULL, NULL, NULL, NULL, 0, false, true, true);
@@ -6396,54 +6489,54 @@ INSERT INTO public.pay_md_product VALUES (10004, 'ums_mini', '银联商务(小�
 INSERT INTO public.pay_md_product VALUES (10005, 'ums_h5', '银联商务(H5)', 'ums_pay', 54, NULL, NULL, NULL, NULL, 0, false, true, true);
 INSERT INTO public.pay_md_product VALUES (10006, 'ums_barcode', '银联商务(B扫C)', 'ums_pay', 55, NULL, NULL, NULL, NULL, 0, false, true, true);
 INSERT INTO public.pay_md_product VALUES (10007, 'lakala_pay', '拉卡拉支付', 'lakala_pay', 60, NULL, NULL, NULL, NULL, 0, false, true, true);
-INSERT INTO public.pay_md_product VALUES (92001, 'stripe_pay', 'Stripe 支付', 'stripe', 190, 1, '2026-08-02 13:04:19.05231', 1, '2026-08-02 13:04:19.05231', 0, false, true, true);
-INSERT INTO public.pay_md_product VALUES (10012, 'ada_pay', 'Adapay', 'huifu', 120, 1, '2026-07-05 23:19:01.974607', 1, '2026-07-05 23:19:01.974607', 0, false, true, true);
+INSERT INTO public.pay_md_product VALUES (92001, 'stripe_pay', 'Stripe 支付', 'stripe', 190, 1, '2026-08-02 13:04:19.05231+00', 1, '2026-08-02 13:04:19.05231+00', 0, false, true, true);
+INSERT INTO public.pay_md_product VALUES (10012, 'ada_pay', 'Adapay', 'huifu', 120, 1, '2026-07-05 23:19:01.974607+00', 1, '2026-07-05 23:19:01.974607+00', 0, false, true, true);
 INSERT INTO public.pay_md_product VALUES (10010, 'douyin_pay', '抖音支付(直连)', 'douyin', 30, NULL, NULL, NULL, NULL, 0, false, false, true);
-INSERT INTO public.pay_md_product VALUES (10022, 'leshua_pay', '乐刷支付', 'leshua_pay', 70, 1, '2026-07-06 00:00:00', 1, '2026-07-06 00:00:00', 0, false, true, true);
-INSERT INTO public.pay_md_product VALUES (10023, 'vbill_pay', '随行付', 'vbill_pay', 80, 1, '2026-07-06 00:00:00', 1, '2026-07-06 00:00:00', 0, false, true, true);
-INSERT INTO public.pay_md_product VALUES (10024, 'hm_pay', '河马付', 'sand_pay', 90, 1, '2026-07-07 00:00:00', 1, '2026-07-07 14:08:28.223227', 1, false, true, true);
-INSERT INTO public.pay_md_product VALUES (10013, 'dougong_pay', '斗拱支付', 'huifu', 91, 1, '2026-07-05 23:19:01.974607', 1, '2026-07-26 12:07:40.114398', 4, false, false, true);
-INSERT INTO public.pay_md_product VALUES (10014, 'hkrt_pay', '海科融通', 'hkrt_pay', 100, 1, '2026-07-05 23:19:01.974607', 1, '2026-07-05 23:19:01.974607', 0, false, false, true);
-INSERT INTO public.pay_md_product VALUES (10020, 'yee_pay', '易宝支付', 'yee_pay', 110, 1, '2026-07-05 23:19:01.974607', 1, '2026-07-05 23:19:01.974607', 0, false, false, true);
-INSERT INTO public.pay_md_product VALUES (10015, 'fuyou_pay', '富友支付', 'fuyou_pay', 140, 1, '2026-07-05 23:19:01.974607', 1, '2026-07-05 23:19:01.974607', 0, false, false, true);
-INSERT INTO public.pay_md_product VALUES (10016, 'sheng_pay', '盛付通', 'sheng_pay', 150, 1, '2026-07-05 23:19:01.974607', 1, '2026-07-05 23:19:01.974607', 0, false, false, true);
-INSERT INTO public.pay_md_product VALUES (10017, 'ysep_pay', '银盛支付', 'ysep_pay', 160, 1, '2026-07-05 23:19:01.974607', 1, '2026-07-05 23:19:01.974607', 0, false, false, true);
-INSERT INTO public.pay_md_product VALUES (10018, 'quick_pay', '快钱支付', 'quick_pay', 170, 1, '2026-07-05 23:19:01.974607', 1, '2026-07-05 23:19:01.974607', 0, false, false, true);
-INSERT INTO public.pay_md_product VALUES (10021, 'jee_pay', 'Jeepay', 'jee_pay', 180, 1, '2026-07-05 23:19:01.974607', 1, '2026-07-05 23:19:01.974607', 0, false, false, true);
+INSERT INTO public.pay_md_product VALUES (10022, 'leshua_pay', '乐刷支付', 'leshua_pay', 70, 1, '2026-07-06 00:00:00+00', 1, '2026-07-06 00:00:00+00', 0, false, true, true);
+INSERT INTO public.pay_md_product VALUES (10023, 'vbill_pay', '随行付', 'vbill_pay', 80, 1, '2026-07-06 00:00:00+00', 1, '2026-07-06 00:00:00+00', 0, false, true, true);
+INSERT INTO public.pay_md_product VALUES (10024, 'hm_pay', '河马付', 'sand_pay', 90, 1, '2026-07-07 00:00:00+00', 1, '2026-07-07 14:08:28.223227+00', 1, false, true, true);
+INSERT INTO public.pay_md_product VALUES (10013, 'dougong_pay', '斗拱支付', 'huifu', 91, 1, '2026-07-05 23:19:01.974607+00', 1, '2026-07-26 12:07:40.114398+00', 4, false, false, true);
+INSERT INTO public.pay_md_product VALUES (10014, 'hkrt_pay', '海科融通', 'hkrt_pay', 100, 1, '2026-07-05 23:19:01.974607+00', 1, '2026-07-05 23:19:01.974607+00', 0, false, false, true);
+INSERT INTO public.pay_md_product VALUES (10020, 'yee_pay', '易宝支付', 'yee_pay', 110, 1, '2026-07-05 23:19:01.974607+00', 1, '2026-07-05 23:19:01.974607+00', 0, false, false, true);
+INSERT INTO public.pay_md_product VALUES (10015, 'fuyou_pay', '富友支付', 'fuyou_pay', 140, 1, '2026-07-05 23:19:01.974607+00', 1, '2026-07-05 23:19:01.974607+00', 0, false, false, true);
+INSERT INTO public.pay_md_product VALUES (10016, 'sheng_pay', '盛付通', 'sheng_pay', 150, 1, '2026-07-05 23:19:01.974607+00', 1, '2026-07-05 23:19:01.974607+00', 0, false, false, true);
+INSERT INTO public.pay_md_product VALUES (10017, 'ysep_pay', '银盛支付', 'ysep_pay', 160, 1, '2026-07-05 23:19:01.974607+00', 1, '2026-07-05 23:19:01.974607+00', 0, false, false, true);
+INSERT INTO public.pay_md_product VALUES (10018, 'quick_pay', '快钱支付', 'quick_pay', 170, 1, '2026-07-05 23:19:01.974607+00', 1, '2026-07-05 23:19:01.974607+00', 0, false, false, true);
+INSERT INTO public.pay_md_product VALUES (10021, 'jee_pay', 'Jeepay', 'jee_pay', 180, 1, '2026-07-05 23:19:01.974607+00', 1, '2026-07-05 23:19:01.974607+00', 0, false, false, true);
 
 
 --
 -- Data for Name: pay_md_product_capability; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.pay_md_product_capability VALUES (6001, 'alipay_isv', 'alipay_barcode', 0, true, NULL, false, 1, '2026-05-29 07:03:18.274881', 0, 1, '2026-05-29 07:03:18.274881');
-INSERT INTO public.pay_md_product_capability VALUES (92001, 'stripe_pay', 'visa_card_gateway', 1, true, NULL, false, 1, '2026-08-02 13:04:19.055745', 0, 1, '2026-08-02 13:04:19.055745');
-INSERT INTO public.pay_md_product_capability VALUES (6003, 'alipay_isv', 'alipay_jsapi', 2, true, NULL, false, 1, '2026-05-29 07:03:18.274881', 0, 1, '2026-05-29 07:03:18.274881');
-INSERT INTO public.pay_md_product_capability VALUES (6004, 'alipay_isv', 'alipay_pc', 3, true, NULL, false, 1, '2026-05-29 07:03:18.274881', 0, 1, '2026-05-29 07:03:18.274881');
-INSERT INTO public.pay_md_product_capability VALUES (6005, 'alipay_isv', 'alipay_h5', 4, true, NULL, false, 1, '2026-05-29 07:03:18.274881', 0, 1, '2026-05-29 07:03:18.274881');
-INSERT INTO public.pay_md_product_capability VALUES (6006, 'alipay_isv', 'alipay_app', 5, true, NULL, false, 1, '2026-05-29 07:03:18.274881', 0, 1, '2026-05-29 07:03:18.274881');
-INSERT INTO public.pay_md_product_capability VALUES (6010, 'wechat_isv', 'wechat_qr', 0, true, NULL, false, 1, '2026-05-29 07:03:18.274881', 0, 1, '2026-05-29 07:03:18.274881');
-INSERT INTO public.pay_md_product_capability VALUES (6011, 'wechat_isv', 'wechat_app', 1, true, NULL, false, 1, '2026-05-29 07:03:18.274881', 0, 1, '2026-05-29 07:03:18.274881');
-INSERT INTO public.pay_md_product_capability VALUES (6012, 'wechat_isv', 'wechat_h5', 2, true, NULL, false, 1, '2026-05-29 07:03:18.274881', 0, 1, '2026-05-29 07:03:18.274881');
-INSERT INTO public.pay_md_product_capability VALUES (6013, 'wechat_isv', 'wechat_barcode', 3, true, NULL, false, 1, '2026-05-29 07:03:18.274881', 0, 1, '2026-05-29 07:03:18.274881');
-INSERT INTO public.pay_md_product_capability VALUES (6014, 'wechat_isv', 'wechat_jsapi', 4, true, NULL, false, 1, '2026-05-29 07:03:18.274881', 0, 1, '2026-05-29 07:03:18.274881');
-INSERT INTO public.pay_md_product_capability VALUES (6015, 'wechat_isv', 'wechat_mini', 5, true, NULL, false, 1, '2026-05-29 07:03:18.274881', 0, 1, '2026-05-29 07:03:18.274881');
-INSERT INTO public.pay_md_product_capability VALUES (6020, 'ums_qrcode', 'aggregate_pay_qrcode', 0, true, NULL, false, 1, '2026-05-29 07:03:18.274881', 0, 1, '2026-05-29 07:03:18.274881');
-INSERT INTO public.pay_md_product_capability VALUES (92002, 'stripe_pay', 'mastercard_card_gateway', 2, true, NULL, false, 1, '2026-08-02 13:04:19.057452', 0, 1, '2026-08-02 13:04:19.057452');
-INSERT INTO public.pay_md_product_capability VALUES (6023, 'ums_qrcode', 'wechat_qr', 3, true, NULL, false, 1, '2026-05-29 07:03:18.274881', 0, 1, '2026-05-29 07:03:18.274881');
-INSERT INTO public.pay_md_product_capability VALUES (6030, 'ums_jsapi', 'wechat_jsapi', 0, true, NULL, false, 1, '2026-05-29 07:03:18.274881', 0, 1, '2026-05-29 07:03:18.274881');
-INSERT INTO public.pay_md_product_capability VALUES (6031, 'ums_jsapi', 'alipay_jsapi', 1, true, NULL, false, 1, '2026-05-29 07:03:18.274881', 0, 1, '2026-05-29 07:03:18.274881');
-INSERT INTO public.pay_md_product_capability VALUES (6040, 'ums_app', 'wechat_app', 0, true, NULL, false, 1, '2026-05-29 07:03:18.274881', 0, 1, '2026-05-29 07:03:18.274881');
-INSERT INTO public.pay_md_product_capability VALUES (6041, 'ums_app', 'alipay_app', 1, true, NULL, false, 1, '2026-05-29 07:03:18.274881', 0, 1, '2026-05-29 07:03:18.274881');
-INSERT INTO public.pay_md_product_capability VALUES (6050, 'ums_mini', 'wechat_mini', 0, true, NULL, false, 1, '2026-05-29 07:03:18.274881', 0, 1, '2026-05-29 07:03:18.274881');
-INSERT INTO public.pay_md_product_capability VALUES (6060, 'ums_h5', 'wechat_h5', 0, true, NULL, false, 1, '2026-05-29 07:03:18.274881', 0, 1, '2026-05-29 07:03:18.274881');
-INSERT INTO public.pay_md_product_capability VALUES (6061, 'ums_h5', 'alipay_h5', 1, true, NULL, false, 1, '2026-05-29 07:03:18.274881', 0, 1, '2026-05-29 07:03:18.274881');
-INSERT INTO public.pay_md_product_capability VALUES (6080, 'lakala_pay', 'wechat_barcode', 0, true, NULL, false, 1, '2026-05-29 07:03:18.274881', 0, 1, '2026-05-29 07:03:18.274881');
-INSERT INTO public.pay_md_product_capability VALUES (6081, 'lakala_pay', 'alipay_barcode', 1, true, NULL, false, 1, '2026-05-29 07:03:18.274881', 0, 1, '2026-05-29 07:03:18.274881');
-INSERT INTO public.pay_md_product_capability VALUES (6083, 'lakala_pay', 'wechat_jsapi', 3, true, NULL, false, 1, '2026-05-29 07:03:18.274881', 0, 1, '2026-05-29 07:03:18.274881');
-INSERT INTO public.pay_md_product_capability VALUES (6084, 'lakala_pay', 'wechat_app', 4, true, NULL, false, 1, '2026-05-29 07:03:18.274881', 0, 1, '2026-05-29 07:03:18.274881');
-INSERT INTO public.pay_md_product_capability VALUES (6085, 'lakala_pay', 'wechat_mini', 5, true, NULL, false, 1, '2026-05-29 07:03:18.274881', 0, 1, '2026-05-29 07:03:18.274881');
-INSERT INTO public.pay_md_product_capability VALUES (6087, 'lakala_pay', 'alipay_jsapi', 7, true, NULL, false, 1, '2026-05-29 07:03:18.274881', 0, 1, '2026-05-29 07:03:18.274881');
+INSERT INTO public.pay_md_product_capability VALUES (6001, 'alipay_isv', 'alipay_barcode', 0, true, NULL, false, 1, '2026-05-29 07:03:18.274881+00', 0, 1, '2026-05-29 07:03:18.274881+00');
+INSERT INTO public.pay_md_product_capability VALUES (92001, 'stripe_pay', 'visa_card_gateway', 1, true, NULL, false, 1, '2026-08-02 13:04:19.055745+00', 0, 1, '2026-08-02 13:04:19.055745+00');
+INSERT INTO public.pay_md_product_capability VALUES (6003, 'alipay_isv', 'alipay_jsapi', 2, true, NULL, false, 1, '2026-05-29 07:03:18.274881+00', 0, 1, '2026-05-29 07:03:18.274881+00');
+INSERT INTO public.pay_md_product_capability VALUES (6004, 'alipay_isv', 'alipay_pc', 3, true, NULL, false, 1, '2026-05-29 07:03:18.274881+00', 0, 1, '2026-05-29 07:03:18.274881+00');
+INSERT INTO public.pay_md_product_capability VALUES (6005, 'alipay_isv', 'alipay_h5', 4, true, NULL, false, 1, '2026-05-29 07:03:18.274881+00', 0, 1, '2026-05-29 07:03:18.274881+00');
+INSERT INTO public.pay_md_product_capability VALUES (6006, 'alipay_isv', 'alipay_app', 5, true, NULL, false, 1, '2026-05-29 07:03:18.274881+00', 0, 1, '2026-05-29 07:03:18.274881+00');
+INSERT INTO public.pay_md_product_capability VALUES (6010, 'wechat_isv', 'wechat_qr', 0, true, NULL, false, 1, '2026-05-29 07:03:18.274881+00', 0, 1, '2026-05-29 07:03:18.274881+00');
+INSERT INTO public.pay_md_product_capability VALUES (6011, 'wechat_isv', 'wechat_app', 1, true, NULL, false, 1, '2026-05-29 07:03:18.274881+00', 0, 1, '2026-05-29 07:03:18.274881+00');
+INSERT INTO public.pay_md_product_capability VALUES (6012, 'wechat_isv', 'wechat_h5', 2, true, NULL, false, 1, '2026-05-29 07:03:18.274881+00', 0, 1, '2026-05-29 07:03:18.274881+00');
+INSERT INTO public.pay_md_product_capability VALUES (6013, 'wechat_isv', 'wechat_barcode', 3, true, NULL, false, 1, '2026-05-29 07:03:18.274881+00', 0, 1, '2026-05-29 07:03:18.274881+00');
+INSERT INTO public.pay_md_product_capability VALUES (6014, 'wechat_isv', 'wechat_jsapi', 4, true, NULL, false, 1, '2026-05-29 07:03:18.274881+00', 0, 1, '2026-05-29 07:03:18.274881+00');
+INSERT INTO public.pay_md_product_capability VALUES (6015, 'wechat_isv', 'wechat_mini', 5, true, NULL, false, 1, '2026-05-29 07:03:18.274881+00', 0, 1, '2026-05-29 07:03:18.274881+00');
+INSERT INTO public.pay_md_product_capability VALUES (6020, 'ums_qrcode', 'aggregate_pay_qrcode', 0, true, NULL, false, 1, '2026-05-29 07:03:18.274881+00', 0, 1, '2026-05-29 07:03:18.274881+00');
+INSERT INTO public.pay_md_product_capability VALUES (92002, 'stripe_pay', 'mastercard_card_gateway', 2, true, NULL, false, 1, '2026-08-02 13:04:19.057452+00', 0, 1, '2026-08-02 13:04:19.057452+00');
+INSERT INTO public.pay_md_product_capability VALUES (6023, 'ums_qrcode', 'wechat_qr', 3, true, NULL, false, 1, '2026-05-29 07:03:18.274881+00', 0, 1, '2026-05-29 07:03:18.274881+00');
+INSERT INTO public.pay_md_product_capability VALUES (6030, 'ums_jsapi', 'wechat_jsapi', 0, true, NULL, false, 1, '2026-05-29 07:03:18.274881+00', 0, 1, '2026-05-29 07:03:18.274881+00');
+INSERT INTO public.pay_md_product_capability VALUES (6031, 'ums_jsapi', 'alipay_jsapi', 1, true, NULL, false, 1, '2026-05-29 07:03:18.274881+00', 0, 1, '2026-05-29 07:03:18.274881+00');
+INSERT INTO public.pay_md_product_capability VALUES (6040, 'ums_app', 'wechat_app', 0, true, NULL, false, 1, '2026-05-29 07:03:18.274881+00', 0, 1, '2026-05-29 07:03:18.274881+00');
+INSERT INTO public.pay_md_product_capability VALUES (6041, 'ums_app', 'alipay_app', 1, true, NULL, false, 1, '2026-05-29 07:03:18.274881+00', 0, 1, '2026-05-29 07:03:18.274881+00');
+INSERT INTO public.pay_md_product_capability VALUES (6050, 'ums_mini', 'wechat_mini', 0, true, NULL, false, 1, '2026-05-29 07:03:18.274881+00', 0, 1, '2026-05-29 07:03:18.274881+00');
+INSERT INTO public.pay_md_product_capability VALUES (6060, 'ums_h5', 'wechat_h5', 0, true, NULL, false, 1, '2026-05-29 07:03:18.274881+00', 0, 1, '2026-05-29 07:03:18.274881+00');
+INSERT INTO public.pay_md_product_capability VALUES (6061, 'ums_h5', 'alipay_h5', 1, true, NULL, false, 1, '2026-05-29 07:03:18.274881+00', 0, 1, '2026-05-29 07:03:18.274881+00');
+INSERT INTO public.pay_md_product_capability VALUES (6080, 'lakala_pay', 'wechat_barcode', 0, true, NULL, false, 1, '2026-05-29 07:03:18.274881+00', 0, 1, '2026-05-29 07:03:18.274881+00');
+INSERT INTO public.pay_md_product_capability VALUES (6081, 'lakala_pay', 'alipay_barcode', 1, true, NULL, false, 1, '2026-05-29 07:03:18.274881+00', 0, 1, '2026-05-29 07:03:18.274881+00');
+INSERT INTO public.pay_md_product_capability VALUES (6083, 'lakala_pay', 'wechat_jsapi', 3, true, NULL, false, 1, '2026-05-29 07:03:18.274881+00', 0, 1, '2026-05-29 07:03:18.274881+00');
+INSERT INTO public.pay_md_product_capability VALUES (6084, 'lakala_pay', 'wechat_app', 4, true, NULL, false, 1, '2026-05-29 07:03:18.274881+00', 0, 1, '2026-05-29 07:03:18.274881+00');
+INSERT INTO public.pay_md_product_capability VALUES (6085, 'lakala_pay', 'wechat_mini', 5, true, NULL, false, 1, '2026-05-29 07:03:18.274881+00', 0, 1, '2026-05-29 07:03:18.274881+00');
+INSERT INTO public.pay_md_product_capability VALUES (6087, 'lakala_pay', 'alipay_jsapi', 7, true, NULL, false, 1, '2026-05-29 07:03:18.274881+00', 0, 1, '2026-05-29 07:03:18.274881+00');
 INSERT INTO public.pay_md_product_capability VALUES (20081, 'alipay', 'alipay_barcode', 1, true, NULL, false, NULL, NULL, 0, NULL, NULL);
 INSERT INTO public.pay_md_product_capability VALUES (20083, 'alipay', 'alipay_jsapi', 3, true, NULL, false, NULL, NULL, 0, NULL, NULL);
 INSERT INTO public.pay_md_product_capability VALUES (20085, 'alipay', 'alipay_pc', 5, true, NULL, false, NULL, NULL, 0, NULL, NULL);
@@ -6455,189 +6548,189 @@ INSERT INTO public.pay_md_product_capability VALUES (20093, 'wechat_pay', 'wecha
 INSERT INTO public.pay_md_product_capability VALUES (20094, 'wechat_pay', 'wechat_barcode', 4, true, NULL, false, NULL, NULL, 0, NULL, NULL);
 INSERT INTO public.pay_md_product_capability VALUES (20095, 'wechat_pay', 'wechat_jsapi', 5, true, NULL, false, NULL, NULL, 0, NULL, NULL);
 INSERT INTO public.pay_md_product_capability VALUES (20096, 'wechat_pay', 'wechat_mini', 6, true, NULL, false, NULL, NULL, 0, NULL, NULL);
-INSERT INTO public.pay_md_product_capability VALUES (20101, 'douyin_pay', 'douyin_qr', 1, true, NULL, false, NULL, NULL, 0, NULL, '2026-06-15 00:00:00');
-INSERT INTO public.pay_md_product_capability VALUES (20102, 'douyin_pay', 'douyin_jsapi', 2, true, NULL, false, NULL, NULL, 0, NULL, '2026-06-15 00:00:00');
-INSERT INTO public.pay_md_product_capability VALUES (20103, 'douyin_pay', 'douyin_h5', 3, true, NULL, false, NULL, NULL, 0, NULL, '2026-06-15 00:00:00');
-INSERT INTO public.pay_md_product_capability VALUES (20104, 'douyin_pay', 'douyin_app', 4, true, NULL, false, NULL, NULL, 0, NULL, '2026-06-15 00:00:00');
-INSERT INTO public.pay_md_product_capability VALUES (21017, 'ada_pay', 'wechat_qr', 0, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21018, 'ada_pay', 'wechat_jsapi', 1, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21019, 'ada_pay', 'wechat_app', 2, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21020, 'ada_pay', 'wechat_h5', 3, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21021, 'ada_pay', 'wechat_mini', 4, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21022, 'ada_pay', 'wechat_barcode', 5, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (6002, 'alipay_isv', 'alipay_qr', 1, true, NULL, false, 1, '2026-05-29 07:03:18.274881', 0, 1, '2026-05-29 07:03:18.274881');
-INSERT INTO public.pay_md_product_capability VALUES (6022, 'ums_qrcode', 'alipay_qr', 2, true, NULL, false, 1, '2026-05-29 07:03:18.274881', 0, 1, '2026-05-29 07:03:18.274881');
-INSERT INTO public.pay_md_product_capability VALUES (6086, 'lakala_pay', 'alipay_qr', 6, true, NULL, false, 1, '2026-05-29 07:03:18.274881', 0, 1, '2026-05-29 07:03:18.274881');
+INSERT INTO public.pay_md_product_capability VALUES (20101, 'douyin_pay', 'douyin_qr', 1, true, NULL, false, NULL, NULL, 0, NULL, '2026-06-15 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (20102, 'douyin_pay', 'douyin_jsapi', 2, true, NULL, false, NULL, NULL, 0, NULL, '2026-06-15 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (20103, 'douyin_pay', 'douyin_h5', 3, true, NULL, false, NULL, NULL, 0, NULL, '2026-06-15 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (20104, 'douyin_pay', 'douyin_app', 4, true, NULL, false, NULL, NULL, 0, NULL, '2026-06-15 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21017, 'ada_pay', 'wechat_qr', 0, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21018, 'ada_pay', 'wechat_jsapi', 1, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21019, 'ada_pay', 'wechat_app', 2, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21020, 'ada_pay', 'wechat_h5', 3, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21021, 'ada_pay', 'wechat_mini', 4, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21022, 'ada_pay', 'wechat_barcode', 5, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (6002, 'alipay_isv', 'alipay_qr', 1, true, NULL, false, 1, '2026-05-29 07:03:18.274881+00', 0, 1, '2026-05-29 07:03:18.274881+00');
+INSERT INTO public.pay_md_product_capability VALUES (6022, 'ums_qrcode', 'alipay_qr', 2, true, NULL, false, 1, '2026-05-29 07:03:18.274881+00', 0, 1, '2026-05-29 07:03:18.274881+00');
+INSERT INTO public.pay_md_product_capability VALUES (6086, 'lakala_pay', 'alipay_qr', 6, true, NULL, false, 1, '2026-05-29 07:03:18.274881+00', 0, 1, '2026-05-29 07:03:18.274881+00');
 INSERT INTO public.pay_md_product_capability VALUES (20082, 'alipay', 'alipay_qr', 2, true, NULL, false, NULL, NULL, 0, NULL, NULL);
-INSERT INTO public.pay_md_product_capability VALUES (6021, 'ums_qrcode', 'union_qr', 1, true, NULL, false, 1, '2026-05-29 07:03:18.274881', 0, 1, '2026-05-29 07:03:18.274881');
-INSERT INTO public.pay_md_product_capability VALUES (6088, 'lakala_pay', 'union_qr', 8, true, NULL, false, 1, '2026-05-29 07:03:18.274881', 0, 1, '2026-05-29 07:03:18.274881');
-INSERT INTO public.pay_md_product_capability VALUES (6089, 'lakala_pay', 'union_jsapi', 9, true, NULL, false, 1, '2026-05-29 07:03:18.274881', 0, 1, '2026-05-29 07:03:18.274881');
-INSERT INTO public.pay_md_product_capability VALUES (6062, 'ums_h5', 'union_h5', 2, true, NULL, false, 1, '2026-05-29 07:03:18.274881', 0, 1, '2026-05-29 07:03:18.274881');
-INSERT INTO public.pay_md_product_capability VALUES (6070, 'ums_barcode', 'union_barcode', 0, true, NULL, false, 1, '2026-05-29 07:03:18.274881', 0, 1, '2026-05-29 07:03:18.274881');
-INSERT INTO public.pay_md_product_capability VALUES (6082, 'lakala_pay', 'union_barcode', 2, true, NULL, false, 1, '2026-05-29 07:03:18.274881', 0, 1, '2026-05-29 07:03:18.274881');
-INSERT INTO public.pay_md_product_capability VALUES (21024, 'ada_pay', 'alipay_jsapi', 7, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21025, 'ada_pay', 'alipay_app', 8, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21026, 'ada_pay', 'alipay_h5', 9, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21027, 'ada_pay', 'alipay_pc', 10, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21028, 'ada_pay', 'alipay_barcode', 11, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21033, 'dougong_pay', 'wechat_qr', 0, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21034, 'dougong_pay', 'wechat_jsapi', 1, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21035, 'dougong_pay', 'wechat_app', 2, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21036, 'dougong_pay', 'wechat_h5', 3, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21037, 'dougong_pay', 'wechat_mini', 4, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21038, 'dougong_pay', 'wechat_barcode', 5, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21040, 'dougong_pay', 'alipay_jsapi', 7, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21041, 'dougong_pay', 'alipay_app', 8, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21042, 'dougong_pay', 'alipay_h5', 9, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21043, 'dougong_pay', 'alipay_pc', 10, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21044, 'dougong_pay', 'alipay_barcode', 11, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21049, 'hkrt_pay', 'wechat_qr', 0, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21050, 'hkrt_pay', 'wechat_jsapi', 1, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21051, 'hkrt_pay', 'wechat_app', 2, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21052, 'hkrt_pay', 'wechat_h5', 3, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21053, 'hkrt_pay', 'wechat_mini', 4, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21054, 'hkrt_pay', 'wechat_barcode', 5, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21056, 'hkrt_pay', 'alipay_jsapi', 7, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21057, 'hkrt_pay', 'alipay_app', 8, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21058, 'hkrt_pay', 'alipay_h5', 9, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21059, 'hkrt_pay', 'alipay_pc', 10, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21060, 'hkrt_pay', 'alipay_barcode', 11, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21065, 'fuyou_pay', 'wechat_qr', 0, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21066, 'fuyou_pay', 'wechat_jsapi', 1, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21067, 'fuyou_pay', 'wechat_app', 2, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21068, 'fuyou_pay', 'wechat_h5', 3, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21069, 'fuyou_pay', 'wechat_mini', 4, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21070, 'fuyou_pay', 'wechat_barcode', 5, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21072, 'fuyou_pay', 'alipay_jsapi', 7, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21073, 'fuyou_pay', 'alipay_app', 8, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21074, 'fuyou_pay', 'alipay_h5', 9, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21075, 'fuyou_pay', 'alipay_pc', 10, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21076, 'fuyou_pay', 'alipay_barcode', 11, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21081, 'sheng_pay', 'wechat_qr', 0, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21082, 'sheng_pay', 'wechat_jsapi', 1, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21083, 'sheng_pay', 'wechat_app', 2, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21084, 'sheng_pay', 'wechat_h5', 3, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21085, 'sheng_pay', 'wechat_mini', 4, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21086, 'sheng_pay', 'wechat_barcode', 5, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21088, 'sheng_pay', 'alipay_jsapi', 7, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21089, 'sheng_pay', 'alipay_app', 8, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21090, 'sheng_pay', 'alipay_h5', 9, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21091, 'sheng_pay', 'alipay_pc', 10, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21029, 'ada_pay', 'union_qr', 12, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21045, 'dougong_pay', 'union_qr', 12, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21061, 'hkrt_pay', 'union_qr', 12, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21077, 'fuyou_pay', 'union_qr', 12, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21030, 'ada_pay', 'union_jsapi', 13, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21046, 'dougong_pay', 'union_jsapi', 13, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21062, 'hkrt_pay', 'union_jsapi', 13, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21078, 'fuyou_pay', 'union_jsapi', 13, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21031, 'ada_pay', 'union_h5', 14, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21047, 'dougong_pay', 'union_h5', 14, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21063, 'hkrt_pay', 'union_h5', 14, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21079, 'fuyou_pay', 'union_h5', 14, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21032, 'ada_pay', 'union_barcode', 15, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21048, 'dougong_pay', 'union_barcode', 15, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21064, 'hkrt_pay', 'union_barcode', 15, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21080, 'fuyou_pay', 'union_barcode', 15, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21092, 'sheng_pay', 'alipay_barcode', 11, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21097, 'ysep_pay', 'wechat_qr', 0, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21098, 'ysep_pay', 'wechat_jsapi', 1, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21099, 'ysep_pay', 'wechat_app', 2, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21100, 'ysep_pay', 'wechat_h5', 3, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21101, 'ysep_pay', 'wechat_mini', 4, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21102, 'ysep_pay', 'wechat_barcode', 5, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21104, 'ysep_pay', 'alipay_jsapi', 7, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21105, 'ysep_pay', 'alipay_app', 8, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21106, 'ysep_pay', 'alipay_h5', 9, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21107, 'ysep_pay', 'alipay_pc', 10, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21108, 'ysep_pay', 'alipay_barcode', 11, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21113, 'quick_pay', 'wechat_qr', 0, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21114, 'quick_pay', 'wechat_jsapi', 1, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21115, 'quick_pay', 'wechat_app', 2, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21116, 'quick_pay', 'wechat_h5', 3, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21117, 'quick_pay', 'wechat_mini', 4, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21118, 'quick_pay', 'wechat_barcode', 5, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21120, 'quick_pay', 'alipay_jsapi', 7, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21121, 'quick_pay', 'alipay_app', 8, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21122, 'quick_pay', 'alipay_h5', 9, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21123, 'quick_pay', 'alipay_pc', 10, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21124, 'quick_pay', 'alipay_barcode', 11, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21145, 'yee_pay', 'wechat_qr', 0, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21146, 'yee_pay', 'wechat_jsapi', 1, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21147, 'yee_pay', 'wechat_app', 2, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21148, 'yee_pay', 'wechat_h5', 3, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21149, 'yee_pay', 'wechat_mini', 4, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21150, 'yee_pay', 'wechat_barcode', 5, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21152, 'yee_pay', 'alipay_jsapi', 7, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21153, 'yee_pay', 'alipay_app', 8, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21154, 'yee_pay', 'alipay_h5', 9, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21155, 'yee_pay', 'alipay_pc', 10, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21156, 'yee_pay', 'alipay_barcode', 11, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21093, 'sheng_pay', 'union_qr', 12, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21109, 'ysep_pay', 'union_qr', 12, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21125, 'quick_pay', 'union_qr', 12, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21157, 'yee_pay', 'union_qr', 12, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21094, 'sheng_pay', 'union_jsapi', 13, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21110, 'ysep_pay', 'union_jsapi', 13, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21126, 'quick_pay', 'union_jsapi', 13, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21158, 'yee_pay', 'union_jsapi', 13, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21095, 'sheng_pay', 'union_h5', 14, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21111, 'ysep_pay', 'union_h5', 14, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21127, 'quick_pay', 'union_h5', 14, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21159, 'yee_pay', 'union_h5', 14, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21096, 'sheng_pay', 'union_barcode', 15, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21112, 'ysep_pay', 'union_barcode', 15, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21128, 'quick_pay', 'union_barcode', 15, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21160, 'yee_pay', 'union_barcode', 15, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21161, 'jee_pay', 'wechat_qr', 0, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21162, 'jee_pay', 'wechat_jsapi', 1, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21163, 'jee_pay', 'wechat_app', 2, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21164, 'jee_pay', 'wechat_h5', 3, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21165, 'jee_pay', 'wechat_mini', 4, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21167, 'jee_pay', 'alipay_jsapi', 6, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21168, 'jee_pay', 'alipay_app', 7, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21169, 'jee_pay', 'alipay_h5', 8, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21170, 'jee_pay', 'alipay_pc', 9, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21023, 'ada_pay', 'alipay_qr', 6, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21039, 'dougong_pay', 'alipay_qr', 6, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21055, 'hkrt_pay', 'alipay_qr', 6, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21071, 'fuyou_pay', 'alipay_qr', 6, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21087, 'sheng_pay', 'alipay_qr', 6, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21103, 'ysep_pay', 'alipay_qr', 6, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21119, 'quick_pay', 'alipay_qr', 6, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21151, 'yee_pay', 'alipay_qr', 6, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (21166, 'jee_pay', 'alipay_qr', 5, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (6100, 'leshua_pay', 'wechat_barcode', 0, true, NULL, false, 1, '2026-07-06 00:00:00', 0, 1, '2026-07-06 00:00:00');
-INSERT INTO public.pay_md_product_capability VALUES (6101, 'leshua_pay', 'alipay_barcode', 1, true, NULL, false, 1, '2026-07-06 00:00:00', 0, 1, '2026-07-06 00:00:00');
-INSERT INTO public.pay_md_product_capability VALUES (6103, 'leshua_pay', 'wechat_jsapi', 3, true, NULL, false, 1, '2026-07-06 00:00:00', 0, 1, '2026-07-06 00:00:00');
-INSERT INTO public.pay_md_product_capability VALUES (6104, 'leshua_pay', 'wechat_mini', 4, true, NULL, false, 1, '2026-07-06 00:00:00', 0, 1, '2026-07-06 00:00:00');
-INSERT INTO public.pay_md_product_capability VALUES (6105, 'leshua_pay', 'alipay_qr', 5, true, NULL, false, 1, '2026-07-06 00:00:00', 0, 1, '2026-07-06 00:00:00');
-INSERT INTO public.pay_md_product_capability VALUES (6106, 'leshua_pay', 'alipay_jsapi', 6, true, NULL, false, 1, '2026-07-06 00:00:00', 0, 1, '2026-07-06 00:00:00');
-INSERT INTO public.pay_md_product_capability VALUES (6200, 'hm_pay', 'aggregate_pay_qrcode', 0, true, NULL, false, 1, '2026-07-07 00:00:00', 0, 1, '2026-07-07 00:00:00');
-INSERT INTO public.pay_md_product_capability VALUES (6202, 'hm_pay', 'wechat_qr', 2, true, NULL, false, 1, '2026-07-07 00:00:00', 0, 1, '2026-07-07 00:00:00');
-INSERT INTO public.pay_md_product_capability VALUES (6203, 'hm_pay', 'wechat_jsapi', 3, true, NULL, false, 1, '2026-07-07 00:00:00', 0, 1, '2026-07-07 00:00:00');
-INSERT INTO public.pay_md_product_capability VALUES (6204, 'hm_pay', 'wechat_mini', 4, true, NULL, false, 1, '2026-07-07 00:00:00', 0, 1, '2026-07-07 00:00:00');
-INSERT INTO public.pay_md_product_capability VALUES (6205, 'hm_pay', 'alipay_qr', 5, true, NULL, false, 1, '2026-07-07 00:00:00', 0, 1, '2026-07-07 00:00:00');
-INSERT INTO public.pay_md_product_capability VALUES (6206, 'hm_pay', 'alipay_jsapi', 6, true, NULL, false, 1, '2026-07-07 00:00:00', 0, 1, '2026-07-07 00:00:00');
-INSERT INTO public.pay_md_product_capability VALUES (6300, 'vbill_pay', 'wechat_jsapi', 0, true, NULL, false, 1, '2026-07-06 00:00:00', 0, 1, '2026-07-06 00:00:00');
-INSERT INTO public.pay_md_product_capability VALUES (6301, 'vbill_pay', 'wechat_mini', 1, true, NULL, false, 1, '2026-07-06 00:00:00', 0, 1, '2026-07-06 00:00:00');
-INSERT INTO public.pay_md_product_capability VALUES (6302, 'vbill_pay', 'wechat_qr', 2, true, NULL, false, 1, '2026-07-06 00:00:00', 0, 1, '2026-07-06 00:00:00');
-INSERT INTO public.pay_md_product_capability VALUES (6303, 'vbill_pay', 'wechat_barcode', 3, true, NULL, false, 1, '2026-07-06 00:00:00', 0, 1, '2026-07-06 00:00:00');
-INSERT INTO public.pay_md_product_capability VALUES (6304, 'vbill_pay', 'wechat_cashier', 4, true, NULL, false, 1, '2026-07-06 00:00:00', 0, 1, '2026-07-06 00:00:00');
-INSERT INTO public.pay_md_product_capability VALUES (6305, 'vbill_pay', 'alipay_jsapi', 5, true, NULL, false, 1, '2026-07-06 00:00:00', 0, 1, '2026-07-06 00:00:00');
-INSERT INTO public.pay_md_product_capability VALUES (6307, 'vbill_pay', 'alipay_qr', 7, true, NULL, false, 1, '2026-07-06 00:00:00', 0, 1, '2026-07-06 00:00:00');
-INSERT INTO public.pay_md_product_capability VALUES (6308, 'vbill_pay', 'alipay_barcode', 8, true, NULL, false, 1, '2026-07-06 00:00:00', 0, 1, '2026-07-06 00:00:00');
-INSERT INTO public.pay_md_product_capability VALUES (97001, 'union_pay', 'union_qr', 1, true, NULL, false, 1, '2026-08-02 09:33:13.993374', 0, 1, '2026-08-02 09:33:13.993374');
-INSERT INTO public.pay_md_product_capability VALUES (97002, 'union_pay', 'union_h5', 2, true, NULL, false, 1, '2026-08-02 09:33:13.993374', 0, 1, '2026-08-02 09:33:13.993374');
-INSERT INTO public.pay_md_product_capability VALUES (97003, 'union_pay', 'union_barcode', 3, true, NULL, false, 1, '2026-08-02 09:33:13.993374', 0, 1, '2026-08-02 09:33:13.993374');
-INSERT INTO public.pay_md_product_capability VALUES (21171, 'jee_pay', 'union_qr', 10, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (6108, 'leshua_pay', 'union_qr', 8, true, NULL, false, 1, '2026-07-06 00:00:00', 0, 1, '2026-07-06 00:00:00');
-INSERT INTO public.pay_md_product_capability VALUES (6310, 'vbill_pay', 'union_qr', 10, true, NULL, false, 1, '2026-07-06 00:00:00', 0, 1, '2026-07-06 00:00:00');
-INSERT INTO public.pay_md_product_capability VALUES (21172, 'jee_pay', 'union_jsapi', 11, true, NULL, false, 1, '2026-07-05 23:19:01.978869', 0, 1, '2026-07-05 23:19:01.978869');
-INSERT INTO public.pay_md_product_capability VALUES (6109, 'leshua_pay', 'union_jsapi', 9, true, NULL, false, 1, '2026-07-06 00:00:00', 0, 1, '2026-07-06 00:00:00');
-INSERT INTO public.pay_md_product_capability VALUES (6309, 'vbill_pay', 'union_jsapi', 9, true, NULL, false, 1, '2026-07-06 00:00:00', 0, 1, '2026-07-06 00:00:00');
-INSERT INTO public.pay_md_product_capability VALUES (6102, 'leshua_pay', 'union_barcode', 2, true, NULL, false, 1, '2026-07-06 00:00:00', 0, 1, '2026-07-06 00:00:00');
-INSERT INTO public.pay_md_product_capability VALUES (6311, 'vbill_pay', 'union_barcode', 11, true, NULL, false, 1, '2026-07-06 00:00:00', 0, 1, '2026-07-06 00:00:00');
+INSERT INTO public.pay_md_product_capability VALUES (6021, 'ums_qrcode', 'union_qr', 1, true, NULL, false, 1, '2026-05-29 07:03:18.274881+00', 0, 1, '2026-05-29 07:03:18.274881+00');
+INSERT INTO public.pay_md_product_capability VALUES (6088, 'lakala_pay', 'union_qr', 8, true, NULL, false, 1, '2026-05-29 07:03:18.274881+00', 0, 1, '2026-05-29 07:03:18.274881+00');
+INSERT INTO public.pay_md_product_capability VALUES (6089, 'lakala_pay', 'union_jsapi', 9, true, NULL, false, 1, '2026-05-29 07:03:18.274881+00', 0, 1, '2026-05-29 07:03:18.274881+00');
+INSERT INTO public.pay_md_product_capability VALUES (6062, 'ums_h5', 'union_h5', 2, true, NULL, false, 1, '2026-05-29 07:03:18.274881+00', 0, 1, '2026-05-29 07:03:18.274881+00');
+INSERT INTO public.pay_md_product_capability VALUES (6070, 'ums_barcode', 'union_barcode', 0, true, NULL, false, 1, '2026-05-29 07:03:18.274881+00', 0, 1, '2026-05-29 07:03:18.274881+00');
+INSERT INTO public.pay_md_product_capability VALUES (6082, 'lakala_pay', 'union_barcode', 2, true, NULL, false, 1, '2026-05-29 07:03:18.274881+00', 0, 1, '2026-05-29 07:03:18.274881+00');
+INSERT INTO public.pay_md_product_capability VALUES (21024, 'ada_pay', 'alipay_jsapi', 7, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21025, 'ada_pay', 'alipay_app', 8, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21026, 'ada_pay', 'alipay_h5', 9, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21027, 'ada_pay', 'alipay_pc', 10, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21028, 'ada_pay', 'alipay_barcode', 11, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21033, 'dougong_pay', 'wechat_qr', 0, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21034, 'dougong_pay', 'wechat_jsapi', 1, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21035, 'dougong_pay', 'wechat_app', 2, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21036, 'dougong_pay', 'wechat_h5', 3, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21037, 'dougong_pay', 'wechat_mini', 4, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21038, 'dougong_pay', 'wechat_barcode', 5, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21040, 'dougong_pay', 'alipay_jsapi', 7, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21041, 'dougong_pay', 'alipay_app', 8, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21042, 'dougong_pay', 'alipay_h5', 9, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21043, 'dougong_pay', 'alipay_pc', 10, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21044, 'dougong_pay', 'alipay_barcode', 11, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21049, 'hkrt_pay', 'wechat_qr', 0, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21050, 'hkrt_pay', 'wechat_jsapi', 1, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21051, 'hkrt_pay', 'wechat_app', 2, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21052, 'hkrt_pay', 'wechat_h5', 3, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21053, 'hkrt_pay', 'wechat_mini', 4, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21054, 'hkrt_pay', 'wechat_barcode', 5, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21056, 'hkrt_pay', 'alipay_jsapi', 7, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21057, 'hkrt_pay', 'alipay_app', 8, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21058, 'hkrt_pay', 'alipay_h5', 9, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21059, 'hkrt_pay', 'alipay_pc', 10, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21060, 'hkrt_pay', 'alipay_barcode', 11, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21065, 'fuyou_pay', 'wechat_qr', 0, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21066, 'fuyou_pay', 'wechat_jsapi', 1, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21067, 'fuyou_pay', 'wechat_app', 2, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21068, 'fuyou_pay', 'wechat_h5', 3, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21069, 'fuyou_pay', 'wechat_mini', 4, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21070, 'fuyou_pay', 'wechat_barcode', 5, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21072, 'fuyou_pay', 'alipay_jsapi', 7, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21073, 'fuyou_pay', 'alipay_app', 8, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21074, 'fuyou_pay', 'alipay_h5', 9, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21075, 'fuyou_pay', 'alipay_pc', 10, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21076, 'fuyou_pay', 'alipay_barcode', 11, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21081, 'sheng_pay', 'wechat_qr', 0, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21082, 'sheng_pay', 'wechat_jsapi', 1, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21083, 'sheng_pay', 'wechat_app', 2, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21084, 'sheng_pay', 'wechat_h5', 3, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21085, 'sheng_pay', 'wechat_mini', 4, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21086, 'sheng_pay', 'wechat_barcode', 5, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21088, 'sheng_pay', 'alipay_jsapi', 7, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21089, 'sheng_pay', 'alipay_app', 8, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21090, 'sheng_pay', 'alipay_h5', 9, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21091, 'sheng_pay', 'alipay_pc', 10, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21029, 'ada_pay', 'union_qr', 12, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21045, 'dougong_pay', 'union_qr', 12, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21061, 'hkrt_pay', 'union_qr', 12, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21077, 'fuyou_pay', 'union_qr', 12, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21030, 'ada_pay', 'union_jsapi', 13, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21046, 'dougong_pay', 'union_jsapi', 13, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21062, 'hkrt_pay', 'union_jsapi', 13, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21078, 'fuyou_pay', 'union_jsapi', 13, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21031, 'ada_pay', 'union_h5', 14, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21047, 'dougong_pay', 'union_h5', 14, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21063, 'hkrt_pay', 'union_h5', 14, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21079, 'fuyou_pay', 'union_h5', 14, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21032, 'ada_pay', 'union_barcode', 15, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21048, 'dougong_pay', 'union_barcode', 15, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21064, 'hkrt_pay', 'union_barcode', 15, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21080, 'fuyou_pay', 'union_barcode', 15, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21092, 'sheng_pay', 'alipay_barcode', 11, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21097, 'ysep_pay', 'wechat_qr', 0, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21098, 'ysep_pay', 'wechat_jsapi', 1, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21099, 'ysep_pay', 'wechat_app', 2, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21100, 'ysep_pay', 'wechat_h5', 3, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21101, 'ysep_pay', 'wechat_mini', 4, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21102, 'ysep_pay', 'wechat_barcode', 5, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21104, 'ysep_pay', 'alipay_jsapi', 7, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21105, 'ysep_pay', 'alipay_app', 8, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21106, 'ysep_pay', 'alipay_h5', 9, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21107, 'ysep_pay', 'alipay_pc', 10, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21108, 'ysep_pay', 'alipay_barcode', 11, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21113, 'quick_pay', 'wechat_qr', 0, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21114, 'quick_pay', 'wechat_jsapi', 1, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21115, 'quick_pay', 'wechat_app', 2, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21116, 'quick_pay', 'wechat_h5', 3, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21117, 'quick_pay', 'wechat_mini', 4, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21118, 'quick_pay', 'wechat_barcode', 5, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21120, 'quick_pay', 'alipay_jsapi', 7, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21121, 'quick_pay', 'alipay_app', 8, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21122, 'quick_pay', 'alipay_h5', 9, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21123, 'quick_pay', 'alipay_pc', 10, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21124, 'quick_pay', 'alipay_barcode', 11, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21145, 'yee_pay', 'wechat_qr', 0, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21146, 'yee_pay', 'wechat_jsapi', 1, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21147, 'yee_pay', 'wechat_app', 2, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21148, 'yee_pay', 'wechat_h5', 3, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21149, 'yee_pay', 'wechat_mini', 4, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21150, 'yee_pay', 'wechat_barcode', 5, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21152, 'yee_pay', 'alipay_jsapi', 7, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21153, 'yee_pay', 'alipay_app', 8, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21154, 'yee_pay', 'alipay_h5', 9, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21155, 'yee_pay', 'alipay_pc', 10, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21156, 'yee_pay', 'alipay_barcode', 11, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21093, 'sheng_pay', 'union_qr', 12, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21109, 'ysep_pay', 'union_qr', 12, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21125, 'quick_pay', 'union_qr', 12, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21157, 'yee_pay', 'union_qr', 12, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21094, 'sheng_pay', 'union_jsapi', 13, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21110, 'ysep_pay', 'union_jsapi', 13, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21126, 'quick_pay', 'union_jsapi', 13, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21158, 'yee_pay', 'union_jsapi', 13, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21095, 'sheng_pay', 'union_h5', 14, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21111, 'ysep_pay', 'union_h5', 14, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21127, 'quick_pay', 'union_h5', 14, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21159, 'yee_pay', 'union_h5', 14, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21096, 'sheng_pay', 'union_barcode', 15, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21112, 'ysep_pay', 'union_barcode', 15, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21128, 'quick_pay', 'union_barcode', 15, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21160, 'yee_pay', 'union_barcode', 15, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21161, 'jee_pay', 'wechat_qr', 0, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21162, 'jee_pay', 'wechat_jsapi', 1, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21163, 'jee_pay', 'wechat_app', 2, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21164, 'jee_pay', 'wechat_h5', 3, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21165, 'jee_pay', 'wechat_mini', 4, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21167, 'jee_pay', 'alipay_jsapi', 6, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21168, 'jee_pay', 'alipay_app', 7, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21169, 'jee_pay', 'alipay_h5', 8, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21170, 'jee_pay', 'alipay_pc', 9, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21023, 'ada_pay', 'alipay_qr', 6, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21039, 'dougong_pay', 'alipay_qr', 6, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21055, 'hkrt_pay', 'alipay_qr', 6, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21071, 'fuyou_pay', 'alipay_qr', 6, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21087, 'sheng_pay', 'alipay_qr', 6, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21103, 'ysep_pay', 'alipay_qr', 6, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21119, 'quick_pay', 'alipay_qr', 6, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21151, 'yee_pay', 'alipay_qr', 6, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21166, 'jee_pay', 'alipay_qr', 5, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (6100, 'leshua_pay', 'wechat_barcode', 0, true, NULL, false, 1, '2026-07-06 00:00:00+00', 0, 1, '2026-07-06 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (6101, 'leshua_pay', 'alipay_barcode', 1, true, NULL, false, 1, '2026-07-06 00:00:00+00', 0, 1, '2026-07-06 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (6103, 'leshua_pay', 'wechat_jsapi', 3, true, NULL, false, 1, '2026-07-06 00:00:00+00', 0, 1, '2026-07-06 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (6104, 'leshua_pay', 'wechat_mini', 4, true, NULL, false, 1, '2026-07-06 00:00:00+00', 0, 1, '2026-07-06 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (6105, 'leshua_pay', 'alipay_qr', 5, true, NULL, false, 1, '2026-07-06 00:00:00+00', 0, 1, '2026-07-06 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (6106, 'leshua_pay', 'alipay_jsapi', 6, true, NULL, false, 1, '2026-07-06 00:00:00+00', 0, 1, '2026-07-06 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (6200, 'hm_pay', 'aggregate_pay_qrcode', 0, true, NULL, false, 1, '2026-07-07 00:00:00+00', 0, 1, '2026-07-07 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (6202, 'hm_pay', 'wechat_qr', 2, true, NULL, false, 1, '2026-07-07 00:00:00+00', 0, 1, '2026-07-07 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (6203, 'hm_pay', 'wechat_jsapi', 3, true, NULL, false, 1, '2026-07-07 00:00:00+00', 0, 1, '2026-07-07 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (6204, 'hm_pay', 'wechat_mini', 4, true, NULL, false, 1, '2026-07-07 00:00:00+00', 0, 1, '2026-07-07 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (6205, 'hm_pay', 'alipay_qr', 5, true, NULL, false, 1, '2026-07-07 00:00:00+00', 0, 1, '2026-07-07 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (6206, 'hm_pay', 'alipay_jsapi', 6, true, NULL, false, 1, '2026-07-07 00:00:00+00', 0, 1, '2026-07-07 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (6300, 'vbill_pay', 'wechat_jsapi', 0, true, NULL, false, 1, '2026-07-06 00:00:00+00', 0, 1, '2026-07-06 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (6301, 'vbill_pay', 'wechat_mini', 1, true, NULL, false, 1, '2026-07-06 00:00:00+00', 0, 1, '2026-07-06 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (6302, 'vbill_pay', 'wechat_qr', 2, true, NULL, false, 1, '2026-07-06 00:00:00+00', 0, 1, '2026-07-06 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (6303, 'vbill_pay', 'wechat_barcode', 3, true, NULL, false, 1, '2026-07-06 00:00:00+00', 0, 1, '2026-07-06 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (6304, 'vbill_pay', 'wechat_cashier', 4, true, NULL, false, 1, '2026-07-06 00:00:00+00', 0, 1, '2026-07-06 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (6305, 'vbill_pay', 'alipay_jsapi', 5, true, NULL, false, 1, '2026-07-06 00:00:00+00', 0, 1, '2026-07-06 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (6307, 'vbill_pay', 'alipay_qr', 7, true, NULL, false, 1, '2026-07-06 00:00:00+00', 0, 1, '2026-07-06 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (6308, 'vbill_pay', 'alipay_barcode', 8, true, NULL, false, 1, '2026-07-06 00:00:00+00', 0, 1, '2026-07-06 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97001, 'union_pay', 'union_qr', 1, true, NULL, false, 1, '2026-08-02 09:33:13.993374+00', 0, 1, '2026-08-02 09:33:13.993374+00');
+INSERT INTO public.pay_md_product_capability VALUES (97002, 'union_pay', 'union_h5', 2, true, NULL, false, 1, '2026-08-02 09:33:13.993374+00', 0, 1, '2026-08-02 09:33:13.993374+00');
+INSERT INTO public.pay_md_product_capability VALUES (97003, 'union_pay', 'union_barcode', 3, true, NULL, false, 1, '2026-08-02 09:33:13.993374+00', 0, 1, '2026-08-02 09:33:13.993374+00');
+INSERT INTO public.pay_md_product_capability VALUES (21171, 'jee_pay', 'union_qr', 10, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (6108, 'leshua_pay', 'union_qr', 8, true, NULL, false, 1, '2026-07-06 00:00:00+00', 0, 1, '2026-07-06 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (6310, 'vbill_pay', 'union_qr', 10, true, NULL, false, 1, '2026-07-06 00:00:00+00', 0, 1, '2026-07-06 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21172, 'jee_pay', 'union_jsapi', 11, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (6109, 'leshua_pay', 'union_jsapi', 9, true, NULL, false, 1, '2026-07-06 00:00:00+00', 0, 1, '2026-07-06 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (6309, 'vbill_pay', 'union_jsapi', 9, true, NULL, false, 1, '2026-07-06 00:00:00+00', 0, 1, '2026-07-06 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (6102, 'leshua_pay', 'union_barcode', 2, true, NULL, false, 1, '2026-07-06 00:00:00+00', 0, 1, '2026-07-06 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (6311, 'vbill_pay', 'union_barcode', 11, true, NULL, false, 1, '2026-07-06 00:00:00+00', 0, 1, '2026-07-06 00:00:00+00');
 
 
 --
@@ -6651,45 +6744,45 @@ INSERT INTO public.pay_md_product_capability VALUES (6311, 'vbill_pay', 'union_b
 -- Data for Name: pay_md_provider; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.pay_md_provider VALUES (502001000, 'aggregate_pay', NULL, 0, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:55.128441', true, NULL);
-INSERT INTO public.pay_md_provider VALUES (502001001, 'wechat', NULL, 1, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:55.128441', true, NULL);
-INSERT INTO public.pay_md_provider VALUES (502001002, 'alipay', NULL, 2, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:55.128441', true, NULL);
-INSERT INTO public.pay_md_provider VALUES (502001003, 'union_pay', NULL, 3, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:55.128441', true, NULL);
-INSERT INTO public.pay_md_provider VALUES (502001004, 'visa', NULL, 4, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:55.128441', true, NULL);
-INSERT INTO public.pay_md_provider VALUES (502001005, 'mastercard', NULL, 5, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:55.128441', true, NULL);
-INSERT INTO public.pay_md_provider VALUES (502001006, 'douyin', 'douyinPay', 60, false, NULL, NULL, 0, NULL, '2026-06-15 00:00:00', true, NULL);
+INSERT INTO public.pay_md_provider VALUES (502001000, 'aggregate_pay', NULL, 0, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:55.128441+00', true, NULL);
+INSERT INTO public.pay_md_provider VALUES (502001001, 'wechat', NULL, 1, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:55.128441+00', true, NULL);
+INSERT INTO public.pay_md_provider VALUES (502001002, 'alipay', NULL, 2, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:55.128441+00', true, NULL);
+INSERT INTO public.pay_md_provider VALUES (502001003, 'union_pay', NULL, 3, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:55.128441+00', true, NULL);
+INSERT INTO public.pay_md_provider VALUES (502001004, 'visa', NULL, 4, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:55.128441+00', true, NULL);
+INSERT INTO public.pay_md_provider VALUES (502001005, 'mastercard', NULL, 5, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:55.128441+00', true, NULL);
+INSERT INTO public.pay_md_provider VALUES (502001006, 'douyin', 'douyinPay', 60, false, NULL, NULL, 0, NULL, '2026-06-15 00:00:00+00', true, NULL);
 
 
 --
 -- Data for Name: pay_md_provider_method; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.pay_md_provider_method VALUES (502001901, 'aggregate_pay', 'aggregate_pay_qrcode', 1, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977', NULL);
-INSERT INTO public.pay_md_provider_method VALUES (502002001, 'wechat', 'wechat_jsapi', 1, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977', NULL);
-INSERT INTO public.pay_md_provider_method VALUES (502002002, 'wechat', 'wechat_app', 2, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977', NULL);
-INSERT INTO public.pay_md_provider_method VALUES (502002003, 'wechat', 'wechat_h5', 3, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977', NULL);
-INSERT INTO public.pay_md_provider_method VALUES (502002004, 'wechat', 'wechat_qr', 4, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977', NULL);
-INSERT INTO public.pay_md_provider_method VALUES (502002005, 'wechat', 'wechat_mini', 5, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977', NULL);
-INSERT INTO public.pay_md_provider_method VALUES (502002006, 'wechat', 'wechat_barcode', 6, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977', NULL);
-INSERT INTO public.pay_md_provider_method VALUES (502002007, 'wechat', 'wechat_cashier', 7, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977', NULL);
-INSERT INTO public.pay_md_provider_method VALUES (502002008, 'alipay', 'alipay_barcode', 1, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977', NULL);
-INSERT INTO public.pay_md_provider_method VALUES (502002010, 'alipay', 'alipay_app', 3, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977', NULL);
-INSERT INTO public.pay_md_provider_method VALUES (502002011, 'alipay', 'alipay_h5', 4, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977', NULL);
-INSERT INTO public.pay_md_provider_method VALUES (502002012, 'alipay', 'alipay_pc', 5, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977', NULL);
-INSERT INTO public.pay_md_provider_method VALUES (502002013, 'alipay', 'alipay_jsapi', 6, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977', NULL);
-INSERT INTO public.pay_md_provider_method VALUES (502002014, 'union_pay', 'union_qr', 1, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977', NULL);
-INSERT INTO public.pay_md_provider_method VALUES (502002016, 'union_pay', 'union_h5', 3, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977', NULL);
-INSERT INTO public.pay_md_provider_method VALUES (502002017, 'union_pay', 'union_jsapi', 4, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977', NULL);
-INSERT INTO public.pay_md_provider_method VALUES (502002018, 'visa', 'visa_card_gateway', 1, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977', NULL);
-INSERT INTO public.pay_md_provider_method VALUES (502002019, 'visa', 'visa_card_present', 2, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977', NULL);
-INSERT INTO public.pay_md_provider_method VALUES (502002020, 'mastercard', 'mastercard_card_gateway', 1, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977', NULL);
-INSERT INTO public.pay_md_provider_method VALUES (502002021, 'mastercard', 'mastercard_card_present', 2, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977', NULL);
-INSERT INTO public.pay_md_provider_method VALUES (502002022, 'douyin', 'douyin_qr', 1, false, NULL, NULL, 0, NULL, '2026-06-15 00:00:00', NULL);
-INSERT INTO public.pay_md_provider_method VALUES (502002023, 'douyin', 'douyin_jsapi', 2, false, NULL, NULL, 0, NULL, '2026-06-15 00:00:00', NULL);
-INSERT INTO public.pay_md_provider_method VALUES (502002024, 'douyin', 'douyin_h5', 3, false, NULL, NULL, 0, NULL, '2026-06-15 00:00:00', NULL);
-INSERT INTO public.pay_md_provider_method VALUES (502002025, 'douyin', 'douyin_app', 4, false, NULL, NULL, 0, NULL, '2026-06-15 00:00:00', NULL);
-INSERT INTO public.pay_md_provider_method VALUES (502002009, 'alipay', 'alipay_qr', 2, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977', NULL);
-INSERT INTO public.pay_md_provider_method VALUES (502002015, 'union_pay', 'union_barcode', 2, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977', NULL);
+INSERT INTO public.pay_md_provider_method VALUES (502001901, 'aggregate_pay', 'aggregate_pay_qrcode', 1, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00', NULL);
+INSERT INTO public.pay_md_provider_method VALUES (502002001, 'wechat', 'wechat_jsapi', 1, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00', NULL);
+INSERT INTO public.pay_md_provider_method VALUES (502002002, 'wechat', 'wechat_app', 2, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00', NULL);
+INSERT INTO public.pay_md_provider_method VALUES (502002003, 'wechat', 'wechat_h5', 3, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00', NULL);
+INSERT INTO public.pay_md_provider_method VALUES (502002004, 'wechat', 'wechat_qr', 4, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00', NULL);
+INSERT INTO public.pay_md_provider_method VALUES (502002005, 'wechat', 'wechat_mini', 5, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00', NULL);
+INSERT INTO public.pay_md_provider_method VALUES (502002006, 'wechat', 'wechat_barcode', 6, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00', NULL);
+INSERT INTO public.pay_md_provider_method VALUES (502002007, 'wechat', 'wechat_cashier', 7, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00', NULL);
+INSERT INTO public.pay_md_provider_method VALUES (502002008, 'alipay', 'alipay_barcode', 1, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00', NULL);
+INSERT INTO public.pay_md_provider_method VALUES (502002010, 'alipay', 'alipay_app', 3, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00', NULL);
+INSERT INTO public.pay_md_provider_method VALUES (502002011, 'alipay', 'alipay_h5', 4, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00', NULL);
+INSERT INTO public.pay_md_provider_method VALUES (502002012, 'alipay', 'alipay_pc', 5, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00', NULL);
+INSERT INTO public.pay_md_provider_method VALUES (502002013, 'alipay', 'alipay_jsapi', 6, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00', NULL);
+INSERT INTO public.pay_md_provider_method VALUES (502002014, 'union_pay', 'union_qr', 1, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00', NULL);
+INSERT INTO public.pay_md_provider_method VALUES (502002016, 'union_pay', 'union_h5', 3, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00', NULL);
+INSERT INTO public.pay_md_provider_method VALUES (502002017, 'union_pay', 'union_jsapi', 4, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00', NULL);
+INSERT INTO public.pay_md_provider_method VALUES (502002018, 'visa', 'visa_card_gateway', 1, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00', NULL);
+INSERT INTO public.pay_md_provider_method VALUES (502002019, 'visa', 'visa_card_present', 2, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00', NULL);
+INSERT INTO public.pay_md_provider_method VALUES (502002020, 'mastercard', 'mastercard_card_gateway', 1, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00', NULL);
+INSERT INTO public.pay_md_provider_method VALUES (502002021, 'mastercard', 'mastercard_card_present', 2, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00', NULL);
+INSERT INTO public.pay_md_provider_method VALUES (502002022, 'douyin', 'douyin_qr', 1, false, NULL, NULL, 0, NULL, '2026-06-15 00:00:00+00', NULL);
+INSERT INTO public.pay_md_provider_method VALUES (502002023, 'douyin', 'douyin_jsapi', 2, false, NULL, NULL, 0, NULL, '2026-06-15 00:00:00+00', NULL);
+INSERT INTO public.pay_md_provider_method VALUES (502002024, 'douyin', 'douyin_h5', 3, false, NULL, NULL, 0, NULL, '2026-06-15 00:00:00+00', NULL);
+INSERT INTO public.pay_md_provider_method VALUES (502002025, 'douyin', 'douyin_app', 4, false, NULL, NULL, 0, NULL, '2026-06-15 00:00:00+00', NULL);
+INSERT INTO public.pay_md_provider_method VALUES (502002009, 'alipay', 'alipay_qr', 2, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00', NULL);
+INSERT INTO public.pay_md_provider_method VALUES (502002015, 'union_pay', 'union_barcode', 2, false, NULL, NULL, 0, NULL, '2026-05-28 15:26:06.620977+00', NULL);
 
 
 --
@@ -6841,17 +6934,17 @@ INSERT INTO public.pay_md_provider_method VALUES (502002015, 'union_pay', 'union
 -- Data for Name: system_dict; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.system_dict VALUES (308196335536967680, 1, '2026-04-30 11:15:28.565006', 1, '2026-04-30 11:15:28.565006', 0, false, '支付宝认证方式', 'common', 'alipay_auth_type', '支付宝接口认证方式', true, true, NULL);
-INSERT INTO public.system_dict VALUES (2034597186006867968, 0, '2026-03-19 19:45:44.788062', 1, '2026-07-14 07:20:39.360411', 7, true, '123', NULL, 'cs', NULL, true, false, NULL);
+INSERT INTO public.system_dict VALUES (308196335536967680, 1, '2026-04-30 11:15:28.565006+00', 1, '2026-04-30 11:15:28.565006+00', 0, false, '支付宝认证方式', 'common', 'alipay_auth_type', '支付宝接口认证方式', true, true, NULL);
+INSERT INTO public.system_dict VALUES (2034597186006867968, 0, '2026-03-19 19:45:44.788062+00', 1, '2026-07-14 07:20:39.360411+00', 7, true, '123', NULL, 'cs', NULL, true, false, NULL);
 
 
 --
 -- Data for Name: system_dict_item; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.system_dict_item VALUES (308196335536967681, 308196335536967680, 'alipay_auth_type', 'public_key', 0, true, '使用公钥进行签名验证', 1, '2026-04-30 11:15:28.567585', 1, '2026-07-14 02:47:08.934408', 0, false, 'dict.alipay_auth_type.public_key');
-INSERT INTO public.system_dict_item VALUES (308196335536967682, 308196335536967680, 'alipay_auth_type', 'cert', 1, true, '使用证书进行签名验证', 1, '2026-04-30 11:15:28.570843', 1, '2026-07-14 02:47:08.934408', 0, false, 'dict.alipay_auth_type.cert');
-INSERT INTO public.system_dict_item VALUES (2034632666501005312, 2034597186006867968, 'cs', 'cs', 0, true, NULL, 0, '2026-03-19 22:06:44.064918', 1, '2026-07-14 07:20:36.33256', 3, true, 'dict.cs.cs');
+INSERT INTO public.system_dict_item VALUES (308196335536967681, 308196335536967680, 'alipay_auth_type', 'public_key', 0, true, '使用公钥进行签名验证', 1, '2026-04-30 11:15:28.567585+00', 1, '2026-07-14 02:47:08.934408+00', 0, false, 'dict.alipay_auth_type.public_key');
+INSERT INTO public.system_dict_item VALUES (308196335536967682, 308196335536967680, 'alipay_auth_type', 'cert', 1, true, '使用证书进行签名验证', 1, '2026-04-30 11:15:28.570843+00', 1, '2026-07-14 02:47:08.934408+00', 0, false, 'dict.alipay_auth_type.cert');
+INSERT INTO public.system_dict_item VALUES (2034632666501005312, 2034597186006867968, 'cs', 'cs', 0, true, NULL, 0, '2026-03-19 22:06:44.064918+00', 1, '2026-07-14 07:20:36.33256+00', 3, true, 'dict.cs.cs');
 
 
 --
@@ -7054,3 +7147,5 @@ SELECT pg_catalog.setval('public.pay_sync_record_id_seq', 1, false);
 --
 -- PostgreSQL database dump complete
 --
+
+

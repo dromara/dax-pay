@@ -9,11 +9,17 @@
  *   4. 非中文注释（表/字段注释要求中文说明）
  *   5. 时间精度不统一（timestamptz 有无精度声明混用）
  *
- * 格式假设（Navicat "Premium Data Transfer" 导出）：
- *   CREATE TABLE "public"."t" ( ... ) 换行 ;
- *   CREATE [UNIQUE] INDEX "name" ON ... USING btree ( 可能跨行 );
- *   ALTER TABLE ... ADD CONSTRAINT "name" PRIMARY KEY/UNIQUE (...);
- *   COMMENT ON TABLE|COLUMN|INDEX "public"."x"[."y"] IS '...';
+ * 格式假设（兼容两种导出格式, 2026-08-30 起 table.sql 已切换为 pg_dump）：
+ *   Navicat "Premium Data Transfer" 导出：
+ *     CREATE TABLE "public"."t" ( ... ) 换行 ;
+ *     CREATE [UNIQUE] INDEX "name" ON ... USING btree ( 可能跨行 );
+ *     ALTER TABLE ... ADD CONSTRAINT "name" PRIMARY KEY/UNIQUE (...);
+ *     COMMENT ON TABLE|COLUMN|INDEX "public"."x"[."y"] IS '...';
+ *   pg_dump --schema-only 导出：
+ *     CREATE TABLE public.t ( 四空格缩进无引号列 );
+ *     CREATE [UNIQUE] INDEX name ON public.t USING btree (...);
+ *     ALTER TABLE ONLY public.t 换行 ADD CONSTRAINT name PRIMARY KEY/UNIQUE (...);
+ *     COMMENT ON TABLE|COLUMN|INDEX public.x[.y] IS '...';
  *
  * 用法：node analyze-table.mjs <table.sql>
  */
@@ -36,6 +42,15 @@ const indexComments = new Map() // 索引名 -> 注释文本
 const indexDefs = new Map()     // 索引/约束名 -> { kind: 'index'|'unique'|'pkey', table, cols }
 const sequences = new Set()     // CREATE SEQUENCE 名
 
+// ---------- 双格式类型归一 ----------
+// pg_dump 把 timestamptz 写作三词形式 `timestamp(6) with time zone`, Navicat 写作 `timestamptz(6)`
+// 捕获截断后可能带 NOT 等尾词, 归一到 Navicat 短形式后再做规范检查
+function normalizeType(t) {
+  return t
+    .replace(/^timestamp(\(\d+\))? with time zone.*$/i, 'timestamptz$1')
+    .replace(/^timestamp(\(\d+\))? without time zone.*$/i, 'timestamp$1')
+}
+
 // ---------- 状态机解析 ----------
 const lines = await new Promise((resolve) => {
   const arr = []
@@ -49,14 +64,17 @@ while (i < lines.length) {
   const line = lines[i]
 
   // CREATE TABLE 块（到 ")\s*;" 或 ")" 单独成行为止）
-  let m = line.match(/^CREATE TABLE "public"\."(\w+)" \($/)
+  // 双格式: Navicat `CREATE TABLE "public"."t" (` / pg_dump `CREATE TABLE public.t (`
+  let m = line.match(/^CREATE TABLE (?:public\.|"public"\.)"?(\w+)"? \($/)
   if (m) {
     const table = m[1]
     const cols = []
     i++
     while (i < lines.length && !/^\)/.test(lines[i])) {
-      const cm = lines[i].match(/^  "(\w+)" (\S+(?: \w+)?(?:\(\d+\))?).*/)
-      if (cm) cols.push({ name: cm[1], type: cm[2].trim() })
+      // 双格式列行: Navicat `  "col" type` / pg_dump `    col type`; 跳过内联 CONSTRAINT 行
+      // 类型捕获最多 4 词, 容纳 pg_dump 的 `timestamp(6) with time zone`
+      const cm = lines[i].match(/^ {2,4}(?!CONSTRAINT\b)"?(\w+)"? (\S+(?: \w+){0,3}(?:\(\d+\))?).*/)
+      if (cm) cols.push({ name: cm[1], type: normalizeType(cm[2].trim()) })
       i++
     }
     tables.set(table, cols)
@@ -65,7 +83,8 @@ while (i < lines.length) {
   }
 
   // CREATE [UNIQUE] INDEX（索引名在首行，语句可能跨行）
-  m = line.match(/^CREATE (UNIQUE )?INDEX "(\w+)" ON "public"\."(\w+)"/)
+  // 双格式: Navicat `CREATE INDEX "name" ON "public"."t"` / pg_dump `CREATE INDEX name ON public.t`
+  m = line.match(/^CREATE (UNIQUE )?INDEX "?(\w+)"? ON (?:public\.|"public"\.)"?(\w+)"?/)
   if (m) {
     indexDefs.set(m[2], { kind: m[1] ? 'unique' : 'index', table: m[3] })
     while (i < lines.length && !/;\s*$/.test(lines[i])) i++
@@ -73,24 +92,36 @@ while (i < lines.length) {
     continue
   }
 
-  // ALTER TABLE ADD CONSTRAINT（单行）
-  m = line.match(/^ALTER TABLE "public"\."(\w+)" ADD CONSTRAINT "(\w+)" (PRIMARY KEY|UNIQUE)\b/)
+  // ALTER TABLE ADD CONSTRAINT（主键/唯一约束）
+  // 双格式: Navicat 单行 `ALTER TABLE "public"."t" ADD CONSTRAINT "name" PRIMARY KEY ...`
+  //         pg_dump 两行 `ALTER TABLE ONLY public.t` + 换行 `ADD CONSTRAINT name PRIMARY KEY ...`
+  m = line.match(/^ALTER TABLE (?:ONLY )?(?:public\.|"public"\.)"?(\w+)"? ADD CONSTRAINT "?(\w+)"? (PRIMARY KEY|UNIQUE)\b/)
   if (m) {
     indexDefs.set(m[2], { kind: m[3] === 'PRIMARY KEY' ? 'pkey' : 'unique', table: m[1] })
     i++
     continue
   }
+  m = line.match(/^ALTER TABLE ONLY (?:public\.|"public"\.)"?(\w+)"?$/)
+  if (m && i + 1 < lines.length) {
+    const cm = lines[i + 1].match(/^\s+ADD CONSTRAINT "?(\w+)"? (PRIMARY KEY|UNIQUE)\b/)
+    if (cm) {
+      indexDefs.set(cm[1], { kind: cm[2] === 'PRIMARY KEY' ? 'pkey' : 'unique', table: m[1] })
+      i += 2
+      continue
+    }
+  }
 
   // CREATE SEQUENCE
-  m = line.match(/^CREATE SEQUENCE "public"\."(\w+)"/)
+  // 双格式: Navicat `CREATE SEQUENCE "public"."x"` / pg_dump `CREATE SEQUENCE public.x`
+  m = line.match(/^CREATE SEQUENCE (?:public\.|"public"\.)"?(\w+)"?/)
   if (m) sequences.add(m[1])
 
-  // COMMENT ON 三类
-  m = line.match(/^COMMENT ON TABLE "public"\."(\w+)" IS '(.*)';/)
+  // COMMENT ON 三类（双格式: 带引号 Navicat / 无引号 pg_dump）
+  m = line.match(/^COMMENT ON TABLE (?:public\.|"public"\.)"?(\w+)"? IS '(.*)';/)
   if (m) { tableComments.set(m[1], m[2]); i++; continue }
-  m = line.match(/^COMMENT ON COLUMN "public"\."(\w+)"\."(\w+)" IS '(.*)';/)
+  m = line.match(/^COMMENT ON COLUMN (?:public\.|"public"\.)"?(\w+)"?\."?(\w+)"? IS '(.*)';/)
   if (m) { columnComments.set(`${m[1]}.${m[2]}`, m[3]); i++; continue }
-  m = line.match(/^COMMENT ON INDEX "public"\."(\w+)" IS '(.*)';/)
+  m = line.match(/^COMMENT ON INDEX (?:public\.|"public"\.)"?(\w+)"? IS '(.*)';/)
   if (m) { indexComments.set(m[1], m[2]); i++; continue }
 
   i++

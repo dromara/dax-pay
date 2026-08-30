@@ -51,14 +51,14 @@
 
 ```
 对每条 INSERT：
-  ① 表 ∈ KEEP_TABLES（18 张系统种子）    → 整表原样保留
+  ① 表 ∈ KEEP_TABLES（19 张系统种子）    → 整表原样保留
   ② iam_user_info 且 id=1 (bootx 内置超管) → 该行保留
   ③ 其余                                  → 整表跳过（写一行审计注释 -- REDACTED: <table>）
 ```
 
 ## 5. 完整表分类清单
 
-### 5.1 保留清单（18 张系统种子表，整表保留）
+### 5.1 保留清单（19 张系统种子表，整表保留）
 
 | 类别 | 表名 | 条数 | 用途 |
 |------|------|------|------|
@@ -71,6 +71,7 @@
 | 字典项 | `system_dict_item` | 3 | 字典枚举值 |
 | 地区 | `base_area` | 2984 | 区/县 |
 | 城市 | `base_city` | 342 | 市 |
+| 城市邻接 | `base_city_adjacent` | 1808 | 相邻城市关系（2026-08-30 复核补列，首版清单遗漏未列但脚本一直在白名单内） |
 | 省份 | `base_province` | 31 | 省 |
 | 支付元数据 | `pay_md_provider` | 7 | 支付通道提供商（wechat/alipay/…） |
 | 支付元数据 | `pay_md_channel` | 18 | 通道 |
@@ -169,7 +170,7 @@ node redact-data.mjs data_raw.sql data.sql
 
 ### 7.1 统计核对
 脚本结尾输出三类统计：
-- `[保留]` 18 张种子表 INSERT 数（应与原文件一致）
+- `[保留]` 19 张种子表 INSERT 数（应与原文件一致）
 - `[行级保留]` iam_user_info 14 → 1（保留 id=1）
 - `[清除]` 其余表 INSERT 数 → 0
 
@@ -227,3 +228,66 @@ $f='data.sql'
 - [x] 运行 `node redact-data.mjs data.sql data-redacted.sql`
 - [x] 执行 §7 验证（统计 + 关键词兜底 + 完整性核对）
 - [ ] （可选）导入干净 PG 库验证应用可启动、`bootx` 可登录
+
+## 11. 2026-08-30 对应性复核与再导出
+
+### 11.1 复核背景
+
+`data.sql` 上次导出为 2026-08-23，其后一周内多批次上线涉及库表与种子变更（异常订单/资金流水、邮件通知、passkey、terminal 列等），需再导出并复核白名单是否仍然对应。
+
+### 11.2 表集合变化（活库 vs 08-23 旧导出）
+
+活库（pg_dump 18.6 实测）共 **137 张表**，与 08-25 Navicat 版 `table.sql` 建表数一致（期间靠手工归档保持同步）。08-23 后真正新增 4 张表：
+
+| 新表 | 性质 | 白名单处置 | 判定 |
+|------|------|-----------|------|
+| `iam_user_passkey` | 用户 WebAuthn 凭据 | 默认整表清除 | ✅ 正确 |
+| `notify_mail_record` | 邮件发送运行记录 | 默认整表清除 | ✅ 正确 |
+| `pay_abnormal_order` | 异常订单（业务单） | 默认整表清除 | ✅ 正确 |
+| `pay_fund_flow` | 资金流水（业务单） | 默认整表清除 | ✅ 正确 |
+
+**结论：4 张新表全部为业务/运行时表，无新增系统种子表，`KEEP_TABLES` 无需任何变更**——印证了 §9.3 白名单「对未来新增表默认安全」的设计。其余核验项：
+
+- 19 张白名单表全部存在于活库且有数据 ✅
+- bootx 行级保留仍精确命中：两表 `VALUES (1,` 首列位置不变，14 行 → 各保留 1 行 ✅
+- 保留表无跨行 INSERT 误切（审计行数与原始导出完全一致）✅
+- 唯一变更为文档级勘误：首版清单称「18 张」种子表，实际 **19 张**（`base_city_adjacent` 在脚本白名单内但未列入 §5.1 清单），已修正本文档与脚本头注释
+
+### 11.3 再导出指标（2026-08-30）
+
+| 指标 | 原始导出 | 脱敏后 |
+|------|---------|--------|
+| 文件大小 | 7,095,999 B (~7.0 MB) | 572,339 B (~559 KB) |
+| 有数据表数 | 101（另 36 张空表） | 21（19 种子 + bootx 两表各 1 行） |
+| INSERT 条数 | 23,703 | 6,152（6,150 种子 + 2 bootx） |
+| 清除 | — | 80 张表 17,525 条 |
+| `v1:` 密文 / accessKey / PEM | 有 | 0 ✅ |
+| 密码哈希 | — | 1（bootx，交付预期） |
+
+种子增量（vs 08-23）：`iam_perm_code` 163→181、`iam_perm_menu` 149→170、`iam_role_code` 128→141、`iam_role_menu` 121→133，新增菜单 612（异常订单）/613（资金流水）/310（邮件记录）等均已在列。
+
+### 11.4 导出方式变更（table.sql）
+
+自 2026-08-30 起 `table.sql` 由 Navicat 手动导出切换为 **pg_dump 脚本化导出**（可复现、与 data.sql 同源同工具）：
+
+```bash
+# 结构（含 DROP IF EXISTS 重建语义）
+pg_dump -h 192.168.1.229 -U bootx -d daxpay-dev --schema-only --clean --if-exists --no-owner --no-privileges
+# 数据（--inserts 与脱敏脚本格式假设一致）
+pg_dump -h 192.168.1.229 -U bootx -d daxpay-dev --data-only --inserts --no-owner --no-privileges
+node redact-data.mjs <raw> ../sql/data.sql
+```
+
+配套调整：
+
+- pg_dump 18 客户端会输出 `\restrict`/`\unrestrict` psql 元命令（非 psql 工具执行会报错），导出后需剥离
+- `analyze-table.mjs`、`find-verbose-comments.mjs` 已适配 Navicat / pg_dump 双格式（含 `timestamp(6) with time zone` 三词类型归一，避免 timestamptz 误报）
+
+### 11.5 全新导入实测（本地容器临时库）
+
+在本地 docker postgres 容器建 `daxpay_export_verify` 临时库（不触碰源库），按 README 顺序执行 `table.sql → data.sql`（`ON_ERROR_STOP=1`）：**零错误**；137 表建成，种子行数与源库一致，bootx 两行为仅有的用户记录，`system_platform_config`/`*_key_config`/`pay_trade`/`pay_close_record` 等全部为 0 行；验后已 dropdb。
+
+### 11.6 遗留事项
+
+- `notify_mail_record` 的 2 条冗长枚举注释已于同日治理完毕：源库 `COMMENT ON` + 实体类注释同步 + `table.sql` 重导 + `update-tables.sql` 补增量，find-verbose-comments 复扫 0 条
+- §10 的「导入干净 PG 库验证」勾选项在本次 §11.5 已完成等价实测

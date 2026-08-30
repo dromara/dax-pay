@@ -30,10 +30,10 @@ public class NotifyMailRecord extends MpBaseEntity implements ToResult<NotifyMai
     /// 邮件正文(HTML)
     private String content;
 
-    /// 业务场景(test测试发送/manual手动发送等)
+    /// 业务场景(test/manual等)
     private String businessType;
 
-    /// 发送状态(sending发送中/success成功/fail失败)
+    /// 发送状态(sending/success/fail)
     private String status;
 
     /// 失败原因

@@ -31,9 +31,14 @@ const rl = createInterface({ input: createReadStream(inputPath, 'utf8'), crlfDel
 const colonHits = []
 const parenHits = []
 rl.on('line', (line) => {
-  const m = line.match(/^COMMENT ON (TABLE|COLUMN|INDEX) "public"\."([^"]+)"(?:\."([^"]+)")? IS '(.*)';/)
+  // 双格式兼容: Navicat `COMMENT ON COLUMN "public"."t"."c" IS` / pg_dump `COMMENT ON COLUMN public.t.c IS`
+  // 统一剥引号后按 `.` 切段: [schema, 表, 列?]
+  const m = line.match(/^COMMENT ON (TABLE|COLUMN|INDEX) (.+?) IS '(.*)';/)
   if (!m) return
-  const [, kind, obj, col, text] = m
+  const [, kind, objPath, text] = m
+  const parts = objPath.replaceAll('"', '').split('.')
+  const obj = parts[1] ?? ''
+  const col = parts.length > 2 ? parts[2] : undefined
   const target = col ? `${obj}.${col}` : `${obj}`
   if (COLON_ENUM_RE.test(text)) colonHits.push([target, kind, text])
   else if (PAREN_ENUM_RE.test(text)) parenHits.push([target, kind, text])
