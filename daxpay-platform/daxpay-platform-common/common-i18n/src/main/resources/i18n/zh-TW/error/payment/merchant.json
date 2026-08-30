@@ -10,6 +10,7 @@
   "merchantNotExist": "商戶不存在",
   "accountExists": "該賬號已存在",
   "mchUserRelationNotExist": "商戶使用者關聯資訊不存在",
+  "mchUserNotBelongCurrent": "該使用者不屬於當前商戶",
   "defaultAppNotConfigured": "商戶未配置預設應用",
   "defaultAppConfigNotFound": "未找到商戶預設應用配置",
   "specifiedAppConfigNotFound": "未找到指定的應用配置",

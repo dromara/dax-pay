@@ -10,6 +10,7 @@
   "merchantNotExist": "ไม่พบผู้ขาย",
   "accountExists": "มีบัญชีอยู่แล้ว",
   "mchUserRelationNotExist": "ไม่พบความสัมพันธ์ผู้ใช้ของผู้ขาย",
+  "mchUserNotBelongCurrent": "ผู้ใช้รายนี้ไม่ได้เป็นของผู้ค้าปัจจุบัน",
   "defaultAppNotConfigured": "ไม่ได้กำหนดค่าแอปพลิเคชันเริ่มต้นของผู้ขาย",
   "defaultAppConfigNotFound": "ไม่พบการกำหนดค่าแอปพลิเคชันเริ่มต้นของผู้ขาย",
   "specifiedAppConfigNotFound": "ไม่พบการกำหนดค่าแอปพลิเคชันที่ระบุ",

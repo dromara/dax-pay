@@ -10,6 +10,7 @@
   "merchantNotExist": "Pedagang tidak ditemukan",
   "accountExists": "Akun sudah ada",
   "mchUserRelationNotExist": "Hubungan pengguna pedagang tidak ditemukan",
+  "mchUserNotBelongCurrent": "Pengguna ini bukan milik pedagang saat ini",
   "defaultAppNotConfigured": "Aplikasi default pedagang tidak dikonfigurasi",
   "defaultAppConfigNotFound": "Konfigurasi aplikasi default pedagang tidak ditemukan",
   "specifiedAppConfigNotFound": "Konfigurasi aplikasi yang ditentukan tidak ditemukan",

@@ -10,6 +10,7 @@
   "merchantNotExist": "Merchant not found",
   "accountExists": "Account already exists",
   "mchUserRelationNotExist": "Merchant user relation not found",
+  "mchUserNotBelongCurrent": "The user does not belong to the current merchant",
   "defaultAppNotConfigured": "Merchant default application is not configured",
   "defaultAppConfigNotFound": "Merchant default application configuration not found",
   "specifiedAppConfigNotFound": "Specified application configuration not found",

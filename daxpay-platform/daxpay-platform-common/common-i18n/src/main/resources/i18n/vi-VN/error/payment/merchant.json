@@ -10,6 +10,7 @@
   "merchantNotExist": "Không tìm thấy người bán",
   "accountExists": "Tài khoản đã tồn tại",
   "mchUserRelationNotExist": "Không tìm thấy mối quan hệ người dùng thương mại",
+  "mchUserNotBelongCurrent": "Người dùng này không thuộc về người bán hiện tại",
   "defaultAppNotConfigured": "Ứng dụng mặc định của người bán chưa được định cấu hình",
   "defaultAppConfigNotFound": "Không tìm thấy cấu hình ứng dụng mặc định của người bán",
   "specifiedAppConfigNotFound": "Không tìm thấy cấu hình ứng dụng được chỉ định",

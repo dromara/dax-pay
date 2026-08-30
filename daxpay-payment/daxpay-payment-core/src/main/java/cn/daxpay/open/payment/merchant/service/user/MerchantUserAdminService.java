@@ -21,9 +21,11 @@ import cn.daxpay.open.platform.iam.entity.user.UserInfo;
 import cn.daxpay.open.platform.iam.exception.user.UserInfoNotExistsException;
 import cn.daxpay.open.platform.iam.result.user.UserInfoResult;
 import cn.daxpay.open.platform.iam.result.user.UserPasswordResult;
+import cn.daxpay.open.platform.iam.service.client.ClientCodeService;
 import cn.daxpay.open.platform.iam.service.upms.UserRoleService;
 import cn.daxpay.open.platform.iam.service.user.UserAdminService;
 import cn.daxpay.open.platform.iam.service.user.UserQueryService;
+import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.merchant.convert.info.MerchantUserConvert;
 import cn.daxpay.open.payment.merchant.dao.info.MerchantInfoManager;
 import cn.daxpay.open.payment.merchant.dao.info.MerchantUserManager;
@@ -64,9 +66,16 @@ public class MerchantUserAdminService {
     private final UserAdminService userAdminService;
     private final IamSecurityConfigService iamSecurityConfigService;
     private final UserEmailService userEmailService;
+    private final PaymentContext paymentContext;
+    private final ClientCodeService clientCodeService;
 
     /// 分页查询商户用户
     public PageResult<MerchantUserResult> page(PageParam pageParam, MerchantUserQuery query) {
+        // 商户端强制以上下文 mchNo 覆盖入参, 防止不传或篡改 mchNo 导致跨商户查询
+        String contextMchNo = this.getMerchantContextMchNo();
+        if (contextMchNo != null) {
+            query.setMchNo(contextMchNo);
+        }
         Page<MerchantUserResult> mpPage = MpUtil.getMpPage(pageParam);
         MPJLambdaWrapper<UserInfo> wrapper = new MPJLambdaWrapper<>();
         wrapper.innerJoin(MerchantUser.class, MerchantUser::getUserId, UserInfo::getId)
@@ -95,6 +104,11 @@ public class MerchantUserAdminService {
     /// @return 含初始密码明文的结果(未传密码时由系统生成随机密码)
     @Transactional(rollbackFor = Exception.class)
     public UserPasswordResult add(MerchantUserParam param) {
+        // 商户端只能为当前商户创建子账号, mchNo 以上下文为准不信任入参
+        String contextMchNo = this.getMerchantContextMchNo();
+        if (contextMchNo != null) {
+            param.setMchNo(contextMchNo);
+        }
         String mchNo = param.getMchNo();
         MerchantInfo merchantInfo = merchantInfoManager.findByMchNo(mchNo)
                 // 商户: 商户不存在
@@ -155,6 +169,8 @@ public class MerchantUserAdminService {
         MerchantUser merchantUser = merchantUserManager.findByUserId(param.getId())
                 // 商户: 商户用户关联关系不存在
                 .orElseThrow(() -> new BizException(CommonCode.FAIL_CODE, "error.payment.merchant.mchUserRelationNotExist"));
+        // 商户端校验目标用户归属当前商户, 防止跨商户篡改
+        this.checkBelongCurrentMerchant(merchantUser);
 
         param.setPassword(null);
         param.setAccount(null);
@@ -229,20 +245,46 @@ public class MerchantUserAdminService {
         return OffsetDateTime.now(ZoneOffset.UTC).plusDays(rotationDays);
     }
 
-    /// 校验用户是否属于商户
-    private void checkMerchantUser(Long userId) {
-        if (!merchantUserManager.existedByField(MerchantUser::getUserId, userId)) {
-            // 商户: 商户用户关联关系不存在
-            throw new BizException(CommonCode.FAIL_CODE, "error.payment.merchant.mchUserRelationNotExist");
+    /// 获取商户端上下文中的商户号
+    /// 仅 [ClientEnum#MERCHANT] 终端返回上下文 mchNo(由 MchContextLocalFilter 装载);
+    /// 运营端返回 null 表示不介入(运营是平台管理员, 无行级隔离);
+    /// 商户端上下文缺失时 fail-closed 拒绝操作
+    private String getMerchantContextMchNo() {
+        if (!ClientEnum.MERCHANT.getCode().equals(clientCodeService.getClientCode())) {
+            return null;
+        }
+        String mchNo = paymentContext.getMchNo();
+        if (StrUtil.isBlank(mchNo)) {
+            // 支付: 商户上下文未装载
+            throw new BizException(CommonCode.FAIL_CODE, "pay.error.assist.mchContextMissing");
+        }
+        return mchNo;
+    }
+
+    /// 校验商户用户归属当前商户(仅商户端生效), 防止跨商户横向越权
+    private void checkBelongCurrentMerchant(MerchantUser merchantUser) {
+        String contextMchNo = this.getMerchantContextMchNo();
+        if (contextMchNo != null && !contextMchNo.equals(merchantUser.getMchNo())) {
+            // 商户: 商户用户不属于当前商户
+            throw new BizException(CommonCode.FAIL_CODE, "error.payment.merchant.mchUserNotBelongCurrent");
         }
     }
 
-    /// 批量校验用户是否属于商户
+    /// 校验用户是否属于商户, 商户端同时校验归属当前商户
+    private void checkMerchantUser(Long userId) {
+        MerchantUser merchantUser = merchantUserManager.findByUserId(userId)
+                // 商户: 商户用户关联关系不存在
+                .orElseThrow(() -> new BizException(CommonCode.FAIL_CODE, "error.payment.merchant.mchUserRelationNotExist"));
+        this.checkBelongCurrentMerchant(merchantUser);
+    }
+
+    /// 批量校验用户是否属于商户, 商户端同时校验归属当前商户
     private void checkMerchantUser(List<Long> userIds) {
         List<MerchantUser> users = merchantUserManager.findAllByField(MerchantUser::getUserId, userIds);
         if (users.size() != userIds.size()) {
             // 商户: 商户用户关联关系不存在
             throw new BizException(CommonCode.FAIL_CODE, "error.payment.merchant.mchUserRelationNotExist");
         }
+        users.forEach(this::checkBelongCurrentMerchant);
     }
 }

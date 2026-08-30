@@ -10,6 +10,7 @@
   "merchantNotExist": "판매자를 찾을 수 없습니다.",
   "accountExists": "계정이 이미 존재합니다.",
   "mchUserRelationNotExist": "판매자 사용자 관계를 찾을 수 없습니다.",
+  "mchUserNotBelongCurrent": "해당 사용자는 현재 판매자의 소유가 아닙니다.",
   "defaultAppNotConfigured": "판매자 기본 애플리케이션이 구성되지 않았습니다.",
   "defaultAppConfigNotFound": "판매자 기본 애플리케이션 구성을 찾을 수 없습니다.",
   "specifiedAppConfigNotFound": "지정된 애플리케이션 구성을 찾을 수 없습니다.",
