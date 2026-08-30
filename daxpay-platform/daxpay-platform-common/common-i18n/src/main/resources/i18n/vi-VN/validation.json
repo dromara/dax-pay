@@ -389,7 +389,8 @@
       "notNull": "ID vai trò không được để trống"
     },
     "code": {
-      "notBlank": "Mã không được để trống"
+      "notBlank": "Mã không được để trống",
+      "size": "Code must not exceed 100 characters"
     },
     "nameCn": {
       "notBlank": "Tên tiếng Trung không được để trống"

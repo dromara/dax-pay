@@ -5,7 +5,7 @@ import cn.daxpay.open.payment.admin.param.device.DeviceQrCodeBindAppParam;
 import cn.daxpay.open.payment.admin.param.device.DeviceQrCodeBindMerchantParam;
 import cn.daxpay.open.payment.admin.param.device.DeviceQrCodeBindStoreParam;
 import cn.daxpay.open.payment.admin.param.device.DeviceQrCodeParam;
-import cn.daxpay.open.payment.admin.result.device.DeviceQrCodeAllocWarningResult;
+import cn.daxpay.open.payment.device.qrcode.result.DeviceQrCodeAllocWarningResult;
 import cn.daxpay.open.payment.admin.service.device.DeviceQrCodeAdminService;
 import cn.daxpay.open.payment.device.qrcode.param.DeviceQrCodeQuery;
 import cn.daxpay.open.payment.device.qrcode.result.DeviceQrCodeResult;

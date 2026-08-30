@@ -13,5 +13,7 @@
   "programTypeNotFound": "未找到对应的码牌程序类型: {0}",
   "openIdRequired": "当前支付方式需要用户授权，请先完成授权后重试",
   "authNotRequired": "当前支付方式无需授权",
-  "storeBindMchInconsistent": "批量绑定门店时须选择同一商户下的码牌"
+  "storeBindMchInconsistent": "批量绑定门店时须选择同一商户下的码牌",
+  "mchNoMatch": "码牌不属于当前商户",
+  "alreadyAssigned": "码牌已被认领或已分配商户"
 }

@@ -389,7 +389,8 @@
       "notNull": "รหัสบทบาทต้องไม่เว้นว่าง"
     },
     "code": {
-      "notBlank": "รหัสไม่สามารถเว้นว่างได้"
+      "notBlank": "รหัสไม่สามารถเว้นว่างได้",
+      "size": "Code must not exceed 100 characters"
     },
     "nameCn": {
       "notBlank": "ชื่อภาษาจีนไม่สามารถเว้นว่างได้"

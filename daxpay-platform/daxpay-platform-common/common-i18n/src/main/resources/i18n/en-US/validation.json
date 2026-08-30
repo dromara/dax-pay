@@ -390,7 +390,8 @@
       "notNull": "Role ID cannot be blank"
     },
     "code": {
-      "notBlank": "Code cannot be blank"
+      "notBlank": "Code cannot be blank",
+      "size": "Code must not exceed 100 characters"
     },
     "nameCn": {
       "notBlank": "Chinese name cannot be blank"

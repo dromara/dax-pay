@@ -13,5 +13,7 @@
   "programTypeNotFound": "対応するコード牌プログラム種別が見つかりません: {0}",
   "openIdRequired": "この支払い方法ではユーザー認可が必要です。先に認可を完了してください",
   "authNotRequired": "この支払い方法では認可は不要です",
-  "storeBindMchInconsistent": "店舗を一括バインドする場合、同一加盟店のコード札を選択してください"
+  "storeBindMchInconsistent": "店舗を一括バインドする場合、同一加盟店のコード札を選択してください",
+  "mchNoMatch": "QRコードボードは現在の加盟店のものではありません",
+  "alreadyAssigned": "QRコードボードは既に取得または割り当て済みです"
 }

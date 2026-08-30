@@ -389,7 +389,8 @@
       "notNull": "ID peranan tidak boleh kosong"
     },
     "code": {
-      "notBlank": "Kod tidak boleh kosong"
+      "notBlank": "Kod tidak boleh kosong",
+      "size": "Code must not exceed 100 characters"
     },
     "nameCn": {
       "notBlank": "Nama Cina tidak boleh kosong"

@@ -390,7 +390,8 @@
       "notNull": "角色ID不可为空"
     },
     "code": {
-      "notBlank": "编码不可为空"
+      "notBlank": "编码不可为空",
+      "size": "编码不可超过100位"
     },
     "nameCn": {
       "notBlank": "中文名称不可为空"

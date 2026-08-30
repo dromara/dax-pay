@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.admin.result.device;
+package cn.daxpay.open.payment.device.qrcode.result;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
