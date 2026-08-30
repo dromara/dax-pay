@@ -1,7 +1,9 @@
 package cn.daxpay.open.payment.app.merchant.controller.trade;
 
 import cn.daxpay.open.payment.app.merchant.service.trade.AppMerchantMchNoticeService;
+import cn.daxpay.open.payment.trade.notice.param.MchNoticeRecordQuery;
 import cn.daxpay.open.payment.trade.notice.param.MchNoticeTaskQuery;
+import cn.daxpay.open.payment.trade.notice.result.MchNoticeRecordResult;
 import cn.daxpay.open.payment.trade.notice.result.MchNoticeTaskResult;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
@@ -15,6 +17,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -44,5 +47,20 @@ public class AppMerchantMchNoticeController {
     public Result<MchNoticeTaskResult> getTaskById(
             @NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(mchNoticeService.findTaskById(id));
+    }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "手动重发通知")
+    @PostMapping("/task/resend")
+    public Result<Void> resend(@NotNull(message = "{validation.field.id.notNull}") Long id) {
+        mchNoticeService.resend(id);
+        return Res.ok();
+    }
+
+    @PermCode(code = PermCodes.Action.VIEW)
+    @Operation(summary = "发送记录分页")
+    @GetMapping("/record/page")
+    public Result<PageResult<MchNoticeRecordResult>> pageRecord(PageParam pageParam, MchNoticeRecordQuery query) {
+        return Res.ok(mchNoticeService.pageRecord(pageParam, query));
     }
 }
