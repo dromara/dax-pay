@@ -105,15 +105,6 @@ public class MchChannelMerchantController {
         return Res.ok();
     }
 
-    @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "删除通道商户")
-    @PostMapping("/delete")
-    public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {
-        this.assertOwned(channelMerchantService.findById(id));
-        channelMerchantService.delete(id);
-        return Res.ok();
-    }
-
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "通道商户下拉（按产品）")
     @GetMapping("/dropdown")
