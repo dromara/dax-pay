@@ -1,6 +1,7 @@
 -- ============================================================
 -- 敏感数据已清除(白名单模式) | 工具 redact-data.mjs | 时间 2026-08-30T02:04:31.735Z
 -- 策略：保留 19 张系统种子表 + bootx 超管(id=1)，其余整表清除
+-- bootx 超管密码已重置为开发默认密码(121212)，生产部署后必须立即修改
 -- 用途：干净安装包/演示数据
 -- ============================================================
 
@@ -6108,7 +6109,7 @@ INSERT INTO public.iam_user_expand_info VALUES (1, 'female', NULL, NULL, NULL, N
 --
 
 -- REDACTED: iam_user_info (整表清除)
-INSERT INTO public.iam_user_info VALUES (1, '超级管理员', 'admin', 'bootx', '$2a$10$jttqpatKx6R13raUG/E8KuDRvB1cStpDXNxVaKT8x8d8wPFS1kXhu', NULL, NULL, true, 'normal', 0, 1, 18, false, '2026-03-28 14:26:08+00', '2026-08-27 05:33:25.789452+00');
+INSERT INTO public.iam_user_info VALUES (1, '超级管理员', 'admin', 'bootx', '$2a$10$HiIvaX7tbGWDeRVSciX/LuIAIYUgVJwasWtstsXsakpt0d9Sw.cKG', NULL, NULL, true, 'normal', 0, 1, 18, false, '2026-03-28 14:26:08+00', '2026-08-27 05:33:25.789452+00');
 
 
 --

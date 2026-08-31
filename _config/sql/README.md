@@ -4,9 +4,12 @@
 - 项目中不直接提供历史SQL文件，如果需要可以查看项目的历史版本，其中的SQL文件就是对应的历史版本
 - 全新安装的脚本执行顺序：table.sql -> data.sql
 - 升级脚本执行顺序：update-tables.sql -> update-datas.sql提供的更新版本是上一个版本升级到当前版本所对应的SQL文件，不能跨版本升级
+- data.sql 中 bootx 超级管理员密码为开发默认密码 **121212**（由 redact-data.mjs 预处理时重置，防止开发库改密导致导出密码漂移），生产部署后必须立即修改
+- 开发库密码忘记时，可执行 reset-bootx-password.sql 将 bootx 密码重置回 121212
 
 ## 脚本介绍
 - table.sql：创建表结构(全量)
 - data.sql：表数据(全量, 已脱敏)
 - update-tables.sql：更新表结构
 - update-datas.sql：更新数据
+- reset-bootx-password.sql：bootx 超管密码重置为开发默认密码(121212)，开发库忘记密码时急救用
