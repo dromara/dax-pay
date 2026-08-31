@@ -1,8 +1,8 @@
 package cn.daxpay.open.payment.app.admin.controller.merchant.openapp;
 
-import cn.daxpay.open.payment.douyin.param.merchant.DyMchAppParam;
-import cn.daxpay.open.payment.douyin.result.merchant.DyMchAppResult;
-import cn.daxpay.open.payment.douyin.service.merchant.DyMchAppService;
+import cn.daxpay.open.payment.douyin.param.platform.DyPlatformAppParam;
+import cn.daxpay.open.payment.douyin.result.platform.DyPlatformAppResult;
+import cn.daxpay.open.payment.douyin.service.platform.DyPlatformAppService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
@@ -22,77 +22,73 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-/// 小程序管理端-商户抖音开放应用
+/// 小程序管理端-平台抖音应用
 ///
-/// 镜像自 admin 版 `DyMchAppController`(路径 /admin/douyin/mch-app), 端点语义与权限码完全一致,
-/// 供小程序端支付应用(抖音)的查询/新增/编辑/删除使用。
-@PermCode(menuCode = PermCodes.Payment.Douyin.MchApp.MENU)
+/// 镜像自 admin 版 `DyPlatformAppController`(路径 /admin/douyin/platform-app), 端点语义与权限码完全一致,
+/// 供小程序端支付应用(抖音)平台维度的查询/新增/编辑/删除使用。
+@PermCode(menuCode = PermCodes.Payment.Douyin.PlatformApp.MENU)
 @Validated
-@Tag(name = "小程序管理端-商户抖音应用")
+@Tag(name = "小程序管理端-平台抖音应用")
 @RestController
-@RequestMapping("/app-admin/douyin/mch-app")
+@RequestMapping("/app-admin/douyin/platform-app")
 @RequiredArgsConstructor
-public class AppAdminDyMchAppController {
+public class AppAdminDyPlatformAppController {
 
-    private final DyMchAppService dyMchAppService;
+    private final DyPlatformAppService dyPlatformAppService;
 
     @PermCode(code = PermCodes.Action.VIEW)
-    @Operation(summary = "按商户号查询抖音应用列表")
-    @GetMapping("/list-by-mch-no")
-    public Result<List<DyMchAppResult>> listByMchNo(
-            @NotBlank(message = "{validation.field.mchNo.notBlank}") String mchNo) {
-        return Res.ok(dyMchAppService.listByMchNo(mchNo));
+    @Operation(summary = "查询平台抖音应用列表")
+    @GetMapping("/list-all")
+    public Result<List<DyPlatformAppResult>> listAll() {
+        return Res.ok(dyPlatformAppService.listAll());
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "查询应用详情")
     @GetMapping("/find-by-id")
-    public Result<DyMchAppResult> findById(
+    public Result<DyPlatformAppResult> findById(
             @NotNull(message = "{validation.field.id.notNull}") Long id) {
-        return Res.ok(dyMchAppService.findById(id));
+        return Res.ok(dyPlatformAppService.findById(id));
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "抖音应用AppId是否已存在")
     @GetMapping("/exists-douyin-app-id")
     public Result<Boolean> existsDouyinAppId(
-            @NotBlank(message = "{validation.field.mchNo.notBlank}") String mchNo,
             @NotBlank(message = "{validation.field.douyinAppId.notBlank}") String douyinAppId) {
-        return Res.ok(dyMchAppService.existsDouyinAppId(mchNo, douyinAppId, null));
+        return Res.ok(dyPlatformAppService.existsDouyinAppId(douyinAppId, null));
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "抖音应用AppId是否已存在(排除自身)")
     @GetMapping("/exists-douyin-app-id-not-id")
     public Result<Boolean> existsDouyinAppIdNotId(
-            @NotBlank(message = "{validation.field.mchNo.notBlank}") String mchNo,
             @NotBlank(message = "{validation.field.douyinAppId.notBlank}") String douyinAppId,
             @NotNull(message = "{validation.field.id.notNull}") Long id) {
-        return Res.ok(dyMchAppService.existsDouyinAppId(mchNo, douyinAppId, id));
+        return Res.ok(dyPlatformAppService.existsDouyinAppId(douyinAppId, id));
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "新增商户抖音应用")
+    @Operation(summary = "新增平台抖音应用")
     @PostMapping("/add")
-    public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) DyMchAppParam param) {
-        // mchNo 必须来自 param（运营端无商户上下文）
-        dyMchAppService.add(param);
+    public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) DyPlatformAppParam param) {
+        dyPlatformAppService.add(param);
         return Res.ok();
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "修改商户抖音应用")
+    @Operation(summary = "修改平台抖音应用")
     @PostMapping("/update")
-    public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) DyMchAppParam param) {
-        dyMchAppService.update(param);
+    public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) DyPlatformAppParam param) {
+        dyPlatformAppService.update(param);
         return Res.ok();
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "删除商户抖音应用")
+    @Operation(summary = "删除平台抖音应用")
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {
-        dyMchAppService.delete(id);
+        dyPlatformAppService.delete(id);
         return Res.ok();
     }
 }
