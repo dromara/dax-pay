@@ -33,6 +33,7 @@
   "backendBaseUrlNotConfigured": "URL cơ sở phụ trợ (backendBaseUrl) chưa được định cấu hình, không thể tạo URL gọi lại",
   "requestContextMissing": "Không thể lấy được ngữ cảnh yêu cầu",
   "gatewayUrlNotConfigured": "URL cơ sở của cổng thanh toán (PaymentGatewayBaseUrl) chưa được định cấu hình, không thể tạo URL gọi lại xác thực",
+  "h5SceneUrlNotConfigured": "Địa chỉ cổng thanh toán nền tảng (paymentGatewayBaseUrl) chưa được cấu hình và returnUrl chưa được truyền, không thể tạo URL bối cảnh thanh toán H5",
   "clientEnvNotExist": "Không tìm thấy môi trường máy khách: {0}",
   "gatewayPayTypeNotExist": "Không tìm thấy loại thanh toán qua cổng: {0}",
   "aggregateConfigLevelNotExist": "Không tìm thấy cấp cấu hình tổng hợp: {0}",

@@ -75,5 +75,7 @@
   "allocReceiverUnsupportedType": "WeChat: unsupported alloc receiver type: {0}",
   "allocReceiverMchNameRequired": "WeChat: merchant full name is required for MERCHANT_ID receiver",
   "allocReceiverSubAppIdRequired": "WeChat: sub-merchant app is required for PERSONAL_SUB_OPENID receiver",
-  "allocReceiverAppMismatch": "WeChat: the openid receiver is bound to another app ({0}), which does not match the app used to start the allocation"
+  "allocReceiverAppMismatch": "WeChat: the openid receiver is bound to another app ({0}), which does not match the app used to start the allocation",
+  "h5WapUrlTooLong": "WeChat: the H5 payment scene URL (wap_url) allows at most 128 characters, got {0}",
+  "attachTooLong": "WeChat: the attach data allows at most 128 characters, got {0}"
 }

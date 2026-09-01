@@ -34,6 +34,13 @@ public class WechatPayService {
     private final WechatChannelClient wechatChannelClient;
     private final PlatformUrlConfigService platformUrlConfigService;
 
+    /// 微信 h5_info.app_url(wap_url) 最长128字符
+    private static final int WECHAT_WAP_URL_MAX = 128;
+    /// 微信 h5_info.app_name(wap_name) 最长64字符
+    private static final int WECHAT_WAP_NAME_MAX = 64;
+    /// 微信 attach 最长128字符(回调需原样返回, 超长报错不截断)
+    private static final int WECHAT_ATTACH_MAX = 128;
+
     /// 执行微信支付
     ///
     /// @param order      支付订单
@@ -54,14 +61,23 @@ public class WechatPayService {
         req.setAuthCode(payParam.getAuthCode());
         req.setOpenId(payParam.getOpenId());
         req.setAttach(payParam.getAttach());
+        // attach 回调需原样返回不可截断, 平台允许500但微信限128, 超长直接报错
+        if (StrUtil.length(payParam.getAttach()) > WECHAT_ATTACH_MAX) {
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "error.channel.wechat.attachTooLong", StrUtil.length(payParam.getAttach()));
+        }
         // 通道通知地址: 始终使用平台生成的回调地址(微信→平台), 不使用 payParam.notifyUrl(语义为平台→商户)
         req.setNotifyUrl(this.buildNotifyUrl(order, payParam.getChannelMchNo()));
         // 关单时间取自订单(createOrder 已对 null 兜底默认30分钟), 不用 payParam 原始入参
         req.setExpireTime(payParam.getExpiredTime());
         // H5 场景信息(场景参数)
         if (req.getMethod() == WechatPayMethod.H5) {
-            req.setWapUrl(payParam.getReturnUrl());
-            req.setWapName(payParam.getTitle());
+            // 用户终端IP(H5必填): 上游入口(NormalPayService/CashierPayService 等)已对 clientIp 做兜底提取
+            req.setPayerClientIp(payParam.getClientIp());
+            // wap_url(H5必填): 发起H5支付的页面地址, 优先商户returnUrl, 为空回退平台支付网关地址(收银台域名)
+            req.setWapUrl(this.buildWapUrl(payParam.getReturnUrl()));
+            // wap_name(纯展示字段): 平台标题最长100, 微信限64, 超长安全截断
+            req.setWapName(StrUtil.subPre(payParam.getTitle(), WECHAT_WAP_NAME_MAX));
         }
         // 分账订单标识: 透传微信 profit_sharing=true
         req.setAllocation(Boolean.TRUE.equals(payParam.getAllocation()));
@@ -94,6 +110,29 @@ public class WechatPayService {
         }
         return StrUtil.format("{}/unipay/callback/{}/{}/wechat/pay",
                 base, order.getMchNo(), channelMchNo);
+    }
+
+    /// 构建H5场景地址(wap_url): 发起H5支付的页面URL
+    ///
+    /// 优先商户指定的returnUrl, 未传时回退平台支付网关地址(收银台模式下发起页即收银台域名,
+    /// 该域名需在微信商户平台H5支付场景中登记); 微信限128字符, 超长报错不截断
+    private String buildWapUrl(String returnUrl) {
+        String wapUrl = StrUtil.blankToDefault(returnUrl, this.getPaymentGatewayBaseUrl());
+        if (StrUtil.length(wapUrl) > WECHAT_WAP_URL_MAX) {
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "error.channel.wechat.h5WapUrlTooLong", StrUtil.length(wapUrl));
+        }
+        return wapUrl;
+    }
+
+    /// 平台支付网关地址(兜底 wap_url 用), 未配置时抛清晰异常
+    private String getPaymentGatewayBaseUrl() {
+        String base = platformUrlConfigService.getUrlConfig().getPaymentGatewayBaseUrl();
+        if (StrUtil.isBlank(base)) {
+            // paymentGatewayBaseUrl 未配置且未传returnUrl时抛清晰异常, 与 buildNotifyUrl 对 backendBaseUrl 的处理对齐
+            throw new BizInfoException(DaxPayErrorCode.CONFIG_ERROR, "error.common.h5SceneUrlNotConfigured");
+        }
+        return base;
     }
 
     /// 平台支付方式([PayMethodEnum] code) -> 微信通道支付方式

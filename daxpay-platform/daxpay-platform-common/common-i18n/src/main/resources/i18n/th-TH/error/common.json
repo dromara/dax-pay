@@ -33,6 +33,7 @@
   "backendBaseUrlNotConfigured": "ไม่ได้กำหนดค่า URL ฐานแบ็กเอนด์ (backendBaseUrl) ไม่สามารถสร้าง URL เรียกกลับได้",
   "requestContextMissing": "ไม่สามารถรับบริบทคำขอได้",
   "gatewayUrlNotConfigured": "ไม่ได้กำหนดค่า URL ฐานเกตเวย์การชำระเงิน (PaymentGatewayBaseUrl) ไม่สามารถสร้าง URL เรียกกลับการรับรองความถูกต้องได้",
+  "h5SceneUrlNotConfigured": "ที่อยู่เกตเวย์การชำระเงินของแพลตฟอร์ม (paymentGatewayBaseUrl) ยังไม่ได้กำหนดค่าและไม่มี returnUrl จึงสร้าง URL สถานการณ์การชำระเงิน H5 ไม่ได้",
   "clientEnvNotExist": "ไม่พบสภาพแวดล้อมไคลเอนต์: {0}",
   "gatewayPayTypeNotExist": "ไม่พบประเภทการชำระเงินของเกตเวย์: {0}",
   "aggregateConfigLevelNotExist": "ไม่พบระดับการกำหนดค่ารวม: {0}",

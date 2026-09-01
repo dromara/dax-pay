@@ -75,5 +75,7 @@
   "allocReceiverUnsupportedType": "WeChat: ไม่รองรับประเภทผู้รับเงินแบ่งนี้: {0}",
   "allocReceiverMchNameRequired": "WeChat: ต้องกรอกชื่อเต็มร้านค้าสำหรับผู้รับประเภท MERCHANT_ID",
   "allocReceiverSubAppIdRequired": "WeChat: ต้องระบุแอปร้านค้าย่อยสำหรับผู้รับประเภท PERSONAL_SUB_OPENID",
-  "allocReceiverAppMismatch": "WeChat: ผู้รับ openid ถูกผูกกับแอปอื่น ({0}) ไม่ตรงกับแอปที่เริ่มแบ่งเงิน"
+  "allocReceiverAppMismatch": "WeChat: ผู้รับ openid ถูกผูกกับแอปอื่น ({0}) ไม่ตรงกับแอปที่เริ่มแบ่งเงิน",
+  "h5WapUrlTooLong": "WeChat: URL สถานการณ์การชำระเงิน H5 (wap_url) ยาวได้สูงสุด 128 อักขระ ปัจจุบัน {0} อักขระ",
+  "attachTooLong": "WeChat: ข้อมูลแนบ (attach) ยาวได้สูงสุด 128 อักขระ ปัจจุบัน {0} อักขระ"
 }

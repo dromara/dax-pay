@@ -33,6 +33,7 @@
   "backendBaseUrlNotConfigured": "URL asas backend (backendBaseUrl) tidak dikonfigurasikan, tidak boleh menjana URL panggil balik",
   "requestContextMissing": "Tidak boleh mendapatkan konteks permintaan",
   "gatewayUrlNotConfigured": "URL asas get laluan pembayaran (paymentGatewayBaseUrl) tidak dikonfigurasikan, tidak boleh menjana URL panggil balik pengesahan",
+  "h5SceneUrlNotConfigured": "URL asas gerbang pembayaran platform (paymentGatewayBaseUrl) tidak dikonfigurasi dan returnUrl tidak diberikan, tidak dapat menjana URL skenario pembayaran H5",
   "clientEnvNotExist": "Persekitaran klien tidak ditemui: {0}",
   "gatewayPayTypeNotExist": "Jenis pembayaran gerbang tidak ditemui: {0}",
   "aggregateConfigLevelNotExist": "Tahap konfigurasi agregat tidak ditemui: {0}",

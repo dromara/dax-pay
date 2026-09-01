@@ -75,5 +75,7 @@
   "allocReceiverUnsupportedType": "WeChat: tipe penerima alokasi tidak didukung: {0}",
   "allocReceiverMchNameRequired": "WeChat: nama lengkap merchant wajib diisi untuk penerima MERCHANT_ID",
   "allocReceiverSubAppIdRequired": "WeChat: aplikasi sub-merchant wajib untuk penerima PERSONAL_SUB_OPENID",
-  "allocReceiverAppMismatch": "WeChat: penerima openid terikat ke aplikasi lain ({0}), tidak cocok dengan aplikasi awal alokasi"
+  "allocReceiverAppMismatch": "WeChat: penerima openid terikat ke aplikasi lain ({0}), tidak cocok dengan aplikasi awal alokasi",
+  "h5WapUrlTooLong": "WeChat: URL skenario pembayaran H5 (wap_url) maksimal 128 karakter, saat ini {0} karakter",
+  "attachTooLong": "WeChat: data attach maksimal 128 karakter, saat ini {0} karakter"
 }

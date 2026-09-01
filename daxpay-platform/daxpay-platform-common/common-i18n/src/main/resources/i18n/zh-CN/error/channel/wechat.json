@@ -75,5 +75,7 @@
   "allocReceiverUnsupportedType": "微信: 不支持的分账接收方类型: {0}",
   "allocReceiverMchNameRequired": "微信: 商户号类型接收方必须填写商户全称",
   "allocReceiverSubAppIdRequired": "微信: 子商户应用openid类型必须指定子商户应用",
-  "allocReceiverAppMismatch": "微信: openid接收方绑定于其他应用({0}), 与分账发起应用不一致"
+  "allocReceiverAppMismatch": "微信: openid接收方绑定于其他应用({0}), 与分账发起应用不一致",
+  "h5WapUrlTooLong": "微信: H5支付场景地址(wap_url)最长128个字符, 当前{0}个字符",
+  "attachTooLong": "微信: 附加参数(attach)最长128个字符, 当前{0}个字符"
 }

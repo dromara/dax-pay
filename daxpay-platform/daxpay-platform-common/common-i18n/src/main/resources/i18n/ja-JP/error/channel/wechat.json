@@ -75,5 +75,7 @@
   "allocReceiverUnsupportedType": "WeChat: サポートされていない分配受取方タイプ: {0}",
   "allocReceiverMchNameRequired": "WeChat: 商户番号タイプの受取方は商户正式名称が必要です",
   "allocReceiverSubAppIdRequired": "WeChat: サブマーチャントアプリopenidタイプにはサブアプリの指定が必要です",
-  "allocReceiverAppMismatch": "WeChat: openid受取側は他のアプリ({0})に紐づいており、分配開始アプリと一致しません"
+  "allocReceiverAppMismatch": "WeChat: openid受取側は他のアプリ({0})に紐づいており、分配開始アプリと一致しません",
+  "h5WapUrlTooLong": "WeChat: H5決済シーンURL(wap_url)は最大128文字です。現在{0}文字",
+  "attachTooLong": "WeChat: 添付データ(attach)は最大128文字です。現在{0}文字"
 }

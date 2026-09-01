@@ -33,6 +33,7 @@
   "backendBaseUrlNotConfigured": "Backend base URL (backendBaseUrl) is not configured, cannot generate callback URL",
   "requestContextMissing": "Cannot obtain request context",
   "gatewayUrlNotConfigured": "Payment gateway base URL (paymentGatewayBaseUrl) is not configured, cannot generate auth callback URL",
+  "h5SceneUrlNotConfigured": "Payment gateway base URL (paymentGatewayBaseUrl) is not configured and returnUrl is not provided, cannot generate the H5 payment scene URL",
   "clientEnvNotExist": "Client environment not found: {0}",
   "gatewayPayTypeNotExist": "Gateway pay type not found: {0}",
   "aggregateConfigLevelNotExist": "Aggregate config level not found: {0}",

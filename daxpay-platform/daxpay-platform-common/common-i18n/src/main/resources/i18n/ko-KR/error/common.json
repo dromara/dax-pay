@@ -33,6 +33,7 @@
   "backendBaseUrlNotConfigured": "백엔드 기본 URL(backendBaseUrl)이 구성되지 않아 콜백 URL을 생성할 수 없습니다.",
   "requestContextMissing": "요청 컨텍스트를 얻을 수 없습니다.",
   "gatewayUrlNotConfigured": "결제 게이트웨이 기본 URL(payGatewayBaseUrl)이 구성되지 않았으며 인증 콜백 URL을 생성할 수 없습니다.",
+  "h5SceneUrlNotConfigured": "결제 게이트웨이 주소(paymentGatewayBaseUrl)가 구성되지 않았고 returnUrl도 전달되지 않아 H5 결제 장면 URL을 생성할 수 없습니다",
   "clientEnvNotExist": "클라이언트 환경을 찾을 수 없습니다: {0}",
   "gatewayPayTypeNotExist": "게이트웨이 지불 유형을 찾을 수 없습니다: {0}",
   "aggregateConfigLevelNotExist": "집계 구성 수준을 찾을 수 없습니다: {0}",
