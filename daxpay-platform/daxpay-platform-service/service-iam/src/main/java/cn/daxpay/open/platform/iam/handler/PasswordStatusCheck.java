@@ -23,6 +23,8 @@ public class PasswordStatusCheck implements AccessPolicy {
             "/user/auth/update-password",
             "/user/auth/get-login-after-user-info",
             "/token/logout",
+            // 登录前获取防重放凭证的公开安全入口, 不能被初始密码状态拦截
+            "/nonce/generate",
             "/captcha/",
             // 改密页拉取密码策略校验配置的必需配套
             "/platform/config/security/password-policy/validate-config"

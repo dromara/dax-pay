@@ -87,6 +87,7 @@ class PasswordStatusCheckTest {
                 "/user/auth/update-password",
                 "/user/auth/get-login-after-user-info",
                 "/token/logout",
+                "/nonce/generate",
                 "/captcha/image",
                 "/platform/config/security/password-policy/validate-config"
         );
