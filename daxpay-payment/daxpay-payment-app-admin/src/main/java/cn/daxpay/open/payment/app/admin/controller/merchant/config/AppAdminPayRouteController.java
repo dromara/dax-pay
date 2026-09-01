@@ -1,20 +1,23 @@
 package cn.daxpay.open.payment.app.admin.controller.merchant.config;
 
-import cn.daxpay.open.payment.admin.service.merchant.route.PayRouteConfigService;
+import cn.daxpay.open.payment.app.admin.service.route.AppAdminPayRouteService;
 import cn.daxpay.open.payment.masterdata.result.provider.PayProviderMethodResult;
-import cn.daxpay.open.payment.masterdata.service.provider.PayProviderMethodService;
 import cn.daxpay.open.payment.route.param.basic.PayRouteBasicConfigBatchParam;
+import cn.daxpay.open.payment.route.param.scene.PayRouteSceneCapabilityBatchParam;
+import cn.daxpay.open.payment.route.param.scene.PayRouteSceneConfigBatchParam;
 import cn.daxpay.open.payment.route.param.strategy.PayRouteStrategyParam;
-import cn.daxpay.open.payment.route.result.basic.PayRouteBasicConfigResult;
-import cn.daxpay.open.payment.route.result.scene.PayRouteSceneConfigResult;
-import cn.daxpay.open.payment.route.result.strategy.PayRouteStrategyResult;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
+import cn.daxpay.open.platform.core.rest.dto.ChannelMchOption;
 import cn.daxpay.open.platform.core.rest.dto.LabelValue;
 import cn.daxpay.open.platform.core.rest.result.Result;
+import cn.daxpay.open.payment.route.result.basic.PayRouteBasicConfigResult;
+import cn.daxpay.open.payment.route.result.scene.PayRouteSceneConfigResult;
+import cn.daxpay.open.payment.route.result.strategy.PayRouteStrategyResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -25,12 +28,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Map;
 
-/// 小程序管理端-应用通道路由管理
+/// # 商户应用通道路由(小程序管理端)
 ///
-/// 镜像自 admin 版 `PayRouteAdminController`(admin 为运营/商户双路径, 小程序端仅保留
-/// /app-admin/merchant/pay-route 单路径), 同权限码同 Service; 仅镜像小程序端所需方法,
-/// 场景模式配置在小程序端只读。
+/// 面向小程序管理端的通道路由配置。业务编排委托 [AppAdminPayRouteService],
+/// 端点集与商户移动端 `AppMerchantPayRouteController` 对齐(场景模式可编辑)。
 @PermCode(menuCode = PermCodes.Merchant.AppRoute.MENU)
 @Validated
 @Tag(name = "小程序管理端-应用通道路由管理")
@@ -39,50 +42,70 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AppAdminPayRouteController {
 
-    private final PayRouteConfigService configService;
-    private final PayProviderMethodService payProviderMethodService;
+    private final AppAdminPayRouteService payRouteService;
+
+    @PermCode(code = PermCodes.Action.VIEW)
+    @Operation(summary = "已启用渠道支付方式扁平列表")
+    @GetMapping("/method-directory/flat-list")
+    public Result<List<PayProviderMethodResult>> listMethodDirectoryFlat() {
+        return Res.ok(payRouteService.listMethodDirectoryFlat());
+    }
 
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "获取或初始化应用路由策略")
     @GetMapping("/strategy/get-or-init-by-app-id")
-    public Result<PayRouteStrategyResult> getOrInitByAppId(@NotBlank(message = "{validation.field.appId.notBlank}") String appId) {
-        return Res.ok(configService.getOrInitByAppId(appId));
+    public Result<PayRouteStrategyResult> getOrInitByAppId(
+            @NotBlank(message = "{validation.field.appId.notBlank}") String appId) {
+        return Res.ok(payRouteService.getOrInitByAppId(appId));
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "更新路由策略")
     @PostMapping("/strategy/update")
     public Result<PayRouteStrategyResult> updateStrategy(@RequestBody @Validated PayRouteStrategyParam param) {
-        return Res.ok(configService.updateStrategy(param));
+        return Res.ok(payRouteService.updateStrategy(param));
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
-    @Operation(summary = "已启用渠道支付方式扁平列表")
-    @GetMapping("/method-directory/flat-list")
-    public Result<List<PayProviderMethodResult>> listMethodDirectoryFlat() {
-        return Res.ok(payProviderMethodService.listDirectoryFlat());
-    }
-
-    @PermCode(code = PermCodes.Action.VIEW)
-    @Operation(summary = "查询基础模式配置列表")
-    @GetMapping("/basic-config/list-by-app-id")
-    public Result<List<PayRouteBasicConfigResult>> listBasicByAppId(@NotBlank(message = "{validation.field.appId.notBlank}") String appId) {
-        return Res.ok(configService.listBasicByAppId(appId));
+    @Operation(summary = "查询场景模式配置列表")
+    @GetMapping("/scene-config/list-by-app-id")
+    public Result<List<PayRouteSceneConfigResult>> listSceneByAppId(
+            @NotBlank(message = "{validation.field.appId.notBlank}") String appId) {
+        return Res.ok(payRouteService.listSceneByAppId(appId));
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "批量保存基础模式配置")
-    @PostMapping("/basic-config/save-batch")
-    public Result<Void> saveBasicBatch(@RequestBody @Validated PayRouteBasicConfigBatchParam param) {
-        configService.saveBasicBatch(param);
+    @Operation(summary = "批量保存场景模式配置")
+    @PostMapping("/scene-config/save-batch")
+    public Result<Void> saveSceneBatch(@RequestBody @Validated PayRouteSceneConfigBatchParam param) {
+        payRouteService.saveSceneBatch(param);
         return Res.ok();
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
-    @Operation(summary = "查询场景模式配置列表(小程序端只读)")
-    @GetMapping("/scene-config/list-by-app-id")
-    public Result<List<PayRouteSceneConfigResult>> listSceneByAppId(@NotBlank(message = "{validation.field.appId.notBlank}") String appId) {
-        return Res.ok(configService.listSceneByAppId(appId));
+    @Operation(summary = "通道路由白名单目录下全部通道商户候选（批量）")
+    @GetMapping("/scene-config/channel-mh-candidates-batch")
+    public Result<Map<String, List<ChannelMchOption>>> listSceneChannelMhCandidatesBatch(
+            @NotBlank(message = "{validation.field.appId.notBlank}") String appId) {
+        return Res.ok(payRouteService.listSceneChannelMhCandidatesBatch(appId));
+    }
+
+    @PermCode(code = PermCodes.Action.VIEW)
+    @Operation(summary = "按目录项与通道商户批量返回支付能力候选")
+    @PostMapping("/scene-config/capability-candidates-batch")
+    public Result<Map<String, List<LabelValue>>> listSceneCapabilityCandidatesBatch(
+            @Valid @RequestBody PayRouteSceneCapabilityBatchParam param) {
+        return Res.ok(payRouteService.listSceneCapabilityCandidatesBatch(param));
+    }
+
+    @PermCode(code = PermCodes.Action.VIEW)
+    @Operation(summary = "目录项下商户已开通的通道商户候选")
+    @GetMapping("/scene-config/channel-mh-candidates")
+    public Result<List<ChannelMchOption>> listSceneChannelMhCandidates(
+            @NotBlank(message = "{validation.field.appId.notBlank}") String appId,
+            @NotBlank(message = "{validation.field.provider.notBlank}") String provider,
+            @NotBlank(message = "{validation.field.method.notBlank}") String method) {
+        return Res.ok(payRouteService.listSceneChannelMhCandidates(appId, provider, method));
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
@@ -93,6 +116,22 @@ public class AppAdminPayRouteController {
             @NotBlank(message = "{validation.field.provider.notBlank}") String provider,
             @NotBlank(message = "{validation.field.method.notBlank}") String method,
             @NotBlank(message = "{validation.field.channelMchNo.notBlank}") String channelMchNo) {
-        return Res.ok(configService.listSceneCapabilityCandidatesForMethod(appId, provider, method, channelMchNo));
+        return Res.ok(payRouteService.listSceneCapabilityCandidates(appId, provider, method, channelMchNo));
+    }
+
+    @PermCode(code = PermCodes.Action.VIEW)
+    @Operation(summary = "查询基础模式配置列表")
+    @GetMapping("/basic-config/list-by-app-id")
+    public Result<List<PayRouteBasicConfigResult>> listBasicByAppId(
+            @NotBlank(message = "{validation.field.appId.notBlank}") String appId) {
+        return Res.ok(payRouteService.listBasicByAppId(appId));
+    }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "批量保存基础模式配置")
+    @PostMapping("/basic-config/save-batch")
+    public Result<Void> saveBasicBatch(@RequestBody @Validated PayRouteBasicConfigBatchParam param) {
+        payRouteService.saveBasicBatch(param);
+        return Res.ok();
     }
 }
