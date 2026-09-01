@@ -84,6 +84,11 @@ daxpay:
         title: DaxPay支付平台-开源版
         description: DaxPay支付平台-开源版
         version: 4.0.0-beta4
+      # spring相关配置
+      spring:
+        cors:
+          # 开启 CORS 跨域（本地前端 H5 dev 直连 9999 端口需要，其余项走默认值：originPatterns=* / credentials=true）
+          enable: true
     starter:
       auth:
         # 开启超级管理员
