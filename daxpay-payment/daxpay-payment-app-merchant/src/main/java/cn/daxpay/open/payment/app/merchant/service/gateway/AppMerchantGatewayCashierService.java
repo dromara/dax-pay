@@ -22,6 +22,11 @@ public class AppMerchantGatewayCashierService {
         return gatewayCashierConfigService.list(appId, cashierType, clientEnv);
     }
 
+    /// 按ID查询收银台支付项
+    public GatewayCashierItemResult findById(Long id) {
+        return gatewayCashierConfigService.findById(id);
+    }
+
     /// 新建收银台支付项
     public void save(GatewayCashierItemParam param) {
         gatewayCashierConfigService.save(param);

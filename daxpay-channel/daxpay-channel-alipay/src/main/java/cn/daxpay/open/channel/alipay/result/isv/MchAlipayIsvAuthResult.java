@@ -22,6 +22,10 @@ public class MchAlipayIsvAuthResult {
     @Schema(description = "所属支付产品")
     private String product;
 
+    /// 服务商应用ID(公开的开放平台应用标识, 移动端授权页展示用)
+    @Schema(description = "服务商应用ID")
+    private String isvAppId;
+
     /// 子商户支付宝识别码(2088开头的16位数字)
     @Schema(description = "子商户支付宝识别码")
     private String alipayUserId;
@@ -29,4 +33,8 @@ public class MchAlipayIsvAuthResult {
     /// 是否已授权(appAuthToken 是否已绑定)
     @Schema(description = "是否已授权")
     private Boolean authorized;
+
+    /// 授权令牌掩码(已配置时仅展示尾4位, 如 ****abcd; 未配置为空)
+    @Schema(description = "授权令牌掩码")
+    private String maskedToken;
 }

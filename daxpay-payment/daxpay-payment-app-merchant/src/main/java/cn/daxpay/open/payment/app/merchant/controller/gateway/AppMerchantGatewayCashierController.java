@@ -45,6 +45,14 @@ public class AppMerchantGatewayCashierController {
         return Res.ok(gatewayCashierService.list(appId, cashierType, clientEnv));
     }
 
+    @PermCode(code = PermCodes.Action.VIEW)
+    @Operation(summary = "按ID查询收银台支付项")
+    @GetMapping("/get-by-id")
+    public Result<GatewayCashierItemResult> getById(
+            @NotNull(message = "{validation.field.id.notNull}") Long id) {
+        return Res.ok(gatewayCashierService.findById(id));
+    }
+
     @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "新建收银台支付项")
     @PostMapping("/save")

@@ -1,0 +1,71 @@
+package cn.daxpay.open.channel.douyin.controller.appmch;
+
+import cn.daxpay.open.channel.douyin.result.direct.DouyinDirectChannelMerchantResult;
+import cn.daxpay.open.channel.douyin.service.direct.DouyinDirectChannelMerchantService;
+import cn.daxpay.open.payment.common.context.PaymentContext;
+import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
+import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
+import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.code.CommonCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
+import cn.daxpay.open.platform.core.exception.BizInfoException;
+import cn.daxpay.open.platform.core.rest.Res;
+import cn.daxpay.open.platform.core.rest.result.Result;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotBlank;
+import lombok.RequiredArgsConstructor;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Objects;
+
+/// # 抖音直连通道商户配置（商户移动端）
+///
+/// 对照商户 Web 版 [MchDouyinDirectChannelMerchantController]，路径前缀 `/app-mch/douyin/direct-channel-merchant`。
+/// 仅提供基础信息查看（含抖音商户号 dyMchId）；密钥配置移动端不提供（PC 端操作）。
+/// 商户号一律取自 [PaymentContext]，防越权。
+@PermCode(menuCode = PermCodes.Channel.Merchant.MENU)
+@Validated
+@Tag(name = "抖音直连通道商户配置(商户移动端)")
+@RestController
+@RequestMapping("/app-mch/douyin/direct-channel-merchant")
+@RequiredArgsConstructor
+public class AppMchDouyinDirectChannelMerchantController {
+
+    private final DouyinDirectChannelMerchantService douyinDirectChannelMerchantService;
+    private final ChannelMerchantManager channelMerchantManager;
+    private final PaymentContext paymentContext;
+
+    /// 当前登录商户号（上下文必有；缺则视为会话异常）
+    private String requireMchNo() {
+        String mchNo = paymentContext.getMchNo();
+        if (mchNo == null || mchNo.isBlank()) {
+            // 商户上下文缺失
+            throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.assist.mchContextMissing");
+        }
+        return mchNo;
+    }
+
+    /// 校验通道商户属于当前商户（防越权）
+    private void assertChannelMchOwned(String channelMchNo) {
+        ChannelMerchant channelMerchant = channelMerchantManager.findByChannelMchNo(channelMchNo)
+                // 抖音: 通道商户不存在或商户号不匹配
+                .orElseThrow(() -> new BizInfoException(CommonCode.FAIL_CODE, "error.channel.douyin.mchAppNotFound"));
+        if (!Objects.equals(channelMerchant.getMchNo(), this.requireMchNo())) {
+            // 抖音: 通道商户与商户号不匹配
+            throw new BizInfoException(CommonCode.FAIL_CODE, "error.channel.douyin.mchAppNotFound");
+        }
+    }
+
+    @PermCode(code = PermCodes.Action.VIEW)
+    @Operation(summary = "根据通道商户号查询抖音直连通道商户配置")
+    @GetMapping("/find-by-channel-mch-no")
+    public Result<DouyinDirectChannelMerchantResult> findByChannelMchNo(
+            @NotBlank(message = "{validation.field.channelMerchantNo.notBlank}") String channelMchNo) {
+        this.assertChannelMchOwned(channelMchNo);
+        return Res.ok(douyinDirectChannelMerchantService.findByChannelMchNo(channelMchNo));
+    }
+}
