@@ -1,17 +1,15 @@
 -- ============================================================
--- DaxPay 全量建表结构 | 导出时间 2026-08-30
+-- DaxPay 全量建表结构 | 导出时间 2026-09-02
 -- 来源: daxpay-dev @ 192.168.1.229:5432 (PostgreSQL 16.14)
 -- 命令: pg_dump --schema-only --clean --if-exists --no-owner --no-privileges
---       (客户端 pg_dump 18.6; 已剥离 \restrict/\unrestrict 元命令)
--- 说明: 2026-08-30 起由 Navicat 手动导出切换为 pg_dump 脚本化导出
---       全新安装顺序不变: table.sql -> data.sql
+--       (已剥离 \restrict/\unrestrict 元命令, 兼容低版本 psql)
+-- 说明: pg_dump 脚本化导出, 全新安装顺序: table.sql -> data.sql
 -- ============================================================
 
 --
 -- PostgreSQL database dump
 --
 
-\restrict cC0Gprlh4bJpKGGZ3It6dKhV5ijjjfbQlzlUxFh72p0RdAptxlwF5yaY78fTi33
 
 -- Dumped from database version 16.14
 -- Dumped by pg_dump version 18.6
