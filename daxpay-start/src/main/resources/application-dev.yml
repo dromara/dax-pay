@@ -83,7 +83,7 @@ daxpay:
         author: DaxPay
         title: DaxPay支付平台-开源版
         description: DaxPay支付平台-开源版
-        version: 4.0.0-beta4
+        version: 4.0.0-beta5
       # spring相关配置
       spring:
         cors:
