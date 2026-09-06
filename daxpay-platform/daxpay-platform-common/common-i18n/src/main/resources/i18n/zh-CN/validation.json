@@ -830,12 +830,6 @@
     "ipv6MatchEnabled": {
       "notNull": "IPv6 地区匹配开关不能为空"
     },
-    "geoFenceEnabled": {
-      "notNull": "地理围栏开关不能为空"
-    },
-    "geoFenceStrategy": {
-      "notNull": "地理围栏策略不能为空"
-    },
     "reqId": {
       "notBlank": "请求ID不可为空",
       "size": "请求ID不可超过64位"

@@ -37,10 +37,4 @@ public class PlatformPaySecurityConfigResult extends BaseResult {
 
     @Schema(description = "IPv6 地区匹配开关（默认关闭, 开启后地域检查对 IPv6 执行匹配; 离线数据精度有限）")
     private Boolean ipv6MatchEnabled;
-
-    @Schema(description = "地理围栏全局开关（默认关闭, 开启后各商户围栏 opt-in 才生效）")
-    private Boolean geoFenceEnabled;
-
-    @Schema(description = "地理围栏全局策略（strict 严格 / balanced 平衡 / loose 宽松）")
-    private String geoFenceStrategy;
 }

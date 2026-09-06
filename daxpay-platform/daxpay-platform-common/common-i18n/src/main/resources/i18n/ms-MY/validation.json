@@ -832,12 +832,6 @@
     "ipv6MatchEnabled": {
       "notNull": "Saklar pemadanan rantau IPv6 tidak boleh kosong"
     },
-    "geoFenceEnabled": {
-      "notNull": "Saklar pagar geo tidak boleh kosong"
-    },
-    "geoFenceStrategy": {
-      "notNull": "Strategi pagar geo tidak boleh kosong"
-    },
     "itemId": {
       "notBlank": "ID item kasir tidak boleh kosong"
     },

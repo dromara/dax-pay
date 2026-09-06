@@ -832,12 +832,6 @@
     "ipv6MatchEnabled": {
       "notNull": "สวิตช์จับคู่ภูมิภาค IPv6 ต้องไม่ว่าง"
     },
-    "geoFenceEnabled": {
-      "notNull": "สวิตช์รั้วภูมิศาสตร์ต้องไม่ว่าง"
-    },
-    "geoFenceStrategy": {
-      "notNull": "กลยุทธ์รั้วภูมิศาสตร์ต้องไม่ว่าง"
-    },
     "itemId": {
       "notBlank": "ต้องระบุรหัสรายการแคชเชียร์"
     },

@@ -832,12 +832,6 @@
     "ipv6MatchEnabled": {
       "notNull": "Saklar pencocokan region IPv6 tidak boleh kosong"
     },
-    "geoFenceEnabled": {
-      "notNull": "Saklar geo-pagar tidak boleh kosong"
-    },
-    "geoFenceStrategy": {
-      "notNull": "Strategi geo-pagar tidak boleh kosong"
-    },
     "itemId": {
       "notBlank": "ID item kasir tidak boleh kosong"
     },

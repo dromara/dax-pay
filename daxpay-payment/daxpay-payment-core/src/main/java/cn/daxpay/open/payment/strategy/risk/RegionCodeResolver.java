@@ -55,6 +55,34 @@ public class RegionCodeResolver {
     /// 城市归一化名称→市编码索引
     private volatile Map<String, String> cityNormToCode = Map.of();
 
+    /// 行政区划后缀(由长到短), 迭代去除
+    private static final String[] REGION_SUFFIXES =
+            {"特别行政区", "维吾尔自治区", "回族自治区", "壮族自治区", "自治区", "省", "市"};
+
+    /// 行政区划名称归一化: 迭代去掉省/市/自治区/特别行政区等常见后缀, 用于地区名称与库内标准名对齐比对
+    ///
+    /// 覆盖: 直辖市(北京市→北京)、普通地级市(深圳市→深圳)、自治区(内蒙古自治区→内蒙古)。
+    /// 自治州/盟保留全名(已知限制)。归一化口径与
+    /// [cn.daxpay.open.platform.capability.audit.log.service.ip2region.IpRegion] 内私有 normalizeName 保持一致。
+    private static String normalizeRegionName(String name) {
+        if (StrUtil.isBlank(name)) {
+            return "";
+        }
+        String result = name.trim();
+        boolean changed = true;
+        while (changed) {
+            changed = false;
+            for (String suffix : REGION_SUFFIXES) {
+                if (result.endsWith(suffix)) {
+                    result = result.substring(0, result.length() - suffix.length());
+                    changed = true;
+                    break;
+                }
+            }
+        }
+        return result;
+    }
+
     /// 启动构建内存索引
     @PostConstruct
     public void init() {
@@ -62,7 +90,7 @@ public class RegionCodeResolver {
         Map<String, String> pNormToCode = new HashMap<>();
         for (Province province : provinceManager.findAll()) {
             pNameToCode.put(province.getName(), province.getCode());
-            pNormToCode.putIfAbsent(GeoFenceUtil.normalizeRegionName(province.getName()), province.getCode());
+            pNormToCode.putIfAbsent(normalizeRegionName(province.getName()), province.getCode());
         }
         // 直辖市/自治区短名补丁: 与全称归一化结果幂等覆盖("北京市"→"北京"与短名"北京"同 key)
         pNormToCode.putAll(DIRECT_CITY_SHORT_TO_CODE);
@@ -72,7 +100,7 @@ public class RegionCodeResolver {
         Map<String, String> cNormToCode = new HashMap<>();
         for (City city : cityManager.findAll()) {
             cNameToCode.put(city.getName(), city.getCode());
-            cNormToCode.putIfAbsent(GeoFenceUtil.normalizeRegionName(city.getName()), city.getCode());
+            cNormToCode.putIfAbsent(normalizeRegionName(city.getName()), city.getCode());
         }
 
         this.provinceNameToCode = Map.copyOf(pNameToCode);
@@ -93,7 +121,7 @@ public class RegionCodeResolver {
         if (code != null) {
             return code;
         }
-        return provinceNormToCode.get(GeoFenceUtil.normalizeRegionName(name));
+        return provinceNormToCode.get(normalizeRegionName(name));
     }
 
     /// 解析城市编码; 无法映射返回 null
@@ -120,6 +148,6 @@ public class RegionCodeResolver {
         if (code != null) {
             return code;
         }
-        return cityNormToCode.get(GeoFenceUtil.normalizeRegionName(name));
+        return cityNormToCode.get(normalizeRegionName(name));
     }
 }

@@ -832,12 +832,6 @@
     "ipv6MatchEnabled": {
       "notNull": "Công tắc khớp vùng IPv6 không được để trống"
     },
-    "geoFenceEnabled": {
-      "notNull": "Công tắc hàng rào địa lý không được để trống"
-    },
-    "geoFenceStrategy": {
-      "notNull": "Chiến lược hàng rào địa lý không được để trống"
-    },
     "itemId": {
       "notBlank": "ID mục thanh toán quầy không được để trống"
     },

@@ -826,12 +826,6 @@
     "ipv6MatchEnabled": {
       "notNull": "IPv6 地區匹配開關不能為空"
     },
-    "geoFenceEnabled": {
-      "notNull": "地理圍欄開關不能為空"
-    },
-    "geoFenceStrategy": {
-      "notNull": "地理圍欄策略不能為空"
-    },
     "reqId": {
       "notBlank": "請求ID不可為空",
       "size": "請求ID不可超過64位"

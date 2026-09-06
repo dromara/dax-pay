@@ -17,7 +17,6 @@ import lombok.experimental.Accessors;
 /// - 用户标识拦截级别: 是否对 H5 / 主扫等免用户标识方式强制 OAuth, 见 [PayRiskOpenIdLevelEnum]
 /// - 海外 IP 拦截: 拦截境外 IP 发起的支付请求（第二层）
 /// - 地区拦截: 根据 IP 归属地匹配省级与市级黑名单, 省级命中后不执行市级检查（第二层）
-/// - 地理围栏: 围栏功能全局开关 + 全局策略(strict/balanced/loose), 开启后各商户 opt-in 才生效（第三层）
 @Data
 @Accessors(chain = true)
 public class PlatformPaySecurityConfig {
@@ -60,15 +59,7 @@ public class PlatformPaySecurityConfig {
 
     /// IPv6 地区匹配开关（默认关闭, IPv6 离线数据精度有限）
     ///
-    /// 开启后省级/市级/海外/地理围栏四项地域检查会对 IPv6 地址执行地区匹配;
+    /// 开启后省级/市级/海外三项地域检查会对 IPv6 地址执行地区匹配;
     /// 关闭时 IPv6 地址在地域检查中直通放行。xdb 开源 IPv6 数据精度有限, 商用数据可提高可靠性。
     private Boolean ipv6MatchEnabled = Boolean.FALSE;
-
-    /// 地理围栏全局开关（默认关闭, 开启后各商户 mch_risk_config.geoFenceEnabled opt-in 才生效）
-    private Boolean geoFenceEnabled = Boolean.FALSE;
-
-    /// 地理围栏全局策略（strict 严格 / balanced 平衡 / loose 宽松, 默认 balanced）
-    ///
-    /// 平台统一策略, 全商户共用; 非法值由 Service 兜底回退 balanced。
-    private String geoFenceStrategy = "balanced";
 }

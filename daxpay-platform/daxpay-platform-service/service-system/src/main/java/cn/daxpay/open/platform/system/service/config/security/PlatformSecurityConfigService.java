@@ -29,13 +29,6 @@ public class PlatformSecurityConfigService {
     /// API安全配置缓存名（L1 Caffeine + L2 Redis）
     public static final String API_SECURITY_CACHE_NAME = "system:api-security-config";
 
-    /// 地理围栏策略默认值（平衡）
-    private static final String GEO_FENCE_STRATEGY_BALANCED = "balanced";
-
-    /// 地理围栏策略合法值集合（与 GeoFenceStrategyEnum 取值对齐, 此处不引 payment-core 避免反向依赖）
-    private static final java.util.Set<String> GEO_FENCE_STRATEGY_VALID =
-            java.util.Set.of("strict", "balanced", "loose");
-
     private final SystemPlatformConfigService systemConfigService;
 
     /// 自注入，保证读 API 安全配置走 Spring 缓存代理
@@ -350,8 +343,7 @@ public class PlatformSecurityConfigService {
                 .setRiskCheckAfterPay(true)
                 .setRiskOpenIdLevel(PayRiskOpenIdLevelEnum.ENHANCED.getCode())
                 .setBlockOverseasIp(false)
-                .setIpv6MatchEnabled(false)
-                .setGeoFenceStrategy(GEO_FENCE_STRATEGY_BALANCED);
+                .setIpv6MatchEnabled(false);
     }
 
     /// 获取支付安全配置(结果)
@@ -362,10 +354,6 @@ public class PlatformSecurityConfigService {
     /// 更新支付安全配置
     @CacheEvict(value = PAY_SECURITY_CACHE_NAME, allEntries = true)
     public void updatePaySecurityConfig(PlatformPaySecurityConfigParam param) {
-        // 地理围栏策略兜底: 非法值回退 balanced（与 GeoFenceStrategyEnum 取值对齐, 此处不引 payment-core 避免反向依赖）
-        if (!GEO_FENCE_STRATEGY_VALID.contains(param.getGeoFenceStrategy())) {
-            param.setGeoFenceStrategy(GEO_FENCE_STRATEGY_BALANCED);
-        }
         PlatformPaySecurityConfig data = systemConfigService.getOrCreateConfig(
                 PlatformConfigTypeEnum.PAY_SECURITY,
                 PlatformPaySecurityConfig.class,

@@ -81,15 +81,6 @@ public class PayRiskHit extends MpBaseEntity implements ToResult<PayRiskHitResul
     /// 客户端 IP 归属城市（ip2region 解析快照）
     private String clientCity;
 
-    /// 门店所在城市（围栏命中快照）
-    private String storeCity;
-
-    /// 门店号（围栏命中快照）
-    private String storeNo;
-
-    /// 地理围栏命中时生效的策略（strict/balanced/loose, 围栏命中快照）
-    private String geoFenceStrategy;
-
     @Override
     public PayRiskHitResult toResult() {
         return PayRiskHitConvert.CONVERT.toResult(this);

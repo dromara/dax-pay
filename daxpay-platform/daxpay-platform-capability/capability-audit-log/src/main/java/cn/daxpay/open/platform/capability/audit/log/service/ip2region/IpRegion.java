@@ -55,7 +55,7 @@ public class IpRegion {
 
     /// 是否国内直辖市
     ///
-    /// v4 数据省名可能带"市"后缀(如"北京市"), 归一化后比对, 与 GeoFenceUtil.normalizeRegionName 口径一致
+    /// v4 数据省名可能带"市"后缀(如"北京市"), 归一化后比对, 与 RegionCodeResolver 的 normalizeRegionName 归一化口径一致
     public boolean isProvinceLevel(){
         return "中国".equals(country)&&
                 PROVINCE_LEVEL_CITY.contains(normalizeName(province));
@@ -108,7 +108,7 @@ public class IpRegion {
 
     /// 归一化地区名: 去首尾空格, 迭代去掉行政区划常见后缀
     ///
-    /// 后缀由长到短迭代去除, 覆盖 省/市/自治区/特别行政区 等, 与 GeoFenceUtil.normalizeRegionName 口径一致。
+    /// 后缀由长到短迭代去除, 覆盖 省/市/自治区/特别行政区 等, 与 RegionCodeResolver 的 normalizeRegionName 归一化口径一致。
     /// 例: "北京市"→"北京", "内蒙古自治区"→"内蒙古", "香港特别行政区"→"香港"; 自治州/盟保留全名(已知限制)。
     private static String normalizeName(String name) {
         if (name == null) {
