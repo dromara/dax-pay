@@ -216,7 +216,11 @@ public class BaseManager<M extends MPJBaseMapper<T>, T> {
     /// @param <E> 泛型
     /// @return 操作结果
     protected <E> boolean executeBatch(Collection<E> list, int batchSize, BiConsumer<SqlSession, E> consumer) {
-        return SqlHelper.executeBatch(getSqlSessionFactory(), this.mpLog, list, batchSize, consumer);
+        // mybatis-plus 3.5.17 起 SqlHelper.executeBatch 要求 BiFunction(其返回值内部被忽略), 此处适配并保持本方法签名不变
+        return SqlHelper.executeBatch(getSqlSessionFactory(), this.mpLog, list, batchSize, (sqlSession, entity) -> {
+            consumer.accept(sqlSession, entity);
+            return null;
+        });
     }
 
     /// TableId 注解存在更新记录，否插入一条记录
@@ -241,7 +245,8 @@ public class BaseManager<M extends MPJBaseMapper<T>, T> {
         }, (sqlSession, entity) -> {
             MapperMethod.ParamMap<T> param = new MapperMethod.ParamMap<>();
             param.put(Constants.ENTITY, entity);
-            sqlSession.update(getSqlStatement(SqlMethod.UPDATE_BY_ID), param);
+            // 返回受影响行数(3.5.17 起该 lambda 要求返回 Integer, 值本身被忽略)
+            return sqlSession.update(getSqlStatement(SqlMethod.UPDATE_BY_ID), param);
         });
     }
 

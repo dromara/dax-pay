@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.1.0</version>
+        <version>4.1.1</version>
         <relativePath/>
     </parent>
 
@@ -41,14 +41,14 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <!-- 三方库版本集中管理（子模块通过继承获取） -->
-        <lombok.version>1.18.46</lombok.version>
+        <lombok.version>1.18.48</lombok.version>
         <mapstruct.version>1.6.3</mapstruct.version>
-        <springdoc.version>3.0.3</springdoc.version>
-        <hutool.version>5.8.46</hutool.version>
+        <springdoc.version>3.1.0</springdoc.version>
+        <hutool.version>5.8.47</hutool.version>
         <bouncycastle.version>1.84</bouncycastle.version>
         <guava.version>33.6.0-jre</guava.version>
-        <mybatis-plus.version>3.5.16</mybatis-plus.version>
-        <mybatis-plus-join.version>1.5.7</mybatis-plus-join.version>
+        <mybatis-plus.version>3.5.17</mybatis-plus.version>
+        <mybatis-plus-join.version>1.5.9</mybatis-plus-join.version>
         <lock4j.version>2.2.7</lock4j.version>
         <shedlock.version>6.3.1</shedlock.version>
         <aws-sdk.version>2.46.15</aws-sdk.version>
@@ -56,7 +56,7 @@
         <webauthn-server.version>2.9.0</webauthn-server.version>
         <caffeine.version>3.2.4</caffeine.version>
         <ip2region.version>3.3.7</ip2region.version>
-        <wxjava.version>4.8.4.B</wxjava.version>
+        <wxjava.version>4.8.6.B</wxjava.version>
         <commonmark.version>0.24.0</commonmark.version>
         <!-- Netty：用 Boot 4.1 BOM 默认（4.2.x），不覆盖。
              曾为 embedded Artemis 降到 4.1.135（netty 4.2 的 CleanerJava25 在 JDK25 上对 NIO journal
