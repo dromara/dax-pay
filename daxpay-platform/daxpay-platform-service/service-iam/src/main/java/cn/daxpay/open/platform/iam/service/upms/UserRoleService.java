@@ -15,6 +15,7 @@ import cn.daxpay.open.platform.iam.result.role.RoleResult;
 import cn.daxpay.open.platform.capability.auth.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +38,7 @@ public class UserRoleService {
     private final UserRoleManager userRoleManager;
 
     /// 给用户分配角色（单角色模式）
+    @CacheEvict(cacheNames = "iam:user-perm-codes", key = "#userId")
     @Transactional(rollbackFor = Exception.class)
     public void saveAssign(Long userId, Long roleId, boolean ignoreScopes) {
         // 校验用户与角色的终端一致性
@@ -59,6 +61,8 @@ public class UserRoleService {
     }
 
     /// 批量给用户分配角色（单角色模式）
+    /// 批量入参无法逐 key 精确失效, 直接全清(管理端低频操作, 冷启动代价可忽略)
+    @CacheEvict(cacheNames = "iam:user-perm-codes", allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public void saveAssignBatch(List<Long> userIds, Long roleId) {
         List<Long> roleIdsByUser = this.findRoleIdsByUser();

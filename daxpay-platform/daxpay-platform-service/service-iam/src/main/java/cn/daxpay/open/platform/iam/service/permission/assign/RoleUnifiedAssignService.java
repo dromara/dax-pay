@@ -19,6 +19,7 @@ import cn.daxpay.open.platform.iam.result.permission.assign.RoleUnifiedAssignTre
 import cn.hutool.core.collection.CollUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -161,6 +162,8 @@ public class RoleUnifiedAssignService {
     /// 前端会同时提交菜单 ID 与权限码 ID，这里在落库前会校验权限码是否都依赖于本次已选择的菜单，
     /// 从而保证功能权限不能脱离菜单权限单独生效。
     /// 保存时会分别维护 `role_menu` 与 `role_code` 两张关系表，仅同步当前角色本次提交的数据差异。
+    /// 角色→权限码映射变更影响挂该角色的全部用户, 无法按 roleId 反查用户, 直接全清权限码缓存
+    @CacheEvict(cacheNames = "iam:user-perm-codes", allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public void save(RoleUnifiedAssignParam param) {
         Role role = roleManager.findById(param.getRoleId()).orElseThrow(RoleNotExistedException::new);

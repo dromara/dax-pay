@@ -25,9 +25,9 @@ public class TradeLockKeys {
     /// 短租期: 获取锁等待时间(ms)
     public static final long SHORT_WAIT = 50;
 
-    /// 普通支付发起: 按业务单号(与幂等唯一键 mchNo+bizOrderNo 对应)
-    public String pay(String bizOrderNo) {
-        return "payment:pay:" + bizOrderNo;
+    /// 普通支付发起: 按商户号+业务单号(与幂等唯一键 mchNo+bizOrderNo 同口径, 不同商户同单号不互相争锁)
+    public String pay(String mchNo, String bizOrderNo) {
+        return "payment:pay:" + mchNo + ":" + bizOrderNo;
     }
 
     /// 网关支付发起: 按网关订单号
@@ -75,9 +75,9 @@ public class TradeLockKeys {
         return "payment:alloc-trade:" + tradeNo;
     }
 
-    /// 转账发起: 按业务转账号
-    public String transfer(String bizTransferNo) {
-        return "payment:transfer:" + bizTransferNo;
+    /// 转账发起: 按商户号+业务转账号(与幂等唯一键同口径, 不同商户同单号不互相争锁)
+    public String transfer(String mchNo, String bizTransferNo) {
+        return "payment:transfer:" + mchNo + ":" + bizTransferNo;
     }
 
     /// 转账交易处置: 按转账交易 id

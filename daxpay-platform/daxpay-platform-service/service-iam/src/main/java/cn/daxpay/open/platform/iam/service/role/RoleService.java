@@ -13,6 +13,7 @@ import cn.daxpay.open.platform.iam.exception.role.RoleNotExistedException;
 import cn.daxpay.open.platform.iam.param.role.RoleParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import cn.daxpay.open.platform.core.code.CommonCode;
@@ -60,6 +61,8 @@ public class RoleService {
     }
 
     /// 删除
+    /// 守卫保证无用户挂载才可删, 理论上无缓存影响; 仍全清权限码缓存兜底
+    @CacheEvict(cacheNames = "iam:user-perm-codes", allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long roleId) {
         Role role = roleManager.findById(roleId).orElseThrow(RoleNotExistedException::new);

@@ -14,6 +14,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -59,6 +60,8 @@ public class PermCodeScanService {
 
     /// 扫描并同步权限码主数据。
     /// 扫描结果会根据新增、更新、跳过、删除分别计入返回对象，便于前端直接展示同步摘要。
+    /// 主数据变更影响管理员"全部码"路径且会联动删 role_code, 全清权限码缓存
+    @CacheEvict(cacheNames = "iam:user-perm-codes", allEntries = true)
     @Transactional(rollbackFor = Exception.class)
     public PermCodeScanResult scan(PermCodeScanParam param) {
         Map<String, PermCodeDefinition> definitionMap = this.collectDefinitions();

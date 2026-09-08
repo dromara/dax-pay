@@ -59,9 +59,10 @@ public class TransferStartService {
     /// @param param   转账参数
     /// @return 平台转账单号(transferNo)
     public String start(String channel, TransferParam param) {
+        // 发起锁按商户隔离(幂等唯一键为 mchNo+bizTransferNo), 不同商户同单号不互相争锁;
         // 锁租期 60s 覆盖通道 HTTP 超时(40s), 等待 3s 让并发同号请求排队而非立即失败
         return lockExecutor.execute(
-                TradeLockKeys.transfer(param.getBizTransferNo()),
+                TradeLockKeys.transfer(param.getMchNo(), param.getBizTransferNo()),
                 TradeLockKeys.LONG_EXPIRE, TradeLockKeys.LONG_WAIT,
                 () -> this.startHandle(channel, param),
                 () -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.transfer.processing")

@@ -11,6 +11,7 @@ import cn.daxpay.open.platform.iam.service.permission.resource.PermMenuService;
 import cn.daxpay.open.platform.capability.auth.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -116,6 +117,10 @@ public class UserRolePremService {
 
     /// 根据用户获取权限码
     /// 超级管理员直接返回全部权限码
+    ///
+    /// 鉴权热路径(每个 @PermCode 请求一次), 走多级缓存(L1 60s / L2 30min, 集群广播失效);
+    /// 失效入口: 用户角色变更(精确 evict)与角色授权/权限码扫描(全清), 见各写入口的 @CacheEvict
+    @Cacheable(cacheNames = "iam:user-perm-codes", key = "#userId")
     public List<String> findAllCodesByUser(Long userId){
         if (SecurityUtil.getUser().isAdmin()){
             return permCodeService.findAllCode();

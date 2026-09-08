@@ -63,10 +63,11 @@ public class NormalPayService {
         this.assertSensitiveWordClean(payParam);
         payAssistService.validationExpiredTime(payParam.getExpiredTime());
         String bizOrderNo = payParam.getBizOrderNo();
+        // 发起锁按商户隔离(幂等唯一键为 mchNo+bizOrderNo), 不同商户同单号不互相争锁;
         // 锁租期 60s 覆盖通道 HTTP 超时(40s), 等待 3s 让并发同号请求排队而非立即失败;
         // 原 10s 默认值在慢通道下会提前释放, 导致同号请求重入并发调通道
         return lockExecutor.execute(
-                TradeLockKeys.pay(bizOrderNo),
+                TradeLockKeys.pay(payParam.getMchNo(), bizOrderNo),
                 TradeLockKeys.LONG_EXPIRE, TradeLockKeys.LONG_WAIT,
                 () -> this.payHandle(payParam),
                 () -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.processing")
