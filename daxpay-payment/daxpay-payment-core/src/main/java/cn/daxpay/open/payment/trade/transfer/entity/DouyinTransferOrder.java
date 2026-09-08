@@ -24,7 +24,7 @@ import java.time.OffsetDateTime;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName(value = "pay_transfer_order_douyin", autoResultMap = true)
-public class DouyinTransferOrder extends MchBaseEntity {
+public class DouyinTransferOrder extends MchBaseEntity implements TransferContainer {
 
     // ===== 身份 =====
 

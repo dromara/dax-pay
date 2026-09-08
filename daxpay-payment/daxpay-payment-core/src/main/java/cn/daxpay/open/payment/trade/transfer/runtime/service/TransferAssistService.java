@@ -9,6 +9,7 @@ import cn.daxpay.open.payment.trade.transfer.dao.TransferTradeManager;
 import cn.daxpay.open.payment.trade.transfer.dao.WechatTransferOrderManager;
 import cn.daxpay.open.payment.trade.transfer.entity.AlipayTransferOrder;
 import cn.daxpay.open.payment.trade.transfer.entity.DouyinTransferOrder;
+import cn.daxpay.open.payment.trade.transfer.entity.TransferContainer;
 import cn.daxpay.open.payment.trade.transfer.entity.TransferTrade;
 import cn.daxpay.open.payment.trade.transfer.entity.WechatTransferOrder;
 import cn.daxpay.open.payment.trade.transfer.param.TransferParam;
@@ -29,6 +30,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
+import java.util.function.LongFunction;
 
 /// # 转账编排辅助服务
 ///
@@ -36,6 +41,7 @@ import java.util.Set;
 /// 供 [TransferStartService]/[TransferSyncService]/[TransferCallbackService]/[TransferCloseService] 复用。
 /// 同时是唯一按通道分发、直接操作通道容器表（[WechatTransferOrder]/[AlipayTransferOrder]/[DouyinTransferOrder]）
 /// 的公共入口，其余编排服务只面向公共凭证 [TransferTrade] 与 [TransferStrategyContext]。
+/// 三容器经 [TransferContainer] 契约统一操作, 加载/保存/CAS 与特有字段回写差异由 [ChannelRoute] 路由承载。
 /// 所有方法要求调用方已持有对应转账单的分布式锁。
 @Slf4j
 @Service
@@ -100,6 +106,8 @@ public class TransferAssistService {
 
     /// 按通道建容器并双写公共资金凭证, 返回装配好的策略上下文
     ///
+    /// 公共字段经 [applyCommonCreateFields] 统一写入, 各分支只补通道特有收款人/场景字段。
+    ///
     /// @param channel 通道编码
     /// @param param   转账参数(公共字段 + 通道特有收款人字段)
     /// @param mchNo   商户号(上下文已装载, 显式传入避免依赖线程上下文)
@@ -107,47 +115,26 @@ public class TransferAssistService {
     public TransferStrategyContext createOrder(String channel, TransferParam param, String mchNo) {
         String transferNo = TradeNoGenerateUtil.transfer();
         long amount = CurrencyAmountUtil.majorToMinor(param.getAmount(), CurrencyEnum.CNY);
-        switch (channel) {
+        return switch (channel) {
             case "wechat" -> {
                 WechatTransferOrder order = new WechatTransferOrder()
                         .setPayeeOpenid(param.getPayeeAccount())
-                        .setUserName(param.getPayeeName())
-                        .setTransferNo(transferNo)
-                        .setBizTransferNo(param.getBizTransferNo())
-                        .setChannelMchNo(param.getChannelMchNo())
-                        .setAmount(amount)
-                        .setCurrency(CurrencyEnum.CNY.getCode())
-                        .setTitle(param.getTitle())
-                        .setReason(param.getReason())
-                        .setNotifyUrl(param.getNotifyUrl())
-                        .setAttach(param.getAttach())
-                        .setStatus(PayFundStatusEnum.PROCESSING.getCode())
-                        .setReqTime(OffsetDateTime.now());
+                        .setUserName(param.getPayeeName());
+                applyCommonCreateFields(order, param, transferNo, amount);
                 // 商户号独立赋值(父类 setter 返回 MchBaseEntity, 禁止链式)
                 order.setMchNo(mchNo);
                 wechatTransferOrderManager.save(order);
                 TransferTrade trade = this.buildTrade(order, channel, transferNo);
                 transferTradeManager.save(trade);
-                return buildWechatContext(order).setChannel(channel).setTrade(trade)
+                yield buildWechatContext(order).setChannel(channel).setTrade(trade)
                         .setReportInfos(param.getReportInfos());
             }
             case "alipay" -> {
                 AlipayTransferOrder order = new AlipayTransferOrder()
                         .setPayeeType(param.getPayeeType())
                         .setPayeeAccount(param.getPayeeAccount())
-                        .setPayeeName(param.getPayeeName())
-                        .setTransferNo(transferNo)
-                        .setBizTransferNo(param.getBizTransferNo())
-                        .setChannelMchNo(param.getChannelMchNo())
-                        .setAmount(amount)
-                        .setCurrency(CurrencyEnum.CNY.getCode())
-                        .setTitle(param.getTitle())
-                        .setReason(param.getReason())
-                        .setNotifyUrl(param.getNotifyUrl())
-                        .setAttach(param.getAttach())
-                        .setStatus(PayFundStatusEnum.PROCESSING.getCode())
-                        .setReqTime(OffsetDateTime.now());
-                // 商户号独立赋值(父类 setter 返回 MchBaseEntity, 禁止链式)
+                        .setPayeeName(param.getPayeeName());
+                applyCommonCreateFields(order, param, transferNo, amount);
                 order.setMchNo(mchNo);
                 // 持久化场景标识与报备信息(FAIL重试时恢复)
                 order.setTransferScene(param.getTransferScene());
@@ -155,7 +142,7 @@ public class TransferAssistService {
                 alipayTransferOrderManager.save(order);
                 TransferTrade trade = this.buildTrade(order, channel, transferNo);
                 transferTradeManager.save(trade);
-                return buildAlipayContext(order).setChannel(channel).setTrade(trade)
+                yield buildAlipayContext(order).setChannel(channel).setTrade(trade)
                         .setTransferScene(param.getTransferScene())
                         .setReportInfos(param.getReportInfos());
             }
@@ -164,73 +151,39 @@ public class TransferAssistService {
                         .setPayeeType(param.getPayeeType())
                         .setPayeeAccount(param.getPayeeAccount())
                         .setPayeeName(param.getPayeeName())
-                        .setTransferScene(param.getTransferScene())
-                        .setTransferNo(transferNo)
-                        .setBizTransferNo(param.getBizTransferNo())
-                        .setChannelMchNo(param.getChannelMchNo())
-                        .setAmount(amount)
-                        .setCurrency(CurrencyEnum.CNY.getCode())
-                        .setTitle(param.getTitle())
-                        .setReason(param.getReason())
-                        .setNotifyUrl(param.getNotifyUrl())
-                        .setAttach(param.getAttach())
-                        .setStatus(PayFundStatusEnum.PROCESSING.getCode())
-                        .setReqTime(OffsetDateTime.now());
-                // 商户号独立赋值(父类 setter 返回 MchBaseEntity, 禁止链式)
+                        .setTransferScene(param.getTransferScene());
+                applyCommonCreateFields(order, param, transferNo, amount);
                 order.setMchNo(mchNo);
-                // 持久化场景与报备信息(FAIL重试时恢复)
+                // 持久化报备信息(FAIL重试时恢复)
                 order.setReportInfos(serializeReportInfos(param.getReportInfos()));
                 douyinTransferOrderManager.save(order);
                 TransferTrade trade = this.buildTrade(order, channel, transferNo);
                 transferTradeManager.save(trade);
-                return buildDouyinContext(order).setChannel(channel).setTrade(trade)
+                yield buildDouyinContext(order).setChannel(channel).setTrade(trade)
                         .setTransferScene(param.getTransferScene())
                         .setReportInfos(param.getReportInfos());
             }
             default -> throw new IllegalArgumentException("未知转账通道: " + channel);
-        }
+        };
     }
 
-    /// 组装公共资金凭证（relationNo 默认=平台转账单号, 特殊通道变形后覆盖）
-    private TransferTrade buildTrade(WechatTransferOrder order, String channel, String transferNo) {
-        TransferTrade trade = new TransferTrade()
-                .setTradeNo(transferNo)
-                .setBizTransferNo(order.getBizTransferNo())
-                .setContainerId(order.getId())
-                .setContainerChannel(channel)
-                .setChannel(channel)
-                .setProvider(channel)
-                .setAmount(order.getAmount())
-                .setCurrency(order.getCurrency())
+    /// 建单公共字段写入: 转账单号/商户转账号/通道商户号/金额/标题/通知等(三通道一致)
+    private void applyCommonCreateFields(TransferContainer order, TransferParam param, String transferNo, long amount) {
+        order.setTransferNo(transferNo)
+                .setBizTransferNo(param.getBizTransferNo())
+                .setChannelMchNo(param.getChannelMchNo())
+                .setAmount(amount)
+                .setCurrency(CurrencyEnum.CNY.getCode())
+                .setTitle(param.getTitle())
+                .setReason(param.getReason())
+                .setNotifyUrl(param.getNotifyUrl())
+                .setAttach(param.getAttach())
                 .setStatus(PayFundStatusEnum.PROCESSING.getCode())
-                .setRelationNo(transferNo)
-                .setTitle(order.getTitle());
-        // 商户号独立赋值(父类 setter 返回 MchBaseEntity, 禁止链式)
-        trade.setMchNo(order.getMchNo());
-        return trade;
+                .setReqTime(OffsetDateTime.now());
     }
 
     /// 组装公共资金凭证（relationNo 默认=平台转账单号, 特殊通道变形后覆盖）
-    private TransferTrade buildTrade(AlipayTransferOrder order, String channel, String transferNo) {
-        TransferTrade trade = new TransferTrade()
-                .setTradeNo(transferNo)
-                .setBizTransferNo(order.getBizTransferNo())
-                .setContainerId(order.getId())
-                .setContainerChannel(channel)
-                .setChannel(channel)
-                .setProvider(channel)
-                .setAmount(order.getAmount())
-                .setCurrency(order.getCurrency())
-                .setStatus(PayFundStatusEnum.PROCESSING.getCode())
-                .setRelationNo(transferNo)
-                .setTitle(order.getTitle());
-        // 商户号独立赋值(父类 setter 返回 MchBaseEntity, 禁止链式)
-        trade.setMchNo(order.getMchNo());
-        return trade;
-    }
-
-    /// 组装公共资金凭证（relationNo 默认=平台转账单号, 特殊通道变形后覆盖）
-    private TransferTrade buildTrade(DouyinTransferOrder order, String channel, String transferNo) {
+    private TransferTrade buildTrade(TransferContainer order, String channel, String transferNo) {
         TransferTrade trade = new TransferTrade()
                 .setTradeNo(transferNo)
                 .setBizTransferNo(order.getBizTransferNo())
@@ -345,96 +298,68 @@ public class TransferAssistService {
         mirrorContainer(channel, trade, Set.of(PayFundStatusEnum.FAIL.getCode()), null, null, null);
     }
 
-    // ===== 容器镜像(按通道分发, 编排服务唯一接触具体容器的地方) =====
+    // ===== 容器镜像(按通道路由, 编排服务唯一接触具体容器的地方) =====
 
     /// 按通道装载容器并镜像状态更新(CAS), 返回更新结果与通知地址
     ///
     /// 容器状态/完成时间/通道单号取自凭证 [trade]; errorMsg 单独传入(success 传 null 清空);
-    /// [transferBody]/[transferScene] 有值才覆盖, 终态沿用容器既有值。
+    /// 特有字段(微信拉起确认参数/抖音转账场景)有值才覆盖, 终态沿用容器既有值。
     private MirrorResult mirrorContainer(String channel, TransferTrade trade, Set<String> expectFrom,
                                          String errorMsg, String transferBody, String transferScene) {
+        MirrorExtras extras = new MirrorExtras(transferBody, transferScene, null);
         return switch (channel) {
-            case "wechat" -> {
-                WechatTransferOrder order = wechatTransferOrderManager.findById(trade.getContainerId()).orElse(null);
-                if (order == null) {
-                    log.warn("转账容器不存在, 跳过容器更新: tradeNo={}", trade.getTradeNo());
-                    yield new MirrorResult(false, null);
-                }
-                order.setStatus(trade.getStatus());
-                order.setFinishTime(trade.getFinishTime());
-                order.setOutTransferNo(trade.getOutTransferNo());
-                order.setErrorMsg(errorMsg);
-                if (transferBody != null) {
-                    order.setTransferBody(transferBody);
-                }
-                boolean updated = wechatTransferOrderManager.casUpdateStatus(order, expectFrom);
-                yield new MirrorResult(updated, order.getNotifyUrl());
-            }
-            case "alipay" -> {
-                AlipayTransferOrder order = alipayTransferOrderManager.findById(trade.getContainerId()).orElse(null);
-                if (order == null) {
-                    log.warn("转账容器不存在, 跳过容器更新: tradeNo={}", trade.getTradeNo());
-                    yield new MirrorResult(false, null);
-                }
-                order.setStatus(trade.getStatus());
-                order.setFinishTime(trade.getFinishTime());
-                order.setOutTransferNo(trade.getOutTransferNo());
-                order.setErrorMsg(errorMsg);
-                boolean updated = alipayTransferOrderManager.casUpdateStatus(order, expectFrom);
-                yield new MirrorResult(updated, order.getNotifyUrl());
-            }
-            case "douyin" -> {
-                DouyinTransferOrder order = douyinTransferOrderManager.findById(trade.getContainerId()).orElse(null);
-                if (order == null) {
-                    log.warn("转账容器不存在, 跳过容器更新: tradeNo={}", trade.getTradeNo());
-                    yield new MirrorResult(false, null);
-                }
-                order.setStatus(trade.getStatus());
-                order.setFinishTime(trade.getFinishTime());
-                order.setOutTransferNo(trade.getOutTransferNo());
-                order.setErrorMsg(errorMsg);
-                if (transferScene != null) {
-                    order.setTransferScene(transferScene);
-                }
-                boolean updated = douyinTransferOrderManager.casUpdateStatus(order, expectFrom);
-                yield new MirrorResult(updated, order.getNotifyUrl());
-            }
+            case "wechat" -> doMirror(wechatRoute(), trade, expectFrom, errorMsg, extras);
+            case "alipay" -> doMirror(alipayRoute(), trade, expectFrom, errorMsg, extras);
+            case "douyin" -> doMirror(douyinRoute(), trade, expectFrom, errorMsg, extras);
             default -> throw new IllegalArgumentException("未知转账通道: " + channel);
         };
+    }
+
+    /// 终态镜像公共段: 状态/完成时间/通道单号/错误信息 + 特有字段钩子 + CAS
+    private <T extends TransferContainer> MirrorResult doMirror(ChannelRoute<T> route, TransferTrade trade,
+            Set<String> expectFrom, String errorMsg, MirrorExtras extras) {
+        T order = route.loader().apply(trade.getContainerId());
+        if (order == null) {
+            log.warn("转账容器不存在, 跳过容器更新: tradeNo={}", trade.getTradeNo());
+            return new MirrorResult(false, null);
+        }
+        order.setStatus(trade.getStatus());
+        order.setFinishTime(trade.getFinishTime());
+        order.setOutTransferNo(trade.getOutTransferNo());
+        order.setErrorMsg(errorMsg);
+        route.mirrorExtras().accept(order, extras);
+        boolean updated = route.casUpdater().apply(order, expectFrom);
+        return new MirrorResult(updated, order.getNotifyUrl());
     }
 
     /// 处理中回写: 按通道装载容器补通道单号/特有字段(非 CAS, 不改变状态)
     private void mirrorProcessing(String channel, Long containerId, String outTransferNo,
                                   String transferBody, String transferScene, String wxAppId) {
+        MirrorExtras extras = new MirrorExtras(transferBody, transferScene, wxAppId);
         switch (channel) {
-            case "wechat" -> wechatTransferOrderManager.findById(containerId).ifPresent(order -> {
-                order.setOutTransferNo(outTransferNo);
-                if (transferBody != null) {
-                    order.setTransferBody(transferBody);
-                }
-                if (wxAppId != null) {
-                    order.setWxAppId(wxAppId);
-                }
-                wechatTransferOrderManager.updateById(order);
-            });
-            case "alipay" -> alipayTransferOrderManager.findById(containerId).ifPresent(order -> {
-                order.setOutTransferNo(outTransferNo);
-                alipayTransferOrderManager.updateById(order);
-            });
-            case "douyin" -> douyinTransferOrderManager.findById(containerId).ifPresent(order -> {
-                order.setOutTransferNo(outTransferNo);
-                if (transferScene != null) {
-                    order.setTransferScene(transferScene);
-                }
-                douyinTransferOrderManager.updateById(order);
-            });
+            case "wechat" -> doProcessing(wechatRoute(), containerId, outTransferNo, extras);
+            case "alipay" -> doProcessing(alipayRoute(), containerId, outTransferNo, extras);
+            case "douyin" -> doProcessing(douyinRoute(), containerId, outTransferNo, extras);
             default -> throw new IllegalArgumentException("未知转账通道: " + channel);
         }
     }
 
+    /// 处理中回写公共段: 通道单号 + 特有字段钩子 + 保存
+    private <T extends TransferContainer> void doProcessing(ChannelRoute<T> route, Long containerId,
+            String outTransferNo, MirrorExtras extras) {
+        T order = route.loader().apply(containerId);
+        if (order == null) {
+            return;
+        }
+        order.setOutTransferNo(outTransferNo);
+        route.processingExtras().accept(order, extras);
+        route.saver().accept(order);
+    }
+
     // ===== 策略上下文装配 =====
 
-    private TransferStrategyContext buildWechatContext(WechatTransferOrder order) {
+    /// 上下文公共字段装配(三通道一致的 12 项)
+    private TransferStrategyContext buildContext(TransferContainer order) {
         return new TransferStrategyContext()
                 .setMchNo(order.getMchNo())
                 .setChannelMchNo(order.getChannelMchNo())
@@ -447,7 +372,11 @@ public class TransferAssistService {
                 .setReason(order.getReason())
                 .setNotifyUrl(order.getNotifyUrl())
                 .setStatus(order.getStatus())
-                .setFinishTime(order.getFinishTime())
+                .setFinishTime(order.getFinishTime());
+    }
+
+    private TransferStrategyContext buildWechatContext(WechatTransferOrder order) {
+        return buildContext(order)
                 .setPayeeOpenid(order.getPayeeOpenid())
                 .setTransferScene(order.getTransferScene())
                 .setUserName(order.getUserName())
@@ -455,19 +384,7 @@ public class TransferAssistService {
     }
 
     private TransferStrategyContext buildAlipayContext(AlipayTransferOrder order) {
-        return new TransferStrategyContext()
-                .setMchNo(order.getMchNo())
-                .setChannelMchNo(order.getChannelMchNo())
-                .setTransferNo(order.getTransferNo())
-                .setBizTransferNo(order.getBizTransferNo())
-                .setOutTransferNo(order.getOutTransferNo())
-                .setAmount(order.getAmount())
-                .setCurrency(order.getCurrency())
-                .setTitle(order.getTitle())
-                .setReason(order.getReason())
-                .setNotifyUrl(order.getNotifyUrl())
-                .setStatus(order.getStatus())
-                .setFinishTime(order.getFinishTime())
+        return buildContext(order)
                 .setPayeeType(order.getPayeeType())
                 .setPayeeAccount(order.getPayeeAccount())
                 .setPayeeName(order.getPayeeName())
@@ -477,25 +394,84 @@ public class TransferAssistService {
     }
 
     private TransferStrategyContext buildDouyinContext(DouyinTransferOrder order) {
-        return new TransferStrategyContext()
-                .setMchNo(order.getMchNo())
-                .setChannelMchNo(order.getChannelMchNo())
-                .setTransferNo(order.getTransferNo())
-                .setBizTransferNo(order.getBizTransferNo())
-                .setOutTransferNo(order.getOutTransferNo())
-                .setAmount(order.getAmount())
-                .setCurrency(order.getCurrency())
-                .setTitle(order.getTitle())
-                .setReason(order.getReason())
-                .setNotifyUrl(order.getNotifyUrl())
-                .setStatus(order.getStatus())
-                .setFinishTime(order.getFinishTime())
+        return buildContext(order)
                 .setPayeeType(order.getPayeeType())
                 .setPayeeAccount(order.getPayeeAccount())
                 .setPayeeName(order.getPayeeName())
                 .setTransferScene(order.getTransferScene())
                 // 恢复报备信息(FAIL重试时使用)
                 .setReportInfos(deserializeReportInfos(order.getReportInfos()));
+    }
+
+    // ===== 通道路由 =====
+
+    /// 镜像差异字段包(仅特有通道消费, null 表示不覆盖)
+    private record MirrorExtras(String transferBody, String transferScene, String wxAppId) {
+    }
+
+    /// 通道路由: 绑定容器加载/保存/CAS 与终态/处理中两段特有字段回写钩子
+    ///
+    /// casUpdater 对应各 Manager 自有的 CAS 方法; 泛型 [T] 保证钩子以具体容器类型操作, 全链零强转。
+    private record ChannelRoute<T extends TransferContainer>(
+            LongFunction<T> loader,
+            Consumer<T> saver,
+            BiFunction<T, Set<String>, Boolean> casUpdater,
+            BiConsumer<T, MirrorExtras> mirrorExtras,
+            BiConsumer<T, MirrorExtras> processingExtras) {
+    }
+
+    private ChannelRoute<WechatTransferOrder> wechatRoute() {
+        return new ChannelRoute<>(
+                id -> wechatTransferOrderManager.findById(id).orElse(null),
+                wechatTransferOrderManager::updateById,
+                wechatTransferOrderManager::casUpdateStatus,
+                // 终态: 拉起确认参数有值才覆盖
+                (order, extras) -> {
+                    if (extras.transferBody() != null) {
+                        order.setTransferBody(extras.transferBody());
+                    }
+                },
+                // 处理中: 拉起确认参数/微信 AppId 有值才覆盖
+                (order, extras) -> {
+                    if (extras.transferBody() != null) {
+                        order.setTransferBody(extras.transferBody());
+                    }
+                    if (extras.wxAppId() != null) {
+                        order.setWxAppId(extras.wxAppId());
+                    }
+                });
+    }
+
+    private ChannelRoute<AlipayTransferOrder> alipayRoute() {
+        return new ChannelRoute<>(
+                id -> alipayTransferOrderManager.findById(id).orElse(null),
+                alipayTransferOrderManager::updateById,
+                alipayTransferOrderManager::casUpdateStatus,
+                // 无终态特有字段
+                (order, extras) -> {
+                },
+                // 无处理中特有字段
+                (order, extras) -> {
+                });
+    }
+
+    private ChannelRoute<DouyinTransferOrder> douyinRoute() {
+        return new ChannelRoute<>(
+                id -> douyinTransferOrderManager.findById(id).orElse(null),
+                douyinTransferOrderManager::updateById,
+                douyinTransferOrderManager::casUpdateStatus,
+                // 终态: 转账场景有值才覆盖
+                (order, extras) -> {
+                    if (extras.transferScene() != null) {
+                        order.setTransferScene(extras.transferScene());
+                    }
+                },
+                // 处理中: 转账场景有值才覆盖
+                (order, extras) -> {
+                    if (extras.transferScene() != null) {
+                        order.setTransferScene(extras.transferScene());
+                    }
+                });
     }
 
     // ===== 报备信息序列化(容器持久化/重试恢复) =====

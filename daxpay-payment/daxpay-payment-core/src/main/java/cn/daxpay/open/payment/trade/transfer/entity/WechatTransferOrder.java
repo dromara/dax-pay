@@ -24,7 +24,7 @@ import java.time.OffsetDateTime;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName(value = "pay_transfer_order_wechat", autoResultMap = true)
-public class WechatTransferOrder extends MchBaseEntity {
+public class WechatTransferOrder extends MchBaseEntity implements TransferContainer {
 
     // ===== 身份 =====
 
