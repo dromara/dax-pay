@@ -33,7 +33,7 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Accessors(chain = true)
 @TableName(value = "pay_gateway_order", autoResultMap = true)
-public class GatewayPayOrder extends MchBaseEntity implements AllocatableContainer {
+public class GatewayPayOrder extends MchBaseEntity implements AllocatableContainer, PayReceiptContainer {
 
     /// 平台业务单号（容器身份，与 tradeNo 独立生成；预下单即生成、可无 trade；普通通道默认作为上送号 / URL 落地号）
     private String orderNo;

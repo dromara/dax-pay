@@ -11,6 +11,7 @@ import cn.daxpay.open.payment.trade.order.dao.NormalPayOrderManager;
 import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
 import cn.daxpay.open.payment.trade.order.entity.GatewayPayOrder;
 import cn.daxpay.open.payment.trade.order.entity.NormalPayOrder;
+import cn.daxpay.open.payment.trade.order.entity.PayReceiptContainer;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.trade.notice.service.TradeNoticeBridge;
 import cn.daxpay.open.payment.trade.flow.service.FundFlowService;
@@ -28,10 +29,14 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.Consumer;
+import java.util.function.LongFunction;
 
 /// # 交易统一处理服务
 ///
 /// 支付成功/失败/关闭后的统一处理逻辑, 按 trade_type 回写对应业务容器。
+/// 双容器([NormalPayOrder] / [GatewayPayOrder])经 [PayReceiptContainer] 契约统一操作,
+/// 加载/保存与各终态业务码差异由 [ContainerRoute] 路由承载。
 /// 通道回执字段(含 payBody)统一写容器; trade 仅资金态、outOrderNo、relationOrderNo(实际上送串)。
 @Slf4j
 @Service
@@ -59,37 +64,21 @@ public class PayUniHandleService {
         Set<String> expectFrom = Set.of(
                 PayFundStatusEnum.INIT.getCode(),
                 PayFundStatusEnum.PROCESSING.getCode());
-        if (isGateway(trade)) {
-            GatewayPayOrder order = gatewayPayOrderManager.findById(trade.getContainerId()).orElse(null);
-            // 渠道分布报表依赖 trade.provider: 空则从容器/method 兜底
-            applyProviderFallback(trade, order);
-            if (!updateTradeWithPosted(trade, expectFrom)) {
-                log.warn("payAfterHandel CAS 失败, 状态已被其他线程改变, tradeNo={}", trade.getTradeNo());
-                return;
+        ContainerRoute route = router(trade);
+        PayReceiptContainer order = route.loader().apply(trade.getContainerId());
+        // 渠道分布报表依赖 trade.provider: 空则从容器/method 兜底
+        applyProviderFallback(trade, order);
+        if (!updateTradeWithPosted(trade, expectFrom)) {
+            log.warn("payAfterHandel CAS 失败, 状态已被其他线程改变, tradeNo={}", trade.getTradeNo());
+            return;
+        }
+        if (order != null) {
+            applyReceipts(order, result);
+            if (Objects.equals(trade.getStatus(), PayFundStatusEnum.SUCCESS.getCode())) {
+                order.setStatus(route.paidCode());
+                order.setPayTime(trade.getPayTime());
             }
-            if (order != null) {
-                applyGatewayReceipts(order, result);
-                if (Objects.equals(trade.getStatus(), PayFundStatusEnum.SUCCESS.getCode())) {
-                    order.setStatus(GatewayOrderStatusEnum.PAID.getCode());
-                    order.setPayTime(trade.getPayTime());
-                }
-                gatewayPayOrderManager.updateById(order);
-            }
-        } else {
-            NormalPayOrder order = payNormalOrderManager.findById(trade.getContainerId()).orElse(null);
-            applyProviderFallback(trade, order);
-            if (!updateTradeWithPosted(trade, expectFrom)) {
-                log.warn("payAfterHandel CAS 失败, 状态已被其他线程改变, tradeNo={}", trade.getTradeNo());
-                return;
-            }
-            if (order != null) {
-                applyNormalReceipts(order, result);
-                if (Objects.equals(trade.getStatus(), PayFundStatusEnum.SUCCESS.getCode())) {
-                    order.setStatus(NormalPayOrderStatusEnum.PAID.getCode());
-                    order.setPayTime(trade.getPayTime());
-                }
-                payNormalOrderManager.updateById(order);
-            }
+            route.saver().accept(order);
         }
         // 出站通知 + 插件 + 事后风控: 仅支付成功时
         if (Objects.equals(trade.getStatus(), PayFundStatusEnum.SUCCESS.getCode())) {
@@ -103,33 +92,19 @@ public class PayUniHandleService {
         // CAS 前置态: 同步路径仅 PROCESSING 可翻转(终态收款证据走异常订单人工处置, 2026-08-29 决策)
         Set<String> expectFrom = Set.of(
                 PayFundStatusEnum.PROCESSING.getCode());
-        if (isGateway(trade)) {
-            GatewayPayOrder order = gatewayPayOrderManager.findById(trade.getContainerId()).orElse(null);
-            applyGatewaySyncReceipts(trade, order, syncResult);
-            applyProviderFallback(trade, order);
-            if (!updateTradeWithPosted(trade, expectFrom)) {
-                log.warn("paySuccess(sync) CAS 失败, 状态已被其他线程改变, tradeNo={}", trade.getTradeNo());
-                return;
-            }
-            if (order != null) {
-                order.setStatus(GatewayOrderStatusEnum.PAID.getCode());
-                order.setPayTime(trade.getPayTime());
-                gatewayPayOrderManager.updateById(order);
-            }
-            this.afterSuccess(trade, syncResult != null ? syncResult.getBuyerId() : null);
-            return;
-        }
-        NormalPayOrder order = payNormalOrderManager.findById(trade.getContainerId()).orElse(null);
-        applyNormalSyncReceipts(trade, order, syncResult);
+        ContainerRoute route = router(trade);
+        PayReceiptContainer order = route.loader().apply(trade.getContainerId());
+        applySyncReceipts(trade, order, syncResult);
         applyProviderFallback(trade, order);
         if (!updateTradeWithPosted(trade, expectFrom)) {
             log.warn("paySuccess(sync) CAS 失败, 状态已被其他线程改变, tradeNo={}", trade.getTradeNo());
             return;
         }
         if (order != null) {
-            order.setStatus(NormalPayOrderStatusEnum.PAID.getCode());
+            // provider 已在 applySyncReceipts 回填, 此处不重复兜底
+            order.setStatus(route.paidCode());
             order.setPayTime(trade.getPayTime());
-            payNormalOrderManager.updateById(order);
+            route.saver().accept(order);
         }
         this.afterSuccess(trade, syncResult != null ? syncResult.getBuyerId() : null);
     }
@@ -141,36 +116,19 @@ public class PayUniHandleService {
         Set<String> expectFrom = Set.of(
                 PayFundStatusEnum.PROCESSING.getCode(),
                 PayFundStatusEnum.INIT.getCode());
-        if (isGateway(trade)) {
-            GatewayPayOrder order = gatewayPayOrderManager.findById(trade.getContainerId()).orElse(null);
-            if (order != null && StrUtil.isNotBlank(buyerId)) {
-                order.setBuyerId(buyerId);
-            }
-            applyProviderFallback(trade, order);
-            if (!updateTradeWithPosted(trade, expectFrom)) {
-                log.warn("paySuccess(callback) CAS 失败, 状态已被其他线程改变, tradeNo={}", trade.getTradeNo());
-                return;
-            }
-            markContainerPaid(trade, order);
-        } else {
-            NormalPayOrder order = payNormalOrderManager.findById(trade.getContainerId()).orElse(null);
-            if (order != null && StrUtil.isNotBlank(buyerId)) {
-                order.setBuyerId(buyerId);
-            }
-            applyProviderFallback(trade, order);
-            if (!updateTradeWithPosted(trade, expectFrom)) {
-                log.warn("paySuccess(callback) CAS 失败, 状态已被其他线程改变, tradeNo={}", trade.getTradeNo());
-                return;
-            }
-            markContainerPaid(trade, order);
+        ContainerRoute route = router(trade);
+        PayReceiptContainer order = route.loader().apply(trade.getContainerId());
+        if (order != null && StrUtil.isNotBlank(buyerId)) {
+            order.setBuyerId(buyerId);
         }
+        applyProviderFallback(trade, order);
+        if (!updateTradeWithPosted(trade, expectFrom)) {
+            log.warn("paySuccess(callback) CAS 失败, 状态已被其他线程改变, tradeNo={}", trade.getTradeNo());
+            return;
+        }
+        markContainerPaid(trade, order, route);
         // 商户出站通知(系统协议)
         this.afterSuccess(trade, buyerId);
-    }
-
-    /// 支付成功后续处理(回调路径, 无回执详情)
-    public void paySuccess(PayTrade trade) {
-        paySuccess(trade, (String) null);
     }
 
     /// 人工确认支付成功(异常订单处置专用)
@@ -189,23 +147,14 @@ public class PayUniHandleService {
         trade.setStatus(PayFundStatusEnum.SUCCESS.getCode());
         trade.setPayTime(now);
         trade.setCloseTime(null);
-        if (isGateway(trade)) {
-            GatewayPayOrder order = gatewayPayOrderManager.findById(trade.getContainerId()).orElse(null);
-            applyProviderFallback(trade, order);
-            if (!updateTradeWithPosted(trade, expectFrom)) {
-                log.warn("confirmPaySuccess CAS 失败, 状态已被其他线程改变, tradeNo={}", trade.getTradeNo());
-                return;
-            }
-            markContainerPaid(trade, order);
-        } else {
-            NormalPayOrder order = payNormalOrderManager.findById(trade.getContainerId()).orElse(null);
-            applyProviderFallback(trade, order);
-            if (!updateTradeWithPosted(trade, expectFrom)) {
-                log.warn("confirmPaySuccess CAS 失败, 状态已被其他线程改变, tradeNo={}", trade.getTradeNo());
-                return;
-            }
-            markContainerPaid(trade, order);
+        ContainerRoute route = router(trade);
+        PayReceiptContainer order = route.loader().apply(trade.getContainerId());
+        applyProviderFallback(trade, order);
+        if (!updateTradeWithPosted(trade, expectFrom)) {
+            log.warn("confirmPaySuccess CAS 失败, 状态已被其他线程改变, tradeNo={}", trade.getTradeNo());
+            return;
         }
+        markContainerPaid(trade, order, route);
         this.afterSuccess(trade, null);
     }
 
@@ -302,80 +251,45 @@ public class PayUniHandleService {
         gatewayPayOrderManager.updateById(order);
     }
 
-    /// 容器置已支付; 若已加载实体则复用, 避免重复查询, 并同步 provider
-    private void markContainerPaid(PayTrade trade, GatewayPayOrder order) {
+    /// 容器置已支付; 若已加载实体则复用, 避免重复查询, 并同步 provider 回填
+    private void markContainerPaid(PayTrade trade, PayReceiptContainer order, ContainerRoute route) {
         if (order == null) {
             return;
         }
-        order.setStatus(GatewayOrderStatusEnum.PAID.getCode());
+        order.setStatus(route.paidCode());
         order.setPayTime(trade.getPayTime());
         if (StrUtil.isBlank(order.getProvider()) && StrUtil.isNotBlank(trade.getProvider())) {
             order.setProvider(trade.getProvider());
         }
-        gatewayPayOrderManager.updateById(order);
-    }
-
-    /// 普通容器置已支付, 同步 provider 回填
-    private void markContainerPaid(PayTrade trade, NormalPayOrder order) {
-        if (order == null) {
-            return;
-        }
-        order.setStatus(NormalPayOrderStatusEnum.PAID.getCode());
-        order.setPayTime(trade.getPayTime());
-        if (StrUtil.isBlank(order.getProvider()) && StrUtil.isNotBlank(trade.getProvider())) {
-            order.setProvider(trade.getProvider());
-        }
-        payNormalOrderManager.updateById(order);
+        route.saver().accept(order);
     }
 
     /// 支付失败: 容器 FAILED
     private void markContainerFailed(PayTrade trade, OffsetDateTime now, String errMsg) {
         String msg = truncateErrorMsg(errMsg);
-        if (isGateway(trade)) {
-            GatewayPayOrder order = gatewayPayOrderManager.findById(trade.getContainerId()).orElse(null);
-            if (order != null) {
-                order.setStatus(GatewayOrderStatusEnum.FAILED.getCode());
-                order.setCloseTime(now);
-                order.setErrorMsg(msg);
-                gatewayPayOrderManager.updateById(order);
-            }
-            return;
-        }
-        NormalPayOrder normalOrder = payNormalOrderManager.findById(trade.getContainerId()).orElse(null);
-        if (normalOrder != null) {
-            normalOrder.setStatus(NormalPayOrderStatusEnum.FAILED.getCode());
-            normalOrder.setCloseTime(now);
-            normalOrder.setErrorMsg(msg);
-            payNormalOrderManager.updateById(normalOrder);
+        ContainerRoute route = router(trade);
+        PayReceiptContainer order = route.loader().apply(trade.getContainerId());
+        if (order != null) {
+            order.setStatus(route.failedCode());
+            order.setCloseTime(now);
+            order.setErrorMsg(msg);
+            route.saver().accept(order);
         }
     }
 
     /// 容器置关闭(CLOSED)或超时(EXPIRED)
     private void markContainerClosed(PayTrade trade, OffsetDateTime now, boolean expired, String errMsg) {
-        if (isGateway(trade)) {
-            GatewayPayOrder order = gatewayPayOrderManager.findById(trade.getContainerId()).orElse(null);
-            if (order != null) {
-                order.setStatus(expired
-                        ? GatewayOrderStatusEnum.EXPIRED.getCode()
-                        : GatewayOrderStatusEnum.CLOSED.getCode());
-                order.setCloseTime(now);
-                if (errMsg != null) {
-                    order.setErrorMsg(truncateErrorMsg(errMsg));
-                }
-                gatewayPayOrderManager.updateById(order);
-            }
-            return;
-        }
-        NormalPayOrder normalOrder = payNormalOrderManager.findById(trade.getContainerId()).orElse(null);
-        if (normalOrder != null) {
-            normalOrder.setStatus(expired
-                    ? NormalPayOrderStatusEnum.EXPIRED.getCode()
-                    : NormalPayOrderStatusEnum.CLOSED.getCode());
-            normalOrder.setCloseTime(now);
+        ContainerRoute route = router(trade);
+        PayReceiptContainer order = route.loader().apply(trade.getContainerId());
+        if (order != null) {
+            order.setStatus(expired
+                    ? route.expiredCode()
+                    : route.closedCode());
+            order.setCloseTime(now);
             if (errMsg != null) {
-                normalOrder.setErrorMsg(truncateErrorMsg(errMsg));
+                order.setErrorMsg(truncateErrorMsg(errMsg));
             }
-            payNormalOrderManager.updateById(normalOrder);
+            route.saver().accept(order);
         }
     }
 
@@ -387,8 +301,8 @@ public class PayUniHandleService {
         return errMsg.length() <= 500 ? errMsg : errMsg.substring(0, 500);
     }
 
-    /// 普通容器写入支付回执字段(transOrderNo/buyerId/payBody 等)
-    private void applyNormalReceipts(NormalPayOrder order, PayTradeResultBo result) {
+    /// 容器写入支付回执字段(transOrderNo/buyerId/payBody 等)
+    private void applyReceipts(PayReceiptContainer order, PayTradeResultBo result) {
         order.setTransOrderNo(result.getTransOrderNo());
         // 特殊通道返回变形上送号时回写容器展示; 空则保留创建时的 orderNo 副本
         if (result.getRelationOrderNo() != null) {
@@ -406,50 +320,8 @@ public class PayUniHandleService {
         order.setErrorMsg(null);
     }
 
-    /// 网关容器写入支付回执字段(transOrderNo/buyerId/payBody 等)
-    private void applyGatewayReceipts(GatewayPayOrder order, PayTradeResultBo result) {
-        order.setTransOrderNo(result.getTransOrderNo());
-        if (result.getRelationOrderNo() != null) {
-            order.setRelationOrderNo(result.getRelationOrderNo());
-        }
-        order.setBuyerId(result.getBuyerId());
-        order.setTradeProduct(result.getTradeProduct());
-        order.setTradeWay(result.getTradeWay());
-        order.setBankType(result.getBankType());
-        order.setPromotionType(result.getPromotionType());
-        // 支付参数体仅落容器
-        order.setPayBody(result.getPayBody());
-        order.setPayBodyType(Objects.nonNull(result.getPayBodyType())
-                ? result.getPayBodyType().getCode() : null);
-        order.setErrorMsg(null);
-    }
-
-    /// 普通容器写入同步查单回执字段(含 provider 回填)
-    private void applyNormalSyncReceipts(PayTrade trade, NormalPayOrder order, PaySyncResultBo syncResult) {
-        if (syncResult == null) {
-            return;
-        }
-        if (Objects.nonNull(syncResult.getProvider())) {
-            String providerCode = syncResult.getProvider().getCode();
-            if (order != null) {
-                order.setProvider(providerCode);
-            }
-            // 冗余至资金凭证, 渠道分布报表/资金列表免 JOIN 容器
-            trade.setProvider(providerCode);
-        }
-        if (order == null) {
-            return;
-        }
-        order.setBuyerId(syncResult.getBuyerId());
-        order.setTradeProduct(syncResult.getTradeProduct());
-        order.setTradeWay(syncResult.getTradeWay());
-        order.setBankType(syncResult.getBankType());
-        order.setPromotionType(syncResult.getPromotionType());
-        order.setErrorMsg(null);
-    }
-
-    /// 网关容器写入同步查单回执字段(含 provider 回填)
-    private void applyGatewaySyncReceipts(PayTrade trade, GatewayPayOrder order, PaySyncResultBo syncResult) {
+    /// 容器写入同步查单回执字段(含 provider 回填)
+    private void applySyncReceipts(PayTrade trade, PayReceiptContainer order, PaySyncResultBo syncResult) {
         if (syncResult == null) {
             return;
         }
@@ -473,7 +345,7 @@ public class PayUniHandleService {
     }
 
     /// trade.provider 为空时从容器 provider / method 兜底, 并回写容器空 provider
-    private void applyProviderFallback(PayTrade trade, NormalPayOrder order) {
+    private void applyProviderFallback(PayTrade trade, PayReceiptContainer order) {
         String containerProvider = order != null ? order.getProvider() : null;
         String method = order != null ? order.getMethod() : null;
         String provider = PayTradeProviderUtil.coalesceProvider(trade.getProvider(), containerProvider, method);
@@ -486,18 +358,37 @@ public class PayUniHandleService {
         }
     }
 
-    /// provider 兜底填充: trade 空则从网关容器 provider/method 派生
-    private void applyProviderFallback(PayTrade trade, GatewayPayOrder order) {
-        String containerProvider = order != null ? order.getProvider() : null;
-        String method = order != null ? order.getMethod() : null;
-        String provider = PayTradeProviderUtil.coalesceProvider(trade.getProvider(), containerProvider, method);
-        if (StrUtil.isBlank(provider)) {
-            return;
+    /// 容器路由: 按交易类型绑定容器加载/保存函数与各终态业务码
+    ///
+    /// loader 返回 null 表示容器不存在(预下单前的关单等场景); saver 的强转安全
+    /// 由"容器必经同一路由的 loader 加载"保证。
+    private record ContainerRoute(
+            LongFunction<PayReceiptContainer> loader,
+            Consumer<PayReceiptContainer> saver,
+            String paidCode,
+            String failedCode,
+            String closedCode,
+            String expiredCode) {
+    }
+
+    /// 按资金凭证交易类型路由到对应业务容器
+    private ContainerRoute router(PayTrade trade) {
+        if (isGateway(trade)) {
+            return new ContainerRoute(
+                    id -> gatewayPayOrderManager.findById(id).orElse(null),
+                    order -> gatewayPayOrderManager.updateById((GatewayPayOrder) order),
+                    GatewayOrderStatusEnum.PAID.getCode(),
+                    GatewayOrderStatusEnum.FAILED.getCode(),
+                    GatewayOrderStatusEnum.CLOSED.getCode(),
+                    GatewayOrderStatusEnum.EXPIRED.getCode());
         }
-        trade.setProvider(provider);
-        if (order != null && StrUtil.isBlank(order.getProvider())) {
-            order.setProvider(provider);
-        }
+        return new ContainerRoute(
+                id -> payNormalOrderManager.findById(id).orElse(null),
+                order -> payNormalOrderManager.updateById((NormalPayOrder) order),
+                NormalPayOrderStatusEnum.PAID.getCode(),
+                NormalPayOrderStatusEnum.FAILED.getCode(),
+                NormalPayOrderStatusEnum.CLOSED.getCode(),
+                NormalPayOrderStatusEnum.EXPIRED.getCode());
     }
 
     /// 判断资金凭证是否为网关支付类型
