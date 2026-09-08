@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.trade.runtime.service.callback;
 
+import cn.daxpay.open.payment.common.lock.TradeLockKeys;
 import cn.daxpay.open.payment.trade.abnormal.service.AbnormalOrderService;
 import cn.daxpay.open.payment.trade.runtime.bo.CallbackData;
 import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
@@ -66,7 +67,7 @@ public class PayCallbackService {
         // 统一锁键: payment:trade:{tradeId}, 与同步/关单路径互斥
         Long tradeId = trade.getId();
         TryLockResult<String> result = lockExecutor.tryExecute(
-                "payment:trade:" + tradeId,
+                TradeLockKeys.trade(tradeId),
                 // 执行具体逻辑
                 () -> self.doPayCallback(callbackData, tradeId)
         );

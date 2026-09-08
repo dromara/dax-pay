@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.trade.transfer.runtime.service;
 
+import cn.daxpay.open.payment.common.lock.TradeLockKeys;
 import cn.daxpay.open.payment.strategy.transfer.AbsTransferStrategy;
 import cn.daxpay.open.payment.strategy.transfer.TransferStrategyContext;
 import cn.daxpay.open.payment.strategy.transfer.TransferStrategyFactory;
@@ -37,7 +38,7 @@ public class TransferCloseService {
     public void close(String channel, Long id) {
         TransferTrade trade = assistService.findTradeByContainer(channel, id)
                 .orElseThrow(() -> new BizInfoException(CommonCode.FAIL_CODE, "pay.error.transfer.notFound"));
-        lockExecutor.run(TransferAssistService.tradeLockKey(trade.getId()), () -> {
+        lockExecutor.run(TradeLockKeys.transferTrade(trade.getId()), () -> {
             // 锁内二次读: 仅处理中可关闭
             TransferTrade latestTrade = transferTradeManager.findById(trade.getId()).orElse(null);
             if (latestTrade == null

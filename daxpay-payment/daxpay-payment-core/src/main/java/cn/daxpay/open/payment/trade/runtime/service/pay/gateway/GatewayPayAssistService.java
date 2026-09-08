@@ -3,6 +3,7 @@ package cn.daxpay.open.payment.trade.runtime.service.pay.gateway;
 import cn.daxpay.open.payment.trade.enums.GatewayOrderStatusEnum;
 import cn.daxpay.open.payment.trade.enums.GatewayPayTypeEnum;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
+import cn.daxpay.open.payment.common.lock.TradeLockKeys;
 import cn.daxpay.open.payment.merchant.service.store.MchStoreInfoService;
 import cn.daxpay.open.payment.trade.order.dao.GatewayPayOrderManager;
 import cn.daxpay.open.payment.trade.order.entity.GatewayPayOrder;
@@ -88,7 +89,7 @@ public class GatewayPayAssistService {
         // 幂等维度为商户(bizOrderNo 同商户唯一), 发起锁按商户隔离, 不同商户同单号不互相争锁
         try {
             return lockExecutor.execute(
-                    "payment:gateway:pre:" + param.getMchNo() + ":" + param.getBizOrderNo(),
+                    TradeLockKeys.gatewayPre(param.getMchNo(), param.getBizOrderNo()),
                     () -> self.doPrePay(param, typeEnum),
                     () -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.processing")
             );

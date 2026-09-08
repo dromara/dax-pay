@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.trade.runtime.service.callback;
 
+import cn.daxpay.open.payment.common.lock.TradeLockKeys;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundCallbackData;
 import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.trade.order.dao.RefundOrderManager;
@@ -36,7 +37,8 @@ public class RefundCallbackService {
     public void refundCallback(RefundCallbackData callbackData) {
         String lockId = StrUtil.blankToDefault(callbackData.getRefundNo(),
                 StrUtil.blankToDefault(callbackData.getRelationOrderNo(), callbackData.getOutRefundNo()));
-        if (!lockExecutor.tryRun("callback:refund:" + lockId, () -> {
+        // 锁键统一挂 payment: 命名空间(历史为 callback:refund:, 收编时对齐)
+        if (!lockExecutor.tryRun(TradeLockKeys.refundCallback(lockId), () -> {
             RefundOrder refundOrder = resolveRefundOrder(callbackData);
             if (Objects.isNull(refundOrder)) {
                 callbackData.setCallbackStatus(CallbackStatusEnum.NOT_FOUND)

@@ -185,8 +185,10 @@ public class PaymentVerifyAspect {
         } else if (param != null) {
             try {
                 event.setReqParam(JacksonUtil.toJson(param));
-            } catch (Exception ignored) {
-                // ignore
+            } catch (Exception e) {
+                // 序列化失败置空, debug 级留痕(审计字段缺失可排查)
+                log.debug("审计请求参数序列化失败, 置空: {}", e.getMessage());
+                event.setReqParam(null);
             }
         }
 
@@ -214,8 +216,10 @@ public class PaymentVerifyAspect {
                 errBody.put("exception", error.getClass().getSimpleName());
                 errBody.put("message", error.getMessage());
                 event.setResBody(JacksonUtil.toJson(errBody));
-            } catch (Exception ignored) {
-                // ignore
+            } catch (Exception e) {
+                // 序列化失败置空, debug 级留痕(审计字段缺失可排查)
+                log.debug("审计错误响应序列化失败, 置空: {}", e.getMessage());
+                event.setResBody(null);
             }
         } else {
             event.setSuccess(true);

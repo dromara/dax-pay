@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.trade.abnormal.service;
 
+import cn.daxpay.open.payment.common.lock.TradeLockKeys;
 import cn.daxpay.open.payment.trade.abnormal.dao.AbnormalOrderManager;
 import cn.daxpay.open.payment.trade.abnormal.entity.AbnormalOrder;
 import cn.daxpay.open.payment.trade.abnormal.enums.AbnormalHandleStatusEnum;
@@ -80,7 +81,7 @@ public class AbnormalOrderService {
         PayTrade trade = payTradeManager.findByTradeNoNotTenant(boot.getTradeNo())
                 .orElseThrow(() -> new DataNotExistException("pay.error.payOrderNotExist"));
         lockExecutor.run(
-                "payment:trade:" + trade.getId(),
+                TradeLockKeys.trade(trade.getId()),
                 () -> self.doConfirmSuccess(id, handler, remark),
                 () -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.closeProcessing")
         );

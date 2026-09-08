@@ -4,6 +4,7 @@ import cn.daxpay.open.payment.trade.enums.GatewayOrderStatusEnum;
 import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
+import cn.daxpay.open.payment.common.lock.TradeLockKeys;
 import cn.daxpay.open.payment.route.service.runtime.PayRouteService;
 import cn.daxpay.open.payment.trade.alloc.enums.TradeAllocStatusEnum;
 import cn.daxpay.open.payment.trade.alloc.runtime.service.AllocCapabilityService;
@@ -68,8 +69,8 @@ public class GatewayPayHandleService {
                                   String openId, String clientEnv, String device, String clientIp) {
         // 锁租期 60s 覆盖通道 HTTP 超时(40s), 等待 3s 让并发同号请求排队而非立即失败
         return lockExecutor.execute(
-                "payment:gateway:pay:" + order.getOrderNo(),
-                60000, 3000,
+                TradeLockKeys.gatewayPay(order.getOrderNo()),
+                TradeLockKeys.LONG_EXPIRE, TradeLockKeys.LONG_WAIT,
                 () -> {
                     // 重新加载最新状态
                     GatewayPayOrder current = gatewayPayOrderManager.findById(order.getId())

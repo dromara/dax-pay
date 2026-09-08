@@ -1,6 +1,7 @@
 package cn.daxpay.open.payment.trade.runtime.service.close;
 
 import cn.daxpay.open.payment.common.context.PaymentContext;
+import cn.daxpay.open.payment.common.lock.TradeLockKeys;
 import cn.daxpay.open.payment.trade.enums.GatewayOrderStatusEnum;
 import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum;
@@ -130,9 +131,9 @@ public class PayCloseService {
             throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.pay.closeNotPaying");
         }
         lockExecutor.run(
-                "payment:trade:" + trade.getId(),
-                10000,
-                50,
+                TradeLockKeys.trade(trade.getId()),
+                TradeLockKeys.SHORT_EXPIRE,
+                TradeLockKeys.SHORT_WAIT,
                 () -> {
                     // 持锁后二次读取状态, 避免与回调成功竞态把已成功单关掉
                     PayTrade locked = payTradeManager.findById(trade.getId()).orElse(null);
@@ -200,7 +201,7 @@ public class PayCloseService {
             log.error("超时关单交易缺少 mchNo, tradeNo={}", tradeNo);
             return;
         }
-        if (!lockExecutor.tryRun("payment:trade:" + boot.getId(), 10000, 50, () ->
+        if (!lockExecutor.tryRun(TradeLockKeys.trade(boot.getId()), TradeLockKeys.SHORT_EXPIRE, TradeLockKeys.SHORT_WAIT, () ->
                 paymentContext.runAs(() -> {
                     paymentContext.setMchNo(boot.getMchNo());
                     PayTrade trade = payTradeManager.findByTradeNo(tradeNo).orElse(null);

@@ -1,6 +1,7 @@
 package cn.daxpay.open.payment.trade.runtime.service.close;
 
 import cn.daxpay.open.payment.common.context.PaymentContext;
+import cn.daxpay.open.payment.common.lock.TradeLockKeys;
 import cn.daxpay.open.payment.trade.enums.GatewayOrderStatusEnum;
 import cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum;
 import cn.daxpay.open.payment.trade.order.dao.GatewayPayOrderManager;
@@ -42,7 +43,7 @@ public class GatewayTimeoutService {
                 .contains(order.getStatus())) {
             return;
         }
-        if (!lockExecutor.tryRun("payment:gateway:timeout:" + order.getId(), 10000, 50, () -> {
+        if (!lockExecutor.tryRun(TradeLockKeys.gatewayTimeout(order.getId()), TradeLockKeys.SHORT_EXPIRE, TradeLockKeys.SHORT_WAIT, () -> {
             GatewayPayOrder current = gatewayPayOrderManager.findByOrderNoNotTenant(orderNo).orElse(null);
             if (current == null
                     || !List.of(GatewayOrderStatusEnum.WAIT_PAY.getCode(), GatewayOrderStatusEnum.PAYING.getCode())

@@ -28,7 +28,7 @@ import java.util.Set;
 /// # 分账辅助服务
 ///
 /// 分账单(主表) + 明细表的读写唯一事实源。
-/// 所有状态变更方法都要求调用方持分布式锁([AllocAssistService#allocLockKey]),
+/// 所有状态变更方法都要求调用方持分布式锁([TradeLockKeys#allocTrade]),
 /// 与同步/回调路径互斥, 保证并发安全。
 ///
 /// 与转账不同: 分账无"容器+凭证"双层, 主表直接携带通道凭证快照,
@@ -38,18 +38,10 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class AllocAssistService {
 
-    /// 分账状态变更互斥锁前缀(与分账单主键组合)
-    public static final String ALLOC_LOCK_PREFIX = "payment:alloc-trade:";
-
     private final AllocOrderManager allocOrderManager;
     private final AllocDetailManager allocDetailManager;
     private final PayTradeManager payTradeManager;
     private final TradeNoticeBridge tradeNoticeBridge;
-
-    /// 分账状态变更互斥锁 key
-    public static String allocLockKey(Long allocOrderId) {
-        return ALLOC_LOCK_PREFIX + allocOrderId;
-    }
 
     /// 根据商户分账单号查找已有分账单(幂等查重主路径)
     public Optional<AllocOrder> findByBizAllocNo(String bizAllocNo, String mchNo) {

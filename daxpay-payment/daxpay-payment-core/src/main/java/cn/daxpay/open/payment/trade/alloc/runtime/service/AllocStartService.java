@@ -2,6 +2,7 @@ package cn.daxpay.open.payment.trade.alloc.runtime.service;
 
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import cn.daxpay.open.payment.common.context.PaymentContext;
+import cn.daxpay.open.payment.common.lock.TradeLockKeys;
 import cn.daxpay.open.payment.trade.alloc.bo.AllocResultBo;
 import cn.daxpay.open.payment.trade.alloc.dao.AllocDetailManager;
 import cn.daxpay.open.payment.trade.alloc.entity.AllocDetail;
@@ -11,6 +12,7 @@ import cn.daxpay.open.payment.trade.alloc.enums.TradeAllocStatusEnum;
 import cn.daxpay.open.payment.trade.alloc.param.AllocParam;
 import cn.daxpay.open.payment.trade.alloc.runtime.bo.AllocatableContainer;
 import cn.daxpay.open.payment.trade.alloc.runtime.mq.AllocSyncMessage;
+import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum;
 import cn.daxpay.open.payment.trade.order.dao.GatewayPayOrderManager;
 import cn.daxpay.open.payment.trade.order.dao.NormalPayOrderManager;
@@ -32,7 +34,7 @@ import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.CurrencyEnum;
 import cn.daxpay.open.platform.core.exception.BizException;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
-import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
+import cn.daxpay.open.platform.common.i18n.util.BizErrorMessageUtil;
 import cn.daxpay.open.platform.core.util.TradeNoGenerateUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,7 +44,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -88,8 +89,8 @@ public class AllocStartService {
         String mchNo = paymentContext.getMchNo();
         // 锁租期 60s 覆盖通道 HTTP 超时, 等待 3s 让并发同号请求排队
         return lockExecutor.execute(
-                "payment:alloc:" + mchNo + ":" + param.getBizAllocNo(),
-                60000, 3000,
+                TradeLockKeys.alloc(mchNo, param.getBizAllocNo()),
+                TradeLockKeys.LONG_EXPIRE, TradeLockKeys.LONG_WAIT,
                 () -> this.startHandle(param),
                 () -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.alloc.allocProcessing")
         );
@@ -111,8 +112,8 @@ public class AllocStartService {
         // 后到者在锁内二次读看到 processing → 校验拒绝, 保证同一订单同时最多一笔分账。
         // 锁租期 60s 覆盖通道 HTTP 超时, 等待 3s 让并发同号请求排队。
         return lockExecutor.execute(
-                "payment:alloc-trade:" + tradeNo,
-                60000, 3000,
+                TradeLockKeys.allocTradeByPayTradeNo(tradeNo),
+                TradeLockKeys.LONG_EXPIRE, TradeLockKeys.LONG_WAIT,
                 () -> this.startWithTradeLock(param),
                 () -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "pay.error.alloc.allocProcessing")
@@ -188,7 +189,7 @@ public class AllocStartService {
             log.error("分账发起失败: allocNo={}, channel={}", allocOrder.getAllocNo(), channel, e);
             if (e instanceof BizException biz) {
                 // 通道明确拒绝(参数/接收方等业务异常): 置 fail, 回退原支付 alloc_status=none 允许重新发起
-                assistService.fail(allocOrder, null, resolveErrorMsg(e));
+                assistService.fail(allocOrder, null, BizErrorMessageUtil.resolve(e));
                 throw biz;
             }
             // 结果未知(网络/超时等非业务异常): 通道可能已受理, 保留 processing 由延迟同步/定时任务纠正。
@@ -280,7 +281,7 @@ public class AllocStartService {
     /// 校验原支付可分账
     private void validateAllocatable(PayTrade trade, AllocParam param) {
         // 原支付须成功
-        if (!Objects.equals(trade.getStatus(), "success")) {
+        if (!Objects.equals(trade.getStatus(), PayFundStatusEnum.SUCCESS.getCode())) {
             throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.alloc.orderNotSuccess");
         }
         // 原支付未分账: 处理中或已分账都拒绝
@@ -374,16 +375,5 @@ public class AllocStartService {
                 log.warn("注册分账延迟同步失败, 由定时任务兜底, allocNo={}, delay={}s", allocNo, delaySeconds, e);
             }
         }
-    }
-
-    /// 异常本地化解析(key → 固定中文)
-    private String resolveErrorMsg(Throwable e) {
-        if (e instanceof BizException biz) {
-            String key = biz.resolveMessageKey();
-            if (key != null) {
-                return I18nUtil.get(key, Locale.CHINA, biz.getArgs());
-            }
-        }
-        return e.getMessage();
     }
 }

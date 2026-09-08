@@ -2,6 +2,7 @@ package cn.daxpay.open.payment.trade.runtime.service.refund;
 
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import cn.daxpay.open.payment.common.context.PaymentContext;
+import cn.daxpay.open.payment.common.lock.TradeLockKeys;
 import cn.daxpay.open.payment.route.service.runtime.PayRouteService;
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
@@ -10,7 +11,7 @@ import cn.daxpay.open.platform.core.exception.BizException;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.ChannelResultUnknownException;
 import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
-import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
+import cn.daxpay.open.platform.common.i18n.util.BizErrorMessageUtil;
 import cn.daxpay.open.platform.common.spring.util.WebServletUtil;
 import cn.daxpay.open.platform.core.util.TradeNoGenerateUtil;
 import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
@@ -38,7 +39,6 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Locale;
 import java.util.Objects;
 
 /// # 退款服务
@@ -102,9 +102,9 @@ public class RefundService {
         // 锁租期 60s 覆盖通道 HTTP 超时(40s), 等待 3s(并发退款排队而非立即失败)
         try {
             return lockExecutor.execute(
-                    RefundSettleService.lockKey(trade.getTradeNo()),
-                    60000,
-                    3000,
+                    TradeLockKeys.refundTrade(trade.getTradeNo()),
+                    TradeLockKeys.LONG_EXPIRE,
+                    TradeLockKeys.LONG_WAIT,
                     () -> {
                         // 二次校验可退余额(持锁后)
                         PayTrade lockedTrade = payTradeManager.findById(trade.getId()).orElseThrow();
@@ -141,13 +141,13 @@ public class RefundService {
                             log.warn("通道退款结果未知, 保持处理中交由同步纠正: refundNo={}",
                                     refundOrder.getRefundNo(), e);
                             refundSettleService.applyProgressResult(
-                                    refundOrder, null, null, null, resolveErrorMsg(e));
+                                    refundOrder, null, null, null, BizErrorMessageUtil.resolve(e));
                             throw e;
                         } catch (Exception e) {
                             log.error("通道退款失败, refundNo={}", refundOrder.getRefundNo(), e);
                             // 预占回滚 + 退款单 FAIL（独立补偿事务）
                             refundSettleService.settleFailOrCloseUnderLock(
-                                    refundOrder.getId(), false, null, null, null, resolveErrorMsg(e));
+                                    refundOrder.getId(), false, null, null, null, BizErrorMessageUtil.resolve(e));
                             throw e;
                         }
 
@@ -170,22 +170,6 @@ public class RefundService {
             // 退款: 退款处理失败
             throw new OperationFailException(CommonCode.FAIL_CODE, "pay.error.operateFailed");
         }
-    }
-
-    /// 解析异常为本地化错误消息
-    ///
-    /// [BizException] 的 getMessage() 返回 i18n messageKey(未经 I18nUtil 解析), 直接落库会导致退款单
-    /// errorMsg 存 key 字符串(如 "error.channel.wechat.refundFailed")。本方法按固定中文(Locale.CHINA)
-    /// 解析, 保证落库文案不随请求语言变化; 非 BizException 的 getMessage() 已是真实文案, 直接使用。
-    /// 与 [TransferStartService#resolveErrorMsg] 同源, 转账侧已有先例。
-    private String resolveErrorMsg(Throwable e) {
-        if (e instanceof BizException biz) {
-            String key = biz.resolveMessageKey();
-            if (key != null) {
-                return I18nUtil.get(key, Locale.CHINA, biz.getArgs());
-            }
-        }
-        return e.getMessage();
     }
 
     /// 解析原支付交易

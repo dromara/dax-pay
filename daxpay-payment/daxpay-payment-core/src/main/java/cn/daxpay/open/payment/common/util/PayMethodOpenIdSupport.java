@@ -58,18 +58,16 @@ public final class PayMethodOpenIdSupport {
         if (METHODS_NEED_OPEN_ID.contains(methodCode)) {
             return true;
         }
-        try {
-            PayMethodEnum method = PayMethodEnum.findByCode(methodCode);
-            return switch (method) {
-                case WECHAT_JSAPI, WECHAT_MINI, ALIPAY_JSAPI, UNION_JSAPI, DOUYIN_JSAPI -> true;
-                default -> false;
-            };
-        }
-        catch (Exception e) {
+        PayMethodEnum method = PayMethodEnum.findByCodeOrNull(methodCode);
+        if (method == null) {
             // 未知扩展 method: 含 jsapi/mini 视作需要
             String lower = methodCode.toLowerCase();
             return lower.contains("jsapi") || lower.contains("mini");
         }
+        return switch (method) {
+            case WECHAT_JSAPI, WECHAT_MINI, ALIPAY_JSAPI, UNION_JSAPI, DOUYIN_JSAPI -> true;
+            default -> false;
+        };
     }
 
     /// 该支付方式 + 客户端环境组合下, 是否可走 OAuth 静默获取 openId
@@ -112,19 +110,18 @@ public final class PayMethodOpenIdSupport {
         if (METHODS_NO_OAUTH_AT_ALL.contains(methodCode)) {
             return true;
         }
-        try {
-            PayMethodEnum method = PayMethodEnum.findByCode(methodCode);
-            return switch (method) {
-                case WECHAT_BARCODE, ALIPAY_BARCODE, UNION_BARCODE,
-                     WECHAT_APP, ALIPAY_APP, DOUYIN_APP,
-                     ALIPAY_PC, VISA_CARD_GATEWAY, VISA_CARD_PRESENT,
-                     MASTERCARD_CARD_GATEWAY, MASTERCARD_CARD_PRESENT,
-                     WECHAT_CASHIER, AGGREGATE_PAY_QRCODE, OTHER -> true;
-                default -> false;
-            };
-        } catch (Exception e) {
+        PayMethodEnum method = PayMethodEnum.findByCodeOrNull(methodCode);
+        if (method == null) {
             // 未知扩展 method: 保守视为不可
             return true;
         }
+        return switch (method) {
+            case WECHAT_BARCODE, ALIPAY_BARCODE, UNION_BARCODE,
+                 WECHAT_APP, ALIPAY_APP, DOUYIN_APP,
+                 ALIPAY_PC, VISA_CARD_GATEWAY, VISA_CARD_PRESENT,
+                 MASTERCARD_CARD_GATEWAY, MASTERCARD_CARD_PRESENT,
+                 WECHAT_CASHIER, AGGREGATE_PAY_QRCODE, OTHER -> true;
+            default -> false;
+        };
     }
 }

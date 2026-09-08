@@ -1,6 +1,7 @@
 package cn.daxpay.open.payment.trade.transfer.runtime.service;
 
 import cn.daxpay.open.payment.strategy.transfer.TransferStrategyContext;
+import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.trade.notice.service.TradeNoticeBridge;
 import cn.daxpay.open.payment.trade.transfer.dao.AlipayTransferOrderManager;
 import cn.daxpay.open.payment.trade.transfer.dao.DouyinTransferOrderManager;
@@ -40,9 +41,6 @@ import java.util.Set;
 @Service
 @RequiredArgsConstructor
 public class TransferAssistService {
-
-    /// 转账状态变更互斥锁前缀(与凭证主键组合)
-    public static final String TRADE_LOCK_PREFIX = "payment:transfer-trade:";
 
     /// 容器镜像更新结果
     ///
@@ -98,11 +96,6 @@ public class TransferAssistService {
         return Optional.of(context);
     }
 
-    /// 凭证主键 → 锁键
-    public static String tradeLockKey(Long tradeId) {
-        return TRADE_LOCK_PREFIX + tradeId;
-    }
-
     // ===== 建单(事务内调用, 容器+凭证双写) =====
 
     /// 按通道建容器并双写公共资金凭证, 返回装配好的策略上下文
@@ -128,7 +121,7 @@ public class TransferAssistService {
                         .setReason(param.getReason())
                         .setNotifyUrl(param.getNotifyUrl())
                         .setAttach(param.getAttach())
-                        .setStatus("processing")
+                        .setStatus(PayFundStatusEnum.PROCESSING.getCode())
                         .setReqTime(OffsetDateTime.now());
                 // 商户号独立赋值(父类 setter 返回 MchBaseEntity, 禁止链式)
                 order.setMchNo(mchNo);
@@ -152,7 +145,7 @@ public class TransferAssistService {
                         .setReason(param.getReason())
                         .setNotifyUrl(param.getNotifyUrl())
                         .setAttach(param.getAttach())
-                        .setStatus("processing")
+                        .setStatus(PayFundStatusEnum.PROCESSING.getCode())
                         .setReqTime(OffsetDateTime.now());
                 // 商户号独立赋值(父类 setter 返回 MchBaseEntity, 禁止链式)
                 order.setMchNo(mchNo);
@@ -181,7 +174,7 @@ public class TransferAssistService {
                         .setReason(param.getReason())
                         .setNotifyUrl(param.getNotifyUrl())
                         .setAttach(param.getAttach())
-                        .setStatus("processing")
+                        .setStatus(PayFundStatusEnum.PROCESSING.getCode())
                         .setReqTime(OffsetDateTime.now());
                 // 商户号独立赋值(父类 setter 返回 MchBaseEntity, 禁止链式)
                 order.setMchNo(mchNo);
@@ -209,7 +202,7 @@ public class TransferAssistService {
                 .setProvider(channel)
                 .setAmount(order.getAmount())
                 .setCurrency(order.getCurrency())
-                .setStatus("processing")
+                .setStatus(PayFundStatusEnum.PROCESSING.getCode())
                 .setRelationNo(transferNo)
                 .setTitle(order.getTitle());
         // 商户号独立赋值(父类 setter 返回 MchBaseEntity, 禁止链式)
@@ -228,7 +221,7 @@ public class TransferAssistService {
                 .setProvider(channel)
                 .setAmount(order.getAmount())
                 .setCurrency(order.getCurrency())
-                .setStatus("processing")
+                .setStatus(PayFundStatusEnum.PROCESSING.getCode())
                 .setRelationNo(transferNo)
                 .setTitle(order.getTitle());
         // 商户号独立赋值(父类 setter 返回 MchBaseEntity, 禁止链式)
@@ -247,7 +240,7 @@ public class TransferAssistService {
                 .setProvider(channel)
                 .setAmount(order.getAmount())
                 .setCurrency(order.getCurrency())
-                .setStatus("processing")
+                .setStatus(PayFundStatusEnum.PROCESSING.getCode())
                 .setRelationNo(transferNo)
                 .setTitle(order.getTitle());
         // 商户号独立赋值(父类 setter 返回 MchBaseEntity, 禁止链式)
@@ -266,19 +259,19 @@ public class TransferAssistService {
     @Transactional(rollbackFor = Exception.class)
     public boolean success(String channel, TransferTrade trade, String outTransferNo,
                            OffsetDateTime finishTime, String relationNo, String transferBody) {
-        if (!Objects.equals(trade.getStatus(), "processing")
-                && !Objects.equals(trade.getStatus(), "fail")) {
+        if (!Objects.equals(trade.getStatus(), PayFundStatusEnum.PROCESSING.getCode())
+                && !Objects.equals(trade.getStatus(), PayFundStatusEnum.FAIL.getCode())) {
             log.warn("转账成功忽略: tradeNo={} 状态为 {} 非 processing/fail", trade.getTradeNo(), trade.getStatus());
             return false;
         }
         // 凭证 CAS
-        trade.setStatus("success");
+        trade.setStatus(PayFundStatusEnum.SUCCESS.getCode());
         trade.setFinishTime(finishTime != null ? finishTime : OffsetDateTime.now());
         trade.setOutTransferNo(outTransferNo);
         trade.setRelationNo(relationNo);
-        boolean tradeUpdated = transferTradeManager.casUpdateStatus(trade, Set.of("processing", "fail"));
+        boolean tradeUpdated = transferTradeManager.casUpdateStatus(trade, Set.of(PayFundStatusEnum.PROCESSING.getCode(), PayFundStatusEnum.FAIL.getCode()));
         // 容器镜像 CAS
-        MirrorResult mirror = mirrorContainer(channel, trade, Set.of("processing", "fail"), null, transferBody, null);
+        MirrorResult mirror = mirrorContainer(channel, trade, Set.of(PayFundStatusEnum.PROCESSING.getCode(), PayFundStatusEnum.FAIL.getCode()), null, transferBody, null);
         if (!tradeUpdated && !mirror.updated()) {
             log.warn("转账成功CAS竞争失败: tradeNo={}", trade.getTradeNo());
             return false;
@@ -293,13 +286,13 @@ public class TransferAssistService {
     /// @return true=本次流转成功; false=CAS 竞争失败/终态幂等, 调用方应幂等退出
     @Transactional(rollbackFor = Exception.class)
     public boolean fail(String channel, TransferTrade trade, String errorMsg) {
-        if (!Objects.equals(trade.getStatus(), "processing")) {
+        if (!Objects.equals(trade.getStatus(), PayFundStatusEnum.PROCESSING.getCode())) {
             log.warn("转账失败忽略: tradeNo={} 状态为 {} 非 processing", trade.getTradeNo(), trade.getStatus());
             return false;
         }
-        trade.setStatus("fail");
-        boolean tradeUpdated = transferTradeManager.casUpdateStatus(trade, Set.of("processing"));
-        MirrorResult mirror = mirrorContainer(channel, trade, Set.of("processing"), errorMsg, null, null);
+        trade.setStatus(PayFundStatusEnum.FAIL.getCode());
+        boolean tradeUpdated = transferTradeManager.casUpdateStatus(trade, Set.of(PayFundStatusEnum.PROCESSING.getCode()));
+        MirrorResult mirror = mirrorContainer(channel, trade, Set.of(PayFundStatusEnum.PROCESSING.getCode()), errorMsg, null, null);
         if (!tradeUpdated && !mirror.updated()) {
             log.warn("转账失败CAS竞争失败: tradeNo={}", trade.getTradeNo());
             return false;
@@ -314,13 +307,13 @@ public class TransferAssistService {
     /// @return true=本次流转成功; false=CAS 竞争失败/终态幂等, 调用方应幂等退出
     @Transactional(rollbackFor = Exception.class)
     public boolean close(String channel, TransferTrade trade, String errorMsg) {
-        if (!Objects.equals(trade.getStatus(), "processing")) {
+        if (!Objects.equals(trade.getStatus(), PayFundStatusEnum.PROCESSING.getCode())) {
             log.warn("转账关闭忽略: tradeNo={} 状态为 {} 非 processing", trade.getTradeNo(), trade.getStatus());
             return false;
         }
-        trade.setStatus("close");
-        boolean tradeUpdated = transferTradeManager.casUpdateStatus(trade, Set.of("processing"));
-        MirrorResult mirror = mirrorContainer(channel, trade, Set.of("processing"), errorMsg, null, null);
+        trade.setStatus(PayFundStatusEnum.CLOSE.getCode());
+        boolean tradeUpdated = transferTradeManager.casUpdateStatus(trade, Set.of(PayFundStatusEnum.PROCESSING.getCode()));
+        MirrorResult mirror = mirrorContainer(channel, trade, Set.of(PayFundStatusEnum.PROCESSING.getCode()), errorMsg, null, null);
         if (!tradeUpdated && !mirror.updated()) {
             log.warn("转账关闭CAS竞争失败: tradeNo={}", trade.getTradeNo());
             return false;
@@ -345,11 +338,11 @@ public class TransferAssistService {
     /// 仅允许 FAIL 状态复用原单重试, CAS 保证并发下仅一方成功。
     @Transactional(rollbackFor = Exception.class)
     public void resetForRetry(String channel, TransferTrade trade) {
-        trade.setStatus("processing");
+        trade.setStatus(PayFundStatusEnum.PROCESSING.getCode());
         trade.setOutTransferNo(null);
         trade.setFinishTime(null);
-        transferTradeManager.casUpdateStatus(trade, Set.of("fail"));
-        mirrorContainer(channel, trade, Set.of("fail"), null, null, null);
+        transferTradeManager.casUpdateStatus(trade, Set.of(PayFundStatusEnum.FAIL.getCode()));
+        mirrorContainer(channel, trade, Set.of(PayFundStatusEnum.FAIL.getCode()), null, null, null);
     }
 
     // ===== 容器镜像(按通道分发, 编排服务唯一接触具体容器的地方) =====

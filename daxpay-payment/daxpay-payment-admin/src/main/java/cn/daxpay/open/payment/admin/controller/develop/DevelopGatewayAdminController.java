@@ -1,7 +1,7 @@
 package cn.daxpay.open.payment.admin.controller.develop;
 
 import cn.daxpay.open.payment.admin.param.develop.DevelopParam;
-import cn.daxpay.open.payment.admin.result.develop.DevelopSignResult;
+import cn.daxpay.open.payment.common.develop.DevelopSignResult;
 import cn.daxpay.open.payment.admin.service.develop.DevelopGatewayAdminService;
 import cn.daxpay.open.payment.unipay.param.gateway.GatewayPrePayParam;
 import cn.daxpay.open.platform.core.annotation.PermCode;

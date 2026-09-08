@@ -3,7 +3,7 @@ package cn.daxpay.open.payment.merchant.service.develop;
 import cn.daxpay.open.payment.masterdata.result.provider.PayProviderMethodResult;
 import cn.daxpay.open.payment.masterdata.service.provider.PayProviderMethodService;
 import cn.daxpay.open.payment.merchant.param.develop.DevelopParam;
-import cn.daxpay.open.payment.merchant.result.develop.DevelopSignResult;
+import cn.daxpay.open.payment.common.develop.DevelopSignResult;
 import cn.daxpay.open.payment.common.util.ObjectSignStrUtil;
 import cn.daxpay.open.payment.common.util.PaySignUtil;
 import cn.daxpay.open.payment.route.service.support.PayRouteStrategyCapabilitySupport;

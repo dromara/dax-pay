@@ -1,9 +1,6 @@
-package cn.daxpay.open.payment.merchant.service.develop;
+package cn.daxpay.open.payment.common.develop;
 
 import cn.daxpay.open.payment.common.util.JsonSignStrUtil;
-import cn.daxpay.open.payment.merchant.param.develop.DevelopSignParam;
-import cn.daxpay.open.payment.merchant.param.develop.DevelopVerifyParam;
-import cn.daxpay.open.payment.merchant.result.develop.DevelopSignResult;
 import cn.daxpay.open.platform.core.util.RsaSignUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -11,11 +8,12 @@ import org.springframework.stereotype.Service;
 
 /// # 签名调试服务
 ///
-/// 提供参数签名生成与验签功能, 便于商户对接联调
+/// 提供参数签名生成与验签功能, 便于商户对接联调。
+/// 运营端与商户端共用同一实现(签名算法与端无关), 由两端 Controller 各自挂接。
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class MchDevelopSignService {
+public class DevelopSignService {
 
     /// 生成签名
     public DevelopSignResult sign(DevelopSignParam param) {

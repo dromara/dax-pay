@@ -1,10 +1,10 @@
 package cn.daxpay.open.payment.admin.controller.develop;
 
 import cn.daxpay.open.platform.core.code.PermCodes;
-import cn.daxpay.open.payment.admin.param.develop.DevelopSignParam;
-import cn.daxpay.open.payment.admin.param.develop.DevelopVerifyParam;
-import cn.daxpay.open.payment.admin.result.develop.DevelopSignResult;
-import cn.daxpay.open.payment.admin.service.develop.DevelopSignAdminService;
+import cn.daxpay.open.payment.common.develop.DevelopSignParam;
+import cn.daxpay.open.payment.common.develop.DevelopSignResult;
+import cn.daxpay.open.payment.common.develop.DevelopSignService;
+import cn.daxpay.open.payment.common.develop.DevelopVerifyParam;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
@@ -24,19 +24,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class DevelopSignAdminController {
 
-    private final DevelopSignAdminService developSignAdminService;
+    private final DevelopSignService developSignService;
 
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "生成签名")
     @PostMapping("/gen")
     public Result<DevelopSignResult> sign(@RequestBody DevelopSignParam param) {
-        return Res.ok(developSignAdminService.sign(param));
+        return Res.ok(developSignService.sign(param));
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "验签")
     @PostMapping("/verify")
     public Result<Boolean> verify(@RequestBody DevelopVerifyParam param) {
-        return Res.ok(developSignAdminService.verify(param));
+        return Res.ok(developSignService.verify(param));
     }
 }

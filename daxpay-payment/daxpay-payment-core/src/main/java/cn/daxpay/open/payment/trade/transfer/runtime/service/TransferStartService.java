@@ -2,6 +2,7 @@ package cn.daxpay.open.payment.trade.transfer.runtime.service;
 
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import cn.daxpay.open.payment.common.context.PaymentContext;
+import cn.daxpay.open.payment.common.lock.TradeLockKeys;
 import cn.daxpay.open.payment.strategy.transfer.AbsTransferStrategy;
 import cn.daxpay.open.payment.strategy.transfer.TransferStrategyContext;
 import cn.daxpay.open.payment.strategy.transfer.TransferStrategyFactory;
@@ -12,7 +13,7 @@ import cn.daxpay.open.payment.trade.transfer.entity.TransferTrade;
 import cn.daxpay.open.payment.trade.transfer.param.TransferParam;
 import cn.daxpay.open.payment.trade.transfer.runtime.mq.TransferSyncMessage;
 import cn.daxpay.open.platform.common.artemis.service.ArtemisTemplateService;
-import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
+import cn.daxpay.open.platform.common.i18n.util.BizErrorMessageUtil;
 import cn.daxpay.open.platform.common.json.util.JacksonUtil;
 import cn.daxpay.open.platform.common.redis.lock.LockExecutor;
 import cn.daxpay.open.platform.core.code.CommonCode;
@@ -26,7 +27,6 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -61,8 +61,8 @@ public class TransferStartService {
     public String start(String channel, TransferParam param) {
         // 锁租期 60s 覆盖通道 HTTP 超时(40s), 等待 3s 让并发同号请求排队而非立即失败
         return lockExecutor.execute(
-                "payment:transfer:" + param.getBizTransferNo(),
-                60000, 3000,
+                TradeLockKeys.transfer(param.getBizTransferNo()),
+                TradeLockKeys.LONG_EXPIRE, TradeLockKeys.LONG_WAIT,
                 () -> this.startHandle(channel, param),
                 () -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.transfer.processing")
         );
@@ -136,7 +136,7 @@ public class TransferStartService {
             log.error("转账发起失败: tradeNo={}, channel={}", trade.getTradeNo(), channel, e);
             // BizException.getMessage() 返回 messageKey(未解析), 需按固定中文解析为本地化文案再落库,
             // 避免订单 errorMsg 存 key 字符串
-            String errorMsg = resolveErrorMsg(e);
+            String errorMsg = BizErrorMessageUtil.resolve(e);
             assistService.fail(channel, trade, errorMsg);
             // BizException 直接透传, 保留通道原始 messageKey(由 RestExceptionHandler 按请求 locale 解析),
             // 避免外层"转账发起失败"与通道前缀叠加成双重前缀; 非 BizException(如网络异常)无 messageKey, 兜底包装
@@ -145,22 +145,6 @@ public class TransferStartService {
             }
             throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "pay.error.transfer.createFailed", errorMsg);
         }
-    }
-
-    /// 解析异常为本地化错误消息
-    ///
-    /// [BizException] 的 getMessage() 返回 i18n messageKey(未经 I18nUtil 解析), 直接记录会导致订单 errorMsg
-    /// 存 key 字符串(如 "error.channel.alipay.transferFailed")。本方法按固定中文(Locale.CHINA)解析,
-    /// 与 [cn.daxpay.open.platform.system.handler.exception.RestExceptionHandler] 的日志行为一致,
-    /// 保证落库文案不随请求语言变化。非 BizException 的 getMessage() 已是真实文案, 直接使用。
-    private String resolveErrorMsg(Throwable e) {
-        if (e instanceof BizException biz) {
-            String key = biz.resolveMessageKey();
-            if (key != null) {
-                return I18nUtil.get(key, Locale.CHINA, biz.getArgs());
-            }
-        }
-        return e.getMessage();
     }
 
     /// 注册 2 分钟延迟同步(发送失败由定时同步任务兜底)

@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.trade.alloc.runtime.service;
 
+import cn.daxpay.open.payment.common.lock.TradeLockKeys;
 import cn.daxpay.open.payment.trade.alloc.bo.AllocResultBo;
 import cn.daxpay.open.payment.trade.alloc.dao.AllocOrderManager;
 import cn.daxpay.open.payment.trade.alloc.entity.AllocOrder;
@@ -61,7 +62,7 @@ public class AllocCallbackService {
 
     /// 锁内回调处理
     private void doAllocCallback(AllocOrder allocOrder, CallbackData data, List<AllocResultBo.DetailResult> detailResults) {
-        lockExecutor.run(AllocAssistService.allocLockKey(allocOrder.getId()), () -> {
+        lockExecutor.run(TradeLockKeys.allocTrade(allocOrder.getId()), () -> {
             // 锁内二次读: 须仍为 processing 才继续(终态幂等忽略)
             AllocOrder latest = allocOrderManager.findById(allocOrder.getId()).orElse(null);
             if (latest == null

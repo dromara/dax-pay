@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.admin.result.develop;
+package cn.daxpay.open.payment.common.develop;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;

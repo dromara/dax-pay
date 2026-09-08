@@ -1,7 +1,7 @@
 package cn.daxpay.open.payment.merchant.controller.develop;
 
 import cn.daxpay.open.payment.merchant.param.develop.DevelopParam;
-import cn.daxpay.open.payment.merchant.result.develop.DevelopSignResult;
+import cn.daxpay.open.payment.common.develop.DevelopSignResult;
 import cn.daxpay.open.payment.merchant.service.develop.MchDevelopTradeService;
 import cn.daxpay.open.payment.masterdata.result.provider.PayProviderMethodResult;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;

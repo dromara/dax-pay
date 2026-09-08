@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.trade.runtime.service.refund;
 
+import cn.daxpay.open.payment.common.lock.TradeLockKeys;
 import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.trade.order.dao.PayTradeManager;
 import cn.daxpay.open.payment.trade.order.dao.RefundOrderManager;
@@ -40,9 +41,6 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class RefundSettleService {
 
-    /// 退款结算锁前缀(按原支付交易号)
-    public static final String LOCK_PREFIX = "payment:refund:trade:";
-
     private final RefundOrderManager refundOrderManager;
     private final PayTradeManager payTradeManager;
     private final LockExecutor lockExecutor;
@@ -55,12 +53,7 @@ public class RefundSettleService {
     @Lazy
     private final RefundSettleService self;
 
-    /// 构建退款结算锁键
-    public static String lockKey(String tradeNo) {
-        return LOCK_PREFIX + tradeNo;
-    }
-
-    /// 预占可退余额(调用方须已持有 [lockKey] 对应锁)
+    /// 预占可退余额(调用方须已持有退款结算锁 [TradeLockKeys#refundTrade])
     @Transactional(rollbackFor = Exception.class)
     public void reserveBalanceUnderLock(PayTrade trade, long amount) {
         // 退款金额必须大于零（防止零值/负值放行导致 refundableBalance 反增）
@@ -83,13 +76,13 @@ public class RefundSettleService {
         RefundOrder boot = refundOrderManager.findById(refundOrderId)
                 .orElseThrow(() -> new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.refund.orderNotFound"));
         return lockExecutor.execute(
-                lockKey(boot.getTradeNo()),
+                TradeLockKeys.refundTrade(boot.getTradeNo()),
                 () -> self.settleSuccessUnderLock(refundOrderId, finishTime, outRefundNo, relationOrderNo),
                 () -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.refund.processing")
         );
     }
 
-    /// 调用方已持有 [lockKey] 对应锁时使用。
+    /// 调用方已持有退款结算锁 [TradeLockKeys#refundTrade] 时使用。
     /// SUCCESS 不改可退余额(发起时已预占); 已 SUCCESS 幂等返回 false。
     @Transactional(rollbackFor = Exception.class)
     public boolean settleSuccessUnderLock(Long refundOrderId, OffsetDateTime finishTime,
@@ -148,7 +141,7 @@ public class RefundSettleService {
         RefundOrder boot = refundOrderManager.findById(refundOrderId)
                 .orElseThrow(() -> new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.refund.orderNotFound"));
         return lockExecutor.execute(
-                lockKey(boot.getTradeNo()),
+                TradeLockKeys.refundTrade(boot.getTradeNo()),
                 () -> self.settleFailOrCloseUnderLock(refundOrderId, close, finishTime, outRefundNo, relationOrderNo, errorMsg),
                 () -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.refund.processing")
         );

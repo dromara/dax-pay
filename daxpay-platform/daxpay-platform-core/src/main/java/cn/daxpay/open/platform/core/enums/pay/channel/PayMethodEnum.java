@@ -104,4 +104,12 @@ public enum PayMethodEnum implements I18nSupport {
                 // 不存在的支付方式
                 .orElseThrow(() -> new UnsupportedAbilityException("pay.error.methodNotExist"));
     }
+
+    /// 根据编码获取枚举, 不存在返回 null(供"未知编码走兜底分支"的场景判空, 勿用异常做控制流)
+    public static PayMethodEnum findByCodeOrNull(String code){
+        return Arrays.stream(values())
+                .filter(o -> Objects.equals(o.getCode(), code))
+                .findFirst()
+                .orElse(null);
+    }
 }

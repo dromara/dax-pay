@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.trade.transfer.runtime.service;
 
+import cn.daxpay.open.payment.common.lock.TradeLockKeys;
 import cn.daxpay.open.payment.trade.record.service.PayCallbackRecordService;
 import cn.daxpay.open.payment.trade.runtime.bo.CallbackData;
 import cn.daxpay.open.payment.trade.transfer.dao.TransferTradeManager;
@@ -55,7 +56,7 @@ public class TransferCallbackService {
         }
         // 统一锁键: 与同步/关闭路径互斥
         Long tradeId = trade.getId();
-        boolean acquired = lockExecutor.tryRun(TransferAssistService.tradeLockKey(tradeId),
+        boolean acquired = lockExecutor.tryRun(TradeLockKeys.transferTrade(tradeId),
                 () -> self.doTransferCallback(channelMchNo, channel, data, tradeId));
         if (!acquired) {
             data.setCallbackStatus(CallbackStatusEnum.IGNORE)

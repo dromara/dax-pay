@@ -10,6 +10,7 @@ import cn.daxpay.open.platform.common.spring.util.WebServletUtil;
 import cn.daxpay.open.platform.core.enums.pay.trade.TradeSourceEnum;
 import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
+import cn.daxpay.open.payment.common.lock.TradeLockKeys;
 import cn.daxpay.open.payment.common.util.PayBarCodeUtil;
 import cn.daxpay.open.payment.strategy.PaymentStrategyFactory;
 import cn.daxpay.open.payment.trade.runtime.bo.PayTradeResultBo;
@@ -65,8 +66,8 @@ public class NormalPayService {
         // 锁租期 60s 覆盖通道 HTTP 超时(40s), 等待 3s 让并发同号请求排队而非立即失败;
         // 原 10s 默认值在慢通道下会提前释放, 导致同号请求重入并发调通道
         return lockExecutor.execute(
-                "payment:pay:" + bizOrderNo,
-                60000, 3000,
+                TradeLockKeys.pay(bizOrderNo),
+                TradeLockKeys.LONG_EXPIRE, TradeLockKeys.LONG_WAIT,
                 () -> this.payHandle(payParam),
                 () -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.processing")
         );

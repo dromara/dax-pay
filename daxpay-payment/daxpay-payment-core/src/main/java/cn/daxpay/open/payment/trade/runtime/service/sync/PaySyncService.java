@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.trade.runtime.service.sync;
 
+import cn.daxpay.open.payment.common.lock.TradeLockKeys;
 import cn.daxpay.open.payment.trade.abnormal.service.AbnormalOrderService;
 import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum;
@@ -114,7 +115,7 @@ public class PaySyncService {
             throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.pay.syncNotStarted");
         }
         return lockExecutor.execute(
-                "payment:trade:" + trade.getId(),
+                TradeLockKeys.trade(trade.getId()),
                 () -> {
                     ContainerInfo info = loadContainerInfo(trade);
                     var context = new PayStrategyContext()
