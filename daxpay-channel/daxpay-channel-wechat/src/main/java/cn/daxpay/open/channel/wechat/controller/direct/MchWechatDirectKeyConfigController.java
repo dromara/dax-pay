@@ -2,6 +2,7 @@ package cn.daxpay.open.channel.wechat.controller.direct;
 
 import cn.daxpay.open.channel.wechat.dao.direct.WechatDirectChannelMerchantManager;
 import cn.daxpay.open.channel.wechat.entity.direct.WechatDirectChannelMerchant;
+import cn.daxpay.open.channel.wechat.param.direct.MchWechatDirectKeyConfigParam;
 import cn.daxpay.open.channel.wechat.param.direct.WechatDirectKeyConfigParam;
 import cn.daxpay.open.channel.wechat.result.direct.WechatDirectKeyConfigResult;
 import cn.daxpay.open.channel.wechat.service.direct.WechatDirectKeyConfigService;
@@ -75,11 +76,19 @@ public class MchWechatDirectKeyConfigController {
     @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "保存密钥配置")
     @PostMapping("/save-key-config")
-    public Result<Void> saveKeyConfig(@RequestBody @Validated WechatDirectKeyConfigParam param) {
+    public Result<Void> saveKeyConfig(@RequestBody @Validated MchWechatDirectKeyConfigParam param) {
         this.assertOwned(param.getChannelMchNo());
-        // 强制当前商户号，忽略客户端传入（防越权）
-        param.setMchNo(requireMchNo());
-        wechatDirectKeyConfigService.save(param);
+        // 商户端参数不含商户号, 强制取当前登录商户(防越权), 组装为完整参数后走通用保存
+        WechatDirectKeyConfigParam saveParam = new WechatDirectKeyConfigParam()
+                .setMchNo(requireMchNo())
+                .setChannelMchNo(param.getChannelMchNo())
+                .setApiKeyV3(param.getApiKeyV3())
+                .setPublicKey(param.getPublicKey())
+                .setPublicKeyId(param.getPublicKeyId())
+                .setPrivateKey(param.getPrivateKey())
+                .setPrivateCert(param.getPrivateCert())
+                .setCertSerialNo(param.getCertSerialNo());
+        wechatDirectKeyConfigService.save(saveParam);
         return Res.ok();
     }
 }
