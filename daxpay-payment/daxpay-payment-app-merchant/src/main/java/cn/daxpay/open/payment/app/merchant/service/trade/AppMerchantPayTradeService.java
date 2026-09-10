@@ -3,6 +3,7 @@ package cn.daxpay.open.payment.app.merchant.service.trade;
 import cn.daxpay.open.payment.merchant.service.trade.MchPayTradeService;
 import cn.daxpay.open.payment.trade.order.param.PayTradeQuery;
 import cn.daxpay.open.payment.trade.order.result.PayTradeResult;
+import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPaySyncResult;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import lombok.RequiredArgsConstructor;
@@ -25,5 +26,10 @@ public class AppMerchantPayTradeService {
     /// 详情查询
     public PayTradeResult findById(Long id) {
         return mchPayTradeService.findById(id);
+    }
+
+    /// 同步交易状态
+    public NormalPaySyncResult sync(Long id) {
+        return mchPayTradeService.sync(id);
     }
 }

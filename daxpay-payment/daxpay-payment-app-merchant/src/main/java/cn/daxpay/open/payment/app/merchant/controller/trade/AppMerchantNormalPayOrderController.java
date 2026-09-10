@@ -3,6 +3,7 @@ package cn.daxpay.open.payment.app.merchant.controller.trade;
 import cn.daxpay.open.payment.app.merchant.service.trade.AppMerchantNormalPayOrderService;
 import cn.daxpay.open.payment.trade.order.param.NormalPayOrderQuery;
 import cn.daxpay.open.payment.trade.order.result.NormalPayOrderResult;
+import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPaySyncResult;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
@@ -15,12 +16,13 @@ import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /// # 普通支付业务单(商户移动端)
 ///
-/// 面向商户移动端的业务订单查询。业务编排委托 [AppMerchantNormalPayOrderService]。
+/// 面向商户移动端的业务订单查询与状态同步。业务编排委托 [AppMerchantNormalPayOrderService]。
 @PermCode(menuCode = PermCodes.Trade.Order.MENU)
 @Validated
 @Tag(name = "普通支付业务单(商户移动端)")
@@ -44,5 +46,13 @@ public class AppMerchantNormalPayOrderController {
     public Result<NormalPayOrderResult> findById(
             @NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(normalPayOrderService.findById(id));
+    }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "同步支付状态")
+    @PostMapping("/sync")
+    public Result<NormalPaySyncResult> sync(
+            @NotNull(message = "{validation.field.id.notNull}") Long id) {
+        return Res.ok(normalPayOrderService.sync(id));
     }
 }

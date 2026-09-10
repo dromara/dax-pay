@@ -3,6 +3,7 @@ package cn.daxpay.open.payment.app.merchant.service.trade;
 import cn.daxpay.open.payment.merchant.service.trade.MchGatewayPayOrderService;
 import cn.daxpay.open.payment.trade.order.param.GatewayPayOrderQuery;
 import cn.daxpay.open.payment.trade.order.result.GatewayPayOrderResult;
+import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPaySyncResult;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import lombok.RequiredArgsConstructor;
@@ -25,5 +26,10 @@ public class AppMerchantGatewayPayOrderService {
     /// 详情查询
     public GatewayPayOrderResult findById(Long id) {
         return mchGatewayPayOrderService.findById(id);
+    }
+
+    /// 同步订单状态
+    public NormalPaySyncResult sync(Long id) {
+        return mchGatewayPayOrderService.sync(id);
     }
 }
