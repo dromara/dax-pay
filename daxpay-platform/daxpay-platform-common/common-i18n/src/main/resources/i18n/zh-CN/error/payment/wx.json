@@ -12,6 +12,7 @@
   "appNotConfigured": "未配置 {0} 对应的应用，请前往通道商户应用配置页绑定",
   "directMchAppNotConfigured": "直连商户未配置 {0} 对应的商户档应用，请前往通道商户应用配置页绑定商户档应用（直连商户不可使用平台档应用）",
   "appNotUnique": "存在多个 {0} 类型的应用，请显式配置能力绑定以明确选择",
+  "platformAppAmbiguous": "该产品下配置了多个平台档微信应用，无法自动解析服务商应用，请指定服务商应用或收敛该产品的应用能力绑定",
   "mpAuthNotConfigured": "微信公众号认证配置未填写，请在「三方平台管理 → 微信公众号认证配置」中配置 AppId 和 AppSecret",
   "appRefByAllocReceiver": "微信应用被分账接收方记录引用, 无法删除"
 }

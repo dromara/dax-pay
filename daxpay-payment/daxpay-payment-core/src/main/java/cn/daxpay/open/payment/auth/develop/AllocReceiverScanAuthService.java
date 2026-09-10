@@ -23,6 +23,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
+
 /// # 分账接收方扫码授权服务
 ///
 /// 接收方报备表单扫码获取 openId/userId, 复用认证域 OAuth 授权 + queryCode 轮询机制:
@@ -102,7 +104,10 @@ public class AllocReceiverScanAuthService {
     private AuthUrlResult generateWechatIsv(AllocReceiverScanAuthParam param, AllocReceiverTypeEnum receiverType) {
         String appId;
         if (receiverType == AllocReceiverTypeEnum.PERSONAL_OPENID) {
-            appId = param.getSpAppId();
+            // 商户端不提供平台档应用选择, 留空时按产品级平台档应用兜底解析(与接收方新增同口径)
+            appId = StrUtil.isBlank(param.getSpAppId())
+                    ? this.resolveProductSpAppId()
+                    : param.getSpAppId();
             if (StrUtil.isBlank(appId)) {
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "error.payment.wx.appNotConfigured", "spAppId");
@@ -121,6 +126,12 @@ public class AllocReceiverScanAuthService {
         this.checkWechatOfficialAccount(app);
         return merchantChannelAuthService.generateAuthUrl(
                 this.buildInnerParam(param, ChannelAuthTypeEnum.WECHAT, app.scope(), app.id()));
+    }
+
+    /// 按产品级平台档应用解析服务商 sp 应用 appId(该产品未配置或配置歧义时返回 null)
+    private String resolveProductSpAppId() {
+        WxAppView platformApp = wxAppFacade.resolveProductPlatformApp(ProductEnum.WECHAT_ISV.getCode());
+        return Objects.isNull(platformApp) ? null : platformApp.wxAppId();
     }
 
     /// 抖音直连: PERSONAL_OPENID 为所选商户档应用(channelAppId)维度, H5 silent_auth 需网站应用

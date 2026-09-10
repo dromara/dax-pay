@@ -637,6 +637,9 @@
     "preAuthToken": {
       "notBlank": "Mã thông báo xác thực trước không được để trống"
     },
+    "alias": {
+      "size": "Bí danh không được vượt quá 50 ký tự"
+    },
     "remark": {
       "size": "Ghi chú không được vượt quá 255 ký tự"
     },

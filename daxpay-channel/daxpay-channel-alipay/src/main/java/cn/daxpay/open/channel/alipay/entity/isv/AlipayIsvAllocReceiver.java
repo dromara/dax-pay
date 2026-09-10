@@ -51,6 +51,11 @@ public class AlipayIsvAllocReceiver extends MchBaseEntity implements ToResult<Al
     @TableField(typeHandler = DataEncryptTypeHandler.class)
     private String receiverName;
 
+    /// 接收方别名(本地备注, 不上送通道, 可随时修改)
+    /// updateStrategy=ALWAYS 保证清空别名(null)可落库
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
+    private String alias;
+
     /// 绑定状态
     /// @see cn.daxpay.open.payment.trade.alloc.enums.AllocReceiverStatusEnum
     private String status;

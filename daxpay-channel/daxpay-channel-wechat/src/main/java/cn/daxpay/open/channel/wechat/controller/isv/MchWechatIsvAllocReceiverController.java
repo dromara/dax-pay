@@ -20,6 +20,7 @@ import cn.daxpay.open.platform.core.rest.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -113,6 +114,16 @@ public class MchWechatIsvAllocReceiverController {
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         this.loadOwned(id);
         allocReceiverService.delete(id);
+        return Res.ok();
+    }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "修改别名(本地备注, 不上送通道; 留空即清空)")
+    @PostMapping("/update-alias")
+    public Result<Void> updateAlias(@NotNull(message = "{validation.field.id.notNull}") Long id,
+                                    @Size(max = 50, message = "{validation.field.alias.size}") String alias) {
+        this.loadOwned(id);
+        allocReceiverService.updateAlias(id, alias);
         return Res.ok();
     }
 }

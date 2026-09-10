@@ -2,6 +2,7 @@ package cn.daxpay.open.channel.wechat.param.direct;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -36,6 +37,11 @@ public class WechatDirectAllocReceiverCreateParam {
     /// 接收方名称(MERCHANT_ID 时必填商户全称)
     @Schema(description = "接收方名称")
     private String receiverName;
+
+    /// 接收方别名(本地备注, 不上送通道, 新增后可随时修改)
+    @Schema(description = "接收方别名")
+    @Size(max = 50, message = "{validation.field.alias.size}")
+    private String alias;
 
     /// 分账关系类型
     @Schema(description = "分账关系类型")

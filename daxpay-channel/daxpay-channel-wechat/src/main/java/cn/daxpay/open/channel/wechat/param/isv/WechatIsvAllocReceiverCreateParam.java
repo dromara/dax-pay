@@ -2,6 +2,7 @@ package cn.daxpay.open.channel.wechat.param.isv;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -37,6 +38,11 @@ public class WechatIsvAllocReceiverCreateParam {
     @Schema(description = "接收方名称")
     private String receiverName;
 
+    /// 接收方别名(本地备注, 不上送通道, 新增后可随时修改)
+    @Schema(description = "接收方别名")
+    @Size(max = 50, message = "{validation.field.alias.size}")
+    private String alias;
+
     /// 分账关系类型
     @Schema(description = "分账关系类型")
     @NotBlank(message = "{validation.field.relationType.notBlank}")
@@ -47,8 +53,10 @@ public class WechatIsvAllocReceiverCreateParam {
     private String customRelation;
 
     /// 绑定所用平台档(服务商)应用 appid
+    ///
+    /// 运营端显式指定; 商户端不提供平台档应用选择(平台档应用属平台侧配置), 留空时由服务层
+    /// 按产品级平台档应用兜底解析并落库
     @Schema(description = "服务商应用appid")
-    @NotBlank(message = "{validation.field.channelAppId.notBlank}")
     private String spAppId;
 
     /// 子商户应用 appid(PERSONAL_SUB_OPENID 时必填)

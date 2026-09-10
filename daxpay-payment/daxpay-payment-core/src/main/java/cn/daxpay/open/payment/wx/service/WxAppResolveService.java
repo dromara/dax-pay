@@ -21,8 +21,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Objects;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /// # 微信开放应用解析服务
 ///
@@ -187,6 +190,35 @@ public class WxAppResolveService implements WxAppFacade {
         return new WxIsvAppPair(platform, merchant);
     }
 
+    /// 解析产品级平台档应用(sp)
+    ///
+    /// 供无 capability 语义的场景使用(如分账接收方报备: 微信服务商的 sp 应用即该产品的服务商应用,
+    /// 与具体支付能力无关)。同一平台应用可能被该产品下多个支付能力同时绑定, 故按应用主键去重后再判定唯一。
+    @Override
+    public WxAppView resolveProductPlatformApp(String product) {
+        if (StrUtil.isBlank(product)) {
+            return null;
+        }
+        List<WxPlatformAppCapability> rels = wxPlatformAppCapabilityManager.listByProduct(product);
+        Set<Long> appIds = rels.stream()
+                .map(WxPlatformAppCapability::getWxPlatformAppId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toSet());
+        if (appIds.isEmpty()) {
+            // 该产品未配置平台档应用, 由调用方按场景给出提示
+            return null;
+        }
+        if (appIds.size() > 1) {
+            // 微信: 该产品下配置了多个平台档应用, 无法自动解析(需显式指定或收敛能力绑定)
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "error.payment.wx.platformAppAmbiguous", product);
+        }
+        WxPlatformApp app = wxPlatformAppManager.findById(appIds.iterator().next())
+                // 微信: 平台应用不存在
+                .orElseThrow(() -> new DataNotExistException("error.payment.wx.appNotFound"));
+        return this.toPlatformView(app);
+    }
+
     /// 按 channelAppId 尝试解析, 未命中返回 empty(不抛异常)
     ///
     /// @param direct 是否直连产品(直连时商户表优先且不回退平台表)
@@ -227,7 +259,6 @@ public class WxAppResolveService implements WxAppFacade {
         return new WxAppView(AppScopeEnum.PLATFORM, app.getId(), app.getWxAppId(),
                 app.getAppType(), app.getAppSecret(), app.getAppName());
     }
-
     /// 商户应用 → View
     private WxAppView toMerchantView(WxMchApp app) {
         return new WxAppView(AppScopeEnum.MERCHANT, app.getId(), app.getWxAppId(),

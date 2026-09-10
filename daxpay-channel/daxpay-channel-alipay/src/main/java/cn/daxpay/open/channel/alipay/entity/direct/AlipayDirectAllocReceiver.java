@@ -50,6 +50,11 @@ public class AlipayDirectAllocReceiver extends MchBaseEntity implements ToResult
     @TableField(typeHandler = DataEncryptTypeHandler.class)
     private String receiverName;
 
+    /// 接收方别名(本地备注, 不上送通道, 可随时修改)
+    /// updateStrategy=ALWAYS 保证清空别名(null)可落库
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
+    private String alias;
+
     /// 发起绑定的支付宝应用引用(alipay_direct_app 主键, 重新绑定复用)
     private Long directAppRefId;
 

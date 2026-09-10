@@ -92,6 +92,7 @@ public class DouyinDirectAllocReceiverService {
                 .setReceiverAccount(param.getReceiverAccount())
                 .setAccountHash(accountHash)
                 .setReceiverName(param.getReceiverName())
+                .setAlias(StrUtil.trimToNull(param.getAlias()))
                 .setRelationType(param.getRelationType())
                 .setCustomRelation(param.getCustomRelation())
                 .setChannelAppId(param.getChannelAppId())
@@ -151,6 +152,13 @@ public class DouyinDirectAllocReceiverService {
                     "error.channel.allocReceiverBoundCannotDelete");
         }
         allocReceiverManager.deleteById(id);
+    }
+
+    /// 修改别名(纯本地字段, 不触发通道调用, 任意绑定状态均可改; 留空即清空)
+    public void updateAlias(Long id, String alias) {
+        DouyinDirectAllocReceiver entity = this.loadAndCheck(id);
+        entity.setAlias(StrUtil.trimToNull(alias));
+        allocReceiverManager.updateById(entity);
     }
 
     /// 执行通道侧绑定并回写状态

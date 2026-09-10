@@ -20,6 +20,7 @@ import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
+import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.SecureUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -95,6 +96,7 @@ public class AlipayDirectAllocReceiverService {
                 .setReceiverAccount(param.getReceiverAccount())
                 .setAccountHash(accountHash)
                 .setReceiverName(param.getReceiverName())
+                .setAlias(StrUtil.trimToNull(param.getAlias()))
                 .setDirectAppRefId(param.getAppRefId())
                 .setStatus(AllocReceiverStatusEnum.FAIL.getCode());
         // 运营端不装载商户上下文, 必须显式赋值
@@ -152,6 +154,13 @@ public class AlipayDirectAllocReceiverService {
                     "error.channel.allocReceiverBoundCannotDelete");
         }
         allocReceiverManager.deleteById(id);
+    }
+
+    /// 修改别名(纯本地字段, 不触发通道调用, 任意绑定状态均可改; 留空即清空)
+    public void updateAlias(Long id, String alias) {
+        AlipayDirectAllocReceiver entity = this.loadAndCheck(id);
+        entity.setAlias(StrUtil.trimToNull(alias));
+        allocReceiverManager.updateById(entity);
     }
 
     /// 执行通道侧绑定并回写状态

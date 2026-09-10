@@ -32,6 +32,16 @@ public interface WxAppFacade {
     /// @param product 支付产品编码（PayProduct.code）
     WxIsvAppPair resolveIsvPair(String mchNo, String channelMchNo, String capability, String channelAppId, String product);
 
+    /// 解析产品级平台档应用(sp)
+    ///
+    /// 供**无 capability 语义**的场景使用(如分账接收方报备: 微信服务商的 sp 应用是该产品的
+    /// 服务商应用, 不区分支付能力)。取该产品下**唯一**的平台档应用:
+    /// - 该产品未绑定平台档应用: 返回 null(由调用方决定提示文案)
+    /// - 绑定了多个不同平台档应用: 抛歧义异常, 要求显式指定或收敛产品能力绑定
+    ///
+    /// @param product 支付产品编码（PayProduct.code）
+    WxAppView resolveProductPlatformApp(String product);
+
     /// 按真实 wxAppId 解析：商户档优先, 平台档兜底
     ///
     /// 供开放接口认证场景使用: 对接方传入真实微信 AppId, 系统自行定位到对应应用。

@@ -28,6 +28,9 @@ public class WechatIsvAllocReceiverResult extends MchBaseResult {
     @Schema(description = "接收方名称(解密后明文)")
     private String receiverName;
 
+    @Schema(description = "接收方别名(本地备注, 不上送通道)")
+    private String alias;
+
     @Schema(description = "分账关系类型")
     private String relationType;
 

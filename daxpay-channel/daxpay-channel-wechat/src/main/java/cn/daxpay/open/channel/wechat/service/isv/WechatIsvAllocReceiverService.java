@@ -15,9 +15,12 @@ import cn.daxpay.open.payment.trade.alloc.AllocReceiverFailSupport;
 import cn.daxpay.open.payment.trade.alloc.enums.AllocReceiverStatusEnum;
 import cn.daxpay.open.payment.trade.alloc.enums.AllocReceiverTypeEnum;
 import cn.daxpay.open.payment.trade.alloc.enums.AllocRelationTypeEnum;
+import cn.daxpay.open.payment.wx.facade.WxAppFacade;
+import cn.daxpay.open.payment.wx.facade.WxAppView;
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
+import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
@@ -49,6 +52,26 @@ public class WechatIsvAllocReceiverService {
     private final WechatIsvChannelMerchantManager wechatIsvChannelMerchantManager;
     private final WechatIsvConfigAssembler wechatIsvConfigAssembler;
     private final WechatAllocReceiverChannelService wechatAllocReceiverChannelService;
+    private final WxAppFacade wxAppFacade;
+
+    /// 解析落库用的 sp(服务商)应用 appId
+    ///
+    /// 运营端显式指定则原样返回; 留空时(商户端不提供平台档应用选择)按**产品级平台档应用**兜底解析,
+    /// 落库后记录自描述, 重绑与扫码取号可直接复用。
+    /// 该产品未配置平台档应用时按「未配置 sp 应用」报错(与显式指定 miss 的提示一致)。
+    private String resolveSpAppId(String mchNo, String spAppId) {
+        if (StrUtil.isNotBlank(spAppId)) {
+            return spAppId;
+        }
+        WxAppView platformApp = wxAppFacade.resolveProductPlatformApp(ProductEnum.WECHAT_ISV.getCode());
+        if (Objects.isNull(platformApp)) {
+            // 微信: 未配置该能力对应的平台应用（sp 必填）
+            throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
+                    "error.payment.wx.appNotConfigured", "spAppId");
+        }
+        log.info("微信服务商接收方 sp 应用按产品级平台档兜底解析: mchNo={}, spAppId={}", mchNo, platformApp.wxAppId());
+        return platformApp.wxAppId();
+    }
 
     /// 分页查询
     public PageResult<WechatIsvAllocReceiverResult> page(PageParam pageParam, WechatIsvAllocReceiverQuery query) {
@@ -91,9 +114,10 @@ public class WechatIsvAllocReceiverService {
                 .setReceiverAccount(param.getReceiverAccount())
                 .setAccountHash(accountHash)
                 .setReceiverName(param.getReceiverName())
+                .setAlias(StrUtil.trimToNull(param.getAlias()))
                 .setRelationType(param.getRelationType())
                 .setCustomRelation(param.getCustomRelation())
-                .setSpAppId(param.getSpAppId())
+                .setSpAppId(this.resolveSpAppId(param.getMchNo(), param.getSpAppId()))
                 .setSubAppId(param.getSubAppId())
                 .setStatus(AllocReceiverStatusEnum.FAIL.getCode());
         // 运营端不装载商户上下文, 必须显式赋值
@@ -113,6 +137,9 @@ public class WechatIsvAllocReceiverService {
         if (StrUtil.isNotBlank(param.getSpAppId())) {
             // 新应用合法性由 doBind 凭证组装校验, 失败留痕(fail + 原因)
             entity.setSpAppId(param.getSpAppId());
+        } else if (StrUtil.isBlank(entity.getSpAppId())) {
+            // 存量记录未落 sp 应用(历史数据/商户端创建)时同样按产品级平台档兜底解析
+            entity.setSpAppId(this.resolveSpAppId(entity.getMchNo(), null));
         }
         if (StrUtil.isNotBlank(param.getSubAppId())) {
             entity.setSubAppId(param.getSubAppId());
@@ -154,6 +181,13 @@ public class WechatIsvAllocReceiverService {
                     "error.channel.allocReceiverBoundCannotDelete");
         }
         allocReceiverManager.deleteById(id);
+    }
+
+    /// 修改别名(纯本地字段, 不触发通道调用, 任意绑定状态均可改; 留空即清空)
+    public void updateAlias(Long id, String alias) {
+        WechatIsvAllocReceiver entity = this.loadAndCheck(id);
+        entity.setAlias(StrUtil.trimToNull(alias));
+        allocReceiverManager.updateById(entity);
     }
 
     /// 执行通道侧绑定并回写状态

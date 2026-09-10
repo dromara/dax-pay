@@ -3,6 +3,7 @@ package cn.daxpay.open.channel.alipay.param.direct;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -37,6 +38,11 @@ public class AlipayDirectAllocReceiverCreateParam {
     /// 接收方名称(可空)
     @Schema(description = "接收方名称")
     private String receiverName;
+
+    /// 接收方别名(本地备注, 不上送通道, 新增后可随时修改)
+    @Schema(description = "接收方别名")
+    @Size(max = 50, message = "{validation.field.alias.size}")
+    private String alias;
 
     /// 发起绑定的支付宝应用引用(alipay_direct_app 主键)
     @Schema(description = "发起绑定的支付宝应用引用")

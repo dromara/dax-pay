@@ -149,6 +149,7 @@ CREATE TABLE public.alipay_direct_alloc_receiver (
     receiver_account character varying(256) NOT NULL,
     account_hash character varying(64) NOT NULL,
     receiver_name character varying(256),
+    alias character varying(50),
     direct_app_ref_id bigint,
     status character varying(16) NOT NULL,
     error_msg text,
@@ -217,6 +218,7 @@ COMMENT ON COLUMN public.alipay_direct_alloc_receiver.account_hash IS '接收方
 --
 
 COMMENT ON COLUMN public.alipay_direct_alloc_receiver.receiver_name IS '接收方名称(AES-256-GCM加密存储, 可空)';
+COMMENT ON COLUMN public.alipay_direct_alloc_receiver.alias IS '接收方别名(本地备注, 不上送通道)';
 
 
 --
@@ -922,6 +924,7 @@ CREATE TABLE public.alipay_isv_alloc_receiver (
     receiver_account character varying(256) NOT NULL,
     account_hash character varying(64) NOT NULL,
     receiver_name character varying(256),
+    alias character varying(50),
     status character varying(16) NOT NULL,
     error_msg text,
     bind_time timestamp(6) with time zone,
@@ -989,6 +992,7 @@ COMMENT ON COLUMN public.alipay_isv_alloc_receiver.account_hash IS '接收方账
 --
 
 COMMENT ON COLUMN public.alipay_isv_alloc_receiver.receiver_name IS '接收方名称(AES-256-GCM加密存储, 可空)';
+COMMENT ON COLUMN public.alipay_isv_alloc_receiver.alias IS '接收方别名(本地备注, 不上送通道)';
 
 
 --
@@ -2300,6 +2304,7 @@ CREATE TABLE public.douyin_direct_alloc_receiver (
     receiver_account character varying(256) NOT NULL,
     account_hash character varying(64) NOT NULL,
     receiver_name character varying(256),
+    alias character varying(50),
     relation_type character varying(32) NOT NULL,
     custom_relation character varying(64),
     channel_app_id character varying(64) NOT NULL,
@@ -2370,6 +2375,7 @@ COMMENT ON COLUMN public.douyin_direct_alloc_receiver.account_hash IS '接收方
 --
 
 COMMENT ON COLUMN public.douyin_direct_alloc_receiver.receiver_name IS '接收方名称(AES-256-GCM加密存储, MERCHANT_ID时必填商户全称)';
+COMMENT ON COLUMN public.douyin_direct_alloc_receiver.alias IS '接收方别名(本地备注, 不上送通道)';
 
 
 --
@@ -16784,6 +16790,7 @@ CREATE TABLE public.wechat_direct_alloc_receiver (
     receiver_account character varying(256) NOT NULL,
     account_hash character varying(64) NOT NULL,
     receiver_name character varying(256),
+    alias character varying(50),
     relation_type character varying(32) NOT NULL,
     custom_relation character varying(64),
     channel_app_id character varying(64) NOT NULL,
@@ -16854,6 +16861,7 @@ COMMENT ON COLUMN public.wechat_direct_alloc_receiver.account_hash IS '接收方
 --
 
 COMMENT ON COLUMN public.wechat_direct_alloc_receiver.receiver_name IS '接收方名称(AES-256-GCM加密存储, MERCHANT_ID时必填商户全称)';
+COMMENT ON COLUMN public.wechat_direct_alloc_receiver.alias IS '接收方别名(本地备注, 不上送通道)';
 
 
 --
@@ -17205,6 +17213,7 @@ CREATE TABLE public.wechat_isv_alloc_receiver (
     receiver_account character varying(256) NOT NULL,
     account_hash character varying(64) NOT NULL,
     receiver_name character varying(256),
+    alias character varying(50),
     relation_type character varying(32) NOT NULL,
     custom_relation character varying(64),
     sp_app_id character varying(64) NOT NULL,
@@ -17276,6 +17285,7 @@ COMMENT ON COLUMN public.wechat_isv_alloc_receiver.account_hash IS '接收方账
 --
 
 COMMENT ON COLUMN public.wechat_isv_alloc_receiver.receiver_name IS '接收方名称(AES-256-GCM加密存储, MERCHANT_ID时必填商户全称)';
+COMMENT ON COLUMN public.wechat_isv_alloc_receiver.alias IS '接收方别名(本地备注, 不上送通道)';
 
 
 --

@@ -14,3 +14,16 @@ DROP TABLE IF EXISTS mch_risk_config;
 -- 风控精简: 移除城市接壤关系表(围栏 balanced 邻市策略专用, 随门店地理围栏一并移交商业版)
 DROP TABLE IF EXISTS base_city_adjacent;
 DROP SEQUENCE IF EXISTS base_city_adjacent_id_seq;
+
+-- 表结构更新(2026-09-10): 分账接收方新增本地别名(纯本地备注字段, 不上送通道, 可随时修改)
+-- 五张通道档案表同步加列, 仅用于平台侧识别管理, 与通道侧接收方名称(receiver_name)无关
+ALTER TABLE public.wechat_direct_alloc_receiver ADD COLUMN IF NOT EXISTS alias varchar(50);
+COMMENT ON COLUMN public.wechat_direct_alloc_receiver.alias IS '接收方别名(本地备注, 不上送通道)';
+ALTER TABLE public.wechat_isv_alloc_receiver ADD COLUMN IF NOT EXISTS alias varchar(50);
+COMMENT ON COLUMN public.wechat_isv_alloc_receiver.alias IS '接收方别名(本地备注, 不上送通道)';
+ALTER TABLE public.alipay_direct_alloc_receiver ADD COLUMN IF NOT EXISTS alias varchar(50);
+COMMENT ON COLUMN public.alipay_direct_alloc_receiver.alias IS '接收方别名(本地备注, 不上送通道)';
+ALTER TABLE public.alipay_isv_alloc_receiver ADD COLUMN IF NOT EXISTS alias varchar(50);
+COMMENT ON COLUMN public.alipay_isv_alloc_receiver.alias IS '接收方别名(本地备注, 不上送通道)';
+ALTER TABLE public.douyin_direct_alloc_receiver ADD COLUMN IF NOT EXISTS alias varchar(50);
+COMMENT ON COLUMN public.douyin_direct_alloc_receiver.alias IS '接收方别名(本地备注, 不上送通道)';

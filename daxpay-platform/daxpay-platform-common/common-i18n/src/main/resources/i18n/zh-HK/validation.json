@@ -638,6 +638,9 @@
     "preAuthToken": {
       "notBlank": "預認證令牌不能為空"
     },
+    "alias": {
+      "size": "別名不可超過50位"
+    },
     "remark": {
       "size": "備註不可超過255位"
     },

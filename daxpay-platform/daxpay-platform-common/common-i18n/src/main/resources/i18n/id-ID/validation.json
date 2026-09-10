@@ -637,6 +637,9 @@
     "preAuthToken": {
       "notBlank": "Token pra-autentikasi tidak boleh kosong"
     },
+    "alias": {
+      "size": "Alias tidak boleh melebihi 50 karakter"
+    },
     "remark": {
       "size": "Komentar tidak boleh melebihi 255 karakter"
     },

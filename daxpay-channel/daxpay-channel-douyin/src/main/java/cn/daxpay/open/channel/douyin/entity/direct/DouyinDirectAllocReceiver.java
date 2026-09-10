@@ -50,6 +50,11 @@ public class DouyinDirectAllocReceiver extends MchBaseEntity implements ToResult
     @TableField(typeHandler = DataEncryptTypeHandler.class)
     private String receiverName;
 
+    /// 接收方别名(本地备注, 不上送通道, 可随时修改)
+    /// updateStrategy=ALWAYS 保证清空别名(null)可落库
+    @TableField(updateStrategy = FieldStrategy.ALWAYS)
+    private String alias;
+
     /// 分账关系类型(平台小写, 通道适配层转抖音原生大写)
     /// @see cn.daxpay.open.payment.trade.alloc.enums.AllocRelationTypeEnum
     private String relationType;
