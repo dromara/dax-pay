@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Objects;
 
 /// # Artemis 消息队列演示接口
 ///
@@ -97,7 +98,7 @@ public class ArtemisDemoController {
 
     /// 校验与场景绑定的必填字段
     private void validateSceneParam(SendDemoMessageParam param, SendDemoMessageParam.SendScene scene) {
-        if (scene == SendDemoMessageParam.SendScene.DELAY && param.getDelaySeconds() == null) {
+        if (scene == SendDemoMessageParam.SendScene.DELAY && Objects.isNull(param.getDelaySeconds())) {
             throw new BizInfoException("error.demo.delaySecondsRequired");
         }
     }

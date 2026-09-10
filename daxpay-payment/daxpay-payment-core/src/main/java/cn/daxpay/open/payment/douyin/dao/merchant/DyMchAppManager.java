@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Objects;
 
 /// # 商户抖音应用
 ///
@@ -37,7 +38,7 @@ public class DyMchAppManager extends BaseManager<DyMchAppMapper, DyMchApp> {
         return lambdaQuery()
                 .eq(DyMchApp::getMchNo, mchNo)
                 .eq(DyMchApp::getDouyinAppId, douyinAppId)
-                .ne(excludeId != null, DyMchApp::getId, excludeId)
+                .ne(Objects.nonNull(excludeId), DyMchApp::getId, excludeId)
                 .exists();
     }
 

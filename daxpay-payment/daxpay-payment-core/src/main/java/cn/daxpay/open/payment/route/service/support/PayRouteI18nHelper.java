@@ -53,7 +53,7 @@ public class PayRouteI18nHelper {
 
     /// 取枚举国际化名称，未配置则回退原始 code
     private String label(I18nSupport i18nSupport, String fallbackCode) {
-        if (i18nSupport == null) {
+        if (Objects.isNull(i18nSupport)) {
             return fallbackCode;
         }
         String name = I18nUtil.getEnumName(i18nSupport);

@@ -76,7 +76,7 @@ public class NormalPayService {
 
     /// 校验支付展示类文本敏感词
     private void assertSensitiveWordClean(NormalPayParam payParam) {
-        if (payParam == null) {
+        if (Objects.isNull(payParam)) {
             return;
         }
         sensitiveWordCheckService.assertClean(payParam.getTitle(), SensitiveWordSceneEnum.PAY_TITLE);
@@ -85,7 +85,7 @@ public class NormalPayService {
             return;
         }
         for (GoodsDetail goods : payParam.getGoodsDetail()) {
-            if (goods == null) {
+            if (Objects.isNull(goods)) {
                 continue;
             }
             sensitiveWordCheckService.assertClean(goods.getGoodsName(), SensitiveWordSceneEnum.GOODS_NAME);

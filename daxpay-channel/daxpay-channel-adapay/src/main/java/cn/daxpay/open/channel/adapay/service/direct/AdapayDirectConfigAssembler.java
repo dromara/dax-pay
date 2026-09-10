@@ -12,6 +12,7 @@ import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 /// # Adapay 直连通道凭证组装器
 ///
@@ -58,7 +59,7 @@ public class AdapayDirectConfigAssembler {
         // 4. 产品策略声明需要绑定微信应用的能力(JSAPI/小程序)尽力解析 wx_app_id(Adapay 聚合通道 wxAppId 可选)
         //    (sync/close/refund 场景 capability 为空, 跳过解析不影响凭证复用)
         PayCapabilityEnum cap = PayCapabilityEnum.findByCode(capability);
-        if (cap != null && productStrategy.wxAppRequiredCapabilities().contains(cap)) {
+        if (Objects.nonNull(cap) && productStrategy.wxAppRequiredCapabilities().contains(cap)) {
             // Adapay 为聚合通道, wxAppId 可选(汇付后台已绑定时可不传), 尽力解析而非强制
             wxAppFacade.resolveOptional(mchNo, channelMchNo, capability, null, ProductEnum.ADA_PAY.getCode())
                     .ifPresent(app -> credential.setWxAppId(app.wxAppId()));

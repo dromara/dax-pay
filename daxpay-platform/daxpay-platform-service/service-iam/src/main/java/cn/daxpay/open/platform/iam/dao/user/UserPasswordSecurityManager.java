@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Optional;
+import java.util.Objects;
 
 /// # 用户密码安全信息
 ///
@@ -63,7 +64,7 @@ public class UserPasswordSecurityManager extends BaseManager<UserPasswordSecurit
                 .update();
         // setSql 不返回新值, 重新读取拿 DB 权威值(残余竞态最多偏小 1, 对锁定判断可接受)
         return findById(userId)
-                .map(s -> s.getPasswordErrorCount() == null ? 0 : s.getPasswordErrorCount())
+                .map(s -> Objects.isNull(s.getPasswordErrorCount()) ? 0 : s.getPasswordErrorCount())
                 .orElse(0);
     }
 

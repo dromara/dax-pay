@@ -24,6 +24,7 @@ import tools.jackson.core.type.TypeReference;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /// # 测试回调接受控制器
 ///
@@ -133,7 +134,7 @@ public class TestCallbackController {
     private String pickFirst(Map<?, ?> map, String... keys) {
         for (String key : keys) {
             Object val = map.get(key);
-            if (val != null) {
+            if (Objects.nonNull(val)) {
                 return String.valueOf(val);
             }
         }

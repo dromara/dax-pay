@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 /// # 社交登录 URL 构建工具
 ///
@@ -24,7 +25,7 @@ public final class SocialUrlBuilder {
 
     /// 追加查询参数, 值为 null 或空串时跳过
     public SocialUrlBuilder queryParam(String key, Object value) {
-        if (value == null) {
+        if (Objects.isNull(value)) {
             return this;
         }
         String strValue = String.valueOf(value);

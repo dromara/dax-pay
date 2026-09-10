@@ -45,17 +45,17 @@ public class SensitiveInfoSerialize extends ValueSerializer<String> {
 
     @Override
     public ValueSerializer<?> createContextual(SerializationContext ctxt, BeanProperty property) {
-        if (property == null) { // 为空直接跳过
+        if (Objects.isNull(property)) { // 为空直接跳过
             return this;
         }
         if (!Objects.equals(property.getType().getRawClass(), String.class)) { // 非 String 类直接跳过
             return null;
         }
         SensitiveInfo sensitiveInfo = property.getAnnotation(SensitiveInfo.class);
-        if (sensitiveInfo == null) {
+        if (Objects.isNull(sensitiveInfo)) {
             sensitiveInfo = property.getContextAnnotation(SensitiveInfo.class);
         }
-        if (sensitiveInfo != null) { // 如果能得到注解，就将注解的 value 传入 SensitiveInfoSerialize
+        if (Objects.nonNull(sensitiveInfo)) { // 如果能得到注解，就将注解的 value 传入 SensitiveInfoSerialize
             return new SensitiveInfoSerialize(sensitiveInfo);
         }
         return null; // 无注解，让 Jackson 使用默认序列化器

@@ -70,7 +70,7 @@ public class WechatPayCallbackService {
         req.setTimestamp(this.getHeader(headerMap, WechatCode.HEADER_TIMESTAMP));
 
         DaxResult<WechatCallbackParseResp> result = wechatChannelClient.parsePayCallback(req);
-        if (result.getCode() != 0 || result.getData() == null || !result.getData().isVerified()) {
+        if (result.getCode() != 0 || Objects.isNull(result.getData()) || !result.getData().isVerified()) {
             log.error("微信支付回调验签失败: channelMchNo={}, isv={}", channelMchNo, isv);
             CallbackData failData = new CallbackData();
             Map<String, Object> notify = new HashMap<>();
@@ -129,6 +129,6 @@ public class WechatPayCallbackService {
     /// 获取 header(大小写兼容)
     private String getHeader(Map<String, String> headerMap, String name) {
         String value = headerMap.get(name);
-        return value != null ? value : headerMap.get(name.toLowerCase());
+        return Objects.nonNull(value) ? value : headerMap.get(name.toLowerCase());
     }
 }

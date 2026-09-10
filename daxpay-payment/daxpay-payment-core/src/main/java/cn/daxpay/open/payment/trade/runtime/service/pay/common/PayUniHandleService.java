@@ -57,7 +57,7 @@ public class PayUniHandleService {
     @Transactional(rollbackFor = Exception.class)
     public void payAfterHandel(PayTrade trade, PayTradeResultBo result) {
         // 特殊通道返回的上送变形号写 trade 反查权威
-        if (result.getRelationOrderNo() != null) {
+        if (Objects.nonNull(result.getRelationOrderNo())) {
             trade.setRelationOrderNo(result.getRelationOrderNo());
         }
         // CAS 前置态: 支付发起后仅 INIT/PROCESSING 可流转
@@ -72,7 +72,7 @@ public class PayUniHandleService {
             log.warn("payAfterHandel CAS 失败, 状态已被其他线程改变, tradeNo={}", trade.getTradeNo());
             return;
         }
-        if (order != null) {
+        if (Objects.nonNull(order)) {
             applyReceipts(order, result);
             if (Objects.equals(trade.getStatus(), PayFundStatusEnum.SUCCESS.getCode())) {
                 order.setStatus(route.paidCode());
@@ -100,13 +100,13 @@ public class PayUniHandleService {
             log.warn("paySuccess(sync) CAS 失败, 状态已被其他线程改变, tradeNo={}", trade.getTradeNo());
             return;
         }
-        if (order != null) {
+        if (Objects.nonNull(order)) {
             // provider 已在 applySyncReceipts 回填, 此处不重复兜底
             order.setStatus(route.paidCode());
             order.setPayTime(trade.getPayTime());
             route.saver().accept(order);
         }
-        this.afterSuccess(trade, syncResult != null ? syncResult.getBuyerId() : null);
+        this.afterSuccess(trade, Objects.nonNull(syncResult) ? syncResult.getBuyerId() : null);
     }
 
     /// 支付成功后续处理(回调路径)；可选回写 buyerId 后补录风控
@@ -118,7 +118,7 @@ public class PayUniHandleService {
                 PayFundStatusEnum.INIT.getCode());
         ContainerRoute route = router(trade);
         PayReceiptContainer order = route.loader().apply(trade.getContainerId());
-        if (order != null && StrUtil.isNotBlank(buyerId)) {
+        if (Objects.nonNull(order) && StrUtil.isNotBlank(buyerId)) {
             order.setBuyerId(buyerId);
         }
         applyProviderFallback(trade, order);
@@ -253,7 +253,7 @@ public class PayUniHandleService {
 
     /// 容器置已支付; 若已加载实体则复用, 避免重复查询, 并同步 provider 回填
     private void markContainerPaid(PayTrade trade, PayReceiptContainer order, ContainerRoute route) {
-        if (order == null) {
+        if (Objects.isNull(order)) {
             return;
         }
         order.setStatus(route.paidCode());
@@ -269,7 +269,7 @@ public class PayUniHandleService {
         String msg = truncateErrorMsg(errMsg);
         ContainerRoute route = router(trade);
         PayReceiptContainer order = route.loader().apply(trade.getContainerId());
-        if (order != null) {
+        if (Objects.nonNull(order)) {
             order.setStatus(route.failedCode());
             order.setCloseTime(now);
             order.setErrorMsg(msg);
@@ -281,12 +281,12 @@ public class PayUniHandleService {
     private void markContainerClosed(PayTrade trade, OffsetDateTime now, boolean expired, String errMsg) {
         ContainerRoute route = router(trade);
         PayReceiptContainer order = route.loader().apply(trade.getContainerId());
-        if (order != null) {
+        if (Objects.nonNull(order)) {
             order.setStatus(expired
                     ? route.expiredCode()
                     : route.closedCode());
             order.setCloseTime(now);
-            if (errMsg != null) {
+            if (Objects.nonNull(errMsg)) {
                 order.setErrorMsg(truncateErrorMsg(errMsg));
             }
             route.saver().accept(order);
@@ -295,7 +295,7 @@ public class PayUniHandleService {
 
     /// 错误信息截断, 避免通道超长报文撑爆列
     private static String truncateErrorMsg(String errMsg) {
-        if (errMsg == null) {
+        if (Objects.isNull(errMsg)) {
             return null;
         }
         return errMsg.length() <= 500 ? errMsg : errMsg.substring(0, 500);
@@ -305,7 +305,7 @@ public class PayUniHandleService {
     private void applyReceipts(PayReceiptContainer order, PayTradeResultBo result) {
         order.setTransOrderNo(result.getTransOrderNo());
         // 特殊通道返回变形上送号时回写容器展示; 空则保留创建时的 orderNo 副本
-        if (result.getRelationOrderNo() != null) {
+        if (Objects.nonNull(result.getRelationOrderNo())) {
             order.setRelationOrderNo(result.getRelationOrderNo());
         }
         order.setBuyerId(result.getBuyerId());
@@ -322,18 +322,18 @@ public class PayUniHandleService {
 
     /// 容器写入同步查单回执字段(含 provider 回填)
     private void applySyncReceipts(PayTrade trade, PayReceiptContainer order, PaySyncResultBo syncResult) {
-        if (syncResult == null) {
+        if (Objects.isNull(syncResult)) {
             return;
         }
         if (Objects.nonNull(syncResult.getProvider())) {
             String providerCode = syncResult.getProvider().getCode();
-            if (order != null) {
+            if (Objects.nonNull(order)) {
                 order.setProvider(providerCode);
             }
             // 冗余至资金凭证, 渠道分布报表/资金列表免 JOIN 容器
             trade.setProvider(providerCode);
         }
-        if (order == null) {
+        if (Objects.isNull(order)) {
             return;
         }
         order.setBuyerId(syncResult.getBuyerId());
@@ -346,14 +346,14 @@ public class PayUniHandleService {
 
     /// trade.provider 为空时从容器 provider / method 兜底, 并回写容器空 provider
     private void applyProviderFallback(PayTrade trade, PayReceiptContainer order) {
-        String containerProvider = order != null ? order.getProvider() : null;
-        String method = order != null ? order.getMethod() : null;
+        String containerProvider = Objects.nonNull(order) ? order.getProvider() : null;
+        String method = Objects.nonNull(order) ? order.getMethod() : null;
         String provider = PayTradeProviderUtil.coalesceProvider(trade.getProvider(), containerProvider, method);
         if (StrUtil.isBlank(provider)) {
             return;
         }
         trade.setProvider(provider);
-        if (order != null && StrUtil.isBlank(order.getProvider())) {
+        if (Objects.nonNull(order) && StrUtil.isBlank(order.getProvider())) {
             order.setProvider(provider);
         }
     }

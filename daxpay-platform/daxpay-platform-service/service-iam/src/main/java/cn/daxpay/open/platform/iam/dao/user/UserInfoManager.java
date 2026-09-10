@@ -18,6 +18,7 @@ import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Optional;
+import java.util.Objects;
 
 /// # 用户信息
 ///
@@ -60,7 +61,7 @@ public class UserInfoManager extends BaseManager<UserInfoMapper, UserInfo> {
 
     /// 按终端+邮箱校验是否存在（终端维度唯一性）
     public boolean existsByClientCodeAndEmail(String clientCode, String email) {
-        if (email == null || email.isBlank()) {
+        if (Objects.isNull(email) || email.isBlank()) {
             return false;
         }
         return lambdaQuery()
@@ -71,7 +72,7 @@ public class UserInfoManager extends BaseManager<UserInfoMapper, UserInfo> {
 
     /// 按终端+邮箱校验是否存在，排除指定用户ID（编辑时防重）
     public boolean existsByClientCodeAndEmail(String clientCode, String email, Long excludeId) {
-        if (email == null || email.isBlank()) {
+        if (Objects.isNull(email) || email.isBlank()) {
             return false;
         }
         return lambdaQuery()

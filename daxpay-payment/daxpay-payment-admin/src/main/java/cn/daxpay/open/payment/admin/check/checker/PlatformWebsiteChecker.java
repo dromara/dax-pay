@@ -10,6 +10,7 @@ import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import java.util.Objects;
 
 /// # 平台站点信息检查器
 ///
@@ -32,7 +33,7 @@ public class PlatformWebsiteChecker implements AdminConfigChecker {
         PlatformWebsiteConfig config = systemPlatformConfigService.getConfig(
                 PlatformConfigTypeEnum.WEBSITE, PlatformWebsiteConfig.class);
         // 关键字段任一为空 => 告警(系统名称与 Logo 是站点基础展示, ICP 为合规要求)
-        boolean unconfigured = config == null
+        boolean unconfigured = Objects.isNull(config)
                 || StrUtil.isBlank(config.getSystemName())
                 || StrUtil.isBlank(config.getLogo())
                 || StrUtil.isBlank(config.getIcpInfo());

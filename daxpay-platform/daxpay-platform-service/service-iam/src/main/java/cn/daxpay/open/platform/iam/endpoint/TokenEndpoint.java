@@ -19,6 +19,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import java.util.Objects;
 
 /// # 基础登录退出操作
 ///
@@ -53,13 +54,13 @@ public class TokenEndpoint {
     @Operation(summary = "获取登录页上下文")
     @PostMapping("/login-content")
     public Result<LoginContentResult> getLoginContent(@RequestBody(required = false) LoginContentParam param) {
-        return Res.ok(loginContentService.getLoginContent(param == null ? new LoginContentParam() : param));
+        return Res.ok(loginContentService.getLoginContent(Objects.isNull(param) ? new LoginContentParam() : param));
     }
 
     @Operation(summary = "获取二次校验信息")
     @PostMapping("/second-check")
     public Result<SecondCheckResult> getSecondCheck(@RequestBody(required = false) LoginContentParam param) {
-        return Res.ok(secondCheckService.getSecondCheck(param == null ? new LoginContentParam() : param));
+        return Res.ok(secondCheckService.getSecondCheck(Objects.isNull(param) ? new LoginContentParam() : param));
     }
 
     @Operation(summary = "二次验证")

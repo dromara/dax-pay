@@ -84,7 +84,7 @@ public class EasyPayAssistService {
     /// 协议 type + create method 映射内部 PayMethod
     public String resolvePayMethod(String type, String method, String device, Integer isApplet) {
         EasyPayMethodEnum methodEnum = EasyPayMethodEnum.findByCode(type);
-        if (methodEnum == null) {
+        if (Objects.isNull(methodEnum)) {
             throw new ValidationFailedException("error.plugin.easypay.unsupportedType");
         }
         boolean applet = Objects.equals(isApplet, 1);
@@ -116,7 +116,7 @@ public class EasyPayAssistService {
 
     /// payBodyType → 协议 pay_type
     public String toPayType(String payBodyType) {
-        if (payBodyType == null) {
+        if (Objects.isNull(payBodyType)) {
             return "qrcode";
         }
         if (Objects.equals(payBodyType, PayBodyTypeEnum.QR_CODE.getCode())
@@ -161,7 +161,7 @@ public class EasyPayAssistService {
 
     /// 根据协议单定位资金交易
     public PayTrade requireTrade(EasyPayOrder order) {
-        if (order.getOrderId() != null) {
+        if (Objects.nonNull(order.getOrderId())) {
             return payTradeManager.findByContainerId(order.getOrderId(), PayTradeTypeEnum.NORMAL.getCode())
                     .orElseThrow(() -> new DataNotExistException("error.plugin.easypay.tradeNotFound"));
         }

@@ -50,7 +50,7 @@ public class StripePayCallbackService {
 
         // 3. 转发到子应用验签解析
         StripeCallbackParseResp resp = this.parsePayCallback(credential, body, headerMap);
-        if (resp == null) {
+        if (Objects.isNull(resp)) {
             log.error("Stripe 支付回调验签失败: channelMchNo={}", channelMchNo);
             CallbackData failData = new CallbackData();
             Map<String, Object> notify = new HashMap<>();
@@ -105,7 +105,7 @@ public class StripePayCallbackService {
         // resp.outOrderNo 是 Stripe PaymentIntent ID
         data.setOutTradeNo(resp.getOutOrderNo());
         // 支付成功时间
-        if (resp.getFinishTime() != null && !resp.getFinishTime().isBlank()) {
+        if (Objects.nonNull(resp.getFinishTime()) && !resp.getFinishTime().isBlank()) {
             data.setFinishTime(OffsetDateTime.parse(resp.getFinishTime()));
         }
         // 交易状态映射: succeeded → 回调 SUCCESS; 其他 → 非成功(触发 fail 处理)
@@ -121,6 +121,6 @@ public class StripePayCallbackService {
     /// 获取 header(大小写兼容)
     private String getHeader(Map<String, String> headerMap, String name) {
         String value = headerMap.get(name);
-        return value != null ? value : headerMap.get(name.toLowerCase());
+        return Objects.nonNull(value) ? value : headerMap.get(name.toLowerCase());
     }
 }

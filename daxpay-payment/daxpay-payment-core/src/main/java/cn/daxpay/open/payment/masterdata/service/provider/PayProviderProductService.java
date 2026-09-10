@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Objects;
 
 /// # 支付渠道与支付方式对应的产品
 ///
@@ -40,7 +41,7 @@ public class PayProviderProductService {
                     .setLabel(product.getName())
                     .setValue(product.getCode())
                     .setChannel(product.getChannel())
-                    .setChannelName(product.getChannelName() != null
+                    .setChannelName(Objects.nonNull(product.getChannelName())
                             ? product.getChannelName()
                             : I18nUtil.getEnumName(ChannelEnum.findByCode(product.getChannel())));
             for (PayProviderMethodEntry entry : directoryEntries) {

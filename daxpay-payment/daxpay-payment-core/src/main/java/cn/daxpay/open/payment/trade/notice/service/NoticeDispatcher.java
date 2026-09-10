@@ -35,7 +35,7 @@ public class NoticeDispatcher {
 
     /// 派发通知意图
     public void dispatch(NoticeDispatchCommand command) {
-        if (command == null
+        if (Objects.isNull(command)
                 || StrUtil.isBlank(command.getMchNo())
                 || StrUtil.isBlank(command.getAppId())
                 || StrUtil.isBlank(command.getEvent())
@@ -43,11 +43,11 @@ public class NoticeDispatcher {
             log.warn("出站通知命令缺少必要字段, skip");
             return;
         }
-        NoticeTransportEnum transport = command.getTransport() == null
+        NoticeTransportEnum transport = Objects.isNull(command.getTransport())
                 ? NoticeTransportEnum.HTTP : command.getTransport();
-        NoticeFormatEnum format = command.getFormat() == null
+        NoticeFormatEnum format = Objects.isNull(command.getFormat())
                 ? NoticeFormatEnum.SYSTEM : command.getFormat();
-        NoticeContentModeEnum contentMode = command.getContentMode() == null
+        NoticeContentModeEnum contentMode = Objects.isNull(command.getContentMode())
                 ? NoticeContentModeEnum.SNAPSHOT : command.getContentMode();
 
         // SYSTEM 格式: 订单级 + 应用级 双轨并行 (订单级恒 HTTP)
@@ -63,7 +63,7 @@ public class NoticeDispatcher {
     /// 应用级订阅: 按 [MchAppNotifyConfig].notifyWay 决定传输通道
     private void tryCreateApp(NoticeDispatchCommand command, NoticeContentModeEnum contentMode) {
         MchAppNotifyConfig config = notifyConfigManager.findByAppId(command.getAppId()).orElse(null);
-        if (config == null || !Boolean.TRUE.equals(config.getStatus())) {
+        if (Objects.isNull(config) || !Boolean.TRUE.equals(config.getStatus())) {
             return;
         }
         if (!matchSubscribed(config.getSubscribedEvents(), command.getEvent())) {

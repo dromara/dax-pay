@@ -21,6 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 /// # 抖音开放应用解析服务
 ///
@@ -38,7 +39,7 @@ public class DyAppResolveService implements DouyinAppFacade {
     /// 按档位与主键加载应用视图（含 Auth）
     @Override
     public DyAppView getById(AppScopeEnum scope, Long id) {
-        if (scope == null || id == null) {
+        if (Objects.isNull(scope) || Objects.isNull(id)) {
             // 抖音: 档位不存在
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.payment.douyin.scopeNotExist");
         }
@@ -89,7 +90,7 @@ public class DyAppResolveService implements DouyinAppFacade {
         // 3. 直连场景商户档 appType 推导(要求唯一命中, 多个直接报错); 非直连未配置则直接报错
         if (direct) {
             DyAppView merchantFallback = this.resolveMerchantFallback(mchNo, capability);
-            if (merchantFallback != null) {
+            if (Objects.nonNull(merchantFallback)) {
                 return merchantFallback;
             }
         }
@@ -138,7 +139,7 @@ public class DyAppResolveService implements DouyinAppFacade {
                 }
             }
         }
-        if (platform == null) {
+        if (Objects.isNull(platform)) {
             // 抖音: 未配置该能力对应的平台应用（sp 必填）
             throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
                     "error.payment.douyin.appNotConfigured", capability);
@@ -191,7 +192,7 @@ public class DyAppResolveService implements DouyinAppFacade {
             if (apps.size() > 1) {
                 // 该类型存在多个商户应用, 要求显式配置能力绑定
                 DyAppTypeEnum typeEnum = DyAppTypeEnum.findByCode(appType);
-                String appTypeLabel = typeEnum != null ? I18nUtil.getEnumName(typeEnum) : appType;
+                String appTypeLabel = Objects.nonNull(typeEnum) ? I18nUtil.getEnumName(typeEnum) : appType;
                 throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
                         "error.payment.douyin.appNotUnique", appTypeLabel);
             }

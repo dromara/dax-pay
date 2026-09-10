@@ -147,7 +147,7 @@ public class GatewayAuthService {
 
     /// 收银台: 按 itemId 解析 METHOD/DIRECT 后再路由(与 CashierPayService 同源)
     private RouteSnapshot resolveCashierRoute(GatewayPayOrder order, GatewayAuthUrlParam param) {
-        if (param.getItemId() == null) {
+        if (Objects.isNull(param.getItemId())) {
             // 参数校验: 收银台支付项 ID 不能为空
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "validation.field.itemId.notBlank");

@@ -39,19 +39,19 @@ public class AllocCallbackService {
     /// @param detailResults 通道解析出的逐明细结果(由通道回调 Service 装配)
     public void allocCallback(CallbackData data, List<AllocResultBo.DetailResult> detailResults) {
         // allocNo 与通道分账号须至少一项非空(通道差异容忍: 部分通道通知仅含通道侧单号)
-        if (data == null || (data.getTradeNo() == null && data.getOutTradeNo() == null)) {
+        if (Objects.isNull(data) || (Objects.isNull(data.getTradeNo()) && Objects.isNull(data.getOutTradeNo()))) {
             log.warn("分账回调: 分账单号与通道分账号均为空, 跳过");
             return;
         }
         // 按 allocNo 反查(忽略租户, 回调无 HTTP 上下文)
-        AllocOrder allocOrder = data.getTradeNo() != null
+        AllocOrder allocOrder = Objects.nonNull(data.getTradeNo())
                 ? allocOrderManager.findByAllocNoNotTenant(data.getTradeNo()).orElse(null)
                 : null;
-        if (allocOrder == null && data.getOutTradeNo() != null) {
+        if (Objects.isNull(allocOrder) && Objects.nonNull(data.getOutTradeNo())) {
             // 容错: 按通道分账号反查
             allocOrder = allocOrderManager.findByOutAllocNo(data.getOutTradeNo()).orElse(null);
         }
-        if (allocOrder == null) {
+        if (Objects.isNull(allocOrder)) {
             log.warn("分账回调: 分账单不存在, allocNo={}, outAllocNo={}", data.getTradeNo(), data.getOutTradeNo());
             // 回传处理状态, 供外层落回调记录(本服务不落记录, 只审计不重放)
             data.setCallbackStatus(CallbackStatusEnum.NOT_FOUND).setCallbackErrorMsg("分账单不存在");
@@ -65,7 +65,7 @@ public class AllocCallbackService {
         lockExecutor.run(TradeLockKeys.allocTrade(allocOrder.getId()), () -> {
             // 锁内二次读: 须仍为 processing 才继续(终态幂等忽略)
             AllocOrder latest = allocOrderManager.findById(allocOrder.getId()).orElse(null);
-            if (latest == null
+            if (Objects.isNull(latest)
                     || !Objects.equals(latest.getStatus(), AllocOrderStatusEnum.PROCESSING.getCode())) {
                 log.info("分账回调幂等: 分账单 {} 非处理中, 跳过", allocOrder.getAllocNo());
                 // 回传处理状态: 非处理中不流转, 幂等忽略(供外层落回调记录)
@@ -73,7 +73,7 @@ public class AllocCallbackService {
                 return;
             }
             // 按逐明细结果聚合状态
-            if (detailResults == null || detailResults.isEmpty()) {
+            if (Objects.isNull(detailResults) || detailResults.isEmpty()) {
                 log.warn("分账回调: 明细结果为空, allocNo={}", latest.getAllocNo());
                 // 回传处理状态: 通知数据异常, 不流转(供外层落回调记录)
                 data.setCallbackStatus(CallbackStatusEnum.EXCEPTION).setCallbackErrorMsg("分账回调明细结果为空");

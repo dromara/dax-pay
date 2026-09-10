@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /// # 用户协议管理服务
 ///
@@ -106,7 +107,7 @@ public class UserProtocolService {
         result.setType(protocol.getType());
         result.setClientType(protocol.getClientType());
         result.setLanguage(lang);
-        if (version != null){
+        if (Objects.nonNull(version)){
             result.setVersionNo(version.getVersionNo());
             result.setVersionLabel(version.getVersionLabel());
             result.setTitle(version.getTitle());

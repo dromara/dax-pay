@@ -8,6 +8,7 @@ import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /// # 应用内社交自动登录配置
 ///
@@ -60,7 +61,7 @@ public class PlatformSocialAutoLoginConfig {
         @JsonIgnore
         public List<String> resolveSources() {
             this.normalize();
-            return this.sources == null ? List.of() : this.sources;
+            return Objects.isNull(this.sources) ? List.of() : this.sources;
         }
     }
 }

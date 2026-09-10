@@ -61,7 +61,7 @@ public class RefundSettleService {
             // 退款: 退款金额必须大于零
             throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.refund.amountInvalid");
         }
-        long balance = trade.getRefundableBalance() == null ? 0 : trade.getRefundableBalance();
+        long balance = Objects.isNull(trade.getRefundableBalance()) ? 0 : trade.getRefundableBalance();
         if (amount > balance) {
             // 退款: 退款金额不能大于支付金额
             throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.refund.amountExceed");
@@ -174,7 +174,7 @@ public class RefundSettleService {
         // 定时同步再次进入将重复回滚余额造成超发
         applyChannelRefs(refundOrder, finishTime, outRefundNo, relationOrderNo);
         refundOrder.setStatus(target);
-        if (errorMsg != null) {
+        if (Objects.nonNull(errorMsg)) {
             refundOrder.setErrorMsg(StrUtil.maxLength(errorMsg, 500));
         }
         // CAS: 仅 PROGRESS 可转 FAIL/CLOSE（锁内防御性兜底）
@@ -215,7 +215,7 @@ public class RefundSettleService {
         }
         applyChannelRefs(refundOrder, finishTime, outRefundNo, relationOrderNo);
         refundOrder.setStatus(RefundOrderStatusEnum.PROGRESS.getCode());
-        if (errorMsg != null) {
+        if (Objects.nonNull(errorMsg)) {
             refundOrder.setErrorMsg(StrUtil.maxLength(errorMsg, 500));
         } else {
             refundOrder.setErrorMsg(null);
@@ -228,7 +228,7 @@ public class RefundSettleService {
     /// 回写通道关联号/完成时间
     private void applyChannelRefs(RefundOrder refundOrder, OffsetDateTime finishTime,
                                   String outRefundNo, String relationOrderNo) {
-        if (finishTime != null) {
+        if (Objects.nonNull(finishTime)) {
             refundOrder.setFinishTime(finishTime);
         }
         if (StrUtil.isNotBlank(outRefundNo)) {
@@ -243,8 +243,8 @@ public class RefundSettleService {
     private void restoreBalance(RefundOrder refundOrder) {
         PayTrade trade = payTradeManager.findByTradeNo(refundOrder.getTradeNo())
                 .orElseThrow(() -> new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.notExists"));
-        long balance = trade.getRefundableBalance() == null ? 0 : trade.getRefundableBalance();
-        long amount = refundOrder.getAmount() == null ? 0 : refundOrder.getAmount();
+        long balance = Objects.isNull(trade.getRefundableBalance()) ? 0 : trade.getRefundableBalance();
+        long amount = Objects.isNull(refundOrder.getAmount()) ? 0 : refundOrder.getAmount();
         trade.setRefundableBalance(balance + amount);
         payTradeManager.updateById(trade);
         log.info("退款预占回滚: refundNo={}, amount={}, newBalance={}",

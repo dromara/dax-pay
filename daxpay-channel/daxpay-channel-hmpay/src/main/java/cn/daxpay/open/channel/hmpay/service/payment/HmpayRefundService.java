@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 /// # 河马付服务商退款执行业务服务
 ///
@@ -60,6 +61,6 @@ public class HmpayRefundService {
 
     /// OffsetDateTime → yyyyMMddHHmmss(东八区)
     private String formatPureDateTime(OffsetDateTime time) {
-        return time == null ? null : time.toLocalDateTime().format(PURE_DATETIME);
+        return Objects.isNull(time) ? null : time.toLocalDateTime().format(PURE_DATETIME);
     }
 }

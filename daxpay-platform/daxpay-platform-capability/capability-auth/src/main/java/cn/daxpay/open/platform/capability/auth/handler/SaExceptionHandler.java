@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.Locale;
+import java.util.Objects;
 
 /// # 过滤SaTokenException,需要运行在 RestExceptionHandler 之前
 ///
@@ -38,7 +39,7 @@ public class SaExceptionHandler {
     /// 判断当前响应是否为 SSE 事件流(Content-Type 已锁定为 text/event-stream)
     private boolean isSseStream(HttpServletResponse response) {
         String contentType = response.getContentType();
-        return contentType != null && contentType.contains(MediaType.TEXT_EVENT_STREAM_VALUE);
+        return Objects.nonNull(contentType) && contentType.contains(MediaType.TEXT_EVENT_STREAM_VALUE);
     }
 
     /// SSE 流或非 REQUEST 派发(ASYNC/ERROR 等): 上下文/鉴权异常按常态降级

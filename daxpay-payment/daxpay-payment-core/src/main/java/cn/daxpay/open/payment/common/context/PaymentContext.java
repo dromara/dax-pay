@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 import java.util.function.Supplier;
+import java.util.Objects;
 
 /// # 支付运行时上下文(线程级身份)
 ///
@@ -28,7 +29,7 @@ public final class PaymentContext {
 
     /// 开启作用域(创建空身份),已开启则抛异常避免重复绑定
     public void open() {
-        if (HOLDER.get() != null) {
+        if (Objects.nonNull(HOLDER.get())) {
             throw new IllegalStateException("PaymentContext already active on this thread");
         }
         HOLDER.set(new TradeActor());
@@ -41,7 +42,7 @@ public final class PaymentContext {
 
     /// 当前线程是否已开启作用域
     public boolean isOpen() {
-        return HOLDER.get() != null;
+        return Objects.nonNull(HOLDER.get());
     }
 
     /// 在作用域内执行(自动管理生命周期,同步)。
@@ -94,7 +95,7 @@ public final class PaymentContext {
 
     private TradeActor requireBound() {
         TradeActor actor = HOLDER.get();
-        if (actor == null) {
+        if (Objects.isNull(actor)) {
             // 若为 MQ/定时任务等非 HTTP 场景,请通过 runAs 开启作用域
             throw new IllegalStateException("PaymentContext not active on this thread");
         }

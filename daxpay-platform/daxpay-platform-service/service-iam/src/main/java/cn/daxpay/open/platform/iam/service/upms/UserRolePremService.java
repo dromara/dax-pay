@@ -20,6 +20,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Objects;
 
 /// # 用户角色权限关联关系服务
 ///
@@ -102,9 +103,9 @@ public class UserRolePremService {
         for (Long menuId : directMenuIds) {
             Set<Long> visited = new HashSet<>();
             Long currentId = menuId;
-            while (currentId != null && visited.add(currentId)) {
+            while (Objects.nonNull(currentId) && visited.add(currentId)) {
                 PermMenu currentMenu = menuMap.get(currentId);
-                if (currentMenu == null || currentMenu.getPid() == null || currentMenu.getPid() == 0L) {
+                if (Objects.isNull(currentMenu) || Objects.isNull(currentMenu.getPid()) || currentMenu.getPid() == 0L) {
                     break;
                 }
                 Long pid = currentMenu.getPid();

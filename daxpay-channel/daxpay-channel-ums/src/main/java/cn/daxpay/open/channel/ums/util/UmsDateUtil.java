@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 /// # 银联商务通道日期工具(主应用侧)
 ///
@@ -34,7 +35,7 @@ public final class UmsDateUtil {
     /// 再附加 +08:00 偏移得到绝对时间点, 入库(timestamptz)时区正确。
     /// 传入 null 或空白字符串时返回 null。
     public static OffsetDateTime parseCst(String text) {
-        if (text == null || text.isBlank()) {
+        if (Objects.isNull(text) || text.isBlank()) {
             return null;
         }
         return LocalDateTime.parse(text, DATETIME_FORMATTER).atOffset(CST);

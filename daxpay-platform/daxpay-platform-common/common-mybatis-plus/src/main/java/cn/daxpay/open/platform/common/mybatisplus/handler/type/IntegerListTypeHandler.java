@@ -14,6 +14,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 
 /// # PostgreSQL jsonb 的 {@link List<Integer>} 类型处理器。
 ///
@@ -47,7 +48,7 @@ public class IntegerListTypeHandler extends BaseTypeHandler<List<Integer>> {
     }
 
     private List<Integer> parse(String json) throws SQLException {
-        if (json == null || json.isBlank()) {
+        if (Objects.isNull(json) || json.isBlank()) {
             return List.of();
         }
         try {
@@ -61,7 +62,7 @@ public class IntegerListTypeHandler extends BaseTypeHandler<List<Integer>> {
     private String toJson(List<Integer> value) throws SQLException {
         try {
             ObjectMapper objectMapper = JacksonUtil.getObjectMapper();
-            return objectMapper.writeValueAsString(value == null ? List.of() : value);
+            return objectMapper.writeValueAsString(Objects.isNull(value) ? List.of() : value);
         } catch (JacksonException e) {
             throw new SQLException("List<Integer>转jsonb失败", e);
         }

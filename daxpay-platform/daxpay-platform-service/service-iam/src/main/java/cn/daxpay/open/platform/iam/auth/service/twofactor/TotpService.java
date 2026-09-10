@@ -14,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.regex.Pattern;
+import java.util.Objects;
 
 /// # TOTP 双因素认证核心服务
 ///
@@ -64,7 +65,7 @@ public class TotpService {
         // 发行者兜底: 未配置时使用默认值
         String issuer = StrUtil.blankToDefault(config.getIssuer(), PlatformTwoFactorAuthConfig.DEFAULT_ISSUER);
         // otpauth://totp/Issuer:account?secret=...&issuer=...&algorithm=SHA1&digits=6&period=30
-        String label = URLUtil.encodeAll(issuer) + ":" + URLUtil.encodeAll(account == null ? "" : account);
+        String label = URLUtil.encodeAll(issuer) + ":" + URLUtil.encodeAll(Objects.isNull(account) ? "" : account);
         return String.format(
                 "otpauth://totp/%s?secret=%s&issuer=%s&algorithm=SHA1&digits=%d&period=%d",
                 label, secret, URLUtil.encodeAll(issuer), DIGITS, PERIOD);
@@ -77,7 +78,7 @@ public class TotpService {
     /// @return 校验通过返回 true, 动态码不匹配返回 false
     /// @throws OperationFailException 密钥格式非法(疑似配置/数据损坏), 须与"用户输错码"明确区分
     public boolean verifyCode(String secret, String code) {
-        if (secret == null || secret.isBlank() || code == null || code.isBlank()) {
+        if (Objects.isNull(secret) || secret.isBlank() || Objects.isNull(code) || code.isBlank()) {
             return false;
         }
         // hutool Base32 解码对非法字符是静默跳过(不抛异常), 密钥损坏会解码出错误字节,
@@ -96,7 +97,7 @@ public class TotpService {
             // 容忍时钟漂移: 前后各 DISCREPANCY 个时间桶
             for (long offset = -DISCREPANCY; offset <= DISCREPANCY; offset++) {
                 String expected = generateCode(key, currentBucket + offset);
-                if (expected != null && expected.equals(code)) {
+                if (Objects.nonNull(expected) && expected.equals(code)) {
                     return true;
                 }
             }

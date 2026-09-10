@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Objects;
 
 /// # 支付宝转账场景配置
 ///
@@ -47,7 +48,7 @@ public class AlipayTransferSceneConfigManager extends BaseManager<AlipayTransfer
 
     /// 按主键查询
     public Optional<AlipayTransferSceneConfig> findById(Long id) {
-        if (id == null) {
+        if (Objects.isNull(id)) {
             return Optional.empty();
         }
         return lambdaQuery()

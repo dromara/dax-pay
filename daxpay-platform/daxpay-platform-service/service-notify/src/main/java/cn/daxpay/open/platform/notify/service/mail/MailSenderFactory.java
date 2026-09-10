@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import java.nio.charset.StandardCharsets;
 import java.util.Properties;
+import java.util.Objects;
 
 /// # 邮件发送器工厂
 ///
@@ -35,9 +36,9 @@ public class MailSenderFactory {
     public JavaMailSender getSender() {
         PlatformMailConfig config = this.getMailConfig();
         String fingerprint = this.fingerprint(config);
-        if (cachedSender == null || !fingerprint.equals(cachedFingerprint)) {
+        if (Objects.isNull(cachedSender) || !fingerprint.equals(cachedFingerprint)) {
             synchronized (this) {
-                if (cachedSender == null || !fingerprint.equals(cachedFingerprint)) {
+                if (Objects.isNull(cachedSender) || !fingerprint.equals(cachedFingerprint)) {
                     cachedSender = this.build(config);
                     cachedFingerprint = fingerprint;
                 }

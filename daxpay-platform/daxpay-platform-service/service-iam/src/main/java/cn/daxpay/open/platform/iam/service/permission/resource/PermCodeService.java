@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 /// # 权限码管理
 ///
@@ -35,7 +36,7 @@ public class PermCodeService {
         PermMenu menu = permMenuManager.findById(menuId)
                 // 权限: 菜单不存在
                 .orElseThrow(() -> new DataNotExistException("error.iam.menu.notExist"));
-        if (menu.getMenuCode() == null || menu.getMenuCode().isBlank()) {
+        if (Objects.isNull(menu.getMenuCode()) || menu.getMenuCode().isBlank()) {
             return List.of();
         }
         return permCodeManager.findByMenuCode(menu.getMenuCode())

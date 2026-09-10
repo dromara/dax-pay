@@ -5,6 +5,7 @@ import lombok.experimental.Accessors;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.Objects;
 
 /// # 配置变更历史实体
 ///
@@ -41,7 +42,7 @@ public class ConfigChangeHistory {
     private String remark;
 
     protected void onCreate() {
-        if (modifiedAt == null) {
+        if (Objects.isNull(modifiedAt)) {
             modifiedAt = OffsetDateTime.now(ZoneOffset.UTC);
         }
     }

@@ -4,6 +4,7 @@ import cn.daxpay.open.platform.core.exception.BizException;
 import lombok.experimental.UtilityClass;
 
 import java.util.Locale;
+import java.util.Objects;
 
 /// # 业务异常错误消息解析工具
 ///
@@ -20,7 +21,7 @@ public class BizErrorMessageUtil {
     public String resolve(Throwable e) {
         if (e instanceof BizException biz) {
             String key = biz.resolveMessageKey();
-            if (key != null) {
+            if (Objects.nonNull(key)) {
                 return I18nUtil.get(key, Locale.CHINA, biz.getArgs());
             }
         }

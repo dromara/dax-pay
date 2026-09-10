@@ -17,6 +17,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+import java.util.Objects;
 
 /// # 商户信息
 ///
@@ -39,7 +40,7 @@ public class MerchantInfoManager extends BaseManager<MerchantInfoMapper, Merchan
     /// 根据商户号集合批量查询, 忽略租户(运营端跨租户翻译商户名称用)
     @IgnoreTenant
     public List<MerchantInfo> findAllByMchNosNotTenant(Collection<String> mchNos) {
-        if (mchNos == null || mchNos.isEmpty()) {
+        if (Objects.isNull(mchNos) || mchNos.isEmpty()) {
             return List.of();
         }
         return this.lambdaQuery()

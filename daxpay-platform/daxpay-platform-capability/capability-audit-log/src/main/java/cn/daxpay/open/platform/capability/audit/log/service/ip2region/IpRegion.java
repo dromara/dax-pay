@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.util.List;
+import java.util.Objects;
 
 /// # IP对应地址区域信息
 ///
@@ -86,7 +87,7 @@ public class IpRegion {
         if (CollUtil.isEmpty(ipInfo)){
             return ipRegion;
         }
-        boolean isOpenSource = version == null || version == Ip2regionDataVersion.OPEN_SOURCE;
+        boolean isOpenSource = Objects.isNull(version) || version == Ip2regionDataVersion.OPEN_SOURCE;
         int[] map = isOpenSource ? INDEX_OPEN_SOURCE : INDEX_COMMERCIAL;
 
         ipRegion.country     = safeGet(ipInfo, map[0]);
@@ -111,7 +112,7 @@ public class IpRegion {
     /// 后缀由长到短迭代去除, 覆盖 省/市/自治区/特别行政区 等, 与 RegionCodeResolver 的 normalizeRegionName 归一化口径一致。
     /// 例: "北京市"→"北京", "内蒙古自治区"→"内蒙古", "香港特别行政区"→"香港"; 自治州/盟保留全名(已知限制)。
     private static String normalizeName(String name) {
-        if (name == null) {
+        if (Objects.isNull(name)) {
             return "";
         }
         String result = name.trim();

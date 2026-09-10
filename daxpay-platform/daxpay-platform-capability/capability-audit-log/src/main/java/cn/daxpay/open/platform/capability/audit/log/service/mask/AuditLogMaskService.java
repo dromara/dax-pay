@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.Objects;
 
 /// # 审计日志脱敏服务
 ///
@@ -97,7 +98,7 @@ public class AuditLogMaskService {
 
             // 检查是否命中部分脱敏规则（优先级高）
             PartialMaskRule partialRule = partialRuleMap.get(lowerKey);
-            if (partialRule != null) {
+            if (Objects.nonNull(partialRule)) {
                 jsonObject.set(key, partialMask(strValue, partialRule.keepPrefix(), partialRule.keepSuffix()));
                 continue;
             }
@@ -131,7 +132,7 @@ public class AuditLogMaskService {
     /// 重复 key 采用后定义覆盖前定义
     private Map<String, PartialMaskRule> buildPartialRuleMap(PartialMaskRule[] partialRules) {
         Map<String, PartialMaskRule> ruleMap = new HashMap<>();
-        if (partialRules != null) {
+        if (Objects.nonNull(partialRules)) {
             for (PartialMaskRule rule : partialRules) {
                 String lowerKey = rule.key().toLowerCase();
                 if (ruleMap.containsKey(lowerKey)) {
@@ -149,7 +150,7 @@ public class AuditLogMaskService {
     /// - 从全量列表中排除部分脱敏规则的 key（部分脱敏优先）
     private Set<String> buildFullMaskKeySet(String[] fullMaskKeys, Set<String> partialKeys) {
         Set<String> keySet;
-        if (fullMaskKeys == null || fullMaskKeys.length == 0) {
+        if (Objects.isNull(fullMaskKeys) || fullMaskKeys.length == 0) {
             // 使用默认列表
             keySet = new HashSet<>(DEFAULT_SENSITIVE_KEYS);
         } else {
@@ -185,7 +186,7 @@ public class AuditLogMaskService {
     /// 字符串级别脱敏（JSON解析失败时的降级处理）
     private String maskStringLevel(String text, Map<String, PartialMaskRule> partialRuleMap,
                                    Set<String> fullMaskKeySet) {
-        if (text == null) {
+        if (Objects.isNull(text)) {
             return null;
         }
 
@@ -225,7 +226,7 @@ public class AuditLogMaskService {
 
     /// 内容截断
     private String truncate(String text, int maxLength) {
-        if (text == null || text.length() <= maxLength) {
+        if (Objects.isNull(text) || text.length() <= maxLength) {
             return text;
         }
         return text.substring(0, maxLength) + "...[truncated]";

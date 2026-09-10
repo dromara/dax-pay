@@ -32,6 +32,7 @@ import org.springframework.web.servlet.resource.NoResourceFoundException;
 import java.util.Locale;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 /// # 项目异常处理
 ///
@@ -52,7 +53,7 @@ public class RestExceptionHandler {
     /// 判断当前响应是否为 SSE 事件流(Content-Type 已锁定为 text/event-stream)
     private boolean isSseStream(HttpServletResponse response) {
         String contentType = response.getContentType();
-        return contentType != null && contentType.contains(MediaType.TEXT_EVENT_STREAM_VALUE);
+        return Objects.nonNull(contentType) && contentType.contains(MediaType.TEXT_EVENT_STREAM_VALUE);
     }
 
     /// SSE 场景统一日志: 降级为 info, 仅记录异常类型与消息, 不打印完整堆栈
@@ -63,7 +64,7 @@ public class RestExceptionHandler {
     /// 获取异常消息，支持国际化(按请求 locale, 用于响应)
     private String getMessage(BizException ex) {
         String messageKey = ex.resolveMessageKey();
-        if (messageKey != null) {
+        if (Objects.nonNull(messageKey)) {
             return I18nUtil.get(messageKey, ex.getArgs());
         }
         return ex.getMessage();
@@ -72,7 +73,7 @@ public class RestExceptionHandler {
     /// 获取异常的固定中文消息(用于日志, 不受请求语言影响)
     private String zhMessage(BizException ex) {
         String messageKey = ex.resolveMessageKey();
-        return messageKey != null ? I18nUtil.get(messageKey, Locale.CHINA, ex.getArgs()) : ex.getMessage();
+        return Objects.nonNull(messageKey) ? I18nUtil.get(messageKey, Locale.CHINA, ex.getArgs()) : ex.getMessage();
     }
 
     /// 业务异常统一处理: SSE 降级 + 日志(由 logger 决定级别与文案) + 国际化响应

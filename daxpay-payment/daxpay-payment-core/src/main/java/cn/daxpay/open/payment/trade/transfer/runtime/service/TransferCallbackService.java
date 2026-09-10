@@ -46,7 +46,7 @@ public class TransferCallbackService {
     public void transferCallback(String channelMchNo, String channel, CallbackData data) {
         // 锁外层: 反查凭证获取锁键维度
         TransferTrade trade = this.resolveTrade(data);
-        if (trade == null) {
+        if (Objects.isNull(trade)) {
             data.setCallbackStatus(CallbackStatusEnum.NOT_FOUND)
                     .setCallbackErrorMsg("转账单不存在,记录回调记录");
             log.warn("转账回调: 凭证不存在 channel={} tradeNo={} outTradeNo={}",
@@ -70,7 +70,7 @@ public class TransferCallbackService {
     public void doTransferCallback(String channelMchNo, String channel, CallbackData data, Long tradeId) {
         // 持锁后二次读取最新状态
         TransferTrade trade = transferTradeManager.findById(tradeId).orElse(null);
-        if (trade == null) {
+        if (Objects.isNull(trade)) {
             data.setCallbackStatus(CallbackStatusEnum.NOT_FOUND)
                     .setCallbackErrorMsg("转账单不存在,记录回调记录");
             payCallbackRecordService.saveTransfer(channelMchNo, data);

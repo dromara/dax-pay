@@ -12,6 +12,7 @@ import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.Objects;
 
 /// # 通道传输 AES-256-GCM 加密器（单密钥、无版本前缀）
 ///
@@ -48,7 +49,7 @@ public class ChannelAesGcmEncryptor {
 
     /// 校验密钥长度
     public static void validateKey(String key) {
-        if (key == null || key.length() != KEY_LENGTH) {
+        if (Objects.isNull(key) || key.length() != KEY_LENGTH) {
             // 通道传输加密密钥长度非法
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, MSG_KEY_INVALID, KEY_LENGTH);
         }
@@ -58,7 +59,7 @@ public class ChannelAesGcmEncryptor {
     /// @param plaintext UTF-8 明文（通常为 JSON）
     /// @return Base64(IV || ciphertext+tag)
     public String encrypt(String plaintext) {
-        if (plaintext == null) {
+        if (Objects.isNull(plaintext)) {
             return null;
         }
         try {
@@ -88,7 +89,7 @@ public class ChannelAesGcmEncryptor {
     /// @param ciphertext Base64(IV || ciphertext+tag)
     /// @return UTF-8 明文
     public String decrypt(String ciphertext) {
-        if (ciphertext == null) {
+        if (Objects.isNull(ciphertext)) {
             return null;
         }
         try {

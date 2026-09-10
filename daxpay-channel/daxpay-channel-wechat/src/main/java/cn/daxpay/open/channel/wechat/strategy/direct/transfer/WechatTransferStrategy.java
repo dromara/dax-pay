@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 /// # 微信直连转账策略
 ///
@@ -64,7 +65,7 @@ public class WechatTransferStrategy extends AbsTransferStrategy {
         }
         // 微信: 转账场景报备信息必填(接口 transfer_scene_report_infos 必填, 且 info_content 不可为空)
         List<TransferReportInfo> reportInfos = param.getReportInfos();
-        if (reportInfos == null || reportInfos.isEmpty()
+        if (Objects.isNull(reportInfos) || reportInfos.isEmpty()
                 || reportInfos.stream().anyMatch(info -> StrUtil.isBlank(info.getInfoContent()))) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.channel.wechat.transferReportInfoRequired");
@@ -111,7 +112,7 @@ public class WechatTransferStrategy extends AbsTransferStrategy {
             throw new BizInfoException(DaxPayErrorCode.CONFIG_NOT_EXIST,
                     "error.channel.wechat.transferSceneNotConfigured");
         }
-        if (transferConfig.getTransferAppRefId() == null) {
+        if (Objects.isNull(transferConfig.getTransferAppRefId())) {
             // 微信: 转账发起应用未配置
             throw new BizInfoException(DaxPayErrorCode.CONFIG_NOT_EXIST,
                     "error.channel.wechat.transferAppNotConfigured");

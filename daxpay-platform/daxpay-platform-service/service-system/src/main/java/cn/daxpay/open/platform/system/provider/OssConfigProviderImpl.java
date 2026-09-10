@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.Objects;
 
 /// # 平台OSS配置提供者实现
 ///
@@ -22,7 +23,7 @@ public class OssConfigProviderImpl implements OssConfigProvider {
     @Override
     public Optional<FileStorageConfig> getDefaultConfig() {
         PlatformOssConfig config = platformOssConfigService.getOssConfig();
-        if (config == null || config.getEndpoint() == null) {
+        if (Objects.isNull(config) || Objects.isNull(config.getEndpoint())) {
             log.warn("OSS配置不存在或未配置");
             return Optional.empty();
         }

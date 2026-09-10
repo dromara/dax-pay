@@ -70,13 +70,13 @@ public class PayRouteService {
         }
         String appId = payParam.getAppId();
         var bundle = routeBundleService.loadBundle(appId);
-        if (bundle == null || bundle.getStrategy() == null) {
+        if (Objects.isNull(bundle) || Objects.isNull(bundle.getStrategy())) {
             // 路由: 应用未配置通道路由策略
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.route.error.strategyNotFound");
         }
         PayRouteStrategy strategy = bundle.getStrategy();
         RouteHit hit = matchByMode(bundle, payParam, strategy.getMode());
-        if (hit == null) {
+        if (Objects.isNull(hit)) {
             // 路由: 未匹配到可用支付产品
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.route.error.noMatch");
         }
@@ -138,10 +138,10 @@ public class PayRouteService {
         if (StrUtil.isBlank(method)) {
             // 直接指定: 由(通道商户, 支付能力)反推支付方式, 供下游通道策略使用
             String inferred = inferMethodForCapability(channelMchNo, capability);
-            if (inferred == null) {
+            if (Objects.isNull(inferred)) {
                 // 支付能力[{0}]与通道商户[{1}]不匹配
                 PayCapabilityEnum capEnum = PayCapabilityEnum.findByCode(capability);
-                String capLabel = capEnum != null ? I18nUtil.getEnumName(capEnum) : capability;
+                String capLabel = Objects.nonNull(capEnum) ? I18nUtil.getEnumName(capEnum) : capability;
                 // 路由: 支付能力与通道商户不匹配
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "pay.route.error.directCapabilityChannelMchMismatch", capLabel, channelMchNo);
@@ -165,11 +165,11 @@ public class PayRouteService {
         }
         AbsProductStrategy strategy = PaymentStrategyFactory.createByProduct(product, AbsProductStrategy.class);
         PayCapabilityEnum capability = PayCapabilityEnum.findByCode(capabilityCode);
-        if (capability == null || !productCapabilityEnabled(product, capabilityCode)) {
+        if (Objects.isNull(capability) || !productCapabilityEnabled(product, capabilityCode)) {
             return null;
         }
         PayMethodEnum method = ProductStrategySupport.methodForCapability(strategy, capability);
-        return method == null ? null : method.getCode();
+        return Objects.isNull(method) ? null : method.getCode();
     }
 
     /// 产品是否挂载该能力且主数据存在（与迁前 productCapabilityEnabled 等价）
@@ -199,7 +199,7 @@ public class PayRouteService {
         PayMethodEnum methodEnum = PayMethodEnum.findByCode(payParam.getMethod());
         // 支付方式自带渠道属性(OTHER 等无归属时报错)
         PayProviderEnum provider = methodEnum.getProvider();
-        if (provider == null) {
+        if (Objects.isNull(provider)) {
             // 路由: 未指定支付产品时支付渠道不能为空
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.route.error.providerRequired");
         }
@@ -227,7 +227,7 @@ public class PayRouteService {
 
     /// 从基础配置中取指定支付渠道已绑定的通道商户号
     private String findConfiguredChannelMchNo(List<PayRouteBasicConfig> basicConfigs, String providerCode) {
-        if (basicConfigs == null) {
+        if (Objects.isNull(basicConfigs)) {
             return null;
         }
         return basicConfigs.stream()
@@ -287,7 +287,7 @@ public class PayRouteService {
     private void validateCapability(String product, PayMethodEnum method, String capability) {
         AbsProductStrategy strategy = PaymentStrategyFactory.createByProduct(product, AbsProductStrategy.class);
         PayCapabilityEnum capabilityEnum = PayCapabilityEnum.findByCode(capability);
-        boolean matched = capabilityEnum != null
+        boolean matched = Objects.nonNull(capabilityEnum)
                 && ProductStrategySupport.capabilitiesForMethod(strategy, method).contains(capabilityEnum);
         if (!matched) {
             // 路由: 支付能力与产品、支付方式不匹配

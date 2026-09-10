@@ -197,7 +197,7 @@ public class UserAdminService {
     private OffsetDateTime calculatePasswordExpireTime() {
         PlatformPasswordPolicyConfig config = iamSecurityConfigService.getPasswordPolicy();
         Integer rotationDays = config.getRotationDays();
-        if (rotationDays == null || rotationDays <= 0) {
+        if (Objects.isNull(rotationDays) || rotationDays <= 0) {
             return null;
         }
         return OffsetDateTime.now(ZoneOffset.UTC).plusDays(rotationDays);

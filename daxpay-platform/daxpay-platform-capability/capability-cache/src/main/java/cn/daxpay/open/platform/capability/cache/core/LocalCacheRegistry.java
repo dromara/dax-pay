@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.time.Duration;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.Objects;
 
 /// # 本地缓存注册表
 ///
@@ -46,7 +47,7 @@ public class LocalCacheRegistry {
     /// @param key       标准化后的字符串缓存键
     public void evict(String cacheName, String key) {
         Cache<Object, Object> cache = this.localCaches.get(cacheName);
-        if (cache != null) {
+        if (Objects.nonNull(cache)) {
             cache.invalidate(key);
             log.debug("本地缓存删除成功: cacheName={}, key={}", cacheName, key);
         }
@@ -57,7 +58,7 @@ public class LocalCacheRegistry {
     /// @param cacheName 缓存名称
     public void clear(String cacheName) {
         Cache<Object, Object> cache = this.localCaches.get(cacheName);
-        if (cache != null) {
+        if (Objects.nonNull(cache)) {
             cache.invalidateAll();
             log.debug("本地缓存清空成功: cacheName={}", cacheName);
         }

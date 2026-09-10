@@ -18,6 +18,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 /// # 易支付协议订单管理端查询服务(运营端)
 ///
@@ -65,7 +66,7 @@ public class EasyPayOrderAdminQueryService {
     public NormalPaySyncResult sync(Long id) {
         EasyPayOrder entity = easyPayOrderManager.findById(id)
                 .orElseThrow(() -> new DataNotExistException("pay.error.payOrderNotExist"));
-        if (entity.getOrderId() == null) {
+        if (Objects.isNull(entity.getOrderId())) {
             throw new DataNotExistException("pay.error.payOrderNotExist");
         }
         PayTrade trade = payTradeManager.findByContainerId(entity.getOrderId(), PayTradeTypeEnum.NORMAL.getCode())
@@ -77,7 +78,7 @@ public class EasyPayOrderAdminQueryService {
     public void close(Long id) {
         EasyPayOrder entity = easyPayOrderManager.findById(id)
                 .orElseThrow(() -> new DataNotExistException("pay.error.payOrderNotExist"));
-        if (entity.getOrderId() == null) {
+        if (Objects.isNull(entity.getOrderId())) {
             throw new DataNotExistException("pay.error.payOrderNotExist");
         }
         PayTrade trade = payTradeManager.findByContainerId(entity.getOrderId(), PayTradeTypeEnum.NORMAL.getCode())

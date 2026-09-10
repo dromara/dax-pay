@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /// # 备用验证码服务
 ///
@@ -54,7 +55,7 @@ public class BackupCodeService {
 
     /// 规范化: 去除分隔符 + 转大写
     public String normalize(String input) {
-        if (input == null) {
+        if (Objects.isNull(input)) {
             return "";
         }
         return input.replace(SEPARATOR, "").trim().toUpperCase();

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Objects;
 
 /// # 银联商务直连通道商户管理
 ///
@@ -52,8 +53,8 @@ public class UmsDirectChannelMerchantController {
             @NotNull(message = "{validation.field.sandbox.notNull}") Boolean sandbox) {
         var config = umsDirectKeyConfigService.findByChannelMchNo(channelMchNo, sandbox);
         var result = config.toResult();
-        result.setAppKeyConfigured(config.getAppKey() != null);
-        result.setSecretKeyConfigured(config.getSecretKey() != null);
+        result.setAppKeyConfigured(Objects.nonNull(config.getAppKey()));
+        result.setSecretKeyConfigured(Objects.nonNull(config.getSecretKey()));
         return Res.ok(result);
     }
 

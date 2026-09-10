@@ -116,8 +116,8 @@ public class AlipayIsvAuthService {
                     "error.channel.alipay.authTokenExchangeFailed", result.getMsg());
         }
         AlipayAppAuthTokenResp resp = result.getData();
-        if (resp == null || !Objects.equals("10000", resp.getCode())) {
-            String detail = resp != null ? StrUtil.blankToDefault(resp.getSubMsg(), resp.getCode()) : "empty";
+        if (Objects.isNull(resp) || !Objects.equals("10000", resp.getCode())) {
+            String detail = Objects.nonNull(resp) ? StrUtil.blankToDefault(resp.getSubMsg(), resp.getCode()) : "empty";
             throw new BizInfoException(DaxPayErrorCode.OPERATION_FAIL,
                     "error.channel.alipay.authTokenExchangeFailed", detail);
         }

@@ -285,7 +285,7 @@ public class ChannelTerminalAdminService {
                 .collect(Collectors.toMap(TerminalDeviceResult::getTerminalNo, r -> r, (a, b) -> a));
         for (ChannelTerminalResult result : results) {
             List<TerminalChannelBind> binds = bindGroup.get(result.getId());
-            if (binds == null) {
+            if (Objects.isNull(binds)) {
                 continue;
             }
             List<TerminalDeviceResult> systemTerminals = binds.stream()

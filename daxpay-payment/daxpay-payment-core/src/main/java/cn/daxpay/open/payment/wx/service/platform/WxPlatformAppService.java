@@ -117,7 +117,7 @@ public class WxPlatformAppService {
 
     /// 校验应用类型
     private void validateAppType(String appType) {
-        if (WxAppTypeEnum.findByCode(appType) == null) {
+        if (Objects.isNull(WxAppTypeEnum.findByCode(appType))) {
             // 微信: 应用类型无效
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.payment.wx.appTypeInvalid");
         }

@@ -41,14 +41,14 @@ public class TransferCloseService {
         lockExecutor.run(TradeLockKeys.transferTrade(trade.getId()), () -> {
             // 锁内二次读: 仅处理中可关闭
             TransferTrade latestTrade = transferTradeManager.findById(trade.getId()).orElse(null);
-            if (latestTrade == null
+            if (Objects.isNull(latestTrade)
                     || !Objects.equals(latestTrade.getStatus(), PayFundStatusEnum.PROCESSING.getCode())) {
                 log.info("转账关闭幂等: 凭证 {} 非处理中, 跳过", trade.getTradeNo());
                 return;
             }
             // 装载容器并装配策略上下文
             TransferStrategyContext context = assistService.loadContext(channel, latestTrade.getContainerId()).orElse(null);
-            if (context == null || !Objects.equals(context.getStatus(), PayFundStatusEnum.PROCESSING.getCode())) {
+            if (Objects.isNull(context) || !Objects.equals(context.getStatus(), PayFundStatusEnum.PROCESSING.getCode())) {
                 log.info("转账关闭幂等: 容器 {} 非处理中, 跳过", latestTrade.getTradeNo());
                 return;
             }

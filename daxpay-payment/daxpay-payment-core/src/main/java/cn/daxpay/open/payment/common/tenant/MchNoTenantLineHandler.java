@@ -74,7 +74,7 @@ public class MchNoTenantLineHandler implements TenantLineHandler {
     /// 仅对 [MchBaseEntity] 子类启用 mch_no 过滤
     public boolean ignoreTableByMch(String tableName) {
         TableInfo tableInfo = MpUtil.getTableInfo(tableName);
-        if (tableInfo == null) {
+        if (Objects.isNull(tableInfo)) {
             return true;
         }
         boolean anyMatch = Stream.of(MchBaseEntity.class)

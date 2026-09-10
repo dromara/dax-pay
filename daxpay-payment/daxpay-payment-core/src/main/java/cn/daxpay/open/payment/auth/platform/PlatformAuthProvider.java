@@ -12,6 +12,7 @@ import cn.daxpay.open.payment.unipay.param.assist.AuthCodeParam;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
 import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
 import cn.hutool.core.util.StrUtil;
+import java.util.Objects;
 
 /// # 平台级认证 Provider(策略)
 ///
@@ -40,7 +41,7 @@ public interface PlatformAuthProvider {
 
     /// 将会话中的 returnPath 回填到认证结果(平台级 Provider 共用)
     default void fillReturnPath(AuthResult authResult, AuthSession session) {
-        if (session != null && StrUtil.isNotBlank(session.getReturnPath())) {
+        if (Objects.nonNull(session) && StrUtil.isNotBlank(session.getReturnPath())) {
             authResult.setReturnPath(session.getReturnPath());
         }
     }

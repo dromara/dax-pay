@@ -54,7 +54,7 @@ public class PayProviderMethodService {
         List<PayProviderMethodEntry> entries = new ArrayList<>();
         for (PayProviderEnum providerEnum : PayProviderEnum.values()) {
             PayProvider dbProvider = context.providerMap().get(providerEnum.getCode());
-            if (dbProvider != null && !dbProvider.isEnabled()) {
+            if (Objects.nonNull(dbProvider) && !dbProvider.isEnabled()) {
                 continue;
             }
             for (MergedRelationRow row : context.relationsByProvider()
@@ -73,7 +73,7 @@ public class PayProviderMethodService {
 
     /// 判断该支付渠道下是否存在该支付方式（目录有效组合）
     public boolean contains(String providerCode, String methodCode) {
-        if (PayProviderEnum.findByCode(providerCode) == null) {
+        if (Objects.isNull(PayProviderEnum.findByCode(providerCode))) {
             return false;
         }
         if (payMethodManager.findByCode(methodCode).isEmpty()) {
@@ -111,7 +111,7 @@ public class PayProviderMethodService {
                 .setProvider(entry.getProviderCode())
                 .setMethod(entry.getMethodCode())
                 .setMethodLabel(I18nUtil.getEnumName(entry.getMethod()))
-                .setDescription(relation != null ? relation.getDescription() : null);
+                .setDescription(Objects.nonNull(relation) ? relation.getDescription() : null);
     }
 
     /// 合并关联表与支付方式主数据
@@ -120,14 +120,14 @@ public class PayProviderMethodService {
         int ordinal = 0;
         for (PayProviderMethod rel : relations) {
             PayMethod methodRow = methodMap.get(rel.getMethod());
-            if (methodRow == null) {
+            if (Objects.isNull(methodRow)) {
                 continue;
             }
             PayMethodEnum methodEnum = resolveMethodEnum(rel.getMethod());
-            if (methodEnum == null) {
+            if (Objects.isNull(methodEnum)) {
                 continue;
             }
-            int sortNo = rel.getSortNo() != null ? rel.getSortNo() : ordinal;
+            int sortNo = Objects.nonNull(rel.getSortNo()) ? rel.getSortNo() : ordinal;
             rows.add(new MergedRelationRow(methodEnum, sortNo, rel.getDescription()));
             ordinal++;
         }

@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /// # 河马付支付回调处理服务
 ///
@@ -53,7 +54,7 @@ public class HmpayPayCallbackService {
         HmpayIsvKeyConfig keyConfig = hmpayIsvKeyConfigManager
                 .findByProduct(ProductEnum.HM_PAY.getCode())
                 .orElse(null);
-        if (keyConfig == null || StrUtil.isBlank(keyConfig.getPublicKey())) {
+        if (Objects.isNull(keyConfig) || StrUtil.isBlank(keyConfig.getPublicKey())) {
             log.error("河马付支付回调: 服务商公钥未配置, 无法验签");
             CallbackData failData = new CallbackData();
             failData.setCallbackData(notify);
@@ -71,7 +72,7 @@ public class HmpayPayCallbackService {
         req.setBody(body);
 
         DaxResult<HmpayCallbackParseResp> result = hmpayChannelClient.parsePayCallback(req);
-        if (result.getCode() != 0 || result.getData() == null
+        if (result.getCode() != 0 || Objects.isNull(result.getData())
                 || !Boolean.TRUE.equals(result.getData().getSuccess())) {
             log.error("河马付支付回调验签/解析失败");
             CallbackData failData = new CallbackData();

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.Objects;
 
 /// # Mapper 注册表
 ///
@@ -32,7 +33,7 @@ public class TransMapperRegistry {
     /// 实际获取 Mapper
     private BaseMapper<?> doGetMapper(Class<?> entityClass) {
         TableInfo tableInfo = TableInfoHelper.getTableInfo(entityClass);
-        if (tableInfo == null) {
+        if (Objects.isNull(tableInfo)) {
             log.warn("翻译模块未找到实体类 {} 的 TableInfo", entityClass.getSimpleName());
             return null;
         }

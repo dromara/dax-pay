@@ -14,6 +14,7 @@ import org.springframework.web.method.HandlerMethod;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Objects;
 
 /// # 基于权限码注解的请求路由校验器。
 ///
@@ -42,7 +43,7 @@ public class PermCodeRouterCheck implements RouterCheck {
     private boolean checkPermCode(HandlerMethod handlerMethod) {
         PermCode classPermCode = handlerMethod.getBeanType().getAnnotation(PermCode.class);
         PermCode methodPermCode = handlerMethod.getMethodAnnotation(PermCode.class);
-        if (classPermCode == null && methodPermCode == null) {
+        if (Objects.isNull(classPermCode) && Objects.isNull(methodPermCode)) {
             return false;
         }
         String fullCode = PermCodeUtil.resolveFullCode(classPermCode, methodPermCode);

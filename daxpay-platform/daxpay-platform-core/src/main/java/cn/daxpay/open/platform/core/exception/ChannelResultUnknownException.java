@@ -1,5 +1,7 @@
 package cn.daxpay.open.platform.core.exception;
 
+import java.util.Objects;
+
 /// # 通道结果未知异常
 ///
 /// 通道调用结果无法明确判定时抛出(如网络超时、连接异常、付款码 USER_PAYING / authCode 已使用等)。
@@ -24,7 +26,7 @@ public class ChannelResultUnknownException extends PayFailureException {
     public ChannelResultUnknownException(String messageKey, Throwable cause) {
         super(messageKey);
         // BizException 构造器未设置 cause, 此处安全调用 initCause 保留堆栈
-        if (cause != null) {
+        if (Objects.nonNull(cause)) {
             initCause(cause);
         }
     }

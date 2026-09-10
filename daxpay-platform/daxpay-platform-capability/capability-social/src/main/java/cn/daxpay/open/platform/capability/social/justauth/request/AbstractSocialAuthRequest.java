@@ -19,6 +19,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /// # 社交授权请求抽象模板
 ///
@@ -89,7 +90,7 @@ public abstract class AbstractSocialAuthRequest implements SocialAuthRequest {
     ///   http://127.0.0.1:13333/auth/oauth-callback/gitee
     protected String buildRedirectUri() {
         String base = config.getRedirectUri();
-        if (base == null) {
+        if (Objects.isNull(base)) {
             base = "";
         }
         // 去掉末尾斜杠, 避免出现 //gitee
@@ -107,7 +108,7 @@ public abstract class AbstractSocialAuthRequest implements SocialAuthRequest {
     /// GET 请求(带请求头)
     protected String doGet(String url, Map<String, String> headers) {
         HttpRequest request = HttpUtil.createGet(url);
-        if (headers != null) {
+        if (Objects.nonNull(headers)) {
             headers.forEach(request::header);
         }
         try (HttpResponse response = request.execute()) {
@@ -131,7 +132,7 @@ public abstract class AbstractSocialAuthRequest implements SocialAuthRequest {
         if (StrUtil.isNotBlank(body)) {
             request.body(body);
         }
-        if (headers != null) {
+        if (Objects.nonNull(headers)) {
             headers.forEach(request::header);
         }
         try (HttpResponse response = request.execute()) {

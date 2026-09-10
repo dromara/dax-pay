@@ -75,7 +75,7 @@ public class WechatDirectConfigAssembler {
     /// @return 微信 SDK 凭证, wxAppId 来自转账配置指定的公众号应用
     public WechatSdkCredential buildTransferConfig(String channelMchNo, Long transferAppRefId) {
         WxAppView app = wxAppFacade.getById(AppScopeEnum.MERCHANT, transferAppRefId);
-        if (app == null) {
+        if (Objects.isNull(app)) {
             // 微信: 转账发起应用未配置或已删除
             throw new BizInfoException(DaxPayErrorCode.CONFIG_NOT_EXIST,
                     "error.channel.wechat.transferAppNotConfigured");

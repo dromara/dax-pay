@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Objects;
 
 /// # 商户端工作台/分析页交易统计
 ///
@@ -53,7 +54,7 @@ public class MchDashboardTradeService {
     /// 解析并校验当前商户号
     private String requireMchNo() {
         String mchNo = paymentContext.getMchNo();
-        if (mchNo == null || mchNo.isBlank()) {
+        if (Objects.isNull(mchNo) || mchNo.isBlank()) {
             // 商户: 数据错误未发现商户号
             throw new BizInfoException(CommonCode.FAIL_CODE, "error.payment.merchant.dataErrorNoMchNo");
         }
@@ -89,7 +90,7 @@ public class MchDashboardTradeService {
         OffsetDateTime end;
         OffsetDateTime prevStart;
         OffsetDateTime prevEnd;
-        if (query.getStart() != null && query.getEnd() != null) {
+        if (Objects.nonNull(query.getStart()) && Objects.nonNull(query.getEnd())) {
             // 区间模式: 上期为等长前移
             start = tradeReportSupport.parseDateStart(query.getStart());
             end = tradeReportSupport.parseDateEndExclusive(query.getEnd());
@@ -188,14 +189,14 @@ public class MchDashboardTradeService {
     /// dim = channelMch | app | store(为空时按 app 兜底)
     public List<DimRankItemResult> dimRank(TradeRangeQuery query) {
         OffsetDateTime[] range = tradeReportSupport.resolveRange(query);
-        int limit = query.getLimit() == null ? 0 : query.getLimit();
+        int limit = Objects.isNull(query.getLimit()) ? 0 : query.getLimit();
         return dimRank(requireMchNo(), query.getDim(), range[0], range[1], limit);
     }
 
     private List<DimRankItemResult> dimRank(
             String mchNo, String dim, OffsetDateTime start, OffsetDateTime end, int limit) {
         int safeLimit = tradeReportSupport.clampLimit(limit);
-        String normalized = dim == null ? DIM_APP : dim.trim();
+        String normalized = Objects.isNull(dim) ? DIM_APP : dim.trim();
         List<DimRankItemResult> rows = switch (normalized) {
             case DIM_CHANNEL_MCH -> mchTradeReportMapper.dimRankByChannelMch(start, end, mchNo, safeLimit);
             case DIM_STORE -> mchTradeReportMapper.dimRankByStore(start, end, mchNo, safeLimit);

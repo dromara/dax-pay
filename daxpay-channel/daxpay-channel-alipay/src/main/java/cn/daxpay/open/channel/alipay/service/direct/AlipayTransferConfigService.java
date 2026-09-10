@@ -99,7 +99,7 @@ public class AlipayTransferConfigService {
     private AlipayTransferConfigResult toResultWithMeta(AlipayTransferConfig entity) {
         AlipayTransferConfigResult result = entity.toResult();
         // 转出应用展示信息
-        if (entity.getTransferAppRefId() != null) {
+        if (Objects.nonNull(entity.getTransferAppRefId())) {
             alipayDirectAppManager.lambdaQuery()
                     .eq(AlipayDirectApp::getId, entity.getTransferAppRefId())
                     .oneOpt()

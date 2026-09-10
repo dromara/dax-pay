@@ -86,7 +86,7 @@ public class DouyinTransferCallbackService {
         req.setTimestamp(this.getHeader(headerMap, DouyinPayCode.HEADER_TIMESTAMP));
 
         DaxResult<DouyinTransferCallbackParseResp> result = douyinChannelClient.parseTransferCallback(req);
-        if (result.getCode() != 0 || result.getData() == null || !result.getData().isVerified()) {
+        if (result.getCode() != 0 || Objects.isNull(result.getData()) || !result.getData().isVerified()) {
             log.error("抖音转账回调验签失败: channelMchNo={}", channelMchNo);
             CallbackData failData = new CallbackData();
             Map<String, Object> notify = new HashMap<>();
@@ -159,7 +159,7 @@ public class DouyinTransferCallbackService {
                 .oneOpt()
                 .orElse(null);
         var credential = new DouyinSdkCredential();
-        credential.setMchId(merchant != null ? merchant.getDyMchId() : null);
+        credential.setMchId(Objects.nonNull(merchant) ? merchant.getDyMchId() : null);
         credential.setMerchantSerialNumber(keyConfig.getMerchantSerialNumber());
         credential.setMerchantPrivateKey(keyConfig.getMerchantPrivateKey());
         credential.setEncryptKey(keyConfig.getEncryptKey());
@@ -169,6 +169,6 @@ public class DouyinTransferCallbackService {
     /// 获取 header(大小写兼容)
     private String getHeader(Map<String, String> headerMap, String name) {
         String value = headerMap.get(name);
-        return value != null ? value : headerMap.get(name.toLowerCase());
+        return Objects.nonNull(value) ? value : headerMap.get(name.toLowerCase());
     }
 }

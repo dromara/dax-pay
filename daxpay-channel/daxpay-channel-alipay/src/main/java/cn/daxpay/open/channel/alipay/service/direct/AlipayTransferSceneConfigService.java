@@ -19,6 +19,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /// # 支付宝转账场景配置
 ///
@@ -62,7 +63,7 @@ public class AlipayTransferSceneConfigService {
             orderMap.put(enums[i].getSceneName(), i);
         }
         return entities.stream()
-                .filter(e -> mchNo == null || mchNo.equals(e.getMchNo()))
+                .filter(e -> Objects.isNull(mchNo) || mchNo.equals(e.getMchNo()))
                 .sorted(Comparator.comparingInt(e -> orderMap.getOrDefault(e.getSceneName(), Integer.MAX_VALUE)))
                 .map(this::toResultWithMeta)
                 .toList();
@@ -72,7 +73,7 @@ public class AlipayTransferSceneConfigService {
     private AlipayTransferSceneConfigResult toResultWithMeta(AlipayTransferSceneConfig entity) {
         AlipayTransferSceneConfigResult result = entity.toResult();
         AlipayTransferSceneEnum scene = AlipayTransferSceneEnum.findBySceneName(entity.getSceneName());
-        if (scene != null) {
+        if (Objects.nonNull(scene)) {
             result.setReportInfoTypes(scene.getReportInfoTypes());
             result.setReportInfoDescriptions(scene.getReportInfoDescriptions());
         }
@@ -89,7 +90,7 @@ public class AlipayTransferSceneConfigService {
     public void setEnabled(String mchNo, String channelMchNo, String sceneName, boolean enabled) {
         // 校验场景名称合法性
         AlipayTransferSceneEnum scene = AlipayTransferSceneEnum.findBySceneName(sceneName);
-        if (scene == null) {
+        if (Objects.isNull(scene)) {
             // 支付宝: 不支持的转账场景: {0}
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.channel.alipay.transferSceneNameInvalid", sceneName);
@@ -132,7 +133,7 @@ public class AlipayTransferSceneConfigService {
             }
             entity.setEnabled(false);
         }
-        if (entity.getId() == null) {
+        if (Objects.isNull(entity.getId())) {
             // 新行先落库(自动填充主键)
             alipayTransferSceneConfigManager.save(entity);
         } else {
@@ -145,7 +146,7 @@ public class AlipayTransferSceneConfigService {
     public void setDefault(String mchNo, String channelMchNo, String sceneName) {
         // 校验场景名称合法性
         AlipayTransferSceneEnum scene = AlipayTransferSceneEnum.findBySceneName(sceneName);
-        if (scene == null) {
+        if (Objects.isNull(scene)) {
             // 支付宝: 不支持的转账场景: {0}
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.channel.alipay.transferSceneNameInvalid", sceneName);
@@ -178,7 +179,7 @@ public class AlipayTransferSceneConfigService {
         // 清旧默认
         alipayTransferSceneConfigManager.clearDefault(channelMchNo);
         entity.setIsDefault(true);
-        if (entity.getId() == null) {
+        if (Objects.isNull(entity.getId())) {
             // 新行先落库(自动填充主键)
             alipayTransferSceneConfigManager.save(entity);
         } else {

@@ -31,6 +31,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 /// # 支付宝直连商户应用支付能力关联
 ///
@@ -85,7 +86,7 @@ public class AlipayDirectAppCapabilityService {
             }
             // 应用归属校验
             AlipayDirectApp app = appMap.get(item.getAlipayDirectAppId());
-            if (app == null) {
+            if (Objects.isNull(app)) {
                 // 支付宝: 直连商户应用不存在
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "error.channel.alipay.mchAppNotFound");
@@ -151,7 +152,7 @@ public class AlipayDirectAppCapabilityService {
     /// 填充关联结果的应用展示字段
     private AlipayDirectAppCapabilityResult fillResult(AlipayDirectAppCapability rel, AlipayDirectApp app) {
         AlipayDirectAppCapabilityResult result = AlipayDirectAppCapabilityConvert.CONVERT.toResult(rel);
-        if (app != null) {
+        if (Objects.nonNull(app)) {
             result.setAppName(app.getAppName())
                     .setAliAppId(app.getAliAppId())
                     .setAppType(app.getAppType());

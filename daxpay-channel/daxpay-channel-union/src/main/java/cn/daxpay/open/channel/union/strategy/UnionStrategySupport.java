@@ -3,6 +3,7 @@ package cn.daxpay.open.channel.union.strategy;
 import cn.daxpay.open.channel.union.client.enums.UnionPayMethod;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayCapabilityEnum;
 import lombok.experimental.UtilityClass;
+import java.util.Objects;
 
 /// # 云闪付策略支持
 ///
@@ -14,7 +15,7 @@ public class UnionStrategySupport {
     /// 支付能力 code → 银联 ACP 通道支付方式
     public UnionPayMethod resolveMethod(String capabilityCode) {
         PayCapabilityEnum cap = PayCapabilityEnum.findByCode(capabilityCode);
-        if (cap == null) {
+        if (Objects.isNull(cap)) {
             throw new IllegalStateException("非云闪付支付能力: " + capabilityCode);
         }
         return switch (cap) {

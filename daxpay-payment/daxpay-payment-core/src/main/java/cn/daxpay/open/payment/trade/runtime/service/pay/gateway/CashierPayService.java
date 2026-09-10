@@ -228,7 +228,7 @@ public class CashierPayService {
             return true;
         }
         PayRiskChecker checker = payRiskCheckerProvider.getIfAvailable();
-        if (checker == null || !isEnhancedOpenIdLevel() || !checker.hasOpenIdBlacklist()) {
+        if (Objects.isNull(checker) || !isEnhancedOpenIdLevel() || !checker.hasOpenIdBlacklist()) {
             return false;
         }
         return PayMethodOpenIdSupport.canAcquireOpenId(method, clientEnv);

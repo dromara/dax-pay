@@ -23,6 +23,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 /// # 网关支付配置（商户端, 码牌/聚合共用）
 ///
@@ -44,7 +45,7 @@ public class MchGatewayPayConfigController {
     /// 当前登录商户号
     private String requireMchNo() {
         String mchNo = paymentContext.getMchNo();
-        if (mchNo == null || mchNo.isBlank()) {
+        if (Objects.isNull(mchNo) || mchNo.isBlank()) {
             // 商户上下文缺失
             throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.assist.mchContextMissing");
         }
@@ -71,7 +72,7 @@ public class MchGatewayPayConfigController {
     public Result<Void> saveOrUpdate(@RequestBody @Validated GatewayPayConfigParam param) {
         MchAppInfoResult app = this.assertAppOwned(param.getAppId());
         // 强制当前商户号，忽略客户端传入（防越权）
-        param.setMchNo(app.getMchNo() != null ? app.getMchNo() : this.requireMchNo());
+        param.setMchNo(Objects.nonNull(app.getMchNo()) ? app.getMchNo() : this.requireMchNo());
         gatewayPayConfigService.saveOrUpdate(param);
         return Res.ok();
     }

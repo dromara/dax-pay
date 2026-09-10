@@ -85,7 +85,7 @@ public class PayRouteStrategyCapabilitySupport {
         // 批量预加载 channelMchNo → product，替代逐次 productOfChannelMchNo 查库
         Set<String> channelMchNos = new HashSet<>();
         for (PayRouteSceneCapabilityBatchItem item : items) {
-            if (item != null && StrUtil.isNotBlank(item.getChannelMchNo())) {
+            if (Objects.nonNull(item) && StrUtil.isNotBlank(item.getChannelMchNo())) {
                 channelMchNos.add(item.getChannelMchNo());
             }
         }
@@ -96,7 +96,7 @@ public class PayRouteStrategyCapabilitySupport {
                 .stream()
                 .collect(Collectors.toMap(ChannelMerchant::getChannelMchNo, ChannelMerchant::getProduct, (a, b) -> a));
         for (PayRouteSceneCapabilityBatchItem item : items) {
-            if (item == null || StrUtil.hasBlank(item.getProvider(), item.getMethod(), item.getChannelMchNo())) {
+            if (Objects.isNull(item) || StrUtil.hasBlank(item.getProvider(), item.getMethod(), item.getChannelMchNo())) {
                 continue;
             }
             String key = capabilityBatchKey(item.getProvider(), item.getMethod(), item.getChannelMchNo());
@@ -117,7 +117,7 @@ public class PayRouteStrategyCapabilitySupport {
     /// 用预加载上下文计算支付能力候选(策略声明能力 ∩ DB 挂载启用)，零查库
     private List<LabelValue> capabilitiesForMethodWithCtx(RouteBatchContext ctx, String product, PayMethodEnum method) {
         AbsProductStrategy strategy = ctx.strategyByProduct().get(product);
-        if (strategy == null) {
+        if (Objects.isNull(strategy)) {
             return List.of();
         }
         List<PayCapabilityEnum> declared = ProductStrategySupport.capabilitiesForMethod(strategy, method);
@@ -219,7 +219,7 @@ public class PayRouteStrategyCapabilitySupport {
                 continue;
             }
             // provider 非空时仅保留产品声明支持该支付渠道的通道商户
-            if (provider != null
+            if (Objects.nonNull(provider)
                     && !productSupportCache.computeIfAbsent(mch.getProduct(), p -> productSupportsProvider(p, provider))) {
                 continue;
             }
@@ -232,7 +232,7 @@ public class PayRouteStrategyCapabilitySupport {
 
     /// 产品策略是否声明支持指定支付渠道(如 lakala_pay 支持 wechat/alipay/union_pay)
     private boolean productSupportsProvider(String product, PayProviderEnum provider) {
-        if (StrUtil.isBlank(product) || provider == null) {
+        if (StrUtil.isBlank(product) || Objects.isNull(provider)) {
             return false;
         }
         if (!PaymentStrategyFactory.existsByProduct(product, AbsProductStrategy.class)) {
@@ -269,7 +269,7 @@ public class PayRouteStrategyCapabilitySupport {
                 .anyMatch(item -> Objects.equals(item.getValue(), capability));
         if (!matched) {
             PayCapabilityEnum capabilityEnum = PayCapabilityEnum.findByCode(capability);
-            String capabilityLabel = capabilityEnum != null ? I18nUtil.getEnumName(capabilityEnum) : capability;
+            String capabilityLabel = Objects.nonNull(capabilityEnum) ? I18nUtil.getEnumName(capabilityEnum) : capability;
             // 路由: 支付能力与通道商户、支付方式不匹配
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.route.error.sceneCapabilityChannelMchMismatch",
@@ -326,11 +326,11 @@ public class PayRouteStrategyCapabilitySupport {
 
     /// 用预加载上下文判断产品是否支持目录支付方式(策略声明能力 ∩ DB 挂载启用)，零查库
     private boolean routeProductSupportsMethod(RouteBatchContext ctx, String product, PayMethodEnum method) {
-        if (method == null || StrUtil.isBlank(product)) {
+        if (Objects.isNull(method) || StrUtil.isBlank(product)) {
             return false;
         }
         AbsProductStrategy strategy = ctx.strategyByProduct().get(product);
-        if (strategy == null) {
+        if (Objects.isNull(strategy)) {
             return false;
         }
         List<PayCapabilityEnum> declared = ProductStrategySupport.capabilitiesForMethod(strategy, method);

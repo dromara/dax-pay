@@ -52,7 +52,7 @@ public class HkrtPayCallbackService {
         // 2. 获取全局服务商 accessKey(只读查询, 不创建记录)
         HkrtIsvKeyConfig keyConfig = hkrtIsvKeyConfigManager.findByProduct(ProductEnum.HKRT_PAY.getCode())
                 .orElse(null);
-        if (keyConfig == null || keyConfig.getAccessKey() == null) {
+        if (Objects.isNull(keyConfig) || Objects.isNull(keyConfig.getAccessKey())) {
             log.error("海科融通支付回调: 服务商密钥未配置, 无法验签");
             CallbackData failData = new CallbackData();
             failData.setCallbackData(notify);
@@ -64,7 +64,7 @@ public class HkrtPayCallbackService {
 
         // 3. 转发子应用验签与解析
         HkrtCallbackParseResp resp = parseCallback(body, keyConfig.getAccessKey(), false);
-        if (resp == null) {
+        if (Objects.isNull(resp)) {
             CallbackData failData = new CallbackData();
             failData.setCallbackData(notify);
             failData.setCallbackStatus(CallbackStatusEnum.FAIL);
@@ -104,7 +104,7 @@ public class HkrtPayCallbackService {
             return null;
         }
         HkrtCallbackParseResp resp = result.getData();
-        if (resp == null || !Boolean.TRUE.equals(resp.getSuccess())) {
+        if (Objects.isNull(resp) || !Boolean.TRUE.equals(resp.getSuccess())) {
             log.error("海科融通支付回调验签失败");
             return null;
         }

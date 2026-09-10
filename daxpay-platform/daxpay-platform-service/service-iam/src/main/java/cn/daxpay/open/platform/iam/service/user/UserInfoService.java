@@ -32,6 +32,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.Objects;
 
 /// # 用户
 ///
@@ -164,7 +165,7 @@ public class UserInfoService {
     private void refreshCurrentSessionPasswordStatus() {
         var session = StpUtil.getSession();
         UserDetail userDetail = session.getModel(CommonCode.USER, UserDetail.class);
-        if (userDetail == null) {
+        if (Objects.isNull(userDetail)) {
             return;
         }
         if (userDetail.isAdmin()) {
@@ -182,7 +183,7 @@ public class UserInfoService {
     private OffsetDateTime calculatePasswordExpireTime() {
         PlatformPasswordPolicyConfig config = iamSecurityConfigService.getPasswordPolicy();
         Integer rotationDays = config.getRotationDays();
-        if (rotationDays == null || rotationDays <= 0) {
+        if (Objects.isNull(rotationDays) || rotationDays <= 0) {
             return null;
         }
         return OffsetDateTime.now(ZoneOffset.UTC).plusDays(rotationDays);

@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.Objects;
 
 /// # 黑名单服务
 ///
@@ -121,7 +122,7 @@ public class PayBlacklistService {
             throw new BizInfoException(PayErrorCode.OPERATION_FAIL, "pay.error.risk.blacklistTypeInvalid");
         }
         ResolvedIdentity resolved = resolveIdentity(hitType, channel, wxAppId);
-        if (resolved == null) {
+        if (Objects.isNull(resolved)) {
             // 微信缺 AppId 或无法映射
             if (ChannelEnum.WECHAT.getCode().equals(channel)
                     || PayBlacklistTypeEnum.WECHAT_OPENID.getCode().equals(hitType)

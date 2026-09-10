@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 /// # 转账策略工厂工具类
 ///
@@ -37,7 +38,7 @@ public class TransferStrategyFactory {
     /// @throws UnsupportedAbilityException 通道未实现转账能力
     public static AbsTransferStrategy create(String channel) {
         AbsTransferStrategy strategy = INDEX.computeIfAbsent(channel, c -> buildIndex().get(c));
-        if (strategy == null) {
+        if (Objects.isNull(strategy)) {
             // 不支持的能力: {0}
             throw new UnsupportedAbilityException("pay.error.unsupportedAbilityWithDetail", channel);
         }

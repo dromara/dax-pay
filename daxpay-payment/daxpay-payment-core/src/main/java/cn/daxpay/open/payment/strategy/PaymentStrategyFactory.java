@@ -13,6 +13,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 /// # 策略工厂工具类
 ///
@@ -48,7 +49,7 @@ public class PaymentStrategyFactory {
     /// @param <T> 需要为 PaymentStrategy 的子类
     public <T extends PaymentStrategy> T createByProduct(String product, Class<T> clazz) {
         T strategy = index(clazz).get(product);
-        if (strategy == null) {
+        if (Objects.isNull(strategy)) {
             // 不支持的能力: {0}
             throw new UnsupportedAbilityException("pay.error.unsupportedAbilityWithDetail", product);
         }
@@ -70,7 +71,7 @@ public class PaymentStrategyFactory {
 
     /// 判断产品是否支持指定支付渠道（微信 / 支付宝 / 银联）
     public boolean productSupportsProvider(String productCode, PayProviderEnum provider) {
-        if (provider == null || !existsByProduct(productCode, AbsProductStrategy.class)) {
+        if (Objects.isNull(provider) || !existsByProduct(productCode, AbsProductStrategy.class)) {
             return false;
         }
         return ProductStrategySupport.supportsPayProvider(

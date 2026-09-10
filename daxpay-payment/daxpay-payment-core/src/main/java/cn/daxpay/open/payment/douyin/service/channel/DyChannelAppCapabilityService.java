@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 /// # 通道商户抖音应用能力绑定
 ///
@@ -62,7 +63,7 @@ public class DyChannelAppCapabilityService {
     @Transactional(rollbackFor = Exception.class)
     public void saveBatch(String mchNo, String channelMchNo, List<DyChannelAppCapabilityParam> items) {
         // mchNo 缺失直接归入"通道商户与商户号不匹配"，避免下方 equals 触发 NPE
-        if (mchNo == null || mchNo.isBlank()) {
+        if (Objects.isNull(mchNo) || mchNo.isBlank()) {
             // 抖音: 通道商户与商户号不匹配
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.payment.douyin.channelMerchantMismatch");
@@ -90,7 +91,7 @@ public class DyChannelAppCapabilityService {
         HashSet<String> uniq = new HashSet<>();
         for (DyChannelAppCapabilityParam item : items) {
             AppScopeEnum scope = AppScopeEnum.findByCode(item.getAppScope());
-            if (scope == null) {
+            if (Objects.isNull(scope)) {
                 // 抖音: 档位不存在
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "error.payment.douyin.scopeNotExist");
@@ -134,7 +135,7 @@ public class DyChannelAppCapabilityService {
                                          Map<Long, DyPlatformApp> platformMap, Map<Long, DyMchApp> mchAppMap) {
         if (scope == AppScopeEnum.PLATFORM) {
             DyPlatformApp app = platformMap.get(refId);
-            if (app == null) {
+            if (Objects.isNull(app)) {
                 // 抖音: 平台应用不存在
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "error.payment.douyin.appNotFound");
@@ -142,7 +143,7 @@ public class DyChannelAppCapabilityService {
             return app.getAppType();
         }
         DyMchApp app = mchAppMap.get(refId);
-        if (app == null || !mchNo.equals(app.getMchNo())) {
+        if (Objects.isNull(app) || !mchNo.equals(app.getMchNo())) {
             // 抖音: 商户应用不存在或不属于当前商户
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.payment.douyin.mchAppNotFound");
@@ -157,7 +158,7 @@ public class DyChannelAppCapabilityService {
         DyChannelAppCapabilityResult result = DyChannelAppCapabilityConvert.CONVERT.toResult(rel);
         if (AppScopeEnum.PLATFORM.getCode().equals(rel.getAppScope())) {
             DyPlatformApp app = platformMap.get(rel.getDyAppRefId());
-            if (app != null) {
+            if (Objects.nonNull(app)) {
                 result.setAppName(app.getAppName())
                         .setDouyinAppId(app.getDouyinAppId())
                         .setAppType(app.getAppType());
@@ -165,7 +166,7 @@ public class DyChannelAppCapabilityService {
         }
         else {
             DyMchApp app = mchAppMap.get(rel.getDyAppRefId());
-            if (app != null) {
+            if (Objects.nonNull(app)) {
                 result.setAppName(app.getAppName())
                         .setDouyinAppId(app.getDouyinAppId())
                         .setAppType(app.getAppType());

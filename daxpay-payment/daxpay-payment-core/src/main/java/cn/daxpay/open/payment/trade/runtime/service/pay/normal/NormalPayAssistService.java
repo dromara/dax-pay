@@ -60,7 +60,7 @@ public class NormalPayAssistService {
     public void createOrder(NormalPayParam payParam, PayStrategyContext context) {
         OffsetDateTime expiredTime = this.getExpiredTime(payParam.getExpiredTime());
         // 门店号: 显式优先, 空则回落商户默认门店; 有值则校验存在/归属/启用
-        String storeNo = payParam.getTerminal() != null ? payParam.getTerminal().getStoreNo() : null;
+        String storeNo = Objects.nonNull(payParam.getTerminal()) ? payParam.getTerminal().getStoreNo() : null;
         storeNo = mchStoreInfoService.resolveStoreNo(paymentContext.getMchNo(), storeNo);
         mchStoreInfoService.validateStoreForPay(storeNo, paymentContext.getMchNo());
         // 双号独立生成
@@ -104,7 +104,7 @@ public class NormalPayAssistService {
         var productEnum = ProductEnum.findByCode(payParam.getProduct());
         String channel = productEnum.getChannel();
         // 终端信息
-        String terminalNo = payParam.getTerminal() != null ? payParam.getTerminal().getTerminalNo() : null;
+        String terminalNo = Objects.nonNull(payParam.getTerminal()) ? payParam.getTerminal().getTerminalNo() : null;
 
         NormalPayOrder normalOrder = new NormalPayOrder();
         // --- 业务身份 ---
@@ -128,7 +128,7 @@ public class NormalPayAssistService {
         normalOrder.setMethod(payParam.getMethod());
         // 支付渠道: 由 method 派生, 渠道分布报表/详情展示用
         normalOrder.setProvider(PayTradeProviderUtil.resolveProviderByMethod(payParam.getMethod()));
-        normalOrder.setLimitPay(payParam.getLimitPay() != null
+        normalOrder.setLimitPay(Objects.nonNull(payParam.getLimitPay())
                 ? String.join(",", payParam.getLimitPay()) : null);
         normalOrder.setOpenid(payParam.getOpenId());
         normalOrder.setAuthCode(payParam.getAuthCode());
@@ -197,7 +197,7 @@ public class NormalPayAssistService {
     /// 与 [NormalPayService] 的 FAIL 路径不同: 本方法保持资金态 PROCESSING, 仅把错误摘要写入容器
     /// 供商户查询/排查, 订单由定时同步任务查通道真实状态后纠正。
     public void recordPayError(PayStrategyContext context, String errMsg) {
-        if (context.getNormalOrder() == null) {
+        if (Objects.isNull(context.getNormalOrder())) {
             return;
         }
         NormalPayOrder order = context.getNormalOrder();
@@ -214,7 +214,7 @@ public class NormalPayAssistService {
         }
         NormalPayOrder normalOrder = normalOrderOpt.get();
         PayTrade trade = payTradeManager.findByContainerId(normalOrder.getId(), PayTradeTypeEnum.NORMAL.getCode()).orElse(null);
-        if (trade == null) {
+        if (Objects.isNull(trade)) {
             return;
         }
         this.checkOrder(normalOrder, trade);
@@ -259,7 +259,7 @@ public class NormalPayAssistService {
     /// 根据 PayTrade + 容器构建支付结果（orderNo/payBody 取自容器）
     public NormalPayResult buildResult(PayTrade trade) {
         NormalPayOrder order = null;
-        if (trade.getContainerId() != null) {
+        if (Objects.nonNull(trade.getContainerId())) {
             order = payNormalOrderManager.findById(trade.getContainerId()).orElse(null);
         }
         return buildResult(trade, order);
@@ -268,13 +268,13 @@ public class NormalPayAssistService {
     /// 根据资金凭证与业务容器构建支付结果
     public NormalPayResult buildResult(PayTrade trade, NormalPayOrder order) {
         NormalPayResult result = new NormalPayResult();
-        result.setOrderId(order != null ? order.getId() : trade.getContainerId());
-        result.setBizOrderNo(order != null ? order.getBizOrderNo() : null);
+        result.setOrderId(Objects.nonNull(order) ? order.getId() : trade.getContainerId());
+        result.setBizOrderNo(Objects.nonNull(order) ? order.getBizOrderNo() : null);
         // 业务单号与资金交易号分离暴露
-        result.setOrderNo(order != null ? order.getOrderNo() : null);
+        result.setOrderNo(Objects.nonNull(order) ? order.getOrderNo() : null);
         result.setTradeNo(trade.getTradeNo());
         result.setStatus(trade.getStatus());
-        if (order != null) {
+        if (Objects.nonNull(order)) {
             result.setPayBody(order.getPayBody());
             result.setPayBodyType(order.getPayBodyType());
         }

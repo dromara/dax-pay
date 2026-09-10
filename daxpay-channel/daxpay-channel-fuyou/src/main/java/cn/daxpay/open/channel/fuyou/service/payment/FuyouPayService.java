@@ -20,6 +20,7 @@ import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 /// # 富友服务商支付执行业务服务
 ///
@@ -105,7 +106,7 @@ public class FuyouPayService {
                 .setTradeProduct(resp.getTradeProduct());
 
         // 支付内容类型映射(子应用 FuyouPayBodyType → 平台 PayBodyTypeEnum)
-        if (resp.getPayBodyType() != null) {
+        if (Objects.nonNull(resp.getPayBodyType())) {
             switch (resp.getPayBodyType()) {
                 case QR_CODE -> bo.setPayBodyType(PayBodyTypeEnum.QR_CODE);
                 case JSAPI -> bo.setPayBodyType(PayBodyTypeEnum.JSAPI);

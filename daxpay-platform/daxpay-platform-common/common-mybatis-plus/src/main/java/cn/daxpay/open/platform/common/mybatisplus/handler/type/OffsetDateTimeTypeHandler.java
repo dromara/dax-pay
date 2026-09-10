@@ -7,6 +7,7 @@ import org.apache.ibatis.type.MappedTypes;
 import java.sql.*;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.Objects;
 
 @MappedTypes(OffsetDateTime.class)
 public class OffsetDateTimeTypeHandler extends BaseTypeHandler<OffsetDateTime> {
@@ -35,7 +36,7 @@ public class OffsetDateTimeTypeHandler extends BaseTypeHandler<OffsetDateTime> {
     }
 
     private OffsetDateTime toOffsetDateTime(Object value) {
-        if (value == null) {
+        if (Objects.isNull(value)) {
             return null;
         }
         if (value instanceof OffsetDateTime offsetDateTime) {

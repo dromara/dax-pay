@@ -36,6 +36,7 @@ import java.time.Duration;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 /// # 缓存自动配置
 ///
@@ -72,7 +73,7 @@ public class CachingConfiguration implements CachingConfigurer {
             String className = target.getClass().getSimpleName();
             String methodName = method.getName();
             String paramsSummary = params.length == 0 ? "" : java.util.Arrays.stream(params)
-                    .map(p -> p == null ? "null" : p.toString())
+                    .map(p -> Objects.isNull(p) ? "null" : p.toString())
                     .collect(Collectors.joining("_"));
             return className + ":" + methodName + (paramsSummary.isEmpty() ? "" : ":" + paramsSummary);
         };
@@ -105,7 +106,7 @@ public class CachingConfiguration implements CachingConfigurer {
 
         SecureAesGcmEncryptor encryptor = encryptorProvider.getIfAvailable();
         RedisCacheConfiguration secureConfig = null;
-        if (encryptor != null) {
+        if (Objects.nonNull(encryptor)) {
             EncryptingRedisSerializer encryptingSerializer = new EncryptingRedisSerializer(encryptor);
             secureConfig = this.secureValueConfig(ttl, encryptingSerializer);
             log.info("敏感缓存 L2 整包加密已启用，前缀: {}", secureCacheNameMatcher.getSecurePrefix());
@@ -135,7 +136,7 @@ public class CachingConfiguration implements CachingConfigurer {
             // TypeFactory 从运行时 mapper 取, 保证与序列化器同源
             contributor.getValueTypes(objectMapper.getTypeFactory()).forEach((cacheName, valueType) -> {
                 RedisCacheConfiguration previous = typedConfigs.put(cacheName, this.typedValueConfig(ttl, objectMapper, valueType));
-                if (previous != null) {
+                if (Objects.nonNull(previous)) {
                     throw new IllegalStateException("缓存值类型重复注册: cacheName=" + cacheName
                             + ", type=" + valueType.toCanonical() + ", 请检查各 CacheValueTypeContributor 实现");
                 }
@@ -183,7 +184,7 @@ public class CachingConfiguration implements CachingConfigurer {
         boolean cacheEnabled = platformCommonProperties.getCache().isEnabled();
         // L1 单独开关：总开关开启时，可单独关闭 L1 仅保留 L2 Redis（纯 Redis 模式）
         boolean l1Enabled = platformCommonProperties.getCache().getL1().isEnabled();
-        boolean secureL2Enabled = encryptorProvider.getIfAvailable() != null;
+        boolean secureL2Enabled = Objects.nonNull(encryptorProvider.getIfAvailable());
         log.info("缓存模式: enabled={}, l1={} -> {}",
                 cacheEnabled, l1Enabled,
                 !cacheEnabled ? "DISABLED (NoOp, 直接穿透)"

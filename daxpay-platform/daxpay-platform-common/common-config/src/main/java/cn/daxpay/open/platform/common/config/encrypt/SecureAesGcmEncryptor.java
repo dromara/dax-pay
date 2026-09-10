@@ -13,6 +13,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.SecureRandom;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 /// # 安全的 AES-256-GCM 加密工具（支持多密钥版本）
 ///
@@ -81,7 +82,7 @@ public class SecureAesGcmEncryptor {
         Set<Integer> versions = new HashSet<>();
         for (EncryptKeyInfo keyInfo : keys) {
             // 校验版本号
-            if (keyInfo.getVersion() == null) {
+            if (Objects.isNull(keyInfo.getVersion())) {
                 throw new IllegalArgumentException("密钥版本号不能为空");
             }
             if (versions.contains(keyInfo.getVersion())) {
@@ -90,7 +91,7 @@ public class SecureAesGcmEncryptor {
             versions.add(keyInfo.getVersion());
 
             // 校验密钥长度
-            if (keyInfo.getKey() == null || keyInfo.getKey().length() != KEY_LENGTH) {
+            if (Objects.isNull(keyInfo.getKey()) || keyInfo.getKey().length() != KEY_LENGTH) {
                 throw new IllegalArgumentException("密钥版本 v" + keyInfo.getVersion() + " 的密钥长度需要为32位");
             }
         }
@@ -106,7 +107,7 @@ public class SecureAesGcmEncryptor {
     /// @param plaintext 明文
     /// @return 密文，格式：v{version}:{encrypted}
     public String encrypt(String plaintext) {
-        if (plaintext == null) {
+        if (Objects.isNull(plaintext)) {
             return null;
         }
         try {
@@ -142,7 +143,7 @@ public class SecureAesGcmEncryptor {
     /// @param ciphertext 密文，格式：v{version}:{encrypted}；或历史明文(原样返回)
     /// @return 明文；若无法解密则原样返回输入值
     public String decrypt(String ciphertext) {
-        if (ciphertext == null) {
+        if (Objects.isNull(ciphertext)) {
             return null;
         }
         try {
@@ -170,7 +171,7 @@ public class SecureAesGcmEncryptor {
 
             // 获取对应版本的密钥
             SecretKey secretKey = secretKeyCache.get(version);
-            if (secretKey == null) {
+            if (Objects.isNull(secretKey)) {
                 log.warn("找不到版本 v{} 对应的密钥, 原样返回", version);
                 return ciphertext;
             }

@@ -50,7 +50,7 @@ public class AllocAssistService {
 
     /// 装配策略上下文(主单 + 明细)
     public Optional<AllocStrategyContext> loadContext(AllocOrder allocOrder) {
-        if (allocOrder == null) {
+        if (Objects.isNull(allocOrder)) {
             return Optional.empty();
         }
         List<AllocDetail> details = allocDetailManager.findAllByAllocNo(allocOrder.getAllocNo());
@@ -138,7 +138,7 @@ public class AllocAssistService {
             log.warn("分账失败忽略: allocNo={} 状态为 {} 非 processing", allocOrder.getAllocNo(), allocOrder.getStatus());
             return false;
         }
-        if (detailResults != null) {
+        if (Objects.nonNull(detailResults)) {
             applyDetailResults(allocOrder.getAllocNo(), detailResults);
         }
         allocOrder.setStatus(AllocOrderStatusEnum.FAIL.getCode());
@@ -166,12 +166,12 @@ public class AllocAssistService {
 
     /// 按通道结果更新明细(逐条 CAS, 仅 pending 来源)
     private void applyDetailResults(String allocNo, List<AllocResultBo.DetailResult> detailResults) {
-        if (detailResults == null || detailResults.isEmpty()) {
+        if (Objects.isNull(detailResults) || detailResults.isEmpty()) {
             return;
         }
         List<AllocDetail> details = allocDetailManager.findAllByAllocNo(allocNo);
         for (AllocResultBo.DetailResult dr : detailResults) {
-            if (dr.getReceiverAccount() == null) {
+            if (Objects.isNull(dr.getReceiverAccount())) {
                 continue;
             }
             // 按接收方账号匹配明细

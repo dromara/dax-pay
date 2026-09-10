@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
+import java.util.Objects;
 
 /// # 敏感缓存整包加密序列化器测试
 class EncryptingRedisSerializerTest {
@@ -26,7 +27,7 @@ class EncryptingRedisSerializerTest {
 
     @BeforeAll
     static void initJackson() {
-        if (JacksonUtil.getObjectMapper() == null) {
+        if (Objects.isNull(JacksonUtil.getObjectMapper())) {
             JacksonUtil.setObjectMapper(JsonMapper.builder().build());
         }
     }

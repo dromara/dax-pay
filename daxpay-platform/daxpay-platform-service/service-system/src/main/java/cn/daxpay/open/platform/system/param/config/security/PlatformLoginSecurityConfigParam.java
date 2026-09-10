@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.AssertTrue;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import java.util.Objects;
 
 /// # 登录安全配置参数
 ///
@@ -33,7 +34,7 @@ public class PlatformLoginSecurityConfigParam {
     @AssertTrue(message = "{validation.field.captchaFailCountNotGreaterThanMax.assertTrue}")
     @Schema(hidden = true)
     public boolean isCaptchaTriggerValid() {
-        if (captchaTriggerAttempts == null || maxFailedAttempts == null) {
+        if (Objects.isNull(captchaTriggerAttempts) || Objects.isNull(maxFailedAttempts)) {
             return true;
         }
         return captchaTriggerAttempts <= maxFailedAttempts;

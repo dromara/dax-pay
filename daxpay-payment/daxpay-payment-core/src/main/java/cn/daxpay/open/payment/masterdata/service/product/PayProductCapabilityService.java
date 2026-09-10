@@ -45,7 +45,7 @@ public class PayProductCapabilityService {
         Map<String, Set<String>> capabilityCodesByProduct = new HashMap<>();
         for (PayProductCapability rel : payProductCapabilityManager.listAllOrdered()) {
             PayCapability cap = capabilityMap.get(rel.getCapabilityCode());
-            if (cap == null) {
+            if (Objects.isNull(cap)) {
                 continue;
             }
             capabilityCodesByProduct
@@ -123,7 +123,7 @@ public class PayProductCapabilityService {
             List<PayProductCapabilityResult> items = new ArrayList<>();
             for (PayProductCapability rel : rels) {
                 PayCapability cap = capabilityMap.get(rel.getCapabilityCode());
-                if (cap == null) {
+                if (Objects.isNull(cap)) {
                     continue;
                 }
                 items.add(toItem(rel, cap));
@@ -138,7 +138,7 @@ public class PayProductCapabilityService {
                 .setCode(cap.getCode())
                 .setSortNo(rel.getSortNo());
         PayCapabilityEnum capabilityEnum = PayCapabilityEnum.findByCode(cap.getCode());
-        if (capabilityEnum != null) {
+        if (Objects.nonNull(capabilityEnum)) {
             item.setName(I18nUtil.getEnumName(capabilityEnum));
         } else {
             item.setName(cap.getCode());
@@ -152,7 +152,7 @@ public class PayProductCapabilityService {
             return List.of();
         }
         PayMethodEnum method = findMethodByCode(methodCode);
-        if (method == null) {
+        if (Objects.isNull(method)) {
             return List.of();
         }
         AbsProductStrategy strategy = PaymentStrategyFactory.createByProduct(productCode, AbsProductStrategy.class);

@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.stream.Stream;
+import java.util.Objects;
 
 /// # 缓存读写演示接口
 ///
@@ -57,7 +58,7 @@ public class CacheDemoController {
         long start = System.currentTimeMillis();
         Object value = cacheDemoService.loadProduct(code);
         long cost = System.currentTimeMillis() - start;
-        String elementType = value == null ? "-" : value.getClass().getName();
+        String elementType = Objects.isNull(value) ? "-" : value.getClass().getName();
         return Res.ok(new CacheDemoReadResult()
                 .setCacheName(CacheDemoService.PRODUCT_CACHE)
                 .setCacheKey(code)
@@ -148,7 +149,7 @@ public class CacheDemoController {
     /// 查询单个缓存名的 L1 状态
     private CacheL1StatusResult queryL1Status(String cacheName) {
         org.springframework.cache.Cache cache = this.cacheManager.getCache(cacheName);
-        Object nativeCache = cache == null ? null : cache.getNativeCache();
+        Object nativeCache = Objects.isNull(cache) ? null : cache.getNativeCache();
         if (nativeCache instanceof com.github.benmanes.caffeine.cache.Cache<?, ?> caffeine) {
             List<String> keys = caffeine.asMap()
                     .keySet()

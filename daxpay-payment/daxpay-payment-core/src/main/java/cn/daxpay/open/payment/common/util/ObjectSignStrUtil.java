@@ -10,6 +10,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.*;
+import java.util.Objects;
 
 /// # 对象签名工具类
 ///
@@ -35,7 +36,7 @@ public class ObjectSignStrUtil {
     /// @param obj 要扁平化的对象（不能为 null）
     /// @return 扁平化后的 Map，键为 fieldPath，值为字符串
     public Map<String, String> flatten(Object obj) {
-        if (obj == null) {
+        if (Objects.isNull(obj)) {
             throw new IllegalArgumentException("对象不能为 null");
         }
         Map<String, String> result = new LinkedHashMap<>();
@@ -46,7 +47,7 @@ public class ObjectSignStrUtil {
     /// 扁平化处理
     private void flatten(String prefix, Object obj, Map<String, String> result) {
         // 空值不签名
-        if (obj == null) {
+        if (Objects.isNull(obj)) {
             return;
         }
 
@@ -122,7 +123,7 @@ public class ObjectSignStrUtil {
     /// 获取类及其父类的所有声明字段
     private List<Field> getAllFields(Class<?> clazz) {
         List<Field> fields = new ArrayList<>();
-        while (clazz != null && clazz != Object.class) {
+        while (Objects.nonNull(clazz) && clazz != Object.class) {
             fields.addAll(Arrays.asList(clazz.getDeclaredFields()));
             clazz = clazz.getSuperclass();
         }

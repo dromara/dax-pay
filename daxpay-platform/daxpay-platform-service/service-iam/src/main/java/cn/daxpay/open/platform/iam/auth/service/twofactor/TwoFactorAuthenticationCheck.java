@@ -10,6 +10,7 @@ import cn.daxpay.open.platform.iam.service.twofactor.UserTwoFactorService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import java.util.Objects;
 
 /// # 双因素二次验证检查
 ///
@@ -34,20 +35,20 @@ public class TwoFactorAuthenticationCheck implements PostAuthenticationCheck {
         }
         Long userId = toLong(authInfoResult.getId());
         // 平台开启且用户已绑定 2FA 时, 登录前需二次验证
-        return userId != null && userTwoFactorService.isTwoFactorRequired(userId);
+        return Objects.nonNull(userId) && userTwoFactorService.isTwoFactorRequired(userId);
     }
 
     @Override
     public SecondaryAuthRequiredException createException(LoginAuthContext context, AuthInfoResult authInfoResult) {
         Long userId = toLong(authInfoResult.getId());
-        String account = authInfoResult.getUserDetail() == null ? null : authInfoResult.getUserDetail().getAccount();
+        String account = Objects.isNull(authInfoResult.getUserDetail()) ? null : authInfoResult.getUserDetail().getAccount();
         String preAuthToken = twoFactorPreAuthService.create(userId, context.getClientCode(), context.getAuthLoginType());
         return new TwoFactorRequiredException(userId, account, preAuthToken);
     }
 
     /// 认证结果 id(Object) 转 Long, 无法转换返回 null
     private Long toLong(Object id) {
-        if (id == null) {
+        if (Objects.isNull(id)) {
             return null;
         }
         if (id instanceof Long l) {

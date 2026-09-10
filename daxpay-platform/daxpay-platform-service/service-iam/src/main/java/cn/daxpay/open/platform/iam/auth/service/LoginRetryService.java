@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
+import java.util.Objects;
 
 /// # 登录重试服务
 ///
@@ -47,12 +48,12 @@ public class LoginRetryService {
 
         Long userId = userDetail.getId();
         UserPasswordSecurity security = passwordSecurityManager.findByUserId(userId).orElse(null);
-        if (security == null) {
+        if (Objects.isNull(security)) {
             return;
         }
 
         Long remainingMinutes = this.checkLockedState(userId, security, config);
-        if (remainingMinutes == null) {
+        if (Objects.isNull(remainingMinutes)) {
             return;
         }
         // 认证: 登录重试次数过多已锁定
@@ -75,11 +76,11 @@ public class LoginRetryService {
             return;
         }
         UserPasswordSecurity security = passwordSecurityManager.findByUserId(userId).orElse(null);
-        if (security == null) {
+        if (Objects.isNull(security)) {
             return;
         }
         Long remainingMinutes = this.checkLockedState(userId, security, config);
-        if (remainingMinutes == null) {
+        if (Objects.isNull(remainingMinutes)) {
             return;
         }
         // 认证: 操作验证失败次数过多已锁定
@@ -93,7 +94,7 @@ public class LoginRetryService {
         this.checkAndResetFailureCount(userId, security, config);
 
         // 检查账号是否被锁定
-        if (security.getLockTime() == null) {
+        if (Objects.isNull(security.getLockTime())) {
             return null;
         }
 
@@ -112,7 +113,7 @@ public class LoginRetryService {
         if (config.failureResetMinutes() <= 0) {
             return;
         }
-        if (security.getLastFailureTime() == null) {
+        if (Objects.isNull(security.getLastFailureTime())) {
             return;
         }
         OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
@@ -152,7 +153,7 @@ public class LoginRetryService {
         // 此处判空是必要防御而非过度设计: 登录失败路径传入的 [LoginFailureException#getUserId] 多数场景为 null
         // (用户不存在/状态异常/已锁定等构造器不携带 userId), 无计数目标只能跳过;
         // 契约见 [AbstractPasswordLoginHandler#attemptAuthentication] 的注释; 敏感操作路径调用方则恒传非空
-        if (userId == null) {
+        if (Objects.isNull(userId)) {
             return;
         }
 
@@ -193,7 +194,7 @@ public class LoginRetryService {
     /// @return 密码状态信息
     public PasswordStatusResult getPasswordStatus(Long userId) {
         UserPasswordSecurity security = passwordSecurityManager.findByUserId(userId).orElse(null);
-        if (security == null) {
+        if (Objects.isNull(security)) {
             return new PasswordStatusResult()
                     .setExpired(false)
                     .setExpiringSoon(false)
@@ -204,9 +205,9 @@ public class LoginRetryService {
         OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
         OffsetDateTime expireTime = security.getPasswordExpireTime();
 
-        boolean expired = expireTime != null && !expireTime.isAfter(now);
+        boolean expired = Objects.nonNull(expireTime) && !expireTime.isAfter(now);
         boolean expiringSoon = false;
-        if (expireTime != null && !expired) {
+        if (Objects.nonNull(expireTime) && !expired) {
             long daysUntilExpiry = ChronoUnit.DAYS.between(now, expireTime);
             expiringSoon = daysUntilExpiry <= 7;
         }
@@ -222,7 +223,7 @@ public class LoginRetryService {
     /// @param userDetail 用户详情
     public void setPasswordStatusToUserDetail(UserDetail userDetail) {
         UserPasswordSecurity security = passwordSecurityManager.findByUserId(userDetail.getId()).orElse(null);
-        if (security == null) {
+        if (Objects.isNull(security)) {
             userDetail.setPasswordExpired(false);
             userDetail.setInitialPassword(true);
             userDetail.setPasswordExpireTime(null);
@@ -231,7 +232,7 @@ public class LoginRetryService {
 
         OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
         OffsetDateTime expireTime = security.getPasswordExpireTime();
-        boolean expired = expireTime != null && !expireTime.isAfter(now);
+        boolean expired = Objects.nonNull(expireTime) && !expireTime.isAfter(now);
 
         userDetail.setPasswordExpired(expired);
         userDetail.setInitialPassword(Boolean.TRUE.equals(security.getInitialPassword()));
@@ -243,7 +244,7 @@ public class LoginRetryService {
     /// @return 错误次数
     public int getErrorCount(Long userId) {
         return passwordSecurityManager.findByUserId(userId)
-                .map(security -> security.getPasswordErrorCount() == null ? 0 : security.getPasswordErrorCount())
+                .map(security -> Objects.isNull(security.getPasswordErrorCount()) ? 0 : security.getPasswordErrorCount())
                 .orElse(0);
     }
 

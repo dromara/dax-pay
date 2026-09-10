@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 /// # 支付产品配置服务
 ///
@@ -98,7 +99,7 @@ public class PayProductConfigService {
 
         config.setProduct(param.getProduct());
         config.setChannel(param.getChannel());
-        config.setActiveEnv(param.getActiveEnv() != null ? param.getActiveEnv() : PayEnvEnum.PROD.getCode());
+        config.setActiveEnv(Objects.nonNull(param.getActiveEnv()) ? param.getActiveEnv() : PayEnvEnum.PROD.getCode());
         config.setRemark(param.getRemark());
         payProductConfigManager.saveOrUpdate(config);
     }
@@ -141,13 +142,13 @@ public class PayProductConfigService {
                 .setChannelName(I18nUtil.getEnumName(ChannelEnum.findByCode(payProduct.getChannel())));
 
         AbsProductStrategy strategy = resolveStrategy(payProduct.getCode());
-        if (strategy != null) {
+        if (Objects.nonNull(strategy)) {
             result.setSandboxSupport(strategy.isSandbox());
             result.setIsv(strategy.isIsv());
         }
 
         PayProductConfig config = configMap.get(payProduct.getCode());
-        if (config != null) {
+        if (Objects.nonNull(config)) {
             result.setId(config.getId());
             result.setActiveEnv(config.getActiveEnv());
         } else {

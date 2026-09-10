@@ -2,6 +2,7 @@ package cn.daxpay.open.platform.core.exception;
 
 import cn.daxpay.open.platform.core.code.CommonCode;
 import lombok.Getter;
+import java.util.Objects;
 
 /// # 业务异常基类
 ///
@@ -38,7 +39,7 @@ public class BizException extends RuntimeException {
     /// 兼容历史两参数构造未写入 messageKey 字段、仅 Throwable.detailMessage 存 key 的情况
     public String resolveMessageKey() {
         // messageKey 为 null 时回退到 Throwable.detailMessage
-        return messageKey != null ? messageKey : getMessage();
+        return Objects.nonNull(messageKey) ? messageKey : getMessage();
     }
 
     /// 指定错误码与 messageKey（两参数形式，Java 优先于 varargs 构造）

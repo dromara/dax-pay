@@ -162,7 +162,7 @@ public class PaySyncService {
         String orderStatus = trade.getStatus();
         if (Objects.equals(orderStatus, PayFundStatusEnum.PROCESSING.getCode())) {
             if (Objects.equals(PayFundStatusEnum.PROCESSING, payStatus)) {
-                if (info.expiredTime() != null
+                if (Objects.nonNull(info.expiredTime())
                         && DateTimeUtil.le(info.expiredTime(), OffsetDateTime.now(ZoneOffset.UTC))) {
                     syncResult.setPayStatus(PayFundStatusEnum.CLOSE);
                     syncResult.setRemoteClose(true);
@@ -258,7 +258,7 @@ public class PaySyncService {
     private ContainerInfo loadContainerInfo(PayTrade trade) {
         if (Objects.equals(trade.getTradeType(), PayTradeTypeEnum.GATEWAY.getCode())) {
             GatewayPayOrder order = gatewayPayOrderManager.findById(trade.getContainerId()).orElse(null);
-            if (order != null) {
+            if (Objects.nonNull(order)) {
                 return new ContainerInfo(
                         order.getProduct(), order.getChannel(), order.getBizOrderNo(),
                         order.getExpiredTime(), order.getChannelMchNo(),
@@ -266,7 +266,7 @@ public class PaySyncService {
             }
         } else {
             NormalPayOrder order = payNormalOrderManager.findById(trade.getContainerId()).orElse(null);
-            if (order != null) {
+            if (Objects.nonNull(order)) {
                 return new ContainerInfo(
                         order.getProduct(), order.getChannel(), order.getBizOrderNo(),
                         order.getExpiredTime(), order.getChannelMchNo(),

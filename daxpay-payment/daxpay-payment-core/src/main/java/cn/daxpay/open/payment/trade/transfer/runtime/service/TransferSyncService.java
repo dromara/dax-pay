@@ -47,7 +47,7 @@ public class TransferSyncService {
     /// 按平台转账单号同步（延迟消息/定时任务入口, 无 HTTP 上下文）
     public void autoSync(String transferNo) {
         TransferTrade trade = transferTradeManager.findByTradeNoNotTenant(transferNo).orElse(null);
-        if (trade == null) {
+        if (Objects.isNull(trade)) {
             log.warn("转账同步: 凭证不存在, tradeNo={}", transferNo);
             return;
         }
@@ -59,14 +59,14 @@ public class TransferSyncService {
         lockExecutor.run(TradeLockKeys.transferTrade(trade.getId()), () -> {
             // 锁内二次读: 凭证须仍为 processing 才继续(容器 CAS 由 Assist 的 expectFrom 兜底幂等)
             TransferTrade latestTrade = transferTradeManager.findById(trade.getId()).orElse(null);
-            if (latestTrade == null
+            if (Objects.isNull(latestTrade)
                     || !Objects.equals(latestTrade.getStatus(), PayFundStatusEnum.PROCESSING.getCode())) {
                 log.info("转账同步幂等: 凭证 {} 非处理中, 跳过", trade.getTradeNo());
                 return;
             }
             // 装载容器并装配策略上下文(容器缺失视为同步失败, 保持处理中由定时任务兜底)
             TransferStrategyContext context = assistService.loadContext(channel, latestTrade.getContainerId()).orElse(null);
-            if (context == null) {
+            if (Objects.isNull(context)) {
                 log.warn("转账同步: 容器不存在, tradeNo={}", latestTrade.getTradeNo());
                 return;
             }
@@ -102,7 +102,7 @@ public class TransferSyncService {
                 .setTradeNo(trade.getTradeNo())
                 .setBizTradeNo(trade.getBizTransferNo())
                 .setOutTradeNo(trade.getOutTransferNo())
-                .setOutTradeStatus(result == null ? null : result.getStatus().getCode())
+                .setOutTradeStatus(Objects.isNull(result) ? null : result.getStatus().getCode())
                 .setTradeType(TradeTypeEnum.TRANSFER.getCode())
                 .setChannel(channel)
                 .setSyncInfo(null)

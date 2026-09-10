@@ -7,6 +7,7 @@ import tools.jackson.databind.ValueDeserializer;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 /// # LocalDateTime 反序列化器, 支持 yyyy-MM-dd HH:mm:ss 和 yyyy-MM-dd HH:mm:ss.SSS 两种格式
 ///
@@ -18,7 +19,7 @@ public class DaxpayLocalDateTimeDeserializer extends ValueDeserializer<LocalDate
     @Override
     public LocalDateTime deserialize(JsonParser p, DeserializationContext ctxt) throws JacksonException {
         String text = p.getString();
-        if (text == null || text.isBlank()) {
+        if (Objects.isNull(text) || text.isBlank()) {
             return null;
         }
         try {

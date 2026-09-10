@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Objects;
 
 /// # 支付宝服务商应用
 ///
@@ -37,7 +38,7 @@ public class AlipayIsvAppManager extends BaseManager<AlipayIsvAppMapper, AlipayI
     public boolean existsByAliAppId(String aliAppId, Long excludeId) {
         return lambdaQuery()
                 .eq(AlipayIsvApp::getAliAppId, aliAppId)
-                .ne(excludeId != null, AlipayIsvApp::getId, excludeId)
+                .ne(Objects.nonNull(excludeId), AlipayIsvApp::getId, excludeId)
                 .exists();
     }
 }

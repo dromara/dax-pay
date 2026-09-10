@@ -18,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 /// # 支付能力主数据
 ///
@@ -50,7 +51,7 @@ public class PayCapabilityService {
     /// 补全支付能力 i18n 展示名
     private PayCapabilityResult fillDisplay(PayCapabilityResult result) {
         PayCapabilityEnum capabilityEnum = PayCapabilityEnum.findByCode(result.getCode());
-        if (capabilityEnum != null) {
+        if (Objects.nonNull(capabilityEnum)) {
             result.setName(I18nUtil.getEnumName(capabilityEnum));
         }
         return result;
@@ -75,6 +76,6 @@ public class PayCapabilityService {
             return true;
         }
         String name = row.getName();
-        return name != null && name.contains(nameKeyword);
+        return Objects.nonNull(name) && name.contains(nameKeyword);
     }
 }

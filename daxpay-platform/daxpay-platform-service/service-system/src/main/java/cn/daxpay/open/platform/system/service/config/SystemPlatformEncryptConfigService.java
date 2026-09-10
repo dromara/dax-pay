@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 /// # 系统平台加密配置服务
 ///
@@ -27,7 +28,7 @@ public class SystemPlatformEncryptConfigService {
     /// @return 配置数据对象，如果不存在则返回null
     public <T> T getConfig(EncryptPlatformConfigTypeEnum configType, Class<T> clazz) {
         SystemPlatformEncryptConfig config = configManager.findByConfigType(configType);
-        if (config == null || StrUtil.isBlank(config.getConfigData())) {
+        if (Objects.isNull(config) || StrUtil.isBlank(config.getConfigData())) {
             return null;
         }
         return JacksonUtil.toBean(config.getConfigData(), clazz);
@@ -40,7 +41,7 @@ public class SystemPlatformEncryptConfigService {
     /// @return 配置数据对象
     public <T> T getOrCreateConfig(EncryptPlatformConfigTypeEnum configType, Class<T> clazz, T defaultValue) {
         T config = this.getConfig(configType, clazz);
-        if (config != null) {
+        if (Objects.nonNull(config)) {
             return config;
         }
         this.saveConfig(configType, defaultValue);
@@ -54,7 +55,7 @@ public class SystemPlatformEncryptConfigService {
         SystemPlatformEncryptConfig config = configManager.findByConfigType(configType);
         String jsonData = JacksonUtil.toJson(data);
         
-        if (config == null) {
+        if (Objects.isNull(config)) {
             config = new SystemPlatformEncryptConfig();
             config.setConfigType(configType.getCode());
             config.setConfigName(I18nUtil.getEnumName(configType));

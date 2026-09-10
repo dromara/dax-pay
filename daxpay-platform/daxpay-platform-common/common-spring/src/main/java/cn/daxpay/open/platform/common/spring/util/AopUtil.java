@@ -7,6 +7,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.Objects;
 
 /// # 切面工具类
 ///
@@ -20,7 +21,7 @@ public class AopUtil {
             return null;
         }
         Method method = methodSignature.getMethod();
-        if (method != null) {
+        if (Objects.nonNull(method)) {
             return method.getAnnotation(annotationClass);
         }
         return null;

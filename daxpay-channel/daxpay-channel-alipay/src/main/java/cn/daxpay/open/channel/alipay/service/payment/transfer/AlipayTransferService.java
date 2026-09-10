@@ -179,7 +179,7 @@ public class AlipayTransferService {
 
     /// 回写支付宝资金流水号到容器(支付宝特有, 非状态流转, 直接更新)
     private void writeBackPayFundOrderId(TransferStrategyContext context, String payFundOrderId) {
-        if (StrUtil.isBlank(payFundOrderId) || context.getTrade() == null) {
+        if (StrUtil.isBlank(payFundOrderId) || Objects.isNull(context.getTrade())) {
             return;
         }
         Long containerId = context.getTrade().getContainerId();

@@ -180,7 +180,7 @@ public class DeviceQrCodeSupportService {
     /// 固定金额校验: fixed 类型必填且大于 0
     public void validateFixedAmount(QrCodeAmountTypeEnum amountType, Long fixedAmount) {
         if (amountType == QrCodeAmountTypeEnum.FIXED) {
-            if (fixedAmount == null || fixedAmount <= 0) {
+            if (Objects.isNull(fixedAmount) || fixedAmount <= 0) {
                 // 码牌: 固定金额必须大于 0
                 throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.qrcode.fixedAmountInvalid");
             }

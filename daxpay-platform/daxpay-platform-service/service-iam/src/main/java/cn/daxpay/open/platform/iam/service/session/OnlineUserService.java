@@ -67,18 +67,18 @@ public class OnlineUserService {
         List<OnlineUserResult> allResults = new ArrayList<>();
 
         for (String json : jsonList) {
-            if (json == null) {
+            if (Objects.isNull(json)) {
                 continue;
             }
             try {
                 // 使用 Sa-Token 自身的 JSON 模板反序列化，与写入时完全对称（自动保留类型信息）
                 SaSession session = SaManager.getSaJsonTemplate().jsonToObject(json, SaSession.class);
-                if (session == null) {
+                if (Objects.isNull(session)) {
                     continue;
                 }
 
                 UserDetail userDetail = session.getModel(CommonCode.USER, UserDetail.class);
-                if (userDetail == null) {
+                if (Objects.isNull(userDetail)) {
                     continue;
                 }
 
@@ -129,13 +129,13 @@ public class OnlineUserService {
             // sessionId 是完整的 Redis key，格式: {tokenName}:{loginType}:session:{loginId}
             // 使用 Sa-Token API 获取 session，然后获取 loginId
             SaSession session = StpUtil.getSessionBySessionId(sessionId);
-            if (session == null) {
+            if (Objects.isNull(session)) {
                 // 会话: 会话不存在或已过期
                 throw new BizInfoException(CommonErrorCode.AUTHENTICATION_FAIL, "error.iam.session.sessionNotExistOrExpired");
             }
 
             Object loginId = session.getLoginId();
-            if (loginId == null) {
+            if (Objects.isNull(loginId)) {
                 // 会话: 无效的会话ID
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.iam.session.invalidSessionId");
             }
@@ -144,7 +144,7 @@ public class OnlineUserService {
 
             // 不允许踢掉超级管理员
             UserDetail userDetail = session.getModel(CommonCode.USER, UserDetail.class);
-            if (userDetail != null && userDetail.isAdmin()) {
+            if (Objects.nonNull(userDetail) && userDetail.isAdmin()) {
                 // 会话: 不允许强制下线管理员
                 throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE, "error.iam.session.cannotKickoutAdmin");
             }

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.Objects;
 
 /// # 测试回调接收记录内存存储
 ///
@@ -31,7 +32,7 @@ public class TestCallbackStore {
         while (deque.size() > MAX_SIZE) {
             // 超出容量, 移除最旧(队尾)
             TestCallbackRecord removed = deque.pollLast();
-            if (removed == null) {
+            if (Objects.isNull(removed)) {
                 break;
             }
         }

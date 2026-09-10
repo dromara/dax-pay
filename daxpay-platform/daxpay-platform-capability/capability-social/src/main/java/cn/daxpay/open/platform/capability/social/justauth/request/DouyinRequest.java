@@ -8,6 +8,7 @@ import cn.daxpay.open.platform.capability.social.justauth.model.AuthToken;
 import cn.daxpay.open.platform.capability.social.justauth.model.AuthUser;
 import cn.daxpay.open.platform.capability.social.justauth.util.SocialUrlBuilder;
 import cn.hutool.json.JSONObject;
+import java.util.Objects;
 
 /// # 抖音(网站应用扫码登录)
 ///
@@ -43,7 +44,7 @@ public class DouyinRequest extends AbstractSocialAuthRequest {
             this.getSource().accessToken(), param.toString(), this.headers("Content-Type", "application/json")
         ));
         JSONObject data = object.getJSONObject("data");
-        if (data == null || !data.containsKey("access_token")) {
+        if (Objects.isNull(data) || !data.containsKey("access_token")) {
             throw new SocialException(object.getStr("message"));
         }
         return new AuthToken()
@@ -62,7 +63,7 @@ public class DouyinRequest extends AbstractSocialAuthRequest {
         String response = this.doGet(url, this.headers("access-token", token.getAccessToken()));
         JSONObject object = this.parseObj(response);
         JSONObject data = object.getJSONObject("data");
-        if (data == null) {
+        if (Objects.isNull(data)) {
             throw new SocialException(object.getStr("message"));
         }
         return new AuthUser()

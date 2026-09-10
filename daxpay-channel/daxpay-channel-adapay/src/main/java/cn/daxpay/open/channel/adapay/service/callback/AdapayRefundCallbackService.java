@@ -69,7 +69,7 @@ public class AdapayRefundCallbackService {
             return AdapayCode.NOTIFY_FAIL;
         }
         AdapayCallbackParseResp resp = result.getData();
-        if (resp == null || !Boolean.TRUE.equals(resp.getSuccess())) {
+        if (Objects.isNull(resp) || !Boolean.TRUE.equals(resp.getSuccess())) {
             log.error("Adapay 退款回调验签失败");
             RefundCallbackData failData = new RefundCallbackData();
             failData.setCallbackData(notify);

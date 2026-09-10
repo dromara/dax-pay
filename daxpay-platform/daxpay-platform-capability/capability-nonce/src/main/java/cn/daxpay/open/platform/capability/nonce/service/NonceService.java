@@ -12,6 +12,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.Objects;
 
 /// # Nonce生成与验证服务
 ///
@@ -31,7 +32,7 @@ public class NonceService {
     /// 从配置提供者读取 nonce 有效期，无实现时回退默认值
     private int resolveTimeout() {
         NonceVerificationConfigProvider provider = configProviderProvider.getIfAvailable();
-        if (provider != null) {
+        if (Objects.nonNull(provider)) {
             int timeout = provider.getNonceTimeoutSeconds();
             if (timeout > 0) {
                 return timeout;
@@ -73,7 +74,7 @@ public class NonceService {
         // 校验nonce是否存在（一次性消费）
         String key = NONCE_PREFIX + nonce;
         String value = stringRedisTemplate.opsForValue().get(key);
-        if (value == null) {
+        if (Objects.isNull(value)) {
             log.warn("Nonce无效或已过期, nonce: {}", nonce);
             throw new NonceInvalidException();
         }

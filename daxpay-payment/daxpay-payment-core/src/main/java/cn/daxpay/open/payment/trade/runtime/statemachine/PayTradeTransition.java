@@ -6,6 +6,7 @@ import cn.daxpay.open.platform.core.exception.BizInfoException;
 
 import java.util.Map;
 import java.util.Set;
+import java.util.Objects;
 
 /// # 资金交易状态转换守卫
 ///
@@ -73,7 +74,7 @@ public final class PayTradeTransition {
     /// @param to   目标资金状态编码
     public static void assertLegal(String from, String to) {
         Set<String> allowed = FORWARD.get(from);
-        if (allowed == null || !allowed.contains(to)) {
+        if (Objects.isNull(allowed) || !allowed.contains(to)) {
             // 支付: 非法状态转换
             throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR,
                     "pay.error.pay.illegalTransition", from, to);
@@ -83,7 +84,7 @@ public final class PayTradeTransition {
     /// 判断状态转换是否合法
     public static boolean isLegal(String from, String to) {
         Set<String> allowed = FORWARD.get(from);
-        return allowed != null && allowed.contains(to);
+        return Objects.nonNull(allowed) && allowed.contains(to);
     }
 
     /// 返回能合法到达目标状态的所有来源状态集合

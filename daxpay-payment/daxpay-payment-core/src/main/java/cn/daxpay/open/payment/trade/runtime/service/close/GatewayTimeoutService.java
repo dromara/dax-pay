@@ -16,6 +16,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 /// # 网关支付超时关单服务
 ///
@@ -36,7 +37,7 @@ public class GatewayTimeoutService {
     /// 按网关单号超时关闭(幂等)
     public void closeForTimeout(String orderNo) {
         GatewayPayOrder order = gatewayPayOrderManager.findByOrderNoNotTenant(orderNo).orElse(null);
-        if (order == null) {
+        if (Objects.isNull(order)) {
             return;
         }
         if (!List.of(GatewayOrderStatusEnum.WAIT_PAY.getCode(), GatewayOrderStatusEnum.PAYING.getCode())
@@ -45,7 +46,7 @@ public class GatewayTimeoutService {
         }
         if (!lockExecutor.tryRun(TradeLockKeys.gatewayTimeout(order.getId()), TradeLockKeys.SHORT_EXPIRE, TradeLockKeys.SHORT_WAIT, () -> {
             GatewayPayOrder current = gatewayPayOrderManager.findByOrderNoNotTenant(orderNo).orElse(null);
-            if (current == null
+            if (Objects.isNull(current)
                     || !List.of(GatewayOrderStatusEnum.WAIT_PAY.getCode(), GatewayOrderStatusEnum.PAYING.getCode())
                     .contains(current.getStatus())) {
                 return;
@@ -59,7 +60,7 @@ public class GatewayTimeoutService {
                 paymentContext.setMchNo(current.getMchNo());
                 PayTrade trade = payTradeManager.findByContainerId(current.getId(), PayTradeTypeEnum.GATEWAY.getCode())
                         .orElse(null);
-                if (trade != null) {
+                if (Objects.nonNull(trade)) {
                     // 有资金凭证: 走统一超时关单(含通道关闭)
                     payCloseService.closeForTimeout(trade.getTradeNo());
                 } else {

@@ -53,7 +53,7 @@ public class PayProviderService {
 
     /// 按支付渠道编码与支付方式编码查一条配置详情（含支持的产品列表）
     public PayProviderMethodResult get(String providerCode, String methodCode) {
-        if (PayProviderEnum.findByCode(providerCode) == null) {
+        if (Objects.isNull(PayProviderEnum.findByCode(providerCode))) {
             // 通道: 支付渠道无效
             throw new DataNotExistException("error.payment.capability.invalidProvider");
         }
@@ -89,10 +89,10 @@ public class PayProviderService {
             var group = new PayProviderGroupResult()
                     .setProvider(brandEnum.getCode())
                     .setProviderLabel(I18nUtil.getEnumName(brandEnum))
-                    .setIcon(dbBrand != null ? dbBrand.getIcon() : null)
+                    .setIcon(Objects.nonNull(dbBrand) ? dbBrand.getIcon() : null)
                     .setSortNo(resolveSortNo(dbBrand, brandOrdinal))
-                    .setEnabled(dbBrand != null ? dbBrand.isEnabled() : true)
-                    .setDescription(dbBrand != null ? dbBrand.getDescription() : null);
+                    .setEnabled(Objects.nonNull(dbBrand) ? dbBrand.isEnabled() : true)
+                    .setDescription(Objects.nonNull(dbBrand) ? dbBrand.getDescription() : null);
             List<PayProviderMethodResult> methods = directoryContext.relationsByProvider()
                     .getOrDefault(brandEnum.getCode(), List.of()).stream()
                     .map(row -> toAdminMethod(brandEnum.getCode(), row, adminContext))
@@ -101,7 +101,7 @@ public class PayProviderService {
             groups.add(group);
             brandOrdinal++;
         }
-        groups.sort(Comparator.comparingInt(g -> g.getSortNo() != null ? g.getSortNo() : 0));
+        groups.sort(Comparator.comparingInt(g -> Objects.nonNull(g.getSortNo()) ? g.getSortNo() : 0));
         return groups;
     }
 
@@ -125,7 +125,7 @@ public class PayProviderService {
 
     /// 取渠道排序号，无则使用枚举顺序
     private static int resolveSortNo(PayProvider dbBrand, int fallback) {
-        return dbBrand != null && dbBrand.getSortNo() != null ? dbBrand.getSortNo() : fallback;
+        return Objects.nonNull(dbBrand) && Objects.nonNull(dbBrand.getSortNo()) ? dbBrand.getSortNo() : fallback;
     }
 
     /// 管理端预加载：渠道方式配置与支持的产品索引

@@ -7,6 +7,7 @@ import org.springframework.context.NoSuchMessageException;
 import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.util.Locale;
+import java.util.Objects;
 
 /// # 国际化工具类
 ///
@@ -25,7 +26,7 @@ public class I18nUtil {
     /// @param code 消息 key
     /// @param args 消息参数（可选）
     public String get(String code, Object... args) {
-        if (messageSource == null) {
+        if (Objects.isNull(messageSource)) {
             return code;
         }
         var locale = LocaleContextHolder.getLocale();
@@ -42,7 +43,7 @@ public class I18nUtil {
     /// @param locale 指定语言(如 Locale.CHINA 取中文)
     /// @param args 消息参数（可选）
     public String get(String code, Locale locale, Object... args) {
-        if (messageSource == null) {
+        if (Objects.isNull(messageSource)) {
             return code;
         }
         try {
@@ -56,7 +57,7 @@ public class I18nUtil {
     /// 获取枚举的国际化名称
     /// @param i18nSupport 实现了 I18nSupport 的枚举常量
     public String getEnumName(I18nSupport i18nSupport) {
-        if (i18nSupport == null) {
+        if (Objects.isNull(i18nSupport)) {
             return null;
         }
         return get(i18nSupport.getI18nPrefix() + "." + i18nSupport.getCode());
@@ -65,7 +66,7 @@ public class I18nUtil {
     /// 判断当前请求语言下是否存在翻译(含回退链, 如非默认语种缺 key 回退 zh-CN 后命中也算存在)
     /// @param code 消息 key
     public boolean exists(String code) {
-        if (messageSource == null) {
+        if (Objects.isNull(messageSource)) {
             return false;
         }
         try {

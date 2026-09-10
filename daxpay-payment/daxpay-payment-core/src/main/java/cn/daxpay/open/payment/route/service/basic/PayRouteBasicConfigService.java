@@ -27,6 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 /// # 通道路由基础模式配置
 ///
@@ -97,7 +98,7 @@ public class PayRouteBasicConfigService {
     /// 校验支付渠道编码合法且在通道路由白名单内
     private PayProviderEnum validateBasicPayProviderCode(String providerCode) {
         PayProviderEnum provider = PayProviderEnum.findByCode(providerCode);
-        if (provider == null || !PayRouteConfigProviders.contains(providerCode)) {
+        if (Objects.isNull(provider) || !PayRouteConfigProviders.contains(providerCode)) {
             // 路由: 支付渠道无效
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.route.error.basicProviderInvalid");
         }

@@ -53,7 +53,7 @@ public class LeshuaRefundCallbackService {
         LeshuaIsvKeyConfig keyConfig = leshuaIsvKeyConfigManager
                 .findByProduct(ProductEnum.LESHUA_PAY.getCode())
                 .orElse(null);
-        if (keyConfig == null || StrUtil.isBlank(keyConfig.getTradeKey())) {
+        if (Objects.isNull(keyConfig) || StrUtil.isBlank(keyConfig.getTradeKey())) {
             log.error("乐刷退款回调: 服务商密钥未配置, 无法验签");
             RefundCallbackData failData = new RefundCallbackData();
             failData.setCallbackData(notify);
@@ -73,7 +73,7 @@ public class LeshuaRefundCallbackService {
         req.setCallbackType("REFUND");
 
         DaxResult<LeshuaCallbackParseResp> result = leshuaChannelClient.parseRefundCallback(req);
-        if (result.getCode() != 0 || result.getData() == null
+        if (result.getCode() != 0 || Objects.isNull(result.getData())
                 || !Boolean.TRUE.equals(result.getData().getSuccess())) {
             log.error("乐刷退款回调验签/解析失败");
             RefundCallbackData failData = new RefundCallbackData();

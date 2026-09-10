@@ -29,6 +29,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 /// 用户端通知服务(未读数/列表/已读/清空/忽略)
 ///
@@ -88,7 +89,7 @@ public class NotifyUserNoticeService {
             NotifyNoticeBriefResult brief = NotifyNoticeConvert.CONVERT.toBrief(notice);
             NotifyNoticeRead read = readMap.get(notice.getId());
             // 有阅读记录视为已读
-            brief.setIsRead(read != null);
+            brief.setIsRead(Objects.nonNull(read));
             // 服务端渲染 Markdown 正文为 HTML, 供前端直接展示
             brief.setHtmlContent(MarkdownRenderUtil.toHtml(notice.getContent()));
             list.add(brief);
@@ -136,8 +137,8 @@ public class NotifyUserNoticeService {
         // 可见性校验: 与 list 的 findVisibleNotices 保持一致
         OffsetDateTime now = OffsetDateTime.now();
         boolean visible = NotifyStatusEnum.published.getCode().equals(notice.getStatus())
-            && (notice.getEffectiveTime() == null || !notice.getEffectiveTime().isAfter(now))
-            && (notice.getExpireTime() == null || notice.getExpireTime().isAfter(now));
+            && (Objects.isNull(notice.getEffectiveTime()) || !notice.getEffectiveTime().isAfter(now))
+            && (Objects.isNull(notice.getExpireTime()) || notice.getExpireTime().isAfter(now));
         if (!visible) {
             throw new DataNotExistException("error.notify.notice.notExist");
         }
@@ -199,7 +200,7 @@ public class NotifyUserNoticeService {
         } else if (NotifyTypeEnum.message.getCode().equals(type)) {
             // 个人消息忽略=逻辑删除(预留)
             NotifyMessage message = messageManager.findById(id).orElse(null);
-            if (message != null && message.getUserId().equals(userId)) {
+            if (Objects.nonNull(message) && message.getUserId().equals(userId)) {
                 messageManager.deleteById(id);
             }
         }

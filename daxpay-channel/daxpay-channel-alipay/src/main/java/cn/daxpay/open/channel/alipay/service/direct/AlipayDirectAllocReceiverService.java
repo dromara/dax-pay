@@ -106,7 +106,7 @@ public class AlipayDirectAllocReceiverService {
             throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
                     "error.channel.allocReceiverAlreadyBound");
         }
-        if (param.getAppRefId() != null) {
+        if (Objects.nonNull(param.getAppRefId())) {
             // 新应用合法性由 doBind 凭证组装(应用存在性+归属)校验, 失败留痕(fail + 原因)
             entity.setDirectAppRefId(param.getAppRefId());
         }

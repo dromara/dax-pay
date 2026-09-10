@@ -21,6 +21,7 @@ import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 /// # 微信支付执行业务服务
 ///
@@ -159,7 +160,7 @@ public class WechatPayService {
 
         // 支付内容类型映射(子应用 WechatPayBodyType -> 平台 PayBodyTypeEnum)
         WechatPayBodyType bodyType = resp.getPayBodyType();
-        if (bodyType != null) {
+        if (Objects.nonNull(bodyType)) {
             switch (bodyType) {
                 case LINK -> bo.setPayBodyType(PayBodyTypeEnum.LINK);
                 case QR_CODE -> bo.setPayBodyType(PayBodyTypeEnum.QR_CODE);

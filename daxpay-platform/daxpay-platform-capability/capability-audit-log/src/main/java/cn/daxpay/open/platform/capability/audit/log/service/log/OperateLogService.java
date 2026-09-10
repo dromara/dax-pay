@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.Objects;
 
 /// # 操作日志服务
 ///
@@ -51,28 +52,28 @@ public class OperateLogService {
     /// 2. 截断处理
     /// 3. 入缓冲队列
     public void add(OperateLogParam operateLog) {
-        if (operateLog == null) {
+        if (Objects.isNull(operateLog)) {
             return;
         }
 
         // 参数脱敏处理
         String paramJson = operateLog.getOperateParam();
-        if (maskService.shouldProcess(operateLog.getSaveParam() != null && operateLog.getSaveParam(), paramJson)) {
+        if (maskService.shouldProcess(Objects.nonNull(operateLog.getSaveParam()) && operateLog.getSaveParam(), paramJson)) {
             operateLog.setOperateParam(maskService.process(paramJson, 
                     Boolean.TRUE.equals(operateLog.getMaskParam()), 
                     operateLog.getFullMaskKeys(),
                     operateLog.getPartialMaskRules(),
-                    operateLog.getPayloadMaxLength() != null ? operateLog.getPayloadMaxLength() : 20000));
+                    Objects.nonNull(operateLog.getPayloadMaxLength()) ? operateLog.getPayloadMaxLength() : 20000));
         }
 
         // 返回值脱敏处理
         String returnJson = operateLog.getOperateReturn();
-        if (maskService.shouldProcess(operateLog.getSaverReturn() != null && operateLog.getSaverReturn(), returnJson)) {
+        if (maskService.shouldProcess(Objects.nonNull(operateLog.getSaverReturn()) && operateLog.getSaverReturn(), returnJson)) {
             operateLog.setOperateReturn(maskService.process(returnJson, 
                     Boolean.TRUE.equals(operateLog.getMaskReturn()), 
                     operateLog.getFullMaskKeys(),
                     operateLog.getPartialMaskRules(),
-                    operateLog.getPayloadMaxLength() != null ? operateLog.getPayloadMaxLength() : 20000));
+                    Objects.nonNull(operateLog.getPayloadMaxLength()) ? operateLog.getPayloadMaxLength() : 20000));
         }
 
         // 入队列

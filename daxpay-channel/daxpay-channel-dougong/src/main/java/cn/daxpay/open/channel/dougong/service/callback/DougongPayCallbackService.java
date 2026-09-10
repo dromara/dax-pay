@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /// # 斗拱支付回调处理服务
 ///
@@ -52,7 +53,7 @@ public class DougongPayCallbackService {
         DougongIsvKeyConfig keyConfig = dougongIsvKeyConfigManager
                 .findByProduct(ProductEnum.DOUGONG_PAY.getCode())
                 .orElse(null);
-        if (keyConfig == null || StrUtil.isBlank(keyConfig.getDgPublicKey())) {
+        if (Objects.isNull(keyConfig) || StrUtil.isBlank(keyConfig.getDgPublicKey())) {
             log.error("斗拱支付回调: 服务商公钥未配置, 无法验签");
             CallbackData failData = new CallbackData();
             failData.setCallbackData(notify);
@@ -70,7 +71,7 @@ public class DougongPayCallbackService {
         req.setBody(body);
 
         DaxResult<DougongCallbackParseResp> result = dougongChannelClient.parsePayCallback(req);
-        if (result.getCode() != 0 || result.getData() == null
+        if (result.getCode() != 0 || Objects.isNull(result.getData())
                 || !Boolean.TRUE.equals(result.getData().getSuccess())) {
             log.error("斗拱支付回调验签/解析失败");
             CallbackData failData = new CallbackData();

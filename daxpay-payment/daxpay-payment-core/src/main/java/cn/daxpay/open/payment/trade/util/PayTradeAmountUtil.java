@@ -25,12 +25,12 @@ public final class PayTradeAmountUtil {
         if (Objects.equals(tradeType, PayTradeTypeEnum.AUTHORIZE.getCode())) {
             return 0L;
         }
-        return amount == null ? 0L : amount;
+        return Objects.isNull(amount) ? 0L : amount;
     }
 
     /// 按当前 trade 字段计算入账金额
     public static long resolvePostedAmount(PayTrade trade) {
-        if (trade == null) {
+        if (Objects.isNull(trade)) {
             return 0L;
         }
         return resolvePostedAmount(trade.getTradeType(), trade.getStatus(), trade.getAmount());
@@ -38,7 +38,7 @@ public final class PayTradeAmountUtil {
 
     /// 根据当前 status/tradeType 回写 [PayTrade#setPostedAmount]
     public static void applyPostedAmount(PayTrade trade) {
-        if (trade == null) {
+        if (Objects.isNull(trade)) {
             return;
         }
         trade.setPostedAmount(resolvePostedAmount(trade));

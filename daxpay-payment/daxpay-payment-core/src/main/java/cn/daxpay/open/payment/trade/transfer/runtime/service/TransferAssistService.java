@@ -83,7 +83,7 @@ public class TransferAssistService {
     /// 按通道装载容器并装配策略上下文（容器或凭证缺失返回 empty）
     public Optional<TransferStrategyContext> loadContext(String channel, Long containerId) {
         TransferTrade trade = transferTradeManager.findByContainerId(containerId, channel).orElse(null);
-        if (trade == null) {
+        if (Objects.isNull(trade)) {
             return Optional.empty();
         }
         TransferStrategyContext context = switch (channel) {
@@ -95,7 +95,7 @@ public class TransferAssistService {
                     .map(this::buildDouyinContext).orElse(null);
             default -> throw new IllegalArgumentException("未知转账通道: " + channel);
         };
-        if (context == null) {
+        if (Objects.isNull(context)) {
             return Optional.empty();
         }
         context.setChannel(channel).setTrade(trade);
@@ -219,7 +219,7 @@ public class TransferAssistService {
         }
         // 凭证 CAS
         trade.setStatus(PayFundStatusEnum.SUCCESS.getCode());
-        trade.setFinishTime(finishTime != null ? finishTime : OffsetDateTime.now());
+        trade.setFinishTime(Objects.nonNull(finishTime) ? finishTime : OffsetDateTime.now());
         trade.setOutTransferNo(outTransferNo);
         trade.setRelationNo(relationNo);
         boolean tradeUpdated = transferTradeManager.casUpdateStatus(trade, Set.of(PayFundStatusEnum.PROCESSING.getCode(), PayFundStatusEnum.FAIL.getCode()));
@@ -319,7 +319,7 @@ public class TransferAssistService {
     private <T extends TransferContainer> MirrorResult doMirror(ChannelRoute<T> route, TransferTrade trade,
             Set<String> expectFrom, String errorMsg, MirrorExtras extras) {
         T order = route.loader().apply(trade.getContainerId());
-        if (order == null) {
+        if (Objects.isNull(order)) {
             log.warn("转账容器不存在, 跳过容器更新: tradeNo={}", trade.getTradeNo());
             return new MirrorResult(false, null);
         }
@@ -348,7 +348,7 @@ public class TransferAssistService {
     private <T extends TransferContainer> void doProcessing(ChannelRoute<T> route, Long containerId,
             String outTransferNo, MirrorExtras extras) {
         T order = route.loader().apply(containerId);
-        if (order == null) {
+        if (Objects.isNull(order)) {
             return;
         }
         order.setOutTransferNo(outTransferNo);
@@ -427,16 +427,16 @@ public class TransferAssistService {
                 wechatTransferOrderManager::casUpdateStatus,
                 // 终态: 拉起确认参数有值才覆盖
                 (order, extras) -> {
-                    if (extras.transferBody() != null) {
+                    if (Objects.nonNull(extras.transferBody())) {
                         order.setTransferBody(extras.transferBody());
                     }
                 },
                 // 处理中: 拉起确认参数/微信 AppId 有值才覆盖
                 (order, extras) -> {
-                    if (extras.transferBody() != null) {
+                    if (Objects.nonNull(extras.transferBody())) {
                         order.setTransferBody(extras.transferBody());
                     }
-                    if (extras.wxAppId() != null) {
+                    if (Objects.nonNull(extras.wxAppId())) {
                         order.setWxAppId(extras.wxAppId());
                     }
                 });
@@ -462,13 +462,13 @@ public class TransferAssistService {
                 douyinTransferOrderManager::casUpdateStatus,
                 // 终态: 转账场景有值才覆盖
                 (order, extras) -> {
-                    if (extras.transferScene() != null) {
+                    if (Objects.nonNull(extras.transferScene())) {
                         order.setTransferScene(extras.transferScene());
                     }
                 },
                 // 处理中: 转账场景有值才覆盖
                 (order, extras) -> {
-                    if (extras.transferScene() != null) {
+                    if (Objects.nonNull(extras.transferScene())) {
                         order.setTransferScene(extras.transferScene());
                     }
                 });
@@ -478,7 +478,7 @@ public class TransferAssistService {
 
     /// 序列化报备信息为JSON字符串(支付宝容器持久化, FAIL重试时恢复)
     private String serializeReportInfos(List<TransferReportInfo> reportInfos) {
-        if (reportInfos == null || reportInfos.isEmpty()) {
+        if (Objects.isNull(reportInfos) || reportInfos.isEmpty()) {
             return null;
         }
         return JSONUtil.toJsonStr(reportInfos);

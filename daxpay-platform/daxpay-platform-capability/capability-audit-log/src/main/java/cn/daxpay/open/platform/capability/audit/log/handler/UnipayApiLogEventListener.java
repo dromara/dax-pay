@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+import java.util.Objects;
 
 /// # 统一支付接口审计事件监听
 ///
@@ -23,7 +24,7 @@ public class UnipayApiLogEventListener {
 
     @EventListener
     public void onUnipayApiAccess(UnipayApiAccessLogEvent event) {
-        if (event == null) {
+        if (Objects.isNull(event)) {
             return;
         }
         try {

@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.Objects;
 
 /// # 登录锁定监控服务
 ///
@@ -86,7 +87,7 @@ public class LoginLockService {
     /// 按锁定状态拼接筛选条件(与 [LoginLockStatusEnum] 计算口径一致), 非法状态值忽略不抛异常
     private void applyStatusFilter(MPJLambdaWrapper<UserPasswordSecurity> wrapper, String status, OffsetDateTime now) {
         LoginLockStatusEnum statusEnum = this.parseStatus(status);
-        if (statusEnum == null) {
+        if (Objects.isNull(statusEnum)) {
             return;
         }
         switch (statusEnum) {
@@ -114,7 +115,7 @@ public class LoginLockService {
 
     /// 填充状态与剩余分钟
     private void fillComputedFields(LoginLockResult result, OffsetDateTime now) {
-        if (result.getLockTime() != null) {
+        if (Objects.nonNull(result.getLockTime())) {
             if (result.getLockTime().isAfter(now)) {
                 result.setStatus(LoginLockStatusEnum.LOCKED.getCode());
                 // 剩余分钟向上取整, 与 LoginRetryService#checkLockedState 的提示口径一致

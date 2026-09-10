@@ -32,7 +32,7 @@ public class TradeOrderDetailAssembler {
 
     /// 普通支付详情：补资金凭证字段
     public void fillFundOnNormal(NormalPayOrderResult result, Long containerId) {
-        if (result == null || containerId == null) {
+        if (Objects.isNull(result) || Objects.isNull(containerId)) {
             return;
         }
         PayTrade trade = payTradeManager.findByContainerId(containerId, PayTradeTypeEnum.NORMAL.getCode())
@@ -42,7 +42,7 @@ public class TradeOrderDetailAssembler {
 
     /// 网关支付详情：补资金凭证字段
     public void fillFundOnGateway(GatewayPayOrderResult result, Long containerId) {
-        if (result == null || containerId == null) {
+        if (Objects.isNull(result) || Objects.isNull(containerId)) {
             return;
         }
         PayTrade trade = payTradeManager.findByContainerId(containerId, PayTradeTypeEnum.GATEWAY.getCode())
@@ -52,27 +52,27 @@ public class TradeOrderDetailAssembler {
 
     /// 资金交易详情：按 tradeType 补容器业务字段
     public void fillContainerOnTrade(PayTradeResult result, PayTrade trade) {
-        if (result == null || trade == null || trade.getContainerId() == null) {
+        if (Objects.isNull(result) || Objects.isNull(trade) || Objects.isNull(trade.getContainerId())) {
             return;
         }
         String tradeType = trade.getTradeType();
         if (Objects.equals(tradeType, PayTradeTypeEnum.GATEWAY.getCode())) {
             GatewayPayOrder order = gatewayPayOrderManager.findById(trade.getContainerId()).orElse(null);
-            if (order != null) {
+            if (Objects.nonNull(order)) {
                 fillFromGateway(result, order);
             }
             return;
         }
         // 默认按普通支付容器解析（含 historical normal；未知类型尝试 normal）
         NormalPayOrder order = normalPayOrderManager.findById(trade.getContainerId()).orElse(null);
-        if (order != null) {
+        if (Objects.nonNull(order)) {
             fillFromNormal(result, order);
         }
     }
 
     /// 普通支付容器详情补充资金凭证字段(tradeNo/outOrderNo/资金状态/可退余额)
     private void fillFundOnContainerResult(NormalPayOrderResult result, PayTrade trade) {
-        if (trade == null) {
+        if (Objects.isNull(trade)) {
             return;
         }
         result.setTradeNo(trade.getTradeNo());
@@ -83,7 +83,7 @@ public class TradeOrderDetailAssembler {
 
     /// 网关支付容器详情补充资金凭证字段(含关联订单号)
     private void fillFundOnGatewayResult(GatewayPayOrderResult result, PayTrade trade) {
-        if (trade == null) {
+        if (Objects.isNull(trade)) {
             return;
         }
         result.setTradeNo(trade.getTradeNo());

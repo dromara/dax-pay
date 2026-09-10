@@ -137,7 +137,7 @@ public class AllocStartService {
         validateAllocatable(trade, param);
         // 装配通道凭证快照(按交易形态分发容器)
         AllocatableContainer container = this.resolveContainer(trade);
-        if (container == null) {
+        if (Objects.isNull(container)) {
             throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.alloc.orderNotFound");
         }
         // 归属校验: tradeNo/bizOrderNo 为可枚举编号, 防跨商户订单发起分账(资金操作)
@@ -180,7 +180,7 @@ public class AllocStartService {
             AbsAllocStrategy strategy = AllocStrategyFactory.create(channel);
             AllocResultBo result = strategy.doAlloc(context);
             // 回写通道分账号(如有)
-            if (result.getOutAllocNo() != null) {
+            if (Objects.nonNull(result.getOutAllocNo())) {
                 assistService.processing(allocOrder, result.getOutAllocNo());
             }
             // 按逐明细结果聚合订单状态
@@ -205,7 +205,7 @@ public class AllocStartService {
     /// 由 [registerDelaySync] 与定时任务兜底推进, 切勿误判为 partial 终态(会导致明细永久 pending 且锁死原支付)。
     /// 参照 [cn.daxpay.open.payment.trade.alloc.runtime.service.AllocSyncService#aggregateResult] 的守卫写法。
     private void aggregateResult(AllocOrder allocOrder, List<AllocResultBo.DetailResult> detailResults) {
-        if (detailResults == null || detailResults.isEmpty()) {
+        if (Objects.isNull(detailResults) || detailResults.isEmpty()) {
             // 无明细结果(通道异常前或未返回明细): 保持 processing, 注册延迟同步兜底
             this.registerDelaySync(allocOrder.getAllocNo());
             return;
@@ -255,10 +255,10 @@ public class AllocStartService {
 
     /// 解析原支付资金交易号(只读, 供构造订单维度锁 key)
     private String resolveTradeNo(AllocParam param) {
-        if (param.getTradeNo() != null && !param.getTradeNo().isBlank()) {
+        if (Objects.nonNull(param.getTradeNo()) && !param.getTradeNo().isBlank()) {
             return param.getTradeNo();
         }
-        if (param.getBizOrderNo() != null && !param.getBizOrderNo().isBlank()) {
+        if (Objects.nonNull(param.getBizOrderNo()) && !param.getBizOrderNo().isBlank()) {
             String bizOrderNo = param.getBizOrderNo();
             // bizOrderNo 幂等唯一维度为商户(uk_normal_order_mch_biz), 定位必须带商户号:
             // 运营端忽略租户, 缺商户条件会跨商户同单号串单
@@ -296,7 +296,7 @@ public class AllocStartService {
         }
         // 原支付容器须声明为分账订单
         AllocatableContainer container = this.resolveContainer(trade);
-        if (container == null || !Boolean.TRUE.equals(container.getAllocation())) {
+        if (Objects.isNull(container) || !Boolean.TRUE.equals(container.getAllocation())) {
             throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.alloc.notAllocOrder");
         }
         // 接收方账号去重(同账号不可重复, 否则明细重复且通道侧可能重复打款)
@@ -310,7 +310,7 @@ public class AllocStartService {
         long totalAmount = param.getReceivers().stream()
                 .mapToLong(r -> CurrencyAmountUtil.majorToMinor(r.getAmount(), CurrencyEnum.CNY))
                 .sum();
-        if (trade.getAmount() == null || totalAmount > trade.getAmount()) {
+        if (Objects.isNull(trade.getAmount()) || totalAmount > trade.getAmount()) {
             throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.alloc.amountExceed");
         }
     }

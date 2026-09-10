@@ -123,7 +123,7 @@ public class AlipayCallbackService {
         // 凭 out_trade_no(平台交易号) 反查凭证; channelMchNo 作直连兜底/一致性校验
         String tradeNo = params.get("out_trade_no");
         AlipaySdkCredential credential = resolveCredentialByTradeNo(tradeNo, channelMchNo);
-        if (credential == null) {
+        if (Objects.isNull(credential)) {
             log.error("支付宝支付回调: 无法解析通道凭证, tradeNo={}, channelMchNo={}", tradeNo, channelMchNo);
             CallbackData failData = new CallbackData();
             failData.setCallbackData(params);
@@ -134,7 +134,7 @@ public class AlipayCallbackService {
             return NOTIFY_FAIL;
         }
         AlipayCallbackParseResp resp = parse(params, credential, false);
-        if (resp == null || !Boolean.TRUE.equals(resp.getSuccess())) {
+        if (Objects.isNull(resp) || !Boolean.TRUE.equals(resp.getSuccess())) {
             log.error("支付宝支付回调验签失败: tradeNo={}", tradeNo);
             CallbackData failData = new CallbackData();
             failData.setCallbackData(params);
@@ -170,7 +170,7 @@ public class AlipayCallbackService {
         // out_request_no 为平台退款号, 凭原支付订单号反查凭证
         String refundNo = params.get("out_request_no");
         RefundOrder refundOrder = payRefundOrderManager.findByRefundNo(refundNo).orElse(null);
-        if (refundOrder == null) {
+        if (Objects.isNull(refundOrder)) {
             log.error("支付宝退款回调: 退款单不存在 refundNo={}", refundNo);
             RefundCallbackData failData = new RefundCallbackData();
             failData.setCallbackData(params);
@@ -181,7 +181,7 @@ public class AlipayCallbackService {
             return NOTIFY_FAIL;
         }
         AlipaySdkCredential credential = resolveCredentialByTradeNo(refundOrder.getTradeNo(), channelMchNo);
-        if (credential == null) {
+        if (Objects.isNull(credential)) {
             log.error("支付宝退款回调: 无法解析通道凭证, refundNo={}, channelMchNo={}", refundNo, channelMchNo);
             RefundCallbackData failData = new RefundCallbackData();
             failData.setCallbackData(params);
@@ -192,7 +192,7 @@ public class AlipayCallbackService {
             return NOTIFY_FAIL;
         }
         AlipayCallbackParseResp resp = parse(params, credential, true);
-        if (resp == null || !Boolean.TRUE.equals(resp.getSuccess())) {
+        if (Objects.isNull(resp) || !Boolean.TRUE.equals(resp.getSuccess())) {
             log.error("支付宝退款回调验签失败: refundNo={}", refundNo);
             RefundCallbackData failData = new RefundCallbackData();
             failData.setCallbackData(params);
@@ -229,7 +229,7 @@ public class AlipayCallbackService {
         // 转账仅直连, 凭 path 通道商户号组装直连凭证(转账无能力维度, 转账单应用由转账配置显式指定, 此处按 appType 推导验签)
         AlipaySdkCredential credential = alipayDirectConfigAssembler.buildConfig(mchNo, channelMchNo, null, null);
         AlipayTransferCallbackParseResp resp = parseTransfer(params, credential);
-        if (resp == null || !Boolean.TRUE.equals(resp.getSuccess())) {
+        if (Objects.isNull(resp) || !Boolean.TRUE.equals(resp.getSuccess())) {
             log.error("支付宝转账回调验签失败: outBizNo={}", params.get("out_biz_no"));
             CallbackData failData = new CallbackData();
             failData.setCallbackData(params);
@@ -304,18 +304,18 @@ public class AlipayCallbackService {
     ///
     /// @param pathChannelMchNo 回调 path 上的通道商户号; 订单侧 channelMchNo 优先, 空则用 path
     private AlipaySdkCredential resolveCredentialByTradeNo(String tradeNo, String pathChannelMchNo) {
-        if (tradeNo == null || tradeNo.isBlank()) {
+        if (Objects.isNull(tradeNo) || tradeNo.isBlank()) {
             return null;
         }
         PayTrade trade = payTradeManager.findByTradeNo(tradeNo).orElse(null);
-        if (trade == null) {
+        if (Objects.isNull(trade)) {
             return null;
         }
         // 按 tradeType 分发到对应容器(normal/gateway)读取通道路由字段
         // 与 PayCallbackService.resolveProduct / PayTradeContainerFields.resolve 同范式,
         // 避免硬编码 normalPayOrder 导致 tradeType=gateway 时跨表查不到容器
         PayTradeContainerFields.CredentialFields fields = payTradeContainerFields.resolveCredentialFields(trade);
-        if (fields == null) {
+        if (Objects.isNull(fields)) {
             // 容器记录不存在(含跨容器误查), 附 tradeType 便于排查
             log.warn("支付宝回调: 容器记录不存在, tradeNo={}, tradeType={}, containerId={}",
                     tradeNo, trade.getTradeType(), trade.getContainerId());
@@ -336,7 +336,7 @@ public class AlipayCallbackService {
         Map<String, String> result = new HashMap<>(paramMap.size());
         for (Map.Entry<String, String[]> entry : paramMap.entrySet()) {
             String[] values = entry.getValue();
-            if (values != null && values.length > 0) {
+            if (Objects.nonNull(values) && values.length > 0) {
                 result.put(entry.getKey(), values[0]);
             }
         }

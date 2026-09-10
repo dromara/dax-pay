@@ -48,7 +48,7 @@ public class RefundSyncService {
         RefundResultBo result = strategy.doSync(refundOrder);
 
         // 同步失败(通道未返回明确结果)
-        if (!result.isSyncSuccess() || result.getStatus() == null) {
+        if (!result.isSyncSuccess() || Objects.isNull(result.getStatus())) {
             log.warn("退款同步未获取明确结果, refundNo={}, error={}", refundOrder.getRefundNo(), result.getSyncErrorMsg());
             return refundOrder;
         }

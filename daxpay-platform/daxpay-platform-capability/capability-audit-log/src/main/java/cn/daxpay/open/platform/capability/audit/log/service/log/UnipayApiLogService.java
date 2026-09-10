@@ -29,6 +29,7 @@ import java.util.Set;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 /// # 统一支付接口审计日志服务
 ///
@@ -66,7 +67,7 @@ public class UnipayApiLogService {
 
     /// 添加入队：强制脱敏 + 截断；队列满则丢弃
     public void add(UnipayApiLogParam param) {
-        if (param == null) {
+        if (Objects.isNull(param)) {
             return;
         }
 
@@ -174,7 +175,7 @@ public class UnipayApiLogService {
     /// 批量回填商户名称(platform 模块通过 SPI 翻译 mchNo, 无 payment 模块时跳过)
     private void fillMchName(List<UnipayApiLogResult> list) {
         MerchantNameResolver resolver = merchantNameResolverProvider.getIfAvailable();
-        if (resolver == null) {
+        if (Objects.isNull(resolver)) {
             return;
         }
         Set<String> mchNos = list.stream()

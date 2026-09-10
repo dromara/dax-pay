@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 /// # 客户端环境(UA/宿主识别)
 ///
@@ -59,7 +60,7 @@ public enum ClientEnvEnum implements I18nSupport {
     /// H5: 微信→jsapi / 支付宝→扫码(alipay_qr, 免 OAuth) / 云闪付、抖音→jsapi
     /// 小程序: 微信→mini / 支付宝、云闪付、抖音→jsapi(无独立 mini)
     public String defaultMethodCode(ClientRuntimeEnum runtime) {
-        ClientRuntimeEnum rt = runtime == null ? ClientRuntimeEnum.H5 : runtime;
+        ClientRuntimeEnum rt = Objects.isNull(runtime) ? ClientRuntimeEnum.H5 : runtime;
         PayMethodEnum method;
         if (rt == ClientRuntimeEnum.MINI) {
             method = switch (this) {
@@ -81,7 +82,7 @@ public enum ClientEnvEnum implements I18nSupport {
                 default -> null;
             };
         }
-        if (method == null) {
+        if (Objects.isNull(method)) {
             // 网关: 不支持的客户端环境
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.gateway.clientEnvNotSupport");
         }

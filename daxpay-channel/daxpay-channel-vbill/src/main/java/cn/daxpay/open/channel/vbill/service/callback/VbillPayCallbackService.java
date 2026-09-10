@@ -66,7 +66,7 @@ public class VbillPayCallbackService {
         // 获取全局服务商公钥(只读查询)
         VbillIsvKeyConfig keyConfig = vbillIsvKeyConfigManager.findByProduct(ProductEnum.VBILL_PAY.getCode())
                 .orElse(null);
-        if (keyConfig == null || keyConfig.getPublicKey() == null) {
+        if (Objects.isNull(keyConfig) || Objects.isNull(keyConfig.getPublicKey())) {
             log.error("随行付支付回调: 服务商密钥未配置, 无法验签");
             CallbackData failData = new CallbackData();
             failData.setCallbackData(notify);
@@ -80,7 +80,7 @@ public class VbillPayCallbackService {
 
         // 转发子应用验签解析
         VbillCallbackParseResp parseResp = parse(body, keyConfig.getPublicKey(), false);
-        if (parseResp == null || !Boolean.TRUE.equals(parseResp.getSuccess())) {
+        if (Objects.isNull(parseResp) || !Boolean.TRUE.equals(parseResp.getSuccess())) {
             log.error("随行付支付回调验签失败");
             CallbackData failData = new CallbackData();
             failData.setCallbackData(notify);

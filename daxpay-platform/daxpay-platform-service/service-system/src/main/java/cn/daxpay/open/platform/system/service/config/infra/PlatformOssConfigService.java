@@ -23,6 +23,7 @@ import software.amazon.awssdk.services.s3.model.NoSuchBucketException;
 import software.amazon.awssdk.services.s3.model.S3Exception;
 
 import java.net.URI;
+import java.util.Objects;
 
 /// # 平台OSS配置服务
 ///
@@ -58,7 +59,7 @@ public class PlatformOssConfigService {
         encryptConfigService.updateConfig(EncryptPlatformConfigTypeEnum.OSS, data);
         // 配置变更后丢弃缓存的 S3 客户端, 下次访问按新配置重建
         StorageClientService storageClientService = storageClientServiceProvider.getIfAvailable();
-        if (storageClientService != null) {
+        if (Objects.nonNull(storageClientService)) {
             storageClientService.invalidate();
         }
     }
@@ -118,7 +119,7 @@ public class PlatformOssConfigService {
     /// 合并探测用配置: 请求非空字段覆盖库配置; 密钥仅在请求显式传入时覆盖
     private PlatformOssConfig mergeForCheck(PlatformOssConfig saved, PlatformOssConfigParam param) {
         PlatformOssConfig probe = new PlatformOssConfig();
-        if (saved != null) {
+        if (Objects.nonNull(saved)) {
             probe.setEndpoint(saved.getEndpoint())
                     .setRegion(saved.getRegion())
                     .setPublicBucket(saved.getPublicBucket())
@@ -132,13 +133,13 @@ public class PlatformOssConfigService {
                     .setDownloadExpireHours(saved.getDownloadExpireHours())
                     .setBasePath(saved.getBasePath());
         }
-        if (param == null) {
+        if (Objects.isNull(param)) {
             return probe;
         }
         if (StrUtil.isNotBlank(param.getEndpoint())) {
             probe.setEndpoint(param.getEndpoint());
         }
-        if (param.getRegion() != null) {
+        if (Objects.nonNull(param.getRegion())) {
             probe.setRegion(param.getRegion());
         }
         if (StrUtil.isNotBlank(param.getPublicBucket())) {
@@ -147,16 +148,16 @@ public class PlatformOssConfigService {
         if (StrUtil.isNotBlank(param.getPrivateBucket())) {
             probe.setPrivateBucket(param.getPrivateBucket());
         }
-        if (param.getPublicBaseUrl() != null) {
+        if (Objects.nonNull(param.getPublicBaseUrl())) {
             probe.setPublicBaseUrl(param.getPublicBaseUrl());
         }
-        if (param.getPrivateBaseUrl() != null) {
+        if (Objects.nonNull(param.getPrivateBaseUrl())) {
             probe.setPrivateBaseUrl(param.getPrivateBaseUrl());
         }
-        if (param.getPathStyleAccess() != null) {
+        if (Objects.nonNull(param.getPathStyleAccess())) {
             probe.setPathStyleAccess(param.getPathStyleAccess());
         }
-        if (param.getBasePath() != null) {
+        if (Objects.nonNull(param.getBasePath())) {
             probe.setBasePath(param.getBasePath());
         }
         // 密钥: 仅当请求携带非空明文时覆盖(前端未改密钥时不传)

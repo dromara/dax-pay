@@ -46,7 +46,7 @@ public class PlatformMailConfig {
 
     /// 超时时间, 默认 10 秒
     public Integer getTimeout() {
-        return timeout == null ? 10 : timeout;
+        return Objects.isNull(timeout) ? 10 : timeout;
     }
 
     /// 通道开关, 默认关闭

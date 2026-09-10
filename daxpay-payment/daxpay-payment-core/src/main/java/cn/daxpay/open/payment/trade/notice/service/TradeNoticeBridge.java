@@ -43,12 +43,12 @@ public class TradeNoticeBridge {
 
     /// 支付终态通知
     public void dispatchPay(PayTrade trade, NoticeEventEnum event) {
-        if (trade == null || event == null) {
+        if (Objects.isNull(trade) || Objects.isNull(event)) {
             return;
         }
         if (isGateway(trade)) {
             GatewayPayOrder order = gatewayPayOrderManager.findById(trade.getContainerId()).orElse(null);
-            if (order == null) {
+            if (Objects.isNull(order)) {
                 log.warn("网关订单不存在, 跳过通知: containerId={}", trade.getContainerId());
                 return;
             }
@@ -66,7 +66,7 @@ public class TradeNoticeBridge {
             return;
         }
         NormalPayOrder order = normalPayOrderManager.findById(trade.getContainerId()).orElse(null);
-        if (order == null) {
+        if (Objects.isNull(order)) {
             log.warn("普通支付订单不存在, 跳过通知: containerId={}", trade.getContainerId());
             return;
         }
@@ -85,7 +85,7 @@ public class TradeNoticeBridge {
 
     /// 退款终态通知
     public void dispatchRefund(RefundOrder refundOrder, NoticeEventEnum event) {
-        if (refundOrder == null || event == null) {
+        if (Objects.isNull(refundOrder) || Objects.isNull(event)) {
             return;
         }
         String content = JacksonUtil.toJson(RefundOrderConvert.CONVERT.toResult(refundOrder));
@@ -103,7 +103,7 @@ public class TradeNoticeBridge {
 
     /// 转账终态通知(通知快照取公共资金凭证, 通知地址取容器)
     public void dispatchTransfer(TransferTrade trade, String notifyUrl, NoticeEventEnum event) {
-        if (trade == null || event == null) {
+        if (Objects.isNull(trade) || Objects.isNull(event)) {
             return;
         }
         String content = JacksonUtil.toJson(TransferTradeConvert.CONVERT.toResult(trade));
@@ -125,7 +125,7 @@ public class TradeNoticeBridge {
 
     /// 分账终态通知(通知快照含明细列表, 通知地址取分账单的 notifyUrl)
     public void dispatchAlloc(AllocOrder allocOrder, NoticeEventEnum event) {
-        if (allocOrder == null || event == null) {
+        if (Objects.isNull(allocOrder) || Objects.isNull(event)) {
             return;
         }
         AllocOrderResult result = AllocOrderConvert.CONVERT.toResult(allocOrder);

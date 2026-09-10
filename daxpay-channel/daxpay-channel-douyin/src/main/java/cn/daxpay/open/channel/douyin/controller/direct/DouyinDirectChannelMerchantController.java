@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Objects;
 
 /// # 抖音直连通道商户管理
 ///
@@ -60,8 +61,8 @@ public class DouyinDirectChannelMerchantController {
             @NotBlank(message = "{validation.field.channelMerchantNo.notBlank}") String channelMchNo) {
         var config = douyinDirectKeyConfigService.findByChannelMchNo(channelMchNo);
         var result = config.toResult();
-        result.setPrivateKeyConfigured(config.getMerchantPrivateKey() != null);
-        result.setEncryptKeyConfigured(config.getEncryptKey() != null);
+        result.setPrivateKeyConfigured(Objects.nonNull(config.getMerchantPrivateKey()));
+        result.setEncryptKeyConfigured(Objects.nonNull(config.getEncryptKey()));
         return Res.ok(result);
     }
 

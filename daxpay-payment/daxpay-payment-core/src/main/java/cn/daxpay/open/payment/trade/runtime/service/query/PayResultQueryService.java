@@ -22,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
+import java.util.Objects;
 
 /// # 支付结果查询服务
 ///
@@ -107,7 +108,7 @@ public class PayResultQueryService {
                 .setCurrency(order.getCurrency())
                 .setReturnUrl(order.getReturnUrl());
         // 容器金额权威
-        if (order.getAmount() != null) {
+        if (Objects.nonNull(order.getAmount())) {
             result.setAmount(order.getAmount());
         }
     }
@@ -123,7 +124,7 @@ public class PayResultQueryService {
                 .setTitle(order.getTitle())
                 .setCurrency(order.getCurrency())
                 .setReturnUrl(order.getReturnUrl());
-        if (order.getAmount() != null) {
+        if (Objects.nonNull(order.getAmount())) {
             result.setAmount(order.getAmount());
         }
     }
@@ -165,7 +166,7 @@ public class PayResultQueryService {
             sb.append("&bizOrderNo=").append(URLUtil.encode(redirect.getBizOrderNo()));
         }
         sb.append("&status=").append(URLUtil.encode(redirect.getStatus()));
-        if (redirect.getAmount() != null) {
+        if (Objects.nonNull(redirect.getAmount())) {
             sb.append("&amount=").append(redirect.getAmount());
         }
         sb.append("&sign=").append(URLUtil.encode(redirect.getSign()));

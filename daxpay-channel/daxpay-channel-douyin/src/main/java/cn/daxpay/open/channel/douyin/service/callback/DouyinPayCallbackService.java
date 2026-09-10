@@ -54,7 +54,7 @@ public class DouyinPayCallbackService {
 
         // 3. 转发到子应用验签
         DouyinCallbackParseResp resp = this.parsePayCallback(credential, body, headerMap);
-        if (resp == null || !resp.isVerified()) {
+        if (Objects.isNull(resp) || !resp.isVerified()) {
             log.error("抖音支付回调验签失败: channelMchNo={}", channelMchNo);
             CallbackData failData = new CallbackData();
             Map<String, Object> notify = new HashMap<>();
@@ -95,7 +95,7 @@ public class DouyinPayCallbackService {
                 .oneOpt()
                 .orElse(null);
         var credential = new DouyinSdkCredential();
-        credential.setMchId(merchant != null ? merchant.getDyMchId() : null);
+        credential.setMchId(Objects.nonNull(merchant) ? merchant.getDyMchId() : null);
         credential.setMerchantSerialNumber(keyConfig.getMerchantSerialNumber());
         credential.setMerchantPrivateKey(keyConfig.getMerchantPrivateKey());
         credential.setEncryptKey(keyConfig.getEncryptKey());
@@ -128,7 +128,7 @@ public class DouyinPayCallbackService {
         // resp.transactionId 是抖音交易号
         data.setOutTradeNo(resp.getTransactionId());
         // 支付成功时间
-        if (resp.getSuccessTime() != null && !resp.getSuccessTime().isBlank()) {
+        if (Objects.nonNull(resp.getSuccessTime()) && !resp.getSuccessTime().isBlank()) {
             data.setFinishTime(OffsetDateTime.parse(resp.getSuccessTime()));
         }
         // 交易状态映射: 抖音 SUCCESS → 回调 SUCCESS; 其他 → 非成功(触发 fail 处理)
@@ -144,6 +144,6 @@ public class DouyinPayCallbackService {
     /// 获取 header(大小写兼容)
     private String getHeader(Map<String, String> headerMap, String name) {
         String value = headerMap.get(name);
-        return value != null ? value : headerMap.get(name.toLowerCase());
+        return Objects.nonNull(value) ? value : headerMap.get(name.toLowerCase());
     }
 }

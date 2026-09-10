@@ -49,11 +49,11 @@ public class EasyPayPayloadBuilder implements NoticePayloadBuilder {
     @Override
     public NoticeEnvelope build(MchNoticeTask task) {
         Long easyPayOrderId = JSONUtil.parseObj(task.getContent()).getLong("id");
-        if (easyPayOrderId == null) {
+        if (Objects.isNull(easyPayOrderId)) {
             throw new IllegalStateException("easy pay ref missing id");
         }
         EasyPayOrder order = easyPayOrderManager.findByIdNotTenant(easyPayOrderId).orElse(null);
-        if (order == null) {
+        if (Objects.isNull(order)) {
             throw new IllegalStateException("easy pay order not found: " + easyPayOrderId);
         }
         Object callback = Objects.equals(order.getApiVersion(), EasyPayApiVersionEnum.V1.getCode())
@@ -78,7 +78,7 @@ public class EasyPayPayloadBuilder implements NoticePayloadBuilder {
                 .setOutTradeNo(order.getOutTradeNo())
                 .setType(order.getType())
                 .setName(order.getName())
-                .setMoney(order.getMoney() == null ? null : order.getMoney().toPlainString())
+                .setMoney(Objects.isNull(order.getMoney()) ? null : order.getMoney().toPlainString())
                 .setTradeStatus("TRADE_SUCCESS")
                 .setParam(order.getParam())
                 .setSignType("MD5");
@@ -96,10 +96,10 @@ public class EasyPayPayloadBuilder implements NoticePayloadBuilder {
                 .setApiTradeNo(order.getApiTradeNo())
                 .setType(order.getType())
                 .setTradeStatus("TRADE_SUCCESS")
-                .setAddTime(order.getAddTime() == null ? null : NORM.format(order.getAddTime().toInstant()))
-                .setEndTime(order.getEndTime() == null ? null : NORM.format(order.getEndTime().toInstant()))
+                .setAddTime(Objects.isNull(order.getAddTime()) ? null : NORM.format(order.getAddTime().toInstant()))
+                .setEndTime(Objects.isNull(order.getEndTime()) ? null : NORM.format(order.getEndTime().toInstant()))
                 .setName(order.getName())
-                .setMoney(order.getMoney() == null ? null : order.getMoney().toPlainString())
+                .setMoney(Objects.isNull(order.getMoney()) ? null : order.getMoney().toPlainString())
                 .setParam(order.getParam())
                 .setBuyer(order.getBuyer())
                 .setTimestamp(String.valueOf(System.currentTimeMillis() / 1000))

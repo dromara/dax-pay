@@ -59,7 +59,7 @@ public class WechatIsvConfigAssembler {
         // 主数据: platform(sp) 必填 + merchant(sub) 可选（产品级平台默认绑）
         WxIsvAppPair pair = wxAppFacade.resolveIsvPair(mchNo, channelMchNo, capability, channelAppId,
                 ProductEnum.WECHAT_ISV.getCode());
-        String subAppId = pair.merchant() != null ? pair.merchant().wxAppId() : null;
+        String subAppId = Objects.nonNull(pair.merchant()) ? pair.merchant().wxAppId() : null;
         return this.assemble(pair.platform().wxAppId(), subAppId, keyConfig, channelMerchant);
     }
 

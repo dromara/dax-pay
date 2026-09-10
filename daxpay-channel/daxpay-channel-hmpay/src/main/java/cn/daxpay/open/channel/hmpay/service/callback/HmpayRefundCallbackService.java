@@ -52,7 +52,7 @@ public class HmpayRefundCallbackService {
         HmpayIsvKeyConfig keyConfig = hmpayIsvKeyConfigManager
                 .findByProduct(ProductEnum.HM_PAY.getCode())
                 .orElse(null);
-        if (keyConfig == null || StrUtil.isBlank(keyConfig.getPublicKey())) {
+        if (Objects.isNull(keyConfig) || StrUtil.isBlank(keyConfig.getPublicKey())) {
             log.error("河马付退款回调: 服务商公钥未配置, 无法验签");
             RefundCallbackData failData = new RefundCallbackData();
             failData.setCallbackData(notify);
@@ -70,7 +70,7 @@ public class HmpayRefundCallbackService {
         req.setBody(body);
 
         DaxResult<HmpayCallbackParseResp> result = hmpayChannelClient.parseRefundCallback(req);
-        if (result.getCode() != 0 || result.getData() == null
+        if (result.getCode() != 0 || Objects.isNull(result.getData())
                 || !Boolean.TRUE.equals(result.getData().getSuccess())) {
             log.error("河马付退款回调验签/解析失败");
             RefundCallbackData failData = new RefundCallbackData();

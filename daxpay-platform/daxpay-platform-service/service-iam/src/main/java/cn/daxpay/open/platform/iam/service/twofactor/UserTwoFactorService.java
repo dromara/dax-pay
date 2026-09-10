@@ -24,6 +24,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Objects;
 
 /// # 用户双因素认证服务
 ///
@@ -176,7 +177,7 @@ public class UserTwoFactorService {
     /// 校验 TOTP 动态码(登录二次验证用)
     public boolean verifyTotpCode(Long userId, String code) {
         UserTwoFactor entity = userTwoFactorManager.findByUserId(userId).orElse(null);
-        if (entity == null) {
+        if (Objects.isNull(entity)) {
             return false;
         }
         boolean valid = totpService.verifyCode(entity.getSecret(), code);
@@ -187,7 +188,7 @@ public class UserTwoFactorService {
     @Transactional(rollbackFor = Exception.class)
     public boolean consumeBackupCode(Long userId, String code) {
         UserTwoFactor entity = userTwoFactorManager.findByUserId(userId).orElse(null);
-        if (entity == null) {
+        if (Objects.isNull(entity)) {
             return false;
         }
         return consumeBackupCodeInternal(entity, code);
@@ -201,7 +202,7 @@ public class UserTwoFactorService {
         List<BackupCodeEntry> entries = JSONUtil.toList(entity.getBackupCodes(), BackupCodeEntry.class);
         String inputHash = backupCodeService.hash(code);
         boolean consumed = false;
-        int remaining = entity.getBackupCodesRemaining() == null ? 0 : entity.getBackupCodesRemaining();
+        int remaining = Objects.isNull(entity.getBackupCodesRemaining()) ? 0 : entity.getBackupCodesRemaining();
         for (BackupCodeEntry entry : entries) {
             if (!entry.isUsed() && inputHash.equals(entry.getHash())) {
                 entry.setUsed(true);
@@ -245,7 +246,7 @@ public class UserTwoFactorService {
     /// 默认备用码数量(从平台配置读取, 兜底默认值)
     private int defaultBackupCodesCount() {
         Integer count = getConfig().getBackupCodesCount();
-        return count == null || count <= 0 ? PlatformTwoFactorAuthConfig.DEFAULT_BACKUP_CODES_COUNT : count;
+        return Objects.isNull(count) || count <= 0 ? PlatformTwoFactorAuthConfig.DEFAULT_BACKUP_CODES_COUNT : count;
     }
 
     private PlatformTwoFactorAuthConfig getConfig() {

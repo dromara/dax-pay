@@ -18,6 +18,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import java.util.Objects;
 
 /// # 防重放Nonce验证切面
 ///
@@ -51,7 +52,7 @@ public class NonceVerificationAspect {
     private Object doVerify(ProceedingJoinPoint pjp, NonceVerification nonceVerification) throws Throwable {
         // 配置级总开关：provider 存在且 enabled=false 时跳过校验
         NonceVerificationConfigProvider provider = configProviderProvider.getIfAvailable();
-        if (provider != null && !provider.isEnabled()) {
+        if (Objects.nonNull(provider) && !provider.isEnabled()) {
             return pjp.proceed();
         }
 
@@ -76,7 +77,7 @@ public class NonceVerificationAspect {
 
         // 时间戳容差: provider 优先（全局配置），回退注解参数（方法级）
         int timestampTolerance = nonceVerification.timestampTolerance();
-        if (provider != null) {
+        if (Objects.nonNull(provider)) {
             int configTolerance = provider.getTimestampToleranceSeconds();
             if (configTolerance > 0) {
                 timestampTolerance = configTolerance;
@@ -92,7 +93,7 @@ public class NonceVerificationAspect {
     /// 获取当前HTTP请求
     private HttpServletRequest getRequest() {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
-        if (attributes == null) {
+        if (Objects.isNull(attributes)) {
             throw new NonceMissingException("error.common.requestContextMissing");
         }
         return attributes.getRequest();

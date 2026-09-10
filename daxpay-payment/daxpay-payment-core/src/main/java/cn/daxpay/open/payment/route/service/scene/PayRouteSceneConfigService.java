@@ -74,7 +74,7 @@ public class PayRouteSceneConfigService {
             }
             // 支付渠道由支付方式派生(OTHER 等无渠道归属或非白名单则跳过)
             PayProviderEnum provider = PayMethodEnum.findByCode(item.getMethod()).getProvider();
-            if (provider == null || !PayRouteConfigProviders.contains(provider.getCode())) {
+            if (Objects.isNull(provider) || !PayRouteConfigProviders.contains(provider.getCode())) {
                 continue;
             }
             String providerCode = provider.getCode();
@@ -200,7 +200,7 @@ public class PayRouteSceneConfigService {
             return;
         }
         PayProviderEnum provider = PayProviderEnum.findByCode(providerCode);
-        if (provider == null) {
+        if (Objects.isNull(provider)) {
             // 路由: 支付渠道无效
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.route.error.basicProviderInvalid");

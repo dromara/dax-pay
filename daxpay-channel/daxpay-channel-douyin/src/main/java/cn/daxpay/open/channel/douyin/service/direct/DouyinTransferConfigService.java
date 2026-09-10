@@ -58,7 +58,7 @@ public class DouyinTransferConfigService {
         // 校验通道商户存在与归属
         assertChannelMerchant(param.getMchNo(), param.getChannelMchNo());
         // 校验发起应用(若指定): 存在 + 归属 + 网站应用类型(仅网站应用支持手机H5获取OpenId)
-        if (param.getTransferAppRefId() != null) {
+        if (Objects.nonNull(param.getTransferAppRefId())) {
             DyMchApp app = dyMchAppManager.findById(param.getTransferAppRefId())
                     .orElseThrow(() -> new DataNotExistException("error.channel.douyin.transferAppNotExist"));
             if (!Objects.equals(app.getMchNo(), param.getMchNo())) {
@@ -108,7 +108,7 @@ public class DouyinTransferConfigService {
     private DouyinTransferConfigResult toResultWithMeta(DouyinTransferConfig entity) {
         DouyinTransferConfigResult result = entity.toResult();
         // 发起应用展示信息
-        if (entity.getTransferAppRefId() != null) {
+        if (Objects.nonNull(entity.getTransferAppRefId())) {
             dyMchAppManager.findById(entity.getTransferAppRefId())
                     .ifPresent(app -> {
                         result.setTransferAppName(app.getAppName());

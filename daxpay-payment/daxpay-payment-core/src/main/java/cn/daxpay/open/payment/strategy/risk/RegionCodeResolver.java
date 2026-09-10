@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.Objects;
 
 /// # 行政区划编码解析器
 ///
@@ -118,7 +119,7 @@ public class RegionCodeResolver {
         }
         String name = provinceName.trim();
         String code = provinceNameToCode.get(name);
-        if (code != null) {
+        if (Objects.nonNull(code)) {
             return code;
         }
         return provinceNormToCode.get(normalizeRegionName(name));
@@ -133,7 +134,7 @@ public class RegionCodeResolver {
             return null;
         }
         String provinceCode = resolveProvinceCode(provinceName);
-        if (provinceCode == null) {
+        if (Objects.isNull(provinceCode)) {
             return null;
         }
         // 直辖市: 城市名单存省编码, 回落省编码
@@ -145,7 +146,7 @@ public class RegionCodeResolver {
         }
         String name = cityName.trim();
         String code = cityNameToCode.get(name);
-        if (code != null) {
+        if (Objects.nonNull(code)) {
             return code;
         }
         return cityNormToCode.get(normalizeRegionName(name));

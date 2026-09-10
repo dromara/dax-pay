@@ -7,6 +7,7 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.cache.RedisCacheWriter;
 
 import java.util.Map;
+import java.util.Objects;
 
 /// # 自定义 Redis 缓存管理器
 ///
@@ -66,12 +67,12 @@ public class DaxpayRedisCacheManager extends RedisCacheManager {
     /// 按 cacheName 解析最终 RedisCacheConfiguration
     private RedisCacheConfiguration resolveConfig(String name, RedisCacheConfiguration cacheConfig) {
         // 敏感缓存且加密 L2 可用：强制使用 secure 序列化，避免 initialCacheConfigurations 漏配
-        if (this.secureMatcher != null
+        if (Objects.nonNull(this.secureMatcher)
                 && this.secureMatcher.matches(name)
-                && this.secureConfig != null) {
+                && Objects.nonNull(this.secureConfig)) {
             return this.secureConfig;
         }
-        if (cacheConfig != null) {
+        if (Objects.nonNull(cacheConfig)) {
             return cacheConfig;
         }
         return this.defaultConfig;

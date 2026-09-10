@@ -51,7 +51,7 @@ public enum WxAppTypeEnum implements I18nSupport {
 
     /// 根据编码获取枚举；未知编码返回 null
     public static WxAppTypeEnum findByCode(String code) {
-        if (code == null) {
+        if (Objects.isNull(code)) {
             return null;
         }
         return Arrays.stream(values())
@@ -62,7 +62,7 @@ public enum WxAppTypeEnum implements I18nSupport {
 
     /// 根据支付能力推导全部兼容应用类型(有序, 首个为兜底优先级)；未知能力返回空列表
     public static List<String> resolveCompatibleAppTypes(String capabilityCode) {
-        if (capabilityCode == null) {
+        if (Objects.isNull(capabilityCode)) {
             return List.of();
         }
         return CAPABILITY_APP_TYPE_MAP.getOrDefault(capabilityCode, List.of());

@@ -29,6 +29,7 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
+import java.util.Objects;
 
 /// # 认证会话与结果缓存测试
 ///
@@ -54,7 +55,7 @@ class AuthSessionStoreTest {
     @BeforeAll
     static void initJackson() {
         // JacksonUtil.convert 依赖静态 objectMapper, 纯单元测试无 Spring 容器初始化, 需手动注入
-        if (JacksonUtil.getObjectMapper() == null) {
+        if (Objects.isNull(JacksonUtil.getObjectMapper())) {
             JacksonUtil.setObjectMapper(JsonMapper.builder().build());
         }
     }

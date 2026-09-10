@@ -76,7 +76,7 @@ public class AlipayAuthCapability {
 
     /// 判断配置是否完整可用(appId + privateKey 必填, 公钥/证书按 authType 二选一)
     public boolean isConfigured(AlipayAuthConfig config) {
-        if (config == null) {
+        if (Objects.isNull(config)) {
             return false;
         }
         if (Objects.toString(config.getAppId(), "").isBlank()

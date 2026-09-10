@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /// # 登录上下文服务
 ///
@@ -35,7 +36,7 @@ public class LoginContentService {
 
     /// 获取登录页上下文信息
     public LoginContentResult getLoginContent(LoginContentParam param) {
-        String clientCode = param != null ? param.getClientId() : null;
+        String clientCode = Objects.nonNull(param) ? param.getClientId() : null;
         if (StrUtil.isNotBlank(clientCode)) {
             ClientEnum.findByCode(clientCode)
                     .orElseThrow(ApplicationNotFoundException::new);

@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.Objects;
 
 /// # 平台文件服务
 ///
@@ -140,7 +141,7 @@ public class PlatformFileService {
             throw new BizInfoException(DaxPayErrorCode.OPERATION_FAIL, "error.file.notUploadedToStorage");
         }
 
-        if (param.getFileSize() != null && param.getFileSize() > 0) {
+        if (Objects.nonNull(param.getFileSize()) && param.getFileSize() > 0) {
             platformFileRecord.setSize(param.getFileSize());
         }
         if (StrUtil.isNotBlank(param.getContentType())) {

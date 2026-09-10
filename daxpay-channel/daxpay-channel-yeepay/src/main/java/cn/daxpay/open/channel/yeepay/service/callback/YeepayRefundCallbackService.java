@@ -53,7 +53,7 @@ public class YeepayRefundCallbackService {
         req.setResponse(response);
         req.setCustomerIdentification(customerIdentification);
         DaxResult<YeepayCallbackParseResp> result = yeepayChannelClient.parseRefundCallback(req);
-        if (result.getCode() != 0 || result.getData() == null || !result.getData().isVerified()) {
+        if (result.getCode() != 0 || Objects.isNull(result.getData()) || !result.getData().isVerified()) {
             log.error("易宝退款回调验签失败: channelMchNo={}", channelMchNo);
             RefundCallbackData failData = new RefundCallbackData();
             failData.setCallbackData(notify);

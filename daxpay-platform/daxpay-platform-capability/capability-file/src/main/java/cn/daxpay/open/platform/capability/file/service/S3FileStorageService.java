@@ -24,6 +24,7 @@ import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Optional;
+import java.util.Objects;
 
 /// # S3文件存储服务
 ///
@@ -301,7 +302,7 @@ public class S3FileStorageService {
     private int getUploadPresignExpireMinutes() {
         return getStorageConfig()
                 .map(FileStorageConfig::getUploadExpireMinutes)
-                .filter(minutes -> minutes != null && minutes > 0)
+                .filter(minutes -> Objects.nonNull(minutes) && minutes > 0)
                 .orElse(DEFAULT_UPLOAD_PRESIGN_EXPIRE_MINUTES);
     }
 
@@ -313,7 +314,7 @@ public class S3FileStorageService {
     private int getDownloadPresignExpireHours() {
         return getStorageConfig()
                 .map(FileStorageConfig::getDownloadExpireHours)
-                .filter(hours -> hours != null && hours > 0)
+                .filter(hours -> Objects.nonNull(hours) && hours > 0)
                 .orElse(DEFAULT_DOWNLOAD_PRESIGN_EXPIRE_HOURS);
     }
 

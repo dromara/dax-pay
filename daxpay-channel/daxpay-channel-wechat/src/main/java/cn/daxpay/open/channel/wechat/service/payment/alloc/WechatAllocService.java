@@ -100,7 +100,7 @@ public class WechatAllocService {
         // 映射逐明细结果
         AllocResultBo bo = new AllocResultBo().setOutAllocNo(resp.getTransactionId());
         List<AllocResultBo.DetailResult> detailResults = new ArrayList<>();
-        if (resp.getReceivers() != null) {
+        if (Objects.nonNull(resp.getReceivers())) {
             for (WechatAllocResp.ReceiverResult r : resp.getReceivers()) {
                 detailResults.add(new AllocResultBo.DetailResult()
                         .setReceiverAccount(r.getAccount())

@@ -16,6 +16,7 @@ import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 /// # 网关支付配置解析(码牌/聚合共用)
 ///
@@ -40,9 +41,9 @@ public class GatewayPayConfigResolveService {
     /// @param clientEnv 客户端环境
     /// @param payForm   支付形态(h5/mini)
     public Resolved resolve(String appId, ClientEnvEnum clientEnv, CodePayFormEnum payForm) {
-        CodePayFormEnum form = payForm == null ? CodePayFormEnum.H5 : payForm;
+        CodePayFormEnum form = Objects.isNull(payForm) ? CodePayFormEnum.H5 : payForm;
         GatewayPayConfig config = configManager.findByAppId(appId).orElse(null);
-        AggregateConfigLevelEnum level = config == null
+        AggregateConfigLevelEnum level = Objects.isNull(config)
                 ? AggregateConfigLevelEnum.AUTO
                 : AggregateConfigLevelEnum.findByCode(config.getLevel());
 
@@ -89,7 +90,7 @@ public class GatewayPayConfigResolveService {
         String inferred = payRouteService.inferMethodForCapability(channelMchNo, capability);
         if (StrUtil.isBlank(inferred)) {
             PayCapabilityEnum capEnum = PayCapabilityEnum.findByCode(capability);
-            String capLabel = capEnum != null ? I18nUtil.getEnumName(capEnum) : capability;
+            String capLabel = Objects.nonNull(capEnum) ? I18nUtil.getEnumName(capEnum) : capability;
             // 路由: 支付能力与通道商户不匹配
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.route.error.directCapabilityChannelMchMismatch", capLabel, channelMchNo);
@@ -100,14 +101,14 @@ public class GatewayPayConfigResolveService {
     /// 获取网关支付的客户端环境与支付形态子表, 不存在则抛异常
     private GatewayPayClientEnv requireEnvConfig(
             GatewayPayConfig config, ClientEnvEnum clientEnv, CodePayFormEnum payForm) {
-        if (config == null) {
+        if (Objects.isNull(config)) {
             // 网关: 应用未配置网关支付策略
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.gateway.payConfigMissing");
         }
         GatewayPayClientEnv envConfig = clientEnvManager.findByConfigIdAndClientEnvAndPayForm(
                 config.getId(), clientEnv.getCode(), payForm.getCode());
-        if (envConfig == null) {
+        if (Objects.isNull(envConfig)) {
             // 网关: 该客户端环境与支付形态未配置支付方式
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.error.gateway.clientEnvNotConfigured");

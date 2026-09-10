@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 /// # OffsetDateTime 字符串解析工具
 /// 供 Jackson 反序列化器与 Spring query/form 参数 [Converter] 共用,
@@ -26,7 +27,7 @@ public class OffsetDateTimeParseUtil {
 
     /// 将字符串解析为 OffsetDateTime
     public OffsetDateTime parse(String text) {
-        if (text == null || text.isBlank()) {
+        if (Objects.isNull(text) || text.isBlank()) {
             return null;
         }
         // 优先按 ISO 带偏移解析

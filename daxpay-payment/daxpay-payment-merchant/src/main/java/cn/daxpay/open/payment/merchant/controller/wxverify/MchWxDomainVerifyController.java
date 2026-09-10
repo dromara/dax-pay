@@ -42,7 +42,7 @@ public class MchWxDomainVerifyController {
 
     private String requireMchNo() {
         String mchNo = paymentContext.getMchNo();
-        if (mchNo == null || mchNo.isBlank()) {
+        if (Objects.isNull(mchNo) || mchNo.isBlank()) {
             throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.assist.mchContextMissing");
         }
         return mchNo;

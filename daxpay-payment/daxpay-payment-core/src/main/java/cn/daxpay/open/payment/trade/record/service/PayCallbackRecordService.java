@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Objects;
 
 /// # 通道入站回调记录服务
 ///
@@ -37,7 +38,7 @@ public class PayCallbackRecordService {
     /// @param data 回调解析数据
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public void savePay(String channelMchNo, CallbackData data) {
-        if (data == null) {
+        if (Objects.isNull(data)) {
             return;
         }
         PayCallbackRecord record = new PayCallbackRecord()
@@ -59,7 +60,7 @@ public class PayCallbackRecordService {
     /// @param data 退款回调解析数据
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public void saveRefund(String channelMchNo, RefundCallbackData data) {
-        if (data == null) {
+        if (Objects.isNull(data)) {
             return;
         }
         PayCallbackRecord record = new PayCallbackRecord()
@@ -80,7 +81,7 @@ public class PayCallbackRecordService {
     /// @param data 转账回调解析数据
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public void saveTransfer(String channelMchNo, CallbackData data) {
-        if (data == null) {
+        if (Objects.isNull(data)) {
             return;
         }
         PayCallbackRecord record = new PayCallbackRecord()
@@ -102,7 +103,7 @@ public class PayCallbackRecordService {
     /// @param data 分账回调解析数据(复用通用 CallbackData)
     @Transactional(propagation = Propagation.REQUIRES_NEW, rollbackFor = Exception.class)
     public void saveAlloc(String channelMchNo, CallbackData data) {
-        if (data == null) {
+        if (Objects.isNull(data)) {
             return;
         }
         PayCallbackRecord record = new PayCallbackRecord()
@@ -127,6 +128,6 @@ public class PayCallbackRecordService {
 
     /// 取处理状态码, 缺省 fail
     private String resolveStatus(CallbackStatusEnum status) {
-        return status != null ? status.getCode() : CallbackStatusEnum.FAIL.getCode();
+        return Objects.nonNull(status) ? status.getCode() : CallbackStatusEnum.FAIL.getCode();
     }
 }

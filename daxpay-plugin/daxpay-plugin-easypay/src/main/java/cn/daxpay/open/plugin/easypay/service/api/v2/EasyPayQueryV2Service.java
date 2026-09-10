@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
+import java.util.Objects;
 
 /// # 易支付 V2 查单
 ///
@@ -56,15 +57,15 @@ public class EasyPayQueryV2Service {
                 .setType(order.getType())
                 .setStatus(order.getStatus())
                 .setPid(order.getPid())
-                .setAddtime(order.getAddTime() == null ? null : FMT.format(order.getAddTime()))
-                .setEndtime(order.getEndTime() == null ? null : FMT.format(order.getEndTime()))
+                .setAddtime(Objects.isNull(order.getAddTime()) ? null : FMT.format(order.getAddTime()))
+                .setEndtime(Objects.isNull(order.getEndTime()) ? null : FMT.format(order.getEndTime()))
                 .setName(order.getName())
-                .setMoney(order.getMoney() == null ? null : order.getMoney().toPlainString())
+                .setMoney(Objects.isNull(order.getMoney()) ? null : order.getMoney().toPlainString())
                 .setParam(order.getParam())
                 .setBuyer(order.getBuyer())
                 .setClientip(order.getClientIp())
                 .setTimestamp(String.valueOf(System.currentTimeMillis() / 1000));
-        if (order.getRefundMoney() != null && order.getRefundMoney().compareTo(BigDecimal.ZERO) > 0) {
+        if (Objects.nonNull(order.getRefundMoney()) && order.getRefundMoney().compareTo(BigDecimal.ZERO) > 0) {
             result.setRefundmoney(order.getRefundMoney().toPlainString());
         }
         return sign(result, credential);

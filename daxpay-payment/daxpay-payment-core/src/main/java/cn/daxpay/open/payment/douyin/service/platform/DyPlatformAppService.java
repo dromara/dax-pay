@@ -109,7 +109,7 @@ public class DyPlatformAppService {
 
     /// 校验应用类型
     private void validateAppType(String appType) {
-        if (DyAppTypeEnum.findByCode(appType) == null) {
+        if (Objects.isNull(DyAppTypeEnum.findByCode(appType))) {
             // 抖音: 应用类型无效
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.payment.douyin.appTypeInvalid");
         }

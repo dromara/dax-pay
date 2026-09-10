@@ -10,6 +10,7 @@ import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 /// # 抖音分账接收方通道服务
 ///
@@ -32,7 +33,7 @@ public class DouyinAllocReceiverChannelService {
                     "error.channel.douyin.allocReceiverBindFailed", result.getMsg());
         }
         DouyinAllocReceiverResp resp = result.getData();
-        if (resp != null && StrUtil.isNotBlank(resp.getErrorCode())) {
+        if (Objects.nonNull(resp) && StrUtil.isNotBlank(resp.getErrorCode())) {
             throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL,
                     "error.channel.douyin.allocReceiverBindFailed",
                     StrUtil.blankToDefault(resp.getErrorMsg(), resp.getErrorCode()));
@@ -48,7 +49,7 @@ public class DouyinAllocReceiverChannelService {
                     "error.channel.douyin.allocReceiverUnbindFailed", result.getMsg());
         }
         DouyinAllocReceiverResp resp = result.getData();
-        if (resp != null && StrUtil.isNotBlank(resp.getErrorCode())) {
+        if (Objects.nonNull(resp) && StrUtil.isNotBlank(resp.getErrorCode())) {
             throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL,
                     "error.channel.douyin.allocReceiverUnbindFailed",
                     StrUtil.blankToDefault(resp.getErrorMsg(), resp.getErrorCode()));

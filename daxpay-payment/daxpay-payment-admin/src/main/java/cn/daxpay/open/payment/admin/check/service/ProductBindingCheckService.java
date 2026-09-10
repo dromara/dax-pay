@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 /// # 产品级绑定检查聚合服务
 ///
@@ -29,7 +30,7 @@ public class ProductBindingCheckService {
                 .filter(c -> c.getProduct().equals(product))
                 .findFirst()
                 .orElse(null);
-        if (checker == null) {
+        if (Objects.isNull(checker)) {
             // 无对应产品的检查器, 返回空结果
             return ProductBindingCheckResult.empty(product);
         }

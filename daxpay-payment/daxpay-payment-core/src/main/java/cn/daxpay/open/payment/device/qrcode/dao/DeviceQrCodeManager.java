@@ -14,6 +14,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
 import java.util.Optional;
+import java.util.Objects;
 
 /// # 支付码牌管理
 ///
@@ -29,7 +30,7 @@ public class DeviceQrCodeManager extends BaseManager<DeviceQrCodeMapper, DeviceQ
 
     /// 判断码牌编码是否存在(排除指定id, excludeId 为 null 时不排除)
     public boolean existsByCode(String code, Long excludeId) {
-        if (excludeId == null) {
+        if (Objects.isNull(excludeId)) {
             return existedByField(DeviceQrCode::getCode, code);
         }
         return existedByField(DeviceQrCode::getCode, code, excludeId);

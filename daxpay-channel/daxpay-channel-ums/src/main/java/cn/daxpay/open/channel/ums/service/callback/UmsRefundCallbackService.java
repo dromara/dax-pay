@@ -53,7 +53,7 @@ public class UmsRefundCallbackService {
         req.setCredential(credential);
         req.setParams(params);
         DaxResult<UmsCallbackParseResp> result = umsChannelClient.parseRefundCallback(req);
-        if (result.getCode() != 0 || result.getData() == null || !result.getData().isVerified()) {
+        if (result.getCode() != 0 || Objects.isNull(result.getData()) || !result.getData().isVerified()) {
             log.error("银联商务退款回调验签失败: channelMchNo={}", channelMchNo);
             RefundCallbackData failData = new RefundCallbackData();
             failData.setCallbackData(notify);
@@ -97,7 +97,7 @@ public class UmsRefundCallbackService {
         JSONObject json = JSONUtil.parseObj(body);
         for (String key : json.keySet()) {
             Object value = json.get(key);
-            if (value != null) {
+            if (Objects.nonNull(value)) {
                 if (value instanceof CharSequence) {
                     params.put(key, value.toString());
                 } else {

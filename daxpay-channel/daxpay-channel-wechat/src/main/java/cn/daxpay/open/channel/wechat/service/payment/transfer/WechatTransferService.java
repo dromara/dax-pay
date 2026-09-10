@@ -133,12 +133,12 @@ public class WechatTransferService {
     /// 为空时按场景枚举 [WechatTransferSceneEnum] 的报备字段模板构建默认值(`-`)。
     private List<TransferReportInfo> ensureReportInfos(TransferStrategyContext context) {
         List<TransferReportInfo> reportInfos = context.getReportInfos();
-        if (reportInfos != null && !reportInfos.isEmpty()) {
+        if (Objects.nonNull(reportInfos) && !reportInfos.isEmpty()) {
             return reportInfos;
         }
         // 兜底: 按场景枚举构建默认报备信息
         WechatTransferSceneEnum scene = WechatTransferSceneEnum.findByCode(context.getTransferScene());
-        if (scene == null) {
+        if (Objects.isNull(scene)) {
             return reportInfos;
         }
         List<TransferReportInfo> defaults = new ArrayList<>();

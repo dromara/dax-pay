@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /// # Stripe 支付执行业务服务
 ///
@@ -107,7 +108,7 @@ public class StripePayService {
                 .setOutOrderNo(resp.getOutOrderNo());
         // 支付内容类型映射(子应用 StripePayBodyType -> 平台 PayBodyTypeEnum)
         StripePayBodyType bodyType = StripePayBodyType.valueOf(resp.getPayBodyType());
-        if (bodyType != null) {
+        if (Objects.nonNull(bodyType)) {
             switch (bodyType) {
                 // Checkout Session: 跳转 URL(前端 redirect 分支)
                 case CHECKOUT_URL -> bo.setPayBodyType(PayBodyTypeEnum.STRIPE_CHECKOUT);

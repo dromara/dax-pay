@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.AssertTrue;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import java.util.Objects;
 
 /// # 密码策略配置参数
 ///
@@ -45,7 +46,7 @@ public class PlatformPasswordPolicyConfigParam {
     @AssertTrue(message = "{validation.field.minLengthNotGreaterThanMax.assertTrue}")
     @Schema(hidden = true)
     public boolean isLengthRangeValid() {
-        if (minLength == null || maxLength == null) {
+        if (Objects.isNull(minLength) || Objects.isNull(maxLength)) {
             return true;
         }
         return minLength <= maxLength;

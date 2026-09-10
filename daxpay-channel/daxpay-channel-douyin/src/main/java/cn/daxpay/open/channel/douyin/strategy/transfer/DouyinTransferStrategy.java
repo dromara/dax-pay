@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
+import java.util.Objects;
 
 /// # 抖音直连转账策略
 ///
@@ -91,7 +92,7 @@ public class DouyinTransferStrategy extends AbsTransferStrategy {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.channel.douyin.transferSceneIdRequired");
         }
-        if (DouyinTransferSceneEnum.findByCode(param.getTransferScene()) == null) {
+        if (Objects.isNull(DouyinTransferSceneEnum.findByCode(param.getTransferScene()))) {
             // 抖音: 不支持的转账场景ID[{0}]
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.channel.douyin.transferSceneNameInvalid", param.getTransferScene());
@@ -121,7 +122,7 @@ public class DouyinTransferStrategy extends AbsTransferStrategy {
         DouyinTransferConfig transferConfig = douyinTransferConfigManager
                 .findByChannelMchNo(context.getChannelMchNo())
                 .orElseThrow(() -> new ConfigErrorException("error.channel.douyin.transferAppNotConfigured"));
-        if (transferConfig.getTransferAppRefId() == null) {
+        if (Objects.isNull(transferConfig.getTransferAppRefId())) {
             // 抖音: 转账发起应用未配置
             throw new ConfigErrorException("error.channel.douyin.transferAppNotConfigured");
         }

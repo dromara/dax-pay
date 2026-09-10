@@ -35,11 +35,11 @@ public class GatewayOrderQueryService {
         if (StrUtil.isNotBlank(param.getOrderNo())) {
             order = gatewayPayOrderManager.findByOrderNo(param.getOrderNo()).orElse(null);
         }
-        if (order == null && StrUtil.isNotBlank(param.getBizOrderNo())) {
+        if (Objects.isNull(order) && StrUtil.isNotBlank(param.getBizOrderNo())) {
             // 商户维度定位(bizOrderNo 同商户唯一), mchNo 必传由参数校验保证
             order = gatewayPayOrderManager.findByBizOrderNoAndMch(param.getBizOrderNo(), param.getMchNo()).orElse(null);
         }
-        if (order == null) {
+        if (Objects.isNull(order)) {
             // 支付: 支付订单不存在
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.payOrderNotExist");
         }

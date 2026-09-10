@@ -67,7 +67,7 @@ public class EasyPayRefundOrderMchQueryService {
                 .orElseThrow(() -> new DataNotExistException("pay.error.refund.orderNotFound"));
         RefundOrder refundOrder = refundSyncService.syncById(entity.getRefundId());
         entity.setStatus(mapStatus(refundOrder.getStatus()));
-        if (Objects.equals(entity.getStatus(), 1) && entity.getEndTime() == null) {
+        if (Objects.equals(entity.getStatus(), 1) && Objects.isNull(entity.getEndTime())) {
             entity.setEndTime(OffsetDateTime.now(ZoneOffset.UTC));
         }
         easyPayRefundOrderManager.updateById(entity);
@@ -86,7 +86,7 @@ public class EasyPayRefundOrderMchQueryService {
 
     private String requireMchNo() {
         String mchNo = paymentContext.getMchNo();
-        if (mchNo == null || mchNo.isBlank()) {
+        if (Objects.isNull(mchNo) || mchNo.isBlank()) {
             // 商户: 数据错误未发现商户号
             throw new BizInfoException(CommonCode.FAIL_CODE, "error.payment.merchant.dataErrorNoMchNo");
         }

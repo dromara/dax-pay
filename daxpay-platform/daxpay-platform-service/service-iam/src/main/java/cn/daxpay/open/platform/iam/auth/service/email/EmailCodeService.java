@@ -8,6 +8,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.Objects;
 
 /// # 邮箱验证码上下文服务
 ///
@@ -50,7 +51,7 @@ public class EmailCodeService {
     /// 查询上下文(不消费)
     public EmailCodeContext get(String scope, String key) {
         String json = stringRedisTemplate.opsForValue().get(scope + key);
-        return json == null ? null : JSONUtil.toBean(json, EmailCodeContext.class);
+        return Objects.isNull(json) ? null : JSONUtil.toBean(json, EmailCodeContext.class);
     }
 
     /// 删除上下文
@@ -65,7 +66,7 @@ public class EmailCodeService {
     /// 由调用方在后续业务校验全部通过后调用 [#consume] 消费
     public EmailCodeContext verify(String scope, String key, String inputCode) {
         EmailCodeContext context = this.get(scope, key);
-        if (context == null) {
+        if (Objects.isNull(context)) {
             // 邮箱: 验证码已过期或不存在
             throw new BizInfoException("error.iam.email.codeExpired");
         }

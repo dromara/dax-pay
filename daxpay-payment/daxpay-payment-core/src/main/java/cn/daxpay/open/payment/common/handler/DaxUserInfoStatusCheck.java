@@ -55,7 +55,7 @@ public class DaxUserInfoStatusCheck implements UserInfoStatusCheck {
         // 运营端(及其他非商户端): 商户用户不得登录运营身份域
         if (Objects.equals(clientCode, ClientEnum.ADMIN.getCode())) {
             String merchant = merchantUserService.findMchNoByUserId(userId);
-            if (merchant != null) {
+            if (Objects.nonNull(merchant)) {
                 // 登录: 您没有运营端的权限，请使用商户端登录
                 throw new LoginFailureException(CommonCode.FAIL_CODE, "error.payment.login.noAdminPermUseMerchant");
             }
@@ -64,7 +64,7 @@ public class DaxUserInfoStatusCheck implements UserInfoStatusCheck {
 
     /// 解析当前登录终端: 优先上下文, 其次请求头
     private String resolveClientCode(LoginAuthContext context) {
-        if (context != null && StrUtil.isNotBlank(context.getClientCode())) {
+        if (Objects.nonNull(context) && StrUtil.isNotBlank(context.getClientCode())) {
             return context.getClientCode();
         }
         return clientCodeService.getClientCode();

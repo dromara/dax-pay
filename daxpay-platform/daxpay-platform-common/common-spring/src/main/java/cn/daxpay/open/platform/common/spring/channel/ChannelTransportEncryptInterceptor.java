@@ -25,6 +25,7 @@ import java.net.ConnectException;
 import java.net.NoRouteToHostException;
 import java.net.UnknownHostException;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 /// # 通道传输报文加解密拦截器
 ///
@@ -102,7 +103,7 @@ public class ChannelTransportEncryptInterceptor implements ClientHttpRequestInte
     /// 读超时([java.net.SocketTimeoutException])不在其列——读超时意味着请求已发出, 资金后果未知。
     private static boolean isConnectionRefused(Throwable e) {
         Throwable cur = e;
-        while (cur != null) {
+        while (Objects.nonNull(cur)) {
             if (cur instanceof ConnectException
                     || cur instanceof UnknownHostException
                     || cur instanceof NoRouteToHostException) {

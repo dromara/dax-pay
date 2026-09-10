@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.Objects;
 
 /// # 移动端应用配置服务
 ///
@@ -135,10 +136,10 @@ public class MobileAppService {
 
         var entity = MobileAppConvert.CONVERT.toEntity(param);
         entity.setAppConfig(appConfigJson);
-        if (entity.getEnabled() == null) {
+        if (Objects.isNull(entity.getEnabled())) {
             entity.setEnabled(true);
         }
-        if (entity.getBindingEnabled() == null) {
+        if (Objects.isNull(entity.getBindingEnabled())) {
             entity.setBindingEnabled(false);
         }
         manager.save(entity);
@@ -160,7 +161,7 @@ public class MobileAppService {
         MobilePlatformEnum platform = MobilePlatformEnum.findByCode(param.getPlatform());
 
         Set<MobilePlatformEnum> allowed = ALLOWED_PLATFORMS.get(appType);
-        if (allowed == null || !allowed.contains(platform)) {
+        if (Objects.isNull(allowed) || !allowed.contains(platform)) {
             // 移动应用: 不支持的平台
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.mobile_app.platformNotAllowed",
@@ -169,13 +170,13 @@ public class MobileAppService {
 
         // 统计传入的嵌套配置数量, 必须恰好 1 个且与 platform 对应
         int nestedCount = 0;
-        if (param.getWxMini() != null) {
+        if (Objects.nonNull(param.getWxMini())) {
             nestedCount++;
         }
-        if (param.getAlipayMini() != null) {
+        if (Objects.nonNull(param.getAlipayMini())) {
             nestedCount++;
         }
-        if (param.getDyMini() != null) {
+        if (Objects.nonNull(param.getDyMini())) {
             nestedCount++;
         }
         if (nestedCount != 1) {
@@ -185,9 +186,9 @@ public class MobileAppService {
         }
 
         boolean match = switch (platform) {
-            case WX_MINI -> param.getWxMini() != null;
-            case ALIPAY_MINI -> param.getAlipayMini() != null;
-            case DY_MINI -> param.getDyMini() != null;
+            case WX_MINI -> Objects.nonNull(param.getWxMini());
+            case ALIPAY_MINI -> Objects.nonNull(param.getAlipayMini());
+            case DY_MINI -> Objects.nonNull(param.getDyMini());
             default -> false;
         };
         if (!match) {
@@ -229,7 +230,7 @@ public class MobileAppService {
             config.setAppSecret(param.getAppSecret());
         }
         // originalId 允许传空串清空
-        if (param.getOriginalId() != null) {
+        if (Objects.nonNull(param.getOriginalId())) {
             config.setOriginalId(param.getOriginalId());
         }
         return config;
@@ -352,7 +353,7 @@ public class MobileAppService {
             throw new DataNotExistException("error.mobile_app.notExist");
         }
         T config = JacksonUtil.toBean(json, type);
-        if (config == null) {
+        if (Objects.isNull(config)) {
             // 移动应用: 移动应用配置不存在
             throw new DataNotExistException("error.mobile_app.notExist");
         }
@@ -368,7 +369,7 @@ public class MobileAppService {
             }
         }
         T config = JacksonUtil.toBean(json, type);
-        if (config != null) {
+        if (Objects.nonNull(config)) {
             return config;
         }
         try {

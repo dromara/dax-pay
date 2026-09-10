@@ -19,6 +19,7 @@ import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 /// # 斗拱服务商支付执行业务服务
 ///
@@ -103,7 +104,7 @@ public class DougongPayService {
                 .setComplete(Boolean.TRUE.equals(resp.getComplete()))
                 .setPayBody(resp.getPayBody());
         // 支付内容类型映射(子应用 DougongPayBodyType → 平台 PayBodyTypeEnum)
-        if (resp.getPayBodyType() != null) {
+        if (Objects.nonNull(resp.getPayBodyType())) {
             switch (resp.getPayBodyType()) {
                 case QR_CODE -> bo.setPayBodyType(PayBodyTypeEnum.QR_CODE);
                 case JSAPI -> bo.setPayBodyType(PayBodyTypeEnum.JSAPI);

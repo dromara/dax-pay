@@ -83,7 +83,7 @@ public class GatewayPayHandleService {
                     // 已有 Trade: 幂等 / 锁定规则
                     PayTrade existing = payTradeManager.findByContainerId(current.getId(), PayTradeTypeEnum.GATEWAY.getCode())
                             .orElse(null);
-                    if (existing != null) {
+                    if (Objects.nonNull(existing)) {
                         if (Objects.equals(existing.getStatus(), PayFundStatusEnum.SUCCESS.getCode())) {
                             // 支付: 已经支付成功请勿重新支付
                             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.alreadySuccess");
@@ -128,7 +128,7 @@ public class GatewayPayHandleService {
                     payRiskAssistService.checkBeforePay(payParam, "gateway");
 
                     // 建 Trade(若无) + 回填容器
-                    if (existing == null) {
+                    if (Objects.isNull(existing)) {
                         existing = self.createTrade(current, payParam, clientEnv, device);
                     } else {
                         // 回填路由结果到容器
@@ -204,7 +204,7 @@ public class GatewayPayHandleService {
         order.setMethod(payParam.getMethod());
         // 支付渠道: 与 trade 同步, 渠道分布报表免 JOIN
         order.setProvider(provider);
-        order.setLimitPay(payParam.getLimitPay() != null
+        order.setLimitPay(Objects.nonNull(payParam.getLimitPay())
                 ? String.join(",", payParam.getLimitPay()) : null);
         order.setOpenid(payParam.getOpenId());
         order.setProduct(payParam.getProduct());

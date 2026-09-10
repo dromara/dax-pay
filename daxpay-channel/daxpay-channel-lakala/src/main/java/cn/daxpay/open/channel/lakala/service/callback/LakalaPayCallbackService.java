@@ -55,7 +55,7 @@ public class LakalaPayCallbackService {
         // 2. 获取全局服务商公钥(只读查询)
         LakalaIsvKeyConfig keyConfig = lakalaIsvKeyConfigManager.findByProduct(ProductEnum.LAKALA_PAY.getCode())
                 .orElse(null);
-        if (keyConfig == null || keyConfig.getPublicKey() == null) {
+        if (Objects.isNull(keyConfig) || Objects.isNull(keyConfig.getPublicKey())) {
             log.error("拉卡拉支付回调: 服务商密钥未配置, 无法验签");
             CallbackData failData = new CallbackData();
             failData.setCallbackData(notify);
@@ -67,7 +67,7 @@ public class LakalaPayCallbackService {
 
         // 3. 转发子应用验签解析
         LakalaCallbackParseResp resp = parse(body, headerMap, keyConfig.getPublicKey(), false);
-        if (resp == null || !Boolean.TRUE.equals(resp.getSuccess())) {
+        if (Objects.isNull(resp) || !Boolean.TRUE.equals(resp.getSuccess())) {
             log.error("拉卡拉支付回调验签失败");
             CallbackData failData = new CallbackData();
             failData.setCallbackData(notify);
@@ -124,6 +124,6 @@ public class LakalaPayCallbackService {
     /// 提取 header(大小写兼容)
     static String getHeader(Map<String, String> headerMap, String name) {
         String value = headerMap.get(name);
-        return value != null ? value : headerMap.get(StrUtil.isBlank(name) ? name : name.toLowerCase());
+        return Objects.nonNull(value) ? value : headerMap.get(StrUtil.isBlank(name) ? name : name.toLowerCase());
     }
 }

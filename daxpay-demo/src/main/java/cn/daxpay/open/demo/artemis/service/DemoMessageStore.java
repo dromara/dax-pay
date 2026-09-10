@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.Objects;
 
 /// # Artemis 演示消息内存存储
 ///
@@ -30,7 +31,7 @@ public class DemoMessageStore {
         while (deque.size() > MAX_SIZE) {
             // 超出容量，移除最旧（队尾）
             DemoMessageResult removed = deque.pollLast();
-            if (removed == null) {
+            if (Objects.isNull(removed)) {
                 break;
             }
         }

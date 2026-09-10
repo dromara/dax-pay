@@ -92,7 +92,7 @@ public class DouyinAllocService {
         }
         AllocResultBo bo = new AllocResultBo().setOutAllocNo(resp.getOrderId());
         List<AllocResultBo.DetailResult> detailResults = new ArrayList<>();
-        if (resp.getReceiverSplitResultDtos() != null) {
+        if (Objects.nonNull(resp.getReceiverSplitResultDtos())) {
             for (DouyinAllocResp.ReceiverSplitResult r : resp.getReceiverSplitResultDtos()) {
                 detailResults.add(new AllocResultBo.DetailResult()
                         .setReceiverAccount(r.getAccount())

@@ -2,6 +2,7 @@ package cn.daxpay.open.platform.core.util;
 
 import cn.hutool.core.util.IdUtil;
 import lombok.Setter;
+import java.util.Objects;
 
 /// # 各类型订单号生成工具类
 ///
@@ -41,6 +42,6 @@ public final class TradeNoGenerateUtil {
 
     /// 拼接环境前缀, 不添加分隔符, 部分通道不允许特殊符号
     private static String prefix() {
-        return env == null ? "" : env;
+        return Objects.isNull(env) ? "" : env;
     }
 }

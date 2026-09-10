@@ -15,6 +15,7 @@ import cn.daxpay.open.platform.capability.social.justauth.SocialAuthConfig;
 import cn.daxpay.open.platform.capability.social.justauth.SocialSourceEnum;
 import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
 import org.springframework.stereotype.Component;
+import java.util.Objects;
 
 /// # 社交授权请求工厂
 ///
@@ -48,7 +49,7 @@ public class SocialAuthRequestFactory {
     /// 根据平台来源创建对应的请求实现, 平台不支持时抛错
     public SocialAuthRequest create(String sourceName, SocialAuthConfig config) {
         SocialSourceEnum source = SocialSourceEnum.of(sourceName);
-        if (source == null) {
+        if (Objects.isNull(source)) {
             // 社交登录: 不支持的平台
             throw new OperationFailException("error.social.unsupportedSource");
         }

@@ -6,6 +6,7 @@ import lombok.experimental.Accessors;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /// # 角色统一授权树节点
 ///
@@ -60,6 +61,6 @@ public class RoleUnifiedAssignTreeResult {
     private List<RoleUnifiedAssignTreeResult> children = new ArrayList<>();
 
     public Double getSortNo() {
-        return sortNo == null ? 0D : sortNo;
+        return Objects.isNull(sortNo) ? 0D : sortNo;
     }
 }

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Objects;
 
 /// # 易宝直连通道商户管理
 ///
@@ -52,9 +53,9 @@ public class YeepayDirectChannelMerchantController {
             @NotNull(message = "{validation.field.sandbox.notNull}") Boolean sandbox) {
         var config = yeepayDirectKeyConfigService.findByChannelMchNo(channelMchNo, sandbox);
         var result = config.toResult();
-        result.setAppKeyConfigured(config.getAppKey() != null);
-        result.setPrivateKeyConfigured(config.getPrivateKey() != null);
-        result.setYopPublicKeyConfigured(config.getYopPublicKey() != null);
+        result.setAppKeyConfigured(Objects.nonNull(config.getAppKey()));
+        result.setPrivateKeyConfigured(Objects.nonNull(config.getPrivateKey()));
+        result.setYopPublicKeyConfigured(Objects.nonNull(config.getYopPublicKey()));
         return Res.ok(result);
     }
 

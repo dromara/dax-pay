@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.time.OffsetDateTime;
+import java.util.Objects;
 
 /// # Artemis 演示消息消费记录
 ///
@@ -72,7 +73,7 @@ public class DemoMessageResult {
                 .setProducerTraceId(producerTraceId)
                 .setConsumerTraceId(consumerTraceId)
                 .setTracePropagated(propagated);
-        if (message.getSendTime() != null) {
+        if (Objects.nonNull(message.getSendTime())) {
             long cost = now.toInstant().toEpochMilli() - message.getSendTime().toInstant().toEpochMilli();
             // 处理时钟回拨导致的负值
             result.setCostMillis(Math.max(0, cost));

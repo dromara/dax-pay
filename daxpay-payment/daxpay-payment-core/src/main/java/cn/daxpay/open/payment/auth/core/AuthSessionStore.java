@@ -90,7 +90,7 @@ public class AuthSessionStore {
     /// 写回轮询结果: 优先 paramQueryCode, 否则从会话恢复(微信等 OAuth 重定向通道)
     public void writeResultByQueryCode(String paramQueryCode, AuthSession session, AuthResult authResult) {
         String queryCode = StrUtil.blankToDefault(paramQueryCode,
-                session != null ? session.getQueryCode() : null);
+                Objects.nonNull(session) ? session.getQueryCode() : null);
         if (StrUtil.isNotBlank(queryCode)) {
             redisTemplate.opsForValue().set(
                     CHANNEL_AUTH_KEY_PREFIX + queryCode,

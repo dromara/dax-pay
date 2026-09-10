@@ -14,6 +14,7 @@ import cn.hutool.crypto.digest.DigestUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 /// # 平台站点配置服务
 ///
@@ -39,7 +40,7 @@ public class PlatformWebsiteConfigService {
         // 确保配置行存在
         PlatformWebsiteConfig config = this.getWebsiteConfig();
         PlatformWebsiteConfigResult result = PlatformWebsiteConfigConvert.CONVERT.toResult(config);
-        if (result == null) {
+        if (Objects.isNull(result)) {
             result = new PlatformWebsiteConfigResult();
         }
         result.setContentHash(this.computeContentHash());
@@ -58,7 +59,7 @@ public class PlatformWebsiteConfigService {
     /// 更新站点配置(整包覆盖, 允许清空字段)
     public void updateWebsiteConfig(PlatformWebsiteConfigParam param) {
         PlatformWebsiteConfig data = PlatformWebsiteConfigConvert.CONVERT.convert(param);
-        if (data == null) {
+        if (Objects.isNull(data)) {
             data = new PlatformWebsiteConfig();
         }
         systemConfigService.updateConfig(PlatformConfigTypeEnum.WEBSITE, data);
@@ -67,7 +68,7 @@ public class PlatformWebsiteConfigService {
     /// 对入库 configData 原文做 MD5, 写什么 hash 什么; 空配置用空对象 JSON
     private String computeContentHash() {
         SystemPlatformConfig entity = systemConfigService.getConfigEntity(PlatformConfigTypeEnum.WEBSITE);
-        String raw = entity != null ? entity.getConfigData() : null;
+        String raw = Objects.nonNull(entity) ? entity.getConfigData() : null;
         if (StrUtil.isBlank(raw)) {
             raw = JacksonUtil.toJson(new PlatformWebsiteConfig());
         }

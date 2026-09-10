@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Objects;
 
 /// # 商户微信应用
 ///
@@ -37,7 +38,7 @@ public class WxMchAppManager extends BaseManager<WxMchAppMapper, WxMchApp> {
         return lambdaQuery()
                 .eq(WxMchApp::getMchNo, mchNo)
                 .eq(WxMchApp::getWxAppId, wxAppId)
-                .ne(excludeId != null, WxMchApp::getId, excludeId)
+                .ne(Objects.nonNull(excludeId), WxMchApp::getId, excludeId)
                 .exists();
     }
 

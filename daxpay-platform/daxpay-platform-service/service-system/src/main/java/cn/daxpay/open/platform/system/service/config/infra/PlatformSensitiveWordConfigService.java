@@ -15,6 +15,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 /// # 平台敏感词策略服务
 ///
@@ -48,7 +49,7 @@ public class PlatformSensitiveWordConfigService implements SensitiveWordPolicy {
                 PlatformConfigTypeEnum.SENSITIVE_WORD,
                 PlatformSensitiveWordConfig.class,
                 new PlatformSensitiveWordConfig());
-        if (config == null) {
+        if (Objects.isNull(config)) {
             config = new PlatformSensitiveWordConfig();
         }
         return JacksonUtil.toJson(config);
@@ -61,7 +62,7 @@ public class PlatformSensitiveWordConfigService implements SensitiveWordPolicy {
             return new PlatformSensitiveWordConfig();
         }
         PlatformSensitiveWordConfig config = JacksonUtil.toBean(json, PlatformSensitiveWordConfig.class);
-        return config == null ? new PlatformSensitiveWordConfig() : config;
+        return Objects.isNull(config) ? new PlatformSensitiveWordConfig() : config;
     }
 
     /// 查询结果
@@ -73,20 +74,20 @@ public class PlatformSensitiveWordConfigService implements SensitiveWordPolicy {
     @CacheEvict(value = CACHE_NAME, allEntries = true)
     public void updateConfig(PlatformSensitiveWordConfigParam param) {
         PlatformSensitiveWordConfig data = PlatformSensitiveWordConfigConvert.CONVERT.convert(param);
-        if (data == null) {
+        if (Objects.isNull(data)) {
             data = new PlatformSensitiveWordConfig();
         }
         // 空值回落到默认
-        if (data.getEnabled() == null) {
+        if (Objects.isNull(data.getEnabled())) {
             data.setEnabled(true);
         }
-        if (data.getRevealWord() == null) {
+        if (Objects.isNull(data.getRevealWord())) {
             data.setRevealWord(false);
         }
-        if (data.getRecordHit() == null) {
+        if (Objects.isNull(data.getRecordHit())) {
             data.setRecordHit(true);
         }
-        if (data.getContentPreviewMaxLen() == null || data.getContentPreviewMaxLen() < 1) {
+        if (Objects.isNull(data.getContentPreviewMaxLen()) || data.getContentPreviewMaxLen() < 1) {
             data.setContentPreviewMaxLen(200);
         }
         systemConfigService.updateConfig(PlatformConfigTypeEnum.SENSITIVE_WORD, data);
@@ -95,7 +96,7 @@ public class PlatformSensitiveWordConfigService implements SensitiveWordPolicy {
     @Override
     public boolean isEnabled() {
         Boolean v = self.getConfig().getEnabled();
-        return v == null || v;
+        return Objects.isNull(v) || v;
     }
 
     @Override
@@ -107,12 +108,12 @@ public class PlatformSensitiveWordConfigService implements SensitiveWordPolicy {
     @Override
     public boolean isRecordHit() {
         Boolean v = self.getConfig().getRecordHit();
-        return v == null || v;
+        return Objects.isNull(v) || v;
     }
 
     @Override
     public int contentPreviewMaxLen() {
         Integer v = self.getConfig().getContentPreviewMaxLen();
-        return v == null || v < 1 ? 200 : v;
+        return Objects.isNull(v) || v < 1 ? 200 : v;
     }
 }

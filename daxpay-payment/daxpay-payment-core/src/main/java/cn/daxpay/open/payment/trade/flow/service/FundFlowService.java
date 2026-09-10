@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 /// # 资金流水服务
 ///
@@ -39,7 +40,7 @@ public class FundFlowService {
                     .setBizOrderNo(this.resolveBizOrderNo(trade))
                     .setTitle(trade.getTitle())
                     // 对账口径取入账金额(postedAmount), 兜底交易金额
-                    .setAmount(trade.getPostedAmount() != null ? trade.getPostedAmount() : trade.getAmount())
+                    .setAmount(Objects.nonNull(trade.getPostedAmount()) ? trade.getPostedAmount() : trade.getAmount())
                     .setCurrency(trade.getCurrency())
                     .setChannel(trade.getChannel())
                     .setProvider(trade.getProvider())

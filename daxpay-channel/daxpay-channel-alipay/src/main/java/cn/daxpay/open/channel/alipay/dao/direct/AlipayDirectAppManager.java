@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Objects;
 
 /// # 支付宝直连商户应用
 ///
@@ -35,7 +36,7 @@ public class AlipayDirectAppManager extends BaseManager<AlipayDirectAppMapper, A
                 .eq(AlipayDirectApp::getMchNo, mchNo)
                 .eq(AlipayDirectApp::getChannelMchNo, channelMchNo)
                 .eq(AlipayDirectApp::getAliAppId, aliAppId)
-                .ne(excludeId != null, AlipayDirectApp::getId, excludeId)
+                .ne(Objects.nonNull(excludeId), AlipayDirectApp::getId, excludeId)
                 .exists();
     }
 

@@ -63,7 +63,7 @@ public class FuyouPayCallbackService {
         // 1. 获取全局服务商公钥(只读查询)
         FuyouIsvKeyConfig keyConfig = fuyouIsvKeyConfigManager.findByProduct(ProductEnum.FUYOU_PAY.getCode())
                 .orElse(null);
-        if (keyConfig == null || StrUtil.isBlank(keyConfig.getPublicKey())) {
+        if (Objects.isNull(keyConfig) || StrUtil.isBlank(keyConfig.getPublicKey())) {
             log.error("富友支付回调: 服务商密钥未配置, 无法验签");
             CallbackData failData = new CallbackData();
             failData.setCallbackData(notify);
@@ -75,7 +75,7 @@ public class FuyouPayCallbackService {
 
         // 2. 转发子应用验签解析
         FuyouCallbackParseResp resp = parse(reqParam, keyConfig.getPublicKey(), false);
-        if (resp == null || !Boolean.TRUE.equals(resp.getSuccess())) {
+        if (Objects.isNull(resp) || !Boolean.TRUE.equals(resp.getSuccess())) {
             log.error("富友支付回调验签失败");
             CallbackData failData = new CallbackData();
             failData.setCallbackData(notify);
@@ -90,7 +90,7 @@ public class FuyouPayCallbackService {
         // 避免硬编码查 NormalPayOrder 导致 tradeType=gateway 时跨表查不到容器(与支付宝回调同源 bug)
         String relationOrderNo = resp.getOutTradeNo();
         PayTrade trade = payTradeManager.findByRelationOrderNo(relationOrderNo).orElse(null);
-        if (trade == null) {
+        if (Objects.isNull(trade)) {
             log.error("富友支付回调: 未找到关联订单 relationOrderNo={}", relationOrderNo);
             CallbackData failData = new CallbackData();
             notify.put("relationOrderNo", relationOrderNo);

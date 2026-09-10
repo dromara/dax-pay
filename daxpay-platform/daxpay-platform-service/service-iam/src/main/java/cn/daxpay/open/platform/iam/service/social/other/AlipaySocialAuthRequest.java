@@ -15,6 +15,7 @@ import cn.daxpay.open.platform.iam.service.social.SocialLoginService;
 import cn.daxpay.open.platform.system.service.config.auth.PlatformAlipayAuthConfigService;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
+import java.util.Objects;
 
 /// # 支付宝社交授权请求
 ///
@@ -94,7 +95,7 @@ public class AlipaySocialAuthRequest implements SocialAuthRequest {
     /// 构建回调地址(配置基础路径 + 平台编码), 与 [AbstractSocialAuthRequest#buildRedirectUri] 对齐
     private String buildRedirectUri() {
         String base = config.getRedirectUri();
-        if (base == null) {
+        if (Objects.isNull(base)) {
             base = "";
         }
         if (base.endsWith("/")) {

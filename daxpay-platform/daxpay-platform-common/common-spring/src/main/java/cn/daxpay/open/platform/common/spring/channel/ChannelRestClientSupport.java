@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.support.RestClientAdapter;
 import org.springframework.web.service.invoker.HttpServiceProxyFactory;
+import java.util.Objects;
 
 /// # 通道 RestClient 工厂
 ///
@@ -30,12 +31,12 @@ public class ChannelRestClientSupport {
     public <T> T createClient(RestClient restClient,
                               DaxpayChannelProperties.ChannelApp app,
                               Class<T> clientType) {
-        if (app == null) {
+        if (Objects.isNull(app)) {
             // 通道子应用配置不能为空
             throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR, MSG_APP_CONFIG_MISSING, clientType.getSimpleName());
         }
         var transportEncrypt = app.getTransportEncrypt();
-        if (transportEncrypt == null) {
+        if (Objects.isNull(transportEncrypt)) {
             // 缺少通道传输加密配置
             throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR, MSG_CONFIG_MISSING, clientType.getSimpleName());
         }

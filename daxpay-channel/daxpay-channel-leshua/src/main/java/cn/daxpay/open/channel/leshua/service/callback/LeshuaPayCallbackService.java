@@ -55,7 +55,7 @@ public class LeshuaPayCallbackService {
         LeshuaIsvKeyConfig keyConfig = leshuaIsvKeyConfigManager
                 .findByProduct(ProductEnum.LESHUA_PAY.getCode())
                 .orElse(null);
-        if (keyConfig == null || StrUtil.isBlank(keyConfig.getTradeKey())) {
+        if (Objects.isNull(keyConfig) || StrUtil.isBlank(keyConfig.getTradeKey())) {
             log.error("乐刷支付回调: 服务商密钥未配置, 无法验签");
             CallbackData failData = new CallbackData();
             failData.setCallbackData(notify);
@@ -75,7 +75,7 @@ public class LeshuaPayCallbackService {
         req.setCallbackType("PAY");
 
         DaxResult<LeshuaCallbackParseResp> result = leshuaChannelClient.parsePayCallback(req);
-        if (result.getCode() != 0 || result.getData() == null
+        if (result.getCode() != 0 || Objects.isNull(result.getData())
                 || !Boolean.TRUE.equals(result.getData().getSuccess())) {
             log.error("乐刷支付回调验签/解析失败");
             CallbackData failData = new CallbackData();

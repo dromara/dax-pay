@@ -10,6 +10,7 @@ import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import java.util.Objects;
 
 /// # 平台访问地址检查器
 ///
@@ -32,7 +33,7 @@ public class PlatformUrlChecker implements AdminConfigChecker {
         PlatformUrlConfig config = systemPlatformConfigService.getConfig(
                 PlatformConfigTypeEnum.URL, PlatformUrlConfig.class);
         // 后端 API 地址与管理端地址是核心: 缺后端地址回调无法拼接, 缺管理端地址第三方登录回调失效
-        boolean unconfigured = config == null
+        boolean unconfigured = Objects.isNull(config)
                 || StrUtil.isBlank(config.getBackendBaseUrl())
                 || StrUtil.isBlank(config.getAdminBaseUrl());
         if (unconfigured) {

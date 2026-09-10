@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Objects;
 
 /// # 平台抖音应用
 ///
@@ -33,7 +34,7 @@ public class DyPlatformAppManager extends BaseManager<DyPlatformAppMapper, DyPla
     public boolean existsByDouyinAppId(String douyinAppId, Long excludeId) {
         return lambdaQuery()
                 .eq(DyPlatformApp::getDouyinAppId, douyinAppId)
-                .ne(excludeId != null, DyPlatformApp::getId, excludeId)
+                .ne(Objects.nonNull(excludeId), DyPlatformApp::getId, excludeId)
                 .exists();
     }
 

@@ -48,7 +48,7 @@ public class FuyouRefundCallbackService {
         }
         FuyouIsvKeyConfig keyConfig = fuyouIsvKeyConfigManager.findByProduct(ProductEnum.FUYOU_PAY.getCode())
                 .orElse(null);
-        if (keyConfig == null || StrUtil.isBlank(keyConfig.getPublicKey())) {
+        if (Objects.isNull(keyConfig) || StrUtil.isBlank(keyConfig.getPublicKey())) {
             log.error("富友退款回调: 服务商密钥未配置, 无法验签");
             RefundCallbackData failData = new RefundCallbackData();
             failData.setCallbackData(notify);
@@ -59,7 +59,7 @@ public class FuyouRefundCallbackService {
         }
 
         FuyouCallbackParseResp resp = fuyouPayCallbackService.parse(reqParam, keyConfig.getPublicKey(), true);
-        if (resp == null || !Boolean.TRUE.equals(resp.getSuccess())) {
+        if (Objects.isNull(resp) || !Boolean.TRUE.equals(resp.getSuccess())) {
             log.error("富友退款回调验签失败");
             RefundCallbackData failData = new RefundCallbackData();
             failData.setCallbackData(notify);

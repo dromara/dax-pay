@@ -160,8 +160,8 @@ public class GatewayCashierConfigService {
                     "pay.error.gateway.cashierItemNameRequired");
         }
 
-        Boolean recommend = param.getRecommend() != null && param.getRecommend();
-        Integer sortNo = param.getSortNo() != null ? param.getSortNo() : 0;
+        Boolean recommend = Objects.nonNull(param.getRecommend()) && param.getRecommend();
+        Integer sortNo = Objects.nonNull(param.getSortNo()) ? param.getSortNo() : 0;
         String icon = StrUtil.trimToNull(param.getIcon());
 
         return new NormalizedItem(typeEnum.getCode(), clientEnv, name, icon, recommend, sortNo,
@@ -180,7 +180,7 @@ public class GatewayCashierConfigService {
     }
 
     private void applyNormalized(GatewayCashierItem entity, NormalizedItem n, String mchNo, String appId) {
-        if (entity.getId() == null) {
+        if (Objects.isNull(entity.getId())) {
             entity.setMchNo(mchNo);
             entity.setAppId(appId);
         }

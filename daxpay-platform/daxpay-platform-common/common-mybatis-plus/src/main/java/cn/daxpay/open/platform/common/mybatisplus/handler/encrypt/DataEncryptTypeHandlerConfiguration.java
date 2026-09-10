@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
+import java.util.Objects;
 
 /// # 数据加密类型处理器初始化配置
 ///
@@ -32,7 +33,7 @@ public class DataEncryptTypeHandlerConfiguration {
         }
 
         SecureAesGcmEncryptor encryptor = encryptorProvider.getIfAvailable();
-        if (encryptor == null) {
+        if (Objects.isNull(encryptor)) {
             throw new IllegalStateException(
                     "已启用数据加密但未找到 SecureAesGcmEncryptor Bean，请检查 daxpay.platform.config.encrypt 配置");
         }

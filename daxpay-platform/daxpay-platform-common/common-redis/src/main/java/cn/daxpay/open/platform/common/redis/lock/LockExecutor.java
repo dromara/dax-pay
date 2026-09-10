@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.function.Supplier;
+import java.util.Objects;
 
 /// # 分布式锁执行器
 ///
@@ -34,7 +35,7 @@ public class LockExecutor {
     public <T> T execute(String key, long expireMs, long waitMs,
                          Supplier<T> action, Supplier<? extends RuntimeException> onFail) {
         LockInfo lock = lockTemplate.lock(key, expireMs, waitMs);
-        if (lock == null) {
+        if (Objects.isNull(lock)) {
             throw onFail.get();
         }
         try {
@@ -66,7 +67,7 @@ public class LockExecutor {
     /// 尝试抢锁执行；未抢到锁时 [TryLockResult#acquired] 为 false（业务返回 null 仍算已获取）
     public <T> TryLockResult<T> tryExecute(String key, long expireMs, long waitMs, Supplier<T> action) {
         LockInfo lock = lockTemplate.lock(key, expireMs, waitMs);
-        if (lock == null) {
+        if (Objects.isNull(lock)) {
             return TryLockResult.notAcquired();
         }
         try {

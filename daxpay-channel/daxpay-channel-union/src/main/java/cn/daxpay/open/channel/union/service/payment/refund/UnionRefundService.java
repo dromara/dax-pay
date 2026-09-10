@@ -18,6 +18,7 @@ import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 /// # 云闪付退款业务服务
 ///
@@ -36,7 +37,7 @@ public class UnionRefundService {
     public RefundResultBo refund(RefundOrder refundOrder, UnionSdkCredential credential, UnionPayMethod method) {
         // 银联退货需 origQryId(原交易查询凭证), 从原交易 outOrderNo 取
         PayTrade trade = payTradeManager.findByTradeNo(refundOrder.getTradeNo()).orElse(null);
-        String origQueryId = trade == null ? null : trade.getOutOrderNo();
+        String origQueryId = Objects.isNull(trade) ? null : trade.getOutOrderNo();
         if (StrUtil.isBlank(origQueryId)) {
             log.error("云闪付退款未查到原交易凭证(origQryId), tradeNo={}", refundOrder.getTradeNo());
             return new RefundResultBo()

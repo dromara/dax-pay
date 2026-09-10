@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /// # 运营端配置检查聚合服务
 ///
@@ -30,7 +31,7 @@ public class AdminConfigCheckService {
         Map<String, Integer> categoryCounts = new LinkedHashMap<>();
         for (AdminConfigChecker checker : checkers) {
             ConfigCheckItem item = safeCheck(checker);
-            if (item != null) {
+            if (Objects.nonNull(item)) {
                 items.add(item);
                 categoryCounts.merge(item.getCategory(), 1, Integer::sum);
             }

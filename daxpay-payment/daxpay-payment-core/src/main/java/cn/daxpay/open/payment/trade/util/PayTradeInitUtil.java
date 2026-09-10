@@ -3,6 +3,7 @@ package cn.daxpay.open.payment.trade.util;
 import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.platform.core.enums.pay.channel.CurrencyEnum;
+import java.util.Objects;
 
 /// # 资金交易初始化工具
 ///
@@ -49,7 +50,7 @@ public final class PayTradeInitUtil {
             String provider,
             String channel) {
         // 币种: 显式透传优先, 缺省 cny(向后兼容国内通道)
-        String resolvedCurrency = (currency == null || currency.isBlank())
+        String resolvedCurrency = (Objects.isNull(currency) || currency.isBlank())
                 ? CurrencyEnum.CNY.getCode() : currency;
         return new PayTrade()
                 .setAppId(appId)

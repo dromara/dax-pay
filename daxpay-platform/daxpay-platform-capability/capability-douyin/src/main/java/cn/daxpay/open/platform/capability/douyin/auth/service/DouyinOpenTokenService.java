@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import java.time.Duration;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /// # 抖音开放平台 Token / Ticket 管理服务
 ///
@@ -199,7 +200,7 @@ public class DouyinOpenTokenService {
         log.info("抖音开放平台响应: url={}, body={}", url, respBody);
         JSONObject obj = JSONUtil.parseObj(respBody);
         JSONObject data = obj.getJSONObject("data");
-        if (data == null) {
+        if (Objects.isNull(data)) {
             // 抖音: 开放平台接口调用失败
             throw new BizInfoException(CommonErrorCode.SYSTEM_ERROR,
                     "error.channel.douyin.openApiFailed", obj.getStr("message", respBody));

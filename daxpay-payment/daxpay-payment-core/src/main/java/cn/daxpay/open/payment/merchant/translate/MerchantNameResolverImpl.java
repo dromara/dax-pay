@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 /// # 商户名称解析器实现
 ///
@@ -23,11 +24,11 @@ public class MerchantNameResolverImpl implements MerchantNameResolver {
 
     @Override
     public Map<String, String> resolveNames(Collection<String> mchNos) {
-        if (mchNos == null || mchNos.isEmpty()) {
+        if (Objects.isNull(mchNos) || mchNos.isEmpty()) {
             return Collections.emptyMap();
         }
         return merchantInfoManager.findAllByMchNosNotTenant(mchNos).stream()
-                .filter(m -> m.getMchNo() != null && m.getMchName() != null)
+                .filter(m -> Objects.nonNull(m.getMchNo()) && Objects.nonNull(m.getMchName()))
                 .collect(Collectors.toMap(MerchantInfo::getMchNo, MerchantInfo::getMchName, (a, b) -> a));
     }
 }

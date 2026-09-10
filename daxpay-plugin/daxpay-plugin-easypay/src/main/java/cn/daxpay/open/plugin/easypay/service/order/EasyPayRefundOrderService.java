@@ -84,14 +84,14 @@ public class EasyPayRefundOrderService {
     /// 根据内核退款单定位关联的易支付订单 ID
     private Optional<Long> findEasyPayOrderId(RefundOrder refundOrder) {
         // 优先用商户订单号查
-        if (refundOrder.getBizOrderNo() != null) {
+        if (Objects.nonNull(refundOrder.getBizOrderNo())) {
             var opt = easyPayOrderManager.findByOutTradeNo(refundOrder.getBizOrderNo());
             if (opt.isPresent()) {
                 return Optional.of(opt.get().getId());
             }
         }
         // 再用平台业务单号查
-        if (refundOrder.getTradeNo() != null) {
+        if (Objects.nonNull(refundOrder.getTradeNo())) {
             var opt = easyPayOrderManager.findByTradeNo(refundOrder.getTradeNo());
             if (opt.isPresent()) {
                 return Optional.of(opt.get().getId());
@@ -107,7 +107,7 @@ public class EasyPayRefundOrderService {
             return;
         }
         entity.setStatus(mapped);
-        if (mapped == 1 && entity.getEndTime() == null) {
+        if (mapped == 1 && Objects.isNull(entity.getEndTime())) {
             entity.setEndTime(OffsetDateTime.now(ZoneOffset.UTC));
         }
         easyPayRefundOrderManager.updateById(entity);
@@ -120,7 +120,7 @@ public class EasyPayRefundOrderService {
 
     /// 分(最小货币单位) → 元(BigDecimal)
     private BigDecimal fenToYuan(Long fen) {
-        if (fen == null) {
+        if (Objects.isNull(fen)) {
             return BigDecimal.ZERO;
         }
         return BigDecimal.valueOf(fen).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);

@@ -20,6 +20,7 @@ import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 /// # 拉卡拉服务商支付执行业务服务
 ///
@@ -115,7 +116,7 @@ public class LakalaPayService {
                 .setPayBody(resp.getPayBody());
 
         // 支付内容类型映射(子应用 LakalaPayBodyType → 平台 PayBodyTypeEnum)
-        if (resp.getPayBodyType() != null) {
+        if (Objects.nonNull(resp.getPayBodyType())) {
             switch (resp.getPayBodyType()) {
                 case LINK -> bo.setPayBodyType(PayBodyTypeEnum.LINK);
                 case QR_CODE -> bo.setPayBodyType(PayBodyTypeEnum.QR_CODE);

@@ -21,6 +21,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 /// # 支付通道主数据
 ///
@@ -53,7 +54,7 @@ public class PayChannelService {
     /// 库表无记录时从通道枚举构造结果
     private PayChannelResult resolveFromEnum(String code) {
         ChannelEnum enumVal = ChannelEnum.findByCode(code);
-        if (enumVal == null) {
+        if (Objects.isNull(enumVal)) {
             // 通道: 支付通道不存在
             throw new DataNotExistException("error.payment.channel.notExist");
         }
@@ -93,7 +94,7 @@ public class PayChannelService {
                 .setName(resolveChannelName(enumVal.getCode()));
 
         PayChannel dbRow = dbMap.get(enumVal.getCode());
-        if (dbRow != null) {
+        if (Objects.nonNull(dbRow)) {
             result.setId(dbRow.getId());
             result.setSortNo(dbRow.getSortNo());
             result.setIcon(dbRow.getIcon());
@@ -106,7 +107,7 @@ public class PayChannelService {
 
     /// 补全通道 i18n 展示名与介绍
     private PayChannelResult fillChannelName(PayChannelResult result) {
-        if (result == null || result.getCode() == null) {
+        if (Objects.isNull(result) || Objects.isNull(result.getCode())) {
             return result;
         }
         return result.setName(resolveChannelName(result.getCode()))
@@ -116,7 +117,7 @@ public class PayChannelService {
     /// 按编码取通道展示名
     private String resolveChannelName(String code) {
         ChannelEnum channelEnum = ChannelEnum.findByCode(code);
-        return channelEnum != null ? I18nUtil.getEnumName(channelEnum) : code;
+        return Objects.nonNull(channelEnum) ? I18nUtil.getEnumName(channelEnum) : code;
     }
 
     /// 按编码取通道介绍(后端多语言), 无词条返回 null
@@ -131,7 +132,7 @@ public class PayChannelService {
             return true;
         }
         String name = row.getName();
-        return name != null && name.contains(nameKeyword);
+        return Objects.nonNull(name) && name.contains(nameKeyword);
     }
 
 }

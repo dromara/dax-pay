@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.Objects;
 
 /// # 翻译缓存管理器
 ///
@@ -48,7 +49,7 @@ public class TransCacheManager {
     /// 检查缓存中是否存在指定键（已过期视为不存在）
     public boolean contains(TransCacheKey key) {
         CacheEntry entry = cache.get(key);
-        if (entry == null) {
+        if (Objects.isNull(entry)) {
             return false;
         }
         if (entry.isExpired()) {
@@ -61,7 +62,7 @@ public class TransCacheManager {
     /// 获取缓存值（已过期返回 null 并移除）
     public Object get(TransCacheKey key) {
         CacheEntry entry = cache.get(key);
-        if (entry == null) {
+        if (Objects.isNull(entry)) {
             return null;
         }
         if (entry.isExpired()) {

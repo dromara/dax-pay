@@ -10,6 +10,7 @@ import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 /// # 微信分账接收方通道服务
 ///
@@ -33,7 +34,7 @@ public class WechatAllocReceiverChannelService {
                     "error.channel.wechat.allocReceiverBindFailed", result.getMsg());
         }
         WechatAllocReceiverResp resp = result.getData();
-        if (resp != null && StrUtil.isNotBlank(resp.getErrorCode())) {
+        if (Objects.nonNull(resp) && StrUtil.isNotBlank(resp.getErrorCode())) {
             throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL,
                     "error.channel.wechat.allocReceiverBindFailed",
                     StrUtil.blankToDefault(resp.getErrorMsg(), resp.getErrorCode()));
@@ -49,7 +50,7 @@ public class WechatAllocReceiverChannelService {
                     "error.channel.wechat.allocReceiverUnbindFailed", result.getMsg());
         }
         WechatAllocReceiverResp resp = result.getData();
-        if (resp != null && StrUtil.isNotBlank(resp.getErrorCode())) {
+        if (Objects.nonNull(resp) && StrUtil.isNotBlank(resp.getErrorCode())) {
             throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL,
                     "error.channel.wechat.allocReceiverUnbindFailed",
                     StrUtil.blankToDefault(resp.getErrorMsg(), resp.getErrorCode()));
@@ -65,7 +66,7 @@ public class WechatAllocReceiverChannelService {
                     "error.channel.wechat.allocReceiverBindFailed", result.getMsg());
         }
         WechatAllocReceiverResp resp = result.getData();
-        if (resp != null && StrUtil.isNotBlank(resp.getErrorCode())) {
+        if (Objects.nonNull(resp) && StrUtil.isNotBlank(resp.getErrorCode())) {
             throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL,
                     "error.channel.wechat.allocReceiverBindFailed",
                     StrUtil.blankToDefault(resp.getErrorMsg(), resp.getErrorCode()));
@@ -81,7 +82,7 @@ public class WechatAllocReceiverChannelService {
                     "error.channel.wechat.allocReceiverUnbindFailed", result.getMsg());
         }
         WechatAllocReceiverResp resp = result.getData();
-        if (resp != null && StrUtil.isNotBlank(resp.getErrorCode())) {
+        if (Objects.nonNull(resp) && StrUtil.isNotBlank(resp.getErrorCode())) {
             throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL,
                     "error.channel.wechat.allocReceiverUnbindFailed",
                     StrUtil.blankToDefault(resp.getErrorMsg(), resp.getErrorCode()));

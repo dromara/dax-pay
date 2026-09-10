@@ -112,7 +112,7 @@ public class MpUtil {
     /// 不配对的 exit（depth 已为 0）会强制清空并打错误日志，避免脏状态。
     public void clearIgnoreTenant() {
         Integer cur = IGNORE_TENANT_DEPTH.get();
-        if (cur == null || cur <= 0) {
+        if (Objects.isNull(cur) || cur <= 0) {
             // 不配对 exit：强制清干净，避免脏状态
             IGNORE_TENANT_DEPTH.remove();
             InterceptorIgnoreHelper.clearIgnoreStrategy();

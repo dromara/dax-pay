@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 /// # 商户级通道认证服务
 ///
@@ -84,20 +85,20 @@ public class MerchantChannelAuthService {
     ///                由认证分发层在调用前通过 [AuthSessionStore#loadSession] 加载后注入。
     public AuthResult auth(AuthCodeParam param, AuthSession session) {
         // 商户上下文恢复: session.mchNo 优先, 否则用 param
-        if (session != null && StrUtil.isNotBlank(session.getMchNo())) {
+        if (Objects.nonNull(session) && StrUtil.isNotBlank(session.getMchNo())) {
             merchantContextLoader.initMch(session.getMchNo());
         } else {
             initMchContext(param.getAppId(), param.getMchNo());
         }
         // authType 优先从会话恢复, 其次取参数(小程序直连场景)
-        String authType = (session != null && StrUtil.isNotBlank(session.getAuthType()))
+        String authType = (Objects.nonNull(session) && StrUtil.isNotBlank(session.getAuthType()))
                 ? session.getAuthType() : param.getAuthType();
         ChannelAuthStrategy strategy = findStrategy(authType);
         // 策略自行从 session 恢复应用凭证(各通道读 appScope/appRefId 查密钥)
         AuthResult authResult = strategy.doAuth(param, session);
         authResult.setStatus(ChannelAuthStatusEnum.SUCCESS.getCode());
         // 会话恢复场景: 回填来源回跳路径, 供前端跳回业务页面
-        if (session != null) {
+        if (Objects.nonNull(session)) {
             authResult.setReturnPath(session.getReturnPath());
         }
         // 写回轮询结果(微信等 OAuth 重定向通道从 session 恢复 queryCode)
@@ -108,7 +109,7 @@ public class MerchantChannelAuthService {
     /// 按 authType 查找认证策略
     private ChannelAuthStrategy findStrategy(String authType) {
         ChannelAuthStrategy strategy = strategyMap.get(authType);
-        if (strategy == null) {
+        if (Objects.isNull(strategy)) {
             // 不支持的能力: {0}
             throw new UnsupportedAbilityException("pay.error.unsupportedAbilityWithDetail", authType);
         }

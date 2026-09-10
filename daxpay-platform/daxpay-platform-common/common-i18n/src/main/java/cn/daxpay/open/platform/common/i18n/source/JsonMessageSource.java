@@ -19,6 +19,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.Objects;
 
 /// # 基于 JSON 文件的消息源, 支持目录嵌套和多文件拆分
 ///
@@ -92,11 +93,11 @@ public class JsonMessageSource extends AbstractMessageSource {
         String message = messages.get(code);
 
         // 未命中则按语言反向匹配地区: en -> en-US；zh 优先 zh-CN
-        if (message == null) {
+        if (Objects.isNull(message)) {
             String lang = resolved.getLanguage();
             if (!lang.isEmpty()) {
                 String regionTag = this.languageToRegionLocale.get(lang);
-                if (regionTag != null) {
+                if (Objects.nonNull(regionTag)) {
                     Locale regionLocale = Locale.forLanguageTag(regionTag);
                     if (!regionLocale.equals(resolved)) {
                         messages = this.loadMessages(regionLocale);
@@ -107,27 +108,27 @@ public class JsonMessageSource extends AbstractMessageSource {
         }
 
         // 仍未命中则用默认 locale 回退（台港互不回退，统一可回 zh-CN）
-        if (message == null && !resolved.equals(this.defaultLocale)) {
+        if (Objects.isNull(message) && !resolved.equals(this.defaultLocale)) {
             messages = this.loadMessages(this.defaultLocale);
             message = messages.get(code);
         }
-        return message != null ? new MessageFormat(message, locale) : null;
+        return Objects.nonNull(message) ? new MessageFormat(message, locale) : null;
     }
 
     /// 将请求 locale 规范为资源目录标签对应的 Locale
     private Locale resolveResourceLocale(Locale locale) {
-        if (locale == null) {
+        if (Objects.isNull(locale)) {
             return this.defaultLocale;
         }
         String tag = locale.toLanguageTag();
         String lower = tag.toLowerCase(Locale.ROOT);
         String alias = LOCALE_ALIASES.get(lower);
-        if (alias != null) {
+        if (Objects.nonNull(alias)) {
             return Locale.forLanguageTag(alias);
         }
         // 脚本 Hant 无地区 → 台湾
         if ("zh".equals(locale.getLanguage()) && "Hant".equalsIgnoreCase(locale.getScript())
-                && (locale.getCountry() == null || locale.getCountry().isEmpty())) {
+                && (Objects.isNull(locale.getCountry()) || locale.getCountry().isEmpty())) {
             return Locale.forLanguageTag("zh-TW");
         }
         // 脚本 Hans → 简体
@@ -150,11 +151,11 @@ public class JsonMessageSource extends AbstractMessageSource {
             for (Resource resource : resources) {
                 String filePath = resource.getURL().toString();
                 String relativePath = this.extractRelativePath(filePath, localeTag);
-                if (relativePath == null) {
+                if (Objects.isNull(relativePath)) {
                     continue;
                 }
                 String content = this.readResourceContent(resource);
-                if (content == null || content.isBlank()) {
+                if (Objects.isNull(content) || content.isBlank()) {
                     continue;
                 }
                 JSONObject jsonObj = JSONUtil.parseObj(content);
@@ -190,7 +191,7 @@ public class JsonMessageSource extends AbstractMessageSource {
             Resource[] resources = this.resourceResolver.getResources("classpath*:i18n/**/*.json");
             for (Resource resource : resources) {
                 String localeTag = this.extractLocaleTag(resource.getURL().toString());
-                if (localeTag != null && this.availableLocaleTags.add(localeTag)) {
+                if (Objects.nonNull(localeTag) && this.availableLocaleTags.add(localeTag)) {
                     Locale locale = Locale.forLanguageTag(localeTag);
                     String lang = locale.getLanguage();
                     if (!lang.isEmpty()) {
@@ -232,9 +233,9 @@ public class JsonMessageSource extends AbstractMessageSource {
             if (value instanceof JSONObject nested) {
                 this.flattenJson(key, nested, result);
             }
-            else if (value != null) {
+            else if (Objects.nonNull(value)) {
                 String existing = result.put(key, value.toString());
-                if (existing != null) {
+                if (Objects.nonNull(existing)) {
                     log.warn("检测到重复的国际化 key: {}, 旧值={}, 新值={}", key, existing, value);
                 }
             }

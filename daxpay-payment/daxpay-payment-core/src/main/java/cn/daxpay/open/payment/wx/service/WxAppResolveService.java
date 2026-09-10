@@ -22,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.Objects;
 
 /// # 微信开放应用解析服务
 ///
@@ -40,7 +41,7 @@ public class WxAppResolveService implements WxAppFacade {
     /// 按档位与主键加载应用视图（含 Auth）
     @Override
     public WxAppView getById(AppScopeEnum scope, Long id) {
-        if (scope == null || id == null) {
+        if (Objects.isNull(scope) || Objects.isNull(id)) {
             // 微信: 档位不存在
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.payment.wx.scopeNotExist");
         }
@@ -131,7 +132,7 @@ public class WxAppResolveService implements WxAppFacade {
         // 3. 产品级平台默认能力绑（wx_platform_app_capability 按 (product, capability) 取；仅非直连）
         if (!direct) {
             WxAppView productDefault = this.resolveProductDefault(product, capability);
-            if (productDefault != null) {
+            if (Objects.nonNull(productDefault)) {
                 return Optional.of(productDefault);
             }
         }
@@ -158,7 +159,7 @@ public class WxAppResolveService implements WxAppFacade {
             }
         }
         // 平台侧回退：产品级平台默认绑（按 product）
-        if (platform == null) {
+        if (Objects.isNull(platform)) {
             platform = this.resolveProductDefault(product, capability);
         }
         // channelAppId 命中某侧时按命中侧覆盖
@@ -178,7 +179,7 @@ public class WxAppResolveService implements WxAppFacade {
                 }
             }
         }
-        if (platform == null) {
+        if (Objects.isNull(platform)) {
             // 微信: 未配置该能力对应的平台应用（sp 必填）
             throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
                     "error.payment.wx.appNotConfigured", capability);

@@ -99,13 +99,13 @@ public class RefundOrderAdminService {
             throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.refund.manualCloseStatus");
         }
         // 校验: 创建须超过 7 天(与定时同步淘汰窗口对齐)
-        if (refundOrder.getCreateTime() == null
+        if (Objects.isNull(refundOrder.getCreateTime())
                 || refundOrder.getCreateTime().isAfter(OffsetDateTime.now(ZoneOffset.UTC).minusDays(7))) {
             throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.refund.manualCloseTooEarly");
         }
         // 关闭前查通道确认未成功退款, 避免误关已退款导致平台双重支出
         RefundResultBo channelResult = refundSyncService.queryChannel(refundOrder);
-        if (!channelResult.isSyncSuccess() || channelResult.getStatus() == null) {
+        if (!channelResult.isSyncSuccess() || Objects.isNull(channelResult.getStatus())) {
             // 通道查单失败, 无法确认状态, 拒绝关闭(可稍后重试)
             throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.refund.closeChannelQueryFailed");
         }

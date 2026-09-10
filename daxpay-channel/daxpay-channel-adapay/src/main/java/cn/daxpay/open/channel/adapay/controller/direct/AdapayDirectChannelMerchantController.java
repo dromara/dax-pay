@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Objects;
 
 /// # Adapay 直连通道商户管理
 ///
@@ -50,8 +51,8 @@ public class AdapayDirectChannelMerchantController {
             @NotBlank(message = "{validation.field.channelMerchantNo.notBlank}") String channelMchNo) {
         var config = adapayDirectKeyConfigService.findByChannelMchNo(channelMchNo);
         var result = config.toResult();
-        result.setApiKeyConfigured(config.getApiKey() != null);
-        result.setPrivateKeyConfigured(config.getPrivateKey() != null);
+        result.setApiKeyConfigured(Objects.nonNull(config.getApiKey()));
+        result.setPrivateKeyConfigured(Objects.nonNull(config.getPrivateKey()));
         return Res.ok(result);
     }
 

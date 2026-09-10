@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 /// # 商户移动端-网关支付配置服务(码牌/聚合共用)
 ///
@@ -31,7 +32,7 @@ public class AppMerchantGatewayPayConfigService {
     /// 当前登录商户号
     private String requireMchNo() {
         String mchNo = paymentContext.getMchNo();
-        if (mchNo == null || mchNo.isBlank()) {
+        if (Objects.isNull(mchNo) || mchNo.isBlank()) {
             // 商户上下文缺失
             throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.assist.mchContextMissing");
         }
@@ -49,7 +50,7 @@ public class AppMerchantGatewayPayConfigService {
     public void saveOrUpdate(GatewayPayConfigParam param) {
         MchAppInfoResult app = mchAppInfoService.findByAppId(param.getAppId());
         // 强制当前商户号，忽略客户端传入
-        param.setMchNo(app.getMchNo() != null ? app.getMchNo() : requireMchNo());
+        param.setMchNo(Objects.nonNull(app.getMchNo()) ? app.getMchNo() : requireMchNo());
         gatewayPayConfigService.saveOrUpdate(param);
     }
 

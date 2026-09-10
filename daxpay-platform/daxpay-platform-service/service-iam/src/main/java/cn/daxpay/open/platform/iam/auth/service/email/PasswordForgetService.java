@@ -27,6 +27,7 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Map;
+import java.util.Objects;
 
 /// # 找回密码服务(邮箱验证码方式)
 ///
@@ -131,7 +132,7 @@ public class PasswordForgetService {
     private OffsetDateTime calculatePasswordExpireTime() {
         PlatformPasswordPolicyConfig config = iamSecurityConfigService.getPasswordPolicy();
         Integer rotationDays = config.getRotationDays();
-        if (rotationDays == null || rotationDays <= 0) {
+        if (Objects.isNull(rotationDays) || rotationDays <= 0) {
             return null;
         }
         return OffsetDateTime.now(ZoneOffset.UTC).plusDays(rotationDays);

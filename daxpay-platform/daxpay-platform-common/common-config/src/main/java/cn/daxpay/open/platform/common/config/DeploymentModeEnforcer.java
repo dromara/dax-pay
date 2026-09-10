@@ -12,6 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 /// # 生产部署模式启动期校验器
 ///
@@ -71,7 +72,7 @@ public class DeploymentModeEnforcer implements EnvironmentPostProcessor {
     /// 推断部署模式: 显式配置优先, 否则按 active profile 推断
     private String resolveMode(ConfigurableEnvironment env) {
         String explicit = env.getProperty("daxpay.platform.deployment.mode");
-        if (explicit != null && !explicit.isBlank()) {
+        if (Objects.nonNull(explicit) && !explicit.isBlank()) {
             return explicit.toUpperCase();
         }
         // 未显式配置: 含 prod profile → PROD, 否则 → DEV
@@ -92,9 +93,9 @@ public class DeploymentModeEnforcer implements EnvironmentPostProcessor {
                                    String label, List<String> errors) {
         Boolean value = env.getProperty(key, Boolean.class);
         // 未显式配置时按 dangerousDefault 推断实际生效值(ConfigurationProperties 绑定阶段会用 Java 默认值)
-        boolean effective = (value == null) ? dangerousDefault : value;
+        boolean effective = (Objects.isNull(value)) ? dangerousDefault : value;
         if (effective) {
-            String actual = (value == null) ? "(未配置, 框架默认 true)" : "true";
+            String actual = (Objects.isNull(value)) ? "(未配置, 框架默认 true)" : "true";
             errors.add("  - " + key + " = " + actual + "  [" + label + " 生产环境必须为 false]");
         }
     }

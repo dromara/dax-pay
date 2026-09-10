@@ -128,7 +128,7 @@ public class PermMenuService {
     /// @param newPid 要设置的父菜单ID
     /// @return 是否会形成循环
     private boolean wouldCreateCycle(Long currentMenuId, Long newPid) {
-        if (newPid == null) {
+        if (Objects.isNull(newPid)) {
             return false;
         }
         // 如果父菜单是自己，形成循环
@@ -138,7 +138,7 @@ public class PermMenuService {
         // 沿着父菜单链向上遍历
         Long pid = newPid;
         Set<Long> visited = new HashSet<>();
-        while (pid != null) {
+        while (Objects.nonNull(pid)) {
             // 防止无限循环（数据异常情况）
             if (visited.contains(pid)) {
                 return true;
@@ -152,7 +152,7 @@ public class PermMenuService {
 
             // 获取父菜单的pid
             PermMenu parent = permMenuManager.findById(pid).orElse(null);
-            if (parent == null) {
+            if (Objects.isNull(parent)) {
                 break;
             }
             pid = parent.getPid();
@@ -178,7 +178,7 @@ public class PermMenuService {
     /// @param menuType 当前菜单类型
     private void validateParentType(Long pid, String menuType) {
         MenuTypeEnum typeEnum = MenuTypeEnum.getByCode(menuType);
-        if (typeEnum == null) {
+        if (Objects.isNull(typeEnum)) {
             // 权限: 无效的菜单类型
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.menu.invalidType");
         }
@@ -204,12 +204,12 @@ public class PermMenuService {
             }
             return;
         }
-        if (pid == null) {
+        if (Objects.isNull(pid)) {
             // 权限: 菜单、内嵌页面、外链必须选择上级目录
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.menu.needParentCatalog");
         }
         PermMenu parent = permMenuManager.findById(pid).orElse(null);
-        if (parent == null) {
+        if (Objects.isNull(parent)) {
             // 权限: 上级菜单不存在
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.menu.parentNotExist");
         }
@@ -225,12 +225,12 @@ public class PermMenuService {
     /// @param needParentKey pid 为空时抛出的错误消息 key
     /// @return 父级菜单实体
     private PermMenu validateAndGetParent(Long pid, String needParentKey) {
-        if (pid == null) {
+        if (Objects.isNull(pid)) {
             // 权限: 菜单内嵌页面外链须选择上级目录
             throw new BizException(CommonCode.FAIL_CODE, needParentKey);
         }
         PermMenu parent = permMenuManager.findById(pid).orElse(null);
-        if (parent == null) {
+        if (Objects.isNull(parent)) {
             // 权限: 上级菜单不存在
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.menu.parentNotExist");
         }
@@ -254,7 +254,7 @@ public class PermMenuService {
         param.setHidden(true);
         if (isGroup) {
             // 子页面分组: 编辑时校验下级只能是子页面
-            if (checkChildren && param.getId() != null) {
+            if (checkChildren && Objects.nonNull(param.getId())) {
                 List<PermMenu> children = permMenuManager.findAllByPid(param.getId());
                 for (PermMenu child : children) {
                     if (!MenuTypeEnum.SUBPAGE.equalsCode(child.getMenuType())) {

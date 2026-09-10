@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 /// # 商户信息管理
 ///
@@ -30,7 +31,7 @@ public class MerchantInfoService {
     /// 获取商户信息
     public MerchantInfoResult getMerchant() {
         String mchNo = paymentContext.getMchNo();
-        if (mchNo == null){
+        if (Objects.isNull(mchNo)){
             // 商户: 数据错误, 未发现商户号
             throw new BizInfoException(CommonCode.FAIL_CODE, "error.payment.merchant.dataErrorNoMchNo");
         }
@@ -41,7 +42,7 @@ public class MerchantInfoService {
     /// 修改
     public void update(MerchantInfoParam param) {
         String mchNo = paymentContext.getMchNo();
-        if (mchNo == null){
+        if (Objects.isNull(mchNo)){
             // 商户: 数据错误, 未发现商户号
             throw new BizInfoException(CommonCode.FAIL_CODE, "error.payment.merchant.dataErrorNoMchNo");
         }

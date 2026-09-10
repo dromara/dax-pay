@@ -51,6 +51,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 /// # 码牌支付编排(公开/H5/小程序侧)
 ///
@@ -308,13 +309,13 @@ public class CodePayAssistService {
     private long resolveAmount(DeviceQrCode entity, Long requestAmount) {
         QrCodeAmountTypeEnum amountType = QrCodeAmountTypeEnum.findByCode(entity.getAmountType());
         if (amountType == QrCodeAmountTypeEnum.FIXED) {
-            if (entity.getFixedAmount() == null || entity.getFixedAmount() <= 0) {
+            if (Objects.isNull(entity.getFixedAmount()) || entity.getFixedAmount() <= 0) {
                 // 码牌: 固定金额必须大于0
                 throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.qrcode.fixedAmountInvalid");
             }
             return entity.getFixedAmount();
         }
-        if (requestAmount == null || requestAmount <= 0) {
+        if (Objects.isNull(requestAmount) || requestAmount <= 0) {
             // 码牌: 金额必须大于0
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.qrcode.amountRequired");
         }
@@ -345,7 +346,7 @@ public class CodePayAssistService {
             return true;
         }
         PayRiskChecker checker = payRiskCheckerProvider.getIfAvailable();
-        if (checker == null || !isEnhancedOpenIdLevel() || !checker.hasOpenIdBlacklist()) {
+        if (Objects.isNull(checker) || !isEnhancedOpenIdLevel() || !checker.hasOpenIdBlacklist()) {
             return false;
         }
         return PayMethodOpenIdSupport.canAcquireOpenId(method, clientEnv);

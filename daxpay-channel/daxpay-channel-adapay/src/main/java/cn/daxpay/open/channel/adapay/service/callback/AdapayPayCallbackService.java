@@ -55,7 +55,7 @@ public class AdapayPayCallbackService {
 
         // 2. 转发子应用验签解析(publicKey 为空, 子应用用全局默认平台公钥)
         AdapayCallbackParseResp resp = parse(data, sign, false);
-        if (resp == null || !Boolean.TRUE.equals(resp.getSuccess())) {
+        if (Objects.isNull(resp) || !Boolean.TRUE.equals(resp.getSuccess())) {
             log.error("Adapay 支付回调验签失败");
             CallbackData failData = new CallbackData();
             failData.setCallbackData(notify);

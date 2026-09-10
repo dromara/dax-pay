@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.Objects;
 
 /// # 易支付订单生命周期回写服务
 ///
@@ -31,14 +32,14 @@ public class EasyPayOrderService {
 
     /// 支付成功回写协议单
     public EasyPayOrder paySuccess(PayTrade trade) {
-        if (trade.getContainerId() == null) {
+        if (Objects.isNull(trade.getContainerId())) {
             return null;
         }
         var optional = easyPayOrderManager.findByOrderIdNotTenant(trade.getContainerId());
         if (optional.isEmpty()) {
             // 收银台中间态可能仅有 outTradeNo 关联
             var normal = normalPayOrderManager.findById(trade.getContainerId()).orElse(null);
-            if (normal != null) {
+            if (Objects.nonNull(normal)) {
                 optional = easyPayOrderManager.findByOutTradeNo(normal.getBizOrderNo());
             }
         }
@@ -49,17 +50,17 @@ public class EasyPayOrderService {
         var easyPayOrder = optional.get();
         String buyer = null;
         var normal = normalPayOrderManager.findById(trade.getContainerId()).orElse(null);
-        if (normal != null) {
+        if (Objects.nonNull(normal)) {
             buyer = normal.getBuyerId();
-            if (easyPayOrder.getTradeNo() == null) {
+            if (Objects.isNull(easyPayOrder.getTradeNo())) {
                 easyPayOrder.setTradeNo(normal.getOrderNo());
             }
-            if (easyPayOrder.getOrderId() == null) {
+            if (Objects.isNull(easyPayOrder.getOrderId())) {
                 easyPayOrder.setOrderId(normal.getId());
             }
         }
         easyPayOrder.setStatus(1)
-                .setEndTime(trade.getPayTime() != null ? trade.getPayTime() : OffsetDateTime.now(ZoneOffset.UTC))
+                .setEndTime(Objects.nonNull(trade.getPayTime()) ? trade.getPayTime() : OffsetDateTime.now(ZoneOffset.UTC))
                 .setApiTradeNo(trade.getOutOrderNo())
                 .setBuyer(buyer);
         easyPayOrderManager.updateById(easyPayOrder);
@@ -68,7 +69,7 @@ public class EasyPayOrderService {
 
     /// 退款成功累加已退金额
     public void refundSuccess(PayTrade trade, long refundAmountFen) {
-        if (trade.getContainerId() == null) {
+        if (Objects.isNull(trade.getContainerId())) {
             return;
         }
         var optional = easyPayOrderManager.findByOrderIdNotTenant(trade.getContainerId());
@@ -78,7 +79,7 @@ public class EasyPayOrderService {
         var order = optional.get();
         BigDecimal add = BigDecimal.valueOf(refundAmountFen)
                 .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
-        BigDecimal current = order.getRefundMoney() == null ? BigDecimal.ZERO : order.getRefundMoney();
+        BigDecimal current = Objects.isNull(order.getRefundMoney()) ? BigDecimal.ZERO : order.getRefundMoney();
         order.setRefundMoney(current.add(add));
         easyPayOrderManager.updateById(order);
     }

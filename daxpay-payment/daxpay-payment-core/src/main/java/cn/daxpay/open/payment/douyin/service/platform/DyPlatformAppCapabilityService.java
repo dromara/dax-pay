@@ -97,7 +97,7 @@ public class DyPlatformAppCapabilityService {
                         "error.payment.douyin.appTypeCapabilityMismatch");
             }
             DyPlatformApp app = appMap.get(item.getDyPlatformAppId());
-            if (app == null) {
+            if (Objects.isNull(app)) {
                 // 抖音: 平台应用不存在
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "error.payment.douyin.appNotFound");
@@ -126,7 +126,7 @@ public class DyPlatformAppCapabilityService {
                 .distinct()
                 .map(code -> {
                     PayCapabilityEnum cap = PayCapabilityEnum.findByCode(code);
-                    String name = cap != null ? I18nUtil.getEnumName(cap) : code;
+                    String name = Objects.nonNull(cap) ? I18nUtil.getEnumName(cap) : code;
                     return new DyCapabilityOption(code, name);
                 })
                 .toList();
@@ -135,7 +135,7 @@ public class DyPlatformAppCapabilityService {
     /// 填充关联结果的应用展示字段
     private DyPlatformAppCapabilityResult fillResult(DyPlatformAppCapability rel, DyPlatformApp app) {
         DyPlatformAppCapabilityResult result = DyPlatformAppCapabilityConvert.CONVERT.toResult(rel);
-        if (app != null) {
+        if (Objects.nonNull(app)) {
             result.setAppName(app.getAppName())
                     .setDouyinAppId(app.getDouyinAppId())
                     .setAppType(app.getAppType());

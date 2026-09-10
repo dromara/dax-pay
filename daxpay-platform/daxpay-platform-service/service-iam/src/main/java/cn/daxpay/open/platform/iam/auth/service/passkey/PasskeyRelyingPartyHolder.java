@@ -12,6 +12,7 @@ import com.yubico.webauthn.data.RelyingPartyIdentity;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import java.util.Objects;
 
 /// # RelyingParty 实例持有器
 ///
@@ -37,9 +38,9 @@ public class PasskeyRelyingPartyHolder {
         PlatformWebAuthnConfig config = iamSecurityConfigService.getWebAuthnConfig();
         String fingerprint = fingerprint(config);
         RelyingParty current = this.relyingParty;
-        if (current == null || !fingerprint.equals(this.fingerprint)) {
+        if (Objects.isNull(current) || !fingerprint.equals(this.fingerprint)) {
             synchronized (this) {
-                if (this.relyingParty == null || !fingerprint.equals(this.fingerprint)) {
+                if (Objects.isNull(this.relyingParty) || !fingerprint.equals(this.fingerprint)) {
                     this.relyingParty = build(config);
                     this.fingerprint = fingerprint;
                     // 通行密钥 RP 配置变更, 重建 RelyingParty 实例
@@ -59,7 +60,7 @@ public class PasskeyRelyingPartyHolder {
         if (StrUtil.isBlank(config.getRpId())) {
             throw new BizInfoException("error.iam.passkey.configIncomplete");
         }
-        Set<String> origins = config.getOrigins() == null ? Set.of()
+        Set<String> origins = Objects.isNull(config.getOrigins()) ? Set.of()
                 : config.getOrigins().stream()
                     .filter(StrUtil::isNotBlank)
                     .map(String::trim)
@@ -85,6 +86,6 @@ public class PasskeyRelyingPartyHolder {
     /// 配置内容指纹(变更即重建)
     private String fingerprint(PlatformWebAuthnConfig config) {
         return config.getEnabled() + "|" + config.getRpId() + "|" + config.getRpName() + "|"
-                + (config.getOrigins() == null ? "" : String.join(",", config.getOrigins()));
+                + (Objects.isNull(config.getOrigins()) ? "" : String.join(",", config.getOrigins()));
     }
 }

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Objects;
 
 /// # 请求上下文存储
 ///
@@ -19,7 +20,7 @@ public final class RequestContextStorage {
     /// 设置数据
     public static void put(String key, String value) {
         String normalizedKey = normalizeKey(key);
-        if (normalizedKey == null) {
+        if (Objects.isNull(normalizedKey)) {
             return;
         }
         Map<String, String> map = THREAD_LOCAL.get();
@@ -33,7 +34,7 @@ public final class RequestContextStorage {
     /// 获取数据
     public static String get(String key) {
         String normalizedKey = normalizeKey(key);
-        if (normalizedKey == null) {
+        if (Objects.isNull(normalizedKey)) {
             return null;
         }
         return Optional.ofNullable(THREAD_LOCAL.get()).map(map -> map.get(normalizedKey)).orElse(null);

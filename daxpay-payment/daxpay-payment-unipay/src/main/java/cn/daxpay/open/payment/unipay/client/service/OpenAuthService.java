@@ -29,6 +29,7 @@ import cn.hutool.core.util.URLUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 /// # 通用认证服务(OPEN 场景)
 ///
@@ -99,7 +100,7 @@ public class OpenAuthService {
         String authToken = urlResult.getAuthToken();
         if (StrUtil.isNotBlank(authToken)) {
             AuthSession session = authSessionStore.loadSession(authToken);
-            if (session != null) {
+            if (Objects.nonNull(session)) {
                 session.setScene(AuthScene.OPEN.getCode());
                 authSessionStore.saveSession(authToken, session);
             }
@@ -118,7 +119,7 @@ public class OpenAuthService {
     public String handleCallback(String code, String state) {
         // 恢复 session
         AuthSession session = authSessionStore.loadSession(state);
-        if (session == null) {
+        if (Objects.isNull(session)) {
             // 会话已失效, 无法恢复 redirect_url, 只能抛异常
             throw new BizInfoException(DaxPayErrorCode.OPERATION_FAIL,
                     "pay.error.assist.authSessionExpired");

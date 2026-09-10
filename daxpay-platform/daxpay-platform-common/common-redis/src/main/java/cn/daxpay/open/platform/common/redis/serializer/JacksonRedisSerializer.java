@@ -6,6 +6,7 @@ import tools.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
+import java.util.Objects;
 
 /// # 基于平台标准 Jackson ObjectMapper 的 Redis JSON 序列化器
 ///
@@ -20,7 +21,7 @@ public class JacksonRedisSerializer<T> implements RedisSerializer<T> {
 
     @Override
     public byte[] serialize(T t) throws SerializationException {
-        if (t == null) {
+        if (Objects.isNull(t)) {
             return new byte[0];
         }
         try {
@@ -36,7 +37,7 @@ public class JacksonRedisSerializer<T> implements RedisSerializer<T> {
     @Override
     @SuppressWarnings("unchecked")
     public T deserialize(byte[] bytes) throws SerializationException {
-        if (bytes == null || bytes.length == 0) {
+        if (Objects.isNull(bytes) || bytes.length == 0) {
             return null;
         }
         try {

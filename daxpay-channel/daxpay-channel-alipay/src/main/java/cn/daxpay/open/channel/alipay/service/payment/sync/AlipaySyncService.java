@@ -12,6 +12,7 @@ import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 /// # 支付宝支付同步业务服务
 ///
@@ -91,7 +92,7 @@ public class AlipaySyncService {
         // 已关闭或支付完成后全额退款
         if (TRADE_CLOSED.equals(tradeStatus)) {
             // 有付款时间说明是支付后全额退款 → SUCCESS; 无付款时间 → CLOSE
-            if (resp.getSendPayDate() != null) {
+            if (Objects.nonNull(resp.getSendPayDate())) {
                 return bo.setPayStatus(PayFundStatusEnum.SUCCESS)
                         .setFinishTime(resp.getSendPayDate());
             }

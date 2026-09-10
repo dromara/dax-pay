@@ -3,6 +3,7 @@ package cn.daxpay.open.platform.core.enums.perm;
 import cn.daxpay.open.platform.core.i18n.I18nSupport;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import java.util.Objects;
 
 /// # 菜单类型枚举
 ///
@@ -32,7 +33,7 @@ public enum MenuTypeEnum implements I18nSupport {
         return "enum.menu_type";
     }
     public static MenuTypeEnum getByCode(String code) {
-        if (code == null) {
+        if (Objects.isNull(code)) {
             return null;
         }
         for (MenuTypeEnum typeEnum : values()) {

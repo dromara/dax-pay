@@ -7,6 +7,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.Objects;
 
 /// # 二次验证临时凭证服务
 ///
@@ -34,11 +35,11 @@ public class TwoFactorPreAuthService {
 
     /// 读取临时凭证上下文(不删除, 供二次验证重试), 不存在或已过期返回 null
     public PreAuthContext get(String token) {
-        if (token == null || token.isBlank()) {
+        if (Objects.isNull(token) || token.isBlank()) {
             return null;
         }
         String json = stringRedisTemplate.opsForValue().get(PREFIX + token);
-        if (json == null) {
+        if (Objects.isNull(json)) {
             return null;
         }
         return JSONUtil.toBean(json, PreAuthContext.class);
@@ -46,7 +47,7 @@ public class TwoFactorPreAuthService {
 
     /// 删除临时凭证(二次验证通过后调用, 保证单次有效)
     public void delete(String token) {
-        if (token != null && !token.isBlank()) {
+        if (Objects.nonNull(token) && !token.isBlank()) {
             stringRedisTemplate.delete(PREFIX + token);
         }
     }

@@ -157,11 +157,11 @@ public class PayProductService {
                 .setChannelName(I18nUtil.getEnumName(ChannelEnum.findByCode(product.getChannel())));
 
         PayProduct dbRow = dbMap.get(product.getCode());
-        if (dbRow != null) {
+        if (Objects.nonNull(dbRow)) {
             result.setId(dbRow.getId());
             result.setEnabled(dbRow.isEnabled());
             result.setSortNo(dbRow.getSortNo());
-            if (dbRow.getSandbox() != null) {
+            if (Objects.nonNull(dbRow.getSandbox())) {
                 result.setSandbox(dbRow.getSandbox());
             }
         } else {
@@ -169,7 +169,7 @@ public class PayProductService {
             result.setSortNo(0);
         }
         AbsProductStrategy strategy = resolveStrategy(product.getCode());
-        if (strategy != null) {
+        if (Objects.nonNull(strategy)) {
             applyStrategyFields(strategy, result);
         }
         // 介绍由后端多语言提供
@@ -190,7 +190,7 @@ public class PayProductService {
         result.setChannelName(I18nUtil.getEnumName(ChannelEnum.findByCode(result.getChannel())));
         result.setDescription(resolveProductDesc(code));
         AbsProductStrategy strategy = resolveStrategy(code);
-        if (strategy != null) {
+        if (Objects.nonNull(strategy)) {
             applyStrategyFields(strategy, result);
         }
         return result;
@@ -225,6 +225,6 @@ public class PayProductService {
             return true;
         }
         String name = row.getName();
-        return name != null && name.contains(nameKeyword);
+        return Objects.nonNull(name) && name.contains(nameKeyword);
     }
 }

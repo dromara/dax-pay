@@ -61,7 +61,7 @@ public class WechatTransferConfigService {
         // 校验通道商户存在与归属
         assertChannelMerchant(param.getMchNo(), param.getChannelMchNo());
         // 校验发起应用(若指定): 存在 + 归属 + 公众号类型
-        if (param.getTransferAppRefId() != null) {
+        if (Objects.nonNull(param.getTransferAppRefId())) {
             WxMchApp app = wxMchAppManager.lambdaQuery()
                     .eq(WxMchApp::getId, param.getTransferAppRefId())
                     .oneOpt()
@@ -113,12 +113,12 @@ public class WechatTransferConfigService {
         // 场景名(枚举推导)
         if (StrUtil.isNotBlank(entity.getTransferScene())) {
             WechatTransferSceneEnum scene = WechatTransferSceneEnum.findByCode(entity.getTransferScene());
-            if (scene != null) {
+            if (Objects.nonNull(scene)) {
                 result.setSceneName(scene.getName());
             }
         }
         // 发起应用展示信息
-        if (entity.getTransferAppRefId() != null) {
+        if (Objects.nonNull(entity.getTransferAppRefId())) {
             wxMchAppManager.lambdaQuery()
                     .eq(WxMchApp::getId, entity.getTransferAppRefId())
                     .oneOpt()

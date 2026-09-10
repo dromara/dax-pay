@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 import java.util.List;
+import java.util.Objects;
 
 /// # 菜单资源
 ///
@@ -77,7 +78,7 @@ public class PermMenuResult {
     private List<PermMenuResult> children;
 
     public Double getSortNo(){
-        return sortNo == null ? 0 : sortNo;
+        return Objects.isNull(sortNo) ? 0 : sortNo;
     }
 
 }

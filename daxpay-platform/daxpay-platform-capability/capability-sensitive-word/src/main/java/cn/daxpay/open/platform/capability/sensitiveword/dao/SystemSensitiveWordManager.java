@@ -13,6 +13,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Objects;
 
 /// # 敏感词 Manager
 ///
@@ -34,7 +35,7 @@ public class SystemSensitiveWordManager extends BaseManager<SystemSensitiveWordM
         }
         return lambdaQuery()
                 .eq(SystemSensitiveWord::getWord, word.trim())
-                .ne(excludeId != null, SystemSensitiveWord::getId, excludeId)
+                .ne(Objects.nonNull(excludeId), SystemSensitiveWord::getId, excludeId)
                 .exists();
     }
 

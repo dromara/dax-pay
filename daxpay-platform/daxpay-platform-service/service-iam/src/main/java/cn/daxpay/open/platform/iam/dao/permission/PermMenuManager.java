@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Objects;
 
 /// # 权限配置
 ///
@@ -38,7 +39,7 @@ public class PermMenuManager extends BaseManager<PermMenuMapper, PermMenu> {
         return lambdaQuery()
                 .eq(PermMenu::getMenuCode, menuCode)
                 .eq(PermMenu::getClientCode, clientCode)
-                .ne(excludeId != null, PermMenu::getId, excludeId)
+                .ne(Objects.nonNull(excludeId), PermMenu::getId, excludeId)
                 .exists();
     }
 

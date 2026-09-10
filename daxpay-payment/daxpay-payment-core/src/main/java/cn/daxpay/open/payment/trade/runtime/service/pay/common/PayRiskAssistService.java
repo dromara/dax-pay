@@ -41,7 +41,7 @@ public class PayRiskAssistService {
     /// `riskBlockBeforePay=false` 时仍执行检查并落命中，但不抛异常阻断下单。
     public void checkBeforePay(NormalPayParam payParam, String scene) {
         PayRiskChecker checker = payRiskCheckerProvider.getIfAvailable();
-        if (checker == null || payParam == null) {
+        if (Objects.isNull(checker) || Objects.isNull(payParam)) {
             return;
         }
         var config = platformSecurityConfigService.getPaySecurityConfig();
@@ -67,7 +67,7 @@ public class PayRiskAssistService {
     /// 仅使用付款用户标识 [buyerId]（微信 openid / 支付宝 user_id），不读取通道内部 userId。
     public void checkAfterPay(PayTrade trade, String buyerId) {
         PayRiskChecker checker = payRiskCheckerProvider.getIfAvailable();
-        if (checker == null || trade == null) {
+        if (Objects.isNull(checker) || Objects.isNull(trade)) {
             return;
         }
         PlatformPaySecurityConfig config = platformSecurityConfigService.getPaySecurityConfig();
@@ -123,7 +123,7 @@ public class PayRiskAssistService {
                 .setAppId(trade.getAppId());
         if (Objects.equals(trade.getTradeType(), PayTradeTypeEnum.GATEWAY.getCode())) {
             GatewayPayOrder order = gatewayPayOrderManager.findById(trade.getContainerId()).orElse(null);
-            if (order != null) {
+            if (Objects.nonNull(order)) {
                 ctx.setScene("gateway")
                         .setClientIp(order.getClientIp())
                         .setOpenId(order.getOpenid())
@@ -137,7 +137,7 @@ public class PayRiskAssistService {
             }
         } else {
             NormalPayOrder order = normalPayOrderManager.findById(trade.getContainerId()).orElse(null);
-            if (order != null) {
+            if (Objects.nonNull(order)) {
                 ctx.setScene(resolveSceneFromSource(order.getSource()))
                         .setClientIp(order.getClientIp())
                         .setOpenId(order.getOpenid())

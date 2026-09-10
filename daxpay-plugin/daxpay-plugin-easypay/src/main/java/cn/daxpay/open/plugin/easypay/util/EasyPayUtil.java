@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.TreeMap;
+import java.util.Objects;
 
 /// # 易支付签名与金额工具
 ///
@@ -61,7 +62,7 @@ public class EasyPayUtil {
         var map = JacksonUtil.toBean(json, new TypeReference<TreeMap<String, String>>() {});
         map.remove("sign");
         map.remove("sign_type");
-        map.entrySet().removeIf(e -> e.getValue() == null || e.getValue().isEmpty());
+        map.entrySet().removeIf(e -> Objects.isNull(e.getValue()) || e.getValue().isEmpty());
         return map;
     }
 

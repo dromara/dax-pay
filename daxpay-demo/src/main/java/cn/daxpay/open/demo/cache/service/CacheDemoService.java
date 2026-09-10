@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.Objects;
 
 /// # 缓存读写演示服务
 ///
@@ -110,7 +111,7 @@ public class CacheDemoService {
     public CacheDemoProduct updateProduct(String code, String name) {
         log.info("演示: 修改商品并触发缓存失效广播, code={}, name={}", code, name);
         CacheDemoProduct old = PRODUCT_DB.get(code);
-        if (old == null) {
+        if (Objects.isNull(old)) {
             return null;
         }
         CacheDemoProduct updated = new CacheDemoProduct()

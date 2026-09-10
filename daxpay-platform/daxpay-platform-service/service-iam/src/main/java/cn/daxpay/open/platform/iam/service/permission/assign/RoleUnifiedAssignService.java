@@ -68,8 +68,8 @@ public class RoleUnifiedAssignService {
 
         // 权限码主数据不区分终端，查询时需要按 menuCode 挂载到当前终端下的菜单实例。
         Map<String, List<PermCodeData>> codeMapByMenuCode = allCodes.stream()
-                .filter(item -> item.getId() != null)
-                .filter(item -> item.getMenuCode() != null && !item.getMenuCode().isBlank())
+                .filter(item -> Objects.nonNull(item.getId()))
+                .filter(item -> Objects.nonNull(item.getMenuCode()) && !item.getMenuCode().isBlank())
                 .collect(Collectors.groupingBy(PermCodeData::getMenuCode));
 
         // 角色菜单/权限码分配跨终端共用一张关系表，需以当前终端为白名单过滤勾选态，
@@ -78,7 +78,7 @@ public class RoleUnifiedAssignService {
         // 当前终端树中实际出现的权限码：当前终端菜单的 menuCode 对应的全部权限码
         Set<Long> codeIdInTree = menus.stream()
                 .map(PermMenu::getMenuCode)
-                .filter(mc -> mc != null && !mc.isBlank())
+                .filter(mc -> Objects.nonNull(mc) && !mc.isBlank())
                 .flatMap(mc -> codeMapByMenuCode.getOrDefault(mc, List.of()).stream())
                 .map(PermCodeData::getId)
                 .collect(Collectors.toCollection(HashSet::new));
@@ -98,7 +98,7 @@ public class RoleUnifiedAssignService {
         // 生成菜单扁平节点
         for (PermMenu menu : menus) {
             String treeId = "menu-" + menu.getId();
-            String treePid = menu.getPid() != null ? "menu-" + menu.getPid() : null;
+            String treePid = Objects.nonNull(menu.getPid()) ? "menu-" + menu.getPid() : null;
             menuIdToTreeIdMap.put(menu.getId(), treeId);
 
             var menuNode = new RoleUnifiedAssignTreeResult()
@@ -172,8 +172,8 @@ public class RoleUnifiedAssignService {
             throw new ValidationFailedException("error.iam.assign.roleClientMismatch");
         }
 
-        List<Long> menuIds = param.getMenuIds() == null ? new ArrayList<>() : param.getMenuIds().stream().filter(Objects::nonNull).distinct().toList();
-        List<Long> codeIds = param.getCodeIds() == null ? new ArrayList<>() : param.getCodeIds().stream().filter(Objects::nonNull).distinct().toList();
+        List<Long> menuIds = Objects.isNull(param.getMenuIds()) ? new ArrayList<>() : param.getMenuIds().stream().filter(Objects::nonNull).distinct().toList();
+        List<Long> codeIds = Objects.isNull(param.getCodeIds()) ? new ArrayList<>() : param.getCodeIds().stream().filter(Objects::nonNull).distinct().toList();
 
         List<PermMenu> menus = menuIds.isEmpty() ? List.of() : permMenuManager.findAllByIds(menuIds);
         if (menus.size() != menuIds.size()) {

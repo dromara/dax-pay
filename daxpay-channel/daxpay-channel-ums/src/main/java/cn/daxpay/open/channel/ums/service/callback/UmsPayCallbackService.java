@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /// # 银联商务支付回调处理服务
 ///
@@ -55,7 +56,7 @@ public class UmsPayCallbackService {
         req.setCredential(credential);
         req.setParams(params);
         DaxResult<UmsCallbackParseResp> result = umsChannelClient.parsePayCallback(req);
-        if (result.getCode() != 0 || result.getData() == null || !result.getData().isVerified()) {
+        if (result.getCode() != 0 || Objects.isNull(result.getData()) || !result.getData().isVerified()) {
             log.error("银联商务支付回调验签失败: channelMchNo={}", channelMchNo);
             CallbackData failData = new CallbackData();
             failData.setCallbackData(notify);
@@ -97,7 +98,7 @@ public class UmsPayCallbackService {
         JSONObject json = JSONUtil.parseObj(body);
         for (String key : json.keySet()) {
             Object value = json.get(key);
-            if (value != null) {
+            if (Objects.nonNull(value)) {
                 if (value instanceof CharSequence) {
                     params.put(key, value.toString());
                 } else {

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.OffsetDateTime;
+import java.util.Objects;
 
 /// # 开放支付防重放校验服务
 ///
@@ -45,7 +46,7 @@ public class PaymentReplayProtectService {
     /// @param mchNo 商户号（用于 nonce key 隔离，防跨商户碰撞）
     public void verify(PaymentCommonParam param, String mchNo) {
         PlatformApiSecurityConfig config = iamSecurityConfigService.getApiSecurityConfig();
-        if (config == null) {
+        if (Objects.isNull(config)) {
             return;
         }
         // Nonce 防重放
@@ -64,7 +65,7 @@ public class PaymentReplayProtectService {
             // Nonce 缺失
             throw new NonceMissingException();
         }
-        int ttl = ttlSeconds == null || ttlSeconds < 1 ? 300 : ttlSeconds;
+        int ttl = Objects.isNull(ttlSeconds) || ttlSeconds < 1 ? 300 : ttlSeconds;
         // key 带商户号隔离，避免不同商户使用相同 nonceStr 时误判
         String key = PAY_NONCE_PREFIX + mchNo + ":" + nonceStr;
         Boolean firstOccupy = stringRedisTemplate.opsForValue()
@@ -78,11 +79,11 @@ public class PaymentReplayProtectService {
 
     /// 请求时间窗口校验（双向绝对值）
     private void verifyReqTime(OffsetDateTime reqTime, Integer timeoutSeconds) {
-        if (reqTime == null) {
+        if (Objects.isNull(reqTime)) {
             // reqTime 由 @NotNull 已校验，兜底
             throw new TimestampExpiredException();
         }
-        int tolerance = timeoutSeconds == null || timeoutSeconds < 1 ? 300 : timeoutSeconds;
+        int tolerance = Objects.isNull(timeoutSeconds) || timeoutSeconds < 1 ? 300 : timeoutSeconds;
         OffsetDateTime now = OffsetDateTime.now();
         long diffSeconds = Math.abs(Duration.between(reqTime, now).getSeconds());
         if (diffSeconds > tolerance) {

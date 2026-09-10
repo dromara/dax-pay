@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.util.Set;
+import java.util.Objects;
 
 /// # 支付宝直连转账策略
 ///
@@ -113,7 +114,7 @@ public class AlipayTransferStrategy extends AbsTransferStrategy {
                 .findByChannelMchNo(context.getChannelMchNo())
                 .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "error.channel.alipay.transferAppNotConfigured"));
-        if (transferConfig.getTransferAppRefId() == null) {
+        if (Objects.isNull(transferConfig.getTransferAppRefId())) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.channel.alipay.transferAppNotConfigured");
         }

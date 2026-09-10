@@ -66,7 +66,7 @@ public class WechatRefundCallbackService {
         req.setTimestamp(this.getHeader(headerMap, WechatCode.HEADER_TIMESTAMP));
 
         DaxResult<WechatCallbackParseResp> result = wechatChannelClient.parseRefundCallback(req);
-        if (result.getCode() != 0 || result.getData() == null || !result.getData().isVerified()) {
+        if (result.getCode() != 0 || Objects.isNull(result.getData()) || !result.getData().isVerified()) {
             log.error("微信退款回调验签失败: channelMchNo={}, isv={}", channelMchNo, isv);
             RefundCallbackData failData = new RefundCallbackData();
             Map<String, Object> notify = new HashMap<>();
@@ -120,6 +120,6 @@ public class WechatRefundCallbackService {
     /// 获取 header(大小写兼容)
     private String getHeader(Map<String, String> headerMap, String name) {
         String value = headerMap.get(name);
-        return value != null ? value : headerMap.get(name.toLowerCase());
+        return Objects.nonNull(value) ? value : headerMap.get(name.toLowerCase());
     }
 }

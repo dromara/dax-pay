@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 
 /// # 邮箱验证邮件模板服务
 ///
@@ -58,7 +59,7 @@ public class EmailTemplateService {
     /// 判定当前请求是否中文语境(简繁统一中文模板)
     private boolean isChineseLocale() {
         Locale locale = LocaleContextHolder.getLocale();
-        return locale != null && locale.getLanguage().equalsIgnoreCase("zh");
+        return Objects.nonNull(locale) && locale.getLanguage().equalsIgnoreCase("zh");
     }
 
     /// 加载 classpath 邮件模板并做命名占位符渲染前的原文读取

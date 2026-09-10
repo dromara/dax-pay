@@ -19,6 +19,7 @@ import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 /// # 抖音认证策略
 ///
@@ -79,7 +80,7 @@ public class DouyinAuthStrategy implements ChannelAuthStrategy {
 
     /// 按档位 + 主键加载抖音网站应用凭证(含解密后的 appSecret)
     private DyAppView loadApp(String appScope, Long appRefId) {
-        if (StrUtil.isBlank(appScope) || appRefId == null) {
+        if (StrUtil.isBlank(appScope) || Objects.isNull(appRefId)) {
             // 抖音: 认证应用引用缺失(appScope/appRefId 未传入)
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.payment.douyin.appNotConfigured", "auth");

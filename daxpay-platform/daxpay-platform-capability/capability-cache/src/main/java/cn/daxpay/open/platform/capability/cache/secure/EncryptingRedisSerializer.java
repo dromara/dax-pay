@@ -9,6 +9,7 @@ import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 
 /// # 敏感缓存 L2 整包加密序列化器
 ///
@@ -26,7 +27,7 @@ public class EncryptingRedisSerializer implements RedisSerializer<Object> {
     private final SecureAesGcmEncryptor encryptor;
 
     public EncryptingRedisSerializer(SecureAesGcmEncryptor encryptor) {
-        if (encryptor == null) {
+        if (Objects.isNull(encryptor)) {
             throw new IllegalArgumentException("SecureAesGcmEncryptor 不能为空");
         }
         this.encryptor = encryptor;
@@ -34,7 +35,7 @@ public class EncryptingRedisSerializer implements RedisSerializer<Object> {
 
     @Override
     public byte[] serialize(Object value) throws SerializationException {
-        if (value == null) {
+        if (Objects.isNull(value)) {
             return new byte[0];
         }
         try {
@@ -53,13 +54,13 @@ public class EncryptingRedisSerializer implements RedisSerializer<Object> {
 
     @Override
     public Object deserialize(byte[] bytes) throws SerializationException {
-        if (bytes == null || bytes.length == 0) {
+        if (Objects.isNull(bytes) || bytes.length == 0) {
             return null;
         }
         try {
             String cipher = new String(bytes, StandardCharsets.UTF_8);
             String json = encryptor.decrypt(cipher);
-            if (json == null) {
+            if (Objects.isNull(json)) {
                 throw new SerializationException("敏感缓存解密失败，密文格式或密钥版本无效");
             }
             ObjectMapper objectMapper = JacksonUtil.getObjectMapper();

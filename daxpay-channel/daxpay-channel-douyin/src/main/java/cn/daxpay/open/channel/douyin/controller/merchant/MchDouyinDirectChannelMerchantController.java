@@ -51,7 +51,7 @@ public class MchDouyinDirectChannelMerchantController {
     /// 当前登录商户号（上下文必有；缺则视为会话异常）
     private String requireMchNo() {
         String mchNo = paymentContext.getMchNo();
-        if (mchNo == null || mchNo.isBlank()) {
+        if (Objects.isNull(mchNo) || mchNo.isBlank()) {
             // 商户上下文缺失
             throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.assist.mchContextMissing");
         }
@@ -86,8 +86,8 @@ public class MchDouyinDirectChannelMerchantController {
         this.assertChannelMchOwned(channelMchNo);
         var config = douyinDirectKeyConfigService.findByChannelMchNo(channelMchNo);
         var result = config.toResult();
-        result.setPrivateKeyConfigured(config.getMerchantPrivateKey() != null);
-        result.setEncryptKeyConfigured(config.getEncryptKey() != null);
+        result.setPrivateKeyConfigured(Objects.nonNull(config.getMerchantPrivateKey()));
+        result.setEncryptKeyConfigured(Objects.nonNull(config.getEncryptKey()));
         return Res.ok(result);
     }
 

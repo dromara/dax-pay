@@ -11,6 +11,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Objects;
 
 /// # 产品策略能力求交工具
 ///
@@ -21,7 +22,7 @@ public class ProductStrategySupport {
 
     /// 产品是否声明支持指定支付渠道（通道路由基础模式等）
     public boolean supportsPayProvider(AbsProductStrategy strategy, PayProviderEnum provider) {
-        return provider != null && strategy.supportedPayProviders().contains(provider);
+        return Objects.nonNull(provider) && strategy.supportedPayProviders().contains(provider);
     }
 
     /// 产品支持的支付能力列表（由方式→能力 Map 派生，对齐 pay_md_product_capability 全集）
@@ -32,7 +33,7 @@ public class ProductStrategySupport {
         }
         Set<PayCapabilityEnum> capabilities = new LinkedHashSet<>();
         for (List<PayCapabilityEnum> list : mapping.values()) {
-            if (list != null) {
+            if (Objects.nonNull(list)) {
                 capabilities.addAll(list);
             }
         }
@@ -41,11 +42,11 @@ public class ProductStrategySupport {
 
     /// 指定目录支付方式下策略声明的支付能力列表
     public List<PayCapabilityEnum> capabilitiesForMethod(AbsProductStrategy strategy, PayMethodEnum method) {
-        if (method == null) {
+        if (Objects.isNull(method)) {
             return List.of();
         }
         Map<PayMethodEnum, List<PayCapabilityEnum>> mapping = strategy.methodCapabilityMapping();
-        if (mapping == null) {
+        if (Objects.isNull(mapping)) {
             return List.of();
         }
         List<PayCapabilityEnum> capabilities = mapping.get(method);
@@ -57,7 +58,7 @@ public class ProductStrategySupport {
 
     /// 反推: 给定策略与能力, 返回所属支付方式(多归属取首个, 无则 null)
     public PayMethodEnum methodForCapability(AbsProductStrategy strategy, PayCapabilityEnum capability) {
-        if (capability == null) {
+        if (Objects.isNull(capability)) {
             return null;
         }
         Map<PayMethodEnum, List<PayCapabilityEnum>> mapping = strategy.methodCapabilityMapping();
@@ -65,7 +66,7 @@ public class ProductStrategySupport {
             return null;
         }
         for (Map.Entry<PayMethodEnum, List<PayCapabilityEnum>> entry : mapping.entrySet()) {
-            if (entry.getValue() != null && entry.getValue().contains(capability)) {
+            if (Objects.nonNull(entry.getValue()) && entry.getValue().contains(capability)) {
                 return entry.getKey();
             }
         }

@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Objects;
 
 /// # Stripe 通道商户管理
 ///
@@ -59,9 +60,9 @@ public class StripeChannelMerchantController {
             @NotBlank(message = "{validation.field.channelMerchantNo.notBlank}") String channelMchNo) {
         var config = stripeDirectKeyConfigService.findByChannelMchNo(channelMchNo);
         var result = config.toResult();
-        result.setSecretKeyConfigured(config.getSecretKey() != null);
-        result.setPublishableKeyConfigured(config.getPublishableKey() != null);
-        result.setWebhookSecretConfigured(config.getWebhookSecret() != null);
+        result.setSecretKeyConfigured(Objects.nonNull(config.getSecretKey()));
+        result.setPublishableKeyConfigured(Objects.nonNull(config.getPublishableKey()));
+        result.setWebhookSecretConfigured(Objects.nonNull(config.getWebhookSecret()));
         return Res.ok(result);
     }
 

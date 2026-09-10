@@ -15,6 +15,7 @@ import com.yubico.webauthn.data.ByteArray;
 import com.yubico.webauthn.data.PublicKeyCredentialDescriptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 /// # 通行密钥凭据仓储适配层
 ///
@@ -67,7 +68,7 @@ public class PasskeyCredentialRepository implements CredentialRepository {
             .orElse(List.of());
         Set<RegisteredCredential> credentials = new HashSet<>();
         for (UserPasskey passkey : passkeys) {
-            long signatureCount = passkey.getSignCount() == null ? 0 : passkey.getSignCount();
+            long signatureCount = Objects.isNull(passkey.getSignCount()) ? 0 : passkey.getSignCount();
             credentials.add(RegisteredCredential.builder()
                 .credentialId(PasskeyService.fromBase64Url(passkey.getCredentialId()))
                 .userHandle(PasskeyService.userIdToHandle(passkey.getUserId()))

@@ -113,7 +113,7 @@ public class AlipayAllocService {
         // 映射逐明细结果
         AllocResultBo bo = new AllocResultBo().setOutAllocNo(resp.getSettleNo());
         List<AllocResultBo.DetailResult> detailResults = new ArrayList<>();
-        if (resp.getRoyaltyDetailList() != null) {
+        if (Objects.nonNull(resp.getRoyaltyDetailList())) {
             for (AlipayAllocResp.RoyaltyDetailResult r : resp.getRoyaltyDetailList()) {
                 detailResults.add(new AllocResultBo.DetailResult()
                         .setReceiverAccount(r.getTransIn())

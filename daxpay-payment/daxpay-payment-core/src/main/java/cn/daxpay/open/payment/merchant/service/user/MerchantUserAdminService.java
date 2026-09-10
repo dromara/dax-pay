@@ -46,6 +46,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Objects;
 
 /// # 商户用户管理服务
 ///
@@ -73,7 +74,7 @@ public class MerchantUserAdminService {
     public PageResult<MerchantUserResult> page(PageParam pageParam, MerchantUserQuery query) {
         // 商户端强制以上下文 mchNo 覆盖入参, 防止不传或篡改 mchNo 导致跨商户查询
         String contextMchNo = this.getMerchantContextMchNo();
-        if (contextMchNo != null) {
+        if (Objects.nonNull(contextMchNo)) {
             query.setMchNo(contextMchNo);
         }
         Page<MerchantUserResult> mpPage = MpUtil.getMpPage(pageParam);
@@ -106,7 +107,7 @@ public class MerchantUserAdminService {
     public UserPasswordResult add(MerchantUserParam param) {
         // 商户端只能为当前商户创建子账号, mchNo 以上下文为准不信任入参
         String contextMchNo = this.getMerchantContextMchNo();
-        if (contextMchNo != null) {
+        if (Objects.nonNull(contextMchNo)) {
             param.setMchNo(contextMchNo);
         }
         String mchNo = param.getMchNo();
@@ -239,7 +240,7 @@ public class MerchantUserAdminService {
     private OffsetDateTime calculatePasswordExpireTime() {
         PlatformPasswordPolicyConfig config = iamSecurityConfigService.getPasswordPolicy();
         Integer rotationDays = config.getRotationDays();
-        if (rotationDays == null || rotationDays <= 0) {
+        if (Objects.isNull(rotationDays) || rotationDays <= 0) {
             return null;
         }
         return OffsetDateTime.now(ZoneOffset.UTC).plusDays(rotationDays);
@@ -264,7 +265,7 @@ public class MerchantUserAdminService {
     /// 校验商户用户归属当前商户(仅商户端生效), 防止跨商户横向越权
     private void checkBelongCurrentMerchant(MerchantUser merchantUser) {
         String contextMchNo = this.getMerchantContextMchNo();
-        if (contextMchNo != null && !contextMchNo.equals(merchantUser.getMchNo())) {
+        if (Objects.nonNull(contextMchNo) && !contextMchNo.equals(merchantUser.getMchNo())) {
             // 商户: 商户用户不属于当前商户
             throw new BizException(CommonCode.FAIL_CODE, "error.payment.merchant.mchUserNotBelongCurrent");
         }

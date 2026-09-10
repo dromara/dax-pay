@@ -5,6 +5,7 @@ import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
 import cn.hutool.core.util.StrUtil;
 
 import java.util.Set;
+import java.util.Objects;
 
 /// # 支付方式是否需要 / 能获取买家 openId / userId
 ///
@@ -59,7 +60,7 @@ public final class PayMethodOpenIdSupport {
             return true;
         }
         PayMethodEnum method = PayMethodEnum.findByCodeOrNull(methodCode);
-        if (method == null) {
+        if (Objects.isNull(method)) {
             // 未知扩展 method: 含 jsapi/mini 视作需要
             String lower = methodCode.toLowerCase();
             return lower.contains("jsapi") || lower.contains("mini");
@@ -84,7 +85,7 @@ public final class PayMethodOpenIdSupport {
     /// @param methodCode 支付方式编码
     /// @param clientEnv  客户端环境, null 视为不可
     public static boolean canAcquireOpenId(String methodCode, ClientEnvEnum clientEnv) {
-        if (clientEnv == null) {
+        if (Objects.isNull(clientEnv)) {
             return false;
         }
         // 付款码 / APP / PC 等完全无 OAuth 时机
@@ -111,7 +112,7 @@ public final class PayMethodOpenIdSupport {
             return true;
         }
         PayMethodEnum method = PayMethodEnum.findByCodeOrNull(methodCode);
-        if (method == null) {
+        if (Objects.isNull(method)) {
             // 未知扩展 method: 保守视为不可
             return true;
         }

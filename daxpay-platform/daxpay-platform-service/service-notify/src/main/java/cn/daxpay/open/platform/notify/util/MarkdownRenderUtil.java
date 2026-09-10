@@ -7,6 +7,7 @@ import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
 
 import java.util.List;
+import java.util.Objects;
 
 /// Markdown 渲染工具类
 ///
@@ -36,7 +37,7 @@ public final class MarkdownRenderUtil {
 
     /// 将 Markdown 文本渲染为 HTML 片段, null 或空白返回空串
     public static String toHtml(String markdown) {
-        if (markdown == null || markdown.isBlank()) {
+        if (Objects.isNull(markdown) || markdown.isBlank()) {
             return "";
         }
         return RENDERER.render(PARSER.parse(markdown));

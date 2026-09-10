@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /// # 网关支付配置服务(码牌/聚合共用)
 ///
@@ -60,7 +61,7 @@ public class GatewayPayConfigService {
                 .orElseGet(() -> new GatewayPayConfig().setAppId(param.getAppId()));
         config.setLevel(level.getCode());
         config.setAutoLaunch(param.getAutoLaunch());
-        if (config.getAutoLaunch() == null) {
+        if (Objects.isNull(config.getAutoLaunch())) {
             config.setAutoLaunch(false);
         }
         // 运营端无商户上下文, 主表/子表均需显式 mchNo(MchBaseEntity insert 填充依赖上下文会失败)
@@ -103,7 +104,7 @@ public class GatewayPayConfigService {
         }
         List<GatewayPayClientEnvParam> filled = new ArrayList<>();
         for (GatewayPayClientEnvParam env : clientEnvs) {
-            if (env == null || StrUtil.isBlank(env.getClientEnv()) || StrUtil.isBlank(env.getPayForm())) {
+            if (Objects.isNull(env) || StrUtil.isBlank(env.getClientEnv()) || StrUtil.isBlank(env.getPayForm())) {
                 continue;
             }
             if (level == AggregateConfigLevelEnum.METHOD) {

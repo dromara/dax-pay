@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /// # 应用内社交自动登录配置服务
 ///
@@ -45,10 +46,10 @@ public class PlatformSocialAutoLoginConfigService {
         PlatformSocialAutoLoginConfig data = this.getConfig();
         PlatformSocialAutoLoginConfigConvert.CONVERT.copy(param, data);
         // 嵌套对象 MapStruct 可能留下 null, 兜底为空对象避免 NPE
-        if (data.getAdmin() == null) {
+        if (Objects.isNull(data.getAdmin())) {
             data.setAdmin(new PlatformSocialAutoLoginConfig.ClientAutoLogin());
         }
-        if (data.getMerchant() == null) {
+        if (Objects.isNull(data.getMerchant())) {
             data.setMerchant(new PlatformSocialAutoLoginConfig.ClientAutoLogin());
         }
         // 参数可能仍带旧 source, 统一合并后落盘只保留 sources
@@ -66,10 +67,10 @@ public class PlatformSocialAutoLoginConfigService {
     }
 
     private void normalize(PlatformSocialAutoLoginConfig config) {
-        if (config.getAdmin() != null) {
+        if (Objects.nonNull(config.getAdmin())) {
             config.getAdmin().normalize();
         }
-        if (config.getMerchant() != null) {
+        if (Objects.nonNull(config.getMerchant())) {
             config.getMerchant().normalize();
         }
     }
@@ -77,7 +78,7 @@ public class PlatformSocialAutoLoginConfigService {
     /// 将 Param 的 sources/source 写回实体, 避免 MapStruct 只拷同名后遗留旧 source
     private void applyParamSources(PlatformSocialAutoLoginConfig.ClientAutoLogin target,
                                    PlatformSocialAutoLoginConfigParam.ClientAutoLoginParam param) {
-        if (target == null || param == null) {
+        if (Objects.isNull(target) || Objects.isNull(param)) {
             return;
         }
         List<String> resolved = new ArrayList<>();

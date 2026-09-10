@@ -15,6 +15,7 @@ import software.amazon.awssdk.services.s3.presigner.S3Presigner;
 
 import java.net.URI;
 import java.util.Optional;
+import java.util.Objects;
 
 /// # S3客户端管理服务
 ///
@@ -66,9 +67,9 @@ public class StorageClientService {
     ///
     /// @return S3客户端实例
     public S3Client getS3Client() {
-        if (s3Client == null) {
+        if (Objects.isNull(s3Client)) {
             synchronized (this) {
-                if (s3Client == null) {
+                if (Objects.isNull(s3Client)) {
                     s3Client = createS3Client();
                 }
             }
@@ -82,9 +83,9 @@ public class StorageClientService {
     ///
     /// @return S3预签名器实例
     public S3Presigner getS3Presigner() {
-        if (s3Presigner == null) {
+        if (Objects.isNull(s3Presigner)) {
             synchronized (this) {
-                if (s3Presigner == null) {
+                if (Objects.isNull(s3Presigner)) {
                     s3Presigner = createS3Presigner();
                 }
             }
@@ -97,7 +98,7 @@ public class StorageClientService {
     /// OSS 配置更新后调用, 下次访问按新配置重建客户端.
     public void invalidate() {
         synchronized (this) {
-            if (s3Client != null) {
+            if (Objects.nonNull(s3Client)) {
                 try {
                     s3Client.close();
                 } catch (Exception e) {
@@ -105,7 +106,7 @@ public class StorageClientService {
                 }
                 s3Client = null;
             }
-            if (s3Presigner != null) {
+            if (Objects.nonNull(s3Presigner)) {
                 try {
                     s3Presigner.close();
                 } catch (Exception e) {

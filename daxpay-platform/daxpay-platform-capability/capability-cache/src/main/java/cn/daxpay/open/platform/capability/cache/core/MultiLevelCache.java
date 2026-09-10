@@ -110,7 +110,7 @@ public class MultiLevelCache implements Cache {
         // L1 单独开关：开启时先查本地缓存
         if (this.l1Enabled) {
             Object localValue = this.localCache.getIfPresent(localKey);
-            if (localValue != null) {
+            if (Objects.nonNull(localValue)) {
                 return () -> localValue;
             }
         }
@@ -124,7 +124,7 @@ public class MultiLevelCache implements Cache {
         }
 
         ValueWrapper redisValue = this.redisCache.get(key);
-        if (redisValue != null) {
+        if (Objects.nonNull(redisValue)) {
             // L1 开启才回填本地，关闭时仅返回 L2 值
             if (this.l1Enabled) {
                 this.localCache.put(localKey, Objects.requireNonNull(redisValue.get()));
@@ -139,9 +139,9 @@ public class MultiLevelCache implements Cache {
     @Override
     public <T> T get(Object key, Class<T> type) {
         ValueWrapper wrapper = this.get(key);
-        if (wrapper != null) {
+        if (Objects.nonNull(wrapper)) {
             Object value = wrapper.get();
-            if (value != null && !type.isInstance(value)) {
+            if (Objects.nonNull(value) && !type.isInstance(value)) {
                 throw new IllegalStateException("Cached value is not of required type [" + type.getName() + "]: " + value);
             }
             return type.cast(value);
@@ -152,7 +152,7 @@ public class MultiLevelCache implements Cache {
     @Override
     public <T> T get(Object key, Callable<T> valueLoader) {
         ValueWrapper wrapper = this.get(key);
-        if (wrapper != null) {
+        if (Objects.nonNull(wrapper)) {
             return (T) wrapper.get();
         }
         try {
@@ -175,7 +175,7 @@ public class MultiLevelCache implements Cache {
         if (!this.cacheEnabled) {
             return;
         }
-        if (value == null) {
+        if (Objects.isNull(value)) {
             log.debug("缓存值为空，跳过写入: cacheName={}, key={}", this.name, key);
             return;
         }
@@ -246,7 +246,7 @@ public class MultiLevelCache implements Cache {
     /// @param key 原始缓存 key
     /// @return 标准化后的字符串 key
     private String toLocalKey(Object key) {
-        if (key == null) {
+        if (Objects.isNull(key)) {
             return "null";
         }
         return String.valueOf(key);

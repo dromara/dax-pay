@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Objects;
 
 /// # 平台微信应用
 ///
@@ -33,7 +34,7 @@ public class WxPlatformAppManager extends BaseManager<WxPlatformAppMapper, WxPla
     public boolean existsByWxAppId(String wxAppId, Long excludeId) {
         return lambdaQuery()
                 .eq(WxPlatformApp::getWxAppId, wxAppId)
-                .ne(excludeId != null, WxPlatformApp::getId, excludeId)
+                .ne(Objects.nonNull(excludeId), WxPlatformApp::getId, excludeId)
                 .exists();
     }
 

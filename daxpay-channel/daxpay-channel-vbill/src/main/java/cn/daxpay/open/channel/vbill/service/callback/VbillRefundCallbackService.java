@@ -51,7 +51,7 @@ public class VbillRefundCallbackService {
         }
         VbillIsvKeyConfig keyConfig = vbillIsvKeyConfigManager.findByProduct(ProductEnum.VBILL_PAY.getCode())
                 .orElse(null);
-        if (keyConfig == null || keyConfig.getPublicKey() == null) {
+        if (Objects.isNull(keyConfig) || Objects.isNull(keyConfig.getPublicKey())) {
             log.error("随行付退款回调: 服务商密钥未配置, 无法验签");
             RefundCallbackData failData = new RefundCallbackData();
             failData.setCallbackData(notify);
@@ -64,7 +64,7 @@ public class VbillRefundCallbackService {
         }
 
         VbillCallbackParseResp parseResp = vbillPayCallbackService.parse(body, keyConfig.getPublicKey(), true);
-        if (parseResp == null || !Boolean.TRUE.equals(parseResp.getSuccess())) {
+        if (Objects.isNull(parseResp) || !Boolean.TRUE.equals(parseResp.getSuccess())) {
             log.error("随行付退款回调验签失败");
             RefundCallbackData failData = new RefundCallbackData();
             failData.setCallbackData(notify);

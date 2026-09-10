@@ -54,7 +54,7 @@ public class StripeRefundCallbackService {
         req.setSignature(this.getHeader(headerMap, StripePayCode.HEADER_SIGNATURE));
 
         DaxResult<StripeCallbackParseResp> result = stripeChannelClient.parseRefundCallback(req);
-        if (result.getCode() != 0 || result.getData() == null) {
+        if (result.getCode() != 0 || Objects.isNull(result.getData())) {
             log.error("Stripe 退款回调验签失败: channelMchNo={}", channelMchNo);
             RefundCallbackData failData = new RefundCallbackData();
             failData.setCallbackData(notify);
@@ -93,6 +93,6 @@ public class StripeRefundCallbackService {
     /// 获取 header(大小写兼容)
     private String getHeader(Map<String, String> headerMap, String name) {
         String value = headerMap.get(name);
-        return value != null ? value : headerMap.get(name.toLowerCase());
+        return Objects.nonNull(value) ? value : headerMap.get(name.toLowerCase());
     }
 }

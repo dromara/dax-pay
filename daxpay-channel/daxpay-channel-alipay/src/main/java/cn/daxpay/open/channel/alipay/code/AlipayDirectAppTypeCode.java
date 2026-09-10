@@ -4,6 +4,7 @@ import cn.daxpay.open.platform.core.enums.pay.channel.PayCapabilityEnum;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /// # 支付宝直连应用类型与支付能力映射
 ///
@@ -42,7 +43,7 @@ public final class AlipayDirectAppTypeCode {
 
     /// 根据支付能力推导全部兼容应用类型(有序, 首个为兜底优先级)；未知能力返回空列表
     public static List<String> resolveCompatibleAppTypes(String capabilityCode) {
-        if (capabilityCode == null) {
+        if (Objects.isNull(capabilityCode)) {
             return List.of();
         }
         return CAPABILITY_APP_TYPE_MAP.getOrDefault(capabilityCode, List.of());

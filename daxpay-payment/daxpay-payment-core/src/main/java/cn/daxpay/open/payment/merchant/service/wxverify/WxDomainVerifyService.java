@@ -22,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.Objects;
 
 /// # 微信域名验证文件管理
 ///
@@ -114,7 +115,7 @@ public class WxDomainVerifyService {
     /// 校验参数并构建实体（不设置 mchNo/platform，由调用方补充）
     private WxDomainVerify build(WxDomainVerifyUploadParam param) {
         String fileName = param.getFileName();
-        if (fileName == null || fileName.isBlank()) {
+        if (Objects.isNull(fileName) || fileName.isBlank()) {
             // 微信域名验证文件: 文件名为空
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.merchant.wxVerifyFileNameEmpty");
         }
@@ -124,7 +125,7 @@ public class WxDomainVerifyService {
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.merchant.wxVerifyFileNameInvalid");
         }
         String verifyCode = matcher.group(1);
-        String content = param.getFileContent() == null ? "" : param.getFileContent().trim();
+        String content = Objects.isNull(param.getFileContent()) ? "" : param.getFileContent().trim();
         if (content.isEmpty()) {
             // 微信域名验证文件: 文件内容为空
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.merchant.wxVerifyFileContentEmpty");
@@ -150,7 +151,7 @@ public class WxDomainVerifyService {
 
     /// 校验商户号非空（运营代商户上传时必须指定）
     private void assertMchNo(String mchNo) {
-        if (mchNo == null || mchNo.isBlank()) {
+        if (Objects.isNull(mchNo) || mchNo.isBlank()) {
             // 商户: 数据错误，未发现商户号
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.payment.merchant.dataErrorNoMchNo");
         }

@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.Objects;
 
 /// SSE 实时推送服务(管理在线用户的 SseEmitter)
 ///
@@ -37,7 +38,7 @@ public class NotifySseService {
     /// 从某用户的连接集合中移除单个 emitter, 集合空则回收 key
     private void removeEmitter(Long userId, SseEmitter emitter) {
         Set<SseEmitter> set = emitters.get(userId);
-        if (set == null) {
+        if (Objects.isNull(set)) {
             return;
         }
         set.remove(emitter);
@@ -50,7 +51,7 @@ public class NotifySseService {
     /// 主动断开该用户的全部连接(预留, 如强制下线场景)
     public void disconnect(Long userId) {
         Set<SseEmitter> set = emitters.remove(userId);
-        if (set == null) {
+        if (Objects.isNull(set)) {
             return;
         }
         for (SseEmitter emitter : set) {
@@ -72,7 +73,7 @@ public class NotifySseService {
     /// 推送给指定用户(个人消息场景)
     public void publishToUser(Long userId, Object payload) {
         Set<SseEmitter> set = emitters.get(userId);
-        if (set != null) {
+        if (Objects.nonNull(set)) {
             sendAll(set, payload);
         }
     }

@@ -9,6 +9,7 @@ import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+import java.util.Objects;
 
 /// # HTTP 传输发送器
 ///
@@ -50,7 +51,7 @@ public class HttpTransportSender implements NoticeTransportSender {
         }
         result.setRequestDigest(envelope.getRequestDigest());
         result.setHttpStatus(httpStatus);
-        boolean ack = httpStatus != null && httpStatus >= 200 && httpStatus < 300
+        boolean ack = Objects.nonNull(httpStatus) && httpStatus >= 200 && httpStatus < 300
                 && StrUtil.equalsIgnoreCase(StrUtil.trim(body), "SUCCESS");
         result.setSuccess(ack);
         if (!ack) {

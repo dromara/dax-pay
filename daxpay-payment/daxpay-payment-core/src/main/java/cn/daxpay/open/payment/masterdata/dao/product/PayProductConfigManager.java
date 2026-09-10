@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 /// # 支付产品配置
 ///
@@ -30,7 +31,7 @@ public class PayProductConfigManager extends BaseManager<PayProductConfigMapper,
 
     /// 批量查询产品 → activeEnv 映射(缺省记录不在 map 中, 调用方按 prod 处理)
     public Map<String, String> mapActiveEnvByProducts(Collection<String> products) {
-        if (products == null || products.isEmpty()) {
+        if (Objects.isNull(products) || products.isEmpty()) {
             return Collections.emptyMap();
         }
         return lambdaQuery()

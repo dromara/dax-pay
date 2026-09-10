@@ -8,6 +8,7 @@ import cn.daxpay.open.platform.capability.social.justauth.model.AuthToken;
 import cn.daxpay.open.platform.capability.social.justauth.model.AuthUser;
 import cn.daxpay.open.platform.capability.social.justauth.util.SocialUrlBuilder;
 import cn.hutool.json.JSONObject;
+import java.util.Objects;
 
 /// # 企业微信(企业自建应用)授权登录
 ///
@@ -95,7 +96,7 @@ public class WeComRequest extends AbstractSocialAuthRequest {
             .build();
         JSONObject detail = this.checkResponse(this.doGet(url));
         // 敏感信息(需 user_ticket)
-        if (userTicket != null && !userTicket.isBlank()) {
+        if (Objects.nonNull(userTicket) && !userTicket.isBlank()) {
             String detailUrl = SocialUrlBuilder.ofBaseUrl("https://qyapi.weixin.qq.com/cgi-bin/auth/getuserdetail")
                 .queryParam("access_token", accessToken)
                 .build();

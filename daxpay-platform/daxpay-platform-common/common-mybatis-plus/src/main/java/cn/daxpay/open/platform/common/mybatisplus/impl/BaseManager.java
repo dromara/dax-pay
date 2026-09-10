@@ -37,6 +37,7 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.Objects;
 
 /// # 自定义的基础数据库Manager操作类 类似自带的ServiceImpl类
 ///
@@ -62,7 +63,7 @@ public class BaseManager<M extends MPJBaseMapper<T>, T> {
     }
 
     protected SqlSessionFactory getSqlSessionFactory() {
-        if (this.sqlSessionFactory == null) {
+        if (Objects.isNull(this.sqlSessionFactory)) {
             MybatisMapperProxy<?> mybatisMapperProxy = MybatisUtils.getMybatisMapperProxy(this.getBaseMapper());
             this.sqlSessionFactory = MybatisUtils.getSqlSessionFactory(mybatisMapperProxy);
         }

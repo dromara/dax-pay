@@ -10,6 +10,7 @@ import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Objects;
 
 /// # 数据加密类型处理器, 使用 AES-256-GCM 加密
 ///
@@ -31,7 +32,7 @@ public class DataEncryptTypeHandler extends BaseTypeHandler<String> {
         DataEncryptTypeHandler.encryptor = encryptor;
         DataEncryptTypeHandler.enable = enable;
         DataEncryptTypeHandler.initialized = true;
-        if (enable && encryptor != null) {
+        if (enable && Objects.nonNull(encryptor)) {
             log.info("数据加密处理器初始化成功，当前密钥版本: v{}", encryptor.getCurrentVersion());
         } else {
             log.info("数据加密处理器未启用");

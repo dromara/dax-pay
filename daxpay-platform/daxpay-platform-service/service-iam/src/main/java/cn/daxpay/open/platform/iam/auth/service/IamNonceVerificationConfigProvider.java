@@ -5,6 +5,7 @@ import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformIa
 import cn.daxpay.open.platform.system.service.config.security.PlatformSecurityConfigService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 /// # IAM域 Nonce 防重放配置提供者
 ///
@@ -23,20 +24,20 @@ public class IamNonceVerificationConfigProvider implements NonceVerificationConf
     public boolean isEnabled() {
         Boolean enabled = platformSecurityConfigService.getIamReplayProtectConfig().getEnabled();
         // 默认启用，保持登录接口现有行为
-        return enabled == null || enabled;
+        return Objects.isNull(enabled) || enabled;
     }
 
     @Override
     public int getNonceTimeoutSeconds() {
         PlatformIamReplayProtectConfig config = platformSecurityConfigService.getIamReplayProtectConfig();
         Integer timeout = config.getNonceTimeoutSeconds();
-        return timeout == null || timeout < 1 ? 300 : timeout;
+        return Objects.isNull(timeout) || timeout < 1 ? 300 : timeout;
     }
 
     @Override
     public int getTimestampToleranceSeconds() {
         PlatformIamReplayProtectConfig config = platformSecurityConfigService.getIamReplayProtectConfig();
         Integer tolerance = config.getTimestampToleranceSeconds();
-        return tolerance == null || tolerance < 1 ? 300 : tolerance;
+        return Objects.isNull(tolerance) || tolerance < 1 ? 300 : tolerance;
     }
 }

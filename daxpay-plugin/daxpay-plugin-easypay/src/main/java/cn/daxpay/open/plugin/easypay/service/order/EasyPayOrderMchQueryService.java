@@ -20,6 +20,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 /// # 易支付协议订单查询服务(商户端)
 ///
@@ -63,7 +64,7 @@ public class EasyPayOrderMchQueryService {
     public NormalPaySyncResult sync(Long id) {
         EasyPayOrder entity = easyPayOrderManager.findById(id)
                 .orElseThrow(() -> new DataNotExistException("pay.error.payOrderNotExist"));
-        if (entity.getOrderId() == null) {
+        if (Objects.isNull(entity.getOrderId())) {
             throw new DataNotExistException("pay.error.payOrderNotExist");
         }
         PayTrade trade = payTradeManager.findByContainerId(entity.getOrderId(), PayTradeTypeEnum.NORMAL.getCode())
@@ -75,7 +76,7 @@ public class EasyPayOrderMchQueryService {
     public void close(Long id) {
         EasyPayOrder entity = easyPayOrderManager.findById(id)
                 .orElseThrow(() -> new DataNotExistException("pay.error.payOrderNotExist"));
-        if (entity.getOrderId() == null) {
+        if (Objects.isNull(entity.getOrderId())) {
             throw new DataNotExistException("pay.error.payOrderNotExist");
         }
         PayTrade trade = payTradeManager.findByContainerId(entity.getOrderId(), PayTradeTypeEnum.NORMAL.getCode())
@@ -90,7 +91,7 @@ public class EasyPayOrderMchQueryService {
 
     private String requireMchNo() {
         String mchNo = paymentContext.getMchNo();
-        if (mchNo == null || mchNo.isBlank()) {
+        if (Objects.isNull(mchNo) || mchNo.isBlank()) {
             // 商户: 数据错误未发现商户号
             throw new BizInfoException(CommonCode.FAIL_CODE, "error.payment.merchant.dataErrorNoMchNo");
         }

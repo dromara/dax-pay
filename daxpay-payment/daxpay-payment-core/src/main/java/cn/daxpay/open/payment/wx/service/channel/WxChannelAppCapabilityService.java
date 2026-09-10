@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 /// # 通道商户微信应用能力绑定
 ///
@@ -62,7 +63,7 @@ public class WxChannelAppCapabilityService {
     @Transactional(rollbackFor = Exception.class)
     public void saveBatch(String mchNo, String channelMchNo, List<WxChannelAppCapabilityParam> items) {
         // mchNo 缺失直接归入"通道商户与商户号不匹配"，避免下方 equals 触发 NPE
-        if (mchNo == null || mchNo.isBlank()) {
+        if (Objects.isNull(mchNo) || mchNo.isBlank()) {
             // 微信: 通道商户与商户号不匹配
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.payment.wx.channelMerchantMismatch");
@@ -90,7 +91,7 @@ public class WxChannelAppCapabilityService {
         HashSet<String> uniq = new HashSet<>();
         for (WxChannelAppCapabilityParam item : items) {
             AppScopeEnum scope = AppScopeEnum.findByCode(item.getAppScope());
-            if (scope == null) {
+            if (Objects.isNull(scope)) {
                 // 微信: 档位不存在
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "error.payment.wx.scopeNotExist");
@@ -134,7 +135,7 @@ public class WxChannelAppCapabilityService {
                                          Map<Long, WxPlatformApp> platformMap, Map<Long, WxMchApp> mchAppMap) {
         if (scope == AppScopeEnum.PLATFORM) {
             WxPlatformApp app = platformMap.get(refId);
-            if (app == null) {
+            if (Objects.isNull(app)) {
                 // 微信: 平台应用不存在
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "error.payment.wx.appNotFound");
@@ -142,7 +143,7 @@ public class WxChannelAppCapabilityService {
             return app.getAppType();
         }
         WxMchApp app = mchAppMap.get(refId);
-        if (app == null || !mchNo.equals(app.getMchNo())) {
+        if (Objects.isNull(app) || !mchNo.equals(app.getMchNo())) {
             // 微信: 商户应用不存在或不属于当前商户
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.payment.wx.mchAppNotFound");
@@ -157,7 +158,7 @@ public class WxChannelAppCapabilityService {
         WxChannelAppCapabilityResult result = WxChannelAppCapabilityConvert.CONVERT.toResult(rel);
         if (AppScopeEnum.PLATFORM.getCode().equals(rel.getAppScope())) {
             WxPlatformApp app = platformMap.get(rel.getWxAppRefId());
-            if (app != null) {
+            if (Objects.nonNull(app)) {
                 result.setAppName(app.getAppName())
                         .setWxAppId(app.getWxAppId())
                         .setAppType(app.getAppType());
@@ -165,7 +166,7 @@ public class WxChannelAppCapabilityService {
         }
         else {
             WxMchApp app = mchAppMap.get(rel.getWxAppRefId());
-            if (app != null) {
+            if (Objects.nonNull(app)) {
                 result.setAppName(app.getAppName())
                         .setWxAppId(app.getWxAppId())
                         .setAppType(app.getAppType());

@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.Objects;
 
 /// # 应用内社交自动登录编排服务
 ///
@@ -54,7 +55,7 @@ public class SocialAutoLoginConfigService {
     public PlatformSocialAutoLoginConfig.ClientAutoLogin resolveForClient(String clientCode) {
         PlatformSocialAutoLoginConfig config = platformSocialAutoLoginConfigService.getConfig();
         PlatformSocialAutoLoginConfig.ClientAutoLogin item = this.pickClient(config, clientCode);
-        if (item == null || !Boolean.TRUE.equals(item.getEnabled())) {
+        if (Objects.isNull(item) || !Boolean.TRUE.equals(item.getEnabled())) {
             return new PlatformSocialAutoLoginConfig.ClientAutoLogin().setEnabled(false);
         }
         List<String> configured = item.resolveSources();
@@ -67,7 +68,7 @@ public class SocialAutoLoginConfigService {
                 continue;
             }
             SocialLoginConfig enabled = socialLoginConfigService.findEnabledBySource(source);
-            if (enabled != null) {
+            if (Objects.nonNull(enabled)) {
                 effective.add(source);
             }
         }
@@ -81,7 +82,7 @@ public class SocialAutoLoginConfigService {
 
     /// 校验单端配置项
     private void validateClientItem(String clientCode, PlatformSocialAutoLoginConfigParam.ClientAutoLoginParam item) {
-        if (item == null || !Boolean.TRUE.equals(item.getEnabled())) {
+        if (Objects.isNull(item) || !Boolean.TRUE.equals(item.getEnabled())) {
             return;
         }
         List<String> sources = this.resolveParamSources(item);
@@ -95,12 +96,12 @@ public class SocialAutoLoginConfigService {
                 throw new OperationFailException("error.social.autoLogin.sourceNotAllowed", code);
             }
             SocialSourceEnum source = SocialSourceEnum.of(code);
-            if (source == null) {
+            if (Objects.isNull(source)) {
                 // 社交登录: 不支持的平台
                 throw new OperationFailException("error.social.unsupportedSource");
             }
             SocialLoginConfig enabled = socialLoginConfigService.findEnabledBySource(code);
-            if (enabled == null) {
+            if (Objects.isNull(enabled)) {
                 // 社交登录: 所选平台未配置或未启用
                 throw new OperationFailException("error.social.autoLogin.sourceNotEnabled", code);
             }

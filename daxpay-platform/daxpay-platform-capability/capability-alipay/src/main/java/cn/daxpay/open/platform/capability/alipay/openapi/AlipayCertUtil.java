@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 /// # 支付宝证书工具
 ///
@@ -31,7 +32,7 @@ public class AlipayCertUtil {
     private static final String RSA_SIG_ALG_OID_PREFIX = "1.2.840.113549.1.1";
 
     static {
-        if (Security.getProvider(BouncyCastleProvider.PROVIDER_NAME) == null) {
+        if (Objects.isNull(Security.getProvider(BouncyCastleProvider.PROVIDER_NAME))) {
             Security.addProvider(new BouncyCastleProvider());
         }
     }
@@ -47,16 +48,16 @@ public class AlipayCertUtil {
         X509Certificate[] certs = parseCertificateChain(rootCertContent);
         StringBuilder rootCertSn = null;
         for (X509Certificate cert : certs) {
-            if (cert.getSigAlgOID() != null && cert.getSigAlgOID().startsWith(RSA_SIG_ALG_OID_PREFIX)) {
+            if (Objects.nonNull(cert.getSigAlgOID()) && cert.getSigAlgOID().startsWith(RSA_SIG_ALG_OID_PREFIX)) {
                 String certSn = getCertSn(cert);
-                if (rootCertSn == null || (rootCertSn.isEmpty())) {
-                    rootCertSn = certSn == null ? null : new StringBuilder(certSn);
+                if (Objects.isNull(rootCertSn) || (rootCertSn.isEmpty())) {
+                    rootCertSn = Objects.isNull(certSn) ? null : new StringBuilder(certSn);
                 } else {
                     rootCertSn.append("_").append(certSn);
                 }
             }
         }
-        return rootCertSn == null ? null : rootCertSn.toString();
+        return Objects.isNull(rootCertSn) ? null : rootCertSn.toString();
     }
 
     /// 从支付宝公钥证书提取 Base64 公钥(X509 编码)

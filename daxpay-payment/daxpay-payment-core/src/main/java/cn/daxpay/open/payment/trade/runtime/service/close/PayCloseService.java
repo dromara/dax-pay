@@ -257,14 +257,14 @@ public class PayCloseService {
     private ContainerInfo loadContainerInfo(PayTrade trade) {
         if (Objects.equals(trade.getTradeType(), PayTradeTypeEnum.GATEWAY.getCode())) {
             GatewayPayOrder order = gatewayPayOrderManager.findById(trade.getContainerId()).orElse(null);
-            if (order != null) {
+            if (Objects.nonNull(order)) {
                 return new ContainerInfo(
                         order.getProduct(), order.getChannel(), order.getBizOrderNo(),
                         order.getChannelMchNo(), order.getCapability(), order.getChannelAppId(), order.getClientIp());
             }
         } else {
             NormalPayOrder order = payNormalOrderManager.findById(trade.getContainerId()).orElse(null);
-            if (order != null) {
+            if (Objects.nonNull(order)) {
                 return new ContainerInfo(
                         order.getProduct(), order.getChannel(), order.getBizOrderNo(),
                         order.getChannelMchNo(), order.getCapability(), order.getChannelAppId(), order.getClientIp());

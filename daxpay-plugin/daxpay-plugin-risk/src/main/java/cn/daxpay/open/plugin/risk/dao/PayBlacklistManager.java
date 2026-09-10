@@ -16,6 +16,7 @@ import org.springframework.stereotype.Repository;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Optional;
+import java.util.Objects;
 
 /// # 黑名单 Manager
 ///
@@ -43,7 +44,7 @@ public class PayBlacklistManager extends BaseManager<PayBlacklistMapper, PayBlac
                         w.eq(PayBlacklist::getWxAppId, app);
                     }
                 })
-                .ne(excludeId != null, PayBlacklist::getId, excludeId)
+                .ne(Objects.nonNull(excludeId), PayBlacklist::getId, excludeId)
                 .exists();
     }
 

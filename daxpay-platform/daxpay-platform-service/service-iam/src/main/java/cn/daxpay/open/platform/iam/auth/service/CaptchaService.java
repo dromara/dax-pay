@@ -11,6 +11,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.Objects;
 
 /// # 图形验证码服务
 ///
@@ -50,7 +51,7 @@ public class CaptchaService {
     public boolean validateCaptcha(String captchaKey, String captchaCode, boolean ignoreCase) {
         String key = CAPTCHA_PREFIX + captchaKey;
         String storedCode = stringRedisTemplate.opsForValue().get(key);
-        if (storedCode == null) {
+        if (Objects.isNull(storedCode)) {
             return false;
         }
         stringRedisTemplate.delete(key);
@@ -92,7 +93,7 @@ public class CaptchaService {
         if (errorCount < triggerAttempts) {
             return;
         }
-        if (captchaKey == null || captchaKey.isBlank() || captchaCode == null || captchaCode.isBlank()) {
+        if (Objects.isNull(captchaKey) || captchaKey.isBlank() || Objects.isNull(captchaCode) || captchaCode.isBlank()) {
             String newCaptchaKey = UUID.fastUUID().toString(true);
             throw new CaptchaRequiredException(newCaptchaKey);
         }

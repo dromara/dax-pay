@@ -49,7 +49,7 @@ public class MchAlipayIsvAuthController {
     /// 当前登录商户号（上下文必有；缺则视为会话异常）
     private String requireMchNo() {
         String mchNo = paymentContext.getMchNo();
-        if (mchNo == null || mchNo.isBlank()) {
+        if (Objects.isNull(mchNo) || mchNo.isBlank()) {
             // 商户上下文缺失
             throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.assist.mchContextMissing");
         }
@@ -120,7 +120,7 @@ public class MchAlipayIsvAuthController {
         result.setChannelMchNo(entity.getChannelMchNo());
         result.setProduct(entity.getProduct());
         result.setAlipayUserId(entity.getAlipayUserId());
-        result.setAuthorized(entity.getAppAuthToken() != null && !entity.getAppAuthToken().isBlank());
+        result.setAuthorized(Objects.nonNull(entity.getAppAuthToken()) && !entity.getAppAuthToken().isBlank());
         return result;
     }
 }

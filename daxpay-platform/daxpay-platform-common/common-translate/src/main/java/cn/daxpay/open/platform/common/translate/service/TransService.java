@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.Objects;
 
 /// # 字段翻译服务
 ///
@@ -56,7 +57,7 @@ public class TransService {
 
     /// 翻译单个对象
     public void translate(Object result) {
-        if (result == null) {
+        if (Objects.isNull(result)) {
             return;
         }
         translate(Collections.singletonList(result));
@@ -85,7 +86,7 @@ public class TransService {
                     continue;
                 }
                 Object sourceValue = getFieldValue(result, meta.source());
-                if (sourceValue == null) {
+                if (Objects.isNull(sourceValue)) {
                     continue;
                 }
                 boolean isDict = !meta.annotation().dictCode().isEmpty();
@@ -120,7 +121,7 @@ public class TransService {
 
     /// 翻译分页结果
     public void translate(PageResult<?> pageResult) {
-        if (pageResult == null) {
+        if (Objects.isNull(pageResult)) {
             return;
         }
         translate(pageResult.getRecords());
@@ -129,7 +130,7 @@ public class TransService {
     /// 处理字典翻译
     /// 通过 DictTranslator 获取所有字典项的完整字段映射，按 @Trans.result 提取对应语言值
     private void processDictTranslations(Map<String, Set<Object>> dictGroupSourceValues, List<TransFieldInfo> fieldInfos) {
-        if (dictTranslator == null) {
+        if (Objects.isNull(dictTranslator)) {
             log.warn("字典翻译不可用，请检查 DictTranslator 实现是否引入");
             return;
         }
@@ -140,7 +141,7 @@ public class TransService {
         for (String dictCode : dictGroupSourceValues.keySet()) {
             try {
                 Map<String, DictItemData> dictData = dictTranslator.findByDictCode(dictCode);
-                if (dictData != null) {
+                if (Objects.nonNull(dictData)) {
                     dictCodeToDataMap.put(dictCode, dictData);
                 }
             } catch (Exception e) {
@@ -151,19 +152,19 @@ public class TransService {
         // 回填：根据 @Trans.result 指定的字段名提取对应语言的值（支持 locale 感知）
         for (TransFieldInfo info : fieldInfos) {
             Object sourceValue = getFieldValue(info.result(), info.annotation().source());
-            if (sourceValue == null) {
+            if (Objects.isNull(sourceValue)) {
                 continue;
             }
             Map<String, DictItemData> dataMap = dictCodeToDataMap.get(info.annotation().dictCode());
-            if (dataMap == null) {
+            if (Objects.isNull(dataMap)) {
                 continue;
             }
             DictItemData itemData = dataMap.get(String.valueOf(sourceValue));
-            if (itemData == null) {
+            if (Objects.isNull(itemData)) {
                 continue;
             }
             // 走 i18n key 语言包翻译
-            if (itemData.i18nKey() != null && !itemData.i18nKey().isBlank()) {
+            if (Objects.nonNull(itemData.i18nKey()) && !itemData.i18nKey().isBlank()) {
                 String translated = I18nUtil.get(itemData.i18nKey());
                 setFieldValue(info.result(), info.field(), translated);
             }
@@ -176,7 +177,7 @@ public class TransService {
     private void processI18nTranslations(List<TransFieldInfo> fieldInfos) {
         for (TransFieldInfo info : fieldInfos) {
             Object sourceValue = getFieldValue(info.result(), info.field().getName());
-            if (sourceValue == null) {
+            if (Objects.isNull(sourceValue)) {
                 continue;
             }
             String raw = String.valueOf(sourceValue);
@@ -191,16 +192,16 @@ public class TransService {
     private void fillBackEntityTranslations(List<TransFieldInfo> fieldInfos, Map<TransGroup, Map<Object, Object>> groupToResultMap) {
         for (TransFieldInfo info : fieldInfos) {
             Object sourceValue = getFieldValue(info.result(), info.annotation().source());
-            if (sourceValue == null) {
+            if (Objects.isNull(sourceValue)) {
                 continue;
             }
             TransGroup group = new TransGroup(info.annotation().entity(), info.annotation().source(), info.annotation().on(), info.annotation().result(), info.annotation().cacheTtl());
             Map<Object, Object> resultMap = groupToResultMap.get(group);
-            if (resultMap == null) {
+            if (Objects.isNull(resultMap)) {
                 continue;
             }
             Object translatedValue = resultMap.get(sourceValue);
-            if (translatedValue != null) {
+            if (Objects.nonNull(translatedValue)) {
                 setFieldValue(info.result(), info.field(), translatedValue);
             }
         }
@@ -215,10 +216,10 @@ public class TransService {
     /// 实际扫描类的 @Trans 注解字段
     private List<TransMeta> doScanTransFields(Class<?> clazz) {
         List<TransMeta> metaList = new ArrayList<>();
-        while (clazz != null && clazz != Object.class) {
+        while (Objects.nonNull(clazz) && clazz != Object.class) {
             for (Field field : clazz.getDeclaredFields()) {
                 Trans trans = field.getAnnotation(Trans.class);
-                if (trans != null) {
+                if (Objects.nonNull(trans)) {
                     metaList.add(new TransMeta(trans.entity(), trans.source(), trans.on(), trans.result(), field, trans));
                 }
             }
@@ -243,7 +244,7 @@ public class TransService {
                 TransCacheKey cacheKey = new TransCacheKey(group.entity(), group.source(), group.result(), sv);
                 if (cacheManager.contains(cacheKey)) {
                     Object cachedValue = cacheManager.get(cacheKey);
-                    if (cachedValue != null) {
+                    if (Objects.nonNull(cachedValue)) {
                         cachedResults.put(sv, cachedValue);
                     }
                 } else {
@@ -285,13 +286,13 @@ public class TransService {
     @SuppressWarnings({"unchecked", "rawtypes"})
     private Map<Object, Object> queryFromDatabase(TransGroup group, Set<Object> sourceValues) {
         BaseMapper<?> mapper = mapperRegistry.getMapper(group.entity());
-        if (mapper == null) {
+        if (Objects.isNull(mapper)) {
             log.warn("翻译模块未找到实体类 {} 对应的 Mapper", group.entity().getSimpleName());
             return Collections.emptyMap();
         }
 
         TableInfo tableInfo = TableInfoHelper.getTableInfo(group.entity());
-        if (tableInfo == null) {
+        if (Objects.isNull(tableInfo)) {
             log.warn("翻译模块未找到实体类 {} 的 TableInfo", group.entity().getSimpleName());
             return Collections.emptyMap();
         }
@@ -314,7 +315,7 @@ public class TransService {
         for (Object entity : entities) {
             Object sourceObj = getFieldValue(entity, targetProperty);
             Object resultObj = getFieldValue(entity, resultProperty);
-            if (sourceObj != null) {
+            if (Objects.nonNull(sourceObj)) {
                 resultMap.put(sourceObj, resultObj);
             }
         }
@@ -347,7 +348,7 @@ public class TransService {
     /// 从对象中获取指定字段的值（按 Class 缓存 Field，避免重复反射）
     private Object getFieldValue(Object obj, String fieldName) {
         Field field = resolveField(obj.getClass(), fieldName);
-        if (field == null) {
+        if (Objects.isNull(field)) {
             return null;
         }
         try {
@@ -368,7 +369,7 @@ public class TransService {
     /// 构建类的字段映射（含父类字段，子类优先覆盖）
     private Map<String, Field> buildFieldMap(Class<?> clazz) {
         Map<String, Field> map = new LinkedHashMap<>();
-        while (clazz != null && clazz != Object.class) {
+        while (Objects.nonNull(clazz) && clazz != Object.class) {
             for (Field field : clazz.getDeclaredFields()) {
                 field.setAccessible(true);
                 map.putIfAbsent(field.getName(), field);

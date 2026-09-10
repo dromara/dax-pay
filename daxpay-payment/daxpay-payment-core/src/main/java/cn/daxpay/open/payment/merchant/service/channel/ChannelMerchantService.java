@@ -201,7 +201,7 @@ public class ChannelMerchantService {
                         code -> code,
                         code -> {
                             AbsProductStrategy strategy = resolveStrategy(code);
-                            return strategy != null && strategy.isSandbox();
+                            return Objects.nonNull(strategy) && strategy.isSandbox();
                         },
                         (a, b) -> a));
         results.forEach(r -> r.setSandboxSupport(sandboxMap.getOrDefault(r.getProduct(), false)));

@@ -59,7 +59,7 @@ public class EasyPayPluginStrategy implements AbsPayPluginStrategy {
         if (!Objects.equals(TradeSourceEnum.EASY_PAY.getCode(), trade.getSource())) {
             return;
         }
-        long amount = refundOrder.getAmount() == null ? 0L : refundOrder.getAmount();
+        long amount = Objects.isNull(refundOrder.getAmount()) ? 0L : refundOrder.getAmount();
         easyPayOrderService.refundSuccess(trade, amount);
         // 回写独立退款记录状态（异步退款最终成功时生效；同步退款记录已直接建为成功，幂等跳过）
         easyPayRefundOrderService.markSuccess(refundOrder);
@@ -67,14 +67,14 @@ public class EasyPayPluginStrategy implements AbsPayPluginStrategy {
 
     /// 注册易支付协议出站（content 仅存 id 指针）
     private void registerEasyPayNotice(EasyPayOrder easyPayOrder) {
-        if (easyPayOrder == null || StrUtil.isBlank(easyPayOrder.getNotifyUrl())) {
+        if (Objects.isNull(easyPayOrder) || StrUtil.isBlank(easyPayOrder.getNotifyUrl())) {
             log.info("易支付订单无需回调, outTradeNo={}",
-                    easyPayOrder == null ? null : easyPayOrder.getOutTradeNo());
+                    Objects.isNull(easyPayOrder) ? null : easyPayOrder.getOutTradeNo());
             return;
         }
         String content = JacksonUtil.toJson(Map.of(
                 "id", easyPayOrder.getId(),
-                "pid", easyPayOrder.getPid() == null ? 0 : easyPayOrder.getPid(),
+                "pid", Objects.isNull(easyPayOrder.getPid()) ? 0 : easyPayOrder.getPid(),
                 "remark", "ref-only; payload assembled at send time"
         ));
         noticeDispatcher.dispatch(new NoticeDispatchCommand()
@@ -82,7 +82,7 @@ public class EasyPayPluginStrategy implements AbsPayPluginStrategy {
                 .setAppId(easyPayOrder.getAppId())
                 .setEvent(NoticeEventEnum.PAY_SUCCESS.getCode())
                 .setBizId(easyPayOrder.getId())
-                .setBizNo(easyPayOrder.getTradeNo() != null ? easyPayOrder.getTradeNo() : easyPayOrder.getOutTradeNo())
+                .setBizNo(Objects.nonNull(easyPayOrder.getTradeNo()) ? easyPayOrder.getTradeNo() : easyPayOrder.getOutTradeNo())
                 .setTransport(NoticeTransportEnum.HTTP)
                 .setFormat(NoticeFormatEnum.EASY_PAY)
                 .setContentMode(NoticeContentModeEnum.REF)

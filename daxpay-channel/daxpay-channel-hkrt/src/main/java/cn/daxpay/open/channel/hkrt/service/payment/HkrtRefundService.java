@@ -13,6 +13,7 @@ import cn.daxpay.open.platform.core.exception.BizInfoException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 /// # 海科融通服务商退款执行业务服务
 ///
@@ -62,9 +63,9 @@ public class HkrtRefundService {
                 : RefundOrderStatusEnum.PROGRESS);
         // 退款同步成功但无完成时间(海科退款接口不返回 end_time), 立即补查 refund-query 拿 end_time,
         // 避免订单进 SUCCESS 终态后被退款同步跳过导致 finishTime 永久为空
-        if (bo.isComplete() && bo.getFinishTime() == null) {
+        if (bo.isComplete() && Objects.isNull(bo.getFinishTime())) {
             RefundResultBo syncBo = hkrtRefundSyncService.sync(refundOrder, credential);
-            if (syncBo.getFinishTime() != null) {
+            if (Objects.nonNull(syncBo.getFinishTime())) {
                 bo.setFinishTime(syncBo.getFinishTime());
             }
         }

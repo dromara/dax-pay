@@ -45,7 +45,7 @@ public class LakalaRefundCallbackService {
 
         LakalaIsvKeyConfig keyConfig = lakalaIsvKeyConfigManager.findByProduct(ProductEnum.LAKALA_PAY.getCode())
                 .orElse(null);
-        if (keyConfig == null || keyConfig.getPublicKey() == null) {
+        if (Objects.isNull(keyConfig) || Objects.isNull(keyConfig.getPublicKey())) {
             log.error("拉卡拉退款回调: 服务商密钥未配置, 无法验签");
             RefundCallbackData failData = new RefundCallbackData();
             failData.setCallbackData(notify);
@@ -56,7 +56,7 @@ public class LakalaRefundCallbackService {
         }
 
         LakalaCallbackParseResp resp = lakalaPayCallbackService.parse(body, headerMap, keyConfig.getPublicKey(), true);
-        if (resp == null || !Boolean.TRUE.equals(resp.getSuccess())) {
+        if (Objects.isNull(resp) || !Boolean.TRUE.equals(resp.getSuccess())) {
             log.error("拉卡拉退款回调验签失败");
             RefundCallbackData failData = new RefundCallbackData();
             failData.setCallbackData(notify);

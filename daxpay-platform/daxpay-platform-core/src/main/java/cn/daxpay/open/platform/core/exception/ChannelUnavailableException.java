@@ -1,5 +1,7 @@
 package cn.daxpay.open.platform.core.exception;
 
+import java.util.Objects;
+
 /// # 通道服务不可用异常
 ///
 /// 通道子应用连接未建立时抛出(如连接被拒绝/主机不可达/DNS 解析失败),
@@ -22,7 +24,7 @@ public class ChannelUnavailableException extends PayFailureException {
     public ChannelUnavailableException(String messageKey, Throwable cause) {
         super(messageKey);
         // BizException 构造器未设置 cause, 此处安全调用 initCause 保留堆栈
-        if (cause != null) {
+        if (Objects.nonNull(cause)) {
             initCause(cause);
         }
     }

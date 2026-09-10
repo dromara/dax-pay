@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import cn.daxpay.open.payment.auth.core.AuthSession;
@@ -65,7 +66,7 @@ public class UnifiedAuthService {
     public AuthUrlResult generateAuthUrl(GenerateAuthUrlParam param) {
         // 获取认证来源: 目前只有支付宝直接获取来源
         AuthSourceEnum source = mapAuthTypeToSource(param.getAuthType());
-        if (source != null) {
+        if (Objects.nonNull(source)) {
             // 通常会是支付宝, 支付宝走平台级获取userId
             return providers.get(source.getCode()).generateAuthUrl(param.getReturnPath());
         }
@@ -78,7 +79,7 @@ public class UnifiedAuthService {
         AuthSession session = authSessionStore.loadSession(param.getAuthToken());
         // 会话已失效(且非平台级认证的无 session 兜底场景): 提示重新生成, 避免下游抛"不支持的能力: null"
         // 平台级 authType(如 alipay)不依赖 session 字段, 由 doAuth 内的兜底分支处理
-        if (session == null && mapAuthTypeToSource(param.getAuthType()) == null) {
+        if (Objects.isNull(session) && Objects.isNull(mapAuthTypeToSource(param.getAuthType()))) {
             // 认证: 授权链接已失效请重新生成
             throw new BizInfoException(DaxPayErrorCode.OPERATION_FAIL,
                     "pay.error.assist.authSessionExpired");
@@ -93,7 +94,7 @@ public class UnifiedAuthService {
             throw e;
         }
         // 平台级 auth 方法未回填 returnPath 时, 从会话补齐
-        if (session != null && StrUtil.isNotBlank(session.getReturnPath())
+        if (Objects.nonNull(session) && StrUtil.isNotBlank(session.getReturnPath())
                 && StrUtil.isBlank(result.getReturnPath())) {
             result.setReturnPath(session.getReturnPath());
         }
@@ -105,16 +106,16 @@ public class UnifiedAuthService {
     /// 按会话来源把授权码回调分到平台 Provider 或商户级服务处理
     private AuthResult doAuth(AuthCodeParam param, AuthSession session) {
         // session.source 标记的平台级认证, 按 source 查 Provider
-        if (session != null && StrUtil.isNotBlank(session.getSource())) {
+        if (Objects.nonNull(session) && StrUtil.isNotBlank(session.getSource())) {
             PlatformAuthProvider provider = providers.get(session.getSource());
-            if (provider != null) {
+            if (Objects.nonNull(provider)) {
                 return provider.auth(param, session);
             }
         }
         // 无 session 且 authType 对应平台级 Provider(如支付宝小程序直连): 兜底走 Provider
-        if (session == null) {
+        if (Objects.isNull(session)) {
             AuthSourceEnum source = mapAuthTypeToSource(param.getAuthType());
-            if (source != null) {
+            if (Objects.nonNull(source)) {
                 return providers.get(source.getCode()).auth(param, null);
             }
         }

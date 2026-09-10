@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /// # 云闪付支付回调处理服务
 ///
@@ -52,7 +53,7 @@ public class UnionPayCallbackService {
         req.setCredential(credential);
         req.setParams(params);
         DaxResult<UnionCallbackParseResp> result = unionChannelClient.parsePayCallback(req);
-        if (result.getCode() != 0 || result.getData() == null || !result.getData().isVerified()) {
+        if (result.getCode() != 0 || Objects.isNull(result.getData()) || !result.getData().isVerified()) {
             log.error("云闪付支付回调验签失败: channelMchNo={}", channelMchNo);
             CallbackData failData = new CallbackData();
             failData.setCallbackData(notify);
@@ -85,7 +86,7 @@ public class UnionPayCallbackService {
     private Map<String, String> extractFormParams(HttpServletRequest request) {
         Map<String, String> params = new HashMap<>();
         request.getParameterMap().forEach((k, v) -> {
-            if (v != null && v.length > 0) {
+            if (Objects.nonNull(v) && v.length > 0) {
                 params.put(k, v[0]);
             }
         });

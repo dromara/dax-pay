@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 /// # 商户出站通知发送引擎
 ///
@@ -66,7 +67,7 @@ public class NoticeSendEngine {
     /// 再装载 PaymentContext 后走租户内发送（与 PayCloseService#closeForTimeout 范式一致）。
     public void sendAuto(Long taskId) {
         MchNoticeTask boot = taskManager.findByIdNotTenant(taskId).orElse(null);
-        if (boot == null) {
+        if (Objects.isNull(boot)) {
             log.warn("出站通知任务不存在: taskId={}", taskId);
             return;
         }
@@ -89,7 +90,7 @@ public class NoticeSendEngine {
     /// 执行发送
     public void send(Long taskId, boolean autoSend) {
         MchNoticeTask task = taskManager.findById(taskId).orElse(null);
-        if (task == null) {
+        if (Objects.isNull(task)) {
             log.warn("出站通知任务不存在: taskId={}", taskId);
             return;
         }
@@ -103,7 +104,7 @@ public class NoticeSendEngine {
             log.info("手动重发已成功任务: taskId={}", taskId);
         }
         OffsetDateTime sendTime = OffsetDateTime.now(ZoneOffset.UTC);
-        int reqCount = (task.getSendCount() == null ? 0 : task.getSendCount()) + 1;
+        int reqCount = (Objects.isNull(task.getSendCount()) ? 0 : task.getSendCount()) + 1;
         MchNoticeRecord record = new MchNoticeRecord();
         // 运营端写 MchBaseEntity 必须显式 mchNo
         record.setMchNo(task.getMchNo());
@@ -112,14 +113,14 @@ public class NoticeSendEngine {
                 .setSendType(autoSend ? NoticeSendTypeEnum.AUTO.getCode() : NoticeSendTypeEnum.MANUAL.getCode());
 
         NoticePayloadBuilder payloadBuilder = payloadBuilderMap.get(task.getFormat());
-        if (payloadBuilder == null) {
+        if (Objects.isNull(payloadBuilder)) {
             log.error("未找到通知报文构建器: format={}, taskId={}", task.getFormat(), taskId);
             record.setSuccess(false).setErrorMsg("payload builder not found: " + task.getFormat());
             failUpdate(task, sendTime, autoSend, record);
             return;
         }
         NoticeTransportSender transportSender = transportSenderMap.get(task.getTransport());
-        if (transportSender == null) {
+        if (Objects.isNull(transportSender)) {
             log.error("未找到通知传输发送器: transport={}, taskId={}", task.getTransport(), taskId);
             record.setSuccess(false).setErrorMsg("transport sender not found: " + task.getTransport());
             failUpdate(task, sendTime, autoSend, record);
@@ -167,7 +168,7 @@ public class NoticeSendEngine {
 
     /// 失败：更新任务并按需排期重试 (重试节奏按 transport 区分)
     private void failUpdate(MchNoticeTask task, OffsetDateTime sendTime, boolean autoSend, MchNoticeRecord record) {
-        int reqCount = record.getReqCount() == null ? 1 : record.getReqCount();
+        int reqCount = Objects.isNull(record.getReqCount()) ? 1 : record.getReqCount();
         task.setSendCount(reqCount).setLatestTime(sendTime);
         if (StrUtil.isNotBlank(record.getErrorMsg())) {
             task.setErrorMsg(record.getErrorMsg());
@@ -178,7 +179,7 @@ public class NoticeSendEngine {
         }
         String transport = task.getTransport();
         if (autoSend && !task.isSuccess()) {
-            int delayCount = task.getDelayCount() == null ? 0 : task.getDelayCount();
+            int delayCount = Objects.isNull(task.getDelayCount()) ? 0 : task.getDelayCount();
             if (retryPolicy.canRetry(transport, delayCount)) {
                 int next = delayCount + 1;
                 task.setDelayCount(next);

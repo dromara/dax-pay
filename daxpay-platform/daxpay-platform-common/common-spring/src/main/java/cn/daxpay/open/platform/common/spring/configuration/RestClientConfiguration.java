@@ -25,6 +25,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.io.IOException;
+import java.util.Objects;
 
 /// # RestClient 配置
 ///
@@ -104,7 +105,7 @@ public class RestClientConfiguration {
                                             byte[] body,
                                             ClientHttpRequestExecution execution) throws IOException {
             HttpServletRequest currentRequest = getCurrentRequest();
-            if (currentRequest != null) {
+            if (Objects.nonNull(currentRequest)) {
                 // 透传国际化语言(子应用异常消息按语言返回)
                 String language = currentRequest.getHeader(HEADER_ACCEPT_LANGUAGE);
                 if (StrUtil.isNotBlank(language)) {

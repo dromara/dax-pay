@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 /// # 分账策略工厂
 ///
@@ -31,7 +32,7 @@ public class AllocStrategyFactory {
     /// 按通道创建策略, 未实现抛 [UnsupportedAbilityException]
     public static AbsAllocStrategy create(String channel) {
         AbsAllocStrategy strategy = INDEX.computeIfAbsent(channel, c -> buildIndex().get(c));
-        if (strategy == null) {
+        if (Objects.isNull(strategy)) {
             // 该通道暂不支持分账
             throw new UnsupportedAbilityException("pay.error.alloc.channelNotSupport", channel);
         }

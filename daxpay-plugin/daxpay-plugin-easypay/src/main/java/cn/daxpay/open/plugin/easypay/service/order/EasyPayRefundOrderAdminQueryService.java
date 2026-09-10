@@ -69,7 +69,7 @@ public class EasyPayRefundOrderAdminQueryService {
                 .orElseThrow(() -> new DataNotExistException("pay.error.refund.orderNotFound"));
         RefundOrder refundOrder = refundSyncService.syncById(entity.getRefundId());
         entity.setStatus(mapStatus(refundOrder.getStatus()));
-        if (Objects.equals(entity.getStatus(), 1) && entity.getEndTime() == null) {
+        if (Objects.equals(entity.getStatus(), 1) && Objects.isNull(entity.getEndTime())) {
             entity.setEndTime(OffsetDateTime.now(ZoneOffset.UTC));
         }
         easyPayRefundOrderManager.updateById(entity);

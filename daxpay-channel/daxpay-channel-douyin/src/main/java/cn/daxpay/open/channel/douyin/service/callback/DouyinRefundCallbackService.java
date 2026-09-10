@@ -74,7 +74,7 @@ public class DouyinRefundCallbackService {
         }
 
         DouyinCallbackParseResp resp = result.getData();
-        if (resp == null || !resp.isVerified()) {
+        if (Objects.isNull(resp) || !resp.isVerified()) {
             log.error("抖音退款回调验签失败: channelMchNo={}", channelMchNo);
             RefundCallbackData failData = new RefundCallbackData();
             failData.setCallbackData(notify);
@@ -117,7 +117,7 @@ public class DouyinRefundCallbackService {
                 .oneOpt()
                 .orElse(null);
         var credential = new DouyinSdkCredential();
-        credential.setMchId(merchant != null ? merchant.getDyMchId() : null);
+        credential.setMchId(Objects.nonNull(merchant) ? merchant.getDyMchId() : null);
         credential.setMerchantSerialNumber(keyConfig.getMerchantSerialNumber());
         credential.setMerchantPrivateKey(keyConfig.getMerchantPrivateKey());
         credential.setEncryptKey(keyConfig.getEncryptKey());
@@ -127,6 +127,6 @@ public class DouyinRefundCallbackService {
     /// 获取 header(大小写兼容)
     private String getHeader(Map<String, String> headerMap, String name) {
         String value = headerMap.get(name);
-        return value != null ? value : headerMap.get(name.toLowerCase());
+        return Objects.nonNull(value) ? value : headerMap.get(name.toLowerCase());
     }
 }

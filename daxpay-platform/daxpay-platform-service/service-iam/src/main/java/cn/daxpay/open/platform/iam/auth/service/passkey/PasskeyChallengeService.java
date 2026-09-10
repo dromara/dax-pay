@@ -7,6 +7,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.Objects;
 
 /// # 通行密钥会话上下文服务
 ///
@@ -37,7 +38,7 @@ public class PasskeyChallengeService {
     /// 消费注册会话上下文(单次有效), 不存在或已过期返回 null
     public RegisterContext consumeRegister(String challengeId) {
         String json = stringRedisTemplate.opsForValue().getAndDelete(REGISTER_PREFIX + challengeId);
-        return json == null ? null : JSONUtil.toBean(json, RegisterContext.class);
+        return Objects.isNull(json) ? null : JSONUtil.toBean(json, RegisterContext.class);
     }
 
     /// 保存登录会话上下文, 返回会话ID
@@ -50,7 +51,7 @@ public class PasskeyChallengeService {
     /// 消费登录会话上下文(单次有效), 不存在或已过期返回 null
     public AuthContext consumeAuth(String challengeId) {
         String json = stringRedisTemplate.opsForValue().getAndDelete(AUTH_PREFIX + challengeId);
-        return json == null ? null : JSONUtil.toBean(json, AuthContext.class);
+        return Objects.isNull(json) ? null : JSONUtil.toBean(json, AuthContext.class);
     }
 
     /// 注册会话上下文(challenge 随机值 + 发起注册的用户信息)

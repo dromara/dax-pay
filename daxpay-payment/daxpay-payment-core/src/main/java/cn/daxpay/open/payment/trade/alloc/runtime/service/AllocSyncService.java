@@ -42,7 +42,7 @@ public class AllocSyncService {
     /// 手动同步(管理端/开放API, 有 HTTP 上下文)
     public void sync(String allocNo) {
         AllocOrder allocOrder = allocOrderManager.findByAllocNo(allocNo).orElse(null);
-        if (allocOrder == null) {
+        if (Objects.isNull(allocOrder)) {
             log.warn("分账同步: 分账单不存在, allocNo={}", allocNo);
             return;
         }
@@ -57,7 +57,7 @@ public class AllocSyncService {
     public void autoSync(String allocNo) {
         // 跨租户查询(定时任务无 HTTP 上下文)
         AllocOrder allocOrder = allocOrderManager.findByAllocNoNotTenant(allocNo).orElse(null);
-        if (allocOrder == null) {
+        if (Objects.isNull(allocOrder)) {
             log.warn("分账同步: 分账单不存在, allocNo={}", allocNo);
             return;
         }
@@ -81,14 +81,14 @@ public class AllocSyncService {
         lockExecutor.run(TradeLockKeys.allocTrade(allocOrder.getId()), () -> {
             // 锁内二次读: 须仍为 processing 才继续
             AllocOrder latest = allocOrderManager.findById(allocOrder.getId()).orElse(null);
-            if (latest == null
+            if (Objects.isNull(latest)
                     || !Objects.equals(latest.getStatus(), AllocOrderStatusEnum.PROCESSING.getCode())) {
                 log.info("分账同步幂等: 分账单 {} 非处理中, 跳过", allocOrder.getAllocNo());
                 return;
             }
             // 装配策略上下文
             AllocStrategyContext context = assistService.loadContext(latest).orElse(null);
-            if (context == null) {
+            if (Objects.isNull(context)) {
                 log.warn("分账同步: 上下文装配失败, allocNo={}", latest.getAllocNo());
                 return;
             }
@@ -104,11 +104,11 @@ public class AllocSyncService {
                 return;
             }
             // 回写通道分账号(如有)
-            if (result.getOutAllocNo() != null && !Objects.equals(result.getOutAllocNo(), latest.getOutAllocNo())) {
+            if (Objects.nonNull(result.getOutAllocNo()) && !Objects.equals(result.getOutAllocNo(), latest.getOutAllocNo())) {
                 assistService.processing(latest, result.getOutAllocNo());
             }
             // 按逐明细结果聚合状态
-            if (result.getDetails() != null && !result.getDetails().isEmpty()) {
+            if (Objects.nonNull(result.getDetails()) && !result.getDetails().isEmpty()) {
                 long successCount = result.getDetails().stream()
                         .filter(d -> Objects.equals(d.getResult(), "success")).count();
                 long failCount = result.getDetails().stream()

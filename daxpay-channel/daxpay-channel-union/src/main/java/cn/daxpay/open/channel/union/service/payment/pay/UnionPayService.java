@@ -20,6 +20,7 @@ import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 /// # 云闪付支付执行业务服务
 ///
@@ -83,7 +84,7 @@ public class UnionPayService {
     private PayTradeResultBo toPayResult(UnionPayResp resp) {
         PayTradeResultBo bo = new PayTradeResultBo().setPayBody(resp.getPayBody());
         UnionPayBodyType bodyType = resp.getPayBodyType();
-        if (bodyType != null) {
+        if (Objects.nonNull(bodyType)) {
             switch (bodyType) {
                 case QR_CODE -> bo.setPayBodyType(PayBodyTypeEnum.QR_CODE);
                 case LINK -> bo.setPayBodyType(PayBodyTypeEnum.LINK);

@@ -15,6 +15,7 @@ import cn.hutool.http.HttpResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 /// # 平台端点配置服务
 ///
@@ -103,7 +104,7 @@ public class PlatformUrlConfigService {
     /// 从已保存配置解析对应端点地址
     private String resolveSavedUrl(String urlType) {
         PlatformUrlConfig config = this.getUrlConfig();
-        if (config == null || StrUtil.isBlank(urlType)) {
+        if (Objects.isNull(config) || StrUtil.isBlank(urlType)) {
             return null;
         }
         return switch (urlType.toLowerCase()) {

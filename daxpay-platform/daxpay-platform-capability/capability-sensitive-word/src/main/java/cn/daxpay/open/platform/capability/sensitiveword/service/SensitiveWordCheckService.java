@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /// # 敏感词运行时校验
 ///
@@ -67,7 +68,7 @@ public class SensitiveWordCheckService {
 
     /// 批量，任一命中即抛
     public void assertClean(SensitiveWordSceneEnum scene, String... texts) {
-        if (texts == null) {
+        if (Objects.isNull(texts)) {
             return;
         }
         for (String t : texts) {
@@ -85,7 +86,7 @@ public class SensitiveWordCheckService {
             return;
         }
         String hitWord = hits.getFirst();
-        SensitiveWordSceneEnum sc = scene == null ? SensitiveWordSceneEnum.GENERAL : scene;
+        SensitiveWordSceneEnum sc = Objects.isNull(scene) ? SensitiveWordSceneEnum.GENERAL : scene;
         if (sensitiveWordPolicy.isRecordHit()) {
             try {
                 recordHit(text, hitWord, sc);
@@ -157,7 +158,7 @@ public class SensitiveWordCheckService {
     private String resolveSource() {
         try {
             String path = RequestContextHolder.getRequestUri();
-            if (path == null) {
+            if (Objects.isNull(path)) {
                 return SensitiveWordSourceEnum.UNKNOWN.getCode();
             }
             if (path.startsWith("/admin/")) {

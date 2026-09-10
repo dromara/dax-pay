@@ -15,6 +15,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Objects;
 
 /// # 支付宝开放平台 OpenAPI 客户端
 ///
@@ -67,7 +68,7 @@ public class AlipayOpenApiClient {
             log.error("支付宝 OpenAPI 请求失败, method={}", METHOD_OAUTH_TOKEN, e);
             throw new IllegalStateException("alipay openapi request failed: " + e.getMessage(), e);
         }
-        if (body == null || body.isBlank()) {
+        if (Objects.isNull(body) || body.isBlank()) {
             throw new IllegalStateException("alipay openapi empty response");
         }
         // 验签
@@ -75,17 +76,17 @@ public class AlipayOpenApiClient {
         // 解析业务节点
         JSONObject root = JSONUtil.parseObj(body);
         JSONObject biz = root.getJSONObject(RESPONSE_NODE);
-        if (biz == null) {
+        if (Objects.isNull(biz)) {
             biz = root.getJSONObject(ERROR_NODE);
         }
-        if (biz == null) {
+        if (Objects.isNull(biz)) {
             throw new IllegalStateException("alipay openapi missing response node");
         }
         String code = biz.getStr("code");
-        if (code != null && !code.isBlank() && !"10000".equals(code)) {
+        if (Objects.nonNull(code) && !code.isBlank() && !"10000".equals(code)) {
             String subMsg = biz.getStr("sub_msg");
-            String msg = subMsg != null && !subMsg.isBlank() ? subMsg : biz.getStr("msg");
-            throw new IllegalStateException(msg != null ? msg : code);
+            String msg = Objects.nonNull(subMsg) && !subMsg.isBlank() ? subMsg : biz.getStr("msg");
+            throw new IllegalStateException(Objects.nonNull(msg) ? msg : code);
         }
         return new AlipayAuthResult()
                 .setUserId(biz.getStr("user_id"))
@@ -109,12 +110,12 @@ public class AlipayOpenApiClient {
     /// 响应验签: 截取 response 节点原文 + RSA2
     private void verifyResponse(String body, AlipayAuthConfig config) {
         String sign = extractJsonStringField(body, "sign");
-        if (sign == null || sign.isBlank()) {
+        if (Objects.isNull(sign) || sign.isBlank()) {
             // 部分错误响应可能无 sign, 交给业务解析抛错
             return;
         }
         String source = extractSignSource(body);
-        if (source == null || source.isBlank()) {
+        if (Objects.isNull(source) || source.isBlank()) {
             throw new IllegalStateException("alipay response sign source empty");
         }
         String publicKey = resolveVerifyPublicKey(config);

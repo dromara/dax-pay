@@ -21,6 +21,7 @@ import cn.hutool.json.JSONUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 /// # 第三方平台登录配置服务
 ///
@@ -53,7 +54,7 @@ public class SocialLoginConfigService {
         Arrays.stream(SocialSourceEnum.values()).forEach(source -> {
             SocialLoginConfigResult item;
             SocialLoginConfig config = configMap.get(source.getCode());
-            if (config != null) {
+            if (Objects.nonNull(config)) {
                 item = config.toResult();
             } else {
                 // 未配置平台构建瞬态展示项, 不落库(无 id)
@@ -74,7 +75,7 @@ public class SocialLoginConfigService {
     /// **平台级跳转型平台**(如支付宝)也落库占位记录(只存 source + enabled), 但不存凭据。
     public SocialLoginConfigResult findBySource(String source) {
         SocialSourceEnum socialSource = SocialSourceEnum.of(source);
-        if (socialSource == null) {
+        if (Objects.isNull(socialSource)) {
             // 社交登录: 不支持的平台
             throw new OperationFailException("error.social.unsupportedSource");
         }
@@ -90,7 +91,7 @@ public class SocialLoginConfigService {
     /// 平台级跳转型(支付宝): 忽略 clientId/clientSecret 占位空串, 仅更新 enabled(与平台凭据解耦)。
     public void update(SocialLoginConfigParam param) {
         SocialSourceEnum socialSource = SocialSourceEnum.of(param.getSource());
-        if (socialSource == null) {
+        if (Objects.isNull(socialSource)) {
             // 社交登录: 不支持的平台
             throw new OperationFailException("error.social.unsupportedSource");
         }
@@ -117,7 +118,7 @@ public class SocialLoginConfigService {
     /// 跳转型也可调用(与 update 同路径), 支付宝抽屉统一走 update, 本方法保留兼容。
     public void updateEnabled(String source, Boolean enabled) {
         SocialSourceEnum socialSource = SocialSourceEnum.of(source);
-        if (socialSource == null) {
+        if (Objects.isNull(socialSource)) {
             // 社交登录: 不支持的平台
             throw new OperationFailException("error.social.unsupportedSource");
         }
@@ -184,7 +185,7 @@ public class SocialLoginConfigService {
 
     /// 是否平台级跳转型(委托 [SocialSourceEnum#isPlatformRedirect], 如 [SocialSourceEnum#ALIPAY])
     private boolean isPlatformRedirectSource(SocialSourceEnum socialSource) {
-        return socialSource != null && socialSource.isPlatformRedirect();
+        return Objects.nonNull(socialSource) && socialSource.isPlatformRedirect();
     }
 
     /// 创建并保存占位记录(configured=false), 业务字段留空

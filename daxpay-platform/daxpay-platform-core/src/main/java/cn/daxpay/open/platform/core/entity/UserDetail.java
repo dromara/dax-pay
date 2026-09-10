@@ -8,6 +8,7 @@ import lombok.experimental.Accessors;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.Objects;
 
 /// # 用户登录会话信息
 ///
@@ -52,7 +53,7 @@ public class UserDetail {
         if (Boolean.TRUE.equals(initialPassword) || Boolean.TRUE.equals(passwordExpired)) {
             return true;
         }
-        return passwordExpireTime != null
+        return Objects.nonNull(passwordExpireTime)
                 && !passwordExpireTime.isAfter(OffsetDateTime.now(ZoneOffset.UTC));
     }
 

@@ -60,7 +60,7 @@ public class MchAppInfoService {
         } else {
             mchNo = param.getMchNo();
         }
-        if (mchNo == null) {
+        if (Objects.isNull(mchNo)) {
             // 商户: 数据错误，未发现商户号
             throw new BizInfoException(CommonCode.FAIL_CODE, "error.payment.merchant.dataErrorNoMchNo");
         }

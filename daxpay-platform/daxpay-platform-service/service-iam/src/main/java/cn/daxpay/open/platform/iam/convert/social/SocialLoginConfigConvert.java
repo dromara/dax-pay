@@ -11,6 +11,7 @@ import cn.hutool.json.JSONUtil;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.factory.Mappers;
+import java.util.Objects;
 
 /// # 第三方平台登录配置转换
 ///
@@ -30,7 +31,7 @@ public interface SocialLoginConfigConvert {
 
     /// Map -> jsonb 原始文本(Param.extra -> Entity.extra)
     default String map(Map<String, String> map) {
-        if (map == null || map.isEmpty()) {
+        if (Objects.isNull(map) || map.isEmpty()) {
             return "{}";
         }
         return JSONUtil.toJsonStr(map);

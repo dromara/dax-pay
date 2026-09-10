@@ -164,7 +164,7 @@ public class MchStoreInfoService {
         if (clientCodeService.getClientCode().equals(ClientEnum.MERCHANT.getCode())) {
             return paymentContext.getMchNo();
         }
-        if (paramMchNo == null) {
+        if (Objects.isNull(paramMchNo)) {
             // 商户: 数据错误，未发现商户号
             throw new BizInfoException(CommonCode.FAIL_CODE, "error.payment.merchant.dataErrorNoMchNo");
         }

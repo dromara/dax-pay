@@ -4,6 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import java.lang.reflect.Field;
+import java.util.Objects;
 
 /// # 条件非空校验器：当指定字段的值等于期望值时，目标字段必须非空
 ///
@@ -24,7 +25,7 @@ public class ConditionalNotBlankValidator implements ConstraintValidator<Conditi
 
     @Override
     public boolean isValid(Object bean, ConstraintValidatorContext context) {
-        if (bean == null) {
+        if (Objects.isNull(bean)) {
             return true;
         }
         try {
@@ -37,7 +38,7 @@ public class ConditionalNotBlankValidator implements ConstraintValidator<Conditi
             Field targetField = bean.getClass().getDeclaredField(target);
             targetField.setAccessible(true);
             Object targetValue = targetField.get(bean);
-            if (targetValue == null || (targetValue instanceof String && StrUtil.isBlank((String) targetValue))) {
+            if (Objects.isNull(targetValue) || (targetValue instanceof String && StrUtil.isBlank((String) targetValue))) {
                 context.disableDefaultConstraintViolation();
                 context.buildConstraintViolationWithTemplate(message)
                         .addPropertyNode(target)

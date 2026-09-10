@@ -6,6 +6,7 @@ import java.util.Optional;
 import cn.daxpay.open.platform.system.entity.config.platform.infra.PlatformUrlConfig;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import java.util.Objects;
 
 /// # 社交登录身份域编码
 ///
@@ -40,7 +41,7 @@ public enum SocialClientEnum {
 
     /// 根据编码查找, 无法识别返回 empty
     public static Optional<SocialClientEnum> findByCode(String code) {
-        if (code == null || code.isBlank()) {
+        if (Objects.isNull(code) || code.isBlank()) {
             return Optional.empty();
         }
         return Arrays.stream(values())

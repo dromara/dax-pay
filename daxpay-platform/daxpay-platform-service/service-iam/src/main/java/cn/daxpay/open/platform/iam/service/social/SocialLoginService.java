@@ -143,7 +143,7 @@ public class SocialLoginService {
         // 加载平台配置(全局唯一)
         SocialLoginConfig config = this.loadEnabledConfig(source);
         SocialSourceEnum socialSource = SocialSourceEnum.of(source);
-        if (socialSource == null) {
+        if (Objects.isNull(socialSource)) {
             // 社交登录: 不支持的平台
             throw new OperationFailException("error.social.unsupportedSource");
         }
@@ -188,7 +188,7 @@ public class SocialLoginService {
             AuthUser authUser = this.doExchange(code, state, source, redirectUri);
             // 查绑定关系
             Long userId = socialBindStore.findUserIdBySourceAndOpenId(source, authUser.getUuid()).orElse(null);
-            if (userId == null) {
+            if (Objects.isNull(userId)) {
                 // 未绑定
                 return new SocialExchangeResult().setError("unbind");
             }
@@ -317,13 +317,13 @@ public class SocialLoginService {
     /// 共享: code 换 AuthUser(登录/绑定共用)
     private AuthUser doExchange(String code, String state, String source, String redirectUri) {
         SocialLoginConfig config = socialLoginConfigService.findEnabledBySource(source);
-        if (config == null) {
+        if (Objects.isNull(config)) {
             // 社交登录: 平台未配置或未启用
             throw new OperationFailException("error.social.configNotExist");
         }
         SocialAuthConfig authConfig = socialLoginConfigService.buildAuthConfig(config, redirectUri);
         SocialSourceEnum socialSource = SocialSourceEnum.of(source);
-        if (socialSource == null) {
+        if (Objects.isNull(socialSource)) {
             // 社交登录: 不支持的平台
             throw new OperationFailException("error.social.unsupportedSource");
         }
@@ -339,7 +339,7 @@ public class SocialLoginService {
             return;
         }
         PlatformWechatMpAuthConfig mp = platformWechatMpAuthConfigService.getWechatMpAuthConfig();
-        if (mp == null || StrUtil.isBlank(mp.getAppId()) || StrUtil.isBlank(mp.getAppSecret())) {
+        if (Objects.isNull(mp) || StrUtil.isBlank(mp.getAppId()) || StrUtil.isBlank(mp.getAppSecret())) {
             // 社交登录: 微信公众号配置不完整
             throw new OperationFailException("error.social.wechatMpNotConfigured");
         }
@@ -411,7 +411,7 @@ public class SocialLoginService {
     /// 加载已启用的平台配置(不存在则抛业务异常)
     private SocialLoginConfig loadEnabledConfig(String source) {
         SocialLoginConfig config = socialLoginConfigService.findEnabledBySource(source);
-        if (config == null) {
+        if (Objects.isNull(config)) {
             // 社交登录: 平台未配置或未启用
             throw new OperationFailException("error.social.configNotExist");
         }

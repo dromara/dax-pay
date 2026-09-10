@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import java.util.Objects;
 
 /// # 云闪付通道商户管理
 ///
@@ -52,8 +53,8 @@ public class UnionChannelMerchantController {
             @NotNull(message = "{validation.field.sandbox.notNull}") Boolean sandbox) {
         var config = unionKeyConfigService.findByChannelMchNo(channelMchNo, sandbox);
         var result = config.toResult();
-        result.setKeyPrivateCertConfigured(config.getKeyPrivateCert() != null);
-        result.setKeyPrivateCertPwdConfigured(config.getKeyPrivateCertPwd() != null);
+        result.setKeyPrivateCertConfigured(Objects.nonNull(config.getKeyPrivateCert()));
+        result.setKeyPrivateCertPwdConfigured(Objects.nonNull(config.getKeyPrivateCertPwd()));
         return Res.ok(result);
     }
 

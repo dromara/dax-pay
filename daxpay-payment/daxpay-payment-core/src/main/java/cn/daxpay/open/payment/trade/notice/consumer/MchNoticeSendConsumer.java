@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.stereotype.Component;
+import java.util.Objects;
 
 /// # 商户出站通知发送消费者
 ///
@@ -28,7 +29,7 @@ public class MchNoticeSendConsumer {
             log.warn("出站通知消息解析失败, 丢弃: json={}, error={}", json, e.getMessage());
             return;
         }
-        if (message.getTaskId() == null) {
+        if (Objects.isNull(message.getTaskId())) {
             log.warn("出站通知消息缺少 taskId, 丢弃: json={}", json);
             return;
         }

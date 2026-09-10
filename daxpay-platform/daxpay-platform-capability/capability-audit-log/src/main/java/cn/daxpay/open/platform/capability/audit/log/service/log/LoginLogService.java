@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.Objects;
 
 /// # 登录日志服务
 ///
@@ -47,7 +48,7 @@ public class LoginLogService {
     /// 添加日志
     /// 入缓冲队列
     public void add(LoginLogParam loginLog) {
-        if (loginLog == null) {
+        if (Objects.isNull(loginLog)) {
             return;
         }
 

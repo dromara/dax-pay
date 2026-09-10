@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.Objects;
 
 /// # PostgreSQL jsonb 字符串类型处理器。
 ///
@@ -29,7 +30,7 @@ public class JsonbStringTypeHandler extends BaseTypeHandler<String> {
     public void setNonNullParameter(PreparedStatement ps, int i, String parameter, JdbcType jdbcType)
             throws SQLException {
         // 空字符串不是合法 JSON, jsonb 列应存 NULL
-        if (parameter == null || parameter.isBlank()) {
+        if (Objects.isNull(parameter) || parameter.isBlank()) {
             ps.setNull(i, Types.OTHER);
             return;
         }

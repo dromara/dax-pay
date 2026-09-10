@@ -20,6 +20,7 @@ import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 /// # 微信认证策略
 ///
@@ -78,7 +79,7 @@ public class WechatAuthStrategy implements ChannelAuthStrategy {
 
     /// 按档位 + 主键加载微信应用凭证(含解密后的 appSecret)
     private WxAppView loadApp(String appScope, Long appRefId) {
-        if (StrUtil.isBlank(appScope) || appRefId == null) {
+        if (StrUtil.isBlank(appScope) || Objects.isNull(appRefId)) {
             // 微信: 认证应用引用缺失(appScope/appRefId 未传入)
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.payment.wx.appNotConfigured", "auth");

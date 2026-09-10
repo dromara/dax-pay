@@ -32,6 +32,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 /// # 登录端点服务
 ///
@@ -109,7 +110,7 @@ public class TokenService {
                                String preAuthToken, String code, String codeType) {
         TwoFactorPreAuthService.PreAuthContext context = twoFactorPreAuthService.get(preAuthToken);
         // 临时凭证无效或已过期
-        if (context == null) {
+        if (Objects.isNull(context)) {
             // 认证: 双因素预认证已过期
             throw new LoginFailureException("error.auth.twoFactorPreAuthExpired");
         }
@@ -236,7 +237,7 @@ public class TokenService {
         StpUtil.login(userId, saLoginModel);
 
         // PER_DEVICE + KICK_OLDEST 必须在 login 后执行(login前本终端尚无token)
-        if (perDeviceKickOldest && config.getMaxConcurrentSessions() != null) {
+        if (perDeviceKickOldest && Objects.nonNull(config.getMaxConcurrentSessions())) {
             StpUtil.stpLogic.logoutByMaxLoginCount(
                     userId, null, clientCode,
                     config.getMaxConcurrentSessions(), SaLogoutMode.KICKOUT);
@@ -249,15 +250,15 @@ public class TokenService {
 
     /// 应用在线时长与活跃超时配置
     private void applyTimeConfig(SaLoginParameter model, PlatformSessionManagementConfig config) {
-        if (config == null) {
+        if (Objects.isNull(config)) {
             return;
         }
         // 在线时长 -> token 固定有效期(秒)
-        if (config.getMaxOnlineHours() != null && config.getMaxOnlineHours() > 0) {
+        if (Objects.nonNull(config.getMaxOnlineHours()) && config.getMaxOnlineHours() > 0) {
             model.setTimeout(config.getMaxOnlineHours() * 3600L);
         }
         // 活跃超时 -> 无操作超时(秒), 0或null表示不限制
-        if (config.getActiveTimeoutHours() != null && config.getActiveTimeoutHours() > 0) {
+        if (Objects.nonNull(config.getActiveTimeoutHours()) && config.getActiveTimeoutHours() > 0) {
             model.setActiveTimeout(config.getActiveTimeoutHours() * 3600L);
         }
     }
@@ -266,7 +267,7 @@ public class TokenService {
     /// 返回 true 表示需要在 login 后手动按终端踢最早会话(PER_DEVICE + KICK_OLDEST 场景)
     private boolean applyConcurrentConfig(SaLoginParameter model, PlatformSessionManagementConfig config,
                                           Object userId, String clientCode) {
-        if (config == null || !Boolean.TRUE.equals(config.getEnabled())) {
+        if (Objects.isNull(config) || !Boolean.TRUE.equals(config.getEnabled())) {
             return false;
         }
         // GATEWAY 终端豁免: 网关为机器API调用, 不受并发限制
@@ -278,7 +279,7 @@ public class TokenService {
         boolean perDevice = "PER_DEVICE".equals(config.getConcurrentScope());
 
         // NEW_SESSION 或未配并发数: 允许并发, 不限制
-        if (max == null || max <= 0 || "NEW_SESSION".equals(strategy)) {
+        if (Objects.isNull(max) || max <= 0 || "NEW_SESSION".equals(strategy)) {
             model.setIsConcurrent(true);
             return false;
         }

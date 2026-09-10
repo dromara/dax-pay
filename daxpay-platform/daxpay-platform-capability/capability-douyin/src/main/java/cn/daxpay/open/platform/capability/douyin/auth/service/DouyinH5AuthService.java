@@ -11,6 +11,7 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 /// # 抖音 H5 认证服务
 ///
@@ -81,7 +82,7 @@ public class DouyinH5AuthService {
         log.info("抖音 access_token 换取响应: {}", body);
         JSONObject object = JSONUtil.parseObj(body);
         JSONObject data = object.getJSONObject("data");
-        if (data == null) {
+        if (Objects.isNull(data)) {
             // 抖音: 换取用户标识失败: {0}
             throw new OperationFailException("error.douyin.authFailed",
                     object.getStr("message", body));

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /// # 易宝支付回调处理服务
 ///
@@ -54,7 +55,7 @@ public class YeepayPayCallbackService {
         req.setResponse(response);
         req.setCustomerIdentification(customerIdentification);
         DaxResult<YeepayCallbackParseResp> result = yeepayChannelClient.parsePayCallback(req);
-        if (result.getCode() != 0 || result.getData() == null || !result.getData().isVerified()) {
+        if (result.getCode() != 0 || Objects.isNull(result.getData()) || !result.getData().isVerified()) {
             log.error("易宝支付回调验签失败: channelMchNo={}", channelMchNo);
             CallbackData failData = new CallbackData();
             failData.setCallbackData(notify);

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /// # 交易报表共享工具
 ///
@@ -65,13 +66,13 @@ public class TradeReportSupport {
     /// 区间模式优先(start + end 都非空), 否则按 days 天数模式(days 为空时按 [DEFAULT_RANGE_DAYS] 兜底)。
     /// 供运营端/商户端/移动端 Dashboard 各统计接口共用, 消除 Controller 层的 if 分支。
     public OffsetDateTime[] resolveRange(TradeRangeQuery query) {
-        if (query.getStart() != null && query.getEnd() != null) {
+        if (Objects.nonNull(query.getStart()) && Objects.nonNull(query.getEnd())) {
             return new OffsetDateTime[]{
                     parseDateStart(query.getStart()),
                     parseDateEndExclusive(query.getEnd())
             };
         }
-        int days = query.getDays() != null ? query.getDays() : DEFAULT_RANGE_DAYS;
+        int days = Objects.nonNull(query.getDays()) ? query.getDays() : DEFAULT_RANGE_DAYS;
         return daysRange(days);
     }
 
@@ -95,8 +96,8 @@ public class TradeReportSupport {
         for (int i = 0; i < days; i++) {
             String key = startDate.plusDays(i).format(DATE_FMT);
             TradeTrendItemResult row = indexed.get(key);
-            if (row != null) {
-                if (row.getCount() == null) {
+            if (Objects.nonNull(row)) {
+                if (Objects.isNull(row.getCount())) {
                     row.setCount(0L);
                 }
                 result.add(row);
@@ -117,8 +118,8 @@ public class TradeReportSupport {
         for (int i = 0; i < days; i++) {
             String key = startDate.plusDays(i).format(DATE_FMT);
             RefundTrendItemResult row = indexed.get(key);
-            if (row != null) {
-                if (row.getCount() == null) {
+            if (Objects.nonNull(row)) {
+                if (Objects.isNull(row.getCount())) {
                     row.setCount(0L);
                 }
                 result.add(row);
@@ -138,11 +139,11 @@ public class TradeReportSupport {
         List<HourlyDistItemResult> result = new ArrayList<>(24);
         for (int h = 0; h < 24; h++) {
             HourlyDistItemResult row = indexed.get(h);
-            if (row != null) {
-                if (row.getCount() == null) {
+            if (Objects.nonNull(row)) {
+                if (Objects.isNull(row.getCount())) {
                     row.setCount(0D);
                 }
-                if (row.getAmount() == null) {
+                if (Objects.isNull(row.getAmount())) {
                     row.setAmount(0L);
                 }
                 result.add(row);
@@ -157,8 +158,8 @@ public class TradeReportSupport {
     public List<HourlyDistItemResult> toDailyAverage(List<HourlyDistItemResult> rows, long daysSpan) {
         long days = Math.max(1L, daysSpan);
         for (HourlyDistItemResult row : rows) {
-            long amount = row.getAmount() == null ? 0L : row.getAmount();
-            double count = row.getCount() == null ? 0D : row.getCount();
+            long amount = Objects.isNull(row.getAmount()) ? 0L : row.getAmount();
+            double count = Objects.isNull(row.getCount()) ? 0D : row.getCount();
             row.setAmount(Math.round((double) amount / days));
             row.setCount(Math.round(count * 10.0 / days) / 10.0);
         }
@@ -195,10 +196,10 @@ public class TradeReportSupport {
     /// 商户端维度排名占比
     public List<DimRankItemResult> computeDimProportion(List<DimRankItemResult> rows) {
         long total = rows.stream()
-                .mapToLong(r -> r.getAmount() == null ? 0L : r.getAmount())
+                .mapToLong(r -> Objects.isNull(r.getAmount()) ? 0L : r.getAmount())
                 .sum();
         for (DimRankItemResult row : rows) {
-            long amount = row.getAmount() == null ? 0L : row.getAmount();
+            long amount = Objects.isNull(row.getAmount()) ? 0L : row.getAmount();
             double proportion = total > 0
                     ? Math.round(amount * 1000.0 / total) / 10.0
                     : 0.0;

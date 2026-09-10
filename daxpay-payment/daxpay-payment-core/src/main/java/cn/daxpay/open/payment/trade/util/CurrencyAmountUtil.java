@@ -30,7 +30,7 @@ public final class CurrencyAmountUtil {
     /// @param currency    币种枚举
     /// @return 最小货币单位(如 CNY/USD 返回 150, JPY 返回 2)
     public static long majorToMinor(BigDecimal majorAmount, CurrencyEnum currency) {
-        if (majorAmount == null) {
+        if (Objects.isNull(majorAmount)) {
             return 0L;
         }
         Objects.requireNonNull(currency, "币种不能为空");
@@ -40,7 +40,7 @@ public final class CurrencyAmountUtil {
 
     /// 元(字符串) → 最小货币单位(Long)
     public static long majorToMinor(String majorAmountStr, CurrencyEnum currency) {
-        if (majorAmountStr == null || majorAmountStr.isBlank()) {
+        if (Objects.isNull(majorAmountStr) || majorAmountStr.isBlank()) {
             return 0L;
         }
         return majorToMinor(new BigDecimal(majorAmountStr), currency);
@@ -70,7 +70,7 @@ public final class CurrencyAmountUtil {
 
     /// 校验两个币种是否一致(不一致抛异常由调用方包装)
     public static boolean sameCurrency(String code1, String code2) {
-        if (code1 == null || code2 == null) {
+        if (Objects.isNull(code1) || Objects.isNull(code2)) {
             return false;
         }
         return code1.equalsIgnoreCase(code2);

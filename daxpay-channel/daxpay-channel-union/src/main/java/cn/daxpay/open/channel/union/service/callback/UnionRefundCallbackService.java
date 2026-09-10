@@ -49,7 +49,7 @@ public class UnionRefundCallbackService {
         req.setCredential(credential);
         req.setParams(params);
         DaxResult<UnionCallbackParseResp> result = unionChannelClient.parseRefundCallback(req);
-        if (result.getCode() != 0 || result.getData() == null || !result.getData().isVerified()) {
+        if (result.getCode() != 0 || Objects.isNull(result.getData()) || !result.getData().isVerified()) {
             log.error("云闪付退款回调验签失败: channelMchNo={}", channelMchNo);
             RefundCallbackData failData = new RefundCallbackData();
             failData.setCallbackData(notify);
@@ -87,7 +87,7 @@ public class UnionRefundCallbackService {
     private Map<String, String> extractFormParams(HttpServletRequest request) {
         Map<String, String> params = new HashMap<>();
         request.getParameterMap().forEach((k, v) -> {
-            if (v != null && v.length > 0) {
+            if (Objects.nonNull(v) && v.length > 0) {
                 params.put(k, v[0]);
             }
         });

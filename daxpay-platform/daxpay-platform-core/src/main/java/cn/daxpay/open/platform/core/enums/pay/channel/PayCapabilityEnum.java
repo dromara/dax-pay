@@ -91,7 +91,7 @@ public enum PayCapabilityEnum implements I18nSupport {
 
     /// 根据编码获取枚举；未知编码返回 null
     public static PayCapabilityEnum findByCode(String code) {
-        if (code == null) {
+        if (Objects.isNull(code)) {
             return null;
         }
         return Arrays.stream(values())

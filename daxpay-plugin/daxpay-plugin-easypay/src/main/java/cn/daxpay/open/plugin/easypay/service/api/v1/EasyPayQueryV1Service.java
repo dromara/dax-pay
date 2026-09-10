@@ -63,10 +63,10 @@ public class EasyPayQueryV1Service {
                 .setType(order.getType())
                 .setStatus(order.getStatus())
                 .setPid(order.getPid())
-                .setAddtime(order.getAddTime() == null ? null : FMT.format(order.getAddTime()))
-                .setEndtime(order.getEndTime() == null ? null : FMT.format(order.getEndTime()))
+                .setAddtime(Objects.isNull(order.getAddTime()) ? null : FMT.format(order.getAddTime()))
+                .setEndtime(Objects.isNull(order.getEndTime()) ? null : FMT.format(order.getEndTime()))
                 .setName(order.getName())
-                .setMoney(order.getMoney() == null ? null : order.getMoney().toPlainString())
+                .setMoney(Objects.isNull(order.getMoney()) ? null : order.getMoney().toPlainString())
                 .setParam(order.getParam())
                 .setBuyer(order.getBuyer());
         return result;

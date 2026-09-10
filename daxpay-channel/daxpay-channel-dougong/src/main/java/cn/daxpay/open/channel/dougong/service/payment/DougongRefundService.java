@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 /// # 斗拱服务商退款执行业务服务
 ///
@@ -77,6 +78,6 @@ public class DougongRefundService {
 
     /// OffsetDateTime → yyyyMMdd(东八区)
     private String formatPureDate(OffsetDateTime time) {
-        return time == null ? null : time.toLocalDate().format(PURE_DATE);
+        return Objects.isNull(time) ? null : time.toLocalDate().format(PURE_DATE);
     }
 }

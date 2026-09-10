@@ -9,6 +9,7 @@ import cn.hutool.json.JSONObject;
 import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 /// # 抖音小程序认证服务
 ///
@@ -74,7 +75,7 @@ public class DouyinMaAuthService {
                     object.getStr("err_tips", body));
         }
         JSONObject data = object.getJSONObject("data");
-        if (data == null) {
+        if (Objects.isNull(data)) {
             // 抖音: 换取用户标识失败: {0}
             throw new OperationFailException("error.douyin.authFailed", "data is null");
         }

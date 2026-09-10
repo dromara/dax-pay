@@ -5,6 +5,7 @@ import cn.daxpay.open.payment.trade.transfer.result.AlipayTransferOrderResult;
 import cn.daxpay.open.payment.trade.transfer.result.DouyinTransferOrderResult;
 import cn.daxpay.open.payment.trade.transfer.result.WechatTransferOrderResult;
 import cn.hutool.core.util.StrUtil;
+import java.util.Objects;
 
 /// # 收款人信息脱敏工具
 ///
@@ -107,7 +108,7 @@ public final class PayeeDesensitizeUtil {
 
     /// 支付宝转账单收款人脱敏: 姓名 + 收款账号(按类型)
     public static void desensitize(AlipayTransferOrderResult result) {
-        if (result == null) {
+        if (Objects.isNull(result)) {
             return;
         }
         result.setPayeeName(maskName(result.getPayeeName()));
@@ -116,7 +117,7 @@ public final class PayeeDesensitizeUtil {
 
     /// 抖音转账单收款人脱敏: 姓名 + 收款账号(按类型)
     public static void desensitize(DouyinTransferOrderResult result) {
-        if (result == null) {
+        if (Objects.isNull(result)) {
             return;
         }
         result.setPayeeName(maskName(result.getPayeeName()));
@@ -125,7 +126,7 @@ public final class PayeeDesensitizeUtil {
 
     /// 微信转账单收款人脱敏: 仅姓名(openid 为伪匿名标识, 不脱敏)
     public static void desensitize(WechatTransferOrderResult result) {
-        if (result == null) {
+        if (Objects.isNull(result)) {
             return;
         }
         result.setUserName(maskName(result.getUserName()));

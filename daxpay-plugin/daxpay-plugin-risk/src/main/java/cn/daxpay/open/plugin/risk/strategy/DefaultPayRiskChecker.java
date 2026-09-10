@@ -20,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.Objects;
 
 /// # 默认支付风控检查器
 ///
@@ -38,7 +39,7 @@ public class DefaultPayRiskChecker implements PayRiskChecker {
 
     @Override
     public void checkBeforePay(PayRiskCheckContext ctx) {
-        if (ctx == null) {
+        if (Objects.isNull(ctx)) {
             return;
         }
         ctx.setPhase(PayRiskHitPhaseEnum.BEFORE_PAY.getCode());
@@ -121,7 +122,7 @@ public class DefaultPayRiskChecker implements PayRiskChecker {
         }
         IpRegion region = ipToRegionService.getRegionByIp(ip);
         // 解析失败 → fail-open
-        if (region == null) {
+        if (Objects.isNull(region)) {
             return false;
         }
         // 回填 IP 归属城市快照(直辖市: 城市即省份; 普通市: 城市为 city), 供命中落库
@@ -164,7 +165,7 @@ public class DefaultPayRiskChecker implements PayRiskChecker {
         }
         IpRegion region = ipToRegionService.getRegionByIp(ip);
         // 未知(IPv6/查询失败)/国内(含港澳台) → 放行
-        if (region == null || region.isChinaIp()) {
+        if (Objects.isNull(region) || region.isChinaIp()) {
             return;
         }
         // 兼容 xdb 文本标注的双保险: 老版 isp=内网IP / 新版 country=Reserved

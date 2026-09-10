@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.Objects;
 
 /// # 敏感词命中记录服务
 ///
@@ -52,7 +53,7 @@ public class SystemSensitiveWordHitService {
     /// 批量回填商户名称(platform 模块通过 SPI 翻译 mchNo, 无 payment 模块时跳过)
     private void fillMchName(List<SystemSensitiveWordHitResult> list) {
         MerchantNameResolver resolver = merchantNameResolverProvider.getIfAvailable();
-        if (resolver == null) {
+        if (Objects.isNull(resolver)) {
             return;
         }
         Set<String> mchNos = list.stream()

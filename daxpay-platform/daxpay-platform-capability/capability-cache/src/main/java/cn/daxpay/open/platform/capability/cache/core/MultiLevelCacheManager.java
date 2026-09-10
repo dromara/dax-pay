@@ -11,6 +11,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.Objects;
 
 /// # 二级缓存管理器
 ///
@@ -65,11 +66,11 @@ public class MultiLevelCacheManager implements CacheManager {
     /// 每个缓存名称对应一个独立的二级缓存实例，包含独立的 L1 本地缓存空间
     private MultiLevelCache createCache(String name) {
         Cache redisCache = this.redisCacheManager.getCache(name);
-        if (redisCache == null) {
+        if (Objects.isNull(redisCache)) {
             throw new IllegalStateException("Redis cache not found: " + name);
         }
 
-        boolean secureCache = this.secureMatcher != null && this.secureMatcher.matches(name);
+        boolean secureCache = Objects.nonNull(this.secureMatcher) && this.secureMatcher.matches(name);
         log.debug("创建二级缓存: name={}, secure={}, secureL2Enabled={}, cacheEnabled={}, l1Enabled={}",
                 name, secureCache, this.secureL2Enabled, this.cacheEnabled, this.l1Enabled);
         return new MultiLevelCache(

@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /// # 用户工作台快捷入口偏好
 ///
@@ -43,10 +44,10 @@ public class UserDashboardPreferenceService {
         String clientCode = clientCodeService.getClientCode();
         String terminal = currentTerminal();
         // 入参为 null 时按空序列处理, 表示全部隐藏
-        List<String> safeEntries = entries == null ? new ArrayList<>() : entries;
+        List<String> safeEntries = Objects.isNull(entries) ? new ArrayList<>() : entries;
         UserDashboardPreference existed = userDashboardPreferenceManager
                 .findByUserAndClientAndTerminal(userId, clientCode, terminal).orElse(null);
-        if (existed == null) {
+        if (Objects.isNull(existed)) {
             // 新增
             userDashboardPreferenceManager.save(
                     UserDashboardPreference.init(userId, clientCode, terminal, safeEntries));
@@ -61,7 +62,7 @@ public class UserDashboardPreferenceService {
     /// 当前请求终端(壳维度), 未携带 x-terminal 请求头时缺省 web(兼容旧客户端)
     private String currentTerminal() {
         String terminal = RequestContextHolder.getTerminal();
-        return terminal == null ? "web" : terminal;
+        return Objects.isNull(terminal) ? "web" : terminal;
     }
 
 }

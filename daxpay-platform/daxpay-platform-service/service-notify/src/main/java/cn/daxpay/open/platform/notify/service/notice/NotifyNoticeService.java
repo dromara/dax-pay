@@ -15,6 +15,7 @@ import cn.daxpay.open.platform.notify.result.notice.NotifyNoticeResult;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Objects;
 
 /// 公告管理端服务(发布/编辑/下线/分页/详情)
 @Service
@@ -30,11 +31,11 @@ public class NotifyNoticeService {
     public NotifyNoticeResult add(NotifyNoticeParam param) {
         NotifyNotice notice = NotifyNoticeConvert.CONVERT.convert(param);
         // 重要程度默认普通
-        if (notice.getSeverity() == null) {
+        if (Objects.isNull(notice.getSeverity())) {
             notice.setSeverity(NotifySeverityEnum.normal.getCode());
         }
         // 置顶默认否
-        if (notice.getIsTop() == null) {
+        if (Objects.isNull(notice.getIsTop())) {
             notice.setIsTop(false);
         }
         // 新建默认草稿
@@ -75,7 +76,7 @@ public class NotifyNoticeService {
             "type", "notice",
             "event", "published",
             "id", notice.getId(),
-            "title", notice.getTitle() == null ? "" : notice.getTitle()
+            "title", Objects.isNull(notice.getTitle()) ? "" : notice.getTitle()
         ));
     }
 

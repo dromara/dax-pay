@@ -30,6 +30,7 @@ import java.time.ZoneOffset;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Objects;
 
 /// # 开放支付验签切面（[PaymentVerify]）
 ///
@@ -142,7 +143,7 @@ public class PaymentVerifyAspect {
     /// 与 [cn.daxpay.open.platform.system.handler.exception.RestExceptionHandler] 的响应消息保持一致语义。
     private String resolveResponseMessage(BizException ex) {
         String messageKey = ex.resolveMessageKey();
-        if (messageKey != null) {
+        if (Objects.nonNull(messageKey)) {
             return I18nUtil.get(messageKey, ex.getArgs());
         }
         return ex.getMessage();
@@ -170,7 +171,7 @@ public class PaymentVerifyAspect {
 
         // 请求参数
         Object[] args = pjp.getArgs();
-        Object param = (args != null && args.length > 0) ? args[0] : null;
+        Object param = (Objects.nonNull(args) && args.length > 0) ? args[0] : null;
         if (param instanceof MerchantPaymentCommonParam paymentParam) {
             event.setMchNo(paymentParam.getMchNo());
             event.setClientIp(paymentParam.getClientIp());
@@ -182,7 +183,7 @@ public class PaymentVerifyAspect {
             } catch (Exception e) {
                 event.setReqParam(null);
             }
-        } else if (param != null) {
+        } else if (Objects.nonNull(param)) {
             try {
                 event.setReqParam(JacksonUtil.toJson(param));
             } catch (Exception e) {
@@ -208,7 +209,7 @@ public class PaymentVerifyAspect {
             } catch (Exception e) {
                 event.setResBody(null);
             }
-        } else if (error != null) {
+        } else if (Objects.nonNull(error)) {
             event.setSuccess(false);
             event.setErrorMsg(StrUtil.sub(error.getMessage(), 0, 512));
             try {

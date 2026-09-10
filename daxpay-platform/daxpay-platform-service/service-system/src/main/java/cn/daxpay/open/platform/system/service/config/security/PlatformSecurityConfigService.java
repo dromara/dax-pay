@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 /// # 平台安全配置服务
 ///
@@ -199,7 +200,7 @@ public class PlatformSecurityConfigService {
                 PlatformConfigTypeEnum.API_SECURITY,
                 PlatformApiSecurityConfig.class,
                 defaultApiSecurityConfig());
-        if (config == null) {
+        if (Objects.isNull(config)) {
             config = defaultApiSecurityConfig();
         }
         return JacksonUtil.toJson(config);
@@ -213,7 +214,7 @@ public class PlatformSecurityConfigService {
             return defaultApiSecurityConfig();
         }
         PlatformApiSecurityConfig config = JacksonUtil.toBean(json, PlatformApiSecurityConfig.class);
-        return config == null ? defaultApiSecurityConfig() : config;
+        return Objects.isNull(config) ? defaultApiSecurityConfig() : config;
     }
 
     /// API安全配置默认值: 默认不启用，避免影响存量商户
@@ -253,7 +254,7 @@ public class PlatformSecurityConfigService {
                 PlatformConfigTypeEnum.IAM_REPLAY_PROTECT,
                 PlatformIamReplayProtectConfig.class,
                 defaultIamReplayProtectConfig());
-        if (config == null) {
+        if (Objects.isNull(config)) {
             config = defaultIamReplayProtectConfig();
         }
         return JacksonUtil.toJson(config);
@@ -266,7 +267,7 @@ public class PlatformSecurityConfigService {
             return defaultIamReplayProtectConfig();
         }
         PlatformIamReplayProtectConfig config = JacksonUtil.toBean(json, PlatformIamReplayProtectConfig.class);
-        return config == null ? defaultIamReplayProtectConfig() : config;
+        return Objects.isNull(config) ? defaultIamReplayProtectConfig() : config;
     }
 
     /// IAM域防重放配置默认值: 默认启用（登录接口已在使用），保持向后兼容
@@ -305,7 +306,7 @@ public class PlatformSecurityConfigService {
                 PlatformConfigTypeEnum.PAY_SECURITY,
                 PlatformPaySecurityConfig.class,
                 defaultPaySecurityConfig());
-        if (config == null) {
+        if (Objects.isNull(config)) {
             config = defaultPaySecurityConfig();
         }
         return JacksonUtil.toJson(config);
@@ -319,7 +320,7 @@ public class PlatformSecurityConfigService {
             return defaultPaySecurityConfig();
         }
         PlatformPaySecurityConfig config = JacksonUtil.toBean(json, PlatformPaySecurityConfig.class);
-        if (config == null) {
+        if (Objects.isNull(config)) {
             return defaultPaySecurityConfig();
         }
         // 兼容旧版: 原省级/市级开关已合并为地区拦截, 旧字段任一开启则迁移为地区拦截开启

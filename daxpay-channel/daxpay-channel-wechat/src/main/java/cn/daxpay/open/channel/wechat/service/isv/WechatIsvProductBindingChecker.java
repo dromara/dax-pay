@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Objects;
 
 /// # 微信服务商产品绑定检查器
 ///
@@ -42,9 +43,9 @@ public class WechatIsvProductBindingChecker implements ProductBindingChecker {
         Optional<WechatIsvKeyConfig> configOpt = wechatIsvKeyConfigManager.findByProduct(getProduct());
         WechatIsvKeyConfig config = configOpt.orElse(null);
 
-        boolean mchIdConfigured = config != null && StrUtil.isNotBlank(config.getWxMchId());
-        boolean apiKeyConfigured = config != null && StrUtil.isNotBlank(config.getApiKeyV3());
-        boolean certConfigured = config != null
+        boolean mchIdConfigured = Objects.nonNull(config) && StrUtil.isNotBlank(config.getWxMchId());
+        boolean apiKeyConfigured = Objects.nonNull(config) && StrUtil.isNotBlank(config.getApiKeyV3());
+        boolean certConfigured = Objects.nonNull(config)
                 && StrUtil.isNotBlank(config.getPrivateKey())
                 && StrUtil.isNotBlank(config.getCertSerialNo());
         // 产品级默认应用: 至少绑定一个支付能力

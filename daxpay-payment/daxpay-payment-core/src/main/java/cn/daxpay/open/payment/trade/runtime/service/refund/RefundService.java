@@ -80,7 +80,7 @@ public class RefundService {
         // 运营端忽略租户, 须显式商户条件防跨商户同退款号串单
         if (StrUtil.isNotBlank(param.getBizRefundNo())) {
             RefundOrder exist = refundOrderManager.findByBizRefundNoAndMch(param.getBizRefundNo(), mchNo).orElse(null);
-            if (exist != null) {
+            if (Objects.nonNull(exist)) {
                 if (Objects.equals(exist.getStatus(), RefundOrderStatusEnum.PROGRESS.getCode())) {
                     log.info("退款幂等命中: bizRefundNo={} 已有处理中退款单 {}",
                             param.getBizRefundNo(), exist.getRefundNo());
@@ -188,7 +188,7 @@ public class RefundService {
             }
             // 运营友好: 支持用网关 URL 单号反查
             GatewayPayOrder gateway = gatewayPayOrderManager.findByOrderNo(tradeNo).orElse(null);
-            if (gateway != null) {
+            if (Objects.nonNull(gateway)) {
                 // 归属校验(网关单号路径)
                 if (!Objects.equals(gateway.getMchNo(), mchNo)) {
                     throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.orderNotBelong");
@@ -203,14 +203,14 @@ public class RefundService {
         NormalPayOrder normalOrder = payNormalOrderManager.findByBizOrderNoAndMch(bizOrderNo, mchNo).orElse(null);
         GatewayPayOrder gatewayOrder = gatewayPayOrderManager.findByBizOrderNoAndMch(bizOrderNo, mchNo).orElse(null);
         // 二义性防御: 同一 bizOrderNo 在 normal 和 gateway 容器各有一单时, 要求传 tradeNo 精确定位
-        if (normalOrder != null && gatewayOrder != null) {
+        if (Objects.nonNull(normalOrder) && Objects.nonNull(gatewayOrder)) {
             throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.refund.tradeNoRequired");
         }
-        if (normalOrder != null) {
+        if (Objects.nonNull(normalOrder)) {
             return payTradeManager.findByContainerId(normalOrder.getId(), PayTradeTypeEnum.NORMAL.getCode())
                     .orElseThrow(() -> new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.notExists"));
         }
-        if (gatewayOrder != null) {
+        if (Objects.nonNull(gatewayOrder)) {
             return payTradeManager.findByContainerId(gatewayOrder.getId(), PayTradeTypeEnum.GATEWAY.getCode())
                     .orElseThrow(() -> new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.notExists"));
         }
@@ -281,10 +281,10 @@ public class RefundService {
             throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.refund.statusNotAllow", trade.getStatus());
         }
         // 退款金额必须大于零（防止零值/负值放行导致 refundableBalance 反增）
-        if (refundAmount == null || refundAmount <= 0) {
+        if (Objects.isNull(refundAmount) || refundAmount <= 0) {
             throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.refund.amountInvalid");
         }
-        long refundable = trade.getRefundableBalance() == null ? 0 : trade.getRefundableBalance();
+        long refundable = Objects.isNull(trade.getRefundableBalance()) ? 0 : trade.getRefundableBalance();
         if (refundAmount > refundable) {
             throw new BizInfoException(DaxPayErrorCode.TRADE_STATUS_ERROR, "pay.error.refund.amountExceed");
         }
@@ -350,7 +350,7 @@ public class RefundService {
 
     /// 回写退款结果: SUCCESS 仅改态; FAIL 回滚预占; PROGRESS 保持预占
     private void applyRefundResult(RefundOrder refundOrder, RefundResultBo result) {
-        if (result.getStatus() == null) {
+        if (Objects.isNull(result.getStatus())) {
             return;
         }
         if (Objects.equals(result.getStatus(), RefundOrderStatusEnum.SUCCESS)) {

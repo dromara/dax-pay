@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Objects;
 
 /// # 工作台/分析页交易统计(运营端)
 ///
@@ -64,7 +65,7 @@ public class AdminDashboardTradeService {
         OffsetDateTime end;
         OffsetDateTime prevStart;
         OffsetDateTime prevEnd;
-        if (query.getStart() != null && query.getEnd() != null) {
+        if (Objects.nonNull(query.getStart()) && Objects.nonNull(query.getEnd())) {
             // 区间模式: 上期为等长前移
             start = tradeReportSupport.parseDateStart(query.getStart());
             end = tradeReportSupport.parseDateEndExclusive(query.getEnd());
@@ -154,7 +155,7 @@ public class AdminDashboardTradeService {
 
     public List<MerchantRankItemResult> merchantRank(TradeRangeQuery query) {
         OffsetDateTime[] range = tradeReportSupport.resolveRange(query);
-        int limit = tradeReportSupport.clampLimit(query.getLimit() == null ? 0 : query.getLimit());
+        int limit = tradeReportSupport.clampLimit(Objects.isNull(query.getLimit()) ? 0 : query.getLimit());
         return tradeReportSupport.computeMerchantProportion(
                 adminTradeReportMapper.merchantRank(range[0], range[1], limit));
     }

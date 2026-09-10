@@ -10,6 +10,7 @@ import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import java.util.Objects;
 
 /// # 支付宝分账接收方通道服务
 ///
@@ -33,7 +34,7 @@ public class AlipayAllocReceiverChannelService {
                     "error.channel.alipay.allocReceiverBindFailed", result.getMsg());
         }
         AlipayAllocReceiverResp resp = result.getData();
-        if (resp != null && StrUtil.isNotBlank(resp.getErrorCode())) {
+        if (Objects.nonNull(resp) && StrUtil.isNotBlank(resp.getErrorCode())) {
             throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL,
                     "error.channel.alipay.allocReceiverBindFailed",
                     StrUtil.blankToDefault(resp.getErrorMsg(), resp.getErrorCode()));
@@ -49,7 +50,7 @@ public class AlipayAllocReceiverChannelService {
                     "error.channel.alipay.allocReceiverUnbindFailed", result.getMsg());
         }
         AlipayAllocReceiverResp resp = result.getData();
-        if (resp != null && StrUtil.isNotBlank(resp.getErrorCode())) {
+        if (Objects.nonNull(resp) && StrUtil.isNotBlank(resp.getErrorCode())) {
             throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL,
                     "error.channel.alipay.allocReceiverUnbindFailed",
                     StrUtil.blankToDefault(resp.getErrorMsg(), resp.getErrorCode()));

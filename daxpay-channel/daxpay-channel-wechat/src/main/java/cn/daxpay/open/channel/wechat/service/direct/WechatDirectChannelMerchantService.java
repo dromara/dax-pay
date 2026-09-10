@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /// # 微信直连通道商户管理
 ///
@@ -91,7 +92,7 @@ public class WechatDirectChannelMerchantService {
                 // 微信: 通道商户配置不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
         // 微信商户号变更时校验同一商户下不重复
-        if (param.getWxMchId() != null && !param.getWxMchId().equals(entity.getWxMchId())) {
+        if (Objects.nonNull(param.getWxMchId()) && !param.getWxMchId().equals(entity.getWxMchId())) {
             if (wechatDirectChannelMerchantManager.existsByMchNoAndWxMchId(
                     entity.getMchNo(), param.getWxMchId())) {
                 // 微信: 同一商户下该微信商户已存在
@@ -100,7 +101,7 @@ public class WechatDirectChannelMerchantService {
             entity.setWxMchId(param.getWxMchId());
         }
         // 转账场景(允许清空, 清空后发起转账会报"场景未配置")
-        if (param.getTransferScene() != null) {
+        if (Objects.nonNull(param.getTransferScene())) {
             entity.setTransferScene(param.getTransferScene());
         }
         wechatDirectChannelMerchantManager.updateById(entity);

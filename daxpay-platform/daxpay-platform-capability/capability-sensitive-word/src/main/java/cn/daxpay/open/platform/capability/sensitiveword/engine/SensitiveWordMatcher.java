@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.Objects;
 
 /// # 敏感词匹配器（Hutool WordTree / AC）
 ///
@@ -40,7 +41,7 @@ public class SensitiveWordMatcher {
         }
         WordTree tree = treeRef.get();
         List<String> hits = tree.matchAll(normalizedText, -1, false, false);
-        return hits == null ? Collections.emptyList() : hits;
+        return Objects.isNull(hits) ? Collections.emptyList() : hits;
     }
 
     public boolean contains(String normalizedText) {

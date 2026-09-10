@@ -107,7 +107,7 @@ public class DeviceQrCodeAdminService {
     /// 批量解绑商户(回空白库存, 保留编码/批次/金额配置; 同步清空应用与门店)
     @Transactional(rollbackFor = Exception.class)
     public void unbindMerchant(List<Long> ids) {
-        if (ids == null || ids.isEmpty()) {
+        if (Objects.isNull(ids) || ids.isEmpty()) {
             // 码牌: 请选择码牌
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.qrcode.idsEmpty");
         }
@@ -126,7 +126,7 @@ public class DeviceQrCodeAdminService {
     /// 批量解绑应用(仅清 appId, 支付时走默认应用)
     @Transactional(rollbackFor = Exception.class)
     public void unbindApp(List<Long> ids) {
-        if (ids == null || ids.isEmpty()) {
+        if (Objects.isNull(ids) || ids.isEmpty()) {
             // 码牌: 请选择码牌
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.qrcode.idsEmpty");
         }
@@ -145,7 +145,7 @@ public class DeviceQrCodeAdminService {
     /// 批量解绑门店(保留商户/应用)
     @Transactional(rollbackFor = Exception.class)
     public void unbindStore(List<Long> ids) {
-        if (ids == null || ids.isEmpty()) {
+        if (Objects.isNull(ids) || ids.isEmpty()) {
             // 码牌: 请选择码牌
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.qrcode.idsEmpty");
         }
@@ -234,7 +234,7 @@ public class DeviceQrCodeAdminService {
                 // 码牌: 请先绑定商户
                 throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.qrcode.notAssigned");
             }
-            if (mchNo == null) {
+            if (Objects.isNull(mchNo)) {
                 mchNo = qrCode.getMchNo();
             } else if (!Objects.equals(mchNo, qrCode.getMchNo())) {
                 // 码牌: 批量操作须选择同一商户下的码牌

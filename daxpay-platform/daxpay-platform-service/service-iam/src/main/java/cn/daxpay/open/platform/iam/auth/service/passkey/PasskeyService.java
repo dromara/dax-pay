@@ -69,6 +69,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.Objects;
 
 /// # 通行密钥服务
 ///
@@ -138,7 +139,7 @@ public class PasskeyService {
     public String verifyLogin(PasskeyLoginVerifyParam param, HttpServletRequest request,
                               HttpServletResponse response) {
         PasskeyChallengeService.AuthContext context = challengeService.consumeAuth(param.getChallengeId());
-        if (context == null) {
+        if (Objects.isNull(context)) {
             throw new BizInfoException("error.iam.passkey.challengeExpired");
         }
         // 会话绑定的终端与本次请求须一致
@@ -242,7 +243,7 @@ public class PasskeyService {
     @Transactional(rollbackFor = Exception.class)
     public UserPasskeyResult register(PasskeyRegisterParam param) {
         PasskeyChallengeService.RegisterContext context = challengeService.consumeRegister(param.getChallengeId());
-        if (context == null) {
+        if (Objects.isNull(context)) {
             throw new BizInfoException("error.iam.passkey.challengeExpired");
         }
         PublicKeyCredential<AuthenticatorAttestationResponse, ClientRegistrationExtensionOutputs> credential =
@@ -270,7 +271,7 @@ public class PasskeyService {
                 .setPublicKey(result.getPublicKeyCose().getBase64Url())
                 .setSignCount(result.getSignatureCount())
                 .setDeviceName(param.getDeviceName())
-                .setTransports(param.getTransports() == null ? null : String.join(",", param.getTransports()))
+                .setTransports(Objects.isNull(param.getTransports()) ? null : String.join(",", param.getTransports()))
                 .setBackupEligible(result.isBackupEligible())
                 .setBackupState(result.isBackedUp());
         userPasskeyManager.save(entity);
@@ -448,7 +449,7 @@ public class PasskeyService {
 
     /// userHandle 转 userId(8 字节大端), 长度不符返回空
     public static Optional<Long> userHandleToId(ByteArray userHandle) {
-        if (userHandle == null || userHandle.size() != 8) {
+        if (Objects.isNull(userHandle) || userHandle.size() != 8) {
             return Optional.empty();
         }
         byte[] bytes = userHandle.getBytes();

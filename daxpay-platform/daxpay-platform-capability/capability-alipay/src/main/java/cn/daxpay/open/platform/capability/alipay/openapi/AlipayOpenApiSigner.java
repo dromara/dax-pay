@@ -14,6 +14,7 @@ import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /// # 支付宝开放平台 RSA2 签名/验签
 ///
@@ -39,7 +40,7 @@ public class AlipayOpenApiSigner {
                 continue;
             }
             String value = params.get(key);
-            if (key == null || key.isEmpty() || value == null || value.isEmpty()) {
+            if (Objects.isNull(key) || key.isEmpty() || Objects.isNull(value) || value.isEmpty()) {
                 continue;
             }
             if (index > 0) {

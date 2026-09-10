@@ -100,7 +100,7 @@ public class WxPlatformAppCapabilityService {
                         "error.payment.wx.appTypeCapabilityMismatch");
             }
             WxPlatformApp app = appMap.get(item.getWxPlatformAppId());
-            if (app == null) {
+            if (Objects.isNull(app)) {
                 // 微信: 平台应用不存在
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "error.payment.wx.appNotFound");
@@ -138,11 +138,11 @@ public class WxPlatformAppCapabilityService {
                 .map(PayProductCapability::getCapabilityCode)
                 .filter(StrUtil::isNotBlank)
                 .filter(this::isWechatCapability)
-                .filter(code -> wxAppRequired == null || wxAppRequired.contains(PayCapabilityEnum.findByCode(code)))
+                .filter(code -> Objects.isNull(wxAppRequired) || wxAppRequired.contains(PayCapabilityEnum.findByCode(code)))
                 .distinct()
                 .map(code -> {
                     PayCapabilityEnum cap = PayCapabilityEnum.findByCode(code);
-                    String name = cap != null ? I18nUtil.getEnumName(cap) : code;
+                    String name = Objects.nonNull(cap) ? I18nUtil.getEnumName(cap) : code;
                     return new WxCapabilityOption(code, name);
                 })
                 .toList();
@@ -156,7 +156,7 @@ public class WxPlatformAppCapabilityService {
     /// 填充关联结果的应用展示字段
     private WxPlatformAppCapabilityResult fillResult(WxPlatformAppCapability rel, WxPlatformApp app) {
         WxPlatformAppCapabilityResult result = WxPlatformAppCapabilityConvert.CONVERT.toResult(rel);
-        if (app != null) {
+        if (Objects.nonNull(app)) {
             result.setAppName(app.getAppName())
                     .setWxAppId(app.getWxAppId())
                     .setAppType(app.getAppType());
