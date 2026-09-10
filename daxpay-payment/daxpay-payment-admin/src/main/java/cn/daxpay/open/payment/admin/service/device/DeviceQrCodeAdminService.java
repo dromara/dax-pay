@@ -98,9 +98,9 @@ public class DeviceQrCodeAdminService {
     @Transactional(rollbackFor = Exception.class)
     public void bindMerchant(DeviceQrCodeBindMerchantParam param) {
         // 应用: 有值则校验归属; 空则写 null(支付 resolveApp 取默认应用)
-        String appId = resolveOptionalAppId(param.getMchNo(), param.getAppId());
+        String appId = supportService.resolveOptionalAppId(param.getMchNo(), param.getAppId());
         // 门店: 有值则校验归属新商户; 无值写 null 防止跨商户脏数据
-        String storeNo = resolveStoreNoForBind(param.getStoreNo(), param.getMchNo());
+        String storeNo = supportService.resolveStoreNoForBind(param.getStoreNo(), param.getMchNo());
         deviceQrCodeManager.bindMerchant(param.getIds(), param.getMchNo(), appId, storeNo);
     }
 
@@ -202,23 +202,6 @@ public class DeviceQrCodeAdminService {
                 // 码牌: 码牌不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.qrcode.notFound"));
         return supportService.buildCodeLink(code, qrCode.getProgramType());
-    }
-
-    /// 绑商户可选应用: 空写 null; 非空校验归属后返回 appId
-    private String resolveOptionalAppId(String mchNo, String appId) {
-        if (StrUtil.isBlank(appId)) {
-            return null;
-        }
-        return supportService.resolveAppId(mchNo, appId);
-    }
-
-    /// 绑定商户时的门店: 空返回 null; 非空校验归属后返回
-    private String resolveStoreNoForBind(String storeNo, String mchNo) {
-        if (StrUtil.isBlank(storeNo)) {
-            return null;
-        }
-        supportService.validateStoreBelongToMch(storeNo, mchNo);
-        return storeNo;
     }
 
     /// 校验勾选码牌已分配商户且同一 mchNo, 返回该商户号

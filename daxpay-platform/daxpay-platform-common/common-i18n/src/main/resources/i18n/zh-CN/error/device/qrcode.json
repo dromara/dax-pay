@@ -15,5 +15,5 @@
   "authNotRequired": "当前支付方式无需授权",
   "storeBindMchInconsistent": "批量绑定门店时须选择同一商户下的码牌",
   "mchNoMatch": "码牌不属于当前商户",
-  "alreadyAssigned": "码牌已被认领或已分配商户"
+  "alreadyAssigned": "码牌已被绑定或已分配商户"
 }

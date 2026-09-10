@@ -153,16 +153,22 @@ public class MchDeviceQrCodeService {
         deviceQrCodeManager.unbindStore(ids);
     }
 
-    /// 认领空白码牌(平台未分配库存码 → 当前商户名下)
+    /// 认领空白码牌(平台未分配库存码 → 当前商户名下, 可同时落可选归属)
     ///
+    /// 归属可选: 应用/门店有值则校验归属后落库, 空则写 null(支付时取商户默认应用/默认门店)。
     /// 并发场景由 [DeviceQrCodeManager#claimBlank] 的条件更新兜底, 仅一个认领生效
     @Transactional(rollbackFor = Exception.class)
     public void claim(DeviceQrCodeClaimParam param) {
+        String mchNo = requireMchNo();
         DeviceQrCode qrCode = deviceQrCodeManager.findByCode(param.getCode())
                 // 码牌: 码牌不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.qrcode.notFound"));
+        // 可选归属: 非空须归属当前商户, 空保留 null 语义(不指定, 支付时兜底默认)
+        String appId = supportService.resolveOptionalAppId(mchNo, param.getAppId());
+        String storeNo = supportService.resolveStoreNoForBind(param.getStoreNo(), mchNo);
         // 空白码才可认领; 已分配商户(含已归属自己)按已被认领处理, 提示走运营划拨渠道
-        if (StrUtil.isNotBlank(qrCode.getMchNo()) || !deviceQrCodeManager.claimBlank(qrCode.getId(), requireMchNo())) {
+        if (StrUtil.isNotBlank(qrCode.getMchNo())
+                || !deviceQrCodeManager.claimBlank(qrCode.getId(), mchNo, appId, storeNo)) {
             // 码牌: 码牌已被认领或已分配商户
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.qrcode.alreadyAssigned");
         }

@@ -15,5 +15,5 @@
   "authNotRequired": "目前支付方式無需授權",
   "storeBindMchInconsistent": "批量綁定門店時須選擇同一商戶下的碼牌",
   "mchNoMatch": "碼牌不屬於當前商戶",
-  "alreadyAssigned": "碼牌已被認領或已分配商戶"
+  "alreadyAssigned": "碼牌已被綁定或已分配商戶"
 }

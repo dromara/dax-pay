@@ -15,5 +15,5 @@
   "authNotRequired": "This payment method does not require authorization",
   "storeBindMchInconsistent": "Khi gán cửa hàng hàng loạt, phải chọn mã thuộc cùng một thương nhân",
   "mchNoMatch": "QR code board does not belong to the current merchant",
-  "alreadyAssigned": "QR code board has already been claimed or assigned to a merchant"
+  "alreadyAssigned": "QR code board has already been bound or assigned to a merchant"
 }

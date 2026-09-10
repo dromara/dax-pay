@@ -15,5 +15,5 @@
   "authNotRequired": "この支払い方法では認可は不要です",
   "storeBindMchInconsistent": "店舗を一括バインドする場合、同一加盟店のコード札を選択してください",
   "mchNoMatch": "QRコードボードは現在の加盟店のものではありません",
-  "alreadyAssigned": "QRコードボードは既に取得または割り当て済みです"
+  "alreadyAssigned": "QRコードボードは既に紐付け済み、または加盟店に割り当て済みです"
 }

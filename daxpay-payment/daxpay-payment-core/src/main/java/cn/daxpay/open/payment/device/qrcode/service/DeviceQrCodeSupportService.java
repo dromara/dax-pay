@@ -145,6 +145,17 @@ public class DeviceQrCodeSupportService {
         return mchApp.getAppId();
     }
 
+    /// 应用解析(可选): 空返回 null 表示不指定(支付时取商户默认应用), 非空校验归属后返回规范化 appId
+    ///
+    /// 与 [DeviceQrCodeSupportService#resolveAppId] 的区别: 后者空值会兜底取默认应用,
+    /// 适合"必须有应用"的场景; 归属绑定类操作须保留 null 语义([DeviceQrCode#appId] 为空即默认应用), 用本方法。
+    public String resolveOptionalAppId(String mchNo, String appId) {
+        if (StrUtil.isBlank(appId)) {
+            return null;
+        }
+        return resolveAppId(mchNo, appId);
+    }
+
     /// 门店存在且归属指定商户(绑定阶段不强制启用态; mchNo 空时跳过归属比对, 由调用方保证语义)
     public void validateStoreBelongToMch(String storeNo, String mchNo) {
         MchStoreInfo store = mchStoreInfoManager.findByStoreNo(storeNo)
@@ -154,6 +165,17 @@ public class DeviceQrCodeSupportService {
             // 商户: 门店不属于当前商户
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.payment.merchant.storeNoMatch");
         }
+    }
+
+    /// 门店解析(可选): 空返回 null, 非空校验归属后返回
+    ///
+    /// 归属绑定类操作使用, 空值写 null 防止跨商户脏数据(换绑商户时原门店不随行)
+    public String resolveStoreNoForBind(String storeNo, String mchNo) {
+        if (StrUtil.isBlank(storeNo)) {
+            return null;
+        }
+        validateStoreBelongToMch(storeNo, mchNo);
+        return storeNo;
     }
 
     /// 应用业务字段更新(编码/归属不可改; 归属走 bind/unbind), 实体加载与归属校验由调用方壳层完成

@@ -53,12 +53,14 @@ public class DeviceQrCodeManager extends BaseManager<DeviceQrCodeMapper, DeviceQ
                 .update();
     }
 
-    /// 认领空白码牌: 仅当 mchNo 为空(空白库存)时写入认领商户
+    /// 认领空白码牌: 仅当 mchNo 为空(空白库存)时写入认领商户, 并可同时落可选归属(应用/门店, 空写 null)
     ///
     /// 条件更新兜底并发场景——两个商户同时认领同一空白码时, 仅一个 update 生效, 另一个返回 false
-    public boolean claimBlank(Long id, String mchNo) {
+    public boolean claimBlank(Long id, String mchNo, String appId, String storeNo) {
         return lambdaUpdate()
                 .set(DeviceQrCode::getMchNo, mchNo)
+                .set(DeviceQrCode::getAppId, appId)
+                .set(DeviceQrCode::getStoreNo, storeNo)
                 .eq(DeviceQrCode::getId, id)
                 .isNull(DeviceQrCode::getMchNo)
                 .update();
