@@ -29,10 +29,11 @@ public class ConfigCheckItem {
     /// 严重程度 code(对应 [ConfigCheckSeverityEnum#getCode])
     private String severity;
 
-    /// 前端路由 name, 点击该项时跳转
-    /// 必须等于前端菜单的 path 字段(运营端 menu.api.ts 中 `route.name = menu.path`),
-    /// 而非组件 defineOptions 的 PascalCase name, 否则 [org.vue.Router#hasRoute] 无法命中
-    /// 跳转目标(如 `/system/config/platform`、`/payment/merchant/route`)
+    /// 点击配置项时使用的 Vue Router 路由 name。
+    /// 运营端动态菜单生成路由时, 菜单的 path 会同时作为路由的 name 和 path(见 menu.api.ts)。
+    /// 因此这里应填写菜单 path, 如 `/system/config/platform`、`/payment/merchant/route`, 而不是组件 defineOptions 中的
+    /// PascalCase name, 如 `PlatformConfig`, 否则前端 router.hasRoute(routeName) 无法找到路由。
+    /// 静态路由使用其自身定义的 name, 例如 `NotifyCenter`。
     private String routeName;
 
     /// 列表型告警的未配置数量(单项型可留空)

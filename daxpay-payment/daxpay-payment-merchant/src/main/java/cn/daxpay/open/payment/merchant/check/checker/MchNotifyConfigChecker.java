@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.common.check.checker.merchant;
+package cn.daxpay.open.payment.merchant.check.checker;
 
 import cn.daxpay.open.payment.common.check.checker.MerchantConfigChecker;
 import cn.daxpay.open.payment.common.check.enums.ConfigCheckCategoryEnum;
@@ -10,15 +10,18 @@ import cn.daxpay.open.payment.merchant.entity.config.MchAppNotifyConfig;
 import cn.daxpay.open.platform.core.enums.merchant.MchAppStatusEnum;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 
 /// # 商户通知配置检查器
 ///
 /// 检测商户下启用的应用是否配置了有效的回调通知地址。
 /// 任一启用应用的 notifyUrl 为空或未启用 => 告警。
 @Component
+@Order(5)
 @RequiredArgsConstructor
 public class MchNotifyConfigChecker implements MerchantConfigChecker {
 
@@ -43,7 +46,7 @@ public class MchNotifyConfigChecker implements MerchantConfigChecker {
         long missingCount = enabledApps.stream()
                 .filter(app -> {
                     MchAppNotifyConfig cfg = mchAppNotifyConfigManager.findByAppId(app.getAppId()).orElse(null);
-                    return cfg == null
+                    return Objects.isNull(cfg)
                             || StrUtil.isBlank(cfg.getNotifyUrl())
                             || !Boolean.TRUE.equals(cfg.getStatus());
                 })

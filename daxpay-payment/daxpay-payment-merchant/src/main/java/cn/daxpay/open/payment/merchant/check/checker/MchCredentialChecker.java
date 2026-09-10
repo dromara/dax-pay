@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.common.check.checker.merchant;
+package cn.daxpay.open.payment.merchant.check.checker;
 
 import cn.daxpay.open.payment.common.check.checker.MerchantConfigChecker;
 import cn.daxpay.open.payment.common.check.enums.ConfigCheckCategoryEnum;
@@ -7,6 +7,7 @@ import cn.daxpay.open.payment.merchant.dao.config.MerchantCredentialManager;
 import cn.daxpay.open.payment.merchant.entity.config.MerchantCredential;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -15,6 +16,7 @@ import java.util.Optional;
 ///
 /// 检测商户通信凭证(公钥/密钥)是否已生成。任一为空视为未配置。
 @Component
+@Order(2)
 @RequiredArgsConstructor
 public class MchCredentialChecker implements MerchantConfigChecker {
 

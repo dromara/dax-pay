@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.common.check.checker.merchant;
+package cn.daxpay.open.payment.merchant.check.checker;
 
 import cn.daxpay.open.payment.common.check.checker.MerchantConfigChecker;
 import cn.daxpay.open.payment.common.check.enums.ConfigCheckCategoryEnum;
@@ -8,6 +8,7 @@ import cn.daxpay.open.payment.merchant.entity.appinfo.MchAppInfo;
 import cn.daxpay.open.payment.route.dao.strategy.PayRouteStrategyManager;
 import cn.daxpay.open.platform.core.enums.merchant.MchAppStatusEnum;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import java.util.List;
 /// 检测商户下启用的应用是否配置了支付路由策略。
 /// 任一启用应用无路由策略记录 => 告警(深入子表校验由支付运行时承担, 配置态仅校验策略记录存在性)。
 @Component
+@Order(4)
 @RequiredArgsConstructor
 public class PayRouteChecker implements MerchantConfigChecker {
 

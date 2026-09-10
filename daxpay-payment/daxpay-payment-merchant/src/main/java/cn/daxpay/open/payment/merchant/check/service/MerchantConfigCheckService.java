@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.common.check.service;
+package cn.daxpay.open.payment.merchant.check.service;
 
 import cn.daxpay.open.payment.common.check.checker.MerchantConfigChecker;
 import cn.daxpay.open.payment.common.check.enums.ConfigCheckCategoryEnum;
@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /// # 商户端配置检查聚合服务
 ///
@@ -27,14 +28,14 @@ public class MerchantConfigCheckService {
 
     /// 检测指定商户的未完成配置项
     public ConfigCheckResult check(String mchNo) {
-        if (mchNo == null || mchNo.isBlank()) {
+        if (Objects.isNull(mchNo) || mchNo.isBlank()) {
             return ConfigCheckResult.empty();
         }
         List<ConfigCheckItem> items = new ArrayList<>();
         Map<String, Integer> categoryCounts = new LinkedHashMap<>();
         for (MerchantConfigChecker checker : checkers) {
             ConfigCheckItem item = safeCheck(checker, mchNo);
-            if (item != null) {
+            if (Objects.nonNull(item)) {
                 items.add(item);
                 categoryCounts.merge(item.getCategory(), 1, Integer::sum);
             }

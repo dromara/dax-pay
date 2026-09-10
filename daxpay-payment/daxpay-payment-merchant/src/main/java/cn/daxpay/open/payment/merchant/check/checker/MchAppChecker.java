@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.common.check.checker.merchant;
+package cn.daxpay.open.payment.merchant.check.checker;
 
 import cn.daxpay.open.payment.common.check.checker.MerchantConfigChecker;
 import cn.daxpay.open.payment.common.check.enums.ConfigCheckCategoryEnum;
@@ -7,6 +7,7 @@ import cn.daxpay.open.payment.merchant.dao.appinfo.MchAppInfoManager;
 import cn.daxpay.open.payment.merchant.entity.appinfo.MchAppInfo;
 import cn.daxpay.open.platform.core.enums.merchant.MchAppStatusEnum;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
 ///
 /// 检测当前商户下是否存在启用状态的应用。无启用应用则视为未配置。
 @Component
+@Order(1)
 @RequiredArgsConstructor
 public class MchAppChecker implements MerchantConfigChecker {
 

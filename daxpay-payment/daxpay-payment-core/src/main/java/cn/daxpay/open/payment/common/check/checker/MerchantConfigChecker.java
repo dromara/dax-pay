@@ -2,12 +2,12 @@ package cn.daxpay.open.payment.common.check.checker;
 
 import cn.daxpay.open.payment.common.check.enums.ConfigCheckCategoryEnum;
 import cn.daxpay.open.payment.common.check.model.ConfigCheckItem;
-import cn.daxpay.open.payment.common.check.service.MerchantConfigCheckService;
 
 /// # 商户端配置检查器接口
 ///
 /// 每个实现类负责一个维度的"商户级配置是否已完成"检测。
-/// 实现类需标注 `@Component`, 由 [MerchantConfigCheckService] 自动收集。
+/// 实现类需标注 `@Component`, 由商户端配置检查聚合服务 `MerchantConfigCheckService`
+/// (位于 daxpay-payment-merchant 模块)自动收集。
 /// 已完成配置时返回 `null`, 未完成时返回 [ConfigCheckItem]。
 ///
 /// routeName 契约: [ConfigCheckItem#routeName] 必须等于**商户端前端菜单的 path 字段**

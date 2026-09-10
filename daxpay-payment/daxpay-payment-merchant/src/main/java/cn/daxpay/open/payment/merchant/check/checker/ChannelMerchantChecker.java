@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.common.check.checker.merchant;
+package cn.daxpay.open.payment.merchant.check.checker;
 
 import cn.daxpay.open.payment.common.check.checker.MerchantConfigChecker;
 import cn.daxpay.open.payment.common.check.enums.ConfigCheckCategoryEnum;
@@ -6,6 +6,7 @@ import cn.daxpay.open.payment.common.check.model.ConfigCheckItem;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
 import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 ///
 /// 检测商户下是否存在启用状态的通道商户。无启用通道商户则视为未配置。
 @Component
+@Order(3)
 @RequiredArgsConstructor
 public class ChannelMerchantChecker implements MerchantConfigChecker {
 
