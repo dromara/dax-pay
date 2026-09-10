@@ -54,16 +54,6 @@ public class IamUserSocialBindStore {
                 authUser.getNickname(), authUser.getAvatar());
     }
 
-    /// 保存小程序快捷登录绑定关系(无昵称头像)
-    /// @param userId 本地用户ID
-    /// @param clientCode 身份域编码
-    /// @param source 平台来源(weChatApplet/alipayApplet/douyinApplet)
-    /// @param openId 平台用户唯一标识
-    @Transactional(rollbackFor = Exception.class)
-    public void saveAppletBind(Long userId, String clientCode, String source, String openId) {
-        this.doSaveBind(userId, clientCode, source, openId, null, null);
-    }
-
     /// 绑定保存核心: 该三方账号已被他人绑定则拒绝, 同用户重复绑定幂等更新, 同一用户同一平台只允许绑定一个账号
     private void doSaveBind(Long userId, String clientCode, String source, String openId,
                             String username, String avatar) {

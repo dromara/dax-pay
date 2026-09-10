@@ -27,9 +27,6 @@ public interface AuthLoginTypeCode {
     /// 微信登录(公众号)
     String WE_CHAT = "weChat";
 
-    /// 微信登录(小程序)
-    String WE_CHAT_APPLET = "weChatApplet";
-
     /// 微信登录(开放平台)
     String WE_CHAT_OPEN = "weChatOpen";
 

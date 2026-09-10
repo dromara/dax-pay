@@ -21,9 +21,6 @@ import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
 import cn.daxpay.open.platform.iam.entity.social.SocialLoginConfig;
 import cn.daxpay.open.platform.iam.enums.SocialAuthMode;
 import cn.daxpay.open.platform.iam.enums.SocialClientEnum;
-import cn.daxpay.open.platform.iam.param.social.SocialAppletBindParam;
-import cn.daxpay.open.platform.iam.param.social.SocialAppletLoginParam;
-import cn.daxpay.open.platform.iam.result.social.AppletAuthResult;
 import cn.daxpay.open.platform.iam.result.social.SocialBindResult;
 import cn.daxpay.open.platform.iam.result.social.SocialCallbackUrlResult;
 import cn.daxpay.open.platform.iam.result.social.SocialEnabledPlatformResult;
@@ -68,8 +65,6 @@ public class SocialLoginService {
 
     private final AlipaySocialAuthRequestFactory alipaySocialAuthRequestFactory;
 
-    private final SocialAppletAuthService socialAppletAuthService;
-
     private final IamUserSocialBindStore socialBindStore;
 
     private final IamSocialLoginHandler socialLoginHandler;
@@ -103,10 +98,6 @@ public class SocialLoginService {
             boolean configured = StrUtil.isNotBlank(baseUrl);
             String base = configured ? StrUtil.removeSuffix(baseUrl, "/") : "";
             for (SocialSourceEnum source : SocialSourceEnum.values()) {
-                // 小程序快捷登录平台无 OAuth 跳转回调, 不生成回调地址条目
-                if (source.isApplet()) {
-                    continue;
-                }
                 String code = source.getCode();
                 list.add(buildCallbackItem(client.getCode(), code, SocialAuthMode.LOGIN, base, configured));
                 list.add(buildCallbackItem(client.getCode(), code, SocialAuthMode.BIND, base, configured));
@@ -146,11 +137,6 @@ public class SocialLoginService {
         if (Objects.isNull(socialSource)) {
             // 社交登录: 不支持的平台
             throw new OperationFailException("error.social.unsupportedSource");
-        }
-        // 小程序快捷登录平台无 OAuth 跳转语义, 拒绝生成授权地址(code 由前端直传)
-        if (socialSource.isApplet()) {
-            // 社交登录: 小程序平台不支持生成跳转授权地址
-            throw new OperationFailException("error.social.appletRenderUnsupported");
         }
         // 按 client 解析前端 baseUrl
         String baseUrl = this.resolveBaseUrl(socialClient);
@@ -263,43 +249,6 @@ public class SocialLoginService {
             log.error("社交绑定失败: source={}, msg={}", source, e.getMessage(), e);
             return new SocialExchangeResult().setError("oauth_failed");
         }
-    }
-
-    /// 小程序快捷登录(code 直传, 无 OAuth 跳转)
-    ///
-    /// 用平台 login code 换取 openId 后查绑定关系:
-    /// 未绑定抛业务异常明确引导(不自动注册, 管理端用户由管理员创建);
-    /// 命中后与 [exchangeForLogin] 同构收尾(client 归属校验 + 状态检查链 + [IamSocialLoginHandler] 统一登录, 含双因素).
-    public SocialExchangeResult appletLogin(SocialAppletLoginParam param,
-                                            HttpServletRequest request, HttpServletResponse response) {
-        SocialClientEnum socialClient = this.requireSocialClient(param.getClient());
-        // code 换 openId(配置校验与网络调用在 SocialAppletAuthService 内)
-        AppletAuthResult authResult = socialAppletAuthService.exchangeOpenId(param.getSource(), param.getCode());
-        // 查绑定关系, 未绑定直接引导(不自动注册)
-        Long userId = socialBindStore.findUserIdBySourceAndOpenId(param.getSource(), authResult.getOpenId())
-                .orElseThrow(() -> {
-                    // 社交登录: 小程序账号未绑定系统账号
-                    throw new OperationFailException("error.social.appletUnbind");
-                });
-        // 身份域 + 用户状态检查(对齐密码路径 UserInfoStatusCheck 链)
-        this.validateSocialLoginUser(userId, socialClient.getCode(), param.getSource(), request, response);
-        // 统一创建登录态(内含双因素检查, 与 redirect 模式同构)
-        String token = socialLoginHandler.login(userId, socialClient.getCode(), param.getSource(), request, response);
-        return new SocialExchangeResult().setToken(token);
-    }
-
-    /// 小程序快捷绑定(需登录态, code 直传)
-    ///
-    /// 终端与用户身份从登录态取(不接受前端传 client, 天然防跨端绑定),
-    /// 幂等规则复用 [IamUserSocialBindStore](已被他人绑定拒绝/已绑同平台幂等).
-    public SocialExchangeResult appletBind(SocialAppletBindParam param) {
-        // 绑定场景必须已登录
-        Long userId = SecurityUtil.getUserId();
-        UserInfoResult userInfo = userQueryService.findById(userId);
-        String clientCode = userInfo.getClientCode();
-        AppletAuthResult authResult = socialAppletAuthService.exchangeOpenId(param.getSource(), param.getCode());
-        socialBindStore.saveAppletBind(userId, clientCode, param.getSource(), authResult.getOpenId());
-        return new SocialExchangeResult().setResult("bind_success");
     }
 
     /// 查询指定用户已绑定的所有第三方账号

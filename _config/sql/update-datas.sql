@@ -98,3 +98,16 @@ UPDATE "public"."iam_perm_menu" SET pid = 91422, sort_no = 1, last_modifier = 1,
 UPDATE "public"."iam_perm_menu" SET pid = 91422, sort_no = 2, last_modifier = 1, last_modified_time = '2026-09-01 12:00:00+00' WHERE id = 91305 AND client_code = 'merchant';
 DELETE FROM "public"."iam_role_menu" WHERE menu_id = 91400;
 DELETE FROM "public"."iam_perm_menu" WHERE id = 91400 AND client_code = 'merchant';
+
+-- =============================================================
+-- 2026-09-10 移除小程序快捷登录功能(weChatApplet/alipayApplet/douyinApplet)
+-- 背景: 凭据为 source 维度单份, 无法支撑多小程序(管理端/商户端各自独立 appid)并存, 功能整体下线;
+--       各端小程序登录回归账号密码; 收银台链路(pay_platform_mobile_app)不受影响。
+-- 本段清理存量库中的 applet 配置行与用户绑定行, 幂等可重放。
+-- =============================================================
+
+-- 清理小程序快捷登录的平台配置行(未配置过的库无行, 0 行删除为正常)
+DELETE FROM "public"."iam_social_login_config" WHERE source IN ('weChatApplet', 'alipayApplet', 'douyinApplet');
+
+-- 清理用户的小程序快捷登录绑定关系(绑定过小程序的用户需改用账号密码登录)
+DELETE FROM "public"."iam_user_social" WHERE source IN ('weChatApplet', 'alipayApplet', 'douyinApplet');
