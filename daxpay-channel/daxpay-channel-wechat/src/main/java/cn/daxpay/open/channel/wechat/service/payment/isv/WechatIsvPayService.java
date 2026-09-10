@@ -69,7 +69,7 @@ public class WechatIsvPayService {
                     "error.channel.wechat.attachTooLong", StrUtil.length(payParam.getAttach()));
         }
         req.setNotifyUrl(this.buildNotifyUrl(order, payParam.getChannelMchNo()));
-        // 关单时间取自订单(createOrder 已对 null 兜底默认30分钟), 不用 payParam 原始入参
+        // 关单时间: payHandle 已将容器过期时间回填到 payParam(新建单兜底默认30分钟/幂等重入沿用已有单)
         req.setExpireTime(payParam.getExpiredTime());
         if (req.getMethod() == WechatPayMethod.H5) {
             // 用户终端IP(H5必填): 上游入口(NormalPayService/CashierPayService 等)已对 clientIp 做兜底提取

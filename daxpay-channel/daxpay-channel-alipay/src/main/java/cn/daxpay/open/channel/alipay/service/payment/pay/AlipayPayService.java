@@ -61,7 +61,7 @@ public class AlipayPayService {
         if (alipayMethod == AlipayPayMethod.PC || alipayMethod == AlipayPayMethod.WAP) {
             req.setReturnUrl(this.buildPayResultUrl(order.getTradeNo()));
         }
-        // 关单时间取自订单(createOrder 已对 null 兜底默认30分钟), 子应用据此向支付宝设置 time_expire
+        // 关单时间: payHandle 已将容器过期时间回填到 payParam(新建单兜底默认30分钟), 子应用据此向支付宝设置 time_expire
         req.setExpireTime(payParam.getExpiredTime());
         // 分账订单标识: 透传支付宝 royalty_freeze=true 冻结分账资金
         req.setAllocation(Boolean.TRUE.equals(payParam.getAllocation()));

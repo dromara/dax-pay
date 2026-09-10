@@ -121,6 +121,11 @@ public class NormalPayService {
         if (Objects.isNull(context.getTrade())) {
             payAssistService.createOrder(payParam, context);
         }
+        // 过期时间以容器为准回填: 新建单 createOrder 已对 null 兜底默认30分钟、幂等重入沿用已有单的值,
+        // 保证 doPay 上送通道的 time_expire 与本地容器时效一致(通道侧自动过期, 避免本地已关但通道可付的窗口)
+        if (Objects.nonNull(context.getNormalOrder())) {
+            payParam.setExpiredTime(context.getNormalOrder().getExpiredTime());
+        }
         PayTrade trade = context.getTrade();
         // 支付操作, 失败标记 trade 为 FAIL 并持久化
         PayTradeResultBo result;
