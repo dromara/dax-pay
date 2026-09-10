@@ -1,9 +1,14 @@
 package cn.daxpay.open.payment.auth.core;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /// # 认证来源标识（平台级 Provider 路由键）
 ///
 /// 标识本次认证使用的平台级配置来源, 由 [cn.daxpay.open.payment.auth.platform.PlatformAuthProvider]
 /// 在 generateAuthUrl 时写入 [AuthSession#getSource], 认证分发层据此 O(1) 查找对应 Provider。
+@Getter
+@AllArgsConstructor
 public enum AuthSourceEnum {
     /// 平台级支付宝配置(系统支付宝配置调试场景)
     PLATFORM_ALIPAY("platform_alipay"),
@@ -14,11 +19,4 @@ public enum AuthSourceEnum {
 
     private final String code;
 
-    AuthSourceEnum(String code) {
-        this.code = code;
-    }
-
-    public String getCode() {
-        return code;
-    }
 }
