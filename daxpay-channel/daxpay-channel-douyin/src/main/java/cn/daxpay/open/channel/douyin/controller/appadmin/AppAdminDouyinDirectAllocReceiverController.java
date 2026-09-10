@@ -43,6 +43,14 @@ public class AppAdminDouyinDirectAllocReceiverController {
         return Res.ok(douyinDirectAllocReceiverService.page(pageParam, query));
     }
 
+    @PermCode(code = PermCodes.Action.VIEW)
+    @Operation(summary = "查询单条(详情页)")
+    @GetMapping("/find-by-id")
+    public Result<DouyinDirectAllocReceiverResult> findById(
+            @NotNull(message = "{validation.field.id.notNull}") Long id) {
+        return Res.ok(douyinDirectAllocReceiverService.findById(id));
+    }
+
     @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "新增并绑定接收方(同步调通道, 失败记录保留)")
     @PostMapping("/create")

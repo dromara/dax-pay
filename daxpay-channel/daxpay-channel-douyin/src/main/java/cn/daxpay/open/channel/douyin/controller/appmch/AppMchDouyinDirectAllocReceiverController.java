@@ -79,6 +79,15 @@ public class AppMchDouyinDirectAllocReceiverController {
         return Res.ok(allocReceiverService.page(pageParam, query));
     }
 
+    @PermCode(code = PermCodes.Action.VIEW)
+    @Operation(summary = "查询单条(详情页)")
+    @GetMapping("/find-by-id")
+    public Result<DouyinDirectAllocReceiverResult> findById(
+            @NotNull(message = "{validation.field.id.notNull}") Long id) {
+        // 归属校验复用 loadOwned(非本商户按不存在处理), 单次查询直接转换避免重复读库
+        return Res.ok(this.loadOwned(id).toResult());
+    }
+
     @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "新增并绑定接收方(同步调通道, 失败记录保留)")
     @PostMapping("/create")

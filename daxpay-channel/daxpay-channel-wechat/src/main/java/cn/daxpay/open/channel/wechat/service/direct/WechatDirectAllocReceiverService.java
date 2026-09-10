@@ -55,6 +55,11 @@ public class WechatDirectAllocReceiverService {
         return MpUtil.toPageResult(allocReceiverManager.page(pageParam, query));
     }
 
+    /// 查询单条(详情页按 id 定位, 归属校验同写操作)
+    public WechatDirectAllocReceiverResult findById(Long id) {
+        return this.loadAndCheck(id).toResult();
+    }
+
     /// 新增并绑定接收方
     ///
     /// 绑定失败时记录保留(状态 fail + 失败原因), 并向调用方抛出失败异常以便即时提示。
