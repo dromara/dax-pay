@@ -291,3 +291,72 @@ node redact-data.mjs <raw> ../sql/data.sql
 
 - `notify_mail_record` 的 2 条冗长枚举注释已于同日治理完毕：源库 `COMMENT ON` + 实体类注释同步 + `table.sql` 重导 + `update-tables.sql` 补增量，find-verbose-comments 复扫 0 条
 - §10 的「导入干净 PG 库验证」勾选项在本次 §11.5 已完成等价实测
+
+---
+
+## 12. 2026-09-11 内置演示账号 +「全新商户」
+
+设计依据详见 `_doc/design/内置演示账号与全新商户种子方案-2026-09-11.md`。
+
+### 12.1 变更目标
+
+data.sql 从「只带 bootx 一个内置超管」升级为**自带一套可登录、可操作的演示账号与商户**，供对外演示：
+
+| 账号 | 端 | 角色 | 商户 |
+|------|----|------|------|
+| `bootx` | admin | 内置超管（代码识别，无角色绑定） | — |
+| `csadmin` | admin | role 1 `admin_admin` | — |
+| `csqysh` | merchant | role 2 `merchant_admin` | M1784445131420「示例商户」 |
+
+商户以**「全新形态」**交付 —— 等价于「刚在运营端点完『新增商户』」的状态，不含任何后续配置。
+
+### 12.2 脚本改造（`redact-data.mjs`）
+
+| 项 | 改造前 | 改造后 |
+|----|--------|--------|
+| 判定层次 | `KEEP_TABLES` + `BOOTX_ADMIN_RE`（硬编码 `id=1`） | `KEEP_TABLES` + `DEMO_ROW_IDS`（表 → 主键 id 集合，含 bootx/csadmin/csqysh 及商户身份行） |
+| 密码重置范围 | 仅 `id=1` | 三个演示账号 id（正则交替，长 id 在前） |
+| 演示数据校验 | 无 | **新增**：行级白名单表若一条都没命中 → 打印告警并**非零退出**，防演示数据随包静默丢失 |
+| pg_dump 18 兼容 | 需外层 sed 剥离 | **内置**：自动跳过 `\restrict` / `\unrestrict` 与 `SET transaction_timeout`（后者 PG17+ 才有，PG16 服务端会报 `unrecognized configuration parameter`），流水线少一步且不再依赖脆弱的 shell 转义 |
+
+另修复一处判据缺陷：密码列替换原先以「替换后字符串是否变化」判断是否生效，当开发库该账号密码**本就是**该固定哈希时会误判为「结构不符」而非零退出；改为先单独 `test()` 正则是否命中，再执行替换（实测修前 2/3、修后 3/3）。
+
+> `DEMO_ROW_IDS` 与 `DEMO_PASSWORD_USER_IDS` 中的 id 固化自 dev 库现网值，保证产物确定性。**重建演示账号/商户后必须同步更新该清单**，否则脚本会以非零退出报错。
+
+### 12.3 保留清单（8 张表 / 14 行）
+
+| 表 | 保留行数 | 说明 |
+|----|---------|------|
+| `iam_user_info` | 3 | bootx + csadmin + csqysh，密码统一重置为固定哈希 |
+| `iam_user_expand_info` | 3 | 同上三个 id（登录后拉用户信息必需） |
+| `iam_user_password_security` | 2 | csadmin + csqysh，见 §12.4 |
+| `iam_user_role` | 2 | csadmin→role 1、csqysh→role 2 |
+| `mch_info` | 1 | 商户本体（示例商户） |
+| `mch_user` | 1 | 商户 ↔ 账号绑定（登录后解析 mchNo 必需） |
+| `mch_app_info` | 1 | **仅** `default_app=true` 的默认应用 |
+| `mch_store_info` | 1 | **仅** `default_store=true` 的默认门店 |
+
+连同 18 张系统种子表（`iam_perm_code`/`iam_perm_menu`/`iam_role`/`iam_role_code`/`iam_role_menu`、`base_*`、`pay_md_*` 元数据、`system_dict*`、`system_sensitive_word`）共 26 张表、4369 条 INSERT。
+
+### 12.4 两个必须处理的点（否则演示账号用不了）
+
+1. **`iam_user_password_security` 必须随包交付**：`PasswordStatusCheck` 对超管直接 `return`（这就是 bootx 可以没有该行的原因），但非超管账号缺行会降级为 `initialPassword=true`，登录后除改密等白名单路径外**全部 40302**，等于卡在改密页进不去系统。交付值：`initial_password=false` + `password_expire_time=2099-12-31`（`needChangePassword` 会比较过期时间，原值的 2026-12 日期将来装包就过期）。
+2. **`iam_user_password_history` 必须保持剔除**：bcrypt 每次加盐不同，历史里的哈希文本与固定哈希不同但 `checkpw("121212", ...)` 为真，`validatePasswordHistory` 命中即抛 `historyDuplicate`，导致演示账号**改不回 121212**。不给演示账号开例外。
+
+### 12.5 实测结果（2026-09-11）
+
+- **流水线**：`pg_dump --data-only --inserts` → `node redact-data.mjs`，退出码 0；密码重置 3/3；演示行保留数 8 张表全部命中
+- **干净库导入**：新建临时库按 `table.sql → data.sql` 顺序执行，`ON_ERROR_STOP=1` 下**零错误**；验后已 dropdb
+- **敏感扫描**：`v1:` / `accessKey` / `secretKey` / `BEGIN PRIVATE KEY` / `BEGIN CERTIFICATE` 命中数**均为 0**；`$2a$10$` 命中 3（三个演示账号）
+- **商户形态**：`mch_channel_merchant` / `mch_credential` / `device_qr_code` / `pay_normal_order` / `pay_trade` / `pay_close_record` / `mch_notice_record` / `iam_user_password_history` / `system_platform_config` **全部 0 行**；`mch_app_info` 与 `mch_store_info` 各 1 行（默认）
+- **权限种子**：role 1 授权 80 权限码 / 82 菜单，role 2 授权 66 权限码 / 56 菜单
+- **密码可用性**：用项目同款 hutool `BCrypt.checkpw("121212", 交付哈希)` = `true`（反例 `123456` = `false`）
+
+### 12.6 产物变化
+
+| 指标 | 改造前 | 改造后 |
+|------|--------|--------|
+| 文件大小 | 438 KB | 443 KB |
+| 有数据表数 | 20 | 26 |
+| 含账号数 | 1（bootx） | 3 |
+| 含商户数 | 0 | 1（示例商户，全新形态） |
