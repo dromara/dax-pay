@@ -142,27 +142,19 @@ public class UserAdminService {
         }
     }
 
-    /// 添加新用户（终端维度唯一性校验）
+    /// 添加新用户（按身份域校验账号唯一性）
+    ///
     @Transactional(rollbackFor = Exception.class)
     public UserPasswordResult add(UserInfoParam userInfoParam) {
-        return add(userInfoParam, false);
-    }
-
-    /// 添加新用户
-    /// @param skipDuplicateCheck 是否跳过重复校验（调用方已做更精确的校验时使用）
-    @Transactional(rollbackFor = Exception.class)
-    public UserPasswordResult add(UserInfoParam userInfoParam, boolean skipDuplicateCheck) {
         // 使用传入的身份域编码，未指定时默认为 admin
         String clientCode = StrUtil.isNotBlank(userInfoParam.getClientCode())
                 ? userInfoParam.getClientCode()
                 : ClientEnum.ADMIN.getCode();
         userInfoParam.setClientCode(clientCode);
-        if (!skipDuplicateCheck) {
-            // 按终端校验账号唯一性
-            if (userQueryService.existsAccountByClientCode(clientCode, userInfoParam.getAccount())) {
-                // 权限: 该终端下账号已存在
-                throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.accountExistsInClient");
-            }
+        // 按终端校验账号唯一性
+        if (userQueryService.existsAccountByClientCode(clientCode, userInfoParam.getAccount())) {
+            // 权限: 该终端下账号已存在
+            throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.accountExistsInClient");
         }
         // 密码可选: 未传时生成随机密码, 传入时按 RSA 密文解密(兼容存量调用方)
         String password = StrUtil.isBlank(userInfoParam.getPassword())
@@ -267,6 +259,15 @@ public class UserAdminService {
         // 禁止修改终端归属
         userInfoParam.setClientCode(userInfo.getClientCode());
         userInfoParam.setPassword(null);
+        // 账号变更时按终端校验唯一性（排除自身）：改成已存在的账号会造出重复登录账号，
+        // 登录按 client_code+account 查单条会抛多结果异常，导致新旧账号一并不可用
+        if (StrUtil.isNotBlank(userInfoParam.getAccount())
+                && !userInfoParam.getAccount().equals(userInfo.getAccount())
+                && userQueryService.existsAccountByClientCode(
+                        userInfo.getClientCode(), userInfoParam.getAccount(), userInfo.getId())) {
+            // 权限: 该终端下账号已存在
+            throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.accountExistsInClient");
+        }
         UserConvert.CONVERT.copy(userInfoParam, userInfo);
         userInfoManager.updateById(userInfo);
     }

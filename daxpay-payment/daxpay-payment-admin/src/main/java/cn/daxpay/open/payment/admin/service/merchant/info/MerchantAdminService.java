@@ -83,7 +83,6 @@ public class MerchantAdminService {
     private final RoleManager roleManager;
     private final UserRoleService userRoleService;
     private final MerchantUserManager merchantUserManager;
-    private final ClientCodeService clientCodeService;
     private final TransService transService;
     private final MchAppInfoService mchAppInfoService;
     private final MchStoreInfoService mchStoreInfoService;
@@ -134,7 +133,9 @@ public class MerchantAdminService {
         userInfoParam.setName(merchant.getMchName()+"管理员");
         // 设置终端归属为商户端
         userInfoParam.setClientCode(ClientEnum.MERCHANT.getCode());
-        UserPasswordResult adminResult = userAdminService.add(userInfoParam, true);
+        // 商户管理员账号必须按商户终端校验唯一性, 不可跳过:
+        // 跳过会产生重复登录账号, 登录按 client_code+account 查单条会抛多结果异常, 导致新旧账号一并不可用
+        UserPasswordResult adminResult = userAdminService.add(userInfoParam);
         Role role;
         // 商户: 商户管理员角色不存在
         role = roleManager.findByCode(RoleCodeEnum.MERCHANT_ADMIN.getCode())
