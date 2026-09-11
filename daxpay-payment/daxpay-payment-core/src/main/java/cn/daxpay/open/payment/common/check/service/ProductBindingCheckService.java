@@ -1,6 +1,5 @@
-package cn.daxpay.open.payment.admin.check.service;
+package cn.daxpay.open.payment.common.check.service;
 
-import cn.daxpay.open.payment.admin.controller.check.ProductBindingCheckController;
 import cn.daxpay.open.payment.common.check.checker.ProductBindingChecker;
 import cn.daxpay.open.payment.common.check.model.ProductBindingCheckItem;
 import cn.daxpay.open.payment.common.check.model.ProductBindingCheckResult;
@@ -16,7 +15,9 @@ import java.util.Objects;
 /// 自动收集所有 [ProductBindingChecker] 实现, 按支付产品编码路由到对应检查器。
 /// 单个检查器抛异常时降级返回空结果, 不影响其他产品。
 ///
-/// 供运营端产品绑定检查 Controller 调用, 前端在进入服务商产品配置页时拉取检查结果。
+/// 供运营端 Web(`ProductBindingCheckController`)与小程序管理端
+/// (`AppAdminProductBindingCheckController`)的绑定检查 Controller 调用,
+/// 前端在进入服务商产品配置页时拉取检查结果。
 @Slf4j
 @Service
 @RequiredArgsConstructor

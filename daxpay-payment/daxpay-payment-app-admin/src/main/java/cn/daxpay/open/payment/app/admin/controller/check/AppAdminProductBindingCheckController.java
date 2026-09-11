@@ -1,4 +1,4 @@
-package cn.daxpay.open.payment.admin.controller.check;
+package cn.daxpay.open.payment.app.admin.controller.check;
 
 import cn.daxpay.open.payment.common.check.model.ProductBindingCheckResult;
 import cn.daxpay.open.payment.common.check.service.ProductBindingCheckService;
@@ -14,17 +14,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/// # 产品绑定检查(运营端)
+/// 小程序管理端-产品绑定检查
 ///
-/// 服务商产品配置页的数据源, 展示该产品各项关键配置的绑定状态。
-/// 不挂菜单权限码: 与配置检查(运营端)一致, 任何已认证运营用户均可查看产品绑定完成度。
-@Tag(name = "产品绑定检查(运营端)")
+/// 镜像自 admin 版 `ProductBindingCheckController`(路径 /admin/product-binding-check),
+/// 供小程序端服务商产品配置页展示各项关键配置的绑定状态。
+/// 不挂菜单权限码: 与运营端一致, 任何已认证运营用户均可查看产品绑定完成度。
 @IgnoreAuth(login = true)
 @Validated
+@Tag(name = "小程序管理端-产品绑定检查")
 @RestController
-@RequestMapping("/admin/product-binding-check")
+@RequestMapping("/app-admin/product-binding-check")
 @RequiredArgsConstructor
-public class ProductBindingCheckController {
+public class AppAdminProductBindingCheckController {
 
     private final ProductBindingCheckService productBindingCheckService;
 
