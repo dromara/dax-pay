@@ -19651,19 +19651,32 @@ CREATE INDEX idx_iam_role_code_role_id ON public.iam_role_code USING btree (role
 
 COMMENT ON INDEX public.idx_iam_role_code_role_id IS '角色权限码关联表角色ID索引';
 
-
 --
--- Name: idx_iam_user_info_client_account; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_iam_user_info_client_account ON public.iam_user_info USING btree (client_code, account) WHERE (deleted = false);
-
-
---
--- Name: INDEX idx_iam_user_info_client_account; Type: COMMENT; Schema: public; Owner: -
+-- Name: uk_iam_role_code; Type: INDEX; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_iam_user_info_client_account IS '用户信息表终端账号索引';
+CREATE UNIQUE INDEX uk_iam_role_code ON public.iam_role USING btree (code) WHERE (deleted = false);
+
+
+--
+-- Name: INDEX uk_iam_role_code; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_iam_role_code IS '角色编码全局唯一(按 code 解析内置角色, 重复会导致角色解析异常)';
+
+
+--
+-- Name: uk_iam_user_info_client_account; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_iam_user_info_client_account ON public.iam_user_info USING btree (client_code, account) WHERE (deleted = false);
+
+
+--
+-- Name: INDEX uk_iam_user_info_client_account; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_iam_user_info_client_account IS '同一身份域下账号全局唯一(登录凭据, 重复会导致登录异常)';
 
 
 --
@@ -19765,17 +19778,17 @@ COMMENT ON INDEX public.idx_mch_credential_mch_no IS '商户号索引';
 
 
 --
--- Name: idx_mch_info_mch_no; Type: INDEX; Schema: public; Owner: -
+-- Name: uk_mch_info_mch_no; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX idx_mch_info_mch_no ON public.mch_info USING btree (mch_no);
+CREATE UNIQUE INDEX uk_mch_info_mch_no ON public.mch_info USING btree (mch_no) WHERE (deleted = false);
 
 
 --
--- Name: INDEX idx_mch_info_mch_no; Type: COMMENT; Schema: public; Owner: -
+-- Name: INDEX uk_mch_info_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_mch_info_mch_no IS '商户号关联查询';
+COMMENT ON INDEX public.uk_mch_info_mch_no IS '商户号全局唯一(商户业务主键, 重复会导致按号查询异常)';
 
 
 --
