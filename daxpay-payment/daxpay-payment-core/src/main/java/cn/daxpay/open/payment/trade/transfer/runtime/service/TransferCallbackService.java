@@ -86,11 +86,17 @@ public class TransferCallbackService {
             return;
         }
         if (!Objects.equals(oldStatus, "processing")) {
-            data.setCallbackStatus(CallbackStatusEnum.IGNORE)
-                    .setCallbackErrorMsg("转账单状态非法,记录回调记录");
-            log.warn("转账回调: 凭证 {} 状态为 {} 非处理中, 忽略", trade.getTradeNo(), oldStatus);
-            payCallbackRecordService.saveTransfer(channelMchNo, data);
-            return;
+            // FAIL 终态 + 通道回调成功: 放行 FAIL→SUCCESS 纠正(Assist CAS 支持), 其余非处理中状态忽略
+            boolean failToSuccessFix = Objects.equals(oldStatus, "fail")
+                    && Objects.equals(CallbackStatusEnum.SUCCESS.getCode(), data.getTradeStatus());
+            if (!failToSuccessFix) {
+                data.setCallbackStatus(CallbackStatusEnum.IGNORE)
+                        .setCallbackErrorMsg("转账单状态非法,记录回调记录");
+                log.warn("转账回调: 凭证 {} 状态为 {} 非处理中, 忽略", trade.getTradeNo(), oldStatus);
+                payCallbackRecordService.saveTransfer(channelMchNo, data);
+                return;
+            }
+            log.warn("转账回调: 凭证 {} 已 FAIL 但通道回调转账成功, 走 FAIL→SUCCESS 纠正", trade.getTradeNo());
         }
         // 按回调状态流转(成功/关闭/失败均双表 CAS + 通知, 容器读写由 Assist 内部完成)
         if (Objects.equals(CallbackStatusEnum.SUCCESS.getCode(), data.getTradeStatus())) {

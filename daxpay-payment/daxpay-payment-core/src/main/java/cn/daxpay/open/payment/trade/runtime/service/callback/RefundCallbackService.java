@@ -52,6 +52,18 @@ public class RefundCallbackService {
             if (Objects.equals(oldStatus, RefundOrderStatusEnum.SUCCESS.getCode())
                     || Objects.equals(oldStatus, RefundOrderStatusEnum.FAIL.getCode())
                     || Objects.equals(oldStatus, RefundOrderStatusEnum.CLOSE.getCode())) {
+                // FAIL/CLOSE 终态收到退款成功回调: 资金矛盾证据(本地已回滚预占恢复可退余额, 但通道实际退款成功,
+                // 再退一次即双重支出)。不自动翻转(结算仅 PROGRESS 可流转), 标记 EXCEPTION 落回调记录,
+                // 由运营核实通道实际结果后人工处置
+                boolean contradiction = !Objects.equals(oldStatus, RefundOrderStatusEnum.SUCCESS.getCode())
+                        && Objects.equals(CallbackStatusEnum.SUCCESS.getCode(), callbackData.getTradeStatus());
+                if (contradiction) {
+                    callbackData.setCallbackStatus(CallbackStatusEnum.EXCEPTION)
+                            .setCallbackErrorMsg("退款单已终态(" + oldStatus + ")但通道回调退款成功，请核实通道实际退款结果");
+                    log.warn("退款回调: 退款单 {} 已终态 {} 但通道回调退款成功, 矛盾证据待人工核实",
+                            refundOrder.getRefundNo(), oldStatus);
+                    return;
+                }
                 callbackData.setCallbackStatus(CallbackStatusEnum.IGNORE)
                         .setCallbackErrorMsg("退款单已处于终态，忽略回调");
                 log.warn("退款回调: 退款单 {} 已处于终态 {}，忽略", refundOrder.getRefundNo(), oldStatus);

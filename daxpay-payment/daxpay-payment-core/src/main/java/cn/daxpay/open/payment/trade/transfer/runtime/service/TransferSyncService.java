@@ -24,7 +24,8 @@ import java.util.Objects;
 /// # 转账同步服务
 ///
 /// 管理端手动同步 / 延迟任务 / 定时任务共用一套锁内流程：
-/// 持锁二次读凭证（终态幂等）→ 装载策略上下文 → 通道查询 → 按通道结果双表 CAS + 落同步记录。
+/// 持锁二次读凭证（PROCESSING 正常同步, FAIL 查证成功走 FAIL→SUCCESS 纠正, 其余终态幂等跳过）
+/// → 装载策略上下文 → 通道查询 → 按通道结果双表 CAS + 落同步记录。
 /// 容器读写收敛在 [TransferAssistService]，本服务只面向凭证与策略上下文。
 /// 锁键 `payment:transfer-trade:{id}` 与回调/关闭路径互斥。
 @Slf4j
@@ -57,10 +58,12 @@ public class TransferSyncService {
     /// 锁内同步编排（无事务, 状态变更由 Assist 各方法独立事务提交）
     private void syncWithLock(String channel, TransferTrade trade) {
         lockExecutor.run(TradeLockKeys.transferTrade(trade.getId()), () -> {
-            // 锁内二次读: 凭证须仍为 processing 才继续(容器 CAS 由 Assist 的 expectFrom 兜底幂等)
+            // 锁内二次读: PROCESSING 正常同步; FAIL 放行走 FAIL→SUCCESS 纠正(Assist CAS 支持,
+            // 查证结果非成功时各 Assist 方法自身守卫幂等退出); 其余终态跳过
             TransferTrade latestTrade = transferTradeManager.findById(trade.getId()).orElse(null);
             if (Objects.isNull(latestTrade)
-                    || !Objects.equals(latestTrade.getStatus(), PayFundStatusEnum.PROCESSING.getCode())) {
+                    || (!Objects.equals(latestTrade.getStatus(), PayFundStatusEnum.PROCESSING.getCode())
+                        && !Objects.equals(latestTrade.getStatus(), PayFundStatusEnum.FAIL.getCode()))) {
                 log.info("转账同步幂等: 凭证 {} 非处理中, 跳过", trade.getTradeNo());
                 return;
             }

@@ -30,9 +30,10 @@ import java.util.List;
 ///
 /// ## 设计要点
 /// - **支付 PROCESSING 段**(4 窗口): 回调丢失/超时关单失败后, 查通道真实状态纠正为 SUCCESS/CLOSE/FAIL
-/// - **支付 FAIL/CLOSE 发现段**(2 窗口): 通道实际已付款的收款证据不再自动翻转(2026-08-29 决策),
+/// - **支付 FAIL/CLOSE/CANCEL 发现段**(3 窗口): 通道实际已付款的收款证据不再自动翻转(2026-08-29 决策),
 ///   查证后落异常订单由运营人工确认成功或忽略
 /// - **退款 PROGRESS 段**(4 窗口): 退款回调丢失后, 查通道真实退款状态
+/// - **转账 FAIL 发现段**(1 窗口): 通道先回失败后实际转账成功的发现, 查证成功后走 FAIL→SUCCESS 纠正
 ///
 /// 订单越"新"查得越勤, 越久越稀疏, 超 7 天自然淘汰(不显式置 FAIL)。
 /// 与 [NormalPayTimeoutJob] / [GatewayTimeoutJob] 共享 `payment:trade:{id}` Redis 锁, 天然互斥。
@@ -125,6 +126,31 @@ public class TradeSyncJob {
         }
     }
 
+    /// 撤销后通道实际已付款的发现窗口: close_time 在 1~60 分钟内的 CANCEL 订单, 每 10 分钟同步一次
+    ///
+    /// 撤销(资金态 CANCEL)与 CLOSE 同样写 close_time, 复用按 close_time 扫描。
+    /// 回调/手动同步路径均已覆盖 CANCEL(见 [cn.daxpay.open.payment.trade.runtime.service.sync.PaySyncService#isTerminalAbnormal]),
+    /// 本窗口补齐定时发现: 撤销单通道侧又实际收款且回调丢失时, 查证后落异常订单人工处置。
+    /// cron 偏移 40s 与 FAIL(20s)/CLOSE(0s)窗口错峰。
+    @Scheduled(cron = "40 */10 * * * ?")
+    @SchedulerLock(name = "lock:tradeSync:payCancelFix", lockAtMostFor = "8m", lockAtLeastFor = "30s")
+    public void syncPayCancelFix() {
+        OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
+        List<PayTrade> trades = payTradeManager.findSyncTradesByCloseTime(
+                PayFundStatusEnum.CANCEL.getCode(), now.minusMinutes(60), now.minusMinutes(1));
+        if (trades.isEmpty()) {
+            return;
+        }
+        log.info("定时同步扫描支付 CANCEL 纠正(close_time) 命中 {} 笔, 开始处理", trades.size());
+        for (PayTrade trade : trades) {
+            try {
+                tradeSyncService.syncPayTrade(trade.getTradeNo());
+            } catch (Exception e) {
+                log.warn("支付同步跳过 tradeNo={}", trade.getTradeNo(), e);
+            }
+        }
+    }
+
     // ==================== 退款 PROGRESS 同步(分层窗口) ====================
 
     /// 最新窗口: 创建 1~10 分钟的 PROGRESS 退款, 每分钟同步一次
@@ -169,7 +195,7 @@ public class TradeSyncJob {
     @SchedulerLock(name = "lock:tradeSync:transfer10M", lockAtMostFor = "50s", lockAtLeastFor = "5s")
     public void syncTransfer10M() {
         OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
-        syncTransferBatch(now.minusMinutes(10), now.minusMinutes(1));
+        syncTransferBatch(PayFundStatusEnum.PROCESSING.getCode(), now.minusMinutes(10), now.minusMinutes(1));
     }
 
     /// 次新窗口: 创建 10 分钟~1 小时的 PROCESSING 转账, 每 10 分钟同步一次
@@ -177,7 +203,7 @@ public class TradeSyncJob {
     @SchedulerLock(name = "lock:tradeSync:transfer1H", lockAtMostFor = "8m", lockAtLeastFor = "30s")
     public void syncTransfer1H() {
         OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
-        syncTransferBatch(now.minusHours(1), now.minusMinutes(10));
+        syncTransferBatch(PayFundStatusEnum.PROCESSING.getCode(), now.minusHours(1), now.minusMinutes(10));
     }
 
     /// 陈旧窗口: 创建 1~24 小时的 PROCESSING 转账, 每小时同步一次
@@ -185,15 +211,28 @@ public class TradeSyncJob {
     @SchedulerLock(name = "lock:tradeSync:transfer1D", lockAtMostFor = "50m", lockAtLeastFor = "1m")
     public void syncTransfer1D() {
         OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
-        syncTransferBatch(now.minusHours(24), now.minusHours(1));
+        syncTransferBatch(PayFundStatusEnum.PROCESSING.getCode(), now.minusHours(24), now.minusHours(1));
     }
 
     /// 死单兜底: 创建 1~7 天的 PROCESSING 转账, 每天凌晨同步一次
     @Scheduled(cron = "0 30 1 * * ?")
-    @SchedulerLock(name = "lock:tradeSync:transfer7D", lockAtMostFor = "30m", lockAtLeastFor = "5m")
+    @SchedulerLock(name = "lock:tradeSync:transfer7D", lockAtMostFor = "30m", lockAtLeastFor = "5s")
     public void syncTransfer7D() {
         OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
-        syncTransferBatch(now.minusDays(7), now.minusHours(24));
+        syncTransferBatch(PayFundStatusEnum.PROCESSING.getCode(), now.minusDays(7), now.minusHours(24));
+    }
+
+    /// 转账 FAIL 发现窗口: 创建 1~60 分钟的 FAIL 转账, 每 10 分钟同步一次
+    ///
+    /// 通道先同步返回失败(本地已 FAIL)但实际转账成功的发现: 查证成功后走 FAIL→SUCCESS 纠正
+    /// (见 [cn.daxpay.open.payment.transfer.runtime.service.TransferAssistService#success] 的 CAS 支持),
+    /// 回调路径同样放行该纠正, 本窗口兜底回调丢失的场景。
+    /// cron 偏移 50s 与支付发现窗口错峰。
+    @Scheduled(cron = "50 */10 * * * ?")
+    @SchedulerLock(name = "lock:tradeSync:transferFailFix", lockAtMostFor = "8m", lockAtLeastFor = "30s")
+    public void syncTransferFailFix() {
+        OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
+        syncTransferBatch(PayFundStatusEnum.FAIL.getCode(), now.minusMinutes(60), now.minusMinutes(1));
     }
 
     // ==================== 分账 PROCESSING 同步(分层窗口) ====================
@@ -275,13 +314,12 @@ public class TradeSyncJob {
     }
 
     /// 转账同步批量处理(逐笔容错)
-    private void syncTransferBatch(OffsetDateTime start, OffsetDateTime end) {
-        List<TransferTrade> trades = transferTradeManager.findSyncTransfers(
-                PayFundStatusEnum.PROCESSING.getCode(), start, end);
+    private void syncTransferBatch(String status, OffsetDateTime start, OffsetDateTime end) {
+        List<TransferTrade> trades = transferTradeManager.findSyncTransfers(status, start, end);
         if (trades.isEmpty()) {
             return;
         }
-        log.info("定时同步扫描转账命中 {} 笔, 开始处理", trades.size());
+        log.info("定时同步扫描转账 status={} 命中 {} 笔, 开始处理", status, trades.size());
         for (TransferTrade trade : trades) {
             try {
                 transferSyncService.autoSync(trade.getTradeNo());
