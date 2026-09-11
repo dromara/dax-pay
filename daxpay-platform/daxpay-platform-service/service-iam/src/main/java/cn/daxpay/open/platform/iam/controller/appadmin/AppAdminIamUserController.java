@@ -11,12 +11,10 @@ import cn.daxpay.open.platform.iam.param.upms.UserRoleParam;
 import cn.daxpay.open.platform.iam.param.user.RestartPwdParam;
 import cn.daxpay.open.platform.iam.param.user.UserInfoParam;
 import cn.daxpay.open.platform.iam.param.user.UserInfoQuery;
-import cn.daxpay.open.platform.iam.result.user.UserInfoResult;
 import cn.daxpay.open.platform.iam.result.user.UserPasswordResult;
 import cn.daxpay.open.platform.iam.result.user.UserWholeInfoResult;
 import cn.daxpay.open.platform.iam.service.upms.UserRoleService;
 import cn.daxpay.open.platform.iam.service.user.UserAdminService;
-import cn.daxpay.open.platform.iam.service.user.UserQueryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
@@ -41,15 +39,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class AppAdminIamUserController {
     private final UserAdminService userAdminService;
 
-    private final UserQueryService userQueryService;
-
     private final UserRoleService userRoleService;
 
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据用户id查询用户")
     @GetMapping("/get")
-    public Result<UserInfoResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
-        return Res.ok(userQueryService.findById(id));
+    public Result<UserWholeInfoResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
+        return Res.ok(userAdminService.findDetail(id));
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)

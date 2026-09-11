@@ -921,6 +921,14 @@
     },
     "emailCode": {
       "notBlank": "Email verification code cannot be empty"
+    },
+    "rotationDays": {
+      "min": "Password rotation period cannot be less than 0 days",
+      "max": "Password rotation period cannot be greater than 365 days"
+    },
+    "expireWarnDays": {
+      "min": "Password expiry reminder days cannot be less than 1 day",
+      "max": "Password expiry reminder days cannot be greater than 90 days"
     }
   }
 }

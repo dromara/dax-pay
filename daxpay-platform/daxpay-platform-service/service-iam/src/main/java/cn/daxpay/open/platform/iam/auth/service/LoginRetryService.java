@@ -9,6 +9,7 @@ import cn.daxpay.open.platform.iam.entity.user.UserPasswordSecurity;
 import cn.daxpay.open.platform.iam.result.user.PasswordStatusResult;
 import cn.daxpay.open.platform.capability.auth.exception.LoginFailureException;
 import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformLoginSecurityConfig;
+import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformPasswordPolicyConfig;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -190,53 +191,117 @@ public class LoginRetryService {
     }
 
     /// 获取密码状态信息
+    ///
+    /// 只读: 不补建记录也不回写过期时间(写操作集中在登录成功路径 [#setPasswordStatusToUserDetail]),
+    /// 因此缺记录的历史用户在此返回"非初始密码 + 无有效期", 由前端展示为未设置。
     /// @param userId 用户ID
     /// @return 密码状态信息
     public PasswordStatusResult getPasswordStatus(Long userId) {
+        Integer rotationDays = this.getRotationDays();
+        long warnDays = this.getExpireWarnDays();
         UserPasswordSecurity security = passwordSecurityManager.findByUserId(userId).orElse(null);
         if (Objects.isNull(security)) {
             return new PasswordStatusResult()
                     .setExpired(false)
                     .setExpiringSoon(false)
                     .setExpireTime(null)
-                    .setInitialPassword(true);
+                    .setRemainingDays(null)
+                    .setInitialPassword(false)
+                    .setRotationEnabled(this.isRotationEnabled(rotationDays))
+                    .setWarnDays(warnDays);
         }
 
         OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
-        OffsetDateTime expireTime = security.getPasswordExpireTime();
-
+        OffsetDateTime expireTime = resolveExpireTime(security, rotationDays);
+        Long remainingDays = this.calcRemainingDays(now, expireTime);
         boolean expired = Objects.nonNull(expireTime) && !expireTime.isAfter(now);
-        boolean expiringSoon = false;
-        if (Objects.nonNull(expireTime) && !expired) {
-            long daysUntilExpiry = ChronoUnit.DAYS.between(now, expireTime);
-            expiringSoon = daysUntilExpiry <= 7;
-        }
 
         return new PasswordStatusResult()
                 .setExpired(expired)
-                .setExpiringSoon(expiringSoon)
+                .setExpiringSoon(Objects.nonNull(remainingDays) && remainingDays <= warnDays)
                 .setExpireTime(expireTime)
-                .setInitialPassword(Boolean.TRUE.equals(security.getInitialPassword()));
+                .setRemainingDays(remainingDays)
+                .setInitialPassword(Boolean.TRUE.equals(security.getInitialPassword()))
+                .setRotationEnabled(this.isRotationEnabled(rotationDays))
+                .setWarnDays(warnDays);
     }
 
     /// 设置密码状态到 UserDetail
+    ///
+    /// 缺记录时补建一行(不视为初始密码), 并按当前轮换策略补算过期时间后落库一次,
+    /// 使存量用户(记录缺失 / 未启用轮换期间设置的密码)在下次登录时自动收敛到当前策略。
     /// @param userDetail 用户详情
     public void setPasswordStatusToUserDetail(UserDetail userDetail) {
-        UserPasswordSecurity security = passwordSecurityManager.findByUserId(userDetail.getId()).orElse(null);
-        if (Objects.isNull(security)) {
-            userDetail.setPasswordExpired(false);
-            userDetail.setInitialPassword(true);
-            userDetail.setPasswordExpireTime(null);
-            return;
-        }
+        UserPasswordSecurity security = passwordSecurityManager.findByUserId(userDetail.getId())
+                .orElseGet(() -> passwordSecurityManager.getOrCreateByUserId(userDetail.getId()));
 
-        OffsetDateTime now = OffsetDateTime.now(ZoneOffset.UTC);
-        OffsetDateTime expireTime = security.getPasswordExpireTime();
-        boolean expired = Objects.nonNull(expireTime) && !expireTime.isAfter(now);
+        Integer rotationDays = this.getRotationDays();
+        OffsetDateTime expireTime = resolveExpireTime(security, rotationDays);
+        this.refreshExpireTimeQuietly(userDetail.getId(), security.getPasswordExpireTime(), expireTime);
 
-        userDetail.setPasswordExpired(expired);
+        userDetail.setPasswordExpired(Objects.nonNull(expireTime)
+                && !expireTime.isAfter(OffsetDateTime.now(ZoneOffset.UTC)));
         userDetail.setInitialPassword(Boolean.TRUE.equals(security.getInitialPassword()));
         userDetail.setPasswordExpireTime(expireTime);
+    }
+
+    /// 解析当前生效的密码过期时间(包级可见, 供单测直接验证口径)
+    ///
+    /// 口径(只放宽不收紧, 兼顾存量补齐与人工豁免):
+    /// - 未启用轮换(rotationDays 为空或 ≤0): 返回 null, 忽略库内历史快照 —— 运维关闭轮换后立即解除限制;
+    /// - 已启用: 以最后改密时间为基准算 `基准 + rotationDays`, 使存量用户(库内无值或值已过期)自动补齐;
+    /// - 库内快照晚于计算结果时保留快照, 从而不覆盖运维手工写入的"永不过期"日期, 也不在调小周期时
+    ///   追溯收紧(收紧需走显式的存量重算动作)。
+    /// @param security 密码安全记录
+    /// @param rotationDays 轮换周期(天)
+    /// @return 过期时间(UTC), 未启用轮换返回 null
+    static OffsetDateTime resolveExpireTime(UserPasswordSecurity security, Integer rotationDays) {
+        if (Objects.isNull(rotationDays) || rotationDays <= 0) {
+            return null;
+        }
+        OffsetDateTime base = Objects.nonNull(security.getLastChangePasswordTime())
+                ? security.getLastChangePasswordTime()
+                : OffsetDateTime.now(ZoneOffset.UTC);
+        OffsetDateTime computed = base.plusDays(rotationDays);
+        OffsetDateTime stored = security.getPasswordExpireTime();
+        return Objects.nonNull(stored) && stored.isAfter(computed) ? stored : computed;
+    }
+
+    /// 剩余天数(向下取整, 已过期返回 0), 过期时间为空返回 null
+    private Long calcRemainingDays(OffsetDateTime now, OffsetDateTime expireTime) {
+        if (Objects.isNull(expireTime)) {
+            return null;
+        }
+        return Math.max(0, ChronoUnit.DAYS.between(now, expireTime));
+    }
+
+    /// 懒补算落库: 值未变化则跳过, 写入失败仅告警不影响登录主流程
+    private void refreshExpireTimeQuietly(Long userId, OffsetDateTime oldValue, OffsetDateTime newValue) {
+        if (Objects.equals(oldValue, newValue)) {
+            return;
+        }
+        try {
+            passwordSecurityManager.refreshExpireTime(userId, newValue);
+        }
+        catch (Exception e) {
+            log.warn("用户[{}]密码过期时间补算失败: {}", userId, e.getMessage());
+        }
+    }
+
+    /// 当前轮换周期(天)
+    private Integer getRotationDays() {
+        return iamSecurityConfigService.getPasswordPolicy().getRotationDays();
+    }
+
+    /// 当前过期提醒天数(配置缺失时兜底默认值)
+    private long getExpireWarnDays() {
+        Integer warnDays = iamSecurityConfigService.getPasswordPolicy().getExpireWarnDays();
+        return ObjectUtil.defaultIfNull(warnDays, PlatformPasswordPolicyConfig.DEFAULT_EXPIRE_WARN_DAYS);
+    }
+
+    /// 是否启用定期轮换
+    private boolean isRotationEnabled(Integer rotationDays) {
+        return Objects.nonNull(rotationDays) && rotationDays > 0;
     }
 
     /// 获取当前错误次数

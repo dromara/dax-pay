@@ -1,7 +1,10 @@
 package cn.daxpay.open.platform.system.param.config.security;
 
+import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformPasswordPolicyConfig;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import java.util.Objects;
@@ -38,7 +41,14 @@ public class PlatformPasswordPolicyConfigParam {
     private String specialChars;
 
     @Schema(description = "密码轮换周期（天）")
+    @Min(value = 0, message = "{validation.field.rotationDays.min}")
+    @Max(value = PlatformPasswordPolicyConfig.MAX_ROTATION_DAYS, message = "{validation.field.rotationDays.max}")
     private Integer rotationDays;
+
+    @Schema(description = "密码过期提醒天数（剩余天数不超过该值时提示即将过期）")
+    @Min(value = 1, message = "{validation.field.expireWarnDays.min}")
+    @Max(value = PlatformPasswordPolicyConfig.MAX_EXPIRE_WARN_DAYS, message = "{validation.field.expireWarnDays.max}")
+    private Integer expireWarnDays;
 
     @Schema(description = "密码历史记录数量")
     private Integer historyCount;

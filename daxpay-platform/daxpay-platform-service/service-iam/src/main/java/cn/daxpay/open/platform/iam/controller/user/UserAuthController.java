@@ -6,6 +6,7 @@ import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.platform.iam.param.user.UpdatePasswordParam;
 import cn.daxpay.open.platform.iam.param.user.UserBaseInfoParam;
 import cn.daxpay.open.platform.iam.result.user.LoginAfterUserInfoResult;
+import cn.daxpay.open.platform.iam.result.user.PasswordStatusResult;
 import cn.daxpay.open.platform.iam.result.user.UserBaseInfoResult;
 import cn.daxpay.open.platform.iam.service.user.UserInfoService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -51,5 +52,11 @@ public class UserAuthController {
     @GetMapping("/get-login-after-user-info")
     public Result<LoginAfterUserInfoResult> getLoginAfterUserInfo() {
         return Res.ok(userInfoService.getLoginAfterUserInfo());
+    }
+
+    @Operation(summary = "获取当前用户的密码状态")
+    @GetMapping("/password-status")
+    public Result<PasswordStatusResult> getPasswordStatus() {
+        return Res.ok(userInfoService.getPasswordStatus());
     }
 }

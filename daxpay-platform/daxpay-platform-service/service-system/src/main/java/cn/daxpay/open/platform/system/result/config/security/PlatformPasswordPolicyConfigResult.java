@@ -41,6 +41,9 @@ public class PlatformPasswordPolicyConfigResult extends BaseResult {
     @Schema(description = "密码轮换周期（天）")
     private Integer rotationDays;
 
+    @Schema(description = "密码过期提醒天数（剩余天数不超过该值时提示即将过期）")
+    private Integer expireWarnDays;
+
     @Schema(description = "密码历史记录数量")
     private Integer historyCount;
 }

@@ -24,12 +24,15 @@ public class UserPasswordSecurityManager extends BaseManager<UserPasswordSecurit
     }
 
     /// 根据用户ID查询，不存在则创建默认记录
+    ///
+    /// 兜底补建一律不写初始密码标记: 该标记只由显式业务动作(建用户/管理员重置密码)写入,
+    /// 否则历史用户(缺记录)会被误判为"使用初始密码"而被 40302 强制改密。
     public UserPasswordSecurity getOrCreateByUserId(Long userId) {
         return findById(userId).orElseGet(() -> {
             var security = new UserPasswordSecurity();
             security.setId(userId);
             security.setPasswordErrorCount(0);
-            security.setInitialPassword(true);
+            security.setInitialPassword(false);
             save(security);
             return security;
         });
@@ -51,7 +54,9 @@ public class UserPasswordSecurityManager extends BaseManager<UserPasswordSecurit
             UserPasswordSecurity security = new UserPasswordSecurity();
             security.setId(userId);
             security.setPasswordErrorCount(1);
-            security.setInitialPassword(true);
+            // 兜底补建不写初始密码标记(理由见 [UserPasswordSecurityManager#getOrCreateByUserId]):
+            // 历史用户登录时输错一次密码即被打上初始密码标记, 会被永久拦在改密页
+            security.setInitialPassword(false);
             security.setLastFailureTime(OffsetDateTime.now(ZoneOffset.UTC));
             save(security);
             return 1;
@@ -127,6 +132,31 @@ public class UserPasswordSecurityManager extends BaseManager<UserPasswordSecurit
         security.setPasswordExpireTime(passwordExpireTime);
         security.setLastChangePasswordTime(OffsetDateTime.now(ZoneOffset.UTC));
         save(security);
+    }
+
+    /// 刷新密码过期时间(差异更新, 仅此一列)
+    ///
+    /// 供登录时按当前轮换策略"懒补算"使用。只写 [UserPasswordSecurity#getPasswordExpireTime] 一列,
+    /// 不触碰初始密码标记与上次改密时间, 因此不能复用 [#updatePasswordExpireTime](会置初始密码标记为 false
+    /// 并覆盖改密时间)或 [#updatePasswordExpireTimeOnReset](会置为 true)。
+    ///
+    /// 条件显式展开 NULL 分支: PG 中 `password_expire_time <> ?` 对 NULL 行返回 unknown 不会命中,
+    /// 只写 `ne` 会让缺值的历史行永远补不上。
+    public void refreshExpireTime(Long userId, OffsetDateTime expireTime) {
+        lambdaUpdate()
+                .eq(UserPasswordSecurity::getId, userId)
+                .and(w -> {
+                    if (Objects.isNull(expireTime)) {
+                        // 关闭轮换: 仅清理仍残留的历史快照
+                        w.isNotNull(UserPasswordSecurity::getPasswordExpireTime);
+                    }
+                    else {
+                        w.isNull(UserPasswordSecurity::getPasswordExpireTime)
+                                .or().ne(UserPasswordSecurity::getPasswordExpireTime, expireTime);
+                    }
+                })
+                .set(UserPasswordSecurity::getPasswordExpireTime, expireTime)
+                .update();
     }
 
     /// 更新初始密码标记

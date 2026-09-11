@@ -81,6 +81,14 @@ public class UserInfoService {
             .setPasswordStatus(passwordStatus);
     }
 
+    /// 获取当前登录用户的密码状态(供个人中心展示)
+    ///
+    /// 与 [#getLoginAfterUserInfo] 内的密码状态区分: 本方法不做超管豁免, 只反映客观状态(有效期/剩余天数),
+    /// 供"密码设置"页展示; 强制改密引导仍由登录后用户信息里的状态驱动。
+    public PasswordStatusResult getPasswordStatus() {
+        return loginRetryService.getPasswordStatus(SecurityUtil.getUserId());
+    }
+
     /// 获取用户基本信息
     public UserBaseInfoResult getUserBaseInfo() {
         UserInfo userInfo = userInfoManager.findById(SecurityUtil.getUserId())

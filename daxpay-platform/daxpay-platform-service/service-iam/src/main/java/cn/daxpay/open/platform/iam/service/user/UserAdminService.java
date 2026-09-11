@@ -16,6 +16,7 @@ import cn.daxpay.open.platform.iam.dao.user.UserInfoManager;
 import cn.daxpay.open.platform.iam.dao.user.UserPasswordSecurityManager;
 import cn.daxpay.open.platform.iam.entity.user.UserExpandInfo;
 import cn.daxpay.open.platform.iam.entity.user.UserInfo;
+import cn.daxpay.open.platform.iam.entity.user.UserPasswordSecurity;
 import cn.daxpay.open.platform.iam.exception.user.UserInfoNotExistsException;
 import cn.daxpay.open.platform.iam.param.user.UserInfoParam;
 import cn.daxpay.open.platform.iam.param.user.UserInfoQuery;
@@ -81,8 +82,14 @@ public class UserAdminService {
                 && platformStarterProperties.getAuth().isAdminInList()
                 && Objects.equals(ClientEnum.ADMIN.getCode(), query.getClientCode());
         wrapper.innerJoin(UserExpandInfo.class,UserExpandInfo::getId, UserInfo::getId)
+                // 密码安全记录: 与用户主键一致, 无记录的历史用户左连接取空
+                .leftJoin(UserPasswordSecurity.class, UserPasswordSecurity::getId, UserInfo::getId)
                 .selectAll(UserInfo.class)
                 .selectAll(UserExpandInfo.class)
+                // 子表列显式 selectAs 取名(selectAll 会与本表 id 等重名列冲突)
+                .selectAs(UserPasswordSecurity::getPasswordExpireTime, UserWholeInfoResult::getPasswordExpireTime)
+                .selectAs(UserPasswordSecurity::getLastChangePasswordTime, UserWholeInfoResult::getLastChangePasswordTime)
+                .selectAs(UserPasswordSecurity::getInitialPassword, UserWholeInfoResult::getInitialPassword)
                 // 仅 ADMIN 端在内置超管能力开启后，才允许在列表中展示超管账号
                 .eq(!showAdminInList, UserInfo::isAdministrator, false)
                 // 按终端过滤
@@ -102,6 +109,29 @@ public class UserAdminService {
                 .setCurrent(page.getCurrent())
                 .setSize(page.getSize())
                 .setTotal(page.getTotal());
+    }
+
+    /// 查询用户详情(管理端展示用)
+    ///
+    /// 与 [UserQueryService#findById] 的差异: 额外带出登录信息与密码状态(到期时间/上次改密/是否初始密码),
+    /// 供运营端详情抽屉展示; 登录与认证链路仍走轻量的用户查询, 不在热路径上增加子表读取。
+    /// @param id 用户ID
+    /// @return 用户完整信息
+    public UserWholeInfoResult findDetail(Long id) {
+        MPJLambdaWrapper<UserInfo> wrapper = new MPJLambdaWrapper<UserInfo>()
+                .innerJoin(UserExpandInfo.class, UserExpandInfo::getId, UserInfo::getId)
+                .leftJoin(UserPasswordSecurity.class, UserPasswordSecurity::getId, UserInfo::getId)
+                .selectAll(UserInfo.class)
+                .selectAll(UserExpandInfo.class)
+                .selectAs(UserPasswordSecurity::getPasswordExpireTime, UserWholeInfoResult::getPasswordExpireTime)
+                .selectAs(UserPasswordSecurity::getLastChangePasswordTime, UserWholeInfoResult::getLastChangePasswordTime)
+                .selectAs(UserPasswordSecurity::getInitialPassword, UserWholeInfoResult::getInitialPassword)
+                .eq(UserInfo::getId, id);
+        UserWholeInfoResult result = userInfoManager.selectJoinOne(UserWholeInfoResult.class, wrapper);
+        if (Objects.isNull(result)) {
+            throw new UserInfoNotExistsException();
+        }
+        return result;
     }
 
     /// 封禁用户

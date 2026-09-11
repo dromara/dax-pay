@@ -61,6 +61,7 @@ public class PlatformSecurityConfigService {
                 .setRequireSpecialChar(false)
                 .setSpecialChars(PlatformPasswordPolicyConfig.DEFAULT_SPECIAL_CHARS)
                 .setRotationDays(0)
+                .setExpireWarnDays(PlatformPasswordPolicyConfig.DEFAULT_EXPIRE_WARN_DAYS)
                 .setHistoryCount(PlatformPasswordPolicyConfig.DEFAULT_HISTORY_COUNT);
     }
 

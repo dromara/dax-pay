@@ -70,5 +70,14 @@ public class UserWholeInfoResult extends BaseResult {
 
     @Schema(description = "注册渠道")
     private String registerChannel;
+
+    @Schema(description = "密码过期时间 (UTC), 为空表示未设置有效期")
+    private OffsetDateTime passwordExpireTime;
+
+    @Schema(description = "上次修改密码时间 (UTC)")
+    private OffsetDateTime lastChangePasswordTime;
+
+    @Schema(description = "是否初始密码（管理员代设, 需用户首次登录修改）")
+    private Boolean initialPassword;
 }
 
