@@ -15,7 +15,7 @@ SELECT 1000000091203, 2, NULL, 91203
 WHERE NOT EXISTS (SELECT 1 FROM "public"."iam_role_menu" rm WHERE rm.role_id = 2 AND rm.menu_id = 91203);
 
 -- 商户管理员角色(role 2)权限码授权: 按code字符串解析code_id
--- (iam_perm_code 由 @PermCode 启动扫描同步生成, 升级库中ID为运行时雪花, 不可硬编码引用)
+-- (iam_perm_code 由 @PermCode 扫描同步生成——运维通过 POST /perm/code/scan 手动触发, 非启动自动同步; 升级库中ID为运行时雪花, 不可硬编码引用)
 INSERT INTO "public"."iam_role_code" (id, role_id, code_id)
 SELECT 2079866296000000311, 2, c.id
 FROM "public"."iam_perm_code" c

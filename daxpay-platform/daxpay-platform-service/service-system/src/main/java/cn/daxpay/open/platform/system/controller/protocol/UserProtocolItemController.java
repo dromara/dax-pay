@@ -1,6 +1,7 @@
 package cn.daxpay.open.platform.system.controller.protocol;
 
-import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
+import cn.daxpay.open.platform.core.code.PermCodes;
+import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.system.param.protocol.UserProtocolItemParam;
 import cn.daxpay.open.platform.system.param.protocol.UserProtocolItemQuery;
 import cn.daxpay.open.platform.system.result.protocol.UserProtocolItemResult;
@@ -21,7 +22,7 @@ import java.util.List;
 
 /// # 用户协议项控制器
 ///
-@IgnoreAuth(login = true)
+@PermCode(menuCode = PermCodes.System.Protocol.MENU)
 @Validated
 @Tag(name = "用户协议项")
 @RestController
@@ -35,6 +36,7 @@ public class UserProtocolItemController {
     /// @param pageParam 分页参数
     /// @param query 查询条件
     /// @return 用户协议项分页结果
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "分页")
     @GetMapping("/page")
     public Result<PageResult<UserProtocolItemResult>> page(PageParam pageParam, UserProtocolItemQuery query){
@@ -45,6 +47,7 @@ public class UserProtocolItemController {
     ///
     /// @param param 用户协议项参数
     /// @return 操作结果
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "新增")
     @PostMapping("/add")
     public Result<Void> add(@RequestBody  @Validated(ValidationGroup.add.class) UserProtocolItemParam param){
@@ -56,6 +59,7 @@ public class UserProtocolItemController {
     ///
     /// @param param 用户协议项参数
     /// @return 操作结果
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "修改")
     @PostMapping("/update")
     public Result<Void> update(@RequestBody  @Validated(ValidationGroup.edit.class) UserProtocolItemParam param){
@@ -67,6 +71,7 @@ public class UserProtocolItemController {
     ///
     /// @param id 协议项ID
     /// @return 操作结果
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "删除")
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id){
@@ -78,6 +83,7 @@ public class UserProtocolItemController {
     ///
     /// @param id 协议项ID
     /// @return 用户协议项信息
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "查询")
     @GetMapping("/get")
     public Result<UserProtocolItemResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id){
@@ -88,6 +94,7 @@ public class UserProtocolItemController {
     ///
     /// @param type 协议类型
     /// @return 协议项列表
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据协议类型查询协议项")
     @GetMapping("/get-by-protocol-type")
     public Result<List<UserProtocolItemResult>> findByProtocolType(@NotNull(message = "{validation.field.type.notBlank}") String type,

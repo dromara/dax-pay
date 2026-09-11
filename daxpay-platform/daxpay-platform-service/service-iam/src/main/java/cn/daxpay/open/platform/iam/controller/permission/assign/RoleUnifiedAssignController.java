@@ -1,6 +1,8 @@
 package cn.daxpay.open.platform.iam.controller.permission.assign;
 
 import cn.daxpay.open.platform.core.annotation.InternalPath;
+import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.platform.iam.param.permission.assign.RoleUnifiedAssignParam;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /// # 角色统一授权
 ///
+@PermCode(menuCode = PermCodes.Iam.Role.MENU)
 @Validated
 @Tag(name = "角色统一授权")
 @RestController
@@ -30,6 +33,7 @@ public class RoleUnifiedAssignController {
 
     private final RoleUnifiedAssignService roleUnifiedAssignService;
 
+    @PermCode(code = PermCodes.Action.VIEW)
     @InternalPath
     @Operation(summary = "查询角色统一授权数据")
     @GetMapping("/get-by-role")
@@ -39,6 +43,7 @@ public class RoleUnifiedAssignController {
         return Res.ok(roleUnifiedAssignService.getByRole(roleId, clientCode));
     }
 
+    @PermCode(code = PermCodes.Action.MANAGE)
     @InternalPath
     @Operation(summary = "保存角色统一授权")
     @PostMapping("/save")

@@ -5,6 +5,8 @@ import cn.daxpay.open.platform.capability.file.param.FileUploadPresignParam;
 import cn.daxpay.open.platform.capability.file.result.FileUploadPresignResult;
 import cn.daxpay.open.platform.capability.file.service.PlatformFileService;
 import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
+import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.exception.BizException;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
@@ -25,6 +27,7 @@ import java.io.IOException;
 /// 提供平台文件的上传、访问、下载等功能。
 /// 基于S3预签名URL实现前端直传，减少服务器压力。
 @Slf4j
+@PermCode(menuCode = PermCodes.System.File.MENU)
 @Validated
 @Tag(name = "平台文件管理")
 @RestController
@@ -34,12 +37,14 @@ public class PlatformFileController {
 
     private final PlatformFileService platformFileService;
 
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "获取上传预签名URL")
     @PostMapping("/upload/presign")
     public Result<FileUploadPresignResult> getUploadPresignUrl(@RequestBody FileUploadPresignParam param) {
         return Res.ok(platformFileService.getUploadPresignUrl(param));
     }
 
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "确认上传")
     @PostMapping("/upload/confirm")
     public Result<Void> confirmUpload(@RequestBody @Valid FileUploadConfirmParam param) {
