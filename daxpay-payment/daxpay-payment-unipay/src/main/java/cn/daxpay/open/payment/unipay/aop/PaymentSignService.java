@@ -19,6 +19,14 @@ import org.springframework.stereotype.Service;
 /// 从原 `PaymentAssistService` 拆出(签名职责):
 /// - `signVerify`:入参验签(线程上下文中的商户号查商户公钥)
 /// - `sign`:出参签名(平台私钥)
+///
+/// ## 签名口径(重要)
+///
+/// 出入参**共用同一条序列化链路**([PaySignUtil] 内部走 [cn.daxpay.open.platform.common.json.util.JacksonUtil]),
+/// 即「签名串 == 报文规范字面量」:
+/// - 出参签名后, 调用方按收到的报文即可验签;
+/// - 入参验签校验的是调用方按**平台规范字面量**构造的签名串, 故时间字段必须使用契约格式
+///   (东八区 `yyyy-MM-dd HH:mm:ss`), 详见对外接口文档「签名机制」。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -41,8 +49,14 @@ public class PaymentSignService {
             // 签名为空
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.assist.signEmpty");
         }
-        // 使用商户公钥验签
-        if (!PaySignUtil.verify(param, publicKey)) {
+        // 使用商户公钥按平台规范字面量验签
+        if (!PaySignUtil.verify(param, param.getSign(), publicKey)) {
+            // 留痕待签串, 便于对接方比对字段字面量(时间格式不一致是历史上最常见原因)
+            if (log.isWarnEnabled()) {
+                log.warn("支付接口验签失败, mchNo: {}, reqId: {}, 待签串: {}",
+                        paymentContext.getMchNo(), param.getReqId(),
+                        StrUtil.sub(PaySignUtil.buildSignStr(param), 0, 512));
+            }
             throw new VerifySignFailedException();
         }
     }

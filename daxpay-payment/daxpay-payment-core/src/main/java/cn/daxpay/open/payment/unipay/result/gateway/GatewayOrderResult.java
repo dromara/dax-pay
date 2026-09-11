@@ -1,5 +1,7 @@
 package cn.daxpay.open.payment.unipay.result.gateway;
 
+import cn.daxpay.open.payment.common.json.UnipayTimeFormat;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -36,10 +38,12 @@ public class GatewayOrderResult {
     @Schema(description = "业务状态")
     private String status;
 
-    @Schema(description = "过期时间")
+    @Schema(description = "过期时间(北京时间)")
+    @JsonFormat(pattern = UnipayTimeFormat.PATTERN, timezone = UnipayTimeFormat.ZONE)
     private OffsetDateTime expiredTime;
 
-    @Schema(description = "支付成功时间")
+    @Schema(description = "支付成功时间(北京时间)")
+    @JsonFormat(pattern = UnipayTimeFormat.PATTERN, timezone = UnipayTimeFormat.ZONE)
     private OffsetDateTime payTime;
 
     @Schema(description = "支付通道")

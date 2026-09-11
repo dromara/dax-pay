@@ -82,7 +82,7 @@ public class PaymentVerifyAspect {
                 ValidationUtil.validateParam(paymentParam);
                 // 商户身份初始化(含状态校验), 使 mchNo 进入线程上下文供签名校验与自动填充
                 merchantContextLoader.initMch(paymentParam.getMchNo());
-                // 参数签名校验
+                // 参数签名校验(按平台规范字面量, 与出参签名同源序列化)
                 paymentSignService.signVerify(paymentParam);
                 // 防重放校验（Nonce一次性消费 + 请求时间窗口，受平台API安全配置开关控制）
                 paymentReplayProtectService.verify(paymentParam, paymentParam.getMchNo());

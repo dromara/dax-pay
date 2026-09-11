@@ -2,7 +2,6 @@ package cn.daxpay.open.payment.admin.service.develop;
 
 import cn.daxpay.open.payment.admin.param.develop.DevelopParam;
 import cn.daxpay.open.payment.common.develop.DevelopSignResult;
-import cn.daxpay.open.payment.common.util.ObjectSignStrUtil;
 import cn.daxpay.open.payment.common.util.PaySignUtil;
 import cn.daxpay.open.payment.masterdata.result.provider.PayProviderMethodResult;
 import cn.daxpay.open.payment.masterdata.service.provider.PayProviderMethodService;
@@ -34,7 +33,7 @@ public class DevelopTradeAdminService {
     /// 调用方需在 param 中自备 reqTime / nonceStr 等公共字段, 本方法只负责签名串与签名值。
     public DevelopSignResult sign(DevelopParam<NormalPayParam> param) {
         // 签名串(与 PaySignUtil 内部一致)
-        String signStr = ObjectSignStrUtil.buildSignStr(param.getParam());
+        String signStr = PaySignUtil.buildSignStr(param.getParam());
         // 签名值
         String sign = PaySignUtil.sign(param.getParam(), param.getPrivateKey());
         return new DevelopSignResult().setSignStr(signStr).setSign(sign);

@@ -1,8 +1,10 @@
 package cn.daxpay.open.payment.unipay.param.gateway;
 
+import cn.daxpay.open.payment.common.json.UnipayTimeFormat;
 import cn.daxpay.open.payment.trade.enums.GatewayPayTypeEnum;
 import cn.daxpay.open.payment.unipay.param.MerchantPaymentCommonParam;
 import cn.daxpay.open.payment.unipay.param.trade.pay.GoodsDetail;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
 import lombok.Data;
@@ -67,7 +69,8 @@ public class GatewayPrePayParam extends MerchantPaymentCommonParam {
     @Size(max = 2048, message = "{validation.field.extraParam.size}")
     private String extraParam;
 
-    @Schema(description = "过期时间")
+    @Schema(description = "过期时间(北京时间)")
+    @JsonFormat(pattern = UnipayTimeFormat.PATTERN, timezone = UnipayTimeFormat.ZONE)
     private OffsetDateTime expiredTime;
 
     /// 门店号（线下经营归属，可空；对应 mch_store_info.store_no）

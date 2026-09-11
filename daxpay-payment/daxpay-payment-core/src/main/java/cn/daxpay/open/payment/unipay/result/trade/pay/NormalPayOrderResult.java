@@ -1,10 +1,12 @@
 package cn.daxpay.open.payment.unipay.result.trade.pay;
 
+import cn.daxpay.open.payment.common.json.UnipayTimeFormat;
 import cn.daxpay.open.platform.core.enums.pay.channel.*;
 import cn.daxpay.open.platform.core.enums.pay.pay.*;
 import cn.daxpay.open.platform.core.enums.pay.trade.*;
 import cn.daxpay.open.platform.core.enums.pay.notice.*;
 import cn.daxpay.open.platform.core.enums.unipay.PayLimitPayEnum;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -84,15 +86,18 @@ public class NormalPayOrderResult {
     private String provider;
 
     /// 支付时间
-    @Schema(description = "支付时间(UTC)")
+    @Schema(description = "支付时间(北京时间)")
+    @JsonFormat(pattern = UnipayTimeFormat.PATTERN, timezone = UnipayTimeFormat.ZONE)
     private OffsetDateTime payTime;
 
     /// 关闭时间
-    @Schema(description = "关闭时间(UTC)")
+    @Schema(description = "关闭时间(北京时间)")
+    @JsonFormat(pattern = UnipayTimeFormat.PATTERN, timezone = UnipayTimeFormat.ZONE)
     private OffsetDateTime closeTime;
 
     /// 过期时间
-    @Schema(description = "过期时间(UTC)")
+    @Schema(description = "过期时间(北京时间)")
+    @JsonFormat(pattern = UnipayTimeFormat.PATTERN, timezone = UnipayTimeFormat.ZONE)
     private OffsetDateTime expiredTime;
 
     /// 终端设备编码

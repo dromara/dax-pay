@@ -67,7 +67,7 @@ public class OpenAuthService {
         ValidationUtil.validateParam(param);
         // 商户身份初始化(含状态校验), 使 mchNo 进入线程上下文供签名校验
         merchantContextLoader.initMch(param.getMchNo());
-        // 参数签名校验
+        // 参数签名校验(按平台规范字面量: 查询参数绑定的时间字段同样按契约格式构造签名串)
         paymentSignService.signVerify(param);
 
         // 组装认证参数, 委托 UnifiedAuthService 按 authType 分发

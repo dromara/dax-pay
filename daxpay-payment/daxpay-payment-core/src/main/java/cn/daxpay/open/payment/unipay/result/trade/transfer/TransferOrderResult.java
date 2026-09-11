@@ -1,6 +1,8 @@
 package cn.daxpay.open.payment.unipay.result.trade.transfer;
 
+import cn.daxpay.open.payment.common.json.UnipayTimeFormat;
 import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -59,7 +61,8 @@ public class TransferOrderResult {
     private String title;
 
     /// 转账完成时间(UTC)
-    @Schema(description = "转账完成时间(UTC)")
+    @Schema(description = "转账完成时间(北京时间)")
+    @JsonFormat(pattern = UnipayTimeFormat.PATTERN, timezone = UnipayTimeFormat.ZONE)
     private OffsetDateTime finishTime;
 
     /// 错误信息(失败时从通道转账单回填)

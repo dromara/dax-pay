@@ -1,11 +1,11 @@
 package cn.daxpay.open.payment.common.util;
 
+import cn.daxpay.open.payment.testsupport.JacksonTestSupport;
+import cn.daxpay.open.platform.common.json.util.JacksonUtil;
 import cn.daxpay.open.platform.core.util.RsaSignUtil;
-import cn.hutool.core.date.DatePattern;
-import cn.hutool.json.JSONConfig;
-import cn.hutool.json.JSONUtil;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +13,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import java.util.TreeMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -60,6 +59,12 @@ class PaySignTest {
             AxnJl5/NyDmL/YfSVksVOZud
             -----END PRIVATE KEY-----
             """;
+
+    @BeforeAll
+    static void initJackson() {
+        // 单测上下文无 Spring, 统一经测试助手装配与生产一致的 Jackson mapper(幂等, 同 JVM 多测试类共用)
+        JacksonTestSupport.init();
+    }
 
     @Data
     @NoArgsConstructor
@@ -195,31 +200,21 @@ class PaySignTest {
         return request;
     }
 
-    /// 直接签名和验签
+    /// 待签串直接签名验签
     @Test
-    @DisplayName("直接签名和验签-对象方式")
+    @DisplayName("待签串直接签名验签")
     void shouldSignAndVerify_withObject() {
         ComplexPaymentRequest request = createComplexRequest();
 
-        String signStr = ObjectSignStrUtil.buildSignStr(request);
+        String signStr = PaySignUtil.buildSignStr(request);
         String sign = RsaSignUtil.sign(signStr, PRIVATE_KEY);
         request.setSign(sign);
 
         boolean verify = RsaSignUtil.verify(signStr, sign, PUBLIC_KEY);
         assertTrue(verify, "直接签名验签应该通过");
-
-        // 转换成json后验签
-        final JSONConfig JSON_CONFIG = JSONConfig.create()
-                .setDateFormat(DatePattern.NORM_DATETIME_PATTERN);
-        String json = JSONUtil.toJsonStr(request, JSON_CONFIG);
-        TreeMap<String, String> map = JsonSignStrUtil.buildSortedMap(json);
-        String jsonSign = map.remove("sign");
-        String jsonSignStr = JsonSignStrUtil.buildSignStr(map);
-        verify = RsaSignUtil.verify(jsonSignStr, jsonSign, PUBLIC_KEY);
-        assertTrue(verify, "JSON方式验签应该通过");
     }
 
-    /// 使用工具类签名和验签
+    /// 签名与验签闭环: 签名串与下发报文同源(报文可验签)
     @Test
     @DisplayName("使用PaySignUtil工具类签名和验签")
     void shouldSignAndVerify_withPaySignUtil() {
@@ -229,15 +224,9 @@ class PaySignTest {
         assertNotNull(sign, "签名结果不应为null");
         request.setSign(sign);
 
-        boolean verify = PaySignUtil.verify(request, PUBLIC_KEY);
-        assertTrue(verify, "对象方式验签应该通过");
-
-        // 转换成json后验签
-        final JSONConfig JSON_CONFIG = JSONConfig.create()
-                .setDateFormat(DatePattern.NORM_DATETIME_PATTERN);
-        String json = JSONUtil.toJsonStr(request, JSON_CONFIG);
-        boolean verify2 = PaySignUtil.verify(json, PUBLIC_KEY);
-        assertTrue(verify2, "JSON方式验签应该通过");
+        // 按"调用方收到的报文"验签: 与签名同一序列化链路, 必须通过
+        String wire = JacksonUtil.toJson(request, false);
+        assertTrue(PaySignUtil.verify(wire, PUBLIC_KEY), "按报文验签应该通过");
     }
 
 }

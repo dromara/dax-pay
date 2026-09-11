@@ -1,5 +1,7 @@
 package cn.daxpay.open.payment.common.result;
 
+import cn.daxpay.open.payment.common.json.UnipayTimeFormat;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,7 +31,8 @@ public class DaxResult<T>{
     @Schema(description = "签名")
     private String sign;
 
-    @Schema(description = "响应时间(UTC)")
+    @Schema(description = "响应时间(北京时间)")
+    @JsonFormat(pattern = UnipayTimeFormat.PATTERN, timezone = UnipayTimeFormat.ZONE)
     private OffsetDateTime resTime;
 
     /// 请求ID（回显入参 reqId）

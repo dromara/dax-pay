@@ -1,5 +1,7 @@
 package cn.daxpay.open.payment.unipay.result.trade.alloc;
 
+import cn.daxpay.open.payment.common.json.UnipayTimeFormat;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -46,7 +48,8 @@ public class AllocOrderResult {
     private String status;
 
     /// 分账完成时间
-    @Schema(description = "分账完成时间")
+    @Schema(description = "分账完成时间(北京时间)")
+    @JsonFormat(pattern = UnipayTimeFormat.PATTERN, timezone = UnipayTimeFormat.ZONE)
     private OffsetDateTime finishTime;
 
     /// 支付通道
@@ -97,7 +100,8 @@ public class AllocOrderResult {
         private String errorMsg;
 
         /// 明细完成时间
-        @Schema(description = "明细完成时间")
+        @Schema(description = "明细完成时间(北京时间)")
+        @JsonFormat(pattern = UnipayTimeFormat.PATTERN, timezone = UnipayTimeFormat.ZONE)
         private OffsetDateTime finishTime;
     }
 }

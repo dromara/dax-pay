@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.auth.core;
 
+import cn.daxpay.open.payment.testsupport.JacksonTestSupport;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
 import cn.daxpay.open.platform.common.json.util.JacksonUtil;
 import cn.daxpay.open.platform.core.enums.unipay.ChannelAuthStatusEnum;
@@ -55,9 +56,7 @@ class AuthSessionStoreTest {
     @BeforeAll
     static void initJackson() {
         // JacksonUtil.convert 依赖静态 objectMapper, 纯单元测试无 Spring 容器初始化, 需手动注入
-        if (Objects.isNull(JacksonUtil.getObjectMapper())) {
-            JacksonUtil.setObjectMapper(JsonMapper.builder().build());
-        }
+        JacksonTestSupport.init();
     }
 
     @BeforeEach

@@ -1,9 +1,11 @@
 package cn.daxpay.open.payment.unipay.param.trade.pay;
 
+import cn.daxpay.open.payment.common.json.UnipayTimeFormat;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
 import cn.daxpay.open.payment.unipay.param.MerchantPaymentCommonParam;
 import jakarta.validation.Valid;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
@@ -132,9 +134,10 @@ public class NormalPayParam extends MerchantPaymentCommonParam {
     // ===== 时间 =====
 
     /// 过期时间（北京时间，格式 yyyy-MM-dd HH:mm:ss，空则默认 30 分钟）
-    /// 注: 实际反序列化由全局 DaxpayOffsetDateTimeDeserializer 处理(按 Asia/Shanghai 解析后转 UTC),
-    /// 此处不标 @JsonFormat 以免误导(注解会被全局反序列化器覆盖)
+    /// 注: 序列化按 unipay 契约输出北京时间(@JsonFormat 生效); 反序列化仍由全局
+    /// DaxpayOffsetDateTimeDeserializer 处理(宽松兼容 ISO 带偏移与北京时间字面量)
     @Schema(description = "过期时间(北京时间，yyyy-MM-dd HH:mm:ss)")
+    @JsonFormat(pattern = UnipayTimeFormat.PATTERN, timezone = UnipayTimeFormat.ZONE)
     private OffsetDateTime expiredTime;
 
     // ===== 终端信息（线下场景选填）=====
