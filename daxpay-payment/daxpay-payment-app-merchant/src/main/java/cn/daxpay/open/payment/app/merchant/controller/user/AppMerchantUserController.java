@@ -14,9 +14,11 @@ import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.platform.core.validation.ValidationGroup;
+import cn.daxpay.open.platform.iam.result.role.RoleResult;
 import cn.daxpay.open.platform.iam.result.user.UserInfoResult;
 import cn.daxpay.open.platform.iam.result.user.UserPasswordResult;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +28,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /// # 商户用户管理(商户移动端)
 ///
@@ -92,6 +96,22 @@ public class AppMerchantUserController {
             @NotNull(message = "{validation.field.roleId.notNull}") Long roleId) {
         merchantUserService.assignRole(userId, roleId);
         return Res.ok();
+    }
+
+    @PermCode(code = PermCodes.Action.ASSIGN_ROLE)
+    @Operation(summary = "根据用户ID获取到可分配角色集合")
+    @GetMapping("/find-assignable-roles-by-user")
+    public Result<List<RoleResult>> findAssignableRolesByUser(
+            @NotNull(message = "{validation.field.userId.notNull}") @Parameter(description = "用户ID") Long userId) {
+        return Res.ok(merchantUserService.findAssignableRolesByUser(userId));
+    }
+
+    @PermCode(code = PermCodes.Action.ASSIGN_ROLE)
+    @Operation(summary = "根据用户ID获取到角色id集合")
+    @GetMapping("/find-role-ids-by-user")
+    public Result<List<Long>> findRoleIdsByUser(
+            @NotNull(message = "{validation.field.userId.notNull}") @Parameter(description = "用户ID") Long userId) {
+        return Res.ok(merchantUserService.findRoleIdsByUser(userId));
     }
 
     @PermCode(code = PermCodes.Action.STATUS)

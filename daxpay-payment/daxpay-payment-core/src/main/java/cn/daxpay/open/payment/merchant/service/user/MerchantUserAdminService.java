@@ -19,6 +19,7 @@ import cn.daxpay.open.platform.iam.dao.user.UserPasswordSecurityManager;
 import cn.daxpay.open.platform.iam.entity.user.UserExpandInfo;
 import cn.daxpay.open.platform.iam.entity.user.UserInfo;
 import cn.daxpay.open.platform.iam.exception.user.UserInfoNotExistsException;
+import cn.daxpay.open.platform.iam.result.role.RoleResult;
 import cn.daxpay.open.platform.iam.result.user.UserInfoResult;
 import cn.daxpay.open.platform.iam.result.user.UserPasswordResult;
 import cn.daxpay.open.platform.iam.service.client.ClientCodeService;
@@ -193,6 +194,18 @@ public class MerchantUserAdminService {
     public void assignRole(Long userId, Long roleId) {
         this.checkMerchantUser(userId);
         userRoleService.saveAssign(userId, roleId, false);
+    }
+
+    /// 查询用户可分配的角色列表(按目标用户终端), 商户端校验归属防止跨商户探测
+    public List<RoleResult> findAssignableRolesByUser(Long userId) {
+        this.checkMerchantUser(userId);
+        return userRoleService.findAssignableRolesByUser(userId);
+    }
+
+    /// 查询用户已分配的角色ID集合(单角色模式), 商户端校验归属防止跨商户探测
+    public List<Long> findRoleIdsByUser(Long userId) {
+        this.checkMerchantUser(userId);
+        return userRoleService.findRoleIdsByUser(userId);
     }
 
     /// 封禁商户用户

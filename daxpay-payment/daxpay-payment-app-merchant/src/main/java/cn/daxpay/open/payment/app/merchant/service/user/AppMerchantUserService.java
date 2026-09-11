@@ -6,10 +6,13 @@ import cn.daxpay.open.payment.merchant.result.info.MerchantUserResult;
 import cn.daxpay.open.payment.merchant.service.user.MerchantUserAdminService;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
+import cn.daxpay.open.platform.iam.result.role.RoleResult;
 import cn.daxpay.open.platform.iam.result.user.UserInfoResult;
 import cn.daxpay.open.platform.iam.result.user.UserPasswordResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /// # 商户移动端-商户用户服务
 ///
@@ -51,6 +54,16 @@ public class AppMerchantUserService {
     /// 分配角色
     public void assignRole(Long userId, Long roleId) {
         merchantUserAdminService.assignRole(userId, roleId);
+    }
+
+    /// 查询用户可分配的角色列表
+    public List<RoleResult> findAssignableRolesByUser(Long userId) {
+        return merchantUserAdminService.findAssignableRolesByUser(userId);
+    }
+
+    /// 查询用户已分配的角色ID集合
+    public List<Long> findRoleIdsByUser(Long userId) {
+        return merchantUserAdminService.findRoleIdsByUser(userId);
     }
 
     /// 封禁
