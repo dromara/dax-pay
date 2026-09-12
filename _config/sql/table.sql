@@ -149,7 +149,6 @@ CREATE TABLE public.alipay_direct_alloc_receiver (
     receiver_account character varying(256) NOT NULL,
     account_hash character varying(64) NOT NULL,
     receiver_name character varying(256),
-    alias character varying(50),
     direct_app_ref_id bigint,
     status character varying(16) NOT NULL,
     error_msg text,
@@ -160,7 +159,8 @@ CREATE TABLE public.alipay_direct_alloc_receiver (
     last_modifier bigint,
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0 NOT NULL,
-    deleted boolean DEFAULT false NOT NULL
+    deleted boolean DEFAULT false NOT NULL,
+    alias character varying(50)
 );
 
 
@@ -218,7 +218,6 @@ COMMENT ON COLUMN public.alipay_direct_alloc_receiver.account_hash IS '接收方
 --
 
 COMMENT ON COLUMN public.alipay_direct_alloc_receiver.receiver_name IS '接收方名称(AES-256-GCM加密存储, 可空)';
-COMMENT ON COLUMN public.alipay_direct_alloc_receiver.alias IS '接收方别名(本地备注, 不上送通道)';
 
 
 --
@@ -296,6 +295,13 @@ COMMENT ON COLUMN public.alipay_direct_alloc_receiver.version IS '乐观锁版�
 --
 
 COMMENT ON COLUMN public.alipay_direct_alloc_receiver.deleted IS '逻辑删除标志';
+
+
+--
+-- Name: COLUMN alipay_direct_alloc_receiver.alias; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.alipay_direct_alloc_receiver.alias IS '接收方别名(本地备注, 不上送通道)';
 
 
 --
@@ -924,7 +930,6 @@ CREATE TABLE public.alipay_isv_alloc_receiver (
     receiver_account character varying(256) NOT NULL,
     account_hash character varying(64) NOT NULL,
     receiver_name character varying(256),
-    alias character varying(50),
     status character varying(16) NOT NULL,
     error_msg text,
     bind_time timestamp(6) with time zone,
@@ -934,7 +939,8 @@ CREATE TABLE public.alipay_isv_alloc_receiver (
     last_modifier bigint,
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0 NOT NULL,
-    deleted boolean DEFAULT false NOT NULL
+    deleted boolean DEFAULT false NOT NULL,
+    alias character varying(50)
 );
 
 
@@ -992,7 +998,6 @@ COMMENT ON COLUMN public.alipay_isv_alloc_receiver.account_hash IS '接收方账
 --
 
 COMMENT ON COLUMN public.alipay_isv_alloc_receiver.receiver_name IS '接收方名称(AES-256-GCM加密存储, 可空)';
-COMMENT ON COLUMN public.alipay_isv_alloc_receiver.alias IS '接收方别名(本地备注, 不上送通道)';
 
 
 --
@@ -1063,6 +1068,13 @@ COMMENT ON COLUMN public.alipay_isv_alloc_receiver.version IS '乐观锁版本�
 --
 
 COMMENT ON COLUMN public.alipay_isv_alloc_receiver.deleted IS '逻辑删除标志';
+
+
+--
+-- Name: COLUMN alipay_isv_alloc_receiver.alias; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.alipay_isv_alloc_receiver.alias IS '接收方别名(本地备注, 不上送通道)';
 
 
 --
@@ -2304,7 +2316,6 @@ CREATE TABLE public.douyin_direct_alloc_receiver (
     receiver_account character varying(256) NOT NULL,
     account_hash character varying(64) NOT NULL,
     receiver_name character varying(256),
-    alias character varying(50),
     relation_type character varying(32) NOT NULL,
     custom_relation character varying(64),
     channel_app_id character varying(64) NOT NULL,
@@ -2317,7 +2328,8 @@ CREATE TABLE public.douyin_direct_alloc_receiver (
     last_modifier bigint,
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0 NOT NULL,
-    deleted boolean DEFAULT false NOT NULL
+    deleted boolean DEFAULT false NOT NULL,
+    alias character varying(50)
 );
 
 
@@ -2375,7 +2387,6 @@ COMMENT ON COLUMN public.douyin_direct_alloc_receiver.account_hash IS '接收方
 --
 
 COMMENT ON COLUMN public.douyin_direct_alloc_receiver.receiver_name IS '接收方名称(AES-256-GCM加密存储, MERCHANT_ID时必填商户全称)';
-COMMENT ON COLUMN public.douyin_direct_alloc_receiver.alias IS '接收方别名(本地备注, 不上送通道)';
 
 
 --
@@ -2467,6 +2478,13 @@ COMMENT ON COLUMN public.douyin_direct_alloc_receiver.version IS '乐观锁版�
 --
 
 COMMENT ON COLUMN public.douyin_direct_alloc_receiver.deleted IS '逻辑删除标志';
+
+
+--
+-- Name: COLUMN douyin_direct_alloc_receiver.alias; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.douyin_direct_alloc_receiver.alias IS '接收方别名(本地备注, 不上送通道)';
 
 
 --
@@ -16790,7 +16808,6 @@ CREATE TABLE public.wechat_direct_alloc_receiver (
     receiver_account character varying(256) NOT NULL,
     account_hash character varying(64) NOT NULL,
     receiver_name character varying(256),
-    alias character varying(50),
     relation_type character varying(32) NOT NULL,
     custom_relation character varying(64),
     channel_app_id character varying(64) NOT NULL,
@@ -16803,7 +16820,8 @@ CREATE TABLE public.wechat_direct_alloc_receiver (
     last_modifier bigint,
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0 NOT NULL,
-    deleted boolean DEFAULT false NOT NULL
+    deleted boolean DEFAULT false NOT NULL,
+    alias character varying(50)
 );
 
 
@@ -16861,7 +16879,6 @@ COMMENT ON COLUMN public.wechat_direct_alloc_receiver.account_hash IS '接收方
 --
 
 COMMENT ON COLUMN public.wechat_direct_alloc_receiver.receiver_name IS '接收方名称(AES-256-GCM加密存储, MERCHANT_ID时必填商户全称)';
-COMMENT ON COLUMN public.wechat_direct_alloc_receiver.alias IS '接收方别名(本地备注, 不上送通道)';
 
 
 --
@@ -16953,6 +16970,13 @@ COMMENT ON COLUMN public.wechat_direct_alloc_receiver.version IS '乐观锁版�
 --
 
 COMMENT ON COLUMN public.wechat_direct_alloc_receiver.deleted IS '逻辑删除标志';
+
+
+--
+-- Name: COLUMN wechat_direct_alloc_receiver.alias; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.wechat_direct_alloc_receiver.alias IS '接收方别名(本地备注, 不上送通道)';
 
 
 --
@@ -17213,7 +17237,6 @@ CREATE TABLE public.wechat_isv_alloc_receiver (
     receiver_account character varying(256) NOT NULL,
     account_hash character varying(64) NOT NULL,
     receiver_name character varying(256),
-    alias character varying(50),
     relation_type character varying(32) NOT NULL,
     custom_relation character varying(64),
     sp_app_id character varying(64) NOT NULL,
@@ -17227,7 +17250,8 @@ CREATE TABLE public.wechat_isv_alloc_receiver (
     last_modifier bigint,
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0 NOT NULL,
-    deleted boolean DEFAULT false NOT NULL
+    deleted boolean DEFAULT false NOT NULL,
+    alias character varying(50)
 );
 
 
@@ -17285,7 +17309,6 @@ COMMENT ON COLUMN public.wechat_isv_alloc_receiver.account_hash IS '接收方账
 --
 
 COMMENT ON COLUMN public.wechat_isv_alloc_receiver.receiver_name IS '接收方名称(AES-256-GCM加密存储, MERCHANT_ID时必填商户全称)';
-COMMENT ON COLUMN public.wechat_isv_alloc_receiver.alias IS '接收方别名(本地备注, 不上送通道)';
 
 
 --
@@ -17384,6 +17407,13 @@ COMMENT ON COLUMN public.wechat_isv_alloc_receiver.version IS '乐观锁版本�
 --
 
 COMMENT ON COLUMN public.wechat_isv_alloc_receiver.deleted IS '逻辑删除标志';
+
+
+--
+-- Name: COLUMN wechat_isv_alloc_receiver.alias; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.wechat_isv_alloc_receiver.alias IS '接收方别名(本地备注, 不上送通道)';
 
 
 --
@@ -19651,33 +19681,6 @@ CREATE INDEX idx_iam_role_code_role_id ON public.iam_role_code USING btree (role
 
 COMMENT ON INDEX public.idx_iam_role_code_role_id IS '角色权限码关联表角色ID索引';
 
---
--- Name: uk_iam_role_code; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX uk_iam_role_code ON public.iam_role USING btree (code) WHERE (deleted = false);
-
-
---
--- Name: INDEX uk_iam_role_code; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.uk_iam_role_code IS '角色编码全局唯一(按 code 解析内置角色, 重复会导致角色解析异常)';
-
-
---
--- Name: uk_iam_user_info_client_account; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX uk_iam_user_info_client_account ON public.iam_user_info USING btree (client_code, account) WHERE (deleted = false);
-
-
---
--- Name: INDEX uk_iam_user_info_client_account; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.uk_iam_user_info_client_account IS '同一身份域下账号全局唯一(登录凭据, 重复会导致登录异常)';
-
 
 --
 -- Name: idx_iam_user_info_client_email; Type: INDEX; Schema: public; Owner: -
@@ -19775,20 +19778,6 @@ CREATE INDEX idx_mch_credential_mch_no ON public.mch_credential USING btree (mch
 --
 
 COMMENT ON INDEX public.idx_mch_credential_mch_no IS '商户号索引';
-
-
---
--- Name: uk_mch_info_mch_no; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX uk_mch_info_mch_no ON public.mch_info USING btree (mch_no) WHERE (deleted = false);
-
-
---
--- Name: INDEX uk_mch_info_mch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.uk_mch_info_mch_no IS '商户号全局唯一(商户业务主键, 重复会导致按号查询异常)';
 
 
 --
@@ -21465,10 +21454,38 @@ COMMENT ON INDEX public.uk_iam_perm_code_code IS '权限码表编码唯一索引
 
 
 --
+-- Name: uk_iam_role_code; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_iam_role_code ON public.iam_role USING btree (code) WHERE (deleted = false);
+
+
+--
+-- Name: INDEX uk_iam_role_code; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_iam_role_code IS '角色编码全局唯一(按 code 解析内置角色, 重复会导致角色解析异常)';
+
+
+--
 -- Name: INDEX uk_iam_social_config_source; Type: COMMENT; Schema: public; Owner: -
 --
 
 COMMENT ON INDEX public.uk_iam_social_config_source IS '同一社交登录来源唯一';
+
+
+--
+-- Name: uk_iam_user_info_client_account; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_iam_user_info_client_account ON public.iam_user_info USING btree (client_code, account) WHERE (deleted = false);
+
+
+--
+-- Name: INDEX uk_iam_user_info_client_account; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_iam_user_info_client_account IS '同一身份域下账号全局唯一(登录凭据, 重复会导致登录异常)';
 
 
 --
@@ -21651,6 +21668,20 @@ CREATE UNIQUE INDEX uk_mch_app_notify_config ON public.mch_app_notify_config USI
 --
 
 COMMENT ON INDEX public.uk_mch_app_notify_config IS '同一应用仅一条通知配置';
+
+
+--
+-- Name: uk_mch_info_mch_no; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_mch_info_mch_no ON public.mch_info USING btree (mch_no) WHERE (deleted = false);
+
+
+--
+-- Name: INDEX uk_mch_info_mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_mch_info_mch_no IS '商户号全局唯一(商户业务主键, 重复会导致按号查询异常)';
 
 
 --
