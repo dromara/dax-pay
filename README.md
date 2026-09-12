@@ -31,13 +31,12 @@
 
 ### 演示环境
 
-> 演示账号暂未公布,完整功能请参考本地部署。本地开发种子账号和初始密码以启动日志为准,首次登录后请立即修改。
+> 演示账号即点即用,数据定期重置,请勿录入真实业务数据与敏感信息。本地部署的种子账号和初始密码以启动日志为准,首次登录后请立即修改。
 
 | 站点类型 | 地址 | 演示账号 |
 |---------|------|---------|
-| 运营端 | https://admin.open.daxpay.cn | 待公布 |
-| 商户端 | https://merchant.open.daxpay.cn | 待公布 |
-| H5 端 | https://h5.open.daxpay.cn | — |
+| 运营端 | https://admin.open.daxpay.cn | `csadmin` / `121212` |
+| 商户端 | https://merchant.open.daxpay.cn | `csqysh` / `121212` |
 
 ## 核心特性
 
