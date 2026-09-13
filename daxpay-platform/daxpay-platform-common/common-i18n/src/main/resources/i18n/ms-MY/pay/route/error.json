@@ -17,6 +17,7 @@
   "channelMchNoRequired": "No pedagang saluran tidak boleh kosong",
   "channelMchNotExist": "Pedagang saluran [{0}] tidak ditemui",
   "channelMchDisabled": "Pedagang saluran [{0}] dilumpuhkan",
+  "productDisabled": "Produk pembayaran [{0}] dilumpuhkan, tidak dapat memulakan pembayaran",
   "duplicateSceneMethod": "Konfigurasi Duplikat Mengikut Kaedah untuk kaedah bayar [{0}]",
   "sceneChannelMchCapabilityPair": "Untuk kaedah bayar [{0}], pilih kedua-dua pedagang saluran dan keupayaan, atau biarkan kedua-duanya kosong",
   "basicChannelMchNotConfigured": "Tiada pedagang saluran dikonfigurasikan untuk jenama berbayar [{0}]; konfigurasikannya di bawah penghalaan saluran Mengikut Lalai Jenama",

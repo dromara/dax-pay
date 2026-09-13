@@ -25,5 +25,5 @@ public class PayProductQuery extends SortParam {
 
     @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     @Schema(description = "是否启用")
-    private Boolean enable;
+    private Boolean enabled;
 }

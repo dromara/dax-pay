@@ -37,6 +37,10 @@ public class PayProviderProductService {
         }
         Map<String, Set<String>> capabilityCodesByProduct = payProductCapabilityService.loadCapabilityCodesByProduct();
         for (PayProductResult product : payProductService.listAll()) {
+            // 停用产品不再出现在「渠道+方式」可用产品索引中
+            if (!product.isEnabled()) {
+                continue;
+            }
             var productItem = new PayProviderProductResult()
                     .setLabel(product.getName())
                     .setValue(product.getCode())

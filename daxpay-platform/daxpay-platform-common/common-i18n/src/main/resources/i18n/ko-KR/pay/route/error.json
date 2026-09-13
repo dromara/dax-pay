@@ -17,6 +17,7 @@
   "channelMchNoRequired": "채널 판매자 번호는 비워둘 수 없습니다.",
   "channelMchNotExist": "채널 판매자 [{0}]을(를) 찾을 수 없습니다.",
   "channelMchDisabled": "채널 판매자 [{0}]이(가) 비활성화되었습니다.",
+  "productDisabled": "결제 상품 [{0}]이(가) 비활성화되어 결제를 시작할 수 없습니다.",
   "duplicateSceneMethod": "결제 방법 [{0}]에 대한 방법별 중복 구성",
   "sceneChannelMchCapabilityPair": "결제 방법 [{0}]의 경우 채널 판매자와 기능을 모두 선택하거나 둘 다 비워 두세요.",
   "basicChannelMchNotConfigured": "유료 브랜드 [{0}]에 구성된 채널 판매자가 없습니다. 브랜드 기본값으로 채널 라우팅에서 구성",

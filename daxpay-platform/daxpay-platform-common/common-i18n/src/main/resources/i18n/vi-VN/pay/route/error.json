@@ -17,6 +17,7 @@
   "channelMchNoRequired": "Số người bán kênh không được để trống",
   "channelMchNotExist": "Không tìm thấy người bán kênh [{0}]",
   "channelMchDisabled": "Người bán kênh [{0}] bị vô hiệu hóa",
+  "productDisabled": "Sản phẩm thanh toán [{0}] đã bị vô hiệu hóa, không thể khởi tạo thanh toán",
   "duplicateSceneMethod": "Cấu hình trùng lặp theo phương thức cho phương thức thanh toán [{0}]",
   "sceneChannelMchCapabilityPair": "Đối với phương thức thanh toán [{0}], hãy chọn cả người bán kênh và khả năng hoặc để trống cả hai",
   "basicChannelMchNotConfigured": "Không có người bán kênh nào được định cấu hình cho thương hiệu trả phí [{0}]; định cấu hình nó theo định tuyến kênh Theo mặc định của thương hiệu",

@@ -17,6 +17,7 @@
   "channelMchNoRequired": "Channel merchant no cannot be blank",
   "channelMchNotExist": "Channel merchant [{0}] not found",
   "channelMchDisabled": "Channel merchant [{0}] is disabled",
+  "productDisabled": "Payment product [{0}] is disabled, unable to initiate payment",
   "duplicateSceneMethod": "Duplicate By Method configuration for pay method [{0}]",
   "sceneChannelMchCapabilityPair": "For pay method [{0}], select both channel merchant and capability, or leave both empty",
   "basicChannelMchNotConfigured": "No channel merchant configured for pay brand [{0}]; configure it under channel routing By Brand Default",

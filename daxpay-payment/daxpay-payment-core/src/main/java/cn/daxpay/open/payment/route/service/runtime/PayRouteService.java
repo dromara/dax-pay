@@ -3,6 +3,8 @@ package cn.daxpay.open.payment.route.service.runtime;
 import cn.daxpay.open.payment.masterdata.dao.capability.PayCapabilityManager;
 import cn.daxpay.open.payment.masterdata.dao.capability.PayProductCapabilityManager;
 import cn.daxpay.open.payment.masterdata.dao.product.PayProductConfigManager;
+import cn.daxpay.open.payment.masterdata.dao.product.PayProductManager;
+import cn.daxpay.open.payment.masterdata.entity.product.PayProduct;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
 import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
 import cn.daxpay.open.payment.route.entity.basic.PayRouteBasicConfig;
@@ -53,12 +55,15 @@ public class PayRouteService {
     private final PayProductCapabilityManager payProductCapabilityManager;
     private final PayCapabilityManager payCapabilityManager;
     private final PayProductConfigManager payProductConfigManager;
+    private final PayProductManager payProductManager;
 
     /// 实付路由解析：直接指定优先，否则跟随通道路由匹配
     public void resolve(NormalPayParam payParam) {
         // 直接指定：已传通道商户号，跳过应用路由策略
         if (StrUtil.isNotBlank(payParam.getChannelMchNo())) {
             resolveDirect(payParam);
+            // 产品启停校验(直接指定路径)
+            validateProductEnabled(payParam.getProduct());
             // 环境一致性校验(直接指定路径)
             validateChannelMchEnvMatch(payParam.getChannelMchNo(), payParam.getProduct());
             return;
@@ -81,8 +86,27 @@ public class PayRouteService {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.route.error.noMatch");
         }
         fillPayParam(payParam, hit);
+        // 产品启停校验(跟随路由路径)
+        validateProductEnabled(payParam.getProduct());
         // 环境一致性校验(跟随路由路径)
         validateChannelMchEnvMatch(payParam.getChannelMchNo(), payParam.getProduct());
+    }
+
+    /// 产品启停校验(运行时): 停用的支付产品不允许发起新支付
+    ///
+    /// 本方法只拦支付下单链路, 存量订单的退款/同步/回调不经过路由, 不受停用影响;
+    /// 主数据无行时视为默认启用, 与 [cn.daxpay.open.payment.masterdata.service.product.PayProductService] 目录融合口径一致。
+    private void validateProductEnabled(String product) {
+        if (StrUtil.isBlank(product)) {
+            return;
+        }
+        Optional<PayProduct> row = payProductManager.findByCode(product);
+        if (row.isPresent() && !row.get().isEnabled()) {
+            log.info("支付产品[{}]已被停用, 路由拒绝", product);
+            // 路由: 支付产品已停用
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "pay.route.error.productDisabled", PayRouteI18nHelper.product(product));
+        }
     }
 
     /// 通道商户可用性校验(运行时)

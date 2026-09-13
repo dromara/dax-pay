@@ -17,6 +17,7 @@
   "channelMchNoRequired": "チャネル販売者番号を空白にすることはできません",
   "channelMchNotExist": "チャネル販売者 [{0}] が見つかりません",
   "channelMchDisabled": "チャネル販売者 [{0}] は無効になっています",
+  "productDisabled": "決済商品 [{0}] は無効化されているため、支払いを開始できません",
   "duplicateSceneMethod": "支払い方法の方法による構成が重複しています [{0}]",
   "sceneChannelMchCapabilityPair": "支払い方法 [{0}] については、チャネル販売者と機能の両方を選択するか、両方を空のままにしてください",
   "basicChannelMchNotConfigured": "有料ブランド [{0}] に対してチャネル販売者が設定されていません。ブランドデフォルトによるチャネルルーティングの下で​​設定します",

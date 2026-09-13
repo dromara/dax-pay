@@ -141,9 +141,10 @@ public class PayProductService {
         results.forEach(r -> r.setActiveEnv(envMap.get(r.getCode())));
     }
 
-    /// 支付产品下拉选项
+    /// 支付产品下拉选项(仅启用产品, 供创建/配置类表单选择)
     public List<LabelValue> dropdown() {
         return listAll().stream()
+                .filter(PayProductResult::isEnabled)
                 .map(e -> new LabelValue(e.getName(), e.getCode()))
                 .toList();
     }

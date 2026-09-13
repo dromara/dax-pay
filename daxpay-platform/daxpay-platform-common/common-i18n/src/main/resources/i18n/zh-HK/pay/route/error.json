@@ -17,6 +17,7 @@
   "channelMchNoRequired": "通道商户號不能為空",
   "channelMchNotExist": "通道商户號[{0}]不存在",
   "channelMchDisabled": "通道商户號[{0}]未啓用",
+  "productDisabled": "支付產品[{0}]已停用，無法發起支付",
   "duplicateSceneMethod": "按支付方式配置下同一支付方式[{0}]存在多條配置",
   "sceneChannelMchCapabilityPair": "支付方式[{0}]須同時選擇通道商户與支付能力，或同時留空",
   "basicChannelMchNotConfigured": "支付渠道[{0}]未配置通道商户，請在通道路由「按渠道默認」中完成配置",
