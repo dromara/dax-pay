@@ -3,6 +3,11 @@
   "checkSuccess": "OSS 连通性检查通过",
   "checkFailed": "OSS 连通性检查失败, 状态码: {0}",
   "authFailed": "OSS 认证失败, 请检查 AccessKey / SecretKey",
+  "publicBucketWriteFailed": "OSS 公开桶写入失败, 请检查密钥是否具备上传权限",
+  "privateBucketWriteFailed": "OSS 私有桶写入失败, 请检查密钥是否具备上传权限",
+  "publicBucketReadFailed": "OSS 公开桶文件写入后无法读取, 请检查密钥是否具备读取权限",
+  "privateBucketReadFailed": "OSS 私有桶文件写入后无法读取, 请检查密钥是否具备读取权限",
+  "publicUrlUnreachable": "上传链路正常, 但服务端无法通过公开访问域名取到文件(浏览器直连可能正常), 请确认公开访问域名配置与桶的公开读权限",
   "bucketNotFound": "存储桶不存在, 请检查公开/私有桶名称",
   "networkError": "无法连接对象存储, 请检查端点与网络"
 }

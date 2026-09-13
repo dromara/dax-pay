@@ -27,12 +27,21 @@ public class ConnectivityCheckResult {
     @Schema(description = "耗时毫秒")
     private Long latencyMs;
 
+    /// 警告信息(已国际化, 检查通过但存在不影响结论的隐患时有值, 如公开访问地址不可达)
+    @Schema(description = "警告信息")
+    private String warning;
+
     public static ConnectivityCheckResult ok(String message, Long latencyMs, Integer statusCode) {
+        return ok(message, latencyMs, statusCode, null);
+    }
+
+    public static ConnectivityCheckResult ok(String message, Long latencyMs, Integer statusCode, String warning) {
         return new ConnectivityCheckResult()
                 .setSuccess(true)
                 .setMessage(message)
                 .setLatencyMs(latencyMs)
-                .setStatusCode(statusCode);
+                .setStatusCode(statusCode)
+                .setWarning(warning);
     }
 
     public static ConnectivityCheckResult fail(String message, Long latencyMs, Integer statusCode) {

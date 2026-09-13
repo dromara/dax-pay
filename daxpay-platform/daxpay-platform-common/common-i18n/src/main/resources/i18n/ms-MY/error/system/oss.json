@@ -3,6 +3,11 @@
   "checkSuccess": "Semakan sambungan OSS lulus",
   "checkFailed": "Semakan sambungan OSS gagal, status: {0}",
   "authFailed": "Pengesahan OSS gagal, sila semak AccessKey / SecretKey",
+  "publicBucketWriteFailed": "Gagal menulis ke baldi awam OSS. Sila semak sama ada bukti kelayakan mempunyai kebenaran muat naik",
+  "privateBucketWriteFailed": "Gagal menulis ke baldi peribadi OSS. Sila semak sama ada bukti kelayakan mempunyai kebenaran muat naik",
+  "publicBucketReadFailed": "Fail yang ditulis ke baldi awam OSS tidak dapat dibaca. Sila semak sama ada bukti kelayakan mempunyai kebenaran baca",
+  "privateBucketReadFailed": "Fail yang ditulis ke baldi peribadi OSS tidak dapat dibaca. Sila semak sama ada bukti kelayakan mempunyai kebenaran baca",
+  "publicUrlUnreachable": "Laluan muat naik normal, tetapi pelayan tidak dapat mengambil fail melalui domain akses awam (akses terus pelayar mungkin normal). Sila semak konfigurasi domain akses awam dan kebenaran baca awam baldi",
   "bucketNotFound": "Baldi tidak ditemui, sila semak nama baldi awam/peribadi",
   "networkError": "Tidak dapat mencapai storan objek, sila semak titik akhir dan rangkaian"
 }

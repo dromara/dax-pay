@@ -3,6 +3,11 @@
   "checkSuccess": "Pemeriksaan konektivitas OSS berhasil",
   "checkFailed": "Pemeriksaan konektivitas OSS gagal, status: {0}",
   "authFailed": "Otentikasi OSS gagal, silakan periksa AccessKey/SecretKey",
+  "publicBucketWriteFailed": "Gagal menulis ke bucket publik OSS. Periksa apakah kredensial memiliki izin unggah",
+  "privateBucketWriteFailed": "Gagal menulis ke bucket privat OSS. Periksa apakah kredensial memiliki izin unggah",
+  "publicBucketReadFailed": "File yang ditulis ke bucket publik OSS tidak dapat dibaca. Periksa apakah kredensial memiliki izin baca",
+  "privateBucketReadFailed": "File yang ditulis ke bucket privat OSS tidak dapat dibaca. Periksa apakah kredensial memiliki izin baca",
+  "publicUrlUnreachable": "Jalur unggah normal, tetapi server tidak dapat mengambil file melalui domain akses publik (akses langsung browser mungkin normal). Periksa konfigurasi domain akses publik dan izin baca publik bucket",
   "bucketNotFound": "Bucket tidak ditemukan, harap periksa nama bucket publik/pribadi",
   "networkError": "Tidak dapat menjangkau penyimpanan objek, harap periksa titik akhir dan jaringan"
 }

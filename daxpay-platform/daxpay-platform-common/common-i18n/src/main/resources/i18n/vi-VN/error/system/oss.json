@@ -3,6 +3,11 @@
   "checkSuccess": "Đã vượt qua kiểm tra kết nối OSS",
   "checkFailed": "Kiểm tra kết nối OSS không thành công, trạng thái: {0}",
   "authFailed": "Xác thực OSS không thành công, vui lòng kiểm tra AccessKey/SecretKey",
+  "publicBucketWriteFailed": "Ghi vào bucket công khai OSS thất bại. Vui lòng kiểm tra xem thông tin xác thực có quyền tải lên không",
+  "privateBucketWriteFailed": "Ghi vào bucket riêng tư OSS thất bại. Vui lòng kiểm tra xem thông tin xác thực có quyền tải lên không",
+  "publicBucketReadFailed": "Không thể đọc tệp đã ghi vào bucket công khai OSS. Vui lòng kiểm tra xem thông tin xác thực có quyền đọc không",
+  "privateBucketReadFailed": "Không thể đọc tệp đã ghi vào bucket riêng tư OSS. Vui lòng kiểm tra xem thông tin xác thực có quyền đọc không",
+  "publicUrlUnreachable": "Đường dẫn tải lên bình thường, nhưng máy chủ không thể lấy tệp qua tên miền truy cập công khai (truy cập trực tiếp từ trình duyệt có thể vẫn bình thường). Vui lòng kiểm tra cấu hình tên miền truy cập công khai và quyền đọc công khai của bucket",
   "bucketNotFound": "Không tìm thấy nhóm, vui lòng kiểm tra tên nhóm công khai/riêng tư",
   "networkError": "Không thể truy cập bộ nhớ đối tượng, vui lòng kiểm tra điểm cuối và mạng"
 }

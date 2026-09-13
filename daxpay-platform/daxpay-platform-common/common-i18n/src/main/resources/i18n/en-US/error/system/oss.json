@@ -3,6 +3,11 @@
   "checkSuccess": "OSS connectivity check passed",
   "checkFailed": "OSS connectivity check failed, status: {0}",
   "authFailed": "OSS authentication failed, please check AccessKey / SecretKey",
+  "publicBucketWriteFailed": "Failed to write to the public OSS bucket. Please check whether the credentials have upload permission",
+  "privateBucketWriteFailed": "Failed to write to the private OSS bucket. Please check whether the credentials have upload permission",
+  "publicBucketReadFailed": "The file written to the public OSS bucket cannot be read. Please check whether the credentials have read permission",
+  "privateBucketReadFailed": "The file written to the private OSS bucket cannot be read. Please check whether the credentials have read permission",
+  "publicUrlUnreachable": "Upload path is fine, but the server cannot retrieve the file via the public base URL (direct browser access may still work). Please verify the public base URL and the bucket public-read permission",
   "bucketNotFound": "Bucket not found, please check public/private bucket names",
   "networkError": "Cannot reach object storage, please check endpoint and network"
 }
