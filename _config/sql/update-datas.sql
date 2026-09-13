@@ -111,3 +111,18 @@ DELETE FROM "public"."iam_social_login_config" WHERE source IN ('weChatApplet', 
 
 -- 清理用户的小程序快捷登录绑定关系(绑定过小程序的用户需改用账号密码登录)
 DELETE FROM "public"."iam_user_social" WHERE source IN ('weChatApplet', 'alipayApplet', 'douyinApplet');
+
+-- =============================================================
+-- 2026-09-13 支付产品启停入口迁移至支付产品配置, 权限码随之迁移
+-- 背景: switch-enabled 端点从 /admin/product 迁至 /admin/product-config(APP 侧 /app-admin 同口径),
+--       原码 payment:platform:product:manage(ID 2070862265027072001)删除;
+--       启停操作改用既有码 payment:config:product-config:manage(ID 2070862265018683392);
+--       存量角色对旧码的授权(iam_role_code 按 code_id 关联)改指既有码, 授权关系不断, 防重复先删再迁。
+-- =============================================================
+
+-- 先删与目标码重复的授权行, 再把旧码授权迁指目标码, 最后删旧权限码种子行(菜单管理页扫描不再生成该码)
+DELETE FROM public.iam_role_code
+WHERE code_id = 2070862265027072001
+  AND role_id IN (SELECT role_id FROM public.iam_role_code WHERE code_id = 2070862265018683392);
+UPDATE public.iam_role_code SET code_id = 2070862265018683392 WHERE code_id = 2070862265027072001;
+DELETE FROM public.iam_perm_code WHERE id = 2070862265027072001 AND code = 'payment:platform:product:manage';

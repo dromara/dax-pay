@@ -83,6 +83,11 @@ public class PayProductConfigService {
         payProductConfigManager.saveOrUpdate(config);
     }
 
+    /// 切换支付产品启停(2026-09-13 启停入口随配置页迁移, 启停逻辑本体在 [PayProductService#switchEnabled])
+    public void switchEnabled(String product, boolean enabled) {
+        payProductService.switchEnabled(product, enabled);
+    }
+
     /// 保存或更新配置
     @Transactional(rollbackFor = Exception.class)
     @CacheEvict(value = "payment:product-sandbox", key = "#param.product")
@@ -139,7 +144,8 @@ public class PayProductConfigService {
                 .setProduct(payProduct.getCode())
                 .setName(I18nUtil.getEnumName(ProductEnum.findByCode(payProduct.getCode())))
                 .setChannel(payProduct.getChannel())
-                .setChannelName(I18nUtil.getEnumName(ChannelEnum.findByCode(payProduct.getChannel())));
+                .setChannelName(I18nUtil.getEnumName(ChannelEnum.findByCode(payProduct.getChannel())))
+                .setEnabled(payProduct.isEnabled());
 
         AbsProductStrategy strategy = resolveStrategy(payProduct.getCode());
         if (Objects.nonNull(strategy)) {

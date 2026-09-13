@@ -22,11 +22,6 @@ public class AppAdminPayProviderService {
         return payProviderService.listByProvider();
     }
 
-    /// 切换支付渠道启停
-    public void switchEnabled(String product, Boolean enabled) {
-        payProviderService.switchEnabled(product, enabled);
-    }
-
     /// 按支付渠道编码与支付方式编码查一条配置详情
     public PayProviderMethodResult get(String providerCode, String methodCode) {
         return payProviderService.get(providerCode, methodCode);

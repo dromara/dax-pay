@@ -32,6 +32,9 @@ public class PayProductConfigResult extends BaseResult {
     @Schema(description = "生效环境: prod/sandbox")
     private String activeEnv;
 
+    @Schema(description = "是否启用(来自支付产品主数据, 卡片状态点与详情页启停使用)")
+    private boolean enabled;
+
     /// 是否为服务商模式（true=服务商, false=直连）
     private boolean isv;
 }

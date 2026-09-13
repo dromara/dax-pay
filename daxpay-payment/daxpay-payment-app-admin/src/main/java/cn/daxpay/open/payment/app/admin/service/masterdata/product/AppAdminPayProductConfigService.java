@@ -27,6 +27,11 @@ public class AppAdminPayProductConfigService {
         payProductConfigService.switchEnv(product, sandbox);
     }
 
+    /// 切换启停(2026-09-13 启停入口随配置页迁移)
+    public void switchEnabled(String product, Boolean enabled) {
+        payProductConfigService.switchEnabled(product, enabled);
+    }
+
     /// 保存配置
     public void saveOrUpdate(PayProductConfigParam param) {
         payProductConfigService.saveOrUpdate(param);

@@ -46,6 +46,16 @@ public class AppAdminPayProductConfigController {
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "切换支付产品启停")
+    @PostMapping("/switch-enabled")
+    public Result<Void> switchEnabled(
+            @NotBlank(message = "{validation.field.product.notBlank}") String product,
+            @NotNull(message = "{validation.field.enabled.notNull}") Boolean enabled) {
+        payProductConfigService.switchEnabled(product, enabled);
+        return Res.ok();
+    }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "保存产品配置")
     @PostMapping("/save")
     public Result<Void> save(@RequestBody @Validated PayProductConfigParam param) {

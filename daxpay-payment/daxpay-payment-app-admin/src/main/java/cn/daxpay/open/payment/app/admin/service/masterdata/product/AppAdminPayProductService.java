@@ -35,11 +35,6 @@ public class AppAdminPayProductService {
         return payProductService.dropdown();
     }
 
-    /// 切换启停
-    public void switchEnabled(String product, Boolean enabled) {
-        payProductService.switchEnabled(product, enabled);
-    }
-
     /// 全量列表
     public List<PayProductResult> listAll() {
         return payProductService.listAll();
