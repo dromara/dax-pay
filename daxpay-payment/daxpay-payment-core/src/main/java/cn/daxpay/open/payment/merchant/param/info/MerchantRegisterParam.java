@@ -39,9 +39,10 @@ public class MerchantRegisterParam {
     @Schema(description = "登录账号")
     private String account;
 
-    /// 管理员姓名
+    /// 管理员名称
+    @NotBlank(message = "{validation.field.adminName.notBlank}")
     @SensitiveWord
-    @Schema(description = "管理员姓名, 可选; 不传时默认为「商户名称+管理员」")
+    @Schema(description = "管理员名称")
     private String adminName;
 
     @Schema(description = "密码(RSA 加密), 可选; 不传时由系统生成随机初始密码并在响应中返回明文")

@@ -376,6 +376,9 @@
     "mchShortName": {
       "notBlank": "판매자 닉네임은 비워둘 수 없습니다."
     },
+    "adminName": {
+      "notBlank": "이름은 필수입니다"
+    },
     "publicKey": {
       "notBlank": "플랫폼 공개 키는 비워둘 수 없습니다. daxpay.platform.config.key-config.public-key 구성"
     },

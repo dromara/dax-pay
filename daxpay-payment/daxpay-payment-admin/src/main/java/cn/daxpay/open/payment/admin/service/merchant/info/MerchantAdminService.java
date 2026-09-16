@@ -129,10 +129,8 @@ public class MerchantAdminService {
         // 创建用户
         var userInfoParam = new UserInfoParam();
         MerchantInfoConvert.CONVERT.copy(param, userInfoParam);
-        // 用户名称: 传入管理员姓名优先, 留空默认「商户名称+管理员」
-        userInfoParam.setName(StrUtil.isBlank(param.getAdminName())
-                ? merchant.getMchName() + "管理员"
-                : param.getAdminName().trim());
+        // 用户名称(管理员名称, 必填)
+        userInfoParam.setName(param.getAdminName().trim());
         // 设置终端归属为商户端
         userInfoParam.setClientCode(ClientEnum.MERCHANT.getCode());
         // 商户管理员账号必须按商户终端校验唯一性, 不可跳过:

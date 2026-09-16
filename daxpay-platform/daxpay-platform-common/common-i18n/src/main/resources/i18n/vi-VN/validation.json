@@ -375,6 +375,9 @@
     "mchShortName": {
       "notBlank": "Tên ngắn của người bán không được để trống"
     },
+    "adminName": {
+      "notBlank": "Tên không được để trống"
+    },
     "publicKey": {
       "notBlank": "Khóa công khai của nền tảng không được để trống; định cấu hình daxpay.platform.config.key-config.public-key"
     },

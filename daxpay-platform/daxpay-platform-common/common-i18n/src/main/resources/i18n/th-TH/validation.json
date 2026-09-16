@@ -375,6 +375,9 @@
     "mchShortName": {
       "notBlank": "ชื่อสั้นของผู้ขายไม่สามารถเว้นว่างได้"
     },
+    "adminName": {
+      "notBlank": "ต้องระบุชื่อ"
+    },
     "publicKey": {
       "notBlank": "รหัสสาธารณะของแพลตฟอร์มต้องไม่เว้นว่าง กำหนดค่า daxpay.platform.config.key-config.public-key"
     },

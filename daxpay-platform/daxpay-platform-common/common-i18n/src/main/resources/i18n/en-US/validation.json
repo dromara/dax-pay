@@ -376,6 +376,9 @@
     "mchShortName": {
       "notBlank": "Merchant short name cannot be blank"
     },
+    "adminName": {
+      "notBlank": "Name cannot be empty"
+    },
     "publicKey": {
       "notBlank": "Platform public key cannot be blank; configure daxpay.platform.config.key-config.public-key"
     },

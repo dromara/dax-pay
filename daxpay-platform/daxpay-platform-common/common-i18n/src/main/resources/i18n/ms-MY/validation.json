@@ -375,6 +375,9 @@
     "mchShortName": {
       "notBlank": "Nama pendek pedagang tidak boleh kosong"
     },
+    "adminName": {
+      "notBlank": "Nama tidak boleh kosong"
+    },
     "publicKey": {
       "notBlank": "Kunci awam platform tidak boleh kosong; konfigurasikan daxpay.platform.config.key-config.public-key"
     },

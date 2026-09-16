@@ -376,6 +376,9 @@
     "mchShortName": {
       "notBlank": "販売者の短縮名を空白にすることはできません"
     },
+    "adminName": {
+      "notBlank": "名前は必須です"
+    },
     "publicKey": {
       "notBlank": "プラットフォーム公開キーを空白にすることはできません。 daxpay.platform.config.key-config.public-key を設定する"
     },

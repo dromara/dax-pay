@@ -376,6 +376,9 @@
     "mchShortName": {
       "notBlank": "商户简称不可为空"
     },
+    "adminName": {
+      "notBlank": "名称不可为空"
+    },
     "publicKey": {
       "notBlank": "平台公钥不能为空，请配置 daxpay.platform.config.key-config.public-key"
     },
