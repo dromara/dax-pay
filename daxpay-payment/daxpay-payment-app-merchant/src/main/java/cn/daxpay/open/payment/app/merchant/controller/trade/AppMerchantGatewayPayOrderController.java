@@ -1,17 +1,25 @@
 package cn.daxpay.open.payment.app.merchant.controller.trade;
 
 import cn.daxpay.open.payment.app.merchant.service.trade.AppMerchantGatewayPayOrderService;
+import cn.daxpay.open.payment.trade.order.convert.export.GatewayOrderExportConvert;
 import cn.daxpay.open.payment.trade.order.param.GatewayPayOrderQuery;
 import cn.daxpay.open.payment.trade.order.result.GatewayPayOrderResult;
+import cn.daxpay.open.payment.trade.order.result.export.GatewayOrderExportResult;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPaySyncResult;
+import cn.daxpay.open.platform.common.excel.ExcelUtils;
+import cn.daxpay.open.platform.common.excel.ExcelWriterWrapper;
+import cn.daxpay.open.platform.core.annotation.OperateLog;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
+import cn.daxpay.open.platform.core.enums.common.OperateLogType;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.platform.core.rest.result.Result;
+import cn.idev.excel.write.metadata.WriteSheet;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -54,5 +62,27 @@ public class AppMerchantGatewayPayOrderController {
     public Result<NormalPaySyncResult> sync(
             @NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(gatewayPayOrderService.sync(id));
+    }
+
+    @PermCode(code = PermCodes.Action.EXPORT)
+    @Operation(summary = "导出网关支付业务单")
+    @OperateLog(title = "导出网关支付业务单", businessType = OperateLogType.EXPORT, saveParam = false)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, GatewayPayOrderQuery query) {
+        ExcelUtils.validateExportTimeRange(query.getCreateTimeStart(), query.getCreateTimeEnd());
+        ExcelUtils.export(GatewayOrderExportResult.class, "网关支付业务单", response, wrapper -> {
+            WriteSheet sheet = ExcelWriterWrapper.buildSheet("网关支付业务单");
+            int pageNo = 1;
+            int totalRows = 0;
+            while (totalRows < ExcelUtils.EXPORT_MAX_ROWS) {
+                var page = gatewayPayOrderService.page(new PageParam(pageNo, ExcelUtils.EXPORT_PAGE_SIZE), query);
+                var exportData = GatewayOrderExportConvert.CONVERT.toExportResultList(page.getRecords());
+                if (exportData.isEmpty()) break;
+                wrapper.write(exportData, sheet);
+                totalRows += exportData.size();
+                if (exportData.size() < ExcelUtils.EXPORT_PAGE_SIZE) break;
+                pageNo++;
+            }
+        });
     }
 }

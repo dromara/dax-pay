@@ -25,6 +25,12 @@ import java.util.function.Consumer;
 /// 基于 FastExcel 实现，仅覆盖导出场景。
 public @UtilityClass class ExcelUtils {
 
+    /** 导出分页大小 */
+    public static final int EXPORT_PAGE_SIZE = 5000;
+
+    /** 导出最大行数上限 */
+    public static final int EXPORT_MAX_ROWS = 50000;
+
     /// 简单导出 — 全量数据一次性写入响应流
     ///
     /// @param data      导出数据

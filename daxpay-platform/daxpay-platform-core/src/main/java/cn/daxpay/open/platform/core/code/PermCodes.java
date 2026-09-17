@@ -45,6 +45,8 @@ public interface PermCodes {
         String RESEND = "resend";
         /// 测试（如通知配置测试发送）
         String TEST = "test";
+        /// 导出（Excel 等数据导出）
+        String EXPORT = "export";
     }
 
     /// 渠道域（导航挂商户下；通道商户 C1 统一码）

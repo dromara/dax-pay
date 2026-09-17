@@ -1,17 +1,25 @@
 package cn.daxpay.open.payment.admin.controller.trade;
 
+import cn.daxpay.open.payment.admin.service.trade.RefundOrderAdminService;
+import cn.daxpay.open.payment.trade.order.convert.export.RefundOrderExportConvert;
+import cn.daxpay.open.payment.trade.order.param.RefundOrderQuery;
+import cn.daxpay.open.payment.trade.order.result.RefundOrderResult;
+import cn.daxpay.open.payment.trade.order.result.export.RefundOrderExportResult;
+import cn.daxpay.open.payment.trade.runtime.param.RefundParam;
+import cn.daxpay.open.platform.common.excel.ExcelUtils;
+import cn.daxpay.open.platform.common.excel.ExcelWriterWrapper;
+import cn.daxpay.open.platform.core.annotation.OperateLog;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
+import cn.daxpay.open.platform.core.enums.common.OperateLogType;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.platform.core.rest.result.Result;
-import cn.daxpay.open.payment.admin.service.trade.RefundOrderAdminService;
-import cn.daxpay.open.payment.trade.order.param.RefundOrderQuery;
-import cn.daxpay.open.payment.trade.order.result.RefundOrderResult;
-import cn.daxpay.open.payment.trade.runtime.param.RefundParam;
+import cn.idev.excel.write.metadata.WriteSheet;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -71,5 +79,27 @@ public class RefundOrderAdminController {
     public Result<RefundOrderResult> manualClose(
             @NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(refundOrderAdminService.manualClose(id));
+    }
+
+    @PermCode(code = PermCodes.Action.EXPORT)
+    @Operation(summary = "导出退款订单")
+    @OperateLog(title = "导出退款订单", businessType = OperateLogType.EXPORT, saveParam = false)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, RefundOrderQuery query) {
+        ExcelUtils.validateExportTimeRange(query.getCreateTimeStart(), query.getCreateTimeEnd());
+        ExcelUtils.export(RefundOrderExportResult.class, "退款订单", response, wrapper -> {
+            WriteSheet sheet = ExcelWriterWrapper.buildSheet("退款订单");
+            int pageNo = 1;
+            int totalRows = 0;
+            while (totalRows < ExcelUtils.EXPORT_MAX_ROWS) {
+                var page = refundOrderAdminService.page(new PageParam(pageNo, ExcelUtils.EXPORT_PAGE_SIZE), query);
+                var exportData = RefundOrderExportConvert.CONVERT.toExportResultList(page.getRecords());
+                if (exportData.isEmpty()) break;
+                wrapper.write(exportData, sheet);
+                totalRows += exportData.size();
+                if (exportData.size() < ExcelUtils.EXPORT_PAGE_SIZE) break;
+                pageNo++;
+            }
+        });
     }
 }

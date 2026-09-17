@@ -1,0 +1,5 @@
+{
+  "exportFailed": "Excel 내보내기 실패",
+  "exportTimeRangeRequired": "내보내기 기간을 입력해 주세요",
+  "exportTimeRangeExceed": "내보내기 기간은 90일을 초과할 수 없습니다"
+}

@@ -1,0 +1,5 @@
+{
+  "exportFailed": "การส่งออก Excel ล้มเหลว",
+  "exportTimeRangeRequired": "กรุณาระบุช่วงเวลาที่ส่งออก",
+  "exportTimeRangeExceed": "ช่วงเวลาที่ส่งออกต้องไม่เกิน 90 วัน"
+}

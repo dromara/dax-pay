@@ -1,0 +1,5 @@
+{
+  "exportFailed": "Xuất Excel thất bại",
+  "exportTimeRangeRequired": "Vui lòng chọn khoảng thời gian xuất",
+  "exportTimeRangeExceed": "Khoảng thời gian xuất không được vượt quá 90 ngày"
+}
