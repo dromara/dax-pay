@@ -11,6 +11,8 @@ public @UtilityClass class FundFlowExportConvertHelper {
 
     public String toFlowTypeName(String code) {
         if (code == null) return "";
-        return I18nUtil.getEnumName(FundFlowTypeEnum.findByCode(code));
+        // 未知编码(历史数据/后续新增类型)输出空串, 不让单行脏数据打崩整次导出
+        FundFlowTypeEnum flowType = FundFlowTypeEnum.findByCode(code);
+        return flowType == null ? "" : I18nUtil.getEnumName(flowType);
     }
 }

@@ -20,11 +20,15 @@ public enum FundFlowTypeEnum implements I18nSupport {
     /// 编码
     private final String code;
 
+    /// 根据编码获取枚举, 未知编码返回 null
+    ///
+    /// 与 [cn.daxpay.open.platform.core.enums.pay.channel.ChannelEnum#findByCode] 等保持一致的 null 容忍策略:
+    /// 导出/展示场景可能遇到历史数据或后续新增类型, 单行未知值不应打崩整批处理。
     public static FundFlowTypeEnum findByCode(String code) {
         for (FundFlowTypeEnum value : values()) {
             if (value.code.equals(code)) return value;
         }
-        throw new IllegalArgumentException("未知的资金流水类型: " + code);
+        return null;
     }
 
     /// 翻译 key 前缀
