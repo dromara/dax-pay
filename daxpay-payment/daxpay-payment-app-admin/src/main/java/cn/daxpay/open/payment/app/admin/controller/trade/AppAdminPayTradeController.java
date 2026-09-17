@@ -1,17 +1,23 @@
 package cn.daxpay.open.payment.app.admin.controller.trade;
 
 import cn.daxpay.open.payment.app.admin.service.trade.AppAdminPayTradeService;
+import cn.daxpay.open.payment.trade.order.convert.export.PayTradeExportConvert;
 import cn.daxpay.open.payment.trade.order.param.PayTradeQuery;
 import cn.daxpay.open.payment.trade.order.result.PayTradeResult;
+import cn.daxpay.open.payment.trade.order.result.export.PayTradeExportResult;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPaySyncResult;
+import cn.daxpay.open.platform.common.excel.ExcelUtils;
+import cn.daxpay.open.platform.core.annotation.OperateLog;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
+import cn.daxpay.open.platform.core.enums.common.OperateLogType;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -54,5 +60,17 @@ public class AppAdminPayTradeController {
     public Result<NormalPaySyncResult> sync(
             @NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(payTradeService.sync(id));
+    }
+
+    @PermCode(code = PermCodes.Action.EXPORT)
+    @Operation(summary = "导出资金交易凭证")
+    @OperateLog(title = "导出资金交易凭证", businessType = OperateLogType.EXPORT, saveParam = false)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, PayTradeQuery query) {
+        // 导出时间范围必填, 跨度上限 90 天
+        ExcelUtils.validateExportTimeRange(query.getCreateTimeStart(), query.getCreateTimeEnd());
+        ExcelUtils.exportPaged(PayTradeExportResult.class, "交易凭证", response,
+                (pageNo, size) -> payTradeService.page(new PageParam(pageNo, size), query),
+                PayTradeExportConvert.CONVERT::toExportResultList);
     }
 }

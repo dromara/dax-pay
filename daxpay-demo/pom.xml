@@ -55,6 +55,13 @@
             <artifactId>capability-cache</artifactId>
             <version>${project.version}</version>
         </dependency>
+
+        <!-- Excel 导出能力（演示简单导出 + 流式导出两种模式） -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>common-excel</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

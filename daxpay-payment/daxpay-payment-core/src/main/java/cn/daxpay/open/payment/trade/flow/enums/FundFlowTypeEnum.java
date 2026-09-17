@@ -20,6 +20,13 @@ public enum FundFlowTypeEnum implements I18nSupport {
     /// 编码
     private final String code;
 
+    public static FundFlowTypeEnum findByCode(String code) {
+        for (FundFlowTypeEnum value : values()) {
+            if (value.code.equals(code)) return value;
+        }
+        throw new IllegalArgumentException("未知的资金流水类型: " + code);
+    }
+
     /// 翻译 key 前缀
     @Override
     public String getI18nPrefix() {

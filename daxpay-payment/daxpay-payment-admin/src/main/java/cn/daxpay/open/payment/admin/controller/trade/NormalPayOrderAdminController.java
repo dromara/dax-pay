@@ -1,17 +1,23 @@
 package cn.daxpay.open.payment.admin.controller.trade;
 
+import cn.daxpay.open.payment.admin.service.trade.NormalPayOrderAdminService;
+import cn.daxpay.open.payment.trade.order.convert.export.NormalOrderExportConvert;
+import cn.daxpay.open.payment.trade.order.param.NormalPayOrderQuery;
+import cn.daxpay.open.payment.trade.order.result.NormalPayOrderResult;
+import cn.daxpay.open.payment.trade.order.result.export.NormalOrderExportResult;
+import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPaySyncResult;
+import cn.daxpay.open.platform.common.excel.ExcelUtils;
+import cn.daxpay.open.platform.core.annotation.OperateLog;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
+import cn.daxpay.open.platform.core.enums.common.OperateLogType;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.platform.core.rest.result.Result;
-import cn.daxpay.open.payment.admin.service.trade.NormalPayOrderAdminService;
-import cn.daxpay.open.payment.trade.order.param.NormalPayOrderQuery;
-import cn.daxpay.open.payment.trade.order.result.NormalPayOrderResult;
-import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPaySyncResult;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -55,5 +61,17 @@ public class NormalPayOrderAdminController {
     public Result<NormalPaySyncResult> sync(
             @NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(normalPayOrderAdminService.sync(id));
+    }
+
+    @PermCode(code = PermCodes.Action.EXPORT)
+    @Operation(summary = "导出普通支付业务单")
+    @OperateLog(title = "导出普通支付业务单", businessType = OperateLogType.EXPORT, saveParam = false)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, NormalPayOrderQuery query) {
+        // 导出时间范围必填, 跨度上限 90 天
+        ExcelUtils.validateExportTimeRange(query.getCreateTimeStart(), query.getCreateTimeEnd());
+        ExcelUtils.exportPaged(NormalOrderExportResult.class, "普通支付业务单", response,
+                (pageNo, size) -> normalPayOrderAdminService.page(new PageParam(pageNo, size), query),
+                NormalOrderExportConvert.CONVERT::toExportResultList);
     }
 }

@@ -1,17 +1,23 @@
 package cn.daxpay.open.payment.app.merchant.controller.trade;
 
 import cn.daxpay.open.payment.app.merchant.service.trade.AppMerchantRefundOrderService;
+import cn.daxpay.open.payment.trade.order.convert.export.RefundOrderExportConvert;
 import cn.daxpay.open.payment.trade.order.param.RefundOrderQuery;
 import cn.daxpay.open.payment.trade.order.result.RefundOrderResult;
+import cn.daxpay.open.payment.trade.order.result.export.RefundOrderExportResult;
 import cn.daxpay.open.payment.trade.runtime.param.RefundParam;
+import cn.daxpay.open.platform.common.excel.ExcelUtils;
+import cn.daxpay.open.platform.core.annotation.OperateLog;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
+import cn.daxpay.open.platform.core.enums.common.OperateLogType;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -63,5 +69,17 @@ public class AppMerchantRefundOrderController {
     public Result<RefundOrderResult> sync(
             @NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(refundOrderService.sync(id));
+    }
+
+    @PermCode(code = PermCodes.Action.EXPORT)
+    @Operation(summary = "导出退款订单")
+    @OperateLog(title = "导出退款订单", businessType = OperateLogType.EXPORT, saveParam = false)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, RefundOrderQuery query) {
+        // 导出时间范围必填, 跨度上限 90 天
+        ExcelUtils.validateExportTimeRange(query.getCreateTimeStart(), query.getCreateTimeEnd());
+        ExcelUtils.exportPaged(RefundOrderExportResult.class, "退款订单", response,
+                (pageNo, size) -> refundOrderService.page(new PageParam(pageNo, size), query),
+                RefundOrderExportConvert.CONVERT::toExportResultList);
     }
 }

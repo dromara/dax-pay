@@ -1,0 +1,8 @@
+{
+  "exportBusy": "Terlalu banyak tugas ekspor. Silakan coba lagi nanti.",
+  "exportFailed": "Ekspor Excel gagal",
+  "exportRowLimitExceed": "Sekali ekspor maksimal {0} baris. Persempit rentang waktu lalu coba lagi.",
+  "exportTimeRangeExceed": "Rentang waktu ekspor tidak boleh lebih dari 90 hari",
+  "exportTimeRangeInvalid": "Waktu mulai tidak boleh lebih lambat dari waktu selesai",
+  "exportTimeRangeRequired": "Rentang waktu ekspor wajib diisi"
+}

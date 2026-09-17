@@ -25,6 +25,9 @@ public interface WebHeaderCode {
     /// 国际化语言
     String ACCEPT_LANGUAGE = "accept-language";
 
+    /// 用户时区(IANA 标识, 如 Asia/Shanghai), 仅用于终端展示类格式化(导出等), 不参与接口时间传输
+    String X_TIME_ZONE = "x-timezone";
+
     /// 通道传输报文已 AES-GCM 加密标记（主应用 ↔ 通道子应用）
     String X_DAX_PAYLOAD_ENCRYPTED = "X-Dax-Payload-Encrypted";
 
