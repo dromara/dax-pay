@@ -24,6 +24,7 @@
         <module>common-artemis</module>
         <module>common-translate</module>
         <module>common-i18n</module>
+        <module>common-excel</module>
     </modules>
 
     <dependencies>

@@ -1,0 +1,5 @@
+{
+  "exportFailed": "Excel エクスポートに失敗しました",
+  "exportTimeRangeRequired": "エクスポート期間を指定してください",
+  "exportTimeRangeExceed": "エクスポート期間は90日以内にしてください"
+}

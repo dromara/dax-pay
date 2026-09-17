@@ -1,0 +1,5 @@
+{
+  "exportFailed": "Ekspor Excel gagal",
+  "exportTimeRangeRequired": "Rentang waktu ekspor wajib diisi",
+  "exportTimeRangeExceed": "Rentang waktu ekspor tidak boleh lebih dari 90 hari"
+}

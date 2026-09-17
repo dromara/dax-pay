@@ -151,6 +151,12 @@
             <artifactId>common-artemis</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- Excel 导出 -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>common-excel</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
     </dependencies>
 

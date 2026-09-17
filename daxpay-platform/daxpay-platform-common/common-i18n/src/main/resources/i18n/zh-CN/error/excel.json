@@ -1,0 +1,5 @@
+{
+  "exportFailed": "Excel 导出失败",
+  "exportTimeRangeRequired": "导出时间范围不能为空",
+  "exportTimeRangeExceed": "导出时间范围不能超过 90 天"
+}

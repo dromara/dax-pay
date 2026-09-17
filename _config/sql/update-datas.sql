@@ -126,3 +126,82 @@ WHERE code_id = 2070862265027072001
   AND role_id IN (SELECT role_id FROM public.iam_role_code WHERE code_id = 2070862265018683392);
 UPDATE public.iam_role_code SET code_id = 2070862265018683392 WHERE code_id = 2070862265027072001;
 DELETE FROM public.iam_perm_code WHERE id = 2070862265027072001 AND code = 'payment:platform:product:manage';
+
+-- =============================================================
+-- 2026-09-15 交易域 5 个 P0 模块导出权限码授权
+-- 新增 iam_perm_code: trade:fund:export / trade:order:export / trade:gateway-order:export / trade:refund:export / trade:fund-flow:export
+-- 运营管理员(role 1) + 商户管理员(role 2) 均授予导出权限
+-- iam_perm_code 行由 data.sql 基线或 POST /perm/code/scan 写入; 已有库可能未包含这 5 行, 本段先补写(ON CONFLICT 幂等)
+-- 再补 iam_role_code 角色授权, 按 code 字符串子查询解析 code_id, NOT EXISTS 防重, 幂等可安全重放
+-- =============================================================
+
+-- 补写 iam_perm_code(已有库可能缺失; 新建库 data.sql 已含; 按 code 防重, 幂等可安全重放)
+INSERT INTO "public"."iam_perm_code" (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key)
+SELECT 2083000000000000003, 'trade:fund:export', 'trade:fund', true, NULL, 1, 1, 0, false, '2026-09-15 00:00:00+00', '2026-09-15 00:00:00+00', 'perm.trade:fund:export'
+WHERE NOT EXISTS (SELECT 1 FROM "public"."iam_perm_code" c WHERE c.code = 'trade:fund:export');
+INSERT INTO "public"."iam_perm_code" (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key)
+SELECT 2083000000000000004, 'trade:order:export', 'trade:order', true, NULL, 1, 1, 0, false, '2026-09-15 00:00:00+00', '2026-09-15 00:00:00+00', 'perm.trade:order:export'
+WHERE NOT EXISTS (SELECT 1 FROM "public"."iam_perm_code" c WHERE c.code = 'trade:order:export');
+INSERT INTO "public"."iam_perm_code" (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key)
+SELECT 2083000000000000005, 'trade:gateway-order:export', 'trade:gateway-order', true, NULL, 1, 1, 0, false, '2026-09-15 00:00:00+00', '2026-09-15 00:00:00+00', 'perm.trade:gateway-order:export'
+WHERE NOT EXISTS (SELECT 1 FROM "public"."iam_perm_code" c WHERE c.code = 'trade:gateway-order:export');
+INSERT INTO "public"."iam_perm_code" (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key)
+SELECT 2083000000000000006, 'trade:refund:export', 'trade:refund', true, NULL, 1, 1, 0, false, '2026-09-15 00:00:00+00', '2026-09-15 00:00:00+00', 'perm.trade:refund:export'
+WHERE NOT EXISTS (SELECT 1 FROM "public"."iam_perm_code" c WHERE c.code = 'trade:refund:export');
+INSERT INTO "public"."iam_perm_code" (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key)
+SELECT 2083000000000000007, 'trade:fund-flow:export', 'trade:fund-flow', true, NULL, 1, 1, 0, false, '2026-09-15 00:00:00+00', '2026-09-15 00:00:00+00', 'perm.trade:fund-flow:export'
+WHERE NOT EXISTS (SELECT 1 FROM "public"."iam_perm_code" c WHERE c.code = 'trade:fund-flow:export');
+
+-- 运营管理员(role 1) 导出权限
+INSERT INTO "public"."iam_role_code" (id, role_id, code_id)
+SELECT 2083100000000000001, 1, c.id
+FROM "public"."iam_perm_code" c
+WHERE c.code = 'trade:fund:export'
+  AND NOT EXISTS (SELECT 1 FROM "public"."iam_role_code" rc WHERE rc.role_id = 1 AND rc.code_id = c.id);
+INSERT INTO "public"."iam_role_code" (id, role_id, code_id)
+SELECT 2083100000000000002, 1, c.id
+FROM "public"."iam_perm_code" c
+WHERE c.code = 'trade:order:export'
+  AND NOT EXISTS (SELECT 1 FROM "public"."iam_role_code" rc WHERE rc.role_id = 1 AND rc.code_id = c.id);
+INSERT INTO "public"."iam_role_code" (id, role_id, code_id)
+SELECT 2083100000000000003, 1, c.id
+FROM "public"."iam_perm_code" c
+WHERE c.code = 'trade:gateway-order:export'
+  AND NOT EXISTS (SELECT 1 FROM "public"."iam_role_code" rc WHERE rc.role_id = 1 AND rc.code_id = c.id);
+INSERT INTO "public"."iam_role_code" (id, role_id, code_id)
+SELECT 2083100000000000004, 1, c.id
+FROM "public"."iam_perm_code" c
+WHERE c.code = 'trade:refund:export'
+  AND NOT EXISTS (SELECT 1 FROM "public"."iam_role_code" rc WHERE rc.role_id = 1 AND rc.code_id = c.id);
+INSERT INTO "public"."iam_role_code" (id, role_id, code_id)
+SELECT 2083100000000000005, 1, c.id
+FROM "public"."iam_perm_code" c
+WHERE c.code = 'trade:fund-flow:export'
+  AND NOT EXISTS (SELECT 1 FROM "public"."iam_role_code" rc WHERE rc.role_id = 1 AND rc.code_id = c.id);
+
+-- 商户管理员(role 2) 导出权限
+INSERT INTO "public"."iam_role_code" (id, role_id, code_id)
+SELECT 2083200000000000001, 2, c.id
+FROM "public"."iam_perm_code" c
+WHERE c.code = 'trade:fund:export'
+  AND NOT EXISTS (SELECT 1 FROM "public"."iam_role_code" rc WHERE rc.role_id = 2 AND rc.code_id = c.id);
+INSERT INTO "public"."iam_role_code" (id, role_id, code_id)
+SELECT 2083200000000000002, 2, c.id
+FROM "public"."iam_perm_code" c
+WHERE c.code = 'trade:order:export'
+  AND NOT EXISTS (SELECT 1 FROM "public"."iam_role_code" rc WHERE rc.role_id = 2 AND rc.code_id = c.id);
+INSERT INTO "public"."iam_role_code" (id, role_id, code_id)
+SELECT 2083200000000000003, 2, c.id
+FROM "public"."iam_perm_code" c
+WHERE c.code = 'trade:gateway-order:export'
+  AND NOT EXISTS (SELECT 1 FROM "public"."iam_role_code" rc WHERE rc.role_id = 2 AND rc.code_id = c.id);
+INSERT INTO "public"."iam_role_code" (id, role_id, code_id)
+SELECT 2083200000000000004, 2, c.id
+FROM "public"."iam_perm_code" c
+WHERE c.code = 'trade:refund:export'
+  AND NOT EXISTS (SELECT 1 FROM "public"."iam_role_code" rc WHERE rc.role_id = 2 AND rc.code_id = c.id);
+INSERT INTO "public"."iam_role_code" (id, role_id, code_id)
+SELECT 2083200000000000005, 2, c.id
+FROM "public"."iam_perm_code" c
+WHERE c.code = 'trade:fund-flow:export'
+  AND NOT EXISTS (SELECT 1 FROM "public"."iam_role_code" rc WHERE rc.role_id = 2 AND rc.code_id = c.id);
