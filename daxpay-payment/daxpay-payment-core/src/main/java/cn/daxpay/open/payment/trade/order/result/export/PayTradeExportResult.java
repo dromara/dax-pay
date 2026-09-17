@@ -10,96 +10,120 @@ import lombok.experimental.Accessors;
 ///
 /// 安全子集：排除 buyerId、openid、authCode、attach、notifyUrl、clientIp、errorMsg 等敏感字段。
 /// 所有金额已换算为元（主币种单位），枚举已翻译为国际化文本，时间已格式化为字符串。
+/// 表头注解值为 i18n 词条 key（`export.pay_trade.*`），渲染时由 [cn.daxpay.open.platform.common.excel.ExcelHeadI18nHandler]
+/// 按当前请求语言翻译，中文文案真相源见 `common-i18n/src/main/resources/i18n/zh-CN/export/pay_trade.json`。
 @Data
 @Accessors(chain = true)
 @Schema(title = "资金交易凭证导出")
 public class PayTradeExportResult {
 
-    @ExcelProperty("平台交易号")
+    /// 平台交易号
+    @ExcelProperty("export.pay_trade.tradeNo")
     @ColumnWidth(24)
     private String tradeNo;
 
-    @ExcelProperty("商户号")
+    /// 商户号
+    @ExcelProperty("export.pay_trade.mchNo")
     @ColumnWidth(18)
     private String mchNo;
 
-    @ExcelProperty("商户名称")
+    /// 商户名称
+    @ExcelProperty("export.pay_trade.mchName")
     @ColumnWidth(20)
     private String mchName;
 
-    @ExcelProperty("应用号")
+    /// 应用号
+    @ExcelProperty("export.pay_trade.appId")
     @ColumnWidth(18)
     private String appId;
 
-    @ExcelProperty("订单标题")
+    /// 订单标题
+    @ExcelProperty("export.pay_trade.title")
     @ColumnWidth(30)
     private String title;
 
-    @ExcelProperty("交易形态")
+    /// 交易形态
+    @ExcelProperty("export.pay_trade.tradeType")
     @ColumnWidth(14)
     private String tradeType;
 
-    @ExcelProperty("支付产品")
+    /// 支付产品
+    @ExcelProperty("export.pay_trade.product")
     @ColumnWidth(14)
     private String product;
 
-    @ExcelProperty("支付通道")
+    /// 支付通道
+    @ExcelProperty("export.pay_trade.channel")
     @ColumnWidth(14)
     private String channel;
 
-    @ExcelProperty("支付方式")
+    /// 支付方式
+    @ExcelProperty("export.pay_trade.method")
     @ColumnWidth(14)
     private String method;
 
-    @ExcelProperty("支付渠道")
+    /// 支付渠道
+    @ExcelProperty("export.pay_trade.provider")
     @ColumnWidth(14)
     private String provider;
 
-    @ExcelProperty("交易金额(元)")
+    /// 交易金额(主币种单位, 按币种小数位换算)
+    @ExcelProperty("export.pay_trade.amount")
     @ColumnWidth(16)
     private String amount;
 
-    @ExcelProperty("币种")
+    /// 币种
+    @ExcelProperty("export.pay_trade.currency")
     @ColumnWidth(10)
     private String currency;
 
-    @ExcelProperty("入账金额(元)")
+    /// 入账金额(主币种单位, 按币种小数位换算)
+    @ExcelProperty("export.pay_trade.postedAmount")
     @ColumnWidth(16)
     private String postedAmount;
 
-    @ExcelProperty("可退金额(元)")
+    /// 可退金额(主币种单位, 按币种小数位换算)
+    @ExcelProperty("export.pay_trade.refundableBalance")
     @ColumnWidth(16)
     private String refundableBalance;
 
-    @ExcelProperty("交易状态")
+    /// 交易状态
+    @ExcelProperty("export.pay_trade.status")
     @ColumnWidth(14)
     private String status;
 
-    @ExcelProperty("分账状态")
+    /// 分账状态
+    @ExcelProperty("export.pay_trade.allocStatus")
     @ColumnWidth(14)
     private String allocStatus;
 
-    @ExcelProperty("支付成功时间")
+    /// 支付成功时间
+    @ExcelProperty("export.pay_trade.payTime")
     @ColumnWidth(22)
     private String payTime;
 
-    @ExcelProperty("通道商户号")
+    /// 通道商户号
+    @ExcelProperty("export.pay_trade.channelMchNo")
     @ColumnWidth(20)
     private String channelMchNo;
 
-    @ExcelProperty("门店号")
+    /// 门店号
+    @ExcelProperty("export.pay_trade.storeNo")
     @ColumnWidth(14)
     private String storeNo;
 
-    @ExcelProperty("通道订单号")
+    /// 通道订单号
+    @ExcelProperty("export.pay_trade.outOrderNo")
     @ColumnWidth(24)
     private String outOrderNo;
 
-    @ExcelProperty("订单来源")
+    /// 订单来源
+    @ExcelProperty("export.pay_trade.source")
     @ColumnWidth(14)
     private String source;
 
-    @ExcelProperty("创建时间")
+    /// 创建时间
+    @ExcelProperty("export.pay_trade.createTime")
     @ColumnWidth(22)
     private String createTime;
 }

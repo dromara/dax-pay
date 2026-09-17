@@ -69,7 +69,7 @@ public class AppMerchantGatewayPayOrderController {
     public void export(HttpServletResponse response, GatewayPayOrderQuery query) {
         // 导出时间范围必填, 跨度上限 90 天
         ExcelUtils.validateExportTimeRange(query.getCreateTimeStart(), query.getCreateTimeEnd());
-        ExcelUtils.exportPaged(GatewayOrderExportResult.class, "网关支付业务单", response,
+        ExcelUtils.exportPaged(GatewayOrderExportResult.class, "export.gateway_order.fileName", response,
                 (pageNo, size) -> gatewayPayOrderService.page(new PageParam(pageNo, size), query),
                 GatewayOrderExportConvert.CONVERT::toExportResultList);
     }

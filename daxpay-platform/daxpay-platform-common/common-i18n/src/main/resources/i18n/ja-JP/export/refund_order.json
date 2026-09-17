@@ -1,0 +1,23 @@
+{
+  "fileName": "返金注文",
+  "refundNo": "返金番号",
+  "mchNo": "マーチャント番号",
+  "mchName": "マーチャント名",
+  "appId": "アプリID",
+  "tradeNo": "資金取引番号",
+  "tradeType": "取引タイプ",
+  "bizOrderNo": "マーチャント注文番号",
+  "title": "注文タイトル",
+  "amount": "返金額",
+  "orderAmount": "注文金額",
+  "currency": "通貨",
+  "status": "返金ステータス",
+  "channel": "決済チャネル",
+  "product": "決済プロダクト",
+  "channelMchNo": "チャネルマーチャント番号",
+  "outOrderNo": "チャネル注文番号",
+  "outRefundNo": "チャネル返金番号",
+  "storeNo": "店舗番号",
+  "finishTime": "返金完了日時",
+  "createTime": "作成日時"
+}

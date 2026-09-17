@@ -1,0 +1,23 @@
+{
+  "fileName": "Đơn hoàn tiền",
+  "refundNo": "Số hoàn tiền",
+  "mchNo": "Số merchant",
+  "mchName": "Tên merchant",
+  "appId": "ID ứng dụng",
+  "tradeNo": "Số giao dịch quỹ",
+  "tradeType": "Loại giao dịch",
+  "bizOrderNo": "Số đơn hàng merchant",
+  "title": "Tiêu đề đơn hàng",
+  "amount": "Số tiền hoàn lại",
+  "orderAmount": "Số tiền đơn hàng",
+  "currency": "Loại tiền",
+  "status": "Trạng thái hoàn tiền",
+  "channel": "Kênh thanh toán",
+  "product": "Sản phẩm thanh toán",
+  "channelMchNo": "Số merchant kênh",
+  "outOrderNo": "Số đơn hàng kênh",
+  "outRefundNo": "Số hoàn tiền kênh",
+  "storeNo": "Số cửa hàng",
+  "finishTime": "Thời gian hoàn tiền",
+  "createTime": "Thời gian tạo"
+}

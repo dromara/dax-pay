@@ -1,0 +1,23 @@
+{
+  "fileName": "退款訂單",
+  "refundNo": "退款號",
+  "mchNo": "商戶號",
+  "mchName": "商戶名稱",
+  "appId": "應用號",
+  "tradeNo": "資金交易號",
+  "tradeType": "交易類型",
+  "bizOrderNo": "商戶訂單號",
+  "title": "訂單標題",
+  "amount": "退款金額",
+  "orderAmount": "訂單金額",
+  "currency": "幣種",
+  "status": "退款狀態",
+  "channel": "支付通道",
+  "product": "支付產品",
+  "channelMchNo": "通道商戶號",
+  "outOrderNo": "通道訂單號",
+  "outRefundNo": "通道退款流水號",
+  "storeNo": "門市號",
+  "finishTime": "退款完成時間",
+  "createTime": "建立時間"
+}

@@ -1,5 +1,6 @@
 package cn.daxpay.open.platform.common.excel;
 
+import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.exception.BizException;
@@ -61,17 +62,20 @@ public @UtilityClass class ExcelUtils {
 
     /// 简单导出 — 全量数据一次性生成后写入响应(小数据量场景)
     ///
-    /// @param data      导出数据
-    /// @param sheetName 工作表名称(同时作为文件名前缀)
-    /// @param clazz     带 `@ExcelProperty` 注解的导出类型
-    /// @param response  HTTP 响应
-    public <T> void export(List<T> data, String sheetName, Class<T> clazz, HttpServletResponse response) {
-        render(sheetName, response, os -> FesodSheet.write(os, clazz)
+    /// @param data        导出数据
+    /// @param fileNameKey 文件名/工作表名词条 key, 按当前请求语言解析, 未命中词条时回退原文
+    /// @param clazz       带 `@ExcelProperty` 注解的导出类型(注解值为表头词条 key, 见 [ExcelHeadI18nHandler])
+    /// @param response    HTTP 响应
+    public <T> void export(List<T> data, String fileNameKey, Class<T> clazz, HttpServletResponse response) {
+        String displayName = I18nUtil.get(fileNameKey);
+        render(displayName, response, os -> FesodSheet.write(os, clazz)
                 .autoCloseStream(false)
                 // 全内存模式: 不落 POI 临时文件
                 .inMemory(true)
+                // 表头词条 key 按当前请求语言翻译
+                .registerWriteHandler(ExcelHeadI18nHandler.INSTANCE)
                 .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
-                .sheet(sheetName)
+                .sheet(displayName)
                 .doWrite(data));
     }
 
@@ -79,15 +83,16 @@ public @UtilityClass class ExcelUtils {
     ///
     /// 首页取数后即校验总行数, 超过 [EXPORT_MAX_ROWS] 直接失败(此时响应尚未写出, 前端可正常收到错误提示)。
     ///
-    /// @param clazz       带 `@ExcelProperty` 注解的导出行类型
-    /// @param sheetName   工作表名称(同时作为文件名前缀)
-    /// @param response    HTTP 响应
-    /// @param pageFetcher 分页取数函数, 入参为 (页码, 每页条数)
-    /// @param converter   领域结果 → 导出行 的转换函数
-    public <T, R> void exportPaged(Class<T> clazz, String sheetName, HttpServletResponse response,
+    /// @param clazz        带 `@ExcelProperty` 注解的导出行类型(注解值为表头词条 key, 见 [ExcelHeadI18nHandler])
+    /// @param fileNameKey  文件名/工作表名词条 key, 按当前请求语言解析, 未命中词条时回退原文
+    /// @param response     HTTP 响应
+    /// @param pageFetcher  分页取数函数, 入参为 (页码, 每页条数)
+    /// @param converter    领域结果 → 导出行 的转换函数
+    public <T, R> void exportPaged(Class<T> clazz, String fileNameKey, HttpServletResponse response,
                                    BiFunction<Integer, Integer, PageResult<R>> pageFetcher,
                                    Function<List<R>, List<T>> converter) {
-        render(sheetName, response, os -> writePaged(os, sheetName, clazz, pageFetcher, converter));
+        String displayName = I18nUtil.get(fileNameKey);
+        render(displayName, response, os -> writePaged(os, displayName, clazz, pageFetcher, converter));
     }
 
     /// 校验导出时间范围(必填, 起点不得晚于终点, 跨度 ≤ 90 天)
@@ -140,6 +145,8 @@ public @UtilityClass class ExcelUtils {
                 .autoCloseStream(false)
                 // 全内存模式: 不落 POI 临时文件
                 .inMemory(true)
+                // 表头词条 key 按当前请求语言翻译(分页路径与简单导出路径同等注册)
+                .registerWriteHandler(ExcelHeadI18nHandler.INSTANCE)
                 .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
                 .build()) {
             ExcelWriterWrapper writer = ExcelWriterWrapper.of(excelWriter, sheetName);

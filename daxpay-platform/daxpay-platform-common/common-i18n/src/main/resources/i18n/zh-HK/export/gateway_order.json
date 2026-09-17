@@ -1,0 +1,21 @@
+{
+  "fileName": "網關支付業務單",
+  "orderNo": "平台網關單號",
+  "mchNo": "商戶號",
+  "mchName": "商戶名稱",
+  "appId": "應用編號",
+  "bizOrderNo": "商戶訂單號",
+  "title": "訂單標題",
+  "gatewayType": "網關類型",
+  "status": "業務狀態",
+  "channel": "支付通道",
+  "provider": "支付渠道",
+  "product": "支付產品",
+  "capability": "支付能力",
+  "amount": "金額",
+  "currency": "幣種",
+  "channelMchNo": "通道商戶號",
+  "storeNo": "門店號",
+  "payTime": "支付成功時間",
+  "createTime": "創建時間"
+}

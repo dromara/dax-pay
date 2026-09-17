@@ -1,0 +1,19 @@
+{
+  "fileName": "Dòng tiền",
+  "tradeNo": "Số giao dịch quỹ",
+  "mchNo": "Số merchant",
+  "mchName": "Tên merchant",
+  "appId": "ID ứng dụng",
+  "flowType": "Loại dòng tiền",
+  "bizOrderNo": "Số đơn nghiệp vụ merchant",
+  "refundNo": "Số đơn hoàn tiền",
+  "title": "Tiêu đề đơn hàng",
+  "amount": "Số tiền dòng",
+  "currency": "Loại tiền",
+  "channel": "Kênh thanh toán",
+  "provider": "Nhà cung cấp thanh toán",
+  "channelMchNo": "Số merchant kênh",
+  "outOrderNo": "Số giao dịch kênh",
+  "finishTime": "Thời gian hoàn tất quỹ",
+  "createTime": "Thời gian tạo"
+}

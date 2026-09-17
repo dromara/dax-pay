@@ -1,0 +1,19 @@
+{
+  "fileName": "通常決済注文",
+  "orderNo": "プラットフォーム取引番号",
+  "mchNo": "マーチャント番号",
+  "mchName": "マーチャント名",
+  "appId": "アプリID",
+  "bizOrderNo": "マーチャント注文番号",
+  "title": "注文タイトル",
+  "status": "ステータス",
+  "channel": "決済チャネル",
+  "product": "決済プロダクト",
+  "capability": "決済機能",
+  "amount": "金額",
+  "currency": "通貨",
+  "channelMchNo": "チャネルマーチャント番号",
+  "storeNo": "店舗番号",
+  "payTime": "支払完了日時",
+  "createTime": "作成日時"
+}

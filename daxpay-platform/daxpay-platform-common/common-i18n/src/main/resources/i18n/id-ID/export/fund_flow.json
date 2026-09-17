@@ -1,0 +1,19 @@
+{
+  "fileName": "Arus Dana",
+  "tradeNo": "No. Transaksi Dana",
+  "mchNo": "No. Merchant",
+  "mchName": "Nama Merchant",
+  "appId": "ID Aplikasi",
+  "flowType": "Jenis Arus",
+  "bizOrderNo": "No. Pesanan Bisnis Merchant",
+  "refundNo": "No. Pesanan Refund",
+  "title": "Judul Pesanan",
+  "amount": "Jumlah Arus",
+  "currency": "Mata Uang",
+  "channel": "Saluran Pembayaran",
+  "provider": "Penyedia Pembayaran",
+  "channelMchNo": "No. Merchant Saluran",
+  "outOrderNo": "No. Transaksi Saluran",
+  "finishTime": "Waktu Penyelesaian Dana",
+  "createTime": "Waktu Dibuat"
+}

@@ -1,0 +1,21 @@
+{
+  "fileName": "게이트웨이 결제 주문",
+  "orderNo": "플랫폼 게이트웨이 주문 번호",
+  "mchNo": "상점 번호",
+  "mchName": "상점 이름",
+  "appId": "앱 ID",
+  "bizOrderNo": "상점 주문 번호",
+  "title": "주문 제목",
+  "gatewayType": "게이트웨이 유형",
+  "status": "상태",
+  "channel": "결제 채널",
+  "provider": "결제 제공사",
+  "product": "결제 상품",
+  "capability": "결제 기능",
+  "amount": "금액",
+  "currency": "통화",
+  "channelMchNo": "채널 상점 번호",
+  "storeNo": "매장 번호",
+  "payTime": "결제 완료 시간",
+  "createTime": "생성 시간"
+}

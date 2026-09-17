@@ -1,0 +1,23 @@
+{
+  "fileName": "Refund Orders",
+  "refundNo": "Refund No.",
+  "mchNo": "Merchant No.",
+  "mchName": "Merchant Name",
+  "appId": "App ID",
+  "tradeNo": "Fund Trade No.",
+  "tradeType": "Trade Type",
+  "bizOrderNo": "Merchant Order No.",
+  "title": "Order Title",
+  "amount": "Refund Amount",
+  "orderAmount": "Order Amount",
+  "currency": "Currency",
+  "status": "Refund Status",
+  "channel": "Payment Channel",
+  "product": "Payment Product",
+  "channelMchNo": "Channel Merchant No.",
+  "outOrderNo": "Channel Order No.",
+  "outRefundNo": "Channel Refund No.",
+  "storeNo": "Store No.",
+  "finishTime": "Refund Time",
+  "createTime": "Created At"
+}

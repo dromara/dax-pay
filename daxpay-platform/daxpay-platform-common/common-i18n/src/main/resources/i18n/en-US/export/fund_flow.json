@@ -1,0 +1,19 @@
+{
+  "fileName": "Fund Flows",
+  "tradeNo": "Fund Trade No.",
+  "mchNo": "Merchant No.",
+  "mchName": "Merchant Name",
+  "appId": "App ID",
+  "flowType": "Flow Type",
+  "bizOrderNo": "Merchant Biz Order No.",
+  "refundNo": "Refund Order No.",
+  "title": "Order Title",
+  "amount": "Flow Amount",
+  "currency": "Currency",
+  "channel": "Payment Channel",
+  "provider": "Payment Provider",
+  "channelMchNo": "Channel Merchant No.",
+  "outOrderNo": "Channel Trade No.",
+  "finishTime": "Fund Completion Time",
+  "createTime": "Created At"
+}

@@ -1,0 +1,19 @@
+{
+  "fileName": "Pesanan Pembayaran Biasa",
+  "orderNo": "No. Pesanan Platform",
+  "mchNo": "No. merchant",
+  "mchName": "Nama merchant",
+  "appId": "ID Aplikasi",
+  "bizOrderNo": "No. Pesanan merchant",
+  "title": "Tajuk Pesanan",
+  "status": "Status",
+  "channel": "Saluran Pembayaran",
+  "product": "Produk Pembayaran",
+  "capability": "Keupayaan Pembayaran",
+  "amount": "Jumlah",
+  "currency": "Mata Wang",
+  "channelMchNo": "No. merchant saluran",
+  "storeNo": "No. Kedai",
+  "payTime": "Masa Pembayaran Berjaya",
+  "createTime": "Masa Dicipta"
+}

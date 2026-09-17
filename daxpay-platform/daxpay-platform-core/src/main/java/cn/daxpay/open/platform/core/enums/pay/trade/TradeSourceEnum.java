@@ -4,6 +4,8 @@ import cn.daxpay.open.platform.core.i18n.I18nSupport;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.util.Arrays;
+
 /// # 交易来源
 ///
 @Getter
@@ -30,6 +32,17 @@ public enum TradeSourceEnum implements I18nSupport {
     @Override
     public String getI18nPrefix() {
         return "enum.trade_source";
+    }
+
+    /// 根据编码获取枚举；未知编码返回 null(导出翻译等容错场景使用, 防止单行脏数据打崩整次导出)
+    public static TradeSourceEnum findByCode(String code) {
+        if (code == null) {
+            return null;
+        }
+        return Arrays.stream(values())
+                .filter(e -> e.getCode().equals(code))
+                .findFirst()
+                .orElse(null);
     }
 
 }

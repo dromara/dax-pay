@@ -1,0 +1,23 @@
+{
+  "fileName": "Pesanan Bayaran Balik",
+  "refundNo": "No. Bayaran Balik",
+  "mchNo": "No. merchant",
+  "mchName": "Nama merchant",
+  "appId": "ID Aplikasi",
+  "tradeNo": "No. Transaksi Dana",
+  "tradeType": "Jenis Transaksi",
+  "bizOrderNo": "No. Pesanan merchant",
+  "title": "Tajuk Pesanan",
+  "amount": "Jumlah Bayaran Balik",
+  "orderAmount": "Jumlah Pesanan",
+  "currency": "Mata Wang",
+  "status": "Status Bayaran Balik",
+  "channel": "Saluran Pembayaran",
+  "product": "Produk Pembayaran",
+  "channelMchNo": "No. merchant saluran",
+  "outOrderNo": "No. Pesanan Saluran",
+  "outRefundNo": "No. Bayaran Balik Saluran",
+  "storeNo": "No. Kedai",
+  "finishTime": "Masa Bayaran Balik",
+  "createTime": "Masa Dicipta"
+}

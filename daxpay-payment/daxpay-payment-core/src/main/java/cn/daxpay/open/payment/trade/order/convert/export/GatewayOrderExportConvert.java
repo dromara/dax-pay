@@ -23,6 +23,8 @@ public interface GatewayOrderExportConvert {
     @Mapping(target = "gatewayType", expression = "java(GatewayOrderExportConvertHelper.toGatewayTypeName(source.getGatewayType()))")
     @Mapping(target = "channel", expression = "java(CommonExportConvertHelper.toChannelName(source.getChannel()))")
     @Mapping(target = "provider", expression = "java(CommonExportConvertHelper.toProviderName(source.getProvider()))")
+    @Mapping(target = "product", expression = "java(CommonExportConvertHelper.toProductName(source.getProduct()))")
+    @Mapping(target = "capability", expression = "java(CommonExportConvertHelper.toCapabilityName(source.getCapability()))")
     @Mapping(target = "payTime", expression = "java(CommonExportConvertHelper.formatDateTime(source.getPayTime()))")
     @Mapping(target = "createTime", expression = "java(CommonExportConvertHelper.formatDateTime(source.getCreateTime()))")
     GatewayOrderExportResult toExportResult(GatewayPayOrderResult source);

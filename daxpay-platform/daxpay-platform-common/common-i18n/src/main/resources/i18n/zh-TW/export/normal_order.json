@@ -1,0 +1,19 @@
+{
+  "fileName": "普通支付業務單",
+  "orderNo": "平台業務單號",
+  "mchNo": "商戶號",
+  "mchName": "商戶名稱",
+  "appId": "應用號",
+  "bizOrderNo": "商戶訂單號",
+  "title": "訂單標題",
+  "status": "業務狀態",
+  "channel": "支付通道",
+  "product": "支付產品",
+  "capability": "支付能力",
+  "amount": "金額",
+  "currency": "幣種",
+  "channelMchNo": "通道商戶號",
+  "storeNo": "門市號",
+  "payTime": "支付成功時間",
+  "createTime": "建立時間"
+}

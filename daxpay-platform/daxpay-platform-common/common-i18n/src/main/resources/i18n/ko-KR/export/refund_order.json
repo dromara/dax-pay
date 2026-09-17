@@ -1,0 +1,23 @@
+{
+  "fileName": "환불 주문",
+  "refundNo": "환불 번호",
+  "mchNo": "상점 번호",
+  "mchName": "상점 이름",
+  "appId": "앱 ID",
+  "tradeNo": "자금 거래 번호",
+  "tradeType": "거래 유형",
+  "bizOrderNo": "상점 주문 번호",
+  "title": "주문 제목",
+  "amount": "환불 금액",
+  "orderAmount": "주문 금액",
+  "currency": "통화",
+  "status": "환불 상태",
+  "channel": "결제 채널",
+  "product": "결제 상품",
+  "channelMchNo": "채널 상점 번호",
+  "outOrderNo": "채널 주문 번호",
+  "outRefundNo": "채널 환불 번호",
+  "storeNo": "매장 번호",
+  "finishTime": "환불 완료 시간",
+  "createTime": "생성 시간"
+}

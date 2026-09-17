@@ -23,6 +23,7 @@ public interface RefundOrderExportConvert {
     @Mapping(target = "status", expression = "java(RefundOrderExportConvertHelper.toStatusName(source.getStatus()))")
     @Mapping(target = "tradeType", expression = "java(RefundOrderExportConvertHelper.toTradeTypeName(source.getTradeType()))")
     @Mapping(target = "channel", expression = "java(CommonExportConvertHelper.toChannelName(source.getChannel()))")
+    @Mapping(target = "product", expression = "java(CommonExportConvertHelper.toProductName(source.getProduct()))")
     @Mapping(target = "finishTime", expression = "java(CommonExportConvertHelper.formatDateTime(source.getFinishTime()))")
     @Mapping(target = "createTime", expression = "java(CommonExportConvertHelper.formatDateTime(source.getCreateTime()))")
     RefundOrderExportResult toExportResult(RefundOrderResult source);

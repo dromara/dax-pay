@@ -70,7 +70,7 @@ public class NormalPayOrderAdminController {
     public void export(HttpServletResponse response, NormalPayOrderQuery query) {
         // 导出时间范围必填, 跨度上限 90 天
         ExcelUtils.validateExportTimeRange(query.getCreateTimeStart(), query.getCreateTimeEnd());
-        ExcelUtils.exportPaged(NormalOrderExportResult.class, "普通支付业务单", response,
+        ExcelUtils.exportPaged(NormalOrderExportResult.class, "export.normal_order.fileName", response,
                 (pageNo, size) -> normalPayOrderAdminService.page(new PageParam(pageNo, size), query),
                 NormalOrderExportConvert.CONVERT::toExportResultList);
     }

@@ -86,7 +86,7 @@ public class RefundOrderAdminController {
     public void export(HttpServletResponse response, RefundOrderQuery query) {
         // 导出时间范围必填, 跨度上限 90 天
         ExcelUtils.validateExportTimeRange(query.getCreateTimeStart(), query.getCreateTimeEnd());
-        ExcelUtils.exportPaged(RefundOrderExportResult.class, "退款订单", response,
+        ExcelUtils.exportPaged(RefundOrderExportResult.class, "export.refund_order.fileName", response,
                 (pageNo, size) -> refundOrderAdminService.page(new PageParam(pageNo, size), query),
                 RefundOrderExportConvert.CONVERT::toExportResultList);
     }

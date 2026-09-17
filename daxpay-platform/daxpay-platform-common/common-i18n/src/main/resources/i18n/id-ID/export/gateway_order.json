@@ -1,0 +1,21 @@
+{
+  "fileName": "Pesanan Pembayaran Gateway",
+  "orderNo": "No. Pesanan Gateway Platform",
+  "mchNo": "No. Merchant",
+  "mchName": "Nama Merchant",
+  "appId": "ID Aplikasi",
+  "bizOrderNo": "No. Pesanan Merchant",
+  "title": "Judul Pesanan",
+  "gatewayType": "Jenis Gateway",
+  "status": "Status",
+  "channel": "Saluran Pembayaran",
+  "provider": "Penyedia Pembayaran",
+  "product": "Produk Pembayaran",
+  "capability": "Kapabilitas Pembayaran",
+  "amount": "Jumlah",
+  "currency": "Mata Uang",
+  "channelMchNo": "No. Merchant Saluran",
+  "storeNo": "No. Toko",
+  "payTime": "Waktu Pembayaran Berhasil",
+  "createTime": "Waktu Dibuat"
+}

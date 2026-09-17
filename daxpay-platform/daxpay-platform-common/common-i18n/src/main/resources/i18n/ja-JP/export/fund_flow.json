@@ -1,0 +1,19 @@
+{
+  "fileName": "資金フロー",
+  "tradeNo": "資金取引番号",
+  "mchNo": "マーチャント番号",
+  "mchName": "マーチャント名",
+  "appId": "アプリID",
+  "flowType": "フロータイプ",
+  "bizOrderNo": "マーチャント業務番号",
+  "refundNo": "返金注文番号",
+  "title": "注文タイトル",
+  "amount": "フロー金額",
+  "currency": "通貨",
+  "channel": "決済チャネル",
+  "provider": "決済プロバイダー",
+  "channelMchNo": "チャネルマーチャント番号",
+  "outOrderNo": "チャネル取引番号",
+  "finishTime": "資金確定日時",
+  "createTime": "作成日時"
+}

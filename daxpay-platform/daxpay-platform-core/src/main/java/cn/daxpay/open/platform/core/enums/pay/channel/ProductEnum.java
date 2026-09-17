@@ -136,4 +136,15 @@ public enum ProductEnum implements I18nSupport {
                 // 通用: 未知的支付产品
                 .orElseThrow(() -> new BizException("error.common.enumUnknown", code));
     }
+
+    /// 根据编码获取枚举；未知编码返回 null(导出翻译等容错场景使用, 防止单行脏数据打崩整次导出)
+    public static ProductEnum findByCodeOrNull(String code) {
+        if (code == null) {
+            return null;
+        }
+        return Arrays.stream(values())
+                .filter(e -> e.getCode().equals(code))
+                .findFirst()
+                .orElse(null);
+    }
 }

@@ -1,0 +1,19 @@
+{
+  "fileName": "Pesanan Pembayaran Normal",
+  "orderNo": "No. Pesanan Platform",
+  "mchNo": "No. Merchant",
+  "mchName": "Nama Merchant",
+  "appId": "ID Aplikasi",
+  "bizOrderNo": "No. Pesanan Merchant",
+  "title": "Judul Pesanan",
+  "status": "Status",
+  "channel": "Saluran Pembayaran",
+  "product": "Produk Pembayaran",
+  "capability": "Kapabilitas Pembayaran",
+  "amount": "Jumlah",
+  "currency": "Mata Uang",
+  "channelMchNo": "No. Merchant Saluran",
+  "storeNo": "No. Toko",
+  "payTime": "Waktu Pembayaran Berhasil",
+  "createTime": "Waktu Dibuat"
+}

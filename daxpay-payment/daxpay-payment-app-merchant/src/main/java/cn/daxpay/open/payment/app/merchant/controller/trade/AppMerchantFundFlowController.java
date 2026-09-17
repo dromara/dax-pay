@@ -60,7 +60,7 @@ public class AppMerchantFundFlowController {
     public void export(HttpServletResponse response, FundFlowQuery query) {
         // 导出时间范围必填, 跨度上限 90 天
         ExcelUtils.validateExportTimeRange(query.getCreateTimeStart(), query.getCreateTimeEnd());
-        ExcelUtils.exportPaged(FundFlowExportResult.class, "资金流水", response,
+        ExcelUtils.exportPaged(FundFlowExportResult.class, "export.fund_flow.fileName", response,
                 (pageNo, size) -> fundFlowService.page(new PageParam(pageNo, size), query),
                 FundFlowExportConvert.CONVERT::toExportResultList);
     }

@@ -20,6 +20,13 @@
             <version>${fesod.version}</version>
         </dependency>
 
+        <!-- 表头/文件名词条翻译(ExcelHeadI18nHandler) -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>common-i18n</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- Servlet API (provided, 由运行时容器提供) -->
         <dependency>
             <groupId>jakarta.servlet</groupId>

@@ -1,0 +1,19 @@
+{
+  "fileName": "Normal Pay Orders",
+  "orderNo": "Platform Order No.",
+  "mchNo": "Merchant No.",
+  "mchName": "Merchant Name",
+  "appId": "App ID",
+  "bizOrderNo": "Merchant Order No.",
+  "title": "Order Title",
+  "status": "Status",
+  "channel": "Payment Channel",
+  "product": "Payment Product",
+  "capability": "Payment Capability",
+  "amount": "Amount",
+  "currency": "Currency",
+  "channelMchNo": "Channel Merchant No.",
+  "storeNo": "Store No.",
+  "payTime": "Payment Time",
+  "createTime": "Created At"
+}

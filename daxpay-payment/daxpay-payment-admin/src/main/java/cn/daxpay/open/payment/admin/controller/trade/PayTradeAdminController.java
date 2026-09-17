@@ -70,7 +70,7 @@ public class PayTradeAdminController {
     public void export(HttpServletResponse response, PayTradeQuery query) {
         // 导出时间范围必填, 跨度上限 90 天
         ExcelUtils.validateExportTimeRange(query.getCreateTimeStart(), query.getCreateTimeEnd());
-        ExcelUtils.exportPaged(PayTradeExportResult.class, "交易凭证", response,
+        ExcelUtils.exportPaged(PayTradeExportResult.class, "export.pay_trade.fileName", response,
                 (pageNo, size) -> payTradeAdminService.page(new PageParam(pageNo, size), query),
                 PayTradeExportConvert.CONVERT::toExportResultList);
     }

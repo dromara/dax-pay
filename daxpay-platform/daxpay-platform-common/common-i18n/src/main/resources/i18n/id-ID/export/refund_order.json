@@ -1,0 +1,23 @@
+{
+  "fileName": "Pesanan Refund",
+  "refundNo": "No. Refund",
+  "mchNo": "No. Merchant",
+  "mchName": "Nama Merchant",
+  "appId": "ID Aplikasi",
+  "tradeNo": "No. Transaksi Dana",
+  "tradeType": "Jenis Transaksi",
+  "bizOrderNo": "No. Pesanan Merchant",
+  "title": "Judul Pesanan",
+  "amount": "Jumlah Refund",
+  "orderAmount": "Jumlah Pesanan",
+  "currency": "Mata Uang",
+  "status": "Status Refund",
+  "channel": "Saluran Pembayaran",
+  "product": "Produk Pembayaran",
+  "channelMchNo": "No. Merchant Saluran",
+  "outOrderNo": "No. Pesanan Saluran",
+  "outRefundNo": "No. Refund Saluran",
+  "storeNo": "No. Toko",
+  "finishTime": "Waktu Refund",
+  "createTime": "Waktu Dibuat"
+}

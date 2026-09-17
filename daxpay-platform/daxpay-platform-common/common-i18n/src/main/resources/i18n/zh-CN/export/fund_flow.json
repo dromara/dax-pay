@@ -1,0 +1,19 @@
+{
+  "fileName": "资金流水",
+  "tradeNo": "资金交易号",
+  "mchNo": "商户号",
+  "mchName": "商户名称",
+  "appId": "应用号",
+  "flowType": "流水类型",
+  "bizOrderNo": "商户业务单号",
+  "refundNo": "退款单号",
+  "title": "订单标题",
+  "amount": "流水金额",
+  "currency": "币种",
+  "channel": "支付通道",
+  "provider": "支付渠道",
+  "channelMchNo": "通道商户号",
+  "outOrderNo": "通道交易号",
+  "finishTime": "资金完成时间",
+  "createTime": "创建时间"
+}

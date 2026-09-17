@@ -1,0 +1,19 @@
+{
+  "fileName": "Đơn thanh toán thường",
+  "orderNo": "Số đơn hàng nền tảng",
+  "mchNo": "Số merchant",
+  "mchName": "Tên merchant",
+  "appId": "ID ứng dụng",
+  "bizOrderNo": "Số đơn hàng merchant",
+  "title": "Tiêu đề đơn hàng",
+  "status": "Trạng thái",
+  "channel": "Kênh thanh toán",
+  "product": "Sản phẩm thanh toán",
+  "capability": "Năng lực thanh toán",
+  "amount": "Số tiền",
+  "currency": "Loại tiền",
+  "channelMchNo": "Số merchant kênh",
+  "storeNo": "Số cửa hàng",
+  "payTime": "Thời gian thanh toán thành công",
+  "createTime": "Thời gian tạo"
+}

@@ -21,6 +21,8 @@ public interface NormalOrderExportConvert {
     @Mapping(target = "amount", expression = "java(CommonExportConvertHelper.toAmountStr(source.getAmount(), source.getCurrency()))")
     @Mapping(target = "status", expression = "java(NormalOrderExportConvertHelper.toStatusName(source.getStatus()))")
     @Mapping(target = "channel", expression = "java(CommonExportConvertHelper.toChannelName(source.getChannel()))")
+    @Mapping(target = "product", expression = "java(CommonExportConvertHelper.toProductName(source.getProduct()))")
+    @Mapping(target = "capability", expression = "java(CommonExportConvertHelper.toCapabilityName(source.getCapability()))")
     @Mapping(target = "payTime", expression = "java(CommonExportConvertHelper.formatDateTime(source.getPayTime()))")
     @Mapping(target = "createTime", expression = "java(CommonExportConvertHelper.formatDateTime(source.getCreateTime()))")
     NormalOrderExportResult toExportResult(NormalPayOrderResult source);

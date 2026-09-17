@@ -1,0 +1,21 @@
+{
+  "fileName": "ゲートウェイ決済注文",
+  "orderNo": "プラットフォームゲートウェイ番号",
+  "mchNo": "マーチャント番号",
+  "mchName": "マーチャント名",
+  "appId": "アプリID",
+  "bizOrderNo": "マーチャント注文番号",
+  "title": "注文タイトル",
+  "gatewayType": "ゲートウェイ種別",
+  "status": "ステータス",
+  "channel": "決済チャネル",
+  "provider": "決済プロバイダー",
+  "product": "決済プロダクト",
+  "capability": "決済機能",
+  "amount": "金額",
+  "currency": "通貨",
+  "channelMchNo": "チャネルマーチャント番号",
+  "storeNo": "店舗番号",
+  "payTime": "支払完了日時",
+  "createTime": "作成日時"
+}

@@ -1,0 +1,19 @@
+{
+  "fileName": "자금 흐름",
+  "tradeNo": "자금 거래 번호",
+  "mchNo": "상점 번호",
+  "mchName": "상점 이름",
+  "appId": "앱 ID",
+  "flowType": "거래 내역 유형",
+  "bizOrderNo": "상점 업무 주문 번호",
+  "refundNo": "환불 주문 번호",
+  "title": "주문 제목",
+  "amount": "거래 내역 금액",
+  "currency": "통화",
+  "channel": "결제 채널",
+  "provider": "결제 제공사",
+  "channelMchNo": "채널 상점 번호",
+  "outOrderNo": "채널 거래 번호",
+  "finishTime": "자금 완료 시간",
+  "createTime": "생성 시간"
+}
