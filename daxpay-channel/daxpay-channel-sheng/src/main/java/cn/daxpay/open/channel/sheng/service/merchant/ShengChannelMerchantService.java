@@ -40,7 +40,6 @@ public class ShengChannelMerchantService {
     public void create(ShengChannelMerchantCreateParam param) {
         // 可选字段空串归一为 NULL(前端未填时可能上送空串), 保证唯一性判断与落库语义一致
         String shengMchId = StrUtil.trimToNull(param.getShengMchId());
-        String sdpAppId = StrUtil.trimToNull(param.getSdpAppId());
         // 唯一性校验: 同一商户下盛付通商户号不重复
         var query = shengKeyConfigManager.lambdaQuery()
                 .eq(ShengKeyConfig::getMchNo, param.getMchNo())
@@ -63,11 +62,10 @@ public class ShengChannelMerchantService {
         boolean sandbox = payProductConfigManager.isSandboxActive(param.getProduct());
         channelMerchant.setSandbox(sandbox);
         channelMerchantManager.save(channelMerchant);
-        // 预建盛付通密钥配置身份行, 商户身份随创建录入, 密钥字段留空由密钥配置后置维护
+        // 预建盛付通密钥配置身份行, 商户身份随创建录入, 应用ID与密钥字段留空由密钥配置后置维护
         var keyConfig = new ShengKeyConfig()
                 .setChannelMchNo(channelMchNo)
-                .setShengMchId(shengMchId)
-                .setSdpAppId(sdpAppId);
+                .setShengMchId(shengMchId);
         // 运营端写入必须显式 setMchNo(父类 setter 返回父类型, 不链式)
         keyConfig.setMchNo(param.getMchNo());
         shengKeyConfigManager.save(keyConfig);

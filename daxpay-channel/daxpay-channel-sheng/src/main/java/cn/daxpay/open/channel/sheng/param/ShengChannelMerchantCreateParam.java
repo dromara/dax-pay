@@ -7,8 +7,8 @@ import lombok.experimental.Accessors;
 
 /// # 盛付通通道商户创建参数
 ///
-/// 创建时录入盛付通商户身份(shengMchId/sdpAppId), 签名密钥(商户私钥/盛付通公钥)
-/// 不在此录入, 由密钥配置后置维护。
+/// 创建时仅录入盛付通商户身份(shengMchId), 应用ID(sdpAppId)与签名密钥(商户私钥/盛付通公钥)
+/// 均不在此录入, 由密钥配置后置维护。
 @Data
 @Accessors(chain = true)
 @Schema(title = "盛付通通道商户创建参数")
@@ -33,8 +33,4 @@ public class ShengChannelMerchantCreateParam {
     @Schema(description = "盛付通商户号(mchId)")
     @NotBlank(message = "{validation.field.shengMchId.notBlank}")
     private String shengMchId;
-
-    /// 盛付通分配的应用ID
-    @Schema(description = "盛付通分配的应用ID")
-    private String sdpAppId;
 }
