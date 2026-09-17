@@ -1,5 +1,8 @@
 {
+  "exportBusy": "當前匯出任務較多, 請稍後重試",
   "exportFailed": "Excel 匯出失敗",
-  "exportTimeRangeRequired": "匯出時間範圍不能為空",
-  "exportTimeRangeExceed": "匯出時間範圍不能超過 90 天"
+  "exportRowLimitExceed": "單次匯出最多 {0} 行, 請縮小時間範圍後重試",
+  "exportTimeRangeExceed": "匯出時間範圍不能超過 90 天",
+  "exportTimeRangeInvalid": "開始時間不能晚於結束時間",
+  "exportTimeRangeRequired": "匯出時間範圍不能為空"
 }
