@@ -1,7 +1,7 @@
 package cn.daxpay.open.payment.trade.order.result.export;
 
-import cn.idev.excel.annotation.ExcelProperty;
-import cn.idev.excel.annotation.write.style.ColumnWidth;
+import org.apache.fesod.sheet.annotation.ExcelProperty;
+import org.apache.fesod.sheet.annotation.write.style.ColumnWidth;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;

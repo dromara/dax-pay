@@ -13,11 +13,11 @@
     <packaging>jar</packaging>
 
     <dependencies>
-        <!-- FastExcel Excel处理工具 -->
+        <!-- Fesod(Apache 孵化中, 原 FastExcel) Excel 处理工具 -->
         <dependency>
-            <groupId>cn.idev.excel</groupId>
-            <artifactId>fastexcel</artifactId>
-            <version>${fastexcel.version}</version>
+            <groupId>org.apache.fesod</groupId>
+            <artifactId>fesod-sheet</artifactId>
+            <version>${fesod.version}</version>
         </dependency>
 
         <!-- Servlet API (provided, 由运行时容器提供) -->

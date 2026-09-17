@@ -1,9 +1,9 @@
 package cn.daxpay.open.platform.common.excel;
 
-import cn.idev.excel.ExcelWriter;
-import cn.idev.excel.FastExcel;
-import cn.idev.excel.write.builder.ExcelWriterSheetBuilder;
-import cn.idev.excel.write.metadata.WriteSheet;
+import org.apache.fesod.sheet.ExcelWriter;
+import org.apache.fesod.sheet.FesodSheet;
+import org.apache.fesod.sheet.write.builder.ExcelWriterSheetBuilder;
+import org.apache.fesod.sheet.write.metadata.WriteSheet;
 
 import java.util.Collection;
 
@@ -46,11 +46,11 @@ public record ExcelWriterWrapper<T>(ExcelWriter excelWriter) {
 
     /// 获取 Sheet 构建器（按名称），支持链式配置
     public static ExcelWriterSheetBuilder sheetBuilder(String sheetName) {
-        return FastExcel.writerSheet(sheetName);
+        return FesodSheet.writerSheet(sheetName);
     }
 
     /// 获取 Sheet 构建器（按编号 + 名称），支持链式配置
     public static ExcelWriterSheetBuilder sheetBuilder(int sheetNo, String sheetName) {
-        return FastExcel.writerSheet(sheetNo, sheetName);
+        return FesodSheet.writerSheet(sheetNo, sheetName);
     }
 }

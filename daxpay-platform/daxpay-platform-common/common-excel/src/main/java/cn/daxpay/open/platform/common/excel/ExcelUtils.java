@@ -1,10 +1,10 @@
 package cn.daxpay.open.platform.common.excel;
 
 import cn.hutool.core.util.IdUtil;
-import cn.idev.excel.ExcelWriter;
-import cn.idev.excel.FastExcel;
-import cn.idev.excel.write.metadata.WriteSheet;
-import cn.idev.excel.write.style.column.LongestMatchColumnWidthStyleStrategy;
+import org.apache.fesod.sheet.ExcelWriter;
+import org.apache.fesod.sheet.FesodSheet;
+import org.apache.fesod.sheet.write.metadata.WriteSheet;
+import org.apache.fesod.sheet.write.style.column.LongestMatchColumnWidthStyleStrategy;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.experimental.UtilityClass;
@@ -72,7 +72,7 @@ public @UtilityClass class ExcelUtils {
     /// @param clazz     带 `@ExcelProperty` 注解的导出类型
     /// @param os        输出流
     public <T> void export(List<T> data, String sheetName, Class<T> clazz, OutputStream os) {
-        FastExcel.write(os, clazz)
+        FesodSheet.write(os, clazz)
                 .autoCloseStream(false)
                 .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
                 .sheet(sheetName)
@@ -87,7 +87,7 @@ public @UtilityClass class ExcelUtils {
     /// @param consumer  导出写入逻辑，接收 {@link ExcelWriterWrapper} 进行分页写入
     public <T> void export(Class<T> clazz, String sheetName, OutputStream os,
                            Consumer<ExcelWriterWrapper<T>> consumer) {
-        try (ExcelWriter writer = FastExcel.write(os, clazz)
+        try (ExcelWriter writer = FesodSheet.write(os, clazz)
                 .autoCloseStream(false)
                 .registerWriteHandler(new LongestMatchColumnWidthStyleStrategy())
                 .build()) {

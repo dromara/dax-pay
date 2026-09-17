@@ -58,7 +58,7 @@
         <ip2region.version>3.3.7</ip2region.version>
         <wxjava.version>4.8.6.B</wxjava.version>
         <commonmark.version>0.24.0</commonmark.version>
-        <fastexcel.version>1.3.0</fastexcel.version>
+        <fesod.version>2.0.2-incubating</fesod.version>
         <!-- Netty：用 Boot 4.1 BOM 默认（4.2.x），不覆盖。
              曾为 embedded Artemis 降到 4.1.135（netty 4.2 的 CleanerJava25 在 JDK25 上对 NIO journal
              direct ByteBuffer 抛 UnsupportedOperationException → AMQ224000），但 4.1 缺少
