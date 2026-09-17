@@ -126,3 +126,30 @@ WHERE code_id = 2070862265027072001
   AND role_id IN (SELECT role_id FROM public.iam_role_code WHERE code_id = 2070862265018683392);
 UPDATE public.iam_role_code SET code_id = 2070862265018683392 WHERE code_id = 2070862265027072001;
 DELETE FROM public.iam_perm_code WHERE id = 2070862265027072001 AND code = 'payment:platform:product:manage';
+-- =============================================================
+-- 2026-09-17晚 盛付通拆分「商户/服务商」双产品
+-- 背景: 服务商模式(代子商户发起)拆为独立产品 sheng_isv, 服务商密钥产品级全局一份(表结构见 update-tables.sql 同日块);
+--       原 sheng_pay 更名「盛付通(商户)」; 能力清单与服务商模式一致(union_h5 种子保留、策略不映射的既定拍板不变)。
+-- =============================================================
+
+-- 商户模式产品名变更(盛付通 → 盛付通(商户))
+UPDATE public.pay_md_product SET name = '盛付通(商户)', last_modified_time = '2026-09-17 00:00:00+00' WHERE code = 'sheng_pay';
+
+-- 服务商模式产品种子 + 能力清单(16 项, 与商户模式一致)
+INSERT INTO public.pay_md_product VALUES (10025, 'sheng_isv', '盛付通(服务商)', 'sheng_pay', 151, 1, '2026-09-17 00:00:00+00', 1, '2026-09-17 00:00:00+00', 0, false, false, true);
+INSERT INTO public.pay_md_product_capability VALUES (21173, 'sheng_isv', 'wechat_qr', 0, true, NULL, false, 1, '2026-09-17 00:00:00+00', 0, 1, '2026-09-17 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21174, 'sheng_isv', 'wechat_jsapi', 1, true, NULL, false, 1, '2026-09-17 00:00:00+00', 0, 1, '2026-09-17 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21175, 'sheng_isv', 'wechat_app', 2, true, NULL, false, 1, '2026-09-17 00:00:00+00', 0, 1, '2026-09-17 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21176, 'sheng_isv', 'wechat_h5', 3, true, NULL, false, 1, '2026-09-17 00:00:00+00', 0, 1, '2026-09-17 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21177, 'sheng_isv', 'wechat_mini', 4, true, NULL, false, 1, '2026-09-17 00:00:00+00', 0, 1, '2026-09-17 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21178, 'sheng_isv', 'wechat_barcode', 5, true, NULL, false, 1, '2026-09-17 00:00:00+00', 0, 1, '2026-09-17 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21179, 'sheng_isv', 'alipay_qr', 6, true, NULL, false, 1, '2026-09-17 00:00:00+00', 0, 1, '2026-09-17 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21180, 'sheng_isv', 'alipay_jsapi', 7, true, NULL, false, 1, '2026-09-17 00:00:00+00', 0, 1, '2026-09-17 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21181, 'sheng_isv', 'alipay_app', 8, true, NULL, false, 1, '2026-09-17 00:00:00+00', 0, 1, '2026-09-17 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21182, 'sheng_isv', 'alipay_h5', 9, true, NULL, false, 1, '2026-09-17 00:00:00+00', 0, 1, '2026-09-17 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21183, 'sheng_isv', 'alipay_pc', 10, true, NULL, false, 1, '2026-09-17 00:00:00+00', 0, 1, '2026-09-17 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21184, 'sheng_isv', 'alipay_barcode', 11, true, NULL, false, 1, '2026-09-17 00:00:00+00', 0, 1, '2026-09-17 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21185, 'sheng_isv', 'union_qr', 12, true, NULL, false, 1, '2026-09-17 00:00:00+00', 0, 1, '2026-09-17 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21186, 'sheng_isv', 'union_jsapi', 13, true, NULL, false, 1, '2026-09-17 00:00:00+00', 0, 1, '2026-09-17 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21187, 'sheng_isv', 'union_h5', 14, true, NULL, false, 1, '2026-09-17 00:00:00+00', 0, 1, '2026-09-17 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21188, 'sheng_isv', 'union_barcode', 15, true, NULL, false, 1, '2026-09-17 00:00:00+00', 0, 1, '2026-09-17 00:00:00+00');

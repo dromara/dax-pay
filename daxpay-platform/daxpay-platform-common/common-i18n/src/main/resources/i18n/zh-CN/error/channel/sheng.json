@@ -1,0 +1,10 @@
+{
+  "keyNotConfigured": "盛付通通道密钥未配置",
+  "isvKeyNotConfigured": "服务商密钥未配置(服务商商户号/私钥/盛付通公钥任一缺失)",
+  "payFailed": "盛付通支付异常: {0}",
+  "closeFailed": "盛付通关闭/撤销订单异常: {0}",
+  "refundFailed": "盛付通退款异常: {0}",
+  "unsupportedPayMethod": "盛付通不支持的支付方式: {0}",
+  "mchDuplicate": "该商户下已存在此盛付通商户号",
+  "isvMchDuplicate": "该商户下已存在此子商户号"
+}

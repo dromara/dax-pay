@@ -1,0 +1,10 @@
+{
+  "keyNotConfigured": "ShengPay channel key not configured",
+  "isvKeyNotConfigured": "ShengPay ISV key not configured (ISV merchant number / private key / ShengPay public key missing)",
+  "payFailed": "ShengPay payment error: {0}",
+  "closeFailed": "ShengPay close/cancel order error: {0}",
+  "refundFailed": "ShengPay refund error: {0}",
+  "unsupportedPayMethod": "Unsupported payment method for ShengPay: {0}",
+  "mchDuplicate": "A ShengPay merchant number already exists under this merchant",
+  "isvMchDuplicate": "A sub-merchant number already exists under this merchant"
+}

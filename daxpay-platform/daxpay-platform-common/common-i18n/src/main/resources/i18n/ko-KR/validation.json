@@ -665,6 +665,12 @@
     "lakalaMchNo": {
       "notBlank": "Lakala 판매자 번호는 비워둘 수 없습니다."
     },
+    "shengMchId": {
+      "notBlank": "성푸퉁(ShengPay) 판매자 번호는 비워둘 수 없습니다."
+    },
+    "subMchId": {
+      "notBlank": "하위 판매자 번호는 비워둘 수 없습니다."
+    },
     "termNo": {
       "notBlank": "터미널 번호는 비워둘 수 없습니다.",
       "size": "터미널 번호는 64자를 초과할 수 없습니다."

@@ -669,6 +669,12 @@
     "lakalaMchNo": {
       "notBlank": "Lakala merchant number cannot be blank"
     },
+    "shengMchId": {
+      "notBlank": "ShengPay merchant number cannot be blank"
+    },
+    "subMchId": {
+      "notBlank": "Sub-merchant number cannot be blank"
+    },
     "termNo": {
       "notBlank": "Terminal number cannot be blank",
       "size": "Terminal number cannot exceed 64 characters"

@@ -21,6 +21,7 @@
         <module>daxpay-channel-ums</module>
         <module>daxpay-channel-union</module>
         <module>daxpay-channel-lakala</module>
+        <module>daxpay-channel-sheng</module>
         <module>daxpay-channel-douyin</module>
         <module>daxpay-channel-hkrt</module>
         <module>daxpay-channel-adapay</module>

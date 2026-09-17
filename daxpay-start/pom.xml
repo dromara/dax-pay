@@ -118,6 +118,12 @@
             <artifactId>daxpay-channel-lakala</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- 盛付通通道 -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-channel-sheng</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- 抖音支付通道 -->
         <dependency>
             <groupId>cn.daxpay.open</groupId>

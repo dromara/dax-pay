@@ -664,6 +664,12 @@
     "lakalaMchNo": {
       "notBlank": "Nomor pedagang Lakala tidak boleh kosong"
     },
+    "shengMchId": {
+      "notBlank": "Nomor merchant ShengPay tidak boleh kosong"
+    },
+    "subMchId": {
+      "notBlank": "Nomor sub-merchant tidak boleh kosong"
+    },
     "termNo": {
       "notBlank": "Nomor terminal tidak boleh kosong",
       "size": "Nomor terminal tidak boleh melebihi 64 karakter"

@@ -665,6 +665,12 @@
     "lakalaMchNo": {
       "notBlank": "拉卡拉商戶號不可為空"
     },
+    "shengMchId": {
+      "notBlank": "盛付通商戶號不能為空"
+    },
+    "subMchId": {
+      "notBlank": "子商戶號不能為空"
+    },
     "termNo": {
       "notBlank": "終端號不可為空",
       "size": "終端號不可超過64位"

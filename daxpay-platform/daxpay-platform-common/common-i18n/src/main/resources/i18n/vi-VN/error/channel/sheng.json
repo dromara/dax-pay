@@ -1,0 +1,10 @@
+{
+  "keyNotConfigured": "Khóa kênh ShengPay chưa được cấu hình",
+  "isvKeyNotConfigured": "Khóa ISV ShengPay chưa được cấu hình (thiếu một trong: số merchant ISV / khóa riêng / khóa công khai ShengPay)",
+  "payFailed": "Lỗi thanh toán ShengPay: {0}",
+  "closeFailed": "Lỗi đóng/hủy đơn hàng ShengPay: {0}",
+  "refundFailed": "Lỗi hoàn tiền ShengPay: {0}",
+  "unsupportedPayMethod": "Phương thức thanh toán không được hỗ trợ cho ShengPay: {0}",
+  "mchDuplicate": "Số merchant ShengPay đã tồn tại dưới merchant này",
+  "isvMchDuplicate": "Số merchant con đã tồn tại dưới merchant này"
+}

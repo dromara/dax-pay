@@ -664,6 +664,12 @@
     "lakalaMchNo": {
       "notBlank": "Mã người bán Lakala không được để trống"
     },
+    "shengMchId": {
+      "notBlank": "Mã merchant ShengPay không được để trống"
+    },
+    "subMchId": {
+      "notBlank": "Mã merchant con không được để trống"
+    },
     "termNo": {
       "notBlank": "Số thiết bị đầu cuối không được để trống",
       "size": "Số thiết bị đầu cuối không thể vượt quá 64 ký tự"

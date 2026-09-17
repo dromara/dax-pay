@@ -1,0 +1,38 @@
+package cn.daxpay.open.channel.sheng.strategy.refund;
+
+import cn.daxpay.open.channel.sheng.client.credential.ShengSdkCredential;
+import cn.daxpay.open.channel.sheng.service.config.ShengConfigAssembler;
+import cn.daxpay.open.channel.sheng.service.payment.ShengRefundService;
+import cn.daxpay.open.payment.strategy.refund.AbsRefundStrategy;
+import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
+import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
+import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+
+/// # 盛付通退款策略
+///
+/// 从退款订单读取通道路由参数(channelMchNo / capability),
+/// 组装通道凭证(委托 [ShengConfigAssembler]), 退款执行委托给 [ShengRefundService]。
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class ShengPayRefundStrategy extends AbsRefundStrategy {
+
+    private final ShengRefundService shengRefundService;
+    private final ShengConfigAssembler shengConfigAssembler;
+
+    @Override
+    public ProductEnum getProduct() {
+        return ProductEnum.SHENG_PAY;
+    }
+
+    @Override
+    public RefundResultBo doRefund(RefundOrder refundOrder) {
+        // 组装通道调用凭证
+        ShengSdkCredential credential = shengConfigAssembler.buildConfig(
+                refundOrder.getMchNo(), refundOrder.getChannelMchNo(), refundOrder.getCapability());
+        return shengRefundService.refund(refundOrder, credential);
+    }
+}

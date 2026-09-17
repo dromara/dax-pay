@@ -71,8 +71,10 @@ public enum ProductEnum implements I18nSupport {
     VBILL_PAY("vbill_pay"),
     /// 富友
     FUYOU_PAY("fuyou_pay"),
-    /// 盛付通
+    /// 盛付通(商户模式, 商户自有对接密钥)
     SHENG_PAY("sheng_pay"),
+    /// 盛付通(服务商模式, 代子商户发起交易)
+    SHENG_ISV("sheng_isv"),
     /// 银盛
     YSEP_PAY("ysep_pay"),
     /// 快钱
@@ -115,7 +117,8 @@ public enum ProductEnum implements I18nSupport {
             case HKRT_PAY -> ChannelEnum.HKRT_PAY.getCode();
             case VBILL_PAY -> ChannelEnum.VBILL_PAY.getCode();
             case FUYOU_PAY -> ChannelEnum.FUYOU_PAY.getCode();
-            case SHENG_PAY -> ChannelEnum.SHENG_PAY.getCode();
+            // 盛付通: 商户(sheng_pay)/服务商(sheng_isv) 两产品共用通道 sheng_pay
+            case SHENG_PAY, SHENG_ISV -> ChannelEnum.SHENG_PAY.getCode();
             case YSEP_PAY -> ChannelEnum.YSEP_PAY.getCode();
             case QUICK_PAY -> ChannelEnum.QUICK_PAY.getCode();
             // 河马付归属杉德通道

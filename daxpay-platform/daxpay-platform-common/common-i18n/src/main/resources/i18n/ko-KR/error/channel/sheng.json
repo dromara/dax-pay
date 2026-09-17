@@ -1,0 +1,10 @@
+{
+  "keyNotConfigured": "성푸퉁(ShengPay) 채널 키가 구성되지 않았습니다",
+  "isvKeyNotConfigured": "서비스 제공자 키가 구성되지 않았습니다(서비스 제공자 가맹점 번호/개인 키/성푸퉁 공개 키 중 하나 누락)",
+  "payFailed": "성푸퉁 결제 오류: {0}",
+  "closeFailed": "성푸퉁 주문 취소/마감 오류: {0}",
+  "refundFailed": "성푸퉁 환불 오류: {0}",
+  "unsupportedPayMethod": "성푸퉁에서 지원하지 않는 결제 수단: {0}",
+  "mchDuplicate": "이 가맹점에 이미 성푸퉁(ShengPay) 가맹점 번호가 존재합니다",
+  "isvMchDuplicate": "이 가맹점에 이미 하위 가맹점 번호가 존재합니다"
+}

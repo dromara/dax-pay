@@ -665,6 +665,12 @@
     "lakalaMchNo": {
       "notBlank": "Lakala 販売者番号を空白にすることはできません"
     },
+    "shengMchId": {
+      "notBlank": "盛付通販売者番号を空白にすることはできません"
+    },
+    "subMchId": {
+      "notBlank": "サブ販売者番号を空白にすることはできません"
+    },
     "termNo": {
       "notBlank": "端子番号を空白にすることはできません",
       "size": "端末番号は 64 文字を超えることはできません"
