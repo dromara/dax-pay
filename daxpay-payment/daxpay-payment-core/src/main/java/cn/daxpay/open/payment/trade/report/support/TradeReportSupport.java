@@ -7,6 +7,7 @@ import cn.daxpay.open.payment.trade.report.result.HourlyDistItemResult;
 import cn.daxpay.open.payment.trade.report.result.MerchantRankItemResult;
 import cn.daxpay.open.payment.trade.report.result.RefundTrendItemResult;
 import cn.daxpay.open.payment.trade.report.result.TradeTrendItemResult;
+import cn.daxpay.open.platform.core.util.DateTimeUtil;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
@@ -25,7 +26,8 @@ import java.util.Objects;
 @Component
 public class TradeReportSupport {
 
-    public static final ZoneId ZONE_CST = ZoneId.of("Asia/Shanghai");
+    /// 业务时区(东八区), 统一取平台常量避免多处副本
+    public static final ZoneId ZONE_CST = DateTimeUtil.ZONE_CST;
     public static final DateTimeFormatter DATE_FMT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     private static final int TREND_DAYS_MIN = 1;

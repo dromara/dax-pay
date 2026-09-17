@@ -157,6 +157,12 @@
             <artifactId>common-excel</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- 请求上下文(导出时间列按用户时区格式化需读 x-timezone 请求头) -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>common-request-context</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
     </dependencies>
 
