@@ -15,8 +15,6 @@ import cn.daxpay.open.payment.trade.order.result.PayTradeResult;
 import cn.daxpay.open.payment.trade.order.result.export.PayTradeExportResult;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPaySyncResult;
 import cn.daxpay.open.platform.common.excel.ExcelUtils;
-import cn.daxpay.open.platform.common.excel.ExcelWriterWrapper;
-import org.apache.fesod.sheet.write.metadata.WriteSheet;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
@@ -70,20 +68,10 @@ public class PayTradeAdminController {
     @OperateLog(title = "导出资金交易凭证", businessType = OperateLogType.EXPORT, saveParam = false)
     @PostMapping("/export")
     public void export(HttpServletResponse response, PayTradeQuery query) {
+        // 导出时间范围必填, 跨度上限 90 天
         ExcelUtils.validateExportTimeRange(query.getCreateTimeStart(), query.getCreateTimeEnd());
-        ExcelUtils.export(PayTradeExportResult.class, "交易凭证", response, wrapper -> {
-            WriteSheet sheet = ExcelWriterWrapper.buildSheet("交易凭证");
-            int pageNo = 1;
-            int totalRows = 0;
-            while (totalRows < ExcelUtils.EXPORT_MAX_ROWS) {
-                var page = payTradeAdminService.page(new PageParam(pageNo, ExcelUtils.EXPORT_PAGE_SIZE), query);
-                var exportData = PayTradeExportConvert.CONVERT.toExportResultList(page.getRecords());
-                if (exportData.isEmpty()) break;
-                wrapper.write(exportData, sheet);
-                totalRows += exportData.size();
-                if (exportData.size() < ExcelUtils.EXPORT_PAGE_SIZE) break;
-                pageNo++;
-            }
-        });
+        ExcelUtils.exportPaged(PayTradeExportResult.class, "交易凭证", response,
+                (pageNo, size) -> payTradeAdminService.page(new PageParam(pageNo, size), query),
+                PayTradeExportConvert.CONVERT::toExportResultList);
     }
 }

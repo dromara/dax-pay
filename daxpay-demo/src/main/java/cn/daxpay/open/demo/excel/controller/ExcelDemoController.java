@@ -2,11 +2,9 @@ package cn.daxpay.open.demo.excel.controller;
 
 import cn.daxpay.open.demo.excel.result.ExcelDemoResult;
 import cn.daxpay.open.platform.common.excel.ExcelUtils;
-import cn.daxpay.open.platform.common.excel.ExcelWriterWrapper;
-import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.open.platform.core.rest.Res;
+import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.platform.core.rest.result.Result;
-import org.apache.fesod.sheet.write.metadata.WriteSheet;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,12 +24,12 @@ import java.util.List;
 ///
 /// 演示两种导出模式:
 /// 1. 简单导出 — 全量数据一次性写入, 适合小数据量
-/// 2. 流式导出 — 模拟分页逐批写入, 适合大数据量场景
+/// 2. 分页导出 — 模拟分页逐批取数写入, 适合大数据量场景
 ///
 /// 数据均为内存 Mock, 不依赖数据库。
 ///
-/// 鉴权：URL 前缀 `/demo/**` 已在白名单，类上叠加 `@IgnoreAuth` 双保险。
-@IgnoreAuth
+/// 鉴权：URL 前缀 `/demo/**` 在 dev 环境已加入白名单; 生产环境不白名单, 需正常登录鉴权
+/// (导出为较重的服务端运算, 不作为匿名开放接口)。
 @Tag(name = "Excel 导出演示")
 @RestController
 @RequestMapping("/demo/excel")
@@ -52,25 +50,25 @@ public class ExcelDemoController {
         ExcelUtils.export(data, "导出演示", ExcelDemoResult.class, response);
     }
 
-    /// 流式导出：模拟分页逐批写入，演示大数据量场景
+    /// 分页导出：模拟分页逐批取数写入，与交易域各导出口径同构
     ///
-    /// 每页 500 条，分批写入 ExcelWriterWrapper，与 PayTradeAdminController 的导出逻辑同构。
-    @Operation(summary = "流式导出（模拟分页逐批写入）")
-    @GetMapping("/export/streaming")
-    public void streamingExport(
+    /// 传入超过 [ExcelUtils#EXPORT_MAX_ROWS] 的 total 可直接观察超限拦截效果(返回业务错误而非截断文件)。
+    @Operation(summary = "分页导出（模拟分页逐批写入）")
+    @GetMapping("/export/paged")
+    public void pagedExport(
             @Parameter(description = "导出总条数，默认 5000") @RequestParam(value = "total", defaultValue = "5000") int total,
             HttpServletResponse response) {
-        ExcelUtils.export(ExcelDemoResult.class, "流式导出演示", response, wrapper -> {
-            WriteSheet sheet = ExcelWriterWrapper.buildSheet("流式导出演示");
-            int pageSize = 500;
-            int written = 0;
-            while (written < total) {
-                int batchSize = Math.min(pageSize, total - written);
-                List<ExcelDemoResult> batch = generateData(batchSize, written);
-                wrapper.write(batch, sheet);
-                written += batchSize;
-            }
-        });
+        ExcelUtils.exportPaged(ExcelDemoResult.class, "分页导出演示", response,
+                (pageNo, size) -> {
+                    int start = (pageNo - 1) * size;
+                    int batchSize = Math.max(0, Math.min(size, total - start));
+                    return new PageResult<ExcelDemoResult>()
+                            .setRecords(generateData(batchSize, start))
+                            .setTotal(total)
+                            .setSize(size)
+                            .setCurrent(pageNo);
+                },
+                rows -> rows);
     }
 
     /// 返回 Mock 数据条数（供前端预览后决定导出）

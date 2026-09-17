@@ -2,55 +2,34 @@ package cn.daxpay.open.platform.common.excel;
 
 import org.apache.fesod.sheet.ExcelWriter;
 import org.apache.fesod.sheet.FesodSheet;
-import org.apache.fesod.sheet.write.builder.ExcelWriterSheetBuilder;
 import org.apache.fesod.sheet.write.metadata.WriteSheet;
 
 import java.util.Collection;
 
-/// # ExcelWriter 安全包装器
+/// # Excel 写出句柄(模块内部)
 ///
-/// 提供受控的写出接口，避免直接暴露 {@link ExcelWriter} 导致 IO 流被提前关闭等不可控问题。
-/// 仅在 {@link ExcelUtils#export(Class, String, java.io.OutputStream, java.util.function.Consumer)}
-/// 的 consumer 回调中使用，writer 的生命周期由 ExcelUtils 统一管理。
-///
-/// @param excelWriter 底层 FastExcel 写出器
-public record ExcelWriterWrapper<T>(ExcelWriter excelWriter) {
+/// 由 [ExcelUtils] 创建并托管生命周期, 只暴露「按批写入」能力: 调用方拿不到 [ExcelWriter],
+/// 也就无法提前关闭 IO 流; 底层 Fesod 类型只在本模块内出现, 后续换库时改动不外溢到业务模块。
+public final class ExcelWriterWrapper {
 
-    /// 写入一批数据到指定 Sheet
+    private final ExcelWriter excelWriter;
+
+    private final WriteSheet writeSheet;
+
+    private ExcelWriterWrapper(ExcelWriter excelWriter, WriteSheet writeSheet) {
+        this.excelWriter = excelWriter;
+        this.writeSheet = writeSheet;
+    }
+
+    /// 创建写出句柄(仅本模块可见)
+    static ExcelWriterWrapper of(ExcelWriter excelWriter, String sheetName) {
+        return new ExcelWriterWrapper(excelWriter, FesodSheet.writerSheet(sheetName).build());
+    }
+
+    /// 写入一批数据到本导出任务的工作表
     ///
-    /// @param data       数据集合
-    /// @param writeSheet 目标工作表
-    public void write(Collection<T> data, WriteSheet writeSheet) {
+    /// @param data 数据集合
+    public void write(Collection<?> data) {
         excelWriter.write(data, writeSheet);
-    }
-
-    /// 创建 ExcelWriterWrapper 实例
-    public static <T> ExcelWriterWrapper<T> of(ExcelWriter excelWriter) {
-        return new ExcelWriterWrapper<>(excelWriter);
-    }
-
-    /// 构建 WriteSheet（按名称）
-    ///
-    /// @param sheetName 工作表名称
-    public static WriteSheet buildSheet(String sheetName) {
-        return sheetBuilder(sheetName).build();
-    }
-
-    /// 构建 WriteSheet（按编号 + 名称）
-    ///
-    /// @param sheetNo   工作表编号
-    /// @param sheetName 工作表名称
-    public static WriteSheet buildSheet(int sheetNo, String sheetName) {
-        return sheetBuilder(sheetNo, sheetName).build();
-    }
-
-    /// 获取 Sheet 构建器（按名称），支持链式配置
-    public static ExcelWriterSheetBuilder sheetBuilder(String sheetName) {
-        return FesodSheet.writerSheet(sheetName);
-    }
-
-    /// 获取 Sheet 构建器（按编号 + 名称），支持链式配置
-    public static ExcelWriterSheetBuilder sheetBuilder(int sheetNo, String sheetName) {
-        return FesodSheet.writerSheet(sheetNo, sheetName);
     }
 }
