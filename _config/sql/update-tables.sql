@@ -149,3 +149,11 @@ CREATE UNIQUE INDEX uk_sheng_isv_cmchno ON public.sheng_isv_channel_merchant USI
 COMMENT ON INDEX uk_sheng_isv_cmchno IS '同一通道商户服务商绑定唯一';
 CREATE UNIQUE INDEX uk_sheng_isv_mch_sub ON public.sheng_isv_channel_merchant USING btree (mch_no, sub_mch_id) WHERE (deleted = false);
 COMMENT ON INDEX uk_sheng_isv_mch_sub IS '同一商户同子商户号唯一(防重复绑定)';
+
+-- ----------------------------------------------------------------------------
+-- 盛付通商户模式密钥: 补 (mch_no, sheng_mch_id) 部分唯一索引(2026-09-17 审查修复)
+-- 应用层判重可被并发创建绕过, 补 DB 约束兜底(与 ISV 侧 uk_sheng_isv_mch_sub 对称);
+-- sheng_mch_id 为空的未完成配置不受约束(NULL 不参与唯一比较)。
+-- ----------------------------------------------------------------------------
+CREATE UNIQUE INDEX IF NOT EXISTS uk_sheng_key_mch_shengmch ON public.sheng_key_config USING btree (mch_no, sheng_mch_id) WHERE (deleted = false);
+COMMENT ON INDEX public.uk_sheng_key_mch_shengmch IS '同一商户同一盛付通商户号唯一(并发创建兜底, 与应用层判重互补; sheng_mch_id 为空的未完成配置不受约束)';

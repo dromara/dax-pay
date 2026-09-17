@@ -22491,6 +22491,20 @@ COMMENT ON INDEX public.uk_sheng_key_cmchno IS '同一通道商户盛付通密�
 
 
 --
+-- Name: uk_sheng_key_mch_shengmch; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_sheng_key_mch_shengmch ON public.sheng_key_config USING btree (mch_no, sheng_mch_id) WHERE (deleted = false);
+
+
+--
+-- Name: INDEX uk_sheng_key_mch_shengmch; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_sheng_key_mch_shengmch IS '同一商户同一盛付通商户号唯一(并发创建兜底, 与应用层判重互补; sheng_mch_id 为空的未完成配置不受约束)';
+
+
+--
 -- Name: sheng_isv_key_config; Type: TABLE; Schema: public; Owner: -
 --
 

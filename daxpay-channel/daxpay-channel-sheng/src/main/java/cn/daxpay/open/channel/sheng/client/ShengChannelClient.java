@@ -21,7 +21,7 @@ import org.springframework.web.service.annotation.PostExchange;
 /// # 盛付通通道客户端
 ///
 /// 声明式 HTTP 接口, 调用子应用 dax-pay-channel-two 的盛付通通道接口。
-/// 盛付通为聚合直连模式, 一通道一产品, 路径前缀 `/channel/sheng`。
+/// 盛付通商户(sheng_pay)/服务商(sheng_isv)两产品共用本客户端(路径前缀 `/channel/sheng`), 凭证按产品维度组装后随请求下发。
 /// 凭证随请求 body 下发, 传输层 AES-GCM 加密由平台统一挂载。
 @HttpExchange(accept = MediaType.APPLICATION_JSON_VALUE, contentType = MediaType.APPLICATION_JSON_VALUE)
 public interface ShengChannelClient {

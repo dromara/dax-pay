@@ -11,7 +11,8 @@ import org.springframework.stereotype.Service;
 /// 从通道密钥配置([ShengKeyConfig], 按通道商户号定位)组装通道调用凭证 [ShengSdkCredential],
 /// 下发给子应用 dax-pay-channel-two 发起盛付通 API 调用。
 ///
-/// 盛付通为聚合直连模式, 一通道一产品, 无沙箱双环境(官方不提供集测接口), 凭证不携带沙箱标记。
+/// 盛付通分商户(sheng_pay)/服务商(sheng_isv)双产品, 本组装器仅服务商户模式(服务商凭证见 [ShengIsvConfigAssembler]);
+/// 无沙箱双环境(官方不提供集测接口), 凭证不携带沙箱标记。
 /// 盛付通为聚合支付, 不区分应用能力(capability 参数保留但不使用)。
 ///
 /// 供支付策略([cn.daxpay.open.channel.sheng.strategy.*])组装通道调用凭证。

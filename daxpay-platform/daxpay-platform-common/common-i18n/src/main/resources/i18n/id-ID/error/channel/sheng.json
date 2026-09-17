@@ -6,5 +6,6 @@
   "refundFailed": "Kesalahan pengembalian dana ShengPay: {0}",
   "unsupportedPayMethod": "Metode pembayaran tidak didukung untuk ShengPay: {0}",
   "mchDuplicate": "Nomor merchant ShengPay sudah ada di bawah merchant ini",
-  "isvMchDuplicate": "Nomor sub-merchant sudah ada di bawah merchant ini"
+  "isvMchDuplicate": "Nomor sub-merchant sudah ada di bawah merchant ini",
+  "invalidProduct": "Endpoint ini hanya mendukung produk penyedia layanan Sheng Bayar (sheng_isv)"
 }

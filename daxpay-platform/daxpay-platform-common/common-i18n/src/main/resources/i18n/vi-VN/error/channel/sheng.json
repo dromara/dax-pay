@@ -6,5 +6,6 @@
   "refundFailed": "Lỗi hoàn tiền ShengPay: {0}",
   "unsupportedPayMethod": "Phương thức thanh toán không được hỗ trợ cho ShengPay: {0}",
   "mchDuplicate": "Số merchant ShengPay đã tồn tại dưới merchant này",
-  "isvMchDuplicate": "Số merchant con đã tồn tại dưới merchant này"
+  "isvMchDuplicate": "Số merchant con đã tồn tại dưới merchant này",
+  "invalidProduct": "Giao diện này chỉ hỗ trợ sản phẩm nhà cung cấp dịch vụ Sheng Pay (sheng_isv)"
 }

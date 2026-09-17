@@ -6,5 +6,6 @@
   "refundFailed": "ShengPay refund error: {0}",
   "unsupportedPayMethod": "Unsupported payment method for ShengPay: {0}",
   "mchDuplicate": "A ShengPay merchant number already exists under this merchant",
-  "isvMchDuplicate": "A sub-merchant number already exists under this merchant"
+  "isvMchDuplicate": "A sub-merchant number already exists under this merchant",
+  "invalidProduct": "This endpoint only supports the ShengPay service provider product (sheng_isv)"
 }

@@ -16,11 +16,4 @@ public class ShengKeyConfigManager extends BaseManager<ShengKeyConfigMapper, She
                 .eq(ShengKeyConfig::getChannelMchNo, channelMchNo)
                 .oneOpt();
     }
-
-    /// 根据通道商户号删除
-    public void deleteByChannelMchNo(String channelMchNo) {
-        lambdaUpdate()
-                .eq(ShengKeyConfig::getChannelMchNo, channelMchNo)
-                .remove();
-    }
 }

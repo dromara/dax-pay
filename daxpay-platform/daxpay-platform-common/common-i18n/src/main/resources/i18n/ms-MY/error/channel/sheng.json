@@ -6,5 +6,6 @@
   "refundFailed": "Ralat bayaran balik ShengPay: {0}",
   "unsupportedPayMethod": "Kaedah pembayaran tidak disokong untuk ShengPay: {0}",
   "mchDuplicate": "Nombor merchant ShengPay sudah wujud di bawah merchant ini",
-  "isvMchDuplicate": "Nombor sub-merchant sudah wujud di bawah merchant ini"
+  "isvMchDuplicate": "Nombor sub-merchant sudah wujud di bawah merchant ini",
+  "invalidProduct": "Antara muka ini hanya menyokong produk penyedia perkhidmatan Sheng Pay (sheng_isv)"
 }

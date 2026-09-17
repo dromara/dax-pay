@@ -6,5 +6,6 @@
   "refundFailed": "盛付通返金エラー: {0}",
   "unsupportedPayMethod": "盛付通でサポートされていない支払い方法: {0}",
   "mchDuplicate": "このマーチャントの下に盛付通マーチャント番号がすでに存在します",
-  "isvMchDuplicate": "このマーチャントの下にサブマーチャント番号がすでに存在します"
+  "isvMchDuplicate": "このマーチャントの下にサブマーチャント番号がすでに存在します",
+  "invalidProduct": "このインターフェースは盛付通サービスプロバイダー製品(sheng_isv)のみサポートします"
 }

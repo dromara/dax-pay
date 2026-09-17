@@ -6,5 +6,6 @@
   "refundFailed": "성푸퉁 환불 오류: {0}",
   "unsupportedPayMethod": "성푸퉁에서 지원하지 않는 결제 수단: {0}",
   "mchDuplicate": "이 가맹점에 이미 성푸퉁(ShengPay) 가맹점 번호가 존재합니다",
-  "isvMchDuplicate": "이 가맹점에 이미 하위 가맹점 번호가 존재합니다"
+  "isvMchDuplicate": "이 가맹점에 이미 하위 가맹점 번호가 존재합니다",
+  "invalidProduct": "이 인터페이스는 선푸페이 서비스 제공자 상품(sheng_isv)만 지원합니다"
 }

@@ -6,5 +6,6 @@
   "refundFailed": "盛付通退款异常: {0}",
   "unsupportedPayMethod": "盛付通不支持的支付方式: {0}",
   "mchDuplicate": "该商户下已存在此盛付通商户号",
-  "isvMchDuplicate": "该商户下已存在此子商户号"
+  "isvMchDuplicate": "该商户下已存在此子商户号",
+  "invalidProduct": "该接口仅支持盛付通服务商产品(sheng_isv)"
 }
