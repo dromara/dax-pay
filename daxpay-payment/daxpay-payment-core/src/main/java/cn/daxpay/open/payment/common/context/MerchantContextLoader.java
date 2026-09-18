@@ -43,7 +43,7 @@ public class MerchantContextLoader {
     /// 通道回调身份装载:仅将 path 上的 mchNo 写入上下文,不查库、不校验商户启用。
     ///
     /// 禁用商户的历史在途单仍可能收到通道回调,须能完成状态更新(与超时关单 `setMchNo` 策略一致)。
-    /// 由各 `*CallbackController` 入口显式调用,替代已删除的 CallbackMchContextFilter。
+    /// 由各 `*CallbackController` 入口显式调用。
     public void bindMchNoForCallback(String mchNo) {
         if (StrUtil.isBlank(mchNo)) {
             // 商户: 商户上下文未装载

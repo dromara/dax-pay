@@ -26,7 +26,7 @@ public class PlatformSocialAutoLoginConfigService {
 
     private final SystemPlatformConfigService systemConfigService;
 
-    /// 获取配置实体(不存在则创建默认关闭态), 并归一化旧 source 字段
+    /// 获取配置实体(不存在则创建默认关闭态), 并归一化 sources 列表
     public PlatformSocialAutoLoginConfig getConfig() {
         PlatformSocialAutoLoginConfig config = systemConfigService.getOrCreateConfig(
                 PlatformConfigTypeEnum.SECURITY_SOCIAL_AUTO,
@@ -52,7 +52,7 @@ public class PlatformSocialAutoLoginConfigService {
         if (Objects.isNull(data.getMerchant())) {
             data.setMerchant(new PlatformSocialAutoLoginConfig.ClientAutoLogin());
         }
-        // 参数可能仍带旧 source, 统一合并后落盘只保留 sources
+        // 统一按 param sources 归一化回写, 落盘只保留 sources
         this.applyParamSources(data.getAdmin(), param.getAdmin());
         this.applyParamSources(data.getMerchant(), param.getMerchant());
         this.normalize(data);
@@ -75,7 +75,7 @@ public class PlatformSocialAutoLoginConfigService {
         }
     }
 
-    /// 将 Param 的 sources/source 写回实体, 避免 MapStruct 只拷同名后遗留旧 source
+    /// 将 Param 的 sources 归一化(去空去重)写回实体
     private void applyParamSources(PlatformSocialAutoLoginConfig.ClientAutoLogin target,
                                    PlatformSocialAutoLoginConfigParam.ClientAutoLoginParam param) {
         if (Objects.isNull(target) || Objects.isNull(param)) {
@@ -88,10 +88,7 @@ public class PlatformSocialAutoLoginConfigService {
                     resolved.add(item);
                 }
             }
-        } else if (StrUtil.isNotBlank(param.getSource())) {
-            resolved.add(param.getSource());
         }
         target.setSources(resolved);
-        target.setSource(null);
     }
 }

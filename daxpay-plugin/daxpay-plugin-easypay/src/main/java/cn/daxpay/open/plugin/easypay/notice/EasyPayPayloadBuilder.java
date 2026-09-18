@@ -82,7 +82,7 @@ public class EasyPayPayloadBuilder implements NoticePayloadBuilder {
                 .setTradeStatus("TRADE_SUCCESS")
                 .setParam(order.getParam())
                 .setSignType("MD5");
-        // 仅一次 MD5 签名（修复商业版重复 setSign）
+        // 仅一次 MD5 签名（商业版实现会重复 setSign, 勿对齐）
         callback.setSign(EasyPayUtil.signByMd5(callback, credential.getMd5Key()));
         return callback;
     }

@@ -36,11 +36,7 @@ public class PlatformSocialAutoLoginConfig {
         /// 可自动跳转的社交平台编码列表(如 feishu / weCom / dingTalk), 登录时按 UA 匹配其一
         private List<String> sources = new ArrayList<>();
 
-        /// 兼容旧版单字段 source; 反序列化后由 [normalize] 合并进 sources, 新写入不再持久化
-        @Deprecated
-        private String source;
-
-        /// 归一化: 旧 source 迁移为 sources[], 去空并去重
+        /// 归一化: sources 去空并去重
         public ClientAutoLogin normalize() {
             List<String> resolved = new ArrayList<>();
             if (CollUtil.isNotEmpty(sources)) {
@@ -49,11 +45,8 @@ public class PlatformSocialAutoLoginConfig {
                         resolved.add(item);
                     }
                 }
-            } else if (StrUtil.isNotBlank(source)) {
-                resolved.add(source);
             }
             this.sources = resolved;
-            this.source = null;
             return this;
         }
 

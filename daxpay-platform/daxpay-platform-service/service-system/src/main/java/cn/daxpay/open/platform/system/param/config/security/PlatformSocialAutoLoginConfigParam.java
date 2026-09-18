@@ -30,10 +30,5 @@ public class PlatformSocialAutoLoginConfigParam {
 
         @Schema(description = "可自动跳转的社交平台编码列表")
         private List<String> sources;
-
-        /// 兼容旧客户端单字段; 服务端优先用 sources, 空时回退
-        @Schema(description = "兼容旧版单平台编码", deprecated = true)
-        @Deprecated
-        private String source;
     }
 }

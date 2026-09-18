@@ -40,7 +40,7 @@ public class MchAppChecker implements MerchantConfigChecker {
                     ConfigCheckCategoryEnum.MCH_APP.getCode(),
                     "configCheck.mchApp.title",
                     "configCheck.mchApp.description",
-                    "MchAppInfo"
+                    "/mch/app"
             ).setCount(apps.isEmpty() ? 0 : (int) (apps.size() - enabledCount));
         }
         return null;

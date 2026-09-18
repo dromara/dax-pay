@@ -49,7 +49,7 @@ public class PayRouteChecker implements MerchantConfigChecker {
                     ConfigCheckCategoryEnum.PAY_ROUTE.getCode(),
                     "configCheck.payRoute.title",
                     "configCheck.payRoute.description",
-                    "PayRouteConfig"
+                    "/mch/route"
             ).setCount((int) missingCount);
         }
         return null;

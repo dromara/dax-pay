@@ -39,7 +39,7 @@ public class ChannelMerchantChecker implements MerchantConfigChecker {
                     ConfigCheckCategoryEnum.CHANNEL_MERCHANT.getCode(),
                     "configCheck.channelMerchant.title",
                     "configCheck.channelMerchant.description",
-                    "ChannelMerchant"
+                    "/mch/channel-merchant"
             ).setCount(channels.size());
         }
         return null;

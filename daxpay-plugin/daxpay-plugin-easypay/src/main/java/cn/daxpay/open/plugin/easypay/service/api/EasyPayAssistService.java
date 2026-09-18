@@ -43,9 +43,7 @@ public class EasyPayAssistService {
         }
         boolean ok;
         if (credential.getUseSystemKey()) {
-            // 商户用平台公钥验签？不对——请求是商户私钥签，平台用商户公钥验
-            // useSystemKey 时：商户用平台提供的密钥对中的私钥签名？商业版逻辑：useSystemKey 用系统密钥
-            // 商业：请求验签用商户公钥；useSystemKey 时平台私钥签响应，验请求用商户 publicKey
+            // 请求由商户私钥签名: 常规用商户公钥验签, useSystemKey(商户持平台分配的密钥对)时回退平台公钥
             String publicKey = StrUtil.blankToDefault(credential.getPublicKey(), credential.getPlatformPublicKey());
             ok = EasyPayUtil.verifySignByRsa(param, sign, publicKey);
         } else {

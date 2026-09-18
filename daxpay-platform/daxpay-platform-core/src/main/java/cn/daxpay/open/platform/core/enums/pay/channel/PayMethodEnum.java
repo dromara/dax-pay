@@ -11,7 +11,7 @@ import java.util.Objects;
 /// # 支付方式
 ///
 /// 字典: pay_method；`code` 全局唯一，且仅绑定一个支付渠道。
-/// `provider` 显式声明每个支付方式所属的支付渠道，供通道路由零开销解析（替代旧版从支付产品反推）。
+/// `provider` 显式声明每个支付方式所属的支付渠道，供通道路由零开销解析。
 @Getter
 @RequiredArgsConstructor
 public enum PayMethodEnum implements I18nSupport {

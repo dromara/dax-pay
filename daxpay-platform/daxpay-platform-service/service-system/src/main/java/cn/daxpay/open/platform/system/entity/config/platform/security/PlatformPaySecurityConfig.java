@@ -45,18 +45,6 @@ public class PlatformPaySecurityConfig {
     /// 合并原省级/市级两个独立开关, 名单数据仍按 type=province/city 在「支付安全 → 黑名单」中区分维护。
     private Boolean regionBlacklistEnabled = Boolean.FALSE;
 
-    /// 省级地区拦截（兼容旧版 jsonb 配置迁移, 不再参与逻辑）
-    ///
-    /// 由 [PlatformSecurityConfigService] 读取时合并进 [regionBlacklistEnabled] 后清理, 勿再使用。
-    @Deprecated
-    private Boolean provinceBlacklistEnabled = Boolean.FALSE;
-
-    /// 市级地区拦截（兼容旧版 jsonb 配置迁移, 不再参与逻辑）
-    ///
-    /// 由 [PlatformSecurityConfigService] 读取时合并进 [regionBlacklistEnabled] 后清理, 勿再使用。
-    @Deprecated
-    private Boolean cityBlacklistEnabled = Boolean.FALSE;
-
     /// IPv6 地区匹配开关（默认关闭, IPv6 离线数据精度有限）
     ///
     /// 开启后省级/市级/海外三项地域检查会对 IPv6 地址执行地区匹配;

@@ -37,7 +37,7 @@ spring:
       lettuce:
         pool:
           max-wait: 1000ms
-  # Artemis 消息队列（native 模式：连接外部独立 broker 容器，不再支持内嵌模式）
+  # Artemis 消息队列（native 模式：连接外部独立 broker 容器）
   artemis:
     mode: native
     # Broker 连接地址

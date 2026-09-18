@@ -16,8 +16,7 @@ import java.util.List;
 ///
 /// 扫描未成功且未排程下次重试的孤儿通知任务, 重新投递 MQ。
 /// 覆盖 [cn.daxpay.open.payment.trade.notice.service.NoticeTaskScheduleService#scheduleImmediateAfterCommit]
-/// 投递 MQ 失败(Artemis 故障)导致任务永久卡在 success=false、nextTime=null 的场景;
-/// 全仓此前无任何扫描 success=false 任务的定时入口, 是通知链路的可用性缺口。
+/// 投递 MQ 失败(Artemis 故障)导致任务永久卡在 success=false、nextTime=null 的场景。
 ///
 /// 全局开关: `daxpay.platform.config.notice-retry-enabled`(默认 true)。
 /// 与 [cn.daxpay.open.payment.trade.runtime.job.TradeSyncJob] 一样使用 ShedLock 防多节点重复执行。

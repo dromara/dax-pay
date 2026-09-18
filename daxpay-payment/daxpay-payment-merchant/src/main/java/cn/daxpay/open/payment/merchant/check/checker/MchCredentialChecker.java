@@ -40,7 +40,7 @@ public class MchCredentialChecker implements MerchantConfigChecker {
                     ConfigCheckCategoryEnum.MCH_CREDENTIAL.getCode(),
                     "configCheck.mchCredential.title",
                     "configCheck.mchCredential.description",
-                    "MchCredential"
+                    "/mch/credential"
             );
         }
         return null;

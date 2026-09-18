@@ -23,7 +23,7 @@ public class PayRouteSceneConfig extends MpBaseEntity implements ToResult<PayRou
     /// 支付方式编码
     private String method;
 
-    /// 通道商户号(唯一绑定一个支付产品，替代旧版 product 字段)
+    /// 通道商户号(唯一绑定一个支付产品)
     private String channelMchNo;
 
     /// 支付能力编码(商户为该支付方式+通道商户选定的能力)

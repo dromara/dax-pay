@@ -116,8 +116,6 @@ public class SocialAutoLoginConfigService {
                     resolved.add(code);
                 }
             }
-        } else if (StrUtil.isNotBlank(item.getSource())) {
-            resolved.add(item.getSource());
         }
         return resolved;
     }

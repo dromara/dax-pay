@@ -57,7 +57,7 @@ public class MchNotifyConfigChecker implements MerchantConfigChecker {
                     ConfigCheckCategoryEnum.MCH_NOTIFY.getCode(),
                     "configCheck.mchNotify.title",
                     "configCheck.mchNotify.description",
-                    "MchNotifyConfig"
+                    "/mch/app/manage"
             ).setCount((int) missingCount);
         }
         return null;
