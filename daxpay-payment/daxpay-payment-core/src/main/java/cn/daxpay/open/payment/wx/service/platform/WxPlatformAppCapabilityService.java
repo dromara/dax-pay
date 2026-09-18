@@ -26,6 +26,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -134,6 +135,17 @@ public class WxPlatformAppCapabilityService {
                 .findOptionallyByProduct(product, AbsProductStrategy.class)
                 .map(AbsProductStrategy::wxAppRequiredCapabilities)
                 .orElse(null);
+        // 该产品已配置的产品级平台默认绑(capability → 平台应用), 供通道商户绑定弹窗回显「服务商默认」生效应用
+        Map<Long, WxPlatformApp> appMap = wxPlatformAppManager.listAll().stream()
+                .collect(Collectors.toMap(WxPlatformApp::getId, Function.identity()));
+        Map<String, WxPlatformApp> defaultBindMap = new HashMap<>();
+        capabilityManager.listByProduct(product).forEach(rel -> {
+            WxPlatformApp app = Objects.isNull(rel.getWxPlatformAppId()) ? null : appMap.get(rel.getWxPlatformAppId());
+            // 同产品同能力唯一(saveBatch 保证), containsKey 仅作防御
+            if (Objects.nonNull(app) && !defaultBindMap.containsKey(rel.getCapability())) {
+                defaultBindMap.put(rel.getCapability(), app);
+            }
+        });
         return payProductCapabilityManager.listByProduct(product).stream()
                 .map(PayProductCapability::getCapabilityCode)
                 .filter(StrUtil::isNotBlank)
@@ -143,7 +155,10 @@ public class WxPlatformAppCapabilityService {
                 .map(code -> {
                     PayCapabilityEnum cap = PayCapabilityEnum.findByCode(code);
                     String name = Objects.nonNull(cap) ? I18nUtil.getEnumName(cap) : code;
-                    return new WxCapabilityOption(code, name);
+                    WxPlatformApp defaultApp = defaultBindMap.get(code);
+                    return new WxCapabilityOption(code, name,
+                            Objects.nonNull(defaultApp) ? defaultApp.getAppName() : null,
+                            Objects.nonNull(defaultApp) ? defaultApp.getWxAppId() : null);
                 })
                 .toList();
     }
