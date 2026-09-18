@@ -183,7 +183,7 @@ dax-pay-open/                       # 主后端应用
 > 微信公众号会定期更新使用教程、版本更新记录和各种活动情况,欢迎关注
 
 <p>
-<img alt="微信公众号" height="440" src="https://cdn.jsdmirror.cn/gh/xxm1995/picx-images-hosting@master/connect/微信图片_20240412152722.231nkeje2o.webp" width="330"/>
+<img alt="微信公众号" height="440" src="https://www.daxpay.cn/assets/other/wxpub.webp" width="330"/>
 </p>
 
 ## 鸣谢
