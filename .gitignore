@@ -2,6 +2,7 @@
 .classpath
 .project
 .module_prj
+.factorypath
 .settings/
 .idea/
 .run/
@@ -16,6 +17,8 @@ logs/
 rebel.xml
 .vscode/
 .trae
+# AI 编程工具生成的项目配置与运行缓存（不入库，同 dax-pay-install 惯例）
+.lithe/
 
 nul
 
