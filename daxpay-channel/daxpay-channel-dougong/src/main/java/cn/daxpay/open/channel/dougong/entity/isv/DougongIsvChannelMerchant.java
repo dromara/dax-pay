@@ -11,7 +11,7 @@ import lombok.experimental.Accessors;
 
 /// # 斗拱通道商户绑定
 ///
-/// 斗拱服务商模式下, 子商户绑定汇付商户号(merchantNo) + 商户 appId(BasePay.putMerConfigs 的 key),
+/// 斗拱服务商模式下, 子商户绑定汇付商户号(merchantNo),
 /// 密钥由服务商全局配置([DougongIsvKeyConfig])提供。
 /// 同一商户下汇付商户号不重复。
 @EqualsAndHashCode(callSuper = true)
@@ -29,9 +29,6 @@ public class DougongIsvChannelMerchant extends MchBaseEntity implements ToResult
 
     /// 汇付商户号(merchantNo / huifuId)
     private String merchantNo;
-
-    /// 商户 appId(汇付 SDK BasePay.putMerConfigs 的 key)
-    private String appId;
 
     /// 转换
     @Override

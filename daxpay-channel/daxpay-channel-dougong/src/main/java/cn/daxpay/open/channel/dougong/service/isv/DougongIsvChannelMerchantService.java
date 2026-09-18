@@ -65,7 +65,6 @@ public class DougongIsvChannelMerchantService {
         entity.setChannelMchNo(channelMchNo);
         entity.setProduct(param.getProduct());
         entity.setMerchantNo(param.getMerchantNo());
-        entity.setAppId(param.getAppId());
         dougongIsvChannelMerchantManager.save(entity);
     }
 
@@ -77,15 +76,5 @@ public class DougongIsvChannelMerchantService {
                 .map(DougongIsvChannelMerchant::toResult)
                 // 斗拱: 通道商户配置不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
-    }
-
-    /// 更新商户 appId
-    @Transactional(rollbackFor = Exception.class)
-    public void updateAppId(String channelMchNo, String appId) {
-        var entity = dougongIsvChannelMerchantManager.findByChannelMchNo(channelMchNo)
-                // 斗拱: 通道商户配置不存在
-                .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
-        entity.setAppId(appId);
-        dougongIsvChannelMerchantManager.updateById(entity);
     }
 }

@@ -100,7 +100,7 @@
       "size": "Payment item name cannot exceed 64 characters"
     },
     "subMchId": {
-      "notBlank": "WeChat sub-merchant ID cannot be blank"
+      "notBlank": "Sub-merchant number cannot be blank"
     },
     "wxMchId": {
       "notBlank": "WeChat merchant ID cannot be blank"
@@ -672,9 +672,6 @@
     "shengMchId": {
       "notBlank": "ShengPay merchant number cannot be blank"
     },
-    "subMchId": {
-      "notBlank": "Sub-merchant number cannot be blank"
-    },
     "termNo": {
       "notBlank": "Terminal number cannot be blank",
       "size": "Terminal number cannot exceed 64 characters"
@@ -699,9 +696,6 @@
     },
     "merchantNo": {
       "notBlank": "Huifu merchant number cannot be blank"
-    },
-    "dougongAppId": {
-      "notBlank": "Merchant AppId cannot be blank"
     },
     "isvNo": {
       "notBlank": "ISV number cannot be blank"

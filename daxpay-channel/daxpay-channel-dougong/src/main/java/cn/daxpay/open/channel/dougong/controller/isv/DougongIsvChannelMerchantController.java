@@ -44,14 +44,4 @@ public class DougongIsvChannelMerchantController {
         dougongIsvChannelMerchantService.create(param);
         return Res.ok();
     }
-
-    @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "更新商户AppId")
-    @PostMapping("/update-app-id")
-    public Result<Void> updateAppId(
-            @NotBlank(message = "{validation.field.channelMerchantNo.notBlank}") String channelMchNo,
-            @NotBlank(message = "{validation.field.dougongAppId.notBlank}") String appId) {
-        dougongIsvChannelMerchantService.updateAppId(channelMchNo, appId);
-        return Res.ok();
-    }
 }

@@ -100,7 +100,7 @@
       "size": "결제 항목 이름은 64자를 초과할 수 없습니다."
     },
     "subMchId": {
-      "notBlank": "WeChat 하위 판매자 ID는 비워둘 수 없습니다."
+      "notBlank": "하위 판매자 번호는 비워둘 수 없습니다."
     },
     "wxMchId": {
       "notBlank": "WeChat 판매자 ID는 비워둘 수 없습니다."
@@ -668,9 +668,6 @@
     "shengMchId": {
       "notBlank": "성푸퉁(ShengPay) 판매자 번호는 비워둘 수 없습니다."
     },
-    "subMchId": {
-      "notBlank": "하위 판매자 번호는 비워둘 수 없습니다."
-    },
     "termNo": {
       "notBlank": "터미널 번호는 비워둘 수 없습니다.",
       "size": "터미널 번호는 64자를 초과할 수 없습니다."
@@ -695,9 +692,6 @@
     },
     "merchantNo": {
       "notBlank": "Huifu 판매자 번호는 비워둘 수 없습니다."
-    },
-    "dougongAppId": {
-      "notBlank": "판매자 앱 ID는 비워둘 수 없습니다."
     },
     "isvNo": {
       "notBlank": "ISV 번호는 필수입니다"

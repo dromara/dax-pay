@@ -62,7 +62,6 @@ CREATE TABLE IF NOT EXISTS public.dougong_isv_channel_merchant (
     channel_mch_no character varying(64) NOT NULL,
     product character varying(32) NOT NULL,
     merchant_no character varying(64) NOT NULL,
-    app_id character varying(64) NOT NULL,
     creator bigint,
     create_time timestamp(6) with time zone,
     last_modifier bigint,
@@ -77,7 +76,6 @@ COMMENT ON COLUMN public.dougong_isv_channel_merchant.mch_no IS '商户号';
 COMMENT ON COLUMN public.dougong_isv_channel_merchant.channel_mch_no IS '通道商户号(DOUGONG+雪花, 唯一关联, 创建后不可修改)';
 COMMENT ON COLUMN public.dougong_isv_channel_merchant.product IS '产品编码(dougong_isv)';
 COMMENT ON COLUMN public.dougong_isv_channel_merchant.merchant_no IS '汇付商户号(merchantNo/huifuId, 须与服务商存在代理关系)';
-COMMENT ON COLUMN public.dougong_isv_channel_merchant.app_id IS '商户appId(汇付SDK BasePay.putMerConfigs的key)';
 COMMENT ON COLUMN public.dougong_isv_channel_merchant.creator IS '创建人ID';
 COMMENT ON COLUMN public.dougong_isv_channel_merchant.create_time IS '创建时间';
 COMMENT ON COLUMN public.dougong_isv_channel_merchant.last_modifier IS '最后修改人ID';

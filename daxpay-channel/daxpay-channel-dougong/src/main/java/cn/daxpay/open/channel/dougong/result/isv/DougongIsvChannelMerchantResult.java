@@ -21,7 +21,4 @@ public class DougongIsvChannelMerchantResult extends MchBaseResult {
 
     @Schema(description = "汇付商户号")
     private String merchantNo;
-
-    @Schema(description = "商户AppId")
-    private String appId;
 }

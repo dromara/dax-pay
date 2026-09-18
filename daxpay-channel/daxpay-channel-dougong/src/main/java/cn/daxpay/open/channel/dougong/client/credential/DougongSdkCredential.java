@@ -10,11 +10,8 @@ import lombok.Data;
 @Data
 public class DougongSdkCredential {
 
-    /// 汇付商户号(huifuId, 每笔交易必填)
+    /// 汇付商户号(huifuId, 每笔交易必填, 兼作汇付 SDK 的 MerConfig 注册键)
     private String merchantNo;
-
-    /// 商户 appId(汇付 SDK BasePay.putMerConfigs 的 key, 也是 BasePayClient.request 的入参)
-    private String appId;
 
     /// 服务商系统ID(sysId)
     private String sysId;

@@ -100,7 +100,7 @@
       "size": "支払い項目名は 64 文字を超えることはできません"
     },
     "subMchId": {
-      "notBlank": "WeChat サブマーチャント ID を空白にすることはできません"
+      "notBlank": "サブ販売者番号を空白にすることはできません"
     },
     "wxMchId": {
       "notBlank": "WeChat 販売者 ID を空白にすることはできません"
@@ -668,9 +668,6 @@
     "shengMchId": {
       "notBlank": "盛付通販売者番号を空白にすることはできません"
     },
-    "subMchId": {
-      "notBlank": "サブ販売者番号を空白にすることはできません"
-    },
     "termNo": {
       "notBlank": "端子番号を空白にすることはできません",
       "size": "端末番号は 64 文字を超えることはできません"
@@ -695,9 +692,6 @@
     },
     "merchantNo": {
       "notBlank": "Huifu 販売者番号を空白にすることはできません"
-    },
-    "dougongAppId": {
-      "notBlank": "販売者の AppId を空白にすることはできません"
     },
     "isvNo": {
       "notBlank": "サービス事業者番号は必須です"

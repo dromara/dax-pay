@@ -30,9 +30,4 @@ public class DougongIsvChannelMerchantCreateParam {
     @Schema(description = "汇付商户号")
     @NotBlank(message = "{validation.field.merchantNo.notBlank}")
     private String merchantNo;
-
-    /// 商户 appId(汇付 SDK key)
-    @Schema(description = "商户AppId")
-    @NotBlank(message = "{validation.field.dougongAppId.notBlank}")
-    private String appId;
 }

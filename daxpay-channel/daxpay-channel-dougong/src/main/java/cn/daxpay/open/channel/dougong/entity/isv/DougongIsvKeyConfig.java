@@ -14,7 +14,7 @@ import lombok.experimental.Accessors;
 /// # 斗拱服务商密钥配置
 ///
 /// 斗拱(汇付天下)为服务商模式, 服务商密钥全局唯一(按 product 查询),
-/// 子商户仅需商户号(merchantNo) + appId, 见 [DougongIsvChannelMerchant]。
+/// 子商户仅需商户号(merchantNo), 见 [DougongIsvChannelMerchant]。
 ///
 /// 签名算法: RSA(汇付 SDK 内部处理), 私钥签名 / 公钥验签。
 /// 敏感字段(私钥/公钥)通过 [DataEncryptTypeHandler] 加密入库。

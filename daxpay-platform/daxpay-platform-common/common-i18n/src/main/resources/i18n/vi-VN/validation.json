@@ -99,7 +99,7 @@
       "size": "Tên mục thanh toán không được vượt quá 64 ký tự"
     },
     "subMchId": {
-      "notBlank": "ID người bán phụ WeChat không được để trống"
+      "notBlank": "Mã merchant con không được để trống"
     },
     "wxMchId": {
       "notBlank": "ID người bán WeChat không được để trống"
@@ -667,9 +667,6 @@
     "shengMchId": {
       "notBlank": "Mã merchant ShengPay không được để trống"
     },
-    "subMchId": {
-      "notBlank": "Mã merchant con không được để trống"
-    },
     "termNo": {
       "notBlank": "Số thiết bị đầu cuối không được để trống",
       "size": "Số thiết bị đầu cuối không thể vượt quá 64 ký tự"
@@ -694,9 +691,6 @@
     },
     "merchantNo": {
       "notBlank": "Số người bán Huifu không được để trống"
-    },
-    "dougongAppId": {
-      "notBlank": "AppId người bán không được để trống"
     },
     "isvNo": {
       "notBlank": "Số ISV không được để trống"

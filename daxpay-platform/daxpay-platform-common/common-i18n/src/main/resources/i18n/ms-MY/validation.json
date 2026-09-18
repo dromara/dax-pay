@@ -99,7 +99,7 @@
       "size": "Nama item pembayaran tidak boleh melebihi 64 aksara"
     },
     "subMchId": {
-      "notBlank": "ID sub-pedagang WeChat tidak boleh kosong"
+      "notBlank": "Nombor sub-peniaga tidak boleh kosong"
     },
     "wxMchId": {
       "notBlank": "ID pedagang WeChat tidak boleh kosong"
@@ -667,9 +667,6 @@
     "shengMchId": {
       "notBlank": "Nombor peniaga ShengPay tidak boleh kosong"
     },
-    "subMchId": {
-      "notBlank": "Nombor sub-peniaga tidak boleh kosong"
-    },
     "termNo": {
       "notBlank": "Nombor terminal tidak boleh kosong",
       "size": "Nombor terminal tidak boleh melebihi 64 aksara"
@@ -694,9 +691,6 @@
     },
     "merchantNo": {
       "notBlank": "Nombor pedagang Huifu tidak boleh kosong"
-    },
-    "dougongAppId": {
-      "notBlank": "Merchant AppId tidak boleh kosong"
     },
     "isvNo": {
       "notBlank": "Nombor ISV wajib diisi"

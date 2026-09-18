@@ -2314,7 +2314,6 @@ CREATE TABLE public.dougong_isv_channel_merchant (
     channel_mch_no character varying(64) NOT NULL,
     product character varying(32) NOT NULL,
     merchant_no character varying(64) NOT NULL,
-    app_id character varying(64) NOT NULL,
     creator bigint,
     create_time timestamp(6) with time zone,
     last_modifier bigint,
@@ -2364,13 +2363,6 @@ COMMENT ON COLUMN public.dougong_isv_channel_merchant.product IS '产品编码(d
 --
 
 COMMENT ON COLUMN public.dougong_isv_channel_merchant.merchant_no IS '汇付商户号(merchantNo/huifuId, 须与服务商存在代理关系)';
-
-
---
--- Name: COLUMN dougong_isv_channel_merchant.app_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.dougong_isv_channel_merchant.app_id IS '商户appId(汇付SDK BasePay.putMerConfigs的key)';
 
 
 --

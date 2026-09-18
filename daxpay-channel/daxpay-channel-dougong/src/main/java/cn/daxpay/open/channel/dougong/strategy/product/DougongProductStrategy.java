@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /// # 斗拱支付产品策略
 ///
@@ -72,5 +73,12 @@ public class DougongProductStrategy extends AbsProductStrategy {
     @Override
     public Map<PayMethodEnum, List<PayCapabilityEnum>> methodCapabilityMapping() {
         return METHOD_CAP_MAP;
+    }
+
+    /// 斗拱聚合通道: 微信侧仅 JSAPI/小程序支付需要 appid(上送 sub_appid),
+    /// 其余微信能力(扫码)与支付宝/银联能力无需绑定应用, 收窄弹窗候选与支付链路的解析范围
+    @Override
+    public Set<PayCapabilityEnum> wxAppRequiredCapabilities() {
+        return Set.of(PayCapabilityEnum.WECHAT_JSAPI, PayCapabilityEnum.WECHAT_MINI);
     }
 }

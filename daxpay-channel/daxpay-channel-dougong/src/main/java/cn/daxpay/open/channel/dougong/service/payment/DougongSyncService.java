@@ -34,7 +34,9 @@ public class DougongSyncService {
         DaxResult<DougongSyncResp> result = dougongChannelClient.sync(req);
         PaySyncResultBo bo = new PaySyncResultBo();
         if (result.getCode() != 0) {
-            // 同步失败(不抛异常, 由核心层决定重试)
+            // 同步失败(不抛异常, 由核心层决定重试), 打出子应用原始错误便于排查
+            log.warn("斗拱支付同步子应用调用失败: tradeNo={}, code={}, msg={}",
+                    order.getTradeNo(), result.getCode(), result.getMsg());
             bo.setSyncSuccess(false);
             bo.setSyncErrorMsg(result.getMsg());
             return bo;

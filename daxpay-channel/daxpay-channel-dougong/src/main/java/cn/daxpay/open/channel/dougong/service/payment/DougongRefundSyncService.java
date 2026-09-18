@@ -34,6 +34,9 @@ public class DougongRefundSyncService {
         DaxResult<DougongRefundSyncResp> result = dougongChannelClient.refundSync(req);
         RefundResultBo bo = new RefundResultBo();
         if (result.getCode() != 0) {
+            // 退款同步失败保持处理中(不抛异常), 打出子应用原始错误便于排查
+            log.warn("斗拱退款同步子应用调用失败: refundNo={}, code={}, msg={}",
+                    refundOrder.getRefundNo(), result.getCode(), result.getMsg());
             bo.setComplete(false);
             bo.setStatus(RefundOrderStatusEnum.PROGRESS);
             return bo;

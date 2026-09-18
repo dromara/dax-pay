@@ -100,7 +100,7 @@
       "size": "支付项名称不可超过64位"
     },
     "subMchId": {
-      "notBlank": "微信子商户号不可为空"
+      "notBlank": "子商户号不能为空"
     },
     "wxMchId": {
       "notBlank": "微信商户Id不可为空"
@@ -672,9 +672,6 @@
     "shengMchId": {
       "notBlank": "盛付通商户号不能为空"
     },
-    "subMchId": {
-      "notBlank": "子商户号不能为空"
-    },
     "termNo": {
       "notBlank": "终端号不可为空",
       "size": "终端号不可超过64位"
@@ -699,9 +696,6 @@
     },
     "merchantNo": {
       "notBlank": "汇付商户号不可为空"
-    },
-    "dougongAppId": {
-      "notBlank": "商户AppId不可为空"
     },
     "isvNo": {
       "notBlank": "服务商号不可为空"

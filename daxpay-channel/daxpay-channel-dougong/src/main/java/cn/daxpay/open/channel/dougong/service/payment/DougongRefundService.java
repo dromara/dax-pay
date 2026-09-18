@@ -50,6 +50,9 @@ public class DougongRefundService {
 
         DaxResult<DougongRefundResp> result = dougongChannelClient.refund(req);
         if (result.getCode() != 0) {
+            // 子应用返回失败时打出原始错误(汇付侧真实原因), 异常参数只透传给前端不进 ERROR 日志
+            log.error("斗拱退款子应用调用失败: refundNo={}, code={}, msg={}",
+                    refundOrder.getRefundNo(), result.getCode(), result.getMsg());
             throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "error.channel.dougong.refundFailed", result.getMsg());
         }
 
