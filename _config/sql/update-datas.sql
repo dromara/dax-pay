@@ -231,3 +231,15 @@ SELECT 2083200000000000005, 2, c.id
 FROM "public"."iam_perm_code" c
 WHERE c.code = 'trade:fund-flow:export'
   AND NOT EXISTS (SELECT 1 FROM "public"."iam_role_code" rc WHERE rc.role_id = 2 AND rc.code_id = c.id);
+
+
+-- 升级数据脚本: 权限码墓碑清理(2026-09-18)
+-- 清理历次重构遗留的软删权限码墓碑(通道统一/设备域收敛/通知下架等, 后端 @PermCode 已不存在, 全量种子 data.sql 同步移除);
+-- 脚本幂等, 可重复执行; 墓碑码无角色绑定, 防御性联动删除角色关联。
+DELETE FROM "public"."iam_role_code"
+WHERE code_id IN (SELECT id FROM "public"."iam_perm_code" WHERE code IN (
+    'channel:alipay:app:manage','channel:alipay:app:view','channel:douyin:app:manage','channel:douyin:app:view','channel:wechat:app:manage','channel:wechat:app:view','develop:trade:pay','device:printer:manage','device:printer:view','device:speaker:manage','device:speaker:view','device:terminal:system:manage','device:terminal:system:view','device:vendor_config:manage','device:vendor_config:view','iam:social:config:manage','iam:social:config:view','merchant:gateway-aggregate:manage','merchant:gateway-aggregate:view','merchant:gateway-code:manage','merchant:gateway-code:view','payment:alipay:isv:manage','payment:alipay:isv:view','payment:config:mobile_app:manage','payment:config:mobile_app:view','payment:dougong:isv:manage','payment:dougong:isv:view','payment:fuyou:isv:manage','payment:fuyou:isv:view','payment:hkrt:isv:manage','payment:hkrt:isv:view','payment:hmpay:isv:manage','payment:hmpay:isv:view','payment:lakala:isv:manage','payment:lakala:isv:view','payment:leshua:isv:manage','payment:leshua:isv:view','payment:risk:hit:manage','payment:vbill:isv:manage','payment:vbill:isv:view','payment:wechat:isv:manage','payment:wechat:isv:view','system:config:mobile-app:manage','system:config:mobile-app:view','system:notify:manage','system:notify:publish','system:notify:view'
+));
+DELETE FROM "public"."iam_perm_code" WHERE code IN (
+    'channel:alipay:app:manage','channel:alipay:app:view','channel:douyin:app:manage','channel:douyin:app:view','channel:wechat:app:manage','channel:wechat:app:view','develop:trade:pay','device:printer:manage','device:printer:view','device:speaker:manage','device:speaker:view','device:terminal:system:manage','device:terminal:system:view','device:vendor_config:manage','device:vendor_config:view','iam:social:config:manage','iam:social:config:view','merchant:gateway-aggregate:manage','merchant:gateway-aggregate:view','merchant:gateway-code:manage','merchant:gateway-code:view','payment:alipay:isv:manage','payment:alipay:isv:view','payment:config:mobile_app:manage','payment:config:mobile_app:view','payment:dougong:isv:manage','payment:dougong:isv:view','payment:fuyou:isv:manage','payment:fuyou:isv:view','payment:hkrt:isv:manage','payment:hkrt:isv:view','payment:hmpay:isv:manage','payment:hmpay:isv:view','payment:lakala:isv:manage','payment:lakala:isv:view','payment:leshua:isv:manage','payment:leshua:isv:view','payment:risk:hit:manage','payment:vbill:isv:manage','payment:vbill:isv:view','payment:wechat:isv:manage','payment:wechat:isv:view','system:config:mobile-app:manage','system:config:mobile-app:view','system:notify:manage','system:notify:publish','system:notify:view'
+);
