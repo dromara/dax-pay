@@ -24,6 +24,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Objects;
 import java.util.Set;
 
@@ -102,6 +103,11 @@ public class RefundSettleService {
         }
 
         applyChannelRefs(refundOrder, finishTime, outRefundNo, relationOrderNo);
+        // 通道同步即时成功但响应无时间字段时(如盛付通退款接口无 refundTime) finishTime 为空,
+        // 退款报表按 finish_time 过滤会漏单, 以结算时刻兜底作为事实完成时刻
+        if (Objects.isNull(refundOrder.getFinishTime())) {
+            refundOrder.setFinishTime(OffsetDateTime.now(ZoneOffset.UTC));
+        }
         refundOrder.setStatus(RefundOrderStatusEnum.SUCCESS.getCode());
         refundOrder.setErrorMsg(null);
         // CAS: 仅 PROGRESS 可转 SUCCESS（锁内防御性兜底，与支付侧对称）
