@@ -14,12 +14,23 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Optional;
 
 /// 公告
 @Repository
 @AllArgsConstructor
 public class NotifyNoticeManager extends BaseManager<NotifyNoticeMapper, NotifyNotice> {
+
+    /// 统计用户未读的可见公告数(SQL 端 count + NOT EXISTS 反连接, 不拉正文与回执)
+    public long countVisibleUnread(Long userId, OffsetDateTime now) {
+        return baseMapper.countVisibleUnread(userId, now);
+    }
+
+    /// 查询当前可见公告的摘要列表(不拉正文全文, 内容截取为摘要)
+    public List<NotifyNotice> listVisibleSummaries(OffsetDateTime now) {
+        return baseMapper.listVisibleSummaries(now);
+    }
 
     /// 管理端分页查询
     public Page<NotifyNotice> page(PageParam pageParam, NotifyNoticeQuery query) {

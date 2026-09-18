@@ -22,19 +22,20 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.Objects;
 
 /// 用户端通知服务(未读数/列表/已读/清空/忽略)
 ///
 /// 公告采用"广播 + 已读表"模型: 一条公告对全员可见, 单独维护用户阅读/忽略状态;
 /// 个人消息采用"定向"模型, 直接带 user_id. 两类在铃铛中聚合展示.
+///
+/// 性能约定: 未读数与列表均在 SQL 端完成重活(count 反连接 / 摘要列查询 / 按当批公告 in 查回执),
+/// 公告正文只有点开详情时才单条拉取并渲染, 避免公告量与用户回执量增大后铃铛链路被全量数据拖垮.
 @Service
 @AllArgsConstructor
 public class NotifyUserNoticeService {
@@ -46,19 +47,14 @@ public class NotifyUserNoticeService {
     private final NotifyMessageManager messageManager;
 
     /// 未读数(公告 + 个人消息)
+    ///
+    /// 公告未读在 SQL 端 count(可见条件 + NOT EXISTS 反连接阅读记录), 不再拉正文与全量回执到内存做差集.
     public NotifyUnreadCountResult unreadCount() {
         Long userId = SecurityUtil.getUserId();
-        // 可见公告
-        List<NotifyNotice> visibleNotices = findVisibleNotices();
-        // 用户已读的公告id集合(含被忽略的, 忽略视同已读, 与 list() 判定一致, 避免已忽略公告被反复计为未读)
-        Set<Long> readNoticeIds = readManager.findAllByUser(userId).stream()
-            .map(NotifyNoticeRead::getNoticeId)
-            .collect(Collectors.toSet());
-        int noticeUnread = (int) visibleNotices.stream()
-            .filter(n -> !readNoticeIds.contains(n.getId()))
-            .count();
+        // 公告未读数(含被忽略的, 忽略视同已读, 与 list() 判定一致, 避免已忽略公告被反复计为未读)
+        int noticeUnread = (int) noticeManager.countVisibleUnread(userId, OffsetDateTime.now());
         // 个人消息未读数(预留, 当前表无数据返回0)
-        int messageUnread = messageManager.findAllByUserAndUnread(userId).size();
+        int messageUnread = (int) messageManager.countByUserAndUnread(userId);
         return new NotifyUnreadCountResult()
             .setNoticeCount(noticeUnread)
             .setMessageCount(messageUnread)
@@ -69,10 +65,11 @@ public class NotifyUserNoticeService {
     public List<NotifyNoticeBriefResult> list(NotifyUserNoticeQuery query) {
         Long userId = SecurityUtil.getUserId();
 
-        // 可见公告
-        List<NotifyNotice> visibleNotices = findVisibleNotices();
-        // 用户阅读记录
-        List<NotifyNoticeRead> reads = readManager.findAllByUser(userId);
+        // 可见公告(摘要查询, 不拉正文全文, 正文渲染收敛到详情接口)
+        List<NotifyNotice> visibleNotices = noticeManager.listVisibleSummaries(OffsetDateTime.now());
+        // 用户对当批公告的阅读记录(in 查询, 不再拉用户全量历史回执)
+        List<NotifyNoticeRead> reads = readManager.findAllByUserAndNoticeIds(userId,
+            visibleNotices.stream().map(MpIdEntity::getId).toList());
         Map<Long, NotifyNoticeRead> readMap = reads.stream()
             .collect(Collectors.toMap(NotifyNoticeRead::getNoticeId, Function.identity(), (a, b) -> a));
         Set<Long> ignoredIds = reads.stream()
@@ -90,8 +87,6 @@ public class NotifyUserNoticeService {
             NotifyNoticeRead read = readMap.get(notice.getId());
             // 有阅读记录视为已读
             brief.setIsRead(Objects.nonNull(read));
-            // 服务端渲染 Markdown 正文为 HTML, 供前端直接展示
-            brief.setHtmlContent(MarkdownRenderUtil.toHtml(notice.getContent()));
             list.add(brief);
         }
 
@@ -134,7 +129,7 @@ public class NotifyUserNoticeService {
         NotifyNotice notice = noticeManager.findById(id)
             // 通知: 通知不存在
             .orElseThrow(() -> new DataNotExistException("error.notify.notice.notExist"));
-        // 可见性校验: 与 list 的 findVisibleNotices 保持一致
+        // 可见性校验: 与 list 的可见公告查询保持一致
         OffsetDateTime now = OffsetDateTime.now();
         boolean visible = NotifyStatusEnum.published.getCode().equals(notice.getStatus())
             && (Objects.isNull(notice.getEffectiveTime()) || !notice.getEffectiveTime().isAfter(now))
@@ -169,26 +164,23 @@ public class NotifyUserNoticeService {
         // 个人消息标记已读预留(暂不接入业务)
     }
 
-    /// 清空(全部标记已读): 为所有可见未读公告补阅读记录
+    /// 清空(全部标记已读): 为所有可见公告批量补阅读记录, 已存在的静默跳过, 幂等
     @Transactional(rollbackFor = Exception.class)
     public void readAll() {
         Long userId = SecurityUtil.getUserId();
         OffsetDateTime now = OffsetDateTime.now();
-        List<NotifyNotice> visibleNotices = findVisibleNotices();
-        Set<Long> readNoticeIds = readManager.findAllByUser(userId).stream()
-            .map(NotifyNoticeRead::getNoticeId)
-            .collect(Collectors.toSet());
+        // 可见公告(摘要查询即可, 只需要 id)
+        List<NotifyNotice> visibleNotices = noticeManager.listVisibleSummaries(now);
+        List<NotifyNoticeRead> reads = new ArrayList<>(visibleNotices.size());
         for (NotifyNotice notice : visibleNotices) {
-            if (readNoticeIds.contains(notice.getId())) {
-                continue;
-            }
             NotifyNoticeRead read = new NotifyNoticeRead();
             read.setUserId(userId);
             read.setNoticeId(notice.getId());
             read.setReadTime(now);
             read.setIsIgnored(false);
-            readManager.save(read);
+            reads.add(read);
         }
+        readManager.saveAllIgnoreConflict(reads);
     }
 
     /// 忽略(用户主动隐藏)
@@ -206,35 +198,9 @@ public class NotifyUserNoticeService {
         }
     }
 
-    /// 标记公告已读/忽略(无记录则新增)
+    /// 标记公告已读/忽略(upsert: 无记录则插入, 已有则更新, 唯一约束兜底并发)
     private void markNoticeRead(Long noticeId, boolean ignored) {
         Long userId = SecurityUtil.getUserId();
-        OffsetDateTime now = OffsetDateTime.now();
-        Optional<NotifyNoticeRead> existing = readManager.findByUserAndNotice(userId, noticeId);
-        if (existing.isPresent()) {
-            NotifyNoticeRead read = existing.get();
-            read.setReadTime(now);
-            read.setIsIgnored(ignored);
-            readManager.updateById(read);
-        } else {
-            NotifyNoticeRead read = new NotifyNoticeRead();
-            read.setUserId(userId);
-            read.setNoticeId(noticeId);
-            read.setReadTime(now);
-            read.setIsIgnored(ignored);
-            readManager.save(read);
-        }
-    }
-
-    /// 查询当前生效的可见公告(已发布 + 生效期内, 置顶/时间倒序)
-    private List<NotifyNotice> findVisibleNotices() {
-        OffsetDateTime now = OffsetDateTime.now();
-        return noticeManager.lambdaQuery()
-            .eq(NotifyNotice::getStatus, NotifyStatusEnum.published.getCode())
-            .and(w -> w.isNull(NotifyNotice::getEffectiveTime).or().le(NotifyNotice::getEffectiveTime, now))
-            .and(w -> w.isNull(NotifyNotice::getExpireTime).or().gt(NotifyNotice::getExpireTime, now))
-            .orderByDesc(NotifyNotice::getIsTop)
-            .orderByDesc(MpIdEntity::getId)
-            .list();
+        readManager.upsertRead(userId, noticeId, OffsetDateTime.now(), ignored);
     }
 }
