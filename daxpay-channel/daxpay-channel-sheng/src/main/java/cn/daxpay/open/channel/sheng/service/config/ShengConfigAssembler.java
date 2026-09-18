@@ -2,9 +2,16 @@ package cn.daxpay.open.channel.sheng.service.config;
 
 import cn.daxpay.open.channel.sheng.client.credential.ShengSdkCredential;
 import cn.daxpay.open.channel.sheng.entity.ShengKeyConfig;
+import cn.daxpay.open.channel.sheng.strategy.product.ShengPayProductStrategy;
+import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
+import cn.daxpay.open.payment.wx.facade.WxAppFacade;
+import cn.daxpay.open.platform.core.enums.pay.channel.PayCapabilityEnum;
+import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 /// # 盛付通通道凭证组装器
 ///
@@ -22,6 +29,8 @@ import org.springframework.stereotype.Service;
 public class ShengConfigAssembler {
 
     private final ShengKeyConfigService shengKeyConfigService;
+    private final WxAppFacade wxAppFacade;
+    private final ShengPayProductStrategy productStrategy;
 
     /// 组装盛付通通道调用凭证(下发给子应用)
     ///
@@ -40,5 +49,25 @@ public class ShengConfigAssembler {
         credential.setMerchantPrivateKey(keyConfig.getMerchantPrivateKey());
         credential.setShengpayPublicKey(keyConfig.getShengpayPublicKey());
         return credential;
+    }
+
+    /// 尽力解析微信应用并回填 channelAppId(微信 JSAPI/小程序支付随单上送 extra.appId)
+    ///
+    /// 解析顺序: 显式 channelAppId → 通道商户能力绑定(商户档优先, 平台档兜底) → 产品级平台默认绑,
+    /// 与 [WxAppFacade#resolveOptional] 一致; 仅产品策略([ShengPayProductStrategy#wxAppRequiredCapabilities])
+    /// 声明需要应用的能力(JSAPI/小程序)解析, 其余能力(扫码/H5/APP/付款码/支付宝/银联)不解析。
+    /// appid 可选(盛付通后台已绑定时可不传), 未命中不回填不阻断;
+    /// 调用方显式传入的 channelAppId 未命中应用表时保留原值透传, 与既有行为兼容。
+    ///
+    /// @param payParam 支付参数(channelAppId 回填后经子应用装 extra.appId 上送)
+    public void resolveWxAppIfRequired(NormalPayParam payParam) {
+        PayCapabilityEnum cap = PayCapabilityEnum.findByCode(payParam.getCapability());
+        // 非微信应用所需能力(扫码/H5/APP/付款码/支付宝/银联)不解析
+        if (Objects.isNull(cap) || !productStrategy.wxAppRequiredCapabilities().contains(cap)) {
+            return;
+        }
+        wxAppFacade.resolveOptional(payParam.getMchNo(), payParam.getChannelMchNo(), payParam.getCapability(),
+                        payParam.getChannelAppId(), ProductEnum.SHENG_PAY.getCode())
+                .ifPresent(app -> payParam.setChannelAppId(app.wxAppId()));
     }
 }

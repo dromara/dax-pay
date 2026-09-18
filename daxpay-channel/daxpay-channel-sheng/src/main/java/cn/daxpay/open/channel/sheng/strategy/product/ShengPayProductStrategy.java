@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /// # 盛付通支付产品策略
 ///
@@ -77,5 +78,13 @@ public class ShengPayProductStrategy extends AbsProductStrategy {
     @Override
     public Map<PayMethodEnum, List<PayCapabilityEnum>> methodCapabilityMapping() {
         return METHOD_CAP_MAP;
+    }
+
+    /// 盛付通聚合通道: 微信侧仅 JSAPI/小程序支付需要 appid(随单上送 extra.appId),
+    /// 其余微信能力(扫码/H5/APP/付款码)与支付宝/银联能力无需绑定应用,
+    /// 收窄弹窗候选与支付链路的解析范围(对齐斗拱/乐刷/Adapay 范式)
+    @Override
+    public Set<PayCapabilityEnum> wxAppRequiredCapabilities() {
+        return Set.of(PayCapabilityEnum.WECHAT_JSAPI, PayCapabilityEnum.WECHAT_MINI);
     }
 }

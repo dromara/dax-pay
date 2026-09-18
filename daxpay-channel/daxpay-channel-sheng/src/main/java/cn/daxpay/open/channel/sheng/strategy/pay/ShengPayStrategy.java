@@ -39,6 +39,8 @@ public class ShengPayStrategy extends AbsNormalPayStrategy {
         ShengSdkCredential credential = shengConfigAssembler.buildConfig(
                 payParam.getMchNo(), payParam.getChannelMchNo(), payParam.getCapability());
         context.setChannelConfig(credential);
+        // 微信 JSAPI/小程序: 尽力解析微信应用回填 channelAppId(未命中不阻断)
+        shengConfigAssembler.resolveWxAppIfRequired(payParam);
     }
 
     @Override
