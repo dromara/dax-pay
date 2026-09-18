@@ -4750,6 +4750,7 @@ INSERT INTO public.pay_md_product VALUES (10025, 'sheng_isv', '盛付通(服务�
 INSERT INTO public.pay_md_product VALUES (10017, 'ysep_pay', '银盛支付', 'ysep_pay', 160, 1, '2026-07-05 23:19:01.974607+00', 1, '2026-07-05 23:19:01.974607+00', 0, false, false, true);
 INSERT INTO public.pay_md_product VALUES (10018, 'quick_pay', '快钱支付', 'quick_pay', 170, 1, '2026-07-05 23:19:01.974607+00', 1, '2026-07-05 23:19:01.974607+00', 0, false, false, true);
 INSERT INTO public.pay_md_product VALUES (10021, 'jee_pay', 'Jeepay', 'jee_pay', 180, 1, '2026-07-05 23:19:01.974607+00', 1, '2026-07-05 23:19:01.974607+00', 0, false, false, true);
+INSERT INTO public.pay_md_product VALUES (10026, 'easy_pay', '易支付', 'easy_pay', 190, 1, '2026-09-18 00:00:00+00', 1, '2026-09-18 00:00:00+00', 0, false, false, true);
 
 
 --
@@ -4995,6 +4996,8 @@ INSERT INTO public.pay_md_product_capability VALUES (21185, 'sheng_isv', 'union_
 INSERT INTO public.pay_md_product_capability VALUES (21186, 'sheng_isv', 'union_jsapi', 13, true, NULL, false, 1, '2026-09-17 00:00:00+00', 0, 1, '2026-09-17 00:00:00+00');
 INSERT INTO public.pay_md_product_capability VALUES (21187, 'sheng_isv', 'union_h5', 14, true, NULL, false, 1, '2026-09-17 00:00:00+00', 0, 1, '2026-09-17 00:00:00+00');
 INSERT INTO public.pay_md_product_capability VALUES (21188, 'sheng_isv', 'union_barcode', 15, true, NULL, false, 1, '2026-09-17 00:00:00+00', 0, 1, '2026-09-17 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21189, 'easy_pay', 'wechat_qr', 0, true, NULL, false, 1, '2026-09-18 00:00:00+00', 0, 1, '2026-09-18 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21190, 'easy_pay', 'alipay_qr', 1, true, NULL, false, 1, '2026-09-18 00:00:00+00', 0, 1, '2026-09-18 00:00:00+00');
 
 
 --

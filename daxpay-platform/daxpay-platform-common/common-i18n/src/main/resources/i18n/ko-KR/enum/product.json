@@ -27,5 +27,7 @@
   "hm_pay": "HM페이",
   "sand_pay": "샌드페이",
   "yee_pay": "예 페이",
-  "jee_pay": "지페이"
+  "jee_pay": "지페이",
+  "easy_pay": "이지페이",
+  "easy_pay_desc": "이지페이 제3자 통합 플랫폼(위챗/알리페이 QR)"
 }

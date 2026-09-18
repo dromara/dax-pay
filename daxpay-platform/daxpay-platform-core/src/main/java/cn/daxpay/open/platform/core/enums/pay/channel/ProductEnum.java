@@ -85,6 +85,8 @@ public enum ProductEnum implements I18nSupport {
     YEE_PAY("yee_pay"),
     /// jeepay
     JEE_PAY("jee_pay"),
+    /// 易支付(三方聚合平台, 一通道一产品, 一期仅扫码两类)
+    EASY_PAY("easy_pay"),
     ;
 
     private final String code;
@@ -125,6 +127,8 @@ public enum ProductEnum implements I18nSupport {
             case HM_PAY -> ChannelEnum.SAND_PAY.getCode();
             case YEE_PAY -> ChannelEnum.YEE_PAY.getCode();
             case JEE_PAY -> ChannelEnum.JEE_PAY.getCode();
+            // 易支付: 一通道一产品
+            case EASY_PAY -> ChannelEnum.EASY_PAY.getCode();
         };
     }
 

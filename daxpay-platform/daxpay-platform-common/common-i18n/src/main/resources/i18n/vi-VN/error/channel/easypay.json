@@ -1,0 +1,8 @@
+{
+  "keyNotConfigured": "Khóa kênh EasyPay chưa được cấu hình",
+  "payFailed": "Lỗi thanh toán EasyPay: {0}",
+  "closeFailed": "Lỗi đóng đơn EasyPay: {0}",
+  "refundFailed": "Lỗi hoàn tiền EasyPay: {0}",
+  "unsupportedPayMethod": "Phương thức thanh toán không được EasyPay hỗ trợ: {0}",
+  "mchDuplicate": "ID merchant EasyPay đã tồn tại dưới merchant này"
+}

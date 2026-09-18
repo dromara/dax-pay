@@ -27,5 +27,7 @@
   "hm_pay": "HM Bayar",
   "sand_pay": "Pembayaran Pasir",
   "yee_pay": "Ya, Bayar",
-  "jee_pay": "Jeepay"
+  "jee_pay": "Jeepay",
+  "easy_pay": "EasyPay",
+  "easy_pay_desc": "Platform agregat pihak ketiga EasyPay (QR WeChat/Alipay)"
 }

@@ -27,5 +27,7 @@
   "hm_pay": "เอชเอ็ม เพย์",
   "sand_pay": "ทรายจ่าย",
   "yee_pay": "ยี่ เปย์",
-  "jee_pay": "รถจี๊ป"
+  "jee_pay": "รถจี๊ป",
+  "easy_pay": "EasyPay",
+  "easy_pay_desc": "แพลตฟอร์มรวมบริการ EasyPay (QR WeChat/Alipay)"
 }

@@ -243,3 +243,22 @@ WHERE code_id IN (SELECT id FROM "public"."iam_perm_code" WHERE code IN (
 DELETE FROM "public"."iam_perm_code" WHERE code IN (
     'channel:alipay:app:manage','channel:alipay:app:view','channel:douyin:app:manage','channel:douyin:app:view','channel:wechat:app:manage','channel:wechat:app:view','develop:trade:pay','device:printer:manage','device:printer:view','device:speaker:manage','device:speaker:view','device:terminal:system:manage','device:terminal:system:view','device:vendor_config:manage','device:vendor_config:view','iam:social:config:manage','iam:social:config:view','merchant:gateway-aggregate:manage','merchant:gateway-aggregate:view','merchant:gateway-code:manage','merchant:gateway-code:view','payment:alipay:isv:manage','payment:alipay:isv:view','payment:config:mobile_app:manage','payment:config:mobile_app:view','payment:dougong:isv:manage','payment:dougong:isv:view','payment:fuyou:isv:manage','payment:fuyou:isv:view','payment:hkrt:isv:manage','payment:hkrt:isv:view','payment:hmpay:isv:manage','payment:hmpay:isv:view','payment:lakala:isv:manage','payment:lakala:isv:view','payment:leshua:isv:manage','payment:leshua:isv:view','payment:risk:hit:manage','payment:vbill:isv:manage','payment:vbill:isv:view','payment:wechat:isv:manage','payment:wechat:isv:view','system:config:mobile-app:manage','system:config:mobile-app:view','system:notify:manage','system:notify:publish','system:notify:view'
 );
+
+-- =============================================================
+-- 2026-09-18 易支付通道(easy_pay)接入
+-- 背景: 自 3.0 商业版移植易支付三方聚合通道, 一通道一产品, 一期仅扫码两类(wechat_qr/alipay_qr);
+--       密钥表结构见 update-tables.sql 同日块; 产品种子与能力清单按 NOT EXISTS 幂等写入。
+-- =============================================================
+
+-- 易支付产品种子
+INSERT INTO public.pay_md_product (id, code, name, channel, sort_no, creator, create_time, last_modifier, last_modified_time, version, deleted, sandbox, enabled)
+SELECT 10026, 'easy_pay', '易支付', 'easy_pay', 190, 1, '2026-09-18 00:00:00+00', 1, '2026-09-18 00:00:00+00', 0, false, false, true
+WHERE NOT EXISTS (SELECT 1 FROM public.pay_md_product WHERE code = 'easy_pay');
+
+-- 易支付能力种子(扫码两类)
+INSERT INTO public.pay_md_product_capability (id, product_code, capability_code, sort_no, enabled, remark, deleted, creator, create_time, version, last_modifier, last_modified_time)
+SELECT 21189, 'easy_pay', 'wechat_qr', 0, true, NULL, false, 1, '2026-09-18 00:00:00+00', 0, 1, '2026-09-18 00:00:00+00'
+WHERE NOT EXISTS (SELECT 1 FROM public.pay_md_product_capability WHERE product_code = 'easy_pay' AND capability_code = 'wechat_qr');
+INSERT INTO public.pay_md_product_capability (id, product_code, capability_code, sort_no, enabled, remark, deleted, creator, create_time, version, last_modifier, last_modified_time)
+SELECT 21190, 'easy_pay', 'alipay_qr', 1, true, NULL, false, 1, '2026-09-18 00:00:00+00', 0, 1, '2026-09-18 00:00:00+00'
+WHERE NOT EXISTS (SELECT 1 FROM public.pay_md_product_capability WHERE product_code = 'easy_pay' AND capability_code = 'alipay_qr');

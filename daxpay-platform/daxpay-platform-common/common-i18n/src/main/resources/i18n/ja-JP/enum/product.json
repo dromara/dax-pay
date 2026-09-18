@@ -27,5 +27,7 @@
   "hm_pay": "英国王室の支払い",
   "sand_pay": "サンドペイ",
   "yee_pay": "イーペイ",
-  "jee_pay": "ジーペイ"
+  "jee_pay": "ジーペイ",
+  "easy_pay": "イージーペイ",
+  "easy_pay_desc": "EasyPay サードパーティ集約プラットフォーム(WeChat/Alipay QR)"
 }

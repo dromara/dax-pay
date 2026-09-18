@@ -20,5 +20,7 @@
   "stripe_desc": "Kênh thu hộ thẻ quốc tế Stripe (Visa/MasterCard, v.v.)",
   "union_pay_desc": "UnionPay QuickPass (UnionPay ACP)",
   "douyin_desc": "Kênh thanh toán Douyin",
-  "huifu_desc": "Huifu (Adapay/Dougong)"
+  "huifu_desc": "Huifu (Adapay/Dougong)",
+  "easy_pay": "EasyPay",
+  "easy_pay_desc": "Kênh tổng hợp bên thứ ba EasyPay (QR WeChat/Alipay)"
 }

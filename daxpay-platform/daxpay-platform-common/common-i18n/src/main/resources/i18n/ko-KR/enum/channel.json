@@ -20,5 +20,7 @@
   "stripe_desc": "Stripe 국제 카드 결제 채널(Visa/MasterCard 등)",
   "union_pay_desc": "UnionPay QuickPass (UnionPay ACP)",
   "douyin_desc": "Douyin 결제 채널",
-  "huifu_desc": "Huifu (Adapay/Dougong)"
+  "huifu_desc": "Huifu (Adapay/Dougong)",
+  "easy_pay": "이지페이",
+  "easy_pay_desc": "이지페이 제3자 통합 채널(위챗/알리페이 QR)"
 }

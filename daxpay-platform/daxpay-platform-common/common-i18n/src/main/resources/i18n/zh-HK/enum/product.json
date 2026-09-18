@@ -27,5 +27,7 @@
   "hm_pay": "河馬付",
   "sand_pay": "杉德支付",
   "yee_pay": "易寶支付",
-  "jee_pay": "Jeepay"
+  "jee_pay": "Jeepay",
+  "easy_pay": "易支付",
+  "easy_pay_desc": "易支付第三方聚合平台(微信/支付寶掃碼)"
 }

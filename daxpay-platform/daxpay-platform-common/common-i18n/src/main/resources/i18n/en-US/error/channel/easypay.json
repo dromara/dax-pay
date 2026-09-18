@@ -1,0 +1,8 @@
+{
+  "keyNotConfigured": "EasyPay channel key not configured",
+  "payFailed": "EasyPay payment error: {0}",
+  "closeFailed": "EasyPay close order error: {0}",
+  "refundFailed": "EasyPay refund error: {0}",
+  "unsupportedPayMethod": "Unsupported payment method for EasyPay: {0}",
+  "mchDuplicate": "An EasyPay merchant ID already exists under this merchant"
+}

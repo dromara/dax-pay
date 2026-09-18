@@ -49,6 +49,8 @@ public enum ChannelEnum implements I18nSupport {
     STRIPE("stripe"),
     /// jeepay
     JEE_PAY("jee_pay"),
+    /// 易支付(三方聚合平台)
+    EASY_PAY("easy_pay"),
     ;
 
     private final String code;

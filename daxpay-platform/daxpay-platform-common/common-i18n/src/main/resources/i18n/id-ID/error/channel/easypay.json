@@ -1,0 +1,8 @@
+{
+  "keyNotConfigured": "Kunci kanal EasyPay belum dikonfigurasi",
+  "payFailed": "Kesalahan pembayaran EasyPay: {0}",
+  "closeFailed": "Kesalahan menutup pesanan EasyPay: {0}",
+  "refundFailed": "Kesalahan pengembalian dana EasyPay: {0}",
+  "unsupportedPayMethod": "Metode pembayaran tidak didukung EasyPay: {0}",
+  "mchDuplicate": "ID merchant EasyPay sudah ada di bawah merchant ini"
+}

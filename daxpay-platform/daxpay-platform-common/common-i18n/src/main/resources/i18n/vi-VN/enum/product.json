@@ -27,5 +27,7 @@
   "hm_pay": "HM trả tiền",
   "sand_pay": "Trả cát",
   "yee_pay": "Yee Pay",
-  "jee_pay": "Jeepay"
+  "jee_pay": "Jeepay",
+  "easy_pay": "EasyPay",
+  "easy_pay_desc": "Nền tảng tổng hợp bên thứ ba EasyPay (QR WeChat/Alipay)"
 }

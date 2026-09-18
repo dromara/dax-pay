@@ -20,5 +20,7 @@
   "stripe_desc": "Stripe 国际信用卡收单通道(Visa/MasterCard 等)",
   "union_pay_desc": "云闪付(银联 ACP)",
   "douyin_desc": "抖音支付通道",
-  "huifu_desc": "汇付天下(Adapay/斗拱)"
+  "huifu_desc": "汇付天下(Adapay/斗拱)",
+  "easy_pay": "易支付",
+  "easy_pay_desc": "易支付三方聚合通道(微信/支付宝扫码)"
 }

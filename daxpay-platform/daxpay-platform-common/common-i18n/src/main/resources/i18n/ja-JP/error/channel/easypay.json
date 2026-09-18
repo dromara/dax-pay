@@ -1,0 +1,8 @@
+{
+  "keyNotConfigured": "EasyPayチャネル鍵が未設定です",
+  "payFailed": "EasyPay決済エラー: {0}",
+  "closeFailed": "EasyPay注文クローズエラー: {0}",
+  "refundFailed": "EasyPay返金エラー: {0}",
+  "unsupportedPayMethod": "EasyPayが対応していない支払い方法: {0}",
+  "mchDuplicate": "この加盟店の下にこのEasyPay加盟店IDが既に存在します"
+}

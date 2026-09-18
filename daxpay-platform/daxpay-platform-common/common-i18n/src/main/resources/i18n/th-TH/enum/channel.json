@@ -20,5 +20,7 @@
   "stripe_desc": "ช่องทางรับชำระบัตรระหว่างประเทศ Stripe (Visa/MasterCard ฯลฯ)",
   "union_pay_desc": "UnionPay QuickPass (UnionPay ACP)",
   "douyin_desc": "ช่องทางชำระเงิน Douyin",
-  "huifu_desc": "Huifu (Adapay/Dougong)"
+  "huifu_desc": "Huifu (Adapay/Dougong)",
+  "easy_pay": "EasyPay",
+  "easy_pay_desc": "ช่องทางรวมบริการ EasyPay (QR WeChat/Alipay)"
 }

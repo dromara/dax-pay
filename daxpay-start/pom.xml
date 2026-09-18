@@ -190,6 +190,12 @@
             <artifactId>daxpay-channel-stripe</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- 易支付通道(三方聚合平台) -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-channel-easypay</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- 易支付协议插件 -->
         <dependency>
             <groupId>cn.daxpay.open</groupId>

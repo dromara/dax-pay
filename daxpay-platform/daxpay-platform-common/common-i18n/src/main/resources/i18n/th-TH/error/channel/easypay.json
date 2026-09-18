@@ -1,0 +1,8 @@
+{
+  "keyNotConfigured": "ยังไม่ได้กำหนดค่าคีย์ช่องทาง EasyPay",
+  "payFailed": "ข้อผิดพลาดการชำระเงิน EasyPay: {0}",
+  "closeFailed": "ข้อผิดพลาดการปิดคำสั่งซื้อ EasyPay: {0}",
+  "refundFailed": "ข้อผิดพลาดการคืนเงิน EasyPay: {0}",
+  "unsupportedPayMethod": "วิธีชำระเงินที่ EasyPay ไม่รองรับ: {0}",
+  "mchDuplicate": "มี ID ร้านค้า EasyPay นี้อยู่แล้วภายใต้ร้านค้านี้"
+}

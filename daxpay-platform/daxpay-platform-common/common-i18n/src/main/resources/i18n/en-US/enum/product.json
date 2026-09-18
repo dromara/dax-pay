@@ -27,5 +27,7 @@
   "hm_pay": "HM Pay",
   "sand_pay": "Sand Pay",
   "yee_pay": "Yee Pay",
-  "jee_pay": "Jeepay"
+  "jee_pay": "Jeepay",
+  "easy_pay": "EasyPay",
+  "easy_pay_desc": "EasyPay third-party aggregate platform (WeChat/Alipay QR)"
 }

@@ -1,0 +1,8 @@
+{
+  "keyNotConfigured": "易支付通道密钥未配置",
+  "payFailed": "易支付支付异常: {0}",
+  "closeFailed": "易支付关单异常: {0}",
+  "refundFailed": "易支付退款异常: {0}",
+  "unsupportedPayMethod": "易支付不支持的支付方式: {0}",
+  "mchDuplicate": "该商户下已存在此易支付商户ID"
+}
