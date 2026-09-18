@@ -7,8 +7,8 @@ import lombok.experimental.Accessors;
 
 /// # 易支付通道商户创建参数
 ///
-/// 创建时录入易支付平台地址与商户ID(pid), 签名密钥(商户私钥/平台公钥)
-/// 不在此录入, 由密钥配置后置维护。
+/// 创建为纯建档动作, 仅录入通道商户名称; 易支付对接配置(平台网关地址/商户ID(pid)/签名密钥)
+/// 全部由密钥配置后置维护, 发起支付前由密钥完整性校验兜底。
 @Data
 @Accessors(chain = true)
 @Schema(title = "易支付通道商户创建参数")
@@ -28,14 +28,4 @@ public class EasyPayChannelMerchantCreateParam {
     @Schema(description = "所属支付产品")
     @NotBlank(message = "{validation.field.product.notBlank}")
     private String product;
-
-    /// 易支付平台网关地址
-    @Schema(description = "易支付平台网关地址(如 https://pay.xxx.com)")
-    @NotBlank(message = "{validation.field.serverUrl.notBlank}")
-    private String serverUrl;
-
-    /// 易支付商户ID(pid)
-    @Schema(description = "易支付商户ID(pid, 上游平台分配)")
-    @NotBlank(message = "{validation.field.partnerId.notBlank}")
-    private String partnerId;
 }

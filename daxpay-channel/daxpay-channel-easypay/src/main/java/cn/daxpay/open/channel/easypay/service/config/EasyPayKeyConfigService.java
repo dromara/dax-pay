@@ -5,6 +5,7 @@ import cn.daxpay.open.channel.easypay.dao.EasyPayKeyConfigManager;
 import cn.daxpay.open.channel.easypay.entity.EasyPayKeyConfig;
 import cn.daxpay.open.channel.easypay.param.EasyPayKeyConfigParam;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
+import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.hutool.core.util.StrUtil;
@@ -12,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Objects;
 
 /// # 易支付通道密钥配置
 ///
@@ -60,11 +63,27 @@ public class EasyPayKeyConfigService {
     /// 保存密钥配置(不存在则创建)
     ///
     /// 以 channelMchNo 定位记录, 仅更新可编辑字段; 记录不存在时要求通道商户已存在并立即落库;
-    /// mchNo/channelMchNo 为不可变身份字段(实体 FieldStrategy.NEVER), 由创建路径从通道商户主表对齐。
+    /// mchNo/channelMchNo 为不可变身份字段(实体 FieldStrategy.NEVER), 由创建路径从通道商户主表对齐;
+    /// 平台网关地址去尾斜杠归一; 商户ID(pid) 变更时校验同一商户下唯一(防止重复绑定同一上游商户)。
     @Transactional(rollbackFor = Exception.class)
     public void save(EasyPayKeyConfigParam param) {
         var config = easyPayKeyConfigManager.findByChannelMchNo(param.getChannelMchNo())
                 .orElseGet(() -> this.createConfig(param.getChannelMchNo()));
+        // 对接参数归一: 网关地址去尾斜杠, 商户ID空白转 NULL(空值不覆盖原值)
+        param.setServerUrl(StrUtil.removeSuffix(StrUtil.trimToNull(param.getServerUrl()), "/"));
+        param.setPartnerId(StrUtil.trimToNull(param.getPartnerId()));
+        // 唯一性校验: 商户ID发生变更时, 同一商户下不允许重复绑定同一易支付商户ID
+        if (Objects.nonNull(param.getPartnerId()) && !param.getPartnerId().equals(config.getPartnerId())) {
+            boolean duplicated = easyPayKeyConfigManager.lambdaQuery()
+                    .eq(EasyPayKeyConfig::getMchNo, config.getMchNo())
+                    .eq(EasyPayKeyConfig::getPartnerId, param.getPartnerId())
+                    .ne(EasyPayKeyConfig::getId, config.getId())
+                    .exists();
+            if (duplicated) {
+                // 易支付: 该商户下已存在此易支付商户ID
+                throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.channel.easypay.mchDuplicate");
+            }
+        }
         EasyPayKeyConfigConvert.CONVERT.copy(param, config);
         easyPayKeyConfigManager.updateById(config);
     }
