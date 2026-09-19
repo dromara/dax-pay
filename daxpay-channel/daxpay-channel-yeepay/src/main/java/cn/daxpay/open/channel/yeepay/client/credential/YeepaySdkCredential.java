@@ -22,7 +22,7 @@ public class YeepaySdkCredential {
     /// 商户 RSA 私钥(PEM 格式 PKCS#8 字符串, SDK 签名用)
     private String privateKey;
 
-    /// 易宝平台 RSA 公钥(PEM 格式, SDK 验签用)
+    /// 易宝平台 RSA 公钥(PEM, 预留字段, 当前回调验签走 SDK 内置平台证书)
     private String yopPublicKey;
 
     /// 微信 AppId(微信 H5/JSAPI 场景用, 可空)

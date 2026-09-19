@@ -79,6 +79,7 @@ public class YeepayPayService {
             case WECHAT_H5 -> YeepayPayMethod.WECHAT_H5;
             // 支付宝
             case ALIPAY_QR -> YeepayPayMethod.ALIPAY_QR;
+            // ALIPAY_PC 未在产品能力中声明, 此处为防御性降级(以 WAP 收银页承接)
             case ALIPAY_H5, ALIPAY_PC -> YeepayPayMethod.ALIPAY_H5;
             // 银联
             case UNION_QR -> YeepayPayMethod.UNION_QR;

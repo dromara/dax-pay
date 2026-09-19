@@ -43,7 +43,7 @@ public class YeepayDirectKeyConfig extends MchBaseEntity implements ToResult<Yee
     @TableField(typeHandler = DataEncryptTypeHandler.class)
     private String privateKey;
 
-    /// 易宝平台 RSA 公钥(PEM, SDK 验签用, 加密存储)
+    /// 易宝平台 RSA 公钥(PEM, 预留字段, 当前验签走 SDK 内置平台证书, 加密存储)
     @TableField(typeHandler = DataEncryptTypeHandler.class)
     private String yopPublicKey;
 
