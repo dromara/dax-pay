@@ -1,6 +1,7 @@
 {
   "payFailed": "ข้อผิดพลาดการชำระเงิน HKRT: {0}",
   "refundFailed": "ข้อผิดพลาดการคืนเงิน HKRT: {0}",
+  "refundStatusFail": "การคืนเงิน HKRT ส่งกลับสถานะล้มเหลว",
   "closeFailed": "ข้อผิดพลาดการปิดคำสั่ง HKRT: {0}",
   "unsupportedPayMethod": "วิธีการชำระเงินไม่ได้รับการสนับสนุนสำหรับ HKRT: {0}",
   "isvKeyNotConfigured": "ไม่ได้กำหนดค่าคีย์ผู้ให้บริการ HKRT",

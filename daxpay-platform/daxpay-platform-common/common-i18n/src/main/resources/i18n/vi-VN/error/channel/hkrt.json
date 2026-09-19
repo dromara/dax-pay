@@ -1,6 +1,7 @@
 {
   "payFailed": "Lỗi thanh toán HKRT: {0}",
   "refundFailed": "Lỗi hoàn tiền HKRT: {0}",
+  "refundStatusFail": "Hoàn tiền HKRT trả về trạng thái thất bại",
   "closeFailed": "Lỗi đóng đơn hàng HKRT: {0}",
   "unsupportedPayMethod": "Phương thức thanh toán không được hỗ trợ cho HKRT: {0}",
   "isvKeyNotConfigured": "Khóa nhà cung cấp dịch vụ HKRT chưa được cấu hình",

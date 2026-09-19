@@ -1,6 +1,7 @@
 {
   "payFailed": "HKRT支払エラー: {0}",
   "refundFailed": "HKRT返金エラー: {0}",
+  "refundStatusFail": "HKRT返金が失敗ステータスで返却されました",
   "closeFailed": "HKRT注文クローズエラー: {0}",
   "unsupportedPayMethod": "HKRTでサポートされていない支払方法: {0}",
   "isvKeyNotConfigured": "HKRTサービスプロバイダキーが設定されていません",

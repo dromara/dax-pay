@@ -1,6 +1,7 @@
 {
   "payFailed": "HKRT payment error: {0}",
   "refundFailed": "HKRT refund error: {0}",
+  "refundStatusFail": "HKRT refund returned a failed status",
   "closeFailed": "HKRT close order error: {0}",
   "unsupportedPayMethod": "Unsupported payment method for HKRT: {0}",
   "isvKeyNotConfigured": "HKRT service provider key not configured",

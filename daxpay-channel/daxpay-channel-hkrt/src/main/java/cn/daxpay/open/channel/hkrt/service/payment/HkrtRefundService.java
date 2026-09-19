@@ -53,10 +53,10 @@ public class HkrtRefundService {
         // 退款状态(子应用统一输出抽象态, 屏蔽海科数字码)
         String tradeStatus = resp.getTradeStatus();
         if ("FAIL".equals(tradeStatus)) {
-            // 退款失败
-            bo.setStatus(RefundOrderStatusEnum.FAIL);
-            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "error.channel.hkrt.refundFailed",
-                    "refund trade_status=FAIL");
+            // 退款失败(明细进日志, 词条不带占位避免英文技术串透出前端)
+            log.error("海科融通退款返回失败状态: outRefundNo={}, tradeNo={}",
+                    refundOrder.getRefundNo(), refundOrder.getTradeNo());
+            throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "error.channel.hkrt.refundStatusFail");
         }
         bo.setStatus(Boolean.TRUE.equals(resp.getComplete())
                 ? RefundOrderStatusEnum.SUCCESS
