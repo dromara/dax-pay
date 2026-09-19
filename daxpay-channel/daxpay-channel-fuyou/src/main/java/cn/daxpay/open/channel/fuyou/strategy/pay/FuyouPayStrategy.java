@@ -38,6 +38,8 @@ public class FuyouPayStrategy extends AbsNormalPayStrategy {
         FuyouSdkCredential credential = fuyouIsvConfigAssembler.buildConfig(
                 payParam.getMchNo(), payParam.getChannelMchNo(), payParam.getCapability());
         context.setChannelConfig(credential);
+        // 微信 JSAPI/小程序解析微信应用(sub_appid)回填 channelAppId, 供子应用上送与订单落库; 未命中不阻断
+        fuyouIsvConfigAssembler.resolveWxAppIfRequired(payParam);
     }
 
     @Override

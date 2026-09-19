@@ -61,6 +61,8 @@ public class VbillPayService {
         // 通道专属参数透传
         req.setOpenId(payParam.getOpenId());
         req.setAuthCode(payParam.getAuthCode());
+        // 微信 JSAPI/小程序 subAppid 透传
+        req.setWxAppId(payParam.getChannelAppId());
         req.setClientIp(payParam.getClientIp());
         req.setNotifyUrl(this.buildNotifyUrl(order, payParam.getChannelMchNo()));
         req.setExpireTime(payParam.getExpiredTime());

@@ -59,6 +59,8 @@ public class LakalaPayService {
         req.setPayBodyType(mapping.bodyType);
         // 通道专属参数透传
         req.setOpenId(payParam.getOpenId());
+        // 通道应用 AppId(微信 JSAPI/小程序 sub_appid)
+        req.setChannelAppId(payParam.getChannelAppId());
         req.setAuthCode(payParam.getAuthCode());
         req.setClientIp(payParam.getClientIp());
         req.setNotifyUrl(this.buildNotifyUrl(order, payParam.getChannelMchNo()));

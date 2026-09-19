@@ -4,14 +4,20 @@ import cn.daxpay.open.channel.hkrt.client.credential.HkrtSdkCredential;
 import cn.daxpay.open.channel.hkrt.dao.isv.HkrtIsvChannelMerchantManager;
 import cn.daxpay.open.channel.hkrt.entity.isv.HkrtIsvChannelMerchant;
 import cn.daxpay.open.channel.hkrt.entity.isv.HkrtIsvKeyConfig;
+import cn.daxpay.open.channel.hkrt.strategy.product.HkrtProductStrategy;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
+import cn.daxpay.open.platform.core.enums.pay.channel.PayCapabilityEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
+import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
+import cn.daxpay.open.payment.wx.facade.WxAppFacade;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 /// # 海科融通服务商通道凭证组装器
 ///
@@ -34,6 +40,8 @@ public class HkrtIsvConfigAssembler {
 
     private final HkrtIsvChannelMerchantManager hkrtIsvChannelMerchantManager;
     private final HkrtIsvKeyConfigService hkrtIsvKeyConfigService;
+    private final WxAppFacade wxAppFacade;
+    private final HkrtProductStrategy productStrategy;
 
     /// 组装海科融通通道调用凭证(下发给子应用)
     ///
@@ -67,5 +75,25 @@ public class HkrtIsvConfigAssembler {
         }
         credential.setPn(pn);
         return credential;
+    }
+
+    /// 尽力解析微信应用并回填 channelAppId(微信 JSAPI/小程序支付上送 sub_appid)
+    ///
+    /// 解析顺序: 显式 channelAppId → 通道商户能力绑定(商户档优先, 平台档兜底) → 产品级平台默认绑,
+    /// 与 [WxAppFacade#resolveOptional] 一致; 仅产品策略([HkrtProductStrategy#wxAppRequiredCapabilities])
+    /// 声明需要应用的能力(JSAPI/小程序)解析, 其余能力(条码/支付宝/银联)不解析。
+    /// 海科 sub_appid 可选(海科后台已绑定时可不传), 未命中不回填不阻断;
+    /// 调用方显式传入的 channelAppId 未命中应用表时保留原值透传, 与既有行为兼容。
+    ///
+    /// @param payParam 支付参数(channelAppId 回填后供子应用上送与订单落库)
+    public void resolveWxAppIfRequired(NormalPayParam payParam) {
+        PayCapabilityEnum cap = PayCapabilityEnum.findByCode(payParam.getCapability());
+        // 非微信应用所需能力(条码/支付宝/银联)不解析
+        if (Objects.isNull(cap) || !productStrategy.wxAppRequiredCapabilities().contains(cap)) {
+            return;
+        }
+        wxAppFacade.resolveOptional(payParam.getMchNo(), payParam.getChannelMchNo(), payParam.getCapability(),
+                        payParam.getChannelAppId(), ProductEnum.HKRT_PAY.getCode())
+                .ifPresent(app -> payParam.setChannelAppId(app.wxAppId()));
     }
 }

@@ -11,8 +11,9 @@ import lombok.experimental.Accessors;
 
 /// # 河马付通道商户绑定
 ///
-/// 河马付服务商模式下, 子商户绑定杉德商户号 + 门店号 + 微信 appId,
-/// 密钥由服务商全局配置([HmpayIsvKeyConfig])提供。
+/// 河马付服务商模式下, 子商户绑定杉德商户号 + 门店号,
+/// 密钥由服务商全局配置([HmpayIsvKeyConfig])提供;
+/// 微信应用绑定走平台统一微信应用能力表(wx_channel_app_capability), 本表仅承载子商户身份。
 /// 同一商户下杉德商户号不重复。
 @EqualsAndHashCode(callSuper = true)
 @Data

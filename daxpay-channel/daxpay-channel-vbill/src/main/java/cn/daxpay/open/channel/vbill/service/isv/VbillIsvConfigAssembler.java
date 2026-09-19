@@ -4,14 +4,20 @@ import cn.daxpay.open.channel.vbill.client.credential.VbillSdkCredential;
 import cn.daxpay.open.channel.vbill.dao.isv.VbillIsvChannelMerchantManager;
 import cn.daxpay.open.channel.vbill.entity.isv.VbillIsvChannelMerchant;
 import cn.daxpay.open.channel.vbill.entity.isv.VbillIsvKeyConfig;
+import cn.daxpay.open.channel.vbill.strategy.product.VbillProductStrategy;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
+import cn.daxpay.open.platform.core.enums.pay.channel.PayCapabilityEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
+import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
+import cn.daxpay.open.payment.wx.facade.WxAppFacade;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 /// # 随行付服务商通道凭证组装器
 ///
@@ -35,6 +41,8 @@ public class VbillIsvConfigAssembler {
 
     private final VbillIsvChannelMerchantManager vbillIsvChannelMerchantManager;
     private final VbillIsvKeyConfigService vbillIsvKeyConfigService;
+    private final WxAppFacade wxAppFacade;
+    private final VbillProductStrategy productStrategy;
 
     /// 组装随行付通道调用凭证(下发给子应用)
     ///
@@ -66,5 +74,25 @@ public class VbillIsvConfigAssembler {
         }
         credential.setMno(mno);
         return credential;
+    }
+
+    /// 尽力解析微信应用并回填 channelAppId(微信 JSAPI/小程序支付随单上送 subAppid)
+    ///
+    /// 解析顺序: 显式 channelAppId → 通道商户能力绑定(商户档优先, 平台档兜底) → 产品级平台默认绑,
+    /// 与 [WxAppFacade#resolveOptional] 一致; 仅产品策略([VbillProductStrategy#wxAppRequiredCapabilities])
+    /// 声明需要应用的能力(JSAPI/小程序)解析, 其余能力(扫码/付款码/收银台/支付宝/银联)不解析。
+    /// 随行付 subAppid 可选(随行付后台已绑定时可不传), 未命中不回填不阻断;
+    /// 调用方显式传入的 channelAppId 未命中应用表时保留原值透传, 与既有行为兼容。
+    ///
+    /// @param payParam 支付参数(channelAppId 回填后供子应用上送与订单落库)
+    public void resolveWxAppIfRequired(NormalPayParam payParam) {
+        PayCapabilityEnum cap = PayCapabilityEnum.findByCode(payParam.getCapability());
+        // 非微信应用所需能力(扫码/付款码/收银台/支付宝/银联)不解析
+        if (Objects.isNull(cap) || !productStrategy.wxAppRequiredCapabilities().contains(cap)) {
+            return;
+        }
+        wxAppFacade.resolveOptional(payParam.getMchNo(), payParam.getChannelMchNo(), payParam.getCapability(),
+                        payParam.getChannelAppId(), ProductEnum.VBILL_PAY.getCode())
+                .ifPresent(app -> payParam.setChannelAppId(app.wxAppId()));
     }
 }

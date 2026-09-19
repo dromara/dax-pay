@@ -38,6 +38,9 @@ public class LakalaPayReq {
     /// 用户标识(JSAPI/MINI 必填)
     private String openId;
 
+    /// 微信 JSAPI/小程序 sub_appid, 由统一微信应用解析回填
+    private String channelAppId;
+
     /// 付款码(MICROPAY 必填)
     private String authCode;
 

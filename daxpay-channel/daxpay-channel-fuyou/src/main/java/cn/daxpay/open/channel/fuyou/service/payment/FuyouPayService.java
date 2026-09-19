@@ -52,6 +52,8 @@ public class FuyouPayService {
         // 通道专属参数透传
         req.setOpenId(payParam.getOpenId());
         req.setAuthCode(payParam.getAuthCode());
+        // 微信 JSAPI/小程序 sub_appid 透传
+        req.setWxAppId(payParam.getChannelAppId());
         req.setClientIp(payParam.getClientIp());
         req.setNotifyUrl(this.buildNotifyUrl(order, payParam.getChannelMchNo()));
         req.setCredential(credential);

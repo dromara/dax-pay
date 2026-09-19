@@ -58,6 +58,8 @@ public class HkrtPayService {
         req.setPayBodyType(mapping.bodyType);
         // 通道专属参数透传
         req.setOpenId(payParam.getOpenId());
+        // 微信 JSAPI/小程序 sub_appid, 由统一微信应用解析回填后透传子应用
+        req.setChannelAppId(payParam.getChannelAppId());
         req.setAuthCode(payParam.getAuthCode());
         req.setClientIp(payParam.getClientIp());
         req.setNotifyUrl(this.buildNotifyUrl(order, payParam.getChannelMchNo()));
