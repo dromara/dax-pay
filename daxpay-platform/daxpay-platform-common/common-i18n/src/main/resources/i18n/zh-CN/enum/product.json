@@ -29,5 +29,19 @@
   "yee_pay": "易宝支付",
   "jee_pay": "Jeepay",
   "easy_pay": "易支付",
-  "easy_pay_desc": "易支付三方聚合平台(微信/支付宝扫码)"
+  "easy_pay_desc": "易支付三方聚合平台(微信/支付宝扫码)",
+  "xingyi_pay": "星驿付",
+  "xingyi_pay_desc": "星驿付聚合支付产品(新大陆旗下国通星驿)",
+  "long_pay": "建行龙支付",
+  "long_pay_desc": "建设银行龙支付聚合支付产品",
+  "allin_cloud": "云商通",
+  "allin_cloud_desc": "通联云商通综合支付产品(一站式聚合收单, 支持沙箱环境)",
+  "allin_cashier": "收银宝",
+  "allin_cashier_desc": "通联收银宝收单产品(统一下单API: 微信/支付宝/云闪付, 支持沙箱环境)",
+  "allin_payfund": "收付通",
+  "allin_payfund_desc": "通联收付通产品(收款+付款, 支持收单, 支持沙箱环境)",
+  "allin_direct": "金服宝",
+  "allin_direct_desc": "通联金服宝直联产品(AT直连收单, 支持沙箱环境)",
+  "shouqianba": "收钱吧",
+  "shouqianba_desc": "收钱吧聚合扫码收单产品"
 }

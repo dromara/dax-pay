@@ -1,5 +1,5 @@
 -- ============================================================
--- 敏感数据已清除(白名单模式) | 工具 redact-data.mjs | 时间 2026-09-12T03:12:33.192Z
+-- 敏感数据已清除(白名单模式) | 工具 redact-data.mjs | 时间 2026-09-19T08:14:37.484Z
 -- 策略：保留系统种子表 + 内置演示账号/商户(行级)，其余整表清除
 -- 内置账号：bootx(超管) / csadmin(运营端) / csqysh(商户端)
 -- 演示账号密码已重置为开发默认密码(121212)，生产部署后必须立即修改
@@ -3521,6 +3521,20 @@ INSERT INTO public.base_province VALUES ('65', '新疆维吾尔自治区');
 
 
 --
+-- Data for Name: dougong_isv_channel_merchant; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+-- REDACTED: dougong_isv_channel_merchant (整表清除)
+
+
+--
+-- Data for Name: dougong_isv_key_config; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+-- REDACTED: dougong_isv_key_config (整表清除)
+
+
+--
 -- Data for Name: douyin_direct_alloc_receiver; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -3574,6 +3588,12 @@ INSERT INTO public.base_province VALUES ('65', '新疆维吾尔自治区');
 
 
 --
+-- Data for Name: easy_pay_key_config; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+
+
+--
 -- Data for Name: fuyou_isv_channel_merchant; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -3589,12 +3609,14 @@ INSERT INTO public.base_province VALUES ('65', '新疆维吾尔自治区');
 -- Data for Name: hkrt_isv_channel_merchant; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+-- REDACTED: hkrt_isv_channel_merchant (整表清除)
 
 
 --
 -- Data for Name: hkrt_isv_key_config; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+-- REDACTED: hkrt_isv_key_config (整表清除)
 
 
 --
@@ -3619,12 +3641,6 @@ INSERT INTO public.iam_perm_code VALUES (2080304418371350529, 'payment:wx:platfo
 INSERT INTO public.iam_perm_code VALUES (2080304418371350530, 'payment:wx:platform-app:view', 'payment:wx:platform-app', true, NULL, 1, 1, 0, false, '2026-07-23 14:49:58.184182+00', '2026-07-23 14:49:58.184182+00', 'perm.payment:wx:platform-app:view');
 INSERT INTO public.iam_perm_code VALUES (2083000000000000001, 'trade:transfer:view', 'trade:transfer', true, NULL, 1, 1, 0, false, '2026-08-05 12:13:20.611224+00', '2026-08-05 12:13:20.611224+00', 'perm.trade:transfer:view');
 INSERT INTO public.iam_perm_code VALUES (2083000000000000002, 'trade:transfer:manage', 'trade:transfer', true, NULL, 1, 1, 0, false, '2026-08-05 12:13:20.613805+00', '2026-08-05 12:13:20.613805+00', 'perm.trade:transfer:manage');
--- 2026-09-15 交易域导出权限码(5 个 P0 模块: 资金交易凭证/普通支付/网关支付/退款/资金流水)
-INSERT INTO public.iam_perm_code VALUES (2083000000000000003, 'trade:fund:export', 'trade:fund', true, NULL, 1, 1, 0, false, '2026-09-15 00:00:00+00', '2026-09-15 00:00:00+00', 'perm.trade:fund:export');
-INSERT INTO public.iam_perm_code VALUES (2083000000000000004, 'trade:order:export', 'trade:order', true, NULL, 1, 1, 0, false, '2026-09-15 00:00:00+00', '2026-09-15 00:00:00+00', 'perm.trade:order:export');
-INSERT INTO public.iam_perm_code VALUES (2083000000000000005, 'trade:gateway-order:export', 'trade:gateway-order', true, NULL, 1, 1, 0, false, '2026-09-15 00:00:00+00', '2026-09-15 00:00:00+00', 'perm.trade:gateway-order:export');
-INSERT INTO public.iam_perm_code VALUES (2083000000000000006, 'trade:refund:export', 'trade:refund', true, NULL, 1, 1, 0, false, '2026-09-15 00:00:00+00', '2026-09-15 00:00:00+00', 'perm.trade:refund:export');
-INSERT INTO public.iam_perm_code VALUES (2083000000000000007, 'trade:fund-flow:export', 'trade:fund-flow', true, NULL, 1, 1, 0, false, '2026-09-15 00:00:00+00', '2026-09-15 00:00:00+00', 'perm.trade:fund-flow:export');
 INSERT INTO public.iam_perm_code VALUES (2079866296000000003, 'system:notify:mail-record:resend', 'system:notify:mail-record', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-08-27 04:10:39.751763+00', '2026-08-27 04:10:39.751763+00', 'perm.system:notify:mail-record:resend');
 INSERT INTO public.iam_perm_code VALUES (2079866296000000001, 'system:notify:mail-record:view', 'system:notify:mail-record', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-08-27 04:10:39.751763+00', '2026-08-27 04:10:39.751763+00', 'perm.system:notify:mail-record:view');
 INSERT INTO public.iam_perm_code VALUES (2076548114998755328, 'channel:app:manage', 'channel:app', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-13 06:03:45.674956+00', '2026-07-15 03:59:23.658548+00', 'perm.channel:app:manage');
@@ -3660,6 +3676,11 @@ INSERT INTO public.iam_perm_code VALUES (2070862265018683392, 'payment:config:pr
 INSERT INTO public.iam_perm_code VALUES (2070862265022877696, 'payment:config:product-config:view', 'payment:config:product-config', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-06-27 13:30:13.398114+00', '2026-07-15 03:59:23.696424+00', 'perm.payment:config:product-config:view');
 INSERT INTO public.iam_perm_code VALUES (2092881952648650754, 'merchant:user:status', 'merchant:user', true, NULL, 1, 1, 0, false, '2026-08-27 07:48:36.034343+00', '2026-08-27 07:48:36.034343+00', 'perm.merchant:user:status');
 INSERT INTO public.iam_perm_code VALUES (2092881952648650755, 'merchant:user:view', 'merchant:user', true, NULL, 1, 1, 0, false, '2026-08-27 07:48:36.034343+00', '2026-08-27 07:48:36.034343+00', 'perm.merchant:user:view');
+INSERT INTO public.iam_perm_code VALUES (2083000000000000003, 'trade:fund:export', 'trade:fund', true, NULL, 1, 1, 0, false, '2026-09-15 00:00:00+00', '2026-09-15 00:00:00+00', 'perm.trade:fund:export');
+INSERT INTO public.iam_perm_code VALUES (2083000000000000004, 'trade:order:export', 'trade:order', true, NULL, 1, 1, 0, false, '2026-09-15 00:00:00+00', '2026-09-15 00:00:00+00', 'perm.trade:order:export');
+INSERT INTO public.iam_perm_code VALUES (2083000000000000005, 'trade:gateway-order:export', 'trade:gateway-order', true, NULL, 1, 1, 0, false, '2026-09-15 00:00:00+00', '2026-09-15 00:00:00+00', 'perm.trade:gateway-order:export');
+INSERT INTO public.iam_perm_code VALUES (2083000000000000006, 'trade:refund:export', 'trade:refund', true, NULL, 1, 1, 0, false, '2026-09-15 00:00:00+00', '2026-09-15 00:00:00+00', 'perm.trade:refund:export');
+INSERT INTO public.iam_perm_code VALUES (2083000000000000007, 'trade:fund-flow:export', 'trade:fund-flow', true, NULL, 1, 1, 0, false, '2026-09-15 00:00:00+00', '2026-09-15 00:00:00+00', 'perm.trade:fund-flow:export');
 INSERT INTO public.iam_perm_code VALUES (2078479091642855424, 'develop:gateway:sign', 'develop:gateway', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-18 13:56:46.379702+00', '2026-07-18 13:56:46.383702+00', 'perm.develop:gateway:sign');
 INSERT INTO public.iam_perm_code VALUES (2078479091684798466, 'system:log:unipay:manage', 'system:log:unipay', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-18 13:56:46.388212+00', '2026-07-18 13:56:46.388212+00', 'perm.system:log:unipay:manage');
 INSERT INTO public.iam_perm_code VALUES (2078479091688992768, 'system:log:unipay:view', 'system:log:unipay', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-18 13:56:46.389213+00', '2026-07-18 13:56:46.389213+00', 'perm.system:log:unipay:view');
@@ -3980,7 +4001,6 @@ INSERT INTO public.iam_role_code VALUES (2070864264980934656, 1, 207086226498093
 INSERT INTO public.iam_role_code VALUES (2070864264976740352, 1, 2070862264976740352);
 INSERT INTO public.iam_role_code VALUES (2072992657125986304, 1, 2072990657125986304);
 INSERT INTO public.iam_role_code VALUES (2070864265022877697, 1, 2070862265022877697);
-INSERT INTO public.iam_role_code VALUES (2070864265027072001, 1, 2070862265027072001);
 INSERT INTO public.iam_role_code VALUES (2070864265031266304, 1, 2070862265031266304);
 INSERT INTO public.iam_role_code VALUES (2070864265031266305, 1, 2070862265031266305);
 INSERT INTO public.iam_role_code VALUES (2070864265035460608, 1, 2070862265035460608);
@@ -4145,6 +4165,16 @@ INSERT INTO public.iam_role_code VALUES (2098335521736720384, 1, 208212498101216
 INSERT INTO public.iam_role_code VALUES (2098335521736720385, 1, 2082124981012164609);
 INSERT INTO public.iam_role_code VALUES (2098335521736720386, 1, 2082124981016358913);
 INSERT INTO public.iam_role_code VALUES (2098335521736720387, 1, 2082124981016358912);
+INSERT INTO public.iam_role_code VALUES (2083100000000000001, 1, 2083000000000000003);
+INSERT INTO public.iam_role_code VALUES (2083100000000000002, 1, 2083000000000000004);
+INSERT INTO public.iam_role_code VALUES (2083100000000000003, 1, 2083000000000000005);
+INSERT INTO public.iam_role_code VALUES (2083100000000000004, 1, 2083000000000000006);
+INSERT INTO public.iam_role_code VALUES (2083100000000000005, 1, 2083000000000000007);
+INSERT INTO public.iam_role_code VALUES (2083200000000000001, 2, 2083000000000000003);
+INSERT INTO public.iam_role_code VALUES (2083200000000000002, 2, 2083000000000000004);
+INSERT INTO public.iam_role_code VALUES (2083200000000000003, 2, 2083000000000000005);
+INSERT INTO public.iam_role_code VALUES (2083200000000000004, 2, 2083000000000000006);
+INSERT INTO public.iam_role_code VALUES (2083200000000000005, 2, 2083000000000000007);
 
 
 --
@@ -4378,7 +4408,7 @@ INSERT INTO public.iam_user_info VALUES (2078739664805732352, '示例商户管�
 -- Data for Name: iam_user_password_security; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.iam_user_password_security VALUES (2098300538905104384, 1, NULL, '2099-12-31 00:00:00+00', '2026-09-11 07:16:52.288083+00', false, 1, '2026-09-11 06:40:07.695052+00', 1, '2026-09-11 06:40:07.695052+00', 0, false, '2026-09-11 08:54:22.764952+00');
+INSERT INTO public.iam_user_password_security VALUES (2098300538905104384, 0, NULL, '2099-12-31 00:00:00+00', '2026-09-11 07:16:52.288083+00', false, 1, '2026-09-11 06:40:07.695052+00', 1, '2026-09-11 06:40:07.695052+00', 0, false, NULL);
 INSERT INTO public.iam_user_password_security VALUES (2078739664805732352, 0, NULL, '2099-12-31 00:00:00+00', '2026-09-06 05:55:55.537858+00', false, 1, '2026-07-19 07:12:14.680839+00', 1, '2026-07-19 07:12:14.681839+00', 0, false, NULL);
 
 
@@ -4420,12 +4450,14 @@ INSERT INTO public.iam_user_role VALUES (2098300598552301568, 209830053890510438
 -- Data for Name: leshua_isv_channel_merchant; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+-- REDACTED: leshua_isv_channel_merchant (整表清除)
 
 
 --
 -- Data for Name: leshua_isv_key_config; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+-- REDACTED: leshua_isv_key_config (整表清除)
 
 
 --
@@ -4600,6 +4632,7 @@ INSERT INTO public.mch_user VALUES (2078739677074071552, 2078739664805732352, 'M
 -- Data for Name: pay_fund_flow; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+-- REDACTED: pay_fund_flow (整表清除)
 
 
 --
@@ -4684,6 +4717,11 @@ INSERT INTO public.pay_md_channel VALUES (5, 'ums_pay', 5, NULL, 1, '2026-05-29 
 INSERT INTO public.pay_md_channel VALUES (8, 'lakala_pay', 6, NULL, 1, '2026-05-29 00:00:00+00', 1, '2026-05-29 00:00:00+00', 0, false);
 INSERT INTO public.pay_md_channel VALUES (6, 'leshua_pay', 7, NULL, 1, '2026-05-29 00:00:00+00', 1, '2026-05-29 00:00:00+00', 0, false);
 INSERT INTO public.pay_md_channel VALUES (7, 'vbill_pay', 8, NULL, 1, '2026-05-29 00:00:00+00', 1, '2026-05-29 00:00:00+00', 0, false);
+INSERT INTO public.pay_md_channel VALUES (21, 'easy_pay', 19, NULL, 1, '2026-09-18 00:00:00+00', 1, '2026-09-18 00:00:00+00', 0, false);
+INSERT INTO public.pay_md_channel VALUES (22, 'xingyi_pay', 20, NULL, 1, '2026-09-19 00:00:00+00', 1, '2026-09-19 00:00:00+00', 0, false);
+INSERT INTO public.pay_md_channel VALUES (23, 'long_pay', 21, NULL, 1, '2026-09-19 00:00:00+00', 1, '2026-09-19 00:00:00+00', 0, false);
+INSERT INTO public.pay_md_channel VALUES (24, 'allin_pay', 22, NULL, 1, '2026-09-19 00:00:00+00', 1, '2026-09-19 00:00:00+00', 0, false);
+INSERT INTO public.pay_md_channel VALUES (25, 'shouqianba', 23, NULL, 1, '2026-09-19 00:00:00+00', 1, '2026-09-19 00:00:00+00', 0, false);
 
 
 --
@@ -4726,7 +4764,6 @@ INSERT INTO public.pay_md_method VALUES (502003021, 'union_barcode', 21, NULL, f
 INSERT INTO public.pay_md_product VALUES (1001, 'alipay_isv', '支付宝(服务商)', 'alipay', 11, NULL, NULL, NULL, NULL, 0, false, false, true);
 INSERT INTO public.pay_md_product VALUES (10009, 'wechat_pay', '微信支付(直连)', 'wechat', 20, NULL, NULL, NULL, NULL, 0, false, false, true);
 INSERT INTO public.pay_md_product VALUES (1003, 'wechat_isv', '微信支付(服务商)', 'wechat', 21, NULL, NULL, NULL, NULL, 0, false, false, true);
-INSERT INTO public.pay_md_product VALUES (10008, 'alipay', '支付宝(直连)', 'alipay', 10, NULL, NULL, 1, '2026-06-17 09:53:02.203443+00', 4, false, true, true);
 INSERT INTO public.pay_md_product VALUES (96001, 'union_pay', '云闪付', 'union_pay', 40, 1, '2026-08-02 09:33:13.989427+00', 1, '2026-08-02 09:33:13.989427+00', 0, false, true, true);
 INSERT INTO public.pay_md_product VALUES (10001, 'ums_qrcode', '银联商务(C扫B)', 'ums_pay', 50, NULL, NULL, NULL, NULL, 0, false, true, true);
 INSERT INTO public.pay_md_product VALUES (10002, 'ums_jsapi', '银联商务(公众号)', 'ums_pay', 51, NULL, NULL, NULL, NULL, 0, false, true, true);
@@ -4734,7 +4771,6 @@ INSERT INTO public.pay_md_product VALUES (10003, 'ums_app', '银联商务(APP)',
 INSERT INTO public.pay_md_product VALUES (10004, 'ums_mini', '银联商务(小程序)', 'ums_pay', 53, NULL, NULL, NULL, NULL, 0, false, true, true);
 INSERT INTO public.pay_md_product VALUES (10005, 'ums_h5', '银联商务(H5)', 'ums_pay', 54, NULL, NULL, NULL, NULL, 0, false, true, true);
 INSERT INTO public.pay_md_product VALUES (10006, 'ums_barcode', '银联商务(B扫C)', 'ums_pay', 55, NULL, NULL, NULL, NULL, 0, false, true, true);
-INSERT INTO public.pay_md_product VALUES (10007, 'lakala_pay', '拉卡拉', 'lakala_pay', 60, NULL, NULL, NULL, NULL, 0, false, true, true);
 INSERT INTO public.pay_md_product VALUES (92001, 'stripe_pay', 'Stripe 支付', 'stripe', 190, 1, '2026-08-02 13:04:19.05231+00', 1, '2026-08-02 13:04:19.05231+00', 0, false, true, true);
 INSERT INTO public.pay_md_product VALUES (10012, 'ada_pay', 'Adapay', 'huifu', 120, 1, '2026-07-05 23:19:01.974607+00', 1, '2026-07-05 23:19:01.974607+00', 0, false, true, true);
 INSERT INTO public.pay_md_product VALUES (10010, 'douyin_pay', '抖音支付(直连)', 'douyin', 30, NULL, NULL, NULL, NULL, 0, false, false, true);
@@ -4745,12 +4781,21 @@ INSERT INTO public.pay_md_product VALUES (10013, 'dougong_pay', '斗拱支付', 
 INSERT INTO public.pay_md_product VALUES (10014, 'hkrt_pay', '海科融通', 'hkrt_pay', 100, 1, '2026-07-05 23:19:01.974607+00', 1, '2026-07-05 23:19:01.974607+00', 0, false, false, true);
 INSERT INTO public.pay_md_product VALUES (10020, 'yee_pay', '易宝支付', 'yee_pay', 110, 1, '2026-07-05 23:19:01.974607+00', 1, '2026-07-05 23:19:01.974607+00', 0, false, false, true);
 INSERT INTO public.pay_md_product VALUES (10015, 'fuyou_pay', '富友支付', 'fuyou_pay', 140, 1, '2026-07-05 23:19:01.974607+00', 1, '2026-07-05 23:19:01.974607+00', 0, false, false, true);
-INSERT INTO public.pay_md_product VALUES (10016, 'sheng_pay', '盛付通(商户)', 'sheng_pay', 150, 1, '2026-07-05 23:19:01.974607+00', 1, '2026-09-17 00:00:00+00', 1, false, false, true);
-INSERT INTO public.pay_md_product VALUES (10025, 'sheng_isv', '盛付通(服务商)', 'sheng_pay', 151, 1, '2026-09-17 00:00:00+00', 1, '2026-09-17 00:00:00+00', 0, false, false, true);
 INSERT INTO public.pay_md_product VALUES (10017, 'ysep_pay', '银盛支付', 'ysep_pay', 160, 1, '2026-07-05 23:19:01.974607+00', 1, '2026-07-05 23:19:01.974607+00', 0, false, false, true);
 INSERT INTO public.pay_md_product VALUES (10018, 'quick_pay', '快钱支付', 'quick_pay', 170, 1, '2026-07-05 23:19:01.974607+00', 1, '2026-07-05 23:19:01.974607+00', 0, false, false, true);
 INSERT INTO public.pay_md_product VALUES (10021, 'jee_pay', 'Jeepay', 'jee_pay', 180, 1, '2026-07-05 23:19:01.974607+00', 1, '2026-07-05 23:19:01.974607+00', 0, false, false, true);
-INSERT INTO public.pay_md_product VALUES (10026, 'easy_pay', '易支付', 'easy_pay', 190, 1, '2026-09-18 00:00:00+00', 1, '2026-09-18 00:00:00+00', 0, false, false, true);
+INSERT INTO public.pay_md_product VALUES (10008, 'alipay', '支付宝(直连)', 'alipay', 10, NULL, NULL, 1, '2026-09-13 03:36:30.587838+00', 6, false, true, true);
+INSERT INTO public.pay_md_product VALUES (10016, 'sheng_pay', '盛付通(商户)', 'sheng_pay', 150, 1, '2026-07-05 23:19:01.974607+00', 1, '2026-09-17 00:00:00+00', 0, false, false, true);
+INSERT INTO public.pay_md_product VALUES (10025, 'sheng_isv', '盛付通(服务商)', 'sheng_pay', 151, 1, '2026-09-17 00:00:00+00', 1, '2026-09-18 10:02:53.59328+00', 1, false, false, false);
+INSERT INTO public.pay_md_product VALUES (10007, 'lakala_pay', '拉卡拉', 'lakala_pay', 60, NULL, NULL, NULL, NULL, 0, false, true, true);
+INSERT INTO public.pay_md_product VALUES (10027, 'xingyi_pay', '星驿付', 'xingyi_pay', 200, 1, '2026-09-19 00:00:00+00', 1, '2026-09-19 00:00:00+00', 0, false, false, true);
+INSERT INTO public.pay_md_product VALUES (10028, 'long_pay', '建行龙支付', 'long_pay', 201, 1, '2026-09-19 00:00:00+00', 1, '2026-09-19 00:00:00+00', 0, false, false, true);
+INSERT INTO public.pay_md_product VALUES (10031, 'allin_cloud', '云商通', 'allin_pay', 202, 1, '2026-09-19 00:00:00+00', 1, '2026-09-19 00:00:00+00', 0, false, true, true);
+INSERT INTO public.pay_md_product VALUES (10032, 'allin_cashier', '收银宝', 'allin_pay', 203, 1, '2026-09-19 00:00:00+00', 1, '2026-09-19 00:00:00+00', 0, false, true, true);
+INSERT INTO public.pay_md_product VALUES (10033, 'allin_payfund', '收付通', 'allin_pay', 204, 1, '2026-09-19 00:00:00+00', 1, '2026-09-19 00:00:00+00', 0, false, true, true);
+INSERT INTO public.pay_md_product VALUES (10034, 'allin_direct', '金服宝', 'allin_pay', 205, 1, '2026-09-19 00:00:00+00', 1, '2026-09-19 00:00:00+00', 0, false, true, true);
+INSERT INTO public.pay_md_product VALUES (10030, 'shouqianba', '收钱吧', 'shouqianba', 206, 1, '2026-09-19 00:00:00+00', 1, '2026-09-19 03:18:02.686831+00', 0, false, false, true);
+INSERT INTO public.pay_md_product VALUES (10026, 'easy_pay', '易支付', 'easy_pay', 191, 1, '2026-09-18 00:00:00+00', 1, '2026-09-19 03:18:26.704188+00', 0, false, false, true);
 
 
 --
@@ -4903,33 +4948,18 @@ INSERT INTO public.pay_md_product_capability VALUES (21121, 'quick_pay', 'alipay
 INSERT INTO public.pay_md_product_capability VALUES (21122, 'quick_pay', 'alipay_h5', 9, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
 INSERT INTO public.pay_md_product_capability VALUES (21123, 'quick_pay', 'alipay_pc', 10, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
 INSERT INTO public.pay_md_product_capability VALUES (21124, 'quick_pay', 'alipay_barcode', 11, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
-INSERT INTO public.pay_md_product_capability VALUES (21145, 'yee_pay', 'wechat_qr', 0, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
-INSERT INTO public.pay_md_product_capability VALUES (21146, 'yee_pay', 'wechat_jsapi', 1, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
-INSERT INTO public.pay_md_product_capability VALUES (21147, 'yee_pay', 'wechat_app', 2, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
-INSERT INTO public.pay_md_product_capability VALUES (21148, 'yee_pay', 'wechat_h5', 3, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
-INSERT INTO public.pay_md_product_capability VALUES (21149, 'yee_pay', 'wechat_mini', 4, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
-INSERT INTO public.pay_md_product_capability VALUES (21150, 'yee_pay', 'wechat_barcode', 5, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
-INSERT INTO public.pay_md_product_capability VALUES (21152, 'yee_pay', 'alipay_jsapi', 7, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
-INSERT INTO public.pay_md_product_capability VALUES (21153, 'yee_pay', 'alipay_app', 8, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
-INSERT INTO public.pay_md_product_capability VALUES (21154, 'yee_pay', 'alipay_h5', 9, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
-INSERT INTO public.pay_md_product_capability VALUES (21155, 'yee_pay', 'alipay_pc', 10, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
-INSERT INTO public.pay_md_product_capability VALUES (21156, 'yee_pay', 'alipay_barcode', 11, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
 INSERT INTO public.pay_md_product_capability VALUES (21093, 'sheng_pay', 'union_qr', 12, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
 INSERT INTO public.pay_md_product_capability VALUES (21109, 'ysep_pay', 'union_qr', 12, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
 INSERT INTO public.pay_md_product_capability VALUES (21125, 'quick_pay', 'union_qr', 12, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
-INSERT INTO public.pay_md_product_capability VALUES (21157, 'yee_pay', 'union_qr', 12, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
 INSERT INTO public.pay_md_product_capability VALUES (21094, 'sheng_pay', 'union_jsapi', 13, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
 INSERT INTO public.pay_md_product_capability VALUES (21110, 'ysep_pay', 'union_jsapi', 13, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
 INSERT INTO public.pay_md_product_capability VALUES (21126, 'quick_pay', 'union_jsapi', 13, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
-INSERT INTO public.pay_md_product_capability VALUES (21158, 'yee_pay', 'union_jsapi', 13, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
 INSERT INTO public.pay_md_product_capability VALUES (21095, 'sheng_pay', 'union_h5', 14, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
 INSERT INTO public.pay_md_product_capability VALUES (21111, 'ysep_pay', 'union_h5', 14, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
 INSERT INTO public.pay_md_product_capability VALUES (21127, 'quick_pay', 'union_h5', 14, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
-INSERT INTO public.pay_md_product_capability VALUES (21159, 'yee_pay', 'union_h5', 14, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
 INSERT INTO public.pay_md_product_capability VALUES (21096, 'sheng_pay', 'union_barcode', 15, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
 INSERT INTO public.pay_md_product_capability VALUES (21112, 'ysep_pay', 'union_barcode', 15, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
 INSERT INTO public.pay_md_product_capability VALUES (21128, 'quick_pay', 'union_barcode', 15, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
-INSERT INTO public.pay_md_product_capability VALUES (21160, 'yee_pay', 'union_barcode', 15, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
 INSERT INTO public.pay_md_product_capability VALUES (21161, 'jee_pay', 'wechat_qr', 0, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
 INSERT INTO public.pay_md_product_capability VALUES (21162, 'jee_pay', 'wechat_jsapi', 1, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
 INSERT INTO public.pay_md_product_capability VALUES (21163, 'jee_pay', 'wechat_app', 2, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
@@ -4946,7 +4976,6 @@ INSERT INTO public.pay_md_product_capability VALUES (21071, 'fuyou_pay', 'alipay
 INSERT INTO public.pay_md_product_capability VALUES (21087, 'sheng_pay', 'alipay_qr', 6, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
 INSERT INTO public.pay_md_product_capability VALUES (21103, 'ysep_pay', 'alipay_qr', 6, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
 INSERT INTO public.pay_md_product_capability VALUES (21119, 'quick_pay', 'alipay_qr', 6, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
-INSERT INTO public.pay_md_product_capability VALUES (21151, 'yee_pay', 'alipay_qr', 6, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
 INSERT INTO public.pay_md_product_capability VALUES (21166, 'jee_pay', 'alipay_qr', 5, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
 INSERT INTO public.pay_md_product_capability VALUES (6100, 'leshua_pay', 'wechat_barcode', 0, true, NULL, false, 1, '2026-07-06 00:00:00+00', 0, 1, '2026-07-06 00:00:00+00');
 INSERT INTO public.pay_md_product_capability VALUES (6101, 'leshua_pay', 'alipay_barcode', 1, true, NULL, false, 1, '2026-07-06 00:00:00+00', 0, 1, '2026-07-06 00:00:00+00');
@@ -4969,6 +4998,11 @@ INSERT INTO public.pay_md_product_capability VALUES (6305, 'vbill_pay', 'alipay_
 INSERT INTO public.pay_md_product_capability VALUES (6307, 'vbill_pay', 'alipay_qr', 7, true, NULL, false, 1, '2026-07-06 00:00:00+00', 0, 1, '2026-07-06 00:00:00+00');
 INSERT INTO public.pay_md_product_capability VALUES (6308, 'vbill_pay', 'alipay_barcode', 8, true, NULL, false, 1, '2026-07-06 00:00:00+00', 0, 1, '2026-07-06 00:00:00+00');
 INSERT INTO public.pay_md_product_capability VALUES (97001, 'union_pay', 'union_qr', 1, true, NULL, false, 1, '2026-08-02 09:33:13.993374+00', 0, 1, '2026-08-02 09:33:13.993374+00');
+INSERT INTO public.pay_md_product_capability VALUES (21145, 'yee_pay', 'wechat_qr', 1, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21151, 'yee_pay', 'alipay_qr', 2, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21157, 'yee_pay', 'union_qr', 3, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21148, 'yee_pay', 'wechat_h5', 4, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21154, 'yee_pay', 'alipay_h5', 5, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
 INSERT INTO public.pay_md_product_capability VALUES (97002, 'union_pay', 'union_h5', 2, true, NULL, false, 1, '2026-08-02 09:33:13.993374+00', 0, 1, '2026-08-02 09:33:13.993374+00');
 INSERT INTO public.pay_md_product_capability VALUES (97003, 'union_pay', 'union_barcode', 3, true, NULL, false, 1, '2026-08-02 09:33:13.993374+00', 0, 1, '2026-08-02 09:33:13.993374+00');
 INSERT INTO public.pay_md_product_capability VALUES (21171, 'jee_pay', 'union_qr', 10, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
@@ -4979,7 +5013,6 @@ INSERT INTO public.pay_md_product_capability VALUES (6109, 'leshua_pay', 'union_
 INSERT INTO public.pay_md_product_capability VALUES (6309, 'vbill_pay', 'union_jsapi', 9, true, NULL, false, 1, '2026-07-06 00:00:00+00', 0, 1, '2026-07-06 00:00:00+00');
 INSERT INTO public.pay_md_product_capability VALUES (6102, 'leshua_pay', 'union_barcode', 2, true, NULL, false, 1, '2026-07-06 00:00:00+00', 0, 1, '2026-07-06 00:00:00+00');
 INSERT INTO public.pay_md_product_capability VALUES (6311, 'vbill_pay', 'union_barcode', 11, true, NULL, false, 1, '2026-07-06 00:00:00+00', 0, 1, '2026-07-06 00:00:00+00');
--- 盛付通服务商模式(sheng_isv)能力清单, 与商户模式(sheng_pay)一致; union_h5 与商户模式同拍板: 种子保留、策略不映射
 INSERT INTO public.pay_md_product_capability VALUES (21173, 'sheng_isv', 'wechat_qr', 0, true, NULL, false, 1, '2026-09-17 00:00:00+00', 0, 1, '2026-09-17 00:00:00+00');
 INSERT INTO public.pay_md_product_capability VALUES (21174, 'sheng_isv', 'wechat_jsapi', 1, true, NULL, false, 1, '2026-09-17 00:00:00+00', 0, 1, '2026-09-17 00:00:00+00');
 INSERT INTO public.pay_md_product_capability VALUES (21175, 'sheng_isv', 'wechat_app', 2, true, NULL, false, 1, '2026-09-17 00:00:00+00', 0, 1, '2026-09-17 00:00:00+00');
@@ -4998,6 +5031,28 @@ INSERT INTO public.pay_md_product_capability VALUES (21187, 'sheng_isv', 'union_
 INSERT INTO public.pay_md_product_capability VALUES (21188, 'sheng_isv', 'union_barcode', 15, true, NULL, false, 1, '2026-09-17 00:00:00+00', 0, 1, '2026-09-17 00:00:00+00');
 INSERT INTO public.pay_md_product_capability VALUES (21189, 'easy_pay', 'wechat_qr', 0, true, NULL, false, 1, '2026-09-18 00:00:00+00', 0, 1, '2026-09-18 00:00:00+00');
 INSERT INTO public.pay_md_product_capability VALUES (21190, 'easy_pay', 'alipay_qr', 1, true, NULL, false, 1, '2026-09-18 00:00:00+00', 0, 1, '2026-09-18 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21191, 'xingyi_pay', 'wechat_qr', 0, true, NULL, false, 1, '2026-09-19 00:00:00+00', 0, 1, '2026-09-19 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21192, 'xingyi_pay', 'alipay_qr', 1, true, NULL, false, 1, '2026-09-19 00:00:00+00', 0, 1, '2026-09-19 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21193, 'xingyi_pay', 'union_qr', 2, true, NULL, false, 1, '2026-09-19 00:00:00+00', 0, 1, '2026-09-19 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21194, 'long_pay', 'wechat_qr', 0, true, NULL, false, 1, '2026-09-19 00:00:00+00', 0, 1, '2026-09-19 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21195, 'long_pay', 'alipay_qr', 1, true, NULL, false, 1, '2026-09-19 00:00:00+00', 0, 1, '2026-09-19 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21196, 'long_pay', 'union_qr', 2, true, NULL, false, 1, '2026-09-19 00:00:00+00', 0, 1, '2026-09-19 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21197, 'yee_pay', 'aggregate_pay_qrcode', 0, true, NULL, false, 1, '2026-09-19 00:00:00+00', 0, 1, '2026-09-19 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21213, 'shouqianba', 'wechat_qr', 0, true, NULL, false, 1, '2026-09-19 00:00:00+00', 0, 1, '2026-09-19 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21214, 'shouqianba', 'alipay_qr', 1, true, NULL, false, 1, '2026-09-19 00:00:00+00', 0, 1, '2026-09-19 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21215, 'shouqianba', 'union_qr', 2, true, NULL, false, 1, '2026-09-19 00:00:00+00', 0, 1, '2026-09-19 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21216, 'allin_cloud', 'wechat_qr', 0, true, NULL, false, 1, '2026-09-19 00:00:00+00', 0, 1, '2026-09-19 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21217, 'allin_cloud', 'alipay_qr', 1, true, NULL, false, 1, '2026-09-19 00:00:00+00', 0, 1, '2026-09-19 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21218, 'allin_cloud', 'union_qr', 2, true, NULL, false, 1, '2026-09-19 00:00:00+00', 0, 1, '2026-09-19 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21219, 'allin_cashier', 'wechat_qr', 0, true, NULL, false, 1, '2026-09-19 00:00:00+00', 0, 1, '2026-09-19 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21220, 'allin_cashier', 'alipay_qr', 1, true, NULL, false, 1, '2026-09-19 00:00:00+00', 0, 1, '2026-09-19 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21221, 'allin_cashier', 'union_qr', 2, true, NULL, false, 1, '2026-09-19 00:00:00+00', 0, 1, '2026-09-19 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21222, 'allin_payfund', 'wechat_qr', 0, true, NULL, false, 1, '2026-09-19 00:00:00+00', 0, 1, '2026-09-19 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21223, 'allin_payfund', 'alipay_qr', 1, true, NULL, false, 1, '2026-09-19 00:00:00+00', 0, 1, '2026-09-19 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21224, 'allin_payfund', 'union_qr', 2, true, NULL, false, 1, '2026-09-19 00:00:00+00', 0, 1, '2026-09-19 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21225, 'allin_direct', 'wechat_qr', 0, true, NULL, false, 1, '2026-09-19 00:00:00+00', 0, 1, '2026-09-19 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21226, 'allin_direct', 'alipay_qr', 1, true, NULL, false, 1, '2026-09-19 00:00:00+00', 0, 1, '2026-09-19 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21227, 'allin_direct', 'union_qr', 2, true, NULL, false, 1, '2026-09-19 00:00:00+00', 0, 1, '2026-09-19 00:00:00+00');
 
 
 --
@@ -5157,6 +5212,27 @@ INSERT INTO public.pay_md_provider_method VALUES (502002015, 'union_pay', 'union
 
 
 --
+-- Data for Name: sheng_isv_channel_merchant; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+-- REDACTED: sheng_isv_channel_merchant (整表清除)
+
+
+--
+-- Data for Name: sheng_isv_key_config; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+-- REDACTED: sheng_isv_key_config (整表清除)
+
+
+--
+-- Data for Name: sheng_key_config; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+-- REDACTED: sheng_key_config (整表清除)
+
+
+--
 -- Data for Name: starter_audit_login_log; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -5259,12 +5335,14 @@ INSERT INTO public.system_sensitive_word VALUES (2077569027575820288, '测试敏
 -- Data for Name: vbill_isv_channel_merchant; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+-- REDACTED: vbill_isv_channel_merchant (整表清除)
 
 
 --
 -- Data for Name: vbill_isv_key_config; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+-- REDACTED: vbill_isv_key_config (整表清除)
 
 
 --
@@ -5361,6 +5439,27 @@ SELECT pg_catalog.setval('public.adapay_direct_key_config_id_seq', 1, false);
 --
 
 SELECT pg_catalog.setval('public.alipay_direct_app_capability_id_seq', 1, false);
+
+
+--
+-- Name: dougong_isv_channel_merchant_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.dougong_isv_channel_merchant_id_seq', 1, false);
+
+
+--
+-- Name: dougong_isv_key_config_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.dougong_isv_key_config_id_seq', 1, true);
+
+
+--
+-- Name: easy_pay_key_config_id_seq; Type: SEQUENCE SET; Schema: public; Owner: -
+--
+
+SELECT pg_catalog.setval('public.easy_pay_key_config_id_seq', 1, false);
 
 
 --

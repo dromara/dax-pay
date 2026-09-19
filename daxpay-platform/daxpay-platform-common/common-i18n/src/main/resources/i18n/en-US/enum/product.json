@@ -29,5 +29,19 @@
   "yee_pay": "Yee Pay",
   "jee_pay": "Jeepay",
   "easy_pay": "EasyPay",
-  "easy_pay_desc": "EasyPay third-party aggregate platform (WeChat/Alipay QR)"
+  "easy_pay_desc": "EasyPay third-party aggregate platform (WeChat/Alipay QR)",
+  "xingyi_pay": "Xingyi Pay",
+  "xingyi_pay_desc": "Xingyi Pay aggregate payment product (Guotong Xingyi, NNGO)",
+  "long_pay": "CCB Long Pay",
+  "long_pay_desc": "China Construction Bank Long Pay aggregate payment product",
+  "allin_cloud": "Cloud",
+  "allin_cloud_desc": "Allinpay Cloud (integrated payment, one-stop aggregate acquiring, sandbox supported)",
+  "allin_cashier": "Cashier",
+  "allin_cashier_desc": "Allinpay Cashier (acquiring, unified order API: WeChat/Alipay/UnionPay, sandbox supported)",
+  "allin_payfund": "Payfund",
+  "allin_payfund_desc": "Allinpay Payfund (collect + pay, acquiring supported, sandbox supported)",
+  "allin_direct": "Direct",
+  "allin_direct_desc": "Allinpay Direct (AT direct acquiring, sandbox supported)",
+  "shouqianba": "Shouqianba",
+  "shouqianba_desc": "Shouqianba aggregate QR payment product"
 }

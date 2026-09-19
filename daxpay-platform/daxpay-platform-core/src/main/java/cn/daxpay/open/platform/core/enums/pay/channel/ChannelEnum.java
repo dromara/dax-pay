@@ -51,6 +51,14 @@ public enum ChannelEnum implements I18nSupport {
     JEE_PAY("jee_pay"),
     /// 易支付(三方聚合平台)
     EASY_PAY("easy_pay"),
+    /// 星驿付(新大陆旗下国通星驿)
+    XINGYI_PAY("xingyi_pay"),
+    /// 建行龙支付(建设银行聚合支付)
+    LONG_PAY("long_pay"),
+    /// 通联支付(聚合收单)
+    ALLIN_PAY("allin_pay"),
+    /// 收钱吧(聚合扫码收单)
+    SHOUQIANBA("shouqianba"),
     ;
 
     private final String code;

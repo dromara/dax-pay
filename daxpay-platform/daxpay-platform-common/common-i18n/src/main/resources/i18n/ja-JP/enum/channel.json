@@ -22,5 +22,13 @@
   "douyin_desc": "Douyin 決済チャネル",
   "huifu_desc": "Huifu(Adapay/Dougong)",
   "easy_pay": "イージーペイ",
-  "easy_pay_desc": "EasyPay サードパーティ集約チャネル(WeChat/Alipay QR)"
+  "easy_pay_desc": "EasyPay サードパーティ集約チャネル(WeChat/Alipay QR)",
+  "xingyi_pay": "星驛付(シンイーペイ)",
+  "xingyi_pay_desc": "星驛付アグリゲートチャネル(WeChat/Alipay/UnionPay QR)",
+  "long_pay": "建行龍支付(CCB Long Pay)",
+  "long_pay_desc": "建設銀行龍支付アグリゲートチャネル(WeChat/Alipay/UnionPay QR)",
+  "allin_pay": "通聯支付(アリンペイ)",
+  "allin_pay_desc": "通聯支付アグリゲートチャネル(雲商通/収銀宝/収付通/金服宝の4製品すべて決済対応, WeChat/Alipay/UnionPay, サンドボックス対応)",
+  "shouqianba": "Shouqianba(収銭吧)",
+  "shouqianba_desc": "Shouqianba アグリゲートQRチャネル(WeChat/Alipay/UnionPay QR)"
 }

@@ -29,5 +29,19 @@
   "yee_pay": "Yee Pay",
   "jee_pay": "Jeepay",
   "easy_pay": "EasyPay",
-  "easy_pay_desc": "Nền tảng tổng hợp bên thứ ba EasyPay (QR WeChat/Alipay)"
+  "easy_pay_desc": "Nền tảng tổng hợp bên thứ ba EasyPay (QR WeChat/Alipay)",
+  "xingyi_pay": "Xingyi Pay",
+  "xingyi_pay_desc": "Sản phẩm thanh toán tổng hợp Xingyi Pay",
+  "long_pay": "CCB Long Pay",
+  "long_pay_desc": "Sản phẩm thanh toán tổng hợp CCB Long Pay",
+  "allin_cloud": "Cloud",
+  "allin_cloud_desc": "Allinpay Cloud (thanh toán tổng hợp, thu hộ một cửa, hỗ trợ sandbox)",
+  "allin_cashier": "Cashier",
+  "allin_cashier_desc": "Allinpay Cashier (thu hộ, API đặt hàng thống nhất: WeChat/Alipay/UnionPay, hỗ trợ sandbox)",
+  "allin_payfund": "Payfund",
+  "allin_payfund_desc": "Allinpay Payfund (thu + chi, hỗ trợ thu hộ, hỗ trợ sandbox)",
+  "allin_direct": "Direct",
+  "allin_direct_desc": "Allinpay Direct (thu hộ kết nối trực tiếp AT, hỗ trợ sandbox)",
+  "shouqianba": "Shouqianba",
+  "shouqianba_desc": "Sản phẩm thanh toán QR tổng hợp Shouqianba"
 }

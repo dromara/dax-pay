@@ -29,5 +29,19 @@
   "yee_pay": "Yee Bayar",
   "jee_pay": "Jeepay",
   "easy_pay": "EasyPay",
-  "easy_pay_desc": "Platform agregat pihak ketiga EasyPay (QR WeChat/Alipay)"
+  "easy_pay_desc": "Platform agregat pihak ketiga EasyPay (QR WeChat/Alipay)",
+  "xingyi_pay": "Xingyi Pay",
+  "xingyi_pay_desc": "Produk pembayaran agregat Xingyi Pay",
+  "long_pay": "CCB Long Pay",
+  "long_pay_desc": "Produk pembayaran agregat CCB Long Pay",
+  "allin_cloud": "Cloud",
+  "allin_cloud_desc": "Allinpay Cloud (pembayaran bersepadu, perolehan agregat satu pintu, sandbox disokong)",
+  "allin_cashier": "Cashier",
+  "allin_cashier_desc": "Allinpay Cashier (perolehan, API pesanan bersepadu: WeChat/Alipay/UnionPay, sandbox disokong)",
+  "allin_payfund": "Payfund",
+  "allin_payfund_desc": "Allinpay Payfund (terima + bayar, perolehan disokong, sandbox disokong)",
+  "allin_direct": "Direct",
+  "allin_direct_desc": "Allinpay Direct (perolehan terus AT, sandbox disokong)",
+  "shouqianba": "Shouqianba",
+  "shouqianba_desc": "Produk pembayaran QR agregat Shouqianba"
 }

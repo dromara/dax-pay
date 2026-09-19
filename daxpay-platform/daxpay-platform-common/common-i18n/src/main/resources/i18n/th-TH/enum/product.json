@@ -29,5 +29,19 @@
   "yee_pay": "ยี่ เปย์",
   "jee_pay": "รถจี๊ป",
   "easy_pay": "EasyPay",
-  "easy_pay_desc": "แพลตฟอร์มรวมบริการ EasyPay (QR WeChat/Alipay)"
+  "easy_pay_desc": "แพลตฟอร์มรวมบริการ EasyPay (QR WeChat/Alipay)",
+  "xingyi_pay": "Xingyi Pay",
+  "xingyi_pay_desc": "ผลิตภัณฑ์ชำระเงินรวม Xingyi Pay",
+  "long_pay": "CCB Long Pay",
+  "long_pay_desc": "ผลิตภัณฑ์ชำระเงินรวม CCB Long Pay",
+  "allin_cloud": "Cloud",
+  "allin_cloud_desc": "Allinpay Cloud (การชำระเงินแบบครบวงจร รับชำระแบบรวมศูนย์ รองรับ sandbox)",
+  "allin_cashier": "Cashier",
+  "allin_cashier_desc": "Allinpay Cashier (รับชำระ, Unified Order API: WeChat/Alipay/UnionPay, รองรับ sandbox)",
+  "allin_payfund": "Payfund",
+  "allin_payfund_desc": "Allinpay Payfund (เก็บ+จ่าย, รับชำระได้, รองรับ sandbox)",
+  "allin_direct": "Direct",
+  "allin_direct_desc": "Allinpay Direct (รับชำระเชื่อมตรง AT, รองรับ sandbox)",
+  "shouqianba": "Shouqianba",
+  "shouqianba_desc": "ผลิตภัณฑ์ชำระเงิน QR รวม Shouqianba"
 }

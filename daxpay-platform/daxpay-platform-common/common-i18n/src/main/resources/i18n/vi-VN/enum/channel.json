@@ -22,5 +22,13 @@
   "douyin_desc": "Kênh thanh toán Douyin",
   "huifu_desc": "Huifu (Adapay/Dougong)",
   "easy_pay": "EasyPay",
-  "easy_pay_desc": "Kênh tổng hợp bên thứ ba EasyPay (QR WeChat/Alipay)"
+  "easy_pay_desc": "Kênh tổng hợp bên thứ ba EasyPay (QR WeChat/Alipay)",
+  "xingyi_pay": "Xingyi Pay",
+  "xingyi_pay_desc": "Kênh tổng hợp Xingyi Pay (QR WeChat/Alipay/UnionPay)",
+  "long_pay": "CCB Long Pay",
+  "long_pay_desc": "Kênh tổng hợp CCB Long Pay (QR WeChat/Alipay/UnionPay)",
+  "allin_pay": "Allinpay",
+  "allin_pay_desc": "Kênh tổng hợp Allinpay (Cloud/Cashier/Payfund/Direct, tất cả đều có khả năng thu hộ; WeChat/Alipay/UnionPay, hỗ trợ sandbox)",
+  "shouqianba": "Shouqianba",
+  "shouqianba_desc": "Kênh QR tổng hợp Shouqianba (WeChat/Alipay/UnionPay)"
 }

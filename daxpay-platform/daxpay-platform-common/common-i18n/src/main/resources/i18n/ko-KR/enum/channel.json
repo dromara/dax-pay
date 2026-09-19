@@ -22,5 +22,13 @@
   "douyin_desc": "Douyin 결제 채널",
   "huifu_desc": "Huifu (Adapay/Dougong)",
   "easy_pay": "이지페이",
-  "easy_pay_desc": "이지페이 제3자 통합 채널(위챗/알리페이 QR)"
+  "easy_pay_desc": "이지페이 제3자 통합 채널(위챗/알리페이 QR)",
+  "xingyi_pay": "싱이페이",
+  "xingyi_pay_desc": "싱이페이 통합 채널(위챗/알리페이/유니온페이 QR)",
+  "long_pay": "CCB 롱페이",
+  "long_pay_desc": "CCB 롱페이 통합 채널(위챗/알리페이/유니온페이 QR)",
+  "allin_pay": "Allinpay(퉁롄페이)",
+  "allin_pay_desc": "Allinpay 통합 채널(클라우드/캐셔/페이펀드/다이렉트 4개 상품 모두 수신 가능, 위챗/알리페이/유니온페이, 샌드박스 지원)",
+  "shouqianba": "Shouqianba(서우첸바)",
+  "shouqianba_desc": "Shouqianba 통합 QR 채널(위챗/알리페이/유니온페이 QR)"
 }

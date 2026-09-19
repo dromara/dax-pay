@@ -22,5 +22,13 @@
   "douyin_desc": "Saluran pembayaran Douyin",
   "huifu_desc": "Huifu (Adapay/Dougong)",
   "easy_pay": "EasyPay",
-  "easy_pay_desc": "Saluran agregat pihak ketiga EasyPay (QR WeChat/Alipay)"
+  "easy_pay_desc": "Saluran agregat pihak ketiga EasyPay (QR WeChat/Alipay)",
+  "xingyi_pay": "Xingyi Pay",
+  "xingyi_pay_desc": "Saluran agregat Xingyi Pay (QR WeChat/Alipay/UnionPay)",
+  "long_pay": "CCB Long Pay",
+  "long_pay_desc": "Saluran agregat CCB Long Pay (QR WeChat/Alipay/UnionPay)",
+  "allin_pay": "Allinpay",
+  "allin_pay_desc": "Saluran agregat Allinpay (Cloud/Cashier/Payfund/Direct, semua mampu perolehan; WeChat/Alipay/UnionPay, sandbox disokong)",
+  "shouqianba": "Shouqianba",
+  "shouqianba_desc": "Saluran QR agregat Shouqianba (WeChat/Alipay/UnionPay)"
 }

@@ -2471,14 +2471,14 @@ COMMENT ON COLUMN public.dougong_isv_key_config.product IS '产品编码(dougong
 -- Name: COLUMN dougong_isv_key_config.sys_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.dougong_isv_key_config.sys_id IS '服务商系统ID(sysId, 汇付控制台分配; 首次查询自动创建的占位记录为空, 支付前由应用层校验必填)';
+COMMENT ON COLUMN public.dougong_isv_key_config.sys_id IS '服务商系统ID(sysId, 汇付控制台分配)';
 
 
 --
 -- Name: COLUMN dougong_isv_key_config.product_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.dougong_isv_key_config.product_id IS '汇付产品号(productId; 首次查询自动创建的占位记录为空, 支付前由应用层校验必填)';
+COMMENT ON COLUMN public.dougong_isv_key_config.product_id IS '汇付产品号(productId)';
 
 
 --
@@ -3477,6 +3477,144 @@ COMMENT ON COLUMN public.dy_platform_app_capability.product IS '产品编码';
 
 
 --
+-- Name: easy_pay_key_config; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.easy_pay_key_config (
+    id bigint NOT NULL,
+    mch_no character varying(32) NOT NULL,
+    channel_mch_no character varying(64) NOT NULL,
+    server_url character varying(255) NOT NULL,
+    partner_id character varying(32) NOT NULL,
+    merchant_private_key text,
+    platform_public_key text,
+    creator bigint,
+    create_time timestamp(6) with time zone,
+    last_modifier bigint,
+    last_modified_time timestamp(6) with time zone,
+    version integer DEFAULT 0 NOT NULL,
+    deleted boolean DEFAULT false NOT NULL
+);
+
+
+--
+-- Name: TABLE easy_pay_key_config; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.easy_pay_key_config IS '易支付通道密钥配置(通道商户维度)';
+
+
+--
+-- Name: COLUMN easy_pay_key_config.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_key_config.id IS '主键';
+
+
+--
+-- Name: COLUMN easy_pay_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_key_config.mch_no IS '商户号';
+
+
+--
+-- Name: COLUMN easy_pay_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_key_config.channel_mch_no IS '通道商户号(EASY+雪花, 唯一关联, 创建后不可修改)';
+
+
+--
+-- Name: COLUMN easy_pay_key_config.server_url; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_key_config.server_url IS '易支付平台网关地址(如 https://pay.xxx.com)';
+
+
+--
+-- Name: COLUMN easy_pay_key_config.partner_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_key_config.partner_id IS '易支付商户ID(pid, 上游平台分配)';
+
+
+--
+-- Name: COLUMN easy_pay_key_config.merchant_private_key; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_key_config.merchant_private_key IS '商户RSA私钥(PKCS8, SHA256withRSA 签名, 加密存储)';
+
+
+--
+-- Name: COLUMN easy_pay_key_config.platform_public_key; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_key_config.platform_public_key IS '易支付平台验签公钥(加密存储)';
+
+
+--
+-- Name: COLUMN easy_pay_key_config.creator; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_key_config.creator IS '创建人ID';
+
+
+--
+-- Name: COLUMN easy_pay_key_config.create_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_key_config.create_time IS '创建时间';
+
+
+--
+-- Name: COLUMN easy_pay_key_config.last_modifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_key_config.last_modifier IS '最后修改人ID';
+
+
+--
+-- Name: COLUMN easy_pay_key_config.last_modified_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_key_config.last_modified_time IS '最后修改时间';
+
+
+--
+-- Name: COLUMN easy_pay_key_config.version; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_key_config.version IS '乐观锁版本号';
+
+
+--
+-- Name: COLUMN easy_pay_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.easy_pay_key_config.deleted IS '逻辑删除标志';
+
+
+--
+-- Name: easy_pay_key_config_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.easy_pay_key_config_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: easy_pay_key_config_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.easy_pay_key_config_id_seq OWNED BY public.easy_pay_key_config.id;
+
+
+--
 -- Name: fuyou_isv_channel_merchant; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -4104,180 +4242,6 @@ CREATE SEQUENCE public.hmpay_isv_channel_merchant_id_seq
 --
 
 ALTER SEQUENCE public.hmpay_isv_channel_merchant_id_seq OWNED BY public.hmpay_isv_channel_merchant.id;
-
-
---
--- Name: easy_pay_key_config; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.easy_pay_key_config (
-    id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
-    channel_mch_no character varying(64) NOT NULL,
-    server_url character varying(255) NOT NULL,
-    partner_id character varying(32) NOT NULL,
-    merchant_private_key text,
-    platform_public_key text,
-    creator bigint,
-    create_time timestamp(6) with time zone,
-    last_modifier bigint,
-    last_modified_time timestamp(6) with time zone,
-    version integer DEFAULT 0 NOT NULL,
-    deleted boolean DEFAULT false NOT NULL
-);
-
-
---
--- Name: TABLE easy_pay_key_config; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.easy_pay_key_config IS '易支付通道密钥配置(通道商户维度)';
-
-
---
--- Name: COLUMN easy_pay_key_config.id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.easy_pay_key_config.id IS '主键';
-
-
---
--- Name: COLUMN easy_pay_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.easy_pay_key_config.mch_no IS '商户号';
-
-
---
--- Name: COLUMN easy_pay_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.easy_pay_key_config.channel_mch_no IS '通道商户号(EASY+雪花, 唯一关联, 创建后不可修改)';
-
-
---
--- Name: COLUMN easy_pay_key_config.server_url; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.easy_pay_key_config.server_url IS '易支付平台网关地址(如 https://pay.xxx.com)';
-
-
---
--- Name: COLUMN easy_pay_key_config.partner_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.easy_pay_key_config.partner_id IS '易支付商户ID(pid, 上游平台分配)';
-
-
---
--- Name: COLUMN easy_pay_key_config.merchant_private_key; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.easy_pay_key_config.merchant_private_key IS '商户RSA私钥(PKCS8, SHA256withRSA 签名, 加密存储)';
-
-
---
--- Name: COLUMN easy_pay_key_config.platform_public_key; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.easy_pay_key_config.platform_public_key IS '易支付平台验签公钥(加密存储)';
-
-
---
--- Name: COLUMN easy_pay_key_config.creator; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.easy_pay_key_config.creator IS '创建人ID';
-
-
---
--- Name: COLUMN easy_pay_key_config.create_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.easy_pay_key_config.create_time IS '创建时间';
-
-
---
--- Name: COLUMN easy_pay_key_config.last_modifier; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.easy_pay_key_config.last_modifier IS '最后修改人ID';
-
-
---
--- Name: COLUMN easy_pay_key_config.last_modified_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.easy_pay_key_config.last_modified_time IS '最后修改时间';
-
-
---
--- Name: COLUMN easy_pay_key_config.version; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.easy_pay_key_config.version IS '乐观锁版本号';
-
-
---
--- Name: COLUMN easy_pay_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.easy_pay_key_config.deleted IS '逻辑删除标志';
-
-
---
--- Name: easy_pay_key_config_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.easy_pay_key_config_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: easy_pay_key_config_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.easy_pay_key_config_id_seq OWNED BY public.easy_pay_key_config.id;
-
-
---
--- Name: easy_pay_key_config easy_pay_key_config_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.easy_pay_key_config
-    ADD CONSTRAINT easy_pay_key_config_pkey PRIMARY KEY (id);
-
-
---
--- Name: uk_easy_pay_key_cmchno; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX uk_easy_pay_key_cmchno ON public.easy_pay_key_config USING btree (channel_mch_no) WHERE (deleted = false);
-
-
---
--- Name: INDEX uk_easy_pay_key_cmchno; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.uk_easy_pay_key_cmchno IS '同一通道商户易支付密钥唯一';
-
-
---
--- Name: uk_easy_pay_key_mch_pid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX uk_easy_pay_key_mch_pid ON public.easy_pay_key_config USING btree (mch_no, partner_id) WHERE (deleted = false);
-
-
---
--- Name: INDEX uk_easy_pay_key_mch_pid; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.uk_easy_pay_key_mch_pid IS '同一商户下易支付商户ID不重复';
 
 
 --
@@ -6439,7 +6403,6 @@ COMMENT ON COLUMN public.leshua_isv_channel_merchant.deleted IS '删除标志';
 CREATE TABLE public.leshua_isv_key_config (
     id bigint NOT NULL,
     product character varying(32) NOT NULL,
-    ls_mch_no character varying(64),
     trade_key text,
     notify_key text,
     sign_type character varying(16),
@@ -6476,24 +6439,17 @@ COMMENT ON COLUMN public.leshua_isv_key_config.product IS '产品编码(对应 P
 
 
 --
--- Name: COLUMN leshua_isv_key_config.ls_mch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.leshua_isv_key_config.ls_mch_no IS '乐刷商户号(merchant_id, 服务商级或商户级, 全局唯一)';
-
-
---
 -- Name: COLUMN leshua_isv_key_config.trade_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.leshua_isv_key_config.trade_key IS '交易密钥(tradeKey, 请求签名与响应/回调验签, 加密存储)';
+COMMENT ON COLUMN public.leshua_isv_key_config.trade_key IS '交易密钥(tradeKey, 交易/进件等所有服务商接口请求签名, 加密存储)';
 
 
 --
 -- Name: COLUMN leshua_isv_key_config.notify_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.leshua_isv_key_config.notify_key IS '异步通知密钥(notifyKey, 部分场景回调验签, 加密存储)';
+COMMENT ON COLUMN public.leshua_isv_key_config.notify_key IS '异步通知密钥(notifyKey, 异步通知回调验签, 加密存储)';
 
 
 --
@@ -6507,7 +6463,7 @@ COMMENT ON COLUMN public.leshua_isv_key_config.sign_type IS '签名类型(MD5 / 
 -- Name: COLUMN leshua_isv_key_config.ls_isv_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.leshua_isv_key_config.ls_isv_no IS '乐刷服务商号(lsIsvNo, 进件场景使用, 可选)';
+COMMENT ON COLUMN public.leshua_isv_key_config.ls_isv_no IS '乐刷服务商号(lsIsvNo, 进件等接口场景必传)';
 
 
 --
@@ -15071,6 +15027,339 @@ COMMENT ON COLUMN public.pay_transfer_trade.deleted IS '逻辑删除';
 
 
 --
+-- Name: sheng_isv_channel_merchant; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.sheng_isv_channel_merchant (
+    id bigint NOT NULL,
+    mch_no character varying(32) NOT NULL,
+    channel_mch_no character varying(64) NOT NULL,
+    product character varying(32),
+    sub_mch_id character varying(16) NOT NULL,
+    sdp_app_id character varying(32),
+    creator bigint,
+    create_time timestamp(6) with time zone,
+    last_modifier bigint,
+    last_modified_time timestamp(6) with time zone,
+    version integer DEFAULT 0 NOT NULL,
+    deleted boolean DEFAULT false NOT NULL
+);
+
+
+--
+-- Name: TABLE sheng_isv_channel_merchant; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.sheng_isv_channel_merchant IS '盛付通服务商子商户绑定(通道商户维度)';
+
+
+--
+-- Name: COLUMN sheng_isv_channel_merchant.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_isv_channel_merchant.id IS '主键';
+
+
+--
+-- Name: COLUMN sheng_isv_channel_merchant.mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_isv_channel_merchant.mch_no IS '商户号';
+
+
+--
+-- Name: COLUMN sheng_isv_channel_merchant.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_isv_channel_merchant.channel_mch_no IS '通道商户号(唯一关联, 创建后不可修改)';
+
+
+--
+-- Name: COLUMN sheng_isv_channel_merchant.product; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_isv_channel_merchant.product IS '产品编码(sheng_isv)';
+
+
+--
+-- Name: COLUMN sheng_isv_channel_merchant.sub_mch_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_isv_channel_merchant.sub_mch_id IS '子商户号(服务商模式必填, 须与服务商商户号存在代理关系)';
+
+
+--
+-- Name: COLUMN sheng_isv_channel_merchant.sdp_app_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_isv_channel_merchant.sdp_app_id IS '盛付通分配AppId(可空, 子商户应用)';
+
+
+--
+-- Name: COLUMN sheng_isv_channel_merchant.creator; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_isv_channel_merchant.creator IS '创建人ID';
+
+
+--
+-- Name: COLUMN sheng_isv_channel_merchant.create_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_isv_channel_merchant.create_time IS '创建时间';
+
+
+--
+-- Name: COLUMN sheng_isv_channel_merchant.last_modifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_isv_channel_merchant.last_modifier IS '最后修改人ID';
+
+
+--
+-- Name: COLUMN sheng_isv_channel_merchant.last_modified_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_isv_channel_merchant.last_modified_time IS '最后修改时间';
+
+
+--
+-- Name: COLUMN sheng_isv_channel_merchant.version; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_isv_channel_merchant.version IS '乐观锁版本号';
+
+
+--
+-- Name: COLUMN sheng_isv_channel_merchant.deleted; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_isv_channel_merchant.deleted IS '逻辑删除标志';
+
+
+--
+-- Name: sheng_isv_key_config; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.sheng_isv_key_config (
+    id bigint NOT NULL,
+    product character varying(32) NOT NULL,
+    sheng_mch_id character varying(16),
+    merchant_private_key text,
+    shengpay_public_key text,
+    creator bigint,
+    create_time timestamp(6) with time zone,
+    last_modifier bigint,
+    last_modified_time timestamp(6) with time zone,
+    version integer DEFAULT 0 NOT NULL,
+    deleted boolean DEFAULT false NOT NULL
+);
+
+
+--
+-- Name: TABLE sheng_isv_key_config; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.sheng_isv_key_config IS '盛付通服务商密钥配置(产品级全局一份)';
+
+
+--
+-- Name: COLUMN sheng_isv_key_config.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_isv_key_config.id IS '主键';
+
+
+--
+-- Name: COLUMN sheng_isv_key_config.product; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_isv_key_config.product IS '产品编码(sheng_isv, 服务商密钥按产品全局一份)';
+
+
+--
+-- Name: COLUMN sheng_isv_key_config.sheng_mch_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_isv_key_config.sheng_mch_id IS '服务商商户号(mchId, 代子商户发起时上送)';
+
+
+--
+-- Name: COLUMN sheng_isv_key_config.merchant_private_key; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_isv_key_config.merchant_private_key IS '服务商私钥(PKCS8/PKCS1 兼容, SHA1withRSA 签名, 加密存储)';
+
+
+--
+-- Name: COLUMN sheng_isv_key_config.shengpay_public_key; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_isv_key_config.shengpay_public_key IS '盛付通验签公钥(加密存储)';
+
+
+--
+-- Name: COLUMN sheng_isv_key_config.creator; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_isv_key_config.creator IS '创建人ID';
+
+
+--
+-- Name: COLUMN sheng_isv_key_config.create_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_isv_key_config.create_time IS '创建时间';
+
+
+--
+-- Name: COLUMN sheng_isv_key_config.last_modifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_isv_key_config.last_modifier IS '最后修改人ID';
+
+
+--
+-- Name: COLUMN sheng_isv_key_config.last_modified_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_isv_key_config.last_modified_time IS '最后修改时间';
+
+
+--
+-- Name: COLUMN sheng_isv_key_config.version; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_isv_key_config.version IS '乐观锁版本号';
+
+
+--
+-- Name: COLUMN sheng_isv_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_isv_key_config.deleted IS '逻辑删除标志';
+
+
+--
+-- Name: sheng_key_config; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.sheng_key_config (
+    id bigint NOT NULL,
+    mch_no character varying(32) NOT NULL,
+    channel_mch_no character varying(64) NOT NULL,
+    sheng_mch_id character varying(16),
+    sdp_app_id character varying(32),
+    merchant_private_key text,
+    shengpay_public_key text,
+    creator bigint,
+    create_time timestamp(6) with time zone,
+    last_modifier bigint,
+    last_modified_time timestamp(6) with time zone,
+    version integer DEFAULT 0 NOT NULL,
+    deleted boolean DEFAULT false NOT NULL
+);
+
+
+--
+-- Name: TABLE sheng_key_config; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.sheng_key_config IS '盛付通通道密钥配置(商户模式)';
+
+
+--
+-- Name: COLUMN sheng_key_config.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_key_config.id IS '主键';
+
+
+--
+-- Name: COLUMN sheng_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_key_config.mch_no IS '商户号';
+
+
+--
+-- Name: COLUMN sheng_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_key_config.channel_mch_no IS '通道商户号(唯一关联, 创建后不可修改)';
+
+
+--
+-- Name: COLUMN sheng_key_config.sheng_mch_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_key_config.sheng_mch_id IS '盛付通商户号(mchId, 商户自有对接商户号)';
+
+
+--
+-- Name: COLUMN sheng_key_config.sdp_app_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_key_config.sdp_app_id IS '盛付通分配AppId(可空, 直连场景必填)';
+
+
+--
+-- Name: COLUMN sheng_key_config.merchant_private_key; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_key_config.merchant_private_key IS '商户私钥(PKCS8, SHA1withRSA 签名, 加密存储)';
+
+
+--
+-- Name: COLUMN sheng_key_config.shengpay_public_key; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_key_config.shengpay_public_key IS '盛付通验签公钥(加密存储)';
+
+
+--
+-- Name: COLUMN sheng_key_config.creator; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_key_config.creator IS '创建人ID';
+
+
+--
+-- Name: COLUMN sheng_key_config.create_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_key_config.create_time IS '创建时间';
+
+
+--
+-- Name: COLUMN sheng_key_config.last_modifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_key_config.last_modifier IS '最后修改人ID';
+
+
+--
+-- Name: COLUMN sheng_key_config.last_modified_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_key_config.last_modified_time IS '最后修改时间';
+
+
+--
+-- Name: COLUMN sheng_key_config.version; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_key_config.version IS '乐观锁版本号';
+
+
+--
+-- Name: COLUMN sheng_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.sheng_key_config.deleted IS '逻辑删除标志';
+
+
+--
 -- Name: starter_audit_login_log; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -18681,14 +18970,14 @@ COMMENT ON COLUMN public.yeepay_direct_key_config.app_key IS '通道应用 AppKe
 -- Name: COLUMN yeepay_direct_key_config.private_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.yeepay_direct_key_config.private_key IS '商户 RSA 私钥(PEM PKCS#8, SDK 签名用, 加密存储)';
+COMMENT ON COLUMN public.yeepay_direct_key_config.private_key IS '商户 RSA 私钥(PEM 格式 PKCS#8, SDK 签名用, 加密存储)';
 
 
 --
 -- Name: COLUMN yeepay_direct_key_config.yop_public_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.yeepay_direct_key_config.yop_public_key IS '易宝平台 RSA 公钥(PEM, SDK 验签用, 加密存储)';
+COMMENT ON COLUMN public.yeepay_direct_key_config.yop_public_key IS '易宝平台 RSA 公钥(PEM, 预留字段, 当前验签走 SDK 内置平台证书, 加密存储)';
 
 
 --
@@ -18716,7 +19005,7 @@ COMMENT ON COLUMN public.yeepay_direct_key_config.sandbox IS '是否沙箱环境
 -- Name: COLUMN yeepay_direct_key_config.creator; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.yeepay_direct_key_config.creator IS '创建者ID';
+COMMENT ON COLUMN public.yeepay_direct_key_config.creator IS '创建人ID';
 
 
 --
@@ -18730,7 +19019,7 @@ COMMENT ON COLUMN public.yeepay_direct_key_config.create_time IS '创建时间';
 -- Name: COLUMN yeepay_direct_key_config.last_modifier; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.yeepay_direct_key_config.last_modifier IS '最后修改者ID';
+COMMENT ON COLUMN public.yeepay_direct_key_config.last_modifier IS '最后修改人ID';
 
 
 --
@@ -18744,14 +19033,14 @@ COMMENT ON COLUMN public.yeepay_direct_key_config.last_modified_time IS '最后�
 -- Name: COLUMN yeepay_direct_key_config.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.yeepay_direct_key_config.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.yeepay_direct_key_config.version IS '乐观锁版本号';
 
 
 --
 -- Name: COLUMN yeepay_direct_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.yeepay_direct_key_config.deleted IS '删除标志';
+COMMENT ON COLUMN public.yeepay_direct_key_config.deleted IS '逻辑删除标志';
 
 
 --
@@ -18904,6 +19193,22 @@ ALTER TABLE ONLY public.device_qr_code
 
 
 --
+-- Name: dougong_isv_channel_merchant dougong_isv_channel_merchant_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dougong_isv_channel_merchant
+    ADD CONSTRAINT dougong_isv_channel_merchant_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: dougong_isv_key_config dougong_isv_key_config_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.dougong_isv_key_config
+    ADD CONSTRAINT dougong_isv_key_config_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: dy_channel_app_capability dy_channel_app_capability_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -18933,6 +19238,14 @@ ALTER TABLE ONLY public.dy_platform_app_capability
 
 ALTER TABLE ONLY public.dy_platform_app
     ADD CONSTRAINT dy_platform_app_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: easy_pay_key_config easy_pay_key_config_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.easy_pay_key_config
+    ADD CONSTRAINT easy_pay_key_config_pkey PRIMARY KEY (id);
 
 
 --
@@ -19432,22 +19745,6 @@ ALTER TABLE ONLY public.alipay_transfer_scene_config
 
 
 --
--- Name: dougong_isv_channel_merchant dougong_isv_channel_merchant_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.dougong_isv_channel_merchant
-    ADD CONSTRAINT dougong_isv_channel_merchant_pkey PRIMARY KEY (id);
-
-
---
--- Name: dougong_isv_key_config dougong_isv_key_config_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.dougong_isv_key_config
-    ADD CONSTRAINT dougong_isv_key_config_pkey PRIMARY KEY (id);
-
-
---
 -- Name: douyin_direct_alloc_receiver pk_douyin_direct_alloc_receiver; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -19765,6 +20062,30 @@ ALTER TABLE ONLY public.wechat_transfer_config
 
 ALTER TABLE ONLY public.yeepay_direct_key_config
     ADD CONSTRAINT pk_yeepay_direct_key_config PRIMARY KEY (id);
+
+
+--
+-- Name: sheng_isv_channel_merchant sheng_isv_channel_merchant_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sheng_isv_channel_merchant
+    ADD CONSTRAINT sheng_isv_channel_merchant_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: sheng_isv_key_config sheng_isv_key_config_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sheng_isv_key_config
+    ADD CONSTRAINT sheng_isv_key_config_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: sheng_key_config sheng_key_config_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sheng_key_config
+    ADD CONSTRAINT sheng_key_config_pkey PRIMARY KEY (id);
 
 
 --
@@ -21833,6 +22154,34 @@ COMMENT ON INDEX public.uk_easy_pay_credential_pid IS '同一易支付商户号�
 
 
 --
+-- Name: uk_easy_pay_key_cmchno; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_easy_pay_key_cmchno ON public.easy_pay_key_config USING btree (channel_mch_no) WHERE (deleted = false);
+
+
+--
+-- Name: INDEX uk_easy_pay_key_cmchno; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_easy_pay_key_cmchno IS '同一通道商户易支付密钥唯一';
+
+
+--
+-- Name: uk_easy_pay_key_mch_pid; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_easy_pay_key_mch_pid ON public.easy_pay_key_config USING btree (mch_no, partner_id) WHERE (deleted = false);
+
+
+--
+-- Name: INDEX uk_easy_pay_key_mch_pid; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_easy_pay_key_mch_pid IS '同一商户下易支付商户ID不重复';
+
+
+--
 -- Name: uk_easy_pay_order_app_out; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -22645,6 +22994,76 @@ COMMENT ON INDEX public.uk_refund_order_refund_no IS '退款号唯一';
 
 
 --
+-- Name: uk_sheng_isv_cmchno; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_sheng_isv_cmchno ON public.sheng_isv_channel_merchant USING btree (channel_mch_no) WHERE (deleted = false);
+
+
+--
+-- Name: INDEX uk_sheng_isv_cmchno; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_sheng_isv_cmchno IS '同一通道商户服务商绑定唯一';
+
+
+--
+-- Name: uk_sheng_isv_key_product; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_sheng_isv_key_product ON public.sheng_isv_key_config USING btree (product) WHERE (deleted = false);
+
+
+--
+-- Name: INDEX uk_sheng_isv_key_product; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_sheng_isv_key_product IS '服务商密钥按产品全局唯一(一个服务商一套密钥, 轮换单点)';
+
+
+--
+-- Name: uk_sheng_isv_mch_sub; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_sheng_isv_mch_sub ON public.sheng_isv_channel_merchant USING btree (mch_no, sub_mch_id) WHERE (deleted = false);
+
+
+--
+-- Name: INDEX uk_sheng_isv_mch_sub; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_sheng_isv_mch_sub IS '同一商户同子商户号唯一(防重复绑定)';
+
+
+--
+-- Name: uk_sheng_key_cmchno; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_sheng_key_cmchno ON public.sheng_key_config USING btree (channel_mch_no) WHERE (deleted = false);
+
+
+--
+-- Name: INDEX uk_sheng_key_cmchno; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_sheng_key_cmchno IS '同一通道商户盛付通密钥唯一(直连商户维度, 无沙箱双环境)';
+
+
+--
+-- Name: uk_sheng_key_mch_shengmch; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_sheng_key_mch_shengmch ON public.sheng_key_config USING btree (mch_no, sheng_mch_id) WHERE (deleted = false);
+
+
+--
+-- Name: INDEX uk_sheng_key_mch_shengmch; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_sheng_key_mch_shengmch IS '同一商户同一盛付通商户号唯一(并发创建兜底, 与应用层判重互补; sheng_mch_id 为空的未完成配置不受约束)';
+
+
+--
 -- Name: uk_system_sensitive_word_word; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -22852,433 +23271,6 @@ CREATE UNIQUE INDEX uk_yeepay_direct_key_cmchno_sandbox ON public.yeepay_direct_
 --
 
 COMMENT ON INDEX public.uk_yeepay_direct_key_cmchno_sandbox IS '同一通道商户同一环境密钥唯一';
-
-
---
--- Name: sheng_key_config; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.sheng_key_config (
-    id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
-    channel_mch_no character varying(64) NOT NULL,
-    sheng_mch_id character varying(16),
-    sdp_app_id character varying(32),
-    merchant_private_key text,
-    shengpay_public_key text,
-    creator bigint,
-    create_time timestamp(6) with time zone,
-    last_modifier bigint,
-    last_modified_time timestamp(6) with time zone,
-    version integer DEFAULT 0 NOT NULL,
-    deleted boolean DEFAULT false NOT NULL
-);
-
-
---
--- Name: TABLE sheng_key_config; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.sheng_key_config IS '盛付通通道密钥配置(商户模式)';
-
-
---
--- Name: COLUMN sheng_key_config.id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_key_config.id IS '主键';
-
-
---
--- Name: COLUMN sheng_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_key_config.mch_no IS '商户号';
-
-
---
--- Name: COLUMN sheng_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_key_config.channel_mch_no IS '通道商户号(唯一关联, 创建后不可修改)';
-
-
---
--- Name: COLUMN sheng_key_config.sheng_mch_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_key_config.sheng_mch_id IS '盛付通商户号(mchId)';
-
-
---
--- Name: COLUMN sheng_key_config.sdp_app_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_key_config.sdp_app_id IS '盛付通分配AppId(可空, 直连场景必填)';
-
-
---
--- Name: COLUMN sheng_key_config.merchant_private_key; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_key_config.merchant_private_key IS '商户私钥(PKCS8, SHA1withRSA 签名, 加密存储)';
-
-
---
--- Name: COLUMN sheng_key_config.shengpay_public_key; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_key_config.shengpay_public_key IS '盛付通验签公钥(加密存储)';
-
-
---
--- Name: COLUMN sheng_key_config.creator; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_key_config.creator IS '创建人ID';
-
-
---
--- Name: COLUMN sheng_key_config.create_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_key_config.create_time IS '创建时间';
-
-
---
--- Name: COLUMN sheng_key_config.last_modifier; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_key_config.last_modifier IS '最后修改人ID';
-
-
---
--- Name: COLUMN sheng_key_config.last_modified_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_key_config.last_modified_time IS '最后修改时间';
-
-
---
--- Name: COLUMN sheng_key_config.version; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_key_config.version IS '乐观锁版本号';
-
-
---
--- Name: COLUMN sheng_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_key_config.deleted IS '逻辑删除标志';
-
-
---
--- Name: sheng_key_config sheng_key_config_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sheng_key_config
-    ADD CONSTRAINT sheng_key_config_pkey PRIMARY KEY (id);
-
-
---
--- Name: uk_sheng_key_cmchno; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX uk_sheng_key_cmchno ON public.sheng_key_config USING btree (channel_mch_no) WHERE (deleted = false);
-
-
---
--- Name: INDEX uk_sheng_key_cmchno; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.uk_sheng_key_cmchno IS '同一通道商户盛付通密钥唯一(直连商户维度, 无沙箱双环境)';
-
-
---
--- Name: uk_sheng_key_mch_shengmch; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX uk_sheng_key_mch_shengmch ON public.sheng_key_config USING btree (mch_no, sheng_mch_id) WHERE (deleted = false);
-
-
---
--- Name: INDEX uk_sheng_key_mch_shengmch; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.uk_sheng_key_mch_shengmch IS '同一商户同一盛付通商户号唯一(并发创建兜底, 与应用层判重互补; sheng_mch_id 为空的未完成配置不受约束)';
-
-
---
--- Name: sheng_isv_key_config; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.sheng_isv_key_config (
-    id bigint NOT NULL,
-    product character varying(32) NOT NULL,
-    sheng_mch_id character varying(16),
-    merchant_private_key text,
-    shengpay_public_key text,
-    creator bigint,
-    create_time timestamp(6) with time zone,
-    last_modifier bigint,
-    last_modified_time timestamp(6) with time zone,
-    version integer DEFAULT 0 NOT NULL,
-    deleted boolean DEFAULT false NOT NULL
-);
-
-
---
--- Name: TABLE sheng_isv_key_config; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.sheng_isv_key_config IS '盛付通服务商密钥配置(产品级全局一份)';
-
-
---
--- Name: COLUMN sheng_isv_key_config.id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_isv_key_config.id IS '主键';
-
-
---
--- Name: COLUMN sheng_isv_key_config.product; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_isv_key_config.product IS '产品编码(sheng_isv, 服务商密钥按产品全局一份)';
-
-
---
--- Name: COLUMN sheng_isv_key_config.sheng_mch_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_isv_key_config.sheng_mch_id IS '服务商商户号(mchId, 代子商户发起时上送)';
-
-
---
--- Name: COLUMN sheng_isv_key_config.merchant_private_key; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_isv_key_config.merchant_private_key IS '服务商私钥(PKCS8/PKCS1 兼容, SHA1withRSA 签名, 加密存储)';
-
-
---
--- Name: COLUMN sheng_isv_key_config.shengpay_public_key; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_isv_key_config.shengpay_public_key IS '盛付通验签公钥(加密存储)';
-
-
---
--- Name: COLUMN sheng_isv_key_config.creator; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_isv_key_config.creator IS '创建人ID';
-
-
---
--- Name: COLUMN sheng_isv_key_config.create_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_isv_key_config.create_time IS '创建时间';
-
-
---
--- Name: COLUMN sheng_isv_key_config.last_modifier; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_isv_key_config.last_modifier IS '最后修改人ID';
-
-
---
--- Name: COLUMN sheng_isv_key_config.last_modified_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_isv_key_config.last_modified_time IS '最后修改时间';
-
-
---
--- Name: COLUMN sheng_isv_key_config.version; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_isv_key_config.version IS '乐观锁版本号';
-
-
---
--- Name: COLUMN sheng_isv_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_isv_key_config.deleted IS '逻辑删除标志';
-
-
---
--- Name: sheng_isv_key_config sheng_isv_key_config_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sheng_isv_key_config
-    ADD CONSTRAINT sheng_isv_key_config_pkey PRIMARY KEY (id);
-
-
---
--- Name: uk_sheng_isv_key_product; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX uk_sheng_isv_key_product ON public.sheng_isv_key_config USING btree (product) WHERE (deleted = false);
-
-
---
--- Name: INDEX uk_sheng_isv_key_product; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.uk_sheng_isv_key_product IS '服务商密钥按产品全局唯一(一个服务商一套密钥, 轮换单点)';
-
-
---
--- Name: sheng_isv_channel_merchant; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.sheng_isv_channel_merchant (
-    id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
-    channel_mch_no character varying(64) NOT NULL,
-    product character varying(32),
-    sub_mch_id character varying(16) NOT NULL,
-    sdp_app_id character varying(32),
-    creator bigint,
-    create_time timestamp(6) with time zone,
-    last_modifier bigint,
-    last_modified_time timestamp(6) with time zone,
-    version integer DEFAULT 0 NOT NULL,
-    deleted boolean DEFAULT false NOT NULL
-);
-
-
---
--- Name: TABLE sheng_isv_channel_merchant; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.sheng_isv_channel_merchant IS '盛付通服务商子商户绑定(通道商户维度)';
-
-
---
--- Name: COLUMN sheng_isv_channel_merchant.id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_isv_channel_merchant.id IS '主键';
-
-
---
--- Name: COLUMN sheng_isv_channel_merchant.mch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_isv_channel_merchant.mch_no IS '商户号';
-
-
---
--- Name: COLUMN sheng_isv_channel_merchant.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_isv_channel_merchant.channel_mch_no IS '通道商户号(唯一关联, 创建后不可修改)';
-
-
---
--- Name: COLUMN sheng_isv_channel_merchant.product; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_isv_channel_merchant.product IS '产品编码(sheng_isv)';
-
-
---
--- Name: COLUMN sheng_isv_channel_merchant.sub_mch_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_isv_channel_merchant.sub_mch_id IS '子商户号(服务商模式必填, 须与服务商商户号存在代理关系)';
-
-
---
--- Name: COLUMN sheng_isv_channel_merchant.sdp_app_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_isv_channel_merchant.sdp_app_id IS '盛付通分配AppId(可空, 子商户应用)';
-
-
---
--- Name: COLUMN sheng_isv_channel_merchant.creator; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_isv_channel_merchant.creator IS '创建人ID';
-
-
---
--- Name: COLUMN sheng_isv_channel_merchant.create_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_isv_channel_merchant.create_time IS '创建时间';
-
-
---
--- Name: COLUMN sheng_isv_channel_merchant.last_modifier; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_isv_channel_merchant.last_modifier IS '最后修改人ID';
-
-
---
--- Name: COLUMN sheng_isv_channel_merchant.last_modified_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_isv_channel_merchant.last_modified_time IS '最后修改时间';
-
-
---
--- Name: COLUMN sheng_isv_channel_merchant.version; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_isv_channel_merchant.version IS '乐观锁版本号';
-
-
---
--- Name: COLUMN sheng_isv_channel_merchant.deleted; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.sheng_isv_channel_merchant.deleted IS '逻辑删除标志';
-
-
---
--- Name: sheng_isv_channel_merchant sheng_isv_channel_merchant_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.sheng_isv_channel_merchant
-    ADD CONSTRAINT sheng_isv_channel_merchant_pkey PRIMARY KEY (id);
-
-
---
--- Name: uk_sheng_isv_cmchno; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX uk_sheng_isv_cmchno ON public.sheng_isv_channel_merchant USING btree (channel_mch_no) WHERE (deleted = false);
-
-
---
--- Name: INDEX uk_sheng_isv_cmchno; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.uk_sheng_isv_cmchno IS '同一通道商户服务商绑定唯一';
-
-
---
--- Name: uk_sheng_isv_mch_sub; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX uk_sheng_isv_mch_sub ON public.sheng_isv_channel_merchant USING btree (mch_no, sub_mch_id) WHERE (deleted = false);
-
-
---
--- Name: INDEX uk_sheng_isv_mch_sub; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.uk_sheng_isv_mch_sub IS '同一商户同子商户号唯一(防重复绑定)';
 
 
 --

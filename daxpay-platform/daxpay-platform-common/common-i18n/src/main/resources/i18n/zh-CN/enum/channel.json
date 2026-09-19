@@ -22,5 +22,13 @@
   "douyin_desc": "抖音支付通道",
   "huifu_desc": "汇付天下(Adapay/斗拱)",
   "easy_pay": "易支付",
-  "easy_pay_desc": "易支付三方聚合通道(微信/支付宝扫码)"
+  "easy_pay_desc": "易支付三方聚合通道(微信/支付宝扫码)",
+  "xingyi_pay": "星驿付",
+  "xingyi_pay_desc": "星驿付聚合通道(微信/支付宝/银联扫码)",
+  "long_pay": "建行龙支付",
+  "long_pay_desc": "建设银行龙支付聚合通道(微信/支付宝/银联/建行钱包扫码)",
+  "allin_pay": "通联支付",
+  "allin_pay_desc": "通联支付聚合通道(云商通/收银宝/收付通/金服宝四产品均可收单, 微信/支付宝/云闪付, 支持沙箱环境)",
+  "shouqianba": "收钱吧",
+  "shouqianba_desc": "收钱吧聚合扫码通道(微信/支付宝/银联)"
 }

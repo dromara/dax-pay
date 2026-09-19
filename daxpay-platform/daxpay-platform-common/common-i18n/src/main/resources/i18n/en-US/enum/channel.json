@@ -22,5 +22,13 @@
   "douyin_desc": "Douyin Pay channel",
   "huifu_desc": "Huifu (Adapay/Dougong)",
   "easy_pay": "EasyPay",
-  "easy_pay_desc": "EasyPay third-party aggregate channel (WeChat/Alipay QR)"
+  "easy_pay_desc": "EasyPay third-party aggregate channel (WeChat/Alipay QR)",
+  "xingyi_pay": "Xingyi Pay",
+  "xingyi_pay_desc": "Xingyi Pay aggregate channel (WeChat/Alipay/UnionPay QR)",
+  "long_pay": "CCB Long Pay",
+  "long_pay_desc": "CCB Long Pay aggregate channel (WeChat/Alipay/UnionPay QR)",
+  "allin_pay": "Allinpay",
+  "allin_pay_desc": "Allinpay aggregate channel (Cloud/Cashier/Payfund/Direct, all acquiring-capable; WeChat/Alipay/UnionPay, sandbox supported)",
+  "shouqianba": "Shouqianba",
+  "shouqianba_desc": "Shouqianba aggregate QR channel (WeChat/Alipay/UnionPay)"
 }

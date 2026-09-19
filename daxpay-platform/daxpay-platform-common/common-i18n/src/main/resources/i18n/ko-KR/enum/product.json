@@ -29,5 +29,19 @@
   "yee_pay": "예 페이",
   "jee_pay": "지페이",
   "easy_pay": "이지페이",
-  "easy_pay_desc": "이지페이 제3자 통합 플랫폼(위챗/알리페이 QR)"
+  "easy_pay_desc": "이지페이 제3자 통합 플랫폼(위챗/알리페이 QR)",
+  "xingyi_pay": "싱이페이",
+  "xingyi_pay_desc": "싱이페이 통합 결제 상품(신대륙 계열)",
+  "long_pay": "CCB 롱페이",
+  "long_pay_desc": "중국건설은행 롱페이 통합 결제 상품",
+  "allin_cloud": "윈샹퉁(클라우드)",
+  "allin_cloud_desc": "Allinpay 클라우드 종합 결제 상품(원스톱 통합 수신, 샌드박스 지원)",
+  "allin_cashier": "서우인바오(캐셔)",
+  "allin_cashier_desc": "Allinpay 캐셔 수신 상품(통합 주문 API: 위챗/알리페이/유니온페이, 샌드박스 지원)",
+  "allin_payfund": "서우푸퉁(페이펀드)",
+  "allin_payfund_desc": "Allinpay 페이펀드 상품(수금+지급, 수신 지원, 샌드박스 지원)",
+  "allin_direct": "진푸바오(다이렉트)",
+  "allin_direct_desc": "Allinpay 다이렉트 상품(AT 직접 수신, 샌드박스 지원)",
+  "shouqianba": "Shouqianba(서우첸바)",
+  "shouqianba_desc": "Shouqianba 통합 QR 결제 상품"
 }

@@ -87,6 +87,21 @@ public enum ProductEnum implements I18nSupport {
     JEE_PAY("jee_pay"),
     /// 易支付(三方聚合平台, 一通道一产品, 一期仅扫码两类)
     EASY_PAY("easy_pay"),
+    /// 星驿付(新大陆旗下国通星驿, 一通道一产品)
+    XINGYI_PAY("xingyi_pay"),
+    /// 建行龙支付(建设银行聚合支付, 一通道一产品)
+    LONG_PAY("long_pay"),
+    // ===== 通联支付(四产品共用通道 allin_pay, 均可收单, 支持沙箱) =====
+    /// 通联支付·云商通(综合支付版, 一站式聚合收单)
+    ALLIN_CLOUD("allin_cloud"),
+    /// 通联支付·收银宝(收单业务, 统一下单 API)
+    ALLIN_CASHIER("allin_cashier"),
+    /// 通联支付·收付通(收付业务, 收款+付款)
+    ALLIN_PAYFUND("allin_payfund"),
+    /// 通联支付·金服宝(直联业务, AT 直连收单)
+    ALLIN_DIRECT("allin_direct"),
+    /// 收钱吧(聚合扫码收单, 一通道一产品)
+    SHOUQIANBA("shouqianba"),
     ;
 
     private final String code;
@@ -129,6 +144,14 @@ public enum ProductEnum implements I18nSupport {
             case JEE_PAY -> ChannelEnum.JEE_PAY.getCode();
             // 易支付: 一通道一产品
             case EASY_PAY -> ChannelEnum.EASY_PAY.getCode();
+            // 星驿付: 一通道一产品
+            case XINGYI_PAY -> ChannelEnum.XINGYI_PAY.getCode();
+            // 建行龙支付: 一通道一产品
+            case LONG_PAY -> ChannelEnum.LONG_PAY.getCode();
+            // 通联支付: 云商通/收银宝/收付通/金服宝 四产品共用通道 allin_pay
+            case ALLIN_CLOUD, ALLIN_CASHIER, ALLIN_PAYFUND, ALLIN_DIRECT -> ChannelEnum.ALLIN_PAY.getCode();
+            // 收钱吧: 一通道一产品
+            case SHOUQIANBA -> ChannelEnum.SHOUQIANBA.getCode();
         };
     }
 
