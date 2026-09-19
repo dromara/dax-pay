@@ -17,21 +17,20 @@ public class LeshuaIsvKeyConfigParam {
     @Schema(description = "产品编码")
     private String product;
 
-    @NotBlank(message = "{validation.field.lsMchNo.notBlank}")
-    @Schema(description = "乐刷商户号")
-    private String lsMchNo;
-
-    @Schema(description = "交易密钥(加密存储)")
+    @NotBlank(message = "{validation.field.tradeKey.notBlank}")
+    @Schema(description = "交易密钥(交易/进件等所有服务商接口请求签名, 加密存储)")
     private String tradeKey;
 
-    @Schema(description = "异步通知密钥(加密存储)")
+    @NotBlank(message = "{validation.field.notifyKey.notBlank}")
+    @Schema(description = "异步通知密钥(异步通知回调验签, 加密存储)")
     private String notifyKey;
 
     @NotBlank(message = "{validation.field.signType.notBlank}")
     @Schema(description = "签名类型(MD5 / SM3)")
     private String signType;
 
-    @Schema(description = "乐刷服务商号(可选)")
+    @NotBlank(message = "{validation.field.lsIsvNo.notBlank}")
+    @Schema(description = "乐刷服务商号(进件等接口场景必传)")
     private String lsIsvNo;
 
     @NotNull(message = "{validation.field.sandbox.notNull}")

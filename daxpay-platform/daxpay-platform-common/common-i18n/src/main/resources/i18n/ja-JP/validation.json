@@ -761,6 +761,15 @@
     "lsMchNo": {
       "notBlank": "Leshua 販売者番号を空白にすることはできません"
     },
+    "lsIsvNo": {
+      "notBlank": "Leshua サービスプロバイダ番号を空白にすることはできません"
+    },
+    "tradeKey": {
+      "notBlank": "トレードキーを空白にすることはできません"
+    },
+    "notifyKey": {
+      "notBlank": "通知キーを空白にすることはできません"
+    },
     "fileName": {
       "notBlank": "ファイル名を空白にすることはできません"
     },

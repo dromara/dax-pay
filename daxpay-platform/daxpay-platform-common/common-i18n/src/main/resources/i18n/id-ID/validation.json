@@ -760,6 +760,15 @@
     "lsMchNo": {
       "notBlank": "Nomor pedagang Leshua tidak boleh kosong"
     },
+    "lsIsvNo": {
+      "notBlank": "Nomor penyedia layanan Leshua tidak boleh kosong"
+    },
+    "tradeKey": {
+      "notBlank": "Kunci perdagangan tidak boleh kosong"
+    },
+    "notifyKey": {
+      "notBlank": "Kunci notifikasi tidak boleh kosong"
+    },
     "fileName": {
       "notBlank": "Nama file tidak boleh kosong"
     },

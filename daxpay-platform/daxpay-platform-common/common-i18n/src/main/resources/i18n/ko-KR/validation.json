@@ -761,6 +761,15 @@
     "lsMchNo": {
       "notBlank": "Leshua 판매자 번호는 비워둘 수 없습니다."
     },
+    "lsIsvNo": {
+      "notBlank": "Leshua 서비스 제공자 번호는 비워둘 수 없습니다."
+    },
+    "tradeKey": {
+      "notBlank": "거래 키는 비워둘 수 없습니다."
+    },
+    "notifyKey": {
+      "notBlank": "알림 키는 비워둘 수 없습니다."
+    },
     "fileName": {
       "notBlank": "파일 이름은 비워둘 수 없습니다."
     },

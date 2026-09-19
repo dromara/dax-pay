@@ -760,6 +760,15 @@
     "lsMchNo": {
       "notBlank": "Số thương gia Leshua không được để trống"
     },
+    "lsIsvNo": {
+      "notBlank": "Số nhà cung cấp dịch vụ Leshua không được để trống"
+    },
+    "tradeKey": {
+      "notBlank": "Khóa giao dịch không được để trống"
+    },
+    "notifyKey": {
+      "notBlank": "Khóa thông báo không được để trống"
+    },
     "fileName": {
       "notBlank": "Tên tệp không được để trống"
     },

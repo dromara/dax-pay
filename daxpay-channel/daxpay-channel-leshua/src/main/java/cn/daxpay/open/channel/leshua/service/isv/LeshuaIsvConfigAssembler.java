@@ -19,11 +19,12 @@ import org.springframework.stereotype.Service;
 /// (创建时按当时产品 activeEnv 写入, 不随产品切换改变), 据此选择对应环境的密钥与网关地址。
 ///
 /// 字段映射(对齐乐刷交易接口):
-/// - merchant_id ← [LeshuaIsvKeyConfig#lsMchNo](服务商级商户号, 全局唯一)
-/// - tradeKey ← [LeshuaIsvKeyConfig#tradeKey]
-/// - signType ← [LeshuaIsvKeyConfig#signType]
+/// - merchant_id ← [LeshuaIsvChannelMerchant#lsMchNo](商户级, 每商户自己的乐刷商户号)
+/// - tradeKey ← [LeshuaIsvKeyConfig#tradeKey](服务商级全局, 交易/进件等接口请求签名)
+/// - notifyKey ← [LeshuaIsvKeyConfig#notifyKey](服务商级全局, 异步通知回调验签)
+/// - signType ← [LeshuaIsvKeyConfig#signType](服务商级全局)
 ///
-/// 注: 乐刷交易接口只需 merchant_id + tradeKey, 子商户号(merchant_id)由服务商全局配置提供。
+/// 注: 乐刷服务商模式下, 各商户用自己的 merchant_id 收款, 服务商只统一持密钥与签名方式。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -45,12 +46,13 @@ public class LeshuaIsvConfigAssembler {
                 .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
         // 沙箱标识直接读通道商户固化的快照(创建时按当时产品 activeEnv 写入, 不随产品切换改变)
         boolean sandbox = channelMerchant.isSandbox();
-        // 服务商密钥(按 sandbox 分环境取对应密钥, 含 lsMchNo + tradeKey + signType)
+        // 服务商密钥(按 sandbox 分环境取对应密钥, 含 tradeKey + signType)
         LeshuaIsvKeyConfig keyConfig = leshuaIsvKeyConfigService.getByProductForPay(ProductEnum.LESHUA_PAY.getCode(), sandbox);
 
         LeshuaSdkCredential credential = new LeshuaSdkCredential();
-        credential.setLsMchNo(keyConfig.getLsMchNo());
+        credential.setLsMchNo(channelMerchant.getLsMchNo());
         credential.setTradeKey(keyConfig.getTradeKey());
+        credential.setNotifyKey(keyConfig.getNotifyKey());
         credential.setSignType(keyConfig.getSignType());
         credential.setSandbox(sandbox);
         return credential;

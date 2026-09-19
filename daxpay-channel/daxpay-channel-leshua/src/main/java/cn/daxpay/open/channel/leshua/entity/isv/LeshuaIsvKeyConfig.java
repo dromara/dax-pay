@@ -14,7 +14,8 @@ import lombok.experimental.Accessors;
 /// # 乐刷服务商密钥配置
 ///
 /// 乐刷为收单机构服务商模式, 服务商密钥全局唯一(按 product 查询),
-/// 子商户仅需乐刷商户号(merchant_id), 见 [LeshuaIsvChannelMerchant]。
+/// 子商户的乐刷商户号(merchant_id)在通道商户绑定([LeshuaIsvChannelMerchant])维护,
+/// 每个商户用自己的乐刷商户号收款, 服务商只统一持密钥与签名方式。
 ///
 /// 签名算法: MD5 或 SM3, 用 tradeKey 做请求签名与回调验签。
 /// 敏感字段(tradeKey/notifyKey)通过 [DataEncryptTypeHandler] 加密入库。
@@ -28,21 +29,18 @@ public class LeshuaIsvKeyConfig extends MpBaseEntity implements ToResult<LeshuaI
     /// @see cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum
     private String product;
 
-    /// 乐刷商户号(merchant_id, 服务商级或商户级, 全局唯一)
-    private String lsMchNo;
-
-    /// 交易密钥(tradeKey, 用于请求签名与响应/回调验签, 加密存储)
+    /// 交易密钥(tradeKey, 交易/进件等所有服务商接口请求签名, 加密存储)
     @TableField(typeHandler = DataEncryptTypeHandler.class)
     private String tradeKey;
 
-    /// 异步通知密钥(notifyKey, 部分场景回调验签使用, 加密存储)
+    /// 异步通知密钥(notifyKey, 异步通知回调验签, 加密存储)
     @TableField(typeHandler = DataEncryptTypeHandler.class)
     private String notifyKey;
 
     /// 签名类型(MD5 / SM3)
     private String signType;
 
-    /// 乐刷服务商号(lsIsvNo, 进件场景使用, 可选)
+    /// 乐刷服务商号(lsIsvNo, 进件等接口场景必传)
     private String lsIsvNo;
 
     /// 是否沙箱环境

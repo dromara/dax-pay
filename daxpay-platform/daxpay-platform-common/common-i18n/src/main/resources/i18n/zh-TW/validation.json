@@ -761,6 +761,15 @@
     "lsMchNo": {
       "notBlank": "樂刷商戶號不能為空"
     },
+    "lsIsvNo": {
+      "notBlank": "樂刷服務商號不能為空"
+    },
+    "tradeKey": {
+      "notBlank": "交易金鑰不能為空"
+    },
+    "notifyKey": {
+      "notBlank": "非同步通知金鑰不能為空"
+    },
     "fileName": {
       "notBlank": "檔名不能為空"
     },

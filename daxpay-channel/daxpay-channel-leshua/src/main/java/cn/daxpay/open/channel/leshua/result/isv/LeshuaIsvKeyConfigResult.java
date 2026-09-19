@@ -18,9 +18,6 @@ public class LeshuaIsvKeyConfigResult extends BaseResult {
     @Schema(description = "产品编码")
     private String product;
 
-    @Schema(description = "乐刷商户号")
-    private String lsMchNo;
-
     @SensitiveInfo(front = 8, end = 8)
     @Schema(description = "交易密钥(加密存储)")
     private String tradeKey;

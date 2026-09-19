@@ -11,8 +11,10 @@ import lombok.Data;
 public class LeshuaSdkCredential {
     /// 乐刷商户编号(merchant_id)
     private String lsMchNo;
-    /// 交易密钥(tradeKey, 用于请求签名与回调验签)
+    /// 交易密钥(tradeKey, 交易/进件等所有服务商接口请求签名)
     private String tradeKey;
+    /// 异步通知密钥(notifyKey, 异步通知回调验签)
+    private String notifyKey;
     /// 签名类型(MD5 / SM3)
     private String signType;
     /// 是否沙箱环境

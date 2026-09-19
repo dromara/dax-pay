@@ -38,12 +38,13 @@ public class LeshuaIsvKeyConfigService {
     /// 支付场景查询服务商密钥(必填校验, 不创建记录)
     ///
     /// 与 [#findByProduct] 的 upsert 语义不同, 此方法只读不写:
-    /// 记录不存在或关键字段(lsMchNo/tradeKey/signType)任一为空时 fail-fast。
+    /// 记录不存在或关键字段(tradeKey/signType)任一为空时 fail-fast。
+    /// 乐刷商户号(merchant_id)属商户级, 由通道商户绑定提供, 不在本表。
     public LeshuaIsvKeyConfig getByProductForPay(String product, boolean sandbox) {
         LeshuaIsvKeyConfig config = leshuaIsvKeyConfigManager.findByProductAndSandbox(product, sandbox)
                 // 乐刷: 服务商密钥未配置
                 .orElseThrow(() -> new BizInfoException("error.channel.leshua.isvKeyNotConfigured"));
-        if (StrUtil.hasBlank(config.getLsMchNo(), config.getTradeKey(), config.getSignType())) {
+        if (StrUtil.hasBlank(config.getTradeKey(), config.getSignType(), config.getNotifyKey())) {
             throw new BizInfoException("error.channel.leshua.isvKeyNotConfigured");
         }
         return config;

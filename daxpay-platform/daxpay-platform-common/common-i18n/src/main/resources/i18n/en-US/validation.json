@@ -765,6 +765,15 @@
     "lsMchNo": {
       "notBlank": "Leshua merchant number cannot be blank"
     },
+    "lsIsvNo": {
+      "notBlank": "Leshua ISV number cannot be blank"
+    },
+    "tradeKey": {
+      "notBlank": "Trade key cannot be blank"
+    },
+    "notifyKey": {
+      "notBlank": "Notify key cannot be blank"
+    },
     "fileName": {
       "notBlank": "File name cannot be blank"
     },
