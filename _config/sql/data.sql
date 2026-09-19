@@ -4734,7 +4734,7 @@ INSERT INTO public.pay_md_product VALUES (10003, 'ums_app', '银联商务(APP)',
 INSERT INTO public.pay_md_product VALUES (10004, 'ums_mini', '银联商务(小程序)', 'ums_pay', 53, NULL, NULL, NULL, NULL, 0, false, true, true);
 INSERT INTO public.pay_md_product VALUES (10005, 'ums_h5', '银联商务(H5)', 'ums_pay', 54, NULL, NULL, NULL, NULL, 0, false, true, true);
 INSERT INTO public.pay_md_product VALUES (10006, 'ums_barcode', '银联商务(B扫C)', 'ums_pay', 55, NULL, NULL, NULL, NULL, 0, false, true, true);
-INSERT INTO public.pay_md_product VALUES (10007, 'lakala_pay', '拉卡拉支付', 'lakala_pay', 60, NULL, NULL, NULL, NULL, 0, false, true, true);
+INSERT INTO public.pay_md_product VALUES (10007, 'lakala_pay', '拉卡拉', 'lakala_pay', 60, NULL, NULL, NULL, NULL, 0, false, true, true);
 INSERT INTO public.pay_md_product VALUES (92001, 'stripe_pay', 'Stripe 支付', 'stripe', 190, 1, '2026-08-02 13:04:19.05231+00', 1, '2026-08-02 13:04:19.05231+00', 0, false, true, true);
 INSERT INTO public.pay_md_product VALUES (10012, 'ada_pay', 'Adapay', 'huifu', 120, 1, '2026-07-05 23:19:01.974607+00', 1, '2026-07-05 23:19:01.974607+00', 0, false, true, true);
 INSERT INTO public.pay_md_product VALUES (10010, 'douyin_pay', '抖音支付(直连)', 'douyin', 30, NULL, NULL, NULL, NULL, 0, false, false, true);

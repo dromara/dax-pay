@@ -53,7 +53,7 @@ public enum ProductEnum implements I18nSupport {
     UNION_PAY("union_pay"),
 
     // ===== 拉卡拉 =====
-    /// 拉卡拉支付
+    /// 拉卡拉
     LAKALA_PAY("lakala_pay"),
 
     // ===== 乐刷 =====
