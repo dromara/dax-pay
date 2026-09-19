@@ -131,7 +131,7 @@ public class PlatformCommonProperties {
         /// 服务条款网址
         private String termsOfServiceUrl;
         /// 版本号
-        private String version = "4.0.0-beta6";
+        private String version = "4.0.0-beta7";
     }
 }
 
