@@ -3,30 +3,20 @@ package cn.daxpay.open.payment.merchant.check.checker;
 import cn.daxpay.open.payment.common.check.checker.MerchantConfigChecker;
 import cn.daxpay.open.payment.common.check.enums.ConfigCheckCategoryEnum;
 import cn.daxpay.open.payment.common.check.model.ConfigCheckItem;
-import cn.daxpay.open.payment.merchant.dao.appinfo.MchAppInfoManager;
-import cn.daxpay.open.payment.merchant.dao.config.MchAppNotifyConfigManager;
-import cn.daxpay.open.payment.merchant.entity.appinfo.MchAppInfo;
-import cn.daxpay.open.payment.merchant.entity.config.MchAppNotifyConfig;
-import cn.daxpay.open.platform.core.enums.merchant.MchAppStatusEnum;
-import cn.hutool.core.util.StrUtil;
-import lombok.RequiredArgsConstructor;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
-import java.util.Objects;
 
 /// # 商户通知配置检查器
 ///
 /// 检测商户下启用的应用是否配置了有效的回调通知地址。
 /// 任一启用应用的 notifyUrl 为空或未启用 => 告警。
+///
+/// 注意: 异步通知配置功能建设中(各端入口已切换为建设中占位, 不开放配置),
+/// 配置不可用期间本检查器同步停用, 避免巡检告警引导用户前往不可用的配置页;
+/// 恢复配置入口时需一并还原本检查逻辑(原实现见 git 历史)。
 @Component
 @Order(5)
-@RequiredArgsConstructor
 public class MchNotifyConfigChecker implements MerchantConfigChecker {
-
-    private final MchAppInfoManager mchAppInfoManager;
-    private final MchAppNotifyConfigManager mchAppNotifyConfigManager;
 
     @Override
     public ConfigCheckCategoryEnum getCategory() {
@@ -35,31 +25,7 @@ public class MchNotifyConfigChecker implements MerchantConfigChecker {
 
     @Override
     public ConfigCheckItem check(String mchNo) {
-        List<MchAppInfo> enabledApps = mchAppInfoManager.findAllByMchNo(mchNo).stream()
-                .filter(a -> MchAppStatusEnum.ENABLE.getCode().equals(a.getStatus()))
-                .toList();
-        // 无启用应用时由 MchAppChecker 告警, 通知检查器跳过
-        if (enabledApps.isEmpty()) {
-            return null;
-        }
-        // 统计启用应用中通知地址未配置或未启用的数量
-        long missingCount = enabledApps.stream()
-                .filter(app -> {
-                    MchAppNotifyConfig cfg = mchAppNotifyConfigManager.findByAppId(app.getAppId()).orElse(null);
-                    return Objects.isNull(cfg)
-                            || StrUtil.isBlank(cfg.getNotifyUrl())
-                            || !Boolean.TRUE.equals(cfg.getStatus());
-                })
-                .count();
-        if (missingCount > 0) {
-            return ConfigCheckItem.of(
-                    ConfigCheckCategoryEnum.MCH_NOTIFY,
-                    ConfigCheckCategoryEnum.MCH_NOTIFY.getCode(),
-                    "configCheck.mchNotify.title",
-                    "configCheck.mchNotify.description",
-                    "/mch/app/manage"
-            ).setCount((int) missingCount);
-        }
+        // 功能建设中停用巡检, 恒不产生告警项
         return null;
     }
 }
