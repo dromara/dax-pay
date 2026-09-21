@@ -2,6 +2,7 @@
   "notConfigured": "Access URL is not configured",
   "checkSuccess": "Connectivity check passed",
   "checkFailed": "Connectivity check failed, HTTP status: {0}",
-  "echoMismatch": "Connectivity check failed, backend echo response mismatch",
+  "notExposed": "Connectivity check failed, endpoint {0} is not exposed: the deployment panel gateway has not opened this interface group. Enable \"Channel Callback\" under Gateway -> Exposed Interfaces in the panel and retry",
+  "probeMismatch": "Connectivity check failed, the backend self-check probe returned an unexpected response (the domain may be served by a CDN or another site)",
   "networkError": "Network unreachable, please verify the URL and service availability"
 }

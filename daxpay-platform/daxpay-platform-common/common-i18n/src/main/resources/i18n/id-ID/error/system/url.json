@@ -2,6 +2,7 @@
   "notConfigured": "URL akses tidak dikonfigurasi",
   "checkSuccess": "Pemeriksaan konektivitas berhasil",
   "checkFailed": "Pemeriksaan konektivitas gagal, status HTTP: {0}",
-  "echoMismatch": "Pemeriksaan konektivitas gagal, respons gema backend tidak cocok",
+  "notExposed": "Pemeriksaan konektivitas gagal, endpoint {0} tidak dibuka: gateway panel deployment belum membuka grup antarmuka ini. Aktifkan \"Callback Kanal\" di 「Gateway -> Antarmuka Eksternal」 pada panel lalu coba lagi",
+  "probeMismatch": "Pemeriksaan konektivitas gagal, respons probe mandiri backend tidak sesuai (domain mungkin dilayani oleh CDN atau situs lain)",
   "networkError": "Jaringan tidak dapat dijangkau, harap verifikasi URL dan ketersediaan layanan"
 }

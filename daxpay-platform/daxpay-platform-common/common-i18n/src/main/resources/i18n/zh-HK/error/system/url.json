@@ -2,6 +2,7 @@
   "notConfigured": "訪問地址未配置",
   "checkSuccess": "連通性檢查通過",
   "checkFailed": "連通性檢查失敗, HTTP 狀態碼: {0}",
-  "echoMismatch": "連通性檢查失敗, 後端 echo 響應不符合預期",
+  "notExposed": "連通性檢查失敗, 接口 {0} 未放行: 部署面板網關未開放該接口組, 請在面板「網關 -> 對外接口」啟用「通道回調」後重試",
+  "probeMismatch": "連通性檢查失敗, 後端自檢探針回應不符合預期(域名可能被 CDN 或其他站點接管)",
   "networkError": "網絡不通, 請檢查地址是否正確或服務是否可達"
 }

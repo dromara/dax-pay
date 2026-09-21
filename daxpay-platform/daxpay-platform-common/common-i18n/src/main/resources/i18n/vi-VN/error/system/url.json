@@ -2,6 +2,7 @@
   "notConfigured": "URL truy cập chưa được định cấu hình",
   "checkSuccess": "Đã vượt qua kiểm tra kết nối",
   "checkFailed": "Kiểm tra kết nối không thành công, trạng thái HTTP: {0}",
-  "echoMismatch": "Kiểm tra kết nối không thành công, phản hồi tiếng vang phụ trợ không khớp",
+  "notExposed": "Kiểm tra kết nối không thành công, điểm cuối {0} chưa được mở: gateway của bảng điều khiển triển khai chưa mở nhóm giao diện này. Hãy bật 「Callback kênh」 tại 「Gateway -> Giao diện đối ngoại」 trên bảng điều khiển rồi thử lại",
+  "probeMismatch": "Kiểm tra kết nối không thành công, phản hồi tự kiểm tra của backend không như mong đợi (tên miền có thể do CDN hoặc trang khác phục vụ)",
   "networkError": "Không thể truy cập mạng, vui lòng xác minh URL và tính khả dụng của dịch vụ"
 }

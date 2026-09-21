@@ -30,6 +30,12 @@ public class PlatformUrlConfigService {
     /// HTTP 探测超时(毫秒)
     private static final int CHECK_TIMEOUT_MS = 5000;
 
+    /// 后端 API 自检探针路径(部署自检端点, 见 UnipayPingController)
+    private static final String BACKEND_PROBE_PATH = "/unipay/callback/ping";
+
+    /// 探针响应标识(须与 UnipayPingController#PING_MARKER 一致, 跨模块不共享常量)
+    private static final String BACKEND_PROBE_MARKER = "daxpay-ping:unipay-callback";
+
     /// 获取端点配置
     public PlatformUrlConfig getUrlConfig() {
         return systemConfigService.getOrCreateConfig(PlatformConfigTypeEnum.URL,
@@ -51,6 +57,8 @@ public class PlatformUrlConfigService {
 
     /// 检查端点连通性
     ///
+    /// 后端 API 地址探测部署自检探针 [#BACKEND_PROBE_PATH], 其余端点仅校验 HTTP 可达。
+    ///
     /// @param param 端点类型与可选 URL
     /// @return 探测结果
     public ConnectivityCheckResult checkUrl(PlatformUrlCheckParam param) {
@@ -61,9 +69,9 @@ public class PlatformUrlConfigService {
         }
         targetUrl = StrUtil.removeSuffix(targetUrl, "/");
 
-        // 后端 API 走 /echo 严格校验; 前端 SPA 仅校验 HTTP 可达
-        boolean backendEcho = "backend".equalsIgnoreCase(urlType);
-        String probeUrl = backendEcho ? targetUrl + "/echo" : targetUrl;
+        // 后端 API 走部署自检探针(严格校验); 前端 SPA 仅校验 HTTP 可达
+        boolean backendProbe = "backend".equalsIgnoreCase(urlType);
+        String probeUrl = backendProbe ? targetUrl + BACKEND_PROBE_PATH : targetUrl;
 
         long start = System.currentTimeMillis();
         try (HttpResponse response = HttpRequest.get(probeUrl)
@@ -72,17 +80,25 @@ public class PlatformUrlConfigService {
                 .execute()) {
             long latency = System.currentTimeMillis() - start;
             int status = response.getStatus();
+            // 404 单独提示: 部署面板网关未开放该接口组(面板部署下检查失败的常见原因)
+            if (backendProbe && status == 404) {
+                return ConnectivityCheckResult.fail(
+                        I18nUtil.get("error.system.url.notExposed", BACKEND_PROBE_PATH),
+                        latency,
+                        status);
+            }
             if (status < 200 || status >= 400) {
                 return ConnectivityCheckResult.fail(
                         I18nUtil.get("error.system.url.checkFailed", String.valueOf(status)),
                         latency,
                         status);
             }
-            if (backendEcho) {
+            if (backendProbe) {
+                // 响应体须带探针标识, 排除域名被 CDN/其他站点接管后返回 200 的情况
                 String body = StrUtil.nullToEmpty(response.body());
-                if (!body.startsWith("echo")) {
+                if (!body.contains(BACKEND_PROBE_MARKER)) {
                     return ConnectivityCheckResult.fail(
-                            I18nUtil.get("error.system.url.echoMismatch"),
+                            I18nUtil.get("error.system.url.probeMismatch"),
                             latency,
                             status);
                 }
