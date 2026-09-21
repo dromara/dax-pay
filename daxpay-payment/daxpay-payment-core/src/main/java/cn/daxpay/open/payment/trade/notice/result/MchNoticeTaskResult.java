@@ -27,6 +27,12 @@ public class MchNoticeTaskResult extends MchBaseResult {
     @Schema(description = "业务单号")
     private String bizNo;
 
+    /// 通知事件码
+    ///
+    /// 经 [Trans] i18n 模式按 `enum.notice_event` 前缀翻译回填本字段（查不到词条时原样返回 code）。
+    /// 注意: 仅管理端/商户端 Web 服务调用 [cn.daxpay.open.platform.common.translate.service.TransService] 进行翻译;
+    /// 小程序端服务刻意不调用, 保留原始 code 供前端 `eventText`/`eventIcon` 按事件前缀翻译与配图标
+    @Trans(i18n = true, i18nPrefix = "enum.notice_event")
     @Schema(description = "通知事件码")
     private String event;
 

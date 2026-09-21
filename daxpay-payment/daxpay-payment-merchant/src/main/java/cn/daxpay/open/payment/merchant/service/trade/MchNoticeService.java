@@ -15,6 +15,7 @@ import cn.daxpay.open.payment.trade.notice.service.NoticeSendEngine;
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
+import cn.daxpay.open.platform.common.translate.service.TransService;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -35,24 +36,31 @@ public class MchNoticeService {
     private final MchNoticeTaskManager taskManager;
     private final MchNoticeRecordManager recordManager;
     private final NoticeSendEngine noticeSendEngine;
+    private final TransService transService;
 
     /// 任务分页
     public PageResult<MchNoticeTaskResult> pageTask(PageParam pageParam, MchNoticeTaskQuery query) {
         forceMchNo(query);
         Page<MchNoticeTask> page = taskManager.page(pageParam, query);
         var records = page.getRecords().stream().map(MchNoticeTaskConvert.CONVERT::toResult).toList();
-        return new PageResult<MchNoticeTaskResult>()
+        PageResult<MchNoticeTaskResult> pageResult = new PageResult<MchNoticeTaskResult>()
                 .setRecords(records)
                 .setTotal(page.getTotal())
                 .setSize(page.getSize())
                 .setCurrent(page.getCurrent());
+        // 翻译事件码与商户名称
+        transService.translate(pageResult);
+        return pageResult;
     }
 
     /// 任务详情
     public MchNoticeTaskResult findTaskById(Long id) {
         MchNoticeTask task = taskManager.findById(id)
                 .orElseThrow(() -> new DataNotExistException("pay.error.order.callbackTaskNotExist"));
-        return MchNoticeTaskConvert.CONVERT.toResult(task);
+        MchNoticeTaskResult result = MchNoticeTaskConvert.CONVERT.toResult(task);
+        // 翻译事件码与商户名称
+        transService.translate(result);
+        return result;
     }
 
     /// 手动重发
