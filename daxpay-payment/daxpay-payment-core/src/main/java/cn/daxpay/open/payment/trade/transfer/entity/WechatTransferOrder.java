@@ -77,6 +77,9 @@ public class WechatTransferOrder extends MchBaseEntity implements TransferContai
     /// 转账场景(冗余自转账配置)
     private String transferScene;
 
+    /// 转账场景报备信息(JSON序列化, FAIL重试时恢复报备用)
+    private String reportInfos;
+
     /// 转账发起应用AppId(从转账配置解析, openid归属校验/对账回查用)
     private String wxAppId;
 

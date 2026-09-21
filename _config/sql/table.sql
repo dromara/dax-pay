@@ -14652,6 +14652,7 @@ CREATE TABLE public.pay_transfer_order_wechat (
     error_msg character varying(2048),
     payee_openid character varying(100) NOT NULL,
     transfer_scene character varying(50),
+    report_infos text,
     transfer_body character varying(2000),
     user_name character varying(100),
     creator bigint,
@@ -14802,6 +14803,13 @@ COMMENT ON COLUMN public.pay_transfer_order_wechat.payee_openid IS '收款人微
 --
 
 COMMENT ON COLUMN public.pay_transfer_order_wechat.transfer_scene IS '转账场景(冗余自通道商户配置)';
+
+
+--
+-- Name: COLUMN pay_transfer_order_wechat.report_infos; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_transfer_order_wechat.report_infos IS '转账场景报备信息(JSON序列化, FAIL重试时恢复报备用)';
 
 
 --

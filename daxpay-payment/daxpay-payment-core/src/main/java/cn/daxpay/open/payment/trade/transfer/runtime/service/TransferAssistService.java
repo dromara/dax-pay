@@ -123,6 +123,8 @@ public class TransferAssistService {
                 applyCommonCreateFields(order, param, transferNo, amount);
                 // 商户号独立赋值(父类 setter 返回 MchBaseEntity, 禁止链式)
                 order.setMchNo(mchNo);
+                // 持久化报备信息(FAIL重试时恢复, 与支付宝/抖音容器对齐)
+                order.setReportInfos(serializeReportInfos(param.getReportInfos()));
                 wechatTransferOrderManager.save(order);
                 TransferTrade trade = this.buildTrade(order, channel, transferNo);
                 transferTradeManager.save(trade);
@@ -381,6 +383,8 @@ public class TransferAssistService {
         return buildContext(order)
                 .setPayeeOpenid(order.getPayeeOpenid())
                 .setTransferScene(order.getTransferScene())
+                // 恢复报备信息(FAIL重试时使用, 与支付宝/抖音容器对齐)
+                .setReportInfos(deserializeReportInfos(order.getReportInfos()))
                 .setUserName(order.getUserName())
                 .setWxAppId(order.getWxAppId());
     }
