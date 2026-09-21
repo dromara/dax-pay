@@ -258,7 +258,6 @@ INSERT INTO "public"."iam_perm_menu" VALUES (91125, 91120, 'trade:transfer:creat
 INSERT INTO "public"."iam_perm_menu" VALUES (61104, 611, 'trade:transfer:trade', 'admin', 'TransferTradeList', 'menu.trade.transfer.trade', 'lucide:list-ordered', 'f', 't', '/payment/transfer/TransferTradeList', '/trade/transfer/trade', NULL, 2, 'f', 't', 'f', 1, 1, 0, 'f', 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-04 16:00:00+00', '2026-08-04 16:00:00+00');
 INSERT INTO "public"."iam_perm_menu" VALUES (91124, 91120, 'trade:transfer:trade', 'merchant', 'TransferTradeList', 'menu.trade.transfer.trade', 'lucide:list-ordered', 'f', 't', '/payment/transfer/TransferTradeList', '/trade/transfer/trade', NULL, 2, 'f', 't', 'f', 1, 1, 0, 'f', 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-04 16:00:00+00', '2026-08-04 16:00:00+00');
 INSERT INTO "public"."iam_perm_menu" VALUES (91415, 91402, 'merchant:alipay-isv-auth', 'merchant', 'AlipayIsvAuthPermission', 'menu.payment.merchant.channelMerchant.detail', NULL, 't', 'f', NULL, NULL, NULL, 3, 'f', 'f', 'f', 0, 1, 0, 'f', 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-27 09:30:00+00', '2026-08-27 09:30:00+00');
-INSERT INTO "public"."iam_perm_menu" VALUES (209, 2, 'demos:mail', 'admin', 'MailDemo', 'menu.demos.mail', 'lucide:mail', 'f', 'f', '/demos/mail/MailDemo', '/demos/mail', NULL, 8, 'f', 't', 'f', 1, 1, 0, 'f', 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-27 16:00:00+00', '2026-08-27 16:00:00+00');
 
 -- ----------------------------
 -- Primary Key structure for table iam_perm_menu
