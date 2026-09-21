@@ -17,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.Set;
 import java.util.Objects;
 
@@ -39,11 +38,11 @@ public class AlipayTransferStrategy extends AbsTransferStrategy {
             TransferPayeeTypeEnum.USER_ID.getCode(),
             TransferPayeeTypeEnum.LOGIN_NAME.getCode());
 
-    /// 转账金额下限(元, 文档 trans_amount 取值范围 [0.1, 100000000])
-    private static final BigDecimal AMOUNT_MIN = new BigDecimal("0.1");
+    /// 转账金额下限(分, 文档 trans_amount 取值范围 [0.1, 100000000]元, 对应 10 分起)
+    private static final long AMOUNT_MIN = 10L;
 
-    /// 大额档位(元): 达到该金额后付款理由必填(错误码 MEMO_REQUIRED_IN_TRANSFER_ERROR)
-    private static final BigDecimal LARGE_AMOUNT_LIMIT = new BigDecimal("50000");
+    /// 大额档位(分): 达到该金额(5万元)后付款理由必填(错误码 MEMO_REQUIRED_IN_TRANSFER_ERROR)
+    private static final long LARGE_AMOUNT_LIMIT = 5_000_000L;
 
     private final AlipayTransferService alipayTransferService;
     private final AlipayDirectConfigAssembler alipayDirectConfigAssembler;
@@ -79,14 +78,14 @@ public class AlipayTransferStrategy extends AbsTransferStrategy {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.channel.alipay.transferLogonNameRequired");
         }
-        // 转账金额不可低于 0.1 元
-        if (param.getAmount().compareTo(AMOUNT_MIN) < 0) {
+        // 转账金额不可低于 0.1 元(入参金额已是分)
+        if (param.getAmount() < AMOUNT_MIN) {
             // 支付宝: 转账金额不可低于0.1元
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.channel.alipay.transferAmountMin");
         }
         // 转账金额达到 50000 元时, 付款理由必填(监管要求, 错误码 MEMO_REQUIRED_IN_TRANSFER_ERROR)
-        if (param.getAmount().compareTo(LARGE_AMOUNT_LIMIT) >= 0 && StrUtil.isBlank(param.getReason())) {
+        if (param.getAmount() >= LARGE_AMOUNT_LIMIT && StrUtil.isBlank(param.getReason())) {
             // 支付宝: 转账金额达到50000元时, 必须填写付款理由
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.channel.alipay.transferRemarkRequired");

@@ -17,6 +17,9 @@ public interface TransferContainer {
     /// 商户号
     String getMchNo();
 
+    /// 应用ID(出站通知派发用, 建单从请求参数写入)
+    String getAppId();
+
     /// 平台转账单号
     String getTransferNo();
 
@@ -54,6 +57,8 @@ public interface TransferContainer {
     TransferContainer setTransferNo(String transferNo);
 
     TransferContainer setBizTransferNo(String bizTransferNo);
+
+    TransferContainer setAppId(String appId);
 
     TransferContainer setChannelMchNo(String channelMchNo);
 

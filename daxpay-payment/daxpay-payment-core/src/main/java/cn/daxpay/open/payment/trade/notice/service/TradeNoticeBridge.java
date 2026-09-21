@@ -113,6 +113,7 @@ public class TradeNoticeBridge {
         String content = unipayJson.toJson(TransferTradeConvert.CONVERT.toResult(trade));
         noticeDispatcher.dispatch(new NoticeDispatchCommand()
                 .setMchNo(trade.getMchNo())
+                .setAppId(trade.getAppId())
                 .setEvent(event.getCode())
                 .setBizId(trade.getId())
                 .setBizNo(trade.getTradeNo())

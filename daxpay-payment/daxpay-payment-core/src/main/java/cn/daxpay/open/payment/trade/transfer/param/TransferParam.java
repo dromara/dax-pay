@@ -1,15 +1,13 @@
 package cn.daxpay.open.payment.trade.transfer.param;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 /// # 转账发起参数(管理端/商户端共用)
@@ -26,6 +24,11 @@ public class TransferParam {
     @Schema(description = "商户号")
     private String mchNo;
 
+    /// 应用ID(unipay 轨由签名参数透传, 出站通知派发用; 管理端/商户端可不传)
+    @Size(max = 64, message = "应用ID不可超过64位")
+    @Schema(description = "应用ID")
+    private String appId;
+
     /// 通道商户号(凭证组装与通道路由用)
     @NotBlank(message = "通道商户号必填")
     @Size(max = 64, message = "通道商户号不可超过64位")
@@ -38,12 +41,11 @@ public class TransferParam {
     @Schema(description = "商户转账号")
     private String bizTransferNo;
 
-    /// 转账金额(元)
+    /// 转账金额(分, 与内部金额单位统一)
     @NotNull(message = "转账金额必填")
-    @DecimalMin(value = "0.01", message = "转账金额不可小于0.01元")
-    @Digits(integer = 8, fraction = 2, message = "转账金额精度到分, 且要小于一亿元")
-    @Schema(description = "转账金额(元)")
-    private BigDecimal amount;
+    @Min(value = 1, message = "转账金额必须大于0")
+    @Schema(description = "转账金额(分)")
+    private Long amount;
 
     /// 转账标题
     @Size(max = 100, message = "转账标题不可超过100位")

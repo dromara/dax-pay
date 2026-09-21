@@ -14134,6 +14134,7 @@ CREATE TABLE public.pay_transfer_order_alipay (
     id bigint NOT NULL,
     transfer_no character varying(32) NOT NULL,
     biz_transfer_no character varying(100) NOT NULL,
+    app_id character varying(64),
     channel_mch_no character varying(64),
     out_transfer_no character varying(150),
     mch_no character varying(32) NOT NULL,
@@ -14189,6 +14190,13 @@ COMMENT ON COLUMN public.pay_transfer_order_alipay.transfer_no IS '平台转账�
 --
 
 COMMENT ON COLUMN public.pay_transfer_order_alipay.biz_transfer_no IS '商户转账号(幂等键, 同一商户下唯一)';
+
+
+--
+-- Name: COLUMN pay_transfer_order_alipay.app_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_transfer_order_alipay.app_id IS '应用ID(建单从请求参数写入, 出站通知派发用)';
 
 
 --
@@ -14381,6 +14389,7 @@ CREATE TABLE public.pay_transfer_order_douyin (
     id bigint NOT NULL,
     transfer_no character varying(32) NOT NULL,
     biz_transfer_no character varying(100) NOT NULL,
+    app_id character varying(64),
     channel_mch_no character varying(64),
     out_transfer_no character varying(150),
     mch_no character varying(32) NOT NULL,
@@ -14435,6 +14444,13 @@ COMMENT ON COLUMN public.pay_transfer_order_douyin.transfer_no IS '平台转账�
 --
 
 COMMENT ON COLUMN public.pay_transfer_order_douyin.biz_transfer_no IS '商户转账号(幂等键, 同一商户下唯一)';
+
+
+--
+-- Name: COLUMN pay_transfer_order_douyin.app_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_transfer_order_douyin.app_id IS '应用ID(建单从请求参数写入, 出站通知派发用)';
 
 
 --
@@ -14620,6 +14636,7 @@ CREATE TABLE public.pay_transfer_order_wechat (
     id bigint NOT NULL,
     transfer_no character varying(32) NOT NULL,
     biz_transfer_no character varying(100) NOT NULL,
+    app_id character varying(64),
     channel_mch_no character varying(64),
     out_transfer_no character varying(150),
     mch_no character varying(32) NOT NULL,
@@ -14673,6 +14690,13 @@ COMMENT ON COLUMN public.pay_transfer_order_wechat.transfer_no IS '平台转账�
 --
 
 COMMENT ON COLUMN public.pay_transfer_order_wechat.biz_transfer_no IS '商户转账号(幂等键, 同一商户下唯一)';
+
+
+--
+-- Name: COLUMN pay_transfer_order_wechat.app_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_transfer_order_wechat.app_id IS '应用ID(建单从请求参数写入, 出站通知派发用)';
 
 
 --
@@ -14851,6 +14875,7 @@ CREATE TABLE public.pay_transfer_trade (
     id bigint NOT NULL,
     trade_no character varying(32) NOT NULL,
     biz_transfer_no character varying(100),
+    app_id character varying(64),
     container_id bigint NOT NULL,
     container_channel character varying(32) NOT NULL,
     channel character varying(32),
@@ -14898,6 +14923,13 @@ COMMENT ON COLUMN public.pay_transfer_trade.trade_no IS '平台转账交易号';
 --
 
 COMMENT ON COLUMN public.pay_transfer_trade.biz_transfer_no IS '商户转账号(冗余自容器, 同步记录/日志免回容器)';
+
+
+--
+-- Name: COLUMN pay_transfer_trade.app_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_transfer_trade.app_id IS '应用ID(冗余自容器, 出站通知派发用; 权威在通道转账单容器)';
 
 
 --

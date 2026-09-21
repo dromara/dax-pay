@@ -14,7 +14,6 @@ import cn.daxpay.open.payment.trade.transfer.entity.TransferTrade;
 import cn.daxpay.open.payment.trade.transfer.entity.WechatTransferOrder;
 import cn.daxpay.open.payment.trade.transfer.param.TransferParam;
 import cn.daxpay.open.payment.trade.transfer.param.TransferReportInfo;
-import cn.daxpay.open.payment.trade.util.CurrencyAmountUtil;
 import cn.daxpay.open.platform.core.enums.pay.channel.CurrencyEnum;
 import cn.daxpay.open.platform.core.enums.pay.notice.NoticeEventEnum;
 import cn.daxpay.open.platform.core.util.TradeNoGenerateUtil;
@@ -114,7 +113,8 @@ public class TransferAssistService {
     @Transactional(rollbackFor = Exception.class)
     public TransferStrategyContext createOrder(String channel, TransferParam param, String mchNo) {
         String transferNo = TradeNoGenerateUtil.transfer();
-        long amount = CurrencyAmountUtil.majorToMinor(param.getAmount(), CurrencyEnum.CNY);
+        // 金额入参已是分, 直接透传
+        long amount = param.getAmount();
         return switch (channel) {
             case "wechat" -> {
                 WechatTransferOrder order = new WechatTransferOrder()
@@ -171,6 +171,7 @@ public class TransferAssistService {
     private void applyCommonCreateFields(TransferContainer order, TransferParam param, String transferNo, long amount) {
         order.setTransferNo(transferNo)
                 .setBizTransferNo(param.getBizTransferNo())
+                .setAppId(param.getAppId())
                 .setChannelMchNo(param.getChannelMchNo())
                 .setAmount(amount)
                 .setCurrency(CurrencyEnum.CNY.getCode())
@@ -187,6 +188,7 @@ public class TransferAssistService {
         TransferTrade trade = new TransferTrade()
                 .setTradeNo(transferNo)
                 .setBizTransferNo(order.getBizTransferNo())
+                .setAppId(order.getAppId())
                 .setContainerId(order.getId())
                 .setContainerChannel(channel)
                 .setChannel(channel)

@@ -74,7 +74,8 @@ public class DouyinTransferStrategy extends AbsTransferStrategy {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.channel.douyin.transferPhoneInvalid");
         }
-        long amountFen = param.getAmount().movePointRight(2).longValue();
+        // 入参金额已是分
+        long amountFen = param.getAmount();
         if (amountFen >= LARGE_AMOUNT_LIMIT && StrUtil.isBlank(param.getPayeeName())) {
             // 抖音: 大于等于2000元必须填收款人姓名
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,

@@ -3,8 +3,7 @@ package cn.daxpay.open.payment.unipay.param.trade.alloc;
 import cn.daxpay.open.payment.unipay.param.MerchantPaymentCommonParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -12,7 +11,6 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 /// # 统一分账参数(对外签名)
@@ -89,11 +87,10 @@ public class UnipayAllocParam extends MerchantPaymentCommonParam {
         @Size(max = 64, message = "{validation.field.receiverName.size}")
         private String receiverName;
 
-        /// 分账金额(元)
-        @Schema(description = "分账金额(元)")
+        /// 分账金额(分, 与 unipay 契约金额单位统一)
+        @Schema(description = "分账金额(分)")
         @NotNull(message = "{validation.field.amount.notNull}")
-        @DecimalMin(value = "0.01", message = "{validation.field.amount.min}")
-        @Digits(integer = 8, fraction = 2, message = "{validation.field.amount.digits}")
-        private BigDecimal amount;
+        @Min(value = 1, message = "{validation.field.amount.min}")
+        private Long amount;
     }
 }

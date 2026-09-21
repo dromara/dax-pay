@@ -34,6 +34,9 @@ public class DouyinTransferOrder extends MchBaseEntity implements TransferContai
     /// 商户转账号(商户传入, 商户侧唯一)
     private String bizTransferNo;
 
+    /// 应用ID(建单从请求参数写入, 出站通知派发用)
+    private String appId;
+
     /// 通道商户号(路由确定后写入, 凭证组装用)
     private String channelMchNo;
 

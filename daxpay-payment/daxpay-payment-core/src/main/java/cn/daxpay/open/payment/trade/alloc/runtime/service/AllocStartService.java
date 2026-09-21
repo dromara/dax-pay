@@ -21,7 +21,6 @@ import cn.daxpay.open.payment.trade.order.entity.GatewayPayOrder;
 import cn.daxpay.open.payment.trade.order.entity.NormalPayOrder;
 import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.trade.runtime.mq.PayArtemisConstants;
-import cn.daxpay.open.payment.trade.util.CurrencyAmountUtil;
 import cn.daxpay.open.payment.strategy.alloc.AbsAllocStrategy;
 import cn.daxpay.open.payment.strategy.alloc.AllocStrategyContext;
 import cn.daxpay.open.payment.strategy.alloc.AllocStrategyFactory;
@@ -307,8 +306,9 @@ public class AllocStartService {
             throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.alloc.duplicateReceiver");
         }
         // 分账总金额不可超过原支付金额(简化校验, 未扣减退款金额, 后续可增强为可分账余额)
+        // 金额入参已是分, 直接汇总
         long totalAmount = param.getReceivers().stream()
-                .mapToLong(r -> CurrencyAmountUtil.majorToMinor(r.getAmount(), CurrencyEnum.CNY))
+                .mapToLong(AllocParam.AllocReceiverParam::getAmount)
                 .sum();
         if (Objects.isNull(trade.getAmount()) || totalAmount > trade.getAmount()) {
             throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.alloc.amountExceed");
@@ -353,7 +353,7 @@ public class AllocStartService {
                     .setReceiverType(rp.getReceiverType())
                     .setReceiverAccount(rp.getReceiverAccount())
                     .setReceiverName(rp.getReceiverName())
-                    .setAmount(CurrencyAmountUtil.majorToMinor(rp.getAmount(), CurrencyEnum.CNY))
+                    .setAmount(rp.getAmount())
                     .setResult(AllocDetailResultEnum.PENDING.getCode());
             details.add(detail);
         }

@@ -30,6 +30,9 @@ public class TransferTrade extends MchBaseEntity {
     /// 商户转账号(冗余自容器, 同步记录/日志免回容器; 权威在容器 bizTransferNo)
     private String bizTransferNo;
 
+    /// 应用ID(冗余自容器, 出站通知派发用; 权威在通道转账单容器)
+    private String appId;
+
     /// 关联通道转账单ID(容器主键)
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private Long containerId;

@@ -2,8 +2,7 @@ package cn.daxpay.open.payment.trade.alloc.param;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -11,7 +10,6 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 /// # 分账发起参数(内部编排用)
@@ -96,11 +94,10 @@ public class AllocParam {
         @Schema(description = "接收方姓名")
         private String receiverName;
 
-        /// 分账金额(元)
+        /// 分账金额(分, 与内部金额单位统一)
         @NotNull(message = "分账金额必填")
-        @DecimalMin(value = "0.01", message = "分账金额不可小于0.01元")
-        @Digits(integer = 8, fraction = 2, message = "分账金额精度到分, 且要小于一亿元")
-        @Schema(description = "分账金额(元)")
-        private BigDecimal amount;
+        @Min(value = 1, message = "分账金额必须大于0")
+        @Schema(description = "分账金额(分)")
+        private Long amount;
     }
 }

@@ -33,7 +33,7 @@ import java.util.Optional;
 /// # 转账发起编排服务
 ///
 /// 锁内编排：商户身份装载 → 幂等查重（仅 FAIL 可复用原单重试）
-/// → 通道参数校验 → 建单（容器+凭证双写, 独立事务）→ 通道发起（事务外, 远程调用）
+/// → 应用解析（新单路径, 空则取商户默认应用）→ 通道参数校验 → 建单（容器+凭证双写, 独立事务）→ 通道发起（事务外, 远程调用）
 /// → 结果处理（成功/处理中/失败, 独立事务 CAS 双写 + 通知）。
 /// 容器读写全部收敛在 [TransferAssistService]，本服务只面向凭证与策略上下文。
 ///
@@ -93,7 +93,10 @@ public class TransferStartService {
             // 该商户转账号已存在，请勿重复转账
             throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.transfer.noDuplicate");
         }
-        // 新单: 建单(独立事务)后发起
+        // 新单: 应用解析(appId 空则取商户默认应用, 校验启用与归属, 与支付链同款兜底)后建单,
+        // 回填的 appId 随建单落库, 转账终态通知派发按 appId 必填校验, 缺失会整体跳过
+        var mchApp = merchantContextLoader.resolveApp(paymentContext.getMchNo(), param.getAppId());
+        param.setAppId(mchApp.getAppId());
         TransferStrategyContext context = self.createOrder(channel, param);
         this.transfer(channel, context);
         return context.getTransferNo();

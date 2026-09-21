@@ -70,7 +70,8 @@ public class WechatTransferStrategy extends AbsTransferStrategy {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "error.channel.wechat.transferReportInfoRequired");
         }
-        long amountFen = param.getAmount().movePointRight(2).longValue();
+        // 入参金额已是分
+        long amountFen = param.getAmount();
         String payeeName = param.getPayeeName();
         if (amountFen < SMALL_AMOUNT_LIMIT && StrUtil.isNotBlank(payeeName)) {
             // 微信: 小于0.3元不允许填收款人姓名
