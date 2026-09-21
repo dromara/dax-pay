@@ -90,18 +90,7 @@ public class PaymentVerifyAspect {
                 // 参数需要继承MerchantPaymentCommonParam
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.verify.paramExtendRequired");
             }
-            Object proceed;
-            try {
-                proceed = pjp.proceed();
-            } catch (BizException ex) {
-                // DaxResult.msg 按 Accept-Language 解析 messageKey 为本地化消息
-                // 否则商户和日志看到的都是 "error.channel.alipay.payFailed" 这种原始 key, 无法阅读
-                DaxResult<Void> daxResult = new DaxResult<>(ex.getCode(), resolveResponseMessage(ex));
-                enrichDaxResult(daxResult, reqId);
-                paymentSignService.sign(daxResult);
-                result = daxResult;
-                return daxResult;
-            }
+            Object proceed = pjp.proceed();
             // 对返回值添加响应时间、reqId 并进行签名(traceId 走响应头, 不进 body)
             if (proceed instanceof DaxResult<?> daxResult) {
                 daxResult.setResTime(OffsetDateTime.now(ZoneOffset.UTC));
@@ -113,6 +102,15 @@ public class PaymentVerifyAspect {
                 throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.verify.returnTypeRequired");
             }
             return proceed;
+        } catch (BizException ex) {
+            // 业务异常（验签阶段失败或控制器内抛出）统一返回签名 DaxResult：
+            // 签名用平台私钥、不依赖商户上下文，商户不存在时同样可签，失败与成功响应形状一致；
+            // msg 按 Accept-Language 解析 messageKey（见 resolveResponseMessage），不透出原始 key
+            DaxResult<Void> daxResult = new DaxResult<>(ex.getCode(), resolveResponseMessage(ex));
+            enrichDaxResult(daxResult, reqId);
+            paymentSignService.sign(daxResult);
+            result = daxResult;
+            return daxResult;
         } catch (Throwable t) {
             error = t;
             throw t;
