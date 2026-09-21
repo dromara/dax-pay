@@ -68,6 +68,7 @@ public class PermMenuController {
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
+    @InternalPath
     @Operation(summary = "根据id查询")
     @GetMapping("/get")
     public Result<PermMenuResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
@@ -84,6 +85,7 @@ public class PermMenuController {
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
+    @InternalPath
     @Operation(summary = "检查菜单编码是否存在")
     @GetMapping("/check-menu-code-exists")
     public Result<Boolean> checkMenuCodeExists(

@@ -1,6 +1,7 @@
 package cn.daxpay.open.platform.iam.controller.permission.resource;
 
 import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
+import cn.daxpay.open.platform.core.annotation.InternalPath;
 import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.entity.UserDetail;
@@ -42,6 +43,7 @@ public class PermCodeController {
     private final PermCodeScanService permCodeScanService;
 
     @PermCode(code = PermCodes.Action.MANAGE)
+    @InternalPath
     @Operation(summary = "手动扫描同步权限码")
     @PostMapping("/scan")
     public Result<PermCodeScanResult> scan() {
@@ -49,6 +51,7 @@ public class PermCodeController {
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
+    @InternalPath
     @Operation(summary = "根据菜单查询权限码列表")
     @GetMapping("/get-by-menu")
     public Result<List<MenuPermCodeItemResult>> findByMenu(
