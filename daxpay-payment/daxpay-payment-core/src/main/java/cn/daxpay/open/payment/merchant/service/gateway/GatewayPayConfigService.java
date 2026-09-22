@@ -81,13 +81,16 @@ public class GatewayPayConfigService {
             String mchNo = config.getMchNo();
             List<GatewayPayClientEnv> rows = new ArrayList<>();
             for (GatewayPayClientEnvParam envParam : filledEnvs) {
+                // 按模式只落本模式字段, 另一侧强制置空: 前端切模式后行内残留旧字段会随保存落库,
+                // DIRECT 行残留 method 会与 capability 组成矛盾三元组, 被路由校验拒绝(pay.route.error.sceneCapabilityProductMismatch)
+                boolean methodLevel = level == AggregateConfigLevelEnum.METHOD;
                 GatewayPayClientEnv env = new GatewayPayClientEnv()
                         .setConfigId(config.getId())
                         .setClientEnv(envParam.getClientEnv())
                         .setPayForm(envParam.getPayForm())
-                        .setMethod(envParam.getMethod())
-                        .setChannelMchNo(envParam.getChannelMchNo())
-                        .setCapability(envParam.getCapability());
+                        .setMethod(methodLevel ? envParam.getMethod() : null)
+                        .setChannelMchNo(methodLevel ? null : envParam.getChannelMchNo())
+                        .setCapability(methodLevel ? null : envParam.getCapability());
                 // 父类 MchBaseEntity#setMchNo 链式返回类型非本类; 运营端无上下文须显式赋值
                 env.setMchNo(mchNo);
                 rows.add(env);
