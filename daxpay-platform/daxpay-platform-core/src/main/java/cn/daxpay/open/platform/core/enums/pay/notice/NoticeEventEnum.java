@@ -38,8 +38,6 @@ public enum NoticeEventEnum implements I18nSupport {
     ALLOC_SUCCESS("alloc.success"),
     /// 分账失败
     ALLOC_FAIL("alloc.fail"),
-    /// 风控命中(黑名单/海外 IP 等规则触发)
-    RISK_HIT("risk.hit"),
     ;
 
     /// 编码

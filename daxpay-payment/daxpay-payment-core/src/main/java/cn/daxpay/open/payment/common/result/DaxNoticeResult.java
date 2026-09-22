@@ -20,6 +20,10 @@ public class DaxNoticeResult<T> extends DaxResult<T> {
     @Schema(description = "通知事件码")
     private String event;
 
+    /// 事件ID(通知任务ID): 同一任务的所有重试推送恒为同值, 商户端据此做幂等去重
+    @Schema(description = "事件ID, 同一通知的多次重试推送恒为同值, 用于消费端幂等去重")
+    private String eventId;
+
     /// 通知协议（system / easy_pay）
     @Schema(description = "通知协议")
     private String protocol;

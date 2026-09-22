@@ -38,6 +38,7 @@ public class SystemPayloadBuilder implements NoticePayloadBuilder {
         var data = JsonSignStrUtil.buildSortedMap(task.getContent());
         var notice = new DaxNoticeResult<>(CommonCode.SUCCESS_CODE, data, CommonCode.SUCCESS_MSG)
                 .setEvent(task.getEvent())
+                .setEventId(String.valueOf(task.getId()))
                 .setProtocol(task.getFormat())
                 .setMchNo(task.getMchNo())
                 .setAppId(task.getAppId());

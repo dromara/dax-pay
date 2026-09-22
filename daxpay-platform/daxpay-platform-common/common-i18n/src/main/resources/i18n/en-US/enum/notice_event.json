@@ -7,7 +7,6 @@
   "pay.timeout": "Pay Timeout Close",
   "pay.cancel": "Pay Cancel",
   "refund.fail": "Refund Fail",
-  "risk.hit": "Risk Hit",
   "transfer.success": "Transfer Success",
   "transfer.fail": "Transfer Fail",
   "transfer.close": "Transfer Close",
