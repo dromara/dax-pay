@@ -9,6 +9,7 @@ import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.common.util.PaySignUtil;
 import cn.daxpay.open.payment.merchant.service.access.MerchantAccessQueryService;
 import cn.daxpay.open.payment.unipay.param.PaymentCommonParam;
+import cn.daxpay.open.payment.unipay.param.assist.UnipayPingParam;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -56,6 +57,12 @@ public class PaymentSignService {
                 log.warn("支付接口验签失败, mchNo: {}, reqId: {}, 待签串: {}",
                         paymentContext.getMchNo(), param.getReqId(),
                         StrUtil.sub(PaySignUtil.buildSignStr(param), 0, 512));
+            }
+            // 签名自检探针(UnipayPingParam)回吐服务端待签串: 探针参数仅公共字段、不含 authCode/openId 等敏感数据,
+            // 待签串也只是调用方自己提交内容的规范字面量, 回吐无泄露风险; 业务接口保持统一的验签失败提示
+            if (param instanceof UnipayPingParam) {
+                throw new VerifySignFailedException("pay.error.assist.signVerifyFailDetail",
+                        StrUtil.sub(PaySignUtil.buildSignStr(param), 0, 2048));
             }
             throw new VerifySignFailedException();
         }

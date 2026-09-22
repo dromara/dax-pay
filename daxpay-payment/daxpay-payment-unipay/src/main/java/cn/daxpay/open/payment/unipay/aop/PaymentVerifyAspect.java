@@ -256,6 +256,9 @@ public class PaymentVerifyAspect {
         if (path.contains("/gateway/query")) {
             return "网关订单查询";
         }
+        if (path.endsWith("/unipay/ping")) {
+            return "签名自检探针";
+        }
         if (path.contains("/generate-auth-url")) {
             return "生成通道授权链接";
         }
