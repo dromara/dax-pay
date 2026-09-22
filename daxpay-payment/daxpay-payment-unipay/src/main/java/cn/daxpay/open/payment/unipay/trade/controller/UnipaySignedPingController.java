@@ -1,10 +1,11 @@
-package cn.daxpay.open.payment.unipay.client.controller;
+package cn.daxpay.open.payment.unipay.trade.controller;
 
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.common.util.DaxRes;
 import cn.daxpay.open.payment.common.util.PaySignUtil;
 import cn.daxpay.open.payment.unipay.aop.PaymentVerify;
+import cn.daxpay.open.payment.unipay.client.controller.UnipayPingController;
 import cn.daxpay.open.payment.unipay.param.assist.UnipayPingParam;
 import cn.daxpay.open.payment.unipay.result.assist.UnipayPingResult;
 import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
