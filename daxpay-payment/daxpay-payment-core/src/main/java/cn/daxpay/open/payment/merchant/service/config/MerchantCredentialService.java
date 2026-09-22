@@ -28,7 +28,8 @@ public class MerchantCredentialService {
 
     /// 根据商户号查询（配置态，租户内；运营端由 ignoreTable 放开）
     public MerchantCredentialResult findByMchNo(String mchNo) {
-        String publicKey = platformConfigProperties.getKeyConfig().getPublicKey();
+        // 展示用: 配置可能是 yml 引号跨行折成的单行(换行变空格)或面板注入的纯 Base64, 统一归一为标准 PEM
+        String publicKey = RsaSignUtil.normalizePublicKeyPem(platformConfigProperties.getKeyConfig().getPublicKey());
         var credentialOptional = credentialManager.findByMchNo(mchNo);
         if (credentialOptional.isEmpty()){
             var merchant = merchantInfoManager.findByMchNo(mchNo)

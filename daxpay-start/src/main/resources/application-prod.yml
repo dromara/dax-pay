@@ -139,7 +139,7 @@ daxpay:
       sandbox-enabled: ${SANDBOX_ENABLED:false}
       # 交易定时同步开关(生产环境开启; installer 表单可管理)
       trade-sync-enabled: ${TRADE_SYNC_ENABLED:true}
-      # RSA 密钥(PEM 文本通过环境变量注入)
+      # RSA 密钥(通过环境变量注入; 经 .env 注入时值必须是单行——env 文件按行解析, 多行 PEM 会被截断, 面板侧已归一为单行 Base64)
       key-config:
         private-key: ${RSA_PRIVATE_KEY}
         public-key: ${RSA_PUBLIC_KEY}

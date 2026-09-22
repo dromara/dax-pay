@@ -56,6 +56,28 @@ public class RsaSignUtil {
         }
     }
 
+    /// 归一为标准的公钥 PEM 文本(X.509, 正文按 64 字符换行)
+    ///
+    /// 配置来源形态不一: yml 引号跨行会被 YAML 折成空格(换行丢失)、运维面板注入的是单行纯 Base64
+    /// (env 文件按行解析, 承载不了换行)、手工粘贴则多为标准 PEM。
+    /// 对外展示与对接方复制统一走此处, 避免"换行变空格"的非标准 PEM 流出给对接方。
+    /// 正文不是合法 Base64 时原样返回, 不把配置错误包装成看似正常的 PEM。
+    public String normalizePublicKeyPem(String keyContent) {
+        if (keyContent == null || keyContent.isBlank()) {
+            return keyContent;
+        }
+        String base64Body = keyContent
+                .replace("-----BEGIN PUBLIC KEY-----", "")
+                .replace("-----END PUBLIC KEY-----", "")
+                .replaceAll("\\s", "");
+        try {
+            Base64.getDecoder().decode(base64Body);
+        } catch (IllegalArgumentException e) {
+            return keyContent;
+        }
+        return wrapPem(base64Body, "PUBLIC KEY");
+    }
+
     /// 私钥签名（SHA256withRSA）
     @SneakyThrows
     public String sign(String data, String privateKeyContent) {
@@ -127,13 +149,17 @@ public class RsaSignUtil {
 
     /// 将 DER 编码的字节数组转换为 PEM 格式字符串
     private String toPemString(byte[] derBytes, String type) {
-        String base64 = Base64.getEncoder().encodeToString(derBytes);
+        return wrapPem(Base64.getEncoder().encodeToString(derBytes), type);
+    }
+
+    /// 将 Base64 正文按 64 字符换行包装为 PEM 文本
+    private String wrapPem(String base64Body, String type) {
         StringBuilder pem = new StringBuilder();
         pem.append("-----BEGIN ").append(type).append("-----\n");
         int lineLength = 64;
-        for (int i = 0; i < base64.length(); i += lineLength) {
-            int end = Math.min(i + lineLength, base64.length());
-            pem.append(base64, i, end).append("\n");
+        for (int i = 0; i < base64Body.length(); i += lineLength) {
+            int end = Math.min(i + lineLength, base64Body.length());
+            pem.append(base64Body, i, end).append("\n");
         }
         pem.append("-----END ").append(type).append("-----\n");
         return pem.toString();
