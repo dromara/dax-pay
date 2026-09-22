@@ -28,6 +28,15 @@ public class NotifySseService {
         // 永不超时, 依靠心跳维持
         SseEmitter emitter = new SseEmitter(0L);
         emitters.computeIfAbsent(userId, k -> ConcurrentHashMap.newKeySet()).add(emitter);
+        // 建连立即发首字节(注释行, 不触发前端 onmessage): 消除首个心跳周期内的响应体空窗,
+        // 防止 CDN/代理等待 body 时按首字节超时掐断流(线上 EdgeOne 实测 20-40s 断流)
+        // 此时 handler 尚未接管, send 由 ResponseBodyEmitter 早期发送机制排队, 返回后回放
+        try {
+            emitter.send(SseEmitter.event().comment("connected"));
+        } catch (IOException e) {
+            // 早期发送仅内存排队阶段, 极少失败; 一旦失败交由后续心跳 send 的既有移除路径清理
+            log.debug("SSE 建连首字节发送失败, userId={}", userId, e);
+        }
         // 连接结束/超时/出错时自动从集合移除, 空集合回收 key
         emitter.onCompletion(() -> removeEmitter(userId, emitter));
         emitter.onTimeout(() -> removeEmitter(userId, emitter));
@@ -89,8 +98,11 @@ public class NotifySseService {
         }
     }
 
-    /// 心跳: 每 25 秒发注释行, 防止 Nginx/代理超时断开
-    @Scheduled(fixedRate = 25_000)
+    /// 心跳: 每 10 秒发注释行, 防止 Nginx/CDN/代理超时断开
+    ///
+    /// 间隔必须小于链路上最小的回源/空闲超时: 原 25s 间隔长于 EdgeOne 回源超时,
+    /// 首个心跳未到达即被掐断(线上实测 20-40s 断流); 10s 对 15s/30s/60s 各档超时均留余量
+    @Scheduled(fixedRate = 10_000)
     public void heartbeat() {
         if (emitters.isEmpty()) {
             return;

@@ -14,7 +14,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.CacheControl;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -88,8 +90,12 @@ public class NotifyUserController {
     /// (withCredentials) 识别会话; 收到推送时前端刷新未读数与铃铛列表.
     @Operation(summary = "建立实时推送连接(SSE)")
     @GetMapping(value = "/sse/connect", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-    public SseEmitter sseConnect() {
+    public ResponseEntity<SseEmitter> sseConnect() {
         Long userId = SecurityUtil.getUserId();
-        return sseService.connect(userId);
+        // 显式 no-cache + no-transform: 源站不带头时 CDN(EdgeOne) 可能按缓存规则缓冲流式响应,
+        // no-transform 同时禁止中间层压缩转码, 保证首字节与心跳注释行实时穿透
+        return ResponseEntity.ok()
+                .cacheControl(CacheControl.noCache().noTransform())
+                .body(sseService.connect(userId));
     }
 }
