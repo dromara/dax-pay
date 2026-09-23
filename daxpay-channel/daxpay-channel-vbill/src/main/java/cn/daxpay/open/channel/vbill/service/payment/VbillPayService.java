@@ -90,22 +90,23 @@ public class VbillPayService {
     }
 
     /// 平台支付方式([PayMethodEnum] code) → 随行付四要素
+    ///
     private static MethodMapping mapMethod(String methodCode) {
         PayMethodEnum m = PayMethodEnum.findByCode(methodCode);
         return switch (m) {
             // 微信
             case WECHAT_JSAPI -> new MethodMapping(VbillPayMethod.UNI_PAY, "WECHAT", "02", VbillPayBodyType.JSAPI);
             case WECHAT_MINI -> new MethodMapping(VbillPayMethod.UNI_PAY, "WECHAT", "03", VbillPayBodyType.JSAPI);
-            case WECHAT_QR -> new MethodMapping(VbillPayMethod.QR_CODE, null, null, VbillPayBodyType.QR_CODE);
+            case WECHAT_QR -> new MethodMapping(VbillPayMethod.QR_CODE, "WECHAT", null, VbillPayBodyType.QR_CODE);
             case WECHAT_BARCODE -> new MethodMapping(VbillPayMethod.BAR_CODE, null, null, null);
             case WECHAT_CASHIER -> new MethodMapping(VbillPayMethod.APPLET_CASHIER, null, null, VbillPayBodyType.JSAPI);
             // 支付宝
             case ALIPAY_JSAPI -> new MethodMapping(VbillPayMethod.UNI_PAY, "ALIPAY", "02", VbillPayBodyType.IDENTIFIER);
-            case ALIPAY_QR -> new MethodMapping(VbillPayMethod.QR_CODE, null, null, VbillPayBodyType.QR_CODE);
+            case ALIPAY_QR -> new MethodMapping(VbillPayMethod.QR_CODE, "ALIPAY", null, VbillPayBodyType.QR_CODE);
             case ALIPAY_BARCODE -> new MethodMapping(VbillPayMethod.BAR_CODE, null, null, null);
             // 银联
             case UNION_JSAPI -> new MethodMapping(VbillPayMethod.UNI_PAY, "UNIONPAY", "02", VbillPayBodyType.LINK);
-            case UNION_QR -> new MethodMapping(VbillPayMethod.QR_CODE, null, null, VbillPayBodyType.QR_CODE);
+            case UNION_QR -> new MethodMapping(VbillPayMethod.QR_CODE, "UNIONPAY", null, VbillPayBodyType.QR_CODE);
             case UNION_BARCODE -> new MethodMapping(VbillPayMethod.BAR_CODE, null, null, null);
             default -> throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
                     "error.channel.vbill.unsupportedPayMethod", methodCode);
