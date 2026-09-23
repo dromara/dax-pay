@@ -3,11 +3,11 @@ package cn.daxpay.open.payment.unipay.param.trade.transfer;
 import cn.daxpay.open.payment.unipay.param.MerchantPaymentCommonParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -35,6 +35,7 @@ public class TransferParam extends MerchantPaymentCommonParam {
     /// 通道商户号(转账凭证组装与通道路由用, 覆盖基类可选语义为必填)
     @Schema(description = "通道商户号")
     @NotBlank(message = "{validation.field.channelMchNo.notBlank}")
+    @Size(max = 32, message = "{validation.field.channelMchNo.size}")
     private String channelMchNo;
 
     /// 商户转账号(幂等键, 同一商户同一通道下唯一; 失败后可复用原单号重试)
@@ -46,8 +47,8 @@ public class TransferParam extends MerchantPaymentCommonParam {
     /// 转账金额(单位: 分, 最小货币单位)
     @Schema(description = "转账金额(分)")
     @NotNull(message = "{validation.field.amount.notNull}")
-    @Positive(message = "{validation.field.amount.positive}")
     @Min(value = 1, message = "{validation.field.amount.min}")
+    @Max(value = 9999999999L, message = "{validation.field.amount.max}")
     private Long amount;
 
     /// 转账标题

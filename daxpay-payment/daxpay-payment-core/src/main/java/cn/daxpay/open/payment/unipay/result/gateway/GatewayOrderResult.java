@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.unipay.result.gateway;
 
+import cn.daxpay.open.payment.common.json.UnipayAmount;
 import cn.daxpay.open.payment.common.json.UnipayTimeFormat;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -29,6 +30,7 @@ public class GatewayOrderResult {
     @Schema(description = "描述")
     private String description;
 
+    @UnipayAmount
     @Schema(description = "金额(分)")
     private Long amount;
 

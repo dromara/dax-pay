@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.unipay.result.trade;
 
+import cn.daxpay.open.payment.common.json.UnipayAmount;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -39,6 +40,7 @@ public class PayResultResult {
     private String title;
 
     /// 订单金额(最小货币单位, 分)
+    @UnipayAmount
     @Schema(description = "订单金额(分)")
     private Long amount;
 

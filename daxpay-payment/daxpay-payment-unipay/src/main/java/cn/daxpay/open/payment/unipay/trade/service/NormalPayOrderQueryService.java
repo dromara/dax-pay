@@ -31,8 +31,8 @@ public class NormalPayOrderQueryService {
 
     /// 查询支付订单
     public NormalPayOrderResult queryPayOrder(NormalPayQueryParam param) {
-        // 校验参数, 支付订单号和商户订单号不能都为空
-        if (StrUtil.isBlank(param.getOrderNo()) && Objects.isNull(param.getBizOrderNo())) {
+        // 校验参数, 支付订单号和商户订单号不能都为空(空白串视为未传, 与 orderNo 的 isBlank 口径一致)
+        if (StrUtil.isBlank(param.getOrderNo()) && StrUtil.isBlank(param.getBizOrderNo())) {
             // 支付: 支付订单号不能都为空
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.orderNoRequired");
         }

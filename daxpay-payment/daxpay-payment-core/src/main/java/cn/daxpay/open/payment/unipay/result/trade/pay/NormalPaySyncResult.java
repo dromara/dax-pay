@@ -12,7 +12,7 @@ import lombok.experimental.Accessors;
 @Schema(title = "支付同步结果")
 public class NormalPaySyncResult {
 
-    /// 退款订单同步后的状态状态
+    /// 同步后的支付订单状态
     /// @see PayStatusEnum
     @Schema(description = "同步状态")
     private String orderStatus;

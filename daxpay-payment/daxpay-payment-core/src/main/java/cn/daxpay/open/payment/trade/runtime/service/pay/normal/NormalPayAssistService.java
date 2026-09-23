@@ -266,9 +266,9 @@ public class NormalPayAssistService {
     }
 
     /// 根据资金凭证与业务容器构建支付结果
+    /// 内部流程需要容器 ID 时改用 [NormalPayService#payInternal] 返回的 [cn.daxpay.open.payment.trade.runtime.bo.NormalPayExecutionResult]
     public NormalPayResult buildResult(PayTrade trade, NormalPayOrder order) {
         NormalPayResult result = new NormalPayResult();
-        result.setOrderId(Objects.nonNull(order) ? order.getId() : trade.getContainerId());
         result.setBizOrderNo(Objects.nonNull(order) ? order.getBizOrderNo() : null);
         // 业务单号与资金交易号分离暴露
         result.setOrderNo(Objects.nonNull(order) ? order.getOrderNo() : null);

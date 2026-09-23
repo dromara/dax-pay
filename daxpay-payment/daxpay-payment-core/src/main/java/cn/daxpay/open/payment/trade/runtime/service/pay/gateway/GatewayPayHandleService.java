@@ -299,7 +299,6 @@ public class GatewayPayHandleService {
     /// 构建网关支付返回结果(含 payBody 供前端拉起)
     private NormalPayResult buildResult(GatewayPayOrder order, PayTrade trade) {
         return new NormalPayResult()
-                .setOrderId(order.getId())
                 .setBizOrderNo(order.getBizOrderNo())
                 // 网关业务单号 vs 资金交易号分离
                 .setOrderNo(order.getOrderNo())

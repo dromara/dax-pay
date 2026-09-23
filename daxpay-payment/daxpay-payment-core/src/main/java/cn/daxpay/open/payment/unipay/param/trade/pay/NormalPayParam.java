@@ -4,7 +4,6 @@ import cn.daxpay.open.payment.common.json.UnipayTimeFormat;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
 import cn.daxpay.open.payment.unipay.param.MerchantPaymentCommonParam;
-import jakarta.validation.Valid;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
@@ -95,11 +94,11 @@ public class NormalPayParam extends MerchantPaymentCommonParam {
     @Schema(description = "付款码")
     private String authCode;
 
-    /// 限制支付类型列表，如限制信用卡
+    /// 限制支付类型列表，如限制信用卡(元素限长与单值字段一致)
     /// @see cn.daxpay.open.platform.core.enums.unipay.PayLimitPayEnum
     @Schema(description = "限制支付类型")
     @Size(max = 10, message = "{validation.field.limitPay.size}")
-    private List<String> limitPay;
+    private List<@Size(max = 32, message = "{validation.field.limitPay.size}") String> limitPay;
 
     /// 支付扩展参数（JSON 格式，通道特有的长尾参数）
     @Schema(description = "支付扩展参数")

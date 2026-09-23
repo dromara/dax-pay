@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.unipay.result.trade.pay;
 
+import cn.daxpay.open.payment.common.json.UnipayAmount;
 import cn.daxpay.open.payment.common.json.UnipayTimeFormat;
 import cn.daxpay.open.platform.core.enums.pay.channel.*;
 import cn.daxpay.open.platform.core.enums.pay.pay.*;
@@ -59,14 +60,22 @@ public class NormalPayOrderResult {
     private String limitPay;
 
     /// 金额（分，最小货币单位）
+    @UnipayAmount
     @Schema(description = "金额(分)")
     private Long amount;
 
+    /// 币种(ISO 4217 三位字母代码, 如 cny/usd/jpy)
+    /// @see CurrencyEnum
+    @Schema(description = "币种(ISO 4217)")
+    private String currency;
+
     /// 实收金额（分，最小货币单位）
+    @UnipayAmount
     @Schema(description = "实收金额(分)")
     private Long realAmount;
 
     /// 可退款余额（分，最小货币单位）
+    @UnipayAmount
     @Schema(description = "可退款余额(分)")
     private Long refundableBalance;
 

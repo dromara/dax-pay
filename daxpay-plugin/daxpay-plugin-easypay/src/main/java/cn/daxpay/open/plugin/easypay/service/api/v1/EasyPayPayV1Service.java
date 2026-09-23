@@ -1,7 +1,9 @@
 package cn.daxpay.open.plugin.easypay.service.api.v1;
 
+import cn.daxpay.open.payment.trade.runtime.bo.NormalPayExecutionResult;
 import cn.daxpay.open.payment.trade.runtime.service.pay.normal.NormalPayService;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
+import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
 import cn.daxpay.open.platform.common.spring.util.WebServletUtil;
 import cn.daxpay.open.platform.core.enums.unipay.PayBodyTypeEnum;
 import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
@@ -91,8 +93,9 @@ public class EasyPayPayV1Service {
             payParam.setMethod(payMethod);
             payParam.setClientIp(order.getClientIp());
             payParam.setSource(easyPayAssistService.sourceCode());
-            var payResult = normalPayService.pay(payParam);
-            order.setOrderId(payResult.getOrderId())
+            NormalPayExecutionResult execution = normalPayService.payInternal(payParam);
+            NormalPayResult payResult = execution.getResult();
+            order.setOrderId(execution.getContainerId())
                     .setTradeNo(payResult.getOrderNo())
                     .setPayBody(payResult.getPayBody())
                     .setPayUrl(payResult.getPayBody())

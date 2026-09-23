@@ -3,6 +3,7 @@ package cn.daxpay.open.payment.unipay.param.trade.alloc;
 import cn.daxpay.open.payment.unipay.param.MerchantPaymentCommonParam;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -91,6 +92,7 @@ public class UnipayAllocParam extends MerchantPaymentCommonParam {
         @Schema(description = "分账金额(分)")
         @NotNull(message = "{validation.field.amount.notNull}")
         @Min(value = 1, message = "{validation.field.amount.min}")
+        @Max(value = 9999999999L, message = "{validation.field.amount.max}")
         private Long amount;
     }
 }

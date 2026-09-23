@@ -13,6 +13,7 @@ import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import cn.daxpay.open.payment.common.lock.TradeLockKeys;
 import cn.daxpay.open.payment.common.util.PayBarCodeUtil;
 import cn.daxpay.open.payment.strategy.PaymentStrategyFactory;
+import cn.daxpay.open.payment.trade.runtime.bo.NormalPayExecutionResult;
 import cn.daxpay.open.payment.trade.runtime.bo.PayTradeResultBo;
 import cn.daxpay.open.payment.trade.runtime.service.pay.common.PayRiskAssistService;
 import cn.daxpay.open.payment.trade.runtime.service.pay.common.PayUniHandleService;
@@ -53,8 +54,13 @@ public class NormalPayService {
     @Lazy
     private final NormalPayService self;
 
-    /// 支付入口
+    /// 支付入口(对外, 返回契约响应)
     public NormalPayResult pay(NormalPayParam payParam) {
+        return payInternal(payParam).getResult();
+    }
+
+    /// 支付入口(内部, 附带容器 ID 供易支付等插件回写关联字段)
+    public NormalPayExecutionResult payInternal(NormalPayParam payParam) {
         // 客户端IP兜底: 商户未传时从当前HTTP请求提取, 供通道 location_info 等场景使用
         if (StrUtil.isBlank(payParam.getClientIp())) {
             payParam.setClientIp(WebServletUtil.getClientIp());
@@ -95,7 +101,7 @@ public class NormalPayService {
 
     /// 支付操作
     /// 拆分为多阶段: 1.应用解析与校验 2.付款码识别 3.通道路由 4.通道预处理 5.风控 6.建单 7.发起支付 8.成功后处理
-    public NormalPayResult payHandle(NormalPayParam payParam) {
+    public NormalPayExecutionResult payHandle(NormalPayParam payParam) {
         // 应用解析: 空则取商户默认应用, 校验启用与归属, 回填到 payParam
         var mchApp = merchantContextLoader.resolveApp(payParam.getMchNo(), payParam.getAppId());
         payParam.setAppId(mchApp.getAppId());
@@ -115,7 +121,9 @@ public class NormalPayService {
         if (Objects.nonNull(context.getNormalOrder())
                 && StrUtil.isNotBlank(context.getNormalOrder().getPayBody())
                 && Objects.nonNull(context.getTrade())) {
-            return payAssistService.buildResult(context.getTrade(), context.getNormalOrder());
+            return new NormalPayExecutionResult()
+                    .setResult(payAssistService.buildResult(context.getTrade(), context.getNormalOrder()))
+                    .setContainerId(context.getNormalOrder().getId());
         }
         // 订单不存在则新建（填充 context）
         if (Objects.isNull(context.getTrade())) {
@@ -164,7 +172,7 @@ public class NormalPayService {
 
     /// 支付成功后操作
     @Transactional(rollbackFor = Exception.class)
-    public NormalPayResult paySuccess(PayTrade trade, PayTradeResultBo result) {
+    public NormalPayExecutionResult paySuccess(PayTrade trade, PayTradeResultBo result) {
         if (result.isComplete()) {
             trade.setStatus(PayFundStatusEnum.SUCCESS.getCode());
             trade.setPayTime(result.getFinishTime());
@@ -173,7 +181,9 @@ public class NormalPayService {
         trade.setOutOrderNo(result.getOutOrderNo());
         // 回执与 payBody 写容器, 由 payAfterHandel 统一处理（含事后风控补录）
         payUniHandleService.payAfterHandel(trade, result);
-        return payAssistService.buildResult(trade);
+        return new NormalPayExecutionResult()
+                .setResult(payAssistService.buildResult(trade))
+                .setContainerId(trade.getContainerId());
     }
 
     /// 按交易来源派生风控场景（与 PayRiskHitSceneEnum 编码对齐）：

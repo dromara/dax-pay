@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.unipay.result.trade.refund;
 
+import cn.daxpay.open.payment.common.json.UnipayAmount;
 import cn.daxpay.open.payment.common.json.UnipayTimeFormat;
 import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -39,10 +40,12 @@ public class RefundOrderResult {
     private String outRefundNo;
 
     /// 退款金额(分)
+    @UnipayAmount
     @Schema(description = "退款金额(分)")
     private Long amount;
 
     /// 订单总金额(分)
+    @UnipayAmount
     @Schema(description = "订单总金额(分)")
     private Long orderAmount;
 
@@ -55,7 +58,7 @@ public class RefundOrderResult {
     @Schema(description = "退款原因")
     private String reason;
 
-    /// 退款完成时间(UTC)
+    /// 退款完成时间(北京时间)
     @Schema(description = "退款完成时间(北京时间)")
     @JsonFormat(pattern = UnipayTimeFormat.PATTERN, timezone = UnipayTimeFormat.ZONE)
     private OffsetDateTime finishTime;

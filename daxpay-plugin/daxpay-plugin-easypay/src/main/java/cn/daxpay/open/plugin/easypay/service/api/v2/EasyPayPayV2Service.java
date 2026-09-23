@@ -1,6 +1,7 @@
 package cn.daxpay.open.plugin.easypay.service.api.v2;
 
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
+import cn.daxpay.open.payment.trade.runtime.bo.NormalPayExecutionResult;
 import cn.daxpay.open.payment.trade.runtime.service.pay.normal.NormalPayService;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
@@ -104,8 +105,9 @@ public class EasyPayPayV2Service {
         }
 
         try {
-            NormalPayResult payResult = doNormalPay(order, credential, payMethod, param.getSubOpenid(), param.getAuthCode());
-            fillOrderFromPayResult(order, payResult);
+            NormalPayExecutionResult execution = doNormalPay(order, credential, payMethod, param.getSubOpenid(), param.getAuthCode());
+            NormalPayResult payResult = execution.getResult();
+            fillOrderFromPayResult(order, execution);
             easyPayOrderManager.updateById(order);
             result.setCode(0)
                     .setMsg("success")
@@ -129,7 +131,6 @@ public class EasyPayPayV2Service {
         if (StrUtil.isNotBlank(order.getPayBody())) {
             return new NormalPayResult()
                     .setPayBody(order.getPayBody())
-                    .setOrderId(order.getOrderId())
                     .setOrderNo(order.getTradeNo())
                     .setBizOrderNo(order.getOutTradeNo());
         }
@@ -145,15 +146,16 @@ public class EasyPayPayV2Service {
             payMethod = PayMethodEnum.WECHAT_JSAPI.getCode();
             order.setType(EasyPayMethodEnum.WECHAT.getCode());
         }
-        NormalPayResult payResult = doNormalPay(order, credential, payMethod, param.getOpenId(), null);
-        fillOrderFromPayResult(order, payResult);
+        NormalPayExecutionResult execution = doNormalPay(order, credential, payMethod, param.getOpenId(), null);
+        fillOrderFromPayResult(order, execution);
         easyPayOrderManager.updateById(order);
-        return payResult;
+        return execution.getResult();
     }
 
     /// 将内核支付结果回写协议单
-    private void fillOrderFromPayResult(EasyPayOrder order, NormalPayResult payResult) {
-        order.setOrderId(payResult.getOrderId())
+    private void fillOrderFromPayResult(EasyPayOrder order, NormalPayExecutionResult execution) {
+        NormalPayResult payResult = execution.getResult();
+        order.setOrderId(execution.getContainerId())
                 .setTradeNo(payResult.getOrderNo())
                 .setPayBody(payResult.getPayBody())
                 .setPayUrl(payResult.getPayBody())
@@ -164,7 +166,7 @@ public class EasyPayPayV2Service {
     }
 
     /// 调用内核普通支付
-    private NormalPayResult doNormalPay(EasyPayOrder order, EasyPayCredential credential,
+    private NormalPayExecutionResult doNormalPay(EasyPayOrder order, EasyPayCredential credential,
                                         String payMethod, String openId, String authCode) {
         NormalPayParam payParam = new NormalPayParam();
         payParam.setMchNo(credential.getMchNo());
@@ -180,7 +182,7 @@ public class EasyPayPayV2Service {
         payParam.setReturnUrl(order.getReturnUrl());
         payParam.setAttach(order.getParam());
         payParam.setSource(easyPayAssistService.sourceCode());
-        return normalPayService.pay(payParam);
+        return normalPayService.payInternal(payParam);
     }
 
     /// 创建协议订单实体

@@ -7,14 +7,11 @@ import lombok.experimental.Accessors;
 
 /// # 统一支付响应参数
 ///
+/// 本类不携带内部数据库主键; 内部流程需要容器 ID 时走 [cn.daxpay.open.payment.trade.runtime.bo.NormalPayExecutionResult]
 @Data
 @Accessors(chain = true)
 @Schema(title = "统一支付响应参数")
 public class NormalPayResult {
-
-    /// 订单ID
-    @Schema(description = "订单ID")
-    private Long orderId;
 
     /// 商户订单号
     @Schema(description = "商户订单号")

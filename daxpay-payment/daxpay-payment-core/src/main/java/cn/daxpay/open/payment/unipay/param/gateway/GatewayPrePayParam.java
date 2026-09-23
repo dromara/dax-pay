@@ -6,6 +6,7 @@ import cn.daxpay.open.payment.unipay.param.MerchantPaymentCommonParam;
 import cn.daxpay.open.payment.unipay.param.trade.pay.GoodsDetail;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -78,6 +79,9 @@ public class GatewayPrePayParam extends MerchantPaymentCommonParam {
     @Size(max = 64, message = "{validation.field.storeNo.size}")
     private String storeNo;
 
+    /// 订单商品明细(嵌套字段校验与列表长度同 [cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam#goodsDetail])
+    @Valid
+    @Size(max = 50, message = "{validation.field.goodsDetail.size}")
     @Schema(description = "商品明细")
     private List<GoodsDetail> goodsDetail;
 

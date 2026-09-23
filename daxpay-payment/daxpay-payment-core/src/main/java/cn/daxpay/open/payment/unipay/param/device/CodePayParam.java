@@ -3,6 +3,7 @@ package cn.daxpay.open.payment.unipay.param.device;
 import cn.daxpay.open.payment.merchant.enums.ClientEnvEnum;
 import cn.daxpay.open.payment.merchant.enums.ClientRuntimeEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -22,6 +23,7 @@ public class CodePayParam {
     /// 支付金额(分); 固定金额码牌可空(服务端取码牌配置)
     @Schema(description = "支付金额(分, 自定义金额时必填)")
     @Min(value = 1, message = "{validation.field.amount.min}")
+    @Max(value = 9999999999L, message = "{validation.field.amount.max}")
     private Long amount;
 
     /// 备注/描述(与普通支付 description 长度对齐)

@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.unipay.result.trade.transfer;
 
+import cn.daxpay.open.payment.common.json.UnipayAmount;
 import cn.daxpay.open.payment.common.json.UnipayTimeFormat;
 import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -36,6 +37,7 @@ public class TransferOrderResult {
     private String relationNo;
 
     /// 转账金额(分)
+    @UnipayAmount
     @Schema(description = "转账金额(分)")
     private Long amount;
 
@@ -47,8 +49,8 @@ public class TransferOrderResult {
     @Schema(description = "转账通道")
     private String channel;
 
-    /// 钱包渠道
-    @Schema(description = "钱包渠道")
+    /// 支付渠道(微信/支付宝/抖音, 见 PayProviderEnum)
+    @Schema(description = "支付渠道")
     private String provider;
 
     /// 转账状态
@@ -60,7 +62,7 @@ public class TransferOrderResult {
     @Schema(description = "转账标题")
     private String title;
 
-    /// 转账完成时间(UTC)
+    /// 转账完成时间(北京时间)
     @Schema(description = "转账完成时间(北京时间)")
     @JsonFormat(pattern = UnipayTimeFormat.PATTERN, timezone = UnipayTimeFormat.ZONE)
     private OffsetDateTime finishTime;

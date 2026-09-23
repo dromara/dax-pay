@@ -2,9 +2,9 @@ package cn.daxpay.open.payment.unipay.param.trade.refund;
 
 import cn.daxpay.open.payment.unipay.param.MerchantPaymentCommonParam;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -33,8 +33,8 @@ public class RefundParam extends MerchantPaymentCommonParam {
     /// 退款金额(单位: 分, 最小货币单位)
     @Schema(description = "退款金额(分)")
     @NotNull(message = "{validation.field.amount.notNull}")
-    @Positive(message = "{validation.field.amount.positive}")
     @Min(value = 1, message = "{validation.field.amount.min}")
+    @Max(value = 9999999999L, message = "{validation.field.amount.max}")
     private Long amount;
 
     /// 退款原因

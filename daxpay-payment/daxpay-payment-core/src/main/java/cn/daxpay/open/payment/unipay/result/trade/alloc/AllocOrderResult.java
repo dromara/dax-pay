@@ -1,5 +1,6 @@
 package cn.daxpay.open.payment.unipay.result.trade.alloc;
 
+import cn.daxpay.open.payment.common.json.UnipayAmount;
 import cn.daxpay.open.payment.common.json.UnipayTimeFormat;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -39,6 +40,7 @@ public class AllocOrderResult {
     private String outAllocNo;
 
     /// 分账总金额(分)
+    @UnipayAmount
     @Schema(description = "分账总金额(分)")
     private Long amount;
 
@@ -87,6 +89,7 @@ public class AllocOrderResult {
         private String receiverName;
 
         /// 分账金额(分)
+        @UnipayAmount
         @Schema(description = "分账金额(分)")
         private Long amount;
 
