@@ -23,11 +23,11 @@ public class FuyouIsvKeyConfigResult extends BaseResult {
     @Schema(description = "富友订单前缀")
     private String orderPrefix;
 
-    @SensitiveInfo(front = 24, end = 24)
+    @SensitiveInfo(front = 24, end = 24, compact = true)
     @Schema(description = "商户RSA私钥(加密存储)")
     private String privateKey;
 
-    @SensitiveInfo(front = 24, end = 24)
+    @SensitiveInfo(front = 24, end = 24, compact = true)
     @Schema(description = "富友RSA公钥(加密存储)")
     private String publicKey;
 

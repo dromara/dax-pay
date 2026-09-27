@@ -20,11 +20,11 @@ public class AdapayDirectKeyConfigResult {
     private String apiKey;
 
     /// 商户 RSA 私钥(脱敏返回)
-    @SensitiveInfo(front = 24, end = 24)
+    @SensitiveInfo(front = 24, end = 24, compact = true)
     private String privateKey;
 
     /// Adapay 平台公钥(脱敏返回)
-    @SensitiveInfo(front = 24, end = 24)
+    @SensitiveInfo(front = 24, end = 24, compact = true)
     private String publicKey;
 
     /// API Key 是否已配置

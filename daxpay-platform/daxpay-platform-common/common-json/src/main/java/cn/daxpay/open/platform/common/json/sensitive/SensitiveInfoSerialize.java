@@ -37,7 +37,8 @@ public class SensitiveInfoSerialize extends ValueSerializer<String> {
             case EMAIL -> jsonGenerator.writeString(DesensitizedUtil.email(s));
             case BANK_CARD -> jsonGenerator.writeString(DesensitizedUtil.bankCard(s));
             case CNAPS_CODE -> jsonGenerator.writeString(this.hide(s, 4, 4));
-            case OTHER -> jsonGenerator.writeString(this.hide(s, sensitiveInfo.front(), sensitiveInfo.end()));
+            case OTHER -> jsonGenerator.writeString(this.hide(s, sensitiveInfo.front(), sensitiveInfo.end(),
+                    sensitiveInfo.compact()));
             default -> jsonGenerator.writeString(s);
         }
 
@@ -76,6 +77,16 @@ public class SensitiveInfoSerialize extends ValueSerializer<String> {
     /// @param end 后多少位不隐藏
     /// @return 处理后的字段
     private String hide(String str, int front, int end) {
+        return this.hide(str, front, end, false);
+    }
+
+    /// 字段隐藏(可压缩: 中间星号固定 6 颗而非全长度填充, 便于长证书头尾查看)
+    /// @param str 字符串
+    /// @param front 前多少位不隐藏
+    /// @param end 后多少位不隐藏
+    /// @param compact 压缩脱敏, 仅 front/end 保留型生效
+    /// @return 处理后的字段
+    private String hide(String str, int front, int end, boolean compact) {
         // 字符串不能为空
         if (StrUtil.isBlank(str)) {
             return StrUtil.EMPTY;
@@ -87,6 +98,9 @@ public class SensitiveInfoSerialize extends ValueSerializer<String> {
         // 保留位数之和超过原长度时, hide 区间为空或反转可能导致明文暴露, 统一全量脱敏
         if (front + end >= str.length()) {
             return StrUtil.repeat('*', 4);
+        }
+        if (compact) {
+            return str.substring(0, front) + StrUtil.repeat('*', 6) + str.substring(str.length() - end);
         }
         return StrUtil.hide(str, front, str.length() - end);
     }

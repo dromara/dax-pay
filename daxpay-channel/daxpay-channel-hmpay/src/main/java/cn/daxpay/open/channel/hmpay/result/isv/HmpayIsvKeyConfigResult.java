@@ -20,11 +20,11 @@ public class HmpayIsvKeyConfigResult extends BaseResult {
     @Schema(description = "杉德代理号(sandAppId)")
     private String sandAppId;
 
-    @SensitiveInfo(front = 24, end = 24)
+    @SensitiveInfo(front = 24, end = 24, compact = true)
     @Schema(description = "商户RSA私钥(加密存储)")
     private String privateKey;
 
-    @SensitiveInfo(front = 24, end = 24)
+    @SensitiveInfo(front = 24, end = 24, compact = true)
     @Schema(description = "杉德RSA公钥(加密存储)")
     private String publicKey;
 

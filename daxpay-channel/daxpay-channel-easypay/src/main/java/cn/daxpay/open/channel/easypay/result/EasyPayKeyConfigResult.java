@@ -20,11 +20,11 @@ public class EasyPayKeyConfigResult {
     private String partnerId;
 
     /// 商户RSA私钥(脱敏返回)
-    @SensitiveInfo(front = 24, end = 24)
+    @SensitiveInfo(front = 24, end = 24, compact = true)
     private String merchantPrivateKey;
 
     /// 易支付平台验签公钥(脱敏返回)
-    @SensitiveInfo(front = 24, end = 24)
+    @SensitiveInfo(front = 24, end = 24, compact = true)
     private String platformPublicKey;
 
     /// 商户私钥是否已配置

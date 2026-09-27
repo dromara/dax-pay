@@ -17,23 +17,23 @@ public class AlipayMiniAppConfigResult {
     @Schema(description = "鉴权方式: public_key / cert")
     private String authType;
 
-    @SensitiveInfo(front = 24, end = 24)
+    @SensitiveInfo(front = 24, end = 24, compact = true)
     @Schema(description = "应用私钥")
     private String privateKey;
 
-    @SensitiveInfo(front = 24, end = 24)
+    @SensitiveInfo(front = 24, end = 24, compact = true)
     @Schema(description = "支付宝公钥")
     private String alipayPublicKey;
 
-    @SensitiveInfo(front = 24, end = 24)
+    @SensitiveInfo(front = 24, end = 24, compact = true)
     @Schema(description = "应用公钥证书")
     private String appCert;
 
-    @SensitiveInfo(front = 24, end = 24)
+    @SensitiveInfo(front = 24, end = 24, compact = true)
     @Schema(description = "支付宝公钥证书")
     private String alipayCert;
 
-    @SensitiveInfo(front = 24, end = 24)
+    @SensitiveInfo(front = 24, end = 24, compact = true)
     @Schema(description = "支付宝根证书")
     private String alipayRootCert;
 }

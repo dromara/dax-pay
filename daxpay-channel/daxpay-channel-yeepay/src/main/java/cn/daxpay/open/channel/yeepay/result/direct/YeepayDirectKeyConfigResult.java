@@ -26,11 +26,11 @@ public class YeepayDirectKeyConfigResult {
     private String appKey;
 
     /// 商户 RSA 私钥(脱敏返回)
-    @SensitiveInfo(front = 24, end = 24)
+    @SensitiveInfo(front = 24, end = 24, compact = true)
     private String privateKey;
 
     /// 易宝平台 RSA 公钥(脱敏返回)
-    @SensitiveInfo(front = 24, end = 24)
+    @SensitiveInfo(front = 24, end = 24, compact = true)
     private String yopPublicKey;
 
     /// 微信 AppId

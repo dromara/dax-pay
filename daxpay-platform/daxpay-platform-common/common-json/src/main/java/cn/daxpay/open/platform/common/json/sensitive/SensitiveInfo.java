@@ -22,6 +22,11 @@ public @interface SensitiveInfo {
     /// 敏感类型为其他可用 end – 保留：后面的end位数；从1开始
     int end() default 4;
 
+    /// 压缩脱敏(仅 front/end 型生效): 中间星号固定 6 颗而非全长度填充,
+    /// 长证书/私钥脱敏串从头尾各 24 字符 + 中间 6 星(总长约 54 字符), 便于表单回显与头尾核对;
+    /// 保留位数之和不小于原长时退化为全量脱敏 4 星
+    boolean compact() default false;
+
     /// # 敏感信息
     ///
     enum SensitiveType {

@@ -16,11 +16,11 @@ public class ShengIsvKeyConfigResult {
     private String shengMchId;
 
     /// 服务商RSA私钥(脱敏返回)
-    @SensitiveInfo(front = 24, end = 24)
+    @SensitiveInfo(front = 24, end = 24, compact = true)
     private String merchantPrivateKey;
 
     /// 盛付通验签公钥(脱敏返回)
-    @SensitiveInfo(front = 24, end = 24)
+    @SensitiveInfo(front = 24, end = 24, compact = true)
     private String shengpayPublicKey;
 
     /// 服务商私钥是否已配置
