@@ -1,5 +1,5 @@
 -- ============================================================
--- 敏感数据已清除(白名单模式) | 工具 redact-data.mjs | 时间 2026-09-19T08:14:37.484Z
+-- 敏感数据已清除(白名单模式) | 工具 redact-data.mjs | 时间 2026-09-27T13:19:48.117Z
 -- 策略：保留系统种子表 + 内置演示账号/商户(行级)，其余整表清除
 -- 内置账号：bootx(超管) / csadmin(运营端) / csqysh(商户端)
 -- 演示账号密码已重置为开发默认密码(121212)，生产部署后必须立即修改
@@ -3810,7 +3810,6 @@ INSERT INTO public.iam_perm_menu VALUES (30701, 307, 'iam:online', 'admin', 'Onl
 INSERT INTO public.iam_perm_menu VALUES (6, NULL, 'trade', 'admin', 'TransactionManagement', 'menu.trade', 'lucide:arrow-left-right', false, false, NULL, '/trade', '/trade/pay-trade', 4, false, true, false, 1, 1, 0, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-05-24 16:00:00+00', '2026-07-17 06:18:15.479497+00');
 INSERT INTO public.iam_perm_menu VALUES (40401, 404, 'merchant:info', 'admin', 'MerchantInfo', 'menu.payment.merchant.list', 'lucide:shopping-bag', false, false, '/payment/merchant/info/MerchantList', '/payment/merchant/info', NULL, 1, false, true, false, 1, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-04-13 16:00:00+00', '2026-06-25 02:00:30.290399+00');
 INSERT INTO public.iam_perm_menu VALUES (30402, 304, 'system:platform-config', 'admin', 'PlatformConfig', 'menu.system.config.platform', 'lucide:settings', false, false, '/system/config/platform/PlatformConfig', '/system/config/platform', NULL, 1, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-04-07 16:00:00+00', '2026-07-13 13:17:21.921261+00');
-INSERT INTO public.iam_perm_menu VALUES (4040125, 4040130, 'payment:risk:mch-config', 'admin', 'MchRiskConfigManage', 'menu.payment.merchant.riskConfig', NULL, true, false, '/payment/merchant/manage/risk-config/MchRiskConfigManage', '/payment/merchant/manage/risk-config', NULL, 25, false, true, false, 1, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-06 00:00:00+00', '2026-08-27 09:32:24.882304+00');
 INSERT INTO public.iam_perm_menu VALUES (40104, 401, 'payment:platform:capability', 'admin', 'PayCapabilityList', 'menu.payment.platform.capability', 'lucide:zap', false, false, '/payment/masterdata/capability/PayCapabilityList', '/payment/platform/pay-capability', NULL, 3, false, true, false, 1, 1, 4, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-05-26 16:00:00+00', '2026-05-28 06:43:27.505831+00');
 INSERT INTO public.iam_perm_menu VALUES (4040102, 4040130, 'merchant:credential', 'admin', 'MerchantCredentialConfig', 'menu.payment.merchant.credential', NULL, true, false, '/payment/merchant/manage/credential/MerchantCredentialConfig', '/payment/merchant/manage/credential', NULL, 3, false, true, false, 1, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-05-01 16:00:00+00', '2026-07-13 10:13:20.809377+00');
 INSERT INTO public.iam_perm_menu VALUES (613, 6, 'trade:fund-flow', 'admin', 'FundFlowList', 'menu.trade.fundFlow', 'lucide:coins', false, false, '/payment/record/FundFlowList', '/trade/record/fund-flow', NULL, 4, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-29 16:00:00+00', '2026-08-29 16:00:00+00');
@@ -3848,6 +3847,7 @@ INSERT INTO public.iam_perm_menu VALUES (40502, 40508, 'payment:isv', 'admin', '
 INSERT INTO public.iam_perm_menu VALUES (4040106, 4040131, 'channel:merchant', 'admin', 'ChannelMerchant', 'menu.payment.merchant.channelMerchant', NULL, true, false, '/payment/global/channel-merchant/ChannelMerchantList', '/payment/global/channel-merchant', NULL, 6, false, true, false, 1, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-05-03 16:00:00+00', '2026-07-22 13:50:46.61698+00');
 INSERT INTO public.iam_perm_menu VALUES (30403, 301, 'system:protocol', 'admin', 'UserProtocol', 'menu.system.basic.protocol', 'lucide:file-text', false, false, '/system/basic/protocol/UserProtocolList', '/system/basic/protocol', NULL, 2, false, true, false, 1, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-24 10:32:13.183371+00', '2026-07-16 08:43:35.038937+00');
 INSERT INTO public.iam_perm_menu VALUES (802, 8, 'develop:sign', 'admin', 'DevelopSign', 'menu.develop.sign', 'lucide:pen-tool', false, false, '/payment/develop/sign/DevelopSign', '/develop/sign', NULL, 3, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-06-23 16:00:00+00', '2026-06-23 16:00:00+00');
+INSERT INTO public.iam_perm_menu VALUES (40584, 40402, 'channel:merchant:detail', 'admin', 'ChannelMerchantDetailDispatch', 'menu.payment.merchant.channelMerchant.detail', NULL, true, false, '/payment/global/channel-merchant/detail/ChannelMerchantDetailDispatch', '/payment/global/channel-merchant/detail-global', NULL, 11, false, true, false, 1, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-09-26 00:00:00+00', '2026-09-26 00:00:00+00');
 INSERT INTO public.iam_perm_menu VALUES (406, 4, 'payment:risk', 'admin', 'PaymentSecurity', 'menu.payment.security', 'lucide:shield-alert', false, false, NULL, '/payment/risk', NULL, 60, false, true, false, 0, 1, 0, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-15 00:00:00+00', '2026-07-31 03:18:17.027286+00');
 INSERT INTO public.iam_perm_menu VALUES (40601, 406, 'payment:risk:blacklist', 'admin', 'PayBlacklistList', 'menu.payment.security.blacklist', 'lucide:ban', false, false, '/payment/risk/blacklist/PayBlacklistList', '/payment/risk/blacklist', NULL, 1, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-15 00:00:00+00', '2026-07-15 00:00:00+00');
 INSERT INTO public.iam_perm_menu VALUES (40602, 406, 'payment:risk:hit', 'admin', 'PayRiskHitList', 'menu.payment.security.hit', 'lucide:triangle-alert', false, false, '/payment/risk/hit/PayRiskHitList', '/payment/risk/hit', NULL, 2, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-15 00:00:00+00', '2026-07-15 00:00:00+00');
@@ -4304,7 +4304,6 @@ INSERT INTO public.iam_role_menu VALUES (920000091124, 2, NULL, 91124);
 INSERT INTO public.iam_role_menu VALUES (920000091125, 2, NULL, 91125);
 INSERT INTO public.iam_role_menu VALUES (2092949683495464960, 2, NULL, 91414);
 INSERT INTO public.iam_role_menu VALUES (2092949683508047872, 2, NULL, 91415);
-INSERT INTO public.iam_role_menu VALUES (1000000000209, 1, NULL, 209);
 INSERT INTO public.iam_role_menu VALUES (1000000000310, 1, NULL, 310);
 INSERT INTO public.iam_role_menu VALUES (1000000000612, 1, NULL, 612);
 INSERT INTO public.iam_role_menu VALUES (1000000000613, 1, NULL, 613);
@@ -4331,7 +4330,6 @@ INSERT INTO public.iam_role_menu VALUES (2098335521606696964, 1, NULL, 40602);
 INSERT INTO public.iam_role_menu VALUES (2098335521606696965, 1, NULL, 4040124);
 INSERT INTO public.iam_role_menu VALUES (2098335521610891264, 1, NULL, 4040126);
 INSERT INTO public.iam_role_menu VALUES (2098335521610891265, 1, NULL, 905);
-INSERT INTO public.iam_role_menu VALUES (2098335521610891266, 1, NULL, 4040125);
 INSERT INTO public.iam_role_menu VALUES (2098335521610891267, 1, NULL, 610);
 INSERT INTO public.iam_role_menu VALUES (2098335521610891268, 1, NULL, 611);
 INSERT INTO public.iam_role_menu VALUES (2098335521615085568, 1, NULL, 61105);
@@ -4350,7 +4348,7 @@ INSERT INTO public.iam_role_menu VALUES (2098335521623474178, 1, NULL, 70101);
 INSERT INTO public.iam_role_menu VALUES (2098335521623474179, 1, NULL, 70102);
 INSERT INTO public.iam_role_menu VALUES (2098335521623474180, 1, NULL, 205);
 INSERT INTO public.iam_role_menu VALUES (2098335521627668480, 1, NULL, 206);
-INSERT INTO public.iam_role_menu VALUES (2098335521627668481, 1, NULL, 207);
+INSERT INTO public.iam_role_menu VALUES (1000000040584, 1, NULL, 40584);
 
 
 --
