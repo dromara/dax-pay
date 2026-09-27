@@ -1,10 +1,12 @@
 package cn.daxpay.open.channel.union.param;
 
+import cn.daxpay.open.platform.common.json.deserializer.CredentialKeepWhenBlankDeserializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import tools.jackson.databind.annotation.JsonDeserialize;
 
 /// # 云闪付密钥配置保存参数
 ///
@@ -28,9 +30,11 @@ public class UnionKeyConfigParam {
     @Schema(description = "是否证书签名")
     private Boolean certSign;
 
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "应用私钥证书(Base64 PKCS12)")
     private String keyPrivateCert;
 
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "私钥证书密码")
     private String keyPrivateCertPwd;
 

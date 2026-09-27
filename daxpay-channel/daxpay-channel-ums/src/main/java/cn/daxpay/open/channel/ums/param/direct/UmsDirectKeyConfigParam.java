@@ -1,10 +1,12 @@
 package cn.daxpay.open.channel.ums.param.direct;
 
+import cn.daxpay.open.platform.common.json.deserializer.CredentialKeepWhenBlankDeserializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import tools.jackson.databind.annotation.JsonDeserialize;
 
 /// # 银联商务直连密钥配置保存参数
 ///
@@ -25,9 +27,11 @@ public class UmsDirectKeyConfigParam {
     @Schema(description = "银联商务应用 AppId")
     private String umsAppId;
 
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "应用密钥(HmacSHA256 签名密钥)")
     private String appKey;
 
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "通讯密钥(回调验签密钥)")
     private String secretKey;
 

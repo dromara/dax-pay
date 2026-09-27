@@ -1,9 +1,11 @@
 package cn.daxpay.open.platform.system.param.config.auth;
 
+import cn.daxpay.open.platform.common.json.deserializer.CredentialKeepWhenBlankDeserializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import tools.jackson.databind.annotation.JsonDeserialize;
 
 /// # 平台抖音开放平台 H5 应用认证配置参数
 ///
@@ -21,6 +23,7 @@ public class PlatformDouyinH5AuthConfigParam {
     private String clientKey;
 
     /// 抖音开放平台 Client Secret
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "抖音开放平台 Client Secret")
     private String clientSecret;
 }

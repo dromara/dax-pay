@@ -1,9 +1,11 @@
 package cn.daxpay.open.channel.sheng.param;
 
+import cn.daxpay.open.platform.common.json.deserializer.CredentialKeepWhenBlankDeserializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import tools.jackson.databind.annotation.JsonDeserialize;
 
 /// # 盛付通服务商密钥配置保存参数
 ///
@@ -21,9 +23,11 @@ public class ShengIsvKeyConfigParam {
     @Schema(description = "服务商盛付通商户号(mchId)")
     private String shengMchId;
 
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "服务商RSA私钥(PKCS8)")
     private String merchantPrivateKey;
 
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "盛付通验签公钥")
     private String shengpayPublicKey;
 }

@@ -1,5 +1,6 @@
 package cn.daxpay.open.platform.system.param.config.infra;
 
+import cn.daxpay.open.platform.common.json.deserializer.CredentialKeepWhenBlankDeserializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -7,6 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import tools.jackson.databind.annotation.JsonDeserialize;
 
 /// # 平台邮件发件箱配置参数
 ///
@@ -33,6 +35,7 @@ public class PlatformMailConfigParam {
     private String username;
 
     /// SMTP 授权码/密码(为空表示沿用库中已存授权码)
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "SMTP授权码")
     private String password;
 

@@ -1,10 +1,12 @@
 package cn.daxpay.open.channel.alipay.param.isv;
 
+import cn.daxpay.open.platform.common.json.deserializer.CredentialKeepWhenBlankDeserializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import tools.jackson.databind.annotation.JsonDeserialize;
 
 /// # 支付宝服务商应用密钥配置保存参数
 ///
@@ -23,21 +25,27 @@ public class AlipayIsvAppKeyConfigParam {
     @Schema(description = "认证类型")
     private String authType;
 
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "支付宝公钥")
     private String alipayPublicKey;
 
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "应用私钥")
     private String privateKey;
 
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "应用公钥证书")
     private String appCert;
 
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "支付宝公钥证书")
     private String alipayCert;
 
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "支付宝CA根证书")
     private String alipayRootCert;
 
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "AES通信密钥")
     private String secretKey;
 }

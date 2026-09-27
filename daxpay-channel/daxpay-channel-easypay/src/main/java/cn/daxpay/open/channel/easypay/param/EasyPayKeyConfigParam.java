@@ -1,9 +1,11 @@
 package cn.daxpay.open.channel.easypay.param;
 
+import cn.daxpay.open.platform.common.json.deserializer.CredentialKeepWhenBlankDeserializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import tools.jackson.databind.annotation.JsonDeserialize;
 
 /// # 易支付通道密钥配置保存参数
 ///
@@ -25,9 +27,11 @@ public class EasyPayKeyConfigParam {
     @Schema(description = "易支付商户ID(pid)")
     private String partnerId;
 
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "商户RSA私钥(PKCS8)")
     private String merchantPrivateKey;
 
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "易支付平台验签公钥")
     private String platformPublicKey;
 }

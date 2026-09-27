@@ -1,9 +1,11 @@
 package cn.daxpay.open.channel.dougong.param.isv;
 
+import cn.daxpay.open.platform.common.json.deserializer.CredentialKeepWhenBlankDeserializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import tools.jackson.databind.annotation.JsonDeserialize;
 
 /// # 斗拱服务商密钥配置保存参数
 @Data
@@ -23,9 +25,11 @@ public class DougongIsvKeyConfigParam {
     @Schema(description = "产品号(productId)")
     private String productId;
 
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "商户RSA私钥(加密存储)")
     private String privateKey;
 
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "斗拱RSA公钥(加密存储)")
     private String dgPublicKey;
 }

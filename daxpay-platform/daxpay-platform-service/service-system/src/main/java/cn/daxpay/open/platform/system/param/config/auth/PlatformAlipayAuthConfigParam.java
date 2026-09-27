@@ -1,9 +1,11 @@
 package cn.daxpay.open.platform.system.param.config.auth;
 
+import cn.daxpay.open.platform.common.json.deserializer.CredentialKeepWhenBlankDeserializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import tools.jackson.databind.annotation.JsonDeserialize;
 
 /// # 平台支付宝开放平台认证配置参数
 ///
@@ -26,22 +28,27 @@ public class PlatformAlipayAuthConfigParam {
     private String authType;
 
     /// 应用私钥
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "应用私钥")
     private String privateKey;
 
     /// 支付宝公钥(公钥模式)
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "支付宝公钥(公钥模式)")
     private String alipayPublicKey;
 
     /// 应用公钥证书内容(证书模式)
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "应用公钥证书内容(证书模式)")
     private String appCert;
 
     /// 支付宝公钥证书内容(证书模式)
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "支付宝公钥证书内容(证书模式)")
     private String alipayCert;
 
     /// 支付宝根证书内容(证书模式)
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "支付宝根证书内容(证书模式)")
     private String alipayRootCert;
 

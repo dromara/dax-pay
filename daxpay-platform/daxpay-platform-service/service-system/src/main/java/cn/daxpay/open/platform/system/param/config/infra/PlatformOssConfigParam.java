@@ -1,9 +1,11 @@
 package cn.daxpay.open.platform.system.param.config.infra;
 
+import cn.daxpay.open.platform.common.json.deserializer.CredentialKeepWhenBlankDeserializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import tools.jackson.databind.annotation.JsonDeserialize;
 
 /// # 平台OSS配置参数
 ///
@@ -40,10 +42,12 @@ public class PlatformOssConfigParam {
     private String privateBaseUrl;
 
     /// 访问密钥（AccessKey），通常由云服务商提供
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "访问密钥（AccessKey），通常由云服务商提供")
     private String accessKey;
 
     /// 私有密钥（SecretKey），请妥善保管
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "私有密钥（SecretKey），请妥善保管")
     private String secretKey;
 

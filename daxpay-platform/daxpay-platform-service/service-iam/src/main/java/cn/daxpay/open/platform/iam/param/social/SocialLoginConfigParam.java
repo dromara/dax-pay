@@ -1,5 +1,7 @@
 package cn.daxpay.open.platform.iam.param.social;
 
+import cn.daxpay.open.platform.common.json.deserializer.CredentialKeepWhenBlankDeserializer;
+import tools.jackson.databind.annotation.JsonDeserialize;
 import java.util.Map;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -25,6 +27,7 @@ public class SocialLoginConfigParam {
     /// 客户端密钥(新增必填, 编辑未修改不传该字段, 修改传新值)
     /// 配合前端 diffForm 比对: 未修改时字段为 undefined, JSON 序列化时被忽略,
     /// 后端默认 NOT_NULL 策略下 null 不参与 UPDATE, 保持数据库原密文不变.
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "客户端密钥(编辑未修改不传, 修改传新值)")
     private String clientSecret;
 

@@ -1,10 +1,12 @@
 package cn.daxpay.open.channel.yeepay.param.direct;
 
+import cn.daxpay.open.platform.common.json.deserializer.CredentialKeepWhenBlankDeserializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import tools.jackson.databind.annotation.JsonDeserialize;
 
 /// # 易宝直连密钥配置保存参数
 ///
@@ -23,18 +25,22 @@ public class YeepayDirectKeyConfigParam {
     @Schema(description = "是否沙箱环境")
     private Boolean sandbox;
 
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "通道应用 AppKey(YOP 应用标识)")
     private String appKey;
 
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "商户 RSA 私钥(PEM PKCS#8)")
     private String privateKey;
 
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "易宝平台 RSA 公钥(PEM)")
     private String yopPublicKey;
 
     @Schema(description = "微信 AppId(微信场景用, 可空)")
     private String wxAppId;
 
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "微信 AppSecret(微信场景用, 可空)")
     private String wxAppSecret;
 }

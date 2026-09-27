@@ -1,13 +1,17 @@
 package cn.daxpay.open.channel.leshua.param.isv;
 
+import cn.daxpay.open.platform.common.json.deserializer.CredentialKeepWhenBlankDeserializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import tools.jackson.databind.annotation.JsonDeserialize;
 
 /// # 乐刷服务商密钥配置保存参数
 ///
+/// 密钥字段留空即保留原值: 空串经 [CredentialKeepWhenBlankDeserializer] 归一为 null,
+/// 由 convert 的空值不覆盖策略跳过更新。
 @Data
 @Accessors(chain = true)
 @Schema(title = "乐刷服务商密钥配置保存参数")
@@ -17,11 +21,11 @@ public class LeshuaIsvKeyConfigParam {
     @Schema(description = "产品编码")
     private String product;
 
-    @NotBlank(message = "{validation.field.tradeKey.notBlank}")
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "交易密钥(交易/进件等所有服务商接口请求签名, 加密存储)")
     private String tradeKey;
 
-    @NotBlank(message = "{validation.field.notifyKey.notBlank}")
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "异步通知密钥(异步通知回调验签, 加密存储)")
     private String notifyKey;
 

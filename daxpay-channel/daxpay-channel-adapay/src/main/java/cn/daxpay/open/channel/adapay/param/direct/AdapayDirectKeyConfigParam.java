@@ -1,9 +1,11 @@
 package cn.daxpay.open.channel.adapay.param.direct;
 
+import cn.daxpay.open.platform.common.json.deserializer.CredentialKeepWhenBlankDeserializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import tools.jackson.databind.annotation.JsonDeserialize;
 
 /// # Adapay 直连密钥配置保存参数
 ///
@@ -21,12 +23,15 @@ public class AdapayDirectKeyConfigParam {
     @Schema(description = "Adapay 支付应用 ID")
     private String adapayAppId;
 
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "Adapay API Key")
     private String apiKey;
 
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "商户 RSA 私钥(PKCS#8 Base64)")
     private String privateKey;
 
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "Adapay 平台公钥(X509 Base64, 为空使用全局默认)")
     private String publicKey;
 }

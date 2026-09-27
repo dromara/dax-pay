@@ -1,11 +1,13 @@
 package cn.daxpay.open.payment.douyin.param.merchant;
 
+import cn.daxpay.open.platform.common.json.deserializer.CredentialKeepWhenBlankDeserializer;
 import cn.daxpay.open.platform.core.validation.ValidationGroup;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.experimental.Accessors;
+import tools.jackson.databind.annotation.JsonDeserialize;
 
 /// # 商户抖音应用保存参数
 ///
@@ -34,6 +36,7 @@ public class DyMchAppParam {
     @Schema(description = "抖音应用AppId")
     private String douyinAppId;
 
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @NotBlank(message = "{validation.field.appSecret.notBlank}", groups = ValidationGroup.add.class)
     @Schema(description = "应用密钥，编辑时为空表示不更新")
     private String appSecret;
