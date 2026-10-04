@@ -41,6 +41,9 @@ import java.util.Objects;
 /// 流程: 主应用接收原始表单 → 凭 out_trade_no/out_request_no 反查订单(channelMchNo 可加速/校验) →
 /// 组装通道凭证(直连/服务商) → 转发子应用验签解析 → 构建 CallbackData/RefundCallbackData 交框架更新订单状态。
 /// 主应用零加密代码, 验签与字段解析集中在子应用 dax-pay-channel-one。
+///
+/// 支付回调的 `trade_status=WAIT_BUYER_PAY` 为待付款中间态(非终态): 验签后记录 IGNORE 回调并应答 success,
+/// 订单保持支付中, 后续 `TRADE_SUCCESS` 通知正常流转; 判失败会使订单被误置 FAIL 终态, 真实付款后无法自动翻转。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -48,6 +51,8 @@ public class AlipayCallbackService {
 
     private static final String NOTIFY_SUCCESS = "success";
     private static final String NOTIFY_FAIL = "fail";
+    /// 支付宝交易状态: 等待买家付款(非终态, 常见于扫码/当面付建单后用户未付款的通知)
+    private static final String WAIT_BUYER_PAY = "WAIT_BUYER_PAY";
 
     private final AlipayChannelClient alipayChannelClient;
     private final AlipayDirectConfigAssembler alipayDirectConfigAssembler;
@@ -143,6 +148,20 @@ public class AlipayCallbackService {
             failData.setCallbackErrorMsg("支付宝支付回调验签失败");
             payCallbackRecordService.savePay(channelMchNo, failData);
             return NOTIFY_FAIL;
+        }
+        // WAIT_BUYER_PAY 为待付款中间态: 订单保持支付中, 验签通过后忽略并应答 success,
+        // 勿进回调状态机被误置失败(与同步路径 PROCESSING 映射、转账回调中间态处理对齐;
+        // 若应答 fail 支付宝会按 4m~15h 间隔重发 8 次, 均无意义)
+        if (Objects.equals(params.get("trade_status"), WAIT_BUYER_PAY)) {
+            log.info("支付宝支付回调为待付款中间态, 忽略: tradeNo={}", tradeNo);
+            CallbackData ignoreData = new CallbackData();
+            ignoreData.setCallbackData(params);
+            ignoreData.setTradeNo(resp.getOutTradeNo());
+            ignoreData.setOutTradeNo(resp.getTradeNo());
+            ignoreData.setCallbackStatus(CallbackStatusEnum.IGNORE);
+            ignoreData.setCallbackErrorMsg("支付宝回调待付款中间态(WAIT_BUYER_PAY), 订单保持支付中");
+            payCallbackRecordService.savePay(channelMchNo, ignoreData);
+            return NOTIFY_SUCCESS;
         }
         CallbackData callbackData = new CallbackData();
         callbackData.setCallbackData(params);
