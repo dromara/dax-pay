@@ -13,6 +13,7 @@ import cn.daxpay.open.platform.iam.entity.user.UserInfo;
 import cn.daxpay.open.platform.iam.exception.user.UserInfoNotExistsException;
 import cn.daxpay.open.platform.iam.param.auth.ForgetResetPasswordParam;
 import cn.daxpay.open.platform.iam.param.auth.ForgetSendCodeParam;
+import cn.daxpay.open.platform.iam.result.auth.ForgetChannelsResult;
 import cn.daxpay.open.platform.iam.result.auth.ForgetSendCodeResult;
 import cn.daxpay.open.platform.iam.service.session.OnlineUserService;
 import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformPasswordPolicyConfig;
@@ -58,6 +59,19 @@ public class PasswordForgetService {
     private final EmailCodeService emailCodeService;
 
     private final EmailTemplateService emailTemplateService;
+
+    /// 查询找回密码可用通道(免登, 登录页入口常显后由此判断表单可否提交; 当前仅有邮件通道)
+    public ForgetChannelsResult findChannels() {
+        boolean emailEnabled;
+        try {
+            emailEnabled = emailTemplateService.isMailReady();
+        }
+        catch (Exception e) {
+            // 通道状态查询不向登录页抛错, 配置读取异常一律按不可用处理
+            emailEnabled = false;
+        }
+        return new ForgetChannelsResult().setEmailEnabled(emailEnabled);
+    }
 
     /// 发送找回密码验证码, 返回流程ID(账号不存在/邮箱未绑定均明确报错)
     public ForgetSendCodeResult sendCode(ForgetSendCodeParam param) {

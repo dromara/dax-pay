@@ -3,7 +3,6 @@ package cn.daxpay.open.platform.system.service.config.infra;
 import cn.daxpay.open.platform.common.json.util.JacksonUtil;
 import cn.daxpay.open.platform.system.convert.config.infra.PlatformWebsiteConfigConvert;
 import cn.daxpay.open.platform.system.entity.config.platform.SystemPlatformConfig;
-import cn.daxpay.open.platform.system.entity.config.platform.infra.PlatformMailConfig;
 import cn.daxpay.open.platform.system.entity.config.platform.infra.PlatformWebsiteConfig;
 import cn.daxpay.open.platform.system.enums.PlatformConfigTypeEnum;
 import cn.daxpay.open.platform.system.param.config.infra.PlatformWebsiteConfigParam;
@@ -26,8 +25,6 @@ public class PlatformWebsiteConfigService {
 
     private final SystemPlatformConfigService systemConfigService;
 
-    private final PlatformMailConfigService mailConfigService;
-
     /// 获取站点配置
     public PlatformWebsiteConfig getWebsiteConfig() {
         return systemConfigService.getOrCreateConfig(PlatformConfigTypeEnum.WEBSITE,
@@ -44,16 +41,7 @@ public class PlatformWebsiteConfigService {
             result = new PlatformWebsiteConfigResult();
         }
         result.setContentHash(this.computeContentHash());
-        result.setForgetPasswordEnabled(this.isForgetPasswordEnabled());
         return result;
-    }
-
-    /// 找回密码入口是否可用, 按邮件发件箱配置是否就绪计算(口径同 service-iam EmailTemplateService#checkMailReady),
-    /// 未配置/未启用时登录页隐藏找回密码入口, 避免用户走完发码表单才被告知邮件通道不可用
-    private boolean isForgetPasswordEnabled() {
-        PlatformMailConfig mailConfig = mailConfigService.getMailConfig();
-        return mailConfig.getEnabled()
-                && !StrUtil.hasBlank(mailConfig.getHost(), mailConfig.getUsername(), mailConfig.getPassword());
     }
 
     /// 更新站点配置(整包覆盖, 允许清空字段)

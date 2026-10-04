@@ -47,10 +47,15 @@ public class EmailTemplateService {
         mailSendService.asyncSend(receiverEmail, receiverUserId, subject, content, template.getBusinessType());
     }
 
+    /// 判定邮件通道是否就绪(启用且 host/username/password 配置完整)
+    public boolean isMailReady() {
+        PlatformMailConfig config = mailSenderFactory.getMailConfig();
+        return config.getEnabled() && !StrUtil.hasBlank(config.getHost(), config.getUsername(), config.getPassword());
+    }
+
     /// 同步预检邮件通道是否可用(未启用或配置不完整抛业务异常)
     public void checkMailReady() {
-        PlatformMailConfig config = mailSenderFactory.getMailConfig();
-        if (!config.getEnabled() || StrUtil.hasBlank(config.getHost(), config.getUsername(), config.getPassword())) {
+        if (!this.isMailReady()) {
             // 邮箱: 邮件服务未配置或未启用
             throw new BizInfoException("error.iam.email.mailNotReady");
         }
