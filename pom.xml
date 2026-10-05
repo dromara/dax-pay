@@ -43,21 +43,21 @@
         <!-- 三方库版本集中管理（子模块通过继承获取） -->
         <lombok.version>1.18.48</lombok.version>
         <mapstruct.version>1.6.3</mapstruct.version>
-        <springdoc.version>3.1.0</springdoc.version>
+        <springdoc.version>3.1.1</springdoc.version>
         <hutool.version>5.8.47</hutool.version>
-        <bouncycastle.version>1.84</bouncycastle.version>
-        <guava.version>33.6.0-jre</guava.version>
+        <bouncycastle.version>1.86</bouncycastle.version>
+        <guava.version>33.7.2-jre</guava.version>
         <mybatis-plus.version>3.5.17</mybatis-plus.version>
         <mybatis-plus-join.version>1.5.9</mybatis-plus-join.version>
         <lock4j.version>2.2.7</lock4j.version>
-        <shedlock.version>6.3.1</shedlock.version>
-        <aws-sdk.version>2.46.15</aws-sdk.version>
+        <shedlock.version>6.10.0</shedlock.version>
+        <aws-sdk.version>2.55.11</aws-sdk.version>
         <sa-token.version>1.46.0</sa-token.version>
-        <webauthn-server.version>2.9.0</webauthn-server.version>
-        <caffeine.version>3.2.4</caffeine.version>
+        <webauthn-server.version>2.10.0</webauthn-server.version>
+        <caffeine.version>3.3.0</caffeine.version>
         <ip2region.version>3.3.7</ip2region.version>
         <wxjava.version>4.8.6.B</wxjava.version>
-        <commonmark.version>0.24.0</commonmark.version>
+        <commonmark.version>0.30.0</commonmark.version>
         <fesod.version>2.0.2-incubating</fesod.version>
     </properties>
 
