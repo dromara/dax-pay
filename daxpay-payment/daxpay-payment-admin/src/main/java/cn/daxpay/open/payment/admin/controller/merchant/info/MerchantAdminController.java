@@ -95,8 +95,8 @@ public class MerchantAdminController {
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "商户下拉列表")
     @GetMapping("/dropdown")
-    public Result<?> dropdown() {
-        return Res.ok(merchantService.dropdown());
+    public Result<?> dropdown(@RequestParam(value = "includeDisabled", required = false, defaultValue = "false") boolean includeDisabled) {
+        return Res.ok(merchantService.dropdown(includeDisabled));
     }
 
 }

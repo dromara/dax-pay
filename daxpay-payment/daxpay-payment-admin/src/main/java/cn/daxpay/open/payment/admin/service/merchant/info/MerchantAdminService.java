@@ -278,10 +278,18 @@ public class MerchantAdminService {
     /// 商户下拉列表
     ///
     /// 显示商户简称(mchShortName), 简称在建表时已强制必填。
-    public List<LabelValue> dropdown() {
-        List<MerchantInfo> merchants = merchantInfoManager.findAllByEnable();
+    /// includeDisabled=true 时返回全量商户(管理/查询场景), 停用商户简称带「（已停用）」后缀;
+    /// 默认仅启用(调试发起交易等业务动作场景的防线)。
+    public List<LabelValue> dropdown(boolean includeDisabled) {
+        List<MerchantInfo> merchants = includeDisabled
+                ? merchantInfoManager.findAll()
+                : merchantInfoManager.findAllByEnable();
         return merchants.stream()
-                .map(m -> new LabelValue(m.getMchShortName(), m.getMchNo()))
+                .map(m -> new LabelValue(
+                        MerchantStatusEnum.DISABLED.getCode().equals(m.getStatus())
+                                ? m.getMchShortName() + "（已停用）"
+                                : m.getMchShortName(),
+                        m.getMchNo()))
                 .collect(Collectors.toList());
     }
 
