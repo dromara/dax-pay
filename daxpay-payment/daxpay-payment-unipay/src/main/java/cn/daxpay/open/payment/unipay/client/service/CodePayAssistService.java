@@ -4,6 +4,7 @@ import cn.daxpay.open.payment.auth.UnifiedAuthService;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import cn.daxpay.open.payment.common.util.PayMethodOpenIdSupport;
 import cn.daxpay.open.payment.device.enums.QrCodeAmountTypeEnum;
+import cn.daxpay.open.payment.device.enums.QrCodeProgramTypeEnum;
 import cn.daxpay.open.payment.device.enums.QrCodeStatusEnum;
 import cn.daxpay.open.payment.device.qrcode.dao.DeviceQrCodeManager;
 import cn.daxpay.open.payment.device.qrcode.entity.DeviceQrCode;
@@ -55,9 +56,9 @@ import java.util.Objects;
 
 /// # 码牌支付编排(公开/H5/小程序侧)
 ///
-/// - 查询: 按编码返回脱敏码牌信息(含 programType / needOpenId)
+/// - 查询: 按编码返回脱敏码牌信息(含 programType / needOpenId); mini 牌按请求 runtime 解析策略形态
 /// - 授权: 按码牌解析商户与策略后生成 OAuth 链接, returnPath 指向分端页
-/// - 支付: 读**码牌支付策略**解析 method(不读聚合配置); payForm 由 programType 映射
+/// - 支付: 读**码牌支付策略**解析 method(不读聚合配置); payForm 由 programType 映射(runtime 强校验一致)
 /// - 状态: 按 orderNo 查询 cashier_code 来源订单脱敏状态
 @Slf4j
 @Service
@@ -84,7 +85,8 @@ public class CodePayAssistService {
     /// 根据码牌编码查询支付信息(公开接口, 脱敏返回)
     ///
     /// @param clientEnv 可选; 传入时解析策略 method 并填充 needOpenId
-    public CodePayInfoResult getByCode(String code, String clientEnv) {
+    /// @param runtime 可选运行形态(mini/h5); 小程序端必传, 缺省按码牌 programType 解析(向后兼容)
+    public CodePayInfoResult getByCode(String code, String clientEnv, String runtime) {
         DeviceQrCode entity = this.loadEnabledAssigned(code);
         // 忽略租户查商户: 公开 H5 无商户上下文; 仅取展示名, 不回 mchNo
         MerchantInfo merchant = merchantInfoManager.findByMchNoNotTenant(entity.getMchNo())
@@ -102,12 +104,12 @@ public class CodePayAssistService {
         if (StrUtil.isNotBlank(clientEnv)) {
             try {
                 ClientEnvEnum env = ClientEnvEnum.findByCode(clientEnv);
-                String method = this.resolveMethod(entity, clientEnv);
+                String method = this.resolveMethod(entity, clientEnv, runtime);
                 // openId 触发判定: 业务必需(JSAPI/MINI) 或 存在 openId 黑名单且当前环境可 OAuth
                 result.setNeedOpenId(this.resolveNeedOpenId(method, env));
             } catch (Exception e) {
                 // 策略未配置等: 不误强制授权(false)；支付时会因策略失败再报错
-                log.warn("码牌 needOpenId 解析失败 code={} clientEnv={}: {}", code, clientEnv, e.getMessage());
+                log.warn("码牌 needOpenId 解析失败 code={} clientEnv={} runtime={}: {}", code, clientEnv, runtime, e.getMessage());
                 result.setNeedOpenId(false);
             }
         }
@@ -322,8 +324,8 @@ public class CodePayAssistService {
         return requestAmount;
     }
 
-    /// 解析码牌策略 method(供 needOpenId)
-    private String resolveMethod(DeviceQrCode entity, String clientEnvCode) {
+    /// 解析码牌策略 method(供 needOpenId); payForm 推导与支付同规则(runtime 可选)
+    private String resolveMethod(DeviceQrCode entity, String clientEnvCode, String runtime) {
         ClientEnvEnum clientEnv = ClientEnvEnum.findByCode(clientEnvCode);
         if (clientEnv == ClientEnvEnum.BROWSER) {
             // 码牌: 当前打开环境不支持码牌支付, 请使用微信/支付宝等扫码
@@ -331,8 +333,24 @@ public class CodePayAssistService {
         }
         merchantContextLoader.initMch(entity.getMchNo());
         var mchApp = merchantContextLoader.resolveApp(entity.getMchNo(), entity.getAppId());
-        CodePayFormEnum payForm = CodePayFormEnum.fromProgramType(entity.getProgramType());
+        CodePayFormEnum payForm = this.resolvePayForm(entity.getProgramType(), runtime);
         return gatewayPayConfigResolveService.resolveRequired(mchApp.getAppId(), clientEnv, payForm).method();
+    }
+
+    /// 码牌策略形态(payForm)推导(get-by-code 查询路径, 对齐 plus 语义)
+    ///
+    /// - h5 牌恒 H5(无前缀映射拉起方, 不存在小程序容器打开的场景, 忽略 runtime)
+    /// - mini 牌带 runtime 时按真实容器映射: mini→MINI, h5→H5
+    ///   (不就形态不匹配硬拦截, 形态由入口链路客观决定; 非法值由查询方 try/catch 兜底 needOpenId=false)
+    /// - runtime 缺省按 programType 映射(open 现状缺省, 向后兼容; 小程序端恒传 runtime=mini)
+    private CodePayFormEnum resolvePayForm(String programType, String runtime) {
+        if (!QrCodeProgramTypeEnum.MINI_APP.getCode().equals(programType)) {
+            return CodePayFormEnum.H5;
+        }
+        if (StrUtil.isBlank(runtime)) {
+            return CodePayFormEnum.fromProgramType(programType);
+        }
+        return CodePayFormEnum.fromRuntime(ClientRuntimeEnum.findByCode(runtime));
     }
 
     /// openId 触发判定

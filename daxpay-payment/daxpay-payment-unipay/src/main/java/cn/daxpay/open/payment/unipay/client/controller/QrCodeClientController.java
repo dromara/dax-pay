@@ -41,8 +41,9 @@ public class QrCodeClientController {
     @GetMapping("/get-by-code")
     public Result<CodePayInfoResult> getByCode(
             @NotBlank(message = "{validation.field.code.notBlank}") String code,
-            @RequestParam(required = false) String clientEnv) {
-        return Res.ok(codePayAssistService.getByCode(code, clientEnv));
+            @RequestParam(required = false) String clientEnv,
+            @RequestParam(required = false) String runtime) {
+        return Res.ok(codePayAssistService.getByCode(code, clientEnv, runtime));
     }
 
     @Operation(summary = "码牌发起支付")
