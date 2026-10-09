@@ -15,6 +15,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -42,6 +43,15 @@ public class SaExceptionHandler {
         return Objects.nonNull(contentType) && contentType.contains(MediaType.TEXT_EVENT_STREAM_VALUE);
     }
 
+    /// 判断请求是否为 SSE 事件流连接(EventSource 的 Accept 头指定 text/event-stream)
+    ///
+    /// 鉴权拦截发生在 preHandle, 此时响应尚未写出, [#isSseStream] 的响应 Content-Type 判断
+    /// 不适用; EventSource 建连未登录时只能靠请求 Accept 头识别.
+    private boolean isEventStreamRequest(HttpServletRequest request) {
+        String accept = request.getHeader(HttpHeaders.ACCEPT);
+        return Objects.nonNull(accept) && accept.contains(MediaType.TEXT_EVENT_STREAM_VALUE);
+    }
+
     /// SSE 流或非 REQUEST 派发(ASYNC/ERROR 等): 上下文/鉴权异常按常态降级
     private boolean isSseOrNonRequest(HttpServletRequest request, HttpServletResponse response) {
         if (request.getDispatcherType() != DispatcherType.REQUEST) {
@@ -51,11 +61,22 @@ public class SaExceptionHandler {
     }
 
     /// 未登录返回401
+    ///
+    /// SSE 连接(EventSource, Accept: text/event-stream)无 JSON 转换器可按该类型写出 Result,
+    /// 强行返回 body 会令异常处理放弃解析、原始异常逃逸到容器
+    /// (控制台刷 Tomcat ERROR 堆栈, 客户端拿到 500 空响应);
+    /// 此时返回无 body 的 401, 并预置 text/event-stream Content-Type 跳过内容协商.
     @ExceptionHandler(NotLoginException.class)
-    public ResponseEntity<Result<Void>> handleNotLoginException(NotLoginException ex){
+    public ResponseEntity<Result<Void>> handleNotLoginException(NotLoginException ex, HttpServletRequest request){
         // 日志固定输出 messageKey 与中文翻译, 不受请求语言影响
         String key = ex.resolveMessageKey();
         log.info("鉴权异常 消息={}, key={}", I18nUtil.get(key, Locale.CHINA, ex.getArgs()), key, ex);
+        // SSE 建连未登录: 无 body 401
+        if (isEventStreamRequest(request)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .contentType(MediaType.TEXT_EVENT_STREAM)
+                    .build();
+        }
         // 响应体按请求语言翻译 messageKey, 与 RestExceptionHandler 行为对齐
         Result<Void> result = Res.response(ex.getCode(), I18nUtil.get(key, ex.getArgs()));
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
@@ -68,7 +89,7 @@ public class SaExceptionHandler {
     /// 若不在此单独处理, 会落入下方 [SaTokenException] 兜底而返回 500, 前端 401 拦截无法感知。
     /// 按异常 type 映射不同 i18n 文案, 返回 401 以便前端识别并跳转登录页。
     @ExceptionHandler(cn.dev33.satoken.exception.NotLoginException.class)
-    public ResponseEntity<Result<Void>> handleSaTokenNotLoginException(cn.dev33.satoken.exception.NotLoginException ex) {
+    public ResponseEntity<Result<Void>> handleSaTokenNotLoginException(cn.dev33.satoken.exception.NotLoginException ex, HttpServletRequest request) {
         String type = ex.getType();
         // 按未登录原因映射 i18n 消息 key
         String messageKey = switch (type) {
@@ -82,16 +103,28 @@ public class SaExceptionHandler {
         };
         String message = I18nUtil.get(messageKey);
         log.info("Sa-Token 未登录 type={}, key={}", type, messageKey);
+        // SSE 连接未登录: 无 body 401, 机制见 [#handleNotLoginException]
+        if (isEventStreamRequest(request)) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .contentType(MediaType.TEXT_EVENT_STREAM)
+                    .build();
+        }
         Result<Void> result = Res.response(CommonErrorCode.AUTHENTICATION_FAIL, message);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
     }
 
     /// 路径无权访问
     @ExceptionHandler(RouterCheckException.class)
-    public ResponseEntity<Result<Void>> handleBusinessException(RouterCheckException ex) {
+    public ResponseEntity<Result<Void>> handleBusinessException(RouterCheckException ex, HttpServletRequest request) {
         // 日志固定输出 messageKey 与中文翻译, 不受请求语言影响
         String key = ex.resolveMessageKey();
         log.info("鉴权异常 消息={}, key={}", I18nUtil.get(key, Locale.CHINA, ex.getArgs()), key, ex);
+        // SSE 连接无权限: 无 body 403, 机制见 [#handleNotLoginException]
+        if (isEventStreamRequest(request)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .contentType(MediaType.TEXT_EVENT_STREAM)
+                    .build();
+        }
         // 响应体按请求语言翻译 messageKey, 与 RestExceptionHandler 行为对齐
         Result<Void> result = Res.response(ex.getCode(), I18nUtil.get(key, ex.getArgs()));
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(result);
