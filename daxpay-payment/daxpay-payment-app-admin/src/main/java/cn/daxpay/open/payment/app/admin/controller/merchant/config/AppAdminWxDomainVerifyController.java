@@ -25,14 +25,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-/// 小程序管理端-商户微信域名验证文件管理
+/// 小程序管理端-商户域名校验文件管理
 ///
 /// 镜像自 admin 版 `WxDomainVerifyAdminController`(路径 /admin/merchant/wx-verify),
-/// 同权限码同 Service, 运营在商户工作台代为管理指定商户的验证文件, mchNo 由请求参数指定;
-/// 上传走 JSON(fileName + fileContent), 不走 multipart。
+/// 同权限码同 Service, 运营在商户工作台代为管理指定商户的域名验证文件(微信授权回调, 仅 MP_verify_*.txt),
+/// mchNo 由请求参数指定; 上传走 JSON(fileName + fileContent), 不走 multipart。
 @PermCode(menuCode = PermCodes.Merchant.WxDomainVerify.MENU)
 @Validated
-@Tag(name = "小程序管理端-商户微信域名验证文件")
+@Tag(name = "小程序管理端-商户域名校验文件")
 @RestController
 @RequestMapping("/app-admin/merchant/wx-verify")
 @RequiredArgsConstructor

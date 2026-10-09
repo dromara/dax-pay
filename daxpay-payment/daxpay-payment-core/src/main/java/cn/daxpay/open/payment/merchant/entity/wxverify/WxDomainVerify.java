@@ -10,9 +10,11 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldNameConstants;
 
-/// # 微信域名验证文件
+/// # 域名校验文件
 ///
-/// 商户将公众号/小程序的 MP_verify_xxx.txt 上传至平台, 由平台网关统一响应微信域名校验请求
+/// 平台/商户将微信、支付宝下发的域名校验文件上传至平台, 由平台网关按文件名统一响应抓取请求:
+/// - 商户级仅 MP_verify_*.txt（商户自己公众号/小程序的域名验证）;
+/// - 平台级另支持微信「扫普通链接二维码」随机名 .txt 与支付宝「关联普通二维码」32位hex .html
 @EqualsAndHashCode(callSuper = true)
 @Data
 @FieldNameConstants

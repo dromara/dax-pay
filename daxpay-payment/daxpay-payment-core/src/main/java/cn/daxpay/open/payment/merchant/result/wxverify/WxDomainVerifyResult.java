@@ -10,13 +10,13 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldNameConstants;
 
-/// # 微信域名验证文件
+/// # 域名校验文件
 ///
 @EqualsAndHashCode(callSuper = true)
 @Data
 @FieldNameConstants
 @Accessors(chain = true)
-@Schema(title = "微信域名验证文件")
+@Schema(title = "域名校验文件")
 public class WxDomainVerifyResult extends BaseResult {
 
     @Schema(description = "商户号")

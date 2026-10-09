@@ -16,17 +16,17 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-/// # 微信域名验证文件管理
+/// # 域名校验文件管理
 ///
 @Slf4j
 @Repository
 @RequiredArgsConstructor
 public class WxDomainVerifyManager extends BaseManager<WxDomainVerifyMapper, WxDomainVerify> {
 
-    /// 根据验证码查询，忽略租户拦截（供网关响应使用）
+    /// 根据完整文件名查询，忽略租户拦截（供网关响应使用）
     @IgnoreTenant
-    public Optional<WxDomainVerify> findByVerifyCodeNotTenant(String verifyCode) {
-        return this.findByField(WxDomainVerify::getVerifyCode, verifyCode);
+    public Optional<WxDomainVerify> findByFileNameNotTenant(String fileName) {
+        return this.findByField(WxDomainVerify::getFileName, fileName);
     }
 
     /// 判断验证码是否存在（查重）

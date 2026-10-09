@@ -20,13 +20,13 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-/// # 商户微信域名验证文件（运营端，商户工作台）
+/// # 商户域名校验文件（运营端，商户工作台）
 ///
-/// 运营在商户工作台代为管理指定商户的验证文件，mchNo 由请求参数指定。
-/// 上传走 JSON（fileName + fileContent），不走 multipart。
+/// 运营在商户工作台代为管理指定商户的域名验证文件（微信授权回调），仅支持 MP_verify_*.txt，
+/// mchNo 由请求参数指定。上传走 JSON（fileName + fileContent），不走 multipart。
 @PermCode(menuCode = PermCodes.Merchant.WxDomainVerify.MENU)
 @Validated
-@Tag(name = "商户微信域名验证文件(管理)")
+@Tag(name = "商户域名校验文件(管理)")
 @RestController
 @RequestMapping("/admin/merchant/wx-verify")
 @RequiredArgsConstructor

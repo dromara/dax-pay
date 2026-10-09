@@ -25,13 +25,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Objects;
 
-/// # 微信域名验证文件（商户端）
+/// # 商户域名校验文件（商户端）
 ///
+/// 商户自己公众号/小程序的域名验证文件（微信授权回调），仅支持 MP_verify_*.txt；
 /// 对照运营端 [WxDomainVerifyAdminController]，路径 `/mch/wx-verify`。
 /// 上传/分页强制使用 PaymentContext 商户号，不接受 URL mchNo。
 @PermCode(menuCode = PermCodes.Merchant.WxDomainVerify.MENU)
 @Validated
-@Tag(name = "微信域名验证文件(商户端)")
+@Tag(name = "商户域名校验文件(商户端)")
 @RestController
 @RequestMapping("/mch/wx-verify")
 @RequiredArgsConstructor
@@ -50,7 +51,7 @@ public class MchWxDomainVerifyController {
 
     private void assertOwned(WxDomainVerifyResult result) {
         if (!Objects.equals(result.getMchNo(), requireMchNo())) {
-            // 微信域名验证文件不属于当前商户
+            // 域名校验文件不属于当前商户
             throw new ConfigErrorException("error.payment.merchant.wxVerifyNoMatch");
         }
     }
