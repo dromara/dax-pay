@@ -1,4 +1,5 @@
 {
   "admin_admin": "運營管理員",
-  "merchant_admin": "商戶管理員"
+  "merchant_admin": "商戶管理員",
+  "merchant_user": "商戶用戶"
 }

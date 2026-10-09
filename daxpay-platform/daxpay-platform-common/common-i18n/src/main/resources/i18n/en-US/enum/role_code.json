@@ -1,4 +1,5 @@
 {
   "admin_admin": "Operations Admin",
-  "merchant_admin": "Merchant Admin"
+  "merchant_admin": "Merchant Admin",
+  "merchant_user": "Merchant User"
 }

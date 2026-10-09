@@ -13,5 +13,6 @@
   "notExist": "ユーザーが見つかりません",
   "cannotEditNonAdmin": "管理者以外のクライアント ユーザーは編集できません",
   "emailUsedByOther": "電子メールはすでに別のユーザーによって使用されています",
-  "phoneUsedByOther": "電話番号はすでに別のユーザーによって使用されています"
+  "phoneUsedByOther": "電話番号はすでに別のユーザーによって使用されています",
+  "subjectAdminBanDenied": "主体管理者[{0}]は禁止・ロックできません"
 }

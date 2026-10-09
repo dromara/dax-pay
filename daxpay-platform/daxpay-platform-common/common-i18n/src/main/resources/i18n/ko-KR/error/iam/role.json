@@ -6,5 +6,6 @@
   "internalCannotDelete": "기본 제공 역할은 삭제할 수 없습니다.",
   "assignOutOfScope": "역할 할당이 할당 가능한 범위를 초과합니다.",
   "assignCrossClient": "터미널 전체에 역할을 할당할 수 없습니다: 사용자 클라이언트 [{0}], 역할 클라이언트 [{1}]",
-  "notExist": "역할을 찾을 수 없습니다."
+  "notExist": "역할을 찾을 수 없습니다.",
+  "subjectAdminRoleFixed": "주체 관리자[{0}]의 역할은 고정되어 변경할 수 없습니다"
 }

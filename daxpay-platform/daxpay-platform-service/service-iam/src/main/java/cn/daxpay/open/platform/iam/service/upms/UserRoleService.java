@@ -12,6 +12,7 @@ import cn.daxpay.open.platform.iam.entity.role.Role;
 import cn.daxpay.open.platform.iam.entity.upms.UserRole;
 import cn.daxpay.open.platform.iam.entity.user.UserInfo;
 import cn.daxpay.open.platform.iam.result.role.RoleResult;
+import cn.daxpay.open.platform.capability.auth.authentication.SubjectAdminGuardHook;
 import cn.daxpay.open.platform.capability.auth.util.SecurityUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,10 +38,24 @@ public class UserRoleService {
 
     private final UserRoleManager userRoleManager;
 
+    /// 主体管理员保护钩子(业务域 SPI, payment 侧提供实现)
+    private final List<SubjectAdminGuardHook> subjectAdminGuardHooks;
+
     /// 给用户分配角色（单角色模式）
+    ///
+    /// 主体管理员(创建商户时自动建号的管理员用户)角色固定不可变更:
+    /// 所有分配入口统一在此拦截; 主体创建链路的初始绑定因"先绑角色后存挂靠关联"的时序天然放行。
     @CacheEvict(cacheNames = "iam:user-perm-codes", key = "#userId")
     @Transactional(rollbackFor = Exception.class)
     public void saveAssign(Long userId, Long roleId, boolean ignoreScopes) {
+        // 主体管理员拒改角色
+        subjectAdminGuardHooks.forEach(hook -> {
+            String subject = hook.findSubjectAdmin(userId);
+            if (subject != null) {
+                // 权限: 主体管理员角色固定
+                throw new ValidationFailedException("error.iam.role.subjectAdminRoleFixed", subject);
+            }
+        });
         // 校验用户与角色的终端一致性
         this.validateUserRoleTerminalConsistency(userId, roleId);
 

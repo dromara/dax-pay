@@ -3,8 +3,10 @@ package cn.daxpay.open.payment.merchant.service.user;
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.enums.client.ClientEnum;
+import cn.daxpay.open.platform.core.enums.role.RoleCodeEnum;
 import cn.daxpay.open.platform.core.exception.BizException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
+import cn.daxpay.open.platform.core.exception.config.ConfigNotExistException;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.platform.iam.auth.service.IamSecurityConfigService;
@@ -13,9 +15,11 @@ import cn.daxpay.open.platform.iam.auth.service.PasswordPolicyService;
 import cn.daxpay.open.platform.iam.auth.service.email.UserEmailService;
 import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformPasswordPolicyConfig;
 import cn.daxpay.open.platform.iam.code.UserStatusEnum;
+import cn.daxpay.open.platform.iam.dao.role.RoleManager;
 import cn.daxpay.open.platform.iam.dao.user.UserExpandInfoManager;
 import cn.daxpay.open.platform.iam.dao.user.UserInfoManager;
 import cn.daxpay.open.platform.iam.dao.user.UserPasswordSecurityManager;
+import cn.daxpay.open.platform.iam.entity.role.Role;
 import cn.daxpay.open.platform.iam.entity.user.UserExpandInfo;
 import cn.daxpay.open.platform.iam.entity.user.UserInfo;
 import cn.daxpay.open.platform.iam.exception.user.UserInfoNotExistsException;
@@ -47,7 +51,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /// # 商户用户管理服务
 ///
@@ -60,6 +66,7 @@ public class MerchantUserAdminService {
     private final UserExpandInfoManager userExpandInfoManager;
     private final MerchantUserManager merchantUserManager;
     private final MerchantInfoManager merchantInfoManager;
+    private final RoleManager roleManager;
     private final PasswordDecryptService passwordDecryptService;
     private final PasswordPolicyService passwordPolicyService;
     private final UserPasswordSecurityManager passwordSecurityManager;
@@ -91,6 +98,14 @@ public class MerchantUserAdminService {
                 .like(StrUtil.isNotBlank(query.getName()), UserInfo::getName, query.getName())
                 .like(StrUtil.isNotBlank(query.getAccount()), UserInfo::getAccount, query.getAccount());
         Page<MerchantUserResult> page = userInfoManager.selectJoinListPage(mpPage, MerchantUserResult.class, wrapper);
+        // 回填主体管理员标识: join 查询中 mch_user.administrator 与 iam_user_info.administrator(内置超管标志) 同名,
+        // 同名列会被用户表的值(商户用户恒 false)遮蔽, 按关联表批量回填真实标识供前端"管理员"tag与操作禁用使用
+        List<Long> userIds = page.getRecords().stream().map(MerchantUserResult::getId).toList();
+        if (!userIds.isEmpty()) {
+            Map<Long, Boolean> adminMap = merchantUserManager.findAllByFields(MerchantUser::getUserId, userIds).stream()
+                    .collect(Collectors.toMap(MerchantUser::getUserId, MerchantUser::isAdministrator, (a, b) -> a));
+            page.getRecords().forEach(r -> r.setAdministrator(adminMap.getOrDefault(r.getId(), false)));
+        }
         return MpUtil.toPageResult(page);
     }
 
@@ -150,6 +165,21 @@ public class MerchantUserAdminService {
         userExpandInfo.setId(userInfo.getId());
         userExpandInfoManager.save(userExpandInfo);
 
+        // 绑定角色: 指定用指定角色, 未指定默认内置商户普通用户(merchant_user);
+        // 创建即有角色, 防止出现无角色裸用户(登录后菜单为空跳转404)
+        Role role;
+        if (Objects.nonNull(param.getRoleId())) {
+            role = roleManager.findById(param.getRoleId())
+                    // 商户: 指定的角色不存在
+                    .orElseThrow(() -> new BizException(CommonCode.FAIL_CODE, "error.payment.merchant.roleNotExist"));
+        } else {
+            role = roleManager.findByCode(RoleCodeEnum.MERCHANT_USER.getCode())
+                    .orElseThrow(ConfigNotExistException::new);
+        }
+        // 时序: 先绑角色后存挂靠关联(主体管理员保护按挂靠判定, 子用户挂靠 administrator=false 本不触发,
+        // 统一时序防未来调整时误伤; 终端一致性由 saveAssign 校验, 不可跨终端指定角色)
+        userRoleService.saveAssign(userInfo.getId(), role.getId(), true);
+
         // 创建商户用户关联
         MerchantUser merchantUser = new MerchantUser(userInfo.getId(), mchNo, false);
         merchantUserManager.save(merchantUser);
@@ -190,10 +220,14 @@ public class MerchantUserAdminService {
     }
 
     /// 分配角色
+    ///
+    /// 商户管理员(主体侧操作者)可给子用户分配本终端任意角色: ignoreScopes=true 放行"操作者须持有该角色"的范围校验
+    /// (单角色模式下商户管理员仅持有 merchant_admin, 不放行则永远无法分配其他内置/自建角色);
+    /// 跨终端角色仍被 saveAssign 的终端一致性校验拦截, 目标为商户管理员的改角色被主体管理员保护拦截
     @Transactional(rollbackFor = Exception.class)
     public void assignRole(Long userId, Long roleId) {
         this.checkMerchantUser(userId);
-        userRoleService.saveAssign(userId, roleId, false);
+        userRoleService.saveAssign(userId, roleId, true);
     }
 
     /// 查询用户可分配的角色列表(按目标用户终端), 商户端校验归属防止跨商户探测
@@ -294,7 +328,8 @@ public class MerchantUserAdminService {
 
     /// 批量校验用户是否属于商户, 商户端同时校验归属当前商户
     private void checkMerchantUser(List<Long> userIds) {
-        List<MerchantUser> users = merchantUserManager.findAllByField(MerchantUser::getUserId, userIds);
+        // findAllByFields 走 in 查询; findAllByField 是单值 eq, 传 List 会触发 PG TypeException
+        List<MerchantUser> users = merchantUserManager.findAllByFields(MerchantUser::getUserId, userIds);
         if (users.size() != userIds.size()) {
             // 商户: 商户用户关联关系不存在
             throw new BizException(CommonCode.FAIL_CODE, "error.payment.merchant.mchUserRelationNotExist");

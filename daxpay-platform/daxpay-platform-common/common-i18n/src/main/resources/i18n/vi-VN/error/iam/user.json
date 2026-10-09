@@ -13,5 +13,6 @@
   "notExist": "Không tìm thấy người dùng",
   "cannotEditNonAdmin": "Không thể chỉnh sửa người dùng khách hàng không phải quản trị viên",
   "emailUsedByOther": "Email đã được người dùng khác sử dụng",
-  "phoneUsedByOther": "Số điện thoại đã được người dùng khác sử dụng"
+  "phoneUsedByOther": "Số điện thoại đã được người dùng khác sử dụng",
+  "subjectAdminBanDenied": "Không thể cấm hoặc khóa quản trị viên chủ thể [{0}]"
 }

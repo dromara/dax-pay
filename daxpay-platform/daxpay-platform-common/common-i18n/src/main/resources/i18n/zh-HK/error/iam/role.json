@@ -6,5 +6,6 @@
   "internalCannotDelete": "內置角色不允許刪除",
   "assignOutOfScope": "角色分配超出了可分配的範圍",
   "assignCrossClient": "禁止為用户分配跨終端角色：用户歸屬終端[{0}]，角色歸屬終端[{1}]",
-  "notExist": "角色不存在"
+  "notExist": "角色不存在",
+  "subjectAdminRoleFixed": "主體管理員[{0}]的角色固定, 不可變更"
 }

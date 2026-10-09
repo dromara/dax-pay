@@ -13,5 +13,6 @@
   "notExist": "使用者不存在",
   "cannotEditNonAdmin": "不允許編輯非運營端使用者",
   "emailUsedByOther": "郵箱已被其他使用者使用",
-  "phoneUsedByOther": "手機號已被其他使用者使用"
+  "phoneUsedByOther": "手機號已被其他使用者使用",
+  "subjectAdminBanDenied": "主體管理員[{0}]不可封鎖或鎖定"
 }

@@ -23,6 +23,7 @@ import cn.daxpay.open.platform.iam.param.user.UserInfoQuery;
 import cn.daxpay.open.platform.iam.result.user.UserPasswordResult;
 import cn.daxpay.open.platform.iam.result.user.UserWholeInfoResult;
 import cn.daxpay.open.platform.iam.service.session.OnlineUserService;
+import cn.daxpay.open.platform.capability.auth.authentication.SubjectAdminGuardHook;
 import cn.daxpay.open.platform.common.config.properties.PlatformStarterProperties;
 import cn.daxpay.open.platform.core.enums.client.ClientEnum;
 import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformPasswordPolicyConfig;
@@ -72,6 +73,9 @@ public class UserAdminService {
     private final OnlineUserService onlineUserService;
 
     private final UserEmailService userEmailService;
+
+    /// 主体管理员保护钩子(业务域 SPI, payment 侧提供实现)
+    private final List<SubjectAdminGuardHook> subjectAdminGuardHooks;
 
     /// 分页查询（按终端过滤）
     public PageResult<UserWholeInfoResult> page(PageParam pageParam, UserInfoQuery query) {
@@ -135,23 +139,42 @@ public class UserAdminService {
     }
 
     /// 封禁用户
+    ///
+    /// 主体管理员(商户)不可封禁: 封禁会导致主体失管且其角色无法换绑他人, 统一在此拦截
     public void ban(Long userId) {
+        this.checkNotSubjectAdmin(userId);
         userInfoManager.setUpStatus(userId, UserStatusEnum.BAN.getCode());
     }
 
     /// 批量封禁用户
     public void banBatch(List<Long> userIds) {
+        userIds.forEach(this::checkNotSubjectAdmin);
         userInfoManager.setUpStatusBatch(userIds, UserStatusEnum.BAN.getCode());
     }
 
     /// 锁定用户
+    ///
+    /// 与封禁同口径: 主体管理员不可锁定
     public void lock(Long userId) {
+        this.checkNotSubjectAdmin(userId);
         userInfoManager.setUpStatus(userId, UserStatusEnum.LOCK.getCode());
     }
 
     /// 批量锁定用户
     public void lockBatch(List<Long> userIds) {
+        userIds.forEach(this::checkNotSubjectAdmin);
         userInfoManager.setUpStatusBatch(userIds, UserStatusEnum.LOCK.getCode());
+    }
+
+    /// 校验目标用户不是主体管理员, 是则拒绝(商户管理员固定不可封禁/锁定)
+    private void checkNotSubjectAdmin(Long userId) {
+        subjectAdminGuardHooks.forEach(hook -> {
+            String subject = hook.findSubjectAdmin(userId);
+            if (subject != null) {
+                // 权限: 主体管理员不可封禁/锁定
+                throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.subjectAdminBanDenied", subject);
+            }
+        });
     }
 
     /// 解锁用户

@@ -6,5 +6,6 @@
   "internalCannotDelete": "Peran bawaan tidak dapat dihapus",
   "assignOutOfScope": "Penetapan peran melebihi cakupan yang dapat ditetapkan",
   "assignCrossClient": "Tidak dapat menetapkan peran di seluruh terminal: klien pengguna [{0}], klien peran [{1}]",
-  "notExist": "Peran tidak ditemukan"
+  "notExist": "Peran tidak ditemukan",
+  "subjectAdminRoleFixed": "Peran admin subjek [{0}] bersifat tetap dan tidak dapat diubah"
 }

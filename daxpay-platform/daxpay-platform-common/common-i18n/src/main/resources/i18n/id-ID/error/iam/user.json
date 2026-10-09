@@ -13,5 +13,6 @@
   "notExist": "Pengguna tidak ditemukan",
   "cannotEditNonAdmin": "Tidak dapat mengedit pengguna klien non-admin",
   "emailUsedByOther": "Email sudah digunakan oleh pengguna lain",
-  "phoneUsedByOther": "Nomor telepon sudah digunakan oleh pengguna lain"
+  "phoneUsedByOther": "Nomor telepon sudah digunakan oleh pengguna lain",
+  "subjectAdminBanDenied": "Admin subjek [{0}] tidak dapat diblokir atau dikunci"
 }

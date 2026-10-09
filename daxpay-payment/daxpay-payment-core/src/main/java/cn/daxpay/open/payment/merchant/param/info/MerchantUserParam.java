@@ -39,6 +39,11 @@ public class MerchantUserParam {
     @Schema(description = "密码(RSA 加密), 可选; 不传时由系统生成随机初始密码并在响应中返回明文")
     private String password;
 
+    /// 绑定角色ID(可选); 不传时默认绑定内置商户普通用户角色(merchant_user),
+    /// 创建即有角色, 防止出现无角色裸用户(登录后菜单为空跳转404)
+    @Schema(description = "绑定角色ID, 可选; 不传默认内置商户普通用户角色")
+    private Long roleId;
+
     /// 手机号与 email 均不在本参数中受理:
     /// 手机号功能已冻结(无短信验证体系, 待接入后以验证码方式启用),
     /// email 是找回密码的安全凭证, 变更仅允许用户本人走 /user/auth/email 绑定验证流程;

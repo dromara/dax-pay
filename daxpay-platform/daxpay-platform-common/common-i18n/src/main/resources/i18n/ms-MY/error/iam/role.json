@@ -6,5 +6,6 @@
   "internalCannotDelete": "Peranan terbina dalam tidak boleh dipadamkan",
   "assignOutOfScope": "Tugasan peranan melebihi skop yang boleh diberikan",
   "assignCrossClient": "Tidak boleh menetapkan peranan merentas terminal: klien pengguna [{0}], klien peranan [{1}]",
-  "notExist": "Peranan tidak ditemui"
+  "notExist": "Peranan tidak ditemui",
+  "subjectAdminRoleFixed": "Peranan pentadbir subjek [{0}] adalah tetap dan tidak boleh diubah"
 }
