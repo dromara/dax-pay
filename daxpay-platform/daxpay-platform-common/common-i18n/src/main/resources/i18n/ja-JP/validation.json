@@ -937,6 +937,11 @@
     "expireWarnDays": {
       "min": "有効期限の事前通知日数は1日より小さくできません",
       "max": "有効期限の事前通知日数は90日より大きくできません"
-    }
+    },
+    "mailTemplateCode": "テンプレートコードは必須です",
+    "mailLanguage": "メール言語は必須です",
+    "mailSubject": "メール件名は必須です",
+    "mailTitle": "メールタイトルは必須です",
+    "mailContent": "本文は必須です"
   }
 }

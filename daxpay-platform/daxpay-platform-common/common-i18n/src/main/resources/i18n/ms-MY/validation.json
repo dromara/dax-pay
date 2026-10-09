@@ -888,6 +888,11 @@
     },
     "emailCode": {
       "notBlank": "Kod pengesahan e-mel tidak boleh kosong"
-    }
+    },
+    "mailTemplateCode": "Kod templat tidak boleh kosong",
+    "mailLanguage": "Bahasa e-mel tidak boleh kosong",
+    "mailSubject": "Subjek e-mel tidak boleh kosong",
+    "mailTitle": "Tajuk e-mel tidak boleh kosong",
+    "mailContent": "Kandungan e-mel tidak boleh kosong"
   }
 }

@@ -941,6 +941,11 @@
     "expireWarnDays": {
       "min": "过期提醒天数不能小于1天",
       "max": "过期提醒天数不能大于90天"
-    }
+    },
+    "mailTemplateCode": "模板编码不能为空",
+    "mailLanguage": "邮件语言不能为空",
+    "mailSubject": "邮件主题不能为空",
+    "mailTitle": "邮件标题不能为空",
+    "mailContent": "正文文案不能为空"
   }
 }

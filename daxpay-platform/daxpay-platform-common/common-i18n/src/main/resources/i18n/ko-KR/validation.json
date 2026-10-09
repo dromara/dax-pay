@@ -937,6 +937,11 @@
     "expireWarnDays": {
       "min": "만료 사전 알림 일수는 1일보다 작을 수 없습니다",
       "max": "만료 사전 알림 일수는 90일보다 클 수 없습니다"
-    }
+    },
+    "mailTemplateCode": "템플릿 코드는 필수입니다",
+    "mailLanguage": "이메일 언어는 필수입니다",
+    "mailSubject": "이메일 제목은 필수입니다",
+    "mailTitle": "이메일 본문 제목은 필수입니다",
+    "mailContent": "본문 내용은 필수입니다"
   }
 }

@@ -888,6 +888,11 @@
     },
     "emailCode": {
       "notBlank": "Mã xác minh email không được để trống"
-    }
+    },
+    "mailTemplateCode": "Mã mẫu không được để trống",
+    "mailLanguage": "Ngôn ngữ email không được để trống",
+    "mailSubject": "Chủ đề email không được để trống",
+    "mailTitle": "Tiêu đề email không được để trống",
+    "mailContent": "Nội dung email không được để trống"
   }
 }

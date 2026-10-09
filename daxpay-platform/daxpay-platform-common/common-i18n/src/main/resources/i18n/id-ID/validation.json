@@ -888,6 +888,11 @@
     },
     "emailCode": {
       "notBlank": "Kode verifikasi email tidak boleh kosong"
-    }
+    },
+    "mailTemplateCode": "Kode templat tidak boleh kosong",
+    "mailLanguage": "Bahasa email tidak boleh kosong",
+    "mailSubject": "Subjek email tidak boleh kosong",
+    "mailTitle": "Judul email tidak boleh kosong",
+    "mailContent": "Konten email tidak boleh kosong"
   }
 }

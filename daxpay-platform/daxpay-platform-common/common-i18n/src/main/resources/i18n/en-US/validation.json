@@ -941,6 +941,11 @@
     "expireWarnDays": {
       "min": "Password expiry reminder days cannot be less than 1 day",
       "max": "Password expiry reminder days cannot be greater than 90 days"
-    }
+    },
+    "mailTemplateCode": "Template code cannot be empty",
+    "mailLanguage": "Email language cannot be empty",
+    "mailSubject": "Email subject cannot be empty",
+    "mailTitle": "Email title cannot be empty",
+    "mailContent": "Email content cannot be empty"
   }
 }

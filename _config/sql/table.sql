@@ -4375,6 +4375,148 @@ ALTER SEQUENCE public.hmpay_isv_key_config_id_seq OWNED BY public.hmpay_isv_key_
 
 
 --
+-- Name: iam_mail_template; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.iam_mail_template (
+    id bigint NOT NULL,
+    template_code character varying(50) NOT NULL,
+    language character varying(10) NOT NULL,
+    subject character varying(200) NOT NULL,
+    title character varying(100) NOT NULL,
+    content text NOT NULL,
+    tip text,
+    footer character varying(500),
+    creator bigint,
+    last_modifier bigint,
+    version integer DEFAULT 0 NOT NULL,
+    deleted boolean DEFAULT false NOT NULL,
+    create_time timestamp with time zone,
+    last_modified_time timestamp with time zone,
+    CONSTRAINT iam_mail_template_pkey PRIMARY KEY (id)
+);
+
+
+--
+-- Name: TABLE iam_mail_template; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.iam_mail_template IS '邮件模板自定义(运营端按场景按语言覆盖出厂默认槽位, 场景清单在 EmailTemplateEnum)';
+
+
+--
+-- Name: COLUMN iam_mail_template.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.iam_mail_template.id IS '主键';
+
+
+--
+-- Name: COLUMN iam_mail_template.template_code; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.iam_mail_template.template_code IS '模板编码(关联 EmailTemplateEnum.templateName)';
+
+
+--
+-- Name: COLUMN iam_mail_template.language; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.iam_mail_template.language IS '语言(zh/en, 关联 MailLanguageEnum.code)';
+
+
+--
+-- Name: COLUMN iam_mail_template.subject; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.iam_mail_template.subject IS '邮件主题';
+
+
+--
+-- Name: COLUMN iam_mail_template.title; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.iam_mail_template.title IS '邮件标题';
+
+
+--
+-- Name: COLUMN iam_mail_template.content; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.iam_mail_template.content IS '正文文案(纯文本, 支持 {变量} 占位符)';
+
+
+--
+-- Name: COLUMN iam_mail_template.tip; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.iam_mail_template.tip IS '提示行文案(空则不输出该行)';
+
+
+--
+-- Name: COLUMN iam_mail_template.footer; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.iam_mail_template.footer IS '页脚文案(空则不输出该行)';
+
+
+--
+-- Name: COLUMN iam_mail_template.creator; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.iam_mail_template.creator IS '创建人';
+
+
+--
+-- Name: COLUMN iam_mail_template.last_modifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.iam_mail_template.last_modifier IS '最后修改人';
+
+
+--
+-- Name: COLUMN iam_mail_template.version; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.iam_mail_template.version IS '版本号, 使用乐观锁';
+
+
+--
+-- Name: COLUMN iam_mail_template.deleted; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.iam_mail_template.deleted IS '删除标识';
+
+
+--
+-- Name: COLUMN iam_mail_template.create_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.iam_mail_template.create_time IS '创建时间';
+
+
+--
+-- Name: COLUMN iam_mail_template.last_modified_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.iam_mail_template.last_modified_time IS '最后修改时间';
+
+
+--
+-- Name: uk_iam_mail_template_code_lang; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_iam_mail_template_code_lang ON public.iam_mail_template USING btree (template_code, language) WHERE (deleted = false);
+
+
+--
+-- Name: INDEX uk_iam_mail_template_code_lang; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_iam_mail_template_code_lang IS '同一场景同一语言仅一份覆盖(软删后可重建)';
+
+
+--
 -- Name: iam_perm_code; Type: TABLE; Schema: public; Owner: -
 --
 

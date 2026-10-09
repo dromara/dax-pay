@@ -937,6 +937,11 @@
     "expireWarnDays": {
       "min": "過期提醒天數不能小於1天",
       "max": "過期提醒天數不能大於90天"
-    }
+    },
+    "mailTemplateCode": "模板編碼不能為空",
+    "mailLanguage": "郵件語言不能為空",
+    "mailSubject": "郵件主題不能為空",
+    "mailTitle": "郵件標題不能為空",
+    "mailContent": "正文文案不能為空"
   }
 }

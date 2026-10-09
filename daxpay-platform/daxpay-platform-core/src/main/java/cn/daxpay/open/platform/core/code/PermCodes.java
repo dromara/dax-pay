@@ -420,6 +420,12 @@ public interface PermCodes {
             String MENU = "system:notify:mail-record";
         }
 
+        /// 邮件模板 menuCode=system:notify:mail-template
+        interface MailTemplate {
+            /// 菜单编码
+            String MENU = "system:notify:mail-template";
+        }
+
         /// 存储文件 menuCode=system:file（原 system:file:platform）
         interface File {
             /// 菜单编码
