@@ -79,8 +79,7 @@ public class DeviceQrCodeAdminService {
                         .setFixedAmount(fixedAmount)
                         .setStatus(status)
                         // 空白码默认非分账, 划拨后由商户/运营按需开启
-                        .setAllocation(false)
-                        .setRemark(param.getRemark()))
+                        .setAllocation(false))
                 .toList();
         deviceQrCodeManager.saveAll(list);
     }

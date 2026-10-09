@@ -53,9 +53,4 @@ public class DeviceQrCodeBatchParam {
     /// @see cn.daxpay.open.payment.device.enums.QrCodeStatusEnum
     @Schema(description = "状态(enabled-启用/disabled-停用), 空则默认启用")
     private String status;
-
-    /// 备注
-    @Schema(description = "备注")
-    @Size(max = 500, message = "{validation.field.remark.size}")
-    private String remark;
 }
