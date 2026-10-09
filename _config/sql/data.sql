@@ -3965,6 +3965,7 @@ INSERT INTO public.iam_perm_menu VALUES (91420, 91417, 'payment:douyin:mch-app',
 
 INSERT INTO public.iam_role VALUES (1, 'admin_admin', 'admin', NULL, true, '系统内置运营管理员角色', 1, 1, 0, false, '2026-07-14 07:08:13.608733+00', '2026-07-14 07:08:13.608733+00', 'role.admin_admin');
 INSERT INTO public.iam_role VALUES (2, 'merchant_admin', 'merchant', NULL, true, '系统内置商户管理员角色', 1, 1, 0, false, '2026-07-14 07:08:13.608733+00', '2026-07-14 07:08:13.608733+00', 'role.merchant_admin');
+INSERT INTO public.iam_role VALUES (3, 'merchant_user', 'merchant', NULL, true, '系统内置商户普通用户角色', 1, 1, 0, false, '2026-10-09 00:00:00+00', '2026-10-09 00:00:00+00', 'role.merchant_user');
 
 
 --
@@ -4353,6 +4354,27 @@ INSERT INTO public.iam_role_menu VALUES (2098335521623474179, 1, NULL, 70102);
 INSERT INTO public.iam_role_menu VALUES (2098335521623474180, 1, NULL, 205);
 INSERT INTO public.iam_role_menu VALUES (2098335521627668480, 1, NULL, 206);
 INSERT INTO public.iam_role_menu VALUES (1000000040584, 1, NULL, 40584);
+-- 内置商户普通用户角色(merchant_user, id=3)出厂授权: 仪表板 + 交易订单 + 回调通知(不含用户管理等敏感菜单),
+-- 新增商户端菜单须同步补本角色授权(维护口径见 update-datas.sql 同批次增量)
+INSERT INTO public.iam_role_menu VALUES (3000091001, 3, NULL, 91001);
+INSERT INTO public.iam_role_menu VALUES (3000091002, 3, NULL, 91002);
+INSERT INTO public.iam_role_menu VALUES (3000091003, 3, NULL, 91003);
+INSERT INTO public.iam_role_menu VALUES (3000091100, 3, NULL, 91100);
+INSERT INTO public.iam_role_menu VALUES (3000091101, 3, NULL, 91101);
+INSERT INTO public.iam_role_menu VALUES (3000091103, 3, NULL, 91103);
+INSERT INTO public.iam_role_menu VALUES (3000091110, 3, NULL, 91110);
+INSERT INTO public.iam_role_menu VALUES (3000091111, 3, NULL, 91111);
+INSERT INTO public.iam_role_menu VALUES (3000091112, 3, NULL, 91112);
+INSERT INTO public.iam_role_menu VALUES (3000091127, 3, NULL, 91127);
+INSERT INTO public.iam_role_menu VALUES (3000091128, 3, NULL, 91128);
+INSERT INTO public.iam_role_menu VALUES (3000091129, 3, NULL, 91129);
+INSERT INTO public.iam_role_menu VALUES (3000091130, 3, NULL, 91130);
+INSERT INTO public.iam_role_menu VALUES (3000091131, 3, NULL, 91131);
+INSERT INTO public.iam_role_menu VALUES (3000091150, 3, NULL, 91150);
+INSERT INTO public.iam_role_menu VALUES (3000091200, 3, NULL, 91200);
+INSERT INTO public.iam_role_menu VALUES (3000091201, 3, NULL, 91201);
+INSERT INTO public.iam_role_menu VALUES (3000091202, 3, NULL, 91202);
+INSERT INTO public.iam_role_menu VALUES (3000091203, 3, NULL, 91203);
 
 
 --
