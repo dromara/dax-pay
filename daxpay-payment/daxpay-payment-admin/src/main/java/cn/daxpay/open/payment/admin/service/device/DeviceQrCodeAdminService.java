@@ -14,9 +14,11 @@ import cn.daxpay.open.payment.device.qrcode.param.DeviceQrCodeQuery;
 import cn.daxpay.open.payment.device.qrcode.result.DeviceQrCodeAllocWarningResult;
 import cn.daxpay.open.payment.device.qrcode.result.DeviceQrCodeResult;
 import cn.daxpay.open.payment.device.qrcode.service.DeviceQrCodeSupportService;
+import cn.daxpay.open.payment.merchant.dao.info.MerchantInfoManager;
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.open.platform.common.translate.service.TransService;
 import cn.daxpay.open.platform.core.code.CommonCode;
+import cn.daxpay.open.platform.core.exception.BizException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
@@ -45,6 +47,7 @@ public class DeviceQrCodeAdminService {
 
     private final DeviceQrCodeManager deviceQrCodeManager;
     private final DeviceQrCodeSupportService supportService;
+    private final MerchantInfoManager merchantInfoManager;
     private final TransService transService;
 
     /// 批量创建空白码牌(不绑商户, 进入平台库存)
@@ -97,6 +100,10 @@ public class DeviceQrCodeAdminService {
     /// 批量绑定商户(可覆盖已绑定归属; appId/storeNo 均可空, 空写 null 支付时再 resolve)
     @Transactional(rollbackFor = Exception.class)
     public void bindMerchant(DeviceQrCodeBindMerchantParam param) {
+        // 商户存在性校验(appId/storeNo 为空时不会触达归属校验, 此处兜底防幽灵商户号落库)
+        merchantInfoManager.findByMchNo(param.getMchNo())
+                // 商户: 商户不存在
+                .orElseThrow(() -> new BizException(CommonCode.FAIL_CODE, "error.payment.merchant.mchNotExist"));
         // 应用: 有值则校验归属; 空则写 null(支付 resolveApp 取默认应用)
         String appId = supportService.resolveOptionalAppId(param.getMchNo(), param.getAppId());
         // 门店: 有值则校验归属新商户; 无值写 null 防止跨商户脏数据
@@ -105,13 +112,23 @@ public class DeviceQrCodeAdminService {
     }
 
     /// 批量解绑商户(回空白库存, 保留编码/批次/金额配置; 同步清空应用与门店)
+    ///
+    /// 仅对已绑定的牌执行解绑(混合勾选时未绑定牌跳过); 全部未绑定时无任何变更, 直接拒绝避免"假成功"
     @Transactional(rollbackFor = Exception.class)
     public void unbindMerchant(List<Long> ids) {
         if (Objects.isNull(ids) || ids.isEmpty()) {
             // 码牌: 请选择码牌
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.qrcode.idsEmpty");
         }
-        deviceQrCodeManager.unbindMerchant(ids);
+        List<Long> boundIds = deviceQrCodeManager.findAllByIds(ids).stream()
+                .filter(qrCode -> StrUtil.isNotBlank(qrCode.getMchNo()))
+                .map(DeviceQrCode::getId)
+                .toList();
+        if (boundIds.isEmpty()) {
+            // 码牌: 所选码牌均未绑定商户
+            throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.qrcode.noneAssigned");
+        }
+        deviceQrCodeManager.unbindMerchant(boundIds);
     }
 
     /// 批量绑定应用(须已绑商户且勾选同商户)

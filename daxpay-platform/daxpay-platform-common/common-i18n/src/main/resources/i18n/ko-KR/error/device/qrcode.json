@@ -15,5 +15,6 @@
   "authNotRequired": "현재 결제 방식은 승인이 필요하지 않습니다",
   "storeBindMchInconsistent": "매장 일괄 바인딩 시 동일 가맹점의 코드판을 선택해야 합니다",
   "mchNoMatch": "QR 코드 보드가 현재 가맹점 소속이 아닙니다",
-  "alreadyAssigned": "QR 코드 보드가 이미 연결되었거나 가맹점에 할당되어 있습니다"
+  "alreadyAssigned": "QR 코드 보드가 이미 연결되었거나 가맹점에 할당되어 있습니다",
+  "noneAssigned": "선택한 QR 코드 보드가 모두 가맹점에 할당되어 있지 않아 해제할 항목이 없습니다"
 }
