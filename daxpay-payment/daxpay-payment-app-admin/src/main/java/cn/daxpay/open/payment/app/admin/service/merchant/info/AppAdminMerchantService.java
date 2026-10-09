@@ -64,7 +64,7 @@ public class AppAdminMerchantService {
     }
 
     /// 商户下拉
-    public List<LabelValue> dropdown() {
-        return merchantAdminService.dropdown();
+    public List<LabelValue> dropdown(boolean includeDisabled) {
+        return merchantAdminService.dropdown(includeDisabled);
     }
 }
