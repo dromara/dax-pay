@@ -105,3 +105,26 @@ WHERE NOT EXISTS (SELECT 1 FROM public.iam_role_menu WHERE role_id = 3 AND menu_
 INSERT INTO public.iam_role_menu (id, role_id, client_code, menu_id)
 SELECT 3000091203, 3, NULL, 91203
 WHERE NOT EXISTS (SELECT 1 FROM public.iam_role_menu WHERE role_id = 3 AND menu_id = 91203);
+
+-- =============================================================
+-- 2026-10-10: 统一支付接口调用日志商户端只读菜单(91204, 挂 91100 交易订单目录, 资金流水之后)
+-- 商户自助排查 unipay 对接问题的只读查询(/mch/log/unipay/*), 不开放清理;
+-- 授权 merchant_admin(2)+merchant_user(3)双角色; 可安全重放。
+-- =============================================================
+INSERT INTO public.iam_perm_menu (id, pid, menu_code, client_code, name, i18n_key, icon, hidden, hide_children_menu, component, path, redirect, sort_no, root, keep_alive, affix_tab, creator, last_modifier, version, deleted, menu_type, active_icon, badge, badge_type, badge_variants, iframe_src, link, create_time, last_modified_time)
+SELECT 91204, 91100, 'trade:unipay-log', 'merchant', 'UnipayApiLogList', 'menu.trade.unipayLog', 'lucide:file-clock', false, false, '/payment/record/UnipayApiLogList', '/trade/unipay-log', NULL, 4.5, false, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-10-10 00:00:00+00', '2026-10-10 00:00:00+00'
+WHERE NOT EXISTS (SELECT 1 FROM public.iam_perm_menu WHERE id = 91204);
+
+INSERT INTO public.iam_perm_code (id, code, menu_code, internal, remark, creator, last_modifier, version, deleted, create_time, last_modified_time, i18n_key)
+SELECT 2079866296000000570, 'trade:unipay-log:view', 'trade:unipay-log', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-10-10 00:00:00+00', '2026-10-10 00:00:00+00', 'perm.trade:unipay-log:view'
+WHERE NOT EXISTS (SELECT 1 FROM public.iam_perm_code WHERE code = 'trade:unipay-log:view');
+
+-- 商户管理员授权
+INSERT INTO public.iam_role_menu (id, role_id, client_code, menu_id)
+SELECT 1000000091204, 2, NULL, 91204
+WHERE NOT EXISTS (SELECT 1 FROM public.iam_role_menu WHERE role_id = 2 AND menu_id = 91204);
+
+-- 商户普通用户授权(与资金流水同层的只读记录, 纳入出厂授权面)
+INSERT INTO public.iam_role_menu (id, role_id, client_code, menu_id)
+SELECT 3000091204, 3, NULL, 91204
+WHERE NOT EXISTS (SELECT 1 FROM public.iam_role_menu WHERE role_id = 3 AND menu_id = 91204);

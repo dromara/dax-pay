@@ -338,6 +338,12 @@ public interface PermCodes {
             /// 菜单编码
             String MENU = "trade:callback-record";
         }
+
+        /// 统一支付接口调用日志(商户端只读) menuCode=trade:unipay-log
+        interface UnipayLog {
+            /// 菜单编码
+            String MENU = "trade:unipay-log";
+        }
     }
 
     /// IAM 身份与访问（导航挂系统下，码域独立）

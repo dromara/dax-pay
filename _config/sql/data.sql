@@ -3769,6 +3769,7 @@ INSERT INTO public.iam_perm_code VALUES (2072377871723388928, 'trade:order:view'
 INSERT INTO public.iam_perm_code VALUES (2072990657130180608, 'trade:refund:manage', 'trade:refund', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-03 10:27:41.620782+00', '2026-07-15 03:59:23.715999+00', 'perm.trade:refund:manage');
 INSERT INTO public.iam_perm_code VALUES (2072990657130180609, 'trade:refund:view', 'trade:refund', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-03 10:27:41.620782+00', '2026-07-15 03:59:23.717505+00', 'perm.trade:refund:view');
 INSERT INTO public.iam_perm_code VALUES (2079866295577419776, 'trade:callback-record:view', 'trade:callback-record', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-22 09:49:01.56951+00', '2026-07-22 09:49:01.575017+00', 'perm.trade:callback-record:view');
+INSERT INTO public.iam_perm_code VALUES (2079866296000000570, 'trade:unipay-log:view', 'trade:unipay-log', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-10-10 00:00:00+00', '2026-10-10 00:00:00+00', 'perm.trade:unipay-log:view');
 INSERT INTO public.iam_perm_code VALUES (2079866295615168512, 'trade:mch-notice:manage', 'trade:mch-notice', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-22 09:49:01.578524+00', '2026-07-22 09:49:01.578524+00', 'perm.trade:mch-notice:manage');
 INSERT INTO public.iam_perm_code VALUES (2079866295619362816, 'trade:mch-notice:view', 'trade:mch-notice', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-22 09:49:01.579524+00', '2026-07-22 09:49:01.579524+00', 'perm.trade:mch-notice:view');
 INSERT INTO public.iam_perm_code VALUES (2082811057154473984, 'merchant:gateway-pay-config:manage', 'merchant:gateway-pay-config', true, NULL, 1, 1, 0, false, '2026-07-30 12:50:27.440009+00', '2026-07-30 12:50:27.44601+00', 'perm.merchant:gateway-pay-config:manage');
@@ -3890,6 +3891,7 @@ INSERT INTO public.iam_perm_menu VALUES (91001, NULL, NULL, 'merchant', 'Dashboa
 INSERT INTO public.iam_perm_menu VALUES (91002, 91001, 'dashboard:workspace', 'merchant', 'Workspace', 'menu.dashboard.workspace', 'lucide:panels-top-left', false, false, '/dashboard/workspace/index', '/workspace', NULL, 1, false, false, true, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-07-23 02:30:21.991345+00', '2026-07-23 02:30:21.991345+00');
 INSERT INTO public.iam_perm_menu VALUES (91003, 91001, 'dashboard:analytics', 'merchant', 'Analytics', 'menu.dashboard.analytics', 'lucide:area-chart', false, false, '/dashboard/analytics/index', '/analytics', NULL, 2, false, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-07-23 02:30:21.994392+00', '2026-07-23 02:30:21.994392+00');
 INSERT INTO public.iam_perm_menu VALUES (91203, 91100, 'trade:fund-flow', 'merchant', 'FundFlowList', 'menu.trade.fundFlow', 'lucide:coins', false, false, '/payment/record/FundFlowList', '/trade/record/fund-flow', NULL, 4, false, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-08-29 16:00:00+00', '2026-08-30 14:15:30.039614+00');
+INSERT INTO public.iam_perm_menu VALUES (91204, 91100, 'trade:unipay-log', 'merchant', 'UnipayApiLogList', 'menu.trade.unipayLog', 'lucide:file-clock', false, false, '/payment/record/UnipayApiLogList', '/trade/unipay-log', NULL, 4.5, false, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-10-10 00:00:00+00', '2026-10-10 00:00:00+00');
 INSERT INTO public.iam_perm_menu VALUES (91128, 91100, 'trade:abnormal-order', 'merchant', 'AbnormalOrderList', 'menu.trade.abnormalOrder', 'lucide:triangle-alert', false, false, '/payment/order/AbnormalOrderList', '/trade/abnormal-order', NULL, 5, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-29 16:00:00+00', '2026-08-30 14:15:30.134434+00');
 INSERT INTO public.iam_perm_menu VALUES (91111, 91110, 'trade:order', 'merchant', 'NormalOrderList', 'menu.trade.normalPay', 'lucide:file-text', false, false, '/payment/order/NormalOrderList', '/trade/pay-order/normal', NULL, 1, false, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-07-23 09:32:12.645988+00', '2026-07-23 09:32:12.645988+00');
 INSERT INTO public.iam_perm_menu VALUES (91112, 91110, 'trade:gateway-order', 'merchant', 'GatewayOrderList', 'menu.trade.gatewayOrder', 'lucide:globe', false, false, '/payment/order/GatewayOrderList', '/trade/pay-order/gateway', NULL, 2, false, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-07-23 09:32:12.648789+00', '2026-07-23 09:32:12.648789+00');
@@ -4315,6 +4317,7 @@ INSERT INTO public.iam_role_menu VALUES (1000000000613, 1, NULL, 613);
 INSERT INTO public.iam_role_menu VALUES (1000000091306, 2, NULL, 91306);
 INSERT INTO public.iam_role_menu VALUES (1000000091128, 2, NULL, 91128);
 INSERT INTO public.iam_role_menu VALUES (1000000091203, 2, NULL, 91203);
+INSERT INTO public.iam_role_menu VALUES (1000000091204, 2, NULL, 91204);
 INSERT INTO public.iam_role_menu VALUES (2098298729809514496, 2, NULL, 91416);
 INSERT INTO public.iam_role_menu VALUES (2098298729817903104, 2, NULL, 91417);
 INSERT INTO public.iam_role_menu VALUES (2098298729817903105, 2, NULL, 91422);
@@ -4375,6 +4378,7 @@ INSERT INTO public.iam_role_menu VALUES (3000091200, 3, NULL, 91200);
 INSERT INTO public.iam_role_menu VALUES (3000091201, 3, NULL, 91201);
 INSERT INTO public.iam_role_menu VALUES (3000091202, 3, NULL, 91202);
 INSERT INTO public.iam_role_menu VALUES (3000091203, 3, NULL, 91203);
+INSERT INTO public.iam_role_menu VALUES (3000091204, 3, NULL, 91204);
 
 
 --
