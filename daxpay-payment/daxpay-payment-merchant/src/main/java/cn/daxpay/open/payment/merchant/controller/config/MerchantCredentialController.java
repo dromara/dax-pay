@@ -1,9 +1,13 @@
 package cn.daxpay.open.payment.merchant.controller.config;
 
 import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
+import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
+import cn.daxpay.open.payment.common.context.PaymentContext;
+import cn.daxpay.open.payment.merchant.param.config.MchMerchantCredentialParam;
 import cn.daxpay.open.payment.merchant.param.config.MerchantCredentialParam;
 import cn.daxpay.open.payment.merchant.result.config.MerchantCredentialResult;
 import cn.daxpay.open.payment.merchant.service.config.MerchantCredentialService;
@@ -13,6 +17,8 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Objects;
 
 /// # 商户API配置控制器
 ///
@@ -24,6 +30,17 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class MerchantCredentialController {
     private final MerchantCredentialService credentialService;
+    private final PaymentContext paymentContext;
+
+    /// 当前登录商户号（上下文必有；缺则视为会话异常）
+    private String requireMchNo() {
+        String mchNo = paymentContext.getMchNo();
+        if (Objects.isNull(mchNo) || mchNo.isBlank()) {
+            // 商户上下文缺失
+            throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.assist.mchContextMissing");
+        }
+        return mchNo;
+    }
 
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据商户号查询")
@@ -35,8 +52,13 @@ public class MerchantCredentialController {
     @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "更新商户API配置")
     @PostMapping("/update")
-    public Result<Void> update(@RequestBody @Validated MerchantCredentialParam param) {
-        credentialService.update(param);
+    public Result<Void> update(@RequestBody @Validated MchMerchantCredentialParam param) {
+        // 商户号强制取自登录上下文(防越权)
+        MerchantCredentialParam saveParam = new MerchantCredentialParam()
+                .setMchNo(requireMchNo())
+                .setPublicKey(param.getPublicKey())
+                .setSecretKey(param.getSecretKey());
+        credentialService.update(saveParam);
         return Res.ok();
     }
 }

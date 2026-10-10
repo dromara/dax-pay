@@ -2,6 +2,7 @@ package cn.daxpay.open.payment.app.merchant.controller.openapp;
 
 import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.douyin.param.merchant.DyMchAppParam;
+import cn.daxpay.open.payment.douyin.param.merchant.MchDyMchAppParam;
 import cn.daxpay.open.payment.douyin.result.merchant.DyMchAppResult;
 import cn.daxpay.open.payment.douyin.service.merchant.DyMchAppService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
@@ -11,7 +12,6 @@ import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.config.ConfigErrorException;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
-import cn.daxpay.open.platform.core.util.ValidationUtil;
 import cn.daxpay.open.platform.core.validation.ValidationGroup;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -98,23 +98,33 @@ public class AppMerchantDyMchAppController {
     @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "新增商户抖音应用")
     @PostMapping("/add")
-    public Result<Void> add(@RequestBody DyMchAppParam param) {
-        // 强制当前商户号，忽略客户端传入（防越权）
-        param.setMchNo(this.requireMchNo());
-        ValidationUtil.validateParam(param, ValidationGroup.add.class);
-        dyMchAppService.add(param);
+    public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) MchDyMchAppParam param) {
+        // 商户端参数不含商户号, 强制取当前登录商户(防越权), 组装为完整参数后走通用保存
+        DyMchAppParam saveParam = new DyMchAppParam()
+                .setMchNo(this.requireMchNo())
+                .setId(param.getId())
+                .setAppName(param.getAppName())
+                .setAppType(param.getAppType())
+                .setDouyinAppId(param.getDouyinAppId())
+                .setAppSecret(param.getAppSecret());
+        dyMchAppService.add(saveParam);
         return Res.ok();
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "修改商户抖音应用")
     @PostMapping("/update")
-    public Result<Void> update(@RequestBody DyMchAppParam param) {
+    public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) MchDyMchAppParam param) {
         this.assertOwned(dyMchAppService.findById(param.getId()));
-        // 强制当前商户号，忽略客户端传入（防越权）
-        param.setMchNo(this.requireMchNo());
-        ValidationUtil.validateParam(param, ValidationGroup.edit.class);
-        dyMchAppService.update(param);
+        // 商户端参数不含商户号, 强制取当前登录商户(防越权), 组装为完整参数后走通用保存
+        DyMchAppParam saveParam = new DyMchAppParam()
+                .setMchNo(this.requireMchNo())
+                .setId(param.getId())
+                .setAppName(param.getAppName())
+                .setAppType(param.getAppType())
+                .setDouyinAppId(param.getDouyinAppId())
+                .setAppSecret(param.getAppSecret());
+        dyMchAppService.update(saveParam);
         return Res.ok();
     }
 

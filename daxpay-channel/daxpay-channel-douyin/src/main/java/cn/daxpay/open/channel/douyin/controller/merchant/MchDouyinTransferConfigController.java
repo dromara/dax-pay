@@ -1,6 +1,7 @@
 package cn.daxpay.open.channel.douyin.controller.merchant;
 
 import cn.daxpay.open.channel.douyin.param.direct.DouyinTransferConfigParam;
+import cn.daxpay.open.channel.douyin.param.direct.MchDouyinTransferConfigParam;
 import cn.daxpay.open.channel.douyin.result.direct.DouyinTransferConfigResult;
 import cn.daxpay.open.channel.douyin.service.direct.DouyinTransferConfigService;
 import cn.daxpay.open.payment.common.context.PaymentContext;
@@ -13,7 +14,6 @@ import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.config.ConfigErrorException;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
-import cn.daxpay.open.platform.core.util.ValidationUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
@@ -77,12 +77,14 @@ public class MchDouyinTransferConfigController {
     @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "保存或更新转账配置(一对一)")
     @PostMapping("/save")
-    public Result<Void> save(@RequestBody DouyinTransferConfigParam param) {
+    public Result<Void> save(@RequestBody @Validated MchDouyinTransferConfigParam param) {
         this.assertChannelMchOwned(param.getChannelMchNo());
-        // 强制当前商户号，忽略客户端传入（防越权）
-        param.setMchNo(this.requireMchNo());
-        ValidationUtil.validateParam(param);
-        douyinTransferConfigService.saveOrUpdate(param);
+        // 商户端参数不含商户号, 强制取当前登录商户(防越权), 组装为完整参数后走通用保存
+        DouyinTransferConfigParam saveParam = new DouyinTransferConfigParam()
+                .setMchNo(this.requireMchNo())
+                .setChannelMchNo(param.getChannelMchNo())
+                .setTransferAppRefId(param.getTransferAppRefId());
+        douyinTransferConfigService.saveOrUpdate(saveParam);
         return Res.ok();
     }
 }

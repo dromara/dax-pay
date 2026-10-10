@@ -1,6 +1,7 @@
 package cn.daxpay.open.channel.alipay.controller.direct;
 
 import cn.daxpay.open.channel.alipay.param.direct.AlipayDirectAppCapabilityBatchParam;
+import cn.daxpay.open.channel.alipay.param.direct.MchAlipayDirectAppCapabilityBatchParam;
 import cn.daxpay.open.channel.alipay.result.direct.AlipayDirectAppCapabilityResult;
 import cn.daxpay.open.channel.alipay.result.direct.AlipayDirectCapabilityOption;
 import cn.daxpay.open.channel.alipay.service.direct.AlipayDirectAppCapabilityService;
@@ -61,10 +62,13 @@ public class MchAlipayDirectAppCapabilityController {
     @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "全量保存能力应用关联")
     @PostMapping("/save-batch")
-    public Result<Void> saveBatch(@RequestBody @Validated AlipayDirectAppCapabilityBatchParam param) {
-        // 强制当前商户号，忽略客户端传入（防越权）
-        param.setMchNo(requireMchNo());
-        alipayDirectAppCapabilityService.saveBatch(param);
+    public Result<Void> saveBatch(@RequestBody @Validated MchAlipayDirectAppCapabilityBatchParam param) {
+        // 商户号强制取自登录上下文(防越权), 组装为完整参数后走通用保存
+        AlipayDirectAppCapabilityBatchParam saveParam = new AlipayDirectAppCapabilityBatchParam()
+                .setMchNo(requireMchNo())
+                .setChannelMchNo(param.getChannelMchNo())
+                .setItems(param.getItems());
+        alipayDirectAppCapabilityService.saveBatch(saveParam);
         return Res.ok();
     }
 

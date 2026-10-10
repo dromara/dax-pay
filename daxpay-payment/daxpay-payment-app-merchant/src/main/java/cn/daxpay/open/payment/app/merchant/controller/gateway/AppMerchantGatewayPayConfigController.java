@@ -2,6 +2,7 @@ package cn.daxpay.open.payment.app.merchant.controller.gateway;
 
 import cn.daxpay.open.payment.app.merchant.service.gateway.AppMerchantGatewayPayConfigService;
 import cn.daxpay.open.payment.merchant.param.gateway.GatewayPayConfigParam;
+import cn.daxpay.open.payment.merchant.param.gateway.MchGatewayPayConfigParam;
 import cn.daxpay.open.payment.merchant.result.gateway.GatewayPayConfigResult;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
@@ -47,8 +48,14 @@ public class AppMerchantGatewayPayConfigController {
     @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "保存或更新网关支付配置")
     @PostMapping("/save-or-update")
-    public Result<Void> saveOrUpdate(@RequestBody @Validated GatewayPayConfigParam param) {
-        gatewayPayConfigService.saveOrUpdate(param);
+    public Result<Void> saveOrUpdate(@RequestBody @Validated MchGatewayPayConfigParam param) {
+        // 商户号由 Service 层按应用归属强制(见 AppMerchantGatewayPayConfigService#saveOrUpdate), 组装为完整参数
+        GatewayPayConfigParam saveParam = new GatewayPayConfigParam();
+        saveParam.setAppId(param.getAppId());
+        saveParam.setLevel(param.getLevel());
+        saveParam.setAutoLaunch(param.getAutoLaunch());
+        saveParam.setClientEnvs(param.getClientEnvs());
+        gatewayPayConfigService.saveOrUpdate(saveParam);
         return Res.ok();
     }
 

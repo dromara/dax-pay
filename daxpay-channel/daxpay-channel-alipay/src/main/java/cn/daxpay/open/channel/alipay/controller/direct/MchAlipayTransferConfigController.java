@@ -1,6 +1,7 @@
 package cn.daxpay.open.channel.alipay.controller.direct;
 
 import cn.daxpay.open.channel.alipay.param.direct.AlipayTransferConfigParam;
+import cn.daxpay.open.channel.alipay.param.direct.MchAlipayTransferConfigParam;
 import cn.daxpay.open.channel.alipay.result.direct.AlipayTransferConfigResult;
 import cn.daxpay.open.channel.alipay.service.direct.AlipayTransferConfigService;
 import cn.daxpay.open.payment.common.context.PaymentContext;
@@ -60,10 +61,13 @@ public class MchAlipayTransferConfigController {
     @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "保存或更新转账配置(一对一)")
     @PostMapping("/save")
-    public Result<Void> save(@RequestBody @Validated AlipayTransferConfigParam param) {
-        // 商户号强制取自上下文, 防越权
-        param.setMchNo(requireMchNo());
-        alipayTransferConfigService.saveOrUpdate(param);
+    public Result<Void> save(@RequestBody @Validated MchAlipayTransferConfigParam param) {
+        // 商户号强制取自登录上下文(防越权), 组装为完整参数后走通用保存
+        AlipayTransferConfigParam saveParam = new AlipayTransferConfigParam()
+                .setMchNo(requireMchNo())
+                .setChannelMchNo(param.getChannelMchNo())
+                .setTransferAppRefId(param.getTransferAppRefId());
+        alipayTransferConfigService.saveOrUpdate(saveParam);
         return Res.ok();
     }
 }

@@ -1,6 +1,7 @@
 package cn.daxpay.open.payment.merchant.controller.wx;
 
 import cn.daxpay.open.payment.common.context.PaymentContext;
+import cn.daxpay.open.payment.wx.param.merchant.MchWxMchAppParam;
 import cn.daxpay.open.payment.wx.param.merchant.WxMchAppParam;
 import cn.daxpay.open.payment.wx.result.merchant.WxMchAppResult;
 import cn.daxpay.open.payment.wx.service.merchant.WxMchAppService;
@@ -11,7 +12,6 @@ import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.config.ConfigErrorException;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
-import cn.daxpay.open.platform.core.util.ValidationUtil;
 import cn.daxpay.open.platform.core.validation.ValidationGroup;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -94,23 +94,33 @@ public class MchWxMchAppController {
     @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "新增商户微信应用")
     @PostMapping("/add")
-    public Result<Void> add(@RequestBody WxMchAppParam param) {
-        // 强制当前商户号，忽略客户端传入（防越权）
-        param.setMchNo(this.requireMchNo());
-        ValidationUtil.validateParam(param, ValidationGroup.add.class);
-        wxMchAppService.add(param);
+    public Result<Void> add(@RequestBody @Validated(ValidationGroup.add.class) MchWxMchAppParam param) {
+        // 商户端参数不含商户号, 强制取当前登录商户(防越权), 组装为完整参数后走通用保存
+        WxMchAppParam saveParam = new WxMchAppParam()
+                .setMchNo(this.requireMchNo())
+                .setId(param.getId())
+                .setAppName(param.getAppName())
+                .setAppType(param.getAppType())
+                .setWxAppId(param.getWxAppId())
+                .setAppSecret(param.getAppSecret());
+        wxMchAppService.add(saveParam);
         return Res.ok();
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "修改商户微信应用")
     @PostMapping("/update")
-    public Result<Void> update(@RequestBody WxMchAppParam param) {
+    public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) MchWxMchAppParam param) {
         this.assertOwned(wxMchAppService.findById(param.getId()));
-        // 强制当前商户号，忽略客户端传入（防越权）
-        param.setMchNo(this.requireMchNo());
-        ValidationUtil.validateParam(param, ValidationGroup.edit.class);
-        wxMchAppService.update(param);
+        // 商户端参数不含商户号, 强制取当前登录商户(防越权), 组装为完整参数后走通用保存
+        WxMchAppParam saveParam = new WxMchAppParam()
+                .setMchNo(this.requireMchNo())
+                .setId(param.getId())
+                .setAppName(param.getAppName())
+                .setAppType(param.getAppType())
+                .setWxAppId(param.getWxAppId())
+                .setAppSecret(param.getAppSecret());
+        wxMchAppService.update(saveParam);
         return Res.ok();
     }
 

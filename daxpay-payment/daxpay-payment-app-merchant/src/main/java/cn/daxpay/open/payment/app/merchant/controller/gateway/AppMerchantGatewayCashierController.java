@@ -1,10 +1,14 @@
 package cn.daxpay.open.payment.app.merchant.controller.gateway;
 
 import cn.daxpay.open.payment.app.merchant.service.gateway.AppMerchantGatewayCashierService;
+import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.merchant.param.gateway.GatewayCashierItemParam;
+import cn.daxpay.open.payment.merchant.param.gateway.MchGatewayCashierItemParam;
 import cn.daxpay.open.payment.merchant.result.gateway.GatewayCashierItemResult;
 import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
+import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.platform.core.validation.ValidationGroup;
@@ -21,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Objects;
 
 /// # 网关收银台配置(商户移动端)
 ///
@@ -34,6 +39,17 @@ import java.util.List;
 public class AppMerchantGatewayCashierController {
 
     private final AppMerchantGatewayCashierService gatewayCashierService;
+    private final PaymentContext paymentContext;
+
+    /// 当前登录商户号（上下文必有；缺则视为会话异常）
+    private String requireMchNo() {
+        String mchNo = paymentContext.getMchNo();
+        if (Objects.isNull(mchNo) || mchNo.isBlank()) {
+            // 商户上下文缺失
+            throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.assist.mchContextMissing");
+        }
+        return mchNo;
+    }
 
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "按应用与分桶查询收银台支付项列表")
@@ -56,17 +72,36 @@ public class AppMerchantGatewayCashierController {
     @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "新建收银台支付项")
     @PostMapping("/save")
-    public Result<Void> save(@RequestBody @Validated GatewayCashierItemParam param) {
-        gatewayCashierService.save(param);
+    public Result<Void> save(@RequestBody @Validated MchGatewayCashierItemParam param) {
+        gatewayCashierService.save(assembleSaveParam(param));
         return Res.ok();
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "更新收银台支付项")
     @PostMapping("/update")
-    public Result<Void> update(@RequestBody @Validated({jakarta.validation.groups.Default.class, ValidationGroup.edit.class}) GatewayCashierItemParam param) {
-        gatewayCashierService.update(param);
+    public Result<Void> update(@RequestBody @Validated({jakarta.validation.groups.Default.class, ValidationGroup.edit.class}) MchGatewayCashierItemParam param) {
+        gatewayCashierService.update(assembleSaveParam(param));
         return Res.ok();
+    }
+
+    /// 商户端参数不含商户号, 强制取当前登录商户(防越权), 组装为完整参数
+    private GatewayCashierItemParam assembleSaveParam(MchGatewayCashierItemParam param) {
+        GatewayCashierItemParam saveParam = new GatewayCashierItemParam();
+        saveParam.setMchNo(requireMchNo());
+        saveParam.setId(param.getId());
+        saveParam.setAppId(param.getAppId());
+        saveParam.setCashierType(param.getCashierType());
+        saveParam.setClientEnv(param.getClientEnv());
+        saveParam.setName(param.getName());
+        saveParam.setIcon(param.getIcon());
+        saveParam.setRecommend(param.getRecommend());
+        saveParam.setSortNo(param.getSortNo());
+        saveParam.setResolveMode(param.getResolveMode());
+        saveParam.setMethod(param.getMethod());
+        saveParam.setChannelMchNo(param.getChannelMchNo());
+        saveParam.setCapability(param.getCapability());
+        return saveParam;
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)

@@ -2,6 +2,7 @@ package cn.daxpay.open.payment.merchant.controller.gateway;
 
 import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.merchant.param.gateway.GatewayPayConfigParam;
+import cn.daxpay.open.payment.merchant.param.gateway.MchGatewayPayConfigParam;
 import cn.daxpay.open.payment.merchant.result.appinfo.MchAppInfoResult;
 import cn.daxpay.open.payment.merchant.result.gateway.GatewayPayConfigResult;
 import cn.daxpay.open.payment.merchant.service.appinfo.MchAppInfoService;
@@ -69,11 +70,16 @@ public class MchGatewayPayConfigController {
     @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "保存或更新网关支付配置")
     @PostMapping("/save-or-update")
-    public Result<Void> saveOrUpdate(@RequestBody @Validated GatewayPayConfigParam param) {
+    public Result<Void> saveOrUpdate(@RequestBody @Validated MchGatewayPayConfigParam param) {
         MchAppInfoResult app = this.assertAppOwned(param.getAppId());
-        // 强制当前商户号，忽略客户端传入（防越权）
-        param.setMchNo(Objects.nonNull(app.getMchNo()) ? app.getMchNo() : this.requireMchNo());
-        gatewayPayConfigService.saveOrUpdate(param);
+        // 商户号以服务端记录组装(防越权), 组装为完整参数后走通用保存
+        GatewayPayConfigParam saveParam = new GatewayPayConfigParam();
+        saveParam.setMchNo(Objects.nonNull(app.getMchNo()) ? app.getMchNo() : this.requireMchNo());
+        saveParam.setAppId(param.getAppId());
+        saveParam.setLevel(param.getLevel());
+        saveParam.setAutoLaunch(param.getAutoLaunch());
+        saveParam.setClientEnvs(param.getClientEnvs());
+        gatewayPayConfigService.saveOrUpdate(saveParam);
         return Res.ok();
     }
 

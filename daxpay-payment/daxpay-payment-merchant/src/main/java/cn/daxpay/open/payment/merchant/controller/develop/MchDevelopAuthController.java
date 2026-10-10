@@ -2,10 +2,14 @@ package cn.daxpay.open.payment.merchant.controller.develop;
 
 import cn.daxpay.open.payment.auth.develop.DevelopAuthService;
 import cn.daxpay.open.payment.auth.develop.DevelopChannelAuthParam;
+import cn.daxpay.open.payment.auth.develop.MchDevelopChannelAuthParam;
+import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.unipay.result.assist.AuthResult;
 import cn.daxpay.open.payment.unipay.result.assist.AuthUrlResult;
 import cn.daxpay.open.platform.core.annotation.PermCode;
+import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
+import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import io.swagger.v3.oas.annotations.Operation;
@@ -18,6 +22,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Objects;
 
 /// 认证调试(商户端)
 ///
@@ -38,6 +44,17 @@ import org.springframework.web.bind.annotation.RestController;
 public class MchDevelopAuthController {
 
     private final DevelopAuthService developAuthService;
+    private final PaymentContext paymentContext;
+
+    /// 当前登录商户号（上下文必有；缺则视为会话异常）
+    private String requireMchNo() {
+        String mchNo = paymentContext.getMchNo();
+        if (Objects.isNull(mchNo) || mchNo.isBlank()) {
+            // 商户上下文缺失
+            throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.assist.mchContextMissing");
+        }
+        return mchNo;
+    }
 
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "生成支付宝H5授权链接")
@@ -63,15 +80,25 @@ public class MchDevelopAuthController {
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "生成微信支付授权链接")
     @PostMapping("/generate-channel-auth-url")
-    public Result<AuthUrlResult> generateChannelAuthUrl(@Validated @RequestBody DevelopChannelAuthParam param) {
-        return Res.ok(developAuthService.generateChannelAuthUrl(param));
+    public Result<AuthUrlResult> generateChannelAuthUrl(@Validated @RequestBody MchDevelopChannelAuthParam param) {
+        // 商户号强制取自登录上下文(防越权), 组装为完整参数
+        DevelopChannelAuthParam saveParam = new DevelopChannelAuthParam()
+                .setMchNo(requireMchNo())
+                .setScope(param.getScope())
+                .setAppId(param.getAppId());
+        return Res.ok(developAuthService.generateChannelAuthUrl(saveParam));
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "生成抖音支付授权链接")
     @PostMapping("/generate-douyin-channel-auth-url")
-    public Result<AuthUrlResult> generateDouyinChannelAuthUrl(@Validated @RequestBody DevelopChannelAuthParam param) {
-        return Res.ok(developAuthService.generateDouyinChannelAuthUrl(param));
+    public Result<AuthUrlResult> generateDouyinChannelAuthUrl(@Validated @RequestBody MchDevelopChannelAuthParam param) {
+        // 商户号强制取自登录上下文(防越权), 组装为完整参数
+        DevelopChannelAuthParam saveParam = new DevelopChannelAuthParam()
+                .setMchNo(requireMchNo())
+                .setScope(param.getScope())
+                .setAppId(param.getAppId());
+        return Res.ok(developAuthService.generateDouyinChannelAuthUrl(saveParam));
     }
 
     @PermCode(code = PermCodes.Action.VIEW)

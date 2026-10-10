@@ -1,6 +1,7 @@
 package cn.daxpay.open.channel.douyin.controller.merchant;
 
 import cn.daxpay.open.channel.douyin.param.direct.DouyinDirectKeyConfigParam;
+import cn.daxpay.open.channel.douyin.param.direct.MchDouyinDirectKeyConfigParam;
 import cn.daxpay.open.channel.douyin.result.direct.DouyinDirectChannelMerchantResult;
 import cn.daxpay.open.channel.douyin.result.direct.DouyinDirectKeyConfigResult;
 import cn.daxpay.open.channel.douyin.result.direct.DouyinTransferSceneOptionResult;
@@ -16,7 +17,6 @@ import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.config.ConfigErrorException;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
-import cn.daxpay.open.platform.core.util.ValidationUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.constraints.NotBlank;
@@ -94,12 +94,16 @@ public class MchDouyinDirectChannelMerchantController {
     @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "保存密钥配置")
     @PostMapping("/save-key-config")
-    public Result<Void> saveKeyConfig(@RequestBody DouyinDirectKeyConfigParam param) {
+    public Result<Void> saveKeyConfig(@RequestBody @Validated MchDouyinDirectKeyConfigParam param) {
         this.assertChannelMchOwned(param.getChannelMchNo());
-        // 强制当前商户号，忽略客户端传入（防越权）
-        param.setMchNo(this.requireMchNo());
-        ValidationUtil.validateParam(param);
-        douyinDirectKeyConfigService.save(param);
+        // 商户端参数不含商户号, 强制取当前登录商户(防越权), 组装为完整参数后走通用保存
+        DouyinDirectKeyConfigParam saveParam = new DouyinDirectKeyConfigParam()
+                .setMchNo(this.requireMchNo())
+                .setChannelMchNo(param.getChannelMchNo())
+                .setMerchantPrivateKey(param.getMerchantPrivateKey())
+                .setMerchantSerialNumber(param.getMerchantSerialNumber())
+                .setEncryptKey(param.getEncryptKey());
+        douyinDirectKeyConfigService.save(saveParam);
         return Res.ok();
     }
 
