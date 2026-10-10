@@ -273,3 +273,11 @@ ALTER TABLE "public"."iam_perm_menu" ADD CONSTRAINT "iam_perm_menu_pkey" PRIMARY
 -- 菜单 ID 顺延 40584）
 -- ----------------------------
 INSERT INTO "public"."iam_perm_menu" VALUES (40584, 40402, 'channel:merchant:detail', 'admin', 'ChannelMerchantDetailDispatch', 'menu.payment.merchant.channelMerchant.detail', NULL, 't', 'f', '/payment/global/channel-merchant/detail/ChannelMerchantDetailDispatch', '/payment/global/channel-merchant/detail-global', NULL, 11, 'f', 't', 'f', 1, 1, 0, 'f', 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-09-26 00:00:00+00', '2026-09-26 00:00:00+00');
+
+-- ----------------------------
+-- 通道商户创建页独立发起子页（2026-10-10; 全局通道商户列表 toolbar 直达创建页, 页内先选商户;
+-- 与商户上下文入口 4040109 同组件双路由, 本行挂 40402 通道商户下使侧栏高亮/面包屑随通道商户;
+-- 复用 menu_code=channel:merchant:create 与 i18n_key=menu.payment.merchant.channelMerchant.create 零新权限码零新词条;
+-- 菜单 ID 顺延 40583）
+-- ----------------------------
+INSERT INTO "public"."iam_perm_menu" VALUES (40583, 40402, 'channel:merchant:create', 'admin', 'ChannelMerchantCreate', 'menu.payment.merchant.channelMerchant.create', NULL, 't', 'f', '/payment/global/channel-merchant/ChannelMerchantCreate', '/payment/global/channel-merchant/create-global', NULL, 10, 'f', 't', 'f', 1, 1, 0, 'f', 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-10-10 00:00:00+00', '2026-10-10 00:00:00+00');

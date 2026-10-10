@@ -107,6 +107,20 @@ SELECT 3000091203, 3, NULL, 91203
 WHERE NOT EXISTS (SELECT 1 FROM public.iam_role_menu WHERE role_id = 3 AND menu_id = 91203);
 
 -- =============================================================
+-- 2026-10-10: 通道商户创建页独立发起子页(全局通道商户列表 toolbar 直达创建页, 页内先选商户)
+-- 与商户上下文入口 4040109 同组件双路由, 挂 40402 通道商户下使侧栏高亮/面包屑随通道商户;
+-- 复用 menu_code=channel:merchant:create 与 i18n_key 零新权限码零新词条; 可安全重放。
+-- =============================================================
+INSERT INTO public.iam_perm_menu (id, pid, menu_code, client_code, name, i18n_key, icon, hidden, hide_children_menu, component, path, redirect, sort_no, root, keep_alive, affix_tab, creator, last_modifier, version, deleted, menu_type, active_icon, badge, badge_type, badge_variants, iframe_src, link, create_time, last_modified_time)
+SELECT 40583, 40402, 'channel:merchant:create', 'admin', 'ChannelMerchantCreate', 'menu.payment.merchant.channelMerchant.create', NULL, true, false, '/payment/global/channel-merchant/ChannelMerchantCreate', '/payment/global/channel-merchant/create-global', NULL, 10, false, true, false, 1, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-10-10 00:00:00+00', '2026-10-10 00:00:00+00'
+WHERE NOT EXISTS (SELECT 1 FROM public.iam_perm_menu WHERE id = 40583);
+
+-- 超管角色绑定(若超管走全量授权该行冗余无害; 按 id 与业务键双查重保证可重放)
+INSERT INTO public.iam_role_menu (id, role_id, client_code, menu_id)
+SELECT 2079866296000000691, 1, NULL, 40583
+WHERE NOT EXISTS (SELECT 1 FROM public.iam_role_menu WHERE id = 2079866296000000691 OR (role_id = 1 AND menu_id = 40583));
+
+-- =============================================================
 -- 2026-10-10: 统一支付接口调用日志商户端只读菜单(91204, 挂 91100 交易订单目录, 资金流水之后)
 -- 商户自助排查 unipay 对接问题的只读查询(/mch/log/unipay/*), 不开放清理;
 -- 授权 merchant_admin(2)+merchant_user(3)双角色; 可安全重放。
