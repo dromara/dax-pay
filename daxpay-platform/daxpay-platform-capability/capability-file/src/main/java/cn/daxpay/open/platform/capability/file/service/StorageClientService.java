@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.core.checksums.RequestChecksumCalculation;
+import software.amazon.awssdk.core.checksums.ResponseChecksumValidation;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.S3Configuration;
@@ -137,7 +139,11 @@ public class StorageClientService {
 
         software.amazon.awssdk.services.s3.S3ClientBuilder builder = S3Client.builder()
                 .credentialsProvider(StaticCredentialsProvider.create(credentials))
-                .region(Region.of(region));
+                .region(Region.of(region))
+                // AWS SDK v2 2.30+ 对上传默认计算 CRC32 校验并以 aws-chunked/trailer 形式发送,
+                // 阿里云 OSS 等 S3 兼容存储不支持该机制(501 NotImplemented), 恢复"仅操作明确要求时才计算"的行为
+                .requestChecksumCalculation(RequestChecksumCalculation.WHEN_REQUIRED)
+                .responseChecksumValidation(ResponseChecksumValidation.WHEN_REQUIRED);
 
         if (StrUtil.isNotBlank(config.getEndpoint())) {
             builder.endpointOverride(URI.create(config.getEndpoint()));

@@ -31,6 +31,14 @@ public class ConnectivityCheckResult {
     @Schema(description = "警告信息")
     private String warning;
 
+    /// 公开桶检查明细(两桶各自独立检查, 一桶失败不影响另一桶明细呈现)
+    @Schema(description = "公开桶检查明细")
+    private BucketCheckDetail publicBucketDetail;
+
+    /// 私有桶检查明细
+    @Schema(description = "私有桶检查明细")
+    private BucketCheckDetail privateBucketDetail;
+
     public static ConnectivityCheckResult ok(String message, Long latencyMs, Integer statusCode) {
         return ok(message, latencyMs, statusCode, null);
     }

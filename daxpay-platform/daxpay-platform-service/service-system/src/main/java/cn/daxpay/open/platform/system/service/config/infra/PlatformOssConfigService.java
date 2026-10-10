@@ -2,13 +2,12 @@ package cn.daxpay.open.platform.system.service.config.infra;
 
 import cn.daxpay.open.platform.capability.file.service.StorageClientService;
 import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
-import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
-import cn.daxpay.open.platform.core.exception.BizException;
-import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.system.convert.config.infra.PlatformOssConfigConvert;
 import cn.daxpay.open.platform.system.entity.config.platform.infra.PlatformOssConfig;
 import cn.daxpay.open.platform.system.enums.EncryptPlatformConfigTypeEnum;
 import cn.daxpay.open.platform.system.param.config.infra.PlatformOssConfigParam;
+import cn.daxpay.open.platform.system.result.config.infra.BucketCheckDetail;
+import cn.daxpay.open.platform.system.result.config.infra.CheckStep;
 import cn.daxpay.open.platform.system.result.config.infra.ConnectivityCheckResult;
 import cn.daxpay.open.platform.system.result.config.infra.PlatformOssConfigResult;
 import cn.daxpay.open.platform.system.service.config.SystemPlatformEncryptConfigService;
@@ -21,6 +20,8 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.core.checksums.RequestChecksumCalculation;
+import software.amazon.awssdk.core.checksums.ResponseChecksumValidation;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -33,6 +34,9 @@ import software.amazon.awssdk.services.s3.model.S3Exception;
 
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -59,6 +63,18 @@ public class PlatformOssConfigService {
 
     /// 公开访问地址可达性检查超时时间(毫秒)
     private static final int PUBLIC_URL_CHECK_TIMEOUT_MS = 10_000;
+
+    /// 检查步骤标识: 连接与桶存在
+    private static final String STEP_CONNECT = "connect";
+
+    /// 检查步骤标识: 写入探测对象
+    private static final String STEP_WRITE = "write";
+
+    /// 检查步骤标识: 读取探测对象
+    private static final String STEP_READ = "read";
+
+    /// 检查步骤标识: 公开访问可达性(仅公开桶)
+    private static final String STEP_PUBLIC_ACCESS = "publicAccess";
 
     /// 获取OSS配置
     public PlatformOssConfig getOssConfig() {
@@ -91,13 +107,13 @@ public class PlatformOssConfigService {
     ///
     /// ### 检查内容
     /// 仅探测存储桶存在性无法发现"密钥只有写权限/对象键路径错误"这类问题, 真正的失败往往出现在上传之后的确认环节,
-    /// 因此这里对公开桶与私有桶各走一遍最小读写闭环:
-    /// - 桶存在性 - 桶不存在直接给出桶名提示
+    /// 因此这里对公开桶与私有桶**各自独立**走一遍最小读写闭环, 一桶失败不中断另一桶的检查, 一次返回两桶的全部分步明细:
+    /// - 连接与桶存在 - 桶不存在/认证失败/网络不通在此暴露
     /// - 写入探测对象 - 验证写权限与对象键路径(与真实上传同一 basePath 前缀)
     /// - 读取探测对象 - 验证读权限(文件上传确认阶段依赖 HEAD, 只写权限的密钥会在此暴露)
-    /// - 删除探测对象 - 清理, 删除失败不影响检查结论
+    /// - 公开访问(仅公开桶) - 配置公开访问域名时验证文件可被真实访问(上传成功但取不到图属于此类问题)
     ///
-    /// 另在配置了公开访问域名时, 用 HTTP 请求验证公开桶文件可被真实访问(上传成功但取不到图属于此类问题).
+    /// 探测对象在读取环节结束后删除, 删除失败不影响检查结论.
     public ConnectivityCheckResult checkOss(PlatformOssConfigParam param) {
         PlatformOssConfig saved = this.getOssConfig();
         PlatformOssConfig probe = mergeForCheck(saved, param);
@@ -110,48 +126,35 @@ public class PlatformOssConfigService {
         long start = System.currentTimeMillis();
         String probeKey = buildProbeKey(probe.getBasePath());
         try (S3Client client = buildTempClient(probe)) {
-            // 两个桶都走完整闭环; 公开桶额外验证"上传后可被公开访问域名取到"
-            String publicWarning = probeBucket(client, probe.getPublicBucket(), true, probeKey, probe);
-            probeBucket(client, probe.getPrivateBucket(), false, probeKey, probe);
+            // 两桶各自独立探测, 互不中断, 汇总返回整体情况
+            BucketCheckDetail publicDetail = probeBucket(client, probe.getPublicBucket(), true, probeKey, probe);
+            BucketCheckDetail privateDetail = probeBucket(client, probe.getPrivateBucket(), false, probeKey, probe);
 
             long latency = System.currentTimeMillis() - start;
-            log.info("OSS 读写检查通过: endpoint={}, probeKey={}, publicWarning={}",
-                    probe.getEndpoint(), probeKey, publicWarning);
-            return ConnectivityCheckResult.ok(
-                    I18nUtil.get("error.system.oss.checkSuccess"),
-                    latency,
-                    null,
-                    publicWarning);
-        } catch (NoSuchBucketException e) {
-            long latency = System.currentTimeMillis() - start;
-            log.warn("OSS 桶不存在: {}", e.getMessage());
-            return ConnectivityCheckResult.fail(
-                    I18nUtil.get("error.system.oss.bucketNotFound"),
-                    latency,
-                    e.statusCode());
-        } catch (S3Exception e) {
-            long latency = System.currentTimeMillis() - start;
-            log.warn("OSS 连通性检查失败: status={}, msg={}", e.statusCode(), e.getMessage());
-            if (e.statusCode() == 403 || e.statusCode() == 401) {
-                return ConnectivityCheckResult.fail(
-                        I18nUtil.get("error.system.oss.authFailed"),
+            boolean allOk = publicDetail.isSuccess() && privateDetail.isSuccess();
+            String warning = resolveTopWarning(publicDetail);
+            if (allOk) {
+                log.info("OSS 读写检查通过: endpoint={}, probeKey={}, warning={}", probe.getEndpoint(), probeKey, warning);
+                return ConnectivityCheckResult.ok(
+                        I18nUtil.get("error.system.oss.checkSuccess"),
                         latency,
-                        e.statusCode());
+                        null,
+                        warning)
+                        .setPublicBucketDetail(publicDetail)
+                        .setPrivateBucketDetail(privateDetail);
             }
+            log.warn("OSS 读写检查未全部通过: endpoint={}, probeKey={}, publicOk={}, privateOk={}, warning={}",
+                    probe.getEndpoint(), probeKey, publicDetail.isSuccess(), privateDetail.isSuccess(), warning);
             return ConnectivityCheckResult.fail(
-                    I18nUtil.get("error.system.oss.checkFailed", String.valueOf(e.statusCode())),
+                    I18nUtil.get("error.system.oss.checkHasFailures"),
                     latency,
-                    e.statusCode());
-        } catch (BizException e) {
-            // 探测环节的具体失败(写不进/读不出), 携带已定位到环节的提示文案
-            long latency = System.currentTimeMillis() - start;
-            return ConnectivityCheckResult.fail(
-                    I18nUtil.get(e.resolveMessageKey(), e.getArgs()),
-                    latency,
-                    null);
+                    null)
+                    .setPublicBucketDetail(publicDetail)
+                    .setPrivateBucketDetail(privateDetail)
+                    .setWarning(warning);
         } catch (Exception e) {
             long latency = System.currentTimeMillis() - start;
-            log.warn("OSS 连通性检查网络异常: {}", e.getMessage());
+            log.warn("OSS 连通性检查异常: {}", e.getMessage());
             return ConnectivityCheckResult.fail(
                     I18nUtil.get("error.system.oss.networkError"),
                     latency,
@@ -159,40 +162,86 @@ public class PlatformOssConfigService {
         }
     }
 
-    /// 对单个存储桶执行最小读写闭环
+    /// 对单个存储桶执行最小读写闭环, 逐步记录检查结果
     ///
-    /// 失败时抛出携带具体环节的业务异常(是写不进去还是读不出来), 便于使用方一眼定位.
+    /// 失败不抛出, 而是记录到对应步骤后跳过后续步骤, 便于一次看到两桶的整体情况.
     ///
     /// @param client   临时 S3 客户端
     /// @param bucket   存储桶名称
-    /// @param isPublic 是否为公开桶(仅用于提示文案区分)
+    /// @param isPublic 是否为公开桶(决定失败文案与是否检查公开访问)
     /// @param probeKey 本次检查使用的探测对象键
     /// @param probe    本次检查实际使用的配置
-    /// @return 公开桶的公开地址可达性警告(非公开桶恒为 null)
-    private String probeBucket(S3Client client, String bucket, boolean isPublic, String probeKey, PlatformOssConfig probe) {
-        headBucket(client, bucket);
+    private BucketCheckDetail probeBucket(S3Client client, String bucket, boolean isPublic, String probeKey, PlatformOssConfig probe) {
+        BucketCheckDetail detail = new BucketCheckDetail()
+                .setBucketName(bucket)
+                .setSteps(new ArrayList<>());
+        List<CheckStep> steps = detail.getSteps();
 
+        // 步骤一: 连接与桶存在(首个 S3 请求, 网络不通/认证失败/桶不存在都在此暴露)
+        try {
+            headBucket(client, bucket);
+            steps.add(CheckStep.of(STEP_CONNECT, CheckStep.STATUS_SUCCESS));
+        } catch (NoSuchBucketException e) {
+            log.warn("OSS 桶不存在: bucket={}, msg={}", bucket, e.getMessage());
+            steps.add(CheckStep.of(STEP_CONNECT, CheckStep.STATUS_FAILED,
+                    I18nUtil.get("error.system.oss.bucketNotFound")));
+            return skipRemaining(detail, isPublic, STEP_WRITE, STEP_READ);
+        } catch (S3Exception e) {
+            log.warn("OSS 连接检查失败: bucket={}, status={}, msg={}", bucket, e.statusCode(), e.getMessage());
+            String message = resolveConnectFailureMessage(e);
+            steps.add(CheckStep.of(STEP_CONNECT, CheckStep.STATUS_FAILED, message));
+            return skipRemaining(detail, isPublic, STEP_WRITE, STEP_READ);
+        } catch (Exception e) {
+            log.warn("OSS 连接异常: bucket={}, msg={}", bucket, e.getMessage());
+            steps.add(CheckStep.of(STEP_CONNECT, CheckStep.STATUS_FAILED,
+                    I18nUtil.get("error.system.oss.networkError")));
+            return skipRemaining(detail, isPublic, STEP_WRITE, STEP_READ);
+        }
+
+        // 步骤二 + 三: 写入与读取(读取失败单独归因, "能写不能读"正是上传确认阶段失败却又留下对象的典型症状)
         boolean objectWritten = false;
         try {
             // 写入探测对象: 验证写权限, 同时验证对象键路径能被该存储服务正确接受
-            client.putObject(PutObjectRequest.builder()
-                            .bucket(bucket)
-                            .key(probeKey)
-                            .contentType("text/plain")
-                            .contentLength((long) PROBE_CONTENT.length)
-                            .build(),
-                    RequestBody.fromBytes(PROBE_CONTENT));
-            objectWritten = true;
+            try {
+                client.putObject(PutObjectRequest.builder()
+                                .bucket(bucket)
+                                .key(probeKey)
+                                .contentType("text/plain")
+                                .contentLength((long) PROBE_CONTENT.length)
+                                .build(),
+                        RequestBody.fromBytes(PROBE_CONTENT));
+                objectWritten = true;
+                steps.add(CheckStep.of(STEP_WRITE, CheckStep.STATUS_SUCCESS));
+            } catch (Exception e) {
+                log.warn("OSS 探测写入失败: bucket={}, key={}, msg={}", bucket, probeKey, e.getMessage());
+                steps.add(CheckStep.of(STEP_WRITE, CheckStep.STATUS_FAILED,
+                        I18nUtil.get(isPublic ? "error.system.oss.publicBucketWriteFailed" : "error.system.oss.privateBucketWriteFailed",
+                                resolveS3ErrorCode(e))));
+                return skipRemaining(detail, isPublic, STEP_READ);
+            }
 
             // 读取探测对象: 文件上传确认阶段依赖 HEAD, 只写权限的密钥会在此暴露
-            assertReadable(client, bucket, probeKey, isPublic);
-        } catch (NoSuchBucketException e) {
-            throw e;
-        } catch (S3Exception e) {
-            log.warn("OSS 探测写入失败: bucket={}, key={}, status={}, msg={}",
-                    bucket, probeKey, e.statusCode(), e.getMessage());
-            throw new BizInfoException(DaxPayErrorCode.OPERATION_FAIL,
-                    isPublic ? "error.system.oss.publicBucketWriteFailed" : "error.system.oss.privateBucketWriteFailed");
+            try {
+                client.headObject(HeadObjectRequest.builder().bucket(bucket).key(probeKey).build());
+                steps.add(CheckStep.of(STEP_READ, CheckStep.STATUS_SUCCESS));
+            } catch (Exception e) {
+                log.warn("OSS 探测对象写入后读取失败: bucket={}, key={}, msg={}", bucket, probeKey, e.getMessage());
+                steps.add(CheckStep.of(STEP_READ, CheckStep.STATUS_FAILED,
+                        I18nUtil.get(isPublic ? "error.system.oss.publicBucketReadFailed" : "error.system.oss.privateBucketReadFailed",
+                                resolveS3ErrorCode(e))));
+                return skipRemaining(detail, isPublic);
+            }
+
+            // 步骤四(仅公开桶): 确认文件能否通过公开访问域名取到, 须在探测对象删除前执行;
+            // 不可达仅作警告, 不影响闭环结论(服务端与浏览器网络环境不同)
+            if (isPublic) {
+                String warning = checkPublicAccessible(probe, probeKey);
+                if (Objects.isNull(warning)) {
+                    steps.add(CheckStep.of(STEP_PUBLIC_ACCESS, CheckStep.STATUS_SUCCESS));
+                } else {
+                    steps.add(CheckStep.of(STEP_PUBLIC_ACCESS, CheckStep.STATUS_WARNING, warning));
+                }
+            }
         } finally {
             if (objectWritten) {
                 try {
@@ -204,27 +253,61 @@ public class PlatformOssConfigService {
             }
         }
 
-        // 公开桶额外确认文件能否通过公开访问域名取到(上传成功但取不到图属于此类问题)
-        return isPublic ? checkPublicAccessible(probe, probeKey) : null;
+        return detail.setSuccess(true);
     }
 
-    /// 校验刚写入的探测对象能否被读取
-    ///
-    /// 读失败单独归因(与写失败区分), 因为"能写不能读"正是上传确认阶段失败却又留下对象的典型症状.
-    ///
-    /// @param client   临时 S3 客户端
-    /// @param bucket   存储桶名称
-    /// @param probeKey 探测对象键
-    /// @param isPublic 是否为公开桶(仅用于提示文案区分)
-    /// @throws BizInfoException 读取失败时抛出
-    private void assertReadable(S3Client client, String bucket, String probeKey, boolean isPublic) {
-        try {
-            client.headObject(HeadObjectRequest.builder().bucket(bucket).key(probeKey).build());
-        } catch (S3Exception e) {
-            log.warn("OSS 探测对象写入后读取失败: bucket={}, key={}, status={}", bucket, probeKey, e.statusCode());
-            throw new BizInfoException(DaxPayErrorCode.OPERATION_FAIL,
-                    isPublic ? "error.system.oss.publicBucketReadFailed" : "error.system.oss.privateBucketReadFailed");
+    /// 连接步骤失败时的提示文案: 401/403 归因认证, 其余携带状态码
+    private String resolveConnectFailureMessage(S3Exception e) {
+        if (e.statusCode() == 403 || e.statusCode() == 401) {
+            return I18nUtil.get("error.system.oss.authFailed");
         }
+        return I18nUtil.get("error.system.oss.checkFailed", String.valueOf(e.statusCode()));
+    }
+
+    /// 提取 S3 错误的服务端错误码(如 AccessDenied / SignatureDoesNotMatch), 非服务端错误时退回异常类名
+    ///
+    /// 阿里云 OSS 等 S3 兼容存储的拒绝原因藏在错误码里, 与"密钥是否有权限"并不等价, 需原样透出供排查.
+    private String resolveS3ErrorCode(Exception e) {
+        if (e instanceof S3Exception s3 && Objects.nonNull(s3.awsErrorDetails())
+                && StrUtil.isNotBlank(s3.awsErrorDetails().errorCode())) {
+            return s3.awsErrorDetails().errorCode();
+        }
+        return e.getClass().getSimpleName();
+    }
+
+    /// 将未执行到的后续步骤标记为跳过, 并以失败结束该桶的检查
+    ///
+    /// @param detail       桶检查明细
+    /// @param isPublic     是否为公开桶(公开桶多一个公开访问步骤)
+    /// @param remainSteps  未执行的后续步骤标识
+    private BucketCheckDetail skipRemaining(BucketCheckDetail detail, boolean isPublic, String... remainSteps) {
+        for (String step : remainSteps) {
+            detail.getSteps().add(CheckStep.of(step, CheckStep.STATUS_SKIPPED));
+        }
+        if (isPublic) {
+            // 未显式列出的公开访问步骤同样未执行
+            boolean publicAccessListed = Arrays.asList(remainSteps).contains(STEP_PUBLIC_ACCESS);
+            if (!publicAccessListed) {
+                detail.getSteps().add(CheckStep.of(STEP_PUBLIC_ACCESS, CheckStep.STATUS_SKIPPED));
+            }
+        }
+        detail.setMessage(detail.getSteps().stream()
+                .filter(s -> Objects.equals(s.getStatus(), CheckStep.STATUS_FAILED))
+                .map(CheckStep::getMessage)
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(null));
+        return detail;
+    }
+
+    /// 从公开桶明细提取顶层警告(公开访问地址不可达, 服务端与浏览器网络环境不同, 不影响闭环结论)
+    private String resolveTopWarning(BucketCheckDetail publicDetail) {
+        return publicDetail.getSteps().stream()
+                .filter(s -> Objects.equals(s.getStatus(), CheckStep.STATUS_WARNING))
+                .map(CheckStep::getMessage)
+                .filter(Objects::nonNull)
+                .findFirst()
+                .orElse(null);
     }
 
     /// 验证公开桶文件能否通过公开访问域名真实访问
@@ -334,7 +417,11 @@ public class PlatformOssConfigService {
         String region = StrUtil.blankToDefault(config.getRegion(), DEFAULT_REGION);
         var builder = S3Client.builder()
                 .credentialsProvider(StaticCredentialsProvider.create(credentials))
-                .region(Region.of(region));
+                .region(Region.of(region))
+                // 与全局客户端一致: 禁用 SDK 默认 CRC32 校验(aws-chunked/trailer), 阿里云 OSS 等
+                // S3 兼容存储不支持该机制, 会在探测写入时报 501 NotImplemented
+                .requestChecksumCalculation(RequestChecksumCalculation.WHEN_REQUIRED)
+                .responseChecksumValidation(ResponseChecksumValidation.WHEN_REQUIRED);
         if (StrUtil.isNotBlank(config.getEndpoint())) {
             builder.endpointOverride(URI.create(config.getEndpoint()));
         }
