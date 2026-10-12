@@ -59,6 +59,8 @@
         <wxjava.version>4.8.6.B</wxjava.version>
         <commonmark.version>0.30.0</commonmark.version>
         <fesod.version>2.0.2-incubating</fesod.version>
+        <!-- Artemis 客户端与运维面板 broker 镜像(2.57.0)对齐（Spring Boot 4.1.1 默认 2.53.0） -->
+        <artemis.version>2.57.0</artemis.version>
     </properties>
 
     <build>
