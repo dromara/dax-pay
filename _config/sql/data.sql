@@ -3959,7 +3959,6 @@ INSERT INTO public.iam_perm_menu VALUES (305, 3, 'iam:perm', 'admin', 'SystemPer
 INSERT INTO public.iam_perm_menu VALUES (302, 3, NULL, 'admin', 'SystemLog', 'menu.system.log', 'lucide:file-text', false, false, NULL, '/system/log', NULL, 99, false, true, false, 0, 1, 1, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-03-20 03:11:13.134079+00', '2026-04-05 08:56:11.97756+00');
 INSERT INTO public.iam_perm_menu VALUES (40603, 406, 'payment:risk:security', 'admin', 'ApiSecurityConfig', 'menu.payment.security.api', 'lucide:lock-keyhole', false, false, '/payment/risk/security/ApiSecurityConfig', '/payment/risk/api-security', NULL, 0, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-06 01:05:45.367566+00', '2026-08-27 09:32:24.858536+00');
 INSERT INTO public.iam_perm_menu VALUES (304, 3, 'system:config', 'admin', 'SystemConfig', 'menu.system.config', 'lucide:settings-2', false, false, NULL, '/system/config', NULL, 10, false, true, false, 0, 1, 1, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-04-04 16:00:00+00', '2026-04-09 15:11:00.840153+00');
-INSERT INTO public.iam_perm_menu VALUES (203, 2, 'demos:region', 'admin', 'RegionCascaderDemo', 'menu.demos.region', 'lucide:map-pin', false, false, '/demos/region/RegionCascaderDemo', '/demos/region', NULL, 3, false, true, false, 0, NULL, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-04-24 16:00:00+00', '2026-04-24 16:00:00+00');
 INSERT INTO public.iam_perm_menu VALUES (40604, 406, 'payment:risk:security', 'admin', 'RiskStrategy', 'menu.payment.security.riskStrategy', 'lucide:shield-alert', false, false, '/payment/risk/security/RiskStrategy', '/payment/risk/strategy', NULL, 0.5, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-06 01:05:45.376446+00', '2026-08-27 09:32:24.858536+00');
 INSERT INTO public.iam_perm_menu VALUES (30702, 307, 'iam:lock', 'admin', 'LoginLock', 'menu.system.monitor.lock', 'lucide:lock', false, false, '/system/monitor/lock/LoginLockList', '/system/monitor/lock', NULL, 1.5, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-28 16:00:00+00', '2026-08-28 16:00:00+00');
 INSERT INTO public.iam_perm_menu VALUES (401, 4, 'payment:platform', 'admin', 'PaymentPlatform', 'menu.payment.platform', 'lucide:building', false, false, NULL, '/payment/platform', NULL, 10, false, true, false, 0, 1, 3, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-04-05 16:00:00+00', '2026-07-31 03:18:17.020454+00');
@@ -4363,7 +4362,6 @@ INSERT INTO public.iam_role_menu VALUES (1000000000305, 1, NULL, 305);
 INSERT INTO public.iam_role_menu VALUES (1000000000302, 1, NULL, 302);
 INSERT INTO public.iam_role_menu VALUES (1000000000304, 1, NULL, 304);
 INSERT INTO public.iam_role_menu VALUES (1000000000401, 1, NULL, 401);
-INSERT INTO public.iam_role_menu VALUES (1000000000203, 1, NULL, 203);
 INSERT INTO public.iam_role_menu VALUES (1000000000003, 1, NULL, 3);
 INSERT INTO public.iam_role_menu VALUES (1000000000301, 1, NULL, 301);
 INSERT INTO public.iam_role_menu VALUES (1000000030101, 1, NULL, 30101);

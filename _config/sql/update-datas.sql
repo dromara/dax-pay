@@ -3,3 +3,7 @@
 -- 清空重置基线。
 -- 发版时本文件无需改动, 保持空白即可; 下一版本周期内的种子数据变化再追加于此,
 -- =============================================================
+
+-- 2026-10-13 移除「行政区划选择器」演示菜单 (demo 页面下线, RegionCascader 组件与 /china/region 接口为业务依赖保留)
+DELETE FROM "public"."iam_role_menu" WHERE menu_id = 203;
+DELETE FROM "public"."iam_perm_menu" WHERE id = 203;
