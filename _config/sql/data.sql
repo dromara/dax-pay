@@ -1,5 +1,5 @@
 -- ============================================================
--- 敏感数据已清除(白名单模式) | 工具 redact-data.mjs | 时间 2026-09-27T13:19:48.117Z
+-- 敏感数据已清除(白名单模式) | 工具 redact-data.mjs | 时间 2026-10-13T02:16:17.358Z
 -- 策略：保留系统种子表 + 内置演示账号/商户(行级)，其余整表清除
 -- 内置账号：bootx(超管) / csadmin(运营端) / csqysh(商户端)
 -- 演示账号密码已重置为开发默认密码(121212)，生产部署后必须立即修改
@@ -3503,14 +3503,177 @@ INSERT INTO public.base_province VALUES ('65', '新疆维吾尔自治区');
 -- Data for Name: base_user_protocol; Type: TABLE DATA; Schema: public; Owner: -
 --
 
--- REDACTED: base_user_protocol (整表清除)
+INSERT INTO public.base_user_protocol VALUES (2091000000000000001, '用户协议', 'DaxPay 用户服务协议', 'USER_AGREEMENT', 'WEB', true, 'zh-CN', 1, '2026-10-05 00:00:00+00', 1, '2026-10-05 00:00:00+00', 0, false);
+INSERT INTO public.base_user_protocol VALUES (2091000000000000002, '隐私政策', 'DaxPay 隐私政策', 'PRIVACY_POLICY', 'WEB', true, 'zh-CN', 1, '2026-10-05 00:00:00+00', 1, '2026-10-05 00:00:00+00', 0, false);
 
 
 --
 -- Data for Name: base_user_protocol_version; Type: TABLE DATA; Schema: public; Owner: -
 --
 
--- REDACTED: base_user_protocol_version (整表清除)
+INSERT INTO public.base_user_protocol_version VALUES (2091000000000000101, 2091000000000000001, 'zh-CN', 1, 'v1.0', 'DaxPay 用户服务协议', '## 一、协议的接受
+
+欢迎使用 DaxPay 支付管理平台（以下简称"本平台"）。请您在使用本平台服务前，仔细阅读并充分理解本协议的全部内容。您点击"同意"或使用本平台服务，即表示您已阅读并接受本协议的全部条款，本协议即构成您与本平台之间具有法律约束力的协议。
+
+## 二、服务说明
+
+本平台为商户及运营管理人员提供支付交易管理、资金结算、订单查询、数据统计及相关增值服务。具体服务内容以本平台实际提供的为准。本平台保留对服务内容进行调整、升级或终止的权利。
+
+## 三、用户账号
+
+1. 您应使用真实、准确的信息注册和管理账号，并对账号及密码的安全负全部责任。
+2. 您不得将账号转让、出借给第三方使用，由此产生的一切责任由您自行承担。
+3. 如发现账号存在安全隐患或被未经授权使用，应立即通知本平台。
+
+## 四、用户行为规范
+
+您承诺不利用本平台从事下列行为：
+
+1. 违反国家法律法规的行为；
+2. 侵犯他人合法权益的行为；
+3. 虚假交易、洗钱、套现等违规支付行为；
+4. 破坏本平台系统安全或干扰正常运行的行为；
+5. 其他损害本平台或第三方权益的行为。
+
+## 五、知识产权
+
+本平台的所有内容，包括但不限于文字、图片、软件、界面设计、程序代码等，其知识产权均归本平台所有。未经书面授权，您不得复制、转载、修改或将其用于其他商业用途。
+
+## 六、免责声明
+
+1. 因不可抗力、系统维护、网络故障等原因导致服务中断，本平台不承担责任。
+2. 本平台不对交易数据的完整性和准确性作出绝对保证，您应及时核对相关信息。
+3. 对于您因违反本协议或法律法规而产生的损失，本平台不承担责任。
+
+## 七、协议的变更
+
+本平台有权根据法律法规及业务发展需要修改本协议，修改后的协议将在本平台公布。您继续使用服务即视为接受修改后的协议；如不同意，您应停止使用本平台服务。
+
+## 八、适用法律与争议解决
+
+本协议的订立、执行和解释适用中华人民共和国法律。因本协议产生的争议，双方应友好协商解决；协商不成的，任何一方均可向本平台所在地有管辖权的人民法院提起诉讼。', '<h2>一、协议的接受</h2>
+<p>欢迎使用 DaxPay 支付管理平台（以下简称"本平台"）。请您在使用本平台服务前，仔细阅读并充分理解本协议的全部内容。您点击"同意"或使用本平台服务，即表示您已阅读并接受本协议的全部条款，本协议即构成您与本平台之间具有法律约束力的协议。</p>
+<h2>二、服务说明</h2>
+<p>本平台为商户及运营管理人员提供支付交易管理、资金结算、订单查询、数据统计及相关增值服务。具体服务内容以本平台实际提供的为准。本平台保留对服务内容进行调整、升级或终止的权利。</p>
+<h2>三、用户账号</h2>
+<ol>
+<li>您应使用真实、准确的信息注册和管理账号，并对账号及密码的安全负全部责任。</li>
+<li>您不得将账号转让、出借给第三方使用，由此产生的一切责任由您自行承担。</li>
+<li>如发现账号存在安全隐患或被未经授权使用，应立即通知本平台。</li>
+</ol>
+<h2>四、用户行为规范</h2>
+<p>您承诺不利用本平台从事下列行为：</p>
+<ol>
+<li>违反国家法律法规的行为；</li>
+<li>侵犯他人合法权益的行为；</li>
+<li>虚假交易、洗钱、套现等违规支付行为；</li>
+<li>破坏本平台系统安全或干扰正常运行的行为；</li>
+<li>其他损害本平台或第三方权益的行为。</li>
+</ol>
+<h2>五、知识产权</h2>
+<p>本平台的所有内容，包括但不限于文字、图片、软件、界面设计、程序代码等，其知识产权均归本平台所有。未经书面授权，您不得复制、转载、修改或将其用于其他商业用途。</p>
+<h2>六、免责声明</h2>
+<ol>
+<li>因不可抗力、系统维护、网络故障等原因导致服务中断，本平台不承担责任。</li>
+<li>本平台不对交易数据的完整性和准确性作出绝对保证，您应及时核对相关信息。</li>
+<li>对于您因违反本协议或法律法规而产生的损失，本平台不承担责任。</li>
+</ol>
+<h2>七、协议的变更</h2>
+<p>本平台有权根据法律法规及业务发展需要修改本协议，修改后的协议将在本平台公布。您继续使用服务即视为接受修改后的协议；如不同意，您应停止使用本平台服务。</p>
+<h2>八、适用法律与争议解决</h2>
+<p>本协议的订立、执行和解释适用中华人民共和国法律。因本协议产生的争议，双方应友好协商解决；协商不成的，任何一方均可向本平台所在地有管辖权的人民法院提起诉讼。</p>', 'MARKDOWN', 'PUBLISHED', '2026-10-05 00:00:00+00', '平台默认用户服务协议模板，可在运营端系统管理-用户协议中编辑调整', 1, '2026-10-05 00:00:00+00', 1, '2026-10-05 00:00:00+00', 0, false);
+INSERT INTO public.base_user_protocol_version VALUES (2091000000000000102, 2091000000000000002, 'zh-CN', 1, 'v1.0', 'DaxPay 隐私政策', 'DaxPay（以下简称"本平台"）高度重视用户隐私保护。本隐私政策说明本平台在您使用服务时如何收集、使用、共享和保护您的个人信息。请您仔细阅读本政策，使用本平台服务即表示您同意本政策所述内容。
+
+## 一、信息收集
+
+本平台在您使用服务过程中可能收集以下信息：
+
+1. 账号信息：用户名、密码（加密存储）、角色信息；
+2. 交易信息：订单数据、交易记录、资金流水；
+3. 设备信息：设备标识、操作系统、网络状态；
+4. 日志信息：登录时间、操作日志、访问记录。
+
+## 二、信息使用
+
+收集的信息将用于：
+
+1. 提供支付管理与交易服务；
+2. 身份验证与安全保障；
+3. 数据统计与业务分析；
+4. 风险控制与反欺诈；
+5. 法律法规要求或监管需要。
+
+## 三、信息共享
+
+本平台不会向第三方出售您的个人信息。在以下情形下，本平台可能共享您的信息：
+
+1. 获得您的明确同意；
+2. 根据法律法规或有权机关的要求；
+3. 与合作支付通道完成交易（仅限必要信息）；
+4. 为维护本平台合法权益。
+
+## 四、信息安全
+
+本平台采取行业通行的安全措施（包括数据加密、访问控制、安全审计等）保护您的信息安全。但请注意，互联网传输并非绝对安全，本平台不能保证信息传输的绝对安全性。
+
+## 五、用户权利
+
+您对个人信息享有以下权利：
+
+1. 查询、更正个人信息；
+2. 删除个人信息或注销账号；
+3. 撤回授权同意；
+4. 投诉举报。
+
+行使上述权利请联系本平台客服。
+
+## 六、未成年人保护
+
+本平台不面向未成年人提供服务。如您为未成年人，请在监护人指导下使用，并确保已获得监护人同意。
+
+## 七、隐私政策变更
+
+本平台可能适时修订本隐私政策，更新后将在本平台公布。重大变更将通过通知方式告知您。', '<p>DaxPay（以下简称"本平台"）高度重视用户隐私保护。本隐私政策说明本平台在您使用服务时如何收集、使用、共享和保护您的个人信息。请您仔细阅读本政策，使用本平台服务即表示您同意本政策所述内容。</p>
+<h2>一、信息收集</h2>
+<p>本平台在您使用服务过程中可能收集以下信息：</p>
+<ol>
+<li>账号信息：用户名、密码（加密存储）、角色信息；</li>
+<li>交易信息：订单数据、交易记录、资金流水；</li>
+<li>设备信息：设备标识、操作系统、网络状态；</li>
+<li>日志信息：登录时间、操作日志、访问记录。</li>
+</ol>
+<h2>二、信息使用</h2>
+<p>收集的信息将用于：</p>
+<ol>
+<li>提供支付管理与交易服务；</li>
+<li>身份验证与安全保障；</li>
+<li>数据统计与业务分析；</li>
+<li>风险控制与反欺诈；</li>
+<li>法律法规要求或监管需要。</li>
+</ol>
+<h2>三、信息共享</h2>
+<p>本平台不会向第三方出售您的个人信息。在以下情形下，本平台可能共享您的信息：</p>
+<ol>
+<li>获得您的明确同意；</li>
+<li>根据法律法规或有权机关的要求；</li>
+<li>与合作支付通道完成交易（仅限必要信息）；</li>
+<li>为维护本平台合法权益。</li>
+</ol>
+<h2>四、信息安全</h2>
+<p>本平台采取行业通行的安全措施（包括数据加密、访问控制、安全审计等）保护您的信息安全。但请注意，互联网传输并非绝对安全，本平台不能保证信息传输的绝对安全性。</p>
+<h2>五、用户权利</h2>
+<p>您对个人信息享有以下权利：</p>
+<ol>
+<li>查询、更正个人信息；</li>
+<li>删除个人信息或注销账号；</li>
+<li>撤回授权同意；</li>
+<li>投诉举报。</li>
+</ol>
+<p>行使上述权利请联系本平台客服。</p>
+<h2>六、未成年人保护</h2>
+<p>本平台不面向未成年人提供服务。如您为未成年人，请在监护人指导下使用，并确保已获得监护人同意。</p>
+<h2>七、隐私政策变更</h2>
+<p>本平台可能适时修订本隐私政策，更新后将在本平台公布。重大变更将通过通知方式告知您。</p>', 'MARKDOWN', 'PUBLISHED', '2026-10-05 00:00:00+00', '平台默认隐私政策模板，可在运营端系统管理-用户协议中编辑调整', 1, '2026-10-05 00:00:00+00', 1, '2026-10-05 00:00:00+00', 0, false);
 
 
 --
@@ -3632,6 +3795,12 @@ INSERT INTO public.base_province VALUES ('65', '新疆维吾尔自治区');
 
 
 --
+-- Data for Name: iam_mail_template; Type: TABLE DATA; Schema: public; Owner: -
+--
+
+
+
+--
 -- Data for Name: iam_perm_code; Type: TABLE DATA; Schema: public; Owner: -
 --
 
@@ -3642,9 +3811,6 @@ INSERT INTO public.iam_perm_code VALUES (2080304418371350530, 'payment:wx:platfo
 INSERT INTO public.iam_perm_code VALUES (2083000000000000001, 'trade:transfer:view', 'trade:transfer', true, NULL, 1, 1, 0, false, '2026-08-05 12:13:20.611224+00', '2026-08-05 12:13:20.611224+00', 'perm.trade:transfer:view');
 INSERT INTO public.iam_perm_code VALUES (2083000000000000002, 'trade:transfer:manage', 'trade:transfer', true, NULL, 1, 1, 0, false, '2026-08-05 12:13:20.613805+00', '2026-08-05 12:13:20.613805+00', 'perm.trade:transfer:manage');
 INSERT INTO public.iam_perm_code VALUES (2079866296000000003, 'system:notify:mail-record:resend', 'system:notify:mail-record', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-08-27 04:10:39.751763+00', '2026-08-27 04:10:39.751763+00', 'perm.system:notify:mail-record:resend');
-INSERT INTO public.iam_perm_code VALUES (2079866296000000557, 'system:notify:mail-template:view', 'system:notify:mail-template', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-10-05 00:00:00+00', '2026-10-05 00:00:00+00', 'perm.system:notify:mail-template:view');
-INSERT INTO public.iam_perm_code VALUES (2079866296000000558, 'system:notify:mail-template:manage', 'system:notify:mail-template', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-10-05 00:00:00+00', '2026-10-05 00:00:00+00', 'perm.system:notify:mail-template:manage');
-INSERT INTO public.iam_perm_code VALUES (2079866296000000559, 'system:notify:mail-template:test', 'system:notify:mail-template', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-10-05 00:00:00+00', '2026-10-05 00:00:00+00', 'perm.system:notify:mail-template:test');
 INSERT INTO public.iam_perm_code VALUES (2079866296000000001, 'system:notify:mail-record:view', 'system:notify:mail-record', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-08-27 04:10:39.751763+00', '2026-08-27 04:10:39.751763+00', 'perm.system:notify:mail-record:view');
 INSERT INTO public.iam_perm_code VALUES (2076548114998755328, 'channel:app:manage', 'channel:app', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-13 06:03:45.674956+00', '2026-07-15 03:59:23.658548+00', 'perm.channel:app:manage');
 INSERT INTO public.iam_perm_code VALUES (2076548115791478784, 'channel:app:view', 'channel:app', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-13 06:03:45.8603+00', '2026-07-15 03:59:23.675708+00', 'perm.channel:app:view');
@@ -3705,6 +3871,9 @@ INSERT INTO public.iam_perm_code VALUES (2082124981016358913, 'plugin:easypay-re
 INSERT INTO public.iam_perm_code VALUES (2093325653469454336, 'iam:lock:unlock', 'iam:lock', true, NULL, 1, 1, 0, false, '2026-08-28 13:11:42.554226+00', '2026-08-28 13:11:42.554226+00', 'perm.iam:lock:unlock');
 INSERT INTO public.iam_perm_code VALUES (2093325653503008768, 'iam:lock:view', 'iam:lock', true, NULL, 1, 1, 0, false, '2026-08-28 13:11:42.562766+00', '2026-08-28 13:11:42.562766+00', 'perm.iam:lock:view');
 INSERT INTO public.iam_perm_code VALUES (2085254519619518464, 'payment:risk:mch-config:view', 'payment:risk:mch-config', true, NULL, 1, 1, 0, true, '2026-08-06 06:39:54.289335+00', '2026-09-08 10:13:38.606507+00', 'perm.payment:risk:mch-config:view');
+INSERT INTO public.iam_perm_code VALUES (2079866296000000557, 'system:notify:mail-template:view', 'system:notify:mail-template', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-10-05 00:00:00+00', '2026-10-05 00:00:00+00', 'perm.system:notify:mail-template:view');
+INSERT INTO public.iam_perm_code VALUES (2079866296000000558, 'system:notify:mail-template:manage', 'system:notify:mail-template', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-10-05 00:00:00+00', '2026-10-05 00:00:00+00', 'perm.system:notify:mail-template:manage');
+INSERT INTO public.iam_perm_code VALUES (2079866296000000559, 'system:notify:mail-template:test', 'system:notify:mail-template', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-10-05 00:00:00+00', '2026-10-05 00:00:00+00', 'perm.system:notify:mail-template:test');
 INSERT INTO public.iam_perm_code VALUES (2078486217727614976, 'merchant:terminal:manage', 'merchant:terminal', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-18 14:25:05.372949+00', '2026-07-18 14:25:05.380456+00', 'perm.merchant:terminal:manage');
 INSERT INTO public.iam_perm_code VALUES (2078486217954107392, 'merchant:terminal:view', 'merchant:terminal', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-18 14:25:05.423491+00', '2026-07-18 14:25:05.423491+00', 'perm.merchant:terminal:view');
 INSERT INTO public.iam_perm_code VALUES (2082636699320639488, 'payment:config:mobile-app:manage', 'payment:config:mobile-app', true, NULL, 1, 1, 0, false, '2026-07-30 01:17:37.296213+00', '2026-07-30 01:17:37.304726+00', 'perm.payment:config:mobile-app:manage');
@@ -3769,7 +3938,6 @@ INSERT INTO public.iam_perm_code VALUES (2072377871723388928, 'trade:order:view'
 INSERT INTO public.iam_perm_code VALUES (2072990657130180608, 'trade:refund:manage', 'trade:refund', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-03 10:27:41.620782+00', '2026-07-15 03:59:23.715999+00', 'perm.trade:refund:manage');
 INSERT INTO public.iam_perm_code VALUES (2072990657130180609, 'trade:refund:view', 'trade:refund', true, '由 @PermCode 扫描同步生成', 1, 1, 1, false, '2026-07-03 10:27:41.620782+00', '2026-07-15 03:59:23.717505+00', 'perm.trade:refund:view');
 INSERT INTO public.iam_perm_code VALUES (2079866295577419776, 'trade:callback-record:view', 'trade:callback-record', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-22 09:49:01.56951+00', '2026-07-22 09:49:01.575017+00', 'perm.trade:callback-record:view');
-INSERT INTO public.iam_perm_code VALUES (2079866296000000570, 'trade:unipay-log:view', 'trade:unipay-log', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-10-10 00:00:00+00', '2026-10-10 00:00:00+00', 'perm.trade:unipay-log:view');
 INSERT INTO public.iam_perm_code VALUES (2079866295615168512, 'trade:mch-notice:manage', 'trade:mch-notice', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-22 09:49:01.578524+00', '2026-07-22 09:49:01.578524+00', 'perm.trade:mch-notice:manage');
 INSERT INTO public.iam_perm_code VALUES (2079866295619362816, 'trade:mch-notice:view', 'trade:mch-notice', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-07-22 09:49:01.579524+00', '2026-07-22 09:49:01.579524+00', 'perm.trade:mch-notice:view');
 INSERT INTO public.iam_perm_code VALUES (2082811057154473984, 'merchant:gateway-pay-config:manage', 'merchant:gateway-pay-config', true, NULL, 1, 1, 0, false, '2026-07-30 12:50:27.440009+00', '2026-07-30 12:50:27.44601+00', 'perm.merchant:gateway-pay-config:manage');
@@ -3778,6 +3946,7 @@ INSERT INTO public.iam_perm_code VALUES (2089898876302675968, 'trade:alloc:view'
 INSERT INTO public.iam_perm_code VALUES (2079866296000000301, 'trade:abnormal-order:view', 'trade:abnormal-order', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-08-29 16:00:00+00', '2026-08-29 16:00:00+00', 'perm.trade:abnormal-order:view');
 INSERT INTO public.iam_perm_code VALUES (2079866296000000302, 'trade:abnormal-order:manage', 'trade:abnormal-order', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-08-29 16:00:00+00', '2026-08-29 16:00:00+00', 'perm.trade:abnormal-order:manage');
 INSERT INTO public.iam_perm_code VALUES (2079866296000000303, 'trade:fund-flow:view', 'trade:fund-flow', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-08-29 16:00:00+00', '2026-08-29 16:00:00+00', 'perm.trade:fund-flow:view');
+INSERT INTO public.iam_perm_code VALUES (2079866296000000570, 'trade:unipay-log:view', 'trade:unipay-log', true, '由 @PermCode 扫描同步生成', 1, 1, 0, false, '2026-10-10 00:00:00+00', '2026-10-10 00:00:00+00', 'perm.trade:unipay-log:view');
 
 
 --
@@ -3891,8 +4060,8 @@ INSERT INTO public.iam_perm_menu VALUES (91001, NULL, NULL, 'merchant', 'Dashboa
 INSERT INTO public.iam_perm_menu VALUES (91002, 91001, 'dashboard:workspace', 'merchant', 'Workspace', 'menu.dashboard.workspace', 'lucide:panels-top-left', false, false, '/dashboard/workspace/index', '/workspace', NULL, 1, false, false, true, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-07-23 02:30:21.991345+00', '2026-07-23 02:30:21.991345+00');
 INSERT INTO public.iam_perm_menu VALUES (91003, 91001, 'dashboard:analytics', 'merchant', 'Analytics', 'menu.dashboard.analytics', 'lucide:area-chart', false, false, '/dashboard/analytics/index', '/analytics', NULL, 2, false, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-07-23 02:30:21.994392+00', '2026-07-23 02:30:21.994392+00');
 INSERT INTO public.iam_perm_menu VALUES (91203, 91100, 'trade:fund-flow', 'merchant', 'FundFlowList', 'menu.trade.fundFlow', 'lucide:coins', false, false, '/payment/record/FundFlowList', '/trade/record/fund-flow', NULL, 4, false, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-08-29 16:00:00+00', '2026-08-30 14:15:30.039614+00');
-INSERT INTO public.iam_perm_menu VALUES (91204, 91100, 'trade:unipay-log', 'merchant', 'UnipayApiLogList', 'menu.trade.unipayLog', 'lucide:file-clock', false, false, '/payment/record/UnipayApiLogList', '/trade/unipay-log', NULL, 4.5, false, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-10-10 00:00:00+00', '2026-10-10 00:00:00+00');
 INSERT INTO public.iam_perm_menu VALUES (91128, 91100, 'trade:abnormal-order', 'merchant', 'AbnormalOrderList', 'menu.trade.abnormalOrder', 'lucide:triangle-alert', false, false, '/payment/order/AbnormalOrderList', '/trade/abnormal-order', NULL, 5, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-29 16:00:00+00', '2026-08-30 14:15:30.134434+00');
+INSERT INTO public.iam_perm_menu VALUES (313, 308, 'system:notify:mail-template', 'admin', 'SystemMailTemplate', 'menu.system.notify.mailTemplate', 'lucide:mail-plus', false, false, '/system/notify/mail/MailTemplateList', '/system/notify/mail-template', NULL, 25, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-10-05 00:00:00+00', '2026-10-05 00:00:00+00');
 INSERT INTO public.iam_perm_menu VALUES (91111, 91110, 'trade:order', 'merchant', 'NormalOrderList', 'menu.trade.normalPay', 'lucide:file-text', false, false, '/payment/order/NormalOrderList', '/trade/pay-order/normal', NULL, 1, false, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-07-23 09:32:12.645988+00', '2026-07-23 09:32:12.645988+00');
 INSERT INTO public.iam_perm_menu VALUES (91112, 91110, 'trade:gateway-order', 'merchant', 'GatewayOrderList', 'menu.trade.gatewayOrder', 'lucide:globe', false, false, '/payment/order/GatewayOrderList', '/trade/pay-order/gateway', NULL, 2, false, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-07-23 09:32:12.648789+00', '2026-07-23 09:32:12.648789+00');
 INSERT INTO public.iam_perm_menu VALUES (91100, NULL, 'trade', 'merchant', 'TransactionManagement', 'menu.trade', 'lucide:arrow-left-right', false, false, NULL, '/trade', '/trade/pay-trade', 3, false, true, false, 1, 1, 0, false, 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-23 03:48:14.886531+00', '2026-07-23 06:44:16.725707+00');
@@ -3914,9 +4083,9 @@ INSERT INTO public.iam_perm_menu VALUES (91304, 91416, 'merchant:terminal', 'mer
 INSERT INTO public.iam_perm_menu VALUES (91401, 91417, 'merchant:app', 'merchant', 'MchAppInfoList', 'menu.payment.merchant.app', 'lucide:app-window', false, false, '/payment/merchant/app/MchAppInfoList', '/mch/app', NULL, 2, false, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-07-23 09:32:12.681008+00', '2026-09-01 12:00:00+00');
 INSERT INTO public.iam_perm_menu VALUES (91412, 91417, 'payment:wx:mch-app', 'merchant', 'MchWxAppList', 'menu.payment.wx.mchApp', 'lucide:message-circle', false, false, '/payment/wx/mch/MchWxAppList', '/mch/wx-app', NULL, 3, false, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-07-24 01:58:27.304104+00', '2026-09-01 12:00:00+00');
 INSERT INTO public.iam_perm_menu VALUES (91305, 91422, 'merchant:wx-verify', 'merchant', 'MchWxDomainVerifyList', 'menu.payment.merchant.wxVerify', 'lucide:shield-check', false, false, '/payment/merchant/wx-verify/MchWxDomainVerifyList', '/mch/wx-verify', NULL, 2, false, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-24 14:17:59.251093+00', '2026-09-01 12:00:00+00');
+INSERT INTO public.iam_perm_menu VALUES (40583, 40402, 'channel:merchant:create', 'admin', 'ChannelMerchantCreate', 'menu.payment.merchant.channelMerchant.create', NULL, true, false, '/payment/global/channel-merchant/ChannelMerchantCreate', '/payment/global/channel-merchant/create-global', NULL, 10, false, true, false, 1, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-10-10 00:00:00+00', '2026-10-10 00:00:00+00');
 INSERT INTO public.iam_perm_menu VALUES (91409, 91403, 'merchant:easypay', 'merchant', 'EasyPayConfig', 'menu.payment.merchant.easypay', 'lucide:plug', true, false, '/payment/merchant/easypay/EasyPayConfig', '/mch/easypay', NULL, 6, false, false, false, 0, 1, 1, false, 'subpage', NULL, NULL, NULL, NULL, '', '', '2026-07-23 09:32:12.710238+00', '2026-07-23 09:32:12.710238+00');
 INSERT INTO public.iam_perm_menu VALUES (310, 308, 'system:notify:mail-record', 'admin', 'SystemMailRecord', 'menu.system.notify.mailRecord', 'lucide:mail', false, false, '/system/notify/mail/MailRecordList', '/system/notify/mail-record', NULL, 30, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-27 04:10:39.742351+00', '2026-08-27 04:10:39.742351+00');
-INSERT INTO public.iam_perm_menu VALUES (313, 308, 'system:notify:mail-template', 'admin', 'SystemMailTemplate', 'menu.system.notify.mailTemplate', 'lucide:mail-plus', false, false, '/system/notify/mail/MailTemplateList', '/system/notify/mail-template', NULL, 25, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-10-05 00:00:00+00', '2026-10-05 00:00:00+00');
 INSERT INTO public.iam_perm_menu VALUES (91421, 91402, 'channel:app', 'merchant', 'AlipayMchAppManage', 'menu.payment.merchant.channelMerchant.alipayApp', NULL, true, false, '/payment/channel/alipay/manage/mch/app/AlipayMchAppManage', '/mch/channel-merchant/alipay-app-manage', NULL, 4, false, false, false, 0, 1, 1, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-25 01:53:14.928869+00', '2026-07-25 01:53:14.928869+00');
 INSERT INTO public.iam_perm_menu VALUES (3040201, 30402, 'system:oss-config', 'admin', 'OssConfigPermission', 'menu.system.config.platform', NULL, true, false, NULL, NULL, NULL, 1, false, false, false, 1, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-27 09:30:00+00', '2026-08-27 09:30:00+00');
 INSERT INTO public.iam_perm_menu VALUES (91601, 91600, 'develop:trade', 'merchant', 'DevelopTrade', 'menu.develop.trade', 'lucide:credit-card', false, false, '/payment/develop/trade/DevelopTrade', '/develop/trade', NULL, 1, false, false, false, 0, NULL, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-07-25 15:10:00+00', '2026-07-25 15:10:00+00');
@@ -3959,6 +4128,7 @@ INSERT INTO public.iam_perm_menu VALUES (61104, 611, 'trade:transfer:trade', 'ad
 INSERT INTO public.iam_perm_menu VALUES (91124, 91120, 'trade:transfer:trade', 'merchant', 'TransferTradeList', 'menu.trade.transfer.trade', 'lucide:list-ordered', false, true, '/payment/transfer/TransferTradeList', '/trade/transfer/trade', NULL, 2, false, true, false, 1, 1, 0, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-04 16:00:00+00', '2026-08-04 16:00:00+00');
 INSERT INTO public.iam_perm_menu VALUES (91415, 91402, 'merchant:alipay-isv-auth', 'merchant', 'AlipayIsvAuthPermission', 'menu.payment.merchant.channelMerchant.detail', NULL, true, false, NULL, NULL, NULL, 3, false, false, false, 0, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-08-27 09:30:00+00', '2026-08-27 09:30:00+00');
 INSERT INTO public.iam_perm_menu VALUES (91420, 91417, 'payment:douyin:mch-app', 'merchant', 'MchDyAppList', 'menu.payment.douyin.mchApp', 'lucide:music-2', false, false, '/payment/douyin/mch/MchDyAppList', '/mch/douyin-app', NULL, 4, false, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, '', '', '2026-07-28 14:00:00+00', '2026-09-01 12:00:00+00');
+INSERT INTO public.iam_perm_menu VALUES (91204, 91100, 'trade:unipay-log', 'merchant', 'UnipayApiLogList', 'menu.trade.unipayLog', 'lucide:file-clock', false, false, '/payment/record/UnipayApiLogList', '/trade/unipay-log', NULL, 4.5, false, false, false, 0, 1, 1, false, 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-10-10 00:00:00+00', '2026-10-10 00:00:00+00');
 
 
 --
@@ -4178,6 +4348,9 @@ INSERT INTO public.iam_role_code VALUES (2083200000000000002, 2, 208300000000000
 INSERT INTO public.iam_role_code VALUES (2083200000000000003, 2, 2083000000000000005);
 INSERT INTO public.iam_role_code VALUES (2083200000000000004, 2, 2083000000000000006);
 INSERT INTO public.iam_role_code VALUES (2083200000000000005, 2, 2083000000000000007);
+INSERT INTO public.iam_role_code VALUES (2098335521800000557, 1, 2079866296000000557);
+INSERT INTO public.iam_role_code VALUES (2098335521800000558, 1, 2079866296000000558);
+INSERT INTO public.iam_role_code VALUES (2098335521800000559, 1, 2079866296000000559);
 
 
 --
@@ -4317,7 +4490,6 @@ INSERT INTO public.iam_role_menu VALUES (1000000000613, 1, NULL, 613);
 INSERT INTO public.iam_role_menu VALUES (1000000091306, 2, NULL, 91306);
 INSERT INTO public.iam_role_menu VALUES (1000000091128, 2, NULL, 91128);
 INSERT INTO public.iam_role_menu VALUES (1000000091203, 2, NULL, 91203);
-INSERT INTO public.iam_role_menu VALUES (1000000091204, 2, NULL, 91204);
 INSERT INTO public.iam_role_menu VALUES (2098298729809514496, 2, NULL, 91416);
 INSERT INTO public.iam_role_menu VALUES (2098298729817903104, 2, NULL, 91417);
 INSERT INTO public.iam_role_menu VALUES (2098298729817903105, 2, NULL, 91422);
@@ -4357,8 +4529,6 @@ INSERT INTO public.iam_role_menu VALUES (2098335521623474179, 1, NULL, 70102);
 INSERT INTO public.iam_role_menu VALUES (2098335521623474180, 1, NULL, 205);
 INSERT INTO public.iam_role_menu VALUES (2098335521627668480, 1, NULL, 206);
 INSERT INTO public.iam_role_menu VALUES (1000000040584, 1, NULL, 40584);
--- 内置商户普通用户角色(merchant_user, id=3)出厂授权: 仪表板 + 交易订单 + 回调通知(不含用户管理等敏感菜单),
--- 新增商户端菜单须同步补本角色授权(维护口径见 update-datas.sql 同批次增量)
 INSERT INTO public.iam_role_menu VALUES (3000091001, 3, NULL, 91001);
 INSERT INTO public.iam_role_menu VALUES (3000091002, 3, NULL, 91002);
 INSERT INTO public.iam_role_menu VALUES (3000091003, 3, NULL, 91003);
@@ -4378,7 +4548,10 @@ INSERT INTO public.iam_role_menu VALUES (3000091200, 3, NULL, 91200);
 INSERT INTO public.iam_role_menu VALUES (3000091201, 3, NULL, 91201);
 INSERT INTO public.iam_role_menu VALUES (3000091202, 3, NULL, 91202);
 INSERT INTO public.iam_role_menu VALUES (3000091203, 3, NULL, 91203);
+INSERT INTO public.iam_role_menu VALUES (2079866296000000691, 1, NULL, 40583);
+INSERT INTO public.iam_role_menu VALUES (1000000091204, 2, NULL, 91204);
 INSERT INTO public.iam_role_menu VALUES (3000091204, 3, NULL, 91204);
+INSERT INTO public.iam_role_menu VALUES (1000000000313, 1, NULL, 313);
 
 
 --
@@ -4408,7 +4581,7 @@ INSERT INTO public.iam_user_expand_info VALUES (2098300538905104384, NULL, NULL,
 -- Data for Name: iam_user_info; Type: TABLE DATA; Schema: public; Owner: -
 --
 
-INSERT INTO public.iam_user_info VALUES (1, '超级管理员', 'admin', 'bootx', '$2a$10$HiIvaX7tbGWDeRVSciX/LuIAIYUgVJwasWtstsXsakpt0d9Sw.cKG', NULL, NULL, true, 'normal', 0, 1, 18, false, '2026-03-28 14:26:08+00', '2026-09-06 05:49:10.858597+00');
+INSERT INTO public.iam_user_info VALUES (1, '超级管理员', 'admin', 'bootx', '$2a$10$HiIvaX7tbGWDeRVSciX/LuIAIYUgVJwasWtstsXsakpt0d9Sw.cKG', NULL, NULL, true, 'normal', 0, 1, 18, false, '2026-03-28 14:26:08+00', '2026-10-09 08:22:54.086025+00');
 INSERT INTO public.iam_user_info VALUES (2098300538905104384, '测试管理员', 'admin', 'csadmin', '$2a$10$HiIvaX7tbGWDeRVSciX/LuIAIYUgVJwasWtstsXsakpt0d9Sw.cKG', NULL, NULL, false, 'normal', 1, 2098300538905104384, 4, false, '2026-09-11 06:40:07.67052+00', '2026-09-11 07:16:52.25994+00');
 INSERT INTO public.iam_user_info VALUES (2078739664805732352, '示例商户管理员', 'merchant', 'csqysh', '$2a$10$HiIvaX7tbGWDeRVSciX/LuIAIYUgVJwasWtstsXsakpt0d9Sw.cKG', NULL, NULL, false, 'normal', 1, 2078739664805732352, 24, false, '2026-07-19 07:12:11.866279+00', '2026-09-06 05:55:54.733091+00');
 
@@ -4549,6 +4722,7 @@ INSERT INTO public.mch_user VALUES (2078739677074071552, 2078739664805732352, 'M
 -- Data for Name: mch_wx_domain_verify; Type: TABLE DATA; Schema: public; Owner: -
 --
 
+-- REDACTED: mch_wx_domain_verify (整表清除)
 
 
 --

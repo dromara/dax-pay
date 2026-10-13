@@ -12,4 +12,5 @@
 - data.sql：表数据(全量, 已脱敏)
 - update-tables.sql：更新表结构
 - update-datas.sql：更新数据
+- 发版口径：每个版本周期内积累的增量, 在定版时随全量 table.sql/data.sql 重导收口后, update-tables.sql 与 update-datas.sql 双双清空重置为空白基线(先例 beta8/beta9); 发版时这两个文件无需改动, 保持空白即可
 - reset-bootx-password.sql：bootx 超管密码重置为开发默认密码(121212)，开发库忘记密码时急救用

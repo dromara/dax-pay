@@ -4391,9 +4391,8 @@ CREATE TABLE public.iam_mail_template (
     last_modifier bigint,
     version integer DEFAULT 0 NOT NULL,
     deleted boolean DEFAULT false NOT NULL,
-    create_time timestamp with time zone,
-    last_modified_time timestamp with time zone,
-    CONSTRAINT iam_mail_template_pkey PRIMARY KEY (id)
+    create_time timestamp(6) with time zone,
+    last_modified_time timestamp(6) with time zone
 );
 
 
@@ -4500,20 +4499,6 @@ COMMENT ON COLUMN public.iam_mail_template.create_time IS '创建时间';
 --
 
 COMMENT ON COLUMN public.iam_mail_template.last_modified_time IS '最后修改时间';
-
-
---
--- Name: uk_iam_mail_template_code_lang; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX uk_iam_mail_template_code_lang ON public.iam_mail_template USING btree (template_code, language) WHERE (deleted = false);
-
-
---
--- Name: INDEX uk_iam_mail_template_code_lang; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.uk_iam_mail_template_code_lang IS '同一场景同一语言仅一份覆盖(软删后可重建)';
 
 
 --
@@ -19447,6 +19432,14 @@ ALTER TABLE ONLY public.hmpay_isv_key_config
 
 
 --
+-- Name: iam_mail_template iam_mail_template_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.iam_mail_template
+    ADD CONSTRAINT iam_mail_template_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: iam_perm_code iam_perm_code_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -22473,6 +22466,20 @@ CREATE UNIQUE INDEX uk_hmpay_isv_key_prod_sandbox ON public.hmpay_isv_key_config
 --
 
 COMMENT ON INDEX public.uk_hmpay_isv_key_prod_sandbox IS '同一产品同一环境密钥唯一';
+
+
+--
+-- Name: uk_iam_mail_template_code_lang; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_iam_mail_template_code_lang ON public.iam_mail_template USING btree (template_code, language) WHERE (deleted = false);
+
+
+--
+-- Name: INDEX uk_iam_mail_template_code_lang; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_iam_mail_template_code_lang IS '同一场景同一语言仅一份覆盖(软删后可重建)';
 
 
 --

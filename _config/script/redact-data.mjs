@@ -74,6 +74,9 @@ const KEEP_TABLES = new Set([
   'pay_md_product_capability',
   // 敏感词库
   'system_sensitive_word',
+  // 用户协议出厂种子(2091 段固定 ID, 全新安装即有默认协议; dev 库须保持纯种子态)
+  'base_user_protocol',
+  'base_user_protocol_version',
 ])
 
 // ---------- 行级白名单：内置演示账号与商户（按主键 id 精确保留） ----------
