@@ -1,6 +1,7 @@
 {
   "pay_title": "Pay title",
   "pay_description": "Pay description",
+  "refund_reason": "Refund reason",
   "goods_name": "Goods name",
   "goods_description": "Goods description",
   "mch_name": "Merchant name",

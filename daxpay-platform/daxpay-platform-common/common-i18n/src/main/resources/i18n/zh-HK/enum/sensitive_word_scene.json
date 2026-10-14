@@ -1,6 +1,7 @@
 {
   "pay_title": "支付標題",
   "pay_description": "支付描述",
+  "refund_reason": "退款原因",
   "goods_name": "商品名稱",
   "goods_description": "商品描述",
   "mch_name": "商戶名稱",

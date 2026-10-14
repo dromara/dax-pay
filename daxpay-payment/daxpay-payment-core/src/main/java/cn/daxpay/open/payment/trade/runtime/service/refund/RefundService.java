@@ -13,6 +13,8 @@ import cn.daxpay.open.platform.core.exception.ChannelResultUnknownException;
 import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
 import cn.daxpay.open.platform.common.i18n.util.BizErrorMessageUtil;
 import cn.daxpay.open.platform.common.spring.util.WebServletUtil;
+import cn.daxpay.open.platform.capability.sensitiveword.enums.SensitiveWordSceneEnum;
+import cn.daxpay.open.platform.capability.sensitiveword.service.SensitiveWordCheckService;
 import cn.daxpay.open.platform.core.util.TradeNoGenerateUtil;
 import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum;
@@ -60,6 +62,7 @@ public class RefundService {
     private final LockExecutor lockExecutor;
     private final MerchantContextLoader merchantContextLoader;
     private final PaymentContext paymentContext;
+    private final SensitiveWordCheckService sensitiveWordCheckService;
 
     /// 自身注入: 使 @Transactional 方法经代理调用生效（锁内层事务模式）
     @Lazy
@@ -70,6 +73,9 @@ public class RefundService {
         if (StrUtil.isBlank(param.getTradeNo()) && StrUtil.isBlank(param.getBizOrderNo())) {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.orderNoRequired");
         }
+
+        // 敏感词: 退款原因(开放 API 不走 Spring @Validated 注解注入, 编程式校验)
+        sensitiveWordCheckService.assertClean(param.getReason(), SensitiveWordSceneEnum.REFUND_REASON);
 
         // 商户身份装载(运营端代发用 param.mchNo; 商户端/开放API已装载, MERCHANT 端忽略参数强制登录上下文)
         merchantContextLoader.initMch(param.getMchNo());

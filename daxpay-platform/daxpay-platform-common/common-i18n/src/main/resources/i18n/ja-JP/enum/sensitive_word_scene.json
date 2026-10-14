@@ -1,6 +1,7 @@
 {
   "pay_title": "支払タイトル",
   "pay_description": "支払説明",
+  "refund_reason": "返金理由",
   "goods_name": "商品名",
   "goods_description": "商品説明",
   "mch_name": "加盟店名",

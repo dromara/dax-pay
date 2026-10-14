@@ -17,6 +17,8 @@ public enum SensitiveWordSceneEnum implements I18nSupport {
     PAY_TITLE("pay_title"),
     /// 支付描述
     PAY_DESCRIPTION("pay_description"),
+    /// 退款原因
+    REFUND_REASON("refund_reason"),
     /// 商品名称
     GOODS_NAME("goods_name"),
     /// 商品描述

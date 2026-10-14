@@ -1,5 +1,6 @@
 package cn.daxpay.open.platform.iam.param.user;
 
+import cn.daxpay.open.platform.capability.sensitiveword.validation.SensitiveWord;
 import cn.daxpay.open.platform.core.validation.ValidationGroup;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -18,6 +19,7 @@ public class UserInfoParam {
     @NotNull(groups = ValidationGroup.edit.class, message = "{validation.field.id.notNull}")
     private Long id;
 
+    @SensitiveWord
     @NotBlank(groups = ValidationGroup.add.class, message = "{validation.field.name.notBlank}")
     @Size(min = 3, max = 15, message = "{validation.field.name.size}")
     @Schema(description = "名称")

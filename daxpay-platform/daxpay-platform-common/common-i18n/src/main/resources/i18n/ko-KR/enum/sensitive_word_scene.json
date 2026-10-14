@@ -1,6 +1,7 @@
 {
   "pay_title": "결제 제목",
   "pay_description": "결제 설명",
+  "refund_reason": "환불 사유",
   "goods_name": "상품명",
   "goods_description": "상품 설명",
   "mch_name": "가맹점명",

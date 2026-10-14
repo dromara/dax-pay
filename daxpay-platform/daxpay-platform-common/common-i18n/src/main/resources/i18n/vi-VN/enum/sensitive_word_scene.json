@@ -1,6 +1,7 @@
 {
   "pay_title": "Tiêu đề thanh toán",
   "pay_description": "Mô tả thanh toán",
+  "refund_reason": "Lý do hoàn tiền",
   "goods_name": "Tên hàng hóa",
   "goods_description": "Mô tả hàng hóa",
   "mch_name": "Tên merchant",

@@ -1,6 +1,7 @@
 {
   "pay_title": "Tajuk pembayaran",
   "pay_description": "Penerangan pembayaran",
+  "refund_reason": "Sebab bayaran balik",
   "goods_name": "Nama barang",
   "goods_description": "Penerangan barang",
   "mch_name": "Nama merchant",

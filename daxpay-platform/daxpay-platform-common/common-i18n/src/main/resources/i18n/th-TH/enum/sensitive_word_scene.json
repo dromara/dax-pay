@@ -1,6 +1,7 @@
 {
   "pay_title": "ชื่อเรื่องการชำระเงิน",
   "pay_description": "คำอธิบายการชำระเงิน",
+  "refund_reason": "เหตุผลการคืนเงิน",
   "goods_name": "ชื่อสินค้า",
   "goods_description": "คำอธิบายสินค้า",
   "mch_name": "ชื่อผู้ค้า",

@@ -50,6 +50,12 @@
             <artifactId>capability-nonce</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- 敏感词校验(用户名称 Bean Validation 注解) -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>capability-sensitive-word</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- 请求上下文 -->
         <dependency>
             <groupId>cn.daxpay.open</groupId>
