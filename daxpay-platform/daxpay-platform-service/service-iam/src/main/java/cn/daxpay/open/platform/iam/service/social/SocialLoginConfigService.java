@@ -149,9 +149,14 @@ public class SocialLoginConfigService {
 
     /// 查询所有已配置且启用的平台(登录页公开接口使用)
     /// 仅返回平台编码(source), 不暴露任何敏感字段(clientId/clientSecret/redirectUri/extra 等).
+    /// scanBind 标记仅微信客户端内可完成授权的平台(公众号), 供 PC 绑定入口改走扫码流程.
     public List<SocialEnabledPlatformResult> findEnabledList() {
         return socialLoginConfigManager.findAllEnabled().stream()
-            .map(c -> new SocialEnabledPlatformResult().setSource(c.getSource()))
+            .map(c -> {
+                SocialSourceEnum source = SocialSourceEnum.of(c.getSource());
+                boolean scanBind = Objects.nonNull(source) && source.isWechatOnly();
+                return new SocialEnabledPlatformResult().setSource(c.getSource()).setScanBind(scanBind);
+            })
             .toList();
     }
 

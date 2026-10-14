@@ -8,6 +8,7 @@
   "endpointNotConfigured": "URL asas bahagian hadapan tiada dalam konfigurasi titik akhir, tidak boleh membina URL panggil balik",
   "adminEndpointNotConfigured": "Sila tetapkan URL Pangkalan Pentadbiran (adminBaseUrl) dalam konfigurasi titik akhir dahulu",
   "merchantEndpointNotConfigured": "Sila tetapkan URL Pangkalan Pedagang (merchantBaseUrl) dalam konfigurasi titik akhir dahulu; log masuk sosial pedagang memerlukannya untuk panggilan balik OAuth",
+  "gatewayEndpointNotConfigured": "Tetapkan 'alamat frontend gateway pembayaran' (paymentGatewayBaseUrl) dalam konfigurasi endpoint dahulu; callback log masuk platform jenis redirect disampaikan melalui domain gateway",
   "alipayNotConfigured": "Konfigurasi Alipay peringkat platform tidak lengkap, sila konfigurasikannya dalam 'Pengurusan Platform Pihak Ketiga' dahulu",
   "wechatMpNotConfigured": "Konfigurasi Akaun Rasmi WeChat peringkat platform tidak lengkap, sila konfigurasikannya dalam 'Pengurusan Platform Pihak Ketiga' dahulu",
   "douyinH5NotConfigured": "Konfigurasi apl Douyin H5 peringkat platform tidak lengkap, sila konfigurasikannya dalam 'Pengurusan Platform Pihak Ketiga' dahulu",
@@ -17,7 +18,13 @@
   "bind": {
     "alreadyBoundByOther": "Akaun pihak ketiga telah terikat oleh pengguna lain",
     "alreadyBoundPlatform": "Anda telah mengikat platform ini, sila buka ikatan dahulu",
-    "clientMismatch": "Pengguna semasa bukan milik klien ini, pengikatan tidak dibenarkan"
+    "clientMismatch": "Pengguna semasa bukan milik klien ini, pengikatan tidak dibenarkan",
+    "scanTicketInvalid": "Kod QR pengikatan telah tamat tempoh atau tidak wujud. Sila muat semula kod QR dan cuba lagi",
+    "scanNotSupported": "Platform ini tidak memerlukan pengikatan melalui kod QR. Sila buat pengikatan secara langsung"
+  },
+  "login": {
+    "scanTicketInvalid": "Kod QR log masuk telah tamat tempoh atau tidak wujud. Muat semula kod QR dan cuba lagi",
+    "scanNotSupported": "Platform ini tidak memerlukan log masuk kod QR, sila log masuk secara langsung"
   },
   "oauthFailed": "Kebenaran pihak ketiga gagal",
   "appletUnbind": "Akaun platform ini belum dikaitkan dengan akaun sistem. Sila log masuk dengan akaun dan kata laluan, kemudian kaitkan di 'Akaun & Keselamatan'",

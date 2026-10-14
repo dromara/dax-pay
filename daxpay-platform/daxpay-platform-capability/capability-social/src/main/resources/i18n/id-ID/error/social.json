@@ -8,6 +8,7 @@
   "endpointNotConfigured": "URL dasar frontend tidak ada dalam konfigurasi titik akhir, tidak dapat membuat URL panggilan balik",
   "adminEndpointNotConfigured": "Harap atur URL Basis Admin (adminBaseUrl) dalam konfigurasi titik akhir terlebih dahulu",
   "merchantEndpointNotConfigured": "Harap tetapkan URL Merchant Base (merchantBaseUrl) di konfigurasi titik akhir terlebih dahulu; login sosial pedagang memerlukannya untuk panggilan balik OAuth",
+  "gatewayEndpointNotConfigured": "Set 'URL frontend gateway pembayaran' (paymentGatewayBaseUrl) di konfigurasi endpoint terlebih dahulu; callback login platform jenis redirect diteruskan melalui domain gateway",
   "alipayNotConfigured": "Konfigurasi Alipay tingkat platform tidak lengkap, harap konfigurasikan di 'Manajemen Platform Pihak Ketiga' terlebih dahulu",
   "wechatMpNotConfigured": "Konfigurasi Akun Resmi WeChat tingkat platform tidak lengkap, harap konfigurasikan di 'Manajemen Platform Pihak Ketiga' terlebih dahulu",
   "douyinH5NotConfigured": "Konfigurasi aplikasi Douyin H5 tingkat platform tidak lengkap, harap konfigurasikan di 'Manajemen Platform Pihak Ketiga' terlebih dahulu",
@@ -17,7 +18,13 @@
   "bind": {
     "alreadyBoundByOther": "Akun pihak ketiga telah diikat oleh pengguna lain",
     "alreadyBoundPlatform": "Anda sudah mengikat platform ini, silakan unbind terlebih dahulu",
-    "clientMismatch": "Pengguna saat ini bukan milik klien ini, pengikatan tidak diperbolehkan"
+    "clientMismatch": "Pengguna saat ini bukan milik klien ini, pengikatan tidak diperbolehkan",
+    "scanTicketInvalid": "Kode QR pengikatan telah kedaluwarsa atau tidak ada. Muat ulang kode QR dan coba lagi",
+    "scanNotSupported": "Platform ini tidak memerlukan pengikatan via kode QR. Silakan lakukan pengikatan secara langsung"
+  },
+  "login": {
+    "scanTicketInvalid": "Kode QR login telah kedaluwarsa atau tidak ada. Muat ulang kode QR dan coba lagi",
+    "scanNotSupported": "Platform ini tidak memerlukan login kode QR, silakan login secara langsung"
   },
   "oauthFailed": "Otorisasi pihak ketiga gagal",
   "appletUnbind": "Akun platform ini belum terhubung ke akun sistem. Silakan masuk dengan akun dan kata sandi, lalu hubungkan di 'Akun & Keamanan'",

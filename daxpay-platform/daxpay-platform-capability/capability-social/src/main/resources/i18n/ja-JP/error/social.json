@@ -8,6 +8,7 @@
   "endpointNotConfigured": "エンドポイント設定にフロントのアクセスURLがなく、コールバックURLを生成できません",
   "adminEndpointNotConfigured": "先にエンドポイント設定で「管理端アクセスURL」(adminBaseUrl)を設定してください",
   "merchantEndpointNotConfigured": "先にエンドポイント設定で「加盟店端アクセスURL」(merchantBaseUrl)を設定してください",
+  "gatewayEndpointNotConfigured": "エンドポイント設定で「支払いゲートウェイフロントエンドアドレス」(paymentGatewayBaseUrl)を先に設定してください。リダイレクト型プラットフォームのログインコールバックはゲートウェイドメイン経由で転送されます",
   "alipayNotConfigured": "プラットフォーム級のAlipay設定が不完全です。「三方平台管理」で設定してください",
   "wechatMpNotConfigured": "プラットフォーム級のWeChat公式アカウント設定が不完全です。「三方平台管理」で設定してください",
   "douyinH5NotConfigured": "プラットフォーム級のDouyin H5アプリ設定が不完全です。「三方平台管理」で設定してください",
@@ -17,7 +18,13 @@
   "bind": {
     "alreadyBoundByOther": "この外部アカウントは他のユーザーに紐付け済みです",
     "alreadyBoundPlatform": "既にこのプラットフォームを紐付けています。先に解除してください",
-    "clientMismatch": "現在のユーザーはこの端末に属していないため紐付けできません"
+    "clientMismatch": "現在のユーザーはこの端末に属していないため紐付けできません",
+    "scanTicketInvalid": "紐付け用QRコードの有効期限が切れたか存在しません。更新して再試行してください",
+    "scanNotSupported": "このプラットフォームはQRコードによる紐付けは不要です。直接紐付けを開始してください"
+  },
+  "login": {
+    "scanTicketInvalid": "ログイン用QRコードの有効期限が切れたか存在しません。QRコードを更新して再試行してください",
+    "scanNotSupported": "このプラットフォームはQRコードログイン不要です。直接ログインを開始してください"
   },
   "oauthFailed": "外部認可に失敗しました",
   "appletUnbind": "このプラットフォームアカウントはシステムアカウントに紐付けられていません。アカウントとパスワードでログイン後、「アカウントとセキュリティ」で紐付けてください",

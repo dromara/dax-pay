@@ -29,15 +29,16 @@ public class WeComRequest extends AbstractSocialAuthRequest {
     @Override
     public String authorize(String state) {
         if (this.getConfig().isSilent()) {
-            // 应用内网页授权(snsapi_base 静默拿 UserId)
+            // 应用内网页授权(snsapi_base 静默拿 UserId); #wechat_redirect 是微信文档要求的
+            // URL 末尾锚点, 拼进 state 值会随授权回显污染 state(同 WechatMpRequest)
             return SocialUrlBuilder.ofBaseUrl(WEB_OAUTH_AUTHORIZE)
                 .queryParam("appid", this.getConfig().getClientId())
                 .queryParam("redirect_uri", this.encode(this.buildRedirectUri()))
                 .queryParam("response_type", "code")
                 .queryParam("scope", "snsapi_base")
                 .queryParam("agentid", this.getConfig().getAgentId())
-                .queryParam("state", state.concat("#wechat_redirect"))
-                .build();
+                .queryParam("state", state)
+                .build() + "#wechat_redirect";
         }
         // PC 扫码登录
         return SocialUrlBuilder.ofBaseUrl(this.getSource().authorize())

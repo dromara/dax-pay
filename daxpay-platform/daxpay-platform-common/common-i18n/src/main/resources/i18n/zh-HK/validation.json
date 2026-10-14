@@ -780,6 +780,9 @@
       "notBlank": "授權碼不可為空",
       "size": "授權碼不可超過128位"
     },
+    "oauthState": {
+      "notBlank": "授權state不可為空"
+    },
     "programType": {
       "notBlank": "落地程式類型不能為空"
     },

@@ -784,6 +784,9 @@
       "notBlank": "Authorization code cannot be blank",
       "size": "Authorization code cannot exceed 128 characters"
     },
+    "oauthState": {
+      "notBlank": "Authorization state cannot be blank"
+    },
     "programType": {
       "notBlank": "Program type cannot be blank"
     },

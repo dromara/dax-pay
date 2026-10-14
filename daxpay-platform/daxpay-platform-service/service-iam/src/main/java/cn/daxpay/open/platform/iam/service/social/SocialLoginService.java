@@ -22,9 +22,13 @@ import cn.daxpay.open.platform.iam.entity.social.SocialLoginConfig;
 import cn.daxpay.open.platform.iam.enums.SocialAuthMode;
 import cn.daxpay.open.platform.iam.enums.SocialClientEnum;
 import cn.daxpay.open.platform.iam.result.social.SocialBindResult;
+import cn.daxpay.open.platform.iam.result.social.SocialBindScanQrResult;
+import cn.daxpay.open.platform.iam.result.social.SocialBindScanStatusResult;
 import cn.daxpay.open.platform.iam.result.social.SocialCallbackUrlResult;
 import cn.daxpay.open.platform.iam.result.social.SocialEnabledPlatformResult;
 import cn.daxpay.open.platform.iam.result.social.SocialExchangeResult;
+import cn.daxpay.open.platform.iam.result.social.SocialLoginScanQrResult;
+import cn.daxpay.open.platform.iam.result.social.SocialLoginScanStatusResult;
 import cn.daxpay.open.platform.iam.result.user.UserInfoResult;
 import cn.daxpay.open.platform.iam.service.social.other.AlipaySocialAuthRequest;
 import cn.daxpay.open.platform.iam.service.social.other.AlipaySocialAuthRequestFactory;
@@ -50,6 +54,12 @@ import org.springframework.stereotype.Service;
 /// 登录和绑定的区分由回调页路由决定(两个不同的前端页面), exchange 时显式传 source + client.
 /// 支付宝非标准 OAuth 经 [AlipaySocialAuthRequest] 收口, 对外与标准平台共用本服务入口.
 ///
+/// ## 跳转型平台回调走支付网关透传
+/// 跳转型平台(支付宝/微信公众号)与支付认证共用同一份开放平台凭据, 回调名额竞争激烈
+/// (支付宝授权回调地址唯一且域名级校验需显式开启), 因此登录/绑定回调统一落在
+/// 支付网关域名的透传路径(`/auth/{oauth|social-bind}-callback/{client}/{source}`),
+/// 由网关 H5 透传页凭 [resolveTransitTarget] 跳回对应端原有回调页, 各端页面与 exchange 接口零改动.
+///
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -61,11 +71,27 @@ public class SocialLoginService {
     /// 绑定回调路径
     private static final String BIND_CALLBACK_PATH = "/auth/social-bind-callback";
 
+    /// 扫码绑定回调路径(公众号跨设备绑定专用, 落在网关域名的 H5 回调页, 不经透传页)
+    private static final String SCAN_BIND_CALLBACK_PATH = "/social/bind-scan-callback";
+
+    /// 扫码绑定 H5 发起页路径(二维码内容, 手机微信扫码打开)
+    private static final String SCAN_BIND_PAGE_PATH = "/social/bind-scan";
+
+    /// 扫码登录回调路径(公众号跨设备登录专用, 落在网关域名的 H5 回调页, 不经透传页)
+    private static final String SCAN_LOGIN_CALLBACK_PATH = "/social/login-scan-callback";
+
+    /// 扫码登录 H5 发起页路径(二维码内容, 手机微信扫码打开)
+    private static final String SCAN_LOGIN_PAGE_PATH = "/social/login-scan";
+
     private final SocialAuthRequestFactory socialAuthRequestFactory;
 
     private final AlipaySocialAuthRequestFactory alipaySocialAuthRequestFactory;
 
     private final IamUserSocialBindStore socialBindStore;
+
+    private final SocialBindScanStore socialBindScanStore;
+
+    private final SocialLoginScanStore socialLoginScanStore;
 
     private final IamSocialLoginHandler socialLoginHandler;
 
@@ -89,7 +115,8 @@ public class SocialLoginService {
 
     /// 列出应在第三方开放平台登记的回调地址(运营/商户 × 全平台 × 登录/绑定)
     ///
-    /// 完整 URL 形态: {baseUrl}/auth/oauth-callback/{source} 与 bind 路径.
+    /// 标准型平台 URL 形态: {baseUrl}/auth/oauth-callback/{source} 与 bind 路径.
+    /// 跳转型平台: 回调走支付网关域名的透传路径(带 client 段), 各端只需在开放平台登记网关域名.
     public List<SocialCallbackUrlResult> listCallbackUrls() {
         PlatformUrlConfig urlConfig = platformUrlConfigService.getUrlConfig();
         List<SocialCallbackUrlResult> list = new ArrayList<>();
@@ -99,8 +126,17 @@ public class SocialLoginService {
             String base = configured ? StrUtil.removeSuffix(baseUrl, "/") : "";
             for (SocialSourceEnum source : SocialSourceEnum.values()) {
                 String code = source.getCode();
-                list.add(buildCallbackItem(client.getCode(), code, SocialAuthMode.LOGIN, base, configured));
-                list.add(buildCallbackItem(client.getCode(), code, SocialAuthMode.BIND, base, configured));
+                if (source.isPlatformRedirect()) {
+                    // 跳转型: 网关透传路径, 网关未配置时 URL 置空
+                    String gatewayBase = StrUtil.removeSuffix(urlConfig.getPaymentGatewayBaseUrl(), "/");
+                    boolean gatewayConfigured = StrUtil.isNotBlank(gatewayBase);
+                    String transitBase = gatewayConfigured ? gatewayBase + "/" + client.getCode() : "";
+                    list.add(buildCallbackItem(client.getCode(), code, SocialAuthMode.LOGIN, transitBase, gatewayConfigured));
+                    list.add(buildCallbackItem(client.getCode(), code, SocialAuthMode.BIND, transitBase, gatewayConfigured));
+                } else {
+                    list.add(buildCallbackItem(client.getCode(), code, SocialAuthMode.LOGIN, base, configured));
+                    list.add(buildCallbackItem(client.getCode(), code, SocialAuthMode.BIND, base, configured));
+                }
             }
         }
         return list;
@@ -145,8 +181,8 @@ public class SocialLoginService {
             throw new OperationFailException(this.endpointMissingKey(socialClient));
         }
         SocialAuthMode authMode = this.resolveMode(mode);
-        // 根据场景拼接回调基础地址
-        String redirectUri = this.buildRedirectUri(baseUrl, authMode);
+        // 根据场景拼接回调基础地址(跳转型平台走支付网关域名的透传路径)
+        String redirectUri = this.buildRedirectUri(baseUrl, socialSource, socialClient, authMode);
         // 构建授权请求
         SocialAuthConfig authConfig = socialLoginConfigService.buildAuthConfig(config, redirectUri);
         // 公众号: 凭据来自平台级配置, 不写在 iam_social_login_config
@@ -169,9 +205,7 @@ public class SocialLoginService {
                                                   HttpServletRequest request, HttpServletResponse response) {
         try {
             SocialClientEnum socialClient = this.requireSocialClient(clientCode);
-            String baseUrl = this.requireBaseUrl(socialClient);
-            String redirectUri = this.buildRedirectUri(baseUrl, SocialAuthMode.LOGIN);
-            AuthUser authUser = this.doExchange(code, state, source, redirectUri);
+            AuthUser authUser = this.doExchange(code, state, source, socialClient, SocialAuthMode.LOGIN);
             // 查绑定关系
             Long userId = socialBindStore.findUserIdBySourceAndOpenId(source, authUser.getUuid()).orElse(null);
             if (Objects.isNull(userId)) {
@@ -236,9 +270,7 @@ public class SocialLoginService {
                 // 社交登录: 绑定用户不属于当前终端
                 throw new OperationFailException("error.social.bind.clientMismatch");
             }
-            String baseUrl = this.requireBaseUrl(socialClient);
-            String redirectUri = this.buildRedirectUri(baseUrl, SocialAuthMode.BIND);
-            AuthUser authUser = this.doExchange(code, state, source, redirectUri);
+            AuthUser authUser = this.doExchange(code, state, source, socialClient, SocialAuthMode.BIND);
             socialBindStore.saveBind(userId, clientCode, authUser);
             return new SocialExchangeResult().setResult("bind_success");
         }
@@ -249,6 +281,236 @@ public class SocialLoginService {
             log.error("社交绑定失败: source={}, msg={}", source, e.getMessage(), e);
             return new SocialExchangeResult().setError("oauth_failed");
         }
+    }
+
+    // ==================== 公众号扫码绑定(跨设备) ====================
+
+    /// 生成扫码绑定二维码(PC 端发起, 需登录)
+    ///
+    /// 公众号网页授权仅微信客户端内可完成, PC 浏览器直接发起必被微信拒绝;
+    /// 本接口生成短期票据并返回含票据的 H5 页面地址, 由前端转二维码供手机微信扫码.
+    /// 票据 5 分钟过期, 绑定结果经 [#queryBindScanStatus] 轮询获取.
+    public SocialBindScanQrResult createBindScanTicket(String source, String client) {
+        SocialSourceEnum socialSource = SocialSourceEnum.of(source);
+        if (Objects.isNull(socialSource) || !socialSource.isWechatOnly()) {
+            // 仅公众号受微信客户端限制, 其余平台 PC 可直接发起绑定
+            throw new OperationFailException("error.social.bind.scanNotSupported");
+        }
+        this.requireSocialClient(client);
+        Long userId = SecurityUtil.getUserId();
+        // 当前用户必须属于该身份域, 防止跨端绑定(对齐 [exchangeForBind] 的校验)
+        UserInfoResult userInfo = userQueryService.findById(userId);
+        if (!Objects.equals(client, userInfo.getClientCode())) {
+            throw new OperationFailException("error.social.bind.clientMismatch");
+        }
+        // 预校验配置(平台启用/公众号凭据/网关地址), 避免二维码生成后手机端才发现配置缺失;
+        // 传入临时空配置仅为触发 [fillPlatformRedirectCredentials] 内的凭据完整性校验
+        this.loadEnabledConfig(source);
+        this.fillPlatformRedirectCredentials(socialSource, new SocialAuthConfig());
+        String gatewayBase = this.requireGatewayBase();
+        String ticket = IdUtil.fastSimpleUUID();
+        socialBindScanStore.saveWaiting(ticket, userId, client, source);
+        String qrUrl = gatewayBase + SCAN_BIND_PAGE_PATH + "?ticket=" + ticket;
+        return new SocialBindScanQrResult().setTicket(ticket).setQrUrl(qrUrl);
+    }
+
+    /// 生成扫码绑定的微信授权地址(手机端 H5 发起页调用, 凭票据定位待绑定用户)
+    ///
+    /// state 仍为纯 UUID 零编码, 经 Redis 一次性映射回票据(见 [SocialBindScanStore#saveState]),
+    /// 授权回调直接落网关域名的扫码绑定回调页(不经透传页, 与登录/普通绑定回调互不干扰).
+    public String buildBindScanAuthUrl(String ticket) {
+        SocialBindScanStore.BindScanContext context = this.requireScanContext(ticket);
+        SocialSourceEnum socialSource = SocialSourceEnum.of(context.getSource());
+        String state = IdUtil.fastSimpleUUID();
+        socialBindScanStore.saveState(state, ticket);
+        return this.buildScanAuthorizeUrl(socialSource, context.getClientCode(), state, SCAN_BIND_CALLBACK_PATH);
+    }
+
+    /// 扫码绑定的授权码兑换(手机端回调页调用)
+    ///
+    /// state 一次性映射换取票据, 凭票据中的用户身份完成绑定(手机端无登录态);
+    /// 兑换成功后将票据标记为 success, PC 端轮询到该状态后刷新绑定列表.
+    public SocialExchangeResult exchangeBindScan(String code, String state) {
+        try {
+            String ticket = socialBindScanStore.consumeTicketByState(state);
+            SocialBindScanStore.BindScanContext context = Objects.isNull(ticket) ? null : socialBindScanStore.get(ticket);
+            if (Objects.isNull(context)) {
+                // state 映射或票据已过期
+                throw new OperationFailException("error.social.bind.scanTicketInvalid");
+            }
+            SocialSourceEnum socialSource = SocialSourceEnum.of(context.getSource());
+            // 回调地址与发起侧保持一致(扫码绑定走网关独立回调路径)
+            String redirectUri = this.requireGatewayBase() + SCAN_BIND_CALLBACK_PATH;
+            AuthUser authUser = this.doExchange(code, state, context.getSource(),
+                SocialClientEnum.findByCode(context.getClientCode()).orElse(null), SocialAuthMode.BIND, redirectUri);
+            socialBindStore.saveBind(context.getUserId(), context.getClientCode(), authUser);
+            socialBindScanStore.markSuccess(ticket, context);
+            return new SocialExchangeResult().setResult("bind_success");
+        }
+        catch (OperationFailException e) {
+            throw e;
+        }
+        catch (Exception e) {
+            log.error("扫码绑定失败: msg={}", e.getMessage(), e);
+            return new SocialExchangeResult().setError("oauth_failed");
+        }
+    }
+
+    /// 查询扫码绑定结果(PC 端轮询, 需登录)
+    ///
+    /// 票据不存在、已过期或不属于当前用户时统一返回 not_exist(防票据遍历探测).
+    public SocialBindScanStatusResult queryBindScanStatus(String ticket) {
+        SocialBindScanStore.BindScanContext context = socialBindScanStore.get(ticket);
+        Long userId = SecurityUtil.getUserId();
+        String status = Objects.isNull(context) || !Objects.equals(userId, context.getUserId())
+            ? SocialBindScanStatusResult.NOT_EXIST
+            : context.getStatus();
+        return new SocialBindScanStatusResult().setStatus(status);
+    }
+
+    /// 查询扫码票据上下文, 不存在或已过期抛业务异常
+    private SocialBindScanStore.BindScanContext requireScanContext(String ticket) {
+        SocialBindScanStore.BindScanContext context = socialBindScanStore.get(ticket);
+        if (Objects.isNull(context)) {
+            throw new OperationFailException("error.social.bind.scanTicketInvalid");
+        }
+        return context;
+    }
+
+    // ==================== 公众号扫码登录(跨设备) ====================
+
+    /// 生成扫码登录二维码(PC 登录页匿名发起)
+    ///
+    /// 登录场景 PC 端无登录态, 票据不携带用户身份; 手机端授权兑换后按绑定关系回填用户,
+    /// PC 轮询到 success 时凭票据一次性换取登录令牌. 票据 5 分钟过期.
+    public SocialLoginScanQrResult createLoginScanTicket(String source, String client) {
+        SocialSourceEnum socialSource = SocialSourceEnum.of(source);
+        if (Objects.isNull(socialSource) || !socialSource.isWechatOnly()) {
+            // 仅公众号受微信客户端限制, 其余平台 PC 可直接跳转授权
+            throw new OperationFailException("error.social.login.scanNotSupported");
+        }
+        this.requireSocialClient(client);
+        // 预校验配置(平台启用/公众号凭据/网关地址), 避免二维码生成后手机端才发现配置缺失;
+        // 传入临时空配置仅为触发 [fillPlatformRedirectCredentials] 内的凭据完整性校验
+        this.loadEnabledConfig(source);
+        this.fillPlatformRedirectCredentials(socialSource, new SocialAuthConfig());
+        String gatewayBase = this.requireGatewayBase();
+        String ticket = IdUtil.fastSimpleUUID();
+        socialLoginScanStore.saveWaiting(ticket, client, source);
+        String qrUrl = gatewayBase + SCAN_LOGIN_PAGE_PATH + "?ticket=" + ticket;
+        return new SocialLoginScanQrResult().setTicket(ticket).setQrUrl(qrUrl);
+    }
+
+    /// 生成扫码登录的微信授权地址(手机端 H5 发起页调用, 凭票据定位身份域与平台)
+    ///
+    /// state 仍为纯 UUID 零编码, 经 Redis 一次性映射回票据(见 [SocialLoginScanStore#saveState]),
+    /// 授权回调直接落网关域名的扫码登录回调页(与扫码绑定回调路径分离, 互不干扰).
+    public String buildLoginScanAuthUrl(String ticket) {
+        SocialLoginScanStore.LoginScanContext context = this.requireLoginScanContext(ticket);
+        SocialSourceEnum socialSource = SocialSourceEnum.of(context.getSource());
+        String state = IdUtil.fastSimpleUUID();
+        socialLoginScanStore.saveState(state, ticket);
+        return this.buildScanAuthorizeUrl(socialSource, context.getClientCode(), state, SCAN_LOGIN_CALLBACK_PATH);
+    }
+
+    /// 扫码登录的授权码兑换(手机端回调页调用)
+    ///
+    /// state 一次性映射换取票据; 授权微信未绑定账号时标记 not_bound 并引导先用账号密码
+    /// 登录后绑定(不自动注册); 已绑定则在手机端请求上下文完成用户校验(身份域归属 + 状态
+    /// 检查链, 失败原因直接透出到手机页), 通过后标记 success 待 PC 轮询签发登录态.
+    public SocialExchangeResult exchangeLoginScan(String code, String state,
+                                                  HttpServletRequest request, HttpServletResponse response) {
+        try {
+            String ticket = socialLoginScanStore.consumeTicketByState(state);
+            SocialLoginScanStore.LoginScanContext context = Objects.isNull(ticket) ? null : socialLoginScanStore.get(ticket);
+            if (Objects.isNull(context)) {
+                // state 映射或票据已过期
+                throw new OperationFailException("error.social.login.scanTicketInvalid");
+            }
+            SocialSourceEnum socialSource = SocialSourceEnum.of(context.getSource());
+            // 回调地址与发起侧保持一致(扫码登录走网关独立回调路径)
+            String redirectUri = this.requireGatewayBase() + SCAN_LOGIN_CALLBACK_PATH;
+            AuthUser authUser = this.doExchange(code, state, context.getSource(),
+                SocialClientEnum.findByCode(context.getClientCode()).orElse(null), SocialAuthMode.LOGIN, redirectUri);
+            Long userId = socialBindStore.findUserIdBySourceAndOpenId(context.getSource(), authUser.getUuid()).orElse(null);
+            if (Objects.isNull(userId)) {
+                // 未绑定: 不自动注册, 手机端引导用账号密码登录后在个人中心绑定
+                socialLoginScanStore.markNotBound(ticket, context);
+                return new SocialExchangeResult().setError("unbind");
+            }
+            this.validateSocialLoginUser(userId, context.getClientCode(), context.getSource(), request, response);
+            socialLoginScanStore.markSuccess(ticket, context.setUserId(userId));
+            return new SocialExchangeResult().setResult("login_ready");
+        }
+        catch (OperationFailException | LoginFailureException e) {
+            throw e;
+        }
+        catch (Exception e) {
+            log.error("扫码登录兑换失败: msg={}", e.getMessage(), e);
+            return new SocialExchangeResult().setError("oauth_failed");
+        }
+    }
+
+    /// 查询扫码登录结果(PC 登录页匿名轮询)
+    ///
+    /// 票据不存在或已过期统一返回 not_exist; success 状态一次性消费(读取即删除),
+    /// 在 PC 轮询请求的上下文签发登录令牌——双因素等登录拦截以业务异常透出(40101+
+    /// preAuthToken, 与 exchange-login 同协议), 由前端进入二次验证面板.
+    public SocialLoginScanStatusResult queryLoginScanStatus(String ticket,
+                                                            HttpServletRequest request, HttpServletResponse response) {
+        SocialLoginScanStore.LoginScanContext context = socialLoginScanStore.get(ticket);
+        if (Objects.isNull(context)) {
+            return new SocialLoginScanStatusResult().setStatus(SocialLoginScanStatusResult.NOT_EXIST);
+        }
+        if (Objects.equals(context.getStatus(), SocialLoginScanStore.STATUS_NOT_BOUND)) {
+            return new SocialLoginScanStatusResult().setStatus(SocialLoginScanStore.STATUS_NOT_BOUND);
+        }
+        if (Objects.equals(context.getStatus(), SocialLoginScanStore.STATUS_CANCELLED)) {
+            return new SocialLoginScanStatusResult().setStatus(SocialLoginScanStatusResult.CANCELLED);
+        }
+        if (!Objects.equals(context.getStatus(), SocialLoginScanStore.STATUS_SUCCESS)) {
+            return new SocialLoginScanStatusResult().setStatus(SocialLoginScanStore.STATUS_WAITING);
+        }
+        // 一次性消费: 并发轮询只有一方拿到上下文并签发令牌
+        SocialLoginScanStore.LoginScanContext consumed = socialLoginScanStore.consume(ticket);
+        if (Objects.isNull(consumed) || Objects.isNull(consumed.getUserId())) {
+            return new SocialLoginScanStatusResult().setStatus(SocialLoginScanStatusResult.NOT_EXIST);
+        }
+        String token = socialLoginHandler.login(consumed.getUserId(), consumed.getClientCode(), consumed.getSource(), request, response);
+        return new SocialLoginScanStatusResult().setStatus(SocialLoginScanStore.STATUS_SUCCESS).setToken(token);
+    }
+
+    /// 取消扫码登录(手机端确认页取消按钮调用, 匿名)
+    ///
+    /// 微信授权页仅首次授权时弹出, 不构成按次确认; 手机端确认页是跨设备扫码登录
+    /// 唯一的按次用户同意环节, 取消后拒绝为 PC 端签发登录态.
+    /// 仅 waiting 状态可取消(授权已完成或票据不存在时为空操作, 不暴露票据状态).
+    public void cancelLoginScan(String ticket) {
+        SocialLoginScanStore.LoginScanContext context = socialLoginScanStore.get(ticket);
+        if (Objects.isNull(context) || !Objects.equals(context.getStatus(), SocialLoginScanStore.STATUS_WAITING)) {
+            return;
+        }
+        socialLoginScanStore.markCancelled(ticket, context);
+    }
+
+    /// 查询扫码登录票据上下文, 不存在或已过期抛业务异常
+    private SocialLoginScanStore.LoginScanContext requireLoginScanContext(String ticket) {
+        SocialLoginScanStore.LoginScanContext context = socialLoginScanStore.get(ticket);
+        if (Objects.isNull(context)) {
+            throw new OperationFailException("error.social.login.scanTicketInvalid");
+        }
+        return context;
+    }
+
+    /// 构建扫码授权地址(回调走网关域名独立路径, 绕开透传页; 绑定/登录按各自回调路径)
+    private String buildScanAuthorizeUrl(SocialSourceEnum socialSource, String clientCode, String state, String redirectPath) {
+        SocialLoginConfig config = this.loadEnabledConfig(socialSource.getCode());
+        String redirectUri = this.requireGatewayBase() + redirectPath;
+        SocialAuthConfig authConfig = socialLoginConfigService.buildAuthConfig(config, redirectUri);
+        // 公众号: 凭据来自平台级配置
+        this.fillPlatformRedirectCredentials(socialSource, authConfig);
+        SocialAuthRequest request = this.createAuthRequest(socialSource, authConfig);
+        return request.authorize(state);
     }
 
     /// 查询指定用户已绑定的所有第三方账号
@@ -263,19 +525,34 @@ public class SocialLoginService {
 
     // ==================== 内部方法 ====================
 
-    /// 共享: code 换 AuthUser(登录/绑定共用)
-    private AuthUser doExchange(String code, String state, String source, String redirectUri) {
+    /// 共享: code 换 AuthUser(登录/绑定共用), redirectUri 拼装内聚于此保证与发起侧一致
+    private AuthUser doExchange(String code, String state, String source,
+                                SocialClientEnum socialClient, SocialAuthMode mode) {
+        return this.doExchange(code, state, source, socialClient, mode, null);
+    }
+
+    /// @param redirectUriOverride 非空时覆盖默认回调地址拼装(扫码绑定走网关独立回调路径)
+    private AuthUser doExchange(String code, String state, String source,
+                                SocialClientEnum socialClient, SocialAuthMode mode, String redirectUriOverride) {
         SocialLoginConfig config = socialLoginConfigService.findEnabledBySource(source);
         if (Objects.isNull(config)) {
             // 社交登录: 平台未配置或未启用
             throw new OperationFailException("error.social.configNotExist");
         }
-        SocialAuthConfig authConfig = socialLoginConfigService.buildAuthConfig(config, redirectUri);
         SocialSourceEnum socialSource = SocialSourceEnum.of(source);
         if (Objects.isNull(socialSource)) {
             // 社交登录: 不支持的平台
             throw new OperationFailException("error.social.unsupportedSource");
         }
+        String redirectUri;
+        if (StrUtil.isNotBlank(redirectUriOverride)) {
+            redirectUri = redirectUriOverride;
+        }
+        else {
+            String baseUrl = this.requireBaseUrl(socialClient);
+            redirectUri = this.buildRedirectUri(baseUrl, socialSource, socialClient, mode);
+        }
+        SocialAuthConfig authConfig = socialLoginConfigService.buildAuthConfig(config, redirectUri);
         // 公众号: 凭据来自平台级配置
         this.fillPlatformRedirectCredentials(socialSource, authConfig);
         SocialAuthRequest authRequest = this.createAuthRequest(socialSource, authConfig);
@@ -349,12 +626,52 @@ public class SocialLoginService {
     }
 
     /// 构建回调基础地址(不含 source 后缀, JustAuth 层再拼 /{source})
-    private String buildRedirectUri(String baseUrl, SocialAuthMode mode) {
-        String base = StrUtil.removeSuffix(baseUrl, "/");
+    ///
+    /// 跳转型平台(支付宝/公众号): 回调走支付网关域名的透传路径, 路径带 client 段供
+    /// H5 透传页识别目标端, 解决同一 AppId 下登录回调与支付认证回调竞争开放平台回调名额的问题.
+    /// 标准型平台: 沿用各端自身域名的回调路径.
+    private String buildRedirectUri(String baseUrl, SocialSourceEnum socialSource,
+                                    SocialClientEnum socialClient, SocialAuthMode mode) {
         String callbackPath = mode == SocialAuthMode.BIND
             ? BIND_CALLBACK_PATH
             : LOGIN_CALLBACK_PATH;
-        return base + callbackPath;
+        if (socialSource.isPlatformRedirect()) {
+            return this.requireGatewayBase() + callbackPath + "/" + socialClient.getCode();
+        }
+        return StrUtil.removeSuffix(baseUrl, "/") + callbackPath;
+    }
+
+    /// 校验并返回支付网关前端地址(去尾斜杠), 未配置时抛业务异常
+    private String requireGatewayBase() {
+        String gatewayBase = platformUrlConfigService.getUrlConfig().getPaymentGatewayBaseUrl();
+        if (StrUtil.isBlank(gatewayBase)) {
+            // 社交登录: 跳转型平台回调依赖支付网关域名, 未配置时无法生成授权地址
+            throw new OperationFailException("error.social.gatewayEndpointNotConfigured");
+        }
+        return StrUtil.removeSuffix(gatewayBase, "/");
+    }
+
+    /// 解析跳转型平台 OAuth 回调的透传目标地址(网关 H5 透传页专用)
+    ///
+    /// 跳转型平台回调统一落在支付网关域名的透传路径, 透传页凭 client+mode 查询本方法,
+    /// 跳回对应端的原有回调页(各端页面与 exchange 接口零改动). 仅对跳转型平台开放,
+    /// 目标域名取自端点配置, 天然构成跳转白名单.
+    public String resolveTransitTarget(String source, String client, String mode) {
+        SocialSourceEnum socialSource = SocialSourceEnum.of(source);
+        if (Objects.isNull(socialSource) || !socialSource.isPlatformRedirect()) {
+            // 社交登录: 透传目标仅对跳转型平台(支付宝/公众号)开放
+            throw new OperationFailException("error.social.unsupportedSource");
+        }
+        SocialClientEnum socialClient = this.requireSocialClient(client);
+        // 透传页路径已区分登录/绑定, mode 非法值按登录兜底
+        SocialAuthMode authMode = StrUtil.equalsIgnoreCase(mode, SocialAuthMode.BIND.name())
+            ? SocialAuthMode.BIND
+            : SocialAuthMode.LOGIN;
+        String baseUrl = this.requireBaseUrl(socialClient);
+        String callbackPath = authMode == SocialAuthMode.BIND
+            ? BIND_CALLBACK_PATH
+            : LOGIN_CALLBACK_PATH;
+        return StrUtil.removeSuffix(baseUrl, "/") + callbackPath + "/" + socialSource.getCode();
     }
 
     /// 加载已启用的平台配置(不存在则抛业务异常)

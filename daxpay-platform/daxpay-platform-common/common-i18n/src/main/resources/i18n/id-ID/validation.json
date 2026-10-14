@@ -779,6 +779,9 @@
       "notBlank": "Kode otorisasi tidak boleh kosong",
       "size": "Kode otorisasi tidak boleh melebihi 128 karakter"
     },
+    "oauthState": {
+      "notBlank": "State otorisasi tidak boleh kosong"
+    },
     "programType": {
       "notBlank": "Program type cannot be blank"
     },

@@ -779,6 +779,9 @@
       "notBlank": "Kod kebenaran tidak boleh kosong",
       "size": "Kod kebenaran tidak boleh melebihi 128 aksara"
     },
+    "oauthState": {
+      "notBlank": "State kebenaran tidak boleh kosong"
+    },
     "programType": {
       "notBlank": "Program type cannot be blank"
     },

@@ -18,8 +18,10 @@ public class WechatMpRequest extends AbstractSocialAuthRequest {
         super(config, SocialSourceEnum.WECHAT_MP);
     }
 
-    /// 微信授权地址使用 appid 参数, 且 state 末尾需追加 #wechat_redirect
-    /// silent 时使用 snsapi_base(静默仅 openId), 否则 snsapi_userinfo
+    /// 微信授权地址使用 appid 参数, silent 时使用 snsapi_base(静默仅 openId), 否则 snsapi_userinfo
+    /// #wechat_redirect 是微信文档要求的 URL 末尾锚点, 必须拼在完整地址之后;
+    /// 拼进 state 值会被编码为 %23 并随授权回显原样带回, 污染 state 导致
+    /// 扫码票据的 state 一次性映射查找失败
     @Override
     public String authorize(String state) {
         String scope = this.getConfig().isSilent() ? "snsapi_base" : "snsapi_userinfo";
@@ -28,8 +30,8 @@ public class WechatMpRequest extends AbstractSocialAuthRequest {
             .queryParam("redirect_uri", this.encode(this.buildRedirectUri()))
             .queryParam("response_type", "code")
             .queryParam("scope", scope)
-            .queryParam("state", state.concat("#wechat_redirect"))
-            .build();
+            .queryParam("state", state)
+            .build() + "#wechat_redirect";
     }
 
     /// 微信 accessToken 同时返回 openid

@@ -780,6 +780,9 @@
       "notBlank": "認証コードは必須です",
       "size": "認証コードは128文字以内で入力してください"
     },
+    "oauthState": {
+      "notBlank": "認証stateは必須です"
+    },
     "programType": {
       "notBlank": "プログラム種別を入力してください"
     },

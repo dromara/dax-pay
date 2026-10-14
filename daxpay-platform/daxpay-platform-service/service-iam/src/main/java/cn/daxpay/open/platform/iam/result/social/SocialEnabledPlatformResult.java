@@ -18,4 +18,8 @@ public class SocialEnabledPlatformResult {
     /// 平台编码(weChat/weCom/qq/github/gitee/feishu/dingTalk/douyin)
     @Schema(description = "平台编码")
     private String source;
+
+    /// 是否仅微信客户端内可完成授权(公众号), PC 端发起绑定时须改走扫码跨设备流程
+    @Schema(description = "是否需要扫码绑定")
+    private boolean scanBind;
 }

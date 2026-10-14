@@ -8,6 +8,7 @@
   "endpointNotConfigured": "URL cơ sở giao diện người dùng bị thiếu trong cấu hình điểm cuối, không thể tạo URL gọi lại",
   "adminEndpointNotConfigured": "Trước tiên, vui lòng đặt URL cơ sở quản trị (adminBaseUrl) trong cấu hình điểm cuối",
   "merchantEndpointNotConfigured": "Trước tiên, vui lòng đặt URL cơ sở người bán (merchantBaseUrl) trong cấu hình điểm cuối; thông tin đăng nhập xã hội của người bán cần nó cho các cuộc gọi lại OAuth",
+  "gatewayEndpointNotConfigured": "Thiết lập 'địa chỉ frontend cổng thanh toán' (paymentGatewayBaseUrl) trong cấu hình endpoint trước; callback đăng nhập nền tảng dạng redirect được chuyển tiếp qua tên miền gateway",
   "alipayNotConfigured": "Cấu hình Alipay cấp nền tảng chưa hoàn chỉnh, trước tiên hãy định cấu hình nó trong 'Quản lý nền tảng của bên thứ ba'",
   "wechatMpNotConfigured": "Cấu hình Tài khoản chính thức WeChat cấp nền tảng chưa hoàn chỉnh, trước tiên hãy định cấu hình nó trong 'Quản lý nền tảng của bên thứ ba'",
   "douyinH5NotConfigured": "Cấu hình ứng dụng Douyin H5 cấp nền tảng chưa hoàn chỉnh, trước tiên vui lòng định cấu hình nó trong 'Quản lý nền tảng bên thứ ba'",
@@ -17,7 +18,13 @@
   "bind": {
     "alreadyBoundByOther": "Tài khoản của bên thứ ba đã bị ràng buộc bởi người dùng khác",
     "alreadyBoundPlatform": "Bạn đã ràng buộc nền tảng này, vui lòng hủy liên kết trước",
-    "clientMismatch": "Người dùng hiện tại không thuộc về khách hàng này, không được phép ràng buộc"
+    "clientMismatch": "Người dùng hiện tại không thuộc về khách hàng này, không được phép ràng buộc",
+    "scanTicketInvalid": "Mã QR liên kết đã hết hạn hoặc không tồn tại. Vui lòng làm mới mã QR và thử lại",
+    "scanNotSupported": "Nền tảng này không cần liên kết qua mã QR, hãy liên kết trực tiếp"
+  },
+  "login": {
+    "scanTicketInvalid": "Mã QR đăng nhập đã hết hạn hoặc không tồn tại. Vui lòng làm mới mã QR và thử lại",
+    "scanNotSupported": "Nền tảng này không cần đăng nhập bằng mã QR, hãy đăng nhập trực tiếp"
   },
   "oauthFailed": "Ủy quyền bên thứ ba thất bại",
   "appletUnbind": "Tài khoản nền tảng này chưa được liên kết với tài khoản hệ thống. Vui lòng đăng nhập bằng tài khoản và mật khẩu, sau đó liên kết trong 'Tài khoản & Bảo mật'",

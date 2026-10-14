@@ -779,6 +779,9 @@
       "notBlank": "รหัสอนุญาตต้องไม่เว้นว่าง",
       "size": "รหัสอนุญาตต้องไม่เกิน 128 ตัวอักษร"
     },
+    "oauthState": {
+      "notBlank": "state การอนุญาตต้องไม่ว่างเปล่า"
+    },
     "programType": {
       "notBlank": "Program type cannot be blank"
     },

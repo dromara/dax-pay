@@ -8,6 +8,7 @@
   "endpointNotConfigured": "Frontend base URL is missing in endpoint configuration, cannot build callback URL",
   "adminEndpointNotConfigured": "Please set Admin Base URL (adminBaseUrl) in endpoint configuration first",
   "merchantEndpointNotConfigured": "Please set Merchant Base URL (merchantBaseUrl) in endpoint configuration first; merchant social login needs it for OAuth callbacks",
+  "gatewayEndpointNotConfigured": "Set the payment gateway frontend URL (paymentGatewayBaseUrl) in endpoint config first; platform-redirect login callbacks transit via the gateway domain",
   "alipayNotConfigured": "Platform-level Alipay configuration is incomplete, please configure it in 'Third-party Platform Management' first",
   "wechatMpNotConfigured": "Platform-level WeChat Official Account configuration is incomplete, please configure it in 'Third-party Platform Management' first",
   "douyinH5NotConfigured": "Platform-level Douyin H5 app configuration is incomplete, please configure it in 'Third-party Platform Management' first",
@@ -17,7 +18,13 @@
   "bind": {
     "alreadyBoundByOther": "The third-party account has been bound by another user",
     "alreadyBoundPlatform": "You have already bound this platform, please unbind first",
-    "clientMismatch": "Current user does not belong to this client, binding is not allowed"
+    "clientMismatch": "Current user does not belong to this client, binding is not allowed",
+    "scanTicketInvalid": "The binding QR code has expired or does not exist. Please refresh the QR code and try again",
+    "scanNotSupported": "This platform does not require QR-code binding. Please initiate binding directly"
+  },
+  "login": {
+    "scanTicketInvalid": "Login QR code has expired or does not exist. Refresh the QR code and try again",
+    "scanNotSupported": "This platform does not require QR code login, please start login directly"
   },
   "oauthFailed": "Third-party authorization failed",
   "appletUnbind": "This platform account is not bound to a system account. Please log in with account and password, then bind it in Account & Security",

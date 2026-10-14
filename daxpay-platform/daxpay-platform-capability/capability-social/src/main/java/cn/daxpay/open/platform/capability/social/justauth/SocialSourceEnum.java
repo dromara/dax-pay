@@ -159,4 +159,13 @@ public enum SocialSourceEnum implements I18nSupport {
     public boolean isPlatformRedirect() {
         return this == ALIPAY || this == WECHAT_MP;
     }
+
+    /// 是否仅微信客户端内可完成授权
+    ///
+    /// 公众号网页授权端点(connect/oauth2/authorize)拒绝非微信内置浏览器访问,
+    /// PC 浏览器直接发起必报「请在微信客户端打开链接」.
+    /// 此类平台在 PC 发起绑定时须走扫码跨设备流程(Web 端展示二维码, 手机微信内完成授权).
+    public boolean isWechatOnly() {
+        return this == WECHAT_MP;
+    }
 }
