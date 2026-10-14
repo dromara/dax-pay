@@ -6,9 +6,10 @@ import cn.daxpay.open.platform.capability.auth.util.SecurityUtil;
 import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
-import cn.daxpay.open.platform.iam.param.social.SocialLoginScanCancelParam;
+import cn.daxpay.open.platform.iam.param.social.SocialScanCancelParam;
 import cn.daxpay.open.platform.iam.param.social.SocialScanExchangeParam;
 import cn.daxpay.open.platform.iam.result.social.SocialBindResult;
+import cn.daxpay.open.platform.iam.result.social.SocialBindScanConfirmResult;
 import cn.daxpay.open.platform.iam.result.social.SocialBindScanQrResult;
 import cn.daxpay.open.platform.iam.result.social.SocialBindScanStatusResult;
 import cn.daxpay.open.platform.iam.result.social.SocialEnabledPlatformResult;
@@ -16,6 +17,8 @@ import cn.daxpay.open.platform.iam.result.social.SocialExchangeResult;
 import cn.daxpay.open.platform.iam.result.social.SocialLoginScanQrResult;
 import cn.daxpay.open.platform.iam.result.social.SocialLoginScanStatusResult;
 import cn.daxpay.open.platform.iam.service.social.SocialLoginService;
+import cn.daxpay.open.platform.iam.service.social.scan.SocialBindScanService;
+import cn.daxpay.open.platform.iam.service.social.scan.SocialLoginScanService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -32,7 +35,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 /// # 第三方社交登录端点
 ///
-/// 瘦控制器, 仅负责 HTTP 参数解包与结果包装, 业务编排全部委托 [SocialLoginService].
+/// 瘦控制器, 仅负责 HTTP 参数解包与结果包装, 业务编排按场景委托:
+/// 标准 OAuth 流程([SocialLoginService])、公众号扫码绑定([SocialBindScanService])、
+/// 公众号扫码登录([SocialLoginScanService]).
 /// 采用前端回调模式: 第三方平台直接重定向到前端回调页, 前端拿到 code+state 后
 /// 调用 exchange-login 或 exchange-bind 接口完成换 token, 后端不做 302 跳转.
 ///
@@ -44,6 +49,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class SocialEndpoint {
 
     private final SocialLoginService socialLoginService;
+
+    private final  SocialBindScanService socialBindScanService;
+
+    private final SocialLoginScanService socialLoginScanService;
 
     /// 查询已启用的第三方登录平台(登录页公开接口)
     /// 仅返回平台编码列表, 不含任何敏感字段, 供登录页动态渲染第三方登录按钮.
@@ -120,14 +129,14 @@ public class SocialEndpoint {
     @GetMapping("/bind-scan/create")
     public Result<SocialBindScanQrResult> bindScanCreate(@RequestParam("source") String source,
                                                          @RequestParam("client") String client) {
-        return Res.ok(socialLoginService.createBindScanTicket(source, client));
+        return Res.ok(socialBindScanService.createBindScanTicket(source, client));
     }
 
     /// 生成扫码绑定的微信授权地址(公开: 手机端 H5 发起页无登录态, 凭票据定位待绑定用户)
     @Operation(summary = "生成扫码绑定授权地址")
     @GetMapping("/bind-scan/auth-url")
     public Result<String> bindScanAuthUrl(@RequestParam("ticket") String ticket) {
-        return Res.ok(socialLoginService.buildBindScanAuthUrl(ticket));
+        return Res.ok(socialBindScanService.buildBindScanAuthUrl(ticket));
     }
 
     /// 扫码绑定的授权码兑换(公开: 手机端回调页无登录态, 绑定用户由票据决定)
@@ -136,7 +145,7 @@ public class SocialEndpoint {
     @Operation(summary = "扫码绑定授权码兑换")
     @PostMapping("/exchange-bind-scan")
     public Result<SocialExchangeResult> exchangeBindScan(@RequestBody @Validated SocialScanExchangeParam param) {
-        return Res.ok(socialLoginService.exchangeBindScan(param.getCode(), param.getState()));
+        return Res.ok(socialBindScanService.exchangeBindScan(param.getCode(), param.getState()));
     }
 
     /// 查询扫码绑定结果(需登录, PC 端轮询)
@@ -144,7 +153,25 @@ public class SocialEndpoint {
     @Operation(summary = "查询扫码绑定结果")
     @GetMapping("/bind-scan/status")
     public Result<SocialBindScanStatusResult> bindScanStatus(@RequestParam("ticket") String ticket) {
-        return Res.ok(socialLoginService.queryBindScanStatus(ticket));
+        return Res.ok(socialBindScanService.queryBindScanStatus(ticket));
+    }
+
+    /// 查询扫码绑定确认信息(公开: 手机端 H5 确认页凭票据换取脱敏账号名,
+    /// 供扫码者核对是否本人电脑端账号, 防微信身份被抢占)
+    @Operation(summary = "查询扫码绑定确认信息")
+    @GetMapping("/bind-scan/confirm-info")
+    public Result<SocialBindScanConfirmResult> bindScanConfirmInfo(@RequestParam("ticket") String ticket) {
+        return Res.ok(socialBindScanService.queryBindScanConfirm(ticket));
+    }
+
+    /// 取消扫码绑定(公开: 手机端确认页取消按钮, 票据即凭证)
+    /// 调用方是 H5 发起页: 参数以 JSON body 提交(同 exchange-bind-scan);
+    /// 票据不存在或已不可取消时空操作, 不暴露票据状态.
+    @Operation(summary = "取消扫码绑定")
+    @PostMapping("/bind-scan/cancel")
+    public Result<Void> bindScanCancel(@RequestBody SocialScanCancelParam param) {
+        socialBindScanService.cancelBindScan(param.getTicket());
+        return Res.ok();
     }
 
     /// 生成扫码登录二维码(公开: 登录页无登录态, 票据即轮询凭证)
@@ -152,14 +179,14 @@ public class SocialEndpoint {
     @GetMapping("/login-scan/create")
     public Result<SocialLoginScanQrResult> loginScanCreate(@RequestParam("source") String source,
                                                            @RequestParam("client") String client) {
-        return Res.ok(socialLoginService.createLoginScanTicket(source, client));
+        return Res.ok(socialLoginScanService.createLoginScanTicket(source, client));
     }
 
     /// 生成扫码登录的微信授权地址(公开: 手机端 H5 发起页凭票据换取)
     @Operation(summary = "生成扫码登录授权地址")
     @GetMapping("/login-scan/auth-url")
     public Result<String> loginScanAuthUrl(@RequestParam("ticket") String ticket) {
-        return Res.ok(socialLoginService.buildLoginScanAuthUrl(ticket));
+        return Res.ok(socialLoginScanService.buildLoginScanAuthUrl(ticket));
     }
 
     /// 扫码登录的授权码兑换(公开: 手机端回调页无登录态, 登录用户由绑定关系决定)
@@ -170,7 +197,7 @@ public class SocialEndpoint {
     public Result<SocialExchangeResult> exchangeLoginScan(@RequestBody @Validated SocialScanExchangeParam param,
                                                           HttpServletRequest request,
                                                           HttpServletResponse response) {
-        return Res.ok(socialLoginService.exchangeLoginScan(param.getCode(), param.getState(), request, response));
+        return Res.ok(socialLoginScanService.exchangeLoginScan(param.getCode(), param.getState(), request, response));
     }
 
     /// 查询扫码登录结果(公开: PC 登录页轮询, success 一次性返回登录令牌;
@@ -180,7 +207,7 @@ public class SocialEndpoint {
     public Result<SocialLoginScanStatusResult> loginScanStatus(@RequestParam("ticket") String ticket,
                                                                HttpServletRequest request,
                                                                HttpServletResponse response) {
-        return Res.ok(socialLoginService.queryLoginScanStatus(ticket, request, response));
+        return Res.ok(socialLoginScanService.queryLoginScanStatus(ticket, request, response));
     }
 
     /// 取消扫码登录(公开: 手机端确认页取消按钮, 票据即凭证)
@@ -188,8 +215,8 @@ public class SocialEndpoint {
     /// 票据不存在或已不可取消时空操作, 不暴露票据状态.
     @Operation(summary = "取消扫码登录")
     @PostMapping("/login-scan/cancel")
-    public Result<Void> loginScanCancel(@RequestBody SocialLoginScanCancelParam param) {
-        socialLoginService.cancelLoginScan(param.getTicket());
+    public Result<Void> loginScanCancel(@RequestBody SocialScanCancelParam param) {
+        socialLoginScanService.cancelLoginScan(param.getTicket());
         return Res.ok();
     }
 

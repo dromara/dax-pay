@@ -1,4 +1,4 @@
-package cn.daxpay.open.platform.iam.service.social;
+package cn.daxpay.open.platform.iam.service.social.scan;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;

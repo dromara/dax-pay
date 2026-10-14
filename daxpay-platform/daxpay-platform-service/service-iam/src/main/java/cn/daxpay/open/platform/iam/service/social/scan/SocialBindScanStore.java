@@ -1,4 +1,4 @@
-package cn.daxpay.open.platform.iam.service.social;
+package cn.daxpay.open.platform.iam.service.social.scan;
 
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.json.JSONUtil;
@@ -36,6 +36,9 @@ public class SocialBindScanStore {
 
     /// 授权并绑定完成
     public static final String STATUS_SUCCESS = "success";
+
+    /// 手机端用户在确认页点击取消, 拒绝本次绑定
+    public static final String STATUS_CANCELLED = "cancelled";
 
     private final StringRedisTemplate stringRedisTemplate;
 
@@ -75,6 +78,12 @@ public class SocialBindScanStore {
     /// 标记绑定成功(TTL 重置 5 分钟, 保留 PC 轮询读取窗口)
     public void markSuccess(String ticket, BindScanContext context) {
         context.setStatus(STATUS_SUCCESS);
+        stringRedisTemplate.opsForValue().set(TICKET_PREFIX + ticket, JSONUtil.toJsonStr(context), EXPIRE);
+    }
+
+    /// 标记已取消(手机端确认页拒绝本次绑定, PC 轮询到该状态后停止轮询)
+    public void markCancelled(String ticket, BindScanContext context) {
+        context.setStatus(STATUS_CANCELLED);
         stringRedisTemplate.opsForValue().set(TICKET_PREFIX + ticket, JSONUtil.toJsonStr(context), EXPIRE);
     }
 
