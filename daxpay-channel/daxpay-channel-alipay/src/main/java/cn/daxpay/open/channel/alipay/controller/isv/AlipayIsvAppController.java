@@ -6,13 +6,10 @@ import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.platform.core.validation.ValidationGroup;
 import cn.daxpay.open.channel.alipay.param.isv.AlipayIsvAppParam;
-import cn.daxpay.open.channel.alipay.param.isv.AlipayIsvAppAuthConfigParam;
 import cn.daxpay.open.channel.alipay.param.isv.AlipayIsvAppKeyConfigParam;
 import cn.daxpay.open.channel.alipay.result.isv.AlipayIsvAppResult;
-import cn.daxpay.open.channel.alipay.result.isv.AlipayIsvAppAuthConfigResult;
 import cn.daxpay.open.channel.alipay.result.isv.AlipayIsvAppKeyConfigResult;
 import cn.daxpay.open.channel.alipay.service.isv.AlipayIsvAppService;
-import cn.daxpay.open.channel.alipay.service.isv.AlipayIsvAppAuthConfigService;
 import cn.daxpay.open.channel.alipay.service.isv.AlipayIsvAppKeyConfigService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,7 +23,7 @@ import java.util.List;
 
 /// # 支付宝服务商应用管理
 ///
-/// 提供服务商应用及其密钥配置、授权认证配置的 REST API，包含查询列表、详情、唯一性校验和增删改操作。
+/// 提供服务商应用及其密钥配置的 REST API，包含查询列表、详情、唯一性校验和增删改操作。
 ///
 @PermCode(menuCode = PermCodes.Payment.Isv.MENU)
 @Validated
@@ -38,7 +35,6 @@ public class AlipayIsvAppController {
 
     private final AlipayIsvAppService alipayIsvAppService;
     private final AlipayIsvAppKeyConfigService alipayIsvAppKeyConfigService;
-    private final AlipayIsvAppAuthConfigService alipayIsvAppAuthConfigService;
 
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "查询服务商应用列表")
@@ -109,22 +105,6 @@ public class AlipayIsvAppController {
     @PostMapping("/save-key-config")
     public Result<Void> saveKeyConfig(@RequestBody @Validated AlipayIsvAppKeyConfigParam param) {
         alipayIsvAppKeyConfigService.save(param);
-        return Res.ok();
-    }
-
-    @PermCode(code = PermCodes.Action.VIEW)
-    @Operation(summary = "查询应用授权认证配置")
-    @GetMapping("/find-auth-config-by-app-id")
-    public Result<AlipayIsvAppAuthConfigResult> findAuthConfigByAppId(
-            @NotNull(message = "{validation.field.alipayIsvAppId.notNull}") Long alipayIsvAppId) {
-        return Res.ok(alipayIsvAppAuthConfigService.findByAlipayIsvAppId(alipayIsvAppId).toResult());
-    }
-
-    @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "保存应用授权认证配置")
-    @PostMapping("/save-auth-config")
-    public Result<Void> saveAuthConfig(@RequestBody @Validated AlipayIsvAppAuthConfigParam param) {
-        alipayIsvAppAuthConfigService.save(param);
         return Res.ok();
     }
 }

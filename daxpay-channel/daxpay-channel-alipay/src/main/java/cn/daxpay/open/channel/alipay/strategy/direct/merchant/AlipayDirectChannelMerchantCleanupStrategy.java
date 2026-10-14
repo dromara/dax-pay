@@ -1,13 +1,11 @@
 package cn.daxpay.open.channel.alipay.strategy.direct.merchant;
 
-import cn.daxpay.open.channel.alipay.dao.direct.AlipayDirectAppAuthConfigManager;
 import cn.daxpay.open.channel.alipay.dao.direct.AlipayDirectAppCapabilityManager;
 import cn.daxpay.open.channel.alipay.dao.direct.AlipayDirectAppKeyConfigManager;
 import cn.daxpay.open.channel.alipay.dao.direct.AlipayDirectAppManager;
 import cn.daxpay.open.channel.alipay.dao.direct.AlipayDirectChannelMerchantManager;
 import cn.daxpay.open.channel.alipay.dao.direct.AlipayTransferConfigManager;
 import cn.daxpay.open.channel.alipay.entity.direct.AlipayDirectApp;
-import cn.daxpay.open.channel.alipay.entity.direct.AlipayDirectAppAuthConfig;
 import cn.daxpay.open.channel.alipay.entity.direct.AlipayDirectAppCapability;
 import cn.daxpay.open.channel.alipay.entity.direct.AlipayDirectAppKeyConfig;
 import cn.daxpay.open.channel.alipay.entity.direct.AlipayDirectChannelMerchant;
@@ -20,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 /// # 支付宝直连通道商户清理策略
 ///
-/// 在通道商户删除时清理支付宝直连相关的所有扩展表（直连扩展表、应用、应用密钥、应用能力、应用授权配置）。
+/// 在通道商户删除时清理支付宝直连相关的所有扩展表（直连扩展表、应用、应用密钥、应用能力）。
 ///
 /// 与 [cn.daxpay.open.channel.alipay.strategy.isv.merchant.AlipayIsvChannelMerchantCleanupStrategy]
 /// 分属不同 product(`ALIPAY` vs `ALIPAY_ISV`), 通过 [cn.daxpay.open.payment.strategy.PaymentStrategyFactory#findOptionallyByProduct]
@@ -34,7 +32,6 @@ public class AlipayDirectChannelMerchantCleanupStrategy implements ChannelMercha
     private final AlipayDirectAppManager alipayDirectAppManager;
     private final AlipayDirectAppKeyConfigManager alipayDirectAppKeyConfigManager;
     private final AlipayDirectAppCapabilityManager alipayDirectAppCapabilityManager;
-    private final AlipayDirectAppAuthConfigManager alipayDirectAppAuthConfigManager;
     private final AlipayTransferConfigManager alipayTransferConfigManager;
 
     /// 对应产品: 支付宝直连
@@ -51,7 +48,6 @@ public class AlipayDirectChannelMerchantCleanupStrategy implements ChannelMercha
         alipayDirectAppManager.deleteByField(AlipayDirectApp::getChannelMchNo, channelMchNo);
         alipayDirectAppKeyConfigManager.deleteByField(AlipayDirectAppKeyConfig::getChannelMchNo, channelMchNo);
         alipayDirectAppCapabilityManager.deleteByField(AlipayDirectAppCapability::getChannelMchNo, channelMchNo);
-        alipayDirectAppAuthConfigManager.deleteByField(AlipayDirectAppAuthConfig::getChannelMchNo, channelMchNo);
         // 转账配置(转账应用绑定)
         alipayTransferConfigManager.deleteByChannelMchNo(channelMchNo);
     }

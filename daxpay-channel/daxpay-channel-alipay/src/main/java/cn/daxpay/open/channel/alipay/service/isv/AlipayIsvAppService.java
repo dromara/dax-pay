@@ -5,7 +5,6 @@ import cn.daxpay.open.channel.alipay.dao.isv.AlipayIsvAppManager;
 import cn.daxpay.open.channel.alipay.entity.isv.AlipayIsvApp;
 import cn.daxpay.open.channel.alipay.param.isv.AlipayIsvAppParam;
 import cn.daxpay.open.channel.alipay.result.isv.AlipayIsvAppResult;
-import cn.daxpay.open.channel.alipay.service.isv.AlipayIsvAppAuthConfigService;
 import cn.daxpay.open.channel.alipay.service.isv.AlipayIsvAppKeyConfigService;
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
@@ -20,7 +19,7 @@ import java.util.List;
 
 /// # 支付宝服务商应用管理
 ///
-/// 提供服务商应用的增删改查功能，包含支付宝应用ID的唯一性校验和级联删除密钥/授权配置。
+/// 提供服务商应用的增删改查功能，包含支付宝应用ID的唯一性校验和级联删除密钥配置。
 ///
 @Slf4j
 @Service
@@ -29,7 +28,6 @@ public class AlipayIsvAppService {
 
     private final AlipayIsvAppManager alipayIsvAppManager;
     private final AlipayIsvAppKeyConfigService alipayIsvAppKeyConfigService;
-    private final AlipayIsvAppAuthConfigService alipayIsvAppAuthConfigService;
 
     /// 查询全部应用列表
     public List<AlipayIsvAppResult> listAll() {
@@ -76,7 +74,6 @@ public class AlipayIsvAppService {
                 // 支付宝: 服务商应用不存在
                 .orElseThrow(() -> new DataNotExistException("error.channel.alipay.appNotFound"));
         alipayIsvAppKeyConfigService.deleteByAlipayIsvAppId(id);
-        alipayIsvAppAuthConfigService.deleteByAlipayIsvAppId(id);
         alipayIsvAppManager.deleteById(id);
     }
 

@@ -30,7 +30,6 @@
   "mchAppNotFound": "支付宝通道商户应用不存在",
   "subMerchantDuplicate": "该支付宝应用下已存在此子商户号",
   "directMchDuplicate": "同一商户下该支付宝商户已存在",
-  "userIdTypeInvalid": "用户标识类型不合法",
   "capabilityDuplicate": "支付能力[{0}]重复配置",
   "authUserIdMismatch": "授权返回的商户号与通道商户绑定的子商户号不一致，已拒绝绑定",
   "subMerchantNoRequired": "请先配置子商户号(2088)后再发起代运营授权",

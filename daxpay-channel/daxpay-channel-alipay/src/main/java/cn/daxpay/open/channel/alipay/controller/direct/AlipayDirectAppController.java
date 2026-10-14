@@ -6,13 +6,10 @@ import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.platform.core.validation.ValidationGroup;
 import cn.daxpay.open.channel.alipay.param.direct.AlipayDirectAppParam;
-import cn.daxpay.open.channel.alipay.param.direct.AlipayDirectAppAuthConfigParam;
 import cn.daxpay.open.channel.alipay.param.direct.AlipayDirectAppKeyConfigParam;
 import cn.daxpay.open.channel.alipay.result.direct.AlipayDirectAppResult;
-import cn.daxpay.open.channel.alipay.result.direct.AlipayDirectAppAuthConfigResult;
 import cn.daxpay.open.channel.alipay.result.direct.AlipayDirectAppKeyConfigResult;
 import cn.daxpay.open.channel.alipay.service.direct.AlipayDirectAppService;
-import cn.daxpay.open.channel.alipay.service.direct.AlipayDirectAppAuthConfigService;
 import cn.daxpay.open.channel.alipay.service.direct.AlipayDirectAppKeyConfigService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -26,7 +23,7 @@ import java.util.List;
 
 /// # 支付宝直连商户应用管理
 ///
-/// 提供直连商户应用及其密钥配置、授权认证配置的 REST API，支持按商户号和通道商户号查询列表。
+/// 提供直连商户应用及其密钥配置的 REST API，支持按商户号和通道商户号查询列表。
 ///
 @PermCode(menuCode = PermCodes.Channel.App.MENU)
 @Validated
@@ -38,7 +35,6 @@ public class AlipayDirectAppController {
 
     private final AlipayDirectAppService alipayDirectAppService;
     private final AlipayDirectAppKeyConfigService alipayDirectAppKeyConfigService;
-    private final AlipayDirectAppAuthConfigService alipayDirectAppAuthConfigService;
 
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据商户号和通道商户号查询应用列表")
@@ -116,22 +112,6 @@ public class AlipayDirectAppController {
     @PostMapping("/save-key-config")
     public Result<Void> saveKeyConfig(@RequestBody @Validated AlipayDirectAppKeyConfigParam param) {
         alipayDirectAppKeyConfigService.save(param);
-        return Res.ok();
-    }
-
-    @PermCode(code = PermCodes.Action.VIEW)
-    @Operation(summary = "查询应用授权认证配置")
-    @GetMapping("/find-auth-config-by-app-id")
-    public Result<AlipayDirectAppAuthConfigResult> findAuthConfigByAppId(
-            @NotNull(message = "{validation.field.alipayDirectAppId.notNull}") Long alipayDirectAppId) {
-        return Res.ok(alipayDirectAppAuthConfigService.findByAlipayDirectAppId(alipayDirectAppId).toResult());
-    }
-
-    @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "保存应用授权认证配置")
-    @PostMapping("/save-auth-config")
-    public Result<Void> saveAuthConfig(@RequestBody @Validated AlipayDirectAppAuthConfigParam param) {
-        alipayDirectAppAuthConfigService.save(param);
         return Res.ok();
     }
 }

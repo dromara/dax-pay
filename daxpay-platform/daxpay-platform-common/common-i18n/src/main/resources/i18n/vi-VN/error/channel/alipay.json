@@ -30,7 +30,6 @@
   "mchAppNotFound": "Không tìm thấy ứng dụng người bán kênh Alipay",
   "subMerchantDuplicate": "Người bán phụ này đã tồn tại trong ứng dụng Alipay",
   "directMchDuplicate": "Người bán Alipay đã tồn tại dưới tên người bán này",
-  "userIdTypeInvalid": "Loại ID người dùng không hợp lệ",
   "capabilityDuplicate": "Khả năng thanh toán [{0}] bị trùng lặp",
   "authUserIdMismatch": "ID người bán được ủy quyền không khớp với ID người bán phụ bị ràng buộc; ràng buộc bị từ chối",
   "subMerchantNoRequired": "Vui lòng định cấu hình ID người bán phụ (2088) trước khi ủy quyền cho đại lý",

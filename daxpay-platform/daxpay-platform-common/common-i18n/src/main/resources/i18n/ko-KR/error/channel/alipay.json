@@ -30,7 +30,6 @@
   "mchAppNotFound": "Alipay 채널 판매자 애플리케이션을 찾을 수 없습니다.",
   "subMerchantDuplicate": "이 하위 판매자는 이미 Alipay 애플리케이션에 존재합니다.",
   "directMchDuplicate": "이 판매자 아래에 Alipay 판매자가 이미 존재합니다.",
-  "userIdTypeInvalid": "잘못된 사용자 ID 유형",
   "capabilityDuplicate": "결제 기능 [{0}]이(가) 중복되었습니다.",
   "authUserIdMismatch": "승인된 판매자 ID가 결합된 하위 판매자 ID와 일치하지 않습니다. 바인딩 거부됨",
   "subMerchantNoRequired": "에이전트 승인 전에 하위 판매자 ID(2088)를 구성하세요.",

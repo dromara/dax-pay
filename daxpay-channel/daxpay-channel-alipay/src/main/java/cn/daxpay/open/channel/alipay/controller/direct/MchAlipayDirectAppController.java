@@ -1,14 +1,10 @@
 package cn.daxpay.open.channel.alipay.controller.direct;
 
-import cn.daxpay.open.channel.alipay.param.direct.AlipayDirectAppAuthConfigParam;
 import cn.daxpay.open.channel.alipay.param.direct.AlipayDirectAppKeyConfigParam;
 import cn.daxpay.open.channel.alipay.param.direct.AlipayDirectAppParam;
-import cn.daxpay.open.channel.alipay.param.direct.MchAlipayDirectAppAuthConfigParam;
 import cn.daxpay.open.channel.alipay.param.direct.MchAlipayDirectAppKeyConfigParam;
-import cn.daxpay.open.channel.alipay.result.direct.AlipayDirectAppAuthConfigResult;
 import cn.daxpay.open.channel.alipay.result.direct.AlipayDirectAppKeyConfigResult;
 import cn.daxpay.open.channel.alipay.result.direct.AlipayDirectAppResult;
-import cn.daxpay.open.channel.alipay.service.direct.AlipayDirectAppAuthConfigService;
 import cn.daxpay.open.channel.alipay.service.direct.AlipayDirectAppKeyConfigService;
 import cn.daxpay.open.channel.alipay.service.direct.AlipayDirectAppService;
 import cn.daxpay.open.payment.common.context.PaymentContext;
@@ -48,7 +44,6 @@ public class MchAlipayDirectAppController {
 
     private final AlipayDirectAppService alipayDirectAppService;
     private final AlipayDirectAppKeyConfigService alipayDirectAppKeyConfigService;
-    private final AlipayDirectAppAuthConfigService alipayDirectAppAuthConfigService;
     private final PaymentContext paymentContext;
 
     /// 当前登录商户号（上下文必有；缺则视为会话异常）
@@ -168,33 +163,6 @@ public class MchAlipayDirectAppController {
                 .setSecretKey(param.getSecretKey())
                 .setSandbox(param.getSandbox());
         alipayDirectAppKeyConfigService.save(saveParam);
-        return Res.ok();
-    }
-
-    @PermCode(code = PermCodes.Action.VIEW)
-    @Operation(summary = "查询应用授权认证配置")
-    @GetMapping("/find-auth-config-by-app-id")
-    public Result<AlipayDirectAppAuthConfigResult> findAuthConfigByAppId(
-            @NotNull(message = "{validation.field.alipayDirectAppId.notNull}") Long alipayDirectAppId) {
-        // 先校验应用归属当前商户
-        this.assertOwned(alipayDirectAppService.findById(alipayDirectAppId));
-        return Res.ok(alipayDirectAppAuthConfigService.findByAlipayDirectAppId(alipayDirectAppId).toResult());
-    }
-
-    @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "保存应用授权认证配置")
-    @PostMapping("/save-auth-config")
-    public Result<Void> saveAuthConfig(@RequestBody @Validated MchAlipayDirectAppAuthConfigParam param) {
-        // 先校验应用归属当前商户
-        AlipayDirectAppResult app = alipayDirectAppService.findById(param.getAlipayDirectAppId());
-        this.assertOwned(app);
-        // 商户号/通道商户号以服务端记录组装(防越权+防归属字段被客户端值污染)
-        AlipayDirectAppAuthConfigParam saveParam = new AlipayDirectAppAuthConfigParam()
-                .setAlipayDirectAppId(param.getAlipayDirectAppId())
-                .setMchNo(app.getMchNo())
-                .setChannelMchNo(app.getChannelMchNo())
-                .setUserIdType(param.getUserIdType());
-        alipayDirectAppAuthConfigService.save(saveParam);
         return Res.ok();
     }
 }

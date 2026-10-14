@@ -6,7 +6,6 @@ import cn.daxpay.open.channel.alipay.dao.direct.AlipayDirectAppManager;
 import cn.daxpay.open.channel.alipay.entity.direct.AlipayDirectApp;
 import cn.daxpay.open.channel.alipay.param.direct.AlipayDirectAppParam;
 import cn.daxpay.open.channel.alipay.result.direct.AlipayDirectAppResult;
-import cn.daxpay.open.channel.alipay.service.direct.AlipayDirectAppAuthConfigService;
 import cn.daxpay.open.channel.alipay.service.direct.AlipayDirectAppKeyConfigService;
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
@@ -32,7 +31,6 @@ public class AlipayDirectAppService {
 
     private final AlipayDirectAppManager alipayDirectAppManager;
     private final AlipayDirectAppKeyConfigService alipayDirectAppKeyConfigService;
-    private final AlipayDirectAppAuthConfigService alipayDirectAppAuthConfigService;
     private final AlipayDirectAppCapabilityService alipayDirectAppCapabilityService;
     private final AlipayDirectAllocReceiverManager alipayDirectAllocReceiverManager;
 
@@ -85,7 +83,7 @@ public class AlipayDirectAppService {
         }
     }
 
-    /// 删除应用（被分账接收方引用时拒删；级联删除密钥配置、授权认证配置与能力关联）
+    /// 删除应用（被分账接收方引用时拒删；级联删除密钥配置与能力关联）
     public void delete(Long id) {
         alipayDirectAppManager.findById(id)
                 // 支付宝: 直连商户应用不存在
@@ -97,7 +95,6 @@ public class AlipayDirectAppService {
                     "error.channel.alipay.appRefByAllocReceiver");
         }
         alipayDirectAppKeyConfigService.deleteByAlipayDirectAppId(id);
-        alipayDirectAppAuthConfigService.deleteByAlipayDirectAppId(id);
         // 级联清理能力关联，避免悬空引用
         alipayDirectAppCapabilityService.deleteByAlipayDirectAppId(id);
         alipayDirectAppManager.deleteById(id);

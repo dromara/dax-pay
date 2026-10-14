@@ -30,7 +30,6 @@
   "mchAppNotFound": "Aplikasi pedagang saluran Alipay tidak ditemukan",
   "subMerchantDuplicate": "Sub-merchant ini sudah ada di aplikasi Alipay",
   "directMchDuplicate": "Merchant Alipay sudah ada di bawah merchant ini",
-  "userIdTypeInvalid": "Jenis ID pengguna tidak valid",
   "capabilityDuplicate": "Kemampuan pembayaran [{0}] diduplikasi",
   "authUserIdMismatch": "ID pedagang resmi tidak cocok dengan ID sub-pedagang yang terikat; pengikatan ditolak",
   "subMerchantNoRequired": "Harap konfigurasikan ID sub-pedagang (2088) sebelum otorisasi agen",

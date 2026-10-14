@@ -30,7 +30,6 @@
   "mchAppNotFound": "Alipay チャネル販売アプリケーションが見つかりません",
   "subMerchantDuplicate": "このサブマーチャントは Alipay アプリケーションにすでに存在します",
   "directMchDuplicate": "Alipay 加盟店はこの加盟店の下にすでに存在します",
-  "userIdTypeInvalid": "無効なユーザー ID タイプです",
   "capabilityDuplicate": "支払い機能 [{0}] が重複しています",
   "authUserIdMismatch": "認定マーチャント ID がバインドされたサブマーチャント ID と一致しません。バインディングが拒否されました",
   "subMerchantNoRequired": "エージェント認証の前にサブマーチャント ID (2088) を設定してください",

@@ -30,7 +30,6 @@
   "mchAppNotFound": "支付寶通道商户應用不存在",
   "subMerchantDuplicate": "該支付寶應用下已存在此子商户號",
   "directMchDuplicate": "同一商户下該支付寶商户已存在",
-  "userIdTypeInvalid": "用户標識類型不合法",
   "capabilityDuplicate": "支付能力[{0}]重複配置",
   "authUserIdMismatch": "授權返回的商户號與通道商户綁定的子商户號不一致，已拒絕綁定",
   "subMerchantNoRequired": "請先配置子商户號(2088)後再發起代運營授權",

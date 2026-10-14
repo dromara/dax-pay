@@ -30,7 +30,6 @@
   "mchAppNotFound": "Alipay channel merchant application not found",
   "subMerchantDuplicate": "This sub-merchant already exists under the Alipay application",
   "directMchDuplicate": "The Alipay merchant already exists under this merchant",
-  "userIdTypeInvalid": "Invalid user ID type",
   "capabilityDuplicate": "Payment capability [{0}] is duplicated",
   "authUserIdMismatch": "Authorized merchant ID does not match the bound sub-merchant ID; binding rejected",
   "subMerchantNoRequired": "Please configure the sub-merchant ID (2088) before agent authorization",
