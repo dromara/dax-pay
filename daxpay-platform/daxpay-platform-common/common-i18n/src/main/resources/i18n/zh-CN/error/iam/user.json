@@ -14,5 +14,8 @@
   "cannotEditNonAdmin": "不允许编辑非运营端用户",
   "emailUsedByOther": "邮箱已被其他用户使用",
   "phoneUsedByOther": "手机号已被其他用户使用",
+  "administratorBanDenied": "内置超级管理员不允许封禁",
+  "administratorLockDenied": "内置超级管理员不允许锁定",
+  "administratorEditDenied": "内置超级管理员不允许编辑",
   "subjectAdminBanDenied": "主体管理员[{0}]不可封禁或锁定"
 }

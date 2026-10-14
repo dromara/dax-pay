@@ -16,10 +16,12 @@ import cn.daxpay.open.platform.iam.auth.service.email.UserEmailService;
 import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformPasswordPolicyConfig;
 import cn.daxpay.open.platform.iam.code.UserStatusEnum;
 import cn.daxpay.open.platform.iam.dao.role.RoleManager;
+import cn.daxpay.open.platform.iam.dao.upms.UserRoleManager;
 import cn.daxpay.open.platform.iam.dao.user.UserExpandInfoManager;
 import cn.daxpay.open.platform.iam.dao.user.UserInfoManager;
 import cn.daxpay.open.platform.iam.dao.user.UserPasswordSecurityManager;
 import cn.daxpay.open.platform.iam.entity.role.Role;
+import cn.daxpay.open.platform.iam.entity.upms.UserRole;
 import cn.daxpay.open.platform.iam.entity.user.UserExpandInfo;
 import cn.daxpay.open.platform.iam.entity.user.UserInfo;
 import cn.daxpay.open.platform.iam.exception.user.UserInfoNotExistsException;
@@ -38,7 +40,9 @@ import cn.daxpay.open.payment.merchant.entity.info.MerchantInfo;
 import cn.daxpay.open.payment.merchant.entity.info.MerchantUser;
 import cn.daxpay.open.payment.merchant.param.info.MerchantUserParam;
 import cn.daxpay.open.payment.merchant.param.info.MerchantUserQuery;
+import cn.daxpay.open.payment.merchant.result.info.MerchantUserDetailResult;
 import cn.daxpay.open.payment.merchant.result.info.MerchantUserResult;
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.BCrypt;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -50,6 +54,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -71,6 +76,8 @@ public class MerchantUserAdminService {
     private final PasswordPolicyService passwordPolicyService;
     private final UserPasswordSecurityManager passwordSecurityManager;
     private final UserRoleService userRoleService;
+
+    private final UserRoleManager userRoleManager;
     private final UserQueryService userQueryService;
     private final UserAdminService userAdminService;
     private final IamSecurityConfigService iamSecurityConfigService;
@@ -105,6 +112,20 @@ public class MerchantUserAdminService {
             Map<Long, Boolean> adminMap = merchantUserManager.findAllByFields(MerchantUser::getUserId, userIds).stream()
                     .collect(Collectors.toMap(MerchantUser::getUserId, MerchantUser::isAdministrator, (a, b) -> a));
             page.getRecords().forEach(r -> r.setAdministrator(adminMap.getOrDefault(r.getId(), false)));
+            // 回填角色名称(单角色模型): 批量查用户-角色关联与角色, 供前端"身份"列展示
+            Map<Long, Long> userRoleIdMap = userRoleManager.findAllByFields(UserRole::getUserId, userIds).stream()
+                    .collect(Collectors.toMap(UserRole::getUserId, UserRole::getRoleId, (a, b) -> a));
+            if (!userRoleIdMap.isEmpty()) {
+                Map<Long, Role> roleMap = roleManager.findAllByIds(new HashSet<>(userRoleIdMap.values())).stream()
+                        .collect(Collectors.toMap(Role::getId, r -> r));
+                page.getRecords().forEach(r -> {
+                    Role role = roleMap.get(userRoleIdMap.get(r.getId()));
+                    if (role != null) {
+                        r.setRoleName(role.getI18nKey());
+                        r.setRoleCode(role.getCode());
+                    }
+                });
+            }
         }
         return MpUtil.toPageResult(page);
     }
@@ -115,6 +136,22 @@ public class MerchantUserAdminService {
         return userInfoManager.findById(id)
                 .map(UserInfo::toResult)
                 .orElseThrow(DataNotExistException::new);
+    }
+
+    /// 查询用户详情(含角色与登录/密码安全信息)
+    ///
+    /// 委托 iam 侧 [UserAdminService#findDetail] 联查 UserInfo + UserExpandInfo + UserPasswordSecurity,
+    /// 再补充单角色信息; 不直接暴露 iam 详情端点是为了把权限码挂在本域菜单下。
+    public MerchantUserDetailResult findDetail(Long userId) {
+        this.checkMerchantUser(userId);
+        MerchantUserDetailResult result = new MerchantUserDetailResult();
+        BeanUtil.copyProperties(userAdminService.findDetail(userId), result);
+        // 单角色模型: 回填角色名称与编码
+        RoleResult role = userRoleService.findRolesByUser(userId);
+        if (role != null) {
+            result.setRoleName(role.getI18nKey()).setRoleCode(role.getCode());
+        }
+        return result;
     }
 
     /// 添加商户用户

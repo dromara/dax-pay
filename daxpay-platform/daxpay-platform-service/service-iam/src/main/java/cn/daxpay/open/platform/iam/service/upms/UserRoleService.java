@@ -48,6 +48,12 @@ public class UserRoleService {
     @CacheEvict(cacheNames = "iam:user-perm-codes", key = "#userId")
     @Transactional(rollbackFor = Exception.class)
     public void saveAssign(Long userId, Long roleId, boolean ignoreScopes) {
+        // 内置超管权限不依赖角色, 拒绝挂脏数据
+        userInfoManager.findById(userId)
+                .filter(UserInfo::isAdministrator)
+                .ifPresent(user -> {
+                    throw new ValidationFailedException("error.iam.role.administratorRoleAssignDenied");
+                });
         // 主体管理员拒改角色
         subjectAdminGuardHooks.forEach(hook -> {
             String subject = hook.findSubjectAdmin(userId);
@@ -89,6 +95,10 @@ public class UserRoleService {
         if (userInfos.size() != userIds.size()) {
             // 权限: 用户数据有问题
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.dataError");
+        }
+        // 内置超管权限不依赖角色, 拒绝挂脏数据
+        if (userInfos.stream().anyMatch(UserInfo::isAdministrator)) {
+            throw new ValidationFailedException("error.iam.role.administratorRoleAssignDenied");
         }
         // 校验用户与角色的终端一致性
         for (UserInfo userInfo : userInfos) {

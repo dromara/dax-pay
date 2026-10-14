@@ -33,6 +33,12 @@ public class MerchantUserResult extends MchResult implements ToResult<MerchantUs
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private boolean administrator;
 
+    /// 角色展示名(单角色模型, 存 i18nKey, 前端  渲染; 分页批量回填)
+    private String roleName;
+
+    /// 角色编码(i18nKey 缺失时的展示回退)
+    private String roleCode;
+
     /// 账号状态
     /// @see UserStatusEnum
     private String status;

@@ -36,8 +36,18 @@ public class UserWholeInfoResult extends BaseResult {
     @SensitiveInfo(SensitiveInfo.SensitiveType.EMAIL)
     private String email;
 
+    @Schema(description = "手机号")
+    @SensitiveInfo(SensitiveInfo.SensitiveType.MOBILE_PHONE)
+    private String phone;
+
     @Schema(description = "是否管理员")
     private boolean administrator;
+
+    @Schema(description = "角色名称(单角色模式, 分页批量回填 i18nKey, 前端 $t 渲染; 内置超管无角色)")
+    private String roleName;
+
+    @Schema(description = "角色编码(i18nKey 缺翻译时的兜底展示)")
+    private String roleCode;
 
     /// 账号状态
     /// @see UserStatusEnum

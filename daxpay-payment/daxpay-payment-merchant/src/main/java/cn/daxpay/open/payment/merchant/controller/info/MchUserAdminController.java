@@ -16,6 +16,7 @@ import cn.daxpay.open.payment.merchant.param.info.MerchantUserResetPwdBatchParam
 import cn.daxpay.open.payment.merchant.param.info.MerchantUserResetPwdParam;
 import cn.daxpay.open.platform.iam.result.user.UserInfoResult;
 import cn.daxpay.open.platform.iam.result.user.UserPasswordResult;
+import cn.daxpay.open.payment.merchant.result.info.MerchantUserDetailResult;
 import cn.daxpay.open.payment.merchant.result.info.MerchantUserResult;
 import cn.daxpay.open.payment.merchant.service.user.MerchantUserAdminService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -54,6 +55,13 @@ public class MchUserAdminController {
     @GetMapping("/get")
     public Result<UserInfoResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(merchantUserAdminService.findById(id));
+    }
+
+    @PermCode(code = PermCodes.Action.VIEW)
+    @Operation(summary = "查询用户详情(含角色与登录/密码信息)")
+    @GetMapping("/get-detail")
+    public Result<MerchantUserDetailResult> findDetail(@NotNull(message = "主键不可为空") Long id) {
+        return Res.ok(merchantUserAdminService.findDetail(id));
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)

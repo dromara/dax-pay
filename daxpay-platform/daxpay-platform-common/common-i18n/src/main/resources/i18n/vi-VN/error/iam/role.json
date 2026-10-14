@@ -7,5 +7,6 @@
   "assignOutOfScope": "Phân công vai trò vượt quá phạm vi được chỉ định",
   "assignCrossClient": "Không thể chỉ định vai trò trên các thiết bị đầu cuối: ứng dụng khách người dùng [{0}], ứng dụng khách vai trò [{1}]",
   "notExist": "Không tìm thấy vai trò",
+  "administratorRoleAssignDenied": "Quản trị viên siêu cấp tích hợp sẵn không cần gán vai trò",
   "subjectAdminRoleFixed": "Vai trò của quản trị viên chủ thể [{0}] bị cố định và không thể thay đổi"
 }

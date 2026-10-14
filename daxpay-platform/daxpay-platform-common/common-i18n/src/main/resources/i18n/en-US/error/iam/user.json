@@ -14,5 +14,8 @@
   "cannotEditNonAdmin": "Cannot edit non-admin client users",
   "emailUsedByOther": "Email is already used by another user",
   "phoneUsedByOther": "Phone number is already used by another user",
+  "administratorBanDenied": "The built-in super admin cannot be banned",
+  "administratorLockDenied": "The built-in super admin cannot be locked",
+  "administratorEditDenied": "The built-in super admin cannot be edited",
   "subjectAdminBanDenied": "Subject administrator [{0}] cannot be banned or locked"
 }

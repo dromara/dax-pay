@@ -7,5 +7,6 @@
   "assignOutOfScope": "ロールの割り当てが割り当て可能な範囲を超えています",
   "assignCrossClient": "端末間でロールを割り当てることはできません: ユーザー クライアント [{0}]、ロール クライアント [{1}]",
   "notExist": "役割が見つかりません",
+  "administratorRoleAssignDenied": "内蔵スーパーユーザーにロールの割り当ては不要です",
   "subjectAdminRoleFixed": "主体管理者[{0}]のロールは固定のため変更できません"
 }

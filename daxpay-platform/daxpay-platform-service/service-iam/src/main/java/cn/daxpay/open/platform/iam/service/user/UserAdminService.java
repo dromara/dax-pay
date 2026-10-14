@@ -11,9 +11,13 @@ import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.platform.iam.code.UserStatusEnum;
 import cn.daxpay.open.platform.iam.convert.user.UserConvert;
+import cn.daxpay.open.platform.iam.dao.role.RoleManager;
+import cn.daxpay.open.platform.iam.dao.upms.UserRoleManager;
 import cn.daxpay.open.platform.iam.dao.user.UserExpandInfoManager;
 import cn.daxpay.open.platform.iam.dao.user.UserInfoManager;
 import cn.daxpay.open.platform.iam.dao.user.UserPasswordSecurityManager;
+import cn.daxpay.open.platform.iam.entity.role.Role;
+import cn.daxpay.open.platform.iam.entity.upms.UserRole;
 import cn.daxpay.open.platform.iam.entity.user.UserExpandInfo;
 import cn.daxpay.open.platform.iam.entity.user.UserInfo;
 import cn.daxpay.open.platform.iam.entity.user.UserPasswordSecurity;
@@ -41,8 +45,11 @@ import org.springframework.transaction.support.TransactionSynchronizationManager
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import cn.daxpay.open.platform.core.code.CommonCode;
 
 /// # 超级管理员操作类
@@ -77,6 +84,10 @@ public class UserAdminService {
     /// 主体管理员保护钩子(业务域 SPI, payment 侧提供实现)
     private final List<SubjectAdminGuardHook> subjectAdminGuardHooks;
 
+    private final UserRoleManager userRoleManager;
+
+    private final RoleManager roleManager;
+
     /// 分页查询（按终端过滤）
     public PageResult<UserWholeInfoResult> page(PageParam pageParam, UserInfoQuery query) {
 
@@ -108,6 +119,25 @@ public class UserAdminService {
                 // 按邮箱模糊查询
                 .like(StrUtil.isNotBlank(query.getEmail()), UserInfo::getEmail, query.getEmail());
         Page<UserWholeInfoResult> page = userInfoManager.selectJoinListPage(mpPage, UserWholeInfoResult.class, wrapper);
+        // 批量回填角色(单角色模式: user_role→role 两段批量查, 避免逐行 N+1; 内置超管无角色, 回填为空)
+        // roleName 存 i18nKey 由前端 $t 渲染, roleCode 兜底缺翻译场景
+        List<UserWholeInfoResult> records = page.getRecords();
+        if (!records.isEmpty()) {
+            List<Long> userIds = records.stream().map(UserWholeInfoResult::getId).toList();
+            Map<Long, Long> userRoleIdMap = userRoleManager.findAllByFields(UserRole::getUserId, userIds).stream()
+                    .collect(Collectors.toMap(UserRole::getUserId, UserRole::getRoleId, (a, b) -> a));
+            if (!userRoleIdMap.isEmpty()) {
+                Map<Long, Role> roleMap = roleManager.findAllByIds(new HashSet<>(userRoleIdMap.values())).stream()
+                        .collect(Collectors.toMap(Role::getId, r -> r));
+                records.forEach(r -> {
+                    Role role = roleMap.get(userRoleIdMap.get(r.getId()));
+                    if (role != null) {
+                        r.setRoleName(role.getI18nKey());
+                        r.setRoleCode(role.getCode());
+                    }
+                });
+            }
+        }
         return new PageResult<UserWholeInfoResult>()
                 .setRecords(page.getRecords())
                 .setCurrent(page.getCurrent())
@@ -140,30 +170,50 @@ public class UserAdminService {
 
     /// 封禁用户
     ///
-    /// 主体管理员(商户)不可封禁: 封禁会导致主体失管且其角色无法换绑他人, 统一在此拦截
+    /// 主体管理员(商户)不可封禁: 封禁会导致主体失管且其角色无法换绑他人, 统一在此拦截;
+    /// 内置超管不可封禁: 登录链对超管跳过状态检查, 封禁不产生实际拦截、只会造成"显示封禁却能登录"的矛盾态
     public void ban(Long userId) {
         this.checkNotSubjectAdmin(userId);
+        this.checkNotAdministrator(userId, "error.iam.user.administratorBanDenied");
         userInfoManager.setUpStatus(userId, UserStatusEnum.BAN.getCode());
     }
 
     /// 批量封禁用户
     public void banBatch(List<Long> userIds) {
-        userIds.forEach(this::checkNotSubjectAdmin);
+        userIds.forEach(userId -> {
+            this.checkNotSubjectAdmin(userId);
+            this.checkNotAdministrator(userId, "error.iam.user.administratorBanDenied");
+        });
         userInfoManager.setUpStatusBatch(userIds, UserStatusEnum.BAN.getCode());
     }
 
     /// 锁定用户
     ///
-    /// 与封禁同口径: 主体管理员不可锁定
+    /// 与封禁同口径: 主体管理员/内置超管不可锁定
     public void lock(Long userId) {
         this.checkNotSubjectAdmin(userId);
+        this.checkNotAdministrator(userId, "error.iam.user.administratorLockDenied");
         userInfoManager.setUpStatus(userId, UserStatusEnum.LOCK.getCode());
     }
 
     /// 批量锁定用户
     public void lockBatch(List<Long> userIds) {
-        userIds.forEach(this::checkNotSubjectAdmin);
+        userIds.forEach(userId -> {
+            this.checkNotSubjectAdmin(userId);
+            this.checkNotAdministrator(userId, "error.iam.user.administratorLockDenied");
+        });
         userInfoManager.setUpStatusBatch(userIds, UserStatusEnum.LOCK.getCode());
+    }
+
+    /// 校验目标用户不是内置超管, 是则拒绝
+    ///
+    /// 内置超管是装机种子账号, 仅保留重置密码一个运营操作(忘记密码的自救通道), 其余变更走 DB
+    private void checkNotAdministrator(Long userId, String errorKey) {
+        userInfoManager.findById(userId)
+                .filter(UserInfo::isAdministrator)
+                .ifPresent(user -> {
+                    throw new BizException(CommonCode.FAIL_CODE, errorKey);
+                });
     }
 
     /// 校验目标用户不是主体管理员, 是则拒绝(商户管理员固定不可封禁/锁定)
@@ -308,6 +358,11 @@ public class UserAdminService {
         if (!ClientEnum.ADMIN.getCode().equals(userInfo.getClientCode())) {
             // 权限: 不能编辑非运营端用户
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.cannotEditNonAdmin");
+        }
+        // 禁止编辑内置超管(装机种子账号, 名称/账号变更走 DB; 重置密码入口保留)
+        if (userInfo.isAdministrator()) {
+            // 权限: 内置超管不允许编辑
+            throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.administratorEditDenied");
         }
         // 禁止修改终端归属
         userInfoParam.setClientCode(userInfo.getClientCode());

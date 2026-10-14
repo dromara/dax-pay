@@ -7,5 +7,6 @@
   "assignOutOfScope": "Penetapan peran melebihi cakupan yang dapat ditetapkan",
   "assignCrossClient": "Tidak dapat menetapkan peran di seluruh terminal: klien pengguna [{0}], klien peran [{1}]",
   "notExist": "Peran tidak ditemukan",
+  "administratorRoleAssignDenied": "Admin super bawaan tidak memerlukan penetapan peran",
   "subjectAdminRoleFixed": "Peran admin subjek [{0}] bersifat tetap dan tidak dapat diubah"
 }

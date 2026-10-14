@@ -14,5 +14,8 @@
   "cannotEditNonAdmin": "管理者以外のクライアント ユーザーは編集できません",
   "emailUsedByOther": "電子メールはすでに別のユーザーによって使用されています",
   "phoneUsedByOther": "電話番号はすでに別のユーザーによって使用されています",
+  "administratorBanDenied": "内蔵スーパーユーザーは凍結できません",
+  "administratorLockDenied": "内蔵スーパーユーザーはロックできません",
+  "administratorEditDenied": "内蔵スーパーユーザーは編集できません",
   "subjectAdminBanDenied": "主体管理者[{0}]は禁止・ロックできません"
 }

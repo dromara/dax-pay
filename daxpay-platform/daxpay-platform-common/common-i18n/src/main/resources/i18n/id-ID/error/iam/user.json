@@ -14,5 +14,8 @@
   "cannotEditNonAdmin": "Tidak dapat mengedit pengguna klien non-admin",
   "emailUsedByOther": "Email sudah digunakan oleh pengguna lain",
   "phoneUsedByOther": "Nomor telepon sudah digunakan oleh pengguna lain",
+  "administratorBanDenied": "Admin super bawaan tidak dapat diblokir",
+  "administratorLockDenied": "Admin super bawaan tidak dapat dikunci",
+  "administratorEditDenied": "Admin super bawaan tidak dapat diedit",
   "subjectAdminBanDenied": "Admin subjek [{0}] tidak dapat diblokir atau dikunci"
 }

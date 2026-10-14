@@ -14,5 +14,8 @@
   "cannotEditNonAdmin": "Tidak boleh mengedit pengguna pelanggan bukan pentadbir",
   "emailUsedByOther": "E-mel sudah digunakan oleh pengguna lain",
   "phoneUsedByOther": "Nombor telefon sudah digunakan oleh pengguna lain",
+  "administratorBanDenied": "Pentadbir super terbina dalam tidak boleh disekat",
+  "administratorLockDenied": "Pentadbir super terbina dalam tidak boleh dikunci",
+  "administratorEditDenied": "Pentadbir super terbina dalam tidak boleh diedit",
   "subjectAdminBanDenied": "Pentadbir subjek [{0}] tidak boleh disekat atau dikunci"
 }

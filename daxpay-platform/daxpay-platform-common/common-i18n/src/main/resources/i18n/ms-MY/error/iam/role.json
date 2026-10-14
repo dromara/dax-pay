@@ -7,5 +7,6 @@
   "assignOutOfScope": "Tugasan peranan melebihi skop yang boleh diberikan",
   "assignCrossClient": "Tidak boleh menetapkan peranan merentas terminal: klien pengguna [{0}], klien peranan [{1}]",
   "notExist": "Peranan tidak ditemui",
+  "administratorRoleAssignDenied": "Pentadbir super terbina dalam tidak memerlukan tugasan peranan",
   "subjectAdminRoleFixed": "Peranan pentadbir subjek [{0}] adalah tetap dan tidak boleh diubah"
 }
