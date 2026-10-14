@@ -416,109 +416,6 @@ COMMENT ON COLUMN public.alipay_direct_app.app_type IS '应用类型';
 
 
 --
--- Name: alipay_direct_app_auth_config; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.alipay_direct_app_auth_config (
-    id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
-    channel_mch_no character varying(64) NOT NULL,
-    alipay_direct_app_id bigint,
-    user_id_type character varying(32),
-    creator bigint,
-    create_time timestamp(6) with time zone,
-    last_modifier bigint,
-    last_modified_time timestamp(6) with time zone,
-    version integer DEFAULT 0 NOT NULL,
-    deleted boolean DEFAULT false NOT NULL
-);
-
-
---
--- Name: TABLE alipay_direct_app_auth_config; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.alipay_direct_app_auth_config IS '支付宝直连商户应用授权配置';
-
-
---
--- Name: COLUMN alipay_direct_app_auth_config.id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.alipay_direct_app_auth_config.id IS '主键';
-
-
---
--- Name: COLUMN alipay_direct_app_auth_config.mch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.alipay_direct_app_auth_config.mch_no IS '商户号';
-
-
---
--- Name: COLUMN alipay_direct_app_auth_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.alipay_direct_app_auth_config.channel_mch_no IS '通道商户号';
-
-
---
--- Name: COLUMN alipay_direct_app_auth_config.alipay_direct_app_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.alipay_direct_app_auth_config.alipay_direct_app_id IS '关联应用 ID';
-
-
---
--- Name: COLUMN alipay_direct_app_auth_config.user_id_type; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.alipay_direct_app_auth_config.user_id_type IS '用户标识类型';
-
-
---
--- Name: COLUMN alipay_direct_app_auth_config.creator; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.alipay_direct_app_auth_config.creator IS '创建人';
-
-
---
--- Name: COLUMN alipay_direct_app_auth_config.create_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.alipay_direct_app_auth_config.create_time IS '创建时间';
-
-
---
--- Name: COLUMN alipay_direct_app_auth_config.last_modifier; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.alipay_direct_app_auth_config.last_modifier IS '最后修改人';
-
-
---
--- Name: COLUMN alipay_direct_app_auth_config.last_modified_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.alipay_direct_app_auth_config.last_modified_time IS '最后修改时间';
-
-
---
--- Name: COLUMN alipay_direct_app_auth_config.version; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.alipay_direct_app_auth_config.version IS '乐观锁版本号';
-
-
---
--- Name: COLUMN alipay_direct_app_auth_config.deleted; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.alipay_direct_app_auth_config.deleted IS '逻辑删除标志';
-
-
---
 -- Name: alipay_direct_app_capability; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1162,93 +1059,6 @@ COMMENT ON COLUMN public.alipay_isv_app.version IS '乐观锁版本号';
 --
 
 COMMENT ON COLUMN public.alipay_isv_app.deleted IS '逻辑删除标志';
-
-
---
--- Name: alipay_isv_app_auth_config; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.alipay_isv_app_auth_config (
-    id bigint NOT NULL,
-    alipay_isv_app_id bigint,
-    user_id_type character varying(32),
-    creator bigint,
-    create_time timestamp(6) with time zone,
-    last_modifier bigint,
-    last_modified_time timestamp(6) with time zone,
-    version integer DEFAULT 0 NOT NULL,
-    deleted boolean DEFAULT false NOT NULL
-);
-
-
---
--- Name: TABLE alipay_isv_app_auth_config; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.alipay_isv_app_auth_config IS '支付宝服务商应用授权配置';
-
-
---
--- Name: COLUMN alipay_isv_app_auth_config.id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.alipay_isv_app_auth_config.id IS '主键';
-
-
---
--- Name: COLUMN alipay_isv_app_auth_config.alipay_isv_app_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.alipay_isv_app_auth_config.alipay_isv_app_id IS '支付宝服务商应用 ID';
-
-
---
--- Name: COLUMN alipay_isv_app_auth_config.user_id_type; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.alipay_isv_app_auth_config.user_id_type IS '用户标识类型';
-
-
---
--- Name: COLUMN alipay_isv_app_auth_config.creator; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.alipay_isv_app_auth_config.creator IS '创建人';
-
-
---
--- Name: COLUMN alipay_isv_app_auth_config.create_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.alipay_isv_app_auth_config.create_time IS '创建时间';
-
-
---
--- Name: COLUMN alipay_isv_app_auth_config.last_modifier; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.alipay_isv_app_auth_config.last_modifier IS '最后修改人';
-
-
---
--- Name: COLUMN alipay_isv_app_auth_config.last_modified_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.alipay_isv_app_auth_config.last_modified_time IS '最后修改时间';
-
-
---
--- Name: COLUMN alipay_isv_app_auth_config.version; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.alipay_isv_app_auth_config.version IS '乐观锁版本号';
-
-
---
--- Name: COLUMN alipay_isv_app_auth_config.deleted; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.alipay_isv_app_auth_config.deleted IS '逻辑删除标志';
 
 
 --
@@ -1976,6 +1786,101 @@ COMMENT ON COLUMN public.base_user_protocol.version IS '乐观锁版本号';
 --
 
 COMMENT ON COLUMN public.base_user_protocol.deleted IS '逻辑删除标志';
+
+
+--
+-- Name: base_user_protocol_item; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.base_user_protocol_item (
+    id bigint NOT NULL,
+    protocol_id bigint NOT NULL,
+    sort_no double precision,
+    content text NOT NULL,
+    creator bigint,
+    create_time timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    last_modifier bigint,
+    last_modified_time timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    version integer DEFAULT 0 NOT NULL,
+    deleted boolean DEFAULT false NOT NULL
+);
+
+
+--
+-- Name: TABLE base_user_protocol_item; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.base_user_protocol_item IS '用户协议条款项';
+
+
+--
+-- Name: COLUMN base_user_protocol_item.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.base_user_protocol_item.id IS '主键';
+
+
+--
+-- Name: COLUMN base_user_protocol_item.protocol_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.base_user_protocol_item.protocol_id IS '协议ID';
+
+
+--
+-- Name: COLUMN base_user_protocol_item.sort_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.base_user_protocol_item.sort_no IS '排序号';
+
+
+--
+-- Name: COLUMN base_user_protocol_item.content; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.base_user_protocol_item.content IS '协议内容';
+
+
+--
+-- Name: COLUMN base_user_protocol_item.creator; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.base_user_protocol_item.creator IS '创建者ID';
+
+
+--
+-- Name: COLUMN base_user_protocol_item.create_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.base_user_protocol_item.create_time IS '创建时间';
+
+
+--
+-- Name: COLUMN base_user_protocol_item.last_modifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.base_user_protocol_item.last_modifier IS '最后修改ID';
+
+
+--
+-- Name: COLUMN base_user_protocol_item.last_modified_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.base_user_protocol_item.last_modified_time IS '最后修改时间';
+
+
+--
+-- Name: COLUMN base_user_protocol_item.version; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.base_user_protocol_item.version IS '版本号, 使用乐观锁';
+
+
+--
+-- Name: COLUMN base_user_protocol_item.deleted; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.base_user_protocol_item.deleted IS '逻辑删除标志';
 
 
 --
@@ -19344,6 +19249,14 @@ ALTER TABLE ONLY public.base_user_protocol
 
 
 --
+-- Name: base_user_protocol_item base_user_protocol_item_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.base_user_protocol_item
+    ADD CONSTRAINT base_user_protocol_item_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: base_user_protocol_version base_user_protocol_version_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -19840,14 +19753,6 @@ ALTER TABLE ONLY public.alipay_direct_app
 
 
 --
--- Name: alipay_direct_app_auth_config pk_alipay_direct_app_auth_config; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.alipay_direct_app_auth_config
-    ADD CONSTRAINT pk_alipay_direct_app_auth_config PRIMARY KEY (id);
-
-
---
 -- Name: alipay_direct_app_key_config pk_alipay_direct_app_key_config; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -19877,14 +19782,6 @@ ALTER TABLE ONLY public.alipay_isv_alloc_receiver
 
 ALTER TABLE ONLY public.alipay_isv_app
     ADD CONSTRAINT pk_alipay_isv_app PRIMARY KEY (id);
-
-
---
--- Name: alipay_isv_app_auth_config pk_alipay_isv_app_auth_config; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.alipay_isv_app_auth_config
-    ADD CONSTRAINT pk_alipay_isv_app_auth_config PRIMARY KEY (id);
 
 
 --
@@ -21857,6 +21754,20 @@ CREATE INDEX idx_system_sensitive_word_status ON public.system_sensitive_word US
 --
 
 COMMENT ON INDEX public.idx_system_sensitive_word_status IS '状态筛选（启用/停用）';
+
+
+--
+-- Name: idx_user_protocol_item_protocol; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_user_protocol_item_protocol ON public.base_user_protocol_item USING btree (protocol_id);
+
+
+--
+-- Name: INDEX idx_user_protocol_item_protocol; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_user_protocol_item_protocol IS '按协议 ID 查询条款项列表';
 
 
 --
