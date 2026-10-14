@@ -34,6 +34,9 @@ public class SocialLoginScanStore {
     /// 等待扫码授权
     public static final String STATUS_WAITING = "waiting";
 
+    /// 已扫码(手机端打开 H5 发起页, 尚未确认授权), PC 端凭此展示"扫码成功待操作"中间态
+    public static final String STATUS_SCANNED = "scanned";
+
     /// 授权完成且账号已绑定(可签发登录态)
     public static final String STATUS_SUCCESS = "success";
 
@@ -84,6 +87,13 @@ public class SocialLoginScanStore {
         }
         String json = stringRedisTemplate.opsForValue().getAndDelete(TICKET_PREFIX + ticket);
         return Objects.isNull(json) ? null : JSONUtil.toBean(json, LoginScanContext.class);
+    }
+
+    /// 标记已扫码(手机端打开 H5 发起页, 仅 waiting 状态迁入, 终态不回退;
+    /// TTL 重置 5 分钟, 用户已扫码后不应在确认操作中途过期)
+    public void markScanned(String ticket, LoginScanContext context) {
+        context.setStatus(STATUS_SCANNED);
+        stringRedisTemplate.opsForValue().set(TICKET_PREFIX + ticket, JSONUtil.toJsonStr(context), EXPIRE);
     }
 
     /// 标记未绑定(不自动注册新账号, 手机端引导回 PC 用账号密码登录后在个人中心绑定)

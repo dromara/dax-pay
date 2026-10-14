@@ -6,8 +6,8 @@ import cn.daxpay.open.platform.capability.auth.util.SecurityUtil;
 import cn.daxpay.open.platform.core.annotation.IgnoreAuth;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.result.Result;
-import cn.daxpay.open.platform.iam.param.social.SocialScanCancelParam;
 import cn.daxpay.open.platform.iam.param.social.SocialScanExchangeParam;
+import cn.daxpay.open.platform.iam.param.social.SocialScanTicketParam;
 import cn.daxpay.open.platform.iam.result.social.SocialBindResult;
 import cn.daxpay.open.platform.iam.result.social.SocialBindScanConfirmResult;
 import cn.daxpay.open.platform.iam.result.social.SocialBindScanQrResult;
@@ -169,7 +169,7 @@ public class SocialEndpoint {
     /// 票据不存在或已不可取消时空操作, 不暴露票据状态.
     @Operation(summary = "取消扫码绑定")
     @PostMapping("/bind-scan/cancel")
-    public Result<Void> bindScanCancel(@RequestBody SocialScanCancelParam param) {
+    public Result<Void> bindScanCancel(@RequestBody SocialScanTicketParam param) {
         socialBindScanService.cancelBindScan(param.getTicket());
         return Res.ok();
     }
@@ -215,8 +215,18 @@ public class SocialEndpoint {
     /// 票据不存在或已不可取消时空操作, 不暴露票据状态.
     @Operation(summary = "取消扫码登录")
     @PostMapping("/login-scan/cancel")
-    public Result<Void> loginScanCancel(@RequestBody SocialScanCancelParam param) {
+    public Result<Void> loginScanCancel(@RequestBody SocialScanTicketParam param) {
         socialLoginScanService.cancelLoginScan(param.getTicket());
+        return Res.ok();
+    }
+
+    /// 标记扫码登录已扫码(公开: 手机端 H5 发起页打开时上报)
+    /// PC 端轮询凭 scanned 状态展示"扫码成功待操作"中间态; 参数以 JSON body 提交
+    /// (同 exchange-login-scan); 票据不存在或已进入终态时空操作, 不暴露票据状态.
+    @Operation(summary = "标记扫码登录已扫码")
+    @PostMapping("/login-scan/scanned")
+    public Result<Void> loginScanScanned(@RequestBody SocialScanTicketParam param) {
+        socialLoginScanService.markLoginScanScanned(param.getTicket());
         return Res.ok();
     }
 

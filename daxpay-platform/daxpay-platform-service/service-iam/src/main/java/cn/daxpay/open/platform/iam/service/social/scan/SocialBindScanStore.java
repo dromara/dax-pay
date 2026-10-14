@@ -34,6 +34,9 @@ public class SocialBindScanStore {
     /// 等待扫码授权
     public static final String STATUS_WAITING = "waiting";
 
+    /// 已扫码(手机端打开 H5 发起页, 尚未确认授权), PC 端凭此展示"扫码成功待操作"中间态
+    public static final String STATUS_SCANNED = "scanned";
+
     /// 授权并绑定完成
     public static final String STATUS_SUCCESS = "success";
 
@@ -73,6 +76,13 @@ public class SocialBindScanStore {
         }
         String json = stringRedisTemplate.opsForValue().get(TICKET_PREFIX + ticket);
         return Objects.isNull(json) ? null : JSONUtil.toBean(json, BindScanContext.class);
+    }
+
+    /// 标记已扫码(手机端打开 H5 发起页, 仅 waiting 状态迁入, 终态不回退;
+    /// TTL 重置 5 分钟, 用户已扫码后不应在确认操作中途过期)
+    public void markScanned(String ticket, BindScanContext context) {
+        context.setStatus(STATUS_SCANNED);
+        stringRedisTemplate.opsForValue().set(TICKET_PREFIX + ticket, JSONUtil.toJsonStr(context), EXPIRE);
     }
 
     /// 标记绑定成功(TTL 重置 5 分钟, 保留 PC 轮询读取窗口)

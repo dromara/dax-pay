@@ -138,8 +138,13 @@ public class SocialBindScanService {
     ///
     /// 返回脱敏的目标账号名, 供扫码者核对是否本人的电脑端账号——这是
     /// 「微信身份抢占」钓鱼(诱导扫码把微信绑到他人账号)的唯一拦截点.
+    /// 手机端打开确认页即视为已扫码, 顺带把票据标记为 scanned(仅 waiting 迁入,
+    /// PC 端轮询凭此展示"扫码成功待操作"中间态).
     public SocialBindScanConfirmResult queryBindScanConfirm(String ticket) {
         SocialBindScanStore.BindScanContext context = this.requireScanContext(ticket);
+        if (Objects.equals(context.getStatus(), SocialBindScanStore.STATUS_WAITING)) {
+            socialBindScanStore.markScanned(ticket, context);
+        }
         UserInfoResult userInfo = userQueryService.findById(context.getUserId());
         String account = Objects.isNull(userInfo) ? null : userInfo.getAccount();
         return new SocialBindScanConfirmResult().setMaskedAccount(this.maskAccount(account));
@@ -148,11 +153,14 @@ public class SocialBindScanService {
     /// 取消扫码绑定(手机端确认页取消按钮调用, 匿名)
     ///
     /// 手机端确认页是扫码绑定的按次用户同意环节, 取消后拒绝为票据对应的
-    /// PC 端账号落绑定. 仅 waiting 状态可取消(授权已完成或票据不存在时为
-    /// 空操作, 不暴露票据状态).
+    /// PC 端账号落绑定. waiting/scanned 均可取消(确认页在扫码后展示, 取消时
+    /// 票据多处于 scanned 中间态; 授权已完成或票据不存在时为空操作, 不暴露票据状态).
     public void cancelBindScan(String ticket) {
         SocialBindScanStore.BindScanContext context = socialBindScanStore.get(ticket);
-        if (Objects.isNull(context) || !Objects.equals(context.getStatus(), SocialBindScanStore.STATUS_WAITING)) {
+        boolean cancellable = Objects.nonNull(context)
+            && (Objects.equals(context.getStatus(), SocialBindScanStore.STATUS_WAITING)
+                || Objects.equals(context.getStatus(), SocialBindScanStore.STATUS_SCANNED));
+        if (!cancellable) {
             return;
         }
         socialBindScanStore.markCancelled(ticket, context);

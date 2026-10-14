@@ -288,6 +288,47 @@ class SocialLoginScanServiceTest {
     }
 
     @Test
+    @DisplayName("扫码登录状态: scanned 中间态透出(不被归一为 waiting, PC 端展示扫码成功待操作)")
+    void loginScanStatusPassthroughScanned() {
+        when(socialLoginScanStore.get("ticket-1")).thenReturn(loginScanContext(null, SocialLoginScanStore.STATUS_SCANNED));
+
+        assertEquals(SocialLoginScanStatusResult.SCANNED,
+                loginScanService.queryLoginScanStatus("ticket-1", null, null).getStatus());
+    }
+
+    @Test
+    @DisplayName("标记扫码登录已扫码: waiting 状态迁入 scanned")
+    void loginScanScannedMarksWaiting() {
+        when(socialLoginScanStore.get("ticket-1")).thenReturn(loginScanContext(null, SocialLoginScanStore.STATUS_WAITING));
+
+        loginScanService.markLoginScanScanned("ticket-1");
+
+        verify(socialLoginScanStore).markScanned(eq("ticket-1"), any(SocialLoginScanStore.LoginScanContext.class));
+    }
+
+    @Test
+    @DisplayName("标记扫码登录已扫码: 票据不存在或已进入终态时空操作(终态不回退)")
+    void loginScanScannedNoOpOnMissingOrTerminal() {
+        loginScanService.markLoginScanScanned("missing-ticket");
+        loginScanService.markLoginScanScanned(null);
+        when(socialLoginScanStore.get("ticket-1")).thenReturn(loginScanContext(1L, SocialLoginScanStore.STATUS_SUCCESS));
+
+        loginScanService.markLoginScanScanned("ticket-1");
+
+        verify(socialLoginScanStore, never()).markScanned(anyString(), any(SocialLoginScanStore.LoginScanContext.class));
+    }
+
+    @Test
+    @DisplayName("取消扫码登录: scanned 中间态同样可取消(确认页在扫码后展示)")
+    void loginScanCancelFromScanned() {
+        when(socialLoginScanStore.get("ticket-1")).thenReturn(loginScanContext(null, SocialLoginScanStore.STATUS_SCANNED));
+
+        loginScanService.cancelLoginScan("ticket-1");
+
+        verify(socialLoginScanStore).markCancelled(eq("ticket-1"), any(SocialLoginScanStore.LoginScanContext.class));
+    }
+
+    @Test
     @DisplayName("扫码登录状态: success 一次性消费票据并在轮询上下文签发登录令牌")
     void loginScanStatusIssuesTokenOnce() {
         SocialLoginScanStore.LoginScanContext context = loginScanContext(1L, SocialLoginScanStore.STATUS_SUCCESS);

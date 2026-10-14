@@ -118,11 +118,23 @@ public class SocialLoginScanService {
         }
     }
 
+    /// 标记扫码登录已扫码(手机端 H5 发起页打开时上报, 匿名)
+    ///
+    /// 手机端打开发起页即视为已扫码, PC 轮询凭 scanned 状态展示"扫码成功待操作"
+    /// 中间态. 仅 waiting 状态迁入(终态不回退, 如 H5 页面刷新重报不覆盖已完成状态);
+    /// 票据不存在或已进入终态时空操作, 不暴露票据状态.
+    public void markLoginScanScanned(String ticket) {
+        SocialLoginScanStore.LoginScanContext context = socialLoginScanStore.get(ticket);
+        if (!Objects.isNull(context) && Objects.equals(context.getStatus(), SocialLoginScanStore.STATUS_WAITING)) {
+            socialLoginScanStore.markScanned(ticket, context);
+        }
+    }
+
     /// 查询扫码登录结果(PC 登录页匿名轮询)
     ///
-    /// 票据不存在或已过期统一返回 not_exist; success 状态一次性消费(读取即删除),
-    /// 在 PC 轮询请求的上下文签发登录令牌——双因素等登录拦截以业务异常透出(40101+
-    /// preAuthToken, 与 exchange-login 同协议), 由前端进入二次验证面板.
+    /// 票据不存在或已过期统一返回 not_exist; scanned 中间态透出(提示扫码成功待操作);
+    /// success 状态一次性消费(读取即删除), 在 PC 轮询请求的上下文签发登录令牌——双因素等
+    /// 登录拦截以业务异常透出(40101+preAuthToken, 与 exchange-login 同协议), 由前端进入二次验证面板.
     public SocialLoginScanStatusResult queryLoginScanStatus(String ticket,
                                                             HttpServletRequest request, HttpServletResponse response) {
         SocialLoginScanStore.LoginScanContext context = socialLoginScanStore.get(ticket);
@@ -134,6 +146,9 @@ public class SocialLoginScanService {
         }
         if (Objects.equals(context.getStatus(), SocialLoginScanStore.STATUS_CANCELLED)) {
             return new SocialLoginScanStatusResult().setStatus(SocialLoginScanStatusResult.CANCELLED);
+        }
+        if (Objects.equals(context.getStatus(), SocialLoginScanStore.STATUS_SCANNED)) {
+            return new SocialLoginScanStatusResult().setStatus(SocialLoginScanStatusResult.SCANNED);
         }
         if (!Objects.equals(context.getStatus(), SocialLoginScanStore.STATUS_SUCCESS)) {
             return new SocialLoginScanStatusResult().setStatus(SocialLoginScanStore.STATUS_WAITING);
@@ -151,10 +166,14 @@ public class SocialLoginScanService {
     ///
     /// 微信授权页仅首次授权时弹出, 不构成按次确认; 手机端确认页是跨设备扫码登录
     /// 唯一的按次用户同意环节, 取消后拒绝为 PC 端签发登录态.
-    /// 仅 waiting 状态可取消(授权已完成或票据不存在时为空操作, 不暴露票据状态).
+    /// waiting/scanned 均可取消(确认页在扫码后展示, 取消时票据多处于 scanned 中间态;
+    /// 授权已完成或票据不存在时为空操作, 不暴露票据状态).
     public void cancelLoginScan(String ticket) {
         SocialLoginScanStore.LoginScanContext context = socialLoginScanStore.get(ticket);
-        if (Objects.isNull(context) || !Objects.equals(context.getStatus(), SocialLoginScanStore.STATUS_WAITING)) {
+        boolean cancellable = Objects.nonNull(context)
+            && (Objects.equals(context.getStatus(), SocialLoginScanStore.STATUS_WAITING)
+                || Objects.equals(context.getStatus(), SocialLoginScanStore.STATUS_SCANNED));
+        if (!cancellable) {
             return;
         }
         socialLoginScanStore.markCancelled(ticket, context);

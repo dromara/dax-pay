@@ -287,6 +287,28 @@ class SocialBindScanServiceTest {
     }
 
     @Test
+    @DisplayName("扫码绑定确认信息: 打开确认页顺带把 waiting 标记为 scanned(已扫码中间态)")
+    void bindScanConfirmInfoMarksScanned() {
+        when(socialBindScanStore.get("ticket-1")).thenReturn(scanContext(1L));
+        when(userQueryService.findById(1L)).thenReturn(adminUserInfo(1L).setAccount("13812345678"));
+
+        bindScanService.queryBindScanConfirm("ticket-1");
+
+        verify(socialBindScanStore).markScanned(eq("ticket-1"), any(SocialBindScanStore.BindScanContext.class));
+    }
+
+    @Test
+    @DisplayName("扫码绑定确认信息: 非 waiting 状态不重复标记(终态不回退为 scanned)")
+    void bindScanConfirmInfoNoRescanOnNonWaiting() {
+        when(socialBindScanStore.get("ticket-1")).thenReturn(scanContext(1L).setStatus(SocialBindScanStore.STATUS_SUCCESS));
+        when(userQueryService.findById(1L)).thenReturn(adminUserInfo(1L).setAccount("13812345678"));
+
+        bindScanService.queryBindScanConfirm("ticket-1");
+
+        verify(socialBindScanStore, never()).markScanned(anyString(), any(SocialBindScanStore.BindScanContext.class));
+    }
+
+    @Test
     @DisplayName("扫码绑定确认信息: 票据无效报错")
     void bindScanConfirmInfoRejectsInvalidTicket() {
         when(socialBindScanStore.get("bad-ticket")).thenReturn(null);
@@ -300,6 +322,16 @@ class SocialBindScanServiceTest {
     @DisplayName("取消扫码绑定: waiting 状态标记 cancelled")
     void bindScanCancelMarksCancelled() {
         when(socialBindScanStore.get("ticket-1")).thenReturn(scanContext(1L));
+
+        bindScanService.cancelBindScan("ticket-1");
+
+        verify(socialBindScanStore).markCancelled(eq("ticket-1"), any(SocialBindScanStore.BindScanContext.class));
+    }
+
+    @Test
+    @DisplayName("取消扫码绑定: scanned 中间态同样可取消(确认页在扫码后展示)")
+    void bindScanCancelFromScanned() {
+        when(socialBindScanStore.get("ticket-1")).thenReturn(scanContext(1L).setStatus(SocialBindScanStore.STATUS_SCANNED));
 
         bindScanService.cancelBindScan("ticket-1");
 
@@ -329,6 +361,20 @@ class SocialBindScanServiceTest {
             SocialBindScanStatusResult result = bindScanService.queryBindScanStatus("ticket-1");
 
             assertEquals(SocialBindScanStatusResult.CANCELLED, result.getStatus());
+        }
+    }
+
+    @Test
+    @DisplayName("扫码绑定状态: scanned 中间态透出(PC 端展示扫码成功待操作)")
+    void bindScanStatusPassthroughScanned() {
+        SocialBindScanStore.BindScanContext context = scanContext(1L).setStatus(SocialBindScanStore.STATUS_SCANNED);
+        when(socialBindScanStore.get("ticket-1")).thenReturn(context);
+        try (MockedStatic<SecurityUtil> mocked = mockStatic(SecurityUtil.class)) {
+            mocked.when(SecurityUtil::getUserId).thenReturn(1L);
+
+            SocialBindScanStatusResult result = bindScanService.queryBindScanStatus("ticket-1");
+
+            assertEquals(SocialBindScanStatusResult.SCANNED, result.getStatus());
         }
     }
 }
