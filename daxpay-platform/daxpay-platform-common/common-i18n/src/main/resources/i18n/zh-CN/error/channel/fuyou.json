@@ -4,5 +4,6 @@
   "unsupportedPayMethod": "富友不支持的支付方式: {0}",
   "merchantDuplicate": "该商户下已存在此富友商户号",
   "isvKeyNotConfigured": "富友服务商密钥未配置",
+  "directKeyNotConfigured": "富友直连商户密钥未配置",
   "mchNoNotConfigured": "富友商户号未配置"
 }

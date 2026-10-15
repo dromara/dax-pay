@@ -20,6 +20,7 @@
   "hkrt_pay": "HKRT",
   "vbill_pay": "Vbill Pay",
   "fuyou_pay": "Fuyou Pay",
+  "fuyou_direct": "Fuyou Pay (Merchant Direct)",
   "sheng_pay": "ShengPay (Merchant)",
   "sheng_isv": "ShengPay (ISV)",
   "ysep_pay": "YSEP trả tiền",

@@ -3520,6 +3520,133 @@ ALTER SEQUENCE public.easy_pay_key_config_id_seq OWNED BY public.easy_pay_key_co
 
 
 --
+-- Name: fuyou_direct_key_config; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.fuyou_direct_key_config (
+    id bigint NOT NULL,
+    mch_no character varying(32),
+    channel_mch_no character varying(64),
+    product character varying(32),
+    sandbox boolean DEFAULT false,
+    mchnt_cd character varying(64),
+    mchnt_key text,
+    term_no character varying(64),
+    creator bigint,
+    create_time timestamp(6) with time zone,
+    last_modifier bigint,
+    last_modified_time timestamp(6) with time zone,
+    version integer DEFAULT 0 NOT NULL,
+    deleted boolean DEFAULT false NOT NULL
+);
+
+
+--
+-- Name: TABLE fuyou_direct_key_config; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.fuyou_direct_key_config IS '富友直连商户密钥配置';
+
+
+--
+-- Name: COLUMN fuyou_direct_key_config.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.fuyou_direct_key_config.id IS '主键';
+
+
+--
+-- Name: COLUMN fuyou_direct_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.fuyou_direct_key_config.mch_no IS '商户号';
+
+
+--
+-- Name: COLUMN fuyou_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.fuyou_direct_key_config.channel_mch_no IS '通道商户号(FUYOU+雪花)';
+
+
+--
+-- Name: COLUMN fuyou_direct_key_config.product; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.fuyou_direct_key_config.product IS '所属支付产品(对应 ProductEnum.code)';
+
+
+--
+-- Name: COLUMN fuyou_direct_key_config.sandbox; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.fuyou_direct_key_config.sandbox IS '是否沙箱环境商户';
+
+
+--
+-- Name: COLUMN fuyou_direct_key_config.mchnt_cd; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.fuyou_direct_key_config.mchnt_cd IS '富友商户号(mchnt_cd)';
+
+
+--
+-- Name: COLUMN fuyou_direct_key_config.mchnt_key; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.fuyou_direct_key_config.mchnt_key IS '商户密钥(mchnt_key, MD5 签名用, 加密存储)';
+
+
+--
+-- Name: COLUMN fuyou_direct_key_config.term_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.fuyou_direct_key_config.term_no IS '终端号(term_id)';
+
+
+--
+-- Name: COLUMN fuyou_direct_key_config.creator; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.fuyou_direct_key_config.creator IS '创建者ID';
+
+
+--
+-- Name: COLUMN fuyou_direct_key_config.create_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.fuyou_direct_key_config.create_time IS '创建时间';
+
+
+--
+-- Name: COLUMN fuyou_direct_key_config.last_modifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.fuyou_direct_key_config.last_modifier IS '最后修改者ID';
+
+
+--
+-- Name: COLUMN fuyou_direct_key_config.last_modified_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.fuyou_direct_key_config.last_modified_time IS '最后修改时间';
+
+
+--
+-- Name: COLUMN fuyou_direct_key_config.version; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.fuyou_direct_key_config.version IS '版本号(乐观锁)';
+
+
+--
+-- Name: COLUMN fuyou_direct_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.fuyou_direct_key_config.deleted IS '删除标志';
+
+
+--
 -- Name: fuyou_isv_channel_merchant; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -22279,6 +22406,34 @@ CREATE UNIQUE INDEX uk_easy_pay_order_app_out ON public.pay_easy_pay_order USING
 --
 
 COMMENT ON INDEX public.uk_easy_pay_order_app_out IS '同一应用下商户订单号唯一';
+
+
+--
+-- Name: uk_fuyou_direct_key_channel_mch; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_fuyou_direct_key_channel_mch ON public.fuyou_direct_key_config USING btree (channel_mch_no) WHERE (deleted = false);
+
+
+--
+-- Name: INDEX uk_fuyou_direct_key_channel_mch; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_fuyou_direct_key_channel_mch IS '通道商户号唯一';
+
+
+--
+-- Name: uk_fuyou_direct_mch_mchnt_cd; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_fuyou_direct_mch_mchnt_cd ON public.fuyou_direct_key_config USING btree (mch_no, mchnt_cd) WHERE (deleted = false);
+
+
+--
+-- Name: INDEX uk_fuyou_direct_mch_mchnt_cd; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_fuyou_direct_mch_mchnt_cd IS '同一商户下富友商户号唯一';
 
 
 --

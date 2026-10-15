@@ -4,5 +4,6 @@
   "unsupportedPayMethod": "Metode pembayaran tidak didukung untuk Fuyou: {0}",
   "merchantDuplicate": "Nomor merchant Fuyou sudah ada di bawah merchant ini",
   "isvKeyNotConfigured": "Kunci penyedia layanan Fuyou tidak dikonfigurasi",
+  "directKeyNotConfigured": "Kunci pedagang langsung Fuyou tidak dikonfigurasi",
   "mchNoNotConfigured": "Nomor merchant Fuyou tidak dikonfigurasi"
 }

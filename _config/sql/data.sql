@@ -4976,6 +4976,7 @@ INSERT INTO public.pay_md_product VALUES (10013, 'dougong_pay', '斗拱支付', 
 INSERT INTO public.pay_md_product VALUES (10014, 'hkrt_pay', '海科融通', 'hkrt_pay', 100, 1, '2026-07-05 23:19:01.974607+00', 1, '2026-07-05 23:19:01.974607+00', 0, false, false, true);
 INSERT INTO public.pay_md_product VALUES (10020, 'yee_pay', '易宝支付', 'yee_pay', 110, 1, '2026-07-05 23:19:01.974607+00', 1, '2026-07-05 23:19:01.974607+00', 0, false, false, true);
 INSERT INTO public.pay_md_product VALUES (10015, 'fuyou_pay', '富友支付', 'fuyou_pay', 140, 1, '2026-07-05 23:19:01.974607+00', 1, '2026-07-05 23:19:01.974607+00', 0, false, false, true);
+INSERT INTO public.pay_md_product VALUES (10035, 'fuyou_direct', '富友商户前置', 'fuyou_pay', 141, 1, '2026-10-15 00:00:00+00', 1, '2026-10-15 00:00:00+00', 0, false, false, true);
 INSERT INTO public.pay_md_product VALUES (10017, 'ysep_pay', '银盛支付', 'ysep_pay', 160, 1, '2026-07-05 23:19:01.974607+00', 1, '2026-07-05 23:19:01.974607+00', 0, false, false, true);
 INSERT INTO public.pay_md_product VALUES (10018, 'quick_pay', '快钱支付', 'quick_pay', 170, 1, '2026-07-05 23:19:01.974607+00', 1, '2026-07-05 23:19:01.974607+00', 0, false, false, true);
 INSERT INTO public.pay_md_product VALUES (10021, 'jee_pay', 'Jeepay', 'jee_pay', 180, 1, '2026-07-05 23:19:01.974607+00', 1, '2026-07-05 23:19:01.974607+00', 0, false, false, true);
@@ -5120,6 +5121,14 @@ INSERT INTO public.pay_md_product_capability VALUES (21032, 'ada_pay', 'union_ba
 INSERT INTO public.pay_md_product_capability VALUES (21048, 'dougong_pay', 'union_barcode', 15, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
 INSERT INTO public.pay_md_product_capability VALUES (21064, 'hkrt_pay', 'union_barcode', 15, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
 INSERT INTO public.pay_md_product_capability VALUES (21080, 'fuyou_pay', 'union_barcode', 15, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
+INSERT INTO public.pay_md_product_capability VALUES (21228, 'fuyou_direct', 'wechat_qr', 0, true, NULL, false, 1, '2026-10-15 00:00:00+00', 0, 1, '2026-10-15 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21229, 'fuyou_direct', 'wechat_jsapi', 1, true, NULL, false, 1, '2026-10-15 00:00:00+00', 0, 1, '2026-10-15 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21230, 'fuyou_direct', 'wechat_mini', 2, true, NULL, false, 1, '2026-10-15 00:00:00+00', 0, 1, '2026-10-15 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21231, 'fuyou_direct', 'wechat_barcode', 3, true, NULL, false, 1, '2026-10-15 00:00:00+00', 0, 1, '2026-10-15 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21232, 'fuyou_direct', 'alipay_qr', 4, true, NULL, false, 1, '2026-10-15 00:00:00+00', 0, 1, '2026-10-15 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21233, 'fuyou_direct', 'alipay_jsapi', 5, true, NULL, false, 1, '2026-10-15 00:00:00+00', 0, 1, '2026-10-15 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21234, 'fuyou_direct', 'alipay_barcode', 6, true, NULL, false, 1, '2026-10-15 00:00:00+00', 0, 1, '2026-10-15 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21235, 'fuyou_direct', 'union_qr', 7, true, NULL, false, 1, '2026-10-15 00:00:00+00', 0, 1, '2026-10-15 00:00:00+00');
 INSERT INTO public.pay_md_product_capability VALUES (21092, 'sheng_pay', 'alipay_barcode', 11, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
 INSERT INTO public.pay_md_product_capability VALUES (21097, 'ysep_pay', 'wechat_qr', 0, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
 INSERT INTO public.pay_md_product_capability VALUES (21098, 'ysep_pay', 'wechat_jsapi', 1, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');

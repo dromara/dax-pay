@@ -71,6 +71,8 @@ public enum ProductEnum implements I18nSupport {
     VBILL_PAY("vbill_pay"),
     /// 富友
     FUYOU_PAY("fuyou_pay"),
+    /// 富友商户前置(直连商户模式, 商户移动支付前置接口)
+    FUYOU_DIRECT("fuyou_direct"),
     /// 盛付通(商户模式, 商户自有对接密钥)
     SHENG_PAY("sheng_pay"),
     /// 盛付通(服务商模式, 代子商户发起交易)
@@ -133,7 +135,7 @@ public enum ProductEnum implements I18nSupport {
             case ADA_PAY, DOUGONG_PAY -> ChannelEnum.HUIFU.getCode();
             case HKRT_PAY -> ChannelEnum.HKRT_PAY.getCode();
             case VBILL_PAY -> ChannelEnum.VBILL_PAY.getCode();
-            case FUYOU_PAY -> ChannelEnum.FUYOU_PAY.getCode();
+            case FUYOU_PAY, FUYOU_DIRECT -> ChannelEnum.FUYOU_PAY.getCode();
             // 盛付通: 商户(sheng_pay)/服务商(sheng_isv) 两产品共用通道 sheng_pay
             case SHENG_PAY, SHENG_ISV -> ChannelEnum.SHENG_PAY.getCode();
             case YSEP_PAY -> ChannelEnum.YSEP_PAY.getCode();
