@@ -65,6 +65,8 @@ public enum ProductEnum implements I18nSupport {
     ADA_PAY("ada_pay"),
     /// 斗拱(归属汇付天下通道 huifu)
     DOUGONG_PAY("dougong_pay"),
+    /// 汇付数字人民币(经斗拱)
+    HUIFU_ECNY("huifu_ecny"),
     /// 海科融通
     HKRT_PAY("hkrt_pay"),
     /// 随行付
@@ -73,16 +75,24 @@ public enum ProductEnum implements I18nSupport {
     FUYOU_PAY("fuyou_pay"),
     /// 富友商户前置(直连商户模式, 商户移动支付前置接口)
     FUYOU_DIRECT("fuyou_direct"),
+    /// 富友(互联网直连)
+    FUYOU_INTERNET("fuyou_internet"),
+    /// 富友(H5聚合收银台)
+    FUYOU_H5("fuyou_h5"),
     /// 盛付通(商户模式, 商户自有对接密钥)
     SHENG_PAY("sheng_pay"),
     /// 盛付通(服务商模式, 代子商户发起交易)
     SHENG_ISV("sheng_isv"),
     /// 银盛
     YSEP_PAY("ysep_pay"),
+    /// 银盛e企通
+    YSEQT_PAY("yseqt_pay"),
     /// 快钱
     QUICK_PAY("quick_pay"),
     /// 河马付(杉德旗下产品)
     HM_PAY("hm_pay"),
+    /// 杉德支付(杉德通道主产品)
+    SAND_PAY("sand_pay"),
     /// 易宝
     YEE_PAY("yee_pay"),
     /// jeepay
@@ -133,15 +143,23 @@ public enum ProductEnum implements I18nSupport {
             case STRIPE_PAY -> ChannelEnum.STRIPE.getCode();
             // 汇付天下: Adapay / 斗拱 两产品共用通道 huifu
             case ADA_PAY, DOUGONG_PAY -> ChannelEnum.HUIFU.getCode();
+            // 汇付数字人民币(经斗拱)归属汇付天下通道
+            case HUIFU_ECNY -> ChannelEnum.HUIFU.getCode();
             case HKRT_PAY -> ChannelEnum.HKRT_PAY.getCode();
             case VBILL_PAY -> ChannelEnum.VBILL_PAY.getCode();
-            case FUYOU_PAY, FUYOU_DIRECT -> ChannelEnum.FUYOU_PAY.getCode();
+            // 富友: 服务商(fuyou_pay)/商户前置(fuyou_direct)/互联网直连(fuyou_internet)/H5聚合收银台(fuyou_h5) 多产品共用通道 fuyou_pay
+            case FUYOU_PAY, FUYOU_DIRECT, FUYOU_INTERNET, FUYOU_H5 -> ChannelEnum.FUYOU_PAY.getCode();
             // 盛付通: 商户(sheng_pay)/服务商(sheng_isv) 两产品共用通道 sheng_pay
             case SHENG_PAY, SHENG_ISV -> ChannelEnum.SHENG_PAY.getCode();
+            // 银盛
             case YSEP_PAY -> ChannelEnum.YSEP_PAY.getCode();
+            // 银盛e企通归属银盛通道
+            case YSEQT_PAY -> ChannelEnum.YSEP_PAY.getCode();
             case QUICK_PAY -> ChannelEnum.QUICK_PAY.getCode();
             // 河马付归属杉德通道
             case HM_PAY -> ChannelEnum.SAND_PAY.getCode();
+            // 杉德主产品归属杉德通道
+            case SAND_PAY -> ChannelEnum.SAND_PAY.getCode();
             case YEE_PAY -> ChannelEnum.YEE_PAY.getCode();
             case JEE_PAY -> ChannelEnum.JEE_PAY.getCode();
             // 易支付: 一通道一产品
