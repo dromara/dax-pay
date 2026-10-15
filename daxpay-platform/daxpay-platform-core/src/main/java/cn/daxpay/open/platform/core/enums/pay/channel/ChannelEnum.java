@@ -59,6 +59,26 @@ public enum ChannelEnum implements I18nSupport {
     ALLIN_PAY("allin_pay"),
     /// 收钱吧(聚合扫码收单)
     SHOUQIANBA("shouqianba"),
+
+    // ===== 合规通道占位(占位通道, 未对接, 仅枚举与目录层登记, 无策略实现与创建入口) =====
+    /// 连连支付(占位通道, 未对接)
+    LLIAN_PAY("llianpay"),
+    /// 汇聚支付(占位通道, 未对接)
+    JOIN_PAY("joinpay"),
+    /// 威富通(占位通道, 未对接)
+    SWIFT_PASS("swiftpass"),
+    /// 嘉联支付(占位通道, 未对接)
+    JL_PAY("jlpay"),
+    /// 合利宝(占位通道, 未对接)
+    HELI_PAY("helipay"),
+    /// 付呗(占位通道, 未对接)
+    FUBEI_PAY("fubei"),
+    /// 易票联(占位通道, 未对接)
+    EPAY_LINKS("epaylinks"),
+    /// PayPal(国际支付通道, 占位未对接)
+    PAY_PAL("paypal"),
+    /// Airwallex(国际支付通道, 占位未对接)
+    AIRWALLEX("airwallex"),
     ;
 
     private final String code;

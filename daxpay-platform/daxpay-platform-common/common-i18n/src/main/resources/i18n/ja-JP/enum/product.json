@@ -48,5 +48,14 @@
   "allin_direct": "金服宝(ダイレクト)",
   "allin_direct_desc": "通聯金服宝直結製品(AT直結決済, サンドボックス対応)",
   "shouqianba": "Shouqianba(収銭吧)",
-  "shouqianba_desc": "Shouqianba アグリゲートQR決済製品"
+  "shouqianba_desc": "Shouqianba アグリゲートQR決済製品",
+  "llian_pay": "LianLian Pay",
+  "join_pay": "JoinPay",
+  "swift_pass": "Swiftpass",
+  "jl_pay": "JLPay",
+  "heli_pay": "Helipay",
+  "fubei_pay": "FuBei",
+  "epay_links": "EPayLinks",
+  "paypal": "PayPal",
+  "airwallex": "Airwallex"
 }

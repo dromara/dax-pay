@@ -48,5 +48,14 @@
   "allin_direct": "Direct",
   "allin_direct_desc": "Allinpay Direct (AT direct acquiring, sandbox supported)",
   "shouqianba": "Shouqianba",
-  "shouqianba_desc": "Shouqianba aggregate QR payment product"
+  "shouqianba_desc": "Shouqianba aggregate QR payment product",
+  "llian_pay": "LianLian Pay",
+  "join_pay": "JoinPay",
+  "swift_pass": "Swiftpass",
+  "jl_pay": "JLPay",
+  "heli_pay": "Helipay",
+  "fubei_pay": "FuBei",
+  "epay_links": "EPayLinks",
+  "paypal": "PayPal",
+  "airwallex": "Airwallex"
 }

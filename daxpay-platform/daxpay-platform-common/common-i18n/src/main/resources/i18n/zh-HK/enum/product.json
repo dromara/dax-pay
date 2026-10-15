@@ -48,5 +48,14 @@
   "allin_direct": "金服寶",
   "allin_direct_desc": "通聯金服寶直聯產品(AT直連收單, 支持沙箱環境)",
   "shouqianba": "收錢吧",
-  "shouqianba_desc": "收錢吧聚合掃碼收單產品"
+  "shouqianba_desc": "收錢吧聚合掃碼收單產品",
+  "llian_pay": "連連聚合支付",
+  "join_pay": "匯聚聚合支付",
+  "swift_pass": "威富通支付",
+  "jl_pay": "嘉聯聚合支付",
+  "heli_pay": "合利寶支付",
+  "fubei_pay": "付唄聚合支付",
+  "epay_links": "易票聯支付",
+  "paypal": "PayPal支付",
+  "airwallex": "Airwallex支付"
 }

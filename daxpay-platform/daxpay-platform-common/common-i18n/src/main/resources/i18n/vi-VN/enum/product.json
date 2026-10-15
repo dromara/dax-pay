@@ -48,5 +48,14 @@
   "allin_direct": "Direct",
   "allin_direct_desc": "Allinpay Direct (thu hộ kết nối trực tiếp AT, hỗ trợ sandbox)",
   "shouqianba": "Shouqianba",
-  "shouqianba_desc": "Sản phẩm thanh toán QR tổng hợp Shouqianba"
+  "shouqianba_desc": "Sản phẩm thanh toán QR tổng hợp Shouqianba",
+  "llian_pay": "LianLian Pay",
+  "join_pay": "JoinPay",
+  "swift_pass": "Swiftpass",
+  "jl_pay": "JLPay",
+  "heli_pay": "Helipay",
+  "fubei_pay": "FuBei",
+  "epay_links": "EPayLinks",
+  "paypal": "PayPal",
+  "airwallex": "Airwallex"
 }

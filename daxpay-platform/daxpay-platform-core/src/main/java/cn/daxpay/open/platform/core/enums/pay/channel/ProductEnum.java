@@ -114,6 +114,26 @@ public enum ProductEnum implements I18nSupport {
     ALLIN_DIRECT("allin_direct"),
     /// 收钱吧(聚合扫码收单, 一通道一产品)
     SHOUQIANBA("shouqianba"),
+
+    // ===== 合规通道占位(占位产品, 未对接, 仅枚举与目录层登记, 无策略实现) =====
+    /// 连连聚合支付(占位, 未对接)
+    LLIAN_PAY("llian_pay"),
+    /// 汇聚聚合支付(占位, 未对接)
+    JOIN_PAY("join_pay"),
+    /// 威富通支付(占位, 未对接)
+    SWIFT_PASS("swift_pass"),
+    /// 嘉联聚合支付(占位, 未对接)
+    JL_PAY("jl_pay"),
+    /// 合利宝支付(占位, 未对接)
+    HELI_PAY("heli_pay"),
+    /// 付呗聚合支付(占位, 未对接)
+    FUBEI_PAY("fubei_pay"),
+    /// 易票联支付(占位, 未对接)
+    EPAY_LINKS("epay_links"),
+    /// PayPal 支付(国际, 占位未对接)
+    PAY_PAL("paypal"),
+    /// Airwallex 支付(国际, 占位未对接)
+    AIRWALLEX("airwallex"),
     ;
 
     private final String code;
@@ -172,6 +192,25 @@ public enum ProductEnum implements I18nSupport {
             case ALLIN_CLOUD, ALLIN_CASHIER, ALLIN_PAYFUND, ALLIN_DIRECT -> ChannelEnum.ALLIN_PAY.getCode();
             // 收钱吧: 一通道一产品
             case SHOUQIANBA -> ChannelEnum.SHOUQIANBA.getCode();
+            // ===== 合规通道占位: 一通道一产品, 未对接 =====
+            // 连连支付(占位通道, 未对接)
+            case LLIAN_PAY -> ChannelEnum.LLIAN_PAY.getCode();
+            // 汇聚支付(占位通道, 未对接)
+            case JOIN_PAY -> ChannelEnum.JOIN_PAY.getCode();
+            // 威富通(占位通道, 未对接)
+            case SWIFT_PASS -> ChannelEnum.SWIFT_PASS.getCode();
+            // 嘉联支付(占位通道, 未对接)
+            case JL_PAY -> ChannelEnum.JL_PAY.getCode();
+            // 合利宝(占位通道, 未对接)
+            case HELI_PAY -> ChannelEnum.HELI_PAY.getCode();
+            // 付呗(占位通道, 未对接)
+            case FUBEI_PAY -> ChannelEnum.FUBEI_PAY.getCode();
+            // 易票联(占位通道, 未对接)
+            case EPAY_LINKS -> ChannelEnum.EPAY_LINKS.getCode();
+            // PayPal(国际通道, 占位未对接)
+            case PAY_PAL -> ChannelEnum.PAY_PAL.getCode();
+            // Airwallex(国际通道, 占位未对接)
+            case AIRWALLEX -> ChannelEnum.AIRWALLEX.getCode();
         };
     }
 

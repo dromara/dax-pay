@@ -48,5 +48,14 @@
   "allin_direct": "진푸바오(다이렉트)",
   "allin_direct_desc": "Allinpay 다이렉트 상품(AT 직접 수신, 샌드박스 지원)",
   "shouqianba": "Shouqianba(서우첸바)",
-  "shouqianba_desc": "Shouqianba 통합 QR 결제 상품"
+  "shouqianba_desc": "Shouqianba 통합 QR 결제 상품",
+  "llian_pay": "LianLian Pay",
+  "join_pay": "JoinPay",
+  "swift_pass": "Swiftpass",
+  "jl_pay": "JLPay",
+  "heli_pay": "Helipay",
+  "fubei_pay": "FuBei",
+  "epay_links": "EPayLinks",
+  "paypal": "PayPal",
+  "airwallex": "Airwallex"
 }
