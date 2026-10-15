@@ -364,7 +364,6 @@ public class PlatformOssConfigService {
                     .setPublicBucket(saved.getPublicBucket())
                     .setPrivateBucket(saved.getPrivateBucket())
                     .setPublicBaseUrl(saved.getPublicBaseUrl())
-                    .setPrivateBaseUrl(saved.getPrivateBaseUrl())
                     .setAccessKey(saved.getAccessKey())
                     .setSecretKey(saved.getSecretKey())
                     .setPathStyleAccess(saved.getPathStyleAccess())
@@ -389,9 +388,6 @@ public class PlatformOssConfigService {
         }
         if (Objects.nonNull(param.getPublicBaseUrl())) {
             probe.setPublicBaseUrl(param.getPublicBaseUrl());
-        }
-        if (Objects.nonNull(param.getPrivateBaseUrl())) {
-            probe.setPrivateBaseUrl(param.getPrivateBaseUrl());
         }
         if (Objects.nonNull(param.getPathStyleAccess())) {
             probe.setPathStyleAccess(param.getPathStyleAccess());

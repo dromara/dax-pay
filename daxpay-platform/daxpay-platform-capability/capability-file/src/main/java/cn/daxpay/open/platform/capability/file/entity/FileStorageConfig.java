@@ -25,9 +25,6 @@ public class FileStorageConfig {
     /// 公开访问域名
     private String publicBaseUrl;
 
-    /// 私有访问域名
-    private String privateBaseUrl;
-
     /// 访问密钥
     private String accessKey;
 

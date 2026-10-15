@@ -37,10 +37,6 @@ public class PlatformOssConfigParam {
     @Schema(description = "公开访问域名")
     private String publicBaseUrl;
 
-    /// 私有访问域名
-    @Schema(description = "私有访问域名")
-    private String privateBaseUrl;
-
     /// 访问密钥（AccessKey），通常由云服务商提供
     @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "访问密钥（AccessKey），通常由云服务商提供")

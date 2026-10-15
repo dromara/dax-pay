@@ -262,22 +262,6 @@ public class S3FileStorageService {
         return StrUtil.removeSuffix(storageConfig.getPublicBaseUrl(), "/") + "/" + bucket + "/" + objectKey;
     }
 
-    /// 获取私有桶访问URL
-    ///
-    /// 构建私有桶中文件的访问URL。
-    /// 如果配置了privateBaseUrl，则拼接返回；否则返回null。
-    /// 注意：此方法返回的是基础URL，实际访问可能需要预签名。
-    ///
-    /// @param storageConfig 存储配置
-    /// @param objectKey     对象Key
-    /// @return 私有桶访问URL，如果未配置privateBaseUrl则返回null
-    public String getPrivateUrl(FileStorageConfig storageConfig, String objectKey) {
-        if (StrUtil.isBlank(storageConfig.getPrivateBaseUrl())) {
-            return null;
-        }
-        return StrUtil.removeSuffix(storageConfig.getPrivateBaseUrl(), "/") + "/" + objectKey;
-    }
-
     /// 计算上传预签名URL过期时间
     ///
     /// @return 过期时间
