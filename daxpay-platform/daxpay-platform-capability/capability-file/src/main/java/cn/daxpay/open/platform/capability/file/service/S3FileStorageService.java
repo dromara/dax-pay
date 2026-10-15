@@ -249,6 +249,8 @@ public class S3FileStorageService {
     /// 获取公开访问URL
     ///
     /// 构建公开桶中文件的直接访问URL。
+    /// publicBaseUrl 语义为公开文件 URL 前缀, 直接拼接对象Key不含桶名:
+    /// R2/阿里云OSS/腾讯云COS 等桶级自定义域名直接填域名; MinIO 等多桶共根形态需将桶路径包含在前缀中。
     /// 仅适用于公开桶，私有桶的文件需要使用预签名URL。
     ///
     /// @param storageConfig 存储配置
@@ -258,8 +260,7 @@ public class S3FileStorageService {
         if (StrUtil.isBlank(storageConfig.getPublicBaseUrl())) {
             return null;
         }
-        String bucket = storageConfig.getPublicBucket();
-        return StrUtil.removeSuffix(storageConfig.getPublicBaseUrl(), "/") + "/" + bucket + "/" + objectKey;
+        return StrUtil.removeSuffix(storageConfig.getPublicBaseUrl(), "/") + "/" + objectKey;
     }
 
     /// 计算上传预签名URL过期时间

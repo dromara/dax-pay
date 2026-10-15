@@ -322,7 +322,7 @@ public class PlatformOssConfigService {
             return null;
         }
         String url = StrUtil.removeSuffix(probe.getPublicBaseUrl(), "/")
-                + "/" + probe.getPublicBucket() + "/" + probeKey;
+                + "/" + probeKey;
         try {
             int status = HttpUtil.createRequest(Method.HEAD, url)
                     .timeout(PUBLIC_URL_CHECK_TIMEOUT_MS)
