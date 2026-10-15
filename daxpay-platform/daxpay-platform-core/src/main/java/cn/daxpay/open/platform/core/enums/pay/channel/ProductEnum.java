@@ -134,6 +134,70 @@ public enum ProductEnum implements I18nSupport {
     PAY_PAL("paypal"),
     /// Airwallex 支付(国际, 占位未对接)
     AIRWALLEX("airwallex"),
+    /// 中金聚合支付(占位, 未对接)
+    CPCN_PAY("cpcn_pay"),
+    /// 宝付支付(占位, 未对接)
+    BAOFU_PAY("baofu_pay"),
+    /// 丰付支付(占位, 未对接)
+    SUMA_PAY("sumapay"),
+    /// 丰付企账宝(占位, 未对接, 归属丰付通道)
+    SUMA_QZB("sumapay_qzb"),
+    /// 首信易支付(占位, 未对接)
+    YIZHIFU_PAY("yizhifubj_pay"),
+    /// 汇付宝支付(占位, 未对接)
+    HEEPAY_PAY("heepay_pay"),
+    /// 汇付宝快捷支付(占位, 未对接, 归属汇付宝通道)
+    HEEPAY_BANK("heepay_bank"),
+    /// 哆啦宝支付(占位, 未对接)
+    DUOLABAO_PAY("duolabao_pay"),
+    /// 精秀支付(占位, 未对接)
+    PASSPAY("passpay_pay"),
+    /// 鲲鹏支付(占位, 未对接)
+    KUNPENG_PAY("kunpeng_pay"),
+    /// 联拓支付(占位, 未对接)
+    LIANTUOFU_PAY("liantuofu_pay"),
+    /// 火脸支付(占位, 未对接)
+    HUOLIAN_PAY("huolian_pay"),
+    /// 有赞支付(占位, 未对接)
+    YOUZAN_PAY("youzan_pay"),
+    /// 移领支付(占位, 未对接)
+    YLPAY("ylpay_pay"),
+    /// 远付宝支付(占位, 未对接)
+    YUANFUBAO_PAY("yuanfubao_pay"),
+    /// 通莞金服(占位, 未对接)
+    TOGOODFIN_PAY("togoodfin"),
+    /// 乐收付(占位, 未对接)
+    SOEZPAY("soezpay_pay"),
+    /// 数汇联动支付(占位, 未对接)
+    SHUHUI_PAY("shuhuipay_pay"),
+    /// 红小点支付(占位, 未对接)
+    XHD_PAY("xhdpay_pay"),
+    /// 恒信通支付(占位, 未对接)
+    HXT_PAY("hxtpay_pay"),
+    /// 好生意支付(占位, 未对接)
+    HSY_PAY("haoshengyi_pay"),
+    /// 银盈通支付(占位, 未对接)
+    YYT_PAY("yinyingtong_pay"),
+    /// 支付宝云支付(占位, 未对接)
+    CLOUD_PAY("cloudpay_pay"),
+    /// O米支付(占位, 未对接)
+    OMI_PAY("omipay_pay"),
+    /// 慧收钱(占位, 未对接)
+    HSQ_PAY("huishouqian_pay"),
+    /// 收银呗支付(占位, 未对接)
+    SYB_PAY("shouyinbei_pay"),
+    /// 金多多支付(占位, 未对接)
+    JINDD_PAY("jindd_pay"),
+    /// 鸿闻支付(占位, 未对接)
+    HWKJ_PAY("hwkpay_pay"),
+    /// Payssion(占位, 未对接)
+    PAYSSION("payssion"),
+    /// 超级支付(占位, 未对接)
+    PAYPRO("paypro_pay"),
+    /// 商福通支付(占位, 未对接)
+    SHANGFUTONG_PAY("shangfutong_pay"),
+    /// 智付支付(占位, 未对接)
+    DINPAY("dinpay_pay"),
     ;
 
     private final String code;
@@ -211,6 +275,67 @@ public enum ProductEnum implements I18nSupport {
             case PAY_PAL -> ChannelEnum.PAY_PAL.getCode();
             // Airwallex(国际通道, 占位未对接)
             case AIRWALLEX -> ChannelEnum.AIRWALLEX.getCode();
+            // ===== 合规通道占位 C 批: 未对接 =====
+            // 丰付: 支付/企账宝 两产品共用通道 sumapay
+            case SUMA_PAY, SUMA_QZB -> ChannelEnum.SUMA_PAY.getCode();
+            // 汇付宝: 支付/快捷支付 两产品共用通道 heepay
+            case HEEPAY_PAY, HEEPAY_BANK -> ChannelEnum.HEEPAY_PAY.getCode();
+            // 中金支付(占位通道, 未对接)
+            case CPCN_PAY -> ChannelEnum.CPCN_PAY.getCode();
+            // 宝付支付(占位通道, 未对接)
+            case BAOFU_PAY -> ChannelEnum.BAOFU_PAY.getCode();
+            // 首信易支付(占位通道, 未对接)
+            case YIZHIFU_PAY -> ChannelEnum.YIZHIFU_PAY.getCode();
+            // 哆啦宝(占位通道, 未对接)
+            case DUOLABAO_PAY -> ChannelEnum.DUOLABAO_PAY.getCode();
+            // 精秀支付(占位通道, 未对接)
+            case PASSPAY -> ChannelEnum.PASSPAY.getCode();
+            // 鲲鹏支付(占位通道, 未对接)
+            case KUNPENG_PAY -> ChannelEnum.KUNPENG_PAY.getCode();
+            // 联拓支付(占位通道, 未对接)
+            case LIANTUOFU_PAY -> ChannelEnum.LIANTUOFU_PAY.getCode();
+            // 火脸支付(占位通道, 未对接)
+            case HUOLIAN_PAY -> ChannelEnum.HUOLIAN_PAY.getCode();
+            // 有赞支付(占位通道, 未对接)
+            case YOUZAN_PAY -> ChannelEnum.YOUZAN_PAY.getCode();
+            // 移领支付(占位通道, 未对接)
+            case YLPAY -> ChannelEnum.YLPAY.getCode();
+            // 远付宝(占位通道, 未对接)
+            case YUANFUBAO_PAY -> ChannelEnum.YUANFUBAO_PAY.getCode();
+            // 通莞金服(占位通道, 未对接)
+            case TOGOODFIN_PAY -> ChannelEnum.TOGOODFIN_PAY.getCode();
+            // 乐收付(占位通道, 未对接)
+            case SOEZPAY -> ChannelEnum.SOEZPAY.getCode();
+            // 数汇联动(占位通道, 未对接)
+            case SHUHUI_PAY -> ChannelEnum.SHUHUI_PAY.getCode();
+            // 红小点支付(占位通道, 未对接)
+            case XHD_PAY -> ChannelEnum.XHD_PAY.getCode();
+            // 恒信通(占位通道, 未对接)
+            case HXT_PAY -> ChannelEnum.HXT_PAY.getCode();
+            // 好生意(占位通道, 未对接)
+            case HSY_PAY -> ChannelEnum.HSY_PAY.getCode();
+            // 银盈通(占位通道, 未对接)
+            case YYT_PAY -> ChannelEnum.YYT_PAY.getCode();
+            // 支付宝云支付(占位通道, 未对接)
+            case CLOUD_PAY -> ChannelEnum.CLOUD_PAY.getCode();
+            // O米支付(占位通道, 未对接)
+            case OMI_PAY -> ChannelEnum.OMI_PAY.getCode();
+            // 慧收钱(占位通道, 未对接)
+            case HSQ_PAY -> ChannelEnum.HSQ_PAY.getCode();
+            // 收银呗(占位通道, 未对接)
+            case SYB_PAY -> ChannelEnum.SYB_PAY.getCode();
+            // 金多多(占位通道, 未对接)
+            case JINDD_PAY -> ChannelEnum.JINDD_PAY.getCode();
+            // 鸿闻Pay(占位通道, 未对接)
+            case HWKJ_PAY -> ChannelEnum.HWKJ_PAY.getCode();
+            // Payssion(占位通道, 未对接)
+            case PAYSSION -> ChannelEnum.PAYSSION.getCode();
+            // 超级支付(占位通道, 未对接)
+            case PAYPRO -> ChannelEnum.PAYPRO.getCode();
+            // 商福通(占位通道, 未对接)
+            case SHANGFUTONG_PAY -> ChannelEnum.SHANGFUTONG_PAY.getCode();
+            // 智付(占位通道, 未对接)
+            case DINPAY -> ChannelEnum.DINPAY.getCode();
         };
     }
 

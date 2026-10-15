@@ -79,6 +79,66 @@ public enum ChannelEnum implements I18nSupport {
     PAY_PAL("paypal"),
     /// Airwallex(国际支付通道, 占位未对接)
     AIRWALLEX("airwallex"),
+    /// 中金支付(占位通道, 未对接)
+    CPCN_PAY("cpcn"),
+    /// 宝付支付(占位通道, 未对接)
+    BAOFU_PAY("baofu"),
+    /// 丰付支付(占位通道, 未对接)
+    SUMA_PAY("sumapay"),
+    /// 首信易支付(占位通道, 未对接)
+    YIZHIFU_PAY("yizhifubj"),
+    /// 汇付宝(占位通道, 未对接)
+    HEEPAY_PAY("heepay"),
+    /// 哆啦宝(占位通道, 未对接)
+    DUOLABAO_PAY("duolabao"),
+    /// 精秀支付(占位通道, 未对接)
+    PASSPAY("passpay"),
+    /// 鲲鹏支付(占位通道, 未对接)
+    KUNPENG_PAY("kunpeng"),
+    /// 联拓支付(占位通道, 未对接)
+    LIANTUOFU_PAY("liantuofu"),
+    /// 火脸支付(占位通道, 未对接)
+    HUOLIAN_PAY("huolian"),
+    /// 有赞支付(占位通道, 未对接)
+    YOUZAN_PAY("youzan"),
+    /// 移领支付(占位通道, 未对接)
+    YLPAY("ylpay"),
+    /// 远付宝(占位通道, 未对接)
+    YUANFUBAO_PAY("yuanfubao"),
+    /// 通莞金服(占位通道, 未对接)
+    TOGOODFIN_PAY("togoodfin"),
+    /// 乐收付(占位通道, 未对接)
+    SOEZPAY("soezpay"),
+    /// 数汇联动(占位通道, 未对接)
+    SHUHUI_PAY("shuhuipay"),
+    /// 红小点支付(占位通道, 未对接)
+    XHD_PAY("xhdpay"),
+    /// 恒信通(占位通道, 未对接)
+    HXT_PAY("hxtpay"),
+    /// 好生意(占位通道, 未对接)
+    HSY_PAY("haoshengyi"),
+    /// 银盈通(占位通道, 未对接)
+    YYT_PAY("yinyingtong"),
+    /// 支付宝云支付(占位通道, 未对接)
+    CLOUD_PAY("cloudpay"),
+    /// O米支付(占位通道, 未对接)
+    OMI_PAY("omipay"),
+    /// 慧收钱(占位通道, 未对接)
+    HSQ_PAY("huishouqian"),
+    /// 收银呗(占位通道, 未对接)
+    SYB_PAY("shouyinbei"),
+    /// 金多多(占位通道, 未对接)
+    JINDD_PAY("jindd"),
+    /// 鸿闻Pay(占位通道, 未对接)
+    HWKJ_PAY("hwkpay"),
+    /// Payssion(占位通道, 未对接)
+    PAYSSION("payssion"),
+    /// 超级支付(占位通道, 未对接)
+    PAYPRO("paypro"),
+    /// 商福通(占位通道, 未对接)
+    SHANGFUTONG_PAY("shangfutong"),
+    /// 智付(占位通道, 未对接)
+    DINPAY("dinpay"),
     ;
 
     private final String code;
