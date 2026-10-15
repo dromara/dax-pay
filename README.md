@@ -13,7 +13,7 @@
 
 业务系统只需对接一套**统一的 HTTP 标准协议**即可接入支付宝、微信、银联等多种支付方式;第三方 SDK 全部隔离到**独立部署的通道子应用**,对接、升级、扩容互不干扰。
 
-> 📌 **快捷导航**: [官方文档站](https://doc.open.daxpay.cn) · [一键部署](https://doc.open.daxpay.cn/deployment/installer) · [部署指南](https://doc.open.daxpay.cn/deployment/run) · [交流群](#关于我们)
+> 📌 **快捷导航**: [官方文档站](https://doc.open.daxpay.cn) · [一键部署](https://doc.open.daxpay.cn/getting-started/deployment/installer) · [部署指南](https://doc.open.daxpay.cn/getting-started/deployment/run) · [交流群](#关于我们)
 
 ## 源码与演示
 
