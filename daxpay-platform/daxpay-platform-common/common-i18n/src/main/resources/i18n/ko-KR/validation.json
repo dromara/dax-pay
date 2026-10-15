@@ -435,6 +435,9 @@
     "privateBucket": {
       "notBlank": "비공개 버킷은 비워둘 수 없습니다."
     },
+    "publicBaseUrl": {
+      "pattern": "공개 기반 URL은 http:// 또는 https://로 시작해야 합니다"
+    },
     "url": {
       "notBlank": "URL은 비워둘 수 없습니다"
     },

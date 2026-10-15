@@ -434,6 +434,9 @@
     "privateBucket": {
       "notBlank": "Keranjang pribadi tidak boleh kosong"
     },
+    "publicBaseUrl": {
+      "pattern": "URL basis publik harus diawali dengan http:// atau https://"
+    },
     "url": {
       "notBlank": "URL tidak boleh kosong"
     },

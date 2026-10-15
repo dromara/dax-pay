@@ -434,6 +434,9 @@
     "privateBucket": {
       "notBlank": "Baldi peribadi tidak boleh kosong"
     },
+    "publicBaseUrl": {
+      "pattern": "URL pangkalan awam mesti bermula dengan http:// atau https://"
+    },
     "url": {
       "notBlank": "URL tidak boleh kosong"
     },

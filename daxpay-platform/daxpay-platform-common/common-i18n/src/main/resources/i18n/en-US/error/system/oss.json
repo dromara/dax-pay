@@ -9,6 +9,8 @@
   "publicBucketReadFailed": "The file written to the public OSS bucket cannot be read ({0}). Please check credential read permission",
   "privateBucketReadFailed": "The file written to the private OSS bucket cannot be read ({0}). Please check credential read permission",
   "publicUrlUnreachable": "Upload path is fine, but the server cannot retrieve the file via the public base URL (direct browser access may still work). Please verify the public base URL and the bucket public-read permission",
+  "publicUrlModeSuggestBucketLevel": "The current \"with bucket\" URL join mode cannot fetch the file, but the bucket-level domain mode works. Please switch the URL join mode to \"Bucket-level domain\"",
+  "publicUrlModeSuggestWithBucket": "The current bucket-level domain URL join mode cannot fetch the file, but the \"with bucket\" mode works. Please switch the URL join mode to \"With bucket\"",
   "bucketNotFound": "Bucket not found, please check public/private bucket names",
   "networkError": "Cannot reach object storage, please check endpoint and network"
 }

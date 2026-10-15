@@ -32,6 +32,10 @@ public class PlatformOssConfigResult {
     @Schema(description = "公开访问域名")
     private String publicBaseUrl;
 
+    /// 公开访问URL拼接方式: bucketLevel-桶级域名(缺省) / withBucket-带桶名
+    @Schema(description = "公开访问URL拼接方式: bucketLevel-桶级域名(缺省) / withBucket-带桶名")
+    private String publicUrlMode;
+
     /// 访问密钥（AccessKey），通常由云服务商提供
     @SensitiveInfo(front = 6, end = 6)
     @Schema(description = "访问密钥（AccessKey），通常由云服务商提供")

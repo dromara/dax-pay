@@ -9,6 +9,8 @@
   "publicBucketReadFailed": "OSS 公开桶文件写入后无法读取({0}), 请检查密钥读取权限",
   "privateBucketReadFailed": "OSS 私有桶文件写入后无法读取({0}), 请检查密钥读取权限",
   "publicUrlUnreachable": "上传链路正常, 但服务端无法通过公开访问域名取到文件(浏览器直连可能正常), 请确认公开访问域名配置与桶的公开读权限",
+  "publicUrlModeSuggestBucketLevel": "当前按「带桶名」方式拼接无法取到文件, 但按「桶级域名」方式可以访问, 请将 URL 拼接方式切换为「桶级域名」",
+  "publicUrlModeSuggestWithBucket": "当前按「桶级域名」方式拼接无法取到文件, 但按「带桶名」方式可以访问, 请将 URL 拼接方式切换为「带桶名」",
   "bucketNotFound": "存储桶不存在, 请检查公开/私有桶名称",
   "networkError": "无法连接对象存储, 请检查端点与网络"
 }

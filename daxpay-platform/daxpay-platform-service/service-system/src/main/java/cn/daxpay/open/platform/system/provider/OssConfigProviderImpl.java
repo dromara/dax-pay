@@ -38,6 +38,7 @@ public class OssConfigProviderImpl implements OssConfigProvider {
                 .setPublicBucket(config.getPublicBucket())
                 .setPrivateBucket(config.getPrivateBucket())
                 .setPublicBaseUrl(config.getPublicBaseUrl())
+                .setPublicUrlMode(config.getPublicUrlMode())
                 .setAccessKey(config.getAccessKey())
                 .setSecretKey(config.getSecretKey())
                 .setPathStyleAccess(config.getPathStyleAccess())

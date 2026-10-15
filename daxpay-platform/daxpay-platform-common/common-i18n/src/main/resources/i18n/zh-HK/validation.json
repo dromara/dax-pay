@@ -435,6 +435,9 @@
     "privateBucket": {
       "notBlank": "私有存儲桶不能為空"
     },
+    "publicBaseUrl": {
+      "pattern": "公開訪問域名必須以 http:// 或 https:// 開頭"
+    },
     "url": {
       "notBlank": "URL不能為空"
     },

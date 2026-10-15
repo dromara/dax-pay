@@ -434,6 +434,9 @@
     "privateBucket": {
       "notBlank": "ที่เก็บข้อมูลส่วนตัวต้องไม่เว้นว่าง"
     },
+    "publicBaseUrl": {
+      "pattern": "URL ฐานสาธารณะต้องขึ้นต้นด้วย http:// หรือ https://"
+    },
     "url": {
       "notBlank": "URL ไม่สามารถเว้นว่างได้"
     },

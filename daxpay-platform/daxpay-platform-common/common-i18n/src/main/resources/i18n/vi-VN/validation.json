@@ -434,6 +434,9 @@
     "privateBucket": {
       "notBlank": "Nhóm riêng tư không được để trống"
     },
+    "publicBaseUrl": {
+      "pattern": "URL cơ sở công cộng phải bắt đầu bằng http:// hoặc https://"
+    },
     "url": {
       "notBlank": "URL không được để trống"
     },

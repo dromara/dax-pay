@@ -9,6 +9,8 @@
   "publicBucketReadFailed": "OSS 公開桶檔案寫入後無法讀取({0}), 請檢查金鑰讀取權限",
   "privateBucketReadFailed": "OSS 私有桶檔案寫入後無法讀取({0}), 請檢查金鑰讀取權限",
   "publicUrlUnreachable": "上傳鏈路正常, 但服務端無法透過公開訪問域名取得檔案(瀏覽器直連可能正常), 請確認公開訪問域名設定與桶的公開讀取權限",
+  "publicUrlModeSuggestBucketLevel": "目前按「帶桶名」方式拼接無法取得檔案, 但按「桶級網域」方式可以存取, 請將 URL 拼接方式切換為「桶級網域」",
+  "publicUrlModeSuggestWithBucket": "目前按「桶級網域」方式拼接無法取得檔案, 但按「帶桶名」方式可以存取, 請將 URL 拼接方式切換為「帶桶名」",
   "bucketNotFound": "存儲桶不存在, 請檢查公開/私有桶名稱",
   "networkError": "無法連接對象存儲, 請檢查端點與網絡"
 }

@@ -9,6 +9,8 @@
   "publicBucketReadFailed": "Fail yang ditulis ke bucket awam OSS tidak dapat dibaca ({0}). Sila semak kebenaran baca kunci",
   "privateBucketReadFailed": "Fail yang ditulis ke bucket peribadi OSS tidak dapat dibaca ({0}). Sila semak kebenaran baca kunci",
   "publicUrlUnreachable": "Laluan muat naik normal, tetapi pelayan tidak dapat mengambil fail melalui domain akses awam (akses terus pelayar mungkin normal). Sila semak konfigurasi domain akses awam dan kebenaran baca awam baldi",
+  "publicUrlModeSuggestBucketLevel": "Mod gabungan \"dengan nama bucket\" semasa tidak dapat memuat fail, tetapi mod \"domain peringkat bucket\" boleh diakses. Sila tukar mod gabungan URL kepada \"Domain peringkat bucket\"",
+  "publicUrlModeSuggestWithBucket": "Mod gabungan \"domain peringkat bucket\" semasa tidak dapat memuat fail, tetapi mod \"dengan nama bucket\" boleh diakses. Sila tukar mod gabungan URL kepada \"Dengan nama bucket\"",
   "bucketNotFound": "Baldi tidak ditemui, sila semak nama baldi awam/peribadi",
   "networkError": "Tidak dapat mencapai storan objek, sila semak titik akhir dan rangkaian"
 }

@@ -3,6 +3,7 @@ package cn.daxpay.open.platform.system.param.config.infra;
 import cn.daxpay.open.platform.common.json.deserializer.CredentialKeepWhenBlankDeserializer;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import lombok.experimental.Accessors;
 import tools.jackson.databind.annotation.JsonDeserialize;
@@ -34,8 +35,16 @@ public class PlatformOssConfigParam {
     private String privateBucket;
 
     /// 公开访问域名
-    @Schema(description = "公开访问域名")
+    ///
+    /// 必须包含协议前缀(http:// 或 https://): 无协议的地址经 302 跳转时会被客户端当作相对路径解析, 导致公开文件无法访问。
+    /// 允许留空(公开桶不用直链的场景)。
+    @Pattern(regexp = "^$|^https?://.+$", message = "{validation.field.publicBaseUrl.pattern}")
+    @Schema(description = "公开访问域名, 须包含协议前缀(http:// 或 https://)")
     private String publicBaseUrl;
+
+    /// 公开访问URL拼接方式: bucketLevel-桶级域名(缺省) / withBucket-带桶名
+    @Schema(description = "公开访问URL拼接方式: bucketLevel-桶级域名(缺省) / withBucket-带桶名")
+    private String publicUrlMode;
 
     /// 访问密钥（AccessKey），通常由云服务商提供
     @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)

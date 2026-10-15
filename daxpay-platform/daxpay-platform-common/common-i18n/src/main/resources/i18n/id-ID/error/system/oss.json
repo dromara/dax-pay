@@ -9,6 +9,8 @@
   "publicBucketReadFailed": "File yang ditulis ke bucket publik OSS tidak dapat dibaca ({0}). Periksa izin baca kredensial",
   "privateBucketReadFailed": "File yang ditulis ke bucket privat OSS tidak dapat dibaca ({0}). Periksa izin baca kredensial",
   "publicUrlUnreachable": "Jalur unggah normal, tetapi server tidak dapat mengambil file melalui domain akses publik (akses langsung browser mungkin normal). Periksa konfigurasi domain akses publik dan izin baca publik bucket",
+  "publicUrlModeSuggestBucketLevel": "Mode penggabungan \"dengan nama bucket\" saat ini tidak dapat mengambil file, tetapi mode \"domain level-bucket\" dapat diakses. Silakan alihkan mode penggabungan URL ke \"Domain level-bucket\"",
+  "publicUrlModeSuggestWithBucket": "Mode penggabungan \"domain level-bucket\" saat ini tidak dapat mengambil file, tetapi mode \"dengan nama bucket\" dapat diakses. Silakan alihkan mode penggabungan URL ke \"Dengan nama bucket\"",
   "bucketNotFound": "Bucket tidak ditemukan, harap periksa nama bucket publik/pribadi",
   "networkError": "Tidak dapat menjangkau penyimpanan objek, harap periksa titik akhir dan jaringan"
 }

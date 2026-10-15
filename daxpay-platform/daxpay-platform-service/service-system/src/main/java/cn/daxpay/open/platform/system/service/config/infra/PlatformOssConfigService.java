@@ -1,5 +1,6 @@
 package cn.daxpay.open.platform.system.service.config.infra;
 
+import cn.daxpay.open.platform.capability.file.code.PublicUrlModeEnum;
 import cn.daxpay.open.platform.capability.file.service.StorageClientService;
 import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.daxpay.open.platform.system.convert.config.infra.PlatformOssConfigConvert;
@@ -313,6 +314,8 @@ public class PlatformOssConfigService {
     /// 验证公开桶文件能否通过公开访问域名真实访问
     ///
     /// 未配置公开访问域名时不做检查(此时公开桶文件本就依赖预签名 URL 访问).
+    /// 按配置的拼接方式探测, 失败时换另一种拼法重试一次:
+    /// 另一种可通过则说明拼接方式选反了, 直接给出切换指引(智能纠偏)而非笼统警告.
     ///
     /// @param probe    本次检查实际使用的配置(表单值与库中值的合并结果)
     /// @param probeKey 探测对象键
@@ -321,22 +324,47 @@ public class PlatformOssConfigService {
         if (StrUtil.isBlank(probe.getPublicBaseUrl())) {
             return null;
         }
-        String url = StrUtil.removeSuffix(probe.getPublicBaseUrl(), "/")
-                + "/" + probeKey;
+        boolean withBucket = PublicUrlModeEnum.WITH_BUCKET.getCode().equals(probe.getPublicUrlMode());
+        if (headOk(buildPublicUrl(probe, probeKey, withBucket))) {
+            return null;
+        }
+        // 智能纠偏: 当前拼接方式不通时换另一种重试, 另一种可通过说明拼接方式配置反了
+        if (headOk(buildPublicUrl(probe, probeKey, !withBucket))) {
+            log.warn("OSS 公开访问拼接方式疑似配置反了: 当前={}, 建议={}",
+                    withBucket ? "withBucket" : "bucketLevel",
+                    withBucket ? "bucketLevel" : "withBucket");
+            return withBucket
+                    ? I18nUtil.get("error.system.oss.publicUrlModeSuggestBucketLevel")
+                    : I18nUtil.get("error.system.oss.publicUrlModeSuggestWithBucket");
+        }
+        return I18nUtil.get("error.system.oss.publicUrlUnreachable");
+    }
+
+    /// 按拼接方式构建公开访问探测地址
+    private String buildPublicUrl(PlatformOssConfig probe, String probeKey, boolean withBucket) {
+        String prefix = StrUtil.removeSuffix(probe.getPublicBaseUrl(), "/");
+        if (withBucket) {
+            return prefix + "/" + probe.getPublicBucket() + "/" + probeKey;
+        }
+        return prefix + "/" + probeKey;
+    }
+
+    /// HEAD 探测公开访问地址是否可达(2xx 视为可达)
+    private boolean headOk(String url) {
         try {
             int status = HttpUtil.createRequest(Method.HEAD, url)
                     .timeout(PUBLIC_URL_CHECK_TIMEOUT_MS)
                     .execute()
                     .getStatus();
             if (status >= 200 && status < 300) {
-                return null;
+                return true;
             }
             log.warn("OSS 公开访问地址不可达: url={}, status={}", url, status);
         } catch (Exception e) {
             // 服务端与浏览器网络环境不同, 此处不可达不代表浏览器不可达, 故仅作警告提示
             log.warn("OSS 公开访问地址请求异常: url={}, msg={}", url, e.getMessage());
         }
-        return I18nUtil.get("error.system.oss.publicUrlUnreachable");
+        return false;
     }
 
     /// 构建探测对象键
@@ -364,6 +392,7 @@ public class PlatformOssConfigService {
                     .setPublicBucket(saved.getPublicBucket())
                     .setPrivateBucket(saved.getPrivateBucket())
                     .setPublicBaseUrl(saved.getPublicBaseUrl())
+                    .setPublicUrlMode(saved.getPublicUrlMode())
                     .setAccessKey(saved.getAccessKey())
                     .setSecretKey(saved.getSecretKey())
                     .setPathStyleAccess(saved.getPathStyleAccess())
@@ -388,6 +417,9 @@ public class PlatformOssConfigService {
         }
         if (Objects.nonNull(param.getPublicBaseUrl())) {
             probe.setPublicBaseUrl(param.getPublicBaseUrl());
+        }
+        if (Objects.nonNull(param.getPublicUrlMode())) {
+            probe.setPublicUrlMode(param.getPublicUrlMode());
         }
         if (Objects.nonNull(param.getPathStyleAccess())) {
             probe.setPathStyleAccess(param.getPathStyleAccess());

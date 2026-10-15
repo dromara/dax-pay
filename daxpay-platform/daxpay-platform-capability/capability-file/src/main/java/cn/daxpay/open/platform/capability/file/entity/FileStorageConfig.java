@@ -25,6 +25,9 @@ public class FileStorageConfig {
     /// 公开访问域名
     private String publicBaseUrl;
 
+    /// 公开访问URL拼接方式, 见 [PublicUrlModeEnum], 缺省桶级域名
+    private String publicUrlMode;
+
     /// 访问密钥
     private String accessKey;
 
