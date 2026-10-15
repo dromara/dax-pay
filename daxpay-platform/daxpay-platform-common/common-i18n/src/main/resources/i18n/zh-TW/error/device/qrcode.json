@@ -1,6 +1,7 @@
 {
   "notFound": "碼牌不存在",
   "disabled": "碼牌已停用",
+  "enabledCannotDelete": "碼牌啟用中，請先停用後再刪除",
   "mchNotFound": "碼牌所屬商戶不存在",
   "amountTypeNotFound": "未找到對應的碼牌金額型別: {0}",
   "statusNotFound": "未找到對應的碼牌狀態: {0}",

@@ -1,6 +1,7 @@
 {
   "notFound": "QR 코드 보드가 존재하지 않습니다",
   "disabled": "QR 코드 보드가 비활성화되었습니다",
+  "enabledCannotDelete": "QR 코드 보드가 활성화되어 있습니다. 삭제하기 전에 비활성화하세요",
   "mchNotFound": "QR 코드 보드 소속 가맹점이 존재하지 않습니다",
   "amountTypeNotFound": "일치하는 QR 코드 금액 유형을 찾을 수 없습니다: {0}",
   "statusNotFound": "일치하는 QR 코드 상태를 찾을 수 없습니다: {0}",

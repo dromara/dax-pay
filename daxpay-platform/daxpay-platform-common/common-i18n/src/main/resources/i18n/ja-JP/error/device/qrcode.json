@@ -1,6 +1,7 @@
 {
   "notFound": "QRコードボードは存在しません",
   "disabled": "QRコードボードが無効になっています",
+  "enabledCannotDelete": "QRコードボードは有効です。削除する前に無効にしてください",
   "mchNotFound": "QRコード掲示板の加盟店は存在しません",
   "amountTypeNotFound": "一致する QR コード金額タイプが見つかりません: {0}",
   "statusNotFound": "一致する QR コード ステータスが見つかりません: {0}",

@@ -1,6 +1,7 @@
 {
   "notFound": "QR code board does not exist",
   "disabled": "QR code board is disabled",
+  "enabledCannotDelete": "QR code board is enabled. Please disable it before deleting",
   "mchNotFound": "The merchant of the QR code board does not exist",
   "amountTypeNotFound": "No matching QR code amount type found: {0}",
   "statusNotFound": "No matching QR code status found: {0}",

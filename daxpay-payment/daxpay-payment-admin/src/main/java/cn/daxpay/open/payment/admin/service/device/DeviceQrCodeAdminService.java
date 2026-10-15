@@ -197,10 +197,14 @@ public class DeviceQrCodeAdminService {
         return result;
     }
 
-    /// 删除
+    /// 删除(仅停用状态可删, 启用中的码牌可能已投放使用)
     public void delete(Long id) {
-        deviceQrCodeManager.findById(id)
+        DeviceQrCode entity = deviceQrCodeManager.findById(id)
                 .orElseThrow(() -> new DataNotExistException("error.device.qrcode.notFound"));
+        if (QrCodeStatusEnum.ENABLED.getCode().equals(entity.getStatus())) {
+            // 码牌: 码牌启用中, 请先停用后再删除
+            throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.qrcode.enabledCannotDelete");
+        }
         deviceQrCodeManager.deleteById(id);
     }
 
