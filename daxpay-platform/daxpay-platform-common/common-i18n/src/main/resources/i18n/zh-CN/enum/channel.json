@@ -60,5 +60,11 @@
   "umfpay": "联动优势",
   "yisheng_pay": "易生支付",
   "umfpay_desc": "联动优势通道(占位, 未对接)",
-  "yisheng_pay_desc": "易生支付通道(占位, 未对接)"
+  "yisheng_pay_desc": "易生支付通道(占位, 未对接)",
+  "worldfirst": "WorldFirst",
+  "worldfirst_desc": "WorldFirst 跨境外贸收款通道(占位, 未对接)",
+  "lianlian_global": "连连国际",
+  "lianlian_global_desc": "连连国际跨境外贸收款通道(占位, 未对接)",
+  "pingpong": "PingPong",
+  "pingpong_desc": "PingPong 跨境外贸收款通道(占位, 未对接)"
 }

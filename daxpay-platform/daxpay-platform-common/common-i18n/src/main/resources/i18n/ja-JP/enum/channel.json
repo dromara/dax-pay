@@ -60,5 +60,11 @@
   "umfpay": "UMF",
   "yisheng_pay": "易生支付",
   "umfpay_desc": "UMFチャネル(プレースホルダ, 未接続)",
-  "yisheng_pay_desc": "易生支付チャネル(プレースホルダ, 未接続)"
+  "yisheng_pay_desc": "易生支付チャネル(プレースホルダ, 未接続)",
+  "worldfirst": "WorldFirst",
+  "worldfirst_desc": "WorldFirst 越境決済チャネル(プレースホルダ, 未接続)",
+  "lianlian_global": "連連国際(LianLian Global)",
+  "lianlian_global_desc": "連連国際(LianLian Global)越境決済チャネル(プレースホルダ, 未接続)",
+  "pingpong": "PingPong",
+  "pingpong_desc": "PingPong 越境決済チャネル(プレースホルダ, 未接続)"
 }

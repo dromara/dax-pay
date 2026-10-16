@@ -150,6 +150,12 @@ public enum ProductEnum implements I18nSupport {
     UMF_PAY("umf_pay"),
     /// 易生支付(占位, 未对接)
     YISHENG_PAY("yisheng_pay"),
+    /// WorldFirst 跨境收款(国际, 占位未对接)
+    WORLDFIRST("worldfirst"),
+    /// 连连国际跨境收款(国际, 占位未对接; 与境内连连支付 llian_pay 为两个独立产品)
+    LIANLIAN_GLOBAL("lianlian_global"),
+    /// PingPong 跨境收款(国际, 占位未对接)
+    PINGPONG("pingpong"),
     ;
 
     private final String code;
@@ -242,6 +248,13 @@ public enum ProductEnum implements I18nSupport {
             case UMF_PAY -> ChannelEnum.UMF_PAY.getCode();
             // 易生支付: 一通道一产品(与易支付协议 easy_pay 无关)
             case YISHENG_PAY -> ChannelEnum.YISHENG_PAY.getCode();
+            // ===== 跨境收款占位批: 未对接 =====
+            // WorldFirst: 一通道一产品
+            case WORLDFIRST -> ChannelEnum.WORLDFIRST.getCode();
+            // 连连国际: 一通道一产品(与境内连连支付分属两条通道)
+            case LIANLIAN_GLOBAL -> ChannelEnum.LIANLIAN_GLOBAL.getCode();
+            // PingPong: 一通道一产品
+            case PINGPONG -> ChannelEnum.PINGPONG.getCode();
         };
     }
 

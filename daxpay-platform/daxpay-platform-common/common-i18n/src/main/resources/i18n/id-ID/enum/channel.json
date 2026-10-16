@@ -60,5 +60,11 @@
   "umfpay": "UMF",
   "yisheng_pay": "Yisheng Pay",
   "umfpay_desc": "UMF channel (placeholder, not connected)",
-  "yisheng_pay_desc": "Yisheng Pay channel (placeholder, not connected)"
+  "yisheng_pay_desc": "Yisheng Pay channel (placeholder, not connected)",
+  "worldfirst": "WorldFirst",
+  "worldfirst_desc": "Saluran pembayaran lintas negara WorldFirst  (placeholder, belum terhubung)",
+  "lianlian_global": "LianLian Global",
+  "lianlian_global_desc": "Saluran pembayaran lintas negara LianLian Global (placeholder, belum terhubung)",
+  "pingpong": "PingPong",
+  "pingpong_desc": "Saluran pembayaran lintas negara PingPong  (placeholder, belum terhubung)"
 }

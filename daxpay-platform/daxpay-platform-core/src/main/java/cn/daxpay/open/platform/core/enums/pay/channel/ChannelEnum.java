@@ -91,6 +91,12 @@ public enum ChannelEnum implements I18nSupport {
     UMF_PAY("umfpay"),
     /// 易生支付(占位通道, 未对接)
     YISHENG_PAY("yisheng_pay"),
+    /// WorldFirst(国际跨境收款通道, 占位未对接)
+    WORLDFIRST("worldfirst"),
+    /// 连连国际(国际跨境收款通道, 占位未对接; 与境内连连支付 llianpay 为两条独立通道)
+    LIANLIAN_GLOBAL("lianlian_global"),
+    /// PingPong(国际跨境收款通道, 占位未对接)
+    PINGPONG("pingpong"),
     ;
 
     private final String code;
