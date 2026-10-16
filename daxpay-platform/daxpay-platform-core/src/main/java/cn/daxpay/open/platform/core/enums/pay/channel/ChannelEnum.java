@@ -63,10 +63,6 @@ public enum ChannelEnum implements I18nSupport {
     // ===== 合规通道占位(占位通道, 未对接, 仅枚举与目录层登记, 无策略实现与创建入口) =====
     /// 连连支付(占位通道, 未对接)
     LLIAN_PAY("llianpay"),
-    /// 汇聚支付(占位通道, 未对接)
-    JOIN_PAY("joinpay"),
-    /// 威富通(占位通道, 未对接)
-    SWIFT_PASS("swiftpass"),
     /// 嘉联支付(占位通道, 未对接)
     JL_PAY("jlpay"),
     /// 合利宝(占位通道, 未对接)
@@ -87,20 +83,10 @@ public enum ChannelEnum implements I18nSupport {
     YIZHIFU_PAY("yizhifubj"),
     /// 哆啦宝(占位通道, 未对接)
     DUOLABAO_PAY("duolabao"),
-    /// 火脸支付(占位通道, 未对接)
-    HUOLIAN_PAY("huolian"),
     /// 有赞支付(占位通道, 未对接)
     YOUZAN_PAY("youzan"),
-    /// 银盈通(占位通道, 未对接)
-    YYT_PAY("yinyingtong"),
-    /// 慧收钱(占位通道, 未对接)
-    HSQ_PAY("huishouqian"),
-    /// 收银呗(占位通道, 未对接)
-    SYB_PAY("shouyinbei"),
     /// Payssion(占位通道, 未对接)
     PAYSSION("payssion"),
-    /// 新生支付(占位通道, 未对接)
-    HNA_PAY("hnapay"),
     /// 联动优势(占位通道, 未对接)
     UMF_PAY("umfpay"),
     /// 易生支付(占位通道, 未对接)

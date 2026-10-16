@@ -257,3 +257,12 @@ INSERT INTO public.pay_md_method VALUES (502003031, 'ecny_qr', 1, NULL, false, N
 INSERT INTO public.pay_md_capability VALUES (7005, 'ecny_qr', 1, true, NULL, false, NULL, NULL, 0, NULL, '2026-10-16 00:00:00+00');
 INSERT INTO public.pay_md_provider_method VALUES (502002026, 'ecny', 'ecny_qr', 1, false, NULL, NULL, 0, NULL, '2026-10-16 00:00:00+00', NULL);
 INSERT INTO public.pay_md_product_capability VALUES (21491, 'huifu_ecny', 'ecny_qr', 1, true, NULL, false, 1, '2026-10-16 00:00:00+00', 0, 1, '2026-10-16 00:00:00+00');
+
+-- 2026-10-16 移除占位主数据: 「海科聚合支付」(产品 hkrt_saas, 与海科融通 hkrt_pay 重复)、
+-- 「收银呗支付」(产品 shouyinbei_pay 及其占位通道 shouyinbei)、「威富通」(产品 swift_pass 及其占位通道 swiftpass)、
+-- 「火脸支付」(产品 huolian_pay 及其占位通道 huolian)、「慧收钱」(产品 huishouqian_pay 及其占位通道 huishouqian)、
+-- 「汇聚支付」(产品 join_pay 及其占位通道 joinpay)、「银盈通」(产品 yinyingtong_pay 及其占位通道 yinyingtong)、
+-- 「新生支付」(产品 hnapay_pay 与新生易 xsy 及其占位通道 hnapay), 均按用户拍板整体下线
+DELETE FROM public.pay_md_product_capability WHERE product_code IN ('shouyinbei_pay', 'hkrt_saas', 'swift_pass', 'huolian_pay', 'huishouqian_pay', 'join_pay', 'yinyingtong_pay', 'hnapay_pay', 'xsy');
+DELETE FROM public.pay_md_product WHERE code IN ('shouyinbei_pay', 'hkrt_saas', 'swift_pass', 'huolian_pay', 'huishouqian_pay', 'join_pay', 'yinyingtong_pay', 'hnapay_pay', 'xsy');
+DELETE FROM public.pay_md_channel WHERE code IN ('shouyinbei', 'swiftpass', 'huolian', 'huishouqian', 'joinpay', 'yinyingtong', 'hnapay');

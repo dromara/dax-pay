@@ -118,10 +118,6 @@ public enum ProductEnum implements I18nSupport {
     // ===== 合规通道占位(占位产品, 未对接, 仅枚举与目录层登记, 无策略实现) =====
     /// 连连聚合支付(占位, 未对接)
     LLIAN_PAY("llian_pay"),
-    /// 汇聚聚合支付(占位, 未对接)
-    JOIN_PAY("join_pay"),
-    /// 威富通支付(占位, 未对接)
-    SWIFT_PASS("swift_pass"),
     /// 嘉联聚合支付(占位, 未对接)
     JL_PAY("jl_pay"),
     /// 合利宝支付(占位, 未对接)
@@ -142,28 +138,14 @@ public enum ProductEnum implements I18nSupport {
     YIZHIFU_PAY("yizhifubj_pay"),
     /// 哆啦宝支付(占位, 未对接)
     DUOLABAO_PAY("duolabao_pay"),
-    /// 火脸支付(占位, 未对接)
-    HUOLIAN_PAY("huolian_pay"),
     /// 有赞支付(占位, 未对接)
     YOUZAN_PAY("youzan_pay"),
-    /// 银盈通支付(占位, 未对接)
-    YYT_PAY("yinyingtong_pay"),
-    /// 慧收钱(占位, 未对接)
-    HSQ_PAY("huishouqian_pay"),
-    /// 收银呗支付(占位, 未对接)
-    SYB_PAY("shouyinbei_pay"),
     /// Payssion(占位, 未对接)
     PAYSSION("payssion"),
     /// 拉卡拉MOSS(拉卡拉 MOSS 开放平台产品线, 占位未对接)
     LAKALA_MOSS("lakala_moss"),
     /// 富友合作方(scanpay 合作方模式, 占位未对接)
     FUYOU_PARTNER("fuyou_partner"),
-    /// 海科聚合支付(海科融通 SaaS 聚合产品线, 占位未对接)
-    HKRT_SAAS("hkrt_saas"),
-    /// 新生支付(占位, 未对接)
-    HNA_PAY("hnapay_pay"),
-    /// 新生易(新生支付旗下机构模式聚合产品线, 占位未对接)
-    XSY_PAY("xsy"),
     /// 联动优势(占位, 未对接)
     UMF_PAY("umf_pay"),
     /// 易生支付(占位, 未对接)
@@ -199,8 +181,8 @@ public enum ProductEnum implements I18nSupport {
             case ADA_PAY, DOUGONG_PAY -> ChannelEnum.HUIFU.getCode();
             // 汇付数字人民币(经斗拱)归属汇付天下通道
             case HUIFU_ECNY -> ChannelEnum.HUIFU.getCode();
-            // 海科融通: 收单(hkrt_pay)/SaaS聚合(hkrt_saas) 两产品共用通道 hkrt_pay
-            case HKRT_PAY, HKRT_SAAS -> ChannelEnum.HKRT_PAY.getCode();
+            // 海科融通
+            case HKRT_PAY -> ChannelEnum.HKRT_PAY.getCode();
             case VBILL_PAY -> ChannelEnum.VBILL_PAY.getCode();
             // 富友: 服务商(fuyou_pay)/商户前置(fuyou_direct)/互联网直连(fuyou_internet)/H5聚合收银台(fuyou_h5)/合作方(fuyou_partner) 多产品共用通道 fuyou_pay
             case FUYOU_PAY, FUYOU_DIRECT, FUYOU_INTERNET, FUYOU_H5, FUYOU_PARTNER -> ChannelEnum.FUYOU_PAY.getCode();
@@ -230,10 +212,6 @@ public enum ProductEnum implements I18nSupport {
             // ===== 合规通道占位: 一通道一产品, 未对接 =====
             // 连连支付(占位通道, 未对接)
             case LLIAN_PAY -> ChannelEnum.LLIAN_PAY.getCode();
-            // 汇聚支付(占位通道, 未对接)
-            case JOIN_PAY -> ChannelEnum.JOIN_PAY.getCode();
-            // 威富通(占位通道, 未对接)
-            case SWIFT_PASS -> ChannelEnum.SWIFT_PASS.getCode();
             // 嘉联支付(占位通道, 未对接)
             case JL_PAY -> ChannelEnum.JL_PAY.getCode();
             // 合利宝(占位通道, 未对接)
@@ -255,21 +233,11 @@ public enum ProductEnum implements I18nSupport {
             case YIZHIFU_PAY -> ChannelEnum.YIZHIFU_PAY.getCode();
             // 哆啦宝(占位通道, 未对接)
             case DUOLABAO_PAY -> ChannelEnum.DUOLABAO_PAY.getCode();
-            // 火脸支付(占位通道, 未对接)
-            case HUOLIAN_PAY -> ChannelEnum.HUOLIAN_PAY.getCode();
             // 有赞支付(占位通道, 未对接)
             case YOUZAN_PAY -> ChannelEnum.YOUZAN_PAY.getCode();
-            // 银盈通(占位通道, 未对接)
-            case YYT_PAY -> ChannelEnum.YYT_PAY.getCode();
-            // 慧收钱(占位通道, 未对接)
-            case HSQ_PAY -> ChannelEnum.HSQ_PAY.getCode();
-            // 收银呗(占位通道, 未对接)
-            case SYB_PAY -> ChannelEnum.SYB_PAY.getCode();
             // Payssion(占位通道, 未对接)
             case PAYSSION -> ChannelEnum.PAYSSION.getCode();
             // ===== D/E 批占位: 未对接 =====
-            // 新生支付: 直连(hnapay_pay)/新生易(xsy) 两产品共用通道 hnapay
-            case HNA_PAY, XSY_PAY -> ChannelEnum.HNA_PAY.getCode();
             // 联动优势: 一通道一产品
             case UMF_PAY -> ChannelEnum.UMF_PAY.getCode();
             // 易生支付: 一通道一产品(与易支付协议 easy_pay 无关)
