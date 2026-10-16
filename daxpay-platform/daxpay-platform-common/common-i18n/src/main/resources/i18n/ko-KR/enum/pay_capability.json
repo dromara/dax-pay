@@ -24,5 +24,6 @@
   "union_qr": "유니온페이QR",
   "union_jsapi": "유니온페이 JSAPI",
   "union_h5": "유니온페이 H5",
-  "union_barcode": "유니온페이 바코드"
+  "union_barcode": "유니온페이 바코드",
+  "ecny_qr": "디지털 위안화 QR"
 }

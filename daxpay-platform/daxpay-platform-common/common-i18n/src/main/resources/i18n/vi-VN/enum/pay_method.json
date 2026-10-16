@@ -25,5 +25,6 @@
   "mastercard_card_gateway": "Cổng Mastercard",
   "mastercard_card_present": "Tặng thẻ Mastercard",
   "other": "Khác",
-  "union_barcode": "Mã vạch UnionPay"
+  "union_barcode": "Mã vạch UnionPay",
+  "ecny_qr": "e-CNY QR"
 }

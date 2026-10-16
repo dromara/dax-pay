@@ -25,5 +25,6 @@
   "mastercard_card_gateway": "Gerbang Mastercard",
   "mastercard_card_present": "Kad Mastercard Hadir",
   "other": "Lain-lain",
-  "union_barcode": "Kod Bar UnionPay"
+  "union_barcode": "Kod Bar UnionPay",
+  "ecny_qr": "e-CNY QR"
 }

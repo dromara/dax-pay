@@ -70,6 +70,10 @@ public enum PayMethodEnum implements I18nSupport {
     /// 抖音APP
     DOUYIN_APP("douyin_app", PayProviderEnum.DOUYIN),
 
+    /* 数字人民币 */
+    /// 数字人民币扫码
+    ECNY_QR("ecny_qr", PayProviderEnum.ECNY),
+
     /* 卡组 */
     /// Visa网关
     VISA_CARD_GATEWAY("visa_card_gateway", PayProviderEnum.VISA),

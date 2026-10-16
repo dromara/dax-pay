@@ -25,5 +25,6 @@
   "mastercard_card_gateway": "マスターカードゲートウェイ",
   "mastercard_card_present": "マスターカードカードプレゼント",
   "other": "他の",
-  "union_barcode": "銀聯バーコード"
+  "union_barcode": "銀聯バーコード",
+  "ecny_qr": "デジタル人民元QR"
 }

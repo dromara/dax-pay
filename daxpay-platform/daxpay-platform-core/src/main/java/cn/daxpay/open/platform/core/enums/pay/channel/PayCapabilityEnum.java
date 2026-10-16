@@ -69,6 +69,10 @@ public enum PayCapabilityEnum implements I18nSupport {
     /// 抖音 APP
     DOUYIN_APP("douyin_app"),
 
+    /* 数字人民币 */
+    /// 数字人民币扫码
+    ECNY_QR("ecny_qr"),
+
     /* 卡组 */
     /// Visa 网关
     VISA_CARD_GATEWAY("visa_card_gateway"),

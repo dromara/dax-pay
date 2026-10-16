@@ -25,5 +25,6 @@
   "mastercard_card_gateway": "Mastercard Gateway",
   "mastercard_card_present": "Mastercard Card Present",
   "other": "Other",
-  "union_barcode": "UnionPay Barcode"
+  "union_barcode": "UnionPay Barcode",
+  "ecny_qr": "e-CNY QR"
 }

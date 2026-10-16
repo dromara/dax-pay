@@ -25,5 +25,6 @@
   "mastercard_card_gateway": "万事达网关",
   "mastercard_card_present": "万事达刷卡",
   "other": "其他",
-  "union_barcode": "银联付款码"
+  "union_barcode": "银联付款码",
+  "ecny_qr": "数字人民币扫码"
 }

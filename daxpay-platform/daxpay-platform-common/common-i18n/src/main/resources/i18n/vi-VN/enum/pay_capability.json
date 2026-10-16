@@ -24,5 +24,6 @@
   "union_qr": "UnionPay QR",
   "union_jsapi": "JSAPI của UnionPay",
   "union_h5": "UnionPay H5",
-  "union_barcode": "Mã vạch UnionPay"
+  "union_barcode": "Mã vạch UnionPay",
+  "ecny_qr": "e-CNY QR"
 }

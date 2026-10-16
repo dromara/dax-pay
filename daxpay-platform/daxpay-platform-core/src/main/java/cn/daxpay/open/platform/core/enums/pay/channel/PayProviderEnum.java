@@ -27,6 +27,8 @@ public enum PayProviderEnum implements I18nSupport {
     MASTERCARD("mastercard"),
     /// 抖音支付
     DOUYIN("douyin"),
+    /// 数字人民币(央行数字货币钱包)
+    ECNY("ecny"),
     ;
     private final String code;
 

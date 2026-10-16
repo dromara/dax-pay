@@ -24,5 +24,6 @@
   "union_qr": "銀聯掃碼",
   "union_jsapi": "銀聯 JSAPI",
   "union_h5": "銀聯 H5",
-  "union_barcode": "銀聯付款碼"
+  "union_barcode": "銀聯付款碼",
+  "ecny_qr": "數字人民幣掃碼"
 }

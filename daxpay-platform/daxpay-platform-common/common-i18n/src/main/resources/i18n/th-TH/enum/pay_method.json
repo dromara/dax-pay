@@ -25,5 +25,6 @@
   "mastercard_card_gateway": "มาสเตอร์การ์ดเกตเวย์",
   "mastercard_card_present": "แสดงบัตรมาสเตอร์การ์ด",
   "other": "อื่น",
-  "union_barcode": "บาร์โค้ดยูเนี่ยนเพย์"
+  "union_barcode": "บาร์โค้ดยูเนี่ยนเพย์",
+  "ecny_qr": "e-CNY QR"
 }

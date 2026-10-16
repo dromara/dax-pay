@@ -25,5 +25,6 @@
   "mastercard_card_gateway": "Gerbang Mastercard",
   "mastercard_card_present": "Hadiah Kartu Mastercard",
   "other": "Lainnya",
-  "union_barcode": "Kode Batang UnionPay"
+  "union_barcode": "Kode Batang UnionPay",
+  "ecny_qr": "e-CNY QR"
 }
