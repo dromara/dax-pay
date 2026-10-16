@@ -26,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.Objects;
 
@@ -38,6 +39,9 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 public class PayProductConfigService {
+
+    /// 已声明产品策略但未实际打通、按「规划中」展示的预留产品(盛付通服务商线未实连, 实连后移除)
+    private static final Set<String> RESERVED_PRODUCTS = Set.of(ProductEnum.SHENG_ISV.getCode());
 
     private final PayProductConfigManager payProductConfigManager;
 
@@ -148,6 +152,8 @@ public class PayProductConfigService {
                 .setEnabled(payProduct.isEnabled());
 
         AbsProductStrategy strategy = resolveStrategy(payProduct.getCode());
+        // online = 通道策略存在且非预留产品(预留/无策略一律视为规划中)
+        result.setOnline(strategy != null && !RESERVED_PRODUCTS.contains(payProduct.getCode()));
         if (Objects.nonNull(strategy)) {
             result.setSandboxSupport(strategy.isSandbox());
             result.setIsv(strategy.isIsv());

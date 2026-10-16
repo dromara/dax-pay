@@ -37,4 +37,7 @@ public class PayProductConfigResult extends BaseResult {
 
     /// 是否为服务商模式（true=服务商, false=直连）
     private boolean isv;
+
+    /// 是否已对接上线(true=通道策略已实连; false=规划中, 卡片页渲染为不可点灰卡)
+    private boolean online;
 }
