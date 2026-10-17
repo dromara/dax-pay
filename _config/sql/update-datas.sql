@@ -379,3 +379,14 @@ UPDATE public.pay_md_product SET enabled = true WHERE code='yizhifubj_pay';
 
 -- 2026-10-16 哆啦宝产品启用: 双层对接完成(SHA1 token 头签名, 聚合码), 能力 6 项与种子一致无需调整
 UPDATE public.pay_md_product SET enabled = true WHERE code = 'duolabao_pay';
+
+-- 2026-10-17 修复商户端子页面侧栏菜单焦点丢失: 清空「应用配置」分组菜单(91403)的 path。
+-- 根因: subpage 子页路由的侧栏高亮 activePath 回落规则取「面包屑链上最近的带 path 祖先」
+-- (见商户端 src/api/core/menu.api.ts 的 subpage 分支), 分组 91403 存量 path '/mch/app-config'
+-- 截胡回落, 高亮指向不在菜单树的路径(分组路由 path 实为派生的 /_subpage-group/91403),
+-- 导致整个侧栏无焦点。波及该分组下全部子页: /mch/app/manage(应用配置)、/mch/route(通道路由)、
+-- /mch/gateway-config(网关支付配置)、/mch/cashier(收银台配置)、/mch/easypay(易支付配置)、通知配置。
+-- admin 端 4 个 subpage_group(4040130/4040131/4040132/40508) path 均为 NULL, 无此问题;
+-- 置空后子页高亮回落到可见菜单 91401「应用管理」(/mch/app)。
+-- 种子 iam_perm_menu.sql 已同步改写; 菜单接口无后端缓存, 存量库执行后重新登录即生效
+UPDATE iam_perm_menu SET path = NULL WHERE id = 91403;
