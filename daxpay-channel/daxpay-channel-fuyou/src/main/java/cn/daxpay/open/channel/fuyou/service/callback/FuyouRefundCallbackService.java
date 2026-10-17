@@ -33,8 +33,16 @@ public class FuyouRefundCallbackService {
     private final RefundCallbackService refundCallbackService;
     private final PayCallbackRecordService payCallbackRecordService;
 
-    /// 退款回调处理
+    /// 退款回调处理(服务商模式 FUYOU_PAY)
     public String refundHandle(String channelMchNo, String reqParam) {
+        return refundHandle(channelMchNo, reqParam, ProductEnum.FUYOU_PAY.getCode());
+    }
+
+    /// 退款回调处理(按产品取密钥行验签)
+    ///
+    /// 服务商模式(FUYOU_PAY)与合作方模式(FUYOU_PARTNER)回调报文同为 form `req` 参数(URL 编码 XML),
+    /// 验签公钥按产品对应密钥行获取, 故以 product 参数区分。
+    public String refundHandle(String channelMchNo, String reqParam, String product) {
         Map<String, Object> notify = new HashMap<>();
         notify.put("req", reqParam);
         if (StrUtil.isBlank(reqParam)) {
@@ -46,10 +54,10 @@ public class FuyouRefundCallbackService {
             payCallbackRecordService.saveRefund(channelMchNo, failData);
             return FuyouPayCallbackService.RESP_FAIL;
         }
-        FuyouIsvKeyConfig keyConfig = fuyouIsvKeyConfigManager.findByProduct(ProductEnum.FUYOU_PAY.getCode())
+        FuyouIsvKeyConfig keyConfig = fuyouIsvKeyConfigManager.findByProduct(product)
                 .orElse(null);
         if (Objects.isNull(keyConfig) || StrUtil.isBlank(keyConfig.getPublicKey())) {
-            log.error("富友退款回调: 服务商密钥未配置, 无法验签");
+            log.error("富友退款回调: 服务商密钥未配置, 无法验签, product={}", product);
             RefundCallbackData failData = new RefundCallbackData();
             failData.setCallbackData(notify);
             failData.setCallbackStatus(CallbackStatusEnum.FAIL);

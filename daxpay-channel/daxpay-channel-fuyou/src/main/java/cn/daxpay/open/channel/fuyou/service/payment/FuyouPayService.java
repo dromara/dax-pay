@@ -37,8 +37,19 @@ public class FuyouPayService {
     private final FuyouChannelClient fuyouChannelClient;
     private final PlatformUrlConfigService platformUrlConfigService;
 
-    /// 执行富友支付
+    /// 执行富友支付(服务商模式 FUYOU_PAY)
     public PayTradeResultBo pay(PayTrade order, NormalPayParam payParam, FuyouSdkCredential credential) {
+        return pay(order, payParam, credential, "pay");
+    }
+
+    /// 执行富友支付(按产品指定回调路径段)
+    ///
+    /// 服务商模式(FUYOU_PAY)与合作方模式(FUYOU_PARTNER)共用 spay 扫码标准接口与请求构建,
+    /// 仅回调路径段不同(服务商 `pay` / 合作方 `partner/pay`, 回调侧按产品取密钥行验签)。
+    ///
+    /// @param callbackPathSegment 回调路径段(拼在 `/unipay/callback/{mchNo}/{channelMchNo}/fuyou/` 之后)
+    public PayTradeResultBo pay(PayTrade order, NormalPayParam payParam, FuyouSdkCredential credential,
+                                String callbackPathSegment) {
         MethodMapping mapping = mapMethod(payParam.getMethod());
 
         FuyouPayReq req = new FuyouPayReq();
@@ -55,7 +66,7 @@ public class FuyouPayService {
         // 微信 JSAPI/小程序 sub_appid 透传
         req.setWxAppId(payParam.getChannelAppId());
         req.setClientIp(payParam.getClientIp());
-        req.setNotifyUrl(this.buildNotifyUrl(order, payParam.getChannelMchNo()));
+        req.setNotifyUrl(this.buildNotifyUrl(order, payParam.getChannelMchNo(), callbackPathSegment));
         req.setCredential(credential);
 
         DaxResult<FuyouPayResp> result = fuyouChannelClient.pay(req);
@@ -67,14 +78,14 @@ public class FuyouPayService {
 
     /// 生成富友支付异步通知地址(富友→平台)
     ///
-    /// 路径约定: `{backendBaseUrl}/unipay/callback/{mchNo}/{channelMchNo}/fuyou/pay`
-    private String buildNotifyUrl(PayTrade order, String channelMchNo) {
+    /// 路径约定: `{backendBaseUrl}/unipay/callback/{mchNo}/{channelMchNo}/fuyou/{callbackPathSegment}`
+    private String buildNotifyUrl(PayTrade order, String channelMchNo, String callbackPathSegment) {
         String base = platformUrlConfigService.getUrlConfig().getBackendBaseUrl();
         if (StrUtil.isBlank(base)) {
             throw new BizInfoException(DaxPayErrorCode.CONFIG_ERROR, "error.common.backendBaseUrlNotConfigured");
         }
-        return StrUtil.format("{}/unipay/callback/{}/{}/fuyou/pay",
-                base, order.getMchNo(), channelMchNo);
+        return StrUtil.format("{}/unipay/callback/{}/{}/fuyou/{}",
+                base, order.getMchNo(), channelMchNo, callbackPathSegment);
     }
 
     /// 平台支付方式([PayMethodEnum] code) → 富友支付方式 + 内容类型

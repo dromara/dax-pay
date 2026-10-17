@@ -43,21 +43,35 @@ public class FuyouIsvConfigAssembler {
     private final WxAppFacade wxAppFacade;
     private final FuyouProductStrategy productStrategy;
 
-    /// 组装富友通道调用凭证(下发给子应用)
+    /// 组装富友通道调用凭证(下发给子应用, 服务商模式 FUYOU_PAY)
     ///
     /// @param mchNo        商户号(保留参数对齐签名, 服务商密钥全局唯一不依赖此字段)
     /// @param channelMchNo 通道商户号(富友商户绑定主键)
     /// @param capability   支付能力编码(保留参数, 富友不按能力路由)
     /// @return 富友 SDK 凭证(含服务商密钥 + 富友商户号 + 终端号)
     public FuyouSdkCredential buildConfig(String mchNo, String channelMchNo, String capability) {
+        return buildConfig(mchNo, channelMchNo, capability, ProductEnum.FUYOU_PAY);
+    }
+
+    /// 组装富友通道调用凭证(下发给子应用, 按产品取密钥行)
+    ///
+    /// 服务商模式(FUYOU_PAY)与合作方模式(FUYOU_PARTNER)共用 spay 扫码标准接口与凭证结构
+    /// (机构号 + RSA 密钥对 + 商户号 + 终端号), 仅密钥行按 product 区分, 故由本组装器统一承载。
+    ///
+    /// @param mchNo        商户号(保留参数对齐签名, 服务商密钥全局唯一不依赖此字段)
+    /// @param channelMchNo 通道商户号(富友商户绑定主键)
+    /// @param capability   支付能力编码(保留参数, 富友不按能力路由)
+    /// @param product      支付产品(FUYOU_PAY / FUYOU_PARTNER, 决定密钥行与微信应用解析范围)
+    /// @return 富友 SDK 凭证(含服务商密钥 + 富友商户号 + 终端号)
+    public FuyouSdkCredential buildConfig(String mchNo, String channelMchNo, String capability, ProductEnum product) {
         // 通道商户绑定(取富友商户号 + 终端号 + sandbox)
         FuyouIsvChannelMerchant channelMerchant = fuyouIsvChannelMerchantManager.findByChannelMchNo(channelMchNo)
                 // 富友: 通道商户配置不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.channel.channelMerchantNotExist"));
         // 沙箱标识直接读通道商户固化的快照(创建时按当时产品 activeEnv 写入, 不随产品切换改变)
         boolean sandbox = channelMerchant.isSandbox();
-        // 服务商密钥(按 sandbox 分环境取对应密钥, 含机构号 + 私钥/公钥 + 订单前缀; 缺失或关键字段为空时 fail-fast)
-        FuyouIsvKeyConfig keyConfig = fuyouIsvKeyConfigService.getByProductForPay(ProductEnum.FUYOU_PAY.getCode(), sandbox);
+        // 服务商密钥(按产品 + sandbox 取对应密钥, 含机构号 + 私钥/公钥 + 订单前缀; 缺失或关键字段为空时 fail-fast)
+        FuyouIsvKeyConfig keyConfig = fuyouIsvKeyConfigService.getByProductForPay(product.getCode(), sandbox);
 
         FuyouSdkCredential credential = new FuyouSdkCredential();
         // 服务商身份与密钥
@@ -77,23 +91,32 @@ public class FuyouIsvConfigAssembler {
         return credential;
     }
 
-    /// 尽力解析微信应用并回填 channelAppId(微信 JSAPI/小程序支付随单上送 sub_appid)
+    /// 尽力解析微信应用并回填 channelAppId(服务商模式 FUYOU_PAY)
+    ///
+    /// @param payParam 支付参数(channelAppId 回填后供子应用上送与订单落库)
+    public void resolveWxAppIfRequired(NormalPayParam payParam) {
+        resolveWxAppIfRequired(payParam, ProductEnum.FUYOU_PAY);
+    }
+
+    /// 尽力解析微信应用并回填 channelAppId(微信 JSAPI/小程序支付随单上送 sub_appid, 按产品解析)
     ///
     /// 解析顺序: 显式 channelAppId → 通道商户能力绑定(商户档优先, 平台档兜底) → 产品级平台默认绑,
     /// 与 [WxAppFacade#resolveOptional] 一致; 仅产品策略([FuyouProductStrategy#wxAppRequiredCapabilities])
     /// 声明需要应用的能力(JSAPI/小程序)解析, 其余能力(扫码/付款码/支付宝/银联)不解析。
     /// 富友 sub_appid 可选(富友后台已绑定时可不传), 未命中不回填不阻断;
     /// 调用方显式传入的 channelAppId 未命中应用表时保留原值透传, 与既有行为兼容。
+    /// 服务商(FUYOU_PAY)与合作方(FUYOU_PARTNER)能力集一致, 解析范围相同。
     ///
     /// @param payParam 支付参数(channelAppId 回填后供子应用上送与订单落库)
-    public void resolveWxAppIfRequired(NormalPayParam payParam) {
+    /// @param product  支付产品(FUYOU_PAY / FUYOU_PARTNER, 决定产品级平台默认绑的查找键)
+    public void resolveWxAppIfRequired(NormalPayParam payParam, ProductEnum product) {
         PayCapabilityEnum cap = PayCapabilityEnum.findByCode(payParam.getCapability());
         // 非微信应用所需能力(扫码/付款码/支付宝/银联)不解析
         if (Objects.isNull(cap) || !productStrategy.wxAppRequiredCapabilities().contains(cap)) {
             return;
         }
         wxAppFacade.resolveOptional(payParam.getMchNo(), payParam.getChannelMchNo(), payParam.getCapability(),
-                        payParam.getChannelAppId(), ProductEnum.FUYOU_PAY.getCode())
+                        payParam.getChannelAppId(), product.getCode())
                 .ifPresent(app -> payParam.setChannelAppId(app.wxAppId()));
     }
 }

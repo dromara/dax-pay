@@ -9,4 +9,6 @@ public enum FuyouPayBodyType {
     JSAPI,
     /// 标识符
     IDENTIFIER,
+    /// 跳转链接(H5 聚合收银台 token_url / 小程序 scheme)
+    LINK,
 }
