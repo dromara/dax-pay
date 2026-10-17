@@ -1,0 +1,6 @@
+{
+  "keyNotConfigured": "Kunci saluran DuoLaoBao belum dikonfigurasi",
+  "payFailed": "Ralat pembayaran DuoLaoBao: {0}",
+  "refundFailed": "Ralat bayaran balik DuoLaoBao: {0}",
+  "unsupportedPayMethod": "Kaedah pembayaran tidak disokong oleh DuoLaoBao: {0}"
+}

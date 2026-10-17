@@ -1,0 +1,6 @@
+{
+  "keyNotConfigured": "哆啦宝通道密钥未配置",
+  "payFailed": "哆啦宝支付异常: {0}",
+  "refundFailed": "哆啦宝退款异常: {0}",
+  "unsupportedPayMethod": "哆啦宝不支持的支付方式: {0}"
+}

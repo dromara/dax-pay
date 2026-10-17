@@ -1,0 +1,6 @@
+{
+  "keyNotConfigured": "哆啦宝チャネル鍵が未設定です",
+  "payFailed": "哆啦宝決済エラー: {0}",
+  "refundFailed": "哆啦宝返金エラー: {0}",
+  "unsupportedPayMethod": "哆啦宝が対応していない支払い方法: {0}"
+}

@@ -1,0 +1,6 @@
+{
+  "keyNotConfigured": "Khóa kênh DuoLaoBao chưa được cấu hình",
+  "payFailed": "Lỗi thanh toán DuoLaoBao: {0}",
+  "refundFailed": "Lỗi hoàn tiền DuoLaoBao: {0}",
+  "unsupportedPayMethod": "Phương thức thanh toán không được DuoLaoBao hỗ trợ: {0}"
+}

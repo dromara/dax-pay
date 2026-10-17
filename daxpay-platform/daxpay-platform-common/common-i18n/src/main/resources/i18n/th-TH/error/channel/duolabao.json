@@ -1,0 +1,6 @@
+{
+  "keyNotConfigured": "ยังไม่ได้กำหนดค่าคีย์ช่องทาง DuoLaoBao",
+  "payFailed": "ข้อผิดพลาดการชำระเงิน DuoLaoBao: {0}",
+  "refundFailed": "ข้อผิดพลาดการคืนเงิน DuoLaoBao: {0}",
+  "unsupportedPayMethod": "วิธีการชำระเงินที่ DuoLaoBao ไม่รองรับ: {0}"
+}
