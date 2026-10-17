@@ -1,0 +1,7 @@
+{
+  "keyNotConfigured": "Kunci saluran YSE Pay belum dikonfigurasi (salah satu daripada: no. peniaga penaja / sijil peribadi / kata laluan / sijil awam platform tidak lengkap)",
+  "payFailed": "Ralat pembayaran YSE Pay: {0}",
+  "unsupportedPayMethod": "Kaedah pembayaran yang tidak disokong YSE Pay: {0}",
+  "closeFailed": "Ralat penutupan pesanan YSE Pay: {0}",
+  "refundFailed": "Ralat bayaran balik YSE Pay: {0}"
+}

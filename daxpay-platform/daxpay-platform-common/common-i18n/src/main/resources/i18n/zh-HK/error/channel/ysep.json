@@ -1,0 +1,7 @@
+{
+  "keyNotConfigured": "銀盛通道密鑰未配置(發起方商戶號/私鑰證書/密碼/平台公鑰證書任一缺失)",
+  "payFailed": "銀盛支付異常: {0}",
+  "unsupportedPayMethod": "銀盛不支持的支付方式: {0}",
+  "closeFailed": "銀盛關閉訂單異常: {0}",
+  "refundFailed": "銀盛退款異常: {0}"
+}

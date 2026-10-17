@@ -1,0 +1,7 @@
+{
+  "keyNotConfigured": "인성(银盛) 채널 키가 구성되지 않았습니다(주최 가맹점 번호/개인키 인증서/비밀번호/플랫폼 공개키 인증서 중 누락)",
+  "payFailed": "인성 결제 오류: {0}",
+  "unsupportedPayMethod": "인성에서 지원하지 않는 결제 수단: {0}",
+  "closeFailed": "인성 주문 마감 오류: {0}",
+  "refundFailed": "인성 환불 오류: {0}"
+}

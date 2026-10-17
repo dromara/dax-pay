@@ -1,0 +1,7 @@
+{
+  "keyNotConfigured": "Kunci saluran YSE Pay belum dikonfigurasi (nomor merchant sponsor / sertifikat privat / kata sandi / sertifikat publik platform ada yang kurang)",
+  "payFailed": "Kesalahan pembayaran YSE Pay: {0}",
+  "unsupportedPayMethod": "Metode pembayaran tidak didukung YSE Pay: {0}",
+  "closeFailed": "Kesalahan penutupan pesanan YSE Pay: {0}",
+  "refundFailed": "Kesalahan pengembalian dana YSE Pay: {0}"
+}

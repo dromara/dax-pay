@@ -1,0 +1,7 @@
+{
+  "keyNotConfigured": "Khóa kênh YSE Pay chưa được cấu hình (thiếu một trong: mã merchant bên khởi tạo / chứng thư private / mật khẩu / chứng thư public của nền tảng)",
+  "payFailed": "Lỗi thanh toán YSE Pay: {0}",
+  "unsupportedPayMethod": "Phương thức thanh toán không được YSE Pay hỗ trợ: {0}",
+  "closeFailed": "Lỗi đóng đơn YSE Pay: {0}",
+  "refundFailed": "Lỗi hoàn tiền YSE Pay: {0}"
+}

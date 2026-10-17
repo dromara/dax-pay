@@ -1,0 +1,7 @@
+{
+  "keyNotConfigured": "YSE Pay channel key not configured (sponsor merchant No. / private cert / password / platform public cert missing)",
+  "payFailed": "YSE Pay payment error: {0}",
+  "unsupportedPayMethod": "Unsupported pay method for YSE Pay: {0}",
+  "closeFailed": "YSE Pay close order error: {0}",
+  "refundFailed": "YSE Pay refund error: {0}"
+}

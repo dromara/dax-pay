@@ -1,0 +1,7 @@
+{
+  "keyNotConfigured": "银盛通道密钥未配置(发起方商户号/私钥证书/密码/平台公钥证书任一缺失)",
+  "payFailed": "银盛支付异常: {0}",
+  "unsupportedPayMethod": "银盛不支持的支付方式: {0}",
+  "closeFailed": "银盛关闭订单异常: {0}",
+  "refundFailed": "银盛退款异常: {0}"
+}
