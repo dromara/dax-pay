@@ -1,0 +1,4 @@
+{
+  "payFailed": "收钱吧支付异常: {0}",
+  "unsupportedPayMethod": "收钱吧不支持的支付方式: {0}"
+}

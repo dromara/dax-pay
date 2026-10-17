@@ -1,0 +1,4 @@
+{
+  "payFailed": "ข้อผิดพลาดการชำระเงิน ShouQianBa: {0}",
+  "unsupportedPayMethod": "วิธีการชำระเงินที่ ShouQianBa ไม่รองรับ: {0}"
+}

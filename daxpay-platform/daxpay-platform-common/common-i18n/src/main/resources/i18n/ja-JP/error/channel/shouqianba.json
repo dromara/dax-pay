@@ -1,0 +1,4 @@
+{
+  "payFailed": "ShouQianBa 決済エラー: {0}",
+  "unsupportedPayMethod": "ShouQianBa でサポートされていない支払い方法: {0}"
+}
