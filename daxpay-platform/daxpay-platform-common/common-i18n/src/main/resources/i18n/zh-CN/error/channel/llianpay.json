@@ -1,0 +1,4 @@
+{
+  "payFailed": "连连支付异常: {0}",
+  "unsupportedPayMethod": "连连不支持的支付方式: {0}"
+}

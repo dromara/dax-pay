@@ -1,0 +1,4 @@
+{
+  "payFailed": "ข้อผิดพลาดการชำระเงิน LianLian: {0}",
+  "unsupportedPayMethod": "วิธีการชำระเงินที่ LianLian ไม่รองรับ: {0}"
+}
