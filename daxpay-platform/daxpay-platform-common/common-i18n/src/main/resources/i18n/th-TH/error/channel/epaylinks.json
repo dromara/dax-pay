@@ -1,0 +1,4 @@
+{
+  "payFailed": "ข้อผิดพลาดการชำระเงิน EpayLinks: {0}",
+  "unsupportedPayMethod": "วิธีการชำระเงินที่ EpayLinks ไม่รองรับ: {0}"
+}

@@ -1,0 +1,4 @@
+{
+  "payFailed": "易票聯支付異常: {0}",
+  "unsupportedPayMethod": "易票聯不支持的支付方式: {0}"
+}

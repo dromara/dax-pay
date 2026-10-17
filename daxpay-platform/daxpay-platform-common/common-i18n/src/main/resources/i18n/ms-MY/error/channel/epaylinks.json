@@ -1,0 +1,4 @@
+{
+  "payFailed": "Ralat pembayaran EpayLinks: {0}",
+  "unsupportedPayMethod": "Kaedah pembayaran tidak disokong oleh EpayLinks: {0}"
+}
