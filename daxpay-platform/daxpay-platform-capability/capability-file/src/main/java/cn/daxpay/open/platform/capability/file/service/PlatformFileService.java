@@ -234,7 +234,28 @@ public class PlatformFileService {
         PlatformFileRecord platformFileRecord = platformFileRecordManager.findByIdNotDeleted(fileId)
                 // 文件: 文件记录不存在
                 .orElseThrow(() -> new DataNotExistException("error.file.recordNotExist"));
+        return doDownloadAndCheck(platformFileRecord);
+    }
 
+    /// 按平台媒体ID或文件名下载文件并校验
+    ///
+    /// 纯数字按文件ID查, 其余按文件名查(见 [PlatformFileRecordManager#findByMediaIdOrFilename]);
+    /// 前端表单图片字段持有的标识是文件名, 历史链路可能传数字文件ID, 本方法统一兼容。
+    /// 会校验文件状态是否为已上传。
+    ///
+    /// @param mediaId 平台媒体ID(纯数字)或文件名(uuid.ext)
+    /// @return 文件字节数组
+    /// @throws DataNotExistException 文件记录不存在
+    /// @throws IllegalStateException 文件未上传完成
+    public byte[] downloadAndCheckByMediaId(String mediaId) {
+        PlatformFileRecord platformFileRecord = platformFileRecordManager.findByMediaIdOrFilename(mediaId)
+                // 文件: 文件记录不存在
+                .orElseThrow(() -> new DataNotExistException("error.file.recordNotExist"));
+        return doDownloadAndCheck(platformFileRecord);
+    }
+
+    /// 按文件记录执行下载(状态校验 + 预签名下载)
+    private byte[] doDownloadAndCheck(PlatformFileRecord platformFileRecord) {
         if (!FileUploadStatusEnum.UPLOADED.getCode().equals(platformFileRecord.getStatus())) {
             // 文件: 文件未上传无法下载
             throw new BizInfoException(DaxPayErrorCode.OPERATION_FAIL, "error.file.notUploadedForDownload");
