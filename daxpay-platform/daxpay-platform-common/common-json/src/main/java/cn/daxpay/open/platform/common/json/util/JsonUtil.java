@@ -1,5 +1,6 @@
 package cn.daxpay.open.platform.common.json.util;
 
+import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.lang.TypeReference;
 import cn.hutool.json.*;
 import lombok.experimental.UtilityClass;
@@ -21,8 +22,11 @@ import java.util.Collection;
 /// @see JacksonUtil
 @UtilityClass
 public class JsonUtil {
+    // 时间格式必须用无时区占位符的 NORM_DATETIME_PATTERN:
+    // 含 XXX 偏移占位符的旧格式对无时区的 LocalDateTime 会抛 UnsupportedTemporalTypeException
+    // (全系统已无 OffsetDateTime, 旧格式无正确工作场景), 且与平台报文时间规范 yyyy-MM-dd HH:mm:ss 一致
     private final JSONConfig JSON_CONFIG = JSONConfig.create()
-            .setDateFormat("yyyy-MM-dd'T'HH:mm:ssXXX");
+            .setDateFormat(DatePattern.NORM_DATETIME_PATTERN);
 
     /// 序列化为字符串
     public String toJsonStr(Object object) {
