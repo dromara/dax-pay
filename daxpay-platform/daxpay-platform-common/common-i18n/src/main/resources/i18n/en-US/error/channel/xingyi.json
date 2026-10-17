@@ -1,0 +1,6 @@
+{
+  "keyNotConfigured": "XingYi channel key not configured",
+  "payFailed": "XingYi payment error: {0}",
+  "refundFailed": "XingYi refund error: {0}",
+  "unsupportedPayMethod": "Unsupported payment method for XingYi: {0}"
+}

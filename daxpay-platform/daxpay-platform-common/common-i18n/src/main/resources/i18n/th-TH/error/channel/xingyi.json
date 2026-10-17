@@ -1,0 +1,6 @@
+{
+  "keyNotConfigured": "ยังไม่ได้กำหนดค่าคีย์ช่องทาง XingYi",
+  "payFailed": "ข้อผิดพลาดการชำระเงิน XingYi: {0}",
+  "refundFailed": "ข้อผิดพลาดการคืนเงิน XingYi: {0}",
+  "unsupportedPayMethod": "วิธีชำระเงินที่ XingYi ไม่รองรับ: {0}"
+}

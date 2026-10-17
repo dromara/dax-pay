@@ -1,0 +1,6 @@
+{
+  "keyNotConfigured": "Kunci kanal XingYi belum dikonfigurasi",
+  "payFailed": "Kesalahan pembayaran XingYi: {0}",
+  "refundFailed": "Kesalahan pengembalian dana XingYi: {0}",
+  "unsupportedPayMethod": "Metode pembayaran tidak didukung XingYi: {0}"
+}

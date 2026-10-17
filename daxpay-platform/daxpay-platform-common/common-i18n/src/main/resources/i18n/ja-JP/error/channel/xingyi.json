@@ -1,0 +1,6 @@
+{
+  "keyNotConfigured": "XingYiチャネル鍵が未設定です",
+  "payFailed": "XingYi決済エラー: {0}",
+  "refundFailed": "XingYi返金エラー: {0}",
+  "unsupportedPayMethod": "XingYiが対応していない支払い方法: {0}"
+}

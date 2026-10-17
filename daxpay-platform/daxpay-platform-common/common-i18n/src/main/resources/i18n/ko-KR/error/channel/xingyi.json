@@ -1,0 +1,6 @@
+{
+  "keyNotConfigured": "星驿付 채널 키가 구성되지 않았습니다",
+  "payFailed": "星驿付 결제 오류: {0}",
+  "refundFailed": "星驿付 환불 오류: {0}",
+  "unsupportedPayMethod": "星驿付에서 지원하지 않는 결제 수단: {0}"
+}

@@ -1,0 +1,6 @@
+{
+  "keyNotConfigured": "星驿付通道密钥未配置",
+  "payFailed": "星驿付支付异常: {0}",
+  "refundFailed": "星驿付退款异常: {0}",
+  "unsupportedPayMethod": "星驿付不支持的支付方式: {0}"
+}

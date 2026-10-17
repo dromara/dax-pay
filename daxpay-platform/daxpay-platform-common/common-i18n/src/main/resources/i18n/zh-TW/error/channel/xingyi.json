@@ -1,0 +1,6 @@
+{
+  "keyNotConfigured": "星驛付通道密鑰未配置",
+  "payFailed": "星驛付支付異常: {0}",
+  "refundFailed": "星驛付退款異常: {0}",
+  "unsupportedPayMethod": "星驛付不支援的支付方式: {0}"
+}

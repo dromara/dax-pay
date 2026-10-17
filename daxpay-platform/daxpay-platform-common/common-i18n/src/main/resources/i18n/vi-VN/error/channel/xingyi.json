@@ -1,0 +1,6 @@
+{
+  "keyNotConfigured": "Khóa kênh XingYi chưa được cấu hình",
+  "payFailed": "Lỗi thanh toán XingYi: {0}",
+  "refundFailed": "Lỗi hoàn tiền XingYi: {0}",
+  "unsupportedPayMethod": "Phương thức thanh toán không được XingYi hỗ trợ: {0}"
+}
