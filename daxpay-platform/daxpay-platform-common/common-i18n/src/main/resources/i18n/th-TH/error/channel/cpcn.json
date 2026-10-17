@@ -1,0 +1,4 @@
+{
+  "payFailed": "ข้อผิดพลาดการชำระเงิน CPCN: {0}",
+  "unsupportedPayMethod": "วิธีชำระเงินที่ CPCN ไม่รองรับ: {0}"
+}

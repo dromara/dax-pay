@@ -1,0 +1,4 @@
+{
+  "payFailed": "中金決済エラー: {0}",
+  "unsupportedPayMethod": "中金がサポートしない支払い方法です: {0}"
+}

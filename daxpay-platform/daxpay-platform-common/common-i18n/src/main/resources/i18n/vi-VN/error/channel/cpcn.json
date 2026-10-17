@@ -1,0 +1,4 @@
+{
+  "payFailed": "Lỗi thanh toán CPCN: {0}",
+  "unsupportedPayMethod": "Phương thức thanh toán CPCN không hỗ trợ: {0}"
+}
