@@ -45,6 +45,9 @@ public class DougongIsvConfigAssembler {
 
     /// 组装斗拱通道调用凭证(下发给子应用)
     ///
+    /// 数字人民币产品(HUIFU_ECNY)与聚合支付(DOUGONG_PAY)共用本方法:
+    /// 两者同通道同服务商, 密钥读取统一按 DOUGONG_PAY 产品记录(数币同一套斗拱密钥, 无独立密钥配置)。
+    ///
     /// @param mchNo        商户号(保留参数, 服务商密钥全局唯一不依赖此字段)
     /// @param channelMchNo 通道商户号(斗拱商户绑定主键)
     /// @param capability   支付能力编码(保留参数, 斗拱不按能力路由)

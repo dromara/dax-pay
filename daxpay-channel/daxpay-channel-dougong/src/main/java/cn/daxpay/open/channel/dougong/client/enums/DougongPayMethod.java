@@ -17,5 +17,7 @@ public enum DougongPayMethod {
     /// 微信小程序支付(tradeType=T_MINIAPP)
     WECHAT_MINI,
     /// 支付宝 JSAPI(tradeType=A_JSAPI)
-    ALIPAY_JSAPI;
+    ALIPAY_JSAPI,
+    /// 数字人民币扫码(tradeType=D_NATIVE, 付款方限数币APP钱包, 返回 qr_code)
+    ECNY_QR;
 }

@@ -94,6 +94,8 @@ public class DougongPayService {
             case ALIPAY_JSAPI -> DougongPayMethod.ALIPAY_JSAPI;
             // 银联(扫码)
             case UNION_QR -> DougongPayMethod.UNION_QR;
+            // 数字人民币(扫码, 付款方限数币APP钱包)
+            case ECNY_QR -> DougongPayMethod.ECNY_QR;
             default -> throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
                     "error.channel.dougong.unsupportedPayMethod", methodCode);
         };
