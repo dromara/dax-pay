@@ -1,0 +1,5 @@
+{
+  "payFailed": "嘉聯支付異常: {0}",
+  "unsupportedPayMethod": "嘉聯不支持的支付方式: {0}",
+  "closeFailed": "嘉聯關單失敗: {0}"
+}

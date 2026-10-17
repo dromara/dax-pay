@@ -1,0 +1,5 @@
+{
+  "payFailed": "JLPay payment error: {0}",
+  "unsupportedPayMethod": "Unsupported pay method for JLPay: {0}",
+  "closeFailed": "JLPay close failed: {0}"
+}

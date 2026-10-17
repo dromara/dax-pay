@@ -1,0 +1,5 @@
+{
+  "payFailed": "Ralat pembayaran JLPay: {0}",
+  "unsupportedPayMethod": "Kaedah pembayaran tidak disokong JLPay: {0}",
+  "closeFailed": "Gagal menutup pesanan JLPay: {0}"
+}

@@ -1,0 +1,5 @@
+{
+  "payFailed": "JLPay 결제 오류: {0}",
+  "unsupportedPayMethod": "JLPay에서 지원하지 않는 결제 수단입니다: {0}",
+  "closeFailed": "JLPay 주문 종료 실패: {0}"
+}

@@ -1,0 +1,5 @@
+{
+  "payFailed": "Lỗi thanh toán JLPay: {0}",
+  "unsupportedPayMethod": "Phương thức thanh toán không được JLPay hỗ trợ: {0}",
+  "closeFailed": "Đóng đơn hàng JLPay thất bại: {0}"
+}
