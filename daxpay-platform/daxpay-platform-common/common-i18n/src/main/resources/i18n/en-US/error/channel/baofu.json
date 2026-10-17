@@ -1,0 +1,4 @@
+{
+  "payFailed": "Baofoo payment error: {0}",
+  "unsupportedPayMethod": "Unsupported payment method for Baofoo: {0}"
+}

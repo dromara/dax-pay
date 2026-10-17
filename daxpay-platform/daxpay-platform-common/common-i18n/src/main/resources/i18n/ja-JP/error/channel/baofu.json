@@ -1,0 +1,4 @@
+{
+  "payFailed": "宝付ペイ異常: {0}",
+  "unsupportedPayMethod": "宝付ペイでサポートされていない支払い方法: {0}"
+}
