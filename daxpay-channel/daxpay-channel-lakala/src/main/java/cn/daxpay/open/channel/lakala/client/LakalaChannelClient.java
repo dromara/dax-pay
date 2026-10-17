@@ -6,12 +6,24 @@ import cn.daxpay.open.channel.lakala.client.req.LakalaPayReq;
 import cn.daxpay.open.channel.lakala.client.req.LakalaRefundReq;
 import cn.daxpay.open.channel.lakala.client.req.LakalaRefundSyncReq;
 import cn.daxpay.open.channel.lakala.client.req.LakalaSyncReq;
+import cn.daxpay.open.channel.lakala.client.req.MossCallbackParseReq;
+import cn.daxpay.open.channel.lakala.client.req.MossCloseReq;
+import cn.daxpay.open.channel.lakala.client.req.MossPayReq;
+import cn.daxpay.open.channel.lakala.client.req.MossRefundReq;
+import cn.daxpay.open.channel.lakala.client.req.MossRefundSyncReq;
+import cn.daxpay.open.channel.lakala.client.req.MossSyncReq;
 import cn.daxpay.open.channel.lakala.client.resp.LakalaCallbackParseResp;
 import cn.daxpay.open.channel.lakala.client.resp.LakalaCloseResp;
 import cn.daxpay.open.channel.lakala.client.resp.LakalaPayResp;
 import cn.daxpay.open.channel.lakala.client.resp.LakalaRefundResp;
 import cn.daxpay.open.channel.lakala.client.resp.LakalaRefundSyncResp;
 import cn.daxpay.open.channel.lakala.client.resp.LakalaSyncResp;
+import cn.daxpay.open.channel.lakala.client.resp.MossCallbackParseResp;
+import cn.daxpay.open.channel.lakala.client.resp.MossCloseResp;
+import cn.daxpay.open.channel.lakala.client.resp.MossPayResp;
+import cn.daxpay.open.channel.lakala.client.resp.MossRefundResp;
+import cn.daxpay.open.channel.lakala.client.resp.MossRefundSyncResp;
+import cn.daxpay.open.channel.lakala.client.resp.MossSyncResp;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -52,4 +64,34 @@ public interface LakalaChannelClient {
     /// 退款回调验签解析(转发子应用)
     @PostExchange("/channel/lakala/callback/parse-refund")
     DaxResult<LakalaCallbackParseResp> parseRefundCallback(@RequestBody LakalaCallbackParseReq req);
+
+    // ===== 拉卡拉 MOSS 产品线(lakala_moss, 开放平台接口体系, 独立路径前缀 /channel/lakala/moss) =====
+
+    /// MOSS 支付下单
+    @PostExchange("/channel/lakala/moss/pay")
+    DaxResult<MossPayResp> mossPay(@RequestBody MossPayReq req);
+
+    /// MOSS 支付同步(查询订单状态)
+    @PostExchange("/channel/lakala/moss/sync")
+    DaxResult<MossSyncResp> mossSync(@RequestBody MossSyncReq req);
+
+    /// MOSS 关闭订单(查单确认式)
+    @PostExchange("/channel/lakala/moss/close")
+    DaxResult<MossCloseResp> mossClose(@RequestBody MossCloseReq req);
+
+    /// MOSS 退款
+    @PostExchange("/channel/lakala/moss/refund")
+    DaxResult<MossRefundResp> mossRefund(@RequestBody MossRefundReq req);
+
+    /// MOSS 退款同步(查询退款状态)
+    @PostExchange("/channel/lakala/moss/refund-sync")
+    DaxResult<MossRefundSyncResp> mossRefundSync(@RequestBody MossRefundSyncReq req);
+
+    /// MOSS 支付回调验签解析(转发子应用)
+    @PostExchange("/channel/lakala/moss/callback/parse-pay")
+    DaxResult<MossCallbackParseResp> mossParsePayCallback(@RequestBody MossCallbackParseReq req);
+
+    /// MOSS 退款回调验签解析(转发子应用)
+    @PostExchange("/channel/lakala/moss/callback/parse-refund")
+    DaxResult<MossCallbackParseResp> mossParseRefundCallback(@RequestBody MossCallbackParseReq req);
 }
