@@ -1,0 +1,4 @@
+{
+  "payFailed": "聯動優勢支付異常: {0}",
+  "unsupportedPayMethod": "聯動優勢不支持的支付方式: {0}"
+}

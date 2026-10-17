@@ -1,0 +1,4 @@
+{
+  "payFailed": "ข้อผิดพลาดการชำระเงิน UMFpay: {0}",
+  "unsupportedPayMethod": "วิธีการชำระเงินที่ UMFpay ไม่รองรับ: {0}"
+}
