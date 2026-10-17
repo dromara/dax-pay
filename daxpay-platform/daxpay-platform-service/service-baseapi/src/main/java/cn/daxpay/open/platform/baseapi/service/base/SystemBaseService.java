@@ -1,17 +1,14 @@
 package cn.daxpay.open.platform.baseapi.service.base;
 
-import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.lang.Opt;
-import cn.hutool.extra.spring.SpringUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.info.BuildProperties;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
 
@@ -24,14 +21,13 @@ public class SystemBaseService {
 
     private final Environment env;
 
+    /// 构建信息(仅 jar 运行时才存在的可选 bean, IDE 直跑时缺失, 经 [ObjectProvider] 可选注入)
+    private final ObjectProvider<BuildProperties> buildPropertiesProvider;
+
     /// 系统信息
     public Map<String, Object> info(){
-        var buildProperties = SpringUtil.getBeansOfType(BuildProperties.class);
         // 只有jar运行时才可以获取
-        Optional<BuildProperties> optional = Opt.ofNullable(new ArrayList<>(buildProperties.values()))
-                .filter(CollUtil::isNotEmpty)
-                .map(ArrayList::getFirst)
-                .toOptional();
+        Optional<BuildProperties> optional = Optional.ofNullable(buildPropertiesProvider.getIfAvailable());
         // 构建时间
         String buildTime = optional
                 .map(BuildProperties::getTime)
