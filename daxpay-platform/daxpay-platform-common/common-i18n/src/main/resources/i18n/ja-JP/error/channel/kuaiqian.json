@@ -1,0 +1,4 @@
+{
+  "payFailed": "快錢ペイ異常: {0}",
+  "unsupportedPayMethod": "快錢ペイでサポートされていない支払い方法: {0}"
+}

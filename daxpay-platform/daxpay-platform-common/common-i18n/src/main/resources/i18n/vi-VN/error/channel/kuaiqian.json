@@ -1,0 +1,4 @@
+{
+  "payFailed": "Lỗi thanh toán KuaiQian: {0}",
+  "unsupportedPayMethod": "Phương thức thanh toán không được KuaiQian hỗ trợ: {0}"
+}

@@ -1,0 +1,4 @@
+{
+  "payFailed": "KuaiQian payment error: {0}",
+  "unsupportedPayMethod": "Unsupported payment method for KuaiQian: {0}"
+}
