@@ -1,0 +1,4 @@
+{
+  "payFailed": "付唄(FuBei)ペイ異常: {0}",
+  "unsupportedPayMethod": "付唄(FuBei)でサポートされていない支払い方法: {0}"
+}

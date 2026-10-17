@@ -1,0 +1,4 @@
+{
+  "payFailed": "Kesalahan pembayaran FuBei: {0}",
+  "unsupportedPayMethod": "Metode pembayaran tidak didukung FuBei: {0}"
+}

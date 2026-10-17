@@ -1,0 +1,4 @@
+{
+  "payFailed": "付唄支付異常: {0}",
+  "unsupportedPayMethod": "付唄不支持的支付方式: {0}"
+}

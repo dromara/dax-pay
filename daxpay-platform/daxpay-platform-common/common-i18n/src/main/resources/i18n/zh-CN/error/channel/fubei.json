@@ -1,0 +1,4 @@
+{
+  "payFailed": "付呗支付异常: {0}",
+  "unsupportedPayMethod": "付呗不支持的支付方式: {0}"
+}
