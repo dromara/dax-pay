@@ -1,0 +1,4 @@
+{
+  "payFailed": "ข้อผิดพลาดการชำระเงิน YiSheng: {0}",
+  "unsupportedPayMethod": "วิธีการชำระเงินที่ YiSheng ไม่รองรับ: {0}"
+}

@@ -1,0 +1,4 @@
+{
+  "payFailed": "易生支付異常: {0}",
+  "unsupportedPayMethod": "易生不支持的支付方式: {0}"
+}

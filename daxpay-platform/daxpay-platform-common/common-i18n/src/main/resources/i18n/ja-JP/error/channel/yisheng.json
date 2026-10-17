@@ -1,0 +1,4 @@
+{
+  "payFailed": "易生ペイ異常: {0}",
+  "unsupportedPayMethod": "易生ペイでサポートされていない支払い方法: {0}"
+}
