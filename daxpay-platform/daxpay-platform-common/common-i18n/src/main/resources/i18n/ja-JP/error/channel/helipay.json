@@ -1,0 +1,7 @@
+{
+  "payFailed": "合利宝決済エラー: {0}",
+  "unsupportedPayMethod": "合利宝がサポートしない決済方法です: {0}",
+  "missingOpenId": "合利宝JS決済({0})にはopenIdが必要です",
+  "keyNotConfigured": "合利宝チャネルキーが未設定です(加盟店番号/署名鍵)",
+  "refundFailed": "合利宝返金エラー: {0}"
+}

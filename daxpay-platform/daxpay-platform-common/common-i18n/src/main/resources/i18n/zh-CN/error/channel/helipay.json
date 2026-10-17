@@ -1,0 +1,7 @@
+{
+  "payFailed": "合利宝支付异常: {0}",
+  "unsupportedPayMethod": "合利宝不支持的支付方式: {0}",
+  "missingOpenId": "合利宝JS支付({0})必填openId",
+  "keyNotConfigured": "合利宝通道密钥未配置(商户编号/签名密钥)",
+  "refundFailed": "合利宝退款异常: {0}"
+}

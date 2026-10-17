@@ -1,0 +1,7 @@
+{
+  "payFailed": "Helipay payment error: {0}",
+  "unsupportedPayMethod": "Unsupported payment method for Helipay: {0}",
+  "missingOpenId": "openid is required for Helipay JS payment ({0})",
+  "keyNotConfigured": "Helipay channel key is not configured (customer number / sign key)",
+  "refundFailed": "Helipay refund error: {0}"
+}

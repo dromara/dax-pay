@@ -1,0 +1,7 @@
+{
+  "payFailed": "合利寶支付異常: {0}",
+  "unsupportedPayMethod": "合利寶不支援的支付方式: {0}",
+  "missingOpenId": "合利寶JS支付({0})必填openId",
+  "keyNotConfigured": "合利寶通道密鑰未配置(商戶編號/簽名密鑰)",
+  "refundFailed": "合利寶退款異常: {0}"
+}

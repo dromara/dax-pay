@@ -1,0 +1,7 @@
+{
+  "payFailed": "합리바오 결제 오류: {0}",
+  "unsupportedPayMethod": "합리바오에서 지원하지 않는 결제 수단입니다: {0}",
+  "missingOpenId": "합리바오 JS 결제({0})에는 openId가 필요합니다",
+  "keyNotConfigured": "합리바오 채널 키가 구성되지 않았습니다(가맹점 번호/서명 키)",
+  "refundFailed": "합리바오 환불 오류: {0}"
+}

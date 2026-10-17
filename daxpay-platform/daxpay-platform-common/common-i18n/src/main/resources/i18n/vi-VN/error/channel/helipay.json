@@ -1,0 +1,7 @@
+{
+  "payFailed": "Lỗi thanh toán Helipay: {0}",
+  "unsupportedPayMethod": "Phương thức thanh toán không được Helipay hỗ trợ: {0}",
+  "missingOpenId": "openId là bắt buộc cho thanh toán JS Helipay ({0})",
+  "keyNotConfigured": "Khóa kênh Helipay chưa được cấu hình (số merchant / khóa ký)",
+  "refundFailed": "Lỗi hoàn tiền Helipay: {0}"
+}

@@ -1,0 +1,7 @@
+{
+  "payFailed": "Kesalahan pembayaran Helipay: {0}",
+  "unsupportedPayMethod": "Metode pembayaran tidak didukung Helipay: {0}",
+  "missingOpenId": "openId wajib diisi untuk pembayaran JS Helipay ({0})",
+  "keyNotConfigured": "Kunci channel Helipay belum dikonfigurasi (nomor merchant / kunci tanda tangan)",
+  "refundFailed": "Kesalahan refund Helipay: {0}"
+}
