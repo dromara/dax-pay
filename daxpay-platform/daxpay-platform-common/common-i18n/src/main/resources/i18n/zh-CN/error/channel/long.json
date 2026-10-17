@@ -1,0 +1,4 @@
+{
+  "payFailed": "建行龙支付支付异常: {0}",
+  "unsupportedPayMethod": "建行龙支付不支持的支付方式: {0}"
+}

@@ -1,0 +1,4 @@
+{
+  "payFailed": "建行龍ペイ異常: {0}",
+  "unsupportedPayMethod": "建行龍ペイでサポートされていない支払い方法: {0}"
+}

@@ -1,0 +1,4 @@
+{
+  "payFailed": "Kesalahan pembayaran CCB Long Pay: {0}",
+  "unsupportedPayMethod": "Metode pembayaran tidak didukung CCB Long Pay: {0}"
+}
