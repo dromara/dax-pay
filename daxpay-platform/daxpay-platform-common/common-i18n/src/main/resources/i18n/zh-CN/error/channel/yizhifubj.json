@@ -1,0 +1,4 @@
+{
+  "payFailed": "一直付支付异常: {0}",
+  "unsupportedPayMethod": "一直付不支持的支付方式: {0}"
+}
