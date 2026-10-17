@@ -1,0 +1,4 @@
+{
+  "payFailed": "Kesalahan pembayaran Youzan: {0}",
+  "unsupportedPayMethod": "Metode pembayaran tidak didukung Youzan: {0}"
+}

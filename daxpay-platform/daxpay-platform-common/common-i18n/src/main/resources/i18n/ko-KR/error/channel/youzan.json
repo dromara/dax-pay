@@ -1,0 +1,4 @@
+{
+  "payFailed": "유자즈 결제 오류: {0}",
+  "unsupportedPayMethod": "유자즈에서 지원하지 않는 결제 수단입니다: {0}"
+}

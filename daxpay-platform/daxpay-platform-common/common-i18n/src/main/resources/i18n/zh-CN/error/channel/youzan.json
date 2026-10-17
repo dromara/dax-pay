@@ -1,0 +1,4 @@
+{
+  "payFailed": "有赞支付异常: {0}",
+  "unsupportedPayMethod": "有赞不支持的支付方式: {0}"
+}
