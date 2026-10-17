@@ -184,6 +184,36 @@
             <artifactId>daxpay-channel-yeepay</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- 快钱支付通道 -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-channel-kuaiqian</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 一直付(北京)支付通道 -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-channel-yizhifubj</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 连连支付通道 -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-channel-llianpay</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 建行龙支付通道(建设银行聚合支付) -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-channel-long</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 杉德支付通道 -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-channel-sand</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- Stripe 国际卡组通道 -->
         <dependency>
             <groupId>cn.daxpay.open</groupId>
@@ -194,6 +224,90 @@
         <dependency>
             <groupId>cn.daxpay.open</groupId>
             <artifactId>daxpay-channel-easypay</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 收钱吧支付通道 -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-channel-shouqianba</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 星驿付支付通道(新大陆旗下国通星驿, 驿云付 YYF 接口) -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-channel-xingyi</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 银盛支付通道(一通道两产品: 银盛支付开放平台 ysep_pay + 银盛e企通 yseqt_pay) -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-channel-ysep</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- Jeepay计全支付通道(三方聚合平台: 微信/支付宝/云闪付) -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-channel-jeepay</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 合利宝支付通道(扫码产品线: 微信/支付宝扫码+公众号JS+H5) -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-channel-helipay</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 付呗聚合支付通道(云闪付扫码/微信JSAPI/支付宝JSAPI/支付宝H5, 开放平台网关 JSON+MD5) -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-channel-fubei</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 嘉联支付通道(聚合通道: 微信/支付宝/云闪付, OpenAPI 国密 SM2 直连商户模式) -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-channel-jlpay</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 易票联支付通道(聚合通道: 微信/支付宝/云闪付扫码+JSAPI+网银收银台, EFPS 网关直连商户模式) -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-channel-epaylinks</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 联动优势支付通道(聚合通道: 微信/支付宝/云闪付扫码+微信公众号跳转, 老网关表单+RSA(SHA1)签名直连商户模式) -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-channel-umfpay</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 易生支付通道(聚合通道: 微信/支付宝扫码+JSAPI, api_gateway.do 表单+RSA 类支付宝协议直连商户模式) -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-channel-yisheng</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 中金支付通道(聚合通道: 微信/支付宝/云闪付扫码+微信JSAPI/H5+支付宝JSAPI, 国密 SM2 证书签名直连机构模式) -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-channel-cpcn</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 宝付支付通道(聚合通道: 微信/支付宝/云闪付收银台+扫码+JSAPI+付款码, 聚合 juhe 网关表单+RSA(SHA256 hex) 直连商户模式) -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-channel-baofu</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 哆啦宝支付通道(聚合通道: 微信/支付宝/云闪付扫码+H5+JSAPI, 开放平台 JSON+SHA1 token 直连商户模式) -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-channel-duolabao</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- 有赞支付通道(高汇通聚合通道: 微信JSAPI/小程序/H5 + 支付宝JSAPI, youzan.pay.unified 统收单线 RSA 头签名直连商户模式) -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-channel-youzan</artifactId>
             <version>${project.version}</version>
         </dependency>
         <!-- 易支付协议插件 -->

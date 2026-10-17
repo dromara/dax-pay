@@ -35,8 +35,8 @@ public enum ChannelEnum implements I18nSupport {
     SHENG_PAY("sheng_pay"),
     /// 银盛
     YSEP_PAY("ysep_pay"),
-    /// 快钱
-    QUICK_PAY("quick_pay"),
+    /// 快钱(官网 https://www.99bill.com/)
+    KUAIQIAN_PAY("kuaiqian_pay"),
     /// 杉德
     SAND_PAY("sand_pay"),
     /// 易宝
@@ -60,40 +60,40 @@ public enum ChannelEnum implements I18nSupport {
     /// 收钱吧(聚合扫码收单)
     SHOUQIANBA("shouqianba"),
 
-    // ===== 合规通道占位(占位通道, 未对接, 仅枚举与目录层登记, 无策略实现与创建入口) =====
-    /// 连连支付(占位通道, 未对接)
+    // ===== 聚合通道(易支付系移植批, 已双层对接) =====
+    /// 连连支付(已对接)
     LLIAN_PAY("llianpay"),
-    /// 嘉联支付(占位通道, 未对接)
+    /// 嘉联支付(已对接)
     JL_PAY("jlpay"),
-    /// 合利宝(占位通道, 未对接)
+    /// 合利宝(已对接)
     HELI_PAY("helipay"),
-    /// 付呗(占位通道, 未对接)
+    /// 付呗(已对接)
     FUBEI_PAY("fubei"),
-    /// 易票联(占位通道, 未对接)
+    /// 易票联(已对接)
     EPAY_LINKS("epaylinks"),
     /// PayPal(国际支付通道, 占位未对接)
     PAY_PAL("paypal"),
     /// Airwallex(国际支付通道, 占位未对接)
     AIRWALLEX("airwallex"),
-    /// 中金支付(占位通道, 未对接)
+    /// 中金支付(已对接)
     CPCN_PAY("cpcn"),
-    /// 宝付支付(占位通道, 未对接)
+    /// 宝付支付(已对接)
     BAOFU_PAY("baofu"),
-    /// 首信易支付(占位通道, 未对接)
+    /// 首信易支付(已对接)
     YIZHIFU_PAY("yizhifubj"),
-    /// 哆啦宝(占位通道, 未对接)
+    /// 哆啦宝(聚合通道: 微信/支付宝/云闪付)
     DUOLABAO_PAY("duolabao"),
-    /// 有赞支付(占位通道, 未对接)
+    /// 有赞支付(已对接)
     YOUZAN_PAY("youzan"),
     /// Payssion(占位通道, 未对接)
     PAYSSION("payssion"),
-    /// 联动优势(占位通道, 未对接)
+    /// 联动优势(已对接)
     UMF_PAY("umfpay"),
-    /// 易生支付(占位通道, 未对接)
+    /// 易生支付
     YISHENG_PAY("yisheng_pay"),
     /// WorldFirst(国际跨境收款通道, 占位未对接)
     WORLDFIRST("worldfirst"),
-    /// 连连国际(国际跨境收款通道, 占位未对接; 与境内连连支付 llianpay 为两条独立通道)
+    /// 连连国际(国际跨境收款通道, 已对接; 与境内连连支付 llianpay 为两条独立通道)
     LIANLIAN_GLOBAL("lianlian_global"),
     /// PingPong(国际跨境收款通道, 占位未对接)
     PINGPONG("pingpong"),

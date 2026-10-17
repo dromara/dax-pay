@@ -204,8 +204,20 @@
     "nonceStr": {
       "size": "Nonce cannot exceed 32 characters"
     },
+    "payType": {
+      "notBlank": "Pay type cannot be blank"
+    },
+    "yishengPartner": {
+      "notBlank": "YiSheng partner ID cannot be blank"
+    },
+    "yishengMerchantId": {
+      "notBlank": "YiSheng merchant ID cannot be blank"
+    },
+    "youzanMerchantId": {
+      "notBlank": "Youzan merchant ID cannot be empty"
+    },
     "sign": {
-      "size": "Signature cannot exceed 1024 characters"
+      "notBlank": "Signature is required"
     },
     "reqTime": {
       "notNull": "Request time cannot be blank"
@@ -738,6 +750,18 @@
     "callbackBody": {
       "notBlank": "Callback body cannot be blank"
     },
+    "callbackPath": {
+      "notBlank": "Callback request URI cannot be empty"
+    },
+    "callbackTimestamp": {
+      "notBlank": "Callback signature timestamp cannot be empty"
+    },
+    "callbackNonce": {
+      "notBlank": "Callback signature nonce cannot be empty"
+    },
+    "callbackSign": {
+      "notBlank": "Callback signature cannot be empty"
+    },
     "callbackType": {
       "notBlank": "Callback type cannot be blank"
     },
@@ -858,6 +882,36 @@
     "yopIsvNo": {
       "notBlank": "YeePay ISV number cannot be blank"
     },
+    "memberCode": {
+      "notBlank": "KuaiQian member code cannot be blank"
+    },
+    "merchantId": {
+      "notBlank": "KuaiQian merchant ID cannot be blank"
+    },
+    "terminalId": {
+      "notBlank": "KuaiQian terminal ID cannot be blank"
+    },
+    "posId": {
+      "notBlank": "CCB POS ID cannot be blank"
+    },
+    "branchId": {
+      "notBlank": "CCB branch ID cannot be blank"
+    },
+    "agetId": {
+      "notBlank": "XingYi agency ID cannot be blank"
+    },
+    "custId": {
+      "notBlank": "XingYi merchant ID cannot be blank"
+    },
+    "customerNum": {
+      "notBlank": "DuoLaoBao customer number cannot be blank"
+    },
+    "mid": {
+      "notBlank": "Sand merchant ID (mid) cannot be empty"
+    },
+    "marketProduct": {
+      "notBlank": "market product code cannot be empty"
+    },
     "itemId": {
       "notBlank": "Cashier item ID cannot be blank"
     },
@@ -952,6 +1006,25 @@
     "mailLanguage": "Email language cannot be empty",
     "mailSubject": "Email subject cannot be empty",
     "mailTitle": "Email title cannot be empty",
-    "mailContent": "Email content cannot be empty"
+    "mailContent": "Email content cannot be empty",
+    "payMethod": {
+      "notNull": "Payment method is required"
+    },
+    "terminalSn": {
+      "notBlank": "Terminal SN is required"
+    },
+    "mchId": {
+      "notBlank": "LianLian merchant ID cannot be empty"
+    },
+    "orderAmount": {
+      "notNull": "Original order amount is required",
+      "positive": "Original order amount must be positive"
+    },
+    "institutionId": {
+      "notBlank": "Institution ID cannot be empty"
+    },
+    "yizhifubjMerchantId": {
+      "notBlank": "Yizhifu (Beijing) merchant ID cannot be empty"
+    }
   }
 }

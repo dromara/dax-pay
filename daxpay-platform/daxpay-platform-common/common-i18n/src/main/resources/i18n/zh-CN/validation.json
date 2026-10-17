@@ -204,8 +204,20 @@
     "nonceStr": {
       "size": "随机数不可超过32位"
     },
+    "payType": {
+      "notBlank": "支付类型不能为空"
+    },
+    "yishengPartner": {
+      "notBlank": "易生合作伙伴ID不能为空"
+    },
+    "yishengMerchantId": {
+      "notBlank": "易生商户编号不能为空"
+    },
+    "youzanMerchantId": {
+      "notBlank": "有赞商户号不能为空"
+    },
     "sign": {
-      "size": "签名不可超过1024位"
+      "notBlank": "签名不能为空"
     },
     "reqTime": {
       "notNull": "请求时间必填"
@@ -738,6 +750,18 @@
     "callbackBody": {
       "notBlank": "回调报文不能为空"
     },
+    "callbackPath": {
+      "notBlank": "回调请求地址不能为空"
+    },
+    "callbackTimestamp": {
+      "notBlank": "回调签名时间戳不能为空"
+    },
+    "callbackNonce": {
+      "notBlank": "回调签名随机串不能为空"
+    },
+    "callbackSign": {
+      "notBlank": "回调签名值不能为空"
+    },
     "callbackType": {
       "notBlank": "回调类型不能为空"
     },
@@ -858,6 +882,36 @@
     "yopIsvNo": {
       "notBlank": "易宝服务商号不能为空"
     },
+    "memberCode": {
+      "notBlank": "快钱会员号不能为空"
+    },
+    "merchantId": {
+      "notBlank": "快钱当面付商户号不能为空"
+    },
+    "terminalId": {
+      "notBlank": "快钱当面付终端号不能为空"
+    },
+    "posId": {
+      "notBlank": "建行柜台号不能为空"
+    },
+    "branchId": {
+      "notBlank": "建行分行号不能为空"
+    },
+    "agetId": {
+      "notBlank": "机构号不能为空"
+    },
+    "custId": {
+      "notBlank": "星驿付商户号不能为空"
+    },
+    "customerNum": {
+      "notBlank": "哆啦宝商户编号不能为空"
+    },
+    "mid": {
+      "notBlank": "杉德商户编号不能为空"
+    },
+    "marketProduct": {
+      "notBlank": "市场产品编码不能为空"
+    },
     "itemId": {
       "notBlank": "收银台支付项ID不可为空"
     },
@@ -952,6 +1006,25 @@
     "mailLanguage": "邮件语言不能为空",
     "mailSubject": "邮件主题不能为空",
     "mailTitle": "邮件标题不能为空",
-    "mailContent": "正文文案不能为空"
+    "mailContent": "正文文案不能为空",
+    "payMethod": {
+      "notNull": "支付方式不可为空"
+    },
+    "terminalSn": {
+      "notBlank": "终端号不能为空"
+    },
+    "mchId": {
+      "notBlank": "连连商户号不能为空"
+    },
+    "orderAmount": {
+      "notNull": "原订单金额不可为空",
+      "positive": "原订单金额必须大于0"
+    },
+    "institutionId": {
+      "notBlank": "机构编号不能为空"
+    },
+    "yizhifubjMerchantId": {
+      "notBlank": "一直付商户编号不能为空"
+    }
   }
 }

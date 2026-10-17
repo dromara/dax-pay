@@ -203,8 +203,20 @@
     "nonceStr": {
       "size": "Nonce ต้องมีความยาวไม่เกิน 32 ตัวอักษร"
     },
+    "payType": {
+      "notBlank": "ต้องระบุประเภทการชำระเงิน"
+    },
+    "yishengPartner": {
+      "notBlank": "ต้องระบุรหัสพันธมิตร YiSheng"
+    },
+    "yishengMerchantId": {
+      "notBlank": "ต้องระบุรหัสร้านค้า YiSheng"
+    },
+    "youzanMerchantId": {
+      "notBlank": "หมายเลขร้านค้า Youzan จำเป็นต้องกรอก"
+    },
     "sign": {
-      "size": "ลายเซ็นต้องมีความยาวไม่เกิน 1,024 อักขระ"
+      "notBlank": "ลายเซ็นเป็นข้อมูลที่จำเป็น"
     },
     "reqTime": {
       "notNull": "เวลาที่ร้องขอต้องไม่เว้นว่าง"
@@ -733,6 +745,18 @@
     "callbackBody": {
       "notBlank": "เนื้อหาการติดต่อกลับต้องไม่เว้นว่าง"
     },
+    "callbackPath": {
+      "notBlank": "URI ของ callback ต้องไม่ว่าง"
+    },
+    "callbackTimestamp": {
+      "notBlank": "timestamp ลายเซ็น callback ต้องไม่ว่าง"
+    },
+    "callbackNonce": {
+      "notBlank": "nonce ลายเซ็น callback ต้องไม่ว่าง"
+    },
+    "callbackSign": {
+      "notBlank": "ลายเซ็น callback ต้องไม่ว่าง"
+    },
     "callbackType": {
       "notBlank": "ประเภทการโทรกลับต้องไม่เว้นว่าง"
     },
@@ -815,6 +839,36 @@
     },
     "yopIsvNo": {
       "notBlank": "หมายเลข ISV YeePay ต้องไม่ว่าง"
+    },
+    "memberCode": {
+      "notBlank": "รหัสสมาชิก KuaiQian ต้องไม่ว่าง"
+    },
+    "merchantId": {
+      "notBlank": "รหัสร้านค้า KuaiQian ต้องไม่ว่าง"
+    },
+    "terminalId": {
+      "notBlank": "รหัสเทอร์มินัล KuaiQian ต้องไม่ว่าง"
+    },
+    "posId": {
+      "notBlank": "หมายเลขเคาน์เตอร์ CCB ต้องไม่ว่าง"
+    },
+    "branchId": {
+      "notBlank": "หมายเลขสาขา CCB ต้องไม่ว่าง"
+    },
+    "agetId": {
+      "notBlank": "รหัสหน่วยงาน XingYi ต้องไม่ว่าง"
+    },
+    "custId": {
+      "notBlank": "รหัสร้านค้า XingYi ต้องไม่ว่าง"
+    },
+    "customerNum": {
+      "notBlank": "หมายเลขลูกค้า DuoLaoBao ต้องไม่ว่าง"
+    },
+    "mid": {
+      "notBlank": "หมายเลขร้านค้า Sand (mid) ต้องไม่ว่างเปล่า"
+    },
+    "marketProduct": {
+      "notBlank": "รหัสผลิตภัณฑ์ตลาดต้องไม่ว่างเปล่า"
     },
     "sensitiveWord": {
       "rejected": "เนื้อหามีคำที่ละเอียดอ่อนและถูกปฏิเสธ"
@@ -899,6 +953,25 @@
     "mailLanguage": "ภาษาอีเมลห้ามว่าง",
     "mailSubject": "หัวเรื่องอีเมลห้ามว่าง",
     "mailTitle": "ชื่ออีเมลห้ามว่าง",
-    "mailContent": "เนื้อหาอีเมลห้ามว่าง"
+    "mailContent": "เนื้อหาอีเมลห้ามว่าง",
+    "payMethod": {
+      "notNull": "วิธีการชำระเงินเป็นข้อมูลที่จำเป็น"
+    },
+    "terminalSn": {
+      "notBlank": "หมายเลขเทอร์มินัลเป็นข้อมูลที่จำเป็น"
+    },
+    "mchId": {
+      "notBlank": "รหัสร้านค้า LianLian ต้องไม่ว่าง"
+    },
+    "orderAmount": {
+      "notNull": "ต้องระบุยอดเงินคำสั่งซื้อเดิม",
+      "positive": "ยอดเงินคำสั่งซื้อเดิมต้องมากกว่า 0"
+    },
+    "institutionId": {
+      "notBlank": "รหัสสถาบันต้องไม่ว่าง"
+    },
+    "yizhifubjMerchantId": {
+      "notBlank": "หมายเลขร้านค้า Yizhifu (ปักกิ่ง) ต้องไม่ว่าง"
+    }
   }
 }

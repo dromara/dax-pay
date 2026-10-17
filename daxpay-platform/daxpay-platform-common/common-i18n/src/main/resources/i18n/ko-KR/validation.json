@@ -204,8 +204,20 @@
     "nonceStr": {
       "size": "Nonce는 32자를 초과할 수 없습니다."
     },
+    "payType": {
+      "notBlank": "결제 유형은 필수입니다"
+    },
+    "yishengPartner": {
+      "notBlank": "易生 파트너 ID는 필수입니다"
+    },
+    "yishengMerchantId": {
+      "notBlank": "易生 가맹점 번호는 필수입니다"
+    },
+    "youzanMerchantId": {
+      "notBlank": "유자즈 가맹점 번호는 비워둘 수 없습니다"
+    },
     "sign": {
-      "size": "서명은 1024자를 초과할 수 없습니다."
+      "notBlank": "서명은 필수입니다"
     },
     "reqTime": {
       "notNull": "요청 시간은 비워둘 수 없습니다."
@@ -734,6 +746,18 @@
     "callbackBody": {
       "notBlank": "콜백 본문은 비워둘 수 없습니다."
     },
+    "callbackPath": {
+      "notBlank": "콜백 요청 URI는 필수입니다"
+    },
+    "callbackTimestamp": {
+      "notBlank": "콜백 서명 타임스탬프는 필수입니다"
+    },
+    "callbackNonce": {
+      "notBlank": "콜백 서명 논스는 필수입니다"
+    },
+    "callbackSign": {
+      "notBlank": "콜백 서명값은 필수입니다"
+    },
     "callbackType": {
       "notBlank": "콜백 유형은 비워둘 수 없습니다."
     },
@@ -854,6 +878,36 @@
     "yopIsvNo": {
       "notBlank": "YeePay ISV 번호는 필수입니다"
     },
+    "memberCode": {
+      "notBlank": "快錢 회원 번호는 필수입니다"
+    },
+    "merchantId": {
+      "notBlank": "快錢 대면결제 가맹점 번호는 필수입니다"
+    },
+    "terminalId": {
+      "notBlank": "快錢 대면결제 단말기 번호는 필수입니다"
+    },
+    "posId": {
+      "notBlank": "建行 카운터 번호는 필수입니다"
+    },
+    "branchId": {
+      "notBlank": "建行 지점 번호는 필수입니다"
+    },
+    "agetId": {
+      "notBlank": "星驿付 기관 번호는 필수입니다"
+    },
+    "custId": {
+      "notBlank": "星驿付 가맹점 번호는 필수입니다"
+    },
+    "customerNum": {
+      "notBlank": "哆啦宝 고객번호는 필수입니다"
+    },
+    "mid": {
+      "notBlank": "Sand 가맹점 번호(mid)는 비워 둘 수 없습니다"
+    },
+    "marketProduct": {
+      "notBlank": "마켓 상품 코드는 비워 둘 수 없습니다"
+    },
     "itemId": {
       "notBlank": "계산대 결제 항목 ID는 필수입니다"
     },
@@ -948,6 +1002,25 @@
     "mailLanguage": "이메일 언어는 필수입니다",
     "mailSubject": "이메일 제목은 필수입니다",
     "mailTitle": "이메일 본문 제목은 필수입니다",
-    "mailContent": "본문 내용은 필수입니다"
+    "mailContent": "본문 내용은 필수입니다",
+    "payMethod": {
+      "notNull": "결제 방식은 필수입니다"
+    },
+    "terminalSn": {
+      "notBlank": "터미널 번호는 필수입니다"
+    },
+    "mchId": {
+      "notBlank": "LianLian 가맹점 ID는 필수입니다"
+    },
+    "orderAmount": {
+      "notNull": "원 주문 금액은 필수입니다",
+      "positive": "원 주문 금액은 0보다 커야 합니다"
+    },
+    "institutionId": {
+      "notBlank": "기관 번호는 필수입니다"
+    },
+    "yizhifubjMerchantId": {
+      "notBlank": "이즈푸(베이징) 가맹점 번호는 필수입니다"
+    }
   }
 }

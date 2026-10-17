@@ -31,8 +31,27 @@
         <module>daxpay-channel-hmpay</module>
         <module>daxpay-channel-fuyou</module>
         <module>daxpay-channel-yeepay</module>
+        <module>daxpay-channel-kuaiqian</module>
+        <module>daxpay-channel-llianpay</module>
+        <module>daxpay-channel-sand</module>
         <module>daxpay-channel-stripe</module>
         <module>daxpay-channel-easypay</module>
+        <module>daxpay-channel-shouqianba</module>
+        <module>daxpay-channel-xingyi</module>
+        <module>daxpay-channel-ysep</module>
+        <module>daxpay-channel-long</module>
+        <module>daxpay-channel-jeepay</module>
+        <module>daxpay-channel-helipay</module>
+        <module>daxpay-channel-fubei</module>
+        <module>daxpay-channel-jlpay</module>
+        <module>daxpay-channel-epaylinks</module>
+        <module>daxpay-channel-umfpay</module>
+        <module>daxpay-channel-yisheng</module>
+        <module>daxpay-channel-cpcn</module>
+        <module>daxpay-channel-baofu</module>
+        <module>daxpay-channel-duolabao</module>
+        <module>daxpay-channel-yizhifubj</module>
+        <module>daxpay-channel-youzan</module>
     </modules>
 
     <dependencies>

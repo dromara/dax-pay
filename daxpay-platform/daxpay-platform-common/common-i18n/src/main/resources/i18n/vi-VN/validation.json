@@ -203,8 +203,20 @@
     "nonceStr": {
       "size": "Nonce không thể vượt quá 32 ký tự"
     },
+    "payType": {
+      "notBlank": "Loại thanh toán không được để trống"
+    },
+    "yishengPartner": {
+      "notBlank": "ID đối tác YiSheng không được để trống"
+    },
+    "yishengMerchantId": {
+      "notBlank": "Mã merchant YiSheng không được để trống"
+    },
+    "youzanMerchantId": {
+      "notBlank": "Mã merchant Youzan không được để trống"
+    },
     "sign": {
-      "size": "Chữ ký không thể vượt quá 1024 ký tự"
+      "notBlank": "Chữ ký là bắt buộc"
     },
     "reqTime": {
       "notNull": "Thời gian yêu cầu không được để trống"
@@ -733,6 +745,18 @@
     "callbackBody": {
       "notBlank": "Nội dung gọi lại không được để trống"
     },
+    "callbackPath": {
+      "notBlank": "URI yêu cầu callback không được để trống"
+    },
+    "callbackTimestamp": {
+      "notBlank": "Dấu thời gian chữ ký callback không được để trống"
+    },
+    "callbackNonce": {
+      "notBlank": "Nonce chữ ký callback không được để trống"
+    },
+    "callbackSign": {
+      "notBlank": "Chữ ký callback không được để trống"
+    },
     "callbackType": {
       "notBlank": "Loại gọi lại không được để trống"
     },
@@ -815,6 +839,36 @@
     },
     "yopIsvNo": {
       "notBlank": "Số ISV YeePay không được để trống"
+    },
+    "memberCode": {
+      "notBlank": "Mã thành viên KuaiQian không được để trống"
+    },
+    "merchantId": {
+      "notBlank": "ID merchant KuaiQian không được để trống"
+    },
+    "terminalId": {
+      "notBlank": "ID terminal KuaiQian không được để trống"
+    },
+    "posId": {
+      "notBlank": "Số quầy CCB không được để trống"
+    },
+    "branchId": {
+      "notBlank": "Số chi nhánh CCB không được để trống"
+    },
+    "agetId": {
+      "notBlank": "Mã cơ quan XingYi không được để trống"
+    },
+    "custId": {
+      "notBlank": "Mã merchant XingYi không được để trống"
+    },
+    "customerNum": {
+      "notBlank": "Số hiệu khách hàng DuoLaoBao không được để trống"
+    },
+    "mid": {
+      "notBlank": "số merchant Sand (mid) không được để trống"
+    },
+    "marketProduct": {
+      "notBlank": "mã sản phẩm thị trường không được để trống"
     },
     "sensitiveWord": {
       "rejected": "Nội dung chứa từ nhạy cảm và bị từ chối"
@@ -899,6 +953,25 @@
     "mailLanguage": "Ngôn ngữ email không được để trống",
     "mailSubject": "Chủ đề email không được để trống",
     "mailTitle": "Tiêu đề email không được để trống",
-    "mailContent": "Nội dung email không được để trống"
+    "mailContent": "Nội dung email không được để trống",
+    "payMethod": {
+      "notNull": "Phương thức thanh toán là bắt buộc"
+    },
+    "terminalSn": {
+      "notBlank": "Số terminal là bắt buộc"
+    },
+    "mchId": {
+      "notBlank": "Mã thương nhân LianLian không được để trống"
+    },
+    "orderAmount": {
+      "notNull": "Số tiền đơn hàng gốc là bắt buộc",
+      "positive": "Số tiền đơn hàng gốc phải lớn hơn 0"
+    },
+    "institutionId": {
+      "notBlank": "Mã tổ chức không được để trống"
+    },
+    "yizhifubjMerchantId": {
+      "notBlank": "Mã thương nhân Yizhifu (Bắc Kinh) không được để trống"
+    }
   }
 }

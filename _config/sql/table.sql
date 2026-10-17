@@ -23529,6 +23529,187 @@ COMMENT ON INDEX public.uk_yeepay_direct_key_cmchno_sandbox IS '同一通道商�
 
 
 --
+-- Name: kuaiqian_direct_key_config; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.kuaiqian_direct_key_config (
+    id bigint NOT NULL,
+    mch_no character varying(32),
+    channel_mch_no character varying(64),
+    member_code character varying(64),
+    vendor_member_code character varying(64),
+    merchant_id character varying(64),
+    terminal_id character varying(64),
+    merchant_cert_pfx text,
+    merchant_cert_password text,
+    platform_cert text,
+    ssl_cert_p12 text,
+    ssl_cert_password text,
+    sandbox boolean DEFAULT false,
+    creator bigint,
+    create_time timestamp(6) with time zone,
+    last_modifier bigint,
+    last_modified_time timestamp(6) with time zone,
+    version integer DEFAULT 0 NOT NULL,
+    deleted boolean DEFAULT false NOT NULL
+);
+
+
+--
+-- Name: TABLE kuaiqian_direct_key_config; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.kuaiqian_direct_key_config IS '快钱直连配置';
+
+
+--
+-- Name: COLUMN kuaiqian_direct_key_config.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.kuaiqian_direct_key_config.id IS '主键';
+
+
+--
+-- Name: COLUMN kuaiqian_direct_key_config.mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.kuaiqian_direct_key_config.mch_no IS '商户号';
+
+
+--
+-- Name: COLUMN kuaiqian_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.kuaiqian_direct_key_config.channel_mch_no IS '通道商户号(创建时录入不可修改)';
+
+
+--
+-- Name: COLUMN kuaiqian_direct_key_config.member_code; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.kuaiqian_direct_key_config.member_code IS '快钱会员号/账户号(memberCode, 人民币网关商户账号 = memberCode + 01, 创建时录入不可修改)';
+
+
+--
+-- Name: COLUMN kuaiqian_direct_key_config.vendor_member_code; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.kuaiqian_direct_key_config.vendor_member_code IS '服务商快钱子账户号(可空; 设置后 head.memberCode=子账户号, vendorMemberCode=会员号)';
+
+
+--
+-- Name: COLUMN kuaiqian_direct_key_config.merchant_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.kuaiqian_direct_key_config.merchant_id IS '当面付商户号(merchantId)';
+
+
+--
+-- Name: COLUMN kuaiqian_direct_key_config.terminal_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.kuaiqian_direct_key_config.terminal_id IS '当面付终端号(terminalId)';
+
+
+--
+-- Name: COLUMN kuaiqian_direct_key_config.merchant_cert_pfx; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.kuaiqian_direct_key_config.merchant_cert_pfx IS '商户证书 pfx 内容(Base64, PKCS12, 签名与响应解密用, 加密存储)';
+
+
+--
+-- Name: COLUMN kuaiqian_direct_key_config.merchant_cert_password; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.kuaiqian_direct_key_config.merchant_cert_password IS '商户证书密码(加密存储)';
+
+
+--
+-- Name: COLUMN kuaiqian_direct_key_config.platform_cert; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.kuaiqian_direct_key_config.platform_cert IS '快钱平台证书 cer 内容(Base64/PEM, 报文加密与验签用, 加密存储)';
+
+
+--
+-- Name: COLUMN kuaiqian_direct_key_config.ssl_cert_p12; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.kuaiqian_direct_key_config.ssl_cert_p12 IS 'SSL 客户端证书 p12 内容(Base64, MAS 网关双向认证用, 加密存储)';
+
+
+--
+-- Name: COLUMN kuaiqian_direct_key_config.ssl_cert_password; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.kuaiqian_direct_key_config.ssl_cert_password IS 'SSL 客户端证书密码(加密存储)';
+
+
+--
+-- Name: COLUMN kuaiqian_direct_key_config.sandbox; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.kuaiqian_direct_key_config.sandbox IS '是否沙箱环境';
+
+
+--
+-- Name: COLUMN kuaiqian_direct_key_config.creator; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.kuaiqian_direct_key_config.creator IS '创建人ID';
+
+
+--
+-- Name: COLUMN kuaiqian_direct_key_config.create_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.kuaiqian_direct_key_config.create_time IS '创建时间';
+
+
+--
+-- Name: COLUMN kuaiqian_direct_key_config.last_modifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.kuaiqian_direct_key_config.last_modifier IS '最后修改人ID';
+
+
+--
+-- Name: COLUMN kuaiqian_direct_key_config.last_modified_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.kuaiqian_direct_key_config.last_modified_time IS '最后修改时间';
+
+
+--
+-- Name: COLUMN kuaiqian_direct_key_config.version; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.kuaiqian_direct_key_config.version IS '乐观锁版本号';
+
+
+--
+-- Name: COLUMN kuaiqian_direct_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.kuaiqian_direct_key_config.deleted IS '逻辑删除标志';
+
+
+--
+-- Name: uk_kuaiqian_direct_key_cmchno_sandbox; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_kuaiqian_direct_key_cmchno_sandbox ON public.kuaiqian_direct_key_config USING btree (channel_mch_no, sandbox) WHERE (deleted = false);
+
+
+--
+-- Name: INDEX uk_kuaiqian_direct_key_cmchno_sandbox; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_kuaiqian_direct_key_cmchno_sandbox IS '同一通道商户同一环境密钥唯一';
+
+
+--
 -- PostgreSQL database dump complete
 --
 

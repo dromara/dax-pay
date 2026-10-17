@@ -204,8 +204,20 @@
     "nonceStr": {
       "size": "ナンスは 32 文字を超えることはできません"
     },
+    "payType": {
+      "notBlank": "支払タイプは必須です"
+    },
+    "yishengPartner": {
+      "notBlank": "易生パートナーIDは必須です"
+    },
+    "yishengMerchantId": {
+      "notBlank": "易生加盟店番号は必須です"
+    },
+    "youzanMerchantId": {
+      "notBlank": "有贊マーチャントIDは必須です"
+    },
     "sign": {
-      "size": "署名は 1024 文字を超えることはできません"
+      "notBlank": "署名は必須です"
     },
     "reqTime": {
       "notNull": "リクエスト時間を空白にすることはできません"
@@ -734,6 +746,18 @@
     "callbackBody": {
       "notBlank": "コールバック本文を空白にすることはできません"
     },
+    "callbackPath": {
+      "notBlank": "コールバックリクエストURIは必須です"
+    },
+    "callbackTimestamp": {
+      "notBlank": "コールバック署名タイムスタンプは必須です"
+    },
+    "callbackNonce": {
+      "notBlank": "コールバック署名ナンスは必須です"
+    },
+    "callbackSign": {
+      "notBlank": "コールバック署名値は必須です"
+    },
     "callbackType": {
       "notBlank": "コールバックタイプを空白にすることはできません"
     },
@@ -854,6 +878,36 @@
     "yopIsvNo": {
       "notBlank": "YeePay ISV番号は必須です"
     },
+    "memberCode": {
+      "notBlank": "快錢会員番号は必須です"
+    },
+    "merchantId": {
+      "notBlank": "快錢対面払店舗番号は必須です"
+    },
+    "terminalId": {
+      "notBlank": "快錢対面払端末番号は必須です"
+    },
+    "posId": {
+      "notBlank": "建行カウンター番号は必須です"
+    },
+    "branchId": {
+      "notBlank": "建行支店番号は必須です"
+    },
+    "agetId": {
+      "notBlank": "星驛付機関番号は必須です"
+    },
+    "custId": {
+      "notBlank": "星驛付加盟店番号は必須です"
+    },
+    "customerNum": {
+      "notBlank": "哆啦宝顧客番号は必須です"
+    },
+    "mid": {
+      "notBlank": "Sand の加盟店番号 (mid) は必須です"
+    },
+    "marketProduct": {
+      "notBlank": "マーケットプロダクトコードは必須です"
+    },
     "itemId": {
       "notBlank": "キャッシャー支払項目IDは必須です"
     },
@@ -948,6 +1002,25 @@
     "mailLanguage": "メール言語は必須です",
     "mailSubject": "メール件名は必須です",
     "mailTitle": "メールタイトルは必須です",
-    "mailContent": "本文は必須です"
+    "mailContent": "本文は必須です",
+    "payMethod": {
+      "notNull": "支払い方法は必須です"
+    },
+    "terminalSn": {
+      "notBlank": "端末番号は必須です"
+    },
+    "mchId": {
+      "notBlank": "LianLian の加盟店 ID は必須です"
+    },
+    "orderAmount": {
+      "notNull": "元の注文金額は必須です",
+      "positive": "元の注文金額は0より大きくなければなりません"
+    },
+    "institutionId": {
+      "notBlank": "機関番号は必須です"
+    },
+    "yizhifubjMerchantId": {
+      "notBlank": "一直払い(北京)の加盟店番号は必須です"
+    }
   }
 }

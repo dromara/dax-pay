@@ -82,8 +82,8 @@ INSERT INTO public.pay_md_product VALUES (10044, 'jl_pay', '嘉联聚合支付',
 INSERT INTO public.pay_md_product VALUES (10045, 'heli_pay', '合利宝支付', 'helipay', 151, 1, '2026-10-15 00:00:00+00', 1, '2026-10-15 00:00:00+00', 0, false, false, true);
 INSERT INTO public.pay_md_product VALUES (10046, 'fubei_pay', '付呗聚合支付', 'fubei', 152, 1, '2026-10-15 00:00:00+00', 1, '2026-10-15 00:00:00+00', 0, false, false, true);
 INSERT INTO public.pay_md_product VALUES (10047, 'epay_links', '易票联支付', 'epaylinks', 153, 1, '2026-10-15 00:00:00+00', 1, '2026-10-15 00:00:00+00', 0, false, false, true);
-INSERT INTO public.pay_md_product VALUES (10048, 'paypal', 'PayPal支付', 'paypal', 154, 1, '2026-10-15 00:00:00+00', 1, '2026-10-15 00:00:00+00', 0, false, false, true);
-INSERT INTO public.pay_md_product VALUES (10049, 'airwallex', 'Airwallex支付', 'airwallex', 155, 1, '2026-10-15 00:00:00+00', 1, '2026-10-15 00:00:00+00', 0, false, false, true);
+INSERT INTO public.pay_md_product VALUES (10048, 'paypal', 'PayPal', 'paypal', 154, 1, '2026-10-15 00:00:00+00', 1, '2026-10-15 00:00:00+00', 0, false, false, true);
+INSERT INTO public.pay_md_product VALUES (10049, 'airwallex', 'Airwallex', 'airwallex', 155, 1, '2026-10-15 00:00:00+00', 1, '2026-10-15 00:00:00+00', 0, false, false, true);
 INSERT INTO public.pay_md_product_capability VALUES (21275, 'llian_pay', 'alipay_qr', 0, true, NULL, false, 1, '2026-10-15 00:00:00+00', 0, 1, '2026-10-15 00:00:00+00');
 INSERT INTO public.pay_md_product_capability VALUES (21276, 'llian_pay', 'alipay_jsapi', 1, true, NULL, false, 1, '2026-10-15 00:00:00+00', 0, 1, '2026-10-15 00:00:00+00');
 INSERT INTO public.pay_md_product_capability VALUES (21277, 'llian_pay', 'wechat_qr', 2, true, NULL, false, 1, '2026-10-15 00:00:00+00', 0, 1, '2026-10-15 00:00:00+00');
@@ -246,7 +246,7 @@ UPDATE public.pay_md_product SET enabled = false WHERE code IN (
   'llian_pay', 'join_pay', 'swift_pass', 'jl_pay', 'heli_pay', 'fubei_pay', 'epay_links',
   'paypal', 'airwallex', 'cpcn_pay', 'baofu_pay', 'yizhifubj_pay', 'duolabao_pay',
   'huolian_pay', 'youzan_pay', 'yinyingtong_pay', 'huishouqian_pay', 'shouyinbei_pay', 'payssion',
-  'ysep_pay', 'quick_pay', 'jee_pay',
+  'ysep_pay', 'kuaiqian_pay', 'jee_pay',
   'xingyi_pay', 'long_pay', 'allin_cloud', 'allin_cashier', 'allin_payfund', 'allin_direct', 'shouqianba',
   'lakala_moss', 'fuyou_partner', 'hkrt_saas', 'hnapay_pay', 'xsy', 'umf_pay', 'yisheng_pay'
 );
@@ -266,3 +266,116 @@ INSERT INTO public.pay_md_product_capability VALUES (21491, 'huifu_ecny', 'ecny_
 DELETE FROM public.pay_md_product_capability WHERE product_code IN ('shouyinbei_pay', 'hkrt_saas', 'swift_pass', 'huolian_pay', 'huishouqian_pay', 'join_pay', 'yinyingtong_pay', 'hnapay_pay', 'xsy');
 DELETE FROM public.pay_md_product WHERE code IN ('shouyinbei_pay', 'hkrt_saas', 'swift_pass', 'huolian_pay', 'huishouqian_pay', 'join_pay', 'yinyingtong_pay', 'hnapay_pay', 'xsy');
 DELETE FROM public.pay_md_channel WHERE code IN ('shouyinbei', 'swiftpass', 'huolian', 'huishouqian', 'joinpay', 'yinyingtong', 'hnapay');
+
+-- 2026-10-16 快钱主数据改名: 通道/产品/能力行的 code 由 quick_pay 改为 kuaiqian_pay(官网 99bill.com, quick_pay 语义含糊),
+-- 与 ProductEnum/ChannelEnum 枚举常量改名同步; 存量库执行本段后主数据与枚举对齐, 无孤儿行
+UPDATE public.pay_md_channel SET code = 'kuaiqian_pay' WHERE code = 'quick_pay';
+UPDATE public.pay_md_product SET code = 'kuaiqian_pay', channel = 'kuaiqian_pay' WHERE code = 'quick_pay';
+UPDATE public.pay_md_product_capability SET product_code = 'kuaiqian_pay' WHERE product_code = 'quick_pay';
+
+-- 2026-10-16 快钱能力对齐: 按实际实现(易支付 kuaiqian 插件 A7007 当面付聚合扫码, qrType=00 微信/支付宝/云闪付一码通用)
+-- 裁剪占位期按官网宣称录入的全量能力, 仅保留三项扫码能力并补挂聚合码能力(与 data.sql 种子一致)
+DELETE FROM public.pay_md_product_capability WHERE product_code = 'kuaiqian_pay' AND capability_code NOT IN ('wechat_qr', 'alipay_qr', 'union_qr');
+INSERT INTO public.pay_md_product_capability VALUES (21492, 'kuaiqian_pay', 'aggregate_pay_qrcode', 3, true, NULL, false, 1, '2026-10-16 00:00:00+00', 0, 1, '2026-10-16 00:00:00+00');
+
+-- 2026-10-16 已对接产品启用: 批次移植完成的产品恢复 enabled(策略实现后 online 派生字段自动在线, 商户侧可配置路由)
+UPDATE public.pay_md_product SET enabled = true WHERE code IN ('fuyou_internet', 'fuyou_h5', 'fuyou_partner', 'lakala_moss', 'huifu_ecny', 'kuaiqian_pay');
+
+-- 2026-10-16 收钱吧能力对齐与启用: 实现含 WAP 跳转(wap api pro)形态, 补挂 wechat_h5 能力并启用产品
+INSERT INTO public.pay_md_product_capability VALUES (21493, 'shouqianba', 'wechat_h5', 3, true, NULL, false, 1, '2026-10-16 00:00:00+00', 0, 1, '2026-10-16 00:00:00+00');
+UPDATE public.pay_md_product SET enabled = true WHERE code = 'shouqianba';
+
+-- 2026-10-16 杉德能力对齐与启用: 扫码为分渠道二维码非一码多渠道聚合, 移除 aggregate_pay_qrcode; 按实现补挂 union_qr(CUPPAY) 并启用产品
+DELETE FROM public.pay_md_product_capability WHERE product_code='sand_pay' AND capability_code='aggregate_pay_qrcode';
+INSERT INTO public.pay_md_product_capability VALUES (21494, 'sand_pay', 'union_qr', 6, true, NULL, false, 1, '2026-10-16 00:00:00+00', 0, 1, '2026-10-16 00:00:00+00');
+UPDATE public.pay_md_product SET enabled = true WHERE code='sand_pay';
+
+-- 2026-10-16 星驿付能力对齐与启用: 按实现补挂 JSAPI(微信/支付宝/小程序)与付款码(微信/支付宝/银联) 六能力并启用产品
+INSERT INTO public.pay_md_product_capability VALUES
+ (21495, 'xingyi_pay', 'wechat_jsapi', 3, true, NULL, false, 1, '2026-10-16 00:00:00+00', 0, 1, '2026-10-16 00:00:00+00'),
+ (21496, 'xingyi_pay', 'wechat_mini', 4, true, NULL, false, 1, '2026-10-16 00:00:00+00', 0, 1, '2026-10-16 00:00:00+00'),
+ (21497, 'xingyi_pay', 'alipay_jsapi', 5, true, NULL, false, 1, '2026-10-16 00:00:00+00', 0, 1, '2026-10-16 00:00:00+00'),
+ (21498, 'xingyi_pay', 'wechat_barcode', 6, true, NULL, false, 1, '2026-10-16 00:00:00+00', 0, 1, '2026-10-16 00:00:00+00'),
+ (21499, 'xingyi_pay', 'alipay_barcode', 7, true, NULL, false, 1, '2026-10-16 00:00:00+00', 0, 1, '2026-10-16 00:00:00+00'),
+ (21500, 'xingyi_pay', 'union_barcode', 8, true, NULL, false, 1, '2026-10-16 00:00:00+00', 0, 1, '2026-10-16 00:00:00+00');
+UPDATE public.pay_md_product SET enabled = true WHERE code='xingyi_pay';
+
+-- 2026-10-16 银盛双产品能力对齐与启用: 按实际实现(ysep 开放平台族/yseqt e企通族)裁剪占位全量能力至各 8 项并启用
+-- ysep_pay 保留: wechat_qr/wechat_jsapi/wechat_mini/alipay_qr/alipay_jsapi/alipay_h5(WAP表单)/union_qr/union_jsapi
+DELETE FROM public.pay_md_product_capability WHERE product_code='ysep_pay' AND capability_code IN ('wechat_app','wechat_h5','wechat_barcode','alipay_app','alipay_pc','alipay_barcode','union_h5','union_barcode');
+-- yseqt_pay 保留: wechat_qr(收银台28)/wechat_jsapi/wechat_mini/wechat_h5(29h5)/alipay_qr/alipay_jsapi/union_qr/union_jsapi
+DELETE FROM public.pay_md_product_capability WHERE product_code='yseqt_pay' AND capability_code IN ('wechat_app','wechat_barcode','alipay_app','alipay_h5','alipay_pc','alipay_barcode','union_h5','union_barcode');
+UPDATE public.pay_md_product SET enabled = true WHERE code IN ('ysep_pay','yseqt_pay');
+
+-- 2026-10-16 Jeepay 产品启用: 双层对接完成(MD5 签名, 网关随凭证下发), 能力 12 项与种子一致无需调整
+UPDATE public.pay_md_product SET enabled = true WHERE code = 'jee_pay';
+
+-- 2026-10-16 建行龙支付能力对齐与启用: 聚合扫码一张码(微信/支付宝/银联/建行钱包), 补挂 aggregate_pay_qrcode 并启用产品;
+-- 查单/退款为明确桩(建行正式文档签约后下发, 见模块注释), 补齐后再放开对应能力
+INSERT INTO public.pay_md_product_capability VALUES (21501, 'long_pay', 'aggregate_pay_qrcode', 3, true, NULL, false, 1, '2026-10-16 00:00:00+00', 0, 1, '2026-10-16 00:00:00+00');
+UPDATE public.pay_md_product SET enabled = true WHERE code='long_pay';
+
+-- 2026-10-16 连连支付能力对齐与启用: 补挂 wechat_mini(WECHAT_APPLET) 并启用产品
+INSERT INTO public.pay_md_product_capability VALUES (21502, 'llian_pay', 'wechat_mini', 5, true, NULL, false, 1, '2026-10-16 00:00:00+00', 0, 1, '2026-10-16 00:00:00+00');
+UPDATE public.pay_md_product SET enabled = true WHERE code='llian_pay';
+
+-- 2026-10-16 付呗能力对齐与启用: PHP 参考无微信/支付宝 C扫B 台牌码(走收银台授权页非开放平台下单), 裁 alipay_qr/wechat_qr;
+-- 按实现补 union_qr/wechat_jsapi/wechat_mini/alipay_h5 并启用产品(后续接 fbpay.order.create 扫码模式可再补回)
+DELETE FROM public.pay_md_product_capability WHERE product_code='fubei_pay' AND capability_code IN ('alipay_qr','wechat_qr');
+INSERT INTO public.pay_md_product_capability VALUES (21503, 'fubei_pay', 'union_qr', 2, true, NULL, false, 1, '2026-10-16 00:00:00+00', 0, 1, '2026-10-16 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21504, 'fubei_pay', 'wechat_jsapi', 3, true, NULL, false, 1, '2026-10-16 00:00:00+00', 0, 1, '2026-10-16 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21505, 'fubei_pay', 'wechat_mini', 4, true, NULL, false, 1, '2026-10-16 00:00:00+00', 0, 1, '2026-10-16 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21506, 'fubei_pay', 'alipay_h5', 5, true, NULL, false, 1, '2026-10-16 00:00:00+00', 0, 1, '2026-10-16 00:00:00+00');
+UPDATE public.pay_md_product SET enabled = true WHERE code='fubei_pay';
+
+-- 2026-10-16 合利宝产品启用: 双层对接完成(P1..Pn 声明序 MD5 签名), 能力 5 项与种子一致无需调整
+UPDATE public.pay_md_product SET enabled = true WHERE code = 'heli_pay';
+
+-- 2026-10-16 嘉联支付能力对齐与启用: SM2 国密签名协议; JSAPI 族/H5 未接(需 openId+微信应用绑定)裁剪;
+-- 补挂被扫付款码三能力(micropay 凭 authCode 自动识别渠道)并启用产品
+DELETE FROM public.pay_md_product_capability WHERE product_code='jl_pay' AND capability_code IN ('alipay_jsapi','wechat_jsapi','union_h5');
+INSERT INTO public.pay_md_product_capability VALUES (21507, 'jl_pay', 'wechat_barcode', 3, true, NULL, false, 1, '2026-10-16 00:00:00+00', 0, 1, '2026-10-16 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21508, 'jl_pay', 'alipay_barcode', 4, true, NULL, false, 1, '2026-10-16 00:00:00+00', 0, 1, '2026-10-16 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21509, 'jl_pay', 'union_barcode', 5, true, NULL, false, 1, '2026-10-16 00:00:00+00', 0, 1, '2026-10-16 00:00:00+00');
+UPDATE public.pay_md_product SET enabled = true WHERE code='jl_pay';
+
+-- 2026-10-16 易票联能力对齐与启用: 补挂 wechat_mini(WxJSAPIPayment payMethod=35) 并启用产品
+INSERT INTO public.pay_md_product_capability VALUES (21510, 'epay_links', 'wechat_mini', 5, true, NULL, false, 1, '2026-10-16 00:00:00+00', 0, 1, '2026-10-16 00:00:00+00');
+UPDATE public.pay_md_product SET enabled = true WHERE code='epay_links';
+
+-- 2026-10-16 联动优势能力对齐与启用: 表单 RSA(SHA1推断)协议, 无查单接口(回调为唯一终态源); 裁未实现的 alipay_jsapi, 补挂 union_qr 并启用产品
+DELETE FROM public.pay_md_product_capability WHERE product_code='umf_pay' AND capability_code='alipay_jsapi';
+INSERT INTO public.pay_md_product_capability VALUES (21511, 'umf_pay', 'union_qr', 3, true, NULL, false, 1, '2026-10-16 00:00:00+00', 0, 1, '2026-10-16 00:00:00+00');
+UPDATE public.pay_md_product SET enabled = true WHERE code='umf_pay';
+
+-- 2026-10-16 易生支付产品启用: 双层对接完成(biz_content RSA2 原文签名), 能力 4 项与种子一致无需调整
+UPDATE public.pay_md_product SET enabled = true WHERE code = 'yisheng_pay';
+
+-- 2026-10-16 中金支付能力对齐与启用: SM3withSM2 国密协议, 网关随凭证下发; 银联线为快捷绑卡流未接裁 union_h5, 启用产品
+DELETE FROM public.pay_md_product_capability WHERE product_code='cpcn_pay' AND capability_code='union_h5';
+UPDATE public.pay_md_product SET enabled = true WHERE code='cpcn_pay';
+
+-- 2026-10-16 宝付能力对齐与启用: 聚合收银台 pre_unified_order; 协议无 union_h5 裁剪, 补聚合码/小程序/双付款码/银联JS 并启用产品
+DELETE FROM public.pay_md_product_capability WHERE product_code='baofu_pay' AND capability_code='union_h5';
+INSERT INTO public.pay_md_product_capability VALUES (21512, 'baofu_pay', 'aggregate_pay_qrcode', 5, true, NULL, false, 1, '2026-10-16 00:00:00+00', 0, 1, '2026-10-16 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21513, 'baofu_pay', 'wechat_mini', 6, true, NULL, false, 1, '2026-10-16 00:00:00+00', 0, 1, '2026-10-16 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21514, 'baofu_pay', 'wechat_barcode', 7, true, NULL, false, 1, '2026-10-16 00:00:00+00', 0, 1, '2026-10-16 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21515, 'baofu_pay', 'alipay_barcode', 8, true, NULL, false, 1, '2026-10-16 00:00:00+00', 0, 1, '2026-10-16 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21516, 'baofu_pay', 'union_jsapi', 9, true, NULL, false, 1, '2026-10-16 00:00:00+00', 0, 1, '2026-10-16 00:00:00+00');
+UPDATE public.pay_md_product SET enabled = true WHERE code='baofu_pay';
+
+-- 2026-10-16 有赞能力重对齐与启用: 通道真实能力为 JS/H5 四形态且无聚合码接口(原 aggregate_pay_qrcode 系占位数据, 保留会导致路由求交为空),
+-- 整组替换为 alipay_jsapi/wechat_jsapi/wechat_mini/wechat_h5 并启用产品
+DELETE FROM public.pay_md_product_capability WHERE product_code='youzan_pay';
+INSERT INTO public.pay_md_product_capability VALUES (21517, 'youzan_pay', 'alipay_jsapi', 0, true, NULL, false, 1, '2026-10-16 00:00:00+00', 0, 1, '2026-10-16 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21518, 'youzan_pay', 'wechat_jsapi', 1, true, NULL, false, 1, '2026-10-16 00:00:00+00', 0, 1, '2026-10-16 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21519, 'youzan_pay', 'wechat_mini', 2, true, NULL, false, 1, '2026-10-16 00:00:00+00', 0, 1, '2026-10-16 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (21520, 'youzan_pay', 'wechat_h5', 3, true, NULL, false, 1, '2026-10-16 00:00:00+00', 0, 1, '2026-10-16 00:00:00+00');
+UPDATE public.pay_md_product SET enabled = true WHERE code='youzan_pay';
+
+-- 2026-10-16 一直付能力对齐与启用: 数字信封协议(AES-ECB+CFCA 证书加密); 微信H5 系本地 scheme 非通道API/云闪付H5 无接口, 裁 wechat_h5/union_h5 并启用产品
+DELETE FROM public.pay_md_product_capability WHERE product_code='yizhifubj_pay' AND capability_code IN ('wechat_h5','union_h5');
+UPDATE public.pay_md_product SET enabled = true WHERE code='yizhifubj_pay';
+
+-- 2026-10-16 哆啦宝产品启用: 双层对接完成(SHA1 token 头签名, 聚合码), 能力 6 项与种子一致无需调整
+UPDATE public.pay_md_product SET enabled = true WHERE code = 'duolabao_pay';

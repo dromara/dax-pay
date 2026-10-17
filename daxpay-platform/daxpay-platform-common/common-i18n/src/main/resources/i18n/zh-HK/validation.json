@@ -204,8 +204,20 @@
     "nonceStr": {
       "size": "隨機數不可超過32位"
     },
+    "payType": {
+      "notBlank": "支付類型不能為空"
+    },
+    "yishengPartner": {
+      "notBlank": "易生合作夥伴ID不能為空"
+    },
+    "yishengMerchantId": {
+      "notBlank": "易生商戶編號不能為空"
+    },
+    "youzanMerchantId": {
+      "notBlank": "有贊商戶號不能為空"
+    },
     "sign": {
-      "size": "簽名不可超過1024位"
+      "notBlank": "簽名不能為空"
     },
     "reqTime": {
       "notNull": "請求時間必填"
@@ -734,6 +746,18 @@
     "callbackBody": {
       "notBlank": "回調報文不能為空"
     },
+    "callbackPath": {
+      "notBlank": "回調請求地址不能為空"
+    },
+    "callbackTimestamp": {
+      "notBlank": "回調簽名時間戳不能為空"
+    },
+    "callbackNonce": {
+      "notBlank": "回調簽名隨機串不能為空"
+    },
+    "callbackSign": {
+      "notBlank": "回調簽名值不能為空"
+    },
     "callbackType": {
       "notBlank": "回調類型不能為空"
     },
@@ -854,6 +878,36 @@
     "yopIsvNo": {
       "notBlank": "易寶服務商號不能為空"
     },
+    "memberCode": {
+      "notBlank": "快錢會員號不能為空"
+    },
+    "merchantId": {
+      "notBlank": "快錢當面付商戶號不能為空"
+    },
+    "terminalId": {
+      "notBlank": "快錢當面付終端號不能為空"
+    },
+    "posId": {
+      "notBlank": "建行櫃檯號不能為空"
+    },
+    "branchId": {
+      "notBlank": "建行分行號不能為空"
+    },
+    "agetId": {
+      "notBlank": "機構號不能為空"
+    },
+    "custId": {
+      "notBlank": "星驛付商戶號不能為空"
+    },
+    "customerNum": {
+      "notBlank": "哆啦寶商戶編號不能為空"
+    },
+    "mid": {
+      "notBlank": "杉德商戶編號不能為空"
+    },
+    "marketProduct": {
+      "notBlank": "市場產品編碼不能為空"
+    },
     "itemId": {
       "notBlank": "收銀台支付項ID不可為空"
     },
@@ -948,6 +1002,25 @@
     "mailLanguage": "郵件語言不能為空",
     "mailSubject": "郵件主題不能為空",
     "mailTitle": "郵件標題不能為空",
-    "mailContent": "正文文案不能為空"
+    "mailContent": "正文文案不能為空",
+    "payMethod": {
+      "notNull": "支付方式不可為空"
+    },
+    "terminalSn": {
+      "notBlank": "終端號不能為空"
+    },
+    "mchId": {
+      "notBlank": "連連商戶號不能為空"
+    },
+    "orderAmount": {
+      "notNull": "原訂單金額不可為空",
+      "positive": "原訂單金額必須大於0"
+    },
+    "institutionId": {
+      "notBlank": "機構編號不能為空"
+    },
+    "yizhifubjMerchantId": {
+      "notBlank": "一直付商戶編號不能為空"
+    }
   }
 }

@@ -203,8 +203,20 @@
     "nonceStr": {
       "size": "Nonce tidak boleh melebihi 32 aksara"
     },
+    "payType": {
+      "notBlank": "Jenis pembayaran tidak boleh kosong"
+    },
+    "yishengPartner": {
+      "notBlank": "ID rakan kongsi YiSheng tidak boleh kosong"
+    },
+    "yishengMerchantId": {
+      "notBlank": "ID merchant YiSheng tidak boleh kosong"
+    },
+    "youzanMerchantId": {
+      "notBlank": "ID merchant Youzan tidak boleh kosong"
+    },
     "sign": {
-      "size": "Tandatangan tidak boleh melebihi 1024 aksara"
+      "notBlank": "Tandatangan diperlukan"
     },
     "reqTime": {
       "notNull": "Masa permintaan tidak boleh kosong"
@@ -733,6 +745,18 @@
     "callbackBody": {
       "notBlank": "Isi panggilan balik tidak boleh kosong"
     },
+    "callbackPath": {
+      "notBlank": "URI permintaan callback tidak boleh kosong"
+    },
+    "callbackTimestamp": {
+      "notBlank": "Timestamp tandatangan callback tidak boleh kosong"
+    },
+    "callbackNonce": {
+      "notBlank": "Nonce tandatangan callback tidak boleh kosong"
+    },
+    "callbackSign": {
+      "notBlank": "Tandatangan callback tidak boleh kosong"
+    },
     "callbackType": {
       "notBlank": "Jenis panggilan balik tidak boleh kosong"
     },
@@ -815,6 +839,36 @@
     },
     "yopIsvNo": {
       "notBlank": "Nombor ISV YeePay tidak boleh kosong"
+    },
+    "memberCode": {
+      "notBlank": "Kod ahli KuaiQian tidak boleh kosong"
+    },
+    "merchantId": {
+      "notBlank": "ID merchant KuaiQian tidak boleh kosong"
+    },
+    "terminalId": {
+      "notBlank": "ID terminal KuaiQian tidak boleh kosong"
+    },
+    "posId": {
+      "notBlank": "ID kaunter CCB tidak boleh kosong"
+    },
+    "branchId": {
+      "notBlank": "ID cawangan CCB tidak boleh kosong"
+    },
+    "agetId": {
+      "notBlank": "ID agensi XingYi tidak boleh kosong"
+    },
+    "custId": {
+      "notBlank": "ID merchant XingYi tidak boleh kosong"
+    },
+    "customerNum": {
+      "notBlank": "Nombor pelanggan DuoLaoBao tidak boleh kosong"
+    },
+    "mid": {
+      "notBlank": "nombor merchant Sand (mid) tidak boleh kosong"
+    },
+    "marketProduct": {
+      "notBlank": "kod produk pasaran tidak boleh kosong"
     },
     "sensitiveWord": {
       "rejected": "Kandungan mengandungi perkataan sensitif dan ditolak"
@@ -899,6 +953,25 @@
     "mailLanguage": "Bahasa e-mel tidak boleh kosong",
     "mailSubject": "Subjek e-mel tidak boleh kosong",
     "mailTitle": "Tajuk e-mel tidak boleh kosong",
-    "mailContent": "Kandungan e-mel tidak boleh kosong"
+    "mailContent": "Kandungan e-mel tidak boleh kosong",
+    "payMethod": {
+      "notNull": "Kaedah pembayaran diperlukan"
+    },
+    "terminalSn": {
+      "notBlank": "Nombor terminal diperlukan"
+    },
+    "mchId": {
+      "notBlank": "ID peniaga LianLian tidak boleh kosong"
+    },
+    "orderAmount": {
+      "notNull": "Jumlah pesanan asal adalah wajib",
+      "positive": "Jumlah pesanan asal mesti lebih besar daripada 0"
+    },
+    "institutionId": {
+      "notBlank": "ID institusi tidak boleh kosong"
+    },
+    "yizhifubjMerchantId": {
+      "notBlank": "ID merchant Yizhifu (Beijing) tidak boleh kosong"
+    }
   }
 }
