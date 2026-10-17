@@ -1,0 +1,4 @@
+{
+  "payFailed": "杉德支付異常: {0}",
+  "unsupportedPayMethod": "杉德不支持的支付方式: {0}"
+}

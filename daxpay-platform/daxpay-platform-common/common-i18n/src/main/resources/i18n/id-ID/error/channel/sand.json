@@ -1,0 +1,4 @@
+{
+  "payFailed": "Kesalahan pembayaran Sand: {0}",
+  "unsupportedPayMethod": "Metode pembayaran tidak didukung Sand: {0}"
+}

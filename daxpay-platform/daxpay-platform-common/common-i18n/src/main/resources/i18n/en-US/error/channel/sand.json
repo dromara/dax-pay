@@ -1,0 +1,4 @@
+{
+  "payFailed": "Sand payment error: {0}",
+  "unsupportedPayMethod": "Unsupported payment method for Sand: {0}"
+}
