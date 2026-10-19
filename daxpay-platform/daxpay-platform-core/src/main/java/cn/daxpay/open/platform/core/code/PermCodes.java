@@ -161,6 +161,12 @@ public interface PermCodes {
             /// 菜单编码
             String MENU = "merchant:wx-verify";
         }
+
+        /// 文件直传（商户侧）menuCode=merchant:file
+        interface File {
+            /// 菜单编码
+            String MENU = "merchant:file";
+        }
     }
 
     /// 支付平台能力（主数据 + 配置 + ISV；不含交易单据）

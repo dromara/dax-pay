@@ -401,3 +401,9 @@ WHERE client_code = 'admin' AND path IN (
     '/system/config/security/system',
     '/system/config/third-platform'
 );
+
+-- 2026-10-19: 商户端文件直传域(merchant:file)——商户 Web 端上传原走 /file/platform/upload/*(system:file:manage 挂 admin 端)恒 403,
+-- 新增 MchFileController(/mch/file/upload/*)与隐藏目录锚点, 并给 merchant_admin 绑定 manage 码
+INSERT INTO "public"."iam_perm_menu" VALUES (91431, 91300, 'merchant:file', 'merchant', 'MchFileAnchor', 'menu.payment.merchant.file', NULL, 't', 'f', NULL, '/mch/file', NULL, 98, 'f', 'f', 'f', 0, 1, 1, 'f', 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-10-19 12:00:00+00', '2026-10-19 12:00:00+00', 'f');
+INSERT INTO public.iam_perm_code VALUES (2079866296000000710, 'merchant:file:manage', 'merchant:file', true, NULL, 1, 1, 0, false, '2026-10-19 12:00:00+00', '2026-10-19 12:00:00+00', 'perm.merchant:file:manage');
+INSERT INTO public.iam_role_code VALUES (2092882051093160000, 2, 2079866296000000710);
