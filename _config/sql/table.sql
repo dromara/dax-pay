@@ -4665,6 +4665,7 @@ CREATE TABLE public.iam_perm_menu (
     root boolean DEFAULT false,
     keep_alive boolean DEFAULT false,
     affix_tab boolean DEFAULT false,
+    query_sync boolean DEFAULT false,
     creator bigint,
     last_modifier bigint,
     version integer DEFAULT 0,
@@ -4798,6 +4799,7 @@ COMMENT ON COLUMN public.iam_perm_menu.keep_alive IS '是否开启页面缓存';
 --
 
 COMMENT ON COLUMN public.iam_perm_menu.affix_tab IS '是否固定标签页';
+COMMENT ON COLUMN public.iam_perm_menu.query_sync IS 'query参数同步页(单页签模式): 开启后该路径所有query参数组合共用一个页签(页签key忽略query)。仅适用于页面内部自行响应query变化的参数定位页(如?tab=分组页/useQueryTab配套); 普通实体定位工作台(仅setup读一次query)开启会导致同页签切参数不刷新数据';
 
 
 --

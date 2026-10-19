@@ -856,3 +856,9 @@ COMMENT ON COLUMN public.yizhifubj_direct_key_config.deleted IS '删除标志';
 
 CREATE UNIQUE INDEX uk_yizhifubj_direct_key_cmchno_sandbox ON public.yizhifubj_direct_key_config USING btree (channel_mch_no, sandbox) WHERE (deleted = false);
 COMMENT ON INDEX public.uk_yizhifubj_direct_key_cmchno_sandbox IS '同一通道商户同一环境密钥唯一';
+
+-- 2026-10-19 菜单表新增 query_sync 列(query参数同步页/单页签模式)
+-- 开启后该路径所有 query 参数组合共用一个页签(页签 key 忽略 query, 对应前端路由 meta.fullPathKey=false)
+-- 仅适用于页面内部自行响应 query 变化的参数定位页(?tab= 分组页/Hub 页), 默认关闭维持页签按完整路径区分
+ALTER TABLE public.iam_perm_menu ADD COLUMN IF NOT EXISTS query_sync boolean NOT NULL DEFAULT false;
+COMMENT ON COLUMN public.iam_perm_menu.query_sync IS 'query参数同步页(单页签模式): 开启后该路径所有query参数组合共用一个页签(页签key忽略query)。仅适用于页面内部自行响应query变化的参数定位页(如?tab=分组页/useQueryTab配套), 普通实体定位工作台(仅setup读一次query)开启会导致同页签切参数不刷新数据';

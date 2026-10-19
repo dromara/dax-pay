@@ -56,6 +56,9 @@ public class PermMenuResult {
     @Schema(description = "是否固定标签页")
     private boolean affixTab;
 
+    @Schema(description = "query参数同步页(单页签模式): 开启后该路径所有query参数组合共用一个页签(页签key忽略query)")
+    private boolean querySync;
+
     @Schema(description = "菜单类型: catalog-目录, menu-菜单, subpage-子页面, subpage_group-子页面分组, embedded-内嵌, link-外链")
     private String menuType;
 

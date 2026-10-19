@@ -63,6 +63,9 @@ public class PermMenu extends MpBaseEntity implements ToResult<PermMenuResult> {
     /// 是否固定标签页
     private boolean affixTab;
 
+    /// query参数同步页(单页签模式): 开启后该路径所有query参数组合共用一个页签(页签key忽略query), 仅适用于页面内部自行响应query变化的参数定位页(如?tab=分组页), 普通实体定位工作台开启会导致同页签切参数不刷新数据
+    private boolean querySync;
+
     /// 菜单类型
     /// @see cn.daxpay.open.platform.core.enums.perm.MenuTypeEnum
     private String menuType;

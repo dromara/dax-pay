@@ -390,3 +390,14 @@ UPDATE public.pay_md_product SET enabled = true WHERE code = 'duolabao_pay';
 -- 置空后子页高亮回落到可见菜单 91401「应用管理」(/mch/app)。
 -- 种子 iam_perm_menu.sql 已同步改写; 菜单接口无后端缓存, 存量库执行后重新登录即生效
 UPDATE iam_perm_menu SET path = NULL WHERE id = 91403;
+
+-- 2026-10-19 已有 query 同步页登记为菜单数据(替代前端 QUERY_SYNC_PATHS 硬编码)
+-- 5 条均为 admin 端参数定位页(Hub 双页签应用中心/PageShell ?tab= 分组配置页), 页面内部已用 useQueryTab 响应 query 变化
+UPDATE public.iam_perm_menu SET query_sync = true
+WHERE client_code = 'admin' AND path IN (
+    '/payment/douyin/app',
+    '/payment/wx/app',
+    '/system/config/platform',
+    '/system/config/security/system',
+    '/system/config/third-platform'
+);
