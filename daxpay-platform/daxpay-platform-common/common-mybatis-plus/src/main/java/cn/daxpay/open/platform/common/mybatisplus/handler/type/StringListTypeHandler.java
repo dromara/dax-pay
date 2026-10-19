@@ -13,6 +13,7 @@ import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -49,7 +50,9 @@ public class StringListTypeHandler extends BaseTypeHandler<List<String>> {
 
     private List<String> parse(String json) throws SQLException {
         if (Objects.isNull(json) || json.isBlank()) {
-            return List.of();
+            // 可变空集合: MapStruct 的目标集合合并策略(clear+addAll)会对查回实体的集合原地修改,
+            // 不可变集合(List.of)在此抛 UnsupportedOperationException
+            return new ArrayList<>();
         }
         try {
             ObjectMapper objectMapper = JacksonUtil.getObjectMapper();
