@@ -28,8 +28,8 @@ public class PayTradeResultBo {
     /// 支付参数体（用于发起支付的参数）
     private String payBody;
 
-    /// 支付参数类型，默认为链接类型
-    private PayBodyTypeEnum payBodyType = PayBodyTypeEnum.LINK;
+    /// 支付参数类型(由通道按返回的支付内容显式指定; 通道未返回类型时为空, 如付款码被扫无支付内容)
+    private PayBodyTypeEnum payBodyType;
 
     /// 付款用户 ID（微信支付宝）
     private String buyerId;
