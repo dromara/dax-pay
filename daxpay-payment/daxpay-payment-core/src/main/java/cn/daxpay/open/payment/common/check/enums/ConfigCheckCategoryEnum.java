@@ -20,6 +20,8 @@ public enum ConfigCheckCategoryEnum {
     PLATFORM_OSS("platformOss"),
     /// 社交登录配置
     SOCIAL_LOGIN("socialLogin"),
+    /// 平台 MQTT 接入
+    PLATFORM_MQTT("platformMqtt"),
 
     // ===== 商户端配置 =====
     /// 商户应用
