@@ -36,7 +36,9 @@ public enum PlatformConfigTypeEnum implements I18nSupport {
     /// 站点显示内容配置(系统名/Logo/备案/版权等)
     WEBSITE("website"),
     /// 敏感词策略配置
-    SENSITIVE_WORD("sensitive_word");
+    SENSITIVE_WORD("sensitive_word"),
+    /// MQTT 接入配置(设备/终端消息通道接入地址与账号, 虚拟设备激活时随凭证下发)
+    DEVICE_MQTT("device_mqtt");
 
     /// 编码
     private final String code;

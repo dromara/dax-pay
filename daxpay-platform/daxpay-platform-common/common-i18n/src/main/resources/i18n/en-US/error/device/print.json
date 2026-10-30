@@ -1,0 +1,20 @@
+{
+  "templateNotFound": "Print template does not exist: {0}",
+  "contentBlank": "Template content cannot be empty",
+  "notJson": "Template content is not valid JSON",
+  "rootInvalid": "Template root must be an object containing an elements array",
+  "elementsEmpty": "Template elements cannot be empty",
+  "elementLimit": "Template element count exceeds the limit ({0})",
+  "elementNotObject": "Element {0} is not an object",
+  "unknownType": "Element {0} ({1}): unknown element type",
+  "fieldRequired": "Element {0} ({1}): {2} cannot be empty",
+  "fieldOverLength": "Element {0} ({1}): {2} exceeds the length limit ({3} characters)",
+  "fieldNotInt": "Element {0} ({1}): {2} must be an integer",
+  "fieldRange": "Element {0} ({1}): {2} must be between {3} and {4}",
+  "unknownVar": "Element {0} ({1}): unknown variable {2}",
+  "alignInvalid": "Element {0}: align must be left/center/right",
+  "sizeInvalid": "Element {0}: size must be normal/double",
+  "dividerInvalid": "Element {0} (divider): separator must be a single half-width character",
+  "qrTooLong": "QR code content too long ({0} chars), fewer than {2} dots per module on {1}mm paper, please shorten the content",
+  "qrNotEncodable": "QR code content cannot be encoded (too long or contains unsupported characters)"
+}

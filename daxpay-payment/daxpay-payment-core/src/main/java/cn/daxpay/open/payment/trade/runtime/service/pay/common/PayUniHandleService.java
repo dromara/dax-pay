@@ -16,12 +16,14 @@ import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.payment.trade.notice.service.TradeNoticeBridge;
 import cn.daxpay.open.payment.trade.flow.service.FundFlowService;
 import cn.daxpay.open.payment.trade.runtime.service.plugin.PayPluginAssistService;
+import cn.daxpay.open.payment.strategy.device.PaySuccessDeviceHook;
 import cn.daxpay.open.payment.trade.util.PayTradeAmountUtil;
 import cn.daxpay.open.payment.trade.util.PayTradeProviderUtil;
 import cn.daxpay.open.platform.core.enums.pay.notice.NoticeEventEnum;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,6 +52,8 @@ public class PayUniHandleService {
     private final TradeNoticeBridge tradeNoticeBridge;
     private final PayRiskAssistService payRiskAssistService;
     private final FundFlowService fundFlowService;
+    /// 设备通知旁路 SPI(虚拟设备播报/打印; 设备域模块未装配时无 Bean 静默跳过)
+    private final ObjectProvider<PaySuccessDeviceHook> paySuccessDeviceHookProvider;
 
     /// 支付发起后处理
     /// 不论是否完成都更新交易单; 仅资金状态为 SUCCESS 时同步容器为 PAID。
@@ -158,7 +162,7 @@ public class PayUniHandleService {
         this.afterSuccess(trade, null);
     }
 
-    /// 支付成功统一后置动作: 资金流水 + 商户出站通知 + 插件 + 事后风控
+    /// 支付成功统一后置动作: 资金流水 + 商户出站通知 + 插件 + 事后风控 + 设备通知旁路
     private void afterSuccess(PayTrade trade, String buyerId) {
         // 资金流水(收款, 幂等)
         fundFlowService.savePayFlow(trade);
@@ -167,6 +171,11 @@ public class PayUniHandleService {
         payPluginAssistService.paySuccess(trade);
         // 事后风控补录（仅用付款用户 buyerId，不用通道内部 userId）
         payRiskAssistService.checkAfterPay(trade, buyerId);
+        // 设备通知旁路(虚拟设备播报/小票; 实现内部异步且吞异常, 未装配设备域模块时静默跳过)
+        PaySuccessDeviceHook deviceHook = paySuccessDeviceHookProvider.getIfAvailable();
+        if (deviceHook != null) {
+            deviceHook.broadcast(trade);
+        }
     }
 
     /// 支付失败处理: 资金态 FAIL, 容器态 FAILED（与主动关单 closed 区分）

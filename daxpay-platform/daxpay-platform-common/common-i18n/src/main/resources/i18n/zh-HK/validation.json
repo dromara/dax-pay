@@ -6,6 +6,31 @@
   "max": "{0}不能大於{1}",
   "parameterError": "參數校驗失敗",
   "field": {
+    "deviceSn": {
+      "notBlank": "設備序列號不能為空"
+    },
+    "deviceNo": {
+      "notBlank": "設備號不可為空"
+    },
+    "ts": {
+      "notNull": "時間戳不可為空"
+    },
+    "nonce": {
+      "notBlank": "隨機串不可為空"
+    },
+    "sign": {
+      "notBlank": "簽名不能為空"
+    },
+    "brokerWssUrl": {
+      "notBlank": "MQTT接入地址不能為空",
+      "pattern": "MQTT接入地址須以 ws:// 或 wss:// 開頭, 且不含空格"
+    },
+    "mqttUsername": {
+      "notBlank": "MQTT接入賬號不能為空"
+    },
+    "mqttPassword": {
+      "notBlank": "MQTT接入密碼不能為空"
+    },
     "source": {
       "notBlank": "平台不能為空"
     },
@@ -215,9 +240,6 @@
     },
     "youzanMerchantId": {
       "notBlank": "有贊商戶號不能為空"
-    },
-    "sign": {
-      "notBlank": "簽名不能為空"
     },
     "reqTime": {
       "notNull": "請求時間必填"
@@ -619,9 +641,6 @@
     "storeName": {
       "notBlank": "門店名稱不能為空"
     },
-    "deviceSn": {
-      "notBlank": "設備序列號不能為空"
-    },
     "deviceType": {
       "notBlank": "設備類型不能為空"
     },
@@ -1021,6 +1040,18 @@
     },
     "yizhifubjMerchantId": {
       "notBlank": "一直付商戶編號不能為空"
+    },
+    "bizNo": {
+      "notBlank": "支付單號不可為空"
+    },
+    "broadcastEnable": {
+      "notNull": "播報開關不可為空"
+    },
+    "printEnable": {
+      "notNull": "列印開關不可為空"
+    },
+    "templateCode": {
+      "size": "列印版式代碼不可超過32位"
     }
   }
 }

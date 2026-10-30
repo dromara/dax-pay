@@ -31,6 +31,7 @@
         <module>daxpay-platform</module>
         <module>daxpay-payment</module>
         <module>daxpay-channel</module>
+        <module>daxpay-device</module>
         <module>daxpay-start</module>
         <module>daxpay-plugin</module>
         <!-- 功能演示模块（可独立装配；需隔离时移除 daxpay-start 中对应依赖即可） -->

@@ -6,6 +6,31 @@
   "max": "{0}은(는) {1}보다 클 수 없습니다.",
   "parameterError": "매개변수 검증 실패",
   "field": {
+    "deviceSn": {
+      "notBlank": "기기 일련번호는 비워둘 수 없습니다."
+    },
+    "deviceNo": {
+      "notBlank": "디바이스 번호는 필수입니다"
+    },
+    "ts": {
+      "notNull": "타임스탬프는 필수입니다"
+    },
+    "nonce": {
+      "notBlank": "nonce는 필수입니다"
+    },
+    "sign": {
+      "notBlank": "서명은 필수입니다"
+    },
+    "brokerWssUrl": {
+      "notBlank": "MQTT 접속 주소는 필수입니다",
+      "pattern": "MQTT 접속 주소는 ws:// 또는 wss:// 로 시작하고 공백을 포함하지 않아야 합니다"
+    },
+    "mqttUsername": {
+      "notBlank": "MQTT 접속 계정은 필수입니다"
+    },
+    "mqttPassword": {
+      "notBlank": "MQTT 접속 비밀번호는 필수입니다"
+    },
     "source": {
       "notBlank": "플랫폼은 비워둘 수 없습니다."
     },
@@ -215,9 +240,6 @@
     },
     "youzanMerchantId": {
       "notBlank": "유자즈 가맹점 번호는 비워둘 수 없습니다"
-    },
-    "sign": {
-      "notBlank": "서명은 필수입니다"
     },
     "reqTime": {
       "notNull": "요청 시간은 비워둘 수 없습니다."
@@ -619,9 +641,6 @@
     "storeName": {
       "notBlank": "상점 이름은 비워둘 수 없습니다."
     },
-    "deviceSn": {
-      "notBlank": "기기 일련번호는 비워둘 수 없습니다."
-    },
     "deviceType": {
       "notBlank": "기기 유형은 비워둘 수 없습니다."
     },
@@ -1021,6 +1040,18 @@
     },
     "yizhifubjMerchantId": {
       "notBlank": "이즈푸(베이징) 가맹점 번호는 필수입니다"
+    },
+    "bizNo": {
+      "notBlank": "결제 번호는 필수입니다"
+    },
+    "broadcastEnable": {
+      "notNull": "방송 스위치는 필수입니다"
+    },
+    "printEnable": {
+      "notNull": "인쇄 스위치는 필수입니다"
+    },
+    "templateCode": {
+      "size": "인쇄 템플릿 코드는 32자를 초과할 수 없습니다"
     }
   }
 }

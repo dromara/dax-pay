@@ -5,6 +5,7 @@ import cn.daxpay.open.payment.merchant.param.store.MchStoreInfoQuery;
 import cn.daxpay.open.platform.common.mybatisplus.impl.BaseManager;
 import cn.daxpay.open.platform.common.mybatisplus.query.generator.QueryGenerator;
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
+import cn.daxpay.open.platform.core.annotation.IgnoreTenant;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -24,6 +25,12 @@ public class MchStoreInfoManager extends BaseManager<MchStoreInfoMapper, MchStor
 
     /// 根据门店号查询
     public Optional<MchStoreInfo> findByStoreNo(String storeNo) {
+        return this.findByField(MchStoreInfo::getStoreNo, storeNo);
+    }
+
+    /// 根据门店号查询（忽略租户, 供 JMS 消费线程等无商户上下文链路取门店名）
+    @IgnoreTenant
+    public Optional<MchStoreInfo> findByStoreNoNotTenant(String storeNo) {
         return this.findByField(MchStoreInfo::getStoreNo, storeNo);
     }
 

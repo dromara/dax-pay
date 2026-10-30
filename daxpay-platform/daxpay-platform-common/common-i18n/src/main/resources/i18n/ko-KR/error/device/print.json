@@ -1,0 +1,20 @@
+{
+  "templateNotFound": "인쇄 템플릿이 존재하지 않습니다: {0}",
+  "contentBlank": "템플릿 내용은 비워둘 수 없습니다",
+  "notJson": "템플릿 내용이 유효한 JSON이 아닙니다",
+  "rootInvalid": "템플릿 루트는 elements 배열을 포함한 객체여야 합니다",
+  "elementsEmpty": "템플릿 elements는 비워둘 수 없습니다",
+  "elementLimit": "템플릿 요소 수가 상한({0}개)을 초과했습니다",
+  "elementNotObject": "요소 {0}이(가) 객체가 아닙니다",
+  "unknownType": "요소 {0} ({1}): 알 수 없는 요소 유형",
+  "fieldRequired": "요소 {0} ({1}): {2}은(는) 필수입니다",
+  "fieldOverLength": "요소 {0} ({1}): {2}이(가) 길이 상한({3}자)을 초과했습니다",
+  "fieldNotInt": "요소 {0} ({1}): {2}은(는) 정수여야 합니다",
+  "fieldRange": "요소 {0} ({1}): {2}은(는) {3}~{4} 범위여야 합니다",
+  "unknownVar": "요소 {0} ({1}): 알 수 없는 변수 {2}",
+  "alignInvalid": "요소 {0}: align은 left/center/right여야 합니다",
+  "sizeInvalid": "요소 {0}: size는 normal/double이어야 합니다",
+  "dividerInvalid": "요소 {0} (divider): 구분 문자는 반각 1자여야 합니다",
+  "qrTooLong": "QR 코드 내용이 너무 깁니다({0}자). {1}mm 용지에서 모듈당 {2}도트 미만입니다. 내용을 줄이세요",
+  "qrNotEncodable": "QR 코드 내용을 인코딩할 수 없습니다(너무 길거나 지원하지 않는 문자 포함)"
+}

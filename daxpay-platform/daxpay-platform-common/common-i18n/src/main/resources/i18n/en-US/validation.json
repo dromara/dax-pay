@@ -6,6 +6,31 @@
   "max": "{0} cannot be greater than {1}",
   "parameterError": "Parameter validation failed",
   "field": {
+    "deviceSn": {
+      "notBlank": "Device serial number cannot be blank"
+    },
+    "deviceNo": {
+      "notBlank": "Device number is required"
+    },
+    "ts": {
+      "notNull": "Timestamp is required"
+    },
+    "nonce": {
+      "notBlank": "Nonce is required"
+    },
+    "sign": {
+      "notBlank": "Signature is required"
+    },
+    "brokerWssUrl": {
+      "notBlank": "MQTT access URL is required",
+      "pattern": "MQTT access URL must start with ws:// or wss:// and contain no spaces"
+    },
+    "mqttUsername": {
+      "notBlank": "MQTT username is required"
+    },
+    "mqttPassword": {
+      "notBlank": "MQTT password is required"
+    },
     "source": {
       "notBlank": "Platform cannot be blank"
     },
@@ -215,9 +240,6 @@
     },
     "youzanMerchantId": {
       "notBlank": "Youzan merchant ID cannot be empty"
-    },
-    "sign": {
-      "notBlank": "Signature is required"
     },
     "reqTime": {
       "notNull": "Request time cannot be blank"
@@ -623,9 +645,6 @@
     "storeName": {
       "notBlank": "Store name cannot be blank"
     },
-    "deviceSn": {
-      "notBlank": "Device serial number cannot be blank"
-    },
     "deviceType": {
       "notBlank": "Device type cannot be blank"
     },
@@ -1025,6 +1044,18 @@
     },
     "yizhifubjMerchantId": {
       "notBlank": "Yizhifu (Beijing) merchant ID cannot be empty"
+    },
+    "bizNo": {
+      "notBlank": "Payment order number cannot be empty"
+    },
+    "broadcastEnable": {
+      "notNull": "Broadcast switch cannot be empty"
+    },
+    "printEnable": {
+      "notNull": "Print switch cannot be empty"
+    },
+    "templateCode": {
+      "size": "Print template code must not exceed 32 characters"
     }
   }
 }

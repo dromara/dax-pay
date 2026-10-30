@@ -79,6 +79,13 @@
             <version>${project.version}</version>
         </dependency>
 
+        <!-- 设备域内核（虚拟设备：收款播报 APP 台账/激活/推送） -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-device-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!-- 功能演示模块（需隔离时注释此依赖即可从产物中剔除） -->
         <dependency>
             <groupId>cn.daxpay.open</groupId>

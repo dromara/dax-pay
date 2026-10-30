@@ -1,0 +1,20 @@
+{
+  "templateNotFound": "印刷テンプレートが存在しません: {0}",
+  "contentBlank": "テンプレート内容は必須です",
+  "notJson": "テンプレート内容が有効な JSON ではありません",
+  "rootInvalid": "テンプレートのルートは elements 配列を含むオブジェクトである必要があります",
+  "elementsEmpty": "テンプレートの elements は空にできません",
+  "elementLimit": "テンプレート要素数が上限({0} 個)を超えています",
+  "elementNotObject": "要素 {0} がオブジェクトではありません",
+  "unknownType": "要素 {0} ({1}): 不明な要素タイプです",
+  "fieldRequired": "要素 {0} ({1}): {2} は必須です",
+  "fieldOverLength": "要素 {0} ({1}): {2} が長さ上限({3} 文字)を超えています",
+  "fieldNotInt": "要素 {0} ({1}): {2} は整数である必要があります",
+  "fieldRange": "要素 {0} ({1}): {2} は {3}~{4} の範囲で指定してください",
+  "unknownVar": "要素 {0} ({1}): 不明な変数 {2}",
+  "alignInvalid": "要素 {0}: align は left/center/right で指定してください",
+  "sizeInvalid": "要素 {0}: size は normal/double で指定してください",
+  "dividerInvalid": "要素 {0} (divider): 区切り文字は半角 1 文字で指定してください",
+  "qrTooLong": "QR コード内容が長すぎます({0} 文字)。{1}mm 紙では 1 モジュール {2} ドット未満のため、内容を短縮してください",
+  "qrNotEncodable": "QR コード内容をエンコードできません(長すぎるか未対応文字を含みます)"
+}

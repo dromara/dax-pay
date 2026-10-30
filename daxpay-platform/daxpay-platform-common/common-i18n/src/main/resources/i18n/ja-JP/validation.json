@@ -6,6 +6,31 @@
   "max": "{0} は {1} より大きくすることはできません",
   "parameterError": "パラメータの検証に失敗しました",
   "field": {
+    "deviceSn": {
+      "notBlank": "デバイスのシリアル番号を空白にすることはできません"
+    },
+    "deviceNo": {
+      "notBlank": "デバイス番号は必須です"
+    },
+    "ts": {
+      "notNull": "タイムスタンプは必須です"
+    },
+    "nonce": {
+      "notBlank": "nonce は必須です"
+    },
+    "sign": {
+      "notBlank": "署名は必須です"
+    },
+    "brokerWssUrl": {
+      "notBlank": "MQTT 接続アドレスは必須です",
+      "pattern": "MQTT 接続アドレスは ws:// または wss:// で始まり、空白を含まない必要があります"
+    },
+    "mqttUsername": {
+      "notBlank": "MQTT 接続アカウントは必須です"
+    },
+    "mqttPassword": {
+      "notBlank": "MQTT 接続パスワードは必須です"
+    },
     "source": {
       "notBlank": "プラットフォームを空白にすることはできません"
     },
@@ -215,9 +240,6 @@
     },
     "youzanMerchantId": {
       "notBlank": "有贊マーチャントIDは必須です"
-    },
-    "sign": {
-      "notBlank": "署名は必須です"
     },
     "reqTime": {
       "notNull": "リクエスト時間を空白にすることはできません"
@@ -619,9 +641,6 @@
     "storeName": {
       "notBlank": "店舗名を空白にすることはできません"
     },
-    "deviceSn": {
-      "notBlank": "デバイスのシリアル番号を空白にすることはできません"
-    },
     "deviceType": {
       "notBlank": "デバイスタイプを空白にすることはできません"
     },
@@ -1021,6 +1040,18 @@
     },
     "yizhifubjMerchantId": {
       "notBlank": "一直払い(北京)の加盟店番号は必須です"
+    },
+    "bizNo": {
+      "notBlank": "支払番号は必須です"
+    },
+    "broadcastEnable": {
+      "notNull": "放報スイッチは必須です"
+    },
+    "printEnable": {
+      "notNull": "印刷スイッチは必須です"
+    },
+    "templateCode": {
+      "size": "印刷テンプレートコードは32文字以内です"
     }
   }
 }

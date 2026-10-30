@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>cn.daxpay.open</groupId>
+        <artifactId>daxpay</artifactId>
+        <version>4.0.0-beta10</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <artifactId>daxpay-device</artifactId>
+    <packaging>pom</packaging>
+    <description>设备域（虚拟设备：收款播报 APP 台账/激活/推送；自 payment-core 拆出为独立一级模块）</description>
+
+    <modules>
+        <module>daxpay-device-core</module>
+    </modules>
+
+</project>

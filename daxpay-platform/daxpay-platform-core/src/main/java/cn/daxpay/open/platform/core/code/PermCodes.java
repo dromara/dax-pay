@@ -508,12 +508,28 @@ public interface PermCodes {
         }
     }
 
-    /// 设备管理（码牌）
+    /// 设备管理（码牌 + 虚拟设备）
     interface Device {
         /// 码牌 menuCode=device:qrcode
         interface QrCode {
             /// 菜单编码
             String MENU = "device:qrcode";
+        }
+
+        /// 虚拟设备(收款播报 APP) menuCode=device:virtual
+        ///
+        /// 权限码 `device:virtual:view` / `device:virtual:manage`(动作段见 [Action], 运营端)
+        interface Virtual {
+            /// 菜单编码
+            String MENU = "device:virtual";
+        }
+
+        /// 商户端收款设备(虚拟设备商户自助) menuCode=device:audio
+        ///
+        /// 权限码 `device:audio:view` / `device:audio:manage`(动作段见 [Action], 商户端)
+        interface Audio {
+            /// 菜单编码
+            String MENU = "device:audio";
         }
     }
 

@@ -1,0 +1,20 @@
+{
+  "templateNotFound": "列印版式不存在: {0}",
+  "contentBlank": "模板內容不能為空",
+  "notJson": "模板內容不是合法 JSON",
+  "rootInvalid": "模板根須為物件且含 elements 陣列",
+  "elementsEmpty": "模板 elements 不能為空",
+  "elementLimit": "模板元素數超過上限({0} 個)",
+  "elementNotObject": "第 {0} 個元素不是物件",
+  "unknownType": "第 {0} 個元素({1}): 未知元素類型",
+  "fieldRequired": "第 {0} 個元素({1}): {2} 不能為空",
+  "fieldOverLength": "第 {0} 個元素({1}): {2} 長度超過上限({3} 字元)",
+  "fieldNotInt": "第 {0} 個元素({1}): {2} 須為整數",
+  "fieldRange": "第 {0} 個元素({1}): {2} 取值範圍 {3}~{4}",
+  "unknownVar": "第 {0} 個元素({1}): 未知變數 {2}",
+  "alignInvalid": "第 {0} 個元素: align 取值須為 left/center/right",
+  "sizeInvalid": "第 {0} 個元素: size 取值須為 normal/double",
+  "dividerInvalid": "第 {0} 個元素(divider): 分隔符須為單個半形字元",
+  "qrTooLong": "二維碼內容過長({0} 字元), {1}mm 紙下不足 {2} 點/模組, 請縮短內容",
+  "qrNotEncodable": "二維碼內容無法編碼(過長或含不支援字元)"
+}

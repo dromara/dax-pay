@@ -1,0 +1,20 @@
+{
+  "templateNotFound": "打印版式不存在: {0}",
+  "contentBlank": "模板内容不能为空",
+  "notJson": "模板内容不是合法 JSON",
+  "rootInvalid": "模板根须为对象且含 elements 数组",
+  "elementsEmpty": "模板 elements 不能为空",
+  "elementLimit": "模板元素数超过上限({0} 个)",
+  "elementNotObject": "第 {0} 个元素不是对象",
+  "unknownType": "第 {0} 个元素({1}): 未知元素类型",
+  "fieldRequired": "第 {0} 个元素({1}): {2} 不能为空",
+  "fieldOverLength": "第 {0} 个元素({1}): {2} 长度超过上限({3} 字符)",
+  "fieldNotInt": "第 {0} 个元素({1}): {2} 须为整数",
+  "fieldRange": "第 {0} 个元素({1}): {2} 取值范围 {3}~{4}",
+  "unknownVar": "第 {0} 个元素({1}): 未知变量 {2}",
+  "alignInvalid": "第 {0} 个元素: align 取值须为 left/center/right",
+  "sizeInvalid": "第 {0} 个元素: size 取值须为 normal/double",
+  "dividerInvalid": "第 {0} 个元素(divider): 分隔符须为单个半角字符",
+  "qrTooLong": "二维码内容过长({0} 字符), {1}mm 纸下不足 {2} 点/模块, 请缩短内容",
+  "qrNotEncodable": "二维码内容无法编码(过长或含不支持字符)"
+}

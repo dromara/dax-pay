@@ -283,3 +283,12 @@ INSERT INTO "public"."iam_perm_menu" VALUES (40584, 40402, 'channel:merchant:det
 -- 菜单 ID 顺延 40583）
 -- ----------------------------
 INSERT INTO "public"."iam_perm_menu" VALUES (40583, 40402, 'channel:merchant:create', 'admin', 'ChannelMerchantCreate', 'menu.payment.merchant.channelMerchant.create', NULL, 't', 'f', '/payment/global/channel-merchant/ChannelMerchantCreate', '/payment/global/channel-merchant/create-global', NULL, 10, 'f', 't', 'f', 1, 1, 0, 'f', 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-10-10 00:00:00+00', '2026-10-10 00:00:00+00', 'f');
+
+-- ----------------------------
+-- 2026-10-24 虚拟设备简版: 运营端目录「虚拟设备」+ 页「设备管理」+ 商户端页「收款设备」
+-- 运营端目录挂支付系统(4)下与码牌同域; 商户端页挂商户中心基础管理组(91416)与码牌/终端同组;
+-- 权限码 device:virtual:view/manage(运营端)与 device:audio:view/manage(商户端)见 update-datas.sql
+-- ----------------------------
+INSERT INTO "public"."iam_perm_menu" VALUES (917, 4, NULL, 'admin', 'VirtualDeviceGroup', 'menu.payment.device.virtual', 'lucide:smartphone', 'f', 'f', NULL, '/device/virtual', '/device/virtual/list', 41, 'f', 'f', 'f', 0, NULL, 0, 'f', 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-10-24 00:00:00+00', '2026-10-24 00:00:00+00', 'f');
+INSERT INTO "public"."iam_perm_menu" VALUES (918, 917, 'device:virtual', 'admin', 'VirtualDeviceList', 'menu.payment.device.virtual.list', 'lucide:monitor-speaker', 'f', 'f', '/payment/device/virtual/VirtualDeviceList', '/device/virtual/list', NULL, 1, 'f', 'f', 'f', 0, 1, 0, 'f', 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-10-24 00:00:00+00', '2026-10-24 00:00:00+00', 'f');
+INSERT INTO "public"."iam_perm_menu" VALUES (91308, 91416, 'device:audio', 'merchant', 'MchAudioDeviceList', 'menu.payment.merchant.audioDevice', 'lucide:speaker', 'f', 'f', '/payment/device/audio/MchAudioDeviceList', '/mch/device/audio', NULL, 6, 'f', 'f', 'f', 0, 1, 0, 'f', 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-10-24 00:00:00+00', '2026-10-24 00:00:00+00', 'f');
