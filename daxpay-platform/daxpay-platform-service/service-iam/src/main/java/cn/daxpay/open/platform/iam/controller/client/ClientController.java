@@ -19,10 +19,13 @@ import java.util.List;
 ///
 /// 只读列表, 供用户/角色/菜单等页下拉使用. 无启停、无 CRUD.
 ///
+/// 前缀归 IAM 域 `/iam/client`(原 `/client`): `/client/**` 保留为对外开放命名空间,
+/// 仅供无自有前端的客户端(APP/小程序/桌面端/设备)的匿名/签名端点使用;
+/// 本端点消费方是运营端 Web 且需要登录, 属正式业务。
 @Validated
 @Tag(name = "登录终端")
 @RestController
-@RequestMapping("/client")
+@RequestMapping("/iam/client")
 @RequiredArgsConstructor
 public class ClientController {
 
