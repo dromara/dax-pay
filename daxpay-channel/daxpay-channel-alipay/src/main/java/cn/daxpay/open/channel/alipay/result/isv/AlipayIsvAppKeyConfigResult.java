@@ -54,4 +54,8 @@ public class AlipayIsvAppKeyConfigResult extends BaseResult {
     @SensitiveInfo(front = 6, end = 6)
     @Schema(description = "AES通信密钥")
     private String secretKey;
+
+    /// 网关地址
+    @Schema(description = "网关地址(留空使用官方网关)")
+    private String serverUrl;
 }

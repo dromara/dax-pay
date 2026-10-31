@@ -161,6 +161,7 @@ public class MchAlipayDirectAppController {
                 .setAlipayCert(param.getAlipayCert())
                 .setAlipayRootCert(param.getAlipayRootCert())
                 .setSecretKey(param.getSecretKey())
+                .setServerUrl(param.getServerUrl())
                 .setSandbox(param.getSandbox());
         alipayDirectAppKeyConfigService.save(saveParam);
         return Res.ok();

@@ -87,7 +87,8 @@ public class MchWechatDirectKeyConfigController {
                 .setPublicKeyId(param.getPublicKeyId())
                 .setPrivateKey(param.getPrivateKey())
                 .setPrivateCert(param.getPrivateCert())
-                .setCertSerialNo(param.getCertSerialNo());
+                .setCertSerialNo(param.getCertSerialNo())
+                .setApiHostUrl(param.getApiHostUrl());
         wechatDirectKeyConfigService.save(saveParam);
         return Res.ok();
     }

@@ -53,6 +53,9 @@ public class AlipayDirectAppKeyConfigResult extends BaseResult {
     @Schema(description = "AES通信密钥")
     private String secretKey;
 
+    @Schema(description = "网关地址(留空使用官方网关)")
+    private String serverUrl;
+
     @Schema(description = "是否沙箱环境")
     private Boolean sandbox;
 }

@@ -112,6 +112,10 @@ public class AlipayDirectConfigAssembler {
         credential.setAppCert(keyConfig.getAppCert());
         credential.setAlipayCert(keyConfig.getAlipayCert());
         credential.setAlipayRootCert(keyConfig.getAlipayRootCert());
+        // 网关地址(非空时覆盖, 留空由子应用按沙箱标志选择官方/沙箱网关; 联调演练指向模拟网关)
+        if (StrUtil.isNotBlank(keyConfig.getServerUrl())) {
+            credential.setServerUrl(keyConfig.getServerUrl());
+        }
         credential.setSandbox(sandbox);
         return credential;
     }

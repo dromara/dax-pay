@@ -48,4 +48,8 @@ public class AlipayIsvAppKeyConfigParam {
     @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
     @Schema(description = "AES通信密钥")
     private String secretKey;
+
+    // 网关地址(非敏感不套凭证空值保留反序列化器, 清空即恢复官方网关)
+    @Schema(description = "网关地址(留空使用官方网关)")
+    private String serverUrl;
 }

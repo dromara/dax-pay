@@ -9,6 +9,7 @@ import cn.daxpay.open.channel.alipay.entity.isv.AlipayIsvChannelMerchant;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
 import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -60,6 +61,10 @@ public class AlipayIsvConfigAssembler {
         credential.setAlipayRootCert(keyConfig.getAlipayRootCert());
         // 应用授权令牌(服务商代子商户调用接口的凭据)
         credential.setAppAuthToken(isvMerchant.getAppAuthToken());
+        // 网关地址(非空时覆盖, 留空由子应用按沙箱标志选择官方/沙箱网关; 联调演练指向模拟网关)
+        if (StrUtil.isNotBlank(keyConfig.getServerUrl())) {
+            credential.setServerUrl(keyConfig.getServerUrl());
+        }
         // 沙箱标识读通用通道商户主表的固化快照(创建时按当时产品 activeEnv 写入, 不随产品切换改变)
         // 单一事实源, 与 Direct 通道 + PayRouteService.validateChannelMchEnvMatch 完全一致
         boolean sandbox = channelMerchantManager.findByChannelMchNo(isvMerchant.getChannelMchNo())

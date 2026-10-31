@@ -56,6 +56,9 @@ public class AlipayDirectAppKeyConfig extends MchBaseEntity implements ToResult<
     @TableField(typeHandler = DataEncryptTypeHandler.class)
     private String secretKey;
 
+    /// 网关地址(留空使用官方网关, 联调演练填模拟网关完整地址)
+    private String serverUrl;
+
     /// 是否沙箱环境
     private Boolean sandbox;
 

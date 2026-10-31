@@ -42,4 +42,7 @@ public class WechatIsvKeyConfigResult extends BaseResult {
 
     @Schema(description = "证书序列号")
     private String certSerialNo;
+
+    @Schema(description = "API域名(留空使用官方 api.mch.weixin.qq.com)")
+    private String apiHostUrl;
 }

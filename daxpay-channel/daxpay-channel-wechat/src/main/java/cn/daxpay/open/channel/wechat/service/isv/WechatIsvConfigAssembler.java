@@ -140,6 +140,10 @@ public class WechatIsvConfigAssembler {
         // 支付公钥新模式(为空则子应用走平台证书模式)
         credential.setPublicKey(keyConfig.getPublicKey());
         credential.setPublicKeyId(keyConfig.getPublicKeyId());
+        // API域名(非空时覆盖, 留空由子应用使用官方 api.mch.weixin.qq.com; 联调演练指向模拟网关)
+        if (StrUtil.isNotBlank(keyConfig.getApiHostUrl())) {
+            credential.setApiHostUrl(keyConfig.getApiHostUrl());
+        }
         return credential;
     }
 }

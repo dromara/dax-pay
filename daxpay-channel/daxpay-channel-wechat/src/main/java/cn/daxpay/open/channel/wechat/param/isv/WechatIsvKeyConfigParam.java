@@ -43,4 +43,8 @@ public class WechatIsvKeyConfigParam {
 
     @Schema(description = "证书序列号")
     private String certSerialNo;
+
+    // API域名(非敏感不套凭证空值保留反序列化器, 清空即恢复官方域名)
+    @Schema(description = "API域名(留空使用官方 api.mch.weixin.qq.com)")
+    private String apiHostUrl;
 }

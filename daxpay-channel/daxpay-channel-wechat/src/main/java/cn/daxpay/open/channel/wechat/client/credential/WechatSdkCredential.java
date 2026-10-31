@@ -29,4 +29,6 @@ public class WechatSdkCredential {
     private String publicKey;
     /// 支付公钥ID
     private String publicKeyId;
+    /// API域名(留空使用官方 api.mch.weixin.qq.com; 联调演练填模拟网关地址)
+    private String apiHostUrl;
 }

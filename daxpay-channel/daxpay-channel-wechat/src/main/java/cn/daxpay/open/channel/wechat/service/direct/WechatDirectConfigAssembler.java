@@ -13,6 +13,7 @@ import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
+import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -132,6 +133,10 @@ public class WechatDirectConfigAssembler {
         // 支付公钥新模式(为空则子应用走平台证书模式)
         credential.setPublicKey(keyConfig.getPublicKey());
         credential.setPublicKeyId(keyConfig.getPublicKeyId());
+        // API域名(非空时覆盖, 留空由子应用使用官方 api.mch.weixin.qq.com; 联调演练指向模拟网关)
+        if (StrUtil.isNotBlank(keyConfig.getApiHostUrl())) {
+            credential.setApiHostUrl(keyConfig.getApiHostUrl());
+        }
         return credential;
     }
 }

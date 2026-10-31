@@ -47,6 +47,9 @@ public class WechatIsvKeyConfig extends MpBaseEntity implements ToResult<WechatI
     /// 证书序列号
     private String certSerialNo;
 
+    /// API域名(留空使用官方 api.mch.weixin.qq.com, 联调演练填模拟网关地址)
+    private String apiHostUrl;
+
     /// 转换
     @Override
     public WechatIsvKeyConfigResult toResult() {
