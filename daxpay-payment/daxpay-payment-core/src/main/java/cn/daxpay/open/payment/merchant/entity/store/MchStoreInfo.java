@@ -28,6 +28,11 @@ public class MchStoreInfo extends MchBaseEntity implements ToResult<MchStoreInfo
     @TableField(updateStrategy = FieldStrategy.NEVER, fill = FieldFill.INSERT)
     private String storeNo;
 
+    /// 门店默认支付应用号(空则使用商户默认应用)
+    ///
+    /// 仅作码牌等门店级场景的应用归属来源, 支付内核默认应用解析顺序不受影响。
+    private String appId;
+
     /// 门店名称
     private String storeName;
 

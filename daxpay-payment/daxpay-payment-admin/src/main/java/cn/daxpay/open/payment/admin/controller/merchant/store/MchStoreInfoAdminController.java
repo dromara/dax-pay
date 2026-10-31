@@ -4,6 +4,7 @@ import cn.daxpay.open.platform.core.code.PermCodes;
 import cn.daxpay.open.payment.merchant.param.store.MchStoreInfoParam;
 import cn.daxpay.open.payment.merchant.param.store.MchStoreInfoQuery;
 import cn.daxpay.open.payment.merchant.result.store.MchStoreInfoResult;
+import cn.daxpay.open.payment.merchant.result.store.MchStoreOverviewResult;
 import cn.daxpay.open.payment.merchant.service.store.MchStoreInfoService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.rest.Res;
@@ -13,10 +14,13 @@ import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.platform.core.validation.ValidationGroup;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /// 门店信息管理(管理端)
 @PermCode(menuCode = PermCodes.Merchant.Store.MENU)
@@ -52,10 +56,24 @@ public class MchStoreInfoAdminController {
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
+    @Operation(summary = "按商户号查询全部门店(门店管理卡片墙用)")
+    @GetMapping("/list-all")
+    public Result<List<MchStoreInfoResult>> listAll(@NotBlank(message = "{validation.field.mchNo.notBlank}") String mchNo) {
+        return Res.ok(mchStoreInfoService.listAllByMchNo(mchNo));
+    }
+
+    @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "根据id查询门店")
     @GetMapping("/get")
     public Result<MchStoreInfoResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(mchStoreInfoService.findById(id));
+    }
+
+    @PermCode(code = PermCodes.Action.VIEW)
+    @Operation(summary = "门店概况聚合(详情工作台)")
+    @GetMapping("/overview")
+    public Result<MchStoreOverviewResult> overview(@NotNull(message = "{validation.field.id.notNull}") Long id) {
+        return Res.ok(mchStoreInfoService.overview(id));
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
@@ -79,6 +97,14 @@ public class MchStoreInfoAdminController {
     @PostMapping("/clear-default")
     public Result<Void> clearDefault(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         mchStoreInfoService.clearDefault(id);
+        return Res.ok();
+    }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "设置/清空门店默认应用")
+    @PostMapping("/set-app")
+    public Result<Void> setApp(@NotNull(message = "{validation.field.id.notNull}") Long id, String appId) {
+        mchStoreInfoService.setApp(id, appId);
         return Res.ok();
     }
 }

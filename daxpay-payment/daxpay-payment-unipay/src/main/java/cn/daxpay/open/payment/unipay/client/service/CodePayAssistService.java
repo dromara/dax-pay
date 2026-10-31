@@ -138,7 +138,8 @@ public class CodePayAssistService {
     public NormalPayResult pay(CodePayParam param) {
         var entity = this.loadEnabledAssigned(param.getCode());
         merchantContextLoader.initMch(entity.getMchNo());
-        var mchApp = merchantContextLoader.resolveApp(entity.getMchNo(), entity.getAppId());
+        // 门店感知应用解析: 码牌未指定应用时取码牌门店的默认应用(必须传码牌显式 storeNo, 不能用解析后的默认门店)
+        var mchApp = merchantContextLoader.resolveApp(entity.getMchNo(), entity.getAppId(), entity.getStoreNo());
         // 获取金额
         long amount = this.resolveAmount(entity, param.getAmount());
         ClientEnvEnum clientEnv = ClientEnvEnum.findByCode(param.getClientEnv());
@@ -192,7 +193,8 @@ public class CodePayAssistService {
     public AuthUrlResult generateAuthUrl(CodePayAuthUrlParam param) {
         DeviceQrCode entity = this.loadEnabledAssigned(param.getCode());
         merchantContextLoader.initMch(entity.getMchNo());
-        var mchApp = merchantContextLoader.resolveApp(entity.getMchNo(), entity.getAppId());
+        // 门店感知应用解析: 码牌未指定应用时取码牌门店的默认应用(与支付链路同源, 防 openId 与 channelAppId 不同域)
+        var mchApp = merchantContextLoader.resolveApp(entity.getMchNo(), entity.getAppId(), entity.getStoreNo());
 
         ClientEnvEnum clientEnv = ClientEnvEnum.findByCode(param.getClientEnv());
         if (clientEnv == ClientEnvEnum.BROWSER) {
@@ -332,7 +334,8 @@ public class CodePayAssistService {
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.qrcode.clientEnvNotSupport");
         }
         merchantContextLoader.initMch(entity.getMchNo());
-        var mchApp = merchantContextLoader.resolveApp(entity.getMchNo(), entity.getAppId());
+        // 门店感知应用解析: 与支付/授权链路同源(码牌未指定应用时取码牌门店的默认应用)
+        var mchApp = merchantContextLoader.resolveApp(entity.getMchNo(), entity.getAppId(), entity.getStoreNo());
         CodePayFormEnum payForm = this.resolvePayForm(entity.getProgramType(), runtime);
         return gatewayPayConfigResolveService.resolveRequired(mchApp.getAppId(), clientEnv, payForm).method();
     }

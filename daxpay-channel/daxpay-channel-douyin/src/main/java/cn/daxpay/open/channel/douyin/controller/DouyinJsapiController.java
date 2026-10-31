@@ -121,7 +121,8 @@ public class DouyinJsapiController {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "error.device.qrcode.notAssigned");
         }
         merchantContextLoader.initMch(entity.getMchNo());
-        var mchApp = merchantContextLoader.resolveApp(entity.getMchNo(), entity.getAppId());
+        // 门店感知应用解析: 与码牌支付链路同源(码牌未指定应用时取码牌门店的默认应用)
+        var mchApp = merchantContextLoader.resolveApp(entity.getMchNo(), entity.getAppId(), entity.getStoreNo());
         CodePayFormEnum payForm = CodePayFormEnum.fromProgramType(entity.getProgramType());
         var resolved = gatewayPayConfigResolveService.resolveRequired(mchApp.getAppId(), ClientEnvEnum.DOUYIN, payForm);
         NormalPayParam routeParam = new NormalPayParam();

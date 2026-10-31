@@ -5,6 +5,7 @@ import cn.daxpay.open.platform.core.validation.ValidationGroup;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
@@ -25,6 +26,13 @@ public class MchStoreInfoParam {
     /// 商户号
     @Schema(description = "商户号")
     private String mchNo;
+
+    /// 门店默认支付应用号(空则使用商户默认应用)
+    ///
+    /// 修改时传空(null/空串)即视为清空, 回到跟随商户默认应用。
+    @Schema(description = "门店默认支付应用号(空则使用商户默认应用)")
+    @Size(max = 32, message = "{validation.field.appId.size}")
+    private String appId;
 
     /// 门店名称
     @Schema(description = "门店名称")

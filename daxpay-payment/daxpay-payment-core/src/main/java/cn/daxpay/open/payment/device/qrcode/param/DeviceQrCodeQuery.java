@@ -36,6 +36,11 @@ public class DeviceQrCodeQuery {
     @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     private String storeNo;
 
+    /// 是否未分配门店(true=仅查门店为空, false=仅查已分配; 门店工作台快捷绑定候选过滤用)
+    @Schema(description = "是否未分配门店(true=仅查门店为空, false=仅查已分配)")
+    @QueryParam(type = QueryParam.CompareTypeEnum.IS_NULL, fieldName = "store_no")
+    private Boolean storeUnassigned;
+
     /// 落地程序类型
     /// @see cn.daxpay.open.payment.device.enums.QrCodeProgramTypeEnum
     @Schema(description = "落地程序类型(h5/mini_app)")

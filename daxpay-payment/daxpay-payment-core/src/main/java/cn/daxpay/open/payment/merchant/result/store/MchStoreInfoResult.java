@@ -24,6 +24,14 @@ public class MchStoreInfoResult extends BaseResult {
     @Schema(description = "门店号")
     private String storeNo;
 
+    /// 门店默认支付应用号(空则使用商户默认应用)
+    @Schema(description = "门店默认支付应用号(空则使用商户默认应用)")
+    private String appId;
+
+    /// 门店默认支付应用名称(只读展示字段, 由 Service 批量回填, 非表字段)
+    @Schema(description = "门店默认支付应用名称")
+    private String appName;
+
     @Schema(description = "门店名称")
     private String storeName;
 
