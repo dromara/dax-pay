@@ -2,5 +2,7 @@
   "none": "精算待ち",
   "unsupported": "精算非対応",
   "processing": "精算中",
-  "done": "精算済み"
+  "done": "精算済み",
+  "allocated": "精算済み未完了",
+  "finished": "精算済み且つ完了"
 }

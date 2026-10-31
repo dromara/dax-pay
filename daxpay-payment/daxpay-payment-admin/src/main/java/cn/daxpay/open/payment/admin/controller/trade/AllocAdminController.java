@@ -1,6 +1,7 @@
 package cn.daxpay.open.payment.admin.controller.trade;
 
 import cn.daxpay.open.payment.admin.service.trade.AllocAdminService;
+import cn.daxpay.open.payment.trade.alloc.param.AllocFinishParam;
 import cn.daxpay.open.payment.trade.alloc.param.AllocOrderQuery;
 import cn.daxpay.open.payment.trade.alloc.param.AllocParam;
 import cn.daxpay.open.payment.trade.alloc.result.AllocCreateResult;
@@ -66,6 +67,13 @@ public class AllocAdminController {
     @PostMapping("/create")
     public Result<AllocCreateResult> create(@Valid @RequestBody AllocParam param) {
         return Res.ok(allocAdminService.create(param));
+    }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "发起分账完结(运营端代发, 多次分账收尾)")
+    @PostMapping("/finish")
+    public Result<AllocCreateResult> finish(@Valid @RequestBody AllocFinishParam param) {
+        return Res.ok(allocAdminService.finish(param));
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)

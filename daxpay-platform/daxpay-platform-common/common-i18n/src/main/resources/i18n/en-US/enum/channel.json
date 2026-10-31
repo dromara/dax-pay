@@ -66,5 +66,6 @@
   "lianlian_global": "LianLian Global",
   "lianlian_global_desc": "LianLian Global cross-border collection channel (placeholder, not connected)",
   "pingpong": "PingPong",
-  "pingpong_desc": "PingPong  cross-border collection channel (placeholder, not connected)"
+  "pingpong_desc": "PingPong  cross-border collection channel (placeholder, not connected)",
+  "mock": "Mock Channel"
 }

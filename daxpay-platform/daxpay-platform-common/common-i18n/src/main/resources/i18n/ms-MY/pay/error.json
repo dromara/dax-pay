@@ -136,7 +136,15 @@
     "channelNotSupport": "Saluran ini tidak menyokong peruntukan",
     "syncProcessing": "Penyegerakan peruntukan sedang diproses",
     "tradeNoRequired": "Nombor transaksi dan nombor pesanan tidak boleh kedua-duanya kosong",
-    "unsupported": "Produk pembayaran tidak menyokong peruntukan bagi pesanan ini; telah diturunkan kepada pembayaran biasa"
+    "unsupported": "Produk pembayaran tidak menyokong peruntukan bagi pesanan ini; telah diturunkan kepada pembayaran biasa",
+    "alreadyFinished": "Peruntukan pesanan ini sudah selesai dan tidak boleh dimulakan semula",
+    "singleOnly": "Saluran ini hanya menyokong peruntukan tunggal (baki dana dilepaskan semasa dimulakan); tiada peruntukan tambahan selepas peruntukan",
+    "finishChannelNotSupport": "Saluran ini tidak menyokong penyelesaian peruntukan bebas",
+    "finishFailed": "Penyelesaian peruntukan gagal: {0}",
+    "finishFailedDefault": "Penyelesaian peruntukan gagal",
+    "finishAlreadyFinished": "Peruntukan pesanan ini sudah selesai",
+    "finishNotAllowed": "Hanya pesanan yang telah diperuntukkan tetapi belum selesai boleh memulakan penyelesaian",
+    "finishModeInvalid": "Mod penyelesaian peruntukan tidak sah: {0}"
   },
   "assist": {
     "mchPublicKeyEmpty": "Kunci awam pedagang kosong",

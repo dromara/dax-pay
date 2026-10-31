@@ -2,5 +2,7 @@
   "none": "분할 대기",
   "unsupported": "분할 미지원",
   "processing": "분할 중",
-  "done": "분할 완료"
+  "done": "분할 완료",
+  "allocated": "분할 완료(미종료)",
+  "finished": "분할 및 완료"
 }

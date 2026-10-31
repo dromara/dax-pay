@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>cn.daxpay.open</groupId>
+        <artifactId>daxpay-channel</artifactId>
+        <version>4.0.0-beta10</version>
+    </parent>
+
+    <artifactId>daxpay-channel-mock</artifactId>
+    <packaging>jar</packaging>
+    <description>Mock 模拟通道编排层(对接独立 mock 子应用, 仅 DEV 模式装配)</description>
+
+    <!--
+      父 pom 已统一提供 daxpay-payment-core(传递 common 层),
+      mock 通道零三方 SDK; 通道商户建档直写通用主表(经 payment-core 的 ChannelMerchantManager)。
+    -->
+
+    <dependencies>
+        <!-- 测试包 -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- 单元测试 Mock(版本由 spring-boot-starter-parent BOM 管理) -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

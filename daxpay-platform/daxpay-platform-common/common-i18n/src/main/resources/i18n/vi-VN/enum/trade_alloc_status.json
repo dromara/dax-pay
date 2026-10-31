@@ -2,5 +2,7 @@
   "none": "Chờ phân bổ",
   "unsupported": "Không hỗ trợ phân bổ",
   "processing": "Đang phân bổ",
-  "done": "Đã phân bổ"
+  "done": "Đã phân bổ",
+  "allocated": "Đã phân bổ (chưa hoàn tất)",
+  "finished": "Đã phân bổ và hoàn tất"
 }

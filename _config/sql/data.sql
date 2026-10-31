@@ -5013,6 +5013,8 @@ INSERT INTO public.pay_md_channel VALUES (92003, 'lianlian_global', 68, NULL, 1,
 INSERT INTO public.pay_md_channel VALUES (92004, 'pingpong', 69, NULL, 1, '2026-10-16 00:00:00+00', 1, '2026-10-16 00:00:00+00', 0, false);
 INSERT INTO public.pay_md_channel VALUES (45, 'youzan', 43, NULL, 1, '2026-10-15 00:00:00+00', 1, '2026-10-15 00:00:00+00', 0, false);
 INSERT INTO public.pay_md_channel VALUES (17, 'kuaiqian_pay', 16, NULL, 1, '2026-07-05 23:19:01.965299+00', 1, '2026-07-05 23:19:01.965299+00', 0, false);
+-- mock 模拟通道(独立 mock 子应用扮演三方, 仅 DEV 装配, 联调/演示用)
+INSERT INTO public.pay_md_channel VALUES (92005, 'mock', 24, NULL, 1, '2026-10-31 00:00:00+00', 1, '2026-10-31 00:00:00+00', 0, false);
 
 
 --
@@ -5114,6 +5116,9 @@ INSERT INTO public.pay_md_product VALUES (96003, 'lianlian_global', '连连国�
 INSERT INTO public.pay_md_product VALUES (96004, 'pingpong', 'PingPong', 'pingpong', 450, 1, '2026-10-16 00:00:00+00', 1, '2026-10-16 00:00:00+00', 0, false, false, false);
 INSERT INTO public.pay_md_product VALUES (10087, 'umf_pay', '联动优势', 'umfpay', 320, 1, '2026-10-16 00:00:00+00', 1, '2026-10-16 00:00:00+00', 0, false, false, true);
 INSERT INTO public.pay_md_product VALUES (10088, 'yisheng_pay', '易生支付', 'yisheng_pay', 340, 1, '2026-10-16 00:00:00+00', 1, '2026-10-16 00:00:00+00', 0, false, false, true);
+-- mock 模拟通道双产品(直连 mock_pay / 服务商 mock_isv, 一通道双产品)
+INSERT INTO public.pay_md_product VALUES (96005, 'mock_pay', '模拟支付', 'mock', 210, 1, '2026-10-31 00:00:00+00', 1, '2026-10-31 00:00:00+00', 0, false, true, true);
+INSERT INTO public.pay_md_product VALUES (96006, 'mock_isv', '模拟支付(服务商)', 'mock', 211, 1, '2026-10-31 00:00:00+00', 1, '2026-10-31 00:00:00+00', 0, false, true, true);
 
 
 --
@@ -5481,6 +5486,51 @@ INSERT INTO public.pay_md_product_capability VALUES (21520, 'youzan_pay', 'wecha
 INSERT INTO public.pay_md_product_capability VALUES (21113, 'kuaiqian_pay', 'wechat_qr', 0, true, NULL, false, 1, '2026-07-05 23:19:01.978869+00', 0, 1, '2026-07-05 23:19:01.978869+00');
 INSERT INTO public.pay_md_product_capability VALUES (21492, 'kuaiqian_pay', 'aggregate_pay_qrcode', 3, true, NULL, false, 1, '2026-10-16 00:00:00+00', 0, 1, '2026-10-16 00:00:00+00');
 INSERT INTO public.pay_md_product_capability VALUES (21449, 'payssion', 'aggregate_pay_qrcode', 0, true, NULL, false, 1, '2026-10-15 00:00:00+00', 0, 1, '2026-10-15 00:00:00+00');
+-- mock 模拟支付产品能力挂载(21 项: 微信7/支付宝6/银联4/抖音4, 与 PayCapabilityEnum 已存在能力码一一对应;
+-- 路由候选/直接指定能力候选按「策略声明 ∩ pay_md_product_capability 挂载」判定, 缺挂载行则该方式不进路由候选)
+INSERT INTO public.pay_md_product_capability VALUES (97004, 'mock_pay', 'wechat_cashier', 0, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97005, 'mock_pay', 'wechat_qr', 1, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97006, 'mock_pay', 'wechat_jsapi', 2, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97007, 'mock_pay', 'wechat_mini', 3, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97008, 'mock_pay', 'wechat_h5', 4, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97009, 'mock_pay', 'wechat_app', 5, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97010, 'mock_pay', 'wechat_barcode', 6, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97011, 'mock_pay', 'alipay_qr', 7, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97012, 'mock_pay', 'alipay_jsapi', 8, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97013, 'mock_pay', 'alipay_pc', 9, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97014, 'mock_pay', 'alipay_h5', 10, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97015, 'mock_pay', 'alipay_app', 11, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97016, 'mock_pay', 'alipay_barcode', 12, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97017, 'mock_pay', 'union_qr', 13, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97018, 'mock_pay', 'union_jsapi', 14, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97019, 'mock_pay', 'union_h5', 15, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97020, 'mock_pay', 'union_barcode', 16, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97021, 'mock_pay', 'douyin_qr', 17, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97022, 'mock_pay', 'douyin_jsapi', 18, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97023, 'mock_pay', 'douyin_h5', 19, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97024, 'mock_pay', 'douyin_app', 20, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+-- mock 模拟支付(服务商)产品能力挂载(与直连产品完全相同, 两产品共用同一能力清单)
+INSERT INTO public.pay_md_product_capability VALUES (97025, 'mock_isv', 'wechat_cashier', 0, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97026, 'mock_isv', 'wechat_qr', 1, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97027, 'mock_isv', 'wechat_jsapi', 2, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97028, 'mock_isv', 'wechat_mini', 3, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97029, 'mock_isv', 'wechat_h5', 4, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97030, 'mock_isv', 'wechat_app', 5, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97031, 'mock_isv', 'wechat_barcode', 6, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97032, 'mock_isv', 'alipay_qr', 7, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97033, 'mock_isv', 'alipay_jsapi', 8, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97034, 'mock_isv', 'alipay_pc', 9, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97035, 'mock_isv', 'alipay_h5', 10, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97036, 'mock_isv', 'alipay_app', 11, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97037, 'mock_isv', 'alipay_barcode', 12, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97038, 'mock_isv', 'union_qr', 13, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97039, 'mock_isv', 'union_jsapi', 14, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97040, 'mock_isv', 'union_h5', 15, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97041, 'mock_isv', 'union_barcode', 16, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97042, 'mock_isv', 'douyin_qr', 17, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97043, 'mock_isv', 'douyin_jsapi', 18, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97044, 'mock_isv', 'douyin_h5', 19, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97045, 'mock_isv', 'douyin_app', 20, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
 
 
 --

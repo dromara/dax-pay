@@ -25,3 +25,63 @@ INSERT INTO public.iam_role_code VALUES (2079866296000003002, 1, 207986629600000
 INSERT INTO public.iam_role_code VALUES (2079866296000003003, 2, 2079866296000002003);
 INSERT INTO public.iam_role_code VALUES (2079866296000003004, 2, 2079866296000002004);
 
+-- ========== 2026-10-31 mock 模拟通道(P0): 通道/产品/能力主数据 + 运营端菜单 ==========
+-- 通道 mock(id 92005, 排序 24); 产品 mock_pay/mock_isv(id 96005/96006, 一通道双产品);
+-- 能力挂载 42 行(id 97004-97045, 两产品各 21 项: 微信7/支付宝6/银联4/抖音4),
+-- 能力码全部取自既有 PayCapabilityEnum, 无新增 pay_md_capability 行、无新增能力码。
+INSERT INTO public.pay_md_channel VALUES (92005, 'mock', 24, NULL, 1, '2026-10-31 00:00:00+00', 1, '2026-10-31 00:00:00+00', 0, false);
+INSERT INTO public.pay_md_product VALUES (96005, 'mock_pay', '模拟支付', 'mock', 210, 1, '2026-10-31 00:00:00+00', 1, '2026-10-31 00:00:00+00', 0, false, true, true);
+INSERT INTO public.pay_md_product VALUES (96006, 'mock_isv', '模拟支付(服务商)', 'mock', 211, 1, '2026-10-31 00:00:00+00', 1, '2026-10-31 00:00:00+00', 0, false, true, true);
+INSERT INTO public.pay_md_product_capability VALUES (97004, 'mock_pay', 'wechat_cashier', 0, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97005, 'mock_pay', 'wechat_qr', 1, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97006, 'mock_pay', 'wechat_jsapi', 2, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97007, 'mock_pay', 'wechat_mini', 3, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97008, 'mock_pay', 'wechat_h5', 4, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97009, 'mock_pay', 'wechat_app', 5, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97010, 'mock_pay', 'wechat_barcode', 6, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97011, 'mock_pay', 'alipay_qr', 7, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97012, 'mock_pay', 'alipay_jsapi', 8, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97013, 'mock_pay', 'alipay_pc', 9, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97014, 'mock_pay', 'alipay_h5', 10, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97015, 'mock_pay', 'alipay_app', 11, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97016, 'mock_pay', 'alipay_barcode', 12, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97017, 'mock_pay', 'union_qr', 13, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97018, 'mock_pay', 'union_jsapi', 14, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97019, 'mock_pay', 'union_h5', 15, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97020, 'mock_pay', 'union_barcode', 16, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97021, 'mock_pay', 'douyin_qr', 17, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97022, 'mock_pay', 'douyin_jsapi', 18, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97023, 'mock_pay', 'douyin_h5', 19, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97024, 'mock_pay', 'douyin_app', 20, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97025, 'mock_isv', 'wechat_cashier', 0, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97026, 'mock_isv', 'wechat_qr', 1, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97027, 'mock_isv', 'wechat_jsapi', 2, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97028, 'mock_isv', 'wechat_mini', 3, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97029, 'mock_isv', 'wechat_h5', 4, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97030, 'mock_isv', 'wechat_app', 5, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97031, 'mock_isv', 'wechat_barcode', 6, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97032, 'mock_isv', 'alipay_qr', 7, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97033, 'mock_isv', 'alipay_jsapi', 8, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97034, 'mock_isv', 'alipay_pc', 9, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97035, 'mock_isv', 'alipay_h5', 10, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97036, 'mock_isv', 'alipay_app', 11, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97037, 'mock_isv', 'alipay_barcode', 12, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97038, 'mock_isv', 'union_qr', 13, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97039, 'mock_isv', 'union_jsapi', 14, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97040, 'mock_isv', 'union_h5', 15, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97041, 'mock_isv', 'union_barcode', 16, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97042, 'mock_isv', 'douyin_qr', 17, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97043, 'mock_isv', 'douyin_jsapi', 18, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97044, 'mock_isv', 'douyin_h5', 19, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+INSERT INTO public.pay_md_product_capability VALUES (97045, 'mock_isv', 'douyin_app', 20, true, NULL, false, 1, '2026-10-31 00:00:00+00', 0, 1, '2026-10-31 00:00:00+00');
+-- 运营端菜单「模拟服务商管理」+「模拟服务商工作台」(subpage, 挂 40508 渠道服务商配置组下;
+-- 复用 menu_code=channel:merchant 零新权限码; i18n_key=menu.payment.mock.isv / menu.payment.mock.isvWorkbench,
+-- 菜单 id 顺延 4040133/4040134; component 路径与 views/payment/channel/mock/ 下文件一致;
+-- 菜单授权无超管全量特判, 与既有 40502/40506 子页一致显式挂运营管理员角色 1)
+INSERT INTO public.iam_perm_menu VALUES (4040133, 40508, 'channel:merchant', 'admin', 'MockIsvManage', 'menu.payment.mock.isv', NULL, true, false, '/payment/channel/mock/MockIsvManage', '/payment/mock/isv', NULL, 6, false, true, false, 1, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-10-31 00:00:00+00', '2026-10-31 00:00:00+00', false);
+INSERT INTO public.iam_role_menu VALUES (1000004040133, 1, NULL, 4040133);
+INSERT INTO public.iam_perm_menu VALUES (4040134, 40508, 'channel:merchant', 'admin', 'MockIsvWorkbench', 'menu.payment.mock.isvWorkbench', NULL, true, false, '/payment/channel/mock/MockIsvWorkbench', '/payment/mock/isv-workbench', NULL, 7, false, true, false, 1, 1, 0, false, 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-10-31 00:00:00+00', '2026-10-31 00:00:00+00', false);
+INSERT INTO public.iam_role_menu VALUES (1000004040134, 1, NULL, 4040134);
+-- 修正 4040133 组件路径(初版误写为 /payment/mock/MockIsvManage, 与 views/payment/channel/mock/ 下实际文件不一致, 已应用库执行本句即可)
+UPDATE public.iam_perm_menu SET component = '/payment/channel/mock/MockIsvManage' WHERE id = 4040133;
+

@@ -146,7 +146,15 @@
     "channelNotSupport": "このチャネルは精算をサポートしていません",
     "syncProcessing": "精算同期処理中",
     "tradeNoRequired": "取引番号と業務注文番号の両方が空欄です",
-    "unsupported": "この注文の決済商品は精算に対応していないため、通常決済に切り替えられました"
+    "unsupported": "この注文の決済商品は精算に対応していないため、通常決済に切り替えられました",
+    "alreadyFinished": "この注文の精算は既に完了しており、再開できません",
+    "singleOnly": "このチャネルは単回精算のみ対応しています（開始時に残額が解除されます）。精算後の追加はできません",
+    "finishChannelNotSupport": "このチャネルは独立した精算完了に対応していません",
+    "finishFailed": "精算完了に失敗: {0}",
+    "finishFailedDefault": "精算完了に失敗",
+    "finishAlreadyFinished": "この注文の精算は既に完了しています",
+    "finishNotAllowed": "精算済みで未完了の注文のみ完了を開始できます",
+    "finishModeInvalid": "精算完了モードが無効です: {0}"
   },
   "assist": {
     "mchPublicKeyEmpty": "販売者の公開キーが空です",

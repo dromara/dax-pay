@@ -146,7 +146,15 @@
     "channelNotSupport": "该通道暂不支持分账",
     "syncProcessing": "分账同步处理中",
     "tradeNoRequired": "原支付交易号和商户业务订单号不可同时为空",
-    "unsupported": "该订单支付产品不支持分账，已降级为普通收款"
+    "unsupported": "该订单支付产品不支持分账，已降级为普通收款",
+    "alreadyFinished": "该订单分账已完结，不可再发起",
+    "singleOnly": "该通道仅支持单次分账（发起即解冻剩余资金），已分账后不可追加",
+    "finishChannelNotSupport": "该通道不支持独立完结分账",
+    "finishFailed": "分账完结失败: {0}",
+    "finishFailedDefault": "分账完结失败",
+    "finishAlreadyFinished": "该订单分账已完结",
+    "finishNotAllowed": "仅已分账未完结的订单可发起完结",
+    "finishModeInvalid": "分账完结模式无效: {0}"
   },
   "assist": {
     "mchPublicKeyEmpty": "商户公钥为空",

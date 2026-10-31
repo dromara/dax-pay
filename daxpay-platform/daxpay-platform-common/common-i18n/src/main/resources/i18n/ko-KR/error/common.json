@@ -53,5 +53,8 @@
   "sensitiveWordStatusInvalid": "상태가 올바르지 않습니다",
   "sensitiveWordMatchModeInvalid": "일치 모드가 올바르지 않습니다",
   "sensitiveWordCategoryInvalid": "분류가 올바르지 않습니다",
-  "clientRuntimeNotExist": "클라이언트 런타임 유형이 존재하지 않습니다: {0}"
+  "clientRuntimeNotExist": "클라이언트 런타임 유형이 존재하지 않습니다: {0}",
+  "allocCapabilityNotExist": "분할 기능이 존재하지 않습니다: {0}",
+  "allocOrderTypeNotExist": "분할 주문 유형이 존재하지 않습니다: {0}",
+  "allocFinishModeNotExist": "분할 완료 모드가 존재하지 않습니다: {0}"
 }

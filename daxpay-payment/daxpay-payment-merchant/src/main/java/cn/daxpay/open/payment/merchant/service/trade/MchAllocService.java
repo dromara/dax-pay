@@ -4,11 +4,13 @@ import cn.daxpay.open.payment.trade.alloc.convert.AllocOrderConvert;
 import cn.daxpay.open.payment.trade.alloc.dao.AllocDetailManager;
 import cn.daxpay.open.payment.trade.alloc.dao.AllocOrderManager;
 import cn.daxpay.open.payment.trade.alloc.entity.AllocOrder;
+import cn.daxpay.open.payment.trade.alloc.param.AllocFinishParam;
 import cn.daxpay.open.payment.trade.alloc.param.AllocOrderQuery;
 import cn.daxpay.open.payment.trade.alloc.param.AllocParam;
 import cn.daxpay.open.payment.trade.alloc.result.AllocCreateResult;
 import cn.daxpay.open.payment.trade.alloc.result.AllocDetailResult;
 import cn.daxpay.open.payment.trade.alloc.result.AllocOrderResult;
+import cn.daxpay.open.payment.trade.alloc.runtime.service.AllocFinishService;
 import cn.daxpay.open.payment.trade.alloc.runtime.service.AllocStartService;
 import cn.daxpay.open.payment.trade.alloc.runtime.service.AllocSyncService;
 import cn.daxpay.open.platform.common.translate.service.TransService;
@@ -31,6 +33,7 @@ public class MchAllocService {
     private final AllocOrderManager allocOrderManager;
     private final AllocDetailManager allocDetailManager;
     private final AllocStartService allocStartService;
+    private final AllocFinishService allocFinishService;
     private final AllocSyncService allocSyncService;
     private final TransService transService;
 
@@ -64,6 +67,16 @@ public class MchAllocService {
     /// @return 平台分账单号
     public AllocCreateResult create(AllocParam param) {
         String allocNo = allocStartService.start(param);
+        return new AllocCreateResult()
+                .setAllocNo(allocNo)
+                .setBizAllocNo(param.getBizAllocNo());
+    }
+
+    /// 发起分账完结(多次分账收尾, 商户号由登录上下文决定, 忽略入参 mchNo)
+    ///
+    /// @return 平台完结单号
+    public AllocCreateResult finish(AllocFinishParam param) {
+        String allocNo = allocFinishService.finish(param);
         return new AllocCreateResult()
                 .setAllocNo(allocNo)
                 .setBizAllocNo(param.getBizAllocNo());

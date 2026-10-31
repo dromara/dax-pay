@@ -53,5 +53,8 @@
   "sensitiveWordStatusInvalid": "敏感词状态无效",
   "sensitiveWordMatchModeInvalid": "匹配模式无效",
   "sensitiveWordCategoryInvalid": "分类无效",
-  "clientRuntimeNotExist": "客户端运行类型不存在: {0}"
+  "clientRuntimeNotExist": "客户端运行类型不存在: {0}",
+  "allocCapabilityNotExist": "该分账能力不存在: {0}",
+  "allocOrderTypeNotExist": "该分账单类型不存在: {0}",
+  "allocFinishModeNotExist": "该分账完结模式不存在: {0}"
 }

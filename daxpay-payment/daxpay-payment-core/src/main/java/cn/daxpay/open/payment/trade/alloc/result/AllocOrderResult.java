@@ -89,6 +89,16 @@ public class AllocOrderResult extends BaseResult {
     @Schema(description = "分账状态")
     private String status;
 
+    /// 分账单类型(alloc-分账单 / finish-完结单)
+    /// @see cn.daxpay.open.payment.trade.alloc.enums.AllocOrderTypeEnum
+    @Schema(description = "分账单类型")
+    private String allocType;
+
+    /// 完结模式(auto-分账即完结 / manual-需显式完结)
+    /// @see cn.daxpay.open.payment.trade.alloc.enums.AllocFinishModeEnum
+    @Schema(description = "完结模式")
+    private String finishMode;
+
     /// 分账完成时间
     @Schema(description = "分账完成时间")
     private OffsetDateTime finishTime;

@@ -2,5 +2,7 @@
   "none": "Pending allocation",
   "unsupported": "Allocation unsupported",
   "processing": "Allocating",
-  "done": "Allocated"
+  "done": "Allocated",
+  "allocated": "Allocated (unfinished)",
+  "finished": "Allocated and finished"
 }

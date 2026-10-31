@@ -175,6 +175,12 @@
     "channelMerchantNo": {
       "notBlank": "通道商户号不可为空"
     },
+    "isvName": {
+      "notBlank": "服务商名称不可为空"
+    },
+    "isvId": {
+      "notNull": "归属服务商不可为空"
+    },
     "channelMerchantName": {
       "notBlank": "商户名称不可为空"
     },
@@ -243,6 +249,21 @@
     },
     "reqTime": {
       "notNull": "请求时间必填"
+    },
+    "bizAllocNo": {
+      "notBlank": "商户分账单号不能为空",
+      "size": "商户分账单号不可超过100位"
+    },
+    "receiverType": {
+      "notBlank": "分账接收方类型不能为空",
+      "size": "分账接收方类型不可超过32位"
+    },
+    "receiverAccount": {
+      "notBlank": "分账接收方账号不能为空",
+      "size": "分账接收方账号不可超过128位"
+    },
+    "receiverName": {
+      "size": "分账接收方名称不可超过64位"
     },
     "bizOrderNo": {
       "size": "商户支付订单号不可超过100位",

@@ -136,7 +136,15 @@
     "channelNotSupport": "Saluran ini tidak mendukung alokasi",
     "syncProcessing": "Sinkronisasi alokasi sedang diproses",
     "tradeNoRequired": "Nomor transaksi dan nomor pesanan tidak boleh keduanya kosong",
-    "unsupported": "Produk pembayaran tidak mendukung alokasi untuk pesanan ini; telah diturunkan menjadi pembayaran biasa"
+    "unsupported": "Produk pembayaran tidak mendukung alokasi untuk pesanan ini; telah diturunkan menjadi pembayaran biasa",
+    "alreadyFinished": "Alokasi pesanan ini sudah selesai dan tidak dapat dimulai lagi",
+    "singleOnly": "Saluran ini hanya mendukung alokasi tunggal (dana sisa dibuka saat dimulai); tidak dapat ditambahkan setelah alokasi",
+    "finishChannelNotSupport": "Saluran ini tidak mendukung penyelesaian alokasi independen",
+    "finishFailed": "Penyelesaian alokasi gagal: {0}",
+    "finishFailedDefault": "Penyelesaian alokasi gagal",
+    "finishAlreadyFinished": "Alokasi pesanan ini sudah selesai",
+    "finishNotAllowed": "Hanya pesanan yang sudah dialokasikan tetapi belum selesai yang dapat memulai penyelesaian",
+    "finishModeInvalid": "Mode penyelesaian alokasi tidak valid: {0}"
   },
   "assist": {
     "mchPublicKeyEmpty": "Kunci publik pedagang kosong",

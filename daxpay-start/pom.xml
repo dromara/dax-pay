@@ -317,6 +317,12 @@
             <artifactId>daxpay-channel-youzan</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <!-- Mock 模拟通道(对接独立 mock 子应用, 仅 DEV 装配; 一期直连单产品 mock_pay) -->
+        <dependency>
+            <groupId>cn.daxpay.open</groupId>
+            <artifactId>daxpay-channel-mock</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- 易支付协议插件 -->
         <dependency>
             <groupId>cn.daxpay.open</groupId>

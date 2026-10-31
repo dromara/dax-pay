@@ -175,6 +175,12 @@
     "channelMerchantNo": {
       "notBlank": "채널 판매자 번호 비워둘 수 없습니다."
     },
+    "isvName": {
+      "notBlank": "서비스 제공자 이름은 필수입니다"
+    },
+    "isvId": {
+      "notNull": "소속 서비스 제공자는 필수입니다"
+    },
     "channelMerchantName": {
       "notBlank": "판매자 이름은 비워둘 수 없습니다."
     },
@@ -243,6 +249,21 @@
     },
     "reqTime": {
       "notNull": "요청 시간은 비워둘 수 없습니다."
+    },
+    "bizAllocNo": {
+      "notBlank": "가맹점 분배번호는 필수입니다",
+      "size": "가맹점 분배번호는 100자를 초과할 수 없습니다"
+    },
+    "receiverType": {
+      "notBlank": "분배 수신자 유형은 필수입니다",
+      "size": "분배 수신자 유형은 32자를 초과할 수 없습니다"
+    },
+    "receiverAccount": {
+      "notBlank": "분배 수신자 계정은 필수입니다",
+      "size": "분배 수신자 계정은 128자를 초과할 수 없습니다"
+    },
+    "receiverName": {
+      "size": "분배 수신자 이름은 64자를 초과할 수 없습니다"
     },
     "bizOrderNo": {
       "size": "판매자 주문번호 100자를 초과할 수 없습니다.",

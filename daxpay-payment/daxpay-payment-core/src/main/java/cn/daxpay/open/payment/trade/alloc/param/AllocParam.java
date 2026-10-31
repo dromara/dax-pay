@@ -60,6 +60,13 @@ public class AllocParam {
     @Schema(description = "接收方列表")
     private List<AllocReceiverParam> receivers;
 
+    /// 分账完结模式(auto-分账即完结 / manual-需显式完结, 未传默认 auto 兼容存量单次语义)
+    /// 多次分账: 前几笔传 manual(剩余资金保持冻结可继续分账), 最后一笔传 auto 或调用完结接口
+    /// @see cn.daxpay.open.payment.trade.alloc.enums.AllocFinishModeEnum
+    @Size(max = 32, message = "分账完结模式不可超过32位")
+    @Schema(description = "分账完结模式(auto/manual, 默认 auto)")
+    private String finishMode;
+
     /// 商户扩展参数, 回调时原样返回
     @Size(max = 500, message = "商户扩展参数不可超过500位")
     @Schema(description = "商户扩展参数, 回调时原样返回")

@@ -2,5 +2,7 @@
   "none": "Menunggu alokasi",
   "unsupported": "Alokasi tidak didukung",
   "processing": "Sedang mengalokasikan",
-  "done": "Teralokasi"
+  "done": "Teralokasi",
+  "allocated": "Dialokasikan (belum selesai)",
+  "finished": "Dialokasikan dan selesai"
 }

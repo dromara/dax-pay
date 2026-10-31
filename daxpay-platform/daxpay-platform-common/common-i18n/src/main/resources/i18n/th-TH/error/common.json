@@ -53,5 +53,8 @@
   "sensitiveWordHitNotFound": "ไม่พบบันทึกที่ตรงกัน",
   "sensitiveWordStatusInvalid": "สถานะคำที่ละเอียดอ่อนไม่ถูกต้อง",
   "sensitiveWordMatchModeInvalid": "โหมดการจับคู่ไม่ถูกต้อง",
-  "sensitiveWordCategoryInvalid": "หมวดหมู่ไม่ถูกต้อง"
+  "sensitiveWordCategoryInvalid": "หมวดหมู่ไม่ถูกต้อง",
+  "allocCapabilityNotExist": "ไม่พบความสามารถในการแบ่ง: {0}",
+  "allocOrderTypeNotExist": "ไม่พบประเภทคำสั่งแบ่ง: {0}",
+  "allocFinishModeNotExist": "ไม่พบโหมดการเสร็จสิ้นการแบ่ง: {0}"
 }

@@ -4,10 +4,12 @@ import cn.daxpay.open.payment.trade.alloc.convert.AllocOrderConvert;
 import cn.daxpay.open.payment.trade.alloc.dao.AllocDetailManager;
 import cn.daxpay.open.payment.trade.alloc.dao.AllocOrderManager;
 import cn.daxpay.open.payment.trade.alloc.entity.AllocOrder;
+import cn.daxpay.open.payment.trade.alloc.param.AllocFinishParam;
 import cn.daxpay.open.payment.trade.alloc.param.AllocOrderQuery;
 import cn.daxpay.open.payment.trade.alloc.result.AllocCreateResult;
 import cn.daxpay.open.payment.trade.alloc.result.AllocDetailResult;
 import cn.daxpay.open.payment.trade.alloc.result.AllocOrderResult;
+import cn.daxpay.open.payment.trade.alloc.runtime.service.AllocFinishService;
 import cn.daxpay.open.payment.trade.alloc.runtime.service.AllocStartService;
 import cn.daxpay.open.payment.trade.alloc.runtime.service.AllocSyncService;
 import cn.daxpay.open.payment.trade.alloc.param.AllocParam;
@@ -35,6 +37,7 @@ public class AllocAdminService {
     private final AllocOrderManager allocOrderManager;
     private final AllocDetailManager allocDetailManager;
     private final AllocStartService allocStartService;
+    private final AllocFinishService allocFinishService;
     private final AllocSyncService allocSyncService;
     private final TransService transService;
 
@@ -73,6 +76,20 @@ public class AllocAdminService {
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "validation.field.mchNo.notBlank");
         }
         String allocNo = allocStartService.start(param);
+        return new AllocCreateResult()
+                .setAllocNo(allocNo)
+                .setBizAllocNo(param.getBizAllocNo());
+    }
+
+    /// 发起分账完结(运营端代发, 多次分账收尾, mchNo 必传)
+    ///
+    /// @return 平台完结单号
+    public AllocCreateResult finish(AllocFinishParam param) {
+        // 运营端无商户上下文, 代发必须显式指定商户号, 提前拦截避免误报"未找到商户配置"
+        if (StrUtil.isBlank(param.getMchNo())) {
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "validation.field.mchNo.notBlank");
+        }
+        String allocNo = allocFinishService.finish(param);
         return new AllocCreateResult()
                 .setAllocNo(allocNo)
                 .setBizAllocNo(param.getBizAllocNo());

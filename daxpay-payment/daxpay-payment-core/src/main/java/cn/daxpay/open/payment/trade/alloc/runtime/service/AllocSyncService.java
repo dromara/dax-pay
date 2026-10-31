@@ -6,7 +6,9 @@ import cn.daxpay.open.payment.common.lock.TradeLockKeys;
 import cn.daxpay.open.payment.trade.alloc.bo.AllocResultBo;
 import cn.daxpay.open.payment.trade.alloc.dao.AllocOrderManager;
 import cn.daxpay.open.payment.trade.alloc.entity.AllocOrder;
+import cn.daxpay.open.payment.trade.alloc.enums.AllocDetailResultEnum;
 import cn.daxpay.open.payment.trade.alloc.enums.AllocOrderStatusEnum;
+import cn.daxpay.open.payment.trade.alloc.enums.AllocOrderTypeEnum;
 import cn.daxpay.open.payment.trade.record.dao.PaySyncRecordManager;
 import cn.daxpay.open.payment.trade.record.entity.PaySyncRecord;
 import cn.daxpay.open.payment.strategy.alloc.AbsAllocStrategy;
@@ -107,8 +109,16 @@ public class AllocSyncService {
             if (Objects.nonNull(result.getOutAllocNo()) && !Objects.equals(result.getOutAllocNo(), latest.getOutAllocNo())) {
                 assistService.processing(latest, result.getOutAllocNo());
             }
-            // 按逐明细结果聚合状态
-            if (Objects.nonNull(result.getDetails()) && !result.getDetails().isEmpty()) {
+            // 完结单: 无接收方明细, 按整体完结状态推进
+            if (Objects.equals(latest.getAllocType(), AllocOrderTypeEnum.FINISH.getCode())) {
+                String finishState = result.getFinishState();
+                if (Objects.equals(finishState, AllocDetailResultEnum.SUCCESS.getCode())) {
+                    assistService.success(latest, null);
+                } else if (Objects.equals(finishState, AllocDetailResultEnum.FAIL.getCode())) {
+                    assistService.fail(latest, null, result.getSyncErrorMsg());
+                }
+                // pending/空: 保持 processing, 等下次同步
+            } else if (Objects.nonNull(result.getDetails()) && !result.getDetails().isEmpty()) {
                 long successCount = result.getDetails().stream()
                         .filter(d -> Objects.equals(d.getResult(), "success")).count();
                 long failCount = result.getDetails().stream()

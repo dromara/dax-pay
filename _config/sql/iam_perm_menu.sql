@@ -292,3 +292,12 @@ INSERT INTO "public"."iam_perm_menu" VALUES (40583, 40402, 'channel:merchant:cre
 INSERT INTO "public"."iam_perm_menu" VALUES (917, 4, NULL, 'admin', 'VirtualDeviceGroup', 'menu.payment.device.virtual', 'lucide:smartphone', 'f', 'f', NULL, '/device/virtual', '/device/virtual/list', 41, 'f', 'f', 'f', 0, NULL, 0, 'f', 'catalog', NULL, NULL, NULL, NULL, NULL, NULL, '2026-10-24 00:00:00+00', '2026-10-24 00:00:00+00', 'f');
 INSERT INTO "public"."iam_perm_menu" VALUES (918, 917, 'device:virtual', 'admin', 'VirtualDeviceList', 'menu.payment.device.virtual.list', 'lucide:monitor-speaker', 'f', 'f', '/payment/device/virtual/VirtualDeviceList', '/device/virtual/list', NULL, 1, 'f', 'f', 'f', 0, 1, 0, 'f', 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-10-24 00:00:00+00', '2026-10-24 00:00:00+00', 'f');
 INSERT INTO "public"."iam_perm_menu" VALUES (91308, 91416, 'device:audio', 'merchant', 'MchAudioDeviceList', 'menu.payment.merchant.audioDevice', 'lucide:speaker', 'f', 'f', '/payment/device/audio/MchAudioDeviceList', '/mch/device/audio', NULL, 6, 'f', 'f', 'f', 0, 1, 0, 'f', 'menu', NULL, NULL, NULL, NULL, NULL, NULL, '2026-10-24 00:00:00+00', '2026-10-24 00:00:00+00', 'f');
+
+-- ----------------------------
+-- 2026-10-31 mock 模拟通道: 运营端子页「模拟服务商管理」+「模拟服务商工作台」
+-- 挂渠道服务商配置组(40508, 与 alipay/lakala 服务商配置子页同组), subpage 隐藏路由;
+-- 复用 menu_code=channel:merchant 零新权限码; i18n_key=menu.payment.mock.isv / menu.payment.mock.isvWorkbench;
+-- 菜单 ID 顺延 4040133/4040134; component 路径与 views/payment/channel/mock/ 下文件一致
+-- ----------------------------
+INSERT INTO "public"."iam_perm_menu" VALUES (4040133, 40508, 'channel:merchant', 'admin', 'MockIsvManage', 'menu.payment.mock.isv', NULL, 't', 'f', '/payment/channel/mock/MockIsvManage', '/payment/mock/isv', NULL, 6, 'f', 't', 'f', 1, 1, 0, 'f', 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-10-31 00:00:00+00', '2026-10-31 00:00:00+00', 'f');
+INSERT INTO "public"."iam_perm_menu" VALUES (4040134, 40508, 'channel:merchant', 'admin', 'MockIsvWorkbench', 'menu.payment.mock.isvWorkbench', NULL, 't', 'f', '/payment/channel/mock/MockIsvWorkbench', '/payment/mock/isv-workbench', NULL, 7, 'f', 't', 'f', 1, 1, 0, 'f', 'subpage', NULL, NULL, NULL, NULL, NULL, NULL, '2026-10-31 00:00:00+00', '2026-10-31 00:00:00+00', 'f');

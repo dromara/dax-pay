@@ -146,7 +146,15 @@
     "channelNotSupport": "이 채널은 분할을 지원하지 않습니다",
     "syncProcessing": "분할 동기화 처리 중",
     "tradeNoRequired": "거래 번호와 업무 주문 번호가 모두 비어있습니다",
-    "unsupported": "이 주문의 결제 상품은 분할을 지원하지 않아 일반 결제로 전환되었습니다"
+    "unsupported": "이 주문의 결제 상품은 분할을 지원하지 않아 일반 결제로 전환되었습니다",
+    "alreadyFinished": "이 주문의 분할이 이미 완료되어 다시 시작할 수 없습니다",
+    "singleOnly": "이 채널은 단일 분할만 지원합니다(시작 시 잔액이 해제됨). 분할 후 추가할 수 없습니다",
+    "finishChannelNotSupport": "이 채널은 독립 분할 완료를 지원하지 않습니다",
+    "finishFailed": "분할 완료 실패: {0}",
+    "finishFailedDefault": "분할 완료 실패",
+    "finishAlreadyFinished": "이 주문의 분할이 이미 완료되었습니다",
+    "finishNotAllowed": "분할되었으나 미완료된 주문만 완료를 시작할 수 있습니다",
+    "finishModeInvalid": "분할 완료 모드가 유효하지 않습니다: {0}"
   },
   "assist": {
     "mchPublicKeyEmpty": "판매자 공개 키가 비어 있습니다.",

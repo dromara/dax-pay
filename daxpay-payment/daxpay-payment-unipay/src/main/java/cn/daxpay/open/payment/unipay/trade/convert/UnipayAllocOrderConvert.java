@@ -2,9 +2,11 @@ package cn.daxpay.open.payment.unipay.trade.convert;
 
 import cn.daxpay.open.payment.trade.alloc.entity.AllocDetail;
 import cn.daxpay.open.payment.trade.alloc.entity.AllocOrder;
+import cn.daxpay.open.payment.trade.alloc.param.AllocFinishParam;
 import cn.daxpay.open.payment.trade.alloc.param.AllocParam;
 import cn.daxpay.open.payment.unipay.param.trade.alloc.AllocOrderQueryParam;
 import cn.daxpay.open.payment.unipay.param.trade.alloc.AllocSyncParam;
+import cn.daxpay.open.payment.unipay.param.trade.alloc.UnipayAllocFinishParam;
 import cn.daxpay.open.payment.unipay.param.trade.alloc.UnipayAllocParam;
 import cn.daxpay.open.payment.unipay.result.trade.alloc.AllocOrderResult;
 import cn.daxpay.open.payment.unipay.result.trade.alloc.AllocResult;
@@ -25,6 +27,9 @@ public interface UnipayAllocOrderConvert {
 
     /// 对外签名入参 → 内部编排参数(同名字段映射, mchNo 透传; 签名/应用字段丢弃)
     AllocParam toRuntime(UnipayAllocParam param);
+
+    /// 对外签名完结入参 → 内部完结编排参数(同名字段映射, mchNo 透传)
+    AllocFinishParam toRuntimeFinish(UnipayAllocFinishParam param);
 
     /// 分账单实体 → 发起响应(同名映射)
     AllocResult toAllocResult(AllocOrder order);

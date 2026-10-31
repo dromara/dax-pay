@@ -20,6 +20,10 @@ public class AllocResultBo {
     /// 逐明细结果(发起时各接收方的处理状态, 同步时从通道查询回填)
     private List<DetailResult> details;
 
+    /// 完结单整体状态(pending/success/fail), 仅 finish 类型分账单使用(无接收方明细, 以通道完结单状态推进)
+    /// @see cn.daxpay.open.payment.trade.alloc.enums.AllocDetailResultEnum
+    private String finishState;
+
     /// 同步是否成功(同步查询用, 发起时默认 true)
     private boolean syncSuccess = true;
 

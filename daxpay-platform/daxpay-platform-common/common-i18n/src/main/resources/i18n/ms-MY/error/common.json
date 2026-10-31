@@ -53,5 +53,8 @@
   "sensitiveWordHitNotFound": "Rekod padanan tidak dijumpai",
   "sensitiveWordStatusInvalid": "Status perkataan sensitif tidak sah",
   "sensitiveWordMatchModeInvalid": "Mod padanan tidak sah",
-  "sensitiveWordCategoryInvalid": "Kategori tidak sah"
+  "sensitiveWordCategoryInvalid": "Kategori tidak sah",
+  "allocCapabilityNotExist": "Keupayaan peruntukan tidak wujud: {0}",
+  "allocOrderTypeNotExist": "Jenis pesanan peruntukan tidak wujud: {0}",
+  "allocFinishModeNotExist": "Mod penyelesaian peruntukan tidak wujud: {0}"
 }

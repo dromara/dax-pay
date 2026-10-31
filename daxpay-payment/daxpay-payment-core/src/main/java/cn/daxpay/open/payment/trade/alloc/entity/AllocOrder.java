@@ -1,7 +1,9 @@
 package cn.daxpay.open.payment.trade.alloc.entity;
 
 import cn.daxpay.open.payment.common.entity.MchBaseEntity;
+import cn.daxpay.open.payment.trade.alloc.enums.AllocFinishModeEnum;
 import cn.daxpay.open.payment.trade.alloc.enums.AllocOrderStatusEnum;
+import cn.daxpay.open.payment.trade.alloc.enums.AllocOrderTypeEnum;
 import com.baomidou.mybatisplus.annotation.FieldStrategy;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableName;
@@ -62,6 +64,14 @@ public class AllocOrder extends MchBaseEntity {
     private String description;
 
     // ===== 本笔分账 =====
+
+    /// 分账单类型(alloc-分账单 / finish-完结单)
+    /// @see AllocOrderTypeEnum
+    private String allocType;
+
+    /// 完结模式(auto-分账即完结 / manual-需显式完结), 仅 alloc 类型单有意义
+    /// @see AllocFinishModeEnum
+    private String finishMode;
 
     /// 通道分账单号(通道返回)
     private String outAllocNo;

@@ -175,6 +175,12 @@
     "channelMerchantNo": {
       "notBlank": "Channel merchant no. cannot be blank"
     },
+    "isvName": {
+      "notBlank": "ISV name cannot be blank"
+    },
+    "isvId": {
+      "notNull": "Owning ISV cannot be null"
+    },
     "channelMerchantName": {
       "notBlank": "Merchant name cannot be blank"
     },
@@ -243,6 +249,21 @@
     },
     "reqTime": {
       "notNull": "Request time cannot be blank"
+    },
+    "bizAllocNo": {
+      "notBlank": "Merchant allocation no. cannot be blank",
+      "size": "Merchant allocation no. cannot exceed 100 characters"
+    },
+    "receiverType": {
+      "notBlank": "Allocation receiver type cannot be blank",
+      "size": "Allocation receiver type cannot exceed 32 characters"
+    },
+    "receiverAccount": {
+      "notBlank": "Allocation receiver account cannot be blank",
+      "size": "Allocation receiver account cannot exceed 128 characters"
+    },
+    "receiverName": {
+      "size": "Allocation receiver name cannot exceed 64 characters"
     },
     "bizOrderNo": {
       "size": "Merchant order no. cannot exceed 100 characters",

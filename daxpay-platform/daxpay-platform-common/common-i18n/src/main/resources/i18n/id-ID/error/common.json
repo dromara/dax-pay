@@ -53,5 +53,8 @@
   "sensitiveWordHitNotFound": "Catatan temuan tidak ada",
   "sensitiveWordStatusInvalid": "Status kata sensitif tidak valid",
   "sensitiveWordMatchModeInvalid": "Mode pencocokan tidak valid",
-  "sensitiveWordCategoryInvalid": "Kategori tidak valid"
+  "sensitiveWordCategoryInvalid": "Kategori tidak valid",
+  "allocCapabilityNotExist": "Kemampuan alokasi tidak ada: {0}",
+  "allocOrderTypeNotExist": "Jenis pesanan alokasi tidak ada: {0}",
+  "allocFinishModeNotExist": "Mode penyelesaian alokasi tidak ada: {0}"
 }

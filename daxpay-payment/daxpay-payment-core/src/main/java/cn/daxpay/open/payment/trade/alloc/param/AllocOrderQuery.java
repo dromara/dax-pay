@@ -51,6 +51,12 @@ public class AllocOrderQuery {
     @Schema(description = "分账状态")
     private String status;
 
+    /// 分账单类型(alloc-分账单 / finish-完结单)
+    /// @see cn.daxpay.open.payment.trade.alloc.enums.AllocOrderTypeEnum
+    @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
+    @Schema(description = "分账单类型")
+    private String allocType;
+
     /// 创建时间-开始
     @QueryParam(type = QueryParam.CompareTypeEnum.GE, fieldName = "create_time")
     @Schema(description = "创建时间-开始")

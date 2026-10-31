@@ -97,7 +97,11 @@ public class PayTrade extends MchBaseEntity {
     @TableField(updateStrategy = FieldStrategy.NEVER)
     private String appId;
 
-    /// 分账状态(null-非分账单 / none-待分账 / unsupported-请求分账但产品不支持已降级 / processing-分账中 / done-已分账)
+    /// 分账状态(null-非分账单 / none-待分账 / unsupported-请求分账但产品不支持已降级 / processing-分账中 / allocated-已分账未完结 / finished-已分账且完结 / done-历史存量)
     /// 防止重复分账, 分账发起前置校验; 取值见 [cn.daxpay.open.payment.trade.alloc.enums.TradeAllocStatusEnum]
     private String allocStatus;
+
+    /// 已分账累计金额(分, 成功分账明细金额累加, 不含失败与完结单)
+    /// 多次分账额度校验依据: 已分累计 + 在途单金额 + 本次申请额 ≤ 订单金额
+    private Long allocatedAmount;
 }

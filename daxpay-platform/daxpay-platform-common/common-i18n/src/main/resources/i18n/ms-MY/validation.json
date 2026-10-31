@@ -149,6 +149,12 @@
     "channelMerchantNo": {
       "notBlank": "Peniaga saluran no. tidak boleh kosong"
     },
+    "isvName": {
+      "notBlank": "Nama penyedia perkhidmatan tidak boleh kosong"
+    },
+    "isvId": {
+      "notNull": "Penyedia perkhidmatan pemilik tidak boleh kosong"
+    },
     "channelMerchantName": {
       "notBlank": "Nama pedagang tidak boleh kosong"
     },
@@ -220,6 +226,21 @@
     },
     "reqTime": {
       "notNull": "Masa permintaan tidak boleh kosong"
+    },
+    "bizAllocNo": {
+      "notBlank": "No. agihan peniaga tidak boleh kosong",
+      "size": "No. agihan peniaga tidak boleh melebihi 100 aksara"
+    },
+    "receiverType": {
+      "notBlank": "Jenis penerima agihan tidak boleh kosong",
+      "size": "Jenis penerima agihan tidak boleh melebihi 32 aksara"
+    },
+    "receiverAccount": {
+      "notBlank": "Akaun penerima agihan tidak boleh kosong",
+      "size": "Akaun penerima agihan tidak boleh melebihi 128 aksara"
+    },
+    "receiverName": {
+      "size": "Nama penerima agihan tidak boleh melebihi 64 aksara"
     },
     "bizOrderNo": {
       "size": "Pesanan peniaga no. tidak boleh melebihi 100 aksara",

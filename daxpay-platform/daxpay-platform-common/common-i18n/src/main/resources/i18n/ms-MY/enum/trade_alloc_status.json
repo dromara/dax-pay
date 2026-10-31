@@ -2,5 +2,7 @@
   "none": "Menunggu peruntukan",
   "unsupported": "Peruntukan tidak disokong",
   "processing": "Sedang memperuntukkan",
-  "done": "Telah diperuntukkan"
+  "done": "Telah diperuntukkan",
+  "allocated": "Diperuntukkan (belum selesai)",
+  "finished": "Diperuntukkan dan selesai"
 }

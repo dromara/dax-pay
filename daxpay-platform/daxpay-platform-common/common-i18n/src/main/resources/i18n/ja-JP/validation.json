@@ -175,6 +175,12 @@
     "channelMerchantNo": {
       "notBlank": "チャネル加盟店番号空白にすることはできません"
     },
+    "isvName": {
+      "notBlank": "サービスプロバイダー名は必須です"
+    },
+    "isvId": {
+      "notNull": "所属サービスプロバイダーは必須です"
+    },
     "channelMerchantName": {
       "notBlank": "販売者名を空白にすることはできません"
     },
@@ -243,6 +249,21 @@
     },
     "reqTime": {
       "notNull": "リクエスト時間を空白にすることはできません"
+    },
+    "bizAllocNo": {
+      "notBlank": "加盟店分配番号は必須です",
+      "size": "加盟店分配番号は100文字を超えることはできません"
+    },
+    "receiverType": {
+      "notBlank": "分配受取方タイプは必須です",
+      "size": "分配受取方タイプは32文字を超えることはできません"
+    },
+    "receiverAccount": {
+      "notBlank": "分配受取方アカウントは必須です",
+      "size": "分配受取方アカウントは128文字を超えることはできません"
+    },
+    "receiverName": {
+      "size": "分配受取方名は64文字を超えることはできません"
     },
     "bizOrderNo": {
       "size": "販売者の注文番号100文字を超えることはできません",

@@ -52,6 +52,7 @@
         <module>daxpay-channel-duolabao</module>
         <module>daxpay-channel-yizhifubj</module>
         <module>daxpay-channel-youzan</module>
+        <module>daxpay-channel-mock</module>
     </modules>
 
     <dependencies>

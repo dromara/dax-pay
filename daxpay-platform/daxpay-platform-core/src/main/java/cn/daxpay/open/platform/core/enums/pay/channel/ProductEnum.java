@@ -156,6 +156,12 @@ public enum ProductEnum implements I18nSupport {
     LIANLIAN_GLOBAL("lianlian_global"),
     /// PingPong 跨境收款(国际, 占位未对接)
     PINGPONG("pingpong"),
+
+    // ===== 模拟通道(mock 子应用扮演三方, 仅 DEV 装配, 联调/演示用) =====
+    /// 模拟支付(直连)
+    MOCK_PAY("mock_pay"),
+    /// 模拟支付(服务商)
+    MOCK_ISV("mock_isv"),
     ;
 
     private final String code;
@@ -256,6 +262,8 @@ public enum ProductEnum implements I18nSupport {
             case LIANLIAN_GLOBAL -> ChannelEnum.LIANLIAN_GLOBAL.getCode();
             // PingPong: 一通道一产品
             case PINGPONG -> ChannelEnum.PINGPONG.getCode();
+            // 模拟通道: 一通道双产品(直连 mock_pay / 服务商 mock_isv)
+            case MOCK_PAY, MOCK_ISV -> ChannelEnum.MOCK.getCode();
         };
     }
 

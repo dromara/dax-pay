@@ -146,7 +146,15 @@
     "channelNotSupport": "This channel does not support allocation",
     "syncProcessing": "Allocation sync processing",
     "tradeNoRequired": "Trade number and biz order number cannot both be empty",
-    "unsupported": "The payment product does not support allocation for this order; it has been downgraded to a normal payment"
+    "unsupported": "The payment product does not support allocation for this order; it has been downgraded to a normal payment",
+    "alreadyFinished": "This order allocation is already finished and cannot be initiated again",
+    "singleOnly": "This channel only supports single allocation (remaining funds are unfrozen upon initiation); no additional allocation is allowed afterwards",
+    "finishChannelNotSupport": "This channel does not support independent allocation finish",
+    "finishFailed": "Allocation finish failed: {0}",
+    "finishFailedDefault": "Allocation finish failed",
+    "finishAlreadyFinished": "This order allocation is already finished",
+    "finishNotAllowed": "Only allocated but unfinished orders can initiate finish",
+    "finishModeInvalid": "Invalid allocation finish mode: {0}"
   },
   "assist": {
     "mchPublicKeyEmpty": "Merchant public key is empty",

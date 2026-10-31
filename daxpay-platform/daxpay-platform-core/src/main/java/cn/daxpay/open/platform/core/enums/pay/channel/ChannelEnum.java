@@ -97,6 +97,10 @@ public enum ChannelEnum implements I18nSupport {
     LIANLIAN_GLOBAL("lianlian_global"),
     /// PingPong(国际跨境收款通道, 占位未对接)
     PINGPONG("pingpong"),
+
+    // ===== 联调/演示通道 =====
+    /// 模拟通道(独立 mock 子应用扮演三方, 仅 DEV 装配, 联调/演示用)
+    MOCK("mock"),
     ;
 
     private final String code;

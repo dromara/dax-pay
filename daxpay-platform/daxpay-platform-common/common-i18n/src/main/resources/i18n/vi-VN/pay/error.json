@@ -136,7 +136,15 @@
     "channelNotSupport": "Kênh này không hỗ trợ phân bổ",
     "syncProcessing": "Đồng bộ phân bổ đang xử lý",
     "tradeNoRequired": "Số giao dịch và số đơn hàng không thể cùng để trống",
-    "unsupported": "Sản phẩm thanh toán không hỗ trợ phân bổ cho đơn hàng này; đã hạ cấp thành thanh toán thường"
+    "unsupported": "Sản phẩm thanh toán không hỗ trợ phân bổ cho đơn hàng này; đã hạ cấp thành thanh toán thường",
+    "alreadyFinished": "Đơn hàng này đã hoàn tất phân bổ, không thể khởi tạo lại",
+    "singleOnly": "Kênh này chỉ hỗ trợ phân bổ một lần (số tiền còn lại được giải phóng khi khởi tạo); không thể bổ sung sau khi phân bổ",
+    "finishChannelNotSupport": "Kênh này không hỗ trợ hoàn tất phân bổ độc lập",
+    "finishFailed": "Hoàn tất phân bổ thất bại: {0}",
+    "finishFailedDefault": "Hoàn tất phân bổ thất bại",
+    "finishAlreadyFinished": "Đơn hàng này đã hoàn tất phân bổ",
+    "finishNotAllowed": "Chỉ đơn hàng đã phân bổ nhưng chưa hoàn tất mới có thể khởi tạo hoàn tất",
+    "finishModeInvalid": "Chế độ hoàn tất phân bổ không hợp lệ: {0}"
   },
   "assist": {
     "mchPublicKeyEmpty": "Khóa công khai của người bán trống",

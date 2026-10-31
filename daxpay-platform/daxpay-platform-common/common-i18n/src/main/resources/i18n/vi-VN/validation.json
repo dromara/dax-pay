@@ -149,6 +149,12 @@
     "channelMerchantNo": {
       "notBlank": "Kênh thương gia không. không thể để trống"
     },
+    "isvName": {
+      "notBlank": "Tên nhà cung cấp dịch vụ không được để trống"
+    },
+    "isvId": {
+      "notNull": "Nhà cung cấp dịch vụ sở hữu không được để trống"
+    },
     "channelMerchantName": {
       "notBlank": "Tên người bán không được để trống"
     },
@@ -220,6 +226,21 @@
     },
     "reqTime": {
       "notNull": "Thời gian yêu cầu không được để trống"
+    },
+    "bizAllocNo": {
+      "notBlank": "Số phân bổ của người bán không được để trống",
+      "size": "Số phân bổ của người bán không được vượt quá 100 ký tự"
+    },
+    "receiverType": {
+      "notBlank": "Loại người nhận phân bổ không được để trống",
+      "size": "Loại người nhận phân bổ không được vượt quá 32 ký tự"
+    },
+    "receiverAccount": {
+      "notBlank": "Tài khoản người nhận phân bổ không được để trống",
+      "size": "Tài khoản người nhận phân bổ không được vượt quá 128 ký tự"
+    },
+    "receiverName": {
+      "size": "Tên người nhận phân bổ không được vượt quá 64 ký tự"
     },
     "bizOrderNo": {
       "size": "Số đơn đặt hàng của người bán không thể vượt quá 100 ký tự",

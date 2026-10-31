@@ -53,5 +53,8 @@
   "sensitiveWordHitNotFound": "Không tìm thấy bản ghi trúng khớp",
   "sensitiveWordStatusInvalid": "Trạng thái từ nhạy cảm không hợp lệ",
   "sensitiveWordMatchModeInvalid": "Chế độ khớp không hợp lệ",
-  "sensitiveWordCategoryInvalid": "Danh mục không hợp lệ"
+  "sensitiveWordCategoryInvalid": "Danh mục không hợp lệ",
+  "allocCapabilityNotExist": "Khả năng phân bổ không tồn tại: {0}",
+  "allocOrderTypeNotExist": "Loại đơn phân bổ không tồn tại: {0}",
+  "allocFinishModeNotExist": "Chế độ hoàn tất phân bổ không tồn tại: {0}"
 }

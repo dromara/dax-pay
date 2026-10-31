@@ -2,5 +2,7 @@
   "none": "待分账",
   "unsupported": "不支持分账",
   "processing": "分账中",
-  "done": "已分账"
+  "done": "已分账",
+  "allocated": "已分账未完结",
+  "finished": "已分账且完结"
 }

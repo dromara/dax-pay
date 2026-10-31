@@ -4,10 +4,14 @@ import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.common.lock.TradeLockKeys;
 import cn.daxpay.open.payment.trade.alloc.bo.AllocResultBo;
-import cn.daxpay.open.payment.trade.alloc.dao.AllocDetailManager;
+import cn.daxpay.open.payment.trade.alloc.dao.AllocOrderManager;
 import cn.daxpay.open.payment.trade.alloc.entity.AllocDetail;
 import cn.daxpay.open.payment.trade.alloc.entity.AllocOrder;
+import cn.daxpay.open.payment.trade.alloc.enums.AllocCapabilityEnum;
 import cn.daxpay.open.payment.trade.alloc.enums.AllocDetailResultEnum;
+import cn.daxpay.open.payment.trade.alloc.enums.AllocFinishModeEnum;
+import cn.daxpay.open.payment.trade.alloc.enums.AllocOrderStatusEnum;
+import cn.daxpay.open.payment.trade.alloc.enums.AllocOrderTypeEnum;
 import cn.daxpay.open.payment.trade.alloc.enums.TradeAllocStatusEnum;
 import cn.daxpay.open.payment.trade.alloc.param.AllocParam;
 import cn.daxpay.open.payment.trade.alloc.runtime.bo.AllocatableContainer;
@@ -33,6 +37,7 @@ import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.CurrencyEnum;
 import cn.daxpay.open.platform.core.exception.BizException;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
+import cn.daxpay.open.platform.core.exception.system.StatusNotExistException;
 import cn.daxpay.open.platform.common.i18n.util.BizErrorMessageUtil;
 import cn.daxpay.open.platform.core.util.TradeNoGenerateUtil;
 import lombok.RequiredArgsConstructor;
@@ -43,6 +48,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -60,7 +66,8 @@ import java.util.Optional;
 public class AllocStartService {
 
     private final AllocAssistService assistService;
-    private final AllocDetailManager allocDetailManager;
+    private final AllocCapabilityService capabilityService;
+    private final AllocOrderManager allocOrderManager;
     private final PayTradeManager payTradeManager;
     private final NormalPayOrderManager normalPayOrderManager;
     private final GatewayPayOrderManager gatewayPayOrderManager;
@@ -101,7 +108,7 @@ public class AllocStartService {
         // 幂等查重: bizAllocNo + mchNo
         Optional<AllocOrder> existOpt = assistService.findByBizAllocNo(param.getBizAllocNo(), mchNo);
         if (existOpt.isPresent()) {
-            // 已存在, 直接返回(不支持重复分账, 单次分账语义)
+            // 幂等键已存在(分账单与完结单共用 bizAllocNo 维度), 直接拒绝
             throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.alloc.noDuplicate");
         }
         // 解析原支付 tradeNo(只读, 提前到锁外用于构造订单维度锁 key)
@@ -187,7 +194,7 @@ public class AllocStartService {
         } catch (Exception e) {
             log.error("分账发起失败: allocNo={}, channel={}", allocOrder.getAllocNo(), channel, e);
             if (e instanceof BizException biz) {
-                // 通道明确拒绝(参数/接收方等业务异常): 置 fail, 回退原支付 alloc_status=none 允许重新发起
+                // 通道明确拒绝(参数/接收方等业务异常): 置 fail, 按是否已有成功分账回退原支付状态允许重新发起
                 assistService.fail(allocOrder, null, BizErrorMessageUtil.resolve(e));
                 throw biz;
             }
@@ -202,7 +209,7 @@ public class AllocStartService {
     ///
     /// 三通道分账均为异步: 发起成功时明细一律返回 pending, 此时须保持 processing 并注册延迟同步,
     /// 由 [registerDelaySync] 与定时任务兜底推进, 切勿误判为 partial 终态(会导致明细永久 pending 且锁死原支付)。
-    /// 参照 [cn.daxpay.open.payment.trade.alloc.runtime.service.AllocSyncService#aggregateResult] 的守卫写法。
+    /// 参照 [cn.daxpay.open.payment.trade.alloc.runtime.service.AllocSyncService#syncWithLock] 的守卫写法。
     private void aggregateResult(AllocOrder allocOrder, List<AllocResultBo.DetailResult> detailResults) {
         if (Objects.isNull(detailResults) || detailResults.isEmpty()) {
             // 无明细结果(通道异常前或未返回明细): 保持 processing, 注册延迟同步兜底
@@ -277,21 +284,30 @@ public class AllocStartService {
         throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.alloc.tradeNoRequired");
     }
 
-    /// 校验原支付可分账
+    /// 校验原支付可分账(多次分账语义)
     private void validateAllocatable(PayTrade trade, AllocParam param) {
         // 原支付须成功
         if (!Objects.equals(trade.getStatus(), PayFundStatusEnum.SUCCESS.getCode())) {
             throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.alloc.orderNotSuccess");
         }
-        // 原支付未分账: 处理中或已分账都拒绝
-        // (processing 拦截: 配合订单维度锁, 保证同一订单同时最多一笔分账; done 拦截: 已分账终态)
-        if (Objects.equals(trade.getAllocStatus(), TradeAllocStatusEnum.PROCESSING.getCode())
-                || Objects.equals(trade.getAllocStatus(), TradeAllocStatusEnum.DONE.getCode())) {
-            throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.alloc.alreadyAllocated");
-        }
+        String allocStatus = trade.getAllocStatus();
         // 支付产品不支持分账(下单时已降级普通收款, 终态不可发起)
-        if (Objects.equals(trade.getAllocStatus(), TradeAllocStatusEnum.UNSUPPORTED.getCode())) {
+        if (Objects.equals(allocStatus, TradeAllocStatusEnum.UNSUPPORTED.getCode())) {
             throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.alloc.unsupported");
+        }
+        // 在途拦截: 配合订单维度锁, 保证同一订单同时最多一笔在途分账/完结单
+        if (Objects.equals(allocStatus, TradeAllocStatusEnum.PROCESSING.getCode())) {
+            throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.alloc.allocProcessing");
+        }
+        // 已完结拦截(单次模式 success 即 finished; 历史存量为 done)
+        if (TradeAllocStatusEnum.FINISHED.getCode().equals(allocStatus)
+                || TradeAllocStatusEnum.DONE.getCode().equals(allocStatus)) {
+            throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.alloc.alreadyFinished");
+        }
+        // 二次分账(allocated): 通道须声明多次分账能力, 否则单次即完结档拒绝
+        boolean reAlloc = Objects.equals(allocStatus, TradeAllocStatusEnum.ALLOCATED.getCode());
+        if (reAlloc && !capabilityService.supports(trade.getChannel(), AllocCapabilityEnum.MULTI)) {
+            throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.alloc.singleOnly");
         }
         // 原支付容器须声明为分账订单
         AllocatableContainer container = this.resolveContainer(trade);
@@ -305,13 +321,35 @@ public class AllocStartService {
         if (distinctAccounts < param.getReceivers().size()) {
             throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.alloc.duplicateReceiver");
         }
-        // 分账总金额不可超过原支付金额(简化校验, 未扣减退款金额, 后续可增强为可分账余额)
+        // 分账额度校验(多次分账累计口径): 已分累计 + 在途单金额 + 本次申请额 ≤ 订单金额
         // 金额入参已是分, 直接汇总
         long totalAmount = param.getReceivers().stream()
                 .mapToLong(AllocParam.AllocReceiverParam::getAmount)
                 .sum();
-        if (Objects.isNull(trade.getAmount()) || totalAmount > trade.getAmount()) {
+        long allocated = Objects.nonNull(trade.getAllocatedAmount()) ? trade.getAllocatedAmount() : 0L;
+        long processing = allocOrderManager.sumProcessingAmountByTradeNo(trade.getTradeNo());
+        if (Objects.isNull(trade.getAmount()) || allocated + processing + totalAmount > trade.getAmount()) {
             throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.alloc.amountExceed");
+        }
+        // 多次分账模式(manual)须通道具备多次能力, 否则该笔分账即解冻剩余不可追加
+        if (AllocFinishModeEnum.MANUAL == this.resolveFinishMode(param)
+                && !capabilityService.supports(trade.getChannel(), AllocCapabilityEnum.MULTI)) {
+            throw new BizInfoException(CommonCode.FAIL_CODE, "pay.error.alloc.singleOnly");
+        }
+    }
+
+    /// 解析分账完结模式(未传默认 auto, 兼容存量单次分账语义)
+    private AllocFinishModeEnum resolveFinishMode(AllocParam param) {
+        String finishMode = param.getFinishMode();
+        if (Objects.isNull(finishMode) || finishMode.isBlank()) {
+            return AllocFinishModeEnum.AUTO;
+        }
+        try {
+            return AllocFinishModeEnum.findByCode(finishMode.trim().toLowerCase(Locale.ROOT));
+        } catch (StatusNotExistException e) {
+            // 分账完结模式无效: {0}
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "pay.error.alloc.finishModeInvalid", finishMode);
         }
     }
 
@@ -329,7 +367,9 @@ public class AllocStartService {
                 .setDescription(param.getDescription())
                 .setOrderAmount(trade.getAmount())
                 .setCurrency(CurrencyEnum.CNY.getCode())
-                .setStatus(cn.daxpay.open.payment.trade.alloc.enums.AllocOrderStatusEnum.PROCESSING.getCode())
+                .setStatus(AllocOrderStatusEnum.PROCESSING.getCode())
+                .setAllocType(AllocOrderTypeEnum.ALLOC.getCode())
+                .setFinishMode(this.resolveFinishMode(param).getCode())
                 .setChannel(trade.getChannel())
                 .setProvider(trade.getProvider())
                 .setProduct(container.getProduct())

@@ -53,5 +53,8 @@
   "sensitiveWordStatusInvalid": "Invalid sensitive word status",
   "sensitiveWordMatchModeInvalid": "Invalid match mode",
   "sensitiveWordCategoryInvalid": "Invalid category",
-  "clientRuntimeNotExist": "Client runtime type does not exist: {0}"
+  "clientRuntimeNotExist": "Client runtime type does not exist: {0}",
+  "allocCapabilityNotExist": "Allocation capability does not exist: {0}",
+  "allocOrderTypeNotExist": "Allocation order type does not exist: {0}",
+  "allocFinishModeNotExist": "Allocation finish mode does not exist: {0}"
 }

@@ -66,5 +66,6 @@
   "lianlian_global": "連連国際(LianLian Global)",
   "lianlian_global_desc": "連連国際(LianLian Global)越境決済チャネル(プレースホルダ, 未接続)",
   "pingpong": "PingPong",
-  "pingpong_desc": "PingPong 越境決済チャネル(プレースホルダ, 未接続)"
+  "pingpong_desc": "PingPong 越境決済チャネル(プレースホルダ, 未接続)",
+  "mock": "モックチャネル"
 }

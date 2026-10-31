@@ -1,6 +1,8 @@
 package cn.daxpay.open.payment.trade.alloc.dao;
 
 import cn.daxpay.open.payment.trade.alloc.entity.AllocOrder;
+import cn.daxpay.open.payment.trade.alloc.enums.AllocOrderStatusEnum;
+import cn.daxpay.open.payment.trade.alloc.enums.AllocOrderTypeEnum;
 import cn.daxpay.open.payment.trade.alloc.param.AllocOrderQuery;
 import cn.daxpay.open.platform.common.mybatisplus.impl.BaseManager;
 import cn.daxpay.open.platform.common.mybatisplus.query.generator.QueryGenerator;
@@ -48,6 +50,30 @@ public class AllocOrderManager extends BaseManager<AllocOrderMapper, AllocOrder>
     /// 根据原支付交易号查询分账单(校验是否已分账)
     public Optional<AllocOrder> findByTradeNo(String tradeNo) {
         return findByField(AllocOrder::getTradeNo, tradeNo);
+    }
+
+    /// 统计原支付交易号下处理中(在途)的分账单总金额(多次分账额度校验用, 不含完结单)
+    ///
+    /// 在途单包含处理中的 alloc 单(amount 为该单申请全额);
+    /// 与 pay_trade.allocated_amount(已成功累计)相加即为"已占用额度"。
+    public long sumProcessingAmountByTradeNo(String tradeNo) {
+        return lambdaQuery()
+                .eq(AllocOrder::getTradeNo, tradeNo)
+                .eq(AllocOrder::getStatus, AllocOrderStatusEnum.PROCESSING.getCode())
+                .eq(AllocOrder::getAllocType, AllocOrderTypeEnum.ALLOC.getCode())
+                .list()
+                .stream()
+                .mapToLong(o -> o.getAmount() != null ? o.getAmount() : 0L)
+                .sum();
+    }
+
+    /// 原支付交易号下是否还存在处理中的分账单/完结单(排除指定单据, 失败回退状态判定用)
+    public boolean existsProcessingByTradeNoExcept(String tradeNo, Long exceptOrderId) {
+        return lambdaQuery()
+                .eq(AllocOrder::getTradeNo, tradeNo)
+                .eq(AllocOrder::getStatus, AllocOrderStatusEnum.PROCESSING.getCode())
+                .ne(exceptOrderId != null, AllocOrder::getId, exceptOrderId)
+                .exists();
     }
 
     /// 按状态 + 创建时间窗口扫描(定时同步任务用)

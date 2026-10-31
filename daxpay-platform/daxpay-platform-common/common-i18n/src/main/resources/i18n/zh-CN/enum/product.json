@@ -68,5 +68,7 @@
   "yisheng_pay": "易生支付",
   "worldfirst": "WorldFirst",
   "lianlian_global": "连连国际",
-  "pingpong": "PingPong"
+  "pingpong": "PingPong",
+  "mock_pay": "模拟支付",
+  "mock_isv": "模拟支付(服务商)"
 }
