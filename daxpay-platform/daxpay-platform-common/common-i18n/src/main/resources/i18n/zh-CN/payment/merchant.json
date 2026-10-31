@@ -1,4 +1,18 @@
 {
   "defaultAppName": "{0}的默认应用",
-  "defaultStoreName": "{0}的默认门店"
+  "defaultStoreName": "{0}的默认门店",
+  "channelMerchantReference": {
+    "type": {
+      "route_scene": "通道路由·场景模式",
+      "route_basic": "通道路由·基础模式",
+      "gateway_env": "网关支付配置",
+      "cashier_item": "收银台支付入口"
+    },
+    "detail": {
+      "sceneWithCapability": "{0}({1})",
+      "env": "{0} × {1}",
+      "cashierItem": "支付项：{0}",
+      "cashierItemRecommend": "{0}(推荐)"
+    }
+  }
 }

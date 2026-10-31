@@ -40,5 +40,8 @@
   "hasOrder": "商户存在订单记录，不允许删除",
   "hasRefund": "商户存在退款记录，不允许删除",
   "hasUser": "商户存在关联用户，请先在商户用户管理中解绑",
-  "roleNotExist": "指定的角色不存在"
+  "roleNotExist": "指定的角色不存在",
+  "hasGatewayOrder": "商户存在网关支付订单，不允许删除",
+  "hasBoundDevice": "商户名下存在绑定设备，请先解绑或处置设备后删除",
+  "lastAdminCannotDelete": "商户至少保留一名管理员用户, 请先转移管理员角色"
 }

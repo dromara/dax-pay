@@ -3,7 +3,9 @@ package cn.daxpay.open.payment.merchant.controller.channel;
 import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.merchant.param.channel.ChannelMerchantEditParam;
 import cn.daxpay.open.payment.merchant.param.channel.ChannelMerchantQuery;
+import cn.daxpay.open.payment.merchant.result.channel.ChannelMerchantReferenceResult;
 import cn.daxpay.open.payment.merchant.result.channel.ChannelMerchantResult;
+import cn.daxpay.open.payment.merchant.service.channel.ChannelMerchantReferenceService;
 import cn.daxpay.open.payment.merchant.service.channel.ChannelMerchantService;
 import cn.daxpay.open.payment.masterdata.result.channel.PayChannelResult;
 import cn.daxpay.open.platform.core.annotation.PermCode;
@@ -40,6 +42,7 @@ import java.util.Objects;
 public class MchChannelMerchantController {
 
     private final ChannelMerchantService channelMerchantService;
+    private final ChannelMerchantReferenceService channelMerchantReferenceService;
     private final PaymentContext paymentContext;
 
     /// 当前登录商户号（上下文必有；缺则视为会话异常）
@@ -83,6 +86,15 @@ public class MchChannelMerchantController {
     @GetMapping("/all")
     public Result<List<ChannelMerchantResult>> findAll() {
         return Res.ok(channelMerchantService.findAllByMchNo(requireMchNo()));
+    }
+
+    /// 引用明细按 channelMchNo 直查(mch_channel_merchant 走 TenantLine 按 mchNo 行级隔离,
+    /// 非本商户的通道商户号在服务层即查不到而抛不存在, 天然防越权, 无需再 assertOwned)
+    @PermCode(code = PermCodes.Action.VIEW)
+    @Operation(summary = "引用明细查询(按应用分组, 停用影响面提示用)")
+    @GetMapping("/reference-detail")
+    public Result<ChannelMerchantReferenceResult> referenceDetail(@NotBlank(message = "{validation.field.channelMchNo.notBlank}") String channelMchNo) {
+        return Res.ok(channelMerchantReferenceService.referenceDetail(channelMchNo));
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)

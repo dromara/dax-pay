@@ -18,6 +18,13 @@ public class PayRouteBasicConfigManager extends BaseManager<PayRouteBasicConfigM
                 .list();
     }
 
+    /// 按通道商户号查询基础模式配置列表(引用明细/级联删除前查用)
+    public List<PayRouteBasicConfig> findAllByChannelMchNo(String channelMchNo) {
+        return lambdaQuery()
+                .eq(PayRouteBasicConfig::getChannelMchNo, channelMchNo)
+                .list();
+    }
+
     /// 按策略 ID 删除全部基础配置
     public void deleteByStrategyId(Long strategyId) {
         lambdaUpdate()

@@ -3,6 +3,7 @@
   "userPhoneAlreadyExisted": "Telepon pengguna sudah ada",
   "userNonePhoneAndEmail": "Telepon atau email harus disediakan",
   "oldPasswordError": "Kata sandi lama salah",
+  "samePassword": "Kata sandi baru tidak boleh sama dengan kata sandi saat ini",
   "loginPasswordError": "Kata sandi login salah",
   "accountExistsInClient": "Akun sudah ada di bawah klien ini",
   "phoneUsedInClient": "Nomor telepon sudah digunakan pada klien ini",
@@ -17,5 +18,7 @@
   "administratorBanDenied": "Admin super bawaan tidak dapat diblokir",
   "administratorLockDenied": "Admin super bawaan tidak dapat dikunci",
   "administratorEditDenied": "Admin super bawaan tidak dapat diedit",
-  "subjectAdminBanDenied": "Admin subjek [{0}] tidak dapat diblokir atau dikunci"
+  "subjectAdminBanDenied": "Admin subjek [{0}] tidak dapat diblokir atau dikunci",
+  "administratorDeleteDenied": "Administrator super bawaan tidak dapat dihapus",
+  "stillAffiliated": "Pengguna masih berafiliasi dengan {0}, silakan hapus di manajemen pengguna subjek terkait terlebih dahulu"
 }

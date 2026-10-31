@@ -1,4 +1,18 @@
 {
   "defaultAppName": "{0} 기본 앱",
-  "defaultStoreName": "{0} 기본 매장"
+  "defaultStoreName": "{0} 기본 매장",
+  "channelMerchantReference": {
+    "type": {
+      "route_scene": "채널 라우트·장면 모드",
+      "route_basic": "채널 라우트·기본 모드",
+      "gateway_env": "게이트웨이 결제 설정",
+      "cashier_item": "결제대 접수 항목"
+    },
+    "detail": {
+      "sceneWithCapability": "{0}({1})",
+      "env": "{0} × {1}",
+      "cashierItem": "결제 항목: {0}",
+      "cashierItemRecommend": "{0}(추천)"
+    }
+  }
 }

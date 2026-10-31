@@ -1,4 +1,18 @@
 {
   "defaultAppName": "{0}的預設應用",
-  "defaultStoreName": "{0}的預設門市"
+  "defaultStoreName": "{0}的預設門市",
+  "channelMerchantReference": {
+    "type": {
+      "route_scene": "通道路由·場景模式",
+      "route_basic": "通道路由·基礎模式",
+      "gateway_env": "網關支付配置",
+      "cashier_item": "收銀台支付入口"
+    },
+    "detail": {
+      "sceneWithCapability": "{0}({1})",
+      "env": "{0} × {1}",
+      "cashierItem": "支付項：{0}",
+      "cashierItemRecommend": "{0}(推薦)"
+    }
+  }
 }

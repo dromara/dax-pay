@@ -18,6 +18,13 @@ public class PayRouteSceneConfigManager extends BaseManager<PayRouteSceneConfigM
                 .list();
     }
 
+    /// 按通道商户号查询场景模式配置列表(引用明细/级联删除前查用)
+    public List<PayRouteSceneConfig> findAllByChannelMchNo(String channelMchNo) {
+        return lambdaQuery()
+                .eq(PayRouteSceneConfig::getChannelMchNo, channelMchNo)
+                .list();
+    }
+
     /// 按策略 ID 删除全部场景配置
     public void deleteByStrategyId(Long strategyId) {
         lambdaUpdate()

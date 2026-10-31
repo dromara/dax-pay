@@ -36,5 +36,8 @@
   "defaultStoreCannotDelete": "Cửa hàng mặc định không thể xóa, vui lòng chuyển đánh dấu mặc định trước",
   "defaultStoreNotConfigured": "Merchant chưa cấu hình cửa hàng mặc định, vui lòng cấu hình trong quản lý cửa hàng trước",
   "defaultStoreDisabled": "Cửa hàng mặc định của merchant đã bị vô hiệu hóa, vui lòng kích hoạt hoặc chuyển đánh dấu mặc định trước",
-  "roleNotExist": "Vai trò được chỉ định không tồn tại"
+  "roleNotExist": "Vai trò được chỉ định không tồn tại",
+  "hasGatewayOrder": "Merchant có đơn thanh toán gateway, không được phép xóa",
+  "hasBoundDevice": "Merchant có thiết bị đang liên kết, vui lòng hủy liên kết hoặc xử lý thiết bị trước khi xóa",
+  "lastAdminCannotDelete": "Merchant phải giữ lại ít nhất một người dùng quản trị, vui lòng chuyển vai trò quản trị trước"
 }

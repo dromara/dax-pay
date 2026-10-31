@@ -1,4 +1,18 @@
 {
   "defaultAppName": "Aplikasi Default {0}",
-  "defaultStoreName": "Toko Default {0}"
+  "defaultStoreName": "Toko Default {0}",
+  "channelMerchantReference": {
+    "type": {
+      "route_scene": "Rute Kanal · Mode Skenario",
+      "route_basic": "Rute Kanal · Mode Dasar",
+      "gateway_env": "Konfigurasi Pembayaran Gateway",
+      "cashier_item": "Entri Pembayaran Kasir"
+    },
+    "detail": {
+      "sceneWithCapability": "{0} ({1})",
+      "env": "{0} × {1}",
+      "cashierItem": "Item bayaran: {0}",
+      "cashierItemRecommend": "{0} (Disarankan)"
+    }
+  }
 }

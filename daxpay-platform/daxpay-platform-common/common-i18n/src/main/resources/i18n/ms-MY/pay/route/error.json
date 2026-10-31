@@ -23,5 +23,8 @@
   "basicChannelMchNotConfigured": "Tiada pedagang saluran dikonfigurasikan untuk jenama berbayar [{0}]; konfigurasikannya di bawah penghalaan saluran Mengikut Lalai Jenama",
   "sceneCapabilityChannelMchMismatch": "Keupayaan [{0}] tidak sepadan dengan pedagang saluran [{1}] dan kaedah [{2}]",
   "directCapabilityChannelMchMismatch": "Keupayaan [{0}] tidak sepadan dengan pedagang saluran [{1}]",
-  "channelMchEnvMismatch": "Bendera persekitaran sandbox pedagang saluran [{0}] tidak sepadan dengan persekitaran aktif produk [{1}]. Sila semak konfigurasi pedagang saluran"
+  "channelMchEnvMismatch": "Bendera persekitaran sandbox pedagang saluran [{0}] tidak sepadan dengan persekitaran aktif produk [{1}]. Sila semak konfigurasi pedagang saluran",
+  "basicProviderDuplicate": "Penyedia saluran [{0}] mempunyai beberapa konfigurasi",
+  "sceneProviderNotInRouteScope": "Penyedia saluran kaedah pembayaran [{0}] tidak berada dalam skop konfigurasi penghalaan saluran",
+  "routeCapabilityMismatch": "Keupayaan pembayaran [{0}] dalam konfigurasi penghalaan tidak lagi sepadan dengan produk [{1}] dan kaedah pembayaran [{2}]. Sila simpan semula konfigurasi penghalaan saluran"
 }

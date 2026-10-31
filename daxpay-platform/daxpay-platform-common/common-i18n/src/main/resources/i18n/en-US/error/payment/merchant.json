@@ -40,5 +40,8 @@
   "hasOrder": "Merchant has order records and cannot be deleted",
   "hasRefund": "Merchant has refund records and cannot be deleted",
   "hasUser": "Merchant has associated users, please unbind them in merchant user management first",
-  "roleNotExist": "The specified role does not exist"
+  "roleNotExist": "The specified role does not exist",
+  "hasGatewayOrder": "Merchant has gateway payment orders and cannot be deleted",
+  "hasBoundDevice": "Merchant has bound devices, please unbind or dispose of them before deletion",
+  "lastAdminCannotDelete": "Merchant must keep at least one administrator user, please transfer the administrator role first"
 }

@@ -1,4 +1,18 @@
 {
   "defaultAppName": "Aplikasi Lalai {0}",
-  "defaultStoreName": "Kedai Lalai {0}"
+  "defaultStoreName": "Kedai Lalai {0}",
+  "channelMerchantReference": {
+    "type": {
+      "route_scene": "Laluan Saluran · Mod Senario",
+      "route_basic": "Laluan Saluran · Mod Asas",
+      "gateway_env": "Konfigurasi Pembayaran Gateway",
+      "cashier_item": "Entri Pembayaran Kasir"
+    },
+    "detail": {
+      "sceneWithCapability": "{0} ({1})",
+      "env": "{0} × {1}",
+      "cashierItem": "Item bayaran: {0}",
+      "cashierItemRecommend": "{0} (Disyorkan)"
+    }
+  }
 }

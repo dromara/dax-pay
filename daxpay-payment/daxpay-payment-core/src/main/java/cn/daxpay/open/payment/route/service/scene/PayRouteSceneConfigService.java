@@ -11,6 +11,7 @@ import cn.daxpay.open.payment.route.param.scene.PayRouteSceneCapabilityBatchPara
 import cn.daxpay.open.payment.route.param.scene.PayRouteSceneConfigBatchParam;
 import cn.daxpay.open.payment.route.param.scene.PayRouteSceneConfigItem;
 import cn.daxpay.open.payment.route.result.scene.PayRouteSceneConfigResult;
+import cn.daxpay.open.payment.route.service.support.PayRouteBundleCacheEvictor;
 import cn.daxpay.open.payment.route.service.support.PayRouteConfigProviders;
 import cn.daxpay.open.payment.route.service.support.PayRouteI18nHelper;
 import cn.daxpay.open.payment.route.service.support.PayRouteStrategyCapabilitySupport;
@@ -24,7 +25,6 @@ import cn.daxpay.open.platform.core.rest.dto.ChannelMchOption;
 import cn.daxpay.open.platform.core.rest.dto.LabelValue;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,6 +49,7 @@ public class PayRouteSceneConfigService {
     private final PayRouteStrategyCapabilitySupport payRouteStrategyCapabilitySupport;
     private final ChannelMerchantManager channelMerchantManager;
     private final PayProviderMethodService payProviderMethodService;
+    private final PayRouteBundleCacheEvictor routeBundleCacheEvictor;
 
     /// 查询场景模式配置列表
     public List<PayRouteSceneConfigResult> listSceneByAppId(String appId) {
@@ -60,7 +61,6 @@ public class PayRouteSceneConfigService {
 
     /// 批量保存场景模式配置（全量覆盖：method 唯一、通道商户/能力校验）
     @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(value = "payment:route-bundle", key = "#param.appId")
     public void saveSceneBatch(PayRouteSceneConfigBatchParam param) {
         String mchNo = mchAppInfoManager.requireMchNoByAppId(param.getAppId());
         PayRouteStrategy strategy = requireStrategy(param.getAppId());
@@ -72,15 +72,19 @@ public class PayRouteSceneConfigService {
             if (StrUtil.isBlank(item.getMethod())) {
                 continue;
             }
-            // 支付渠道由支付方式派生(OTHER 等无渠道归属或非白名单则跳过)
-            PayProviderEnum provider = PayMethodEnum.findByCode(item.getMethod()).getProvider();
-            if (Objects.isNull(provider) || !PayRouteConfigProviders.contains(provider.getCode())) {
-                continue;
-            }
-            String providerCode = provider.getCode();
+            // 未填写的目录行不落库(通道商户与能力都空 = 该支付方式不配置)
             if (isSceneRowEmpty(item)) {
                 continue;
             }
+            // 支付渠道由支付方式派生; 无渠道归属(OTHER)或非通道路由白名单渠道不允许配置。
+            // 此处必须显式拒绝: 静默跳过会变成「保存成功但配置不生效」, 用户无从发现
+            PayProviderEnum provider = PayMethodEnum.findByCode(item.getMethod()).getProvider();
+            if (Objects.isNull(provider) || !PayRouteConfigProviders.contains(provider.getCode())) {
+                // 路由: 支付方式所属支付渠道不支持通道路由配置
+                throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                        "pay.route.error.sceneProviderNotInRouteScope", PayRouteI18nHelper.payMethod(item.getMethod()));
+            }
+            String providerCode = provider.getCode();
             validateSceneConfigItem(providerCode, item.getMethod());
             // 校验通道商户属本商户且启用
             ChannelMerchant mch = channelMerchantManager
@@ -115,6 +119,8 @@ public class PayRouteSceneConfigService {
         for (PayRouteSceneConfig config : configs) {
             sceneConfigManager.save(config);
         }
+        // 缓存失效: 事务提交后执行(提交前失效会被并发回源回填旧配置)
+        routeBundleCacheEvictor.evictAfterCommit(param.getAppId());
     }
 
     /// 通道路由白名单目录下全部 (provider,method) 的通道商户候选（批量）
@@ -139,8 +145,12 @@ public class PayRouteSceneConfigService {
     }
 
     /// 按目录项与通道商户筛选支付能力候选（策略 Map ∩ DB，不落库）
+    ///
+    /// 与其余候选方法一致先校验 appId 归属：channelMchNo 由调用方传入，缺此校验等于放开跨商户探测入口
+    /// (现状靠 channelMerchant 查询的租户隔离兜底，口径不应依赖底层实现)
     public List<LabelValue> listSceneCapabilityCandidatesForMethod(
             String appId, String provider, String method, String channelMchNo) {
+        mchAppInfoManager.requireMchNoByAppId(appId);
         if (StrUtil.isBlank(channelMchNo)) {
             return List.of();
         }
@@ -186,26 +196,16 @@ public class PayRouteSceneConfigService {
 
     /// 校验场景配置项支付渠道与支付方式
     ///
-    /// - 无 provider：仅允许 other 等无渠道绑定的支付方式；
-    /// - 有 provider：支付方式须落在已启用的渠道支付方式目录内。
+    /// 调用方已按 [PayRouteConfigProviders] 过滤，provider 必非空且为白名单渠道，
+    /// 此处只需校验支付方式落在已启用的渠道支付方式目录内。
     private void validateSceneConfigItem(String providerCode, String method) {
-        boolean genericMethod = Objects.equals(PayMethodEnum.OTHER.getCode(), method);
-        if (StrUtil.isBlank(providerCode)) {
-            // 非品牌绑定行：只能是跨支付渠道通用支付方式
-            if (!genericMethod) {
-                // 路由: 非通用支付方式须指定支付渠道
-                throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
-                        "pay.route.error.scenePayProviderRequiredForMethod", PayRouteI18nHelper.payMethod(method));
-            }
-            return;
-        }
         PayProviderEnum provider = PayProviderEnum.findByCode(providerCode);
         if (Objects.isNull(provider)) {
             // 路由: 支付渠道无效
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                     "pay.route.error.basicProviderInvalid");
         }
-        // 品牌绑定行：须在合并且启用的渠道支付方式目录内
+        // 支付方式须在合并且启用的渠道支付方式目录内
         if (!payProviderMethodService.contains(providerCode, method)) {
             // 路由: 支付方式不在渠道目录中
             throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,

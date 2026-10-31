@@ -36,5 +36,8 @@
   "defaultStoreCannotDelete": "Toko default tidak dapat dihapus, harap pindahkan penanda default terlebih dahulu",
   "defaultStoreNotConfigured": "Merchant belum mengonfigurasi toko default, harap konfigurasikan di manajemen toko terlebih dahulu",
   "defaultStoreDisabled": "Toko default merchant dinonaktifkan, harap aktifkan atau pindahkan penanda default terlebih dahulu",
-  "roleNotExist": "Peran yang ditentukan tidak ditemukan"
+  "roleNotExist": "Peran yang ditentukan tidak ditemukan",
+  "hasGatewayOrder": "Merchant memiliki pesanan pembayaran gateway, tidak dapat dihapus",
+  "hasBoundDevice": "Merchant memiliki perangkat terikat, silakan lepaskan atau proses perangkat terlebih dahulu sebelum menghapus",
+  "lastAdminCannotDelete": "Merchant harus menyimpan setidaknya satu pengguna administrator, silakan alihkan peran administrator terlebih dahulu"
 }

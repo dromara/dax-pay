@@ -24,4 +24,11 @@ public class GatewayCashierItemManager extends BaseManager<GatewayCashierItemMap
                 .orderByAsc(GatewayCashierItem::getId)
                 .list();
     }
+
+    /// 按通道商户号查询全部支付项(引用明细查用)
+    public List<GatewayCashierItem> findAllByChannelMchNo(String channelMchNo) {
+        return lambdaQuery()
+                .eq(GatewayCashierItem::getChannelMchNo, channelMchNo)
+                .list();
+    }
 }

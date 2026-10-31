@@ -23,5 +23,8 @@
   "basicChannelMchNotConfigured": "유료 브랜드 [{0}]에 구성된 채널 판매자가 없습니다. 브랜드 기본값으로 채널 라우팅에서 구성",
   "sceneCapabilityChannelMchMismatch": "기능 [{0}]이 채널 판매자 [{1}] 및 방법 [{2}]과 일치하지 않습니다.",
   "directCapabilityChannelMchMismatch": "기능 [{0}]이 채널 판매자 [{1}]와 일치하지 않습니다.",
-  "channelMchEnvMismatch": "채널 판매자[{0}]의 샌드박스 환경 플래그가 상품[{1}]의 현재 활성 환경과 일치하지 않습니다. 채널 판매자 설정을 확인해 주세요."
+  "channelMchEnvMismatch": "채널 판매자[{0}]의 샌드박스 환경 플래그가 상품[{1}]의 현재 활성 환경과 일치하지 않습니다. 채널 판매자 설정을 확인해 주세요.",
+  "basicProviderDuplicate": "결제 채널[{0}]에 중복된 설정이 있습니다",
+  "sceneProviderNotInRouteScope": "결제 방식[{0}]의 소속 채널이 채널 라우팅 설정 범위에 없습니다",
+  "routeCapabilityMismatch": "라우팅 설정의 결제 능력[{0}]이(가) 상품[{1}], 결제 방식[{2}]와 더 이상 일치하지 않습니다. 채널 라우팅 설정을 다시 저장해 주세요"
 }

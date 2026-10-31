@@ -170,7 +170,10 @@
   "barcode": {
     "invalid": "Mã thanh toán không hợp lệ",
     "unsupportedType": "Loại mã thanh toán không được hỗ trợ",
-    "methodMismatch": "Mã thanh toán không khớp với phương thức"
+    "methodMismatch": "Mã thanh toán không khớp với phương thức",
+    "wechatFormatInvalid": "Mã thanh toán WeChat phải là 18 chữ số",
+    "alipayFormatInvalid": "Mã thanh toán Alipay phải là 16-24 chữ số bắt đầu bằng 25-30",
+    "unionFormatInvalid": "Mã thanh toán UnionPay phải là 19 chữ số bắt đầu bằng 62"
   },
   "risk": {
     "blacklist": "Giao dịch bị hạn chế",

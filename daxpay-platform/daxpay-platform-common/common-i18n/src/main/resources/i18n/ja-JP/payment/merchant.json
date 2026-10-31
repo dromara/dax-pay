@@ -1,4 +1,18 @@
 {
   "defaultAppName": "{0}のデフォルトアプリ",
-  "defaultStoreName": "{0}のデフォルト店舗"
+  "defaultStoreName": "{0}のデフォルト店舗",
+  "channelMerchantReference": {
+    "type": {
+      "route_scene": "チャネルルート・シーンモード",
+      "route_basic": "チャネルルート・基本モード",
+      "gateway_env": "ゲートウェイ支払設定",
+      "cashier_item": "レジ支払いエントリ"
+    },
+    "detail": {
+      "sceneWithCapability": "{0}({1})",
+      "env": "{0} × {1}",
+      "cashierItem": "支払い項目：{0}",
+      "cashierItemRecommend": "{0}(推奨)"
+    }
+  }
 }

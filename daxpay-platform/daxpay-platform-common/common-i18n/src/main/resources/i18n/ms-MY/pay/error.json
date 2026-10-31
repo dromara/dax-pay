@@ -170,7 +170,10 @@
   "barcode": {
     "invalid": "Kod bar pembayaran tidak sah",
     "unsupportedType": "Jenis kod bar pembayaran tidak disokong",
-    "methodMismatch": "Kod bar tidak sepadan dengan kaedah pembayaran"
+    "methodMismatch": "Kod bar tidak sepadan dengan kaedah pembayaran",
+    "wechatFormatInvalid": "Kod bar pembayaran WeChat mesti 18 digit angka",
+    "alipayFormatInvalid": "Kod bar pembayaran Alipay mesti 16-24 digit angka bermula dengan 25-30",
+    "unionFormatInvalid": "Kod bar pembayaran UnionPay mesti 19 digit angka bermula dengan 62"
   },
   "risk": {
     "blacklist": "Transaksi dihadkan",

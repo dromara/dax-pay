@@ -3,6 +3,7 @@
   "userPhoneAlreadyExisted": "Điện thoại người dùng đã tồn tại",
   "userNonePhoneAndEmail": "Phải cung cấp điện thoại hoặc email",
   "oldPasswordError": "Mật khẩu cũ không đúng",
+  "samePassword": "Mật khẩu mới không được trùng với mật khẩu hiện tại",
   "loginPasswordError": "Mật khẩu đăng nhập không đúng",
   "accountExistsInClient": "Tài khoản đã tồn tại dưới tên khách hàng này",
   "phoneUsedInClient": "Số điện thoại đã được sử dụng cho khách hàng này",
@@ -17,5 +18,7 @@
   "administratorBanDenied": "Không thể cấm quản trị viên siêu cấp tích hợp sẵn",
   "administratorLockDenied": "Không thể khóa quản trị viên siêu cấp tích hợp sẵn",
   "administratorEditDenied": "Không thể chỉnh sửa quản trị viên siêu cấp tích hợp sẵn",
-  "subjectAdminBanDenied": "Không thể cấm hoặc khóa quản trị viên chủ thể [{0}]"
+  "subjectAdminBanDenied": "Không thể cấm hoặc khóa quản trị viên chủ thể [{0}]",
+  "administratorDeleteDenied": "Không được phép xóa quản trị viên siêu cấp tích hợp sẵn",
+  "stillAffiliated": "Người dùng này vẫn liên thuộc {0}, vui lòng xóa trong quản lý người dùng của chủ thể tương ứng trước"
 }

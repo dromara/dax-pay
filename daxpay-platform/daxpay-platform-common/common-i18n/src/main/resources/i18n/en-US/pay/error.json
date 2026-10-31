@@ -182,7 +182,10 @@
   "barcode": {
     "invalid": "Invalid payment barcode",
     "unsupportedType": "Unsupported payment barcode type",
-    "methodMismatch": "Barcode does not match the payment method"
+    "methodMismatch": "Barcode does not match the payment method",
+    "wechatFormatInvalid": "WeChat payment barcode should be 18 digits",
+    "alipayFormatInvalid": "Alipay payment barcode should be 16-24 digits starting with 25-30",
+    "unionFormatInvalid": "UnionPay payment barcode should be 19 digits starting with 62"
   },
   "risk": {
     "blacklist": "Transaction is restricted",

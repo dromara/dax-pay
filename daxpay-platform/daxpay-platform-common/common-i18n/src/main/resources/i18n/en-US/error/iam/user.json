@@ -3,6 +3,7 @@
   "userPhoneAlreadyExisted": "User phone already exists",
   "userNonePhoneAndEmail": "Either phone or email must be provided",
   "oldPasswordError": "Old password is incorrect",
+  "samePassword": "The new password cannot be the same as the current password",
   "loginPasswordError": "Login password is incorrect",
   "accountExistsInClient": "Account already exists under this client",
   "phoneUsedInClient": "Phone number already used under this client",
@@ -17,5 +18,7 @@
   "administratorBanDenied": "The built-in super admin cannot be banned",
   "administratorLockDenied": "The built-in super admin cannot be locked",
   "administratorEditDenied": "The built-in super admin cannot be edited",
-  "subjectAdminBanDenied": "Subject administrator [{0}] cannot be banned or locked"
+  "subjectAdminBanDenied": "Subject administrator [{0}] cannot be banned or locked",
+  "administratorDeleteDenied": "Built-in super administrator cannot be deleted",
+  "stillAffiliated": "The user is still affiliated with {0}, please delete it in the corresponding subject user management first"
 }

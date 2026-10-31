@@ -3,6 +3,7 @@
   "userPhoneAlreadyExisted": "Telefon pengguna sudah wujud",
   "userNonePhoneAndEmail": "Sama ada telefon atau e-mel mesti disediakan",
   "oldPasswordError": "Kata laluan lama tidak betul",
+  "samePassword": "Kata laluan baharu tidak boleh sama dengan kata laluan semasa",
   "loginPasswordError": "Kata laluan log masuk tidak betul",
   "accountExistsInClient": "Akaun sudah wujud di bawah pelanggan ini",
   "phoneUsedInClient": "Nombor telefon sudah digunakan di bawah pelanggan ini",
@@ -17,5 +18,7 @@
   "administratorBanDenied": "Pentadbir super terbina dalam tidak boleh disekat",
   "administratorLockDenied": "Pentadbir super terbina dalam tidak boleh dikunci",
   "administratorEditDenied": "Pentadbir super terbina dalam tidak boleh diedit",
-  "subjectAdminBanDenied": "Pentadbir subjek [{0}] tidak boleh disekat atau dikunci"
+  "subjectAdminBanDenied": "Pentadbir subjek [{0}] tidak boleh disekat atau dikunci",
+  "administratorDeleteDenied": "Pentadbir super terbina dalam tidak boleh dipadamkan",
+  "stillAffiliated": "Pengguna ini masih berafiliasi dengan {0}, silakan padam dalam pengurusan pengguna subjek berkenaan terlebih dahulu"
 }

@@ -8,10 +8,13 @@ import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.payment.merchant.param.channel.ChannelMerchantEditParam;
 import cn.daxpay.open.payment.merchant.param.channel.ChannelMerchantQuery;
+import cn.daxpay.open.payment.merchant.result.channel.ChannelMerchantReferenceResult;
 import cn.daxpay.open.payment.merchant.result.channel.ChannelMerchantResult;
+import cn.daxpay.open.payment.merchant.service.channel.ChannelMerchantReferenceService;
 import cn.daxpay.open.payment.merchant.service.channel.ChannelMerchantService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.validation.annotation.Validated;
@@ -27,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ChannelMerchantAdminController {
     private final ChannelMerchantService channelMerchantService;
+    private final ChannelMerchantReferenceService channelMerchantReferenceService;
 
     @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "修改")
@@ -56,6 +60,13 @@ public class ChannelMerchantAdminController {
     @GetMapping("/get")
     public Result<ChannelMerchantResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(channelMerchantService.findById(id));
+    }
+
+    @PermCode(code = PermCodes.Action.VIEW)
+    @Operation(summary = "引用明细查询(按应用分组, 停用/删除影响面提示用)")
+    @GetMapping("/reference-detail")
+    public Result<ChannelMerchantReferenceResult> referenceDetail(@NotBlank(message = "{validation.field.channelMchNo.notBlank}") String channelMchNo) {
+        return Res.ok(channelMerchantReferenceService.referenceDetail(channelMchNo));
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)

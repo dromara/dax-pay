@@ -6,6 +6,7 @@ import cn.daxpay.open.payment.merchant.entity.gateway.GatewayCashierItem;
 import cn.daxpay.open.payment.merchant.enums.CashierItemResolveModeEnum;
 import cn.daxpay.open.payment.merchant.enums.ClientEnvEnum;
 import cn.daxpay.open.payment.merchant.enums.GatewayCashierTypeEnum;
+import cn.daxpay.open.payment.route.service.runtime.PayRouteService;
 import cn.daxpay.open.payment.strategy.risk.PayRiskChecker;
 import cn.daxpay.open.payment.trade.enums.GatewayOrderStatusEnum;
 import cn.daxpay.open.payment.trade.enums.GatewayPayTypeEnum;
@@ -49,6 +50,8 @@ public class CashierPayService {
     private final GatewayPayAssistService gatewayPayAssistService;
     private final GatewayPayHandleService gatewayPayHandleService;
     private final GatewayCashierItemManager gatewayCashierItemManager;
+    /// 路由服务（只读探测用: 支付项可用性预检, 不参与支付链路）
+    private final PayRouteService payRouteService;
     /// 风控检查器（可选 SPI：用于判断是否存在 openId 黑名单, 决定是否触发强制 OAuth）
     private final ObjectProvider<PayRiskChecker> payRiskCheckerProvider;
     /// 平台安全配置（读取用户标识拦截级别, 决定 NORMAL 模式下不触发强制 OAuth）
@@ -77,10 +80,30 @@ public class CashierPayService {
                     "pay.error.gateway.channelLocked");
         }
         return items.stream()
-                .map(item -> this.toPublicResult(item, envEnum)
-                        // 命中锁定的支付项置 locked=true, 前端据此自动选中并禁用其他项
-                        .setLocked(orderLocked && this.isLockedItem(item, order)))
+                .map(item -> {
+                    boolean locked = orderLocked && this.isLockedItem(item, order);
+                    return this.toPublicResult(item, envEnum)
+                            // 命中锁定的支付项置 locked=true, 前端据此自动选中并禁用其他项
+                            .setLocked(locked)
+                            // 可用性预检: 路由不可达的项置 available=false 供前端隐藏; 锁定项恒可用(见预检方法)
+                            .setAvailable(locked || this.resolveItemAvailable(order.getAppId(), item));
+                })
                 .toList();
+    }
+
+    /// 支付项可用性预检: 按解析模式做只读路由探测(不改变支付链路运行时行为)
+    ///
+    /// - METHOD 模式: 跟随路由探测, 应用路由策略无法命中该支付方式(含产品停用/通道商户不可用)时不可用
+    /// - DIRECT 模式: 直接指定探测, 通道商户+支付能力无法通过校验(策略缺失/能力不匹配/停用/环境不一致拦截)时不可用
+    ///
+    /// 锁定项(订单支付中且通道已锁定)不由本方法判定, 调用方恒视为可用:
+    /// 在途支付流程维持现状语义, 不因路由失效隐藏锁定项。
+    private boolean resolveItemAvailable(String appId, GatewayCashierItem item) {
+        CashierItemResolveModeEnum resolveMode = CashierItemResolveModeEnum.findByCode(item.getResolveMode());
+        if (resolveMode == CashierItemResolveModeEnum.METHOD) {
+            return Objects.nonNull(payRouteService.tryResolveRoute(appId, item.getMethod()));
+        }
+        return Objects.nonNull(payRouteService.tryResolveDirect(item.getChannelMchNo(), item.getCapability()));
     }
 
     /// 判断收银台支付项是否为订单已锁定的支付方式

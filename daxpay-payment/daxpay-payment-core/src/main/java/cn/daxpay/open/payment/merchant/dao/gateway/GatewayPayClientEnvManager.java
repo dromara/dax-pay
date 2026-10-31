@@ -17,6 +17,13 @@ public class GatewayPayClientEnvManager extends BaseManager<GatewayPayClientEnvM
                 .list();
     }
 
+    /// 按通道商户号查询全部网关支付环境子配置(引用明细查用)
+    public List<GatewayPayClientEnv> findAllByChannelMchNo(String channelMchNo) {
+        return lambdaQuery()
+                .eq(GatewayPayClientEnv::getChannelMchNo, channelMchNo)
+                .list();
+    }
+
     /// 按主表 ID 删除全部子配置
     public void deleteByConfigId(Long configId) {
         lambdaUpdate()

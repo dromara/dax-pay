@@ -2,6 +2,6 @@
   "notExist": "Keupayaan pembayaran tidak wujud",
   "duplicateProduct": "Produk pembayaran yang dipautkan mestilah unik",
   "productNotExist": "Produk pembayaran tidak wujud",
-  "methodNotInDirectory": "Kaedah pembayaran tidak dalam direktori pembayaran",
+  "methodNotInDirectory": "Kaedah pembayaran [{0}] tidak dalam direktori pembayaran penyedia saluran [{1}]",
   "invalidProvider": "Penyedia pembayaran tidak sah"
 }

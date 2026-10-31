@@ -1,4 +1,18 @@
 {
   "defaultAppName": "{0} Default App",
-  "defaultStoreName": "{0} Default Store"
+  "defaultStoreName": "{0} Default Store",
+  "channelMerchantReference": {
+    "type": {
+      "route_scene": "Channel Route · Scene Mode",
+      "route_basic": "Channel Route · Basic Mode",
+      "gateway_env": "Gateway Pay Config",
+      "cashier_item": "Cashier Pay Entry"
+    },
+    "detail": {
+      "sceneWithCapability": "{0} ({1})",
+      "env": "{0} × {1}",
+      "cashierItem": "Pay item: {0}",
+      "cashierItemRecommend": "{0} (Recommended)"
+    }
+  }
 }

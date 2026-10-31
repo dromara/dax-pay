@@ -143,6 +143,12 @@ public class UserInfoService {
         }
         // 验证通过, 清零失败计数(与登录成功同口径)
         loginRetryService.onSensitiveVerifySuccess(userInfo.getId());
+        // 新旧密码相同视为无效修改: 历史校验依赖 historyCount(默认 0 不校验), 此处独立兜底,
+        // 防止把初始密码原样填成新密码后清掉初始密码/过期标记形成"改密空转"
+        if (BCrypt.checkpw(decryptedNewPassword, userInfo.getPassword())) {
+            // 权限: 新密码不能与当前密码相同
+            throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.samePassword");
+        }
         // 验证密码历史
         passwordPolicyService.validatePasswordHistory(userInfo.getId(), decryptedNewPassword);
         passwordPolicyService.validatePassword(decryptedNewPassword);

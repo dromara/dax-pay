@@ -36,5 +36,8 @@
   "defaultStoreCannotDelete": "Kedai lalai tidak boleh dipadam, sila pindahkan penanda lalai terlebih dahulu",
   "defaultStoreNotConfigured": "Merchant belum mengkonfigurasi kedai lalai, sila konfigurasikan dalam pengurusan kedai terlebih dahulu",
   "defaultStoreDisabled": "Kedai lalai merchant dilumpuhkan, sila aktifkan atau pindahkan penanda lalai terlebih dahulu",
-  "roleNotExist": "Peranan yang dinyatakan tidak wujud"
+  "roleNotExist": "Peranan yang dinyatakan tidak wujud",
+  "hasGatewayOrder": "Merchant mempunyai pesanan pembayaran gateway, tidak boleh dipadamkan",
+  "hasBoundDevice": "Merchant mempunyai peranti yang terikat, silakan lepaskan atau urus peranti terlebih dahulu sebelum memadam",
+  "lastAdminCannotDelete": "Merchant mesti menyimpan sekurang-kurangnya seorang pengguna pentadbir, silakan pindahkan peranan pentadbir terlebih dahulu"
 }

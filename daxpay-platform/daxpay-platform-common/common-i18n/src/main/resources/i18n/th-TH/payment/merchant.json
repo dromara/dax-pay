@@ -1,4 +1,18 @@
 {
   "defaultAppName": "แอปเริ่มต้นของ {0}",
-  "defaultStoreName": "ร้านเริ่มต้นของ {0}"
+  "defaultStoreName": "ร้านเริ่มต้นของ {0}",
+  "channelMerchantReference": {
+    "type": {
+      "route_scene": "เส้นทางช่องทาง · โหมดฉาก",
+      "route_basic": "เส้นทางช่องทาง · โหมดพื้นฐาน",
+      "gateway_env": "การตั้งค่าการชำระเงินเกตเวย์",
+      "cashier_item": "ทางเข้าชำระเงินแคชเชียร์"
+    },
+    "detail": {
+      "sceneWithCapability": "{0} ({1})",
+      "env": "{0} × {1}",
+      "cashierItem": "รายการชำระเงิน: {0}",
+      "cashierItemRecommend": "{0} (แนะนำ)"
+    }
+  }
 }

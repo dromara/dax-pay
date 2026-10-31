@@ -40,5 +40,8 @@
   "hasOrder": "商戶存在訂單記錄，不允許刪除",
   "hasRefund": "商戶存在退款記錄，不允許刪除",
   "hasUser": "商戶存在關聯用戶，請先喺商戶用戶管理中解綁",
-  "roleNotExist": "指定的角色不存在"
+  "roleNotExist": "指定的角色不存在",
+  "hasGatewayOrder": "商戶存在網關支付訂單，不允許刪除",
+  "hasBoundDevice": "商戶名下存在綁定設備，請先解綁或處置設備後刪除",
+  "lastAdminCannotDelete": "商戶至少保留一名管理員用戶, 請先轉移管理員角色"
 }

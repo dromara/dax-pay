@@ -11,7 +11,9 @@ import cn.daxpay.open.payment.route.entity.strategy.PayRouteStrategy;
 import cn.daxpay.open.payment.route.param.basic.PayRouteBasicConfigBatchParam;
 import cn.daxpay.open.payment.route.param.basic.PayRouteBasicConfigItem;
 import cn.daxpay.open.payment.route.result.basic.PayRouteBasicConfigResult;
+import cn.daxpay.open.payment.route.service.support.PayRouteBundleCacheEvictor;
 import cn.daxpay.open.payment.route.service.support.PayRouteConfigProviders;
+import cn.daxpay.open.payment.route.service.support.PayRouteI18nHelper;
 import cn.daxpay.open.payment.strategy.product.AbsProductStrategy;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum;
@@ -20,12 +22,13 @@ import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.rest.dto.LabelValue;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.Objects;
 
@@ -40,6 +43,7 @@ public class PayRouteBasicConfigService {
     private final PayRouteBasicConfigManager basicConfigManager;
     private final MchAppInfoManager mchAppInfoManager;
     private final ChannelMerchantManager channelMerchantManager;
+    private final PayRouteBundleCacheEvictor routeBundleCacheEvictor;
 
     /// 查询基础模式面板数据（已保存通道商户号 + 各渠道可选通道商户列表）
     public List<PayRouteBasicConfigResult> listBasicByAppId(String appId) {
@@ -56,10 +60,10 @@ public class PayRouteBasicConfigService {
 
     /// 批量保存基础模式配置（先删后插）
     @Transactional(rollbackFor = Exception.class)
-    @CacheEvict(value = "payment:route-bundle", key = "#param.appId")
     public void saveBasicBatch(PayRouteBasicConfigBatchParam param) {
         String mchNo = mchAppInfoManager.requireMchNoByAppId(param.getAppId());
         PayRouteStrategy strategy = requireStrategy(param.getAppId());
+        validateBasicProviderUnique(param.getItems());
         basicConfigManager.deleteByStrategyId(strategy.getId());
         for (PayRouteBasicConfigItem item : param.getItems()) {
             if (StrUtil.isBlank(item.getChannelMchNo())) {
@@ -92,6 +96,27 @@ public class PayRouteBasicConfigService {
             config.setProvider(item.getProvider());
             config.setChannelMchNo(item.getChannelMchNo());
             basicConfigManager.save(config);
+        }
+        // 缓存失效: 事务提交后执行(提交前失效会被并发回源回填旧配置)
+        routeBundleCacheEvictor.evictAfterCommit(param.getAppId());
+    }
+
+    /// 校验批量保存项：同一支付渠道只允许一行
+    ///
+    /// 与场景模式的 method 唯一校验对齐；否则重复项会直接撞
+    /// `uk_pay_route_basic_config_provider` 唯一索引，用户拿到的是 500 而不是可读提示。
+    private void validateBasicProviderUnique(List<PayRouteBasicConfigItem> items) {
+        Set<String> providerCodes = new HashSet<>();
+        for (PayRouteBasicConfigItem item : items) {
+            // 通道商户号为空 = 清除该渠道配置，不参与重复判定
+            if (StrUtil.isBlank(item.getChannelMchNo())) {
+                continue;
+            }
+            if (!providerCodes.add(item.getProvider())) {
+                // 路由: 同一支付渠道存在多条配置
+                throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                        "pay.route.error.basicProviderDuplicate", PayRouteI18nHelper.provider(item.getProvider()));
+            }
         }
     }
 

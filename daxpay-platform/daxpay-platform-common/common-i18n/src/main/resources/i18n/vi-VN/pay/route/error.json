@@ -23,5 +23,8 @@
   "basicChannelMchNotConfigured": "Không có người bán kênh nào được định cấu hình cho thương hiệu trả phí [{0}]; định cấu hình nó theo định tuyến kênh Theo mặc định của thương hiệu",
   "sceneCapabilityChannelMchMismatch": "Khả năng [{0}] không khớp với người bán kênh [{1}] và phương thức [{2}]",
   "directCapabilityChannelMchMismatch": "Khả năng [{0}] không khớp với người bán kênh [{1}]",
-  "channelMchEnvMismatch": "Cờ môi trường sandbox của người bán kênh [{0}] không khớp với môi trường đang hoạt động của sản phẩm [{1}]. Vui lòng kiểm tra cấu hình người bán kênh"
+  "channelMchEnvMismatch": "Cờ môi trường sandbox của người bán kênh [{0}] không khớp với môi trường đang hoạt động của sản phẩm [{1}]. Vui lòng kiểm tra cấu hình người bán kênh",
+  "basicProviderDuplicate": "Kênh thanh toán [{0}] có nhiều cấu hình",
+  "sceneProviderNotInRouteScope": "Kênh thanh toán của phương thức thanh toán [{0}] không nằm trong phạm vi cấu hình định tuyến kênh",
+  "routeCapabilityMismatch": "Năng lực thanh toán [{0}] trong cấu hình định tuyến không còn khớp với sản phẩm [{1}] và phương thức thanh toán [{2}]. Vui lòng lưu lại cấu hình định tuyến kênh"
 }

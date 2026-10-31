@@ -1,4 +1,18 @@
 {
   "defaultAppName": "Ứng dụng mặc định {0}",
-  "defaultStoreName": "Cửa hàng mặc định {0}"
+  "defaultStoreName": "Cửa hàng mặc định {0}",
+  "channelMerchantReference": {
+    "type": {
+      "route_scene": "Tuyến kênh · Chế độ cảnh",
+      "route_basic": "Tuyến kênh · Chế độ cơ bản",
+      "gateway_env": "Cấu hình thanh toán cổng",
+      "cashier_item": "Đầu vào thanh toán quầy"
+    },
+    "detail": {
+      "sceneWithCapability": "{0} ({1})",
+      "env": "{0} × {1}",
+      "cashierItem": "Khoản thanh toán: {0}",
+      "cashierItemRecommend": "{0} (Đề xuất)"
+    }
+  }
 }

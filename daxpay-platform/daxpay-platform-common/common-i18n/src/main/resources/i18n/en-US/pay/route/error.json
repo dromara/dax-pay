@@ -23,5 +23,8 @@
   "basicChannelMchNotConfigured": "No channel merchant configured for pay brand [{0}]; configure it under channel routing By Brand Default",
   "sceneCapabilityChannelMchMismatch": "Capability [{0}] does not match channel merchant [{1}] and method [{2}]",
   "directCapabilityChannelMchMismatch": "Capability [{0}] does not match channel merchant [{1}]",
-  "channelMchEnvMismatch": "The sandbox flag of channel merchant [{0}] does not match the active environment of product [{1}]. Please check the channel merchant configuration."
+  "channelMchEnvMismatch": "The sandbox flag of channel merchant [{0}] does not match the active environment of product [{1}]. Please check the channel merchant configuration.",
+  "basicProviderDuplicate": "Channel provider [{0}] has multiple configurations",
+  "sceneProviderNotInRouteScope": "The channel provider of payment method [{0}] is not within the channel routing configuration scope",
+  "routeCapabilityMismatch": "The payment capability [{0}] in the routing configuration no longer matches product [{1}] and payment method [{2}]. Please re-save the channel routing configuration"
 }

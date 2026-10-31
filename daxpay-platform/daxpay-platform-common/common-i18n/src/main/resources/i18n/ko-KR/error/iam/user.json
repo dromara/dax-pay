@@ -3,6 +3,7 @@
   "userPhoneAlreadyExisted": "사용자 전화번호가 이미 존재합니다.",
   "userNonePhoneAndEmail": "전화나 이메일 중 하나를 제공해야 합니다.",
   "oldPasswordError": "이전 비밀번호가 올바르지 않습니다.",
+  "samePassword": "새 비밀번호는 현재 비밀번호와 같을 수 없습니다",
   "loginPasswordError": "로그인 비밀번호가 올바르지 않습니다.",
   "accountExistsInClient": "이 고객의 계정이 이미 존재합니다.",
   "phoneUsedInClient": "이 클라이언트에서 이미 사용된 전화번호",
@@ -17,5 +18,7 @@
   "administratorBanDenied": "내장 슈퍼 관리자는 정지할 수 없습니다",
   "administratorLockDenied": "내장 슈퍼 관리자는 잠글 수 없습니다",
   "administratorEditDenied": "내장 슈퍼 관리자는 편집할 수 없습니다",
-  "subjectAdminBanDenied": "주체 관리자[{0}]는 정지하거나 잠글 수 없습니다"
+  "subjectAdminBanDenied": "주체 관리자[{0}]는 정지하거나 잠글 수 없습니다",
+  "administratorDeleteDenied": "내장 슈퍼 관리자는 삭제할 수 없습니다",
+  "stillAffiliated": "해당 사용자는 여전히 {0}에 소속되어 있습니다. 먼저 해당 주체의 사용자 관리에서 삭제하세요"
 }

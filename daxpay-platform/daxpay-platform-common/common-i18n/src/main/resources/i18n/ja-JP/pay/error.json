@@ -182,7 +182,10 @@
   "barcode": {
     "invalid": "無効な決済バーコードです",
     "unsupportedType": "未対応の決済バーコード種別です",
-    "methodMismatch": "バーコードと支払方法が一致しません"
+    "methodMismatch": "バーコードと支払方法が一致しません",
+    "wechatFormatInvalid": "WeChat決済バーコードは18桁の数字である必要があります",
+    "alipayFormatInvalid": "Alipay決済バーコードは25~30で始まる16~24桁の数字である必要があります",
+    "unionFormatInvalid": "銀聯決済バーコードは62で始まる19桁の数字である必要があります"
   },
   "risk": {
     "blacklist": "取引が制限されています",

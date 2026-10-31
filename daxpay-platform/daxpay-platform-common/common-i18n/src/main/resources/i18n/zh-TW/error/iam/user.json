@@ -3,6 +3,7 @@
   "userPhoneAlreadyExisted": "使用者手機已存在",
   "userNonePhoneAndEmail": "使用者的電話和電子郵件必須包含一個",
   "oldPasswordError": "舊密碼錯誤",
+  "samePassword": "新密碼不能與目前密碼相同",
   "loginPasswordError": "登入密碼錯誤",
   "accountExistsInClient": "該終端下賬號已存在",
   "phoneUsedInClient": "該終端下手機號已被使用",
@@ -17,5 +18,7 @@
   "administratorBanDenied": "內置超級管理員不允許封禁",
   "administratorLockDenied": "內置超級管理員不允許鎖定",
   "administratorEditDenied": "內置超級管理員不允許編輯",
-  "subjectAdminBanDenied": "主體管理員[{0}]不可封鎖或鎖定"
+  "subjectAdminBanDenied": "主體管理員[{0}]不可封鎖或鎖定",
+  "administratorDeleteDenied": "內建超級管理員不允許刪除",
+  "stillAffiliated": "該用戶仍掛靠{0}, 請先在對應主體的用戶管理中刪除"
 }

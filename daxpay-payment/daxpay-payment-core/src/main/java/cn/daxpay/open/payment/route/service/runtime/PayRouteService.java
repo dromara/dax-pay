@@ -27,6 +27,7 @@ import cn.daxpay.open.platform.core.enums.pay.channel.PayCapabilityEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum;
 import cn.daxpay.open.platform.core.enums.pay.route.PayRouteModeEnum;
+import cn.daxpay.open.platform.core.exception.BizException;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.util.StrUtil;
@@ -45,6 +46,9 @@ import java.util.Optional;
 /// 1. 直接指定：已传 channelMchNo（+ capability），跳过应用路由策略，由 channelMchNo 推导产品；capability 必填，method 未传时由能力反推。
 /// 2. 跟随通道路由：未传 channelMchNo，按 appId 加载策略，经基础/场景匹配后回填 product/channelMchNo/capability。
 /// 调用方需保证 appId 已解析完毕。
+///
+/// 另提供两个只读探测入口 [PayRouteService#tryResolveRoute] / [PayRouteService#tryResolveDirect]，
+/// 供收银台支付项可用性预检使用：与 resolve 同口径探测，失败返回 null 而不抛异常，不影响支付链路运行时行为。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -68,6 +72,15 @@ public class PayRouteService {
             validateChannelMchEnvMatch(payParam.getChannelMchNo(), payParam.getProduct());
             return;
         }
+        // 跟随通道路由
+        resolveByRoute(payParam);
+    }
+
+    /// 跟随通道路由路径：按应用路由策略匹配并回填 product/channelMchNo/capability
+    ///
+    /// 从 [PayRouteService#resolve] 提取的「跟随路由」分支体，供运行时解析与只读探测
+    /// [PayRouteService#tryResolveRoute] 共用，保证两条链路口径一致。
+    private void resolveByRoute(NormalPayParam payParam) {
         // 跟随通道路由: 支付方式必填(Bean Validation 已放宽以兼容直接指定可空, 此处显式校验)
         if (StrUtil.isBlank(payParam.getMethod())) {
             // 路由: 通道路由下支付方式不能为空
@@ -90,6 +103,51 @@ public class PayRouteService {
         validateProductEnabled(payParam.getProduct());
         // 环境一致性校验(跟随路由路径)
         validateChannelMchEnvMatch(payParam.getChannelMchNo(), payParam.getProduct());
+    }
+
+    /// 跟随通道路由的只读探测（收银台支付项可用性预检用）
+    ///
+    /// 构造临时参数走 [PayRouteService#resolveByRoute] 完整链路（含产品/通道商户校验），
+    /// 与运行时解析同口径；任一环节失败（方式为空/应用未配置策略/未命中/产品停用/通道商户禁用或环境不一致）
+    /// 均返回 null 而不抛异常。成功时 [RouteHit] 由回填后的临时参数组装（product/channelMchNo/capability）。
+    ///
+    /// 捕获 [BizException] 而非 [BizInfoException]：链路内 `PayMethodEnum#findByCode` 抛的是
+    /// `UnsupportedAbilityException`（继承链为 PayFailureException → BizException），只catch BizInfoException
+    /// 会让脏支付方式穿透到调用方；本方法语义是「探测」，一切业务异常都应转成不可用。
+    public RouteHit tryResolveRoute(String appId, String method) {
+        NormalPayParam probe = new NormalPayParam();
+        probe.setAppId(appId);
+        probe.setMethod(method);
+        try {
+            resolveByRoute(probe);
+        } catch (BizException e) {
+            return null;
+        }
+        return new RouteHit(probe.getProduct(), probe.getChannelMchNo(), probe.getCapability());
+    }
+
+    /// 直接指定的只读探测（收银台支付项可用性预检用）
+    ///
+    /// 构造临时参数走 [PayRouteService#resolveDirect]（含能力校验与 method 能力反推回填）
+    /// 加产品/通道商户可用性校验，与运行时解析同口径；任一环节失败（能力缺失/产品策略不存在/
+    /// 能力与通道商户不匹配/产品停用/通道商户禁用或环境不一致）均返回 null 而不抛异常。
+    ///
+    /// 与 [PayRouteService#tryResolveRoute] 同口径捕获 [BizException]：探测语义下一切业务异常都转成不可用，
+    /// 防止 `UnsupportedAbilityException`（继承 PayFailureException → BizException）穿透到调用方。
+    public RouteHit tryResolveDirect(String channelMchNo, String capability) {
+        NormalPayParam probe = new NormalPayParam();
+        probe.setChannelMchNo(channelMchNo);
+        probe.setCapability(capability);
+        try {
+            resolveDirect(probe);
+            // 产品启停校验(直接指定路径)
+            validateProductEnabled(probe.getProduct());
+            // 环境一致性校验(直接指定路径)
+            validateChannelMchEnvMatch(probe.getChannelMchNo(), probe.getProduct());
+        } catch (BizException e) {
+            return null;
+        }
+        return new RouteHit(probe.getProduct(), probe.getChannelMchNo(), probe.getCapability());
     }
 
     /// 产品启停校验(运行时): 停用的支付产品不允许发起新支付
@@ -246,6 +304,14 @@ public class PayRouteService {
         }
         // 基础模式不存能力，由 (产品, 支付方式) 派生
         String capability = resolveCapabilityFromProduct(product, methodEnum);
+        if (StrUtil.isBlank(capability)) {
+            // 产品未声明该支付方式的能力映射时能力留空(维持历史口径，不可在此硬拒):
+            // 部分通道按 method 自行分派、并不读能力(如 ums_qrcode 处理 wechat_jsapi/cashier)，
+            // 硬拒会把这类可用组合一并挡掉; 但不声明通常也意味着该通道商户做不到这个支付方式，
+            // 留 warning 便于定位「路由通过、到通道才报不支持」的问题(如拉卡拉产品未映射 wechat_qr)
+            log.warn("通道路由命中未声明能力映射的组合, 支付能力留空: provider={}, method={}, product={}, channelMchNo={}",
+                    provider.getCode(), methodEnum.getCode(), product, channelMchNo);
+        }
         return new RouteHit(product, channelMchNo, capability);
     }
 
@@ -294,6 +360,10 @@ public class PayRouteService {
     }
 
     /// 将命中结果写入 NormalPayParam：回填 product(由通道商户号派生)、通道商户号、支付能力
+    ///
+    /// 支付能力**以命中配置为准**：跟随通道路由时调用方自报的 capability 不得覆盖路由配置(场景模式)
+    /// 或产品派生值(基础模式)，否则调用方可绕过路由配置自选能力且全程无校验；
+    /// 仅在命中结果无能力时才保留调用方原值(历史脏配置容错)。
     private void fillPayParam(NormalPayParam payParam, RouteHit hit) {
         String product = StrUtil.isNotBlank(hit.product())
                 ? hit.product()
@@ -302,8 +372,39 @@ public class PayRouteService {
         if (StrUtil.isNotBlank(hit.channelMchNo())) {
             payParam.setChannelMchNo(hit.channelMchNo());
         }
-        if (StrUtil.isBlank(payParam.getCapability()) && StrUtil.isNotBlank(hit.capability())) {
-            payParam.setCapability(hit.capability());
+        if (StrUtil.isBlank(hit.capability())) {
+            return;
+        }
+        // 防配置漂移: 通道商户换产品后旧配置能力可能已不在(产品, 支付方式)候选内
+        validateHitCapability(product, payParam.getMethod(), hit.capability());
+        if (StrUtil.isNotBlank(payParam.getCapability()) && !Objects.equals(payParam.getCapability(), hit.capability())) {
+            log.info("路由能力覆盖调用方传值: method={}, 调用方={}, 路由配置={}",
+                    payParam.getMethod(), payParam.getCapability(), hit.capability());
+        }
+        payParam.setCapability(hit.capability());
+    }
+
+    /// 校验路由命中的支付能力仍在(产品, 支付方式)策略声明候选内
+    ///
+    /// 配置态保存时已做同口径校验，但通道商户换产品后旧配置会失效；运行期不校验会把错误能力
+    /// 透传到通道层，报错点离配置很远。策略索引由 [PaymentStrategyFactory] 缓存，本校验零查库。
+    private void validateHitCapability(String product, String method, String capability) {
+        if (!PaymentStrategyFactory.existsByProduct(product, AbsProductStrategy.class)) {
+            // 路由: 支付产品策略不存在
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "pay.route.error.productStrategyMissing");
+        }
+        AbsProductStrategy strategy = PaymentStrategyFactory.createByProduct(product, AbsProductStrategy.class);
+        PayCapabilityEnum capabilityEnum = PayCapabilityEnum.findByCode(capability);
+        boolean matched = Objects.nonNull(capabilityEnum)
+                && ProductStrategySupport.capabilitiesForMethod(strategy, PayMethodEnum.findByCode(method))
+                        .contains(capabilityEnum);
+        if (!matched) {
+            String capLabel = Objects.nonNull(capabilityEnum) ? I18nUtil.getEnumName(capabilityEnum) : capability;
+            // 路由: 路由配置的支付能力已失效
+            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
+                    "pay.route.error.routeCapabilityMismatch",
+                    capLabel, PayRouteI18nHelper.product(product), PayRouteI18nHelper.payMethod(method));
         }
     }
 

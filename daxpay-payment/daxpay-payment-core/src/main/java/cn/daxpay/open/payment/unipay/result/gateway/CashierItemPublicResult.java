@@ -34,4 +34,9 @@ public class CashierItemPublicResult {
     // 是否为订单已锁定的支付项（订单支付中且与已锁定的支付方式匹配）
     @Schema(description = "是否为订单已锁定的支付项")
     private Boolean locked;
+
+    // 支付项可用性预检结果: 后端按解析模式做只读路由探测, 路由不可达时 false, 前端应隐藏该项;
+    // 默认 true 向后兼容旧前端(不识别该字段的旧前端不受影响)
+    @Schema(description = "支付项当前是否可用(路由预检, false 时前端应隐藏)")
+    private Boolean available = true;
 }
