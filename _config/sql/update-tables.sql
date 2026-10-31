@@ -16,6 +16,7 @@ CREATE TABLE IF NOT EXISTS public.pay_virtual_device (
     store_no character varying(32),
     enable boolean DEFAULT true NOT NULL,
     secret character varying(64),
+    activated_time timestamp(6) with time zone,
     last_pay_ack_time timestamp(6) with time zone,
     last_pay_ack_msg_id character varying(64),
     last_pay_ack_ok boolean,
@@ -28,6 +29,8 @@ CREATE TABLE IF NOT EXISTS public.pay_virtual_device (
     deleted boolean DEFAULT false NOT NULL,
     CONSTRAINT pk_pay_virtual_device PRIMARY KEY (id)
 );
+-- 存量库补列: 建表语句已含该列, 本行幂等(覆盖建表后新增激活时间的开发/测试环境)
+ALTER TABLE public.pay_virtual_device ADD COLUMN IF NOT EXISTS activated_time timestamp(6) with time zone;
 COMMENT ON TABLE public.pay_virtual_device IS '虚拟设备: 播报打印一体机(收款播报 APP)独立台账, 设备号平台自造号段(VD+日期+随机段), 生成入平台库存后绑定商户/应用';
 COMMENT ON COLUMN public.pay_virtual_device.name IS '设备名称';
 COMMENT ON COLUMN public.pay_virtual_device.device_no IS '设备号(平台自造 SN: VD+日期+6位随机段, 创建后不可改, 激活唯一准入凭据)';
@@ -37,6 +40,7 @@ COMMENT ON COLUMN public.pay_virtual_device.app_id IS '关联应用号(绑定应
 COMMENT ON COLUMN public.pay_virtual_device.store_no IS '使用门店号(空=未分配, 不参与门店级播报/打印匹配, 对应 mch_store_info.store_no)';
 COMMENT ON COLUMN public.pay_virtual_device.enable IS '是否启用(停用后设备心跳返回 disabled, 终端停止播报)';
 COMMENT ON COLUMN public.pay_virtual_device.secret IS '播报加密密钥(AES-256-GCM 32字符, 激活时生成并轮换, 解绑时清空即回到未激活态)';
+COMMENT ON COLUMN public.pay_virtual_device.activated_time IS '最近一次成功激活时间(激活轮换 secret 时写入, 解绑清空即回到未激活态, 未成功激活过为空)';
 COMMENT ON COLUMN public.pay_virtual_device.last_pay_ack_time IS '最近一次收款播报回执时间(仅 cmd=pay.success 的 ack 回写, 心跳不覆盖)';
 COMMENT ON COLUMN public.pay_virtual_device.last_pay_ack_msg_id IS '最近一次收款播报回执消息ID(与推送 msgId 对应, 排障定位用)';
 COMMENT ON COLUMN public.pay_virtual_device.last_pay_ack_ok IS '最近一次收款播报回执结果(true=设备已完成播报)';
@@ -284,3 +288,126 @@ COMMENT ON COLUMN public.pay_alloc_order.finish_mode IS '完结模式(auto 分�
 -- 原支付已分账累计金额(分, 不含失败与完结单), 多次分账额度校验依据
 ALTER TABLE public.pay_trade ADD COLUMN IF NOT EXISTS allocated_amount bigint;
 COMMENT ON COLUMN public.pay_trade.allocated_amount IS '已分账累计金额(分, 不含失败与完结单)';
+
+-- ========== 2026-10-31 支付宝/微信通道密钥配置加网关地址列(按通道主体覆盖 SDK 网关, 留空走官方) ==========
+-- alipay serverUrl 须填完整网关 URL(SDK 原样 POST 不拼 path, 如 http://127.0.0.1:10400/gateway.do);
+-- wechat apiHostUrl 填域名根(如 http://127.0.0.1:10400, WxJava 自动拼 /v3/** 路径);
+-- 幂等写法, 全新安装库执行无副作用(全新安装由全量 tables.sql 建表)
+ALTER TABLE public.alipay_direct_app_key_config ADD COLUMN IF NOT EXISTS server_url character varying(512);
+ALTER TABLE public.alipay_isv_app_key_config ADD COLUMN IF NOT EXISTS server_url character varying(512);
+ALTER TABLE public.wechat_direct_key_config ADD COLUMN IF NOT EXISTS api_host_url character varying(512);
+ALTER TABLE public.wechat_isv_key_config ADD COLUMN IF NOT EXISTS api_host_url character varying(512);
+COMMENT ON COLUMN public.alipay_direct_app_key_config.server_url IS '网关地址(留空使用官方网关; 联调演练填模拟网关完整地址, 如 http://127.0.0.1:10400/gateway.do)';
+COMMENT ON COLUMN public.alipay_isv_app_key_config.server_url IS '网关地址(留空使用官方网关; 联调演练填模拟网关完整地址, 如 http://127.0.0.1:10400/gateway.do)';
+COMMENT ON COLUMN public.wechat_direct_key_config.api_host_url IS 'API域名(留空使用官方 api.mch.weixin.qq.com; 联调演练填模拟网关地址, 如 http://127.0.0.1:10400)';
+COMMENT ON COLUMN public.wechat_isv_key_config.api_host_url IS 'API域名(留空使用官方 api.mch.weixin.qq.com; 联调演练填模拟网关地址, 如 http://127.0.0.1:10400)';
+
+-- ========== 2026-10-31 门店默认支付应用(码牌等门店级场景的应用归属来源, 空则回落商户默认应用) ==========
+-- 门店级默认应用: 码牌未指定应用且显式门店时按门店带出 appId, 空则后端回落商户默认应用;
+-- 幂等写法, 全新安装库执行无副作用(全新安装由全量 tables.sql 建表)
+ALTER TABLE public.mch_store_info ADD COLUMN IF NOT EXISTS app_id character varying(32);
+COMMENT ON COLUMN public.mch_store_info.app_id IS '门店默认支付应用号(空则使用商户默认应用)';
+
+-- ========== 2026-10-31 主体注销治理批A: 唯一索引补软删过滤(软删行不再占用唯一键, 同业务键注销后重建放行) ==========
+-- 口径移植自 plus 8100363e; open 全量 table.sql 此前已完成大部分唯一索引 partial 化, 本段仅补齐剩余 6 个全行唯一索引;
+-- plus 侧 agent 域 8 索引 / 限额 / 风控配置 / 投诉 / 支付分 / 预授权 / 应收账单 / 租户能力 / 文件名等表 open 不存在, 不在本段范围;
+-- 幂等写法: DROP IF EXISTS + CREATE, 重复执行无副作用。
+DROP INDEX IF EXISTS public.uk_device_qr_code_code;
+CREATE UNIQUE INDEX uk_device_qr_code_code ON public.device_qr_code USING btree (code) WHERE (deleted = false);
+COMMENT ON INDEX public.uk_device_qr_code_code IS '二维码设备编码唯一(仅未删除行, 注销后同码重建放行)';
+DROP INDEX IF EXISTS public.uk_mch_app_info_app_id;
+CREATE UNIQUE INDEX uk_mch_app_info_app_id ON public.mch_app_info USING btree (app_id) WHERE (deleted = false);
+COMMENT ON INDEX public.uk_mch_app_info_app_id IS '应用号唯一索引(仅未删除行, 商户注销级联软删后同号重建放行; appId 骨架行保留可追溯)';
+DROP INDEX IF EXISTS public.uk_mch_store_info_store_no;
+CREATE UNIQUE INDEX uk_mch_store_info_store_no ON public.mch_store_info USING btree (store_no) WHERE (deleted = false);
+COMMENT ON INDEX public.uk_mch_store_info_store_no IS '门店号唯一(仅未删除行, 商户注销级联软删后同号重建放行)';
+DROP INDEX IF EXISTS public.uk_pay_alloc_order_alloc_no;
+CREATE UNIQUE INDEX uk_pay_alloc_order_alloc_no ON public.pay_alloc_order USING btree (alloc_no) WHERE (deleted = false);
+COMMENT ON INDEX public.uk_pay_alloc_order_alloc_no IS '平台分账单号唯一约束(仅未删除行)';
+DROP INDEX IF EXISTS public.uk_pay_blacklist_type_value_app;
+CREATE UNIQUE INDEX uk_pay_blacklist_type_value_app ON public.pay_blacklist USING btree (type, value, COALESCE(wx_app_id, ''::character varying)) WHERE (deleted = false);
+COMMENT ON INDEX public.uk_pay_blacklist_type_value_app IS '类型+值+微信应用维度唯一约束（微信应用为空按空串参与唯一性; 仅未删除行）';
+DROP INDEX IF EXISTS public.uk_user_das_pref_user_client;
+CREATE UNIQUE INDEX uk_user_das_pref_user_client ON public.iam_user_dashboard_preference USING btree (user_id, client_code, terminal) WHERE (deleted = false);
+COMMENT ON INDEX public.uk_user_das_pref_user_client IS '同一用户同一身份域终端同一壳仪表盘偏好唯一(仅未删除行, 用户注销后重建同配置放行)';
+
+-- ========== 2026-10-31 主体注销治理批A: 23 张表 deleted 列补 NOT NULL(裸 SQL 写 NULL 会让该行对逻辑删查询永久隐身) ==========
+-- 口径移植自 plus 8100363e 的 28 表清单 ∩ open 实际存在表; plus 侧 mch_agent_transfer_record / mch_limit_rule / pay_md_channel_onb /
+-- pay_risk_alert / yeepay_isv_channel_merchant 五表 open 不存在, 不在本段范围;
+-- 幂等写法: 先刷 NULL 为 false 再收紧约束, 重复执行无副作用。
+UPDATE public.adapay_direct_key_config SET deleted = false WHERE deleted IS NULL;
+ALTER TABLE public.adapay_direct_key_config ALTER COLUMN deleted SET DEFAULT false;
+ALTER TABLE public.adapay_direct_key_config ALTER COLUMN deleted SET NOT NULL;
+UPDATE public.alipay_direct_app_capability SET deleted = false WHERE deleted IS NULL;
+ALTER TABLE public.alipay_direct_app_capability ALTER COLUMN deleted SET DEFAULT false;
+ALTER TABLE public.alipay_direct_app_capability ALTER COLUMN deleted SET NOT NULL;
+UPDATE public.hmpay_isv_channel_merchant SET deleted = false WHERE deleted IS NULL;
+ALTER TABLE public.hmpay_isv_channel_merchant ALTER COLUMN deleted SET DEFAULT false;
+ALTER TABLE public.hmpay_isv_channel_merchant ALTER COLUMN deleted SET NOT NULL;
+UPDATE public.iam_perm_code SET deleted = false WHERE deleted IS NULL;
+ALTER TABLE public.iam_perm_code ALTER COLUMN deleted SET DEFAULT false;
+ALTER TABLE public.iam_perm_code ALTER COLUMN deleted SET NOT NULL;
+UPDATE public.iam_perm_menu SET deleted = false WHERE deleted IS NULL;
+ALTER TABLE public.iam_perm_menu ALTER COLUMN deleted SET DEFAULT false;
+ALTER TABLE public.iam_perm_menu ALTER COLUMN deleted SET NOT NULL;
+UPDATE public.iam_role SET deleted = false WHERE deleted IS NULL;
+ALTER TABLE public.iam_role ALTER COLUMN deleted SET DEFAULT false;
+ALTER TABLE public.iam_role ALTER COLUMN deleted SET NOT NULL;
+UPDATE public.iam_social_login_config SET deleted = false WHERE deleted IS NULL;
+ALTER TABLE public.iam_social_login_config ALTER COLUMN deleted SET DEFAULT false;
+ALTER TABLE public.iam_social_login_config ALTER COLUMN deleted SET NOT NULL;
+UPDATE public.iam_user_expand_info SET deleted = false WHERE deleted IS NULL;
+ALTER TABLE public.iam_user_expand_info ALTER COLUMN deleted SET DEFAULT false;
+ALTER TABLE public.iam_user_expand_info ALTER COLUMN deleted SET NOT NULL;
+UPDATE public.iam_user_info SET deleted = false WHERE deleted IS NULL;
+ALTER TABLE public.iam_user_info ALTER COLUMN deleted SET DEFAULT false;
+ALTER TABLE public.iam_user_info ALTER COLUMN deleted SET NOT NULL;
+UPDATE public.iam_user_password_security SET deleted = false WHERE deleted IS NULL;
+ALTER TABLE public.iam_user_password_security ALTER COLUMN deleted SET DEFAULT false;
+ALTER TABLE public.iam_user_password_security ALTER COLUMN deleted SET NOT NULL;
+UPDATE public.mch_app_info SET deleted = false WHERE deleted IS NULL;
+ALTER TABLE public.mch_app_info ALTER COLUMN deleted SET DEFAULT false;
+ALTER TABLE public.mch_app_info ALTER COLUMN deleted SET NOT NULL;
+UPDATE public.mch_credential SET deleted = false WHERE deleted IS NULL;
+ALTER TABLE public.mch_credential ALTER COLUMN deleted SET DEFAULT false;
+ALTER TABLE public.mch_credential ALTER COLUMN deleted SET NOT NULL;
+UPDATE public.pay_blacklist SET deleted = false WHERE deleted IS NULL;
+ALTER TABLE public.pay_blacklist ALTER COLUMN deleted SET DEFAULT false;
+ALTER TABLE public.pay_blacklist ALTER COLUMN deleted SET NOT NULL;
+UPDATE public.pay_easy_pay_refund_order SET deleted = false WHERE deleted IS NULL;
+ALTER TABLE public.pay_easy_pay_refund_order ALTER COLUMN deleted SET DEFAULT false;
+ALTER TABLE public.pay_easy_pay_refund_order ALTER COLUMN deleted SET NOT NULL;
+UPDATE public.pay_md_channel SET deleted = false WHERE deleted IS NULL;
+ALTER TABLE public.pay_md_channel ALTER COLUMN deleted SET DEFAULT false;
+ALTER TABLE public.pay_md_channel ALTER COLUMN deleted SET NOT NULL;
+UPDATE public.pay_md_product SET deleted = false WHERE deleted IS NULL;
+ALTER TABLE public.pay_md_product ALTER COLUMN deleted SET DEFAULT false;
+ALTER TABLE public.pay_md_product ALTER COLUMN deleted SET NOT NULL;
+UPDATE public.starter_audit_login_log SET deleted = false WHERE deleted IS NULL;
+ALTER TABLE public.starter_audit_login_log ALTER COLUMN deleted SET DEFAULT false;
+ALTER TABLE public.starter_audit_login_log ALTER COLUMN deleted SET NOT NULL;
+UPDATE public.starter_audit_operate_log SET deleted = false WHERE deleted IS NULL;
+ALTER TABLE public.starter_audit_operate_log ALTER COLUMN deleted SET DEFAULT false;
+ALTER TABLE public.starter_audit_operate_log ALTER COLUMN deleted SET NOT NULL;
+UPDATE public.starter_platform_file_record SET deleted = false WHERE deleted IS NULL;
+ALTER TABLE public.starter_platform_file_record ALTER COLUMN deleted SET DEFAULT false;
+ALTER TABLE public.starter_platform_file_record ALTER COLUMN deleted SET NOT NULL;
+UPDATE public.system_dict SET deleted = false WHERE deleted IS NULL;
+ALTER TABLE public.system_dict ALTER COLUMN deleted SET DEFAULT false;
+ALTER TABLE public.system_dict ALTER COLUMN deleted SET NOT NULL;
+UPDATE public.system_dict_item SET deleted = false WHERE deleted IS NULL;
+ALTER TABLE public.system_dict_item ALTER COLUMN deleted SET DEFAULT false;
+ALTER TABLE public.system_dict_item ALTER COLUMN deleted SET NOT NULL;
+UPDATE public.system_platform_encrypt_config SET deleted = false WHERE deleted IS NULL;
+ALTER TABLE public.system_platform_encrypt_config ALTER COLUMN deleted SET DEFAULT false;
+ALTER TABLE public.system_platform_encrypt_config ALTER COLUMN deleted SET NOT NULL;
+UPDATE public.vbill_isv_channel_merchant SET deleted = false WHERE deleted IS NULL;
+ALTER TABLE public.vbill_isv_channel_merchant ALTER COLUMN deleted SET DEFAULT false;
+ALTER TABLE public.vbill_isv_channel_merchant ALTER COLUMN deleted SET NOT NULL;
+
+-- ========== 2026-10-31 主体注销治理批A: mch_user 补 user_id 唯一索引(一人一商户, 物理删表无 deleted 列故全行唯一) ==========
+-- 与商户删除的用户级联注销构成双保险: 级联删挂靠行后按 userId 复查为空才委托 iam 注销, 唯一索引从数据库层兜底同一用户不可能挂靠两个商户;
+-- 执行前先查重(有结果须先人工清理再建唯一索引):
+-- SELECT user_id, count(*) FROM public.mch_user GROUP BY user_id HAVING count(*) > 1
+CREATE UNIQUE INDEX IF NOT EXISTS uk_mch_user_user_id ON public.mch_user USING btree (user_id);
+COMMENT ON INDEX public.uk_mch_user_user_id IS '同一用户仅归属一个商户(跨商户挂靠被数据库拒绝)';

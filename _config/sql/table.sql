@@ -16,7 +16,7 @@ CREATE TABLE public.adapay_direct_key_config (
     last_modifier bigint,
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0,
-    deleted boolean DEFAULT false
+    deleted boolean DEFAULT false NOT NULL
 );
 
 
@@ -427,7 +427,7 @@ CREATE TABLE public.alipay_direct_app_capability (
     alipay_direct_app_id bigint NOT NULL,
     create_time timestamp(6) with time zone DEFAULT now(),
     update_time timestamp(6) with time zone DEFAULT now(),
-    deleted boolean DEFAULT false,
+    deleted boolean DEFAULT false NOT NULL,
     creator bigint,
     last_modifier bigint,
     last_modified_time timestamp(6) with time zone,
@@ -5085,7 +5085,7 @@ CREATE TABLE public.hmpay_isv_channel_merchant (
     last_modifier bigint,
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0,
-    deleted boolean DEFAULT false,
+    deleted boolean DEFAULT false NOT NULL,
     sandbox boolean DEFAULT false
 );
 
@@ -5491,7 +5491,7 @@ CREATE TABLE public.iam_perm_code (
     creator bigint,
     last_modifier bigint,
     version integer DEFAULT 0,
-    deleted boolean DEFAULT false,
+    deleted boolean DEFAULT false NOT NULL,
     create_time timestamp with time zone,
     last_modified_time timestamp with time zone,
     i18n_key character varying(200)
@@ -5613,7 +5613,7 @@ CREATE TABLE public.iam_perm_menu (
     creator bigint,
     last_modifier bigint,
     version integer DEFAULT 0,
-    deleted boolean DEFAULT false,
+    deleted boolean DEFAULT false NOT NULL,
     menu_type character varying(20),
     active_icon character varying(100),
     badge character varying(50),
@@ -5858,7 +5858,7 @@ CREATE TABLE public.iam_role (
     creator bigint,
     last_modifier bigint,
     version integer DEFAULT 0,
-    deleted boolean DEFAULT false,
+    deleted boolean DEFAULT false NOT NULL,
     create_time timestamp with time zone,
     last_modified_time timestamp with time zone,
     i18n_key character varying(200)
@@ -6060,7 +6060,7 @@ CREATE TABLE public.iam_social_login_config (
     last_modifier bigint,
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0,
-    deleted boolean DEFAULT false,
+    deleted boolean DEFAULT false NOT NULL,
     source character varying(32) NOT NULL,
     client_id character varying(128),
     client_secret character varying(256),
@@ -6287,7 +6287,7 @@ CREATE TABLE public.iam_user_expand_info (
     creator bigint,
     last_modifier bigint,
     version integer DEFAULT 0,
-    deleted boolean DEFAULT false,
+    deleted boolean DEFAULT false NOT NULL,
     create_time timestamp with time zone,
     last_modified_time timestamp with time zone,
     last_login_time timestamp with time zone,
@@ -6439,7 +6439,7 @@ CREATE TABLE public.iam_user_info (
     creator bigint,
     last_modifier bigint,
     version integer DEFAULT 0,
-    deleted boolean DEFAULT false,
+    deleted boolean DEFAULT false NOT NULL,
     create_time timestamp with time zone,
     last_modified_time timestamp with time zone
 );
@@ -6779,7 +6779,7 @@ CREATE TABLE public.iam_user_password_security (
     last_modifier bigint,
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0,
-    deleted boolean DEFAULT false,
+    deleted boolean DEFAULT false NOT NULL,
     last_failure_time timestamp with time zone
 );
 
@@ -8342,7 +8342,7 @@ CREATE TABLE public.mch_app_info (
     last_modifier bigint,
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0,
-    deleted boolean DEFAULT false
+    deleted boolean DEFAULT false NOT NULL
 );
 
 
@@ -8732,7 +8732,7 @@ CREATE TABLE public.mch_credential (
     last_modifier bigint,
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0,
-    deleted boolean DEFAULT false
+    deleted boolean DEFAULT false NOT NULL
 );
 
 
@@ -10838,7 +10838,7 @@ CREATE TABLE public.pay_blacklist (
     last_modifier bigint,
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0,
-    deleted boolean DEFAULT false,
+    deleted boolean DEFAULT false NOT NULL,
     type character varying(32) NOT NULL,
     value character varying(128) NOT NULL,
     wx_app_id character varying(64),
@@ -11960,7 +11960,7 @@ CREATE TABLE public.pay_easy_pay_refund_order (
     last_modifier bigint,
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0,
-    deleted boolean DEFAULT false
+    deleted boolean DEFAULT false NOT NULL
 );
 
 
@@ -13238,7 +13238,7 @@ CREATE TABLE public.pay_md_channel (
     last_modifier bigint,
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0,
-    deleted boolean DEFAULT false
+    deleted boolean DEFAULT false NOT NULL
 );
 
 
@@ -13429,7 +13429,7 @@ CREATE TABLE public.pay_md_product (
     last_modifier bigint,
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0,
-    deleted boolean DEFAULT false,
+    deleted boolean DEFAULT false NOT NULL,
     sandbox boolean DEFAULT false,
     enabled boolean DEFAULT true NOT NULL
 );
@@ -17509,7 +17509,7 @@ CREATE TABLE public.starter_audit_login_log (
     last_modifier bigint,
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0,
-    deleted boolean DEFAULT false,
+    deleted boolean DEFAULT false NOT NULL,
     login_time timestamp with time zone
 );
 
@@ -17674,7 +17674,7 @@ CREATE TABLE public.starter_audit_operate_log (
     last_modifier bigint,
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0,
-    deleted boolean DEFAULT false,
+    deleted boolean DEFAULT false NOT NULL,
     operate_time timestamp with time zone
 );
 
@@ -18016,7 +18016,7 @@ CREATE TABLE public.starter_platform_file_record (
     last_modifier bigint,
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0,
-    deleted boolean DEFAULT false,
+    deleted boolean DEFAULT false NOT NULL,
     size bigint,
     filename character varying(128),
     original_filename character varying(255),
@@ -18389,7 +18389,7 @@ CREATE TABLE public.system_dict (
     last_modifier bigint,
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0,
-    deleted boolean DEFAULT false,
+    deleted boolean DEFAULT false NOT NULL,
     name character varying(255),
     dict_type character varying(255),
     code character varying(255),
@@ -18522,7 +18522,7 @@ CREATE TABLE public.system_dict_item (
     last_modifier bigint,
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0,
-    deleted boolean DEFAULT false,
+    deleted boolean DEFAULT false NOT NULL,
     i18n_key character varying(200)
 );
 
@@ -18759,7 +18759,7 @@ CREATE TABLE public.system_platform_encrypt_config (
     last_modifier bigint,
     last_modified_time timestamp(6) with time zone,
     version integer,
-    deleted boolean DEFAULT false
+    deleted boolean DEFAULT false NOT NULL
 );
 
 
@@ -19552,7 +19552,7 @@ CREATE TABLE public.vbill_isv_channel_merchant (
     last_modifier bigint,
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0,
-    deleted boolean DEFAULT false,
+    deleted boolean DEFAULT false NOT NULL,
     sandbox boolean DEFAULT false
 );
 
@@ -24882,14 +24882,14 @@ COMMENT ON INDEX public.uk_cpcn_direct_key_cmchno_sandbox IS '同一通道商户
 -- Name: uk_device_qr_code_code; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX uk_device_qr_code_code ON public.device_qr_code USING btree (code);
+CREATE UNIQUE INDEX uk_device_qr_code_code ON public.device_qr_code USING btree (code) WHERE (deleted = false);
 
 
 --
 -- Name: INDEX uk_device_qr_code_code; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_device_qr_code_code IS '二维码设备编码唯一';
+COMMENT ON INDEX public.uk_device_qr_code_code IS '二维码设备编码唯一(仅未删除行, 注销后同码重建放行)';
 
 
 --
@@ -25631,14 +25631,14 @@ COMMENT ON INDEX public.uk_long_pay_key_cmchno_sandbox IS '同一通道商户同
 -- Name: uk_mch_app_info_app_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX uk_mch_app_info_app_id ON public.mch_app_info USING btree (app_id);
+CREATE UNIQUE INDEX uk_mch_app_info_app_id ON public.mch_app_info USING btree (app_id) WHERE (deleted = false);
 
 
 --
 -- Name: INDEX uk_mch_app_info_app_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_mch_app_info_app_id IS '应用号唯一索引';
+COMMENT ON INDEX public.uk_mch_app_info_app_id IS '应用号唯一索引(仅未删除行, 商户注销级联软删后同号重建放行; appId 骨架行保留可追溯)';
 
 
 --
@@ -25667,6 +25667,20 @@ CREATE UNIQUE INDEX uk_mch_app_notify_config ON public.mch_app_notify_config USI
 --
 
 COMMENT ON INDEX public.uk_mch_app_notify_config IS '同一应用仅一条通知配置';
+
+
+--
+-- Name: uk_mch_user_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_mch_user_user_id ON public.mch_user USING btree (user_id);
+
+
+--
+-- Name: INDEX uk_mch_user_user_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_mch_user_user_id IS '同一用户仅归属一个商户(跨商户挂靠被数据库拒绝)';
 
 
 --
@@ -25715,14 +25729,14 @@ COMMENT ON INDEX public.uk_mch_store_info_default IS '每商户仅一个默认�
 -- Name: uk_mch_store_info_store_no; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX uk_mch_store_info_store_no ON public.mch_store_info USING btree (store_no);
+CREATE UNIQUE INDEX uk_mch_store_info_store_no ON public.mch_store_info USING btree (store_no) WHERE (deleted = false);
 
 
 --
 -- Name: INDEX uk_mch_store_info_store_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_mch_store_info_store_no IS '门店号唯一';
+COMMENT ON INDEX public.uk_mch_store_info_store_no IS '门店号唯一(仅未删除行, 商户注销级联软删后同号重建放行)';
 
 
 --
@@ -25792,14 +25806,14 @@ COMMENT ON INDEX public.uk_pay_abnormal_order_trade_pending IS '同一交易仅�
 -- Name: uk_pay_alloc_order_alloc_no; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX uk_pay_alloc_order_alloc_no ON public.pay_alloc_order USING btree (alloc_no);
+CREATE UNIQUE INDEX uk_pay_alloc_order_alloc_no ON public.pay_alloc_order USING btree (alloc_no) WHERE (deleted = false);
 
 
 --
 -- Name: INDEX uk_pay_alloc_order_alloc_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_pay_alloc_order_alloc_no IS '平台分账单号唯一约束';
+COMMENT ON INDEX public.uk_pay_alloc_order_alloc_no IS '平台分账单号唯一约束(仅未删除行)';
 
 
 --
@@ -25820,14 +25834,14 @@ COMMENT ON INDEX public.uk_pay_alloc_order_mch_biz IS '分账单商户分账单�
 -- Name: uk_pay_blacklist_type_value_app; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX uk_pay_blacklist_type_value_app ON public.pay_blacklist USING btree (type, value, COALESCE(wx_app_id, ''::character varying));
+CREATE UNIQUE INDEX uk_pay_blacklist_type_value_app ON public.pay_blacklist USING btree (type, value, COALESCE(wx_app_id, ''::character varying)) WHERE (deleted = false);
 
 
 --
 -- Name: INDEX uk_pay_blacklist_type_value_app; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_pay_blacklist_type_value_app IS '类型+值+微信应用维度唯一约束（微信应用为空按空串参与唯一性）';
+COMMENT ON INDEX public.uk_pay_blacklist_type_value_app IS '类型+值+微信应用维度唯一约束（微信应用为空按空串参与唯一性; 仅未删除行）';
 
 
 --
@@ -26310,14 +26324,14 @@ COMMENT ON INDEX public.uk_union_key_mch_sandbox IS '同一通道商户同一环
 -- Name: uk_user_das_pref_user_client; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX uk_user_das_pref_user_client ON public.iam_user_dashboard_preference USING btree (user_id, client_code, terminal);
+CREATE UNIQUE INDEX uk_user_das_pref_user_client ON public.iam_user_dashboard_preference USING btree (user_id, client_code, terminal) WHERE (deleted = false);
 
 
 --
 -- Name: INDEX uk_user_das_pref_user_client; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_user_das_pref_user_client IS '同一用户同一身份域终端同一壳仪表盘偏好唯一';
+COMMENT ON INDEX public.uk_user_das_pref_user_client IS '同一用户同一身份域终端同一壳仪表盘偏好唯一(仅未删除行, 用户注销后重建同配置放行)';
 
 
 --

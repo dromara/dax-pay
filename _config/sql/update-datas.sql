@@ -85,3 +85,13 @@ INSERT INTO public.iam_role_menu VALUES (1000004040134, 1, NULL, 4040134);
 -- 修正 4040133 组件路径(初版误写为 /payment/mock/MockIsvManage, 与 views/payment/channel/mock/ 下实际文件不一致, 已应用库执行本句即可)
 UPDATE public.iam_perm_menu SET component = '/payment/channel/mock/MockIsvManage' WHERE id = 4040133;
 
+-- ========== 2026-10-31 主体注销治理批C: 存量已删商户/用户数据批量脱敏(幂等, 仅命中 deleted=true 行, 零行时无操作) ==========
+-- 口径对齐后端注销服务(移植自 plus 52efeb86): 名称类改占位符, 强 PII 置 NULL, 密钥/密码置失效占位, 骨架字段(编号/时间戳)保留;
+-- password 置为格式合法但明文不存在的 BCrypt 占位串, 防离线字典还原(历史已删用户的密码哈希不再可信)。
+UPDATE public.mch_info SET mch_name = '已删除-' || mch_no, mch_short_name = NULL WHERE deleted;
+UPDATE public.mch_app_info SET app_name = '已删除应用' WHERE deleted;
+UPDATE public.mch_store_info SET store_name = '已删除门店', contact_phone = NULL, address = NULL, logo_url = NULL, facade_url = NULL, interior_url = NULL, remark = NULL WHERE deleted;
+UPDATE public.mch_credential SET public_key = NULL, secret_key = NULL WHERE deleted;
+UPDATE public.iam_user_info SET name = '已删除用户-' || id, account = 'deleted-' || id, password = '$2a$10$SwQ7Km2RcXv9Bn4Ld8GfUopA1zE5yT9wQ3iO7pL2kJ6hG4fD0sA5', phone = NULL, email = NULL WHERE deleted;
+UPDATE public.iam_user_expand_info SET sex = NULL, birthday = NULL, avatar = NULL, last_login_ip = NULL WHERE deleted;
+
