@@ -15,4 +15,13 @@ public class MerchantCredentialManager extends BaseManager<MerchantCredentialMap
     public Optional<MerchantCredential> findByMchNo(String mchNo){
         return findByField(MerchantCredential::getMchNo, mchNo);
     }
+
+    /// 按商户号脱敏改写(主体注销前置): 应用加密公私钥置空, 防离线解密残留
+    public void sanitizeByMchNo(String mchNo) {
+        lambdaUpdate()
+                .set(MerchantCredential::getPublicKey, null)
+                .set(MerchantCredential::getSecretKey, null)
+                .eq(MerchantCredential::getMchNo, mchNo)
+                .update();
+    }
 }

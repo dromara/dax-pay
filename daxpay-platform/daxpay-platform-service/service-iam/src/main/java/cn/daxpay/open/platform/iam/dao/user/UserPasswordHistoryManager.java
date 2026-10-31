@@ -68,5 +68,14 @@ public class UserPasswordHistoryManager {
         return histories.stream()
                 .anyMatch(h -> h.getPassword().equals(passwordHash));
     }
+
+    /// 删除用户全部密码历史记录(用户注销级联用, 物理删除)
+    ///
+    /// 密码哈希属敏感资产, 用户注销时随主体一并清除, 防离线字典还原。
+    public void deleteByUserId(Long userId) {
+        LambdaQueryWrapper<UserPasswordHistory> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(UserPasswordHistory::getUserId, userId);
+        passwordHistoryMapper.delete(wrapper);
+    }
 }
 

@@ -15,6 +15,7 @@ import cn.daxpay.open.platform.iam.dao.role.RoleManager;
 import cn.daxpay.open.platform.iam.dao.upms.UserRoleManager;
 import cn.daxpay.open.platform.iam.dao.user.UserExpandInfoManager;
 import cn.daxpay.open.platform.iam.dao.user.UserInfoManager;
+import cn.daxpay.open.platform.iam.dao.user.UserPasswordHistoryManager;
 import cn.daxpay.open.platform.iam.dao.user.UserPasswordSecurityManager;
 import cn.daxpay.open.platform.iam.entity.role.Role;
 import cn.daxpay.open.platform.iam.entity.upms.UserRole;
@@ -28,9 +29,17 @@ import cn.daxpay.open.platform.iam.result.user.UserPasswordResult;
 import cn.daxpay.open.platform.iam.result.user.UserWholeInfoResult;
 import cn.daxpay.open.platform.iam.service.session.OnlineUserService;
 import cn.daxpay.open.platform.capability.auth.authentication.SubjectAdminGuardHook;
+import cn.daxpay.open.platform.capability.auth.authentication.UserTerminateHook;
 import cn.daxpay.open.platform.common.config.properties.PlatformStarterProperties;
 import cn.daxpay.open.platform.core.enums.client.ClientEnum;
 import cn.daxpay.open.platform.system.entity.config.platform.security.PlatformPasswordPolicyConfig;
+import cn.daxpay.open.platform.iam.dao.passkey.UserPasskeyManager;
+import cn.daxpay.open.platform.iam.dao.social.IamUserSocialManager;
+import cn.daxpay.open.platform.iam.dao.twofactor.UserTwoFactorManager;
+import cn.daxpay.open.platform.iam.entity.passkey.UserPasskey;
+import cn.daxpay.open.platform.iam.entity.social.IamUserSocial;
+import cn.daxpay.open.platform.iam.entity.twofactor.UserTwoFactor;
+import cn.daxpay.open.platform.capability.file.service.PlatformFileService;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.BCrypt;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -84,9 +93,21 @@ public class UserAdminService {
     /// 主体管理员保护钩子(业务域 SPI, payment 侧提供实现)
     private final List<SubjectAdminGuardHook> subjectAdminGuardHooks;
 
+    /// 用户注销挂靠钩子(业务域 SPI, payment 侧提供实现)
+    private final List<UserTerminateHook> userTerminateHooks;
+
     private final UserRoleManager userRoleManager;
 
     private final RoleManager roleManager;
+
+    // 用户注销级联清理: 三方绑定/通行密钥/两步验证/密码历史
+    private final IamUserSocialManager iamUserSocialManager;
+    private final UserPasskeyManager userPasskeyManager;
+    private final UserTwoFactorManager userTwoFactorManager;
+    private final UserPasswordHistoryManager userPasswordHistoryManager;
+
+    // 头像附件本体删除(注销后 best-effort)
+    private final PlatformFileService platformFileService;
 
     /// 分页查询（按终端过滤）
     public PageResult<UserWholeInfoResult> page(PageParam pageParam, UserInfoQuery query) {
@@ -392,6 +413,90 @@ public class UserAdminService {
             throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.cannotEditNonAdmin");
         }
         userEmailService.adminUnbind(userId);
+    }
+
+    /// 删除用户(注销: 级联清理 + 脱敏 + 逻辑删 + 踢线)
+    ///
+    /// 主体注销体系的统一原子操作, 两个消费方: iam 运营端用户管理入口、
+    /// 商户用户管理(主体侧先删挂靠行再调本方法)与商户删除时的批量级联。
+    /// 序列: 内置超管拒删 → 挂靠拒删(走 [UserTerminateHook] 钩子, 引导去主体侧) →
+    /// 级联逻辑删安全资产(角色绑定/三方绑定/通行密钥/两步验证/密码历史/密码安全) →
+    /// 脱敏改写(骨架保留 id/clientCode/时间戳, PII 抹除) → 置 BAN + 逻辑删 →
+    /// 事务提交后踢全部会话并 best-effort 删除头像附件本体。
+    /// 账号唯一索引为 partial(deleted=false), account 改占位后原账号即可重新注册;
+    /// 密码换随机 hash, 防残留 hash 被离线字典爆破还原原密码。
+    /// 审计纪律: 日志只记 id 与终端, 不写原名/账号明文。
+    @Transactional(rollbackFor = Exception.class)
+    public void delete(Long userId) {
+        UserInfo userInfo = userInfoManager.findById(userId)
+                .orElseThrow(UserInfoNotExistsException::new);
+        // 内置超管不可删除
+        if (userInfo.isAdministrator()) {
+            // 权限: 内置超管不允许删除
+            throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.administratorDeleteDenied");
+        }
+        // 挂靠主体的用户须走主体侧入口(有关联上下文确认), 通用入口拒删;
+        // 主体侧调用前已删除挂靠行, 此处钩子查询为空即放行
+        List<String> affiliations = userTerminateHooks.stream()
+                .flatMap(hook -> hook.findAffiliations(userId).stream())
+                .distinct()
+                .toList();
+        if (!affiliations.isEmpty()) {
+            // 权限: 该用户仍挂靠{0}, 请先在对应主体的用户管理中删除
+            throw new BizException(CommonCode.FAIL_CODE, "error.iam.user.stillAffiliated",
+                    String.join("、", affiliations));
+        }
+        // 级联清理: 安全资产与绑定(逻辑删); 密码安全记录主键即 userId(与用户主键一致)
+        userRoleManager.deleteByField(UserRole::getUserId, userId);
+        iamUserSocialManager.deleteByField(IamUserSocial::getUserId, userId);
+        userPasskeyManager.deleteByField(UserPasskey::getUserId, userId);
+        userTwoFactorManager.deleteByField(UserTwoFactor::getUserId, userId);
+        userPasswordHistoryManager.deleteByUserId(userId);
+        passwordSecurityManager.deleteByField(UserPasswordSecurity::getId, userId);
+        // 先置 BAN 落库(updateById 会回写内存旧值, 脱敏必须放在其后覆盖)
+        userInfo.setStatus(UserStatusEnum.BAN.getCode());
+        userInfoManager.updateById(userInfo);
+        // 头像文件名置空前收集(提交后删对象存储本体)
+        String avatarFilename = userExpandInfoManager.findById(userId)
+                .map(UserExpandInfo::getAvatar)
+                .filter(StrUtil::isNotBlank)
+                .orElse(null);
+        // 脱敏改写: 名称/账号占位(带 id 保唯一), 密码随机化, 强 PII 置空
+        String randomHash = BCrypt.hashpw(passwordPolicyService.generateSecurePassword(), BCrypt.gensalt());
+        userInfoManager.lambdaUpdate()
+                .set(UserInfo::getName, "已删除用户-" + userId)
+                .set(UserInfo::getAccount, "deleted-" + userId)
+                .set(UserInfo::getPassword, randomHash)
+                .set(UserInfo::getPhone, null)
+                .set(UserInfo::getEmail, null)
+                .eq(UserInfo::getId, userId)
+                .update();
+        userExpandInfoManager.lambdaUpdate()
+                .set(UserExpandInfo::getSex, null)
+                .set(UserExpandInfo::getAvatar, null)
+                .set(UserExpandInfo::getBirthday, null)
+                .set(UserExpandInfo::getLastLoginIp, null)
+                .eq(UserExpandInfo::getId, userId)
+                .update();
+        // 逻辑删(行即被 @TableLogic 从一切业务查询隐去)
+        userInfoManager.deleteById(userId);
+        // 注销成功后强制该用户全部会话下线(事务提交后回调, 避免回滚误踢); 头像本体一并 best-effort 删除
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                onlineUserService.kickoutAllSessions(userId);
+                if (avatarFilename != null) {
+                    try {
+                        platformFileService.deleteByFilename(avatarFilename);
+                    }
+                    catch (Exception e) {
+                        log.warn("头像本体删除失败(不重试): filename={}", avatarFilename, e);
+                    }
+                }
+            }
+        });
+        // 审计: 只记 id 与终端
+        log.info("用户注销: userId={}, clientCode={}", userId, userInfo.getClientCode());
     }
 }
 

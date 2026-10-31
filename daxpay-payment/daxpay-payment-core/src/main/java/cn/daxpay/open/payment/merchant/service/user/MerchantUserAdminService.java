@@ -320,6 +320,53 @@ public class MerchantUserAdminService {
         return userAdminService.restartPasswordBatch(userIds);
     }
 
+    /// 删除商户用户(注销: 删挂靠行 + 委托 iam 侧注销)
+    ///
+    /// 最后管理员护栏: 该商户名下唯一的 administrator 用户不可删, 防止主体失管;
+    /// 先删除 [MerchantUser] 挂靠行再调 [UserAdminService#delete](iam 侧挂靠钩子校验依赖行已删)。
+    @Transactional(rollbackFor = Exception.class)
+    public void delete(Long userId) {
+        MerchantUser merchantUser = merchantUserManager.findByUserId(userId)
+                // 商户: 商户用户关联信息不存在
+                .orElseThrow(() -> new BizException(CommonCode.FAIL_CODE, "error.payment.merchant.mchUserRelationNotExist"));
+        // 商户端校验目标用户归属当前商户, 防跨商户篡改
+        this.checkBelongCurrentMerchant(merchantUser);
+        // 最后管理员护栏
+        if (merchantUser.isAdministrator()) {
+            long adminCount = merchantUserManager.lambdaQuery()
+                    .eq(MerchantUser::getMchNo, merchantUser.getMchNo())
+                    .eq(MerchantUser::isAdministrator, true)
+                    .count();
+            if (adminCount <= 1) {
+                // 商户: 商户至少保留一名管理员用户, 请先转移管理员角色
+                throw new BizException(CommonCode.FAIL_CODE, "error.payment.merchant.lastAdminCannotDelete");
+            }
+        }
+        merchantUserManager.deleteByField(MerchantUser::getUserId, userId);
+        userAdminService.delete(userId);
+    }
+
+    /// 按商户号注销名下全部用户(商户删除的级联专用入口)
+    ///
+    /// 与单删 [#delete] 的差异: 不做最后管理员护栏(主体即将删除, 无失管问题);
+    /// 逐用户先删挂靠行再委托 iam 注销, 全程复用外层事务。
+    /// 跨主体护栏: 删本商户挂靠行后仍存在挂靠记录的用户仅解绑不注销,
+    /// 防止 iam 挂靠钩子拦截导致整个商户删除事务失败; 与 mch_user 的 user_id 唯一索引构成双保险
+    /// (开源版无代理商域, 跨主体仅商户一处, 护栏主要防唯一索引落地前的存量重复挂靠)。
+    @Transactional(rollbackFor = Exception.class)
+    public void deleteByMchNo(String mchNo) {
+        List<MerchantUser> users = merchantUserManager.findAllByField(MerchantUser::getMchNo, mchNo);
+        for (MerchantUser user : users) {
+            merchantUserManager.deleteByField(MerchantUser::getUserId, user.getUserId());
+            boolean stillAffiliated = merchantUserManager.findByUserId(user.getUserId()).isPresent();
+            if (stillAffiliated) {
+                log.info("跨主体用户仅解绑不注销: userId={}, mchNo={}", user.getUserId(), mchNo);
+                continue;
+            }
+            userAdminService.delete(user.getUserId());
+        }
+    }
+
     /// 按平台密码策略计算过期时间(UTC); 未启用轮换则 null
     private OffsetDateTime calculatePasswordExpireTime() {
         PlatformPasswordPolicyConfig config = iamSecurityConfigService.getPasswordPolicy();

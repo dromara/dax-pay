@@ -136,4 +136,13 @@ public class UserAdminController {
     public Result<PageResult<UserWholeInfoResult>> page(PageParam pageParam, UserInfoQuery query) {
         return Res.ok(userAdminService.page(pageParam, query));
     }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "删除用户(注销: 级联清理+脱敏+逻辑删, 挂靠商户的用户请先在对应商户的用户管理中删除)")
+    @PostMapping("/delete")
+    public Result<Void> delete(@NotNull(message = "{validation.field.userId.notNull}") Long userId) {
+        // 注销式删除: 挂靠商户的用户被拒并引导去商户侧; 级联清理安全资产并脱敏, 事务提交后踢全部会话
+        userAdminService.delete(userId);
+        return Res.ok();
+    }
 }

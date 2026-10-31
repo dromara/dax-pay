@@ -312,6 +312,36 @@ public class PlatformFileService {
         return filename;
     }
 
+    /// 按文件名删除文件(best-effort, 主体注销附件清理用)
+    ///
+    /// 删除对象存储本体并逻辑删文件记录行; 文件记录不存在或存储配置缺失时仅告警不抛错,
+    /// 不拖累注销主事务。调用方应在事务提交后(afterCommit)调用, 保证 DB 已落库才删本体;
+    /// S3 deleteObject 对不存在对象幂等, 重复调用无害。
+    ///
+    /// @param filename 文件名(UUID.后缀, 业务表图片字段存储的标识)
+    public void deleteByFilename(String filename) {
+        if (StrUtil.isBlank(filename)) {
+            return;
+        }
+        PlatformFileRecord record = platformFileRecordManager.findByFilename(filename)
+                .orElse(null);
+        if (record == null) {
+            log.warn("附件删除跳过: 文件记录不存在, filename={}", filename);
+            return;
+        }
+        FileStorageConfig storageConfig = s3FileStorageService.getStorageConfig()
+                .orElse(null);
+        if (storageConfig == null) {
+            log.warn("附件删除跳过: 存储配置不存在, filename={}", filename);
+            return;
+        }
+        String bucket = selectBucket(storageConfig, record.getAccessType());
+        String objectKey = buildObjectKey(record.getPath(), record.getFilename());
+        s3FileStorageService.delete(bucket, objectKey);
+        platformFileRecordManager.deleteById(record.getId());
+        log.info("附件删除: fileId={}, filename={}", record.getId(), filename);
+    }
+
     /// 生成对象Key
     ///
     /// 格式: {basePath}/{yyyy/MM/dd}/{uuid}.{extension}

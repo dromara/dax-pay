@@ -105,4 +105,12 @@ public class MchAppInfoManager extends BaseManager<MchAppInfoMapper, MchAppInfo>
                 .update();
     }
 
+    /// 按商户号脱敏改写(主体注销前置): 应用名改占位符(多应用统一占位, appId 骨架保留可追溯)
+    public void sanitizeByMchNo(String mchNo) {
+        lambdaUpdate()
+                .set(MchAppInfo::getAppName, "已删除应用")
+                .eq(MchAppInfo::getMchNo, mchNo)
+                .update();
+    }
+
 }

@@ -155,4 +155,14 @@ public class MchUserAdminController {
         // 每个用户独立生成随机密码, 响应中一次性返回明文列表
         return Res.ok(merchantUserAdminService.restartPasswordBatch(param.getUserIds()));
     }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "删除商户用户(注销, 不可恢复)")
+    @PostMapping("/delete")
+    @OperateLog(title = "删除商户用户", businessType = OperateLogType.DELETE, saveParam = true, maskParam = true)
+    public Result<Void> delete(@NotNull(message = "{validation.field.userId.notNull}") Long userId) {
+        // 注销式删除: 名下最后一名管理员被拒; 级联清理 iam 侧数据并脱敏, 事务提交后踢全部会话
+        merchantUserAdminService.delete(userId);
+        return Res.ok();
+    }
 }

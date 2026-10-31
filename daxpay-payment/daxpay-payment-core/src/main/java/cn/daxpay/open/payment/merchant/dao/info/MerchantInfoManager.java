@@ -62,4 +62,16 @@ public class MerchantInfoManager extends BaseManager<MerchantInfoMapper, Merchan
                 .list();
     }
 
+    /// 按商户号脱敏改写(主体注销前置)
+    ///
+    /// 名称改占位符(带 mchNo 保可读可追溯), 简称置空; 骨架字段(mchNo/status/时间戳)不动,
+    /// 历史订单与流水记录的编号引用仍可追溯到本行。状态由注销主流程单独置 DISABLED, 此处不重复。
+    public void sanitizeByMchNo(String mchNo) {
+        lambdaUpdate()
+                .set(MerchantInfo::getMchName, "已删除-" + mchNo)
+                .set(MerchantInfo::getMchShortName, null)
+                .eq(MerchantInfo::getMchNo, mchNo)
+                .update();
+    }
+
 }
