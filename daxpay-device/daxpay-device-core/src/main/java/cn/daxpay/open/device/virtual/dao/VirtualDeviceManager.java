@@ -170,18 +170,20 @@ public class VirtualDeviceManager extends BaseManager<VirtualDeviceMapper, Virtu
                 .update();
     }
 
-    /// 轮换播报密钥(激活/重复激活: 旧密文与旧回执签名即时作废, 即换机语义)
+    /// 轮换播报密钥(激活/重复激活: 旧密文与旧回执签名即时作废, 即换机语义; 同时刷新激活时间)
     public void rotateSecret(Long id, String secret) {
         lambdaUpdate()
                 .set(VirtualDevice::getSecret, secret)
+                .set(VirtualDevice::getActivatedTime, OffsetDateTime.now(ZoneOffset.UTC))
                 .eq(VirtualDevice::getId, id)
                 .update();
     }
 
-    /// 清空播报凭证(解绑: 旧 APP 下一次心跳即 revoked, 且设备回到可删除状态)
+    /// 清空播报凭证(解绑: 旧 APP 下一次心跳即 revoked, 且设备回到可删除状态; 激活时间一并清空回到未激活态)
     public void clearSecret(Long id) {
         lambdaUpdate()
                 .set(VirtualDevice::getSecret, null)
+                .set(VirtualDevice::getActivatedTime, null)
                 .eq(VirtualDevice::getId, id)
                 .update();
     }

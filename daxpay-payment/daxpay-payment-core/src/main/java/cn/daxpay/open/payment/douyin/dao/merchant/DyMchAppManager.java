@@ -17,6 +17,13 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class DyMchAppManager extends BaseManager<DyMchAppMapper, DyMchApp> {
 
+    /// 按商户号统计应用存量总数(只过滤逻辑删除, 工作台计数角标用)
+    public long countByMchNo(String mchNo) {
+        return lambdaQuery()
+                .eq(DyMchApp::getMchNo, mchNo)
+                .count();
+    }
+
     /// 按商户号查询应用列表（按创建时间升序）
     public List<DyMchApp> listByMchNo(String mchNo) {
         return lambdaQuery()

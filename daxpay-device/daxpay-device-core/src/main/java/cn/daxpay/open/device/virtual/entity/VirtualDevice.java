@@ -53,6 +53,9 @@ public class VirtualDevice extends MpBaseEntity implements ToResult<VirtualDevic
     /// 播报加密密钥(AES-256-GCM 32 字符, 激活时生成并轮换; 解绑时清空即回到未激活态)
     private String secret;
 
+    /// 最近一次成功激活时间(激活轮换 secret 时写入, 解绑清空即回到未激活态; 未成功激活过为空)
+    private OffsetDateTime activatedTime;
+
     /// 最近一次收款播报回执时间(仅 cmd=pay.success 的 ack 回写, 心跳不覆盖)
     private OffsetDateTime lastPayAckTime;
 

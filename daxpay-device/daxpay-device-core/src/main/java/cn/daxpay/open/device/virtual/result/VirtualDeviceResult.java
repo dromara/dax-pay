@@ -14,7 +14,7 @@ import java.time.OffsetDateTime;
 
 /// # 虚拟设备
 ///
-/// (开源版无代理商域: 无 agentNo/agentName; 激活日志与监控大屏不在范围: 无 activatedTime)
+/// (开源版无代理商域: 无 agentNo/agentName; 激活日志与监控大屏不在范围)
 @EqualsAndHashCode(callSuper = true)
 @Data
 @FieldNameConstants
@@ -84,4 +84,7 @@ public class VirtualDeviceResult extends MchBaseResult {
 
     @Schema(description = "是否已激活(secret 非空即已激活)")
     private Boolean activated;
+
+    @Schema(description = "最近一次成功激活时间(未成功激活过为空)")
+    private OffsetDateTime activatedTime;
 }
