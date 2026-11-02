@@ -25,6 +25,9 @@ import java.util.Objects;
 /// - `PROD` 模式下校验一组"开发态功能"开关, 收集所有违规后一次性抛 [IllegalStateException] 拒绝启动
 /// - `DEV` 模式下完全跳过校验, 保持现有开发体验
 ///
+/// 唯一例外: `daxpay.platform.starter.auth.allow-admin-in-prod=true` 时跳过"超级管理员登录"这一项,
+/// 其余 8 项照常校验——由安装面板在"生产 + 超管"组合下注入, 与整体切 DEV 划清边界。
+///
 /// 设计原则: **只校验、不覆盖**。运维必须自行在 `application-prod.yml` / 环境变量中把开发态功能关闭,
 /// 框架不偷偷改写配置, 全程透明。
 ///
@@ -52,9 +55,17 @@ public class DeploymentModeEnforcer implements EnvironmentPostProcessor {
 
         // ERROR 级校验: 收集所有违规后一次性 fail fast(避免"修一个重启再发现一个"的折磨)
         List<String> errors = new ArrayList<>();
+        // 被放行/跳过项的提示(不参与失败判定, 仅在仍有其它违规时附在失败信息里便于定位)
+        List<String> notices = new ArrayList<>();
         // boolean 参数第二位 = 该属性未显式配置时的"危险默认值"(框架/Java 默认是否为 true)
         checkBooleanFalse(env, "daxpay.platform.config.sandbox-enabled", true, "沙箱环境全局开关", errors);
-        checkBooleanFalse(env, "daxpay.platform.starter.auth.enable-admin", true, "超级管理员登录", errors);
+        // 超级管理员是唯一支持"单点放行"的检查项: allow-admin-in-prod=true 时跳过本项,
+        // 其余 8 项照常校验(与整体切 DEV 跳过全部不同), 由安装面板在"生产 + 超管"时自动写入
+        if (isAllowAdminInProd(env)) {
+            notices.add("  - 已允许生产超管(allow-admin-in-prod=true), 跳过 [超级管理员登录] 一项校验");
+        } else {
+            checkBooleanFalse(env, "daxpay.platform.starter.auth.enable-admin", true, "超级管理员登录", errors);
+        }
         checkBooleanFalse(env, "daxpay.platform.common.exception.show-full-message", false, "异常详情展示", errors);
         checkBooleanFalse(env, "springdoc.api-docs.enabled", true, "OpenAPI 文档", errors);
         checkBooleanFalse(env, "springdoc.swagger-ui.enabled", true, "Swagger UI", errors);
@@ -65,8 +76,17 @@ public class DeploymentModeEnforcer implements EnvironmentPostProcessor {
 
         // 有 ERROR 则拒绝启动(失败信息由 Spring Boot 启动失败机制打印, 通过则静默)
         if (!errors.isEmpty()) {
-            throw new IllegalStateException(buildFailureMessage(errors));
+            throw new IllegalStateException(buildFailureMessage(errors, notices));
         }
+    }
+
+    /// 生产模式是否放行超级管理员(`daxpay.platform.starter.auth.allow-admin-in-prod`, 默认 false)。
+    ///
+    /// 只影响"超级管理员登录"这一项校验: 其余沙箱/Swagger/CORS/actuator 检查照常执行。
+    /// 与整体 `daxpay.platform.deployment.mode=DEV`(跳过全部校验)划清边界, 供运维在生产
+    /// 排障时精确放行后门账号, 而不是把整套校验关掉。
+    private boolean isAllowAdminInProd(ConfigurableEnvironment env) {
+        return Boolean.TRUE.equals(env.getProperty("daxpay.platform.starter.auth.allow-admin-in-prod", Boolean.class));
     }
 
     /// 推断部署模式: 显式配置优先, 否则按 active profile 推断
@@ -143,15 +163,21 @@ public class DeploymentModeEnforcer implements EnvironmentPostProcessor {
         }
     }
 
-    private String buildFailureMessage(List<String> errors) {
-        return System.lineSeparator()
-                + "----------------------------------------------------------" + System.lineSeparator()
-                + "  生产部署模式(PROD)启动校验失败" + System.lineSeparator()
-                + "  检测到 " + errors.size() + " 项开发态功能未关闭:" + System.lineSeparator()
-                + String.join(System.lineSeparator(), errors) + System.lineSeparator()
-                + "----------------------------------------------------------" + System.lineSeparator()
-                + "  请在 application-prod.yml / 环境变量中修正上述配置后重启。" + System.lineSeparator()
-                + "  如确需在当前环境开启(例如联调), 显式设置 daxpay.platform.deployment.mode=DEV" + System.lineSeparator()
-                + "----------------------------------------------------------";
+    private String buildFailureMessage(List<String> errors, List<String> notices) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(System.lineSeparator())
+                .append("----------------------------------------------------------").append(System.lineSeparator())
+                .append("  生产部署模式(PROD)启动校验失败").append(System.lineSeparator())
+                .append("  检测到 ").append(errors.size()).append(" 项开发态功能未关闭:").append(System.lineSeparator())
+                .append(String.join(System.lineSeparator(), errors)).append(System.lineSeparator());
+        // 已放行项提示: 便于运维确认"超管已放行而其它项才是失败原因"
+        if (!notices.isEmpty()) {
+            sb.append(String.join(System.lineSeparator(), notices)).append(System.lineSeparator());
+        }
+        sb.append("----------------------------------------------------------").append(System.lineSeparator())
+                .append("  请在 application-prod.yml / 环境变量中修正上述配置后重启。").append(System.lineSeparator())
+                .append("  如确需在当前环境开启(例如联调), 显式设置 daxpay.platform.deployment.mode=DEV").append(System.lineSeparator())
+                .append("----------------------------------------------------------");
+        return sb.toString();
     }
 }

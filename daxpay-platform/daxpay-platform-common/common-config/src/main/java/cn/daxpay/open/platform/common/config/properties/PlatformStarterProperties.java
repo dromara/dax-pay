@@ -84,6 +84,12 @@ public class PlatformStarterProperties {
         private List<String> ignoreUrls = new ArrayList<>();
         /// 开启超级管理员(生产模式请关闭)
         private boolean enableAdmin = true;
+        /// 生产模式放行超级管理员(默认关闭)
+        ///
+        /// 置 true 时 [cn.daxpay.open.platform.common.config.DeploymentModeEnforcer] 只跳过
+        /// "超级管理员登录"这一项校验, 其余生产检查照常执行——用于生产排障需要超管账号入场的场景,
+        /// 与整体切 DEV(跳过全部校验)区分。由安装面板在"生产 + 超管"组合下自动写入。
+        private boolean allowAdminInProd = false;
         /// 用户管理列表中是否显示超级管理员用户
         private boolean adminInList = true;
     }

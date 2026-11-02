@@ -116,6 +116,9 @@ daxpay:
       auth:
         # 关闭超级管理员(生产不应有超管后门; 仅 DEV 联调可由 installer 表单开启)
         enable-admin: ${ENABLE_ADMIN:false}
+        # 生产模式放行超级管理员(默认关闭): 为 true 时 DeploymentModeEnforcer 只跳过
+        # "超级管理员登录"一项校验, 其余生产检查照常; 由 installer 在"生产 + 超管"组合下注入
+        allow-admin-in-prod: ${ALLOW_ADMIN_IN_PROD:false}
         admin-in-list: false
         # ignore-urls 严格收紧: 仅放行 health 探针和静态资源
         # 警告: 绝不能加 /** (dev 中那条会完全关闭认证)
