@@ -17,6 +17,10 @@ logs/
 rebel.xml
 .vscode/
 .trae
+
+# SQL 生成链脚本目录(_config/sql/build/, 2026-11-02 自 plus 移植): 不被上面的 build/ 规则忽略
+!_config/sql/build/
+
 # AI 编程工具生成的项目配置与运行缓存（不入库，同 dax-pay-install 惯例）
 .lithe/
 

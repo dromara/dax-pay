@@ -12,7 +12,7 @@ import cn.daxpay.open.payment.common.check.model.ConfigCheckItem;
 ///
 /// routeName 契约: [ConfigCheckItem#routeName] 必须等于**商户端前端菜单的 path 字段**
 /// (商户端前端 `menu.api.ts` 中 `route.name = menu.path`), 而非 PascalCase 组件名,
-/// 否则前端 `router.hasRoute()` 无法命中。可在 `iam_perm_menu.sql`(client_code='merchant') 查 path 真值。
+/// 否则前端 `router.hasRoute()` 无法命中。可在 `_config/sql/data.sql` 的 `[3]` 菜单段(client_code='merchant') 查 path 真值。
 public interface MerchantConfigChecker {
 
     /// 该检查器负责的分类

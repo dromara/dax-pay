@@ -1,7 +1,7 @@
 -- ============================================================
 -- bootx 超级管理员密码重置为开发默认密码(121212) | 2026-08-31
 -- 用途: 开发库密码改动后忘记时, 对目标库直接执行本脚本急救, 无需重新导库
--- 哈希与 _config/script/redact-data.mjs 的 BOOTX_DEV_PASSWORD_HASH 共用同一固定值,
+-- 哈希与 _config/sql/build/redact-data.mjs 的 BOOTX_DEV_PASSWORD_HASH 共用同一固定值,
 -- 换默认密码时两处(及 data.sql 的 bootx 行)必须同步修改
 -- 哈希由项目同款 hutool BCrypt.hashpw 生成, 登录侧 AbstractPasswordLoginHandler 的 checkpw 校验互通
 -- 本机无 psql, 通过 JDBC 单文件脚本执行

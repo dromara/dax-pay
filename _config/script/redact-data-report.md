@@ -1,5 +1,7 @@
 # DaxPay Data SQL 敏感数据清除方案报告
 
+> **历史文档（2026-11-03 注明）**：本报告描述的 `_config/script/redact-data.mjs` 一次性脱敏链路已退役——能力已被 `_config/sql/build/redact-data.mjs` 取代（白名单表 / mock 行级排除并旁路输出 / bootx 行级保留 / 密码重置），生成入口统一为 `_config/sql/build/export-sql.mjs`（纯净版 `data.sql` 与演示版 `data-demo.sql` 共用同一套规则）。本文仅保留作历史依据，勿按文中命令执行。
+
 > 工具：`redact-data.mjs`（同目录） ｜ 输入：`../sql/data.sql`（pg_dump --inserts 导出） ｜ 输出：`../sql/data.sql`
 > 用途：生成**干净安装包/演示数据**，供他人导入；清除全部敏感数据与运行时业务数据，仅保留系统运行所必需的种子数据与一个内置超级管理员账号。
 
