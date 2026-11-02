@@ -10,8 +10,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Objects;
@@ -51,7 +49,8 @@ public class EasyPayRefundOrderService {
                 .setOutTradeNo(refundOrder.getBizOrderNo())
                 .setPid(credential.getPid())
                 .setAppId(credential.getAppId())
-                .setMoney(fenToYuan(refundOrder.getAmount()))
+                // 内核退款单金额已是分, 直接落库; 空值兜底 0 保持原行为
+                .setMoney(Objects.isNull(refundOrder.getAmount()) ? 0L : refundOrder.getAmount())
                 .setStatus(mapStatus(refundOrder.getStatus()))
                 .setApiVersion("v2")
                 .setAddTime(OffsetDateTime.now(ZoneOffset.UTC));
@@ -116,13 +115,5 @@ public class EasyPayRefundOrderService {
     /// 内核退款状态码 → 易支付协议状态(1=成功, 0=其它)
     private int mapStatus(String kernelStatus) {
         return Objects.equals(kernelStatus, RefundOrderStatusEnum.SUCCESS.getCode()) ? 1 : 0;
-    }
-
-    /// 分(最小货币单位) → 元(BigDecimal)
-    private BigDecimal fenToYuan(Long fen) {
-        if (Objects.isNull(fen)) {
-            return BigDecimal.ZERO;
-        }
-        return BigDecimal.valueOf(fen).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
     }
 }

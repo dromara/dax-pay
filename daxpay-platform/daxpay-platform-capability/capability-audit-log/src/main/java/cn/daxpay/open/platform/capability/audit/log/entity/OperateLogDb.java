@@ -1,6 +1,6 @@
 package cn.daxpay.open.platform.capability.audit.log.entity;
 
-import cn.daxpay.open.platform.common.mybatisplus.base.MpIdEntity;
+import cn.daxpay.open.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.daxpay.open.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.open.platform.common.mybatisplus.handler.type.JsonbStringTypeHandler;
 import cn.daxpay.open.platform.capability.audit.log.convert.LogConvert;
@@ -19,7 +19,7 @@ import java.time.OffsetDateTime;
 @Data
 @Accessors(chain = true)
 @TableName(value = "starter_audit_operate_log", autoResultMap = true)
-public class OperateLogDb extends MpIdEntity implements ToResult<OperateLogResult> {
+public class OperateLogDb extends MpBaseEntity implements ToResult<OperateLogResult> {
 
     /// 操作模块
     private String title;

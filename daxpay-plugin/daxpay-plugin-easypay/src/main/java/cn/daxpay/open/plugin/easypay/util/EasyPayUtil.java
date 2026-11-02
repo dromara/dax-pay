@@ -76,6 +76,11 @@ public class EasyPayUtil {
         return money.multiply(BigDecimal.valueOf(100)).setScale(0, RoundingMode.HALF_UP).longValueExact();
     }
 
+    /// 分转元
+    public BigDecimal fenToYuan(long fen) {
+        return BigDecimal.valueOf(fen).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
+    }
+
     /// 分转元字符串
     public String fenToYuanString(long fen) {
         return BigDecimal.valueOf(fen).divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP).toPlainString();

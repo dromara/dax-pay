@@ -8,8 +8,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Objects;
@@ -77,10 +75,9 @@ public class EasyPayOrderService {
             return;
         }
         var order = optional.get();
-        BigDecimal add = BigDecimal.valueOf(refundAmountFen)
-                .divide(BigDecimal.valueOf(100), 2, RoundingMode.HALF_UP);
-        BigDecimal current = Objects.isNull(order.getRefundMoney()) ? BigDecimal.ZERO : order.getRefundMoney();
-        order.setRefundMoney(current.add(add));
+        // 退款金额与已退金额均为分, 直接累加
+        long current = Objects.isNull(order.getRefundMoney()) ? 0L : order.getRefundMoney();
+        order.setRefundMoney(current + refundAmountFen);
         easyPayOrderManager.updateById(order);
     }
 

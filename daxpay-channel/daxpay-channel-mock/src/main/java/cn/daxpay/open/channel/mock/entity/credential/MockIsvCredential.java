@@ -19,7 +19,7 @@ import lombok.experimental.Accessors;
 /// - 装配链: isvNo 非空且两件套齐时整行下发(主体编号取服务商编号, 由 one 侧随请求报文/查询串
 ///   携带 key_owner_no, 模拟网关按主体编号定位登记公钥, gatewayBaseUrl 供 one 侧优先选址),
 ///   否则回落全局单行([MockChannelCredential]);
-/// - 数据库 key_serial 列已废弃(保留列兼容存量, 本实体不再读写)。
+/// - 主体级密钥已下线, 按主体编号 key_owner_no 取钥(主体编号取服务商编号), 装配按「商户私钥 + 平台公钥」两件套。
 /// 由 [cn.daxpay.open.channel.mock.controller.admin.MockIsvCredentialController] 运营端维护,
 /// 随 [cn.daxpay.open.channel.mock.MockChannelApp] 仅 DEV 装配。
 @EqualsAndHashCode(callSuper = true)

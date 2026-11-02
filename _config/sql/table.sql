@@ -1,11 +1,10 @@
-
 --
 -- Name: adapay_direct_key_config; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.adapay_direct_key_config (
     id bigint NOT NULL,
-    mch_no character varying(32),
+    mch_no character varying(64),
     channel_mch_no character varying(64),
     adapay_app_id character varying(64),
     api_key text,
@@ -119,31 +118,12 @@ COMMENT ON COLUMN public.adapay_direct_key_config.deleted IS '删除标志';
 
 
 --
--- Name: adapay_direct_key_config_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.adapay_direct_key_config_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: adapay_direct_key_config_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.adapay_direct_key_config_id_seq OWNED BY public.adapay_direct_key_config.id;
-
-
---
 -- Name: alipay_direct_alloc_receiver; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.alipay_direct_alloc_receiver (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     channel_mch_no character varying(64) NOT NULL,
     receiver_type character varying(32) NOT NULL,
     receiver_account character varying(256) NOT NULL,
@@ -310,7 +290,7 @@ COMMENT ON COLUMN public.alipay_direct_alloc_receiver.alias IS '接收方别名(
 
 CREATE TABLE public.alipay_direct_app (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     channel_mch_no character varying(64) NOT NULL,
     app_name character varying(64),
     ali_app_id character varying(64),
@@ -421,12 +401,11 @@ COMMENT ON COLUMN public.alipay_direct_app.app_type IS '应用类型';
 
 CREATE TABLE public.alipay_direct_app_capability (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     channel_mch_no character varying(64) NOT NULL,
     capability character varying(32) NOT NULL,
     alipay_direct_app_id bigint NOT NULL,
     create_time timestamp(6) with time zone DEFAULT now(),
-    update_time timestamp(6) with time zone DEFAULT now(),
     deleted boolean DEFAULT false NOT NULL,
     creator bigint,
     last_modifier bigint,
@@ -485,13 +464,6 @@ COMMENT ON COLUMN public.alipay_direct_app_capability.create_time IS '创建时�
 
 
 --
--- Name: COLUMN alipay_direct_app_capability.update_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.alipay_direct_app_capability.update_time IS '更新时间';
-
-
---
 -- Name: COLUMN alipay_direct_app_capability.deleted; Type: COMMENT; Schema: public; Owner: -
 --
 
@@ -527,31 +499,12 @@ COMMENT ON COLUMN public.alipay_direct_app_capability.version IS '乐观锁版�
 
 
 --
--- Name: alipay_direct_app_capability_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.alipay_direct_app_capability_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: alipay_direct_app_capability_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.alipay_direct_app_capability_id_seq OWNED BY public.alipay_direct_app_capability.id;
-
-
---
 -- Name: alipay_direct_app_key_config; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.alipay_direct_app_key_config (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     channel_mch_no character varying(64) NOT NULL,
     alipay_direct_app_id bigint,
     auth_type character varying(32),
@@ -567,7 +520,8 @@ CREATE TABLE public.alipay_direct_app_key_config (
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0 NOT NULL,
     deleted boolean DEFAULT false NOT NULL,
-    sandbox boolean DEFAULT false
+    sandbox boolean DEFAULT false,
+    server_url character varying(512)
 );
 
 
@@ -705,12 +659,19 @@ COMMENT ON COLUMN public.alipay_direct_app_key_config.sandbox IS '是否沙箱�
 
 
 --
+-- Name: COLUMN alipay_direct_app_key_config.server_url; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.alipay_direct_app_key_config.server_url IS '网关地址(留空使用官方网关; 联调演练填模拟网关完整地址, 如 http://127.0.0.1:10400/gateway.do)';
+
+
+--
 -- Name: alipay_direct_channel_merchant; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.alipay_direct_channel_merchant (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     channel_mch_no character varying(64) NOT NULL,
     product character varying(32) NOT NULL,
     alipay_user_id character varying(64),
@@ -821,7 +782,7 @@ COMMENT ON COLUMN public.alipay_direct_channel_merchant.sandbox IS '是否沙箱
 
 CREATE TABLE public.alipay_isv_alloc_receiver (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     channel_mch_no character varying(64) NOT NULL,
     receiver_type character varying(32) NOT NULL,
     receiver_account character varying(256) NOT NULL,
@@ -1080,7 +1041,8 @@ CREATE TABLE public.alipay_isv_app_key_config (
     last_modifier bigint,
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0 NOT NULL,
-    deleted boolean DEFAULT false NOT NULL
+    deleted boolean DEFAULT false NOT NULL,
+    server_url character varying(512)
 );
 
 
@@ -1197,12 +1159,19 @@ COMMENT ON COLUMN public.alipay_isv_app_key_config.deleted IS '逻辑删除标�
 
 
 --
+-- Name: COLUMN alipay_isv_app_key_config.server_url; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.alipay_isv_app_key_config.server_url IS '网关地址(留空使用官方网关; 联调演练填模拟网关完整地址, 如 http://127.0.0.1:10400/gateway.do)';
+
+
+--
 -- Name: alipay_isv_channel_merchant; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.alipay_isv_channel_merchant (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     channel_mch_no character varying(64) NOT NULL,
     product character varying(32) NOT NULL,
     isv_app_id bigint,
@@ -1321,7 +1290,7 @@ COMMENT ON COLUMN public.alipay_isv_channel_merchant.deleted IS '逻辑删除标
 
 CREATE TABLE public.alipay_transfer_config (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     channel_mch_no character varying(64) NOT NULL,
     transfer_app_ref_id bigint NOT NULL,
     creator bigint,
@@ -1416,7 +1385,7 @@ COMMENT ON COLUMN public.alipay_transfer_config.deleted IS '逻辑删除标志';
 
 CREATE TABLE public.alipay_transfer_scene_config (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     channel_mch_no character varying(64) NOT NULL,
     scene_name character varying(64) NOT NULL,
     enabled boolean DEFAULT false NOT NULL,
@@ -1527,7 +1496,7 @@ COMMENT ON COLUMN public.alipay_transfer_scene_config.deleted IS '逻辑删除�
 
 CREATE TABLE public.baofu_direct_key_config (
     id bigint NOT NULL,
-    mch_no character varying(32),
+    mch_no character varying(64),
     channel_mch_no character varying(64),
     mer_id character varying(64),
     ter_id character varying(64),
@@ -2191,7 +2160,7 @@ COMMENT ON COLUMN public.base_user_protocol_version.deleted IS '逻辑删除标�
 
 CREATE TABLE public.cpcn_direct_key_config (
     id bigint NOT NULL,
-    mch_no character varying(32),
+    mch_no character varying(64),
     channel_mch_no character varying(64),
     institution_id character varying(64),
     gateway_url character varying(255),
@@ -2337,7 +2306,7 @@ CREATE TABLE public.device_qr_code (
     code character varying(64) NOT NULL,
     name character varying(100),
     batch_no character varying(64),
-    mch_no character varying(32),
+    mch_no character varying(64),
     app_id character varying(64),
     program_type character varying(20) DEFAULT 'h5'::character varying NOT NULL,
     amount_type character varying(20) NOT NULL,
@@ -2501,7 +2470,7 @@ COMMENT ON COLUMN public.device_qr_code.allocation IS '是否分账码牌(开启
 
 CREATE TABLE public.dougong_isv_channel_merchant (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     channel_mch_no character varying(64) NOT NULL,
     product character varying(32) NOT NULL,
     merchant_no character varying(64) NOT NULL,
@@ -2596,25 +2565,6 @@ COMMENT ON COLUMN public.dougong_isv_channel_merchant.version IS '乐观锁版�
 --
 
 COMMENT ON COLUMN public.dougong_isv_channel_merchant.deleted IS '逻辑删除标志';
-
-
---
--- Name: dougong_isv_channel_merchant_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.dougong_isv_channel_merchant_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: dougong_isv_channel_merchant_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.dougong_isv_channel_merchant_id_seq OWNED BY public.dougong_isv_channel_merchant.id;
 
 
 --
@@ -2729,31 +2679,12 @@ COMMENT ON COLUMN public.dougong_isv_key_config.deleted IS '逻辑删除标志';
 
 
 --
--- Name: dougong_isv_key_config_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.dougong_isv_key_config_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: dougong_isv_key_config_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.dougong_isv_key_config_id_seq OWNED BY public.dougong_isv_key_config.id;
-
-
---
 -- Name: douyin_direct_alloc_receiver; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.douyin_direct_alloc_receiver (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     channel_mch_no character varying(64) NOT NULL,
     receiver_type character varying(32) NOT NULL,
     receiver_account character varying(256) NOT NULL,
@@ -2936,7 +2867,7 @@ COMMENT ON COLUMN public.douyin_direct_alloc_receiver.alias IS '接收方别名(
 
 CREATE TABLE public.douyin_direct_channel_merchant (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     channel_mch_no character varying(64) NOT NULL,
     product character varying(32) NOT NULL,
     dy_mch_id character varying(64),
@@ -2945,8 +2876,7 @@ CREATE TABLE public.douyin_direct_channel_merchant (
     last_modifier bigint,
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0 NOT NULL,
-    deleted boolean DEFAULT false NOT NULL,
-    transfer_scene character varying(50)
+    deleted boolean DEFAULT false NOT NULL
 );
 
 
@@ -3035,19 +2965,12 @@ COMMENT ON COLUMN public.douyin_direct_channel_merchant.deleted IS '逻辑删除
 
 
 --
--- Name: COLUMN douyin_direct_channel_merchant.transfer_scene; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.douyin_direct_channel_merchant.transfer_scene IS '转账场景ID(商家转账, 未配置时发起转账报错)';
-
-
---
 -- Name: douyin_direct_key_config; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.douyin_direct_key_config (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     channel_mch_no character varying(64) NOT NULL,
     merchant_private_key text,
     merchant_serial_number character varying(64),
@@ -3164,7 +3087,7 @@ CREATE TABLE public.douyin_transfer_config (
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0 NOT NULL,
     deleted boolean DEFAULT false NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     channel_mch_no character varying(64) NOT NULL,
     transfer_app_ref_id bigint
 );
@@ -3253,7 +3176,7 @@ COMMENT ON COLUMN public.douyin_transfer_config.transfer_app_ref_id IS '转账�
 
 CREATE TABLE public.duolabao_direct_key_config (
     id bigint NOT NULL,
-    mch_no character varying(32),
+    mch_no character varying(64),
     channel_mch_no character varying(64),
     customer_num character varying(64),
     shop_num character varying(64),
@@ -3394,7 +3317,7 @@ CREATE TABLE public.dy_channel_app_capability (
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0 NOT NULL,
     deleted boolean DEFAULT false NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     channel_mch_no character varying(64) NOT NULL,
     capability character varying(64) NOT NULL,
     app_scope character varying(16) NOT NULL,
@@ -3505,7 +3428,7 @@ CREATE TABLE public.dy_mch_app (
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0 NOT NULL,
     deleted boolean DEFAULT false NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     app_name character varying(64) NOT NULL,
     app_type character varying(32) NOT NULL,
     douyin_app_id character varying(64) NOT NULL,
@@ -3808,7 +3731,7 @@ COMMENT ON COLUMN public.dy_platform_app_capability.product IS '产品编码';
 
 CREATE TABLE public.easy_pay_key_config (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     channel_mch_no character varying(64) NOT NULL,
     server_url character varying(255) NOT NULL,
     partner_id character varying(32) NOT NULL,
@@ -3922,31 +3845,12 @@ COMMENT ON COLUMN public.easy_pay_key_config.deleted IS '逻辑删除标志';
 
 
 --
--- Name: easy_pay_key_config_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.easy_pay_key_config_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: easy_pay_key_config_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.easy_pay_key_config_id_seq OWNED BY public.easy_pay_key_config.id;
-
-
---
 -- Name: epaylinks_direct_key_config; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.epaylinks_direct_key_config (
     id bigint NOT NULL,
-    mch_no character varying(32),
+    mch_no character varying(64),
     channel_mch_no character varying(64),
     customer_code character varying(64),
     channel_mcht_no character varying(64),
@@ -4081,7 +3985,7 @@ COMMENT ON COLUMN public.epaylinks_direct_key_config.deleted IS '删除标志';
 
 CREATE TABLE public.fubei_direct_key_config (
     id bigint NOT NULL,
-    mch_no character varying(32),
+    mch_no character varying(64),
     channel_mch_no character varying(64),
     app_id character varying(64),
     merchant_id character varying(64),
@@ -4208,7 +4112,7 @@ COMMENT ON COLUMN public.fubei_direct_key_config.deleted IS '删除标志';
 
 CREATE TABLE public.fuyou_direct_key_config (
     id bigint NOT NULL,
-    mch_no character varying(32),
+    mch_no character varying(64),
     channel_mch_no character varying(64),
     product character varying(32),
     sandbox boolean DEFAULT false,
@@ -4335,7 +4239,7 @@ COMMENT ON COLUMN public.fuyou_direct_key_config.deleted IS '删除标志';
 
 CREATE TABLE public.fuyou_isv_channel_merchant (
     id bigint NOT NULL,
-    mch_no character varying(32),
+    mch_no character varying(64),
     channel_mch_no character varying(64),
     product character varying(32),
     sandbox boolean DEFAULT false,
@@ -4573,7 +4477,7 @@ COMMENT ON COLUMN public.fuyou_isv_key_config.deleted IS '删除标志';
 
 CREATE TABLE public.fuyou_rsa_key_config (
     id bigint NOT NULL,
-    mch_no character varying(32),
+    mch_no character varying(64),
     channel_mch_no character varying(64),
     product character varying(32),
     sandbox boolean DEFAULT false,
@@ -4700,7 +4604,7 @@ COMMENT ON COLUMN public.fuyou_rsa_key_config.deleted IS '删除标志';
 
 CREATE TABLE public.helipay_key_config (
     id bigint NOT NULL,
-    mch_no character varying(32),
+    mch_no character varying(64),
     channel_mch_no character varying(64),
     customer_number character varying(64),
     sub_customer_number character varying(64),
@@ -4958,7 +4862,6 @@ CREATE TABLE public.hkrt_isv_key_config (
     agent_no character varying(64),
     access_id character varying(128),
     access_key text,
-    wx_app_id character varying(64),
     deleted boolean DEFAULT false NOT NULL,
     last_modifier bigint,
     last_modified_time timestamp(6) with time zone,
@@ -5009,13 +4912,6 @@ COMMENT ON COLUMN public.hkrt_isv_key_config.access_id IS '接入机构标识(ac
 --
 
 COMMENT ON COLUMN public.hkrt_isv_key_config.access_key IS '签名密钥(access_key, MD5 大写签名, 加密存储)';
-
-
---
--- Name: COLUMN hkrt_isv_key_config.wx_app_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.hkrt_isv_key_config.wx_app_id IS '微信公众号 AppId(JSAPI 场景透传, 可选)';
 
 
 --
@@ -5073,13 +4969,11 @@ COMMENT ON COLUMN public.hkrt_isv_key_config.sandbox IS '是否沙箱环境';
 
 CREATE TABLE public.hmpay_isv_channel_merchant (
     id bigint NOT NULL,
-    mch_no character varying(32),
+    mch_no character varying(64),
     channel_mch_no character varying(64),
     product character varying(32),
     merchant_no character varying(64),
     store_id character varying(64),
-    wx_app_id character varying(64),
-    wx_channel_auth boolean DEFAULT false,
     creator bigint,
     create_time timestamp(6) with time zone,
     last_modifier bigint,
@@ -5140,20 +5034,6 @@ COMMENT ON COLUMN public.hmpay_isv_channel_merchant.store_id IS '门店号(store
 
 
 --
--- Name: COLUMN hmpay_isv_channel_merchant.wx_app_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.hmpay_isv_channel_merchant.wx_app_id IS '微信应用ID(公众号/小程序 appId, 用于微信 JSAPI/小程序支付)';
-
-
---
--- Name: COLUMN hmpay_isv_channel_merchant.wx_channel_auth; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.hmpay_isv_channel_merchant.wx_channel_auth IS '是否使用通道渠道认证(微信服务商授权模式)';
-
-
---
 -- Name: COLUMN hmpay_isv_channel_merchant.creator; Type: COMMENT; Schema: public; Owner: -
 --
 
@@ -5203,25 +5083,6 @@ COMMENT ON COLUMN public.hmpay_isv_channel_merchant.sandbox IS '是否沙箱环�
 
 
 --
--- Name: hmpay_isv_channel_merchant_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.hmpay_isv_channel_merchant_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: hmpay_isv_channel_merchant_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.hmpay_isv_channel_merchant_id_seq OWNED BY public.hmpay_isv_channel_merchant.id;
-
-
---
 -- Name: hmpay_isv_key_config; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -5236,7 +5097,7 @@ CREATE TABLE public.hmpay_isv_key_config (
     last_modifier bigint,
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0,
-    deleted boolean DEFAULT false,
+    deleted boolean DEFAULT false NOT NULL,
     sandbox boolean DEFAULT false
 );
 
@@ -5330,25 +5191,6 @@ COMMENT ON COLUMN public.hmpay_isv_key_config.deleted IS '删除标志';
 --
 
 COMMENT ON COLUMN public.hmpay_isv_key_config.sandbox IS '是否沙箱环境';
-
-
---
--- Name: hmpay_isv_key_config_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.hmpay_isv_key_config_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: hmpay_isv_key_config_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.hmpay_isv_key_config_id_seq OWNED BY public.hmpay_isv_key_config.id;
 
 
 --
@@ -5598,7 +5440,6 @@ CREATE TABLE public.iam_perm_menu (
     pid bigint,
     menu_code character varying(100),
     client_code character varying(100),
-    name character varying(200),
     i18n_key character varying(200),
     icon character varying(200),
     hidden boolean DEFAULT false,
@@ -5607,7 +5448,6 @@ CREATE TABLE public.iam_perm_menu (
     path character varying(500),
     redirect character varying(500),
     sort_no double precision,
-    root boolean DEFAULT false,
     keep_alive boolean DEFAULT false,
     affix_tab boolean DEFAULT false,
     creator bigint,
@@ -5615,7 +5455,6 @@ CREATE TABLE public.iam_perm_menu (
     version integer DEFAULT 0,
     deleted boolean DEFAULT false NOT NULL,
     menu_type character varying(20),
-    active_icon character varying(100),
     badge character varying(50),
     badge_type character varying(20),
     badge_variants character varying(50),
@@ -5660,13 +5499,6 @@ COMMENT ON COLUMN public.iam_perm_menu.menu_code IS '菜单编码';
 --
 
 COMMENT ON COLUMN public.iam_perm_menu.client_code IS '关联终端code';
-
-
---
--- Name: COLUMN iam_perm_menu.name; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.iam_perm_menu.name IS '路由名称，建议唯一';
 
 
 --
@@ -5726,13 +5558,6 @@ COMMENT ON COLUMN public.iam_perm_menu.sort_no IS '菜单排序';
 
 
 --
--- Name: COLUMN iam_perm_menu.root; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.iam_perm_menu.root IS '是否是一级菜单';
-
-
---
 -- Name: COLUMN iam_perm_menu.keep_alive; Type: COMMENT; Schema: public; Owner: -
 --
 
@@ -5779,13 +5604,6 @@ COMMENT ON COLUMN public.iam_perm_menu.deleted IS '删除标志';
 --
 
 COMMENT ON COLUMN public.iam_perm_menu.menu_type IS '菜单类型';
-
-
---
--- Name: COLUMN iam_perm_menu.active_icon; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.iam_perm_menu.active_icon IS '激活状态图标';
 
 
 --
@@ -5852,7 +5670,6 @@ CREATE TABLE public.iam_role (
     id bigint NOT NULL,
     code character varying(100) NOT NULL,
     client_code character varying(100) NOT NULL,
-    data_scope character varying(50),
     internal boolean DEFAULT false,
     remark character varying(500),
     creator bigint,
@@ -5891,13 +5708,6 @@ COMMENT ON COLUMN public.iam_role.code IS '角色编码';
 --
 
 COMMENT ON COLUMN public.iam_role.client_code IS '终端编码';
-
-
---
--- Name: COLUMN iam_role.data_scope; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.iam_role.data_scope IS '数据权限范围';
 
 
 --
@@ -6009,7 +5819,6 @@ COMMENT ON COLUMN public.iam_role_code.code_id IS '权限码ID';
 CREATE TABLE public.iam_role_menu (
     id bigint NOT NULL,
     role_id bigint NOT NULL,
-    client_code character varying(50),
     menu_id bigint NOT NULL
 );
 
@@ -6033,13 +5842,6 @@ COMMENT ON COLUMN public.iam_role_menu.id IS '主键';
 --
 
 COMMENT ON COLUMN public.iam_role_menu.role_id IS '角色ID';
-
-
---
--- Name: COLUMN iam_role_menu.client_code; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.iam_role_menu.client_code IS '终端编码: ADMIN/ISV/AGENT/MCH';
 
 
 --
@@ -7149,7 +6951,7 @@ COMMENT ON COLUMN public.iam_user_two_factor.deleted IS '逻辑删除标志';
 
 CREATE TABLE public.jee_pay_key_config (
     id bigint NOT NULL,
-    mch_no character varying(32),
+    mch_no character varying(64),
     channel_mch_no character varying(64),
     server_url character varying(255),
     jeepay_mch_no character varying(64),
@@ -7268,7 +7070,7 @@ COMMENT ON COLUMN public.jee_pay_key_config.deleted IS '删除标志';
 
 CREATE TABLE public.jlpay_direct_key_config (
     id bigint NOT NULL,
-    mch_no character varying(32),
+    mch_no character varying(64),
     channel_mch_no character varying(64),
     app_id character varying(64),
     mch_id character varying(64),
@@ -7403,7 +7205,7 @@ COMMENT ON COLUMN public.jlpay_direct_key_config.deleted IS '删除标志';
 
 CREATE TABLE public.kuaiqian_direct_key_config (
     id bigint NOT NULL,
-    mch_no character varying(32),
+    mch_no character varying(64),
     channel_mch_no character varying(64),
     member_code character varying(64),
     vendor_member_code character varying(64),
@@ -7570,7 +7372,7 @@ COMMENT ON COLUMN public.kuaiqian_direct_key_config.deleted IS '删除标志';
 
 CREATE TABLE public.lakala_isv_channel_merchant (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     channel_mch_no character varying(64) NOT NULL,
     product character varying(32) NOT NULL,
     lakala_mch_no character varying(64) NOT NULL,
@@ -7824,7 +7626,7 @@ COMMENT ON COLUMN public.lakala_isv_key_config.sandbox IS '是否沙箱环境';
 
 CREATE TABLE public.leshua_isv_channel_merchant (
     id bigint NOT NULL,
-    mch_no character varying(32),
+    mch_no character varying(64),
     channel_mch_no character varying(64),
     product character varying(32),
     sandbox boolean DEFAULT false,
@@ -8054,7 +7856,7 @@ COMMENT ON COLUMN public.leshua_isv_key_config.deleted IS '删除标志';
 
 CREATE TABLE public.llianpay_direct_key_config (
     id bigint NOT NULL,
-    mch_no character varying(32),
+    mch_no character varying(64),
     channel_mch_no character varying(64),
     mch_id character varying(64),
     sub_mchid character varying(64),
@@ -8197,7 +7999,7 @@ COMMENT ON COLUMN public.llianpay_direct_key_config.deleted IS '删除标志';
 
 CREATE TABLE public.long_pay_direct_key_config (
     id bigint NOT NULL,
-    mch_no character varying(32),
+    mch_no character varying(64),
     channel_mch_no character varying(64),
     merchant_id character varying(64),
     pos_id character varying(64),
@@ -8332,8 +8134,8 @@ COMMENT ON COLUMN public.long_pay_direct_key_config.deleted IS '删除标志';
 
 CREATE TABLE public.mch_app_info (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
-    app_id character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
+    app_id character varying(64) NOT NULL,
     app_name character varying(64) NOT NULL,
     status character varying(32) NOT NULL,
     default_app boolean DEFAULT false NOT NULL,
@@ -8443,8 +8245,8 @@ COMMENT ON COLUMN public.mch_app_info.deleted IS '逻辑删除';
 
 CREATE TABLE public.mch_app_notify_config (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
-    app_id character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
+    app_id character varying(64) NOT NULL,
     notify_url character varying(255),
     notify_way character varying(20) DEFAULT 'http'::character varying,
     subscribed_events character varying(100),
@@ -8565,32 +8367,13 @@ COMMENT ON COLUMN public.mch_app_notify_config.deleted IS '逻辑删除标志';
 
 
 --
--- Name: mch_app_notify_config_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.mch_app_notify_config_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: mch_app_notify_config_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.mch_app_notify_config_id_seq OWNED BY public.mch_app_notify_config.id;
-
-
---
 -- Name: mch_channel_merchant; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.mch_channel_merchant (
     id bigint NOT NULL,
-    mch_no character varying(32),
-    channel_mch_no character varying(32),
+    mch_no character varying(64),
+    channel_mch_no character varying(64),
     channel_merchant_name character varying(200),
     product character varying(32),
     enable boolean DEFAULT false,
@@ -8724,7 +8507,7 @@ COMMENT ON COLUMN public.mch_channel_merchant.sandbox IS '是否沙箱环境商�
 
 CREATE TABLE public.mch_credential (
     id bigint NOT NULL,
-    mch_no character varying(32),
+    mch_no character varying(64),
     public_key text,
     secret_key text,
     creator bigint,
@@ -8819,7 +8602,7 @@ COMMENT ON COLUMN public.mch_credential.deleted IS '逻辑删除';
 
 CREATE TABLE public.mch_info (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     mch_name character varying(128),
     mch_short_name character varying(64),
     admin_user_id bigint,
@@ -8944,7 +8727,7 @@ CREATE TABLE public.mch_notice_record (
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0 NOT NULL,
     deleted boolean DEFAULT false NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     task_id bigint NOT NULL,
     req_count integer NOT NULL,
     send_type character varying(16) NOT NULL,
@@ -9079,7 +8862,7 @@ CREATE TABLE public.mch_notice_task (
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0 NOT NULL,
     deleted boolean DEFAULT false NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     app_id character varying(64) NOT NULL,
     biz_id bigint,
     biz_no character varying(64) NOT NULL,
@@ -9280,7 +9063,7 @@ COMMENT ON COLUMN public.mch_notice_task.format IS '报文格式: system / easy_
 
 CREATE TABLE public.mch_store_info (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     store_no character varying(32) NOT NULL,
     store_name character varying(128) NOT NULL,
     contact_phone character varying(32),
@@ -9299,7 +9082,8 @@ CREATE TABLE public.mch_store_info (
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0 NOT NULL,
     deleted boolean DEFAULT false NOT NULL,
-    default_store boolean DEFAULT false NOT NULL
+    default_store boolean DEFAULT false NOT NULL,
+    app_id character varying(64)
 );
 
 
@@ -9458,13 +9242,20 @@ COMMENT ON COLUMN public.mch_store_info.default_store IS '是否默认门店(同
 
 
 --
+-- Name: COLUMN mch_store_info.app_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mch_store_info.app_id IS '门店默认支付应用号(空则使用商户默认应用)';
+
+
+--
 -- Name: mch_user; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.mch_user (
     id bigint NOT NULL,
     user_id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     administrator boolean DEFAULT false,
     creator bigint,
     create_time timestamp(6) with time zone DEFAULT CURRENT_TIMESTAMP
@@ -9521,31 +9312,12 @@ COMMENT ON COLUMN public.mch_user.create_time IS '创建时间';
 
 
 --
--- Name: mch_user_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.mch_user_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: mch_user_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.mch_user_id_seq OWNED BY public.mch_user.id;
-
-
---
 -- Name: mch_wx_domain_verify; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.mch_wx_domain_verify (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     platform boolean DEFAULT false NOT NULL,
     file_name character varying(100) NOT NULL,
     verify_code character varying(64) NOT NULL,
@@ -9656,6 +9428,672 @@ COMMENT ON COLUMN public.mch_wx_domain_verify.version IS '版本号（乐观锁�
 --
 
 COMMENT ON COLUMN public.mch_wx_domain_verify.deleted IS '逻辑删除标记';
+
+
+--
+-- Name: mock_alloc_receiver; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.mock_alloc_receiver (
+    id bigint NOT NULL,
+    mch_no character varying(64) NOT NULL,
+    channel_mch_no character varying(64) NOT NULL,
+    product character varying(32) NOT NULL,
+    receiver_type character varying(32) NOT NULL,
+    receiver_account character varying(256) NOT NULL,
+    account_hash character varying(64) NOT NULL,
+    receiver_name character varying(256),
+    alias character varying(50),
+    status character varying(16) NOT NULL,
+    error_msg text,
+    bind_time timestamp(6) with time zone,
+    unbind_time timestamp(6) with time zone,
+    creator bigint,
+    create_time timestamp(6) with time zone,
+    last_modifier bigint,
+    last_modified_time timestamp(6) with time zone,
+    version integer DEFAULT 0 NOT NULL,
+    deleted boolean DEFAULT false NOT NULL
+);
+
+
+--
+-- Name: TABLE mock_alloc_receiver; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.mock_alloc_receiver IS 'Mock 分账接收方绑定档案';
+
+
+--
+-- Name: COLUMN mock_alloc_receiver.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_alloc_receiver.id IS '主键';
+
+
+--
+-- Name: COLUMN mock_alloc_receiver.mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_alloc_receiver.mch_no IS '商户号';
+
+
+--
+-- Name: COLUMN mock_alloc_receiver.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_alloc_receiver.channel_mch_no IS '通道商户号(关联通道商户主表)';
+
+
+--
+-- Name: COLUMN mock_alloc_receiver.product; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_alloc_receiver.product IS '所属支付产品(mock_pay/mock_isv, 冗余自通道商户)';
+
+
+--
+-- Name: COLUMN mock_alloc_receiver.receiver_type; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_alloc_receiver.receiver_type IS '接收方类型';
+
+
+--
+-- Name: COLUMN mock_alloc_receiver.receiver_account; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_alloc_receiver.receiver_account IS '接收方账号(AES-256-GCM 加密存储)';
+
+
+--
+-- Name: COLUMN mock_alloc_receiver.account_hash; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_alloc_receiver.account_hash IS '接收方账号 SHA-256 哈希(密文不确定, 查重与等值定位用)';
+
+
+--
+-- Name: COLUMN mock_alloc_receiver.receiver_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_alloc_receiver.receiver_name IS '接收方名称(AES-256-GCM 加密存储, MERCHANT_ID 时必填商户全称)';
+
+
+--
+-- Name: COLUMN mock_alloc_receiver.alias; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_alloc_receiver.alias IS '接收方别名(本地备注, 不上送通道, 可随时修改)';
+
+
+--
+-- Name: COLUMN mock_alloc_receiver.status; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_alloc_receiver.status IS '绑定状态(bound/unbound/fail)';
+
+
+--
+-- Name: COLUMN mock_alloc_receiver.error_msg; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_alloc_receiver.error_msg IS '最近一次绑定/解绑失败原因';
+
+
+--
+-- Name: COLUMN mock_alloc_receiver.bind_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_alloc_receiver.bind_time IS '绑定成功时间';
+
+
+--
+-- Name: COLUMN mock_alloc_receiver.unbind_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_alloc_receiver.unbind_time IS '解绑成功时间';
+
+
+--
+-- Name: COLUMN mock_alloc_receiver.creator; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_alloc_receiver.creator IS '创建人';
+
+
+--
+-- Name: COLUMN mock_alloc_receiver.create_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_alloc_receiver.create_time IS '创建时间';
+
+
+--
+-- Name: COLUMN mock_alloc_receiver.last_modifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_alloc_receiver.last_modifier IS '最后修改人';
+
+
+--
+-- Name: COLUMN mock_alloc_receiver.last_modified_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_alloc_receiver.last_modified_time IS '最后修改时间';
+
+
+--
+-- Name: COLUMN mock_alloc_receiver.version; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_alloc_receiver.version IS '乐观锁版本号';
+
+
+--
+-- Name: COLUMN mock_alloc_receiver.deleted; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_alloc_receiver.deleted IS '逻辑删除标志';
+
+
+--
+-- Name: mock_channel_credential; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.mock_channel_credential (
+    id bigint NOT NULL,
+    merchant_private_key text,
+    platform_public_key text,
+    creator bigint,
+    create_time timestamp(6) with time zone,
+    last_modifier bigint,
+    last_modified_time timestamp(6) with time zone,
+    version integer DEFAULT 0 NOT NULL,
+    deleted boolean DEFAULT false NOT NULL
+);
+
+
+--
+-- Name: TABLE mock_channel_credential; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.mock_channel_credential IS 'Mock 通道网关签名密钥(全局单行, 仅 DEV 装配)';
+
+
+--
+-- Name: COLUMN mock_channel_credential.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_channel_credential.id IS '主键(全局单行, 固定为1)';
+
+
+--
+-- Name: COLUMN mock_channel_credential.merchant_private_key; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_channel_credential.merchant_private_key IS '商户私钥(PEM PKCS#8 多行原文, 加密存储; 请求签名用, 与模拟网关侧商户公钥成对)';
+
+
+--
+-- Name: COLUMN mock_channel_credential.platform_public_key; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_channel_credential.platform_public_key IS '平台公钥(PEM SPKI 多行原文, 加密存储; 响应/回调验签用, 与模拟网关侧平台私钥成对)';
+
+
+--
+-- Name: COLUMN mock_channel_credential.creator; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_channel_credential.creator IS '创建人';
+
+
+--
+-- Name: COLUMN mock_channel_credential.create_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_channel_credential.create_time IS '创建时间';
+
+
+--
+-- Name: COLUMN mock_channel_credential.last_modifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_channel_credential.last_modifier IS '最后修改人';
+
+
+--
+-- Name: COLUMN mock_channel_credential.last_modified_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_channel_credential.last_modified_time IS '最后修改时间';
+
+
+--
+-- Name: COLUMN mock_channel_credential.version; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_channel_credential.version IS '乐观锁版本号';
+
+
+--
+-- Name: COLUMN mock_channel_credential.deleted; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_channel_credential.deleted IS '逻辑删除标志';
+
+
+--
+-- Name: mock_direct_credential; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.mock_direct_credential (
+    id bigint NOT NULL,
+    channel_mch_no character varying(64) NOT NULL,
+    merchant_private_key text,
+    platform_public_key text,
+    gateway_base_url character varying(256),
+    creator bigint,
+    create_time timestamp(6) with time zone,
+    last_modifier bigint,
+    last_modified_time timestamp(6) with time zone,
+    version integer DEFAULT 0 NOT NULL,
+    deleted boolean DEFAULT false NOT NULL
+);
+
+
+--
+-- Name: TABLE mock_direct_credential; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.mock_direct_credential IS 'Mock 直连商户接入密钥(按通道商户一行, 仅 DEV 装配)';
+
+
+--
+-- Name: COLUMN mock_direct_credential.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_direct_credential.id IS '主键';
+
+
+--
+-- Name: COLUMN mock_direct_credential.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_direct_credential.channel_mch_no IS '通道商户号(通道商户主表 channel_mch_no, 一通道商户一行未删除记录)';
+
+
+--
+-- Name: COLUMN mock_direct_credential.merchant_private_key; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_direct_credential.merchant_private_key IS '商户私钥(PEM PKCS#8, 加密存储; 留空保留原值)';
+
+
+--
+-- Name: COLUMN mock_direct_credential.platform_public_key; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_direct_credential.platform_public_key IS '平台公钥(PEM SPKI 多行原文, 加密存储; 直连产品网关响应/回调验签用, 留空保存保留原值)';
+
+
+--
+-- Name: COLUMN mock_direct_credential.gateway_base_url; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_direct_credential.gateway_base_url IS '商户接入网关地址(可空; 通道子应用侧非空优先选址, 空回落 yml base-url)';
+
+
+--
+-- Name: COLUMN mock_direct_credential.creator; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_direct_credential.creator IS '创建人';
+
+
+--
+-- Name: COLUMN mock_direct_credential.create_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_direct_credential.create_time IS '创建时间';
+
+
+--
+-- Name: COLUMN mock_direct_credential.last_modifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_direct_credential.last_modifier IS '最后修改人';
+
+
+--
+-- Name: COLUMN mock_direct_credential.last_modified_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_direct_credential.last_modified_time IS '最后修改时间';
+
+
+--
+-- Name: COLUMN mock_direct_credential.version; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_direct_credential.version IS '乐观锁版本号';
+
+
+--
+-- Name: COLUMN mock_direct_credential.deleted; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_direct_credential.deleted IS '逻辑删除标志';
+
+
+--
+-- Name: mock_isv_channel_merchant; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.mock_isv_channel_merchant (
+    id bigint NOT NULL,
+    mch_no character varying(64) NOT NULL,
+    channel_mch_no character varying(64) NOT NULL,
+    product character varying(32) NOT NULL,
+    creator bigint,
+    create_time timestamp(6) with time zone,
+    last_modifier bigint,
+    last_modified_time timestamp(6) with time zone,
+    version integer DEFAULT 0 NOT NULL,
+    deleted boolean DEFAULT false NOT NULL,
+    isv_id bigint
+);
+
+
+--
+-- Name: TABLE mock_isv_channel_merchant; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.mock_isv_channel_merchant IS 'Mock 服务商通道商户绑定';
+
+
+--
+-- Name: COLUMN mock_isv_channel_merchant.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_isv_channel_merchant.id IS '主键';
+
+
+--
+-- Name: COLUMN mock_isv_channel_merchant.mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_isv_channel_merchant.mch_no IS '商户号';
+
+
+--
+-- Name: COLUMN mock_isv_channel_merchant.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_isv_channel_merchant.channel_mch_no IS '通道商户号(模拟控制台手填, 与主表同值)';
+
+
+--
+-- Name: COLUMN mock_isv_channel_merchant.product; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_isv_channel_merchant.product IS '所属支付产品(恒为 mock_isv)';
+
+
+--
+-- Name: COLUMN mock_isv_channel_merchant.creator; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_isv_channel_merchant.creator IS '创建人';
+
+
+--
+-- Name: COLUMN mock_isv_channel_merchant.create_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_isv_channel_merchant.create_time IS '创建时间';
+
+
+--
+-- Name: COLUMN mock_isv_channel_merchant.last_modifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_isv_channel_merchant.last_modifier IS '最后修改人';
+
+
+--
+-- Name: COLUMN mock_isv_channel_merchant.last_modified_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_isv_channel_merchant.last_modified_time IS '最后修改时间';
+
+
+--
+-- Name: COLUMN mock_isv_channel_merchant.version; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_isv_channel_merchant.version IS '乐观锁版本号';
+
+
+--
+-- Name: COLUMN mock_isv_channel_merchant.deleted; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_isv_channel_merchant.deleted IS '逻辑删除标志';
+
+
+--
+-- Name: COLUMN mock_isv_channel_merchant.isv_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_isv_channel_merchant.isv_id IS '归属模拟服务商ID(指向 mock_isv_info.id, 创建时选定, 创建后不可改)';
+
+
+--
+-- Name: mock_isv_credential; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.mock_isv_credential (
+    id bigint NOT NULL,
+    isv_no character varying(32) NOT NULL,
+    merchant_private_key text,
+    platform_public_key text,
+    gateway_base_url character varying(256),
+    creator bigint,
+    create_time timestamp(6) with time zone,
+    last_modifier bigint,
+    last_modified_time timestamp(6) with time zone,
+    version integer DEFAULT 0 NOT NULL,
+    deleted boolean DEFAULT false NOT NULL
+);
+
+
+--
+-- Name: TABLE mock_isv_credential; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.mock_isv_credential IS 'Mock 服务商接入密钥(按服务商一行, 仅 DEV 装配)';
+
+
+--
+-- Name: COLUMN mock_isv_credential.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_isv_credential.id IS '主键';
+
+
+--
+-- Name: COLUMN mock_isv_credential.isv_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_isv_credential.isv_no IS '服务商编号(指向 mock_isv_info.isv_no, 一服务商一行未删除记录)';
+
+
+--
+-- Name: COLUMN mock_isv_credential.merchant_private_key; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_isv_credential.merchant_private_key IS '商户私钥(PEM PKCS#8, 加密存储; 留空保留原值)';
+
+
+--
+-- Name: COLUMN mock_isv_credential.platform_public_key; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_isv_credential.platform_public_key IS '平台公钥(PEM SPKI, 加密存储; 与商户私钥须齐配)';
+
+
+--
+-- Name: COLUMN mock_isv_credential.gateway_base_url; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_isv_credential.gateway_base_url IS '服务商接入网关地址(可空; 通道子应用侧非空优先选址, 空回落 yml base-url)';
+
+
+--
+-- Name: COLUMN mock_isv_credential.creator; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_isv_credential.creator IS '创建人';
+
+
+--
+-- Name: COLUMN mock_isv_credential.create_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_isv_credential.create_time IS '创建时间';
+
+
+--
+-- Name: COLUMN mock_isv_credential.last_modifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_isv_credential.last_modifier IS '最后修改人';
+
+
+--
+-- Name: COLUMN mock_isv_credential.last_modified_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_isv_credential.last_modified_time IS '最后修改时间';
+
+
+--
+-- Name: COLUMN mock_isv_credential.version; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_isv_credential.version IS '乐观锁版本号';
+
+
+--
+-- Name: COLUMN mock_isv_credential.deleted; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_isv_credential.deleted IS '逻辑删除标志';
+
+
+--
+-- Name: mock_isv_info; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.mock_isv_info (
+    id bigint NOT NULL,
+    isv_no character varying(32) NOT NULL,
+    isv_name character varying(64) NOT NULL,
+    enable boolean DEFAULT true NOT NULL,
+    creator bigint,
+    create_time timestamp(6) with time zone,
+    last_modifier bigint,
+    last_modified_time timestamp(6) with time zone,
+    version integer DEFAULT 0 NOT NULL,
+    deleted boolean DEFAULT false NOT NULL,
+    pay_enable boolean DEFAULT true NOT NULL
+);
+
+
+--
+-- Name: TABLE mock_isv_info; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.mock_isv_info IS 'Mock 模拟服务商主数据';
+
+
+--
+-- Name: COLUMN mock_isv_info.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_isv_info.id IS '主键';
+
+
+--
+-- Name: COLUMN mock_isv_info.isv_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_isv_info.isv_no IS '服务商编号(MISV+16位数字, 创建时自动生成不可改; 通道商户主表 isv_no 固化来源)';
+
+
+--
+-- Name: COLUMN mock_isv_info.isv_name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_isv_info.isv_name IS '服务商名称';
+
+
+--
+-- Name: COLUMN mock_isv_info.enable; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_isv_info.enable IS '是否允许新建服务商通道商户(停用后不影响已有通道商户支付)';
+
+
+--
+-- Name: COLUMN mock_isv_info.creator; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_isv_info.creator IS '创建人';
+
+
+--
+-- Name: COLUMN mock_isv_info.create_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_isv_info.create_time IS '创建时间';
+
+
+--
+-- Name: COLUMN mock_isv_info.last_modifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_isv_info.last_modifier IS '最后修改人';
+
+
+--
+-- Name: COLUMN mock_isv_info.last_modified_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_isv_info.last_modified_time IS '最后修改时间';
+
+
+--
+-- Name: COLUMN mock_isv_info.version; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_isv_info.version IS '乐观锁版本号';
+
+
+--
+-- Name: COLUMN mock_isv_info.deleted; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_isv_info.deleted IS '逻辑删除标志';
+
+
+--
+-- Name: COLUMN mock_isv_info.pay_enable; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.mock_isv_info.pay_enable IS '是否启用服务商支付(停用后仅阻止新支付下单, 不影响存量交易处理)';
 
 
 --
@@ -10132,10 +10570,10 @@ COMMENT ON COLUMN public.notify_notice_read.create_time IS '创建时间';
 
 CREATE TABLE public.pay_abnormal_order (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     app_id character varying(64),
-    trade_no character varying(64) NOT NULL,
-    biz_order_no character varying(100),
+    trade_no character varying(128) NOT NULL,
+    biz_order_no character varying(128),
     trade_type character varying(32),
     title character varying(100),
     amount bigint,
@@ -10530,14 +10968,14 @@ COMMENT ON COLUMN public.pay_alloc_detail.deleted IS '逻辑删除';
 
 CREATE TABLE public.pay_alloc_order (
     id bigint NOT NULL,
-    app_id character varying(32) NOT NULL,
+    app_id character varying(64) NOT NULL,
     alloc_no character varying(100) NOT NULL,
     biz_alloc_no character varying(100) NOT NULL,
     title character varying(100),
     description character varying(500),
-    trade_no character varying(100) NOT NULL,
+    trade_no character varying(128) NOT NULL,
     trade_type character varying(32),
-    biz_order_no character varying(100),
+    biz_order_no character varying(128),
     out_order_no character varying(150),
     out_alloc_no character varying(150),
     amount bigint NOT NULL,
@@ -10556,7 +10994,7 @@ CREATE TABLE public.pay_alloc_order (
     client_ip character varying(64),
     error_code character varying(64),
     error_msg character varying(500),
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     creator bigint,
     create_time timestamp(6) with time zone,
     last_modifier bigint,
@@ -10966,10 +11404,10 @@ CREATE TABLE public.pay_callback_record (
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0 NOT NULL,
     deleted boolean DEFAULT false NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     app_id character varying(64),
     channel_mch_no character varying(64),
-    trade_no character varying(100),
+    trade_no character varying(128),
     out_trade_no character varying(150),
     product character varying(32),
     callback_type character varying(20) NOT NULL,
@@ -11111,7 +11549,7 @@ COMMENT ON COLUMN public.pay_callback_record.error_msg IS '错误信息';
 
 CREATE TABLE public.pay_channel_terminal (
     id bigint NOT NULL,
-    channel_mch_no character varying(32) NOT NULL,
+    channel_mch_no character varying(64) NOT NULL,
     product character varying(64) NOT NULL,
     channel character varying(64) NOT NULL,
     type character varying(32) NOT NULL,
@@ -11120,7 +11558,7 @@ CREATE TABLE public.pay_channel_terminal (
     status character varying(32) DEFAULT 'init'::character varying NOT NULL,
     error_msg character varying(255),
     remark character varying(255),
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     creator bigint,
     create_time timestamp(6) with time zone,
     last_modifier bigint,
@@ -11262,9 +11700,9 @@ COMMENT ON COLUMN public.pay_channel_terminal.deleted IS '删除标志';
 
 CREATE TABLE public.pay_close_record (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
-    app_id character varying(32),
-    trade_no character varying(64) NOT NULL,
+    mch_no character varying(64) NOT NULL,
+    app_id character varying(64),
+    trade_no character varying(128) NOT NULL,
     biz_trade_no character varying(64),
     product character varying(32),
     channel character varying(32),
@@ -11416,34 +11854,15 @@ COMMENT ON COLUMN public.pay_close_record.deleted IS '逻辑删除标志';
 
 
 --
--- Name: pay_close_record_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.pay_close_record_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: pay_close_record_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.pay_close_record_id_seq OWNED BY public.pay_close_record.id;
-
-
---
 -- Name: pay_easy_pay_config; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.pay_easy_pay_config (
     id bigint NOT NULL,
     pid integer NOT NULL,
-    app_id character varying(32) NOT NULL,
+    app_id character varying(64) NOT NULL,
     limit_pay character varying(64),
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     creator bigint,
     create_time timestamp(6) with time zone,
     last_modifier bigint,
@@ -11544,14 +11963,14 @@ COMMENT ON COLUMN public.pay_easy_pay_config.deleted IS '逻辑删除';
 CREATE TABLE public.pay_easy_pay_credential (
     id bigint NOT NULL,
     pid integer NOT NULL,
-    app_id character varying(32) NOT NULL,
+    app_id character varying(64) NOT NULL,
     enable boolean DEFAULT false NOT NULL,
     enable_v1 boolean DEFAULT false NOT NULL,
     enable_v2 boolean DEFAULT true NOT NULL,
     md5_key character varying(128),
     use_system_key boolean DEFAULT true NOT NULL,
     public_key text,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     creator bigint,
     create_time timestamp(6) with time zone,
     last_modifier bigint,
@@ -11688,8 +12107,8 @@ CREATE TABLE public.pay_easy_pay_order (
     id bigint NOT NULL,
     order_id bigint,
     pid integer NOT NULL,
-    app_id character varying(32) NOT NULL,
-    trade_no character varying(64),
+    app_id character varying(64) NOT NULL,
+    trade_no character varying(128),
     out_trade_no character varying(100) NOT NULL,
     api_trade_no character varying(64),
     type character varying(32),
@@ -11697,8 +12116,8 @@ CREATE TABLE public.pay_easy_pay_order (
     add_time timestamp(6) with time zone,
     end_time timestamp(6) with time zone,
     name character varying(200),
-    money numeric(16,2) NOT NULL,
-    refund_money numeric(16,2) DEFAULT 0,
+    money bigint NOT NULL,
+    refund_money bigint DEFAULT 0,
     notify_url character varying(500),
     return_url character varying(500),
     param character varying(500),
@@ -11708,7 +12127,7 @@ CREATE TABLE public.pay_easy_pay_order (
     pc_call_type character varying(32),
     pay_url character varying(1000),
     pay_body text,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     creator bigint,
     create_time timestamp(6) with time zone,
     last_modifier bigint,
@@ -11813,14 +12232,14 @@ COMMENT ON COLUMN public.pay_easy_pay_order.name IS '商品名称';
 -- Name: COLUMN pay_easy_pay_order.money; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_easy_pay_order.money IS '订单金额（元）';
+COMMENT ON COLUMN public.pay_easy_pay_order.money IS '订单金额（分）';
 
 
 --
 -- Name: COLUMN pay_easy_pay_order.refund_money; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_easy_pay_order.refund_money IS '已退款金额（元）';
+COMMENT ON COLUMN public.pay_easy_pay_order.refund_money IS '已退款金额（分）';
 
 
 --
@@ -11948,9 +12367,9 @@ CREATE TABLE public.pay_easy_pay_refund_order (
     app_id character varying(64),
     refund_no character varying(64),
     biz_refund_no character varying(64),
-    trade_no character varying(64),
+    trade_no character varying(128),
     out_trade_no character varying(64),
-    money numeric(15,2),
+    money bigint,
     status integer,
     api_version character varying(20),
     add_time timestamp(6) with time zone,
@@ -12045,7 +12464,7 @@ COMMENT ON COLUMN public.pay_easy_pay_refund_order.out_trade_no IS '商户订单
 -- Name: COLUMN pay_easy_pay_refund_order.money; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_easy_pay_refund_order.money IS '退款金额(元)';
+COMMENT ON COLUMN public.pay_easy_pay_refund_order.money IS '退款金额(分)';
 
 
 --
@@ -12124,12 +12543,12 @@ COMMENT ON COLUMN public.pay_easy_pay_refund_order.deleted IS '删除标志(逻�
 
 CREATE TABLE public.pay_fund_flow (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     app_id character varying(64),
     flow_type character varying(32) NOT NULL,
-    trade_no character varying(64) NOT NULL,
+    trade_no character varying(128) NOT NULL,
     refund_no character varying(64),
-    biz_order_no character varying(100),
+    biz_order_no character varying(128),
     title character varying(100),
     amount bigint NOT NULL,
     currency character varying(8),
@@ -12307,7 +12726,7 @@ COMMENT ON COLUMN public.pay_fund_flow.deleted IS '逻辑删除标志';
 
 CREATE TABLE public.pay_gateway_cashier_item (
     id bigint NOT NULL,
-    app_id character varying(32) NOT NULL,
+    app_id character varying(64) NOT NULL,
     cashier_type character varying(16) NOT NULL,
     client_env character varying(32),
     name character varying(64) NOT NULL,
@@ -12318,7 +12737,7 @@ CREATE TABLE public.pay_gateway_cashier_item (
     method character varying(32),
     channel_mch_no character varying(64),
     capability character varying(64),
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     creator bigint,
     create_time timestamp(6) with time zone,
     last_modifier bigint,
@@ -12475,7 +12894,7 @@ COMMENT ON COLUMN public.pay_gateway_cashier_item.deleted IS '逻辑删除';
 CREATE TABLE public.pay_gateway_order (
     id bigint NOT NULL,
     order_no character varying(100) NOT NULL,
-    biz_order_no character varying(100),
+    biz_order_no character varying(128),
     gateway_type character varying(32),
     source character varying(32),
     title character varying(100),
@@ -12510,19 +12929,18 @@ CREATE TABLE public.pay_gateway_order (
     trans_order_no character varying(150),
     relation_order_no character varying(150),
     extra_param character varying(2048),
-    app_id character varying(32),
+    app_id character varying(64),
     goods_detail jsonb,
     client_ip character varying(64),
     store_no character varying(32),
     error_msg character varying(500),
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     creator bigint,
     create_time timestamp(6) with time zone,
     last_modifier bigint,
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0 NOT NULL,
     deleted boolean DEFAULT false NOT NULL,
-    link_form character varying(16) DEFAULT 'h5'::character varying,
     allocation boolean
 );
 
@@ -12878,13 +13296,6 @@ COMMENT ON COLUMN public.pay_gateway_order.deleted IS '逻辑删除';
 
 
 --
--- Name: COLUMN pay_gateway_order.link_form; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_gateway_order.link_form IS '链接形态: h5/mini(聚合小程序扫码), 缺省 h5';
-
-
---
 -- Name: COLUMN pay_gateway_order.allocation; Type: COMMENT; Schema: public; Owner: -
 --
 
@@ -12897,7 +13308,7 @@ COMMENT ON COLUMN public.pay_gateway_order.allocation IS '是否分账订单(预
 
 CREATE TABLE public.pay_gateway_pay_client_env (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     config_id bigint NOT NULL,
     client_env character varying(32) NOT NULL,
     pay_form character varying(16) NOT NULL,
@@ -13024,8 +13435,8 @@ COMMENT ON COLUMN public.pay_gateway_pay_client_env.version IS '版本号(乐观
 
 CREATE TABLE public.pay_gateway_pay_config (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
-    app_id character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
+    app_id character varying(64) NOT NULL,
     level character varying(16) DEFAULT 'auto'::character varying NOT NULL,
     auto_launch boolean DEFAULT false NOT NULL,
     deleted boolean DEFAULT false NOT NULL,
@@ -13122,6 +13533,125 @@ COMMENT ON COLUMN public.pay_gateway_pay_config.version IS '版本号(乐观锁)
 
 
 --
+-- Name: pay_mch_app_device_config; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.pay_mch_app_device_config (
+    id bigint NOT NULL,
+    mch_no character varying(64) NOT NULL,
+    app_id character varying(64) NOT NULL,
+    broadcast_enable boolean DEFAULT true NOT NULL,
+    print_enable boolean DEFAULT true NOT NULL,
+    template_code character varying(32) DEFAULT 'standard'::character varying NOT NULL,
+    creator bigint,
+    create_time timestamp(6) with time zone DEFAULT now(),
+    last_modifier bigint,
+    last_modified_time timestamp(6) with time zone,
+    version integer DEFAULT 0 NOT NULL,
+    deleted boolean DEFAULT false NOT NULL,
+    store_strict_match boolean
+);
+
+
+--
+-- Name: TABLE pay_mch_app_device_config; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.pay_mch_app_device_config IS '商户应用设备联动配置: 播报/打印/门店严格匹配开关与打印版式代码挂应用维度, 配置收归一点; 行不存在=默认全开';
+
+
+--
+-- Name: COLUMN pay_mch_app_device_config.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_mch_app_device_config.id IS '主键';
+
+
+--
+-- Name: COLUMN pay_mch_app_device_config.mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_mch_app_device_config.mch_no IS '所属商户号(冗余自应用, 便于归属校验与审计)';
+
+
+--
+-- Name: COLUMN pay_mch_app_device_config.app_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_mch_app_device_config.app_id IS '应用号(全局唯一, 一应用一行)';
+
+
+--
+-- Name: COLUMN pay_mch_app_device_config.broadcast_enable; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_mch_app_device_config.broadcast_enable IS '是否播报(false=该应用支付成功不触发任何设备联动播报)';
+
+
+--
+-- Name: COLUMN pay_mch_app_device_config.print_enable; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_mch_app_device_config.print_enable IS '是否允许打印(false=虚拟设备消息不附带 printData)';
+
+
+--
+-- Name: COLUMN pay_mch_app_device_config.template_code; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_mch_app_device_config.template_code IS '打印版式代码(内置版式常量, 首期 standard 标准小票; 非 pay_print_template 外键)';
+
+
+--
+-- Name: COLUMN pay_mch_app_device_config.creator; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_mch_app_device_config.creator IS '创建者ID';
+
+
+--
+-- Name: COLUMN pay_mch_app_device_config.create_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_mch_app_device_config.create_time IS '创建时间';
+
+
+--
+-- Name: COLUMN pay_mch_app_device_config.last_modifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_mch_app_device_config.last_modifier IS '最后修改者ID';
+
+
+--
+-- Name: COLUMN pay_mch_app_device_config.last_modified_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_mch_app_device_config.last_modified_time IS '最后修改时间';
+
+
+--
+-- Name: COLUMN pay_mch_app_device_config.version; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_mch_app_device_config.version IS '版本号(乐观锁)';
+
+
+--
+-- Name: COLUMN pay_mch_app_device_config.deleted; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_mch_app_device_config.deleted IS '删除标志';
+
+
+--
+-- Name: COLUMN pay_mch_app_device_config.store_strict_match; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_mch_app_device_config.store_strict_match IS '门店订单严格匹配(true=门店订单仅推绑定该门店的设备, 未绑门店设备不参与; false/空=未绑门店设备视为商户通用照常推送)';
+
+
+--
 -- Name: pay_md_capability; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -13129,7 +13659,6 @@ CREATE TABLE public.pay_md_capability (
     id bigint NOT NULL,
     code character varying(64) NOT NULL,
     sort_no integer DEFAULT 0 NOT NULL,
-    enabled boolean DEFAULT true NOT NULL,
     description character varying(512),
     deleted boolean DEFAULT false NOT NULL,
     last_modifier bigint,
@@ -13166,13 +13695,6 @@ COMMENT ON COLUMN public.pay_md_capability.code IS '支付能力编码（PayCapa
 --
 
 COMMENT ON COLUMN public.pay_md_capability.sort_no IS '全局排序';
-
-
---
--- Name: COLUMN pay_md_capability.enabled; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_md_capability.enabled IS '是否启用';
 
 
 --
@@ -13421,7 +13943,6 @@ COMMENT ON COLUMN public.pay_md_method.create_time IS '创建时间';
 CREATE TABLE public.pay_md_product (
     id bigint NOT NULL,
     code character varying(32) NOT NULL,
-    name character varying(64) NOT NULL,
     channel character varying(32) NOT NULL,
     sort_no integer DEFAULT 0,
     creator bigint,
@@ -13454,13 +13975,6 @@ COMMENT ON COLUMN public.pay_md_product.id IS '主键';
 --
 
 COMMENT ON COLUMN public.pay_md_product.code IS '产品编码';
-
-
---
--- Name: COLUMN pay_md_product.name; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_md_product.name IS '产品名称';
 
 
 --
@@ -13542,8 +14056,6 @@ CREATE TABLE public.pay_md_product_capability (
     product_code character varying(32) NOT NULL,
     capability_code character varying(64) NOT NULL,
     sort_no integer DEFAULT 0 NOT NULL,
-    enabled boolean DEFAULT true NOT NULL,
-    remark character varying(512),
     deleted boolean DEFAULT false NOT NULL,
     last_modifier bigint,
     last_modified_time timestamp(6) with time zone,
@@ -13586,20 +14098,6 @@ COMMENT ON COLUMN public.pay_md_product_capability.capability_code IS '支付能
 --
 
 COMMENT ON COLUMN public.pay_md_product_capability.sort_no IS '排序';
-
-
---
--- Name: COLUMN pay_md_product_capability.enabled; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_md_product_capability.enabled IS '是否启用';
-
-
---
--- Name: COLUMN pay_md_product_capability.remark; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_md_product_capability.remark IS '备注';
 
 
 --
@@ -13968,7 +14466,7 @@ COMMENT ON COLUMN public.pay_md_provider_method.description IS '目录项说明'
 CREATE TABLE public.pay_normal_order (
     id bigint NOT NULL,
     order_no character varying(100) NOT NULL,
-    biz_order_no character varying(100) NOT NULL,
+    biz_order_no character varying(128) NOT NULL,
     source character varying(32),
     title character varying(100) NOT NULL,
     description character varying(500),
@@ -14001,13 +14499,13 @@ CREATE TABLE public.pay_normal_order (
     trans_order_no character varying(150),
     relation_order_no character varying(150),
     extra_param character varying(2048),
-    app_id character varying(32) NOT NULL,
+    app_id character varying(64) NOT NULL,
     goods_detail jsonb,
     client_ip character varying(64),
     terminal_no character varying(128),
     store_no character varying(32),
     error_msg character varying(500),
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     creator bigint,
     create_time timestamp(6) with time zone,
     last_modifier bigint,
@@ -14501,12 +14999,12 @@ COMMENT ON COLUMN public.pay_platform_mobile_app.deleted IS '逻辑删除标记'
 
 CREATE TABLE public.pay_refund_order (
     id bigint NOT NULL,
-    app_id character varying(32) NOT NULL,
+    app_id character varying(64) NOT NULL,
     refund_no character varying(100) NOT NULL,
     biz_refund_no character varying(100),
     title character varying(100),
-    trade_no character varying(100) NOT NULL,
-    biz_order_no character varying(100),
+    trade_no character varying(128) NOT NULL,
+    biz_order_no character varying(128),
     out_order_no character varying(150),
     out_refund_no character varying(150),
     amount bigint NOT NULL,
@@ -14525,7 +15023,7 @@ CREATE TABLE public.pay_refund_order (
     client_ip character varying(64),
     store_no character varying(32),
     error_msg character varying(500),
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     creator bigint,
     create_time timestamp(6) with time zone,
     last_modifier bigint,
@@ -14798,9 +15296,9 @@ CREATE TABLE public.pay_risk_hit (
     hit_type character varying(32) NOT NULL,
     hit_value character varying(128) NOT NULL,
     blacklist_id bigint,
-    mch_no character varying(32),
+    mch_no character varying(64),
     app_id character varying(64),
-    trade_no character varying(64),
+    trade_no character varying(128),
     order_no character varying(64),
     biz_order_no character varying(128),
     trade_type character varying(32),
@@ -15013,7 +15511,7 @@ CREATE TABLE public.pay_route_basic_config (
     id bigint NOT NULL,
     strategy_id bigint NOT NULL,
     provider character varying(32) NOT NULL,
-    channel_mch_no character varying(32) NOT NULL,
+    channel_mch_no character varying(64) NOT NULL,
     creator bigint,
     create_time timestamp(6) with time zone,
     last_modifier bigint,
@@ -15108,7 +15606,7 @@ CREATE TABLE public.pay_route_scene_config (
     id bigint NOT NULL,
     strategy_id bigint NOT NULL,
     method character varying(32) NOT NULL,
-    channel_mch_no character varying(32) NOT NULL,
+    channel_mch_no character varying(64) NOT NULL,
     capability character varying(32) NOT NULL,
     creator bigint,
     create_time timestamp(6) with time zone,
@@ -15209,8 +15707,8 @@ COMMENT ON COLUMN public.pay_route_scene_config.deleted IS '逻辑删除';
 
 CREATE TABLE public.pay_route_strategy (
     id bigint NOT NULL,
-    app_id character varying(32) NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    app_id character varying(64) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     mode character varying(32),
     creator bigint,
     create_time timestamp(6) with time zone,
@@ -15304,9 +15802,9 @@ COMMENT ON COLUMN public.pay_route_strategy.deleted IS '删除标志';
 
 CREATE TABLE public.pay_sync_record (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
-    app_id character varying(32),
-    trade_no character varying(64) NOT NULL,
+    mch_no character varying(64) NOT NULL,
+    app_id character varying(64),
+    trade_no character varying(128) NOT NULL,
     biz_trade_no character varying(64),
     out_trade_no character varying(64),
     out_trade_status character varying(32),
@@ -15482,25 +15980,6 @@ COMMENT ON COLUMN public.pay_sync_record.deleted IS '逻辑删除标志';
 
 
 --
--- Name: pay_sync_record_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.pay_sync_record_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: pay_sync_record_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.pay_sync_record_id_seq OWNED BY public.pay_sync_record.id;
-
-
---
 -- Name: pay_terminal_channel_bind; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -15508,7 +15987,7 @@ CREATE TABLE public.pay_terminal_channel_bind (
     id bigint NOT NULL,
     system_terminal_no character varying(32) NOT NULL,
     channel_terminal_id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     creator bigint,
     create_time timestamp(6) with time zone,
     last_modifier bigint,
@@ -15606,7 +16085,7 @@ CREATE TABLE public.pay_terminal_device (
     store_no character varying(64),
     enable boolean DEFAULT true NOT NULL,
     remark character varying(255),
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     creator bigint,
     create_time timestamp(6) with time zone,
     last_modifier bigint,
@@ -15720,7 +16199,7 @@ COMMENT ON COLUMN public.pay_terminal_device.deleted IS '删除标志';
 
 CREATE TABLE public.pay_trade (
     id bigint NOT NULL,
-    trade_no character varying(100) NOT NULL,
+    trade_no character varying(128) NOT NULL,
     trade_type character varying(32) NOT NULL,
     container_id bigint NOT NULL,
     amount bigint NOT NULL,
@@ -15735,8 +16214,8 @@ CREATE TABLE public.pay_trade (
     store_no character varying(32),
     out_order_no character varying(150),
     relation_order_no character varying(150),
-    app_id character varying(32) NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    app_id character varying(64) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     creator bigint,
     create_time timestamp(6) with time zone,
     last_modifier bigint,
@@ -15951,7 +16430,7 @@ COMMENT ON COLUMN public.pay_trade.channel IS '支付通道';
 -- Name: COLUMN pay_trade.alloc_status; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_trade.alloc_status IS '分账状态(none-未分账/processing-分账中/allocated-已分账未完结/finished-已分账且完结/done-历史存量已分账)';
+COMMENT ON COLUMN public.pay_trade.alloc_status IS '分账状态(none-待分账/unsupported-不支持已降级/processing-分账中/allocated-已分账未完结/finished-已分账且完结/done-历史存量已分账)';
 
 
 --
@@ -15971,7 +16450,7 @@ CREATE TABLE public.pay_transfer_order_alipay (
     biz_transfer_no character varying(100) NOT NULL,
     channel_mch_no character varying(64),
     out_transfer_no character varying(150),
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     amount bigint NOT NULL,
     currency character varying(8) DEFAULT 'CNY'::character varying NOT NULL,
     title character varying(100),
@@ -15992,7 +16471,6 @@ CREATE TABLE public.pay_transfer_order_alipay (
     version integer DEFAULT 0 NOT NULL,
     deleted boolean DEFAULT false NOT NULL,
     pay_fund_order_id character varying(64),
-    transfer_scene_config_id character varying(32),
     report_infos text,
     transfer_scene character varying(50),
     app_id character varying(64)
@@ -16189,13 +16667,6 @@ COMMENT ON COLUMN public.pay_transfer_order_alipay.pay_fund_order_id IS '支付�
 
 
 --
--- Name: COLUMN pay_transfer_order_alipay.transfer_scene_config_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_transfer_order_alipay.transfer_scene_config_id IS '转账场景配置ID(支付宝专用, FAIL重试时恢复场景用)';
-
-
---
 -- Name: COLUMN pay_transfer_order_alipay.report_infos; Type: COMMENT; Schema: public; Owner: -
 --
 
@@ -16226,7 +16697,7 @@ CREATE TABLE public.pay_transfer_order_douyin (
     biz_transfer_no character varying(100) NOT NULL,
     channel_mch_no character varying(64),
     out_transfer_no character varying(150),
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     amount bigint NOT NULL,
     currency character varying(8) DEFAULT 'CNY'::character varying NOT NULL,
     title character varying(100),
@@ -16247,7 +16718,6 @@ CREATE TABLE public.pay_transfer_order_douyin (
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0 NOT NULL,
     deleted boolean DEFAULT false NOT NULL,
-    user_recv_perception character varying(64),
     report_infos text,
     app_id character varying(64)
 );
@@ -16443,13 +16913,6 @@ COMMENT ON COLUMN public.pay_transfer_order_douyin.deleted IS '逻辑删除';
 
 
 --
--- Name: COLUMN pay_transfer_order_douyin.user_recv_perception; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.pay_transfer_order_douyin.user_recv_perception IS '用户收款感知(收款人在抖音中看到的文案)';
-
-
---
 -- Name: COLUMN pay_transfer_order_douyin.report_infos; Type: COMMENT; Schema: public; Owner: -
 --
 
@@ -16473,7 +16936,7 @@ CREATE TABLE public.pay_transfer_order_wechat (
     biz_transfer_no character varying(100) NOT NULL,
     channel_mch_no character varying(64),
     out_transfer_no character varying(150),
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     amount bigint NOT NULL,
     currency character varying(8) DEFAULT 'CNY'::character varying NOT NULL,
     title character varying(100),
@@ -16716,7 +17179,7 @@ COMMENT ON COLUMN public.pay_transfer_order_wechat.report_infos IS '转账场景
 
 CREATE TABLE public.pay_transfer_trade (
     id bigint NOT NULL,
-    trade_no character varying(32) NOT NULL,
+    trade_no character varying(128) NOT NULL,
     biz_transfer_no character varying(100),
     container_id bigint NOT NULL,
     container_channel character varying(32) NOT NULL,
@@ -16729,7 +17192,7 @@ CREATE TABLE public.pay_transfer_trade (
     relation_no character varying(150),
     finish_time timestamp(6) with time zone,
     title character varying(100),
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     creator bigint,
     create_time timestamp(6) with time zone,
     last_modifier bigint,
@@ -16902,12 +17365,187 @@ COMMENT ON COLUMN public.pay_transfer_trade.app_id IS '应用ID(冗余自容器,
 
 
 --
+-- Name: pay_virtual_device; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.pay_virtual_device (
+    id bigint NOT NULL,
+    name character varying(128),
+    device_no character varying(64),
+    batch_no character varying(64),
+    mch_no character varying(64),
+    app_id character varying(64),
+    store_no character varying(32),
+    enable boolean DEFAULT true NOT NULL,
+    secret character varying(64),
+    last_pay_ack_time timestamp(6) with time zone,
+    last_pay_ack_msg_id character varying(64),
+    last_pay_ack_ok boolean,
+    last_online_time timestamp(6) with time zone,
+    creator bigint,
+    create_time timestamp(6) with time zone DEFAULT now(),
+    last_modifier bigint,
+    last_modified_time timestamp(6) with time zone,
+    version integer DEFAULT 0 NOT NULL,
+    deleted boolean DEFAULT false NOT NULL,
+    activated_time timestamp(6) with time zone
+);
+
+
+--
+-- Name: TABLE pay_virtual_device; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON TABLE public.pay_virtual_device IS '虚拟设备: 播报打印一体机(收款播报 APP)独立台账, 设备号平台自造号段(VD+日期+随机段), 生成入平台库存后绑定商户/应用';
+
+
+--
+-- Name: COLUMN pay_virtual_device.id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_virtual_device.id IS '主键';
+
+
+--
+-- Name: COLUMN pay_virtual_device.name; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_virtual_device.name IS '设备名称';
+
+
+--
+-- Name: COLUMN pay_virtual_device.device_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_virtual_device.device_no IS '设备号(平台自造 SN: VD+日期+6位随机段, 创建后不可改, 激活唯一准入凭据)';
+
+
+--
+-- Name: COLUMN pay_virtual_device.batch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_virtual_device.batch_no IS '批次号(批量生成时写入)';
+
+
+--
+-- Name: COLUMN pay_virtual_device.mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_virtual_device.mch_no IS '所属商户号(绑定后写入, 空=平台库存, 未绑定不可激活)';
+
+
+--
+-- Name: COLUMN pay_virtual_device.app_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_virtual_device.app_id IS '关联应用号(绑定应用后有值, 空=全部应用)';
+
+
+--
+-- Name: COLUMN pay_virtual_device.store_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_virtual_device.store_no IS '使用门店号(空=未分配, 不参与门店级播报/打印匹配, 对应 mch_store_info.store_no)';
+
+
+--
+-- Name: COLUMN pay_virtual_device.enable; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_virtual_device.enable IS '是否启用(停用后设备心跳返回 disabled, 终端停止播报)';
+
+
+--
+-- Name: COLUMN pay_virtual_device.secret; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_virtual_device.secret IS '播报加密密钥(AES-256-GCM 32字符, 激活时生成并轮换, 解绑时清空即回到未激活态)';
+
+
+--
+-- Name: COLUMN pay_virtual_device.last_pay_ack_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_virtual_device.last_pay_ack_time IS '最近一次收款播报回执时间(仅 cmd=pay.success 的 ack 回写, 心跳不覆盖)';
+
+
+--
+-- Name: COLUMN pay_virtual_device.last_pay_ack_msg_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_virtual_device.last_pay_ack_msg_id IS '最近一次收款播报回执消息ID(与推送 msgId 对应, 排障定位用)';
+
+
+--
+-- Name: COLUMN pay_virtual_device.last_pay_ack_ok; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_virtual_device.last_pay_ack_ok IS '最近一次收款播报回执结果(true=设备已完成播报)';
+
+
+--
+-- Name: COLUMN pay_virtual_device.last_online_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_virtual_device.last_online_time IS '设备最后在线时间(心跳 30 分钟节流落库, 非实时; 实时在线判定走 Redis ZSET)';
+
+
+--
+-- Name: COLUMN pay_virtual_device.creator; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_virtual_device.creator IS '创建者ID';
+
+
+--
+-- Name: COLUMN pay_virtual_device.create_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_virtual_device.create_time IS '创建时间';
+
+
+--
+-- Name: COLUMN pay_virtual_device.last_modifier; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_virtual_device.last_modifier IS '最后修改者ID';
+
+
+--
+-- Name: COLUMN pay_virtual_device.last_modified_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_virtual_device.last_modified_time IS '最后修改时间';
+
+
+--
+-- Name: COLUMN pay_virtual_device.version; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_virtual_device.version IS '版本号(乐观锁)';
+
+
+--
+-- Name: COLUMN pay_virtual_device.deleted; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_virtual_device.deleted IS '删除标志';
+
+
+--
+-- Name: COLUMN pay_virtual_device.activated_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_virtual_device.activated_time IS '最近一次成功激活时间(激活轮换 secret 时写入, 解绑清空即回到未激活态, 未成功激活过为空)';
+
+
+--
 -- Name: sand_direct_key_config; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.sand_direct_key_config (
     id bigint NOT NULL,
-    mch_no character varying(32),
+    mch_no character varying(64),
     channel_mch_no character varying(64),
     mid character varying(64),
     merchant_cert_pfx text,
@@ -17042,7 +17680,7 @@ COMMENT ON COLUMN public.sand_direct_key_config.deleted IS '删除标志';
 
 CREATE TABLE public.sheng_isv_channel_merchant (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     channel_mch_no character varying(64) NOT NULL,
     product character varying(32),
     sub_mch_id character varying(16) NOT NULL,
@@ -17256,7 +17894,7 @@ COMMENT ON COLUMN public.sheng_isv_key_config.deleted IS '逻辑删除标志';
 
 CREATE TABLE public.sheng_key_config (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     channel_mch_no character varying(64) NOT NULL,
     sheng_mch_id character varying(16),
     sdp_app_id character varying(32),
@@ -17375,7 +18013,7 @@ COMMENT ON COLUMN public.sheng_key_config.deleted IS '逻辑删除标志';
 
 CREATE TABLE public.shouqianba_direct_key_config (
     id bigint NOT NULL,
-    mch_no character varying(32),
+    mch_no character varying(64),
     channel_mch_no character varying(64),
     terminal_sn character varying(64),
     terminal_key text,
@@ -17860,7 +18498,7 @@ COMMENT ON COLUMN public.starter_audit_operate_log.operate_time IS '操作时间
 
 CREATE TABLE public.starter_audit_unipay_log (
     id bigint NOT NULL,
-    mch_no character varying(32),
+    mch_no character varying(64),
     api_path character varying(256),
     api_title character varying(64),
     request_method character varying(16),
@@ -18162,7 +18800,7 @@ COMMENT ON COLUMN public.starter_platform_file_record.remark IS '备注';
 
 CREATE TABLE public.stripe_channel_merchant (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     channel_mch_no character varying(64) NOT NULL,
     product character varying(32),
     account_id character varying(64),
@@ -18265,12 +18903,11 @@ COMMENT ON COLUMN public.stripe_channel_merchant.deleted IS '逻辑删除标志'
 
 CREATE TABLE public.stripe_key_config (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     channel_mch_no character varying(64) NOT NULL,
     secret_key text,
     publishable_key text,
     webhook_secret text,
-    sandbox boolean DEFAULT false NOT NULL,
     creator bigint,
     create_time timestamp(6) with time zone,
     last_modifier bigint,
@@ -18327,13 +18964,6 @@ COMMENT ON COLUMN public.stripe_key_config.publishable_key IS 'Stripe Publishabl
 --
 
 COMMENT ON COLUMN public.stripe_key_config.webhook_secret IS 'Webhook 签名密钥(whsec_xxx, 加密存储)';
-
-
---
--- Name: COLUMN stripe_key_config.sandbox; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.stripe_key_config.sandbox IS '是否沙箱(test mode)';
 
 
 --
@@ -18984,8 +19614,8 @@ CREATE TABLE public.system_sensitive_word_hit (
     content_preview character varying(200),
     scene character varying(32) NOT NULL,
     source character varying(32),
-    mch_no character varying(32),
-    app_id character varying(50),
+    mch_no character varying(64),
+    app_id character varying(64),
     operator_id bigint,
     client_ip character varying(64),
     request_path character varying(255),
@@ -19138,7 +19768,7 @@ COMMENT ON COLUMN public.system_sensitive_word_hit.deleted IS '删除标志';
 
 CREATE TABLE public.umfpay_direct_key_config (
     id bigint NOT NULL,
-    mch_no character varying(32),
+    mch_no character varying(64),
     channel_mch_no character varying(64),
     mer_id character varying(64),
     merchant_private_key text,
@@ -19257,7 +19887,7 @@ COMMENT ON COLUMN public.umfpay_direct_key_config.deleted IS '删除标志';
 
 CREATE TABLE public.ums_direct_key_config (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     channel_mch_no character varying(64) NOT NULL,
     ums_app_id character varying(128),
     app_key text,
@@ -19392,7 +20022,7 @@ COMMENT ON COLUMN public.ums_direct_key_config.sandbox IS '是否沙箱环境';
 
 CREATE TABLE public.union_key_config (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     channel_mch_no character varying(64) NOT NULL,
     mer_id character varying(64),
     sign_type character varying(32),
@@ -19664,7 +20294,7 @@ CREATE TABLE public.vbill_isv_key_config (
     last_modifier bigint,
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0,
-    deleted boolean DEFAULT false
+    deleted boolean DEFAULT false NOT NULL
 );
 
 
@@ -19765,7 +20395,7 @@ COMMENT ON COLUMN public.vbill_isv_key_config.deleted IS '删除标志';
 
 CREATE TABLE public.wechat_direct_alloc_receiver (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     channel_mch_no character varying(64) NOT NULL,
     receiver_type character varying(32) NOT NULL,
     receiver_account character varying(256) NOT NULL,
@@ -19948,7 +20578,7 @@ COMMENT ON COLUMN public.wechat_direct_alloc_receiver.alias IS '接收方别名(
 
 CREATE TABLE public.wechat_direct_channel_merchant (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     channel_mch_no character varying(64) NOT NULL,
     product character varying(32) NOT NULL,
     wx_mch_id character varying(32),
@@ -20059,7 +20689,7 @@ COMMENT ON COLUMN public.wechat_direct_channel_merchant.transfer_scene IS '转�
 
 CREATE TABLE public.wechat_direct_key_config (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     channel_mch_no character varying(64) NOT NULL,
     api_key_v3 text,
     public_key text,
@@ -20072,7 +20702,8 @@ CREATE TABLE public.wechat_direct_key_config (
     last_modifier bigint,
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0 NOT NULL,
-    deleted boolean DEFAULT false NOT NULL
+    deleted boolean DEFAULT false NOT NULL,
+    api_host_url character varying(512)
 );
 
 
@@ -20189,12 +20820,19 @@ COMMENT ON COLUMN public.wechat_direct_key_config.deleted IS '逻辑删除标志
 
 
 --
+-- Name: COLUMN wechat_direct_key_config.api_host_url; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.wechat_direct_key_config.api_host_url IS 'API域名(留空使用官方 api.mch.weixin.qq.com; 联调演练填模拟网关地址, 如 http://127.0.0.1:10400)';
+
+
+--
 -- Name: wechat_isv_alloc_receiver; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.wechat_isv_alloc_receiver (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     channel_mch_no character varying(64) NOT NULL,
     receiver_type character varying(32) NOT NULL,
     receiver_account character varying(256) NOT NULL,
@@ -20385,7 +21023,7 @@ COMMENT ON COLUMN public.wechat_isv_alloc_receiver.alias IS '接收方别名(本
 
 CREATE TABLE public.wechat_isv_channel_merchant (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     channel_mch_no character varying(64) NOT NULL,
     product character varying(32) NOT NULL,
     sub_mch_id character varying(32),
@@ -20501,7 +21139,8 @@ CREATE TABLE public.wechat_isv_key_config (
     last_modifier bigint,
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0 NOT NULL,
-    deleted boolean DEFAULT false NOT NULL
+    deleted boolean DEFAULT false NOT NULL,
+    api_host_url character varying(512)
 );
 
 
@@ -20618,12 +21257,19 @@ COMMENT ON COLUMN public.wechat_isv_key_config.deleted IS '逻辑删除标志';
 
 
 --
+-- Name: COLUMN wechat_isv_key_config.api_host_url; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.wechat_isv_key_config.api_host_url IS 'API域名(留空使用官方 api.mch.weixin.qq.com; 联调演练填模拟网关地址, 如 http://127.0.0.1:10400)';
+
+
+--
 -- Name: wechat_transfer_config; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.wechat_transfer_config (
     id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     channel_mch_no character varying(64) NOT NULL,
     transfer_scene character varying(64),
     transfer_app_ref_id bigint,
@@ -20732,7 +21378,7 @@ CREATE TABLE public.wx_channel_app_capability (
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0 NOT NULL,
     deleted boolean DEFAULT false NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     channel_mch_no character varying(64) NOT NULL,
     capability character varying(64) NOT NULL,
     app_scope character varying(16) NOT NULL,
@@ -20843,7 +21489,7 @@ CREATE TABLE public.wx_mch_app (
     last_modified_time timestamp(6) with time zone,
     version integer DEFAULT 0 NOT NULL,
     deleted boolean DEFAULT false NOT NULL,
-    mch_no character varying(32) NOT NULL,
+    mch_no character varying(64) NOT NULL,
     app_name character varying(64) NOT NULL,
     app_type character varying(32) NOT NULL,
     wx_app_id character varying(64) NOT NULL,
@@ -21146,7 +21792,7 @@ COMMENT ON COLUMN public.wx_platform_app_capability.product IS '支付产品编�
 
 CREATE TABLE public.xingyi_direct_key_config (
     id bigint NOT NULL,
-    mch_no character varying(32),
+    mch_no character varying(64),
     channel_mch_no character varying(64),
     aget_id character varying(64),
     cust_id character varying(64),
@@ -21265,7 +21911,7 @@ COMMENT ON COLUMN public.xingyi_direct_key_config.deleted IS '删除标志';
 
 CREATE TABLE public.yeepay_direct_key_config (
     id bigint NOT NULL,
-    mch_no character varying(32),
+    mch_no character varying(64),
     channel_mch_no character varying(64),
     merchant_no character varying(64),
     yop_isv_no character varying(64),
@@ -21416,7 +22062,7 @@ COMMENT ON COLUMN public.yeepay_direct_key_config.deleted IS '逻辑删除标志
 
 CREATE TABLE public.yisheng_direct_key_config (
     id bigint NOT NULL,
-    mch_no character varying(32),
+    mch_no character varying(64),
     channel_mch_no character varying(64),
     partner character varying(64),
     merchant_id character varying(64),
@@ -21543,7 +22189,7 @@ COMMENT ON COLUMN public.yisheng_direct_key_config.deleted IS '删除标志';
 
 CREATE TABLE public.yizhifubj_direct_key_config (
     id bigint NOT NULL,
-    mch_no character varying(32),
+    mch_no character varying(64),
     channel_mch_no character varying(64),
     merchant_id character varying(64),
     partner_id character varying(64),
@@ -21686,7 +22332,7 @@ COMMENT ON COLUMN public.yizhifubj_direct_key_config.deleted IS '删除标志';
 
 CREATE TABLE public.youzan_direct_key_config (
     id bigint NOT NULL,
-    mch_no character varying(32),
+    mch_no character varying(64),
     channel_mch_no character varying(64),
     merchant_id character varying(64),
     merchant_private_key text,
@@ -21813,7 +22459,7 @@ COMMENT ON COLUMN public.youzan_direct_key_config.deleted IS '删除标志';
 
 CREATE TABLE public.ysep_key_config (
     id bigint NOT NULL,
-    mch_no character varying(32),
+    mch_no character varying(64),
     channel_mch_no character varying(64),
     product character varying(32),
     sponsor_mch_no character varying(64),
@@ -21948,83 +22594,6 @@ COMMENT ON COLUMN public.ysep_key_config.version IS '版本号(乐观锁)';
 --
 
 COMMENT ON COLUMN public.ysep_key_config.deleted IS '删除标志';
-
-
---
--- Name: adapay_direct_key_config id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.adapay_direct_key_config ALTER COLUMN id SET DEFAULT nextval('public.adapay_direct_key_config_id_seq'::regclass);
-
-
---
--- Name: alipay_direct_app_capability id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.alipay_direct_app_capability ALTER COLUMN id SET DEFAULT nextval('public.alipay_direct_app_capability_id_seq'::regclass);
-
-
---
--- Name: dougong_isv_channel_merchant id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.dougong_isv_channel_merchant ALTER COLUMN id SET DEFAULT nextval('public.dougong_isv_channel_merchant_id_seq'::regclass);
-
-
---
--- Name: dougong_isv_key_config id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.dougong_isv_key_config ALTER COLUMN id SET DEFAULT nextval('public.dougong_isv_key_config_id_seq'::regclass);
-
-
---
--- Name: easy_pay_key_config id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.easy_pay_key_config ALTER COLUMN id SET DEFAULT nextval('public.easy_pay_key_config_id_seq'::regclass);
-
-
---
--- Name: hmpay_isv_channel_merchant id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.hmpay_isv_channel_merchant ALTER COLUMN id SET DEFAULT nextval('public.hmpay_isv_channel_merchant_id_seq'::regclass);
-
-
---
--- Name: hmpay_isv_key_config id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.hmpay_isv_key_config ALTER COLUMN id SET DEFAULT nextval('public.hmpay_isv_key_config_id_seq'::regclass);
-
-
---
--- Name: mch_app_notify_config id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.mch_app_notify_config ALTER COLUMN id SET DEFAULT nextval('public.mch_app_notify_config_id_seq'::regclass);
-
-
---
--- Name: mch_user id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.mch_user ALTER COLUMN id SET DEFAULT nextval('public.mch_user_id_seq'::regclass);
-
-
---
--- Name: pay_close_record id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.pay_close_record ALTER COLUMN id SET DEFAULT nextval('public.pay_close_record_id_seq'::regclass);
-
-
---
--- Name: pay_sync_record id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.pay_sync_record ALTER COLUMN id SET DEFAULT nextval('public.pay_sync_record_id_seq'::regclass);
 
 
 --
@@ -22652,6 +23221,22 @@ ALTER TABLE ONLY public.alipay_transfer_scene_config
 
 
 --
+-- Name: baofu_direct_key_config pk_baofu_direct_key_config; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.baofu_direct_key_config
+    ADD CONSTRAINT pk_baofu_direct_key_config PRIMARY KEY (id);
+
+
+--
+-- Name: cpcn_direct_key_config pk_cpcn_direct_key_config; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.cpcn_direct_key_config
+    ADD CONSTRAINT pk_cpcn_direct_key_config PRIMARY KEY (id);
+
+
+--
 -- Name: douyin_direct_alloc_receiver pk_douyin_direct_alloc_receiver; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -22684,6 +23269,38 @@ ALTER TABLE ONLY public.douyin_transfer_config
 
 
 --
+-- Name: duolabao_direct_key_config pk_duolabao_direct_key_config; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.duolabao_direct_key_config
+    ADD CONSTRAINT pk_duolabao_direct_key_config PRIMARY KEY (id);
+
+
+--
+-- Name: epaylinks_direct_key_config pk_epaylinks_direct_key_config; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.epaylinks_direct_key_config
+    ADD CONSTRAINT pk_epaylinks_direct_key_config PRIMARY KEY (id);
+
+
+--
+-- Name: fubei_direct_key_config pk_fubei_direct_key_config; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.fubei_direct_key_config
+    ADD CONSTRAINT pk_fubei_direct_key_config PRIMARY KEY (id);
+
+
+--
+-- Name: fuyou_direct_key_config pk_fuyou_direct_key_config; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.fuyou_direct_key_config
+    ADD CONSTRAINT pk_fuyou_direct_key_config PRIMARY KEY (id);
+
+
+--
 -- Name: fuyou_isv_channel_merchant pk_fuyou_isv_channel_merchant; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -22700,11 +23317,67 @@ ALTER TABLE ONLY public.fuyou_isv_key_config
 
 
 --
+-- Name: fuyou_rsa_key_config pk_fuyou_rsa_key_config; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.fuyou_rsa_key_config
+    ADD CONSTRAINT pk_fuyou_rsa_key_config PRIMARY KEY (id);
+
+
+--
+-- Name: helipay_key_config pk_helipay_key_config; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.helipay_key_config
+    ADD CONSTRAINT pk_helipay_key_config PRIMARY KEY (id);
+
+
+--
+-- Name: hkrt_isv_channel_merchant pk_hkrt_isv_channel_merchant; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.hkrt_isv_channel_merchant
+    ADD CONSTRAINT pk_hkrt_isv_channel_merchant PRIMARY KEY (id);
+
+
+--
+-- Name: hkrt_isv_key_config pk_hkrt_isv_key_config; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.hkrt_isv_key_config
+    ADD CONSTRAINT pk_hkrt_isv_key_config PRIMARY KEY (id);
+
+
+--
 -- Name: iam_user_social pk_iam_user_social; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.iam_user_social
     ADD CONSTRAINT pk_iam_user_social PRIMARY KEY (id);
+
+
+--
+-- Name: jee_pay_key_config pk_jee_pay_key_config; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.jee_pay_key_config
+    ADD CONSTRAINT pk_jee_pay_key_config PRIMARY KEY (id);
+
+
+--
+-- Name: jlpay_direct_key_config pk_jlpay_direct_key_config; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.jlpay_direct_key_config
+    ADD CONSTRAINT pk_jlpay_direct_key_config PRIMARY KEY (id);
+
+
+--
+-- Name: kuaiqian_direct_key_config pk_kuaiqian_direct_key_config; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.kuaiqian_direct_key_config
+    ADD CONSTRAINT pk_kuaiqian_direct_key_config PRIMARY KEY (id);
 
 
 --
@@ -22721,6 +23394,22 @@ ALTER TABLE ONLY public.leshua_isv_channel_merchant
 
 ALTER TABLE ONLY public.leshua_isv_key_config
     ADD CONSTRAINT pk_leshua_isv_key_config PRIMARY KEY (id);
+
+
+--
+-- Name: llianpay_direct_key_config pk_llianpay_direct_key_config; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.llianpay_direct_key_config
+    ADD CONSTRAINT pk_llianpay_direct_key_config PRIMARY KEY (id);
+
+
+--
+-- Name: long_pay_direct_key_config pk_long_pay_direct_key_config; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.long_pay_direct_key_config
+    ADD CONSTRAINT pk_long_pay_direct_key_config PRIMARY KEY (id);
 
 
 --
@@ -22761,6 +23450,62 @@ ALTER TABLE ONLY public.wechat_isv_channel_merchant
 
 ALTER TABLE ONLY public.mch_wx_domain_verify
     ADD CONSTRAINT pk_mch_wx_domain_verify PRIMARY KEY (id);
+
+
+--
+-- Name: mock_alloc_receiver pk_mock_alloc_receiver; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.mock_alloc_receiver
+    ADD CONSTRAINT pk_mock_alloc_receiver PRIMARY KEY (id);
+
+
+--
+-- Name: mock_channel_credential pk_mock_channel_credential; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.mock_channel_credential
+    ADD CONSTRAINT pk_mock_channel_credential PRIMARY KEY (id);
+
+
+--
+-- Name: mock_direct_credential pk_mock_direct_credential; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.mock_direct_credential
+    ADD CONSTRAINT pk_mock_direct_credential PRIMARY KEY (id);
+
+
+--
+-- Name: mock_isv_channel_merchant pk_mock_isv_channel_merchant; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.mock_isv_channel_merchant
+    ADD CONSTRAINT pk_mock_isv_channel_merchant PRIMARY KEY (id);
+
+
+--
+-- Name: mock_isv_credential pk_mock_isv_credential; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.mock_isv_credential
+    ADD CONSTRAINT pk_mock_isv_credential PRIMARY KEY (id);
+
+
+--
+-- Name: mock_isv_info pk_mock_isv_info; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.mock_isv_info
+    ADD CONSTRAINT pk_mock_isv_info PRIMARY KEY (id);
+
+
+--
+-- Name: notify_mail_record pk_notify_mail_record; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.notify_mail_record
+    ADD CONSTRAINT pk_notify_mail_record PRIMARY KEY (id);
 
 
 --
@@ -22836,6 +23581,14 @@ ALTER TABLE ONLY public.pay_gateway_order
 
 
 --
+-- Name: pay_mch_app_device_config pk_pay_mch_app_device_config; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.pay_mch_app_device_config
+    ADD CONSTRAINT pk_pay_mch_app_device_config PRIMARY KEY (id);
+
+
+--
 -- Name: pay_md_product_config pk_pay_md_product_config; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -22908,6 +23661,46 @@ ALTER TABLE ONLY public.pay_transfer_trade
 
 
 --
+-- Name: pay_virtual_device pk_pay_virtual_device; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.pay_virtual_device
+    ADD CONSTRAINT pk_pay_virtual_device PRIMARY KEY (id);
+
+
+--
+-- Name: sand_direct_key_config pk_sand_direct_key_config; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.sand_direct_key_config
+    ADD CONSTRAINT pk_sand_direct_key_config PRIMARY KEY (id);
+
+
+--
+-- Name: shouqianba_direct_key_config pk_shouqianba_direct_key_config; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.shouqianba_direct_key_config
+    ADD CONSTRAINT pk_shouqianba_direct_key_config PRIMARY KEY (id);
+
+
+--
+-- Name: starter_audit_login_log pk_starter_audit_login_log; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.starter_audit_login_log
+    ADD CONSTRAINT pk_starter_audit_login_log PRIMARY KEY (id);
+
+
+--
+-- Name: starter_audit_operate_log pk_starter_audit_operate_log; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.starter_audit_operate_log
+    ADD CONSTRAINT pk_starter_audit_operate_log PRIMARY KEY (id);
+
+
+--
 -- Name: stripe_channel_merchant pk_stripe_direct_channel_merchant; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -22921,6 +23714,46 @@ ALTER TABLE ONLY public.stripe_channel_merchant
 
 ALTER TABLE ONLY public.stripe_key_config
     ADD CONSTRAINT pk_stripe_direct_key_config PRIMARY KEY (id);
+
+
+--
+-- Name: system_dict pk_system_dict; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.system_dict
+    ADD CONSTRAINT pk_system_dict PRIMARY KEY (id);
+
+
+--
+-- Name: system_dict_item pk_system_dict_item; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.system_dict_item
+    ADD CONSTRAINT pk_system_dict_item PRIMARY KEY (id);
+
+
+--
+-- Name: system_platform_config pk_system_platform_config; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.system_platform_config
+    ADD CONSTRAINT pk_system_platform_config PRIMARY KEY (id);
+
+
+--
+-- Name: system_platform_encrypt_config pk_system_platform_encrypt_config; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.system_platform_encrypt_config
+    ADD CONSTRAINT pk_system_platform_encrypt_config PRIMARY KEY (id);
+
+
+--
+-- Name: umfpay_direct_key_config pk_umfpay_direct_key_config; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.umfpay_direct_key_config
+    ADD CONSTRAINT pk_umfpay_direct_key_config PRIMARY KEY (id);
 
 
 --
@@ -22964,11 +23797,51 @@ ALTER TABLE ONLY public.wechat_transfer_config
 
 
 --
+-- Name: xingyi_direct_key_config pk_xingyi_direct_key_config; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.xingyi_direct_key_config
+    ADD CONSTRAINT pk_xingyi_direct_key_config PRIMARY KEY (id);
+
+
+--
 -- Name: yeepay_direct_key_config pk_yeepay_direct_key_config; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.yeepay_direct_key_config
     ADD CONSTRAINT pk_yeepay_direct_key_config PRIMARY KEY (id);
+
+
+--
+-- Name: yisheng_direct_key_config pk_yisheng_direct_key_config; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.yisheng_direct_key_config
+    ADD CONSTRAINT pk_yisheng_direct_key_config PRIMARY KEY (id);
+
+
+--
+-- Name: yizhifubj_direct_key_config pk_yizhifubj_direct_key_config; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.yizhifubj_direct_key_config
+    ADD CONSTRAINT pk_yizhifubj_direct_key_config PRIMARY KEY (id);
+
+
+--
+-- Name: youzan_direct_key_config pk_youzan_direct_key_config; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.youzan_direct_key_config
+    ADD CONSTRAINT pk_youzan_direct_key_config PRIMARY KEY (id);
+
+
+--
+-- Name: ysep_key_config pk_ysep_key_config; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.ysep_key_config
+    ADD CONSTRAINT pk_ysep_key_config PRIMARY KEY (id);
 
 
 --
@@ -23136,6 +24009,34 @@ COMMENT ON INDEX public.idx_alipay_transfer_scene_config_mch IS '按通道商户
 
 
 --
+-- Name: idx_audit_login_log_user_time; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_audit_login_log_user_time ON public.starter_audit_login_log USING btree (user_id, login_time);
+
+
+--
+-- Name: INDEX idx_audit_login_log_user_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_audit_login_log_user_time IS '登录日志按用户+登录时间检索';
+
+
+--
+-- Name: idx_audit_operate_log_operate_time; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_audit_operate_log_operate_time ON public.starter_audit_operate_log USING btree (operate_id, operate_time);
+
+
+--
+-- Name: INDEX idx_audit_operate_log_operate_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_audit_operate_log_operate_time IS '操作日志按操作人+操作时间检索';
+
+
+--
 -- Name: idx_base_street_area_code; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -23234,20 +24135,6 @@ COMMENT ON INDEX public.idx_dy_mch_app_app_type IS '按商户号+应用类型查
 
 
 --
--- Name: idx_dy_mch_app_mch_no; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_dy_mch_app_mch_no ON public.dy_mch_app USING btree (mch_no);
-
-
---
--- Name: INDEX idx_dy_mch_app_mch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.idx_dy_mch_app_mch_no IS '商户号关联查询';
-
-
---
 -- Name: idx_dy_platform_app_app_type; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -23343,6 +24230,20 @@ CREATE INDEX idx_gateway_order_app_biz ON public.pay_gateway_order USING btree (
 --
 
 COMMENT ON INDEX public.idx_gateway_order_app_biz IS '按应用+业务订单号查询';
+
+
+--
+-- Name: idx_gateway_order_mch_create_time; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_gateway_order_mch_create_time ON public.pay_gateway_order USING btree (mch_no, create_time);
+
+
+--
+-- Name: INDEX idx_gateway_order_mch_create_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_gateway_order_mch_create_time IS '商户维度按创建时间检索';
 
 
 --
@@ -23455,6 +24356,20 @@ CREATE INDEX idx_mch_app_info_mch_no ON public.mch_app_info USING btree (mch_no)
 --
 
 COMMENT ON INDEX public.idx_mch_app_info_mch_no IS '商户号索引';
+
+
+--
+-- Name: idx_mch_channel_merchant_mch_no; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_mch_channel_merchant_mch_no ON public.mch_channel_merchant USING btree (mch_no);
+
+
+--
+-- Name: INDEX idx_mch_channel_merchant_mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_mch_channel_merchant_mch_no IS '通道商户按商户号检索';
 
 
 --
@@ -23640,6 +24555,20 @@ COMMENT ON INDEX public.idx_normal_order_app_biz IS '按应用+业务订单号�
 
 
 --
+-- Name: idx_normal_order_mch_create_time; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_normal_order_mch_create_time ON public.pay_normal_order USING btree (mch_no, create_time);
+
+
+--
+-- Name: INDEX idx_normal_order_mch_create_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_normal_order_mch_create_time IS '商户维度按创建时间检索';
+
+
+--
 -- Name: idx_normal_order_mch_store; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -23777,6 +24706,20 @@ CREATE INDEX idx_pay_alloc_detail_alloc_no ON public.pay_alloc_detail USING btre
 --
 
 COMMENT ON INDEX public.idx_pay_alloc_detail_alloc_no IS '分账单号反查明细';
+
+
+--
+-- Name: idx_pay_alloc_order_mch_create_time; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_pay_alloc_order_mch_create_time ON public.pay_alloc_order USING btree (mch_no, create_time);
+
+
+--
+-- Name: INDEX idx_pay_alloc_order_mch_create_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_pay_alloc_order_mch_create_time IS '商户维度按创建时间检索';
 
 
 --
@@ -24214,6 +25157,20 @@ COMMENT ON INDEX public.idx_pay_trade_mch_channel IS '按商户+通道商户维�
 
 
 --
+-- Name: idx_pay_trade_mch_create_time; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_pay_trade_mch_create_time ON public.pay_trade USING btree (mch_no, create_time);
+
+
+--
+-- Name: INDEX idx_pay_trade_mch_create_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_pay_trade_mch_create_time IS '商户维度按创建时间检索';
+
+
+--
 -- Name: idx_pay_trade_mch_store; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -24396,6 +25353,62 @@ COMMENT ON INDEX public.idx_pay_transfer_trade_status_time IS '按状态+创建�
 
 
 --
+-- Name: idx_pay_virtual_device_batch_no; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_pay_virtual_device_batch_no ON public.pay_virtual_device USING btree (batch_no);
+
+
+--
+-- Name: INDEX idx_pay_virtual_device_batch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_pay_virtual_device_batch_no IS '批次号索引(按批次查询)';
+
+
+--
+-- Name: idx_pay_virtual_device_mch_app; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_pay_virtual_device_mch_app ON public.pay_virtual_device USING btree (mch_no, app_id);
+
+
+--
+-- Name: INDEX idx_pay_virtual_device_mch_app; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_pay_virtual_device_mch_app IS '商户+应用索引(播报/打印按应用作用域匹配)';
+
+
+--
+-- Name: idx_pay_virtual_device_mch_no; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_pay_virtual_device_mch_no ON public.pay_virtual_device USING btree (mch_no);
+
+
+--
+-- Name: INDEX idx_pay_virtual_device_mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_pay_virtual_device_mch_no IS '商户号索引(商户名下设备查询/解绑级联入口)';
+
+
+--
+-- Name: idx_pay_virtual_device_mch_store; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_pay_virtual_device_mch_store ON public.pay_virtual_device USING btree (mch_no, store_no);
+
+
+--
+-- Name: INDEX idx_pay_virtual_device_mch_store; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_pay_virtual_device_mch_store IS '商户+使用门店索引(播报/打印按门店作用域匹配)';
+
+
+--
 -- Name: idx_refund_order_app_biz; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -24407,6 +25420,20 @@ CREATE INDEX idx_refund_order_app_biz ON public.pay_refund_order USING btree (ap
 --
 
 COMMENT ON INDEX public.idx_refund_order_app_biz IS '按应用+业务退款号查询';
+
+
+--
+-- Name: idx_refund_order_mch_create_time; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_refund_order_mch_create_time ON public.pay_refund_order USING btree (mch_no, create_time);
+
+
+--
+-- Name: INDEX idx_refund_order_mch_create_time; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_refund_order_mch_create_time IS '商户维度按创建时间检索';
 
 
 --
@@ -24449,20 +25476,6 @@ CREATE INDEX idx_refund_order_status_create_time ON public.pay_refund_order USIN
 --
 
 COMMENT ON INDEX public.idx_refund_order_status_create_time IS '按退款状态+创建时间窗口扫描(定时同步)';
-
-
---
--- Name: idx_role_menu_role_client; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_role_menu_role_client ON public.iam_role_menu USING btree (role_id, client_code);
-
-
---
--- Name: INDEX idx_role_menu_role_client; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.idx_role_menu_role_client IS '角色菜单表按角色ID和终端编码的普通索引';
 
 
 --
@@ -24519,6 +25532,20 @@ CREATE INDEX idx_starter_audit_unipay_log_trace ON public.starter_audit_unipay_l
 --
 
 COMMENT ON INDEX public.idx_starter_audit_unipay_log_trace IS '按链路追踪 ID 查询';
+
+
+--
+-- Name: idx_system_dict_item_dict_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX idx_system_dict_item_dict_id ON public.system_dict_item USING btree (dict_id);
+
+
+--
+-- Name: INDEX idx_system_dict_item_dict_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.idx_system_dict_item_dict_id IS '字典项按字典ID检索';
 
 
 --
@@ -24673,20 +25700,6 @@ CREATE INDEX idx_wx_mch_app_app_type ON public.wx_mch_app USING btree (mch_no, a
 --
 
 COMMENT ON INDEX public.idx_wx_mch_app_app_type IS '按商户号+应用类型查询';
-
-
---
--- Name: idx_wx_mch_app_mch_no; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX idx_wx_mch_app_mch_no ON public.wx_mch_app USING btree (mch_no);
-
-
---
--- Name: INDEX idx_wx_mch_app_mch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.idx_wx_mch_app_mch_no IS '商户号关联查询';
 
 
 --
@@ -25327,6 +26340,20 @@ COMMENT ON INDEX public.uk_helipay_key_channel_mch IS '通道商户号唯一(一
 
 
 --
+-- Name: uk_hkrt_isv_channel_merchant_channel_product_sandbox; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_hkrt_isv_channel_merchant_channel_product_sandbox ON public.hkrt_isv_channel_merchant USING btree (channel_mch_no, product, sandbox) WHERE (deleted = false);
+
+
+--
+-- Name: INDEX uk_hkrt_isv_channel_merchant_channel_product_sandbox; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_hkrt_isv_channel_merchant_channel_product_sandbox IS '业务唯一键(未删除行): channel_mch_no, product, sandbox';
+
+
+--
 -- Name: uk_hkrt_isv_key_prod_sandbox; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -25530,20 +26557,6 @@ COMMENT ON INDEX public.uk_lakala_isv_key_prod_sandbox IS '同一产品同一环
 
 
 --
--- Name: uk_lakala_isv_key_product; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX uk_lakala_isv_key_product ON public.lakala_isv_key_config USING btree (product) WHERE (deleted = false);
-
-
---
--- Name: INDEX uk_lakala_isv_key_product; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.uk_lakala_isv_key_product IS '同一产品密钥唯一（疑似冗余，见 §6）';
-
-
---
 -- Name: uk_lakala_isv_mch_lakala_no; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -25670,17 +26683,17 @@ COMMENT ON INDEX public.uk_mch_app_notify_config IS '同一应用仅一条通知
 
 
 --
--- Name: uk_mch_user_user_id; Type: INDEX; Schema: public; Owner: -
+-- Name: uk_mch_channel_merchant_mch_channel; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE UNIQUE INDEX uk_mch_user_user_id ON public.mch_user USING btree (user_id);
+CREATE UNIQUE INDEX uk_mch_channel_merchant_mch_channel ON public.mch_channel_merchant USING btree (mch_no, channel_mch_no) WHERE (deleted = false);
 
 
 --
--- Name: INDEX uk_mch_user_user_id; Type: COMMENT; Schema: public; Owner: -
+-- Name: INDEX uk_mch_channel_merchant_mch_channel; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_mch_user_user_id IS '同一用户仅归属一个商户(跨商户挂靠被数据库拒绝)';
+COMMENT ON INDEX public.uk_mch_channel_merchant_mch_channel IS '商户下通道商户号唯一(未删除行), 下单路由主链路';
 
 
 --
@@ -25740,6 +26753,20 @@ COMMENT ON INDEX public.uk_mch_store_info_store_no IS '门店号唯一(仅未删
 
 
 --
+-- Name: uk_mch_user_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_mch_user_user_id ON public.mch_user USING btree (user_id);
+
+
+--
+-- Name: INDEX uk_mch_user_user_id; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_mch_user_user_id IS '同一用户仅归属一个商户(跨商户挂靠被数据库拒绝)';
+
+
+--
 -- Name: uk_mch_wx_domain_verify_code; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -25751,6 +26778,76 @@ CREATE UNIQUE INDEX uk_mch_wx_domain_verify_code ON public.mch_wx_domain_verify 
 --
 
 COMMENT ON INDEX public.uk_mch_wx_domain_verify_code IS '域名校验码唯一';
+
+
+--
+-- Name: uk_mock_alloc_receiver; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_mock_alloc_receiver ON public.mock_alloc_receiver USING btree (channel_mch_no, receiver_type, account_hash) WHERE (deleted = false);
+
+
+--
+-- Name: INDEX uk_mock_alloc_receiver; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_mock_alloc_receiver IS '同一通道商户下同类型同账号接收方唯一(部分唯一索引)';
+
+
+--
+-- Name: uk_mock_direct_credential_cmchno; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_mock_direct_credential_cmchno ON public.mock_direct_credential USING btree (channel_mch_no) WHERE (deleted = false);
+
+
+--
+-- Name: INDEX uk_mock_direct_credential_cmchno; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_mock_direct_credential_cmchno IS '通道商户号唯一(未删除行)';
+
+
+--
+-- Name: uk_mock_isv_channel_merchant_channel_mch; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_mock_isv_channel_merchant_channel_mch ON public.mock_isv_channel_merchant USING btree (channel_mch_no) WHERE (deleted = false);
+
+
+--
+-- Name: INDEX uk_mock_isv_channel_merchant_channel_mch; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_mock_isv_channel_merchant_channel_mch IS '通道商户号唯一(未删除行)';
+
+
+--
+-- Name: uk_mock_isv_credential_isvno; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_mock_isv_credential_isvno ON public.mock_isv_credential USING btree (isv_no) WHERE (deleted = false);
+
+
+--
+-- Name: INDEX uk_mock_isv_credential_isvno; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_mock_isv_credential_isvno IS '服务商编号唯一(未删除行)';
+
+
+--
+-- Name: uk_mock_isv_info_isvno; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_mock_isv_info_isvno ON public.mock_isv_info USING btree (isv_no) WHERE (deleted = false);
+
+
+--
+-- Name: INDEX uk_mock_isv_info_isvno; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_mock_isv_info_isvno IS '服务商编号唯一(未删除行)';
 
 
 --
@@ -25898,6 +26995,20 @@ CREATE UNIQUE INDEX uk_pay_gateway_pay_env ON public.pay_gateway_pay_client_env 
 --
 
 COMMENT ON INDEX public.uk_pay_gateway_pay_env IS '同一支付配置同客户端环境同支付形态唯一(部分唯一索引)';
+
+
+--
+-- Name: uk_pay_mch_app_device_config_app; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_pay_mch_app_device_config_app ON public.pay_mch_app_device_config USING btree (app_id) WHERE (deleted = false);
+
+
+--
+-- Name: INDEX uk_pay_mch_app_device_config_app; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_pay_mch_app_device_config_app IS '一应用一行配置(仅未删除行; 行不存在由消费方解释为默认全开)';
 
 
 --
@@ -26125,6 +27236,20 @@ COMMENT ON INDEX public.uk_pay_transfer_trade_no IS '平台转账交易号唯一
 
 
 --
+-- Name: uk_pay_virtual_device_device_no; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_pay_virtual_device_device_no ON public.pay_virtual_device USING btree (device_no) WHERE ((deleted = false) AND (device_no IS NOT NULL));
+
+
+--
+-- Name: INDEX uk_pay_virtual_device_device_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_pay_virtual_device_device_no IS '设备号唯一(SN 为激活唯一锚点, 仅未删除行)';
+
+
+--
 -- Name: uk_refund_order_mch_biz; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -26251,6 +27376,62 @@ COMMENT ON INDEX public.uk_shouqianba_direct_key_cmchno_sandbox IS '同一通道
 
 
 --
+-- Name: uk_system_dict_item_dict_code; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_system_dict_item_dict_code ON public.system_dict_item USING btree (dict_id, code) WHERE (deleted = false);
+
+
+--
+-- Name: INDEX uk_system_dict_item_dict_code; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_system_dict_item_dict_code IS '同字典下编码唯一(未删除行)';
+
+
+--
+-- Name: uk_system_dict_type_code; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_system_dict_type_code ON public.system_dict USING btree (dict_type, code) WHERE (deleted = false);
+
+
+--
+-- Name: INDEX uk_system_dict_type_code; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_system_dict_type_code IS '字典类型+编码唯一(未删除行)';
+
+
+--
+-- Name: uk_system_platform_config_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_system_platform_config_type ON public.system_platform_config USING btree (config_type) WHERE (deleted = false);
+
+
+--
+-- Name: INDEX uk_system_platform_config_type; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_system_platform_config_type IS '配置类型唯一(未删除行), 配置取数走 config_type 等值查询';
+
+
+--
+-- Name: uk_system_platform_encrypt_config_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_system_platform_encrypt_config_type ON public.system_platform_encrypt_config USING btree (config_type) WHERE (deleted = false);
+
+
+--
+-- Name: INDEX uk_system_platform_encrypt_config_type; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_system_platform_encrypt_config_type IS '加密配置类型唯一(未删除行)';
+
+
+--
 -- Name: uk_system_sensitive_word_word; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -26276,20 +27457,6 @@ CREATE UNIQUE INDEX uk_umfpay_direct_key_cmchno_sandbox ON public.umfpay_direct_
 --
 
 COMMENT ON INDEX public.uk_umfpay_direct_key_cmchno_sandbox IS '同一通道商户同一环境密钥唯一';
-
-
---
--- Name: uk_ums_direct_key_cmchno; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX uk_ums_direct_key_cmchno ON public.ums_direct_key_config USING btree (channel_mch_no) WHERE (deleted = false);
-
-
---
--- Name: INDEX uk_ums_direct_key_cmchno; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.uk_ums_direct_key_cmchno IS '通道商户号唯一';
 
 
 --
@@ -26547,806 +27714,3 @@ COMMENT ON INDEX public.uk_ysep_key_channel_mch IS '通道商户号唯一(一通
 --
 -- PostgreSQL database dump complete
 --
-
--- ========== 2026-10-31 mock 模拟通道(开源版 P0): 6 张 mock 私有表 ==========
--- 来源: plus 同名表定义摘录; 时间列统一 timestamptz(6)(open 规范), 剔除 plus 代理商域 agent_no 列(open 无代理商域);
--- mock 通道为仿真第三方通道(mock_pay 直连 / mock_isv 服务商 双产品), 仅 DEV 装配 mock 子应用, 联调/演示用。
-
---
--- Name: mock_isv_channel_merchant; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.mock_isv_channel_merchant (
-    id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
-    channel_mch_no character varying(64) NOT NULL,
-    product character varying(32) NOT NULL,
-    creator bigint,
-    create_time timestamp(6) with time zone,
-    last_modifier bigint,
-    last_modified_time timestamp(6) with time zone,
-    version integer DEFAULT 0 NOT NULL,
-    deleted boolean DEFAULT false NOT NULL,
-    isv_id bigint
-);
-
-
---
--- Name: TABLE mock_isv_channel_merchant; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.mock_isv_channel_merchant IS 'Mock 服务商通道商户绑定';
-
-
---
--- Name: COLUMN mock_isv_channel_merchant.id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_channel_merchant.id IS '主键';
-
-
---
--- Name: COLUMN mock_isv_channel_merchant.mch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_channel_merchant.mch_no IS '商户号';
-
-
---
--- Name: COLUMN mock_isv_channel_merchant.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_channel_merchant.channel_mch_no IS '通道商户号(模拟控制台手填, 与主表同值)';
-
-
---
--- Name: COLUMN mock_isv_channel_merchant.product; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_channel_merchant.product IS '所属支付产品(恒为 mock_isv)';
-
-
---
--- Name: COLUMN mock_isv_channel_merchant.creator; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_channel_merchant.creator IS '创建人';
-
-
---
--- Name: COLUMN mock_isv_channel_merchant.create_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_channel_merchant.create_time IS '创建时间';
-
-
---
--- Name: COLUMN mock_isv_channel_merchant.last_modifier; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_channel_merchant.last_modifier IS '最后修改人';
-
-
---
--- Name: COLUMN mock_isv_channel_merchant.last_modified_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_channel_merchant.last_modified_time IS '最后修改时间';
-
-
---
--- Name: COLUMN mock_isv_channel_merchant.version; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_channel_merchant.version IS '乐观锁版本号';
-
-
---
--- Name: COLUMN mock_isv_channel_merchant.deleted; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_channel_merchant.deleted IS '逻辑删除标志';
-
-
---
--- Name: COLUMN mock_isv_channel_merchant.isv_id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_channel_merchant.isv_id IS '归属模拟服务商ID(指向 mock_isv_info.id, 创建时选定, 创建后不可改)';
-
-
---
--- Name: pk_mock_isv_channel_merchant; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.mock_isv_channel_merchant
-    ADD CONSTRAINT pk_mock_isv_channel_merchant PRIMARY KEY (id);
-
-
---
--- Name: uk_mock_isv_channel_merchant_channel_mch; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX uk_mock_isv_channel_merchant_channel_mch ON public.mock_isv_channel_merchant USING btree (channel_mch_no) WHERE (deleted = false);
-
-
---
--- Name: INDEX uk_mock_isv_channel_merchant_channel_mch; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.uk_mock_isv_channel_merchant_channel_mch IS '通道商户号唯一(未删除行)';
-
-
---
--- Name: mock_isv_info; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.mock_isv_info (
-    id bigint NOT NULL,
-    isv_no character varying(32) NOT NULL,
-    isv_name character varying(64) NOT NULL,
-    enable boolean DEFAULT true NOT NULL,
-    creator bigint,
-    create_time timestamp(6) with time zone,
-    last_modifier bigint,
-    last_modified_time timestamp(6) with time zone,
-    version integer DEFAULT 0 NOT NULL,
-    deleted boolean DEFAULT false NOT NULL,
-    pay_enable boolean DEFAULT true NOT NULL
-);
-
-
---
--- Name: TABLE mock_isv_info; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.mock_isv_info IS 'Mock 模拟服务商主数据';
-
-
---
--- Name: COLUMN mock_isv_info.id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_info.id IS '主键';
-
-
---
--- Name: COLUMN mock_isv_info.isv_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_info.isv_no IS '服务商编号(MISV+16位数字, 创建时自动生成不可改; 通道商户主表 isv_no 固化来源)';
-
-
---
--- Name: COLUMN mock_isv_info.isv_name; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_info.isv_name IS '服务商名称';
-
-
---
--- Name: COLUMN mock_isv_info.enable; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_info.enable IS '是否允许新建服务商通道商户(停用后不影响已有通道商户支付)';
-
-
---
--- Name: COLUMN mock_isv_info.creator; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_info.creator IS '创建人';
-
-
---
--- Name: COLUMN mock_isv_info.create_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_info.create_time IS '创建时间';
-
-
---
--- Name: COLUMN mock_isv_info.last_modifier; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_info.last_modifier IS '最后修改人';
-
-
---
--- Name: COLUMN mock_isv_info.last_modified_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_info.last_modified_time IS '最后修改时间';
-
-
---
--- Name: COLUMN mock_isv_info.version; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_info.version IS '乐观锁版本号';
-
-
---
--- Name: COLUMN mock_isv_info.deleted; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_info.deleted IS '逻辑删除标志';
-
-
---
--- Name: COLUMN mock_isv_info.pay_enable; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_info.pay_enable IS '是否启用服务商支付(停用后仅阻止新支付下单, 不影响存量交易处理)';
-
-
---
--- Name: pk_mock_isv_info; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.mock_isv_info
-    ADD CONSTRAINT pk_mock_isv_info PRIMARY KEY (id);
-
-
---
--- Name: uk_mock_isv_info_isvno; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX uk_mock_isv_info_isvno ON public.mock_isv_info USING btree (isv_no) WHERE (deleted = false);
-
-
---
--- Name: INDEX uk_mock_isv_info_isvno; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.uk_mock_isv_info_isvno IS '服务商编号唯一(未删除行)';
-
-
---
--- Name: mock_isv_credential; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.mock_isv_credential (
-    id bigint NOT NULL,
-    isv_no character varying(32) NOT NULL,
-    key_serial character varying(64),
-    merchant_private_key text,
-    platform_public_key text,
-    gateway_base_url character varying(256),
-    creator bigint,
-    create_time timestamp(6) with time zone,
-    last_modifier bigint,
-    last_modified_time timestamp(6) with time zone,
-    version integer DEFAULT 0 NOT NULL,
-    deleted boolean DEFAULT false NOT NULL
-);
-
-
---
--- Name: TABLE mock_isv_credential; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.mock_isv_credential IS 'Mock 服务商接入密钥(按服务商一行, 仅 DEV 装配)';
-
-
---
--- Name: COLUMN mock_isv_credential.id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_credential.id IS '主键';
-
-
---
--- Name: COLUMN mock_isv_credential.isv_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_credential.isv_no IS '服务商编号(指向 mock_isv_info.isv_no, 一服务商一行未删除记录)';
-
-
---
--- Name: COLUMN mock_isv_credential.key_serial; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_credential.key_serial IS '密钥序列号(已废弃: 保留列兼容存量, 不再读写; 取钥改按主体编号 key_owner_no, 装配按两件套)';
-
-
---
--- Name: COLUMN mock_isv_credential.merchant_private_key; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_credential.merchant_private_key IS '商户私钥(PEM PKCS#8, 加密存储; 留空保留原值)';
-
-
---
--- Name: COLUMN mock_isv_credential.platform_public_key; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_credential.platform_public_key IS '平台公钥(PEM SPKI, 加密存储; 与商户私钥须齐配)';
-
-
---
--- Name: COLUMN mock_isv_credential.gateway_base_url; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_credential.gateway_base_url IS '服务商接入网关地址(可空; 通道子应用侧非空优先选址, 空回落 yml base-url)';
-
-
---
--- Name: COLUMN mock_isv_credential.creator; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_credential.creator IS '创建人';
-
-
---
--- Name: COLUMN mock_isv_credential.create_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_credential.create_time IS '创建时间';
-
-
---
--- Name: COLUMN mock_isv_credential.last_modifier; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_credential.last_modifier IS '最后修改人';
-
-
---
--- Name: COLUMN mock_isv_credential.last_modified_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_credential.last_modified_time IS '最后修改时间';
-
-
---
--- Name: COLUMN mock_isv_credential.version; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_credential.version IS '乐观锁版本号';
-
-
---
--- Name: COLUMN mock_isv_credential.deleted; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_isv_credential.deleted IS '逻辑删除标志';
-
-
---
--- Name: pk_mock_isv_credential; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.mock_isv_credential
-    ADD CONSTRAINT pk_mock_isv_credential PRIMARY KEY (id);
-
-
---
--- Name: uk_mock_isv_credential_isvno; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX uk_mock_isv_credential_isvno ON public.mock_isv_credential USING btree (isv_no) WHERE (deleted = false);
-
-
---
--- Name: INDEX uk_mock_isv_credential_isvno; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.uk_mock_isv_credential_isvno IS '服务商编号唯一(未删除行)';
-
-
---
--- Name: mock_channel_credential; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.mock_channel_credential (
-    id bigint NOT NULL,
-    merchant_private_key text,
-    platform_public_key text,
-    creator bigint,
-    create_time timestamp(6) with time zone,
-    last_modifier bigint,
-    last_modified_time timestamp(6) with time zone,
-    version integer DEFAULT 0 NOT NULL,
-    deleted boolean DEFAULT false NOT NULL
-);
-
-
---
--- Name: TABLE mock_channel_credential; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.mock_channel_credential IS 'Mock 通道网关签名密钥(全局单行, 仅 DEV 装配)';
-
-
---
--- Name: COLUMN mock_channel_credential.id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_channel_credential.id IS '主键(全局单行, 固定为1)';
-
-
---
--- Name: COLUMN mock_channel_credential.merchant_private_key; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_channel_credential.merchant_private_key IS '商户私钥(PEM PKCS#8 多行原文, 加密存储; 请求签名用, 与模拟网关侧商户公钥成对)';
-
-
---
--- Name: COLUMN mock_channel_credential.platform_public_key; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_channel_credential.platform_public_key IS '平台公钥(PEM SPKI 多行原文, 加密存储; 响应/回调验签用, 与模拟网关侧平台私钥成对)';
-
-
---
--- Name: COLUMN mock_channel_credential.creator; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_channel_credential.creator IS '创建人';
-
-
---
--- Name: COLUMN mock_channel_credential.create_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_channel_credential.create_time IS '创建时间';
-
-
---
--- Name: COLUMN mock_channel_credential.last_modifier; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_channel_credential.last_modifier IS '最后修改人';
-
-
---
--- Name: COLUMN mock_channel_credential.last_modified_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_channel_credential.last_modified_time IS '最后修改时间';
-
-
---
--- Name: COLUMN mock_channel_credential.version; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_channel_credential.version IS '乐观锁版本号';
-
-
---
--- Name: COLUMN mock_channel_credential.deleted; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_channel_credential.deleted IS '逻辑删除标志';
-
-
---
--- Name: pk_mock_channel_credential; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.mock_channel_credential
-    ADD CONSTRAINT pk_mock_channel_credential PRIMARY KEY (id);
-
-
---
--- Name: mock_direct_credential; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.mock_direct_credential (
-    id bigint NOT NULL,
-    channel_mch_no character varying(64) NOT NULL,
-    key_serial character varying(64),
-    merchant_private_key text,
-    platform_public_key text,
-    gateway_base_url character varying(256),
-    creator bigint,
-    create_time timestamp(6) with time zone,
-    last_modifier bigint,
-    last_modified_time timestamp(6) with time zone,
-    version integer DEFAULT 0 NOT NULL,
-    deleted boolean DEFAULT false NOT NULL
-);
-
-
---
--- Name: TABLE mock_direct_credential; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.mock_direct_credential IS 'Mock 直连商户接入密钥(按通道商户一行, 仅 DEV 装配)';
-
-
---
--- Name: COLUMN mock_direct_credential.id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_direct_credential.id IS '主键';
-
-
---
--- Name: COLUMN mock_direct_credential.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_direct_credential.channel_mch_no IS '通道商户号(通道商户主表 channel_mch_no, 一通道商户一行未删除记录)';
-
-
---
--- Name: COLUMN mock_direct_credential.key_serial; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_direct_credential.key_serial IS '密钥序列号(已废弃: 保留列兼容存量, 不再读写; 取钥改按主体编号 key_owner_no, 装配按两件套)';
-
-
---
--- Name: COLUMN mock_direct_credential.merchant_private_key; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_direct_credential.merchant_private_key IS '商户私钥(PEM PKCS#8, 加密存储; 留空保留原值)';
-
-
---
--- Name: COLUMN mock_direct_credential.platform_public_key; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_direct_credential.platform_public_key IS '平台公钥(PEM SPKI 多行原文, 加密存储; 直连产品网关响应/回调验签用, 留空保存保留原值)';
-
-
---
--- Name: COLUMN mock_direct_credential.gateway_base_url; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_direct_credential.gateway_base_url IS '商户接入网关地址(可空; 通道子应用侧非空优先选址, 空回落 yml base-url)';
-
-
---
--- Name: COLUMN mock_direct_credential.creator; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_direct_credential.creator IS '创建人';
-
-
---
--- Name: COLUMN mock_direct_credential.create_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_direct_credential.create_time IS '创建时间';
-
-
---
--- Name: COLUMN mock_direct_credential.last_modifier; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_direct_credential.last_modifier IS '最后修改人';
-
-
---
--- Name: COLUMN mock_direct_credential.last_modified_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_direct_credential.last_modified_time IS '最后修改时间';
-
-
---
--- Name: COLUMN mock_direct_credential.version; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_direct_credential.version IS '乐观锁版本号';
-
-
---
--- Name: COLUMN mock_direct_credential.deleted; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_direct_credential.deleted IS '逻辑删除标志';
-
-
---
--- Name: pk_mock_direct_credential; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.mock_direct_credential
-    ADD CONSTRAINT pk_mock_direct_credential PRIMARY KEY (id);
-
-
---
--- Name: uk_mock_direct_credential_cmchno; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX uk_mock_direct_credential_cmchno ON public.mock_direct_credential USING btree (channel_mch_no) WHERE (deleted = false);
-
-
---
--- Name: INDEX uk_mock_direct_credential_cmchno; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.uk_mock_direct_credential_cmchno IS '通道商户号唯一(未删除行)';
-
-
---
--- Name: mock_alloc_receiver; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.mock_alloc_receiver (
-    id bigint NOT NULL,
-    mch_no character varying(32) NOT NULL,
-    channel_mch_no character varying(64) NOT NULL,
-    product character varying(32) NOT NULL,
-    receiver_type character varying(32) NOT NULL,
-    receiver_account character varying(256) NOT NULL,
-    account_hash character varying(64) NOT NULL,
-    receiver_name character varying(256),
-    alias character varying(50),
-    status character varying(16) NOT NULL,
-    error_msg text,
-    bind_time timestamp(6) with time zone,
-    unbind_time timestamp(6) with time zone,
-    creator bigint,
-    create_time timestamp(6) with time zone,
-    last_modifier bigint,
-    last_modified_time timestamp(6) with time zone,
-    version integer DEFAULT 0 NOT NULL,
-    deleted boolean DEFAULT false NOT NULL
-);
-
-
---
--- Name: TABLE mock_alloc_receiver; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON TABLE public.mock_alloc_receiver IS 'Mock 分账接收方绑定档案';
-
-
---
--- Name: COLUMN mock_alloc_receiver.id; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_alloc_receiver.id IS '主键';
-
-
---
--- Name: COLUMN mock_alloc_receiver.mch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_alloc_receiver.mch_no IS '商户号';
-
-
---
--- Name: COLUMN mock_alloc_receiver.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_alloc_receiver.channel_mch_no IS '通道商户号(关联通道商户主表)';
-
-
---
--- Name: COLUMN mock_alloc_receiver.product; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_alloc_receiver.product IS '所属支付产品(mock_pay/mock_isv, 冗余自通道商户)';
-
-
---
--- Name: COLUMN mock_alloc_receiver.receiver_type; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_alloc_receiver.receiver_type IS '接收方类型';
-
-
---
--- Name: COLUMN mock_alloc_receiver.receiver_account; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_alloc_receiver.receiver_account IS '接收方账号(AES-256-GCM 加密存储)';
-
-
---
--- Name: COLUMN mock_alloc_receiver.account_hash; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_alloc_receiver.account_hash IS '接收方账号 SHA-256 哈希(密文不确定, 查重与等值定位用)';
-
-
---
--- Name: COLUMN mock_alloc_receiver.receiver_name; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_alloc_receiver.receiver_name IS '接收方名称(AES-256-GCM 加密存储, MERCHANT_ID 时必填商户全称)';
-
-
---
--- Name: COLUMN mock_alloc_receiver.alias; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_alloc_receiver.alias IS '接收方别名(本地备注, 不上送通道, 可随时修改)';
-
-
---
--- Name: COLUMN mock_alloc_receiver.status; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_alloc_receiver.status IS '绑定状态(bound/unbound/fail)';
-
-
---
--- Name: COLUMN mock_alloc_receiver.error_msg; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_alloc_receiver.error_msg IS '最近一次绑定/解绑失败原因';
-
-
---
--- Name: COLUMN mock_alloc_receiver.bind_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_alloc_receiver.bind_time IS '绑定成功时间';
-
-
---
--- Name: COLUMN mock_alloc_receiver.unbind_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_alloc_receiver.unbind_time IS '解绑成功时间';
-
-
---
--- Name: COLUMN mock_alloc_receiver.creator; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_alloc_receiver.creator IS '创建人';
-
-
---
--- Name: COLUMN mock_alloc_receiver.create_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_alloc_receiver.create_time IS '创建时间';
-
-
---
--- Name: COLUMN mock_alloc_receiver.last_modifier; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_alloc_receiver.last_modifier IS '最后修改人';
-
-
---
--- Name: COLUMN mock_alloc_receiver.last_modified_time; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_alloc_receiver.last_modified_time IS '最后修改时间';
-
-
---
--- Name: COLUMN mock_alloc_receiver.version; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_alloc_receiver.version IS '乐观锁版本号';
-
-
---
--- Name: COLUMN mock_alloc_receiver.deleted; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON COLUMN public.mock_alloc_receiver.deleted IS '逻辑删除标志';
-
-
---
--- Name: pk_mock_alloc_receiver; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.mock_alloc_receiver
-    ADD CONSTRAINT pk_mock_alloc_receiver PRIMARY KEY (id);
-
-
---
--- Name: uk_mock_alloc_receiver; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX uk_mock_alloc_receiver ON public.mock_alloc_receiver USING btree (channel_mch_no, receiver_type, account_hash) WHERE (deleted = false);
-
-
---
--- Name: INDEX uk_mock_alloc_receiver; Type: COMMENT; Schema: public; Owner: -
---
-
-COMMENT ON INDEX public.uk_mock_alloc_receiver IS '同一通道商户下同类型同账号接收方唯一(部分唯一索引)';

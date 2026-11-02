@@ -11,7 +11,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 /// # 易支付协议退款订单
@@ -49,8 +48,8 @@ public class EasyPayRefundOrder extends MchBaseEntity implements ToResult<EasyPa
     /// 商户订单号 out_trade_no
     private String outTradeNo;
 
-    /// 退款金额（元）
-    private BigDecimal money;
+    /// 退款金额（分）
+    private Long money;
 
     /// 协议退款状态 0=失败/处理中 1=成功
     private Integer status;

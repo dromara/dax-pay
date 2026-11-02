@@ -149,7 +149,8 @@ public class EasyPayAssistService {
                 .setId(order.getId())
                 .setType(order.getType())
                 .setName(order.getName())
-                .setMoney(order.getMoney())
+                // 收银台信息对外仍为元金额, 实体金额为分需转换
+                .setMoney(Objects.isNull(order.getMoney()) ? null : EasyPayUtil.fenToYuan(order.getMoney()))
                 .setPayUrl(order.getPayUrl())
                 .setPayBody(order.getPayBody())
                 .setPcCallType(order.getPcCallType())

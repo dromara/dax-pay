@@ -1,6 +1,6 @@
 package cn.daxpay.open.platform.capability.audit.log.entity;
 
-import cn.daxpay.open.platform.common.mybatisplus.base.MpIdEntity;
+import cn.daxpay.open.platform.common.mybatisplus.base.MpBaseEntity;
 import cn.daxpay.open.platform.common.mybatisplus.function.ToResult;
 import cn.daxpay.open.platform.capability.audit.log.convert.LogConvert;
 import cn.daxpay.open.platform.capability.audit.log.result.LoginLogResult;
@@ -17,7 +17,7 @@ import java.time.OffsetDateTime;
 @Data
 @Accessors(chain = true)
 @TableName("starter_audit_login_log")
-public class LoginLogDb extends MpIdEntity implements ToResult<LoginLogResult> {
+public class LoginLogDb extends MpBaseEntity implements ToResult<LoginLogResult> {
 
     /// 用户账号id
     private Long userId;

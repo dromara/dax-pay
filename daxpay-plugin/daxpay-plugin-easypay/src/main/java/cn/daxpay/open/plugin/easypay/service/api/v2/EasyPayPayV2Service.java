@@ -28,7 +28,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.Objects;
@@ -173,7 +172,7 @@ public class EasyPayPayV2Service {
         payParam.setAppId(credential.getAppId());
         payParam.setBizOrderNo(order.getOutTradeNo());
         payParam.setTitle(order.getName());
-        payParam.setAmount(EasyPayUtil.yuanToFen(order.getMoney()));
+        payParam.setAmount(order.getMoney());
         payParam.setMethod(payMethod);
         payParam.setOpenId(openId);
         payParam.setAuthCode(authCode);
@@ -194,8 +193,9 @@ public class EasyPayPayV2Service {
         order.setOutTradeNo(outTradeNo);
         order.setType(type);
         order.setName(name);
-        order.setMoney(new BigDecimal(money));
-        order.setRefundMoney(BigDecimal.ZERO);
+        // 协议入参为元字符串, 落库统一转为分
+        order.setMoney(EasyPayUtil.yuanToFen(money));
+        order.setRefundMoney(0L);
         order.setPid(credential.getPid());
         order.setAppId(credential.getAppId());
         order.setMchNo(credential.getMchNo());

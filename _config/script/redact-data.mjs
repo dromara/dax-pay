@@ -94,8 +94,8 @@ const DEMO_ROW_IDS = new Map([
   ['iam_user_expand_info', new Set([DEMO_USER_BOOTX, DEMO_USER_CSADMIN, DEMO_USER_CSQYSH])],
   // 密码安全行：非超管账号缺行会被判为初始密码而拦在改密页，故必须随包交付
   ['iam_user_password_security', new Set([DEMO_USER_CSADMIN, DEMO_USER_CSQYSH])],
-  // 角色绑定：csadmin→role 1(admin_admin)、csqysh→role 2(merchant_admin)
-  ['iam_user_role', new Set(['2098300598552301568', '2098238898364952576'])],
+  // 角色绑定：bootx(id=1)→role 1(超管)、csadmin→role 1(admin_admin)、csqysh→role 2(merchant_admin)
+  ['iam_user_role', new Set(['1', '2098300598552301568', '2098238898364952576'])],
   // 商户本体
   ['mch_info', new Set(['2078739677237649408'])],
   // 商户 ↔ 账号绑定（登录后解析 mchNo 必需，见 MchContextLocalFilter）

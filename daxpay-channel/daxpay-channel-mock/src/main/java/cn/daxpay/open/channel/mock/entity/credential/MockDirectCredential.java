@@ -19,7 +19,7 @@ import lombok.experimental.Accessors;
 /// - 商户私钥 + 平台公钥两件套均非空才算已配置(接入网关地址可空), 两段 PEM 留空保存保留原值;
 /// - 装配链: 两件套齐时整行下发(主体编号取通道商户号, 由 one 侧随请求报文/查询串携带 key_owner_no,
 ///   模拟网关按主体编号定位登记公钥, gatewayBaseUrl 供 one 侧优先选址), 未配置直接报错;
-/// - 数据库 key_serial 列已废弃(保留列兼容存量, 本实体不读写)。
+/// - 主体级密钥已下线, 按主体编号 key_owner_no 取钥(主体编号取通道商户号), 装配按「商户私钥 + 平台公钥」两件套。
 /// 由 [cn.daxpay.open.channel.mock.controller.admin.MockDirectCredentialController] 运营端维护,
 /// 随 [cn.daxpay.open.channel.mock.MockChannelApp] 仅 DEV 装配。
 @EqualsAndHashCode(callSuper = true)

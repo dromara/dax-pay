@@ -78,7 +78,7 @@ public class EasyPayPayloadBuilder implements NoticePayloadBuilder {
                 .setOutTradeNo(order.getOutTradeNo())
                 .setType(order.getType())
                 .setName(order.getName())
-                .setMoney(Objects.isNull(order.getMoney()) ? null : order.getMoney().toPlainString())
+                .setMoney(Objects.isNull(order.getMoney()) ? null : EasyPayUtil.fenToYuanString(order.getMoney()))
                 .setTradeStatus("TRADE_SUCCESS")
                 .setParam(order.getParam())
                 .setSignType("MD5");
@@ -99,7 +99,7 @@ public class EasyPayPayloadBuilder implements NoticePayloadBuilder {
                 .setAddTime(Objects.isNull(order.getAddTime()) ? null : NORM.format(order.getAddTime().toInstant()))
                 .setEndTime(Objects.isNull(order.getEndTime()) ? null : NORM.format(order.getEndTime().toInstant()))
                 .setName(order.getName())
-                .setMoney(Objects.isNull(order.getMoney()) ? null : order.getMoney().toPlainString())
+                .setMoney(Objects.isNull(order.getMoney()) ? null : EasyPayUtil.fenToYuanString(order.getMoney()))
                 .setParam(order.getParam())
                 .setBuyer(order.getBuyer())
                 .setTimestamp(String.valueOf(System.currentTimeMillis() / 1000))

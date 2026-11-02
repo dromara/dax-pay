@@ -11,7 +11,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
-import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
 /// # 易支付协议订单
@@ -56,11 +55,11 @@ public class EasyPayOrder extends MchBaseEntity implements ToResult<EasyPayOrder
     /// 商品名称
     private String name;
 
-    /// 金额（元）
-    private BigDecimal money;
+    /// 金额（分）
+    private Long money;
 
-    /// 已退款金额（元）
-    private BigDecimal refundMoney;
+    /// 已退款金额（分）
+    private Long refundMoney;
 
     /// 异步通知地址（由 EasyPayNoticeSender 出站推送，不写内核订单 notifyUrl）
     private String notifyUrl;

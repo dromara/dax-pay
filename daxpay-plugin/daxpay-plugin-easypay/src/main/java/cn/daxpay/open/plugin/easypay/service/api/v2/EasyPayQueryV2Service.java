@@ -11,7 +11,6 @@ import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Optional;
@@ -60,13 +59,13 @@ public class EasyPayQueryV2Service {
                 .setAddtime(Objects.isNull(order.getAddTime()) ? null : FMT.format(order.getAddTime()))
                 .setEndtime(Objects.isNull(order.getEndTime()) ? null : FMT.format(order.getEndTime()))
                 .setName(order.getName())
-                .setMoney(Objects.isNull(order.getMoney()) ? null : order.getMoney().toPlainString())
+                .setMoney(Objects.isNull(order.getMoney()) ? null : EasyPayUtil.fenToYuanString(order.getMoney()))
                 .setParam(order.getParam())
                 .setBuyer(order.getBuyer())
                 .setClientip(order.getClientIp())
                 .setTimestamp(String.valueOf(System.currentTimeMillis() / 1000));
-        if (Objects.nonNull(order.getRefundMoney()) && order.getRefundMoney().compareTo(BigDecimal.ZERO) > 0) {
-            result.setRefundmoney(order.getRefundMoney().toPlainString());
+        if (Objects.nonNull(order.getRefundMoney()) && order.getRefundMoney() > 0) {
+            result.setRefundmoney(EasyPayUtil.fenToYuanString(order.getRefundMoney()));
         }
         return sign(result, credential);
     }

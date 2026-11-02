@@ -6,6 +6,7 @@ import cn.daxpay.open.plugin.easypay.entity.EasyPayOrder;
 import cn.daxpay.open.plugin.easypay.param.api.v1.EasyPayQueryV1Param;
 import cn.daxpay.open.plugin.easypay.result.api.v1.EasyPayOrderV1Result;
 import cn.daxpay.open.plugin.easypay.service.config.EasyPayCredentialService;
+import cn.daxpay.open.plugin.easypay.util.EasyPayUtil;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -66,7 +67,7 @@ public class EasyPayQueryV1Service {
                 .setAddtime(Objects.isNull(order.getAddTime()) ? null : FMT.format(order.getAddTime()))
                 .setEndtime(Objects.isNull(order.getEndTime()) ? null : FMT.format(order.getEndTime()))
                 .setName(order.getName())
-                .setMoney(Objects.isNull(order.getMoney()) ? null : order.getMoney().toPlainString())
+                .setMoney(Objects.isNull(order.getMoney()) ? null : EasyPayUtil.fenToYuanString(order.getMoney()))
                 .setParam(order.getParam())
                 .setBuyer(order.getBuyer());
         return result;

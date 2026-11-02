@@ -102,7 +102,7 @@ public class MockIsvCredentialService {
         return entity;
     }
 
-    /// 已配置口径: 商户私钥/平台公钥均非空(脱敏视图与装配分流共用, 防口径漂移; key_serial 已废弃不参与)
+    /// 已配置口径: 商户私钥/平台公钥均非空(脱敏视图与装配分流共用, 防口径漂移; 主体级密钥已下线, 取钥按主体编号 key_owner_no)
     private boolean isConfigured(MockIsvCredential entity) {
         return StrUtil.isNotBlank(entity.getMerchantPrivateKey())
                 && StrUtil.isNotBlank(entity.getPlatformPublicKey());
