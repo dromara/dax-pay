@@ -58,8 +58,8 @@ export const ANCHORS = {
   mockChannelMchNo: 'MOCKM99999',
   mockWxAppId: 'wx9999999999999999',
   mockWxAppSecret: '9'.repeat(32),
-  // 演示账号（沿用现网习惯：运营 csadmin / 商户 csqysh）
-  adminUser: 'csadmin',
+  // 演示账号（运营 admin / 商户 csqysh；2026-11-03 起与商业版统一为 admin）
+  adminUser: 'admin',
   merchantUser: 'csqysh',
   // 预留：对比商户账号
   merchant2User: 'merchant2',

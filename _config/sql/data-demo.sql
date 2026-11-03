@@ -1,9 +1,9 @@
 -- ============================================================================
--- data-demo.sql — DaxPay 演示版数据脚本 | 工具 build/export-sql.mjs | 时间 2026-11-02T16:10:31.428Z
+-- data-demo.sql — DaxPay 演示版数据脚本 | 工具 build/export-sql.mjs | 时间 2026-11-03T10:15:14.227Z
 -- 来源: daxpay-dev @ 192.168.1.229:5432（[4] 段为剧本生成，不取库内业务数据）
 -- 内容: [2] 纯净种子  [3] 菜单种子（含演示菜单）  [4] 演示数据（旁路 mock 元数据 + 剧本生成的商户/通道/流水）
 -- 用法: 先执行 table.sql，再执行本文件（与 data.sql 二选一，不要都执行）
--- 说明: 演示账号 csadmin / csqysh，密码 121212；演示商户 M1999999999999；mock 通道 MOCKM99999
+-- 说明: 演示账号 admin / csqysh，密码 121212；演示商户 M1999999999999；mock 通道 MOCKM99999
 --       仅适用于开发/演示环境（daxpay.platform.config.sandbox-enabled=true），生产部署必须改用 data.sql
 -- 警告: 构建产物，禁止手编；改演示口径改 build/demo-dataset.mjs，然后重跑脚本
 -- ============================================================================
@@ -5050,7 +5050,7 @@ INSERT INTO public.pay_md_product_capability (id, product_code, capability_code,
 -- ---------------------------------------------------------------------------
 -- [4.3] 身份与配置（剧本生成：商户 / 用户 / 应用 / 门店 / 码牌 / 路由策略）
 -- ---------------------------------------------------------------------------
-INSERT INTO public.iam_user_info (id, creator, create_time, last_modifier, last_modified_time, version, deleted, name, client_code, account, password, status, administrator) VALUES (1800000000000000801, 1, now() - interval '45 day', 1, now() - interval '45 day', 0, false, '演示运营管理员', 'admin', 'csadmin', '$2a$10$HiIvaX7tbGWDeRVSciX/LuIAIYUgVJwasWtstsXsakpt0d9Sw.cKG', 'normal', false);
+INSERT INTO public.iam_user_info (id, creator, create_time, last_modifier, last_modified_time, version, deleted, name, client_code, account, password, status, administrator) VALUES (1800000000000000801, 1, now() - interval '45 day', 1, now() - interval '45 day', 0, false, '演示运营管理员', 'admin', 'admin', '$2a$10$HiIvaX7tbGWDeRVSciX/LuIAIYUgVJwasWtstsXsakpt0d9Sw.cKG', 'normal', false);
 INSERT INTO public.iam_user_expand_info (id, creator, create_time, last_modifier, last_modified_time, version, deleted, register_source) VALUES (1800000000000000801, 1, now() - interval '45 day', 1, now() - interval '45 day', 0, false, 'demo');
 INSERT INTO public.iam_user_password_security (id, creator, create_time, last_modifier, last_modified_time, version, deleted, password_error_count, lock_time, password_expire_time, last_change_password_time, initial_password) VALUES (1800000000000000801, 1, now() - interval '45 day', 1, now() - interval '45 day', 0, false, 0, NULL, now() + interval '3650 day', now() - interval '45 day', false);
 INSERT INTO public.iam_user_role (id, user_id, role_id) VALUES (1800000000000000832, 1800000000000000801, 1);

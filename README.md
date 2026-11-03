@@ -35,7 +35,7 @@
 
 | 站点类型 | 地址 | 演示账号 |
 |---------|------|---------|
-| 运营端 | https://admin.open.daxpay.cn | `csadmin` / `121212` |
+| 运营端 | https://admin.open.daxpay.cn | `admin` / `121212` |
 | 商户端 | https://merchant.open.daxpay.cn | `csqysh` / `121212` |
 
 ## 核心特性
