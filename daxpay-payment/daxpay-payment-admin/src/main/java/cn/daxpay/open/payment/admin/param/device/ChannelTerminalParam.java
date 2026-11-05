@@ -2,7 +2,6 @@ package cn.daxpay.open.payment.admin.param.device;
 
 import cn.daxpay.open.payment.device.enums.TerminalTypeEnum;
 import cn.daxpay.open.platform.capability.sensitiveword.validation.SensitiveWord;
-import cn.daxpay.open.platform.core.enums.pay.channel.ChannelTerminalStatusEnum;
 import cn.daxpay.open.platform.core.validation.ValidationGroup;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
@@ -12,6 +11,9 @@ import lombok.Data;
 import lombok.experimental.Accessors;
 
 /// # 通道终端台账参数
+///
+/// 新增建档即绑定系统终端; 通道侧终端号与登记状态由手动登记
+/// ([ChannelTerminalRegisterParam]) 动作回写, 不在本参数维护。
 @Data
 @Accessors(chain = true)
 @Schema(title = "通道终端台账参数")
@@ -35,7 +37,7 @@ public class ChannelTerminalParam {
     @NotBlank(message = "{validation.field.type.notBlank}", groups = ValidationGroup.add.class)
     private String type;
 
-    /// 绑定的系统终端编码(新增必填, 创建通道终端时同步建立绑定; 编辑时传入则补绑)
+    /// 绑定的系统终端编码(建档即绑定, 新增必填)
     @Schema(description = "绑定的系统终端编码(新增必填)")
     @NotBlank(message = "{validation.field.systemTerminalNo.notBlank}", groups = ValidationGroup.add.class)
     private String systemTerminalNo;
@@ -45,19 +47,6 @@ public class ChannelTerminalParam {
     @Size(max = 100, message = "{validation.field.deviceName.size}")
     @SensitiveWord
     private String name;
-
-    @Schema(description = "通道侧终端号")
-    @Size(max = 64, message = "{validation.field.terminalNo.size}")
-    private String outTerminalNo;
-
-    /// 登记状态
-    /// @see ChannelTerminalStatusEnum
-    @Schema(description = "登记状态")
-    private String status;
-
-    @Schema(description = "错误信息")
-    @Size(max = 255, message = "{validation.field.remark.size}")
-    private String errorMsg;
 
     @Schema(description = "备注")
     @Size(max = 255, message = "{validation.field.remark.size}")

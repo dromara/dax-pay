@@ -8,6 +8,7 @@ import cn.daxpay.open.platform.core.exception.ChannelResultUnknownException;
 import cn.daxpay.open.platform.core.exception.PayFailureException;
 import cn.daxpay.open.platform.common.spring.util.WebServletUtil;
 import cn.daxpay.open.platform.core.enums.pay.trade.TradeSourceEnum;
+import cn.daxpay.open.payment.device.terminal.service.TerminalResolveService;
 import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import cn.daxpay.open.payment.common.lock.TradeLockKeys;
@@ -23,6 +24,7 @@ import cn.daxpay.open.payment.strategy.pay.AbsNormalPayStrategy;
 import cn.daxpay.open.payment.strategy.pay.PayStrategyContext;
 import cn.daxpay.open.payment.unipay.param.trade.pay.GoodsDetail;
 import cn.daxpay.open.payment.unipay.param.trade.pay.NormalPayParam;
+import cn.daxpay.open.payment.unipay.param.trade.pay.TerminalInfo;
 import cn.daxpay.open.payment.unipay.result.trade.pay.NormalPayResult;
 import cn.daxpay.open.platform.common.redis.lock.LockExecutor;
 import cn.hutool.core.collection.CollUtil;
@@ -49,6 +51,7 @@ public class NormalPayService {
     private final MerchantContextLoader merchantContextLoader;
     private final SensitiveWordCheckService sensitiveWordCheckService;
     private final PayRiskAssistService payRiskAssistService;
+    private final TerminalResolveService terminalResolveService;
 
     /// 自注入，保证 [NormalPayService#paySuccess] 走 Spring 事务代理
     @Lazy
@@ -109,6 +112,8 @@ public class NormalPayService {
         this.resolveBarcodeMethodIfNeeded(payParam);
         // 路由解析：直接指定(已传 channelMchNo)优先，否则按 appId+method 跟随通道路由匹配
         payRouteService.resolve(payParam);
+        // 终端校验与通道侧终端号解析: 路由落定(channelMchNo 就绪)后执行, 建单前拦截无效终端号
+        this.resolveTerminalIfNeeded(payParam);
         var payStrategy = PaymentStrategyFactory.createByProduct(payParam.getProduct(), AbsNormalPayStrategy.class);
         // 支付前处理: 校验与通道配置组装(只依赖请求参数), 含微信 channelAppId 回填; 失败直接抛出不持久化
         var context = new PayStrategyContext().setPayParam(payParam);
@@ -168,6 +173,40 @@ public class NormalPayService {
             return;
         }
         PayBarCodeUtil.validateMethodMatchesAuthCode(payParam.getMethod(), authCode);
+    }
+
+    /// 终端校验与通道侧终端号解析
+    ///
+    /// 上送终端号时: 先校验系统终端(存在/归属/启用, 失败拦截下单, 不会建单),
+    /// 再按绑定关系解析通道侧终端号回填到 [TerminalInfo#getResolvedOutTerminalNo] 供建单落库
+    /// (宽松策略, 解析不到按无报备继续)。
+    ///
+    /// 未上送终端号但携带门店号时: 先按 (mchNo, storeNo) 查门店默认终端回落补齐终端号
+    /// (回落值是服务端查出的可信值, 后续校验自然通过); 未配置默认终端维持无终端号放行
+    /// (存量调用路径零影响)。已显式传终端号的路径行为不变。
+    private void resolveTerminalIfNeeded(NormalPayParam payParam) {
+        TerminalInfo terminal = payParam.getTerminal();
+        if (Objects.isNull(terminal)) {
+            return;
+        }
+        // 门店默认终端回落: 只认请求显式携带的门店号(不用建单侧解析后的默认门店)
+        if (StrUtil.isBlank(terminal.getTerminalNo()) && StrUtil.isNotBlank(terminal.getStoreNo())) {
+            String defaultTerminalNo = terminalResolveService.resolveDefaultTerminalNo(
+                    payParam.getMchNo(), terminal.getStoreNo());
+            if (StrUtil.isNotBlank(defaultTerminalNo)) {
+                terminal.setTerminalNo(defaultTerminalNo);
+            }
+        }
+        if (StrUtil.isBlank(terminal.getTerminalNo())) {
+            // 未上送终端且无默认终端: 一律放行(存量客户端不传号零影响)
+            return;
+        }
+        String terminalNo = terminal.getTerminalNo();
+        // 系统终端存在性/归属/启用校验: 失败拦截下单
+        terminalResolveService.validateTerminal(terminalNo, payParam.getMchNo());
+        // 通道侧终端号解析: 宽松策略, 解析不到返回 null 按无报备继续
+        String outTerminalNo = terminalResolveService.resolveOutTerminalNo(terminalNo, payParam.getChannelMchNo());
+        terminal.setResolvedOutTerminalNo(outTerminalNo);
     }
 
     /// 支付成功后操作

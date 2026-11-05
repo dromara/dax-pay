@@ -7,5 +7,14 @@
   "mchMismatch": "Thiết bị hệ thống và kênh phải thuộc cùng một thương gia",
   "bindExists": "Liên kết đã tồn tại",
   "bindNotFound": "Không tìm thấy liên kết",
-  "channelMchTerminalExists": "Đầu cuối hệ thống này đã có bản ghi đầu cuối dưới merchant kênh này"
+  "channelMchTerminalExists": "Đầu cuối hệ thống này đã có bản ghi đầu cuối dưới merchant kênh này",
+  "notFound": "Không tìm thấy thiết bị đầu cuối [{0}]",
+  "mchNotMatch": "Thiết bị đầu cuối [{0}] không thuộc thương gia hiện tại",
+  "disabled": "Thiết bị đầu cuối [{0}] đã bị vô hiệu hóa",
+  "typeConflict": "Đầu cuối hệ thống này đã có đầu cuối kênh cùng loại báo cáo ({0}) dưới merchant kênh này",
+  "ownerExists": "Đầu cuối kênh này đã được liên kết với đầu cuối hệ thống khác",
+  "defaultStoreNotBound": "Đầu cuối chưa được gán cửa hàng, không thể đặt làm mặc định",
+  "defaultCannotDelete": "Đầu cuối mặc định của cửa hàng không thể xóa, vui lòng bỏ đặt mặc định hoặc chuyển sang đầu cuối khác trước",
+  "batchSystemNotFound": "Một số đầu cuối hệ thống không tồn tại, vui lòng làm mới và thử lại",
+  "batchMchMismatch": "Các đầu cuối hệ thống phải thuộc cùng một merchant"
 }

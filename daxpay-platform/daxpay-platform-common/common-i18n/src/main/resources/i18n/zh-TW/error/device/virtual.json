@@ -21,5 +21,8 @@
   "requestExpired": "請求已過期, 請校準裝置時間後重試",
   "reprintFail": "補打資料獲取失敗",
   "previewFail": "試打資料獲取失敗, 請檢查裝置狀態",
-  "appNotFound": "商戶應用不存在"
+  "appNotFound": "商戶應用不存在",
+  "batchNotFound": "部分虛擬設備不存在, 請重新整理後重試",
+  "mchNotAssigned": "虛擬設備未綁定商戶, 請先綁定商戶後再分配門店",
+  "batchMchMismatch": "批次操作須選擇同一商戶下的虛擬設備"
 }

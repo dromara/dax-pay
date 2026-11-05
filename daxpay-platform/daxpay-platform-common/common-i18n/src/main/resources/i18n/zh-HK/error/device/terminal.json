@@ -7,5 +7,14 @@
   "mchMismatch": "系統終端與通道終端須屬於同一商戶",
   "bindExists": "綁定關係已存在",
   "bindNotFound": "綁定關係不存在",
-  "channelMchTerminalExists": "該系統終端在此通道商戶下已有終端記錄"
+  "channelMchTerminalExists": "該系統終端在此通道商戶下已有終端記錄",
+  "notFound": "終端號[{0}]不存在",
+  "mchNotMatch": "終端號[{0}]不屬於當前商戶",
+  "disabled": "終端號[{0}]已停用",
+  "typeConflict": "該系統終端在此通道商戶下已有同報送類型({0})的通道終端",
+  "ownerExists": "該通道終端已綁定其他系統終端",
+  "defaultStoreNotBound": "終端未掛載門店, 無法設為預設",
+  "defaultCannotDelete": "門店預設終端不可刪除, 請先取消預設或轉交其他終端",
+  "batchSystemNotFound": "部分系統終端不存在, 請重新整理後重試",
+  "batchMchMismatch": "系統終端須屬於同一商戶"
 }

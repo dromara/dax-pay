@@ -1,6 +1,7 @@
 package cn.daxpay.open.payment.admin.service.device;
 
 import cn.daxpay.open.payment.admin.param.device.ChannelTerminalParam;
+import cn.daxpay.open.payment.admin.param.device.ChannelTerminalRegisterParam;
 import cn.daxpay.open.payment.admin.param.device.TerminalChannelBindParam;
 import cn.daxpay.open.payment.device.enums.TerminalTypeEnum;
 import cn.daxpay.open.payment.device.terminal.dao.ChannelTerminalManager;
@@ -12,6 +13,7 @@ import cn.daxpay.open.payment.device.terminal.entity.TerminalDevice;
 import cn.daxpay.open.payment.device.terminal.param.ChannelTerminalQuery;
 import cn.daxpay.open.payment.device.terminal.result.ChannelTerminalResult;
 import cn.daxpay.open.payment.device.terminal.result.TerminalDeviceResult;
+import cn.daxpay.open.payment.device.terminal.service.TerminalBindSupport;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
 import cn.daxpay.open.payment.merchant.dao.info.MerchantInfoManager;
 import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
@@ -40,8 +42,10 @@ import java.util.stream.Collectors;
 /// # 通道终端台账管理(运营端)
 ///
 /// 挂在通道商户下人工登记通道侧终端号与状态; 不调用通道报备 API。
-/// 新增/编辑时必须绑定系统终端(创建即绑定, 同一系统终端在同一通道商户下仅一条记录);
-/// 存量记录与多绑场景通过 [TerminalChannelBind] 维护。
+/// 关联关系在新增建档/手动绑定时建立(建档即绑定):
+/// - 一条通道终端只归属一个系统终端; 同一系统终端在同一通道商户下按报送类型各一条;
+/// - 通道侧终端号与登记状态由手动登记([ChannelTerminalAdminService#register])回写。
+/// 绑定规则校验见 [TerminalBindSupport]。
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -54,8 +58,9 @@ public class ChannelTerminalAdminService {
     private final PayProductManager payProductManager;
     private final MerchantInfoManager merchantInfoManager;
     private final TransService transService;
+    private final TerminalBindSupport terminalBindSupport;
 
-    /// 新增通道终端台账(创建即绑定系统终端)
+    /// 新增通道终端台账(建档即绑定系统终端)
     @Transactional(rollbackFor = Exception.class)
     public void add(ChannelTerminalParam param) {
         merchantInfoManager.findByMchNo(param.getMchNo())
@@ -73,12 +78,8 @@ public class ChannelTerminalAdminService {
         PayProduct payProduct = payProductManager.findByCode(product)
                 // 产品: 支付产品不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.product.notExist", product));
-        // 校验系统终端并建立绑定(同一系统终端在同一通道商户下仅允许一条记录)
-        TerminalDevice systemTerminal = checkSystemTerminalForBind(
-                param.getSystemTerminalNo(), param.getMchNo(), channelMerchant.getChannelMchNo(), null);
-        String status = StrUtil.isBlank(param.getStatus())
-                ? ChannelTerminalStatusEnum.INIT.getCode()
-                : ChannelTerminalStatusEnum.findByCode(param.getStatus()).getCode();
+        // 校验系统终端(存在性/同商户)
+        TerminalDevice systemTerminal = requireSystemTerminal(param.getSystemTerminalNo(), param.getMchNo());
 
         ChannelTerminal entity = new ChannelTerminal();
         // 运营端写 MchBaseEntity 必须显式 setMchNo
@@ -88,47 +89,47 @@ public class ChannelTerminalAdminService {
         entity.setChannel(payProduct.getChannel());
         entity.setType(typeEnum.getCode());
         entity.setName(param.getName());
-        entity.setOutTerminalNo(StrUtil.blankToDefault(param.getOutTerminalNo(), null));
-        entity.setStatus(status);
-        entity.setErrorMsg(param.getErrorMsg());
+        // 建档即初始状态; 通道侧终端号/状态由手动登记动作回写
+        entity.setStatus(ChannelTerminalStatusEnum.INIT.getCode());
         entity.setRemark(param.getRemark());
         channelTerminalManager.save(entity);
 
-        // 创建即绑定系统终端
-        TerminalChannelBind bind = new TerminalChannelBind();
-        // 运营端写 MchBaseEntity 必须显式 setMchNo
-        bind.setMchNo(entity.getMchNo());
-        bind.setSystemTerminalNo(systemTerminal.getTerminalNo());
-        bind.setChannelTerminalId(entity.getId());
-        terminalChannelBindManager.save(bind);
+        // 建档即绑定: 同一系统终端在同一通道商户下按报送类型唯一
+        if (terminalBindSupport.hasTypeConflict(systemTerminal.getTerminalNo(), entity, entity.getId())) {
+            // 终端: 同报送类型下已有通道终端
+            throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.terminal.typeConflict", entity.getType());
+        }
+        terminalChannelBindManager.save(terminalBindSupport.buildBind(systemTerminal.getTerminalNo(), entity));
     }
 
-    /// 修改通道终端(名称/通道号/状态/备注; 不改通道商户与 type; 传入系统终端编码则补绑)
+    /// 修改通道终端(仅名称/备注; 通道商户/类型/系统终端绑定与登记状态不在此维护)
     @Transactional(rollbackFor = Exception.class)
     public void update(ChannelTerminalParam param) {
         ChannelTerminal entity = channelTerminalManager.findById(param.getId())
                 // 终端: 通道终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.channelNotFound"));
         entity.setName(param.getName());
-        entity.setOutTerminalNo(StrUtil.blankToDefault(param.getOutTerminalNo(), null));
-        if (StrUtil.isNotBlank(param.getStatus())) {
-            entity.setStatus(ChannelTerminalStatusEnum.findByCode(param.getStatus()).getCode());
-        }
-        entity.setErrorMsg(param.getErrorMsg());
         entity.setRemark(param.getRemark());
         channelTerminalManager.updateById(entity);
+    }
 
-        // 存量记录补绑系统终端(不传则不处理)
-        if (StrUtil.isNotBlank(param.getSystemTerminalNo())) {
-            TerminalDevice systemTerminal = checkSystemTerminalForBind(param.getSystemTerminalNo(),
-                    entity.getMchNo(), entity.getChannelMchNo(), entity.getId());
-            TerminalChannelBind bind = new TerminalChannelBind();
-            // 运营端写 MchBaseEntity 必须显式 setMchNo
-            bind.setMchNo(entity.getMchNo());
-            bind.setSystemTerminalNo(systemTerminal.getTerminalNo());
-            bind.setChannelTerminalId(entity.getId());
-            terminalChannelBindManager.save(bind);
+    /// 手动登记通道终端(手工订正通道侧终端号与登记状态; 不调通道)
+    ///
+    /// - 任意状态可用: 通道控制台手工操作后系统状态可据此对齐;
+    /// - 通道侧终端号可空 = 只改状态; 登记视为一次人工修复, 清空错误信息。
+    @Transactional(rollbackFor = Exception.class)
+    public void register(ChannelTerminalRegisterParam param) {
+        ChannelTerminal entity = channelTerminalManager.findById(param.getId())
+                // 终端: 通道终端不存在
+                .orElseThrow(() -> new DataNotExistException("error.device.terminal.channelNotFound"));
+        // 目标状态按实际选择, 校验枚举合法性(含空值)
+        ChannelTerminalStatusEnum targetStatus = ChannelTerminalStatusEnum.findByCode(param.getStatus());
+        if (StrUtil.isNotBlank(param.getOutTerminalNo())) {
+            entity.setOutTerminalNo(param.getOutTerminalNo().trim());
         }
+        entity.setStatus(targetStatus.getCode());
+        entity.setErrorMsg(null);
+        channelTerminalManager.updateById(entity);
     }
 
     /// 分页
@@ -167,7 +168,7 @@ public class ChannelTerminalAdminService {
         channelTerminalManager.deleteById(id);
     }
 
-    /// 绑定系统终端
+    /// 绑定系统终端(存量记录修复入口; 正常关联由新增建档建立)
     @Transactional(rollbackFor = Exception.class)
     public void bind(TerminalChannelBindParam param) {
         TerminalDevice system = terminalDeviceManager.findByTerminalNo(param.getSystemTerminalNo())
@@ -184,12 +185,17 @@ public class ChannelTerminalAdminService {
             // 终端: 绑定关系已存在
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.terminal.bindExists");
         }
-        TerminalChannelBind bind = new TerminalChannelBind();
-        // 运营端写 MchBaseEntity 必须显式 setMchNo
-        bind.setMchNo(channel.getMchNo());
-        bind.setSystemTerminalNo(param.getSystemTerminalNo());
-        bind.setChannelTerminalId(param.getChannelTerminalId());
-        terminalChannelBindManager.save(bind);
+        // 一条通道终端只归属一个系统终端
+        if (terminalBindSupport.hasOtherOwner(channel.getId(), param.getSystemTerminalNo())) {
+            // 终端: 通道终端已绑定其他系统终端
+            throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.terminal.ownerExists");
+        }
+        // 同一系统终端在同一通道商户、同一报送类型下仅一条
+        if (terminalBindSupport.hasTypeConflict(param.getSystemTerminalNo(), channel, channel.getId())) {
+            // 终端: 同报送类型下已有通道终端
+            throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.terminal.typeConflict", channel.getType());
+        }
+        terminalChannelBindManager.save(terminalBindSupport.buildBind(param.getSystemTerminalNo(), channel));
     }
 
     /// 解绑系统终端
@@ -223,32 +229,14 @@ public class ChannelTerminalAdminService {
         return results;
     }
 
-    /// 校验待绑定的系统终端(存在性/同商户/同通道商户下不重复), 返回系统终端实体
-    ///
-    /// @param excludeChannelTerminalId 唯一性校验排除的通道终端主键(编辑补绑时排除自身)
-    private TerminalDevice checkSystemTerminalForBind(String systemTerminalNo, String mchNo,
-                                                      String channelMchNo, Long excludeChannelTerminalId) {
+    /// 校验系统终端(存在性/同商户), 返回系统终端实体
+    private TerminalDevice requireSystemTerminal(String systemTerminalNo, String mchNo) {
         TerminalDevice systemTerminal = terminalDeviceManager.findByTerminalNo(systemTerminalNo)
                 // 终端: 系统终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.systemNotFound"));
         if (!Objects.equals(systemTerminal.getMchNo(), mchNo)) {
             // 终端: 系统终端与通道终端须属于同一商户
             throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.terminal.mchMismatch");
-        }
-        // 同一系统终端在同一通道商户下仅允许一条通道终端记录
-        List<Long> boundIds = terminalChannelBindManager.findBySystemTerminalNo(systemTerminalNo).stream()
-                .map(TerminalChannelBind::getChannelTerminalId)
-                .filter(id -> !Objects.equals(id, excludeChannelTerminalId))
-                .toList();
-        if (!boundIds.isEmpty()) {
-            boolean exists = channelTerminalManager.lambdaQuery()
-                    .in(ChannelTerminal::getId, boundIds)
-                    .eq(ChannelTerminal::getChannelMchNo, channelMchNo)
-                    .exists();
-            if (exists) {
-                // 终端: 该系统终端在此通道商户下已有终端记录
-                throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.terminal.channelMchTerminalExists");
-            }
         }
         return systemTerminal;
     }

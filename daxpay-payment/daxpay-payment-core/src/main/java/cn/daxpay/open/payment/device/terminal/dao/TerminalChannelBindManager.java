@@ -38,6 +38,14 @@ public class TerminalChannelBindManager extends BaseManager<TerminalChannelBindM
                 .list();
     }
 
+    /// 支付终端解析: 系统终端号 + 通道商户号 定位绑定(冗余列单表查, 免 join 通道终端)
+    public List<TerminalChannelBind> findBySystemTerminalNoAndChannelMchNo(String systemTerminalNo, String channelMchNo) {
+        return lambdaQuery()
+                .eq(TerminalChannelBind::getSystemTerminalNo, systemTerminalNo)
+                .eq(TerminalChannelBind::getChannelMchNo, channelMchNo)
+                .list();
+    }
+
     /// 通道终端下的全部绑定
     public List<TerminalChannelBind> findByChannelTerminalId(Long channelTerminalId) {
         return lambdaQuery()

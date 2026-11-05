@@ -38,6 +38,9 @@ public class TerminalDevice extends MchBaseEntity implements ToResult<TerminalDe
     /// 是否启用
     private Boolean enable;
 
+    /// 是否门店默认终端(同门店至多一个; 支付未指定终端号时按门店回落, 见 [cn.daxpay.open.payment.device.terminal.service.TerminalResolveService])
+    private Boolean defaultTerminal = false;
+
     /// 备注
     private String remark;
 

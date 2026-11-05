@@ -140,6 +140,9 @@ public class NormalPayAssistService {
         normalOrder.setChannelAppId(payParam.getChannelAppId());
         // --- 终端 / 门店 / 客户端 ---
         normalOrder.setTerminalNo(terminalNo);
+        // 通道侧终端号: 终端解析服务在路由落定后回填到 payParam, 建单时同步落库(未解析到为空)
+        normalOrder.setOutTerminalNo(Objects.nonNull(payParam.getTerminal())
+                ? payParam.getTerminal().getResolvedOutTerminalNo() : null);
         // 门店号: 线下经营归属权威落容器
         normalOrder.setStoreNo(storeNo);
         // 客户端IP(支付入口已兜底, 作为单一事实源供退款/关单等后续流程取用)

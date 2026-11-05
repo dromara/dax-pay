@@ -162,6 +162,14 @@ public class VirtualDeviceManager extends BaseManager<VirtualDeviceMapper, Virtu
                 .update();
     }
 
+    /// 批量绑定门店(运营端门店工作台快捷绑定, 单事务一次更新)
+    public void changeStoreBatch(Collection<Long> ids, String storeNo) {
+        lambdaUpdate()
+                .set(VirtualDevice::getStoreNo, storeNo)
+                .in(VirtualDevice::getId, ids)
+                .update();
+    }
+
     /// 商户启用/停用设备
     public void changeEnable(Long id, boolean enable) {
         lambdaUpdate()

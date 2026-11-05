@@ -7,5 +7,14 @@
   "mchMismatch": "Terminal sistem dan saluran harus milik merchant yang sama",
   "bindExists": "Ikatan sudah ada",
   "bindNotFound": "Ikatan tidak ditemukan",
-  "channelMchTerminalExists": "Terminal sistem ini sudah memiliki catatan terminal di bawah merchant channel ini"
+  "channelMchTerminalExists": "Terminal sistem ini sudah memiliki catatan terminal di bawah merchant channel ini",
+  "notFound": "Nomor terminal [{0}] tidak ditemukan",
+  "mchNotMatch": "Nomor terminal [{0}] tidak milik merchant saat ini",
+  "disabled": "Nomor terminal [{0}] telah dinonaktifkan",
+  "typeConflict": "Terminal sistem ini sudah memiliki terminal saluran dengan jenis laporan yang sama ({0}) di bawah merchant channel ini",
+  "ownerExists": "Terminal saluran ini sudah terikat ke terminal sistem lain",
+  "defaultStoreNotBound": "Terminal belum terikat ke toko, tidak dapat dijadikan terminal bawaan",
+  "defaultCannotDelete": "Terminal bawaan toko tidak dapat dihapus, batalkan status bawaan atau alihkan ke terminal lain terlebih dahulu",
+  "batchSystemNotFound": "Sebagian terminal sistem tidak ditemukan, muat ulang dan coba lagi",
+  "batchMchMismatch": "Terminal sistem harus milik merchant yang sama"
 }

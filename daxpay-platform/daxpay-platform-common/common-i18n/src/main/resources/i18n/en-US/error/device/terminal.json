@@ -7,5 +7,14 @@
   "mchMismatch": "System and channel terminals must belong to the same merchant",
   "bindExists": "Binding already exists",
   "bindNotFound": "Binding not found",
-  "channelMchTerminalExists": "This system terminal already has a record under this channel merchant"
+  "channelMchTerminalExists": "This system terminal already has a record under this channel merchant",
+  "notFound": "Terminal number [{0}] not found",
+  "mchNotMatch": "Terminal number [{0}] does not belong to the current merchant",
+  "disabled": "Terminal number [{0}] is disabled",
+  "typeConflict": "This system terminal already has a channel terminal of the same report type ({0}) under this channel merchant",
+  "ownerExists": "This channel terminal is already bound to another system terminal",
+  "defaultStoreNotBound": "Terminal is not bound to a store and cannot be set as default",
+  "defaultCannotDelete": "Default store terminal cannot be deleted, please clear the default flag or transfer it first",
+  "batchSystemNotFound": "Some system terminals not found, please refresh and retry",
+  "batchMchMismatch": "System terminals must belong to the same merchant"
 }

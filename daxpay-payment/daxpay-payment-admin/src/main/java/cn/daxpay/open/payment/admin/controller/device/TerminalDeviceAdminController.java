@@ -3,6 +3,7 @@ package cn.daxpay.open.payment.admin.controller.device;
 import cn.daxpay.open.payment.admin.param.device.TerminalChannelBindParam;
 import cn.daxpay.open.payment.admin.param.device.TerminalDeviceParam;
 import cn.daxpay.open.payment.admin.service.device.TerminalDeviceAdminService;
+import cn.daxpay.open.payment.device.terminal.param.TerminalBindStoreParam;
 import cn.daxpay.open.payment.device.terminal.param.TerminalDeviceQuery;
 import cn.daxpay.open.payment.device.terminal.result.ChannelTerminalResult;
 import cn.daxpay.open.payment.device.terminal.result.TerminalDeviceResult;
@@ -81,6 +82,30 @@ public class TerminalDeviceAdminController {
     @PostMapping("/delete")
     public Result<Void> delete(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         terminalDeviceAdminService.delete(id);
+        return Res.ok();
+    }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "设为门店默认终端(同门店先清后设)")
+    @PostMapping("/set-default")
+    public Result<Void> setDefault(@NotNull(message = "{validation.field.id.notNull}") Long id) {
+        terminalDeviceAdminService.setDefault(id);
+        return Res.ok();
+    }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "取消门店默认终端")
+    @PostMapping("/clear-default")
+    public Result<Void> clearDefault(@NotNull(message = "{validation.field.id.notNull}") Long id) {
+        terminalDeviceAdminService.clearDefault(id);
+        return Res.ok();
+    }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "批量绑定门店")
+    @PostMapping("/bind-store-batch")
+    public Result<Void> bindStoreBatch(@RequestBody @Validated TerminalBindStoreParam param) {
+        terminalDeviceAdminService.bindStoreBatch(param);
         return Res.ok();
     }
 

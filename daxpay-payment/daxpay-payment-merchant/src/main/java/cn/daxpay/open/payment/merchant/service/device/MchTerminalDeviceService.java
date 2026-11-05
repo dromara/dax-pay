@@ -7,12 +7,12 @@ import cn.daxpay.open.payment.device.terminal.dao.TerminalDeviceManager;
 import cn.daxpay.open.payment.device.terminal.entity.ChannelTerminal;
 import cn.daxpay.open.payment.device.terminal.entity.TerminalChannelBind;
 import cn.daxpay.open.payment.device.terminal.entity.TerminalDevice;
+import cn.daxpay.open.payment.device.terminal.param.TerminalBindStoreParam;
 import cn.daxpay.open.payment.device.terminal.param.TerminalDeviceQuery;
 import cn.daxpay.open.payment.device.terminal.result.ChannelTerminalResult;
 import cn.daxpay.open.payment.device.terminal.result.TerminalDeviceResult;
 import cn.daxpay.open.payment.merchant.dao.store.MchStoreInfoManager;
 import cn.daxpay.open.payment.merchant.entity.store.MchStoreInfo;
-import cn.daxpay.open.payment.merchant.param.device.TerminalChannelBindParam;
 import cn.daxpay.open.payment.merchant.param.device.TerminalDeviceParam;
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.open.platform.common.translate.service.TransService;
@@ -91,11 +91,16 @@ public class MchTerminalDeviceService {
                 // 终端: 系统终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.systemNotFound"));
         this.checkTerminal(entity);
+        String oldStoreNo = entity.getStoreNo();
         String storeNo = resolveStoreNo(param.getStoreNo(), entity.getMchNo());
         entity.setName(param.getName());
         entity.setStoreNo(storeNo);
         entity.setEnable(param.getEnable());
         entity.setRemark(param.getRemark());
+        // 门店变更后默认标记必须失效(默认终端同门店唯一, 由 setDefault 先清后设保证)
+        if (!Objects.equals(StrUtil.blankToDefault(oldStoreNo, null), StrUtil.blankToDefault(storeNo, null))) {
+            entity.setDefaultTerminal(false);
+        }
         terminalDeviceManager.updateById(entity);
     }
 
@@ -126,57 +131,80 @@ public class MchTerminalDeviceService {
     }
 
     /// 删除系统终端(级联解绑)
+    ///
+    /// 门店默认终端禁止删除(对齐默认门店禁删), 需先取消默认或转交其他终端。
     @Transactional(rollbackFor = Exception.class)
     public void delete(Long id) {
         TerminalDevice entity = terminalDeviceManager.findById(id)
                 // 终端: 系统终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.systemNotFound"));
         this.checkTerminal(entity);
+        if (Boolean.TRUE.equals(entity.getDefaultTerminal())) {
+            // 终端: 门店默认终端不可删除, 请先取消默认或转交其他终端
+            throw new BizInfoException(CommonCode.FAIL_CODE, "error.device.terminal.defaultCannotDelete");
+        }
         terminalChannelBindManager.deleteBySystemTerminalNo(entity.getTerminalNo());
         terminalDeviceManager.deleteById(id);
     }
 
-    /// 绑定通道终端
+    /// 设为门店默认终端(同门店先清后设)
+    ///
+    /// 仅已挂载门店的终端可设默认; 对齐 [cn.daxpay.open.payment.merchant.service.store.MchStoreInfoService#setDefault] 范式。
     @Transactional(rollbackFor = Exception.class)
-    public void bind(TerminalChannelBindParam param) {
-        TerminalDevice system = terminalDeviceManager.findByTerminalNo(param.getSystemTerminalNo())
+    public void setDefault(Long id) {
+        TerminalDevice entity = terminalDeviceManager.findById(id)
                 // 终端: 系统终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.systemNotFound"));
-        this.checkTerminal(system);
-        ChannelTerminal channel = channelTerminalManager.findById(param.getChannelTerminalId())
-                // 终端: 通道终端不存在
-                .orElseThrow(() -> new DataNotExistException("error.device.terminal.channelNotFound"));
-        if (!Objects.equals(system.getMchNo(), channel.getMchNo())
-                || !Objects.equals(channel.getMchNo(), requireMchNo())) {
-            // 终端: 系统终端与通道终端须属于同一商户
-            throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.terminal.mchMismatch");
+        this.checkTerminal(entity);
+        if (StrUtil.isBlank(entity.getStoreNo())) {
+            // 终端: 终端未挂载门店, 无法设为默认
+            throw new BizInfoException(CommonCode.FAIL_CODE, "error.device.terminal.defaultStoreNotBound");
         }
-        if (terminalChannelBindManager.existsBind(param.getSystemTerminalNo(), param.getChannelTerminalId())) {
-            // 终端: 绑定关系已存在
-            throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.terminal.bindExists");
-        }
-        TerminalChannelBind bind = new TerminalChannelBind();
-        bind.setMchNo(system.getMchNo());
-        bind.setSystemTerminalNo(param.getSystemTerminalNo());
-        bind.setChannelTerminalId(param.getChannelTerminalId());
-        terminalChannelBindManager.save(bind);
+        terminalDeviceManager.clearDefaultByStoreNo(entity.getStoreNo());
+        // clearDefault 后重新加载, 避免 version 冲突
+        entity = terminalDeviceManager.findById(id)
+                .orElseThrow(() -> new DataNotExistException("error.device.terminal.systemNotFound"));
+        entity.setDefaultTerminal(true);
+        terminalDeviceManager.updateById(entity);
     }
 
-    /// 解绑通道终端
+    /// 取消门店默认终端
     @Transactional(rollbackFor = Exception.class)
-    public void unbind(TerminalChannelBindParam param) {
-        TerminalDevice system = terminalDeviceManager.findByTerminalNo(param.getSystemTerminalNo())
+    public void clearDefault(Long id) {
+        TerminalDevice entity = terminalDeviceManager.findById(id)
                 // 终端: 系统终端不存在
                 .orElseThrow(() -> new DataNotExistException("error.device.terminal.systemNotFound"));
-        this.checkTerminal(system);
-        if (!terminalChannelBindManager.existsBind(param.getSystemTerminalNo(), param.getChannelTerminalId())) {
-            // 终端: 绑定关系不存在
-            throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.terminal.bindNotFound");
-        }
-        terminalChannelBindManager.deleteBind(param.getSystemTerminalNo(), param.getChannelTerminalId());
+        this.checkTerminal(entity);
+        entity.setDefaultTerminal(false);
+        terminalDeviceManager.updateById(entity);
     }
 
-    /// 已绑定的通道终端列表
+    /// 批量绑定门店(门店工作台勾选多台; 单事务一次更新)
+    ///
+    /// 逻辑对齐运营端 [TerminalDeviceAdminService#bindStoreBatch], 但归属校验换成当前登录商户:
+    /// 每台终端均须属于当前商户(逐台校验), 门店归属由 [resolveStoreNo] 校验一次;
+    /// 任一终端不存在则整批拒绝。迁移的终端若带默认标记一并清除——默认终端同门店唯一,
+    /// 门店变更后原标记必须失效(否则原门店悬挂默认/新门店多默认)。
+    @Transactional(rollbackFor = Exception.class)
+    public void bindStoreBatch(TerminalBindStoreParam param) {
+        List<TerminalDevice> terminals = terminalDeviceManager.findAllByIds(param.getTerminalIds());
+        if (terminals.size() != param.getTerminalIds().stream().distinct().count()) {
+            // 终端: 部分系统终端不存在
+            throw new DataNotExistException("error.device.terminal.batchSystemNotFound");
+        }
+        for (TerminalDevice terminal : terminals) {
+            this.checkTerminal(terminal);
+        }
+        String mchNo = requireMchNo();
+        String storeNo = resolveStoreNo(param.getStoreNo(), mchNo);
+        terminalDeviceManager.lambdaUpdate()
+                .set(TerminalDevice::getStoreNo, storeNo)
+                .set(TerminalDevice::getDefaultTerminal, false)
+                .in(TerminalDevice::getId, param.getTerminalIds())
+                .update();
+    }
+
+    /// 已绑定的通道终端列表(只读)
     public List<ChannelTerminalResult> listBoundChannel(String terminalNo) {
         TerminalDevice system = terminalDeviceManager.findByTerminalNo(terminalNo)
                 // 终端: 系统终端不存在
@@ -189,16 +217,6 @@ public class MchTerminalDeviceService {
             return List.of();
         }
         List<ChannelTerminalResult> results = channelTerminalManager.findAllByIds(channelIds).stream()
-                .map(ChannelTerminal::toResult)
-                .collect(Collectors.toList());
-        transService.translate(results);
-        return results;
-    }
-
-    /// 当前商户下通道终端列表（绑定候选）
-    public List<ChannelTerminalResult> listChannelTerminal() {
-        String mchNo = requireMchNo();
-        List<ChannelTerminalResult> results = channelTerminalManager.findAllByMchNo(mchNo).stream()
                 .map(ChannelTerminal::toResult)
                 .collect(Collectors.toList());
         transService.translate(results);

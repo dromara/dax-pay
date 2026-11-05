@@ -1,5 +1,7 @@
 package cn.daxpay.open.payment.unipay.param.trade.pay;
 
+import cn.daxpay.open.payment.device.terminal.service.TerminalResolveService;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -43,4 +45,13 @@ public class TerminalInfo {
     /// 纬度
     @Schema(description = "纬度")
     private Double latitude;
+
+    /// 解析出的通道侧终端号, 服务端回填, 客户端传入无效
+    ///
+    /// [TerminalResolveService] 在通道路由落定后按绑定关系解析回填,
+    /// 供建单落库到订单 outTerminalNo; 不传终端号场景下服务端不覆写,
+    /// 公网预置值可绕过终端绑定直上通道, 故隐藏并不接受反序列化。
+    @Schema(hidden = true)
+    @JsonIgnore
+    private String resolvedOutTerminalNo;
 }

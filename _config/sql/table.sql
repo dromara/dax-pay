@@ -12722,6 +12722,7 @@ CREATE TABLE public.pay_normal_order (
     goods_detail jsonb,
     client_ip character varying(64),
     terminal_no character varying(128),
+    out_terminal_no character varying(64),
     store_no character varying(32),
     error_msg character varying(500),
     mch_no character varying(64) NOT NULL,
@@ -12973,6 +12974,12 @@ COMMENT ON COLUMN public.pay_normal_order.client_ip IS '下单客户端 IP';
 --
 
 COMMENT ON COLUMN public.pay_normal_order.terminal_no IS '终端设备编码';
+
+--
+-- Name: COLUMN pay_normal_order.out_terminal_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_normal_order.out_terminal_no IS '通道侧终端号(支付时按绑定关系解析落库)';
 
 --
 -- Name: COLUMN pay_normal_order.store_no; Type: COMMENT; Schema: public; Owner: -
@@ -14015,6 +14022,9 @@ CREATE TABLE public.pay_terminal_channel_bind (
     id bigint NOT NULL,
     system_terminal_no character varying(32) NOT NULL,
     channel_terminal_id bigint NOT NULL,
+    channel_mch_no character varying(64),
+    channel character varying(32),
+    type character varying(32),
     mch_no character varying(64) NOT NULL,
     creator bigint,
     create_time timestamp(6) with time zone,
@@ -14047,6 +14057,24 @@ COMMENT ON COLUMN public.pay_terminal_channel_bind.system_terminal_no IS '系统
 --
 
 COMMENT ON COLUMN public.pay_terminal_channel_bind.channel_terminal_id IS '通道终端主键';
+
+--
+-- Name: COLUMN pay_terminal_channel_bind.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_terminal_channel_bind.channel_mch_no IS '通道商户号(冗余自通道终端, 支付解析与筛选用)';
+
+--
+-- Name: COLUMN pay_terminal_channel_bind.channel; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_terminal_channel_bind.channel IS '通道编码(冗余自通道终端)';
+
+--
+-- Name: COLUMN pay_terminal_channel_bind.type; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_terminal_channel_bind.type IS '报送类型(冗余自通道终端, 唯一校验用)';
 
 --
 -- Name: COLUMN pay_terminal_channel_bind.mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -14100,6 +14128,7 @@ CREATE TABLE public.pay_terminal_device (
     name character varying(100) NOT NULL,
     store_no character varying(64),
     enable boolean DEFAULT true NOT NULL,
+    default_terminal boolean DEFAULT false NOT NULL,
     remark character varying(255),
     mch_no character varying(64) NOT NULL,
     creator bigint,
@@ -14145,6 +14174,12 @@ COMMENT ON COLUMN public.pay_terminal_device.store_no IS '绑定门店号(可空
 --
 
 COMMENT ON COLUMN public.pay_terminal_device.enable IS '是否启用';
+
+--
+-- Name: COLUMN pay_terminal_device.default_terminal; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_terminal_device.default_terminal IS '是否门店默认终端(同门店至多一个, 支付未指定终端号时回落)';
 
 --
 -- Name: COLUMN pay_terminal_device.remark; Type: COMMENT; Schema: public; Owner: -
@@ -23733,6 +23768,18 @@ CREATE UNIQUE INDEX uk_pay_terminal_device_terminal_no ON public.pay_terminal_de
 COMMENT ON INDEX public.uk_pay_terminal_device_terminal_no IS '终端号唯一';
 
 --
+-- Name: uk_pay_terminal_device_store_default; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_pay_terminal_device_store_default ON public.pay_terminal_device USING btree (store_no) WHERE ((default_terminal = true) AND (deleted = false));
+
+--
+-- Name: INDEX uk_pay_terminal_device_store_default; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_pay_terminal_device_store_default IS '同一门店至多一个默认终端';
+
+--
 -- Name: uk_pay_trade_trade_no; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -23971,6 +24018,30 @@ CREATE UNIQUE INDEX uk_system_sensitive_word_word ON public.system_sensitive_wor
 --
 
 COMMENT ON INDEX public.uk_system_sensitive_word_word IS '敏感词唯一';
+
+--
+-- Name: uk_term_bind_channel_terminal; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_term_bind_channel_terminal ON public.pay_terminal_channel_bind USING btree (channel_terminal_id) WHERE (deleted = false);
+
+--
+-- Name: INDEX uk_term_bind_channel_terminal; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_term_bind_channel_terminal IS '一条通道终端只归属一个系统终端';
+
+--
+-- Name: uk_term_bind_sys_chmch_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX uk_term_bind_sys_chmch_type ON public.pay_terminal_channel_bind USING btree (system_terminal_no, channel_mch_no, type) WHERE (deleted = false);
+
+--
+-- Name: INDEX uk_term_bind_sys_chmch_type; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON INDEX public.uk_term_bind_sys_chmch_type IS '同一系统终端在同一通道商户下按报送类型唯一';
 
 --
 -- Name: uk_umfpay_direct_key_cmchno_sandbox; Type: INDEX; Schema: public; Owner: -

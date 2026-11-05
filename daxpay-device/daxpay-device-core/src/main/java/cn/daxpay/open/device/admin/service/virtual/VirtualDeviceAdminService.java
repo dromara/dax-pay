@@ -1,6 +1,7 @@
 package cn.daxpay.open.device.admin.service.virtual;
 
 import cn.daxpay.open.device.admin.param.common.DeviceBindMerchantParam;
+import cn.daxpay.open.device.admin.param.common.DeviceBindStoreBatchParam;
 import cn.daxpay.open.device.admin.param.virtual.VirtualDeviceGenerateParam;
 import cn.daxpay.open.device.admin.param.virtual.VirtualDeviceParam;
 import cn.daxpay.open.device.admin.service.common.DeviceBindSupport;
@@ -172,6 +173,42 @@ public class VirtualDeviceAdminService {
     public void unbindMerchant(List<Long> ids) {
         virtualDeviceCredentialService.revokeByIds(ids, "设备已被解绑");
         virtualDeviceManager.unbindMerchant(ids);
+    }
+
+    /// 批量绑定门店(运营端门店工作台「绑定收银设备到本店」磁贴; 单事务一次更新)
+    ///
+    /// 与 [bindMerchant] 的门店校验同口径: 设备须均已绑定商户且同属一个商户
+    /// (未绑商户的库存设备无门店归属锚点), 门店须存在且归属该商户;
+    /// 任一设备不存在则整批拒绝。
+    @Transactional(rollbackFor = Exception.class)
+    public void bindStoreBatch(DeviceBindStoreBatchParam param) {
+        List<VirtualDevice> devices = virtualDeviceManager.findAllByIds(param.getDeviceIds());
+        if (devices.size() != param.getDeviceIds().stream().distinct().count()) {
+            // 设备: 部分虚拟设备不存在
+            throw new DataNotExistException("error.device.virtual.batchNotFound");
+        }
+        String mchNo = this.requireSameAssignedMchOf(devices);
+        String storeNo = deviceBindSupport.resolveOptionalStoreNo(mchNo, param.getStoreNo());
+        virtualDeviceManager.changeStoreBatch(param.getDeviceIds(), storeNo);
+        log.info("批量绑定 {} 台虚拟设备的门店: mchNo={}, storeNo={}", devices.size(), mchNo, storeNo);
+    }
+
+    /// 校验设备列表均已绑定商户且同一 mchNo, 返回该商户号
+    private String requireSameAssignedMchOf(List<VirtualDevice> list) {
+        String mchNo = null;
+        for (VirtualDevice device : list) {
+            if (StrUtil.isBlank(device.getMchNo())) {
+                // 设备: 虚拟设备未绑定商户
+                throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.virtual.mchNotAssigned");
+            }
+            if (mchNo == null) {
+                mchNo = device.getMchNo();
+            } else if (!mchNo.equals(device.getMchNo())) {
+                // 设备: 批量操作须选择同一商户下的设备
+                throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.virtual.batchMchMismatch");
+            }
+        }
+        return mchNo;
     }
 
     /// 试播文案预览(平台侧镜像终端词元合成规则, 供确认框展示「预计播报」)

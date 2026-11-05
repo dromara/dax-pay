@@ -21,5 +21,8 @@
   "requestExpired": "请求已过期, 请校准设备时间后重试",
   "reprintFail": "补打数据获取失败",
   "previewFail": "试打数据获取失败, 请检查设备状态",
-  "appNotFound": "商户应用不存在"
+  "appNotFound": "商户应用不存在",
+  "batchNotFound": "部分虚拟设备不存在, 请刷新后重试",
+  "mchNotAssigned": "虚拟设备未绑定商户, 请先绑定商户后再分配门店",
+  "batchMchMismatch": "批量操作须选择同一商户下的虚拟设备"
 }

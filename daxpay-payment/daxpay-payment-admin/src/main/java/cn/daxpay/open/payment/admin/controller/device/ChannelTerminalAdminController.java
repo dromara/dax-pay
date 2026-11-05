@@ -1,6 +1,7 @@
 package cn.daxpay.open.payment.admin.controller.device;
 
 import cn.daxpay.open.payment.admin.param.device.ChannelTerminalParam;
+import cn.daxpay.open.payment.admin.param.device.ChannelTerminalRegisterParam;
 import cn.daxpay.open.payment.admin.param.device.TerminalChannelBindParam;
 import cn.daxpay.open.payment.admin.service.device.ChannelTerminalAdminService;
 import cn.daxpay.open.payment.device.terminal.param.ChannelTerminalQuery;
@@ -53,6 +54,14 @@ public class ChannelTerminalAdminController {
     @PostMapping("/update")
     public Result<Void> update(@RequestBody @Validated(ValidationGroup.edit.class) ChannelTerminalParam param) {
         channelTerminalAdminService.update(param);
+        return Res.ok();
+    }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "手动登记通道终端")
+    @PostMapping("/register")
+    public Result<Void> register(@RequestBody @Validated ChannelTerminalRegisterParam param) {
+        channelTerminalAdminService.register(param);
         return Res.ok();
     }
 

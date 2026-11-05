@@ -52,4 +52,42 @@ public class TerminalDeviceManager extends BaseManager<TerminalDeviceMapper, Ter
                 .eq(TerminalDevice::getEnable, true)
                 .list();
     }
+
+    /// 查询门店默认终端(商户 + 门店维度, 仅启用; 支付未指定终端号时回落使用)
+    ///
+    /// 对齐 [cn.daxpay.open.payment.merchant.dao.store.MchStoreInfoManager#findDefaultByMchNo] 范式;
+    /// 默认终端唯一由部分唯一索引 uk_pay_terminal_device_store_default 兜底。
+    public Optional<TerminalDevice> findDefaultByStoreNo(String mchNo, String storeNo) {
+        return lambdaQuery()
+                .eq(TerminalDevice::getMchNo, mchNo)
+                .eq(TerminalDevice::getStoreNo, storeNo)
+                .eq(TerminalDevice::getDefaultTerminal, true)
+                .eq(TerminalDevice::getEnable, true)
+                .oneOpt();
+    }
+
+    /// 查询门店默认终端(不限启用态, 门店概况展示用)
+    ///
+    /// 与 [#findDefaultByStoreNo](支付回落用, 仅启用终端)区分: 门店工作台展示台账事实, 默认终端停用也如实展示。
+    public Optional<TerminalDevice> findDefaultByStoreNoAnyStatus(String storeNo) {
+        return lambdaQuery()
+                .eq(TerminalDevice::getStoreNo, storeNo)
+                .eq(TerminalDevice::getDefaultTerminal, true)
+                .oneOpt();
+    }
+
+    /// 统计门店下系统终端数(不限启用态; 门店概况聚合用, 逻辑删除自动过滤)
+    public long countByStoreNo(String storeNo) {
+        return lambdaQuery()
+                .eq(TerminalDevice::getStoreNo, storeNo)
+                .count();
+    }
+
+    /// 清除门店下全部默认终端标记(设默认前先清后设, 部分唯一索引兜底)
+    public void clearDefaultByStoreNo(String storeNo) {
+        lambdaUpdate()
+                .eq(TerminalDevice::getStoreNo, storeNo)
+                .set(TerminalDevice::getDefaultTerminal, false)
+                .update();
+    }
 }

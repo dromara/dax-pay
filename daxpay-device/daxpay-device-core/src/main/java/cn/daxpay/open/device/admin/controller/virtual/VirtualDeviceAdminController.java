@@ -1,6 +1,7 @@
 package cn.daxpay.open.device.admin.controller.virtual;
 
 import cn.daxpay.open.device.admin.param.common.DeviceBindMerchantParam;
+import cn.daxpay.open.device.admin.param.common.DeviceBindStoreBatchParam;
 import cn.daxpay.open.device.admin.param.virtual.VirtualDeviceGenerateParam;
 import cn.daxpay.open.device.admin.param.virtual.VirtualDeviceParam;
 import cn.daxpay.open.device.admin.service.virtual.VirtualDeviceAdminService;
@@ -94,6 +95,14 @@ public class VirtualDeviceAdminController {
     @PostMapping("/unbind-merchant")
     public Result<Void> unbindMerchant(@RequestBody List<Long> ids) {
         virtualDeviceAdminService.unbindMerchant(ids);
+        return Res.ok();
+    }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "批量绑定门店(门店工作台「绑定收银设备到本店」)")
+    @PostMapping("/bind-store-batch")
+    public Result<Void> bindStoreBatch(@RequestBody @Validated DeviceBindStoreBatchParam param) {
+        virtualDeviceAdminService.bindStoreBatch(param);
         return Res.ok();
     }
 

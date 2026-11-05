@@ -37,6 +37,9 @@ public class TerminalDeviceResult extends MchBaseResult {
     @Schema(description = "是否启用")
     private Boolean enable;
 
+    @Schema(description = "是否门店默认终端(同门店至多一个)")
+    private Boolean defaultTerminal;
+
     @Schema(description = "备注")
     private String remark;
 }

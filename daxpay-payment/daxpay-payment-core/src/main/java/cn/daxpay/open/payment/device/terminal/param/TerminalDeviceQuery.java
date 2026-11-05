@@ -27,6 +27,11 @@ public class TerminalDeviceQuery {
     @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     private String storeNo;
 
+    /// 是否未分配门店(绑定弹层筛选用)
+    @Schema(description = "是否未分配门店(true=仅查门店为空)")
+    @QueryParam(type = QueryParam.CompareTypeEnum.IS_NULL, fieldName = "store_no")
+    private Boolean storeUnassigned;
+
     @Schema(description = "是否启用")
     @QueryParam(type = QueryParam.CompareTypeEnum.EQ)
     private Boolean enable;

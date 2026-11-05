@@ -5,6 +5,7 @@ import cn.daxpay.open.payment.trade.enums.PayFundStatusEnum;
 import cn.daxpay.open.payment.trade.enums.PayTradeTypeEnum;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import cn.daxpay.open.payment.common.lock.TradeLockKeys;
+import cn.daxpay.open.payment.device.terminal.service.TerminalResolveService;
 import cn.daxpay.open.payment.route.service.runtime.PayRouteService;
 import cn.daxpay.open.payment.trade.alloc.enums.TradeAllocStatusEnum;
 import cn.daxpay.open.payment.trade.alloc.runtime.service.AllocCapabilityService;
@@ -49,6 +50,7 @@ public class GatewayPayHandleService {
     private final GatewayPayOrderManager gatewayPayOrderManager;
     private final PayTradeManager payTradeManager;
     private final PayRouteService payRouteService;
+    private final TerminalResolveService terminalResolveService;
     private final MerchantContextLoader merchantContextLoader;
     private final PayUniHandleService payUniHandleService;
     private final GatewayPayAssistService gatewayPayAssistService;
@@ -119,6 +121,8 @@ public class GatewayPayHandleService {
                     // 组装路由用参数
                     NormalPayParam payParam = this.buildPayParam(current, product, method, channelMchNo, capability, openId, clientIp);
                     payRouteService.resolve(payParam);
+                    // 终端校验与门店默认终端回落(网关独立链路不经 NormalPayService, 与其 resolveTerminalIfNeeded 同口径)
+                    this.resolveTerminalIfNeeded(payParam);
                     // 分账能力降级: 意图在容器, 出站与交易状态以产品能力为准(不支持时降级普通收款, 不阻断支付)
                     this.applyAllocCapability(current, payParam);
                     var payStrategy = PaymentStrategyFactory.createByProduct(payParam.getProduct(), AbsNormalPayStrategy.class);
@@ -279,6 +283,35 @@ public class GatewayPayHandleService {
         // 此处拷贝容器意图, 产品不支持时由 handle 的分账能力判定降级为 false
         payParam.setAllocation(order.getAllocation());
         return payParam;
+    }
+
+    /// 终端校验与门店默认终端回落(网关独立链路)
+    ///
+    /// 与 [cn.daxpay.open.payment.trade.runtime.service.pay.normal.NormalPayService#resolveTerminalIfNeeded]
+    /// 同口径: 网关链路客户端不传终端号, [buildPayParam] 注入容器冗余的 storeNo;
+    /// 门店配置了默认终端时回落补齐终端号并解析通道侧终端号, 未配置维持无终端号(存量行为不变)。
+    private void resolveTerminalIfNeeded(NormalPayParam payParam) {
+        TerminalInfo terminal = payParam.getTerminal();
+        if (Objects.isNull(terminal)) {
+            return;
+        }
+        // 门店默认终端回落: 只认容器冗余的显式门店号
+        if (StrUtil.isBlank(terminal.getTerminalNo()) && StrUtil.isNotBlank(terminal.getStoreNo())) {
+            String defaultTerminalNo = terminalResolveService.resolveDefaultTerminalNo(
+                    payParam.getMchNo(), terminal.getStoreNo());
+            if (StrUtil.isNotBlank(defaultTerminalNo)) {
+                terminal.setTerminalNo(defaultTerminalNo);
+            }
+        }
+        if (StrUtil.isBlank(terminal.getTerminalNo())) {
+            return;
+        }
+        String terminalNo = terminal.getTerminalNo();
+        // 系统终端存在性/归属/启用校验: 失败拦截支付(不会建 Trade)
+        terminalResolveService.validateTerminal(terminalNo, payParam.getMchNo());
+        // 通道侧终端号解析: 宽松策略, 解析不到返回 null 按无报备继续
+        String outTerminalNo = terminalResolveService.resolveOutTerminalNo(terminalNo, payParam.getChannelMchNo());
+        terminal.setResolvedOutTerminalNo(outTerminalNo);
     }
 
     /// 分账能力降级: 产品不支持分账时不阻断支付, 出站参数降级为普通收款

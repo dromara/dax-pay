@@ -3,6 +3,7 @@ package cn.daxpay.open.payment.merchant.service.store;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.device.qrcode.dao.DeviceQrCodeManager;
+import cn.daxpay.open.payment.device.terminal.dao.TerminalDeviceManager;
 import cn.daxpay.open.payment.device.qrcode.entity.DeviceQrCode;
 import cn.daxpay.open.payment.merchant.convert.store.MchStoreInfoConvert;
 import cn.daxpay.open.payment.merchant.dao.appinfo.MchAppInfoManager;
@@ -56,6 +57,8 @@ public class MchStoreInfoService {
     private final MerchantInfoManager merchantInfoManager;
 
     private final DeviceQrCodeManager deviceQrCodeManager;
+
+    private final TerminalDeviceManager terminalDeviceManager;
 
     private final ClientCodeService clientCodeService;
 
@@ -182,8 +185,8 @@ public class MchStoreInfoService {
 
     /// 门店概况聚合(门店工作台)
     ///
-    /// 按门店主键聚合门店默认应用/商户默认应用与码牌绑定计数;
-    /// 应用解析直接查台账展示事实(不做存在性/启用校验抛错, 配置失效时字段留空由前端呈现)。
+    /// 按门店主键聚合门店默认应用/商户默认应用/本店默认终端与绑定计数(码牌/系统终端);
+    /// 应用与终端解析直接查台账展示事实(不做存在性/启用校验抛错, 配置失效时字段留空由前端呈现)。
     /// 开源版裁剪: 收款设备(虚拟设备)域模块独立不在此聚合, 设备计数由前端经分页接口 total 取数。
     public MchStoreOverviewResult overview(Long id) {
         MchStoreInfo mchStore = mchStoreInfoManager.findById(id)
@@ -203,9 +206,17 @@ public class MchStoreInfoService {
             result.setMchDefaultAppId(app.getAppId());
             result.setMchDefaultAppName(app.getAppName());
         });
+        // 本店默认终端(不限启用态, 展示台账事实; 停用的默认终端支付不回落, 前端据此标注)
+        terminalDeviceManager.findDefaultByStoreNoAnyStatus(mchStore.getStoreNo()).ifPresent(terminal -> {
+            result.setDefaultTerminalNo(terminal.getTerminalNo());
+            result.setDefaultTerminalName(terminal.getName());
+            result.setDefaultTerminalEnable(terminal.getEnable());
+        });
         // 码牌绑定计数(强转 int 前置: 计数为非负值且门店维度量级远小于 int 上限)
         Long qrCodeCount = deviceQrCodeManager.countByField(DeviceQrCode::getStoreNo, mchStore.getStoreNo());
         result.setQrCodeCount(qrCodeCount == null ? 0 : qrCodeCount.intValue());
+        // 本店系统终端计数(不限启用态)
+        result.setTerminalCount((int) terminalDeviceManager.countByStoreNo(mchStore.getStoreNo()));
         return result;
     }
 

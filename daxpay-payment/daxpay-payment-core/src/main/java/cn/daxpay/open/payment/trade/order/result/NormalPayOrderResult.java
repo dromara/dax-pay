@@ -129,6 +129,10 @@ public class NormalPayOrderResult extends BaseResult {
     @Schema(description = "终端设备编码")
     private String terminalNo;
 
+    /// 通道侧终端号(支付时按绑定关系解析落库, 未解析到为空)
+    @Schema(description = "通道侧终端号")
+    private String outTerminalNo;
+
     /// 门店号（线下经营归属，可空）
     @Schema(description = "门店号")
     private String storeNo;

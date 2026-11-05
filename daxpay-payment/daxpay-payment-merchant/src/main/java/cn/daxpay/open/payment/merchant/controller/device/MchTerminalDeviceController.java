@@ -1,9 +1,9 @@
 package cn.daxpay.open.payment.merchant.controller.device;
 
+import cn.daxpay.open.payment.device.terminal.param.TerminalBindStoreParam;
 import cn.daxpay.open.payment.device.terminal.param.TerminalDeviceQuery;
 import cn.daxpay.open.payment.device.terminal.result.ChannelTerminalResult;
 import cn.daxpay.open.payment.device.terminal.result.TerminalDeviceResult;
-import cn.daxpay.open.payment.merchant.param.device.TerminalChannelBindParam;
 import cn.daxpay.open.payment.merchant.param.device.TerminalDeviceParam;
 import cn.daxpay.open.payment.merchant.service.device.MchTerminalDeviceService;
 import cn.daxpay.open.platform.core.annotation.PermCode;
@@ -26,7 +26,8 @@ import java.util.List;
 /// # 系统终端管理（商户端）
 ///
 /// 对照运营端 [TerminalDeviceAdminController]，路径 `/mch/device/terminal/system`。
-/// 商户号由 Service 从 PaymentContext 强制写入；额外提供通道终端候选列表供绑定抽屉使用。
+/// 商户号由 Service 从 PaymentContext 强制写入；通道终端绑定/解绑已收口运营端，
+/// 商户端仅保留系统终端管理与已绑定通道终端的只读查询。
 @PermCode(menuCode = PermCodes.Merchant.Terminal.MENU)
 @Validated
 @Tag(name = "系统终端管理(商户端)")
@@ -83,18 +84,26 @@ public class MchTerminalDeviceController {
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "绑定通道终端")
-    @PostMapping("/bind")
-    public Result<Void> bind(@RequestBody @Validated TerminalChannelBindParam param) {
-        mchTerminalDeviceService.bind(param);
+    @Operation(summary = "设为门店默认终端(同门店先清后设)")
+    @PostMapping("/set-default")
+    public Result<Void> setDefault(@NotNull(message = "{validation.field.id.notNull}") Long id) {
+        mchTerminalDeviceService.setDefault(id);
         return Res.ok();
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
-    @Operation(summary = "解绑通道终端")
-    @PostMapping("/unbind")
-    public Result<Void> unbind(@RequestBody @Validated TerminalChannelBindParam param) {
-        mchTerminalDeviceService.unbind(param);
+    @Operation(summary = "取消门店默认终端")
+    @PostMapping("/clear-default")
+    public Result<Void> clearDefault(@NotNull(message = "{validation.field.id.notNull}") Long id) {
+        mchTerminalDeviceService.clearDefault(id);
+        return Res.ok();
+    }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "批量绑定门店")
+    @PostMapping("/bind-store-batch")
+    public Result<Void> bindStoreBatch(@RequestBody @Validated TerminalBindStoreParam param) {
+        mchTerminalDeviceService.bindStoreBatch(param);
         return Res.ok();
     }
 
@@ -104,12 +113,5 @@ public class MchTerminalDeviceController {
     public Result<List<ChannelTerminalResult>> listBoundChannel(
             @NotBlank(message = "{validation.field.type.notBlank}") String terminalNo) {
         return Res.ok(mchTerminalDeviceService.listBoundChannel(terminalNo));
-    }
-
-    @PermCode(code = PermCodes.Action.VIEW)
-    @Operation(summary = "当前商户通道终端列表（绑定候选）")
-    @GetMapping("/channel-terminal-list")
-    public Result<List<ChannelTerminalResult>> listChannelTerminal() {
-        return Res.ok(mchTerminalDeviceService.listChannelTerminal());
     }
 }

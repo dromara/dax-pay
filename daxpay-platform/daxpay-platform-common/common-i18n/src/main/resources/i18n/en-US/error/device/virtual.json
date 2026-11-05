@@ -21,5 +21,8 @@
   "requestExpired": "Request expired, please calibrate the device time and retry",
   "reprintFail": "Failed to fetch reprint data",
   "previewFail": "Failed to fetch test print data, please check the device status",
-  "appNotFound": "Merchant app does not exist"
+  "appNotFound": "Merchant app does not exist",
+  "batchNotFound": "Some virtual devices not found, please refresh and retry",
+  "mchNotAssigned": "Virtual device is not bound to a merchant, please bind a merchant before assigning a store",
+  "batchMchMismatch": "Batch operations require virtual devices under the same merchant"
 }
