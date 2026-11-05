@@ -107,6 +107,13 @@ public class VirtualDeviceAdminController {
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)
+    @Operation(summary = "试播(可指定金额与收款方式, 返回 msgId 供回执比对)")
+    @PostMapping("/test")
+    public Result<String> test(@RequestBody @Validated VirtualDeviceTestParam param) {
+        return Res.ok(virtualDeviceAdminService.test(param));
+    }
+
+    @PermCode(code = PermCodes.Action.MANAGE)
     @Operation(summary = "试播文案预览(平台镜像终端词元规则, 返回预计播报文本)")
     @GetMapping("/test-speech")
     public Result<String> testSpeech(Long amountFen, String channel) {

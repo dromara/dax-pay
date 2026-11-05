@@ -211,6 +211,21 @@ public class VirtualDeviceAdminService {
         return mchNo;
     }
 
+    /// 试播(下发 audio.test 指令, 设备按所选金额与方式播报; 返回 msgId 供回执比对)
+    ///
+    /// 与商户端同口径: 渠道归一化为终端词元键后下发, 金额上限统一 999,999.99 元;
+    /// 设备须已激活(secret 非空), 未激活设备无指令通道。
+    public String test(VirtualDeviceTestParam param) {
+        VirtualTestSampleSupport.requireAnnounceMode(param.getMode());
+        long amountFen = VirtualTestSampleSupport.resolveAmountFen(param.getAmountFen());
+        String channel = VirtualTestSampleSupport.resolveChannel(param.getChannel());
+        VirtualDevice device = requireActivated(param.getId());
+        String msgId = virtualDevicePushClient.testBroadcast(device.getDeviceNo(), device.getSecret(),
+                amountFen, VirtualTestSampleSupport.toDeviceChannel(channel));
+        log.info("虚拟设备试播: deviceNo={}, amountFen={}, channel={}", device.getDeviceNo(), amountFen, channel);
+        return msgId;
+    }
+
     /// 试播文案预览(平台侧镜像终端词元合成规则, 供确认框展示「预计播报」)
     public String testSpeech(Long amountFen, String channel) {
         long amount = VirtualTestSampleSupport.resolveAmountFen(amountFen);
