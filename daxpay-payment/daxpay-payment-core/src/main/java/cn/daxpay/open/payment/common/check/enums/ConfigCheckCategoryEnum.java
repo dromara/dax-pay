@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 /// # 配置检查分类
 ///
 /// 标识一项"配置是否已完成"的维度, 运营端与商户端共用。
-/// `code` 同时作为前端 i18n key 后缀(`configCheck.category.{code}`)。
+/// `code` 同时作为前端 i18n key 前缀, checker 下发 `configCheck.{code}.title` / `configCheck.{code}.description`。
 @Getter
 @RequiredArgsConstructor
 public enum ConfigCheckCategoryEnum {
@@ -22,6 +22,14 @@ public enum ConfigCheckCategoryEnum {
     SOCIAL_LOGIN("socialLogin"),
     /// 平台 MQTT 接入
     PLATFORM_MQTT("platformMqtt"),
+    /// 平台邮件服务
+    PLATFORM_MAIL("platformMail"),
+    /// 平台支付宝应用凭据
+    PLATFORM_ALIPAY_AUTH("platformAlipayAuth"),
+    /// 平台微信公众号凭据
+    PLATFORM_WECHAT_MP("platformWechatMp"),
+    /// 收银台小程序应用
+    PLATFORM_MOBILE_APP("platformMobileApp"),
 
     // ===== 商户端配置 =====
     /// 商户应用

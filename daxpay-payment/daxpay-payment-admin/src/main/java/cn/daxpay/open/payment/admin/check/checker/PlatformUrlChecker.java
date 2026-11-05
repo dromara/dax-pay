@@ -15,8 +15,10 @@ import java.util.Objects;
 
 /// # 平台访问地址检查器
 ///
-/// 检测平台后端 API 地址与管理端地址是否已配置。
-/// 后端地址为支付回调拼接的必需项, 缺失会导致通道回调地址无法生成。
+/// 检测平台后端 API 地址、管理端地址与支付网关地址是否已配置。
+/// 后端地址为支付回调拼接的必需项, 缺失会导致通道回调地址无法生成;
+/// 支付网关地址缺失则收银台/支付页面跳转不可用。
+/// 商户端地址不纳入检测(未启用商户端社交登录的部署会误报)。
 @Component
 @Order(3)
 @RequiredArgsConstructor
@@ -33,10 +35,12 @@ public class PlatformUrlChecker implements AdminConfigChecker {
     public ConfigCheckItem check() {
         PlatformUrlConfig config = systemPlatformConfigService.getConfig(
                 PlatformConfigTypeEnum.URL, PlatformUrlConfig.class);
-        // 后端 API 地址与管理端地址是核心: 缺后端地址回调无法拼接, 缺管理端地址第三方登录回调失效
+        // 后端 API 地址与管理端地址是核心: 缺后端地址回调无法拼接, 缺管理端地址第三方登录回调失效;
+        // 支付网关地址缺失则收银台/支付页面跳转不可用
         boolean unconfigured = Objects.isNull(config)
                 || StrUtil.isBlank(config.getBackendBaseUrl())
-                || StrUtil.isBlank(config.getAdminBaseUrl());
+                || StrUtil.isBlank(config.getAdminBaseUrl())
+                || StrUtil.isBlank(config.getPaymentGatewayBaseUrl());
         if (unconfigured) {
             return ConfigCheckItem.of(
                     ConfigCheckCategoryEnum.PLATFORM_URL,
