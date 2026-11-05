@@ -5,6 +5,8 @@ import cn.daxpay.open.payment.common.check.enums.ConfigCheckSeverityEnum;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
+import java.util.Map;
+
 /// # 单个配置检查结果项
 ///
 /// 一条"未完成配置"记录。已完成的配置不产生本对象(返回 null)。
@@ -36,6 +38,12 @@ public class ConfigCheckItem {
     /// 静态路由使用其自身定义的 name, 例如 `NotifyCenter`。
     private String routeName;
 
+    /// 点击跳转时附加的路由 query 参数(可空)。
+    /// 目标页为 `?tab=` 页签型单页(如平台配置页 `/system/config/platform`)时,
+    /// 传 `tab=website` 等直达对应子分组, 避免跳转后停留在默认页签。
+    /// 页签 key 见前端 PlatformConfig/ThirdPlatform 的 tabs 定义与 [useQueryTab]。
+    private Map<String, String> routeQuery;
+
     /// 列表型告警的未配置数量(单项型可留空)
     /// 前端用于显示"N 项待配置", 并在跳转列表后聚焦这些条目
     private Integer count;
@@ -49,5 +57,13 @@ public class ConfigCheckItem {
                 .setDescriptionKey(descriptionKey)
                 .setRouteName(routeName)
                 .setSeverity(ConfigCheckSeverityEnum.SUGGEST.getCode());
+    }
+
+    /// 带 query 直达子页签的构造(页签型配置页用, 如平台配置页 `tab=website`)
+    public static ConfigCheckItem of(ConfigCheckCategoryEnum category,
+                                     String itemKey, String titleKey, String descriptionKey, String routeName,
+                                     Map<String, String> routeQuery) {
+        return of(category, itemKey, titleKey, descriptionKey, routeName)
+                .setRouteQuery(routeQuery);
     }
 }

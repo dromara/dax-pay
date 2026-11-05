@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
 /// # 社交登录配置检查器
 ///
 /// 检测社交登录平台中, 已启用但未完成参数配置的数量。
@@ -38,7 +40,8 @@ public class SocialLoginChecker implements AdminConfigChecker {
                     ConfigCheckCategoryEnum.SOCIAL_LOGIN.getCode(),
                     "configCheck.socialLogin.title",
                     "configCheck.socialLogin.description",
-                    "/system/config/third-platform"
+                    "/system/config/third-platform",
+                    Map.of("tab", "loginConfig")
             ).setCount((int) unconfiguredCount);
         }
         return null;

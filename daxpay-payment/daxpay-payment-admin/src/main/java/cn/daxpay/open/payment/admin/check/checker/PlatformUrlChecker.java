@@ -10,6 +10,7 @@ import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import java.util.Map;
 import java.util.Objects;
 
 /// # 平台访问地址检查器
@@ -42,7 +43,8 @@ public class PlatformUrlChecker implements AdminConfigChecker {
                     ConfigCheckCategoryEnum.PLATFORM_URL.getCode(),
                     "configCheck.platformUrl.title",
                     "configCheck.platformUrl.description",
-                    "/system/config/platform"
+                    "/system/config/platform",
+                    Map.of("tab", "url")
             );
         }
         return null;

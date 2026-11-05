@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
 /// # 平台 MQTT 接入配置检查器
 ///
 /// 检测 MQTT 接入地址与密码是否已配置。配置记录恒存在(缺省创建),
@@ -38,7 +40,8 @@ public class PlatformMqttChecker implements AdminConfigChecker {
                     ConfigCheckCategoryEnum.PLATFORM_MQTT.getCode(),
                     "configCheck.platformMqtt.title",
                     "configCheck.platformMqtt.description",
-                    "/system/config/platform"
+                    "/system/config/platform",
+                    Map.of("tab", "mqtt")
             );
         }
         return null;

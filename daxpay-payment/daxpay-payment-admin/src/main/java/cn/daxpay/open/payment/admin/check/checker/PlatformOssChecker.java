@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
+
 /// # 对象存储配置检查器
 ///
 /// 检测 OSS 配置是否存在。OSS 未配置时文件上传/Logo 存储等能力不可用。
@@ -35,7 +37,8 @@ public class PlatformOssChecker implements AdminConfigChecker {
                     ConfigCheckCategoryEnum.PLATFORM_OSS.getCode(),
                     "configCheck.platformOss.title",
                     "configCheck.platformOss.description",
-                    "/system/config/platform"
+                    "/system/config/platform",
+                    Map.of("tab", "oss")
             );
         }
         return null;

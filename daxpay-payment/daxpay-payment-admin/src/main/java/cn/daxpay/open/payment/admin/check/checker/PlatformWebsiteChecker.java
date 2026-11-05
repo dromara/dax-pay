@@ -10,6 +10,7 @@ import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
+import java.util.Map;
 import java.util.Objects;
 
 /// # 平台站点信息检查器
@@ -43,7 +44,8 @@ public class PlatformWebsiteChecker implements AdminConfigChecker {
                     ConfigCheckCategoryEnum.PLATFORM_WEBSITE.getCode(),
                     "configCheck.platformWebsite.title",
                     "configCheck.platformWebsite.description",
-                    "/system/config/platform"
+                    "/system/config/platform",
+                    Map.of("tab", "website")
             );
         }
         return null;
