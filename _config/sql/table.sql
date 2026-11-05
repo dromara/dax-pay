@@ -81,31 +81,31 @@ COMMENT ON COLUMN public.adapay_direct_key_config.mch_no IS '商户号';
 -- Name: COLUMN adapay_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.adapay_direct_key_config.channel_mch_no IS '通道商户号(创建时录入不可修改)';
+COMMENT ON COLUMN public.adapay_direct_key_config.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN adapay_direct_key_config.adapay_app_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.adapay_direct_key_config.adapay_app_id IS 'Adapay 应用ID(app_id)';
+COMMENT ON COLUMN public.adapay_direct_key_config.adapay_app_id IS 'Adapay 应用ID';
 
 --
 -- Name: COLUMN adapay_direct_key_config.api_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.adapay_direct_key_config.api_key IS 'Adapay API Key(请求头Authorization, 加密存储)';
+COMMENT ON COLUMN public.adapay_direct_key_config.api_key IS 'Adapay API Key';
 
 --
 -- Name: COLUMN adapay_direct_key_config.private_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.adapay_direct_key_config.private_key IS '商户RSA私钥(PKCS#8 Base64, 请求签名, 加密存储)';
+COMMENT ON COLUMN public.adapay_direct_key_config.private_key IS '商户RSA私钥';
 
 --
 -- Name: COLUMN adapay_direct_key_config.public_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.adapay_direct_key_config.public_key IS 'Adapay 平台公钥(X509 Base64, 响应验签, 加密存储; 为空使用全局默认)';
+COMMENT ON COLUMN public.adapay_direct_key_config.public_key IS 'Adapay平台公钥';
 
 --
 -- Name: COLUMN adapay_direct_key_config.creator; Type: COMMENT; Schema: public; Owner: -
@@ -135,7 +135,7 @@ COMMENT ON COLUMN public.adapay_direct_key_config.last_modified_time IS '最后�
 -- Name: COLUMN adapay_direct_key_config.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.adapay_direct_key_config.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.adapay_direct_key_config.version IS '版本号';
 
 --
 -- Name: COLUMN adapay_direct_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -173,7 +173,7 @@ CREATE TABLE public.alipay_direct_alloc_receiver (
 -- Name: TABLE alipay_direct_alloc_receiver; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.alipay_direct_alloc_receiver IS '支付宝直连分账接收方(通道侧绑定档案)';
+COMMENT ON TABLE public.alipay_direct_alloc_receiver IS '支付宝直连分账接收方';
 
 --
 -- Name: COLUMN alipay_direct_alloc_receiver.id; Type: COMMENT; Schema: public; Owner: -
@@ -191,7 +191,7 @@ COMMENT ON COLUMN public.alipay_direct_alloc_receiver.mch_no IS '商户号';
 -- Name: COLUMN alipay_direct_alloc_receiver.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_direct_alloc_receiver.channel_mch_no IS '通道商户号(关联通用通道商户主表)';
+COMMENT ON COLUMN public.alipay_direct_alloc_receiver.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN alipay_direct_alloc_receiver.receiver_type; Type: COMMENT; Schema: public; Owner: -
@@ -203,25 +203,25 @@ COMMENT ON COLUMN public.alipay_direct_alloc_receiver.receiver_type IS '接收�
 -- Name: COLUMN alipay_direct_alloc_receiver.receiver_account; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_direct_alloc_receiver.receiver_account IS '接收方账号(AES-256-GCM加密存储)';
+COMMENT ON COLUMN public.alipay_direct_alloc_receiver.receiver_account IS '接收方账号';
 
 --
 -- Name: COLUMN alipay_direct_alloc_receiver.account_hash; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_direct_alloc_receiver.account_hash IS '接收方账号SHA-256哈希(密文不确定, 查重与等值定位用)';
+COMMENT ON COLUMN public.alipay_direct_alloc_receiver.account_hash IS '接收方账号SHA-256哈希';
 
 --
 -- Name: COLUMN alipay_direct_alloc_receiver.receiver_name; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_direct_alloc_receiver.receiver_name IS '接收方名称(AES-256-GCM加密存储, 可空)';
+COMMENT ON COLUMN public.alipay_direct_alloc_receiver.receiver_name IS '接收方名称';
 
 --
 -- Name: COLUMN alipay_direct_alloc_receiver.direct_app_ref_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_direct_alloc_receiver.direct_app_ref_id IS '发起绑定的支付宝应用引用(alipay_direct_app主键, 重新绑定复用)';
+COMMENT ON COLUMN public.alipay_direct_alloc_receiver.direct_app_ref_id IS '支付宝应用引用';
 
 --
 -- Name: COLUMN alipay_direct_alloc_receiver.status; Type: COMMENT; Schema: public; Owner: -
@@ -287,7 +287,7 @@ COMMENT ON COLUMN public.alipay_direct_alloc_receiver.deleted IS '逻辑删除�
 -- Name: COLUMN alipay_direct_alloc_receiver.alias; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_direct_alloc_receiver.alias IS '接收方别名(本地备注, 不上送通道)';
+COMMENT ON COLUMN public.alipay_direct_alloc_receiver.alias IS '接收方别名';
 
 --
 -- Name: alipay_direct_app; Type: TABLE; Schema: public; Owner: -
@@ -548,31 +548,31 @@ COMMENT ON COLUMN public.alipay_direct_app_key_config.alipay_public_key IS '支�
 -- Name: COLUMN alipay_direct_app_key_config.private_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_direct_app_key_config.private_key IS '应用私钥(加密存储)';
+COMMENT ON COLUMN public.alipay_direct_app_key_config.private_key IS '应用私钥';
 
 --
 -- Name: COLUMN alipay_direct_app_key_config.app_cert; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_direct_app_key_config.app_cert IS '应用公钥证书(加密存储)';
+COMMENT ON COLUMN public.alipay_direct_app_key_config.app_cert IS '应用公钥证书';
 
 --
 -- Name: COLUMN alipay_direct_app_key_config.alipay_cert; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_direct_app_key_config.alipay_cert IS '支付宝公钥证书(加密存储)';
+COMMENT ON COLUMN public.alipay_direct_app_key_config.alipay_cert IS '支付宝公钥证书';
 
 --
 -- Name: COLUMN alipay_direct_app_key_config.alipay_root_cert; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_direct_app_key_config.alipay_root_cert IS '支付宝CA根证书(加密存储)';
+COMMENT ON COLUMN public.alipay_direct_app_key_config.alipay_root_cert IS '支付宝CA根证书';
 
 --
 -- Name: COLUMN alipay_direct_app_key_config.secret_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_direct_app_key_config.secret_key IS 'AES通信密钥(加密存储)';
+COMMENT ON COLUMN public.alipay_direct_app_key_config.secret_key IS 'AES通信密钥';
 
 --
 -- Name: COLUMN alipay_direct_app_key_config.creator; Type: COMMENT; Schema: public; Owner: -
@@ -620,7 +620,7 @@ COMMENT ON COLUMN public.alipay_direct_app_key_config.sandbox IS '是否沙箱�
 -- Name: COLUMN alipay_direct_app_key_config.server_url; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_direct_app_key_config.server_url IS '网关地址(留空使用官方网关; 联调演练填模拟网关完整地址, 如 http://127.0.0.1:10400/gateway.do)';
+COMMENT ON COLUMN public.alipay_direct_app_key_config.server_url IS '网关地址';
 
 --
 -- Name: alipay_direct_channel_merchant; Type: TABLE; Schema: public; Owner: -
@@ -663,7 +663,7 @@ COMMENT ON COLUMN public.alipay_direct_channel_merchant.mch_no IS '商户号';
 -- Name: COLUMN alipay_direct_channel_merchant.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_direct_channel_merchant.channel_mch_no IS '通道商户号(系统生成雪花号)';
+COMMENT ON COLUMN public.alipay_direct_channel_merchant.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN alipay_direct_channel_merchant.product; Type: COMMENT; Schema: public; Owner: -
@@ -675,7 +675,7 @@ COMMENT ON COLUMN public.alipay_direct_channel_merchant.product IS '所属支付
 -- Name: COLUMN alipay_direct_channel_merchant.alipay_user_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_direct_channel_merchant.alipay_user_id IS '支付宝商家唯一识别码(2088开头的16位数字)';
+COMMENT ON COLUMN public.alipay_direct_channel_merchant.alipay_user_id IS '支付宝商家识别码';
 
 --
 -- Name: COLUMN alipay_direct_channel_merchant.creator; Type: COMMENT; Schema: public; Owner: -
@@ -748,7 +748,7 @@ CREATE TABLE public.alipay_isv_alloc_receiver (
 -- Name: TABLE alipay_isv_alloc_receiver; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.alipay_isv_alloc_receiver IS '支付宝服务商分账接收方(通道侧绑定档案, 凭证由子商户授权绑定自动决定)';
+COMMENT ON TABLE public.alipay_isv_alloc_receiver IS '支付宝服务商分账接收方';
 
 --
 -- Name: COLUMN alipay_isv_alloc_receiver.id; Type: COMMENT; Schema: public; Owner: -
@@ -766,7 +766,7 @@ COMMENT ON COLUMN public.alipay_isv_alloc_receiver.mch_no IS '商户号';
 -- Name: COLUMN alipay_isv_alloc_receiver.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_isv_alloc_receiver.channel_mch_no IS '通道商户号(关联通用通道商户主表)';
+COMMENT ON COLUMN public.alipay_isv_alloc_receiver.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN alipay_isv_alloc_receiver.receiver_type; Type: COMMENT; Schema: public; Owner: -
@@ -778,19 +778,19 @@ COMMENT ON COLUMN public.alipay_isv_alloc_receiver.receiver_type IS '接收方�
 -- Name: COLUMN alipay_isv_alloc_receiver.receiver_account; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_isv_alloc_receiver.receiver_account IS '接收方账号(AES-256-GCM加密存储)';
+COMMENT ON COLUMN public.alipay_isv_alloc_receiver.receiver_account IS '接收方账号';
 
 --
 -- Name: COLUMN alipay_isv_alloc_receiver.account_hash; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_isv_alloc_receiver.account_hash IS '接收方账号SHA-256哈希(密文不确定, 查重与等值定位用)';
+COMMENT ON COLUMN public.alipay_isv_alloc_receiver.account_hash IS '接收方账号SHA-256哈希';
 
 --
 -- Name: COLUMN alipay_isv_alloc_receiver.receiver_name; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_isv_alloc_receiver.receiver_name IS '接收方名称(AES-256-GCM加密存储, 可空)';
+COMMENT ON COLUMN public.alipay_isv_alloc_receiver.receiver_name IS '接收方名称';
 
 --
 -- Name: COLUMN alipay_isv_alloc_receiver.status; Type: COMMENT; Schema: public; Owner: -
@@ -856,7 +856,7 @@ COMMENT ON COLUMN public.alipay_isv_alloc_receiver.deleted IS '逻辑删除标�
 -- Name: COLUMN alipay_isv_alloc_receiver.alias; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_isv_alloc_receiver.alias IS '接收方别名(本地备注, 不上送通道)';
+COMMENT ON COLUMN public.alipay_isv_alloc_receiver.alias IS '接收方别名';
 
 --
 -- Name: alipay_isv_app; Type: TABLE; Schema: public; Owner: -
@@ -991,31 +991,31 @@ COMMENT ON COLUMN public.alipay_isv_app_key_config.alipay_public_key IS '支付�
 -- Name: COLUMN alipay_isv_app_key_config.private_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_isv_app_key_config.private_key IS '应用私钥(加密存储)';
+COMMENT ON COLUMN public.alipay_isv_app_key_config.private_key IS '应用私钥';
 
 --
 -- Name: COLUMN alipay_isv_app_key_config.app_cert; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_isv_app_key_config.app_cert IS '应用公钥证书(加密存储)';
+COMMENT ON COLUMN public.alipay_isv_app_key_config.app_cert IS '应用公钥证书';
 
 --
 -- Name: COLUMN alipay_isv_app_key_config.alipay_cert; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_isv_app_key_config.alipay_cert IS '支付宝公钥证书(加密存储)';
+COMMENT ON COLUMN public.alipay_isv_app_key_config.alipay_cert IS '支付宝公钥证书';
 
 --
 -- Name: COLUMN alipay_isv_app_key_config.alipay_root_cert; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_isv_app_key_config.alipay_root_cert IS '支付宝CA根证书(加密存储)';
+COMMENT ON COLUMN public.alipay_isv_app_key_config.alipay_root_cert IS '支付宝CA根证书';
 
 --
 -- Name: COLUMN alipay_isv_app_key_config.secret_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_isv_app_key_config.secret_key IS 'AES通信密钥(加密存储)';
+COMMENT ON COLUMN public.alipay_isv_app_key_config.secret_key IS 'AES通信密钥';
 
 --
 -- Name: COLUMN alipay_isv_app_key_config.creator; Type: COMMENT; Schema: public; Owner: -
@@ -1057,7 +1057,7 @@ COMMENT ON COLUMN public.alipay_isv_app_key_config.deleted IS '逻辑删除标�
 -- Name: COLUMN alipay_isv_app_key_config.server_url; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_isv_app_key_config.server_url IS '网关地址(留空使用官方网关; 联调演练填模拟网关完整地址, 如 http://127.0.0.1:10400/gateway.do)';
+COMMENT ON COLUMN public.alipay_isv_app_key_config.server_url IS '网关地址';
 
 --
 -- Name: alipay_isv_channel_merchant; Type: TABLE; Schema: public; Owner: -
@@ -1101,7 +1101,7 @@ COMMENT ON COLUMN public.alipay_isv_channel_merchant.mch_no IS '商户号';
 -- Name: COLUMN alipay_isv_channel_merchant.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_isv_channel_merchant.channel_mch_no IS '通道商户号(AISV+雪花)';
+COMMENT ON COLUMN public.alipay_isv_channel_merchant.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN alipay_isv_channel_merchant.product; Type: COMMENT; Schema: public; Owner: -
@@ -1119,13 +1119,13 @@ COMMENT ON COLUMN public.alipay_isv_channel_merchant.isv_app_id IS '关联服务
 -- Name: COLUMN alipay_isv_channel_merchant.alipay_user_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_isv_channel_merchant.alipay_user_id IS '子商户支付宝识别码(2088开头的16位数字)';
+COMMENT ON COLUMN public.alipay_isv_channel_merchant.alipay_user_id IS '子商户支付宝识别码';
 
 --
 -- Name: COLUMN alipay_isv_channel_merchant.app_auth_token; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_isv_channel_merchant.app_auth_token IS '应用授权令牌(服务商代子商户调用接口的凭据, 会过期/刷新)';
+COMMENT ON COLUMN public.alipay_isv_channel_merchant.app_auth_token IS '应用授权令牌';
 
 --
 -- Name: COLUMN alipay_isv_channel_merchant.creator; Type: COMMENT; Schema: public; Owner: -
@@ -1184,7 +1184,7 @@ CREATE TABLE public.alipay_transfer_config (
 -- Name: TABLE alipay_transfer_config; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.alipay_transfer_config IS '支付宝转账配置(通道商户一对一绑定转账转出应用, 发起转账时按配置解析应用与密钥)';
+COMMENT ON TABLE public.alipay_transfer_config IS '支付宝转账配置';
 
 --
 -- Name: COLUMN alipay_transfer_config.id; Type: COMMENT; Schema: public; Owner: -
@@ -1202,13 +1202,13 @@ COMMENT ON COLUMN public.alipay_transfer_config.mch_no IS '商户号';
 -- Name: COLUMN alipay_transfer_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_transfer_config.channel_mch_no IS '通道商户号(一对一)';
+COMMENT ON COLUMN public.alipay_transfer_config.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN alipay_transfer_config.transfer_app_ref_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_transfer_config.transfer_app_ref_id IS '转账转出应用引用(alipay_direct_app主键, 决定转账使用的aliAppId与密钥)';
+COMMENT ON COLUMN public.alipay_transfer_config.transfer_app_ref_id IS '转账转出应用引用';
 
 --
 -- Name: COLUMN alipay_transfer_config.creator; Type: COMMENT; Schema: public; Owner: -
@@ -1269,7 +1269,7 @@ CREATE TABLE public.alipay_transfer_scene_config (
 -- Name: TABLE alipay_transfer_scene_config; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.alipay_transfer_scene_config IS '支付宝转账场景配置(主数据枚举驱动, 仅存启用/默认状态行, 最多启用3个, 默认必须启用)';
+COMMENT ON TABLE public.alipay_transfer_scene_config IS '支付宝转账场景配置';
 
 --
 -- Name: COLUMN alipay_transfer_scene_config.id; Type: COMMENT; Schema: public; Owner: -
@@ -1293,19 +1293,19 @@ COMMENT ON COLUMN public.alipay_transfer_scene_config.channel_mch_no IS '通道�
 -- Name: COLUMN alipay_transfer_scene_config.scene_name; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_transfer_scene_config.scene_name IS '转账场景名称(8枚举:现金营销/企业退款/佣金报酬/业务结算/二手回收/公益补助/行政补贴和退款/保险理赔)';
+COMMENT ON COLUMN public.alipay_transfer_scene_config.scene_name IS '转账场景名称';
 
 --
 -- Name: COLUMN alipay_transfer_scene_config.enabled; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_transfer_scene_config.enabled IS '是否启用(一个通道商户最多启用3个转账场景)';
+COMMENT ON COLUMN public.alipay_transfer_scene_config.enabled IS '是否启用';
 
 --
 -- Name: COLUMN alipay_transfer_scene_config.is_default; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.alipay_transfer_scene_config.is_default IS '是否默认场景(默认必须启用, 由部分唯一索引约束)';
+COMMENT ON COLUMN public.alipay_transfer_scene_config.is_default IS '是否默认场景';
 
 --
 -- Name: COLUMN alipay_transfer_scene_config.creator; Type: COMMENT; Schema: public; Owner: -
@@ -1388,49 +1388,49 @@ COMMENT ON COLUMN public.baofu_direct_key_config.mch_no IS '商户号';
 -- Name: COLUMN baofu_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.baofu_direct_key_config.channel_mch_no IS '通道商户号(BAOFU+雪花, 创建时录入不可修改)';
+COMMENT ON COLUMN public.baofu_direct_key_config.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN baofu_direct_key_config.mer_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.baofu_direct_key_config.mer_id IS '宝付商户号(merId, 收款线, 创建时录入不可修改)';
+COMMENT ON COLUMN public.baofu_direct_key_config.mer_id IS '宝付商户号';
 
 --
 -- Name: COLUMN baofu_direct_key_config.ter_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.baofu_direct_key_config.ter_id IS '宝付终端号(terId, 收款线, 创建时录入不可修改)';
+COMMENT ON COLUMN public.baofu_direct_key_config.ter_id IS '宝付终端号';
 
 --
 -- Name: COLUMN baofu_direct_key_config.sub_mch_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.baofu_direct_key_config.sub_mch_id IS '聚合交易商户号(subMchId, 在微信/支付宝报备的商户号, 聚合收银台场景上送)';
+COMMENT ON COLUMN public.baofu_direct_key_config.sub_mch_id IS '聚合交易商户号';
 
 --
 -- Name: COLUMN baofu_direct_key_config.merchant_cert_pfx; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.baofu_direct_key_config.merchant_cert_pfx IS '商户证书 pfx 内容(Base64, PKCS12, 请求签名用, 加密存储)';
+COMMENT ON COLUMN public.baofu_direct_key_config.merchant_cert_pfx IS '商户证书pfx';
 
 --
 -- Name: COLUMN baofu_direct_key_config.merchant_cert_password; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.baofu_direct_key_config.merchant_cert_password IS '商户证书密码(加密存储)';
+COMMENT ON COLUMN public.baofu_direct_key_config.merchant_cert_password IS '商户证书密码';
 
 --
 -- Name: COLUMN baofu_direct_key_config.platform_cert; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.baofu_direct_key_config.platform_cert IS '宝付平台证书 cer 内容(Base64/PEM, 响应与回调验签用, 加密存储)';
+COMMENT ON COLUMN public.baofu_direct_key_config.platform_cert IS '宝付平台证书';
 
 --
 -- Name: COLUMN baofu_direct_key_config.sandbox; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.baofu_direct_key_config.sandbox IS '是否沙箱环境(宝付聚合线无公开沙箱网关, 双环境密钥并存)';
+COMMENT ON COLUMN public.baofu_direct_key_config.sandbox IS '是否沙箱环境';
 
 --
 -- Name: COLUMN baofu_direct_key_config.creator; Type: COMMENT; Schema: public; Owner: -
@@ -1460,7 +1460,7 @@ COMMENT ON COLUMN public.baofu_direct_key_config.last_modified_time IS '最后�
 -- Name: COLUMN baofu_direct_key_config.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.baofu_direct_key_config.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.baofu_direct_key_config.version IS '版本号';
 
 --
 -- Name: COLUMN baofu_direct_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -1645,25 +1645,25 @@ COMMENT ON COLUMN public.base_user_protocol.show_name IS '显示名称';
 -- Name: COLUMN base_user_protocol.type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.base_user_protocol.type IS '协议类型(USER_AGREEMENT/PRIVACY_POLICY/THIRD_PARTY_INFO/CHILDREN_POLICY)';
+COMMENT ON COLUMN public.base_user_protocol.type IS '协议类型';
 
 --
 -- Name: COLUMN base_user_protocol.client_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.base_user_protocol.client_type IS '端类型(WEB/APP/MINIAPP)';
+COMMENT ON COLUMN public.base_user_protocol.client_type IS '端类型';
 
 --
 -- Name: COLUMN base_user_protocol.default_protocol; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.base_user_protocol.default_protocol IS '是否默认协议(同类型同端唯一)';
+COMMENT ON COLUMN public.base_user_protocol.default_protocol IS '是否默认协议';
 
 --
 -- Name: COLUMN base_user_protocol.default_language; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.base_user_protocol.default_language IS '默认语言(对外拉取时回退使用)';
+COMMENT ON COLUMN public.base_user_protocol.default_language IS '默认语言';
 
 --
 -- Name: COLUMN base_user_protocol.creator; Type: COMMENT; Schema: public; Owner: -
@@ -1837,7 +1837,7 @@ COMMENT ON COLUMN public.base_user_protocol_version.language IS '语言';
 -- Name: COLUMN base_user_protocol_version.version_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.base_user_protocol_version.version_no IS '版本号(同协议同语言自增)';
+COMMENT ON COLUMN public.base_user_protocol_version.version_no IS '版本号';
 
 --
 -- Name: COLUMN base_user_protocol_version.version_label; Type: COMMENT; Schema: public; Owner: -
@@ -1855,7 +1855,7 @@ COMMENT ON COLUMN public.base_user_protocol_version.title IS '标题';
 -- Name: COLUMN base_user_protocol_version.content; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.base_user_protocol_version.content IS '协议内容(Markdown)';
+COMMENT ON COLUMN public.base_user_protocol_version.content IS '协议内容';
 
 --
 -- Name: COLUMN base_user_protocol_version.content_html; Type: COMMENT; Schema: public; Owner: -
@@ -1968,49 +1968,49 @@ COMMENT ON COLUMN public.cpcn_direct_key_config.mch_no IS '商户号';
 -- Name: COLUMN cpcn_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.cpcn_direct_key_config.channel_mch_no IS '通道商户号(CPCN+雪花, 创建时录入不可修改)';
+COMMENT ON COLUMN public.cpcn_direct_key_config.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN cpcn_direct_key_config.institution_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.cpcn_direct_key_config.institution_id IS '中金机构编号(InstitutionID, 创建时录入不可修改)';
+COMMENT ON COLUMN public.cpcn_direct_key_config.institution_id IS '中金机构编号';
 
 --
 -- Name: COLUMN cpcn_direct_key_config.gateway_url; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.cpcn_direct_key_config.gateway_url IS '中金网关地址(开户开通后下发, 无统一公开网关)';
+COMMENT ON COLUMN public.cpcn_direct_key_config.gateway_url IS '中金网关地址';
 
 --
 -- Name: COLUMN cpcn_direct_key_config.appoint_merchant_ids; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.cpcn_direct_key_config.appoint_merchant_ids IS '指定分账子商户号(可空, 多个用英文逗号分隔, 上送 Extension.AppointMerchantInfos)';
+COMMENT ON COLUMN public.cpcn_direct_key_config.appoint_merchant_ids IS '指定分账子商户号';
 
 --
 -- Name: COLUMN cpcn_direct_key_config.merchant_cert_pfx; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.cpcn_direct_key_config.merchant_cert_pfx IS '商户证书pfx内容(Base64, PKCS12国密SM2私钥, 请求签名用, 加密存储)';
+COMMENT ON COLUMN public.cpcn_direct_key_config.merchant_cert_pfx IS '商户证书pfx';
 
 --
 -- Name: COLUMN cpcn_direct_key_config.merchant_cert_password; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.cpcn_direct_key_config.merchant_cert_password IS '商户证书密码(加密存储)';
+COMMENT ON COLUMN public.cpcn_direct_key_config.merchant_cert_password IS '商户证书密码';
 
 --
 -- Name: COLUMN cpcn_direct_key_config.platform_cert; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.cpcn_direct_key_config.platform_cert IS '中金平台证书cer内容(Base64或PEM, 响应/通知验签用, 加密存储)';
+COMMENT ON COLUMN public.cpcn_direct_key_config.platform_cert IS '中金平台证书';
 
 --
 -- Name: COLUMN cpcn_direct_key_config.sandbox; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.cpcn_direct_key_config.sandbox IS '是否沙箱环境(中金测试环境与生产环境网关/证书独立, 双环境密钥并存)';
+COMMENT ON COLUMN public.cpcn_direct_key_config.sandbox IS '是否沙箱环境';
 
 --
 -- Name: COLUMN cpcn_direct_key_config.creator; Type: COMMENT; Schema: public; Owner: -
@@ -2040,7 +2040,7 @@ COMMENT ON COLUMN public.cpcn_direct_key_config.last_modified_time IS '最后修
 -- Name: COLUMN cpcn_direct_key_config.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.cpcn_direct_key_config.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.cpcn_direct_key_config.version IS '版本号';
 
 --
 -- Name: COLUMN cpcn_direct_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -2090,7 +2090,7 @@ COMMENT ON COLUMN public.device_qr_code.id IS '主键';
 -- Name: COLUMN device_qr_code.code; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.device_qr_code.code IS '码牌编码(唯一, 二维码参数)';
+COMMENT ON COLUMN public.device_qr_code.code IS '码牌编码';
 
 --
 -- Name: COLUMN device_qr_code.name; Type: COMMENT; Schema: public; Owner: -
@@ -2108,37 +2108,37 @@ COMMENT ON COLUMN public.device_qr_code.batch_no IS '批次号';
 -- Name: COLUMN device_qr_code.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.device_qr_code.mch_no IS '所属商户号(空=空白库存)';
+COMMENT ON COLUMN public.device_qr_code.mch_no IS '所属商户号';
 
 --
 -- Name: COLUMN device_qr_code.app_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.device_qr_code.app_id IS '关联应用号(空=商户默认应用)';
+COMMENT ON COLUMN public.device_qr_code.app_id IS '关联应用号';
 
 --
 -- Name: COLUMN device_qr_code.program_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.device_qr_code.program_type IS '落地程序类型 h5/小程序(mini_app)';
+COMMENT ON COLUMN public.device_qr_code.program_type IS '落地程序类型';
 
 --
 -- Name: COLUMN device_qr_code.amount_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.device_qr_code.amount_type IS '金额类型 random/fixed';
+COMMENT ON COLUMN public.device_qr_code.amount_type IS '金额类型';
 
 --
 -- Name: COLUMN device_qr_code.fixed_amount; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.device_qr_code.fixed_amount IS '固定金额(分)';
+COMMENT ON COLUMN public.device_qr_code.fixed_amount IS '固定金额';
 
 --
 -- Name: COLUMN device_qr_code.status; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.device_qr_code.status IS '状态 enabled/disabled';
+COMMENT ON COLUMN public.device_qr_code.status IS '状态';
 
 --
 -- Name: COLUMN device_qr_code.remark; Type: COMMENT; Schema: public; Owner: -
@@ -2186,13 +2186,13 @@ COMMENT ON COLUMN public.device_qr_code.deleted IS '逻辑删除标识';
 -- Name: COLUMN device_qr_code.store_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.device_qr_code.store_no IS '绑定门店号(可空; 对应 mch_store_info.store_no)';
+COMMENT ON COLUMN public.device_qr_code.store_no IS '绑定门店号';
 
 --
 -- Name: COLUMN device_qr_code.allocation; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.device_qr_code.allocation IS '是否分账码牌(开启后扫码支付向下单链路透传分账标识; 产品不支持分账时自动降级普通收款, 交易分账状态记为 unsupported)';
+COMMENT ON COLUMN public.device_qr_code.allocation IS '是否分账码牌';
 
 --
 -- Name: dougong_isv_channel_merchant; Type: TABLE; Schema: public; Owner: -
@@ -2216,7 +2216,7 @@ CREATE TABLE public.dougong_isv_channel_merchant (
 -- Name: TABLE dougong_isv_channel_merchant; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.dougong_isv_channel_merchant IS '斗拱通道商户绑定(服务商模式, 通道商户维度)';
+COMMENT ON TABLE public.dougong_isv_channel_merchant IS '斗拱通道商户绑定';
 
 --
 -- Name: COLUMN dougong_isv_channel_merchant.id; Type: COMMENT; Schema: public; Owner: -
@@ -2234,19 +2234,19 @@ COMMENT ON COLUMN public.dougong_isv_channel_merchant.mch_no IS '商户号';
 -- Name: COLUMN dougong_isv_channel_merchant.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.dougong_isv_channel_merchant.channel_mch_no IS '通道商户号(DOUGONG+雪花, 唯一关联, 创建后不可修改)';
+COMMENT ON COLUMN public.dougong_isv_channel_merchant.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN dougong_isv_channel_merchant.product; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.dougong_isv_channel_merchant.product IS '产品编码(dougong_isv)';
+COMMENT ON COLUMN public.dougong_isv_channel_merchant.product IS '产品编码';
 
 --
 -- Name: COLUMN dougong_isv_channel_merchant.merchant_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.dougong_isv_channel_merchant.merchant_no IS '汇付商户号(merchantNo/huifuId, 须与服务商存在代理关系)';
+COMMENT ON COLUMN public.dougong_isv_channel_merchant.merchant_no IS '汇付商户号';
 
 --
 -- Name: COLUMN dougong_isv_channel_merchant.creator; Type: COMMENT; Schema: public; Owner: -
@@ -2307,7 +2307,7 @@ CREATE TABLE public.dougong_isv_key_config (
 -- Name: TABLE dougong_isv_key_config; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.dougong_isv_key_config IS '斗拱服务商密钥配置(产品级全局一份)';
+COMMENT ON TABLE public.dougong_isv_key_config IS '斗拱服务商密钥配置';
 
 --
 -- Name: COLUMN dougong_isv_key_config.id; Type: COMMENT; Schema: public; Owner: -
@@ -2319,31 +2319,31 @@ COMMENT ON COLUMN public.dougong_isv_key_config.id IS '主键';
 -- Name: COLUMN dougong_isv_key_config.product; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.dougong_isv_key_config.product IS '产品编码(dougong_isv, 服务商密钥按产品全局一份)';
+COMMENT ON COLUMN public.dougong_isv_key_config.product IS '产品编码';
 
 --
 -- Name: COLUMN dougong_isv_key_config.sys_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.dougong_isv_key_config.sys_id IS '服务商系统ID(sysId, 汇付控制台分配)';
+COMMENT ON COLUMN public.dougong_isv_key_config.sys_id IS '服务商系统ID';
 
 --
 -- Name: COLUMN dougong_isv_key_config.product_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.dougong_isv_key_config.product_id IS '汇付产品号(productId)';
+COMMENT ON COLUMN public.dougong_isv_key_config.product_id IS '汇付产品号';
 
 --
 -- Name: COLUMN dougong_isv_key_config.private_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.dougong_isv_key_config.private_key IS '商户RSA私钥(PEM, 请求签名, 加密存储)';
+COMMENT ON COLUMN public.dougong_isv_key_config.private_key IS '商户RSA私钥';
 
 --
 -- Name: COLUMN dougong_isv_key_config.dg_public_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.dougong_isv_key_config.dg_public_key IS '斗拱RSA公钥(PEM, 响应验签, 加密存储)';
+COMMENT ON COLUMN public.dougong_isv_key_config.dg_public_key IS '斗拱RSA公钥';
 
 --
 -- Name: COLUMN dougong_isv_key_config.creator; Type: COMMENT; Schema: public; Owner: -
@@ -2413,7 +2413,7 @@ CREATE TABLE public.douyin_direct_alloc_receiver (
 -- Name: TABLE douyin_direct_alloc_receiver; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.douyin_direct_alloc_receiver IS '抖音直连分账接收方(通道侧绑定档案)';
+COMMENT ON TABLE public.douyin_direct_alloc_receiver IS '抖音直连分账接收方';
 
 --
 -- Name: COLUMN douyin_direct_alloc_receiver.id; Type: COMMENT; Schema: public; Owner: -
@@ -2431,7 +2431,7 @@ COMMENT ON COLUMN public.douyin_direct_alloc_receiver.mch_no IS '商户号';
 -- Name: COLUMN douyin_direct_alloc_receiver.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.douyin_direct_alloc_receiver.channel_mch_no IS '通道商户号(关联通用通道商户主表)';
+COMMENT ON COLUMN public.douyin_direct_alloc_receiver.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN douyin_direct_alloc_receiver.receiver_type; Type: COMMENT; Schema: public; Owner: -
@@ -2443,37 +2443,37 @@ COMMENT ON COLUMN public.douyin_direct_alloc_receiver.receiver_type IS '接收�
 -- Name: COLUMN douyin_direct_alloc_receiver.receiver_account; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.douyin_direct_alloc_receiver.receiver_account IS '接收方账号(AES-256-GCM加密存储)';
+COMMENT ON COLUMN public.douyin_direct_alloc_receiver.receiver_account IS '接收方账号';
 
 --
 -- Name: COLUMN douyin_direct_alloc_receiver.account_hash; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.douyin_direct_alloc_receiver.account_hash IS '接收方账号SHA-256哈希(密文不确定, 查重与等值定位用)';
+COMMENT ON COLUMN public.douyin_direct_alloc_receiver.account_hash IS '接收方账号SHA-256哈希';
 
 --
 -- Name: COLUMN douyin_direct_alloc_receiver.receiver_name; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.douyin_direct_alloc_receiver.receiver_name IS '接收方名称(AES-256-GCM加密存储, MERCHANT_ID时必填商户全称)';
+COMMENT ON COLUMN public.douyin_direct_alloc_receiver.receiver_name IS '接收方名称';
 
 --
 -- Name: COLUMN douyin_direct_alloc_receiver.relation_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.douyin_direct_alloc_receiver.relation_type IS '分账关系类型(抖音原生大写, CUSTOM时需custom_relation)';
+COMMENT ON COLUMN public.douyin_direct_alloc_receiver.relation_type IS '分账关系类型';
 
 --
 -- Name: COLUMN douyin_direct_alloc_receiver.custom_relation; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.douyin_direct_alloc_receiver.custom_relation IS '自定义分账关系名(relation_type=CUSTOM时必填)';
+COMMENT ON COLUMN public.douyin_direct_alloc_receiver.custom_relation IS '自定义分账关系名';
 
 --
 -- Name: COLUMN douyin_direct_alloc_receiver.channel_app_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.douyin_direct_alloc_receiver.channel_app_id IS '绑定时所用商户档抖音应用appid(重新绑定复用)';
+COMMENT ON COLUMN public.douyin_direct_alloc_receiver.channel_app_id IS '商户档抖音应用appid';
 
 --
 -- Name: COLUMN douyin_direct_alloc_receiver.status; Type: COMMENT; Schema: public; Owner: -
@@ -2539,7 +2539,7 @@ COMMENT ON COLUMN public.douyin_direct_alloc_receiver.deleted IS '逻辑删除�
 -- Name: COLUMN douyin_direct_alloc_receiver.alias; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.douyin_direct_alloc_receiver.alias IS '接收方别名(本地备注, 不上送通道)';
+COMMENT ON COLUMN public.douyin_direct_alloc_receiver.alias IS '接收方别名';
 
 --
 -- Name: douyin_direct_channel_merchant; Type: TABLE; Schema: public; Owner: -
@@ -2581,19 +2581,19 @@ COMMENT ON COLUMN public.douyin_direct_channel_merchant.mch_no IS '商户号';
 -- Name: COLUMN douyin_direct_channel_merchant.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.douyin_direct_channel_merchant.channel_mch_no IS '通道商户号(系统生成雪花号)';
+COMMENT ON COLUMN public.douyin_direct_channel_merchant.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN douyin_direct_channel_merchant.product; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.douyin_direct_channel_merchant.product IS '所属支付产品(如 douyin_pay)';
+COMMENT ON COLUMN public.douyin_direct_channel_merchant.product IS '所属支付产品';
 
 --
 -- Name: COLUMN douyin_direct_channel_merchant.dy_mch_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.douyin_direct_channel_merchant.dy_mch_id IS '抖音商户号(MCHID)';
+COMMENT ON COLUMN public.douyin_direct_channel_merchant.dy_mch_id IS '抖音商户号';
 
 --
 -- Name: COLUMN douyin_direct_channel_merchant.creator; Type: COMMENT; Schema: public; Owner: -
@@ -2672,25 +2672,25 @@ COMMENT ON COLUMN public.douyin_direct_key_config.mch_no IS '商户号';
 -- Name: COLUMN douyin_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.douyin_direct_key_config.channel_mch_no IS '通道商户号(唯一关联)';
+COMMENT ON COLUMN public.douyin_direct_key_config.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN douyin_direct_key_config.merchant_private_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.douyin_direct_key_config.merchant_private_key IS '商户私钥(MERCHANT_PRIVATE_KEY, 加密存储)';
+COMMENT ON COLUMN public.douyin_direct_key_config.merchant_private_key IS '商户私钥';
 
 --
 -- Name: COLUMN douyin_direct_key_config.merchant_serial_number; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.douyin_direct_key_config.merchant_serial_number IS '商家公钥证书序列号(MERCHANT_SERIAL_NO)';
+COMMENT ON COLUMN public.douyin_direct_key_config.merchant_serial_number IS '商家公钥证书序列号';
 
 --
 -- Name: COLUMN douyin_direct_key_config.encrypt_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.douyin_direct_key_config.encrypt_key IS '接口加密密钥(ENCRYPT_KEY, 加密存储)';
+COMMENT ON COLUMN public.douyin_direct_key_config.encrypt_key IS '接口加密密钥';
 
 --
 -- Name: COLUMN douyin_direct_key_config.creator; Type: COMMENT; Schema: public; Owner: -
@@ -2749,7 +2749,7 @@ CREATE TABLE public.douyin_transfer_config (
 -- Name: TABLE douyin_transfer_config; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.douyin_transfer_config IS '抖音转账配置(一对一, 指定转账发起应用, 决定转出主体与收款人openId来源)';
+COMMENT ON TABLE public.douyin_transfer_config IS '抖音转账配置';
 
 --
 -- Name: COLUMN douyin_transfer_config.id; Type: COMMENT; Schema: public; Owner: -
@@ -2809,7 +2809,7 @@ COMMENT ON COLUMN public.douyin_transfer_config.channel_mch_no IS '通道商户�
 -- Name: COLUMN douyin_transfer_config.transfer_app_ref_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.douyin_transfer_config.transfer_app_ref_id IS '转账发起应用引用(dy_mch_app 主键, 须为网站应用 web_app, 支持手机H5获取OpenId)';
+COMMENT ON COLUMN public.douyin_transfer_config.transfer_app_ref_id IS '转账发起应用引用';
 
 --
 -- Name: duolabao_direct_key_config; Type: TABLE; Schema: public; Owner: -
@@ -2855,43 +2855,43 @@ COMMENT ON COLUMN public.duolabao_direct_key_config.mch_no IS '商户号';
 -- Name: COLUMN duolabao_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.duolabao_direct_key_config.channel_mch_no IS '通道商户号(DUOLABAO+雪花, 创建时录入不可修改)';
+COMMENT ON COLUMN public.duolabao_direct_key_config.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN duolabao_direct_key_config.customer_num; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.duolabao_direct_key_config.customer_num IS '商户编号(customerNum, 哆啦宝商户唯一标识, 创建时录入不可修改)';
+COMMENT ON COLUMN public.duolabao_direct_key_config.customer_num IS '哆啦宝商户编号';
 
 --
 -- Name: COLUMN duolabao_direct_key_config.shop_num; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.duolabao_direct_key_config.shop_num IS '店铺编号(shopNum, 可空)';
+COMMENT ON COLUMN public.duolabao_direct_key_config.shop_num IS '店铺编号';
 
 --
 -- Name: COLUMN duolabao_direct_key_config.agent_num; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.duolabao_direct_key_config.agent_num IS '代理商编号(agentNum, 可空, 非代理商不需要填写)';
+COMMENT ON COLUMN public.duolabao_direct_key_config.agent_num IS '代理商编号';
 
 --
 -- Name: COLUMN duolabao_direct_key_config.access_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.duolabao_direct_key_config.access_key IS '公钥(accessKey, Header 上送的身份标识, 加密存储)';
+COMMENT ON COLUMN public.duolabao_direct_key_config.access_key IS '公钥';
 
 --
 -- Name: COLUMN duolabao_direct_key_config.secret_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.duolabao_direct_key_config.secret_key IS '私钥(secretKey, token 签名与回调验签用, 不上送, 加密存储)';
+COMMENT ON COLUMN public.duolabao_direct_key_config.secret_key IS '私钥';
 
 --
 -- Name: COLUMN duolabao_direct_key_config.sandbox; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.duolabao_direct_key_config.sandbox IS '是否沙箱环境(哆啦宝无独立沙箱网关, 标识透传记录)';
+COMMENT ON COLUMN public.duolabao_direct_key_config.sandbox IS '是否沙箱环境';
 
 --
 -- Name: COLUMN duolabao_direct_key_config.creator; Type: COMMENT; Schema: public; Owner: -
@@ -2921,7 +2921,7 @@ COMMENT ON COLUMN public.duolabao_direct_key_config.last_modified_time IS '最�
 -- Name: COLUMN duolabao_direct_key_config.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.duolabao_direct_key_config.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.duolabao_direct_key_config.version IS '版本号';
 
 --
 -- Name: COLUMN duolabao_direct_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -2952,7 +2952,7 @@ CREATE TABLE public.dy_channel_app_capability (
 -- Name: TABLE dy_channel_app_capability; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.dy_channel_app_capability IS '通道商户抖音应用能力绑定（同能力可按档位双绑 platform+merchant）';
+COMMENT ON TABLE public.dy_channel_app_capability IS '通道商户抖音应用能力绑定';
 
 --
 -- Name: COLUMN dy_channel_app_capability.id; Type: COMMENT; Schema: public; Owner: -
@@ -3018,13 +3018,13 @@ COMMENT ON COLUMN public.dy_channel_app_capability.capability IS '支付能力�
 -- Name: COLUMN dy_channel_app_capability.app_scope; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.dy_channel_app_capability.app_scope IS '应用档位：platform/merchant';
+COMMENT ON COLUMN public.dy_channel_app_capability.app_scope IS '应用档位';
 
 --
 -- Name: COLUMN dy_channel_app_capability.dy_app_ref_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.dy_channel_app_capability.dy_app_ref_id IS '抖音应用主数据主键（由 app_scope 决定指向平台或商户表）';
+COMMENT ON COLUMN public.dy_channel_app_capability.dy_app_ref_id IS '抖音应用主数据主键';
 
 --
 -- Name: dy_mch_app; Type: TABLE; Schema: public; Owner: -
@@ -3049,7 +3049,7 @@ CREATE TABLE public.dy_mch_app (
 -- Name: TABLE dy_mch_app; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.dy_mch_app IS '商户抖音应用（商户域开放平台身份，跨通道可引用）';
+COMMENT ON TABLE public.dy_mch_app IS '商户抖音应用';
 
 --
 -- Name: COLUMN dy_mch_app.id; Type: COMMENT; Schema: public; Owner: -
@@ -3109,7 +3109,7 @@ COMMENT ON COLUMN public.dy_mch_app.app_name IS '应用名称';
 -- Name: COLUMN dy_mch_app.app_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.dy_mch_app.app_type IS '应用类型：mini_program/mobile_app/web_app';
+COMMENT ON COLUMN public.dy_mch_app.app_type IS '应用类型';
 
 --
 -- Name: COLUMN dy_mch_app.douyin_app_id; Type: COMMENT; Schema: public; Owner: -
@@ -3121,7 +3121,7 @@ COMMENT ON COLUMN public.dy_mch_app.douyin_app_id IS '抖音应用AppId';
 -- Name: COLUMN dy_mch_app.app_secret; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.dy_mch_app.app_secret IS '应用密钥(加密存储)';
+COMMENT ON COLUMN public.dy_mch_app.app_secret IS '应用密钥';
 
 --
 -- Name: dy_platform_app; Type: TABLE; Schema: public; Owner: -
@@ -3145,7 +3145,7 @@ CREATE TABLE public.dy_platform_app (
 -- Name: TABLE dy_platform_app; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.dy_platform_app IS '平台抖音应用（开放平台身份，跨通道可引用）';
+COMMENT ON TABLE public.dy_platform_app IS '平台抖音应用';
 
 --
 -- Name: COLUMN dy_platform_app.id; Type: COMMENT; Schema: public; Owner: -
@@ -3199,7 +3199,7 @@ COMMENT ON COLUMN public.dy_platform_app.app_name IS '应用名称';
 -- Name: COLUMN dy_platform_app.app_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.dy_platform_app.app_type IS '应用类型：mini_program/mobile_app/web_app';
+COMMENT ON COLUMN public.dy_platform_app.app_type IS '应用类型';
 
 --
 -- Name: COLUMN dy_platform_app.douyin_app_id; Type: COMMENT; Schema: public; Owner: -
@@ -3211,7 +3211,7 @@ COMMENT ON COLUMN public.dy_platform_app.douyin_app_id IS '抖音应用AppId';
 -- Name: COLUMN dy_platform_app.app_secret; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.dy_platform_app.app_secret IS '应用密钥(加密存储)';
+COMMENT ON COLUMN public.dy_platform_app.app_secret IS '应用密钥';
 
 --
 -- Name: dy_platform_app_capability; Type: TABLE; Schema: public; Owner: -
@@ -3234,7 +3234,7 @@ CREATE TABLE public.dy_platform_app_capability (
 -- Name: TABLE dy_platform_app_capability; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.dy_platform_app_capability IS '平台抖音应用默认能力绑定（全局一能力一应用）';
+COMMENT ON TABLE public.dy_platform_app_capability IS '平台抖音应用默认能力绑定';
 
 --
 -- Name: COLUMN dy_platform_app_capability.id; Type: COMMENT; Schema: public; Owner: -
@@ -3320,7 +3320,7 @@ CREATE TABLE public.easy_pay_key_config (
 -- Name: TABLE easy_pay_key_config; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.easy_pay_key_config IS '易支付通道密钥配置(通道商户维度)';
+COMMENT ON TABLE public.easy_pay_key_config IS '易支付通道密钥配置';
 
 --
 -- Name: COLUMN easy_pay_key_config.id; Type: COMMENT; Schema: public; Owner: -
@@ -3338,31 +3338,31 @@ COMMENT ON COLUMN public.easy_pay_key_config.mch_no IS '商户号';
 -- Name: COLUMN easy_pay_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.easy_pay_key_config.channel_mch_no IS '通道商户号(EASY+雪花, 唯一关联, 创建后不可修改)';
+COMMENT ON COLUMN public.easy_pay_key_config.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN easy_pay_key_config.server_url; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.easy_pay_key_config.server_url IS '易支付平台网关地址(如 https://pay.xxx.com)';
+COMMENT ON COLUMN public.easy_pay_key_config.server_url IS '易支付平台网关地址';
 
 --
 -- Name: COLUMN easy_pay_key_config.partner_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.easy_pay_key_config.partner_id IS '易支付商户ID(pid, 上游平台分配)';
+COMMENT ON COLUMN public.easy_pay_key_config.partner_id IS '易支付商户ID';
 
 --
 -- Name: COLUMN easy_pay_key_config.merchant_private_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.easy_pay_key_config.merchant_private_key IS '商户RSA私钥(PKCS8, SHA256withRSA 签名, 加密存储)';
+COMMENT ON COLUMN public.easy_pay_key_config.merchant_private_key IS '商户RSA私钥';
 
 --
 -- Name: COLUMN easy_pay_key_config.platform_public_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.easy_pay_key_config.platform_public_key IS '易支付平台验签公钥(加密存储)';
+COMMENT ON COLUMN public.easy_pay_key_config.platform_public_key IS '易支付平台验签公钥';
 
 --
 -- Name: COLUMN easy_pay_key_config.creator; Type: COMMENT; Schema: public; Owner: -
@@ -3444,43 +3444,43 @@ COMMENT ON COLUMN public.epaylinks_direct_key_config.mch_no IS '商户号';
 -- Name: COLUMN epaylinks_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.epaylinks_direct_key_config.channel_mch_no IS '通道商户号(EPAYLINKS+雪花, 创建时录入不可修改)';
+COMMENT ON COLUMN public.epaylinks_direct_key_config.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN epaylinks_direct_key_config.customer_code; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.epaylinks_direct_key_config.customer_code IS '易票联商户编号(customerCode, 创建时录入不可修改)';
+COMMENT ON COLUMN public.epaylinks_direct_key_config.customer_code IS '易票联商户编号';
 
 --
 -- Name: COLUMN epaylinks_direct_key_config.channel_mcht_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.epaylinks_direct_key_config.channel_mcht_no IS '上游商户号(可空, 设置后下单上送 channelMchtNo 指定受理商户)';
+COMMENT ON COLUMN public.epaylinks_direct_key_config.channel_mcht_no IS '上游商户号';
 
 --
 -- Name: COLUMN epaylinks_direct_key_config.sign_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.epaylinks_direct_key_config.sign_no IS '证书序列号(sign_no, 与商户私钥证书配套, 请求头 x-efps-sign-no, 加密存储)';
+COMMENT ON COLUMN public.epaylinks_direct_key_config.sign_no IS '证书序列号';
 
 --
 -- Name: COLUMN epaylinks_direct_key_config.merchant_private_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.epaylinks_direct_key_config.merchant_private_key IS '商户私钥(PEM/Base64, 兼容 PKCS1/PKCS8, 请求签名用, 加密存储)';
+COMMENT ON COLUMN public.epaylinks_direct_key_config.merchant_private_key IS '商户私钥';
 
 --
 -- Name: COLUMN epaylinks_direct_key_config.platform_cert; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.epaylinks_direct_key_config.platform_cert IS '易票联平台公钥证书(efps.cer, PEM/Base64, 回调验签用, 加密存储)';
+COMMENT ON COLUMN public.epaylinks_direct_key_config.platform_cert IS '易票联平台公钥证书';
 
 --
 -- Name: COLUMN epaylinks_direct_key_config.sandbox; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.epaylinks_direct_key_config.sandbox IS '是否沙箱环境(易票联无独立沙箱网关, 生产/沙箱密钥双环境并存)';
+COMMENT ON COLUMN public.epaylinks_direct_key_config.sandbox IS '是否沙箱环境';
 
 --
 -- Name: COLUMN epaylinks_direct_key_config.creator; Type: COMMENT; Schema: public; Owner: -
@@ -3510,7 +3510,7 @@ COMMENT ON COLUMN public.epaylinks_direct_key_config.last_modified_time IS '最�
 -- Name: COLUMN epaylinks_direct_key_config.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.epaylinks_direct_key_config.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.epaylinks_direct_key_config.version IS '版本号';
 
 --
 -- Name: COLUMN epaylinks_direct_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -3543,7 +3543,7 @@ CREATE TABLE public.fubei_direct_key_config (
 -- Name: TABLE fubei_direct_key_config; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.fubei_direct_key_config IS '付呗直连密钥配置(通道商户维度)';
+COMMENT ON TABLE public.fubei_direct_key_config IS '付呗直连密钥配置';
 
 --
 -- Name: COLUMN fubei_direct_key_config.id; Type: COMMENT; Schema: public; Owner: -
@@ -3561,37 +3561,37 @@ COMMENT ON COLUMN public.fubei_direct_key_config.mch_no IS '商户号';
 -- Name: COLUMN fubei_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.fubei_direct_key_config.channel_mch_no IS '通道商户号(FUBEI+雪花, 创建时录入不可修改)';
+COMMENT ON COLUMN public.fubei_direct_key_config.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN fubei_direct_key_config.app_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.fubei_direct_key_config.app_id IS '付呗开放平台应用ID(app_id, 创建时录入不可修改)';
+COMMENT ON COLUMN public.fubei_direct_key_config.app_id IS '付呗开放平台应用ID';
 
 --
 -- Name: COLUMN fubei_direct_key_config.merchant_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.fubei_direct_key_config.merchant_id IS '付呗商户ID(merchant_id, 服务商形态时必传, 可空)';
+COMMENT ON COLUMN public.fubei_direct_key_config.merchant_id IS '付呗商户ID';
 
 --
 -- Name: COLUMN fubei_direct_key_config.store_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.fubei_direct_key_config.store_id IS '付呗门店ID(store_id, 交易必传)';
+COMMENT ON COLUMN public.fubei_direct_key_config.store_id IS '付呗门店ID';
 
 --
 -- Name: COLUMN fubei_direct_key_config.app_secret; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.fubei_direct_key_config.app_secret IS '接口密钥(app_secret, MD5 签名与回调验签共用, 加密存储)';
+COMMENT ON COLUMN public.fubei_direct_key_config.app_secret IS '接口密钥';
 
 --
 -- Name: COLUMN fubei_direct_key_config.sandbox; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.fubei_direct_key_config.sandbox IS '是否沙箱环境(付呗无独立沙箱网关, 预留双环境密钥并存)';
+COMMENT ON COLUMN public.fubei_direct_key_config.sandbox IS '是否沙箱环境';
 
 --
 -- Name: COLUMN fubei_direct_key_config.creator; Type: COMMENT; Schema: public; Owner: -
@@ -3621,7 +3621,7 @@ COMMENT ON COLUMN public.fubei_direct_key_config.last_modified_time IS '最后�
 -- Name: COLUMN fubei_direct_key_config.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.fubei_direct_key_config.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.fubei_direct_key_config.version IS '版本号';
 
 --
 -- Name: COLUMN fubei_direct_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -3672,13 +3672,13 @@ COMMENT ON COLUMN public.fuyou_direct_key_config.mch_no IS '商户号';
 -- Name: COLUMN fuyou_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.fuyou_direct_key_config.channel_mch_no IS '通道商户号(FUYOU+雪花)';
+COMMENT ON COLUMN public.fuyou_direct_key_config.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN fuyou_direct_key_config.product; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.fuyou_direct_key_config.product IS '所属支付产品(对应 ProductEnum.code)';
+COMMENT ON COLUMN public.fuyou_direct_key_config.product IS '所属支付产品';
 
 --
 -- Name: COLUMN fuyou_direct_key_config.sandbox; Type: COMMENT; Schema: public; Owner: -
@@ -3690,19 +3690,19 @@ COMMENT ON COLUMN public.fuyou_direct_key_config.sandbox IS '是否沙箱环境�
 -- Name: COLUMN fuyou_direct_key_config.mchnt_cd; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.fuyou_direct_key_config.mchnt_cd IS '富友商户号(mchnt_cd)';
+COMMENT ON COLUMN public.fuyou_direct_key_config.mchnt_cd IS '富友商户号';
 
 --
 -- Name: COLUMN fuyou_direct_key_config.mchnt_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.fuyou_direct_key_config.mchnt_key IS '商户密钥(mchnt_key, MD5 签名用, 加密存储)';
+COMMENT ON COLUMN public.fuyou_direct_key_config.mchnt_key IS '商户密钥';
 
 --
 -- Name: COLUMN fuyou_direct_key_config.term_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.fuyou_direct_key_config.term_no IS '终端号(term_id)';
+COMMENT ON COLUMN public.fuyou_direct_key_config.term_no IS '终端号';
 
 --
 -- Name: COLUMN fuyou_direct_key_config.creator; Type: COMMENT; Schema: public; Owner: -
@@ -3732,7 +3732,7 @@ COMMENT ON COLUMN public.fuyou_direct_key_config.last_modified_time IS '最后�
 -- Name: COLUMN fuyou_direct_key_config.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.fuyou_direct_key_config.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.fuyou_direct_key_config.version IS '版本号';
 
 --
 -- Name: COLUMN fuyou_direct_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -3782,13 +3782,13 @@ COMMENT ON COLUMN public.fuyou_isv_channel_merchant.mch_no IS '商户号';
 -- Name: COLUMN fuyou_isv_channel_merchant.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.fuyou_isv_channel_merchant.channel_mch_no IS '通道商户号(FUYOU+雪花)';
+COMMENT ON COLUMN public.fuyou_isv_channel_merchant.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN fuyou_isv_channel_merchant.product; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.fuyou_isv_channel_merchant.product IS '所属支付产品(对应 ProductEnum.code)';
+COMMENT ON COLUMN public.fuyou_isv_channel_merchant.product IS '所属支付产品';
 
 --
 -- Name: COLUMN fuyou_isv_channel_merchant.sandbox; Type: COMMENT; Schema: public; Owner: -
@@ -3800,13 +3800,13 @@ COMMENT ON COLUMN public.fuyou_isv_channel_merchant.sandbox IS '是否沙箱环�
 -- Name: COLUMN fuyou_isv_channel_merchant.fuyou_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.fuyou_isv_channel_merchant.fuyou_mch_no IS '富友商户号(mchnt_cd)';
+COMMENT ON COLUMN public.fuyou_isv_channel_merchant.fuyou_mch_no IS '富友商户号';
 
 --
 -- Name: COLUMN fuyou_isv_channel_merchant.term_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.fuyou_isv_channel_merchant.term_no IS '终端号(term_id)';
+COMMENT ON COLUMN public.fuyou_isv_channel_merchant.term_no IS '终端号';
 
 --
 -- Name: COLUMN fuyou_isv_channel_merchant.creator; Type: COMMENT; Schema: public; Owner: -
@@ -3836,7 +3836,7 @@ COMMENT ON COLUMN public.fuyou_isv_channel_merchant.last_modified_time IS '最�
 -- Name: COLUMN fuyou_isv_channel_merchant.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.fuyou_isv_channel_merchant.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.fuyou_isv_channel_merchant.version IS '版本号';
 
 --
 -- Name: COLUMN fuyou_isv_channel_merchant.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -3880,31 +3880,31 @@ COMMENT ON COLUMN public.fuyou_isv_key_config.id IS '主键';
 -- Name: COLUMN fuyou_isv_key_config.product; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.fuyou_isv_key_config.product IS '产品编码(对应 ProductEnum.code, 如 fuyou_pay)';
+COMMENT ON COLUMN public.fuyou_isv_key_config.product IS '产品编码';
 
 --
 -- Name: COLUMN fuyou_isv_key_config.fy_app_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.fuyou_isv_key_config.fy_app_id IS '富友应用编号(机构号 ins_cd)';
+COMMENT ON COLUMN public.fuyou_isv_key_config.fy_app_id IS '富友应用编号';
 
 --
 -- Name: COLUMN fuyou_isv_key_config.order_prefix; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.fuyou_isv_key_config.order_prefix IS '富友订单前缀(关联订单号前缀, 富友回调凭 mchnt_order_no 反查平台订单)';
+COMMENT ON COLUMN public.fuyou_isv_key_config.order_prefix IS '富友订单号前缀';
 
 --
 -- Name: COLUMN fuyou_isv_key_config.private_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.fuyou_isv_key_config.private_key IS '商户RSA私钥(PKCS8 Base64, MD5withRSA 签名, 加密存储)';
+COMMENT ON COLUMN public.fuyou_isv_key_config.private_key IS '商户RSA私钥';
 
 --
 -- Name: COLUMN fuyou_isv_key_config.public_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.fuyou_isv_key_config.public_key IS '富友RSA公钥(X509 Base64, 响应/回调验签, 加密存储)';
+COMMENT ON COLUMN public.fuyou_isv_key_config.public_key IS '富友RSA公钥';
 
 --
 -- Name: COLUMN fuyou_isv_key_config.sandbox; Type: COMMENT; Schema: public; Owner: -
@@ -3940,7 +3940,7 @@ COMMENT ON COLUMN public.fuyou_isv_key_config.last_modified_time IS '最后修�
 -- Name: COLUMN fuyou_isv_key_config.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.fuyou_isv_key_config.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.fuyou_isv_key_config.version IS '版本号';
 
 --
 -- Name: COLUMN fuyou_isv_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -3973,7 +3973,7 @@ CREATE TABLE public.fuyou_rsa_key_config (
 -- Name: TABLE fuyou_rsa_key_config; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.fuyou_rsa_key_config IS '富友RSA密钥对配置(互联网直连/H5聚合收银台共用)';
+COMMENT ON TABLE public.fuyou_rsa_key_config IS '富友RSA密钥对配置';
 
 --
 -- Name: COLUMN fuyou_rsa_key_config.id; Type: COMMENT; Schema: public; Owner: -
@@ -3991,13 +3991,13 @@ COMMENT ON COLUMN public.fuyou_rsa_key_config.mch_no IS '商户号';
 -- Name: COLUMN fuyou_rsa_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.fuyou_rsa_key_config.channel_mch_no IS '通道商户号(FUYOU+雪花)';
+COMMENT ON COLUMN public.fuyou_rsa_key_config.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN fuyou_rsa_key_config.product; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.fuyou_rsa_key_config.product IS '所属支付产品(fuyou_internet/fuyou_h5, 对应 ProductEnum.code)';
+COMMENT ON COLUMN public.fuyou_rsa_key_config.product IS '所属支付产品';
 
 --
 -- Name: COLUMN fuyou_rsa_key_config.sandbox; Type: COMMENT; Schema: public; Owner: -
@@ -4009,19 +4009,19 @@ COMMENT ON COLUMN public.fuyou_rsa_key_config.sandbox IS '是否沙箱环境商�
 -- Name: COLUMN fuyou_rsa_key_config.mchnt_cd; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.fuyou_rsa_key_config.mchnt_cd IS '富友商户号(mchnt_cd)';
+COMMENT ON COLUMN public.fuyou_rsa_key_config.mchnt_cd IS '富友商户号';
 
 --
 -- Name: COLUMN fuyou_rsa_key_config.private_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.fuyou_rsa_key_config.private_key IS '商户RSA私钥(PKCS1/PKCS8, 响应/回调解密用, 加密存储)';
+COMMENT ON COLUMN public.fuyou_rsa_key_config.private_key IS '商户RSA私钥';
 
 --
 -- Name: COLUMN fuyou_rsa_key_config.public_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.fuyou_rsa_key_config.public_key IS '富友平台RSA公钥(X509, 请求加密用, 加密存储)';
+COMMENT ON COLUMN public.fuyou_rsa_key_config.public_key IS '富友平台RSA公钥';
 
 --
 -- Name: COLUMN fuyou_rsa_key_config.creator; Type: COMMENT; Schema: public; Owner: -
@@ -4051,7 +4051,7 @@ COMMENT ON COLUMN public.fuyou_rsa_key_config.last_modified_time IS '最后修�
 -- Name: COLUMN fuyou_rsa_key_config.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.fuyou_rsa_key_config.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.fuyou_rsa_key_config.version IS '版本号';
 
 --
 -- Name: COLUMN fuyou_rsa_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -4085,7 +4085,7 @@ CREATE TABLE public.helipay_key_config (
 -- Name: TABLE helipay_key_config; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.helipay_key_config IS '合利宝通道密钥配置(扫码产品线直连商户模式)';
+COMMENT ON TABLE public.helipay_key_config IS '合利宝通道密钥配置';
 
 --
 -- Name: COLUMN helipay_key_config.id; Type: COMMENT; Schema: public; Owner: -
@@ -4103,43 +4103,43 @@ COMMENT ON COLUMN public.helipay_key_config.mch_no IS '商户号';
 -- Name: COLUMN helipay_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.helipay_key_config.channel_mch_no IS '通道商户号(HELIPAY+雪花, 唯一关联, 创建后不可修改)';
+COMMENT ON COLUMN public.helipay_key_config.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN helipay_key_config.customer_number; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.helipay_key_config.customer_number IS '合利宝商户编号(customerNumber, 上送 P3_customerNumber)';
+COMMENT ON COLUMN public.helipay_key_config.customer_number IS '合利宝商户编号';
 
 --
 -- Name: COLUMN helipay_key_config.sub_customer_number; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.helipay_key_config.sub_customer_number IS '子商户号(可空, 设置后覆盖 P3_customerNumber 发起交易)';
+COMMENT ON COLUMN public.helipay_key_config.sub_customer_number IS '子商户号';
 
 --
 -- Name: COLUMN helipay_key_config.sign_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.helipay_key_config.sign_key IS '扫码产品签名密钥(MD5 签名与回调验签共用, 加密存储)';
+COMMENT ON COLUMN public.helipay_key_config.sign_key IS '扫码产品签名密钥';
 
 --
 -- Name: COLUMN helipay_key_config.public_app_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.helipay_key_config.public_app_id IS '公众号/生活号支付 AppId(微信 JS 支付必填, 支付宝生活号固定传 1 由子应用处理)';
+COMMENT ON COLUMN public.helipay_key_config.public_app_id IS '公众号/生活号AppId';
 
 --
 -- Name: COLUMN helipay_key_config.h5_app_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.helipay_key_config.h5_app_id IS 'H5 支付 AppId(可空, 微信 H5 场景使用)';
+COMMENT ON COLUMN public.helipay_key_config.h5_app_id IS 'H5支付AppId';
 
 --
 -- Name: COLUMN helipay_key_config.report_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.helipay_key_config.report_id IS '扫码支付报备ID(可空, 上送 P15_subMerchantId, 多个逗号分隔)';
+COMMENT ON COLUMN public.helipay_key_config.report_id IS '扫码支付报备ID';
 
 --
 -- Name: COLUMN helipay_key_config.creator; Type: COMMENT; Schema: public; Owner: -
@@ -4169,7 +4169,7 @@ COMMENT ON COLUMN public.helipay_key_config.last_modified_time IS '最后修改�
 -- Name: COLUMN helipay_key_config.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.helipay_key_config.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.helipay_key_config.version IS '版本号';
 
 --
 -- Name: COLUMN helipay_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -4219,25 +4219,25 @@ COMMENT ON COLUMN public.hkrt_isv_channel_merchant.mch_no IS '平台商户号';
 -- Name: COLUMN hkrt_isv_channel_merchant.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.hkrt_isv_channel_merchant.channel_mch_no IS '通道商户号(平台生成的唯一标识, HKRT+雪花)';
+COMMENT ON COLUMN public.hkrt_isv_channel_merchant.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN hkrt_isv_channel_merchant.product; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.hkrt_isv_channel_merchant.product IS '所属支付产品(对应 ProductEnum.code, 如 hkrt_pay)';
+COMMENT ON COLUMN public.hkrt_isv_channel_merchant.product IS '所属支付产品';
 
 --
 -- Name: COLUMN hkrt_isv_channel_merchant.merch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.hkrt_isv_channel_merchant.merch_no IS '海科商户号(merch_no)';
+COMMENT ON COLUMN public.hkrt_isv_channel_merchant.merch_no IS '海科商户号';
 
 --
 -- Name: COLUMN hkrt_isv_channel_merchant.pn; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.hkrt_isv_channel_merchant.pn IS 'SAAS 终端号(pn)';
+COMMENT ON COLUMN public.hkrt_isv_channel_merchant.pn IS 'SAAS 终端号';
 
 --
 -- Name: COLUMN hkrt_isv_channel_merchant.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -4316,25 +4316,25 @@ COMMENT ON COLUMN public.hkrt_isv_key_config.id IS '主键';
 -- Name: COLUMN hkrt_isv_key_config.product; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.hkrt_isv_key_config.product IS '产品编码(对应 ProductEnum.code, 如 hkrt_pay)';
+COMMENT ON COLUMN public.hkrt_isv_key_config.product IS '产品编码';
 
 --
 -- Name: COLUMN hkrt_isv_key_config.agent_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.hkrt_isv_key_config.agent_no IS '服务商编号(agent_no)';
+COMMENT ON COLUMN public.hkrt_isv_key_config.agent_no IS '服务商编号';
 
 --
 -- Name: COLUMN hkrt_isv_key_config.access_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.hkrt_isv_key_config.access_id IS '接入机构标识(access_id)';
+COMMENT ON COLUMN public.hkrt_isv_key_config.access_id IS '接入机构标识';
 
 --
 -- Name: COLUMN hkrt_isv_key_config.access_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.hkrt_isv_key_config.access_key IS '签名密钥(access_key, MD5 大写签名, 加密存储)';
+COMMENT ON COLUMN public.hkrt_isv_key_config.access_key IS '签名密钥';
 
 --
 -- Name: COLUMN hkrt_isv_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -4420,25 +4420,25 @@ COMMENT ON COLUMN public.hmpay_isv_channel_merchant.mch_no IS '商户号';
 -- Name: COLUMN hmpay_isv_channel_merchant.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.hmpay_isv_channel_merchant.channel_mch_no IS '通道商户号(HMPAY+雪花)';
+COMMENT ON COLUMN public.hmpay_isv_channel_merchant.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN hmpay_isv_channel_merchant.product; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.hmpay_isv_channel_merchant.product IS '所属支付产品(对应 ProductEnum.code, 如 hm_pay)';
+COMMENT ON COLUMN public.hmpay_isv_channel_merchant.product IS '所属支付产品';
 
 --
 -- Name: COLUMN hmpay_isv_channel_merchant.merchant_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.hmpay_isv_channel_merchant.merchant_no IS '杉德商户编号(merchantNo / sub_app_id)';
+COMMENT ON COLUMN public.hmpay_isv_channel_merchant.merchant_no IS '杉德商户编号';
 
 --
 -- Name: COLUMN hmpay_isv_channel_merchant.store_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.hmpay_isv_channel_merchant.store_id IS '门店号(storeId)';
+COMMENT ON COLUMN public.hmpay_isv_channel_merchant.store_id IS '门店号';
 
 --
 -- Name: COLUMN hmpay_isv_channel_merchant.creator; Type: COMMENT; Schema: public; Owner: -
@@ -4468,7 +4468,7 @@ COMMENT ON COLUMN public.hmpay_isv_channel_merchant.last_modified_time IS '最�
 -- Name: COLUMN hmpay_isv_channel_merchant.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.hmpay_isv_channel_merchant.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.hmpay_isv_channel_merchant.version IS '版本号';
 
 --
 -- Name: COLUMN hmpay_isv_channel_merchant.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -4517,25 +4517,25 @@ COMMENT ON COLUMN public.hmpay_isv_key_config.id IS '主键';
 -- Name: COLUMN hmpay_isv_key_config.product; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.hmpay_isv_key_config.product IS '产品编码(对应 ProductEnum.code, 如 hm_pay)';
+COMMENT ON COLUMN public.hmpay_isv_key_config.product IS '产品编码';
 
 --
 -- Name: COLUMN hmpay_isv_key_config.sand_app_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.hmpay_isv_key_config.sand_app_id IS '杉德代理号(sandAppId / app_id)';
+COMMENT ON COLUMN public.hmpay_isv_key_config.sand_app_id IS '杉德代理号';
 
 --
 -- Name: COLUMN hmpay_isv_key_config.private_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.hmpay_isv_key_config.private_key IS '商户RSA私钥(PKCS#8 Base64, 加密存储, 签名用)';
+COMMENT ON COLUMN public.hmpay_isv_key_config.private_key IS '商户RSA私钥';
 
 --
 -- Name: COLUMN hmpay_isv_key_config.public_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.hmpay_isv_key_config.public_key IS '杉德RSA公钥(X509 Base64, 加密存储, 回调/响应验签用)';
+COMMENT ON COLUMN public.hmpay_isv_key_config.public_key IS '杉德RSA公钥';
 
 --
 -- Name: COLUMN hmpay_isv_key_config.creator; Type: COMMENT; Schema: public; Owner: -
@@ -4565,7 +4565,7 @@ COMMENT ON COLUMN public.hmpay_isv_key_config.last_modified_time IS '最后修�
 -- Name: COLUMN hmpay_isv_key_config.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.hmpay_isv_key_config.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.hmpay_isv_key_config.version IS '版本号';
 
 --
 -- Name: COLUMN hmpay_isv_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -4604,7 +4604,7 @@ CREATE TABLE public.iam_mail_template (
 -- Name: TABLE iam_mail_template; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.iam_mail_template IS '邮件模板自定义(运营端按场景按语言覆盖出厂默认槽位, 场景清单在 EmailTemplateEnum)';
+COMMENT ON TABLE public.iam_mail_template IS '邮件模板自定义';
 
 --
 -- Name: COLUMN iam_mail_template.id; Type: COMMENT; Schema: public; Owner: -
@@ -4616,13 +4616,13 @@ COMMENT ON COLUMN public.iam_mail_template.id IS '主键';
 -- Name: COLUMN iam_mail_template.template_code; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.iam_mail_template.template_code IS '模板编码(关联 EmailTemplateEnum.templateName)';
+COMMENT ON COLUMN public.iam_mail_template.template_code IS '模板编码';
 
 --
 -- Name: COLUMN iam_mail_template.language; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.iam_mail_template.language IS '语言(zh/en, 关联 MailLanguageEnum.code)';
+COMMENT ON COLUMN public.iam_mail_template.language IS '语言';
 
 --
 -- Name: COLUMN iam_mail_template.subject; Type: COMMENT; Schema: public; Owner: -
@@ -4640,19 +4640,19 @@ COMMENT ON COLUMN public.iam_mail_template.title IS '邮件标题';
 -- Name: COLUMN iam_mail_template.content; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.iam_mail_template.content IS '正文文案(纯文本, 支持 {变量} 占位符)';
+COMMENT ON COLUMN public.iam_mail_template.content IS '正文文案';
 
 --
 -- Name: COLUMN iam_mail_template.tip; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.iam_mail_template.tip IS '提示行文案(空则不输出该行)';
+COMMENT ON COLUMN public.iam_mail_template.tip IS '提示行文案';
 
 --
 -- Name: COLUMN iam_mail_template.footer; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.iam_mail_template.footer IS '页脚文案(空则不输出该行)';
+COMMENT ON COLUMN public.iam_mail_template.footer IS '页脚文案';
 
 --
 -- Name: COLUMN iam_mail_template.creator; Type: COMMENT; Schema: public; Owner: -
@@ -4785,7 +4785,7 @@ COMMENT ON COLUMN public.iam_perm_code.last_modified_time IS '最后修改时间
 -- Name: COLUMN iam_perm_code.i18n_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.iam_perm_code.i18n_key IS '国际化key（由 code 推导: perm.{code}）';
+COMMENT ON COLUMN public.iam_perm_code.i18n_key IS '国际化key';
 
 --
 -- Name: iam_perm_menu; Type: TABLE; Schema: public; Owner: -
@@ -4891,7 +4891,7 @@ COMMENT ON COLUMN public.iam_perm_menu.path IS '访问路径';
 -- Name: COLUMN iam_perm_menu.redirect; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.iam_perm_menu.redirect IS '菜单跳转地址(重定向)';
+COMMENT ON COLUMN public.iam_perm_menu.redirect IS '菜单跳转地址';
 
 --
 -- Name: COLUMN iam_perm_menu.sort_no; Type: COMMENT; Schema: public; Owner: -
@@ -4987,7 +4987,7 @@ COMMENT ON COLUMN public.iam_perm_menu.last_modified_time IS '最后修改时间
 -- Name: COLUMN iam_perm_menu.query_sync; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.iam_perm_menu.query_sync IS 'query参数同步页(单页签模式): 开启后该路径所有query参数组合共用一个页签(页签key忽略query)。仅适用于页面内部自行响应query变化的参数定位页(如?tab=分组页/useQueryTab配套), 普通实体定位工作台(仅setup读一次query)开启会导致同页签切参数不刷新数据';
+COMMENT ON COLUMN public.iam_perm_menu.query_sync IS 'query参数同步页签';
 
 --
 -- Name: iam_role; Type: TABLE; Schema: public; Owner: -
@@ -5084,7 +5084,7 @@ COMMENT ON COLUMN public.iam_role.last_modified_time IS '最后修改时间';
 -- Name: COLUMN iam_role.i18n_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.iam_role.i18n_key IS '国际化key（有值时走语言包翻译）';
+COMMENT ON COLUMN public.iam_role.i18n_key IS '国际化key';
 
 --
 -- Name: iam_role_code; Type: TABLE; Schema: public; Owner: -
@@ -5298,13 +5298,13 @@ COMMENT ON COLUMN public.iam_user_dashboard_preference.user_id IS '用户ID';
 -- Name: COLUMN iam_user_dashboard_preference.client_code; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.iam_user_dashboard_preference.client_code IS '终端编码(WEB/MOBILE), PC与移动分开管理';
+COMMENT ON COLUMN public.iam_user_dashboard_preference.client_code IS '终端编码';
 
 --
 -- Name: COLUMN iam_user_dashboard_preference.entries; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.iam_user_dashboard_preference.entries IS '已选快捷入口有序序列(纯key数组), 如 ["merchant","notify"]';
+COMMENT ON COLUMN public.iam_user_dashboard_preference.entries IS '已选快捷入口有序序列';
 
 --
 -- Name: COLUMN iam_user_dashboard_preference.creator; Type: COMMENT; Schema: public; Owner: -
@@ -5346,7 +5346,7 @@ COMMENT ON COLUMN public.iam_user_dashboard_preference.deleted IS '逻辑删除�
 -- Name: COLUMN iam_user_dashboard_preference.terminal; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.iam_user_dashboard_preference.terminal IS '请求终端(壳维度): web=PC Web端 / app=移动管理端, 与client_code正交, 同身份域下PC与App各存一份';
+COMMENT ON COLUMN public.iam_user_dashboard_preference.terminal IS '请求终端';
 
 --
 -- Name: iam_user_expand_info; Type: TABLE; Schema: public; Owner: -
@@ -5626,7 +5626,7 @@ CREATE TABLE public.iam_user_passkey (
 -- Name: TABLE iam_user_passkey; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.iam_user_passkey IS '用户通行密钥(WebAuthn 凭据)绑定记录';
+COMMENT ON TABLE public.iam_user_passkey IS '用户通行密钥';
 
 --
 -- Name: COLUMN iam_user_passkey.id; Type: COMMENT; Schema: public; Owner: -
@@ -5638,49 +5638,49 @@ COMMENT ON COLUMN public.iam_user_passkey.id IS '主键';
 -- Name: COLUMN iam_user_passkey.user_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.iam_user_passkey.user_id IS '用户ID(关联 iam_user_info.id)';
+COMMENT ON COLUMN public.iam_user_passkey.user_id IS '用户ID';
 
 --
 -- Name: COLUMN iam_user_passkey.client_code; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.iam_user_passkey.client_code IS '终端编码(admin/merchant)';
+COMMENT ON COLUMN public.iam_user_passkey.client_code IS '终端编码';
 
 --
 -- Name: COLUMN iam_user_passkey.credential_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.iam_user_passkey.credential_id IS 'WebAuthn 凭据ID(base64url)';
+COMMENT ON COLUMN public.iam_user_passkey.credential_id IS 'WebAuthn凭据ID';
 
 --
 -- Name: COLUMN iam_user_passkey.public_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.iam_user_passkey.public_key IS 'COSE 公钥(base64url)';
+COMMENT ON COLUMN public.iam_user_passkey.public_key IS 'COSE 公钥';
 
 --
 -- Name: COLUMN iam_user_passkey.sign_count; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.iam_user_passkey.sign_count IS '签名计数(防认证器克隆)';
+COMMENT ON COLUMN public.iam_user_passkey.sign_count IS '签名计数';
 
 --
 -- Name: COLUMN iam_user_passkey.device_name; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.iam_user_passkey.device_name IS '设备可辨识名(用户自定义)';
+COMMENT ON COLUMN public.iam_user_passkey.device_name IS '设备可辨识名';
 
 --
 -- Name: COLUMN iam_user_passkey.transports; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.iam_user_passkey.transports IS '凭据传输方式(internal/hybrid/usb/nfc/ble, 逗号分隔)';
+COMMENT ON COLUMN public.iam_user_passkey.transports IS '凭据传输方式';
 
 --
 -- Name: COLUMN iam_user_passkey.backup_eligible; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.iam_user_passkey.backup_eligible IS '凭据是否可多设备同步(passkey)';
+COMMENT ON COLUMN public.iam_user_passkey.backup_eligible IS '凭据是否可多设备同步';
 
 --
 -- Name: COLUMN iam_user_passkey.backup_state; Type: COMMENT; Schema: public; Owner: -
@@ -5722,7 +5722,7 @@ COMMENT ON COLUMN public.iam_user_passkey.last_modified_time IS '最后修改时
 -- Name: COLUMN iam_user_passkey.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.iam_user_passkey.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.iam_user_passkey.version IS '版本号';
 
 --
 -- Name: COLUMN iam_user_passkey.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -5952,25 +5952,25 @@ COMMENT ON COLUMN public.iam_user_social.id IS '主键';
 -- Name: COLUMN iam_user_social.user_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.iam_user_social.user_id IS '本地用户ID(关联 iam_user_info.id)';
+COMMENT ON COLUMN public.iam_user_social.user_id IS '本地用户ID';
 
 --
 -- Name: COLUMN iam_user_social.client_code; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.iam_user_social.client_code IS '终端编码(admin/merchant)';
+COMMENT ON COLUMN public.iam_user_social.client_code IS '终端编码';
 
 --
 -- Name: COLUMN iam_user_social.source; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.iam_user_social.source IS '平台编码(weChat/weCom/qq/github/gitee/feishu/dingTalk)';
+COMMENT ON COLUMN public.iam_user_social.source IS '平台编码';
 
 --
 -- Name: COLUMN iam_user_social.open_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.iam_user_social.open_id IS '平台用户唯一标识(openid/uuid)';
+COMMENT ON COLUMN public.iam_user_social.open_id IS '平台用户ID';
 
 --
 -- Name: COLUMN iam_user_social.username; Type: COMMENT; Schema: public; Owner: -
@@ -6012,13 +6012,13 @@ COMMENT ON COLUMN public.iam_user_social.last_modified_time IS '最后修改时�
 -- Name: COLUMN iam_user_social.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.iam_user_social.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.iam_user_social.version IS '版本号';
 
 --
 -- Name: COLUMN iam_user_social.deleted; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.iam_user_social.deleted IS '删除标志(逻辑删除)';
+COMMENT ON COLUMN public.iam_user_social.deleted IS '删除标志';
 
 --
 -- Name: iam_user_two_factor; Type: TABLE; Schema: public; Owner: -
@@ -6102,7 +6102,7 @@ COMMENT ON COLUMN public.iam_user_two_factor.last_modified_time IS '最后修改
 -- Name: COLUMN iam_user_two_factor.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.iam_user_two_factor.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.iam_user_two_factor.version IS '版本号';
 
 --
 -- Name: COLUMN iam_user_two_factor.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -6134,7 +6134,7 @@ CREATE TABLE public.jee_pay_key_config (
 -- Name: TABLE jee_pay_key_config; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.jee_pay_key_config IS 'Jeepay计全通道密钥配置(通道商户维度)';
+COMMENT ON TABLE public.jee_pay_key_config IS 'Jeepay计全通道密钥配置';
 
 --
 -- Name: COLUMN jee_pay_key_config.id; Type: COMMENT; Schema: public; Owner: -
@@ -6152,31 +6152,31 @@ COMMENT ON COLUMN public.jee_pay_key_config.mch_no IS '商户号';
 -- Name: COLUMN jee_pay_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.jee_pay_key_config.channel_mch_no IS '通道商户号(JEE+雪花, 唯一关联, 创建后不可修改)';
+COMMENT ON COLUMN public.jee_pay_key_config.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN jee_pay_key_config.server_url; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.jee_pay_key_config.server_url IS 'Jeepay平台网关地址(如 https://pay.jeepay.vip)';
+COMMENT ON COLUMN public.jee_pay_key_config.server_url IS 'Jeepay平台网关地址';
 
 --
 -- Name: COLUMN jee_pay_key_config.jeepay_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.jee_pay_key_config.jeepay_mch_no IS 'Jeepay商户号(mchNo, 上游平台分配)';
+COMMENT ON COLUMN public.jee_pay_key_config.jeepay_mch_no IS 'Jeepay商户号';
 
 --
 -- Name: COLUMN jee_pay_key_config.app_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.jee_pay_key_config.app_id IS '应用ID(appId, Jeepay 商户后台的应用标识)';
+COMMENT ON COLUMN public.jee_pay_key_config.app_id IS 'Jeepay应用ID';
 
 --
 -- Name: COLUMN jee_pay_key_config.app_secret; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.jee_pay_key_config.app_secret IS '应用密钥(appSecret, MD5 签名钥, 请求签名与回调验签共用, 加密存储)';
+COMMENT ON COLUMN public.jee_pay_key_config.app_secret IS '应用密钥';
 
 --
 -- Name: COLUMN jee_pay_key_config.creator; Type: COMMENT; Schema: public; Owner: -
@@ -6206,7 +6206,7 @@ COMMENT ON COLUMN public.jee_pay_key_config.last_modified_time IS '最后修改�
 -- Name: COLUMN jee_pay_key_config.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.jee_pay_key_config.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.jee_pay_key_config.version IS '版本号';
 
 --
 -- Name: COLUMN jee_pay_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -6258,43 +6258,43 @@ COMMENT ON COLUMN public.jlpay_direct_key_config.mch_no IS '商户号';
 -- Name: COLUMN jlpay_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.jlpay_direct_key_config.channel_mch_no IS '通道商户号(JLPAY+雪花, 创建时录入不可修改)';
+COMMENT ON COLUMN public.jlpay_direct_key_config.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN jlpay_direct_key_config.app_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.jlpay_direct_key_config.app_id IS '嘉联开放平台应用appid(请求头 x-jlpay-appid, 创建时录入不可修改)';
+COMMENT ON COLUMN public.jlpay_direct_key_config.app_id IS '嘉联开放平台应用appid';
 
 --
 -- Name: COLUMN jlpay_direct_key_config.mch_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.jlpay_direct_key_config.mch_id IS '嘉联商户号(mch_id, 创建时录入不可修改)';
+COMMENT ON COLUMN public.jlpay_direct_key_config.mch_id IS '嘉联商户号';
 
 --
 -- Name: COLUMN jlpay_direct_key_config.term_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.jlpay_direct_key_config.term_no IS '嘉联终端号(term_no)';
+COMMENT ON COLUMN public.jlpay_direct_key_config.term_no IS '嘉联终端号';
 
 --
 -- Name: COLUMN jlpay_direct_key_config.merchant_private_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.jlpay_direct_key_config.merchant_private_key IS '商户SM2私钥(hex或PEM文本, 请求签名用, 加密存储)';
+COMMENT ON COLUMN public.jlpay_direct_key_config.merchant_private_key IS '商户SM2私钥';
 
 --
 -- Name: COLUMN jlpay_direct_key_config.platform_public_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.jlpay_direct_key_config.platform_public_key IS '嘉联平台SM2公钥(hex或PEM文本, 响应/通知验签用, 加密存储)';
+COMMENT ON COLUMN public.jlpay_direct_key_config.platform_public_key IS '嘉联平台SM2公钥';
 
 --
 -- Name: COLUMN jlpay_direct_key_config.sandbox; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.jlpay_direct_key_config.sandbox IS '是否沙箱环境(true走UAT网关 openapi-uat.jlpay.com)';
+COMMENT ON COLUMN public.jlpay_direct_key_config.sandbox IS '是否沙箱环境';
 
 --
 -- Name: COLUMN jlpay_direct_key_config.creator; Type: COMMENT; Schema: public; Owner: -
@@ -6324,7 +6324,7 @@ COMMENT ON COLUMN public.jlpay_direct_key_config.last_modified_time IS '最后�
 -- Name: COLUMN jlpay_direct_key_config.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.jlpay_direct_key_config.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.jlpay_direct_key_config.version IS '版本号';
 
 --
 -- Name: COLUMN jlpay_direct_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -6380,61 +6380,61 @@ COMMENT ON COLUMN public.kuaiqian_direct_key_config.mch_no IS '商户号';
 -- Name: COLUMN kuaiqian_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.kuaiqian_direct_key_config.channel_mch_no IS '通道商户号(KUAIQIAN+雪花, 创建时录入不可修改)';
+COMMENT ON COLUMN public.kuaiqian_direct_key_config.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN kuaiqian_direct_key_config.member_code; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.kuaiqian_direct_key_config.member_code IS '快钱会员号/账户号(memberCode, 人民币网关商户账号 = memberCode + 01, 创建时录入不可修改)';
+COMMENT ON COLUMN public.kuaiqian_direct_key_config.member_code IS '快钱会员号/账户号';
 
 --
 -- Name: COLUMN kuaiqian_direct_key_config.vendor_member_code; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.kuaiqian_direct_key_config.vendor_member_code IS '服务商快钱子账户号(可空; 设置后 head.memberCode=子账户号, vendorMemberCode=会员号)';
+COMMENT ON COLUMN public.kuaiqian_direct_key_config.vendor_member_code IS '服务商快钱子账户号';
 
 --
 -- Name: COLUMN kuaiqian_direct_key_config.merchant_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.kuaiqian_direct_key_config.merchant_id IS '当面付商户号(merchantId)';
+COMMENT ON COLUMN public.kuaiqian_direct_key_config.merchant_id IS '当面付商户号';
 
 --
 -- Name: COLUMN kuaiqian_direct_key_config.terminal_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.kuaiqian_direct_key_config.terminal_id IS '当面付终端号(terminalId)';
+COMMENT ON COLUMN public.kuaiqian_direct_key_config.terminal_id IS '当面付终端号';
 
 --
 -- Name: COLUMN kuaiqian_direct_key_config.merchant_cert_pfx; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.kuaiqian_direct_key_config.merchant_cert_pfx IS '商户证书 pfx 内容(Base64, PKCS12, 签名与响应解密用, 加密存储)';
+COMMENT ON COLUMN public.kuaiqian_direct_key_config.merchant_cert_pfx IS '商户证书pfx';
 
 --
 -- Name: COLUMN kuaiqian_direct_key_config.merchant_cert_password; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.kuaiqian_direct_key_config.merchant_cert_password IS '商户证书密码(加密存储)';
+COMMENT ON COLUMN public.kuaiqian_direct_key_config.merchant_cert_password IS '商户证书密码';
 
 --
 -- Name: COLUMN kuaiqian_direct_key_config.platform_cert; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.kuaiqian_direct_key_config.platform_cert IS '快钱平台证书 cer 内容(Base64/PEM, 报文加密与验签用, 加密存储)';
+COMMENT ON COLUMN public.kuaiqian_direct_key_config.platform_cert IS '快钱平台证书';
 
 --
 -- Name: COLUMN kuaiqian_direct_key_config.ssl_cert_p12; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.kuaiqian_direct_key_config.ssl_cert_p12 IS 'SSL 客户端证书 p12 内容(Base64, MAS 网关双向认证用, 加密存储)';
+COMMENT ON COLUMN public.kuaiqian_direct_key_config.ssl_cert_p12 IS 'SSL客户端证书p12';
 
 --
 -- Name: COLUMN kuaiqian_direct_key_config.ssl_cert_password; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.kuaiqian_direct_key_config.ssl_cert_password IS 'SSL 客户端证书密码(加密存储)';
+COMMENT ON COLUMN public.kuaiqian_direct_key_config.ssl_cert_password IS 'SSL 客户端证书密码';
 
 --
 -- Name: COLUMN kuaiqian_direct_key_config.sandbox; Type: COMMENT; Schema: public; Owner: -
@@ -6470,7 +6470,7 @@ COMMENT ON COLUMN public.kuaiqian_direct_key_config.last_modified_time IS '最�
 -- Name: COLUMN kuaiqian_direct_key_config.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.kuaiqian_direct_key_config.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.kuaiqian_direct_key_config.version IS '版本号';
 
 --
 -- Name: COLUMN kuaiqian_direct_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -6520,7 +6520,7 @@ COMMENT ON COLUMN public.lakala_isv_channel_merchant.mch_no IS '平台商户号'
 -- Name: COLUMN lakala_isv_channel_merchant.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.lakala_isv_channel_merchant.channel_mch_no IS '通道商户号(LAKALA+雪花)';
+COMMENT ON COLUMN public.lakala_isv_channel_merchant.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN lakala_isv_channel_merchant.product; Type: COMMENT; Schema: public; Owner: -
@@ -6532,7 +6532,7 @@ COMMENT ON COLUMN public.lakala_isv_channel_merchant.product IS '所属支付产
 -- Name: COLUMN lakala_isv_channel_merchant.lakala_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.lakala_isv_channel_merchant.lakala_mch_no IS '拉卡拉商户编号(merchantNo)';
+COMMENT ON COLUMN public.lakala_isv_channel_merchant.lakala_mch_no IS '拉卡拉商户编号';
 
 --
 -- Name: COLUMN lakala_isv_channel_merchant.term_no; Type: COMMENT; Schema: public; Owner: -
@@ -6608,7 +6608,7 @@ CREATE TABLE public.lakala_isv_key_config (
 -- Name: TABLE lakala_isv_key_config; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.lakala_isv_key_config IS '拉卡拉服务商密钥配置(全局唯一)';
+COMMENT ON TABLE public.lakala_isv_key_config IS '拉卡拉服务商密钥配置';
 
 --
 -- Name: COLUMN lakala_isv_key_config.id; Type: COMMENT; Schema: public; Owner: -
@@ -6620,7 +6620,7 @@ COMMENT ON COLUMN public.lakala_isv_key_config.id IS '主键';
 -- Name: COLUMN lakala_isv_key_config.product; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.lakala_isv_key_config.product IS '产品编码 @see ProductEnum';
+COMMENT ON COLUMN public.lakala_isv_key_config.product IS '产品编码';
 
 --
 -- Name: COLUMN lakala_isv_key_config.lkl_app_id; Type: COMMENT; Schema: public; Owner: -
@@ -6638,19 +6638,19 @@ COMMENT ON COLUMN public.lakala_isv_key_config.mch_serial_no IS '商户证书序
 -- Name: COLUMN lakala_isv_key_config.private_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.lakala_isv_key_config.private_key IS '商户RSA私钥PEM(加密存储)';
+COMMENT ON COLUMN public.lakala_isv_key_config.private_key IS '商户RSA私钥PEM';
 
 --
 -- Name: COLUMN lakala_isv_key_config.public_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.lakala_isv_key_config.public_key IS '拉卡拉RSA公钥PEM(加密存储)';
+COMMENT ON COLUMN public.lakala_isv_key_config.public_key IS '拉卡拉RSA公钥PEM';
 
 --
 -- Name: COLUMN lakala_isv_key_config.sm4_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.lakala_isv_key_config.sm4_key IS 'SM4对称密钥(加密存储, 进件敏感字段加密用)';
+COMMENT ON COLUMN public.lakala_isv_key_config.sm4_key IS 'SM4对称密钥';
 
 --
 -- Name: COLUMN lakala_isv_key_config.creator; Type: COMMENT; Schema: public; Owner: -
@@ -6741,13 +6741,13 @@ COMMENT ON COLUMN public.leshua_isv_channel_merchant.mch_no IS '商户号';
 -- Name: COLUMN leshua_isv_channel_merchant.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.leshua_isv_channel_merchant.channel_mch_no IS '通道商户号(LESHUA+雪花)';
+COMMENT ON COLUMN public.leshua_isv_channel_merchant.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN leshua_isv_channel_merchant.product; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.leshua_isv_channel_merchant.product IS '所属支付产品(对应 ProductEnum.code)';
+COMMENT ON COLUMN public.leshua_isv_channel_merchant.product IS '所属支付产品';
 
 --
 -- Name: COLUMN leshua_isv_channel_merchant.sandbox; Type: COMMENT; Schema: public; Owner: -
@@ -6759,7 +6759,7 @@ COMMENT ON COLUMN public.leshua_isv_channel_merchant.sandbox IS '是否沙箱环
 -- Name: COLUMN leshua_isv_channel_merchant.ls_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.leshua_isv_channel_merchant.ls_mch_no IS '乐刷商户编号(merchant_id)';
+COMMENT ON COLUMN public.leshua_isv_channel_merchant.ls_mch_no IS '乐刷商户编号';
 
 --
 -- Name: COLUMN leshua_isv_channel_merchant.creator; Type: COMMENT; Schema: public; Owner: -
@@ -6789,7 +6789,7 @@ COMMENT ON COLUMN public.leshua_isv_channel_merchant.last_modified_time IS '最�
 -- Name: COLUMN leshua_isv_channel_merchant.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.leshua_isv_channel_merchant.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.leshua_isv_channel_merchant.version IS '版本号';
 
 --
 -- Name: COLUMN leshua_isv_channel_merchant.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -6833,31 +6833,31 @@ COMMENT ON COLUMN public.leshua_isv_key_config.id IS '主键';
 -- Name: COLUMN leshua_isv_key_config.product; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.leshua_isv_key_config.product IS '产品编码(对应 ProductEnum.code, 如 leshua_pay)';
+COMMENT ON COLUMN public.leshua_isv_key_config.product IS '产品编码';
 
 --
 -- Name: COLUMN leshua_isv_key_config.trade_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.leshua_isv_key_config.trade_key IS '交易密钥(tradeKey, 交易/进件等所有服务商接口请求签名, 加密存储)';
+COMMENT ON COLUMN public.leshua_isv_key_config.trade_key IS '交易密钥';
 
 --
 -- Name: COLUMN leshua_isv_key_config.notify_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.leshua_isv_key_config.notify_key IS '异步通知密钥(notifyKey, 异步通知回调验签, 加密存储)';
+COMMENT ON COLUMN public.leshua_isv_key_config.notify_key IS '异步通知密钥';
 
 --
 -- Name: COLUMN leshua_isv_key_config.sign_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.leshua_isv_key_config.sign_type IS '签名类型(MD5 / SM3)';
+COMMENT ON COLUMN public.leshua_isv_key_config.sign_type IS '签名类型';
 
 --
 -- Name: COLUMN leshua_isv_key_config.ls_isv_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.leshua_isv_key_config.ls_isv_no IS '乐刷服务商号(lsIsvNo, 进件等接口场景必传)';
+COMMENT ON COLUMN public.leshua_isv_key_config.ls_isv_no IS '乐刷服务商号';
 
 --
 -- Name: COLUMN leshua_isv_key_config.sandbox; Type: COMMENT; Schema: public; Owner: -
@@ -6893,7 +6893,7 @@ COMMENT ON COLUMN public.leshua_isv_key_config.last_modified_time IS '最后修�
 -- Name: COLUMN leshua_isv_key_config.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.leshua_isv_key_config.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.leshua_isv_key_config.version IS '版本号';
 
 --
 -- Name: COLUMN leshua_isv_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -6946,49 +6946,49 @@ COMMENT ON COLUMN public.llianpay_direct_key_config.mch_no IS '商户号';
 -- Name: COLUMN llianpay_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.llianpay_direct_key_config.channel_mch_no IS '通道商户号(LLIANPAY+雪花, 创建时录入不可修改)';
+COMMENT ON COLUMN public.llianpay_direct_key_config.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN llianpay_direct_key_config.mch_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.llianpay_direct_key_config.mch_id IS '连连商户编号(mch_id, 创建时录入不可修改)';
+COMMENT ON COLUMN public.llianpay_direct_key_config.mch_id IS '连连商户编号';
 
 --
 -- Name: COLUMN llianpay_direct_key_config.sub_mchid; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.llianpay_direct_key_config.sub_mchid IS '二级商户号(可空; 平台商模式上送 sub_mchid)';
+COMMENT ON COLUMN public.llianpay_direct_key_config.sub_mchid IS '二级商户号';
 
 --
 -- Name: COLUMN llianpay_direct_key_config.payee_uid; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.llianpay_direct_key_config.payee_uid IS '收款方用户ID(可空; 留空为商户自身收款, 配置后用户收款)';
+COMMENT ON COLUMN public.llianpay_direct_key_config.payee_uid IS '收款方用户ID';
 
 --
 -- Name: COLUMN llianpay_direct_key_config.busi_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.llianpay_direct_key_config.busi_type IS '业务属性(busi_type, 如 100001 虚拟商品购买)';
+COMMENT ON COLUMN public.llianpay_direct_key_config.busi_type IS '业务属性';
 
 --
 -- Name: COLUMN llianpay_direct_key_config.merchant_private_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.llianpay_direct_key_config.merchant_private_key IS '商户私钥(Base64 裸串, 兼容 PKCS1/PKCS8, 请求签名用, 加密存储)';
+COMMENT ON COLUMN public.llianpay_direct_key_config.merchant_private_key IS '商户私钥';
 
 --
 -- Name: COLUMN llianpay_direct_key_config.llianpay_public_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.llianpay_direct_key_config.llianpay_public_key IS '连连平台公钥(Base64 裸串, X509 格式, 响应/回调验签用, 加密存储)';
+COMMENT ON COLUMN public.llianpay_direct_key_config.llianpay_public_key IS '连连平台公钥';
 
 --
 -- Name: COLUMN llianpay_direct_key_config.sandbox; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.llianpay_direct_key_config.sandbox IS '是否沙箱环境(连连测试网关 mpay-openapi-ste2, 生产/沙箱密钥双环境并存)';
+COMMENT ON COLUMN public.llianpay_direct_key_config.sandbox IS '是否沙箱环境';
 
 --
 -- Name: COLUMN llianpay_direct_key_config.creator; Type: COMMENT; Schema: public; Owner: -
@@ -7018,7 +7018,7 @@ COMMENT ON COLUMN public.llianpay_direct_key_config.last_modified_time IS '最�
 -- Name: COLUMN llianpay_direct_key_config.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.llianpay_direct_key_config.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.llianpay_direct_key_config.version IS '版本号';
 
 --
 -- Name: COLUMN llianpay_direct_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -7070,43 +7070,43 @@ COMMENT ON COLUMN public.long_pay_direct_key_config.mch_no IS '商户号';
 -- Name: COLUMN long_pay_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.long_pay_direct_key_config.channel_mch_no IS '通道商户号(LONGPAY+雪花, 创建时录入不可修改)';
+COMMENT ON COLUMN public.long_pay_direct_key_config.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN long_pay_direct_key_config.merchant_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.long_pay_direct_key_config.merchant_id IS '建行商户号(MERCHANTID, 开户后分配, 创建时录入不可修改)';
+COMMENT ON COLUMN public.long_pay_direct_key_config.merchant_id IS '建行商户号';
 
 --
 -- Name: COLUMN long_pay_direct_key_config.pos_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.long_pay_direct_key_config.pos_id IS '建行柜台号(POSID, 创建时录入不可修改)';
+COMMENT ON COLUMN public.long_pay_direct_key_config.pos_id IS '建行柜台号';
 
 --
 -- Name: COLUMN long_pay_direct_key_config.branch_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.long_pay_direct_key_config.branch_id IS '建行分行号(BRANCHID, 创建时录入不可修改)';
+COMMENT ON COLUMN public.long_pay_direct_key_config.branch_id IS '建行分行号';
 
 --
 -- Name: COLUMN long_pay_direct_key_config.merchant_public_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.long_pay_direct_key_config.merchant_public_key IS '柜台公钥(请求 MD5 摘要 MAC 用, 取后 30 位参与拼串, 加密存储)';
+COMMENT ON COLUMN public.long_pay_direct_key_config.merchant_public_key IS '柜台公钥';
 
 --
 -- Name: COLUMN long_pay_direct_key_config.ccb_public_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.long_pay_direct_key_config.ccb_public_key IS '建行公钥(异步通知 RSA MD5withRSA 验签用, DER hex 或 PEM, 加密存储)';
+COMMENT ON COLUMN public.long_pay_direct_key_config.ccb_public_key IS '建行公钥';
 
 --
 -- Name: COLUMN long_pay_direct_key_config.sandbox; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.long_pay_direct_key_config.sandbox IS '是否沙箱环境(建行无公开沙箱网关, 预留双环境密钥并存)';
+COMMENT ON COLUMN public.long_pay_direct_key_config.sandbox IS '是否沙箱环境';
 
 --
 -- Name: COLUMN long_pay_direct_key_config.creator; Type: COMMENT; Schema: public; Owner: -
@@ -7136,7 +7136,7 @@ COMMENT ON COLUMN public.long_pay_direct_key_config.last_modified_time IS '最�
 -- Name: COLUMN long_pay_direct_key_config.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.long_pay_direct_key_config.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.long_pay_direct_key_config.version IS '版本号';
 
 --
 -- Name: COLUMN long_pay_direct_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -7197,7 +7197,7 @@ COMMENT ON COLUMN public.mch_app_info.app_name IS '应用名称';
 -- Name: COLUMN mch_app_info.status; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_app_info.status IS '应用状态，字典 mch_app_status';
+COMMENT ON COLUMN public.mch_app_info.status IS '应用状态';
 
 --
 -- Name: COLUMN mch_app_info.default_app; Type: COMMENT; Schema: public; Owner: -
@@ -7266,7 +7266,7 @@ CREATE TABLE public.mch_app_notify_config (
 -- Name: TABLE mch_app_notify_config; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.mch_app_notify_config IS '商户应用事件通知配置(应用级,通用事件订阅,与支付订单级回调并行)';
+COMMENT ON TABLE public.mch_app_notify_config IS '商户应用事件通知配置';
 
 --
 -- Name: COLUMN mch_app_notify_config.id; Type: COMMENT; Schema: public; Owner: -
@@ -7290,7 +7290,7 @@ COMMENT ON COLUMN public.mch_app_notify_config.app_id IS '应用ID';
 -- Name: COLUMN mch_app_notify_config.notify_url; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_app_notify_config.notify_url IS '回调地址(https, notifyWay=http 时生效)';
+COMMENT ON COLUMN public.mch_app_notify_config.notify_url IS '回调地址';
 
 --
 -- Name: COLUMN mch_app_notify_config.notify_way; Type: COMMENT; Schema: public; Owner: -
@@ -7302,13 +7302,13 @@ COMMENT ON COLUMN public.mch_app_notify_config.notify_way IS '传输通道';
 -- Name: COLUMN mch_app_notify_config.subscribed_events; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_app_notify_config.subscribed_events IS '订阅事件类型(逗号分隔, 支持前缀匹配: pay 匹配 pay.*, refund 匹配 refund.*)';
+COMMENT ON COLUMN public.mch_app_notify_config.subscribed_events IS '订阅事件类型';
 
 --
 -- Name: COLUMN mch_app_notify_config.status; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_app_notify_config.status IS '启用状态(true-启用 false-禁用)';
+COMMENT ON COLUMN public.mch_app_notify_config.status IS '启用状态';
 
 --
 -- Name: COLUMN mch_app_notify_config.remark; Type: COMMENT; Schema: public; Owner: -
@@ -7509,13 +7509,13 @@ COMMENT ON COLUMN public.mch_credential.mch_no IS '商户号';
 -- Name: COLUMN mch_credential.public_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_credential.public_key IS '商户公钥(加密存储)';
+COMMENT ON COLUMN public.mch_credential.public_key IS '商户公钥';
 
 --
 -- Name: COLUMN mch_credential.secret_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_credential.secret_key IS '通信密钥(加密存储)';
+COMMENT ON COLUMN public.mch_credential.secret_key IS '通信密钥';
 
 --
 -- Name: COLUMN mch_credential.creator; Type: COMMENT; Schema: public; Owner: -
@@ -7655,7 +7655,7 @@ COMMENT ON COLUMN public.mch_info.last_modified_time IS '最后修改时间';
 -- Name: COLUMN mch_info.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_info.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.mch_info.version IS '版本号';
 
 --
 -- Name: mch_notice_record; Type: TABLE; Schema: public; Owner: -
@@ -7749,7 +7749,7 @@ COMMENT ON COLUMN public.mch_notice_record.req_count IS '本次对应的发送�
 -- Name: COLUMN mch_notice_record.send_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_notice_record.send_type IS '发送类型: auto / manual';
+COMMENT ON COLUMN public.mch_notice_record.send_type IS '发送类型';
 
 --
 -- Name: COLUMN mch_notice_record.success; Type: COMMENT; Schema: public; Owner: -
@@ -7773,7 +7773,7 @@ COMMENT ON COLUMN public.mch_notice_record.error_msg IS '错误摘要';
 -- Name: COLUMN mch_notice_record.request_digest; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_notice_record.request_digest IS '请求摘要(截断)';
+COMMENT ON COLUMN public.mch_notice_record.request_digest IS '请求摘要';
 
 --
 -- Name: mch_notice_task; Type: TABLE; Schema: public; Owner: -
@@ -7882,31 +7882,31 @@ COMMENT ON COLUMN public.mch_notice_task.biz_no IS '业务单号';
 -- Name: COLUMN mch_notice_task.event; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_notice_task.event IS '通知事件码(如 pay.success / refund.close)';
+COMMENT ON COLUMN public.mch_notice_task.event IS '通知事件码';
 
 --
 -- Name: COLUMN mch_notice_task.source; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_notice_task.source IS 'URL来源: order / app / protocol';
+COMMENT ON COLUMN public.mch_notice_task.source IS '来源';
 
 --
 -- Name: COLUMN mch_notice_task.content_mode; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_notice_task.content_mode IS '内容策略: snapshot / ref';
+COMMENT ON COLUMN public.mch_notice_task.content_mode IS '内容策略';
 
 --
 -- Name: COLUMN mch_notice_task.content; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_notice_task.content IS '通知内容(快照JSON或引用指针JSON)';
+COMMENT ON COLUMN public.mch_notice_task.content IS '通知内容';
 
 --
 -- Name: COLUMN mch_notice_task.url; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_notice_task.url IS '目标地址(HTTP时为回调URL, MQ时为Topic名, 如 daxpay.notice.<appId>)';
+COMMENT ON COLUMN public.mch_notice_task.url IS '目标地址';
 
 --
 -- Name: COLUMN mch_notice_task.success; Type: COMMENT; Schema: public; Owner: -
@@ -7948,13 +7948,13 @@ COMMENT ON COLUMN public.mch_notice_task.error_msg IS '最近一次错误摘要'
 -- Name: COLUMN mch_notice_task.transport; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_notice_task.transport IS '传输通道: http / mq';
+COMMENT ON COLUMN public.mch_notice_task.transport IS '传输通道';
 
 --
 -- Name: COLUMN mch_notice_task.format; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_notice_task.format IS '报文格式: system / easy_pay';
+COMMENT ON COLUMN public.mch_notice_task.format IS '报文格式';
 
 --
 -- Name: mch_store_info; Type: TABLE; Schema: public; Owner: -
@@ -7989,7 +7989,7 @@ CREATE TABLE public.mch_store_info (
 -- Name: TABLE mch_store_info; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.mch_store_info IS '商户门店(商户物理经营场所)';
+COMMENT ON TABLE public.mch_store_info IS '商户门店';
 
 --
 -- Name: COLUMN mch_store_info.id; Type: COMMENT; Schema: public; Owner: -
@@ -8007,7 +8007,7 @@ COMMENT ON COLUMN public.mch_store_info.mch_no IS '商户号';
 -- Name: COLUMN mch_store_info.store_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_store_info.store_no IS '门店号(系统生成, 唯一)';
+COMMENT ON COLUMN public.mch_store_info.store_no IS '门店号';
 
 --
 -- Name: COLUMN mch_store_info.store_name; Type: COMMENT; Schema: public; Owner: -
@@ -8043,7 +8043,7 @@ COMMENT ON COLUMN public.mch_store_info.interior_url IS '门店内景照';
 -- Name: COLUMN mch_store_info.region_code; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_store_info.region_code IS '行政区划代码(区县级)';
+COMMENT ON COLUMN public.mch_store_info.region_code IS '行政区划代码';
 
 --
 -- Name: COLUMN mch_store_info.address; Type: COMMENT; Schema: public; Owner: -
@@ -8103,7 +8103,7 @@ COMMENT ON COLUMN public.mch_store_info.last_modified_time IS '最后修改时�
 -- Name: COLUMN mch_store_info.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_store_info.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.mch_store_info.version IS '版本号';
 
 --
 -- Name: COLUMN mch_store_info.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -8115,13 +8115,13 @@ COMMENT ON COLUMN public.mch_store_info.deleted IS '逻辑删除标志';
 -- Name: COLUMN mch_store_info.default_store; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_store_info.default_store IS '是否默认门店(同商户至多一个; 支付未指定 storeNo 时回落)';
+COMMENT ON COLUMN public.mch_store_info.default_store IS '是否默认门店';
 
 --
 -- Name: COLUMN mch_store_info.app_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_store_info.app_id IS '门店默认支付应用号(空则使用商户默认应用)';
+COMMENT ON COLUMN public.mch_store_info.app_id IS '门店默认支付应用号';
 
 --
 -- Name: mch_user; Type: TABLE; Schema: public; Owner: -
@@ -8214,31 +8214,31 @@ COMMENT ON COLUMN public.mch_wx_domain_verify.id IS '主键';
 -- Name: COLUMN mch_wx_domain_verify.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_wx_domain_verify.mch_no IS '商户号（平台级填 0）';
+COMMENT ON COLUMN public.mch_wx_domain_verify.mch_no IS '商户号';
 
 --
 -- Name: COLUMN mch_wx_domain_verify.platform; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_wx_domain_verify.platform IS '是否平台级：false-商户级 true-平台级';
+COMMENT ON COLUMN public.mch_wx_domain_verify.platform IS '平台级';
 
 --
 -- Name: COLUMN mch_wx_domain_verify.file_name; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_wx_domain_verify.file_name IS '完整文件名（如 MP_verify_PjhdRxpB8FhG06Fr.txt）';
+COMMENT ON COLUMN public.mch_wx_domain_verify.file_name IS '完整文件名';
 
 --
 -- Name: COLUMN mch_wx_domain_verify.verify_code; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_wx_domain_verify.verify_code IS '验证码（文件名提取，全局唯一）';
+COMMENT ON COLUMN public.mch_wx_domain_verify.verify_code IS '验证码';
 
 --
 -- Name: COLUMN mch_wx_domain_verify.file_content; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_wx_domain_verify.file_content IS '文件内容（微信生成的随机字符串）';
+COMMENT ON COLUMN public.mch_wx_domain_verify.file_content IS '文件内容';
 
 --
 -- Name: COLUMN mch_wx_domain_verify.remark; Type: COMMENT; Schema: public; Owner: -
@@ -8274,7 +8274,7 @@ COMMENT ON COLUMN public.mch_wx_domain_verify.last_modified_time IS '最后修�
 -- Name: COLUMN mch_wx_domain_verify.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mch_wx_domain_verify.version IS '版本号（乐观锁）';
+COMMENT ON COLUMN public.mch_wx_domain_verify.version IS '版本号';
 
 --
 -- Name: COLUMN mch_wx_domain_verify.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -8330,13 +8330,13 @@ COMMENT ON COLUMN public.mock_alloc_receiver.mch_no IS '商户号';
 -- Name: COLUMN mock_alloc_receiver.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mock_alloc_receiver.channel_mch_no IS '通道商户号(关联通道商户主表)';
+COMMENT ON COLUMN public.mock_alloc_receiver.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN mock_alloc_receiver.product; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mock_alloc_receiver.product IS '所属支付产品(mock_pay/mock_isv, 冗余自通道商户)';
+COMMENT ON COLUMN public.mock_alloc_receiver.product IS '所属支付产品';
 
 --
 -- Name: COLUMN mock_alloc_receiver.receiver_type; Type: COMMENT; Schema: public; Owner: -
@@ -8348,31 +8348,31 @@ COMMENT ON COLUMN public.mock_alloc_receiver.receiver_type IS '接收方类型';
 -- Name: COLUMN mock_alloc_receiver.receiver_account; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mock_alloc_receiver.receiver_account IS '接收方账号(AES-256-GCM 加密存储)';
+COMMENT ON COLUMN public.mock_alloc_receiver.receiver_account IS '接收方账号';
 
 --
 -- Name: COLUMN mock_alloc_receiver.account_hash; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mock_alloc_receiver.account_hash IS '接收方账号 SHA-256 哈希(密文不确定, 查重与等值定位用)';
+COMMENT ON COLUMN public.mock_alloc_receiver.account_hash IS '接收方账号SHA-256哈希';
 
 --
 -- Name: COLUMN mock_alloc_receiver.receiver_name; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mock_alloc_receiver.receiver_name IS '接收方名称(AES-256-GCM 加密存储, MERCHANT_ID 时必填商户全称)';
+COMMENT ON COLUMN public.mock_alloc_receiver.receiver_name IS '接收方名称';
 
 --
 -- Name: COLUMN mock_alloc_receiver.alias; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mock_alloc_receiver.alias IS '接收方别名(本地备注, 不上送通道, 可随时修改)';
+COMMENT ON COLUMN public.mock_alloc_receiver.alias IS '接收方别名';
 
 --
 -- Name: COLUMN mock_alloc_receiver.status; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mock_alloc_receiver.status IS '绑定状态(bound/unbound/fail)';
+COMMENT ON COLUMN public.mock_alloc_receiver.status IS '绑定状态';
 
 --
 -- Name: COLUMN mock_alloc_receiver.error_msg; Type: COMMENT; Schema: public; Owner: -
@@ -8448,25 +8448,25 @@ CREATE TABLE public.mock_channel_credential (
 -- Name: TABLE mock_channel_credential; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.mock_channel_credential IS 'Mock 通道网关签名密钥(全局单行, 仅 DEV 装配)';
+COMMENT ON TABLE public.mock_channel_credential IS 'Mock 通道网关签名密钥';
 
 --
 -- Name: COLUMN mock_channel_credential.id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mock_channel_credential.id IS '主键(全局单行, 固定为1)';
+COMMENT ON COLUMN public.mock_channel_credential.id IS '主键';
 
 --
 -- Name: COLUMN mock_channel_credential.merchant_private_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mock_channel_credential.merchant_private_key IS '商户私钥(PEM PKCS#8 多行原文, 加密存储; 请求签名用, 与模拟网关侧商户公钥成对)';
+COMMENT ON COLUMN public.mock_channel_credential.merchant_private_key IS '商户私钥';
 
 --
 -- Name: COLUMN mock_channel_credential.platform_public_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mock_channel_credential.platform_public_key IS '平台公钥(PEM SPKI 多行原文, 加密存储; 响应/回调验签用, 与模拟网关侧平台私钥成对)';
+COMMENT ON COLUMN public.mock_channel_credential.platform_public_key IS '平台公钥';
 
 --
 -- Name: COLUMN mock_channel_credential.creator; Type: COMMENT; Schema: public; Owner: -
@@ -8526,7 +8526,7 @@ CREATE TABLE public.mock_direct_credential (
 -- Name: TABLE mock_direct_credential; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.mock_direct_credential IS 'Mock 直连商户接入密钥(按通道商户一行, 仅 DEV 装配)';
+COMMENT ON TABLE public.mock_direct_credential IS 'Mock 直连商户接入密钥';
 
 --
 -- Name: COLUMN mock_direct_credential.id; Type: COMMENT; Schema: public; Owner: -
@@ -8538,25 +8538,25 @@ COMMENT ON COLUMN public.mock_direct_credential.id IS '主键';
 -- Name: COLUMN mock_direct_credential.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mock_direct_credential.channel_mch_no IS '通道商户号(通道商户主表 channel_mch_no, 一通道商户一行未删除记录)';
+COMMENT ON COLUMN public.mock_direct_credential.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN mock_direct_credential.merchant_private_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mock_direct_credential.merchant_private_key IS '商户私钥(PEM PKCS#8, 加密存储; 留空保留原值)';
+COMMENT ON COLUMN public.mock_direct_credential.merchant_private_key IS '商户私钥';
 
 --
 -- Name: COLUMN mock_direct_credential.platform_public_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mock_direct_credential.platform_public_key IS '平台公钥(PEM SPKI 多行原文, 加密存储; 直连产品网关响应/回调验签用, 留空保存保留原值)';
+COMMENT ON COLUMN public.mock_direct_credential.platform_public_key IS '平台公钥';
 
 --
 -- Name: COLUMN mock_direct_credential.gateway_base_url; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mock_direct_credential.gateway_base_url IS '商户接入网关地址(可空; 通道子应用侧非空优先选址, 空回落 yml base-url)';
+COMMENT ON COLUMN public.mock_direct_credential.gateway_base_url IS '商户接入网关地址';
 
 --
 -- Name: COLUMN mock_direct_credential.creator; Type: COMMENT; Schema: public; Owner: -
@@ -8634,13 +8634,13 @@ COMMENT ON COLUMN public.mock_isv_channel_merchant.mch_no IS '商户号';
 -- Name: COLUMN mock_isv_channel_merchant.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mock_isv_channel_merchant.channel_mch_no IS '通道商户号(模拟控制台手填, 与主表同值)';
+COMMENT ON COLUMN public.mock_isv_channel_merchant.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN mock_isv_channel_merchant.product; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mock_isv_channel_merchant.product IS '所属支付产品(恒为 mock_isv)';
+COMMENT ON COLUMN public.mock_isv_channel_merchant.product IS '所属支付产品';
 
 --
 -- Name: COLUMN mock_isv_channel_merchant.creator; Type: COMMENT; Schema: public; Owner: -
@@ -8682,7 +8682,7 @@ COMMENT ON COLUMN public.mock_isv_channel_merchant.deleted IS '逻辑删除标�
 -- Name: COLUMN mock_isv_channel_merchant.isv_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mock_isv_channel_merchant.isv_id IS '归属模拟服务商ID(指向 mock_isv_info.id, 创建时选定, 创建后不可改)';
+COMMENT ON COLUMN public.mock_isv_channel_merchant.isv_id IS '归属模拟服务商ID';
 
 --
 -- Name: mock_isv_credential; Type: TABLE; Schema: public; Owner: -
@@ -8706,7 +8706,7 @@ CREATE TABLE public.mock_isv_credential (
 -- Name: TABLE mock_isv_credential; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.mock_isv_credential IS 'Mock 服务商接入密钥(按服务商一行, 仅 DEV 装配)';
+COMMENT ON TABLE public.mock_isv_credential IS 'Mock 服务商接入密钥';
 
 --
 -- Name: COLUMN mock_isv_credential.id; Type: COMMENT; Schema: public; Owner: -
@@ -8718,25 +8718,25 @@ COMMENT ON COLUMN public.mock_isv_credential.id IS '主键';
 -- Name: COLUMN mock_isv_credential.isv_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mock_isv_credential.isv_no IS '服务商编号(指向 mock_isv_info.isv_no, 一服务商一行未删除记录)';
+COMMENT ON COLUMN public.mock_isv_credential.isv_no IS '服务商编号';
 
 --
 -- Name: COLUMN mock_isv_credential.merchant_private_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mock_isv_credential.merchant_private_key IS '商户私钥(PEM PKCS#8, 加密存储; 留空保留原值)';
+COMMENT ON COLUMN public.mock_isv_credential.merchant_private_key IS '商户私钥';
 
 --
 -- Name: COLUMN mock_isv_credential.platform_public_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mock_isv_credential.platform_public_key IS '平台公钥(PEM SPKI, 加密存储; 与商户私钥须齐配)';
+COMMENT ON COLUMN public.mock_isv_credential.platform_public_key IS '平台公钥';
 
 --
 -- Name: COLUMN mock_isv_credential.gateway_base_url; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mock_isv_credential.gateway_base_url IS '服务商接入网关地址(可空; 通道子应用侧非空优先选址, 空回落 yml base-url)';
+COMMENT ON COLUMN public.mock_isv_credential.gateway_base_url IS '服务商接入网关地址';
 
 --
 -- Name: COLUMN mock_isv_credential.creator; Type: COMMENT; Schema: public; Owner: -
@@ -8808,7 +8808,7 @@ COMMENT ON COLUMN public.mock_isv_info.id IS '主键';
 -- Name: COLUMN mock_isv_info.isv_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mock_isv_info.isv_no IS '服务商编号(MISV+16位数字, 创建时自动生成不可改; 通道商户主表 isv_no 固化来源)';
+COMMENT ON COLUMN public.mock_isv_info.isv_no IS '服务商编号';
 
 --
 -- Name: COLUMN mock_isv_info.isv_name; Type: COMMENT; Schema: public; Owner: -
@@ -8820,7 +8820,7 @@ COMMENT ON COLUMN public.mock_isv_info.isv_name IS '服务商名称';
 -- Name: COLUMN mock_isv_info.enable; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mock_isv_info.enable IS '是否允许新建服务商通道商户(停用后不影响已有通道商户支付)';
+COMMENT ON COLUMN public.mock_isv_info.enable IS '是否允许新建服务商通道商户';
 
 --
 -- Name: COLUMN mock_isv_info.creator; Type: COMMENT; Schema: public; Owner: -
@@ -8862,7 +8862,7 @@ COMMENT ON COLUMN public.mock_isv_info.deleted IS '逻辑删除标志';
 -- Name: COLUMN mock_isv_info.pay_enable; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.mock_isv_info.pay_enable IS '是否启用服务商支付(停用后仅阻止新支付下单, 不影响存量交易处理)';
+COMMENT ON COLUMN public.mock_isv_info.pay_enable IS '是否启用服务商支付';
 
 --
 -- Name: notify_mail_record; Type: TABLE; Schema: public; Owner: -
@@ -8909,7 +8909,7 @@ COMMENT ON COLUMN public.notify_mail_record.receiver_email IS '收件邮箱';
 -- Name: COLUMN notify_mail_record.receiver_user_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.notify_mail_record.receiver_user_id IS '收件用户ID(关联iam_user_info, 非用户发送可空)';
+COMMENT ON COLUMN public.notify_mail_record.receiver_user_id IS '收件用户ID';
 
 --
 -- Name: COLUMN notify_mail_record.subject; Type: COMMENT; Schema: public; Owner: -
@@ -8921,19 +8921,19 @@ COMMENT ON COLUMN public.notify_mail_record.subject IS '邮件主题';
 -- Name: COLUMN notify_mail_record.content; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.notify_mail_record.content IS '邮件正文(HTML)';
+COMMENT ON COLUMN public.notify_mail_record.content IS '邮件正文';
 
 --
 -- Name: COLUMN notify_mail_record.business_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.notify_mail_record.business_type IS '业务场景(test/manual等)';
+COMMENT ON COLUMN public.notify_mail_record.business_type IS '业务场景';
 
 --
 -- Name: COLUMN notify_mail_record.status; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.notify_mail_record.status IS '发送状态(sending/success/fail)';
+COMMENT ON COLUMN public.notify_mail_record.status IS '发送状态';
 
 --
 -- Name: COLUMN notify_mail_record.error_msg; Type: COMMENT; Schema: public; Owner: -
@@ -8981,7 +8981,7 @@ COMMENT ON COLUMN public.notify_mail_record.last_modified_time IS '最后修改�
 -- Name: COLUMN notify_mail_record.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.notify_mail_record.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.notify_mail_record.version IS '版本号';
 
 --
 -- Name: COLUMN notify_mail_record.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -9014,7 +9014,7 @@ CREATE TABLE public.notify_message (
 -- Name: TABLE notify_message; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.notify_message IS '个人消息(定向通知, 1条对1用户)';
+COMMENT ON TABLE public.notify_message IS '个人消息';
 
 --
 -- Name: COLUMN notify_message.id; Type: COMMENT; Schema: public; Owner: -
@@ -9044,19 +9044,19 @@ COMMENT ON COLUMN public.notify_message.content IS '正文内容';
 -- Name: COLUMN notify_message.source; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.notify_message.source IS '业务来源(预留, 如TRADE/REFUND等)';
+COMMENT ON COLUMN public.notify_message.source IS '业务来源';
 
 --
 -- Name: COLUMN notify_message.link; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.notify_message.link IS '跳转链接(内部路由或完整http外链)';
+COMMENT ON COLUMN public.notify_message.link IS '跳转链接';
 
 --
 -- Name: COLUMN notify_message.extra; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.notify_message.extra IS '跳转附加参数(JSON字符串)';
+COMMENT ON COLUMN public.notify_message.extra IS '跳转附加参数';
 
 --
 -- Name: COLUMN notify_message.is_read; Type: COMMENT; Schema: public; Owner: -
@@ -9092,7 +9092,7 @@ COMMENT ON COLUMN public.notify_message.last_modified_time IS '最后修改时�
 -- Name: COLUMN notify_message.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.notify_message.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.notify_message.version IS '版本号';
 
 --
 -- Name: COLUMN notify_message.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -9125,7 +9125,7 @@ CREATE TABLE public.notify_notice (
 -- Name: TABLE notify_notice; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.notify_notice IS '公告通知(广播型, 1条对多用户可见)';
+COMMENT ON TABLE public.notify_notice IS '公告通知';
 
 --
 -- Name: COLUMN notify_notice.id; Type: COMMENT; Schema: public; Owner: -
@@ -9143,7 +9143,7 @@ COMMENT ON COLUMN public.notify_notice.title IS '标题';
 -- Name: COLUMN notify_notice.content; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.notify_notice.content IS '正文(Markdown原文)';
+COMMENT ON COLUMN public.notify_notice.content IS '正文';
 
 --
 -- Name: COLUMN notify_notice.severity; Type: COMMENT; Schema: public; Owner: -
@@ -9161,13 +9161,13 @@ COMMENT ON COLUMN public.notify_notice.is_top IS '是否置顶';
 -- Name: COLUMN notify_notice.effective_time; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.notify_notice.effective_time IS '生效时间(为空则立即生效)';
+COMMENT ON COLUMN public.notify_notice.effective_time IS '生效时间';
 
 --
 -- Name: COLUMN notify_notice.expire_time; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.notify_notice.expire_time IS '过期时间(为空则永久有效)';
+COMMENT ON COLUMN public.notify_notice.expire_time IS '过期时间';
 
 --
 -- Name: COLUMN notify_notice.status; Type: COMMENT; Schema: public; Owner: -
@@ -9203,7 +9203,7 @@ COMMENT ON COLUMN public.notify_notice.last_modified_time IS '最后修改时间
 -- Name: COLUMN notify_notice.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.notify_notice.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.notify_notice.version IS '版本号';
 
 --
 -- Name: COLUMN notify_notice.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -9229,7 +9229,7 @@ CREATE TABLE public.notify_notice_read (
 -- Name: TABLE notify_notice_read; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.notify_notice_read IS '公告已读记录(用户x公告)';
+COMMENT ON TABLE public.notify_notice_read IS '公告已读记录';
 
 --
 -- Name: COLUMN notify_notice_read.id; Type: COMMENT; Schema: public; Owner: -
@@ -9259,7 +9259,7 @@ COMMENT ON COLUMN public.notify_notice_read.read_time IS '阅读时间';
 -- Name: COLUMN notify_notice_read.is_ignored; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.notify_notice_read.is_ignored IS '是否忽略(用户主动隐藏该公告)';
+COMMENT ON COLUMN public.notify_notice_read.is_ignored IS '是否忽略';
 
 --
 -- Name: COLUMN notify_notice_read.creator; Type: COMMENT; Schema: public; Owner: -
@@ -9349,7 +9349,7 @@ COMMENT ON COLUMN public.pay_abnormal_order.biz_order_no IS '商户业务单号'
 -- Name: COLUMN pay_abnormal_order.trade_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_abnormal_order.trade_type IS '交易形态(normal/gateway)';
+COMMENT ON COLUMN public.pay_abnormal_order.trade_type IS '交易形态';
 
 --
 -- Name: COLUMN pay_abnormal_order.title; Type: COMMENT; Schema: public; Owner: -
@@ -9361,7 +9361,7 @@ COMMENT ON COLUMN public.pay_abnormal_order.title IS '订单标题';
 -- Name: COLUMN pay_abnormal_order.amount; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_abnormal_order.amount IS '交易金额(最小货币单位)';
+COMMENT ON COLUMN public.pay_abnormal_order.amount IS '交易金额';
 
 --
 -- Name: COLUMN pay_abnormal_order.currency; Type: COMMENT; Schema: public; Owner: -
@@ -9373,19 +9373,19 @@ COMMENT ON COLUMN public.pay_abnormal_order.currency IS '币种';
 -- Name: COLUMN pay_abnormal_order.trade_status; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_abnormal_order.trade_status IS '发现异常时的资金状态(close/fail/cancel)';
+COMMENT ON COLUMN public.pay_abnormal_order.trade_status IS '资金状态';
 
 --
 -- Name: COLUMN pay_abnormal_order.abnormal_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_abnormal_order.abnormal_type IS '异常类型(close_paid/fail_paid/cancel_paid)';
+COMMENT ON COLUMN public.pay_abnormal_order.abnormal_type IS '异常类型';
 
 --
 -- Name: COLUMN pay_abnormal_order.source; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_abnormal_order.source IS '发现来源(callback/sync/job)';
+COMMENT ON COLUMN public.pay_abnormal_order.source IS '发现来源';
 
 --
 -- Name: COLUMN pay_abnormal_order.channel; Type: COMMENT; Schema: public; Owner: -
@@ -9427,13 +9427,13 @@ COMMENT ON COLUMN public.pay_abnormal_order.callback_notify_info IS '通道回�
 -- Name: COLUMN pay_abnormal_order.handle_status; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_abnormal_order.handle_status IS '处理状态(pending/confirmed/ignored)';
+COMMENT ON COLUMN public.pay_abnormal_order.handle_status IS '处理状态';
 
 --
 -- Name: COLUMN pay_abnormal_order.handle_action; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_abnormal_order.handle_action IS '处置动作(confirm_success/ignore)';
+COMMENT ON COLUMN public.pay_abnormal_order.handle_action IS '处置动作';
 
 --
 -- Name: COLUMN pay_abnormal_order.handler; Type: COMMENT; Schema: public; Owner: -
@@ -9517,7 +9517,7 @@ CREATE TABLE public.pay_alloc_detail (
 -- Name: TABLE pay_alloc_detail; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.pay_alloc_detail IS '分账明细(每个接收方一行)';
+COMMENT ON TABLE public.pay_alloc_detail IS '分账明细';
 
 --
 -- Name: COLUMN pay_alloc_detail.id; Type: COMMENT; Schema: public; Owner: -
@@ -9529,43 +9529,43 @@ COMMENT ON COLUMN public.pay_alloc_detail.id IS '主键';
 -- Name: COLUMN pay_alloc_detail.alloc_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_alloc_detail.alloc_no IS '分账单号(关联 pay_alloc_order.alloc_no)';
+COMMENT ON COLUMN public.pay_alloc_detail.alloc_no IS '分账单号';
 
 --
 -- Name: COLUMN pay_alloc_detail.receiver_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_alloc_detail.receiver_type IS '接收方类型(MERCHANT_ID/PERSONAL_OPENID/USER_ID/LOGIN_NAME 等, 按通道)';
+COMMENT ON COLUMN public.pay_alloc_detail.receiver_type IS '接收方类型';
 
 --
 -- Name: COLUMN pay_alloc_detail.receiver_account; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_alloc_detail.receiver_account IS '接收方账号(AES-256-GCM 加密存储)';
+COMMENT ON COLUMN public.pay_alloc_detail.receiver_account IS '接收方账号';
 
 --
 -- Name: COLUMN pay_alloc_detail.receiver_name; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_alloc_detail.receiver_name IS '接收方姓名(AES-256-GCM 加密存储, 可空)';
+COMMENT ON COLUMN public.pay_alloc_detail.receiver_name IS '接收方姓名';
 
 --
 -- Name: COLUMN pay_alloc_detail.amount; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_alloc_detail.amount IS '分账金额(分)';
+COMMENT ON COLUMN public.pay_alloc_detail.amount IS '分账金额';
 
 --
 -- Name: COLUMN pay_alloc_detail.result; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_alloc_detail.result IS '明细结果(pending/success/fail)';
+COMMENT ON COLUMN public.pay_alloc_detail.result IS '明细结果';
 
 --
 -- Name: COLUMN pay_alloc_detail.out_detail_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_alloc_detail.out_detail_id IS '通道侧明细ID(同步/回调时回填)';
+COMMENT ON COLUMN public.pay_alloc_detail.out_detail_id IS '通道侧明细ID';
 
 --
 -- Name: COLUMN pay_alloc_detail.error_code; Type: COMMENT; Schema: public; Owner: -
@@ -9686,19 +9686,19 @@ COMMENT ON COLUMN public.pay_alloc_order.app_id IS '应用号';
 -- Name: COLUMN pay_alloc_order.alloc_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_alloc_order.alloc_no IS '分账单号(平台统一生成, 全局唯一)';
+COMMENT ON COLUMN public.pay_alloc_order.alloc_no IS '分账单号';
 
 --
 -- Name: COLUMN pay_alloc_order.biz_alloc_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_alloc_order.biz_alloc_no IS '商户分账单号(商户传入, 商户侧唯一, 幂等键)';
+COMMENT ON COLUMN public.pay_alloc_order.biz_alloc_no IS '商户分账单号';
 
 --
 -- Name: COLUMN pay_alloc_order.title; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_alloc_order.title IS '标题(继承自原支付容器)';
+COMMENT ON COLUMN public.pay_alloc_order.title IS '标题';
 
 --
 -- Name: COLUMN pay_alloc_order.description; Type: COMMENT; Schema: public; Owner: -
@@ -9710,43 +9710,43 @@ COMMENT ON COLUMN public.pay_alloc_order.description IS '分账描述';
 -- Name: COLUMN pay_alloc_order.trade_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_alloc_order.trade_no IS '原支付资金交易号(= pay_trade.trade_no)';
+COMMENT ON COLUMN public.pay_alloc_order.trade_no IS '原支付资金交易号';
 
 --
 -- Name: COLUMN pay_alloc_order.trade_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_alloc_order.trade_type IS '原支付交易形态(冗余自 pay_trade.trade_type)';
+COMMENT ON COLUMN public.pay_alloc_order.trade_type IS '原支付交易形态';
 
 --
 -- Name: COLUMN pay_alloc_order.biz_order_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_alloc_order.biz_order_no IS '商户业务订单号(冗余, 便于查询)';
+COMMENT ON COLUMN public.pay_alloc_order.biz_order_no IS '商户业务订单号';
 
 --
 -- Name: COLUMN pay_alloc_order.out_order_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_alloc_order.out_order_no IS '通道支付订单号(冗余, 分账上送通道用)';
+COMMENT ON COLUMN public.pay_alloc_order.out_order_no IS '通道支付订单号';
 
 --
 -- Name: COLUMN pay_alloc_order.out_alloc_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_alloc_order.out_alloc_no IS '通道分账单号(通道返回, 如支付宝 settle_no / 微信 transaction_id / 抖音 orderId)';
+COMMENT ON COLUMN public.pay_alloc_order.out_alloc_no IS '通道分账单号';
 
 --
 -- Name: COLUMN pay_alloc_order.amount; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_alloc_order.amount IS '分账总金额(各接收方金额之和, 分)';
+COMMENT ON COLUMN public.pay_alloc_order.amount IS '分账总金额';
 
 --
 -- Name: COLUMN pay_alloc_order.order_amount; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_alloc_order.order_amount IS '原订单总金额(冗余, 分)';
+COMMENT ON COLUMN public.pay_alloc_order.order_amount IS '原订单总金额';
 
 --
 -- Name: COLUMN pay_alloc_order.currency; Type: COMMENT; Schema: public; Owner: -
@@ -9758,7 +9758,7 @@ COMMENT ON COLUMN public.pay_alloc_order.currency IS '币种';
 -- Name: COLUMN pay_alloc_order.status; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_alloc_order.status IS '分账状态(processing/success/partial/fail)';
+COMMENT ON COLUMN public.pay_alloc_order.status IS '分账状态';
 
 --
 -- Name: COLUMN pay_alloc_order.finish_time; Type: COMMENT; Schema: public; Owner: -
@@ -9782,37 +9782,37 @@ COMMENT ON COLUMN public.pay_alloc_order.provider IS '支付渠道';
 -- Name: COLUMN pay_alloc_order.product; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_alloc_order.product IS '支付产品编码(策略选型)';
+COMMENT ON COLUMN public.pay_alloc_order.product IS '支付产品编码';
 
 --
 -- Name: COLUMN pay_alloc_order.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_alloc_order.channel_mch_no IS '通道商户号(继承自原支付)';
+COMMENT ON COLUMN public.pay_alloc_order.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN pay_alloc_order.capability; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_alloc_order.capability IS '支付能力编码(继承自原支付)';
+COMMENT ON COLUMN public.pay_alloc_order.capability IS '支付能力编码';
 
 --
 -- Name: COLUMN pay_alloc_order.channel_app_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_alloc_order.channel_app_id IS '通道应用 AppId 快照(继承自原支付)';
+COMMENT ON COLUMN public.pay_alloc_order.channel_app_id IS '通道应用AppId快照';
 
 --
 -- Name: COLUMN pay_alloc_order.notify_url; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_alloc_order.notify_url IS '异步通知地址(出站商户通知用)';
+COMMENT ON COLUMN public.pay_alloc_order.notify_url IS '异步通知地址';
 
 --
 -- Name: COLUMN pay_alloc_order.attach; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_alloc_order.attach IS '商户附加参数(回调原样返回)';
+COMMENT ON COLUMN public.pay_alloc_order.attach IS '商户附加参数';
 
 --
 -- Name: COLUMN pay_alloc_order.client_ip; Type: COMMENT; Schema: public; Owner: -
@@ -9878,13 +9878,13 @@ COMMENT ON COLUMN public.pay_alloc_order.deleted IS '逻辑删除';
 -- Name: COLUMN pay_alloc_order.alloc_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_alloc_order.alloc_type IS '分账单类型(alloc-分账单 / finish-完结单, 完结单解冻剩余冻结资金给商户, 无接收方明细)';
+COMMENT ON COLUMN public.pay_alloc_order.alloc_type IS '分账单类型';
 
 --
 -- Name: COLUMN pay_alloc_order.finish_mode; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_alloc_order.finish_mode IS '完结模式(auto 分账即完结/manual 需显式完结)';
+COMMENT ON COLUMN public.pay_alloc_order.finish_mode IS '完结模式';
 
 --
 -- Name: pay_blacklist; Type: TABLE; Schema: public; Owner: -
@@ -9911,7 +9911,7 @@ CREATE TABLE public.pay_blacklist (
 -- Name: TABLE pay_blacklist; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.pay_blacklist IS '支付黑名单（平台级；IP全局 / 支付宝userId全局 / 微信按平台应用）';
+COMMENT ON TABLE public.pay_blacklist IS '支付黑名单';
 
 --
 -- Name: COLUMN pay_blacklist.id; Type: COMMENT; Schema: public; Owner: -
@@ -9959,19 +9959,19 @@ COMMENT ON COLUMN public.pay_blacklist.deleted IS '删除标志';
 -- Name: COLUMN pay_blacklist.type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_blacklist.type IS '名单类型: ip / alipay_user / wechat_openid';
+COMMENT ON COLUMN public.pay_blacklist.type IS '名单类型';
 
 --
 -- Name: COLUMN pay_blacklist.value; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_blacklist.value IS '名单值（IP、支付宝userId或微信openId）';
+COMMENT ON COLUMN public.pay_blacklist.value IS '名单值';
 
 --
 -- Name: COLUMN pay_blacklist.wx_app_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_blacklist.wx_app_id IS '微信平台支付应用 AppId；仅 wechat_openid 使用';
+COMMENT ON COLUMN public.pay_blacklist.wx_app_id IS '微信平台支付应用AppId';
 
 --
 -- Name: COLUMN pay_blacklist.status; Type: COMMENT; Schema: public; Owner: -
@@ -9989,7 +9989,7 @@ COMMENT ON COLUMN public.pay_blacklist.reason IS '拉黑原因';
 -- Name: COLUMN pay_blacklist.expire_time; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_blacklist.expire_time IS '过期时间（空表示永久有效）';
+COMMENT ON COLUMN public.pay_blacklist.expire_time IS '过期时间';
 
 --
 -- Name: COLUMN pay_blacklist.remark; Type: COMMENT; Schema: public; Owner: -
@@ -10091,7 +10091,7 @@ COMMENT ON COLUMN public.pay_callback_record.channel_mch_no IS '通道商户号'
 -- Name: COLUMN pay_callback_record.trade_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_callback_record.trade_no IS '平台交易号(支付回调为 trade_no, 退款回调为 refund_no)';
+COMMENT ON COLUMN public.pay_callback_record.trade_no IS '平台交易号';
 
 --
 -- Name: COLUMN pay_callback_record.out_trade_no; Type: COMMENT; Schema: public; Owner: -
@@ -10109,13 +10109,13 @@ COMMENT ON COLUMN public.pay_callback_record.product IS '支付产品';
 -- Name: COLUMN pay_callback_record.callback_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_callback_record.callback_type IS '回调类型: pay / refund';
+COMMENT ON COLUMN public.pay_callback_record.callback_type IS '回调类型';
 
 --
 -- Name: COLUMN pay_callback_record.notify_info; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_callback_record.notify_info IS '通知消息内容(JSON)';
+COMMENT ON COLUMN public.pay_callback_record.notify_info IS '通知消息内容';
 
 --
 -- Name: COLUMN pay_callback_record.status; Type: COMMENT; Schema: public; Owner: -
@@ -10157,7 +10157,7 @@ CREATE TABLE public.pay_channel_terminal (
 -- Name: TABLE pay_channel_terminal; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.pay_channel_terminal IS '通道终端台账(人工登记, 无自动报备)';
+COMMENT ON TABLE public.pay_channel_terminal IS '通道终端台账';
 
 --
 -- Name: COLUMN pay_channel_terminal.id; Type: COMMENT; Schema: public; Owner: -
@@ -10175,19 +10175,19 @@ COMMENT ON COLUMN public.pay_channel_terminal.channel_mch_no IS '通道商户号
 -- Name: COLUMN pay_channel_terminal.product; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_channel_terminal.product IS '所属支付产品(冗余)';
+COMMENT ON COLUMN public.pay_channel_terminal.product IS '所属支付产品';
 
 --
 -- Name: COLUMN pay_channel_terminal.channel; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_channel_terminal.channel IS '所属通道编码(冗余)';
+COMMENT ON COLUMN public.pay_channel_terminal.channel IS '所属通道编码';
 
 --
 -- Name: COLUMN pay_channel_terminal.type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_channel_terminal.type IS '报送类型 common/wechat/alipay/union';
+COMMENT ON COLUMN public.pay_channel_terminal.type IS '报送类型';
 
 --
 -- Name: COLUMN pay_channel_terminal.name; Type: COMMENT; Schema: public; Owner: -
@@ -10199,13 +10199,13 @@ COMMENT ON COLUMN public.pay_channel_terminal.name IS '终端名称';
 -- Name: COLUMN pay_channel_terminal.out_terminal_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_channel_terminal.out_terminal_no IS '通道侧终端号(人工录入)';
+COMMENT ON COLUMN public.pay_channel_terminal.out_terminal_no IS '通道侧终端号';
 
 --
 -- Name: COLUMN pay_channel_terminal.status; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_channel_terminal.status IS '登记状态 init/wait/submit/logged/error';
+COMMENT ON COLUMN public.pay_channel_terminal.status IS '登记状态';
 
 --
 -- Name: COLUMN pay_channel_terminal.error_msg; Type: COMMENT; Schema: public; Owner: -
@@ -10314,13 +10314,13 @@ COMMENT ON COLUMN public.pay_close_record.app_id IS '应用号';
 -- Name: COLUMN pay_close_record.trade_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_close_record.trade_no IS '平台交易号(对应 pay_trade.trade_no)';
+COMMENT ON COLUMN public.pay_close_record.trade_no IS '平台交易号';
 
 --
 -- Name: COLUMN pay_close_record.biz_trade_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_close_record.biz_trade_no IS '商户业务单号(对应 pay_normal_order.biz_order_no)';
+COMMENT ON COLUMN public.pay_close_record.biz_trade_no IS '商户业务单号';
 
 --
 -- Name: COLUMN pay_close_record.product; Type: COMMENT; Schema: public; Owner: -
@@ -10344,7 +10344,7 @@ COMMENT ON COLUMN public.pay_close_record.closed IS '是否关闭成功';
 -- Name: COLUMN pay_close_record.close_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_close_record.close_type IS '关闭类型(close/cancel)';
+COMMENT ON COLUMN public.pay_close_record.close_type IS '关闭类型';
 
 --
 -- Name: COLUMN pay_close_record.error_code; Type: COMMENT; Schema: public; Owner: -
@@ -10517,7 +10517,7 @@ CREATE TABLE public.pay_easy_pay_credential (
 -- Name: TABLE pay_easy_pay_credential; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.pay_easy_pay_credential IS '易支付凭证配置表（应用级）';
+COMMENT ON TABLE public.pay_easy_pay_credential IS '易支付凭证配置表';
 
 --
 -- Name: COLUMN pay_easy_pay_credential.id; Type: COMMENT; Schema: public; Owner: -
@@ -10535,7 +10535,7 @@ COMMENT ON COLUMN public.pay_easy_pay_credential.pid IS '易支付商户号';
 -- Name: COLUMN pay_easy_pay_credential.app_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_easy_pay_credential.app_id IS '应用号（支付出口）';
+COMMENT ON COLUMN public.pay_easy_pay_credential.app_id IS '应用号';
 
 --
 -- Name: COLUMN pay_easy_pay_credential.enable; Type: COMMENT; Schema: public; Owner: -
@@ -10662,7 +10662,7 @@ COMMENT ON TABLE public.pay_easy_pay_order IS '易支付协议订单表';
 -- Name: COLUMN pay_easy_pay_order.id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_easy_pay_order.id IS '主键（收银台路径参数）';
+COMMENT ON COLUMN public.pay_easy_pay_order.id IS '主键';
 
 --
 -- Name: COLUMN pay_easy_pay_order.order_id; Type: COMMENT; Schema: public; Owner: -
@@ -10686,7 +10686,7 @@ COMMENT ON COLUMN public.pay_easy_pay_order.app_id IS '应用号';
 -- Name: COLUMN pay_easy_pay_order.trade_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_easy_pay_order.trade_no IS '平台业务单号（容器orderNo）';
+COMMENT ON COLUMN public.pay_easy_pay_order.trade_no IS '平台业务单号';
 
 --
 -- Name: COLUMN pay_easy_pay_order.out_trade_no; Type: COMMENT; Schema: public; Owner: -
@@ -10704,7 +10704,7 @@ COMMENT ON COLUMN public.pay_easy_pay_order.api_trade_no IS '通道订单号';
 -- Name: COLUMN pay_easy_pay_order.type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_easy_pay_order.type IS '协议支付方式 alipay/wxpay/aggregate';
+COMMENT ON COLUMN public.pay_easy_pay_order.type IS '协议支付方式';
 
 --
 -- Name: COLUMN pay_easy_pay_order.status; Type: COMMENT; Schema: public; Owner: -
@@ -10734,19 +10734,19 @@ COMMENT ON COLUMN public.pay_easy_pay_order.name IS '商品名称';
 -- Name: COLUMN pay_easy_pay_order.money; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_easy_pay_order.money IS '订单金额（分）';
+COMMENT ON COLUMN public.pay_easy_pay_order.money IS '订单金额';
 
 --
 -- Name: COLUMN pay_easy_pay_order.refund_money; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_easy_pay_order.refund_money IS '已退款金额（分）';
+COMMENT ON COLUMN public.pay_easy_pay_order.refund_money IS '已退款金额';
 
 --
 -- Name: COLUMN pay_easy_pay_order.notify_url; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_easy_pay_order.notify_url IS '异步通知地址（本期仅落库）';
+COMMENT ON COLUMN public.pay_easy_pay_order.notify_url IS '异步通知地址';
 
 --
 -- Name: COLUMN pay_easy_pay_order.return_url; Type: COMMENT; Schema: public; Owner: -
@@ -10888,13 +10888,13 @@ COMMENT ON COLUMN public.pay_easy_pay_refund_order.mch_no IS '商户号';
 -- Name: COLUMN pay_easy_pay_refund_order.refund_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_easy_pay_refund_order.refund_id IS '关联内核退款单ID(pay_refund_order.id)';
+COMMENT ON COLUMN public.pay_easy_pay_refund_order.refund_id IS '关联内核退款单ID';
 
 --
 -- Name: COLUMN pay_easy_pay_refund_order.easy_pay_order_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_easy_pay_refund_order.easy_pay_order_id IS '关联易支付订单ID(pay_easy_pay_order.id)';
+COMMENT ON COLUMN public.pay_easy_pay_refund_order.easy_pay_order_id IS '关联易支付订单ID';
 
 --
 -- Name: COLUMN pay_easy_pay_refund_order.pid; Type: COMMENT; Schema: public; Owner: -
@@ -10936,13 +10936,13 @@ COMMENT ON COLUMN public.pay_easy_pay_refund_order.out_trade_no IS '商户订单
 -- Name: COLUMN pay_easy_pay_refund_order.money; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_easy_pay_refund_order.money IS '退款金额(分)';
+COMMENT ON COLUMN public.pay_easy_pay_refund_order.money IS '退款金额';
 
 --
 -- Name: COLUMN pay_easy_pay_refund_order.status; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_easy_pay_refund_order.status IS '协议退款状态 0=失败/处理中 1=成功';
+COMMENT ON COLUMN public.pay_easy_pay_refund_order.status IS '协议退款状态';
 
 --
 -- Name: COLUMN pay_easy_pay_refund_order.api_version; Type: COMMENT; Schema: public; Owner: -
@@ -10996,7 +10996,7 @@ COMMENT ON COLUMN public.pay_easy_pay_refund_order.version IS '版本号';
 -- Name: COLUMN pay_easy_pay_refund_order.deleted; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_easy_pay_refund_order.deleted IS '删除标志(逻辑删除)';
+COMMENT ON COLUMN public.pay_easy_pay_refund_order.deleted IS '删除标志';
 
 --
 -- Name: pay_fund_flow; Type: TABLE; Schema: public; Owner: -
@@ -11030,7 +11030,7 @@ CREATE TABLE public.pay_fund_flow (
 -- Name: TABLE pay_fund_flow; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.pay_fund_flow IS '资金流水表(只增不改)';
+COMMENT ON TABLE public.pay_fund_flow IS '资金流水表';
 
 --
 -- Name: COLUMN pay_fund_flow.id; Type: COMMENT; Schema: public; Owner: -
@@ -11054,7 +11054,7 @@ COMMENT ON COLUMN public.pay_fund_flow.app_id IS '应用号';
 -- Name: COLUMN pay_fund_flow.flow_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_fund_flow.flow_type IS '流水类型(pay/refund)';
+COMMENT ON COLUMN public.pay_fund_flow.flow_type IS '流水类型';
 
 --
 -- Name: COLUMN pay_fund_flow.trade_no; Type: COMMENT; Schema: public; Owner: -
@@ -11084,7 +11084,7 @@ COMMENT ON COLUMN public.pay_fund_flow.title IS '订单标题';
 -- Name: COLUMN pay_fund_flow.amount; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_fund_flow.amount IS '流水金额(最小货币单位)';
+COMMENT ON COLUMN public.pay_fund_flow.amount IS '流水金额';
 
 --
 -- Name: COLUMN pay_fund_flow.currency; Type: COMMENT; Schema: public; Owner: -
@@ -11188,7 +11188,7 @@ CREATE TABLE public.pay_gateway_cashier_item (
 -- Name: TABLE pay_gateway_cashier_item; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.pay_gateway_cashier_item IS '网关收银台支付项配置(应用级)';
+COMMENT ON TABLE public.pay_gateway_cashier_item IS '网关收银台支付项配置';
 
 --
 -- Name: COLUMN pay_gateway_cashier_item.id; Type: COMMENT; Schema: public; Owner: -
@@ -11206,13 +11206,13 @@ COMMENT ON COLUMN public.pay_gateway_cashier_item.app_id IS '应用号';
 -- Name: COLUMN pay_gateway_cashier_item.cashier_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_cashier_item.cashier_type IS '收银台类型: h5/web';
+COMMENT ON COLUMN public.pay_gateway_cashier_item.cashier_type IS '收银台类型';
 
 --
 -- Name: COLUMN pay_gateway_cashier_item.client_env; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_cashier_item.client_env IS '客户端环境(ClientEnvEnum)；WEB 为空';
+COMMENT ON COLUMN public.pay_gateway_cashier_item.client_env IS '客户端环境';
 
 --
 -- Name: COLUMN pay_gateway_cashier_item.name; Type: COMMENT; Schema: public; Owner: -
@@ -11236,31 +11236,31 @@ COMMENT ON COLUMN public.pay_gateway_cashier_item.recommend IS '是否推荐';
 -- Name: COLUMN pay_gateway_cashier_item.sort_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_cashier_item.sort_no IS '排序号(越小越前)';
+COMMENT ON COLUMN public.pay_gateway_cashier_item.sort_no IS '排序号';
 
 --
 -- Name: COLUMN pay_gateway_cashier_item.resolve_mode; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_cashier_item.resolve_mode IS '解析模式: method/direct';
+COMMENT ON COLUMN public.pay_gateway_cashier_item.resolve_mode IS '解析模式';
 
 --
 -- Name: COLUMN pay_gateway_cashier_item.method; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_cashier_item.method IS '支付方式(METHOD 模式)';
+COMMENT ON COLUMN public.pay_gateway_cashier_item.method IS '支付方式';
 
 --
 -- Name: COLUMN pay_gateway_cashier_item.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_cashier_item.channel_mch_no IS '通道商户号(DIRECT 模式)';
+COMMENT ON COLUMN public.pay_gateway_cashier_item.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN pay_gateway_cashier_item.capability; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_cashier_item.capability IS '支付能力(DIRECT 模式)';
+COMMENT ON COLUMN public.pay_gateway_cashier_item.capability IS '支付能力';
 
 --
 -- Name: COLUMN pay_gateway_cashier_item.mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -11365,7 +11365,7 @@ CREATE TABLE public.pay_gateway_order (
 -- Name: TABLE pay_gateway_order; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.pay_gateway_order IS '网关支付业务单容器(聚合扫码/收银台预下单)';
+COMMENT ON TABLE public.pay_gateway_order IS '网关支付业务单';
 
 --
 -- Name: COLUMN pay_gateway_order.id; Type: COMMENT; Schema: public; Owner: -
@@ -11377,7 +11377,7 @@ COMMENT ON COLUMN public.pay_gateway_order.id IS '主键';
 -- Name: COLUMN pay_gateway_order.order_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_order.order_no IS '平台业务单号(容器身份, 与 tradeNo 独立; 预下单 URL 号)';
+COMMENT ON COLUMN public.pay_gateway_order.order_no IS '平台业务单号';
 
 --
 -- Name: COLUMN pay_gateway_order.biz_order_no; Type: COMMENT; Schema: public; Owner: -
@@ -11389,13 +11389,13 @@ COMMENT ON COLUMN public.pay_gateway_order.biz_order_no IS '商户业务单号';
 -- Name: COLUMN pay_gateway_order.gateway_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_order.gateway_type IS '网关支付类型(GatewayPayTypeEnum)';
+COMMENT ON COLUMN public.pay_gateway_order.gateway_type IS '网关支付类型';
 
 --
 -- Name: COLUMN pay_gateway_order.source; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_order.source IS '订单来源(业务入口权威, TradeSourceEnum; 预下单写入)';
+COMMENT ON COLUMN public.pay_gateway_order.source IS '订单来源';
 
 --
 -- Name: COLUMN pay_gateway_order.title; Type: COMMENT; Schema: public; Owner: -
@@ -11413,7 +11413,7 @@ COMMENT ON COLUMN public.pay_gateway_order.description IS '描述';
 -- Name: COLUMN pay_gateway_order.status; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_order.status IS '业务状态(GatewayOrderStatusEnum)';
+COMMENT ON COLUMN public.pay_gateway_order.status IS '业务状态';
 
 --
 -- Name: COLUMN pay_gateway_order.notify_url; Type: COMMENT; Schema: public; Owner: -
@@ -11431,7 +11431,7 @@ COMMENT ON COLUMN public.pay_gateway_order.return_url IS '同步跳转地址';
 -- Name: COLUMN pay_gateway_order.attach; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_order.attach IS '商户附加参数(回调原样返回)';
+COMMENT ON COLUMN public.pay_gateway_order.attach IS '商户附加参数';
 
 --
 -- Name: COLUMN pay_gateway_order.expired_time; Type: COMMENT; Schema: public; Owner: -
@@ -11443,55 +11443,55 @@ COMMENT ON COLUMN public.pay_gateway_order.expired_time IS '业务单过期时�
 -- Name: COLUMN pay_gateway_order.amount; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_order.amount IS '业务单金额(最小货币单位)';
+COMMENT ON COLUMN public.pay_gateway_order.amount IS '业务单金额';
 
 --
 -- Name: COLUMN pay_gateway_order.currency; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_order.currency IS '币种(CurrencyEnum)';
+COMMENT ON COLUMN public.pay_gateway_order.currency IS '币种';
 
 --
 -- Name: COLUMN pay_gateway_order.channel; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_order.channel IS '支付通道编码(ChannelEnum)';
+COMMENT ON COLUMN public.pay_gateway_order.channel IS '支付通道编码';
 
 --
 -- Name: COLUMN pay_gateway_order.method; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_order.method IS '支付方式(PayMethodEnum)';
+COMMENT ON COLUMN public.pay_gateway_order.method IS '支付方式';
 
 --
 -- Name: COLUMN pay_gateway_order.limit_pay; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_order.limit_pay IS '限制支付类型(PayLimitPayEnum)';
+COMMENT ON COLUMN public.pay_gateway_order.limit_pay IS '限制支付类型';
 
 --
 -- Name: COLUMN pay_gateway_order.product; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_order.product IS '支付产品编码(ProductEnum)';
+COMMENT ON COLUMN public.pay_gateway_order.product IS '支付产品编码';
 
 --
 -- Name: COLUMN pay_gateway_order.openid; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_order.openid IS '微信 openid(jsapi/app/miniapp)';
+COMMENT ON COLUMN public.pay_gateway_order.openid IS '微信openid';
 
 --
 -- Name: COLUMN pay_gateway_order.client_env; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_order.client_env IS '客户端环境(ClientEnvEnum, 支付时回填)';
+COMMENT ON COLUMN public.pay_gateway_order.client_env IS '客户端环境';
 
 --
 -- Name: COLUMN pay_gateway_order.device; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_order.device IS '最后发起设备(mobile/pc, 支付时回填)';
+COMMENT ON COLUMN public.pay_gateway_order.device IS '最后发起设备';
 
 --
 -- Name: COLUMN pay_gateway_order.pay_time; Type: COMMENT; Schema: public; Owner: -
@@ -11509,13 +11509,13 @@ COMMENT ON COLUMN public.pay_gateway_order.close_time IS '关闭时间';
 -- Name: COLUMN pay_gateway_order.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_order.channel_mch_no IS '通道商户号(路由回填)';
+COMMENT ON COLUMN public.pay_gateway_order.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN pay_gateway_order.capability; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_order.capability IS '支付能力编码(路由回填)';
+COMMENT ON COLUMN public.pay_gateway_order.capability IS '支付能力编码';
 
 --
 -- Name: COLUMN pay_gateway_order.channel_app_id; Type: COMMENT; Schema: public; Owner: -
@@ -11527,7 +11527,7 @@ COMMENT ON COLUMN public.pay_gateway_order.channel_app_id IS '通道应用 AppId
 -- Name: COLUMN pay_gateway_order.provider; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_order.provider IS '支付渠道(PayProviderEnum)';
+COMMENT ON COLUMN public.pay_gateway_order.provider IS '支付渠道';
 
 --
 -- Name: COLUMN pay_gateway_order.buyer_id; Type: COMMENT; Schema: public; Owner: -
@@ -11551,7 +11551,7 @@ COMMENT ON COLUMN public.pay_gateway_order.trade_way IS '通道方记录的交�
 -- Name: COLUMN pay_gateway_order.bank_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_order.bank_type IS '银行卡类型(借记卡/贷记卡)';
+COMMENT ON COLUMN public.pay_gateway_order.bank_type IS '银行卡类型';
 
 --
 -- Name: COLUMN pay_gateway_order.promotion_type; Type: COMMENT; Schema: public; Owner: -
@@ -11563,25 +11563,25 @@ COMMENT ON COLUMN public.pay_gateway_order.promotion_type IS '活动类型';
 -- Name: COLUMN pay_gateway_order.pay_body; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_order.pay_body IS '支付参数体(已拉起缓存, 仅容器)';
+COMMENT ON COLUMN public.pay_gateway_order.pay_body IS '支付参数体';
 
 --
 -- Name: COLUMN pay_gateway_order.pay_body_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_order.pay_body_type IS '支付参数体类型(jsapi/sdk/app)';
+COMMENT ON COLUMN public.pay_gateway_order.pay_body_type IS '支付参数体类型';
 
 --
 -- Name: COLUMN pay_gateway_order.trans_order_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_order.trans_order_no IS '透传订单号(三方通道产生)';
+COMMENT ON COLUMN public.pay_gateway_order.trans_order_no IS '透传订单号';
 
 --
 -- Name: COLUMN pay_gateway_order.relation_order_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_order.relation_order_no IS '实际上送通道的商户订单号(展示冗余)';
+COMMENT ON COLUMN public.pay_gateway_order.relation_order_no IS '实际上送通道的商户订单号';
 
 --
 -- Name: COLUMN pay_gateway_order.extra_param; Type: COMMENT; Schema: public; Owner: -
@@ -11599,7 +11599,7 @@ COMMENT ON COLUMN public.pay_gateway_order.app_id IS '应用号';
 -- Name: COLUMN pay_gateway_order.goods_detail; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_order.goods_detail IS '订单商品明细列表(jsonb)';
+COMMENT ON COLUMN public.pay_gateway_order.goods_detail IS '订单商品明细列表';
 
 --
 -- Name: COLUMN pay_gateway_order.client_ip; Type: COMMENT; Schema: public; Owner: -
@@ -11611,7 +11611,7 @@ COMMENT ON COLUMN public.pay_gateway_order.client_ip IS '下单客户端 IP';
 -- Name: COLUMN pay_gateway_order.store_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_order.store_no IS '门店号(线下经营归属, 可空)';
+COMMENT ON COLUMN public.pay_gateway_order.store_no IS '门店号';
 
 --
 -- Name: COLUMN pay_gateway_order.error_msg; Type: COMMENT; Schema: public; Owner: -
@@ -11665,7 +11665,7 @@ COMMENT ON COLUMN public.pay_gateway_order.deleted IS '逻辑删除';
 -- Name: COLUMN pay_gateway_order.allocation; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_order.allocation IS '是否分账订单(预下单透传通道分账标识, true 表示资金冻结仅可分账拆分)';
+COMMENT ON COLUMN public.pay_gateway_order.allocation IS '是否分账订单';
 
 --
 -- Name: pay_gateway_pay_client_env; Type: TABLE; Schema: public; Owner: -
@@ -11692,7 +11692,7 @@ CREATE TABLE public.pay_gateway_pay_client_env (
 -- Name: TABLE pay_gateway_pay_client_env; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.pay_gateway_pay_client_env IS '网关支付客户端环境配置(子表, 码牌/聚合共用)';
+COMMENT ON TABLE public.pay_gateway_pay_client_env IS '网关支付客户端环境配置';
 
 --
 -- Name: COLUMN pay_gateway_pay_client_env.id; Type: COMMENT; Schema: public; Owner: -
@@ -11716,31 +11716,31 @@ COMMENT ON COLUMN public.pay_gateway_pay_client_env.config_id IS '网关支付�
 -- Name: COLUMN pay_gateway_pay_client_env.client_env; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_pay_client_env.client_env IS '客户端环境编码: wechat/alipay/union_pay/douyin';
+COMMENT ON COLUMN public.pay_gateway_pay_client_env.client_env IS '客户端环境';
 
 --
 -- Name: COLUMN pay_gateway_pay_client_env.pay_form; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_pay_client_env.pay_form IS '支付形态: h5/mini';
+COMMENT ON COLUMN public.pay_gateway_pay_client_env.pay_form IS '支付形态';
 
 --
 -- Name: COLUMN pay_gateway_pay_client_env.method; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_pay_client_env.method IS '支付方式(METHOD 模式填)';
+COMMENT ON COLUMN public.pay_gateway_pay_client_env.method IS '支付方式';
 
 --
 -- Name: COLUMN pay_gateway_pay_client_env.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_pay_client_env.channel_mch_no IS '通道商户号(DIRECT 模式填)';
+COMMENT ON COLUMN public.pay_gateway_pay_client_env.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN pay_gateway_pay_client_env.capability; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_pay_client_env.capability IS '支付能力(DIRECT 模式填)';
+COMMENT ON COLUMN public.pay_gateway_pay_client_env.capability IS '支付能力';
 
 --
 -- Name: COLUMN pay_gateway_pay_client_env.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -11776,7 +11776,7 @@ COMMENT ON COLUMN public.pay_gateway_pay_client_env.last_modified_time IS '最�
 -- Name: COLUMN pay_gateway_pay_client_env.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_pay_client_env.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.pay_gateway_pay_client_env.version IS '版本号';
 
 --
 -- Name: pay_gateway_pay_config; Type: TABLE; Schema: public; Owner: -
@@ -11800,7 +11800,7 @@ CREATE TABLE public.pay_gateway_pay_config (
 -- Name: TABLE pay_gateway_pay_config; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.pay_gateway_pay_config IS '网关支付配置(应用级, 码牌/聚合共用)';
+COMMENT ON TABLE public.pay_gateway_pay_config IS '网关支付配置';
 
 --
 -- Name: COLUMN pay_gateway_pay_config.id; Type: COMMENT; Schema: public; Owner: -
@@ -11824,13 +11824,13 @@ COMMENT ON COLUMN public.pay_gateway_pay_config.app_id IS '应用号';
 -- Name: COLUMN pay_gateway_pay_config.level; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_pay_config.level IS '配置深度: auto/method/direct';
+COMMENT ON COLUMN public.pay_gateway_pay_config.level IS '配置深度';
 
 --
 -- Name: COLUMN pay_gateway_pay_config.auto_launch; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_pay_config.auto_launch IS '是否自动拉起支付(码牌仅对固定金额生效)';
+COMMENT ON COLUMN public.pay_gateway_pay_config.auto_launch IS '是否自动拉起支付';
 
 --
 -- Name: COLUMN pay_gateway_pay_config.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -11866,7 +11866,7 @@ COMMENT ON COLUMN public.pay_gateway_pay_config.last_modified_time IS '最后修
 -- Name: COLUMN pay_gateway_pay_config.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_gateway_pay_config.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.pay_gateway_pay_config.version IS '版本号';
 
 --
 -- Name: pay_mch_app_device_config; Type: TABLE; Schema: public; Owner: -
@@ -11892,7 +11892,7 @@ CREATE TABLE public.pay_mch_app_device_config (
 -- Name: TABLE pay_mch_app_device_config; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.pay_mch_app_device_config IS '商户应用设备联动配置: 播报/打印/门店严格匹配开关与打印版式代码挂应用维度, 配置收归一点; 行不存在=默认全开';
+COMMENT ON TABLE public.pay_mch_app_device_config IS '商户应用设备联动配置';
 
 --
 -- Name: COLUMN pay_mch_app_device_config.id; Type: COMMENT; Schema: public; Owner: -
@@ -11904,31 +11904,31 @@ COMMENT ON COLUMN public.pay_mch_app_device_config.id IS '主键';
 -- Name: COLUMN pay_mch_app_device_config.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_mch_app_device_config.mch_no IS '所属商户号(冗余自应用, 便于归属校验与审计)';
+COMMENT ON COLUMN public.pay_mch_app_device_config.mch_no IS '所属商户号';
 
 --
 -- Name: COLUMN pay_mch_app_device_config.app_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_mch_app_device_config.app_id IS '应用号(全局唯一, 一应用一行)';
+COMMENT ON COLUMN public.pay_mch_app_device_config.app_id IS '应用号';
 
 --
 -- Name: COLUMN pay_mch_app_device_config.broadcast_enable; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_mch_app_device_config.broadcast_enable IS '是否播报(false=该应用支付成功不触发任何设备联动播报)';
+COMMENT ON COLUMN public.pay_mch_app_device_config.broadcast_enable IS '是否播报';
 
 --
 -- Name: COLUMN pay_mch_app_device_config.print_enable; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_mch_app_device_config.print_enable IS '是否允许打印(false=虚拟设备消息不附带 printData)';
+COMMENT ON COLUMN public.pay_mch_app_device_config.print_enable IS '是否允许打印';
 
 --
 -- Name: COLUMN pay_mch_app_device_config.template_code; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_mch_app_device_config.template_code IS '打印版式代码(内置版式常量, 首期 standard 标准小票; 非 pay_print_template 外键)';
+COMMENT ON COLUMN public.pay_mch_app_device_config.template_code IS '打印版式代码';
 
 --
 -- Name: COLUMN pay_mch_app_device_config.creator; Type: COMMENT; Schema: public; Owner: -
@@ -11958,7 +11958,7 @@ COMMENT ON COLUMN public.pay_mch_app_device_config.last_modified_time IS '最后
 -- Name: COLUMN pay_mch_app_device_config.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_mch_app_device_config.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.pay_mch_app_device_config.version IS '版本号';
 
 --
 -- Name: COLUMN pay_mch_app_device_config.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -11970,7 +11970,7 @@ COMMENT ON COLUMN public.pay_mch_app_device_config.deleted IS '删除标志';
 -- Name: COLUMN pay_mch_app_device_config.store_strict_match; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_mch_app_device_config.store_strict_match IS '门店订单严格匹配(true=门店订单仅推绑定该门店的设备, 未绑门店设备不参与; false/空=未绑门店设备视为商户通用照常推送)';
+COMMENT ON COLUMN public.pay_mch_app_device_config.store_strict_match IS '门店订单严格匹配';
 
 --
 -- Name: pay_md_capability; Type: TABLE; Schema: public; Owner: -
@@ -12005,7 +12005,7 @@ COMMENT ON COLUMN public.pay_md_capability.id IS '主键';
 -- Name: COLUMN pay_md_capability.code; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_md_capability.code IS '支付能力编码（PayCapabilityEnum.code）';
+COMMENT ON COLUMN public.pay_md_capability.code IS '支付能力编码';
 
 --
 -- Name: COLUMN pay_md_capability.sort_no; Type: COMMENT; Schema: public; Owner: -
@@ -12041,7 +12041,7 @@ COMMENT ON COLUMN public.pay_md_capability.last_modified_time IS '最后修改�
 -- Name: COLUMN pay_md_capability.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_md_capability.version IS '版本号（乐观锁）';
+COMMENT ON COLUMN public.pay_md_capability.version IS '版本号';
 
 --
 -- Name: COLUMN pay_md_capability.creator; Type: COMMENT; Schema: public; Owner: -
@@ -12171,7 +12171,7 @@ COMMENT ON COLUMN public.pay_md_method.id IS '主键';
 -- Name: COLUMN pay_md_method.code; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_md_method.code IS '支付方式编码（全局唯一）';
+COMMENT ON COLUMN public.pay_md_method.code IS '支付方式编码';
 
 --
 -- Name: COLUMN pay_md_method.sort_no; Type: COMMENT; Schema: public; Owner: -
@@ -12447,7 +12447,7 @@ COMMENT ON COLUMN public.pay_md_product_config.channel IS '通道编码';
 -- Name: COLUMN pay_md_product_config.active_env; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_md_product_config.active_env IS '生效环境: prod/sandbox';
+COMMENT ON COLUMN public.pay_md_product_config.active_env IS '生效环境';
 
 --
 -- Name: COLUMN pay_md_product_config.remark; Type: COMMENT; Schema: public; Owner: -
@@ -12526,25 +12526,25 @@ COMMENT ON COLUMN public.pay_md_provider.id IS '主键';
 -- Name: COLUMN pay_md_provider.code; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_md_provider.code IS '支付渠道编码（PayProviderEnum.code：aggregate_pay/wechat/alipay/union_pay/visa/mastercard）';
+COMMENT ON COLUMN public.pay_md_provider.code IS '渠道编码';
 
 --
 -- Name: COLUMN pay_md_provider.icon; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_md_provider.icon IS '图标（可选，覆盖前端默认展示）';
+COMMENT ON COLUMN public.pay_md_provider.icon IS '图标';
 
 --
 -- Name: COLUMN pay_md_provider.sort_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_md_provider.sort_no IS '排序（管理端 Tab/列表顺序）';
+COMMENT ON COLUMN public.pay_md_provider.sort_no IS '排序';
 
 --
 -- Name: COLUMN pay_md_provider.deleted; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_md_provider.deleted IS '删除标志（逻辑删除）';
+COMMENT ON COLUMN public.pay_md_provider.deleted IS '删除标志';
 
 --
 -- Name: COLUMN pay_md_provider.last_modifier; Type: COMMENT; Schema: public; Owner: -
@@ -12562,7 +12562,7 @@ COMMENT ON COLUMN public.pay_md_provider.last_modified_time IS '最后修改时�
 -- Name: COLUMN pay_md_provider.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_md_provider.version IS '版本号（乐观锁）';
+COMMENT ON COLUMN public.pay_md_provider.version IS '版本号';
 
 --
 -- Name: COLUMN pay_md_provider.creator; Type: COMMENT; Schema: public; Owner: -
@@ -12622,13 +12622,13 @@ COMMENT ON COLUMN public.pay_md_provider_method.id IS '主键';
 -- Name: COLUMN pay_md_provider_method.provider; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_md_provider_method.provider IS '支付渠道编码（对应 PayProviderMethod.provider / PayProviderEnum.code）';
+COMMENT ON COLUMN public.pay_md_provider_method.provider IS '支付渠道编码';
 
 --
 -- Name: COLUMN pay_md_provider_method.method; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_md_provider_method.method IS '支付方式编码（PayMethodEnum.code）';
+COMMENT ON COLUMN public.pay_md_provider_method.method IS '支付方式编码';
 
 --
 -- Name: COLUMN pay_md_provider_method.sort_no; Type: COMMENT; Schema: public; Owner: -
@@ -12640,7 +12640,7 @@ COMMENT ON COLUMN public.pay_md_provider_method.sort_no IS '渠道内排序';
 -- Name: COLUMN pay_md_provider_method.deleted; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_md_provider_method.deleted IS '删除标志（逻辑删除）';
+COMMENT ON COLUMN public.pay_md_provider_method.deleted IS '删除标志';
 
 --
 -- Name: COLUMN pay_md_provider_method.last_modifier; Type: COMMENT; Schema: public; Owner: -
@@ -12658,7 +12658,7 @@ COMMENT ON COLUMN public.pay_md_provider_method.last_modified_time IS '最后修
 -- Name: COLUMN pay_md_provider_method.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_md_provider_method.version IS '版本号（乐观锁）';
+COMMENT ON COLUMN public.pay_md_provider_method.version IS '版本号';
 
 --
 -- Name: COLUMN pay_md_provider_method.creator; Type: COMMENT; Schema: public; Owner: -
@@ -12752,7 +12752,7 @@ COMMENT ON COLUMN public.pay_normal_order.id IS '主键';
 -- Name: COLUMN pay_normal_order.order_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_normal_order.order_no IS '平台业务单号(容器身份)';
+COMMENT ON COLUMN public.pay_normal_order.order_no IS '平台业务单号';
 
 --
 -- Name: COLUMN pay_normal_order.biz_order_no; Type: COMMENT; Schema: public; Owner: -
@@ -12764,7 +12764,7 @@ COMMENT ON COLUMN public.pay_normal_order.biz_order_no IS '商户业务单号';
 -- Name: COLUMN pay_normal_order.source; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_normal_order.source IS '订单来源(业务入口权威, TradeSourceEnum)';
+COMMENT ON COLUMN public.pay_normal_order.source IS '订单来源';
 
 --
 -- Name: COLUMN pay_normal_order.title; Type: COMMENT; Schema: public; Owner: -
@@ -12812,7 +12812,7 @@ COMMENT ON COLUMN public.pay_normal_order.expired_time IS '业务单过期时间
 -- Name: COLUMN pay_normal_order.amount; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_normal_order.amount IS '业务单金额(最小货币单位/分)';
+COMMENT ON COLUMN public.pay_normal_order.amount IS '业务单金额';
 
 --
 -- Name: COLUMN pay_normal_order.currency; Type: COMMENT; Schema: public; Owner: -
@@ -12854,7 +12854,7 @@ COMMENT ON COLUMN public.pay_normal_order.openid IS '微信 openid';
 -- Name: COLUMN pay_normal_order.auth_code; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_normal_order.auth_code IS '付款码（被扫支付，审计保留）';
+COMMENT ON COLUMN public.pay_normal_order.auth_code IS '付款码';
 
 --
 -- Name: COLUMN pay_normal_order.pay_time; Type: COMMENT; Schema: public; Owner: -
@@ -12872,13 +12872,13 @@ COMMENT ON COLUMN public.pay_normal_order.close_time IS '关闭时间';
 -- Name: COLUMN pay_normal_order.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_normal_order.channel_mch_no IS '通道商户号(路由回填)';
+COMMENT ON COLUMN public.pay_normal_order.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN pay_normal_order.capability; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_normal_order.capability IS '支付能力编码(路由回填)';
+COMMENT ON COLUMN public.pay_normal_order.capability IS '支付能力编码';
 
 --
 -- Name: COLUMN pay_normal_order.channel_app_id; Type: COMMENT; Schema: public; Owner: -
@@ -12890,7 +12890,7 @@ COMMENT ON COLUMN public.pay_normal_order.channel_app_id IS '通道应用 AppId 
 -- Name: COLUMN pay_normal_order.provider; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_normal_order.provider IS '支付渠道(微信/支付宝/银联等)';
+COMMENT ON COLUMN public.pay_normal_order.provider IS '支付渠道';
 
 --
 -- Name: COLUMN pay_normal_order.buyer_id; Type: COMMENT; Schema: public; Owner: -
@@ -12962,7 +12962,7 @@ COMMENT ON COLUMN public.pay_normal_order.app_id IS '应用号';
 -- Name: COLUMN pay_normal_order.goods_detail; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_normal_order.goods_detail IS '订单商品明细(jsonb)';
+COMMENT ON COLUMN public.pay_normal_order.goods_detail IS '订单商品明细';
 
 --
 -- Name: COLUMN pay_normal_order.client_ip; Type: COMMENT; Schema: public; Owner: -
@@ -12980,13 +12980,13 @@ COMMENT ON COLUMN public.pay_normal_order.terminal_no IS '终端设备编码';
 -- Name: COLUMN pay_normal_order.out_terminal_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_normal_order.out_terminal_no IS '通道侧终端号(支付时按绑定关系解析落库)';
+COMMENT ON COLUMN public.pay_normal_order.out_terminal_no IS '通道侧终端号';
 
 --
 -- Name: COLUMN pay_normal_order.store_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_normal_order.store_no IS '门店号(线下经营归属, 可空)';
+COMMENT ON COLUMN public.pay_normal_order.store_no IS '门店号';
 
 --
 -- Name: COLUMN pay_normal_order.qr_code; Type: COMMENT; Schema: public; Owner: -
@@ -13046,7 +13046,7 @@ COMMENT ON COLUMN public.pay_normal_order.deleted IS '逻辑删除';
 -- Name: COLUMN pay_normal_order.allocation; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_normal_order.allocation IS '是否分账订单(下单时透传通道分账标识, true 表示资金冻结仅可分账拆分)';
+COMMENT ON COLUMN public.pay_normal_order.allocation IS '是否分账订单';
 
 --
 -- Name: pay_platform_mobile_app; Type: TABLE; Schema: public; Owner: -
@@ -13091,19 +13091,19 @@ COMMENT ON COLUMN public.pay_platform_mobile_app.app_type IS '端类型';
 -- Name: COLUMN pay_platform_mobile_app.platform; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_platform_mobile_app.platform IS '移动平台: wx_h5/wx_mini/alipay_mini/dy_mini/android/ios';
+COMMENT ON COLUMN public.pay_platform_mobile_app.platform IS '移动平台';
 
 --
 -- Name: COLUMN pay_platform_mobile_app.app_config; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_platform_mobile_app.app_config IS '平台特有密钥配置(JSON文本, AES-256-GCM加密存储)';
+COMMENT ON COLUMN public.pay_platform_mobile_app.app_config IS '平台特有密钥配置';
 
 --
 -- Name: COLUMN pay_platform_mobile_app.notify_config; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_platform_mobile_app.notify_config IS '消息通知配置(jsonb, 明文, 非敏感)';
+COMMENT ON COLUMN public.pay_platform_mobile_app.notify_config IS '消息通知配置';
 
 --
 -- Name: COLUMN pay_platform_mobile_app.binding_enabled; Type: COMMENT; Schema: public; Owner: -
@@ -13151,7 +13151,7 @@ COMMENT ON COLUMN public.pay_platform_mobile_app.last_modified_time IS '最后�
 -- Name: COLUMN pay_platform_mobile_app.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_platform_mobile_app.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.pay_platform_mobile_app.version IS '版本号';
 
 --
 -- Name: COLUMN pay_platform_mobile_app.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -13222,7 +13222,7 @@ COMMENT ON COLUMN public.pay_refund_order.app_id IS '应用号';
 -- Name: COLUMN pay_refund_order.refund_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_refund_order.refund_no IS '退款号(平台统一生成)';
+COMMENT ON COLUMN public.pay_refund_order.refund_no IS '退款号';
 
 --
 -- Name: COLUMN pay_refund_order.biz_refund_no; Type: COMMENT; Schema: public; Owner: -
@@ -13240,7 +13240,7 @@ COMMENT ON COLUMN public.pay_refund_order.title IS '标题';
 -- Name: COLUMN pay_refund_order.trade_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_refund_order.trade_no IS '原支付资金交易号(= pay_trade.trade_no，非容器 orderNo)';
+COMMENT ON COLUMN public.pay_refund_order.trade_no IS '原支付资金交易号';
 
 --
 -- Name: COLUMN pay_refund_order.biz_order_no; Type: COMMENT; Schema: public; Owner: -
@@ -13264,13 +13264,13 @@ COMMENT ON COLUMN public.pay_refund_order.out_refund_no IS '通道退款流水�
 -- Name: COLUMN pay_refund_order.amount; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_refund_order.amount IS '退款金额(分)';
+COMMENT ON COLUMN public.pay_refund_order.amount IS '退款金额';
 
 --
 -- Name: COLUMN pay_refund_order.order_amount; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_refund_order.order_amount IS '订单总金额(冗余, 分)';
+COMMENT ON COLUMN public.pay_refund_order.order_amount IS '订单总金额';
 
 --
 -- Name: COLUMN pay_refund_order.currency; Type: COMMENT; Schema: public; Owner: -
@@ -13312,13 +13312,13 @@ COMMENT ON COLUMN public.pay_refund_order.product IS '支付产品编码';
 -- Name: COLUMN pay_refund_order.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_refund_order.channel_mch_no IS '通道商户号(路由回填)';
+COMMENT ON COLUMN public.pay_refund_order.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN pay_refund_order.capability; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_refund_order.capability IS '支付能力编码(路由回填)';
+COMMENT ON COLUMN public.pay_refund_order.capability IS '支付能力编码';
 
 --
 -- Name: COLUMN pay_refund_order.channel_app_id; Type: COMMENT; Schema: public; Owner: -
@@ -13348,7 +13348,7 @@ COMMENT ON COLUMN public.pay_refund_order.client_ip IS '客户端 IP';
 -- Name: COLUMN pay_refund_order.store_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_refund_order.store_no IS '门店号(继承自原支付容器, 可空)';
+COMMENT ON COLUMN public.pay_refund_order.store_no IS '门店号';
 
 --
 -- Name: COLUMN pay_refund_order.error_msg; Type: COMMENT; Schema: public; Owner: -
@@ -13402,13 +13402,13 @@ COMMENT ON COLUMN public.pay_refund_order.deleted IS '逻辑删除';
 -- Name: COLUMN pay_refund_order.trade_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_refund_order.trade_type IS '原支付交易形态(冗余自 pay_trade.trade_type，如 normal/gateway)';
+COMMENT ON COLUMN public.pay_refund_order.trade_type IS '原支付交易形态';
 
 --
 -- Name: COLUMN pay_refund_order.relation_order_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_refund_order.relation_order_no IS '实际上送通道的商户退款关联号(普通通道=refund_no；特殊通道可变形)';
+COMMENT ON COLUMN public.pay_refund_order.relation_order_no IS '实际上送通道的商户退款关联号';
 
 --
 -- Name: pay_risk_hit; Type: TABLE; Schema: public; Owner: -
@@ -13447,7 +13447,7 @@ CREATE TABLE public.pay_risk_hit (
 -- Name: TABLE pay_risk_hit; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.pay_risk_hit IS '支付风险命中记录（事前拦截与事后命中，供运营预警与处置）';
+COMMENT ON TABLE public.pay_risk_hit IS '支付风险命中记录';
 
 --
 -- Name: COLUMN pay_risk_hit.id; Type: COMMENT; Schema: public; Owner: -
@@ -13501,25 +13501,25 @@ COMMENT ON COLUMN public.pay_risk_hit.phase IS '命中阶段';
 -- Name: COLUMN pay_risk_hit.hit_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_risk_hit.hit_type IS '命中类型（与黑名单 type 一致: ip / open_id）';
+COMMENT ON COLUMN public.pay_risk_hit.hit_type IS '命中类型';
 
 --
 -- Name: COLUMN pay_risk_hit.hit_value; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_risk_hit.hit_value IS '命中值快照（IP 或 openId）';
+COMMENT ON COLUMN public.pay_risk_hit.hit_value IS '命中值快照';
 
 --
 -- Name: COLUMN pay_risk_hit.blacklist_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_risk_hit.blacklist_id IS '关联名单 ID（可空）';
+COMMENT ON COLUMN public.pay_risk_hit.blacklist_id IS '关联名单 ID';
 
 --
 -- Name: COLUMN pay_risk_hit.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_risk_hit.mch_no IS '商户号（业务字段，非租户行级隔离）';
+COMMENT ON COLUMN public.pay_risk_hit.mch_no IS '商户号';
 
 --
 -- Name: COLUMN pay_risk_hit.app_id; Type: COMMENT; Schema: public; Owner: -
@@ -13549,7 +13549,7 @@ COMMENT ON COLUMN public.pay_risk_hit.biz_order_no IS '商户业务单号';
 -- Name: COLUMN pay_risk_hit.trade_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_risk_hit.trade_type IS '交易类型: normal / gateway';
+COMMENT ON COLUMN public.pay_risk_hit.trade_type IS '交易类型';
 
 --
 -- Name: COLUMN pay_risk_hit.method; Type: COMMENT; Schema: public; Owner: -
@@ -13585,13 +13585,13 @@ COMMENT ON COLUMN public.pay_risk_hit.openid IS '下单 openId 快照';
 -- Name: COLUMN pay_risk_hit.buyer_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_risk_hit.buyer_id IS '通道回写付款人标识（buyerId / openId）';
+COMMENT ON COLUMN public.pay_risk_hit.buyer_id IS '通道回写付款人标识';
 
 --
 -- Name: COLUMN pay_risk_hit.scene; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_risk_hit.scene IS '来源场景: api/gateway/code/manual/unknown';
+COMMENT ON COLUMN public.pay_risk_hit.scene IS '来源场景';
 
 --
 -- Name: COLUMN pay_risk_hit.remark; Type: COMMENT; Schema: public; Owner: -
@@ -13603,7 +13603,7 @@ COMMENT ON COLUMN public.pay_risk_hit.remark IS '备注';
 -- Name: COLUMN pay_risk_hit.client_city; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_risk_hit.client_city IS '客户端 IP 归属城市（ip2region 解析快照）';
+COMMENT ON COLUMN public.pay_risk_hit.client_city IS '客户端IP归属城市';
 
 --
 -- Name: pay_route_basic_config; Type: TABLE; Schema: public; Owner: -
@@ -13734,7 +13734,7 @@ COMMENT ON COLUMN public.pay_route_scene_config.method IS '支付方式编码';
 -- Name: COLUMN pay_route_scene_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_route_scene_config.channel_mch_no IS '通道商户号(唯一绑定支付产品)';
+COMMENT ON COLUMN public.pay_route_scene_config.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN pay_route_scene_config.capability; Type: COMMENT; Schema: public; Owner: -
@@ -13823,7 +13823,7 @@ COMMENT ON COLUMN public.pay_route_strategy.mch_no IS '商户号';
 -- Name: COLUMN pay_route_strategy.mode; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_route_strategy.mode IS '路由模式：basic / scene';
+COMMENT ON COLUMN public.pay_route_strategy.mode IS '路由模式';
 
 --
 -- Name: COLUMN pay_route_strategy.creator; Type: COMMENT; Schema: public; Owner: -
@@ -13853,7 +13853,7 @@ COMMENT ON COLUMN public.pay_route_strategy.last_modified_time IS '最后修改�
 -- Name: COLUMN pay_route_strategy.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_route_strategy.version IS '版本号（乐观锁）';
+COMMENT ON COLUMN public.pay_route_strategy.version IS '版本号';
 
 --
 -- Name: COLUMN pay_route_strategy.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -13917,19 +13917,19 @@ COMMENT ON COLUMN public.pay_sync_record.app_id IS '应用号';
 -- Name: COLUMN pay_sync_record.trade_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_sync_record.trade_no IS '平台交易号(对应 pay_trade.trade_no)';
+COMMENT ON COLUMN public.pay_sync_record.trade_no IS '平台交易号';
 
 --
 -- Name: COLUMN pay_sync_record.biz_trade_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_sync_record.biz_trade_no IS '商户业务单号(对应 pay_normal_order.biz_order_no)';
+COMMENT ON COLUMN public.pay_sync_record.biz_trade_no IS '商户业务单号';
 
 --
 -- Name: COLUMN pay_sync_record.out_trade_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_sync_record.out_trade_no IS '通道交易号(三方通道返回的订单号)';
+COMMENT ON COLUMN public.pay_sync_record.out_trade_no IS '通道交易号';
 
 --
 -- Name: COLUMN pay_sync_record.out_trade_status; Type: COMMENT; Schema: public; Owner: -
@@ -13959,7 +13959,7 @@ COMMENT ON COLUMN public.pay_sync_record.channel IS '支付通道';
 -- Name: COLUMN pay_sync_record.sync_info; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_sync_record.sync_info IS '网关返回的同步原始报文(json)';
+COMMENT ON COLUMN public.pay_sync_record.sync_info IS '网关返回的同步原始报文';
 
 --
 -- Name: COLUMN pay_sync_record.adjust; Type: COMMENT; Schema: public; Owner: -
@@ -14069,19 +14069,19 @@ COMMENT ON COLUMN public.pay_terminal_channel_bind.channel_terminal_id IS '通�
 -- Name: COLUMN pay_terminal_channel_bind.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_terminal_channel_bind.channel_mch_no IS '通道商户号(冗余自通道终端, 支付解析与筛选用)';
+COMMENT ON COLUMN public.pay_terminal_channel_bind.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN pay_terminal_channel_bind.channel; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_terminal_channel_bind.channel IS '通道编码(冗余自通道终端)';
+COMMENT ON COLUMN public.pay_terminal_channel_bind.channel IS '通道编码';
 
 --
 -- Name: COLUMN pay_terminal_channel_bind.type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_terminal_channel_bind.type IS '报送类型(冗余自通道终端, 唯一校验用)';
+COMMENT ON COLUMN public.pay_terminal_channel_bind.type IS '报送类型';
 
 --
 -- Name: COLUMN pay_terminal_channel_bind.mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -14150,7 +14150,7 @@ CREATE TABLE public.pay_terminal_device (
 -- Name: TABLE pay_terminal_device; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.pay_terminal_device IS '系统终端(逻辑终端台账)';
+COMMENT ON TABLE public.pay_terminal_device IS '系统终端';
 
 --
 -- Name: COLUMN pay_terminal_device.id; Type: COMMENT; Schema: public; Owner: -
@@ -14162,7 +14162,7 @@ COMMENT ON COLUMN public.pay_terminal_device.id IS '主键';
 -- Name: COLUMN pay_terminal_device.terminal_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_terminal_device.terminal_no IS '系统终端编码(平台生成)';
+COMMENT ON COLUMN public.pay_terminal_device.terminal_no IS '系统终端编码';
 
 --
 -- Name: COLUMN pay_terminal_device.name; Type: COMMENT; Schema: public; Owner: -
@@ -14174,7 +14174,7 @@ COMMENT ON COLUMN public.pay_terminal_device.name IS '终端名称';
 -- Name: COLUMN pay_terminal_device.store_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_terminal_device.store_no IS '绑定门店号(可空, 门店1:N终端)';
+COMMENT ON COLUMN public.pay_terminal_device.store_no IS '绑定门店号';
 
 --
 -- Name: COLUMN pay_terminal_device.enable; Type: COMMENT; Schema: public; Owner: -
@@ -14186,7 +14186,7 @@ COMMENT ON COLUMN public.pay_terminal_device.enable IS '是否启用';
 -- Name: COLUMN pay_terminal_device.default_terminal; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_terminal_device.default_terminal IS '是否门店默认终端(同门店至多一个, 支付未指定终端号时回落)';
+COMMENT ON COLUMN public.pay_terminal_device.default_terminal IS '是否门店默认终端';
 
 --
 -- Name: COLUMN pay_terminal_device.remark; Type: COMMENT; Schema: public; Owner: -
@@ -14288,13 +14288,13 @@ COMMENT ON COLUMN public.pay_trade.id IS '主键';
 -- Name: COLUMN pay_trade.trade_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_trade.trade_no IS '资金交易号(平台生成)';
+COMMENT ON COLUMN public.pay_trade.trade_no IS '资金交易号';
 
 --
 -- Name: COLUMN pay_trade.trade_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_trade.trade_type IS '交易形态(normal/gateway/authorize 等)';
+COMMENT ON COLUMN public.pay_trade.trade_type IS '交易形态';
 
 --
 -- Name: COLUMN pay_trade.container_id; Type: COMMENT; Schema: public; Owner: -
@@ -14306,7 +14306,7 @@ COMMENT ON COLUMN public.pay_trade.container_id IS '关联业务容器ID';
 -- Name: COLUMN pay_trade.amount; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_trade.amount IS '本次交易金额(最小货币单位/分)';
+COMMENT ON COLUMN public.pay_trade.amount IS '本次交易金额';
 
 --
 -- Name: COLUMN pay_trade.currency; Type: COMMENT; Schema: public; Owner: -
@@ -14318,13 +14318,13 @@ COMMENT ON COLUMN public.pay_trade.currency IS '币种';
 -- Name: COLUMN pay_trade.posted_amount; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_trade.posted_amount IS '入账金额(分; 结算类 SUCCESS 时=amount)';
+COMMENT ON COLUMN public.pay_trade.posted_amount IS '入账金额';
 
 --
 -- Name: COLUMN pay_trade.refundable_balance; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_trade.refundable_balance IS '可退金额(分)';
+COMMENT ON COLUMN public.pay_trade.refundable_balance IS '可退金额';
 
 --
 -- Name: COLUMN pay_trade.status; Type: COMMENT; Schema: public; Owner: -
@@ -14348,19 +14348,19 @@ COMMENT ON COLUMN public.pay_trade.close_time IS '关闭时间';
 -- Name: COLUMN pay_trade.source; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_trade.source IS '订单来源(冗余自容器; 权威在容器)';
+COMMENT ON COLUMN public.pay_trade.source IS '订单来源';
 
 --
 -- Name: COLUMN pay_trade.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_trade.channel_mch_no IS '通道商户号(冗余自业务容器, 路由确定后写入)';
+COMMENT ON COLUMN public.pay_trade.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN pay_trade.store_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_trade.store_no IS '门店号(冗余自业务容器, 可空; 权威在容器)';
+COMMENT ON COLUMN public.pay_trade.store_no IS '门店号';
 
 --
 -- Name: COLUMN pay_trade.out_order_no; Type: COMMENT; Schema: public; Owner: -
@@ -14372,7 +14372,7 @@ COMMENT ON COLUMN public.pay_trade.out_order_no IS '通道订单号';
 -- Name: COLUMN pay_trade.relation_order_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_trade.relation_order_no IS '实际上送通道的商户订单号(反查权威)';
+COMMENT ON COLUMN public.pay_trade.relation_order_no IS '实际上送通道的商户订单号';
 
 --
 -- Name: COLUMN pay_trade.app_id; Type: COMMENT; Schema: public; Owner: -
@@ -14426,7 +14426,7 @@ COMMENT ON COLUMN public.pay_trade.deleted IS '逻辑删除';
 -- Name: COLUMN pay_trade.provider; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_trade.provider IS '支付渠道(冗余自容器, 支付成功sync后回填; 权威在容器 provider)';
+COMMENT ON COLUMN public.pay_trade.provider IS '支付渠道';
 
 --
 -- Name: COLUMN pay_trade.title; Type: COMMENT; Schema: public; Owner: -
@@ -14444,13 +14444,13 @@ COMMENT ON COLUMN public.pay_trade.channel IS '支付通道';
 -- Name: COLUMN pay_trade.alloc_status; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_trade.alloc_status IS '分账状态(none-待分账/unsupported-不支持已降级/processing-分账中/allocated-已分账未完结/finished-已分账且完结/done-历史存量已分账)';
+COMMENT ON COLUMN public.pay_trade.alloc_status IS '分账状态';
 
 --
 -- Name: COLUMN pay_trade.allocated_amount; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_trade.allocated_amount IS '已分账累计金额(分, 不含失败与完结单)';
+COMMENT ON COLUMN public.pay_trade.allocated_amount IS '已分账累计金额';
 
 --
 -- Name: pay_transfer_order_alipay; Type: TABLE; Schema: public; Owner: -
@@ -14510,19 +14510,19 @@ COMMENT ON COLUMN public.pay_transfer_order_alipay.transfer_no IS '平台转账�
 -- Name: COLUMN pay_transfer_order_alipay.biz_transfer_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_order_alipay.biz_transfer_no IS '商户转账号(幂等键, 同一商户下唯一)';
+COMMENT ON COLUMN public.pay_transfer_order_alipay.biz_transfer_no IS '商户转账号';
 
 --
 -- Name: COLUMN pay_transfer_order_alipay.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_order_alipay.channel_mch_no IS '通道商户号(路由确定后写入, 凭证组装用)';
+COMMENT ON COLUMN public.pay_transfer_order_alipay.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN pay_transfer_order_alipay.out_transfer_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_order_alipay.out_transfer_no IS '通道转账单号(支付宝 order_id)';
+COMMENT ON COLUMN public.pay_transfer_order_alipay.out_transfer_no IS '通道转账单号';
 
 --
 -- Name: COLUMN pay_transfer_order_alipay.mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -14534,7 +14534,7 @@ COMMENT ON COLUMN public.pay_transfer_order_alipay.mch_no IS '商户号';
 -- Name: COLUMN pay_transfer_order_alipay.amount; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_order_alipay.amount IS '转账金额(最小货币单位/分)';
+COMMENT ON COLUMN public.pay_transfer_order_alipay.amount IS '转账金额';
 
 --
 -- Name: COLUMN pay_transfer_order_alipay.currency; Type: COMMENT; Schema: public; Owner: -
@@ -14558,7 +14558,7 @@ COMMENT ON COLUMN public.pay_transfer_order_alipay.reason IS '转账原因/备�
 -- Name: COLUMN pay_transfer_order_alipay.status; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_order_alipay.status IS '转账状态(processing/success/fail/close)';
+COMMENT ON COLUMN public.pay_transfer_order_alipay.status IS '转账状态';
 
 --
 -- Name: COLUMN pay_transfer_order_alipay.finish_time; Type: COMMENT; Schema: public; Owner: -
@@ -14576,7 +14576,7 @@ COMMENT ON COLUMN public.pay_transfer_order_alipay.notify_url IS '商户异步�
 -- Name: COLUMN pay_transfer_order_alipay.attach; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_order_alipay.attach IS '商户扩展参数(回调原样返回)';
+COMMENT ON COLUMN public.pay_transfer_order_alipay.attach IS '商户扩展参数';
 
 --
 -- Name: COLUMN pay_transfer_order_alipay.req_time; Type: COMMENT; Schema: public; Owner: -
@@ -14594,7 +14594,7 @@ COMMENT ON COLUMN public.pay_transfer_order_alipay.error_msg IS '错误信息';
 -- Name: COLUMN pay_transfer_order_alipay.payee_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_order_alipay.payee_type IS '收款人账号类型(user_id/open_id/login_name)';
+COMMENT ON COLUMN public.pay_transfer_order_alipay.payee_type IS '收款人账号类型';
 
 --
 -- Name: COLUMN pay_transfer_order_alipay.payee_account; Type: COMMENT; Schema: public; Owner: -
@@ -14648,25 +14648,25 @@ COMMENT ON COLUMN public.pay_transfer_order_alipay.deleted IS '逻辑删除';
 -- Name: COLUMN pay_transfer_order_alipay.pay_fund_order_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_order_alipay.pay_fund_order_id IS '支付宝资金流水号(财务对账,区别于 out_transfer_no)';
+COMMENT ON COLUMN public.pay_transfer_order_alipay.pay_fund_order_id IS '支付宝资金流水号';
 
 --
 -- Name: COLUMN pay_transfer_order_alipay.report_infos; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_order_alipay.report_infos IS '转账场景报备信息(JSON序列化, FAIL重试时恢复报备用)';
+COMMENT ON COLUMN public.pay_transfer_order_alipay.report_infos IS '转账场景报备信息';
 
 --
 -- Name: COLUMN pay_transfer_order_alipay.transfer_scene; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_order_alipay.transfer_scene IS '转账场景标识(支付宝=转账场景配置ID, FAIL重试时恢复场景用)';
+COMMENT ON COLUMN public.pay_transfer_order_alipay.transfer_scene IS '转账场景标识';
 
 --
 -- Name: COLUMN pay_transfer_order_alipay.app_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_order_alipay.app_id IS '应用ID(建单从请求参数写入, 出站通知派发用)';
+COMMENT ON COLUMN public.pay_transfer_order_alipay.app_id IS '应用ID';
 
 --
 -- Name: pay_transfer_order_douyin; Type: TABLE; Schema: public; Owner: -
@@ -14725,19 +14725,19 @@ COMMENT ON COLUMN public.pay_transfer_order_douyin.transfer_no IS '平台转账�
 -- Name: COLUMN pay_transfer_order_douyin.biz_transfer_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_order_douyin.biz_transfer_no IS '商户转账号(幂等键, 同一商户下唯一)';
+COMMENT ON COLUMN public.pay_transfer_order_douyin.biz_transfer_no IS '商户转账号';
 
 --
 -- Name: COLUMN pay_transfer_order_douyin.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_order_douyin.channel_mch_no IS '通道商户号(路由确定后写入, 凭证组装用)';
+COMMENT ON COLUMN public.pay_transfer_order_douyin.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN pay_transfer_order_douyin.out_transfer_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_order_douyin.out_transfer_no IS '通道转账单号(抖音 orderId)';
+COMMENT ON COLUMN public.pay_transfer_order_douyin.out_transfer_no IS '通道转账单号';
 
 --
 -- Name: COLUMN pay_transfer_order_douyin.mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -14749,7 +14749,7 @@ COMMENT ON COLUMN public.pay_transfer_order_douyin.mch_no IS '商户号';
 -- Name: COLUMN pay_transfer_order_douyin.amount; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_order_douyin.amount IS '转账金额(最小货币单位/分)';
+COMMENT ON COLUMN public.pay_transfer_order_douyin.amount IS '转账金额';
 
 --
 -- Name: COLUMN pay_transfer_order_douyin.currency; Type: COMMENT; Schema: public; Owner: -
@@ -14773,7 +14773,7 @@ COMMENT ON COLUMN public.pay_transfer_order_douyin.reason IS '转账原因/备�
 -- Name: COLUMN pay_transfer_order_douyin.status; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_order_douyin.status IS '转账状态(processing/success/fail/close)';
+COMMENT ON COLUMN public.pay_transfer_order_douyin.status IS '转账状态';
 
 --
 -- Name: COLUMN pay_transfer_order_douyin.finish_time; Type: COMMENT; Schema: public; Owner: -
@@ -14791,7 +14791,7 @@ COMMENT ON COLUMN public.pay_transfer_order_douyin.notify_url IS '商户异步�
 -- Name: COLUMN pay_transfer_order_douyin.attach; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_order_douyin.attach IS '商户扩展参数(回调原样返回)';
+COMMENT ON COLUMN public.pay_transfer_order_douyin.attach IS '商户扩展参数';
 
 --
 -- Name: COLUMN pay_transfer_order_douyin.req_time; Type: COMMENT; Schema: public; Owner: -
@@ -14827,7 +14827,7 @@ COMMENT ON COLUMN public.pay_transfer_order_douyin.payee_name IS '收款人姓�
 -- Name: COLUMN pay_transfer_order_douyin.transfer_scene; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_order_douyin.transfer_scene IS '转账场景标识(抖音=转账场景配置ID, FAIL重试时恢复场景用)';
+COMMENT ON COLUMN public.pay_transfer_order_douyin.transfer_scene IS '转账场景标识';
 
 --
 -- Name: COLUMN pay_transfer_order_douyin.creator; Type: COMMENT; Schema: public; Owner: -
@@ -14869,13 +14869,13 @@ COMMENT ON COLUMN public.pay_transfer_order_douyin.deleted IS '逻辑删除';
 -- Name: COLUMN pay_transfer_order_douyin.report_infos; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_order_douyin.report_infos IS '转账场景报备信息(JSON序列化, FAIL重试时恢复报备用)';
+COMMENT ON COLUMN public.pay_transfer_order_douyin.report_infos IS '转账场景报备信息';
 
 --
 -- Name: COLUMN pay_transfer_order_douyin.app_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_order_douyin.app_id IS '应用ID(建单从请求参数写入, 出站通知派发用)';
+COMMENT ON COLUMN public.pay_transfer_order_douyin.app_id IS '应用ID';
 
 --
 -- Name: pay_transfer_order_wechat; Type: TABLE; Schema: public; Owner: -
@@ -14935,19 +14935,19 @@ COMMENT ON COLUMN public.pay_transfer_order_wechat.transfer_no IS '平台转账�
 -- Name: COLUMN pay_transfer_order_wechat.biz_transfer_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_order_wechat.biz_transfer_no IS '商户转账号(幂等键, 同一商户下唯一)';
+COMMENT ON COLUMN public.pay_transfer_order_wechat.biz_transfer_no IS '商户转账号';
 
 --
 -- Name: COLUMN pay_transfer_order_wechat.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_order_wechat.channel_mch_no IS '通道商户号(路由确定后写入, 凭证组装用)';
+COMMENT ON COLUMN public.pay_transfer_order_wechat.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN pay_transfer_order_wechat.out_transfer_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_order_wechat.out_transfer_no IS '通道转账单号(微信 paymentNo)';
+COMMENT ON COLUMN public.pay_transfer_order_wechat.out_transfer_no IS '通道转账单号';
 
 --
 -- Name: COLUMN pay_transfer_order_wechat.mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -14959,7 +14959,7 @@ COMMENT ON COLUMN public.pay_transfer_order_wechat.mch_no IS '商户号';
 -- Name: COLUMN pay_transfer_order_wechat.amount; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_order_wechat.amount IS '转账金额(最小货币单位/分)';
+COMMENT ON COLUMN public.pay_transfer_order_wechat.amount IS '转账金额';
 
 --
 -- Name: COLUMN pay_transfer_order_wechat.currency; Type: COMMENT; Schema: public; Owner: -
@@ -14983,7 +14983,7 @@ COMMENT ON COLUMN public.pay_transfer_order_wechat.reason IS '转账原因/备�
 -- Name: COLUMN pay_transfer_order_wechat.status; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_order_wechat.status IS '转账状态(processing/success/fail/close)';
+COMMENT ON COLUMN public.pay_transfer_order_wechat.status IS '转账状态';
 
 --
 -- Name: COLUMN pay_transfer_order_wechat.finish_time; Type: COMMENT; Schema: public; Owner: -
@@ -15001,7 +15001,7 @@ COMMENT ON COLUMN public.pay_transfer_order_wechat.notify_url IS '商户异步�
 -- Name: COLUMN pay_transfer_order_wechat.attach; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_order_wechat.attach IS '商户扩展参数(回调原样返回)';
+COMMENT ON COLUMN public.pay_transfer_order_wechat.attach IS '商户扩展参数';
 
 --
 -- Name: COLUMN pay_transfer_order_wechat.req_time; Type: COMMENT; Schema: public; Owner: -
@@ -15025,19 +15025,19 @@ COMMENT ON COLUMN public.pay_transfer_order_wechat.payee_openid IS '收款人微
 -- Name: COLUMN pay_transfer_order_wechat.transfer_scene; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_order_wechat.transfer_scene IS '转账场景(冗余自通道商户配置)';
+COMMENT ON COLUMN public.pay_transfer_order_wechat.transfer_scene IS '转账场景';
 
 --
 -- Name: COLUMN pay_transfer_order_wechat.transfer_body; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_order_wechat.transfer_body IS '拉起转账确认参数(微信二次确认)';
+COMMENT ON COLUMN public.pay_transfer_order_wechat.transfer_body IS '拉起转账确认参数';
 
 --
 -- Name: COLUMN pay_transfer_order_wechat.user_name; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_order_wechat.user_name IS '收款人姓名(金额档位校验用)';
+COMMENT ON COLUMN public.pay_transfer_order_wechat.user_name IS '收款人姓名';
 
 --
 -- Name: COLUMN pay_transfer_order_wechat.creator; Type: COMMENT; Schema: public; Owner: -
@@ -15079,19 +15079,19 @@ COMMENT ON COLUMN public.pay_transfer_order_wechat.deleted IS '逻辑删除';
 -- Name: COLUMN pay_transfer_order_wechat.wx_app_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_order_wechat.wx_app_id IS '转账发起应用AppId(从转账配置解析, openid归属校验用)';
+COMMENT ON COLUMN public.pay_transfer_order_wechat.wx_app_id IS '转账发起应用AppId';
 
 --
 -- Name: COLUMN pay_transfer_order_wechat.app_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_order_wechat.app_id IS '应用ID(建单从请求参数写入, 出站通知派发用)';
+COMMENT ON COLUMN public.pay_transfer_order_wechat.app_id IS '应用ID';
 
 --
 -- Name: COLUMN pay_transfer_order_wechat.report_infos; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_order_wechat.report_infos IS '转账场景报备信息(JSON序列化, FAIL重试时恢复报备用)';
+COMMENT ON COLUMN public.pay_transfer_order_wechat.report_infos IS '转账场景报备信息';
 
 --
 -- Name: pay_transfer_trade; Type: TABLE; Schema: public; Owner: -
@@ -15144,7 +15144,7 @@ COMMENT ON COLUMN public.pay_transfer_trade.trade_no IS '平台转账交易号';
 -- Name: COLUMN pay_transfer_trade.biz_transfer_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_trade.biz_transfer_no IS '商户转账号(冗余自容器, 同步记录/日志免回容器)';
+COMMENT ON COLUMN public.pay_transfer_trade.biz_transfer_no IS '商户转账号';
 
 --
 -- Name: COLUMN pay_transfer_trade.container_id; Type: COMMENT; Schema: public; Owner: -
@@ -15156,25 +15156,25 @@ COMMENT ON COLUMN public.pay_transfer_trade.container_id IS '关联通道转账�
 -- Name: COLUMN pay_transfer_trade.container_channel; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_trade.container_channel IS '所属通道(wechat/alipay/douyin)';
+COMMENT ON COLUMN public.pay_transfer_trade.container_channel IS '所属通道';
 
 --
 -- Name: COLUMN pay_transfer_trade.channel; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_trade.channel IS '通道编码(冗余, 跨通道统计)';
+COMMENT ON COLUMN public.pay_transfer_trade.channel IS '通道编码';
 
 --
 -- Name: COLUMN pay_transfer_trade.provider; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_trade.provider IS '钱包渠道(wechat/alipay/douyin)';
+COMMENT ON COLUMN public.pay_transfer_trade.provider IS '钱包渠道';
 
 --
 -- Name: COLUMN pay_transfer_trade.amount; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_trade.amount IS '转账金额(最小货币单位/分)';
+COMMENT ON COLUMN public.pay_transfer_trade.amount IS '转账金额';
 
 --
 -- Name: COLUMN pay_transfer_trade.currency; Type: COMMENT; Schema: public; Owner: -
@@ -15186,7 +15186,7 @@ COMMENT ON COLUMN public.pay_transfer_trade.currency IS '币种';
 -- Name: COLUMN pay_transfer_trade.status; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_trade.status IS '转账状态(processing/success/fail/close)';
+COMMENT ON COLUMN public.pay_transfer_trade.status IS '转账状态';
 
 --
 -- Name: COLUMN pay_transfer_trade.out_transfer_no; Type: COMMENT; Schema: public; Owner: -
@@ -15198,7 +15198,7 @@ COMMENT ON COLUMN public.pay_transfer_trade.out_transfer_no IS '通道转账单�
 -- Name: COLUMN pay_transfer_trade.relation_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_trade.relation_no IS '实际上送通道的商户转账号(反查权威)';
+COMMENT ON COLUMN public.pay_transfer_trade.relation_no IS '实际上送通道的商户转账号';
 
 --
 -- Name: COLUMN pay_transfer_trade.finish_time; Type: COMMENT; Schema: public; Owner: -
@@ -15258,7 +15258,7 @@ COMMENT ON COLUMN public.pay_transfer_trade.deleted IS '逻辑删除';
 -- Name: COLUMN pay_transfer_trade.app_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_transfer_trade.app_id IS '应用ID(冗余自容器, 出站通知派发用; 权威在通道转账单容器)';
+COMMENT ON COLUMN public.pay_transfer_trade.app_id IS '应用ID';
 
 --
 -- Name: pay_virtual_device; Type: TABLE; Schema: public; Owner: -
@@ -15291,7 +15291,7 @@ CREATE TABLE public.pay_virtual_device (
 -- Name: TABLE pay_virtual_device; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.pay_virtual_device IS '虚拟设备: 播报打印一体机(收款播报 APP)独立台账, 设备号平台自造号段(VD+日期+随机段), 生成入平台库存后绑定商户/应用';
+COMMENT ON TABLE public.pay_virtual_device IS '虚拟设备';
 
 --
 -- Name: COLUMN pay_virtual_device.id; Type: COMMENT; Schema: public; Owner: -
@@ -15309,67 +15309,67 @@ COMMENT ON COLUMN public.pay_virtual_device.name IS '设备名称';
 -- Name: COLUMN pay_virtual_device.device_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_virtual_device.device_no IS '设备号(平台自造 SN: VD+日期+6位随机段, 创建后不可改, 激活唯一准入凭据)';
+COMMENT ON COLUMN public.pay_virtual_device.device_no IS '设备号';
 
 --
 -- Name: COLUMN pay_virtual_device.batch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_virtual_device.batch_no IS '批次号(批量生成时写入)';
+COMMENT ON COLUMN public.pay_virtual_device.batch_no IS '批次号';
 
 --
 -- Name: COLUMN pay_virtual_device.mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_virtual_device.mch_no IS '所属商户号(绑定后写入, 空=平台库存, 未绑定不可激活)';
+COMMENT ON COLUMN public.pay_virtual_device.mch_no IS '所属商户号';
 
 --
 -- Name: COLUMN pay_virtual_device.app_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_virtual_device.app_id IS '关联应用号(绑定应用后有值, 空=全部应用)';
+COMMENT ON COLUMN public.pay_virtual_device.app_id IS '关联应用号';
 
 --
 -- Name: COLUMN pay_virtual_device.store_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_virtual_device.store_no IS '使用门店号(空=未分配, 不参与门店级播报/打印匹配, 对应 mch_store_info.store_no)';
+COMMENT ON COLUMN public.pay_virtual_device.store_no IS '使用门店号';
 
 --
 -- Name: COLUMN pay_virtual_device.enable; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_virtual_device.enable IS '是否启用(停用后设备心跳返回 disabled, 终端停止播报)';
+COMMENT ON COLUMN public.pay_virtual_device.enable IS '是否启用';
 
 --
 -- Name: COLUMN pay_virtual_device.secret; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_virtual_device.secret IS '播报加密密钥(AES-256-GCM 32字符, 激活时生成并轮换, 解绑时清空即回到未激活态)';
+COMMENT ON COLUMN public.pay_virtual_device.secret IS '播报加密密钥';
 
 --
 -- Name: COLUMN pay_virtual_device.last_pay_ack_time; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_virtual_device.last_pay_ack_time IS '最近一次收款播报回执时间(仅 cmd=pay.success 的 ack 回写, 心跳不覆盖)';
+COMMENT ON COLUMN public.pay_virtual_device.last_pay_ack_time IS '最近一次收款播报回执时间';
 
 --
 -- Name: COLUMN pay_virtual_device.last_pay_ack_msg_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_virtual_device.last_pay_ack_msg_id IS '最近一次收款播报回执消息ID(与推送 msgId 对应, 排障定位用)';
+COMMENT ON COLUMN public.pay_virtual_device.last_pay_ack_msg_id IS '最近一次收款播报回执消息ID';
 
 --
 -- Name: COLUMN pay_virtual_device.last_pay_ack_ok; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_virtual_device.last_pay_ack_ok IS '最近一次收款播报回执结果(true=设备已完成播报)';
+COMMENT ON COLUMN public.pay_virtual_device.last_pay_ack_ok IS '最近一次收款播报回执结果';
 
 --
 -- Name: COLUMN pay_virtual_device.last_online_time; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_virtual_device.last_online_time IS '设备最后在线时间(心跳 30 分钟节流落库, 非实时; 实时在线判定走 Redis ZSET)';
+COMMENT ON COLUMN public.pay_virtual_device.last_online_time IS '设备最后在线时间';
 
 --
 -- Name: COLUMN pay_virtual_device.creator; Type: COMMENT; Schema: public; Owner: -
@@ -15399,7 +15399,7 @@ COMMENT ON COLUMN public.pay_virtual_device.last_modified_time IS '最后修改�
 -- Name: COLUMN pay_virtual_device.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_virtual_device.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.pay_virtual_device.version IS '版本号';
 
 --
 -- Name: COLUMN pay_virtual_device.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -15411,7 +15411,7 @@ COMMENT ON COLUMN public.pay_virtual_device.deleted IS '删除标志';
 -- Name: COLUMN pay_virtual_device.activated_time; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.pay_virtual_device.activated_time IS '最近一次成功激活时间(激活轮换 secret 时写入, 解绑清空即回到未激活态, 未成功激活过为空)';
+COMMENT ON COLUMN public.pay_virtual_device.activated_time IS '最近一次成功激活时间';
 
 --
 -- Name: sand_direct_key_config; Type: TABLE; Schema: public; Owner: -
@@ -15457,43 +15457,43 @@ COMMENT ON COLUMN public.sand_direct_key_config.mch_no IS '商户号';
 -- Name: COLUMN sand_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.sand_direct_key_config.channel_mch_no IS '通道商户号(SAND+雪花, 创建时录入不可修改)';
+COMMENT ON COLUMN public.sand_direct_key_config.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN sand_direct_key_config.mid; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.sand_direct_key_config.mid IS '杉德商户编号(mid, 创建时录入不可修改)';
+COMMENT ON COLUMN public.sand_direct_key_config.mid IS '杉德商户编号';
 
 --
 -- Name: COLUMN sand_direct_key_config.merchant_cert_pfx; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.sand_direct_key_config.merchant_cert_pfx IS '商户私钥证书 pfx 内容(Base64, PKCS12, 签名与响应 encryptKey 解密用, 加密存储)';
+COMMENT ON COLUMN public.sand_direct_key_config.merchant_cert_pfx IS '商户证书 pfx';
 
 --
 -- Name: COLUMN sand_direct_key_config.merchant_cert_password; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.sand_direct_key_config.merchant_cert_password IS '商户私钥证书密码(加密存储)';
+COMMENT ON COLUMN public.sand_direct_key_config.merchant_cert_password IS '商户私钥证书密码';
 
 --
 -- Name: COLUMN sand_direct_key_config.sand_cert; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.sand_direct_key_config.sand_cert IS '杉德平台公钥证书 cer 内容(Base64/PEM, 请求加密与响应/回调验签用, 加密存储)';
+COMMENT ON COLUMN public.sand_direct_key_config.sand_cert IS '杉德平台公钥证书';
 
 --
 -- Name: COLUMN sand_direct_key_config.market_product; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.sand_direct_key_config.market_product IS '市场产品编码(QZF 标准线上收款 / CSDB 企业杉德宝)';
+COMMENT ON COLUMN public.sand_direct_key_config.market_product IS '市场产品编码';
 
 --
 -- Name: COLUMN sand_direct_key_config.sandbox; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.sand_direct_key_config.sandbox IS '是否沙箱环境(true 走 UAT 网关)';
+COMMENT ON COLUMN public.sand_direct_key_config.sandbox IS '是否沙箱环境';
 
 --
 -- Name: COLUMN sand_direct_key_config.creator; Type: COMMENT; Schema: public; Owner: -
@@ -15523,7 +15523,7 @@ COMMENT ON COLUMN public.sand_direct_key_config.last_modified_time IS '最后修
 -- Name: COLUMN sand_direct_key_config.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.sand_direct_key_config.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.sand_direct_key_config.version IS '版本号';
 
 --
 -- Name: COLUMN sand_direct_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -15554,7 +15554,7 @@ CREATE TABLE public.sheng_isv_channel_merchant (
 -- Name: TABLE sheng_isv_channel_merchant; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.sheng_isv_channel_merchant IS '盛付通服务商子商户绑定(通道商户维度)';
+COMMENT ON TABLE public.sheng_isv_channel_merchant IS '盛付通服务商子商户绑定';
 
 --
 -- Name: COLUMN sheng_isv_channel_merchant.id; Type: COMMENT; Schema: public; Owner: -
@@ -15572,25 +15572,25 @@ COMMENT ON COLUMN public.sheng_isv_channel_merchant.mch_no IS '商户号';
 -- Name: COLUMN sheng_isv_channel_merchant.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.sheng_isv_channel_merchant.channel_mch_no IS '通道商户号(唯一关联, 创建后不可修改)';
+COMMENT ON COLUMN public.sheng_isv_channel_merchant.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN sheng_isv_channel_merchant.product; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.sheng_isv_channel_merchant.product IS '产品编码(sheng_isv)';
+COMMENT ON COLUMN public.sheng_isv_channel_merchant.product IS '产品编码';
 
 --
 -- Name: COLUMN sheng_isv_channel_merchant.sub_mch_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.sheng_isv_channel_merchant.sub_mch_id IS '子商户号(服务商模式必填, 须与服务商商户号存在代理关系)';
+COMMENT ON COLUMN public.sheng_isv_channel_merchant.sub_mch_id IS '子商户号';
 
 --
 -- Name: COLUMN sheng_isv_channel_merchant.sdp_app_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.sheng_isv_channel_merchant.sdp_app_id IS '盛付通分配AppId(可空, 子商户应用)';
+COMMENT ON COLUMN public.sheng_isv_channel_merchant.sdp_app_id IS '盛付通AppId';
 
 --
 -- Name: COLUMN sheng_isv_channel_merchant.creator; Type: COMMENT; Schema: public; Owner: -
@@ -15650,7 +15650,7 @@ CREATE TABLE public.sheng_isv_key_config (
 -- Name: TABLE sheng_isv_key_config; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.sheng_isv_key_config IS '盛付通服务商密钥配置(产品级全局一份)';
+COMMENT ON TABLE public.sheng_isv_key_config IS '盛付通服务商密钥配置';
 
 --
 -- Name: COLUMN sheng_isv_key_config.id; Type: COMMENT; Schema: public; Owner: -
@@ -15662,25 +15662,25 @@ COMMENT ON COLUMN public.sheng_isv_key_config.id IS '主键';
 -- Name: COLUMN sheng_isv_key_config.product; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.sheng_isv_key_config.product IS '产品编码(sheng_isv, 服务商密钥按产品全局一份)';
+COMMENT ON COLUMN public.sheng_isv_key_config.product IS '产品编码';
 
 --
 -- Name: COLUMN sheng_isv_key_config.sheng_mch_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.sheng_isv_key_config.sheng_mch_id IS '服务商商户号(mchId, 代子商户发起时上送)';
+COMMENT ON COLUMN public.sheng_isv_key_config.sheng_mch_id IS '服务商商户号';
 
 --
 -- Name: COLUMN sheng_isv_key_config.merchant_private_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.sheng_isv_key_config.merchant_private_key IS '服务商私钥(PKCS8/PKCS1 兼容, SHA1withRSA 签名, 加密存储)';
+COMMENT ON COLUMN public.sheng_isv_key_config.merchant_private_key IS '服务商私钥';
 
 --
 -- Name: COLUMN sheng_isv_key_config.shengpay_public_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.sheng_isv_key_config.shengpay_public_key IS '盛付通验签公钥(加密存储)';
+COMMENT ON COLUMN public.sheng_isv_key_config.shengpay_public_key IS '盛付通验签公钥';
 
 --
 -- Name: COLUMN sheng_isv_key_config.creator; Type: COMMENT; Schema: public; Owner: -
@@ -15742,7 +15742,7 @@ CREATE TABLE public.sheng_key_config (
 -- Name: TABLE sheng_key_config; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.sheng_key_config IS '盛付通通道密钥配置(商户模式)';
+COMMENT ON TABLE public.sheng_key_config IS '盛付通通道密钥配置';
 
 --
 -- Name: COLUMN sheng_key_config.id; Type: COMMENT; Schema: public; Owner: -
@@ -15760,31 +15760,31 @@ COMMENT ON COLUMN public.sheng_key_config.mch_no IS '商户号';
 -- Name: COLUMN sheng_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.sheng_key_config.channel_mch_no IS '通道商户号(唯一关联, 创建后不可修改)';
+COMMENT ON COLUMN public.sheng_key_config.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN sheng_key_config.sheng_mch_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.sheng_key_config.sheng_mch_id IS '盛付通商户号(mchId, 商户自有对接商户号)';
+COMMENT ON COLUMN public.sheng_key_config.sheng_mch_id IS '盛付通商户号';
 
 --
 -- Name: COLUMN sheng_key_config.sdp_app_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.sheng_key_config.sdp_app_id IS '盛付通分配AppId(可空, 直连场景必填)';
+COMMENT ON COLUMN public.sheng_key_config.sdp_app_id IS '盛付通AppId';
 
 --
 -- Name: COLUMN sheng_key_config.merchant_private_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.sheng_key_config.merchant_private_key IS '商户私钥(PKCS8, SHA1withRSA 签名, 加密存储)';
+COMMENT ON COLUMN public.sheng_key_config.merchant_private_key IS '商户私钥';
 
 --
 -- Name: COLUMN sheng_key_config.shengpay_public_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.sheng_key_config.shengpay_public_key IS '盛付通验签公钥(加密存储)';
+COMMENT ON COLUMN public.sheng_key_config.shengpay_public_key IS '盛付通验签公钥';
 
 --
 -- Name: COLUMN sheng_key_config.creator; Type: COMMENT; Schema: public; Owner: -
@@ -15864,25 +15864,25 @@ COMMENT ON COLUMN public.shouqianba_direct_key_config.mch_no IS '商户号';
 -- Name: COLUMN shouqianba_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.shouqianba_direct_key_config.channel_mch_no IS '通道商户号(SHOUQIANBA+雪花, 创建时录入不可修改)';
+COMMENT ON COLUMN public.shouqianba_direct_key_config.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN shouqianba_direct_key_config.terminal_sn; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.shouqianba_direct_key_config.terminal_sn IS '收钱吧终端号(terminal_sn, 终端激活后获得, 创建时录入不可修改)';
+COMMENT ON COLUMN public.shouqianba_direct_key_config.terminal_sn IS '收钱吧终端号';
 
 --
 -- Name: COLUMN shouqianba_direct_key_config.terminal_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.shouqianba_direct_key_config.terminal_key IS '收钱吧终端密钥(terminal_key, 签名用, 加密存储; 签到重置后更新)';
+COMMENT ON COLUMN public.shouqianba_direct_key_config.terminal_key IS '收钱吧终端密钥';
 
 --
 -- Name: COLUMN shouqianba_direct_key_config.operator; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.shouqianba_direct_key_config.operator IS '操作员(收钱吧要求上送, 缺省 daxpay)';
+COMMENT ON COLUMN public.shouqianba_direct_key_config.operator IS '操作员';
 
 --
 -- Name: COLUMN shouqianba_direct_key_config.sandbox; Type: COMMENT; Schema: public; Owner: -
@@ -15918,7 +15918,7 @@ COMMENT ON COLUMN public.shouqianba_direct_key_config.last_modified_time IS '最
 -- Name: COLUMN shouqianba_direct_key_config.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.shouqianba_direct_key_config.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.shouqianba_direct_key_config.version IS '版本号';
 
 --
 -- Name: COLUMN shouqianba_direct_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -15992,7 +15992,7 @@ COMMENT ON COLUMN public.starter_audit_login_log.client IS '登录终端';
 -- Name: COLUMN starter_audit_login_log.terminal; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.starter_audit_login_log.terminal IS '登录终端类型(web/app/elf)';
+COMMENT ON COLUMN public.starter_audit_login_log.terminal IS '登录终端类型';
 
 --
 -- Name: COLUMN starter_audit_login_log.login_type; Type: COMMENT; Schema: public; Owner: -
@@ -16365,13 +16365,13 @@ COMMENT ON COLUMN public.starter_audit_unipay_log.trace_id IS '链路追踪ID';
 -- Name: COLUMN starter_audit_unipay_log.req_param; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.starter_audit_unipay_log.req_param IS '请求参数(脱敏后)';
+COMMENT ON COLUMN public.starter_audit_unipay_log.req_param IS '请求参数';
 
 --
 -- Name: COLUMN starter_audit_unipay_log.res_body; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.starter_audit_unipay_log.res_body IS '响应体(脱敏后)';
+COMMENT ON COLUMN public.starter_audit_unipay_log.res_body IS '响应体';
 
 --
 -- Name: COLUMN starter_audit_unipay_log.operate_time; Type: COMMENT; Schema: public; Owner: -
@@ -16383,7 +16383,7 @@ COMMENT ON COLUMN public.starter_audit_unipay_log.operate_time IS '操作时间U
 -- Name: COLUMN starter_audit_unipay_log.req_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.starter_audit_unipay_log.req_id IS '请求ID(商户传入, 审计索引)';
+COMMENT ON COLUMN public.starter_audit_unipay_log.req_id IS '请求ID';
 
 --
 -- Name: starter_platform_file_record; Type: TABLE; Schema: public; Owner: -
@@ -16461,13 +16461,13 @@ COMMENT ON COLUMN public.starter_platform_file_record.deleted IS '逻辑删除';
 -- Name: COLUMN starter_platform_file_record.size; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.starter_platform_file_record.size IS '文件大小(字节)';
+COMMENT ON COLUMN public.starter_platform_file_record.size IS '文件大小';
 
 --
 -- Name: COLUMN starter_platform_file_record.filename; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.starter_platform_file_record.filename IS '文件名称(不含路径)';
+COMMENT ON COLUMN public.starter_platform_file_record.filename IS '文件名称';
 
 --
 -- Name: COLUMN starter_platform_file_record.original_filename; Type: COMMENT; Schema: public; Owner: -
@@ -16479,7 +16479,7 @@ COMMENT ON COLUMN public.starter_platform_file_record.original_filename IS '原�
 -- Name: COLUMN starter_platform_file_record.path; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.starter_platform_file_record.path IS '存储路径(以/开头,不含文件名)';
+COMMENT ON COLUMN public.starter_platform_file_record.path IS '存储路径';
 
 --
 -- Name: COLUMN starter_platform_file_record.ext; Type: COMMENT; Schema: public; Owner: -
@@ -16569,7 +16569,7 @@ COMMENT ON COLUMN public.stripe_channel_merchant.product IS '所属支付产品'
 -- Name: COLUMN stripe_channel_merchant.account_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.stripe_channel_merchant.account_id IS 'Stripe 账户 ID(acct_xxx)';
+COMMENT ON COLUMN public.stripe_channel_merchant.account_id IS 'Stripe 账户 ID';
 
 --
 -- Name: COLUMN stripe_channel_merchant.creator; Type: COMMENT; Schema: public; Owner: -
@@ -16654,19 +16654,19 @@ COMMENT ON COLUMN public.stripe_key_config.channel_mch_no IS '通道商户号';
 -- Name: COLUMN stripe_key_config.secret_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.stripe_key_config.secret_key IS 'Stripe Secret Key(sk_test/sk_live, 加密存储)';
+COMMENT ON COLUMN public.stripe_key_config.secret_key IS 'Stripe Secret Key';
 
 --
 -- Name: COLUMN stripe_key_config.publishable_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.stripe_key_config.publishable_key IS 'Stripe Publishable Key(pk_test/pk_live, 加密存储)';
+COMMENT ON COLUMN public.stripe_key_config.publishable_key IS 'Stripe Publishable Key';
 
 --
 -- Name: COLUMN stripe_key_config.webhook_secret; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.stripe_key_config.webhook_secret IS 'Webhook 签名密钥(whsec_xxx, 加密存储)';
+COMMENT ON COLUMN public.stripe_key_config.webhook_secret IS 'Webhook 签名密钥';
 
 --
 -- Name: COLUMN stripe_key_config.creator; Type: COMMENT; Schema: public; Owner: -
@@ -16765,7 +16765,7 @@ COMMENT ON COLUMN public.system_dict.last_modified_time IS '最后修改时间';
 -- Name: COLUMN system_dict.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.system_dict.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.system_dict.version IS '版本号';
 
 --
 -- Name: COLUMN system_dict.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -16813,7 +16813,7 @@ COMMENT ON COLUMN public.system_dict.internal IS '是否内置';
 -- Name: COLUMN system_dict.i18n_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.system_dict.i18n_key IS '国际化key（有值时走语言包翻译）';
+COMMENT ON COLUMN public.system_dict.i18n_key IS '国际化key';
 
 --
 -- Name: system_dict_item; Type: TABLE; Schema: public; Owner: -
@@ -16924,7 +16924,7 @@ COMMENT ON COLUMN public.system_dict_item.deleted IS '删除标志';
 -- Name: COLUMN system_dict_item.i18n_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.system_dict_item.i18n_key IS '国际化key（有值时走语言包翻译）';
+COMMENT ON COLUMN public.system_dict_item.i18n_key IS '国际化key';
 
 --
 -- Name: system_platform_config; Type: TABLE; Schema: public; Owner: -
@@ -17070,7 +17070,7 @@ COMMENT ON COLUMN public.system_platform_encrypt_config.config_name IS '配置�
 -- Name: COLUMN system_platform_encrypt_config.config_data; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.system_platform_encrypt_config.config_data IS '配置数据(加密存储)';
+COMMENT ON COLUMN public.system_platform_encrypt_config.config_data IS '配置数据';
 
 --
 -- Name: COLUMN system_platform_encrypt_config.description; Type: COMMENT; Schema: public; Owner: -
@@ -17156,31 +17156,31 @@ COMMENT ON COLUMN public.system_sensitive_word.id IS '主键';
 -- Name: COLUMN system_sensitive_word.word; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.system_sensitive_word.word IS '敏感词原文(建议简体)';
+COMMENT ON COLUMN public.system_sensitive_word.word IS '敏感词原文';
 
 --
 -- Name: COLUMN system_sensitive_word.category; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.system_sensitive_word.category IS '分类: politic/porn/violence/ad/custom';
+COMMENT ON COLUMN public.system_sensitive_word.category IS '分类';
 
 --
 -- Name: COLUMN system_sensitive_word.match_mode; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.system_sensitive_word.match_mode IS '匹配模式: contains/exact';
+COMMENT ON COLUMN public.system_sensitive_word.match_mode IS '匹配模式';
 
 --
 -- Name: COLUMN system_sensitive_word.level; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.system_sensitive_word.level IS '处理级别: reject/warn';
+COMMENT ON COLUMN public.system_sensitive_word.level IS '处理级别';
 
 --
 -- Name: COLUMN system_sensitive_word.status; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.system_sensitive_word.status IS '状态: enable/disable';
+COMMENT ON COLUMN public.system_sensitive_word.status IS '状态';
 
 --
 -- Name: COLUMN system_sensitive_word.remark; Type: COMMENT; Schema: public; Owner: -
@@ -17283,13 +17283,13 @@ COMMENT ON COLUMN public.system_sensitive_word_hit.content_preview IS '原文摘
 -- Name: COLUMN system_sensitive_word_hit.scene; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.system_sensitive_word_hit.scene IS '场景: pay_title/goods_name/...';
+COMMENT ON COLUMN public.system_sensitive_word_hit.scene IS '场景';
 
 --
 -- Name: COLUMN system_sensitive_word_hit.source; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.system_sensitive_word_hit.source IS '来源: admin/merchant/unipay/app_admin';
+COMMENT ON COLUMN public.system_sensitive_word_hit.source IS '来源';
 
 --
 -- Name: COLUMN system_sensitive_word_hit.mch_no; Type: COMMENT; Schema: public; Owner: -
@@ -17405,31 +17405,31 @@ COMMENT ON COLUMN public.umfpay_direct_key_config.mch_no IS '商户号';
 -- Name: COLUMN umfpay_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.umfpay_direct_key_config.channel_mch_no IS '通道商户号(UMFPAY+雪花, 创建时录入不可修改)';
+COMMENT ON COLUMN public.umfpay_direct_key_config.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN umfpay_direct_key_config.mer_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.umfpay_direct_key_config.mer_id IS '联动优势商户号(mer_id, 创建时录入不可修改)';
+COMMENT ON COLUMN public.umfpay_direct_key_config.mer_id IS '联动优势商户号';
 
 --
 -- Name: COLUMN umfpay_direct_key_config.merchant_private_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.umfpay_direct_key_config.merchant_private_key IS '商户私钥(PEM/Base64文本, 兼容PKCS1/PKCS8, 请求/应答签名用, 加密存储)';
+COMMENT ON COLUMN public.umfpay_direct_key_config.merchant_private_key IS '商户私钥';
 
 --
 -- Name: COLUMN umfpay_direct_key_config.platform_public_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.umfpay_direct_key_config.platform_public_key IS '联动优势平台公钥(PEM/Base64文本, X509格式, 响应/回调验签用, 加密存储)';
+COMMENT ON COLUMN public.umfpay_direct_key_config.platform_public_key IS '联动优势平台公钥';
 
 --
 -- Name: COLUMN umfpay_direct_key_config.sandbox; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.umfpay_direct_key_config.sandbox IS '是否沙箱环境(联动优势老网关无独立沙箱地址, 生产/沙箱密钥双环境并存)';
+COMMENT ON COLUMN public.umfpay_direct_key_config.sandbox IS '是否沙箱环境';
 
 --
 -- Name: COLUMN umfpay_direct_key_config.creator; Type: COMMENT; Schema: public; Owner: -
@@ -17459,7 +17459,7 @@ COMMENT ON COLUMN public.umfpay_direct_key_config.last_modified_time IS '最后�
 -- Name: COLUMN umfpay_direct_key_config.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.umfpay_direct_key_config.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.umfpay_direct_key_config.version IS '版本号';
 
 --
 -- Name: COLUMN umfpay_direct_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -17511,7 +17511,7 @@ COMMENT ON COLUMN public.ums_direct_key_config.mch_no IS '商户号';
 -- Name: COLUMN ums_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.ums_direct_key_config.channel_mch_no IS '通道商户号(唯一关联)';
+COMMENT ON COLUMN public.ums_direct_key_config.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN ums_direct_key_config.ums_app_id; Type: COMMENT; Schema: public; Owner: -
@@ -17523,13 +17523,13 @@ COMMENT ON COLUMN public.ums_direct_key_config.ums_app_id IS '银联商务应用
 -- Name: COLUMN ums_direct_key_config.app_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.ums_direct_key_config.app_key IS '应用密钥(HmacSHA256 签名密钥, 加密存储)';
+COMMENT ON COLUMN public.ums_direct_key_config.app_key IS '应用密钥';
 
 --
 -- Name: COLUMN ums_direct_key_config.secret_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.ums_direct_key_config.secret_key IS '通讯密钥(回调验签 MD5/SHA256 拼接密钥, 加密存储)';
+COMMENT ON COLUMN public.ums_direct_key_config.secret_key IS '通讯密钥';
 
 --
 -- Name: COLUMN ums_direct_key_config.creator; Type: COMMENT; Schema: public; Owner: -
@@ -17571,13 +17571,13 @@ COMMENT ON COLUMN public.ums_direct_key_config.deleted IS '逻辑删除标志';
 -- Name: COLUMN ums_direct_key_config.merchant_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.ums_direct_key_config.merchant_no IS '银联商务商户号(mid)';
+COMMENT ON COLUMN public.ums_direct_key_config.merchant_no IS '银联商务商户号';
 
 --
 -- Name: COLUMN ums_direct_key_config.terminal_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.ums_direct_key_config.terminal_no IS '终端号(tid)';
+COMMENT ON COLUMN public.ums_direct_key_config.terminal_no IS '终端号';
 
 --
 -- Name: COLUMN ums_direct_key_config.sandbox; Type: COMMENT; Schema: public; Owner: -
@@ -17631,19 +17631,19 @@ COMMENT ON COLUMN public.union_key_config.mch_no IS '商户号';
 -- Name: COLUMN union_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.union_key_config.channel_mch_no IS '通道商户号(唯一关联)';
+COMMENT ON COLUMN public.union_key_config.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN union_key_config.mer_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.union_key_config.mer_id IS '银联商户号(merId)';
+COMMENT ON COLUMN public.union_key_config.mer_id IS '银联商户号';
 
 --
 -- Name: COLUMN union_key_config.sign_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.union_key_config.sign_type IS '签名类型(银联 ACP 固定 RSA2)';
+COMMENT ON COLUMN public.union_key_config.sign_type IS '签名类型';
 
 --
 -- Name: COLUMN union_key_config.cert_sign; Type: COMMENT; Schema: public; Owner: -
@@ -17655,25 +17655,25 @@ COMMENT ON COLUMN public.union_key_config.cert_sign IS '是否证书签名';
 -- Name: COLUMN union_key_config.key_private_cert; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.union_key_config.key_private_cert IS '应用私钥证书(Base64 PKCS12, 加密存储)';
+COMMENT ON COLUMN public.union_key_config.key_private_cert IS '应用私钥证书';
 
 --
 -- Name: COLUMN union_key_config.key_private_cert_pwd; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.union_key_config.key_private_cert_pwd IS '私钥证书密码(加密存储)';
+COMMENT ON COLUMN public.union_key_config.key_private_cert_pwd IS '私钥证书密码';
 
 --
 -- Name: COLUMN union_key_config.acp_middle_cert; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.union_key_config.acp_middle_cert IS '中级证书(Base64 X.509)';
+COMMENT ON COLUMN public.union_key_config.acp_middle_cert IS '中级证书';
 
 --
 -- Name: COLUMN union_key_config.acp_root_cert; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.union_key_config.acp_root_cert IS '根证书(Base64 X.509)';
+COMMENT ON COLUMN public.union_key_config.acp_root_cert IS '根证书';
 
 --
 -- Name: COLUMN union_key_config.sandbox; Type: COMMENT; Schema: public; Owner: -
@@ -17758,19 +17758,19 @@ COMMENT ON COLUMN public.vbill_isv_channel_merchant.mch_no IS '平台商户号';
 -- Name: COLUMN vbill_isv_channel_merchant.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.vbill_isv_channel_merchant.channel_mch_no IS '通道商户号(平台生成的唯一标识, VBILL+雪花)';
+COMMENT ON COLUMN public.vbill_isv_channel_merchant.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN vbill_isv_channel_merchant.product; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.vbill_isv_channel_merchant.product IS '所属支付产品(对应 ProductEnum.code, 如 vbill_pay)';
+COMMENT ON COLUMN public.vbill_isv_channel_merchant.product IS '所属支付产品';
 
 --
 -- Name: COLUMN vbill_isv_channel_merchant.vbill_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.vbill_isv_channel_merchant.vbill_mch_no IS '天阙商户号(mno)';
+COMMENT ON COLUMN public.vbill_isv_channel_merchant.vbill_mch_no IS '天阙商户号';
 
 --
 -- Name: COLUMN vbill_isv_channel_merchant.creator; Type: COMMENT; Schema: public; Owner: -
@@ -17800,7 +17800,7 @@ COMMENT ON COLUMN public.vbill_isv_channel_merchant.last_modified_time IS '最�
 -- Name: COLUMN vbill_isv_channel_merchant.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.vbill_isv_channel_merchant.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.vbill_isv_channel_merchant.version IS '版本号';
 
 --
 -- Name: COLUMN vbill_isv_channel_merchant.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -17849,25 +17849,25 @@ COMMENT ON COLUMN public.vbill_isv_key_config.id IS '主键';
 -- Name: COLUMN vbill_isv_key_config.product; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.vbill_isv_key_config.product IS '支付产品编码(对应 ProductEnum.code, 如 vbill_pay)';
+COMMENT ON COLUMN public.vbill_isv_key_config.product IS '支付产品编码';
 
 --
 -- Name: COLUMN vbill_isv_key_config.org_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.vbill_isv_key_config.org_id IS '天阙合作机构ID(orgId)';
+COMMENT ON COLUMN public.vbill_isv_key_config.org_id IS '天阙合作机构ID';
 
 --
 -- Name: COLUMN vbill_isv_key_config.public_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.vbill_isv_key_config.public_key IS '天阙RSA公钥(X509 Base64, 用于响应/回调验签, 加密存储)';
+COMMENT ON COLUMN public.vbill_isv_key_config.public_key IS '天阙RSA公钥';
 
 --
 -- Name: COLUMN vbill_isv_key_config.private_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.vbill_isv_key_config.private_key IS '商户RSA私钥(PKCS8 Base64, SHA1withRSA 签名, 加密存储)';
+COMMENT ON COLUMN public.vbill_isv_key_config.private_key IS '商户RSA私钥';
 
 --
 -- Name: COLUMN vbill_isv_key_config.sandbox; Type: COMMENT; Schema: public; Owner: -
@@ -17903,7 +17903,7 @@ COMMENT ON COLUMN public.vbill_isv_key_config.last_modified_time IS '最后修�
 -- Name: COLUMN vbill_isv_key_config.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.vbill_isv_key_config.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.vbill_isv_key_config.version IS '版本号';
 
 --
 -- Name: COLUMN vbill_isv_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -17943,7 +17943,7 @@ CREATE TABLE public.wechat_direct_alloc_receiver (
 -- Name: TABLE wechat_direct_alloc_receiver; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.wechat_direct_alloc_receiver IS '微信直连分账接收方(通道侧绑定档案)';
+COMMENT ON TABLE public.wechat_direct_alloc_receiver IS '微信直连分账接收方';
 
 --
 -- Name: COLUMN wechat_direct_alloc_receiver.id; Type: COMMENT; Schema: public; Owner: -
@@ -17961,7 +17961,7 @@ COMMENT ON COLUMN public.wechat_direct_alloc_receiver.mch_no IS '商户号';
 -- Name: COLUMN wechat_direct_alloc_receiver.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_direct_alloc_receiver.channel_mch_no IS '通道商户号(关联通用通道商户主表)';
+COMMENT ON COLUMN public.wechat_direct_alloc_receiver.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN wechat_direct_alloc_receiver.receiver_type; Type: COMMENT; Schema: public; Owner: -
@@ -17973,37 +17973,37 @@ COMMENT ON COLUMN public.wechat_direct_alloc_receiver.receiver_type IS '接收�
 -- Name: COLUMN wechat_direct_alloc_receiver.receiver_account; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_direct_alloc_receiver.receiver_account IS '接收方账号(AES-256-GCM加密存储, openid为channel_app_id维度)';
+COMMENT ON COLUMN public.wechat_direct_alloc_receiver.receiver_account IS '接收方账号';
 
 --
 -- Name: COLUMN wechat_direct_alloc_receiver.account_hash; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_direct_alloc_receiver.account_hash IS '接收方账号SHA-256哈希(密文不确定, 查重与等值定位用)';
+COMMENT ON COLUMN public.wechat_direct_alloc_receiver.account_hash IS '接收方账号SHA-256哈希';
 
 --
 -- Name: COLUMN wechat_direct_alloc_receiver.receiver_name; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_direct_alloc_receiver.receiver_name IS '接收方名称(AES-256-GCM加密存储, MERCHANT_ID时必填商户全称)';
+COMMENT ON COLUMN public.wechat_direct_alloc_receiver.receiver_name IS '接收方名称';
 
 --
 -- Name: COLUMN wechat_direct_alloc_receiver.relation_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_direct_alloc_receiver.relation_type IS '分账关系类型(微信原生小写映射, CUSTOM时需custom_relation)';
+COMMENT ON COLUMN public.wechat_direct_alloc_receiver.relation_type IS '分账关系类型';
 
 --
 -- Name: COLUMN wechat_direct_alloc_receiver.custom_relation; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_direct_alloc_receiver.custom_relation IS '自定义分账关系名(relation_type=CUSTOM时必填)';
+COMMENT ON COLUMN public.wechat_direct_alloc_receiver.custom_relation IS '自定义分账关系名';
 
 --
 -- Name: COLUMN wechat_direct_alloc_receiver.channel_app_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_direct_alloc_receiver.channel_app_id IS '绑定时所用商户档微信应用appid(重新绑定复用)';
+COMMENT ON COLUMN public.wechat_direct_alloc_receiver.channel_app_id IS '绑定时所用商户微信应用appid';
 
 --
 -- Name: COLUMN wechat_direct_alloc_receiver.status; Type: COMMENT; Schema: public; Owner: -
@@ -18069,7 +18069,7 @@ COMMENT ON COLUMN public.wechat_direct_alloc_receiver.deleted IS '逻辑删除�
 -- Name: COLUMN wechat_direct_alloc_receiver.alias; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_direct_alloc_receiver.alias IS '接收方别名(本地备注, 不上送通道)';
+COMMENT ON COLUMN public.wechat_direct_alloc_receiver.alias IS '接收方别名';
 
 --
 -- Name: wechat_direct_channel_merchant; Type: TABLE; Schema: public; Owner: -
@@ -18112,7 +18112,7 @@ COMMENT ON COLUMN public.wechat_direct_channel_merchant.mch_no IS '商户号';
 -- Name: COLUMN wechat_direct_channel_merchant.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_direct_channel_merchant.channel_mch_no IS '通道商户号(系统生成雪花号)';
+COMMENT ON COLUMN public.wechat_direct_channel_merchant.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN wechat_direct_channel_merchant.product; Type: COMMENT; Schema: public; Owner: -
@@ -18166,7 +18166,7 @@ COMMENT ON COLUMN public.wechat_direct_channel_merchant.deleted IS '逻辑删除
 -- Name: COLUMN wechat_direct_channel_merchant.transfer_scene; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_direct_channel_merchant.transfer_scene IS '转账场景ID(商家转账到零钱, 未配置时发起转账报错)';
+COMMENT ON COLUMN public.wechat_direct_channel_merchant.transfer_scene IS '转账场景ID';
 
 --
 -- Name: wechat_direct_key_config; Type: TABLE; Schema: public; Owner: -
@@ -18219,13 +18219,13 @@ COMMENT ON COLUMN public.wechat_direct_key_config.channel_mch_no IS '通道商�
 -- Name: COLUMN wechat_direct_key_config.api_key_v3; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_direct_key_config.api_key_v3 IS 'APIv3密钥(加密存储)';
+COMMENT ON COLUMN public.wechat_direct_key_config.api_key_v3 IS 'APIv3密钥';
 
 --
 -- Name: COLUMN wechat_direct_key_config.public_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_direct_key_config.public_key IS '支付公钥(加密存储)';
+COMMENT ON COLUMN public.wechat_direct_key_config.public_key IS '支付公钥';
 
 --
 -- Name: COLUMN wechat_direct_key_config.public_key_id; Type: COMMENT; Schema: public; Owner: -
@@ -18237,13 +18237,13 @@ COMMENT ON COLUMN public.wechat_direct_key_config.public_key_id IS '支付公钥
 -- Name: COLUMN wechat_direct_key_config.private_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_direct_key_config.private_key IS '商户私钥(加密存储)';
+COMMENT ON COLUMN public.wechat_direct_key_config.private_key IS '商户私钥';
 
 --
 -- Name: COLUMN wechat_direct_key_config.private_cert; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_direct_key_config.private_cert IS '商户证书(加密存储)';
+COMMENT ON COLUMN public.wechat_direct_key_config.private_cert IS '商户证书';
 
 --
 -- Name: COLUMN wechat_direct_key_config.cert_serial_no; Type: COMMENT; Schema: public; Owner: -
@@ -18291,7 +18291,7 @@ COMMENT ON COLUMN public.wechat_direct_key_config.deleted IS '逻辑删除标志
 -- Name: COLUMN wechat_direct_key_config.api_host_url; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_direct_key_config.api_host_url IS 'API域名(留空使用官方 api.mch.weixin.qq.com; 联调演练填模拟网关地址, 如 http://127.0.0.1:10400)';
+COMMENT ON COLUMN public.wechat_direct_key_config.api_host_url IS 'API域名';
 
 --
 -- Name: wechat_isv_alloc_receiver; Type: TABLE; Schema: public; Owner: -
@@ -18326,7 +18326,7 @@ CREATE TABLE public.wechat_isv_alloc_receiver (
 -- Name: TABLE wechat_isv_alloc_receiver; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.wechat_isv_alloc_receiver IS '微信服务商分账接收方(通道侧绑定档案, 挂特约商户sub_mchid维度)';
+COMMENT ON TABLE public.wechat_isv_alloc_receiver IS '微信服务商分账接收方';
 
 --
 -- Name: COLUMN wechat_isv_alloc_receiver.id; Type: COMMENT; Schema: public; Owner: -
@@ -18344,7 +18344,7 @@ COMMENT ON COLUMN public.wechat_isv_alloc_receiver.mch_no IS '商户号';
 -- Name: COLUMN wechat_isv_alloc_receiver.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_isv_alloc_receiver.channel_mch_no IS '通道商户号(关联通用通道商户主表)';
+COMMENT ON COLUMN public.wechat_isv_alloc_receiver.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN wechat_isv_alloc_receiver.receiver_type; Type: COMMENT; Schema: public; Owner: -
@@ -18356,43 +18356,43 @@ COMMENT ON COLUMN public.wechat_isv_alloc_receiver.receiver_type IS '接收方�
 -- Name: COLUMN wechat_isv_alloc_receiver.receiver_account; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_isv_alloc_receiver.receiver_account IS '接收方账号(AES-256-GCM加密存储, openid为对应appid维度)';
+COMMENT ON COLUMN public.wechat_isv_alloc_receiver.receiver_account IS '接收方账号';
 
 --
 -- Name: COLUMN wechat_isv_alloc_receiver.account_hash; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_isv_alloc_receiver.account_hash IS '接收方账号SHA-256哈希(密文不确定, 查重与等值定位用)';
+COMMENT ON COLUMN public.wechat_isv_alloc_receiver.account_hash IS '接收方账号SHA-256哈希';
 
 --
 -- Name: COLUMN wechat_isv_alloc_receiver.receiver_name; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_isv_alloc_receiver.receiver_name IS '接收方名称(AES-256-GCM加密存储, MERCHANT_ID时必填商户全称)';
+COMMENT ON COLUMN public.wechat_isv_alloc_receiver.receiver_name IS '接收方名称';
 
 --
 -- Name: COLUMN wechat_isv_alloc_receiver.relation_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_isv_alloc_receiver.relation_type IS '分账关系类型(微信原生小写映射, CUSTOM时需custom_relation)';
+COMMENT ON COLUMN public.wechat_isv_alloc_receiver.relation_type IS '分账关系类型';
 
 --
 -- Name: COLUMN wechat_isv_alloc_receiver.custom_relation; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_isv_alloc_receiver.custom_relation IS '自定义分账关系名(relation_type=CUSTOM时必填)';
+COMMENT ON COLUMN public.wechat_isv_alloc_receiver.custom_relation IS '自定义分账关系名';
 
 --
 -- Name: COLUMN wechat_isv_alloc_receiver.sp_app_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_isv_alloc_receiver.sp_app_id IS '绑定时所用平台档(服务商)应用appid(重新绑定复用)';
+COMMENT ON COLUMN public.wechat_isv_alloc_receiver.sp_app_id IS '绑定时所用服务商应用appid';
 
 --
 -- Name: COLUMN wechat_isv_alloc_receiver.sub_app_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_isv_alloc_receiver.sub_app_id IS '子商户应用appid(可空, PERSONAL_SUB_OPENID时必填)';
+COMMENT ON COLUMN public.wechat_isv_alloc_receiver.sub_app_id IS '子商户appid';
 
 --
 -- Name: COLUMN wechat_isv_alloc_receiver.status; Type: COMMENT; Schema: public; Owner: -
@@ -18458,7 +18458,7 @@ COMMENT ON COLUMN public.wechat_isv_alloc_receiver.deleted IS '逻辑删除标�
 -- Name: COLUMN wechat_isv_alloc_receiver.alias; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_isv_alloc_receiver.alias IS '接收方别名(本地备注, 不上送通道)';
+COMMENT ON COLUMN public.wechat_isv_alloc_receiver.alias IS '接收方别名';
 
 --
 -- Name: wechat_isv_channel_merchant; Type: TABLE; Schema: public; Owner: -
@@ -18500,7 +18500,7 @@ COMMENT ON COLUMN public.wechat_isv_channel_merchant.mch_no IS '商户号';
 -- Name: COLUMN wechat_isv_channel_merchant.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_isv_channel_merchant.channel_mch_no IS '通道商户号(WISV+雪花)';
+COMMENT ON COLUMN public.wechat_isv_channel_merchant.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN wechat_isv_channel_merchant.product; Type: COMMENT; Schema: public; Owner: -
@@ -18512,7 +18512,7 @@ COMMENT ON COLUMN public.wechat_isv_channel_merchant.product IS '所属支付产
 -- Name: COLUMN wechat_isv_channel_merchant.sub_mch_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_isv_channel_merchant.sub_mch_id IS '微信特约商户号/二级商户号(V3服务商支付 sub_mchid)';
+COMMENT ON COLUMN public.wechat_isv_channel_merchant.sub_mch_id IS '微信特约商户号';
 
 --
 -- Name: COLUMN wechat_isv_channel_merchant.creator; Type: COMMENT; Schema: public; Owner: -
@@ -18601,13 +18601,13 @@ COMMENT ON COLUMN public.wechat_isv_key_config.wx_mch_id IS '微信服务商商�
 -- Name: COLUMN wechat_isv_key_config.api_key_v3; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_isv_key_config.api_key_v3 IS 'APIv3密钥(加密存储)';
+COMMENT ON COLUMN public.wechat_isv_key_config.api_key_v3 IS 'APIv3密钥';
 
 --
 -- Name: COLUMN wechat_isv_key_config.public_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_isv_key_config.public_key IS '支付公钥(加密存储)';
+COMMENT ON COLUMN public.wechat_isv_key_config.public_key IS '支付公钥';
 
 --
 -- Name: COLUMN wechat_isv_key_config.public_key_id; Type: COMMENT; Schema: public; Owner: -
@@ -18619,13 +18619,13 @@ COMMENT ON COLUMN public.wechat_isv_key_config.public_key_id IS '支付公钥ID'
 -- Name: COLUMN wechat_isv_key_config.private_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_isv_key_config.private_key IS '商户私钥(加密存储)';
+COMMENT ON COLUMN public.wechat_isv_key_config.private_key IS '商户私钥';
 
 --
 -- Name: COLUMN wechat_isv_key_config.private_cert; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_isv_key_config.private_cert IS '商户证书(加密存储)';
+COMMENT ON COLUMN public.wechat_isv_key_config.private_cert IS '商户证书';
 
 --
 -- Name: COLUMN wechat_isv_key_config.cert_serial_no; Type: COMMENT; Schema: public; Owner: -
@@ -18673,7 +18673,7 @@ COMMENT ON COLUMN public.wechat_isv_key_config.deleted IS '逻辑删除标志';
 -- Name: COLUMN wechat_isv_key_config.api_host_url; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_isv_key_config.api_host_url IS 'API域名(留空使用官方 api.mch.weixin.qq.com; 联调演练填模拟网关地址, 如 http://127.0.0.1:10400)';
+COMMENT ON COLUMN public.wechat_isv_key_config.api_host_url IS 'API域名';
 
 --
 -- Name: wechat_transfer_config; Type: TABLE; Schema: public; Owner: -
@@ -18697,7 +18697,7 @@ CREATE TABLE public.wechat_transfer_config (
 -- Name: TABLE wechat_transfer_config; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.wechat_transfer_config IS '微信转账配置(一对一, 一个通道商户一条: 转账场景+发起应用)';
+COMMENT ON TABLE public.wechat_transfer_config IS '微信转账配置';
 
 --
 -- Name: COLUMN wechat_transfer_config.id; Type: COMMENT; Schema: public; Owner: -
@@ -18721,13 +18721,13 @@ COMMENT ON COLUMN public.wechat_transfer_config.channel_mch_no IS '通道商户�
 -- Name: COLUMN wechat_transfer_config.transfer_scene; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_transfer_config.transfer_scene IS '转账场景ID(微信transfer_scene, 枚举:1000现金营销/1002行政补贴/1004保险理赔/1005佣金报酬/1009采购货款/1010二手回收/1011企业赔付/1013公益补助)';
+COMMENT ON COLUMN public.wechat_transfer_config.transfer_scene IS '转账场景ID';
 
 --
 -- Name: COLUMN wechat_transfer_config.transfer_app_ref_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wechat_transfer_config.transfer_app_ref_id IS '转账发起应用引用(指向wx_mch_app主键, 须为公众号类型, 决定appid与openid来源)';
+COMMENT ON COLUMN public.wechat_transfer_config.transfer_app_ref_id IS '转账发起应用';
 
 --
 -- Name: COLUMN wechat_transfer_config.creator; Type: COMMENT; Schema: public; Owner: -
@@ -18788,7 +18788,7 @@ CREATE TABLE public.wx_channel_app_capability (
 -- Name: TABLE wx_channel_app_capability; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.wx_channel_app_capability IS '通道商户微信应用能力绑定（同能力可按档位双绑 platform+merchant）';
+COMMENT ON TABLE public.wx_channel_app_capability IS '通道商户微信应用能力绑定';
 
 --
 -- Name: COLUMN wx_channel_app_capability.id; Type: COMMENT; Schema: public; Owner: -
@@ -18854,13 +18854,13 @@ COMMENT ON COLUMN public.wx_channel_app_capability.capability IS '支付能力�
 -- Name: COLUMN wx_channel_app_capability.app_scope; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wx_channel_app_capability.app_scope IS '应用档位：platform/merchant';
+COMMENT ON COLUMN public.wx_channel_app_capability.app_scope IS '应用档位';
 
 --
 -- Name: COLUMN wx_channel_app_capability.wx_app_ref_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wx_channel_app_capability.wx_app_ref_id IS '微信应用主数据主键（由 app_scope 决定指向平台或商户表）';
+COMMENT ON COLUMN public.wx_channel_app_capability.wx_app_ref_id IS '微信应用主数据主键';
 
 --
 -- Name: wx_mch_app; Type: TABLE; Schema: public; Owner: -
@@ -18885,7 +18885,7 @@ CREATE TABLE public.wx_mch_app (
 -- Name: TABLE wx_mch_app; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.wx_mch_app IS '商户微信应用（商户域开放平台身份，跨通道可引用）';
+COMMENT ON TABLE public.wx_mch_app IS '商户微信应用';
 
 --
 -- Name: COLUMN wx_mch_app.id; Type: COMMENT; Schema: public; Owner: -
@@ -18945,7 +18945,7 @@ COMMENT ON COLUMN public.wx_mch_app.app_name IS '应用名称';
 -- Name: COLUMN wx_mch_app.app_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wx_mch_app.app_type IS '应用类型：official_account/mini_program/mobile_app';
+COMMENT ON COLUMN public.wx_mch_app.app_type IS '应用类型';
 
 --
 -- Name: COLUMN wx_mch_app.wx_app_id; Type: COMMENT; Schema: public; Owner: -
@@ -18957,7 +18957,7 @@ COMMENT ON COLUMN public.wx_mch_app.wx_app_id IS '微信应用AppId';
 -- Name: COLUMN wx_mch_app.app_secret; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wx_mch_app.app_secret IS '应用密钥(加密存储)';
+COMMENT ON COLUMN public.wx_mch_app.app_secret IS '应用密钥';
 
 --
 -- Name: wx_platform_app; Type: TABLE; Schema: public; Owner: -
@@ -18981,7 +18981,7 @@ CREATE TABLE public.wx_platform_app (
 -- Name: TABLE wx_platform_app; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.wx_platform_app IS '平台微信应用（开放平台身份，跨通道可引用）';
+COMMENT ON TABLE public.wx_platform_app IS '平台微信应用';
 
 --
 -- Name: COLUMN wx_platform_app.id; Type: COMMENT; Schema: public; Owner: -
@@ -19035,7 +19035,7 @@ COMMENT ON COLUMN public.wx_platform_app.app_name IS '应用名称';
 -- Name: COLUMN wx_platform_app.app_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wx_platform_app.app_type IS '应用类型：official_account/mini_program/mobile_app';
+COMMENT ON COLUMN public.wx_platform_app.app_type IS '应用类型';
 
 --
 -- Name: COLUMN wx_platform_app.wx_app_id; Type: COMMENT; Schema: public; Owner: -
@@ -19047,7 +19047,7 @@ COMMENT ON COLUMN public.wx_platform_app.wx_app_id IS '微信应用AppId';
 -- Name: COLUMN wx_platform_app.app_secret; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.wx_platform_app.app_secret IS '应用密钥(加密存储)';
+COMMENT ON COLUMN public.wx_platform_app.app_secret IS '应用密钥';
 
 --
 -- Name: wx_platform_app_capability; Type: TABLE; Schema: public; Owner: -
@@ -19070,7 +19070,7 @@ CREATE TABLE public.wx_platform_app_capability (
 -- Name: TABLE wx_platform_app_capability; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.wx_platform_app_capability IS '平台微信应用默认能力绑定（全局一能力一应用）';
+COMMENT ON TABLE public.wx_platform_app_capability IS '平台微信应用默认能力绑定';
 
 --
 -- Name: COLUMN wx_platform_app_capability.id; Type: COMMENT; Schema: public; Owner: -
@@ -19174,31 +19174,31 @@ COMMENT ON COLUMN public.xingyi_direct_key_config.mch_no IS '商户号';
 -- Name: COLUMN xingyi_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.xingyi_direct_key_config.channel_mch_no IS '通道商户号(XINGYI+雪花, 创建时录入不可修改)';
+COMMENT ON COLUMN public.xingyi_direct_key_config.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN xingyi_direct_key_config.aget_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.xingyi_direct_key_config.aget_id IS '机构号(agetId, 星驿付分配的机构标识, 创建时录入不可修改)';
+COMMENT ON COLUMN public.xingyi_direct_key_config.aget_id IS '星驿付机构号';
 
 --
 -- Name: COLUMN xingyi_direct_key_config.cust_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.xingyi_direct_key_config.cust_id IS '星驿付商户号(custId, 创建时录入不可修改)';
+COMMENT ON COLUMN public.xingyi_direct_key_config.cust_id IS '星驿付商户号';
 
 --
 -- Name: COLUMN xingyi_direct_key_config.merchant_public_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.xingyi_direct_key_config.merchant_public_key IS '商户RSA公钥(Base64, 兼容PEM头尾; 请求签名与回调验签共用, 加密存储)';
+COMMENT ON COLUMN public.xingyi_direct_key_config.merchant_public_key IS '商户RSA公钥';
 
 --
 -- Name: COLUMN xingyi_direct_key_config.sandbox; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.xingyi_direct_key_config.sandbox IS '是否沙箱环境(true走测试网关xyf-server-test)';
+COMMENT ON COLUMN public.xingyi_direct_key_config.sandbox IS '是否沙箱环境';
 
 --
 -- Name: COLUMN xingyi_direct_key_config.creator; Type: COMMENT; Schema: public; Owner: -
@@ -19228,7 +19228,7 @@ COMMENT ON COLUMN public.xingyi_direct_key_config.last_modified_time IS '最后�
 -- Name: COLUMN xingyi_direct_key_config.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.xingyi_direct_key_config.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.xingyi_direct_key_config.version IS '版本号';
 
 --
 -- Name: COLUMN xingyi_direct_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -19282,49 +19282,49 @@ COMMENT ON COLUMN public.yeepay_direct_key_config.mch_no IS '商户号';
 -- Name: COLUMN yeepay_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.yeepay_direct_key_config.channel_mch_no IS '通道商户号(创建时录入不可修改)';
+COMMENT ON COLUMN public.yeepay_direct_key_config.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN yeepay_direct_key_config.merchant_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.yeepay_direct_key_config.merchant_no IS '易宝商户号(merchantNo, 创建时录入不可修改)';
+COMMENT ON COLUMN public.yeepay_direct_key_config.merchant_no IS '易宝商户号';
 
 --
 -- Name: COLUMN yeepay_direct_key_config.yop_isv_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.yeepay_direct_key_config.yop_isv_no IS '易宝服务商商编(parentMerchantNo / yopIsvNo, 创建时录入不可修改)';
+COMMENT ON COLUMN public.yeepay_direct_key_config.yop_isv_no IS '易宝服务商商编';
 
 --
 -- Name: COLUMN yeepay_direct_key_config.app_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.yeepay_direct_key_config.app_key IS '通道应用 AppKey(YOP 应用标识, 加密存储)';
+COMMENT ON COLUMN public.yeepay_direct_key_config.app_key IS '通道应用 AppKey';
 
 --
 -- Name: COLUMN yeepay_direct_key_config.private_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.yeepay_direct_key_config.private_key IS '商户 RSA 私钥(PEM 格式 PKCS#8, SDK 签名用, 加密存储)';
+COMMENT ON COLUMN public.yeepay_direct_key_config.private_key IS '商户 RSA 私钥';
 
 --
 -- Name: COLUMN yeepay_direct_key_config.yop_public_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.yeepay_direct_key_config.yop_public_key IS '易宝平台 RSA 公钥(PEM, 预留字段, 当前验签走 SDK 内置平台证书, 加密存储)';
+COMMENT ON COLUMN public.yeepay_direct_key_config.yop_public_key IS '易宝平台 RSA 公钥';
 
 --
 -- Name: COLUMN yeepay_direct_key_config.wx_app_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.yeepay_direct_key_config.wx_app_id IS '微信 AppId(微信 H5/JSAPI 场景用, 可空)';
+COMMENT ON COLUMN public.yeepay_direct_key_config.wx_app_id IS '微信 AppId';
 
 --
 -- Name: COLUMN yeepay_direct_key_config.wx_app_secret; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.yeepay_direct_key_config.wx_app_secret IS '微信 AppSecret(微信场景用, 可空, 加密存储)';
+COMMENT ON COLUMN public.yeepay_direct_key_config.wx_app_secret IS '微信 AppSecret';
 
 --
 -- Name: COLUMN yeepay_direct_key_config.sandbox; Type: COMMENT; Schema: public; Owner: -
@@ -19411,37 +19411,37 @@ COMMENT ON COLUMN public.yisheng_direct_key_config.mch_no IS '商户号';
 -- Name: COLUMN yisheng_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.yisheng_direct_key_config.channel_mch_no IS '通道商户号(YISHENG+雪花, 创建时录入不可修改)';
+COMMENT ON COLUMN public.yisheng_direct_key_config.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN yisheng_direct_key_config.partner; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.yisheng_direct_key_config.partner IS '合作伙伴ID(reqId, 网关公共参数 partner, 创建时录入不可修改)';
+COMMENT ON COLUMN public.yisheng_direct_key_config.partner IS '合作伙伴ID';
 
 --
 -- Name: COLUMN yisheng_direct_key_config.merchant_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.yisheng_direct_key_config.merchant_id IS '易生商户编号(merchant_id, 创建时录入不可修改)';
+COMMENT ON COLUMN public.yisheng_direct_key_config.merchant_id IS '易生商户编号';
 
 --
 -- Name: COLUMN yisheng_direct_key_config.merchant_private_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.yisheng_direct_key_config.merchant_private_key IS '商户RSA私钥(Base64/PEM文本, 兼容PKCS1/PKCS8, biz_content 请求签名用, 加密存储)';
+COMMENT ON COLUMN public.yisheng_direct_key_config.merchant_private_key IS '商户RSA私钥';
 
 --
 -- Name: COLUMN yisheng_direct_key_config.platform_public_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.yisheng_direct_key_config.platform_public_key IS '易生平台RSA公钥(Base64/PEM文本, X509格式, 响应/回调验签用, 加密存储)';
+COMMENT ON COLUMN public.yisheng_direct_key_config.platform_public_key IS '易生平台RSA公钥';
 
 --
 -- Name: COLUMN yisheng_direct_key_config.sandbox; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.yisheng_direct_key_config.sandbox IS '是否沙箱环境(易生网关生产/沙箱同址, 生产/沙箱密钥双环境并存)';
+COMMENT ON COLUMN public.yisheng_direct_key_config.sandbox IS '是否沙箱环境';
 
 --
 -- Name: COLUMN yisheng_direct_key_config.creator; Type: COMMENT; Schema: public; Owner: -
@@ -19471,7 +19471,7 @@ COMMENT ON COLUMN public.yisheng_direct_key_config.last_modified_time IS '最后
 -- Name: COLUMN yisheng_direct_key_config.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.yisheng_direct_key_config.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.yisheng_direct_key_config.version IS '版本号';
 
 --
 -- Name: COLUMN yisheng_direct_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -19524,43 +19524,43 @@ COMMENT ON COLUMN public.yizhifubj_direct_key_config.mch_no IS '商户号';
 -- Name: COLUMN yizhifubj_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.yizhifubj_direct_key_config.channel_mch_no IS '通道商户号(YIZHIFUBJ+雪花, 创建时录入不可修改)';
+COMMENT ON COLUMN public.yizhifubj_direct_key_config.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN yizhifubj_direct_key_config.merchant_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.yizhifubj_direct_key_config.merchant_id IS '一直付商户编号(merchantId, 创建时录入不可修改)';
+COMMENT ON COLUMN public.yizhifubj_direct_key_config.merchant_id IS '一直付商户编号';
 
 --
 -- Name: COLUMN yizhifubj_direct_key_config.partner_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.yizhifubj_direct_key_config.partner_id IS '服务端ID(partnerId, 可空, 机构服务端形态下下发)';
+COMMENT ON COLUMN public.yizhifubj_direct_key_config.partner_id IS '服务端ID';
 
 --
 -- Name: COLUMN yizhifubj_direct_key_config.report_serial_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.yizhifubj_direct_key_config.report_serial_no IS '报备序列号(reportSerialNo, 可空, 下单上送通道侧报备用)';
+COMMENT ON COLUMN public.yizhifubj_direct_key_config.report_serial_no IS '报备序列号';
 
 --
 -- Name: COLUMN yizhifubj_direct_key_config.cert_pfx; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.yizhifubj_direct_key_config.cert_pfx IS '商户 pfx 证书内容(Base64, PKCS12, 请求签名与 encryptKey 解密用, 加密存储)';
+COMMENT ON COLUMN public.yizhifubj_direct_key_config.cert_pfx IS '商户证书 pfx';
 
 --
 -- Name: COLUMN yizhifubj_direct_key_config.cert_password; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.yizhifubj_direct_key_config.cert_password IS '商户证书密码(加密存储)';
+COMMENT ON COLUMN public.yizhifubj_direct_key_config.cert_password IS '商户证书密码';
 
 --
 -- Name: COLUMN yizhifubj_direct_key_config.platform_cert; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.yizhifubj_direct_key_config.platform_cert IS '5upay 平台证书内容(Base64/DER, 可空, AES 密钥加密与验签用, 空时子应用用内置默认证书, 加密存储)';
+COMMENT ON COLUMN public.yizhifubj_direct_key_config.platform_cert IS '5upay 平台证书';
 
 --
 -- Name: COLUMN yizhifubj_direct_key_config.sandbox; Type: COMMENT; Schema: public; Owner: -
@@ -19596,7 +19596,7 @@ COMMENT ON COLUMN public.yizhifubj_direct_key_config.last_modified_time IS '最�
 -- Name: COLUMN yizhifubj_direct_key_config.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.yizhifubj_direct_key_config.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.yizhifubj_direct_key_config.version IS '版本号';
 
 --
 -- Name: COLUMN yizhifubj_direct_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -19647,37 +19647,37 @@ COMMENT ON COLUMN public.youzan_direct_key_config.mch_no IS '商户号';
 -- Name: COLUMN youzan_direct_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.youzan_direct_key_config.channel_mch_no IS '通道商户号(YOUZAN+雪花, 创建时录入不可修改)';
+COMMENT ON COLUMN public.youzan_direct_key_config.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN youzan_direct_key_config.merchant_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.youzan_direct_key_config.merchant_id IS '高汇通商户号(mch_id, 请求头 mchid 与 body mch_id 同值, 创建时录入不可修改)';
+COMMENT ON COLUMN public.youzan_direct_key_config.merchant_id IS '高汇通商户号';
 
 --
 -- Name: COLUMN youzan_direct_key_config.merchant_private_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.youzan_direct_key_config.merchant_private_key IS '商户RSA私钥(Base64/PEM文本, 兼容PKCS1/PKCS8, 请求签名用, 加密存储)';
+COMMENT ON COLUMN public.youzan_direct_key_config.merchant_private_key IS '商户RSA私钥';
 
 --
 -- Name: COLUMN youzan_direct_key_config.platform_public_key; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.youzan_direct_key_config.platform_public_key IS '有赞支付平台RSA公钥(Base64/PEM文本, X509格式, 响应/回调验签用, 加密存储)';
+COMMENT ON COLUMN public.youzan_direct_key_config.platform_public_key IS '有赞支付平台RSA公钥';
 
 --
 -- Name: COLUMN youzan_direct_key_config.public_key_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.youzan_direct_key_config.public_key_id IS '公钥唯一标识(请求头 publickeyid, 与平台公钥成对下发, 加密存储)';
+COMMENT ON COLUMN public.youzan_direct_key_config.public_key_id IS '公钥唯一标识';
 
 --
 -- Name: COLUMN youzan_direct_key_config.sandbox; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.youzan_direct_key_config.sandbox IS '是否沙箱环境(高汇通无独立沙箱网关, 生产/沙箱密钥双环境并存)';
+COMMENT ON COLUMN public.youzan_direct_key_config.sandbox IS '是否沙箱环境';
 
 --
 -- Name: COLUMN youzan_direct_key_config.creator; Type: COMMENT; Schema: public; Owner: -
@@ -19707,7 +19707,7 @@ COMMENT ON COLUMN public.youzan_direct_key_config.last_modified_time IS '最后�
 -- Name: COLUMN youzan_direct_key_config.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.youzan_direct_key_config.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.youzan_direct_key_config.version IS '版本号';
 
 --
 -- Name: COLUMN youzan_direct_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -19742,7 +19742,7 @@ CREATE TABLE public.ysep_key_config (
 -- Name: TABLE ysep_key_config; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON TABLE public.ysep_key_config IS '银盛直连密钥配置(一通道两产品共用: ysep_pay 开放平台 / yseqt_pay e企通)';
+COMMENT ON TABLE public.ysep_key_config IS '银盛直连密钥配置';
 
 --
 -- Name: COLUMN ysep_key_config.id; Type: COMMENT; Schema: public; Owner: -
@@ -19760,49 +19760,49 @@ COMMENT ON COLUMN public.ysep_key_config.mch_no IS '商户号';
 -- Name: COLUMN ysep_key_config.channel_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.ysep_key_config.channel_mch_no IS '通道商户号(YSEP+雪花, 创建时录入不可修改, 全局唯一)';
+COMMENT ON COLUMN public.ysep_key_config.channel_mch_no IS '通道商户号';
 
 --
 -- Name: COLUMN ysep_key_config.product; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.ysep_key_config.product IS '所属支付产品(ysep_pay 银盛支付 / yseqt_pay 银盛e企通, 表达密钥行归属, 对应 ProductEnum.code)';
+COMMENT ON COLUMN public.ysep_key_config.product IS '所属支付产品';
 
 --
 -- Name: COLUMN ysep_key_config.sponsor_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.ysep_key_config.sponsor_mch_no IS '发起方商户号(ysep_pay=partner_id / yseqt_pay=srcMerchantNo)';
+COMMENT ON COLUMN public.ysep_key_config.sponsor_mch_no IS '发起方商户号';
 
 --
 -- Name: COLUMN ysep_key_config.payee_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.ysep_key_config.payee_mch_no IS '收款商户号(ysep_pay=seller_id / yseqt_pay=payeeMerchantNo)';
+COMMENT ON COLUMN public.ysep_key_config.payee_mch_no IS '收款商户号';
 
 --
 -- Name: COLUMN ysep_key_config.business_code; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.ysep_key_config.business_code IS '业务代码(ysep_pay 专用 business_code, 银盛后台分配; yseqt_pay 不使用)';
+COMMENT ON COLUMN public.ysep_key_config.business_code IS '业务代码';
 
 --
 -- Name: COLUMN ysep_key_config.merchant_cert_pfx; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.ysep_key_config.merchant_cert_pfx IS '商户私钥证书 pfx 内容(Base64, PKCS12, SHA1withRSA 请求签名, 加密存储)';
+COMMENT ON COLUMN public.ysep_key_config.merchant_cert_pfx IS '商户证书 pfx';
 
 --
 -- Name: COLUMN ysep_key_config.merchant_cert_password; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.ysep_key_config.merchant_cert_password IS '商户私钥证书密码(加密存储)';
+COMMENT ON COLUMN public.ysep_key_config.merchant_cert_password IS '商户私钥证书密码';
 
 --
 -- Name: COLUMN ysep_key_config.ysepay_public_cert; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.ysep_key_config.ysepay_public_cert IS '银盛平台公钥证书 cer 内容(Base64/PEM, 响应/回调验签, 加密存储)';
+COMMENT ON COLUMN public.ysep_key_config.ysepay_public_cert IS '银盛平台公钥证书';
 
 --
 -- Name: COLUMN ysep_key_config.creator; Type: COMMENT; Schema: public; Owner: -
@@ -19832,7 +19832,7 @@ COMMENT ON COLUMN public.ysep_key_config.last_modified_time IS '最后修改时�
 -- Name: COLUMN ysep_key_config.version; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON COLUMN public.ysep_key_config.version IS '版本号(乐观锁)';
+COMMENT ON COLUMN public.ysep_key_config.version IS '版本号';
 
 --
 -- Name: COLUMN ysep_key_config.deleted; Type: COMMENT; Schema: public; Owner: -
@@ -21421,7 +21421,7 @@ CREATE INDEX idx_mch_notice_record_create_time ON public.mch_notice_record USING
 -- Name: INDEX idx_mch_notice_record_create_time; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_mch_notice_record_create_time IS '按时间倒序分页/范围扫描（通知投递记录高频）';
+COMMENT ON INDEX public.idx_mch_notice_record_create_time IS '通知投递记录按创建时间分页';
 
 --
 -- Name: idx_mch_notice_record_task_id; Type: INDEX; Schema: public; Owner: -
@@ -21457,7 +21457,7 @@ CREATE INDEX idx_mch_notice_task_create_time ON public.mch_notice_task USING btr
 -- Name: INDEX idx_mch_notice_task_create_time; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_mch_notice_task_create_time IS '按时间倒序分页/范围扫描（通知任务高频）';
+COMMENT ON INDEX public.idx_mch_notice_task_create_time IS '通知任务按创建时间分页';
 
 --
 -- Name: idx_mch_notice_task_next_time; Type: INDEX; Schema: public; Owner: -
@@ -21469,7 +21469,7 @@ CREATE INDEX idx_mch_notice_task_next_time ON public.mch_notice_task USING btree
 -- Name: INDEX idx_mch_notice_task_next_time; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_mch_notice_task_next_time IS '兜底扫描: 未成功且 next_time 已到的任务';
+COMMENT ON INDEX public.idx_mch_notice_task_next_time IS '未成功任务按下次执行时间扫描';
 
 --
 -- Name: idx_mch_notice_task_success; Type: INDEX; Schema: public; Owner: -
@@ -21481,7 +21481,7 @@ CREATE INDEX idx_mch_notice_task_success ON public.mch_notice_task USING btree (
 -- Name: INDEX idx_mch_notice_task_success; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_mch_notice_task_success IS '按投递结果筛选（成功/失败统计）';
+COMMENT ON INDEX public.idx_mch_notice_task_success IS '按投递结果筛选';
 
 --
 -- Name: idx_mch_store_info_mch_default; Type: INDEX; Schema: public; Owner: -
@@ -21577,7 +21577,7 @@ CREATE INDEX idx_notify_mail_record_create_time ON public.notify_mail_record USI
 -- Name: INDEX idx_notify_mail_record_create_time; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_notify_mail_record_create_time IS '发送记录创建时间索引(分页排序)';
+COMMENT ON INDEX public.idx_notify_mail_record_create_time IS '发送记录创建时间索引';
 
 --
 -- Name: idx_notify_mail_record_receiver_email; Type: INDEX; Schema: public; Owner: -
@@ -21589,7 +21589,7 @@ CREATE INDEX idx_notify_mail_record_receiver_email ON public.notify_mail_record 
 -- Name: INDEX idx_notify_mail_record_receiver_email; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_notify_mail_record_receiver_email IS '收件邮箱索引(按收件人查询)';
+COMMENT ON INDEX public.idx_notify_mail_record_receiver_email IS '收件邮箱索引';
 
 --
 -- Name: idx_notify_mail_record_status; Type: INDEX; Schema: public; Owner: -
@@ -21601,7 +21601,7 @@ CREATE INDEX idx_notify_mail_record_status ON public.notify_mail_record USING bt
 -- Name: INDEX idx_notify_mail_record_status; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_notify_mail_record_status IS '发送状态索引(失败记录定位)';
+COMMENT ON INDEX public.idx_notify_mail_record_status IS '发送状态索引';
 
 --
 -- Name: idx_notify_message_user; Type: INDEX; Schema: public; Owner: -
@@ -21613,7 +21613,7 @@ CREATE INDEX idx_notify_message_user ON public.notify_message USING btree (user_
 -- Name: INDEX idx_notify_message_user; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_notify_message_user IS '按用户查询站内信（含已读/未读筛选）';
+COMMENT ON INDEX public.idx_notify_message_user IS '按用户查询站内信';
 
 --
 -- Name: idx_notify_notice_read_user; Type: INDEX; Schema: public; Owner: -
@@ -21697,7 +21697,7 @@ CREATE INDEX idx_pay_alloc_order_status_time ON public.pay_alloc_order USING btr
 -- Name: INDEX idx_pay_alloc_order_status_time; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_pay_alloc_order_status_time IS '定时同步扫描(状态+创建时间)';
+COMMENT ON INDEX public.idx_pay_alloc_order_status_time IS '定时同步扫描';
 
 --
 -- Name: idx_pay_alloc_order_trade_no; Type: INDEX; Schema: public; Owner: -
@@ -21721,7 +21721,7 @@ CREATE INDEX idx_pay_blacklist_status ON public.pay_blacklist USING btree (statu
 -- Name: INDEX idx_pay_blacklist_status; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_pay_blacklist_status IS '状态筛选（启用/停用）';
+COMMENT ON INDEX public.idx_pay_blacklist_status IS '状态筛选';
 
 --
 -- Name: idx_pay_blacklist_type_value; Type: INDEX; Schema: public; Owner: -
@@ -21757,7 +21757,7 @@ CREATE INDEX idx_pay_callback_record_create_time ON public.pay_callback_record U
 -- Name: INDEX idx_pay_callback_record_create_time; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_pay_callback_record_create_time IS '按时间倒序分页/范围扫描（回调流水高频）';
+COMMENT ON INDEX public.idx_pay_callback_record_create_time IS '回调流水按创建时间分页';
 
 --
 -- Name: idx_pay_callback_record_mch_no; Type: INDEX; Schema: public; Owner: -
@@ -21913,7 +21913,7 @@ CREATE INDEX idx_pay_gateway_pay_env_config_id ON public.pay_gateway_pay_client_
 -- Name: INDEX idx_pay_gateway_pay_env_config_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_pay_gateway_pay_env_config_id IS '网关支付环境外键查询索引(关联 pay_gateway_pay_config 主键)';
+COMMENT ON INDEX public.idx_pay_gateway_pay_env_config_id IS '网关支付配置环境外键查询';
 
 --
 -- Name: idx_pay_md_product_code; Type: INDEX; Schema: public; Owner: -
@@ -21937,7 +21937,7 @@ CREATE INDEX idx_pay_risk_hit_create_time ON public.pay_risk_hit USING btree (cr
 -- Name: INDEX idx_pay_risk_hit_create_time; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_pay_risk_hit_create_time IS '按时间倒序分页/范围扫描（风控命中高频）';
+COMMENT ON INDEX public.idx_pay_risk_hit_create_time IS '风控命中记录按创建时间分页';
 
 --
 -- Name: idx_pay_risk_hit_hit_type_value; Type: INDEX; Schema: public; Owner: -
@@ -22117,7 +22117,7 @@ CREATE INDEX idx_pay_trade_status_create_time ON public.pay_trade USING btree (s
 -- Name: INDEX idx_pay_trade_status_create_time; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_pay_trade_status_create_time IS '按资金状态+创建时间窗口扫描(定时同步)';
+COMMENT ON INDEX public.idx_pay_trade_status_create_time IS '按资金状态+创建时间扫描';
 
 --
 -- Name: idx_pay_transfer_order_alipay_mch; Type: INDEX; Schema: public; Owner: -
@@ -22141,7 +22141,7 @@ CREATE INDEX idx_pay_transfer_order_alipay_status_time ON public.pay_transfer_or
 -- Name: INDEX idx_pay_transfer_order_alipay_status_time; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_pay_transfer_order_alipay_status_time IS '按状态+创建时间窗口扫描(定时同步)';
+COMMENT ON INDEX public.idx_pay_transfer_order_alipay_status_time IS '按状态+创建时间窗口扫描';
 
 --
 -- Name: idx_pay_transfer_order_douyin_mch; Type: INDEX; Schema: public; Owner: -
@@ -22165,7 +22165,7 @@ CREATE INDEX idx_pay_transfer_order_douyin_status_time ON public.pay_transfer_or
 -- Name: INDEX idx_pay_transfer_order_douyin_status_time; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_pay_transfer_order_douyin_status_time IS '按状态+创建时间窗口扫描(定时同步)';
+COMMENT ON INDEX public.idx_pay_transfer_order_douyin_status_time IS '按状态+创建时间窗口扫描';
 
 --
 -- Name: idx_pay_transfer_order_wechat_mch; Type: INDEX; Schema: public; Owner: -
@@ -22189,7 +22189,7 @@ CREATE INDEX idx_pay_transfer_order_wechat_status_time ON public.pay_transfer_or
 -- Name: INDEX idx_pay_transfer_order_wechat_status_time; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_pay_transfer_order_wechat_status_time IS '按状态+创建时间窗口扫描(定时同步)';
+COMMENT ON INDEX public.idx_pay_transfer_order_wechat_status_time IS '按状态+创建时间窗口扫描';
 
 --
 -- Name: idx_pay_transfer_trade_container; Type: INDEX; Schema: public; Owner: -
@@ -22225,7 +22225,7 @@ CREATE INDEX idx_pay_transfer_trade_status_time ON public.pay_transfer_trade USI
 -- Name: INDEX idx_pay_transfer_trade_status_time; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_pay_transfer_trade_status_time IS '按状态+创建时间窗口扫描(定时同步)';
+COMMENT ON INDEX public.idx_pay_transfer_trade_status_time IS '按状态+创建时间窗口扫描';
 
 --
 -- Name: idx_pay_virtual_device_batch_no; Type: INDEX; Schema: public; Owner: -
@@ -22237,7 +22237,7 @@ CREATE INDEX idx_pay_virtual_device_batch_no ON public.pay_virtual_device USING 
 -- Name: INDEX idx_pay_virtual_device_batch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_pay_virtual_device_batch_no IS '批次号索引(按批次查询)';
+COMMENT ON INDEX public.idx_pay_virtual_device_batch_no IS '批次号索引';
 
 --
 -- Name: idx_pay_virtual_device_mch_app; Type: INDEX; Schema: public; Owner: -
@@ -22249,7 +22249,7 @@ CREATE INDEX idx_pay_virtual_device_mch_app ON public.pay_virtual_device USING b
 -- Name: INDEX idx_pay_virtual_device_mch_app; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_pay_virtual_device_mch_app IS '商户+应用索引(播报/打印按应用作用域匹配)';
+COMMENT ON INDEX public.idx_pay_virtual_device_mch_app IS '按商户+应用查询播报打印设备';
 
 --
 -- Name: idx_pay_virtual_device_mch_no; Type: INDEX; Schema: public; Owner: -
@@ -22261,7 +22261,7 @@ CREATE INDEX idx_pay_virtual_device_mch_no ON public.pay_virtual_device USING bt
 -- Name: INDEX idx_pay_virtual_device_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_pay_virtual_device_mch_no IS '商户号索引(商户名下设备查询/解绑级联入口)';
+COMMENT ON INDEX public.idx_pay_virtual_device_mch_no IS '按商户号查询设备';
 
 --
 -- Name: idx_pay_virtual_device_mch_store; Type: INDEX; Schema: public; Owner: -
@@ -22273,7 +22273,7 @@ CREATE INDEX idx_pay_virtual_device_mch_store ON public.pay_virtual_device USING
 -- Name: INDEX idx_pay_virtual_device_mch_store; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_pay_virtual_device_mch_store IS '商户+使用门店索引(播报/打印按门店作用域匹配)';
+COMMENT ON INDEX public.idx_pay_virtual_device_mch_store IS '按商户+门店查询设备';
 
 --
 -- Name: idx_refund_order_app_biz; Type: INDEX; Schema: public; Owner: -
@@ -22333,7 +22333,7 @@ CREATE INDEX idx_refund_order_status_create_time ON public.pay_refund_order USIN
 -- Name: INDEX idx_refund_order_status_create_time; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_refund_order_status_create_time IS '按退款状态+创建时间窗口扫描(定时同步)';
+COMMENT ON INDEX public.idx_refund_order_status_create_time IS '按退款状态+创建时间扫描';
 
 --
 -- Name: idx_starter_audit_unipay_log_mch_time; Type: INDEX; Schema: public; Owner: -
@@ -22369,7 +22369,7 @@ CREATE INDEX idx_starter_audit_unipay_log_time ON public.starter_audit_unipay_lo
 -- Name: INDEX idx_starter_audit_unipay_log_time; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_starter_audit_unipay_log_time IS '按时间倒序分页/范围扫描（审计日志高频）';
+COMMENT ON INDEX public.idx_starter_audit_unipay_log_time IS '审计日志按时间倒序分页';
 
 --
 -- Name: idx_starter_audit_unipay_log_trace; Type: INDEX; Schema: public; Owner: -
@@ -22453,7 +22453,7 @@ CREATE INDEX idx_system_sensitive_word_status ON public.system_sensitive_word US
 -- Name: INDEX idx_system_sensitive_word_status; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_system_sensitive_word_status IS '状态筛选（启用/停用）';
+COMMENT ON INDEX public.idx_system_sensitive_word_status IS '状态筛选';
 
 --
 -- Name: idx_user_protocol_item_protocol; Type: INDEX; Schema: public; Owner: -
@@ -22489,7 +22489,7 @@ CREATE INDEX idx_wechat_transfer_config_app ON public.wechat_transfer_config USI
 -- Name: INDEX idx_wechat_transfer_config_app; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.idx_wechat_transfer_config_app IS '按发起应用引用查询(应用换绑/清理用)';
+COMMENT ON INDEX public.idx_wechat_transfer_config_app IS '按发起应用引用查询';
 
 --
 -- Name: idx_wx_channel_app_cap_mch; Type: INDEX; Schema: public; Owner: -
@@ -22567,7 +22567,7 @@ CREATE UNIQUE INDEX uk_alipay_direct_alloc_receiver ON public.alipay_direct_allo
 -- Name: INDEX uk_alipay_direct_alloc_receiver; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_alipay_direct_alloc_receiver IS '同一通道商户下同类型同账号接收方唯一(部分唯一索引)';
+COMMENT ON INDEX public.uk_alipay_direct_alloc_receiver IS '同一通道商户下同类型同账号接收方唯一';
 
 --
 -- Name: uk_alipay_direct_app_cap; Type: INDEX; Schema: public; Owner: -
@@ -22579,7 +22579,7 @@ CREATE UNIQUE INDEX uk_alipay_direct_app_cap ON public.alipay_direct_app_capabil
 -- Name: INDEX uk_alipay_direct_app_cap; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_alipay_direct_app_cap IS '同一通道商户下支付能力唯一，防重复开通';
+COMMENT ON INDEX public.uk_alipay_direct_app_cap IS '同一通道商户下支付能力唯一';
 
 --
 -- Name: uk_alipay_direct_app_key_sandbox; Type: INDEX; Schema: public; Owner: -
@@ -22603,7 +22603,7 @@ CREATE UNIQUE INDEX uk_alipay_direct_app_mch_channel_appid ON public.alipay_dire
 -- Name: INDEX uk_alipay_direct_app_mch_channel_appid; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_alipay_direct_app_mch_channel_appid IS '同一商户同一通道商户下支付宝应用ID唯一(与业务层查重作用域对齐, 对齐微信/抖音商户应用唯一约束)';
+COMMENT ON INDEX public.uk_alipay_direct_app_mch_channel_appid IS '同一通道商户下支付宝应用ID唯一';
 
 --
 -- Name: uk_alipay_isv_alloc_receiver; Type: INDEX; Schema: public; Owner: -
@@ -22615,7 +22615,7 @@ CREATE UNIQUE INDEX uk_alipay_isv_alloc_receiver ON public.alipay_isv_alloc_rece
 -- Name: INDEX uk_alipay_isv_alloc_receiver; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_alipay_isv_alloc_receiver IS '同一通道商户下同类型同账号接收方唯一(部分唯一索引)';
+COMMENT ON INDEX public.uk_alipay_isv_alloc_receiver IS '同一通道商户下同类型同账号接收方唯一';
 
 --
 -- Name: uk_alipay_isv_app_appid; Type: INDEX; Schema: public; Owner: -
@@ -22627,7 +22627,7 @@ CREATE UNIQUE INDEX uk_alipay_isv_app_appid ON public.alipay_isv_app USING btree
 -- Name: INDEX uk_alipay_isv_app_appid; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_alipay_isv_app_appid IS '支付宝服务商应用ID全局唯一(与业务层查重作用域对齐, 对齐微信/抖音平台应用唯一约束)';
+COMMENT ON INDEX public.uk_alipay_isv_app_appid IS '支付宝服务商应用ID全局唯一';
 
 --
 -- Name: uk_alipay_transfer_config_mch; Type: INDEX; Schema: public; Owner: -
@@ -22639,7 +22639,7 @@ CREATE UNIQUE INDEX uk_alipay_transfer_config_mch ON public.alipay_transfer_conf
 -- Name: INDEX uk_alipay_transfer_config_mch; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_alipay_transfer_config_mch IS '同一通道商户仅一条转账配置(部分唯一索引)';
+COMMENT ON INDEX public.uk_alipay_transfer_config_mch IS '同一通道商户仅一条转账配置';
 
 --
 -- Name: uk_alipay_transfer_scene_config_default; Type: INDEX; Schema: public; Owner: -
@@ -22651,7 +22651,7 @@ CREATE UNIQUE INDEX uk_alipay_transfer_scene_config_default ON public.alipay_tra
 -- Name: INDEX uk_alipay_transfer_scene_config_default; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_alipay_transfer_scene_config_default IS '同一通道商户最多一个默认场景且必须处于启用状态(部分唯一索引)';
+COMMENT ON INDEX public.uk_alipay_transfer_scene_config_default IS '同一通道商户仅一个默认场景';
 
 --
 -- Name: uk_alipay_transfer_scene_config_scene; Type: INDEX; Schema: public; Owner: -
@@ -22663,7 +22663,7 @@ CREATE UNIQUE INDEX uk_alipay_transfer_scene_config_scene ON public.alipay_trans
 -- Name: INDEX uk_alipay_transfer_scene_config_scene; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_alipay_transfer_scene_config_scene IS '同一通道商户同一转账场景不可重复(部分唯一索引)';
+COMMENT ON INDEX public.uk_alipay_transfer_scene_config_scene IS '同一通道商户转账场景不可重复';
 
 --
 -- Name: uk_baofu_direct_key_cmchno_sandbox; Type: INDEX; Schema: public; Owner: -
@@ -22699,7 +22699,7 @@ CREATE UNIQUE INDEX uk_device_qr_code_code ON public.device_qr_code USING btree 
 -- Name: INDEX uk_device_qr_code_code; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_device_qr_code_code IS '二维码设备编码唯一(仅未删除行, 注销后同码重建放行)';
+COMMENT ON INDEX public.uk_device_qr_code_code IS '二维码设备编码唯一';
 
 --
 -- Name: uk_dougong_isv_cmchno; Type: INDEX; Schema: public; Owner: -
@@ -22711,7 +22711,7 @@ CREATE UNIQUE INDEX uk_dougong_isv_cmchno ON public.dougong_isv_channel_merchant
 -- Name: INDEX uk_dougong_isv_cmchno; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_dougong_isv_cmchno IS '通道商户号唯一关联(与pay_channel_merchant一对一)';
+COMMENT ON INDEX public.uk_dougong_isv_cmchno IS '通道商户号唯一';
 
 --
 -- Name: uk_dougong_isv_key_product; Type: INDEX; Schema: public; Owner: -
@@ -22723,7 +22723,7 @@ CREATE UNIQUE INDEX uk_dougong_isv_key_product ON public.dougong_isv_key_config 
 -- Name: INDEX uk_dougong_isv_key_product; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_dougong_isv_key_product IS '服务商密钥按产品全局唯一(一个服务商一套密钥, 轮换单点)';
+COMMENT ON INDEX public.uk_dougong_isv_key_product IS '服务商密钥按产品全局唯一';
 
 --
 -- Name: uk_dougong_isv_mch_mer; Type: INDEX; Schema: public; Owner: -
@@ -22747,7 +22747,7 @@ CREATE UNIQUE INDEX uk_douyin_direct_alloc_receiver ON public.douyin_direct_allo
 -- Name: INDEX uk_douyin_direct_alloc_receiver; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_douyin_direct_alloc_receiver IS '同一通道商户下同类型同账号接收方唯一(部分唯一索引)';
+COMMENT ON INDEX public.uk_douyin_direct_alloc_receiver IS '同一通道商户下同类型同账号接收方唯一';
 
 --
 -- Name: uk_douyin_direct_key_cmchno; Type: INDEX; Schema: public; Owner: -
@@ -22783,7 +22783,7 @@ CREATE UNIQUE INDEX uk_douyin_transfer_config_mch ON public.douyin_transfer_conf
 -- Name: INDEX uk_douyin_transfer_config_mch; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_douyin_transfer_config_mch IS '同一通道商户仅一条转账配置(部分唯一索引)';
+COMMENT ON INDEX public.uk_douyin_transfer_config_mch IS '同一通道商户仅一条转账配置';
 
 --
 -- Name: uk_duolabao_direct_key_cmchno_sandbox; Type: INDEX; Schema: public; Owner: -
@@ -23047,7 +23047,7 @@ CREATE UNIQUE INDEX uk_gateway_order_mch_biz ON public.pay_gateway_order USING b
 -- Name: INDEX uk_gateway_order_mch_biz; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_gateway_order_mch_biz IS '网关支付商户业务单号唯一约束: 同商户同 biz_order_no 仅允许一单, 防重复建单(与 pay_normal_order.uk_normal_order_mch_biz 维度一致)';
+COMMENT ON INDEX public.uk_gateway_order_mch_biz IS '同商户业务单号唯一';
 
 --
 -- Name: uk_gateway_order_order_no; Type: INDEX; Schema: public; Owner: -
@@ -23071,7 +23071,7 @@ CREATE UNIQUE INDEX uk_helipay_key_channel_mch ON public.helipay_key_config USIN
 -- Name: INDEX uk_helipay_key_channel_mch; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_helipay_key_channel_mch IS '通道商户号唯一(一通道商户一条密钥)';
+COMMENT ON INDEX public.uk_helipay_key_channel_mch IS '通道商户号唯一';
 
 --
 -- Name: uk_hkrt_isv_channel_merchant_channel_product_sandbox; Type: INDEX; Schema: public; Owner: -
@@ -23083,7 +23083,7 @@ CREATE UNIQUE INDEX uk_hkrt_isv_channel_merchant_channel_product_sandbox ON publ
 -- Name: INDEX uk_hkrt_isv_channel_merchant_channel_product_sandbox; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_hkrt_isv_channel_merchant_channel_product_sandbox IS '业务唯一键(未删除行): channel_mch_no, product, sandbox';
+COMMENT ON INDEX public.uk_hkrt_isv_channel_merchant_channel_product_sandbox IS '通道商户+产品+环境唯一';
 
 --
 -- Name: uk_hkrt_isv_key_prod_sandbox; Type: INDEX; Schema: public; Owner: -
@@ -23119,7 +23119,7 @@ CREATE UNIQUE INDEX uk_iam_mail_template_code_lang ON public.iam_mail_template U
 -- Name: INDEX uk_iam_mail_template_code_lang; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_iam_mail_template_code_lang IS '同一场景同一语言仅一份覆盖(软删后可重建)';
+COMMENT ON INDEX public.uk_iam_mail_template_code_lang IS '同一场景同一语言仅一份覆盖';
 
 --
 -- Name: uk_iam_perm_code_code; Type: INDEX; Schema: public; Owner: -
@@ -23143,7 +23143,7 @@ CREATE UNIQUE INDEX uk_iam_role_code ON public.iam_role USING btree (code) WHERE
 -- Name: INDEX uk_iam_role_code; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_iam_role_code IS '角色编码全局唯一(按 code 解析内置角色, 重复会导致角色解析异常)';
+COMMENT ON INDEX public.uk_iam_role_code IS '角色编码全局唯一';
 
 --
 -- Name: INDEX uk_iam_social_config_source; Type: COMMENT; Schema: public; Owner: -
@@ -23161,7 +23161,7 @@ CREATE UNIQUE INDEX uk_iam_user_info_client_account ON public.iam_user_info USIN
 -- Name: INDEX uk_iam_user_info_client_account; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_iam_user_info_client_account IS '同一身份域下账号全局唯一(登录凭据, 重复会导致登录异常)';
+COMMENT ON INDEX public.uk_iam_user_info_client_account IS '同一身份域下账号全局唯一';
 
 --
 -- Name: uk_iam_user_passkey_credential_id; Type: INDEX; Schema: public; Owner: -
@@ -23173,7 +23173,7 @@ CREATE UNIQUE INDEX uk_iam_user_passkey_credential_id ON public.iam_user_passkey
 -- Name: INDEX uk_iam_user_passkey_credential_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_iam_user_passkey_credential_id IS '同一 WebAuthn 凭据全局唯一(只能绑定一个用户)';
+COMMENT ON INDEX public.uk_iam_user_passkey_credential_id IS 'WebAuthn 凭据全局唯一';
 
 --
 -- Name: uk_iam_user_social_source_open_id; Type: INDEX; Schema: public; Owner: -
@@ -23209,7 +23209,7 @@ CREATE UNIQUE INDEX uk_jee_pay_key_channel_mch ON public.jee_pay_key_config USIN
 -- Name: INDEX uk_jee_pay_key_channel_mch; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_jee_pay_key_channel_mch IS '通道商户号唯一(一通道商户一条密钥)';
+COMMENT ON INDEX public.uk_jee_pay_key_channel_mch IS '通道商户号唯一';
 
 --
 -- Name: uk_jlpay_direct_key_cmchno_sandbox; Type: INDEX; Schema: public; Owner: -
@@ -23341,7 +23341,7 @@ CREATE UNIQUE INDEX uk_mch_app_info_app_id ON public.mch_app_info USING btree (a
 -- Name: INDEX uk_mch_app_info_app_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_mch_app_info_app_id IS '应用号唯一索引(仅未删除行, 商户注销级联软删后同号重建放行; appId 骨架行保留可追溯)';
+COMMENT ON INDEX public.uk_mch_app_info_app_id IS '应用号唯一';
 
 --
 -- Name: uk_mch_app_info_default; Type: INDEX; Schema: public; Owner: -
@@ -23353,7 +23353,7 @@ CREATE UNIQUE INDEX uk_mch_app_info_default ON public.mch_app_info USING btree (
 -- Name: INDEX uk_mch_app_info_default; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_mch_app_info_default IS '每商户仅一个默认应用（默认应用）';
+COMMENT ON INDEX public.uk_mch_app_info_default IS '每商户仅一个默认应用';
 
 --
 -- Name: uk_mch_app_notify_config; Type: INDEX; Schema: public; Owner: -
@@ -23377,7 +23377,7 @@ CREATE UNIQUE INDEX uk_mch_channel_merchant_mch_channel ON public.mch_channel_me
 -- Name: INDEX uk_mch_channel_merchant_mch_channel; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_mch_channel_merchant_mch_channel IS '商户下通道商户号唯一(未删除行), 下单路由主链路';
+COMMENT ON INDEX public.uk_mch_channel_merchant_mch_channel IS '商户下通道商户号唯一';
 
 --
 -- Name: uk_mch_info_mch_no; Type: INDEX; Schema: public; Owner: -
@@ -23389,7 +23389,7 @@ CREATE UNIQUE INDEX uk_mch_info_mch_no ON public.mch_info USING btree (mch_no) W
 -- Name: INDEX uk_mch_info_mch_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_mch_info_mch_no IS '商户号全局唯一(商户业务主键, 重复会导致按号查询异常)';
+COMMENT ON INDEX public.uk_mch_info_mch_no IS '商户号全局唯一';
 
 --
 -- Name: uk_mch_notice_task_biz; Type: INDEX; Schema: public; Owner: -
@@ -23401,7 +23401,7 @@ CREATE UNIQUE INDEX uk_mch_notice_task_biz ON public.mch_notice_task USING btree
 -- Name: INDEX uk_mch_notice_task_biz; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_mch_notice_task_biz IS '商户+应用+事件+业务号+传输通道+报文格式+来源维度的幂等唯一约束';
+COMMENT ON INDEX public.uk_mch_notice_task_biz IS '通知任务幂等唯一';
 
 --
 -- Name: uk_mch_store_info_default; Type: INDEX; Schema: public; Owner: -
@@ -23413,7 +23413,7 @@ CREATE UNIQUE INDEX uk_mch_store_info_default ON public.mch_store_info USING btr
 -- Name: INDEX uk_mch_store_info_default; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_mch_store_info_default IS '每商户仅一个默认门店（默认门店）';
+COMMENT ON INDEX public.uk_mch_store_info_default IS '每商户仅一个默认门店';
 
 --
 -- Name: uk_mch_store_info_store_no; Type: INDEX; Schema: public; Owner: -
@@ -23425,7 +23425,7 @@ CREATE UNIQUE INDEX uk_mch_store_info_store_no ON public.mch_store_info USING bt
 -- Name: INDEX uk_mch_store_info_store_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_mch_store_info_store_no IS '门店号唯一(仅未删除行, 商户注销级联软删后同号重建放行)';
+COMMENT ON INDEX public.uk_mch_store_info_store_no IS '门店号唯一';
 
 --
 -- Name: uk_mch_user_user_id; Type: INDEX; Schema: public; Owner: -
@@ -23437,7 +23437,7 @@ CREATE UNIQUE INDEX uk_mch_user_user_id ON public.mch_user USING btree (user_id)
 -- Name: INDEX uk_mch_user_user_id; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_mch_user_user_id IS '同一用户仅归属一个商户(跨商户挂靠被数据库拒绝)';
+COMMENT ON INDEX public.uk_mch_user_user_id IS '同一用户仅归属一个商户';
 
 --
 -- Name: uk_mch_wx_domain_verify_code; Type: INDEX; Schema: public; Owner: -
@@ -23461,7 +23461,7 @@ CREATE UNIQUE INDEX uk_mock_alloc_receiver ON public.mock_alloc_receiver USING b
 -- Name: INDEX uk_mock_alloc_receiver; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_mock_alloc_receiver IS '同一通道商户下同类型同账号接收方唯一(部分唯一索引)';
+COMMENT ON INDEX public.uk_mock_alloc_receiver IS '同一通道商户下同类型同账号接收方唯一';
 
 --
 -- Name: uk_mock_direct_credential_cmchno; Type: INDEX; Schema: public; Owner: -
@@ -23473,7 +23473,7 @@ CREATE UNIQUE INDEX uk_mock_direct_credential_cmchno ON public.mock_direct_crede
 -- Name: INDEX uk_mock_direct_credential_cmchno; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_mock_direct_credential_cmchno IS '通道商户号唯一(未删除行)';
+COMMENT ON INDEX public.uk_mock_direct_credential_cmchno IS '通道商户号唯一';
 
 --
 -- Name: uk_mock_isv_channel_merchant_channel_mch; Type: INDEX; Schema: public; Owner: -
@@ -23485,7 +23485,7 @@ CREATE UNIQUE INDEX uk_mock_isv_channel_merchant_channel_mch ON public.mock_isv_
 -- Name: INDEX uk_mock_isv_channel_merchant_channel_mch; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_mock_isv_channel_merchant_channel_mch IS '通道商户号唯一(未删除行)';
+COMMENT ON INDEX public.uk_mock_isv_channel_merchant_channel_mch IS '通道商户号唯一';
 
 --
 -- Name: uk_mock_isv_credential_isvno; Type: INDEX; Schema: public; Owner: -
@@ -23497,7 +23497,7 @@ CREATE UNIQUE INDEX uk_mock_isv_credential_isvno ON public.mock_isv_credential U
 -- Name: INDEX uk_mock_isv_credential_isvno; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_mock_isv_credential_isvno IS '服务商编号唯一(未删除行)';
+COMMENT ON INDEX public.uk_mock_isv_credential_isvno IS '服务商编号唯一';
 
 --
 -- Name: uk_mock_isv_info_isvno; Type: INDEX; Schema: public; Owner: -
@@ -23509,7 +23509,7 @@ CREATE UNIQUE INDEX uk_mock_isv_info_isvno ON public.mock_isv_info USING btree (
 -- Name: INDEX uk_mock_isv_info_isvno; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_mock_isv_info_isvno IS '服务商编号唯一(未删除行)';
+COMMENT ON INDEX public.uk_mock_isv_info_isvno IS '服务商编号唯一';
 
 --
 -- Name: uk_normal_order_mch_biz; Type: INDEX; Schema: public; Owner: -
@@ -23521,7 +23521,7 @@ CREATE UNIQUE INDEX uk_normal_order_mch_biz ON public.pay_normal_order USING btr
 -- Name: INDEX uk_normal_order_mch_biz; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_normal_order_mch_biz IS '支付商户业务单号唯一约束: 同商户同 biz_order_no 仅允许一单, 防重复建单';
+COMMENT ON INDEX public.uk_normal_order_mch_biz IS '同商户业务单号唯一';
 
 --
 -- Name: uk_normal_order_order_no; Type: INDEX; Schema: public; Owner: -
@@ -23563,7 +23563,7 @@ CREATE UNIQUE INDEX uk_pay_alloc_order_alloc_no ON public.pay_alloc_order USING 
 -- Name: INDEX uk_pay_alloc_order_alloc_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_pay_alloc_order_alloc_no IS '平台分账单号唯一约束(仅未删除行)';
+COMMENT ON INDEX public.uk_pay_alloc_order_alloc_no IS '平台分账单号唯一约束';
 
 --
 -- Name: uk_pay_alloc_order_mch_biz; Type: INDEX; Schema: public; Owner: -
@@ -23575,7 +23575,7 @@ CREATE UNIQUE INDEX uk_pay_alloc_order_mch_biz ON public.pay_alloc_order USING b
 -- Name: INDEX uk_pay_alloc_order_mch_biz; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_pay_alloc_order_mch_biz IS '分账单商户分账单号唯一约束: 同商户同 biz_alloc_no 仅允许一单, 商户幂等键(升级原普通索引 idx_pay_alloc_order_mch_biz)';
+COMMENT ON INDEX public.uk_pay_alloc_order_mch_biz IS '同商户分账单号唯一';
 
 --
 -- Name: uk_pay_blacklist_type_value_app; Type: INDEX; Schema: public; Owner: -
@@ -23587,7 +23587,7 @@ CREATE UNIQUE INDEX uk_pay_blacklist_type_value_app ON public.pay_blacklist USIN
 -- Name: INDEX uk_pay_blacklist_type_value_app; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_pay_blacklist_type_value_app IS '类型+值+微信应用维度唯一约束（微信应用为空按空串参与唯一性; 仅未删除行）';
+COMMENT ON INDEX public.uk_pay_blacklist_type_value_app IS '类型+值+微信应用唯一';
 
 --
 -- Name: uk_pay_fund_flow_pay_trade; Type: INDEX; Schema: public; Owner: -
@@ -23623,7 +23623,7 @@ CREATE UNIQUE INDEX uk_pay_gateway_pay_config_app ON public.pay_gateway_pay_conf
 -- Name: INDEX uk_pay_gateway_pay_config_app; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_pay_gateway_pay_config_app IS '同一支付网关应用唯一(部分唯一索引)';
+COMMENT ON INDEX public.uk_pay_gateway_pay_config_app IS '同一支付网关应用唯一';
 
 --
 -- Name: uk_pay_gateway_pay_env; Type: INDEX; Schema: public; Owner: -
@@ -23635,7 +23635,7 @@ CREATE UNIQUE INDEX uk_pay_gateway_pay_env ON public.pay_gateway_pay_client_env 
 -- Name: INDEX uk_pay_gateway_pay_env; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_pay_gateway_pay_env IS '同一支付配置同客户端环境同支付形态唯一(部分唯一索引)';
+COMMENT ON INDEX public.uk_pay_gateway_pay_env IS '同一配置+客户端环境+支付形态唯一';
 
 --
 -- Name: uk_pay_mch_app_device_config_app; Type: INDEX; Schema: public; Owner: -
@@ -23647,7 +23647,7 @@ CREATE UNIQUE INDEX uk_pay_mch_app_device_config_app ON public.pay_mch_app_devic
 -- Name: INDEX uk_pay_mch_app_device_config_app; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_pay_mch_app_device_config_app IS '一应用一行配置(仅未删除行; 行不存在由消费方解释为默认全开)';
+COMMENT ON INDEX public.uk_pay_mch_app_device_config_app IS '一应用一行设备联动配置';
 
 --
 -- Name: uk_pay_md_capability_code; Type: INDEX; Schema: public; Owner: -
@@ -23659,7 +23659,7 @@ CREATE UNIQUE INDEX uk_pay_md_capability_code ON public.pay_md_capability USING 
 -- Name: INDEX uk_pay_md_capability_code; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_pay_md_capability_code IS '支付能力编码唯一（未删除）';
+COMMENT ON INDEX public.uk_pay_md_capability_code IS '支付能力编码唯一';
 
 --
 -- Name: uk_pay_md_method_code; Type: INDEX; Schema: public; Owner: -
@@ -23671,7 +23671,7 @@ CREATE UNIQUE INDEX uk_pay_md_method_code ON public.pay_md_method USING btree (c
 -- Name: INDEX uk_pay_md_method_code; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_pay_md_method_code IS '支付方式编码唯一（未删除）';
+COMMENT ON INDEX public.uk_pay_md_method_code IS '支付方式编码唯一';
 
 --
 -- Name: uk_pay_md_product_capability_pair; Type: INDEX; Schema: public; Owner: -
@@ -23683,7 +23683,7 @@ CREATE UNIQUE INDEX uk_pay_md_product_capability_pair ON public.pay_md_product_c
 -- Name: INDEX uk_pay_md_product_capability_pair; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_pay_md_product_capability_pair IS '产品+能力唯一（未删除）';
+COMMENT ON INDEX public.uk_pay_md_product_capability_pair IS '产品+能力唯一';
 
 --
 -- Name: uk_pay_md_product_config_product; Type: INDEX; Schema: public; Owner: -
@@ -23707,7 +23707,7 @@ CREATE UNIQUE INDEX uk_pay_md_provider_code ON public.pay_md_provider USING btre
 -- Name: INDEX uk_pay_md_provider_code; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_pay_md_provider_code IS '支付渠道编码唯一（未删除）';
+COMMENT ON INDEX public.uk_pay_md_provider_code IS '支付渠道编码唯一';
 
 --
 -- Name: uk_pay_md_provider_method_pair; Type: INDEX; Schema: public; Owner: -
@@ -23719,7 +23719,7 @@ CREATE UNIQUE INDEX uk_pay_md_provider_method_pair ON public.pay_md_provider_met
 -- Name: INDEX uk_pay_md_provider_method_pair; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_pay_md_provider_method_pair IS '支付渠道+支付方式唯一（未删除）';
+COMMENT ON INDEX public.uk_pay_md_provider_method_pair IS '支付渠道+支付方式唯一';
 
 --
 -- Name: uk_pay_platform_mobile_app_type_platform; Type: INDEX; Schema: public; Owner: -
@@ -23863,7 +23863,7 @@ CREATE UNIQUE INDEX uk_pay_virtual_device_device_no ON public.pay_virtual_device
 -- Name: INDEX uk_pay_virtual_device_device_no; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_pay_virtual_device_device_no IS '设备号唯一(SN 为激活唯一锚点, 仅未删除行)';
+COMMENT ON INDEX public.uk_pay_virtual_device_device_no IS '设备号唯一';
 
 --
 -- Name: uk_refund_order_mch_biz; Type: INDEX; Schema: public; Owner: -
@@ -23875,7 +23875,7 @@ CREATE UNIQUE INDEX uk_refund_order_mch_biz ON public.pay_refund_order USING btr
 -- Name: INDEX uk_refund_order_mch_biz; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_refund_order_mch_biz IS '退款商户业务单号唯一约束: 同商户同 biz_refund_no 仅允许一单, 防重复退款双扣';
+COMMENT ON INDEX public.uk_refund_order_mch_biz IS '同商户退款业务单号唯一';
 
 --
 -- Name: uk_refund_order_refund_no; Type: INDEX; Schema: public; Owner: -
@@ -23923,7 +23923,7 @@ CREATE UNIQUE INDEX uk_sheng_isv_key_product ON public.sheng_isv_key_config USIN
 -- Name: INDEX uk_sheng_isv_key_product; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_sheng_isv_key_product IS '服务商密钥按产品全局唯一(一个服务商一套密钥, 轮换单点)';
+COMMENT ON INDEX public.uk_sheng_isv_key_product IS '服务商密钥按产品全局唯一';
 
 --
 -- Name: uk_sheng_isv_mch_sub; Type: INDEX; Schema: public; Owner: -
@@ -23935,7 +23935,7 @@ CREATE UNIQUE INDEX uk_sheng_isv_mch_sub ON public.sheng_isv_channel_merchant US
 -- Name: INDEX uk_sheng_isv_mch_sub; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_sheng_isv_mch_sub IS '同一商户同子商户号唯一(防重复绑定)';
+COMMENT ON INDEX public.uk_sheng_isv_mch_sub IS '同一商户同子商户号唯一';
 
 --
 -- Name: uk_sheng_key_cmchno; Type: INDEX; Schema: public; Owner: -
@@ -23947,7 +23947,7 @@ CREATE UNIQUE INDEX uk_sheng_key_cmchno ON public.sheng_key_config USING btree (
 -- Name: INDEX uk_sheng_key_cmchno; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_sheng_key_cmchno IS '同一通道商户盛付通密钥唯一(直连商户维度, 无沙箱双环境)';
+COMMENT ON INDEX public.uk_sheng_key_cmchno IS '同一通道商户盛付通密钥唯一';
 
 --
 -- Name: uk_sheng_key_mch_shengmch; Type: INDEX; Schema: public; Owner: -
@@ -23959,7 +23959,7 @@ CREATE UNIQUE INDEX uk_sheng_key_mch_shengmch ON public.sheng_key_config USING b
 -- Name: INDEX uk_sheng_key_mch_shengmch; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_sheng_key_mch_shengmch IS '同一商户同一盛付通商户号唯一(并发创建兜底, 与应用层判重互补; sheng_mch_id 为空的未完成配置不受约束)';
+COMMENT ON INDEX public.uk_sheng_key_mch_shengmch IS '同一商户盛付通商户号唯一';
 
 --
 -- Name: uk_shouqianba_direct_key_cmchno_sandbox; Type: INDEX; Schema: public; Owner: -
@@ -23983,7 +23983,7 @@ CREATE UNIQUE INDEX uk_system_dict_item_dict_code ON public.system_dict_item USI
 -- Name: INDEX uk_system_dict_item_dict_code; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_system_dict_item_dict_code IS '同字典下编码唯一(未删除行)';
+COMMENT ON INDEX public.uk_system_dict_item_dict_code IS '同字典下编码唯一';
 
 --
 -- Name: uk_system_dict_type_code; Type: INDEX; Schema: public; Owner: -
@@ -23995,7 +23995,7 @@ CREATE UNIQUE INDEX uk_system_dict_type_code ON public.system_dict USING btree (
 -- Name: INDEX uk_system_dict_type_code; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_system_dict_type_code IS '字典类型+编码唯一(未删除行)';
+COMMENT ON INDEX public.uk_system_dict_type_code IS '字典类型+编码唯一';
 
 --
 -- Name: uk_system_platform_config_type; Type: INDEX; Schema: public; Owner: -
@@ -24007,7 +24007,7 @@ CREATE UNIQUE INDEX uk_system_platform_config_type ON public.system_platform_con
 -- Name: INDEX uk_system_platform_config_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_system_platform_config_type IS '配置类型唯一(未删除行), 配置取数走 config_type 等值查询';
+COMMENT ON INDEX public.uk_system_platform_config_type IS '配置类型唯一';
 
 --
 -- Name: uk_system_platform_encrypt_config_type; Type: INDEX; Schema: public; Owner: -
@@ -24019,7 +24019,7 @@ CREATE UNIQUE INDEX uk_system_platform_encrypt_config_type ON public.system_plat
 -- Name: INDEX uk_system_platform_encrypt_config_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_system_platform_encrypt_config_type IS '加密配置类型唯一(未删除行)';
+COMMENT ON INDEX public.uk_system_platform_encrypt_config_type IS '加密配置类型唯一';
 
 --
 -- Name: uk_system_sensitive_word_word; Type: INDEX; Schema: public; Owner: -
@@ -24055,7 +24055,7 @@ CREATE UNIQUE INDEX uk_term_bind_sys_chmch_type ON public.pay_terminal_channel_b
 -- Name: INDEX uk_term_bind_sys_chmch_type; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_term_bind_sys_chmch_type IS '同一系统终端在同一通道商户下按报送类型唯一';
+COMMENT ON INDEX public.uk_term_bind_sys_chmch_type IS '同一终端+通道商户+报送类型唯一';
 
 --
 -- Name: uk_umfpay_direct_key_cmchno_sandbox; Type: INDEX; Schema: public; Owner: -
@@ -24103,7 +24103,7 @@ CREATE UNIQUE INDEX uk_user_das_pref_user_client ON public.iam_user_dashboard_pr
 -- Name: INDEX uk_user_das_pref_user_client; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_user_das_pref_user_client IS '同一用户同一身份域终端同一壳仪表盘偏好唯一(仅未删除行, 用户注销后重建同配置放行)';
+COMMENT ON INDEX public.uk_user_das_pref_user_client IS '同一用户+身份域+终端仪表盘偏好唯一';
 
 --
 -- Name: uk_user_protocol_version_published; Type: INDEX; Schema: public; Owner: -
@@ -24115,7 +24115,7 @@ CREATE UNIQUE INDEX uk_user_protocol_version_published ON public.base_user_proto
 -- Name: INDEX uk_user_protocol_version_published; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_user_protocol_version_published IS '同一协议同一语言仅一个已发布版本（已发布）';
+COMMENT ON INDEX public.uk_user_protocol_version_published IS '同一协议同一语言仅一个已发布版本';
 
 --
 -- Name: uk_vbill_isv_key_prod_sandbox; Type: INDEX; Schema: public; Owner: -
@@ -24139,7 +24139,7 @@ CREATE UNIQUE INDEX uk_wechat_direct_alloc_receiver ON public.wechat_direct_allo
 -- Name: INDEX uk_wechat_direct_alloc_receiver; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_wechat_direct_alloc_receiver IS '同一通道商户下同类型同账号接收方唯一(部分唯一索引)';
+COMMENT ON INDEX public.uk_wechat_direct_alloc_receiver IS '同一通道商户下同类型同账号接收方唯一';
 
 --
 -- Name: uk_wechat_isv_alloc_receiver; Type: INDEX; Schema: public; Owner: -
@@ -24151,7 +24151,7 @@ CREATE UNIQUE INDEX uk_wechat_isv_alloc_receiver ON public.wechat_isv_alloc_rece
 -- Name: INDEX uk_wechat_isv_alloc_receiver; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_wechat_isv_alloc_receiver IS '同一通道商户下同类型同账号接收方唯一(部分唯一索引)';
+COMMENT ON INDEX public.uk_wechat_isv_alloc_receiver IS '同一通道商户下同类型同账号接收方唯一';
 
 --
 -- Name: uk_wechat_transfer_config; Type: INDEX; Schema: public; Owner: -
@@ -24163,7 +24163,7 @@ CREATE UNIQUE INDEX uk_wechat_transfer_config ON public.wechat_transfer_config U
 -- Name: INDEX uk_wechat_transfer_config; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_wechat_transfer_config IS '一个通道商户仅一条转账配置(部分唯一索引)';
+COMMENT ON INDEX public.uk_wechat_transfer_config IS '一个通道商户仅一条转账配置';
 
 --
 -- Name: uk_wx_channel_app_cap; Type: INDEX; Schema: public; Owner: -
@@ -24283,7 +24283,7 @@ CREATE UNIQUE INDEX uk_ysep_key_channel_mch ON public.ysep_key_config USING btre
 -- Name: INDEX uk_ysep_key_channel_mch; Type: COMMENT; Schema: public; Owner: -
 --
 
-COMMENT ON INDEX public.uk_ysep_key_channel_mch IS '通道商户号唯一(一通道商户一条密钥, 产品由行内 product 表达)';
+COMMENT ON INDEX public.uk_ysep_key_channel_mch IS '通道商户号唯一';
 
 --
 -- PostgreSQL database dump complete
