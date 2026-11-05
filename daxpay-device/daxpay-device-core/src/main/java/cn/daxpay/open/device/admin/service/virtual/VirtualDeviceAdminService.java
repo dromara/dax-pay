@@ -318,7 +318,7 @@ public class VirtualDeviceAdminService {
         return msgId;
     }
 
-    /// 激活二维码内容(扫码激活协议 daxpay:activate:{serverBaseUrl}:{sn}, 前端负责渲染二维码图)
+    /// 激活二维码内容(扫码激活协议 daxpay:activate:{sn}, 服务器地址 APP 编译期内置, 前端负责渲染二维码图)
     public String qrContent(String deviceNo) {
         return virtualDeviceQrService.qrContent(deviceNo);
     }

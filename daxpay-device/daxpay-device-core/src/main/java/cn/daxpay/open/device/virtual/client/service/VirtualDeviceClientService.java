@@ -30,9 +30,7 @@ import cn.daxpay.open.payment.trade.order.entity.PayTrade;
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
 import cn.daxpay.open.platform.system.entity.config.platform.infra.PlatformMqttConfig;
-import cn.daxpay.open.platform.system.entity.config.platform.infra.PlatformUrlConfig;
 import cn.daxpay.open.platform.system.service.config.infra.PlatformMqttConfigService;
-import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
@@ -49,8 +47,8 @@ import java.time.Duration;
 /// 服务 APP 免登录公共端点(`/client/device/audio/**`):
 /// 虚拟设备为独立台账(pay_virtual_device), 激活/回执按设备号单表定位。
 ///
-/// 开源版单因子激活(拍板: 砍激活码体系): APP 凭「设备码(SN)」激活(扫码可带入后端接口地址),
-/// 下发凭证七件套(plus 六件套 + serverBaseUrl); 设备号唯一准入凭据已接受(拍板 12),
+/// 开源版单因子激活(拍板: 砍激活码体系): APP 凭「设备码(SN)」激活(服务器地址由 APP 编译期内置),
+/// 下发凭证六件套; 设备号唯一准入凭据已接受(拍板 12),
 /// 缓解 = 21 亿随机空间 + 激活限流(IP 10/min + SN 20/min) + 可禁用 + 重复激活轮换 secret。
 /// 回执/心跳以 HMAC-SHA256(设备 secret) 验签防伪造, ts 窗口+nonce SETNX 防重放,
 /// 回写回执并返回设备状态供终端校准; 验签通过即刷新 Redis 在线 ZSET(15 分钟窗口)
@@ -83,7 +81,6 @@ public class VirtualDeviceClientService {
 
     private final VirtualDeviceManager virtualDeviceManager;
     private final PlatformMqttConfigService platformMqttConfigService;
-    private final PlatformUrlConfigService platformUrlConfigService;
     private final PeriodCounterService periodCounterService;
     private final VirtualOnlineTracker virtualOnlineTracker;
     private final VirtualTestAckTracker virtualTestAckTracker;
@@ -102,8 +99,8 @@ public class VirtualDeviceClientService {
     /// 激活虚拟设备(免登录, 设备号单因子)
     ///
     /// 限流通过后进入激活语义: 设备存在/启用/已绑商户 → 轮换 secret(旧密文/旧回执签名即时作废
-    /// = 换机语义), 下发接入凭证七件套(MQTT 接入参数取平台配置「MQTT接入」, serverBaseUrl 取
-    /// 平台端点配置「后端 API 地址」); 激活成败排障走应用日志(拍板 11: 不建激活审计表)。
+    /// = 换机语义), 下发接入凭证六件套(MQTT 接入参数取平台配置「MQTT接入」);
+    /// 激活成败排障走应用日志(拍板 11: 不建激活审计表)。
     public VirtualDeviceActivateResult activate(VirtualDeviceActivateParam param, String clientIp) {
         // IP/SN 两维限流(分钟窗口, 防设备号撞库)
         checkActivateRateLimit("ip:" + clientIp, ACTIVATE_IP_LIMIT);
@@ -124,17 +121,13 @@ public class VirtualDeviceClientService {
         log.info("虚拟设备激活: deviceNo={}, ip={}", device.getDeviceNo(), clientIp);
         // 接入参数取平台配置「MQTT接入」(纯 DB 存储, 保存即时生效; 已激活设备重新激活后才取到新值)
         PlatformMqttConfig mqttConfig = platformMqttConfigService.getMqttConfig();
-        // 后端接口基址取平台端点配置「后端 API 地址」(开源版新增, 未配置时容忍 null, APP 手填兜底)
-        PlatformUrlConfig urlConfig = platformUrlConfigService.getUrlConfig();
-        String serverBaseUrl = urlConfig == null ? null : urlConfig.getBackendBaseUrl();
         return new VirtualDeviceActivateResult()
                 .setDeviceNo(device.getDeviceNo())
                 .setSecret(secret)
                 .setBrokerUrl(mqttConfig.getBrokerWssUrl())
                 .setTopic(VirtualDevicePushClient.topic(device.getDeviceNo()))
                 .setMqttUsername(mqttConfig.getMqttUsername())
-                .setMqttPassword(mqttConfig.getMqttPassword())
-                .setServerBaseUrl(StrUtil.blankToDefault(serverBaseUrl, null));
+                .setMqttPassword(mqttConfig.getMqttPassword());
     }
 
     /// 回执/心跳(HMAC 验签 -> nonce 防重放 -> 刷新在线 -> 回写收款回执 -> 返回设备状态供终端校准)

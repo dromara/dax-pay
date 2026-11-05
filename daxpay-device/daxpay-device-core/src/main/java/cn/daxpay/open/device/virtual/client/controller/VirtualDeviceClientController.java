@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 /// # 虚拟音箱设备自助(公开/APP 侧)
 ///
 /// 供 DaxPay 收款播报 APP(纯设备终端, 零业务感知)调用, 无需登录态:
-/// 激活凭设备号单因子下发凭证七件套, 回执/心跳验签、nonce 防重放并刷新在线状态(Redis 在线窗口)。
+/// 激活凭设备号单因子下发凭证六件套, 回执/心跳验签、nonce 防重放并刷新在线状态(Redis 在线窗口)。
 /// 设备归属绑定在运营端台账完成。
 ///
 /// B 波(2026-10-24)已补齐: `/reprint-data`(补打取数)与 `/print-preview`(试打取数),
@@ -41,7 +41,7 @@ public class VirtualDeviceClientController {
 
     private final VirtualDeviceClientService audioDeviceClientService;
 
-    @Operation(summary = "激活虚拟音箱(设备号单因子, 返回凭证七件套)")
+    @Operation(summary = "激活虚拟音箱(设备号单因子, 返回凭证六件套)")
     @PostMapping("/activate")
     public Result<VirtualDeviceActivateResult> activate(@RequestBody @Validated VirtualDeviceActivateParam param,
             HttpServletRequest request) {
