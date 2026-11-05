@@ -1,0 +1,20 @@
+{
+  "templateNotFound": "Không tìm thấy mẫu in: {0}",
+  "contentBlank": "Nội dung mẫu không được để trống",
+  "notJson": "Nội dung mẫu không phải JSON hợp lệ",
+  "rootInvalid": "Gốc mẫu phải là đối tượng và chứa mảng elements",
+  "elementsEmpty": "Mảng elements của mẫu không được để trống",
+  "elementLimit": "Số phần tử mẫu vượt quá giới hạn ({0})",
+  "elementNotObject": "Phần tử thứ {0} không phải đối tượng",
+  "unknownType": "Phần tử thứ {0} ({1}): loại phần tử không xác định",
+  "fieldRequired": "Phần tử thứ {0} ({1}): {2} không được để trống",
+  "fieldOverLength": "Phần tử thứ {0} ({1}): độ dài {2} vượt quá giới hạn ({3} ký tự)",
+  "fieldNotInt": "Phần tử thứ {0} ({1}): {2} phải là số nguyên",
+  "fieldRange": "Phần tử thứ {0} ({1}): giá trị {2} phải nằm trong khoảng {3}~{4}",
+  "unknownVar": "Phần tử thứ {0} ({1}): biến không xác định {2}",
+  "alignInvalid": "Phần tử thứ {0}: giá trị align phải là left/center/right",
+  "sizeInvalid": "Phần tử thứ {0}: giá trị size phải là normal/double",
+  "dividerInvalid": "Phần tử thứ {0} (divider): ký tự phân cách phải là một ký tự nửa độ rộng",
+  "qrTooLong": "Nội dung mã QR quá dài ({0} ký tự), trên giấy {1}mm không đủ {2} điểm/module, vui lòng rút ngắn nội dung",
+  "qrNotEncodable": "Nội dung mã QR không thể mã hóa (quá dài hoặc chứa ký tự không được hỗ trợ)"
+}

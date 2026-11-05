@@ -39,5 +39,9 @@
   "roleNotExist": "Vai trò được chỉ định không tồn tại",
   "hasGatewayOrder": "Merchant có đơn thanh toán gateway, không được phép xóa",
   "hasBoundDevice": "Merchant có thiết bị đang liên kết, vui lòng hủy liên kết hoặc xử lý thiết bị trước khi xóa",
-  "lastAdminCannotDelete": "Merchant phải giữ lại ít nhất một người dùng quản trị, vui lòng chuyển vai trò quản trị trước"
+  "lastAdminCannotDelete": "Merchant phải giữ lại ít nhất một người dùng quản trị, vui lòng chuyển vai trò quản trị trước",
+  "hasTrade": "Thương gia có bản ghi giao dịch, không được phép xóa",
+  "hasOrder": "Thương gia có bản ghi đơn hàng, không được phép xóa",
+  "hasRefund": "Thương gia có bản ghi hoàn tiền, không được phép xóa",
+  "hasUser": "Thương gia có người dùng liên kết, vui lòng hủy liên kết trong quản lý người dùng thương gia trước"
 }

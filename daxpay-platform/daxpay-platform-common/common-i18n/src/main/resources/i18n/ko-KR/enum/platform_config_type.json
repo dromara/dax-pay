@@ -3,6 +3,7 @@
   "security_login": "로그인 보안",
   "security_session": "세션 관리",
   "security_two_factor_auth": "이중 인증",
+  "security_webauthn": "패스키(WebAuthn) 설정",
   "url": "시스템 URL 설정",
   "website": "웹사이트 표시 설정",
   "sensitive_word": "민감어 정책 설정",

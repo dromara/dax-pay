@@ -60,7 +60,7 @@ public class MchUserAdminController {
     @PermCode(code = PermCodes.Action.VIEW)
     @Operation(summary = "查询用户详情(含角色与登录/密码信息)")
     @GetMapping("/get-detail")
-    public Result<MerchantUserDetailResult> findDetail(@NotNull(message = "主键不可为空") Long id) {
+    public Result<MerchantUserDetailResult> findDetail(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(merchantUserAdminService.findDetail(id));
     }
 

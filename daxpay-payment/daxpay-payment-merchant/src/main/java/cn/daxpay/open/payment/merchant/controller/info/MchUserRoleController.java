@@ -38,14 +38,14 @@ public class MchUserRoleController {
     @PermCode(code = PermCodes.Action.ASSIGN_ROLE)
     @Operation(summary = "根据用户ID获取到可分配角色集合")
     @GetMapping(value = "/find-assignable-roles-by-user")
-    public Result<List<RoleResult>> findAssignableRolesByUser(@NotNull(message = "用户 ID 不能为空") @Parameter(description = "用户ID") Long userId) {
+    public Result<List<RoleResult>> findAssignableRolesByUser(@NotNull(message = "{validation.field.userId.notNull}") @Parameter(description = "用户ID") Long userId) {
         return Res.ok(merchantUserAdminService.findAssignableRolesByUser(userId));
     }
 
     @PermCode(code = PermCodes.Action.ASSIGN_ROLE)
     @Operation(summary = "根据用户ID获取到角色id集合")
     @GetMapping(value = "/find-role-ids-by-user")
-    public Result<List<Long>> findRoleIdsByUser(@NotNull(message = "用户 ID 不能为空") @Parameter(description = "用户ID") Long userId) {
+    public Result<List<Long>> findRoleIdsByUser(@NotNull(message = "{validation.field.userId.notNull}") @Parameter(description = "用户ID") Long userId) {
         return Res.ok(merchantUserAdminService.findRoleIdsByUser(userId));
     }
 }

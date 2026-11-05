@@ -1,0 +1,18 @@
+{
+  "appNotFound": "Aplikasi WeChat platform tidak ditemukan",
+  "mchAppNotFound": "Aplikasi WeChat pedagang tidak ditemukan",
+  "appIdDuplicate": "AppId aplikasi WeChat sudah ada",
+  "appTypeInvalid": "Jenis aplikasi WeChat tidak valid",
+  "appInUse": "Aplikasi WeChat masih dirujuk oleh ikatan kemampuan, tidak dapat dihapus",
+  "appTypeCapabilityMismatch": "Jenis aplikasi WeChat tidak cocok dengan kemampuan pembayaran",
+  "scopeNotExist": "Tingkat aplikasi WeChat tidak ditemukan atau referensi tidak valid",
+  "channelAppIdNotFound": "AppId aplikasi WeChat [{0}] yang ditentukan belum dikonfigurasi dalam sistem",
+  "appNotBound": "Belum terikat ke aplikasi WeChat yang tersedia",
+  "channelMerchantMismatch": "Pedagang saluran tidak ditemukan atau tidak cocok dengan nomor pedagang",
+  "appNotConfigured": "Aplikasi yang sesuai untuk {0} belum dikonfigurasi, silakan buka halaman konfigurasi aplikasi pedagang saluran untuk mengikat",
+  "directMchAppNotConfigured": "Pedagang sambungan langsung belum mengonfigurasi aplikasi tingkat pedagang untuk {0}, silakan buka halaman konfigurasi aplikasi pedagang saluran untuk mengikat aplikasi tingkat pedagang (pedagang sambungan langsung tidak dapat menggunakan aplikasi tingkat platform)",
+  "appNotUnique": "Terdapat beberapa aplikasi bertipe {0}, silakan konfigurasi ikatan kemampuan secara eksplisit untuk pemilihan yang jelas",
+  "platformAppAmbiguous": "Produk ini memiliki beberapa aplikasi WeChat tingkat platform sehingga aplikasi penyedia layanan tidak dapat ditentukan otomatis, silakan tentukan aplikasi penyedia layanan atau perkecil ikatan kemampuan aplikasi produk ini",
+  "mpAuthNotConfigured": "Konfigurasi autentikasi akun resmi WeChat belum diisi, silakan konfigurasi AppId dan AppSecret di 「Manajemen platform pihak ketiga → Konfigurasi autentikasi akun resmi WeChat」",
+  "appRefByAllocReceiver": "Aplikasi WeChat dirujuk oleh catatan penerima pembagian dana, tidak dapat dihapus"
+}

@@ -133,7 +133,8 @@
       "notBlank": "子商户号不能为空"
     },
     "wxMchId": {
-      "notBlank": "微信商户Id不可为空"
+      "notBlank": "微信商户Id不可为空",
+      "size": "微信直连商户号不可超过32位"
     },
     "wxAppId": {
       "notBlank": "微信应用AppId不可为空",
@@ -213,7 +214,8 @@
       "size": "支付订单号不可超过100位"
     },
     "allocTitle": {
-      "notBlank": "分账标题不可为空"
+      "notBlank": "分账标题不可为空",
+      "size": "分账标题不可超过100位"
     },
     "amount": {
       "notNull": "支付金额不可为空",
@@ -986,7 +988,8 @@
       "notBlank": "系统终端不可为空"
     },
     "transferNo": {
-      "size": "平台转账单号不可超过100位"
+      "size": "平台转账单号不可超过100位",
+      "notBlank": "转账单号不可为空"
     },
     "bizTransferNo": {
       "notBlank": "商户转账号不可为空",
@@ -1134,7 +1137,8 @@
       "notNull": "易支付商户号不可为空"
     },
     "receivers": {
-      "notEmpty": "分账接收方列表不能为空"
+      "notEmpty": "分账接收方列表不能为空",
+      "size": "接收方列表不可超过50个"
     },
     "relationType": {
       "notBlank": "分账关系类型不能为空"
@@ -1154,6 +1158,32 @@
     },
     "wxPlatformAppId": {
       "notNull": "微信平台应用主键不可为空"
+    },
+    "allocDescription": {
+      "size": "分账描述不可超过500位"
+    },
+    "finishMode": {
+      "size": "分账完结模式不可超过32位"
+    },
+    "allocAmount": {
+      "notNull": "分账金额必填",
+      "min": "分账金额必须大于0"
+    },
+    "allocFinishDescription": {
+      "size": "完结描述不可超过500位"
+    },
+    "transferAppId": {
+      "size": "应用ID不可超过64位"
+    },
+    "transferChannelMchNo": {
+      "size": "通道商户号不可超过64位"
+    },
+    "transferAmount": {
+      "notNull": "转账金额必填",
+      "min": "转账金额必须大于0"
+    },
+    "transferTitle": {
+      "size": "转账标题不可超过100位"
     }
   }
 }

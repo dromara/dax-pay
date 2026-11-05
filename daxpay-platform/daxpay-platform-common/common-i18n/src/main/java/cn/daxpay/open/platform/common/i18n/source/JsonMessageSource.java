@@ -112,7 +112,12 @@ public class JsonMessageSource extends AbstractMessageSource {
             messages = this.loadMessages(this.defaultLocale);
             message = messages.get(code);
         }
-        return Objects.nonNull(message) ? new MessageFormat(message, locale) : null;
+        // 缺 key 时返回 null, 由调用方(如 I18nUtil)回退为 key 原串; 记 WARN 便于发现漏配词条
+        if (Objects.isNull(message)) {
+            log.warn("未找到国际化 key, locale={}, resolvedLocale={}, key={}", locale, resolved, code);
+            return null;
+        }
+        return new MessageFormat(message, locale);
     }
 
     /// 将请求 locale 规范为资源目录标签对应的 Locale

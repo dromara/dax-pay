@@ -1,0 +1,20 @@
+{
+  "templateNotFound": "Template cetak tidak ditemukan: {0}",
+  "contentBlank": "Isi template tidak boleh kosong",
+  "notJson": "Isi template bukan JSON yang valid",
+  "rootInvalid": "Akar template harus berupa objek dan berisi array elements",
+  "elementsEmpty": "Elemen template (elements) tidak boleh kosong",
+  "elementLimit": "Jumlah elemen template melebihi batas ({0})",
+  "elementNotObject": "Elemen ke-{0} bukan objek",
+  "unknownType": "Elemen ke-{0} ({1}): jenis elemen tidak dikenal",
+  "fieldRequired": "Elemen ke-{0} ({1}): {2} tidak boleh kosong",
+  "fieldOverLength": "Elemen ke-{0} ({1}): panjang {2} melebihi batas ({3} karakter)",
+  "fieldNotInt": "Elemen ke-{0} ({1}): {2} harus berupa bilangan bulat",
+  "fieldRange": "Elemen ke-{0} ({1}): nilai {2} harus dalam rentang {3}~{4}",
+  "unknownVar": "Elemen ke-{0} ({1}): variabel tidak dikenal {2}",
+  "alignInvalid": "Elemen ke-{0}: nilai align harus left/center/right",
+  "sizeInvalid": "Elemen ke-{0}: nilai size harus normal/double",
+  "dividerInvalid": "Elemen ke-{0} (divider): pemisah harus satu karakter setengah lebar",
+  "qrTooLong": "Isi kode QR terlalu panjang ({0} karakter), pada kertas {1}mm kurang dari {2} titik/modul, silakan persingkat isi",
+  "qrNotEncodable": "Isi kode QR tidak dapat dikodekan (terlalu panjang atau berisi karakter yang tidak didukung)"
+}

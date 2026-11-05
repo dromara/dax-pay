@@ -68,5 +68,7 @@
   "yisheng_pay": "Yisheng Pay",
   "worldfirst": "WorldFirst",
   "lianlian_global": "LianLian Global",
-  "pingpong": "PingPong"
+  "pingpong": "PingPong",
+  "mock_pay": "Pembayaran simulasi",
+  "mock_isv": "Pembayaran simulasi (penyedia layanan)"
 }

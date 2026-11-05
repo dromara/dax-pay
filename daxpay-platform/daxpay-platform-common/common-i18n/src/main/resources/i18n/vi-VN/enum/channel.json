@@ -66,5 +66,6 @@
   "lianlian_global": "LianLian Global",
   "lianlian_global_desc": "Kênh thanh toán xuyên biên giới LianLian Global (placeholder, chưa kết nối)",
   "pingpong": "PingPong",
-  "pingpong_desc": "Kênh thanh toán xuyên biên giới PingPong  (placeholder, chưa kết nối)"
+  "pingpong_desc": "Kênh thanh toán xuyên biên giới PingPong  (placeholder, chưa kết nối)",
+  "mock": "Kênh mô phỏng"
 }

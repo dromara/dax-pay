@@ -68,5 +68,7 @@
   "yisheng_pay": "Yisheng Pay",
   "worldfirst": "WorldFirst",
   "lianlian_global": "LianLian Global",
-  "pingpong": "PingPong"
+  "pingpong": "PingPong",
+  "mock_pay": "Thanh toán mô phỏng",
+  "mock_isv": "Thanh toán mô phỏng (nhà cung cấp dịch vụ)"
 }

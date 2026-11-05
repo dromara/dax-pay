@@ -133,7 +133,8 @@
       "notBlank": "하위 판매자 번호는 비워둘 수 없습니다."
     },
     "wxMchId": {
-      "notBlank": "WeChat 판매자 ID는 비워둘 수 없습니다."
+      "notBlank": "WeChat 판매자 ID는 비워둘 수 없습니다.",
+      "size": "WeChat 판매자 ID는 32자를 초과할 수 없습니다"
     },
     "wxAppId": {
       "notBlank": "WeChat 앱 ID는 비워둘 수 없습니다.",
@@ -213,7 +214,8 @@
       "size": "결제주문번호 100자를 초과할 수 없습니다."
     },
     "allocTitle": {
-      "notBlank": "분담 제목은 필수입니다"
+      "notBlank": "분담 제목은 필수입니다",
+      "size": "분담 제목은 100자를 초과할 수 없습니다"
     },
     "amount": {
       "notNull": "결제 금액은 비워둘 수 없습니다.",
@@ -982,7 +984,8 @@
       "notBlank": "시스템 단말은 필수입니다"
     },
     "transferNo": {
-      "size": "플랫폼 송금 번호는 100자를 초과할 수 없습니다"
+      "size": "플랫폼 송금 번호는 100자를 초과할 수 없습니다",
+      "notBlank": "송금 번호는 비워둘 수 없습니다"
     },
     "bizTransferNo": {
       "notBlank": "가맹점 송금 번호는 필수입니다",
@@ -1130,7 +1133,8 @@
       "notNull": "EasyPay 판매자 ID는 필수입니다."
     },
     "receivers": {
-      "notEmpty": "분할 수취인 목록은 비워둘 수 없습니다."
+      "notEmpty": "분할 수취인 목록은 비워둘 수 없습니다.",
+      "size": "분할 수취인 목록은 50개를 초과할 수 없습니다"
     },
     "relationType": {
       "notBlank": "분할 관계 유형은 필수입니다."
@@ -1150,6 +1154,36 @@
     },
     "wxPlatformAppId": {
       "notNull": "WeChat 플랫폼 앱은 필수입니다."
+    },
+    "redirectUrl": {
+      "notBlank": "리디렉션 URL은 비워둘 수 없습니다.",
+      "size": "리디렉션 URL은 500자를 초과할 수 없습니다."
+    },
+    "allocDescription": {
+      "size": "분담 설명은 500자를 초과할 수 없습니다"
+    },
+    "finishMode": {
+      "size": "분담 완료 모드는 32자를 초과할 수 없습니다"
+    },
+    "allocAmount": {
+      "notNull": "분담 금액은 필수입니다",
+      "min": "분담 금액은 0보다 커야 합니다"
+    },
+    "allocFinishDescription": {
+      "size": "완료 설명은 500자를 초과할 수 없습니다"
+    },
+    "transferAppId": {
+      "size": "애플리케이션 ID는 64자를 초과할 수 없습니다"
+    },
+    "transferChannelMchNo": {
+      "size": "채널 판매자 번호는 64자를 초과할 수 없습니다"
+    },
+    "transferAmount": {
+      "notNull": "송금 금액은 필수입니다",
+      "min": "송금 금액은 0보다 커야 합니다"
+    },
+    "transferTitle": {
+      "size": "송금 제목은 100자를 초과할 수 없습니다"
     }
   }
 }

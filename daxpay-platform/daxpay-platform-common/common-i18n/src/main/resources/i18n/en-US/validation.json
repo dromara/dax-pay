@@ -133,7 +133,8 @@
       "notBlank": "Sub-merchant number cannot be blank"
     },
     "wxMchId": {
-      "notBlank": "WeChat merchant ID cannot be blank"
+      "notBlank": "WeChat merchant ID cannot be blank",
+      "size": "WeChat direct merchant number cannot exceed 32 characters"
     },
     "wxAppId": {
       "notBlank": "WeChat AppId cannot be blank",
@@ -213,7 +214,8 @@
       "size": "Payment order no. cannot exceed 100 characters"
     },
     "allocTitle": {
-      "notBlank": "Allocation title cannot be empty"
+      "notBlank": "Allocation title cannot be empty",
+      "size": "Allocation title cannot exceed 100 characters"
     },
     "amount": {
       "notNull": "Payment amount cannot be blank",
@@ -986,7 +988,8 @@
       "notBlank": "System terminal cannot be empty"
     },
     "transferNo": {
-      "size": "Platform transfer number cannot exceed 100 characters"
+      "size": "Platform transfer number cannot exceed 100 characters",
+      "notBlank": "Transfer number cannot be blank"
     },
     "bizTransferNo": {
       "notBlank": "Merchant transfer number cannot be empty",
@@ -1134,7 +1137,8 @@
       "notNull": "EasyPay merchant ID is required"
     },
     "receivers": {
-      "notEmpty": "Allocation receiver list cannot be empty"
+      "notEmpty": "Allocation receiver list cannot be empty",
+      "size": "Receiver list cannot exceed 50 entries"
     },
     "relationType": {
       "notBlank": "Allocation relation type is required"
@@ -1154,6 +1158,32 @@
     },
     "wxPlatformAppId": {
       "notNull": "WeChat platform app is required"
+    },
+    "allocDescription": {
+      "size": "Allocation description cannot exceed 500 characters"
+    },
+    "finishMode": {
+      "size": "Allocation finish mode cannot exceed 32 characters"
+    },
+    "allocAmount": {
+      "notNull": "Allocation amount is required",
+      "min": "Allocation amount must be greater than 0"
+    },
+    "allocFinishDescription": {
+      "size": "Finish description cannot exceed 500 characters"
+    },
+    "transferAppId": {
+      "size": "Application ID cannot exceed 64 characters"
+    },
+    "transferChannelMchNo": {
+      "size": "Channel merchant number cannot exceed 64 characters"
+    },
+    "transferAmount": {
+      "notNull": "Transfer amount is required",
+      "min": "Transfer amount must be greater than 0"
+    },
+    "transferTitle": {
+      "size": "Transfer title cannot exceed 100 characters"
     }
   }
 }

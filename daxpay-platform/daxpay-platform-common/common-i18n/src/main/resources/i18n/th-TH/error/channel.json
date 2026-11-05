@@ -4,5 +4,7 @@
   "allocReceiverAlreadyBound": "ผู้รับถูกผูกแล้ว",
   "allocReceiverNotBound": "ผูกแล้วเท่านั้นจึงจะยกเลิกการผูกได้",
   "allocReceiverBoundCannotDelete": "ผู้รับที่ผูกแล้วลบไม่ได้ กรุณายกเลิกการผูกก่อน",
-  "allocReceiverCustomRelationRequired": "ต้องระบุชื่อความสัมพันธ์แบบกำหนดเอง"
+  "allocReceiverCustomRelationRequired": "ต้องระบุชื่อความสัมพันธ์แบบกำหนดเอง",
+  "allocReceiverBindUnknownResult": "เครือข่ายขัดข้อง ไม่ทราบผลการผูก โปรดตรวจสอบสถานะฝั่งช่องทางแล้วลองอีกครั้ง",
+  "allocReceiverUnbindUnknownResult": "เครือข่ายขัดข้อง ไม่ทราบผลการยกเลิกการผูก โปรดตรวจสอบสถานะฝั่งช่องทางแล้วลองอีกครั้ง"
 }

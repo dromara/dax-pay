@@ -53,5 +53,19 @@
   "allocReceiverTypeInvalid": "Alipay: tipe penerima alokasi tidak didukung: {0}",
   "allocReceiverAccountRequired": "Alipay: akun penerima alokasi wajib diisi",
   "allocReceiverBindFailed": "Gagal mengikat penerima alokasi Alipay: {0}",
-  "allocReceiverUnbindFailed": "Gagal melepas penerima alokasi Alipay: {0}"
+  "allocReceiverUnbindFailed": "Gagal melepas penerima alokasi Alipay: {0}",
+  "transferTitleRequired": "Alipay: judul transfer wajib diisi",
+  "transferSceneNotFound": "Alipay: konfigurasi skenario transfer tidak ditemukan",
+  "transferSceneNameInvalid": "Alipay: skenario transfer tidak didukung: {0}",
+  "transferSceneNotConfigured": "Alipay: pedagang saluran ini belum mengonfigurasi skenario transfer, silakan konfigurasi di 「Skenario transfer」 pada detail pedagang saluran terlebih dahulu",
+  "transferSceneNotBelong": "Alipay: konfigurasi skenario transfer bukan milik pedagang saat ini",
+  "transferSceneIdRequired": "Alipay: kunci utama konfigurasi skenario transfer wajib diisi",
+  "transferSceneIdInvalid": "Alipay: format ID konfigurasi skenario transfer salah: {0}",
+  "transferAppNotConfigured": "Alipay: pedagang saluran ini belum mengikat aplikasi transfer, silakan konfigurasi di 「Aplikasi transfer」 pada detail pedagang saluran terlebih dahulu",
+  "transferAppNotExist": "Alipay: aplikasi transfer tidak ditemukan",
+  "transferAppNotBelong": "Alipay: aplikasi transfer bukan milik pedagang saat ini",
+  "channelMerchantMismatch": "Alipay: pedagang saluran bukan milik pedagang saat ini",
+  "appRefByAllocReceiver": "Aplikasi Alipay dirujuk oleh catatan penerima pembagian dana, tidak dapat dihapus",
+  "allocReceiverAppNotExist": "Aplikasi Alipay yang diikat oleh penerima pembagian dana tidak ditemukan",
+  "allocReceiverAppNotBelong": "Aplikasi Alipay yang diikat oleh penerima pembagian dana bukan milik pedagang saat ini"
 }

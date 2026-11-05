@@ -66,5 +66,6 @@
   "lianlian_global": "LianLian Global",
   "lianlian_global_desc": "Saluran pembayaran lintas negara LianLian Global (placeholder, belum terhubung)",
   "pingpong": "PingPong",
-  "pingpong_desc": "Saluran pembayaran lintas negara PingPong  (placeholder, belum terhubung)"
+  "pingpong_desc": "Saluran pembayaran lintas negara PingPong  (placeholder, belum terhubung)",
+  "mock": "Saluran simulasi"
 }

@@ -53,5 +53,19 @@
   "allocReceiverTypeInvalid": "Alipay: loại người nhận phân bổ không được hỗ trợ: {0}",
   "allocReceiverAccountRequired": "Alipay: tài khoản người nhận phân bổ là bắt buộc",
   "allocReceiverBindFailed": "Liên kết người nhận phân chia Alipay thất bại: {0}",
-  "allocReceiverUnbindFailed": "Hủy liên kết người nhận phân chia Alipay thất bại: {0}"
+  "allocReceiverUnbindFailed": "Hủy liên kết người nhận phân chia Alipay thất bại: {0}",
+  "transferTitleRequired": "Alipay: tiêu đề chuyển khoản là bắt buộc",
+  "transferSceneNotFound": "Alipay: cấu hình kịch bản chuyển khoản không tồn tại",
+  "transferSceneNameInvalid": "Alipay: kịch bản chuyển khoản không được hỗ trợ: {0}",
+  "transferSceneNotConfigured": "Alipay: thương gia kênh này chưa cấu hình kịch bản chuyển khoản, vui lòng cấu hình trong 「Kịch bản chuyển khoản」 ở chi tiết thương gia kênh trước",
+  "transferSceneNotBelong": "Alipay: cấu hình kịch bản chuyển khoản không thuộc thương gia hiện tại",
+  "transferSceneIdRequired": "Alipay: khóa chính cấu hình kịch bản chuyển khoản là bắt buộc",
+  "transferSceneIdInvalid": "Alipay: định dạng ID cấu hình kịch bản chuyển khoản sai: {0}",
+  "transferAppNotConfigured": "Alipay: thương gia kênh này chưa liên kết ứng dụng chuyển khoản, vui lòng cấu hình trong 「Ứng dụng chuyển khoản」 ở chi tiết thương gia kênh trước",
+  "transferAppNotExist": "Alipay: ứng dụng chuyển khoản không tồn tại",
+  "transferAppNotBelong": "Alipay: ứng dụng chuyển khoản không thuộc thương gia hiện tại",
+  "channelMerchantMismatch": "Alipay: thương gia kênh không thuộc thương gia hiện tại",
+  "appRefByAllocReceiver": "Ứng dụng Alipay được tham chiếu bởi bản ghi người nhận phân chia tiền, không thể xóa",
+  "allocReceiverAppNotExist": "Ứng dụng Alipay được liên kết bởi người nhận phân chia tiền không tồn tại",
+  "allocReceiverAppNotBelong": "Ứng dụng Alipay được liên kết bởi người nhận phân chia tiền không thuộc thương gia hiện tại"
 }

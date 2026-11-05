@@ -39,5 +39,9 @@
   "roleNotExist": "Peran yang ditentukan tidak ditemukan",
   "hasGatewayOrder": "Merchant memiliki pesanan pembayaran gateway, tidak dapat dihapus",
   "hasBoundDevice": "Merchant memiliki perangkat terikat, silakan lepaskan atau proses perangkat terlebih dahulu sebelum menghapus",
-  "lastAdminCannotDelete": "Merchant harus menyimpan setidaknya satu pengguna administrator, silakan alihkan peran administrator terlebih dahulu"
+  "lastAdminCannotDelete": "Merchant harus menyimpan setidaknya satu pengguna administrator, silakan alihkan peran administrator terlebih dahulu",
+  "hasTrade": "Pedagang memiliki catatan transaksi, tidak boleh dihapus",
+  "hasOrder": "Pedagang memiliki catatan pesanan, tidak boleh dihapus",
+  "hasRefund": "Pedagang memiliki catatan pengembalian dana, tidak boleh dihapus",
+  "hasUser": "Pedagang memiliki pengguna terkait, silakan lepas ikatan di manajemen pengguna pedagang terlebih dahulu"
 }

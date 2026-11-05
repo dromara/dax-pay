@@ -80,7 +80,8 @@
     "codeClientEnvNotConfigured": "Kaedah pembayaran belum dikonfigurasi untuk persekitaran dan bentuk ini",
     "codeRuntimeMismatch": "Jenis pendaratan kod QR tidak sepadan dengan runtime",
     "codeClientEnvChannelMchRequired": "Dalam mod DIRECT, nombor peniaga saluran baris yang diisi wajib",
-    "bizOrderTypeImmutable": "Nombor pesanan telah digunakan dan jenis pesanan tidak boleh ditukar, sila tukar nombor pesanan"
+    "bizOrderTypeImmutable": "Nombor pesanan telah digunakan dan jenis pesanan tidak boleh ditukar, sila tukar nombor pesanan",
+    "returnPathExternalDenied": "Alamat lencongan balik kebenaran tidak dibenarkan pautan luaran"
   },
   "refund": {
     "processing": "Pemprosesan bayaran balik, jangan ulangi",
@@ -93,7 +94,14 @@
     "orderNotFound": "Pesanan bayaran balik tidak ditemui",
     "syncProcessing": "Penyegerakan bayaran balik sedang dijalankan, jangan ulangi",
     "noPermission": "Pedagang tidak mempunyai kebenaran bayaran balik",
-    "gatewayNotSupported": "Pesanan bayaran gateway belum menyokong bayaran balik"
+    "gatewayNotSupported": "Pesanan bayaran gateway belum menyokong bayaran balik",
+    "tradeNoRequired": "Nombor pesanan perniagaan ini mempunyai berbilang transaksi, sila tentukan nombor transaksi dana (tradeNo) untuk lokasi tepat",
+    "manualCloseStatus": "Hanya pesanan yang sedang dalam bayaran balik boleh ditutup secara manual",
+    "manualCloseTooEarly": "Pesanan bayaran balik dicipta belum 7 hari, penutupan manual belum disokong",
+    "duplicate": "Nombor bayaran balik peniaga ini sudah wujud, jangan ulang bayaran balik",
+    "casConflict": "Konflik keserentakan penyelesaian pesanan bayaran balik {0}, telah digulung semula secara automatik",
+    "closeChannelQueryFailed": "Gagal menanyakan pesanan kepada saluran, status bayaran balik tidak dapat dipastikan, sila cuba lagi kemudian",
+    "alreadySuccessOnClose": "Saluran mengesahkan bayaran balik ini berjaya, telah dibetulkan secara automatik kepada berjaya, tidak perlu ditutup"
   },
   "callback": {
     "processing": "Pemprosesan panggilan balik, mengabaikan permintaan panggilan balik ini",
@@ -106,7 +114,8 @@
     "refundNotFound": "Pesanan bayaran balik tidak ditemui, merakam panggilan balik",
     "refundAlreadyProcessed": "Pesanan bayaran balik telah diproses, merakam panggilan balik",
     "transferNotFound": "Perintah pemindahan tidak ditemui, merakam panggilan balik",
-    "transferAlreadyProcessed": "Pindahkan pesanan sudah diproses, merekodkan panggilan balik"
+    "transferAlreadyProcessed": "Pindahkan pesanan sudah diproses, merekodkan panggilan balik",
+    "abnormal": "Ralat pemprosesan panggilan balik, sila hubungi khidmat pelanggan platform"
   },
   "transfer": {
     "createFailed": "Gagal mencipta pindahan: {0}",
@@ -117,7 +126,8 @@
     "syncProcessing": "Sinkronisasi pindahan sedang diproses, jangan ulangi",
     "closeNotProcessing": "Hanya pindahan yang sedang berjalan boleh ditutup secara manual",
     "channelNotSupport": "Saluran ini tidak menyokong penutupan pindahan",
-    "illegalTransition": "Peralihan status tidak sah: {0} → {1}"
+    "illegalTransition": "Peralihan status tidak sah: {0} → {1}",
+    "locateRequired": "Nombor pemindahan platform dan nombor pemindahan peniaga + saluran tidak boleh kosong serentak"
   },
   "alloc": {
     "illegalTransition": "Peralihan status tidak sah: {0} → {1}",
@@ -160,7 +170,9 @@
     "signVerifyFailDetail": "Pengesahan tandatangan gagal: {0}",
     "productOrChannelMchRequired": "Sama ada produk pembayaran atau nombor pedagang saluran mesti disediakan",
     "channelMchNotFound": "Pedagang saluran [{0}] tidak ditemui",
-    "mchContextMissing": "Konteks pedagang tidak dimuatkan; tidak boleh menggunakan pengasingan penyewa"
+    "mchContextMissing": "Konteks pedagang tidak dimuatkan; tidak boleh menggunakan pengasingan penyewa",
+    "authSessionExpired": "Pautan kebenaran telah tamat tempoh, sila jana semula",
+    "authSceneMismatch": "Senario panggilan balik kebenaran tidak sepadan, lencongan ditolak"
   },
   "verify": {
     "methodParamRequired": "Kaedah pembayaran mesti mempunyai sekurang-kurangnya satu parameter dan parameter pembayaran yang ditandatangani mesti berada di kedudukan pertama",
@@ -186,5 +198,12 @@
     "hitNotFound": "Rekod hit risiko tidak ditemui"
   },
   "channelResultUnknown": "Hasil saluran tidak diketahui, sedang mengesahkan status akhir",
-  "channelUnavailable": "Perkhidmatan saluran tidak tersedia, sila cuba lagi kemudian"
+  "channelUnavailable": "Perkhidmatan saluran tidak tersedia, sila cuba lagi kemudian",
+  "abnormal": {
+    "notFound": "Pesanan abnormal tidak ditemukan",
+    "alreadyHandled": "Pesanan abnormal telah diurus, tidak boleh diulang"
+  },
+  "fundFlow": {
+    "notFound": "Aliran dana tidak ditemukan"
+  }
 }

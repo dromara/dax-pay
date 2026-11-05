@@ -16,7 +16,7 @@ import lombok.Data;
 public class RefundParam {
 
     /// 商户号(运营端代发必填; 商户端/开放API由上下文强制)
-    @Size(max = 32, message = "商户号不可超过32位")
+    @Size(max = 32, message = "{validation.field.mchNo.size}")
     @Schema(description = "商户号")
     private String mchNo;
 

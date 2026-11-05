@@ -4,5 +4,7 @@
   "allocReceiverAlreadyBound": "Penerima sudah terikat",
   "allocReceiverNotBound": "Hanya penerima terikat boleh dilepaskan",
   "allocReceiverBoundCannotDelete": "Penerima terikat tidak boleh dipadam, lepaskan dahulu",
-  "allocReceiverCustomRelationRequired": "Nama hubungan tersuai wajib untuk jenis hubungan tersuai"
+  "allocReceiverCustomRelationRequired": "Nama hubungan tersuai wajib untuk jenis hubungan tersuai",
+  "allocReceiverBindUnknownResult": "Ralat rangkaian, hasil pelaksanaan pemautan tidak diketahui, sila sahkan status di bahagian saluran dan cuba lagi",
+  "allocReceiverUnbindUnknownResult": "Ralat rangkaian, hasil pelaksanaan nyahpaut tidak diketahui, sila sahkan status di bahagian saluran dan cuba lagi"
 }

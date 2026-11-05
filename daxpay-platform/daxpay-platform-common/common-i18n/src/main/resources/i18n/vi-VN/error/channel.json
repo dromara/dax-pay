@@ -4,5 +4,7 @@
   "allocReceiverAlreadyBound": "Người nhận đã được liên kết",
   "allocReceiverNotBound": "Chỉ người nhận đã liên kết mới được hủy liên kết",
   "allocReceiverBoundCannotDelete": "Người nhận đã liên kết không thể xóa, hãy hủy liên kết trước",
-  "allocReceiverCustomRelationRequired": "Loại quan hệ tùy chỉnh phải điền tên quan hệ tùy chỉnh"
+  "allocReceiverCustomRelationRequired": "Loại quan hệ tùy chỉnh phải điền tên quan hệ tùy chỉnh",
+  "allocReceiverBindUnknownResult": "Lỗi mạng, không rõ kết quả thực thi liên kết, vui lòng xác minh trạng thái phía kênh rồi thử lại",
+  "allocReceiverUnbindUnknownResult": "Lỗi mạng, không rõ kết quả thực thi hủy liên kết, vui lòng xác minh trạng thái phía kênh rồi thử lại"
 }

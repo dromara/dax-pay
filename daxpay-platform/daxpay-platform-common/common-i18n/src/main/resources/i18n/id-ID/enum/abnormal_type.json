@@ -1,0 +1,5 @@
+{
+  "close_paid": "Pembayaran diterima setelah pesanan ditutup",
+  "fail_paid": "Pembayaran diterima setelah gagal",
+  "cancel_paid": "Pembayaran diterima setelah pembatalan"
+}

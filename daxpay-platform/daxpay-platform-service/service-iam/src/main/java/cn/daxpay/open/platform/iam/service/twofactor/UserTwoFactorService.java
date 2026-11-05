@@ -76,7 +76,7 @@ public class UserTwoFactorService {
         // 已绑定不允许重复初始化
         if (userTwoFactorManager.findByUserId(userId).isPresent()) {
             // 双因素认证: 已绑定, 无需重复操作
-            throw new OperationFailException("error.iam.twoFactor.alreadyBound");
+            throw new OperationFailException("error.iam.two_factor.alreadyBound");
         }
         String account = userInfoManager.findById(userId)
                 .map(UserInfo::getAccount)
@@ -95,12 +95,12 @@ public class UserTwoFactorService {
         Long userId = SecurityUtil.getUserId();
         // 防止重复绑定
         if (userTwoFactorManager.findByUserId(userId).isPresent()) {
-            throw new OperationFailException("error.iam.twoFactor.alreadyBound");
+            throw new OperationFailException("error.iam.two_factor.alreadyBound");
         }
         // 校验动态码
         if (!totpService.verifyCode(secret, code)) {
             // 双因素认证: 动态码错误
-            throw new OperationFailException("error.iam.twoFactor.codeError");
+            throw new OperationFailException("error.iam.two_factor.codeError");
         }
         // 生成备用码
         int count = defaultBackupCodesCount();
@@ -129,7 +129,7 @@ public class UserTwoFactorService {
         if (!verifyByCodeType(entity, code, codeType)) {
             // 失败计数: 防止持有会话者无限穷举动态码/备用码关闭 2FA
             loginRetryService.onSensitiveVerifyFailure(userId, account);
-            throw new OperationFailException("error.iam.twoFactor.codeError");
+            throw new OperationFailException("error.iam.two_factor.codeError");
         }
         // 验证通过, 清零失败计数(与登录成功同口径)
         loginRetryService.onSensitiveVerifySuccess(userId);
@@ -148,7 +148,7 @@ public class UserTwoFactorService {
         if (!verifyByCodeType(entity, code, codeType)) {
             // 失败计数: 防止持有会话者无限穷举动态码/备用码
             loginRetryService.onSensitiveVerifyFailure(userId, account);
-            throw new OperationFailException("error.iam.twoFactor.codeError");
+            throw new OperationFailException("error.iam.two_factor.codeError");
         }
         // 验证通过, 清零失败计数(与登录成功同口径)
         loginRetryService.onSensitiveVerifySuccess(userId);
@@ -233,14 +233,14 @@ public class UserTwoFactorService {
     private void checkPlatformEnabled() {
         if (!Boolean.TRUE.equals(getConfig().getEnabled())) {
             // 双因素认证: 平台未启用
-            throw new OperationFailException("error.iam.twoFactor.platformDisabled");
+            throw new OperationFailException("error.iam.two_factor.platformDisabled");
         }
     }
 
     /// 获取已绑定记录, 不存在抛异常
     private UserTwoFactor requireBound(Long userId) {
         return userTwoFactorManager.findByUserId(userId)
-                .orElseThrow(() -> new OperationFailException("error.iam.twoFactor.notBound"));
+                .orElseThrow(() -> new OperationFailException("error.iam.two_factor.notBound"));
     }
 
     /// 默认备用码数量(从平台配置读取, 兜底默认值)

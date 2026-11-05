@@ -10,5 +10,9 @@
   "originOrderNotExist": "Pesanan asli tidak ditemukan",
   "scanTypeNotSupported": "Jenis penerima ini tidak mendukung pengambilan akun melalui pemindaian kode QR",
   "scanWechatAppTypeNotSupported": "Otorisasi QR WeChat hanya mendukung aplikasi official account (jenis aplikasi saat ini: {0}); silakan pilih aplikasi lain atau masukkan openid secara manual",
-  "scanDouyinAppTypeNotSupported": "Otorisasi QR Douyin hanya mendukung aplikasi web (jenis aplikasi saat ini: {0}); silakan pilih aplikasi lain atau masukkan openid secara manual"
+  "scanDouyinAppTypeNotSupported": "Otorisasi QR Douyin hanya mendukung aplikasi web (jenis aplikasi saat ini: {0}); silakan pilih aplikasi lain atau masukkan openid secara manual",
+  "channelMerchantHasTrade": "Pedagang saluran memiliki catatan transaksi, tidak boleh dihapus",
+  "channelMerchantHasOrder": "Pedagang saluran memiliki catatan pesanan, tidak boleh dihapus",
+  "channelMerchantHasGatewayOrder": "Pedagang saluran memiliki catatan pesanan gateway, tidak boleh dihapus",
+  "channelMerchantHasRefund": "Pedagang saluran memiliki catatan pengembalian dana, tidak boleh dihapus"
 }

@@ -3,11 +3,13 @@
   "security_login": "Keselamatan log masuk",
   "security_session": "Pengurusan sesi",
   "security_two_factor_auth": "Pengesahan dua faktor",
+  "security_webauthn": "Konfigurasi Passkey (WebAuthn)",
   "url": "Tetapan URL sistem",
   "website": "Tetapan paparan laman web",
   "api_security": "Konfigurasi Keselamatan API",
   "iam_replay_protect": "Konfigurasi Anti-Main Semula IAM",
   "sensitive_word": "Konfigurasi perkataan sensitif",
   "pay_security": "Konfigurasi keselamatan pembayaran",
-  "security_social_auto": "Konfigurasi log masuk sosial auto dalam app"
+  "security_social_auto": "Konfigurasi log masuk sosial auto dalam app",
+  "device_mqtt": "Konfigurasi Akses MQTT"
 }

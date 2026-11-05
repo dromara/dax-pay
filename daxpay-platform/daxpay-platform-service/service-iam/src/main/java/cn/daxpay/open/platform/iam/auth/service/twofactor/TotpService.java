@@ -88,7 +88,7 @@ public class TotpService {
         if (!BASE32_PATTERN.matcher(normalized).matches() || normalized.length() % 8 != 0) {
             log.error("TOTP 密钥格式非法(疑似数据损坏或客户端数据错误), length={}", secret.length());
             // 双因素认证: TOTP 密钥格式非法, 属配置/数据问题而非动态码错误
-            throw new OperationFailException("error.iam.twoFactor.secretInvalid");
+            throw new OperationFailException("error.iam.two_factor.secretInvalid");
         }
         try {
             byte[] key = Base32.decode(normalized);

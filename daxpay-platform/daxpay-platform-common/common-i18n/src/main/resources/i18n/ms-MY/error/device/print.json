@@ -1,0 +1,20 @@
+{
+  "templateNotFound": "Templat cetakan tidak ditemukan: {0}",
+  "contentBlank": "Kandungan templat tidak boleh kosong",
+  "notJson": "Kandungan templat bukan JSON yang sah",
+  "rootInvalid": "Akar templat mesti objek dan mengandungi array elements",
+  "elementsEmpty": "Elemen templat (elements) tidak boleh kosong",
+  "elementLimit": "Bilangan elemen templat melebihi had ({0})",
+  "elementNotObject": "Elemen ke-{0} bukan objek",
+  "unknownType": "Elemen ke-{0} ({1}): jenis elemen tidak diketahui",
+  "fieldRequired": "Elemen ke-{0} ({1}): {2} tidak boleh kosong",
+  "fieldOverLength": "Elemen ke-{0} ({1}): panjang {2} melebihi had ({3} aksara)",
+  "fieldNotInt": "Elemen ke-{0} ({1}): {2} mesti integer",
+  "fieldRange": "Elemen ke-{0} ({1}): nilai {2} mesti dalam julat {3}~{4}",
+  "unknownVar": "Elemen ke-{0} ({1}): pemboleh ubah tidak diketahui {2}",
+  "alignInvalid": "Elemen ke-{0}: nilai align mesti left/center/right",
+  "sizeInvalid": "Elemen ke-{0}: nilai size mesti normal/double",
+  "dividerInvalid": "Elemen ke-{0} (divider): pemisah mesti satu aksara separuh lebar",
+  "qrTooLong": "Kandungan kod QR terlalu panjang ({0} aksara), pada kertas {1}mm kurang daripada {2} titik/modul, sila pendekkan kandungan",
+  "qrNotEncodable": "Kandungan kod QR tidak dapat dikodkan (terlalu panjang atau mengandungi aksara tidak disokong)"
+}

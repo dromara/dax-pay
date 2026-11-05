@@ -10,5 +10,9 @@
   "originOrderNotExist": "Pesanan asal tidak wujud",
   "scanTypeNotSupported": "Jenis penerima ini tidak menyokong pengambilan akaun melalui imbasan kod QR",
   "scanWechatAppTypeNotSupported": "Pendaftaran QR WeChat hanya menyokong aplikasi official account (jenis aplikasi semasa: {0}); sila pilih aplikasi lain atau masukkan openid secara manual",
-  "scanDouyinAppTypeNotSupported": "Pendaftaran QR Douyin hanya menyokong aplikasi web (jenis aplikasi semasa: {0}); sila pilih aplikasi lain atau masukkan openid secara manual"
+  "scanDouyinAppTypeNotSupported": "Pendaftaran QR Douyin hanya menyokong aplikasi web (jenis aplikasi semasa: {0}); sila pilih aplikasi lain atau masukkan openid secara manual",
+  "channelMerchantHasTrade": "Peniaga saluran mempunyai rekod transaksi, tidak dibenarkan dipadam",
+  "channelMerchantHasOrder": "Peniaga saluran mempunyai rekod pesanan, tidak dibenarkan dipadam",
+  "channelMerchantHasGatewayOrder": "Peniaga saluran mempunyai rekod pesanan gerbang pembayaran, tidak dibenarkan dipadam",
+  "channelMerchantHasRefund": "Peniaga saluran mempunyai rekod bayaran balik, tidak dibenarkan dipadam"
 }

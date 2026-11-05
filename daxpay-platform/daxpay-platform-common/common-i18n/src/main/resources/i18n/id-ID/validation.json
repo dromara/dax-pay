@@ -62,7 +62,8 @@
     "channel": {
       "notBlank": "Kode saluran tidak boleh kosong",
       "size": "Kode saluran tidak boleh melebihi 32 karakter",
-      "notNull": "Channel wajib diisi"
+      "notNull": "Channel wajib diisi",
+      "pattern": "Saluran transfer hanya mendukung wechat/alipay/douyin"
     },
     "sandbox": {
       "notNull": "Lingkungan Sandbox tidak boleh kosong"
@@ -106,7 +107,8 @@
       "notBlank": "Nomor sub-merchant tidak boleh kosong"
     },
     "wxMchId": {
-      "notBlank": "ID pedagang WeChat tidak boleh kosong"
+      "notBlank": "ID pedagang WeChat tidak boleh kosong",
+      "size": "Nomor merchant WeChat langsung tidak boleh lebih dari 32 karakter"
     },
     "wxAppId": {
       "notBlank": "AppId WeChat wajib diisi",
@@ -186,7 +188,8 @@
       "size": "Nomor pesanan pembayaran. tidak boleh melebihi 100 karakter"
     },
     "allocTitle": {
-      "notBlank": "Judul alokasi tidak boleh kosong"
+      "notBlank": "Judul alokasi tidak boleh kosong",
+      "size": "Judul pembagian tidak boleh lebih dari 100 karakter"
     },
     "amount": {
       "notNull": "Jumlah pembayaran tidak boleh kosong",
@@ -1050,7 +1053,8 @@
       "notNull": "ID merchant EasyPay wajib diisi"
     },
     "receivers": {
-      "notEmpty": "Daftar penerima pembagian tidak boleh kosong"
+      "notEmpty": "Daftar penerima pembagian tidak boleh kosong",
+      "size": "Daftar penerima tidak boleh lebih dari 50 entri"
     },
     "relationType": {
       "notBlank": "Tipe relasi pembagian wajib diisi"
@@ -1070,6 +1074,116 @@
     },
     "wxPlatformAppId": {
       "notNull": "Aplikasi platform WeChat wajib diisi"
+    },
+    "deviceNo": {
+      "notBlank": "Nomor perangkat wajib diisi"
+    },
+    "ts": {
+      "notNull": "Stempel waktu wajib diisi"
+    },
+    "nonce": {
+      "notBlank": "Nonce wajib diisi"
+    },
+    "brokerWssUrl": {
+      "notBlank": "Alamat akses MQTT wajib diisi",
+      "pattern": "Alamat akses MQTT harus diawali dengan ws:// atau wss:// dan tidak boleh mengandung spasi"
+    },
+    "mqttUsername": {
+      "notBlank": "Akun akses MQTT wajib diisi"
+    },
+    "mqttPassword": {
+      "notBlank": "Kata sandi akses MQTT wajib diisi"
+    },
+    "redirectUrl": {
+      "notBlank": "URL pengalihan tidak boleh kosong",
+      "size": "URL pengalihan tidak boleh lebih dari 500 karakter"
+    },
+    "transferSceneName": {
+      "notBlank": "Nama skenario transfer tidak boleh kosong",
+      "size": "Nama skenario transfer tidak boleh lebih dari 64 karakter"
+    },
+    "transferSceneReportInfoType": {
+      "size": "Tipe info pelaporan skenario transfer tidak boleh lebih dari 64 karakter"
+    },
+    "transferSceneReportInfoContent": {
+      "size": "Isi info pelaporan skenario transfer tidak boleh lebih dari 200 karakter"
+    },
+    "transferNo": {
+      "size": "Nomor transfer platform tidak boleh lebih dari 100 karakter",
+      "notBlank": "Nomor transfer tidak boleh kosong"
+    },
+    "bizTransferNo": {
+      "notBlank": "Nomor transfer merchant tidak boleh kosong",
+      "size": "Nomor transfer merchant tidak boleh lebih dari 100 karakter"
+    },
+    "payeeType": {
+      "notBlank": "Tipe akun penerima tidak boleh kosong",
+      "size": "Tipe akun penerima tidak boleh lebih dari 32 karakter"
+    },
+    "payeeAccount": {
+      "notBlank": "Akun penerima tidak boleh kosong",
+      "size": "Akun penerima tidak boleh lebih dari 100 karakter"
+    },
+    "transferPayeeName": {
+      "size": "Nama penerima tidak boleh lebih dari 100 karakter"
+    },
+    "transferReason": {
+      "size": "Alasan transfer tidak boleh lebih dari 200 karakter"
+    },
+    "transferScene": {
+      "size": "Skenario transfer tidak boleh lebih dari 32 karakter"
+    },
+    "infoType": {
+      "size": "Tipe info pelaporan tidak boleh lebih dari 64 karakter"
+    },
+    "infoContent": {
+      "size": "Isi info pelaporan tidak boleh lebih dari 200 karakter"
+    },
+    "rotationDays": {
+      "min": "Periode rotasi kata sandi tidak boleh kurang dari 0 hari",
+      "max": "Periode rotasi kata sandi tidak boleh lebih dari 365 hari"
+    },
+    "expireWarnDays": {
+      "min": "Hari peringatan kedaluwarsa kata sandi tidak boleh kurang dari 1 hari",
+      "max": "Hari peringatan kedaluwarsa kata sandi tidak boleh lebih dari 90 hari"
+    },
+    "bizNo": {
+      "notBlank": "Nomor pesanan pembayaran tidak boleh kosong"
+    },
+    "broadcastEnable": {
+      "notNull": "Sakelar siaran wajib diisi"
+    },
+    "printEnable": {
+      "notNull": "Sakelar cetak wajib diisi"
+    },
+    "templateCode": {
+      "size": "Kode templat cetak tidak boleh lebih dari 32 karakter"
+    },
+    "allocDescription": {
+      "size": "Deskripsi pembagian tidak boleh lebih dari 500 karakter"
+    },
+    "finishMode": {
+      "size": "Mode penyelesaian pembagian tidak boleh lebih dari 32 karakter"
+    },
+    "allocAmount": {
+      "notNull": "Jumlah pembagian wajib diisi",
+      "min": "Jumlah pembagian harus lebih dari 0"
+    },
+    "allocFinishDescription": {
+      "size": "Deskripsi penyelesaian tidak boleh lebih dari 500 karakter"
+    },
+    "transferAppId": {
+      "size": "ID aplikasi tidak boleh lebih dari 64 karakter"
+    },
+    "transferChannelMchNo": {
+      "size": "Nomor merchant kanal tidak boleh lebih dari 64 karakter"
+    },
+    "transferAmount": {
+      "notNull": "Jumlah transfer wajib diisi",
+      "min": "Jumlah transfer harus lebih dari 0"
+    },
+    "transferTitle": {
+      "size": "Judul transfer tidak boleh lebih dari 100 karakter"
     }
   }
 }

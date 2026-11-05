@@ -80,7 +80,8 @@
     "codeClientEnvNotConfigured": "Môi trường và hình thức này chưa cấu hình phương thức thanh toán",
     "codeRuntimeMismatch": "Loại landing mã QR không khớp với runtime",
     "codeClientEnvChannelMchRequired": "Chế độ DIRECT: bắt buộc có số thương nhân kênh cho mỗi dòng đã điền",
-    "bizOrderTypeImmutable": "Số đơn hàng đã được sử dụng và loại đơn hàng không thể thay đổi, vui lòng đổi số đơn hàng"
+    "bizOrderTypeImmutable": "Số đơn hàng đã được sử dụng và loại đơn hàng không thể thay đổi, vui lòng đổi số đơn hàng",
+    "returnPathExternalDenied": "Địa chỉ chuyển hướng trả về khi ủy quyền không được là liên kết ngoài"
   },
   "refund": {
     "processing": "Xử lý hoàn tiền, không lặp lại",
@@ -93,7 +94,14 @@
     "orderNotFound": "Không tìm thấy lệnh hoàn tiền",
     "syncProcessing": "Đang đồng bộ hóa hoàn tiền, không lặp lại",
     "noPermission": "Người bán không có quyền hoàn tiền",
-    "gatewayNotSupported": "Đơn thanh toán cổng tạm thời không hỗ trợ hoàn tiền"
+    "gatewayNotSupported": "Đơn thanh toán cổng tạm thời không hỗ trợ hoàn tiền",
+    "tradeNoRequired": "Số đơn hàng nghiệp vụ này có nhiều giao dịch, vui lòng chỉ định số giao dịch tiền (tradeNo) để xác định chính xác",
+    "manualCloseStatus": "Chỉ đơn hàng đang hoàn tiền mới có thể đóng thủ công",
+    "manualCloseTooEarly": "Đơn hoàn tiền được tạo chưa đủ 7 ngày, chưa hỗ trợ đóng thủ công",
+    "duplicate": "Số hoàn tiền của thương gia này đã tồn tại, vui lòng không hoàn tiền lặp lại",
+    "casConflict": "Xung đột đồng thời khi quyết toán đơn hoàn tiền {0}, đã tự động hoàn tác",
+    "closeChannelQueryFailed": "Truy vấn đơn hàng qua kênh thất bại, không thể xác nhận trạng thái hoàn tiền, vui lòng thử lại sau",
+    "alreadySuccessOnClose": "Kênh xác nhận khoản hoàn tiền này đã thành công, đã tự động sửa thành thành công, không cần đóng"
   },
   "callback": {
     "processing": "Xử lý cuộc gọi lại, bỏ qua yêu cầu gọi lại này",
@@ -106,7 +114,8 @@
     "refundNotFound": "Không tìm thấy yêu cầu hoàn tiền, đang ghi lại cuộc gọi lại",
     "refundAlreadyProcessed": "Yêu cầu hoàn tiền đã được xử lý, đang ghi lại cuộc gọi lại",
     "transferNotFound": "Không tìm thấy lệnh chuyển, đang ghi lại cuộc gọi lại",
-    "transferAlreadyProcessed": "Lệnh chuyển đã được xử lý, đang ghi lại cuộc gọi lại"
+    "transferAlreadyProcessed": "Lệnh chuyển đã được xử lý, đang ghi lại cuộc gọi lại",
+    "abnormal": "Xử lý gọi lại bất thường, vui lòng liên hệ bộ phận chăm sóc khách hàng nền tảng"
   },
   "transfer": {
     "createFailed": "Khởi tạo chuyển khoản thất bại: {0}",
@@ -117,7 +126,8 @@
     "syncProcessing": "Đồng bộ chuyển khoản đang xử lý, vui lòng không lặp lại",
     "closeNotProcessing": "Chỉ đơn chuyển khoản đang xử lý mới có thể đóng thủ công",
     "channelNotSupport": "Kênh này không hỗ trợ đóng chuyển khoản",
-    "illegalTransition": "Chuyển trạng thái không hợp lệ: {0} → {1}"
+    "illegalTransition": "Chuyển trạng thái không hợp lệ: {0} → {1}",
+    "locateRequired": "Số chuyển khoản nền tảng và số chuyển khoản thương gia + kênh không được đồng thời để trống"
   },
   "alloc": {
     "illegalTransition": "Chuyển đổi trạng thái không hợp lệ: {0} → {1}",
@@ -160,7 +170,9 @@
     "signVerifyFailDetail": "Xác minh chữ ký không thành công: {0}",
     "productOrChannelMchRequired": "Phải cung cấp sản phẩm thanh toán hoặc mã số kênh của người bán",
     "channelMchNotFound": "Không tìm thấy người bán kênh [{0}]",
-    "mchContextMissing": "Ngữ cảnh của người bán không được tải; không thể áp dụng cách ly người thuê nhà"
+    "mchContextMissing": "Ngữ cảnh của người bán không được tải; không thể áp dụng cách ly người thuê nhà",
+    "authSessionExpired": "Liên kết ủy quyền đã hết hiệu lực, vui lòng tạo lại",
+    "authSceneMismatch": "Kịch bản gọi lại ủy quyền không khớp, từ chối chuyển hướng"
   },
   "verify": {
     "methodParamRequired": "Phương thức thanh toán phải có ít nhất một tham số và tham số thanh toán đã ký phải ở vị trí đầu tiên",
@@ -186,5 +198,12 @@
     "hitNotFound": "Không tìm thấy bản ghi trúng rủi ro"
   },
   "channelResultUnknown": "Kết quả kênh không xác định, đang xác nhận trạng thái cuối cùng",
-  "channelUnavailable": "Dịch vụ kênh không khả dụng, vui lòng thử lại sau"
+  "channelUnavailable": "Dịch vụ kênh không khả dụng, vui lòng thử lại sau",
+  "abnormal": {
+    "notFound": "Đơn hàng bất thường không tồn tại",
+    "alreadyHandled": "Đơn hàng bất thường đã được xử lý, không thể thao tác lặp lại"
+  },
+  "fundFlow": {
+    "notFound": "Dòng tiền không tồn tại"
+  }
 }

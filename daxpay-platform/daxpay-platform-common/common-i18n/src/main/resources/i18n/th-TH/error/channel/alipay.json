@@ -53,5 +53,19 @@
   "allocReceiverTypeInvalid": "Alipay: ประเภทผู้รับการแบ่งไม่ได้รับการสนับสนุน: {0}",
   "allocReceiverAccountRequired": "Alipay: จำเป็นต้องระบุบัญชีผู้รับการแบ่ง",
   "allocReceiverBindFailed": "ผูกผู้รับเงินแบ่ง Alipay ไม่สำเร็จ: {0}",
-  "allocReceiverUnbindFailed": "ยกเลิกการผูกผู้รับเงินแบ่ง Alipay ไม่สำเร็จ: {0}"
+  "allocReceiverUnbindFailed": "ยกเลิกการผูกผู้รับเงินแบ่ง Alipay ไม่สำเร็จ: {0}",
+  "transferTitleRequired": "Alipay: ต้องระบุหัวข้อการโอนเงิน",
+  "transferSceneNotFound": "Alipay: ไม่พบการกำหนดค่าสถานการณ์โอนเงิน",
+  "transferSceneNameInvalid": "Alipay: สถานการณ์โอนเงินที่ไม่รองรับ: {0}",
+  "transferSceneNotConfigured": "Alipay: ร้านค้าช่องทางนี้ยังไม่ได้กำหนดค่าสถานการณ์โอนเงิน โปรดกำหนดค่าใน 「สถานการณ์โอนเงิน」 ของรายละเอียดร้านค้าช่องทางก่อน",
+  "transferSceneNotBelong": "Alipay: การกำหนดค่าสถานการณ์โอนเงินไม่ได้เป็นของร้านค้าปัจจุบัน",
+  "transferSceneIdRequired": "Alipay: ต้องระบุคีย์หลักของการกำหนดค่าสถานการณ์โอนเงิน",
+  "transferSceneIdInvalid": "Alipay: รูปแบบ ID การกำหนดค่าสถานการณ์โอนเงินไม่ถูกต้อง: {0}",
+  "transferAppNotConfigured": "Alipay: ร้านค้าช่องทางนี้ยังไม่ได้ผูกแอปโอนเงิน โปรดกำหนดค่าใน 「แอปโอนเงิน」 ของรายละเอียดร้านค้าช่องทางก่อน",
+  "transferAppNotExist": "Alipay: ไม่พบแอปโอนเงิน",
+  "transferAppNotBelong": "Alipay: แอปโอนเงินไม่ได้เป็นของร้านค้าปัจจุบัน",
+  "channelMerchantMismatch": "Alipay: ร้านค้าช่องทางไม่ได้เป็นของร้านค้าปัจจุบัน",
+  "appRefByAllocReceiver": "แอป Alipay ถูกอ้างอิงโดยบันทึกผู้รับการแบ่งเงิน ลบไม่ได้",
+  "allocReceiverAppNotExist": "ไม่พบแอป Alipay ที่ผูกโดยผู้รับการแบ่งเงิน",
+  "allocReceiverAppNotBelong": "แอป Alipay ที่ผูกโดยผู้รับการแบ่งเงินไม่ได้เป็นของร้านค้าปัจจุบัน"
 }

@@ -10,5 +10,9 @@
   "originOrderNotExist": "Đơn hàng gốc không tồn tại",
   "scanTypeNotSupported": "Loại người nhận này không hỗ trợ lấy tài khoản qua quét mã QR",
   "scanWechatAppTypeNotSupported": "Ủy quyền QR WeChat chỉ hỗ trợ ứng dụng official account (loại ứng dụng hiện tại: {0}); vui lòng chọn ứng dụng khác hoặc nhập openid thủ công",
-  "scanDouyinAppTypeNotSupported": "Ủy quyền QR Douyin chỉ hỗ trợ ứng dụng web (loại ứng dụng hiện tại: {0}); vui lòng chọn ứng dụng khác hoặc nhập openid thủ công"
+  "scanDouyinAppTypeNotSupported": "Ủy quyền QR Douyin chỉ hỗ trợ ứng dụng web (loại ứng dụng hiện tại: {0}); vui lòng chọn ứng dụng khác hoặc nhập openid thủ công",
+  "channelMerchantHasTrade": "Thương gia kênh có bản ghi giao dịch, không được phép xóa",
+  "channelMerchantHasOrder": "Thương gia kênh có bản ghi đơn hàng, không được phép xóa",
+  "channelMerchantHasGatewayOrder": "Thương gia kênh có bản ghi đơn hàng cổng thanh toán, không được phép xóa",
+  "channelMerchantHasRefund": "Thương gia kênh có bản ghi hoàn tiền, không được phép xóa"
 }

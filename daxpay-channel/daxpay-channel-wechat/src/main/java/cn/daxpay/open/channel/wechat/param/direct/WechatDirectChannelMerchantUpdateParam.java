@@ -21,7 +21,7 @@ public class WechatDirectChannelMerchantUpdateParam {
 
     /// 微信直连商户号
     @Schema(description = "微信直连商户号")
-    @Size(max = 32, message = "微信直连商户号不可超过32位")
+    @Size(max = 32, message = "{validation.field.wxMchId.size}")
     private String wxMchId;
 
     /// 转账场景ID(商家转账到零钱, 微信转账时必填)

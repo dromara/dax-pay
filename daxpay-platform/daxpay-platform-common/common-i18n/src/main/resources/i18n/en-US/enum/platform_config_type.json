@@ -3,6 +3,7 @@
   "security_login": "Login security",
   "security_session": "Session management",
   "security_two_factor_auth": "Two-factor authentication",
+  "security_webauthn": "Passkey (WebAuthn) settings",
   "url": "System URL settings",
   "website": "Website display settings",
   "sensitive_word": "Sensitive word policy",

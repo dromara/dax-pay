@@ -62,7 +62,8 @@
     "channel": {
       "notBlank": "Kod saluran tidak boleh kosong",
       "size": "Kod saluran tidak boleh melebihi 32 aksara",
-      "notNull": "Saluran tidak boleh kosong"
+      "notNull": "Saluran tidak boleh kosong",
+      "pattern": "Saluran pemindahan hanya menyokong wechat/alipay/douyin"
     },
     "sandbox": {
       "notNull": "Persekitaran kotak pasir tidak boleh kosong"
@@ -106,7 +107,8 @@
       "notBlank": "Nombor sub-peniaga tidak boleh kosong"
     },
     "wxMchId": {
-      "notBlank": "ID pedagang WeChat tidak boleh kosong"
+      "notBlank": "ID pedagang WeChat tidak boleh kosong",
+      "size": "Nombor pedagang WeChat langsung tidak boleh melebihi 32 aksara"
     },
     "wxAppId": {
       "notBlank": "WeChat AppId tidak boleh kosong",
@@ -186,7 +188,8 @@
       "size": "Pesanan pembayaran no. tidak boleh melebihi 100 aksara"
     },
     "allocTitle": {
-      "notBlank": "Tajuk pembahagian tidak boleh kosong"
+      "notBlank": "Tajuk pembahagian tidak boleh kosong",
+      "size": "Tajuk pembahagian tidak boleh melebihi 100 aksara"
     },
     "amount": {
       "notNull": "Jumlah bayaran tidak boleh kosong",
@@ -1050,7 +1053,8 @@
       "notNull": "ID pedagang EasyPay tidak boleh kosong"
     },
     "receivers": {
-      "notEmpty": "Senarai penerima agihan tidak boleh kosong"
+      "notEmpty": "Senarai penerima agihan tidak boleh kosong",
+      "size": "Senarai penerima tidak boleh melebihi 50 entri"
     },
     "relationType": {
       "notBlank": "Jenis hubungan agihan tidak boleh kosong"
@@ -1070,6 +1074,116 @@
     },
     "wxPlatformAppId": {
       "notNull": "Aplikasi platform WeChat tidak boleh kosong"
+    },
+    "deviceNo": {
+      "notBlank": "Nombor peranti wajib diisi"
+    },
+    "ts": {
+      "notNull": "Cap masa wajib diisi"
+    },
+    "nonce": {
+      "notBlank": "Nonce wajib diisi"
+    },
+    "brokerWssUrl": {
+      "notBlank": "Alamat akses MQTT wajib diisi",
+      "pattern": "Alamat akses MQTT mesti bermula dengan ws:// atau wss:// dan tidak boleh mengandungi ruang"
+    },
+    "mqttUsername": {
+      "notBlank": "Nama pengguna akses MQTT wajib diisi"
+    },
+    "mqttPassword": {
+      "notBlank": "Kata laluan akses MQTT wajib diisi"
+    },
+    "redirectUrl": {
+      "notBlank": "URL ubah hala tidak boleh kosong",
+      "size": "URL ubah hala tidak boleh melebihi 500 aksara"
+    },
+    "transferSceneName": {
+      "notBlank": "Nama senario pemindahan tidak boleh kosong",
+      "size": "Nama senario pemindahan tidak boleh melebihi 64 aksara"
+    },
+    "transferSceneReportInfoType": {
+      "size": "Jenis maklumat laporan senario pemindahan tidak boleh melebihi 64 aksara"
+    },
+    "transferSceneReportInfoContent": {
+      "size": "Kandungan maklumat laporan senario pemindahan tidak boleh melebihi 200 aksara"
+    },
+    "transferNo": {
+      "size": "Nombor pemindahan platform tidak boleh melebihi 100 aksara",
+      "notBlank": "Nombor pemindahan tidak boleh kosong"
+    },
+    "bizTransferNo": {
+      "notBlank": "Nombor pemindahan pedagang tidak boleh kosong",
+      "size": "Nombor pemindahan pedagang tidak boleh melebihi 100 aksara"
+    },
+    "payeeType": {
+      "notBlank": "Jenis akaun penerima tidak boleh kosong",
+      "size": "Jenis akaun penerima tidak boleh melebihi 32 aksara"
+    },
+    "payeeAccount": {
+      "notBlank": "Akaun penerima tidak boleh kosong",
+      "size": "Akaun penerima tidak boleh melebihi 100 aksara"
+    },
+    "transferPayeeName": {
+      "size": "Nama penerima tidak boleh melebihi 100 aksara"
+    },
+    "transferReason": {
+      "size": "Sebab pemindahan tidak boleh melebihi 200 aksara"
+    },
+    "transferScene": {
+      "size": "Senario pemindahan tidak boleh melebihi 32 aksara"
+    },
+    "infoType": {
+      "size": "Jenis maklumat laporan tidak boleh melebihi 64 aksara"
+    },
+    "infoContent": {
+      "size": "Kandungan maklumat laporan tidak boleh melebihi 200 aksara"
+    },
+    "rotationDays": {
+      "min": "Tempoh putaran kata laluan tidak boleh kurang daripada 0 hari",
+      "max": "Tempoh putaran kata laluan tidak boleh melebihi 365 hari"
+    },
+    "expireWarnDays": {
+      "min": "Hari peringatan kata laluan tamat tempoh tidak boleh kurang daripada 1 hari",
+      "max": "Hari peringatan kata laluan tamat tempoh tidak boleh melebihi 90 hari"
+    },
+    "bizNo": {
+      "notBlank": "Nombor pesanan pembayaran tidak boleh kosong"
+    },
+    "broadcastEnable": {
+      "notNull": "Suis siaran wajib diisi"
+    },
+    "printEnable": {
+      "notNull": "Suis cetakan wajib diisi"
+    },
+    "templateCode": {
+      "size": "Kod templat cetakan tidak boleh melebihi 32 aksara"
+    },
+    "allocDescription": {
+      "size": "Penerangan pembahagian tidak boleh melebihi 500 aksara"
+    },
+    "finishMode": {
+      "size": "Mod penyelesaian pembahagian tidak boleh melebihi 32 aksara"
+    },
+    "allocAmount": {
+      "notNull": "Jumlah pembahagian wajib diisi",
+      "min": "Jumlah pembahagian mesti lebih daripada 0"
+    },
+    "allocFinishDescription": {
+      "size": "Penerangan penyelesaian tidak boleh melebihi 500 aksara"
+    },
+    "transferAppId": {
+      "size": "ID aplikasi tidak boleh melebihi 64 aksara"
+    },
+    "transferChannelMchNo": {
+      "size": "Nombor pedagang saluran tidak boleh melebihi 64 aksara"
+    },
+    "transferAmount": {
+      "notNull": "Jumlah pemindahan wajib diisi",
+      "min": "Jumlah pemindahan mesti lebih daripada 0"
+    },
+    "transferTitle": {
+      "size": "Tajuk pemindahan tidak boleh melebihi 100 aksara"
     }
   }
 }

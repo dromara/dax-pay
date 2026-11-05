@@ -32,7 +32,7 @@ public class WechatTransferConfirmController {
     @Operation(summary = "查询微信转账确认收款信息")
     @GetMapping("/confirm-info/{transferNo}")
     public Result<WechatTransferConfirmResult> getConfirmInfo(
-            @PathVariable @NotBlank(message = "转账单号不可为空") String transferNo) {
+            @PathVariable @NotBlank(message = "{validation.field.transferNo.notBlank}") String transferNo) {
         return Res.ok(wechatTransferConfirmQueryService.queryByTransferNo(transferNo));
     }
 }

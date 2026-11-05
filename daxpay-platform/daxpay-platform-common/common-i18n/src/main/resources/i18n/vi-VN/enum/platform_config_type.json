@@ -3,11 +3,13 @@
   "security_login": "Bảo mật đăng nhập",
   "security_session": "Quản lý phiên",
   "security_two_factor_auth": "Xác thực hai yếu tố",
+  "security_webauthn": "Cấu hình Passkey (WebAuthn)",
   "url": "Cài đặt URL hệ thống",
   "website": "Cài đặt hiển thị trang web",
   "api_security": "Cấu hình bảo mật API",
   "iam_replay_protect": "Cấu hình chống phát lại IAM",
   "sensitive_word": "Cấu hình từ nhạy cảm",
   "pay_security": "Cấu hình bảo mật thanh toán",
-  "security_social_auto": "Cấu hình đăng nhập xã hội tự động trong app"
+  "security_social_auto": "Cấu hình đăng nhập xã hội tự động trong app",
+  "device_mqtt": "Cấu hình truy cập MQTT"
 }

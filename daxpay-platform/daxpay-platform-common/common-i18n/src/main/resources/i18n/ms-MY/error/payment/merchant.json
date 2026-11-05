@@ -39,5 +39,9 @@
   "roleNotExist": "Peranan yang dinyatakan tidak wujud",
   "hasGatewayOrder": "Merchant mempunyai pesanan pembayaran gateway, tidak boleh dipadamkan",
   "hasBoundDevice": "Merchant mempunyai peranti yang terikat, silakan lepaskan atau urus peranti terlebih dahulu sebelum memadam",
-  "lastAdminCannotDelete": "Merchant mesti menyimpan sekurang-kurangnya seorang pengguna pentadbir, silakan pindahkan peranan pentadbir terlebih dahulu"
+  "lastAdminCannotDelete": "Merchant mesti menyimpan sekurang-kurangnya seorang pengguna pentadbir, silakan pindahkan peranan pentadbir terlebih dahulu",
+  "hasTrade": "Peniaga mempunyai rekod transaksi, tidak dibenarkan dipadam",
+  "hasOrder": "Peniaga mempunyai rekod pesanan, tidak dibenarkan dipadam",
+  "hasRefund": "Peniaga mempunyai rekod bayaran balik, tidak dibenarkan dipadam",
+  "hasUser": "Peniaga mempunyai pengguna berkaitan, sila nyahpaut dalam pengurusan pengguna peniaga dahulu"
 }

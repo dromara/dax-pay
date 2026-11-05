@@ -133,7 +133,8 @@
       "notBlank": "子商戶號不能為空"
     },
     "wxMchId": {
-      "notBlank": "微信商戶Id不可為空"
+      "notBlank": "微信商戶Id不可為空",
+      "size": "微信商戶Id不可超過32位"
     },
     "wxAppId": {
       "notBlank": "微信應用AppId不可為空",
@@ -213,7 +214,8 @@
       "size": "支付訂單號不可超過100位"
     },
     "allocTitle": {
-      "notBlank": "分帳標題不可為空"
+      "notBlank": "分帳標題不可為空",
+      "size": "分賬標題不可超過100位"
     },
     "amount": {
       "notNull": "支付金額不可為空",
@@ -982,7 +984,8 @@
       "notBlank": "系統終端不可為空"
     },
     "transferNo": {
-      "size": "平台轉賬單號不可超過100位"
+      "size": "平台轉賬單號不可超過100位",
+      "notBlank": "轉賬單號不可為空"
     },
     "bizTransferNo": {
       "notBlank": "商戶轉賬號不可為空",
@@ -1130,7 +1133,8 @@
       "notNull": "易支付商戶號不可為空"
     },
     "receivers": {
-      "notEmpty": "分賬接收方列表不能為空"
+      "notEmpty": "分賬接收方列表不能為空",
+      "size": "分賬接收方列表不可超過50個"
     },
     "relationType": {
       "notBlank": "分賬關係類型不能為空"
@@ -1150,6 +1154,36 @@
     },
     "wxPlatformAppId": {
       "notNull": "微信平台應用主鍵不可為空"
+    },
+    "redirectUrl": {
+      "notBlank": "回調地址不可為空",
+      "size": "回調地址不可超過500位"
+    },
+    "allocDescription": {
+      "size": "分賬描述不可超過500位"
+    },
+    "finishMode": {
+      "size": "分賬完結模式不可超過32位"
+    },
+    "allocAmount": {
+      "notNull": "分賬金額不可為空",
+      "min": "分賬金額必須大於0"
+    },
+    "allocFinishDescription": {
+      "size": "完結描述不可超過500位"
+    },
+    "transferAppId": {
+      "size": "應用ID不可超過64位"
+    },
+    "transferChannelMchNo": {
+      "size": "通道商戶號不可超過64位"
+    },
+    "transferAmount": {
+      "notNull": "轉賬金額不可為空",
+      "min": "轉賬金額必須大於0"
+    },
+    "transferTitle": {
+      "size": "轉賬標題不可超過100位"
     }
   }
 }

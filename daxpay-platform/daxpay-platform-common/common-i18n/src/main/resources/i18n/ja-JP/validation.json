@@ -133,7 +133,8 @@
       "notBlank": "サブ販売者番号を空白にすることはできません"
     },
     "wxMchId": {
-      "notBlank": "WeChat 販売者 ID を空白にすることはできません"
+      "notBlank": "WeChat 販売者 ID を空白にすることはできません",
+      "size": "WeChat 販売者 ID は 32 文字を超えることはできません"
     },
     "wxAppId": {
       "notBlank": "WeChat AppId を空白にすることはできません",
@@ -213,7 +214,8 @@
       "size": "支払い注文番号100文字を超えることはできません"
     },
     "allocTitle": {
-      "notBlank": "分配タイトルは必須です"
+      "notBlank": "分配タイトルは必須です",
+      "size": "分配タイトルは100文字を超えることはできません"
     },
     "amount": {
       "notNull": "支払い金額を空白にすることはできません",
@@ -982,7 +984,8 @@
       "notBlank": "システム端末は必須です"
     },
     "transferNo": {
-      "size": "プラットフォーム送金番号は100文字を超えることはできません"
+      "size": "プラットフォーム送金番号は100文字を超えることはできません",
+      "notBlank": "送金番号を空白にすることはできません"
     },
     "bizTransferNo": {
       "notBlank": "マーチャント送金番号は必須です",
@@ -1130,7 +1133,8 @@
       "notNull": "EasyPay マーチャントIDは必須です"
     },
     "receivers": {
-      "notEmpty": "精算受取人リストは空にできません"
+      "notEmpty": "精算受取人リストは空にできません",
+      "size": "精算受取人リストは50件を超えることはできません"
     },
     "relationType": {
       "notBlank": "精算関係タイプは必須です"
@@ -1150,6 +1154,36 @@
     },
     "wxPlatformAppId": {
       "notNull": "WeChat プラットフォームアプリは必須です"
+    },
+    "redirectUrl": {
+      "notBlank": "リダイレクト URL を空白にすることはできません",
+      "size": "リダイレクト URL は 500 文字を超えることはできません"
+    },
+    "allocDescription": {
+      "size": "分配説明は500文字を超えることはできません"
+    },
+    "finishMode": {
+      "size": "分配完了モードは32文字を超えることはできません"
+    },
+    "allocAmount": {
+      "notNull": "分配金額は必須です",
+      "min": "分配金額は0より大きくなければなりません"
+    },
+    "allocFinishDescription": {
+      "size": "完了説明は500文字を超えることはできません"
+    },
+    "transferAppId": {
+      "size": "アプリケーション ID は 64 文字を超えることはできません"
+    },
+    "transferChannelMchNo": {
+      "size": "チャネル販売者番号は 64 文字を超えることはできません"
+    },
+    "transferAmount": {
+      "notNull": "送金金額は必須です",
+      "min": "送金金額は0より大きくなければなりません"
+    },
+    "transferTitle": {
+      "size": "送金タイトルは100文字を超えることはできません"
     }
   }
 }

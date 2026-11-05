@@ -3,11 +3,13 @@
   "security_login": "ความปลอดภัยในการเข้าสู่ระบบ",
   "security_session": "การจัดการเซสชัน",
   "security_two_factor_auth": "การรับรองความถูกต้องด้วยสองปัจจัย",
+  "security_webauthn": "การกำหนดค่า Passkey (WebAuthn)",
   "url": "การตั้งค่า URL ของระบบ",
   "website": "การตั้งค่าการแสดงผลเว็บไซต์",
   "api_security": "การกำหนดค่าความปลอดภัย API",
   "iam_replay_protect": "การกำหนดค่าการป้องกันการเล่นซ้ำ IAM",
   "sensitive_word": "การกำหนดค่าคำที่ละเอียดอ่อน",
   "pay_security": "การกำหนดค่าความปลอดภัยการชำระเงิน",
-  "security_social_auto": "ตั้งค่าเข้าสู่ระบบโซเชียลอัตโนมัติในแอป"
+  "security_social_auto": "ตั้งค่าเข้าสู่ระบบโซเชียลอัตโนมัติในแอป",
+  "device_mqtt": "การกำหนดค่าการเชื่อมต่อ MQTT"
 }

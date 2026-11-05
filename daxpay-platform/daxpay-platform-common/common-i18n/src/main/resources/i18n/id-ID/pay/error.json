@@ -80,7 +80,8 @@
     "codeClientEnvNotConfigured": "Metode pembayaran belum dikonfigurasi untuk lingkungan dan bentuk ini",
     "codeRuntimeMismatch": "Jenis landing kode QR tidak cocok dengan runtime",
     "codeClientEnvChannelMchRequired": "Pada mode DIRECT, nomor merchant saluran baris yang diisi wajib",
-    "bizOrderTypeImmutable": "Nomor pesanan sudah digunakan dan jenis pesanan tidak dapat diubah, silakan ganti nomor pesanan"
+    "bizOrderTypeImmutable": "Nomor pesanan sudah digunakan dan jenis pesanan tidak dapat diubah, silakan ganti nomor pesanan",
+    "returnPathExternalDenied": "Alamat pengalihan kembali otorisasi tidak boleh berupa tautan eksternal"
   },
   "refund": {
     "processing": "Proses pengembalian dana, jangan ulangi",
@@ -93,7 +94,14 @@
     "orderNotFound": "Perintah pengembalian dana tidak ditemukan",
     "syncProcessing": "Sinkronisasi pengembalian dana sedang berlangsung, jangan ulangi",
     "noPermission": "Penjual tidak memiliki izin pengembalian dana",
-    "gatewayNotSupported": "Pesanan pembayaran gateway belum mendukung pengembalian dana"
+    "gatewayNotSupported": "Pesanan pembayaran gateway belum mendukung pengembalian dana",
+    "tradeNoRequired": "Nomor pesanan bisnis ini memiliki beberapa transaksi, silakan tentukan nomor transaksi dana (tradeNo) untuk lokasi yang tepat",
+    "manualCloseStatus": "Hanya pesanan yang sedang dalam pengembalian dana dapat ditutup secara manual",
+    "manualCloseTooEarly": "Pesanan pengembalian dana dibuat belum 7 hari, penutupan manual belum didukung",
+    "duplicate": "Nomor pengembalian dana pedagang ini sudah ada, jangan mengulang pengembalian dana",
+    "casConflict": "Konflik konkurensi penyelesaian pesanan pengembalian dana {0}, telah dikembalikan secara otomatis",
+    "closeChannelQueryFailed": "Gagal menanyakan pesanan ke saluran, status pengembalian dana tidak dapat dipastikan, silakan coba lagi nanti",
+    "alreadySuccessOnClose": "Saluran mengonfirmasi pengembalian dana ini berhasil, telah otomatis dikoreksi menjadi berhasil, tidak perlu ditutup"
   },
   "callback": {
     "processing": "Pemrosesan panggilan balik, mengabaikan permintaan panggilan balik ini",
@@ -106,7 +114,8 @@
     "refundNotFound": "Perintah pengembalian dana tidak ditemukan, merekam panggilan balik",
     "refundAlreadyProcessed": "Pesanan pengembalian dana sudah diproses, merekam panggilan balik",
     "transferNotFound": "Perintah transfer tidak ditemukan, merekam panggilan balik",
-    "transferAlreadyProcessed": "Pesanan transfer sudah diproses, rekaman panggilan balik"
+    "transferAlreadyProcessed": "Pesanan transfer sudah diproses, rekaman panggilan balik",
+    "abnormal": "Kesalahan pemrosesan panggilan balik, silakan hubungi layanan pelanggan platform"
   },
   "transfer": {
     "createFailed": "Gagal membuat transfer: {0}",
@@ -117,7 +126,8 @@
     "syncProcessing": "Sinkronisasi transfer sedang diproses, jangan ulangi",
     "closeNotProcessing": "Hanya transfer yang sedang berjalan yang dapat ditutup manual",
     "channelNotSupport": "Saluran ini tidak mendukung penutupan transfer",
-    "illegalTransition": "Transisi status tidak valid: {0} → {1}"
+    "illegalTransition": "Transisi status tidak valid: {0} → {1}",
+    "locateRequired": "Nomor transfer platform dan nomor transfer pedagang + saluran tidak boleh kosong semua"
   },
   "alloc": {
     "illegalTransition": "Transisi status ilegal: {0} → {1}",
@@ -160,7 +170,9 @@
     "signVerifyFailDetail": "Verifikasi tanda tangan gagal: {0}",
     "productOrChannelMchRequired": "Nomor produk pembayaran atau nomor pedagang saluran harus diberikan",
     "channelMchNotFound": "Penjual saluran [{0}] tidak ditemukan",
-    "mchContextMissing": "Konteks pedagang tidak dimuat; tidak dapat menerapkan isolasi penyewa"
+    "mchContextMissing": "Konteks pedagang tidak dimuat; tidak dapat menerapkan isolasi penyewa",
+    "authSessionExpired": "Tautan otorisasi telah kedaluwarsa, silakan buat ulang",
+    "authSceneMismatch": "Skenario panggilan balik otorisasi tidak cocok, pengalihan ditolak"
   },
   "verify": {
     "methodParamRequired": "Metode pembayaran harus memiliki minimal satu parameter, dan parameter pembayaran yang ditandatangani harus berada di posisi pertama",
@@ -186,5 +198,12 @@
     "hitNotFound": "Catatan hit risiko tidak ditemukan"
   },
   "channelResultUnknown": "Hasil saluran tidak diketahui, sedang mengonfirmasi status akhir",
-  "channelUnavailable": "Layanan saluran tidak tersedia, coba lagi nanti"
+  "channelUnavailable": "Layanan saluran tidak tersedia, coba lagi nanti",
+  "abnormal": {
+    "notFound": "Pesanan abnormal tidak ditemukan",
+    "alreadyHandled": "Pesanan abnormal telah ditangani, tidak dapat diulang"
+  },
+  "fundFlow": {
+    "notFound": "Arus dana tidak ditemukan"
+  }
 }

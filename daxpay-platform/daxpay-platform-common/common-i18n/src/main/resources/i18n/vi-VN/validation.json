@@ -62,7 +62,8 @@
     "channel": {
       "notBlank": "Mã kênh không được để trống",
       "size": "Mã kênh không được vượt quá 32 ký tự",
-      "notNull": "Kênh không được để trống"
+      "notNull": "Kênh không được để trống",
+      "pattern": "Kênh chuyển khoản chỉ hỗ trợ wechat/alipay/douyin"
     },
     "sandbox": {
       "notNull": "Môi trường hộp cát không được để trống"
@@ -106,7 +107,8 @@
       "notBlank": "Mã merchant con không được để trống"
     },
     "wxMchId": {
-      "notBlank": "ID người bán WeChat không được để trống"
+      "notBlank": "ID người bán WeChat không được để trống",
+      "size": "Số merchant WeChat trực tiếp không được vượt quá 32 ký tự"
     },
     "wxAppId": {
       "notBlank": "WeChat AppId không được để trống",
@@ -186,7 +188,8 @@
       "size": "Lệnh thanh toán số không thể vượt quá 100 ký tự"
     },
     "allocTitle": {
-      "notBlank": "Tiêu đề phân chia không được để trống"
+      "notBlank": "Tiêu đề phân chia không được để trống",
+      "size": "Tiêu đề phân chia không được vượt quá 100 ký tự"
     },
     "amount": {
       "notNull": "Số tiền thanh toán không được để trống",
@@ -1050,7 +1053,8 @@
       "notNull": "Mã người bán EasyPay không được để trống"
     },
     "receivers": {
-      "notEmpty": "Danh sách người nhận phân chia không được để trống"
+      "notEmpty": "Danh sách người nhận phân chia không được để trống",
+      "size": "Danh sách người nhận không được vượt quá 50 mục"
     },
     "relationType": {
       "notBlank": "Loại quan hệ phân chia không được để trống"
@@ -1070,6 +1074,116 @@
     },
     "wxPlatformAppId": {
       "notNull": "Ứng dụng nền tảng WeChat không được để trống"
+    },
+    "deviceNo": {
+      "notBlank": "Số thiết bị không được để trống"
+    },
+    "ts": {
+      "notNull": "Dấu thời gian không được để trống"
+    },
+    "nonce": {
+      "notBlank": "Nonce không được để trống"
+    },
+    "brokerWssUrl": {
+      "notBlank": "Địa chỉ truy cập MQTT không được để trống",
+      "pattern": "Địa chỉ truy cập MQTT phải bắt đầu bằng ws:// hoặc wss:// và không chứa dấu cách"
+    },
+    "mqttUsername": {
+      "notBlank": "Tài khoản truy cập MQTT không được để trống"
+    },
+    "mqttPassword": {
+      "notBlank": "Mật khẩu truy cập MQTT không được để trống"
+    },
+    "redirectUrl": {
+      "notBlank": "URL chuyển hướng không được để trống",
+      "size": "URL chuyển hướng không được vượt quá 500 ký tự"
+    },
+    "transferSceneName": {
+      "notBlank": "Tên kịch bản chuyển khoản không được để trống",
+      "size": "Tên kịch bản chuyển khoản không được vượt quá 64 ký tự"
+    },
+    "transferSceneReportInfoType": {
+      "size": "Loại thông tin báo cáo kịch bản chuyển khoản không được vượt quá 64 ký tự"
+    },
+    "transferSceneReportInfoContent": {
+      "size": "Nội dung thông tin báo cáo kịch bản chuyển khoản không được vượt quá 200 ký tự"
+    },
+    "transferNo": {
+      "size": "Số lệnh chuyển khoản nền tảng không được vượt quá 100 ký tự",
+      "notBlank": "Số lệnh chuyển khoản không được để trống"
+    },
+    "bizTransferNo": {
+      "notBlank": "Số lệnh chuyển khoản của merchant không được để trống",
+      "size": "Số lệnh chuyển khoản của merchant không được vượt quá 100 ký tự"
+    },
+    "payeeType": {
+      "notBlank": "Loại tài khoản người nhận không được để trống",
+      "size": "Loại tài khoản người nhận không được vượt quá 32 ký tự"
+    },
+    "payeeAccount": {
+      "notBlank": "Tài khoản người nhận không được để trống",
+      "size": "Tài khoản người nhận không được vượt quá 100 ký tự"
+    },
+    "transferPayeeName": {
+      "size": "Tên người nhận không được vượt quá 100 ký tự"
+    },
+    "transferReason": {
+      "size": "Lý do chuyển khoản không được vượt quá 200 ký tự"
+    },
+    "transferScene": {
+      "size": "Kịch bản chuyển khoản không được vượt quá 32 ký tự"
+    },
+    "infoType": {
+      "size": "Loại thông tin báo cáo không được vượt quá 64 ký tự"
+    },
+    "infoContent": {
+      "size": "Nội dung thông tin báo cáo không được vượt quá 200 ký tự"
+    },
+    "rotationDays": {
+      "min": "Chu kỳ thay đổi mật khẩu không được nhỏ hơn 0 ngày",
+      "max": "Chu kỳ thay đổi mật khẩu không được lớn hơn 365 ngày"
+    },
+    "expireWarnDays": {
+      "min": "Số ngày nhắc nhở hết hạn mật khẩu không được nhỏ hơn 1 ngày",
+      "max": "Số ngày nhắc nhở hết hạn mật khẩu không được lớn hơn 90 ngày"
+    },
+    "bizNo": {
+      "notBlank": "Số đơn thanh toán không được để trống"
+    },
+    "broadcastEnable": {
+      "notNull": "Công tắc phát sóng không được để trống"
+    },
+    "printEnable": {
+      "notNull": "Công tắc in không được để trống"
+    },
+    "templateCode": {
+      "size": "Mã mẫu in không được vượt quá 32 ký tự"
+    },
+    "allocDescription": {
+      "size": "Mô tả phân chia không được vượt quá 500 ký tự"
+    },
+    "finishMode": {
+      "size": "Chế độ hoàn tất phân chia không được vượt quá 32 ký tự"
+    },
+    "allocAmount": {
+      "notNull": "Số tiền phân chia không được để trống",
+      "min": "Số tiền phân chia phải lớn hơn 0"
+    },
+    "allocFinishDescription": {
+      "size": "Mô tả hoàn tất không được vượt quá 500 ký tự"
+    },
+    "transferAppId": {
+      "size": "ID ứng dụng không được vượt quá 64 ký tự"
+    },
+    "transferChannelMchNo": {
+      "size": "Số merchant kênh không được vượt quá 64 ký tự"
+    },
+    "transferAmount": {
+      "notNull": "Số tiền chuyển khoản không được để trống",
+      "min": "Số tiền chuyển khoản phải lớn hơn 0"
+    },
+    "transferTitle": {
+      "size": "Tiêu đề chuyển khoản không được vượt quá 100 ký tự"
     }
   }
 }

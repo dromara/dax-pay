@@ -11,5 +11,7 @@
   "channelMerchantMismatch": "Pedagang saluran tidak ada atau tidak cocok dengan nomor pedagang",
   "appNotConfigured": "Aplikasi untuk {0} belum dikonfigurasi, silakan ikat di halaman konfigurasi aplikasi merchant channel",
   "appNotUnique": "Ada beberapa aplikasi tipe {0}, silakan konfigurasi binding kapabilitas secara eksplisit untuk memilih",
-  "mpAuthNotConfigured": "Konfigurasi autentikasi aplikasi Douyin tidak lengkap, mohon konfigurasikan AppId dan AppSecret di Manajemen Aplikasi"
+  "mpAuthNotConfigured": "Konfigurasi autentikasi aplikasi Douyin tidak lengkap, mohon konfigurasikan AppId dan AppSecret di Manajemen Aplikasi",
+  "directMchAppNotConfigured": "Pedagang sambungan langsung belum mengonfigurasi aplikasi tingkat pedagang untuk {0}, silakan buka halaman konfigurasi aplikasi pedagang saluran untuk mengikat aplikasi tingkat pedagang (pedagang sambungan langsung tidak dapat menggunakan aplikasi tingkat platform)",
+  "appRefByAllocReceiver": "Aplikasi Douyin dirujuk oleh catatan penerima pembagian dana, tidak dapat dihapus"
 }

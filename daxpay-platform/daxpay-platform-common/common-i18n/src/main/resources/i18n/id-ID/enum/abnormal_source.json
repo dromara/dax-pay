@@ -1,0 +1,5 @@
+{
+  "callback": "Panggilan balik saluran",
+  "sync": "Sinkronisasi kueri pesanan",
+  "job": "Tugas terjadwal"
+}

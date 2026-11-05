@@ -10,5 +10,9 @@
   "originOrderNotExist": "ไม่พบคำสั่งเดิม",
   "scanTypeNotSupported": "ประเภทผู้รับนี้ไม่รองรับการรับบัญชีผ่านการสแกนคิวอาร์โค้ด",
   "scanWechatAppTypeNotSupported": "การอนุญาต QR ของ WeChat รองรับเฉพาะแอป official account (ประเภทแอปปัจจุบัน: {0}) โปรดเลือกแอปอื่นหรือกรอก openid ด้วยตนเอง",
-  "scanDouyinAppTypeNotSupported": "การอนุญาต QR ของ Douyin รองรับเฉพาะแอปเว็บ (ประเภทแอปปัจจุบัน: {0}) โปรดเลือกแอปอื่นหรือกรอก openid ด้วยตนเอง"
+  "scanDouyinAppTypeNotSupported": "การอนุญาต QR ของ Douyin รองรับเฉพาะแอปเว็บ (ประเภทแอปปัจจุบัน: {0}) โปรดเลือกแอปอื่นหรือกรอก openid ด้วยตนเอง",
+  "channelMerchantHasTrade": "ร้านค้าช่องทางมีบันทึกธุรกรรม ไม่สามารถลบได้",
+  "channelMerchantHasOrder": "ร้านค้าช่องทางมีบันทึกคำสั่งซื้อ ไม่สามารถลบได้",
+  "channelMerchantHasGatewayOrder": "ร้านค้าช่องทางมีบันทึกคำสั่งซื้อเกตเวย์ ไม่สามารถลบได้",
+  "channelMerchantHasRefund": "ร้านค้าช่องทางมีบันทึกการคืนเงิน ไม่สามารถลบได้"
 }
