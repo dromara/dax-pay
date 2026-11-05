@@ -1,0 +1,23 @@
+{
+  "fileName": "Thiết bị ảo",
+  "deviceNo": "Số thiết bị",
+  "name": "Tên thiết bị",
+  "batchNo": "Số lô",
+  "mchNo": "Số merchant",
+  "mchName": "Tên merchant",
+  "appId": "ID ứng dụng",
+  "appName": "Tên ứng dụng",
+  "storeNo": "Số cửa hàng",
+  "storeName": "Tên cửa hàng",
+  "activated": "Trạng thái kích hoạt",
+  "activated.true": "Đã kích hoạt",
+  "activated.false": "Chưa kích hoạt",
+  "online": "Trạng thái trực tuyến",
+  "online.true": "Trực tuyến",
+  "online.false": "Ngoại tuyến",
+  "enable": "Trạng thái bật tắt",
+  "enable.true": "Bật",
+  "enable.false": "Tắt",
+  "lastOnlineTime": "Thời gian trực tuyến cuối",
+  "createTime": "Thời gian tạo"
+}

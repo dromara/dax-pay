@@ -1,0 +1,23 @@
+{
+  "fileName": "Virtual Devices",
+  "deviceNo": "Device No.",
+  "name": "Device Name",
+  "batchNo": "Batch No.",
+  "mchNo": "Merchant No.",
+  "mchName": "Merchant Name",
+  "appId": "App ID",
+  "appName": "App Name",
+  "storeNo": "Store No.",
+  "storeName": "Store Name",
+  "activated": "Activation Status",
+  "activated.true": "Activated",
+  "activated.false": "Not Activated",
+  "online": "Online Status",
+  "online.true": "Online",
+  "online.false": "Offline",
+  "enable": "Enabled Status",
+  "enable.true": "Enabled",
+  "enable.false": "Disabled",
+  "lastOnlineTime": "Last Online Time",
+  "createTime": "Created At"
+}

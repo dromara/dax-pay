@@ -1,0 +1,21 @@
+{
+  "fileName": "Kode QR Pembayaran",
+  "code": "No. Kode QR",
+  "name": "Nama Kode QR",
+  "batchNo": "No. Batch",
+  "mchNo": "No. Merchant",
+  "mchName": "Nama Merchant",
+  "appId": "ID Aplikasi",
+  "appName": "Nama Aplikasi",
+  "storeNo": "No. Toko",
+  "storeName": "Nama Toko",
+  "programType": "Program Pendaratan",
+  "amountType": "Jenis Jumlah",
+  "fixedAmount": "Jumlah Tetap (CNY)",
+  "status": "Status",
+  "allocation": "Pembagian Dana",
+  "allocation.true": "Ya",
+  "allocation.false": "Tidak",
+  "remark": "Catatan",
+  "createTime": "Dibuat Pada"
+}

@@ -1,0 +1,23 @@
+{
+  "fileName": "虛擬設備",
+  "deviceNo": "設備號",
+  "name": "設備名稱",
+  "batchNo": "批次號",
+  "mchNo": "歸屬商戶號",
+  "mchName": "商戶名稱",
+  "appId": "關聯應用號",
+  "appName": "應用名稱",
+  "storeNo": "門店號",
+  "storeName": "門店名稱",
+  "activated": "啟用狀態",
+  "activated.true": "已啟用",
+  "activated.false": "未啟用",
+  "online": "在線狀態",
+  "online.true": "在線",
+  "online.false": "離線",
+  "enable": "啟停狀態",
+  "enable.true": "啟用",
+  "enable.false": "停用",
+  "lastOnlineTime": "最後在線時間",
+  "createTime": "建立時間"
+}

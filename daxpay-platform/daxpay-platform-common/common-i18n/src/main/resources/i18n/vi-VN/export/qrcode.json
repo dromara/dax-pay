@@ -1,0 +1,21 @@
+{
+  "fileName": "Mã QR thanh toán",
+  "code": "Số mã QR",
+  "name": "Tên mã QR",
+  "batchNo": "Số lô",
+  "mchNo": "Số merchant",
+  "mchName": "Tên merchant",
+  "appId": "ID ứng dụng",
+  "appName": "Tên ứng dụng",
+  "storeNo": "Số cửa hàng",
+  "storeName": "Tên cửa hàng",
+  "programType": "Chương trình đích",
+  "amountType": "Loại số tiền",
+  "fixedAmount": "Số tiền cố định (CNY)",
+  "status": "Trạng thái",
+  "allocation": "Chia sẻ lợi nhuận",
+  "allocation.true": "Có",
+  "allocation.false": "Không",
+  "remark": "Ghi chú",
+  "createTime": "Thời gian tạo"
+}

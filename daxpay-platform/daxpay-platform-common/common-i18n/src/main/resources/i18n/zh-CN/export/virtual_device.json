@@ -1,0 +1,23 @@
+{
+  "fileName": "虚拟设备",
+  "deviceNo": "设备号",
+  "name": "设备名称",
+  "batchNo": "批次号",
+  "mchNo": "归属商户号",
+  "mchName": "商户名称",
+  "appId": "关联应用号",
+  "appName": "应用名称",
+  "storeNo": "门店号",
+  "storeName": "门店名称",
+  "activated": "激活状态",
+  "activated.true": "已激活",
+  "activated.false": "未激活",
+  "online": "在线状态",
+  "online.true": "在线",
+  "online.false": "离线",
+  "enable": "启用状态",
+  "enable.true": "启用",
+  "enable.false": "禁用",
+  "lastOnlineTime": "最后在线时间",
+  "createTime": "创建时间"
+}

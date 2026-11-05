@@ -16,15 +16,19 @@ import cn.daxpay.open.device.virtual.enums.VirtualTestMode;
 import cn.daxpay.open.device.virtual.param.VirtualDeviceQuery;
 import cn.daxpay.open.device.virtual.param.VirtualDeviceTestParam;
 import cn.daxpay.open.device.virtual.result.VirtualDeviceResult;
+import cn.daxpay.open.device.virtual.result.export.VirtualDeviceExportResult;
 import cn.daxpay.open.device.virtual.service.VirtualDeviceCredentialService;
 import cn.daxpay.open.device.virtual.service.VirtualDeviceNoService;
 import cn.daxpay.open.device.virtual.service.VirtualDeviceQrService;
 import cn.daxpay.open.device.virtual.service.VirtualDeviceRuntimeService;
 import cn.daxpay.open.device.virtual.support.VirtualTestSampleSupport;
+import cn.daxpay.open.payment.common.convert.export.CommonExportConvertHelper;
 import cn.daxpay.open.payment.merchant.dao.appinfo.MchAppInfoManager;
 import cn.daxpay.open.payment.merchant.dao.info.MerchantInfoManager;
 import cn.daxpay.open.payment.merchant.entity.appinfo.MchAppInfo;
 import cn.daxpay.open.payment.merchant.entity.info.MerchantInfo;
+import cn.daxpay.open.platform.common.excel.ExcelUtils;
+import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.open.platform.common.translate.service.TransService;
 import cn.daxpay.open.platform.core.code.CommonCode;
@@ -35,12 +39,14 @@ import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 
 /// # 虚拟设备管理(运营端)
 ///
@@ -96,6 +102,48 @@ public class VirtualDeviceAdminService {
         fillRuntime(mpPage.getRecords(), pageResult.getRecords());
         transService.translate(pageResult);
         return pageResult;
+    }
+
+    /// 导出(服务端生成 xlsx, 查询条件与分页同参, 无时间范围必填要求)
+    ///
+    /// 复用 [page] 的取数口径: 商户/应用/门店名称已由翻译服务回填, 运行态三项由 Redis 批量组装;
+    /// 行转换只做布尔状态词条文本与时间格式化, 不携带任何激活凭证字段。
+    public void export(VirtualDeviceQuery query, HttpServletResponse response) {
+        ExcelUtils.exportPaged(VirtualDeviceExportResult.class, "export.virtual_device.fileName", response,
+                (pageNo, size) -> page(new PageParam(pageNo, size), query),
+                this::toExportRows);
+    }
+
+    /// 分页结果 → 导出行
+    private List<VirtualDeviceExportResult> toExportRows(List<VirtualDeviceResult> records) {
+        return records.stream().map(this::toExportRow).toList();
+    }
+
+    /// 单行 → 导出行(布尔状态翻译为词条文本, 时间按当前用户时区格式化)
+    private VirtualDeviceExportResult toExportRow(VirtualDeviceResult source) {
+        return new VirtualDeviceExportResult()
+                .setDeviceNo(source.getDeviceNo())
+                .setName(source.getName())
+                .setBatchNo(source.getBatchNo())
+                .setMchNo(source.getMchNo())
+                .setMchName(source.getMchName())
+                .setAppId(source.getAppId())
+                .setAppName(source.getAppName())
+                .setStoreNo(source.getStoreNo())
+                .setStoreName(source.getStoreName())
+                .setActivated(this.toBoolText("export.virtual_device.activated", source.getActivated()))
+                .setOnline(this.toBoolText("export.virtual_device.online", source.getOnline()))
+                .setEnable(this.toBoolText("export.virtual_device.enable", source.getEnable()))
+                .setLastOnlineTime(CommonExportConvertHelper.formatDateTime(source.getLastOnlineTime()))
+                .setCreateTime(CommonExportConvertHelper.formatDateTime(source.getCreateTime()));
+    }
+
+    /// 布尔状态 → 国际化文本(空值输出空串, 词条形如 `export.virtual_device.activated.true`)
+    private String toBoolText(String keyPrefix, Boolean value) {
+        if (Objects.isNull(value)) {
+            return "";
+        }
+        return I18nUtil.get(keyPrefix + "." + value);
     }
 
     /// 运行态组装(实体页与结果页按下标一一对应, 保序转换)

@@ -8,8 +8,10 @@ import cn.daxpay.open.device.admin.service.virtual.VirtualDeviceAdminService;
 import cn.daxpay.open.device.virtual.param.VirtualDeviceQuery;
 import cn.daxpay.open.device.virtual.param.VirtualDeviceTestParam;
 import cn.daxpay.open.device.virtual.result.VirtualDeviceResult;
+import cn.daxpay.open.platform.core.annotation.OperateLog;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
+import cn.daxpay.open.platform.core.enums.common.OperateLogType;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
@@ -17,6 +19,7 @@ import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.platform.core.validation.ValidationGroup;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -48,6 +51,14 @@ public class VirtualDeviceAdminController {
     @GetMapping("/page")
     public Result<PageResult<VirtualDeviceResult>> page(PageParam pageParam, VirtualDeviceQuery query) {
         return Res.ok(virtualDeviceAdminService.page(pageParam, query));
+    }
+
+    @PermCode(code = PermCodes.Action.EXPORT)
+    @Operation(summary = "导出虚拟设备")
+    @OperateLog(title = "导出虚拟设备", businessType = OperateLogType.EXPORT, saveParam = false)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, VirtualDeviceQuery query) {
+        virtualDeviceAdminService.export(query, response);
     }
 
     @PermCode(code = PermCodes.Action.MANAGE)

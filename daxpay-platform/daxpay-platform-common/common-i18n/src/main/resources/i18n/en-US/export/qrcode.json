@@ -1,0 +1,21 @@
+{
+  "fileName": "Payment QR Codes",
+  "code": "QR Code No.",
+  "name": "QR Code Name",
+  "batchNo": "Batch No.",
+  "mchNo": "Merchant No.",
+  "mchName": "Merchant Name",
+  "appId": "App ID",
+  "appName": "App Name",
+  "storeNo": "Store No.",
+  "storeName": "Store Name",
+  "programType": "Landing Program",
+  "amountType": "Amount Type",
+  "fixedAmount": "Fixed Amount (CNY)",
+  "status": "Status",
+  "allocation": "Profit Sharing",
+  "allocation.true": "Yes",
+  "allocation.false": "No",
+  "remark": "Remark",
+  "createTime": "Created At"
+}

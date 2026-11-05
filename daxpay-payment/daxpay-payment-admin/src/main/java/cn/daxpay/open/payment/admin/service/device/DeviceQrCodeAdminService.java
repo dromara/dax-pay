@@ -5,6 +5,7 @@ import cn.daxpay.open.payment.admin.param.device.DeviceQrCodeBindAppParam;
 import cn.daxpay.open.payment.admin.param.device.DeviceQrCodeBindMerchantParam;
 import cn.daxpay.open.payment.admin.param.device.DeviceQrCodeBindStoreParam;
 import cn.daxpay.open.payment.admin.param.device.DeviceQrCodeParam;
+import cn.daxpay.open.payment.common.convert.export.CommonExportConvertHelper;
 import cn.daxpay.open.payment.device.enums.QrCodeAmountTypeEnum;
 import cn.daxpay.open.payment.device.enums.QrCodeProgramTypeEnum;
 import cn.daxpay.open.payment.device.enums.QrCodeStatusEnum;
@@ -13,18 +14,25 @@ import cn.daxpay.open.payment.device.qrcode.entity.DeviceQrCode;
 import cn.daxpay.open.payment.device.qrcode.param.DeviceQrCodeQuery;
 import cn.daxpay.open.payment.device.qrcode.result.DeviceQrCodeAllocWarningResult;
 import cn.daxpay.open.payment.device.qrcode.result.DeviceQrCodeResult;
+import cn.daxpay.open.payment.device.qrcode.result.export.DeviceQrCodeExportResult;
 import cn.daxpay.open.payment.device.qrcode.service.DeviceQrCodeSupportService;
 import cn.daxpay.open.payment.merchant.dao.info.MerchantInfoManager;
+import cn.daxpay.open.payment.trade.util.CurrencyAmountUtil;
+import cn.daxpay.open.platform.common.excel.ExcelUtils;
+import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.open.platform.common.translate.service.TransService;
 import cn.daxpay.open.platform.core.code.CommonCode;
+import cn.daxpay.open.platform.core.enums.pay.channel.CurrencyEnum;
 import cn.daxpay.open.platform.core.exception.BizException;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
 import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
+import cn.daxpay.open.platform.core.i18n.I18nSupport;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.daxpay.open.platform.common.translate.service.TransService;
 import cn.hutool.core.util.StrUtil;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -184,6 +192,71 @@ public class DeviceQrCodeAdminService {
         // 翻译商户名称(mchNo -> mchName)
         transService.translate(pageResult);
         return pageResult;
+    }
+
+    /// 导出(服务端生成 xlsx, 查询条件与分页同参, 无时间范围必填要求)
+    ///
+    /// 复用 [page] 的取数口径: 商户/应用/门店名称已由翻译服务回填;
+    /// 行转换做金额分→元、枚举与布尔词条翻译、时间按当前用户时区格式化。
+    public void export(DeviceQrCodeQuery query, HttpServletResponse response) {
+        ExcelUtils.exportPaged(DeviceQrCodeExportResult.class, "export.qrcode.fileName", response,
+                (pageNo, size) -> page(new PageParam(pageNo, size), query),
+                this::toExportRows);
+    }
+
+    /// 分页结果 → 导出行
+    private List<DeviceQrCodeExportResult> toExportRows(List<DeviceQrCodeResult> records) {
+        return records.stream().map(this::toExportRow).toList();
+    }
+
+    /// 单行 → 导出行(固定金额分→元, 枚举/布尔翻译为词条文本, 时间按当前用户时区格式化)
+    private DeviceQrCodeExportResult toExportRow(DeviceQrCodeResult source) {
+        return new DeviceQrCodeExportResult()
+                .setCode(source.getCode())
+                .setName(source.getName())
+                .setBatchNo(source.getBatchNo())
+                .setMchNo(source.getMchNo())
+                .setMchName(source.getMchName())
+                .setAppId(source.getAppId())
+                .setAppName(source.getAppName())
+                .setStoreNo(source.getStoreNo())
+                .setStoreName(source.getStoreName())
+                .setProgramType(this.toEnumName(QrCodeProgramTypeEnum.values(), source.getProgramType()))
+                .setAmountType(this.toEnumName(QrCodeAmountTypeEnum.values(), source.getAmountType()))
+                .setFixedAmount(this.toYuan(source.getFixedAmount()))
+                .setStatus(this.toEnumName(QrCodeStatusEnum.values(), source.getStatus()))
+                .setAllocation(this.toBoolText("export.qrcode.allocation", source.getAllocation()))
+                .setRemark(source.getRemark())
+                .setCreateTime(CommonExportConvertHelper.formatDateTime(source.getCreateTime()));
+    }
+
+    /// 枚举编码 → 国际化名称(未知编码输出空串, 不让单行脏数据打崩整次导出)
+    private <E extends Enum<E> & I18nSupport> String toEnumName(E[] values, String code) {
+        if (StrUtil.isBlank(code)) {
+            return "";
+        }
+        for (E value : values) {
+            if (value.getCode().equals(code)) {
+                return I18nUtil.getEnumName(value);
+            }
+        }
+        return "";
+    }
+
+    /// 布尔状态 → 国际化文本(空值输出空串, 词条形如 `export.qrcode.allocation.true`)
+    private String toBoolText(String keyPrefix, Boolean value) {
+        if (Objects.isNull(value)) {
+            return "";
+        }
+        return I18nUtil.get(keyPrefix + "." + value);
+    }
+
+    /// 固定金额分 → 元(码牌固定金额固定人民币, 非固定金额为空)
+    private String toYuan(Long amountFen) {
+        if (Objects.isNull(amountFen)) {
+            return "";
+        }
+        return CurrencyAmountUtil.minorToMajorStr(amountFen, CurrencyEnum.CNY);
     }
 
     /// 根据id查询

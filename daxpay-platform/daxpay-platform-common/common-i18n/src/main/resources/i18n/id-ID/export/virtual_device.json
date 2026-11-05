@@ -1,0 +1,23 @@
+{
+  "fileName": "Perangkat Virtual",
+  "deviceNo": "No. Perangkat",
+  "name": "Nama Perangkat",
+  "batchNo": "No. Batch",
+  "mchNo": "No. Merchant",
+  "mchName": "Nama Merchant",
+  "appId": "ID Aplikasi",
+  "appName": "Nama Aplikasi",
+  "storeNo": "No. Toko",
+  "storeName": "Nama Toko",
+  "activated": "Status Aktivasi",
+  "activated.true": "Diaktifkan",
+  "activated.false": "Belum Diaktifkan",
+  "online": "Status Daring",
+  "online.true": "Daring",
+  "online.false": "Luring",
+  "enable": "Status Aktif",
+  "enable.true": "Aktif",
+  "enable.false": "Nonaktif",
+  "lastOnlineTime": "Waktu Daring Terakhir",
+  "createTime": "Dibuat Pada"
+}

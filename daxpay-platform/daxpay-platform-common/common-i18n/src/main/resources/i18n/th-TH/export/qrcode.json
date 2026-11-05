@@ -1,0 +1,21 @@
+{
+  "fileName": "คิวอาร์โค้ดชำระเงิน",
+  "code": "หมายเลขคิวอาร์โค้ด",
+  "name": "ชื่อคิวอาร์โค้ด",
+  "batchNo": "หมายเลขแบตช์",
+  "mchNo": "หมายเลขร้านค้า",
+  "mchName": "ชื่อร้านค้า",
+  "appId": "รหัสแอป",
+  "appName": "ชื่อแอป",
+  "storeNo": "หมายเลขสาขา",
+  "storeName": "ชื่อสาขา",
+  "programType": "โปรแกรมปลายทาง",
+  "amountType": "ประเภทจำนวนเงิน",
+  "fixedAmount": "จำนวนเงินคงที่ (หยวน)",
+  "status": "สถานะ",
+  "allocation": "การแบ่งเงิน",
+  "allocation.true": "ใช่",
+  "allocation.false": "ไม่",
+  "remark": "หมายเหตุ",
+  "createTime": "สร้างเมื่อ"
+}

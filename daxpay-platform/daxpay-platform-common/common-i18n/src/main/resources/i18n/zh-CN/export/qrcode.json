@@ -1,0 +1,21 @@
+{
+  "fileName": "支付码牌",
+  "code": "码牌编码",
+  "name": "码牌名称",
+  "batchNo": "批次号",
+  "mchNo": "商户号",
+  "mchName": "商户名称",
+  "appId": "应用号",
+  "appName": "应用名称",
+  "storeNo": "门店号",
+  "storeName": "门店名称",
+  "programType": "落地程序",
+  "amountType": "金额类型",
+  "fixedAmount": "固定金额(元)",
+  "status": "状态",
+  "allocation": "是否分账",
+  "allocation.true": "是",
+  "allocation.false": "否",
+  "remark": "备注",
+  "createTime": "创建时间"
+}

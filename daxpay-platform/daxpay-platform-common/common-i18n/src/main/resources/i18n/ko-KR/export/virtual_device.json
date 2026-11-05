@@ -1,0 +1,23 @@
+{
+  "fileName": "가상 기기",
+  "deviceNo": "기기 번호",
+  "name": "기기 이름",
+  "batchNo": "배치 번호",
+  "mchNo": "소속 상점 번호",
+  "mchName": "상점 이름",
+  "appId": "앱 ID",
+  "appName": "앱 이름",
+  "storeNo": "매장 번호",
+  "storeName": "매장 이름",
+  "activated": "활성화 상태",
+  "activated.true": "활성화됨",
+  "activated.false": "미활성화",
+  "online": "온라인 상태",
+  "online.true": "온라인",
+  "online.false": "오프라인",
+  "enable": "사용 상태",
+  "enable.true": "사용",
+  "enable.false": "사용 안 함",
+  "lastOnlineTime": "마지막 온라인 시간",
+  "createTime": "생성 시간"
+}

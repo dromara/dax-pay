@@ -1,0 +1,21 @@
+{
+  "fileName": "決済QRコード",
+  "code": "QRコード番号",
+  "name": "QRコード名",
+  "batchNo": "バッチ番号",
+  "mchNo": "マーチャント番号",
+  "mchName": "マーチャント名",
+  "appId": "アプリID",
+  "appName": "アプリ名",
+  "storeNo": "店舗番号",
+  "storeName": "店舗名",
+  "programType": "ランディングプログラム",
+  "amountType": "金額タイプ",
+  "fixedAmount": "固定金額(元)",
+  "status": "ステータス",
+  "allocation": "分帳有無",
+  "allocation.true": "はい",
+  "allocation.false": "いいえ",
+  "remark": "備考",
+  "createTime": "作成日時"
+}
