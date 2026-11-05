@@ -1,0 +1,33 @@
+{
+  "notConfigured": "Social login platform not configured, please fill in the clientId first",
+  "configNotExist": "Social login platform config not found or not enabled",
+  "unsupportedSource": "Unsupported social login platform",
+  "unsupportedClient": "Unsupported client code, only admin/merchant are supported",
+  "oauthFailed": "Third-party authorization failed",
+  "authCodeBlank": "Auth code is required",
+  "adminEndpointNotConfigured": "Admin frontend URL not configured, cannot initiate social login",
+  "merchantEndpointNotConfigured": "Merchant frontend URL not configured, cannot initiate social login",
+  "gatewayEndpointNotConfigured": "Payment gateway frontend URL not configured, cannot build authorization redirect URL",
+  "alipayNotConfigured": "Platform-level Alipay config incomplete, please configure it in 'Third-Party Platform Management' first",
+  "douyinH5NotConfigured": "Platform-level Douyin H5 app config incomplete, please configure it in 'Third-Party Platform Management' first",
+  "wechatMpNotConfigured": "WeChat Official Account config incomplete",
+  "autoLogin": {
+    "sourceRequired": "At least one platform must be selected to enable auto login, client: {0}",
+    "sourceNotEnabled": "Selected platform not configured or not enabled: {0}",
+    "sourceNotAllowed": "Selected platform does not support in-app auto login: {0}"
+  },
+  "bind": {
+    "alreadyBoundByOther": "This third-party account is already bound to another user",
+    "alreadyBoundPlatform": "You have already bound this platform, please unbind first",
+    "clientMismatch": "The bound user does not belong to the current client",
+    "scanNotSupported": "This platform does not support QR code binding",
+    "scanTicketInvalid": "QR code binding ticket is invalid or expired"
+  },
+  "login": {
+    "scanNotSupported": "This platform does not support QR code login",
+    "scanTicketInvalid": "QR code login ticket is invalid or expired"
+  },
+  "weCom": {
+    "notCorpMember": "Not a member of this enterprise, login not supported"
+  }
+}

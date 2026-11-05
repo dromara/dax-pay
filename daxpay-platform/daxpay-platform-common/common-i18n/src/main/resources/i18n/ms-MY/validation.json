@@ -7,7 +7,8 @@
   "parameterError": "Pengesahan parameter gagal",
   "field": {
     "source": {
-      "notBlank": "Platform tidak boleh kosong"
+      "notBlank": "Platform tidak boleh kosong",
+      "size": "Sumber transaksi tidak boleh melebihi 32 aksara"
     },
     "clientId": {
       "notBlank": "ID Pelanggan tidak boleh kosong"
@@ -28,7 +29,8 @@
       "notBlank": "ID apl Alipay tidak boleh kosong"
     },
     "authType": {
-      "notBlank": "Jenis pengesahan tidak boleh kosong"
+      "notBlank": "Jenis pengesahan tidak boleh kosong",
+      "size": "Jenis pengesahan tidak boleh melebihi 32 aksara"
     },
     "signType": {
       "notBlank": "Jenis tanda tidak boleh kosong"
@@ -40,7 +42,8 @@
       "notBlank": "Kunci persendirian apl tidak boleh kosong"
     },
     "appSecret": {
-      "size": "Rahsia apl tidak boleh melebihi 512 aksara"
+      "size": "Rahsia apl tidak boleh melebihi 512 aksara",
+      "notBlank": "Rahsia aplikasi tidak boleh kosong"
     },
     "douyinMchId": {
       "notBlank": "ID pedagang Douyin tidak boleh kosong"
@@ -58,7 +61,8 @@
     },
     "channel": {
       "notBlank": "Kod saluran tidak boleh kosong",
-      "size": "Kod saluran tidak boleh melebihi 32 aksara"
+      "size": "Kod saluran tidak boleh melebihi 32 aksara",
+      "notNull": "Saluran tidak boleh kosong"
     },
     "sandbox": {
       "notNull": "Persekitaran kotak pasir tidak boleh kosong"
@@ -105,7 +109,8 @@
       "notBlank": "ID pedagang WeChat tidak boleh kosong"
     },
     "wxAppId": {
-      "notBlank": "WeChat AppId tidak boleh kosong"
+      "notBlank": "WeChat AppId tidak boleh kosong",
+      "size": "WeChat AppId tidak boleh melebihi 64 aksara"
     },
     "publicKeyId": {
       "notBlank": "ID kunci awam pembayaran tidak boleh kosong"
@@ -222,7 +227,8 @@
       "notBlank": "ID merchant Youzan tidak boleh kosong"
     },
     "sign": {
-      "notBlank": "Tandatangan diperlukan"
+      "notBlank": "Tandatangan diperlukan",
+      "size": "Tandatangan tidak boleh melebihi 1024 aksara"
     },
     "reqTime": {
       "notNull": "Masa permintaan tidak boleh kosong"
@@ -345,7 +351,8 @@
       "notBlank": "Nama pendek tidak boleh kosong"
     },
     "status": {
-      "size": "Panjang status mesti antara {min} dan {max}"
+      "size": "Panjang status mesti antara {min} dan {max}",
+      "notBlank": "Status tidak boleh kosong"
     },
     "accountType": {
       "notBlank": "Jenis akaun tidak boleh kosong"
@@ -510,7 +517,8 @@
       "notNull": "ID Protokol tidak boleh kosong"
     },
     "content": {
-      "notBlank": "Kandungan protokol tidak boleh kosong"
+      "notBlank": "Kandungan protokol tidak boleh kosong",
+      "size": "Teks untuk diperiksa tidak boleh melebihi 2000 aksara"
     },
     "showName": {
       "notBlank": "Nama paparan tidak boleh kosong"
@@ -572,7 +580,8 @@
       "size": "Token pengesahan tidak boleh melebihi 64 aksara"
     },
     "returnPath": {
-      "size": "Laluan kembali tidak boleh melebihi 200 aksara"
+      "size": "Laluan kembali tidak boleh melebihi 200 aksara",
+      "notBlank": "Laluan kembali tidak boleh kosong"
     },
     "taskId": {
       "notNull": "ID mesej tidak boleh kosong"
@@ -748,7 +757,8 @@
       "notBlank": "Nombor permintaan saluran tidak boleh kosong"
     },
     "tradeNo": {
-      "notBlank": "Perdagangan platform no. tidak boleh kosong"
+      "notBlank": "Perdagangan platform no. tidak boleh kosong",
+      "size": "Nombor transaksi tidak boleh melebihi 100 aksara"
     },
     "tradeProduct": {
       "notBlank": "Produk dagangan tidak boleh kosong"
@@ -970,11 +980,21 @@
     "emailCode": {
       "notBlank": "Kod pengesahan e-mel tidak boleh kosong"
     },
-    "mailTemplateCode": "Kod templat tidak boleh kosong",
-    "mailLanguage": "Bahasa e-mel tidak boleh kosong",
-    "mailSubject": "Subjek e-mel tidak boleh kosong",
-    "mailTitle": "Tajuk e-mel tidak boleh kosong",
-    "mailContent": "Kandungan e-mel tidak boleh kosong",
+    "mailTemplateCode": {
+      "notBlank": "Kod templat tidak boleh kosong"
+    },
+    "mailLanguage": {
+      "notBlank": "Bahasa e-mel tidak boleh kosong"
+    },
+    "mailSubject": {
+      "notBlank": "Subjek e-mel tidak boleh kosong"
+    },
+    "mailTitle": {
+      "notBlank": "Tajuk e-mel tidak boleh kosong"
+    },
+    "mailContent": {
+      "notBlank": "Kandungan e-mel tidak boleh kosong"
+    },
     "payMethod": {
       "notNull": "Kaedah pembayaran diperlukan"
     },
@@ -993,6 +1013,63 @@
     },
     "yizhifubjMerchantId": {
       "notBlank": "ID merchant Yizhifu (Beijing) tidak boleh kosong"
+    },
+    "allocNo": {
+      "notBlank": "Nombor pesanan agihan tidak boleh kosong",
+      "size": "Nombor pesanan agihan tidak boleh melebihi 100 aksara"
+    },
+    "appRefId": {
+      "notNull": "Rujukan aplikasi Alipay tidak boleh kosong"
+    },
+    "appScope": {
+      "notBlank": "Skop aplikasi tidak boleh kosong"
+    },
+    "currency": {
+      "size": "Mata wang tidak boleh melebihi 8 aksara"
+    },
+    "device": {
+      "size": "Peranti tidak boleh melebihi 16 aksara"
+    },
+    "dyAppRefId": {
+      "notNull": "Rujukan aplikasi Douyin tidak boleh kosong"
+    },
+    "dyPlatformAppId": {
+      "notNull": "Aplikasi platform Douyin tidak boleh kosong"
+    },
+    "gatewayPayType": {
+      "notBlank": "Jenis pembayaran gerbang tidak boleh kosong",
+      "size": "Jenis pembayaran gerbang tidak boleh melebihi 32 aksara"
+    },
+    "orderTime": {
+      "notBlank": "Tarikh pesanan tidak boleh kosong"
+    },
+    "payForm": {
+      "size": "Bentuk pembayaran tidak boleh melebihi 16 aksara"
+    },
+    "pid": {
+      "notNull": "ID pedagang EasyPay tidak boleh kosong"
+    },
+    "receivers": {
+      "notEmpty": "Senarai penerima agihan tidak boleh kosong"
+    },
+    "relationType": {
+      "notBlank": "Jenis hubungan agihan tidak boleh kosong"
+    },
+    "scope": {
+      "notBlank": "Skop aplikasi tidak boleh kosong"
+    },
+    "totalAmount": {
+      "notNull": "Jumlah pesanan asal tidak boleh kosong",
+      "positive": "Jumlah pesanan asal mesti lebih besar daripada 0"
+    },
+    "transferAppRefId": {
+      "notNull": "Rujukan aplikasi pemindahan tidak boleh kosong"
+    },
+    "wxAppRefId": {
+      "notNull": "Rujukan aplikasi WeChat tidak boleh kosong"
+    },
+    "wxPlatformAppId": {
+      "notNull": "Aplikasi platform WeChat tidak boleh kosong"
     }
   }
 }

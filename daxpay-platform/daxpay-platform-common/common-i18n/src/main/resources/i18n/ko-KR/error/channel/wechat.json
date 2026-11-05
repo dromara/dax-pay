@@ -77,5 +77,8 @@
   "allocReceiverSubAppIdRequired": "위챗: 하위가맹점 앱 openid 유형은 하위 앱을 지정해야 합니다",
   "allocReceiverAppMismatch": "위챗: openid 수신자가 다른 앱({0})에 바인딩되어 있어 분배 시작 앱과 일치하지 않습니다",
   "h5WapUrlTooLong": "WeChat: H5 결제 장면 URL(wap_url)은 최대 128자까지 가능합니다. 현재 {0}자",
-  "attachTooLong": "WeChat: 첨부 데이터(attach)는 최대 128자까지 가능합니다. 현재 {0}자"
+  "attachTooLong": "WeChat: 첨부 데이터(attach)는 최대 128자까지 가능합니다. 현재 {0}자",
+  "allocPersonalNameRequired": "WeChat: 개인 openid 유형 수취인은 이름이 필수입니다.",
+  "allocReceiverAccountRequired": "WeChat: 분할 수취인 계정은 필수입니다.",
+  "allocReceiverTypeInvalid": "WeChat: 분할 수취인 유형이 유효하지 않습니다: {0}"
 }

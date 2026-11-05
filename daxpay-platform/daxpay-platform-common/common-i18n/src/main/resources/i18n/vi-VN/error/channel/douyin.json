@@ -44,5 +44,8 @@
   "allocReceiverUnsupportedType": "Douyin: loại người nhận phân chia không được hỗ trợ: {0}",
   "allocReceiverMchNameRequired": "Douyin: phải nhập tên đầy đủ của merchant cho người nhận MERCHANT_ID",
   "allocReceiverAppMismatch": "Douyin: người nhận openid liên kết với ứng dụng khác ({0}), không khớp ứng dụng khởi tạo chia tiền",
-  "channelMerchantMismatch": "Douyin: merchant kênh không thuộc merchant hiện tại"
+  "channelMerchantMismatch": "Douyin: merchant kênh không thuộc merchant hiện tại",
+  "allocPersonalNameRequired": "Douyin: Người nhận loại openid cá nhân phải nhập họ tên",
+  "allocReceiverAccountRequired": "Douyin: Tài khoản người nhận phân chia không được để trống",
+  "allocReceiverTypeInvalid": "Douyin: Loại người nhận phân chia không hợp lệ: {0}"
 }

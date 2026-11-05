@@ -1,3 +1,6 @@
 {
-  "mchDuplicate": "Merchant Stripe ini sudah ada di bawah merchant yang sama"
+  "mchDuplicate": "Merchant Stripe ini sudah ada di bawah merchant yang sama",
+  "payFailed": "Kesalahan pembayaran Stripe: {0}",
+  "closeFailed": "Kesalahan penutupan pesanan Stripe: {0}",
+  "notSupportMethod": "Metode pembayaran Stripe yang tidak didukung: {0}"
 }

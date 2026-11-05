@@ -1,0 +1,9 @@
+{
+  "keyNotConfigured": "Jeepay channel key not configured",
+  "mchDuplicate": "This Jeepay merchant and app config already exists under the merchant",
+  "payFailed": "Jeepay payment error: {0}",
+  "closeFailed": "Jeepay close order error: {0}",
+  "refundFailed": "Jeepay refund failed: {0}",
+  "unsupportedPayMethod": "Unsupported Jeepay payment method: {0}",
+  "missingOpenId": "Jeepay payment method [{0}] requires openId parameter"
+}

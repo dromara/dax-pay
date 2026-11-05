@@ -44,5 +44,8 @@
   "allocReceiverUnsupportedType": "抖音: 不支援的分賬接收方類型: {0}",
   "allocReceiverMchNameRequired": "抖音: 商戶號類型接收方必須填寫商戶全稱",
   "allocReceiverAppMismatch": "抖音: openid接收方綁定於其他應用({0}), 與分賬發起應用不一致",
-  "channelMerchantMismatch": "抖音: 通道商戶不屬於當前商戶"
+  "channelMerchantMismatch": "抖音: 通道商戶不屬於當前商戶",
+  "allocPersonalNameRequired": "抖音: 個人openid類型接收方必須填寫姓名",
+  "allocReceiverAccountRequired": "抖音: 分賬接收方帳號不能為空",
+  "allocReceiverTypeInvalid": "抖音: 分賬接收方類型無效: {0}"
 }

@@ -1,0 +1,9 @@
+{
+  "keyNotConfigured": "Kunci channel Jeepay belum dikonfigurasi",
+  "mchDuplicate": "Konfigurasi merchant+aplikasi Jeepay ini sudah ada di bawah merchant tersebut",
+  "payFailed": "Kesalahan pembayaran Jeepay: {0}",
+  "closeFailed": "Kesalahan penutupan pesanan Jeepay: {0}",
+  "refundFailed": "Pengembalian dana Jeepay gagal: {0}",
+  "unsupportedPayMethod": "Metode pembayaran Jeepay yang tidak didukung: {0}",
+  "missingOpenId": "Metode pembayaran Jeepay [{0}] memerlukan parameter openId"
+}

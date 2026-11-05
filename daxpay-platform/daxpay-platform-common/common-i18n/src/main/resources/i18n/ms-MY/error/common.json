@@ -56,5 +56,9 @@
   "sensitiveWordCategoryInvalid": "Kategori tidak sah",
   "allocCapabilityNotExist": "Keupayaan peruntukan tidak wujud: {0}",
   "allocOrderTypeNotExist": "Jenis pesanan peruntukan tidak wujud: {0}",
-  "allocFinishModeNotExist": "Mod penyelesaian peruntukan tidak wujud: {0}"
+  "allocFinishModeNotExist": "Mod penyelesaian peruntukan tidak wujud: {0}",
+  "allocDetailResultNotExist": "Hasil terperinci agihan tidak ditemui: {0}",
+  "allocOrderStatusNotExist": "Status pesanan agihan tidak ditemui: {0}",
+  "refundOrderStatusNotExist": "Status pesanan bayaran balik tidak ditemui: {0}",
+  "tradeAllocStatusNotExist": "Status agihan urus niaga tidak ditemui: {0}"
 }

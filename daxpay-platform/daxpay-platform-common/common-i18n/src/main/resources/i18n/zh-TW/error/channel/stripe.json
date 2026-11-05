@@ -1,3 +1,6 @@
 {
-  "mchDuplicate": "同一商戶下該 Stripe 商戶已存在"
+  "mchDuplicate": "同一商戶下該 Stripe 商戶已存在",
+  "payFailed": "Stripe支付異常: {0}",
+  "closeFailed": "Stripe關單異常: {0}",
+  "notSupportMethod": "Stripe暫不支援的支付方式: {0}"
 }

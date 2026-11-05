@@ -1,3 +1,6 @@
 {
-  "mchDuplicate": "Merchant Stripe này đã tồn tại trong cùng merchant"
+  "mchDuplicate": "Merchant Stripe này đã tồn tại trong cùng merchant",
+  "payFailed": "Lỗi thanh toán Stripe: {0}",
+  "closeFailed": "Lỗi đóng đơn hàng Stripe: {0}",
+  "notSupportMethod": "Phương thức thanh toán Stripe không được hỗ trợ: {0}"
 }

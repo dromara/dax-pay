@@ -44,5 +44,8 @@
   "allocReceiverUnsupportedType": "더우인: 지원하지 않는 분배 수신자 유형: {0}",
   "allocReceiverMchNameRequired": "더우인:商户号 유형 수신자는 상호 전체 명칭을 입력해야 합니다",
   "allocReceiverAppMismatch": "더우인: openid 수신자가 다른 앱({0})에 바인딩되어 있어 분배 시작 앱과 일치하지 않습니다",
-  "channelMerchantMismatch": "더우인: 채널 가맹점이 현재 가맹점 소속이 아닙니다"
+  "channelMerchantMismatch": "더우인: 채널 가맹점이 현재 가맹점 소속이 아닙니다",
+  "allocPersonalNameRequired": "Douyin: 개인 openid 유형 수취인은 이름이 필수입니다.",
+  "allocReceiverAccountRequired": "Douyin: 분할 수취인 계정은 필수입니다.",
+  "allocReceiverTypeInvalid": "Douyin: 분할 수취인 유형이 유효하지 않습니다: {0}"
 }

@@ -1,0 +1,33 @@
+{
+  "notConfigured": "ソーシャルログインプラットフォームが未設定です。先にclientIdを入力してください",
+  "configNotExist": "ソーシャルログインプラットフォームの設定が存在しないか、無効になっています",
+  "unsupportedSource": "サポートされていないソーシャルログインプラットフォームです",
+  "unsupportedClient": "サポートされていないクライアントコードです。admin/merchantのみ対応しています",
+  "oauthFailed": "サードパーティー認可に失敗しました",
+  "authCodeBlank": "認可コードは必須です",
+  "adminEndpointNotConfigured": "運営側フロントエンドURLが未設定のため、ソーシャルログインを開始できません",
+  "merchantEndpointNotConfigured": "マーチャント側フロントエンドURLが未設定のため、ソーシャルログインを開始できません",
+  "gatewayEndpointNotConfigured": "決済ゲートウェイのフロントエンドURLが未設定のため、認可コールバックURLを生成できません",
+  "alipayNotConfigured": "プラットフォームレベルのAlipay設定が不完全です。先に「サードパーティプラットフォーム管理」で設定してください",
+  "douyinH5NotConfigured": "プラットフォームレベルのDouyin H5アプリ設定が不完全です。先に「サードパーティプラットフォーム管理」で設定してください",
+  "wechatMpNotConfigured": "微信公式アカウントの設定が不完全です",
+  "autoLogin": {
+    "sourceRequired": "自動ログインを有効にするには、少なくとも1つのプラットフォームを選択してください: {0}",
+    "sourceNotEnabled": "選択されたプラットフォームが未設定か無効です: {0}",
+    "sourceNotAllowed": "選択されたプラットフォームはアプリ内自動ログインに対応していません: {0}"
+  },
+  "bind": {
+    "alreadyBoundByOther": "このサードパーティーアカウントは既に他のユーザーにバインドされています",
+    "alreadyBoundPlatform": "このプラットフォームは既にバインド済みです。先に解除してください",
+    "clientMismatch": "バインドされたユーザーは現在のクライアントに属していません",
+    "scanNotSupported": "このプラットフォームはQRコードバインドに対応していません",
+    "scanTicketInvalid": "QRコードバインドのチケットが無効または期限切れです"
+  },
+  "login": {
+    "scanNotSupported": "このプラットフォームはQRコードログインに対応していません",
+    "scanTicketInvalid": "QRコードログインのチケットが無効または期限切れです"
+  },
+  "weCom": {
+    "notCorpMember": "本企業のメンバーではないため、ログインできません"
+  }
+}

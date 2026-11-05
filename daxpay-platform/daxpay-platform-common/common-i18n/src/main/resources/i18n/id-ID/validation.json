@@ -7,7 +7,8 @@
   "parameterError": "Validasi parameter gagal",
   "field": {
     "source": {
-      "notBlank": "Platform wajib diisi"
+      "notBlank": "Platform wajib diisi",
+      "size": "Sumber transaksi tidak boleh lebih dari 32 karakter"
     },
     "clientId": {
       "notBlank": "ID Klien tidak boleh kosong"
@@ -28,7 +29,8 @@
       "notBlank": "ID aplikasi Alipay tidak boleh kosong"
     },
     "authType": {
-      "notBlank": "Jenis autentikasi tidak boleh kosong"
+      "notBlank": "Jenis autentikasi tidak boleh kosong",
+      "size": "Tipe autentikasi tidak boleh lebih dari 32 karakter"
     },
     "signType": {
       "notBlank": "Jenis tanda tidak boleh kosong"
@@ -40,7 +42,8 @@
       "notBlank": "Kunci pribadi aplikasi tidak boleh kosong"
     },
     "appSecret": {
-      "size": "Rahasia aplikasi tidak boleh melebihi 512 karakter"
+      "size": "Rahasia aplikasi tidak boleh melebihi 512 karakter",
+      "notBlank": "Secret aplikasi wajib diisi"
     },
     "douyinMchId": {
       "notBlank": "ID pedagang Douyin tidak boleh kosong"
@@ -58,7 +61,8 @@
     },
     "channel": {
       "notBlank": "Kode saluran tidak boleh kosong",
-      "size": "Kode saluran tidak boleh melebihi 32 karakter"
+      "size": "Kode saluran tidak boleh melebihi 32 karakter",
+      "notNull": "Channel wajib diisi"
     },
     "sandbox": {
       "notNull": "Lingkungan Sandbox tidak boleh kosong"
@@ -105,7 +109,8 @@
       "notBlank": "ID pedagang WeChat tidak boleh kosong"
     },
     "wxAppId": {
-      "notBlank": "AppId WeChat wajib diisi"
+      "notBlank": "AppId WeChat wajib diisi",
+      "size": "WeChat AppId tidak boleh lebih dari 64 karakter"
     },
     "publicKeyId": {
       "notBlank": "ID kunci publik pembayaran tidak boleh kosong"
@@ -222,7 +227,8 @@
       "notBlank": "ID merchant Youzan wajib diisi"
     },
     "sign": {
-      "notBlank": "Tanda tangan wajib diisi"
+      "notBlank": "Tanda tangan wajib diisi",
+      "size": "Tanda tangan tidak boleh lebih dari 1024 karakter"
     },
     "reqTime": {
       "notNull": "Waktu permintaan tidak boleh kosong"
@@ -345,7 +351,8 @@
       "notBlank": "Nama pendek wajib diisi"
     },
     "status": {
-      "size": "Panjang status harus antara {min} dan {max}"
+      "size": "Panjang status harus antara {min} dan {max}",
+      "notBlank": "Status wajib diisi"
     },
     "accountType": {
       "notBlank": "Jenis akun tidak boleh kosong"
@@ -510,7 +517,8 @@
       "notNull": "ID Protokol tidak boleh kosong"
     },
     "content": {
-      "notBlank": "Konten protokol wajib diisi"
+      "notBlank": "Konten protokol wajib diisi",
+      "size": "Teks yang diperiksa tidak boleh lebih dari 2000 karakter"
     },
     "showName": {
       "notBlank": "Nama tampilan tidak boleh kosong"
@@ -572,7 +580,8 @@
       "size": "Token autentikasi tidak boleh melebihi 64 karakter"
     },
     "returnPath": {
-      "size": "Jalur kembali tidak boleh melebihi 200 karakter"
+      "size": "Jalur kembali tidak boleh melebihi 200 karakter",
+      "notBlank": "Path kembali wajib diisi"
     },
     "taskId": {
       "notNull": "ID Pesan tidak boleh kosong"
@@ -748,7 +757,8 @@
       "notBlank": "Permintaan saluran no. tidak boleh kosong"
     },
     "tradeNo": {
-      "notBlank": "Perdagangan platform no. tidak boleh kosong"
+      "notBlank": "Perdagangan platform no. tidak boleh kosong",
+      "size": "Nomor transaksi tidak boleh lebih dari 100 karakter"
     },
     "tradeProduct": {
       "notBlank": "Produk Dagang wajib diisi"
@@ -970,11 +980,21 @@
     "emailCode": {
       "notBlank": "Kode verifikasi email tidak boleh kosong"
     },
-    "mailTemplateCode": "Kode templat tidak boleh kosong",
-    "mailLanguage": "Bahasa email tidak boleh kosong",
-    "mailSubject": "Subjek email tidak boleh kosong",
-    "mailTitle": "Judul email tidak boleh kosong",
-    "mailContent": "Konten email tidak boleh kosong",
+    "mailTemplateCode": {
+      "notBlank": "Kode templat tidak boleh kosong"
+    },
+    "mailLanguage": {
+      "notBlank": "Bahasa email tidak boleh kosong"
+    },
+    "mailSubject": {
+      "notBlank": "Subjek email tidak boleh kosong"
+    },
+    "mailTitle": {
+      "notBlank": "Judul email tidak boleh kosong"
+    },
+    "mailContent": {
+      "notBlank": "Konten email tidak boleh kosong"
+    },
     "payMethod": {
       "notNull": "Metode pembayaran wajib diisi"
     },
@@ -993,6 +1013,63 @@
     },
     "yizhifubjMerchantId": {
       "notBlank": "ID merchant Yizhifu (Beijing) tidak boleh kosong"
+    },
+    "allocNo": {
+      "notBlank": "Nomor pesanan pembagian wajib diisi",
+      "size": "Nomor pesanan pembagian tidak boleh lebih dari 100 karakter"
+    },
+    "appRefId": {
+      "notNull": "Referensi aplikasi Alipay wajib diisi"
+    },
+    "appScope": {
+      "notBlank": "Lingkup aplikasi wajib diisi"
+    },
+    "currency": {
+      "size": "Mata uang tidak boleh lebih dari 8 karakter"
+    },
+    "device": {
+      "size": "Perangkat tidak boleh lebih dari 16 karakter"
+    },
+    "dyAppRefId": {
+      "notNull": "Referensi aplikasi Douyin wajib diisi"
+    },
+    "dyPlatformAppId": {
+      "notNull": "Aplikasi platform Douyin wajib diisi"
+    },
+    "gatewayPayType": {
+      "notBlank": "Tipe pembayaran gateway wajib diisi",
+      "size": "Tipe pembayaran gateway tidak boleh lebih dari 32 karakter"
+    },
+    "orderTime": {
+      "notBlank": "Tanggal pesanan wajib diisi"
+    },
+    "payForm": {
+      "size": "Formulir pembayaran tidak boleh lebih dari 16 karakter"
+    },
+    "pid": {
+      "notNull": "ID merchant EasyPay wajib diisi"
+    },
+    "receivers": {
+      "notEmpty": "Daftar penerima pembagian tidak boleh kosong"
+    },
+    "relationType": {
+      "notBlank": "Tipe relasi pembagian wajib diisi"
+    },
+    "scope": {
+      "notBlank": "Lingkup aplikasi wajib diisi"
+    },
+    "totalAmount": {
+      "notNull": "Total jumlah pesanan asli wajib diisi",
+      "positive": "Total jumlah pesanan asli harus lebih dari 0"
+    },
+    "transferAppRefId": {
+      "notNull": "Referensi aplikasi transfer wajib diisi"
+    },
+    "wxAppRefId": {
+      "notNull": "Referensi aplikasi WeChat wajib diisi"
+    },
+    "wxPlatformAppId": {
+      "notNull": "Aplikasi platform WeChat wajib diisi"
     }
   }
 }

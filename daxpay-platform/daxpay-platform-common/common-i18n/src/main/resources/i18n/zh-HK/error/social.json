@@ -1,0 +1,33 @@
+{
+  "notConfigured": "社交登錄平台未配置, 請先填寫clientId",
+  "configNotExist": "社交登錄平台配置不存在或未啓用",
+  "unsupportedSource": "社交登錄不支持的平台",
+  "unsupportedClient": "不支持的身份域編碼, 僅支持admin/merchant",
+  "oauthFailed": "第三方授權失敗",
+  "authCodeBlank": "授權碼不能為空",
+  "adminEndpointNotConfigured": "運營端前端地址未配置, 無法發起社交登錄",
+  "merchantEndpointNotConfigured": "商户端前端地址未配置, 無法發起社交登錄",
+  "gatewayEndpointNotConfigured": "支付網關前端地址未配置, 無法生成授權回調地址",
+  "alipayNotConfigured": "平台級支付寶配置不完整, 請先在「三方平台管理」中配置",
+  "douyinH5NotConfigured": "平台級抖音H5應用配置不完整, 請先在「三方平台管理」中配置",
+  "wechatMpNotConfigured": "微信公眾號配置不完整",
+  "autoLogin": {
+    "sourceRequired": "開啟自動登錄時必須至少選擇一個平台: {0}",
+    "sourceNotEnabled": "所選平台未配置或未啓用: {0}",
+    "sourceNotAllowed": "所選平台不支持應用內自動登錄: {0}"
+  },
+  "bind": {
+    "alreadyBoundByOther": "該第三方帳號已被其他用戶綁定",
+    "alreadyBoundPlatform": "您已綁定該平台, 請先解綁",
+    "clientMismatch": "綁定用戶不屬於當前終端",
+    "scanNotSupported": "該平台不支持掃碼綁定",
+    "scanTicketInvalid": "掃碼綁定票據無效或已過期"
+  },
+  "login": {
+    "scanNotSupported": "該平台不支持掃碼登錄",
+    "scanTicketInvalid": "掃碼登錄票據無效或已過期"
+  },
+  "weCom": {
+    "notCorpMember": "非本企業成員, 不支持登錄"
+  }
+}

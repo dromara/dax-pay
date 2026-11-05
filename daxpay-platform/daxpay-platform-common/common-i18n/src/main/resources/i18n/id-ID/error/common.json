@@ -56,5 +56,9 @@
   "sensitiveWordCategoryInvalid": "Kategori tidak valid",
   "allocCapabilityNotExist": "Kemampuan alokasi tidak ada: {0}",
   "allocOrderTypeNotExist": "Jenis pesanan alokasi tidak ada: {0}",
-  "allocFinishModeNotExist": "Mode penyelesaian alokasi tidak ada: {0}"
+  "allocFinishModeNotExist": "Mode penyelesaian alokasi tidak ada: {0}",
+  "allocDetailResultNotExist": "Hasil detail pembagian tidak ditemukan: {0}",
+  "allocOrderStatusNotExist": "Status pesanan pembagian tidak ditemukan: {0}",
+  "refundOrderStatusNotExist": "Status pesanan pengembalian dana tidak ditemukan: {0}",
+  "tradeAllocStatusNotExist": "Status pembagian transaksi tidak ditemukan: {0}"
 }

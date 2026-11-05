@@ -56,5 +56,9 @@
   "sensitiveWordCategoryInvalid": "หมวดหมู่ไม่ถูกต้อง",
   "allocCapabilityNotExist": "ไม่พบความสามารถในการแบ่ง: {0}",
   "allocOrderTypeNotExist": "ไม่พบประเภทคำสั่งแบ่ง: {0}",
-  "allocFinishModeNotExist": "ไม่พบโหมดการเสร็จสิ้นการแบ่ง: {0}"
+  "allocFinishModeNotExist": "ไม่พบโหมดการเสร็จสิ้นการแบ่ง: {0}",
+  "allocDetailResultNotExist": "ไม่พบผลลัพธ์รายการส่วนแบ่ง: {0}",
+  "allocOrderStatusNotExist": "ไม่พบสถานะคำสั่งส่วนแบ่ง: {0}",
+  "refundOrderStatusNotExist": "ไม่พบสถานะคำสั่งคืนเงิน: {0}",
+  "tradeAllocStatusNotExist": "ไม่พบสถานะส่วนแบ่งธุรกรรม: {0}"
 }

@@ -1,0 +1,33 @@
+{
+  "notConfigured": "Platform login sosial belum dikonfigurasi, silakan isi clientId terlebih dahulu",
+  "configNotExist": "Konfigurasi platform login sosial tidak ditemukan atau tidak diaktifkan",
+  "unsupportedSource": "Platform login sosial tidak didukung",
+  "unsupportedClient": "Kode klien tidak didukung, hanya admin/merchant yang didukung",
+  "oauthFailed": "Otorisasi pihak ketiga gagal",
+  "authCodeBlank": "Kode otorisasi wajib diisi",
+  "adminEndpointNotConfigured": "URL frontend admin belum dikonfigurasi, tidak dapat memulai login sosial",
+  "merchantEndpointNotConfigured": "URL frontend merchant belum dikonfigurasi, tidak dapat memulai login sosial",
+  "gatewayEndpointNotConfigured": "URL frontend gateway pembayaran belum dikonfigurasi, tidak dapat membuat URL callback otorisasi",
+  "alipayNotConfigured": "Konfigurasi Alipay tingkat platform belum lengkap, silakan konfigurasi di 'Manajemen Platform Pihak Ketiga' terlebih dahulu",
+  "douyinH5NotConfigured": "Konfigurasi aplikasi Douyin H5 tingkat platform belum lengkap, silakan konfigurasi di 'Manajemen Platform Pihak Ketiga' terlebih dahulu",
+  "wechatMpNotConfigured": "Konfigurasi Akun Resmi WeChat belum lengkap",
+  "autoLogin": {
+    "sourceRequired": "Minimal satu platform harus dipilih untuk mengaktifkan login otomatis: {0}",
+    "sourceNotEnabled": "Platform yang dipilih belum dikonfigurasi atau tidak diaktifkan: {0}",
+    "sourceNotAllowed": "Platform yang dipilih tidak mendukung login otomatis dalam aplikasi: {0}"
+  },
+  "bind": {
+    "alreadyBoundByOther": "Akun pihak ketiga ini sudah terikat dengan pengguna lain",
+    "alreadyBoundPlatform": "Anda sudah terikat dengan platform ini, silakan lepaskan ikatan terlebih dahulu",
+    "clientMismatch": "Pengguna yang terikat bukan milik klien saat ini",
+    "scanNotSupported": "Platform ini tidak mendukung pengikatan kode QR",
+    "scanTicketInvalid": "Tiket pengikatan kode QR tidak valid atau kedaluwarsa"
+  },
+  "login": {
+    "scanNotSupported": "Platform ini tidak mendukung login kode QR",
+    "scanTicketInvalid": "Tiket login kode QR tidak valid atau kedaluwarsa"
+  },
+  "weCom": {
+    "notCorpMember": "Bukan anggota perusahaan ini, login tidak didukung"
+  }
+}

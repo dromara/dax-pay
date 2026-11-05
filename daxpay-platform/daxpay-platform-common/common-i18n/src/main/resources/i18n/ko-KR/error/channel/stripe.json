@@ -1,3 +1,6 @@
 {
-  "mchDuplicate": "같은 가맹점에 이 Stripe  가맹점이 이미 존재합니다"
+  "mchDuplicate": "같은 가맹점에 이 Stripe  가맹점이 이미 존재합니다",
+  "payFailed": "Stripe 결제 오류: {0}",
+  "closeFailed": "Stripe 주문 종료 오류: {0}",
+  "notSupportMethod": "지원되지 않는 Stripe 결제 방식: {0}"
 }

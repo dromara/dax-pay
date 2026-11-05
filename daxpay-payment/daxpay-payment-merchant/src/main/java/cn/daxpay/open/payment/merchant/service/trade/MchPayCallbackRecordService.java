@@ -57,7 +57,7 @@ public class MchPayCallbackRecordService {
     public PayCallbackRecordResult findById(Long id) {
         String mchNo = requireMchNo();
         PayCallbackRecord record = callbackRecordManager.findByIdAndMchNo(id, mchNo)
-                .orElseThrow(() -> new DataNotExistException("pay.error.order.callbackRecordNotExist"));
+                .orElseThrow(() -> new DataNotExistException("error.payment.order.callbackRecordNotExist"));
         PayCallbackRecordResult result = PayCallbackRecordConvert.CONVERT.toResult(record);
         // 翻译通道商户名称等 @Trans 字段(与运营端对齐), 须在裁剪前执行
         transService.translate(result);

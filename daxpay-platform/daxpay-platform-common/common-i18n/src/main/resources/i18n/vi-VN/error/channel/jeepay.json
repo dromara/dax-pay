@@ -1,0 +1,9 @@
+{
+  "keyNotConfigured": "Khóa kênh Jeepay chưa được cấu hình",
+  "mchDuplicate": "Cấu hình mã người bán+ứng dụng Jeepay này đã tồn tại dưới người bán",
+  "payFailed": "Lỗi thanh toán Jeepay: {0}",
+  "closeFailed": "Lỗi đóng đơn hàng Jeepay: {0}",
+  "refundFailed": "Hoàn tiền Jeepay không thành công: {0}",
+  "unsupportedPayMethod": "Phương thức thanh toán Jeepay không được hỗ trợ: {0}",
+  "missingOpenId": "Phương thức thanh toán Jeepay [{0}] yêu cầu tham số openId"
+}

@@ -1,0 +1,33 @@
+{
+  "notConfigured": "Nền tảng đăng nhập xã hội chưa được cấu hình, vui lòng nhập clientId trước",
+  "configNotExist": "Cấu hình nền tảng đăng nhập xã hội không tồn tại hoặc chưa được kích hoạt",
+  "unsupportedSource": "Nền tảng đăng nhập xã hội không được hỗ trợ",
+  "unsupportedClient": "Mã client không được hỗ trợ, chỉ hỗ trợ admin/merchant",
+  "oauthFailed": "Ủy quyền bên thứ ba thất bại",
+  "authCodeBlank": "Mã ủy quyền không được để trống",
+  "adminEndpointNotConfigured": "Địa chỉ frontend quản trị chưa được cấu hình, không thể bắt đầu đăng nhập xã hội",
+  "merchantEndpointNotConfigured": "Địa chỉ frontend merchant chưa được cấu hình, không thể bắt đầu đăng nhập xã hội",
+  "gatewayEndpointNotConfigured": "Địa chỉ frontend cổng thanh toán chưa được cấu hình, không thể tạo địa chỉ callback ủy quyền",
+  "alipayNotConfigured": "Cấu hình Alipay cấp nền tảng chưa đầy đủ, vui lòng cấu hình trong 'Quản lý nền tảng bên thứ ba' trước",
+  "douyinH5NotConfigured": "Cấu hình ứng dụng Douyin H5 cấp nền tảng chưa đầy đủ, vui lòng cấu hình trong 'Quản lý nền tảng bên thứ ba' trước",
+  "wechatMpNotConfigured": "Cấu hình tài khoản chính thức WeChat chưa đầy đủ",
+  "autoLogin": {
+    "sourceRequired": "Phải chọn ít nhất một nền tảng để bật đăng nhập tự động: {0}",
+    "sourceNotEnabled": "Nền tảng đã chọn chưa được cấu hình hoặc chưa được kích hoạt: {0}",
+    "sourceNotAllowed": "Nền tảng đã chọn không hỗ trợ đăng nhập tự động trong ứng dụng: {0}"
+  },
+  "bind": {
+    "alreadyBoundByOther": "Tài khoản bên thứ ba này đã được liên kết với người dùng khác",
+    "alreadyBoundPlatform": "Bạn đã liên kết nền tảng này, vui lòng hủy liên kết trước",
+    "clientMismatch": "Người dùng được liên kết không thuộc client hiện tại",
+    "scanNotSupported": "Nền tảng này không hỗ trợ liên kết bằng mã QR",
+    "scanTicketInvalid": "Phiên liên kết mã QR không hợp lệ hoặc đã hết hạn"
+  },
+  "login": {
+    "scanNotSupported": "Nền tảng này không hỗ trợ đăng nhập bằng mã QR",
+    "scanTicketInvalid": "Phiên đăng nhập mã QR không hợp lệ hoặc đã hết hạn"
+  },
+  "weCom": {
+    "notCorpMember": "Không phải thành viên của doanh nghiệp này, không hỗ trợ đăng nhập"
+  }
+}

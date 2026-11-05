@@ -56,7 +56,7 @@ public class MchNoticeService {
     /// 任务详情
     public MchNoticeTaskResult findTaskById(Long id) {
         MchNoticeTask task = taskManager.findById(id)
-                .orElseThrow(() -> new DataNotExistException("pay.error.order.callbackTaskNotExist"));
+                .orElseThrow(() -> new DataNotExistException("error.payment.order.callbackTaskNotExist"));
         MchNoticeTaskResult result = MchNoticeTaskConvert.CONVERT.toResult(task);
         // 翻译事件码与商户名称
         transService.translate(result);
@@ -66,7 +66,7 @@ public class MchNoticeService {
     /// 手动重发
     public void resend(Long id) {
         taskManager.findById(id)
-                .orElseThrow(() -> new DataNotExistException("pay.error.order.callbackTaskNotExist"));
+                .orElseThrow(() -> new DataNotExistException("error.payment.order.callbackTaskNotExist"));
         noticeSendEngine.sendManual(id);
     }
 

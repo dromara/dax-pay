@@ -19,7 +19,8 @@
       "notBlank": "nonce는 필수입니다"
     },
     "sign": {
-      "notBlank": "서명은 필수입니다"
+      "notBlank": "서명은 필수입니다",
+      "size": "서명은 1024자를 초과할 수 없습니다."
     },
     "brokerWssUrl": {
       "notBlank": "MQTT 접속 주소는 필수입니다",
@@ -32,7 +33,8 @@
       "notBlank": "MQTT 접속 비밀번호는 필수입니다"
     },
     "source": {
-      "notBlank": "플랫폼은 비워둘 수 없습니다."
+      "notBlank": "플랫폼은 비워둘 수 없습니다.",
+      "size": "거래 소스는 32자를 초과할 수 없습니다."
     },
     "clientId": {
       "notBlank": "클라이언트 ID는 비워둘 수 없습니다."
@@ -53,7 +55,8 @@
       "notBlank": "Alipay 앱 ID는 비워둘 수 없습니다."
     },
     "authType": {
-      "notBlank": "인증 유형은 비워둘 수 없습니다."
+      "notBlank": "인증 유형은 비워둘 수 없습니다.",
+      "size": "인증 유형은 32자를 초과할 수 없습니다."
     },
     "signType": {
       "notBlank": "서명 유형은 비워둘 수 없습니다."
@@ -65,7 +68,8 @@
       "notBlank": "앱 비공개 키는 비워둘 수 없습니다."
     },
     "appSecret": {
-      "size": "앱 비밀번호는 512자를 초과할 수 없습니다."
+      "size": "앱 비밀번호는 512자를 초과할 수 없습니다.",
+      "notBlank": "앱 시크릿은 필수입니다."
     },
     "douyinMchId": {
       "notBlank": "Douyin 판매자 ID는 비워둘 수 없습니다."
@@ -84,7 +88,8 @@
     "channel": {
       "notBlank": "채널 코드는 비워둘 수 없습니다.",
       "size": "채널 코드는 32자를 초과할 수 없습니다.",
-      "pattern": "송금 채널은 wechat/alipay/douyin만 지원합니다"
+      "pattern": "송금 채널은 wechat/alipay/douyin만 지원합니다",
+      "notNull": "채널은 필수입니다."
     },
     "sandbox": {
       "notNull": "샌드박스 환경은 비워둘 수 없습니다."
@@ -131,7 +136,8 @@
       "notBlank": "WeChat 판매자 ID는 비워둘 수 없습니다."
     },
     "wxAppId": {
-      "notBlank": "WeChat 앱 ID는 비워둘 수 없습니다."
+      "notBlank": "WeChat 앱 ID는 비워둘 수 없습니다.",
+      "size": "WeChat AppId는 64자를 초과할 수 없습니다."
     },
     "publicKeyId": {
       "notBlank": "결제 공개 키 ID는 비워둘 수 없습니다."
@@ -368,7 +374,8 @@
       "notBlank": "닉네임은 비워둘 수 없습니다."
     },
     "status": {
-      "size": "상태는 16자 이내여야 합니다"
+      "size": "상태는 16자 이내여야 합니다",
+      "notBlank": "상태는 필수입니다."
     },
     "accountType": {
       "notBlank": "계정 유형은 비워둘 수 없습니다."
@@ -533,7 +540,8 @@
       "notNull": "프로토콜 ID는 비워둘 수 없습니다."
     },
     "content": {
-      "notBlank": "프로토콜 내용은 비워둘 수 없습니다."
+      "notBlank": "프로토콜 내용은 비워둘 수 없습니다.",
+      "size": "검사 대상 텍스트는 2000자를 초과할 수 없습니다."
     },
     "showName": {
       "notBlank": "표시 이름은 비워둘 수 없습니다."
@@ -595,7 +603,8 @@
       "size": "인증 토큰은 64자를 초과할 수 없습니다."
     },
     "returnPath": {
-      "size": "반환 경로는 200자를 초과할 수 없습니다."
+      "size": "반환 경로는 200자를 초과할 수 없습니다.",
+      "notBlank": "복귀 경로는 필수입니다."
     },
     "taskId": {
       "notNull": "메시지 ID는 비워둘 수 없습니다."
@@ -768,7 +777,8 @@
       "notBlank": "채널 요청 번호 비워둘 수 없습니다."
     },
     "tradeNo": {
-      "notBlank": "플랫폼 거래번호 비워둘 수 없습니다."
+      "notBlank": "플랫폼 거래번호 비워둘 수 없습니다.",
+      "size": "거래번호는 100자를 초과할 수 없습니다."
     },
     "tradeProduct": {
       "notBlank": "무역 제품은 비워둘 수 없습니다."
@@ -1038,11 +1048,21 @@
       "min": "만료 사전 알림 일수는 1일보다 작을 수 없습니다",
       "max": "만료 사전 알림 일수는 90일보다 클 수 없습니다"
     },
-    "mailTemplateCode": "템플릿 코드는 필수입니다",
-    "mailLanguage": "이메일 언어는 필수입니다",
-    "mailSubject": "이메일 제목은 필수입니다",
-    "mailTitle": "이메일 본문 제목은 필수입니다",
-    "mailContent": "본문 내용은 필수입니다",
+    "mailTemplateCode": {
+      "notBlank": "템플릿 코드는 필수입니다"
+    },
+    "mailLanguage": {
+      "notBlank": "이메일 언어는 필수입니다"
+    },
+    "mailSubject": {
+      "notBlank": "이메일 제목은 필수입니다"
+    },
+    "mailTitle": {
+      "notBlank": "이메일 본문 제목은 필수입니다"
+    },
+    "mailContent": {
+      "notBlank": "본문 내용은 필수입니다"
+    },
     "payMethod": {
       "notNull": "결제 방식은 필수입니다"
     },
@@ -1073,6 +1093,63 @@
     },
     "templateCode": {
       "size": "인쇄 템플릿 코드는 32자를 초과할 수 없습니다"
+    },
+    "allocNo": {
+      "notBlank": "분할 주문번호는 필수입니다.",
+      "size": "분할 주문번호는 100자를 초과할 수 없습니다."
+    },
+    "appRefId": {
+      "notNull": "Alipay 앱 참조는 필수입니다."
+    },
+    "appScope": {
+      "notBlank": "앱 범위는 필수입니다."
+    },
+    "currency": {
+      "size": "통화는 8자를 초과할 수 없습니다."
+    },
+    "device": {
+      "size": "디바이스는 16자를 초과할 수 없습니다."
+    },
+    "dyAppRefId": {
+      "notNull": "Douyin 앱 참조는 필수입니다."
+    },
+    "dyPlatformAppId": {
+      "notNull": "Douyin 플랫폼 앱은 필수입니다."
+    },
+    "gatewayPayType": {
+      "notBlank": "게이트웨이 결제 유형은 필수입니다.",
+      "size": "게이트웨이 결제 유형은 32자를 초과할 수 없습니다."
+    },
+    "orderTime": {
+      "notBlank": "주문 날짜는 필수입니다."
+    },
+    "payForm": {
+      "size": "결제 형태는 16자를 초과할 수 없습니다."
+    },
+    "pid": {
+      "notNull": "EasyPay 판매자 ID는 필수입니다."
+    },
+    "receivers": {
+      "notEmpty": "분할 수취인 목록은 비워둘 수 없습니다."
+    },
+    "relationType": {
+      "notBlank": "분할 관계 유형은 필수입니다."
+    },
+    "scope": {
+      "notBlank": "앱 범위는 필수입니다."
+    },
+    "totalAmount": {
+      "notNull": "원 주문 총 금액은 필수입니다.",
+      "positive": "원 주문 총 금액은 0보다 커야 합니다."
+    },
+    "transferAppRefId": {
+      "notNull": "이체 앱 참조는 필수입니다."
+    },
+    "wxAppRefId": {
+      "notNull": "WeChat 앱 참조는 필수입니다."
+    },
+    "wxPlatformAppId": {
+      "notNull": "WeChat 플랫폼 앱은 필수입니다."
     }
   }
 }

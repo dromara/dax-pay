@@ -1,0 +1,9 @@
+{
+  "keyNotConfigured": "Jeepay通道金鑰未配置",
+  "mchDuplicate": "該商户下已存在此Jeepay商户號+應用配置",
+  "payFailed": "Jeepay支付異常: {0}",
+  "closeFailed": "Jeepay關單異常: {0}",
+  "refundFailed": "Jeepay退款異常: {0}",
+  "unsupportedPayMethod": "Jeepay暫不支持的支付方式: {0}",
+  "missingOpenId": "Jeepay支付方式[{0}]需要openId參數"
+}

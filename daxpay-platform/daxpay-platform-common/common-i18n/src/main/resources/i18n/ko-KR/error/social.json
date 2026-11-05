@@ -1,0 +1,33 @@
+{
+  "notConfigured": "소셜 로그인 플랫폼이 구성되지 않았습니다. 먼저 clientId를 입력해 주십시오.",
+  "configNotExist": "소셜 로그인 플랫폼 구성이 존재하지 않거나 활성화되지 않았습니다.",
+  "unsupportedSource": "지원되지 않는 소셜 로그인 플랫폼입니다.",
+  "unsupportedClient": "지원되지 않는 클라이언트 코드입니다. admin/merchant만 지원됩니다.",
+  "oauthFailed": "제3자 인증에 실패했습니다.",
+  "authCodeBlank": "인증 코드는 필수입니다.",
+  "adminEndpointNotConfigured": "운영단 프런트엔드 주소가 구성되지 않아 소셜 로그인을 시작할 수 없습니다.",
+  "merchantEndpointNotConfigured": "판매자단 프런트엔드 주소가 구성되지 않아 소셜 로그인을 시작할 수 없습니다.",
+  "gatewayEndpointNotConfigured": "결제 게이트웨이 프런트엔드 주소가 구성되지 않아 인증 콜백 주소를 생성할 수 없습니다.",
+  "alipayNotConfigured": "플랫폼 수준의 Alipay 구성이 불완전합니다. 먼저 '제3자 플랫폼 관리'에서 구성해 주십시오.",
+  "douyinH5NotConfigured": "플랫폼 수준의 Douyin H5 앱 구성이 불완전합니다. 먼저 '제3자 플랫폼 관리'에서 구성해 주십시오.",
+  "wechatMpNotConfigured": "위챗 공식 계정 구성이 불완전합니다.",
+  "autoLogin": {
+    "sourceRequired": "자동 로그인을 활성화하려면 플랫폼을 하나 이상 선택해야 합니다: {0}",
+    "sourceNotEnabled": "선택한 플랫폼이 구성되지 않았거나 비활성화되어 있습니다: {0}",
+    "sourceNotAllowed": "선택한 플랫폼은 앱 내 자동 로그인을 지원하지 않습니다: {0}"
+  },
+  "bind": {
+    "alreadyBoundByOther": "이 제3자 계정은 이미 다른 사용자에게 연결되어 있습니다.",
+    "alreadyBoundPlatform": "이미 해당 플랫폼에 연결되어 있습니다. 먼저 연결을 해제해 주십시오.",
+    "clientMismatch": "연결된 사용자가 현재 클라이언트에 속하지 않습니다.",
+    "scanNotSupported": "이 플랫폼은 QR 코드 연결을 지원하지 않습니다.",
+    "scanTicketInvalid": "QR 코드 연결 티켓이 무효이거나 만료되었습니다."
+  },
+  "login": {
+    "scanNotSupported": "이 플랫폼은 QR 코드 로그인을 지원하지 않습니다.",
+    "scanTicketInvalid": "QR 코드 로그인 티켓이 무효이거나 만료되었습니다."
+  },
+  "weCom": {
+    "notCorpMember": "본 기업의 구성원이 아니므로 로그인할 수 없습니다."
+  }
+}

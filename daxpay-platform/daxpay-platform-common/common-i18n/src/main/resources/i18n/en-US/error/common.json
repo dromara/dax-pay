@@ -56,5 +56,9 @@
   "clientRuntimeNotExist": "Client runtime type does not exist: {0}",
   "allocCapabilityNotExist": "Allocation capability does not exist: {0}",
   "allocOrderTypeNotExist": "Allocation order type does not exist: {0}",
-  "allocFinishModeNotExist": "Allocation finish mode does not exist: {0}"
+  "allocFinishModeNotExist": "Allocation finish mode does not exist: {0}",
+  "allocDetailResultNotExist": "Allocation detail result not found: {0}",
+  "allocOrderStatusNotExist": "Allocation order status not found: {0}",
+  "refundOrderStatusNotExist": "Refund order status not found: {0}",
+  "tradeAllocStatusNotExist": "Trade allocation status not found: {0}"
 }

@@ -56,5 +56,9 @@
   "sensitiveWordCategoryInvalid": "Danh mục không hợp lệ",
   "allocCapabilityNotExist": "Khả năng phân bổ không tồn tại: {0}",
   "allocOrderTypeNotExist": "Loại đơn phân bổ không tồn tại: {0}",
-  "allocFinishModeNotExist": "Chế độ hoàn tất phân bổ không tồn tại: {0}"
+  "allocFinishModeNotExist": "Chế độ hoàn tất phân bổ không tồn tại: {0}",
+  "allocDetailResultNotExist": "Kết quả chi tiết phân chia không tồn tại: {0}",
+  "allocOrderStatusNotExist": "Trạng thái đơn phân chia không tồn tại: {0}",
+  "refundOrderStatusNotExist": "Trạng thái đơn hoàn tiền không tồn tại: {0}",
+  "tradeAllocStatusNotExist": "Trạng thái phân chia giao dịch không tồn tại: {0}"
 }

@@ -77,5 +77,8 @@
   "allocReceiverSubAppIdRequired": "WeChat: phải chỉ định ứng dụng merchant con cho người nhận PERSONAL_SUB_OPENID",
   "allocReceiverAppMismatch": "WeChat: người nhận openid liên kết với ứng dụng khác ({0}), không khớp ứng dụng khởi tạo chia tiền",
   "h5WapUrlTooLong": "WeChat: URL bối cảnh thanh toán H5 (wap_url) tối đa 128 ký tự, hiện tại {0} ký tự",
-  "attachTooLong": "WeChat: dữ liệu attach tối đa 128 ký tự, hiện tại {0} ký tự"
+  "attachTooLong": "WeChat: dữ liệu attach tối đa 128 ký tự, hiện tại {0} ký tự",
+  "allocPersonalNameRequired": "WeChat: Người nhận loại openid cá nhân phải nhập họ tên",
+  "allocReceiverAccountRequired": "WeChat: Tài khoản người nhận phân chia không được để trống",
+  "allocReceiverTypeInvalid": "WeChat: Loại người nhận phân chia không hợp lệ: {0}"
 }

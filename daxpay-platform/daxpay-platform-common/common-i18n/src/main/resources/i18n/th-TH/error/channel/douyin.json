@@ -44,5 +44,8 @@
   "allocReceiverUnsupportedType": "Douyin: ไม่รองรับประเภทผู้รับเงินแบ่งนี้: {0}",
   "allocReceiverMchNameRequired": "Douyin: ต้องกรอกชื่อเต็มร้านค้าสำหรับผู้รับประเภท MERCHANT_ID",
   "allocReceiverAppMismatch": "Douyin: ผู้รับ openid ถูกผูกกับแอปอื่น ({0}) ไม่ตรงกับแอปที่เริ่มแบ่งเงิน",
-  "channelMerchantMismatch": "Douyin: ร้านค้าช่องทางไม่ได้เป็นของร้านค้าปัจจุบัน"
+  "channelMerchantMismatch": "Douyin: ร้านค้าช่องทางไม่ได้เป็นของร้านค้าปัจจุบัน",
+  "allocPersonalNameRequired": "Douyin: ผู้รับประเภท openid ส่วนบุคคลต้องระบุชื่อ",
+  "allocReceiverAccountRequired": "Douyin: บัญชีผู้รับส่วนแบ่งไม่สามารถเว้นว่างได้",
+  "allocReceiverTypeInvalid": "Douyin: ประเภทผู้รับส่วนแบ่งไม่ถูกต้อง: {0}"
 }

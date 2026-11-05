@@ -56,5 +56,9 @@
   "clientRuntimeNotExist": "クライアントランタイムタイプが存在しません: {0}",
   "allocCapabilityNotExist": "精算能力が存在しません: {0}",
   "allocOrderTypeNotExist": "精算注文タイプが存在しません: {0}",
-  "allocFinishModeNotExist": "精算完了モードが存在しません: {0}"
+  "allocFinishModeNotExist": "精算完了モードが存在しません: {0}",
+  "allocDetailResultNotExist": "該当する精算明細結果が存在しません: {0}",
+  "allocOrderStatusNotExist": "該当する精算注文ステータスが存在しません: {0}",
+  "refundOrderStatusNotExist": "該当する返金注文ステータスが存在しません: {0}",
+  "tradeAllocStatusNotExist": "該当する取引精算ステータスが存在しません: {0}"
 }

@@ -1,3 +1,6 @@
 {
-  "mchDuplicate": "This Stripe merchant already exists under the merchant"
+  "mchDuplicate": "This Stripe merchant already exists under the merchant",
+  "payFailed": "Stripe payment error: {0}",
+  "closeFailed": "Stripe close order error: {0}",
+  "notSupportMethod": "Unsupported Stripe payment method: {0}"
 }

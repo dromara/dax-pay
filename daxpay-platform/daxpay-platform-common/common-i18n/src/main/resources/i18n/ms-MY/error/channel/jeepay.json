@@ -1,0 +1,9 @@
+{
+  "keyNotConfigured": "Kunci saluran Jeepay tidak dikonfigurasi",
+  "mchDuplicate": "Konfigurasi pedagang+aplikasi Jeepay ini sudah wujud di bawah pedagang tersebut",
+  "payFailed": "Ralat pembayaran Jeepay: {0}",
+  "closeFailed": "Ralat tutup pesanan Jeepay: {0}",
+  "refundFailed": "Bayaran balik Jeepay gagal: {0}",
+  "unsupportedPayMethod": "Kaedah pembayaran Jeepay tidak disokong: {0}",
+  "missingOpenId": "Kaedah pembayaran Jeepay [{0}] memerlukan parameter openId"
+}

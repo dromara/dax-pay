@@ -56,5 +56,9 @@
   "clientRuntimeNotExist": "客户端运行类型不存在: {0}",
   "allocCapabilityNotExist": "该分账能力不存在: {0}",
   "allocOrderTypeNotExist": "该分账单类型不存在: {0}",
-  "allocFinishModeNotExist": "该分账完结模式不存在: {0}"
+  "allocFinishModeNotExist": "该分账完结模式不存在: {0}",
+  "allocDetailResultNotExist": "该分账明细结果不存在: {0}",
+  "allocOrderStatusNotExist": "该分账订单状态不存在: {0}",
+  "refundOrderStatusNotExist": "该退款订单状态不存在: {0}",
+  "tradeAllocStatusNotExist": "该交易分账状态不存在: {0}"
 }

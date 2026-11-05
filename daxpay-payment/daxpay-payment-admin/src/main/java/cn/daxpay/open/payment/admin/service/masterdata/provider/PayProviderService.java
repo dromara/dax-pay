@@ -7,6 +7,7 @@ import cn.daxpay.open.payment.masterdata.result.provider.PayProviderMethodResult
 import cn.daxpay.open.payment.masterdata.result.provider.PayProviderProductResult;
 import cn.daxpay.open.payment.masterdata.service.provider.PayProviderMethodService;
 import cn.daxpay.open.payment.masterdata.service.provider.PayProviderProductService;
+import cn.daxpay.open.payment.route.service.support.PayRouteI18nHelper;
 import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayProviderEnum;
 import cn.daxpay.open.platform.core.exception.DataNotExistException;
@@ -47,7 +48,8 @@ public class PayProviderService {
                 .filter(r -> Objects.equals(r.methodEnum().getCode(), methodCode))
                 .findFirst()
                 // 通道: 支付方式不在目录中
-                .orElseThrow(() -> new DataNotExistException("error.payment.capability.methodNotInDirectory"));
+                .orElseThrow(() -> new DataNotExistException("error.payment.capability.methodNotInDirectory",
+                        PayRouteI18nHelper.payMethod(methodCode), PayRouteI18nHelper.provider(providerCode)));
         return toAdminMethod(providerCode, row, adminContext);
     }
 

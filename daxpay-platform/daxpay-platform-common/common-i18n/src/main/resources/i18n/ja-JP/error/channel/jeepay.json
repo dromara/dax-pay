@@ -1,0 +1,9 @@
+{
+  "keyNotConfigured": "Jeepay チャネルキーが設定されていません",
+  "mchDuplicate": "このマーチャントの下に同じ Jeepay マーチャント+アプリ設定が既に存在します",
+  "payFailed": "Jeepay 支払いエラー: {0}",
+  "closeFailed": "Jeepay 注文完了エラー: {0}",
+  "refundFailed": "Jeepay 返金に失敗しました: {0}",
+  "unsupportedPayMethod": "サポートされていない Jeepay 支払い方法: {0}",
+  "missingOpenId": "Jeepay 支払い方法 [{0}] には openId パラメータが必要です"
+}

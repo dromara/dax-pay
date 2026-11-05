@@ -1,0 +1,9 @@
+{
+  "keyNotConfigured": "ยังไม่ได้กำหนดค่าคีย์ช่องทาง Jeepay",
+  "mchDuplicate": "มีการกำหนดค่าผู้ขาย+แอป Jeepay นี้อยู่แล้วภายใต้ผู้ขายรายนี้",
+  "payFailed": "ข้อผิดพลาดในการชำระเงิน Jeepay: {0}",
+  "closeFailed": "ข้อผิดพลาดในการปิดคำสั่งซื้อ Jeepay: {0}",
+  "refundFailed": "การคืนเงิน Jeepay ล้มเหลว: {0}",
+  "unsupportedPayMethod": "ไม่รองรับวิธีการชำระเงิน Jeepay: {0}",
+  "missingOpenId": "วิธีการชำระเงิน Jeepay [{0}] ต้องการพารามิเตอร์ openId"
+}

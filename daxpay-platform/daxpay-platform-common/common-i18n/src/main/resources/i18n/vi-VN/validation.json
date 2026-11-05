@@ -7,7 +7,8 @@
   "parameterError": "Xác thực tham số không thành công",
   "field": {
     "source": {
-      "notBlank": "Nền tảng không được để trống"
+      "notBlank": "Nền tảng không được để trống",
+      "size": "Nguồn giao dịch không được vượt quá 32 ký tự"
     },
     "clientId": {
       "notBlank": "ID khách hàng không được để trống"
@@ -28,7 +29,8 @@
       "notBlank": "ID ứng dụng Alipay không được để trống"
     },
     "authType": {
-      "notBlank": "Loại xác thực không được để trống"
+      "notBlank": "Loại xác thực không được để trống",
+      "size": "Loại xác thực không được vượt quá 32 ký tự"
     },
     "signType": {
       "notBlank": "Loại dấu hiệu không được để trống"
@@ -40,7 +42,8 @@
       "notBlank": "Khóa riêng của ứng dụng không được để trống"
     },
     "appSecret": {
-      "size": "Bí mật ứng dụng không được vượt quá 512 ký tự"
+      "size": "Bí mật ứng dụng không được vượt quá 512 ký tự",
+      "notBlank": "Khóa bí mật ứng dụng không được để trống"
     },
     "douyinMchId": {
       "notBlank": "ID người bán Douyin không được để trống"
@@ -58,7 +61,8 @@
     },
     "channel": {
       "notBlank": "Mã kênh không được để trống",
-      "size": "Mã kênh không được vượt quá 32 ký tự"
+      "size": "Mã kênh không được vượt quá 32 ký tự",
+      "notNull": "Kênh không được để trống"
     },
     "sandbox": {
       "notNull": "Môi trường hộp cát không được để trống"
@@ -105,7 +109,8 @@
       "notBlank": "ID người bán WeChat không được để trống"
     },
     "wxAppId": {
-      "notBlank": "WeChat AppId không được để trống"
+      "notBlank": "WeChat AppId không được để trống",
+      "size": "WeChat AppId không được vượt quá 64 ký tự"
     },
     "publicKeyId": {
       "notBlank": "ID khóa công khai thanh toán không được để trống"
@@ -222,7 +227,8 @@
       "notBlank": "Mã merchant Youzan không được để trống"
     },
     "sign": {
-      "notBlank": "Chữ ký là bắt buộc"
+      "notBlank": "Chữ ký là bắt buộc",
+      "size": "Chữ ký không được vượt quá 1024 ký tự"
     },
     "reqTime": {
       "notNull": "Thời gian yêu cầu không được để trống"
@@ -345,7 +351,8 @@
       "notBlank": "Tên ngắn không được để trống"
     },
     "status": {
-      "size": "Độ dài trạng thái phải từ {min} đến {max}"
+      "size": "Độ dài trạng thái phải từ {min} đến {max}",
+      "notBlank": "Trạng thái không được để trống"
     },
     "accountType": {
       "notBlank": "Loại tài khoản không được để trống"
@@ -510,7 +517,8 @@
       "notNull": "ID giao thức không được để trống"
     },
     "content": {
-      "notBlank": "Nội dung giao thức không được để trống"
+      "notBlank": "Nội dung giao thức không được để trống",
+      "size": "Văn bản cần kiểm tra không được vượt quá 2000 ký tự"
     },
     "showName": {
       "notBlank": "Tên hiển thị không được để trống"
@@ -572,7 +580,8 @@
       "size": "Mã thông báo xác thực không thể vượt quá 64 ký tự"
     },
     "returnPath": {
-      "size": "Đường dẫn trả về không được vượt quá 200 ký tự"
+      "size": "Đường dẫn trả về không được vượt quá 200 ký tự",
+      "notBlank": "Đường dẫn quay lại không được để trống"
     },
     "taskId": {
       "notNull": "ID tin nhắn không được để trống"
@@ -748,7 +757,8 @@
       "notBlank": "Số yêu cầu kênh không thể để trống"
     },
     "tradeNo": {
-      "notBlank": "Nền tảng giao dịch số. không thể để trống"
+      "notBlank": "Nền tảng giao dịch số. không thể để trống",
+      "size": "Số giao dịch không được vượt quá 100 ký tự"
     },
     "tradeProduct": {
       "notBlank": "Sản phẩm thương mại không được để trống"
@@ -970,11 +980,21 @@
     "emailCode": {
       "notBlank": "Mã xác minh email không được để trống"
     },
-    "mailTemplateCode": "Mã mẫu không được để trống",
-    "mailLanguage": "Ngôn ngữ email không được để trống",
-    "mailSubject": "Chủ đề email không được để trống",
-    "mailTitle": "Tiêu đề email không được để trống",
-    "mailContent": "Nội dung email không được để trống",
+    "mailTemplateCode": {
+      "notBlank": "Mã mẫu không được để trống"
+    },
+    "mailLanguage": {
+      "notBlank": "Ngôn ngữ email không được để trống"
+    },
+    "mailSubject": {
+      "notBlank": "Chủ đề email không được để trống"
+    },
+    "mailTitle": {
+      "notBlank": "Tiêu đề email không được để trống"
+    },
+    "mailContent": {
+      "notBlank": "Nội dung email không được để trống"
+    },
     "payMethod": {
       "notNull": "Phương thức thanh toán là bắt buộc"
     },
@@ -993,6 +1013,63 @@
     },
     "yizhifubjMerchantId": {
       "notBlank": "Mã thương nhân Yizhifu (Bắc Kinh) không được để trống"
+    },
+    "allocNo": {
+      "notBlank": "Số đơn phân chia không được để trống",
+      "size": "Số đơn phân chia không được vượt quá 100 ký tự"
+    },
+    "appRefId": {
+      "notNull": "Tham chiếu ứng dụng Alipay không được để trống"
+    },
+    "appScope": {
+      "notBlank": "Phạm vi ứng dụng không được để trống"
+    },
+    "currency": {
+      "size": "Loại tiền tệ không được vượt quá 8 ký tự"
+    },
+    "device": {
+      "size": "Thiết bị không được vượt quá 16 ký tự"
+    },
+    "dyAppRefId": {
+      "notNull": "Tham chiếu ứng dụng Douyin không được để trống"
+    },
+    "dyPlatformAppId": {
+      "notNull": "Ứng dụng nền tảng Douyin không được để trống"
+    },
+    "gatewayPayType": {
+      "notBlank": "Loại thanh toán cổng không được để trống",
+      "size": "Loại thanh toán cổng không được vượt quá 32 ký tự"
+    },
+    "orderTime": {
+      "notBlank": "Ngày đặt hàng không được để trống"
+    },
+    "payForm": {
+      "size": "Hình thức thanh toán không được vượt quá 16 ký tự"
+    },
+    "pid": {
+      "notNull": "Mã người bán EasyPay không được để trống"
+    },
+    "receivers": {
+      "notEmpty": "Danh sách người nhận phân chia không được để trống"
+    },
+    "relationType": {
+      "notBlank": "Loại quan hệ phân chia không được để trống"
+    },
+    "scope": {
+      "notBlank": "Phạm vi ứng dụng không được để trống"
+    },
+    "totalAmount": {
+      "notNull": "Tổng số tiền đơn gốc không được để trống",
+      "positive": "Tổng số tiền đơn gốc phải lớn hơn 0"
+    },
+    "transferAppRefId": {
+      "notNull": "Tham chiếu ứng dụng chuyển tiền không được để trống"
+    },
+    "wxAppRefId": {
+      "notNull": "Tham chiếu ứng dụng WeChat không được để trống"
+    },
+    "wxPlatformAppId": {
+      "notNull": "Ứng dụng nền tảng WeChat không được để trống"
     }
   }
 }

@@ -44,5 +44,8 @@
   "allocReceiverUnsupportedType": "Douyin: jenis penerima agihan tidak disokong: {0}",
   "allocReceiverMchNameRequired": "Douyin: nama penuh merchant wajib untuk penerima MERCHANT_ID",
   "allocReceiverAppMismatch": "Douyin: penerima openid terikat pada aplikasi lain ({0}), tidak sepadan dengan aplikasi permulaan pembahagian",
-  "channelMerchantMismatch": "Douyin: merchant saluran bukan milik merchant semasa"
+  "channelMerchantMismatch": "Douyin: merchant saluran bukan milik merchant semasa",
+  "allocPersonalNameRequired": "Douyin: Nama diperlukan untuk penerima jenis openid peribadi",
+  "allocReceiverAccountRequired": "Douyin: Akaun penerima agihan tidak boleh kosong",
+  "allocReceiverTypeInvalid": "Douyin: Jenis penerima agihan tidak sah: {0}"
 }

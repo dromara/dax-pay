@@ -56,5 +56,9 @@
   "clientRuntimeNotExist": "클라이언트 런타임 유형이 존재하지 않습니다: {0}",
   "allocCapabilityNotExist": "분할 기능이 존재하지 않습니다: {0}",
   "allocOrderTypeNotExist": "분할 주문 유형이 존재하지 않습니다: {0}",
-  "allocFinishModeNotExist": "분할 완료 모드가 존재하지 않습니다: {0}"
+  "allocFinishModeNotExist": "분할 완료 모드가 존재하지 않습니다: {0}",
+  "allocDetailResultNotExist": "해당 분할 상세 결과가 존재하지 않습니다: {0}",
+  "allocOrderStatusNotExist": "해당 분할 주문 상태가 존재하지 않습니다: {0}",
+  "refundOrderStatusNotExist": "해당 환불 주문 상태가 존재하지 않습니다: {0}",
+  "tradeAllocStatusNotExist": "해당 거래 분할 상태가 존재하지 않습니다: {0}"
 }

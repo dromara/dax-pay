@@ -77,5 +77,8 @@
   "allocReceiverSubAppIdRequired": "WeChat: aplikasi sub-merchant wajib untuk penerima PERSONAL_SUB_OPENID",
   "allocReceiverAppMismatch": "WeChat: penerima openid terikat pada aplikasi lain ({0}), tidak sepadan dengan aplikasi permulaan pembahagian",
   "h5WapUrlTooLong": "WeChat: URL skenario pembayaran H5 (wap_url) maksimum 128 aksara, semasa {0} aksara",
-  "attachTooLong": "WeChat: data attach maksimum 128 aksara, semasa {0} aksara"
+  "attachTooLong": "WeChat: data attach maksimum 128 aksara, semasa {0} aksara",
+  "allocPersonalNameRequired": "WeChat: Nama diperlukan untuk penerima jenis openid peribadi",
+  "allocReceiverAccountRequired": "WeChat: Akaun penerima agihan tidak boleh kosong",
+  "allocReceiverTypeInvalid": "WeChat: Jenis penerima agihan tidak sah: {0}"
 }

@@ -44,5 +44,8 @@
   "allocReceiverUnsupportedType": "Douyin: サポートされていない分配受取方タイプ: {0}",
   "allocReceiverMchNameRequired": "Douyin: 商户番号タイプの受取方は商户正式名称が必要です",
   "allocReceiverAppMismatch": "Douyin: openid受取側は他のアプリ({0})に紐づいており、分配開始アプリと一致しません",
-  "channelMerchantMismatch": "Douyin: チャネル加盟店は現在の加盟店のものではありません"
+  "channelMerchantMismatch": "Douyin: チャネル加盟店は現在の加盟店のものではありません",
+  "allocPersonalNameRequired": "Douyin: 個人openidタイプの受取人は氏名が必須です",
+  "allocReceiverAccountRequired": "Douyin: 精算受取人アカウントは必須です",
+  "allocReceiverTypeInvalid": "Douyin: 精算受取人タイプが無効です: {0}"
 }

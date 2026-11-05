@@ -77,5 +77,8 @@
   "allocReceiverSubAppIdRequired": "微信: 子商戶應用openid類型必須指定子商戶應用",
   "allocReceiverAppMismatch": "微信: openid接收方綁定於其他應用({0}), 與分賬發起應用不一致",
   "h5WapUrlTooLong": "微信: H5支付場景地址(wap_url)最長128個字符, 當前{0}個字符",
-  "attachTooLong": "微信: 附加參數(attach)最長128個字符, 當前{0}個字符"
+  "attachTooLong": "微信: 附加參數(attach)最長128個字符, 當前{0}個字符",
+  "allocPersonalNameRequired": "微信: 個人openid類型接收方必須填寫姓名",
+  "allocReceiverAccountRequired": "微信: 分賬接收方帳號不能為空",
+  "allocReceiverTypeInvalid": "微信: 分賬接收方類型無效: {0}"
 }

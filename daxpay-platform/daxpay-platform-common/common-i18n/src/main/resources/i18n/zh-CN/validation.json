@@ -19,7 +19,8 @@
       "notBlank": "随机串不可为空"
     },
     "sign": {
-      "notBlank": "签名不能为空"
+      "notBlank": "签名不能为空",
+      "size": "签名不可超过1024位"
     },
     "brokerWssUrl": {
       "notBlank": "MQTT接入地址不能为空",
@@ -32,7 +33,8 @@
       "notBlank": "MQTT接入密码不能为空"
     },
     "source": {
-      "notBlank": "平台不能为空"
+      "notBlank": "平台不能为空",
+      "size": "交易来源不可超过32位"
     },
     "clientId": {
       "notBlank": "客户端ID不能为空"
@@ -53,7 +55,8 @@
       "notBlank": "支付宝商户appId不可为空"
     },
     "authType": {
-      "notBlank": "认证类型不可为空"
+      "notBlank": "认证类型不可为空",
+      "size": "认证类型不可超过32位"
     },
     "signType": {
       "notBlank": "签名类型不可为空"
@@ -65,7 +68,8 @@
       "notBlank": "应用私钥不可为空"
     },
     "appSecret": {
-      "size": "应用密钥不可超过512位"
+      "size": "应用密钥不可超过512位",
+      "notBlank": "应用密钥不能为空"
     },
     "douyinMchId": {
       "notBlank": "抖音商户号不可为空"
@@ -84,7 +88,8 @@
     "channel": {
       "notBlank": "通道编码不可为空",
       "size": "通道不可超过32位",
-      "pattern": "转账通道仅支持 wechat/alipay/douyin"
+      "pattern": "转账通道仅支持 wechat/alipay/douyin",
+      "notNull": "通道不可为空"
     },
     "sandbox": {
       "notNull": "沙箱环境不可为空"
@@ -131,7 +136,8 @@
       "notBlank": "微信商户Id不可为空"
     },
     "wxAppId": {
-      "notBlank": "微信应用AppId不可为空"
+      "notBlank": "微信应用AppId不可为空",
+      "size": "微信应用AppId不可超过64位"
     },
     "publicKeyId": {
       "notBlank": "支付公钥ID不可为空"
@@ -368,7 +374,8 @@
       "notBlank": "简称不能为空"
     },
     "status": {
-      "size": "状态不可超过16位"
+      "size": "状态不可超过16位",
+      "notBlank": "状态不能为空"
     },
     "accountType": {
       "notBlank": "账户类型不可为空"
@@ -533,7 +540,8 @@
       "notNull": "协议id不能为空"
     },
     "content": {
-      "notBlank": "协议内容不能为空"
+      "notBlank": "协议内容不能为空",
+      "size": "待检文本不可超过2000位"
     },
     "showName": {
       "notBlank": "显示名称不能为空"
@@ -595,7 +603,8 @@
       "size": "认证会话码不可超过64位"
     },
     "returnPath": {
-      "size": "来源回跳路径不可超过200位"
+      "size": "来源回跳路径不可超过200位",
+      "notBlank": "回跳路径不能为空"
     },
     "redirectUrl": {
       "notBlank": "回调地址不可为空",
@@ -772,7 +781,8 @@
       "notBlank": "通道请求号不能为空"
     },
     "tradeNo": {
-      "notBlank": "平台交易号不能为空"
+      "notBlank": "平台交易号不能为空",
+      "size": "平台交易号不可超过100位"
     },
     "tradeProduct": {
       "notBlank": "交易产品不能为空"
@@ -1042,11 +1052,21 @@
       "min": "过期提醒天数不能小于1天",
       "max": "过期提醒天数不能大于90天"
     },
-    "mailTemplateCode": "模板编码不能为空",
-    "mailLanguage": "邮件语言不能为空",
-    "mailSubject": "邮件主题不能为空",
-    "mailTitle": "邮件标题不能为空",
-    "mailContent": "正文文案不能为空",
+    "mailTemplateCode": {
+      "notBlank": "模板编码不能为空"
+    },
+    "mailLanguage": {
+      "notBlank": "邮件语言不能为空"
+    },
+    "mailSubject": {
+      "notBlank": "邮件主题不能为空"
+    },
+    "mailTitle": {
+      "notBlank": "邮件标题不能为空"
+    },
+    "mailContent": {
+      "notBlank": "正文文案不能为空"
+    },
     "payMethod": {
       "notNull": "支付方式不可为空"
     },
@@ -1077,6 +1097,63 @@
     },
     "templateCode": {
       "size": "打印版式代码不可超过32位"
+    },
+    "allocNo": {
+      "notBlank": "分账单号不能为空",
+      "size": "分账单号不可超过100位"
+    },
+    "appRefId": {
+      "notNull": "支付宝应用主键不可为空"
+    },
+    "appScope": {
+      "notBlank": "应用档位不能为空"
+    },
+    "currency": {
+      "size": "币种不可超过8位"
+    },
+    "device": {
+      "size": "设备类型不可超过16位"
+    },
+    "dyAppRefId": {
+      "notNull": "抖音应用主键不可为空"
+    },
+    "dyPlatformAppId": {
+      "notNull": "抖音平台应用主键不可为空"
+    },
+    "gatewayPayType": {
+      "notBlank": "网关支付类型不能为空",
+      "size": "网关支付类型不可超过32位"
+    },
+    "orderTime": {
+      "notBlank": "订单日期不能为空"
+    },
+    "payForm": {
+      "size": "支付形态不可超过16位"
+    },
+    "pid": {
+      "notNull": "易支付商户号不可为空"
+    },
+    "receivers": {
+      "notEmpty": "分账接收方列表不能为空"
+    },
+    "relationType": {
+      "notBlank": "分账关系类型不能为空"
+    },
+    "scope": {
+      "notBlank": "应用档位不能为空"
+    },
+    "totalAmount": {
+      "notNull": "原订单总金额不可为空",
+      "positive": "原订单总金额必须大于0"
+    },
+    "transferAppRefId": {
+      "notNull": "转账转出应用主键不可为空"
+    },
+    "wxAppRefId": {
+      "notNull": "微信应用主键不可为空"
+    },
+    "wxPlatformAppId": {
+      "notNull": "微信平台应用主键不可为空"
     }
   }
 }

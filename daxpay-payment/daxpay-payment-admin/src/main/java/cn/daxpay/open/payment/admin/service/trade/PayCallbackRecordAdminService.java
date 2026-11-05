@@ -40,7 +40,7 @@ public class PayCallbackRecordAdminService {
     /// 详情
     public PayCallbackRecordResult findById(Long id) {
         PayCallbackRecord record = callbackRecordManager.findById(id)
-                .orElseThrow(() -> new DataNotExistException("pay.error.order.callbackRecordNotExist"));
+                .orElseThrow(() -> new DataNotExistException("error.payment.order.callbackRecordNotExist"));
         PayCallbackRecordResult result = PayCallbackRecordConvert.CONVERT.toResult(record);
         transService.translate(result);
         return result;

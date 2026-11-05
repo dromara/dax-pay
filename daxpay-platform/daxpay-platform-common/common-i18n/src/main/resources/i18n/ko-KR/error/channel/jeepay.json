@@ -1,0 +1,9 @@
+{
+  "keyNotConfigured": "Jeepay 채널 키가 구성되지 않았습니다",
+  "mchDuplicate": "이 판매자 아래에 동일한 Jeepay 판매자+앱 구성이 이미 존재합니다",
+  "payFailed": "Jeepay 결제 오류: {0}",
+  "closeFailed": "Jeepay 주문 종료 오류: {0}",
+  "refundFailed": "Jeepay 환불 실패: {0}",
+  "unsupportedPayMethod": "지원되지 않는 Jeepay 결제 방식: {0}",
+  "missingOpenId": "Jeepay 결제 방식 [{0}]에는 openId 파라미터가 필요합니다"
+}

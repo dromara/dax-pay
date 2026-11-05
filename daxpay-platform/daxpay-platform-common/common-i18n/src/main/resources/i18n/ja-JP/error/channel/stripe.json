@@ -1,3 +1,6 @@
 {
-  "mchDuplicate": "同一加盟店にこの Stripe 加盟店は既に存在します"
+  "mchDuplicate": "同一加盟店にこの Stripe 加盟店は既に存在します",
+  "payFailed": "Stripe 支払いエラー: {0}",
+  "closeFailed": "Stripe 注文完了エラー: {0}",
+  "notSupportMethod": "サポートされていない Stripe 支払い方法: {0}"
 }
