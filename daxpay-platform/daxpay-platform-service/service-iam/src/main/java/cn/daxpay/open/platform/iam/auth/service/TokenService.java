@@ -9,6 +9,7 @@ import cn.daxpay.open.platform.capability.auth.handler.LoginSuccessHandler;
 import cn.daxpay.open.platform.capability.auth.util.SecurityUtil;
 import cn.daxpay.open.platform.common.config.properties.PlatformStarterProperties;
 import cn.daxpay.open.platform.core.code.CommonCode;
+import cn.daxpay.open.platform.core.code.WebHeaderCode;
 import cn.daxpay.open.platform.core.entity.UserDetail;
 import cn.daxpay.open.platform.core.enums.client.ClientEnum;
 import cn.daxpay.open.platform.capability.auth.entity.AuthInfoResult;
@@ -67,12 +68,15 @@ public class TokenService {
     public String login(HttpServletRequest request, HttpServletResponse response) {
         String clientCode = this.getClientCode(request);
         String loginType = SecurityUtil.getLoginType(request);
+        // 请求终端白名单归一(未携带/非法值回退 web), 与身份域正交
+        String terminal = WebHeaderCode.normalizeTerminal(request.getHeader(WebHeaderCode.X_TERMINAL));
         try {
             LoginAuthContext loginAuthContext = new LoginAuthContext().setRequest(request)
                     .setResponse(response)
                     .setAuthProperties(platformStarterProperties.getAuth())
                     .setAuthLoginType(loginType)
-                    .setClientCode(clientCode);
+                    .setClientCode(clientCode)
+                    .setTerminal(terminal);
             // 校验该终端是否支持此种登录方式(按 clientCode + loginType 双键匹配)
             this.validateClient(loginAuthContext);
             // 认证并获取结果
@@ -98,8 +102,11 @@ public class TokenService {
     public String completeAuthenticatedLogin(AuthInfoResult authInfoResult, LoginAuthContext context) {
         // 认证后额外检查(如双因素)
         this.applyPostAuthChecks(context, authInfoResult);
+        // 请求终端: 优先上下文(登录入口已归一); 社交/通行密钥等旁路入口按请求头补齐, 缺头回落 web 不留空
+        String terminal = WebHeaderCode.normalizeTerminal(Objects.nonNull(context.getTerminal())
+                ? context.getTerminal() : context.getRequest().getHeader(WebHeaderCode.X_TERMINAL));
         // 创建登录态
-        this.doSaLogin(authInfoResult, context.getClientCode(), context.getAuthLoginType());
+        this.doSaLogin(authInfoResult, context.getClientCode(), context.getAuthLoginType(), terminal);
         // 登录成功回调
         this.loginSuccessHandler(context.getRequest(), context.getResponse(), authInfoResult);
         return StpUtil.getTokenValue();
@@ -144,7 +151,9 @@ public class TokenService {
         AuthInfoResult authInfoResult = new AuthInfoResult()
                 .setId(userDetail.getId())
                 .setUserDetail(userDetail);
-        this.doSaLogin(authInfoResult, context.clientCode(), context.loginType());
+        // 二次验证请求与首次登录同样携带 x-terminal 头, 归一口径一致
+        String terminal = WebHeaderCode.normalizeTerminal(request.getHeader(WebHeaderCode.X_TERMINAL));
+        this.doSaLogin(authInfoResult, context.clientCode(), context.loginType(), terminal);
         // 登录成功回调
         this.loginSuccessHandler(request, response, authInfoResult);
         return StpUtil.getTokenValue();
@@ -218,7 +227,7 @@ public class TokenService {
     }
 
     /// 执行 Sa-Token 登录(建立会话)
-    private void doSaLogin(AuthInfoResult authInfoResult, String clientCode, String loginType) {
+    private void doSaLogin(AuthInfoResult authInfoResult, String clientCode, String loginType, String terminal) {
         Object userId = authInfoResult.getId();
         var saLoginModel = new SaLoginParameter()
                 .setDeviceType(clientCode)
@@ -233,6 +242,7 @@ public class TokenService {
         boolean perDeviceKickOldest = this.applyConcurrentConfig(saLoginModel, config, userId, clientCode);
 
         authInfoResult.setClient(clientCode)
+                .setTerminal(terminal)
                 .setLoginType(loginType);
         StpUtil.login(userId, saLoginModel);
 
@@ -246,6 +256,8 @@ public class TokenService {
         SaSession session = StpUtil.getSession();
         UserDetail userDetail = authInfoResult.getUserDetail();
         session.set(CommonCode.USER, userDetail);
+        // 记录最近一次登录终端, 供在线会话展示(账号级会话仅一份, 多端登录时为最后登录终端)
+        session.set(CommonCode.TERMINAL, terminal);
     }
 
     /// 应用在线时长与活跃超时配置

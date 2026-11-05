@@ -8,6 +8,7 @@ import cn.daxpay.open.payment.trade.enums.RefundOrderStatusEnum;
 import cn.daxpay.open.payment.common.result.DaxResult;
 import cn.daxpay.open.payment.trade.runtime.bo.RefundResultBo;
 import cn.daxpay.open.payment.trade.order.entity.RefundOrder;
+import cn.daxpay.open.platform.core.exception.ChannelResultUnknownException;
 import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,12 @@ public class YeepayRefundService {
         req.setCredential(credential);
 
         DaxResult<YeepayRefundResp> result = yeepayChannelClient.refund(req);
+        // 子应用返回"结果未知"(上游通道连接中断/读超时): 保持 PROGRESS 交由退款同步查单纠正,
+        // 避免误判 FAIL 导致资金悬挂
+        if (result.getCode() == ChannelResultUnknownException.RESULT_UNKNOWN_CODE) {
+            throw new ChannelResultUnknownException("pay.error.channelResultUnknown",
+                    new RuntimeException(result.getMsg()));
+        }
         if (result.getCode() != 0) {
             log.error("易宝通道退款失败: refundNo={}, msg={}", refundOrder.getRefundNo(), result.getMsg());
             return new RefundResultBo()

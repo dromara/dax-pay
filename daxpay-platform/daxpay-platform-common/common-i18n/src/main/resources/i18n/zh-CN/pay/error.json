@@ -19,6 +19,7 @@
   "configNotEnable": "配置未启用",
   "configError": "配置错误",
   "systemUnknown": "未知异常，系统无法处理",
+  "systemError": "系统异常，请稍后重试",
   "methodNotExist": "不存在的支付方式",
   "methodNotEnable": "支付方式未启用",
   "orderNoRequired": "支付订单号不能都为空",

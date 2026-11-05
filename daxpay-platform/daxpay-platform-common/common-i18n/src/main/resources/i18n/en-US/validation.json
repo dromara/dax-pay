@@ -167,7 +167,7 @@
     "amount": {
       "notNull": "Payment amount cannot be blank",
       "min": "Payment amount cannot be less than 1 cent",
-      "max": "Payment amount cannot exceed 100 million yuan",
+      "max": "Payment amount cannot exceed 9999999999 cents",
       "positive": "Amount must be greater than 0"
     },
     "title": {
@@ -233,7 +233,8 @@
       "notBlank": "Pay brand must not be blank"
     },
     "limitPay": {
-      "size": "Limit pay type cannot exceed 128 characters"
+      "size": "At most 10 limit pay types are allowed",
+      "itemSize": "Limit pay type code cannot exceed 32 characters"
     },
     "channelAppId": {
       "size": "Op app ID cannot exceed 128 characters",
@@ -243,7 +244,15 @@
       "size": "Open ID cannot exceed 128 characters"
     },
     "terminalNo": {
-      "size": "Terminal no. cannot exceed 128 characters"
+      "size": "Terminal no. cannot exceed 64 characters"
+    },
+    "longitude": {
+      "min": "Longitude cannot be less than -180",
+      "max": "Longitude cannot be greater than 180"
+    },
+    "latitude": {
+      "min": "Latitude cannot be less than -90",
+      "max": "Latitude cannot be greater than 90"
     },
     "extraParam": {
       "size": "Extra param cannot exceed 2048 characters"
@@ -497,6 +506,7 @@
     },
     "storeNo": {
       "size": "Store number cannot exceed 64 characters",
+      "terminalSize": "Store number cannot exceed 32 characters",
       "notBlank": "Store number cannot be blank"
     },
     "operatorId": {

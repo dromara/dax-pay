@@ -14,6 +14,7 @@ import cn.daxpay.open.platform.core.code.CommonErrorCode;
 import cn.daxpay.open.platform.core.code.DaxPayErrorCode;
 import cn.daxpay.open.platform.core.enums.unipay.PayBodyTypeEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
+import cn.daxpay.open.platform.core.exception.ChannelResultUnknownException;
 import cn.daxpay.open.platform.system.service.config.infra.PlatformUrlConfigService;
 import cn.hutool.core.util.StrUtil;
 import lombok.RequiredArgsConstructor;
@@ -62,6 +63,12 @@ public class EasyPayPayService {
 
         // 调用子应用
         DaxResult<EasyPayPayResp> result = easyPayChannelClient.pay(req);
+        // 子应用返回"结果未知"(上游通道连接中断/读超时): 保持 PROCESSING 交由定时同步查单纠正,
+        // 避免误判 FAIL 导致资金悬挂
+        if (result.getCode() == ChannelResultUnknownException.RESULT_UNKNOWN_CODE) {
+            throw new ChannelResultUnknownException("pay.error.channelResultUnknown",
+                    new RuntimeException(result.getMsg()));
+        }
         if (result.getCode() != 0) {
             // 易支付支付异常
             throw new BizInfoException(DaxPayErrorCode.TRADE_FAIL, "error.channel.easypay.payFailed", result.getMsg());

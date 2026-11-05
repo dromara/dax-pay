@@ -5,6 +5,7 @@ import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.channel.PayMethodEnum;
 import cn.daxpay.open.payment.unipay.param.MerchantPaymentCommonParam;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
@@ -98,7 +99,7 @@ public class NormalPayParam extends MerchantPaymentCommonParam {
     /// @see cn.daxpay.open.platform.core.enums.unipay.PayLimitPayEnum
     @Schema(description = "限制支付类型")
     @Size(max = 10, message = "{validation.field.limitPay.size}")
-    private List<@Size(max = 32, message = "{validation.field.limitPay.size}") String> limitPay;
+    private List<@Size(max = 32, message = "{validation.field.limitPay.itemSize}") String> limitPay;
 
     /// 支付扩展参数（JSON 格式，通道特有的长尾参数）
     @Schema(description = "支付扩展参数")
@@ -149,10 +150,17 @@ public class NormalPayParam extends MerchantPaymentCommonParam {
     // ===== 来源 =====
 
     /// 交易来源（内部使用，如易支付协议层写入 easy_pay；空则默认 mch_api）
+    /// 内部调用方均走 Java setter 注入, 公网 JSON 传入一律忽略, 防止商户自报来源改写风控场景判定与来源审计
     /// @see cn.daxpay.open.platform.core.enums.pay.trade.TradeSourceEnum
     @Schema(description = "交易来源", hidden = true)
+    @JsonIgnore
     @Size(max = 32, message = "{validation.field.source.size}")
     private String source;
+
+    /// 码牌编码(内部使用: 码牌入口写入, 公网请求忽略)
+    @Schema(description = "码牌编码", hidden = true)
+    @JsonIgnore
+    private String qrCode;
 
     /// 是否分账订单(下单时透传通道分账标识, 如支付宝 royalty_freeze / 微信 profit_sharing / 抖音 split_info)
     /// 传 true 后该笔订单资金将被冻结, 仅可通过发起分账进行拆分。

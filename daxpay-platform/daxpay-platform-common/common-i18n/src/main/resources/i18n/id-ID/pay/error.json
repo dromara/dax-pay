@@ -19,6 +19,7 @@
   "configNotEnable": "Konfigurasi Tidak Diaktifkan",
   "configError": "Kesalahan Konfigurasi",
   "systemUnknown": "Kesalahan Tidak Diketahui, Sistem Tidak Dapat Memproses",
+  "systemError": "Kesalahan sistem, silakan coba lagi nanti",
   "methodNotExist": "Metode pembayaran tidak ada",
   "methodNotEnable": "Metode pembayaran tidak diaktifkan",
   "orderNoRequired": "Nomor perintah pembayaran wajib diisi",

@@ -16,6 +16,9 @@ public class AuthInfoResult {
     /// 认证终端(例如管理端/商户端/代理端等)
     private String client = "";
 
+    /// 请求终端(web/app/elf, 已白名单归一), 与认证终端正交, 供登录日志落库
+    private String terminal = "";
+
     /// 登录方式(例如web/开放平台/app等)
     private String loginType = "";
 

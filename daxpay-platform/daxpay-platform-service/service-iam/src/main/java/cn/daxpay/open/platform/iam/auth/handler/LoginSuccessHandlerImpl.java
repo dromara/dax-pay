@@ -47,6 +47,7 @@ public class LoginSuccessHandlerImpl implements LoginSuccessHandler {
         var loginLog = new LoginLogParam().setLogin(true)
                 .setUserId(authInfoResult.getUserDetail().getId())
                 .setClient(authInfoResult.getClient())
+                .setTerminal(authInfoResult.getTerminal())
                 .setLoginType(authInfoResult.getLoginType())
                 .setAccount(authInfoResult.getUserDetail().getAccount())
                 .setIp(ip)

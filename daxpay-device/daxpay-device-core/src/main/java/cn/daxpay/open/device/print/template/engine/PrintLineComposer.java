@@ -305,7 +305,7 @@ public final class PrintLineComposer {
         return BarcodeCodec.moduleCount(content) * moduleWidth;
     }
 
-    /// 二维码行: 空内容(变量缺项)跳过; 密度按 58mm 最坏纸宽卡下限(设备纸宽才是渲染权威), 实际纸宽下自动取更大模块
+    /// 二维码行: 空内容(变量缺项)跳过; 目标宽统一 58mm 物理口径(见 [QrCodec#moduleDots]), 两档纸宽落纸尺寸一致
     private static void appendQr(QrElement e, int dotsPerLine, List<LineModel.Line> lines) {
         String content = e.value() == null ? "" : e.value().trim();
         if (content.isEmpty()) {

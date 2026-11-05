@@ -26,6 +26,7 @@ import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /// # 在线用户服务
@@ -99,6 +100,8 @@ public class OnlineUserService {
                         .setUsername(userDetail.getName())
                         .setAccount(userDetail.getAccount())
                         .setClientCode(userDetail.getClientCode())
+                        // 登录终端取自会话属性(账号级会话仅一份, 多端登录时为最后登录终端); 旧会话/网关无此属性展示 '-'
+                        .setTerminal(Optional.ofNullable(session.getModel(CommonCode.TERMINAL, String.class)).orElse("-"))
                         .setLoginTime(toLocalDateTime(session.getCreateTime()));
 
                 allResults.add(result);

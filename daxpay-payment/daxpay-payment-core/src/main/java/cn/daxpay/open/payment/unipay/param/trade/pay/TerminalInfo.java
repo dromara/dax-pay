@@ -3,6 +3,8 @@ package cn.daxpay.open.payment.unipay.param.trade.pay;
 import cn.daxpay.open.payment.device.terminal.service.TerminalResolveService;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.DecimalMax;
+import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
@@ -18,8 +20,8 @@ public class TerminalInfo {
     @Schema(description = "终端设备号")
     private String terminalNo;
 
-    /// 门店编号
-    @Size(max = 64, message = "{validation.field.storeNo.size}")
+    /// 门店编号(对齐 pay_normal_order.store_no / 门店表 store_no 列宽 32)
+    @Size(max = 32, message = "{validation.field.storeNo.terminalSize}")
     @Schema(description = "门店编号")
     private String storeNo;
 
@@ -39,10 +41,14 @@ public class TerminalInfo {
     private String deviceIp;
 
     /// 经度
+    @DecimalMin(value = "-180", message = "{validation.field.longitude.min}")
+    @DecimalMax(value = "180", message = "{validation.field.longitude.max}")
     @Schema(description = "经度")
     private Double longitude;
 
     /// 纬度
+    @DecimalMin(value = "-90", message = "{validation.field.latitude.min}")
+    @DecimalMax(value = "90", message = "{validation.field.latitude.max}")
     @Schema(description = "纬度")
     private Double latitude;
 
@@ -54,4 +60,12 @@ public class TerminalInfo {
     @Schema(hidden = true)
     @JsonIgnore
     private String resolvedOutTerminalNo;
+
+    /// 解析出的通道报备差异化参数(JSON 原文), 服务端回填, 客户端传入无效
+    ///
+    /// [TerminalResolveService] 解析报备号时从通道终端配置的扩展参数回填,
+    /// 供通道解析门店级编号(如拉卡拉 storeId); 对接方无须上送。
+    @Schema(hidden = true)
+    @JsonIgnore
+    private String resolvedChannelExtra;
 }

@@ -19,6 +19,7 @@
   "configNotEnable": "Configuration Not Enabled",
   "configError": "Configuration Error",
   "systemUnknown": "Unknown Error, System Cannot Process",
+  "systemError": "System error, please try again later",
   "methodNotExist": "Payment method does not exist",
   "methodNotEnable": "Payment method not enabled",
   "orderNoRequired": "Payment order number cannot be empty",

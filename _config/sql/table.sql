@@ -12724,6 +12724,7 @@ CREATE TABLE public.pay_normal_order (
     terminal_no character varying(128),
     out_terminal_no character varying(64),
     store_no character varying(32),
+    qr_code character varying(64),
     error_msg character varying(500),
     mch_no character varying(64) NOT NULL,
     creator bigint,
@@ -12986,6 +12987,12 @@ COMMENT ON COLUMN public.pay_normal_order.out_terminal_no IS '通道侧终端号
 --
 
 COMMENT ON COLUMN public.pay_normal_order.store_no IS '门店号(线下经营归属, 可空)';
+
+--
+-- Name: COLUMN pay_normal_order.qr_code; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.pay_normal_order.qr_code IS '码牌编码';
 
 --
 -- Name: COLUMN pay_normal_order.error_msg; Type: COMMENT; Schema: public; Owner: -
@@ -15929,6 +15936,7 @@ CREATE TABLE public.starter_audit_login_log (
     account character varying(200),
     login boolean DEFAULT false,
     client character varying(100),
+    terminal character varying(16),
     login_type character varying(100),
     ip character varying(100),
     login_location character varying(200),
@@ -15979,6 +15987,12 @@ COMMENT ON COLUMN public.starter_audit_login_log.login IS '登录成功状态';
 --
 
 COMMENT ON COLUMN public.starter_audit_login_log.client IS '登录终端';
+
+--
+-- Name: COLUMN starter_audit_login_log.terminal; Type: COMMENT; Schema: public; Owner: -
+--
+
+COMMENT ON COLUMN public.starter_audit_login_log.terminal IS '登录终端类型(web/app/elf)';
 
 --
 -- Name: COLUMN starter_audit_login_log.login_type; Type: COMMENT; Schema: public; Owner: -

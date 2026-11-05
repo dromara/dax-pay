@@ -19,6 +19,7 @@
   "configNotEnable": "구성이 활성화되지 않음",
   "configError": "구성 오류",
   "systemUnknown": "알 수 없는 오류, 시스템이 처리할 수 없음",
+  "systemError": "시스템 오류입니다. 잠시 후 다시 시도하십시오.",
   "methodNotExist": "결제 수단이 존재하지 않습니다.",
   "methodNotEnable": "결제 수단이 활성화되지 않았습니다.",
   "orderNoRequired": "결제 주문 번호는 비워둘 수 없습니다.",

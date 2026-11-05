@@ -25,6 +25,9 @@ public class LoginLogParam {
     @Schema(description = "登录终端")
     private String client;
 
+    @Schema(description = "登录终端类型(web/app/elf)")
+    private String terminal;
+
     @Schema(description = "登录方式")
     private String loginType;
 

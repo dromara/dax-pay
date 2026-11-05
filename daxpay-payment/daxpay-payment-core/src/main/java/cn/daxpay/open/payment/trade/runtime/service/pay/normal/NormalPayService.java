@@ -2,7 +2,7 @@ package cn.daxpay.open.payment.trade.runtime.service.pay.normal;
 
 import cn.daxpay.open.platform.capability.sensitiveword.enums.SensitiveWordSceneEnum;
 import cn.daxpay.open.platform.capability.sensitiveword.service.SensitiveWordCheckService;
-import cn.daxpay.open.platform.core.code.CommonErrorCode;
+import cn.daxpay.open.platform.core.code.PayErrorCode;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.exception.ChannelResultUnknownException;
 import cn.daxpay.open.platform.core.exception.PayFailureException;
@@ -79,7 +79,8 @@ public class NormalPayService {
                 TradeLockKeys.pay(payParam.getMchNo(), bizOrderNo),
                 TradeLockKeys.LONG_EXPIRE, TradeLockKeys.LONG_WAIT,
                 () -> this.payHandle(payParam),
-                () -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.processing")
+                // 交易处理中(20043): 同号并发请求锁等待超时, 语义化告知勿重复发起
+                () -> new BizInfoException(PayErrorCode.TRADE_PROCESSING, "pay.error.pay.processing")
         );
     }
 

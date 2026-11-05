@@ -43,7 +43,7 @@ public sealed interface PrintTemplateElement
     /// 条码行: CODE128(内容须 ASCII, 非 ASCII 运行时降级为文本行)
     record BarcodeElement(String value, Integer height, Integer moduleWidth) implements PrintTemplateElement {}
 
-    /// 二维码行: 内容可为单号或链接(支持变量), 打印端按 58mm 最坏纸宽自适应模块点数
+    /// 二维码行: 内容可为单号或链接(支持变量), 打印端统一按 58mm 物理口径推导模块点数(两档纸宽落纸尺寸一致)
     record QrElement(String value) implements PrintTemplateElement {}
 
     /// 商品明细块: 消费独立的明细上下文(不参与 ${} 变量替换), 两行式展开

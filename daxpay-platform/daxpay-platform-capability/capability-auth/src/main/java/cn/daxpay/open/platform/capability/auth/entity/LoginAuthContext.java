@@ -28,6 +28,9 @@ public class LoginAuthContext {
     @NotNull
     private String clientCode;
 
+    /// 请求终端(web/app/elf, 已白名单归一), 与身份域正交
+    private String terminal;
+
     /// 登录方式
     @NotNull
     private String authLoginType;

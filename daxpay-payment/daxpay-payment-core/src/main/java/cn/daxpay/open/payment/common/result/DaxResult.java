@@ -31,7 +31,8 @@ public class DaxResult<T>{
     @Schema(description = "签名")
     private String sign;
 
-    @Schema(description = "响应时间(北京时间)")
+    /// 响应时间(全系统统一东八区口径, 格式 yyyy-MM-dd HH:mm:ss, 无时区换算)
+    @Schema(description = "响应时间(东八区, yyyy-MM-dd HH:mm:ss)")
     @JsonFormat(pattern = UnipayTimeFormat.PATTERN, timezone = UnipayTimeFormat.ZONE)
     private OffsetDateTime resTime;
 

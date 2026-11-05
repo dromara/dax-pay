@@ -137,6 +137,10 @@ public class NormalPayOrderResult extends BaseResult {
     @Schema(description = "门店号")
     private String storeNo;
 
+    /// 码牌编码(码牌支付来源, 可空)
+    @Schema(description = "码牌编码")
+    private String qrCode;
+
     // ===== 资金凭证(PayTrade)联表字段, 仅详情时填充 =====
 
     /// 资金交易号

@@ -7,6 +7,7 @@ import cn.daxpay.open.platform.core.enums.pay.channel.ProductEnum;
 import cn.daxpay.open.platform.core.enums.pay.trade.TradeSourceEnum;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
+import cn.daxpay.open.platform.core.code.PayErrorCode;
 import cn.daxpay.open.platform.core.util.DateTimeUtil;
 import cn.daxpay.open.platform.core.util.TradeNoGenerateUtil;
 import cn.daxpay.open.payment.common.context.PaymentContext;
@@ -145,6 +146,8 @@ public class NormalPayAssistService {
                 ? payParam.getTerminal().getResolvedOutTerminalNo() : null);
         // 门店号: 线下经营归属权威落容器
         normalOrder.setStoreNo(storeNo);
+        // 码牌编码: 码牌入口写入, 来源审计/详情展示用
+        normalOrder.setQrCode(payParam.getQrCode());
         // 客户端IP(支付入口已兜底, 作为单一事实源供退款/关单等后续流程取用)
         normalOrder.setClientIp(payParam.getClientIp());
         // --- 回调与扩展 ---
@@ -226,36 +229,38 @@ public class NormalPayAssistService {
     }
 
     /// 检查订单状态
+    ///
+    /// 幂等冲突按语义抛 [PayErrorCode] 交易域错误码: 已支付/已超时→交易状态错误; 已关闭/过期/失败→交易已关闭。
     public void checkOrder(NormalPayOrder normalOrder, PayTrade trade) {
         // 容器状态检查
         String bizStatus = normalOrder.getStatus();
         if (Objects.equals(bizStatus, NormalPayOrderStatusEnum.PAID.getCode())) {
             // 支付: 已经支付成功, 请勿重新支付
-            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.alreadySuccess");
+            throw new BizInfoException(PayErrorCode.TRADE_STATUS_ERROR, "pay.error.pay.alreadySuccess");
         }
         if (Objects.equals(bizStatus, NormalPayOrderStatusEnum.CLOSED.getCode())
                 || Objects.equals(bizStatus, NormalPayOrderStatusEnum.EXPIRED.getCode())
                 || Objects.equals(bizStatus, NormalPayOrderStatusEnum.FAILED.getCode())) {
             // 支付: 该订单支付失败或已经被关闭
-            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.failedOrClosed");
+            throw new BizInfoException(PayErrorCode.TRADE_CLOSED, "pay.error.pay.failedOrClosed");
         }
         // 资金状态检查
         String fundStatus = trade.getStatus();
         if (Objects.equals(fundStatus, PayFundStatusEnum.SUCCESS.getCode())) {
             // 支付: 已经支付成功, 请勿重新支付
-            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.alreadySuccess");
+            throw new BizInfoException(PayErrorCode.TRADE_STATUS_ERROR, "pay.error.pay.alreadySuccess");
         }
         if (Objects.equals(fundStatus, PayFundStatusEnum.CLOSE.getCode())
                 || Objects.equals(fundStatus, PayFundStatusEnum.FAIL.getCode())
                 || Objects.equals(fundStatus, PayFundStatusEnum.CANCEL.getCode())) {
             // 支付: 该订单支付失败或已经被关闭
-            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.failedOrClosed");
+            throw new BizInfoException(PayErrorCode.TRADE_CLOSED, "pay.error.pay.failedOrClosed");
         }
         // 超时检查
         if (Objects.nonNull(normalOrder.getExpiredTime())
                 && DateTimeUtil.ge(OffsetDateTime.now(ZoneOffset.UTC), normalOrder.getExpiredTime())) {
             // 支付: 支付已超时, 请重新确认支付状态
-            throw new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR, "pay.error.pay.timeoutRetry");
+            throw new BizInfoException(PayErrorCode.TRADE_STATUS_ERROR, "pay.error.pay.timeoutRetry");
         }
     }
 

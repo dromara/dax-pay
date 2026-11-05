@@ -23,7 +23,9 @@ public @interface SensitiveInfo {
     int end() default 4;
 
     /// 压缩脱敏(仅 front/end 型生效): 中间星号固定 6 颗而非全长度填充,
-    /// 长证书/私钥脱敏串从头尾各 24 字符 + 中间 6 星(总长约 54 字符), 便于表单回显与头尾核对;
+    /// - 长密钥脱敏串从注解的 front/end 位置保留明文, 中间 6 星(如 24 时总长约 54 字符), 便于表单回显与头尾核对;
+    /// - 值为多行 PEM 内容(首行 `-----BEGIN`, 末行 `-----END`)时不看本参数与 front/end, 统一按行结构脱敏:
+    ///   完整 BEGIN/END 行 + 正文首尾各 32 字符明文 + 中间星号行, 见 [SensitiveInfoSerialize#hidePem];
     /// 保留位数之和不小于原长时退化为全量脱敏 4 星
     boolean compact() default false;
 

@@ -29,6 +29,9 @@ public class LoginLogResult {
     @Schema(description = "登录终端")
     private String client;
 
+    @Schema(description = "登录终端类型(web=PC Web端/app=移动端/elf=PC收款精灵)")
+    private String terminal;
+
     @Schema(description = "登录方式")
     private String loginType;
 

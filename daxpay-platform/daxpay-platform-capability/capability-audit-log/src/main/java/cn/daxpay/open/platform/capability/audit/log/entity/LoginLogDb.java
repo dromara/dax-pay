@@ -28,8 +28,11 @@ public class LoginLogDb extends MpBaseEntity implements ToResult<LoginLogResult>
     /// 登录成功状态
     private Boolean login;
 
-    /// 登录终端
+    /// 登录终端(身份域)
     private String client;
+
+    /// 登录终端类型(web=PC Web端/app=移动端/elf=PC收款精灵, 旧数据为空)
+    private String terminal;
 
     /// 登录方式
     private String loginType;

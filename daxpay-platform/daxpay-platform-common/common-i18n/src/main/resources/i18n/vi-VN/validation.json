@@ -141,7 +141,7 @@
     "amount": {
       "notNull": "Số tiền thanh toán không được để trống",
       "min": "Số tiền thanh toán không thể nhỏ hơn 1 xu",
-      "max": "Số tiền thanh toán không thể vượt quá 100 triệu nhân dân tệ",
+      "max": "Số tiền thanh toán không thể vượt quá 9999999999 xu",
       "positive": "Số tiền phải lớn hơn 0"
     },
     "title": {
@@ -211,7 +211,8 @@
       "notBlank": "Thương hiệu thanh toán không được để trống"
     },
     "limitPay": {
-      "size": "Loại thanh toán giới hạn không thể vượt quá 128 ký tự"
+      "size": "Loại thanh toán giới hạn tối đa 10 mục",
+      "itemSize": "Mã loại thanh toán giới hạn không thể vượt quá 32 ký tự"
     },
     "channelAppId": {
       "size": "ID ứng dụng Op không được vượt quá 128 ký tự",
@@ -221,7 +222,15 @@
       "size": "ID mở không được vượt quá 128 ký tự"
     },
     "terminalNo": {
-      "size": "Thiết bị đầu cuối số không thể vượt quá 128 ký tự"
+      "size": "Thiết bị đầu cuối số không thể vượt quá 64 ký tự"
+    },
+    "longitude": {
+      "min": "Kinh độ không thể nhỏ hơn -180",
+      "max": "Kinh độ không thể lớn hơn 180"
+    },
+    "latitude": {
+      "min": "Vĩ độ không thể nhỏ hơn -90",
+      "max": "Vĩ độ không thể lớn hơn 90"
     },
     "extraParam": {
       "size": "Thông số bổ sung không được vượt quá 2048 ký tự"
@@ -471,6 +480,7 @@
     },
     "storeNo": {
       "size": "Số cửa hàng không thể vượt quá 64 ký tự",
+      "terminalSize": "Số cửa hàng không thể vượt quá 32 ký tự",
       "notBlank": "Số cửa hàng không được để trống"
     },
     "operatorId": {

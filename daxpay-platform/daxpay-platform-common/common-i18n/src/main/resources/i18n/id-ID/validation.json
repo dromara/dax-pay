@@ -141,7 +141,7 @@
     "amount": {
       "notNull": "Jumlah pembayaran tidak boleh kosong",
       "min": "Jumlah pembayaran tidak boleh kurang dari 1 sen",
-      "max": "Jumlah pembayaran tidak boleh melebihi 100 juta yuan",
+      "max": "Jumlah pembayaran tidak boleh melebihi 9999999999 sen",
       "positive": "Jumlahnya harus lebih besar dari 0"
     },
     "title": {
@@ -211,7 +211,8 @@
       "notBlank": "Merek pembayaran wajib diisi"
     },
     "limitPay": {
-      "size": "Jenis pembayaran batas tidak boleh melebihi 128 karakter"
+      "size": "Jenis pembayaran batas maksimal 10 item",
+      "itemSize": "Kode jenis pembayaran batas tidak boleh melebihi 32 karakter"
     },
     "channelAppId": {
       "size": "ID aplikasi op tidak boleh melebihi 128 karakter",
@@ -221,7 +222,15 @@
       "size": "ID Terbuka tidak boleh melebihi 128 karakter"
     },
     "terminalNo": {
-      "size": "Terminal no. tidak boleh melebihi 128 karakter"
+      "size": "Terminal no. tidak boleh melebihi 64 karakter"
+    },
+    "longitude": {
+      "min": "Bujur tidak boleh kurang dari -180",
+      "max": "Bujur tidak boleh lebih dari 180"
+    },
+    "latitude": {
+      "min": "Lintang tidak boleh kurang dari -90",
+      "max": "Lintang tidak boleh lebih dari 90"
     },
     "extraParam": {
       "size": "Param ekstra tidak boleh melebihi 2048 karakter"
@@ -471,6 +480,7 @@
     },
     "storeNo": {
       "size": "Nomor toko tidak boleh melebihi 64 karakter",
+      "terminalSize": "Nomor toko tidak boleh melebihi 32 karakter",
       "notBlank": "Nomor toko tidak boleh kosong"
     },
     "operatorId": {

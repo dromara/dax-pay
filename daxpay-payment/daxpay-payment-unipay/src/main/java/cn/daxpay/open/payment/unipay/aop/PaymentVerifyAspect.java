@@ -9,6 +9,7 @@ import cn.daxpay.open.platform.common.request.context.RequestContextHolder;
 import cn.daxpay.open.platform.common.spring.util.WebServletUtil;
 import cn.daxpay.open.platform.core.code.CommonCode;
 import cn.daxpay.open.platform.core.code.CommonErrorCode;
+import cn.daxpay.open.platform.core.code.PayErrorCode;
 import cn.daxpay.open.platform.core.event.UnipayApiAccessLogEvent;
 import cn.daxpay.open.platform.core.exception.BizException;
 import cn.daxpay.open.platform.core.exception.BizInfoException;
@@ -93,7 +94,7 @@ public class PaymentVerifyAspect {
             Object proceed = pjp.proceed();
             // 对返回值添加响应时间、reqId 并进行签名(traceId 走响应头, 不进 body)
             if (proceed instanceof DaxResult<?> daxResult) {
-                daxResult.setResTime(OffsetDateTime.now(ZoneOffset.UTC));
+                daxResult.setResTime(OffsetDateTime.now(ZoneOffset.ofHours(8)));
                 enrichDaxResult(daxResult, reqId);
                 paymentSignService.sign(daxResult);
                 result = daxResult;
@@ -107,6 +108,17 @@ public class PaymentVerifyAspect {
             // 签名用平台私钥、不依赖商户上下文，商户不存在时同样可签，失败与成功响应形状一致；
             // msg 按 Accept-Language 解析 messageKey（见 resolveResponseMessage），不透出原始 key
             DaxResult<Void> daxResult = new DaxResult<>(ex.getCode(), resolveResponseMessage(ex));
+            enrichDaxResult(daxResult, reqId);
+            paymentSignService.sign(daxResult);
+            result = daxResult;
+            return daxResult;
+        } catch (Exception ex) {
+            // 系统异常兜底: 非 BizException 也统一渲染为签名 DaxResult 壳(code/msg/sign/reqId),
+            // 避免落入全局异常处理器返回无签名响应, 商户 SDK 被迫适配两套响应;
+            // 文案走 messageKey 本地化, 不暴露异常详情
+            log.error("支付接口系统异常: {}", ex.getMessage(), ex);
+            DaxResult<Void> daxResult = new DaxResult<>(PayErrorCode.SYSTEM_UNKNOWN_ERROR,
+                    I18nUtil.get("pay.error.systemError"));
             enrichDaxResult(daxResult, reqId);
             paymentSignService.sign(daxResult);
             result = daxResult;

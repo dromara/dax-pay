@@ -19,6 +19,7 @@
   "configNotEnable": "Konfigurasi Tidak Didayakan",
   "configError": "Ralat Konfigurasi",
   "systemUnknown": "Ralat Tidak Diketahui, Sistem Tidak Dapat Memproses",
+  "systemError": "Ralat sistem, sila cuba lagi kemudian",
   "methodNotExist": "Kaedah pembayaran tidak wujud",
   "methodNotEnable": "Kaedah pembayaran tidak didayakan",
   "orderNoRequired": "Nombor pesanan pembayaran tidak boleh kosong",

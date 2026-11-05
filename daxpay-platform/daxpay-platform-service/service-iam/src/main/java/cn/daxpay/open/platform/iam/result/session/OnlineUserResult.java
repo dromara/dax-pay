@@ -28,6 +28,9 @@ public class OnlineUserResult {
     @Schema(description = "身份域编码")
     private String clientCode;
 
+    @Schema(description = "登录终端类型(web=PC Web端/app=移动端/elf=PC收款精灵, 旧会话为'-')")
+    private String terminal;
+
     @Schema(description = "登录时间 (UTC)")
     private OffsetDateTime loginTime;
 }

@@ -180,6 +180,9 @@ public class NormalPayOrder extends MchBaseEntity implements AllocatableContaine
     /// 门店号（线下经营归属，可空；对应 [MchStoreInfo#storeNo]）
     private String storeNo;
 
+    /// 码牌编码(码牌支付来源, 可空; 对应 [cn.daxpay.open.payment.device.qrcode.entity.DeviceQrCode#code])
+    private String qrCode;
+
     /// 错误信息
     @TableField(updateStrategy = FieldStrategy.ALWAYS)
     private String errorMsg;

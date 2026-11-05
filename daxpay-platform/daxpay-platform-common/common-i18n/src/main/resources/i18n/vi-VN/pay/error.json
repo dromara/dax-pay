@@ -19,6 +19,7 @@
   "configNotEnable": "Cấu hình không được kích hoạt",
   "configError": "Lỗi cấu hình",
   "systemUnknown": "Lỗi không xác định, hệ thống không thể xử lý",
+  "systemError": "Lỗi hệ thống, vui lòng thử lại sau",
   "methodNotExist": "Phương thức thanh toán không tồn tại",
   "methodNotEnable": "Phương thức thanh toán chưa được kích hoạt",
   "orderNoRequired": "Số lệnh thanh toán không được để trống",

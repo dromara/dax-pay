@@ -48,9 +48,12 @@ public class LoginFailureHandlerImpl implements LoginFailureHandler {
 
         String loginType = SecurityUtil.getLoginType(request);
         String client = SecurityUtil.getClient(request);
+        // 请求终端白名单归一, 与登录成功路径口径一致
+        String terminal = WebHeaderCode.normalizeTerminal(request.getHeader(WebHeaderCode.X_TERMINAL));
         LoginLogParam loginLog = new LoginLogParam().setAccount(e.getAccount())
                 .setLogin(false)
                 .setClient(client)
+                .setTerminal(terminal)
                 .setLoginType(loginType)
                 .setMsg(e.getMessage())
                 .setIp(ip)

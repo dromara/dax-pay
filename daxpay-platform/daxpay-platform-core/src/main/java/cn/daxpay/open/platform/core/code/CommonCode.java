@@ -19,6 +19,9 @@ public interface CommonCode {
     /// 用户
     String USER = "user";
 
+    /// 登录终端(会话属性: web/app/elf, 由登录时 x-terminal 请求头归一写入)
+    String TERMINAL = "terminal";
+
     /// 创建人字段
     String CREATOR = "creator";
 

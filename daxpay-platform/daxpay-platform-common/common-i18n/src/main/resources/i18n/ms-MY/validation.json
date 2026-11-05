@@ -141,7 +141,7 @@
     "amount": {
       "notNull": "Jumlah bayaran tidak boleh kosong",
       "min": "Jumlah bayaran tidak boleh kurang daripada 1 sen",
-      "max": "Jumlah bayaran tidak boleh melebihi 100 juta yuan",
+      "max": "Jumlah bayaran tidak boleh melebihi 9999999999 sen",
       "positive": "Jumlah mestilah lebih besar daripada 0"
     },
     "title": {
@@ -211,7 +211,8 @@
       "notBlank": "Jenama bayar tidak boleh kosong"
     },
     "limitPay": {
-      "size": "Jenis bayaran had tidak boleh melebihi 128 aksara"
+      "size": "Jenis bayaran had maksimum 10 item",
+      "itemSize": "Kod jenis bayaran had tidak boleh melebihi 32 aksara"
     },
     "channelAppId": {
       "size": "ID apl Op tidak boleh melebihi 128 aksara",
@@ -221,7 +222,15 @@
       "size": "ID terbuka tidak boleh melebihi 128 aksara"
     },
     "terminalNo": {
-      "size": "Terminal no. tidak boleh melebihi 128 aksara"
+      "size": "Terminal no. tidak boleh melebihi 64 aksara"
+    },
+    "longitude": {
+      "min": "Longitud tidak boleh kurang daripada -180",
+      "max": "Longitud tidak boleh melebihi 180"
+    },
+    "latitude": {
+      "min": "Latitud tidak boleh kurang daripada -90",
+      "max": "Latitud tidak boleh melebihi 90"
     },
     "extraParam": {
       "size": "Param tambahan tidak boleh melebihi 2048 aksara"
@@ -471,6 +480,7 @@
     },
     "storeNo": {
       "size": "Nombor kedai tidak boleh melebihi 64 aksara",
+      "terminalSize": "Nombor kedai tidak boleh melebihi 32 aksara",
       "notBlank": "Nombor kedai tidak boleh kosong"
     },
     "operatorId": {

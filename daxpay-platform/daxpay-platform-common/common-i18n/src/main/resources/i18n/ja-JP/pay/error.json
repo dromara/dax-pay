@@ -19,6 +19,7 @@
   "configNotEnable": "構成が有効になっていません",
   "configError": "構成エラー",
   "systemUnknown": "不明なエラー、システムが処理できません",
+  "systemError": "システム異常です。しばらくしてから再試行してください",
   "methodNotExist": "支払い方法が存在しません",
   "methodNotEnable": "支払い方法が有効になっていません",
   "orderNoRequired": "支払い注文番号を空にすることはできません",

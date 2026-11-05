@@ -19,8 +19,26 @@ public interface WebHeaderCode {
     /// 身份域编码
     String X_CLIENT_CODE = "x-client-code";
 
-    /// 请求终端: web=PC Web端 / app=移动管理端
+    /// 请求终端: web=PC Web端 / app=移动端 / elf=PC收款精灵
     String X_TERMINAL = "x-terminal";
+
+    /// 终端类型: PC Web端
+    String TERMINAL_WEB = "web";
+
+    /// 终端类型: 移动端(APP/小程序)
+    String TERMINAL_APP = "app";
+
+    /// 终端类型: PC收款精灵
+    String TERMINAL_ELF = "elf";
+
+    /// 归一化请求终端值: 入参属于 {web, app, elf} 白名单时原样返回, 其余(含空)回退 web
+    /// 防止任意头值伪造终端桶绕过按终端的并发登录限制
+    static String normalizeTerminal(String terminal) {
+        if (TERMINAL_WEB.equals(terminal) || TERMINAL_APP.equals(terminal) || TERMINAL_ELF.equals(terminal)) {
+            return terminal;
+        }
+        return TERMINAL_WEB;
+    }
 
     /// 国际化语言
     String ACCEPT_LANGUAGE = "accept-language";
