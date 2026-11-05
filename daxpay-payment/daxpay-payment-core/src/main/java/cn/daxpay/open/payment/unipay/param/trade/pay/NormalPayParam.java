@@ -84,7 +84,7 @@ public class NormalPayParam extends MerchantPaymentCommonParam {
     @Schema(description = "用户标识OpenId")
     private String openId;
 
-    /// 通道应用 AppId（微信 wxAppId 等）；非空则强制使用(须预配)，空则按 capability 路由解析
+    /// 通道应用 AppId（微信 wxAppId 等）；非空则强制使用（微信应用未登记时按透传处理，支付宝/抖音须已登记），空则按 capability 路由解析
     @Size(max = 128, message = "{validation.field.channelAppId.size}")
     @Schema(description = "通道应用AppId")
     private String channelAppId;

@@ -266,6 +266,10 @@ public class GatewayAuthService {
         if (authType == ChannelAuthTypeEnum.WECHAT) {
             WxAppView app = wxAppFacade.resolve(
                     mchNo, route.channelMchNo(), route.capability(), route.channelAppId(), route.product());
+            // 未登记应用透传视图无密钥档案, 平台承接的 OAuth 换不了 openid, 明确拦截
+            if (app.id() == null) {
+                throw new DataNotExistException("error.payment.wx.channelAppIdNotRegistered", app.wxAppId());
+            }
             authParam.setAppScope(app.scope().getCode());
             authParam.setAppRefId(app.id());
         }

@@ -6,7 +6,7 @@
   "appInUse": "Douyin app is still referenced by capability bindings and cannot be deleted",
   "appTypeCapabilityMismatch": "Douyin app type is incompatible with the payment capability",
   "scopeNotExist": "Douyin app scope does not exist or reference is invalid",
-  "channelAppIdNotFound": "Specified Douyin AppId [{0}] is not configured in the system",
+  "channelAppIdNotFound": "The Douyin AppId [{0}] specified in the request is not registered in the system. Please check whether it is correct, or register the app in App Configuration first",
   "appNotBound": "No Douyin app is bound",
   "channelMerchantMismatch": "Channel merchant does not exist or does not match the merchant number",
   "appNotConfigured": "No application configured for {0}, please bind one on the channel merchant app configuration page",

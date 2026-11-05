@@ -6,7 +6,7 @@
   "appInUse": "Ứng dụng Douyin vẫn được tham chiếu bởi liên kết năng lực, không thể xóa",
   "appTypeCapabilityMismatch": "Loại ứng dụng Douyin không tương thích với khả năng thanh toán",
   "scopeNotExist": "Phạm vi ứng dụng Douyin không tồn tại hoặc tham chiếu không hợp lệ",
-  "channelAppIdNotFound": "Douyin AppId [{0}] chưa được cấu hình trong hệ thống",
+  "channelAppIdNotFound": "AppId ứng dụng Douyin [{0}] được chỉ định trong tham số yêu cầu chưa được đăng ký trong hệ thống. Vui lòng kiểm tra xem đã nhập đúng chưa, hoặc đăng ký ứng dụng này trong Cấu hình ứng dụng trước",
   "appNotBound": "Chưa liên kết ứng dụng Douyin khả dụng",
   "channelMerchantMismatch": "Không tìm thấy merchant kênh hoặc không khớp với mã merchant",
   "appNotConfigured": "Chưa cấu hình ứng dụng cho {0}, vui lòng liên kết tại trang cấu hình ứng dụng merchant kênh",

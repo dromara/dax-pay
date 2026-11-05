@@ -13,7 +13,7 @@
   "jsapiConfigParamBlank": "Parameter tandatangan sdk.config Douyin (clientKey/clientSecret/url) kosong",
   "h5AuthNotConfigured": "Konfigurasi pengesahan aplikasi H5 Douyin tidak lengkap, sila konfigurasikan clientKey/clientSecret dalam Konfigurasi Platform terlebih dahulu",
   "authFailed": "Gagal mendapatkan id pengguna (openId): {0}",
-  "channelAppIdNotFound": "Douyin AppId [{0}] tidak dikonfigurasi dalam sistem",
+  "channelAppIdNotFound": "AppId aplikasi Douyin [{0}] yang dinyatakan dalam parameter permintaan belum didaftarkan dalam sistem. Sila semak sama ada pengisian betul, atau daftarkan aplikasi ini dalam Konfigurasi Aplikasi terlebih dahulu",
   "webAppNotFound": "Tiada apl web Douyin di bawah peniaga saluran; tidak dapat melengkapkan auth/tandatangan H5",
   "appAuthSecretMissing": "Rahsia auth apl terus Douyin tiada; konfigurasikan appSecret pada apl peniaga saluran dahulu",
   "jsapiContextRequired": "Tandatangan JSAPI Douyin memerlukan salah satu daripada orderNo, code atau channelMchNo",

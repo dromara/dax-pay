@@ -6,7 +6,7 @@
   "appInUse": "抖音应用仍被能力绑定引用，不可删除",
   "appTypeCapabilityMismatch": "抖音应用类型与支付能力不匹配",
   "scopeNotExist": "抖音应用档位不存在或引用无效",
-  "channelAppIdNotFound": "指定的抖音应用AppId[{0}]未在系统中配置",
+  "channelAppIdNotFound": "请求参数中指定的抖音应用AppId[{0}]未在系统中登记，请检查填写是否正确，或先在应用配置中登记该应用",
   "appNotBound": "未绑定可用的抖音应用",
   "channelMerchantMismatch": "通道商户不存在或与商户号不匹配",
   "appNotConfigured": "未配置 {0} 对应的应用，请前往通道商户应用配置页绑定",

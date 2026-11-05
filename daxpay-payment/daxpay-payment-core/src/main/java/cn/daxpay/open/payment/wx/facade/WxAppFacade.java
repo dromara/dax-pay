@@ -15,6 +15,9 @@ public interface WxAppFacade {
 
     /// 解析单应用：显式 channelAppId → 通道能力绑 → 产品级平台默认能力绑
     ///
+    /// 显式 channelAppId 未登记时按透传处理: 返回视图仅含 AppId, [WxAppView#id]/[WxAppView#appSecret]
+    /// 为空; 平台承接 OAuth 等依赖应用密钥的场景须以 id 为空识别并拦截, 支付/聚合通道按 AppId 直接上送即可。
+    ///
     /// @param product 支付产品编码（PayProduct.code），平台默认绑按产品隔离
     WxAppView resolve(String mchNo, String channelMchNo, String capability, String channelAppId, String product);
 
@@ -28,6 +31,9 @@ public interface WxAppFacade {
     Optional<WxAppView> resolveOptional(String mchNo, String channelMchNo, String capability, String channelAppId, String product);
 
     /// 解析 ISV 双应用：platform(sp) + optional merchant(sub)
+    ///
+    /// 显式 channelAppId 未登记时抛错(不透传): sp/sub 应用为服务商侧管理资产,
+    /// 服务商模式的调用凭证依赖其登记配置。
     ///
     /// @param product 支付产品编码（PayProduct.code）
     WxIsvAppPair resolveIsvPair(String mchNo, String channelMchNo, String capability, String channelAppId, String product);

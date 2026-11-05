@@ -66,6 +66,11 @@ public class WxAppResolveService implements WxAppFacade {
 
     /// 解析单应用：显式 channelAppId → 通道能力绑 → 产品级平台默认绑
     ///
+    /// 显式 channelAppId 未登记时按透传处理(返回仅含 AppId、无密钥的视图): 微信下单签名使用
+    /// 商户号级证书(不依赖应用密钥), AppId 与商户号的绑定关系由微信侧校验, 故显式指定的
+    /// AppId 不强制要求已登记; 依赖应用密钥的场景(平台承接 OAuth 换 openid)以
+    /// [WxAppView#id] 为空识别透传视图并拦截。能力绑定/默认绑兜底仅在未指定 channelAppId 时参与。
+    ///
     /// 直连产品(WECHAT_PAY)禁止回退到平台档应用: OAuth 拿到的 openId 必须与
     /// 直连商户号同主体, 使用平台应用会导致 appid 与 mchid 主体不一致。
     /// 仅服务商(WECHAT_ISV)及其他产品允许平台档兜底。
@@ -75,19 +80,8 @@ public class WxAppResolveService implements WxAppFacade {
         if (resolved.isPresent()) {
             return resolved.get();
         }
-        // 解析失败, 按场景抛对应异常(语义与重构前完全一致)
+        // 未指定 channelAppId, 能力绑定/默认绑均未命中, 按场景抛对应异常
         boolean direct = ProductEnum.WECHAT_PAY.getCode().equals(product);
-        // 显式指定了 channelAppId 但未命中
-        if (StrUtil.isNotBlank(channelAppId)) {
-            if (direct) {
-                // 直连商户未配置商户档应用
-                throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
-                        "error.payment.wx.directMchAppNotConfigured", channelAppId);
-            }
-            // 微信: 指定 AppId 未配置
-            throw new DataNotExistException("error.payment.wx.channelAppIdNotFound", channelAppId);
-        }
-        // 未指定 channelAppId, 能力绑定/默认绑均未命中
         if (direct) {
             // 微信: 直连商户未配置商户档应用
             throw new BizInfoException(CommonErrorCode.UN_SUPPORTED_OPERATE,
@@ -219,21 +213,36 @@ public class WxAppResolveService implements WxAppFacade {
         return this.toPlatformView(app);
     }
 
-    /// 按 channelAppId 尝试解析, 未命中返回 empty(不抛异常)
+    /// 按 channelAppId 尝试解析, 未命中时按透传处理(返回仅含 AppId 的视图)
+    ///
+    /// 透传语义: 微信下单不需要应用密钥(签名用商户号级证书, openid 由调用方传入),
+    /// AppId 与商户号的绑定关系由微信侧校验, 故显式传入的 AppId 不强制要求已登记。
+    /// 平台承接 OAuth(换 openid)的场景依赖登记档案取密钥, 由调用方以 [WxAppView#id] 为空拦截。
     ///
     /// @param direct 是否直连产品(直连时商户表优先且不回退平台表)
     private Optional<WxAppView> tryResolveByChannelAppId(String mchNo, String channelAppId, boolean direct) {
         // 直连商户优先查商户表, 且不回退到平台表
         if (direct) {
             return wxMchAppManager.findByMchNoAndWxAppId(mchNo, channelAppId)
-                    .map(this::toMerchantView);
+                    .map(this::toMerchantView)
+                    .or(() -> Optional.of(this.passthroughView(mchNo, channelAppId)));
         }
         var platform = wxPlatformAppManager.findByWxAppId(channelAppId);
         if (platform.isPresent()) {
             return Optional.of(this.toPlatformView(platform.get()));
         }
         return wxMchAppManager.findByMchNoAndWxAppId(mchNo, channelAppId)
-                .map(this::toMerchantView);
+                .map(this::toMerchantView)
+                .or(() -> Optional.of(this.passthroughView(mchNo, channelAppId)));
+    }
+
+    /// 未登记应用透传视图(仅 AppId, 无档位主键/密钥/类型)
+    ///
+    /// 档位标记为商户档(调用方显式指定的应用视为商户自有应用); [WxAppView#id] 为空表示未登记,
+    /// 供 OAuth 等依赖应用密钥的场景识别并拦截。
+    private WxAppView passthroughView(String mchNo, String channelAppId) {
+        log.warn("显式指定的微信应用AppId[{}]未登记, 按透传使用(商户号: {})", channelAppId, mchNo);
+        return new WxAppView(AppScopeEnum.MERCHANT, null, channelAppId, null, null, null);
     }
 
     /// 产品级平台默认能力绑兜底：按 (product, capability) 查 wx_platform_app_capability

@@ -6,7 +6,7 @@
   "appInUse": "Douyin 앱이 능력 바인딩에서 참조 중이므로 삭제할 수 없습니다",
   "appTypeCapabilityMismatch": "Douyin 앱 유형과 결제 능력이 일치하지 않습니다",
   "scopeNotExist": "Douyin 앱 범위가 없거나 참조가 유효하지 않습니다",
-  "channelAppIdNotFound": "지정한 Douyin AppId[{0}]가 시스템에 구성되어 있지 않습니다",
+  "channelAppIdNotFound": "요청 파라미터에 지정된 Douyin 앱 AppId[{0}]가 시스템에 등록되어 있지 않습니다. 입력값이 올바른지 확인하거나 먼저 앱 구성에서 해당 앱을 등록하세요",
   "appNotBound": "사용 가능한 Douyin 앱이 바인딩되지 않았습니다",
   "channelMerchantMismatch": "채널 가맹점이 없거나 가맹점 번호와 일치하지 않습니다",
   "appNotConfigured": "{0}에 해당하는 앱이 구성되지 않았습니다. 채널 가맹점 앱 구성 페이지에서 바인딩하세요",

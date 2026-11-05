@@ -13,7 +13,7 @@
   "jsapiConfigParamBlank": "Douyin sdk.config 署名パラメータ(clientKey/clientSecret/url)が空です",
   "h5AuthNotConfigured": "Douyin H5 アプリ認証設定が不完全です。先に「プラットフォーム設定」で clientKey/clientSecret を設定してください",
   "authFailed": "ユーザー識別子(openId)の取得に失敗しました: {0}",
-  "channelAppIdNotFound": "指定の Douyin AppId [{0}] はシステムに未設定です",
+  "channelAppIdNotFound": "リクエストパラメータで指定されたDouyinアプリAppId[{0}]はシステムに登録されていません。入力内容を確認するか、先にアプリ設定で該当アプリを登録してください",
   "webAppNotFound": "チャネル販売者に Douyin Web アプリが未設定のため、H5 認証/署名できません",
   "appAuthSecretMissing": "Douyin 直連アプリの認証シークレット未設定。チャネル販売者アプリで appSecret を設定してください",
   "jsapiContextRequired": "Douyin JSAPI 署名には orderNo / code / channelMchNo のいずれかが必要です",

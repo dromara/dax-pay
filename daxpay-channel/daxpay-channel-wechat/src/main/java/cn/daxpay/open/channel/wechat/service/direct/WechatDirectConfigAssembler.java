@@ -44,7 +44,7 @@ public class WechatDirectConfigAssembler {
     /// @param mchNo         商户号(主数据商户档应用定位)
     /// @param channelMchNo  通道商户号(系统生成号, 密钥查询与应用定位主键, 不等于微信商户号)
     /// @param capability    支付能力编码(用于选择匹配的应用)
-    /// @param channelAppId  通道应用 AppId(可选; 非空则强制使用并校验预配)
+    /// @param channelAppId  通道应用 AppId(可选; 非空则强制使用, 未登记时按透传处理)
     /// @return 微信 SDK 凭证, 字段对齐子应用 WechatSdkCredential
     public WechatSdkCredential buildConfig(String mchNo, String channelMchNo, String capability, String channelAppId) {
         // 主数据应用(直连期望 merchant 档；产品级平台默认绑兜底)

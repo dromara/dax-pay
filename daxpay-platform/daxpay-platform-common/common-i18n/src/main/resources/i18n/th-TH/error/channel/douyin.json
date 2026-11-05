@@ -13,7 +13,7 @@
   "jsapiConfigParamBlank": "พารามิเตอร์ลายเซ็น sdk.config ของ Douyin (clientKey/clientSecret/url) ว่างเปล่า",
   "h5AuthNotConfigured": "การกำหนดค่าการตรวจสอบสิทธิ์แอป H5 Douyin ไม่สมบูรณ์ โปรดกำหนดค่า clientKey/clientSecret ในการกำหนดค่าแพลตฟอร์มก่อน",
   "authFailed": "ไม่สามารถรับรหัสผู้ใช้ (openId) ได้: {0}",
-  "channelAppIdNotFound": "Douyin AppId [{0}] ยังไม่ได้ตั้งค่าในระบบ",
+  "channelAppIdNotFound": "AppId แอป Douyin [{0}] ที่ระบุในพารามิเตอร์คำขอไม่ได้ลงทะเบียนในระบบ โปรดตรวจสอบว่ากรอกถูกต้อง หรือลงทะเบียนแอปนี้ในการกำหนดค่าแอปก่อน",
   "webAppNotFound": "ไม่มีแอปเว็บ Douyin ภายใต้ผู้ค้าช่องทาง ไม่สามารถยืนยันตัวตน/ลงนาม H5 ได้",
   "appAuthSecretMissing": "ไม่มี appSecret การยืนยันตัวตนของแอป Douyin ตรง; ตั้งค่าในแอปผู้ค้าช่องทางก่อน",
   "jsapiContextRequired": "การลงนาม JSAPI Douyin ต้องระบุ orderNo หรือ code หรือ channelMchNo",

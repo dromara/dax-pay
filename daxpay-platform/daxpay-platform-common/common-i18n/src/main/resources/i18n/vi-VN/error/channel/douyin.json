@@ -13,7 +13,7 @@
   "jsapiConfigParamBlank": "Tham số ký sdk.config Douyin (clientKey/clientSecret/url) bị trống",
   "h5AuthNotConfigured": "Cấu hình xác thực ứng dụng H5 Douyin không đầy đủ, vui lòng cấu hình clientKey/clientSecret trong Cấu hình nền tảng trước",
   "authFailed": "Không lấy được định danh người dùng (openId): {0}",
-  "channelAppIdNotFound": "Douyin AppId [{0}] chưa được cấu hình trong hệ thống",
+  "channelAppIdNotFound": "AppId ứng dụng Douyin [{0}] được chỉ định trong tham số yêu cầu chưa được đăng ký trong hệ thống. Vui lòng kiểm tra xem đã nhập đúng chưa, hoặc đăng ký ứng dụng này trong Cấu hình ứng dụng trước",
   "webAppNotFound": "Merchant kênh chưa cấu hình ứng dụng web Douyin; không thể hoàn tất xác thực/ký H5",
   "appAuthSecretMissing": "Thiếu appSecret xác thực ứng dụng Douyin trực tiếp; hãy cấu hình trên ứng dụng merchant kênh",
   "jsapiContextRequired": "Ký JSAPI Douyin cần một trong orderNo, code hoặc channelMchNo",

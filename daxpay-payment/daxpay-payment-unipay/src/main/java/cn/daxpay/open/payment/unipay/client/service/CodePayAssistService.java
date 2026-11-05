@@ -230,6 +230,10 @@ public class CodePayAssistService {
             WxAppView app = wxAppFacade.resolve(
                     entity.getMchNo(), routeParam.getChannelMchNo(),
                     routeParam.getCapability(), routeParam.getChannelAppId(), routeParam.getProduct());
+            // 未登记应用透传视图无密钥档案, 平台承接的 OAuth 换不了 openid, 明确拦截
+            if (app.id() == null) {
+                throw new DataNotExistException("error.payment.wx.channelAppIdNotRegistered", app.wxAppId());
+            }
             authParam.setAppScope(app.scope().getCode());
             authParam.setAppRefId(app.id());
         }

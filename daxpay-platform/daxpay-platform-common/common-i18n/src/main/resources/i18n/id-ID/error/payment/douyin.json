@@ -6,7 +6,7 @@
   "appInUse": "Aplikasi Douyin masih dirujuk oleh binding kapabilitas dan tidak dapat dihapus",
   "appTypeCapabilityMismatch": "Jenis aplikasi Douyin tidak cocok dengan kemampuan pembayaran",
   "scopeNotExist": "Cakupan aplikasi Douyin tidak ada atau referensi tidak valid",
-  "channelAppIdNotFound": "Douyin AppId [{0}] tidak dikonfigurasi di sistem",
+  "channelAppIdNotFound": "AppId aplikasi Douyin [{0}] yang ditentukan dalam parameter permintaan belum terdaftar di sistem. Periksa apakah pengisian sudah benar, atau daftarkan aplikasi tersebut di Konfigurasi Aplikasi terlebih dahulu",
   "appNotBound": "Tidak ada aplikasi Douyin yang terikat",
   "channelMerchantMismatch": "Pedagang saluran tidak ada atau tidak cocok dengan nomor pedagang",
   "appNotConfigured": "Aplikasi untuk {0} belum dikonfigurasi, silakan ikat di halaman konfigurasi aplikasi merchant channel",

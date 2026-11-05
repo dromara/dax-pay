@@ -6,7 +6,7 @@
   "appInUse": "Douyinアプリは能力バインドで参照中のため削除できません",
   "appTypeCapabilityMismatch": "Douyinアプリ種別と支払い能力が一致しません",
   "scopeNotExist": "Douyinアプリのスコープが存在しないか参照が無効です",
-  "channelAppIdNotFound": "指定されたDouyin AppId[{0}]はシステムに設定されていません",
+  "channelAppIdNotFound": "リクエストパラメータで指定されたDouyinアプリAppId[{0}]はシステムに登録されていません。入力内容を確認するか、先にアプリ設定で該当アプリを登録してください",
   "appNotBound": "利用可能なDouyinアプリがバインドされていません",
   "channelMerchantMismatch": "チャネル加盟店が存在しないか加盟店番号と一致しません",
   "appNotConfigured": "{0} に対応するアプリが未設定です。チャネル加盟店アプリ設定ページでバインドしてください",
