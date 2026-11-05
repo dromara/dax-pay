@@ -1,5 +1,4 @@
 {
-  "envMismatch": "Môi trường người bán kênh không khớp với môi trường hoạt động của sản phẩm",
   "allocReceiverDuplicate": "Người nhận phân账款 đã tồn tại (cùng merchant kênh, cùng loại và tài khoản)",
   "allocReceiverAlreadyBound": "Người nhận đã được liên kết",
   "allocReceiverNotBound": "Chỉ người nhận đã liên kết mới được hủy liên kết",

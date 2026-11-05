@@ -7,7 +7,6 @@
   "mchMismatch": "Terminal sistem dan saluran harus milik merchant yang sama",
   "bindExists": "Ikatan sudah ada",
   "bindNotFound": "Ikatan tidak ditemukan",
-  "channelMchTerminalExists": "Terminal sistem ini sudah memiliki catatan terminal di bawah merchant channel ini",
   "notFound": "Nomor terminal [{0}] tidak ditemukan",
   "mchNotMatch": "Nomor terminal [{0}] tidak milik merchant saat ini",
   "disabled": "Nomor terminal [{0}] telah dinonaktifkan",

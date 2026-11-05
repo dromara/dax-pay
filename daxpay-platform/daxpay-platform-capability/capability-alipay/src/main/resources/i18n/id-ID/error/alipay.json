@@ -1,4 +1,3 @@
 {
-  "authFailed": "Gagal mendapatkan pengenal pengguna Alipay: {0}",
-  "clientInitFailed": "Gagal memulai klien Alipay OpenAPI: {0}"
+  "authFailed": "Gagal mendapatkan pengenal pengguna Alipay: {0}"
 }

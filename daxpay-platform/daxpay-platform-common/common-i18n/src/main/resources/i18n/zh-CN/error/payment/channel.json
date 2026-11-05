@@ -1,12 +1,6 @@
 {
   "notExist": "支付通道不存在",
-  "subMchNoExists": "系统中已存在该子商户号",
-  "merchantNoChannelPerm": "商户没有该通道的权限，无法添加通道商户",
-  "channelMerchantExists": "系统中已存在该通道商户信息，不要重复添加",
-  "onlyDraftCanDelete": "非草稿状态，不能删除",
-  "signVerifyFailIllegal": "签名验证失败，非法请求",
   "channelMerchantNotExist": "通道商户信息不存在",
-  "merchantInfoNotFound": "未查询到商户信息",
   "originOrderNotExist": "原订单不存在",
   "channelMerchantHasTrade": "通道商户存在交易记录，不允许删除",
   "channelMerchantHasOrder": "通道商户存在订单记录，不允许删除",

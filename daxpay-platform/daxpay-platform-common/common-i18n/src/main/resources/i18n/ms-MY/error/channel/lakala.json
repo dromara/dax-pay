@@ -1,8 +1,4 @@
 {
-  "privateKeyRequired": "Kunci peribadi diperlukan",
-  "publicKeyRequired": "Kunci awam diperlukan",
-  "lklAppIdRequired": "ID permohonan Lakala diperlukan",
-  "mchSerialNoRequired": "Nombor siri sijil pedagang diperlukan",
   "termNoNotConfigured": "Nombor terminal tidak dikonfigurasikan, sila tetapkan dalam konfigurasi pedagang",
   "isvKeyNotConfigured": "Kunci penyedia perkhidmatan Lakala tidak dikonfigurasi",
   "merchantDuplicate": "Nombor merchant Lakala sudah wujud di bawah merchant ini",

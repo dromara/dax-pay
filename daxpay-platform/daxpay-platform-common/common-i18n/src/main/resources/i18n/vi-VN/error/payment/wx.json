@@ -8,11 +8,9 @@
   "scopeNotExist": "Cấp ứng dụng WeChat không tồn tại hoặc tham chiếu không hợp lệ",
   "channelAppIdNotFound": "AppId ứng dụng WeChat [{0}] được chỉ định trong tham số yêu cầu chưa được đăng ký trong hệ thống. Vui lòng kiểm tra xem đã nhập đúng chưa, hoặc đăng ký ứng dụng này trong Cấu hình ứng dụng trước",
   "channelAppIdNotRegistered": "AppId ứng dụng WeChat [{0}] được chỉ định chưa được đăng ký trong hệ thống, không thể bắt đầu ủy quyền WeChat. Vui lòng đăng ký ứng dụng này trong Cấu hình ứng dụng trước",
-  "appNotBound": "Chưa liên kết ứng dụng WeChat khả dụng",
   "channelMerchantMismatch": "Thương gia kênh không tồn tại hoặc không khớp với số thương gia",
   "appNotConfigured": "Chưa cấu hình ứng dụng tương ứng với {0}, vui lòng vào trang cấu hình ứng dụng thương gia kênh để liên kết",
   "directMchAppNotConfigured": "Thương gia kết nối trực tiếp chưa cấu hình ứng dụng cấp thương gia tương ứng với {0}, vui lòng vào trang cấu hình ứng dụng thương gia kênh để liên kết ứng dụng cấp thương gia (thương gia kết nối trực tiếp không thể dùng ứng dụng cấp nền tảng)",
-  "appNotUnique": "Có nhiều ứng dụng loại {0}, vui lòng cấu hình liên kết năng lực rõ ràng để chọn chính xác",
   "platformAppAmbiguous": "Sản phẩm này có nhiều ứng dụng WeChat cấp nền tảng nên không thể tự động xác định ứng dụng nhà cung cấp dịch vụ, vui lòng chỉ định ứng dụng nhà cung cấp dịch vụ hoặc thu hẹp liên kết năng lực ứng dụng của sản phẩm này",
   "mpAuthNotConfigured": "Chưa điền cấu hình xác thực tài khoản chính thức WeChat, vui lòng cấu hình AppId và AppSecret trong 「Quản lý nền tảng bên thứ ba → Cấu hình xác thực tài khoản chính thức WeChat」",
   "appRefByAllocReceiver": "Ứng dụng WeChat được tham chiếu bởi bản ghi người nhận phân chia tiền, không thể xóa"

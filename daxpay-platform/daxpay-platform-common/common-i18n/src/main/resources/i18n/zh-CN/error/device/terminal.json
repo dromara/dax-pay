@@ -7,7 +7,6 @@
   "mchMismatch": "系统终端与通道终端须属于同一商户",
   "bindExists": "绑定关系已存在",
   "bindNotFound": "绑定关系不存在",
-  "channelMchTerminalExists": "该系统终端在此通道商户下已有终端记录",
   "notFound": "终端号[{0}]不存在",
   "mchNotMatch": "终端号[{0}]不属于当前商户",
   "disabled": "终端号[{0}]已停用",

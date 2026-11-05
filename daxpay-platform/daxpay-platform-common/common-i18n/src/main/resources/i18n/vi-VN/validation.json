@@ -1,10 +1,4 @@
 {
-  "notBlank": "{0} không được để trống",
-  "notEmpty": "{0} không được để trống",
-  "lengthRange": "Độ dài {0} phải nằm trong khoảng {1} đến {2}",
-  "min": "{0} không thể nhỏ hơn {1}",
-  "max": "{0} không được lớn hơn {1}",
-  "parameterError": "Xác thực tham số không thành công",
   "field": {
     "source": {
       "notBlank": "Nền tảng không được để trống",
@@ -13,17 +7,11 @@
     "clientId": {
       "notBlank": "ID khách hàng không được để trống"
     },
-    "clientSecret": {
-      "notBlank": "Bí mật của khách hàng không được để trống"
-    },
     "clientKey": {
       "notBlank": "Khóa khách hàng không được để trống"
     },
     "clientCode": {
       "notBlank": "Mã khách hàng không được để trống"
-    },
-    "ip": {
-      "notValid": "Địa chỉ IP không hợp lệ"
     },
     "aliAppId": {
       "notBlank": "ID ứng dụng Alipay không được để trống"
@@ -38,26 +26,15 @@
     "alipayPublicKey": {
       "notBlank": "Khóa công khai Alipay không được để trống"
     },
-    "mchAppPrivateKey": {
-      "notBlank": "Khóa riêng của ứng dụng không được để trống"
-    },
     "appSecret": {
-      "size": "Bí mật ứng dụng không được vượt quá 512 ký tự",
       "notBlank": "Khóa bí mật ứng dụng không được để trống"
-    },
-    "douyinMchId": {
-      "notBlank": "ID người bán Douyin không được để trống"
     },
     "accountId": {
       "notBlank": "ID Tài khoản Stripe không được để trống"
     },
-    "userIdType": {
-      "notBlank": "Loại ID người dùng không được để trống"
-    },
     "product": {
       "notBlank": "Mã sản phẩm không được để trống",
-      "size": "Mã sản phẩm không được vượt quá 32 ký tự",
-      "notNull": "Mã sản phẩm không được để trống"
+      "size": "Mã sản phẩm không được vượt quá 32 ký tự"
     },
     "channel": {
       "notBlank": "Mã kênh không được để trống",
@@ -114,12 +91,6 @@
       "notBlank": "WeChat AppId không được để trống",
       "size": "WeChat AppId không được vượt quá 64 ký tự"
     },
-    "publicKeyId": {
-      "notBlank": "ID khóa công khai thanh toán không được để trống"
-    },
-    "certSerialNo": {
-      "notBlank": "Số sê-ri chứng chỉ không thể để trống"
-    },
     "id": {
       "notNull": "Khóa chính không được để trống",
       "mustBeNullOnAdd": "Id phải trống"
@@ -129,9 +100,6 @@
     },
     "alipayDirectAppId": {
       "notNull": "Id ứng dụng trực tiếp Alipay không thể rỗng"
-    },
-    "wechatIsvAppId": {
-      "notNull": "Id ứng dụng WeChat ISV không được rỗng"
     },
     "captchaCode": {
       "notBlank": "Mã xác nhận không được để trống"
@@ -150,9 +118,6 @@
     "subjectType": {
       "notBlank": "Loại chủ đề không được để trống"
     },
-    "pass": {
-      "notNull": "Kết quả kiểm tra không được để trống"
-    },
     "channelMerchantNo": {
       "notBlank": "Kênh thương gia không. không thể để trống"
     },
@@ -164,24 +129,6 @@
     },
     "channelMerchantName": {
       "notBlank": "Tên người bán không được để trống"
-    },
-    "appKey": {
-      "notBlank": "Khóa ứng dụng không được để trống"
-    },
-    "secretKey": {
-      "notBlank": "Khóa bí mật không được để trống"
-    },
-    "tradeIdentity": {
-      "notBlank": "Danh tính thương mại của người bán không được để trống"
-    },
-    "subMchNo": {
-      "notBlank": "Người bán phụ không. không thể để trống"
-    },
-    "parentMchNo": {
-      "notBlank": "Người bán kênh phụ huynh không. không thể để trống"
-    },
-    "subMchName": {
-      "notBlank": "Tên người bán phụ không được để trống"
     },
     "orderNo": {
       "notBlank": "Lệnh thanh toán số không thể để trống",
@@ -201,14 +148,7 @@
       "notBlank": "Tiêu đề không được để trống",
       "size": "Tiêu đề không thể vượt quá 100 ký tự"
     },
-    "date": {
-      "notNull": "Ngày không được để trống"
-    },
-    "fileType": {
-      "notNull": "Loại tệp không được để trống"
-    },
     "authCode": {
-      "notBlank": "Mã thanh toán không được để trống",
       "size": "Mã thanh toán không được vượt quá 128 ký tự"
     },
     "clientIp": {
@@ -256,8 +196,7 @@
       "notBlank": "Số đơn đặt hàng của người bán không thể để trống"
     },
     "description": {
-      "size": "Mô tả không thể vượt quá 50 ký tự",
-      "notBlank": "Mô tả không được để trống"
+      "size": "Mô tả không thể vượt quá 50 ký tự"
     },
     "method": {
       "notBlank": "Phương thức thanh toán không được để trống",
@@ -269,8 +208,7 @@
       "notBlank": "Khả năng thanh toán không được để trống"
     },
     "provider": {
-      "notBlank": "Thương hiệu thanh toán không được để trống",
-      "size": "Mã thương hiệu Pay không được vượt quá 32 ký tự"
+      "notBlank": "Thương hiệu thanh toán không được để trống"
     },
     "limitPay": {
       "size": "Loại thanh toán giới hạn không thể vượt quá 128 ký tự"
@@ -323,9 +261,6 @@
     "returnUrl": {
       "size": "URL trả về không được vượt quá 200 ký tự"
     },
-    "quitUrl": {
-      "size": "URL thoát không được vượt quá 200 ký tự"
-    },
     "notifyUrl": {
       "size": "URL thông báo không được vượt quá 200 ký tự"
     },
@@ -334,73 +269,23 @@
       "notBlank": "Số thứ tự kênh không thể để trống"
     },
     "refundNo": {
-      "notBlank": "Số hoàn tiền không được để trống",
       "size": "Số hoàn tiền không được vượt quá 100 ký tự"
     },
     "bizRefundNo": {
-      "size": "Số tiền hoàn lại của người bán không thể vượt quá 100 ký tự",
-      "notBlank": "Số tiền hoàn lại của người bán không thể để trống"
+      "size": "Số tiền hoàn lại của người bán không thể vượt quá 100 ký tự"
     },
     "reason": {
       "size": "Lý do không thể vượt quá 50 ký tự"
-    },
-    "payeeName": {
-      "size": "Tên người nhận thanh toán không được vượt quá 50 ký tự"
-    },
-    "items": {
-      "notEmpty": "Danh sách cấu hình sản phẩm không được để trống"
-    },
-    "shortName": {
-      "notBlank": "Tên ngắn không được để trống"
     },
     "status": {
       "size": "Độ dài trạng thái phải từ {min} đến {max}",
       "notBlank": "Trạng thái không được để trống"
     },
-    "accountType": {
-      "notBlank": "Loại tài khoản không được để trống"
-    },
     "appAuthToken": {
       "notBlank": "Mã thông báo xác thực ứng dụng không được để trống"
     },
-    "isvAppId": {
-      "notBlank": "Ứng dụng Alipay không được để trống"
-    },
     "alipayUserId": {
       "notBlank": "Người bán phụ không. không thể để trống"
-    },
-    "accountName": {
-      "notBlank": "Tên tài khoản ngân hàng không được để trống"
-    },
-    "cardNo": {
-      "notBlank": "Số thẻ ngân hàng không thể để trống"
-    },
-    "bankName": {
-      "notBlank": "Tên ngân hàng không được để trống"
-    },
-    "cardFrontPic": {
-      "notBlank": "Ảnh mặt trước thẻ ngân hàng không được để trống"
-    },
-    "legalName": {
-      "notBlank": "Tên pháp nhân không được để trống"
-    },
-    "certNo": {
-      "notBlank": "Số CMND không thể để trống"
-    },
-    "frontPic": {
-      "notBlank": "Ảnh mặt trước CMND không được để trống"
-    },
-    "backPic": {
-      "notBlank": "Ảnh mặt sau CMND không được để trống"
-    },
-    "licenseNo": {
-      "notBlank": "Giấy phép kinh doanh số không thể để trống"
-    },
-    "licenseName": {
-      "notBlank": "Tên giấy phép kinh doanh không được để trống"
-    },
-    "licensePic": {
-      "notBlank": "Ảnh giấy phép kinh doanh không được để trống"
     },
     "appName": {
       "notBlank": "Tên ứng dụng không được để trống",
@@ -427,10 +312,6 @@
     "privateKey": {
       "notBlank": "Khóa riêng của nền tảng không được để trống; định cấu hình daxpay.platform.config.key-config.private-key"
     },
-    "phone": {
-      "notBlank": "Số điện thoại không được để trống",
-      "format": "Định dạng số điện thoại không hợp lệ"
-    },
     "roleId": {
       "notNull": "ID vai trò không được để trống"
     },
@@ -438,20 +319,8 @@
       "notBlank": "Mã không được để trống",
       "size": "Code must not exceed 100 characters"
     },
-    "nameCn": {
-      "notBlank": "Tên tiếng Trung không được để trống"
-    },
-    "nameEn": {
-      "notBlank": "Tên tiếng Anh không được để trống"
-    },
     "menuCode": {
       "notBlank": "Mã menu không được để trống"
-    },
-    "titleCn": {
-      "notBlank": "Tiêu đề menu (tiếng Trung) không được để trống"
-    },
-    "titleEn": {
-      "notBlank": "Tiêu đề menu (tiếng Anh) không được để trống"
     },
     "i18nKey": {
       "notBlank": "Khóa I18n không được để trống"
@@ -464,9 +333,6 @@
     },
     "newPassword": {
       "notBlank": "Mật khẩu mới không được để trống"
-    },
-    "configName": {
-      "notBlank": "Tên cấu hình không được để trống"
     },
     "endpoint": {
       "notBlank": "Điểm cuối không được để trống"
@@ -539,9 +405,6 @@
       "notBlank": "Email không được để trống",
       "format": "Định dạng email không hợp lệ"
     },
-    "realName": {
-      "notBlank": "Tên không được để trống"
-    },
     "regionCode": {
       "notBlank": "Mã vùng không được để trống"
     },
@@ -551,12 +414,6 @@
     "configItems": {
       "notEmpty": "Các mục cấu hình không được để trống"
     },
-    "payOrderId": {
-      "notNull": "ID lệnh thanh toán không được để trống"
-    },
-    "orderId": {
-      "notNull": "ID đơn hàng không được để trống"
-    },
     "fileId": {
       "notNull": "ID tệp không được để trống"
     },
@@ -565,9 +422,6 @@
     },
     "sessionIds": {
       "notEmpty": "Danh sách ID phiên không được để trống"
-    },
-    "orderSource": {
-      "mustBeNull": "Trường nguồn đơn hàng không được phép thiết lập"
     },
     "minLengthNotGreaterThanMax": {
       "assertTrue": "Độ dài tối thiểu không được lớn hơn độ dài tối đa"
@@ -579,15 +433,11 @@
       "notBlank": "Mã truy vấn không được để trống"
     },
     "authToken": {
-      "notBlank": "Mã xác thực không được để trống",
       "size": "Mã thông báo xác thực không thể vượt quá 64 ký tự"
     },
     "returnPath": {
       "size": "Đường dẫn trả về không được vượt quá 200 ký tự",
       "notBlank": "Đường dẫn quay lại không được để trống"
-    },
-    "taskId": {
-      "notNull": "ID tin nhắn không được để trống"
     },
     "deleteDay": {
       "notNull": "Ngày không được để trống"
@@ -636,32 +486,14 @@
     "douyinAppId": {
       "notBlank": "ID ứng dụng Douyin không được để trống"
     },
-    "douyinDirectAppId": {
-      "notNull": "ID ứng dụng trực tiếp Douyin không được để trống"
-    },
     "dyMchId": {
       "notBlank": "ID người bán Douyin không được để trống"
-    },
-    "wechatDirectAppId": {
-      "notNull": "ID ứng dụng trực tiếp WeChat không được để trống"
-    },
-    "wechatIsvMchAppId": {
-      "notNull": "ID ứng dụng người bán kênh WeChat ISV không được để trống"
     },
     "storeName": {
       "notBlank": "Tên cửa hàng không được để trống"
     },
     "deviceSn": {
       "notBlank": "Số sê-ri thiết bị không được để trống"
-    },
-    "deviceType": {
-      "notBlank": "Loại thiết bị không được để trống"
-    },
-    "vendorCode": {
-      "notBlank": "Mã nhà cung cấp không được để trống"
-    },
-    "vendorConfigId": {
-      "notNull": "Cấu hình nhà cung cấp không được rỗng"
     },
     "qrCodeName": {
       "notBlank": "Tên mã QR không được để trống",
@@ -700,9 +532,6 @@
     "mchSerialNo": {
       "notBlank": "Số sê-ri chứng chỉ người bán không được để trống"
     },
-    "orgCode": {
-      "notBlank": "Mã tổ chức không được để trống"
-    },
     "orgId": {
       "notBlank": "ID tổ chức không được để trống"
     },
@@ -716,8 +545,7 @@
       "notBlank": "Mã merchant ShengPay không được để trống"
     },
     "termNo": {
-      "notBlank": "Số thiết bị đầu cuối không được để trống",
-      "size": "Số thiết bị đầu cuối không thể vượt quá 64 ký tự"
+      "notBlank": "Số thiết bị đầu cuối không được để trống"
     },
     "agentNo": {
       "notBlank": "Mã số đại lý không được để trống"
@@ -756,9 +584,6 @@
     "outRefundNo": {
       "notBlank": "Số hoàn tiền của kênh không thể để trống"
     },
-    "outRequestNo": {
-      "notBlank": "Số yêu cầu kênh không thể để trống"
-    },
     "tradeNo": {
       "notBlank": "Nền tảng giao dịch số. không thể để trống",
       "size": "Số giao dịch không được vượt quá 100 ký tự"
@@ -772,9 +597,6 @@
     "refundAmount": {
       "notNull": "Số tiền hoàn lại không thể rỗng",
       "positive": "Số tiền hoàn lại phải lớn hơn 0"
-    },
-    "subject": {
-      "notBlank": "Tiêu đề thanh toán không được để trống"
     },
     "callbackBody": {
       "notBlank": "Nội dung gọi lại không được để trống"
@@ -791,23 +613,11 @@
     "callbackSign": {
       "notBlank": "Chữ ký callback không được để trống"
     },
-    "callbackType": {
-      "notBlank": "Loại gọi lại không được để trống"
-    },
     "rawData": {
       "notBlank": "Dữ liệu thô không được để trống"
     },
-    "orderCreateTime": {
-      "notBlank": "Thời gian tạo đơn hàng không được để trống"
-    },
-    "orgReqDate": {
-      "notBlank": "Ngày yêu cầu ban đầu không được để trống"
-    },
     "originOutTradeNo": {
       "notBlank": "Số giao dịch kênh gốc không thể để trống"
-    },
-    "config": {
-      "notNull": "Cấu hình không thể rỗng"
     },
     "fuyouMchNo": {
       "notBlank": "Số người bán Fuyou không được để trống"
@@ -815,20 +625,11 @@
     "fyAppId": {
       "notBlank": "ID ứng dụng Fuyou không được để trống"
     },
-    "leshuaOrderId": {
-      "notBlank": "ID đơn hàng Leshua không được để trống"
-    },
     "lsMchNo": {
       "notBlank": "Số thương gia Leshua không được để trống"
     },
     "lsIsvNo": {
       "notBlank": "Số nhà cung cấp dịch vụ Leshua không được để trống"
-    },
-    "tradeKey": {
-      "notBlank": "Khóa giao dịch không được để trống"
-    },
-    "notifyKey": {
-      "notBlank": "Khóa thông báo không được để trống"
     },
     "fileName": {
       "notBlank": "Tên tệp không được để trống"
@@ -904,9 +705,6 @@
     "marketProduct": {
       "notBlank": "mã sản phẩm thị trường không được để trống"
     },
-    "sensitiveWord": {
-      "rejected": "Nội dung chứa từ nhạy cảm và bị từ chối"
-    },
     "word": {
       "notBlank": "Từ nhạy cảm không được để trống",
       "size": "Độ dài từ nhạy cảm phải từ {min} đến {max}"
@@ -946,10 +744,6 @@
     },
     "runtime": {
       "size": "Mã runtime không được vượt quá 16 ký tự"
-    },
-    "transferSceneId": {
-      "notBlank": "ID kịch bản chuyển khoản không được để trống",
-      "size": "ID kịch bản chuyển khoản không được vượt quá 16 ký tự"
     },
     "systemTerminalNo": {
       "notBlank": "Đầu cuối hệ thống không được để trống"
@@ -1099,14 +893,7 @@
       "size": "URL chuyển hướng không được vượt quá 500 ký tự"
     },
     "transferSceneName": {
-      "notBlank": "Tên kịch bản chuyển khoản không được để trống",
-      "size": "Tên kịch bản chuyển khoản không được vượt quá 64 ký tự"
-    },
-    "transferSceneReportInfoType": {
-      "size": "Loại thông tin báo cáo kịch bản chuyển khoản không được vượt quá 64 ký tự"
-    },
-    "transferSceneReportInfoContent": {
-      "size": "Nội dung thông tin báo cáo kịch bản chuyển khoản không được vượt quá 200 ký tự"
+      "notBlank": "Tên kịch bản chuyển khoản không được để trống"
     },
     "transferNo": {
       "size": "Số lệnh chuyển khoản nền tảng không được vượt quá 100 ký tự",

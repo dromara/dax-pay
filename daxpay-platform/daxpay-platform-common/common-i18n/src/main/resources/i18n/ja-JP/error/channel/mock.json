@@ -7,7 +7,6 @@
   "unsupportedPayMethod": "モックチャネルが対応していない決済方法: {0}",
   "payFailed": "モックチャネル決済例外: {0}",
   "closeFailed": "モックチャネル注文クローズ例外: {0}",
-  "refundFailed": "モックチャネル返金例外: {0}",
   "allocFailed": "モックチャネルの分配に失敗しました: {0}",
   "allocFinishFailed": "モックチャネルの分配完了に失敗しました: {0}",
   "allocReceiverBindFailed": "モックチャネルの分配受取方バインドに失敗しました: {0}",

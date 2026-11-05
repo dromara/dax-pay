@@ -1,10 +1,4 @@
 {
-  "notBlank": "{0} cannot be blank",
-  "notEmpty": "{0} cannot be empty",
-  "lengthRange": "{0} length must be between {1} and {2}",
-  "min": "{0} cannot be less than {1}",
-  "max": "{0} cannot be greater than {1}",
-  "parameterError": "Parameter validation failed",
   "field": {
     "deviceSn": {
       "notBlank": "Device serial number cannot be blank"
@@ -39,17 +33,11 @@
     "clientId": {
       "notBlank": "Client ID cannot be blank"
     },
-    "clientSecret": {
-      "notBlank": "Client secret cannot be blank"
-    },
     "clientKey": {
       "notBlank": "Client Key cannot be blank"
     },
     "clientCode": {
       "notBlank": "Client code cannot be blank"
-    },
-    "ip": {
-      "notValid": "IP address is invalid"
     },
     "aliAppId": {
       "notBlank": "Alipay app ID cannot be blank"
@@ -64,26 +52,15 @@
     "alipayPublicKey": {
       "notBlank": "Alipay public key cannot be blank"
     },
-    "mchAppPrivateKey": {
-      "notBlank": "App private key cannot be blank"
-    },
     "appSecret": {
-      "size": "App secret cannot exceed 512 characters",
       "notBlank": "App secret is required"
-    },
-    "douyinMchId": {
-      "notBlank": "Douyin merchant ID cannot be blank"
     },
     "accountId": {
       "notBlank": "Stripe Account ID cannot be blank"
     },
-    "userIdType": {
-      "notBlank": "User ID type cannot be blank"
-    },
     "product": {
       "notBlank": "Product code cannot be blank",
-      "size": "Product code cannot exceed 32 characters",
-      "notNull": "Product code cannot be blank"
+      "size": "Product code cannot exceed 32 characters"
     },
     "channel": {
       "notBlank": "Channel code cannot be blank",
@@ -140,12 +117,6 @@
       "notBlank": "WeChat AppId cannot be blank",
       "size": "WeChat AppId cannot exceed 64 characters"
     },
-    "publicKeyId": {
-      "notBlank": "Payment public key ID cannot be blank"
-    },
-    "certSerialNo": {
-      "notBlank": "Certificate serial no. cannot be blank"
-    },
     "id": {
       "notNull": "Primary key cannot be blank",
       "mustBeNullOnAdd": "Id must be empty"
@@ -155,9 +126,6 @@
     },
     "alipayDirectAppId": {
       "notNull": "Alipay direct app id cannot be null"
-    },
-    "wechatIsvAppId": {
-      "notNull": "WeChat ISV app id cannot be null"
     },
     "captchaCode": {
       "notBlank": "Captcha code cannot be empty"
@@ -176,9 +144,6 @@
     "subjectType": {
       "notBlank": "Subject type cannot be blank"
     },
-    "pass": {
-      "notNull": "Audit result cannot be blank"
-    },
     "channelMerchantNo": {
       "notBlank": "Channel merchant no. cannot be blank"
     },
@@ -190,24 +155,6 @@
     },
     "channelMerchantName": {
       "notBlank": "Merchant name cannot be blank"
-    },
-    "appKey": {
-      "notBlank": "App Key cannot be blank"
-    },
-    "secretKey": {
-      "notBlank": "Secret Key cannot be blank"
-    },
-    "tradeIdentity": {
-      "notBlank": "Merchant trade identity cannot be blank"
-    },
-    "subMchNo": {
-      "notBlank": "Sub-merchant no. cannot be blank"
-    },
-    "parentMchNo": {
-      "notBlank": "Parent channel merchant no. cannot be blank"
-    },
-    "subMchName": {
-      "notBlank": "Sub-merchant name cannot be blank"
     },
     "orderNo": {
       "notBlank": "Payment order no. cannot be blank",
@@ -227,14 +174,7 @@
       "notBlank": "Title cannot be blank",
       "size": "Title cannot exceed 100 characters"
     },
-    "date": {
-      "notNull": "Date cannot be blank"
-    },
-    "fileType": {
-      "notNull": "File type cannot be blank"
-    },
     "authCode": {
-      "notBlank": "Payment code cannot be blank",
       "size": "Payment code cannot exceed 128 characters"
     },
     "clientIp": {
@@ -278,8 +218,7 @@
       "notBlank": "Merchant order no. cannot be blank"
     },
     "description": {
-      "size": "Description cannot exceed 50 characters",
-      "notBlank": "Description cannot be blank"
+      "size": "Description cannot exceed 50 characters"
     },
     "method": {
       "notBlank": "Payment method cannot be blank",
@@ -291,8 +230,7 @@
       "notBlank": "Payment capability must not be blank"
     },
     "provider": {
-      "notBlank": "Pay brand must not be blank",
-      "size": "Pay brand code must not exceed 32 characters"
+      "notBlank": "Pay brand must not be blank"
     },
     "limitPay": {
       "size": "Limit pay type cannot exceed 128 characters"
@@ -345,9 +283,6 @@
     "returnUrl": {
       "size": "Return URL cannot exceed 200 characters"
     },
-    "quitUrl": {
-      "size": "Quit URL cannot exceed 200 characters"
-    },
     "notifyUrl": {
       "size": "Notify URL cannot exceed 200 characters"
     },
@@ -356,73 +291,23 @@
       "notBlank": "Channel order no. cannot be blank"
     },
     "refundNo": {
-      "notBlank": "Refund number cannot be blank",
       "size": "Refund number cannot exceed 100 characters"
     },
     "bizRefundNo": {
-      "size": "Merchant refund no. cannot exceed 100 characters",
-      "notBlank": "Merchant refund no. cannot be blank"
+      "size": "Merchant refund no. cannot exceed 100 characters"
     },
     "reason": {
       "size": "Reason cannot exceed 50 characters"
-    },
-    "payeeName": {
-      "size": "Payee name cannot exceed 50 characters"
-    },
-    "items": {
-      "notEmpty": "Product config list cannot be empty"
-    },
-    "shortName": {
-      "notBlank": "Short name cannot be blank"
     },
     "status": {
       "size": "Status must be at most 16 characters",
       "notBlank": "Status is required"
     },
-    "accountType": {
-      "notBlank": "Account type cannot be blank"
-    },
     "appAuthToken": {
       "notBlank": "App auth token cannot be blank"
     },
-    "isvAppId": {
-      "notBlank": "Alipay application cannot be blank"
-    },
     "alipayUserId": {
       "notBlank": "Sub-merchant no. cannot be blank"
-    },
-    "accountName": {
-      "notBlank": "Bank account name cannot be blank"
-    },
-    "cardNo": {
-      "notBlank": "Bank card no. cannot be blank"
-    },
-    "bankName": {
-      "notBlank": "Bank name cannot be blank"
-    },
-    "cardFrontPic": {
-      "notBlank": "Bank card front photo cannot be blank"
-    },
-    "legalName": {
-      "notBlank": "Legal person name cannot be blank"
-    },
-    "certNo": {
-      "notBlank": "ID card no. cannot be blank"
-    },
-    "frontPic": {
-      "notBlank": "ID card front photo cannot be blank"
-    },
-    "backPic": {
-      "notBlank": "ID card back photo cannot be blank"
-    },
-    "licenseNo": {
-      "notBlank": "Business license no. cannot be blank"
-    },
-    "licenseName": {
-      "notBlank": "Business license name cannot be blank"
-    },
-    "licensePic": {
-      "notBlank": "Business license photo cannot be blank"
     },
     "appName": {
       "notBlank": "Application name cannot be blank",
@@ -449,10 +334,6 @@
     "privateKey": {
       "notBlank": "Platform private key cannot be blank; configure daxpay.platform.config.key-config.private-key"
     },
-    "phone": {
-      "notBlank": "Phone number cannot be blank",
-      "format": "Invalid phone number format"
-    },
     "roleId": {
       "notNull": "Role ID cannot be blank"
     },
@@ -460,20 +341,8 @@
       "notBlank": "Code cannot be blank",
       "size": "Code must not exceed 100 characters"
     },
-    "nameCn": {
-      "notBlank": "Chinese name cannot be blank"
-    },
-    "nameEn": {
-      "notBlank": "English name cannot be blank"
-    },
     "menuCode": {
       "notBlank": "Menu code cannot be blank"
-    },
-    "titleCn": {
-      "notBlank": "Menu title (Chinese) cannot be blank"
-    },
-    "titleEn": {
-      "notBlank": "Menu title (English) cannot be blank"
     },
     "i18nKey": {
       "notBlank": "I18n key cannot be blank"
@@ -486,9 +355,6 @@
     },
     "newPassword": {
       "notBlank": "New password cannot be blank"
-    },
-    "configName": {
-      "notBlank": "Config name cannot be blank"
     },
     "endpoint": {
       "notBlank": "Endpoint cannot be blank"
@@ -561,9 +427,6 @@
       "notBlank": "Email cannot be blank",
       "format": "Invalid email format"
     },
-    "realName": {
-      "notBlank": "Name cannot be blank"
-    },
     "regionCode": {
       "notBlank": "Region code cannot be blank"
     },
@@ -573,12 +436,6 @@
     "configItems": {
       "notEmpty": "Configuration items cannot be empty"
     },
-    "payOrderId": {
-      "notNull": "Payment order ID cannot be blank"
-    },
-    "orderId": {
-      "notNull": "Order ID cannot be blank"
-    },
     "fileId": {
       "notNull": "File ID cannot be blank"
     },
@@ -587,9 +444,6 @@
     },
     "sessionIds": {
       "notEmpty": "Session ID list cannot be empty"
-    },
-    "orderSource": {
-      "mustBeNull": "Order source field is not allowed to be set"
     },
     "minLengthNotGreaterThanMax": {
       "assertTrue": "Minimum length cannot be greater than maximum length"
@@ -601,7 +455,6 @@
       "notBlank": "Query code cannot be blank"
     },
     "authToken": {
-      "notBlank": "Auth token cannot be blank",
       "size": "Auth token cannot exceed 64 characters"
     },
     "returnPath": {
@@ -611,9 +464,6 @@
     "redirectUrl": {
       "notBlank": "Redirect URL cannot be blank",
       "size": "Redirect URL cannot exceed 500 characters"
-    },
-    "taskId": {
-      "notNull": "Message ID cannot be blank"
     },
     "deleteDay": {
       "notNull": "Days cannot be blank"
@@ -662,29 +512,11 @@
     "douyinAppId": {
       "notBlank": "Douyin app ID cannot be blank"
     },
-    "douyinDirectAppId": {
-      "notNull": "Douyin direct app ID cannot be blank"
-    },
     "dyMchId": {
       "notBlank": "Douyin merchant ID cannot be blank"
     },
-    "wechatDirectAppId": {
-      "notNull": "WeChat direct app ID cannot be blank"
-    },
-    "wechatIsvMchAppId": {
-      "notNull": "WeChat ISV channel merchant app ID cannot be blank"
-    },
     "storeName": {
       "notBlank": "Store name cannot be blank"
-    },
-    "deviceType": {
-      "notBlank": "Device type cannot be blank"
-    },
-    "vendorCode": {
-      "notBlank": "Vendor code cannot be blank"
-    },
-    "vendorConfigId": {
-      "notNull": "Vendor config cannot be null"
     },
     "qrCodeName": {
       "notBlank": "QR code name cannot be blank",
@@ -723,9 +555,6 @@
     "mchSerialNo": {
       "notBlank": "Merchant certificate serial number cannot be blank"
     },
-    "orgCode": {
-      "notBlank": "Organization code cannot be blank"
-    },
     "orgId": {
       "notBlank": "Organization ID cannot be blank"
     },
@@ -739,8 +568,7 @@
       "notBlank": "ShengPay merchant number cannot be blank"
     },
     "termNo": {
-      "notBlank": "Terminal number cannot be blank",
-      "size": "Terminal number cannot exceed 64 characters"
+      "notBlank": "Terminal number cannot be blank"
     },
     "agentNo": {
       "notBlank": "Agent number cannot be blank"
@@ -779,9 +607,6 @@
     "outRefundNo": {
       "notBlank": "Channel refund no. cannot be blank"
     },
-    "outRequestNo": {
-      "notBlank": "Channel request no. cannot be blank"
-    },
     "tradeNo": {
       "notBlank": "Platform trade no. cannot be blank",
       "size": "Platform trade no. cannot exceed 100 characters"
@@ -795,9 +620,6 @@
     "refundAmount": {
       "notNull": "Refund amount cannot be null",
       "positive": "Refund amount must be greater than 0"
-    },
-    "subject": {
-      "notBlank": "Payment title cannot be blank"
     },
     "callbackBody": {
       "notBlank": "Callback body cannot be blank"
@@ -814,23 +636,11 @@
     "callbackSign": {
       "notBlank": "Callback signature cannot be empty"
     },
-    "callbackType": {
-      "notBlank": "Callback type cannot be blank"
-    },
     "rawData": {
       "notBlank": "Raw data cannot be blank"
     },
-    "orderCreateTime": {
-      "notBlank": "Order create time cannot be blank"
-    },
-    "orgReqDate": {
-      "notBlank": "Original request date cannot be blank"
-    },
     "originOutTradeNo": {
       "notBlank": "Original channel trade no. cannot be blank"
-    },
-    "config": {
-      "notNull": "Config cannot be null"
     },
     "fuyouMchNo": {
       "notBlank": "Fuyou merchant number cannot be blank"
@@ -838,20 +648,11 @@
     "fyAppId": {
       "notBlank": "Fuyou app ID cannot be blank"
     },
-    "leshuaOrderId": {
-      "notBlank": "Leshua order ID cannot be blank"
-    },
     "lsMchNo": {
       "notBlank": "Leshua merchant number cannot be blank"
     },
     "lsIsvNo": {
       "notBlank": "Leshua ISV number cannot be blank"
-    },
-    "tradeKey": {
-      "notBlank": "Trade key cannot be blank"
-    },
-    "notifyKey": {
-      "notBlank": "Notify key cannot be blank"
     },
     "fileName": {
       "notBlank": "File name cannot be blank"
@@ -868,9 +669,6 @@
     },
     "programType": {
       "notBlank": "Program type cannot be blank"
-    },
-    "sensitiveWord": {
-      "rejected": "Content contains sensitive words"
     },
     "word": {
       "notBlank": "Word is required",
@@ -971,18 +769,7 @@
       "size": "Runtime code cannot exceed 16 characters"
     },
     "transferSceneName": {
-      "notBlank": "Transfer scene name cannot be empty",
-      "size": "Transfer scene name cannot exceed 64 characters"
-    },
-    "transferSceneReportInfoType": {
-      "size": "Transfer scene report info type cannot exceed 64 characters"
-    },
-    "transferSceneReportInfoContent": {
-      "size": "Transfer scene report info content cannot exceed 200 characters"
-    },
-    "transferSceneId": {
-      "notBlank": "Transfer scene ID cannot be empty",
-      "size": "Transfer scene ID cannot exceed 16 characters"
+      "notBlank": "Transfer scene name cannot be empty"
     },
     "systemTerminalNo": {
       "notBlank": "System terminal cannot be empty"

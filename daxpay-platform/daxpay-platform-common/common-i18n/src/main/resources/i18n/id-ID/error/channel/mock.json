@@ -7,7 +7,6 @@
   "unsupportedPayMethod": "Metode pembayaran tidak didukung saluran simulasi: {0}",
   "payFailed": "Kesalahan pembayaran saluran simulasi: {0}",
   "closeFailed": "Kesalahan menutup pesanan saluran simulasi: {0}",
-  "refundFailed": "Kesalahan pengembalian dana saluran simulasi: {0}",
   "allocFailed": "Pembagian dana saluran simulasi gagal: {0}",
   "allocFinishFailed": "Penyelesaian pembagian dana saluran simulasi gagal: {0}",
   "allocReceiverBindFailed": "Gagal mengikat penerima pembagian dana saluran simulasi: {0}",

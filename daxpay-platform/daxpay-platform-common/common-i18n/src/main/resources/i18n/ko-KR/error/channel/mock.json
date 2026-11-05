@@ -7,7 +7,6 @@
   "unsupportedPayMethod": "모의 채널이 지원하지 않는 결제 방식: {0}",
   "payFailed": "모의 채널 결제 예외: {0}",
   "closeFailed": "모의 채널 주문 종료 예외: {0}",
-  "refundFailed": "모의 채널 환불 예외: {0}",
   "allocFailed": "모의 채널 분배에 실패했습니다: {0}",
   "allocFinishFailed": "모의 채널 분배 완료에 실패했습니다: {0}",
   "allocReceiverBindFailed": "모의 채널 분배 수신자 바인딩에 실패했습니다: {0}",

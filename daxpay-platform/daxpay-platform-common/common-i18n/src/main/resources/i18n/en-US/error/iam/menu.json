@@ -7,7 +7,6 @@
   "typeImmutable": "Menu type cannot be changed after creation",
   "subpageNeedParent": "Subpage must select a parent menu",
   "parentNotExist": "Parent menu not found",
-  "subpageParentMustBeMenu": "Subpage parent must be a menu type",
   "subpageParentInvalid": "Subpage parent must be a menu or subpage group",
   "subpageGroupNeedParent": "Subpage group must select a parent menu",
   "subpageGroupParentMustBeMenu": "Subpage group parent must be a menu type",

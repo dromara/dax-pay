@@ -7,7 +7,6 @@
   "mchMismatch": "System and channel terminals must belong to the same merchant",
   "bindExists": "Binding already exists",
   "bindNotFound": "Binding not found",
-  "channelMchTerminalExists": "This system terminal already has a record under this channel merchant",
   "notFound": "Terminal number [{0}] not found",
   "mchNotMatch": "Terminal number [{0}] does not belong to the current merchant",
   "disabled": "Terminal number [{0}] is disabled",

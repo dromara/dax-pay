@@ -1,5 +1,4 @@
 {
-  "envMismatch": "Lingkungan pedagang saluran tidak cocok dengan lingkungan aktif produk",
   "allocReceiverDuplicate": "Penerima alokasi sudah ada (merchant channel, tipe, dan akun yang sama)",
   "allocReceiverAlreadyBound": "Penerima sudah terikat",
   "allocReceiverNotBound": "Hanya penerima terikat yang dapat dilepaskan",

@@ -1,7 +1,5 @@
 {
   "notExist": "Payment capability does not exist",
-  "duplicateProduct": "Linked payment products must be unique",
-  "productNotExist": "Payment product does not exist",
   "methodNotInDirectory": "Payment method [{0}] is not in the payment directory of channel provider [{1}]",
   "invalidProvider": "Invalid payment provider"
 }

@@ -1,7 +1,5 @@
 {
   "notExist": "Khả năng thanh toán không tồn tại",
-  "duplicateProduct": "Các sản phẩm thanh toán được liên kết phải là duy nhất",
-  "productNotExist": "Sản phẩm thanh toán không tồn tại",
   "methodNotInDirectory": "Phương thức thanh toán [{0}] không có trong thư mục thanh toán của kênh thanh toán [{1}]",
   "invalidProvider": "Nhà cung cấp thanh toán không hợp lệ"
 }

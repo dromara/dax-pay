@@ -1,5 +1,3 @@
 {
-  "notExist": "Produk pembayaran tidak ditemukan",
-  "duplicateCapability": "Kode kemampuan pembayaran duplikat",
-  "capabilityNotExist": "Kemampuan membayar tidak ditemukan"
+  "notExist": "Produk pembayaran tidak ditemukan"
 }

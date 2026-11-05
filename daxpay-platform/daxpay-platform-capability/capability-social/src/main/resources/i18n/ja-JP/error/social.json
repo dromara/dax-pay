@@ -2,10 +2,8 @@
   "configNotExist": "プラットフォーム設定が存在しないか無効です",
   "unsupportedSource": "未対応のプラットフォームです",
   "unsupportedClient": "ソーシャルログインは管理端(admin)と加盟店端(merchant)のみ対応しています",
-  "configDuplicated": "このプラットフォーム設定は既に存在します",
   "notConfigured": "プラットフォーム未設定のため有効/無効を切り替えできません",
   "authCodeBlank": "認可コードは空にできません",
-  "endpointNotConfigured": "エンドポイント設定にフロントのアクセスURLがなく、コールバックURLを生成できません",
   "adminEndpointNotConfigured": "先にエンドポイント設定で「管理端アクセスURL」(adminBaseUrl)を設定してください",
   "merchantEndpointNotConfigured": "先にエンドポイント設定で「加盟店端アクセスURL」(merchantBaseUrl)を設定してください",
   "gatewayEndpointNotConfigured": "エンドポイント設定で「支払いゲートウェイフロントエンドアドレス」(paymentGatewayBaseUrl)を先に設定してください。リダイレクト型プラットフォームのログインコールバックはゲートウェイドメイン経由で転送されます",
@@ -27,10 +25,6 @@
     "scanNotSupported": "このプラットフォームはQRコードログイン不要です。直接ログインを開始してください"
   },
   "oauthFailed": "外部認可に失敗しました",
-  "appletUnbind": "このプラットフォームアカウントはシステムアカウントに紐付けられていません。アカウントとパスワードでログイン後、「アカウントとセキュリティ」で紐付けてください",
-  "codeExchangeFail": "ログイン証憑とプラットフォームユーザー識別子の交換に失敗しました: {0}",
-  "appletRenderUnsupported": "ミニアプリプラットフォームはリダイレクト認可URLの生成に対応していません。ミニアプリ内でログインまたは紐付けを開始してください",
-  "appletNotConfigured": "ミニアプリログインのプラットフォーム証憑が不完全です。先にソーシャルログイン設定で補完してください",
   "autoLogin": {
     "sourceRequired": "自動ログインを有効にする場合はプラットフォームを1つ以上選択してください",
     "sourceNotEnabled": "選択した自動ログインプラットフォームが未設定または無効です: {0}",

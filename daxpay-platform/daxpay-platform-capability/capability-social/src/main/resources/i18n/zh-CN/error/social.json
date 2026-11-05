@@ -2,10 +2,8 @@
   "configNotExist": "平台配置不存在或未启用",
   "unsupportedSource": "不支持的平台",
   "unsupportedClient": "社交登录仅支持运营端(admin)与商户端(merchant)",
-  "configDuplicated": "该平台配置已存在",
   "notConfigured": "平台尚未配置，无法启停",
   "authCodeBlank": "授权码不能为空",
-  "endpointNotConfigured": "端点配置中缺少对应前端访问地址，无法生成回调 URL",
   "adminEndpointNotConfigured": "请先在端点配置中设置「管理端访问地址」(adminBaseUrl)",
   "merchantEndpointNotConfigured": "请先在端点配置中设置「商户端访问地址」(merchantBaseUrl)，商户社交登录依赖该地址生成回调",
   "gatewayEndpointNotConfigured": "请先在端点配置中设置「支付网关前端地址」(paymentGatewayBaseUrl)，跳转型平台登录回调经网关域名透传",
@@ -27,10 +25,6 @@
     "scanNotSupported": "该平台无需扫码登录，请直接发起登录"
   },
   "oauthFailed": "三方授权失败",
-  "appletUnbind": "该平台账号未绑定系统账号, 请使用账号密码登录后在「账户与安全」中绑定",
-  "codeExchangeFail": "登录凭证换取平台用户标识失败: {0}",
-  "appletRenderUnsupported": "小程序平台不支持生成跳转授权地址, 请在小程序内发起登录或绑定",
-  "appletNotConfigured": "小程序登录平台凭据不完整, 请先在社交登录配置中补全",
   "autoLogin": {
     "sourceRequired": "开启自动登录时必须至少选择一个平台",
     "sourceNotEnabled": "所选自动登录平台未配置或未启用: {0}",

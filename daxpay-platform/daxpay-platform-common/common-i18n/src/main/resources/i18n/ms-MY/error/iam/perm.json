@@ -1,6 +1,4 @@
 {
   "codeDefinitionConflict": "Takrifan kod kebenaran yang bercanggah: {0}",
-  "codeNotConfigured": "Pengisytiharan kod kebenaran tiada kod",
-  "nameCnNotConfigured": "Pengisytiharan kod kebenaran tiada namaCn",
-  "nameEnNotConfigured": "Pengisytiharan kod kebenaran tiada namaEn"
+  "codeNotConfigured": "Pengisytiharan kod kebenaran tiada kod"
 }

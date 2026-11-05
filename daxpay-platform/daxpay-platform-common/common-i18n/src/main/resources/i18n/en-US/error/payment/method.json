@@ -1,5 +1,1 @@
-{
-  "notExist": "Payment method does not exist",
-  "duplicateProvider": "Duplicate pay provider in association",
-  "providerNotExist": "Pay provider does not exist"
-}
+{}

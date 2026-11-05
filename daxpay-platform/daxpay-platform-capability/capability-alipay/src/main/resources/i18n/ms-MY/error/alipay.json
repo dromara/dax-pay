@@ -1,4 +1,3 @@
 {
-  "authFailed": "Gagal mendapatkan pengecam pengguna Alipay: {0}",
-  "clientInitFailed": "Gagal untuk memulakan klien Alipay OpenAPI: {0}"
+  "authFailed": "Gagal mendapatkan pengecam pengguna Alipay: {0}"
 }

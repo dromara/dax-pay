@@ -1,5 +1,4 @@
 {
-  "envMismatch": "通道商户环境与支付产品当前生效环境不一致",
   "allocReceiverDuplicate": "分账接收方已存在(同通道商户同类型同账号)",
   "allocReceiverAlreadyBound": "已绑定的接收方无需重复绑定",
   "allocReceiverNotBound": "仅已绑定的接收方可解绑",

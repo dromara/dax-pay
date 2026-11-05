@@ -2,10 +2,8 @@
   "configNotExist": "Konfigurasi platform tidak wujud atau tidak didayakan",
   "unsupportedSource": "Platform tidak disokong",
   "unsupportedClient": "Log masuk sosial hanya menyokong pelanggan pentadbir dan pedagang",
-  "configDuplicated": "Konfigurasi platform sudah wujud",
   "notConfigured": "Platform tidak dikonfigurasikan dan tidak boleh ditogol",
   "authCodeBlank": "Kod kebenaran tidak boleh kosong",
-  "endpointNotConfigured": "URL asas bahagian hadapan tiada dalam konfigurasi titik akhir, tidak boleh membina URL panggil balik",
   "adminEndpointNotConfigured": "Sila tetapkan URL Pangkalan Pentadbiran (adminBaseUrl) dalam konfigurasi titik akhir dahulu",
   "merchantEndpointNotConfigured": "Sila tetapkan URL Pangkalan Pedagang (merchantBaseUrl) dalam konfigurasi titik akhir dahulu; log masuk sosial pedagang memerlukannya untuk panggilan balik OAuth",
   "gatewayEndpointNotConfigured": "Tetapkan 'alamat frontend gateway pembayaran' (paymentGatewayBaseUrl) dalam konfigurasi endpoint dahulu; callback log masuk platform jenis redirect disampaikan melalui domain gateway",
@@ -27,10 +25,6 @@
     "scanNotSupported": "Platform ini tidak memerlukan log masuk kod QR, sila log masuk secara langsung"
   },
   "oauthFailed": "Kebenaran pihak ketiga gagal",
-  "appletUnbind": "Akaun platform ini belum dikaitkan dengan akaun sistem. Sila log masuk dengan akaun dan kata laluan, kemudian kaitkan di 'Akaun & Keselamatan'",
-  "codeExchangeFail": "Gagal menukar kredensial log masuk dengan identiti pengguna platform: {0}",
-  "appletRenderUnsupported": "Platform mini program tidak menyokong penjanaan URL kebenaran lencongan. Sila mulakan log masuk atau pengikatan dalam mini program",
-  "appletNotConfigured": "Kredensial platform log masuk mini program tidak lengkap. Sila lengkapkan dalam konfigurasi log masuk sosial terlebih dahulu",
   "autoLogin": {
     "sourceRequired": "Pilih sekurang-kurangnya satu platform apabila log masuk auto diaktifkan",
     "sourceNotEnabled": "Platform log masuk auto belum dikonfigurasi atau dilumpuhkan: {0}",

@@ -7,7 +7,6 @@
   "unsupportedPayMethod": "Unsupported payment method for the mock channel: {0}",
   "payFailed": "Mock channel payment exception: {0}",
   "closeFailed": "Mock channel close order exception: {0}",
-  "refundFailed": "Mock channel refund exception: {0}",
   "allocFailed": "Mock channel allocation failed: {0}",
   "allocFinishFailed": "Mock channel allocation finish failed: {0}",
   "allocReceiverBindFailed": "Mock channel allocation receiver bind failed: {0}",

@@ -1,14 +1,5 @@
 {
-  "success": "ความสำเร็จ",
   "channelNotFound": "รหัสช่องที่ไม่รองรับ",
-  "channelNotFoundWithDetail": "รหัสช่องที่ไม่รองรับ: {0}",
-  "invalidConfig": "การกำหนดค่าช่องไม่ถูกต้อง",
-  "sdkCallFailed": "การเรียก SDK ล้มเหลว",
-  "sdkCallFailedWithDetail": "การเรียก SDK ล้มเหลว: {0}",
-  "callbackVerifyFailed": "การตรวจสอบลายเซ็นโทรกลับล้มเหลว",
-  "cacheConcurrentConflict": "ความขัดแย้งที่เกิดขึ้นพร้อมกัน",
-  "systemError": "ข้อผิดพลาดของระบบภายใน",
-  "validateParams": "การตรวจสอบพารามิเตอร์ล้มเหลว",
   "transportEncrypt": {
     "appConfigMissing": "การตั้งค่าแอปช่องทางว่างเปล่า: {0}",
     "configMissing": "ไม่มีการตั้งค่าการเข้ารหัสการส่งช่องทาง: {0}",
@@ -17,7 +8,6 @@
     "ciphertextInvalid": "ความยาวciphertext การส่งช่องทางไม่ถูกต้อง",
     "decryptFailed": "การถอดรหัสการส่งช่องทางล้มเหลว",
     "responseHeaderMissing": "การตอบกลับช่องทางไม่มีส่วนหัวเข้ารหัสการส่ง {0}",
-    "requestHeaderMissing": "การเข้ารหัสการส่งช่องทาง: คำขอไม่มีส่วนหัวเข้ารหัส",
     "plainErrorResponse": "แอปย่อยของช่องทางส่งกลับการตอบกลับข้อผิดพลาดแบบข้อความธรรมดา [{0}]: {1}"
   }
 }

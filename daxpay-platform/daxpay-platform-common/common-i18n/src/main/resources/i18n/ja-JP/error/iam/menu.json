@@ -7,7 +7,6 @@
   "typeImmutable": "メニュータイプは作成後に変更できません",
   "subpageNeedParent": "サブページは親メニューを選択する必要があります",
   "parentNotExist": "親メニューが見つかりません",
-  "subpageParentMustBeMenu": "サブページの親はメニュー タイプである必要があります",
   "subpageParentInvalid": "サブページの親はメニューまたはサブページ グループである必要があります",
   "subpageGroupNeedParent": "サブページグループは親メニューを選択する必要があります",
   "subpageGroupParentMustBeMenu": "サブページグループの親はメニュータイプである必要があります",

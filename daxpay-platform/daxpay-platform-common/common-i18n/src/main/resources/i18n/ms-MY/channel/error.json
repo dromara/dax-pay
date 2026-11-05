@@ -1,14 +1,5 @@
 {
-  "success": "kejayaan",
   "channelNotFound": "Kod saluran tidak disokong",
-  "channelNotFoundWithDetail": "Kod saluran tidak disokong: {0}",
-  "invalidConfig": "Konfigurasi saluran tidak sah",
-  "sdkCallFailed": "Panggilan SDK gagal",
-  "sdkCallFailedWithDetail": "Panggilan SDK gagal: {0}",
-  "callbackVerifyFailed": "Pengesahan tandatangan panggilan balik gagal",
-  "cacheConcurrentConflict": "Konflik serentak",
-  "systemError": "Ralat sistem dalaman",
-  "validateParams": "Pengesahan parameter gagal",
   "transportEncrypt": {
     "appConfigMissing": "Konfigurasi aplikasi saluran kosong: {0}",
     "configMissing": "Konfigurasi penyulitan pengangkutan saluran tiada: {0}",
@@ -17,7 +8,6 @@
     "ciphertextInvalid": "Panjang ciphertext pengangkutan saluran tidak sah",
     "decryptFailed": "Penyahsulitan pengangkutan saluran gagal",
     "responseHeaderMissing": "Respons saluran tiada pengepala penyulitan pengangkutan {0}",
-    "requestHeaderMissing": "Penyulitan pengangkutan saluran: permintaan tiada pengepala penyulitan",
     "plainErrorResponse": "Sub-aplikasi saluran memulangkan respons ralat teks biasa [{0}]: {1}"
   }
 }

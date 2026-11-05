@@ -7,7 +7,6 @@
   "typeImmutable": "Loại menu không thể thay đổi sau khi tạo",
   "subpageNeedParent": "Trang con phải chọn menu gốc",
   "parentNotExist": "Không tìm thấy menu gốc",
-  "subpageParentMustBeMenu": "Trang con gốc phải là một loại menu",
   "subpageParentInvalid": "Trang con gốc phải là một menu hoặc nhóm trang con",
   "subpageGroupNeedParent": "Nhóm trang con phải chọn menu gốc",
   "subpageGroupParentMustBeMenu": "Nhóm trang con gốc phải là loại menu",

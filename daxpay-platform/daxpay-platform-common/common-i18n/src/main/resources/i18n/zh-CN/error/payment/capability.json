@@ -1,7 +1,5 @@
 {
   "notExist": "支付能力不存在",
-  "duplicateProduct": "关联支付产品不可重复",
-  "productNotExist": "支付产品不存在",
   "methodNotInDirectory": "支付方式[{0}]不在支付渠道[{1}]的支付目录中",
   "invalidProvider": "无效的支付服务商"
 }

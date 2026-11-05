@@ -2,10 +2,8 @@
   "configNotExist": "Cấu hình nền tảng không tồn tại hoặc không được kích hoạt",
   "unsupportedSource": "Nền tảng không được hỗ trợ",
   "unsupportedClient": "Đăng nhập xã hội chỉ hỗ trợ khách hàng quản trị và người bán",
-  "configDuplicated": "Cấu hình nền tảng đã tồn tại",
   "notConfigured": "Nền tảng chưa được định cấu hình và không thể chuyển đổi",
   "authCodeBlank": "Mã ủy quyền không được để trống",
-  "endpointNotConfigured": "URL cơ sở giao diện người dùng bị thiếu trong cấu hình điểm cuối, không thể tạo URL gọi lại",
   "adminEndpointNotConfigured": "Trước tiên, vui lòng đặt URL cơ sở quản trị (adminBaseUrl) trong cấu hình điểm cuối",
   "merchantEndpointNotConfigured": "Trước tiên, vui lòng đặt URL cơ sở người bán (merchantBaseUrl) trong cấu hình điểm cuối; thông tin đăng nhập xã hội của người bán cần nó cho các cuộc gọi lại OAuth",
   "gatewayEndpointNotConfigured": "Thiết lập 'địa chỉ frontend cổng thanh toán' (paymentGatewayBaseUrl) trong cấu hình endpoint trước; callback đăng nhập nền tảng dạng redirect được chuyển tiếp qua tên miền gateway",
@@ -27,10 +25,6 @@
     "scanNotSupported": "Nền tảng này không cần đăng nhập bằng mã QR, hãy đăng nhập trực tiếp"
   },
   "oauthFailed": "Ủy quyền bên thứ ba thất bại",
-  "appletUnbind": "Tài khoản nền tảng này chưa được liên kết với tài khoản hệ thống. Vui lòng đăng nhập bằng tài khoản và mật khẩu, sau đó liên kết trong 'Tài khoản & Bảo mật'",
-  "codeExchangeFail": "Đổi thông tin đăng nhập lấy định danh người dùng nền tảng thất bại: {0}",
-  "appletRenderUnsupported": "Nền tảng tiểu chương trình không hỗ trợ tạo URL uỷ quyền chuyển hướng. Vui lòng đăng nhập hoặc liên kết trong tiểu chương trình",
-  "appletNotConfigured": "Thông tin xác thực nền tảng đăng nhập tiểu chương trình chưa đầy đủ. Vui lòng bổ sung trong cấu hình đăng nhập mạng xã hội trước",
   "autoLogin": {
     "sourceRequired": "Khi bật tự động đăng nhập phải chọn ít nhất một nền tảng",
     "sourceNotEnabled": "Nền tảng tự động đăng nhập chưa cấu hình hoặc đã tắt: {0}",

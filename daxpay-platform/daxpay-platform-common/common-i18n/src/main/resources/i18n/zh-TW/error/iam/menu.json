@@ -7,7 +7,6 @@
   "typeImmutable": "選單型別建立後不可修改",
   "subpageNeedParent": "子頁面必須選擇上級選單",
   "parentNotExist": "上級選單不存在",
-  "subpageParentMustBeMenu": "子頁面的上級選單必須是選單型別",
   "subpageParentInvalid": "子頁面的上級必須是選單或子頁面分組",
   "subpageGroupNeedParent": "子頁面分組必須選擇上級選單",
   "subpageGroupParentMustBeMenu": "子頁面分組的上級必須是選單型別",

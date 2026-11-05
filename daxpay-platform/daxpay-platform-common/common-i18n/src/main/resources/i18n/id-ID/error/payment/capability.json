@@ -1,7 +1,5 @@
 {
   "notExist": "Kemampuan pembayaran tidak ada",
-  "duplicateProduct": "Produk pembayaran tertaut harus unik",
-  "productNotExist": "Produk pembayaran tidak ada",
   "methodNotInDirectory": "Metode pembayaran [{0}] tidak ada dalam direktori pembayaran penyedia saluran [{1}]",
   "invalidProvider": "Penyedia pembayaran tidak valid"
 }

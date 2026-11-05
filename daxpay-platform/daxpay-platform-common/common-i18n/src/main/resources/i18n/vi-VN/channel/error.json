@@ -1,14 +1,5 @@
 {
-  "success": "thành công",
   "channelNotFound": "Mã kênh không được hỗ trợ",
-  "channelNotFoundWithDetail": "Mã kênh không được hỗ trợ: {0}",
-  "invalidConfig": "Cấu hình kênh không hợp lệ",
-  "sdkCallFailed": "Cuộc gọi SDK không thành công",
-  "sdkCallFailedWithDetail": "Cuộc gọi SDK không thành công: {0}",
-  "callbackVerifyFailed": "Xác minh chữ ký gọi lại không thành công",
-  "cacheConcurrentConflict": "Xung đột đồng thời",
-  "systemError": "Lỗi hệ thống nội bộ",
-  "validateParams": "Xác thực tham số không thành công",
   "transportEncrypt": {
     "appConfigMissing": "Cấu hình ứng dụng kênh trống: {0}",
     "configMissing": "Thiếu cấu hình mã hóa truyền tải kênh: {0}",
@@ -17,7 +8,6 @@
     "ciphertextInvalid": "Độ dài bản mã truyền tải kênh không hợp lệ",
     "decryptFailed": "Giải mã truyền tải kênh thất bại",
     "responseHeaderMissing": "Phản hồi kênh thiếu header mã hóa truyền tải {0}",
-    "requestHeaderMissing": "Mã hóa truyền tải kênh: yêu cầu thiếu header mã hóa",
     "plainErrorResponse": "Ứng dụng con kênh trả về phản hồi lỗi văn bản thuần [{0}]: {1}"
   }
 }

@@ -1,6 +1,4 @@
 {
   "codeDefinitionConflict": "คำจำกัดความของรหัสอนุญาตที่ขัดแย้งกัน: {0}",
-  "codeNotConfigured": "รหัสประกาศรหัสอนุญาตรหัสหายไป",
-  "nameCnNotConfigured": "การประกาศรหัสสิทธิ์ไม่มี nameCn",
-  "nameEnNotConfigured": "การประกาศรหัสสิทธิ์ไม่มี nameEn"
+  "codeNotConfigured": "รหัสประกาศรหัสอนุญาตรหัสหายไป"
 }

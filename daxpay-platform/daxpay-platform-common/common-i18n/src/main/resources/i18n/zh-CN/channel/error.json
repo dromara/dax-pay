@@ -1,14 +1,5 @@
 {
-  "success": "success",
   "channelNotFound": "不支持的通道编码",
-  "channelNotFoundWithDetail": "不支持的通道编码: {0}",
-  "invalidConfig": "通道配置无效",
-  "sdkCallFailed": "SDK 调用失败",
-  "sdkCallFailedWithDetail": "SDK 调用失败: {0}",
-  "callbackVerifyFailed": "回调验签失败",
-  "cacheConcurrentConflict": "并发冲突",
-  "systemError": "系统内部错误",
-  "validateParams": "参数校验失败",
   "transportEncrypt": {
     "appConfigMissing": "通道子应用配置不能为空: {0}",
     "configMissing": "缺少通道传输加密配置: {0}",
@@ -17,7 +8,6 @@
     "ciphertextInvalid": "通道传输密文长度非法",
     "decryptFailed": "通道传输解密失败",
     "responseHeaderMissing": "通道子应用响应未携带传输加密头 {0}",
-    "requestHeaderMissing": "通道传输加密：请求未携带加密头",
     "plainErrorResponse": "通道子应用返回明文错误响应[{0}]: {1}"
   }
 }

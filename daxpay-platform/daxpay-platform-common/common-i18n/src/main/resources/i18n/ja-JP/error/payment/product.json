@@ -1,5 +1,3 @@
 {
-  "notExist": "支払い商品が見つかりません",
-  "duplicateCapability": "支払い機能コードが重複しています",
-  "capabilityNotExist": "支払い能力が見つかりません"
+  "notExist": "支払い商品が見つかりません"
 }

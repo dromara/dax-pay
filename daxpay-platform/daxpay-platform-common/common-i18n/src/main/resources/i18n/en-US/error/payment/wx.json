@@ -8,11 +8,9 @@
   "scopeNotExist": "WeChat app scope does not exist or reference is invalid",
   "channelAppIdNotFound": "The WeChat AppId [{0}] specified in the request is not registered in the system. Please check whether it is correct, or register the app in App Configuration first",
   "channelAppIdNotRegistered": "The specified WeChat AppId [{0}] is not registered in the system, so WeChat authorization cannot be initiated. Please register the app in App Configuration first",
-  "appNotBound": "No WeChat app is bound",
   "channelMerchantMismatch": "Channel merchant does not exist or does not match the merchant number",
   "appNotConfigured": "No application configured for {0}, please bind one on the channel merchant app configuration page",
   "directMchAppNotConfigured": "Direct merchant has no merchant-tier app configured for {0}. Please bind one (merchant scope) on the channel merchant app configuration page. Platform-tier apps are not allowed for direct merchants.",
-  "appNotUnique": "Multiple applications of type {0} exist, please explicitly configure the capability binding to select one",
   "platformAppAmbiguous": "Multiple platform WeChat apps are configured for this product, so the service provider app cannot be resolved automatically. Specify the service provider app or reduce the app capability bindings for this product",
   "mpAuthNotConfigured": "WeChat Official Account auth config is missing, please configure AppId and AppSecret in Third-Party Platform → WeChat Official Account Auth Config",
   "appRefByAllocReceiver": "This WeChat app is referenced by an allocation receiver record and cannot be deleted"

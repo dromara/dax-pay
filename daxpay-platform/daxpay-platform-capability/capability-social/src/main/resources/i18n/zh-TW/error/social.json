@@ -2,10 +2,8 @@
   "configNotExist": "平臺配置不存在或未啟用",
   "unsupportedSource": "不支援的平臺",
   "unsupportedClient": "社交登入僅支援運營端(admin)與商戶端(merchant)",
-  "configDuplicated": "該平臺配置已存在",
   "notConfigured": "平臺尚未配置，無法啟停",
   "authCodeBlank": "授權碼不能為空",
-  "endpointNotConfigured": "端點配置中缺少對應前端訪問地址，無法生成回撥 URL",
   "adminEndpointNotConfigured": "請先在端點配置中設定「管理端訪問地址」(adminBaseUrl)",
   "merchantEndpointNotConfigured": "請先在端點配置中設定「商戶端訪問地址」(merchantBaseUrl)，商戶社交登入依賴該地址生成回撥",
   "gatewayEndpointNotConfigured": "請先在端點配置中設定「支付網關前端地址」(paymentGatewayBaseUrl)，跳轉型平台登入回調經網關域名轉傳",
@@ -27,10 +25,6 @@
     "scanNotSupported": "該平台無需掃碼登入，請直接發起登入"
   },
   "oauthFailed": "三方授權失敗",
-  "appletUnbind": "該平台賬號未綁定系統賬號, 請使用賬號密碼登入後在「帳戶與安全」中綁定",
-  "codeExchangeFail": "登入憑證換取平台使用者標識失敗: {0}",
-  "appletRenderUnsupported": "小程式平台不支援產生跳轉授權位址, 請在小程式內發起登入或綁定",
-  "appletNotConfigured": "小程式登入平台憑證不完整, 請先在社群登入設定中補全",
   "autoLogin": {
     "sourceRequired": "開啟自動登入時必須至少選擇一個平台",
     "sourceNotEnabled": "所選自動登入平台未配置或未啟用: {0}",

@@ -7,7 +7,6 @@
   "unsupportedPayMethod": "Phương thức thanh toán không được kênh mô phỏng hỗ trợ: {0}",
   "payFailed": "Lỗi thanh toán kênh mô phỏng: {0}",
   "closeFailed": "Lỗi đóng đơn hàng kênh mô phỏng: {0}",
-  "refundFailed": "Lỗi hoàn tiền kênh mô phỏng: {0}",
   "allocFailed": "Phân chia tiền kênh mô phỏng thất bại: {0}",
   "allocFinishFailed": "Hoàn tất phân chia tiền kênh mô phỏng thất bại: {0}",
   "allocReceiverBindFailed": "Liên kết người nhận phân chia tiền kênh mô phỏng thất bại: {0}",

@@ -7,11 +7,9 @@
   "appTypeCapabilityMismatch": "Loại ứng dụng Douyin không tương thích với khả năng thanh toán",
   "scopeNotExist": "Phạm vi ứng dụng Douyin không tồn tại hoặc tham chiếu không hợp lệ",
   "channelAppIdNotFound": "AppId ứng dụng Douyin [{0}] được chỉ định trong tham số yêu cầu chưa được đăng ký trong hệ thống. Vui lòng kiểm tra xem đã nhập đúng chưa, hoặc đăng ký ứng dụng này trong Cấu hình ứng dụng trước",
-  "appNotBound": "Chưa liên kết ứng dụng Douyin khả dụng",
   "channelMerchantMismatch": "Không tìm thấy merchant kênh hoặc không khớp với mã merchant",
   "appNotConfigured": "Chưa cấu hình ứng dụng cho {0}, vui lòng liên kết tại trang cấu hình ứng dụng merchant kênh",
   "appNotUnique": "Tồn tại nhiều ứng dụng loại {0}, vui lòng cấu hình liên kết năng lực rõ ràng để chọn",
-  "mpAuthNotConfigured": "Cấu hình xác thực ứng dụng Douyin chưa được điền, vui lòng cấu hình AppId và AppSecret trong Quản lý ứng dụng",
   "directMchAppNotConfigured": "Thương gia kết nối trực tiếp chưa cấu hình ứng dụng cấp thương gia tương ứng với {0}, vui lòng vào trang cấu hình ứng dụng thương gia kênh để liên kết ứng dụng cấp thương gia (thương gia kết nối trực tiếp không thể dùng ứng dụng cấp nền tảng)",
   "appRefByAllocReceiver": "Ứng dụng Douyin được tham chiếu bởi bản ghi người nhận phân chia tiền, không thể xóa"
 }

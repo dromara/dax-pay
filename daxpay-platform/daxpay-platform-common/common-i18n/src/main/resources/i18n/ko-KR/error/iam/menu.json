@@ -7,7 +7,6 @@
   "typeImmutable": "생성 후에는 메뉴 유형을 변경할 수 없습니다.",
   "subpageNeedParent": "하위 페이지는 상위 메뉴를 선택해야 합니다.",
   "parentNotExist": "상위 메뉴를 찾을 수 없습니다",
-  "subpageParentMustBeMenu": "하위 페이지 상위 항목은 메뉴 유형이어야 합니다.",
   "subpageParentInvalid": "하위 페이지 상위는 메뉴 또는 하위 페이지 그룹이어야 합니다.",
   "subpageGroupNeedParent": "하위 페이지 그룹은 상위 메뉴를 선택해야 합니다.",
   "subpageGroupParentMustBeMenu": "하위 페이지 그룹 상위는 메뉴 유형이어야 합니다.",

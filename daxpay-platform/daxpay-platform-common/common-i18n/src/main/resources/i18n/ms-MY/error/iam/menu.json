@@ -7,7 +7,6 @@
   "typeImmutable": "Jenis menu tidak boleh ditukar selepas dibuat",
   "subpageNeedParent": "Subhalaman mesti memilih menu induk",
   "parentNotExist": "Menu induk tidak ditemui",
-  "subpageParentMustBeMenu": "Induk subhalaman mestilah jenis menu",
   "subpageParentInvalid": "Induk subhalaman mestilah menu atau kumpulan subhalaman",
   "subpageGroupNeedParent": "Kumpulan subhalaman mesti memilih menu induk",
   "subpageGroupParentMustBeMenu": "Induk kumpulan subhalaman mestilah jenis menu",

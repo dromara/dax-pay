@@ -7,7 +7,6 @@
   "unsupportedPayMethod": "模拟通道不支持的支付方式: {0}",
   "payFailed": "模拟通道支付异常: {0}",
   "closeFailed": "模拟通道关闭订单异常: {0}",
-  "refundFailed": "模拟通道退款异常: {0}",
   "allocFailed": "模拟通道分账失败: {0}",
   "allocFinishFailed": "模拟通道分账完结失败: {0}",
   "allocReceiverBindFailed": "模拟通道分账接收方绑定失败: {0}",

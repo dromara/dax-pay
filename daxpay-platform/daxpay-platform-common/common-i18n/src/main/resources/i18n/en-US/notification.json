@@ -1,6 +1,1 @@
-{
-  "paySuccessTitle": "Payment Success Notification",
-  "paySuccessBody": "Your order {0} has been paid successfully, amount: {1}",
-  "refundSuccessTitle": "Refund Success Notification",
-  "refundSuccessBody": "Your order {0} has been refunded, amount: {1}"
-}
+{}

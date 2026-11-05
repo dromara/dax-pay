@@ -1,12 +1,6 @@
 {
   "notExist": "Pay channel does not exist",
-  "subMchNoExists": "Sub merchant number already exists in the system",
-  "merchantNoChannelPerm": "Merchant does not have permission for this channel, cannot add channel merchant",
-  "channelMerchantExists": "Channel merchant already exists in the system, do not add again",
-  "onlyDraftCanDelete": "Only draft status can be deleted",
-  "signVerifyFailIllegal": "Signature verification failed, illegal request",
   "channelMerchantNotExist": "Channel merchant information not found",
-  "merchantInfoNotFound": "Merchant information not found",
   "originOrderNotExist": "Original order does not exist",
   "channelMerchantHasTrade": "Channel merchant has trade records and cannot be deleted",
   "channelMerchantHasOrder": "Channel merchant has order records and cannot be deleted",

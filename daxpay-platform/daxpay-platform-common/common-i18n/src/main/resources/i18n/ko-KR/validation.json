@@ -1,10 +1,4 @@
 {
-  "notBlank": "{0}은 비워둘 수 없습니다.",
-  "notEmpty": "{0}은 비워둘 수 없습니다.",
-  "lengthRange": "{0} 길이는 {1}에서 {2} 사이여야 합니다.",
-  "min": "{0}은(는) {1}보다 작을 수 없습니다.",
-  "max": "{0}은(는) {1}보다 클 수 없습니다.",
-  "parameterError": "매개변수 검증 실패",
   "field": {
     "deviceSn": {
       "notBlank": "기기 일련번호는 비워둘 수 없습니다."
@@ -39,17 +33,11 @@
     "clientId": {
       "notBlank": "클라이언트 ID는 비워둘 수 없습니다."
     },
-    "clientSecret": {
-      "notBlank": "클라이언트 비밀번호는 비워둘 수 없습니다."
-    },
     "clientKey": {
       "notBlank": "클라이언트 키는 비워둘 수 없습니다."
     },
     "clientCode": {
       "notBlank": "클라이언트 코드는 비워둘 수 없습니다."
-    },
-    "ip": {
-      "notValid": "IP 주소가 유효하지 않습니다"
     },
     "aliAppId": {
       "notBlank": "Alipay 앱 ID는 비워둘 수 없습니다."
@@ -64,26 +52,15 @@
     "alipayPublicKey": {
       "notBlank": "Alipay 공개 키는 비워둘 수 없습니다."
     },
-    "mchAppPrivateKey": {
-      "notBlank": "앱 비공개 키는 비워둘 수 없습니다."
-    },
     "appSecret": {
-      "size": "앱 비밀번호는 512자를 초과할 수 없습니다.",
       "notBlank": "앱 시크릿은 필수입니다."
-    },
-    "douyinMchId": {
-      "notBlank": "Douyin 판매자 ID는 비워둘 수 없습니다."
     },
     "accountId": {
       "notBlank": "Stripe 계정 ID를 입력하세요"
     },
-    "userIdType": {
-      "notBlank": "사용자 ID 유형은 비워둘 수 없습니다."
-    },
     "product": {
       "notBlank": "제품 코드는 비워둘 수 없습니다.",
-      "size": "제품 코드는 32자를 초과할 수 없습니다.",
-      "notNull": "제품 코드는 비워둘 수 없습니다."
+      "size": "제품 코드는 32자를 초과할 수 없습니다."
     },
     "channel": {
       "notBlank": "채널 코드는 비워둘 수 없습니다.",
@@ -140,12 +117,6 @@
       "notBlank": "WeChat 앱 ID는 비워둘 수 없습니다.",
       "size": "WeChat AppId는 64자를 초과할 수 없습니다."
     },
-    "publicKeyId": {
-      "notBlank": "결제 공개 키 ID는 비워둘 수 없습니다."
-    },
-    "certSerialNo": {
-      "notBlank": "인증서 일련번호 비워둘 수 없습니다."
-    },
     "id": {
       "notNull": "기본 키는 비워둘 수 없습니다.",
       "mustBeNullOnAdd": "ID는 비어 있어야 합니다."
@@ -155,9 +126,6 @@
     },
     "alipayDirectAppId": {
       "notNull": "Alipay 다이렉트 앱 ID는 null일 수 없습니다."
-    },
-    "wechatIsvAppId": {
-      "notNull": "WeChat ISV 앱 ID는 null일 수 없습니다."
     },
     "captchaCode": {
       "notBlank": "그래픽 인증코드를 입력해 주세요"
@@ -176,9 +144,6 @@
     "subjectType": {
       "notBlank": "제목 유형은 비워둘 수 없습니다."
     },
-    "pass": {
-      "notNull": "감사 결과는 비워둘 수 없습니다."
-    },
     "channelMerchantNo": {
       "notBlank": "채널 판매자 번호 비워둘 수 없습니다."
     },
@@ -190,24 +155,6 @@
     },
     "channelMerchantName": {
       "notBlank": "판매자 이름은 비워둘 수 없습니다."
-    },
-    "appKey": {
-      "notBlank": "앱 키는 비워둘 수 없습니다."
-    },
-    "secretKey": {
-      "notBlank": "비밀 키는 비워둘 수 없습니다."
-    },
-    "tradeIdentity": {
-      "notBlank": "판매자 거래 ID는 비워둘 수 없습니다."
-    },
-    "subMchNo": {
-      "notBlank": "하위 판매자 번호 비워둘 수 없습니다."
-    },
-    "parentMchNo": {
-      "notBlank": "상위 채널 판매자 번호 비워둘 수 없습니다."
-    },
-    "subMchName": {
-      "notBlank": "하위 판매자 이름은 비워둘 수 없습니다."
     },
     "orderNo": {
       "notBlank": "결제주문번호 비워둘 수 없습니다.",
@@ -227,14 +174,7 @@
       "notBlank": "제목은 비워둘 수 없습니다.",
       "size": "제목은 100자를 초과할 수 없습니다."
     },
-    "date": {
-      "notNull": "날짜는 비워둘 수 없습니다."
-    },
-    "fileType": {
-      "notNull": "파일 형식은 비워둘 수 없습니다."
-    },
     "authCode": {
-      "notBlank": "결제 코드는 필수입니다",
       "size": "결제 코드는 128자를 초과할 수 없습니다"
     },
     "clientIp": {
@@ -278,8 +218,7 @@
       "notBlank": "판매자 주문번호 비워둘 수 없습니다."
     },
     "description": {
-      "size": "설명은 50자를 초과할 수 없습니다.",
-      "notBlank": "설명은 비워둘 수 없습니다."
+      "size": "설명은 50자를 초과할 수 없습니다."
     },
     "method": {
       "notBlank": "결제 수단은 비워둘 수 없습니다.",
@@ -291,8 +230,7 @@
       "notBlank": "결제 기능은 비워둘 수 없습니다."
     },
     "provider": {
-      "notBlank": "유료 브랜드는 비워둘 수 없습니다.",
-      "size": "유료 브랜드 코드는 32자를 초과할 수 없습니다."
+      "notBlank": "유료 브랜드는 비워둘 수 없습니다."
     },
     "limitPay": {
       "size": "한도 지불 유형은 128자를 초과할 수 없습니다."
@@ -345,9 +283,6 @@
     "returnUrl": {
       "size": "반환 URL은 200자를 초과할 수 없습니다."
     },
-    "quitUrl": {
-      "size": "종료 URL은 200자를 초과할 수 없습니다."
-    },
     "notifyUrl": {
       "size": "알림 URL은 200자를 초과할 수 없습니다."
     },
@@ -356,73 +291,23 @@
       "notBlank": "채널 주문번호 비워둘 수 없습니다."
     },
     "refundNo": {
-      "notBlank": "환불 번호는 비워둘 수 없습니다.",
       "size": "환불 번호는 100자를 초과할 수 없습니다."
     },
     "bizRefundNo": {
-      "size": "가맹점 환불번호 100자를 초과할 수 없습니다.",
-      "notBlank": "가맹점 환불번호 비워둘 수 없습니다."
+      "size": "가맹점 환불번호 100자를 초과할 수 없습니다."
     },
     "reason": {
       "size": "이유는 50자를 초과할 수 없습니다."
-    },
-    "payeeName": {
-      "size": "수취인 이름은 50자를 초과할 수 없습니다."
-    },
-    "items": {
-      "notEmpty": "제품 구성 목록은 비워둘 수 없습니다."
-    },
-    "shortName": {
-      "notBlank": "닉네임은 비워둘 수 없습니다."
     },
     "status": {
       "size": "상태는 16자 이내여야 합니다",
       "notBlank": "상태는 필수입니다."
     },
-    "accountType": {
-      "notBlank": "계정 유형은 비워둘 수 없습니다."
-    },
     "appAuthToken": {
       "notBlank": "앱 인증 토큰은 비워둘 수 없습니다."
     },
-    "isvAppId": {
-      "notBlank": "Alipay 애플리케이션은 비워둘 수 없습니다."
-    },
     "alipayUserId": {
       "notBlank": "하위 판매자 번호 비워둘 수 없습니다."
-    },
-    "accountName": {
-      "notBlank": "은행 계좌 이름은 비워둘 수 없습니다."
-    },
-    "cardNo": {
-      "notBlank": "은행카드번호 비워둘 수 없습니다."
-    },
-    "bankName": {
-      "notBlank": "은행 이름은 비워둘 수 없습니다."
-    },
-    "cardFrontPic": {
-      "notBlank": "은행 카드 앞면 사진은 비워둘 수 없습니다."
-    },
-    "legalName": {
-      "notBlank": "법인 이름은 비워둘 수 없습니다."
-    },
-    "certNo": {
-      "notBlank": "신분증번호 비워둘 수 없습니다."
-    },
-    "frontPic": {
-      "notBlank": "신분증 앞면 사진은 비워둘 수 없습니다."
-    },
-    "backPic": {
-      "notBlank": "신분증 뒷면 사진은 비워둘 수 없습니다."
-    },
-    "licenseNo": {
-      "notBlank": "사업자등록번호 비워둘 수 없습니다."
-    },
-    "licenseName": {
-      "notBlank": "사업자 등록증 이름은 비워둘 수 없습니다."
-    },
-    "licensePic": {
-      "notBlank": "사업자 등록증 사진은 비워둘 수 없습니다."
     },
     "appName": {
       "notBlank": "애플리케이션 이름은 비워둘 수 없습니다.",
@@ -449,10 +334,6 @@
     "privateKey": {
       "notBlank": "플랫폼 개인 키는 비워둘 수 없습니다. daxpay.platform.config.key-config.private-key 구성"
     },
-    "phone": {
-      "notBlank": "전화번호는 비워둘 수 없습니다.",
-      "format": "잘못된 전화번호 형식"
-    },
     "roleId": {
       "notNull": "역할 ID는 비워둘 수 없습니다."
     },
@@ -460,20 +341,8 @@
       "notBlank": "코드는 비워둘 수 없습니다.",
       "size": "코드는 100자를 초과할 수 없습니다"
     },
-    "nameCn": {
-      "notBlank": "중국어 이름은 비워둘 수 없습니다."
-    },
-    "nameEn": {
-      "notBlank": "영문 이름은 비워둘 수 없습니다."
-    },
     "menuCode": {
       "notBlank": "메뉴 코드는 비워둘 수 없습니다."
-    },
-    "titleCn": {
-      "notBlank": "메뉴 제목(중국어)은 비워둘 수 없습니다."
-    },
-    "titleEn": {
-      "notBlank": "메뉴 제목(영문)은 비워둘 수 없습니다."
     },
     "i18nKey": {
       "notBlank": "I18n 키는 비워둘 수 없습니다."
@@ -486,9 +355,6 @@
     },
     "newPassword": {
       "notBlank": "새 비밀번호는 비워둘 수 없습니다."
-    },
-    "configName": {
-      "notBlank": "구성 이름은 비워둘 수 없습니다."
     },
     "endpoint": {
       "notBlank": "끝점은 비워둘 수 없습니다."
@@ -561,9 +427,6 @@
       "notBlank": "이메일은 비워둘 수 없습니다.",
       "format": "잘못된 이메일 형식"
     },
-    "realName": {
-      "notBlank": "이름은 비워둘 수 없습니다."
-    },
     "regionCode": {
       "notBlank": "지역 코드는 비워둘 수 없습니다."
     },
@@ -573,12 +436,6 @@
     "configItems": {
       "notEmpty": "구성 항목은 비워둘 수 없습니다."
     },
-    "payOrderId": {
-      "notNull": "결제 주문 ID는 비워둘 수 없습니다."
-    },
-    "orderId": {
-      "notNull": "주문 ID는 비워둘 수 없습니다."
-    },
     "fileId": {
       "notNull": "파일 ID는 비워둘 수 없습니다."
     },
@@ -587,9 +444,6 @@
     },
     "sessionIds": {
       "notEmpty": "세션 ID 목록은 비워둘 수 없습니다."
-    },
-    "orderSource": {
-      "mustBeNull": "주문 출처 필드는 설정할 수 없습니다."
     },
     "minLengthNotGreaterThanMax": {
       "assertTrue": "최소 길이는 최대 길이보다 클 수 없습니다."
@@ -601,15 +455,11 @@
       "notBlank": "쿼리 코드는 비워둘 수 없습니다."
     },
     "authToken": {
-      "notBlank": "인증 토큰은 비워둘 수 없습니다.",
       "size": "인증 토큰은 64자를 초과할 수 없습니다."
     },
     "returnPath": {
       "size": "반환 경로는 200자를 초과할 수 없습니다.",
       "notBlank": "복귀 경로는 필수입니다."
-    },
-    "taskId": {
-      "notNull": "메시지 ID는 비워둘 수 없습니다."
     },
     "deleteDay": {
       "notNull": "요일은 비워둘 수 없습니다."
@@ -658,29 +508,11 @@
     "douyinAppId": {
       "notBlank": "Douyin 앱 ID는 비워둘 수 없습니다."
     },
-    "douyinDirectAppId": {
-      "notNull": "Douyin 다이렉트 앱 ID는 비워둘 수 없습니다."
-    },
     "dyMchId": {
       "notBlank": "Douyin 판매자 ID는 비워둘 수 없습니다."
     },
-    "wechatDirectAppId": {
-      "notNull": "WeChat 다이렉트 앱 ID는 비워둘 수 없습니다."
-    },
-    "wechatIsvMchAppId": {
-      "notNull": "WeChat ISV 채널 판매자 앱 ID는 비워둘 수 없습니다."
-    },
     "storeName": {
       "notBlank": "상점 이름은 비워둘 수 없습니다."
-    },
-    "deviceType": {
-      "notBlank": "기기 유형은 비워둘 수 없습니다."
-    },
-    "vendorCode": {
-      "notBlank": "공급업체 코드는 비워둘 수 없습니다."
-    },
-    "vendorConfigId": {
-      "notNull": "공급업체 구성은 null일 수 없습니다."
     },
     "qrCodeName": {
       "notBlank": "QR 코드 이름은 비워둘 수 없습니다.",
@@ -719,9 +551,6 @@
     "mchSerialNo": {
       "notBlank": "판매자 인증서 일련번호는 비워둘 수 없습니다."
     },
-    "orgCode": {
-      "notBlank": "조직 코드는 비워둘 수 없습니다."
-    },
     "orgId": {
       "notBlank": "조직 ID는 비워둘 수 없습니다."
     },
@@ -735,8 +564,7 @@
       "notBlank": "성푸퉁(ShengPay) 판매자 번호는 비워둘 수 없습니다."
     },
     "termNo": {
-      "notBlank": "터미널 번호는 비워둘 수 없습니다.",
-      "size": "터미널 번호는 64자를 초과할 수 없습니다."
+      "notBlank": "터미널 번호는 비워둘 수 없습니다."
     },
     "agentNo": {
       "notBlank": "대리인 번호는 비워둘 수 없습니다."
@@ -775,9 +603,6 @@
     "outRefundNo": {
       "notBlank": "채널 환불 번호 비워둘 수 없습니다."
     },
-    "outRequestNo": {
-      "notBlank": "채널 요청 번호 비워둘 수 없습니다."
-    },
     "tradeNo": {
       "notBlank": "플랫폼 거래번호 비워둘 수 없습니다.",
       "size": "거래번호는 100자를 초과할 수 없습니다."
@@ -791,9 +616,6 @@
     "refundAmount": {
       "notNull": "환불 금액은 null일 수 없습니다.",
       "positive": "환불 금액은 0보다 커야 합니다."
-    },
-    "subject": {
-      "notBlank": "지불 제목은 비워둘 수 없습니다."
     },
     "callbackBody": {
       "notBlank": "콜백 본문은 비워둘 수 없습니다."
@@ -810,23 +632,11 @@
     "callbackSign": {
       "notBlank": "콜백 서명값은 필수입니다"
     },
-    "callbackType": {
-      "notBlank": "콜백 유형은 비워둘 수 없습니다."
-    },
     "rawData": {
       "notBlank": "원시 데이터는 비워둘 수 없습니다."
     },
-    "orderCreateTime": {
-      "notBlank": "주문 생성 시간은 비워둘 수 없습니다."
-    },
-    "orgReqDate": {
-      "notBlank": "원래 요청 날짜는 비워둘 수 없습니다."
-    },
     "originOutTradeNo": {
       "notBlank": "원래 채널 거래 번호 비워둘 수 없습니다."
-    },
-    "config": {
-      "notNull": "구성은 null일 수 없습니다."
     },
     "fuyouMchNo": {
       "notBlank": "Fuyou 판매자 번호는 비워둘 수 없습니다."
@@ -834,20 +644,11 @@
     "fyAppId": {
       "notBlank": "Fuyou 앱 ID는 비워둘 수 없습니다."
     },
-    "leshuaOrderId": {
-      "notBlank": "Leshua 주문 ID는 비워둘 수 없습니다."
-    },
     "lsMchNo": {
       "notBlank": "Leshua 판매자 번호는 비워둘 수 없습니다."
     },
     "lsIsvNo": {
       "notBlank": "Leshua 서비스 제공자 번호는 비워둘 수 없습니다."
-    },
-    "tradeKey": {
-      "notBlank": "거래 키는 비워둘 수 없습니다."
-    },
-    "notifyKey": {
-      "notBlank": "알림 키는 비워둘 수 없습니다."
     },
     "fileName": {
       "notBlank": "파일 이름은 비워둘 수 없습니다."
@@ -864,9 +665,6 @@
     },
     "programType": {
       "notBlank": "프로그램 유형은 비워 둘 수 없습니다"
-    },
-    "sensitiveWord": {
-      "rejected": "민감한 단어가 포함되어 있습니다"
     },
     "word": {
       "notBlank": "민감어는 필수입니다",
@@ -967,18 +765,7 @@
       "size": "런타임 코드는 16자를 초과할 수 없습니다"
     },
     "transferSceneName": {
-      "notBlank": "이체 시나리오 이름은 비워둘 수 없습니다",
-      "size": "이체 시나리오 이름은 64자를 초과할 수 없습니다"
-    },
-    "transferSceneReportInfoType": {
-      "size": "이체 시나리오 보고 정보 유형은 64자를 초과할 수 없습니다"
-    },
-    "transferSceneReportInfoContent": {
-      "size": "이체 시나리오 보고 정보 내용은 200자를 초과할 수 없습니다"
-    },
-    "transferSceneId": {
-      "notBlank": "송금 시나리오 ID는 필수입니다",
-      "size": "송금 시나리오 ID는 16자 이내여야 합니다"
+      "notBlank": "이체 시나리오 이름은 비워둘 수 없습니다"
     },
     "systemTerminalNo": {
       "notBlank": "시스템 단말은 필수입니다"

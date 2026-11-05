@@ -2,10 +2,8 @@
   "configNotExist": "플랫폼 구성이 없거나 비활성화되어 있습니다",
   "unsupportedSource": "지원하지 않는 플랫폼입니다",
   "unsupportedClient": "소셜 로그인은 운영단(admin)과 가맹점단(merchant)만 지원합니다",
-  "configDuplicated": "해당 플랫폼 구성이 이미 존재합니다",
   "notConfigured": "플랫폼이 구성되지 않아 활성/비활성할 수 없습니다",
   "authCodeBlank": "인가 코드는 비울 수 없습니다",
-  "endpointNotConfigured": "엔드포인트 구성에 프론트 접속 URL이 없어 콜백 URL을 생성할 수 없습니다",
   "adminEndpointNotConfigured": "먼저 엔드포인트 구성에서 「운영단 접속 주소」(adminBaseUrl)를 설정하세요",
   "merchantEndpointNotConfigured": "먼저 엔드포인트 구성에서 「가맹점단 접속 주소」(merchantBaseUrl)를 설정하세요",
   "gatewayEndpointNotConfigured": "먼저 엔드포인트 설정에서 '결제 게이트웨이 프론트 주소'(paymentGatewayBaseUrl)를 설정하세요. 리다이렉트형 플랫폼 로그인 콜백은 게이트웨이 도메인을 경유합니다",
@@ -27,10 +25,6 @@
     "scanNotSupported": "이 플랫폼은 QR 코드 로그인이 필요하지 않습니다. 직접 로그인을 시작하세요"
   },
   "oauthFailed": "소셜 인가에 실패했습니다",
-  "appletUnbind": "이 플랫폼 계정이 시스템 계정에 연결되어 있지 않습니다. 계정과 비밀번호로 로그인한 후 '계정 및 보안'에서 연결해 주세요",
-  "codeExchangeFail": "로그인 자격 증명으로 플랫폼 사용자 식별자를 교환하지 못했습니다: {0}",
-  "appletRenderUnsupported": "미니프로그램 플랫폼은 리디렉션 인증 URL 생성을 지원하지 않습니다. 미니프로그램 내에서 로그인 또는 연결을 시작해 주세요",
-  "appletNotConfigured": "미니프로그램 로그인 플랫폼 자격 증명이 완전하지 않습니다. 소셜 로그인 설정에서 먼저 완성해 주세요",
   "autoLogin": {
     "sourceRequired": "자동 로그인 사용 시 플랫폼을 하나 이상 선택하세요",
     "sourceNotEnabled": "선택한 자동 로그인 플랫폼이 미구성이거나 비활성입니다: {0}",

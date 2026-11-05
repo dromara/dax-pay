@@ -7,7 +7,6 @@
   "typeImmutable": "ประเภทเมนูไม่สามารถเปลี่ยนแปลงได้หลังจากการสร้าง",
   "subpageNeedParent": "หน้าย่อยต้องเลือกเมนูหลัก",
   "parentNotExist": "ไม่พบเมนูหลัก",
-  "subpageParentMustBeMenu": "พาเรนต์ของเพจย่อยต้องเป็นประเภทเมนู",
   "subpageParentInvalid": "เพจย่อยจะต้องเป็นเมนูหรือกลุ่มเพจย่อย",
   "subpageGroupNeedParent": "กลุ่มเพจย่อยต้องเลือกเมนูหลัก",
   "subpageGroupParentMustBeMenu": "พาเรนต์กลุ่มเพจย่อยต้องเป็นประเภทเมนู",

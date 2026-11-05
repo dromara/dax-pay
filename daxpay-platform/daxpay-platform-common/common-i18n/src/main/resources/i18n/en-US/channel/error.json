@@ -1,14 +1,5 @@
 {
-  "success": "success",
   "channelNotFound": "Unsupported channel code",
-  "channelNotFoundWithDetail": "Unsupported channel code: {0}",
-  "invalidConfig": "Invalid channel configuration",
-  "sdkCallFailed": "SDK call failed",
-  "sdkCallFailedWithDetail": "SDK call failed: {0}",
-  "callbackVerifyFailed": "Callback signature verification failed",
-  "cacheConcurrentConflict": "Concurrent conflict",
-  "systemError": "Internal system error",
-  "validateParams": "Parameter validation failed",
   "transportEncrypt": {
     "appConfigMissing": "Channel app config is missing: {0}",
     "configMissing": "Channel transport encrypt config is missing: {0}",
@@ -17,7 +8,6 @@
     "ciphertextInvalid": "Channel transport ciphertext length is invalid",
     "decryptFailed": "Channel transport decrypt failed",
     "responseHeaderMissing": "Channel response missing transport encrypt header {0}",
-    "requestHeaderMissing": "Channel transport encrypt: request missing encrypt header",
     "plainErrorResponse": "Channel sub-app returned plaintext error response [{0}]: {1}"
   }
 }

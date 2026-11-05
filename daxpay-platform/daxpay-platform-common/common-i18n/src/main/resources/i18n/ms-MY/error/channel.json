@@ -1,5 +1,4 @@
 {
-  "envMismatch": "Persekitaran pedagang saluran tidak sepadan dengan persekitaran aktif produk",
   "allocReceiverDuplicate": "Penerima agihan sudah wujud (merchant saluran, jenis dan akaun yang sama)",
   "allocReceiverAlreadyBound": "Penerima sudah terikat",
   "allocReceiverNotBound": "Hanya penerima terikat boleh dilepaskan",
