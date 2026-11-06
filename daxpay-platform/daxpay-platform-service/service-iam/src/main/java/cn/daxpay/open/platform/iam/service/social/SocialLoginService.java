@@ -35,7 +35,8 @@ import org.springframework.stereotype.Service;
 /// 编排 OAuth2 授权流程: 授权地址生成(render)、授权码兑换(login/bind)、
 /// 绑定关系查询与解绑. 采用前端回调模式: 第三方平台直接重定向到前端回调页,
 /// 前端拿到 code+state 后调用 exchange 接口完成换 token.
-/// state 仅用于 OAuth2 合规(CSRF), 不携带业务上下文.
+/// state 为随机 UUID(OAuth2 合规防 CSRF), 生成时一次性落 Redis(5 分钟), 兑换时校验 source/client/mode
+/// (绑定场景再校验 userId)并原子消费, 防伪造/重放/跨场景串用.
 /// 登录和绑定的区分由回调页路由决定(两个不同的前端页面), exchange 时显式传 source + client.
 /// 授权链路共享原语(code 兑换/凭据回填/回调拼装)收口在 [SocialAuthSupport];
 /// 公众号跨设备扫码绑定/扫码登录见 social.scan 子包的 SocialBindScanService/SocialLoginScanService.
@@ -62,6 +63,8 @@ public class SocialLoginService {
     private final PlatformUrlConfigService platformUrlConfigService;
 
     private final UserQueryService userQueryService;
+
+    private final SocialLoginStateStore socialLoginStateStore;
 
     /// 查询已启用的第三方登录平台(登录页公开接口)
     /// 仅返回平台编码列表, 不含任何敏感字段, 供登录页动态渲染第三方登录按钮.
@@ -131,9 +134,14 @@ public class SocialLoginService {
         if (Boolean.TRUE.equals(silent)) {
             authConfig.setSilent(true);
         }
-        // state 仅用于 OAuth2 合规, 不缓存业务上下文
+        // 与 buildAuthConfig 同口径解析场景/平台编码, 用于写入 state 上下文
+        SocialAuthMode authMode = this.resolveMode(mode);
+        SocialSourceEnum socialSource = SocialSourceEnum.of(source);
+        // state 一次性落 Redis(5 分钟), 兑换时校验业务上下文防伪造/重放/跨场景串用
         String state = IdUtil.fastSimpleUUID();
-        return socialAuthSupport.createAuthRequest(SocialSourceEnum.of(source), authConfig).authorize(state);
+        socialLoginStateStore.save(state, socialClient.getCode(), socialSource.getCode(), authMode.name(),
+                authMode == SocialAuthMode.BIND && SecurityUtil.isLogin() ? SecurityUtil.getUserId() : null);
+        return socialAuthSupport.createAuthRequest(socialSource, authConfig).authorize(state);
     }
 
     /// 按场景组装授权配置(redirectUri 拼装 + 平台级凭据回填)
@@ -167,6 +175,10 @@ public class SocialLoginService {
                                                   HttpServletRequest request, HttpServletResponse response) {
         try {
             SocialClientEnum socialClient = socialAuthSupport.requireSocialClient(clientCode);
+            // state 必须存在且与本次兑换的 source/client/mode 一致(一次性消费, 防伪造/重放/跨场景串用)
+            if (!this.consumeState(state, source, socialClient.getCode(), SocialAuthMode.LOGIN, null)) {
+                return new SocialExchangeResult().setError("state_invalid");
+            }
             AuthUser authUser = socialAuthSupport.doExchange(code, state, source, socialClient, SocialAuthMode.LOGIN);
             // 查绑定关系
             Long userId = socialBindStore.findUserIdBySourceAndOpenId(source, authUser.getUuid()).orElse(null);
@@ -205,6 +217,10 @@ public class SocialLoginService {
                 // 社交登录: 绑定用户不属于当前终端
                 throw new OperationFailException("error.social.bind.clientMismatch");
             }
+            // state 必须存在且与本次兑换的 source/client/mode/userId 一致(一次性消费, 防伪造/重放/跨场景串用)
+            if (!this.consumeState(state, source, socialClient.getCode(), SocialAuthMode.BIND, userId)) {
+                return new SocialExchangeResult().setError("state_invalid");
+            }
             AuthUser authUser = socialAuthSupport.doExchange(code, state, source, socialClient, SocialAuthMode.BIND);
             socialBindStore.saveBind(userId, clientCode, authUser);
             return new SocialExchangeResult().setResult("bind_success");
@@ -239,6 +255,23 @@ public class SocialLoginService {
         // 默认: 已登录走绑定, 未登录走登录
         boolean login = SecurityUtil.isLogin();
         return login ? SocialAuthMode.BIND : SocialAuthMode.LOGIN;
+    }
+
+    /// 校验并原子消费 state：不存在/过期/source、client、mode 不一致均失败；绑定场景再校验 userId
+    private boolean consumeState(String state, String source, String clientCode,
+                                 SocialAuthMode mode, Long userId) {
+        SocialSourceEnum socialSource = SocialSourceEnum.of(source);
+        if (Objects.isNull(socialSource)) {
+            return false;
+        }
+        SocialLoginStateStore.StateContext context = socialLoginStateStore.consume(state);
+        if (Objects.isNull(context)) {
+            return false;
+        }
+        return StrUtil.equals(context.getSource(), socialSource.getCode())
+                && StrUtil.equals(context.getClientCode(), clientCode)
+                && StrUtil.equals(context.getMode(), mode.name())
+                && (mode != SocialAuthMode.BIND || Objects.equals(context.getUserId(), userId));
     }
 
     /// 解析跳转型平台 OAuth 回调的透传目标地址(网关 H5 透传页专用)

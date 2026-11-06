@@ -68,6 +68,9 @@ class SocialLoginServiceTest {
     private UserQueryService userQueryService;
 
     @Mock
+    private SocialLoginStateStore socialLoginStateStore;
+
+    @Mock
     private IamSocialLoginHandler socialLoginHandler;
 
     @Mock
@@ -93,7 +96,7 @@ class SocialLoginServiceTest {
                 socialLoginConfigService, platformUrlConfigService, platformWechatMpAuthConfigService,
                 userQueryService, platformStarterProperties, userInfoStatusChecks);
         socialLoginService = new SocialLoginService(socialAuthSupport, socialBindStore, socialLoginHandler,
-                socialLoginConfigService, platformUrlConfigService, userQueryService);
+                socialLoginConfigService, platformUrlConfigService, userQueryService, socialLoginStateStore);
     }
 
     /// 端点配置桩(三地址齐备)

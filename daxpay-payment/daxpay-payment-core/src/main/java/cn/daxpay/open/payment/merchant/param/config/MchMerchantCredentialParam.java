@@ -16,7 +16,8 @@ import tools.jackson.databind.annotation.JsonDeserialize;
 public class MchMerchantCredentialParam {
 
     /// 商户公钥
-    @Schema(description = "商户公钥")
+    @JsonDeserialize(using = CredentialKeepWhenBlankDeserializer.class)
+    @Schema(description = "商户公钥(留空=保留原值)")
     private String publicKey;
 
     /// 通信密钥

@@ -48,6 +48,10 @@ public class MerchantCredentialService {
         var credential = credentialManager.findByMchNo(param.getMchNo())
                 // 商户: API配置不存在
                 .orElseThrow(() -> new DataNotExistException("error.payment.merchant.apiConfigNotExist"));
+        // 凭据留空=保留原值: 空串归一为 null, 配合 Convert 的 null-IGNORE 跳过覆盖
+        if (StrUtil.isBlank(param.getPublicKey())) {
+            param.setPublicKey(null);
+        }
         // 判断公钥是否合法
         if (StrUtil.isNotBlank(param.getPublicKey())){
             RsaSignUtil.loadPublicKeyFromPem(param.getPublicKey());

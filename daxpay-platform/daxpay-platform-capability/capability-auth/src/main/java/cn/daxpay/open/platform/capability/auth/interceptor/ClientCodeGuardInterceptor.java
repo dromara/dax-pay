@@ -30,8 +30,16 @@ public class ClientCodeGuardInterceptor implements HandlerInterceptor {
 
     private final ClientEnum expectClient;
 
+    /// 身份域不匹配时的提示文案 key(各端可指定更贴切的文案, 默认商户端通用文案)
+    private final String messageKey;
+
     public ClientCodeGuardInterceptor(ClientEnum expectClient) {
+        this(expectClient, "error.auth.clientCodeMismatch");
+    }
+
+    public ClientCodeGuardInterceptor(ClientEnum expectClient, String messageKey) {
         this.expectClient = expectClient;
+        this.messageKey = messageKey;
     }
 
     @Override
@@ -39,7 +47,7 @@ public class ClientCodeGuardInterceptor implements HandlerInterceptor {
         String clientCode = request.getHeader(WebHeaderCode.X_CLIENT_CODE);
         if (!expectClient.getCode().equals(clientCode)) {
             // 返回 401 触发前端"登录态失效"处理(清 token + 跳登录页)
-            throw new NotLoginException(CommonErrorCode.AUTHENTICATION_FAIL, "error.auth.clientCodeMismatch");
+            throw new NotLoginException(CommonErrorCode.AUTHENTICATION_FAIL, messageKey);
         }
         return true;
     }
