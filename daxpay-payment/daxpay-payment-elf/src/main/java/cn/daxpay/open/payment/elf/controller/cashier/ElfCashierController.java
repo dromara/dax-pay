@@ -1,7 +1,6 @@
 package cn.daxpay.open.payment.elf.controller.cashier;
 
 import cn.daxpay.open.payment.elf.result.cashier.ElfCashierConfigOptionsResult;
-import cn.daxpay.open.payment.elf.result.cashier.ElfPrintTemplateOptionsResult;
 import cn.daxpay.open.payment.elf.service.cashier.ElfCashierConfigService;
 import cn.daxpay.open.payment.merchant.param.cashier.MchCashierOrderStatusParam;
 import cn.daxpay.open.payment.merchant.param.cashier.MchCashierPayParam;
@@ -20,7 +19,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /// # 精灵收银(PC收款精灵专用端)
@@ -58,13 +56,6 @@ public class ElfCashierController {
     @GetMapping("/config-options")
     public Result<ElfCashierConfigOptionsResult> configOptions() {
         return Res.ok(elfCashierConfigService.configOptions());
-    }
-
-    @PermCode(menuCode = PermCodes.Trade.Order.MENU, code = PermCodes.Action.VIEW)
-    @Operation(summary = "收银小票模板选项(开源版暂用内置模板)")
-    @GetMapping("/print-template-options")
-    public Result<ElfPrintTemplateOptionsResult> printTemplateOptions(@RequestParam(required = false) String appId) {
-        return Res.ok(elfCashierConfigService.printTemplateOptions(appId));
     }
 
 }
