@@ -7,7 +7,6 @@ import cn.daxpay.open.platform.common.mybatisplus.impl.BaseManager;
 import cn.daxpay.open.platform.common.mybatisplus.query.generator.QueryGenerator;
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.open.platform.core.annotation.IgnoreTenant;
-import cn.daxpay.open.platform.core.enums.pay.notice.NoticeTransportEnum;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -45,25 +44,18 @@ public class MchNoticeTaskManager extends BaseManager<MchNoticeTaskMapper, MchNo
                 .oneOpt();
     }
 
-    /// 扫描未成功且(nextTime 为空 或 nextTime <= now)的孤儿任务(MQ 投递失败兜底)
+    /// 扫描未成功且(nextTime 为空 或 nextTime <= now)的孤儿任务(投递失败兜底)
     ///
     /// 覆盖 [cn.daxpay.open.payment.trade.notice.service.NoticeTaskScheduleService#scheduleImmediateAfterCommit]
-    /// 投递 MQ 失败导致任务卡在 success=false、nextTime=null 的场景(全仓无其他扫描入口)。
+    /// 投递失败导致任务卡在 success=false、nextTime=null 的场景(全仓无其他扫描入口)。
     /// 跨租户扫描(定时任务无 HTTP 上下文), 单次上限 limit 防积压爆量。
-    /// 按传输通道分别过滤最大重试次数, 避免已耗尽重试的任务被 NoticeRetryJob 无限重投:
-    /// - HTTP: delayCount < [NoticeRetryPolicy#MAX_DELAY_COUNT_HTTP] (16)
-    /// - MQ:   delayCount < [NoticeRetryPolicy#MAX_DELAY_COUNT_MQ]   (3)
+    /// 过滤最大重试次数, 避免已耗尽重试的任务被 NoticeRetryJob 无限重投:
+    /// delayCount < [NoticeRetryPolicy#MAX_DELAY_COUNT] (16)
     @IgnoreTenant
     public List<MchNoticeTask> findStaleUnsent(int limit) {
         return listLimit(limit, q -> q
             .eq(MchNoticeTask::isSuccess, false)
-            .and(w -> w
-                .and(http -> http
-                    .eq(MchNoticeTask::getTransport, NoticeTransportEnum.HTTP.getCode())
-                    .lt(MchNoticeTask::getDelayCount, NoticeRetryPolicy.MAX_DELAY_COUNT_HTTP))
-                .or(mq -> mq
-                    .eq(MchNoticeTask::getTransport, NoticeTransportEnum.MQ.getCode())
-                    .lt(MchNoticeTask::getDelayCount, NoticeRetryPolicy.MAX_DELAY_COUNT_MQ)))
+            .lt(MchNoticeTask::getDelayCount, NoticeRetryPolicy.MAX_DELAY_COUNT)
             .and(w -> w.isNull(MchNoticeTask::getNextTime)
                 .or().le(MchNoticeTask::getNextTime, OffsetDateTime.now(ZoneOffset.UTC)))
             .orderByAsc(MchNoticeTask::getCreateTime));

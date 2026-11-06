@@ -393,7 +393,6 @@ function buildDemoSection() {
       { table: 'mch_user', col: 'user_id', to: 'iam_user_info', toCol: 'id' },
       { table: 'iam_user_role', col: 'user_id', to: 'iam_user_info', toCol: 'id' },
       { table: 'mch_app_info', col: 'mch_no', to: 'mch_info', toCol: 'mch_no' },
-      { table: 'mch_app_notify_config', col: 'app_id', to: 'mch_app_info', toCol: 'app_id' },
       { table: 'mch_credential', col: 'mch_no', to: 'mch_info', toCol: 'mch_no' },
       { table: 'mch_channel_merchant', col: 'mch_no', to: 'mch_info', toCol: 'mch_no' },
       { table: 'mch_store_info', col: 'mch_no', to: 'mch_info', toCol: 'mch_no' },

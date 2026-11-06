@@ -9,7 +9,7 @@ import cn.daxpay.open.payment.trade.notice.payload.NoticeEnvelope;
 /// 负责把已组装好的 [NoticeEnvelope] 投递出去 (HTTP 回调 / MQ 推送), 与报文格式正交
 public interface NoticeTransportSender {
 
-    /// 传输通道编码（与 NoticeTransportEnum.code 对齐: http / mq）
+    /// 传输通道编码（与 NoticeTransportEnum.code 对齐: http）
     String transport();
 
     /// 执行一次投递

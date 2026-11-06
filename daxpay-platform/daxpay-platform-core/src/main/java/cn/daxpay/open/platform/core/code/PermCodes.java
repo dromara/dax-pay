@@ -84,12 +84,6 @@ public interface PermCodes {
             String MENU = "merchant:credential";
         }
 
-        /// 通知配置 menuCode=merchant:notify-config
-        interface NotifyConfig {
-            /// 菜单编码
-            String MENU = "merchant:notify-config";
-        }
-
         /// 商户应用 menuCode=merchant:app
         interface App {
             /// 菜单编码

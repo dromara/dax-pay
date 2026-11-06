@@ -36,9 +36,4 @@ public interface PayArtemisConstants {
     /// 分账返回处理中后延时 2 分钟投递, 由
     /// [cn.daxpay.open.payment.trade.alloc.runtime.consumer.AllocSyncConsumer] 消费触发状态同步。
     String ALLOC_SYNC_QUEUE = "pay.alloc.sync";
-
-    /// 商户出站 MQ 通知 Topic 前缀
-    /// MQ 投递方式(notifyWay=mq)下, 按应用隔离的 Topic: `<前缀>.<appId>`, 商户侧用 JMS 持久订阅消费。
-    /// broker 端该 address 需配为 multicast 路由类型。
-    String MCH_NOTICE_TOPIC_PREFIX = "daxpay.notice";
 }

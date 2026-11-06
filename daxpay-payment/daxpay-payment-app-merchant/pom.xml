@@ -29,7 +29,7 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!-- 运营管理端（复用 PayRouteConfigService / GatewayCashierConfigService / MchAppNotifyConfigService） -->
+        <!-- 运营管理端（复用 PayRouteConfigService / GatewayCashierConfigService） -->
         <dependency>
             <groupId>cn.daxpay.open</groupId>
             <artifactId>daxpay-payment-admin</artifactId>

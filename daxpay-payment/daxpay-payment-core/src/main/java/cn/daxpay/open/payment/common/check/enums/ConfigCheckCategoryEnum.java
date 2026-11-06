@@ -39,9 +39,7 @@ public enum ConfigCheckCategoryEnum {
     /// 通道商户
     CHANNEL_MERCHANT("channelMerchant"),
     /// 支付路由
-    PAY_ROUTE("payRoute"),
-    /// 通知配置
-    MCH_NOTIFY("mchNotify");
+    PAY_ROUTE("payRoute");
 
     private final String code;
 }

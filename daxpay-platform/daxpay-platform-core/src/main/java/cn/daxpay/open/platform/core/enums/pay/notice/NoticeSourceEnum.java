@@ -13,8 +13,6 @@ public enum NoticeSourceEnum implements I18nSupport {
 
     /// 订单级 notifyUrl
     ORDER("order"),
-    /// 应用级订阅配置
-    APP("app"),
     /// 协议适配层自带 URL（如易支付）
     PROTOCOL("protocol"),
     ;

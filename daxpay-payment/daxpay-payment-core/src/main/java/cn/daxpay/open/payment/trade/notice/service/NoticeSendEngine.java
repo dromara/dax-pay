@@ -166,7 +166,7 @@ public class NoticeSendEngine {
         failUpdate(task, sendTime, autoSend, record);
     }
 
-    /// 失败：更新任务并按需排期重试 (重试节奏按 transport 区分)
+    /// 失败：更新任务并按需排期重试
     private void failUpdate(MchNoticeTask task, OffsetDateTime sendTime, boolean autoSend, MchNoticeRecord record) {
         int reqCount = Objects.isNull(record.getReqCount()) ? 1 : record.getReqCount();
         task.setSendCount(reqCount).setLatestTime(sendTime);
@@ -177,13 +177,12 @@ public class NoticeSendEngine {
         if (!autoSend) {
             task.setSuccess(false);
         }
-        String transport = task.getTransport();
         if (autoSend && !task.isSuccess()) {
             int delayCount = Objects.isNull(task.getDelayCount()) ? 0 : task.getDelayCount();
-            if (retryPolicy.canRetry(transport, delayCount)) {
+            if (retryPolicy.canRetry(delayCount)) {
                 int next = delayCount + 1;
                 task.setDelayCount(next);
-                int delaySeconds = retryPolicy.nextDelaySeconds(transport, next);
+                int delaySeconds = retryPolicy.nextDelaySeconds(next);
                 task.setNextTime(sendTime.plusSeconds(delaySeconds));
                 taskManager.updateById(task);
                 recordManager.save(record);

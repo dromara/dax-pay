@@ -55,6 +55,7 @@ psql -v ON_ERROR_STOP=1 --single-transaction -f data-demo.sql   # 演示版（�
 | `data.sql` | 纯净版数据 = `[2]` 纯净种子 + `[3]` 菜单种子（不含表结构） | 否 |
 | `data-demo.sql` | 演示版数据 = `[2]` + `[3]` + `[4]` 演示段（旁路菜单/mock 元数据 + 剧本生成 + 装机断言） | 否 |
 | `reset-bootx-password.sql` | `bootx` 密码重置回 `121212` | 是 |
+| `migrate-2026-11-06-remove-mch-app-notify-config.sql` | 既有库一次性迁移：异步通知配置功能下线（删表 + IAM 三表关联 + 应用级通知任务存量） | 是 |
 | `build/export-sql.mjs` | 生成脚本（唯一入口）：连库导出 + 拼装 + 自检 + 原子落盘 | — |
 | `build/redact-data.mjs` | 纯净种子脱敏规则（白名单表 / mock 行级排除 / bootx 行级保留 / 密码重置），同时旁路输出演示段所需的 mock 元数据 | — |
 | `build/demo-gen.mjs` | 演示数据编译器，按 `table.sql` 列契约生成 INSERT（列名/必填/引用完整性校验） | — |

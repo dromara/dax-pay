@@ -25,7 +25,6 @@ import cn.daxpay.open.platform.core.exception.operation.OperationFailException;
 import cn.daxpay.open.payment.merchant.convert.info.MerchantInfoConvert;
 import cn.daxpay.open.payment.merchant.dao.appinfo.MchAppInfoManager;
 import cn.daxpay.open.payment.merchant.dao.channel.ChannelMerchantManager;
-import cn.daxpay.open.payment.merchant.dao.config.MchAppNotifyConfigManager;
 import cn.daxpay.open.payment.merchant.dao.config.MerchantCredentialManager;
 import cn.daxpay.open.payment.merchant.dao.gateway.GatewayCashierItemManager;
 import cn.daxpay.open.payment.merchant.dao.gateway.GatewayPayClientEnvManager;
@@ -36,7 +35,6 @@ import cn.daxpay.open.payment.merchant.dao.store.MchStoreInfoManager;
 import cn.daxpay.open.payment.merchant.dao.wxverify.WxDomainVerifyManager;
 import cn.daxpay.open.payment.merchant.entity.appinfo.MchAppInfo;
 import cn.daxpay.open.payment.merchant.entity.channel.ChannelMerchant;
-import cn.daxpay.open.payment.merchant.entity.config.MchAppNotifyConfig;
 import cn.daxpay.open.payment.merchant.entity.config.MerchantCredential;
 import cn.daxpay.open.payment.merchant.entity.gateway.GatewayCashierItem;
 import cn.daxpay.open.payment.merchant.entity.gateway.GatewayPayClientEnv;
@@ -106,12 +104,11 @@ public class MerchantAdminService {
 
     // === 删除商户所需的级联 Manager（按 mchNo 关联的子表）===
 
-    // 应用 / 门店 / 通道商户主表 / 凭证 / 通知配置
+    // 应用 / 门店 / 通道商户主表 / 凭证
     private final MchAppInfoManager mchAppInfoManager;
     private final MchStoreInfoManager mchStoreInfoManager;
     private final ChannelMerchantManager channelMerchantManager;
     private final MerchantCredentialManager merchantCredentialManager;
-    private final MchAppNotifyConfigManager mchAppNotifyConfigManager;
     // 网关与路由配置
     private final GatewayPayConfigManager gatewayPayConfigManager;
     private final GatewayCashierItemManager gatewayCashierItemManager;
@@ -289,7 +286,6 @@ public class MerchantAdminService {
         merchantCredentialManager.deleteByField(MerchantCredential::getMchNo, mchNo);
         // 配置类子表（强关联，业务上属于商户私有数据）
         channelMerchantManager.deleteByField(ChannelMerchant::getMchNo, mchNo);
-        mchAppNotifyConfigManager.deleteByField(MchAppNotifyConfig::getMchNo, mchNo);
         // 网关与路由配置（按 mchNo 隔离的主表，其子表留孤儿不影响业务）
         gatewayPayConfigManager.deleteByField(GatewayPayConfig::getMchNo, mchNo);
         gatewayCashierItemManager.deleteByField(GatewayCashierItem::getMchNo, mchNo);

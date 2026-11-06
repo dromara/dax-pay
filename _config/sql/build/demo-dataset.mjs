@@ -210,16 +210,6 @@ export function buildIdentity(gen) {
     status: 'enable',
     default_app: true,
   })
-  gen.add('mch_app_notify_config', {
-    ...base(idCfg(13)),
-    mch_no: ANCHORS.mchMain,
-    app_id: ANCHORS.appMain,
-    notify_url: NOTIFY_URL,
-    notify_way: 'http',
-    subscribed_events: 'pay,refund',
-    status: true,
-    remark: '演示回调占位地址，部署时按环境修改',
-  })
   gen.add('mch_credential', {
     ...base(idCfg(14)),
     mch_no: ANCHORS.mchMain,
@@ -461,7 +451,8 @@ export function buildTransactions(gen, ctx, seed = 20261115) {
       biz_id: bizId,
       biz_no: bizNo,
       event,
-      source: 'app',
+      // 应用级订阅来源(notice_source=app)已随异步通知配置下线移除, 演示任务统一按订单级回调生成
+      source: 'order',
       content_mode: 'snapshot',
       content: JSON.stringify({ demo: true, bizNo, event }),
       url: NOTIFY_URL,
