@@ -512,18 +512,11 @@ public interface PermCodes {
 
         /// 虚拟设备(收款播报 APP) menuCode=device:virtual
         ///
-        /// 权限码 `device:virtual:view` / `device:virtual:manage`(动作段见 [Action], 运营端)
+        /// 权限码 `device:virtual:view` / `device:virtual:manage` / `device:virtual:export`(动作段见 [Action])
+        /// 运营端与商户端共用同一套权限码: 角色按 client_code 隔离, 两端菜单各自挂载, 不会串权
         interface Virtual {
             /// 菜单编码
             String MENU = "device:virtual";
-        }
-
-        /// 商户端收款设备(虚拟设备商户自助) menuCode=device:audio
-        ///
-        /// 权限码 `device:audio:view` / `device:audio:manage`(动作段见 [Action], 商户端)
-        interface Audio {
-            /// 菜单编码
-            String MENU = "device:audio";
         }
     }
 

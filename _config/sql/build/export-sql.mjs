@@ -144,9 +144,37 @@ const { host, via } = resolveHost(ds.hostRaw)
 const connStr = `postgresql://${ds.username}:${ds.password}@${host}:${ds.port}/${ds.db}`
 console.log(`[数据源] ${ds.hostRaw} --${via}--> ${host}:${ds.port}/${ds.db}`)
 
-// ---------- WSL docker 执行封装 ----------
+// ---------- 数据库命令执行封装 ----------
+/**
+ * 本机 PostgreSQL 客户端探测：PATH 优先，再查 Windows 常见安装目录；未命中返回 null。
+ * 命中时直接执行本机二进制，避免依赖 WSL docker（部分环境禁用 wsl.exe）。
+ */
+function resolveNativeClient(cmd) {
+  const exe = platform === 'win32' ? `${cmd}.exe` : cmd
+  for (const dir of (process.env.PATH || '').split(platform === 'win32' ? ';' : ':')) {
+    if (!dir) continue
+    const candidate = join(dir, exe)
+    if (existsSync(candidate)) return candidate
+  }
+  if (platform === 'win32') {
+    for (const version of ['18', '17', '16', '15', '14']) {
+      const candidate = `C:/Program Files/PostgreSQL/${version}/bin/${exe}`
+      if (existsSync(candidate)) return candidate
+    }
+  }
+  return null
+}
+
+/**
+ * 执行 pg_dump / psql：优先本机客户端直连，未安装时回落 WSL docker postgres:16。
+ * 两条路径的参数语义一致（args 中 pg_dump/psql 之后的参数原样透传）。
+ */
 function runDocker(label, args, { quietStderr = false } = {}) {
-  const r = spawnSync('wsl', args, { encoding: 'utf8', maxBuffer: 256 * 1024 * 1024 })
+  const nativeIdx = args[0] === 'docker' ? args.findIndex((a) => a === 'pg_dump' || a === 'psql') : -1
+  const nativeBin = nativeIdx > 0 ? resolveNativeClient(args[nativeIdx]) : null
+  const r = nativeBin
+    ? spawnSync(nativeBin, args.slice(nativeIdx + 1), { encoding: 'utf8', maxBuffer: 256 * 1024 * 1024 })
+    : spawnSync('wsl', args, { encoding: 'utf8', maxBuffer: 256 * 1024 * 1024 })
   if (r.stderr && r.stderr.trim() && !quietStderr) {
     // WSL 的 localhost 代理提示(UTF-16 中文)属环境噪音, 只回显真正的错误行
     const lines = r.stderr.trim().split(/\r?\n/).filter((l) => /error|fatal|failed|错误/i.test(l))
@@ -157,7 +185,9 @@ function runDocker(label, args, { quietStderr = false } = {}) {
     console.error((r.stderr || '').slice(0, 2000))
     exit(1)
   }
-  return r.stdout
+  // Windows 版本机 pg_dump/psql 输出 CRLF，统一收敛为 LF：否则行尾 \r 会让
+  // 后续按行匹配的净化/断言（如 ^CREATE SCHEMA public;$）全部失效
+  return r.stdout.replace(/\r\n/g, '\n')
 }
 
 function pgDumpSchemaOnly() {

@@ -30,37 +30,40 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-/// # 收款设备管理(商户端)
+/// # 虚拟设备管理(商户端)
 ///
 /// 只开放商户自助能力: 查看/导出/改名/应用门店调整(支持批量)/启停/试播试打/激活二维码内容。
 /// 设备录入、商户归属变更、密钥重置属运营端能力; 商户号由 Service 从 PaymentContext 强制校验。
-@PermCode(menuCode = PermCodes.Device.Audio.MENU)
+/// 菜单码与权限码与运营端统一为 device:virtual, 两端仅端点前缀区分;
+/// 设备 APP 侧免登录协议仍为 `/client/device/audio`, 消息主题仍为 `daxpay/device/audio/{deviceNo}`, 不随菜单改名。
+/// 端点保留旧前缀 `/mch/device/audio` 作过渡兼容(存量小程序/浏览器书签), 待存量客户端全部升级后再移除。
+@PermCode(menuCode = PermCodes.Device.Virtual.MENU)
 @Validated
-@Tag(name = "收款设备管理(商户端)")
+@Tag(name = "虚拟设备管理(商户端)")
 @RestController
-@RequestMapping("/mch/device/audio")
+@RequestMapping({"/mch/device/virtual", "/mch/device/audio"})
 @RequiredArgsConstructor
 public class MchVirtualDeviceController {
 
     private final MchVirtualDeviceService mchAudioDeviceService;
 
     @PermCode(code = PermCodes.Action.VIEW)
-    @Operation(summary = "收款设备分页(强制当前商户)")
+    @Operation(summary = "虚拟设备分页(强制当前商户)")
     @GetMapping("/page")
     public Result<PageResult<VirtualDeviceResult>> page(PageParam pageParam, VirtualDeviceQuery query) {
         return Res.ok(mchAudioDeviceService.page(pageParam, query));
     }
 
     @PermCode(code = PermCodes.Action.EXPORT)
-    @Operation(summary = "导出收款设备")
-    @OperateLog(title = "导出收款设备", businessType = OperateLogType.EXPORT, saveParam = false)
+    @Operation(summary = "导出虚拟设备")
+    @OperateLog(title = "导出虚拟设备", businessType = OperateLogType.EXPORT, saveParam = false)
     @PostMapping("/export")
     public void export(HttpServletResponse response, VirtualDeviceQuery query) {
         mchAudioDeviceService.export(query, response);
     }
 
     @PermCode(code = PermCodes.Action.VIEW)
-    @Operation(summary = "收款设备详情")
+    @Operation(summary = "虚拟设备详情")
     @GetMapping("/get")
     public Result<VirtualDeviceResult> findById(@NotNull(message = "{validation.field.id.notNull}") Long id) {
         return Res.ok(mchAudioDeviceService.findById(id));
