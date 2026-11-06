@@ -16,5 +16,6 @@
   "storeBindMchInconsistent": "Saat mengikat toko secara batch, pilih papan kode dari merchant yang sama",
   "mchNoMatch": "QR code board does not belong to the current merchant",
   "alreadyAssigned": "QR code board has already been bound or assigned to a merchant",
-  "noneAssigned": "None of the selected QR code boards are bound to a merchant, nothing to unbind"
+  "noneAssigned": "None of the selected QR code boards are bound to a merchant, nothing to unbind",
+  "enabledCannotDelete": "Kode QR sedang aktif, silakan nonaktifkan terlebih dahulu sebelum menghapus"
 }

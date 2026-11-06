@@ -16,5 +16,6 @@
   "storeBindMchInconsistent": "เมื่อผูกสาขาแบบชุดต้องเลือกป้ายรหัสภายใต้ร้านค้าเดียวกัน",
   "mchNoMatch": "QR code board does not belong to the current merchant",
   "alreadyAssigned": "QR code board has already been bound or assigned to a merchant",
-  "noneAssigned": "None of the selected QR code boards are bound to a merchant, nothing to unbind"
+  "noneAssigned": "None of the selected QR code boards are bound to a merchant, nothing to unbind",
+  "enabledCannotDelete": "คิวอาร์โค้ดกำลังเปิดใช้งาน โปรดปิดใช้งานก่อนลบ"
 }
