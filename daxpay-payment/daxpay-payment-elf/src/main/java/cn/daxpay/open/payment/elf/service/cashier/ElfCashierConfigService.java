@@ -4,6 +4,7 @@ import cn.daxpay.open.payment.common.context.PaymentContext;
 import cn.daxpay.open.payment.device.terminal.dao.TerminalDeviceManager;
 import cn.daxpay.open.payment.device.terminal.entity.TerminalDevice;
 import cn.daxpay.open.payment.elf.result.cashier.ElfCashierConfigOptionsResult;
+import cn.daxpay.open.payment.elf.result.cashier.ElfPrintTemplateOptionsResult;
 import cn.daxpay.open.payment.merchant.dao.appinfo.MchAppInfoManager;
 import cn.daxpay.open.payment.merchant.dao.info.MerchantInfoManager;
 import cn.daxpay.open.payment.merchant.dao.store.MchStoreInfoManager;
@@ -95,6 +96,19 @@ public class ElfCashierConfigService {
                 .setStores(storeOptions)
                 .setApps(appOptions)
                 .setTerminals(terminalOptions);
+    }
+
+    /// 查询小票模板选项(开源版暂用内置模板, 返回空清单)
+    ///
+    /// 桌面端契约与商业版一致: 空清单会回退本机内置版式, 不报错;
+    /// 后续接入设备域模板时只改本方法, 桌面端无需改动。
+    public ElfPrintTemplateOptionsResult printTemplateOptions(String appId) {
+        String mchNo = this.requireMchNo();
+        return new ElfPrintTemplateOptionsResult()
+                .setMchNo(mchNo)
+                .setAppId(StrUtil.blankToDefault(appId, null))
+                .setTotal(0)
+                .setTemplates(List.of());
     }
 
     /// 商户上下文必须已装载(精灵端 ClientCodeGuard 已强制 merchant 域)
