@@ -105,4 +105,13 @@ public class ChannelMerchantManager extends BaseManager<ChannelMerchantMapper, C
                 .orElseThrow(() -> new BizInfoException(CommonErrorCode.VALIDATE_PARAMETERS_ERROR,
                         "pay.route.error.channelMchNotExist", channelMchNo));
     }
+
+    /// 统计商户下通道商户数(存量总数, 不限启用状态; 运营端商户工作台磁贴计数用, 逻辑删除自动过滤)
+    ///
+    /// 显式按 mchNo 过滤, 不依赖租户自动拼接: 运营端无商户上下文(租户拦截整体放开)。
+    public long countByMchNo(String mchNo) {
+        return lambdaQuery()
+                .eq(ChannelMerchant::getMchNo, mchNo)
+                .count();
+    }
 }

@@ -83,6 +83,15 @@ public class TerminalDeviceManager extends BaseManager<TerminalDeviceMapper, Ter
                 .count();
     }
 
+    /// 统计商户下系统终端数(存量总数, 不限启用态; 运营端商户工作台磁贴计数用, 逻辑删除自动过滤)
+    ///
+    /// 显式按 mchNo 过滤, 不依赖租户自动拼接: 运营端无商户上下文(租户拦截整体放开)。
+    public long countByMchNo(String mchNo) {
+        return lambdaQuery()
+                .eq(TerminalDevice::getMchNo, mchNo)
+                .count();
+    }
+
     /// 清除门店下全部默认终端标记(设默认前先清后设, 部分唯一索引兜底)
     public void clearDefaultByStoreNo(String storeNo) {
         lambdaUpdate()

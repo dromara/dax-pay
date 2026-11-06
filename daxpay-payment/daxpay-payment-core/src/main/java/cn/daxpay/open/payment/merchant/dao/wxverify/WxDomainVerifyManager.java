@@ -49,4 +49,14 @@ public class WxDomainVerifyManager extends BaseManager<WxDomainVerifyMapper, WxD
                 .list();
     }
 
+    /// 统计商户下域名校验文件数(存量总数; 运营端商户工作台磁贴计数用, 逻辑删除自动过滤)
+    ///
+    /// 显式按 mchNo 过滤, 不依赖租户自动拼接: 运营端无商户上下文(租户拦截整体放开);
+    /// mch_no 相等条件天然排除平台级校验文件。
+    public long countByMchNo(String mchNo) {
+        return lambdaQuery()
+                .eq(WxDomainVerify::getMchNo, mchNo)
+                .count();
+    }
+
 }

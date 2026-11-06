@@ -73,6 +73,15 @@ public class MchStoreInfoManager extends BaseManager<MchStoreInfoMapper, MchStor
         return existedByField(MchStoreInfo::getMchNo, mchNo);
     }
 
+    /// 统计商户下门店数(存量总数, 不限启用状态; 运营端商户工作台磁贴计数用, 逻辑删除自动过滤)
+    ///
+    /// 显式按 mchNo 过滤, 不依赖租户自动拼接: 运营端无商户上下文(租户拦截整体放开)。
+    public long countByMchNo(String mchNo) {
+        return lambdaQuery()
+                .eq(MchStoreInfo::getMchNo, mchNo)
+                .count();
+    }
+
     /// 清除商户下全部默认门店标记
     public void clearDefault(String mchNo) {
         lambdaUpdate()

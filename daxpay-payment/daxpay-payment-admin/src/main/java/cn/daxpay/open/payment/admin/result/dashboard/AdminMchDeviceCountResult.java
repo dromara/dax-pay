@@ -14,6 +14,10 @@ import lombok.experimental.Accessors;
 @Schema(title = "商户设备与应用计数")
 public class AdminMchDeviceCountResult {
 
+    /// 名下逻辑终端数(系统终端台账, 不限启用态)
+    @Schema(description = "名下逻辑终端数")
+    private Integer terminalCount;
+
     /// 名下虚拟设备台数(已绑定商户, 不含平台库存/未绑定设备)
     @Schema(description = "名下虚拟设备台数(不含平台库存/未绑定设备)")
     private Integer virtualDeviceCount;
