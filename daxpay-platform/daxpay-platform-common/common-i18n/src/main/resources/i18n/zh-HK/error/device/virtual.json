@@ -24,5 +24,6 @@
   "appNotFound": "商戶應用不存在",
   "batchNotFound": "部分虛擬設備不存在, 請重新整理後重試",
   "mchNotAssigned": "虛擬設備未綁定商戶, 請先綁定商戶後再分配門店",
-  "batchMchMismatch": "批次操作須選擇同一商戶下的虛擬設備"
+  "batchMchMismatch": "批次操作須選擇同一商戶下的虛擬設備",
+  "mqttNotConfigured": "平台 MQTT 接入未配置, 請聯絡平台營運"
 }

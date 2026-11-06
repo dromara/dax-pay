@@ -24,5 +24,6 @@
   "appNotFound": "商户应用不存在",
   "batchNotFound": "部分虚拟设备不存在, 请刷新后重试",
   "mchNotAssigned": "虚拟设备未绑定商户, 请先绑定商户后再分配门店",
-  "batchMchMismatch": "批量操作须选择同一商户下的虚拟设备"
+  "batchMchMismatch": "批量操作须选择同一商户下的虚拟设备",
+  "mqttNotConfigured": "平台 MQTT 接入未配置, 请联系平台运营"
 }

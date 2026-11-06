@@ -19,7 +19,8 @@ public enum DeviceVendorEnum implements I18nSupport {
     /// 平台虚拟设备(DaxPay 收款播报 APP, 直连平台 Artemis MQTT)
     ///
     /// 播报打印一体机: 台账/生成/激活/推送链路全自持于虚拟设备域(pay_virtual_device 独立台账),
-    /// 小票打印搭同一条 pay.success 通道(daxpay.device.audio.{deviceNo} 主题)。
+    /// 小票打印搭同一条 pay.success 通道(core 地址 daxpay.device.audio.{deviceNo};
+    /// 设备侧订阅斜杠主题 daxpay/device/audio/{deviceNo})。
     VIRTUAL("virtual");
 
     /// 编码

@@ -9,7 +9,8 @@ import lombok.experimental.Accessors;
 ///
 /// 支付成功后由消费链路分发给虚拟设备 client 的播报载荷。
 /// 本消息序列化后经 AES-256-GCM(每设备 secret)加密,
-/// 以信封 v1(cmd=pay.success)发布到设备主题 daxpay.device.audio.{deviceNo};
+/// 以信封 v1(cmd=pay.success)发布到 core 地址 daxpay.device.audio.{deviceNo}
+/// (设备侧订阅斜杠主题 daxpay/device/audio/{deviceNo}, 由 broker 映射到同一多段地址);
 /// 事件范围 V1 仅支付成功(退款/关闭不播)。
 @Data
 @Accessors(chain = true)

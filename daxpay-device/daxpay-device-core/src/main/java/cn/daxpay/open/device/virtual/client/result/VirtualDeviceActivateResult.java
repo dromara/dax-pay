@@ -22,7 +22,7 @@ public class VirtualDeviceActivateResult {
     @Schema(description = "MQTT WSS 接入地址")
     private String brokerUrl;
 
-    @Schema(description = "订阅主题(点号形式)")
+    @Schema(description = "订阅主题(斜杠形式)")
     private String topic;
 
     /// MQTT 连接用户名(broker 静态设备账号 app-device, 仅 consume 权限; 面板轮换密码后重新激活取新值)

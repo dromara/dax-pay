@@ -24,5 +24,6 @@
   "appNotFound": "Merchant app does not exist",
   "batchNotFound": "Some virtual devices not found, please refresh and retry",
   "mchNotAssigned": "Virtual device is not bound to a merchant, please bind a merchant before assigning a store",
-  "batchMchMismatch": "Batch operations require virtual devices under the same merchant"
+  "batchMchMismatch": "Batch operations require virtual devices under the same merchant",
+  "mqttNotConfigured": "Platform MQTT access is not configured, please contact platform operations"
 }

@@ -24,5 +24,6 @@
   "appNotFound": "Aplikasi pedagang tidak ditemukan",
   "batchNotFound": "Sebagian perangkat virtual tidak ditemukan, silakan muat ulang lalu coba lagi",
   "mchNotAssigned": "Perangkat virtual belum terikat ke pedagang, silakan ikat pedagang dahulu lalu tugaskan toko",
-  "batchMchMismatch": "Operasi massal harus memilih perangkat virtual di bawah pedagang yang sama"
+  "batchMchMismatch": "Operasi massal harus memilih perangkat virtual di bawah pedagang yang sama",
+  "mqttNotConfigured": "Akses MQTT platform belum dikonfigurasi, silakan hubungi operasional platform"
 }

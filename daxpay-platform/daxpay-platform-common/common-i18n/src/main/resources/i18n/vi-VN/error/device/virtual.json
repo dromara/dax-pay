@@ -24,5 +24,6 @@
   "appNotFound": "Ứng dụng của thương gia không tồn tại",
   "batchNotFound": "Một số thiết bị ảo không tồn tại, vui lòng làm mới rồi thử lại",
   "mchNotAssigned": "Thiết bị ảo chưa liên kết thương gia, vui lòng liên kết thương gia trước khi phân bổ cửa hàng",
-  "batchMchMismatch": "Thao tác hàng loạt phải chọn thiết bị ảo thuộc cùng một thương gia"
+  "batchMchMismatch": "Thao tác hàng loạt phải chọn thiết bị ảo thuộc cùng một thương gia",
+  "mqttNotConfigured": "Kết nối MQTT của nền tảng chưa được cấu hình, vui lòng liên hệ bộ phận vận hành nền tảng"
 }

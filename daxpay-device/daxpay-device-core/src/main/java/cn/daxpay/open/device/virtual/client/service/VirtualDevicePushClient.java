@@ -28,10 +28,10 @@ import org.springframework.stereotype.Component;
 /// ## 消息链路
 ///
 /// 1. 播报载荷序列化为 JSON, 以 AES-256-GCM(每设备 secret)加密为信封 v1 的 data
-/// 2. 信封发布到 Artemis 设备主题 `daxpay.device.audio.{deviceNo}`, 同名两形式各归一侧:
-///     - 设备端订阅: 标准主题名([TOPIC_PREFIX], 激活凭证下发)
-///     - 平台端发布: 点号字面转义地址([TOPIC_PREFIX_LITERAL])——Artemis 2.5x
-///       新版 MQTT 实现下, core 分隔符语义地址与 MQTT 订阅地址不再自动互通
+/// 2. 设备订阅斜杠主题 `daxpay/device/audio/{deviceNo}`(激活凭证下发), broker 按 MQTT 语义
+///    映射为多段 core 地址 `daxpay.device.audio.{deviceNo}`; 平台以 JMS Topic 发布到同一多段
+///    地址, 由 broker 直接路由到订阅队列, 投递时主题名由 Artemis 还原为斜杠形式
+///    (ARTEMIS-4532, Artemis 2.33.0 起)
 /// 3. 主题名含 audio 系命名历史, 承载虚拟设备全部形态(播报/打印一体)
 ///
 /// ## 信封结构(明文壳)
@@ -58,22 +58,24 @@ import org.springframework.stereotype.Component;
 @Component
 public class VirtualDevicePushClient {
 
-    /// 设备端订阅主题前缀(开源版 daxpay. 前缀, 与面板 MQTT 批 daxpay.device.# 安全矩阵对齐)
+    /// 设备端 MQTT 订阅主题前缀(斜杠形式, 激活下发与设备订阅使用)
     ///
-    /// 标准主题名, 激活凭证下发与设备端 MQTT 订阅均用此形式;
-    /// 平台发布地址不能直接用它(路由不到 MQTT 订阅队列), 须用字面转义形式 [TOPIC_PREFIX_LITERAL]。
-    /// 运维面板「MQTT 接入」页展示同一前缀(extensions/dax-pay-install 的
-    /// `ArtemisMqttTopicPrefix` + broker.xml 的 `daxpay.device.#` ACL), 两侧无运行时联动,
+    /// Artemis 2.5x(ARTEMIS-4532, 2.33.0 起)按 MQTT 官方语义处理主题: `/` 是层级分隔符,
+    /// `.` 属字面字符并被转义为 `\.`; 设备主题必须用斜杠, 订阅后落到多段 core 地址
+    /// `daxpay.device.audio.{deviceNo}`, 与平台发布地址 [CORE_ADDRESS_PREFIX] 完全一致。
+    /// 运维面板「MQTT 接入」页展示的 `daxpay.device.` 是 core 地址前缀(ACL 匹配用),
+    /// 与本常量是同一地址的两种界面形式(daxpay/device/... ↔ daxpay.device....), 两侧无运行时联动,
     /// 改值须人工同步面板常量与已部署环境的 ACL 段。
-    public static final String TOPIC_PREFIX = "daxpay.device.audio.";
+    public static final String DEVICE_TOPIC_PREFIX = "daxpay/device/audio/";
 
-    /// 发布地址前缀: 主题点号的字面转义形式
+    /// 平台 JMS 发布地址前缀(点号多段 core 地址)
     ///
-    /// Artemis 2.5x 新版 MQTT 实现按 MQTT 语义处理订阅主题(层级分隔符为 `/`, 点号属字面字符),
-    /// 订阅队列建在转义字面地址 daxpay\.device\.audio\.{deviceNo} 上(单段), 与 core/JMS 发送侧的
-    /// 分隔符语义地址(多段)互不相通; 平台发送必须使用同款转义字面量才能路由到设备订阅队列。
-    /// 设备端订阅与激活下发的主题仍用未转义标准名 [TOPIC_PREFIX]。
-    private static final String TOPIC_PREFIX_LITERAL = "daxpay\\.device\\.audio\\.";
+    /// JMS Topic(pubSubDomain=true, multicast)发送到该地址, 与 MQTT 斜杠订阅创建的 multicast
+    /// 队列地址一致, 由 broker 直接路由; 投递给设备时主题名由 Artemis 反向还原为斜杠形式。
+    /// 禁止改回点号字面转义形式(daxpay\.device\.audio\.)——那会落到单段转义地址,
+    /// 与斜杠订阅队列不匹配, 消息静默无人接收; 且面板 address-setting `daxpay.device.#`
+    /// 对转义地址不生效, 离线设备队列不会被自动清理。
+    private static final String CORE_ADDRESS_PREFIX = "daxpay.device.audio.";
 
     /// 命令名: 支付成功播报(含带 printData 的播报打印一体消息)
     public static final String CMD_PAY_SUCCESS = "pay.success";
@@ -192,26 +194,26 @@ public class VirtualDevicePushClient {
         CommandEnvelope envelope = CommandEnvelope.plain(
                 "kick:" + deviceNo + ":" + System.currentTimeMillis(), new KickData(reason));
         try {
-            artemisTemplateService.sendTopic(topicLiteral(deviceNo), toJson(envelope));
+            artemisTemplateService.sendTopic(publishAddress(deviceNo), toJson(envelope));
         } catch (Exception e) {
             log.warn("虚拟设备踢出消息发送失败, deviceNo={}", deviceNo, e);
         }
     }
 
-    /// 设备订阅主题名(激活时随凭证下发, 设备端以未转义标准名订阅)
+    /// 设备订阅主题名(激活时随凭证下发, 设备端原样订阅斜杠形式)
     public static String topic(String deviceNo) {
-        return TOPIC_PREFIX + deviceNo;
+        return DEVICE_TOPIC_PREFIX + deviceNo;
     }
 
-    /// 平台发布地址(MQTT 订阅的字面转义形式, 仅平台发送侧使用, 见 [TOPIC_PREFIX_LITERAL])
-    static String topicLiteral(String deviceNo) {
-        return TOPIC_PREFIX_LITERAL + deviceNo;
+    /// 平台发布地址(点号多段 core 地址, 与 MQTT 斜杠订阅队列同址, 仅平台发送侧使用)
+    static String publishAddress(String deviceNo) {
+        return CORE_ADDRESS_PREFIX + deviceNo;
     }
 
     /// 组装加密信封并发布(data 先序列化再加密)
     private void publish(String deviceNo, String secret, String cmd, String msgId, Object data) {
         CommandEnvelope envelope = CommandEnvelope.encrypted(cmd, msgId, encrypt(secret, toJson(data)));
-        artemisTemplateService.sendTopic(topicLiteral(deviceNo), toJson(envelope));
+        artemisTemplateService.sendTopic(publishAddress(deviceNo), toJson(envelope));
         // 发布成功计日推送笔数(pay.success 含带 printData 的打印单、print.ticket 纯打印单都算;
         // audio.test 试播不计入)
         if (!CMD_AUDIO_TEST.equals(cmd)) {

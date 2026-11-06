@@ -115,12 +115,18 @@ public class VirtualDeviceClientService {
         if (StrUtil.isBlank(device.getMchNo())) {
             throw activateFail();
         }
+        // 接入参数取平台配置「MQTT接入」(纯 DB 存储, 保存即时生效; 已激活设备重新激活后才取到新值);
+        // 缺失必须在轮换 secret 之前拦截——否则旧凭证被作废却下发空凭证, 终端重激活后无法连接
+        PlatformMqttConfig mqttConfig = platformMqttConfigService.getMqttConfig();
+        if (StrUtil.isBlank(mqttConfig.getBrokerWssUrl())
+                || StrUtil.isBlank(mqttConfig.getMqttUsername())
+                || StrUtil.isBlank(mqttConfig.getMqttPassword())) {
+            throw new OperationFailException(CommonCode.FAIL_CODE, "error.device.virtual.mqttNotConfigured");
+        }
         // 轮换 secret(旧密文/旧回执签名即时作废 = 换机语义)
         String secret = generateSecret();
         virtualDeviceManager.rotateSecret(device.getId(), secret);
         log.info("虚拟设备激活: deviceNo={}, ip={}", device.getDeviceNo(), clientIp);
-        // 接入参数取平台配置「MQTT接入」(纯 DB 存储, 保存即时生效; 已激活设备重新激活后才取到新值)
-        PlatformMqttConfig mqttConfig = platformMqttConfigService.getMqttConfig();
         return new VirtualDeviceActivateResult()
                 .setDeviceNo(device.getDeviceNo())
                 .setSecret(secret)
