@@ -550,6 +550,9 @@
     "ids": {
       "notEmpty": "QR코드 보드를 선택해주세요."
     },
+    "deviceIds": {
+      "notEmpty": "기기를 선택해주세요."
+    },
     "twoFactorCode": {
       "notBlank": "인증 코드는 비워둘 수 없습니다."
     },

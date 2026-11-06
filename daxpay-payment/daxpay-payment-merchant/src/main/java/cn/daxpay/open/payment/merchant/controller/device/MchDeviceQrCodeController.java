@@ -8,8 +8,10 @@ import cn.daxpay.open.payment.merchant.param.device.DeviceQrCodeBindStoreParam;
 import cn.daxpay.open.payment.merchant.param.device.DeviceQrCodeClaimParam;
 import cn.daxpay.open.payment.merchant.param.device.DeviceQrCodeParam;
 import cn.daxpay.open.payment.merchant.service.device.MchDeviceQrCodeService;
+import cn.daxpay.open.platform.core.annotation.OperateLog;
 import cn.daxpay.open.platform.core.annotation.PermCode;
 import cn.daxpay.open.platform.core.code.PermCodes;
+import cn.daxpay.open.platform.core.enums.common.OperateLogType;
 import cn.daxpay.open.platform.core.rest.Res;
 import cn.daxpay.open.platform.core.rest.param.PageParam;
 import cn.daxpay.open.platform.core.rest.result.PageResult;
@@ -17,6 +19,7 @@ import cn.daxpay.open.platform.core.rest.result.Result;
 import cn.daxpay.open.platform.core.validation.ValidationGroup;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -50,6 +53,14 @@ public class MchDeviceQrCodeController {
     @GetMapping("/page")
     public Result<PageResult<DeviceQrCodeResult>> page(PageParam pageParam, DeviceQrCodeQuery query) {
         return Res.ok(mchDeviceQrCodeService.page(pageParam, query));
+    }
+
+    @PermCode(code = PermCodes.Action.EXPORT)
+    @Operation(summary = "导出支付码牌")
+    @OperateLog(title = "导出支付码牌", businessType = OperateLogType.EXPORT, saveParam = false)
+    @PostMapping("/export")
+    public void export(HttpServletResponse response, DeviceQrCodeQuery query) {
+        mchDeviceQrCodeService.export(query, response);
     }
 
     @PermCode(code = PermCodes.Action.VIEW)

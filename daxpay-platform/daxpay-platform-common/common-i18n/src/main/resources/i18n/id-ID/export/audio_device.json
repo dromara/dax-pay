@@ -1,0 +1,19 @@
+{
+  "fileName": "Perangkat Pembayaran",
+  "deviceNo": "No. Perangkat",
+  "name": "Nama Perangkat",
+  "batchNo": "No. Batch",
+  "appName": "Nama Aplikasi",
+  "storeName": "Nama Toko",
+  "activated": "Status Aktivasi",
+  "activated.true": "Diaktifkan",
+  "activated.false": "Belum Diaktifkan",
+  "online": "Status Daring",
+  "online.true": "Daring",
+  "online.false": "Luring",
+  "enable": "Status Aktif",
+  "enable.true": "Aktif",
+  "enable.false": "Nonaktif",
+  "lastOnlineTime": "Waktu Daring Terakhir",
+  "createTime": "Dibuat Pada"
+}

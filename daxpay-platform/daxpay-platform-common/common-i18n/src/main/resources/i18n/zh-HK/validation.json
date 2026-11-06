@@ -550,6 +550,9 @@
     "ids": {
       "notEmpty": "請選擇碼牌"
     },
+    "deviceIds": {
+      "notEmpty": "請選擇設備"
+    },
     "twoFactorCode": {
       "notBlank": "動態驗證碼不能為空"
     },

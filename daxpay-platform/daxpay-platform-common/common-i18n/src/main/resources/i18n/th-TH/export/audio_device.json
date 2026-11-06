@@ -1,0 +1,19 @@
+{
+  "fileName": "อุปกรณ์รับชำระเงิน",
+  "deviceNo": "หมายเลขอุปกรณ์",
+  "name": "ชื่ออุปกรณ์",
+  "batchNo": "หมายเลขแบตช์",
+  "appName": "ชื่อแอป",
+  "storeName": "ชื่อสาขา",
+  "activated": "สถานะการเปิดใช้งาน",
+  "activated.true": "เปิดใช้งานแล้ว",
+  "activated.false": "ยังไม่เปิดใช้งาน",
+  "online": "สถานะออนไลน์",
+  "online.true": "ออนไลน์",
+  "online.false": "ออฟไลน์",
+  "enable": "สถานะการใช้งาน",
+  "enable.true": "เปิดใช้งาน",
+  "enable.false": "ปิดใช้งาน",
+  "lastOnlineTime": "เวลาออนไลน์ล่าสุด",
+  "createTime": "สร้างเมื่อ"
+}

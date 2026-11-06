@@ -554,6 +554,9 @@
     "ids": {
       "notEmpty": "Please select QR code boards"
     },
+    "deviceIds": {
+      "notEmpty": "Please select devices"
+    },
     "twoFactorCode": {
       "notBlank": "Verification code cannot be blank"
     },

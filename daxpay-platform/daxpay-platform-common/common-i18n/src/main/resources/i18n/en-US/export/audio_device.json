@@ -1,0 +1,19 @@
+{
+  "fileName": "Payment Devices",
+  "deviceNo": "Device No.",
+  "name": "Device Name",
+  "batchNo": "Batch No.",
+  "appName": "App Name",
+  "storeName": "Store Name",
+  "activated": "Activation Status",
+  "activated.true": "Activated",
+  "activated.false": "Not Activated",
+  "online": "Online Status",
+  "online.true": "Online",
+  "online.false": "Offline",
+  "enable": "Enabled Status",
+  "enable.true": "Enabled",
+  "enable.false": "Disabled",
+  "lastOnlineTime": "Last Online Time",
+  "createTime": "Created At"
+}

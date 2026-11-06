@@ -554,6 +554,9 @@
     "ids": {
       "notEmpty": "请选择码牌"
     },
+    "deviceIds": {
+      "notEmpty": "请选择设备"
+    },
     "twoFactorCode": {
       "notBlank": "动态验证码不能为空"
     },

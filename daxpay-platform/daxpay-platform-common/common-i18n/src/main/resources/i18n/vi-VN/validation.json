@@ -524,6 +524,9 @@
     "ids": {
       "notEmpty": "Vui lòng chọn bảng mã QR"
     },
+    "deviceIds": {
+      "notEmpty": "Vui lòng chọn thiết bị"
+    },
     "twoFactorCode": {
       "notBlank": "Mã xác minh không được để trống"
     },

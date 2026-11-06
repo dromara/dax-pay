@@ -1,0 +1,19 @@
+{
+  "fileName": "Thiết bị thanh toán",
+  "deviceNo": "Số thiết bị",
+  "name": "Tên thiết bị",
+  "batchNo": "Số lô",
+  "appName": "Tên ứng dụng",
+  "storeName": "Tên cửa hàng",
+  "activated": "Trạng thái kích hoạt",
+  "activated.true": "Đã kích hoạt",
+  "activated.false": "Chưa kích hoạt",
+  "online": "Trạng thái trực tuyến",
+  "online.true": "Trực tuyến",
+  "online.false": "Ngoại tuyến",
+  "enable": "Trạng thái bật tắt",
+  "enable.true": "Bật",
+  "enable.false": "Tắt",
+  "lastOnlineTime": "Thời gian trực tuyến cuối",
+  "createTime": "Thời gian tạo"
+}

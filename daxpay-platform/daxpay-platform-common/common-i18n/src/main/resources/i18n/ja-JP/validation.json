@@ -550,6 +550,9 @@
     "ids": {
       "notEmpty": "QRコードボードを選択してください"
     },
+    "deviceIds": {
+      "notEmpty": "デバイスを選択してください"
+    },
     "twoFactorCode": {
       "notBlank": "確認コードを空白にすることはできません"
     },

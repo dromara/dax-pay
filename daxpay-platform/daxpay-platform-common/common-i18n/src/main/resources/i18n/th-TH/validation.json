@@ -524,6 +524,9 @@
     "ids": {
       "notEmpty": "กรุณาเลือกบอร์ดรหัส QR"
     },
+    "deviceIds": {
+      "notEmpty": "กรุณาเลือกอุปกรณ์"
+    },
     "twoFactorCode": {
       "notBlank": "รหัสยืนยันต้องไม่เว้นว่าง"
     },

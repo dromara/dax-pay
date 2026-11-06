@@ -1,0 +1,19 @@
+{
+  "fileName": "Peranti Pembayaran",
+  "deviceNo": "No. Peranti",
+  "name": "Nama Peranti",
+  "batchNo": "No. Kelompok",
+  "appName": "Nama Aplikasi",
+  "storeName": "Nama Kedai",
+  "activated": "Status Pengaktifan",
+  "activated.true": "Diaktifkan",
+  "activated.false": "Belum Diaktifkan",
+  "online": "Status Dalam Talian",
+  "online.true": "Dalam Talian",
+  "online.false": "Luar Talian",
+  "enable": "Status Aktif",
+  "enable.true": "Aktif",
+  "enable.false": "Nyahaktif",
+  "lastOnlineTime": "Masa Dalam Talian Terakhir",
+  "createTime": "Dicipta Pada"
+}

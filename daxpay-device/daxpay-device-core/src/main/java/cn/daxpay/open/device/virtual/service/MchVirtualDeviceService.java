@@ -3,8 +3,12 @@ package cn.daxpay.open.device.virtual.service;
 import cn.daxpay.open.device.audio.support.AmountSpeechComposer;
 import cn.daxpay.open.device.comm.AudioBroadcastMessage;
 import cn.daxpay.open.device.comm.PrintPushData;
+import cn.daxpay.open.device.merchant.param.audio.MchAudioDeviceBindAppBatchParam;
 import cn.daxpay.open.device.merchant.param.audio.MchAudioDeviceBindAppParam;
+import cn.daxpay.open.device.merchant.param.audio.MchAudioDeviceBindStoreBatchParam;
 import cn.daxpay.open.device.merchant.param.audio.MchAudioDeviceBindStoreParam;
+import cn.daxpay.open.device.merchant.param.audio.MchAudioDeviceUpdateParam;
+import cn.daxpay.open.device.merchant.result.audio.MchAudioDeviceExportResult;
 import cn.daxpay.open.device.print.service.PrintPushService;
 import cn.daxpay.open.device.virtual.client.service.VirtualDevicePushClient;
 import cn.daxpay.open.device.virtual.client.service.VirtualTestAckTracker;
@@ -17,12 +21,15 @@ import cn.daxpay.open.device.virtual.result.VirtualDeviceResult;
 import cn.daxpay.open.device.virtual.support.VirtualTestSampleSupport;
 import cn.daxpay.open.payment.common.context.MerchantContextLoader;
 import cn.daxpay.open.payment.common.context.PaymentContext;
+import cn.daxpay.open.payment.common.convert.export.CommonExportConvertHelper;
 import cn.daxpay.open.payment.merchant.dao.appinfo.MchAppInfoManager;
 import cn.daxpay.open.payment.merchant.dao.info.MerchantInfoManager;
 import cn.daxpay.open.payment.merchant.dao.store.MchStoreInfoManager;
 import cn.daxpay.open.payment.merchant.entity.appinfo.MchAppInfo;
 import cn.daxpay.open.payment.merchant.entity.info.MerchantInfo;
 import cn.daxpay.open.payment.merchant.entity.store.MchStoreInfo;
+import cn.daxpay.open.platform.common.excel.ExcelUtils;
+import cn.daxpay.open.platform.common.i18n.util.I18nUtil;
 import cn.daxpay.open.platform.common.mybatisplus.util.MpUtil;
 import cn.daxpay.open.platform.common.translate.service.TransService;
 import cn.daxpay.open.platform.core.code.CommonCode;
@@ -35,6 +42,7 @@ import cn.daxpay.open.platform.core.rest.result.PageResult;
 import cn.hutool.core.util.RandomUtil;
 import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -45,7 +53,7 @@ import java.util.Objects;
 
 /// # 收款设备(虚拟设备)商户自助管理
 ///
-/// 商户端能力: 查看名下虚拟设备、调整应用/门店、启停、试播试打、激活二维码内容;
+/// 商户端能力: 查看名下虚拟设备、导出、改名、调整应用/门店(支持批量)、启停、试播试打、激活二维码内容;
 /// 设备归属绑定由运营端完成, 商户在 APP 端凭运营发放的设备号激活。
 /// 设备表继承 MpBaseEntity(库存行 mchNo 为空, 不参与 mch_no 行级隔离),
 /// 所有读写均显式走 [PaymentContext] 归属校验。
@@ -90,6 +98,44 @@ public class MchVirtualDeviceService {
         return pageResult;
     }
 
+    /// 导出(服务端生成 xlsx, 查询条件与分页同参, 无时间范围必填要求)
+    ///
+    /// 复用 [page] 的取数口径: 分页已强制当前商户, 应用/门店名称由翻译服务回填, 运行态由 Redis 组装;
+    /// 行转换只做布尔状态词条文本与时间格式化, 不携带任何激活凭证字段。
+    public void export(VirtualDeviceQuery query, HttpServletResponse response) {
+        ExcelUtils.exportPaged(MchAudioDeviceExportResult.class, "export.audio_device.fileName", response,
+                (pageNo, size) -> page(new PageParam(pageNo, size), query),
+                this::toExportRows);
+    }
+
+    /// 分页结果 → 导出行
+    private List<MchAudioDeviceExportResult> toExportRows(List<VirtualDeviceResult> records) {
+        return records.stream().map(this::toExportRow).toList();
+    }
+
+    /// 单行 → 导出行(布尔状态翻译为词条文本, 时间按当前用户时区格式化)
+    private MchAudioDeviceExportResult toExportRow(VirtualDeviceResult source) {
+        return new MchAudioDeviceExportResult()
+                .setDeviceNo(source.getDeviceNo())
+                .setName(source.getName())
+                .setBatchNo(source.getBatchNo())
+                .setAppName(source.getAppName())
+                .setStoreName(source.getStoreName())
+                .setActivated(this.toBoolText("export.audio_device.activated", source.getActivated()))
+                .setOnline(this.toBoolText("export.audio_device.online", source.getOnline()))
+                .setEnable(this.toBoolText("export.audio_device.enable", source.getEnable()))
+                .setLastOnlineTime(CommonExportConvertHelper.formatDateTime(source.getLastOnlineTime()))
+                .setCreateTime(CommonExportConvertHelper.formatDateTime(source.getCreateTime()));
+    }
+
+    /// 布尔状态 → 国际化文本(空值输出空串, 词条形如 `export.audio_device.activated.true`)
+    private String toBoolText(String keyPrefix, Boolean value) {
+        if (Objects.isNull(value)) {
+            return "";
+        }
+        return I18nUtil.get(keyPrefix + "." + value);
+    }
+
     /// 虚拟设备运行态组装(实体页与结果页按下标一一对应, 保序转换)
     private void fillRuntime(List<VirtualDevice> entities, List<VirtualDeviceResult> results) {
         if (entities.isEmpty()) {
@@ -123,6 +169,14 @@ public class MchVirtualDeviceService {
         return result;
     }
 
+    /// 修改设备名称(商户端仅开放改名, 启停走 change-enable, 归属走 bind-app/bind-store-batch)
+    @Transactional(rollbackFor = Exception.class)
+    public void update(MchAudioDeviceUpdateParam param) {
+        VirtualDevice device = requireOwned(param.getId());
+        device.setName(param.getName());
+        virtualDeviceManager.updateById(device);
+    }
+
     /// 调整使用应用(appId 空=全部应用)
     @Transactional(rollbackFor = Exception.class)
     public void bindApp(MchAudioDeviceBindAppParam param) {
@@ -131,12 +185,40 @@ public class MchVirtualDeviceService {
         virtualDeviceManager.changeApp(device.getId(), appId);
     }
 
+    /// 批量调整使用应用(appId 空=全部应用)
+    ///
+    /// 逐个校验设备归属当前商户(跨商户 id 直接拒绝), 再校验应用归属并单事务一次更新。
+    @Transactional(rollbackFor = Exception.class)
+    public void bindAppBatch(MchAudioDeviceBindAppBatchParam param) {
+        String mchNo = requireMchNo();
+        for (Long id : param.getIds()) {
+            requireOwned(id);
+        }
+        String appId = resolveAppIdOrNull(mchNo, param.getAppId());
+        virtualDeviceManager.bindApp(param.getIds(), appId);
+    }
+
     /// 调整使用门店
     @Transactional(rollbackFor = Exception.class)
     public void bindStore(MchAudioDeviceBindStoreParam param) {
         VirtualDevice device = requireOwned(param.getId());
         validateStoreBelongToMch(param.getStoreNo(), device.getMchNo());
         virtualDeviceManager.changeStore(device.getId(), param.getStoreNo());
+    }
+
+    /// 批量调整使用门店(门店号空=解绑, 置为未分配)
+    ///
+    /// 逐个校验设备归属当前商户(跨商户 id 直接拒绝); 门店有值时须归属当前商户, 空则清空门店关联。
+    @Transactional(rollbackFor = Exception.class)
+    public void bindStoreBatch(MchAudioDeviceBindStoreBatchParam param) {
+        String mchNo = requireMchNo();
+        for (Long id : param.getIds()) {
+            requireOwned(id);
+        }
+        if (StrUtil.isNotBlank(param.getStoreNo())) {
+            validateStoreBelongToMch(param.getStoreNo(), mchNo);
+        }
+        virtualDeviceManager.changeStoreBatch(param.getIds(), StrUtil.blankToDefault(param.getStoreNo(), null));
     }
 
     /// 解绑门店(置为未分配, 不参与门店级匹配)

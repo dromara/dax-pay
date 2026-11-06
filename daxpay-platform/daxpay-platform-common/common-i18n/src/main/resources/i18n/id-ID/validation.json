@@ -524,6 +524,9 @@
     "ids": {
       "notEmpty": "Silakan pilih papan kode QR"
     },
+    "deviceIds": {
+      "notEmpty": "Silakan pilih perangkat"
+    },
     "twoFactorCode": {
       "notBlank": "Kode verifikasi tidak boleh kosong"
     },
